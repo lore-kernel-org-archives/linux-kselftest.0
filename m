@@ -1,589 +1,354 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814AA33A71A
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 05:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70DC364E80
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 05:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783054890; cv=none; b=EaGZtgm5jLE7yjP7FkSC+d2VQikxGHLZrCDzlCY4++/ARA6VQIutazbpJeRwUrHdLd1XWRCyr3INsTSZDTv63OjziBVNua/pGC+GIPBR8LX3o4NqQ253OAJ1hbLb9fsERHtqkyRI/Dp+T4vfjgmz53Hss1+/AIEZsKnYKBreYBo=
+	t=1783058215; cv=none; b=aQm+CMpIkzW5yyIZ9ulnbiHchdOMgcus6AZMEIj1mtB5B+4rwopcEtKRIKEDhXI8BWM/KSLQKC+S0cTEyKOYg2U5TDT2RgIarxnwMrvmf65p73+1g4fzERmOzmsNTcgkcurFgh3GBrIUqjmvRVjGdYOG6aMJyHuHId5exbdnh5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783054890; c=relaxed/simple;
-	bh=11EVXotu1qTwi7ZGXrvzzeMxpHA0gLqoGkLx4/gvXoo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wy2wC9isI6ubL0gWmUJmisfAeparYJ286hfuPjHd41o0Bzci9c8LPAWAIef7umga7QD/oAHDH1R/S1QvK1t/KtGtc1s8bb7YZ1e89OYmI3yUyncu1mDRowLk+mJaUzbdlPw1QeYmYkguS9KzkI+9AWi9/EzzsrGfW2bSSUM+H/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hN9PW6fl; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783058215; c=relaxed/simple;
+	bh=3sYzbaBmtugcRQJyp0gpMkQF6yclm1aMLvUq9SjdyiQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kwsZz70dlVlAm0Cy+qGrZUKzEqaCaHRSxeA32S6+GVQ+AMxhi0Tx9JdGY0qZ4TfHzsGUKXLg1MPYVeqQSrGolZq3qX3X4V51Zq9LHlQF8mFohQ9pUBixUiCjfALrStPSMBellbTUbTLymHzoa92xu1sSvw62mfZVGCE54ljq4DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a1b6M+I7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hN9PW6fl"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ca11143dbbso1049295ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 22:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783054872; x=1783659672; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=vOTTbIp30b2abiob/bJSAzkwIrXTOEeNOvRGNGfW9io=;
-        b=hN9PW6flAFjop7As/wCIZgU03erXgJAzdLrcqYZeDNJDKZZTqxul1t4jA0dUIK1bvx
-         oqtVVq83dHN0VFsLGgToJkYaeWld4BCof1Mf2drvbU8rWrumzs+OmfoShmfso8ZyOSA7
-         aivFD2Qq3tTNKZTYWV3hiNcFgtrMPdA168KOXnh9wMDqtq5mHGCSYUIzKHMbBiK+2DB5
-         8neyMVK5dUwXq/vT4fpjhW3Zcb9D3ukVjAoP7jjicfjj1yGmWdXWyYqSZuhgZQl/d0HP
-         Zv4Nz7lu5UM1IBLI6rEBNNRRXcM6z2HgW2KPPNHFaruyyKzqVFI1Gfeu1QwQz2We5Lna
-         nRmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783054872; x=1783659672;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vOTTbIp30b2abiob/bJSAzkwIrXTOEeNOvRGNGfW9io=;
-        b=lx6ZHmXjQTWWQ+maAp7t0e+Pzptj8ToVk8e82wGPumM+cBAz0maiDP2xWhUnBY7V1P
-         nIhFi1fWbV5Xtk2TtKXObKC35drwnt+nE/gcwKN9X8KFKwM3oCrvHjEfsO4G+w5qHsuT
-         MNfmVcFbGzWKaw/fAZJ8t9ajln/NlCk8JDiaxwoA36qMikv+T3obSzG61ycLO4mHJU8k
-         j9FM34e6HcbkWP0vfLfk91YlIcaeCUffNpTU2yTVm/42B+LtG4UuX8Con8CKQ6Nt/t5a
-         C1Z/4Z1WLw28f2xFJTMMyKirkQ22IhkCpeXVIGWX5CZnUJqBdQCKxe1dQedSE31tmosv
-         pC4g==
-X-Forwarded-Encrypted: i=1; AHgh+RoRHTK9PZoDTaZXDjKzNczxvPsQuatFh9M5SaIKP2Df3neA42iU95FR3nUtMTa2LAcFQ9v83Xzfo4PG2bTCXfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDtcLPueaEJgw2g4AqTDOlyVT+7PuNCT2vpfYNZi79lZD8V5Mk
-	wU5AGqiXXQ4nWLajG2Ds+OtOvD3MFOfKH8n5qIrkntuwxnQsbFQsYJiw
-X-Gm-Gg: AfdE7cmHLhWMpUjaKulmbkzQQL28u4LDG1TlR44n13W7pWhPcebrgoHpD3GgREfurxY
-	JZ7Ew5Arl6tji7A/tO1nXF2FT/tB7y/q2huKBMirmwJw6r5KKaIIBE+++oHuCtaHTALLCmFg5dP
-	vR7Oylmp0R5WcPLKdm/lPH2wavaUnl6wRu3DGVa+swryH2BMjJkwZzozjgWJykSdsAU/Zg58vAH
-	VyvMCcmOCTFvoiz4tALX2a23OS8A02TxUyLI5BiNFqAul/fOuAH6ELUCTV1dZmMwd0ApSt24+T5
-	BQs3i2sekbL9BPpVWoQVdzIjUBKLNxSO9vHpg71vI6XYIdDB++yqmJVc2qdczE1tLLD75YcEz4m
-	mMBgR8Z0Q0Bmo5/cITIe0ZQNvfx8nNRNntU7Rd1/sJr0/L337eXwUIW2XaBmgQLj2trZI+oj1db
-	D2iAa/r74f0fk+C4LEIAkTzcas40A/6arvhkofxhuUt3mmEN4C/YCHxW4se7vgPKSChWAVYiHIi
-	Sxjjb5uIJD1NYKQu/KHfeqigMN0Ehsqe2I=
-X-Received: by 2002:a17:903:b10:b0:2ca:d975:5bbd with SMTP id d9443c01a7336-2cad9755c93mr6199165ad.20.1783054872288;
-        Thu, 02 Jul 2026 22:01:12 -0700 (PDT)
-Received: from kirchou-macbookpro2.roam.corp.google.com ([2a00:79e0:2031:7:204c:c814:fccf:3297])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad7871697sm3244415ad.67.2026.07.02.22.01.08
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 02 Jul 2026 22:01:11 -0700 (PDT)
-Sender: kir <610548@gmail.com>
-From: Kir Chou <note351@hotmail.com>
-To: akpm@linux-foundation.org
-Cc: thomas.weissschuh@linutronix.de,
-	david@davidgow.net,
-	geert@linux-m68k.org,
-	visitorckw@gmail.com,
-	brendan.higgins@linux.dev,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	Kir Chou <note351@hotmail.com>,
-	David Gow <davidgow@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
-Subject: [PATCH v5] lib/random32: convert selftest to KUnit
-Date: Fri,  3 Jul 2026 14:00:59 +0900
-Message-ID: <20260703050100.23944-1-note351@hotmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a1b6M+I7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783058212;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y64fWAWHPb6LXJKvL5ApTJBG1MuBOUvs4HV2l3FDgHQ=;
+	b=a1b6M+I7OX/VTV+tdpx3s6I8ZkQQHB14+8I+bHUIbBBhEJ3sKmQjGVBetpQyeOxhWjd3Ga
+	ffPxG7crBdVOtwYJQHEuXXNKXfnr2vLDiVLdwbb9lyPzfDpLDOramX4VON1IwFHF1+RzdK
+	l0+BMZTK1+KkyjrtYA5gr84eP3ulBZk=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-egeHS9_gM4S6XNtPCbOknQ-1; Fri,
+ 03 Jul 2026 01:56:49 -0400
+X-MC-Unique: egeHS9_gM4S6XNtPCbOknQ-1
+X-Mimecast-MFC-AGG-ID: egeHS9_gM4S6XNtPCbOknQ_1783058207
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4B0F81944AB4;
+	Fri,  3 Jul 2026 05:56:47 +0000 (UTC)
+Received: from [10.2.16.58] (unknown [10.2.16.58])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EDE51800613;
+	Fri,  3 Jul 2026 05:56:42 +0000 (UTC)
+Message-ID: <7d40ab06-7f1c-4cd8-84a0-552c53e2ca20@redhat.com>
+Date: Fri, 3 Jul 2026 01:56:41 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH-next v10 10/11] cgroup/cpuset: Support multiple
+ destination cpusets for cpuset_*attach()
+To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
+ Guopeng Zhang <guopeng.zhang@linux.dev>
+References: <20260702214757.579012-1-longman@redhat.com>
+ <20260702214757.579012-11-longman@redhat.com>
+ <5a8b4500-7cab-4ef6-ae96-b0f794ee51a9@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <5a8b4500-7cab-4ef6-ae96-b0f794ee51a9@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-This patch converts the existing prandom selftest (lib/random32.c) to use
-the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
-tests, this file is directly #included into lib/random32.c.
+On 7/2/26 11:31 PM, Ridong Chen wrote:
+>
+>
+> On 7/3/2026 5:47 AM, Waiman Long wrote:
+>> The only case where the cgroup_taskset structure requires task migration
+>> to multiple cpusets is when enabling a cpuset controller in cgroup v2
+>> where the newly created child cpusets inherits the same effective CPUs
+>> and memory nodes from the parent. In that case, task migration can 
+>> happen
+>> directly with no update to tasks' CPU and memory nodes assignment and no
+>> further work needed from the cpuset side except updating 
+>> nr_deadline_tasks
+>> when DL tasks are involved and setting old_mems_allowed in the child
+>> cpusets.
+>>
+>> Do that by tracking all the destination cpusets with a new dst_cs_head
+>> singly linked list. The reset_migrate_dl_data() function is integrated
+>> into clear_attach_data() so that it can be used for both source and
+>> destination cpusets.
+>>
+>> It is assumed that a given cpuset cannot be both a source and a
+>> destination cpuset. If such condition happens or when there are multiple
+>> destination cpusets with CPU or memory nodes changes, the current code
+>> will not handle it correctly. So it will print a warning and fail the
+>> attach operation in these unexpected cases as we will have to enhance 
+>> the
+>> code to support this if such use cases are valid and not coding errors.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset-internal.h |   1 +
+>>   kernel/cgroup/cpuset.c          | 115 ++++++++++++++++++++------------
+>>   2 files changed, 72 insertions(+), 44 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset-internal.h 
+>> b/kernel/cgroup/cpuset-internal.h
+>> index e7d010661fd3..d1161b0a3d85 100644
+>> --- a/kernel/cgroup/cpuset-internal.h
+>> +++ b/kernel/cgroup/cpuset-internal.h
+>> @@ -149,6 +149,7 @@ struct cpuset {
+>>        * For linking impacted cpusets during an attach operation.
+>>        */
+>>       struct llist_node attach_node;
+>> +    bool attach_source;
+>>         /* partition root state */
+>>       int partition_root_state;
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 4bbfae041b63..cf14dc506a40 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -366,10 +366,12 @@ static struct {
+>>       bool cpus_updated;
+>>       bool mems_updated;
+>>       bool task_work_queued;
+>> +    bool many_dest_cs;    /* Have many destination cpusets */
+>>       struct cpuset *old_cs;    /* Source cpuset */
+>>       nodemask_t nodemask_to;
+>>   } attach_ctx;
+>>   static LLIST_HEAD(src_cs_head);
+>> +static LLIST_HEAD(dst_cs_head);
+>
+> Nit.
+>
+> Would it make sense to move src_cs_head/dst_cs_head into attach_ctx?
 
-The new test:
-- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/random32.c.
-- Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
-- Moves the test logic to lib/tests/random32_kunit.c.
+I had thought about it, but it is more simple to just use LIST_HEAD() 
+macro than explicitly initialize just the two llist_head's in the structure.
 
-This commit is verified by `./tools/testing/kunit/kunit.py run`
-with the .kunit/.kunitconfig:
+Cheers,
+Longman
 
-```
-CONFIG_KUNIT=y
-CONFIG_PRANDOM_KUNIT_TEST=y
-```
-
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Kir Chou <note351@hotmail.com>
-
----
-v5:
-- Adds missing MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING").
-  Verified with a kernel build with CONFIG_PRANDOM_KUNIT_TEST.
-
-v4:
-- Changes from bool to tristate in lib/Kconfig.debug.
-- Spins off the test into its own module under lib/tests/.
-- Adds a prototype for prandom_warmup() to avoid a warning.
-- Makes prandom_warmup() visible to the test in lib/random32.c.
-- Adds the build rule for random32_kunit.o to lib/tests/Makefile.
-
-v3:
-- Changes from tristate to bool in lib/Kconfig.debug.
-
-v2:
-- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/Kconfig.
-- Add const to arrays in lib/tests/random32_kunit.c.
----
- lib/Kconfig                |   6 --
- lib/Kconfig.debug          |   9 ++
- lib/random32.c             | 184 ++-----------------------------------
- lib/tests/Makefile         |   1 +
- lib/tests/random32_kunit.c | 182 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 202 insertions(+), 180 deletions(-)
- create mode 100644 lib/tests/random32_kunit.c
-
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 2923924be..5f185e9f1 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -156,12 +156,6 @@ config AUDIT_COMPAT_GENERIC
- 	depends on AUDIT_GENERIC && AUDIT_ARCH_COMPAT_GENERIC && COMPAT
- 	default y
- 
--config RANDOM32_SELFTEST
--	bool "PRNG perform self test on init"
--	help
--	  This option enables the 32 bit PRNG library functions to perform a
--	  self test on initialization.
--
- #
- # compression support is select'ed if needed
- #
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index ba36939fd..0214a5859 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -3354,6 +3354,15 @@ config PRIME_NUMBERS_KUNIT_TEST
- 
- 	  If unsure, say N
- 
-+config PRANDOM_KUNIT_TEST
-+	tristate "KUnit test for prandom" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Enable this option to test the prandom functions at runtime.
-+
-+	  If unsure, say N
-+
- endif # RUNTIME_TESTING_MENU
- 
- config ARCH_USE_MEMTEST
-diff --git a/lib/random32.c b/lib/random32.c
-index 24e7acd93..dad90219c 100644
---- a/lib/random32.c
-+++ b/lib/random32.c
-@@ -41,6 +41,7 @@
- #include <linux/bitops.h>
- #include <linux/slab.h>
- #include <linux/unaligned.h>
-+#include <kunit/visibility.h>
- 
- /**
-  *	prandom_u32_state - seeded pseudo-random number generator.
-@@ -92,7 +93,14 @@ void prandom_bytes_state(struct rnd_state *state, void *buf, size_t bytes)
- }
- EXPORT_SYMBOL(prandom_bytes_state);
- 
--static void prandom_warmup(struct rnd_state *state)
-+/*
-+ * Only declared here so that it has a prototype when made
-+ * non-static for KUnit testing (avoids -Wmissing-prototypes).
-+ */
-+#if IS_ENABLED(CONFIG_KUNIT)
-+void prandom_warmup(struct rnd_state *state);
-+#endif
-+VISIBLE_IF_KUNIT void prandom_warmup(struct rnd_state *state)
- {
- 	/* Calling RNG ten times to satisfy recurrence condition */
- 	prandom_u32_state(state);
-@@ -106,6 +114,7 @@ static void prandom_warmup(struct rnd_state *state)
- 	prandom_u32_state(state);
- 	prandom_u32_state(state);
- }
-+EXPORT_SYMBOL_IF_KUNIT(prandom_warmup);
- 
- void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
- {
-@@ -125,176 +134,3 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
- 	}
- }
- EXPORT_SYMBOL(prandom_seed_full_state);
--
--#ifdef CONFIG_RANDOM32_SELFTEST
--static struct prandom_test1 {
--	u32 seed;
--	u32 result;
--} test1[] = {
--	{ 1U, 3484351685U },
--	{ 2U, 2623130059U },
--	{ 3U, 3125133893U },
--	{ 4U,  984847254U },
--};
--
--static struct prandom_test2 {
--	u32 seed;
--	u32 iteration;
--	u32 result;
--} test2[] = {
--	/* Test cases against taus113 from GSL library. */
--	{  931557656U, 959U, 2975593782U },
--	{ 1339693295U, 876U, 3887776532U },
--	{ 1545556285U, 961U, 1615538833U },
--	{  601730776U, 723U, 1776162651U },
--	{ 1027516047U, 687U,  511983079U },
--	{  416526298U, 700U,  916156552U },
--	{ 1395522032U, 652U, 2222063676U },
--	{  366221443U, 617U, 2992857763U },
--	{ 1539836965U, 714U, 3783265725U },
--	{  556206671U, 994U,  799626459U },
--	{  684907218U, 799U,  367789491U },
--	{ 2121230701U, 931U, 2115467001U },
--	{ 1668516451U, 644U, 3620590685U },
--	{  768046066U, 883U, 2034077390U },
--	{ 1989159136U, 833U, 1195767305U },
--	{  536585145U, 996U, 3577259204U },
--	{ 1008129373U, 642U, 1478080776U },
--	{ 1740775604U, 939U, 1264980372U },
--	{ 1967883163U, 508U,   10734624U },
--	{ 1923019697U, 730U, 3821419629U },
--	{  442079932U, 560U, 3440032343U },
--	{ 1961302714U, 845U,  841962572U },
--	{ 2030205964U, 962U, 1325144227U },
--	{ 1160407529U, 507U,  240940858U },
--	{  635482502U, 779U, 4200489746U },
--	{ 1252788931U, 699U,  867195434U },
--	{ 1961817131U, 719U,  668237657U },
--	{ 1071468216U, 983U,  917876630U },
--	{ 1281848367U, 932U, 1003100039U },
--	{  582537119U, 780U, 1127273778U },
--	{ 1973672777U, 853U, 1071368872U },
--	{ 1896756996U, 762U, 1127851055U },
--	{  847917054U, 500U, 1717499075U },
--	{ 1240520510U, 951U, 2849576657U },
--	{ 1685071682U, 567U, 1961810396U },
--	{ 1516232129U, 557U,    3173877U },
--	{ 1208118903U, 612U, 1613145022U },
--	{ 1817269927U, 693U, 4279122573U },
--	{ 1510091701U, 717U,  638191229U },
--	{  365916850U, 807U,  600424314U },
--	{  399324359U, 702U, 1803598116U },
--	{ 1318480274U, 779U, 2074237022U },
--	{  697758115U, 840U, 1483639402U },
--	{ 1696507773U, 840U,  577415447U },
--	{ 2081979121U, 981U, 3041486449U },
--	{  955646687U, 742U, 3846494357U },
--	{ 1250683506U, 749U,  836419859U },
--	{  595003102U, 534U,  366794109U },
--	{   47485338U, 558U, 3521120834U },
--	{  619433479U, 610U, 3991783875U },
--	{  704096520U, 518U, 4139493852U },
--	{ 1712224984U, 606U, 2393312003U },
--	{ 1318233152U, 922U, 3880361134U },
--	{  855572992U, 761U, 1472974787U },
--	{   64721421U, 703U,  683860550U },
--	{  678931758U, 840U,  380616043U },
--	{  692711973U, 778U, 1382361947U },
--	{  677703619U, 530U, 2826914161U },
--	{   92393223U, 586U, 1522128471U },
--	{ 1222592920U, 743U, 3466726667U },
--	{  358288986U, 695U, 1091956998U },
--	{ 1935056945U, 958U,  514864477U },
--	{  735675993U, 990U, 1294239989U },
--	{ 1560089402U, 897U, 2238551287U },
--	{   70616361U, 829U,   22483098U },
--	{  368234700U, 731U, 2913875084U },
--	{   20221190U, 879U, 1564152970U },
--	{  539444654U, 682U, 1835141259U },
--	{ 1314987297U, 840U, 1801114136U },
--	{ 2019295544U, 645U, 3286438930U },
--	{  469023838U, 716U, 1637918202U },
--	{ 1843754496U, 653U, 2562092152U },
--	{  400672036U, 809U, 4264212785U },
--	{  404722249U, 965U, 2704116999U },
--	{  600702209U, 758U,  584979986U },
--	{  519953954U, 667U, 2574436237U },
--	{ 1658071126U, 694U, 2214569490U },
--	{  420480037U, 749U, 3430010866U },
--	{  690103647U, 969U, 3700758083U },
--	{ 1029424799U, 937U, 3787746841U },
--	{ 2012608669U, 506U, 3362628973U },
--	{ 1535432887U, 998U,   42610943U },
--	{ 1330635533U, 857U, 3040806504U },
--	{ 1223800550U, 539U, 3954229517U },
--	{ 1322411537U, 680U, 3223250324U },
--	{ 1877847898U, 945U, 2915147143U },
--	{ 1646356099U, 874U,  965988280U },
--	{  805687536U, 744U, 4032277920U },
--	{ 1948093210U, 633U, 1346597684U },
--	{  392609744U, 783U, 1636083295U },
--	{  690241304U, 770U, 1201031298U },
--	{ 1360302965U, 696U, 1665394461U },
--	{ 1220090946U, 780U, 1316922812U },
--	{  447092251U, 500U, 3438743375U },
--	{ 1613868791U, 592U,  828546883U },
--	{  523430951U, 548U, 2552392304U },
--	{  726692899U, 810U, 1656872867U },
--	{ 1364340021U, 836U, 3710513486U },
--	{ 1986257729U, 931U,  935013962U },
--	{  407983964U, 921U,  728767059U },
--};
--
--static void prandom_state_selftest_seed(struct rnd_state *state, u32 seed)
--{
--#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
--	state->s1 = __seed(LCG(seed),        2U);
--	state->s2 = __seed(LCG(state->s1),   8U);
--	state->s3 = __seed(LCG(state->s2),  16U);
--	state->s4 = __seed(LCG(state->s3), 128U);
--}
--
--static int __init prandom_state_selftest(void)
--{
--	int i, j, errors = 0, runs = 0;
--	bool error = false;
--
--	for (i = 0; i < ARRAY_SIZE(test1); i++) {
--		struct rnd_state state;
--
--		prandom_state_selftest_seed(&state, test1[i].seed);
--		prandom_warmup(&state);
--
--		if (test1[i].result != prandom_u32_state(&state))
--			error = true;
--	}
--
--	if (error)
--		pr_warn("prandom: seed boundary self test failed\n");
--	else
--		pr_info("prandom: seed boundary self test passed\n");
--
--	for (i = 0; i < ARRAY_SIZE(test2); i++) {
--		struct rnd_state state;
--
--		prandom_state_selftest_seed(&state, test2[i].seed);
--		prandom_warmup(&state);
--
--		for (j = 0; j < test2[i].iteration - 1; j++)
--			prandom_u32_state(&state);
--
--		if (test2[i].result != prandom_u32_state(&state))
--			errors++;
--
--		runs++;
--		cond_resched();
--	}
--
--	if (errors)
--		pr_warn("prandom: %d/%d self tests failed\n", errors, runs);
--	else
--		pr_info("prandom: %d self tests passed\n", runs);
--	return 0;
--}
--core_initcall(prandom_state_selftest);
--#endif
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 601dba4b7..39d283b26 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -49,5 +49,6 @@ obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
- obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
- obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
- obj-$(CONFIG_RATELIMIT_KUNIT_TEST) += test_ratelimit.o
-+obj-$(CONFIG_PRANDOM_KUNIT_TEST) += random32_kunit.o
- 
- obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
-diff --git a/lib/tests/random32_kunit.c b/lib/tests/random32_kunit.c
-new file mode 100644
-index 000000000..0b4af2b09
---- /dev/null
-+++ b/lib/tests/random32_kunit.c
-@@ -0,0 +1,182 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test cases for random32 functions.
-+ */
-+
-+#include <linux/prandom.h>
-+#include <kunit/test.h>
-+
-+/* prandom_warmup() is static in lib/random32.c; exposed for testing only. */
-+void prandom_warmup(struct rnd_state *state);
-+
-+static const struct prandom_test1 {
-+	u32 seed;
-+	u32 result;
-+} test1[] = {
-+	{ 1U, 3484351685U },
-+	{ 2U, 2623130059U },
-+	{ 3U, 3125133893U },
-+	{ 4U,  984847254U },
-+};
-+
-+static const struct prandom_test2 {
-+	u32 seed;
-+	u32 iteration;
-+	u32 result;
-+} test2[] = {
-+	/* Test cases against taus113 from GSL library. */
-+	{  931557656U, 959U, 2975593782U },
-+	{ 1339693295U, 876U, 3887776532U },
-+	{ 1545556285U, 961U, 1615538833U },
-+	{  601730776U, 723U, 1776162651U },
-+	{ 1027516047U, 687U,  511983079U },
-+	{  416526298U, 700U,  916156552U },
-+	{ 1395522032U, 652U, 2222063676U },
-+	{  366221443U, 617U, 2992857763U },
-+	{ 1539836965U, 714U, 3783265725U },
-+	{  556206671U, 994U,  799626459U },
-+	{  684907218U, 799U,  367789491U },
-+	{ 2121230701U, 931U, 2115467001U },
-+	{ 1668516451U, 644U, 3620590685U },
-+	{  768046066U, 883U, 2034077390U },
-+	{ 1989159136U, 833U, 1195767305U },
-+	{  536585145U, 996U, 3577259204U },
-+	{ 1008129373U, 642U, 1478080776U },
-+	{ 1740775604U, 939U, 1264980372U },
-+	{ 1967883163U, 508U,   10734624U },
-+	{ 1923019697U, 730U, 3821419629U },
-+	{  442079932U, 560U, 3440032343U },
-+	{ 1961302714U, 845U,  841962572U },
-+	{ 2030205964U, 962U, 1325144227U },
-+	{ 1160407529U, 507U,  240940858U },
-+	{  635482502U, 779U, 4200489746U },
-+	{ 1252788931U, 699U,  867195434U },
-+	{ 1961817131U, 719U,  668237657U },
-+	{ 1071468216U, 983U,  917876630U },
-+	{ 1281848367U, 932U, 1003100039U },
-+	{  582537119U, 780U, 1127273778U },
-+	{ 1973672777U, 853U, 1071368872U },
-+	{ 1896756996U, 762U, 1127851055U },
-+	{  847917054U, 500U, 1717499075U },
-+	{ 1240520510U, 951U, 2849576657U },
-+	{ 1685071682U, 567U, 1961810396U },
-+	{ 1516232129U, 557U,    3173877U },
-+	{ 1208118903U, 612U, 1613145022U },
-+	{ 1817269927U, 693U, 4279122573U },
-+	{ 1510091701U, 717U,  638191229U },
-+	{  365916850U, 807U,  600424314U },
-+	{  399324359U, 702U, 1803598116U },
-+	{ 1318480274U, 779U, 2074237022U },
-+	{  697758115U, 840U, 1483639402U },
-+	{ 1696507773U, 840U,  577415447U },
-+	{ 2081979121U, 981U, 3041486449U },
-+	{  955646687U, 742U, 3846494357U },
-+	{ 1250683506U, 749U,  836419859U },
-+	{  595003102U, 534U,  366794109U },
-+	{   47485338U, 558U, 3521120834U },
-+	{  619433479U, 610U, 3991783875U },
-+	{  704096520U, 518U, 4139493852U },
-+	{ 1712224984U, 606U, 2393312003U },
-+	{ 1318233152U, 922U, 3880361134U },
-+	{  855572992U, 761U, 1472974787U },
-+	{   64721421U, 703U,  683860550U },
-+	{  678931758U, 840U,  380616043U },
-+	{  692711973U, 778U, 1382361947U },
-+	{  677703619U, 530U, 2826914161U },
-+	{   92393223U, 586U, 1522128471U },
-+	{ 1222592920U, 743U, 3466726667U },
-+	{  358288986U, 695U, 1091956998U },
-+	{ 1935056945U, 958U,  514864477U },
-+	{  735675993U, 990U, 1294239989U },
-+	{ 1560089402U, 897U, 2238551287U },
-+	{   70616361U, 829U,   22483098U },
-+	{  368234700U, 731U, 2913875084U },
-+	{   20221190U, 879U, 1564152970U },
-+	{  539444654U, 682U, 1835141259U },
-+	{ 1314987297U, 840U, 1801114136U },
-+	{ 2019295544U, 645U, 3286438930U },
-+	{  469023838U, 716U, 1637918202U },
-+	{ 1843754496U, 653U, 2562092152U },
-+	{  400672036U, 809U, 4264212785U },
-+	{  404722249U, 965U, 2704116999U },
-+	{  600702209U, 758U,  584979986U },
-+	{  519953954U, 667U, 2574436237U },
-+	{ 1658071126U, 694U, 2214569490U },
-+	{  420480037U, 749U, 3430010866U },
-+	{  690103647U, 969U, 3700758083U },
-+	{ 1029424799U, 937U, 3787746841U },
-+	{ 2012608669U, 506U, 3362628973U },
-+	{ 1535432887U, 998U,   42610943U },
-+	{ 1330635533U, 857U, 3040806504U },
-+	{ 1223800550U, 539U, 3954229517U },
-+	{ 1322411537U, 680U, 3223250324U },
-+	{ 1877847898U, 945U, 2915147143U },
-+	{ 1646356099U, 874U,  965988280U },
-+	{  805687536U, 744U, 4032277920U },
-+	{ 1948093210U, 633U, 1346597684U },
-+	{  392609744U, 783U, 1636083295U },
-+	{  690241304U, 770U, 1201031298U },
-+	{ 1360302965U, 696U, 1665394461U },
-+	{ 1220090946U, 780U, 1316922812U },
-+	{  447092251U, 500U, 3438743375U },
-+	{ 1613868791U, 592U,  828546883U },
-+	{  523430951U, 548U, 2552392304U },
-+	{  726692899U, 810U, 1656872867U },
-+	{ 1364340021U, 836U, 3710513486U },
-+	{ 1986257729U, 931U,  935013962U },
-+	{  407983964U, 921U,  728767059U },
-+};
-+
-+static void prandom_state_test_seed(struct rnd_state *state, u32 seed)
-+{
-+#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
-+	state->s1 = __seed(LCG(seed),        2U);
-+	state->s2 = __seed(LCG(state->s1),   8U);
-+	state->s3 = __seed(LCG(state->s2),  16U);
-+	state->s4 = __seed(LCG(state->s3), 128U);
-+}
-+
-+static void test_prandom_seed_boundary(struct kunit *test)
-+{
-+	int i;
-+	struct rnd_state state;
-+
-+	for (i = 0; i < ARRAY_SIZE(test1); i++) {
-+		prandom_state_test_seed(&state, test1[i].seed);
-+		prandom_warmup(&state);
-+		KUNIT_EXPECT_EQ(test, test1[i].result, prandom_u32_state(&state));
-+	}
-+}
-+
-+static void test_prandom_taus113(struct kunit *test)
-+{
-+	int i, j;
-+	struct rnd_state state;
-+
-+	for (i = 0; i < ARRAY_SIZE(test2); i++) {
-+		prandom_state_test_seed(&state, test2[i].seed);
-+		prandom_warmup(&state);
-+
-+		for (j = 0; j < test2[i].iteration - 1; j++)
-+			prandom_u32_state(&state);
-+
-+		KUNIT_EXPECT_EQ(test, test2[i].result, prandom_u32_state(&state));
-+	}
-+}
-+
-+static struct kunit_case prandom_test_cases[] = {
-+	KUNIT_CASE(test_prandom_seed_boundary),
-+	KUNIT_CASE(test_prandom_taus113),
-+	{}
-+};
-+
-+static struct kunit_suite prandom_test_suite = {
-+	.name = "prandom",
-+	.test_cases = prandom_test_cases,
-+};
-+
-+kunit_test_suite(prandom_test_suite);
-+
-+MODULE_DESCRIPTION("KUnit test for prandom");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
--- 
-2.52.0
+>
+>>   /*
+>>    * Wait if task attach is in progress until it is done and then 
+>> acquire
+>> @@ -3044,8 +3046,23 @@ static int cpuset_can_attach_check(struct 
+>> cpuset *cs, struct cpuset *oldcs,
+>>       if (!oldcs)
+>>           return 0;
+>>   -    if (!llist_on_list(&oldcs->attach_node))
+>> +    /*
+>> +     * The same cpuset cannot be both a source and a destination.
+>> +     * The current code does not support that, print a warning and
+>> +     * fail the attach if so.
+>> +     */
+>> +    if (WARN_ON_ONCE((!oldcs->attach_source &&
+>> +              llist_on_list(&oldcs->attach_node)) ||
+>> +              cs->attach_source))
+>> +        return -EINVAL;
+>> +
+>> +    if (!llist_on_list(&oldcs->attach_node)) {
+>>           llist_add(&oldcs->attach_node, &src_cs_head);
+>> +        oldcs->attach_source = true;
+>> +    }
+>> +
+>> +    if (!llist_on_list(&cs->attach_node))
+>> +        llist_add(&cs->attach_node, &dst_cs_head);
+>>         cpus_updated = !cpumask_equal(cs->effective_cpus, 
+>> oldcs->effective_cpus);
+>>       mems_updated = !nodes_equal(cs->effective_mems, 
+>> oldcs->effective_mems);
+>> @@ -3075,35 +3092,31 @@ static int cpuset_can_attach_check(struct 
+>> cpuset *cs, struct cpuset *oldcs,
+>>       return 0;
+>>   }
+>>   -static int cpuset_reserve_dl_bw(struct cpuset *cs)
+>> +static int cpuset_reserve_dl_bw(void)
+>>   {
+>> +    struct cpuset *cs;
+>>       int cpu, ret;
+>>   -    if (!cs->sum_migrate_dl_bw)
+>> -        return 0;
+>> +    llist_for_each_entry(cs, dst_cs_head.first, attach_node) {
+>> +        if (!cs->sum_migrate_dl_bw)
+>> +            continue;
+>>   -    cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
+>> -    if (unlikely(cpu >= nr_cpu_ids))
+>> -        return -EINVAL;
+>> +        cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
+>> +        if (unlikely(cpu >= nr_cpu_ids))
+>> +            return -EINVAL;
+>>   -    ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
+>> -    if (ret)
+>> -        return ret;
+>> +        ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
+>> +        if (ret)
+>> +            return ret;
+>>   -    cs->dl_bw_cpu = cpu;
+>> +        cs->dl_bw_cpu = cpu;
+>> +    }
+>>       return 0;
+>>   }
+>>   -static void reset_migrate_dl_data(struct cpuset *cs)
+>> -{
+>> -    cs->nr_migrate_dl_tasks = 0;
+>> -    cs->sum_migrate_dl_bw = 0;
+>> -    cs->dl_bw_cpu = -1;
+>> -}
+>> -
+>>   /*
+>>    * Clear and optionally apply (@cancel is false) the attach related 
+>> data in the
+>> - * source cpusets.
+>> + * source or destination cpuset.
+>>    */
+>>   static void clear_attach_data(struct llist_head *head, bool cancel)
+>>   {
+>> @@ -3115,8 +3128,13 @@ static void clear_attach_data(struct 
+>> llist_head *head, bool cancel)
+>>           if (cs->nr_migrate_dl_tasks) {
+>>               if (!cancel)
+>>                   atomic_add(cs->nr_migrate_dl_tasks, 
+>> &cs->nr_deadline_tasks);
+>> +            else if (cs->dl_bw_cpu >= 0) /* && cacnel */
+>> +                dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
+>>               cs->nr_migrate_dl_tasks = 0;
+>> +            cs->sum_migrate_dl_bw = 0;
+>> +            cs->dl_bw_cpu = -1;
+>>           }
+>> +        cs->attach_source = false;
+>>       }
+>>   }
+>>   @@ -3137,6 +3155,7 @@ static int cpuset_can_attach(struct 
+>> cgroup_taskset *tset)
+>>       mutex_lock(&cpuset_mutex);
+>>       attach_ctx.cpus_updated = false;
+>>       attach_ctx.mems_updated = false;
+>> +    attach_ctx.many_dest_cs = false;
+>>         /* Check to see if task is allowed in the cpuset */
+>>       ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
+>> @@ -3161,9 +3180,13 @@ static int cpuset_can_attach(struct 
+>> cgroup_taskset *tset)
+>>        * selected as attach_ctx.old_cs.
+>>        */
+>>       cgroup_taskset_for_each(task, css, tset) {
+>> +        struct cpuset *new_cs = css_cs(css);
+>>           struct cpuset *new_oldcs = task_cs(task);
+>>   -        if (new_oldcs != oldcs) {
+>> +        if ((new_oldcs != oldcs) || (new_cs != cs)) {
+>> +            if (new_cs != cs)
+>> +                attach_ctx.many_dest_cs = true;
+>> +            cs = new_cs;
+>>               oldcs = new_oldcs;
+>>               ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
+>>               if (ret)
+>> @@ -3197,12 +3220,28 @@ static int cpuset_can_attach(struct 
+>> cgroup_taskset *tset)
+>>           }
+>>       }
+>>   -    ret = cpuset_reserve_dl_bw(cs);
+>> +    /*
+>> +     * The only case where there are multiple destination cpusets for
+>> +     * task migration is when enabling a v2 cpuset controllers where
+>> +     * tasks will be migrated to multiple child cpusets from a parent
+>> +     * cpuset with the same effective CPUs and memory nodes. IOW,
+>> +     * both attach_cpus_updated and attach_mems_updated should be 
+>> false.
+>> +     * If not, it is a condition that the current code cannot handled.
+>> +     * Print a warning and abort the attach operation as further code
+>> +     * change will be needed.
+>> +     */
+>> +    if (WARN_ON_ONCE(attach_ctx.many_dest_cs && (!cpuset_v2() ||
+>> +             attach_ctx.cpus_updated || attach_ctx.mems_updated))) {
+>> +        ret = -EINVAL;
+>> +        goto out_unlock;
+>> +    }
+>> +
+>> +    ret = cpuset_reserve_dl_bw();
+>>     out_unlock:
+>>       if (ret) {
+>> -        reset_migrate_dl_data(cs); /* Destination cpuset only */
+>>           clear_attach_data(&src_cs_head, true);
+>> +        clear_attach_data(&dst_cs_head, true);
+>>       } else {
+>>           attach_ctx.in_progress++;
+>>       }
+>> @@ -3213,22 +3252,10 @@ static int cpuset_can_attach(struct 
+>> cgroup_taskset *tset)
+>>     static void cpuset_cancel_attach(struct cgroup_taskset *tset)
+>>   {
+>> -    struct cgroup_subsys_state *css;
+>> -    struct cpuset *cs;
+>> -
+>> -    cgroup_taskset_first(tset, &css);
+>> -    cs = css_cs(css);
+>> -
+>>       mutex_lock(&cpuset_mutex);
+>>       dec_attach_in_progress_locked();
+>>       clear_attach_data(&src_cs_head, true);
+>> -
+>> -    if (cs->dl_bw_cpu >= 0)
+>> -        dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
+>> -
+>> -    if (cs->nr_migrate_dl_tasks)
+>> -        reset_migrate_dl_data(cs);
+>> -
+>> +    clear_attach_data(&dst_cs_head, true);
+>>       mutex_unlock(&cpuset_mutex);
+>>   }
+>>   @@ -3311,25 +3338,25 @@ static void cpuset_attach(struct 
+>> cgroup_taskset *tset)
+>>        * In the default hierarchy, enabling cpuset in the child cgroups
+>>        * will trigger a cpuset_attach() call with no change in 
+>> effective cpus
+>>        * and mems. In that case, we can optimize out by skipping the 
+>> task
+>> -     * iteration and update.
+>> +     * iteration and updatebut the destination cpuset list is 
+>> iterated to
+>      updatebut -> update, but?> +     * set old_mems_allowed.
+>>        */
+>> -    if (cpuset_v2() && !attach_ctx.cpus_updated && 
+>> !attach_ctx.mems_updated)
+>> +    if (cpuset_v2() && !attach_ctx.cpus_updated && 
+>> !attach_ctx.mems_updated) {
+>> +        llist_for_each_entry(cs, dst_cs_head.first, attach_node)
+>> +            cs->old_mems_allowed = attach_ctx.nodemask_to;
+>>           goto out;
+>> +    }
+>>   +    /* Task iteration shouldn't happen with 
+>> attach_ctx.many_dest_cs set */
+>>       cgroup_taskset_for_each(task, css, tset)
+>>           cpuset_attach_task(cs, task);
+>>   -out:
+>>       if (attach_ctx.task_work_queued)
+>>           schedule_flush_migrate_mm();
+>>       cs->old_mems_allowed = attach_ctx.nodemask_to;
+>> -
+>> -    if (cs->nr_migrate_dl_tasks) {
+>> -        atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
+>> -        reset_migrate_dl_data(cs);
+>> -    }
+>> -
+>> +out:
+>>       clear_attach_data(&src_cs_head, false);
+>> +    clear_attach_data(&dst_cs_head, false);
+>>       dec_attach_in_progress_locked();
+>>         mutex_unlock(&cpuset_mutex);
+>
+> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+>
 
