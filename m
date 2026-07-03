@@ -1,354 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70DC364E80
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 05:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A729B3655EA;
+	Fri,  3 Jul 2026 06:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783058215; cv=none; b=aQm+CMpIkzW5yyIZ9ulnbiHchdOMgcus6AZMEIj1mtB5B+4rwopcEtKRIKEDhXI8BWM/KSLQKC+S0cTEyKOYg2U5TDT2RgIarxnwMrvmf65p73+1g4fzERmOzmsNTcgkcurFgh3GBrIUqjmvRVjGdYOG6aMJyHuHId5exbdnh5M=
+	t=1783058665; cv=none; b=iD9fhnzLIK7yBDNyHmWNxxFhTIUKqSc9KlyyRH8477dPMNO2PGjTsT8stS+YqOtO+XlgxEyB4LR963npgoI4jpIn6uSK7NgIBPp4Etn5wyLXf5lSd5GaP07+2R/m3iFVUY/8A3mzl5TkdrG8jdAdltnifnwLJOo0zvbtQSNOhlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783058215; c=relaxed/simple;
-	bh=3sYzbaBmtugcRQJyp0gpMkQF6yclm1aMLvUq9SjdyiQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kwsZz70dlVlAm0Cy+qGrZUKzEqaCaHRSxeA32S6+GVQ+AMxhi0Tx9JdGY0qZ4TfHzsGUKXLg1MPYVeqQSrGolZq3qX3X4V51Zq9LHlQF8mFohQ9pUBixUiCjfALrStPSMBellbTUbTLymHzoa92xu1sSvw62mfZVGCE54ljq4DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a1b6M+I7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783058665; c=relaxed/simple;
+	bh=0xv7uP9Oaijvxl1OZ7odzKCoFJhpt++ekmtViYEMvv0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k9Nwx0K/zss6i2+5Klpc3/ZONKth85N+S4r1E4TpKGqYjHidPnu1DgSOQ+VASw1LGO7RMSnZ2DJaQnr/oVOqEWb7MN6JlbfUQ5y22sn1NWJUE7U1K8m9AUA91ogQlKsfCYZ+kOyGWfY4lX/4HDFlchtGu8IaQv/jkYzZ9E8M4tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZdXxfLXn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HTNUD6EB; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a1b6M+I7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783058212;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZdXxfLXn";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HTNUD6EB"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1783058661;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y64fWAWHPb6LXJKvL5ApTJBG1MuBOUvs4HV2l3FDgHQ=;
-	b=a1b6M+I7OX/VTV+tdpx3s6I8ZkQQHB14+8I+bHUIbBBhEJ3sKmQjGVBetpQyeOxhWjd3Ga
-	ffPxG7crBdVOtwYJQHEuXXNKXfnr2vLDiVLdwbb9lyPzfDpLDOramX4VON1IwFHF1+RzdK
-	l0+BMZTK1+KkyjrtYA5gr84eP3ulBZk=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-488-egeHS9_gM4S6XNtPCbOknQ-1; Fri,
- 03 Jul 2026 01:56:49 -0400
-X-MC-Unique: egeHS9_gM4S6XNtPCbOknQ-1
-X-Mimecast-MFC-AGG-ID: egeHS9_gM4S6XNtPCbOknQ_1783058207
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4B0F81944AB4;
-	Fri,  3 Jul 2026 05:56:47 +0000 (UTC)
-Received: from [10.2.16.58] (unknown [10.2.16.58])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EDE51800613;
-	Fri,  3 Jul 2026 05:56:42 +0000 (UTC)
-Message-ID: <7d40ab06-7f1c-4cd8-84a0-552c53e2ca20@redhat.com>
-Date: Fri, 3 Jul 2026 01:56:41 -0400
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rj3q4njGKF+XfKqAgwZeMSjHfycU6n05olq8I7af1q8=;
+	b=ZdXxfLXnI4zn/WxPN2fkvhgjZTvTV/3WHJMyNI7h5Kwj/kLDR8ZvhqtM1d9EIqVQ8o2zWj
+	xTOaIUvbiYoutNKzIOutoaJDty83Fgs8G+w0UqYdZ4XPzGx+m2nWuBHuRy75BGN33xK05p
+	aHILt4/VwpuSXYwzuCluYMOsFljivJf0UsKFEcg8fdXcQVHFswQWw1TlKNJT+iqTnmbz5N
+	4jgpZpvxzuxbpEeMSo+YrsC+Q1yGmDQtHoJFkwpw7jmXwCG+lW8OOowS/SZ5Leyq+YhCyL
+	HAgN6DUIZ/2uJ5iaTdzw755byVRIMhS9rRPQ02UOOTBz1vQ9Bl0BUa4kaxmYLg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1783058661;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rj3q4njGKF+XfKqAgwZeMSjHfycU6n05olq8I7af1q8=;
+	b=HTNUD6EBuhPwDD4noLZOrJYSsHTD1oqZktHi9MIg+uoJ4WI0vQzE9Fe/cRFQ8i3dCiuNs2
+	GGHiPxSmCd8vHSDw==
+Date: Fri, 03 Jul 2026 08:04:08 +0200
+Subject: [PATCH] kbuild: unset sub_make_done before calling kselftest build
+ system
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-next v10 10/11] cgroup/cpuset: Support multiple
- destination cpusets for cpuset_*attach()
-To: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260702214757.579012-1-longman@redhat.com>
- <20260702214757.579012-11-longman@redhat.com>
- <5a8b4500-7cab-4ef6-ae96-b0f794ee51a9@linux.dev>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <5a8b4500-7cab-4ef6-ae96-b0f794ee51a9@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MywrCMBAAf6XsuQtJxAb9Fekhj1UXNZGsESHk3
+ 017nGGYBkKFSeA8NSj0ZeGcBuh5gnB36UbIcTAYZRZllcGXe9CVn4Q1CX1Qqt8MxpwIgw/Knw7
+ 2uGgL4/AuI/3t98va+x8OBuv+bQAAAA==
+X-Change-ID: 20260702-makefile-unset-submake-done-cbc0b9375617
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ live-patching@vger.kernel.org, shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783058655; l=1536;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=0xv7uP9Oaijvxl1OZ7odzKCoFJhpt++ekmtViYEMvv0=;
+ b=5bGET+Pivq1os2f+IEA0g9q5IHSwh81+wA/fca9SS8z/ObGDCWiZmxRCL9RjjW7Wvmct+ZKHH
+ mg+uGzaek4PAx0OjOJCgWvIHl/YxpYbhdgwMRGYh8RQLXIUKIOaJZga
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 7/2/26 11:31 PM, Ridong Chen wrote:
->
->
-> On 7/3/2026 5:47 AM, Waiman Long wrote:
->> The only case where the cgroup_taskset structure requires task migration
->> to multiple cpusets is when enabling a cpuset controller in cgroup v2
->> where the newly created child cpusets inherits the same effective CPUs
->> and memory nodes from the parent. In that case, task migration can 
->> happen
->> directly with no update to tasks' CPU and memory nodes assignment and no
->> further work needed from the cpuset side except updating 
->> nr_deadline_tasks
->> when DL tasks are involved and setting old_mems_allowed in the child
->> cpusets.
->>
->> Do that by tracking all the destination cpusets with a new dst_cs_head
->> singly linked list. The reset_migrate_dl_data() function is integrated
->> into clear_attach_data() so that it can be used for both source and
->> destination cpusets.
->>
->> It is assumed that a given cpuset cannot be both a source and a
->> destination cpuset. If such condition happens or when there are multiple
->> destination cpusets with CPU or memory nodes changes, the current code
->> will not handle it correctly. So it will print a warning and fail the
->> attach operation in these unexpected cases as we will have to enhance 
->> the
->> code to support this if such use cases are valid and not coding errors.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   kernel/cgroup/cpuset-internal.h |   1 +
->>   kernel/cgroup/cpuset.c          | 115 ++++++++++++++++++++------------
->>   2 files changed, 72 insertions(+), 44 deletions(-)
->>
->> diff --git a/kernel/cgroup/cpuset-internal.h 
->> b/kernel/cgroup/cpuset-internal.h
->> index e7d010661fd3..d1161b0a3d85 100644
->> --- a/kernel/cgroup/cpuset-internal.h
->> +++ b/kernel/cgroup/cpuset-internal.h
->> @@ -149,6 +149,7 @@ struct cpuset {
->>        * For linking impacted cpusets during an attach operation.
->>        */
->>       struct llist_node attach_node;
->> +    bool attach_source;
->>         /* partition root state */
->>       int partition_root_state;
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 4bbfae041b63..cf14dc506a40 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -366,10 +366,12 @@ static struct {
->>       bool cpus_updated;
->>       bool mems_updated;
->>       bool task_work_queued;
->> +    bool many_dest_cs;    /* Have many destination cpusets */
->>       struct cpuset *old_cs;    /* Source cpuset */
->>       nodemask_t nodemask_to;
->>   } attach_ctx;
->>   static LLIST_HEAD(src_cs_head);
->> +static LLIST_HEAD(dst_cs_head);
->
-> Nit.
->
-> Would it make sense to move src_cs_head/dst_cs_head into attach_ctx?
+The kselftest build system may recourse back into kbuild when building
+test modules. In that case kbuild needs to parse the new flags passed
+from the command line, instead of using the ones inherited from the
+kbuild invocation.
 
-I had thought about it, but it is more simple to just use LIST_HEAD() 
-macro than explicitly initialize just the two llist_head's in the structure.
+Force that command line reevaluation.
 
-Cheers,
-Longman
+The same was done for scripts/install.sh in commit 14ccc638b02f9ec
+("kbuild: cancel sub_make_done for the install target to fix DKMS")
 
->
->>   /*
->>    * Wait if task attach is in progress until it is done and then 
->> acquire
->> @@ -3044,8 +3046,23 @@ static int cpuset_can_attach_check(struct 
->> cpuset *cs, struct cpuset *oldcs,
->>       if (!oldcs)
->>           return 0;
->>   -    if (!llist_on_list(&oldcs->attach_node))
->> +    /*
->> +     * The same cpuset cannot be both a source and a destination.
->> +     * The current code does not support that, print a warning and
->> +     * fail the attach if so.
->> +     */
->> +    if (WARN_ON_ONCE((!oldcs->attach_source &&
->> +              llist_on_list(&oldcs->attach_node)) ||
->> +              cs->attach_source))
->> +        return -EINVAL;
->> +
->> +    if (!llist_on_list(&oldcs->attach_node)) {
->>           llist_add(&oldcs->attach_node, &src_cs_head);
->> +        oldcs->attach_source = true;
->> +    }
->> +
->> +    if (!llist_on_list(&cs->attach_node))
->> +        llist_add(&cs->attach_node, &dst_cs_head);
->>         cpus_updated = !cpumask_equal(cs->effective_cpus, 
->> oldcs->effective_cpus);
->>       mems_updated = !nodes_equal(cs->effective_mems, 
->> oldcs->effective_mems);
->> @@ -3075,35 +3092,31 @@ static int cpuset_can_attach_check(struct 
->> cpuset *cs, struct cpuset *oldcs,
->>       return 0;
->>   }
->>   -static int cpuset_reserve_dl_bw(struct cpuset *cs)
->> +static int cpuset_reserve_dl_bw(void)
->>   {
->> +    struct cpuset *cs;
->>       int cpu, ret;
->>   -    if (!cs->sum_migrate_dl_bw)
->> -        return 0;
->> +    llist_for_each_entry(cs, dst_cs_head.first, attach_node) {
->> +        if (!cs->sum_migrate_dl_bw)
->> +            continue;
->>   -    cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
->> -    if (unlikely(cpu >= nr_cpu_ids))
->> -        return -EINVAL;
->> +        cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
->> +        if (unlikely(cpu >= nr_cpu_ids))
->> +            return -EINVAL;
->>   -    ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
->> -    if (ret)
->> -        return ret;
->> +        ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
->> +        if (ret)
->> +            return ret;
->>   -    cs->dl_bw_cpu = cpu;
->> +        cs->dl_bw_cpu = cpu;
->> +    }
->>       return 0;
->>   }
->>   -static void reset_migrate_dl_data(struct cpuset *cs)
->> -{
->> -    cs->nr_migrate_dl_tasks = 0;
->> -    cs->sum_migrate_dl_bw = 0;
->> -    cs->dl_bw_cpu = -1;
->> -}
->> -
->>   /*
->>    * Clear and optionally apply (@cancel is false) the attach related 
->> data in the
->> - * source cpusets.
->> + * source or destination cpuset.
->>    */
->>   static void clear_attach_data(struct llist_head *head, bool cancel)
->>   {
->> @@ -3115,8 +3128,13 @@ static void clear_attach_data(struct 
->> llist_head *head, bool cancel)
->>           if (cs->nr_migrate_dl_tasks) {
->>               if (!cancel)
->>                   atomic_add(cs->nr_migrate_dl_tasks, 
->> &cs->nr_deadline_tasks);
->> +            else if (cs->dl_bw_cpu >= 0) /* && cacnel */
->> +                dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
->>               cs->nr_migrate_dl_tasks = 0;
->> +            cs->sum_migrate_dl_bw = 0;
->> +            cs->dl_bw_cpu = -1;
->>           }
->> +        cs->attach_source = false;
->>       }
->>   }
->>   @@ -3137,6 +3155,7 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>       mutex_lock(&cpuset_mutex);
->>       attach_ctx.cpus_updated = false;
->>       attach_ctx.mems_updated = false;
->> +    attach_ctx.many_dest_cs = false;
->>         /* Check to see if task is allowed in the cpuset */
->>       ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
->> @@ -3161,9 +3180,13 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>        * selected as attach_ctx.old_cs.
->>        */
->>       cgroup_taskset_for_each(task, css, tset) {
->> +        struct cpuset *new_cs = css_cs(css);
->>           struct cpuset *new_oldcs = task_cs(task);
->>   -        if (new_oldcs != oldcs) {
->> +        if ((new_oldcs != oldcs) || (new_cs != cs)) {
->> +            if (new_cs != cs)
->> +                attach_ctx.many_dest_cs = true;
->> +            cs = new_cs;
->>               oldcs = new_oldcs;
->>               ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
->>               if (ret)
->> @@ -3197,12 +3220,28 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>           }
->>       }
->>   -    ret = cpuset_reserve_dl_bw(cs);
->> +    /*
->> +     * The only case where there are multiple destination cpusets for
->> +     * task migration is when enabling a v2 cpuset controllers where
->> +     * tasks will be migrated to multiple child cpusets from a parent
->> +     * cpuset with the same effective CPUs and memory nodes. IOW,
->> +     * both attach_cpus_updated and attach_mems_updated should be 
->> false.
->> +     * If not, it is a condition that the current code cannot handled.
->> +     * Print a warning and abort the attach operation as further code
->> +     * change will be needed.
->> +     */
->> +    if (WARN_ON_ONCE(attach_ctx.many_dest_cs && (!cpuset_v2() ||
->> +             attach_ctx.cpus_updated || attach_ctx.mems_updated))) {
->> +        ret = -EINVAL;
->> +        goto out_unlock;
->> +    }
->> +
->> +    ret = cpuset_reserve_dl_bw();
->>     out_unlock:
->>       if (ret) {
->> -        reset_migrate_dl_data(cs); /* Destination cpuset only */
->>           clear_attach_data(&src_cs_head, true);
->> +        clear_attach_data(&dst_cs_head, true);
->>       } else {
->>           attach_ctx.in_progress++;
->>       }
->> @@ -3213,22 +3252,10 @@ static int cpuset_can_attach(struct 
->> cgroup_taskset *tset)
->>     static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->>   {
->> -    struct cgroup_subsys_state *css;
->> -    struct cpuset *cs;
->> -
->> -    cgroup_taskset_first(tset, &css);
->> -    cs = css_cs(css);
->> -
->>       mutex_lock(&cpuset_mutex);
->>       dec_attach_in_progress_locked();
->>       clear_attach_data(&src_cs_head, true);
->> -
->> -    if (cs->dl_bw_cpu >= 0)
->> -        dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
->> -
->> -    if (cs->nr_migrate_dl_tasks)
->> -        reset_migrate_dl_data(cs);
->> -
->> +    clear_attach_data(&dst_cs_head, true);
->>       mutex_unlock(&cpuset_mutex);
->>   }
->>   @@ -3311,25 +3338,25 @@ static void cpuset_attach(struct 
->> cgroup_taskset *tset)
->>        * In the default hierarchy, enabling cpuset in the child cgroups
->>        * will trigger a cpuset_attach() call with no change in 
->> effective cpus
->>        * and mems. In that case, we can optimize out by skipping the 
->> task
->> -     * iteration and update.
->> +     * iteration and updatebut the destination cpuset list is 
->> iterated to
->      updatebut -> update, but?> +     * set old_mems_allowed.
->>        */
->> -    if (cpuset_v2() && !attach_ctx.cpus_updated && 
->> !attach_ctx.mems_updated)
->> +    if (cpuset_v2() && !attach_ctx.cpus_updated && 
->> !attach_ctx.mems_updated) {
->> +        llist_for_each_entry(cs, dst_cs_head.first, attach_node)
->> +            cs->old_mems_allowed = attach_ctx.nodemask_to;
->>           goto out;
->> +    }
->>   +    /* Task iteration shouldn't happen with 
->> attach_ctx.many_dest_cs set */
->>       cgroup_taskset_for_each(task, css, tset)
->>           cpuset_attach_task(cs, task);
->>   -out:
->>       if (attach_ctx.task_work_queued)
->>           schedule_flush_migrate_mm();
->>       cs->old_mems_allowed = attach_ctx.nodemask_to;
->> -
->> -    if (cs->nr_migrate_dl_tasks) {
->> -        atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
->> -        reset_migrate_dl_data(cs);
->> -    }
->> -
->> +out:
->>       clear_attach_data(&src_cs_head, false);
->> +    clear_attach_data(&dst_cs_head, false);
->>       dec_attach_in_progress_locked();
->>         mutex_unlock(&cpuset_mutex);
->
-> Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
->
+Reported-by: Zelin Deng <zelin.deng@linux.alibaba.com>
+Closes: https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+Fixes: c9bb03ac2c66 ("kbuild: reduce output spam when building out of tree")
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index b9c5792c79e0..f717a4dc96d6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1591,10 +1591,10 @@ tools/%: FORCE
+ 
+ PHONY += kselftest
+ kselftest: headers
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
++	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+ 
+ kselftest-%: headers FORCE
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
++	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
+ 
+ PHONY += kselftest-merge
+ kselftest-merge:
+
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260702-makefile-unset-submake-done-cbc0b9375617
+
+Best regards,
+--  
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
