@@ -1,76 +1,78 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F5133F8D4
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 08:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BBF34388A
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 08:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783067120; cv=none; b=LV9xNFY6NczV3yx4q5PAP/uXncABB2eSyNlr19wAxo5vtD72idTzIqRtPFukC/rqsYRkx+SVUeLtpOS25c9yUk/W5ID2M34nCo1BIeZEk8BQCGFjjXQs2niQplWPguCTcuh0A4wR3Zuo52/CCcZKfU4iV25S5B6lSU90f/bdjc0=
+	t=1783067173; cv=none; b=QcgicVIH2C7LFWmy6zQ5iO3bnHA6SKxDwLCyGQFQHeD5c1MaZznqtrR/gMZovfRHJA10yTXu/+ol9Z622o6VoHI8oR+5JrSgJPRRTDCDt8TzWsCL4qFvNYM2VSDnzeBqpRt4C9+A3F8wxWp2mTUcMAjooBS9+J9XNVshzkigLS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783067120; c=relaxed/simple;
-	bh=FMD/ZdR5TV/zMpIaXaekNOgBHrcVT9Hf7I5g9Mfv/xI=;
+	s=arc-20240116; t=1783067173; c=relaxed/simple;
+	bh=XKI2pAfG7OX1O/DXM04l/YZndOsoqOzA948p9sxcHoE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kmVVHlARZoXbKU27/hlbdj8ZMhgGDhc+UxfSw4f6FjRByCEmK8B+McipHSyS4b4EfRq+W1ou2MFq+f7yP1X/Zuvk1Ol4vuLwLCbtwRLkvHjNhi+5EHO73cr7Ijj7FGktNZ9Bpn+IUSTa85kBdgmn0OQb5nU3MNN3s94mb3OBMiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Os+GC+hH; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7fH1gi8QGylGbhKStyjidwKUg/MDTopqD5ExhTkIUyFV9iitLeiByOgZZ4Bdqzdd6h/ekL6ORBHdNl4n/GBJwBVedlQMzkjoMnVvqJjrATTEV3uuTkwR8p8N8jMYf7P7Q2WnMDzdkPe+AAJVGqzigvSaM1lDnJ9uDzmG4CAlng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=S0cPpTDn; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Os+GC+hH"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493ba701891so1989325e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 01:25:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="S0cPpTDn"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-493ba701891so1995935e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 01:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783067118; x=1783671918; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1783067170; x=1783671970; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yxHYpki4yEEhqIJwGY1xJ1lg0TosZM+PSkKjRYtqjgc=;
-        b=Os+GC+hHMQkfgqxPFwtpcjfUFeDUXDrf5RlC1bAZYewXZlBRFJY/dz2Ffn0/h8cXzz
-         +tY1L272fS+oTayj5xKzShUaJ8cJqY5AHXSX0TYCCB4H0y5tjuKh07sjWxwJauaCoBfy
-         j1N7PP3AGIiC7sxNZKaeEGZsi8y2G4Los8TZM6UNGutn1kX1zXYQ9v9ew9KUASHFUpRn
-         r/H+SD33Mbe/flHkLiKLoKzrt4sRjGpr3iaxQAG+JFm6gQ9Fij6SuRSAj4DosElKRfgD
-         N+eWst96LQNkZKGP1ZDwpJ1PoHwzac0YjTcwx3cEGqgVLobgMqci08QSsC9T3djva+TN
-         ZNzw==
+        bh=yi3rhvEIY7HPb2+WXJBWNBz8xP5NaPUV+FO6A/JpBpc=;
+        b=S0cPpTDnY/bjqdlG6CvI1QWYPk5WPF2FxG4eJR8wwRsoNhViXn0w9GyWuFe//az0sy
+         kHFQACYOK8imS6MyX6mTyKsKb9HOOjhnbc+HzOpILUw2F0lL7Wf+Ku/JoJ2oSH1ZPC3Y
+         nVdC9E6StrdVwDFyd+MY8wpd993A+N46BN93Rv9TkT2JOa1ug1e1U/jr6Rb7+sayTzaJ
+         /gI80KtGV5QxfK9xz9T2W58Yiq1aDV+CzEFVFi5LlWTP8bbEKIWK2iSpXYwueCfMGQBf
+         stylJN1XLtC0U9Gy/IRbFfoMkbcKAViwIW0Z8dQkKH670y8b30IcuPIC76bpvn0tEutf
+         b5FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783067118; x=1783671918;
+        d=1e100.net; s=20251104; t=1783067170; x=1783671970;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=yxHYpki4yEEhqIJwGY1xJ1lg0TosZM+PSkKjRYtqjgc=;
-        b=Wfl29piTNGfA4E9jkgi9SlQGRn9v7zDBHljln0sjD5dgmoVJwquPfoRqREEoU7czEJ
-         Aq9Gr2CLwVOCnLUJLKCHrGYX6DxZboIu1KXIRJzrcE8VfdfbCXPkCgjYdmlwpV5hqXns
-         7ALOp79Dpl/fnUJZ62qpm2JdzrhNOFBeNklYwfTP+3cbDxn0mrZtBwhGBUN967/c1wDY
-         zUYX3WdchVn4XI4TL8TDUECCRO1BO59U9M+eJ4Kzn3vS/dsbABhwDW9OSsoyjf7/wg0D
-         I4NTSoVH2EwUn0ka4Ld+R8q+Y1KEutfMnNRYK3cgC0nkSS8utW2tXbVL5nKQdNzAgZ85
-         yhzg==
-X-Forwarded-Encrypted: i=1; AFNElJ+pH/cSANc8Mx7zTkc7fi3e+iFGnVgp57LMQ0hPM+gnI/AeSv8RxzwoguMMCh7qKT4Xzc1hTLLrKFMkFVoo72k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfuzdI31Zldgu/B8L/1zi/4ccLpyhSMFNXi8r7RFIwL5ExR6Sl
-	LvML68JoNLHasWpDCBY/5NwL2M6IrtuP6ipi/wxYetdCCWu5dxzj7teFySpxXAqx4Us=
-X-Gm-Gg: AfdE7cn0/s0MVBz2ZyY6B7omHQnCnAN00egDmhhA4RrdR6GD5iVZg4JXWf5JZ6jn3hX
-	sQg8pfV/qhv6BaQO5NTY/e2nIRjPm3SIIfj+kEMha7ETM+t598dJ1u9qVD3AOUB5sTFk7lFQneT
-	54t3a+VyE2NmMVhZvl6ss86UMitWv86014YnlJPOXlO+xpi2GChSrIzEd9sxPtyglyIHErFpkvg
-	Y3q/vJxF21lhw4mmp466ns7w0/KqnqI7LxtniSc5ZC1dZ8LLW4u4m9CdN57jJuUbuhXkuhEuH7v
-	mR9fpib3m0yToHomv55/cMvgIPI8ugg5NrufjhZbG/rfPuRJQw5gy1Q8/5+83pwGX+9wTqHYvud
-	62lHevtL5Iv6bM/8L+aIqvmtRPZynOXDa4Vt52Rxp465cRf3r7PgRDQcObD/Ydx/7WA/rCZVNvS
-	xZPtNge4KjbKBxxn8=
-X-Received: by 2002:a05:600c:a4a:b0:493:a96b:fa0b with SMTP id 5b1f17b1804b1-493c9bc6d44mr45352795e9.24.1783067117809;
-        Fri, 03 Jul 2026 01:25:17 -0700 (PDT)
+        bh=yi3rhvEIY7HPb2+WXJBWNBz8xP5NaPUV+FO6A/JpBpc=;
+        b=Vm2lxhqyh7jTIsI57/IR/YQuh/e/B31vcnsobl4SpPV+cQzCMpYxmu1UPiceGH427g
+         wLLBKYCybMRfSNsLjDCP0SIMXYyq/eNYcNWP+dURJOZCLcmaoDI5dD66pjioMspca9gP
+         N3cdLRpMKVjIV8vCXGLpUKpZ7kMMV9k7eDOvzZKDOXDSSDNwuU7UXnmxWHBN9MOI2vWF
+         ObGIaV+TqBU0dqgfLcK68INUZ9YbeHB/jm9ycrOxdf1LgP0lucbmuz/iQMTZFVeulW/L
+         cVo9z6vQVfFNT8Rc6hn/e+gHX1YyTxzrFFOydANZCX0kKFIdUN+akrbKigA3OFKCgQYs
+         2QVg==
+X-Forwarded-Encrypted: i=1; AFNElJ/IKam5FZwsZ6/NYj2a33dt0Z+iQPu9GJ2S5U4Hf6y8LW7VNtlYssFng6JcMyJisRg5eDBN6XATUOE9nFxXXeE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2MMy0BEMJEP+5Dil5d7ZMNmaMxHTyEFHOJ5z/6BISBYqouFdT
+	NpfOtc6OLl0G3yh4yGm7pdH6kEr/vwjhE9KPdiSKu1SVCQL4+/rD3ygYyzMcB6apxRs=
+X-Gm-Gg: AfdE7ckX8+zPDo7Q+qRrZYtigdZZb/DV8jMR2MeHIcLoE/MrmGyRNSgca3KLvvc9JMz
+	ji5Wf+nh5MOCmlKXw7bokP8/usQoYVgHPZwKY4GVW04NOFjKwvL8Nic0XkaZYo91dzcxkS7a29R
+	uzu4f36N8cJFyjh/eRu47rXvgyr/HwITxPRptvxTHmtsuReWIxwlAnLVn4rEZuT3oMmI1WYkhkO
+	9zvOlGniLlqPZWKkSNpihmaEUICHPeCLqUd4sDY3CKoy2dhGFabCgWjV6zMWFtVHTWGdjWIhhQ3
+	RfVyNjyAxVIpM+9ZrfWePBhiDe6h2N+zRNCkU6Oa0/spu+KLyZlZGmXau8/O4T9hanSFpKIpeIG
+	PP1zJpSZr5+AGrOXh8bvQwfKPdq2+w09DRWQB99e/VI9uWkN27TOCrSf/4PmU3Om/Db7NlRiJFG
+	7ZSP6+daBj/C8Xe8Q=
+X-Received: by 2002:a05:600c:8718:b0:493:c845:bc20 with SMTP id 5b1f17b1804b1-493c845bc60mr60654815e9.4.1783067170178;
+        Fri, 03 Jul 2026 01:26:10 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493ccdab27dsm28999435e9.4.2026.07.03.01.25.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493cce12c40sm50659555e9.13.2026.07.03.01.26.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2026 01:25:17 -0700 (PDT)
-Date: Fri, 3 Jul 2026 10:25:15 +0200
+        Fri, 03 Jul 2026 01:26:09 -0700 (PDT)
+Date: Fri, 3 Jul 2026 10:26:07 +0200
 From: Petr Mladek <pmladek@suse.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+To: sashiko-reviews@lists.linux.dev
 Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org,
-	Zelin Deng <zelin.deng@linux.alibaba.com>
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	shuah@kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>,
+	linux-kbuild@vger.kernel.org
 Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
  build system
-Message-ID: <akdx6xWTuv5Ga0YY@pathway.suse.cz>
+Message-ID: <akdyH7rRV1WHtBJ3@pathway.suse.cz>
 References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+ <20260703061449.246801F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,37 +82,51 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+In-Reply-To: <20260703061449.246801F000E9@smtp.kernel.org>
 
-On Fri 2026-07-03 08:04:08, Thomas Weiﬂschuh wrote:
-> The kselftest build system may recourse back into kbuild when building
-> test modules. In that case kbuild needs to parse the new flags passed
-> from the command line, instead of using the ones inherited from the
-> kbuild invocation.
+On Fri 2026-07-03 06:14:48, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Incomplete fix and inconsistent state: The patch correctly unsets `sub_make_done` for the `kselftest` targets to allow Kbuild command-line reevaluation when building external kernel modules. However, it fails to apply the same logic to the `tools/` and `tools/%` targets, introducing a discrepancy between build entry points.
+> --
 > 
-> Force that command line reevaluation.
+> commit 06c418388d65deb3d8494a6e8e7071c0e709186b
+> Author: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 > 
-> The same was done for scripts/install.sh in commit 14ccc638b02f9ec
-> ("kbuild: cancel sub_make_done for the install target to fix DKMS")
->
-> Reported-by: Zelin Deng <zelin.deng@linux.alibaba.com>
-> Closes: https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+> kbuild: unset sub_make_done before calling kselftest build system
+> 
+> This commit unsets sub_make_done before invoking the kselftest build system to
+> ensure Kbuild reevaluates command-line flags when building test modules. It
+> mirrors a previous fix done for scripts/install.sh.
+> 
+> > diff --git a/Makefile b/Makefile
+> > index b9c5792c79e01..f717a4dc96d6a 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1591,10 +1591,10 @@ tools/%: FORCE
+> >  
+> >  PHONY += kselftest
+> >  kselftest: headers
+> > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> 
+> [Severity: Medium]
+> Will make tools/selftests still fail after this change?
+> 
+> The tools/ and tools/% targets in Makefile delegate to the tools build
+> system, which can also trigger external kernel module builds (like bpf_testmod).
+> 
+> Because sub_make_done is not unset for these targets, invoking commands like
+> make tools/selftests or make tools/all will skip Kbuild's M= argument parsing.
+> 
+> Should sub_make_done also be unset in the tools/ and tools/% targets to maintain
+> consistency across the build entry points?
 
-It is great that you added references to the related commit and
-the original thread.
+This might make sense. I see that the tools: and tools/%: targets are
+defined right above the kselftest*: ones. And they are even advertised
+in "make help" or "make tools/help".
 
-> Fixes: c9bb03ac2c66 ("kbuild: reduce output spam when building out of tree")
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-
-I believe that this is reasonable solution:
-
-Acked-by: Petr Mladek <pmladek@suse.com>
-
-Zelin, could you please provide your Tested-by, please?
+Well it probably should be done in a separate patch. It would be better
+for bisecting potential regressions. Thomas, Zelin, what do you think, please?
 
 Best Regards,
 Petr
-
-PS: I could take this via livepatching tree. But feel free to take it
-    via kbuild tree. I am going to wait few days until the discussion
-    settles down.
