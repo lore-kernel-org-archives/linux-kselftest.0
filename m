@@ -1,84 +1,85 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776F13164C7
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 03:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814AA33A71A
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 05:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783050725; cv=none; b=q1vsK4ea7P+boaI9RzfiQ5Hpub8rE267GOeYxP13heovXFcG/zY64V6MNADRHEFGvY9tQ2vHqtO93nVxcYYti3B3UiVGShidQj0pBTaK3KrdsQEfAb3O9kPib+tdNCZPLeiOzpepj+eW6WRcrgkvOonms07MN8ij4K6TwbwbSb8=
+	t=1783054890; cv=none; b=EaGZtgm5jLE7yjP7FkSC+d2VQikxGHLZrCDzlCY4++/ARA6VQIutazbpJeRwUrHdLd1XWRCyr3INsTSZDTv63OjziBVNua/pGC+GIPBR8LX3o4NqQ253OAJ1hbLb9fsERHtqkyRI/Dp+T4vfjgmz53Hss1+/AIEZsKnYKBreYBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783050725; c=relaxed/simple;
-	bh=n9otxYLLiVUCiF0NwBWC80h7o2RKMS08s81YRFvEbGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qmr/EcbyoxzeSo7A4A5AaAjZKwhe1/nJ5kjFCfVpZirTAZVnDgyyQiXt59UHGBIxGFjPyMPiKTxDVgA7cDTRvgiTZdWD8FyADhhefnrHALM0dGEQJiN+9OpHDbOqvZDK23j5Ul2GgrzzPSMeNUcylQtKuuZ5cXJXx92UdYQdflw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBULXGrH; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1783054890; c=relaxed/simple;
+	bh=11EVXotu1qTwi7ZGXrvzzeMxpHA0gLqoGkLx4/gvXoo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wy2wC9isI6ubL0gWmUJmisfAeparYJ286hfuPjHd41o0Bzci9c8LPAWAIef7umga7QD/oAHDH1R/S1QvK1t/KtGtc1s8bb7YZ1e89OYmI3yUyncu1mDRowLk+mJaUzbdlPw1QeYmYkguS9KzkI+9AWi9/EzzsrGfW2bSSUM+H/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hN9PW6fl; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBULXGrH"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c7c61b5292so1521935ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 20:51:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hN9PW6fl"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ca11143dbbso1049295ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 22:01:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783050713; x=1783655513; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783054872; x=1783659672; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
-        b=EBULXGrHQOdatlJZ2pVyQERbi8gAUzgYotR+3WB1dxaFC1KToZ7iOHiykVXOw7fUhe
-         SNCYWjJlMpS5FkvHeIWxRio51Z7wNhXENlSoRDmnxxL3tzOr2pGt+Rts7r8yB/LxQNjK
-         0O8QofLWBTzwuLO1njRW2JylNnZW1bOAWUw54ieXrOM9CRiIWIbaLCz+wE9t2Gj858sV
-         hwg4Yi0C13YC5Jq1q1ZLVgVoPPx9MzybPvdBMTXdd5GE+kGGGb4DDeRPPTTk9svanW52
-         wtTKzvonds3q4vZKbLVZcg+ugH35Cbu2X2Lpo8jbu768RAoRFXdZ2h8Pugxaj5xk2jtB
-         dtaQ==
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vOTTbIp30b2abiob/bJSAzkwIrXTOEeNOvRGNGfW9io=;
+        b=hN9PW6flAFjop7As/wCIZgU03erXgJAzdLrcqYZeDNJDKZZTqxul1t4jA0dUIK1bvx
+         oqtVVq83dHN0VFsLGgToJkYaeWld4BCof1Mf2drvbU8rWrumzs+OmfoShmfso8ZyOSA7
+         aivFD2Qq3tTNKZTYWV3hiNcFgtrMPdA168KOXnh9wMDqtq5mHGCSYUIzKHMbBiK+2DB5
+         8neyMVK5dUwXq/vT4fpjhW3Zcb9D3ukVjAoP7jjicfjj1yGmWdXWyYqSZuhgZQl/d0HP
+         Zv4Nz7lu5UM1IBLI6rEBNNRRXcM6z2HgW2KPPNHFaruyyKzqVFI1Gfeu1QwQz2We5Lna
+         nRmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783050713; x=1783655513;
+        d=1e100.net; s=20251104; t=1783054872; x=1783659672;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
-        b=O4kREP/30TqSlLQ48N/FUxU4IU2UXgzHZkfN/iz6E81FhmkfKNOFNzKhq7di4KPb6B
-         NnYU6ZYqj3E+xq/1wj5SIVubNHR6WDth7M57IArhy54lNlSzmy5uCDUbDeUwMgz/TrA/
-         lZM6vMXQOTXvxeZghI5Uv89ejemJNruFP3XeTJZ4XBSDP9khHznmpyQzQ6YkrPHaHtZo
-         gtitCioVV9RUICEmL8Zl7mobmFPSbitIptn1o8M1itoOnEXOOkZVMwcqi9WFkdmc4Rpl
-         MJbRas8zBiJAP5A2u0uZtMQBK64PH3Aka2Wfz9C8GcLJUAZaCNpI5I0oMuGNoGYWRqJc
-         N8dA==
-X-Forwarded-Encrypted: i=1; AHgh+RrRrpLGYdZdd22fkKP/EDYLt+1hOGWpGA73rP718/S5A4m322jFqWhyQEmBTomCoVwKvDceFtQ2r3OFKiyDjl8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRYYzCp9ijxiGkczVAyEqiNy9OfBcdvaNohDOpxOhf4mAl56Tb
-	81FqP6/jOZN4H9WBFLnGSlc3q36rCv4J4SjYaJfH3+Dr5kjUDaSsitUc
-X-Gm-Gg: AfdE7cl7nsYn5asskZZQ/nZjGW9kKvs1qdv013JbVKP+nxAIUKKXjLkAPIg/lvC+Xd2
-	OPJKVHHZFWSWeHnmRfSeukmhYghXJa2rWTCIWdN59XG084RygNjgnXEVUx/yWJQnDadPeo45Iq1
-	SwbPCgGAqgWIvjcR6J+WO6XeZpuIqIdI4OILXq4iliE0IXMASWt5xqMbnUE1Jc+KYyF4UcZSIFs
-	K5HQVqqk993pa6iDG/qaV7ihmcA46nkUIfRiz+R5EbSeLptGaAjGBAHavCAaaZ0jA99aE/rpelR
-	lc2n71Tcvbi7McO4wlDimp67uhgIlMQ/OO2pnOsbXHWE1qnFUaPokpay3W8zha0h2ISnwCUYt22
-	h2uLMncZ9H5z6u+z8NRHqMNS67Nl/O+sbahd8pT6yHjV6pv9FkECEQoRTxFBqy2/HAQsfNUV+H8
-	w+1kzpXESwdcChzrLTXaecaMJRpvwzkqJCLnt49jDNQ94mWMbOauXgbEOy5QIl2k4tHGf+SeA35
-	OgcUCTF2HVX3FIUHiSCuhRjbA==
-X-Received: by 2002:a17:903:2411:b0:2c1:98b7:ecf3 with SMTP id d9443c01a7336-2ca911de5d0mr82443825ad.23.1783050712813;
-        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
-Received: from u2404-VMware-Virtual-Platform.localdomain ([24.4.24.156])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c85b345sm22506479c88.10.2026.07.02.20.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	shuah@kernel.org,
-	mmullins@fb.com,
-	linux-kernel@vger.kernel.org,
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOTTbIp30b2abiob/bJSAzkwIrXTOEeNOvRGNGfW9io=;
+        b=lx6ZHmXjQTWWQ+maAp7t0e+Pzptj8ToVk8e82wGPumM+cBAz0maiDP2xWhUnBY7V1P
+         nIhFi1fWbV5Xtk2TtKXObKC35drwnt+nE/gcwKN9X8KFKwM3oCrvHjEfsO4G+w5qHsuT
+         MNfmVcFbGzWKaw/fAZJ8t9ajln/NlCk8JDiaxwoA36qMikv+T3obSzG61ycLO4mHJU8k
+         j9FM34e6HcbkWP0vfLfk91YlIcaeCUffNpTU2yTVm/42B+LtG4UuX8Con8CKQ6Nt/t5a
+         C1Z/4Z1WLw28f2xFJTMMyKirkQ22IhkCpeXVIGWX5CZnUJqBdQCKxe1dQedSE31tmosv
+         pC4g==
+X-Forwarded-Encrypted: i=1; AHgh+RoRHTK9PZoDTaZXDjKzNczxvPsQuatFh9M5SaIKP2Df3neA42iU95FR3nUtMTa2LAcFQ9v83Xzfo4PG2bTCXfQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDtcLPueaEJgw2g4AqTDOlyVT+7PuNCT2vpfYNZi79lZD8V5Mk
+	wU5AGqiXXQ4nWLajG2Ds+OtOvD3MFOfKH8n5qIrkntuwxnQsbFQsYJiw
+X-Gm-Gg: AfdE7cmHLhWMpUjaKulmbkzQQL28u4LDG1TlR44n13W7pWhPcebrgoHpD3GgREfurxY
+	JZ7Ew5Arl6tji7A/tO1nXF2FT/tB7y/q2huKBMirmwJw6r5KKaIIBE+++oHuCtaHTALLCmFg5dP
+	vR7Oylmp0R5WcPLKdm/lPH2wavaUnl6wRu3DGVa+swryH2BMjJkwZzozjgWJykSdsAU/Zg58vAH
+	VyvMCcmOCTFvoiz4tALX2a23OS8A02TxUyLI5BiNFqAul/fOuAH6ELUCTV1dZmMwd0ApSt24+T5
+	BQs3i2sekbL9BPpVWoQVdzIjUBKLNxSO9vHpg71vI6XYIdDB++yqmJVc2qdczE1tLLD75YcEz4m
+	mMBgR8Z0Q0Bmo5/cITIe0ZQNvfx8nNRNntU7Rd1/sJr0/L337eXwUIW2XaBmgQLj2trZI+oj1db
+	D2iAa/r74f0fk+C4LEIAkTzcas40A/6arvhkofxhuUt3mmEN4C/YCHxW4se7vgPKSChWAVYiHIi
+	Sxjjb5uIJD1NYKQu/KHfeqigMN0Ehsqe2I=
+X-Received: by 2002:a17:903:b10:b0:2ca:d975:5bbd with SMTP id d9443c01a7336-2cad9755c93mr6199165ad.20.1783054872288;
+        Thu, 02 Jul 2026 22:01:12 -0700 (PDT)
+Received: from kirchou-macbookpro2.roam.corp.google.com ([2a00:79e0:2031:7:204c:c814:fccf:3297])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad7871697sm3244415ad.67.2026.07.02.22.01.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 02 Jul 2026 22:01:11 -0700 (PDT)
+Sender: kir <610548@gmail.com>
+From: Kir Chou <note351@hotmail.com>
+To: akpm@linux-foundation.org
+Cc: thomas.weissschuh@linutronix.de,
+	david@davidgow.net,
+	geert@linux-m68k.org,
+	visitorckw@gmail.com,
+	brendan.higgins@linux.dev,
 	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH bpf] bpf: Reject negative const offsets for buffer pointers
-Date: Thu,  2 Jul 2026 20:51:37 -0700
-Message-ID: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	kunit-dev@googlegroups.com,
+	Kir Chou <note351@hotmail.com>,
+	David Gow <davidgow@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+Subject: [PATCH v5] lib/random32: convert selftest to KUnit
+Date: Fri,  3 Jul 2026 14:00:59 +0900
+Message-ID: <20260703050100.23944-1-note351@hotmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,144 +88,502 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
-accesses, but it currently accepts a constant negative offset produced by
-pointer arithmetic.
+This patch converts the existing prandom selftest (lib/random32.c) to use
+the KUnit framework (lib/tests/random32_kunit.c). Unlike typical KUnit
+tests, this file is directly #included into lib/random32.c.
 
-For example, a raw tracepoint writable program can load ctx[0] as a
-PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
-The register is still tracked as tp_buffer(imm=-8), but the access is
-before the tracepoint writable buffer base and should be rejected.
+The new test:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/random32.c.
+- Adds CONFIG_PRANDOM_KUNIT_TEST (defaulting to KUNIT_ALL_TESTS).
+- Moves the test logic to lib/tests/random32_kunit.c.
 
-Check the signed effective buffer offset before updating max_tp_access or
-other buffer max access accounting. Reject negative effective offsets and
-use the checked end offset for max access accounting.
+This commit is verified by `./tools/testing/kunit/kunit.py run`
+with the .kunit/.kunitconfig:
 
-Add a verifier test that rejects a raw tracepoint writable program using a
-negative constant offset.
+```
+CONFIG_KUNIT=y
+CONFIG_PRANDOM_KUNIT_TEST=y
+```
 
-Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Signed-off-by: Kir Chou <note351@hotmail.com>
+
 ---
- kernel/bpf/verifier.c                         | 41 ++++++++++++++++---
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++++
- 2 files changed, 52 insertions(+), 5 deletions(-)
+v5:
+- Adds missing MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING").
+  Verified with a kernel build with CONFIG_PRANDOM_KUNIT_TEST.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 21a365d436a5..421ca118fcbf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- static int __check_buffer_access(struct bpf_verifier_env *env,
- 				 const char *buf_info,
- 				 const struct bpf_reg_state *reg,
--				 argno_t argno, int off, int size)
-+				 argno_t argno, int off, int size,
-+				 u32 *access_end)
- {
-+	s64 start, var_off;
+v4:
+- Changes from bool to tristate in lib/Kconfig.debug.
+- Spins off the test into its own module under lib/tests/.
+- Adds a prototype for prandom_warmup() to avoid a warning.
+- Makes prandom_warmup() visible to the test in lib/random32.c.
+- Adds the build rule for random32_kunit.o to lib/tests/Makefile.
+
+v3:
+- Changes from tristate to bool in lib/Kconfig.debug.
+
+v2:
+- Removes the legacy CONFIG_RANDOM32_SELFTEST from lib/Kconfig.
+- Add const to arrays in lib/tests/random32_kunit.c.
+---
+ lib/Kconfig                |   6 --
+ lib/Kconfig.debug          |   9 ++
+ lib/random32.c             | 184 ++-----------------------------------
+ lib/tests/Makefile         |   1 +
+ lib/tests/random32_kunit.c | 182 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 202 insertions(+), 180 deletions(-)
+ create mode 100644 lib/tests/random32_kunit.c
+
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 2923924be..5f185e9f1 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -156,12 +156,6 @@ config AUDIT_COMPAT_GENERIC
+ 	depends on AUDIT_GENERIC && AUDIT_ARCH_COMPAT_GENERIC && COMPAT
+ 	default y
+ 
+-config RANDOM32_SELFTEST
+-	bool "PRNG perform self test on init"
+-	help
+-	  This option enables the 32 bit PRNG library functions to perform a
+-	  self test on initialization.
+-
+ #
+ # compression support is select'ed if needed
+ #
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ba36939fd..0214a5859 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3354,6 +3354,15 @@ config PRIME_NUMBERS_KUNIT_TEST
+ 
+ 	  If unsure, say N
+ 
++config PRANDOM_KUNIT_TEST
++	tristate "KUnit test for prandom" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the prandom functions at runtime.
 +
- 	if (off < 0) {
- 		verbose(env,
- 			"%s invalid %s buffer access: off=%d, size=%d\n",
- 			reg_arg_name(env, argno), buf_info, off, size);
- 		return -EACCES;
++	  If unsure, say N
++
+ endif # RUNTIME_TESTING_MENU
+ 
+ config ARCH_USE_MEMTEST
+diff --git a/lib/random32.c b/lib/random32.c
+index 24e7acd93..dad90219c 100644
+--- a/lib/random32.c
++++ b/lib/random32.c
+@@ -41,6 +41,7 @@
+ #include <linux/bitops.h>
+ #include <linux/slab.h>
+ #include <linux/unaligned.h>
++#include <kunit/visibility.h>
+ 
+ /**
+  *	prandom_u32_state - seeded pseudo-random number generator.
+@@ -92,7 +93,14 @@ void prandom_bytes_state(struct rnd_state *state, void *buf, size_t bytes)
+ }
+ EXPORT_SYMBOL(prandom_bytes_state);
+ 
+-static void prandom_warmup(struct rnd_state *state)
++/*
++ * Only declared here so that it has a prototype when made
++ * non-static for KUnit testing (avoids -Wmissing-prototypes).
++ */
++#if IS_ENABLED(CONFIG_KUNIT)
++void prandom_warmup(struct rnd_state *state);
++#endif
++VISIBLE_IF_KUNIT void prandom_warmup(struct rnd_state *state)
+ {
+ 	/* Calling RNG ten times to satisfy recurrence condition */
+ 	prandom_u32_state(state);
+@@ -106,6 +114,7 @@ static void prandom_warmup(struct rnd_state *state)
+ 	prandom_u32_state(state);
+ 	prandom_u32_state(state);
+ }
++EXPORT_SYMBOL_IF_KUNIT(prandom_warmup);
+ 
+ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
+ {
+@@ -125,176 +134,3 @@ void prandom_seed_full_state(struct rnd_state __percpu *pcpu_state)
  	}
-+
- 	if (!tnum_is_const(reg->var_off)) {
- 		char tn_buf[48];
- 
-@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 
-+	var_off = (s64)reg->var_off.value;
-+	if (check_add_overflow(var_off, (s64)off, &start)) {
-+		verbose(env,
-+			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
-+			reg_arg_name(env, argno), buf_info, off, var_off);
-+		return -EACCES;
-+	}
-+
-+	if (start < 0) {
-+		verbose(env,
-+			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
-+			reg_arg_name(env, argno), buf_info, off, var_off);
-+		return -EACCES;
-+	}
-+
-+	if (start > U32_MAX || size < 0 ||
-+	    check_add_overflow((u32)start, (u32)size, access_end)) {
-+		verbose(env,
-+			"%s invalid %s buffer access: off=%lld, size=%d\n",
-+			reg_arg_name(env, argno), buf_info, start, size);
-+		return -EACCES;
-+	}
-+
- 	return 0;
  }
+ EXPORT_SYMBOL(prandom_seed_full_state);
+-
+-#ifdef CONFIG_RANDOM32_SELFTEST
+-static struct prandom_test1 {
+-	u32 seed;
+-	u32 result;
+-} test1[] = {
+-	{ 1U, 3484351685U },
+-	{ 2U, 2623130059U },
+-	{ 3U, 3125133893U },
+-	{ 4U,  984847254U },
+-};
+-
+-static struct prandom_test2 {
+-	u32 seed;
+-	u32 iteration;
+-	u32 result;
+-} test2[] = {
+-	/* Test cases against taus113 from GSL library. */
+-	{  931557656U, 959U, 2975593782U },
+-	{ 1339693295U, 876U, 3887776532U },
+-	{ 1545556285U, 961U, 1615538833U },
+-	{  601730776U, 723U, 1776162651U },
+-	{ 1027516047U, 687U,  511983079U },
+-	{  416526298U, 700U,  916156552U },
+-	{ 1395522032U, 652U, 2222063676U },
+-	{  366221443U, 617U, 2992857763U },
+-	{ 1539836965U, 714U, 3783265725U },
+-	{  556206671U, 994U,  799626459U },
+-	{  684907218U, 799U,  367789491U },
+-	{ 2121230701U, 931U, 2115467001U },
+-	{ 1668516451U, 644U, 3620590685U },
+-	{  768046066U, 883U, 2034077390U },
+-	{ 1989159136U, 833U, 1195767305U },
+-	{  536585145U, 996U, 3577259204U },
+-	{ 1008129373U, 642U, 1478080776U },
+-	{ 1740775604U, 939U, 1264980372U },
+-	{ 1967883163U, 508U,   10734624U },
+-	{ 1923019697U, 730U, 3821419629U },
+-	{  442079932U, 560U, 3440032343U },
+-	{ 1961302714U, 845U,  841962572U },
+-	{ 2030205964U, 962U, 1325144227U },
+-	{ 1160407529U, 507U,  240940858U },
+-	{  635482502U, 779U, 4200489746U },
+-	{ 1252788931U, 699U,  867195434U },
+-	{ 1961817131U, 719U,  668237657U },
+-	{ 1071468216U, 983U,  917876630U },
+-	{ 1281848367U, 932U, 1003100039U },
+-	{  582537119U, 780U, 1127273778U },
+-	{ 1973672777U, 853U, 1071368872U },
+-	{ 1896756996U, 762U, 1127851055U },
+-	{  847917054U, 500U, 1717499075U },
+-	{ 1240520510U, 951U, 2849576657U },
+-	{ 1685071682U, 567U, 1961810396U },
+-	{ 1516232129U, 557U,    3173877U },
+-	{ 1208118903U, 612U, 1613145022U },
+-	{ 1817269927U, 693U, 4279122573U },
+-	{ 1510091701U, 717U,  638191229U },
+-	{  365916850U, 807U,  600424314U },
+-	{  399324359U, 702U, 1803598116U },
+-	{ 1318480274U, 779U, 2074237022U },
+-	{  697758115U, 840U, 1483639402U },
+-	{ 1696507773U, 840U,  577415447U },
+-	{ 2081979121U, 981U, 3041486449U },
+-	{  955646687U, 742U, 3846494357U },
+-	{ 1250683506U, 749U,  836419859U },
+-	{  595003102U, 534U,  366794109U },
+-	{   47485338U, 558U, 3521120834U },
+-	{  619433479U, 610U, 3991783875U },
+-	{  704096520U, 518U, 4139493852U },
+-	{ 1712224984U, 606U, 2393312003U },
+-	{ 1318233152U, 922U, 3880361134U },
+-	{  855572992U, 761U, 1472974787U },
+-	{   64721421U, 703U,  683860550U },
+-	{  678931758U, 840U,  380616043U },
+-	{  692711973U, 778U, 1382361947U },
+-	{  677703619U, 530U, 2826914161U },
+-	{   92393223U, 586U, 1522128471U },
+-	{ 1222592920U, 743U, 3466726667U },
+-	{  358288986U, 695U, 1091956998U },
+-	{ 1935056945U, 958U,  514864477U },
+-	{  735675993U, 990U, 1294239989U },
+-	{ 1560089402U, 897U, 2238551287U },
+-	{   70616361U, 829U,   22483098U },
+-	{  368234700U, 731U, 2913875084U },
+-	{   20221190U, 879U, 1564152970U },
+-	{  539444654U, 682U, 1835141259U },
+-	{ 1314987297U, 840U, 1801114136U },
+-	{ 2019295544U, 645U, 3286438930U },
+-	{  469023838U, 716U, 1637918202U },
+-	{ 1843754496U, 653U, 2562092152U },
+-	{  400672036U, 809U, 4264212785U },
+-	{  404722249U, 965U, 2704116999U },
+-	{  600702209U, 758U,  584979986U },
+-	{  519953954U, 667U, 2574436237U },
+-	{ 1658071126U, 694U, 2214569490U },
+-	{  420480037U, 749U, 3430010866U },
+-	{  690103647U, 969U, 3700758083U },
+-	{ 1029424799U, 937U, 3787746841U },
+-	{ 2012608669U, 506U, 3362628973U },
+-	{ 1535432887U, 998U,   42610943U },
+-	{ 1330635533U, 857U, 3040806504U },
+-	{ 1223800550U, 539U, 3954229517U },
+-	{ 1322411537U, 680U, 3223250324U },
+-	{ 1877847898U, 945U, 2915147143U },
+-	{ 1646356099U, 874U,  965988280U },
+-	{  805687536U, 744U, 4032277920U },
+-	{ 1948093210U, 633U, 1346597684U },
+-	{  392609744U, 783U, 1636083295U },
+-	{  690241304U, 770U, 1201031298U },
+-	{ 1360302965U, 696U, 1665394461U },
+-	{ 1220090946U, 780U, 1316922812U },
+-	{  447092251U, 500U, 3438743375U },
+-	{ 1613868791U, 592U,  828546883U },
+-	{  523430951U, 548U, 2552392304U },
+-	{  726692899U, 810U, 1656872867U },
+-	{ 1364340021U, 836U, 3710513486U },
+-	{ 1986257729U, 931U,  935013962U },
+-	{  407983964U, 921U,  728767059U },
+-};
+-
+-static void prandom_state_selftest_seed(struct rnd_state *state, u32 seed)
+-{
+-#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
+-	state->s1 = __seed(LCG(seed),        2U);
+-	state->s2 = __seed(LCG(state->s1),   8U);
+-	state->s3 = __seed(LCG(state->s2),  16U);
+-	state->s4 = __seed(LCG(state->s3), 128U);
+-}
+-
+-static int __init prandom_state_selftest(void)
+-{
+-	int i, j, errors = 0, runs = 0;
+-	bool error = false;
+-
+-	for (i = 0; i < ARRAY_SIZE(test1); i++) {
+-		struct rnd_state state;
+-
+-		prandom_state_selftest_seed(&state, test1[i].seed);
+-		prandom_warmup(&state);
+-
+-		if (test1[i].result != prandom_u32_state(&state))
+-			error = true;
+-	}
+-
+-	if (error)
+-		pr_warn("prandom: seed boundary self test failed\n");
+-	else
+-		pr_info("prandom: seed boundary self test passed\n");
+-
+-	for (i = 0; i < ARRAY_SIZE(test2); i++) {
+-		struct rnd_state state;
+-
+-		prandom_state_selftest_seed(&state, test2[i].seed);
+-		prandom_warmup(&state);
+-
+-		for (j = 0; j < test2[i].iteration - 1; j++)
+-			prandom_u32_state(&state);
+-
+-		if (test2[i].result != prandom_u32_state(&state))
+-			errors++;
+-
+-		runs++;
+-		cond_resched();
+-	}
+-
+-	if (errors)
+-		pr_warn("prandom: %d/%d self tests failed\n", errors, runs);
+-	else
+-		pr_info("prandom: %d self tests passed\n", runs);
+-	return 0;
+-}
+-core_initcall(prandom_state_selftest);
+-#endif
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index 601dba4b7..39d283b26 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -49,5 +49,6 @@ obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
+ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
+ obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
+ obj-$(CONFIG_RATELIMIT_KUNIT_TEST) += test_ratelimit.o
++obj-$(CONFIG_PRANDOM_KUNIT_TEST) += random32_kunit.o
  
-@@ -5351,13 +5378,15 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
- 				  const struct bpf_reg_state *reg,
- 				  argno_t argno, int off, int size)
- {
-+	u32 access_end;
- 	int err;
- 
--	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
-+	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size,
-+				    &access_end);
- 	if (err)
- 		return err;
- 
--	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
-+	env->prog->aux->max_tp_access = max(access_end,
- 					    env->prog->aux->max_tp_access);
- 
- 	return 0;
-@@ -5370,13 +5399,15 @@ static int check_buffer_access(struct bpf_verifier_env *env,
- 			       u32 *max_access)
- {
- 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
-+	u32 access_end;
- 	int err;
- 
--	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
-+	err = __check_buffer_access(env, buf_info, reg, argno, off, size,
-+				    &access_end);
- 	if (err)
- 		return err;
- 
--	*max_access = max(reg->var_off.value + off + size, *max_access);
-+	*max_access = max(access_end, *max_access);
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-index 14a0172e2141..4055a6443bc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
- 	: __clobber_all);
- }
- 
-+SEC("raw_tracepoint.w")
-+__description("raw_tracepoint_writable: reject negative const offset")
-+__failure
-+__msg("invalid negative tracepoint buffer offset")
-+__naked void tracepoint_writable_reject_negative_const_offset(void)
+ obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
+diff --git a/lib/tests/random32_kunit.c b/lib/tests/random32_kunit.c
+new file mode 100644
+index 000000000..0b4af2b09
+--- /dev/null
++++ b/lib/tests/random32_kunit.c
+@@ -0,0 +1,182 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for random32 functions.
++ */
++
++#include <linux/prandom.h>
++#include <kunit/test.h>
++
++/* prandom_warmup() is static in lib/random32.c; exposed for testing only. */
++void prandom_warmup(struct rnd_state *state);
++
++static const struct prandom_test1 {
++	u32 seed;
++	u32 result;
++} test1[] = {
++	{ 1U, 3484351685U },
++	{ 2U, 2623130059U },
++	{ 3U, 3125133893U },
++	{ 4U,  984847254U },
++};
++
++static const struct prandom_test2 {
++	u32 seed;
++	u32 iteration;
++	u32 result;
++} test2[] = {
++	/* Test cases against taus113 from GSL library. */
++	{  931557656U, 959U, 2975593782U },
++	{ 1339693295U, 876U, 3887776532U },
++	{ 1545556285U, 961U, 1615538833U },
++	{  601730776U, 723U, 1776162651U },
++	{ 1027516047U, 687U,  511983079U },
++	{  416526298U, 700U,  916156552U },
++	{ 1395522032U, 652U, 2222063676U },
++	{  366221443U, 617U, 2992857763U },
++	{ 1539836965U, 714U, 3783265725U },
++	{  556206671U, 994U,  799626459U },
++	{  684907218U, 799U,  367789491U },
++	{ 2121230701U, 931U, 2115467001U },
++	{ 1668516451U, 644U, 3620590685U },
++	{  768046066U, 883U, 2034077390U },
++	{ 1989159136U, 833U, 1195767305U },
++	{  536585145U, 996U, 3577259204U },
++	{ 1008129373U, 642U, 1478080776U },
++	{ 1740775604U, 939U, 1264980372U },
++	{ 1967883163U, 508U,   10734624U },
++	{ 1923019697U, 730U, 3821419629U },
++	{  442079932U, 560U, 3440032343U },
++	{ 1961302714U, 845U,  841962572U },
++	{ 2030205964U, 962U, 1325144227U },
++	{ 1160407529U, 507U,  240940858U },
++	{  635482502U, 779U, 4200489746U },
++	{ 1252788931U, 699U,  867195434U },
++	{ 1961817131U, 719U,  668237657U },
++	{ 1071468216U, 983U,  917876630U },
++	{ 1281848367U, 932U, 1003100039U },
++	{  582537119U, 780U, 1127273778U },
++	{ 1973672777U, 853U, 1071368872U },
++	{ 1896756996U, 762U, 1127851055U },
++	{  847917054U, 500U, 1717499075U },
++	{ 1240520510U, 951U, 2849576657U },
++	{ 1685071682U, 567U, 1961810396U },
++	{ 1516232129U, 557U,    3173877U },
++	{ 1208118903U, 612U, 1613145022U },
++	{ 1817269927U, 693U, 4279122573U },
++	{ 1510091701U, 717U,  638191229U },
++	{  365916850U, 807U,  600424314U },
++	{  399324359U, 702U, 1803598116U },
++	{ 1318480274U, 779U, 2074237022U },
++	{  697758115U, 840U, 1483639402U },
++	{ 1696507773U, 840U,  577415447U },
++	{ 2081979121U, 981U, 3041486449U },
++	{  955646687U, 742U, 3846494357U },
++	{ 1250683506U, 749U,  836419859U },
++	{  595003102U, 534U,  366794109U },
++	{   47485338U, 558U, 3521120834U },
++	{  619433479U, 610U, 3991783875U },
++	{  704096520U, 518U, 4139493852U },
++	{ 1712224984U, 606U, 2393312003U },
++	{ 1318233152U, 922U, 3880361134U },
++	{  855572992U, 761U, 1472974787U },
++	{   64721421U, 703U,  683860550U },
++	{  678931758U, 840U,  380616043U },
++	{  692711973U, 778U, 1382361947U },
++	{  677703619U, 530U, 2826914161U },
++	{   92393223U, 586U, 1522128471U },
++	{ 1222592920U, 743U, 3466726667U },
++	{  358288986U, 695U, 1091956998U },
++	{ 1935056945U, 958U,  514864477U },
++	{  735675993U, 990U, 1294239989U },
++	{ 1560089402U, 897U, 2238551287U },
++	{   70616361U, 829U,   22483098U },
++	{  368234700U, 731U, 2913875084U },
++	{   20221190U, 879U, 1564152970U },
++	{  539444654U, 682U, 1835141259U },
++	{ 1314987297U, 840U, 1801114136U },
++	{ 2019295544U, 645U, 3286438930U },
++	{  469023838U, 716U, 1637918202U },
++	{ 1843754496U, 653U, 2562092152U },
++	{  400672036U, 809U, 4264212785U },
++	{  404722249U, 965U, 2704116999U },
++	{  600702209U, 758U,  584979986U },
++	{  519953954U, 667U, 2574436237U },
++	{ 1658071126U, 694U, 2214569490U },
++	{  420480037U, 749U, 3430010866U },
++	{  690103647U, 969U, 3700758083U },
++	{ 1029424799U, 937U, 3787746841U },
++	{ 2012608669U, 506U, 3362628973U },
++	{ 1535432887U, 998U,   42610943U },
++	{ 1330635533U, 857U, 3040806504U },
++	{ 1223800550U, 539U, 3954229517U },
++	{ 1322411537U, 680U, 3223250324U },
++	{ 1877847898U, 945U, 2915147143U },
++	{ 1646356099U, 874U,  965988280U },
++	{  805687536U, 744U, 4032277920U },
++	{ 1948093210U, 633U, 1346597684U },
++	{  392609744U, 783U, 1636083295U },
++	{  690241304U, 770U, 1201031298U },
++	{ 1360302965U, 696U, 1665394461U },
++	{ 1220090946U, 780U, 1316922812U },
++	{  447092251U, 500U, 3438743375U },
++	{ 1613868791U, 592U,  828546883U },
++	{  523430951U, 548U, 2552392304U },
++	{  726692899U, 810U, 1656872867U },
++	{ 1364340021U, 836U, 3710513486U },
++	{ 1986257729U, 931U,  935013962U },
++	{  407983964U, 921U,  728767059U },
++};
++
++static void prandom_state_test_seed(struct rnd_state *state, u32 seed)
 +{
-+	asm volatile ("					\
-+	r6 = *(u64 *)(r1 + 0);				\
-+	r6 += -8;					\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
++#define LCG(x)	 ((x) * 69069U)	/* super-duper LCG */
++	state->s1 = __seed(LCG(seed),        2U);
++	state->s2 = __seed(LCG(state->s1),   8U);
++	state->s3 = __seed(LCG(state->s2),  16U);
++	state->s4 = __seed(LCG(state->s3), 128U);
 +}
 +
- char _license[] SEC("license") = "GPL";
++static void test_prandom_seed_boundary(struct kunit *test)
++{
++	int i;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test1); i++) {
++		prandom_state_test_seed(&state, test1[i].seed);
++		prandom_warmup(&state);
++		KUNIT_EXPECT_EQ(test, test1[i].result, prandom_u32_state(&state));
++	}
++}
++
++static void test_prandom_taus113(struct kunit *test)
++{
++	int i, j;
++	struct rnd_state state;
++
++	for (i = 0; i < ARRAY_SIZE(test2); i++) {
++		prandom_state_test_seed(&state, test2[i].seed);
++		prandom_warmup(&state);
++
++		for (j = 0; j < test2[i].iteration - 1; j++)
++			prandom_u32_state(&state);
++
++		KUNIT_EXPECT_EQ(test, test2[i].result, prandom_u32_state(&state));
++	}
++}
++
++static struct kunit_case prandom_test_cases[] = {
++	KUNIT_CASE(test_prandom_seed_boundary),
++	KUNIT_CASE(test_prandom_taus113),
++	{}
++};
++
++static struct kunit_suite prandom_test_suite = {
++	.name = "prandom",
++	.test_cases = prandom_test_cases,
++};
++
++kunit_test_suite(prandom_test_suite);
++
++MODULE_DESCRIPTION("KUnit test for prandom");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
 -- 
-2.43.0
+2.52.0
 
