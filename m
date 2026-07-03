@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26245348C4E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261C2348C4C;
 	Fri,  3 Jul 2026 21:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783113727; cv=none; b=kCB1IQlwbRyYAtlyaKXO934J3pfukG2nsbBQVFRu23/MjhjrPtFx/o5p9KtLZPvNrq5MIGfh1KeMKOR7JxkVAAjYUod+BLL6Lmwp2Z8unz+kZqmXCuHtTx19CvK8C2P4ORMZDzu4/KaWxQuzjCEeVngIAd1VmXeQUkcs3zVUVNc=
+	t=1783113727; cv=none; b=Y4jvMhhJYpf+LAIzJTVMna4QXmW1URsoTp2s5d19WrlAr37C28k22tohAnUfMhaxzWLFmQvLzd9IszMmC+iZ2mnomEHpcXxfPlJn9Z5PeDo8r3Km6E6KGlaPk59GxL+a7LeN/wOht3yWtyV5tcl0NLQ2F71UwZhYHeEzX+j/Vcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1783113727; c=relaxed/simple;
-	bh=0LNAa1ifjTFpxR26pziZghGbfpY+Md+UZhwHacc1/48=;
+	bh=sc9JCjNJ1obKVnbxXzlhjW8ef4pY2aJOy8X+OZhnxFU=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j2mCWlx4xjdN9jLNdhamEgV+8L3cWOYL9iG0n+rIXSNua23Jul9VFKUsrSMoLWh9L+ucjU5gcRe0pVm+4p8EUwGHPIN99YHJ1E0r2N3PAxEThqbIDCTXQSPqqbf8/m1q9Nc8QfipcY/ru4fg63ZBZpKNFESQgbzMJe1OZY6JeJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mTF1YHey; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=BAnR1MdXUTNKC3MySOBRBtzdIIMLqKb2D312bUbi4VlWvMgHGgAxaNazwk0OdO1gzrvS4A6H/kUJVAygWF/6OuWvvdJ/18tj9reMGdypniln4DSGt5IMijmAJMauUbe6WciVU0rR2BTuxa+czxF6KcBrndffUysqIEXjEmRHlsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bmWLHuUV; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mTF1YHey"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bmWLHuUV"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
 	Cc:Content-Type:Content-ID:Content-Description;
-	bh=CzWz4Us7r/rEWP66HSxuHNlM7/EVQzg+tC4fjHgL8hU=; b=mTF1YHeydnaypEa+INXWx9qXoR
-	M0PqgmKfFa4z677E1dsW1eEvyWkF6xUV1PdB8gg/x+CCYBbTc8AfTSe7OkZPaq2U5ubShAbVjKgct
-	kCMUrQtwKWJRjjP9W7glXLslomFXL1Uab3oPmtTv/VeXByun+aTfqAFILzp5HUTkuKh4m1NdyROs6
-	HNxK1P0nee9tkb0MG2OqepLt57YqRuJjvJlfa11a8OWJs2g1z30A2IGWV3whrfTOf0xpAlQC1+teG
-	DfqFxOoVBfqyecjXVw+McN+dGdz8Nmn7AjS0GmGwMHLWHq8299lfwPp8dMCfRogqtIfbHaA41RpTZ
-	GQMkyl5A==;
+	bh=EXbsKVccUqJVUsNQz6ddm7iFrU6RHTQ7Y+Y2aEq7ws8=; b=bmWLHuUVFitSUFZOTx9OuvAnfd
+	xPH4uTWi9QwLkGQZiHcolsh2xvG2w+yaFIm6i3YV1ye8RBp7cKq+mwvTGGF+JhdBEMUE5bBTAdMKk
+	0IYlkrAN/MRrqOBcpHFfI+dzK6kbqckneRzOhdzUIj7qH+AWGPVy7JUQLJYgjbTPxlhB4eB5SwXmA
+	uI1j/2xzbfvh6RW09eoS99Y3PPw//1OiHHNoYebGJIdwL13NuGPRTZD4QY77tAFfJcdzkJgJ6DjLo
+	8KHrwUNDMmWRZUUINWybBd1Ov9lHW3YVD/FKf6ETSPYBgbG7dkcdaqqxnn57QUV+cq3wubXh174y0
+	gUWoax4g==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wflKX-0000000AsYG-1i3E;
+	id 1wflKX-0000000AsYB-09Vp;
 	Fri, 03 Jul 2026 21:21:49 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1wflKX-00000001RPb-1H0I;
-	Fri, 03 Jul 2026 22:21:49 +0100
+	id 1wflKW-00000001RP9-3lTW;
+	Fri, 03 Jul 2026 22:21:48 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,9 +61,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	xen-devel@lists.xenproject.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 27/36] KVM: x86: Avoid redundant masterclock updates from multiple vCPUs
-Date: Fri,  3 Jul 2026 22:18:06 +0100
-Message-ID: <20260703212145.343527-28-dwmw2@infradead.org>
+Subject: [PATCH v6 20/36] KVM: x86: Kill last_tsc_{nsec,write,offset} fields
+Date: Fri,  3 Jul 2026 22:17:59 +0100
+Message-ID: <20260703212145.343527-21-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260703212145.343527-1-dwmw2@infradead.org>
 References: <20260703212145.343527-1-dwmw2@infradead.org>
@@ -79,146 +79,160 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-When a masterclock update is triggered (e.g. by the clocksource change
-notifier), KVM_REQ_MASTERCLOCK_UPDATE is set on all vCPUs. Without this
-fix, each vCPU independently processes the request and redundantly
-re-executes the entire pvclock_update_vm_gtod_copy() sequence, serialized
-only by tsc_write_lock. Each redundant re-snapshot of the master clock
-reference point introduces potential clock drift.
+These pointlessly duplicate the cur_tsc_{nsec,write,offset} values.
+The only place they were used was where the TSC is stable and a new
+vCPU is being synchronized to the previous setting, in which case the
+cur_tsc_* value is definitely identical.
 
-Fix this by having __kvm_start_pvclock_update() check, after acquiring
-the lock, whether the requesting vCPU's KVM_REQ_MASTERCLOCK_UPDATE is
-still set. If another vCPU already did the update and cleared it, bail
-out. Otherwise, clear the request on all other vCPUs before proceeding.
+Rename last_tsc_khz and last_tsc_scaling_ratio to cur_tsc_khz and
+cur_tsc_scaling_ratio respectively, since they are properties of the
+current TSC generation.
 
-The caller in vcpu_enter_guest() now uses kvm_test_request() (non-clearing)
-since the clearing is done inside __kvm_start_pvclock_update() under the
-lock.
+Since cur_tsc_offset now serves as the single source of truth for the
+TSC generation's offset, the backwards-TSC adjustment (used during S4
+resume when the host TSC resets) must also update cur_tsc_offset by the
+same delta applied to all vCPUs. Without this, subsequent vCPUs that
+synchronize after the adjustment would get the stale pre-S4 offset.
 
-Suggested-by: Dongli Zhang <dongli.zhang@oracle.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Tested-by: Dongli Zhang <dongli.zhang@oracle.com>
+Reviewed-by: Paul Durrant <paul@xen.org>
 ---
- arch/x86/kvm/x86.c | 60 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 46 insertions(+), 14 deletions(-)
+ arch/x86/include/asm/kvm_host.h |  7 ++---
+ arch/x86/kvm/x86.c              | 45 +++++++++++++++++----------------
+ 2 files changed, 25 insertions(+), 27 deletions(-)
 
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 87435ddecde1..e752b13c0809 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1486,11 +1486,8 @@ struct kvm_arch {
+ 	 * preemption-disabled region, so it must be a raw spinlock.
+ 	 */
+ 	raw_spinlock_t tsc_write_lock;
+-	u64 last_tsc_nsec;
+-	u64 last_tsc_write;
+-	u32 last_tsc_khz;
+-	u64 last_tsc_offset;
+-	u64 last_tsc_scaling_ratio;
++	u32 cur_tsc_khz;
++	u64 cur_tsc_scaling_ratio;
+ 	u64 cur_tsc_nsec;
+ 	u64 cur_tsc_write;
+ 	u64 cur_tsc_offset;
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2a1e1a1ab6ee..80fe69974ded 100644
+index ffe5f98a5688..478147aff56a 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -3282,10 +3282,39 @@ static void kvm_make_mclock_inprogress_request(struct kvm *kvm)
- 	kvm_make_all_cpus_request(kvm, KVM_REQ_MCLOCK_INPROGRESS);
- }
+@@ -2813,14 +2813,12 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
+ 		vcpu->kvm->arch.user_set_tsc = true;
  
--static void __kvm_start_pvclock_update(struct kvm *kvm)
-+static void kvm_clear_mclock_inprogress_request(struct kvm *kvm)
- {
-+	struct kvm_vcpu *vcpu;
-+	unsigned long i;
-+
-+	kvm_for_each_vcpu(i, vcpu, kvm)
-+		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
-+}
-+
-+static bool __kvm_start_pvclock_update(struct kvm *kvm, struct kvm_vcpu *requesting_vcpu)
-+{
-+	struct kvm_vcpu *vcpu;
-+	unsigned long i;
-+
- 	raw_spin_lock_irq(&kvm->arch.tsc_write_lock);
-+
-+	/*
-+	 * If another vCPU already did the update while we were waiting
-+	 * for the lock, our request will have been cleared. Bail out.
-+	 */
-+	if (requesting_vcpu &&
-+	    !kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, requesting_vcpu)) {
-+		kvm_clear_mclock_inprogress_request(kvm);
-+		raw_spin_unlock_irq(&kvm->arch.tsc_write_lock);
-+		return false;
-+	}
-+
-+	/* The update is VM-wide; prevent other vCPUs from redoing it. */
-+	kvm_for_each_vcpu(i, vcpu, kvm)
-+		kvm_clear_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
-+
- 	write_seqcount_begin(&kvm->arch.pvclock_sc);
-+	return true;
- }
+ 	/*
+-	 * We also track th most recent recorded KHZ, write and time to
+-	 * allow the matching interval to be extended at each write.
++	 * Track the TSC frequency, scaling ratio, and offset for the current
++	 * generation. These are used to detect matching TSC writes and to
++	 * compute the guest TSC from the host clock.
+ 	 */
+-	kvm->arch.last_tsc_nsec = ns;
+-	kvm->arch.last_tsc_write = tsc;
+-	kvm->arch.last_tsc_khz = vcpu->arch.virtual_tsc_khz;
+-	kvm->arch.last_tsc_offset = offset;
+-	kvm->arch.last_tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
++	kvm->arch.cur_tsc_khz = vcpu->arch.virtual_tsc_khz;
++	kvm->arch.cur_tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
  
- static void kvm_start_pvclock_update(struct kvm *kvm)
-@@ -3293,7 +3322,7 @@ static void kvm_start_pvclock_update(struct kvm *kvm)
- 	kvm_make_mclock_inprogress_request(kvm);
+ 	vcpu->arch.last_guest_tsc = tsc;
  
- 	/* no guest entries from this point */
--	__kvm_start_pvclock_update(kvm);
-+	__kvm_start_pvclock_update(kvm, NULL);
- }
- 
- static void kvm_end_pvclock_update(struct kvm *kvm)
-@@ -3302,22 +3331,25 @@ static void kvm_end_pvclock_update(struct kvm *kvm)
- 	struct kvm_vcpu *vcpu;
- 	unsigned long i;
- 
--	write_seqcount_end(&ka->pvclock_sc);
--	raw_spin_unlock_irq(&ka->tsc_write_lock);
- 	kvm_for_each_vcpu(i, vcpu, kvm)
- 		kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 
- 	/* guest entries allowed */
--	kvm_for_each_vcpu(i, vcpu, kvm)
--		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
-+	kvm_clear_mclock_inprogress_request(kvm);
-+
-+	write_seqcount_end(&ka->pvclock_sc);
-+	raw_spin_unlock_irq(&ka->tsc_write_lock);
- }
- 
--static void kvm_update_masterclock(struct kvm *kvm)
-+static void kvm_update_masterclock(struct kvm *kvm, struct kvm_vcpu *vcpu)
- {
- 	kvm_hv_request_tsc_page_update(kvm);
--	kvm_start_pvclock_update(kvm);
--	pvclock_update_vm_gtod_copy(kvm);
--	kvm_end_pvclock_update(kvm);
-+	kvm_make_mclock_inprogress_request(kvm);
-+
-+	if (__kvm_start_pvclock_update(kvm, vcpu)) {
-+		pvclock_update_vm_gtod_copy(kvm);
-+		kvm_end_pvclock_update(kvm);
-+	}
- }
- 
- /*
-@@ -10144,7 +10176,7 @@ static void kvm_hyperv_tsc_notifier(void)
- 	kvm_caps.max_guest_tsc_khz = tsc_khz;
- 
- 	list_for_each_entry(kvm, &vm_list, vm_list) {
--		__kvm_start_pvclock_update(kvm);
-+		__kvm_start_pvclock_update(kvm, NULL);
- 		pvclock_update_vm_gtod_copy(kvm);
- 		kvm_end_pvclock_update(kvm);
+@@ -2833,8 +2831,6 @@ static void __kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 offset, u64 tsc,
+ 		 * nanosecond time, offset, and write, so if TSCs are in
+ 		 * sync, we can match exact offset, and if not, we can match
+ 		 * exact software computation in compute_guest_tsc()
+-		 *
+-		 * These values are tracked in kvm->arch.cur_xxx variables.
+ 		 */
+ 		kvm->arch.cur_tsc_generation++;
+ 		kvm->arch.cur_tsc_nsec = ns;
+@@ -2874,7 +2870,7 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
  	}
-@@ -11522,8 +11554,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 			kvm_mmu_free_obsolete_roots(vcpu);
- 		if (kvm_check_request(KVM_REQ_MIGRATE_TIMER, vcpu))
- 			__kvm_migrate_timers(vcpu);
--		if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
--			kvm_update_masterclock(vcpu->kvm);
-+		if (kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
-+			kvm_update_masterclock(vcpu->kvm, vcpu);
- 		if (kvm_check_request(KVM_REQ_GLOBAL_CLOCK_UPDATE, vcpu))
- 			kvm_gen_kvmclock_update(vcpu);
- 		if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, vcpu)) {
-@@ -13260,7 +13292,7 @@ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
- 	vcpu_load(vcpu);
- 	kvm_synchronize_tsc(vcpu, NULL);
- 	if (!vcpu->kvm->arch.use_master_clock)
--		kvm_update_masterclock(vcpu->kvm);
-+		kvm_update_masterclock(vcpu->kvm, NULL);
- 	vcpu_put(vcpu);
  
- 	/* poll control enabled by default */
+ 	offset = kvm_compute_l1_tsc_offset(vcpu, host_tsc, data);
+-	elapsed = ns - kvm->arch.last_tsc_nsec;
++	elapsed = ns - kvm->arch.cur_tsc_nsec;
+ 
+ 	if (vcpu->arch.virtual_tsc_khz) {
+ 		if (data == 0) {
+@@ -2884,7 +2880,7 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
+ 			 */
+ 			synchronizing = true;
+ 		} else if (kvm->arch.user_set_tsc) {
+-			u64 tsc_exp = kvm->arch.last_tsc_write +
++			u64 tsc_exp = kvm->arch.cur_tsc_write +
+ 						nsec_to_cycles(vcpu, elapsed);
+ 			u64 tsc_hz = vcpu->arch.virtual_tsc_khz * 1000LL;
+ 			/*
+@@ -2915,7 +2911,7 @@ static void kvm_synchronize_tsc(struct kvm_vcpu *vcpu, u64 *user_value)
+ 	 * it's better to try to match offsets from the beginning.
+          */
+ 	if (synchronizing &&
+-	    vcpu->arch.virtual_tsc_khz == kvm->arch.last_tsc_khz) {
++	    vcpu->arch.virtual_tsc_khz == kvm->arch.cur_tsc_khz) {
+ 		/*
+ 		 * If synchronizing, advance the reference point to "now"
+ 		 * so the matching window slides forward with each vCPU.
+@@ -3199,7 +3195,7 @@ static void pvclock_update_vm_gtod_copy(struct kvm *kvm)
+ 		 * get_kvmclock() to compute kvmclock from the host TSC
+ 		 * without needing a vCPU reference.
+ 		 */
+-		ka->master_tsc_scaling_ratio = ka->last_tsc_scaling_ratio;
++		ka->master_tsc_scaling_ratio = ka->cur_tsc_scaling_ratio;
+ 		tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
+ 		if (tsc_hz && kvm_caps.has_tsc_control)
+ 			tsc_hz = kvm_scale_tsc(tsc_hz,
+@@ -6068,8 +6064,8 @@ static int kvm_arch_tsc_set_attr(struct kvm_vcpu *vcpu,
+ 		raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
+ 
+ 		matched = (vcpu->arch.virtual_tsc_khz &&
+-			   kvm->arch.last_tsc_khz == vcpu->arch.virtual_tsc_khz &&
+-			   kvm->arch.last_tsc_offset == offset);
++			   kvm->arch.cur_tsc_khz == vcpu->arch.virtual_tsc_khz &&
++			   kvm->arch.cur_tsc_offset == offset);
+ 
+ 		tsc = kvm_scale_tsc(rdtsc(), vcpu->arch.l1_tsc_scaling_ratio) + offset;
+ 		ns = get_kvmclock_base_ns();
+@@ -13451,7 +13447,7 @@ int kvm_arch_enable_virtualization_cpu(void)
+ {
+ 	struct kvm *kvm;
+ 	struct kvm_vcpu *vcpu;
+-	unsigned long i;
++	unsigned long i, flags;
+ 	int ret;
+ 	u64 local_tsc;
+ 	u64 max_tsc = 0;
+@@ -13530,13 +13526,18 @@ int kvm_arch_enable_virtualization_cpu(void)
+ 			}
+ 
+ 			/*
+-			 * We have to disable TSC offset matching.. if you were
+-			 * booting a VM while issuing an S4 host suspend....
+-			 * you may have some problem.  Solving this issue is
+-			 * left as an exercise to the reader.
++			 * Adjust the TSC matching reference by the same
++			 * delta applied to each vCPU's offset, so that
++			 * future KVM_SET_TSC / vCPU creation still matches
++			 * correctly against the adjusted TSC timeline.
++			 * Scale from host to guest TSC rate.
+ 			 */
+-			kvm->arch.last_tsc_nsec = 0;
+-			kvm->arch.last_tsc_write = 0;
++			raw_spin_lock_irqsave(&kvm->arch.tsc_write_lock, flags);
++			kvm->arch.cur_tsc_write -=
++				kvm_scale_tsc(delta_cyc,
++					      kvm->arch.cur_tsc_scaling_ratio);
++			kvm->arch.cur_tsc_offset += delta_cyc;
++			raw_spin_unlock_irqrestore(&kvm->arch.tsc_write_lock, flags);
+ 		}
+ 
+ 	}
 -- 
 2.54.0
 
