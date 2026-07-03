@@ -1,167 +1,151 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002193F485E;
-	Fri,  3 Jul 2026 14:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B76E3E0081;
+	Fri,  3 Jul 2026 15:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783090558; cv=none; b=ZP1Psv5WqEpl76OzpxB6KSyIV8j/JZuK9anJiKpk5TPEAA2ExjJ7W8PFDOHQNEs2WuL+JpW491ymvONr1c4NmXcicZYIS4h+lT579OJYMVrYC3QRubSj7Fv/p9VTY08a6Tj9m+RqAl6A9KVUhNaokpOjpBG8kSmZekqdN5kOQ9M=
+	t=1783091324; cv=none; b=SiBB20Y3PM2UEhHNpADjhypcYfdN7zTz2L/A025w+gMJNI0wAgn6+KvFbt00HxQJpgnYiHVINAVYOCCrBKSFxauAyZ3sCckBIB/pJHyvysu2f60i5zaSPc0Tgm0rC+4or1yjUIgBEagMSFFanT1lpbL0sO1FdvFvdLJkA4tsgX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783090558; c=relaxed/simple;
-	bh=SK6N+4Kw2vy3x3+hsIpZLgF9nRE23C7o4xhOpyb/k/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZrMwMY3q7TS33PK40ovD3CgK1ygr9po41TvZNhxoSOpzgLMW/fRxjKVIPF+g1gfpmI98P7yEgEKEzO3EgN9M8eZMSg8xxYuI/8aEx2MIFbFFGcZfQ97rZZJsindmuo0bgmRUF6ySTy1Ek2mWR6zfwiEkIV3WsCCsCkrYFvembVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=S9oYgrZ6; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1783091324; c=relaxed/simple;
+	bh=EatkHwGiINJvh8y+G+TYGlWEAfX3X9SjxnXDjq5DWGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sxMFwMI/7BxrBVW48SOO6Q9yMj/WzrYBgdzHYrTUOcO48iLtfXX7UnvcqgRZAGGCIHaO3Ajnqr9ObG6JaxXlWegPz9aWGe4dU8wm9g7OcUJ9mKByxbROzVzNWoWvx0PqzXplu4wCZmEzsR2JM8J+X54L4d0hLT0ZyiGo2oajAKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W+yNG8Yo; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="S9oYgrZ6"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09F25463D;
-	Fri,  3 Jul 2026 07:55:52 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 232E63F905;
-	Fri,  3 Jul 2026 07:55:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783090556; bh=SK6N+4Kw2vy3x3+hsIpZLgF9nRE23C7o4xhOpyb/k/c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S9oYgrZ6oZsHOH0UoMqYEbvDMsroTPuwSE+HzZ1xYfswP+KuNpt4B4BU+MPhwQaMI
-	 EqEgmcaEU87K9wHDfliJoPeBcjQLouWsiRU70cB2lNN4blfSISh21tM0JSG018OnTH
-	 MG/uKQvVHeqECM5D5aO7kSxfdYFOQ07yVWLmxUDw=
-Date: Fri, 3 Jul 2026 15:55:52 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 2/2] selftests/mm: test kmemleak's N-consecutive-scan
- leak confirmation
-Message-ID: <akfNeK7OOpvoZE9z@arm.com>
-References: <20260626-kmemleak_twice-v1-0-ab28f7cc0971@debian.org>
- <20260626-kmemleak_twice-v1-2-ab28f7cc0971@debian.org>
- <akYkKgWOsYnw6ETE@arm.com>
- <akZ4tzQw70x3RR2D@gmail.com>
- <akeX8mFiizd65pDw@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W+yNG8Yo"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6636J59R1814320;
+	Fri, 3 Jul 2026 15:08:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=m9vBeFOx9VmUPzIweBpa39fiiZs7qpA2wGQJ2FLtW
+	OE=; b=W+yNG8YotbVqaqa1TggKGTNBl1CS8AIVvfrXir1pQhYuFonn/FqKAXk59
+	E36UOumbwaZSQGYAk4xRATRcDSoGvrqHKJb60AyA1FFOX3iMVnGhNdYcSxTD48SJ
+	mzsM9FlDnt4jmqx3/OXEqDzhhDY3KBtrzDuSRVszG1NMm1wml8m4GBEsyXtyJMOQ
+	nCcw87Pj0PuT+x+AIY245AEh1muAj3d5S11oBaTdZd/H/pOopQpFYrepZuZ+8Hvd
+	2pAB4+uIzU+Nl25//xqgTJaer0pAEVlvz/doh2XVlygEiuyEtxpiNTe1IgkS3REA
+	dFG+r4gaWJmyAONBxFn2pBHHxdC6g==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f26qafe91-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jul 2026 15:08:27 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 663F4a5o023728;
+	Fri, 3 Jul 2026 15:08:27 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f2uhys5ca-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jul 2026 15:08:27 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 663F8PON50528762
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 3 Jul 2026 15:08:25 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 388B020043;
+	Fri,  3 Jul 2026 15:08:25 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3017220040;
+	Fri,  3 Jul 2026 15:08:21 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.39.22.216])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  3 Jul 2026 15:08:20 +0000 (GMT)
+From: Disha Goel <disgoel@linux.ibm.com>
+To: shuah@kernel.org
+Cc: wenyang.linux@foxmail.com, akpm@linux-foundation.org, jlayton@kernel.org,
+        brauner@kernel.org, jack@suse.cz, djwong@kernel.org,
+        aleksa@amutable.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Disha Goel <disgoel@linux.ibm.com>
+Subject: [PATCH] selftests/filesystems: fix missing and stale TARGETS entries
+Date: Fri,  3 Jul 2026 20:37:42 +0530
+Message-ID: <20260703150742.58991-1-disgoel@linux.ibm.com>
+X-Mailer: git-send-email 2.45.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <akeX8mFiizd65pDw@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAzMDE0NiBTYWx0ZWRfXzifltJwzJ5Gj
+ NAaFzh02SZsFeVHot9l7XAXJNW5QKoc51bCvhK8hmxhGYHRY9ghda75dAHODPYzoocZU6+0JIrj
+ Sy1sc6NrSQ4bU5A0wOVP/JQriYGoWurhb7U9rxZSlqHluZkWkODF5ApO41XG+n9PZgv/rpuuwG5
+ tWxFfe7d3r/dhuUBJfPB6+yFu9MkHeMup8lnwAJyTV+eTIo+igXv6KV/uOb5d6QTUbp3Cb++vhv
+ 47nEa/Er9LDZlkAsilB5/kkOXDbLStIyY9EnOtKT4juWh+eHMtOK8+f4aJ26bJb+ChR+QMLfeU6
+ LMBiBIVolrkShFjh7fgMDit8hTnQP4NFOy+xKkC9xQYzOkZno8EPlx8RODceL2DZmhEH4naRylA
+ AtoTZZNksGBoCmKtTGa9uALdZE/jVuI2q5e6Y4LSZxBE/G/50bxDl4u64HbqiLMDKO4byMOTjq2
+ ADiMV0J5Ze94lcbCIOA==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAzMDE0NiBTYWx0ZWRfX7EmTt8t+MCVW
+ dQZfslt7xQgAquj2OAEgCrJDYjAmOmMI6QxuntHIHrwlNBB1Ao4PyHJLWXBet1yKe8f9le35ERL
+ QlUQttvGUPNxFZEkVudjdC6rOp/7YZ4=
+X-Proofpoint-GUID: HTpnxO-XLNYvnb0nXnYrtUjWCKTuGZEc
+X-Proofpoint-ORIG-GUID: V1UzGahCg_FONDGsUfdQ7lZUS475iEhJ
+X-Authority-Analysis: v=2.4 cv=WZ88rUhX c=1 sm=1 tr=0 ts=6a47d06c cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=2UpccJByY7zQxxB6lQIA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-07-03_02,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 phishscore=0 clxscore=1011 bulkscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607030146
 
-On Fri, Jul 03, 2026 at 04:24:09AM -0700, Breno Leitao wrote:
-> On Thu, Jul 02, 2026 at 07:55:42AM -0700, Breno Leitao wrote:
-> > On Thu, Jul 02, 2026 at 09:41:14AM +0100, Catalin Marinas wrote:
-> > > On Fri, Jun 26, 2026 at 08:52:03AM -0700, Breno Leitao wrote:
-> > > > +pass "min_unref_scans=1 immediate; =2 gated to 2nd scan (counts $first/$s1/$s2); param read-back ok"
-> > > 
-> > > Are these off by one?
-> > 
-> > They seem to be OK, and I've tested it multiple times.
-> > 
-> > > Kmemleak has a mechanism to detect live objects
-> > > via the checksum. A side effect is that on allocation, the checksum is 0
-> > > and only after the first scan the checksum is changed.
-> > 
-> > I got the impression that checksum continues to be zero for these
-> > objects during the whole life time? (weird). 
-> 
-> I've investigated this a bit more and I found something interesting, in
-> our per_pcu checksum. The code in update_checksum() is:
-> 
-> 	for_each_possible_cpu(cpu) {
-> 		void *ptr = per_cpu_ptr((void __percpu *)object->pointer, cpu);
-> 
-> 		object->checksum ^= crc32(0, kasan_reset_tag((void *)ptr), object->size);
-> 	}
-> 
-> From my naive view, this has two concerns:
-> 
-> 1) In the kernel, crc32(0, <64 zero bytes>, 64) is zero, and the samples' test
-> I am using (kmemleak-test.c) has:
-> 
-> 	pr_info("__alloc_percpu(64, 4) = 0x%px\n", __alloc_percpu(64, 4)); 
-> 
-> alloc_percpu returns ZEROed memory, so, we are checkingsuming zero content.
-> Because we are using 0 as seed, that is returning zero.
-> 
-> object->checksum is a bunch of 0 XOR 0 XOR 0 and so forth.
+filesystems/eventfd, filesystems/open_tree_ns and filesystems/xattr
+were never added to TARGETS when introduced. filesystems/openat2 was
+moved from selftests/openat2/ but the TARGETS entry was never updated,
+leaving a stale entry pointing at a directory that no longer exists.
 
-Ah, yes, you are right. Irrespective of the per-cpu xor, I think we
-should seed the checksum with something other than 0 (say -1 or some
-random clock value).
+Fix this by adding the four missing subdirectories to TARGETS and
+removing the stale openat2 entry.
 
-> 2) that XOR above seems very weird. Basically we want to detect if some of
-> those per-cpu areas changed, here, but, if checksum goes to zero if two object content is similar.
-> 
-> Let me give you a simple example. We have SMP=2, and both objects have crc32 =
-> 0x42. At the end of that function, object->checksum will be zero, given 0x42
-> XOR 0x42 is zero.
-> 
-> If both object changes their content at the same time, object->checksum will
-> continue to be zero (although the content (and checksum) HAS changed).
-> 
-> I understand we want to detect any change in any of these per cpu field and
-> catch it independent of the CPU. I am inclined toward that.
-> 
-> 	--- a/mm/kmemleak.c
-> 	+++ b/mm/kmemleak.c
-> 	@@ -1409,8 +1409,9 @@ static bool update_checksum(struct kmemleak_object *object)
-> 			object->checksum = 0;
-> 			for_each_possible_cpu(cpu) {
-> 				void *ptr = per_cpu_ptr((void __percpu *)object->pointer, cpu);
-> 	+                       u32 seed = object->checksum + cpu;
-> 
-> 	-                       object->checksum ^= crc32(0, kasan_reset_tag((void *)ptr), object->size);
-> 	+                       object->checksum ^= crc32(seed, kasan_reset_tag((void *)ptr), object->size);
+Fixes: 7c37857fc23a ("selftests: add eventfd selftests")
+Fixes: b8f7622aa6e3 ("selftests/open_tree: add OPEN_TREE_NAMESPACE tests")
+Fixes: 7e28fef5d4db ("selftests/xattr: path-based AF_UNIX socket xattr tests")
+Fixes: fe087927046c ("selftests: move openat2 tests to selftests/filesystems/")
+Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
+---
+ tools/testing/selftests/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Yeah, the xor wasn't a great idea. What about initialising the checksum
-value on object allocation to ~0 (for the two-scans idea) and for
-per-cpu, just build the crc on top of the previous crc, something like:
-
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 7c7ba17ce7af..e196f53f9b46 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -687,7 +687,7 @@ static struct kmemleak_object *__alloc_object(gfp_t gfp)
- 	atomic_set(&object->use_count, 1);
- 	object->excess_ref = 0;
- 	object->count = 0;			/* white color initially */
--	object->checksum = 0;
-+	object->checksum = ~0;
- 	object->del_state = 0;
- 
- 	/* task information */
-@@ -981,7 +981,7 @@ static void reset_checksum(unsigned long ptr)
- 	}
- 
- 	raw_spin_lock_irqsave(&object->lock, flags);
--	object->checksum = 0;
-+	object->checksum = ~0;
- 	raw_spin_unlock_irqrestore(&object->lock, flags);
- 	put_object(object);
- }
-@@ -1410,7 +1410,8 @@ static bool update_checksum(struct kmemleak_object *object)
- 		for_each_possible_cpu(cpu) {
- 			void *ptr = per_cpu_ptr((void __percpu *)object->pointer, cpu);
- 
--			object->checksum ^= crc32(0, kasan_reset_tag((void *)ptr), object->size);
-+			object->checksum = crc32(object->checksum,
-+						 kasan_reset_tag((void *)ptr), object->size);
- 		}
- 	} else {
- 		object->checksum = crc32(0, kasan_reset_tag((void *)object->pointer), object->size);
-
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 8d4db2241cc2..4c4df65a6f91 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -33,7 +33,10 @@ TARGETS += fchmodat2
+ TARGETS += filesystems
+ TARGETS += filesystems/binderfs
+ TARGETS += filesystems/epoll
++TARGETS += filesystems/eventfd
+ TARGETS += filesystems/fat
++TARGETS += filesystems/openat2
++TARGETS += filesystems/open_tree_ns
+ TARGETS += filesystems/overlayfs
+ TARGETS += filesystems/statmount
+ TARGETS += filesystems/mount-notify
+@@ -42,6 +45,7 @@ TARGETS += filesystems/fuse
+ TARGETS += filesystems/move_mount
+ TARGETS += filesystems/empty_mntns
+ TARGETS += filesystems/fsmount_ns
++TARGETS += filesystems/xattr
+ TARGETS += firmware
+ TARGETS += fpu
+ TARGETS += ftrace
+@@ -98,7 +102,6 @@ TARGETS += prctl
+ TARGETS += proc
+ TARGETS += pstore
+ TARGETS += ptrace
+-TARGETS += openat2
+ TARGETS += rdma
+ TARGETS += resctrl
+ TARGETS += riscv
 -- 
-Catalin
+2.45.1
+
