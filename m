@@ -1,66 +1,31 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E28333D6C0
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 08:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5B934BA28;
+	Fri,  3 Jul 2026 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783067952; cv=none; b=Cnx4TDOOpVuyIQT1A5zPgvgeiwT0Wrj7wiwyx+485UxuRZaSRpTzOihe4+XhGFWGtukW8myUG+Ty+QElcbMLGzeh3+HbePR0ELU2t58rv272yED7/nHImyZBHO7elkj12ib9U7vv7VSciXjV3fDILvHX88mPouTJJITRdmGlu7A=
+	t=1783070534; cv=none; b=TAJihZueGq9iF4vqCrcVDcECxxaWLZ2q9oy+4ezXQBtyxspdryGbde0PRAaaxpG5ceW9yrNBzH6VQ+wuJFBDPgpx5Rxjb8mtGsNiUWJ1d8lMacJY+qWRSaAVwixRWaJ1Hbxywl7DAAmBwf0XFVFSR2A4XtY1z4l22AdDw4T4bFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783067952; c=relaxed/simple;
-	bh=cc1YF5Xt6ILBwZEpNWgVPIYMTH4RiRIUrO8CEZqCiAI=;
+	s=arc-20240116; t=1783070534; c=relaxed/simple;
+	bh=N5io/5HBiIe2UPJQ4gFbkOpsH0fAzouzCXnXdl9zj1A=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=FQMWVFtyVLg4nw4Kwph5apjdz1MR9/7xpOkS/EIy5NaS79Or1GTClbuo8OlXOIEnOog+GfMh5iuc4ppGratK69bZr7oDLEJuGSnwrMvEPZ3YtfU7GHpPurYomEAdZZULxkB1jgLGrAD+Vj9k+XobObUQq0nXcf+3cqyOsfwLXVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=zCNOBjzx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=H/v83nw5; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YIN6v6wc; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=oJ0bmoSU; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 References:Date:Message-Id; b=pinsCW4rtfvVZMI9x9PGYgFjwQonujUux4a/xTpcDtAf4sPHeIDj1mhAOGGdCtceHFONErRags2nN6fDeTGD9jPSrJPpaqiSZnL+ITyukVFjL0urKGJtvEE/qCQTyR4FoYyKlAuFO6n0z8oLW034yzzQV/knBwLXCZJKLE8bVN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TfVKb9g/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="zCNOBjzx";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="H/v83nw5";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YIN6v6wc";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="oJ0bmoSU"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:2b::1244])
-	by smtp-out2.suse.de (Postfix) with ESMTP id C279776295;
-	Fri,  3 Jul 2026 08:39:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1783067950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aVCN46FUPtrb2rabya6kBc7h7xw67ekcKSWMFjZW77M=;
-	b=zCNOBjzxpmleslMmlUNaH+UCwwGNlKkZZqDmQH8EVA9HCbEjVy4r0TpXodHevqutoi5ayV
-	pYlepXhM5JI35yQY+s6HgeX8uphAI/7dndoitiDHw/dqITHdWLLGzwXi0KweziZsOOD1sL
-	eXidzRLNI1WpkzM2KH9PfPXP82ook3Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1783067950;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aVCN46FUPtrb2rabya6kBc7h7xw67ekcKSWMFjZW77M=;
-	b=H/v83nw5Yt5xuNM/cOyvbsxd+kDhKsEBKDgE7GaxccCFyE7N2z7GZ0Q4PUY5q2rkDWtgul
-	vZLWOdsDFrUHNdCA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=YIN6v6wc;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=oJ0bmoSU
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1783067949; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aVCN46FUPtrb2rabya6kBc7h7xw67ekcKSWMFjZW77M=;
-	b=YIN6v6wcGBmPdER1DLZaFrgjXjY/QFShEFFyX+pfaLyvLyUOVHW6RI4f3E2A/13x4wf8Vb
-	nSUF+tvUFtU7Xnx8xIYqgdHjY0h6dFZRBG+wkpmIqDVmaEDsW08RG+2ZduYCGoa0I/9YVb
-	xCR4t0CHhw50uDZBIAX+LKKVSZkB7bQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1783067949;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aVCN46FUPtrb2rabya6kBc7h7xw67ekcKSWMFjZW77M=;
-	b=oJ0bmoSU8Z3ld2eavU6EN0EZOtWQJokai34GjWF+5DiD9BbvVCMOArCZG2rqVBwBigMWWn
-	06UDxonY4+DYMwBw==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TfVKb9g/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A629C1F000E9;
+	Fri,  3 Jul 2026 09:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783070532;
+	bh=q5MVo4uh7FPL2i29WjKWktvZLA+Qe7ZwlDr/cqGze4Q=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=TfVKb9g/9iSnY4ExisoSc3gmKIAxDrLdMhNEN1FI68OMG1K0/W6AW7hrjGAL8TPez
+	 /zc1oNoppTZ/xxtLm7TUlanJbhvPShr3cL+RouxgY/6mhJurBJprc4wuc0nZcRKydh
+	 y9VJs17ovtCLRXLJSxfDGC8tTovOYdbzJ6iStxAyhYjNeGTF+gvPREr9AyHIkPjaKo
+	 XFHuypf6SArTxkxbTAcx1n78PRqlAkmfhby2HBX/GWzQLgKs21Eqf9E+cK37K3DWbD
+	 Y6U+9b2Kk5YOvfhUS3AFQIbddASGvs4N2gEcZh4/3KqFBjSQJ9RiAn6Xjnq0VjgWks
+	 j1WVnxRSKGVlw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,74 +33,325 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
- build system
-From: Miroslav Benes <mbenes@suse.cz>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- live-patching@vger.kernel.org, shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>
-In-Reply-To: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
-References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
-Date: Fri, 03 Jul 2026 10:39:01 +0200
-Message-Id: <178306794166.34581.9718581938044856305.b4-review@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=227; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=cc1YF5Xt6ILBwZEpNWgVPIYMTH4RiRIUrO8CEZqCiAI=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiz3Uq1DAXPUxDeGX3jLENvXlDQ38cC2ud07A6TtFZdtd
- W5X9LrVyejPwsDIwWAppsjyeq+znOGUXAPN6nd3YQaxMoFMkRZpYAACFga+3MS8UiMdIz1TbUM9
- QyBDx4iBi1MApvrYb/b/nq//srGJ/z4gFJtelHPny1vhla8uCQrr88x93y1b62QrtfHzbEG/Zpk
- /Gs/nvmXqvF99xlY0abLPNoOSFQceeL72SJWL/GO6rdRvygqn3lc9TVdS0loj0icU3A9/tHDDr5
- tXzea2fvEJY1wZ/YtxXqifrdK0orP93xpb4jYckP/swBCfKb54pvQy//kNWux7ygx51+d0pDpPN
- D/4I/qD1t3zzQb8Z+8nb8vvubVx273fvfyLVON4nQTCSt7EXAxRTNJiXfTT5c8uu+mV89SUnZKP
- L3apZjJ2KH284oCYuuaRewpx6+Q/ZG0N3C2p6ntvTs02zW0e/mylAif23a4QdYsMrmuZsT7MO+y
- gnjwA
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Flag: YES
-X-Rspamd-Action: add header
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.38 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_SPAM_SHORT(2.99)[0.997];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:2b::1244:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim,linutronix.de:email]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: C279776295
-X-Spam-Score: 17.38
-X-Spam: Yes
+Content-Transfer-Encoding: 7bit
+Subject: Re: [RFC PATCH] fs: introduce pluggable ELF interpreter loader
+ registry
+From: Christian Brauner <brauner@kernel.org>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: david.laight.linux@gmail.com, brauner@kernel.org, jack@suse.cz, 
+ jannh@google.com, kees@kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-mm@kvack.org, mail@johnericson.me, shuah@kernel.org, 
+ viro@zeniv.linux.org.uk
+In-Reply-To: <20260702214247.1253741-1-farid.m.zakaria@gmail.com>
+References: <20260630185916.5a694895@pumpkin>
+ <20260702214247.1253741-1-farid.m.zakaria@gmail.com>
+Date: Fri, 03 Jul 2026 11:22:05 +0200
+Message-Id: <20260703-meditation-ratsuchende-moratorium-9ecdf1f3f8bb@brauner>
+X-Mailer: b4 0.16-dev-4217c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10072; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=N5io/5HBiIe2UPJQ4gFbkOpsH0fAzouzCXnXdl9zj1A=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS51zuylLzeX6ZTf2apsa1UT+JFXX2jHZ9UfGabXjyre
+ 0Z4S82ZjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIl8CGBkuNu9tmpbnchyabHT
+ M09fkOa7ziW2+Nix2mPmtUsW6BfW6TD8M97pJOXwZJ/n5Io969o+fHrF0d740iNd4+L5d6aPJIP
+ nMAAA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Fri, 03 Jul 2026 08:04:08 +0200, Thomas Weißschuh <thomas.weissschuh@linutronix.de> wrote:
-> kbuild: unset sub_make_done before calling kselftest build system
+> Introduce a pluggable framework for ELF binary loading to allow dynamic
+> resolution and redirection of program interpreters (PT_INTERP). This is
+> primarily designed to support hermetic path resolution like NixOS $ORIGIN
+> relative dynamic linkers without bloating the core ELF loader or compromising
+> system execution security.
+> 
+> Introduce a new registration interface for kernel modules to register
+> open_interpreter callbacks. Standard ELF loading queries this registry; if a
+> plugin resolves a custom segment type (like PT_INTERP_NIX), it returns a file
+> descriptor for the resolved interpreter. Secure execution environments
+> (bprm->secureexec) bypass relative resolution for safety.
+> 
+> Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+>
+> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+> index 1949e25c7741..ef4277fd8050 100644
+> --- a/fs/Kconfig.binfmt
+> +++ b/fs/Kconfig.binfmt
+> @@ -38,6 +38,21 @@ config BINFMT_ELF_KUNIT_TEST
+>  	  only needed for debugging. Note that with CONFIG_COMPAT=y, the
+>  	  compat_binfmt_elf KUnit test is also created.
+>  
+> +config BINFMT_ELF_PLUGINS
+> +	bool "Enable plugin support for ELF interpreter loading"
+> +	depends on BINFMT_ELF
+> +	help
+> +	  This option allows kernel modules to register handlers to dynamically
+> +	  resolve and override the ELF program interpreter (e.g. supporting relative
+> +	  interpreter paths with $ORIGIN).
+> +
+> +config BINFMT_ELF_NIX
+> +	tristate "ELF interpreter plugin for NixOS ($ORIGIN support)"
+> +	depends on BINFMT_ELF_PLUGINS
+> +	help
+> +	  This builds the NixOS ELF interpreter plugin. It intercepts PT_INTERP_NIX
+> +	  headers to resolve relative and $ORIGIN interpreter paths.
+> +
+>  config COMPAT_BINFMT_ELF
+>  	def_bool y
+>  	depends on COMPAT && BINFMT_ELF
+> diff --git a/fs/Makefile b/fs/Makefile
+> index 89a8a9d207d1..bd81e7ff64f3 100644
+> --- a/fs/Makefile
+> +++ b/fs/Makefile
+> @@ -35,6 +35,7 @@ obj-$(CONFIG_FILE_LOCKING)      += locks.o
+>  obj-$(CONFIG_BINFMT_MISC)	+= binfmt_misc.o
+>  obj-$(CONFIG_BINFMT_SCRIPT)	+= binfmt_script.o
+>  obj-$(CONFIG_BINFMT_ELF)	+= binfmt_elf.o
+> +obj-$(CONFIG_BINFMT_ELF_NIX)	+= binfmt_elf_nix.o
+>  obj-$(CONFIG_COMPAT_BINFMT_ELF)	+= compat_binfmt_elf.o
+>  obj-$(CONFIG_BINFMT_ELF_FDPIC)	+= binfmt_elf_fdpic.o
+>  obj-$(CONFIG_BINFMT_FLAT)	+= binfmt_flat.o
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 16a56b6b3f6c..53fa2681555a 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/random.h>
+>  #include <linux/elf.h>
+>  #include <linux/elf-randomize.h>
+> +#include <linux/elf_plugins.h>
+>  #include <linux/utsname.h>
+>  #include <linux/coredump.h>
+>  #include <linux/sched.h>
+> @@ -870,6 +871,12 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  	if (!elf_phdata)
+>  		goto out;
+>  
+> +	interpreter = elf_plugin_open_interpreter(bprm, elf_ex, elf_phdata);
+> +	if (IS_ERR(interpreter)) {
+> +		retval = PTR_ERR(interpreter);
+> +		goto out_free_ph;
+> +	}
+> +
+>  	elf_ppnt = elf_phdata;
+>  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+>  		char *elf_interpreter;
+> @@ -882,6 +889,9 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  		if (elf_ppnt->p_type != PT_INTERP)
+>  			continue;
+>  
+> +		if (interpreter)
+> +			continue;
+> +
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+
+>  		/*
+>  		 * This is the program interpreter used for shared libraries -
+>  		 * for now assume that this is an a.out format binary.
+> @@ -935,6 +945,20 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  		goto out_free_ph;
+>  	}
+>  
+> +	if (interpreter && !interp_elf_ex) {
+> +		interp_elf_ex = kmalloc_obj(*interp_elf_ex);
+> +		if (!interp_elf_ex) {
+> +			retval = -ENOMEM;
+> +			goto out_free_file;
+> +		}
+> +
+> +		/* Get the exec headers */
+> +		retval = elf_read(interpreter, interp_elf_ex,
+> +				  sizeof(*interp_elf_ex), 0);
+> +		if (retval < 0)
+> +			goto out_free_dentry;
+> +	}
+> +
+>  	elf_ppnt = elf_phdata;
+>  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++)
+>  		switch (elf_ppnt->p_type) {
+> diff --git a/fs/binfmt_elf_nix.c b/fs/binfmt_elf_nix.c
+> new file mode 100644
+> index 000000000000..d28b92c30939
+> --- /dev/null
+> +++ b/fs/binfmt_elf_nix.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/init.h>
+> +#include <linux/fs.h>
+> +#include <linux/path.h>
+> +#include <linux/namei.h>
+> +#include <linux/elf.h>
+> +#include <linux/elf_plugins.h>
+> +#include <linux/slab.h>
+> +
+> +MODULE_DESCRIPTION("ELF Interpreter plugin for NixOS / $ORIGIN");
+> +MODULE_AUTHOR("Farid Zakaria");
+> +MODULE_LICENSE("GPL");
+> +
+> +/* Mnemonic value for NixOS-specific program interpreter: 'N', 'I', 'X', 3 */
+> +#define PT_INTERP_NIX  (PT_LOOS + 0x4e49583)
+> +
+> +static struct file *nix_open_interpreter(struct linux_binprm *bprm,
+> +					 struct elfhdr *elf_ex,
+> +					 struct elf_phdr *elf_phdata)
+> +{
+> +	struct elf_phdr *elf_ppnt;
+> +	struct file *interpreter = NULL;
+> +	char *elf_interpreter = NULL;
+> +	int i, retval;
+> +
+> +	/* Find the custom Nix interpreter header */
+> +	elf_ppnt = elf_phdata;
+> +	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+> +		if (elf_ppnt->p_type == PT_INTERP_NIX)
+> +			break;
+> +	}
+
+
+> +
+> +	if (i == elf_ex->e_phnum)
+> +		return NULL; /* Segment not present; fall back to others */
+> +
+> +	/* Security check: refuse relative interp resolution on secure execution */
+> +	if (bprm->secureexec) {
+> +		pr_warn_once("binfmt_elf_nix: secureexec active, refusing custom interpreter lookup\n");
+> +		return NULL; /* Fallback to standard PT_INTERP */
+> +	}
+> +
+> +	if (elf_ppnt->p_filesz > PATH_MAX || elf_ppnt->p_filesz < 2)
+> +		return ERR_PTR(-ENOEXEC);
+> +
+> +	elf_interpreter = kmalloc(elf_ppnt->p_filesz, GFP_KERNEL);
+> +	if (!elf_interpreter)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	/* Read the interpreter path from the executable file */
+> +	retval = kernel_read(bprm->file, elf_interpreter, elf_ppnt->p_filesz, &elf_ppnt->p_offset);
+
+
+> +	if (retval != elf_ppnt->p_filesz) {
+> +		retval = (retval < 0) ? retval : -EIO;
+> +		goto out_free;
+> +	}
+> +
+> +	if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0') {
+> +		retval = -ENOEXEC;
+> +		goto out_free;
+> +	}
+> +
+> +	/* Path Resolution: Absolute vs. $ORIGIN */
+> +	if (elf_interpreter[0] == '/') {
+> +		interpreter = open_exec(elf_interpreter);
+> +	} else if (strncmp(elf_interpreter, "$ORIGIN/", 8) == 0 || strncmp(elf_interpreter, "${ORIGIN}/", 10) == 0) {
+> +		const char *rel_path = (elf_interpreter[0] == '$') ? (elf_interpreter + 8) : (elf_interpreter + 10);
+
+
+> +		struct path parent_path;
+> +
+> +		/* Reference parent directory of the executed file safely */
+> +		parent_path.mnt = mntget(bprm->file->f_path.mnt);
+> +		parent_path.dentry = dget_parent(bprm->file->f_path.dentry);
+> +
+> +		/* Open relative to parent directory */
+> +		interpreter = file_open_root(&parent_path, rel_path, O_RDONLY, 0);
+
+
+> +
+> +		path_put(&parent_path);
+> +	} else {
+> +		/* Naked relative paths are rejected for safety */
+> +		retval = -ENOEXEC;
+> +		goto out_free;
+> +	}
+> +
+> +	kfree(elf_interpreter);
+> +	return interpreter;
+> +
+> +out_free:
+> +	kfree(elf_interpreter);
+> +	return ERR_PTR(retval);
+> +}
+> +
+> +static struct elf_plugin nix_elf_plugin = {
+> +	.owner = THIS_MODULE,
+> +	.open_interpreter = nix_open_interpreter,
+> +};
+> +
+> +static int __init binfmt_elf_nix_init(void)
+> +{
+> +	return register_elf_plugin(&nix_elf_plugin);
+> +}
+> +
+> +static void __exit binfmt_elf_nix_exit(void)
+> +{
+> +	unregister_elf_plugin(&nix_elf_plugin);
+> +}
+> +
+> +module_init(binfmt_elf_nix_init);
+> +module_exit(binfmt_elf_nix_exit);
+> diff --git a/fs/exec.c b/fs/exec.c
+> index b92fe7db176c..45813bbce833 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -46,6 +46,7 @@
+>  #include <linux/key.h>
+>  #include <linux/personality.h>
+>  #include <linux/binfmts.h>
+> +#include <linux/elf_plugins.h>
+>  #include <linux/utsname.h>
+>  #include <linux/pid_namespace.h>
+>  #include <linux/module.h>
+> @@ -108,6 +109,52 @@ void unregister_binfmt(struct linux_binfmt * fmt)
+>  
+>  EXPORT_SYMBOL(unregister_binfmt);
+>  
+> +#if IS_ENABLED(CONFIG_BINFMT_ELF_PLUGINS)
+> +static DEFINE_MUTEX(elf_plugins_lock);
+> +static LIST_HEAD(elf_plugins);
+> +
+> +int register_elf_plugin(struct elf_plugin *plugin)
+> +{
+> +	mutex_lock(&elf_plugins_lock);
+> +	list_add_tail(&plugin->list, &elf_plugins);
+> +	mutex_unlock(&elf_plugins_lock);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(register_elf_plugin);
+> +
+> +void unregister_elf_plugin(struct elf_plugin *plugin)
+> +{
+> +	mutex_lock(&elf_plugins_lock);
+> +	list_del(&plugin->list);
+> +	mutex_unlock(&elf_plugins_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(unregister_elf_plugin);
+> +
+> +struct file *elf_plugin_open_interpreter(struct linux_binprm *bprm,
+> +					 struct elfhdr *elf_ex,
+> +					 struct elf_phdr *elf_phdata)
+> +{
+> +	struct elf_plugin *plugin;
+> +	struct file *file = NULL;
+> +
+> +	mutex_lock(&elf_plugins_lock);
+> +	list_for_each_entry(plugin, &elf_plugins, list) {
+> +		if (!try_module_get(plugin->owner))
+> +			continue;
+> +		mutex_unlock(&elf_plugins_lock);
+> +
+> +		file = plugin->open_interpreter(bprm, elf_ex, elf_phdata);
+
+I have to say I do not like this at all because it also means you need
+actual kernel modules for custom binaries. Yeech.
+
+I think you should extend binfmt_misc for that, combining it with bpf.
+When binfmt_misc selects the interpreter a bpf program is run. That bpf
+program is passed the necessary information to make a decision. It can
+check whether it's in the right sandbox. Then checks if the interpreter
+starts with the magic ORIGIN string or whatever. Once it has determined
+that a binfmt_misc entry applies things progress as usual. Then you can
+point binfmt_misc at a static binary that finds the right loader to use.
 
 -- 
-Miroslav
-
+Christian Brauner <brauner@kernel.org>
