@@ -1,140 +1,512 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02213016FB
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 17:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC1A2F745D
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 18:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783101432; cv=pass; b=XDs1oeyfMlEVGllO6TGYn6LuHy2uQlCmkLKYhN/wq7xPT8W45bcMg9tvwTW2CJ0NdcbmFcqyYJ0OnDuCJo7fDNHtaCvgqnG68TxeM1ztdP+tozn97Gl6Pt50TEPZbbWeSyLpgUH1bYMXH8qasqEZ7yvoxUIv5tAZXj1E4JRj8aU=
+	t=1783103574; cv=pass; b=BnunT0CBSxv8cQsKhM08M2C3uWQblRuIYq333ywt476Z14s+MDwI0xV5AzPhHB4t5WJ5eb8zphOXMWoZRFZR43eVm20zqidaQwR7vi0A9L1BbthZLkjpCF0N40aRbV3zk775F6RCJgMYm3VUxO5NXnvu5vFmZsIYaHOrs6Z/ovI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783101432; c=relaxed/simple;
-	bh=jYcBMUsEf16lB1gSKJT1q30+H1rv8CvgUFQ3Cpw3r0Q=;
+	s=arc-20240116; t=1783103574; c=relaxed/simple;
+	bh=5kW7D966yJD4XNrJla9R2uSsmGdJPEDWuthJIMMyVSM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ek4z2xhmIj6t8etyjlxs0fy1iijBXnCyKjep9CQ33rd3jYCEHjbh0y4GJGq8/FwNbQnwyOc4FB87lm3wwnusGujTMEZU5g0POjnr/7n0pFZNYRRkc5ncSe+iTysnuV2r9USAIQJgMeCyFhL/mdenhYIj7LSTohulJd2tDnllsPM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oFlfiDqi; arc=pass smtp.client-ip=74.125.224.52
+	 To:Cc:Content-Type; b=HrMXxGYjMl/yYUUJMABzVkHo4uFCNN1m0JXYKvzRFqM2yPtGis6Fq5RBqPp1UWjzsAOBMiPxrV5xDpiknS+p8d99BKRBzag3r2dfcx3pA6im+Y20rd1uNKo/TMQpyKz34UZyq8lB0z86780AqgW45MuJb7AaprX8aluxN3AYen0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PMhEV0VP; arc=pass smtp.client-ip=209.85.167.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oFlfiDqi"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-6647bc8f900so945663d50.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 10:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783101429; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMhEV0VP"
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-495ee8e807aso353615b6e.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 11:32:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783103571; cv=none;
         d=google.com; s=arc-20260327;
-        b=egt0GeuysssWi5YNv1ReHsV4Jaexu/5PbmC7rFk0McSEMVc9WdGUphKrOsiznSXt5G
-         rmubD9lIMC4VM6UvXDQYQV81YS1zjxfuOLDyVAmzRdeyZ2xJi6gf8b5xfhsiuWDV0VUE
-         /s5xguqn2lIoJgIdn/Dch32bqgdS1kzIyXUiY0N9hlKz3M9Znqd0Ue6qX39meMtOb7eG
-         UTtFVFvcMjoX+2+NjauHWTgNT1KvGgT8Vg+bBJkMF1s0HryjVNgkAFO9TKrUl8xxKQiZ
-         KUSt0mowcAg27u9z5uxODNkj77ZH1g08R1r4Y7GNJaE9T/2eB2u/bWkZJDa4OMESMxws
-         3BZQ==
+        b=b4gX4hVLI3M3R+MJolFN2YpH3AOU0mMTFlIgm3nzEMUFKP4I20jBKPYaj/TM7h7OHR
+         hEwpP+8GVesXrcBCg4glakOwmcdEJEP41VIUNVJ5pb865IdrmM7wNvVljb7xmAfnCHdA
+         HHd2F7qZIVazejpmSD9jpvKGmgnknN9WOrDFBj2t8a0UDG8pUU/bkVgpbYB41DeEztEw
+         Q6p4lx5/bhZahzZvdaRsIt9DHC/2IwPG7ZLQ58WxWB+YiN2J0Bm/g9P47g5v2fp95AmW
+         rdAAZQDDN5cJGWsT6BwKRrtcsYNIc7zoBgX4LbR9SONolGG0eaT4922duIeY+48hQsrk
+         AECg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+wCeRX4PM1cy9pj31y6w69soFSedp2CdjVACBoJy82Y=;
-        fh=ZvzRr+3dSxBCqta7pSze/nDzuNqi0o0+j4gdsUw6xWg=;
-        b=FB8aqpSvTYaDh8ZZKbl+Nnt7wPT4krjJ6kx0YvXT+H6V+DkwuCSa+cMirxCYo7D9k8
-         myz1gc9v7T7ts0s+0iPD/nwdl1b09srdbB0BlNHMY+mEFk1S7tlwfEa27F+T6pYlREd9
-         o12jZFgxHLzHbsPFjYUrMyAEFS9qA43q0UmWJ6VWsg03/l6Y3OGJwiVhD7R8Ztu+Smxb
-         9GwR/3QOIhKgieFT2G6xoo9/6hta9pHXygB/39XFttoUU1WttY082U8Fv4VLW94Jb9nH
-         mdYceAN8lYSUngv+T/qrZegORlm2NHlr/fzi81FwNAU/BBlathf0c5jYXzfI5waA+nge
-         6lfg==;
+        bh=jGxxuYIICA4XkrM04fmbBq4SZy/bQdrB/PRjF642fak=;
+        fh=MTKtMk5EIdbS6UyFaS83Wjna+kHHgATkMGqJ7Q0zbLM=;
+        b=LMjpKxDKZuSamFRbe3CnFmnKueM+ddW1HX3cj69uqAUAa5Uhs8+vgEGFRlWfanBWLZ
+         ywZ4ln+urkrpV5krMZpot5ur+18GaQwFtDDlw53MBtGkGP5jEc/yDn1A/Ti5zmleb+lM
+         uh8958VGdlOD/AE/LlFKeW0dqfse4j0SoRgCVnRNNrI9Xa8XsCI95nIKFGoqvTU8bPIP
+         hrI7+wCeeSK37vxoT6xWW2F18OxibtGBPZkShImMn3ddTqrAh/XdlDMA+IqKTFROiBao
+         sDx4yOR7LB1BSBpVCHTEr0XCqoKzMVvQo5IjeMD7+Qk/IfKOC5eUQIppjL+DQpXprpDh
+         KUEQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783101429; x=1783706229; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+wCeRX4PM1cy9pj31y6w69soFSedp2CdjVACBoJy82Y=;
-        b=oFlfiDqiyIycyNGH+cVcbvmFX/RmhjrH5sPMfRT7k1kn8A/WOwoJgAfGBdX2peGT+F
-         Cwgapy48tixM3/WTyQjHJ9PNKAhiiz1IlBQmwArtP8AHYu7Kacv7j0gw1AFvaYsKiJmf
-         0Csd6PfCuMih79MkIIjVPS3xziiqXSQPxCgczadAOPlrt4XprBXwa9bn9LNy4UuzIpjX
-         GvUkTyMoxaoCUIz4JHZkDvYgu5FJdUfiLNCYIW1UQusCA2K+3Nk9+8DSdT5LsYyEC9NK
-         LrJPrHxNmyT3jLDBM+sLnXQiSESI1I9fMGWPcz0hzQQasGGzujIgLGSWRjq0H8fN1Vf5
-         xbjg==
+        d=gmail.com; s=20251104; t=1783103571; x=1783708371; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jGxxuYIICA4XkrM04fmbBq4SZy/bQdrB/PRjF642fak=;
+        b=PMhEV0VP7+0kMgRiKBF13pJQ02jVUYcv1+B+CzeV7GqCgsnwS+43D4qDU95YT/ouKy
+         3btpAiPKNbWwr92TGZgRN/yfhGMFzdgGVkMiZj3sYGJLoGKjPUuurZzGWQvk9a5tSK+J
+         q1Pp/vFpLMvbYsxs7GV8UcbDsj3W44UvLpbnTl5BxWBAddK29ZQ4rZXUfOVY3t+K9mTX
+         NulnrinfrVFW/UEv1rGqjKPYQlTLNyKXEUCP8EfNaEUuUQobb4XxgCcndcVlvifRVKiE
+         tZzwHm72h9GmG0dSiT/f0h5mbytWeXDpMGVpKtAE6TnDSmbJ2p3+bEcuSqy3MN3UWpXN
+         XBEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783101429; x=1783706229;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+wCeRX4PM1cy9pj31y6w69soFSedp2CdjVACBoJy82Y=;
-        b=DMhwFDKT7K2BGW/5R3B3GvIm1wc+flXITkrVkMuCR+zXhXUsnP8WiHYKC6d7jA18np
-         SNYNy48ACh6gnk/tD0aLb+lkl52+37j19WOfK79nNXc3aqM5shuye5axvcfJp3pCz0SD
-         b5lgYliqS453huLIiUfwSVRRtivMfzdXxatCdy36Olac8IO0dvH9NGDOQG50di1IvjhT
-         KeiVaWMepZEloqE2LXO0/wftr1eJ5F9ZVTrFzkj628vSIresIElv9mB8U4XIr3ZcTSwq
-         cUQ0B1eOiROemVa1dADjxrTz76/bgFnuZjHRrcPJW+fHgaOZUu+/Cux/z+lZobeHRH7x
-         rzLw==
-X-Forwarded-Encrypted: i=1; AHgh+RpXOjLYQxveLrLd5mBS8m1F7ySMK7PYufvMzGDRnLjmSfR8x7uN2Vil7dxRBI/zyRwiz+Y9XQoPIHiNtuzvBg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHlEp7xR5uohCT6oekbNc0V6gbETDx83hgM2953Yfo1Asm9MTg
-	oJ6tQPIXJ3qIN0O/Sx/JZrduHVI5It2EEDXVtUyPrwoEq2YEh9mr1jN0IeChDqlRKQ8dWH2QfrT
-	caz7K1PQaQ8lObtdRbjm4wDPzbaUI4cQ=
-X-Gm-Gg: AfdE7cmzDp1INGEt7B5EDs7+UpQzVwfmaFbpTH60+vgiPD1GyO031wmWP9nvkHhCRUH
-	dUhEl31WOP3eyLgkvVDUVhuySCDUpe3Ee6VckwUO0RouI13zE7CI40qhUnulaWgS4cXt636TjGL
-	CZNRsW0YEVXwg6pKB0gl1+fuTRpNCu0gS20XKNMg2WzIbDmRL9CCx+tpHWAqSDjuRPN3t4gG+7/
-	tj87avmdItL2XPEMQq41gccEtTdd81TVbFAVcGmnZF21QEAKsau6tFOubmHXfG+fLb88QmW
-X-Received: by 2002:a05:690e:14c6:b0:664:8376:fd42 with SMTP id
- 956f58d0204a3-66652ea1109mr98370d50.39.1783101428823; Fri, 03 Jul 2026
- 10:57:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783103571; x=1783708371;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jGxxuYIICA4XkrM04fmbBq4SZy/bQdrB/PRjF642fak=;
+        b=HE1Ay6sZ04oZ8Qot0WWySaLzTlGlNey4AmO91yonwp0LyLqT5BYlCqW07Jfj6ibqHx
+         +oTMtb4tmeRfDbQgvaanw+ZXqNG6SPPt2vPpNAaN0E+LobtYmq+Fy5m3kIj2lQtNYEYo
+         W8zg0FsATfmaHVmCfZXjHgpFTqB4aaTXLqOeZdxofE60/tG9zRrTyr+3I2FIye/vMP3C
+         rFqvDfgPhnK5zRgdc0dLOHrSVOpFQTzIpngVpfzUwEvdHm+7VhKy/sSjRzMThPxwX0YB
+         +zs2HQcPoPFeNu/FArgarhva1TJq6egI2ovyt1vwQNOHPMx9JrTQIGZ0y1ovR2QHLhI9
+         HMQQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9esoh8osLgtS+dZ02bml4K4QNEtMYY4oEsniBMu9EjH8gdLPtId9v9WKvIMtyTOr9moYBfwC2KvLAavuypNNA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDE7AZ7sg8x8cmgvY1KMI6mIWssY8zeVbTaS5eE9M0BujRpBho
+	6rPrWsnJ/yy+Yz5IbcPc+u5KUlVee8xKgEQepigOqcaKIIihURRwezT3BDkZ7HaABA9rumeTBWE
+	K8xHxBlvGFRxOSv/dpkhREAzuJhawrvo=
+X-Gm-Gg: AfdE7cnpmyRT0lP2O2Rgl5BczV7n9LU4C1Z/dJnpIPrnt2ULE4UQ9it1Jioe1OJiS57
+	njARd2SrXuV5fZg8+2IDjsclpwOzOvbV8/nOMP73kdmP/Tcm+YfpDM4TUuC9M5AXsM00nGhHkgT
+	0OjQ2o9Hd5+VpckFXGgEo4P+XfG2UJ3YPLrUu/icjJOKbYCK+ofXn5QC77j6hC8adie+t/+QWIb
+	Z79iukJtDFtOtRlGHXMiPFymrsSOKoEArEzvcSXW5HGAm+LNEnmthdwdyCYLJAIQXQ+Ba4dpbKk
+	bsPW
+X-Received: by 2002:a05:6808:c145:b0:492:8920:81b7 with SMTP id
+ 5614622812f47-499b6477461mr229466b6e.8.1783103571184; Fri, 03 Jul 2026
+ 11:32:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFftDdrDgoHCopx9byaupea8GB6P=qSAY==6QQoXSJcJgn_04w@mail.gmail.com>
- <20260703120951.1622491-1-wangyan01@kylinos.cn>
-In-Reply-To: <20260703120951.1622491-1-wangyan01@kylinos.cn>
-From: William Roberts <bill.c.roberts@gmail.com>
-Date: Fri, 3 Jul 2026 12:56:58 -0500
-X-Gm-Features: AVVi8CdSPVEbVI_H4mhzLOXB7QTVgXg_PLL4YqyXE43yr2FhcrPKm3ONR_hrQhI
-Message-ID: <CAFftDdp9TF3Jp+4yff9aJLnKBbzSzy6BK=og6+m+CXG9wO=OsQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/lsm: Fix memory leak in attr_lsm_count
-To: Wang Yan <wangyan01@kylinos.cn>
-Cc: casey@schaufler-ca.com, jmorris@namei.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	mic@digikod.net, paul@paul-moore.com, serge@hallyn.com, shuah@kernel.org
+References: <20260630185916.5a694895@pumpkin> <20260702214247.1253741-1-farid.m.zakaria@gmail.com>
+ <20260703-meditation-ratsuchende-moratorium-9ecdf1f3f8bb@brauner>
+In-Reply-To: <20260703-meditation-ratsuchende-moratorium-9ecdf1f3f8bb@brauner>
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+Date: Fri, 3 Jul 2026 11:32:38 -0700
+X-Gm-Features: AVVi8Cd92ozOgdmrIKRm-TUElsCXe-xdr671pT3QnWUHq6iaEWsPZ767F3i70qg
+Message-ID: <CACCo2jkCFdqa1SQ_k1_42x_KYHReqcaGEScKp8ozt3FcAX7f8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH] fs: introduce pluggable ELF interpreter loader registry
+To: Christian Brauner <brauner@kernel.org>
+Cc: david.laight.linux@gmail.com, jack@suse.cz, jannh@google.com, 
+	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, 
+	shuah@kernel.org, viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 3, 2026 at 7:10=E2=80=AFAM Wang Yan <wangyan01@kylinos.cn> wrot=
-e:
+On Fri, Jul 3, 2026 at 2:22=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
 >
-> The calloc-allocated buffer in attr_lsm_count() is never released on
-> any exit path, including both the normal return path and the early
-> return when read_sysfs_lsms fails, resulting in a heap memory leak.
+> > Introduce a pluggable framework for ELF binary loading to allow dynamic
+> > resolution and redirection of program interpreters (PT_INTERP). This is
+> > primarily designed to support hermetic path resolution like NixOS $ORIG=
+IN
+> > relative dynamic linkers without bloating the core ELF loader or compro=
+mising
+> > system execution security.
+> >
+> > Introduce a new registration interface for kernel modules to register
+> > open_interpreter callbacks. Standard ELF loading queries this registry;=
+ if a
+> > plugin resolves a custom segment type (like PT_INTERP_NIX), it returns =
+a file
+> > descriptor for the resolved interpreter. Secure execution environments
+> > (bprm->secureexec) bypass relative resolution for safety.
+> >
+> > Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+> >
+> > diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+> > index 1949e25c7741..ef4277fd8050 100644
+> > --- a/fs/Kconfig.binfmt
+> > +++ b/fs/Kconfig.binfmt
+> > @@ -38,6 +38,21 @@ config BINFMT_ELF_KUNIT_TEST
+> >         only needed for debugging. Note that with CONFIG_COMPAT=3Dy, th=
+e
+> >         compat_binfmt_elf KUnit test is also created.
+> >
+> > +config BINFMT_ELF_PLUGINS
+> > +     bool "Enable plugin support for ELF interpreter loading"
+> > +     depends on BINFMT_ELF
+> > +     help
+> > +       This option allows kernel modules to register handlers to dynam=
+ically
+> > +       resolve and override the ELF program interpreter (e.g. supporti=
+ng relative
+> > +       interpreter paths with $ORIGIN).
+> > +
+> > +config BINFMT_ELF_NIX
+> > +     tristate "ELF interpreter plugin for NixOS ($ORIGIN support)"
+> > +     depends on BINFMT_ELF_PLUGINS
+> > +     help
+> > +       This builds the NixOS ELF interpreter plugin. It intercepts PT_=
+INTERP_NIX
+> > +       headers to resolve relative and $ORIGIN interpreter paths.
+> > +
+> >  config COMPAT_BINFMT_ELF
+> >       def_bool y
+> >       depends on COMPAT && BINFMT_ELF
+> > diff --git a/fs/Makefile b/fs/Makefile
+> > index 89a8a9d207d1..bd81e7ff64f3 100644
+> > --- a/fs/Makefile
+> > +++ b/fs/Makefile
+> > @@ -35,6 +35,7 @@ obj-$(CONFIG_FILE_LOCKING)      +=3D locks.o
+> >  obj-$(CONFIG_BINFMT_MISC)    +=3D binfmt_misc.o
+> >  obj-$(CONFIG_BINFMT_SCRIPT)  +=3D binfmt_script.o
+> >  obj-$(CONFIG_BINFMT_ELF)     +=3D binfmt_elf.o
+> > +obj-$(CONFIG_BINFMT_ELF_NIX) +=3D binfmt_elf_nix.o
+> >  obj-$(CONFIG_COMPAT_BINFMT_ELF)      +=3D compat_binfmt_elf.o
+> >  obj-$(CONFIG_BINFMT_ELF_FDPIC)       +=3D binfmt_elf_fdpic.o
+> >  obj-$(CONFIG_BINFMT_FLAT)    +=3D binfmt_flat.o
+> > diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> > index 16a56b6b3f6c..53fa2681555a 100644
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -35,6 +35,7 @@
+> >  #include <linux/random.h>
+> >  #include <linux/elf.h>
+> >  #include <linux/elf-randomize.h>
+> > +#include <linux/elf_plugins.h>
+> >  #include <linux/utsname.h>
+> >  #include <linux/coredump.h>
+> >  #include <linux/sched.h>
+> > @@ -870,6 +871,12 @@ static int load_elf_binary(struct linux_binprm *bp=
+rm)
+> >       if (!elf_phdata)
+> >               goto out;
+> >
+> > +     interpreter =3D elf_plugin_open_interpreter(bprm, elf_ex, elf_phd=
+ata);
+> > +     if (IS_ERR(interpreter)) {
+> > +             retval =3D PTR_ERR(interpreter);
+> > +             goto out_free_ph;
+> > +     }
+> > +
+> >       elf_ppnt =3D elf_phdata;
+> >       for (i =3D 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+> >               char *elf_interpreter;
+> > @@ -882,6 +889,9 @@ static int load_elf_binary(struct linux_binprm *bpr=
+m)
+> >               if (elf_ppnt->p_type !=3D PT_INTERP)
+> >                       continue;
+> >
+> > +             if (interpreter)
+> > +                     continue;
+> > +
 >
-> Add free() for the buffer on all return branches to fix the leak.
 >
-> Fixes: d3d929a8b0cd ("LSM: selftests for Linux Security Module syscalls")
-> Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
-> ---
->  tools/testing/selftests/lsm/common.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> >               /*
+> >                * This is the program interpreter used for shared librar=
+ies -
+> >                * for now assume that this is an a.out format binary.
+> > @@ -935,6 +945,20 @@ static int load_elf_binary(struct linux_binprm *bp=
+rm)
+> >               goto out_free_ph;
+> >       }
+> >
+> > +     if (interpreter && !interp_elf_ex) {
+> > +             interp_elf_ex =3D kmalloc_obj(*interp_elf_ex);
+> > +             if (!interp_elf_ex) {
+> > +                     retval =3D -ENOMEM;
+> > +                     goto out_free_file;
+> > +             }
+> > +
+> > +             /* Get the exec headers */
+> > +             retval =3D elf_read(interpreter, interp_elf_ex,
+> > +                               sizeof(*interp_elf_ex), 0);
+> > +             if (retval < 0)
+> > +                     goto out_free_dentry;
+> > +     }
+> > +
+> >       elf_ppnt =3D elf_phdata;
+> >       for (i =3D 0; i < elf_ex->e_phnum; i++, elf_ppnt++)
+> >               switch (elf_ppnt->p_type) {
+> > diff --git a/fs/binfmt_elf_nix.c b/fs/binfmt_elf_nix.c
+> > new file mode 100644
+> > index 000000000000..d28b92c30939
+> > --- /dev/null
+> > +++ b/fs/binfmt_elf_nix.c
+> > @@ -0,0 +1,108 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +#include <linux/module.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/init.h>
+> > +#include <linux/fs.h>
+> > +#include <linux/path.h>
+> > +#include <linux/namei.h>
+> > +#include <linux/elf.h>
+> > +#include <linux/elf_plugins.h>
+> > +#include <linux/slab.h>
+> > +
+> > +MODULE_DESCRIPTION("ELF Interpreter plugin for NixOS / $ORIGIN");
+> > +MODULE_AUTHOR("Farid Zakaria");
+> > +MODULE_LICENSE("GPL");
+> > +
+> > +/* Mnemonic value for NixOS-specific program interpreter: 'N', 'I', 'X=
+', 3 */
+> > +#define PT_INTERP_NIX  (PT_LOOS + 0x4e49583)
+> > +
+> > +static struct file *nix_open_interpreter(struct linux_binprm *bprm,
+> > +                                      struct elfhdr *elf_ex,
+> > +                                      struct elf_phdr *elf_phdata)
+> > +{
+> > +     struct elf_phdr *elf_ppnt;
+> > +     struct file *interpreter =3D NULL;
+> > +     char *elf_interpreter =3D NULL;
+> > +     int i, retval;
+> > +
+> > +     /* Find the custom Nix interpreter header */
+> > +     elf_ppnt =3D elf_phdata;
+> > +     for (i =3D 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
+> > +             if (elf_ppnt->p_type =3D=3D PT_INTERP_NIX)
+> > +                     break;
+> > +     }
 >
-> diff --git a/tools/testing/selftests/lsm/common.c b/tools/testing/selftes=
-ts/lsm/common.c
-> index 9ad258912646..927dce4f04cb 100644
-> --- a/tools/testing/selftests/lsm/common.c
-> +++ b/tools/testing/selftests/lsm/common.c
-> @@ -76,7 +76,7 @@ int attr_lsm_count(void)
->                 return 0;
 >
->         if (read_sysfs_lsms(names, sysconf(_SC_PAGESIZE)))
-> -               return 0;
-> +               goto out;
+> > +
+> > +     if (i =3D=3D elf_ex->e_phnum)
+> > +             return NULL; /* Segment not present; fall back to others =
+*/
+> > +
+> > +     /* Security check: refuse relative interp resolution on secure ex=
+ecution */
+> > +     if (bprm->secureexec) {
+> > +             pr_warn_once("binfmt_elf_nix: secureexec active, refusing=
+ custom interpreter lookup\n");
+> > +             return NULL; /* Fallback to standard PT_INTERP */
+> > +     }
+> > +
+> > +     if (elf_ppnt->p_filesz > PATH_MAX || elf_ppnt->p_filesz < 2)
+> > +             return ERR_PTR(-ENOEXEC);
+> > +
+> > +     elf_interpreter =3D kmalloc(elf_ppnt->p_filesz, GFP_KERNEL);
+> > +     if (!elf_interpreter)
+> > +             return ERR_PTR(-ENOMEM);
+> > +
+> > +     /* Read the interpreter path from the executable file */
+> > +     retval =3D kernel_read(bprm->file, elf_interpreter, elf_ppnt->p_f=
+ilesz, &elf_ppnt->p_offset);
 >
->         if (strstr(names, "selinux"))
->                 count++;
-> @@ -85,5 +85,7 @@ int attr_lsm_count(void)
->         if (strstr(names, "apparmor"))
->                 count++;
 >
-> +out:
-> +       free(names);
->         return count;
->  }
-> --
-> 2.25.1
+> > +     if (retval !=3D elf_ppnt->p_filesz) {
+> > +             retval =3D (retval < 0) ? retval : -EIO;
+> > +             goto out_free;
+> > +     }
+> > +
+> > +     if (elf_interpreter[elf_ppnt->p_filesz - 1] !=3D '\0') {
+> > +             retval =3D -ENOEXEC;
+> > +             goto out_free;
+> > +     }
+> > +
+> > +     /* Path Resolution: Absolute vs. $ORIGIN */
+> > +     if (elf_interpreter[0] =3D=3D '/') {
+> > +             interpreter =3D open_exec(elf_interpreter);
+> > +     } else if (strncmp(elf_interpreter, "$ORIGIN/", 8) =3D=3D 0 || st=
+rncmp(elf_interpreter, "${ORIGIN}/", 10) =3D=3D 0) {
+> > +             const char *rel_path =3D (elf_interpreter[0] =3D=3D '$') =
+? (elf_interpreter + 8) : (elf_interpreter + 10);
+>
+>
+> > +             struct path parent_path;
+> > +
+> > +             /* Reference parent directory of the executed file safely=
+ */
+> > +             parent_path.mnt =3D mntget(bprm->file->f_path.mnt);
+> > +             parent_path.dentry =3D dget_parent(bprm->file->f_path.den=
+try);
+> > +
+> > +             /* Open relative to parent directory */
+> > +             interpreter =3D file_open_root(&parent_path, rel_path, O_=
+RDONLY, 0);
+>
+>
+> > +
+> > +             path_put(&parent_path);
+> > +     } else {
+> > +             /* Naked relative paths are rejected for safety */
+> > +             retval =3D -ENOEXEC;
+> > +             goto out_free;
+> > +     }
+> > +
+> > +     kfree(elf_interpreter);
+> > +     return interpreter;
+> > +
+> > +out_free:
+> > +     kfree(elf_interpreter);
+> > +     return ERR_PTR(retval);
+> > +}
+> > +
+> > +static struct elf_plugin nix_elf_plugin =3D {
+> > +     .owner =3D THIS_MODULE,
+> > +     .open_interpreter =3D nix_open_interpreter,
+> > +};
+> > +
+> > +static int __init binfmt_elf_nix_init(void)
+> > +{
+> > +     return register_elf_plugin(&nix_elf_plugin);
+> > +}
+> > +
+> > +static void __exit binfmt_elf_nix_exit(void)
+> > +{
+> > +     unregister_elf_plugin(&nix_elf_plugin);
+> > +}
+> > +
+> > +module_init(binfmt_elf_nix_init);
+> > +module_exit(binfmt_elf_nix_exit);
+> > diff --git a/fs/exec.c b/fs/exec.c
+> > index b92fe7db176c..45813bbce833 100644
+> > --- a/fs/exec.c
+> > +++ b/fs/exec.c
+> > @@ -46,6 +46,7 @@
+> >  #include <linux/key.h>
+> >  #include <linux/personality.h>
+> >  #include <linux/binfmts.h>
+> > +#include <linux/elf_plugins.h>
+> >  #include <linux/utsname.h>
+> >  #include <linux/pid_namespace.h>
+> >  #include <linux/module.h>
+> > @@ -108,6 +109,52 @@ void unregister_binfmt(struct linux_binfmt * fmt)
+> >
+> >  EXPORT_SYMBOL(unregister_binfmt);
+> >
+> > +#if IS_ENABLED(CONFIG_BINFMT_ELF_PLUGINS)
+> > +static DEFINE_MUTEX(elf_plugins_lock);
+> > +static LIST_HEAD(elf_plugins);
+> > +
+> > +int register_elf_plugin(struct elf_plugin *plugin)
+> > +{
+> > +     mutex_lock(&elf_plugins_lock);
+> > +     list_add_tail(&plugin->list, &elf_plugins);
+> > +     mutex_unlock(&elf_plugins_lock);
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(register_elf_plugin);
+> > +
+> > +void unregister_elf_plugin(struct elf_plugin *plugin)
+> > +{
+> > +     mutex_lock(&elf_plugins_lock);
+> > +     list_del(&plugin->list);
+> > +     mutex_unlock(&elf_plugins_lock);
+> > +}
+> > +EXPORT_SYMBOL_GPL(unregister_elf_plugin);
+> > +
+> > +struct file *elf_plugin_open_interpreter(struct linux_binprm *bprm,
+> > +                                      struct elfhdr *elf_ex,
+> > +                                      struct elf_phdr *elf_phdata)
+> > +{
+> > +     struct elf_plugin *plugin;
+> > +     struct file *file =3D NULL;
+> > +
+> > +     mutex_lock(&elf_plugins_lock);
+> > +     list_for_each_entry(plugin, &elf_plugins, list) {
+> > +             if (!try_module_get(plugin->owner))
+> > +                     continue;
+> > +             mutex_unlock(&elf_plugins_lock);
+> > +
+> > +             file =3D plugin->open_interpreter(bprm, elf_ex, elf_phdat=
+a);
+>
+> I have to say I do not like this at all because it also means you need
+> actual kernel modules for custom binaries. Yeech.
 >
 
-Reviewed-by: William Roberts <bill.c.roberts@gmail.com>
-Tested-by: William Roberts <bill.c.roberts@gmail.com>
+Isn't this already true via binfmt for new binary formats?
+ELF support in binfmt itself is also built-in from what I understand.
+
+Anyway, I'm not too attached to the idea, I'm just trying to
+brainstorm on how to get it done.
+
+> I think you should extend binfmt_misc for that, combining it with bpf.
+> When binfmt_misc selects the interpreter a bpf program is run. That bpf
+> program is passed the necessary information to make a decision. It can
+> check whether it's in the right sandbox. Then checks if the interpreter
+> starts with the magic ORIGIN string or whatever. Once it has determined
+> that a binfmt_misc entry applies things progress as usual. Then you can
+> point binfmt_misc at a static binary that finds the right loader to use.
+>
+
+My audit of this shows it might be doable, but it's definitely
+confusing, and I'm still not clear it solves the problem -- I will
+work through an example on my NixOS machine. I think I can patch
+https://github.com/nix-community/nix-ld to maybe act as this
+trampoline for binfmt_misc to read PT_INTERP_NIX. I will try that and
+respond back if it works conceptually at least to maybe keep the
+discussion moving forward and to explore the space more.
+
+If binfmt_misc has to point to a wrapper binary, that wrapper must
+live at a fixed, hardcoded absolute path.
+I guess we could bootstrap it for NixOS only but one other problem I
+forsee: /proc/self/exe is now something else than expected
+
+The entire goal of relocatability is to allow binaries to run on any
+host machine without relying on global, hardcoded system paths.
+Just to demo how Nix is designed to let you copy code from a machine
+to another with *ideally* no assumptions.
+Here is a simple hello world:
+
+#hello.nix
+with import <nixpkgs> {};
+runCommandCC "hello" {} ''
+  mkdir -p $out/bin
+  gcc -x c -o $out/bin/hello - <<\INNER_EOF
+#include <stdio.h>
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+INNER_EOF
+''
+
+We can then build it:
+> nix build -f hello.nix
+
+My machine uses the default /nix/store prefix, so the interpreter is
+set to there.
+> patchelf --print-interpreter ./result/bin/hello
+/nix/store/7nbi22pcc92y2fqbkyp7h3srvvklmckb-glibc-2.40-224/lib/ld-linux-x86=
+-64.so.2
+
+If I were to use a machine with a different prefix
+/home/fmzakari/.local/nix then I couldn't "substitute" (download from
+the cache), this binary.
+I would have to build it and the whole graph down to our bootstrap
+seeds with the new store prefix.
+
+Nix then let's us then query the graph and copy it, including ld.so
+and glibc to any other machine to ideally run.
+
+> nix-store --query --tree $(realpath result)
+/nix/store/adbwpmzwgdcmk5qcskyqwygmxbkffb32-hello
+=E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/7nbi22pcc92y2fqbkyp7h3srvvkl=
+mckb-glibc-2.40-224
+=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/fv5lgysa3hmf3l3d=
+kkpwvndcg6xwhy8m-xgcc-14.3.0-libgcc
+=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/qywg7bxskvihq62m=
+s2g51fkzkrdnyfkh-libidn2-2.3.8
+=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/hjwp=
+pd89fk8781xl4r35xqlddwqi5f66-libunistring-1.4.1
+=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80=E2=94=80/ni=
+x/store/hjwppd89fk8781xl4r35xqlddwqi5f66-libunistring-1.4.1
+[...]
+=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80=E2=94=80/nix/store/qywg=
+7bxskvihq62ms2g51fkzkrdnyfkh-libidn2-2.3.8 [...]
+=E2=94=82   =E2=94=94=E2=94=80=E2=94=80=E2=94=80/nix/store/7nbi22pcc92y2fqb=
+kyp7h3srvvklmckb-glibc-2.40-224 [...]
+=E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/ybp235ps7m4yd85v0pgvqkhd4xmx=
+f6jq-gcc-14.3.0-lib
+=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/7nbi22pcc92y2fqb=
+kyp7h3srvvklmckb-glibc-2.40-224 [...]
+=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80/nix/store/phpq5h7cp6y1w84a=
+ysy29548irqy5dd9-gcc-14.3.0-libgcc
+=E2=94=82   =E2=94=94=E2=94=80=E2=94=80=E2=94=80/nix/store/ybp235ps7m4yd85v=
+0pgvqkhd4xmxf6jq-gcc-14.3.0-lib [...]
+=E2=94=94=E2=94=80=E2=94=80=E2=94=80/nix/store/adbwpmzwgdcmk5qcskyqwygmxbkf=
+fb32-hello [...]
+
+I appreciate you engaging me on this topic -- thank you.
+
+> --
+> Christian Brauner <brauner@kernel.org>
