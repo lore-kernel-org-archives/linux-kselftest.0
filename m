@@ -1,165 +1,274 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-1-111.ptr.blmpb.com (va-1-111.ptr.blmpb.com [209.127.230.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18713C4171;
-	Fri,  3 Jul 2026 12:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBCE3D333D
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 12:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783080771; cv=none; b=HwFKwsnnXu6M/hIcQ0Gq0XKjgPuS6qHsiWoF8YIt1gEMJppIG21GAoXi1CF8Of2NL/QUjQ1U+GbMvXRIlcrFNAG0idxqq2NMYNqOfpcBi+STKs8ZzvGppsRiPWiUQjuJML3M/VdjCpeSwm47ThnN5dzkxuXmnBppB59nxXIQBdA=
+	t=1783083214; cv=none; b=twdzhepVACTcvaiJxWUxknurutwflVkwagxMx7BEaX0g5xB3TPDifhSkD8qtv1QY4+GSfMQoLLlue9SkBkVj8u70HUaKXJ0nNYzPfA0D+imOzk5nQQZEqqpzHfHR5OF0G9Y1lfVip5q5su6RKTXM0+X2aFTWXr2JhadgwI0uA4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783080771; c=relaxed/simple;
-	bh=svuMCr40km+pZ9uy6Wrvq5DI4pzkEmdcVGA4/pmIkcE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JKw5zpPCZ2s0Ugfb96AwAFKTq5njJ+xqTjSYolBx2CGsRM08L0hHsGeie8mAWbjxuglebWv9ajS5CFsKx0z1kVi6Xi5iW0cDXAOvSUiS5Ls7IS0i040vL8L57JFGWMQOHZkQ4DBsUTnRnOh9fple+y/YXFhdgCxEYrfldLRvIoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.org; spf=pass smtp.mailfrom=fastmail.org; dkim=pass (2048-bit key) header.d=fastmail.org header.i=@fastmail.org header.b=RujNGzWy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LbR5w1H9; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.org
+	s=arc-20240116; t=1783083214; c=relaxed/simple;
+	bh=Xxssz8tDPJhjYPnivwci6RzpBfg2GqvpS304T4SluOU=;
+	h=From:Message-Id:To:Mime-Version:Content-Type:Date:Cc:Subject; b=oKp35tYwb7KGEX3MDW6aDUicZllW75lu3ROLYqz0CKFR2Mxs5mJEpRB9p6RYtZ1J49LsyZP4Bp5mTWvZ35ZoHFjtxYgi1xl3376U9AJgpeS4nTeawHSfcx5DAkB0U1bHh8EZxHj8FlxSBNQdo/zH8YhuFuvWxCR1SFPioBBGuqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=oU8xIwJb; arc=none smtp.client-ip=209.127.230.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.org header.i=@fastmail.org header.b="RujNGzWy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LbR5w1H9"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id A921B1380284;
-	Fri,  3 Jul 2026 08:12:48 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Fri, 03 Jul 2026 08:12:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.org; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm2;
-	 t=1783080768; x=1783084368; bh=m4XJPc232WXgHvfWbkxdWEyKS6DaeVGg
-	FYWDDMuo6k8=; b=RujNGzWyVEXpSE0n+Jr4mRWFddDz+dvHDNydDzanbLya2m3H
-	mqXI5+OTGrF4ShApJAfeED1M5tGtksscmnDMIEFkVUwzvaa4oXv1ZeFvvRYnmqSn
-	Q+H8IcV1GsTEQVxI8JkWoecTTDbV5LZk2m4S0cvOZLDtIhoqk1Hn22WNbjvx9QAW
-	DhuqEnsiPEzLIfB8RPnd3pq1QEVGVwofQ9jSghjQ5lgNOUp6AJ36Ethu8zyIGCDv
-	I09ESHDLeHw/hpor/N2PSKY62JuZf57uIrZQUL5cC6y7+Nh6JRyOQOZ/tOe0Lc1A
-	uqjtJJ2DXDRlkdrL0mRZK/UUk/arsP9WVu5utA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:message-id
-	:mime-version:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783080768; x=
-	1783084368; bh=m4XJPc232WXgHvfWbkxdWEyKS6DaeVGgFYWDDMuo6k8=; b=L
-	bR5w1H9m8OLeANhy9ft+aOFCycMBm/TLTuQJImrXyc77gzRjj3WpZQZYtorUHiR5
-	tYhMIX33Wej5D/zK+Dflv8JNew2h86dt47+u8qxKGPPhX+0Gl8+xCG3GAk5CP7tN
-	Mxb3Sq2iXHzd4r1MlcJGKuXvDeAaTq6EO4wHjum1qpOFJDoFE9bc99LL7mAUu0co
-	kmtBvhiz++vrU47vyBR7vzZG0rzfqS01LtFaYpqUqZigplqFOKWmk66VW8pem8zP
-	0oo1ZP2sNUXLAUY/tPw31RpzzCAPgkhTYoJD9BXf5/ye05pZs+QYzJyUpL3iSoqm
-	PK3XzKCjOBKGYziuQXoFw==
-X-ME-Sender: <xms:QKdHamIhHfb9yrkBj5RAVBCi9CdD0hl-cWSsGjAVcYL6ntWl6mibqQ>
-    <xme:QKdHaoOiCgtSbGkJ90x5XWWVD4h9zVzSOt3HudidDs5MOUbOqQG7zMCzeSjUXOnnH
-    w-MB-UDNPFOw-5tqsviyRxg-6c72s19867m0VdueCuEzST0DNXNWA>
-X-ME-Received: <xmr:QKdHamk_JyApDLQpHtzcip37k--OJsc3pXGSOBZOpUZEeBSmxJTnNesgi70>
-X-ME-Proxy-Cause: dmFkZTEAwyBZPl0V2RBfwhsNfZDOaVSL/bZNHBc1GnWElBBEjOg7d9WhUZaS1YAT/Kq5I0
-    r/NWyOA4/OIyQxgX09eMu00qaVbBQptcgEhWPxRpH2/WnLWCjyF3lkjoFRoO7e3FU7cULa
-    ADNQweOt4aRX0xWLfj4+aLYguU47OyrCDlKKpF4RoOiPQjaBVmXisM90kAJAuAtJ5erMkz
-    4Q8rhsCLs8V5JDcSawJWo1cwsuZec4qS9PUAvJw15Tt/tDL9tEYLC8L10yNQ7PWghBVQa1
-    GUxJsIXpq6w4NUUrMUavux11wXMKBYtI6WQ2fK5RA6YAEYOZIUi+6xOJNozdHX+rl+QeQe
-    TJFBcWDadlGyoHzMobdMZeYvpnHvKdNlz1UfpbHIQ0phwcqB7M/3ED6POq+b6Sg8CNuJSv
-    qxPpHXh5G3wNP/ez0WZassEsVmjOoW/65NGQUQy8agq8XKyN2HlMuoiRoDmPznhP0PQAIW
-    cepYcy1KnCh4f2nB7wYxj/jDKghnzJhtv4TTEAkeACg1vVLRbAV+4lTpd+cFn2m1fTgPyO
-    YsIsV5xfroCmyFMkwBMFrFcu+ZNGvJe+lBYly43RxJs5FUxw+mIEG8uKqKWLmhd28UjBov
-    GeRTjWgBNmi8QN+x1k84GX5lZQwHu0TIn5htwGZxbQQseROK9X8c4z5JYlaA
-X-ME-Proxy: <xmx:QKdHas5Q4wTQYwVxDx0y1izlhekHdWc_ImV9Ez2MxF4ncj0toyC0hg>
-    <xmx:QKdHaq051wSuDud02Wx8FdgOkifz9naiXnLb4nl6LSKCl_meB3tQXA>
-    <xmx:QKdHanEa2hMewyaiMH2Dn-lyJMnuPazrTThB-0Pf0ETQQ3lTEPQAxA>
-    <xmx:QKdHaphWCe49d4ZEgiM0IUS1cowHCBWPdWioR8-z3V0u0h06Lav6pA>
-    <xmx:QKdHaowSHACkgHDpw4LoYI7Ld3ZDuALVmJA5o68lzQS-JKU6ZR1iWooP>
-Feedback-ID: ib53e4b78:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Jul 2026 08:12:48 -0400 (EDT)
-Date: Fri, 3 Jul 2026 07:12:46 -0500
-From: Ian Bridges <icb@fastmail.org>
-To: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] kunit: string-stream: Replace strlcat() with strscpy() and
- seq_buf
-Message-ID: <akenPvVk1xr_-480@dev>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="oU8xIwJb"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1783083200; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=5iSjvvkSDC/X60HGRmHM6EylxCOdLYgdwYl3Zikxfvs=;
+ b=oU8xIwJbYvLr3LSoMjWF8Ok6VCaSIL8vtyzSoerFkjh0g+pIoaDliaawWhQeFK+NMH95ue
+ /eAl5qGDGumt6q5VaHzwxvlaFOn4l/eXNdhyBJ/CjZaStbQfwNCn8FjK9OLy/9cRrIOR77
+ yxKIfDuauZeZrQJ5JIhtMeCKSwg0UMUY9UNvYD/y6jIyMGVJFTAMz8ZvB6csRTx9yt791L
+ XX5J4BckHm26DzzxTavED9MiYUCUjOFHxRLwBwEUBcesKPVPzF04Wz81WhH6zgzMAtN/Rc
+ 7jnx2C4yB8nF37nG9bfb4SlSVVupKA8k3BKkv6xZWUHRBiE3XHSq7wYstxwezQ==
+From: "Yijia Wang" <wangyijia.yeah@bytedance.com>
+Message-Id: <20260703125253.3016281-1-wangyijia.yeah@bytedance.com>
+X-Lms-Return-Path: <lba+26a47b0be+12050a+vger.kernel.org+wangyijia.yeah@bytedance.com>
+To: "Shuah Khan" <shuah@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0
+Content-Type: text/plain; charset=UTF-8
+Date: Fri,  3 Jul 2026 20:52:53 +0800
+Content-Transfer-Encoding: 7bit
+X-Original-From: Yijia Wang <wangyijia.yeah@bytedance.com>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>, 
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-mm@kvack.org>, "Muchun Song" <muchun.song@linux.dev>, 
+	"Yijia Wang" <wangyijia.yeah@bytedance.com>
+Subject: [PATCH RESEND v3] selftests: mincore: fix the readahead check on large base page sizes
 
-In preparation for removing the strlcat() API[1], replace its uses in
-string-stream.
+check_file_mmap faults a page in the middle of a file mapping and
+expects the readahead window to have populated further pages *after*
+it. With a large base page size this is wrong and the test fails
+reliably, e.g. on arm64 with 64K pages:
 
-string_stream_vadd() appends at most a single newline into space that
-was explicitly reserved when the fragment was sized, so a bounded copy
-at the end of the string is enough. The return value of strscpy()
-keeps the length accounting unchanged. string_stream_get_string()
-concatenates a variable number of fragments into a buffer sized to
-hold them all, which is what seq_buf is for.
+  # mincore_selftest.c:260:check_file_mmap:Expected ra_pages (0) > 0 (0)
+  # mincore_selftest.c:261:check_file_mmap:No read-ahead pages found in memory
+  not ok 4 global.check_file_mmap
 
-Link: https://github.com/KSPP/linux/issues/370 [1]
-Signed-off-by: Ian Bridges <icb@fastmail.org>
+The read-around window is read_ahead_kb / page_size pages wide and is
+centred on the faulting page (mm/filemap.c):
+
+  ra->start = max(0, pgoff - ra_pages / 2)
+
+With the default 128K budget that is 32 pages on 4K but only 2 pages on
+64K, so the window becomes [pgoff-1, pgoff] and the single extra page
+lands *before* the faulted page. The forward-only scan finds nothing.
+This is not a huge-page (THP) effect; it is just a byte-sized readahead
+budget divided by a large page size plus a fault-centred window.
+
+Count readahead pages on both sides of the faulted page, and skip the
+readahead check up front when there is no usable read-around window:
+either it is narrower than two pages (readahead disabled, or the base
+page size so large that read_ahead_kb covers a single page), or the file
+has no backing block device whose read_ahead_kb can be read (e.g. on
+tmpfs). When the window is wide enough the EXPECT_GT(ra_pages, 0)
+assertion is kept, so a kernel that should read ahead but does not is
+still caught.
+
+Signed-off-by: Yijia Wang <wangyijia.yeah@bytedance.com>
 ---
-Truncation semantics differ between the two APIs. On overflow,
-strlcat() keeps whatever prefix of the fragment fits, while
-seq_buf_puts() drops any fragment that does not fit whole. Neither
-path is reachable here. string_stream_get_string() sizes the buffer
-to hold all fragments exactly. The newline lands in a byte that
-string_stream_vadd() reserved when it sized the fragment.
+How the problem was tracked down, step by step:
 
-The patch was tested as follows:
- - The string-stream KUnit suite passes all 12 tests before and after
-   the change. The full lib/kunit KUnit config (95 tests) also shows
-   identical results before and after.
- - An x86_64 build of lib/kunit/string-stream.o at W=1 produces no
-   warnings.
- - A userspace comparison of the old and new construction ran
-   with different fragment lengths for the newline append and with
-   randomized fragment lists for the concatenation loop. All outputs
-   were identical.
+ 1. On arm64 with 64K base pages, check_file_mmap fails:
 
- lib/kunit/string-stream.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+      # mincore_selftest.c:260:check_file_mmap:Expected ra_pages (0) > 0 (0)
+      # mincore_selftest.c:261:check_file_mmap:No read-ahead pages found in memory
+      not ok 4 global.check_file_mmap
 
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index 0d8f1b30559b..51ba40ebf19f 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -9,6 +9,7 @@
- #include <kunit/static_stub.h>
- #include <kunit/test.h>
- #include <linux/list.h>
-+#include <linux/seq_buf.h>
- #include <linux/slab.h>
+ 2. The test faults the middle page and scans only *forward* for the
+    readahead pages, so "ra_pages == 0" means nothing was read in after
+    the faulted page.
+
+ 3. Readahead is a byte budget (read_ahead_kb, default 128K) turned into
+    a page count: ra_pages = read_ahead_kb / page_size. That is 32 pages
+    on 4K but only 2 pages on 64K.
+
+ 4. The mmap read-around window is centred on the fault:
+    ra->start = max(0, pgoff - ra_pages / 2). With 2 pages the window is
+    [pgoff-1, pgoff] - the one extra page lands *before* the fault.
+
+ 5. Measured directly on the 64K box, varying read_ahead_kb, faulting
+    page 32:
+
+      read_ahead_kb=64  (1 page):  resident: 32          (no neighbour)
+      read_ahead_kb=128 (2 pages): resident: 31 32        (neighbour before)
+      read_ahead_kb=192 (3 pages): resident: 31 32 33     (before and after)
+
+    So the neighbour really is before the fault, and a 1-page window
+    brings in no neighbour at all. This is not a THP effect.
+
+ 6. A file with no backing block device (e.g. tmpfs) has no
+    read_ahead_kb to read and no block-device readahead at all; faulting
+    the middle page brings in only that page (before=0 after=0). The fix
+    therefore skips when the window cannot be determined, not just when
+    it is too narrow.
+
+Open question for the list: which fix do you prefer?
+
+  (a) Move the fault towards the start of the mapping so the centred
+      window always leaves a page *after* it, keeping the original
+      forward-only scan. Minimal, but the page count after the fault is
+      ceil(ra_pages/2) - 1, which is 0 whenever ra_pages <= 2; only a
+      fault within the first ra_pages/2 pages (e.g. page 0) has a page
+      after it. That changes the test's intent - it would exercise
+      readahead at the boundary, not in the interior - and still fails
+      when read_ahead_kb yields a 1-page window or on tmpfs.
+
+  (b) Scan both sides of the faulted page (this patch), and skip up front
+      when there is no usable read-around window. A little more code, but
+      page-size-agnostic and it keeps the assertion whenever a neighbour
+      is actually expected.
+
+I went with (b); happy to switch to (a) if that is preferred.
+
+An earlier posting of mine changed check_huge_pages instead - that was a
+misdiagnosis (on the 64K box that subtest merely SKIPs and was never the
+failure). Please disregard it; this version supersedes it.
+ .../selftests/mincore/mincore_selftest.c      | 82 ++++++++++++++++++-
+ 1 file changed, 80 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+index cdd022c1c..960851286 100644
+--- a/tools/testing/selftests/mincore/mincore_selftest.c
++++ b/tools/testing/selftests/mincore/mincore_selftest.c
+@@ -12,6 +12,8 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <string.h>
+ #include <fcntl.h>
  
- #include "string-stream.h"
-@@ -74,7 +75,8 @@ int string_stream_vadd(struct string_stream *stream,
+@@ -174,6 +176,48 @@ TEST(check_huge_pages)
+ }
  
- 		/* Append newline if necessary. */
- 		if (frag_container->fragment[result_len - 1] != '\n')
--			result_len = strlcat(frag_container->fragment, "\n", buf_len);
-+			result_len += strscpy(frag_container->fragment + result_len,
-+					      "\n", buf_len - result_len);
- 	} else {
- 		result_len = vsnprintf(frag_container->fragment, buf_len, fmt, args);
- 	}
-@@ -118,15 +120,18 @@ char *string_stream_get_string(struct string_stream *stream)
- {
- 	struct string_stream_fragment *frag_container;
- 	size_t buf_len = stream->length + 1; /* +1 for null byte. */
-+	struct seq_buf sb;
- 	char *buf;
  
- 	buf = kzalloc(buf_len, stream->gfp);
- 	if (!buf)
- 		return NULL;
- 
-+	seq_buf_init(&sb, buf, buf_len);
++/*
++ * Return the size of the mmap read-around window, in pages, for the block
++ * device backing the file referred to by @fd, or -1 if it cannot be
++ * determined. The window size is the device's read_ahead_kb divided by the
++ * page size; the kernel centres this window on the faulting page, so it must
++ * be at least two pages wide for any neighbouring page to be read in.
++ */
++static long readahead_window_pages(int fd, long page_size)
++{
++	char path[64];
++	struct stat st;
++	long ra_kb;
++	FILE *f;
 +
- 	spin_lock(&stream->lock);
- 	list_for_each_entry(frag_container, &stream->fragments, node)
--		strlcat(buf, frag_container->fragment, buf_len);
-+		seq_buf_puts(&sb, frag_container->fragment);
- 	spin_unlock(&stream->lock);
++	if (fstat(fd, &st))
++		return -1;
++
++	/*
++	 * read_ahead_kb lives in the owning disk's queue/ directory. For a
++	 * whole-disk device that is the device's own queue/; for a partition
++	 * it is one level up ("..") at the parent disk.
++	 */
++	snprintf(path, sizeof(path), "/sys/dev/block/%u:%u/queue/read_ahead_kb",
++		 major(st.st_dev), minor(st.st_dev));
++	f = fopen(path, "r");
++	if (!f) {
++		snprintf(path, sizeof(path),
++			 "/sys/dev/block/%u:%u/../queue/read_ahead_kb",
++			 major(st.st_dev), minor(st.st_dev));
++		f = fopen(path, "r");
++		if (!f)
++			return -1;
++	}
++	if (fscanf(f, "%ld", &ra_kb) != 1) {
++		fclose(f);
++		return -1;
++	}
++	fclose(f);
++
++	return (ra_kb << 10) / page_size;
++}
++
+ /*
+  * Test mincore() behavior on a file-backed page.
+  * No pages should be loaded into memory right after the mapping. Then,
+@@ -194,6 +238,7 @@ TEST(check_file_mmap)
+ 	int fd;
+ 	int i;
+ 	int ra_pages = 0;
++	long ra_window;
  
- 	return buf;
+ 	page_size = sysconf(_SC_PAGESIZE);
+ 	vec_size = FILE_SIZE / page_size;
+@@ -224,6 +269,22 @@ TEST(check_file_mmap)
+ 		SKIP(goto out_close, "fallocate not supported by filesystem.");
+ 	}
+ 
++	/*
++	 * mmap read-around brings in a window of pages centred on the
++	 * faulting page. Its width is the backing device's read_ahead_kb
++	 * divided by the page size. If that window is narrower than two
++	 * pages - because readahead is disabled, or the base page size is so
++	 * large that read_ahead_kb covers a single page - then no
++	 * neighbouring page can ever be read in and the readahead part of
++	 * this test does not apply, so skip it. The same goes for a file with
++	 * no backing block device (e.g. on tmpfs), where the window cannot be
++	 * determined and there is no block-device readahead to exercise.
++	 */
++	ra_window = readahead_window_pages(fd, page_size);
++	if (ra_window < 2)
++		SKIP(goto out_close,
++		     "no usable readahead window for this configuration.");
++
+ 	/*
+ 	 * Map the whole file, the pages shouldn't be fetched yet.
+ 	 */
+@@ -242,8 +303,11 @@ TEST(check_file_mmap)
+ 	}
+ 
+ 	/*
+-	 * Touch a page in the middle of the mapping. We expect the next
+-	 * few pages (the readahead window) to be populated too.
++	 * Touch a page in the middle of the mapping. We expect the
++	 * surrounding pages (the readahead window) to be populated too.
++	 * The kernel centres the mmap read-around window on the faulting
++	 * page, so with a large base page size the readahead pages may
++	 * land before the touched page rather than after it.
+ 	 */
+ 	addr[FILE_SIZE / 2] = 1;
+ 	retval = mincore(addr, FILE_SIZE, vec);
+@@ -252,11 +316,25 @@ TEST(check_file_mmap)
+ 		TH_LOG("Page not found in memory after use");
+ 	}
+ 
++	/* Count readahead pages that landed before the touched page. */
++	i = FILE_SIZE / 2 / page_size - 1;
++	while (i >= 0 && vec[i]) {
++		ra_pages++;
++		i--;
++	}
++
++	/* Count readahead pages that landed after the touched page. */
+ 	i = FILE_SIZE / 2 / page_size + 1;
+ 	while (i < vec_size && vec[i]) {
+ 		ra_pages++;
+ 		i++;
+ 	}
++
++	/*
++	 * The readahead window is at least two pages wide here (narrow
++	 * windows were skipped above), so the kernel must have brought in at
++	 * least one neighbouring page on one side of the faulted page.
++	 */
+ 	EXPECT_GT(ra_pages, 0) {
+ 		TH_LOG("No read-ahead pages found in memory");
+ 	}
 -- 
-2.47.3
-
+2.43.0
