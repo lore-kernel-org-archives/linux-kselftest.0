@@ -1,133 +1,110 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097743C4B9A;
-	Fri,  3 Jul 2026 11:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33743CF1F5;
+	Fri,  3 Jul 2026 12:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783077881; cv=none; b=rnOLDNMA5zlDb9kynR+Y6WuEfaOhpvk8kfpRZPZB/uK1Y4usmz63djW/e0FFJzWzbAa8DoKnuUgov9Twdq04bota9ODkZWr15vPJWYtK0ylmMLkFqb3pizNqOAtt/0vmIM1SyyFGFTeJngUlGB79LZ5iEMXgKSGUOIDiQ9KDEdE=
+	t=1783080630; cv=none; b=AJ29a9xG5eJEY/0HCIl6aQ+ZqOjoR3MZUSXclR80QDtnBPuLNJvd/ZvCSOQm3xcYklzu8JVU4tYnItt3FPCo+3JV92o/T7bh4hFilCYgvM9/tmtZph5GYZv+K10o0fs1EqWN/TQwnUFNXXMye1gKdFb8ehmBBrYbJTk4ZOK5MEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783077881; c=relaxed/simple;
-	bh=4oxmWufTRFAQuiOe0V0OOrsBSYMDsdXdFlzpM5/7AQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qs8vzI9h9jUF2JdX7pz/o7w0DlaXvyYRUgZJRoWZjHnu21dowZWbaVf+Qx3e9Brhtf5hSzgLMsQ0Y2TR9Sk74sf/UsEzqnNDXQxtm0wlDxNumwtgF5ndUoRAwzpD/w0rZKBOHISitgSZ16BTJ0lPeWh8GjL5+HzZthqQkGxkEBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=btkxHrkz; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="btkxHrkz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=n17w8bkbdYcKF+4kwASzBBp0Rz/4YcqSgLJnMesWzKg=; b=btkxHrkzCM4wV6isED0eBgRsyL
-	wwGgzJ6GKqoqppe6E8Q4D9rTHXf2Hph6UVag5NZvod4BsLIxt3cg3PcoclVxTWVafHPVaQahr89Np
-	4lMCW/r/KGYOGO+vU8LA2jtXK9HkXrztzoQv9OquY52DCx98NFS43gnp0W1hO7tNzJyJnP3lf/LE7
-	baPDHMoSz46F6TsffR+YQt4pcHYPhQbIE/xcM682GDzhTomftlk8Y/eN8LGeRxI8RX3MN303TPN/Y
-	SFcPFDDAoGL0OPlmfg+Bk9jYQ3qg1MfzozX157BNyy/8pe9f0ab7AvXojHCXCDbBe/y7w70KGCn2j
-	DWQoluyA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wfc0F-009Miy-36;
-	Fri, 03 Jul 2026 11:24:16 +0000
-Date: Fri, 3 Jul 2026 04:24:09 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 2/2] selftests/mm: test kmemleak's N-consecutive-scan
- leak confirmation
-Message-ID: <akeX8mFiizd65pDw@gmail.com>
-References: <20260626-kmemleak_twice-v1-0-ab28f7cc0971@debian.org>
- <20260626-kmemleak_twice-v1-2-ab28f7cc0971@debian.org>
- <akYkKgWOsYnw6ETE@arm.com>
- <akZ4tzQw70x3RR2D@gmail.com>
+	s=arc-20240116; t=1783080630; c=relaxed/simple;
+	bh=oy17HZPdJNlh+5IeYqa3gikbqHqLbJ2RB3av78le6ig=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=DujNb+OGRtJZn2DaB3cC50f1PLiGtODt+7AmneKfTLrPkyY+9YsB4LvJ+CUNEuAH9mjZlk0PxRc3pIq4UbFRw89S5ohFvksCIYYyI58rv9p8M5zJpf9cPpKdymVPVpQ44CFiMDRx9OF44vNpTsm1AXvIyQW4hxV7rLZex+AWR7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 2846491a76d811f1aa26b74ffac11d73-20260703
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:9201fb13-3fb1-43b3-8e79-67ad92ea33c9,IP:15,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:40
+X-CID-INFO: VERSION:1.3.12,REQID:9201fb13-3fb1-43b3-8e79-67ad92ea33c9,IP:15,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:40
+X-CID-META: VersionHash:e7bac3a,CLOUDID:29aae46b6e7b057768350e6a0fb91eaf,BulkI
+	D:260703151457A2XKY1N7,BulkQuantity:2,Recheck:0,SF:17|19|66|78|81|82|102|1
+	27|850|865|898|915,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:ni
+	l,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,B
+	RR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 2846491a76d811f1aa26b74ffac11d73-20260703
+X-User: wangyan01@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
+	(envelope-from <wangyan01@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 921031607; Fri, 03 Jul 2026 20:10:18 +0800
+From: Wang Yan <wangyan01@kylinos.cn>
+To: bill.c.roberts@gmail.com
+Cc: casey@schaufler-ca.com,
+	jmorris@namei.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	mic@digikod.net,
+	paul@paul-moore.com,
+	serge@hallyn.com,
+	shuah@kernel.org,
+	wangyan01@kylinos.cn
+Subject: [PATCH v2] selftests/lsm: Fix memory leak in attr_lsm_count
+Date: Fri,  3 Jul 2026 20:09:51 +0800
+Message-Id: <20260703120951.1622491-1-wangyan01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAFftDdrDgoHCopx9byaupea8GB6P=qSAY==6QQoXSJcJgn_04w@mail.gmail.com>
+References: <CAFftDdrDgoHCopx9byaupea8GB6P=qSAY==6QQoXSJcJgn_04w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <akZ4tzQw70x3RR2D@gmail.com>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 02, 2026 at 07:55:42AM -0700, Breno Leitao wrote:
-> On Thu, Jul 02, 2026 at 09:41:14AM +0100, Catalin Marinas wrote:
-> > On Fri, Jun 26, 2026 at 08:52:03AM -0700, Breno Leitao wrote:
-> > > +pass "min_unref_scans=1 immediate; =2 gated to 2nd scan (counts $first/$s1/$s2); param read-back ok"
-> > 
-> > Are these off by one?
-> 
-> They seem to be OK, and I've tested it multiple times.
-> 
-> > Kmemleak has a mechanism to detect live objects
-> > via the checksum. A side effect is that on allocation, the checksum is 0
-> > and only after the first scan the checksum is changed.
-> 
-> I got the impression that checksum continues to be zero for these
-> objects during the whole life time? (weird). 
+The calloc-allocated buffer in attr_lsm_count() is never released on
+any exit path, including both the normal return path and the early
+return when read_sysfs_lsms fails, resulting in a heap memory leak.
 
-I've investigated this a bit more and I found something interesting, in
-our per_pcu checksum. The code in update_checksum() is:
+Add free() for the buffer on all return branches to fix the leak.
 
-	for_each_possible_cpu(cpu) {
-		void *ptr = per_cpu_ptr((void __percpu *)object->pointer, cpu);
+Fixes: d3d929a8b0cd ("LSM: selftests for Linux Security Module syscalls")
+Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
+---
+ tools/testing/selftests/lsm/common.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-		object->checksum ^= crc32(0, kasan_reset_tag((void *)ptr), object->size);
-	}
+diff --git a/tools/testing/selftests/lsm/common.c b/tools/testing/selftests/lsm/common.c
+index 9ad258912646..927dce4f04cb 100644
+--- a/tools/testing/selftests/lsm/common.c
++++ b/tools/testing/selftests/lsm/common.c
+@@ -76,7 +76,7 @@ int attr_lsm_count(void)
+ 		return 0;
+ 
+ 	if (read_sysfs_lsms(names, sysconf(_SC_PAGESIZE)))
+-		return 0;
++		goto out;
+ 
+ 	if (strstr(names, "selinux"))
+ 		count++;
+@@ -85,5 +85,7 @@ int attr_lsm_count(void)
+ 	if (strstr(names, "apparmor"))
+ 		count++;
+ 
++out:
++	free(names);
+ 	return count;
+ }
+-- 
+2.25.1
 
-From my naive view, this has two concerns:
-
-1) In the kernel, crc32(0, <64 zero bytes>, 64) is zero, and the samples' test
-I am using (kmemleak-test.c) has:
-
-	pr_info("__alloc_percpu(64, 4) = 0x%px\n", __alloc_percpu(64, 4)); 
-
-alloc_percpu returns ZEROed memory, so, we are checkingsuming zero content.
-Because we are using 0 as seed, that is returning zero.
-
-object->checksum is a bunch of 0 XOR 0 XOR 0 and so forth.
-
-2) that XOR above seems very weird. Basically we want to detect if some of
-those per-cpu areas changed, here, but, if checksum goes to zero if two object content is similar.
-
-Let me give you a simple example. We have SMP=2, and both objects have crc32 =
-0x42. At the end of that function, object->checksum will be zero, given 0x42
-XOR 0x42 is zero.
-
-If both object changes their content at the same time, object->checksum will
-continue to be zero (although the content (and checksum) HAS changed).
-
-I understand we want to detect any change in any of these per cpu field and
-catch it independent of the CPU. I am inclined toward that.
-
-	--- a/mm/kmemleak.c
-	+++ b/mm/kmemleak.c
-	@@ -1409,8 +1409,9 @@ static bool update_checksum(struct kmemleak_object *object)
-			object->checksum = 0;
-			for_each_possible_cpu(cpu) {
-				void *ptr = per_cpu_ptr((void __percpu *)object->pointer, cpu);
-	+                       u32 seed = object->checksum + cpu;
-
-	-                       object->checksum ^= crc32(0, kasan_reset_tag((void *)ptr), object->size);
-	+                       object->checksum ^= crc32(seed, kasan_reset_tag((void *)ptr), object->size);
-			}
-		} else {
-			object->checksum = crc32(0, kasan_reset_tag((void *)object->pointer), object->size);
-
-
-
-Once this is fixed, then I priming would make sense.
-
-Please let me know if my flaky logic is worse than usual this Friday.
- --breno
