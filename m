@@ -1,134 +1,132 @@
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8263016F7;
-	Fri,  3 Jul 2026 18:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59C0326D4A;
+	Fri,  3 Jul 2026 19:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783104842; cv=none; b=d3+wFDxSoAdjlO7f8lPxLljkkHdjT+d8X+pM/UUPB6qsxqlXSd4tt/Oy8OX1rfdNjQpDZ9dzJtgphEcQyG/BLM+4g7JwV/zxmJIEPO58Xv2G7klABc7Fdal/G3YQVKVdU6OTmYE0el4HFjW671DPXWxtvZsoSXD2Awgavdf7wtw=
+	t=1783106781; cv=none; b=AHjr0BDWNBye67DH2ATBqpgf2c3azw+f8R/IAbX3uUfIJeFhbhGZFvv4qjgiUCLlVt1blBgEnLM5gPs4HaDfcE+hiNrql6eXBMp2dvi+SsxGO0Fqn0SSlhnzShIL8PRD/n0Oike5ud6ka1vYvpjjRbGMG2SE1sv0/OTaUOqGevA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783104842; c=relaxed/simple;
-	bh=k8eAyWfiavhZPQUIRN7Hwwm6tZEyjbfZBMp188AI/nE=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=skZokr193PEt8hvJ5Jfh3qkLoMOR8VUDSot1MB6ohRcvMGUCa7vv2FBW2VCLvS78qN19MAMStr990UOkqCaBdAjK5XhKNzbsTBmJZKd50mDEnr03Ln4gj6Ou/G/DDpJNdRNZ7QziKs2JDZ6qHlvZ4za9iKPa2nNSnQlHXM8xTQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=CaWD5eZs; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
+	s=arc-20240116; t=1783106781; c=relaxed/simple;
+	bh=0BE8UCtgwMe/W+YJ6rS13MNVFlvxNIXuS76bDmle718=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/3Ha7Idmcj9f4qDBy6OllDVeEpoiaK79YMib55rdwht+Od3QPsFJ1e7KJFbTqc9XuAvnrPKON/tyxjQJiiv0V2Z48eji+vAcRwP7NkMUdWdBaNhFZr3JpsWcI4EmV9Sz+DpjX86pZEtJHwa9NscSoherAIU1nzHEZg33Li9h/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQTEPXna; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="CaWD5eZs"
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id 4571920758;
-	Fri,  3 Jul 2026 20:53:57 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UZZKk4vse5xv; Fri,  3 Jul 2026 20:53:56 +0200 (CEST)
-Received: from EXCH-02.secunet.de (rl2.secunet.de [10.32.0.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 8DCC520561;
-	Fri,  3 Jul 2026 20:53:56 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 8DCC520561
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1783104836;
-	bh=9o8/bqXzxkD5g4mMHZoquLRFczrFTBCt291qnAraS3A=;
-	h=Date:From:To:CC:Subject:Reply-To:From;
-	b=CaWD5eZshNXSwsWef7R8VQh4ipyB7CW8qDJZxIE/dHHpbho/Z6TnMjCJvo5V1nS0p
-	 9VPJLUhQYrP+eoRJqB26/trRnwl+FhZVWayvOoO1y9Vv2odwgQGihjZFZzc6jDbZfW
-	 XbVAbZatiKwqgtn+uzEHANhyxeO4TWsaxDw4p5KijcSGdBPfs5drwEzvQgorGuaGaN
-	 ZIYvVpYlpU5MbyTP3jb2ipZPCUtaRbojeuRVjT4293S8Qz/cf1W1a0FHGf3bVAvoYu
-	 HHtPIkBic1tbqs4an85lmcNjl2q8E/Lbs/e6k63OrNPrZlqloUDTWv/GpluYjO8TyF
-	 TABNK/rn5UxcA==
-Received: from moon.secunet.de (172.18.149.1) by EXCH-02.secunet.de
- (10.32.0.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 3 Jul
- 2026 20:53:54 +0200
-Date: Fri, 3 Jul 2026 20:53:44 +0200
-From: Antony Antony <antony.antony@secunet.com>
-To: Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
-	<herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, David Ahern
-	<dsahern@kernel.org>, Antony Antony <antony.antony@secunet.com>, Jamal Hadi
- Salim <hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>
-CC: Sabrina Dubroca <sd@queasysnail.net>, <netdev@vger.kernel.org>, Yan Yan
-	<evitayan@google.com>, Tobias Brunner <tobias@strongswan.org>, Florian
- Westphal <fw@strlen.de>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, Sashiko <sashiko-bot@kernel.org>, Antony Antony
-	<antony@phenome.org>
-Subject: [PATCH ipsec 0/8] xfrm: state: exact mark/mask match for
- control-plane SA lookups
-Message-ID: <migrate-state-fixes-v0-0-a69e8637ba3b@secunet.com>
-Reply-To: <antony.antony@secunet.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQTEPXna"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id E07A11F000E9;
+	Fri,  3 Jul 2026 19:26:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783106779;
+	bh=MEgpkqGul0n6ffAp2eA2uUfdXTni9ivgOvrmkoB0774=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=AQTEPXnax0WBd1xsUAveab8iG+vtPMYpFX8zmO40Rt+Eh38kWF+iM3TGCv9rVW5hN
+	 W+R7mecoj/QWY8ypw+ibw+L/o1cxtznbJdEgitRYnoCn9VCM4JXSlWR/vQa3dXAGFK
+	 aQcmsPK66yoN84CXp3utWyyJTp/FYjmuhY69NKsSNrRYr54HaCW6TOzCwtICvA8Fmb
+	 4RZ4GA16+s9cI94AbcWGOQmjWMVnzK14Vi5jn17LJNhEk5PBeA49WX+eremqe31hAy
+	 /75CFvbzp3AwPbpmwbq179OPwY2zPECsaPO5fbZcJNOqsZ/UNZmv4tFgNh2pEgzyTN
+	 IBlSPp6awGu5Q==
+Date: Fri, 3 Jul 2026 21:24:29 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	sashiko-reviews@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+	shuah@kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
+ build system
+Message-ID: <akgMbd9fFOZYXUoC@levanger>
+Mail-Followup-To: Petr Mladek <pmladek@suse.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	sashiko-reviews@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+	shuah@kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>,
+	linux-kbuild@vger.kernel.org
+References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+ <20260703061449.246801F000E9@smtp.kernel.org>
+ <akdyH7rRV1WHtBJ3@pathway.suse.cz>
+ <20260703113019-678f1eb6-a061-435e-91a4-c0d76794b2cf@linutronix.de>
+ <akeJto1TC2CSs4Yw@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-B4-Tracking: v=1; b=H4sIAH7pR2oC/z2OwQrDIBBEf6V4rmCiWNNfKT2YdU32EBNcKSkh/
- 15toZeF2eHNzCEYMyGL++UQGV/EtKYq1PUiYPZpQkmharHQlH1ByaXdSDuyVFYjKm1623WiAqN
- nlGP2CeaG0MYIMuFe/iasy0KlmX1vo/FmUKHzg3YRnHbBRQfGeoPgnTWgws01dMv4Lazc45cqn
- vU9E5c1v9v08zw/L1A8zMoAAAA=
-X-Change-ID: migrate-state-fixes-063ee0342611
-X-Mailer: b4 0.16-dev
-Precedence: first-class
-Priority: normal
-Organization: secunet
-X-ClientProxiedBy: EXCH-03.secunet.de (10.32.0.183) To EXCH-02.secunet.de
- (10.32.0.172)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <akeJto1TC2CSs4Yw@pathway.suse.cz>
 
-While looking into a XFRM_MSG_MIGRATE_STATE issue reported by Sashiko,
-we found the underlying problem generalizes: xfrm allows multiple SAs
-to coexist for the same (SPI, daddr, proto) differing only in mark,
-and every control-plane operation that resolves "which SA" - get,
-delete, update, get_ae, new_ae, expire, migrate - uses the same
-wildcard mark match the data path needs. A broader-mask SA can
-silently shadow a more specific one:
+On Fri, Jul 03, 2026 at 12:06:46PM +0200, Petr Mladek wrote:
+> On Fri 2026-07-03 11:32:30, Thomas Weiﬂschuh wrote:
+> > On Fri, Jul 03, 2026 at 10:26:07AM +0200, Petr Mladek wrote:
+> > > On Fri 2026-07-03 06:14:48, sashiko-bot@kernel.org wrote:
+> > > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> > > > - [Medium] Incomplete fix and inconsistent state: The patch correctly unsets `sub_make_done` for the `kselftest` targets to allow Kbuild command-line reevaluation when building external kernel modules. However, it fails to apply the same logic to the `tools/` and `tools/%` targets, introducing a discrepancy between build entry points.
+> > > > --
+> > > > 
+> > > > commit 06c418388d65deb3d8494a6e8e7071c0e709186b
+> > > > Author: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > > > 
+> > > > kbuild: unset sub_make_done before calling kselftest build system
+> > > > 
+> > > > This commit unsets sub_make_done before invoking the kselftest build system to
+> > > > ensure Kbuild reevaluates command-line flags when building test modules. It
+> > > > mirrors a previous fix done for scripts/install.sh.
+> > > > 
+> > > > > diff --git a/Makefile b/Makefile
+> > > > > index b9c5792c79e01..f717a4dc96d6a 100644
+> > > > > --- a/Makefile
+> > > > > +++ b/Makefile
+> > > > > @@ -1591,10 +1591,10 @@ tools/%: FORCE
+> > > > >  
+> > > > >  PHONY += kselftest
+> > > > >  kselftest: headers
+> > > > > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> > > > > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> > > > 
+> > > > [Severity: Medium]
+> > > > Will make tools/selftests still fail after this change?
+> > > > 
+> > > > The tools/ and tools/% targets in Makefile delegate to the tools build
+> > > > system, which can also trigger external kernel module builds (like bpf_testmod).
+> > > > 
+> > > > Because sub_make_done is not unset for these targets, invoking commands like
+> > > > make tools/selftests or make tools/all will skip Kbuild's M= argument parsing.
+> > > > 
+> > > > Should sub_make_done also be unset in the tools/ and tools/% targets to maintain
+> > > > consistency across the build entry points?
+> > > 
+> > > This might make sense. I see that the tools: and tools/%: targets are
+> > > defined right above the kselftest*: ones. And they are even advertised
+> > > in "make help" or "make tools/help".
+> > 
+> > I am not sure how the tools/ targets can reach back into kbuild.
+> > The example with bpf_testmod above is bogus, as tools/* is only for
+> > top-level tools directories. Subdirectories in tools/testing/selftests/
+> > don't seem to be reachable.
+> 
+> I see.
+> 
+> > > Well it probably should be done in a separate patch. It would be better
+> > > for bisecting potential regressions. Thomas, Zelin, what do you think, please?
+> > 
+> > If we do it for consistency it should be its own patch, agreed.
+> 
+> I would keep it as is until anyone reports a real problem.
 
-  # ip xfrm state add ... spi 0x1000 mark 1 mask 1 (SA_target)
-  # ip xfrm state add ... spi 0x1000 mark 0 mask 0
-    (SA_decoy, catch-all, added after -> bucket head)
-  # ip xfrm state delete dst ... proto esp spi 0x1000 mark 1 mask 1
-    -> deletes SA_decoy; SA_target survives, untouched
+Ack.
 
-xfrm policy had the same bug, fixed in commit 4f47e8ab6ab7
-("xfrm: policy: match with both mark and mask on user interfaces").
+Thomas, thanks for fix!
 
-Control-plane lookups need an exact mark/mask match; the wildcard
-match stays for the data path and state_add only.
-This series applies that fix across every affected method,
-not just XFRM_MSG_MIGRATE_STATE.
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
 
-More examples in the attached self tests.
-This series not fixing likely isusses PF_KEY. As it
-is no more receiving non critical fixes.
 
----
-Antony Antony (8):
-      xfrm: state: exact mark/mask match for SPI-keyed control-plane SA lookups
-      xfrm: state: exact mark/mask match for by-address control-plane SA lookups
-      selftests: net: xfrm_state: add mark shadowing tests for state lookups
-      xfrm: fix use-after-free of migrated state in xfrm_do_migrate_state()
-      xfrm: fix hw offload state leak on xfrm_do_migrate_state() error path
-      xfrm: include mark in MIGRATE_STATE SA collision check
-      xfrm: pass extack through to xfrm_init_replay() from xfrm_init_state()
-      docs: xfrm: include mark in XFRM_MSG_MIGRATE_STATE EEXIST tuple
-
- .../networking/xfrm/xfrm_migrate_state.rst         |  20 ++--
- include/net/xfrm.h                                 |   5 +-
- net/ipv6/xfrm6_input.c                             |   2 +-
- net/xfrm/xfrm_state.c                              | 109 +++++++++++++----
- net/xfrm/xfrm_user.c                               |  49 +++++---
- tools/testing/selftests/net/xfrm_state.sh          | 130 ++++++++++++++++++++-
- 6 files changed, 262 insertions(+), 53 deletions(-)
----
-base-commit: 226f4a490d1a938fc838d8f8c46a4eca864c0d78
-change-id: migrate-state-fixes-063ee0342611
-
-Best regards,
---  
-Antony Antony <antony.antony@secunet.com>
-
+-- 
+Nicolas
