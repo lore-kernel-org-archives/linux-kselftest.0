@@ -1,132 +1,166 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BBF34388A
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 08:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02CA340416;
+	Fri,  3 Jul 2026 08:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783067173; cv=none; b=QcgicVIH2C7LFWmy6zQ5iO3bnHA6SKxDwLCyGQFQHeD5c1MaZznqtrR/gMZovfRHJA10yTXu/+ol9Z622o6VoHI8oR+5JrSgJPRRTDCDt8TzWsCL4qFvNYM2VSDnzeBqpRt4C9+A3F8wxWp2mTUcMAjooBS9+J9XNVshzkigLS8=
+	t=1783067315; cv=none; b=RvzqUkNCWfkLUzPirP04ECyKRKFt7H61O1h+p+llRb1rEzo19CWrlhfOksBoBhpi7OGudHez73oTO4/ckGNX5s5dypCs4n04JO32GHbEgSZPyCJCEoWid6DxyhwTID02uHkUGyjdImXWA0puv/5oJParazYHvtQo3yn/0c7AEdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783067173; c=relaxed/simple;
-	bh=XKI2pAfG7OX1O/DXM04l/YZndOsoqOzA948p9sxcHoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P7fH1gi8QGylGbhKStyjidwKUg/MDTopqD5ExhTkIUyFV9iitLeiByOgZZ4Bdqzdd6h/ekL6ORBHdNl4n/GBJwBVedlQMzkjoMnVvqJjrATTEV3uuTkwR8p8N8jMYf7P7Q2WnMDzdkPe+AAJVGqzigvSaM1lDnJ9uDzmG4CAlng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=S0cPpTDn; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783067315; c=relaxed/simple;
+	bh=I7kViHvOqAa2QOxclPTEeSYPFhTt/rOFj4As1JtsxRc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fM7/1XBwwxUg2NoyFYgZqnpIwLBKxgwIevojyQUXUWBx9oFaVdQxH97lfrSGW28fQ522KyzPnESWpBrR1xaSn6Yn4hbzhcEuleXvNgQEELzPbMVYfebI0Cz6iehebTXjbTTjaM3onNAsiLGH63HD+Q6WowNImXJPpTb80sxBXd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Cbd4DtOO; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="S0cPpTDn"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-493ba701891so1995935e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jul 2026 01:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783067170; x=1783671970; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yi3rhvEIY7HPb2+WXJBWNBz8xP5NaPUV+FO6A/JpBpc=;
-        b=S0cPpTDnY/bjqdlG6CvI1QWYPk5WPF2FxG4eJR8wwRsoNhViXn0w9GyWuFe//az0sy
-         kHFQACYOK8imS6MyX6mTyKsKb9HOOjhnbc+HzOpILUw2F0lL7Wf+Ku/JoJ2oSH1ZPC3Y
-         nVdC9E6StrdVwDFyd+MY8wpd993A+N46BN93Rv9TkT2JOa1ug1e1U/jr6Rb7+sayTzaJ
-         /gI80KtGV5QxfK9xz9T2W58Yiq1aDV+CzEFVFi5LlWTP8bbEKIWK2iSpXYwueCfMGQBf
-         stylJN1XLtC0U9Gy/IRbFfoMkbcKAViwIW0Z8dQkKH670y8b30IcuPIC76bpvn0tEutf
-         b5FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783067170; x=1783671970;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=yi3rhvEIY7HPb2+WXJBWNBz8xP5NaPUV+FO6A/JpBpc=;
-        b=Vm2lxhqyh7jTIsI57/IR/YQuh/e/B31vcnsobl4SpPV+cQzCMpYxmu1UPiceGH427g
-         wLLBKYCybMRfSNsLjDCP0SIMXYyq/eNYcNWP+dURJOZCLcmaoDI5dD66pjioMspca9gP
-         N3cdLRpMKVjIV8vCXGLpUKpZ7kMMV9k7eDOvzZKDOXDSSDNwuU7UXnmxWHBN9MOI2vWF
-         ObGIaV+TqBU0dqgfLcK68INUZ9YbeHB/jm9ycrOxdf1LgP0lucbmuz/iQMTZFVeulW/L
-         cVo9z6vQVfFNT8Rc6hn/e+gHX1YyTxzrFFOydANZCX0kKFIdUN+akrbKigA3OFKCgQYs
-         2QVg==
-X-Forwarded-Encrypted: i=1; AFNElJ/IKam5FZwsZ6/NYj2a33dt0Z+iQPu9GJ2S5U4Hf6y8LW7VNtlYssFng6JcMyJisRg5eDBN6XATUOE9nFxXXeE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2MMy0BEMJEP+5Dil5d7ZMNmaMxHTyEFHOJ5z/6BISBYqouFdT
-	NpfOtc6OLl0G3yh4yGm7pdH6kEr/vwjhE9KPdiSKu1SVCQL4+/rD3ygYyzMcB6apxRs=
-X-Gm-Gg: AfdE7ckX8+zPDo7Q+qRrZYtigdZZb/DV8jMR2MeHIcLoE/MrmGyRNSgca3KLvvc9JMz
-	ji5Wf+nh5MOCmlKXw7bokP8/usQoYVgHPZwKY4GVW04NOFjKwvL8Nic0XkaZYo91dzcxkS7a29R
-	uzu4f36N8cJFyjh/eRu47rXvgyr/HwITxPRptvxTHmtsuReWIxwlAnLVn4rEZuT3oMmI1WYkhkO
-	9zvOlGniLlqPZWKkSNpihmaEUICHPeCLqUd4sDY3CKoy2dhGFabCgWjV6zMWFtVHTWGdjWIhhQ3
-	RfVyNjyAxVIpM+9ZrfWePBhiDe6h2N+zRNCkU6Oa0/spu+KLyZlZGmXau8/O4T9hanSFpKIpeIG
-	PP1zJpSZr5+AGrOXh8bvQwfKPdq2+w09DRWQB99e/VI9uWkN27TOCrSf/4PmU3Om/Db7NlRiJFG
-	7ZSP6+daBj/C8Xe8Q=
-X-Received: by 2002:a05:600c:8718:b0:493:c845:bc20 with SMTP id 5b1f17b1804b1-493c845bc60mr60654815e9.4.1783067170178;
-        Fri, 03 Jul 2026 01:26:10 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493cce12c40sm50659555e9.13.2026.07.03.01.26.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2026 01:26:09 -0700 (PDT)
-Date: Fri, 3 Jul 2026 10:26:07 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	shuah@kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
- build system
-Message-ID: <akdyH7rRV1WHtBJ3@pathway.suse.cz>
-References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
- <20260703061449.246801F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Cbd4DtOO"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6636IPvP1812945;
+	Fri, 3 Jul 2026 08:28:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=WEp7ih
+	hbqwOWllNpg4G2jbQyg82KbcXyJvgz7C3uUTM=; b=Cbd4DtOOBj0zdSOMr09tPf
+	497fDDq73dDQT/NGJFqYaCK3RDv0nBUca6mMXrwT9SMn/rsDP9w7OyQCY5Cnwg5o
+	PboeRiv2ofvvkvLBzfmzY/GcpiUANWemqrXKfCMoG1BB/cmx1UJkegy6j4vzR6ye
+	lMWz0QG86hkIVkurT0NdEEWfXwEY2+ojHCFAbVuh2gvSKmDYwZt4cQoz1N5apZoi
+	Dljbz6E0liJhlVGmjuAcJfgaBka0WhuIASRKl5F5rIDlLrGkl5iBUktnJgwavr9O
+	WC5Zrnwz6/fBPfp0Ywwh6zw6S2uX+F1NTYnnhC+LyQswGEgZu/JTRQ31F+6KhgZA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f26qadt1b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jul 2026 08:28:23 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6638JrPk005112;
+	Fri, 3 Jul 2026 08:28:22 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4f2sukfxdr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jul 2026 08:28:22 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6638SLgQ32637640
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 3 Jul 2026 08:28:21 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3BA5158054;
+	Fri,  3 Jul 2026 08:28:21 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A6B665803F;
+	Fri,  3 Jul 2026 08:28:15 +0000 (GMT)
+Received: from [9.39.22.184] (unknown [9.39.22.184])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  3 Jul 2026 08:28:15 +0000 (GMT)
+Message-ID: <5bc225fc-4b0f-45eb-9700-57e27f575818@linux.ibm.com>
+Date: Fri, 3 Jul 2026 13:58:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260703061449.246801F000E9@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/6] selftests/vfio: Add sPAPR TCE v2 coverage
+Content-Language: en-GB
+To: Narayana Murty N <nnmlinux@linux.ibm.com>, alex@shazbot.org,
+        dmatlack@google.com, shuah@kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: amastro@fb.com, rananta@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vaibhav@linux.ibm.com, sbhat@linux.ibm.com
+References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
+From: Harsh Prateek Bora <harshpb@linux.ibm.com>
+In-Reply-To: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzAzMDA3OCBTYWx0ZWRfX96M4ovCf14lJ
+ JOQ5OKaWGCHYdQ4GNBHy+gFuTLEFuqvHaoAhX64faL/VI8K5R/2Lv3Tq9im5qvR3S0a+ojKyX97
+ Tvsw3vgwYF20bkpa5YUlGPrgGRDT78hV2HIYAHa6y/NM1Arkr4Kqg8Tebgki1u7zr0KGXxLSBX0
+ UwBdnUFd4JTc13XZuTEo/yCfv7uzdGrLeQin3L7eIuB6q4RAtTJFw+t+OWF9EXVo7I81o5FlqAn
+ nZMDO4ORncT9pSWbAOnjUyt9kE7Kfws9u9rfyohZYlUnvA3Bcd1c6DZ3IbycM7F7q60GZXsc/BO
+ GIAUqdWQFSEnymGDjjCLDsxZZlcCva8EaKHbeIHFCH9wicn1Dawan5YVIr6kiCcmlZfHLK4XLox
+ TGwXenuAJ9aQBEmR88GlStdTMMPlyYiz3uVGciKVSbUdrFE/rKE17b664REllY+H6ZIZ0z3qmQZ
+ 1z3YTmTamP84825+e6Q==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzAzMDA3OCBTYWx0ZWRfX6mc+ak0ifSgQ
+ H7Dsrj2MrIytPGoD+jRvkarFUYp7+V7jCnU280MwRC6qnH4v5GMW3TGmnlDdUOZeT8mAxGzEFsi
+ S+2KMxPMfCskKN1xytMKQwAQbDAelow=
+X-Proofpoint-GUID: 5lI8WL29gxczl988owhbP5YUlXcUFVYi
+X-Proofpoint-ORIG-GUID: nuNrdcZ5HGVH-3aUUAjjdGtWYJ0ziyjj
+X-Authority-Analysis: v=2.4 cv=WZ88rUhX c=1 sm=1 tr=0 ts=6a4772a7 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=f7IdgyKtn90A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22
+ a=LWOX-0NBJ426XIOUI0cA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-07-03_02,2026-06-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 phishscore=0 clxscore=1011 bulkscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607030078
 
-On Fri 2026-07-03 06:14:48, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Incomplete fix and inconsistent state: The patch correctly unsets `sub_make_done` for the `kselftest` targets to allow Kbuild command-line reevaluation when building external kernel modules. However, it fails to apply the same logic to the `tools/` and `tools/%` targets, introducing a discrepancy between build entry points.
-> --
-> 
-> commit 06c418388d65deb3d8494a6e8e7071c0e709186b
-> Author: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> 
-> kbuild: unset sub_make_done before calling kselftest build system
-> 
-> This commit unsets sub_make_done before invoking the kselftest build system to
-> ensure Kbuild reevaluates command-line flags when building test modules. It
-> mirrors a previous fix done for scripts/install.sh.
-> 
-> > diff --git a/Makefile b/Makefile
-> > index b9c5792c79e01..f717a4dc96d6a 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1591,10 +1591,10 @@ tools/%: FORCE
-> >  
-> >  PHONY += kselftest
-> >  kselftest: headers
-> > -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> > +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> 
-> [Severity: Medium]
-> Will make tools/selftests still fail after this change?
-> 
-> The tools/ and tools/% targets in Makefile delegate to the tools build
-> system, which can also trigger external kernel module builds (like bpf_testmod).
-> 
-> Because sub_make_done is not unset for these targets, invoking commands like
-> make tools/selftests or make tools/all will skip Kbuild's M= argument parsing.
-> 
-> Should sub_make_done also be unset in the tools/ and tools/% targets to maintain
-> consistency across the build entry points?
++ linuxppc-dev
 
-This might make sense. I see that the tools: and tools/%: targets are
-defined right above the kselftest*: ones. And they are even advertised
-in "make help" or "make tools/help".
+On 03/07/26 8:58 am, Narayana Murty N wrote:
+> This RFC adds PowerPC sPAPR TCE v2 support to VFIO selftests.
+> 
+> The series adds a selftest IOMMU mode for the legacy VFIO container
+> backend, adds helpers for default and dynamic DMA windows, and exercises
+> the sPAPR DDW path through the DMA mapping tests.
+> 
+> sPAPR TCE v2 remains a legacy VFIO container backend. This series does
+> not add iommufd or VFIO cdev support for sPAPR.
+> 
+> The main points are
+> 1. add VFIO_SELFTESTS_IOMMU_MODE for selecting a backend
+> 2. add vfio_spapr_tce_v2_iommu as the PowerPC VFIO backend
+> 3. preserve the platform default DMA window
+> 4. create and tear down only selftest-created DDWs
+> 5. prepare the DMA window before IOVA allocation
+> 6. exercise DDW creation for hugepage DMA mappings
+> 7. accept sPAPR-specific errno for invalid DMA ranges
+> 
+> Example:
+> 
+> VFIO_SELFTESTS_IOMMU_MODE=vfio_spapr_tce_v2_iommu
+> ./vfio_dma_mapping_test <BDF>
+> 
+> Observed coverage includes anonymous mappings through the default window
+> and 2MB hugetlb mappings through a DDW. 1GB hugetlb mappings may skip when
+> the platform rejects the requested DDW characteristics.
+> 
+> Feedback is requested from the VFIO and PowerPC communities on:
+> 1. whether the sPAPR TCE v2 helpers should remain in the common VFIO
+> selftest library or move into a sPAPR-specific test helper?
+> 2. whether DDW setup through hugepage mappings is the right initial
+> coverage?
+> 3. whether the sPAPR-specific overflow errno expectation should be
+> accepted, skipped, or hidden behind a backend helper?
+> 4. whether PowerPC should generate only the sPAPR TCE v2 fixture variants,
+> or keep the generic IOMMU-mode matrix and skip unsupported modes.
+> 
+> TODO: vfio_spapr_tce_v1_iommu yet to be covered.
+> 
+> Narayana Murty N (6):
+>    selftests/vfio: allow selecting IOMMU backend from environment
+>    selftests/vfio: add sPAPR TCE v2 IOMMU mode
+>    selftests/vfio: add sPAPR TCE v2 DMA window helpers
+>    selftests/vfio: Exercise sPAPR DDW path for hugepage DMA mappings
+>    selftests/vfio: Accept sPAPR errno for DMA range overflow
+>    selftests/vfio: Enable VFIO selftests on ppc64 and ppc64le
+> 
+>   .../selftests/vfio/lib/include/libvfio.h      |   9 +
+>   .../vfio/lib/include/libvfio/iommu.h          |  26 ++
+>   tools/testing/selftests/vfio/lib/iommu.c      | 280 +++++++++++++++++-
+>   tools/testing/selftests/vfio/lib/libvfio.c    |  37 +++
+>   .../selftests/vfio/vfio_dma_mapping_test.c    |  30 ++
+>   .../selftests/vfio/vfio_pci_device_test.c     |   4 +-
+>   tools/testing/selftests/vfio/Makefile         |   2 +-
+>   7 files changed, 382 insertions(+), 6 deletions(-)
+> 
 
-Well it probably should be done in a separate patch. It would be better
-for bisecting potential regressions. Thomas, Zelin, what do you think, please?
-
-Best Regards,
-Petr
