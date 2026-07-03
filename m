@@ -1,137 +1,87 @@
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4F4233939;
-	Fri,  3 Jul 2026 17:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC65E26CE39;
+	Fri,  3 Jul 2026 17:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783098571; cv=none; b=VQ0nMRZVbdK1R0AU/AOoTex8woeTGGhcw5GcXdwNxtgtkJp8RLbL/bBvh9Nlt15jNMI/NvKYPWAQpmtEAkwoo3UFgXFcs6eqewKFRo/oLpt/zYw/GUoV/cwMRjweRv4HUVptVCWNxuNEy+7HTJni1bvC8U6rkccuCMBNJYZPk68=
+	t=1783098719; cv=none; b=L/XZmugMwKpeMCfuAt0qsedroFOBlZPVszPiVntjeAJBX8xcujuq/YKOcZvVhxLcRTtqi5v0HZrs2zR/0QrFB9QzFQ6LHwFgDZ+2CpUWXK/XlzCgL6Md3HT+GQBKJ7V0IGwcyHJ03SzavtIp1sA++EQ9CcgG9rfZfAw5d0YR0AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783098571; c=relaxed/simple;
-	bh=Tx3uRpemsitIxjfP5pQUSxiDpjnD442Pkjg/xS/Hyb0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tvk7gUksedpTJNdIrVEpGl5i5PkT+FKLc6/d462L0qrgNMFUpLwrCRvaKCDwzIaVeKC/PaTmbNnhxgNJoQolDILus0t/eiLiif4VDAbwDRsnEmnrhaatK4l9wPTT7jhV8PijDOGhGmWS62T0fbOyXYmbSd4+ndjVVT+8hx4DWMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=Hh9gBKB1; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
+	s=arc-20240116; t=1783098719; c=relaxed/simple;
+	bh=PVGhc102ynLSuCQ40lxSCLYB5ht1swFOMOHchkaTU48=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMvAtGfmTS0UDL9MmGKMbe4aykjXBZNrMfwMci+7oHU3dIozqx23G/ka+/3y0cgfBCboN7x8VlL181xwW0BX0YY1XKjhaV7z6jL1A2b20ptfF0c17d7+xjjEYWJtXurTbWFKYhvWY7aXLjIl8cOB906Det65RXh9S1F7zxm6Gkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=KYlDRCMj; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="Hh9gBKB1"
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id C1F8C20758;
-	Fri,  3 Jul 2026 19:09:28 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DTdLDSgXdy9q; Fri,  3 Jul 2026 19:09:28 +0200 (CEST)
-Received: from EXCH-02.secunet.de (rl2.secunet.de [10.32.0.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 296BB20612;
-	Fri,  3 Jul 2026 19:09:28 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 296BB20612
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1783098568;
-	bh=d1mKac98hSvJt1X++COIe0eebE6Eji+lJ/iqhJWOsV0=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-	b=Hh9gBKB1l7BZOmQ/9w5+qK1fNRx5zuQBdlWcSM4GXbEEP+I5u7fjqu7nl+gAs7cga
-	 qvi8JZhT5f7FBnjMLl8ZMoFyNzbqrdlB7K+VubbEJyzNyZw3SppjZhstJndEST7Wse
-	 26vOMqgwZzwHMRDC+koIvWZ/7vaUJIzD0S0+Co/L3HNZ/AmHYQgETVRZNKcefSlb6z
-	 tDe5A/MFWnObCDFzT/SjuJmMSvCTL6adCifXDtnowinR3N0ZTTHvcKW4/1dUWos2jz
-	 FAEYQ4BpafbVOzLA/mgsADHJSVKKMY0du2M/MLHaKyUMMEN2rwDiC64hEiAqboJQML
-	 Ej7yqlNHD8gBA==
-Received: from moon.secunet.de (172.18.149.1) by EXCH-02.secunet.de
- (10.32.0.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 3 Jul
- 2026 19:09:27 +0200
-From: Antony Antony <antony.antony@secunet.com>
-To: Antony Antony <antony.antony@secunet.com>, Steffen Klassert
-	<steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Jamal Hadi Salim
-	<hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>
-CC: Sabrina Dubroca <sd@queasysnail.net>, <netdev@vger.kernel.org>, Yan Yan
-	<evitayan@google.com>, Tobias Brunner <tobias@strongswan.org>, Florian
- Westphal <fw@strlen.de>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>
-Subject: [PATCH ipsec 8/8] docs: xfrm: include mark in XFRM_MSG_MIGRATE_STATE EEXIST tuple
-Date: Fri, 3 Jul 2026 19:09:16 +0200
-Message-ID: <migrate-state-fixes-v0-8-a69e8637ba3b@secunet.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <migrate-state-fixes-v0-0-a69e8637ba3b@secunet.com>
-References: <migrate-state-fixes-v0-0-a69e8637ba3b@secunet.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="KYlDRCMj"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=pb7TrLeGqe0b/bNAlrMgjLIiLoh7aG16nEZVkpvvbWA=; b=KYlDRCMj9Z9aprfDoC0OuuVSUt
+	aAt90CVAPXFkHFoG5hzBMuAaOMFhnK4O6WYD4bQ5KjvqtsctuFQren0WOJHa8Z3MKEOwD8xSNWxbD
+	l+Zy2RkUqkCwYo9oltROgpA4pkfi0CkGZ5KT513lP/g2lv+35+LQGW3hNsANPA0ToQeNN0sEgZpGN
+	xZpH2+pbgnWw473psp1hwBauahFCEmIYkhPDLNZdOHAM/sXqFheIjqSNkEtLrGEiM0QvX2sFxdPqy
+	aqL2jhscx5y4MjD7KZd2TFmkTyPqZdp2oMrHXb2ZPjnSKYUzBirMeSDCid2bzcKtpaRyd4nnkqFiW
+	/F4hDR/w==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wfhQZ-009YIE-2C;
+	Fri, 03 Jul 2026 17:11:48 +0000
+Date: Fri, 3 Jul 2026 10:11:42 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 2/2] selftests/mm: test kmemleak's N-consecutive-scan
+ leak confirmation
+Message-ID: <akfsldIW1US1d69C@gmail.com>
+References: <20260626-kmemleak_twice-v1-0-ab28f7cc0971@debian.org>
+ <20260626-kmemleak_twice-v1-2-ab28f7cc0971@debian.org>
+ <akYkKgWOsYnw6ETE@arm.com>
+ <akZ4tzQw70x3RR2D@gmail.com>
+ <akeX8mFiizd65pDw@gmail.com>
+ <akfNeK7OOpvoZE9z@arm.com>
+ <akfYImSNDh3OjIfR@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.16-dev
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EXCH-01.secunet.de (10.32.0.171) To EXCH-02.secunet.de
- (10.32.0.172)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <akfYImSNDh3OjIfR@gmail.com>
+X-Debian-User: leitao
 
-Document mark as part of the EEXIST tuple and update the SA lookup
-description to match.
+On Fri, Jul 03, 2026 at 08:43:27AM -0700, Breno Leitao wrote:
+> On Fri, Jul 03, 2026 at 03:55:52PM +0100, Catalin Marinas wrote:
+>
+> I will spin this "fix" separated (CCing stable), and send a v2 for this
+> selftest with priming enabled.
 
-Fixes: c13c0cc6f52e ("xfrm: add documentation for XFRM_MSG_MIGRATE_STATE")
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
----
- Documentation/networking/xfrm/xfrm_migrate_state.rst | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+Quick update on this plan. The v2 for this patch depends on checksum fix[0],
+given it touches a similar code:
 
-diff --git a/Documentation/networking/xfrm/xfrm_migrate_state.rst b/Documentation/networking/xfrm/xfrm_migrate_state.rst
-index 9d53cb22b007..905e3f0c4ee0 100644
---- a/Documentation/networking/xfrm/xfrm_migrate_state.rst
-+++ b/Documentation/networking/xfrm/xfrm_migrate_state.rst
-@@ -27,15 +27,18 @@ SA Identification
- =================
- 
- The struct is defined in ``include/uapi/linux/xfrm.h``. The SA is looked
--up using ``xfrm_state_lookup()`` with ``id.spi``,
--``id.daddr``, ``id.proto``, ``id.family``, and
--``old_mark.v & old_mark.m`` as the mark key::
-+up using ``xfrm_state_lookup_exact()`` with ``id.spi``, ``id.daddr``,
-+``id.proto``, ``id.family``, and an exact match against ``old_mark.v``
-+and ``old_mark.m``. Unlike the data path, which uses a masked
-+comparison, this requires the SA's mark and mask to equal ``old_mark``
-+exactly, so a broad-mask SA is never matched when a more specific one
-+was intended. If no such SA exists, ``-ESRCH`` is returned.::
- 
-     struct xfrm_user_migrate_state {
-         struct xfrm_usersa_id  id;       /* spi, daddr, proto, family */
-         xfrm_address_t         new_daddr;
-         xfrm_address_t         new_saddr;
--        struct xfrm_mark       old_mark; /* SA lookup: key = v & m */
-+        struct xfrm_mark       old_mark; /* SA lookup key (exact v/m match) */
-         struct xfrm_selector   new_sel;  /* new selector (see Flags) */
-         __u32                  new_reqid;
-         __u32                  flags;    /* XFRM_MIGRATE_STATE_* */
-@@ -72,8 +75,8 @@ inherits the value from the existing SA (omit-to-inherit).
-      - Description
-    * - ``XFRMA_MARK``
-      - Mark on the migrated SA (``struct xfrm_mark``). Absent inherits
--       ``old_mark``. To use no mark on the new SA, send ``XFRMA_MARK``
--       with ``{0, 0}``.
-+       the mark of the existing SA. To use no mark on the new SA, send
-+       ``XFRMA_MARK`` with ``{0, 0}``.
-    * - ``XFRMA_ENCAP``
-      - UDP encapsulation template; only ``UDP_ENCAP_ESPINUDP`` is supported.
-        Set ``encap_type=0`` to remove encap.
-@@ -259,8 +262,9 @@ Attributes in the notification
- Error Handling
- ==============
- 
--If the target SA tuple (new daddr, SPI, proto, new family) is already
--occupied, the operation returns ``-EEXIST`` before the migration begins.
-+If the target SA tuple (new daddr, SPI, proto, new family, mark) is
-+already occupied, the operation returns ``-EEXIST`` before the migration
-+begins.
- The old SA remains intact and the operation is safe to retry after
- resolving the conflict.
- 
+	@@ -687,6 +692,7 @@ static struct kmemleak_object *__alloc_object(gfp_t gfp)
+		atomic_set(&object->use_count, 1);
+		object->excess_ref = 0;
+		object->count = 0; 
+	+       object->unref_scans = 0;
+		object->checksum = ~0;   <-- Adde by the fix [0]
 
--- 
-2.47.3
+I will wait the "Fix" to land first, before sending v2, avoiding merge
+conflicts and being able to rely on sashiko to review it (instead of having merging
+issues)
 
+Link: https://lore.kernel.org/all/20260703-kmemleak_checksum-v1-1-5e0ab7d6966f@debian.org/ [0]
