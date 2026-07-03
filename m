@@ -1,327 +1,230 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4B530676C
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 03:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776F13164C7
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 03:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783049529; cv=none; b=LedwiwS3m9nb2SrzagdXLODrr99F95K5LtoFpXuOwmKUWkqaVnncRyva5gWfu3+JI/zqSbdsrfwefhjZyzQ4ZosnGa90i1ZlYnKL1YKcFpp0TwS8DnlZXpS+VeuSXM5juHGSC2VV1bZAV25Y/QwuC5L7ISB7o0WY9mdbPbHUUO0=
+	t=1783050725; cv=none; b=q1vsK4ea7P+boaI9RzfiQ5Hpub8rE267GOeYxP13heovXFcG/zY64V6MNADRHEFGvY9tQ2vHqtO93nVxcYYti3B3UiVGShidQj0pBTaK3KrdsQEfAb3O9kPib+tdNCZPLeiOzpepj+eW6WRcrgkvOonms07MN8ij4K6TwbwbSb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783049529; c=relaxed/simple;
-	bh=mqC4HGLSJgflEpn+SG63X8nwZCbtQ+aEny1Go3KH5So=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kZUIm2H1i7vA/bwkrYMkX5DAUcNy5aESVFjc3QYuJxB78oFlFOrgJovbC1zmwjGwOZILEKy6Q2qZDDV1coz1ENf6IC7Xrpg8mRMEoWKrKYKStKOdKQgKChQEfdE57gWEDZA9pYYjPfQICYgjpX+or5XORWBQNErffOCjsiVjsJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tlC2/uiJ; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783050725; c=relaxed/simple;
+	bh=n9otxYLLiVUCiF0NwBWC80h7o2RKMS08s81YRFvEbGM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qmr/EcbyoxzeSo7A4A5AaAjZKwhe1/nJ5kjFCfVpZirTAZVnDgyyQiXt59UHGBIxGFjPyMPiKTxDVgA7cDTRvgiTZdWD8FyADhhefnrHALM0dGEQJiN+9OpHDbOqvZDK23j5Ul2GgrzzPSMeNUcylQtKuuZ5cXJXx92UdYQdflw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBULXGrH; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tlC2/uiJ"
-Message-ID: <5a8b4500-7cab-4ef6-ae96-b0f794ee51a9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783049506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q7VIyA97SWoJB4En6LwJM5FDK6ypX7b7m1z0uXVUJuc=;
-	b=tlC2/uiJ91ZFRvKsfhHC20WHXs2FiKbx9D8/uvVNHMjzAhtheZGC7y8aY+SY/AfsfgVKXq
-	XNJerAPOT9PH64X4ISnrOanWu/HFLhOonByJt3bcJMeWAJ4DiPWDkikUGSdFZ45Y++YiXy
-	pEZhQ7uXbzfuLGgGPcKFTr3YcYT3waE=
-Date: Fri, 3 Jul 2026 11:31:40 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBULXGrH"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c7c61b5292so1521935ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jul 2026 20:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783050713; x=1783655513; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
+        b=EBULXGrHQOdatlJZ2pVyQERbi8gAUzgYotR+3WB1dxaFC1KToZ7iOHiykVXOw7fUhe
+         SNCYWjJlMpS5FkvHeIWxRio51Z7wNhXENlSoRDmnxxL3tzOr2pGt+Rts7r8yB/LxQNjK
+         0O8QofLWBTzwuLO1njRW2JylNnZW1bOAWUw54ieXrOM9CRiIWIbaLCz+wE9t2Gj858sV
+         hwg4Yi0C13YC5Jq1q1ZLVgVoPPx9MzybPvdBMTXdd5GE+kGGGb4DDeRPPTTk9svanW52
+         wtTKzvonds3q4vZKbLVZcg+ugH35Cbu2X2Lpo8jbu768RAoRFXdZ2h8Pugxaj5xk2jtB
+         dtaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783050713; x=1783655513;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=irOx4um9SxVnPfyQhReoF+nfX6PSfywyMAlSD0zArHg=;
+        b=O4kREP/30TqSlLQ48N/FUxU4IU2UXgzHZkfN/iz6E81FhmkfKNOFNzKhq7di4KPb6B
+         NnYU6ZYqj3E+xq/1wj5SIVubNHR6WDth7M57IArhy54lNlSzmy5uCDUbDeUwMgz/TrA/
+         lZM6vMXQOTXvxeZghI5Uv89ejemJNruFP3XeTJZ4XBSDP9khHznmpyQzQ6YkrPHaHtZo
+         gtitCioVV9RUICEmL8Zl7mobmFPSbitIptn1o8M1itoOnEXOOkZVMwcqi9WFkdmc4Rpl
+         MJbRas8zBiJAP5A2u0uZtMQBK64PH3Aka2Wfz9C8GcLJUAZaCNpI5I0oMuGNoGYWRqJc
+         N8dA==
+X-Forwarded-Encrypted: i=1; AHgh+RrRrpLGYdZdd22fkKP/EDYLt+1hOGWpGA73rP718/S5A4m322jFqWhyQEmBTomCoVwKvDceFtQ2r3OFKiyDjl8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRYYzCp9ijxiGkczVAyEqiNy9OfBcdvaNohDOpxOhf4mAl56Tb
+	81FqP6/jOZN4H9WBFLnGSlc3q36rCv4J4SjYaJfH3+Dr5kjUDaSsitUc
+X-Gm-Gg: AfdE7cl7nsYn5asskZZQ/nZjGW9kKvs1qdv013JbVKP+nxAIUKKXjLkAPIg/lvC+Xd2
+	OPJKVHHZFWSWeHnmRfSeukmhYghXJa2rWTCIWdN59XG084RygNjgnXEVUx/yWJQnDadPeo45Iq1
+	SwbPCgGAqgWIvjcR6J+WO6XeZpuIqIdI4OILXq4iliE0IXMASWt5xqMbnUE1Jc+KYyF4UcZSIFs
+	K5HQVqqk993pa6iDG/qaV7ihmcA46nkUIfRiz+R5EbSeLptGaAjGBAHavCAaaZ0jA99aE/rpelR
+	lc2n71Tcvbi7McO4wlDimp67uhgIlMQ/OO2pnOsbXHWE1qnFUaPokpay3W8zha0h2ISnwCUYt22
+	h2uLMncZ9H5z6u+z8NRHqMNS67Nl/O+sbahd8pT6yHjV6pv9FkECEQoRTxFBqy2/HAQsfNUV+H8
+	w+1kzpXESwdcChzrLTXaecaMJRpvwzkqJCLnt49jDNQ94mWMbOauXgbEOy5QIl2k4tHGf+SeA35
+	OgcUCTF2HVX3FIUHiSCuhRjbA==
+X-Received: by 2002:a17:903:2411:b0:2c1:98b7:ecf3 with SMTP id d9443c01a7336-2ca911de5d0mr82443825ad.23.1783050712813;
+        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
+Received: from u2404-VMware-Virtual-Platform.localdomain ([24.4.24.156])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c85b345sm22506479c88.10.2026.07.02.20.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 20:51:52 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	mmullins@fb.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf] bpf: Reject negative const offsets for buffer pointers
+Date: Thu,  2 Jul 2026 20:51:37 -0700
+Message-ID: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH-next v10 10/11] cgroup/cpuset: Support multiple
- destination cpusets for cpuset_*attach()
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>
-Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
- Guopeng Zhang <guopeng.zhang@linux.dev>
-References: <20260702214757.579012-1-longman@redhat.com>
- <20260702214757.579012-11-longman@redhat.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20260702214757.579012-11-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
+accesses, but it currently accepts a constant negative offset produced by
+pointer arithmetic.
 
+For example, a raw tracepoint writable program can load ctx[0] as a
+PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
+The register is still tracked as tp_buffer(imm=-8), but the access is
+before the tracepoint writable buffer base and should be rejected.
 
-On 7/3/2026 5:47 AM, Waiman Long wrote:
-> The only case where the cgroup_taskset structure requires task migration
-> to multiple cpusets is when enabling a cpuset controller in cgroup v2
-> where the newly created child cpusets inherits the same effective CPUs
-> and memory nodes from the parent. In that case, task migration can happen
-> directly with no update to tasks' CPU and memory nodes assignment and no
-> further work needed from the cpuset side except updating nr_deadline_tasks
-> when DL tasks are involved and setting old_mems_allowed in the child
-> cpusets.
-> 
-> Do that by tracking all the destination cpusets with a new dst_cs_head
-> singly linked list. The reset_migrate_dl_data() function is integrated
-> into clear_attach_data() so that it can be used for both source and
-> destination cpusets.
-> 
-> It is assumed that a given cpuset cannot be both a source and a
-> destination cpuset. If such condition happens or when there are multiple
-> destination cpusets with CPU or memory nodes changes, the current code
-> will not handle it correctly. So it will print a warning and fail the
-> attach operation in these unexpected cases as we will have to enhance the
-> code to support this if such use cases are valid and not coding errors.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   kernel/cgroup/cpuset-internal.h |   1 +
->   kernel/cgroup/cpuset.c          | 115 ++++++++++++++++++++------------
->   2 files changed, 72 insertions(+), 44 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-> index e7d010661fd3..d1161b0a3d85 100644
-> --- a/kernel/cgroup/cpuset-internal.h
-> +++ b/kernel/cgroup/cpuset-internal.h
-> @@ -149,6 +149,7 @@ struct cpuset {
->   	 * For linking impacted cpusets during an attach operation.
->   	 */
->   	struct llist_node attach_node;
-> +	bool attach_source;
->   
->   	/* partition root state */
->   	int partition_root_state;
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 4bbfae041b63..cf14dc506a40 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -366,10 +366,12 @@ static struct {
->   	bool cpus_updated;
->   	bool mems_updated;
->   	bool task_work_queued;
-> +	bool many_dest_cs;	/* Have many destination cpusets */
->   	struct cpuset *old_cs;	/* Source cpuset */
->   	nodemask_t nodemask_to;
->   } attach_ctx;
->   static LLIST_HEAD(src_cs_head);
-> +static LLIST_HEAD(dst_cs_head);
->   
+Check the signed effective buffer offset before updating max_tp_access or
+other buffer max access accounting. Reject negative effective offsets and
+use the checked end offset for max access accounting.
 
-Nit.
+Add a verifier test that rejects a raw tracepoint writable program using a
+negative constant offset.
 
-Would it make sense to move src_cs_head/dst_cs_head into attach_ctx?
+Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ kernel/bpf/verifier.c                         | 41 ++++++++++++++++---
+ .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++++
+ 2 files changed, 52 insertions(+), 5 deletions(-)
 
->   /*
->    * Wait if task attach is in progress until it is done and then acquire
-> @@ -3044,8 +3046,23 @@ static int cpuset_can_attach_check(struct cpuset *cs, struct cpuset *oldcs,
->   	if (!oldcs)
->   		return 0;
->   
-> -	if (!llist_on_list(&oldcs->attach_node))
-> +	/*
-> +	 * The same cpuset cannot be both a source and a destination.
-> +	 * The current code does not support that, print a warning and
-> +	 * fail the attach if so.
-> +	 */
-> +	if (WARN_ON_ONCE((!oldcs->attach_source &&
-> +			  llist_on_list(&oldcs->attach_node)) ||
-> +			  cs->attach_source))
-> +		return -EINVAL;
-> +
-> +	if (!llist_on_list(&oldcs->attach_node)) {
->   		llist_add(&oldcs->attach_node, &src_cs_head);
-> +		oldcs->attach_source = true;
-> +	}
-> +
-> +	if (!llist_on_list(&cs->attach_node))
-> +		llist_add(&cs->attach_node, &dst_cs_head);
->   
->   	cpus_updated = !cpumask_equal(cs->effective_cpus, oldcs->effective_cpus);
->   	mems_updated = !nodes_equal(cs->effective_mems, oldcs->effective_mems);
-> @@ -3075,35 +3092,31 @@ static int cpuset_can_attach_check(struct cpuset *cs, struct cpuset *oldcs,
->   	return 0;
->   }
->   
-> -static int cpuset_reserve_dl_bw(struct cpuset *cs)
-> +static int cpuset_reserve_dl_bw(void)
->   {
-> +	struct cpuset *cs;
->   	int cpu, ret;
->   
-> -	if (!cs->sum_migrate_dl_bw)
-> -		return 0;
-> +	llist_for_each_entry(cs, dst_cs_head.first, attach_node) {
-> +		if (!cs->sum_migrate_dl_bw)
-> +			continue;
->   
-> -	cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-> -	if (unlikely(cpu >= nr_cpu_ids))
-> -		return -EINVAL;
-> +		cpu = cpumask_any_and(cpu_active_mask, cs->effective_cpus);
-> +		if (unlikely(cpu >= nr_cpu_ids))
-> +			return -EINVAL;
->   
-> -	ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-> -	if (ret)
-> -		return ret;
-> +		ret = dl_bw_alloc(cpu, cs->sum_migrate_dl_bw);
-> +		if (ret)
-> +			return ret;
->   
-> -	cs->dl_bw_cpu = cpu;
-> +		cs->dl_bw_cpu = cpu;
-> +	}
->   	return 0;
->   }
->   
-> -static void reset_migrate_dl_data(struct cpuset *cs)
-> -{
-> -	cs->nr_migrate_dl_tasks = 0;
-> -	cs->sum_migrate_dl_bw = 0;
-> -	cs->dl_bw_cpu = -1;
-> -}
-> -
->   /*
->    * Clear and optionally apply (@cancel is false) the attach related data in the
-> - * source cpusets.
-> + * source or destination cpuset.
->    */
->   static void clear_attach_data(struct llist_head *head, bool cancel)
->   {
-> @@ -3115,8 +3128,13 @@ static void clear_attach_data(struct llist_head *head, bool cancel)
->   		if (cs->nr_migrate_dl_tasks) {
->   			if (!cancel)
->   				atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
-> +			else if (cs->dl_bw_cpu >= 0) /* && cacnel */
-> +				dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
->   			cs->nr_migrate_dl_tasks = 0;
-> +			cs->sum_migrate_dl_bw = 0;
-> +			cs->dl_bw_cpu = -1;
->   		}
-> +		cs->attach_source = false;
->   	}
->   }
->   
-> @@ -3137,6 +3155,7 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   	mutex_lock(&cpuset_mutex);
->   	attach_ctx.cpus_updated = false;
->   	attach_ctx.mems_updated = false;
-> +	attach_ctx.many_dest_cs = false;
->   
->   	/* Check to see if task is allowed in the cpuset */
->   	ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
-> @@ -3161,9 +3180,13 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   	 * selected as attach_ctx.old_cs.
->   	 */
->   	cgroup_taskset_for_each(task, css, tset) {
-> +		struct cpuset *new_cs = css_cs(css);
->   		struct cpuset *new_oldcs = task_cs(task);
->   
-> -		if (new_oldcs != oldcs) {
-> +		if ((new_oldcs != oldcs) || (new_cs != cs)) {
-> +			if (new_cs != cs)
-> +				attach_ctx.many_dest_cs = true;
-> +			cs = new_cs;
->   			oldcs = new_oldcs;
->   			ret = cpuset_can_attach_check(cs, oldcs, &setsched_check);
->   			if (ret)
-> @@ -3197,12 +3220,28 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   		}
->   	}
->   
-> -	ret = cpuset_reserve_dl_bw(cs);
-> +	/*
-> +	 * The only case where there are multiple destination cpusets for
-> +	 * task migration is when enabling a v2 cpuset controllers where
-> +	 * tasks will be migrated to multiple child cpusets from a parent
-> +	 * cpuset with the same effective CPUs and memory nodes. IOW,
-> +	 * both attach_cpus_updated and attach_mems_updated should be false.
-> +	 * If not, it is a condition that the current code cannot handled.
-> +	 * Print a warning and abort the attach operation as further code
-> +	 * change will be needed.
-> +	 */
-> +	if (WARN_ON_ONCE(attach_ctx.many_dest_cs && (!cpuset_v2() ||
-> +			 attach_ctx.cpus_updated || attach_ctx.mems_updated))) {
-> +		ret = -EINVAL;
-> +		goto out_unlock;
-> +	}
-> +
-> +	ret = cpuset_reserve_dl_bw();
->   
->   out_unlock:
->   	if (ret) {
-> -		reset_migrate_dl_data(cs); /* Destination cpuset only */
->   		clear_attach_data(&src_cs_head, true);
-> +		clear_attach_data(&dst_cs_head, true);
->   	} else {
->   		attach_ctx.in_progress++;
->   	}
-> @@ -3213,22 +3252,10 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->   
->   static void cpuset_cancel_attach(struct cgroup_taskset *tset)
->   {
-> -	struct cgroup_subsys_state *css;
-> -	struct cpuset *cs;
-> -
-> -	cgroup_taskset_first(tset, &css);
-> -	cs = css_cs(css);
-> -
->   	mutex_lock(&cpuset_mutex);
->   	dec_attach_in_progress_locked();
->   	clear_attach_data(&src_cs_head, true);
-> -
-> -	if (cs->dl_bw_cpu >= 0)
-> -		dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
-> -
-> -	if (cs->nr_migrate_dl_tasks)
-> -		reset_migrate_dl_data(cs);
-> -
-> +	clear_attach_data(&dst_cs_head, true);
->   	mutex_unlock(&cpuset_mutex);
->   }
->   
-> @@ -3311,25 +3338,25 @@ static void cpuset_attach(struct cgroup_taskset *tset)
->   	 * In the default hierarchy, enabling cpuset in the child cgroups
->   	 * will trigger a cpuset_attach() call with no change in effective cpus
->   	 * and mems. In that case, we can optimize out by skipping the task
-> -	 * iteration and update.
-> +	 * iteration and updatebut the destination cpuset list is iterated to
-	 updatebut -> update, but?> +	 * set old_mems_allowed.
->   	 */
-> -	if (cpuset_v2() && !attach_ctx.cpus_updated && !attach_ctx.mems_updated)
-> +	if (cpuset_v2() && !attach_ctx.cpus_updated && !attach_ctx.mems_updated) {
-> +		llist_for_each_entry(cs, dst_cs_head.first, attach_node)
-> +			cs->old_mems_allowed = attach_ctx.nodemask_to;
->   		goto out;
-> +	}
->   
-> +	/* Task iteration shouldn't happen with attach_ctx.many_dest_cs set */
->   	cgroup_taskset_for_each(task, css, tset)
->   		cpuset_attach_task(cs, task);
->   
-> -out:
->   	if (attach_ctx.task_work_queued)
->   		schedule_flush_migrate_mm();
->   	cs->old_mems_allowed = attach_ctx.nodemask_to;
-> -
-> -	if (cs->nr_migrate_dl_tasks) {
-> -		atomic_add(cs->nr_migrate_dl_tasks, &cs->nr_deadline_tasks);
-> -		reset_migrate_dl_data(cs);
-> -	}
-> -
-> +out:
->   	clear_attach_data(&src_cs_head, false);
-> +	clear_attach_data(&dst_cs_head, false);
->   	dec_attach_in_progress_locked();
->   
->   	mutex_unlock(&cpuset_mutex);
-
-Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 21a365d436a5..421ca118fcbf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 				 const char *buf_info,
+ 				 const struct bpf_reg_state *reg,
+-				 argno_t argno, int off, int size)
++				 argno_t argno, int off, int size,
++				 u32 *access_end)
+ {
++	s64 start, var_off;
++
+ 	if (off < 0) {
+ 		verbose(env,
+ 			"%s invalid %s buffer access: off=%d, size=%d\n",
+ 			reg_arg_name(env, argno), buf_info, off, size);
+ 		return -EACCES;
+ 	}
++
+ 	if (!tnum_is_const(reg->var_off)) {
+ 		char tn_buf[48];
+ 
+@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	var_off = (s64)reg->var_off.value;
++	if (check_add_overflow(var_off, (s64)off, &start)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start < 0) {
++		verbose(env,
++			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start > U32_MAX || size < 0 ||
++	    check_add_overflow((u32)start, (u32)size, access_end)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%lld, size=%d\n",
++			reg_arg_name(env, argno), buf_info, start, size);
++		return -EACCES;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -5351,13 +5378,15 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
+ 				  const struct bpf_reg_state *reg,
+ 				  argno_t argno, int off, int size)
+ {
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
++	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size,
++				    &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
++	env->prog->aux->max_tp_access = max(access_end,
+ 					    env->prog->aux->max_tp_access);
+ 
+ 	return 0;
+@@ -5370,13 +5399,15 @@ static int check_buffer_access(struct bpf_verifier_env *env,
+ 			       u32 *max_access)
+ {
+ 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
++	err = __check_buffer_access(env, buf_info, reg, argno, off, size,
++				    &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	*max_access = max(reg->var_off.value + off + size, *max_access);
++	*max_access = max(access_end, *max_access);
+ 
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
+index 14a0172e2141..4055a6443bc2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
++++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
+@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
+ 	: __clobber_all);
+ }
+ 
++SEC("raw_tracepoint.w")
++__description("raw_tracepoint_writable: reject negative const offset")
++__failure
++__msg("invalid negative tracepoint buffer offset")
++__naked void tracepoint_writable_reject_negative_const_offset(void)
++{
++	asm volatile ("					\
++	r6 = *(u64 *)(r1 + 0);				\
++	r6 += -8;					\
++	r0 = *(u64 *)(r6 + 0);				\
++	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
-Best regards
-Ridong
+2.43.0
 
