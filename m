@@ -1,243 +1,348 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4416301486
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jul 2026 16:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4F4433E92;
+	Fri,  3 Jul 2026 17:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783097000; cv=none; b=Aofgo8iZqVM5XiK6FQlU/7LpQSzCZo/Krf/rVeopVx6M0azFWzBWU+v9BaZgceUOlikcULZB6avdegQhv20ZC7A0L679wLfG10r+ev3VThvJgSnLPhsUm5YQ6Z9ynf63XZK/V8qSsGZntkfekPuJ/DIz4caa6b0MR8OJXFqDZC0=
+	t=1783098482; cv=none; b=qRD7SE+ZVOb4jQtQtF4+VJuYiR4YNM+OkN2XwEO6Zr4GuZDuuuSlN5OEokWXUCz1ew2Js78hk8KgEy0sMFVVdy7siXbYXAHRsaiOvNz6/srcAGH/njQhDvVq6JekPjJAbcph1ZEJ9Vx3mkj/uYZ8DfYUDkHcdSl267QdByOr584=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783097000; c=relaxed/simple;
-	bh=WBab9+njAD5aiCXcAouVi7TeyY4y7/wl56ZyGFZBq1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d4DkY8yx7qQeXHsYPJCBPjz0mOrGyVrqcG24V+qEp8q7SOQy4cHrL11EnHbDWFnLKSfD3v4NSHg+E9s3ELiP+9X1s1jmLYxnNgOO13BRl3ZVm2HkImOzznpIbZrH+ntSjDXVX2VvW7SUAe8O5VLhRKcM7vwYVVGisHn1NwZ8sC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQgODdQc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783098482; c=relaxed/simple;
+	bh=PMiOeVqxr5FlSVi/VMmRMEA6bAxsr47i0e2W+DkOtHQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MZ6FxkAzx6Plea1M1jCa4bl+sQN5408UKQ5zGoTA2kwjaFMnE0FVysfrDdhhQGGc4crltdNPV7u6WCbf66OSfUILZ5IMtx6N2HLAZU7ecGq2nP3pJTZIEd5wUutMQtLeoWquqWItlD8Bae3Qzxq3LuQq/PPS1r4BgNP6vRym9/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=LMuPNf6P; arc=none smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQgODdQc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13461F00ACA;
-	Fri,  3 Jul 2026 16:43:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783096999;
-	bh=wmiike0RMf4GUZzG60cV6tKCpPnHn3sgz+92qG8ZSFo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oQgODdQcQOZJ6UkIoTHpSPAR+xm0LbTzqhxtul4thXzJ1L4k1xRCB5Jfy9i79GdKy
-	 AqZzrmO9bPCWxh1+UKQeckEA8xfE1ALRrFgdtPWO8vjwNCunLuPHT3DQY412txfRXM
-	 IcPirEckZNvCksYf7oe2J9e7Gb5Koo01YZfFnIEDWVb2ZH6ACzGBQOnmSqTdpxJG/p
-	 jE9g1J1K8wCvGiZ6t6teTZjFTfq4KjVtxn3YEXBVakSfpQy5fogPPdyjHcKdGbkX9Y
-	 rkoOLSm0x9pfqRwQbmndrfkrHk4CW6WfefyPzMPDnrR/5D2l0WpKn8AHdQbcbcwD0f
-	 t+0ZKGm4Ihgmw==
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A9FACF4006C;
-	Fri,  3 Jul 2026 12:43:17 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Fri, 03 Jul 2026 12:43:17 -0400
-X-ME-Sender: <xms:peZHagMAZzcYl7CmGJIRQXcADJfppBSUDgNGnKdXW7-27IhwjKYNSA>
-    <xme:peZHav94GBW2fS7CSPjP7dXckGLtKDruvWFJgoRhS21FxCl5eSniepVxlnmADCm2k
-    ot3CcE2nTZxy-aoG3P9nlnbLnnddED08kNQfUr4Ghc-QSpAM3BUGVc>
-X-ME-Received: <xmr:peZHag-yEVwy1cFKNkUnw1mA7mzH_ik4hwH_tdr4YTNR-JuUxfNtBQ6LD3-XvA>
-X-ME-Proxy-Cause: dmFkZTEhXLrG7RRgWewl6PxPi2xh+8RsvhIU1msTLaJArxEAHB6uY996MYxuxeHg0YK91y
-    R0wyJcP7nTPMFDWO2Q8TpgpNyNZ42owgYwLWubaXjtExEZhofOlvlDvWLcia4Prx0zY45R
-    Fw38UnVt/frpIxZIsiAA6MUvzEARpnKuokCRNpn3gJzH0DP6jNc6FvmZdyr5G4Z2yyeA3e
-    A0pTNJ/xcW6DuOeNSIJ8JAKYtZNQGLKSOSu8G1RdEMTK0KDrunlklY8omtJiDqkZaS+9Im
-    xxzBCx16mviGsn1Gf931m+HMap5B6fYLxqAeP9gaObnEeRSCHAQmpkENZV8SepZp8HRAVS
-    D0mw8Lk+gVKD1CORE7bPyI2GJGmG4myt9165rJWgPoq8dT6ush6hA9t45mkxQ+OTjL+AIS
-    p+s9Ya+POW2qVpOGRTM3mU/duDR8ZK8HmdXoz87Dnj93jS1kPgVfUmo+5sGgF1rAvYNw17
-    jjw7+Tv7Y9MATgSPzv+Oq5FeWwGbeqjXX/0q+uGinBX/WSOsXB0IeMiSnOhwNfCGQJLE0k
-    Bld2Zc9VVIRr9ZuB3HegwP27DOKH9IzcWyGPzpgQVWOiR308qAcGNSuLpMCF4ffgkhfCf7
-    XsttxQzyy66CukTnb565g5n2L6u6r1LVYxt905mN7so2p6LQ4vyLwep8Ryiw
-X-ME-Proxy: <xmx:peZHavqZomUiomjVpT4A2daHUPpDZbqZLOGRjBjZpiGyVhDSfJNukg>
-    <xmx:peZHarJH0dyQxR4lrQGZ9IqAUJctIzzPAFEoPd5G-ISbH1gMNpzZSA>
-    <xmx:peZHak0BtjTmrFjtRwV9bkHngywyLii-Ma5udRkPh5Dbtkh4e9qQ0g>
-    <xmx:peZHak7O_jSu-q03beVgwlBiHYK8VGPqx_4AvW4Ujhd0wQ8X3DYjUw>
-    <xmx:peZHaiMlQJmsOlLT50fzJ4z4SqiiflrE1QXy9udNZWRfsTPEdZJWvGeB>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Jul 2026 12:43:17 -0400 (EDT)
-Date: Fri, 3 Jul 2026 17:43:15 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
-	david@kernel.org
-Cc: ljs@kernel.org, surenb@google.com, vbabka@kernel.org, 
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
-	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, kernel-team@meta.com
-Subject: Addressing Sashiko AI review
-Message-ID: <akfmUXjqaBQnxqYX@thinkstation>
-References: <20260703133615.1039465-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="LMuPNf6P"
+Received: from localhost (localhost [127.0.0.1])
+	by mx1.secunet.com (Postfix) with ESMTP id C65C1206D2;
+	Fri,  3 Jul 2026 19:07:50 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from mx1.secunet.com ([127.0.0.1])
+ by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yEFN8pRTWpjr; Fri,  3 Jul 2026 19:07:49 +0200 (CEST)
+Received: from EXCH-02.secunet.de (rl2.secunet.de [10.32.0.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.secunet.com (Postfix) with ESMTPS id D009920612;
+	Fri,  3 Jul 2026 19:07:49 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com D009920612
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
+	s=202301; t=1783098469;
+	bh=XK6tcWJtHkBmnDkcInoIAHg4SGs9356CMyKVHhkn7GY=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+	b=LMuPNf6PKknxhZSsKRkzxhb+lzrxTOxFAguCwXjfGzmfZIXsDZdbRngfVG68/nbJa
+	 sXxOnyF/l9t2EApIBPesl/9sJ7BKT4ptFo+UrSKqkCRA7Ik39B4kc0Xgi7Hel+8if1
+	 ThdrOivxcG0EbHrAT0wrRamqnCs8WQolH7FjcPZ0WVC6o7aS09nqmevfru3WJQWH6x
+	 3cF8CIECq72TuTl/h4+uq1LlPYxc2F0A8Cdw1pYwGZ1C7BAcmckh6pg4NkQaNBgvbW
+	 ARHtgFSEMBu/eyWQQ1iOVZklYqiODxA56efPBFlXPUQXU+teGgEiTDW1YMxM6oIQF4
+	 BgHtIwW1CBNSQ==
+Received: from moon.secunet.de (172.18.149.1) by EXCH-02.secunet.de
+ (10.32.0.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37; Fri, 3 Jul
+ 2026 19:07:49 +0200
+From: Antony Antony <antony.antony@secunet.com>
+To: Antony Antony <antony.antony@secunet.com>, Steffen Klassert
+	<steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, Jamal Hadi Salim
+	<hadi@cyberus.ca>, Shuah Khan <shuah@kernel.org>
+CC: Sabrina Dubroca <sd@queasysnail.net>, <netdev@vger.kernel.org>, Yan Yan
+	<evitayan@google.com>, Tobias Brunner <tobias@strongswan.org>, Florian
+ Westphal <fw@strlen.de>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>
+Subject: [PATCH ipsec 1/8] xfrm: state: exact mark/mask match for SPI-keyed control-plane SA lookups
+Date: Fri, 3 Jul 2026 19:07:34 +0200
+Message-ID: <migrate-state-fixes-v0-1-a69e8637ba3b@secunet.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <migrate-state-fixes-v0-0-a69e8637ba3b@secunet.com>
+References: <migrate-state-fixes-v0-0-a69e8637ba3b@secunet.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703133615.1039465-1-kirill@shutemov.name>
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.16-dev
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EXCH-01.secunet.de (10.32.0.171) To EXCH-02.secunet.de
+ (10.32.0.172)
 
-I looked through Sashiko review and queued changes for v9 (see incremental
-diff below). The v9 branch is available at:
+Add __xfrm_state_lookup_exact(), an identity-match like
+__xfrm_state_lookup().
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git uffd/v9
+Wire it into every SPI-keyed control-plane path: DELSA/GETSA, UPDSA,
+GETAE/NEWAE, EXPIRE, MIGRATE_STATE.
 
-- 05/15: uffd_disable_fault_around() did not cover RWP, so one
-  missing-page fault on shmem pre-installed up to 15 cached neighbours
-  as accessible ptes and PAGEMAP_SCAN reported them as
-  PAGE_IS_ACCESSED. Fault-around is now disabled for RWP.
+xfrm_state_add()'s duplicate-detect keeps the wildcard
+__xfrm_state_locate() - unrelated, unchanged.
 
-- 06/15: change_huge_pud() rejects MM_CP_UFFD_RWP_ALL next to the
-  existing MM_CP_UFFD_WP_ALL check. Defensive only.
+Fixes: 3d6acfa7641f ("xfrm: SA lookups with mark")
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+---
+ include/net/xfrm.h    |  3 ++
+ net/xfrm/xfrm_state.c | 80 ++++++++++++++++++++++++++++++++++++++++++++-------
+ net/xfrm/xfrm_user.c  | 29 ++++++++++---------
+ 3 files changed, 88 insertions(+), 24 deletions(-)
 
-- 09/15: the PROT_NONE accessibility check lived in
-  vma_can_userfault(), which unregister also calls, so RWP register ->
-  mprotect(PROT_NONE) -> UFFDIO_UNREGISTER failed with EINVAL. The
-  check is now register-time only.
-
-- 13/15: userfaultfd_register() read ctx->features with a plain load,
-  racing the WRITE_ONCE() in userfaultfd_set_mode(). Benign (the
-  tested bit is not toggleable), now uses userfaultfd_features().
-
-- 15/15: the documentation wrongly claimed UFFDIO_API returns the
-  supported feature bitmask on EINVAL; the kernel returns the
-  structure zeroed. Corrected.
-
-The finding against 03/15 is a pre-existing bug that the rename only
-made visible: copy_hugetlb_page_range() clears the uffd-wp bit of
-hwpoison/migration entries with the present-pte accessor, corrupting
-the swap offset. Fix posted separately:
-
-  https://lore.kernel.org/all/20260703161833.57416-1-kirill@shutemov.name/
-
-I believe the remaining findings are either pre-existing or false
-positives. Ping me if you think something is worth discussing.
-
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 69836e39aa0b..783d969f0e28 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -348,9 +348,9 @@ without ``CONFIG_USERFAULTFD_RWP``, and architectures whose ptes cannot
- carry the uffd bit at runtime (e.g. riscv without the ``SVRSW60T59B``
- extension). Requesting an unsupported feature in
- ``uffdio_api.features`` makes ``UFFDIO_API`` fail with ``EINVAL`` and
--leaves the userfaultfd context uninitialized; the bitmask returned in
--``uffdio_api.features`` then advertises the features the kernel does
--support. The recommended probe sequence is therefore to open a
-+leaves the userfaultfd context uninitialized; the structure is returned
-+zeroed, so the error path cannot be used to discover what the kernel
-+supports. The recommended probe sequence is therefore to open a
- throwaway userfaultfd, call ``UFFDIO_API`` once with ``features = 0``,
- inspect the returned bitmask, close that fd, then open the real one
- and call ``UFFDIO_API`` again with only the supported features set.
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index ca718e8590c5..bfbd6a59909f 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -171,7 +171,8 @@ static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
- /*
-  * Never enable huge pmd sharing on some uffd registered vmas:
-  *
-- * - VM_UFFD_WP VMAs, because write protect information is per pgtable entry.
-+ * - VM_UFFD_WP and VM_UFFD_RWP VMAs, because the write protect / access
-+ *   tracking information is per pgtable entry.
-  *
-  * - VM_UFFD_MINOR VMAs, because otherwise we would never get minor faults for
-  *   VMAs which share huge pmds. (If you have two mappings to the same
-@@ -182,21 +183,25 @@ static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
- static inline bool uffd_disable_huge_pmd_share(struct vm_area_struct *vma)
- {
- 	return vma_test_any_mask(vma,
--		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR,
--					VMA_UFFD_RWP));
-+		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_RWP,
-+					VMA_UFFD_MINOR));
+diff --git a/include/net/xfrm.h b/include/net/xfrm.h
+index 519a0156a05c..f6ed590cb2ff 100644
+--- a/include/net/xfrm.h
++++ b/include/net/xfrm.h
+@@ -1746,6 +1746,9 @@ struct xfrm_state *xfrm_state_lookup_byaddr(struct net *net, u32 mark,
+ 					    const xfrm_address_t *saddr,
+ 					    u8 proto,
+ 					    unsigned short family);
++struct xfrm_state *xfrm_state_lookup_exact(struct net *net, const struct xfrm_mark *mark,
++					   const xfrm_address_t *daddr, __be32 spi,
++					   u8 proto, unsigned short family);
+ #ifdef CONFIG_XFRM_SUB_POLICY
+ void xfrm_tmpl_sort(struct xfrm_tmpl **dst, struct xfrm_tmpl **src, int n,
+ 		    unsigned short family);
+diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+index c58cd024e3c6..df761ce1c290 100644
+--- a/net/xfrm/xfrm_state.c
++++ b/net/xfrm/xfrm_state.c
+@@ -1172,11 +1172,22 @@ static struct xfrm_state *__xfrm_state_lookup_all(const struct xfrm_hash_state_p
+ 	return NULL;
  }
  
- /*
-- * Don't do fault around for either WP or MINOR registered uffd range.  For
-+ * Don't do fault around for WP, RWP or MINOR registered uffd range.  For
-  * MINOR registered range, fault around will be a total disaster and ptes can
-  * be installed without notifications; for WP it should mostly be fine as long
-  * as the fault around checks for pte_none() before the installation, however
-- * to be super safe we just forbid it.
-+ * to be super safe we just forbid it; for RWP, pre-faulted neighbours would
-+ * be indistinguishable from accessed pages in PAGEMAP_SCAN (PAGE_IS_ACCESSED)
-+ * and pollute the tracked working set, so each page must be populated by its
-+ * own fault.
-  */
- static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
- {
- 	return vma_test_any_mask(vma,
--		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_MINOR));
-+		mk_vma_flags_from_masks(VMA_UFFD_WP, VMA_UFFD_RWP,
-+					VMA_UFFD_MINOR));
- }
- 
- static inline bool userfaultfd_missing(struct vm_area_struct *vma)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c67261f04731..4150f1bdea0c 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2766,10 +2766,10 @@ int change_huge_pud(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 		return 1;
- 
- 	/*
--	 * Huge entries on userfault-wp only works with anonymous, while we
--	 * don't have anonymous PUDs yet.
-+	 * Huge entries on userfault-wp or userfault-rwp only work with
-+	 * anonymous, while we don't have anonymous PUDs yet.
- 	 */
--	if (WARN_ON_ONCE(cp_flags & MM_CP_UFFD_WP_ALL))
-+	if (WARN_ON_ONCE(cp_flags & (MM_CP_UFFD_WP_ALL | MM_CP_UFFD_RWP_ALL)))
- 		return 1;
- 
- 	ptl = __pud_trans_huge_lock(pudp, vma);
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index a7659b0a1147..c96cfe0871dd 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -2221,15 +2221,6 @@ static bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
- 	    !vma_is_anonymous(vma))
- 		return false;
- 
--	/*
--	 * RWP uses protnone as an access-tracking marker. PROT_NONE VMAs
--	 * have vm_page_prot == PAGE_NONE, so RWP resolution can't make a
--	 * page accessible -- the next access would fault again. Reject up
--	 * front instead of letting FOLL_FORCE loop on protnone+uffd PTEs.
--	 */
--	if ((vm_flags & VM_UFFD_RWP) && !vma_is_accessible(vma))
--		return false;
--
- 	return ops->can_userfault(vma, vm_flags);
- }
- 
-@@ -3758,7 +3749,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 	if (uffdio_register.mode & UFFDIO_REGISTER_MODE_RWP) {
- 		if (!pgtable_supports_uffd() || VM_UFFD_RWP == VM_NONE)
- 			goto out;
--		if (!(ctx->features & UFFD_FEATURE_RWP))
-+		if (!(userfaultfd_features(ctx) & UFFD_FEATURE_RWP))
- 			goto out;
- 		vm_flags |= VM_UFFD_RWP;
- 	}
-@@ -3825,6 +3816,17 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		if (!vma_can_userfault(cur, vm_flags, wp_async))
- 			goto out_unlock;
- 
-+		/*
-+		 * RWP uses protnone as an access-tracking marker. PROT_NONE
-+		 * VMAs have vm_page_prot == PAGE_NONE, so RWP resolution
-+		 * cannot make a page accessible again. Reject at register
-+		 * time only: a VMA that later becomes inaccessible via
-+		 * mprotect() must still be unregisterable, so this is not
-+		 * part of vma_can_userfault().
-+		 */
-+		if ((vm_flags & VM_UFFD_RWP) && !vma_is_accessible(cur))
-+			goto out_unlock;
+-static struct xfrm_state *__xfrm_state_lookup(const struct xfrm_hash_state_ptrs *state_ptrs,
+-					      u32 mark,
+-					      const xfrm_address_t *daddr,
+-					      __be32 spi, u8 proto,
+-					      unsigned short family)
++/* exact=false: data-plane wildcard match against x's mask. exact=true:
++ * control-plane identity match, mark and mask must both match exactly.
++ */
++static bool xfrm_state_mark_matches(const struct xfrm_state *x, u32 mark, u32 mask, bool exact)
++{
++	if (exact)
++		return x->mark.v == mark && x->mark.m == mask;
++	return (mark & x->mark.m) == x->mark.v;
++}
 +
- 		/*
- 		 * UFFDIO_COPY will fill file holes even without
- 		 * PROT_WRITE. This check enforces that if this is a
++static struct xfrm_state *
++__xfrm_state_lookup(const struct xfrm_hash_state_ptrs *state_ptrs,
++		    u32 mark, u32 mask, bool exact,
++		    const xfrm_address_t *daddr,
++		    __be32 spi, u8 proto,
++		    unsigned short family)
+ {
+ 	unsigned int h = __xfrm_spi_hash(daddr, spi, proto, family, state_ptrs->hmask);
+ 	struct xfrm_state *x;
+@@ -1188,7 +1199,7 @@ static struct xfrm_state *__xfrm_state_lookup(const struct xfrm_hash_state_ptrs
+ 		    !xfrm_addr_equal(&x->id.daddr, daddr, family))
+ 			continue;
+ 
+-		if ((mark & x->mark.m) != x->mark.v)
++		if (!xfrm_state_mark_matches(x, mark, mask, exact))
+ 			continue;
+ 		if (!xfrm_state_hold_rcu(x))
+ 			continue;
+@@ -1198,6 +1209,17 @@ static struct xfrm_state *__xfrm_state_lookup(const struct xfrm_hash_state_ptrs
+ 	return NULL;
+ }
+ 
++static struct xfrm_state *
++__xfrm_state_lookup_exact(const struct xfrm_hash_state_ptrs *state_ptrs,
++			  const struct xfrm_mark *mark,
++			  const xfrm_address_t *daddr,
++			  __be32 spi, u8 proto,
++			  unsigned short family)
++{
++	return __xfrm_state_lookup(state_ptrs, mark->v, mark->m, true,
++				   daddr, spi, proto, family);
++}
++
+ struct xfrm_state *xfrm_input_state_lookup(struct net *net, u32 mark,
+ 					   const xfrm_address_t *daddr,
+ 					   __be32 spi, u8 proto,
+@@ -1228,7 +1250,7 @@ struct xfrm_state *xfrm_input_state_lookup(struct net *net, u32 mark,
+ 
+ 	xfrm_hash_ptrs_get(net, &state_ptrs);
+ 
+-	x = __xfrm_state_lookup(&state_ptrs, mark, daddr, spi, proto, family);
++	x = __xfrm_state_lookup(&state_ptrs, mark, 0, false, daddr, spi, proto, family);
+ 	if (x) {
+ 		spin_lock(&net->xfrm.xfrm_state_lock);
+ 		if (x->km.state != XFRM_STATE_VALID) {
+@@ -1288,7 +1310,7 @@ __xfrm_state_locate(struct xfrm_state *x, int use_spi, int family)
+ 	xfrm_hash_ptrs_get(net, &state_ptrs);
+ 
+ 	if (use_spi)
+-		return __xfrm_state_lookup(&state_ptrs, mark, &x->id.daddr,
++		return __xfrm_state_lookup(&state_ptrs, mark, 0, false, &x->id.daddr,
+ 					   x->id.spi, x->id.proto, family);
+ 	else
+ 		return __xfrm_state_lookup_byaddr(&state_ptrs, mark,
+@@ -1297,6 +1319,27 @@ __xfrm_state_locate(struct xfrm_state *x, int use_spi, int family)
+ 						  x->id.proto, family);
+ }
+ 
++/* Used by xfrm_state_update() only; xfrm_state_add()'s dup check keeps
++ * using the wildcard __xfrm_state_locate() above.
++ */
++static inline struct xfrm_state *
++__xfrm_state_locate_exact(struct xfrm_state *x, int use_spi, int family)
++{
++	struct xfrm_hash_state_ptrs state_ptrs;
++	struct net *net = xs_net(x);
++
++	xfrm_hash_ptrs_get(net, &state_ptrs);
++
++	if (use_spi)
++		return __xfrm_state_lookup_exact(&state_ptrs, &x->mark, &x->id.daddr,
++						 x->id.spi, x->id.proto, family);
++	else
++		return __xfrm_state_lookup_byaddr(&state_ptrs, x->mark.v & x->mark.m,
++						  &x->id.daddr,
++						  &x->props.saddr,
++						  x->id.proto, family);
++}
++
+ static void xfrm_hash_grow_check(struct net *net, int have_hash_collision)
+ {
+ 	if (have_hash_collision &&
+@@ -2229,7 +2272,7 @@ int xfrm_state_update(struct xfrm_state *x)
+ 	to_put = NULL;
+ 
+ 	spin_lock_bh(&net->xfrm.xfrm_state_lock);
+-	x1 = __xfrm_state_locate(x, use_spi, x->props.family);
++	x1 = __xfrm_state_locate_exact(x, use_spi, x->props.family);
+ 
+ 	err = -ESRCH;
+ 	if (!x1)
+@@ -2374,7 +2417,7 @@ xfrm_state_lookup(struct net *net, u32 mark, const xfrm_address_t *daddr, __be32
+ 	rcu_read_lock();
+ 	xfrm_hash_ptrs_get(net, &state_ptrs);
+ 
+-	x = __xfrm_state_lookup(&state_ptrs, mark, daddr, spi, proto, family);
++	x = __xfrm_state_lookup(&state_ptrs, mark, 0, false, daddr, spi, proto, family);
+ 	rcu_read_unlock();
+ 	return x;
+ }
+@@ -2398,6 +2441,23 @@ xfrm_state_lookup_byaddr(struct net *net, u32 mark,
+ }
+ EXPORT_SYMBOL(xfrm_state_lookup_byaddr);
+ 
++struct xfrm_state *
++xfrm_state_lookup_exact(struct net *net, const struct xfrm_mark *mark,
++			const xfrm_address_t *daddr, __be32 spi,
++			u8 proto, unsigned short family)
++{
++	struct xfrm_hash_state_ptrs state_ptrs;
++	struct xfrm_state *x;
++
++	rcu_read_lock();
++	xfrm_hash_ptrs_get(net, &state_ptrs);
++
++	x = __xfrm_state_lookup_exact(&state_ptrs, mark, daddr, spi, proto, family);
++	rcu_read_unlock();
++	return x;
++}
++EXPORT_SYMBOL(xfrm_state_lookup_exact);
++
+ struct xfrm_state *
+ xfrm_find_acq(struct net *net, const struct xfrm_mark *mark, u8 mode, u32 reqid,
+ 	      u32 if_id, u32 pcpu_num, u8 proto, const xfrm_address_t *daddr,
+diff --git a/net/xfrm/xfrm_user.c b/net/xfrm/xfrm_user.c
+index 6384795ee6b2..b56fca666b89 100644
+--- a/net/xfrm/xfrm_user.c
++++ b/net/xfrm/xfrm_user.c
+@@ -1089,11 +1089,12 @@ static struct xfrm_state *xfrm_user_state_lookup(struct net *net,
+ 	struct xfrm_state *x = NULL;
+ 	struct xfrm_mark m;
+ 	int err;
+-	u32 mark = xfrm_mark_get(attrs, &m);
++
++	xfrm_mark_get(attrs, &m);
+ 
+ 	if (xfrm_id_proto_match(p->proto, IPSEC_PROTO_ANY)) {
+ 		err = -ESRCH;
+-		x = xfrm_state_lookup(net, mark, &p->daddr, p->spi, p->proto, p->family);
++		x = xfrm_state_lookup_exact(net, &m, &p->daddr, p->spi, p->proto, p->family);
+ 	} else {
+ 		xfrm_address_t *saddr = NULL;
+ 
+@@ -1104,7 +1105,7 @@ static struct xfrm_state *xfrm_user_state_lookup(struct net *net,
+ 		}
+ 
+ 		err = -ESRCH;
+-		x = xfrm_state_lookup_byaddr(net, mark,
++		x = xfrm_state_lookup_byaddr(net, m.v & m.m,
+ 					     &p->daddr, saddr,
+ 					     p->proto, p->family);
+ 	}
+@@ -2788,14 +2789,13 @@ static int xfrm_get_ae(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	struct sk_buff *r_skb;
+ 	int err;
+ 	struct km_event c;
+-	u32 mark;
+ 	struct xfrm_mark m;
+ 	struct xfrm_aevent_id *p = nlmsg_data(nlh);
+ 	struct xfrm_usersa_id *id = &p->sa_id;
+ 
+-	mark = xfrm_mark_get(attrs, &m);
++	xfrm_mark_get(attrs, &m);
+ 
+-	x = xfrm_state_lookup(net, mark, &id->daddr, id->spi, id->proto, id->family);
++	x = xfrm_state_lookup_exact(net, &m, &id->daddr, id->spi, id->proto, id->family);
+ 	if (x == NULL)
+ 		return -ESRCH;
+ 
+@@ -2836,7 +2836,6 @@ static int xfrm_new_ae(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	struct xfrm_state *x;
+ 	struct km_event c;
+ 	int err = -EINVAL;
+-	u32 mark = 0;
+ 	struct xfrm_mark m;
+ 	struct xfrm_aevent_id *p = nlmsg_data(nlh);
+ 	struct nlattr *rp = attrs[XFRMA_REPLAY_VAL];
+@@ -2856,9 +2855,10 @@ static int xfrm_new_ae(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 		return err;
+ 	}
+ 
+-	mark = xfrm_mark_get(attrs, &m);
++	xfrm_mark_get(attrs, &m);
+ 
+-	x = xfrm_state_lookup(net, mark, &p->sa_id.daddr, p->sa_id.spi, p->sa_id.proto, p->sa_id.family);
++	x = xfrm_state_lookup_exact(net, &m, &p->sa_id.daddr, p->sa_id.spi,
++				    p->sa_id.proto, p->sa_id.family);
+ 	if (x == NULL)
+ 		return -ESRCH;
+ 
+@@ -2992,9 +2992,10 @@ static int xfrm_add_sa_expire(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 	struct xfrm_user_expire *ue = nlmsg_data(nlh);
+ 	struct xfrm_usersa_info *p = &ue->state;
+ 	struct xfrm_mark m;
+-	u32 mark = xfrm_mark_get(attrs, &m);
+ 
+-	x = xfrm_state_lookup(net, mark, &p->id.daddr, p->id.spi, p->id.proto, p->family);
++	xfrm_mark_get(attrs, &m);
++
++	x = xfrm_state_lookup_exact(net, &m, &p->id.daddr, p->id.spi, p->id.proto, p->family);
+ 
+ 	err = -ENOENT;
+ 	if (x == NULL)
+@@ -3361,9 +3362,9 @@ static int xfrm_do_migrate_state(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 
+ 	copy_from_user_migrate_state(&m, um);
+ 
+-	x = xfrm_state_lookup(net, m.old_mark.v & m.old_mark.m,
+-			      &um->id.daddr, um->id.spi,
+-			      um->id.proto, um->id.family);
++	x = xfrm_state_lookup_exact(net, &m.old_mark,
++				    &um->id.daddr, um->id.spi,
++				    um->id.proto, um->id.family);
+ 	if (!x) {
+ 		NL_SET_ERR_MSG(extack, "Can not find state");
+ 		return -ESRCH;
+
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.47.3
+
