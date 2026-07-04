@@ -1,181 +1,531 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF5725B099
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 19:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38B1A6829
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 21:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783192093; cv=none; b=LlUtwJzMe9xwPv/8QoVWaNUkHmY51wVKFayU7MQ8MSzf5xngiuDcKG+HdiqeM78iLecIWTwNyH4ZMFMIFwSekqd67RgOY0RpaCsnAgdZ/+tP3f+w6dNkMVvC0JdJyLqX0ghFEbScekIfqQ93Wx7t4cP1XMxB48262Istp2UTZtk=
+	t=1783199658; cv=none; b=A1gweuBJ4dBkk/P6rwr0IfsVY8JUzx7hDXM0OQnoR+J6Cc/99msDmTIpuYIPb8gi8a923jDa4dctdIWyJqYSV3XDf8meNtnOEJ6/H7O0ko2Eag49C3cxo6fq3+/la9F6eHy5WYJDWxS+hpSzpyqyMqHTc2ltIlJQUH6F1Da/AMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783192093; c=relaxed/simple;
-	bh=YNzXT3aqH9Fv7w8avj+C4EBMB5oQXh9FSLCur/rtAMk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Ql1Bb7/qkr6wTU+p3/XDu3mSz39cVq6Cf4YgMhUTSQ7Ah2rmOo9t7KpOGs3DKCHuHocWvm9D2JojYvhZh+U3jxzvIfxb4YofpgwAKwppE5BvS2S87YmnJ0RsY85XQVX8D8w0zD2ULSDuFznoahYCXjHcgfNORa5tAelsChtZXyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SRFolpZQ; arc=none smtp.client-ip=209.85.128.180
+	s=arc-20240116; t=1783199658; c=relaxed/simple;
+	bh=i5lGcJWkBxS7CJBWynnEmiQB+QzayIHGBFaFnqq+f8w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IEfJEjRhNq+E7KEUEnHcZlaE6dV1krG5rt6yPbqv9yV02haI+macinpSVfCeRHCzzsNLxnxj1biY7XyULmooK3Kf7g2Wisu0lWVe/TGKiAT1DXOo1iTd0LKIeeN9kBzZN5J6ATMiNAkSJFMyjypSCf+YX4Tko5ZaCbpDF3I8NUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=edwvnw1v; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRFolpZQ"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-8111c0c7561so16387087b3.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 12:08:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edwvnw1v"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c96c92c0980so866536a12.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 14:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783192091; x=1783796891; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gm/Rge7I0kflCRggw6lmJbxqV6a3OPZp5P4k8oCntmo=;
-        b=SRFolpZQoqwIBPxqTJkNbLRhXfv8jn8fmRsIYzTxQKruvuCMl61MK7iwggYjk1CbDi
-         B0gos9yQniqU4CSN/AqS6vI50ge+FJNuOFGJBvmkfCj+DIQ9WbHlL8+8VFBuUk+IFwx5
-         +7dutaWCgewmXen3U+wNfnBggayI9+kJPhOn/TKjHVsXV+D276pqJFwIKhD0rUmoS/Im
-         Aud18RIrunwAG7Sgc9tgevEQ/cEpsLRDCHqOkMczau8B9jQK8THnKKeK+X2VOgNx7yNB
-         Q9LvAlQRLJZnk2cU+VqkM8Hv2BbSBAk0nK4aPo/o34IyyA7ukw/u90DKN0yfBFpcdPX7
-         QbBQ==
+        d=gmail.com; s=20251104; t=1783199656; x=1783804456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wNObvvCR77mS9Inyq/bIvC7lHlQKSaAhco2QLbfN6gc=;
+        b=edwvnw1vCvpbNgkyQbOHO5FK5IESVgizO2+kQtrTMjyutfA/PAlC4QTV69+jUWtsxu
+         MHI1/k9f49fhmqwo4WlvgDFEdqfzwxa3XKcLE0Kic0NqR05nwnnlrX/CFA9y7GC91z1B
+         gv5uTBILPxaZ2H99jSHOBEXi6CyPIrUQ4dE4/1pvzFuDxyriv/YildSm2Uq+D+8n0xSE
+         BAXRVKL+2MIILifQVwpcmwQZG2cx78acBM2hDfe2SfA8TckfVs1BsYulH/WgUtcJYiUx
+         HjmTOjaPciZPxpi1/FB/zldY4PWsEZmQLlMcoMRM7T8eZEzas46CRFffubGtnTXuZbhB
+         DwTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783192091; x=1783796891;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gm/Rge7I0kflCRggw6lmJbxqV6a3OPZp5P4k8oCntmo=;
-        b=aSG3JfjZyRus3bhxQwrOO0k4SEfB7zMeCu6o7Z3507ug2gMjOomk4xao/OT0TlyiZc
-         7iQpG5YLDfMnRzq93iFfmFAGQCAoN9PASIX37JC/UhSrAikqLEg7AWzYb/rmNZ64uMyE
-         7k4iN7L6qZdC2i5BETSmjC3x+NNKhqpso0w0vwzlU/XGWH6hoskJhZyyv0QzW2G2Dcl5
-         X3Zrz7BMvBgwYP9lGZMMUH62jVzPEBa3tLd5/94RoTP41IV6RPbWjByRf9Mp54W/z68E
-         EHxNFduJ1J0TxfIQ5L94bavhiKx2hUCjodTrOtPzr/FSM++xhBqA8j/88BbnuUzZi/Ie
-         XsYA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq9Pnd4eZE/llaeC4WX5VU6kHSQCcRDGRFvKhTfP8ttmVwuB88/rXrgk2M9X4qA3MO3FMnm0egYLGzAZRNFzHg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGCoGS+pXwAn85aNrRqyj4nUtJLpyhVPaVw19BIe8J+Kjkc9iZ
-	hGnJ4UV830PF5vey+1Ok+hqwF1i3yicskgnTPEUlMfMTi9SzI9I3ZRCt
-X-Gm-Gg: AfdE7cniKOKKGXA5K+6sq01AA4b46mi4H7JaYW2lusycHnTrR2v1lb/5rLnadLrN4Zr
-	VCtpUYA///UcVQIGFVDdiGRW1gXKn8T3dEk8JQbEHQDcxph8U7tyRXBQ92UpTAT5TyZs0BEPk1K
-	MnW+gIY94ZrAqVAfQu1ZbyNCO9y3P1FhGw1eibE+rWNkGgqmz1LRgssMD40/kg8ONYGgDv7vk4B
-	+GZ3mU/sDmozSCRhp+e0lpwWSHvZJCgAYg4X3m9eXi9HBfn5cCfK0rxyHxnVzMYlmi0vvP+piCB
-	nkT4lT///NmhBXxtW0oX0sByilmSZia4+GG1Tt71F20qsFo7wskNGM6NKsuvOb3xvhD5O7DxS8p
-	i25T/v7Z33ywe/wbbjobyRR8urITC4tUrf0Hh5tECi3+eF5xs4C+skes1pqxRhdkPiFwtGCI/w/
-	I622BlgK/oNLLCLzS9Mu2DjGRoSQzto5bZfWx+a1D/7a4eqdXYzGT58tu8AJp3gpnIDg==
-X-Received: by 2002:a05:690c:2789:b0:7f5:ec53:b4ce with SMTP id 00721157ae682-81737544143mr49405597b3.16.1783192091451;
-        Sat, 04 Jul 2026 12:08:11 -0700 (PDT)
-Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81448dd0217sm37817917b3.22.2026.07.04.12.08.09
+        d=1e100.net; s=20251104; t=1783199656; x=1783804456;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wNObvvCR77mS9Inyq/bIvC7lHlQKSaAhco2QLbfN6gc=;
+        b=joVGkJThC6KuYYYSekQEK/CRmzSfhTRAUgYDn4aCc4HNjcQs/ibSNemZHYJT9QX0bq
+         2vICzIsYC6kkOpJjtZayPP2Vr9uy5Jca217d3/MZcIy75kaaFQIBSukSPy3pY8EnSiTS
+         lECtQ+ig0vY9tRjA8A9kYw6nwFVzJgqTHzKnesE6bkSanlG7XwG0S/Qb52hUXUnPo6ge
+         IQGpiN3D1K8dvAbwm1CB6+j65hZaewlbKQtUD59KI5ZGpD1L9CyCdP1QJw4xpKn5nMYZ
+         EIaoulXvOn31RKy+YKcMykVr/67Wrr+72IK12BDG4gDvMWaOQKYmWv4pfRTrn/44BHVI
+         ixGg==
+X-Forwarded-Encrypted: i=1; AFNElJ8edag7kXLeHxDWs37yS4JQn3AgDMmzCpz2S9c0CJgn2phWIVGJVGqsbM1+W3+uZtT0ZaOvHXip3pk6V+FZxoE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmX2MQJbESKpyCGaMJjO+yCWVpHe7wi7aS4N0/SQUHDzVtWQF9
+	jcWZTLRhIyX3El2qB0qCreMQJ/d+CNRRWsI+THmtt63Pp5YsZOrK9q5a
+X-Gm-Gg: AfdE7clUklbOXigaa6LKUuWUDTjq9hjZdn6OEZ2BB5BvgtZDwW/Xf7UPit9ruxVX66L
+	WITCW6Vfd8dbZCPfVmtrN4+GwZnSyLAoKTeD2vo3xgjFvrx/uaBamB+PMsRBxNEewmpcAxndci3
+	O1eot34sDmyY38ESoc0YPQFwfwcezXEXz2cGSI+VvX1bZI5eBVij4NkD5FIJPJvYEOK4P5EohM/
+	/0It6VDpsomKzobPT0+KKyHPTpzxpM+IFmy7vfplcuQnt7ujMQZVKy6uev44Da1c1bJ4j7CI58v
+	6uD+yJNr91484ouncOYYHqK0jtpb5HkFF7TTGVWvVzRQQopXoM6FBxD1+DL15izgc2fvTpSDUH5
+	1YRRHpMNxu0QjYDatMp4aH+5eaBA3Wl6DiJrm1sjH01kbej01GMhsXBTdUJhlYUF9+edU8qbb5R
+	fjXKv7a5UoiNJyOsgWan0qEqHE2N8=
+X-Received: by 2002:a05:6a21:a91:b0:3bf:a698:ce4d with SMTP id adf61e73a8af0-3c03e5ea69dmr4576055637.54.1783199655731;
+        Sat, 04 Jul 2026 14:14:15 -0700 (PDT)
+Received: from nyx.tail25a6.ts.net ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f38ee1333sm18515569eec.24.2026.07.04.14.14.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 12:08:10 -0700 (PDT)
-Date: Sat, 04 Jul 2026 15:08:09 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Anton Danilov <littlesmilingcloud@gmail.com>, 
- netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemb@google.com>, 
- "David S . Miller" <davem@davemloft.net>, 
- David Ahern <dsahern@kernel.org>, 
- Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.1f71507524703@gmail.com>
-In-Reply-To: <a196b53a2829da66c982f88e82805afc498ea13b.1782945956.git.littlesmilingcloud@gmail.com>
-References: <cover.1782945956.git.littlesmilingcloud@gmail.com>
- <a196b53a2829da66c982f88e82805afc498ea13b.1782945956.git.littlesmilingcloud@gmail.com>
-Subject: Re: [PATCH net-next v4 2/2] selftests: net: add FOU multicast
- encapsulation resubmit test
+        Sat, 04 Jul 2026 14:14:15 -0700 (PDT)
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+To: brauner@kernel.org
+Cc: david.laight.linux@gmail.com,
+	farid.m.zakaria@gmail.com,
+	jack@suse.cz,
+	jannh@google.com,
+	kees@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	mail@johnericson.me,
+	shuah@kernel.org,
+	viro@zeniv.linux.org.uk,
+	Gemini <assistant@google.com>
+Subject: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and interpreter selection
+Date: Sat,  4 Jul 2026 14:14:09 -0700
+Message-ID: <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Anton Danilov wrote:
-> Add a selftest to verify that FOU-encapsulated packets addressed to a
-> multicast destination are correctly resubmitted to the inner protocol
-> handler (GRE) via the UDP multicast delivery path.
-> 
-> The test creates two network namespaces connected by a veth pair with
-> a FOU/GRETAP tunnel using a multicast remote address (239.0.0.1).
-> Ping is sent through the tunnel and received packets are counted on
-> the receiver's tunnel interface.
-> 
-> A static neighbor entry is configured on the sender because ARP
-> replies from the receiver cannot traverse the unidirectional multicast
-> tunnel back to the sender.
-> 
-> The early demux optimization (net.ipv4.ip_early_demux) is disabled on
-> the receiver to force packets through __udp4_lib_mcast_deliver(),
-> which is the code path being tested.
-> 
-> Signed-off-by: Anton Danilov <littlesmilingcloud@gmail.com>
-> Assisted-by: Claude:claude-opus-4-6
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  .../testing/selftests/net/fou_mcast_encap.sh  | 112 ++++++++++++++++++
->  2 files changed, 113 insertions(+)
->  create mode 100755 tools/testing/selftests/net/fou_mcast_encap.sh
-> 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 708d960ae07d..7e9ae937cffa 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -39,6 +39,7 @@ TEST_PROGS := \
->  	fib_rule_tests.sh \
->  	fib_tests.sh \
->  	fin_ack_lat.sh \
-> +	fou_mcast_encap.sh \
->  	fq_band_pktlimit.sh \
->  	gre_gso.sh \
->  	gre_ipv6_lladdr.sh \
-> diff --git a/tools/testing/selftests/net/fou_mcast_encap.sh b/tools/testing/selftests/net/fou_mcast_encap.sh
-> new file mode 100755
-> index 000000000000..8db9633f4c28
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/fou_mcast_encap.sh
-> @@ -0,0 +1,112 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Test that UDP encapsulation (FOU) correctly handles packet resubmit
-> +# when packets are delivered via the multicast UDP delivery path.
-> +#
-> +# When a FOU-encapsulated packet arrives with a multicast destination IP,
-> +# __udp4_lib_mcast_deliver() must resubmit it to the inner protocol
-> +# handler (e.g., GRE) rather than consuming it. This test verifies that
-> +# by creating a FOU/GRETAP tunnel with a multicast remote address and
-> +# sending ping through it.
-> +#
-> +# The early demux optimization can mask this issue by routing packets via
-> +# the unicast path (udp_unicast_rcv_skb), so we disable it to force
-> +# packets through __udp4_lib_mcast_deliver().
-> +
-> +source lib.sh
-> +
-> +NSENDER=""
-> +NRECV=""
-> +
-> +cleanup() {
-> +	cleanup_all_ns
-> +}
-> +
-> +trap cleanup EXIT
-> +
-> +setup() {
-> +	setup_ns NSENDER NRECV
-> +
-> +	ip link add veth_s type veth peer name veth_r
-> +	ip link set veth_s netns "$NSENDER"
-> +	ip link set veth_r netns "$NRECV"
+Historically binfmt_misc has only matched binaries by magic bytes or file
+extension, and always redirects a match to a fixed interpreter recorded in
+the registration. This is insufficient when the match requires parsing the
+binary header (e.g. inspecting ELF program headers) or when the interpreter
+must be computed per-binary rather than hard-coded.
 
-Sashiko points out that names in the root namespace may collide with
-other devices. Unexpected here, but it's just as easy to immediately
-assign the new veth nodes to the netns. See for instance sctp_vrf.sh.
+Introduce a new 'B' (BPF) handler type. A pinned SOCKET_FILTER program is
+registered in place of the magic/mask, and no interpreter is recorded:
 
-> +
-> +	ip -n "$NSENDER" addr add 10.0.0.1/24 dev veth_s
+  echo ':name:B:<bpf_pinned_path>::::<flags>' \
+      > /proc/sys/fs/binfmt_misc/register
 
-More importantly, have you also tested IPv6? Can you expand the
-test with IPv6.
+When a binary is executed, binfmt_misc runs the program with the
+BINPRM_BUF_SIZE file-header buffer as context. Returning 1 selects the
+handler; returning 0 falls through to the remaining handlers.
 
-Again, sashiko points to an important issue: ip_protocol_deliver_rcu
-and ip6_protocol_deliver_rcu are not equivalent. From a quick scan it
-appears that the latter does not resubmit on negative return code.
+Unlike magic/extension handlers, a 'B' handler carries no interpreter of its
+own: the program chooses it via a new helper, bpf_binprm_set_interp(). This
+lets the program compute the interpreter path however it sees fit (for example
+relative to the binary). A 'B' handler is therefore a strict superset of the
+existing magic handlers -- any of them can be expressed as a program that
+matches on the header and sets a fixed interpreter.
+
+bpf_binprm_set_interp() is exposed to SOCKET_FILTER programs and stashes the
+chosen path on a per-CPU area that binfmt_misc reads back immediately after
+the run under migrate_disable(); only a match that set an interpreter
+allocates.
+
+Assisted-by: Gemini <assistant@google.com>
+Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+---
+
+Hey Christian,
+
+Thank you for the suggestion and discussion on the mailing list. I took a stab
+at your idea of driving binfmt_misc interpreter selection from a BPF program
+(hopefully this is what you had in mind). The other approach was also to use a
+static interpreter during registration but this current approach feels right.
+
+This prototype demonstrates binfmt_misc interpreter selection from a BPF program
+so the interpreter can be *computed* (e.g. $ORIGIN-relative) rather than recorded
+statically. It replaces my earlier "pluggable ELF interpreter loader registry" RFC.
+
+As this is a first draft, a few things you probably will have notes on.
+I tried my best but I am a novice here so I welcome your feedback.
+
+ * The prototype uses socket filter type. This seemed the easiest to wire up to
+   start. My guess is it should be a dedicated type (eg. BPF_PROG_TYPE_BINFMT).
+ * bpf_binprm_set_interp() is a "classic helper", but that list
+   is frozen in favour of kfuncs. A kfunc needs BTF and can't be called from
+   the raw-bytecode selftest I wrote.
+ * The program only gets bprm->buf today.
+   That is enough to match on the ELF header but not to compute an
+   $ORIGIN-relative path from the binary's location, which needs bprm->filename
+ * I have some selftests that exercises match + program-chosen interpreter. I don't
+   include them here yet since it seems unnecessary when discussing the idea.
+
+To demo the functionality, I thought it would be neat to see how this is a superset
+and can replace all the qemu binfmt usage [1].
+
+  $ ./hello-aarch64;
+  -bash: /etc/binfmt-demo/hello-aarch64: cannot execute binary file: Exec format error
+
+  $ bpftool prog load filter.bpf.o /sys/fs/bpf/qemu type socket
+  $ echo ':qemu-bpf:B:/sys/fs/bpf/qemu::::P' > /proc/sys/fs/binfmt_misc/register
+
+  $ ./hello-aarch64
+  AARCH64_RAN_VIA_QEMU
+
+All the per-CPU guards were recommended by AI.
+
+[1] https://gist.github.com/fzakaria/bef27d2e21b0e36ffccda1cbf417b636
+
+ fs/binfmt_misc.c         | 181 ++++++++++++++++++++++++++++++++++++---
+ include/linux/bpf.h      |   1 +
+ include/uapi/linux/bpf.h |   1 +
+ net/core/filter.c        |   8 ++
+ 4 files changed, 180 insertions(+), 11 deletions(-)
+
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index 84349fcb9..cf6698d59 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -29,6 +29,11 @@
+ #include <linux/fs.h>
+ #include <linux/uaccess.h>
+ 
++#ifdef CONFIG_BPF_SYSCALL
++#include <linux/bpf.h>
++#include <linux/filter.h>
++#endif
++
+ #include "internal.h"
+ 
+ #ifdef DEBUG
+@@ -41,12 +46,14 @@ enum {
+ 	VERBOSE_STATUS = 1 /* make it zero to save 400 bytes kernel memory */
+ };
+ 
+-enum {Enabled, Magic};
++enum {Enabled, Magic, Bpf};
+ #define MISC_FMT_PRESERVE_ARGV0 (1UL << 31)
+ #define MISC_FMT_OPEN_BINARY (1UL << 30)
+ #define MISC_FMT_CREDENTIALS (1UL << 29)
+ #define MISC_FMT_OPEN_FILE (1UL << 28)
+ 
++struct bpf_prog;
++
+ typedef struct {
+ 	struct list_head list;
+ 	unsigned long flags;		/* type, status, etc. */
+@@ -59,6 +66,9 @@ typedef struct {
+ 	struct dentry *dentry;
+ 	struct file *interp_file;
+ 	refcount_t users;		/* sync removal with load_misc_binary() */
++#ifdef CONFIG_BPF_SYSCALL
++	struct bpf_prog *bpf_prog;
++#endif
+ } Node;
+ 
+ static struct file_system_type bm_fs_type;
+@@ -78,10 +88,51 @@ static struct file_system_type bm_fs_type;
+  */
+ #define MAX_REGISTER_LENGTH 1920
+ 
++#ifdef CONFIG_BPF_SYSCALL
++struct binfmt_bpf_interp {
++	char path[PATH_MAX];
++	int len;	/* < 0 if the current program set no interpreter */
++};
++static DEFINE_PER_CPU(struct binfmt_bpf_interp, binfmt_bpf_interp);
++
++/*
++ * bpf_binprm_set_interp - let a binfmt_misc 'B' program pick the interpreter.
++ * @path: interpreter path, in BPF-accessible memory
++ * @len:  number of bytes in @path
++ *
++ * The program computes the interpreter path however it sees fit (e.g. relative
++ * to the binary). The path is stashed on a per-CPU area that binfmt_misc reads
++ * back immediately after running the program under migrate_disable(), so it
++ * cannot race with another CPU.
++ */
++BPF_CALL_2(bpf_binprm_set_interp, const char *, path, u32, len)
++{
++	struct binfmt_bpf_interp *sc = this_cpu_ptr(&binfmt_bpf_interp);
++
++	if (len == 0 || len >= PATH_MAX)
++		return -EINVAL;
++	/* @path is @len bytes of BPF memory and is not NUL-terminated. */
++	memcpy(sc->path, path, len);
++	sc->path[len] = '\0';
++	sc->len = len;
++	return 0;
++}
++
++const struct bpf_func_proto bpf_binprm_set_interp_proto = {
++	.func		= bpf_binprm_set_interp,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
++	.arg2_type	= ARG_CONST_SIZE,
++};
++#endif /* CONFIG_BPF_SYSCALL */
++
+ /**
+  * search_binfmt_handler - search for a binary handler for @bprm
+  * @misc: handle to binfmt_misc instance
+  * @bprm: binary for which we are looking for a handler
++ * @bpf_interp: receives a kmalloc'd interpreter path if a 'B' program chooses
++ *              one via bpf_binprm_set_interp(); the caller must kfree() it
+  *
+  * Search for a binary type handler for @bprm in the list of registered binary
+  * type handlers.
+@@ -89,7 +140,8 @@ static struct file_system_type bm_fs_type;
+  * Return: binary type list entry on success, NULL on failure
+  */
+ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+-				   struct linux_binprm *bprm)
++				   struct linux_binprm *bprm,
++				   char **bpf_interp)
+ {
+ 	char *p = strrchr(bprm->interp, '.');
+ 	Node *e;
+@@ -103,6 +155,37 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+ 		if (!test_bit(Enabled, &e->flags))
+ 			continue;
+ 
++		/* Do matching based on BPF if applicable. */
++		if (test_bit(Bpf, &e->flags)) {
++#ifdef CONFIG_BPF_SYSCALL
++			if (e->bpf_prog) {
++				struct binfmt_bpf_interp *sc;
++				u32 ret;
++
++				migrate_disable();
++				sc = this_cpu_ptr(&binfmt_bpf_interp);
++				sc->len = -1;
++
++				rcu_read_lock();
++				ret = bpf_prog_run(e->bpf_prog, bprm->buf);
++				rcu_read_unlock();
++
++				if (ret == 1 && sc->len > 0)
++					*bpf_interp = kmemdup_nul(sc->path,
++								  sc->len,
++								  GFP_ATOMIC);
++				migrate_enable();
++
++				pr_debug("binfmt_misc: ran BPF program for %s, ret = %u\n",
++					 bprm->filename, ret);
++
++				if (ret == 1)
++					return e;
++			}
++#endif
++			continue;
++		}
++
+ 		/* Do matching based on extension if applicable. */
+ 		if (!test_bit(Magic, &e->flags)) {
+ 			if (p && !strcmp(e->magic, p + 1))
+@@ -139,12 +222,13 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
+  * Return: binary type list entry on success, NULL on failure
+  */
+ static Node *get_binfmt_handler(struct binfmt_misc *misc,
+-				struct linux_binprm *bprm)
++				struct linux_binprm *bprm,
++				char **bpf_interp)
+ {
+ 	Node *e;
+ 
+ 	read_lock(&misc->entries_lock);
+-	e = search_binfmt_handler(misc, bprm);
++	e = search_binfmt_handler(misc, bprm, bpf_interp);
+ 	if (e)
+ 		refcount_inc(&e->users);
+ 	read_unlock(&misc->entries_lock);
+@@ -164,6 +248,10 @@ static void put_binfmt_handler(Node *e)
+ 	if (refcount_dec_and_test(&e->users)) {
+ 		if (e->flags & MISC_FMT_OPEN_FILE)
+ 			filp_close(e->interp_file, NULL);
++#ifdef CONFIG_BPF_SYSCALL
++		if (test_bit(Bpf, &e->flags) && e->bpf_prog)
++			bpf_prog_put(e->bpf_prog);
++#endif
+ 		kfree(e);
+ 	}
+ }
+@@ -206,15 +294,27 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 	struct file *interp_file = NULL;
+ 	int retval = -ENOEXEC;
+ 	struct binfmt_misc *misc;
++	char *bpf_interp __free(kfree) = NULL;
++	const char *interpreter;
+ 
+ 	misc = load_binfmt_misc();
+ 	if (!misc->enabled)
+ 		return retval;
+ 
+-	fmt = get_binfmt_handler(misc, bprm);
++	fmt = get_binfmt_handler(misc, bprm, &bpf_interp);
+ 	if (!fmt)
+ 		return retval;
+ 
++	/*
++	 * A 'B' (BPF) handler carries no interpreter of its own; the program
++	 * chooses it via bpf_binprm_set_interp(). Other handlers use the
++	 * interpreter recorded at registration.
++	 */
++	interpreter = bpf_interp ? bpf_interp : fmt->interpreter;
++	retval = -ENOEXEC;
++	if (!interpreter[0])
++		goto ret;
++
+ 	/* Need to be able to load the file after exec */
+ 	retval = -ENOENT;
+ 	if (bprm->interp_flags & BINPRM_FLAGS_PATH_INACCESSIBLE)
+@@ -238,22 +338,27 @@ static int load_misc_binary(struct linux_binprm *bprm)
+ 	bprm->argc++;
+ 
+ 	/* add the interp as argv[0] */
+-	retval = copy_string_kernel(fmt->interpreter, bprm);
++	retval = copy_string_kernel(interpreter, bprm);
+ 	if (retval < 0)
+ 		goto ret;
+ 	bprm->argc++;
+ 
+ 	/* Update interp in case binfmt_script needs it. */
+-	retval = bprm_change_interp(fmt->interpreter, bprm);
++	retval = bprm_change_interp(interpreter, bprm);
+ 	if (retval < 0)
+ 		goto ret;
+ 
+-	if (fmt->flags & MISC_FMT_OPEN_FILE) {
++	/*
++	 * The pre-opened interp_file (MISC_FMT_OPEN_FILE / 'F' flag) only
++	 * applies to the statically registered interpreter; a program-supplied
++	 * path is opened here.
++	 */
++	if ((fmt->flags & MISC_FMT_OPEN_FILE) && !bpf_interp) {
+ 		interp_file = file_clone_open(fmt->interp_file);
+ 		if (!IS_ERR(interp_file))
+ 			deny_write_access(interp_file);
+ 	} else {
+-		interp_file = open_exec(fmt->interpreter);
++		interp_file = open_exec(interpreter);
+ 	}
+ 	retval = PTR_ERR(interp_file);
+ 	if (IS_ERR(interp_file))
+@@ -404,6 +509,10 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 		pr_debug("register: type: M (magic)\n");
+ 		e->flags = (1 << Enabled) | (1 << Magic);
+ 		break;
++	case 'B':
++		pr_debug("register: type: B (bpf)\n");
++		e->flags = (1 << Enabled) | (1 << Bpf);
++		break;
+ 	default:
+ 		goto einval;
+ 	}
+@@ -492,6 +601,45 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 				}
+ 			}
+ 		}
++	} else if (test_bit(Bpf, &e->flags)) {
++		/* Handle the 'B' (BPF) format. */
++		char *s;
++
++		/* The offset field actually holds the pinned BPF program path */
++		s = strchr(p, del);
++		if (!s)
++			goto einval;
++		*s++ = '\0';
++		e->magic = p; /* Keep path in e->magic */
++		pr_debug("register: bpf program path: %s\n", e->magic);
++
++#ifdef CONFIG_BPF_SYSCALL
++		e->bpf_prog = bpf_prog_get_type_path(e->magic, BPF_PROG_TYPE_SOCKET_FILTER);
++		if (IS_ERR(e->bpf_prog)) {
++			err = PTR_ERR(e->bpf_prog);
++			e->bpf_prog = NULL;
++			kfree(e);
++			return ERR_PTR(err);
++		}
++#else
++		goto einval;
++#endif
++
++		p = s;
++
++		/* The magic field is unused, must be empty */
++		s = strchr(p, del);
++		if (!s || p != s)
++			goto einval;
++		*s++ = '\0';
++		p = s;
++
++		/* The mask field is unused, must be empty */
++		s = strchr(p, del);
++		if (!s || p != s)
++			goto einval;
++		*s++ = '\0';
++		p = s;
+ 	} else {
+ 		/* Handle the 'E' (extension) format. */
+ 
+@@ -524,8 +672,17 @@ static Node *create_entry(const char __user *buffer, size_t count)
+ 	if (!p)
+ 		goto einval;
+ 	*p++ = '\0';
+-	if (!e->interpreter[0])
++	if (test_bit(Bpf, &e->flags)) {
++		/*
++		 * A 'B' (BPF) handler carries no interpreter of its own; the
++		 * program picks it via bpf_binprm_set_interp(). Reject a
++		 * statically registered one.
++		 */
++		if (e->interpreter[0])
++			goto einval;
++	} else if (!e->interpreter[0]) {
+ 		goto einval;
++	}
+ 	pr_debug("register: interpreter: {%s}\n", e->interpreter);
+ 
+ 	/* Parse the 'flags' field. */
+@@ -602,7 +759,9 @@ static void entry_status(Node *e, char *page)
+ 		*dp++ = 'F';
+ 	*dp++ = '\n';
+ 
+-	if (!test_bit(Magic, &e->flags)) {
++	if (test_bit(Bpf, &e->flags)) {
++		sprintf(dp, "bpf %s\n", e->magic);
++	} else if (!test_bit(Magic, &e->flags)) {
+ 		sprintf(dp, "extension .%s\n", e->magic);
+ 	} else {
+ 		dp += sprintf(dp, "offset %i\nmagic ", e->offset);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528..3aef44b69 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3874,6 +3874,7 @@ extern const struct bpf_func_proto bpf_ktime_get_ns_proto;
+ extern const struct bpf_func_proto bpf_ktime_get_boot_ns_proto;
+ extern const struct bpf_func_proto bpf_ktime_get_tai_ns_proto;
+ extern const struct bpf_func_proto bpf_get_current_pid_tgid_proto;
++extern const struct bpf_func_proto bpf_binprm_set_interp_proto;
+ extern const struct bpf_func_proto bpf_get_current_uid_gid_proto;
+ extern const struct bpf_func_proto bpf_get_current_comm_proto;
+ extern const struct bpf_func_proto bpf_get_stackid_proto;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 89b36de5f..dce155c5b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -6142,6 +6142,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(binprm_set_interp, 212, ##ctx)		\
+ 	/* This helper list is effectively frozen. If you are trying to	\
+ 	 * add a new helper, you should add a kfunc instead which has	\
+ 	 * less stability guarantees. See Documentation/bpf/kfuncs.rst	\
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 2e96b4b84..187692a4a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8397,6 +8397,14 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_socket_uid_proto;
+ 	case BPF_FUNC_perf_event_output:
+ 		return &bpf_skb_event_output_proto;
++#if IS_BUILTIN(CONFIG_BINFMT_MISC)
++	case BPF_FUNC_binprm_set_interp:
++		/*
++		 * binfmt_misc reuses SOCKET_FILTER programs to select an
++		 * interpreter; expose the helper that lets them set it.
++		 */
++		return &bpf_binprm_set_interp_proto;
++#endif
+ 	default:
+ 		return bpf_sk_base_func_proto(func_id, prog);
+ 	}
+-- 
+2.51.2
+
