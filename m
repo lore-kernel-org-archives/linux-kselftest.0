@@ -1,148 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BEE27B35F;
-	Fri,  3 Jul 2026 21:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38926150997;
+	Sat,  4 Jul 2026 01:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783114478; cv=none; b=Oq2W3VxXj9Dd3MUhDGi3GxfuoO6ZrWLCmGhV5MBakw/DH5Au5RjBpFuZzrr6EdoAByxDTt2+ezb3GG+Wd+hLDTkw+YJSAsUin+7P3Iz2/xRbE8jlit08NcWmgku9Eyc9qFtc+fuNodBwxNfTZ3uXLYHvQmajbCrpwdF760dtVnQ=
+	t=1783130355; cv=none; b=qny7DuvXiwdTGTj36bbaXRdduWKWBqtq7TcVDLr7qQwjaA6IMzwkTg8zHfxR19a52F/ILhJJ7EJ/TtXdZgzotADp4kAEUQ3NROBUqqiXUTGrIDsIJIpdwOeBCYgM3IsedXFTcgjxTnsX1iUSQ8zEg2Xvo/+W6YJ7vXI7q5RT1rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783114478; c=relaxed/simple;
-	bh=x0bvJLKJaAc6rYVnc8di40rWewd25QyVRfeGTu6MwZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FWmU0mOF5enKm45oT5KQbcsDaa7CIgKshYS5wm76e21+VtvZTtRSEm5ojB20m0HpT+D+YFRRgmIkpo8oDHnqPe68pj8tW2jNPqmYUO8ewTvfBIP2WIlLQVt7w/eWU0WuyguO4Qt4S101RntwUy5SS0q8prJ6FEDmjbNs88m80XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZynY/Rx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783130355; c=relaxed/simple;
+	bh=/2mJWVfJjfkfle0EVwSRjRz/Tdc1zDZfT9UWeRyszhw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j/iS0jOBrRE4TWinQeY9H2dYvYwPI7lDbWIS4Phn/tKUjAfX8B3W0b2YfvGi4lZ2ddYfYTYYeNUmao5DUlJreB0HIqffLsWSp7MTbAVdXhK5ZwyYHKRspz++w0oowsxvJxoi1Rg0nhpaEEIabPfFIqjIT8F9Wqcuz2Dxo7e36IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=jOLkkEqz; arc=none smtp.client-ip=115.124.30.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZynY/Rx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631141F000E9;
-	Fri,  3 Jul 2026 21:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783114477;
-	bh=0HjjJtel6gpE7V/w3HMWnHHVGlGEUs52zAzp1l+F7aU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JZynY/RxCUwX90FxlGkLCzwOgWllCnzx9VCS7KJjVIbDn7IXe2uT2ea+DrzvdkC10
-	 KLuvk1POTRdkiLEuxqMI37FnMU5S1Ljduy2u/YP4sVFDB+QMj75/XisTY4W4+grzYe
-	 xj8QwBuXj7lT/BX/Po8jhoUctHSBnZkYMpmDktPGjLwOeOcfiUuIzGfToadJAKzy/t
-	 zCiJsuwUPnPGVu+Z03uYwMEUF8GRcuMsjm31XopoAP/lWS4Ckibqo8mXz6Iyl4/EoX
-	 nSyb5IOrdLjXF4tPk7WADGlaHLjmXkpR6g9J+GliKpvIsT1grF1u03Y6GY5shz/C9w
-	 cQubIvu8kAmhw==
-Message-ID: <2d9312a5-0847-41db-bbea-54e66869d91e@kernel.org>
-Date: Fri, 3 Jul 2026 15:34:34 -0600
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="jOLkkEqz"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1783130343; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=ODlSjJH8+4SRzCaSNrFMVGFA6u+Rs1hlD97twS6n6t8=;
+	b=jOLkkEqzlo+SeD/rRsm9PQ/VOFIqLVL3MIFC1jYLXukbBr5m+wXlsKZv1THh+CcgHDAxyxE+slkyS5szod7j98oWg5Nsor20ia881DM/ty7dC+dRSWgf0yk1v6Kno5aiB4dblD6O79mNU+M+RFIVLAqANzRrTAknpIuAUGkFeeo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X6KR50J_1783130342;
+Received: from localhost(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X6KR50J_1783130342 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Sat, 04 Jul 2026 09:59:03 +0800
+Date: Sat, 4 Jul 2026 09:59:02 +0800
+From: Zelin Deng <zelin.deng@linux.alibaba.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+	live-patching@vger.kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kbuild: unset sub_make_done before calling kselftest
+ build system
+Message-ID: <akho5uXVYWGOI5Y2@tdx.gnr>
+References: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+ <akdx6xWTuv5Ga0YY@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-Content-Language: en-US
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, john.fastabend@gmail.com, sdf@fomichev.me,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, hawk@kernel.org,
- yatsenko@meta.com, leon.hwang@linux.dev, kpsingh@kernel.org,
- a.s.protopopov@gmail.com, ameryhung@gmail.com, rongtao@cestc.cn,
- eyal.birger@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260624030530.3342884-1-avinash.duduskar@gmail.com>
- <20260624030530.3342884-2-avinash.duduskar@gmail.com>
- <d820adf6-4a33-45e9-9cfa-17f11a37c9e8@kernel.org> <87se65bd04.fsf@toke.dk>
- <2ffa32dd-5c88-488a-aa23-deef13465eb9@kernel.org> <87echobb5h.fsf@toke.dk>
- <cf25f667-1095-4f84-98ff-bf4662d3faa8@kernel.org> <874iik2ew4.fsf@toke.dk>
- <916191fc-2e10-4449-b82b-c086d90283ae@kernel.org> <87y0fv0y79.fsf@toke.dk>
- <9d14ff4b-eadd-4ae2-ab68-5927d4f19eeb@kernel.org> <87ik6x1m9n.fsf@toke.dk>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <87ik6x1m9n.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <akdx6xWTuv5Ga0YY@pathway.suse.cz>
 
-On 7/2/26 8:47 AM, Toke Høiland-Jørgensen wrote:
-> David Ahern <dsahern@kernel.org> writes:
+On Fri, Jul 03, 2026 at 10:25:15AM +0200, Petr Mladek wrote:
+> On Fri 2026-07-03 08:04:08, Thomas Weißschuh wrote:
+> > The kselftest build system may recourse back into kbuild when building
+> > test modules. In that case kbuild needs to parse the new flags passed
+> > from the command line, instead of using the ones inherited from the
+> > kbuild invocation.
+> > 
+> > Force that command line reevaluation.
+> > 
+> > The same was done for scripts/install.sh in commit 14ccc638b02f9ec
+> > ("kbuild: cancel sub_make_done for the install target to fix DKMS")
+> >
+> > Reported-by: Zelin Deng <zelin.deng@linux.alibaba.com>
+> > Closes: https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
 > 
->> On 7/1/26 5:02 AM, Toke Høiland-Jørgensen wrote:
->>> David Ahern <dsahern@kernel.org> writes:
->>>> Seems to me the fib_lookup for xdp needs to return the bottom device,
->>>> not the vlan device, for forwarding to work. That's why I added the
->>>> fields to the struct. That allows the program to push the vlan header if
->>>> required. My preference (dream?) was that Tx path had support to tell
->>>> the redirect the vlan and h/w added it on send.
->>>
->>> Sure, returning the bottom device index with the VLAN tag makes sense,
->>> and that's basically what this series does (but bails out on stacked
->>> VLANs). However, that's not what the helper does today, which is why the
->>> flag is there, to opt-in to the new behaviour. I don't think we can just
->>> change the ifindex without breaking existing applications (as noted
->>> up-thread).
->>
->> I do not see it as breaking existing programs which is why I chimed in
->> on the thread.
->>
->>>
->>>> But really, once stacked devices come into play, I just wanted to make
->>>> sure thought is given to different use cases. As you know the lookup
->>>> struct if hard bound to 64B and it is trying to cover a lot of use cases.
->>>
->>> Agreed, I don't think we can handle stacked devices in this helper. But
->>> we could split it out into a new one. Something like:
->>>
->>> struct lower_device_info {
->>> 	enum device_type type;
->>> 	struct {
->>> 		__be16	h_vlan_proto;
->>> 		__be16	h_vlan_TCI;
->>> 	} vlan;
->>>         /* add other types here */
->>> };
->>>
->>> int xdp_get_lower_device(int ifindex, struct lower_device_info *info);
->>>
->>> called like:
->>>
->>> int xdp_program(struct xdp_md *ctx)
->>> {
->>>         struct lower_device_info dev_info = {};
->>> 	int ifindex, ret;
->>>
->>>         ifindex = find_destination(ctx); /* does fib lookup, or something else */
->>>
->>>         while ((ret = xdp_get_lower_device_info(ifindex, &dev_info)) > 0) {
->>>         	if (dev_info.type == VLAN) {
->>>                       	push_vlan_tag(ctx, &dev_info.vlan);
->>>                         ifindex = ret;
->>>                 } else {
->>>                 	return XDP_PASS; /* we only handle VLAN devices */
->>>                 }
->>>         }
->>>
->>>         return bpf_redirect(ifindex, 0);
->>> }
->>>
->>>
->>> With a helper like this, we obviously don't strictly speaking need to
->>> change the fib lookup helper at all. However, for the single-tagged VLAN
->>> case, I think supporting it directly in the fib lookup could still have
->>> value, as an optimisation: it saves an extra call for resolving the
->>> ifindex, and the fields are already there. So I think my preference
->>> would be to merge this series as-is, and then follow up with a new kfunc
->>> to handle the stacked case. But we could also just drop this series and
->>> go straight to the new kfunc.
->>>
->>> WDYT?
->>
->> no preference. I only chimed in because of the added flag to the uapi
->> which I do not see as needed. If the consensus is that it is in fact
->> needed, all good then.
+> It is great that you added references to the related commit and
+> the original thread.
 > 
-> Alright, cool - care to provide an ACK, then? :)
+> > Fixes: c9bb03ac2c66 ("kbuild: reduce output spam when building out of tree")
+> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 > 
+> I believe that this is reasonable solution:
+> 
+> Acked-by: Petr Mladek <pmladek@suse.com>
+> 
+> Zelin, could you please provide your Tested-by, please?
 
+Sorry for late response, I just started a vacation.
+Sure I had verified, and
+Tested-by: Zelin Deng <zelin.deng@linux.alibaba.com>
 
-Acked-by: David Ahern <dsahern@kernel.org>
-
-
+> 
+> Best Regards,
+> Petr
+> 
+> PS: I could take this via livepatching tree. But feel free to take it
+>     via kbuild tree. I am going to wait few days until the discussion
+>     settles down.
