@@ -1,135 +1,157 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274622F8EA4;
-	Sat,  4 Jul 2026 08:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277CB348445
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783153706; cv=none; b=KFr9It3+t3VVwZHDwLzJ0g8yQFe0fExWBo76omH8iio3p3UCRgU3wFNhvSr81JcV1W2/AObKUN8uxlh3Blo9Jc2nOG+yjsLQL8Jlnqy50c2Cxb7wIK0rygR2keocKiWqC0pO9m+epxnAiXm0KjY+GMPRWtat95DnBGfbD6J5P4Q=
+	t=1783156933; cv=none; b=OA/T/vyRU7cQTPvmXsMvho/2zpGaQkbfjGRy0a02J4SYTvn7SEW69BSdg1Aif0pNDsSWyISelj2r2xgin4qcEsKVFmktYQncfiIvihLAeuJD36whvr9CwWRGvB6Kyadfp4D+EIiF0CLqUzP5HjlB0nz5DKc4/Zd/FhiC1h1zTMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783153706; c=relaxed/simple;
-	bh=kiOjEEIye7RStbdfnVGOpKI3c/OoGSoOQfjCsPn13qg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eX5HcFrCjoo1nzUMrZN5kre6CjqtsvH0MWMmv8sc6l8Sl5g+rikkkmKCEYRPqXNvw2hwXHYakSRTnBXixBSNCjrYdzUJvygusuvnyd7iVo9sb64EPTj4lugEnL0EXG13LF0xrhOyXsHRmTqD4PVqDxI5i0SmR5PVUXuyH3nPgT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 51C6F1EA5F5; Sat,  4 Jul 2026 16:28:17 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 1B2A61E90AB;
-	Sat,  4 Jul 2026 16:28:15 +0800 (AWST)
-Message-ID: <3378cb25-a409-4834-8edb-3274270844c5@davidgow.net>
-Date: Sat, 4 Jul 2026 16:28:12 +0800
+	s=arc-20240116; t=1783156933; c=relaxed/simple;
+	bh=dllSngM0zvxO1v5ssnhzMkLAGt8xboxcd17Ii9VCYBA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LNVmo+kP9B/o56xVeBNfYBA7+YSSj5G7b2kBT/vH4f5c9wKpi59iEHIKBLjmjzrAc5goEJafROxI1ENAc9OTHWtcEo1PqkTsNpjq0rzhL7pb50fPyBV0T0ZQmOuPJQ8h2FzGze8ItdQuF4ChhR5pJ39gvDcFLHs3AC0gfGfpduM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oZoHUO1v; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oZoHUO1v"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-381891a9525so1082218a91.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 02:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783156931; x=1783761731; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UzWJONpzkCdirFiS8VKHmgg9vJNeKiCmuT7IeyhNbw8=;
+        b=oZoHUO1vyfgJsHrlj7jXnac8Y7jFX6bNCl/ftdu8IISRsqEME/uJE0/A83H8yVsc7t
+         WHgiurXdOrn5zlM1oRmm50BegFEyQ30S9GgqWiqVNfBlZCJQTJa5VQNo69nm+H7NfZYu
+         YV7LX4d7GySYMkDpu6jqNh/99w9z/nnf8U+XYOA82KAuEcRIyC8k9f73l1anTQNO2sqF
+         2G4pKU0w4aGPSLilKQcC4Wye+w0Jr/D0Y3XqqEHJMcBtSJ0SbP+sfhluMMeIHDF/3K0D
+         020XnE++zeBtNcH7tXs/3NllP9rf6Lf27nCIx4Fqm3mSJwZPSBrVQGerPUYMMvwHMHhN
+         8fpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783156931; x=1783761731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UzWJONpzkCdirFiS8VKHmgg9vJNeKiCmuT7IeyhNbw8=;
+        b=OElXbb3mWenI+cGbjy5HDin+cvNNrOhR0x1GZ5IykzMtvQ3hSb2lZRg3hZC/YVFBJD
+         jPwS9NnLXIEcc8nQw6pCsx9kF6uyM47hgEIulsfPaXGrjIJm1vRcDzDA1wVM8Gfg5ctj
+         9C3kLQxmBBNYBVxnkg6OhGixeeAFIaFwgKDzuSGTXggRu4GgidGTN3JtxlwvuvjpFuEI
+         0wliaGRt84BCfzuqi9fo5CP1/czrUxVD1L8b7EjF8xOicbQZlNQ4svAlhndaup7OQJRZ
+         MCP464dH0n8W/j+30mRahgG/gK5U+mRxUSvIk3zp/VnKK569J5q23cFhvMEYVJfIXNkF
+         NeUA==
+X-Forwarded-Encrypted: i=1; AHgh+RoE1RkYZR9oYjRh3xo0TNIL6DVpQznFqWENbBiu+ccPo42HlSxLMhwQJqr2h224h+bnupd+V3rrZSmuUlq+mIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/+euFGuIGe8Pxk2qYZpWhAG6V2VqnlL31xXiO/lIf5Kl/6btk
+	TR8V9+PJlAlfExdv0d0lBZzE5BcCkIQids17jkWcBZzfQYS6/LaDr0R7
+X-Gm-Gg: AfdE7cmRFnT9UDFBgi6j2jBiaSc1C+TbkbdzHoh/dz78bnXavMUjPaFcSo/KL21H01C
+	PBObYL0ekwqnlu9H7KiwEKiMumkYyz+/NRtw8Bi+91STIiKo9guNOKg8bU/bi9Gg8Gmoj5z8hs2
+	63snWjY3rPVoRN9DTaDCtX0+xQnxE/Win/hWRHspWJbgvwx+Cc6i2u+h/ywNNzq5TL+fmbURmqz
+	OcdBc9vQiKNKCqidfU1NFMP0qIKxWqS4R9/ox21UwPJy3BjpaoF62OTn2qBEJBf105vcyQ5DD1L
+	npqpwJVMYJ+Jsd7gNaCq0DV7camVLz/xJ5fDidc7h1N3KOKuUbR2lsPUi7mbU3lcVL+4km5IREc
+	d38OeWE811R0xWMHZ1HXGWFHtjNUUdbakNZe7LfFwjD/Qbm6cbc7zw5Z1ZIrimcBrc4PsLpKYXb
+	JmIV6KAXo3/07WzAPvHTepMIBzRCb+2TG6uI+YOSRZ/ggaF+Sg7hneRsNboqzekKuCXvcWmX0=
+X-Received: by 2002:a17:90a:e703:b0:37f:9ce1:736b with SMTP id 98e67ed59e1d1-3829f9ea9dcmr2672536a91.33.1783156931264;
+        Sat, 04 Jul 2026 02:22:11 -0700 (PDT)
+Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bc27ae7sm28006464eec.26.2026.07.04.02.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jul 2026 02:22:10 -0700 (PDT)
+From: Avinash Duduskar <avinash.duduskar@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	hawk@kernel.org,
+	yatsenko@meta.com,
+	leon.hwang@linux.dev,
+	kpsingh@kernel.org,
+	a.s.protopopov@gmail.com,
+	ameryhung@gmail.com,
+	rongtao@cestc.cn,
+	eyal.birger@gmail.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	toke@redhat.com,
+	dsahern@kernel.org
+Subject: [PATCH bpf-next v6 0/3] bpf: bidirectional VLAN support for bpf_fib_lookup()
+Date: Sat,  4 Jul 2026 14:51:56 +0530
+Message-ID: <20260704092159.1256823-1-avinash.duduskar@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: string-stream: Replace strlcat() with strscpy()
- and seq_buf
-To: Ian Bridges <icb@fastmail.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <akenPvVk1xr_-480@dev>
-Content-Language: fr
-From: David Gow <david@davidgow.net>
-In-Reply-To: <akenPvVk1xr_-480@dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 03/07/2026 à 8:12 PM, Ian Bridges a écrit :
-> In preparation for removing the strlcat() API[1], replace its uses in
-> string-stream.
-> 
-> string_stream_vadd() appends at most a single newline into space that
-> was explicitly reserved when the fragment was sized, so a bounded copy
-> at the end of the string is enough. The return value of strscpy()
-> keeps the length accounting unchanged. string_stream_get_string()
-> concatenates a variable number of fragments into a buffer sized to
-> hold them all, which is what seq_buf is for.
-> 
-> Link: https://github.com/KSPP/linux/issues/370 [1]
-> Signed-off-by: Ian Bridges <icb@fastmail.org>
-> ---
-> Truncation semantics differ between the two APIs. On overflow,
-> strlcat() keeps whatever prefix of the fragment fits, while
-> seq_buf_puts() drops any fragment that does not fit whole. Neither
-> path is reachable here. string_stream_get_string() sizes the buffer
-> to hold all fragments exactly. The newline lands in a byte that
-> string_stream_vadd() reserved when it sized the fragment.
-> 
-> The patch was tested as follows:
->  - The string-stream KUnit suite passes all 12 tests before and after
->    the change. The full lib/kunit KUnit config (95 tests) also shows
->    identical results before and after.
->  - An x86_64 build of lib/kunit/string-stream.o at W=1 produces no
->    warnings.
->  - A userspace comparison of the old and new construction ran
->    with different fragment lengths for the newline append and with
->    randomized fragment lists for the concatenation loop. All outputs
->    were identical.
-> 
+This series adds VLAN awareness to bpf_fib_lookup() in both directions.
+BPF_FIB_LOOKUP_VLAN resolves a VLAN egress to its underlying real device
+plus the VLAN tag (XDP programs need this because VLAN devices have no
+XDP xmit), and BPF_FIB_LOOKUP_VLAN_INPUT runs the lookup as if a tagged
+frame had arrived on the matching VLAN subinterface, for iif policy
+routing and VRF table selection.
+
+BPF_FIB_LOOKUP_VLAN opts in to replacing params->ifindex, whose value
+existing programs consume since d1c362e1dd68 ("bpf: Always return
+target ifindex in bpf_fib_lookup"); without it the output is unchanged.
+
+An egress that does not reduce to a real device plus one tag (a QinQ
+stack, or a parent in another network namespace) returns
+BPF_FIB_LKUP_RET_VLAN_FAILURE with params->ifindex left at the input;
+re-issue without the flag for the VLAN device's own ifindex. A VLAN on
+a bond reduces to the bond, which picks its egress slave at xmit.
+
+The new return code is appended after BPF_FIB_LKUP_RET_NO_SRC_ADDR
+(nothing renumbered, tools/ mirror updated) and is returned only when
+the flag is set, so no existing caller can observe it.
+
+Changes v5 -> v6:
+
+- Patch 1 (BPF_FIB_LOOKUP_VLAN: resolve a VLAN egress to its real
+  device plus the tag): no code change.
+- Patch 2 (BPF_FIB_LOOKUP_VLAN_INPUT: run the lookup as if the tagged
+  frame arrived on the matching VLAN subinterface): no code change.
+- Patch 3 (selftests for both flags, tc and XDP paths): comments
+  restyled; dead skb.ifindex write removed.
+
+v5: https://lore.kernel.org/all/20260624030530.3342884-1-avinash.duduskar@gmail.com/
+v4: https://lore.kernel.org/all/20260623025147.1001664-1-avinash.duduskar@gmail.com/
+v3: https://lore.kernel.org/all/20260617224729.1428662-1-avinash.duduskar@gmail.com/
+v2: https://lore.kernel.org/all/20260616223426.3568080-1-avinash.duduskar@gmail.com/
+v1: https://lore.kernel.org/all/20260609172052.81613-1-avinash.duduskar@gmail.com/
+
+Avinash Duduskar (3):
+  bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
+  bpf: Add BPF_FIB_LOOKUP_VLAN_INPUT flag to bpf_fib_lookup() helper
+  selftests/bpf: Add bpf_fib_lookup() VLAN flag tests
+
+ include/uapi/linux/bpf.h                      |  50 +-
+ net/core/filter.c                             |  97 ++-
+ tools/include/uapi/linux/bpf.h                |  50 +-
+ .../selftests/bpf/prog_tests/fib_lookup.c     | 712 +++++++++++++++++-
+ .../testing/selftests/bpf/progs/fib_lookup.c  |  36 +
+ 5 files changed, 931 insertions(+), 14 deletions(-)
 
 
-Thanks very much (and thanks for testing it so thoroughly!)
-
-As much as I find the need for all of the pointer/length arithmetic with
-strscpy here a little less clear than strlcat, it's definitely not worth
-the extra loop over the string, so I'm happy with the change.
-
-Reviewed-by: David Gow <david@davidgow.net>
-
-Cheers,
--- David
-
->  lib/kunit/string-stream.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index 0d8f1b30559b..51ba40ebf19f 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -9,6 +9,7 @@
->  #include <kunit/static_stub.h>
->  #include <kunit/test.h>
->  #include <linux/list.h>
-> +#include <linux/seq_buf.h>
->  #include <linux/slab.h>
->  
->  #include "string-stream.h"
-> @@ -74,7 +75,8 @@ int string_stream_vadd(struct string_stream *stream,
->  
->  		/* Append newline if necessary. */
->  		if (frag_container->fragment[result_len - 1] != '\n')
-> -			result_len = strlcat(frag_container->fragment, "\n", buf_len);
-> +			result_len += strscpy(frag_container->fragment + result_len,
-> +					      "\n", buf_len - result_len);
->  	} else {
->  		result_len = vsnprintf(frag_container->fragment, buf_len, fmt, args);
->  	}
-> @@ -118,15 +120,18 @@ char *string_stream_get_string(struct string_stream *stream)
->  {
->  	struct string_stream_fragment *frag_container;
->  	size_t buf_len = stream->length + 1; /* +1 for null byte. */
-> +	struct seq_buf sb;
->  	char *buf;
->  
->  	buf = kzalloc(buf_len, stream->gfp);
->  	if (!buf)
->  		return NULL;
->  
-> +	seq_buf_init(&sb, buf, buf_len);
-> +
->  	spin_lock(&stream->lock);
->  	list_for_each_entry(frag_container, &stream->fragments, node)
-> -		strlcat(buf, frag_container->fragment, buf_len);
-> +		seq_buf_puts(&sb, frag_container->fragment);
->  	spin_unlock(&stream->lock);
->  
->  	return buf;
+base-commit: a975094bf98ca97be9146f9d3b5681a6f9cf5ce3
+-- 
+2.54.0
 
