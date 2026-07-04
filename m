@@ -1,64 +1,64 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7101C283FE6
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 23:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5434133F59E
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 23:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783208830; cv=none; b=pxXLa1z9YdyYE07/5FzY81rvx0WGSg9QOPndsaemnWBGcH6xRjyzeqZubcXAwJQD0/bgra63fEKeIl7ZypkKBagJ97tBs5ZfmuTPxQxnO8BfH/C9lb+YerjD7jsR0ZpEyO+XC/1/hgLlwxNJ/MEohjf/FAJi6MlpEWYPBHPi684=
+	t=1783208831; cv=none; b=HL3MlcNPwQRyIgqMJi5E1DFR7b6ee/z4AqVNfiTFx/ydvPyjCjILHk0zXxLUlCsMxfvnsmLWtlU3pWS+hspr6Xy2BJYsCnLFzPUNXH3AWP3gHDvuNQSqODde0sxfsJaizTY0HGZdc1R7G75h3ywXOFwty5rg+n8AJQxxcbi6aA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783208830; c=relaxed/simple;
-	bh=WmdVxG1qjyumTLg0dAYkqMTScBrx63gA3nVyRq5XgG4=;
+	s=arc-20240116; t=1783208831; c=relaxed/simple;
+	bh=rrYma4sdY/EKOaCz+0ZnCAGtPRG4kmPijBQ1M/kgDuU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tpLHwuDbd91n+Mfkyvw/YOPcNT7PyyVOAiMIQWwkbzBIlhuVQ4zPuIJZIJk7Et6CiECNcYtimfo5x5hCkqsYTl5E9R9qD4mwtWkLHgVudzd/RoS6LWqLngt6YFQ8bgABMBT526SKyf97b/DlqIubUPCY/yXNWy9m7xT5k/Y/tiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLPwZYb4; arc=none smtp.client-ip=209.85.221.46
+	 MIME-Version; b=NXgUJfHkXKvCVUysSPYJvW8XC4vjjWeKXTvfPpA/7KvW/Djzix6CMxC9PyIV7CiLDwzl4Qg73rfCQLFtWaYCIk8sHBUbQ5i1eafkLkrch//p7slTHuIYpX6vBh0Gi9m/+HbjfO1sLCBXaYDjMJOx7AnrtLO7gjGQJMygW4gXmP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJnaY0hg; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLPwZYb4"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4706f016316so200533f8f.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 16:47:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJnaY0hg"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493bb481d51so539265e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 16:47:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783208827; x=1783813627; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783208828; x=1783813628; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=u2AK/8mBVRm/uASU3oq6CXiRGB/9zBaQ2taBmIKBqgA=;
-        b=XLPwZYb41pfPaC0ovv/karFQTLFAp2SmbTk8rr5dI8DrZp72Rg/iXc0JEPsGyi1dtr
-         /VJeETSB+GHfAZ3+htxi+kX9npUCJJACKmUChGbYhocbGsqxmUpYbA1BPKs6knjw63G/
-         LQ/VDJAf0sj2dT5zfiW3llo1MngL6Dg85Y0BH+YJhdtEYxrlXvb9wg0FOWQZ645fXJdC
-         MVV4g0vCja8KwRecPY4O168utBPrlqC7x05p/iVzOHQ1hJ6BIARlnHWfy97v8EhIQ90r
-         e3IVpz2R+1bLmQ4gLl0kTbS1I7BPjNDsgV9FNS3V+LNqRcxteTwIIykhz8MK1POwCg9d
-         nfMA==
+        bh=KR6G98ejd7YQBOCRwJ4kmyrzqgrbuG5J4PbK3v86NWM=;
+        b=KJnaY0hgCwYkV92FzSzL1vcuhYcLaMXgO6gA6pL3LyXqU+nVyePHBNrmXYyaWM8DOX
+         xlINOJ4pnfCYOTFJO4pQ+pfo4Mr/mFy8nbModv4Y7icaoFVXS/SNQ32IT2vanRCteHj+
+         vSbKzEXuvgd2DrA1tV24gcAxyI6Y7v70OQ50wwtocyLL4+2/4xlqpKsXdnqsSBDNMHS4
+         4wWAIreUJoWnN8MiQR74Mmhyo9duculqDyJhLuCzAVBq313uq857FKy4+sVBhQk5bUjL
+         WWfQdjf8AdFw6Gs/Olp326Z6zGbMJUA4whB8/Qvk2neEC8kUlCxfPnUvPqeobJnZmjM2
+         kwEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783208827; x=1783813627;
+        d=1e100.net; s=20251104; t=1783208828; x=1783813628;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=u2AK/8mBVRm/uASU3oq6CXiRGB/9zBaQ2taBmIKBqgA=;
-        b=I1fYGw0OW+xt/l0OenxtiOT6zXxdhDbgNysQPvAsPVGCEzhnacwFNZViB5fx4/qPGy
-         vMiZR4sp8ARJ0Hz7Mtk5OyIZLBxqpcGtKFbOeWp5mjnyNCQ2hkIFpqJA8HDmepKAO9go
-         /py3V4c7+omi2KB5pt5ECYNFPdz6Cp6ACIbsgK+8orQIDAJpFXpusty6tl8Gi2IawW1h
-         svrWQJqTAK0+0Px/C27RjMcryxJLIrvO4K3OMkBGzxNyR/SW3T02e+V8ECrEXqGNXKVz
-         EhNj7o9UmP+Udlo6a+I3jsjeEnf6vuo3Hd/yYYWXWAGq3ZFZ4wnMbP7Otlhm+nBjPuRL
-         mHog==
-X-Forwarded-Encrypted: i=1; AFNElJ8U8JreNRUd1PxUdfLGcGTEIl5cLNrfuPHFAZUK3gxU9JhZiKjQClEXb+nfba1fOsZQtPB7n1cTug9BhZfNKSA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy88q8djGDKm8BxiDNXbJ4U5ul52ZiGlxMDW53eSO5hv1fqlZKx
-	VYv6+sna1YNoW5FJ8JgERSJzgx4oT+CcuonB4MSFDKHYYe51or+gnygX
-X-Gm-Gg: AfdE7cl9Yan3MOPI7eO5FjFTlEAbdHRf9aDuaXUEd3QlGmPO/zdVQnKIBoUqFf4rbjx
-	jt/N/eThxI9P6+f3XmcSky15Di9XAoCKMJcgsAEsbWhEPPtzPV8/cC2pAXo2y5gHcZWA4CI87uP
-	xy2UvYIDV6xBG6fK9kSBTmUxV2BzJ2DuZEmau+sY3kasb7ZOa080+pJR5sIYncTpIM9HgThIn1F
-	YBnQ46Io4NsNb8Jsb6WTdKpCaaIMRFxJ3kMg0L//3eDbpkxjTmJBQ2B6jG96mXtLtyJDZckQ0ih
-	DK4b7BxTRzP4Fr31jD8HZftsi5M4wxwBclUa9/Mw0GglbzYoxW278WdA37cDAT+IYawduVE1sh1
-	xBPTxyK71EJS4IjT+muQVJzWiDiOwUW59xGFcmLJb8o4oIow9rITh5N7LGEG3HtLfR6yUac94/Z
-	+WWYjqejM++wk/tewUb6nv+CwII6MKHzN+MZrGBAkxiEgIKmgmatt+QnKQDM9UylShw7shCmDns
-	J90R6bHmVLBfkrJnjg80K0+ER1BSRbuwnxvJTJqidRd9zgK57I=
-X-Received: by 2002:a05:600c:83c6:b0:493:cc01:8067 with SMTP id 5b1f17b1804b1-493d0f48594mr30891745e9.8.1783208826853;
-        Sat, 04 Jul 2026 16:47:06 -0700 (PDT)
+        bh=KR6G98ejd7YQBOCRwJ4kmyrzqgrbuG5J4PbK3v86NWM=;
+        b=IOhQ8jGvIR2ibjae/F+KAAMqtRD1yBb6r+JwOp1/b+XQCgR0ZaBStZFfEFlxfMA8W4
+         Gh7jCfIn1iWGh+4jWI8npcGRx6HApamumPQwgYrkP3apBQyh9ZYdmQ49bWZwn7+tq35a
+         lynmZOzoelktjZm20NloUqjO2UrFibByriWgVhHb+YGjn7Hfjb+Un12BHcnySl8EDsEX
+         HVPZkwErZQMp4vPkQwRqq9N9STaDCqOeTOCEMghRU71OB0i8kWDx3T25ad5kzbhoKphV
+         EXc/4N278SBuDRUahJ7nBK3lyifmb9V1+NQ7VGO3b5fv5mvlu/JD8+Qu8buQxPUkstui
+         6rIA==
+X-Forwarded-Encrypted: i=1; AFNElJ+R6u4tM8K5Tu6z/t+PKrbyn8ftVFQgy/49IHMcARY6QJ5fWbRShkGCx8LRVhQBL0rab64PGtOxtIyK3WAq0Vw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWI/hhU9vrmL3bobVNUvIWa5K0V8wSmfaDVLaajC/JTSF9/3iU
+	RnIToN4TCVAZTYoxnlvXbfGqoxX0qqfKHy6RpWPXm0A6HtOCOwgwXnKX
+X-Gm-Gg: AfdE7ckHmRjT9f5p1dsPUjnVZ8AbXMrgY7UpflhX/L9Gi4lUbUH6opjvdmmKZtfiEvB
+	930h+CwsmbfdQZctANwSWGkSRohgbw6nlJOEmY4fNbkHQ2kUuszJtXbgpPkQo3SH70lnKQvNKm6
+	vcwK+KTplVQ0unYqaoANaBXCbcy6CuMKVhuT/qSAdS8WnMuGNyZY3nlqpZ8sgB9xdxNUDDpFJp3
+	o9PS4bmnKr2ULz82EOKDyuB/J0Zci3/o8gpsow0ppuNg39olB1WKzgZSsO05mYFWKW6ZbGihJBy
+	Je4CNLGXfaPcEOCfAmdgifhDgt9SyH68ruuTdQMQ299dFN7A0+goNU362s7+Gb8L3Cwa4fNMSBj
+	xY3G83HOoQ4Xu/uTGdfjUQ90SofWHeRohE1UO8PqXV0vjB5tWf84cQMRbfSTURqamibugpCXJcX
+	RwBIXqNAdZhsTHse6fK6lSDzsqGpG6LezX0Am3gNQYKoSuBthETcHr4p6DYf/Me0TO+BJdJhSwx
+	pTiE54ibkUEejVLQDsCxDlvzbHAiGHZZqd+BZrD+6x4iVtiCcw=
+X-Received: by 2002:a05:600c:5249:b0:493:d282:8275 with SMTP id 5b1f17b1804b1-493d2828325mr21184415e9.0.1783208827713;
+        Sat, 04 Jul 2026 16:47:07 -0700 (PDT)
 Received: from hpubt (dynamic-2a02-3100-5cf8-ddfc-6651-06ff-fed8-72a4.310.pool.telefonica.de. [2a02:3100:5cf8:ddfc:6651:6ff:fed8:72a4])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493cce040b4sm216014125e9.10.2026.07.04.16.47.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 16:47:06 -0700 (PDT)
+        Sat, 04 Jul 2026 16:47:07 -0700 (PDT)
 From: Xin Xie <xiexinet@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Xin Xie <xiexinet@gmail.com>
-Subject: [PATCH net-next 1/4] net: hsr: add PRP interlink (RedBox) datapath and duplicate discard
-Date: Sat,  4 Jul 2026 23:47:01 +0000
-Message-ID: <20260704234704.4297-2-xiexinet@gmail.com>
+Subject: [PATCH net-next 2/4] net: hsr: emit RedBox-MAC TLV in PRP RedBox supervision frames
+Date: Sat,  4 Jul 2026 23:47:02 +0000
+Message-ID: <20260704234704.4297-3-xiexinet@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260704234704.4297-1-xiexinet@gmail.com>
 References: <20260704234704.4297-1-xiexinet@gmail.com>
@@ -84,156 +84,109 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A PRP RedBox proxies SANs that sit behind an interlink port: their frames
-must reach the PRP network with the SAN source MAC preserved, and PRP
-unicast must be steered between the LAN and the SAN segment correctly.
+A PRP RedBox must announce the SANs it proxies so peers populate their
+proxy node tables. The proxy-announce machinery (hsr_proxy_announce(),
+armed via hsr->redbox) already iterates proxy_node_db under RCU and calls
+send_sv_frame() once per SAN, but the PRP sender emitted neither the
+announced SAN MAC nor the RedBox-MAC TLV that IEC 62439-3 requires.
 
-Add the PRP interlink forwarding rules to prp_drop_frame() and give RedBox
-nodes a second duplicate-discard slot so the two LAN copies of a frame
-destined to a SAN collapse to a single delivery out the interlink.
+Extend send_prp_supervision_frame() so that, for a proxy-announce
+(identified by the interlink port, an O(1) test), the frame carries the
+proxied SAN MAC as MacAddressA followed by the RedBox-MAC TLV (Type 30)
+and an explicit End-of-TLV marker before padding.
 
-The destination classification (is the unicast DA a PRP-network node or a
-proxied SAN) is resolved once per frame in fill_frame_info(), gated to PRP
-RedBox devices, and cached in struct hsr_frame_info, so prp_drop_frame()
-stays O(1) and does not walk the node tables for every candidate egress
-port in the softIRQ path. HSR RedBox frame classification is untouched.
-
-Factor the LAN A/B duplicate test into prp_is_lan_dup() so the new PRP
-interlink rules do not change hsr_drop_frame() behaviour, including the
-NETIF_F_HW_HSR_FWD path which keeps using the LAN-duplicate test only.
+hsr_get_node() must also accept the reinjected proxy-announce: a PRP
+supervision frame is an untagged ETH_P_PRP frame (mac_len == ETH_HLEN, the
+RCT is appended only on egress) sourced from macaddress_redbox, which is
+never learned from data. Exempt only PRP supervision frames from the
+hsr_ethhdr length guard; HSR (ETH_P_HSR) supervision is front-tagged and
+keeps the original guard, so HSR malformed-frame filtering is unchanged.
 
 Signed-off-by: Xin Xie <xiexinet@gmail.com>
 ---
- net/hsr/hsr_forward.c  | 49 ++++++++++++++++++++++++++++++++++++------
- net/hsr/hsr_framereg.c | 10 ++++++---
- net/hsr/hsr_framereg.h |  2 ++
- 3 files changed, 52 insertions(+), 9 deletions(-)
+ net/hsr/hsr_device.c   | 33 ++++++++++++++++++++++++++++++---
+ net/hsr/hsr_framereg.c | 13 +++++++++++--
+ 2 files changed, 41 insertions(+), 5 deletions(-)
 
-diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
-index 0774981a6..efcd0acef 100644
---- a/net/hsr/hsr_forward.c
-+++ b/net/hsr/hsr_forward.c
-@@ -440,12 +440,37 @@ static int hsr_xmit(struct sk_buff *skb, struct hsr_port *port,
- 	return dev_queue_xmit(skb);
- }
- 
-+static bool prp_is_lan_dup(struct hsr_frame_info *frame,
-+			   struct hsr_port *port)
-+{
-+	enum hsr_port_type rx = frame->port_rcv->type;
-+
-+	return (rx == HSR_PT_SLAVE_A && port->type == HSR_PT_SLAVE_B) ||
-+	       (rx == HSR_PT_SLAVE_B && port->type == HSR_PT_SLAVE_A);
-+}
-+
- bool prp_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+index 5555b71ab..7cc21253c 100644
+--- a/net/hsr/hsr_device.c
++++ b/net/hsr/hsr_device.c
+@@ -372,10 +372,21 @@ static void send_prp_supervision_frame(struct hsr_port *master,
  {
--	return ((frame->port_rcv->type == HSR_PT_SLAVE_A &&
--		 port->type == HSR_PT_SLAVE_B) ||
--		(frame->port_rcv->type == HSR_PT_SLAVE_B &&
--		 port->type == HSR_PT_SLAVE_A));
-+	enum hsr_port_type rx = frame->port_rcv->type;
-+
-+	/* Supervision frames are not delivered to a SAN on the interlink. */
-+	if (frame->is_supervision && port->type == HSR_PT_INTERLINK)
-+		return true;
-+
-+	if (prp_is_lan_dup(frame, port))
-+		return true;
-+
-+	/* LAN to interlink: keep PRP-network unicast off the SAN segment. */
-+	if ((rx == HSR_PT_SLAVE_A || rx == HSR_PT_SLAVE_B) &&
-+	    port->type == HSR_PT_INTERLINK)
-+		return frame->dst_in_node_db;
-+
-+	/* Interlink to LAN: keep SAN-to-SAN unicast local. */
-+	if ((port->type == HSR_PT_SLAVE_A || port->type == HSR_PT_SLAVE_B) &&
-+	    rx == HSR_PT_INTERLINK)
-+		return frame->dst_in_proxy_node_db;
-+
-+	return false;
- }
- 
- bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
-@@ -453,7 +478,7 @@ bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+ 	struct hsr_priv *hsr = master->hsr;
+ 	struct hsr_sup_payload *hsr_sp;
++	struct hsr_sup_tlv *hsr_stlv;
+ 	struct hsr_sup_tag *hsr_stag;
  	struct sk_buff *skb;
- 
- 	if (port->dev->features & NETIF_F_HW_HSR_FWD)
--		return prp_drop_frame(frame, port);
-+		return prp_is_lan_dup(frame, port);
- 
- 	/* RedBox specific frames dropping policies
- 	 *
-@@ -466,7 +491,7 @@ bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
- 	 * are addressed to interlink port (and are in the ProxyNodeTable).
- 	 */
- 	skb = frame->skb_hsr;
--	if (skb && prp_drop_frame(frame, port) &&
-+	if (skb && prp_is_lan_dup(frame, port) &&
- 	    is_unicast_ether_addr(eth_hdr(skb)->h_dest) &&
- 	    hsr_is_node_in_db(&port->hsr->proxy_node_db,
- 			      eth_hdr(skb)->h_dest)) {
-@@ -706,6 +731,18 @@ static int fill_frame_info(struct hsr_frame_info *frame,
- 	frame->is_vlan = false;
- 	proto = ethhdr->h_proto;
- 
-+	/* PRP RedBox only: classify the unicast destination once so the
-+	 * per-egress-port decision in prp_drop_frame() stays O(1). HSR RedBox
-+	 * does its own classification and must not pay these node-table walks.
-+	 */
-+	if (hsr->prot_version == PRP_V1 && hsr->redbox &&
-+	    is_unicast_ether_addr(ethhdr->h_dest)) {
-+		frame->dst_in_node_db =
-+			hsr_is_node_in_db(&hsr->node_db, ethhdr->h_dest);
-+		frame->dst_in_proxy_node_db =
-+			hsr_is_node_in_db(&hsr->proxy_node_db, ethhdr->h_dest);
-+	}
++	bool redbox_proxy;
++	int extra = 0;
 +
- 	if (proto == htons(ETH_P_8021Q))
- 		frame->is_vlan = true;
++	redbox_proxy = hsr->redbox && master->type == HSR_PT_INTERLINK;
++
++	/* A proxy-announce carries a RedBox-MAC TLV and an EOT marker. */
++	if (redbox_proxy)
++		extra = sizeof(struct hsr_sup_tlv) +
++			sizeof(struct hsr_sup_payload) +
++			sizeof(struct hsr_sup_tlv);
  
+-	skb = hsr_init_skb(master, 0);
++	skb = hsr_init_skb(master, extra);
+ 	if (!skb) {
+ 		netdev_warn_once(master->dev, "PRP: Could not send supervision frame\n");
+ 		return;
+@@ -393,9 +404,25 @@ static void send_prp_supervision_frame(struct hsr_port *master,
+ 	hsr_stag->tlv.HSR_TLV_type = PRP_TLV_LIFE_CHECK_DD;
+ 	hsr_stag->tlv.HSR_TLV_length = sizeof(struct hsr_sup_payload);
+ 
+-	/* Payload: MacAddressA */
++	/* Payload: MacAddressA, the announced node. */
+ 	hsr_sp = skb_put(skb, sizeof(struct hsr_sup_payload));
+-	ether_addr_copy(hsr_sp->macaddress_A, master->dev->dev_addr);
++	ether_addr_copy(hsr_sp->macaddress_A, addr);
++
++	/* Proxy-announce: append the RedBox-MAC TLV (Type 30) and an explicit
++	 * EOT to terminate the TLV chain before zero padding.
++	 */
++	if (redbox_proxy) {
++		hsr_stlv = skb_put(skb, sizeof(struct hsr_sup_tlv));
++		hsr_stlv->HSR_TLV_type = PRP_TLV_REDBOX_MAC;
++		hsr_stlv->HSR_TLV_length = sizeof(struct hsr_sup_payload);
++
++		hsr_sp = skb_put(skb, sizeof(struct hsr_sup_payload));
++		ether_addr_copy(hsr_sp->macaddress_A, hsr->macaddress_redbox);
++
++		hsr_stlv = skb_put(skb, sizeof(struct hsr_sup_tlv));
++		hsr_stlv->HSR_TLV_type = HSR_TLV_EOT;
++		hsr_stlv->HSR_TLV_length = 0;
++	}
+ 
+ 	if (skb_put_padto(skb, ETH_ZLEN)) {
+ 		spin_unlock_bh(&hsr->seqnr_lock);
 diff --git a/net/hsr/hsr_framereg.c b/net/hsr/hsr_framereg.c
-index e44929871..7a7c52a95 100644
+index 7a7c52a95..37ade2dde 100644
 --- a/net/hsr/hsr_framereg.c
 +++ b/net/hsr/hsr_framereg.c
-@@ -199,7 +199,7 @@ static struct hsr_node *hsr_add_node(struct hsr_priv *hsr,
- 	spin_lock_init(&new_node->seq_out_lock);
- 
- 	if (hsr->prot_version == PRP_V1)
--		new_node->seq_port_cnt = 1;
-+		new_node->seq_port_cnt = hsr->redbox ? 2 : 1;
- 	else
- 		new_node->seq_port_cnt = HSR_PT_PORTS - 1;
- 
-@@ -649,9 +649,13 @@ int prp_register_frame_out(struct hsr_port *port, struct hsr_frame_info *frame)
- 	if (frame->port_rcv->type == HSR_PT_MASTER)
- 		return 0;
- 
--	/* for PRP we should only forward frames from the slave ports
--	 * to the master port
-+	/* RedBox: forward LAN frames out the interlink to a SAN, deduping the
-+	 * two LAN copies on a dedicated slot.
+@@ -293,8 +293,17 @@ struct hsr_node *hsr_get_node(struct hsr_port *port, struct list_head *node_db,
  	 */
-+	if (port->type == HSR_PT_INTERLINK)
-+		return hsr_check_duplicate(frame, 1);
+ 	if (ethhdr->h_proto == htons(ETH_P_PRP) ||
+ 	    ethhdr->h_proto == htons(ETH_P_HSR)) {
+-		/* Check if skb contains hsr_ethhdr */
+-		if (skb->mac_len < sizeof(struct hsr_ethhdr))
++		bool prp_sup;
 +
-+	/* For PRP only slave-to-master frames are forwarded. */
- 	if (port->type != HSR_PT_MASTER)
- 		return 1;
- 
-diff --git a/net/hsr/hsr_framereg.h b/net/hsr/hsr_framereg.h
-index c65ecb925..127a3fb64 100644
---- a/net/hsr/hsr_framereg.h
-+++ b/net/hsr/hsr_framereg.h
-@@ -27,6 +27,8 @@ struct hsr_frame_info {
- 	bool is_local_dest;
- 	bool is_local_exclusive;
- 	bool is_from_san;
-+	bool dst_in_node_db;
-+	bool dst_in_proxy_node_db;
- };
- 
- void hsr_del_self_node(struct hsr_priv *hsr);
++		/* A PRP supervision frame is an untagged ETH_P_PRP frame
++		 * (mac_len == ETH_HLEN); its RCT is appended only on egress.
++		 * HSR (ETH_P_HSR) supervision is front-tagged and still must
++		 * contain a struct hsr_ethhdr.
++		 */
++		prp_sup = hsr->prot_version == PRP_V1 &&
++			  ethhdr->h_proto == htons(ETH_P_PRP) && is_sup;
++
++		if (!prp_sup && skb->mac_len < sizeof(struct hsr_ethhdr))
+ 			return NULL;
+ 	} else {
+ 		rct = skb_get_PRP_rct(skb);
 -- 
 2.53.0
 
