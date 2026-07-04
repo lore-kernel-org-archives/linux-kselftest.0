@@ -1,338 +1,177 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96F318AE3;
-	Sat,  4 Jul 2026 23:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C009A224234
+	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 23:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783208331; cv=none; b=KwkGit/dZ9nnOQlElHc6LF5fEELFI5IfNCkkxg8mVYfuBg3y1AJ0RaBO3Wu8FSjNJKoaP+PhKG1E3ZCHqeTYe87zp3DDacygmFtziMk7HO/7ujawgU3ZntOolGs+LmNe1Tk9DZp6jy9DLKf3LtqRPzFmAlBWgRyOdfY1C+i1Lcw=
+	t=1783208829; cv=none; b=Qa/RbzJw4DhobWv2e92JGWadL4RjNtlUK9/bsFp1tD1nVhUdoK3/3K3S7umCnLcIOL7Wfbp/w0TlgYSRq7saYcXOLir2h3hb1cU4QfF4x/YeAW9kxeBAVUyNOHgWxA6ObdKKA4JD8Q7EkXI4XC3ro7tBSkV2E7MlHihls68Omf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783208331; c=relaxed/simple;
-	bh=s8K7gocsWH9rX7pANzHxIK07Z+WF9Hm5c4sGgOuC5gs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SdbLNCgHHIS/xth6JOrJmzbBUAyhNGz0JvhyeaSX+ko+fpD/rL6lOiIsGYdNelWCKXgTNzHEgvoU4+meQoPqG2+58ezB+bB99wuFU2aWEvJMVcMKAJf78cHU12/OW/8g45ZU2QETLBXVV1OygWGxXifsUOEaRSWorv5D0/29jhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CQASIfnk; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1783208829; c=relaxed/simple;
+	bh=hG23Q4y5aBcg3cuKpH3vsyLBWDktEghaMP46k932PwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iJWo+Hb+6+/KnW/ymXdPxOzPMp0Wj/yot1fs5p1sgvAPBqf/B5kG0Yo7dzuqYycmyUlM5Ixb9FEAt26JPKpdsdFG5JxuD/+zQ16L7tEqckPwwnmQFRmVCL67CZO/IqclBq0gvde894vw3fu7Dkxuec/CD9+JyFsNcJw84PSzLD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ez/HwjQa; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CQASIfnk"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 764091A9A;
-	Sat,  4 Jul 2026 16:38:35 -0700 (PDT)
-Received: from [10.57.39.250] (unknown [10.57.39.250])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B68F3F85F;
-	Sat,  4 Jul 2026 16:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783208319; bh=s8K7gocsWH9rX7pANzHxIK07Z+WF9Hm5c4sGgOuC5gs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CQASIfnktKJ+nJBsa+sb+UUp/whO7qPhCX8lvNLWNHjZbzL0OZNmp18ACbtwf78sq
-	 5BQyc2Gvo4iMWs88e7iwAVmUzNwMDDnMKDS5JXpoQMiHp1m54keQESKtrPapIShSsS
-	 Y/fCh+eY83Tx1TDwgjWsfX8tgU4pzalslz35LonA=
-Message-ID: <114e2488-97ed-4740-a8e8-1edd991f26c5@arm.com>
-Date: Sun, 5 Jul 2026 00:38:24 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ez/HwjQa"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490791a3e92so442455e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 16:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783208826; x=1783813626; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VP4mk76KIzqP5E59dkvynV+Ki6J6pthrQtt+0HdWFW0=;
+        b=ez/HwjQahvWEFOi7JXEfrb2nnK79Ajct+Ipp8HSWwUd6sm/lCF67RTkx7CuU4dhiuR
+         VJsDPnYET/Ch8brTLmyAgmn3aklYYxaZciJdp0CchbUgTZRXaZg8LmzBJZ+DBVsa7yJD
+         TCCyhbr048jqR6H4jKwSJYIeNx+lzqh9XaooUWwoajnnSgvQo+33Me0sq7+uydUNznIK
+         ZnrbZ3qLPCacINrCrdbPZt4oh8/ywZ81X7L/etMCtoo3ShXxF3gnh6h87qytESWRvbqd
+         RXCJsH0SLQ2YowPih8Guo5uTHtZD3Txo9TKHn4twkO4OfEtIy2iVsh6ZAzhAbu5LkxVv
+         0lGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783208826; x=1783813626;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VP4mk76KIzqP5E59dkvynV+Ki6J6pthrQtt+0HdWFW0=;
+        b=JZtsiTWVGy1JKblUDJTb+tOuIbimMJ2TZRf9kv+bta0LRUZUfnfzhLqHgJdLIUjG5/
+         jAgp/2s58ZAgHL9OqmbjQC4FxNUFYkFUlikF+CXfAvEFchq43HcmbF/XbCTk8Jdug0pd
+         Oqfhuay8Pkgen+1AydR2WdN37379gtddJx8L6kng0/x0aEBARG84vjSyfNHO7jXrovak
+         5/bvE+BahEe8LBI4cSh+F9mZYKRXYvEAn2zVQuwv9dNepxcJqVYQBCtSJaNMSu3GiD8/
+         v27xQ4Z3TxtCrWqc9vAXn3HsFH9gDlWO95jRQuTnnAKneWz1/I712RMqI5ndRdM3WaB7
+         VVdg==
+X-Forwarded-Encrypted: i=1; AFNElJ/mrjMKC+eGTG5Lm2Xbn6NcStZ/DA3Hs4uDVUaRZUL2SEiGZ1mseRfmDsnSaFDBY2FitHFMWNgmoi2V/JLpLv0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzQe3MD/QnU33gbwiGK6TnXYY8HhourQntjC6AHzB2OmXYHyFJ
+	zEQqEdCQLOiSpMDSgB7aWga2dXZIlq78yUMa1ikhjsAJhGw9aO67NRQt
+X-Gm-Gg: AfdE7ckM8OfFqLcvYxRLoI8AXxIxi3IAqjFJjmOVpSw2MOLVrpZDpvJ9w3w5lC9wPcw
+	GZY4pBgnT1YNEbu9vIaD+NSRNBBz+jP6jMexFA2hu4EEUb9qE2bkoYr4ygZWLnrhrMJJJlqIozS
+	yHt6zbggZnsTylN1dCUpZbwLjZQSWXyH4jVDkAYa9SzrD6BOcuF9zBMJEBwLNTOEdsQzr/x51uz
+	7zg99ZQkelLcbDTYCPo9otbd7dLvk4NmsPz+aVG6TLKqZsjBhZx/4o9/LE4bf68FaQ3vQJ+9lhG
+	5XP6Ru47Q4IsPLkDuS0dRb/7ZX1KARVmogCL8agEFYfxY4zJH88VqaiYW2WLJMMg6xqaBBkPN64
+	Y/S/nuFXIyS/GmcGfqzKK/BBeISax/ODT24EViBG4j9ReyoX7OePO7nOOO+6Uuya237d5JLCSG+
+	zBV+i0/qEPYdWzfwWexNvmHWWQ5hXiUYGs0xG8cPtsNbxYIP7AeJsL1frNgBDSY14nsL+UyzGiF
+	ihfnZHJevD4Pblsx7yBXkCI495cZEv/P0NhfXTCCRfy3fHQ+MI=
+X-Received: by 2002:a05:600c:8217:b0:493:bea7:6b67 with SMTP id 5b1f17b1804b1-493d0f35d08mr31512525e9.3.1783208825954;
+        Sat, 04 Jul 2026 16:47:05 -0700 (PDT)
+Received: from hpubt (dynamic-2a02-3100-5cf8-ddfc-6651-06ff-fed8-72a4.310.pool.telefonica.de. [2a02:3100:5cf8:ddfc:6651:6ff:fed8:72a4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493cce040b4sm216014125e9.10.2026.07.04.16.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jul 2026 16:47:05 -0700 (PDT)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xin Xie <xiexinet@gmail.com>
+Subject: [PATCH net-next 0/4] net: hsr: PRP RedBox (PRP-SAN) support
+Date: Sat,  4 Jul 2026 23:47:00 +0000
+Message-ID: <20260704234704.4297-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 13/46] KVM: guest_memfd: Add base support for
- KVM_SET_MEMORY_ATTRIBUTES2
-Content-Language: en-GB
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
- liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
- <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi
+This series adds PRP RedBox support to the hsr driver: a PRP node that
+proxies one or more SANs sitting behind an interlink port (IEC 62439-3,
+PRP-SAN). HSR-SAN has been supported since commit 5055cccfc2d1 ("net: hsr:
+Provide RedBox support (HSR-SAN)"); this extends the equivalent capability
+to PRP, reusing the existing protocol-neutral proxy machinery
+(proxy_node_db, hsr_proxy_announce(), hsr_prune_proxy_nodes()).
 
-On 19/06/2026 01:31, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Introduce base support for KVM_SET_MEMORY_ATTRIBUTES2 in guest_memfd, which
-> just updates attributes tracked by guest_memfd.
-> 
-> Validate input fields in general. Guard usage of KVM_SET_MEMORY_ATTRIBUTES2
-> by making sure requested attributes are supported for this instance of kvm.
-> 
-> A new KVM_SET_MEMORY_ATTRIBUTES2 is defined to support writes (unlike
-> KVM_SET_MEMORY_ATTRIBUTES) in addition to reads so it can provide error
-> details to userspace. This will be used in a later patch.
-> 
-> The two ioctls use their corresponding structs with no overlap, but
-> backward compatibility is baked in for future support of
-> KVM_SET_MEMORY_ATTRIBUTES2 and struct kvm_memory_attributes2 in the VM
-> ioctl.
-> 
-> The process of setting memory attributes is set up such that the later half
-> will not fail due to allocation. Any necessary checks are performed before
-> the point of no return.
-> 
-> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> Co-developed-by: Sean Christoperson <seanjc@google.com>
-> Signed-off-by: Sean Christoperson <seanjc@google.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
+A SAN behind the interlink does bidirectional unicast with peers on the PRP
+network, its source MAC is preserved on the wire, the PRP RCT is correct,
+and the RedBox announces each proxied SAN with the RedBox-MAC TLV (Type 30)
+in its supervision frames.
 
-...
+The series is bisect-safe: the datapath, duplicate discard and supervision
+support are added first; the rtnetlink rejection of "type hsr ... interlink
+<dev> proto 1" is removed only in patch 3, once the feature is complete.
 
+Design notes:
 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 65ce795c090d9..0d14548c1ed22 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -541,11 +541,127 @@ bool kvm_gmem_is_private(struct kvm *kvm, gfn_t gfn)
+ - prp_drop_frame() does not walk the node tables. The destination
+   classification (PRP-network node vs proxied SAN) is resolved once per
+   frame in fill_frame_info() and cached in struct hsr_frame_info, so the
+   per egress-port drop decision is O(1) in the softIRQ path. The
+   classification is gated on PRP RedBox devices (prot_version == PRP_V1 &&
+   hsr->redbox), so HSR RedBox traffic is not affected.
 
-...
+ - The LAN A/B duplicate test is factored into prp_is_lan_dup() so the new
+   PRP interlink rules in prp_drop_frame() do not change hsr_drop_frame()
+   behaviour, including the NETIF_F_HW_HSR_FWD path. This is software PRP
+   RedBox only; it adds no new hardware-offload contract.
 
-> +static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> +				     size_t nr_pages, uint64_t attrs)
-> +{
-> +	struct address_space *mapping = inode->i_mapping;
-> +	struct gmem_inode *gi = GMEM_I(inode);
-> +	pgoff_t end = start + nr_pages;
-> +	struct maple_tree *mt;
-> +	struct ma_state mas;
-> +	int r;
-> +
-> +	mt = &gi->attributes;
-> +
-> +	filemap_invalidate_lock(mapping);
-> +
-> +	mas_init(&mas, mt, start);
-> +	r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
-> +	if (r)
-> +		goto out;
-> +
-> +	/*
-> +	 * From this point on guest_memfd has performed necessary
-> +	 * checks and can proceed to do guest-breaking changes.
-> +	 */
-> +
-> +	kvm_gmem_invalidate_start(inode, start, end);
+ - The supervision emitter uses pre-reserved tailroom (hsr_init_skb() +
+   skb_put()) on the existing GFP_ATOMIC path; no skb_linearize() or
+   pskb_expand_head(). The RedBox-MAC TLV is followed by an explicit EOT
+   (Type 0, Length 0); padding via skb_put_padto(ETH_ZLEN) and the 6-byte
+   PRP RCT remain at the absolute tail of the egress frame.
 
-I added support for Arm CCA KVM patches with the inplace conversion and
-I am hitting the following issue.
+ - The hsr_get_node() hsr_ethhdr length guard is relaxed only for PRP
+   supervision frames (prot_version == PRP_V1 && ETH_P_PRP && is_sup), which
+   are untagged with mac_len == ETH_HLEN. HSR (ETH_P_HSR) supervision is
+   front-tagged and keeps the original length requirement, so HSR
+   malformed-frame filtering is unchanged.
 
-1. I am supporting INIT_SHARED + MMAP flags.
-2. VMM creates the Gmem_fd with both the flags above.
-3. Uses the shared gmem-mmap to load the initial payloads (kernel, dtb).
-4. At the VM finalization time, Populate the loaded regions one by one
-    by
-     a) copying the images to a temparory buffer - Since CCA can't really
-        load the contents in-place.
-     b) Set the "region" to Private in the gmem_fd (via 
-SET_MEMORY_ATTRIBUTES2)
-     c) Invoke CCA backend to populate the private memory via
-        ioctl(KVM_ARM_RMI_POPULATE,..) [0]
+Testing (on a net-next v7.2-rc1 kernel built from this base, x86-64):
+ - checkpatch.pl --strict: patches 1-3 clean; patch 4 reports only the
+   expected "added file(s), does MAINTAINERS need updating?" note, which is
+   ignorable here -- MAINTAINERS already lists
+   tools/testing/selftests/net/hsr/ under HSR NETWORK PROTOCOL.
+ - git diff --check clean; the series git-am's onto the base commit.
+ - tools/testing/selftests/net/hsr/hsr_prp_redbox.sh: PASS on the patched
+   kernel (bidirectional unicast, SAN MAC preservation, RedBox-MAC TLV +
+   EOT in the proxy-announce).
+ - HSR regression on the same kernel: hsr_redbox.sh (HSR-SAN/RedBox),
+   hsr_ping.sh and prp_ping.sh all PASS, confirming the PRP changes do not
+   regress the existing HSR/PRP paths.
+ - netns checks: peer<->SAN 0% loss with no duplicates and a valid PRP RCT
+   on the wire; a silent SAN is pruned from the announce; zero driver
+   WARN/BUG/Oops/RCU-stall during the run.
 
-[0] 
-https://lore.kernel.org/all/20260513131757.116630-27-steven.price@arm.com/
+Beyond the in-tree selftest, this exact series (applied to this base and
+running as the net-next kernel on x86-64 hardware) was also validated with an
+out-of-tree IEC 62439-3 conformance harness (supervision TLV chain, duplicate
+discard, cross-LAN rejection, seqnr rollover, VLAN/multicast/GOOSE frame types
+with the RCT verified at the absolute frame tail), and interoperability-tested
+against a commercial PRP RedBox (Siemens SCALANCE X204RNA) over 100 Mbit/s
+Fast Ethernet with NIC hardware (PTP) timestamping: a mid-stream single-LAN
+outage of ~2 s at 10 kpps was bridged with zero lost and zero duplicate frames
+(seamless PRP failover), and the duplicate-discard window held zero lost /
+zero duplicates under netem asymmetric delay up to 100 ms (~1000 sequence
+numbers in flight), 25% reorder, and 5% single-LAN loss. The failover and
+impairment matrix was additionally repeated on a KASAN + lockdep + kmemleak
+instrumented build of this kernel, including a 72-carrier-event link
+flap-storm with deliberate double-LAN cuts: zero KASAN, lockdep, or kmemleak
+findings. This out-of-tree testing is supplementary and not required to
+evaluate the series.
+
+Xin Xie (4):
+  net: hsr: add PRP interlink (RedBox) datapath and duplicate discard
+  net: hsr: emit RedBox-MAC TLV in PRP RedBox supervision frames
+  net: hsr: allow PRP RedBox (interlink) creation
+  selftests: net: hsr: add PRP RedBox test
+
+ net/hsr/hsr_device.c                          | 33 ++++++-
+ net/hsr/hsr_forward.c                         | 49 ++++++++--
+ net/hsr/hsr_framereg.c                        | 23 ++++-
+ net/hsr/hsr_framereg.h                        |  2 +
+ net/hsr/hsr_netlink.c                         |  8 +-
+ tools/testing/selftests/net/hsr/Makefile      |  1 +
+ .../selftests/net/hsr/hsr_prp_redbox.sh       | 96 +++++++++++++++++++
+ 7 files changed, 191 insertions(+), 21 deletions(-)
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_prp_redbox.sh
 
 
-5. Additionally, VMM can mark the entire RAM to be private before the VM
-    starts running, again via SET_MEMORY_ATTRIBUTES2. On CCA, this 
-action is measured and doesn't require the Host to "commit" memory to 
-the VM.
-Instead the host can lazily donate memory on a fault.
-
-But step (5) triggers the invalidation of both private and shared
-mappings of the gmem area, from the kvm_gmem_invalidate_start()
-above.
-
-This is because, the entire DRAM now has, some portions PRIVATE (the 
-loaded regions) and the rest are SHARED (from the Gmem_fd creation).
-  Thus, kvm_gmem_get_invalidate_filter(Dram_start, Dram_end) causes the 
-invalidation of both "PRIVATE" and "SHARED" regions, which results
-in the destruction of the already loaded data and things go south.
-
-When we know that the kvm_gmem_invalidate_xx is triggered by a 
-conversion, we don't need to invalidate the existing pages that
-are in the requested state. i.e., the following patch on top of
-this series does the trick for me :
-
-
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index a97fcac34a0e..62e0427a49f4 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -250,16 +250,23 @@ static void __kvm_gmem_invalidate_start(struct 
-gmem_file *f, pgoff_t start,
-                 KVM_MMU_UNLOCK(kvm);
-  }
-
-+static void kvm_gmem_invalidate_start_filter(struct inode *inode, 
-pgoff_t start,
-+                                            pgoff_t end,
-+                                            enum kvm_gfn_range_filter 
-attr_filter)
-+{
-+       struct gmem_file *f;
-+
-+       kvm_gmem_for_each_file(f, inode)
-+               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
-+}
-+
-  static void kvm_gmem_invalidate_start(struct inode *inode, pgoff_t start,
-                                       pgoff_t end)
-  {
-         enum kvm_gfn_range_filter attr_filter;
--       struct gmem_file *f;
--
-         attr_filter = kvm_gmem_get_invalidate_filter(inode, start, end);
-
--       kvm_gmem_for_each_file(f, inode)
--               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
-+       kvm_gmem_invalidate_start_filter(inode, start, end, attr_filter);
-  }
-
-  static void __kvm_gmem_invalidate_end(struct gmem_file *f, pgoff_t start,
-@@ -724,9 +731,14 @@ static int __kvm_gmem_set_attributes(struct inode 
-*inode, pgoff_t start,
-         /*
-          * From this point on guest_memfd has performed necessary
-          * checks and can proceed to do guest-breaking changes.
-+        * Also, we don't have to invalidate the regions that
-+        * may already be in the requested state. Hence, we could
-+        * explicitly filter the invalidations to the opposite
-+        * state.
-          */
-
--       kvm_gmem_invalidate_start(inode, start, end);
-+       kvm_gmem_invalidate_start_filter(inode, start, end,
-+                                       to_private ? KVM_FILTER_SHARED : 
-KVM_FILTER_PRIVATE);
-
-         if (!to_private)
-                 kvm_gmem_invalidate(inode, start, end);
-
-
-Thoughts ?
-
-Suzuki
-
-
-> +	mas_store_prealloc(&mas, xa_mk_value(attrs));
-> +	kvm_gmem_invalidate_end(inode, start, end);
-> +out:
-> +	filemap_invalidate_unlock(mapping);
-> +	return r;
-> +}
-> +
-> +static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
-> +{
-> +	struct gmem_file *f = file->private_data;
-> +	struct inode *inode = file_inode(file);
-> +	struct kvm_memory_attributes2 attrs;
-> +	size_t nr_pages;
-> +	pgoff_t index;
-> +	int i;
-> +
-> +	if (copy_from_user(&attrs, argp, sizeof(attrs)))
-> +		return -EFAULT;
-> +
-> +	if (attrs.flags)
-> +		return -EINVAL;
-> +	for (i = 0; i < ARRAY_SIZE(attrs.reserved); i++) {
-> +		if (attrs.reserved[i])
-> +			return -EINVAL;
-> +	}
-> +	if (!kvm_arch_has_private_mem(f->kvm))
-> +		return -EINVAL;
-> +	if (attrs.attributes & ~KVM_MEMORY_ATTRIBUTE_PRIVATE)
-> +		return -EINVAL;
-> +	if (attrs.size == 0 || attrs.offset + attrs.size < attrs.offset)
-> +		return -EINVAL;
-> +	if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.size))
-> +		return -EINVAL;
-> +
-> +	if (attrs.offset >= i_size_read(inode) ||
-> +	    attrs.offset + attrs.size > i_size_read(inode))
-> +		return -EINVAL;
-> +
-> +	nr_pages = attrs.size >> PAGE_SHIFT;
-> +	index = attrs.offset >> PAGE_SHIFT;
-> +	return __kvm_gmem_set_attributes(inode, index, nr_pages,
-> +					 attrs.attributes);
-> +}
-> +
-> +static long kvm_gmem_ioctl(struct file *file, unsigned int ioctl,
-> +			   unsigned long arg)
-> +{
-> +	switch (ioctl) {
-> +	case KVM_SET_MEMORY_ATTRIBUTES2:
-> +		if (!gmem_in_place_conversion)
-> +			return -ENOTTY;
-> +
-> +		return kvm_gmem_set_attributes(file, (void __user *)arg);
-> +	default:
-> +		return -ENOTTY;
-> +	}
-> +}
-> +
->   static struct file_operations kvm_gmem_fops = {
->   	.mmap		= kvm_gmem_mmap,
->   	.open		= generic_file_open,
->   	.release	= kvm_gmem_release,
->   	.fallocate	= kvm_gmem_fallocate,
-> +	.unlocked_ioctl	= kvm_gmem_ioctl,
->   };
->   
->   static int kvm_gmem_migrate_folio(struct address_space *mapping,
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 01761f6e25d25..a08b518cdb175 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -105,6 +105,18 @@ module_param(allow_unsafe_mappings, bool, 0444);
->   bool __ro_after_init gmem_in_place_conversion = false;
->   #endif
->   
-> +#define MEMORY_ATTRIBUTES_MATCH(one, two)				\
-> +	static_assert(offsetof(struct kvm_memory_attributes, one) ==	\
-> +		      offsetof(struct kvm_memory_attributes2, two));	\
-> +	static_assert(sizeof_field(struct kvm_memory_attributes, one) ==\
-> +		      sizeof_field(struct kvm_memory_attributes2, two))
-> +
-> +/* Ensure the common parts of the two structs are identical. */
-> +MEMORY_ATTRIBUTES_MATCH(address, address);
-> +MEMORY_ATTRIBUTES_MATCH(size, size);
-> +MEMORY_ATTRIBUTES_MATCH(attributes, attributes);
-> +MEMORY_ATTRIBUTES_MATCH(flags, flags);
-> +
->   /*
->    * Ordering of locks:
->    *
-> 
-
+base-commit: b73bc9ca3686b78b642fb35dcc1fdf874ecb74a1
+--
+2.53.0
