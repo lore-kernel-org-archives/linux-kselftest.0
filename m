@@ -1,531 +1,338 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38B1A6829
-	for <linux-kselftest@vger.kernel.org>; Sat,  4 Jul 2026 21:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96F318AE3;
+	Sat,  4 Jul 2026 23:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783199658; cv=none; b=A1gweuBJ4dBkk/P6rwr0IfsVY8JUzx7hDXM0OQnoR+J6Cc/99msDmTIpuYIPb8gi8a923jDa4dctdIWyJqYSV3XDf8meNtnOEJ6/H7O0ko2Eag49C3cxo6fq3+/la9F6eHy5WYJDWxS+hpSzpyqyMqHTc2ltIlJQUH6F1Da/AMM=
+	t=1783208331; cv=none; b=KwkGit/dZ9nnOQlElHc6LF5fEELFI5IfNCkkxg8mVYfuBg3y1AJ0RaBO3Wu8FSjNJKoaP+PhKG1E3ZCHqeTYe87zp3DDacygmFtziMk7HO/7ujawgU3ZntOolGs+LmNe1Tk9DZp6jy9DLKf3LtqRPzFmAlBWgRyOdfY1C+i1Lcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783199658; c=relaxed/simple;
-	bh=i5lGcJWkBxS7CJBWynnEmiQB+QzayIHGBFaFnqq+f8w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IEfJEjRhNq+E7KEUEnHcZlaE6dV1krG5rt6yPbqv9yV02haI+macinpSVfCeRHCzzsNLxnxj1biY7XyULmooK3Kf7g2Wisu0lWVe/TGKiAT1DXOo1iTd0LKIeeN9kBzZN5J6ATMiNAkSJFMyjypSCf+YX4Tko5ZaCbpDF3I8NUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=edwvnw1v; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783208331; c=relaxed/simple;
+	bh=s8K7gocsWH9rX7pANzHxIK07Z+WF9Hm5c4sGgOuC5gs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SdbLNCgHHIS/xth6JOrJmzbBUAyhNGz0JvhyeaSX+ko+fpD/rL6lOiIsGYdNelWCKXgTNzHEgvoU4+meQoPqG2+58ezB+bB99wuFU2aWEvJMVcMKAJf78cHU12/OW/8g45ZU2QETLBXVV1OygWGxXifsUOEaRSWorv5D0/29jhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CQASIfnk; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edwvnw1v"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c96c92c0980so866536a12.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 14:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783199656; x=1783804456; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wNObvvCR77mS9Inyq/bIvC7lHlQKSaAhco2QLbfN6gc=;
-        b=edwvnw1vCvpbNgkyQbOHO5FK5IESVgizO2+kQtrTMjyutfA/PAlC4QTV69+jUWtsxu
-         MHI1/k9f49fhmqwo4WlvgDFEdqfzwxa3XKcLE0Kic0NqR05nwnnlrX/CFA9y7GC91z1B
-         gv5uTBILPxaZ2H99jSHOBEXi6CyPIrUQ4dE4/1pvzFuDxyriv/YildSm2Uq+D+8n0xSE
-         BAXRVKL+2MIILifQVwpcmwQZG2cx78acBM2hDfe2SfA8TckfVs1BsYulH/WgUtcJYiUx
-         HjmTOjaPciZPxpi1/FB/zldY4PWsEZmQLlMcoMRM7T8eZEzas46CRFffubGtnTXuZbhB
-         DwTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783199656; x=1783804456;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wNObvvCR77mS9Inyq/bIvC7lHlQKSaAhco2QLbfN6gc=;
-        b=joVGkJThC6KuYYYSekQEK/CRmzSfhTRAUgYDn4aCc4HNjcQs/ibSNemZHYJT9QX0bq
-         2vICzIsYC6kkOpJjtZayPP2Vr9uy5Jca217d3/MZcIy75kaaFQIBSukSPy3pY8EnSiTS
-         lECtQ+ig0vY9tRjA8A9kYw6nwFVzJgqTHzKnesE6bkSanlG7XwG0S/Qb52hUXUnPo6ge
-         IQGpiN3D1K8dvAbwm1CB6+j65hZaewlbKQtUD59KI5ZGpD1L9CyCdP1QJw4xpKn5nMYZ
-         EIaoulXvOn31RKy+YKcMykVr/67Wrr+72IK12BDG4gDvMWaOQKYmWv4pfRTrn/44BHVI
-         ixGg==
-X-Forwarded-Encrypted: i=1; AFNElJ8edag7kXLeHxDWs37yS4JQn3AgDMmzCpz2S9c0CJgn2phWIVGJVGqsbM1+W3+uZtT0ZaOvHXip3pk6V+FZxoE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmX2MQJbESKpyCGaMJjO+yCWVpHe7wi7aS4N0/SQUHDzVtWQF9
-	jcWZTLRhIyX3El2qB0qCreMQJ/d+CNRRWsI+THmtt63Pp5YsZOrK9q5a
-X-Gm-Gg: AfdE7clUklbOXigaa6LKUuWUDTjq9hjZdn6OEZ2BB5BvgtZDwW/Xf7UPit9ruxVX66L
-	WITCW6Vfd8dbZCPfVmtrN4+GwZnSyLAoKTeD2vo3xgjFvrx/uaBamB+PMsRBxNEewmpcAxndci3
-	O1eot34sDmyY38ESoc0YPQFwfwcezXEXz2cGSI+VvX1bZI5eBVij4NkD5FIJPJvYEOK4P5EohM/
-	/0It6VDpsomKzobPT0+KKyHPTpzxpM+IFmy7vfplcuQnt7ujMQZVKy6uev44Da1c1bJ4j7CI58v
-	6uD+yJNr91484ouncOYYHqK0jtpb5HkFF7TTGVWvVzRQQopXoM6FBxD1+DL15izgc2fvTpSDUH5
-	1YRRHpMNxu0QjYDatMp4aH+5eaBA3Wl6DiJrm1sjH01kbej01GMhsXBTdUJhlYUF9+edU8qbb5R
-	fjXKv7a5UoiNJyOsgWan0qEqHE2N8=
-X-Received: by 2002:a05:6a21:a91:b0:3bf:a698:ce4d with SMTP id adf61e73a8af0-3c03e5ea69dmr4576055637.54.1783199655731;
-        Sat, 04 Jul 2026 14:14:15 -0700 (PDT)
-Received: from nyx.tail25a6.ts.net ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f38ee1333sm18515569eec.24.2026.07.04.14.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 14:14:15 -0700 (PDT)
-From: Farid Zakaria <farid.m.zakaria@gmail.com>
-To: brauner@kernel.org
-Cc: david.laight.linux@gmail.com,
-	farid.m.zakaria@gmail.com,
-	jack@suse.cz,
-	jannh@google.com,
-	kees@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	mail@johnericson.me,
-	shuah@kernel.org,
-	viro@zeniv.linux.org.uk,
-	Gemini <assistant@google.com>
-Subject: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and interpreter selection
-Date: Sat,  4 Jul 2026 14:14:09 -0700
-Message-ID: <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CQASIfnk"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 764091A9A;
+	Sat,  4 Jul 2026 16:38:35 -0700 (PDT)
+Received: from [10.57.39.250] (unknown [10.57.39.250])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B68F3F85F;
+	Sat,  4 Jul 2026 16:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1783208319; bh=s8K7gocsWH9rX7pANzHxIK07Z+WF9Hm5c4sGgOuC5gs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CQASIfnktKJ+nJBsa+sb+UUp/whO7qPhCX8lvNLWNHjZbzL0OZNmp18ACbtwf78sq
+	 5BQyc2Gvo4iMWs88e7iwAVmUzNwMDDnMKDS5JXpoQMiHp1m54keQESKtrPapIShSsS
+	 Y/fCh+eY83Tx1TDwgjWsfX8tgU4pzalslz35LonA=
+Message-ID: <114e2488-97ed-4740-a8e8-1edd991f26c5@arm.com>
+Date: Sun, 5 Jul 2026 00:38:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 13/46] KVM: guest_memfd: Add base support for
+ KVM_SET_MEMORY_ATTRIBUTES2
+Content-Language: en-GB
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
+ liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com>
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Historically binfmt_misc has only matched binaries by magic bytes or file
-extension, and always redirects a match to a fixed interpreter recorded in
-the registration. This is insufficient when the match requires parsing the
-binary header (e.g. inspecting ELF program headers) or when the interpreter
-must be computed per-binary rather than hard-coded.
+Hi
 
-Introduce a new 'B' (BPF) handler type. A pinned SOCKET_FILTER program is
-registered in place of the magic/mask, and no interpreter is recorded:
+On 19/06/2026 01:31, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> Introduce base support for KVM_SET_MEMORY_ATTRIBUTES2 in guest_memfd, which
+> just updates attributes tracked by guest_memfd.
+> 
+> Validate input fields in general. Guard usage of KVM_SET_MEMORY_ATTRIBUTES2
+> by making sure requested attributes are supported for this instance of kvm.
+> 
+> A new KVM_SET_MEMORY_ATTRIBUTES2 is defined to support writes (unlike
+> KVM_SET_MEMORY_ATTRIBUTES) in addition to reads so it can provide error
+> details to userspace. This will be used in a later patch.
+> 
+> The two ioctls use their corresponding structs with no overlap, but
+> backward compatibility is baked in for future support of
+> KVM_SET_MEMORY_ATTRIBUTES2 and struct kvm_memory_attributes2 in the VM
+> ioctl.
+> 
+> The process of setting memory attributes is set up such that the later half
+> will not fail due to allocation. Any necessary checks are performed before
+> the point of no return.
+> 
+> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> Co-developed-by: Sean Christoperson <seanjc@google.com>
+> Signed-off-by: Sean Christoperson <seanjc@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
 
-  echo ':name:B:<bpf_pinned_path>::::<flags>' \
-      > /proc/sys/fs/binfmt_misc/register
+...
 
-When a binary is executed, binfmt_misc runs the program with the
-BINPRM_BUF_SIZE file-header buffer as context. Returning 1 selects the
-handler; returning 0 falls through to the remaining handlers.
 
-Unlike magic/extension handlers, a 'B' handler carries no interpreter of its
-own: the program chooses it via a new helper, bpf_binprm_set_interp(). This
-lets the program compute the interpreter path however it sees fit (for example
-relative to the binary). A 'B' handler is therefore a strict superset of the
-existing magic handlers -- any of them can be expressed as a program that
-matches on the header and sets a fixed interpreter.
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 65ce795c090d9..0d14548c1ed22 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -541,11 +541,127 @@ bool kvm_gmem_is_private(struct kvm *kvm, gfn_t gfn)
 
-bpf_binprm_set_interp() is exposed to SOCKET_FILTER programs and stashes the
-chosen path on a per-CPU area that binfmt_misc reads back immediately after
-the run under migrate_disable(); only a match that set an interpreter
-allocates.
+...
 
-Assisted-by: Gemini <assistant@google.com>
-Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
----
+> +static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> +				     size_t nr_pages, uint64_t attrs)
+> +{
+> +	struct address_space *mapping = inode->i_mapping;
+> +	struct gmem_inode *gi = GMEM_I(inode);
+> +	pgoff_t end = start + nr_pages;
+> +	struct maple_tree *mt;
+> +	struct ma_state mas;
+> +	int r;
+> +
+> +	mt = &gi->attributes;
+> +
+> +	filemap_invalidate_lock(mapping);
+> +
+> +	mas_init(&mas, mt, start);
+> +	r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
+> +	if (r)
+> +		goto out;
+> +
+> +	/*
+> +	 * From this point on guest_memfd has performed necessary
+> +	 * checks and can proceed to do guest-breaking changes.
+> +	 */
+> +
+> +	kvm_gmem_invalidate_start(inode, start, end);
 
-Hey Christian,
+I added support for Arm CCA KVM patches with the inplace conversion and
+I am hitting the following issue.
 
-Thank you for the suggestion and discussion on the mailing list. I took a stab
-at your idea of driving binfmt_misc interpreter selection from a BPF program
-(hopefully this is what you had in mind). The other approach was also to use a
-static interpreter during registration but this current approach feels right.
+1. I am supporting INIT_SHARED + MMAP flags.
+2. VMM creates the Gmem_fd with both the flags above.
+3. Uses the shared gmem-mmap to load the initial payloads (kernel, dtb).
+4. At the VM finalization time, Populate the loaded regions one by one
+    by
+     a) copying the images to a temparory buffer - Since CCA can't really
+        load the contents in-place.
+     b) Set the "region" to Private in the gmem_fd (via 
+SET_MEMORY_ATTRIBUTES2)
+     c) Invoke CCA backend to populate the private memory via
+        ioctl(KVM_ARM_RMI_POPULATE,..) [0]
 
-This prototype demonstrates binfmt_misc interpreter selection from a BPF program
-so the interpreter can be *computed* (e.g. $ORIGIN-relative) rather than recorded
-statically. It replaces my earlier "pluggable ELF interpreter loader registry" RFC.
+[0] 
+https://lore.kernel.org/all/20260513131757.116630-27-steven.price@arm.com/
 
-As this is a first draft, a few things you probably will have notes on.
-I tried my best but I am a novice here so I welcome your feedback.
 
- * The prototype uses socket filter type. This seemed the easiest to wire up to
-   start. My guess is it should be a dedicated type (eg. BPF_PROG_TYPE_BINFMT).
- * bpf_binprm_set_interp() is a "classic helper", but that list
-   is frozen in favour of kfuncs. A kfunc needs BTF and can't be called from
-   the raw-bytecode selftest I wrote.
- * The program only gets bprm->buf today.
-   That is enough to match on the ELF header but not to compute an
-   $ORIGIN-relative path from the binary's location, which needs bprm->filename
- * I have some selftests that exercises match + program-chosen interpreter. I don't
-   include them here yet since it seems unnecessary when discussing the idea.
+5. Additionally, VMM can mark the entire RAM to be private before the VM
+    starts running, again via SET_MEMORY_ATTRIBUTES2. On CCA, this 
+action is measured and doesn't require the Host to "commit" memory to 
+the VM.
+Instead the host can lazily donate memory on a fault.
 
-To demo the functionality, I thought it would be neat to see how this is a superset
-and can replace all the qemu binfmt usage [1].
+But step (5) triggers the invalidation of both private and shared
+mappings of the gmem area, from the kvm_gmem_invalidate_start()
+above.
 
-  $ ./hello-aarch64;
-  -bash: /etc/binfmt-demo/hello-aarch64: cannot execute binary file: Exec format error
+This is because, the entire DRAM now has, some portions PRIVATE (the 
+loaded regions) and the rest are SHARED (from the Gmem_fd creation).
+  Thus, kvm_gmem_get_invalidate_filter(Dram_start, Dram_end) causes the 
+invalidation of both "PRIVATE" and "SHARED" regions, which results
+in the destruction of the already loaded data and things go south.
 
-  $ bpftool prog load filter.bpf.o /sys/fs/bpf/qemu type socket
-  $ echo ':qemu-bpf:B:/sys/fs/bpf/qemu::::P' > /proc/sys/fs/binfmt_misc/register
+When we know that the kvm_gmem_invalidate_xx is triggered by a 
+conversion, we don't need to invalidate the existing pages that
+are in the requested state. i.e., the following patch on top of
+this series does the trick for me :
 
-  $ ./hello-aarch64
-  AARCH64_RAN_VIA_QEMU
 
-All the per-CPU guards were recommended by AI.
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index a97fcac34a0e..62e0427a49f4 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -250,16 +250,23 @@ static void __kvm_gmem_invalidate_start(struct 
+gmem_file *f, pgoff_t start,
+                 KVM_MMU_UNLOCK(kvm);
+  }
 
-[1] https://gist.github.com/fzakaria/bef27d2e21b0e36ffccda1cbf417b636
-
- fs/binfmt_misc.c         | 181 ++++++++++++++++++++++++++++++++++++---
- include/linux/bpf.h      |   1 +
- include/uapi/linux/bpf.h |   1 +
- net/core/filter.c        |   8 ++
- 4 files changed, 180 insertions(+), 11 deletions(-)
-
-diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
-index 84349fcb9..cf6698d59 100644
---- a/fs/binfmt_misc.c
-+++ b/fs/binfmt_misc.c
-@@ -29,6 +29,11 @@
- #include <linux/fs.h>
- #include <linux/uaccess.h>
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+#endif
-+
- #include "internal.h"
- 
- #ifdef DEBUG
-@@ -41,12 +46,14 @@ enum {
- 	VERBOSE_STATUS = 1 /* make it zero to save 400 bytes kernel memory */
- };
- 
--enum {Enabled, Magic};
-+enum {Enabled, Magic, Bpf};
- #define MISC_FMT_PRESERVE_ARGV0 (1UL << 31)
- #define MISC_FMT_OPEN_BINARY (1UL << 30)
- #define MISC_FMT_CREDENTIALS (1UL << 29)
- #define MISC_FMT_OPEN_FILE (1UL << 28)
- 
-+struct bpf_prog;
-+
- typedef struct {
- 	struct list_head list;
- 	unsigned long flags;		/* type, status, etc. */
-@@ -59,6 +66,9 @@ typedef struct {
- 	struct dentry *dentry;
- 	struct file *interp_file;
- 	refcount_t users;		/* sync removal with load_misc_binary() */
-+#ifdef CONFIG_BPF_SYSCALL
-+	struct bpf_prog *bpf_prog;
-+#endif
- } Node;
- 
- static struct file_system_type bm_fs_type;
-@@ -78,10 +88,51 @@ static struct file_system_type bm_fs_type;
-  */
- #define MAX_REGISTER_LENGTH 1920
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+struct binfmt_bpf_interp {
-+	char path[PATH_MAX];
-+	int len;	/* < 0 if the current program set no interpreter */
-+};
-+static DEFINE_PER_CPU(struct binfmt_bpf_interp, binfmt_bpf_interp);
-+
-+/*
-+ * bpf_binprm_set_interp - let a binfmt_misc 'B' program pick the interpreter.
-+ * @path: interpreter path, in BPF-accessible memory
-+ * @len:  number of bytes in @path
-+ *
-+ * The program computes the interpreter path however it sees fit (e.g. relative
-+ * to the binary). The path is stashed on a per-CPU area that binfmt_misc reads
-+ * back immediately after running the program under migrate_disable(), so it
-+ * cannot race with another CPU.
-+ */
-+BPF_CALL_2(bpf_binprm_set_interp, const char *, path, u32, len)
++static void kvm_gmem_invalidate_start_filter(struct inode *inode, 
+pgoff_t start,
++                                            pgoff_t end,
++                                            enum kvm_gfn_range_filter 
+attr_filter)
 +{
-+	struct binfmt_bpf_interp *sc = this_cpu_ptr(&binfmt_bpf_interp);
++       struct gmem_file *f;
 +
-+	if (len == 0 || len >= PATH_MAX)
-+		return -EINVAL;
-+	/* @path is @len bytes of BPF memory and is not NUL-terminated. */
-+	memcpy(sc->path, path, len);
-+	sc->path[len] = '\0';
-+	sc->len = len;
-+	return 0;
++       kvm_gmem_for_each_file(f, inode)
++               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
 +}
 +
-+const struct bpf_func_proto bpf_binprm_set_interp_proto = {
-+	.func		= bpf_binprm_set_interp,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg2_type	= ARG_CONST_SIZE,
-+};
-+#endif /* CONFIG_BPF_SYSCALL */
-+
- /**
-  * search_binfmt_handler - search for a binary handler for @bprm
-  * @misc: handle to binfmt_misc instance
-  * @bprm: binary for which we are looking for a handler
-+ * @bpf_interp: receives a kmalloc'd interpreter path if a 'B' program chooses
-+ *              one via bpf_binprm_set_interp(); the caller must kfree() it
-  *
-  * Search for a binary type handler for @bprm in the list of registered binary
-  * type handlers.
-@@ -89,7 +140,8 @@ static struct file_system_type bm_fs_type;
-  * Return: binary type list entry on success, NULL on failure
-  */
- static Node *search_binfmt_handler(struct binfmt_misc *misc,
--				   struct linux_binprm *bprm)
-+				   struct linux_binprm *bprm,
-+				   char **bpf_interp)
- {
- 	char *p = strrchr(bprm->interp, '.');
- 	Node *e;
-@@ -103,6 +155,37 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
- 		if (!test_bit(Enabled, &e->flags))
- 			continue;
- 
-+		/* Do matching based on BPF if applicable. */
-+		if (test_bit(Bpf, &e->flags)) {
-+#ifdef CONFIG_BPF_SYSCALL
-+			if (e->bpf_prog) {
-+				struct binfmt_bpf_interp *sc;
-+				u32 ret;
-+
-+				migrate_disable();
-+				sc = this_cpu_ptr(&binfmt_bpf_interp);
-+				sc->len = -1;
-+
-+				rcu_read_lock();
-+				ret = bpf_prog_run(e->bpf_prog, bprm->buf);
-+				rcu_read_unlock();
-+
-+				if (ret == 1 && sc->len > 0)
-+					*bpf_interp = kmemdup_nul(sc->path,
-+								  sc->len,
-+								  GFP_ATOMIC);
-+				migrate_enable();
-+
-+				pr_debug("binfmt_misc: ran BPF program for %s, ret = %u\n",
-+					 bprm->filename, ret);
-+
-+				if (ret == 1)
-+					return e;
-+			}
-+#endif
-+			continue;
-+		}
-+
- 		/* Do matching based on extension if applicable. */
- 		if (!test_bit(Magic, &e->flags)) {
- 			if (p && !strcmp(e->magic, p + 1))
-@@ -139,12 +222,13 @@ static Node *search_binfmt_handler(struct binfmt_misc *misc,
-  * Return: binary type list entry on success, NULL on failure
-  */
- static Node *get_binfmt_handler(struct binfmt_misc *misc,
--				struct linux_binprm *bprm)
-+				struct linux_binprm *bprm,
-+				char **bpf_interp)
- {
- 	Node *e;
- 
- 	read_lock(&misc->entries_lock);
--	e = search_binfmt_handler(misc, bprm);
-+	e = search_binfmt_handler(misc, bprm, bpf_interp);
- 	if (e)
- 		refcount_inc(&e->users);
- 	read_unlock(&misc->entries_lock);
-@@ -164,6 +248,10 @@ static void put_binfmt_handler(Node *e)
- 	if (refcount_dec_and_test(&e->users)) {
- 		if (e->flags & MISC_FMT_OPEN_FILE)
- 			filp_close(e->interp_file, NULL);
-+#ifdef CONFIG_BPF_SYSCALL
-+		if (test_bit(Bpf, &e->flags) && e->bpf_prog)
-+			bpf_prog_put(e->bpf_prog);
-+#endif
- 		kfree(e);
- 	}
- }
-@@ -206,15 +294,27 @@ static int load_misc_binary(struct linux_binprm *bprm)
- 	struct file *interp_file = NULL;
- 	int retval = -ENOEXEC;
- 	struct binfmt_misc *misc;
-+	char *bpf_interp __free(kfree) = NULL;
-+	const char *interpreter;
- 
- 	misc = load_binfmt_misc();
- 	if (!misc->enabled)
- 		return retval;
- 
--	fmt = get_binfmt_handler(misc, bprm);
-+	fmt = get_binfmt_handler(misc, bprm, &bpf_interp);
- 	if (!fmt)
- 		return retval;
- 
-+	/*
-+	 * A 'B' (BPF) handler carries no interpreter of its own; the program
-+	 * chooses it via bpf_binprm_set_interp(). Other handlers use the
-+	 * interpreter recorded at registration.
-+	 */
-+	interpreter = bpf_interp ? bpf_interp : fmt->interpreter;
-+	retval = -ENOEXEC;
-+	if (!interpreter[0])
-+		goto ret;
-+
- 	/* Need to be able to load the file after exec */
- 	retval = -ENOENT;
- 	if (bprm->interp_flags & BINPRM_FLAGS_PATH_INACCESSIBLE)
-@@ -238,22 +338,27 @@ static int load_misc_binary(struct linux_binprm *bprm)
- 	bprm->argc++;
- 
- 	/* add the interp as argv[0] */
--	retval = copy_string_kernel(fmt->interpreter, bprm);
-+	retval = copy_string_kernel(interpreter, bprm);
- 	if (retval < 0)
- 		goto ret;
- 	bprm->argc++;
- 
- 	/* Update interp in case binfmt_script needs it. */
--	retval = bprm_change_interp(fmt->interpreter, bprm);
-+	retval = bprm_change_interp(interpreter, bprm);
- 	if (retval < 0)
- 		goto ret;
- 
--	if (fmt->flags & MISC_FMT_OPEN_FILE) {
-+	/*
-+	 * The pre-opened interp_file (MISC_FMT_OPEN_FILE / 'F' flag) only
-+	 * applies to the statically registered interpreter; a program-supplied
-+	 * path is opened here.
-+	 */
-+	if ((fmt->flags & MISC_FMT_OPEN_FILE) && !bpf_interp) {
- 		interp_file = file_clone_open(fmt->interp_file);
- 		if (!IS_ERR(interp_file))
- 			deny_write_access(interp_file);
- 	} else {
--		interp_file = open_exec(fmt->interpreter);
-+		interp_file = open_exec(interpreter);
- 	}
- 	retval = PTR_ERR(interp_file);
- 	if (IS_ERR(interp_file))
-@@ -404,6 +509,10 @@ static Node *create_entry(const char __user *buffer, size_t count)
- 		pr_debug("register: type: M (magic)\n");
- 		e->flags = (1 << Enabled) | (1 << Magic);
- 		break;
-+	case 'B':
-+		pr_debug("register: type: B (bpf)\n");
-+		e->flags = (1 << Enabled) | (1 << Bpf);
-+		break;
- 	default:
- 		goto einval;
- 	}
-@@ -492,6 +601,45 @@ static Node *create_entry(const char __user *buffer, size_t count)
- 				}
- 			}
- 		}
-+	} else if (test_bit(Bpf, &e->flags)) {
-+		/* Handle the 'B' (BPF) format. */
-+		char *s;
-+
-+		/* The offset field actually holds the pinned BPF program path */
-+		s = strchr(p, del);
-+		if (!s)
-+			goto einval;
-+		*s++ = '\0';
-+		e->magic = p; /* Keep path in e->magic */
-+		pr_debug("register: bpf program path: %s\n", e->magic);
-+
-+#ifdef CONFIG_BPF_SYSCALL
-+		e->bpf_prog = bpf_prog_get_type_path(e->magic, BPF_PROG_TYPE_SOCKET_FILTER);
-+		if (IS_ERR(e->bpf_prog)) {
-+			err = PTR_ERR(e->bpf_prog);
-+			e->bpf_prog = NULL;
-+			kfree(e);
-+			return ERR_PTR(err);
-+		}
-+#else
-+		goto einval;
-+#endif
-+
-+		p = s;
-+
-+		/* The magic field is unused, must be empty */
-+		s = strchr(p, del);
-+		if (!s || p != s)
-+			goto einval;
-+		*s++ = '\0';
-+		p = s;
-+
-+		/* The mask field is unused, must be empty */
-+		s = strchr(p, del);
-+		if (!s || p != s)
-+			goto einval;
-+		*s++ = '\0';
-+		p = s;
- 	} else {
- 		/* Handle the 'E' (extension) format. */
- 
-@@ -524,8 +672,17 @@ static Node *create_entry(const char __user *buffer, size_t count)
- 	if (!p)
- 		goto einval;
- 	*p++ = '\0';
--	if (!e->interpreter[0])
-+	if (test_bit(Bpf, &e->flags)) {
-+		/*
-+		 * A 'B' (BPF) handler carries no interpreter of its own; the
-+		 * program picks it via bpf_binprm_set_interp(). Reject a
-+		 * statically registered one.
-+		 */
-+		if (e->interpreter[0])
-+			goto einval;
-+	} else if (!e->interpreter[0]) {
- 		goto einval;
-+	}
- 	pr_debug("register: interpreter: {%s}\n", e->interpreter);
- 
- 	/* Parse the 'flags' field. */
-@@ -602,7 +759,9 @@ static void entry_status(Node *e, char *page)
- 		*dp++ = 'F';
- 	*dp++ = '\n';
- 
--	if (!test_bit(Magic, &e->flags)) {
-+	if (test_bit(Bpf, &e->flags)) {
-+		sprintf(dp, "bpf %s\n", e->magic);
-+	} else if (!test_bit(Magic, &e->flags)) {
- 		sprintf(dp, "extension .%s\n", e->magic);
- 	} else {
- 		dp += sprintf(dp, "offset %i\nmagic ", e->offset);
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7719f6528..3aef44b69 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3874,6 +3874,7 @@ extern const struct bpf_func_proto bpf_ktime_get_ns_proto;
- extern const struct bpf_func_proto bpf_ktime_get_boot_ns_proto;
- extern const struct bpf_func_proto bpf_ktime_get_tai_ns_proto;
- extern const struct bpf_func_proto bpf_get_current_pid_tgid_proto;
-+extern const struct bpf_func_proto bpf_binprm_set_interp_proto;
- extern const struct bpf_func_proto bpf_get_current_uid_gid_proto;
- extern const struct bpf_func_proto bpf_get_current_comm_proto;
- extern const struct bpf_func_proto bpf_get_stackid_proto;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 89b36de5f..dce155c5b 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6142,6 +6142,7 @@ union bpf_attr {
- 	FN(user_ringbuf_drain, 209, ##ctx)		\
- 	FN(cgrp_storage_get, 210, ##ctx)		\
- 	FN(cgrp_storage_delete, 211, ##ctx)		\
-+	FN(binprm_set_interp, 212, ##ctx)		\
- 	/* This helper list is effectively frozen. If you are trying to	\
- 	 * add a new helper, you should add a kfunc instead which has	\
- 	 * less stability guarantees. See Documentation/bpf/kfuncs.rst	\
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2e96b4b84..187692a4a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8397,6 +8397,14 @@ sk_filter_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_socket_uid_proto;
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_skb_event_output_proto;
-+#if IS_BUILTIN(CONFIG_BINFMT_MISC)
-+	case BPF_FUNC_binprm_set_interp:
-+		/*
-+		 * binfmt_misc reuses SOCKET_FILTER programs to select an
-+		 * interpreter; expose the helper that lets them set it.
-+		 */
-+		return &bpf_binprm_set_interp_proto;
-+#endif
- 	default:
- 		return bpf_sk_base_func_proto(func_id, prog);
- 	}
--- 
-2.51.2
+  static void kvm_gmem_invalidate_start(struct inode *inode, pgoff_t start,
+                                       pgoff_t end)
+  {
+         enum kvm_gfn_range_filter attr_filter;
+-       struct gmem_file *f;
+-
+         attr_filter = kvm_gmem_get_invalidate_filter(inode, start, end);
+
+-       kvm_gmem_for_each_file(f, inode)
+-               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
++       kvm_gmem_invalidate_start_filter(inode, start, end, attr_filter);
+  }
+
+  static void __kvm_gmem_invalidate_end(struct gmem_file *f, pgoff_t start,
+@@ -724,9 +731,14 @@ static int __kvm_gmem_set_attributes(struct inode 
+*inode, pgoff_t start,
+         /*
+          * From this point on guest_memfd has performed necessary
+          * checks and can proceed to do guest-breaking changes.
++        * Also, we don't have to invalidate the regions that
++        * may already be in the requested state. Hence, we could
++        * explicitly filter the invalidations to the opposite
++        * state.
+          */
+
+-       kvm_gmem_invalidate_start(inode, start, end);
++       kvm_gmem_invalidate_start_filter(inode, start, end,
++                                       to_private ? KVM_FILTER_SHARED : 
+KVM_FILTER_PRIVATE);
+
+         if (!to_private)
+                 kvm_gmem_invalidate(inode, start, end);
+
+
+Thoughts ?
+
+Suzuki
+
+
+> +	mas_store_prealloc(&mas, xa_mk_value(attrs));
+> +	kvm_gmem_invalidate_end(inode, start, end);
+> +out:
+> +	filemap_invalidate_unlock(mapping);
+> +	return r;
+> +}
+> +
+> +static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
+> +{
+> +	struct gmem_file *f = file->private_data;
+> +	struct inode *inode = file_inode(file);
+> +	struct kvm_memory_attributes2 attrs;
+> +	size_t nr_pages;
+> +	pgoff_t index;
+> +	int i;
+> +
+> +	if (copy_from_user(&attrs, argp, sizeof(attrs)))
+> +		return -EFAULT;
+> +
+> +	if (attrs.flags)
+> +		return -EINVAL;
+> +	for (i = 0; i < ARRAY_SIZE(attrs.reserved); i++) {
+> +		if (attrs.reserved[i])
+> +			return -EINVAL;
+> +	}
+> +	if (!kvm_arch_has_private_mem(f->kvm))
+> +		return -EINVAL;
+> +	if (attrs.attributes & ~KVM_MEMORY_ATTRIBUTE_PRIVATE)
+> +		return -EINVAL;
+> +	if (attrs.size == 0 || attrs.offset + attrs.size < attrs.offset)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.size))
+> +		return -EINVAL;
+> +
+> +	if (attrs.offset >= i_size_read(inode) ||
+> +	    attrs.offset + attrs.size > i_size_read(inode))
+> +		return -EINVAL;
+> +
+> +	nr_pages = attrs.size >> PAGE_SHIFT;
+> +	index = attrs.offset >> PAGE_SHIFT;
+> +	return __kvm_gmem_set_attributes(inode, index, nr_pages,
+> +					 attrs.attributes);
+> +}
+> +
+> +static long kvm_gmem_ioctl(struct file *file, unsigned int ioctl,
+> +			   unsigned long arg)
+> +{
+> +	switch (ioctl) {
+> +	case KVM_SET_MEMORY_ATTRIBUTES2:
+> +		if (!gmem_in_place_conversion)
+> +			return -ENOTTY;
+> +
+> +		return kvm_gmem_set_attributes(file, (void __user *)arg);
+> +	default:
+> +		return -ENOTTY;
+> +	}
+> +}
+> +
+>   static struct file_operations kvm_gmem_fops = {
+>   	.mmap		= kvm_gmem_mmap,
+>   	.open		= generic_file_open,
+>   	.release	= kvm_gmem_release,
+>   	.fallocate	= kvm_gmem_fallocate,
+> +	.unlocked_ioctl	= kvm_gmem_ioctl,
+>   };
+>   
+>   static int kvm_gmem_migrate_folio(struct address_space *mapping,
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 01761f6e25d25..a08b518cdb175 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -105,6 +105,18 @@ module_param(allow_unsafe_mappings, bool, 0444);
+>   bool __ro_after_init gmem_in_place_conversion = false;
+>   #endif
+>   
+> +#define MEMORY_ATTRIBUTES_MATCH(one, two)				\
+> +	static_assert(offsetof(struct kvm_memory_attributes, one) ==	\
+> +		      offsetof(struct kvm_memory_attributes2, two));	\
+> +	static_assert(sizeof_field(struct kvm_memory_attributes, one) ==\
+> +		      sizeof_field(struct kvm_memory_attributes2, two))
+> +
+> +/* Ensure the common parts of the two structs are identical. */
+> +MEMORY_ATTRIBUTES_MATCH(address, address);
+> +MEMORY_ATTRIBUTES_MATCH(size, size);
+> +MEMORY_ATTRIBUTES_MATCH(attributes, attributes);
+> +MEMORY_ATTRIBUTES_MATCH(flags, flags);
+> +
+>   /*
+>    * Ordering of locks:
+>    *
+> 
 
