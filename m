@@ -1,84 +1,193 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063CC263F4A;
-	Sun,  5 Jul 2026 20:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCAA18BBAE;
+	Sun,  5 Jul 2026 20:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783281895; cv=none; b=ZLUIxwX2EeFroyPYfpBD+KIrm6FMSnh6JO1Vt9FdtPInsAgfJgxN6D5K0UX4LRdXD1USZghe6qntgVXfnb9bi0sljOMLp3+fI06fVz6OYCjEs4/XF5AwGUUjxLCN1S4emDP0ZYikn/G+Otzo4CpqDP6EufNUqwg/rx9TgDX//4M=
+	t=1783284502; cv=none; b=qMYOw6uWA6t5ZkwDvHRcBCvtMQHLLsgIrgP1R912YaPJp9Y+K7cYj3mYHr+tPpxD+9YRuxgwDBgEXD+8oQQL7y8R7c12R5QfUFjacg0icWNrJpkrU/qabSdFDPPWTeB4Wzv8RnOdZ+ElJhBScNu4G6VUl6ap2e8oCMMmqPGQQwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783281895; c=relaxed/simple;
-	bh=2sqy2aZLH/v0SC8TzpK9ShdGQBDuRvEuGMZytAXRlXs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RK4P515JXP4SJInTwdA/NcaB9s2NpuSX4pvubs6hhV8yr4FELIOTeeGtlNv8QHTYQIPyjXLY7lLoPDYOuAudYx6OMcmxMYEQLKkyrEUdNd7e6Tj6cDeCpTsmFwqktfjZiUbtY5sZYveLpRVAJNBzElhJHVXQu+RN27dck55z2bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MD5WhYlO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783284502; c=relaxed/simple;
+	bh=VtpLc/+EJwl7cvpisYHaQsi+9fOMmLGNXZLAwgHhtUw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=qaYDJB8p0qnGfQxqsiii5L3B8JSeLUZGVQULGtANwtXheKxrnv1hjYR2I2Ga0WPhv9hdeCSJu431U6zIM4CtH4UTqu5lsfVm4cgVwz1D9+mAJZJekmPXeD8a1ISRUd9GXdcuN9NIwPmncQD0OI8WlRHX+6jqeFkDfnIAoIAgXr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aYuX+2ZO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MD5WhYlO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132B31F000E9;
-	Sun,  5 Jul 2026 20:04:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783281893;
-	bh=pVn1bX2iRKKUn1/jaTQA8Ho6vRT9HVGPvQMn/YX2kA4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=MD5WhYlOaZ8ZoWq5aJfWL+pqiGNWD7uEEFqskf6YXyK1zq1lucuLjR86AjmF8sZ4W
-	 GJ0qLFVY8nLxwQT5S9yuA/1LItccb1HS4u4aS7YANLFHZU8LURZUD54+gzk2FHpqTD
-	 QJx/MRUr0aB4qfe++oFtoLdwbbiTYPLKujT1NdpF8kRxdxJflwLYiBLbiGJbEf7Bpl
-	 nUaNnbDbRKmZ3kbp9CuWKLOL2h62xYapdu6ygvU+RBs8j2NmibfKjVqTT1g4j0mpkY
-	 h4+6boFVwuYd6Uk9cPqz4zDpivg/9ciJ13Quwix45Cot6rwlLBMnc1uKq7XR7SuJnh
-	 2/1nuzXxtvwoA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Feng Tang <feng.tang@linux.alibaba.com>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- Davidlohr Bueso <dave@stgolabs.net>, andrealmeid@igalia.com, Shuah Khan
- <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Feng Tang
- <feng.tang@linux.alibaba.com>
-Subject: Re: [PATCH] selftests/futex_requeue: Increase futex timeout to
- cover slow hardware
-In-Reply-To: <20260703032113.535-1-feng.tang@linux.alibaba.com>
-References: <20260703032113.535-1-feng.tang@linux.alibaba.com>
-Date: Sun, 05 Jul 2026 22:04:50 +0200
-Message-ID: <87tsqdjj8d.ffs@fw13>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aYuX+2ZO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D7F1F000E9;
+	Sun,  5 Jul 2026 20:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1783284500;
+	bh=qqf23XiVeF7E6IoPTpK7HKahKDWobW5oehZgHKt5vFE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=aYuX+2ZOPOZFALiltW8zNgEUGECOVLI+5MHUXK+ZduK/0uGZivRyZ38HaaZ+em3Sj
+	 B2I81V9AabL9RkcM1CmYlg2XcIBpVBOugSvAhT/rdlVbw3rn5r7hdtKymbTJK0GUPD
+	 zzRcW76UEZfHhXOb6lU3Y0wlp7ZY8ps7B3MjOb8c=
+Date: Sun, 5 Jul 2026 13:48:19 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jhubbard@nvidia.com, joey.gouly@arm.com,
+ keith.lucas@oracle.com, kevin.brodsky@arm.com, usama.anjum@collabora.com,
+ yury.khrustalev@arm.com, zwisler@google.com, hongfu.li@linux.dev
+Subject: Re: [PATCH v9 0/5] selftests/mm: refactor pkey helpers and fix mmap
+ error handling
+Message-Id: <20260705134819.871dbf41d2b06681f0facf12@linux-foundation.org>
+In-Reply-To: <20260702062332.911786-1-lihongfu@kylinos.cn>
+References: <20260702062332.911786-1-lihongfu@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 03 2026 at 11:21, Feng Tang wrote:
-> When running  mixed stress tests (stess-ng, kernel selftests etc.)
-> on a slow machine, futex 'requeue_multiple' case failed randomly,
-> with message:
-> "
->     waiter failed errno 110
->     not ok 2 futex_requeue many returned: 0 Success
->     not ok 3 futex_requeue many returned: 0 Success
->     # Planned tests != run tests (2 != 3)
->     # Totals: pass:1 fail:2 xfail:0 xpass:0 skip:0 error:0
-> "
->
-> The process of 'requeue_multiple' case will:
-> * create 10 pthreads with futex (timeout 30 ms)
-> * wait 10 ms
-> * start 'futex_cmp_requeue' case
->
-> So there is an assumption that the 10 threads can be created in 20 ms,
-> which is safe enough for normal platforms, while for slow platforms
-> with stress workload, the creation could take more than 20 ms, and
-> some futex will timeout and cause the case to fail.
->
-> Increasing the timeout to 100 ms to cover slow platforms, which doesn't
-> hurt normal platforms much.
+On Thu,  2 Jul 2026 14:23:27 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
 
-That's just lame and it hurts because it makes testing slower. If you'd
-had taken the time to search LKML for discusssions about this issue then
-you'd have noticed that there is work in progress to solve that
-properly.
+> The main changes in this series are to refactor shared tracing and assertion
+> helpers into a common file, unify both pkey selftests on pkey_assert() and
+> per-test tracing for consistent diagnostics, and add missing mmap() return
+> checks with MAP_FAILED used throughout for readability and consistency.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=157a9b22ff769e1a657aec6210df3ea896600eec
+Updated, thanks.
 
-Thanks,
+AI review might have found a pre-existing thing:
+	https://sashiko.dev/#/patchset/20260702062332.911786-1-lihongfu@kylinos.cn
 
-        tglx
+> v9:
+> - In patch 1/5, define test_nr, iteration_nr and dprint_in_signal in
+>   pkey_util.c and remove them from protection_keys.c and
+>   pkey_sighandler_tests.c.
+> - In patch 1/5, cat_into_file() used the wrong argument in the open()
+>   failure message; print file instead of str. Update the commit message
+>   accordingly.
+> - In patch 2/5, align clone_raw() continuation lines to the opening parenthesis.
+> - In patch 5/5, set errno from pthread_create() return value before
+>   pkey_assert(0) on thread creation failure.
+> - Add Acked-by, Reviewed-by and Tested-by tags to each patch.
+
+Here's how v9 altered mm.git:
+
+ tools/testing/selftests/mm/pkey_sighandler_tests.c |   38 +++++------
+ tools/testing/selftests/mm/pkey_util.c             |    6 +
+ tools/testing/selftests/mm/protection_keys.c       |    4 -
+ 3 files changed, 25 insertions(+), 23 deletions(-)
+
+--- a/tools/testing/selftests/mm/pkey_sighandler_tests.c~b
++++ a/tools/testing/selftests/mm/pkey_sighandler_tests.c
+@@ -35,10 +35,6 @@ static pthread_mutex_t mutex = PTHREAD_M
+ static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+ static siginfo_t siginfo = {0};
+ 
+-int iteration_nr = 1;
+-int test_nr;
+-int dprint_in_signal;
+-
+ /*
+  * We need to use inline assembly instead of glibc's syscall because glibc's
+  * syscall will attempt to access the PLT in order to call a library function
+@@ -225,7 +221,10 @@ static void test_sigsegv_handler_with_pk
+ 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+ 
+ 	ret = pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
+-	pkey_assert(ret == 0);
++	if (ret) {
++		errno = ret;
++		pkey_assert(0);
++	}
+ 
+ 	pthread_mutex_lock(&mutex);
+ 	while (siginfo.si_signo == 0)
+@@ -265,7 +264,10 @@ static void test_sigsegv_handler_cannot_
+ 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+ 
+ 	ret = pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
+-	pkey_assert(ret == 0);
++	if (ret) {
++		errno = ret;
++		pkey_assert(0);
++	}
+ 
+ 	pthread_mutex_lock(&mutex);
+ 	while (siginfo.si_signo == 0)
+@@ -327,12 +329,12 @@ static void test_sigsegv_handler_with_di
+ 
+ 	/* Use clone to avoid newer glibcs using rseq on new threads */
+ 	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
+-			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
+-			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
+-			     CLONE_DETACHED,
+-			     stack + STACK_SIZE,
+-			     &parent_pid,
+-			     &child_pid);
++			CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
++			CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
++			CLONE_DETACHED,
++			stack + STACK_SIZE,
++			&parent_pid,
++			&child_pid);
+ 
+ 	if (ret < 0) {
+ 		errno = -ret;
+@@ -501,12 +503,12 @@ static void test_pkru_sigreturn(void)
+ 
+ 	/* Use clone to avoid newer glibcs using rseq on new threads */
+ 	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
+-			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
+-			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
+-			     CLONE_DETACHED,
+-			     stack + STACK_SIZE,
+-			     &parent_pid,
+-			     &child_pid);
++			CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
++			CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
++			CLONE_DETACHED,
++			stack + STACK_SIZE,
++			&parent_pid,
++			&child_pid);
+ 
+ 	if (ret < 0) {
+ 		errno = -ret;
+--- a/tools/testing/selftests/mm/pkey_util.c~b
++++ a/tools/testing/selftests/mm/pkey_util.c
+@@ -8,6 +8,10 @@
+ 
+ #include "pkey-helpers.h"
+ 
++int iteration_nr = 1;
++int test_nr;
++int dprint_in_signal;
++
+ #if CONTROL_TRACING > 0
+ static void cat_into_file(char *str, char *file)
+ {
+@@ -20,7 +24,7 @@ static void cat_into_file(char *str, cha
+ 	 * pkey_assert()
+ 	 */
+ 	if (fd < 0) {
+-		fprintf(stderr, "error opening '%s'\n", str);
++		fprintf(stderr, "error opening '%s'\n", file);
+ 		perror("error: ");
+ 		exit(__LINE__);
+ 	}
+--- a/tools/testing/selftests/mm/protection_keys.c~b
++++ a/tools/testing/selftests/mm/protection_keys.c
+@@ -49,11 +49,7 @@
+ #include "hugepage_settings.h"
+ #include "pkey-helpers.h"
+ 
+-int iteration_nr = 1;
+-int test_nr;
+-
+ u64 shadow_pkey_reg;
+-int dprint_in_signal;
+ 
+ noinline int read_ptr(int *ptr)
+ {
+_
+
