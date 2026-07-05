@@ -1,145 +1,97 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191DE362149
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2026 07:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEE7292B54;
+	Sun,  5 Jul 2026 15:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783237201; cv=none; b=cCbkCHnCzhyzq0HQ7xVezudC7DIELzriLEmGxBd/gYfJuBdCzDuyDNR/nQGnhsud829axzDhBWn6OJ9xqwyh7JMChGhDg4mtaJdXGZpZDKlSdW4XPwB8oL8t9LOrIgxeWbEK6qUVDJJw+S9unskBmzWDRYJJdxRykd8gH//2FH4=
+	t=1783266483; cv=none; b=WT8q69gfZFhTTSm/7hroHKyPTrOIRrIKvgpNBH/gx4SukGUkJ2cy/5vKMHmlKEti6HM8aItqnsgJDV7CBC9xV9Vr2H5lvqLmWR4sFSxeya6p+GP6sM7c14EceEGId9xCObmGtgEBPt6u+KIRZsoV3uVFtYUxoor0XaCWdsGoTXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783237201; c=relaxed/simple;
-	bh=Oeebzmlj2IUYz9Wvf7b8zwEBWFf6yEz6RSrG2e5iXv8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fdJQ+WslbDb7rTRjcQykdeVPFrKgDW4EzRGNs1gFGnaKRiDgF7AviUe6nz6euTKcMLTHobCuhZ9+ruY9AvUJAU8CbHlEAvApp2O6SFHzt3+iY0Lk42b3bRC1R73XUObnRxwHpIznJH+RMXJo5Ug9a2U2lT9Hy6kXKOV2qfJFfBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JSXs2jIM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4kQxb+ui; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JSXs2jIM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=4kQxb+ui; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1783266483; c=relaxed/simple;
+	bh=hlbpdBo3Uq0EN/42H203OfcXv1pYqJQdz8cLqyz426E=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=CzPmJ68FB/GKxjOer3/P6QrsGZMA17j8NO6Arh/4mCkN3N+XicQ2td/0vQUAhnoM0eW3zU/r2mesRADWNUrVWkB1VdrO1Z0Xmj7y245NkEPxdR92KUyJ/+zbVMA3U2MZEQm0YqRXm1Qk+qPPEqrublwLjhCN8V/u09/nwfJxlNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=SFoFy0dM; arc=none smtp.client-ip=203.205.221.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JSXs2jIM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4kQxb+ui";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JSXs2jIM";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="4kQxb+ui"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0256A7580E;
-	Sun,  5 Jul 2026 07:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783237191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2U3/co07P0FjfO8pupYTVfbHIwzb+992bBN9i9egodI=;
-	b=JSXs2jIMEgaugQNCZ5QttAuJ9tD0C145GVfjVnT3xVuo5BYUOaK3EIgoeMeGyyaP2pYp3Z
-	zBQKhfIvbfBqoKegqjfaR7Hms5ALUh8zo9R2emYHFTxxKeGWqImLyEx+VZuvm83ZVoosJA
-	zlwYW3ZMXCF0TOXsYYvZR56pPAT/f1g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783237191;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2U3/co07P0FjfO8pupYTVfbHIwzb+992bBN9i9egodI=;
-	b=4kQxb+ui76Khy0qHN4bjtMUIkCKsIpgIsmjq/eawr6/unkKwGXEy67LxKGL58mNvzs1zkJ
-	CzOvydnJ7jsNQ4BQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=JSXs2jIM;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=4kQxb+ui
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1783237191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2U3/co07P0FjfO8pupYTVfbHIwzb+992bBN9i9egodI=;
-	b=JSXs2jIMEgaugQNCZ5QttAuJ9tD0C145GVfjVnT3xVuo5BYUOaK3EIgoeMeGyyaP2pYp3Z
-	zBQKhfIvbfBqoKegqjfaR7Hms5ALUh8zo9R2emYHFTxxKeGWqImLyEx+VZuvm83ZVoosJA
-	zlwYW3ZMXCF0TOXsYYvZR56pPAT/f1g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1783237191;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2U3/co07P0FjfO8pupYTVfbHIwzb+992bBN9i9egodI=;
-	b=4kQxb+ui76Khy0qHN4bjtMUIkCKsIpgIsmjq/eawr6/unkKwGXEy67LxKGL58mNvzs1zkJ
-	CzOvydnJ7jsNQ4BQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A6862779AA;
-	Sun,  5 Jul 2026 07:39:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id JZ/zJkYKSmpdZgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Sun, 05 Jul 2026 07:39:50 +0000
-Date: Sun, 05 Jul 2026 09:39:50 +0200
-Message-ID: <87y0fp6g1l.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Malaya Kumar Rout <malayarout91@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	mrout@redhat.com,
-	skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/alsa: Fix memory leak in find_controls error path
-In-Reply-To: <20260704105736.94874-1-malayarout91@gmail.com>
-References: <20260704105736.94874-1-malayarout91@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="SFoFy0dM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1783266477; bh=NtuUbY240M0fU9kQruxrCPW0ej8gT6RfnDWnfPfSEQU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=SFoFy0dM8Ier5Yv53ERLxg3WLCshKGtjLPfRriDjsVw33f8x3mc85Gls0cYujGr/d
+	 EtwKVvbuXHzNr0ME2RIK1EIEOW+IqJy00VNdVqbIk6SZRiXaAcPwlq5loONj/PCT90
+	 fgjjvlhfE+aebcIUYxE3dLmMIw1imqOeAOXO8zOQ=
+Received: from LAPTOP-KNA43L24 ([2409:8a55:34b0:84b3:416b:63d5:3813:92b0])
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id BF238886; Sun, 05 Jul 2026 23:47:50 +0800
+X-QQ-mid: xmsmtpt1783266470te4886uuo
+Message-ID: <tencent_BAB26179A92C5CE28657C0451540E6EE4B05@qq.com>
+X-QQ-XMAILINFO: OOO9dHjlsLs7iIfk7wHMrsewBYACxnX2AZtccVv8Fxc37wgTwJkpy4gNVMurwK
+	 brfmNAtJJrstkwgn+247UGZFPr3jU5PDQQJ17kuG4XhqipzaPAHYMS8OIo73J3/d08zZ5gS0fWib
+	 l9oS71e6SJgoaGzWYhWRattHp8E6G/39HLfzgFZt0LS/bU75DNqPPvXjmro1W0J55bsBd+EQkmJx
+	 L5YlwjAE3aQXGUwPHe6DYS5MrtRdEfn3wIbDxHA57RZbk+HJ+K4oNgLScC3K1DSgZZW7pZtlUdxF
+	 eA25en+U2ZbaUg9zX+JY3a4cIMcliBEumTWPXZxWTVxhd9XJR88I+VR/+xPkC92UmTNW0icXYy3/
+	 Sr/kc3xgV7dMEdzVlHSl0IHukPHCN8ZYkIp3ws/DEfwrsnPWPWIJ0AS84O2ChXeEMRmkK7+uDFom
+	 HWpsacfrCkbesWytPROQY+pYN1arExjBkXitgX7V5FGcdsoW8TA+etUCBz+k/POu+UQvlF6giM50
+	 xRz63Y5lJKO9h8BrmRGPnOTHJsqH8fGURlmw5d3Taki5BsezaXDUSjIcTrjyoC+IMk7O58IvdXOc
+	 OtE4KKYnDCz2/drYcqgVBuKOLMcJ8ei5y76F7YqsE/vapbVllyqQ950mtm09WV9jR5/dHxDHqXmZ
+	 Esd5tv6nOvJhkjeOMvvW0K4QoApkrU+R0AudInQWftK9Fd5ca2cq4IVMuf0tvS9AoN1Ycq8gCjx4
+	 O9DuQTIOyK1GnNZffupTfz4wO+LgqwzQYsYzPNl02Kg2dD4V0PmwUHEMWHRIVdV5x4qM440EtqM+
+	 wciWU0Z+q5XdsXzY+waWsEwNJyIHUrQZq8Sf+PvX3o/fxh1uaZTX9DTnkLAkf9Hu+2ewLwxU6jJ2
+	 7EbfUUt3nzlHJEKV3BpyajWX6Nmk1h0ZFBJkRZGwfwiNsKWe2nkxg0VlVEoyKGjs1OilZvrKnjCb
+	 P5VV002qt1qFbCXk+Jnku4EUFkYY9akFjfYUBOUBYAFNixYjUjJJfD+/5CoIEdoiVVJyQ9jJfKAR
+	 TCKnRGOG+xkL4JnrBf0KGF2AMrBiidUKZcdZjj7A==
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+From: Ding Junlin <1746193727@qq.com>
+To: mathieu.desnoyers@efficios.com,
+	peterz@infradead.org,
+	paulmck@kernel.org,
+	boqun@kernel.org,
+	shuah@kernel.org
+Cc: tglx@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ding Junlin <1746193727@qq.com>
+Subject: [PATCH v2] selftests/rseq: Fix spelling of accommodate
+Date: Sun,  5 Jul 2026 23:47:46 +0800
+X-OQ-MSGID: <20260705154746.99-1-1746193727@qq.com>
+X-Mailer: git-send-email 2.50.1.windows.1
+In-Reply-To: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
+References: <tencent_A20EAF9C0B2AC0D6DD97A4C2F250D9970406@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 0256A7580E
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat, 04 Jul 2026 12:57:36 +0200,
-Malaya Kumar Rout wrote:
-> 
-> In find_controls(), card_data is allocated with malloc() but when
-> snd_ctl_open_lconf() fails, the code jumps to next_card without
-> freeing the allocated memory. This results in a memory leak for
-> each card where snd_ctl_open_lconf() fails.
-> 
-> Add free(card_data) before goto next_card to ensure proper cleanup
-> of the allocated memory in the error path.
-> 
-> Fixes: 5aaf9efffc57 ("kselftest: alsa: Add simplistic test for ALSA mixer controls kselftest")
-> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+The comment contains a spelling error listed in scripts/spelling.txt.
 
-Applied now.  Thanks.
+Fix it.
 
+Signed-off-by: Ding Junlin <1746193727@qq.com>
+---
+v2:
+- Use real name for authorship and Signed-off-by. No code changes.
 
-Takashi
+ tools/testing/selftests/rseq/rseq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index be0d0a97031e..1cd633923b1d 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -73,7 +73,7 @@ static int rseq_ownership;
+ #define ORIG_RSEQ_ALLOC_SIZE		32
+ 
+ /*
+- * Use a union to ensure we allocate a TLS area of 1024 bytes to accomodate an
++ * Use a union to ensure we allocate a TLS area of 1024 bytes to accommodate an
+  * rseq registration that is larger than the current rseq ABI.
+  */
+ union rseq_tls {
+-- 
+2.50.1.windows.1
+
