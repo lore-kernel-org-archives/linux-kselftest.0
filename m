@@ -1,315 +1,88 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E5884039
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2026 02:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2623EA66;
+	Sun,  5 Jul 2026 03:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783218996; cv=none; b=hMj7LF89V5n8TbxSOGuWetaEOpmdhFfczwQeecKc1Flhlcw7r+imEGpCB0m/99pVgQAm5qpHA9VwSPhA+ayRxtKtalKWK1noa1S6FYWLtzhaCFE511qO9SQVmO3UHOghotysKqMZ7QxgKtltp33L4XFwXGiX7/VNw26uP7wGHDU=
+	t=1783222578; cv=none; b=ovPNxbmqev78Q+nPt+Fcexx74OCfBNzPAJTG8hr3m8JKiY3YB9KZOxsd7nYbt/NTl/0mEhluloZbZV5jshn9m58acxaKwYEt1CRIhPBqygZ6bU1zOJU02O7UE5ijvk2PtUwFe14LZt1z0XQ9jVvbYN7NgWFimscY07Azv1DmyC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783218996; c=relaxed/simple;
-	bh=C6INMuq8FuV/QzCmdZWMKxJ2Gq/F+3gT/xwMaJT50RY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hvE+dhwSdkImKyCuyLxdNaRoOeZahqbe0Y8Q7nmZWN15odso7797ZByxXv8CH0ZytDQPGFtKbG2+zOLu6ofkV3RBqjaiJM1zlT+F4F3aze/lI9rsJpaYixWpK+a+l57aKNc78eKtBAyEvie+KnTDpi7kcd1Z6mUn+WUcFBekrx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ih1ddvtg; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783222578; c=relaxed/simple;
+	bh=cSXRHZ/mVG7DA3h4SeHE4Oml6SIucx1bV7ldnR6p+6w=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=LlF8LQI01wRvZTWpMoov8IilGg3/Iseh2bqWoolVxy9ru6fgkyk7ZyIvxqvEtjuRmdJ7D8ghNnDNit4UhlrQSIXu++GRGDSIS3+A3c31ktLOAJTiGa6pCafpkWgVbzjDybrOk/SRRq093tBSUvYdiyoLgOg/qrEZj8Dakvu1lFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YBUQTjDh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ih1ddvtg"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c125ba77577so167278966b.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 Jul 2026 19:36:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YBUQTjDh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F941F000E9;
+	Sun,  5 Jul 2026 03:36:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783218993; x=1783823793; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QNI0y5zuLguVzkcebZ5tUWaeh5KsfA7kAM+rWUugMtw=;
-        b=ih1ddvtgx53Wqj9Pkl+pyJR2D/EU3/K8pD0bAjoIxoRDve288GAnXP5sDyEZQMdP//
-         iPnAyLKe0gspmec+JktoDYIRBZzInVOCFEXt3qwIrFW67F2g6GX3GYIMZOyIBLs/ObNj
-         c56YuDAnhwt0fmCRlxDTkPZ7bLmnEc+pkZRj1dZWSBfgNGlE2vBP06dhI4KaK4AySMGN
-         YMVdpGaPIa9hbGbRURRYzam4kGlrJgjs+FZTw75+4FGaBL6zhU4W+S2GtRla+31zF+Qx
-         FOhtYCfvFBHtbAa+LSneL8rvYQO/YX666ZHGqiUNlxP2ubAksHv0axDIAJos8KHu4YCy
-         aSXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783218993; x=1783823793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QNI0y5zuLguVzkcebZ5tUWaeh5KsfA7kAM+rWUugMtw=;
-        b=VXYzk+v0+vGhzU1/v1b4ZbRMHFai+fEbdb4fq5b2eSgAqQ6KrtdwuhUW/Nq6gmQYkC
-         qT4Hg8bmbMQ4MBU8X2uEUbxb9XXiOKtS+U0E9A2TcOkajgvvenRkqbQCSvR6Fgt9DMBY
-         XMm5y7XttSBnKBbj7l2IsZNEoKLNHSTQrECktP58zk3ZzmzwF8lBKRoHcvSWf8OvmJPH
-         Oh42rac9vmpLQj6wBC3i4K0jBlulblnbqn8AYGzZ0xndQ5NTCtHEOGshJG8EHBj+f4U7
-         XqjbqIMkTKr4X6rL7AEn7RfUoSLFsFjC5z21VUhtkR1yywd2a1HLhBQDbNpCNC8h1i3W
-         Sgcw==
-X-Forwarded-Encrypted: i=1; AHgh+RqQQiGqo9IAZ11wP+YiywFhy4ZXZiB5Eu7ey6smKb/hApxHy8KnOsnK8eJH9saXn8hp3u6Gi7eBIrqRZ/QU9g8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7wK2+TXRdy6HuaTAuEq0qYf7UblbMG9X7CXbIdkPwIqOsvqm8
-	Y3QsYgb+rePMfgK5Z8J3O+fOQvLAdAwo4xmVdglfSgbaEKtzWJWGYujU
-X-Gm-Gg: AfdE7cm6sjTdPNbcplbFffet82IAhBPuUStBfD3LZmRX0DD/LEFuLuf6sgWhdMiXEna
-	I8dm4UaHCcOF/ju63D5exHYOoAX9eEdh3qd2+rogddH9TonamZa/fjEZuE7ldJ2/1YFiZsueXyA
-	DwBvXALoHmNTCWeXFvWwcrq+vpYtppq5gsoyCxIJGAB4vvrvI87UFH7pH8AIpxPVxsbmtP5smsi
-	qRgsFLipPuEnVEevPEdoZxNQJYaK2WJ1SP6h8p8cJY0lOO3Xns5WV0xMDsTC6gFz+WrmdBUHvDe
-	aGq94swrTnskdTTVlc6axEBngH/g9vFHZZE7M4FtlHTLi6lb6Ww+Me4ucYDHmtSneG3edpOuY1k
-	ks+wtrxfeaAx6GHJUmZ7QDSFeiOm7A+EK0/8bxYRiE1Cav4vu5lG8XNvdq7Y594r47UmF0+/OXf
-	pfkikv4N2nvHxXYYW4mPyEuWDEvQ/nFx/0QFhGKeyA5AMqJmI2naFWx56Y7g==
-X-Received: by 2002:a17:907:25c3:b0:c12:cfa4:3a3f with SMTP id a640c23a62f3a-c12e6c0ddcdmr163074866b.55.1783218993239;
-        Sat, 04 Jul 2026 19:36:33 -0700 (PDT)
-Received: from dau-home-pc.. ([95.164.115.35])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c12bc53e065sm463082166b.46.2026.07.04.19.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2026 19:36:31 -0700 (PDT)
-From: Anton Danilov <littlesmilingcloud@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemb@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v5 2/2] selftests: net: add FOU multicast encapsulation resubmit test
-Date: Sun,  5 Jul 2026 05:36:04 +0300
-Message-ID: <b66a8b13a33b21a1d0bf620bc51b68d78a2c16e1.1783218197.git.littlesmilingcloud@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1783218197.git.littlesmilingcloud@gmail.com>
-References: <cover.1783218197.git.littlesmilingcloud@gmail.com>
+	d=linux-foundation.org; s=korg; t=1783222576;
+	bh=yaQSA+c0eA23eljol+15gGGuS4n86bu1Vd0UOzc/IDQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=YBUQTjDhhzOUeupzNOcNLQVaV7ok5XNKQiPZmnd7dn1uC12tIQhuww1Dr7hrZyusQ
+	 CP3M8KaSQ4YSlvfi3+ONT4YcWNwH3Ptk3q5sVLSOTZIRqvufJH5CiL4SFV3X6UoYF0
+	 3qprjiMzvfHQHPQgcEMHSZx8v0qYZCI5acxY6kxY=
+Date: Sat, 4 Jul 2026 20:36:16 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Yijia Wang" <wangyijia.yeah@bytedance.com>
+Cc: "Shuah Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, "Muchun Song"
+ <muchun.song@linux.dev>
+Subject: Re: [PATCH RESEND v3] selftests: mincore: fix the readahead check
+ on large base page sizes
+Message-Id: <20260704203616.1ce10365e07c746f1e805cab@linux-foundation.org>
+In-Reply-To: <20260703125253.3016281-1-wangyijia.yeah@bytedance.com>
+References: <20260703125253.3016281-1-wangyijia.yeah@bytedance.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add a selftest to verify that FOU-encapsulated packets addressed to a
-multicast destination are correctly resubmitted to the inner protocol
-handler (GRE) via the UDP multicast delivery path.  Both IPv4 and IPv6
-paths are tested.
+On Fri,  3 Jul 2026 20:52:53 +0800 "Yijia Wang" <wangyijia.yeah@bytedance.com> wrote:
 
-The test creates two network namespaces connected by a veth pair with
-a FOU/GRETAP (IPv4) and FOU/ip6gretap (IPv6) tunnel using multicast
-remote addresses (239.0.0.1 and ff0e::1).  Ping is sent through each
-tunnel and received packets are counted on the receiver's tunnel
-interface.
+> check_file_mmap faults a page in the middle of a file mapping and
+> expects the readahead window to have populated further pages *after*
+> it. With a large base page size this is wrong and the test fails
+> reliably, e.g. on arm64 with 64K pages:
+> 
+>   # mincore_selftest.c:260:check_file_mmap:Expected ra_pages (0) > 0 (0)
+>   # mincore_selftest.c:261:check_file_mmap:No read-ahead pages found in memory
+>   not ok 4 global.check_file_mmap
 
-The veth pair is created directly inside the namespaces to avoid
-possible name collisions with devices in the root namespace.
+I'm not sure this is a good thing for us to be self-testing for.  It's
+poking pretty deeply inside the internal implementations of
+kernel-of-the-moment.
 
-Static neighbor entries are configured on the sender because ARP/ND
-replies from the receiver cannot traverse the unidirectional multicast
-tunnel back to the sender.
+Oh well, I guss if the test suddenly starts reporting errors, it might
+be something we want to look into.
 
-The early demux optimization (net.ipv4.ip_early_demux, which controls
-both IPv4 and IPv6) is disabled on the receiver to force packets
-through __udp4_lib_mcast_deliver() / __udp6_lib_mcast_deliver(), which
-is the code path being tested.
+> The read-around window is read_ahead_kb / page_size pages wide and is
+> centred on the faulting page (mm/filemap.c):
+> 
+>   ra->start = max(0, pgoff - ra_pages / 2)
+> 
+> With the default 128K budget that is 32 pages on 4K but only 2 pages on
+> 64K, so the window becomes [pgoff-1, pgoff] and the single extra page
+> lands *before* the faulted page. The forward-only scan finds nothing.
+> This is not a huge-page (THP) effect; it is just a byte-sized readahead
+> budget divided by a large page size plus a fault-centred window.
+> 
+> Count readahead pages on both sides of the faulted page, and skip the
+> readahead check up front when there is no usable read-around window:
+> either it is narrower than two pages (readahead disabled, or the base
+> page size so large that read_ahead_kb covers a single page), or the file
+> has no backing block device whose read_ahead_kb can be read (e.g. on
+> tmpfs). When the window is wide enough the EXPECT_GT(ra_pages, 0)
+> assertion is kept, so a kernel that should read ahead but does not is
+> still caught.
 
-Signed-off-by: Anton Danilov <littlesmilingcloud@gmail.com>
-Assisted-by: Claude:claude-opus-4-6
----
- tools/testing/selftests/net/Makefile          |   1 +
- .../testing/selftests/net/fou_mcast_encap.sh  | 177 ++++++++++++++++++
- 2 files changed, 178 insertions(+)
- create mode 100755 tools/testing/selftests/net/fou_mcast_encap.sh
+Thanks.  AI review might have found a couple of things of interest:
+	https://sashiko.dev/#/patchset/20260703125253.3016281-1-wangyijia.yeah@bytedance.com
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 708d960ae07d..7e9ae937cffa 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -39,6 +39,7 @@ TEST_PROGS := \
- 	fib_rule_tests.sh \
- 	fib_tests.sh \
- 	fin_ack_lat.sh \
-+	fou_mcast_encap.sh \
- 	fq_band_pktlimit.sh \
- 	gre_gso.sh \
- 	gre_ipv6_lladdr.sh \
-diff --git a/tools/testing/selftests/net/fou_mcast_encap.sh b/tools/testing/selftests/net/fou_mcast_encap.sh
-new file mode 100755
-index 000000000000..728513d55db4
---- /dev/null
-+++ b/tools/testing/selftests/net/fou_mcast_encap.sh
-@@ -0,0 +1,177 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test that UDP encapsulation (FOU) correctly handles packet resubmit
-+# when packets are delivered via the multicast UDP delivery path.
-+#
-+# When a FOU-encapsulated packet arrives with a multicast destination IP,
-+# __udp4_lib_mcast_deliver() / __udp6_lib_mcast_deliver() must resubmit
-+# it to the inner protocol handler (e.g., GRE) rather than consuming it.
-+# This test verifies both IPv4 and IPv6 paths by creating a FOU/GRETAP
-+# tunnel with a multicast remote address and sending ping through it.
-+#
-+# The early demux optimization can mask this issue by routing packets via
-+# the unicast path (udp[6]_unicast_rcv_skb), so we disable it to force
-+# packets through the multicast delivery function.
-+
-+source lib.sh
-+
-+NSENDER=""
-+NRECV=""
-+
-+FOU_PORT4=4797
-+FOU_PORT6=4798
-+MCAST4=239.0.0.1
-+MCAST6=ff0e::1
-+
-+TUN4_S=192.168.99.1
-+TUN4_R=192.168.99.2
-+TUN6_S=2001:db8:99::1
-+TUN6_R=2001:db8:99::2
-+
-+cleanup() {
-+	cleanup_all_ns
-+}
-+
-+trap cleanup EXIT
-+
-+setup_common() {
-+	setup_ns NSENDER NRECV
-+
-+	# Create veth pair directly inside namespaces to avoid name
-+	# collisions with devices in the root namespace.
-+	ip link add veth_s netns "$NSENDER" type veth \
-+		peer name veth_r netns "$NRECV"
-+
-+	ip -n "$NSENDER" link set veth_s up
-+	ip -n "$NRECV" link set veth_r up
-+
-+	# Same sysctl controls early demux for both IPv4 and IPv6.
-+	ip netns exec "$NRECV" sysctl -wq net.ipv4.ip_early_demux=0
-+}
-+
-+setup_ipv4() {
-+	ip -n "$NSENDER" addr add 10.0.0.1/24 dev veth_s
-+	ip -n "$NRECV" addr add 10.0.0.2/24 dev veth_r
-+
-+	# Join multicast group on receiver
-+	ip -n "$NRECV" addr add "$MCAST4/32" dev veth_r autojoin
-+
-+	ip -n "$NSENDER" route add 239.0.0.0/8 dev veth_s
-+	ip -n "$NRECV" route add 239.0.0.0/8 dev veth_r
-+
-+	# Sender: GRETAP with FOU encap (no FOU listener needed on TX side)
-+	ip -n "$NSENDER" link add eoudp4 type gretap \
-+		remote "$MCAST4" local 10.0.0.1 \
-+		encap fou encap-sport "$FOU_PORT4" encap-dport "$FOU_PORT4" \
-+		key "$MCAST4"
-+	ip -n "$NSENDER" link set eoudp4 up
-+	ip -n "$NSENDER" addr add "$TUN4_S/24" dev eoudp4
-+
-+	# Receiver: FOU listener + GRETAP
-+	ip netns exec "$NRECV" ip fou add port "$FOU_PORT4" ipproto 47
-+	ip -n "$NRECV" link add eoudp4 type gretap \
-+		remote "$MCAST4" local 10.0.0.2 \
-+		encap fou encap-sport "$FOU_PORT4" encap-dport "$FOU_PORT4" \
-+		key "$MCAST4"
-+	ip -n "$NRECV" link set eoudp4 up
-+	ip -n "$NRECV" addr add "$TUN4_R/24" dev eoudp4
-+
-+	# Static neigh on sender: ARP replies cannot traverse the
-+	# unidirectional multicast tunnel.
-+	local recv_mac
-+	recv_mac=$(ip -n "$NRECV" link show eoudp4 | awk '/ether/{print $2}')
-+	ip -n "$NSENDER" neigh add "$TUN4_R" lladdr "$recv_mac" dev eoudp4
-+}
-+
-+setup_ipv6() {
-+	# Skip cleanly if IPv6 is not available in the running kernel.
-+	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
-+	modprobe -q fou6 || return "$ksft_skip"
-+
-+	ip -n "$NSENDER" addr add 2001:db8::1/64 dev veth_s nodad
-+	ip -n "$NRECV" addr add 2001:db8::2/64 dev veth_r nodad
-+
-+	# Join multicast group on receiver
-+	ip -n "$NRECV" addr add "$MCAST6/128" dev veth_r autojoin
-+
-+	ip -n "$NSENDER" -6 route add ff00::/8 dev veth_s
-+	ip -n "$NRECV" -6 route add ff00::/8 dev veth_r
-+
-+	# Sender: ip6gretap with FOU encap
-+	ip -n "$NSENDER" link add eoudp6 type ip6gretap \
-+		remote "$MCAST6" local 2001:db8::1 \
-+		encap fou encap-sport "$FOU_PORT6" encap-dport "$FOU_PORT6" \
-+		key 42
-+	ip -n "$NSENDER" link set eoudp6 up
-+	ip -n "$NSENDER" addr add "$TUN6_S/64" dev eoudp6 nodad
-+
-+	# Receiver: FOU listener (IPv6) + ip6gretap
-+	ip netns exec "$NRECV" ip fou add port "$FOU_PORT6" ipproto 47 -6
-+	ip -n "$NRECV" link add eoudp6 type ip6gretap \
-+		remote "$MCAST6" local 2001:db8::2 \
-+		encap fou encap-sport "$FOU_PORT6" encap-dport "$FOU_PORT6" \
-+		key 42
-+	ip -n "$NRECV" link set eoudp6 up
-+	ip -n "$NRECV" addr add "$TUN6_R/64" dev eoudp6 nodad
-+
-+	# Static neigh on sender: neighbor discovery cannot traverse the
-+	# unidirectional multicast tunnel.
-+	local recv_mac
-+	recv_mac=$(ip -n "$NRECV" link show eoudp6 | awk '/ether/{print $2}')
-+	ip -n "$NSENDER" neigh add "$TUN6_R" lladdr "$recv_mac" dev eoudp6
-+}
-+
-+get_rx_packets() {
-+	local dev="$1"
-+
-+	ip -n "$NRECV" -s link show "$dev" | awk '/RX:/{getline; print $2}'
-+}
-+
-+run_ping_test() {
-+	local family="$1"
-+	local dev="$2"
-+	local dst="$3"
-+	local count=100
-+	local rx_before rx_after rx_delta
-+
-+	# Warmup: let any initial broadcast/ND traffic settle
-+	ip netns exec "$NSENDER" ping "$family" -c 1 -W 1 "$dst" \
-+		>/dev/null 2>&1
-+	sleep 1
-+
-+	rx_before=$(get_rx_packets "$dev")
-+	ip netns exec "$NSENDER" ping "$family" -c $count -W 1 "$dst" \
-+		>/dev/null 2>&1
-+	sleep 1
-+	rx_after=$(get_rx_packets "$dev")
-+
-+	rx_delta=$((rx_after - rx_before))
-+
-+	if [ "$rx_delta" -ge "$count" ]; then
-+		echo "PASS: received $rx_delta/$count packets"
-+		return "$ksft_pass"
-+	elif [ "$rx_delta" -gt 0 ]; then
-+		echo "FAIL: only $rx_delta/$count packets received"
-+		return "$ksft_fail"
-+	else
-+		echo "FAIL: 0/$count packets received"
-+		return "$ksft_fail"
-+	fi
-+}
-+
-+ret=0
-+
-+echo "TEST: FOU/GRETAP IPv4 multicast encapsulation resubmit"
-+setup_common
-+setup_ipv4
-+run_ping_test -4 eoudp4 "$TUN4_R" || ret=$?
-+
-+echo "TEST: FOU/GRETAP IPv6 multicast encapsulation resubmit"
-+if setup_ipv6; then
-+	run_ping_test -6 eoudp6 "$TUN6_R" || ret=$?
-+else
-+	echo "SKIP: IPv6 unavailable"
-+fi
-+
-+exit $ret
--- 
-2.47.3
 
