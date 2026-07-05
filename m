@@ -1,124 +1,84 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B812E2FC876
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2026 17:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063CC263F4A;
+	Sun,  5 Jul 2026 20:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783271460; cv=none; b=JEZZxux0SXWBAtXV4/wi2dFZa12H9lrGLGupDNDZMmw1nJjDlA8zV7VpqhToqa0MXbpouBEhMCuf0CeAGZN2YZYfyn0jFQwksGvLseVEIAMb7laHQQy5KvrQms6EzcX2R4MbKhLOeTRS4Z1cMvUqkNY/0Lr1897NhKpJ7KSPhNg=
+	t=1783281895; cv=none; b=ZLUIxwX2EeFroyPYfpBD+KIrm6FMSnh6JO1Vt9FdtPInsAgfJgxN6D5K0UX4LRdXD1USZghe6qntgVXfnb9bi0sljOMLp3+fI06fVz6OYCjEs4/XF5AwGUUjxLCN1S4emDP0ZYikn/G+Otzo4CpqDP6EufNUqwg/rx9TgDX//4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783271460; c=relaxed/simple;
-	bh=dKbDeK5JMWOskgWhH2hh7caMG/c2GZ2IPAktPg/6cNs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JGm/7+TZRvn1hR0NjEKTwXqtF4R4Am+bW0veWsajxYxkitN0U7sZtwLWN8nLqWEZXSAEKQPGpIztUyfeDAYF+SV0xxBsee3I1DDbV5/zou/y4Wb7OYWVfXERgPPC5OVi/xQu2GyaEziVL//+yXxWgsw/MfQVNMVzmXz+53BnmR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kDitKflW; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783281895; c=relaxed/simple;
+	bh=2sqy2aZLH/v0SC8TzpK9ShdGQBDuRvEuGMZytAXRlXs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=RK4P515JXP4SJInTwdA/NcaB9s2NpuSX4pvubs6hhV8yr4FELIOTeeGtlNv8QHTYQIPyjXLY7lLoPDYOuAudYx6OMcmxMYEQLKkyrEUdNd7e6Tj6cDeCpTsmFwqktfjZiUbtY5sZYveLpRVAJNBzElhJHVXQu+RN27dck55z2bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MD5WhYlO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDitKflW"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cca24023edso512375ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jul 2026 10:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783271459; x=1783876259; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F6oriXBGQKRVO8BFxyvH8HRrLjtHNA6kmEs+Bsjv0iU=;
-        b=kDitKflW8giQwfda6RrlbI49/Xk4B7wcYcgaoA1SgnzB8/v1PEnvaRrT8J3yGiBCfZ
-         htpHSE1XpvpZH4cL71/cLddoFKsZob8k/P5ORnzU3BfRurQ+ZbgHH/r/AiiyUoq31A0H
-         hYurNpbXVjnJfQAwpax+xVTDrgjY+or+tcXS7DV97Jw++O7CkjmmrlZFzHWjs9pJ0Y9c
-         pLC9BOT1hgE9rvi3OgfDeY9KHfzSJ3bFgBiIFGp1SCdnraFbCpWlJ++B6Io4ih28fba0
-         t7fCQvE4PFbQEYjPq6L7TmI3YUwDOI6IW1ACx+mbG9VlgzOwQ6LWAOUTgwP0fr5aHL9U
-         op4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783271459; x=1783876259;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F6oriXBGQKRVO8BFxyvH8HRrLjtHNA6kmEs+Bsjv0iU=;
-        b=tDjHdk7/oOKVyqbIjZ5AF0ARwdT1gkYU34BwzCX/UxAiRqJSSr0ZcUnAI2Xwq54Tz3
-         QsZcy+4Om/HOhrzfhxL8mw01P/yBxeo0L93tuj1Yuezzqccrzp9MaRbrrrgHYz4f2RL1
-         UbCw6akhs/Es6sLZw4K77V1iUutj2RlaodxkKOcUPz34vc7kfqWRXbd8k3CV3Q72ltJd
-         EOcDPBPwI5HT7fc/UD9n2UufP8NBwfrY60cD/CKxZCBdJ3q7ldx9HSh7pDItjMM6viD7
-         NHWInGHNd6adHRZsDaUuefYoOz/JhSe/WqDYBR5fSbTP8C4HEoC0hInAecO+BDtSXOBd
-         FKrg==
-X-Forwarded-Encrypted: i=1; AHgh+RqRkMTyGxp1CTYyrnDryykIB3J56FP0cwL/GoeC6VYRb8nZ8eOEC5Y4Uwva57mrnxPSd4SK6Fu7Rq8P2KbOuTY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZll8uGvLraoJz4DO5r48kRwt97xTScj4oP7DtyeeiMXZjR/4d
-	C14SKliUin8g9dWgpyuyw/jeUa6snx014qONlcLKzWt2PowUBuxxHf/e
-X-Gm-Gg: AfdE7cnOLepjTdM5JXLY+q+4HbMxB7nEw7/Joq7QLDkQqpwxDTONHdIv+CPygGNKqXz
-	znbSfBMhsElzwpnS7jqw3c9VlPCVUzgYGl5HZ9/rN7qxYfjYdT8O6Xp/Tqr9ilA9Q7QupXkUF5j
-	l1AnIp1Uk4M7f/rJaemI6XuAT3g78u1a4iWFlDLDr+xQT/ORONyAbIBYfwixKdEGtmHYkYR6jwD
-	3ZfIEVbnMGVRT42411WZNbrybaxTZBJub49OQ5JEq3d0OnvcW2zRb6SJR4QEoWGWg2+k+oT8sZc
-	/3IqKbugX6YUPtZwZPAB9uFyLmosKNQfNsLc49qLUmZOm7PdoCuliZVJDtfg+wSKRD0BR168Idw
-	ynJt6XqUrFNigdO68rba5PvORjYq2GN3sRviMTmlkrRYnw5b0W4S9j1NYxiq6myz/VA48WxR7Pu
-	cOwAX4fCA0pf5MCKohQ6arojkYgnlOm1VrMKUNCesv3XFpGymbFYthX7UU+w==
-X-Received: by 2002:a17:902:ce83:b0:2c9:97a7:71ae with SMTP id d9443c01a7336-2cbb9f2a80emr65200725ad.41.1783271458503;
-        Sun, 05 Jul 2026 10:10:58 -0700 (PDT)
-Received: from fedora.mrout-thinkpadp16vgen1.punetw6.csb ([103.133.229.222])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c876ea9sm39655434c88.13.2026.07.05.10.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2026 10:10:57 -0700 (PDT)
-From: Malaya Kumar Rout <malayarout91@gmail.com>
-To: linux-sound@vger.kernel.org,
-	tiwai@suse.de
-Cc: mrout@redhat.com,
-	skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
-	Malaya Kumar Rout <malayarout91@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/alsa: Fix format specifier and function mismatch in mixer-test
-Date: Sun,  5 Jul 2026 22:40:38 +0530
-Message-ID: <20260705171038.171966-1-malayarout91@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MD5WhYlO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132B31F000E9;
+	Sun,  5 Jul 2026 20:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783281893;
+	bh=pVn1bX2iRKKUn1/jaTQA8Ho6vRT9HVGPvQMn/YX2kA4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=MD5WhYlOaZ8ZoWq5aJfWL+pqiGNWD7uEEFqskf6YXyK1zq1lucuLjR86AjmF8sZ4W
+	 GJ0qLFVY8nLxwQT5S9yuA/1LItccb1HS4u4aS7YANLFHZU8LURZUD54+gzk2FHpqTD
+	 QJx/MRUr0aB4qfe++oFtoLdwbbiTYPLKujT1NdpF8kRxdxJflwLYiBLbiGJbEf7Bpl
+	 nUaNnbDbRKmZ3kbp9CuWKLOL2h62xYapdu6ygvU+RBs8j2NmibfKjVqTT1g4j0mpkY
+	 h4+6boFVwuYd6Uk9cPqz4zDpivg/9ciJ13Quwix45Cot6rwlLBMnc1uKq7XR7SuJnh
+	 2/1nuzXxtvwoA==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Feng Tang <feng.tang@linux.alibaba.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, andrealmeid@igalia.com, Shuah Khan
+ <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Feng Tang
+ <feng.tang@linux.alibaba.com>
+Subject: Re: [PATCH] selftests/futex_requeue: Increase futex timeout to
+ cover slow hardware
+In-Reply-To: <20260703032113.535-1-feng.tang@linux.alibaba.com>
+References: <20260703032113.535-1-feng.tang@linux.alibaba.com>
+Date: Sun, 05 Jul 2026 22:04:50 +0200
+Message-ID: <87tsqdjj8d.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-In the ctl_value_index_valid() function, when validating 64-bit integer
-controls (SND_CTL_ELEM_TYPE_INTEGER64), the error message for maximum
-value validation has two bugs:
+On Fri, Jul 03 2026 at 11:21, Feng Tang wrote:
+> When running  mixed stress tests (stess-ng, kernel selftests etc.)
+> on a slow machine, futex 'requeue_multiple' case failed randomly,
+> with message:
+> "
+>     waiter failed errno 110
+>     not ok 2 futex_requeue many returned: 0 Success
+>     not ok 3 futex_requeue many returned: 0 Success
+>     # Planned tests != run tests (2 != 3)
+>     # Totals: pass:1 fail:2 xfail:0 xpass:0 skip:0 error:0
+> "
+>
+> The process of 'requeue_multiple' case will:
+> * create 10 pthreads with futex (timeout 30 ms)
+> * wait 10 ms
+> * start 'futex_cmp_requeue' case
+>
+> So there is an assumption that the 10 threads can be created in 20 ms,
+> which is safe enough for normal platforms, while for slow platforms
+> with stress workload, the creation could take more than 20 ms, and
+> some futex will timeout and cause the case to fail.
+>
+> Increasing the timeout to 100 ms to cover slow platforms, which doesn't
+> hurt normal platforms much.
 
-1. Uses snd_ctl_elem_info_get_max() instead of the 64-bit variant
-   snd_ctl_elem_info_get_max64()
-2. Uses %ld format specifier instead of %lld for long long type
+That's just lame and it hurts because it makes testing slower. If you'd
+had taken the time to search LKML for discusssions about this issue then
+you'd have noticed that there is work in progress to solve that
+properly.
 
-This is inconsistent with the minimum value validation (line 335-339)
-which correctly uses get_min64() and %lld. The mismatch can cause:
-- Incorrect maximum values being reported on some architectures
-- Undefined behavior due to format specifier mismatch
-- Potential crashes when printing the error message
+  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=157a9b22ff769e1a657aec6210df3ea896600eec
 
-Fix by using snd_ctl_elem_info_get_max64() and %lld format specifier
-to match the data type and be consistent with the minimum value check.
+Thanks,
 
-Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
----
- tools/testing/selftests/alsa/mixer-test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index d4f845c32804..242a0b21e85e 100644
---- a/tools/testing/selftests/alsa/mixer-test.c
-+++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -339,9 +339,9 @@ static bool ctl_value_index_valid(struct ctl_data *ctl,
- 		}
- 
- 		if (int64_val > snd_ctl_elem_info_get_max64(ctl->info)) {
--			ksft_print_msg("%s.%d value %lld more than maximum %ld\n",
-+			ksft_print_msg("%s.%d value %lld more than maximum %lld\n",
- 				       ctl->name, index, int64_val,
--				       snd_ctl_elem_info_get_max(ctl->info));
-+				       snd_ctl_elem_info_get_max64(ctl->info));
- 			return false;
- 		}
- 
--- 
-2.54.0
-
+        tglx
