@@ -1,193 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCAA18BBAE;
-	Sun,  5 Jul 2026 20:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3870A2DFA3A
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2026 21:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783284502; cv=none; b=qMYOw6uWA6t5ZkwDvHRcBCvtMQHLLsgIrgP1R912YaPJp9Y+K7cYj3mYHr+tPpxD+9YRuxgwDBgEXD+8oQQL7y8R7c12R5QfUFjacg0icWNrJpkrU/qabSdFDPPWTeB4Wzv8RnOdZ+ElJhBScNu4G6VUl6ap2e8oCMMmqPGQQwI=
+	t=1783288514; cv=none; b=ps8vj0e3VH9U3OvyWni+71EsS2kCdyLzIBOKmK7JAA+OxjudUJPy7mjBoudbqD3bziXC1B0hOmUYrbYO86kV4T6GJu5qzESVZEejX/ddfh5KiUfQxzfajl/DZ+xARj0bmp24sz1vK1QugGYBYTvP5glSX28Bn3lBZZN2DCB+eYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783284502; c=relaxed/simple;
-	bh=VtpLc/+EJwl7cvpisYHaQsi+9fOMmLGNXZLAwgHhtUw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=qaYDJB8p0qnGfQxqsiii5L3B8JSeLUZGVQULGtANwtXheKxrnv1hjYR2I2Ga0WPhv9hdeCSJu431U6zIM4CtH4UTqu5lsfVm4cgVwz1D9+mAJZJekmPXeD8a1ISRUd9GXdcuN9NIwPmncQD0OI8WlRHX+6jqeFkDfnIAoIAgXr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aYuX+2ZO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783288514; c=relaxed/simple;
+	bh=2MsExnvuYrMO9KVmvVKeJb/z9uFAjmtZIrAajNnEKSw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nDMn6npx2ppvwCNPUREG1rLHY5dDGAqOlaEtmZOHvgvqmeYj5+mWL9TolJ6Fz+AMyqMbW59uZHvuB/78ArQyrGZsGt4bgrKXZ+X4G3VR5cplzEQ0omVJHV03hMtq3YPGzqtocy530/8+/DG+zwqfJvPw4ZLrYSSezG8JDZCCEGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cA+liGlU; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aYuX+2ZO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D7F1F000E9;
-	Sun,  5 Jul 2026 20:48:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cA+liGlU"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9f6b94a49so1296651a34.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jul 2026 14:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1783284500;
-	bh=qqf23XiVeF7E6IoPTpK7HKahKDWobW5oehZgHKt5vFE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=aYuX+2ZOPOZFALiltW8zNgEUGECOVLI+5MHUXK+ZduK/0uGZivRyZ38HaaZ+em3Sj
-	 B2I81V9AabL9RkcM1CmYlg2XcIBpVBOugSvAhT/rdlVbw3rn5r7hdtKymbTJK0GUPD
-	 zzRcW76UEZfHhXOb6lU3Y0wlp7ZY8ps7B3MjOb8c=
-Date: Sun, 5 Jul 2026 13:48:19 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Hongfu Li <lihongfu@kylinos.cn>
-Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, jhubbard@nvidia.com, joey.gouly@arm.com,
- keith.lucas@oracle.com, kevin.brodsky@arm.com, usama.anjum@collabora.com,
- yury.khrustalev@arm.com, zwisler@google.com, hongfu.li@linux.dev
-Subject: Re: [PATCH v9 0/5] selftests/mm: refactor pkey helpers and fix mmap
- error handling
-Message-Id: <20260705134819.871dbf41d2b06681f0facf12@linux-foundation.org>
-In-Reply-To: <20260702062332.911786-1-lihongfu@kylinos.cn>
-References: <20260702062332.911786-1-lihongfu@kylinos.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=gmail.com; s=20251104; t=1783288512; x=1783893312; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0BNmO/nSJ/zuyfL1He4LEsZwukmVnEntNkbHxW3ZPa4=;
+        b=cA+liGlURb60wiYQfOch7UjpYLFu+TpqPRA5nsp9lV2MUzNjXXMMj2vao5AP6iSigm
+         s+nNoIhBJHbXu1yZ8BwW+eOZ0HTNRzVs/PPqE7UpS+/YahcAliKsKF9E1SbVga4WcXFs
+         6ZMagF17kJ5L+YVjJXPla1fjk4gdr/TaPSAyessrpjUpunBvntaSFKFTG+fZRJj2uQ2b
+         tqoIWCvy7eInlJ6N/cJqyTFNx61OhyH4k8OvrhfByRKbYntcRS7gR6b4la2qUNLoyzfn
+         MxYVqfrfpFEF8T40YeL8CsbsvnGOaoH1YdRueolmP3KbjswdwK6earkep6jIQN0Ox6ZA
+         0v+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783288512; x=1783893312;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0BNmO/nSJ/zuyfL1He4LEsZwukmVnEntNkbHxW3ZPa4=;
+        b=krLOAkZJsPyNjHzTsT0EjpQnbLfEs27EfB2i5oOpVeljX4O2D1qd9SXaEP70gG4rBy
+         k0sNUx7Oddier89xaDYfp9zzhRrqkUnoUJ7qX66o0RWfcLFVOmnoEPuKsLrQiTo2jp6C
+         fwPoXlEwrCLEFkpkGDFDG307rGEjMDIHt2m3a9z+dUfeELJybVHFvGqW+ED8bd3zOhGa
+         BAqWBmQgxXnUwACbZ3qB7HUYqNbxlGumPdYmChxRhyPgZ1Npnd9HkWVj2ibXcHERPncA
+         sw2fljc6XygfcLZYPt5Zo1G8xgNeM7RIJ+oji+W4W8VVCYbK997NKa1TTCOIQ3fukaUA
+         /2QQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9IJV/vUILOPtfTzdx/iyrnNnfReC+QauYlLNGcbkSp0As2bXMR3dWUi4Wm2voAJHAt/7xjesqDjoGC5MbKL1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDFvuJbdxYXKEMXjtNqHwnkK/3BIG68NY6rwpyPtN3COdzXkwn
+	VHt/ziCl+Hi57CWJh6XN5P4iTR2mF3kDUwktgkHSrieiJthoKesHYPm1xQGySmgY
+X-Gm-Gg: AfdE7clHBL2EGt7ZpLtSbaAJqlE1zoo9fHJtGSqWpU3B+lBLYZKslMZRQbe6R9UscS1
+	w5qJ/uhRIP4h/ujPdQoi1LnRn96DCNDI0b7yvQa95VlOm80gTjg4ilKOCc9prsvGXskZW1kDr9I
+	5pv/q++xE1+pPqk8Un1QKvN0JtQTz30aJjK4yEMGxvnB9/krkhhBKySJHnWd77geF2IFzwyzA5X
+	iOOoGsh4tpeiPJay3+z7ClB/TZ+UeNLxcUP0AU3aHwlCSMDDHUi8HNUuzv7vKCtFDKPBa0iDUZP
+	E8JFmSaXpytrSfKrHvm0AMVnLr2avKQjuQJsKnS0A+3xm/RZAkQ/hvCdsok5CX/mnwxBrQJ6//i
+	hauFnUXWrPdlAzln9ZKyohKgpgNySIjJpgbAsrPom4bTGR219MK9Jj9gl01lAiTI+HzRVUpC2Ov
+	gZ84a684eU
+X-Received: by 2002:a05:6830:82bf:b0:7e6:c9eb:535a with SMTP id 46e09a7af769-7eb7fd0bdf3mr4798640a34.6.1783288511994;
+        Sun, 05 Jul 2026 14:55:11 -0700 (PDT)
+Received: from fedora ([189.146.106.138])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb542d017csm9955434a34.8.2026.07.05.14.55.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jul 2026 14:55:11 -0700 (PDT)
+From: Cihan Karadag <cihan.cihan@gmail.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Cihan Karadag <cihan.cihan@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/rseq: Add missing test binaries to .gitignore
+Date: Sun,  5 Jul 2026 15:53:40 -0600
+Message-ID: <20260705215346.1132764-1-cihan.cihan@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu,  2 Jul 2026 14:23:27 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
+legacy_check and check_optimized are built by this Makefile via
+TEST_GEN_PROGS_EXTENDED but are not listed in .gitignore, causing them
+to show up as untracked files after a build.
 
-> The main changes in this series are to refactor shared tracing and assertion
-> helpers into a common file, unify both pkey selftests on pkey_assert() and
-> per-test tracing for consistent diagnostics, and add missing mmap() return
-> checks with MAP_FAILED used throughout for readability and consistency.
+Signed-off-by: Cihan Karadag <cihan.cihan@gmail.com>
+---
+ tools/testing/selftests/rseq/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Updated, thanks.
-
-AI review might have found a pre-existing thing:
-	https://sashiko.dev/#/patchset/20260702062332.911786-1-lihongfu@kylinos.cn
-
-> v9:
-> - In patch 1/5, define test_nr, iteration_nr and dprint_in_signal in
->   pkey_util.c and remove them from protection_keys.c and
->   pkey_sighandler_tests.c.
-> - In patch 1/5, cat_into_file() used the wrong argument in the open()
->   failure message; print file instead of str. Update the commit message
->   accordingly.
-> - In patch 2/5, align clone_raw() continuation lines to the opening parenthesis.
-> - In patch 5/5, set errno from pthread_create() return value before
->   pkey_assert(0) on thread creation failure.
-> - Add Acked-by, Reviewed-by and Tested-by tags to each patch.
-
-Here's how v9 altered mm.git:
-
- tools/testing/selftests/mm/pkey_sighandler_tests.c |   38 +++++------
- tools/testing/selftests/mm/pkey_util.c             |    6 +
- tools/testing/selftests/mm/protection_keys.c       |    4 -
- 3 files changed, 25 insertions(+), 23 deletions(-)
-
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c~b
-+++ a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -35,10 +35,6 @@ static pthread_mutex_t mutex = PTHREAD_M
- static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
- static siginfo_t siginfo = {0};
- 
--int iteration_nr = 1;
--int test_nr;
--int dprint_in_signal;
--
- /*
-  * We need to use inline assembly instead of glibc's syscall because glibc's
-  * syscall will attempt to access the PLT in order to call a library function
-@@ -225,7 +221,10 @@ static void test_sigsegv_handler_with_pk
- 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
- 
- 	ret = pthread_create(&thr, &attr, thread_segv_with_pkey0_disabled, NULL);
--	pkey_assert(ret == 0);
-+	if (ret) {
-+		errno = ret;
-+		pkey_assert(0);
-+	}
- 
- 	pthread_mutex_lock(&mutex);
- 	while (siginfo.si_signo == 0)
-@@ -265,7 +264,10 @@ static void test_sigsegv_handler_cannot_
- 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
- 
- 	ret = pthread_create(&thr, &attr, thread_segv_pkuerr_stack, NULL);
--	pkey_assert(ret == 0);
-+	if (ret) {
-+		errno = ret;
-+		pkey_assert(0);
-+	}
- 
- 	pthread_mutex_lock(&mutex);
- 	while (siginfo.si_signo == 0)
-@@ -327,12 +329,12 @@ static void test_sigsegv_handler_with_di
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
- 	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
--			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
--			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
--			     CLONE_DETACHED,
--			     stack + STACK_SIZE,
--			     &parent_pid,
--			     &child_pid);
-+			CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
-+			CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
-+			CLONE_DETACHED,
-+			stack + STACK_SIZE,
-+			&parent_pid,
-+			&child_pid);
- 
- 	if (ret < 0) {
- 		errno = -ret;
-@@ -501,12 +503,12 @@ static void test_pkru_sigreturn(void)
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
- 	ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
--			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
--			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
--			     CLONE_DETACHED,
--			     stack + STACK_SIZE,
--			     &parent_pid,
--			     &child_pid);
-+			CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
-+			CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
-+			CLONE_DETACHED,
-+			stack + STACK_SIZE,
-+			&parent_pid,
-+			&child_pid);
- 
- 	if (ret < 0) {
- 		errno = -ret;
---- a/tools/testing/selftests/mm/pkey_util.c~b
-+++ a/tools/testing/selftests/mm/pkey_util.c
-@@ -8,6 +8,10 @@
- 
- #include "pkey-helpers.h"
- 
-+int iteration_nr = 1;
-+int test_nr;
-+int dprint_in_signal;
-+
- #if CONTROL_TRACING > 0
- static void cat_into_file(char *str, char *file)
- {
-@@ -20,7 +24,7 @@ static void cat_into_file(char *str, cha
- 	 * pkey_assert()
- 	 */
- 	if (fd < 0) {
--		fprintf(stderr, "error opening '%s'\n", str);
-+		fprintf(stderr, "error opening '%s'\n", file);
- 		perror("error: ");
- 		exit(__LINE__);
- 	}
---- a/tools/testing/selftests/mm/protection_keys.c~b
-+++ a/tools/testing/selftests/mm/protection_keys.c
-@@ -49,11 +49,7 @@
- #include "hugepage_settings.h"
- #include "pkey-helpers.h"
- 
--int iteration_nr = 1;
--int test_nr;
--
- u64 shadow_pkey_reg;
--int dprint_in_signal;
- 
- noinline int read_ptr(int *ptr)
- {
-_
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+index ec01d164c1f05..9b6eb6c3922f9 100644
+--- a/tools/testing/selftests/rseq/.gitignore
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -11,3 +11,5 @@ param_test_mm_cid_benchmark
+ param_test_mm_cid_compare_twice
+ syscall_errors_test
+ slice_test
++legacy_check
++check_optimized
+-- 
+2.54.0
 
