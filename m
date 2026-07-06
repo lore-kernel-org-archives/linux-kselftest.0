@@ -1,146 +1,339 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB44E39734E;
-	Mon,  6 Jul 2026 17:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4E52D0C72
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 17:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783358705; cv=none; b=DEn9qxz0TVtLoweKfY6p7/vmXqdopTOksf/wwdjOPQfj37/hk9AgBMCFOvLeaIx/rg/sT8Ac/islT89kPXzUAT9pJxHl3bqH7HZYT9r+qXclymw9LN7zvHmzGdq0ij51EHo/8ilF8qty7PWt51xZ3tGYBhGR0HwBSPl1ZWY3DgU=
+	t=1783359916; cv=none; b=FM4v1criLHEk0gb5EIZBGpsOdRjA0chVG89mOMl2fgrrylfnjp9k5Cg3q8ydc730ZZms3fBjjdhFZiWELRgfSMhzHJgAnEtnaKgtTFSUkDS3UQlo2iGKesU+00lgO2TL9h+jF1fw2hFYSZdl0Z5vclzcQHEFBXZSipfpU5Jvtu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783358705; c=relaxed/simple;
-	bh=2y5ckWPYQJ8G2pY4u8ihalHWvoXMugXkPGDdogkateY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFPbaP34X1gid8I4Auf/7YoFbiWskWmuqtmG2WYrPmkLoPfriEgMJQXYcGxL8QFVJPLHQYUxA94uCw/dc6hKbeiJ+UguanbiM1pNAWWOlh9CCAOEqhMEU+qMU+F3bPnrKieEe1XZ3I0Tepr5xvisVLU0l6XUC+oW/DecJdzu5KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=avs52las; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1783359916; c=relaxed/simple;
+	bh=cn+VU197UgOgFy+ZlUz1XqNMPTdsd/01FYsqu2dr1Bg=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=PrZ4yq7zPXEFoCyfBKh0O6uAh2m3pK/04Sic3wStYo8kv1UNS3AV4ZxCrTl+O+BV7ePoBumd4M2nS8xipBE4fMyDJCT2WqJzptMX9UkNAsubqm1irs34gGjqsTcm6U+LaRhCnvCegGHVAMV7Zz3xSzqcbpAWwzc6JMb6HzVlJvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s8C6YITl; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="avs52las"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783358704; x=1814894704;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2y5ckWPYQJ8G2pY4u8ihalHWvoXMugXkPGDdogkateY=;
-  b=avs52lasllYV8MBfFnVNO0epufBg2NxTWDAL5HpNQLyVek09sPeF+fCv
-   VTjShPS2cMpyJo9nt1x4sDq+CEMerrl3+xDheD1ed59vWfS12HJAcSzaf
-   pvCj/5FveLp9qwAGYN4VoX8Ok1V813oT8KoizbJPj7c386bAK2lkwJirW
-   W+J5YbcuqnhlDJ7LUiJurfTJFtSpXvVqZX6vnVL17yby0bBjYU0jT7TTa
-   5HTiqJimCjRs7m7kotk7BfRESednPLCdLOsSfZD2UFdB4Xv6rxG+jeK1E
-   Llcs2oZE7XqSWSIjVsjObmOprtAdMpXtIZKQ5fk2pHkQBXEU6lW/AqXzJ
-   g==;
-X-CSE-ConnectionGUID: 3ge5sQZAT2O/L3y85c/o+Q==
-X-CSE-MsgGUID: TTaj8KzvSJa1Rp4jjN0H9A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11838"; a="95378605"
-X-IronPort-AV: E=Sophos;i="6.25,151,1779174000"; 
-   d="scan'208";a="95378605"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2026 10:25:03 -0700
-X-CSE-ConnectionGUID: Lfe9lLBGTUu1ALhIe94NDQ==
-X-CSE-MsgGUID: Ovu7lWmMTmic8Fiot1bOlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,151,1779174000"; 
-   d="scan'208";a="258093602"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.244.48])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2026 10:24:59 -0700
-Date: Mon, 6 Jul 2026 20:24:56 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] software node: add fw_devlink support
-Message-ID: <akvk6Lv2TdtyV_Rb@ashevche-desk.local>
-References: <20260706-swnode-fw-devlink-v2-0-f39b09d50112@oss.qualcomm.com>
- <20260706-swnode-fw-devlink-v2-2-f39b09d50112@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s8C6YITl"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-8143d8fdc0bso34441547b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 10:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783359914; x=1783964714; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OHTEazAohpw6CA9quM3em+lASZBTbzUOB89kn7A3dMc=;
+        b=s8C6YITlYiK7IZsp/oPuR77c2Z1GqAPEw4lRSYmpEKcT7GOt5aOJVFGp01NiIEolUw
+         v00biLgckLy3qFcGo+9cb2i91vdXVgn1lhxvoZVK6CT+ruzfkGRLCfeBFd/vLUw+eH1S
+         tSXH2iXUS5NxEzlC6O66LdR+wEajlEn4V912gmYXRyfjNEKDE1Z3IO2Ud9c9EaILSBwW
+         6gV6l7rT+WRtkZWzU5z4G5mHnpYOEKKowHmaR3xfKhyk6v6QW3CZbHIQNQfUN2xoLgdz
+         sIy0l6WSi8l2DQhakeTvREUEMoAreeh9LMcs2F0eUvyJ6xWy2pThTd8zXOny+z6LYdVJ
+         tmxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783359914; x=1783964714;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OHTEazAohpw6CA9quM3em+lASZBTbzUOB89kn7A3dMc=;
+        b=OMQ8sks3+YKv6Hzj3M1A2tVoukFb7oRtydnkdYBxhKKUEez4jFXRs1ce77l7bnXZIX
+         P+J56MZkfSEVpfMor8o0WJkClh0ifkKHhpFcn9b3qZq4yiCVVQA2qQE2rwdlzk2cKnuL
+         ZGJVPmlxcp8Vj4x/4xrZUySbR8TKFoUFOaSaaIAXojVD+gYEpsCUO7i8OowIx//Fnu/v
+         DpB97Zv6gb/9mwhp+W5h2eJKEvHrTRlanLgUnI7RQu7jsNZ70MDrLREKFzQ9fzK2cerZ
+         DO+dKLgG8x6p8udyhFBJAmFdDvPKrhE223MrII83Q2SVbEX68JxdJ17+AKsLs0OX0Wy1
+         03vA==
+X-Forwarded-Encrypted: i=1; AHgh+RoIBlcq70NkQUK4HCUHvz0fgc/v98E5KuFpoAaErYRVUsXyPzCDwSHU32q1aSHrtzwatmDuzMDNhs2S8bNdmjQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywurk3j/SAq4f7jXzJznBH8XfISREM8mV0o/j2UgWjthvz8YDdT
+	OKHX5nD1EWG+/usLwcEqYvrSHFzaEOa0j5grKzmhn/EvqMwzRCTX7V1V
+X-Gm-Gg: AfdE7ck3RwFzvtfY5fU5Kmfms8HxgtP5uNpGPzHIwm07onf0sWxiIfeYmb9YhMoe/y7
+	ydFNxNroHiEz6xkpI5cdK6iKeL/w/Hri44uuA4zZhXHepIKpuj+sI1Bh/xSa3tKCLRqpBTMlueo
+	RNXmFFPioGGkSRyRDrEojyfaPTMKDuQoUUQYEGYzFh4XMNVJE+pYzrtthI44ekMn2O04YNQmhhG
+	DEQK2pIDIUDurGnW3ZjwhNtjV8+2fVC8TsmpmyGObKTKFwtfh1ElQiEt5QrxXWNIMiBo8OEkL/W
+	5AXyeHQ7XMAvX0lIfLeu7dyxcizoSGFOKJa4lGqi3hCxh74bxFnrQMJsyrZzdrgnVXfWqtctBp5
+	f4FJ6oA5dtKq/hVFVitnmIz0An7WXT/7dloe31btDSa0/nGuYgsp3HEzAPbPCLmEQtx2eKxu0P5
+	6V0xjHK22URvMlyCePDfumrSxhAoviO69shm7PKdnxlkCXh6LkM2gg4FMhL36iHPXrAA==
+X-Received: by 2002:a05:690c:63c2:b0:80d:c24f:b790 with SMTP id 00721157ae682-81be0d35bbamr10567447b3.5.1783359913613;
+        Mon, 06 Jul 2026 10:45:13 -0700 (PDT)
+Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8144783f9e2sm61157457b3.3.2026.07.06.10.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 10:45:12 -0700 (PDT)
+Date: Mon, 06 Jul 2026 13:45:12 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Anton Danilov <littlesmilingcloud@gmail.com>, 
+ netdev@vger.kernel.org
+Cc: Willem de Bruijn <willemb@google.com>, 
+ "David S . Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.1ab21e66eb906@gmail.com>
+In-Reply-To: <b66a8b13a33b21a1d0bf620bc51b68d78a2c16e1.1783218197.git.littlesmilingcloud@gmail.com>
+References: <cover.1783218197.git.littlesmilingcloud@gmail.com>
+ <b66a8b13a33b21a1d0bf620bc51b68d78a2c16e1.1783218197.git.littlesmilingcloud@gmail.com>
+Subject: Re: [PATCH net-next v5 2/2] selftests: net: add FOU multicast
+ encapsulation resubmit test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706-swnode-fw-devlink-v2-2-f39b09d50112@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 06, 2026 at 02:54:09PM +0200, Bartosz Golaszewski wrote:
-> Software nodes can be used to describe supplier-consumer relationships
-> between devices they represent using reference property entries. Unlike
-> for OF-nodes, driver core cannot yet use these references to create a
-> probe order that avoids needless probe deferrals on missing providers.
+Anton Danilov wrote:
+> Add a selftest to verify that FOU-encapsulated packets addressed to a
+> multicast destination are correctly resubmitted to the inner protocol
+> handler (GRE) via the UDP multicast delivery path.  Both IPv4 and IPv6
+> paths are tested.
 > 
-> Implement software_node_add_links() modelled on of_fwnode_add_links().
-> For every DEV_PROP_REF property we resolve each referenced supplier and
-> create an fwnode link from the node to it. The driver core later promotes
-> these to device links and defers the consumer until the suppliers are
-> ready.
+> The test creates two network namespaces connected by a veth pair with
+> a FOU/GRETAP (IPv4) and FOU/ip6gretap (IPv6) tunnel using multicast
+> remote addresses (239.0.0.1 and ff0e::1).  Ping is sent through each
+> tunnel and received packets are counted on the receiver's tunnel
+> interface.
 > 
-> There's no allowlist like the one DT needs - devicetree phandles appear
-> in plenty of non-supplier contexts, but a software node only carries a
-> reference property when its author explicitly points at another node, so
-> we treat every reference as an intentional supplier dependency and link
-> all of them. Graph "remote-endpoint" references are skipped for now: they
-> go 2-ways between endpoint nodes and would create graph cycles without
-> the port-parent lifting DT does via get_con_dev(). References to
-> suppliers that aren't registered yet and self-references are ignored.
+> The veth pair is created directly inside the namespaces to avoid
+> possible name collisions with devices in the root namespace.
 > 
-> fw_devlink resolves the supplier device through fwnode->dev but the core
-> only records the owning device on the primary fwnode. When the software
-> node is a device's secondary fwnode, mirror the device pointer onto it in
-> software_node_notify() so the consumer can actually find the supplier
-> instead of deferring forever.
+> Static neighbor entries are configured on the sender because ARP/ND
+> replies from the receiver cannot traverse the unidirectional multicast
+> tunnel back to the sender.
 > 
-> While at it: purge the fwnode links in software_node_release() now that
-> software nodes can own them.
-
-...
-
-> +	/*
-> +	 * When the software node is the device's secondary firmware node,
-> +	 * the core only records the owning device on the primary fwnode
-> +	 * (see device_add()). fw_devlink resolves a supplier device through
-> +	 * fwnode->dev, so without this a consumer referencing the software
-> +	 * node could never find the supplier device and would defer forever.
-> +	 * Make fwnode.dev point to its owner in that case.
-> +	 */
-> +	if (dev_fwnode(dev) != &swnode->fwnode && !swnode->fwnode.dev)
-
-Can we use device_match_fwnode() here?
-
-> +		swnode->fwnode.dev = dev;
+> The early demux optimization (net.ipv4.ip_early_demux, which controls
+> both IPv4 and IPv6) is disabled on the receiver to force packets
+> through __udp4_lib_mcast_deliver() / __udp6_lib_mcast_deliver(), which
+> is the code path being tested.
+> 
+> Signed-off-by: Anton Danilov <littlesmilingcloud@gmail.com>
+> Assisted-by: Claude:claude-opus-4-6
+> ---
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  .../testing/selftests/net/fou_mcast_encap.sh  | 177 ++++++++++++++++++
+>  2 files changed, 178 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/fou_mcast_encap.sh
+> 
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 708d960ae07d..7e9ae937cffa 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -39,6 +39,7 @@ TEST_PROGS := \
+>  	fib_rule_tests.sh \
+>  	fib_tests.sh \
+>  	fin_ack_lat.sh \
+> +	fou_mcast_encap.sh \
+>  	fq_band_pktlimit.sh \
+>  	gre_gso.sh \
+>  	gre_ipv6_lladdr.sh \
+> diff --git a/tools/testing/selftests/net/fou_mcast_encap.sh b/tools/testing/selftests/net/fou_mcast_encap.sh
+> new file mode 100755
+> index 000000000000..728513d55db4
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/fou_mcast_encap.sh
+> @@ -0,0 +1,177 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Test that UDP encapsulation (FOU) correctly handles packet resubmit
+> +# when packets are delivered via the multicast UDP delivery path.
+> +#
+> +# When a FOU-encapsulated packet arrives with a multicast destination IP,
+> +# __udp4_lib_mcast_deliver() / __udp6_lib_mcast_deliver() must resubmit
+> +# it to the inner protocol handler (e.g., GRE) rather than consuming it.
+> +# This test verifies both IPv4 and IPv6 paths by creating a FOU/GRETAP
+> +# tunnel with a multicast remote address and sending ping through it.
+> +#
+> +# The early demux optimization can mask this issue by routing packets via
+> +# the unicast path (udp[6]_unicast_rcv_skb), so we disable it to force
+> +# packets through the multicast delivery function.
 > +
+> +source lib.sh
+> +
+> +NSENDER=""
+> +NRECV=""
+> +
+> +FOU_PORT4=4797
+> +FOU_PORT6=4798
+> +MCAST4=239.0.0.1
+> +MCAST6=ff0e::1
+> +
+> +TUN4_S=192.168.99.1
+> +TUN4_R=192.168.99.2
+> +TUN6_S=2001:db8:99::1
+> +TUN6_R=2001:db8:99::2
+> +
+> +cleanup() {
+> +	cleanup_all_ns
+> +}
+> +
+> +trap cleanup EXIT
+> +
+> +setup_common() {
+> +	setup_ns NSENDER NRECV
+> +
+> +	# Create veth pair directly inside namespaces to avoid name
+> +	# collisions with devices in the root namespace.
+> +	ip link add veth_s netns "$NSENDER" type veth \
+> +		peer name veth_r netns "$NRECV"
+> +
+> +	ip -n "$NSENDER" link set veth_s up
+> +	ip -n "$NRECV" link set veth_r up
+> +
+> +	# Same sysctl controls early demux for both IPv4 and IPv6.
+> +	ip netns exec "$NRECV" sysctl -wq net.ipv4.ip_early_demux=0
+> +}
+> +
+> +setup_ipv4() {
+> +	ip -n "$NSENDER" addr add 10.0.0.1/24 dev veth_s
+> +	ip -n "$NRECV" addr add 10.0.0.2/24 dev veth_r
+> +
+> +	# Join multicast group on receiver
+> +	ip -n "$NRECV" addr add "$MCAST4/32" dev veth_r autojoin
+> +
+> +	ip -n "$NSENDER" route add 239.0.0.0/8 dev veth_s
+> +	ip -n "$NRECV" route add 239.0.0.0/8 dev veth_r
+> +
+> +	# Sender: GRETAP with FOU encap (no FOU listener needed on TX side)
+> +	ip -n "$NSENDER" link add eoudp4 type gretap \
+> +		remote "$MCAST4" local 10.0.0.1 \
+> +		encap fou encap-sport "$FOU_PORT4" encap-dport "$FOU_PORT4" \
+> +		key "$MCAST4"
+> +	ip -n "$NSENDER" link set eoudp4 up
+> +	ip -n "$NSENDER" addr add "$TUN4_S/24" dev eoudp4
+> +
+> +	# Receiver: FOU listener + GRETAP
+> +	ip netns exec "$NRECV" ip fou add port "$FOU_PORT4" ipproto 47
+> +	ip -n "$NRECV" link add eoudp4 type gretap \
+> +		remote "$MCAST4" local 10.0.0.2 \
+> +		encap fou encap-sport "$FOU_PORT4" encap-dport "$FOU_PORT4" \
+> +		key "$MCAST4"
+> +	ip -n "$NRECV" link set eoudp4 up
+> +	ip -n "$NRECV" addr add "$TUN4_R/24" dev eoudp4
+> +
+> +	# Static neigh on sender: ARP replies cannot traverse the
+> +	# unidirectional multicast tunnel.
+> +	local recv_mac
+> +	recv_mac=$(ip -n "$NRECV" link show eoudp4 | awk '/ether/{print $2}')
+> +	ip -n "$NSENDER" neigh add "$TUN4_R" lladdr "$recv_mac" dev eoudp4
+> +}
+> +
+> +setup_ipv6() {
+> +	# Skip cleanly if IPv6 is not available in the running kernel.
+> +	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
+> +	modprobe -q fou6 || return "$ksft_skip"
 
-...
+Is the equivalent not needed for fou?
 
-> +	/*
-> +	 * Drop the device pointer mirrored onto a secondary software node in
-> +	 * software_node_notify(). For a primary software node the core owns
-> +	 * fwnode->dev and clears it in device_del().
-> +	 */
-> +	if (dev_fwnode(dev) != &swnode->fwnode && swnode->fwnode.dev == dev)
-> +		swnode->fwnode.dev = NULL;
+More importantly, this means we need to add CONFIG_IPV6_FOU to
+tools/testing/selftests/net/config
 
-Ditto.
+> +
+> +	ip -n "$NSENDER" addr add 2001:db8::1/64 dev veth_s nodad
+> +	ip -n "$NRECV" addr add 2001:db8::2/64 dev veth_r nodad
+> +
+> +	# Join multicast group on receiver
+> +	ip -n "$NRECV" addr add "$MCAST6/128" dev veth_r autojoin
+> +
+> +	ip -n "$NSENDER" -6 route add ff00::/8 dev veth_s
+> +	ip -n "$NRECV" -6 route add ff00::/8 dev veth_r
+> +
+> +	# Sender: ip6gretap with FOU encap
+> +	ip -n "$NSENDER" link add eoudp6 type ip6gretap \
+> +		remote "$MCAST6" local 2001:db8::1 \
+> +		encap fou encap-sport "$FOU_PORT6" encap-dport "$FOU_PORT6" \
+> +		key 42
+> +	ip -n "$NSENDER" link set eoudp6 up
+> +	ip -n "$NSENDER" addr add "$TUN6_S/64" dev eoudp6 nodad
+> +
+> +	# Receiver: FOU listener (IPv6) + ip6gretap
+> +	ip netns exec "$NRECV" ip fou add port "$FOU_PORT6" ipproto 47 -6
+> +	ip -n "$NRECV" link add eoudp6 type ip6gretap \
+> +		remote "$MCAST6" local 2001:db8::2 \
+> +		encap fou encap-sport "$FOU_PORT6" encap-dport "$FOU_PORT6" \
+> +		key 42
+> +	ip -n "$NRECV" link set eoudp6 up
+> +	ip -n "$NRECV" addr add "$TUN6_R/64" dev eoudp6 nodad
+> +
+> +	# Static neigh on sender: neighbor discovery cannot traverse the
+> +	# unidirectional multicast tunnel.
+> +	local recv_mac
+> +	recv_mac=$(ip -n "$NRECV" link show eoudp6 | awk '/ether/{print $2}')
+> +	ip -n "$NSENDER" neigh add "$TUN6_R" lladdr "$recv_mac" dev eoudp6
 
-Note, it does check passed fwnode pointer against NULL, but looking at
-the above &swnode->fwnode must never be NULL, so basically device_match_node()
-will be an equivalent replacement.
+I think these two functions can probably be deduplicated easily. But I
+may be wrong, e.g., if there are too many nodad, autojoin, etc special
+cases to have to take care of.. Fine to leave as is too.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> +}
+> +
+> +get_rx_packets() {
+> +	local dev="$1"
+> +
+> +	ip -n "$NRECV" -s link show "$dev" | awk '/RX:/{getline; print $2}'
+> +}
+> +
+> +run_ping_test() {
+> +	local family="$1"
+> +	local dev="$2"
+> +	local dst="$3"
+> +	local count=100
+> +	local rx_before rx_after rx_delta
+> +
+> +	# Warmup: let any initial broadcast/ND traffic settle
+> +	ip netns exec "$NSENDER" ping "$family" -c 1 -W 1 "$dst" \
+> +		>/dev/null 2>&1
+> +	sleep 1
+> +
+> +	rx_before=$(get_rx_packets "$dev")
+> +	ip netns exec "$NSENDER" ping "$family" -c $count -W 1 "$dst" \
+> +		>/dev/null 2>&1
+
+Pass -i 0.01 to speed this up?
+
+> +	sleep 1
+> +	rx_after=$(get_rx_packets "$dev")
+> +
+> +	rx_delta=$((rx_after - rx_before))
+> +
+> +	if [ "$rx_delta" -ge "$count" ]; then
+> +		echo "PASS: received $rx_delta/$count packets"
+> +		return "$ksft_pass"
+> +	elif [ "$rx_delta" -gt 0 ]; then
+> +		echo "FAIL: only $rx_delta/$count packets received"
+> +		return "$ksft_fail"
+> +	else
+> +		echo "FAIL: 0/$count packets received"
+> +		return "$ksft_fail"
+> +	fi
+> +}
+> +
+> +ret=0
+> +
+> +echo "TEST: FOU/GRETAP IPv4 multicast encapsulation resubmit"
+> +setup_common
+> +setup_ipv4
+> +run_ping_test -4 eoudp4 "$TUN4_R" || ret=$?
+> +
+> +echo "TEST: FOU/GRETAP IPv6 multicast encapsulation resubmit"
+> +if setup_ipv6; then
+> +	run_ping_test -6 eoudp6 "$TUN6_R" || ret=$?
+> +else
+> +	echo "SKIP: IPv6 unavailable"
+
+Use KSFT_SKIP for such cases.
+
+> +fi
+> +
+> +exit $ret
+> -- 
+> 2.47.3
+> 
 
 
