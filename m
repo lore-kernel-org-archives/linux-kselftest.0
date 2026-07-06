@@ -1,180 +1,171 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2063F9F48
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFC83F9F48
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783356129; cv=pass; b=Jo/ocpuru/xjEdCACCNkGXmFG7huzsceakYxP0xJTBoPiOaQPuODKKS97qzJsfjkSxjOXUeSCY+qezbN2BtBPJu6ooyREMpj8SyP+PyxmOOlqF4LHiyfHo2NdwqEvqAU8zJGqMw68GK8mWyegScC5gjro35tGGDExkogRsGPalM=
+	t=1783356487; cv=pass; b=GWoN0krsHo8k2c6YPqspp8a3kdswtpU1BVY907rrn94HyGn/Zaet8WYQLUTioHYc8hcfMRTd/NJWuJSIortyJfeWOPKdVasXKcIwFCaW+NRTWZwMYGCqPmcE2toF/zEvoRDOrcEzGfKojkSBE2HI5U2To15OhH6SLpuWqd2qZxY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783356129; c=relaxed/simple;
-	bh=VNYai2/KPlhkeALcWLLZ0ukJRHgn91vQcKUBUKFOdDs=;
+	s=arc-20240116; t=1783356487; c=relaxed/simple;
+	bh=4PHgPVZZ8sj1dNJeoG46xQkWSVN7vyFHtfclac+X7d8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a4/rSBlckVNEXTESewRtmbZuhKyQHsMglSpdAvNUruJ5dduSjXByN/H1s0ocSNCuhtIxF1BkI3S/g5XZPDgZpcWx9nSTVygJgHtQAkg7A4E2G/DPbf/a9DPb5nS9QSCgWQKggjm2+rxmxFSK+9DdQDewy/+Jb1qSKq8183gvZbw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i7+UflVE; arc=pass smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=LzGKe9MjhKwO5qPqadMCNjN0J9jmcCd+Lmog7Gt5JtEw+N/gC3inknxH9J0CIrq2NFv+taXqDLiyaRKDARgZx9R2f5mQeQEoBtIUxBWBo10cex/gP2ipUkOp9p9EcorESEHxPCpQ0wmnRMjDyUaIyeZLqxV0MT4Z2mbfEZyf1M8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRs9Isus; arc=pass smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i7+UflVE"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-383adaa461fso1580097a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:42:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783356127; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRs9Isus"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-4877a7b451dso2096683b6e.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:48:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783356485; cv=none;
         d=google.com; s=arc-20260327;
-        b=rMV2nSACauJcIDu7QQ1hLCnKloetguKfnAVuknQf6C80XBzfQnU/+uKYNswINSGnKh
-         uAuY/zkDL4pmKOb6mjQBpP4HhL1Cm+TAejiuYMNw5wI2qe9eJ50aVpYmW09GSiAyremE
-         F3006y/0utNlec+6+1eyPVk7cBkYl+Y++2aBsKy3LQKSSAjR/a1GAOh0ZNOJKt+CAJe+
-         1iqnbe0Q7Jh+g9cgIX+eOX7JV/7ZCcIELTrlt8MTGZZ0ZHDGHAdnJa2iu1HDRf/XaiZn
-         qDiRP+BuSYLZ26n8zpfXZCUUAX7mK1lyjbcvg3zaeKkqlkwQwwqVZSk1zSG94zv3T9S/
-         LoJA==
+        b=leNkvIXn+FhsdZLbuuV2MWKbkNvNISi19rnuqJgy2Dt5nSwZRke2cTjA8Xvii0aMXp
+         W7DLrY1xM9ntTrI6onhb1GgdQiOoM3mQk7fyInMm8LBDGbXdsRl1HRoq85N9LDPx5/2L
+         gcAsKaqnaK8qvl/hDUJ+XPLNZQ8j21JtVnXGFopc4lAJVf7aY4SBOazjwRSElNpDcjvW
+         RMybsSzR6IuItzxe24eqYLAaxKX+67OPdgm+OYWq0FDq4Yi+aJ8KdumG5LTILdhP2nHA
+         qjdTURWPg78hS1FNRnm0zrNSnsMbA57ZtjQHBYU56+CIdgx2qQXsX52PmASXNmT+f0cZ
+         KkOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
-        fh=y7e4iRb+VUO+3x+dlq0fCBO4qCbnp8UkmWp5uZ7cqJ0=;
-        b=iS/4a1Ik036O+zFukKbJzDMtKO2ElapjnY3t5ysD2v7I35j6iN99PyGJ0AxDITGBo4
-         eiNk7RmzDjvYDQZqnI90zaiz66jjxoqNo864qmbzeHLz8M3A5FgiEyT0iMljZ8Dbfrhi
-         O1cdjwDlf6S0ktmPVyyjpokvSBwnV5Ap21NmKpLD8LtNctBhcxN/kWFWkEwSNtyaxSzg
-         itWDJRkeyeXgMUy7EqQFptTsG3MauB0HzqVY1uT0hN1cLvQms6lU0oaLQUF2hyNW9gI3
-         7m2b/T5bpd+UL7gevezPHZjrUFSP2xPnEGOWNhNFpWBwB8ha6mahHgBjjahNVpyk4ht9
-         0M5w==;
+        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
+        fh=Qf30w0STVsOAgeO+Tmv5x6FEAnGxKjBs734k1VOwjJU=;
+        b=SLKgnOWMBmpKQZsRslley+qXXzVlAHG0/7n23GDdhLtkGP7UhRqrBCmSpS0tD7L2bH
+         3fwukcdPnb0Tkgm10F4Bru3XMpeJNBnXdE77KXKkQMtEDFdKGAeYT5lWlW5KQuU6T5Q7
+         L3zXJBLTBJDRKG1aRs3qG9i1Ylu7JH/zCTFSJ7+k4iY0cXP+SxBs0ig93ElnL3a0L60i
+         Tgquzv+eY0Bu/DYNa5dhjnhFkTjbz4oKvEqAQxx3mGh2VL5dEA5Kh3UxV/5OhJrgkagW
+         397NLQWcMuNoq0xUrpLUKso+IgG3yb9/eM2/f9ApEiZS/FKTi10lpneyQ9mNYs00ecmZ
+         P0nw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783356127; x=1783960927; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
-        b=i7+UflVE8le/HQGSr6TKddOcP5/Rv3a98MWH+CQoGg8RFx8t0Ngn5ZO6px4k3aA5Kn
-         V0y49QLWLa8o2wa3FFwhWYm2GvgR3Y5LWqmphRNG8OXgZbkLlf/tURhyuTs0US4lMT3k
-         kpWDM9Wu+qBXGZ42zjt5AA9364nCClyFUr20QjtC2vmrR9yOohlCbZKaJvcOzeZtRURO
-         74X92tu13mTdElCwCP+8M2lX6HIVJfdBUmZ899aPBjrn6asHyTO8TtmOG0s/81+yy4BI
-         7Umc35EsfHPNP8KMJbA2GN12J+/SpCAR0FpEMnocikEASVGfg6S9EOL7Cta6fv6Xg2wC
-         wuLg==
+        d=gmail.com; s=20251104; t=1783356485; x=1783961285; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
+        b=QRs9IsusX5DhA8Fd92WNEEu0twzkgeu7adQ4L0B48QaxF5lhvnETBtPKGecRnsD26P
+         BpcR+Pm21HPu01zaJmapxUjXUAo3obsi3sTKTdTo8YiICcNyGWKSN4aixwe07otdh30D
+         ZkPK+gJ12HwCZDJ3Ke5gtu6eFhnkln4t0IeszGtowVMM9daifpVNZ0dBkatP0cU35sit
+         vcIprt9D4S4fx8Zk40MVGZEJRr8vw3t3quQDn+8vNx7EMGI6WiYPOJeXUHl40+1qGo8M
+         LVKlQxvnn8ewtU3LU2iXfIfqKOyQ3rmLo9jYBTUlZ7W/Kys2BdtdwTkyOIiQzNnpjn5N
+         2xAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783356127; x=1783960927;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
-        b=RWSnz6ig1DYKKYc6Y72B5b8nQ+EvCjVBiOnO/STAMUTuDtf9SYYCc0tARxnjeIlTSj
-         +KLOdbPAzBB08X9j585VLBfdAQ88ZxUfEe3cMsLw5WnwTGS/tevF/QjDZolE1U3pVEFb
-         pTyaDdcfM5oD1srhUL45MdM0xCcYzfOdn7Gm78GO2kWTVHAO3SO9OW5/OLlYPn7f9DAO
-         B0R8hyzrcTYKfiqVev4i+FDZect/APRxb1f7ljkENRfojnJZ8zbGcYQzlmWksMyLDElZ
-         u09rHIokgaRrkrFPWGR6rqgWHxULbJ2mpWivSyQNyBiMgWx5/FZpgfyQG93BzYTNX6Wv
-         dZCQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoYB+1ZJocReJieoPEwhDJ+x36SeLP1EJGyxyUDf3SLgbyftbXT3hz+b+eynQdfnNk7JBN93NEmTRsv4eg5dkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWrR2Cvis9Ol3c0lnIHZEDi3ZMpYj9W4Uc5cUsZPJyQsLr28PV
-	dVPS+GXptpKr3Ym7doN21cvd0djSibyy/yU47VBVpvJ8Wyf+s4JSSj7RSxpykDmh5BaxSFkitcS
-	irMEfBIa1kCfAY4X8ujLsV7IxWKQ76LJ2Jtj3M5D/
-X-Gm-Gg: AfdE7cl9Jy+5ZCpPJvA03WjS6akO4Uk30LFzquChaQtU+iAnZ7hIqtgUwsbWs8ZLk0x
-	Wkia8oGm8YMKPaSBmaugyRZ1TGIZeTSZ/9jy/DNXAQZgjF54iCHCksLR1Drxri9nQc2eGt94rT4
-	mMNjndUYwvnp2EuDNIysEADvRHamGmGBurIdMjr3Eb2xT+qDs0+QkWL42CrU9fhAfHKXz3Vim0X
-	4U+xHuSOFXEwLpQm3v+AnKttuIgKNUblsb09+gon2oYkwHG5ZyQetbovMYPsCxZjWzQrVMC
-X-Received: by 2002:a05:6a20:c799:b0:3bf:aa1f:4881 with SMTP id
- adf61e73a8af0-3c08ef34b2dmr1593273637.56.1783356126046; Mon, 06 Jul 2026
- 09:42:06 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783356485; x=1783961285;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
+        b=HfZW9+vVKk43MJk2jneiTOTfaCgc0Q4DmRB6eMO0rMzG+mGX7dfUySjRqPhIzpmh4v
+         PnzrY2OsRQRFihDxe+7uReSc2gMejK0OULLQmNpyz3Zg02GnS3309Jn++XmFIbhMb6rL
+         G2D2MEr51NQN4uPJn1Jo0FJZMM9D3X9b9Tx7ahndDjWRtJC++KRbz0bAt/PYHqZS0rUI
+         y9/rs1lMok7xZtP6HozQN81j5biXAD2iPKWtr/AZ5OT+zqHv3iLKar47Z3f7OFi4++gX
+         mdEQS/EdfP40k+UpYKQ4ytpScvlHoNKyp2uTDo8Lp8u0w4vwWFt/1oOwHjOmnbKoNkgx
+         b81A==
+X-Forwarded-Encrypted: i=1; AFNElJ/kND0kok1Sm7MVF0bEJCVDTF2g7JT1giFSXSK1hJMwxoLf7P0sMudTCXNgZxmJDp4R0kPYDjiXVLL0/QNVjis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTXE0lgYF7sTX00Solw8q7n980A9uqOPdvzJxM3zIYQgHVBZlf
+	ktMNYgOSqezhxO6DEtTdA73dV9CBc09McdJcJJErj/qE3q/kNGXehhpBcEXlU/1KLvgAeSS0VhG
+	giyv1iNIG+SHIvkd62ASd5/luWU2NkEw=
+X-Gm-Gg: AfdE7ckVrcZrgC6hd3zIULgfwHeu4TFU3qYuuINfnHSSxjE4TfS2Sh5Ixi9hgPGwXq7
+	HAvPAEsPtgD0GwCLtNtCHQEWbtBiyaQMhFn8nbEYsFXfz9S4ccbDIBQ02/AxMHY5NG3m72ED5ev
+	A2fiTlczrmG7FGx4UBeonp9Wp7cSYQ64zPqQIqyQS0uAVD+W0sWaOqwIZWC+8kEcugnMN3Ngfkm
+	Z0d+311QjoFYhtaPeRyNTiN0oV3bz+VtUMzPEVuoNKkJnwhFY43UMHirWkw5dQPNiO5MA==
+X-Received: by 2002:a05:6808:3986:b0:497:df42:1df4 with SMTP id
+ 5614622812f47-49fdb9341bemr1075973b6e.9.1783356484621; Mon, 06 Jul 2026
+ 09:48:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260630213341.1664345-1-dmatlack@google.com> <20260630165244.0d013bbc@shazbot.org>
- <20260701024906.GA3960633@ax162>
-In-Reply-To: <20260701024906.GA3960633@ax162>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 6 Jul 2026 09:41:39 -0700
-X-Gm-Features: AVVi8CePgqxvFszRnZoJMtiuDb6vccWgIQj_T8klBJuvC17Cx9M9s08vrURGQT0
-Message-ID: <CALzav=dVQ1EpQ2x4zZWv0akqPryQuMXqE_vKG3LuC0-2NorT1w@mail.gmail.com>
-Subject: Re: [PATCH] selftests: harness: Mark test fixture objects __maybe_unused
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alex Williamson <alex@shazbot.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, Will Drewry <wad@chromium.org>, 
-	Aaron Lewis <aaronlewis@google.com>
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+ <20260704211409.1978485-1-farid.m.zakaria@gmail.com> <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+In-Reply-To: <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+Date: Mon, 6 Jul 2026 09:47:53 -0700
+X-Gm-Features: AVVi8CezoZXmxdx0EVJgscHRgUSuI56V3d2lgnD3ARstqF0mvBDKn_k51tgqOEc
+Message-ID: <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
+Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
+ interpreter selection
+To: Christian Brauner <brauner@kernel.org>
+Cc: david.laight.linux@gmail.com, jack@suse.cz, jannh@google.com, 
+	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, 
+	shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 30, 2026 at 7:49=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+On Mon, Jul 6, 2026 at 9:01=E2=80=AFAM Christian Brauner <brauner@kernel.or=
 g> wrote:
 >
-> On Tue, Jun 30, 2026 at 04:52:44PM -0600, Alex Williamson wrote:
-> > On Tue, 30 Jun 2026 21:33:41 +0000
-> > David Matlack <dmatlack@google.com> wrote:
+> > Historically binfmt_misc has only matched binaries by magic bytes or fi=
+le
+> > extension, and always redirects a match to a fixed interpreter recorded=
+ in
+> > the registration. This is insufficient when the match requires parsing =
+the
+> > binary header (e.g. inspecting ELF program headers) or when the interpr=
+eter
+> > must be computed per-binary rather than hard-coded.
 > >
-> > > Mark test fixture objects __maybe_unused since they will not be used
-> > > when there are fixture variants (the variants will be used instead).
-> > >
-> > > This fixes the VFIO selftest build with clang and -Werror:
-> > >
-> > > vfio_dma_mapping_mmio_test.c:106:1: error: variable '_vfio_dma_mappin=
-g_mmio_test_map_full_bar_object' set but not used [-Werror,-Wunused-but-set=
--global]
-> > >   106 | TEST_F(vfio_dma_mapping_mmio_test, map_full_bar)
-> > >       | ^
-> > > ./../kselftest_harness.h:398:2: note: expanded from macro 'TEST_F'
-> > >   398 |         __TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEO=
-UT_DEFAULT)
-> > >       |         ^
-> > > ./../kselftest_harness.h:470:33: note: expanded from macro '__TEST_F_=
-IMPL'
-> > >   470 |         static struct __test_metadata *_##fixture_name##_##te=
-st_name##_object; \
-> > >       |
-> > >
-> > > Fixes: ff556bd98348 ("vfio: selftests: Add -Wall and -Werror to the M=
-akefile")
-> > > Reported-by: Aaron Lewis <aaronlewis@google.com>
-> > > Signed-off-by: David Matlack <dmatlack@google.com>
-> > > ---
-> > >  tools/testing/selftests/kselftest_harness.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/test=
-ing/selftests/kselftest_harness.h
-> > > index 261e4df94d9d..29a19bc87084 100644
-> > > --- a/tools/testing/selftests/kselftest_harness.h
-> > > +++ b/tools/testing/selftests/kselftest_harness.h
-> > > @@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *=
-s, int c, size_t n)
-> > >                             !__atomic_test_and_set(_metadata->no_tear=
-down, __ATOMIC_RELAXED)) \
-> > >                     fixture_name##_teardown(_metadata, self, variant)=
-; \
-> > >     } \
-> > > -   static struct __test_metadata *_##fixture_name##_##test_name##_ob=
-ject; \
-> > > +   static struct __test_metadata *_##fixture_name##_##test_name##_ob=
-ject __maybe_unused; \
-> > >     static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
-> > >                     _register_##fixture_name##_##test_name(void) \
-> > >     { \
-> > >
-> > > base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+> > Introduce a new 'B' (BPF) handler type. A pinned SOCKET_FILTER program =
+is
+> > registered in place of the magic/mask, and no interpreter is recorded:
 > >
-> > Reviewed-by: Alex Williamson <alex@shazbot.org>
+> >   echo ':name:B:<bpf_pinned_path>::::<flags>' \
+> >       > /proc/sys/fs/binfmt_misc/register
 > >
-> > Kees/Shuah, I can take this through the vfio tree if you prefer, it
-> > fixes a commit that entered through vfio selftests.  Thanks,
+> > When a binary is executed, binfmt_misc runs the program with the
+> > BINPRM_BUF_SIZE file-header buffer as context. Returning 1 selects the
+> > handler; returning 0 falls through to the remaining handlers.
+> >
+> > Unlike magic/extension handlers, a 'B' handler carries no interpreter o=
+f its
+> > own: the program chooses it via a new helper, bpf_binprm_set_interp(). =
+This
+> > lets the program compute the interpreter path however it sees fit (for =
+example
+> > relative to the binary). A 'B' handler is therefore a strict superset o=
+f the
+> > existing magic handlers -- any of them can be expressed as a program th=
+at
+> > matches on the header and sets a fixed interpreter.
+> >
+> > bpf_binprm_set_interp() is exposed to SOCKET_FILTER programs and stashe=
+s the
+> > chosen path on a per-CPU area that binfmt_misc reads back immediately a=
+fter
+> > the run under migrate_disable(); only a match that set an interpreter
+> > allocates.
+> >
+> > Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 >
-> Not that it is a big deal or matters all too much but I do not think
-> this fixes tag is entirely accurate. The blamed commit may have
-> introduced the build warning/error in the VFIO code but that same
-> warning could occur in any selftest code, as evidenced by the exact same
-> patch submitted a month ago:
->
->   https://lore.kernel.org/20260530054722.271157-1-kuniyu@google.com/
->
-> clang made a change to -Wunused-but-set-variable (split out into its own
-> subwarning, -Wunused-but-set-global) that exposes this. Personally, I
-> find that change explains the problem better but this one makes it clear
-> that it can become fatal with -Werror.
+> Ignoring the blatant bpf abuse here I think this is quite workable. So
+> this can be turned into an actual design and patch imho...
 
-Thanks for the additional context Nathan. I can send out a quick v2
-today with an updated commit message to capture these details and
-a better fixes tag.
+Glad to see you think this proposal is in the right direction.
+Just for my edification, when you say "balatant bpf abuse", you mean
+how it abuses the socket bpf type?
+If so, do you have any guidance on a new type or should I just take a
+stab at it.
+
+For the proper RFC patch unbastardized with tests, should I start a
+new thread or is
+the convention to keep attaching it to this same thread?
+
+>
+> Note that binfmt_misc is namespaced and can be mounted inside of user
+> namespace + mount namespaces fwiw. So a container mounting binfmt_misc
+> (a fresh instance - few do) would escape that bpf program. On the other
+> hand it would allow to register a custom bpf program per container if
+> needed...
+
+That makes sense -- but you will need CAP_BPF etc.. to load the new
+programs though
+if inside a userns.
+
+>
+> --
+> Christian Brauner <brauner@kernel.org>
