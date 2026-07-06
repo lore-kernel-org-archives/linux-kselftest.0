@@ -1,83 +1,140 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3781636F912;
-	Mon,  6 Jul 2026 13:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEDB29D265;
+	Mon,  6 Jul 2026 13:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783345427; cv=none; b=LDhVeCRYkHXfUpDd3BYVfUCxARhqzxOCWzBSFkBv7/EMoPIvtyMyxLJ0gCySS+dggISm/7LsR2xEK+RcnuO+wzo4DyawulrdwanDh/zp4tGyfYb+POAemDmZa/qaZbYcJsSWS3AfOGma9WUlRF/7UtKzbQGSB3sMXPCtEemwBts=
+	t=1783345625; cv=none; b=guNZGb/gqRwQXVLKftsNW/0s/0ihjwfWOD+esRtNzcZs8r2RQibFXxRZfa0eP+a0SMpSPRTefDwhu+vPH0+d2nYldDsLuY06McJT53L55aywk8x3cUI9ufW7s1zVPIi340uaVsL8OgPbSKYvJmTpHo5+cGseK2v0in/S4Z5WyOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783345427; c=relaxed/simple;
-	bh=lvmzbjmSLHuPrSg9i6keondBkuMGzwiG4BXn0yA+cBM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hHoXp2mYpp+Q5yKruey+r4SHS8nj+2kxeErNrsY7VZ7EYawhXyChO/rmc7P7QFCEHDfSvu/zqBqDwn75qU2f1jkdkT4hRNxfoRbhvDkDFcRt6u8HAKIPFkGQ7A4qJuFqEaBzTMKcWvU0LGAqrvzxDkW8lfbQ6VNT2n9OPSlDoSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oph9/hLB; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1783345625; c=relaxed/simple;
+	bh=UtgI4lw8E3NTxivL06a9jwYXMukKscbxytHaXl3Yd1g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QpCXfKxQ7lSy6NxVnsevEis3g4gm35bCaKm6LDpYDG/EqAcz3DGF/FFmeYZv6pqV/PaItms9jVGXlC8T+aRMnP9It1bhqeLJsrQTKta2jMq9hfohe8JjZbeLg6BfFLfEPeedFfs5zIqhS+XKq/itzpyINUZ6ILyxWy7HA/P5fuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEXCbBS1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oph9/hLB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=hQ
-	UpE0Csfah/M8uxVY62fBjrw6KwaN/+M0p9wa2ysCE=; b=oph9/hLBUNqNGHlYsA
-	yVrpKumUqFLle8jezuyTaNda2gyzQBAmrWIQCLQkeKIGAiMVYdHA7MPtPxw/ij3o
-	Ilm64A9NYviaggNuvhkbOJSZkP16aAwQa2LBWxCzrYJXcce8+YOsgS3sXZSKN3Wl
-	1fQ60FI+Lu9nv1VO9DRMdqpzM=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wD3X9XqsEtq_MxpHg--.52234S2;
-	Mon, 06 Jul 2026 21:43:06 +0800 (CST)
-From: wang wei <a929244872@163.com>
-To: sj@kernel.org,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: wang wei <a929244872@163.com>
-Subject: [PATCH] selftests/damon: check correct path in ensure_file() not_exist case
-Date: Mon,  6 Jul 2026 21:43:04 +0800
-Message-Id: <20260706134305.5224-1-a929244872@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEXCbBS1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5483B1F00ADF;
+	Mon,  6 Jul 2026 13:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783345623;
+	bh=bE75Uesevd0qFjsHhZ00uNBsyFy5Mf+YUOmZN/u63ZU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=mEXCbBS1hGkkaViwffeIdfYIe5kFScAv78jQ6xrbIsLwo7aYx/WLhz7L9yw2UHucL
+	 rIDkx0WF4bI/LYiY6J5m9G5LzXJQDEQr8S4dXIjfZOOV69X+wYBg0EOTykMX8hKz+U
+	 v8dchSGhziyCz8IuNne1tZi83FFi/cscqxm7iongQMyE+tFNe8Db+DEuUQ2FOd79bq
+	 OVbBNzxcmuKW81iSJn2eKQQKbuiW8Fm0pcsWfSl/rZChQBjl4ICJ5ufNNpbGidPYqt
+	 rNBJsEvmYj1WHWU1/EJFJU1Nx7s6B7uVR4Q2Dqp+e2gWKc9oGZdPTJyxhkBWTd5uVM
+	 LJybkhEu+Oe+A==
+Message-ID: <4913bf32-3695-4983-9ad7-ea0638807453@kernel.org>
+Date: Mon, 6 Jul 2026 15:46:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3X9XqsEtq_MxpHg--.52234S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JryrXr13urW8Zr4rZFWDJwb_yoWkGrgEgr
-	W0qrn3Aws5ZFsYyF13ZFn5ur4Yqay5Gr43uF45WrnIkry5XFs0qFykuF1DZ3Z3W3s8KasF
-	9an0v3yxCr4jgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRhYF3DUUUUU==
-X-CM-SenderInfo: jdzsmjiuuylji6rwjhhfrp/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/5] selftests/mm: move pkey selftest helpers to
+ pkey_util.c
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: akpm@linux-foundation.org, hongfu.li@linux.dev, jhubbard@nvidia.com,
+ joey.gouly@arm.com, keith.lucas@oracle.com, kevin.brodsky@arm.com,
+ liam@infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, ljs@kernel.org,
+ mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com,
+ usama.anjum@collabora.com, vbabka@kernel.org, yury.khrustalev@arm.com,
+ zwisler@google.com
+References: <436863f8-5840-4c3f-82ec-c55b46fb9969@kernel.org>
+ <20260706103143.3638104-1-lihongfu@kylinos.cn>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260706103143.3638104-1-lihongfu@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In the ensure_file() function, the "not_exist" code path checks
-whether $dir exists as a regular file.  However, the intent is to
-verify that the target file ($file) does not exist, not the $dir.
-Testing $dir makes the existence check effectively useless --
-it tests the wrong path and thus never catches the case
-where the file is unexpectedly present.
+On 7/6/26 12:31, Hongfu Li wrote:
+> Hi,
+> 
+>>> diff --git a/tools/testing/selftests/mm/pkey_util.c b/tools/testing/selftests/mm/pkey_util.c
+>>> index 255b332f7a08..fbef3cd45447 100644
+>>> --- a/tools/testing/selftests/mm/pkey_util.c
+>>> +++ b/tools/testing/selftests/mm/pkey_util.c
+>>> @@ -2,9 +2,99 @@
+>>>  #define __SANE_USERSPACE_TYPES__
+>>>  #include <sys/syscall.h>
+>>>  #include <unistd.h>
+>>> +#include <fcntl.h>
+>>> +#include <stdio.h>
+>>> +#include <string.h>
+>>>  
+>>>  #include "pkey-helpers.h"
+>>>  
+>>> +int iteration_nr = 1;
+>>> +int test_nr;
+>>> +int dprint_in_signal;
+>>> +
+>>> +#if CONTROL_TRACING > 0
+>>
+>> Who sets that CONTROL_TRACING? And if it's nobody, why are we dragging this along?
+> 
+> Thanks a lot for your comment.
+> 
+> CONTROL_TRACING is disabled by default. It can be enabled at build time
+> with -DCONTROL_TRACING=1 to capture extra debug info via ftrace for pkey
+> failure debugging. This patch just moves the tracing and abort-hook code
+> to the shared pkey_util.c, fully retaining the original opt-in debug logic.
+> This is based on my understanding of the existing code design, are
+> there any corner cases I overlooked?
 
-Replace $dir with $file so the not_exist verification targets the
-correct path.
+This is not documented anywhere, so it's rather odd. I wonder if there is a
+single person on earth that uses this :)
 
-Signed-off-by: wang wei <a929244872@163.com>
----
- tools/testing/selftests/damon/sysfs.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 78f4badb5..bf4684d36 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -67,7 +67,7 @@ ensure_file()
- 			echo "$file permission: expected $permission but $perm"
- 			exit 1
- 		fi
--	elif [ "$to_ensure" = "not_exist" ] && [ -f "$dir" ]
-+	elif [ "$to_ensure" = "not_exist" ] && [ -f "$file" ]
- 	then
- 		echo "$file is not expected but found"
- 		exit 1
 -- 
-2.43.0
+Cheers,
 
+David
