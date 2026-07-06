@@ -1,132 +1,185 @@
-Received: from mail-oo1-f73.google.com (mail-oo1-f73.google.com [209.85.161.73])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273EB357D0E
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 18:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783362725; cv=none; b=Tj2ipPsA6TqIyViqYPNnsL/PTmTQHqwk5UX8ovzmoqTYxR5UwNoth8rdMm6LdahLVlFsH9HlKdf5gfiNjRqvst/m57lcb1E6n0+pL3uUUfLwolHISQ+XovAxhlrHuZ+p13qfNf8f2hNjK1m9KVd6ER00uBhqg/YSCu9B6oS21rA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783362725; c=relaxed/simple;
-	bh=LQpZuqWDhGaY8Lp7XP00kP+hrd4jA3kaR16Fcs8BB8Q=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mjYeCQo4JY9vBQE7YD3bUTEaZxLoQITS5uX9XOVhM5zDDSB1k5EIkHIzf4AvmZ/aOU8V+nvKCwuKgIhQPOwwurX1fzEojG/86oI3FbtPSSec4AxkyZDMBeKYScvJFA1wnmNcsBxb0NjDfq5hz+Mzx8xHg+BmALxo9J08oKKKNT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QVq5o7Y4; arc=none smtp.client-ip=209.85.161.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6106F3AE1A8
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 18:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783363674; cv=pass; b=To956Ly9qj/7aiS7RE3u1QB6TXhL2Xj+pjRBBGnGT/xZXGLy0zfcLs54yT7kaTu00WAlfZPFiIDX3Ke3tfPCRNPTy0eBedl0X0+pdEDz8gdqSS+rLYiZ+VrHYWruHyexYRf48+jh1iJY8elgafb/sNDvSg699Yq4g3zF+wPEhMo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783363674; c=relaxed/simple;
+	bh=3CpDeh3U/Ub/nnGgM+FSJgwXu2F8sXt7Wd9OJeF59Aw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DfKnIMjrSwNvgKpHsTWUtIclQZaDXxQQsP6wQtp4cjaVDGP7pAEB10BXnnpYznORosq3b5WiexONJiotcVctAlNlDdhaOLK92Y7vUmJYEbP7LXC2qZoOLSjUn+DqfDFEUD9/VZrflbuCeEcAEhX5/1O13LP9JowyxaFt3IeqK2c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PWaJITAl; arc=pass smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QVq5o7Y4"
-Received: by mail-oo1-f73.google.com with SMTP id 006d021491bc7-6a177ce25dfso3954742eaf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 11:32:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PWaJITAl"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c9c26a5fb98so93716a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 11:47:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783363661; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QxC7f3sH78EHRyZEnPFLpAFO0qbyvXiQrM+WWIrkpzwCF/R3Lr6bYkOvovFFV51IQg
+         YogKYQRDTGPCJ5+Qr/NAlNuNYG97bf/VIqCd2BnMpJDjr/eo4dvEE9nr5IOHvEMF0gZW
+         XGiKIath9eGV7a0GZRPgtAzFcSHfQz7ZzGmafYCYJbCYBi0PuoShLawsGCbGOu1toyl8
+         9dh4yL4KPMf8TijTaLeO09CFN0kO4eZBpVYOLZUz2iDmaooH5KgP7lxDl48PGwfVAYdW
+         J1k1UGY30eZd21nFnxW0UTuKykQ32dHg+reZZGJ9N9SdEKgaXfIr1zR2oalaFQG59dMS
+         y9YQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
+        fh=GAHC+L3MNG6wkyahrUBzWDxzlTac8ddTtWbThUf4c8Y=;
+        b=K8IeOwyGkIN9vm5W/1VTvs4/BtJvhCEIYOmdEYnRWBx4PsJlgl03cLjju0Dl2s0cnd
+         nD71Q5potsNxDTjkjZX/h/utMX/CvAR8DwIZMXzUY3Ri5o/ufnpxVAaLyMnpBg1Y9nvC
+         eujrUQP+QeUxDyahTy0RrdczzYvzhrl2KBeYURD5/t0M8CKl+oxKqQ/xUIGDfycxRyqp
+         jQp3GWLnD+QS4KgZgsPspJQ6IYGzgQLLQ9HAaCnbPQATQNfDe+7bq1I1TwzwnVNZIriI
+         jH+KYyg5YnUC+D7sTfaUhfIDjP/HCB5uiEa/r9w9V4J1RoojSrvdq7AD74oNEbevn92o
+         qZhA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783362723; x=1783967523; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zaPUDS5X61bEGf4R9DTCwdGD0nVsXP4UZeidWRH5cHA=;
-        b=QVq5o7Y48Ru54zSfT+B4E0yKG642nFs3X69RmJ1iPe5YVfrAOxP+Bd5XPHXhvvJfi9
-         M6e+PSdkTiRKPI7NgDNsUTbJ4Xhw6HcVqL2eN/+slFI2D5eaxBQ2pzMb5uHNEk6zAtFS
-         tpAv3QcnQAzPRVtTGV9lt1mEsLmn2j0h4W7YSUW02PnMmUl26Qh3qKb/+6kqnee6rHQf
-         Lz6LiboekASWT44cAxNcXoo3xRJLq8B75k1aBGnjyxcNEo9CQqR//1VYUxFwiJylhSaB
-         xeR2f7NkITgn95Be0cKFlqlOGIl6BHigdbG2g9PS0QlmVH5nwoY9+bD1LF4CI31m9Xlh
-         /siQ==
+        d=google.com; s=20251104; t=1783363661; x=1783968461; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
+        b=PWaJITAlEzGGz2WTVzpcEOc2cooyZPVAP31hZ8ORyeDkvc7//oZc4TtkQCz9jtYc2T
+         ZwScLNDk8VJQYF06n4ytgai0kT9d7qu8HCOeJ9Swktyl3IedqOmbRpeDsmDHCAhUzl7Y
+         2GIOuqAV87pPbxtOf+ckzeM3/ehrTsfUGLjogB4cKjNNFev6QeYoUq2CRVUhGPc6mXni
+         Rq8MBk3i8TTPzOMASZaCrE0pxVttxws7kwhui751oA1grYh8mSGjx0y6gDwkEraa/hcP
+         T9eR8ACWJOivCLZDU65Os31RL4aoWpr8+tAY+dahdS1cN49QjaCgwk2DxJ9MRR3PI0dQ
+         1W/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783362723; x=1783967523;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zaPUDS5X61bEGf4R9DTCwdGD0nVsXP4UZeidWRH5cHA=;
-        b=QOI4Vh2Uu04aNm/W85Cw/zisX0i12h5XIm8qgM5G4UrRG2iu4seG6wokGthOC1rhzy
-         t/XZnXiscCQ1NS4ebap7vFpmmIMKeTEe1PdWWW2UpoG3cF/KLeRQ5+ooPmTS0LZJSJS1
-         UkYPJ6uOR2BnGAWpARZKMoLHiM6XCefBVMkEwQSPcX4rwAr5N3nN1TuHqIteH7hHVyKH
-         7oG9FvolK9VkvWjWm+o5PikLLtrkUElGR3wIQhOZdPq7znATZnMoB0zuqphF0IRB+7ZE
-         LuJ5PvLSWduF2chdmjyeA14KY86mKSHbsW3b9xiSKUtWWLpHOvDCusBBqz1vb+TzlMDC
-         VtIQ==
-X-Forwarded-Encrypted: i=1; AFNElJ99D2VCqfrAGM7HS7L2hGMWStIo5FGLUw7nWt1uRDX1RBFLaR4HmrzekNHM4qjcqXPhCv6lXolGqbLJrjTN+3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3WW0hGYXLnp9hM3rYRJUfEARTR/4mmRdOcYNcDtnd0l20ZJXz
-	uUXawPube9ZGyOQUtNDRhaa3DkH8KrOxPC9ZjFQnB+hjwUmTNph1Xcedft428ifmdHEknUHSCpa
-	Ac11vUGF5kN0NxQ==
-X-Received: from oacg2.prod.google.com ([2002:a05:6870:d202:b0:448:c6c8:879e])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:4b02:b0:6a1:50eb:d519 with SMTP id 006d021491bc7-6a3556d62a2mr1000185eaf.58.1783362722788;
- Mon, 06 Jul 2026 11:32:02 -0700 (PDT)
-Date: Mon,  6 Jul 2026 18:31:54 +0000
+        d=1e100.net; s=20251104; t=1783363661; x=1783968461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
+        b=Bxtb41fTiKUq7plxUxrvtZyzVhy90QfcS9C+PLw+K27Ic3pGhbyRivgRxsiqsZUACX
+         qtoXyMEtwgBc4SpT5tiihBy1T0zrKQ5owwjnUNlXCLvDuHzRJJjVxLfzLuvofUDuULJm
+         2hMqw+Rac6EfuJPJUXh6GOUXCo8tVFA9eAOY9bdurm4WpySvMmVXKdy6Ez+9EwUv2sIH
+         HIg8MtWxy8vz68ceSwIJRPAhnOJ5dMQF1c2QLziIbq5aZt/b7E8fk4NnM39wLNG9Mza7
+         WHe9sR5fOqOcNixxg2r11UQHimUtuZZz00CIvtTRLeIJJf4zultel9tWiuDA0nvZv0XD
+         uLkQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro6K/Mgj1h9nT/td2sGu1Nv12NKNTCela/tgTzz4hDN630vVn6WSWk8l6od/PZLfQNlkrYodu3pZOebYTg+CHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytqMfSnLf/oFjd5dV0J9ULiuUE1ApTNSdxWiLF6C5sv1nWp+F4
+	XDt4DyVm7mOAOXsVZ1YT6NGtUuesIG08iQC1VA0k90llNb9GB3q7t5FbyW0bDtbEJtJyXPrHls4
+	/Cfi5tdPJObfgTrJnh2R95sa17Jk6LjHCqbNCIE8=
+X-Gm-Gg: AfdE7cm582P0vXTpkvQLza1LABudz0srBbMvytaH4jln4omj5h6jRYpWUYcf6RJFZVZ
+	DScUWE+LxUIsUCV7YYs/hMgO6sqV6tphj9g8c2eQOfcyf2GipAsn4vqL55B3zpXMXmtgDleKi2E
+	I4UQy/NLBxD9+KQQfpAgEovOwMHCpuiwyxVLwCuTbtGn3n/jzdEAOnkmEScpy25wmRGq1AvJfLX
+	2b386j02fJiIk7HJYmTbITOU6/OVFwlcYHmTv66g0cZaJm4HmmWvUPZrOrfbBrY1s9RBPFOWciw
+	4DyzVlyofDCgeqwXAayYqfJEF/lNMdA1Kba4TmaZ7b3qlx6mHgNyRLGSRKR7EMgz4dxkiFKfo/+
+	Spn5iOMF4T+O0PuSDnx5FjX73
+X-Received: by 2002:a05:6a20:734e:b0:3b3:6db1:5986 with SMTP id
+ adf61e73a8af0-3c01cb9a275mr16216502637.30.1783363660754; Mon, 06 Jul 2026
+ 11:47:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
-Message-ID: <20260706183154.2660394-1-dmatlack@google.com>
-Subject: [PATCH v3] selftests: harness: Mark test fixture objects __maybe_unused
-From: David Matlack <dmatlack@google.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Will Drewry <wad@chromium.org>, David Matlack <dmatlack@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Alex Williamson <alex@shazbot.org>
+MIME-Version: 1.0
+References: <20260702093915.2652638-1-yijiangshan@kylinos.cn>
+In-Reply-To: <20260702093915.2652638-1-yijiangshan@kylinos.cn>
+From: John Stultz <jstultz@google.com>
+Date: Mon, 6 Jul 2026 11:47:28 -0700
+X-Gm-Features: AVVi8CdHZQNS7AGlZBRWgQUJj3H5tHf1nk1Nxw6hrirjNm3_0kkmPayICBfy-pg
+Message-ID: <CANDhNCrVv7KQNEY5V_K5b_JVbEWW+C8+WfbJWkUb3y0fw128Bg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: timers: leap-a-day: fix -w option and update
+ usage comment
+To: Jiangshan Yi <yijiangshan@kylinos.cn>
+Cc: tglx@kernel.org, shuah@kernel.org, frederic@kernel.org, 
+	anna-maria@linutronix.de, sboyd@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 13667453960@163.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mark _##fixture_name##_##test_name##_object __maybe_unused since it may
-not ever be read. This pointer is only read in XFAIL_ADD(), which tests
-are not required to use.
+On Thu, Jul 2, 2026 at 2:39=E2=80=AFAM Jiangshan Yi <yijiangshan@kylinos.cn=
+> wrote:
+>
+> Commit 98b74e1f3104 ("kselftests: timers: leap-a-day: Change default
+> arguments to help test runs") replaced the -s option with -w and made
+> "wait for the leap second" the non-default behaviour, but it only
+> updated the switch/case handling. Two things were left inconsistent:
+>
+>   - The getopt() option string still lists 's' instead of 'w', so
+>     passing -w is rejected as an invalid option and the new behaviour
+>     cannot be selected at all.
+>
+>   - The file header comment still documents the removed -s option and
+>     an outdated default for -i.
+>
+> Fix the getopt() string to accept 'w' (matching the existing case 'w':
+> handler) and update the header comment to describe -w, -t and the
+> current -i default.
+>
+> Fixes: 98b74e1f3104 ("kselftests: timers: leap-a-day: Change default argu=
+ments to help test runs")
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> ---
+>  tools/testing/selftests/timers/leap-a-day.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/=
+selftests/timers/leap-a-day.c
+> index 3568cfb3e815..97c8c66bea88 100644
+> --- a/tools/testing/selftests/timers/leap-a-day.c
+> +++ b/tools/testing/selftests/timers/leap-a-day.c
+> @@ -9,16 +9,19 @@
+>   *  kernel's leap-second behavior, as well as how well applications
+>   *  handle the leap-second discontinuity.
+>   *
+> - *  Usage: leap-a-day [-s] [-i <num>]
+> + *  Usage: leap-a-day [-w] [-i <num>] [-t]
+>   *
+>   *  Options:
+> - *     -s:     Each iteration, set the date to 10 seconds before midnigh=
+t GMT.
+> - *             This speeds up the number of leapsecond transitions teste=
+d,
+> - *             but because it calls settimeofday frequently, advancing t=
+he
+> - *             time by 24 hours every ~16 seconds, it may cause applicat=
+ion
+> - *             disruption.
+> + *     -w:     Only set the leap-second flag and wait for the leap secon=
+d
+> + *             each iteration, instead of advancing the time. By default=
+ the
+> + *             date is set to 10 seconds before midnight GMT, which spee=
+ds up
+> + *             the number of leapsecond transitions tested, but because =
+it
+> + *             calls settimeofday frequently, advancing the time by 24 h=
+ours
+> + *             every ~16 seconds, it may cause application disruption.
+>   *
+> - *     -i:     Number of iterations to run (default: infinite)
+> + *     -i:     Number of iterations to run (-1 =3D infinite, default: 10=
+)
+> + *
+> + *     -t:     Print TAI time.
+>   *
+>   *  Other notes: Disabling NTP prior to running this is advised, as the =
+two
+>   *              may conflict in their commands to the kernel.
+> @@ -186,7 +189,7 @@ int main(int argc, char **argv)
+>         int opt;
+>
+>         /* Process arguments */
+> -       while ((opt =3D getopt(argc, argv, "sti:")) !=3D -1) {
+> +       while ((opt =3D getopt(argc, argv, "wti:")) !=3D -1) {
+>                 switch (opt) {
+>                 case 'w':
+>                         printf("Only setting leap-flag, not changing time=
+. It could take up to a day for leap to trigger.\n");
 
-clang made a change to -Wunused-but-set-variable (split out into its own
-subwarning, -Wunused-but-set-global) that causes this warning to be
-emitted for various selftests and can be upgraded to an error in
-selftest that set -Werror.
+Ah. Good catch. I clearly didn't find the time to actually test the
+"wait for up to a day for leap to trigger" case.  Whoops.
 
-VFIO selftests have been broken since commit ff556bd98348 ("vfio:
-selftests: Add -Wall and -Werror to the Makefile"), and the net
-selftests builds have been noisy due to -Wall.
+Thanks for sending this out!
 
-Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked processes")
-Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reported-by: Aaron Lewis <aaronlewis@google.com>
-Reviewed-by: Alex Williamson <alex@shazbot.org>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
----
-v3:
- - Pick up Kuniyuki's Reviewed-by tag.
- - Pick up Alex's Reviewed-by tag from v1.
- - Fix commit description accuracy (Kuniyuki)
-
-v2: https://lore.kernel.org/linux-kselftest/20260706175228.2468730-1-dmatlack@google.com/
-
-v1: https://lore.kernel.org/linux-kselftest/20260630213341.1664345-1-dmatlack@google.com/
-
-Note: The fixes tag is commit 24cf65a62266 ("selftests/harness: Share
-_metadata between forked processes"), which refactored TEST_F to share
-test metadata across processes using mmap and convereted the test
-fixture object from a static struct to a static pointer. Prior to commit
-24cf65a62266 the static struct was always used once (the address of it
-was taken and passed to __register_test()), but after the static pointer
-was always assigned but potentially never read.
-
-Cc: Nathan Chancellor <nathan@kernel.org>
-
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 261e4df94d9d..29a19bc87084 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
- 			fixture_name##_teardown(_metadata, self, variant); \
- 	} \
--	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-+	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
- 	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
- 			_register_##fixture_name##_##test_name(void) \
- 	{ \
-
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
--- 
-2.55.0.rc2.803.g1fd1e6609c-goog
-
+Acked-by: John Stultz <jstultz@google.com>
