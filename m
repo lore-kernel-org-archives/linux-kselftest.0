@@ -1,124 +1,109 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDD03446CE
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 20:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E01B3D4112;
+	Mon,  6 Jul 2026 20:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783368060; cv=none; b=agpF5+Ts22PuTpdbyB1iaaubTKYfQcVcOELOW8BVERtACrBmlvdpCxzJDA4x5xpMdkcsCEZj2maTzCdnYPjQKvZ3DzpEpKrd19zHLhrQ4EbC0PrILHdAHALQz5hk9uDUqzj26DhrE14IAkb6sUGApoLqUjjnpHQ/TYwZE3D9uiw=
+	t=1783368352; cv=none; b=J8zm19DIsa5if0v4R5iHDxiH95v4yryflzlqeKES7xjlH5eT1wp2uiKsiEMTMUYM/CCML6svnUTLeSMWFn+00FdssbHVgu6zamQfWLSS5ovHELXBOyOukDnIOBaX+wprF00ivuh2+PWDiV9sSPnf+1ptkJL7AN3rF6OEwhHZL7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783368060; c=relaxed/simple;
-	bh=Bn4Wn0GSYZIZgIEZ5ntKigY1VQrjvtTEoGxji+iVLx8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ofI0rKpgXdC/7ZNJkoLHqDOWgU8afTDv9SV3eT81nt+XHyaht9AzdoOQwH1axLX+bwxUJzv9gbm7nNJMKNeCIBHwjdfcSFMvFMeK/hnbSZseztsNnDsF7Q7ZJhCA1STt8XNsvmNOZ/AGGHfULMcf86lUYfAUIA52Pf5fOi/1BfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HiSwyHYX; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783368352; c=relaxed/simple;
+	bh=A790MAqss06qaRLCi7RF7m28mRL3gUQB4idIsBO0Tcw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZdfEGOUlbj9fFFSLmhK6a7JcDZDeaxuKDBaoc439T8v3ONWFZCQGUZJbZgDc6Wc4hOtehWYlz1GOZf2hTlQZoqJvxbcJmLsIULEnDAfT/H9LnUSo1jlzOZpsSeg0+ABdFDbCD8xRSwLCbGJQH79IKXM6wYY7U3L8oBszmyoJ+CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JrIsNPYd; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HiSwyHYX"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3811e59df58so2096446a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 13:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783368058; x=1783972858; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=VIf+zohqeDaZywcmZWeYMtyc4MEDifAz/egCRkrh6AM=;
-        b=HiSwyHYXuXpCTq21Ed9uLQF2gfbf80+jtXt78BOXXvwjEWDjx6ulzU1zCNWvT3Pkut
-         Y2na8agDKhmivMiVJa8MdV2BDLdW1wfBHmwuGNh/K49HVPvBdiVX5xuFhbIJCON7jM/P
-         PH5J+TN7sD2UJSGqjcVlB0/hLN6VyfFHZ5NeBu6J3IGW6D2o7us0DAnHTZn+qRqztdQh
-         nAZKcwglPbcQZSO95lZW4zlFIj4eG4Z1RcYvNjcQNhfoyHhVlUkA4aln1omwu00MH3Cm
-         iIs5H2YKZvt3T2fEe2mCywK1m/eD2aIGEPnKt3pw3KuPebIrX2A4jqlSl8ouzaK30nLR
-         pCQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783368058; x=1783972858;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VIf+zohqeDaZywcmZWeYMtyc4MEDifAz/egCRkrh6AM=;
-        b=MrgK9Q6OIFtYrpRToAovllQcUdK0f0fWvvXRtYxoyecPNqMpiKV+zdrGowJD69+0Pd
-         LrlpHZqugH9WJ4Cgq78DejsF/RPviZvv3LsBfMpFBkKzt/VJVPHJtCrSHy5ViIS4ZpI5
-         Q0awUvQJ430m4lM/04w/6TVcORGqkaLwrZOT3gIlw9E5/wKJ7ccyV+hG78v2wOAPkWNF
-         AfpwuRsWzzo2MkAOrHEEAc6gysLe6IBMZB5W27QPJFyEJuKh0mI/W4XgFBWKBiADSZHy
-         jA3t+WJOofRCudfq+AuiXaMBYCXgDlL67zZpL5GLF6WLgJOO2GTwCFy2OcyOwEmkfBfb
-         0H4g==
-X-Forwarded-Encrypted: i=1; AHgh+RodDF9SQJ+O3zgrxFP8/aaspFxe7Vg99UKjbaxZh0ZO0GK/1wLDjgc5OfmBZWkEFDxNwsH7uHxbR95R42jm9Pk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyF6v6AUv5L3CwAdqPunFSQbvKEiFYDeIV1Gb7Vh2wLGIp1oJZ
-	9hyHR0RK9u7YuvR7Fg0xHngdYGkRdtEsOEseY85ggodUQ4YKRhKEZo5s
-X-Gm-Gg: AfdE7cmXjxiLzNAhm4aCJfEVMlI6oMm0yFMWvkzHVgGpqJGIrz5RQNwSJRzYsS3UDC6
-	4bW0wqpLZhAjyWeC9RUp6OgM+rGmECQf8fNO0yWgLxAY4dkLm1gu2Txx/lIJIiIPH9seej3wwiG
-	upSevamb1lkL5jGyNaz4EAMGd86vfW5ioMaiyrdreGtgyvZgLd+TOC4fuXnu1Q7Y0ofFmVMTv6V
-	2Rh9yjHEXve8bFe5W/r4nXchVeHzLAIMBsY8B6fxKQdz7ePHd7y+Pa29nb8cYt4Ns8HR5S6MIJo
-	LtMgDbDlDNJq5UY7gdGK9khkiD09ZBBZ7WiKmPToWRuYOCaoPa7c0nEY4Y/W2hnHEO9BTurnKIO
-	Tf1J8LB/9zog0oIVYCP+AuBVaWJpmkbhHw8pkLasCR3AyUT4OWvpbGhupsTVaJKkuD+6niIaxwy
-	3nAh5koYoXz/tZ0XNiumVtZNDnI07mIMunzmcNm0XdhY/Xd/tCQQVKI6aBoeXw2X9HzJpJIw==
-X-Received: by 2002:a17:90b:1d43:b0:380:540:d499 with SMTP id 98e67ed59e1d1-38754ea7328mr2054607a91.6.1783368058145;
-        Mon, 06 Jul 2026 13:00:58 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:612f:7084:be32:532a? ([2620:10d:c090:500::1:55b9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311561dd3a1sm19197214eec.22.2026.07.06.13.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 13:00:57 -0700 (PDT)
-Message-ID: <559673fc207097ecd08f1d7e9f684fe1e9f2a581.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Reject negative const offsets for buffer
- pointers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- 	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, 	mmullins@fb.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Date: Mon, 06 Jul 2026 13:00:54 -0700
-In-Reply-To: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-References: <20260703035137.109608-1-sun.jian.kdev@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JrIsNPYd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783368351; x=1814904351;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A790MAqss06qaRLCi7RF7m28mRL3gUQB4idIsBO0Tcw=;
+  b=JrIsNPYdPtPez7WwiVHzOyf6GZbPNnaHGGSmrBTIEjmXjU7J0AbO2GqG
+   6wbin4UUT9a4FK3lry56UerSfrZF8wqKjKHfxeEE4yDiVYVsC/QTCqvx6
+   +e5W4fda1eaukfOewJbQkenj0KLBHjgfJyE/E/UMyX9asMZTuJswcKpmW
+   3UMj3NoI9qKyoq67HbIN5CFLOAVMG9p1+2Ckq7S07Uw4LHaOY1VcwPWID
+   begqVgVH9BA4IK0BIuYH2PkYP5DeuU/nkAHccBdjsMsHCLVIn0rnU5bsF
+   VBKJMq/0KwQiBRFj3e366X8POhncl34EgXjQ4rd+octfvlFsg452pnoR4
+   Q==;
+X-CSE-ConnectionGUID: KvUVG+bsRwan38YyTeQVIA==
+X-CSE-MsgGUID: R43lL2TeSy+zFOFS8wvfHQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11839"; a="84102831"
+X-IronPort-AV: E=Sophos;i="6.25,151,1779174000"; 
+   d="scan'208";a="84102831"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2026 13:05:51 -0700
+X-CSE-ConnectionGUID: HiYqsg0SS4+Gr6wTTThf9w==
+X-CSE-MsgGUID: Qk7AXdh8TZW5ZPY3/rwsFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,151,1779174000"; 
+   d="scan'208";a="258717342"
+Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.244.48])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2026 13:05:45 -0700
+Date: Mon, 6 Jul 2026 23:05:43 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH 3/5] software node: add kunit tests for fw_devlink support
+Message-ID: <akwKlx2uTtHXI7zT@ashevche-desk.local>
+References: <20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com>
+ <20260629-swnode-fw-devlink-v1-3-b90058b41839@oss.qualcomm.com>
+ <akKT8q5TjkMkZkmB@ashevche-desk.local>
+ <CAMRc=Me4oJG47C2LOzRvagbEtAWKqbzmQ_R2VG4rt6zd1-QE5Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Me4oJG47C2LOzRvagbEtAWKqbzmQ_R2VG4rt6zd1-QE5Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, 2026-07-02 at 20:51 -0700, Sun Jian wrote:
-> The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
-> accesses, but it currently accepts a constant negative offset produced by
-> pointer arithmetic.
->
-> For example, a raw tracepoint writable program can load ctx[0] as a
-> PTR_TO_TP_BUFFER, move it by -8, and then read from the adjusted pointer.
-> The register is still tracked as tp_buffer(imm=3D-8), but the access is
-> before the tracepoint writable buffer base and should be rejected.
->
-> Check the signed effective buffer offset before updating max_tp_access or
-> other buffer max access accounting. Reject negative effective offsets and
-> use the checked end offset for max access accounting.
->
-> Add a verifier test that rejects a raw tracepoint writable program using =
-a
-> negative constant offset.
->
-> Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
+On Mon, Jul 06, 2026 at 07:42:36AM -0400, Bartosz Golaszewski wrote:
+> On Mon, 29 Jun 2026 17:49:06 +0200, Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> said:
+> > On Mon, Jun 29, 2026 at 12:52:08PM +0200, Bartosz Golaszewski wrote:
 
-The commit 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-delays the tracepoint buffer access to the attach time:
+...
 
-    int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_raw_tp=
-_link *link)
-    {
-            ...
-            if (prog->aux->max_tp_access > btp->writable_size)
-                    return -EINVAL;   =20
-            ...
-    }
+> >> +	static const struct software_node supp_swnode = {
+> >> +		.name = "swnode-devlink-test-supplier"
+> >
+> > Keep trailing comma.
+> >
+> >> +	};
+> >
+> >> +
+> >
+> > Redundant blank line.
+> >
+> 
+> I actually leave a blank line between static, const and regular local variable
+> blocks for readability.
 
-Called from syscall.c:bpf_raw_tp_link_attach().
-Please modify the test case such that it exercises the attachment logic.
+As far as I know this is against the style.
 
-Also, please keep selftests in a separate patch and make use of the
-full 100 characters line width limit.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-pw-bot: cr.
+
