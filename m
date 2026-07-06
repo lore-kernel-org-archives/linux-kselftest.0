@@ -1,120 +1,83 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E99B420889
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE3140683F;
+	Mon,  6 Jul 2026 16:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783353848; cv=none; b=T8lpuKeuGgVu9IZJWxy0+faDjdBzXryDuupUl324d4ududqw0+aS3ZO1mtbdIYtmTmmYAmsgFF+allhf+qBgboJ6UCdAtQjSbE5kp64Y4vaHD4n4lKQ6xPtpckEUTXUnlgMu/q3WMrtTIMxKCirBCpCHWhCc7F01pgacKzQc+tc=
+	t=1783354497; cv=none; b=jYa2Zhgl1EuYC8QMVzt2jgWNYCj5z1Th8dstBQ8wyVqolqJorEXFFFLBK677FenIY+wlltNhWMrHSJ3g9hNYVBHUk6nTZ9dTOpAUwHIDlqcITFRpsCjdJYxVO+zcYu88vunRg30yFeED3EdJ4QI72DrKMOxQejjzUgoMQqTbJIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783353848; c=relaxed/simple;
-	bh=gOErEcGC2rddUTWqAroj+qxDUTEbmHwrlR+WdCfcYSk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=IB/rD0lMlweWYg4zo3wk7bHV4S0y/Ro2uWGPNrgOQuaF5C8azanX07ow+x05R2uPy1z9MIByu4ItQpZ7/Mrzq039vBwL1tpbvYchesNzAJ/MUN6xPR8DNOvkni3shRICQMZiy+Pd9bfA3hZ4RJxrBbXdhI+P2Hpyhikg4mxnwqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=EqKUImWp; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1783354497; c=relaxed/simple;
+	bh=nxCleHpg40spjwZm+IaFSsyRCcoBS6IkMmrXC6FGTxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZHTXNiYjlPLdCg5GbG8sZXgOWBhI0wNSrUNQvzKwA99TKJ2BQVcUPVrGaxfOOCM3VuXsjkIRgF0qBQaZDJ8bFlJZLbXXSf2qNiTXhkhw1fF+BVfyDX0bs70ZG/zS+qfhqYBZLf4vqwZlwHt9G8yfB1qLWGMXqq2rwriPw0EWxBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Ydnz4US+; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="EqKUImWp"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso17347225ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783353847; x=1783958647; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0bU/6iPyibPDENzeGgAeBM6ROU1FMgoMSU+p7ppEeK0=;
-        b=EqKUImWpd7qAWF/mGZhlbsJPGct2LoccAxxLsLU82TLFkVtDQPVlWgo4Awg0Yi3kie
-         AkRmUECcgKlDS78losqUmvieffuZS3qTS7Gxv+3yCBYmA1IYnvaO5oDqrZsm+9w2FVnd
-         xRRhSiGZbs8xHv3SmUy+5ENjaz2Uz8vMnUj/qwwuczZFwlKZanN0W6T77/0XSIXHgAQG
-         7GEzYOMQoKNzcvmdW/eJDJaS5/6mgxq7mqC7vk7ZpGNNufStDhV1ZiIfb8tCLqaH1FLk
-         TaXMlyIRzDudeDRv5jQmWErUzAMnHUbTrZGK+d/s9I+PhMhHPWof1aGHwAV0uRwn1Nof
-         7XQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783353847; x=1783958647;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0bU/6iPyibPDENzeGgAeBM6ROU1FMgoMSU+p7ppEeK0=;
-        b=oXBAr16ZsV6PK5TkT5H1OK34zHEi/ixvnabjH6E9tAfSoGDtzsoaSdHiFxcrrK41fw
-         aKBqsD544UX+6D77Ec6cHnAjTW+Tprzj+78qHa64OU84JpXrTq+RExnF96D1dOXlGS5n
-         vsXp7DtQnxa0sNdQR8fpjsmE292695opJLHBZLt5bCkX8lzULpdIWXZaIqU2H3arLwy0
-         cD1wjWWlvXQ6thsP7lPbVMPGADb3kXEPbEezZnNGLIDUW2YhMiT1Sj675Ey4VwRi7sO2
-         X57hlNiNlL6QX6jnJbkEfslX/xo7/4ZrTaJaQFGyMDgRNYg6cbeCG6ELgJ4Cxd4F/3J0
-         3ycQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrmd30MAe2a7VuT9XLHMG5XALsw+X1fTlUiCHeO+1Bt5SZ1zIxMZ1qoo6pWoE2a800Sv+DvbznY8nHX9Ssek8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcRzgn5jUvSz/kGSoAbzoCuoLikyUOv2U2PdYh7KkgeUGJAB+p
-	Oh3JTO44LRPRddLQn/o2EoM6xTMxuDcwNSvyeZB1DRZ7m1ysifAr6qqES/wREnLZ8XY=
-X-Gm-Gg: AfdE7ckf8/Q74m2meL852CoPJlC8laCKyTQpjcmNS+eEYQSGUMWkqet4TpmOgmiL/Zs
-	W9sEjY/OFUHeV6WX05lZ6mFbsER3xuAr4stoCukPhWz1k5rJxD9nvCc9FpWRamLsB8wiGZFADYN
-	89MJLtA/Hm+kDPop4CCL/enwO56B/wE9FWkWpVzZXTpgfQeTcxJO6KmPmcv6FlVZ37q4NcKYlbM
-	W8/QXjfMOM3KMHp2sebrgWWQizoAlSuYEo+1O3v0Xs+gOvvMX5aIZmNzBqnc97iWGPB2ZBMw/ss
-	ZWKTLWW5bS2udHQtCiBeDJqiVtKovNMgr+twwTcBwmlZCzmTkqC0W8qSZaxhW/+vEil3TgKI6ks
-	DCHzUfb2We5cbuLvjJRXe5XO0cRsFwbxWPmdIz+dJbR6dXQKDsIodtXckEQ8AndinvcyOj7FA8m
-	uKg7HvUOI1aAF22w==
-X-Received: by 2002:a17:903:19cf:b0:2ca:bf8e:35fe with SMTP id d9443c01a7336-2ccbe611af8mr13889635ad.16.1783353846456;
-        Mon, 06 Jul 2026 09:04:06 -0700 (PDT)
-Received: from localhost ([2605:8d80:5c40:4f71:1131:e194:34df:ee9e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cad77651c2sm53854365ad.49.2026.07.06.09.04.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2026 09:04:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Ydnz4US+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=lE8+oP1XZjjpdBFy2VrkSZhpJog2DvPRMczl++eRN6E=; b=Ydnz4US+QFx44rkGq3ArU7qxzv
+	+zU4oxFKJ09GE4PHFj+Q7ERLs/y0AJITwakgtn3r7lBg9lPuOJ6TgshWCI+IFhcEjuzuCYT72PMDE
+	6lXkL4ukw9/nrvU4QLyJrOX9tHh7IkKAjh27GBOkcvnAxUkFRYOuEWDw8sOv08J74Z+RAcTVbFMkv
+	pfyYfE6rAhDMgHjxAIlwn/IJSSru4PSVUgX8Mg4+/X8Db5dBBuUWjqVjR9JDNZVcizNe7T7CPpjlc
+	aFE0Qc/z8mQW0dJ34QzI2wyOJyDTVFwzHgwhU1TkFE/m8uqD1mjZFDpeqB7dfqWIZf0YmkFJSCs1/
+	GWFRwxZQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wglxl-001Xdp-0U;
+	Mon, 06 Jul 2026 16:14:29 +0000
+Date: Mon, 6 Jul 2026 09:14:22 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
+Message-ID: <akvSzb0mRSS5aCg_@gmail.com>
+References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+ <20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
+ <akjS7kiGjVwWaWEz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Jul 2026 12:04:04 -0400
-Message-Id: <DJRM6DY3TW3X.1OJSVM8VW21B4@etsalapatis.com>
-To: "Malaya Kumar Rout" <malayarout91@gmail.com>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <martin.lau@linux.dev>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah
- Khan" <shuah@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] selftests/bpf: Fix memory leak in msg_alloc_iov
- error path
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <7f3e0f9992a32264f6c7cf00f2ef3ce87a0a6fbd6703084aff3de68cda77dc9c@mail.kernel.org> <20260704122936.102394-1-malayarout91@gmail.com>
-In-Reply-To: <20260704122936.102394-1-malayarout91@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <akjS7kiGjVwWaWEz@kernel.org>
+X-Debian-User: leitao
 
-On Sat Jul 4, 2026 at 8:29 AM EDT, Malaya Kumar Rout wrote:
-> In msg_alloc_iov(), when calloc() fails for an individual iov_base
-> allocation, the error path frees all previously allocated iov_base
-> entries but fails to free the iov array itself that was allocated
-> with calloc() at the beginning of the function. This results in a
-> memory leak of the iov array.
->
-> Add free(iov) in the unwind_iov error path to ensure proper cleanup
-> of all allocated memory.
->
-> Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
-> Signed-off-by: Malaya Kumar Rout <malayarout91@gmail.com>
+Hello Mike,
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+On Sat, Jul 04, 2026 at 12:31:26PM +0300, Mike Rapoport wrote:
+> On Tue, Jun 30, 2026 at 05:46:09AM -0700, Breno Leitao wrote:
 
-> ---
->  tools/testing/selftests/bpf/test_sockmap.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/s=
-elftests/bpf/test_sockmap.c
-> index ac814eb63edb..3e6be455d158 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -436,6 +436,7 @@ static int msg_alloc_iov(struct msghdr *msg,
->  unwind_iov:
->  	for (i--; i >=3D 0 ; i--)
->  		free(msg->msg_iov[i].iov_base);
-> +	free(iov);
->  	return -ENOMEM;
->  }
-> =20
+> I'm looking at these awk scripts and od encodings and I wonder if wasn't it
+> simpler to write the test in C.
+> 
+> We have a bunch of helpers in tools/testing/selftests/mm/vm_utils.h for
+> accessing /proc files and there is already /proc/iomem parser in
+> tools/testing/selftests/mm/pfnmap.c that also could be lifter to vm_util
 
+I'm fine with either approach.
+
+My main concern is keeping the selftest decoupled from the feature
+itself, so that review of the test doesn't block the feature from
+landing. Would that work for you?
+
+Thanks
+--breno
