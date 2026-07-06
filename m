@@ -1,127 +1,170 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CEB41D4FC
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 17:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783360558; cv=pass; b=K0bh7HGykYtn3RRxClepGJbqlQYJY466OR+yQ6y6ddgAGHAqoKJoSGIXP1lkjwOq+RrziwZMIzYG6XRflicwKT+7sGO7J5JY9WlPCKkAXU/6q/oe56yLXrGeUbVXM0fD1aUQUUW5WDVS+nyg+bAxXS807SsuxSZLwarAP1EJRTs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783360558; c=relaxed/simple;
-	bh=s21emSiFBXRhIG4adzOt8PS21mYSI/BQjSGzMfPEb60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QT6Oy1DEFh7/tWA3KM2jroY3cbezLEI0ZVYCglvb9TLtWueLBmvyIUYu96AlyrwCmJOLunQ29CTtRuTJCwAO4OzUChKddohV0IZPFjJAyrpNk26EZRwUrUfmA89rdvoVlWa3RMuMfLFaOUzLJniJYsr14zPHNfibmWjCHrCeBiI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O289yygc; arc=pass smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1989727A107;
+	Mon,  6 Jul 2026 17:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783360699; cv=none; b=krS2M0SGlNUmhImO+LLd2BnA2VmgxRLV+a2vPf7jTkk7pCCyXoChh+62t5j4HbV7HHKfAnbmoRLGPlLJJvqtWNggzdZHTHnNJk5j4JFgBSdTEUSA59Z9CBeEsXbAS5aqQ4c08oK8k9wu8KS2GoAlIbfAk3JnIkVGFssBNABfLKg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783360699; c=relaxed/simple;
+	bh=h980sEF6MU4UaII9Q4INlvAIxaxOl7RRKHFGjT/8d/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W22BNX206mRsgB0w0rJOVe8211Z2Ta8KRtUCoIK2iZMlTXZD0MYu49HykUQqBVkikS7aHZv+QZ1Q/sVxK+KI+2bXf7ow6JKYiulgvqCJwfPoGFbZTdlu4SM/9UWglQvLcsCOb2yLT0VDUkVBx40lpLE4utKd+yH7X2/XwS9Oqt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l/EoXkqE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O289yygc"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84783bce476so2257337b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 10:55:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783360556; cv=none;
-        d=google.com; s=arc-20260327;
-        b=j6gul07aFAFeQEsQrscjMMc/0rBEiQRIacI/G0TLOO2SX/dDFswkEzFNJuNSV+HhPf
-         KgLvSEhnVlORHnKsbNcs6amCePriEjNKsYwLLJOo6xtjg8UJN5neVj6WI9yV6uXWkl5E
-         EX3bzTohoOyJ8RP3kc4NVS9N5BvaT1cGYJPTPWwJHFeoOyzo3bg4Nn2pmIKVfpzxB7uR
-         DJTXgS0go4nCLy+dB6yGy+9K61/3fU86YZbnnxs4Sftdug3PzTlEks8BP4p5EwrsSVe5
-         KeV98f943Iaf7rjJ1Da1TsoDcaVTm31z2NVQkofQLH4+I/DC346Xfq8+fuc9u9MIgypA
-         CSHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        fh=VbB+ecOKELT+n5NW1EIuG4017qgSCO3Q/Cn8NaF6npE=;
-        b=W4nM0sleSaBYWHUn+p3W2y3cxW3Vo4ZPhFLxo7SeZYDvJYX77r34rIysG44rQ/m64B
-         MBBrHeSYCb79kHqzS+EwshmwubWmgf+GqPsp/SitmfzB4Yyo6DxCwvQiWg/8v6jKmoJo
-         fNEiuFI0gO+8kI2ZwjE5iyHqpfeIltq6sA1v+M4UP0pBU4jkXvqiQDsHdLIwt8GIzToX
-         ZwI5ao+glUI5mBv6wsSjIQ1o5NeaQcNWvnPe0byiyQfZ2+bmiqfxfRSnr0LITJuwrEoJ
-         ZkaF8cNmw6gwr2oEtPFEsL4akIGz66sF/BYtY91mmtiPw+vtguZGerXEb5I1l0AEWCyY
-         fjvw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783360556; x=1783965356; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        b=O289yygcJAxImWKeon0D1zv0Il1gQKmFwOUVcSmlx9Vl1GqYMckcAONyRM0/tJL9Xi
-         nGevgfHy3JfQIgfp+A5cae1X0wBsU/2/TvdaeVHD9zcjTHnNsm0/LufLQfHoHWmdTabz
-         M5T8I9QJZZzKopWFn1r2Nna/Els8YL3utKKiurzzi6ifYiDdjz2x7Z0GbsKzWETl4U+w
-         B4onaHI7meUgiNW77P6Peis6gFfu+JuhRxiTcfZLV8KS25Kbsu/PGw93AdopFOaplvr3
-         pNeyngxzIRoCJKtoZfxEoF4XO557EPo3Z5ZdM1m9WxkJKyhgBOZYjKA7lRz6IxM/k4xH
-         gxJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783360556; x=1783965356;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        b=ic5FX9DxPB4pDWVyjDU5exBYo6mHOwXUSt6WmSjFZNmnQzgVyXzKVKmtXj/Cwh14pw
-         VwLTXOgDFrBCucbliQoGpnKQwr+kaLQ4Xgskb+a0Cb0VAQtLZlNCt/F8NnNxnO2ITC+j
-         R/43XCw5CK/yIpaJrWLiAAxPsATgwxeGdguV0zVNq8Lz4ZwaisXqHbkX5JHPSjbo5Bjm
-         7Zz0iH2og2D/liLDlU1tQmbuoEuPeIhZEkidKJSDn6CPb4l4q+Y6O27Vhqlwg2XxvtM3
-         N9YR8arV3FBzuNXY3OG9KutRBF4h+97SRngrkf9H79SpDKz1zHxMRcBZwPkgaV0pDrps
-         p7Vw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro07Kg8O2ojFQ0dXIzUcHwRYDF0a4Y4wUYW2ZMZSFTbmNMUjZmaFxTVspsYyK5PvOf95T152+XQZ6IyYTQ/nSw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzasasSVjQ70cAfvxwAcp8RGDN8Lm4ZkaIlyMpA70jQyLy0DX90
-	8JqxvmFnPX1nk72cUXOg/ktKZu0qeV7/derx0VaODd8p3DN5QppAxu8XzSoH+ubenGGENtTyDeC
-	WM/cXS3pEak/uzab8mvaxL5+1dnYkd69yr6vWg04m
-X-Gm-Gg: AfdE7cliRetpXKTaqyNQUq1ZziMtIhM19irhEzw2y2HG88Ab9tyqAyoIkHK9Xo/XjAf
-	i6xQnaaAudiw60UZYRYqRisgHsyEE4mKhoGBQyVgOFNJVTjFwil+TS6TmRoGikhx//Ibp9A0ndM
-	cB0Hf6l5jO4Gu4V/12QrLx3kdkSj8lWBEGNI1YR7MV/o5RmeDeGRpdV+VbWlzKf8xAYlDU7KG1W
-	RjxfuDfUemYeBwKjQRtEXyzp1u6FIY5l3SpCEMKjRuG5GQAu4w4ESGpR1KverHqxi3uK25O
-X-Received: by 2002:a05:6a21:3988:b0:3bf:6c08:fb8e with SMTP id
- adf61e73a8af0-3c08eecc5f1mr1926858637.48.1783360555946; Mon, 06 Jul 2026
- 10:55:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l/EoXkqE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83771F000E9;
+	Mon,  6 Jul 2026 17:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783360697;
+	bh=Xfa02w+2R7v85UsHbfc8c8fBDDDTcGtnNT9og3+/x+Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=l/EoXkqEqLzf/RmDFKoleUlyWGN8jKQKxq88TU+k7AINCMlouqbeFvDNtMG1ujBD0
+	 daO+DPr9pYbKdvKxoQu38X0ZYp1smDFej9Nm24s6FwslOX+7mIbZnPFTFajOX3N+Lx
+	 uHvR+9g0G8rKkVBPNnzYKihpTCv8aP4sg0oR4ct0Xw7Oy7bpgmGTdHo24nyLjp+uTQ
+	 SxzKfmEUvtM8MGXPQbAL4s27RmkpJ9I3v9p3/nrB1Ubo+h+TUiFVG27qZJcqGAvCI1
+	 aKXOvLUS0HrAjs7XNVArgFq+aXnLaJEkr0mQZzY11Yfvlti/0vf1GKWx7Rh2OgdSmU
+	 ui4UATs+PWTKA==
+Date: Mon, 6 Jul 2026 10:58:16 -0700
+From: Oliver Upton <oupton@kernel.org>
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 6/7] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+Message-ID: <akvsuBcqCCzlrBLk@kernel.org>
+References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+ <20260706-hybrid-v8-6-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706175228.2468730-1-dmatlack@google.com>
-In-Reply-To: <20260706175228.2468730-1-dmatlack@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 6 Jul 2026 10:55:28 -0700
-X-Gm-Features: AVVi8Ce5nbB5dQBx-YTPg7rJMXNHy2ZTmt6qPpfE6nxI2-mw0XhdUMdNTXLndXI
-Message-ID: <CALzav=f4-mCCvu1fL4DUQ3saetcqCumvfEmQuDFmH5X2SHXqEA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: harness: Mark test fixture objects __maybe_unused
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Alex Williamson <alex@shazbot.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706-hybrid-v8-6-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
 
-On Mon, Jul 6, 2026 at 10:52=E2=80=AFAM David Matlack <dmatlack@google.com>=
- wrote:
->
-> Mark global test fixture object pointers __maybe_unused since they may
-> not ever be read (e.g. if fixture variants are used instead).
->
-> clang made a change to -Wunused-but-set-variable (split out into its own
-> subwarning, -Wunused-but-set-global) that causes this warning to be
-> emitted for various selftests and can be upgraded to an error in
-> selftest that set -Werror.
->
-> VFIO selftests have been broken since commit ff556bd98348 ("vfio:
-> selftests: Add -Wall and -Werror to the Makefile"), and the net
-> selftests builds have been noisy due to -Wall.
->
-> Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked p=
-rocesses")
-> Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Reported-by: Aaron Lewis <aaronlewis@google.com>
-> Signed-off-by: David Matlack <dmatlack@google.com>
+On Mon, Jul 06, 2026 at 07:03:29PM +0900, Akihiko Odaki wrote:
+> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
+> +------------------------------------------------------
+> +
+> +:Parameters: no additional parameter in kvm_device_attr.addr
+> +
+> +:Returns:
+> +
+> +	 =======  ==================================================
+> +	 -EBUSY   PMUv3 already initialized, a VCPU has already run,
+> +		  an event filter has already been set or
+> +		  a hardware PMU has already been specified
+> +	 -ENXIO   Attempted to get before setting
+> +	 -ENODEV  Attempted to set while PMUv3 not supported
+> +	 =======  ==================================================
+> +
+> +If set, KVM emulates PMUv3 without programmable event counters. Only fixed
+> +counters are exposed to the guest: the cycle counter today, and the instruction
+> +counter if support for FEAT_PMUv3_ICNTR is added.
 
-Sorry I forgot to apply Alex's Reviewed-by tag from v1:
+Drop the mention of cycle counter and FEAT_PMUv3_ICNTR, I want to avoid
+the argument later down the line when ICNTR support is added to this
+mode.
 
-   https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.=
-org/
+The expectation is that the VMM discovers the feature set using the ID
+registers just like every other CPU feature. KVM documentation doesn't
+need to describe the architecture.
+
+> +With programmable counters disabled, the VCPU can run on any physical CPU.
+> +This is particularly useful on heterogeneous systems where different hardware
+> +PMUs cover different physical CPUs. All VCPUs in a VM share this attribute.
+
+  When this attribute is enabled, the vCPU can run on any physical CPU
+  that has a PMU, regardless of the underlying implementation. This
+  attribute is VM-scoped.
+
+The documentation is focused on unambiguously representing the UAPI, not
+providing application recommendations.
+
+>  2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
+>  =================================
+>  
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 1c13bfa2d38a..39a1a1e412e6 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -437,6 +437,7 @@ enum {
+>  #define   KVM_ARM_VCPU_PMU_V3_FILTER		2
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_PMU		3
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS	4
+> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY	5
+>  #define KVM_ARM_VCPU_TIMER_CTRL		1
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER		0
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER		1
+> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+> index 40cad183376c..ad9ff4d0d89c 100644
+> --- a/arch/arm64/kvm/pmu-emul.c
+> +++ b/arch/arm64/kvm/pmu-emul.c
+> @@ -1149,11 +1149,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>  		arm_pmu = entry->arm_pmu;
+>  		if (arm_pmu->pmu.type == pmu_id) {
+>  			if (kvm_vm_has_ran_once(kvm) ||
+> +			    kvm_pmu_fixed_counters_only(kvm) ||
+>  			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
+>  				ret = -EBUSY;
+>  				break;
+>  			}
+>  
+> +			set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
+
+Why is this flag necessary? kvm->arch.arm_pmu is NULL if no PMU
+implementation was selected by userspace.
+
+>  			kvm_arm_set_pmu(kvm, arm_pmu);
+>  			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
+>  			ret = 0;
+> @@ -1164,6 +1166,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>  	return ret;
+>  }
+>  
+> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm *kvm = vcpu->kvm;
+> +
+> +	lockdep_assert_held(&kvm->arch.config_lock);
+> +
+> +	if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
+> +	    test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
+> +		return -EBUSY;
+> +
+> +	set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
+> +	kvm_arm_set_nr_counters(kvm, 0);
+> +
+> +	return 0;
+> +}
+> +
+>  static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+>  {
+>  	struct kvm *kvm = vcpu->kvm;
+> @@ -1238,7 +1256,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>  		     filter.action != KVM_PMU_EVENT_DENY))
+>  			return -EINVAL;
+>  
+> -		if (kvm_vm_has_ran_once(kvm))
+> +		if (kvm_vm_has_ran_once(kvm) || kvm_pmu_fixed_counters_only(kvm))
+
+There's no reason for doing this, just let userspace create an event
+filter. Even with the current PMU implementation it's possible that the
+fixed cycle counter gets filtered.
+
+Thanks,
+Oliver
