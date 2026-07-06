@@ -1,136 +1,127 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D74442377E
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 17:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783360526; cv=none; b=IrAWYtEifBfN8o81gmWM0wdiNCu9Wej3jsSMGhICVpg0GHbFQ+dh27nnwelXDW8bquMXJ8Lz/MkMh6I7+KY6ZRLgsdtM6CxB2rZC1ZfvowIQkVNsDoxiKlLCupFwSmzWc9aaatXrSqm4tJ/F2WqGm7+Bf53y/Q433twdVcBTkcc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783360526; c=relaxed/simple;
-	bh=Qwjjdhxc1DcpvjFxKNOKhBVoMAZizvPc+3Ojfi5wZJw=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sTvSacK+CDIKCTrI/YVjN2+Oi0Q3Kv8Ca48lHpL1BPW9akWc7lTdrvftWVJjv0sxSH7/SppDDF5JOvZDhKlb3xI+H5hZ8umkg6UWw48c6vu8vwDNYVwVkmrspy5CrRXUgmz/DRfgurmH5l3S/2i6St67DBGpbjhuA3OUSzUXJxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fP5YRTWc; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CEB41D4FC
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 17:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783360558; cv=pass; b=K0bh7HGykYtn3RRxClepGJbqlQYJY466OR+yQ6y6ddgAGHAqoKJoSGIXP1lkjwOq+RrziwZMIzYG6XRflicwKT+7sGO7J5JY9WlPCKkAXU/6q/oe56yLXrGeUbVXM0fD1aUQUUW5WDVS+nyg+bAxXS807SsuxSZLwarAP1EJRTs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783360558; c=relaxed/simple;
+	bh=s21emSiFBXRhIG4adzOt8PS21mYSI/BQjSGzMfPEb60=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QT6Oy1DEFh7/tWA3KM2jroY3cbezLEI0ZVYCglvb9TLtWueLBmvyIUYu96AlyrwCmJOLunQ29CTtRuTJCwAO4OzUChKddohV0IZPFjJAyrpNk26EZRwUrUfmA89rdvoVlWa3RMuMfLFaOUzLJniJYsr14zPHNfibmWjCHrCeBiI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O289yygc; arc=pass smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fP5YRTWc"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84592b55832so3256835b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 10:55:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O289yygc"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84783bce476so2257337b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 10:55:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783360556; cv=none;
+        d=google.com; s=arc-20260327;
+        b=j6gul07aFAFeQEsQrscjMMc/0rBEiQRIacI/G0TLOO2SX/dDFswkEzFNJuNSV+HhPf
+         KgLvSEhnVlORHnKsbNcs6amCePriEjNKsYwLLJOo6xtjg8UJN5neVj6WI9yV6uXWkl5E
+         EX3bzTohoOyJ8RP3kc4NVS9N5BvaT1cGYJPTPWwJHFeoOyzo3bg4Nn2pmIKVfpzxB7uR
+         DJTXgS0go4nCLy+dB6yGy+9K61/3fU86YZbnnxs4Sftdug3PzTlEks8BP4p5EwrsSVe5
+         KeV98f943Iaf7rjJ1Da1TsoDcaVTm31z2NVQkofQLH4+I/DC346Xfq8+fuc9u9MIgypA
+         CSHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        fh=VbB+ecOKELT+n5NW1EIuG4017qgSCO3Q/Cn8NaF6npE=;
+        b=W4nM0sleSaBYWHUn+p3W2y3cxW3Vo4ZPhFLxo7SeZYDvJYX77r34rIysG44rQ/m64B
+         MBBrHeSYCb79kHqzS+EwshmwubWmgf+GqPsp/SitmfzB4Yyo6DxCwvQiWg/8v6jKmoJo
+         fNEiuFI0gO+8kI2ZwjE5iyHqpfeIltq6sA1v+M4UP0pBU4jkXvqiQDsHdLIwt8GIzToX
+         ZwI5ao+glUI5mBv6wsSjIQ1o5NeaQcNWvnPe0byiyQfZ2+bmiqfxfRSnr0LITJuwrEoJ
+         ZkaF8cNmw6gwr2oEtPFEsL4akIGz66sF/BYtY91mmtiPw+vtguZGerXEb5I1l0AEWCyY
+         fjvw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783360524; x=1783965324; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:message-id:date:cc:to:from:subject:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gda9EnNaq+fnHp+pBJqOcXDPF8q5yM+z5/crGMT/FCk=;
-        b=fP5YRTWcInXEJpUGE6ALaVUQKlMIDWpYrtQ8iVOdjSaKcOg4OecNE8nUEKCN9NzM47
-         FRytmT3f5odfFRHq/wWOBqFc/lKgBmBZsb37MnzgH+JE3GutvoFHgHMQau7zIsZqnIXd
-         6FlEJpcFGZI7VcfKlBUabrHpfDOc7obMSUgcDdJUca3g3+NSbXm2TvWVyFV5bp+LorKw
-         4nYP9ibGcA1Nxd5R4/aa00yVS3vSVlbDe4eq9ambDLfEC3VTqUs3YJIa7OEyM8UQ3oPk
-         W8AWUiOTSS5HiPr+ADlbOkk24oqMueiyIRY/qJae3GQsk6IhwHZBI201AnCKx8184jbb
-         aKow==
+        d=google.com; s=20251104; t=1783360556; x=1783965356; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        b=O289yygcJAxImWKeon0D1zv0Il1gQKmFwOUVcSmlx9Vl1GqYMckcAONyRM0/tJL9Xi
+         nGevgfHy3JfQIgfp+A5cae1X0wBsU/2/TvdaeVHD9zcjTHnNsm0/LufLQfHoHWmdTabz
+         M5T8I9QJZZzKopWFn1r2Nna/Els8YL3utKKiurzzi6ifYiDdjz2x7Z0GbsKzWETl4U+w
+         B4onaHI7meUgiNW77P6Peis6gFfu+JuhRxiTcfZLV8KS25Kbsu/PGw93AdopFOaplvr3
+         pNeyngxzIRoCJKtoZfxEoF4XO557EPo3Z5ZdM1m9WxkJKyhgBOZYjKA7lRz6IxM/k4xH
+         gxJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783360524; x=1783965324;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:message-id:date:cc:to:from:subject:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gda9EnNaq+fnHp+pBJqOcXDPF8q5yM+z5/crGMT/FCk=;
-        b=D1wD9nNadGwA3UnljFHDF6f/TA/ahbIM9FJjYoBzNWtYpfpK/q2JZJtkGM2bhgtGdd
-         feEbsmNDjICeOMm9Hq3Mf8+mccQz0ueu6SwKfB9JNu+LhDnSG1bK2barFhOSeK1QiC/n
-         +jlOUlLGomgGnird68qqGXP1s0cFFbI45unjxlK+QpvwLBvVXwwD+enDqKAgGSkaRUQc
-         iaIqLtM5qPcT8eEl+zieNBbuiJWjOslfd5Ahus34oudCtapm7/UCGzYl9emcKqGKjJc/
-         4B2O8YyXy8pzWULkkJmJTNMDP7I0cYnHUtdYd4YjiBHEC71ujLkCVUX06dSALB4G+T4l
-         Q9Tw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr8H5zHO1cdZFaOyFFXhQlyafBG18o55IF7N9+TXN1rJDSPeljIV6+G1kGadFUQSeFkpeuGAv72b1ESVurbqtQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgSi1iMOXlu8VGhDg1mLsOiX3RUBKT3AdTnBzZ3LXwpafnqkSd
-	38LcJ9bNxj0wA7QehCETWge/KUv2EFb0ybDUyRV8HW8SAGnT+RR31fHY
-X-Gm-Gg: AfdE7clS896BGJVrIIqpePWu4BhdTkjehq2mJ94V/N3g+dXKAbR+rjJJqPDiEtCrCXm
-	4upDTBoKIXZTrijnJGaFd1eNS61/9ov4Zg947eeaGe5aETNBtyraSl/dL08VOJcRu3OOwMbIQIA
-	3j039Iw9fFINmNuRmbNtm429PDnqm2L22F7lUwdIiECVvMB7XK9F3WjPbGCPwWamLuEiAyC3avG
-	d2X2nS93yyMIFJRFLn6udIVIUdLYF9Kk0eqiRi76OJ94UivAazgn5Rpj7YT7RffWsiERCJTyKEm
-	6zf1UqAiu9FMrMdTsOdtddSxpRwWdrSDvkBp4NWOeVNdOiU17hR0QjWs85NuOBdB04KH3XjXuYQ
-	bYZys90xgiClslMAUONrLP0dnDZ0bXtNdGhr+fy98vonKrwX5ar4UIB0HxPJqyqFvmHo4WUX9CQ
-	x1Ca7/JpnE3aE02VSfulTD0ok20cSYp+lZ6PCVTIgx6hucYw2uZVHMqIpiXWE=
-X-Received: by 2002:a05:6a00:2a08:b0:847:7ece:3426 with SMTP id d2e1a72fcca58-84826da830amr1487737b3a.58.1783360524459;
-        Mon, 06 Jul 2026 10:55:24 -0700 (PDT)
-Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6b95c89sm4375268b3a.15.2026.07.06.10.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 10:55:23 -0700 (PDT)
-Subject: [PATCH v6 4/4] mshv: Use hmm_range_fault_unlocked() for region faults
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Liam.Howlett@oracle.com, akpm@linux-foundation.org,
- akpm@linux-foundation.org, david@kernel.org, jgg@ziepe.ca, corbet@lwn.net,
- leon@kernel.org, ljs@kernel.org, mhocko@suse.com, rppt@kernel.org,
- shuah@kernel.org, skhan@linuxfoundation.org, surenb@google.com,
- vbabka@kernel.org, skinsburskii@gmail.com, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- longli@microsoft.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-hyperv@vger.kernel.org
-Date: Mon, 06 Jul 2026 10:55:21 -0700
-Message-ID: <178336052192.504354.1841795575701703197.stgit@skinsburskii>
-In-Reply-To: <178336023903.504354.7500950448226027718.stgit@skinsburskii>
-References: <178336023903.504354.7500950448226027718.stgit@skinsburskii>
-User-Agent: StGit/0.19
+        d=1e100.net; s=20251104; t=1783360556; x=1783965356;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        b=ic5FX9DxPB4pDWVyjDU5exBYo6mHOwXUSt6WmSjFZNmnQzgVyXzKVKmtXj/Cwh14pw
+         VwLTXOgDFrBCucbliQoGpnKQwr+kaLQ4Xgskb+a0Cb0VAQtLZlNCt/F8NnNxnO2ITC+j
+         R/43XCw5CK/yIpaJrWLiAAxPsATgwxeGdguV0zVNq8Lz4ZwaisXqHbkX5JHPSjbo5Bjm
+         7Zz0iH2og2D/liLDlU1tQmbuoEuPeIhZEkidKJSDn6CPb4l4q+Y6O27Vhqlwg2XxvtM3
+         N9YR8arV3FBzuNXY3OG9KutRBF4h+97SRngrkf9H79SpDKz1zHxMRcBZwPkgaV0pDrps
+         p7Vw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro07Kg8O2ojFQ0dXIzUcHwRYDF0a4Y4wUYW2ZMZSFTbmNMUjZmaFxTVspsYyK5PvOf95T152+XQZ6IyYTQ/nSw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzasasSVjQ70cAfvxwAcp8RGDN8Lm4ZkaIlyMpA70jQyLy0DX90
+	8JqxvmFnPX1nk72cUXOg/ktKZu0qeV7/derx0VaODd8p3DN5QppAxu8XzSoH+ubenGGENtTyDeC
+	WM/cXS3pEak/uzab8mvaxL5+1dnYkd69yr6vWg04m
+X-Gm-Gg: AfdE7cliRetpXKTaqyNQUq1ZziMtIhM19irhEzw2y2HG88Ab9tyqAyoIkHK9Xo/XjAf
+	i6xQnaaAudiw60UZYRYqRisgHsyEE4mKhoGBQyVgOFNJVTjFwil+TS6TmRoGikhx//Ibp9A0ndM
+	cB0Hf6l5jO4Gu4V/12QrLx3kdkSj8lWBEGNI1YR7MV/o5RmeDeGRpdV+VbWlzKf8xAYlDU7KG1W
+	RjxfuDfUemYeBwKjQRtEXyzp1u6FIY5l3SpCEMKjRuG5GQAu4w4ESGpR1KverHqxi3uK25O
+X-Received: by 2002:a05:6a21:3988:b0:3bf:6c08:fb8e with SMTP id
+ adf61e73a8af0-3c08eecc5f1mr1926858637.48.1783360555946; Mon, 06 Jul 2026
+ 10:55:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20260706175228.2468730-1-dmatlack@google.com>
+In-Reply-To: <20260706175228.2468730-1-dmatlack@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Mon, 6 Jul 2026 10:55:28 -0700
+X-Gm-Features: AVVi8Ce5nbB5dQBx-YTPg7rJMXNHy2ZTmt6qPpfE6nxI2-mw0XhdUMdNTXLndXI
+Message-ID: <CALzav=f4-mCCvu1fL4DUQ3saetcqCumvfEmQuDFmH5X2SHXqEA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: harness: Mark test fixture objects __maybe_unused
+To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev
+Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Alex Williamson <alex@shazbot.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert mshv_region_hmm_fault_and_lock() to use
-hmm_range_fault_unlocked() instead of taking mmap_read_lock() around
-hmm_range_fault() directly.
+On Mon, Jul 6, 2026 at 10:52=E2=80=AFAM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> Mark global test fixture object pointers __maybe_unused since they may
+> not ever be read (e.g. if fixture variants are used instead).
+>
+> clang made a change to -Wunused-but-set-variable (split out into its own
+> subwarning, -Wunused-but-set-global) that causes this warning to be
+> emitted for various selftests and can be upgraded to an error in
+> selftest that set -Werror.
+>
+> VFIO selftests have been broken since commit ff556bd98348 ("vfio:
+> selftests: Add -Wall and -Werror to the Makefile"), and the net
+> selftests builds have been noisy due to -Wall.
+>
+> Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked p=
+rocesses")
+> Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Reported-by: Aaron Lewis <aaronlewis@google.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 
-This lets the HMM helper own the mmap read lock and allows the MSHV fault
-path to handle mappings whose fault handlers may drop mmap_lock, including
-userfaultfd-backed VMAs. The existing caller already retries on -EBUSY
-after refreshing the mmu_interval_notifier sequence, so no control flow
-change is needed beyond using the unlocked helper.
+Sorry I forgot to apply Alex's Reviewed-by tag from v1:
 
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
----
- drivers/hv/mshv_regions.c |   14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hv/mshv_regions.c b/drivers/hv/mshv_regions.c
-index 6d65e5b42152..04676f06c5c7 100644
---- a/drivers/hv/mshv_regions.c
-+++ b/drivers/hv/mshv_regions.c
-@@ -388,13 +388,11 @@ int mshv_region_get(struct mshv_mem_region *region)
-  *
-  * This function performs the following steps:
-  * 1. Reads the notifier sequence for the HMM range.
-- * 2. Acquires a read lock on the memory map.
-- * 3. Handles HMM faults for the specified range.
-- * 4. Releases the read lock on the memory map.
-- * 5. If successful, locks the memory region mutex.
-- * 6. Verifies if the notifier sequence has changed during the operation.
-+ * 2. Handles HMM faults for the specified range.
-+ * 3. If successful, locks the memory region mutex.
-+ * 4. Verifies if the notifier sequence has changed during the operation.
-  *    If it has, releases the mutex and returns -EBUSY to match with
-- *    hmm_range_fault() return code for repeating.
-+ *    hmm_range_fault_unlocked() so the caller retries the range fault.
-  *
-  * Return: 0 on success, a negative error code otherwise.
-  */
-@@ -404,9 +402,7 @@ static int mshv_region_hmm_fault_and_lock(struct mshv_mem_region *region,
- 	int ret;
- 
- 	range->notifier_seq = mmu_interval_read_begin(range->notifier);
--	mmap_read_lock(region->mreg_mni.mm);
--	ret = hmm_range_fault(range);
--	mmap_read_unlock(region->mreg_mni.mm);
-+	ret = hmm_range_fault_unlocked(range);
- 	if (ret)
- 		return ret;
- 
-
-
+   https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.=
+org/
