@@ -1,79 +1,94 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B65303C9C;
-	Mon,  6 Jul 2026 10:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E464936F42B;
+	Mon,  6 Jul 2026 10:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783333944; cv=none; b=YeYzLWRHjgAQ39cU3GbA1b6CxJ5Scu7NDhRbUD/uamhusSOtbPPDG5v6NVRvs8VYlI33Kpf8skMmEevD/gP3OPUQyx7bxgIuM2zNvxeuPO/ynU7o4obj2UuX4uCu+B04IXPXC65bHa6L85xy0EuGbT9w/InbdUP+5Ma8/neYa9s=
+	t=1783334594; cv=none; b=CBdJ+ZunW4ZfjCrqutn/EbnjT5QsJoPeNhaoxeC4R7TEt307/xlqaCpF51dEpkVPn73mZ7yn8PPyHLb1QC+VV0OP4QqLy877bAcSnjIc2AVaGmYZBdqVESvRcBmY04uyjaENEo6NIlYKN5EwylZGh6fwuY9f/tHP+QNtmcPXJP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783333944; c=relaxed/simple;
-	bh=sqanHEo/cHDJEwMS8kl/GOliyAuEokEWzQh38F+MVwc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=quD2CgB/qxFLdov/zhwU+OX9P2aqI0UB1KWRrCIc0GCIm9vXYAZeY+z87L5EblAaz4PhJ5fHBBNe9Sb73yMn1cEzQq8cMNA4JKg6Lb+AkBGTW+SjUEzLQLzYwsqbvHNULjCM203wqrcgdIE6veu4FZcm2Li0v3URotjr38k5zsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f559448a792511f1aa26b74ffac11d73-20260706
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:3b99b28f-9c22-4c81-99c5-564192bb4652,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:20
-X-CID-INFO: VERSION:1.3.12,REQID:3b99b28f-9c22-4c81-99c5-564192bb4652,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:20
-X-CID-META: VersionHash:e7bac3a,CLOUDID:a5810aaf9e41aedb88353a90b9405af6,BulkI
-	D:260706172852M3XCK1II,BulkQuantity:1,Recheck:0,SF:10|64|66|78|80|81|82|83
-	|102|127|841|850|865|898,TC:nil,Content:-10|0|15|50,EDM:-3,IP:-2,URL:0,Fil
-	e:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DK
-	R:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: f559448a792511f1aa26b74ffac11d73-20260706
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1786583648; Mon, 06 Jul 2026 18:32:16 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: david@kernel.org
-Cc: akpm@linux-foundation.org,
-	hongfu.li@linux.dev,
-	jhubbard@nvidia.com,
-	joey.gouly@arm.com,
-	keith.lucas@oracle.com,
-	kevin.brodsky@arm.com,
+	s=arc-20240116; t=1783334594; c=relaxed/simple;
+	bh=5GQvjyKk3pmOp61K3CWBv3LYpE/yv0RBbg0QcueUGsk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LhL4b4qXcppWatF5bqDfzojy1p1F/PKEMTYPXWLFjvD17xzpGSFwWYNs4zxfuF+guwl6vllyXRxeV26QRmYouR6oKbEO89cJ0AdDOnUmxjL8To6D3JkHi5hAgJ0HMuhF4NH0oK1V7gKGHjEOWfSGbazAbPlK25zLTN5yG7Co8co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=11ruPhqW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kpzctZV/; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="11ruPhqW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kpzctZV/"
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id A24171D000F7;
+	Mon,  6 Jul 2026 06:43:10 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-10.internal (MEProxy); Mon, 06 Jul 2026 06:43:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm3; t=1783334590; x=1783420990; bh=eV/9alPWS8
+	ElGqEhPLcVMrChiDA40ZmyFXIEDHgejGQ=; b=11ruPhqWi+gRLBt/DOpMRs+VB9
+	c88OCV08j/eTOF+kQWpqSrR4UFoQO6x9iuIxHlcjN+4UaB0uMoYpWP1S7cvWfkfm
+	TySuq1LjXaEtuOTbCnDoVd/7lJGCg3Vjof4twe77qJB84BpLKbR1lJPSiCXn1W57
+	9Z0DzJ2vW1+pmG37cpoQeJmEZa+Vych4seJsibFGa/1dqdVbHzUQPAd+8qPJIIYc
+	N1VdIvXYadS0Ky0XU6McP5NYa2rr0KPwMA4LLLUC+Ht3sk/B19XDA8shGgGk0Usd
+	ig9FW3ky56aIYT4sSHVO2Nur1CmAtiCs/1ptUcOzI2p0skvKwvaiB7EOSFYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1783334590; x=1783420990; bh=eV/9alPWS8ElGqEhPLcVMrChiDA40ZmyFXI
+	EDHgejGQ=; b=kpzctZV/IWAhQ71XrUSRAbj3a9CwzIk1s48NpSIe+Mb6hL9Qm95
+	cvhZEF4ifOcQvFulwMKQ+V9nBNwI1BwA5j4jAka8N2Kt6z0DRcif8Id4RXU7vJu5
+	xn+3pQqPCy69OtJabyGRhBmw8AEm3dSuMcCFf4kc4OZx6eDy5T5FpPp3ChB2edgp
+	xqez8ppcvPH/Z4DLdzva40TokvP2MOGRbEOuSba/ELeftfJBV67T3pyzxsz97oPq
+	gIYZh8/couKP0QcDV1ETRRpDcTYvlZIcnJZGdEjuy0QJbubQdSCpxzsL082cVYAY
+	EEX45bSp+kU/YjrbHrPLEKqKbRT+4bP5VDA==
+X-ME-Sender: <xms:vYZLalawRMGJGRfL0jCDBViPEJdOzZAXKHFZgScdU5COTXleVsYynA>
+    <xme:vYZLat2q49XorsjGXtWTvyByiUJP6ThFu6mLF-3cOUELnwKltuUJpGhFbenI5Av7k
+    jeNdZczhirHwivdly-c0eABeHhNRIodjSmObV2Fr2P0BmDs_8S-mro>
+X-ME-Received: <xmr:vYZLajWG5OullFblYLdL1sH6QsMr-9xi15akicSUL5fKpEZtXEeLJ5nOPLs1Kg>
+X-ME-Proxy-Cause: dmFkZTE59eE0a8v92zvMt2CZRWlI+3piJHg5kS4n5Ij9aa8GawoG4+qulLS96Kun/O16B7
+    wkCscgn2uFgvPJ0vvjLjF/OvSijQNoCmJKrMH0kJdxorhmid7e2jGKg0oTanAelyO1yN/u
+    NBe5aO3gZ3S3h5sR9c7l3epWPYbDBI1kUi/L9wjXUTJIrC03wKamtizkalYNeG3n3VsnNs
+    xeGgUqYSzV60mrCS2pP3viLogAEVHgNs1vgFISbbuNc6iQyV0uJXE/wTKcpo+N2hc4F/uY
+    Y9m3N9+FGt9DhIuVe4lHp9Shw4xR21m3aAHGM2Cheqzgf62jSy9xB9iW6y/t0CslHR0Ccu
+    yyGZymsqnYP//sL4RVCkbCMT0cDaEmE5HBUEBS76/CkerFzEb0Ck45pR+5Heg5Dpeyt7Ly
+    F4V3Ykx64gMeGQ3Pb56r/E2uV12kMggljpR2HmJX7T3acHGIzYoU+dksbKkxoTrD4Ynsfl
+    +X+WrGX/5eSChHv32oUfX0JEK0tTPb71l4CKgu7H0wgBDLS3nPnFrSgkkZWQIZs9952YrM
+    N46dsJcoqW/lspps/qk56P8nbkv088ChChz23Z1ehBpzzV9au9+aWAZoMP2ANNaA6etRpb
+    3Qkew/Q3KXsHEDDaya20rgPaYLJtgsYdukxUtPHsj1amVrZcM0Ta0eVGeFxA
+X-ME-Proxy: <xmx:vYZLagu3G4p79s9FvMZ-hZFwFzJkeiXf5IRll00PpnRGhh70vvKWbw>
+    <xmx:vYZLaiWpNnktHknJFUg-y7vfZhoGnGSByfe0GrR9fv18S6JqGFK4YQ>
+    <xmx:vYZLakWLpe9_QX-y3hvmkZND8t7u1UYxKkptHR6B25H8cuZUGvg_bA>
+    <xmx:vYZLakeZO9rGDkK5lH3vZm4-8uEOMJU_Y_r-JzcebEUhR58GDtTMEQ>
+    <xmx:voZLauCuA_ivlEqjXGxH7r_0HbUontP3qVcVL9GGNvtiY_nnkUdzko8L>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Jul 2026 06:43:09 -0400 (EDT)
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: akpm@linux-foundation.org
+Cc: usama.anjum@collabora.com,
+	peterx@redhat.com,
 	liam@infradead.org,
-	lihongfu@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
 	ljs@kernel.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.anjum@collabora.com,
 	vbabka@kernel.org,
-	yury.khrustalev@arm.com,
-	zwisler@google.com
-Subject: Re: [PATCH v9 1/5] selftests/mm: move pkey selftest helpers to pkey_util.c
-Date: Mon,  6 Jul 2026 18:31:43 +0800
-Message-Id: <20260706103143.3638104-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <436863f8-5840-4c3f-82ec-c55b46fb9969@kernel.org>
-References: <436863f8-5840-4c3f-82ec-c55b46fb9969@kernel.org>
+	jannh@google.com,
+	pfalcato@suse.de,
+	david@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH] fs/proc/task_mmu: fix PAGEMAP_SCAN written state for unpopulated ptes
+Date: Mon,  6 Jul 2026 11:43:08 +0100
+Message-ID: <20260706104308.34741-1-kirill@shutemov.name>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,38 +97,149 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-> > diff --git a/tools/testing/selftests/mm/pkey_util.c b/tools/testing/selftests/mm/pkey_util.c
-> > index 255b332f7a08..fbef3cd45447 100644
-> > --- a/tools/testing/selftests/mm/pkey_util.c
-> > +++ b/tools/testing/selftests/mm/pkey_util.c
-> > @@ -2,9 +2,99 @@
-> >  #define __SANE_USERSPACE_TYPES__
-> >  #include <sys/syscall.h>
-> >  #include <unistd.h>
-> > +#include <fcntl.h>
-> > +#include <stdio.h>
-> > +#include <string.h>
-> >  
-> >  #include "pkey-helpers.h"
-> >  
-> > +int iteration_nr = 1;
-> > +int test_nr;
-> > +int dprint_in_signal;
-> > +
-> > +#if CONTROL_TRACING > 0
-> 
-> Who sets that CONTROL_TRACING? And if it's nobody, why are we dragging this along?
+PAGEMAP_SCAN reports an unpopulated pte on a uffd-wp VMA differently
+depending on which path serves the request. The PAGE_IS_WRITTEN fast
+path in pagemap_scan_pmd_entry() treats a pte_none (no uffd-wp marker)
+as written and, under PM_SCAN_WP_MATCHING, arms a marker. The generic
+path does not: pagemap_page_category() returns 0 for pte_none, so a
+request that cannot use the fast path (extra category bit,
+category_anyof_mask or category_inverted) reports the same pte as clean
+and skips arming it.
 
-Thanks a lot for your comment.
+So a range that was populated and then MADV_DONTNEED'd reads as written
+via one mask and clean via another, and in the latter case is not
+re-armed for the next round -- an incremental-dump consumer (e.g. CRIU)
+using a richer mask drops the zapped range and stops tracking writes to
+it.
 
-CONTROL_TRACING is disabled by default. It can be enabled at build time
-with -DCONTROL_TRACING=1 to capture extra debug info via ftrace for pkey
-failure debugging. This patch just moves the tracing and abort-hook code
-to the shared pkey_util.c, fully retaining the original opt-in debug logic.
-This is based on my understanding of the existing code design, are
-there any corner cases I overlooked?
+Return PAGE_IS_WRITTEN for a pte_none on a uffd-wp VMA, mirroring the
+present and swap branches just below which already report it whenever the
+entry is not write-protected.
 
-Best regards,
-Hongfu
+Add a pagemap_ioctl selftest that asserts the two paths agree over a
+MADV_DONTNEED'd range.
+
+Fixes: 12f6b01a0bcb ("fs/proc/task_mmu: add fast paths to get/clear PAGE_IS_WRITTEN flag")
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+Assisted-by: Claude:claude-fable-5
+---
+ fs/proc/task_mmu.c                         | 14 +++++-
+ tools/testing/selftests/mm/pagemap_ioctl.c | 55 +++++++++++++++++++++-
+ 2 files changed, 67 insertions(+), 2 deletions(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index d32408f7cd5e..a5f5d2e04257 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -2432,8 +2432,20 @@ static unsigned long pagemap_page_category(struct pagemap_scan_private *p,
+ {
+ 	unsigned long categories;
+ 
+-	if (pte_none(pte))
++	if (pte_none(pte)) {
++		/*
++		 * An unpopulated pte carries no uffd-wp marker, so like any
++		 * other entry that is not write-protected it reads as written
++		 * on a uffd-wp VMA. This matches the PAGE_IS_WRITTEN fast path
++		 * in pagemap_scan_pmd_entry(); without it a scan forced onto
++		 * this generic path (extra category bits, anyof or inverted
++		 * masks) would report the same pte differently and, under
++		 * PM_SCAN_WP_MATCHING, skip arming its marker.
++		 */
++		if (userfaultfd_wp(vma))
++			return PAGE_IS_WRITTEN;
+ 		return 0;
++	}
+ 
+ 	if (pte_present(pte)) {
+ 		struct page *page;
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 762306177ad8..78fa2d1e3719 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -1051,6 +1051,56 @@ static void test_simple(void)
+ 	ksft_test_result(i == TEST_ITERATIONS, "Test %s\n", __func__);
+ }
+ 
++/*
++ * A range that was populated and then MADV_DONTNEED'd is genuine pte_none
++ * with no uffd-wp marker. Such a pte must read the same regardless of which
++ * PAGEMAP_SCAN path serves the request: the PAGE_IS_WRITTEN fast path and the
++ * generic path (reached e.g. via category_anyof_mask) must agree.
++ */
++static void unpopulated_scan_test(void)
++{
++	int npages = 16, i;
++	long mem_size = npages * page_size;
++	struct page_region regions[16];
++	long fast = 0, slow = 0, ret;
++	char *mem;
++
++	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
++		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (mem == MAP_FAILED)
++		ksft_exit_fail_msg("%s mmap failed\n", __func__);
++
++	wp_init(mem, mem_size);
++
++	/* Populate, then drop: the ptes become pte_none without a marker. */
++	memset(mem, 1, mem_size);
++	if (madvise(mem, mem_size, MADV_DONTNEED))
++		ksft_exit_fail_msg("%s MADV_DONTNEED failed\n", __func__);
++
++	/* Fast path: category_mask == return_mask == PAGE_IS_WRITTEN. */
++	ret = pagemap_ioctl(mem, mem_size, regions, npages, 0, 0,
++			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
++	if (ret < 0)
++		ksft_exit_fail_msg("%s fast scan failed\n", __func__);
++	for (i = 0; i < ret; i++)
++		fast += LEN(regions[i]);
++
++	/* Generic path: same query expressed via category_anyof_mask. */
++	ret = pagemap_ioctl(mem, mem_size, regions, npages, 0, 0,
++			    0, PAGE_IS_WRITTEN, 0, PAGE_IS_WRITTEN);
++	if (ret < 0)
++		ksft_exit_fail_msg("%s generic scan failed\n", __func__);
++	for (i = 0; i < ret; i++)
++		slow += LEN(regions[i]);
++
++	ksft_test_result(fast == slow,
++			 "%s unpopulated ptes agree across scan paths (%ld vs %ld)\n",
++			 __func__, fast, slow);
++
++	wp_free(mem, mem_size);
++	munmap(mem, mem_size);
++}
++
+ int sanity_tests(void)
+ {
+ 	unsigned long long mem_size, vec_size;
+@@ -1559,7 +1609,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	if (!hugetlb_setup_default(4))
+ 		ksft_print_msg("HugeTLB test will be skipped\n");
+ 
+-	ksft_set_plan(117);
++	ksft_set_plan(118);
+ 
+ 	page_size = getpagesize();
+ 	hpage_size = read_pmd_pagesize();
+@@ -1737,6 +1787,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	/* 17. ZEROPFN tests */
+ 	zeropfn_tests();
+ 
++	/* 18. Unpopulated pte scan-path consistency */
++	unpopulated_scan_test();
++
+ 	close(pagemap_fd);
+ 	ksft_finished();
+ }
+
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+-- 
+2.54.0
+
