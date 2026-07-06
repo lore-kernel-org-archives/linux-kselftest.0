@@ -1,171 +1,127 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFC83F9F48
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783356487; cv=pass; b=GWoN0krsHo8k2c6YPqspp8a3kdswtpU1BVY907rrn94HyGn/Zaet8WYQLUTioHYc8hcfMRTd/NJWuJSIortyJfeWOPKdVasXKcIwFCaW+NRTWZwMYGCqPmcE2toF/zEvoRDOrcEzGfKojkSBE2HI5U2To15OhH6SLpuWqd2qZxY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783356487; c=relaxed/simple;
-	bh=4PHgPVZZ8sj1dNJeoG46xQkWSVN7vyFHtfclac+X7d8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LzGKe9MjhKwO5qPqadMCNjN0J9jmcCd+Lmog7Gt5JtEw+N/gC3inknxH9J0CIrq2NFv+taXqDLiyaRKDARgZx9R2f5mQeQEoBtIUxBWBo10cex/gP2ipUkOp9p9EcorESEHxPCpQ0wmnRMjDyUaIyeZLqxV0MT4Z2mbfEZyf1M8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRs9Isus; arc=pass smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4CE4302ED
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783357039; cv=none; b=is1lZ6y6YdXpDMQtvtIMg/ysrEk9ts4w2P44x311UOVJSTryni1R0LANeTAHiOdfpnhkI8gqOZ6wuVISYIIIkwFzCFhYKIt5dMA2gft1uLPDWpGGruRvsOjKfguKM1cXQPoZeje5BNS4VJes+bGP8jYBXP/OPEIPIB2FSvAgNdM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783357039; c=relaxed/simple;
+	bh=kEBJEY/PJInPUYHCrM/CWDu6omOsOAQaEbY6MfxYMmY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=DMFtP93oafrQxU2BKRU/8Kk3Hvbvqrbdt7qoVNEDkTBAn/YGWzgfyR35UngRTiUl941yaP/KAvAoZ2jdJs0nekkgb1paj95zhIu/gJ44ywxF0+43I4Q5327OdhxOEwDDwT3Fhtx1guLZkCc1QYyjX44F1boydutriU0dhi15L4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=v3YxPL9W; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRs9Isus"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-4877a7b451dso2096683b6e.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:48:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783356485; cv=none;
-        d=google.com; s=arc-20260327;
-        b=leNkvIXn+FhsdZLbuuV2MWKbkNvNISi19rnuqJgy2Dt5nSwZRke2cTjA8Xvii0aMXp
-         W7DLrY1xM9ntTrI6onhb1GgdQiOoM3mQk7fyInMm8LBDGbXdsRl1HRoq85N9LDPx5/2L
-         gcAsKaqnaK8qvl/hDUJ+XPLNZQ8j21JtVnXGFopc4lAJVf7aY4SBOazjwRSElNpDcjvW
-         RMybsSzR6IuItzxe24eqYLAaxKX+67OPdgm+OYWq0FDq4Yi+aJ8KdumG5LTILdhP2nHA
-         qjdTURWPg78hS1FNRnm0zrNSnsMbA57ZtjQHBYU56+CIdgx2qQXsX52PmASXNmT+f0cZ
-         KkOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
-        fh=Qf30w0STVsOAgeO+Tmv5x6FEAnGxKjBs734k1VOwjJU=;
-        b=SLKgnOWMBmpKQZsRslley+qXXzVlAHG0/7n23GDdhLtkGP7UhRqrBCmSpS0tD7L2bH
-         3fwukcdPnb0Tkgm10F4Bru3XMpeJNBnXdE77KXKkQMtEDFdKGAeYT5lWlW5KQuU6T5Q7
-         L3zXJBLTBJDRKG1aRs3qG9i1Ylu7JH/zCTFSJ7+k4iY0cXP+SxBs0ig93ElnL3a0L60i
-         Tgquzv+eY0Bu/DYNa5dhjnhFkTjbz4oKvEqAQxx3mGh2VL5dEA5Kh3UxV/5OhJrgkagW
-         397NLQWcMuNoq0xUrpLUKso+IgG3yb9/eM2/f9ApEiZS/FKTi10lpneyQ9mNYs00ecmZ
-         P0nw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="v3YxPL9W"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84532e3dbf7so3401307b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783356485; x=1783961285; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783357034; x=1783961834; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
-        b=QRs9IsusX5DhA8Fd92WNEEu0twzkgeu7adQ4L0B48QaxF5lhvnETBtPKGecRnsD26P
-         BpcR+Pm21HPu01zaJmapxUjXUAo3obsi3sTKTdTo8YiICcNyGWKSN4aixwe07otdh30D
-         ZkPK+gJ12HwCZDJ3Ke5gtu6eFhnkln4t0IeszGtowVMM9daifpVNZ0dBkatP0cU35sit
-         vcIprt9D4S4fx8Zk40MVGZEJRr8vw3t3quQDn+8vNx7EMGI6WiYPOJeXUHl40+1qGo8M
-         LVKlQxvnn8ewtU3LU2iXfIfqKOyQ3rmLo9jYBTUlZ7W/Kys2BdtdwTkyOIiQzNnpjn5N
-         2xAw==
+        bh=/8ge3ixhQ7bc+RtCQGTIiLP+joKUlT/9A4CFAqvurEA=;
+        b=v3YxPL9WHWjJW95U6yFeSiFzz7kiBYOP1tVAhFJhF/+uHEcNvLvrJvbEZIOTXmCUFr
+         PCgBTE8fiGxhTPyzA9BAakl7H7XFR1/+cS52ncH8z5fiPI7tYrvG1LgVCihVfxg44Olo
+         9mLXwdcFsBvUjZkgKHMCQAPoSPAx/1Qv8jPfQOzG3gLEcZQ9LCaaten6lEoD6oeuUSMU
+         Z2fpgCtgba82kGWa+GFCA9Oo/KupuPHqYwiBUp8m82YCe3AxWKnyxBF9twZPP2IwnEWE
+         q6uf5mi6cfPLUHSvYEJJ7aEg4BGX4JUAxr5DQbtxmW4kAypBjVSb483JGYGrnA+DPSmq
+         a+ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783356485; x=1783961285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zarcUzp/fr15vy/Sk3GURs8seOzb+QEYuzaIJK/NbMg=;
-        b=HfZW9+vVKk43MJk2jneiTOTfaCgc0Q4DmRB6eMO0rMzG+mGX7dfUySjRqPhIzpmh4v
-         PnzrY2OsRQRFihDxe+7uReSc2gMejK0OULLQmNpyz3Zg02GnS3309Jn++XmFIbhMb6rL
-         G2D2MEr51NQN4uPJn1Jo0FJZMM9D3X9b9Tx7ahndDjWRtJC++KRbz0bAt/PYHqZS0rUI
-         y9/rs1lMok7xZtP6HozQN81j5biXAD2iPKWtr/AZ5OT+zqHv3iLKar47Z3f7OFi4++gX
-         mdEQS/EdfP40k+UpYKQ4ytpScvlHoNKyp2uTDo8Lp8u0w4vwWFt/1oOwHjOmnbKoNkgx
-         b81A==
-X-Forwarded-Encrypted: i=1; AFNElJ/kND0kok1Sm7MVF0bEJCVDTF2g7JT1giFSXSK1hJMwxoLf7P0sMudTCXNgZxmJDp4R0kPYDjiXVLL0/QNVjis=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTXE0lgYF7sTX00Solw8q7n980A9uqOPdvzJxM3zIYQgHVBZlf
-	ktMNYgOSqezhxO6DEtTdA73dV9CBc09McdJcJJErj/qE3q/kNGXehhpBcEXlU/1KLvgAeSS0VhG
-	giyv1iNIG+SHIvkd62ASd5/luWU2NkEw=
-X-Gm-Gg: AfdE7ckVrcZrgC6hd3zIULgfwHeu4TFU3qYuuINfnHSSxjE4TfS2Sh5Ixi9hgPGwXq7
-	HAvPAEsPtgD0GwCLtNtCHQEWbtBiyaQMhFn8nbEYsFXfz9S4ccbDIBQ02/AxMHY5NG3m72ED5ev
-	A2fiTlczrmG7FGx4UBeonp9Wp7cSYQ64zPqQIqyQS0uAVD+W0sWaOqwIZWC+8kEcugnMN3Ngfkm
-	Z0d+311QjoFYhtaPeRyNTiN0oV3bz+VtUMzPEVuoNKkJnwhFY43UMHirWkw5dQPNiO5MA==
-X-Received: by 2002:a05:6808:3986:b0:497:df42:1df4 with SMTP id
- 5614622812f47-49fdb9341bemr1075973b6e.9.1783356484621; Mon, 06 Jul 2026
- 09:48:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783357034; x=1783961834;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/8ge3ixhQ7bc+RtCQGTIiLP+joKUlT/9A4CFAqvurEA=;
+        b=R9pk2lBGFvTc2k8Bydsc2SX9g82s2zUm7KMJ4rY9Loau0xcZPp68F+LSbS4yqLh0KT
+         qKe0LTr5Lc+oyeBNc+HqR1yF8ALybGKHXx0iIKaOjOoWuyQXCa8h2midyjlmfDQb2s/A
+         FH6uELd9kQtD3GD/c+jZ6l5o/DOb89qVK93HbbS5wmPzB0oCNLNEb8m5HsoNit0zcjjs
+         Sl/ad03iVga5scd2OnrbonESk1qOiD+fN6cZJN4pjIJeQJkoZo7sJPmj+LOZC/VEzVIh
+         0h8PGmieS8Jp8mNKnYJTNqQiX+rsnN1m+YeagS3DDXLf+llVmXYlqnfFQS/bD4DS9Opm
+         IVtg==
+X-Forwarded-Encrypted: i=1; AHgh+RoUb5XqfIbYpYOl6B4b1q8AlU3RcxL/mC4VS74EJonQUGDHrtbVxQat+vpzz9WpmlgDylK/rcPuJxGjEWo/Jlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwN0+0XP4FaBr4VoxLJNu+3jVqW38Pg0VCHaYAsTfJt70gWcXEl
+	oAumWU/Pit+XnEc3DsdRFTplFR28e3omqKJj02tkfQoYRwXPaDLg35Ba7YJwFQo1vmk=
+X-Gm-Gg: AfdE7cljpZCYvbn1nWgkICDcyrQZTHyTetJxfXcs1xeelqSehDh2J3dFyeKRXXMU8Oq
+	SQpQet6yJCUq7ak6BUFIAKcTqg1iqBuOwLdHNEZFnXRViJgPslDcEDRUM4tGRsESbOJlYJ5iN2G
+	0gv1I/oD0ifyJRXjhoocZys4NVutKmFuI1HD2KwQJoeYWMCP58v48hNYnbuta/pWbSwoiQXgxb1
+	42v3H8cItGtebbaf29m/QLsxX782VHh3Ox9P61QaERxIccmVP0nY9Omx799x9kFVhU09BUGK+V2
+	dT/jB40D0t3Hvm1MsPORO+EnFlRWk4b5fFJfuOWmYc9hAQMC4to6Dh/rNQyaS9PiznvGlveq2o2
+	QTkIDiw6SJt2A/eBuwDuO7iEIkUQw2By6RJYag9XHNr+3Cv4w6UFq3vXQXU7JIuPZapwfibp+A+
+	OPWL9U2tV+Hhm56+5eD85GUGPAHndRp8QeSsfS1ST7bA==
+X-Received: by 2002:a05:6a00:80b:b0:845:259f:8925 with SMTP id d2e1a72fcca58-84826be28aamr1426446b3a.6.1783357033742;
+        Mon, 06 Jul 2026 09:57:13 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e91b0a2c4sm6115711a12.19.2026.07.06.09.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jul 2026 09:57:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com> <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
-In-Reply-To: <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
-From: Farid Zakaria <farid.m.zakaria@gmail.com>
-Date: Mon, 6 Jul 2026 09:47:53 -0700
-X-Gm-Features: AVVi8CezoZXmxdx0EVJgscHRgUSuI56V3d2lgnD3ARstqF0mvBDKn_k51tgqOEc
-Message-ID: <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-To: Christian Brauner <brauner@kernel.org>
-Cc: david.laight.linux@gmail.com, jack@suse.cz, jannh@google.com, 
-	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, 
-	shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 06 Jul 2026 12:57:12 -0400
+Message-Id: <DJRNB2GQ7RAX.T3F4PHNFMI49@etsalapatis.com>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Puranjay Mohan"
+ <puranjay@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject out-of-range arena free
+ addresses
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Shuah Khan"
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260706-f01-31-arena-free-bpf-next-v1-0-3ad6e7384285@mails.tsinghua.edu.cn> <20260706-f01-31-arena-free-bpf-next-v1-1-3ad6e7384285@mails.tsinghua.edu.cn>
+In-Reply-To: <20260706-f01-31-arena-free-bpf-next-v1-1-3ad6e7384285@mails.tsinghua.edu.cn>
 
-On Mon, Jul 6, 2026 at 9:01=E2=80=AFAM Christian Brauner <brauner@kernel.or=
-g> wrote:
+On Mon Jul 6, 2026 at 11:52 AM EDT, Nuoqi Gui wrote:
+> bpf_arena_free_pages() accepts scalar arena addresses. The free path
+> masks the low 32 bits, computes the full user address, and clips only
+> against arena->user_vm_end before inserting the range into the arena
+> free range tree.
 >
-> > Historically binfmt_misc has only matched binaries by magic bytes or fi=
-le
-> > extension, and always redirects a match to a fixed interpreter recorded=
- in
-> > the registration. This is insufficient when the match requires parsing =
-the
-> > binary header (e.g. inspecting ELF program headers) or when the interpr=
-eter
-> > must be computed per-binary rather than hard-coded.
-> >
-> > Introduce a new 'B' (BPF) handler type. A pinned SOCKET_FILTER program =
-is
-> > registered in place of the magic/mask, and no interpreter is recorded:
-> >
-> >   echo ':name:B:<bpf_pinned_path>::::<flags>' \
-> >       > /proc/sys/fs/binfmt_misc/register
-> >
-> > When a binary is executed, binfmt_misc runs the program with the
-> > BINPRM_BUF_SIZE file-header buffer as context. Returning 1 selects the
-> > handler; returning 0 falls through to the remaining handlers.
-> >
-> > Unlike magic/extension handlers, a 'B' handler carries no interpreter o=
-f its
-> > own: the program chooses it via a new helper, bpf_binprm_set_interp(). =
-This
-> > lets the program compute the interpreter path however it sees fit (for =
-example
-> > relative to the binary). A 'B' handler is therefore a strict superset o=
-f the
-> > existing magic handlers -- any of them can be expressed as a program th=
-at
-> > matches on the header and sets a fixed interpreter.
-> >
-> > bpf_binprm_set_interp() is exposed to SOCKET_FILTER programs and stashe=
-s the
-> > chosen path on a per-CPU area that binfmt_misc reads back immediately a=
-fter
-> > the run under migrate_disable(); only a match that set an interpreter
-> > allocates.
-> >
-> > Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
+> A scalar address below arena->user_vm_start can therefore produce an
+> out-of-domain page offset. A later allocation can consume that offset
+> from the free range tree and return an address outside the arena range.
 >
-> Ignoring the blatant bpf abuse here I think this is quite workable. So
-> this can be turned into an actual design and patch imho...
-
-Glad to see you think this proposal is in the right direction.
-Just for my edification, when you say "balatant bpf abuse", you mean
-how it abuses the socket bpf type?
-If so, do you have any guidance on a new type or should I just take a
-stab at it.
-
-For the proper RFC patch unbastardized with tests, should I start a
-new thread or is
-the convention to keep attaching it to this same thread?
-
+> Reject frees whose computed full address is below the arena start before
+> clipping the end of the range.
 >
-> Note that binfmt_misc is namespaced and can be mounted inside of user
-> namespace + mount namespaces fwiw. So a container mounting binfmt_misc
-> (a fresh instance - few do) would escape that bpf program. On the other
-> hand it would allow to register a custom bpf program per container if
-> needed...
+> Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
+> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
 
-That makes sense -- but you will need CAP_BPF etc.. to load the new
-programs though
-if inside a userns.
+This is the exact same patch that Yiyang Chen sent about a week ago.
 
+pw-bot: cr
+
+> ---
+>  kernel/bpf/arena.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> --
-> Christian Brauner <brauner@kernel.org>
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 80b7b8a69446..97a5d8d21295 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -853,6 +853,8 @@ static void arena_free_pages(struct bpf_arena *arena,=
+ long uaddr, long page_cnt,
+>  	uaddr &=3D PAGE_MASK;
+>  	kaddr =3D bpf_arena_get_kern_vm_start(arena) + uaddr;
+>  	full_uaddr =3D clear_lo32(arena->user_vm_start) + uaddr;
+> +	if (full_uaddr < arena->user_vm_start)
+> +		return;
+>  	uaddr_end =3D min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SH=
+IFT));
+>  	if (full_uaddr >=3D uaddr_end)
+>  		return;
+
