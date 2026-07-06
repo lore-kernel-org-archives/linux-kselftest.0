@@ -1,109 +1,133 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7172E8B83
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 22:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770413A9013
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 22:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783375453; cv=none; b=eXRGOBU1wvoK76WiNT0EN+6eeIfP4rKdXacfvgAA55V2YcSu/xgoHzjzgnB1U1MwlGG+iHFq/0vY635bPOLNz51ckYL/MeC9KNTiefs1gTblvMpNbhnCldvDGrMK7W7CGSwtkSR3cHWB01aUbPG8LbTxj0fbKXjLJ5ONKN7nGWY=
+	t=1783375819; cv=none; b=iqImj03pv72XGfwRMkT5hBzNWdKj6Cp05STpeNyKjRIT5G78GwPtBnkQM/JYZr8IqTJtZthR88zM1qfPp8O3heQFRNGZ4VX3VbzQHpaHNBaDnLtqpYEoVvh04FjkVD6ap1r4+G8htSK5QErTkhnSLLxmiEJXScBz8q914fS0tiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783375453; c=relaxed/simple;
-	bh=rLy/ysj5tbpERefiVlqo7Up7k2XPDa6wDyapX0dgtAQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UVjp/mpWVfnBd4l0LUHuHKKteVovtAKJUeSbMuw56jIX5q9GK3P+NUvcIbBH0TDO7tJaTpahi65F6XLXMNbLK+5ZqTKRyTrKJtZX1lfLLEyGefACM9o75/y3RZHb/TsYe3dEzSPEwRHpRzVBvcFx6TBIWt2Kjh6Hvs4St3FY5gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RFfpI5LL; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1783375819; c=relaxed/simple;
+	bh=scRh2OdWbDi2c/x8JjbQezLmH0RD0LXwZD4IFksG6E0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=e07+liCp/zFjWXVqRwhfzsP3FfW3mHWFjPZgr97e3EvlHy2K7MhUG43bkSyLWiVdYuabk/MvTWY8J/qHzPJzCrSUmqgQuiym54xou880t/PSMyCcmHggSv4EboougMt6ElcNVTk4iHry2XpiEfkMRGpxs4hAkDk+G5s0KjUcTr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvX5bNzc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rRqFmv93; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RFfpI5LL"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cc6dd436c6so18077905ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 15:04:10 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvX5bNzc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rRqFmv93"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783375817;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
+	b=DvX5bNzcsy02udzE4ALN9Atgypf74VjccqggMf7uJ8ECBR2z2fQUE36WO3D4ZPuMW2senD
+	fYOfEQVmJLWBJwrqHoctOGBMrTBUhnZVLHN8etDRTV1GEuZi5tGrpJCa7nxy7pHLJn+1mQ
+	ZtxAAImr4rv2CrK3ReQ8ppwo8XwOI6c=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-iF_AOo4YMnag9NmErp6_lA-1; Mon, 06 Jul 2026 18:10:16 -0400
+X-MC-Unique: iF_AOo4YMnag9NmErp6_lA-1
+X-Mimecast-MFC-AGG-ID: iF_AOo4YMnag9NmErp6_lA_1783375816
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-8fc92c5373bso8694256d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 15:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783375450; x=1783980250; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ExF2e/cXpRQsXQR0TRuzWP6MSTLDs8ljOSl9uaYcPTU=;
-        b=RFfpI5LL9CeFLidDrLl0FoW4hdPY0VRDS3QcnJ+clGW9WvEdLWCbXf5J92IQaigrL0
-         Bp2yCFakukTmmVAeM6ZeL77QMcc1fuAoIEuR6crhbkkApmqw9D+jN7f1QHWJvW5OVEpH
-         HMKrIENsTn+MC7NUTKuJDYjpGtSn++j3fihYwBAyAwtNYsWCciQQ2k35Qq/3TlLootZC
-         QWk1MTX627gzw34S731LWLEO7OtwnWzZDfC4rJzuaQ4IBgCZzwQfoQjLBmdo9Fd5iEQu
-         UuuCdoHxTO1Stpoqw4pKcg2hSFefko4jeIiEQyJjzXTXDAI3L21m66dCXTiOVDpnycmx
-         vePQ==
+        d=redhat.com; s=google; t=1783375816; x=1783980616; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
+        b=rRqFmv93YAkuqRbmuA2N0poYHtxIKf0okDfRn56JL92Boi8aX9SAzpcGW4WC+6uPuT
+         VCXLaDjpk6ajc0NUFeSoW1GP4ONd8d09Nr3oCNvmidDBjTNg0ffYJRKMCZMlaN0/WtHz
+         IWaoPX8vtEMCVh+yoMGFBUgiWtJ9EX+5ofGYZQBDE9ihQYQPQtAJjy+psZgwzAt7Wiwz
+         jOY54UUqb30rFy7dMHYSqVRWmwp5y9BpwVQkcrJ5BAtStBi2ri3GGMcwQE4HsvxUF4xY
+         fnSG/weAsX1G1CEb0rjn7tB8THgHBjKBDnXyGCmQQV4Gq0c08d0Dx9o8wOnL9ksK+Gag
+         Eoiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783375450; x=1783980250;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ExF2e/cXpRQsXQR0TRuzWP6MSTLDs8ljOSl9uaYcPTU=;
-        b=gAkAPKVlE+bYyKxFla1Vhea8PX2yXs/byEacVk+ZxOTrWNo4stZg6VaRyx6Sd8aOpt
-         6RfkjCSBKzIkkp01OHU1/85FD64AsSa+x30NvUm5rXA0Toq/LKqkU2WQKCFVGD8TOje0
-         +Dka7YPZ4inY1kRkc7189f6vm8uszxtU+E79hu7iUgPKMypjEC+Fz+9d8N49UzLFGmL2
-         Bwq1iNa8O+bR3gtzgbm6k13egtlKTUxNCw/pKpR/DpseKowY3NZGE51WVwuThlGQUKqb
-         x5q1EVs714Jyjkqte06N2qrp7yJNj8mL68z0VCb6EM/aJaQZn04ufh7IwzadN7YAwL0I
-         XPrQ==
-X-Forwarded-Encrypted: i=1; AHgh+RprUNnhtjxL5hYvOoPwVDF85GF1L4gpXF0SyjPkuUucFtEvXsbXnH5bnpmfdxxj5VjszgAnJbXgKY3xoDQFXFA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwI/uUsNF2JD7UdorLb8Wt3Un1acOWBaCWCtJzA+G5EkjpRyF2U
-	Tlnwdnl4IG9KMDtqVoXQr2CzzfIwbO3OAjjpUwr7Js4QNHAmDh9INt97aeVMJeNdKQ==
-X-Gm-Gg: AfdE7cmrm0zpGgcLBLD6vHO+kwhJoG4LVOihRcKpGbBTlDBfFEXFLNm22yKH2rjUqkO
-	0HLKh4uWEqGKLMO+UJkVLHaBfCMo0mP5uFEJojFrva27dB+kdfF0Qd42N2ZsQJb2jRE+TT8A7XD
-	BOfYkRZZwfF0Z29CDKVObocnEzQGVV+vAhhvPhQ48IMbmzSF4MIZt3Zm9sFZ9y0yiC2XTxxpeGy
-	zpWs6j8L6E+z2zVjFfQ7Nl51F+2ZXSBDIAIpVavvou/3Uj/SoT2bLmRIH0nhypVsW+8PEJxi4fd
-	JEqwCeIEPNJmA0mnAMfrY4NNtYhdjYMle4eeBzakppEqeaNgFWIxAq2v/TnAKL/EE6EFgwKnldm
-	R7l4QPfZDLUMH6o62kqE9EFCY227ZBbtBnLWvn/Gnapnvo5jvB2zxzDt5z6IdUl97skS2w1TVkd
-	yOh+HQRunNhoLtvJ1SX4gZ19OOG/spQKa4yvKh3a744eaHpuU2Q10=
-X-Received: by 2002:a17:903:3d0f:b0:2c9:b48c:fdde with SMTP id d9443c01a7336-2ccbf057775mr26873645ad.26.1783375449431;
-        Mon, 06 Jul 2026 15:04:09 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf8c12sm1075785ad.26.2026.07.06.15.04.08
+        d=1e100.net; s=20251104; t=1783375816; x=1783980616;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
+        b=ji5YN/Z+gBfIfogmlTUR3AGf5ZxSz3Ds+apT2V7K7xMIT2RVlekpMt31RVr5eL2oqZ
+         5Ms0iC7sHLkq94wGT9gR8lkkWRgMPvQWSHRuq+aEsVCVXmdPeX030yj7blJEBGtlCZhT
+         nLfT0jdu82SjvdA1NbdelpUnsppp4dkrOy5nbGR/FiWiMvy/GDq+R9lzeJ6Gx+YWHmjn
+         l4/YbpMK0RVMyuT58wN8JBionC2DsZj19OcKZO0R6b+L835ragIEZHFt4zPL31MycwxC
+         arv1CgVIG+11ZeYICIe07SjBw7YUZxqaancpb5iaAVYsy/kMRFkcwFEG0zhoPrHGvn78
+         kFRg==
+X-Forwarded-Encrypted: i=1; AHgh+RrFa7S6fdXFMtqtH5sOTfjThRUy6NKyTFCmj7r5OXWrYB6+8oizLV4yUiEenuDko5usRBQUckiF031nYVgjQMI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjMHYDg21fouj1tN/SKdbTkSiu8gwgrcH22InskopubaOLOf4Z
+	Seqr9BjnZ5ui3GDcscQXRmbFajJ9Ok5HBJK6VOqBpzHPFOUd1jTYffNywaFkCZ98qznWrsZ23Gj
+	YHGqRCP/BBMm9iCY7FVJ8lcIdaicCrPF4f8pq62Wu1XXR4dYwJWzxJZGys5cZcnoUWttAGg==
+X-Gm-Gg: AfdE7clJtEj90GU0XFX7h9s66XR+oqhG3a9KAUUPU7Gh8Novb7qwBUXlrP4jph4bkWD
+	yyGgiSc115JMD+laMamHBhrOS9CE7kl8eNZuvZvvmjNZPTjzZQEnkR9Xte5Hz5bcxDSuRaV0HnW
+	RNag2Zr3HhfgwnPQLkaIL4v1KItcVPaEvD9c7RVuVGKqw+K4cIKrk3ozCAQ3HazhJdLb1hV95EI
+	HmrTkFVIx7IEsh0thQV4NXxylbt+dnwj0GRO/5v3xIHtZ7g7Jo+fViWMpxo6A3O/0KqzTHDC31E
+	E1DsjrJNnTxXKjkL40RyRCrLjLlCfRiAfsneCDXariv2rlpeYMUflKnGcJk0OUPhNiqZ15D1NCL
+	BytODQBs+Caok+dHzpqo=
+X-Received: by 2002:a05:6214:2f8f:b0:8f1:64b4:421c with SMTP id 6a1803df08f44-8fcb648cce0mr33728066d6.57.1783375815647;
+        Mon, 06 Jul 2026 15:10:15 -0700 (PDT)
+X-Received: by 2002:a05:6214:2f8f:b0:8f1:64b4:421c with SMTP id 6a1803df08f44-8fcb648cce0mr33727646d6.57.1783375815069;
+        Mon, 06 Jul 2026 15:10:15 -0700 (PDT)
+Received: from intellaptop.lan ([2607:fea8:fc01:7d0d:91f2:ac3f:2776:92d6])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46f30c04fsm156615146d6.22.2026.07.06.15.10.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 15:04:08 -0700 (PDT)
-Date: Mon, 6 Jul 2026 22:04:05 +0000
-From: David Matlack <dmatlack@google.com>
-To: Narayana Murty N <nnmlinux@linux.ibm.com>
-Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
-	sbhat@linux.ibm.com, harshpb@linux.ibm.com
-Subject: Re: [RFC PATCH 3/6] selftests/vfio: add sPAPR TCE v2 DMA window
- helpers
-Message-ID: <akwmVUE6w_4mesUO@google.com>
-References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
- <20260703032806.40946-4-nnmlinux@linux.ibm.com>
+        Mon, 06 Jul 2026 15:10:14 -0700 (PDT)
+Message-ID: <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+From: mlevitsk@redhat.com
+To: Jim Mattson <jmattson@google.com>, Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>,  kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ zhouyanjing@hygon.cn,  linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Mon, 06 Jul 2026 18:10:12 -0400
+In-Reply-To: <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+	 <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703032806.40946-4-nnmlinux@linux.ibm.com>
 
-On 2026-07-02 11:28 PM, Narayana Murty N wrote:
-> Add helper support for sPAPR TCE v2 DMA windows in the VFIO selftest
-> library.
-> 
-> Track the platform default DMA window separately from selftest-created
-> dynamic DMA windows. The default window is discovered with
-> VFIO_IOMMU_SPAPR_TCE_GET_INFO and is not removed during cleanup.
-> 
-> Add helpers to create and remove DDWs, return the active IOVA range, and
-> register/unregister memory around DMA map/unmap operations. Window
-> selection is done before IOVA allocation; the map path only validates,
-> registers memory, and calls VFIO_IOMMU_MAP_DMA.
-> 
-> Signed-off-by: Narayana Murty N <nnmlinux@linux.ibm.com>
-> ---
->  .../vfio/lib/include/libvfio/iommu.h          |  18 ++
->  tools/testing/selftests/vfio/lib/iommu.c      | 273 +++++++++++++++++-
->  tools/testing/selftests/vfio/lib/libvfio.c    |   2 -
+On Tue, 2026-06-30 at 08:52 -0700, Jim Mattson wrote:
+> On Mon, Jun 29, 2026 at 5:57=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.=
+net> wrote:
+> >=20
+> > The SVM DecodeAssists feature is reported in CPUID
+> > Fn8000_000A_EDX[7].=C2=A0 When available, hardware provides the length =
+and bytes
+> > of the intercepted instruction in the VMCB, allowing a hypervisor to co=
+nsume
+> > the decode information directly instead of re-decoding the instruction =
+in
+> > software on relevant VM-Exit paths.
+>=20
+> DecodeAssists actually comprises four components:
+> * GPR number in EXITINFO1 for MOV-CR and MOV-DR VM-exits
+> * Software interrupt number in EXITINFO1 for INTn VM-exits
+> * Linear address in EXITINFO1 for INVLPG[A] VM-exits
+> * Guest instruction bytes and length in the VMCB for #NPF and #PF VM-exit=
+s
+>=20
+> You only partially address the last component.
+>=20
+Yes, and I also remember when I implemented some of the optional SVM featur=
+es,
+I decided not to implement this, also because of the same reason - pass-thr=
+ough
+is easy but for all the emulated VM exits, it can be tricky to get that rig=
+ht.
 
-Let's move all the spapr code to its own .c file under lib and only
-compile it on powerpc, and a new header file so that the code in iommu.c
-can call into it as needed.
+Best regards,
+	Maxim Levitsky
 
-Please also avoid adding ifdefs within function bodies. The generic code
-in iommu.c should unconditionally call spapr routines and those routines
-should be stubbed out on non-powerpc architectures.
