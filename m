@@ -1,101 +1,78 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3870A2DFA3A
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jul 2026 21:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F841DE4F1;
+	Mon,  6 Jul 2026 01:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783288514; cv=none; b=ps8vj0e3VH9U3OvyWni+71EsS2kCdyLzIBOKmK7JAA+OxjudUJPy7mjBoudbqD3bziXC1B0hOmUYrbYO86kV4T6GJu5qzESVZEejX/ddfh5KiUfQxzfajl/DZ+xARj0bmp24sz1vK1QugGYBYTvP5glSX28Bn3lBZZN2DCB+eYk=
+	t=1783300725; cv=none; b=g4Ev8SI7wh744TbGpVIMvK9XtkcetVPyBMz9OTXLRfH4Q8IMliqL2n7kefzg6EgMkSJKGTahdMJLnnjj2jMvCWWaBq0p25La2IAwTH4Pb/6R67enluuVcYX+QzvOZ8PWXWWG+Jq80uAQhi/7wGeSNrMvAMoC6/Uj3mfxdIpONgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783288514; c=relaxed/simple;
-	bh=2MsExnvuYrMO9KVmvVKeJb/z9uFAjmtZIrAajNnEKSw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nDMn6npx2ppvwCNPUREG1rLHY5dDGAqOlaEtmZOHvgvqmeYj5+mWL9TolJ6Fz+AMyqMbW59uZHvuB/78ArQyrGZsGt4bgrKXZ+X4G3VR5cplzEQ0omVJHV03hMtq3YPGzqtocy530/8+/DG+zwqfJvPw4ZLrYSSezG8JDZCCEGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cA+liGlU; arc=none smtp.client-ip=209.85.210.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783300725; c=relaxed/simple;
+	bh=WrwsT+Ncb3pgOUjIr2a42L2V6G5MctpdERpw4fCAeSg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=r7iZ2rfe/gOtsOrCE1FRPdMDmfadWEo/Gwvi59U3F5FsRZmpe9+d6vWtlg51AoWLAgm3BYlgaT9vxBnaxyZfZBsSkkHS81LXrnd+F+w0RiQuetczfikS/KaQsAthdtWVgVm9eeZSQtuQhdkr0pf6m0Orn4c/PsyISRziNB6Xy44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xspm3dFI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cA+liGlU"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9f6b94a49so1296651a34.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jul 2026 14:55:12 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xspm3dFI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D741F000E9;
+	Mon,  6 Jul 2026 01:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783288512; x=1783893312; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0BNmO/nSJ/zuyfL1He4LEsZwukmVnEntNkbHxW3ZPa4=;
-        b=cA+liGlURb60wiYQfOch7UjpYLFu+TpqPRA5nsp9lV2MUzNjXXMMj2vao5AP6iSigm
-         s+nNoIhBJHbXu1yZ8BwW+eOZ0HTNRzVs/PPqE7UpS+/YahcAliKsKF9E1SbVga4WcXFs
-         6ZMagF17kJ5L+YVjJXPla1fjk4gdr/TaPSAyessrpjUpunBvntaSFKFTG+fZRJj2uQ2b
-         tqoIWCvy7eInlJ6N/cJqyTFNx61OhyH4k8OvrhfByRKbYntcRS7gR6b4la2qUNLoyzfn
-         MxYVqfrfpFEF8T40YeL8CsbsvnGOaoH1YdRueolmP3KbjswdwK6earkep6jIQN0Ox6ZA
-         0v+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783288512; x=1783893312;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0BNmO/nSJ/zuyfL1He4LEsZwukmVnEntNkbHxW3ZPa4=;
-        b=krLOAkZJsPyNjHzTsT0EjpQnbLfEs27EfB2i5oOpVeljX4O2D1qd9SXaEP70gG4rBy
-         k0sNUx7Oddier89xaDYfp9zzhRrqkUnoUJ7qX66o0RWfcLFVOmnoEPuKsLrQiTo2jp6C
-         fwPoXlEwrCLEFkpkGDFDG307rGEjMDIHt2m3a9z+dUfeELJybVHFvGqW+ED8bd3zOhGa
-         BAqWBmQgxXnUwACbZ3qB7HUYqNbxlGumPdYmChxRhyPgZ1Npnd9HkWVj2ibXcHERPncA
-         sw2fljc6XygfcLZYPt5Zo1G8xgNeM7RIJ+oji+W4W8VVCYbK997NKa1TTCOIQ3fukaUA
-         /2QQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9IJV/vUILOPtfTzdx/iyrnNnfReC+QauYlLNGcbkSp0As2bXMR3dWUi4Wm2voAJHAt/7xjesqDjoGC5MbKL1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDFvuJbdxYXKEMXjtNqHwnkK/3BIG68NY6rwpyPtN3COdzXkwn
-	VHt/ziCl+Hi57CWJh6XN5P4iTR2mF3kDUwktgkHSrieiJthoKesHYPm1xQGySmgY
-X-Gm-Gg: AfdE7clHBL2EGt7ZpLtSbaAJqlE1zoo9fHJtGSqWpU3B+lBLYZKslMZRQbe6R9UscS1
-	w5qJ/uhRIP4h/ujPdQoi1LnRn96DCNDI0b7yvQa95VlOm80gTjg4ilKOCc9prsvGXskZW1kDr9I
-	5pv/q++xE1+pPqk8Un1QKvN0JtQTz30aJjK4yEMGxvnB9/krkhhBKySJHnWd77geF2IFzwyzA5X
-	iOOoGsh4tpeiPJay3+z7ClB/TZ+UeNLxcUP0AU3aHwlCSMDDHUi8HNUuzv7vKCtFDKPBa0iDUZP
-	E8JFmSaXpytrSfKrHvm0AMVnLr2avKQjuQJsKnS0A+3xm/RZAkQ/hvCdsok5CX/mnwxBrQJ6//i
-	hauFnUXWrPdlAzln9ZKyohKgpgNySIjJpgbAsrPom4bTGR219MK9Jj9gl01lAiTI+HzRVUpC2Ov
-	gZ84a684eU
-X-Received: by 2002:a05:6830:82bf:b0:7e6:c9eb:535a with SMTP id 46e09a7af769-7eb7fd0bdf3mr4798640a34.6.1783288511994;
-        Sun, 05 Jul 2026 14:55:11 -0700 (PDT)
-Received: from fedora ([189.146.106.138])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7eb542d017csm9955434a34.8.2026.07.05.14.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2026 14:55:11 -0700 (PDT)
-From: Cihan Karadag <cihan.cihan@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Cihan Karadag <cihan.cihan@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/rseq: Add missing test binaries to .gitignore
-Date: Sun,  5 Jul 2026 15:53:40 -0600
-Message-ID: <20260705215346.1132764-1-cihan.cihan@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	d=linux-foundation.org; s=korg; t=1783300723;
+	bh=dCse9pyTLSRmKmhBEW/kg3N3umOx0WojuIarGT+1LjM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=xspm3dFINsFpaUjIb0bOkdmGSeRBRdJkPgGxF4MG9Yf2eXwtefOV5caZkE8M+DInY
+	 Z9Rvq0vXxisksxW4151QDzPxlebMOTdFgOg7uzvSMcvg1oWEmAG5JWqaB5PLQvHOxQ
+	 qS4wur2bNJZqWmcktMhGmvByWelAPisfXorI5ddI=
+Date: Sun, 5 Jul 2026 18:18:43 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Yijia Wang" <wangyijia.yeah@bytedance.com>
+Cc: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <shuah@kernel.org>
+Subject: Re: [PATCH] selftests: mincore: use default huge page size for
+ hugetlb test
+Message-Id: <20260705181843.6c7a2c4629cb05d47305cf14@linux-foundation.org>
+In-Reply-To: <20260626-b4-mincore-preview-v1-1-5f07aa02ab32@bytedance.com>
+References: <20260626-b4-mincore-preview-v1-1-5f07aa02ab32@bytedance.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-legacy_check and check_optimized are built by this Makefile via
-TEST_GEN_PROGS_EXTENDED but are not listed in .gitignore, causing them
-to show up as untracked files after a build.
+On Fri, 26 Jun 2026 20:59:02 +0800 "Yijia Wang" <wangyijia.yeah@bytedance.com> wrote:
 
-Signed-off-by: Cihan Karadag <cihan.cihan@gmail.com>
----
- tools/testing/selftests/rseq/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+> The hugetlb mincore test passes the base page size as the MAP_HUGETLB
+> mapping length.  This works on systems where the default huge page size
+> is the same as the base page size, but mmap() can fail with EINVAL before
+> mincore() is exercised when the default huge page size is larger, such as
+> on arm64 systems with 64K base pages and 2M huge pages.
+> 
+> Use the default huge page size from /proc/meminfo for the hugetlb mapping
+> and unmap length.  Keep the mincore() check scoped to one base page since
+> the test only needs to verify the residency state before and after the
+> mapping is touched.  This also avoids changing the mincore() length to the
+> whole huge page, which would require a larger residency vector because
+> mincore() reports one byte per base page.
 
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index ec01d164c1f05..9b6eb6c3922f9 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -11,3 +11,5 @@ param_test_mm_cid_benchmark
- param_test_mm_cid_compare_twice
- syscall_errors_test
- slice_test
-+legacy_check
-+check_optimized
--- 
-2.54.0
+Thanks.
+
+AI review flagged a couple of possible issues - can you please take a
+look?
+
+https://sashiko.dev/#/patchset/20260626-b4-mincore-preview-v1-1-5f07aa02ab32@bytedance.com
+
+> --- a/tools/testing/selftests/mincore/mincore_selftest.c
+> +++ b/tools/testing/selftests/mincore/mincore_selftest.c
+> @@ -22,6 +22,27 @@
+>  #define MB (1UL << 20)
+>  #define FILE_SIZE (4 * MB)
+>  
+> +static unsigned long default_huge_page_size(void)
+
+This would be our fifth(?) implementation of default_huge_page_size()
+in tools/testing/selftests.  There's a project for someone!
 
