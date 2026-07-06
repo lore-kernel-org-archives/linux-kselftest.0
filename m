@@ -1,185 +1,111 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6106F3AE1A8
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 18:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783363674; cv=pass; b=To956Ly9qj/7aiS7RE3u1QB6TXhL2Xj+pjRBBGnGT/xZXGLy0zfcLs54yT7kaTu00WAlfZPFiIDX3Ke3tfPCRNPTy0eBedl0X0+pdEDz8gdqSS+rLYiZ+VrHYWruHyexYRf48+jh1iJY8elgafb/sNDvSg699Yq4g3zF+wPEhMo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783363674; c=relaxed/simple;
-	bh=3CpDeh3U/Ub/nnGgM+FSJgwXu2F8sXt7Wd9OJeF59Aw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DfKnIMjrSwNvgKpHsTWUtIclQZaDXxQQsP6wQtp4cjaVDGP7pAEB10BXnnpYznORosq3b5WiexONJiotcVctAlNlDdhaOLK92Y7vUmJYEbP7LXC2qZoOLSjUn+DqfDFEUD9/VZrflbuCeEcAEhX5/1O13LP9JowyxaFt3IeqK2c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PWaJITAl; arc=pass smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3473B0AED
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 18:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783364023; cv=none; b=FZUjOCgBr9CVSkDSCBgr3IMtxo57qvzhwD5I3PyEknUM8Unh27UrtrU8LHoGLLIz9IgwDatHB9ukqNV28AKjUW5OAMBxJXOmOkicbLi5xiNLRwu43NV6GgDveIp5TTkgTfA01WRHE9n4fqjQ6bYQNIytQwqFH3wS6EZT7c08VuI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783364023; c=relaxed/simple;
+	bh=MpET7ucvY4RWt7XBea563Uf8ggta6J1m9GSdG8sZ3u0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PM6t3CTev9b21zumDYUIZR8A1fs9NhpJ7ZLch4JeXntC9uz4EqCXD7ayXYEHvhcJcoSuq0w5VQPQB/OJGhQie+/PekA+L2pd4JkbB2pK4W+UIkZocFAv46xb9Waw94/kFzbkF/ZjF21+Zr3fBf+bZpkiIt3y6tSgHyN1K0TLU1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i/0RCBdt; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PWaJITAl"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c9c26a5fb98so93716a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 11:47:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783363661; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QxC7f3sH78EHRyZEnPFLpAFO0qbyvXiQrM+WWIrkpzwCF/R3Lr6bYkOvovFFV51IQg
-         YogKYQRDTGPCJ5+Qr/NAlNuNYG97bf/VIqCd2BnMpJDjr/eo4dvEE9nr5IOHvEMF0gZW
-         XGiKIath9eGV7a0GZRPgtAzFcSHfQz7ZzGmafYCYJbCYBi0PuoShLawsGCbGOu1toyl8
-         9dh4yL4KPMf8TijTaLeO09CFN0kO4eZBpVYOLZUz2iDmaooH5KgP7lxDl48PGwfVAYdW
-         J1k1UGY30eZd21nFnxW0UTuKykQ32dHg+reZZGJ9N9SdEKgaXfIr1zR2oalaFQG59dMS
-         y9YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
-        fh=GAHC+L3MNG6wkyahrUBzWDxzlTac8ddTtWbThUf4c8Y=;
-        b=K8IeOwyGkIN9vm5W/1VTvs4/BtJvhCEIYOmdEYnRWBx4PsJlgl03cLjju0Dl2s0cnd
-         nD71Q5potsNxDTjkjZX/h/utMX/CvAR8DwIZMXzUY3Ri5o/ufnpxVAaLyMnpBg1Y9nvC
-         eujrUQP+QeUxDyahTy0RrdczzYvzhrl2KBeYURD5/t0M8CKl+oxKqQ/xUIGDfycxRyqp
-         jQp3GWLnD+QS4KgZgsPspJQ6IYGzgQLLQ9HAaCnbPQATQNfDe+7bq1I1TwzwnVNZIriI
-         jH+KYyg5YnUC+D7sTfaUhfIDjP/HCB5uiEa/r9w9V4J1RoojSrvdq7AD74oNEbevn92o
-         qZhA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i/0RCBdt"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c999f162c9aso2201164a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 11:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783363661; x=1783968461; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
-        b=PWaJITAlEzGGz2WTVzpcEOc2cooyZPVAP31hZ8ORyeDkvc7//oZc4TtkQCz9jtYc2T
-         ZwScLNDk8VJQYF06n4ytgai0kT9d7qu8HCOeJ9Swktyl3IedqOmbRpeDsmDHCAhUzl7Y
-         2GIOuqAV87pPbxtOf+ckzeM3/ehrTsfUGLjogB4cKjNNFev6QeYoUq2CRVUhGPc6mXni
-         Rq8MBk3i8TTPzOMASZaCrE0pxVttxws7kwhui751oA1grYh8mSGjx0y6gDwkEraa/hcP
-         T9eR8ACWJOivCLZDU65Os31RL4aoWpr8+tAY+dahdS1cN49QjaCgwk2DxJ9MRR3PI0dQ
-         1W/A==
+        d=gmail.com; s=20251104; t=1783364022; x=1783968822; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MpET7ucvY4RWt7XBea563Uf8ggta6J1m9GSdG8sZ3u0=;
+        b=i/0RCBdtJ0qlQSZ3fzUQRQfH1E2VYbfmlaUGReShXRuN9ngYfEHReVF1Uc5QD7X1EC
+         Nv3hgHsa9Mh2xLAqMj0Z/Ut7SynKgz6Fj8JqGClX9GAPzYiptrKz59NPskRLivkhrosw
+         d7TDP8HfLNooOFZH18V6YRTev9N1sXz84qhDySJKEBbiRvjhYeyx4cFMVcxxG8wB4oPs
+         5sVWw0r8k57IFs4cbiqFvkt619Nn1ZU0oyPZaD1JQU/gKrktfAfyLm7lS28BRtWqFSfd
+         y+mpimF8V1uCamyKQhiNm0vu030tGl+oUlDOD/YYYrFYtJoyQGuQkD73B/jCoH+TK5WV
+         eevw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783363661; x=1783968461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UlffmDV9amnyG4+2I/tHJmLiSsgPapi2+hDODnkkvEU=;
-        b=Bxtb41fTiKUq7plxUxrvtZyzVhy90QfcS9C+PLw+K27Ic3pGhbyRivgRxsiqsZUACX
-         qtoXyMEtwgBc4SpT5tiihBy1T0zrKQ5owwjnUNlXCLvDuHzRJJjVxLfzLuvofUDuULJm
-         2hMqw+Rac6EfuJPJUXh6GOUXCo8tVFA9eAOY9bdurm4WpySvMmVXKdy6Ez+9EwUv2sIH
-         HIg8MtWxy8vz68ceSwIJRPAhnOJ5dMQF1c2QLziIbq5aZt/b7E8fk4NnM39wLNG9Mza7
-         WHe9sR5fOqOcNixxg2r11UQHimUtuZZz00CIvtTRLeIJJf4zultel9tWiuDA0nvZv0XD
-         uLkQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro6K/Mgj1h9nT/td2sGu1Nv12NKNTCela/tgTzz4hDN630vVn6WSWk8l6od/PZLfQNlkrYodu3pZOebYTg+CHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytqMfSnLf/oFjd5dV0J9ULiuUE1ApTNSdxWiLF6C5sv1nWp+F4
-	XDt4DyVm7mOAOXsVZ1YT6NGtUuesIG08iQC1VA0k90llNb9GB3q7t5FbyW0bDtbEJtJyXPrHls4
-	/Cfi5tdPJObfgTrJnh2R95sa17Jk6LjHCqbNCIE8=
-X-Gm-Gg: AfdE7cm582P0vXTpkvQLza1LABudz0srBbMvytaH4jln4omj5h6jRYpWUYcf6RJFZVZ
-	DScUWE+LxUIsUCV7YYs/hMgO6sqV6tphj9g8c2eQOfcyf2GipAsn4vqL55B3zpXMXmtgDleKi2E
-	I4UQy/NLBxD9+KQQfpAgEovOwMHCpuiwyxVLwCuTbtGn3n/jzdEAOnkmEScpy25wmRGq1AvJfLX
-	2b386j02fJiIk7HJYmTbITOU6/OVFwlcYHmTv66g0cZaJm4HmmWvUPZrOrfbBrY1s9RBPFOWciw
-	4DyzVlyofDCgeqwXAayYqfJEF/lNMdA1Kba4TmaZ7b3qlx6mHgNyRLGSRKR7EMgz4dxkiFKfo/+
-	Spn5iOMF4T+O0PuSDnx5FjX73
-X-Received: by 2002:a05:6a20:734e:b0:3b3:6db1:5986 with SMTP id
- adf61e73a8af0-3c01cb9a275mr16216502637.30.1783363660754; Mon, 06 Jul 2026
- 11:47:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783364022; x=1783968822;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MpET7ucvY4RWt7XBea563Uf8ggta6J1m9GSdG8sZ3u0=;
+        b=r29L4p1auhGI7F7+jPwwJIK4PeD0RdljA9epTLpdHeqVYGkwwmV4QFZyuj3ou4iKVC
+         v4/7kk1wyz+RQEt9wu1zeNWYnZmWZrSIAFO07GPdI8JFCmlB8OGHixrqdB15VSJX96l/
+         1yMmXw3DvB37HZURzVzDCSC/IKgAPT+rruWcOKEJ783vXYZJDqYauAv2kalumJ9gTRD/
+         FaBGMz5RcUcBUR6hVD3w50nAH1SskVE07b4Dvu0/glTK0O+AVAxnuI1wxckbFadiv/Yc
+         j8ud3AXIdVaQrhdEfD6OmN0Sug2k99/gZLdAGgv4jGd2I2S0jniBu1ITZ3YkRc/JEuYg
+         CvBw==
+X-Forwarded-Encrypted: i=1; AHgh+Rov6vGN5XFf/jLHSulUFvxHR9HKG9DYPfdgPXvUt2bApWyEiOjK48TXg4+wwye7uE8vtm+Zv9/P4fKFv6YTu8M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3oTtfUjhucdmHvZkY8NER8xkNy9dngy8IWeokizQ7iKKAivwY
+	GedGGIO2SjOVG3SDCXYo7WHskWFdQo6w7GKZzq0tq8fpL6eTWKpkvXye
+X-Gm-Gg: AfdE7cn/nL01U9oE3ZquEiexlL4gC20+gfgikiusDS20d2sDGgIjlKSY2GpCxEKlxdC
+	c46qRheDYblbJGOnRv5sjCGempZxXyOAPpurh9frylEkVK+9CKl33MkufYF8tGVNccezZN8fLXD
+	YiVJOxOVut/eRKVH7gi2XLuEm8nHYscS0L3VPIr42UeQjjS0qXe5324R9CVxmLVoJZ4VdGlBmV2
+	VPq0O4NzyIPADTwUc9AL/FAuCE+mvqWZWCHv4nk/OM/zPTnCAWCOwRsnwL6+KvnqUsb4ye+7KIL
+	5V0u+SGxSgGNBe7wztvOU9mRXRjKQA05VJ7gmk7HAp45EPIYPreneoP8KvXVU8uXtXtY1/AatK/
+	s3oGKQ06Gy2/ZJ21H3mfnkEupE1AD1SzZisJUB6SxnrY59A0D7rmL1MzkMP//my/TCFqezvIucB
+	zATlPRK2jhw/na79rJDXl2jSadFC/b7zCji33jp7+qMkc5x9QgiDOcZais4QkvJnVuPmbPiTGP2
+	DJmWT0H
+X-Received: by 2002:a05:6a20:e290:b0:3bf:6c05:a6 with SMTP id adf61e73a8af0-3c08efd986dmr2263676637.53.1783364021670;
+        Mon, 06 Jul 2026 11:53:41 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:612f:7084:be32:532a? ([2620:10d:c090:500::1:55b9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0b816a42sm89531831eec.9.2026.07.06.11.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 11:53:41 -0700 (PDT)
+Message-ID: <9fb4401c0ea5e68b86fcc499bf23c6a7872ce5cf.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Reject MEM_ALLOC BTF accesses past
+ object bounds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 06 Jul 2026 11:53:39 -0700
+In-Reply-To: <4b8c8a81102ba4b595011434c881194f264ddc59.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
+	 <4b8c8a81102ba4b595011434c881194f264ddc59.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260702093915.2652638-1-yijiangshan@kylinos.cn>
-In-Reply-To: <20260702093915.2652638-1-yijiangshan@kylinos.cn>
-From: John Stultz <jstultz@google.com>
-Date: Mon, 6 Jul 2026 11:47:28 -0700
-X-Gm-Features: AVVi8CdHZQNS7AGlZBRWgQUJj3H5tHf1nk1Nxw6hrirjNm3_0kkmPayICBfy-pg
-Message-ID: <CANDhNCrVv7KQNEY5V_K5b_JVbEWW+C8+WfbJWkUb3y0fw128Bg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: timers: leap-a-day: fix -w option and update
- usage comment
-To: Jiangshan Yi <yijiangshan@kylinos.cn>
-Cc: tglx@kernel.org, shuah@kernel.org, frederic@kernel.org, 
-	anna-maria@linutronix.de, sboyd@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 13667453960@163.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 2, 2026 at 2:39=E2=80=AFAM Jiangshan Yi <yijiangshan@kylinos.cn=
-> wrote:
->
-> Commit 98b74e1f3104 ("kselftests: timers: leap-a-day: Change default
-> arguments to help test runs") replaced the -s option with -w and made
-> "wait for the leap second" the non-default behaviour, but it only
-> updated the switch/case handling. Two things were left inconsistent:
->
->   - The getopt() option string still lists 's' instead of 'w', so
->     passing -w is rejected as an invalid option and the new behaviour
->     cannot be selected at all.
->
->   - The file header comment still documents the removed -s option and
->     an outdated default for -i.
->
-> Fix the getopt() string to accept 'w' (matching the existing case 'w':
-> handler) and update the header comment to describe -w, -t and the
-> current -i default.
->
-> Fixes: 98b74e1f3104 ("kselftests: timers: leap-a-day: Change default argu=
-ments to help test runs")
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Tue, 2026-06-30 at 08:41 +0000, Yiyang Chen wrote:
+> BTF struct walks relax the struct-size check for accesses through a
+> trailing flexible array. That is valid for ordinary BTF type walking, but
+> PTR_TO_BTF_ID | MEM_ALLOC values point to objects allocated with the stat=
+ic
+> BTF type size.
+>=20
+> When walking a MEM_ALLOC object, reject the access before applying the
+> flexible-array relaxation if the access range extends past the struct siz=
+e.
+> Apply the same policy to struct ID matching so kfunc and kptr type checks
+> do not walk past the allocated object bounds either.
+>=20
+> Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
+> Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local=
+ percpu kptr")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
 > ---
->  tools/testing/selftests/timers/leap-a-day.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/timers/leap-a-day.c b/tools/testing/=
-selftests/timers/leap-a-day.c
-> index 3568cfb3e815..97c8c66bea88 100644
-> --- a/tools/testing/selftests/timers/leap-a-day.c
-> +++ b/tools/testing/selftests/timers/leap-a-day.c
-> @@ -9,16 +9,19 @@
->   *  kernel's leap-second behavior, as well as how well applications
->   *  handle the leap-second discontinuity.
->   *
-> - *  Usage: leap-a-day [-s] [-i <num>]
-> + *  Usage: leap-a-day [-w] [-i <num>] [-t]
->   *
->   *  Options:
-> - *     -s:     Each iteration, set the date to 10 seconds before midnigh=
-t GMT.
-> - *             This speeds up the number of leapsecond transitions teste=
-d,
-> - *             but because it calls settimeofday frequently, advancing t=
-he
-> - *             time by 24 hours every ~16 seconds, it may cause applicat=
-ion
-> - *             disruption.
-> + *     -w:     Only set the leap-second flag and wait for the leap secon=
-d
-> + *             each iteration, instead of advancing the time. By default=
- the
-> + *             date is set to 10 seconds before midnight GMT, which spee=
-ds up
-> + *             the number of leapsecond transitions tested, but because =
-it
-> + *             calls settimeofday frequently, advancing the time by 24 h=
-ours
-> + *             every ~16 seconds, it may cause application disruption.
->   *
-> - *     -i:     Number of iterations to run (default: infinite)
-> + *     -i:     Number of iterations to run (-1 =3D infinite, default: 10=
-)
-> + *
-> + *     -t:     Print TAI time.
->   *
->   *  Other notes: Disabling NTP prior to running this is advised, as the =
-two
->   *              may conflict in their commands to the kernel.
-> @@ -186,7 +189,7 @@ int main(int argc, char **argv)
->         int opt;
->
->         /* Process arguments */
-> -       while ((opt =3D getopt(argc, argv, "sti:")) !=3D -1) {
-> +       while ((opt =3D getopt(argc, argv, "wti:")) !=3D -1) {
->                 switch (opt) {
->                 case 'w':
->                         printf("Only setting leap-flag, not changing time=
-. It could take up to a day for leap to trigger.\n");
 
-Ah. Good catch. I clearly didn't find the time to actually test the
-"wait for up to a day for leap to trigger" case.  Whoops.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Thanks for sending this out!
+(Please keep acks from revision to revision if the changes are minor).
 
-Acked-by: John Stultz <jstultz@google.com>
+[...]
