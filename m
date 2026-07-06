@@ -1,133 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770413A9013
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 22:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7B41FF7C5
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 22:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783375819; cv=none; b=iqImj03pv72XGfwRMkT5hBzNWdKj6Cp05STpeNyKjRIT5G78GwPtBnkQM/JYZr8IqTJtZthR88zM1qfPp8O3heQFRNGZ4VX3VbzQHpaHNBaDnLtqpYEoVvh04FjkVD6ap1r4+G8htSK5QErTkhnSLLxmiEJXScBz8q914fS0tiA=
+	t=1783376253; cv=none; b=QFRCSOmeGw+7KFiDS5Qm5pLINJMzXLe5RwrnTlu6W2VGC7PFfaMUQJKkkT3Xacrak+38bRZ2EgtRbkpQk8TbaO3BwTaz7LKEwa1/ej5LI/K+yfFAkuku4gBrylEq9E4Gm1kO8dfAFL/NXil9We81CKj6oM5TULzrDHJo46O3ZTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783375819; c=relaxed/simple;
-	bh=scRh2OdWbDi2c/x8JjbQezLmH0RD0LXwZD4IFksG6E0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e07+liCp/zFjWXVqRwhfzsP3FfW3mHWFjPZgr97e3EvlHy2K7MhUG43bkSyLWiVdYuabk/MvTWY8J/qHzPJzCrSUmqgQuiym54xou880t/PSMyCcmHggSv4EboougMt6ElcNVTk4iHry2XpiEfkMRGpxs4hAkDk+G5s0KjUcTr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvX5bNzc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rRqFmv93; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783376253; c=relaxed/simple;
+	bh=f/IzoqOGi8PXMVs3HV6Y8YSAbtT1tQuyf/8xkJVy/Tg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D9gySvQmMB2sUoVpCtZ8n5THg6IFg6bmMr/jKvSlV+StYA9ci8rbPr0V6/jMfaUMbUfSaeuTInMeg1+5gcVhBJeQykPZ06NC5PF8GmJDOw82nMHjZ+lqxgdrw3giDnUpenyiy/krF9rpb4Tady3BQ8x1pI7PDc4b7/N27Vlu9jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JbCuAbGt; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvX5bNzc";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rRqFmv93"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783375817;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
-	b=DvX5bNzcsy02udzE4ALN9Atgypf74VjccqggMf7uJ8ECBR2z2fQUE36WO3D4ZPuMW2senD
-	fYOfEQVmJLWBJwrqHoctOGBMrTBUhnZVLHN8etDRTV1GEuZi5tGrpJCa7nxy7pHLJn+1mQ
-	ZtxAAImr4rv2CrK3ReQ8ppwo8XwOI6c=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-512-iF_AOo4YMnag9NmErp6_lA-1; Mon, 06 Jul 2026 18:10:16 -0400
-X-MC-Unique: iF_AOo4YMnag9NmErp6_lA-1
-X-Mimecast-MFC-AGG-ID: iF_AOo4YMnag9NmErp6_lA_1783375816
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-8fc92c5373bso8694256d6.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 15:10:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JbCuAbGt"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc73e322dbso20496235ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 15:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1783375816; x=1783980616; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
-        b=rRqFmv93YAkuqRbmuA2N0poYHtxIKf0okDfRn56JL92Boi8aX9SAzpcGW4WC+6uPuT
-         VCXLaDjpk6ajc0NUFeSoW1GP4ONd8d09Nr3oCNvmidDBjTNg0ffYJRKMCZMlaN0/WtHz
-         IWaoPX8vtEMCVh+yoMGFBUgiWtJ9EX+5ofGYZQBDE9ihQYQPQtAJjy+psZgwzAt7Wiwz
-         jOY54UUqb30rFy7dMHYSqVRWmwp5y9BpwVQkcrJ5BAtStBi2ri3GGMcwQE4HsvxUF4xY
-         fnSG/weAsX1G1CEb0rjn7tB8THgHBjKBDnXyGCmQQV4Gq0c08d0Dx9o8wOnL9ksK+Gag
-         Eoiw==
+        d=google.com; s=20251104; t=1783376252; x=1783981052; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qn2c1bB5Wb+AF5xB66Al/MOSv4OIpwYv11LYrtxLyVs=;
+        b=JbCuAbGt720jBCSemdVJMHn6/i1B1zvRUgmkbtCvaPnlu3Fa58TD8u1VZM0nkLwoul
+         qdXLfrT4P67SU48v7ekvtg6gKE0DjJJvZi8jq/0118U25aB8jA7OSxcUcbnXesiINn0B
+         Fm6s9sjy002/NXiP7lHpvQ08ldYzt2PH7jghffzq/aSKyLU4l2dOOBZc8fxZca0dW3S+
+         /Ol5FEQhsHYbE1vQ678w+MyMElgu0hIviqQPEDvF5zZ9KP7vyaC6u2dSec6idsuVN8TH
+         gPqblKph48B8Gh+1a69HbRNV/UGaSdjVQlfxNY6NApteTp3AIi1Um9g583IJqCx5K2XY
+         tD1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783375816; x=1783980616;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mah/HpZO5BAes8mn7X8WZEkXgN+0zHJkp+xqEAPaVEo=;
-        b=ji5YN/Z+gBfIfogmlTUR3AGf5ZxSz3Ds+apT2V7K7xMIT2RVlekpMt31RVr5eL2oqZ
-         5Ms0iC7sHLkq94wGT9gR8lkkWRgMPvQWSHRuq+aEsVCVXmdPeX030yj7blJEBGtlCZhT
-         nLfT0jdu82SjvdA1NbdelpUnsppp4dkrOy5nbGR/FiWiMvy/GDq+R9lzeJ6Gx+YWHmjn
-         l4/YbpMK0RVMyuT58wN8JBionC2DsZj19OcKZO0R6b+L835ragIEZHFt4zPL31MycwxC
-         arv1CgVIG+11ZeYICIe07SjBw7YUZxqaancpb5iaAVYsy/kMRFkcwFEG0zhoPrHGvn78
-         kFRg==
-X-Forwarded-Encrypted: i=1; AHgh+RrFa7S6fdXFMtqtH5sOTfjThRUy6NKyTFCmj7r5OXWrYB6+8oizLV4yUiEenuDko5usRBQUckiF031nYVgjQMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjMHYDg21fouj1tN/SKdbTkSiu8gwgrcH22InskopubaOLOf4Z
-	Seqr9BjnZ5ui3GDcscQXRmbFajJ9Ok5HBJK6VOqBpzHPFOUd1jTYffNywaFkCZ98qznWrsZ23Gj
-	YHGqRCP/BBMm9iCY7FVJ8lcIdaicCrPF4f8pq62Wu1XXR4dYwJWzxJZGys5cZcnoUWttAGg==
-X-Gm-Gg: AfdE7clJtEj90GU0XFX7h9s66XR+oqhG3a9KAUUPU7Gh8Novb7qwBUXlrP4jph4bkWD
-	yyGgiSc115JMD+laMamHBhrOS9CE7kl8eNZuvZvvmjNZPTjzZQEnkR9Xte5Hz5bcxDSuRaV0HnW
-	RNag2Zr3HhfgwnPQLkaIL4v1KItcVPaEvD9c7RVuVGKqw+K4cIKrk3ozCAQ3HazhJdLb1hV95EI
-	HmrTkFVIx7IEsh0thQV4NXxylbt+dnwj0GRO/5v3xIHtZ7g7Jo+fViWMpxo6A3O/0KqzTHDC31E
-	E1DsjrJNnTxXKjkL40RyRCrLjLlCfRiAfsneCDXariv2rlpeYMUflKnGcJk0OUPhNiqZ15D1NCL
-	BytODQBs+Caok+dHzpqo=
-X-Received: by 2002:a05:6214:2f8f:b0:8f1:64b4:421c with SMTP id 6a1803df08f44-8fcb648cce0mr33728066d6.57.1783375815647;
-        Mon, 06 Jul 2026 15:10:15 -0700 (PDT)
-X-Received: by 2002:a05:6214:2f8f:b0:8f1:64b4:421c with SMTP id 6a1803df08f44-8fcb648cce0mr33727646d6.57.1783375815069;
-        Mon, 06 Jul 2026 15:10:15 -0700 (PDT)
-Received: from intellaptop.lan ([2607:fea8:fc01:7d0d:91f2:ac3f:2776:92d6])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46f30c04fsm156615146d6.22.2026.07.06.15.10.13
+        d=1e100.net; s=20251104; t=1783376252; x=1783981052;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qn2c1bB5Wb+AF5xB66Al/MOSv4OIpwYv11LYrtxLyVs=;
+        b=hmH7Ho7PYzvxoiGm84dA/HhGM/rxpSGPPgAaoOVtCMX4I0UDbAFatwHk4OmfhPcKaN
+         Gs2U2d9g7/XqQgfdrWm+cd65XrAAtH3rds9P/qKH7B9P8yP8Uyi0IqZsJ43PBwm+uBPH
+         eILF65BKd0fRBEjhtiPjo6mXqEHI2dxQZl3dMtIllXjBFZrT2UhNolVLMjo9JAtvXVvi
+         iTBHyUTi+vKr4bHm3qpXXvmsKlWMzD9GO9VAtj0TIY8xTz5PfboT53hCNP6XKghYyYpb
+         KJUGKi8B84HLkoV8YYyKurY79jm/0S3tIMKNL5iA4yMuqLvp7mmYByHtW0zsSozOG3Yy
+         bhXA==
+X-Forwarded-Encrypted: i=1; AHgh+RqnVgOpFUXZoGuXMisQ8wdnVVxnfWooyPFJKaklJGNpZqnWmWLTNXcG8sWJTY6VdzEVCfmuHU5rn1cW8Kf3mOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHuT/qo6yd4nIHHxRlkoXfhoCaTX/SvfzwRIkSi5W7BwAcE8Kk
+	s5ClyCppJSwnqe8ELkh7CaXs8u/GcfUhMSxvZ/h+qyNmD6YtDXr3GWvN0pfqBuaEwg==
+X-Gm-Gg: AfdE7clmkHO9sF1/U4vWm2n8pePJeTaIEX8jUy0crvTV+wQHHg/yCPdw5ZApN4EHulr
+	OjwqL8vIfc0MHGOMtCJJVrWkuN0yzpHpGVdHro7LMpuIl3aM38Z0bSeDN4P5P447wx6/zPwt+w3
+	Fy9WeXohimgAgVB5YNqA5IzR+rsRC66VTQgMRZuc6byj0tsAVJ6i+XcJxWPcaOu/DS54IoxC1wX
+	sbqSMyz1EuMgZnpUUYL8/cRJMrxIKVCbbgJJDz8FEE7oDGapWniVGZGzg0ytl1Hdkz/zyBJDWop
+	q+1v8af99x5Sr1vbRzbkCuHiXizWhxI5PO8MNQIyR1w/cHo4WXuAy6xYsn6kUs/wKWmh671bvie
+	dzyE4uIsD795Xgl4/dxp3X0b9KhVLdoMpcg+tr9I3lXHMC8+0PbWFOiemzEz6JkXAjJCZtapnHp
+	FKn3EGIgBgtX+hzQOnMPFSlzdocJjRJytLsrGJXZJxNnrDlcI1JAs=
+X-Received: by 2002:a17:903:2450:b0:2ca:f44b:63be with SMTP id d9443c01a7336-2ccbe3fd125mr27385865ad.3.1783376251214;
+        Mon, 06 Jul 2026 15:17:31 -0700 (PDT)
+Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf92bfsm1175875ad.28.2026.07.06.15.17.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 15:10:14 -0700 (PDT)
-Message-ID: <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-From: mlevitsk@redhat.com
-To: Jim Mattson <jmattson@google.com>, Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>,  kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- zhouyanjing@hygon.cn,  linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Mon, 06 Jul 2026 18:10:12 -0400
-In-Reply-To: <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
-	 <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+        Mon, 06 Jul 2026 15:17:30 -0700 (PDT)
+Date: Mon, 6 Jul 2026 22:17:27 +0000
+From: David Matlack <dmatlack@google.com>
+To: Narayana Murty N <nnmlinux@linux.ibm.com>
+Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
+	sbhat@linux.ibm.com, harshpb@linux.ibm.com
+Subject: Re: [RFC PATCH 3/6] selftests/vfio: add sPAPR TCE v2 DMA window
+ helpers
+Message-ID: <akwpd6TXTH_pIgKJ@google.com>
+References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
+ <20260703032806.40946-4-nnmlinux@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260703032806.40946-4-nnmlinux@linux.ibm.com>
 
-On Tue, 2026-06-30 at 08:52 -0700, Jim Mattson wrote:
-> On Mon, Jun 29, 2026 at 5:57=E2=80=AFAM Tina Zhang <zhang_wei@open-hieco.=
-net> wrote:
-> >=20
-> > The SVM DecodeAssists feature is reported in CPUID
-> > Fn8000_000A_EDX[7].=C2=A0 When available, hardware provides the length =
-and bytes
-> > of the intercepted instruction in the VMCB, allowing a hypervisor to co=
-nsume
-> > the decode information directly instead of re-decoding the instruction =
-in
-> > software on relevant VM-Exit paths.
->=20
-> DecodeAssists actually comprises four components:
-> * GPR number in EXITINFO1 for MOV-CR and MOV-DR VM-exits
-> * Software interrupt number in EXITINFO1 for INTn VM-exits
-> * Linear address in EXITINFO1 for INVLPG[A] VM-exits
-> * Guest instruction bytes and length in the VMCB for #NPF and #PF VM-exit=
-s
->=20
-> You only partially address the last component.
->=20
-Yes, and I also remember when I implemented some of the optional SVM featur=
-es,
-I decided not to implement this, also because of the same reason - pass-thr=
-ough
-is easy but for all the emulated VM exits, it can be tricky to get that rig=
-ht.
+On 2026-07-02 11:28 PM, Narayana Murty N wrote:
+> Add helper support for sPAPR TCE v2 DMA windows in the VFIO selftest
+> library.
+> 
+> Track the platform default DMA window separately from selftest-created
+> dynamic DMA windows. The default window is discovered with
+> VFIO_IOMMU_SPAPR_TCE_GET_INFO and is not removed during cleanup.
+> 
+> Add helpers to create and remove DDWs, return the active IOVA range, and
+> register/unregister memory around DMA map/unmap operations. Window
+> selection is done before IOVA allocation; the map path only validates,
+> registers memory, and calls VFIO_IOMMU_MAP_DMA.
+> 
+> Signed-off-by: Narayana Murty N <nnmlinux@linux.ibm.com>
 
-Best regards,
-	Maxim Levitsky
+> +static int spapr_tce_read_default_window(struct iommu *iommu)
 
+Please add vfio_iommu_*() prefix to these routines that wrap
+VFIO_IOMMU_* ioctls.
+
+e.g.
+
+ spapr_tce_read_default_window() -> vfio_iommu_spapr_tce_get_default()
+ spapr_tce_create_ddw()          -> vfio_iommu_spapr_tce_create_window()
+ spapr_tce_remove_ddw()          -> vfio_iommu_spapr_tce_remove_window()
+ spapr_register_memory()         -> vfio_iommu_spapr_register_memory()
+ spapr_unregister_memory()       -> vfio_iommu_spapr_unregister_memory()
+
+This helps with readability since it makes it clear these functions are
+interacting with the VFIO IOMMU driver.
+
+> +{
+> +	struct vfio_iommu_spapr_tce_info info = {
+> +		.argsz = sizeof(info),
+> +	};
+> +
+> +	if (iommu->default_window.valid)
+> +		return 0;
+> +
+> +	if (ioctl(iommu->container_fd, VFIO_IOMMU_SPAPR_TCE_GET_INFO, &info))
+> +		return -errno;
+> +
+> +	iommu->default_window.start = info.dma32_window_start;
+> +	iommu->default_window.size = info.dma32_window_size;
+> +	iommu->default_window.page_shift = page_size_to_shift(getpagesize());
+> +	iommu->default_window.valid = true;
+> +	iommu->default_window.dynamic = false;
+> +	iommu->default_window.remove_on_cleanup = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static int spapr_tce_create_ddw(struct iommu *iommu, u64 min_size, u32 page_shift)
+> +{
+> +	struct vfio_iommu_spapr_tce_create create = {
+> +		.argsz = sizeof(create),
+> +		.page_shift = page_shift,
+> +		.levels = 1,
+> +		.window_size = min_size,
+> +	};
+> +
+> +	if (ioctl(iommu->container_fd, VFIO_IOMMU_SPAPR_TCE_CREATE, &create))
+> +		return -errno;
+> +
+> +	iommu->ddw_window.start = create.start_addr;
+> +	iommu->ddw_window.size = create.window_size;
+> +	iommu->ddw_window.page_shift = page_shift;
+> +	iommu->ddw_window.valid = true;
+> +	iommu->ddw_window.dynamic = true;
+> +	iommu->ddw_window.remove_on_cleanup = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int spapr_tce_remove_window(struct iommu *iommu, struct spapr_tce_window *window)
+> +{
+> +	struct vfio_iommu_spapr_tce_remove remove = {
+> +		.argsz = sizeof(remove),
+> +		.start_addr = window->start,
+> +	};
+> +
+> +	if (!window->valid || !window->remove_on_cleanup)
+> +		return 0;
+> +
+> +	if (ioctl(iommu->container_fd, VFIO_IOMMU_SPAPR_TCE_REMOVE, &remove))
+> +		return -errno;
+> +
+> +	window->valid = false;
+> +	return 0;
+> +}
