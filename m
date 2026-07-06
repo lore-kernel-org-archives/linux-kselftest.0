@@ -1,153 +1,137 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891093911B8
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1047433BBE
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 16:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783355073; cv=none; b=k0L7Ok8y1a64BrfLl1XpPr9W0eIO+eGQkEGPfoysQ6cjuNADFeJ2AP9zlCb6yshyW08n38umtxM5214o028UVJTz/P0dCjtDHIQSzUsJ2kCQk8e9mM+Yz70bj4DY8CEjm1DLYgfG/ifpfBjn3u+T0S9vC9Fdt4i4dqnw/ijTGD0=
+	t=1783355901; cv=none; b=maLLT+h9lr8hrmfUGHaC5cqSuI048ZbVzIzIVj8gmSzVQFa1UPXpIXvJYPZkx6dwzJijp73djkZX2X0EjKzDBgUaWanxPZ8nB9YERJaaQjSFGzIkbZeS6lETOu6U+YTIe6WrEUWugpJvgu20CAtkIIUo/r8MQoBwlTvb0NoD36k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783355073; c=relaxed/simple;
-	bh=kYjyZKOu5BuvTQeegraRp8HuW0OwQSiyPN8ROmlETNw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tgNHn7dfkD4zah5/1dN1rzuSb51+L8MNvUlslFTA8chWFmUnevZWIyc2X1jn1+3+WMcAXr65J7ZMyi9M15UHyujp9qWcI5BPkMB5VFms+rumFK1RUtZzl/vQiFqBw96aY2vg59dfWSBDjubFvpjDKMEfGOEt2OTjifRd6Zw2cg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=USww8SF7; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783355901; c=relaxed/simple;
+	bh=UwF9jbW7z5Rcv+P0PwnoEl6y3nQ7k1YZUnxUDdgc0iQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DwEj0DJMPUuJBi9TQmNG2KJnrBuQ+K0TJTW5ysXqKkVC+ucDn+fKDBNOyb5aPxzEkakYazvJmwb3ixWoSlrpYzitC6RERzxbhr8y4BzaAlzrhybhgwjFnyOs+gy6KAMUjHDNq2lITMbYon4HnpxT7EX9iWF4vFSYlGR4e886nTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qrZJvViW; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="USww8SF7"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-493bc8fda98so35803175e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:24:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qrZJvViW"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4728c12ba97so1863941f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 09:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783355070; x=1783959870; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=B3vq7ymDFM9EX/uHn2Ys6Oqxy7HM2kIJcIzJVFHBep0=;
-        b=USww8SF7GY0pwQsyk+Qy8cUGc6QkXOu+aXZfUxpJxGj3XzhsaiZi7jycGTIpMdeJ4u
-         TDl/d46ypXJmrD9xglW0qD6zaAsbLzMHyxX8tqeSBrPdzmeFv/TnS0ezIGxPqAyYYhgr
-         O0qigw2xqRuDeVz1ZZcxTTOoEFPGMwzQzSLme85JvN7zgTbIVXkh1Q+RseiAiiTvLU1b
-         qOX3J5up6cYPkQM4TPUOgGFovc1AOb1wA9GaHfEgDYmYqvEOsXAmDMQ700ViITmrgkTc
-         +vR7O38V2FY6ZH65kLnq3nlMVZBAJra4CLSCUi4xnkCyxWbYixVlrX+8M7q2kzddPEzb
-         SbgQ==
+        d=gmail.com; s=20251104; t=1783355898; x=1783960698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=L6fxd414zjbKl4/fM0nOf+lIyo7xTqgthi3ysLKzw9U=;
+        b=qrZJvViWBIV2jt1efHYbAjBg4MRHUg+YIgIeq+0JIWno2qlCGf710mzw/UBZpg8ds2
+         FRWaNsWubaKd1n4OH250FFHEL1qSWnMjxmZIhVuk48dRWfaDAIvEVa/i1eVyApzU1hrl
+         cOPE2cxQc5/Ltk6cgqOTgl2d0ZQAzaCWB89VybEPXIakz6dUS7YR7JaomZPNDTSAf+V/
+         1gqD1ISIhy1/wNeIdNYV4J/EoeV+kKWs0pbFbYEGKNMZiW5BVQndF2X23x6nYKcJAdWo
+         UkBC5D8fqf51+Laai5lnK95H6pTheu5ik336T0bv5RqDcxpUimBavQU6cNtt13FNwF5V
+         I34w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783355070; x=1783959870;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=B3vq7ymDFM9EX/uHn2Ys6Oqxy7HM2kIJcIzJVFHBep0=;
-        b=KB7OgRxseaUsGj+WQFYPlhc9A4JitwugWChVJbupR5UM3BL/BDN6BfVUI94q/Dcm+c
-         y2gju1+wDpDbNu+FZH4CXrLQnuEbVRK5z0gMUHS1N9N7p2XoHg96xkdUFhQSfEtxOnbn
-         V/WfoiuclQSPGD3GQxsBieHzsq5yXnv7PUc40BYXGPbhHOe7PcvXtN4qm+QoaDPoda8x
-         H7myD4WN0V4z1BQtWtetmXRB8qFW++X2cmrDwBrad8v3gInOgUh9DUwhA/Uafls4ccuT
-         Rq6K6LuoJym3cq8xdiXkCOiiIUAs1x5m0uAlmORgCVSQ7wLm1wWxOeE6v4LXBzc6ygHf
-         pwVQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqUkwR1LYSC3xpDVGTpdEzpVIZc53waNOyGWmyI/aj9qcXcYZB3vJvpUfIiDRLoB5rT4vnDaPyNvB7QPVPlgqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWyIn6+S/Mm1LkkqDalWsICxP+N595uOs13BatDOmRWnS2WOcv
-	j/IWnnUPcowgkvHC1o5t8LWuY48cxUHFCIc0CsgmAijR2rCUh5l6cdnsaxoTaTNWjD99poxwTRL
-	08HJz55o=
-X-Gm-Gg: AfdE7cm3dH6WZGhHKLKM2tzwgB5xkcl5LJ4P77kHHcqBQiNX+iFjINa9c9iF85cnsVF
-	jxcUKMoWK4Ynf3Rb3any9UJa6PybZH4yRc0FWTmhTmuZCevLMZGViCnovfFrhjyw5lEO1VBXc+E
-	XkSfhoBeR+x8g103DI8AOMmB9Mz02t0Y3NwMthQiek19SyFsa6uY7Wbi9G5BMiukWCXC8xIJHv1
-	0qNxieHXzNH3ABMzs356RptEKBHakF21pXij6BOoBrhPE6j0NmsQLZLAG9EejwZsjIX6dV4wBIs
-	Nyef+K70F9HameR5yXDBRQaM4yMf8piyy6XIV/d8eD4NMdVVY4jrt3QpN/TfnUOVM9p1AD7ULD7
-	cDGnh4jTjN+jYW1ydx5T7WWD74bpHzQWIeXiwqDIewWlc8W6h1flwOs48SGUMaGzX2/18InSI4i
-	OUPg==
-X-Received: by 2002:a05:600d:110:b0:493:c337:db18 with SMTP id 5b1f17b1804b1-493df042299mr10585915e9.16.1783355069970;
-        Mon, 06 Jul 2026 09:24:29 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:157e:cc5f:6c4b:db0a:5d2a])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-969839dc37esm6075296241.8.2026.07.06.09.24.28
+        d=1e100.net; s=20251104; t=1783355898; x=1783960698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L6fxd414zjbKl4/fM0nOf+lIyo7xTqgthi3ysLKzw9U=;
+        b=pKiNGPzr2IGEsJ8e/dzmS3T5CsFdRCNjm8UOasKCe205moOsS+t6PqugzEU1wN1Zmj
+         tyUace9W2vJrQ6yHa8BFb0R1FSwF5rRZIGVpwR5BwnrZb/vuZxwsDcFgfK0HrrUiEzGE
+         wlS1V2v4yh03PfRQhjwFFPrKwJ8NAjPciYbFS5ogb1JtUWje93EUjfMMIPmEQWNWAhNy
+         b0L9ake9eDLu4XHBTGG/9qiWriH9IVHUigk4Y2J018YyMAlB6/i6UV//IVcZfspOW5BK
+         GlziYmfcwEbcWSsOHSZmXi8gcks8yk3oQW5Ir2mCLr8ETUTu41rlJFrL3Owg6mmYs3x4
+         niTg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro3C0MF6Z4+DhIRoilb/CBmhqrYvzGwkzJJYuhq/PsQmTx2fhCVg5Be+iPiICL8SE0hmSnnX0MRJmsUMWRyLnQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzlk5TPKK1CqMm4UH27NC/nZUSGbRkB+ys5Az080nTXyGr4HYA7
+	11HEAGZe/JiAyJvwskD96VDN9yEushWDcJz9d8mi83msbG7bS1C4O7Hj
+X-Gm-Gg: AfdE7cnnCF7WksBCPIsQwzjxpsQ8/IXkn1htB9NGv8fusxvg+1r4YOxtpjeyLpSKScI
+	vZRkW67DY66O87rP3/VIkzFalnudLQYccimXVZxln57tazdvkOadsAvrYRjAUDArqCh3nv/JoT/
+	IismpLRNYSjIwQRvmoGAOzt0lbl/Gn/rbHLwckWAcabK2NCAvB1wVO+ywODg35u/2bMUxhXorwR
+	8GXzNUr70WL2czRwiFELzuV5k3/IZXKpVNATyK1CV0WsxckPr/3F6KJ/oVs3h3PEfPkAxBkxcCu
+	2QutJwRI/Qm+L7dt+pJwQUbNy8YM2EcUF8n3ND0494bppNbKbzXJbRaz0HepGUnLMV6xA8s8blg
+	iSvU/cMs1egsxzVFUS/UYMDYEtuoGzev6X9p8SOdJnyigtMLMYvn2SwqykLgwDYWNpxKcjG+LpG
+	mXVqpPzy2GpRvEEesfrc+m1wBw4EfV0FWDceDjs95X5oZw
+X-Received: by 2002:a5d:6e44:0:b0:46a:168c:3795 with SMTP id ffacd0b85a97d-47de66763b6mr1056438f8f.16.1783355898114;
+        Mon, 06 Jul 2026 09:38:18 -0700 (PDT)
+Received: from hisam ([39.40.20.205])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039afacsm24804721f8f.19.2026.07.06.09.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 09:24:29 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Mon, 06 Jul 2026 13:24:04 -0300
-Subject: [PATCH net] selftests/net: Fix tun IPv6 test addresses to avoid
- 6to4 range
+        Mon, 06 Jul 2026 09:38:17 -0700 (PDT)
+From: Hisam Mehboob <hisamshar@gmail.com>
+To: pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	seanjc@google.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	aqibaf@amazon.com,
+	Hisam Mehboob <hisamshar@gmail.com>
+Subject: [PATCH] KVM: selftests: Use KVM's task pinning APIs in steal_time
+Date: Mon,  6 Jul 2026 21:36:49 +0500
+Message-ID: <20260706163649.155548-1-hisamshar@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260706-b4-net_tun_addr-v1-1-3d3cb2473560@suse.com>
-X-B4-Tracking: v=1; b=H4sIAKPWS2oC/yWMUQrCMBAFr1L222BakipeRaRsktWu4CrZVITSu
- 5vo5wzz3gpKmUnh1K2Q6c3KT6nQ7zqIM8qNDKfKMNhhtAc7muCMUJnKIhOmlI31PjnvMBx7C3X
- 1ynTlz+/xDLWEy1/qEu4US/tqWUAlEzJKnJuq4f6BLLBtXwWvXEuTAAAA
-X-Change-ID: 20260706-b4-net_tun_addr-055d454ab810
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Xu Du <xudu@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1783355066; l=2310;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=kYjyZKOu5BuvTQeegraRp8HuW0OwQSiyPN8ROmlETNw=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QGsxImto4BLYWX83ENgbi9BRJw4aGnVNlX0lWSyKU6KEtZYd0Yt+oOYh3CVT/jHst93iAhQHFGj
- tBVJGl8iocwc=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-The IPv6 addresses used for the tun_vnet_udptnl fixture currently fall in
-the 2002::/16 prefix, which is reserved for the 6to4 transition mechanism
-(RFC 3056).
+From: Sean Christopherson <seanjc@google.com>
 
-On systems where the sit module is loaded, the kernel automatically claims
-2002::/16 as a 6to4 tunnel prefix. When the test assigns a 2002:: address
-to a TUN interface, sit registers a competing local route for the same
-address. This ambiguity breaks the GENEVE decapsulation path: packets
-injected via the TUN fd are not delivered to the test socket, causing the
-IPv6-outer gtgso send_gso_packet variants to fail.
+Use pin_self_to_cpu() and pin_task_to_cpu() to pin the vCPU thread and
+the stealer thread to pCPU0 in the steal_time test. Eliminating the usage
+of pthread_attr_setaffinity_np() in particular allows building the test
+against non-glibc C libraries.
 
-Replace all four IPv6 test addresses with addresses from the fd00:db8::/32
-range, which is part of the ULA space (fc00::/7, RFC 4193) and carries no
-special kernel semantics.
-
-Fixes: 24e59f26eef2 ("selftest: tun: Add helpers for GSO over UDP tunnel")
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+Reported-by: Aqib Faruqui <aqibaf@amazon.com>
+Closes: https://lore.kernel.org/all/20250829142556.72577-4-aqibaf@amazon.com/
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/all/aLIroyJSWQ26wnY4@google.com/
+[hisamshar@gmail.com: resend, fix changelog typos; original series was never reposted]
+Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
 ---
- tools/testing/selftests/net/tun.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/kvm/steal_time.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tun.c b/tools/testing/selftests/net/tun.c
-index cf106a49b55e..abe488bac50b 100644
---- a/tools/testing/selftests/net/tun.c
-+++ b/tools/testing/selftests/net/tun.c
-@@ -42,19 +42,19 @@ static struct in_addr param_ipaddr4_inner_src = {
- };
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index 76fcdd1fd3cb..19a97d6a3607 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -508,9 +508,7 @@ int main(int ac, char **av)
+ {
+ 	struct kvm_vcpu *vcpus[NR_VCPUS];
+ 	struct kvm_vm *vm;
+-	pthread_attr_t attr;
+ 	pthread_t thread;
+-	cpu_set_t cpuset;
+ 	unsigned int gpages;
+ 	long stolen_time;
+ 	long run_delay;
+@@ -520,11 +518,7 @@ int main(int ac, char **av)
+ 	verbose = ac > 1 && (!strncmp(av[1], "-v", 3) || !strncmp(av[1], "--verbose", 10));
  
- static struct in6_addr param_ipaddr6_outer_dst = {
--	{ { 0x20, 0x02, 0x0d, 0xb8, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } },
-+	{ { 0xfd, 0x00, 0x0d, 0xb8, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } },
- };
+ 	/* Set CPU affinity so we can force preemption of the VCPU */
+-	CPU_ZERO(&cpuset);
+-	CPU_SET(0, &cpuset);
+-	pthread_attr_init(&attr);
+-	pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpuset);
+-	pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
++	pin_self_to_cpu(0);
  
- static struct in6_addr param_ipaddr6_outer_src = {
--	{ { 0x20, 0x02, 0x0d, 0xb8, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 } },
-+	{ { 0xfd, 0x00, 0x0d, 0xb8, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 } },
- };
+ 	/* Create a VM and an identity mapped memslot for the steal time structure */
+ 	vm = vm_create_with_vcpus(NR_VCPUS, guest_code, vcpus);
+@@ -558,7 +552,9 @@ int main(int ac, char **av)
  
- static struct in6_addr param_ipaddr6_inner_dst = {
--	{ { 0x20, 0x02, 0x0d, 0xb8, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } },
-+	{ { 0xfd, 0x00, 0x0d, 0xb8, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 } },
- };
- 
- static struct in6_addr param_ipaddr6_inner_src = {
--	{ { 0x20, 0x02, 0x0d, 0xb8, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 } },
-+	{ { 0xfd, 0x00, 0x0d, 0xb8, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 } },
- };
- 
- #ifndef BIT
-
----
-base-commit: 56abdaebbf0da304b860bed1f2b5a85f5a6a16a0
-change-id: 20260706-b4-net_tun_addr-055d454ab810
-
-Best regards,
---  
-Ricardo B. Marlière <rbm@suse.com>
+ 		/* Steal time from the VCPU. The steal time thread has the same CPU affinity as the VCPUs. */
+ 		run_delay = get_run_delay();
+-		pthread_create(&thread, &attr, do_steal_time, NULL);
++		pthread_create(&thread, NULL, do_steal_time, NULL);
++		pin_task_to_cpu(thread, 0);
++
+ 		do
+ 			sched_yield();
+ 		while (get_run_delay() - run_delay < MIN_RUN_DELAY_NS);
+-- 
+2.51.0
 
