@@ -1,119 +1,85 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CAA41A797
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 14:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E2A38B12C;
+	Mon,  6 Jul 2026 14:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783347394; cv=none; b=PPEVPUijKRf+zQMWhMvMk9mEGItDp9SXyT8o0FgJYCgrTMiL3NCHM9sm6MowERKncEzDWvePec77sDXtseDAiP4uB/0tV9RAZSrWS4AvcpnIb/74fmhj1WvFbYYdnHyNNDU4nOCY2NJCHMkBbV78D7Ki9giDiYbF0a/FQHJPEqM=
+	t=1783348175; cv=none; b=W+2Y0M7uttSQKRgR8aCPMHgxAZiqx9DuCxvqdrj1pF5YhaF8NKL0T5udwn+EPkLpOuIMIjAbsO/vkoWZCC5vlCVBRr6s6NZ7Qq9mYdDdPixfvgytqG5zTVkI6eMjy9t6V/YMwbX0l21i+DWc+3oXVyRPQBGdbmnuRUdRxpwauQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783347394; c=relaxed/simple;
-	bh=Z462dJVLhUuc7O3el4wqGSe9NqpHGqLyckYou6DakcM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=GbA31pL6V0gr5ytrNIT2s8qrKTGYp+eCFpZ8/pWkjqX8ntHHpkgdbS6sRn9bOpD/Y06YO3o0iI2KuLqSaZq+N9IWzBErs69V/iT6Sa49K8pgGfFBLc50ywtmp/htn71Ke77tLDQptmwjcDq3yhGjk+dFAM3kh3xBZqQP5Ts3Jro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tAqfGVWm; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783348175; c=relaxed/simple;
+	bh=IUBZBC8jM7ZqaMmrXQsElfN9XQ4z0aBp3JH2Ym6ekd8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Vm5BnJ7TjHVkUd48yFeMzzUWl5CnvP5Oml2+BeNOYtvGsiQ0Aq1oVv/d+jf/qhMcZGeXsh3aQ+66oIhKJor9xUXBkY7lBL2t0VC9paCZ4RZqyxMjO5oBkfW/33bhoP7dTmplSlKC69s17ornFCAmL00gI/fi1PSQ2Ci0hVOHaVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grXeyKe1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tAqfGVWm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id E8A57C8EC7C;
-	Mon,  6 Jul 2026 14:16:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CCBD1601A2;
-	Mon,  6 Jul 2026 14:16:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 75E6D11BBA535;
-	Mon,  6 Jul 2026 16:16:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783347390; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=FscgQS9V09PYtyLYPG4VcMCZ6avrrSFZcTEyFdiSxYU=;
-	b=tAqfGVWmAZg/iwU6s4lGdM16t/Xf//Nx5f/zM7B71tyxxHcNX06EUZ6Qcaq/Ngp2w9foIX
-	2WHeo+6KO1vjhgS9xbgywpk6UNKQfBSlREP3haVmhwmt7/X11kAn0PIABByEPnMeSs79Aa
-	5/GrXgnYw7qgHnhuYMDP4Uasdqa8lT2BR0fqiX9obfEk7XCvZwbJe8G9sudTuvWbBjT6fG
-	qtjzxk8u56JjuPN2OVv7NK0Yi1nqY2jEiqo6hFUXlH9p4r1m3mTMl2c06APK0ftt3/Nphe
-	f5g9oDkj32en8mko7MFZ97PXHxh4EbYDk3jphBdOSeB4aeyjE0rnRvm2nBrUgA==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grXeyKe1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CAD1F00A3D;
+	Mon,  6 Jul 2026 14:29:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783348174;
+	bh=SBCRhKZI583zCcBg/zj8+qNKFcYvMBYzCOYKUJEwpkU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=grXeyKe1dw9UXQJWwPd6e3WCw6WWVG0VN47dubQw6EL4/mx1gGIZFP0Y7ME+5KYvg
+	 yh4G9UUzszbFR9q6qW54Ebyek9BAoIZdFx4ki86ozkUCuuwL51TC/y9akZ/3zwYOU7
+	 rvEDsZVMIZJQ1WmsEOdhhwYtFFIRn+y4ep7jdesJaUBrlejcJ/0Mb7a0JG0mBFWaxy
+	 3ms1xNB/vSZcHE4wvEn60qP6Lani3uBhMi70R3IlllVow2OsZbZRzp8zZYx0CXEqiL
+	 QD9EbcBaUV78/0ezFV2bfY87Qh1e1kKdYA5c+wfav83OKa+jftcPWonwPF+jxqaoKp
+	 NOJ7lHhzO0bHA==
+From: SJ Park <sj@kernel.org>
+To: wang wei <a929244872@163.com>
+Cc: SJ Park <sj@kernel.org>,
+	shuah@kernel.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] selftests/damon: check correct path in ensure_file() not_exist case
+Date: Mon,  6 Jul 2026 07:29:28 -0700
+Message-ID: <20260706142929.93146-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260706134305.5224-1-a929244872@163.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Jul 2026 16:16:23 +0200
-Message-Id: <DJRJVY5TTS73.2NQ1NZ8XI5WWL@bootlin.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter
- Anvin" <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Andrey Konovalov" <andreyknvl@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next v3 03/10] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260701-kasan-v3-0-bd09bb942d86@bootlin.com>
- <20260701-kasan-v3-3-bd09bb942d86@bootlin.com>
- <CA+fCnZcJzRvq9942LXgTpq5067u4DvXQRjdNDpq-5vOZpQuCVQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZcJzRvq9942LXgTpq5067u4DvXQRjdNDpq-5vOZpQuCVQ@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Andrey,
++ Andrew
 
-On Wed Jul 1, 2026 at 3:43 PM CEST, Andrey Konovalov wrote:
-> On Wed, Jul 1, 2026 at 12:03=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
-ion)
-> <alexis.lothore@bootlin.com> wrote:
+On Mon,  6 Jul 2026 21:43:04 +0800 wang wei <a929244872@163.com> wrote:
 
-[...]
+> In the ensure_file() function, the "not_exist" code path checks
+> whether $dir exists as a regular file.  However, the intent is to
+> verify that the target file ($file) does not exist, not the $dir.
+> Testing $dir makes the existence check effectively useless --
+> it tests the wrong path and thus never catches the case
+> where the file is unexpectedly present.
+> 
+> Replace $dir with $file so the not_exist verification targets the
+> correct path.
 
->> +config BPF_JIT_KASAN
->> +       bool
->> +       depends on HAVE_EBPF_JIT_KASAN
->> +       default y if BPF_JIT && KASAN_GENERIC && KASAN_VMALLOC && VMAP_S=
-TACK
->
-> I think it make sense to put KASAN_GENERIC into the "depends on"
-> section, as __asan_load/storeX() are only defined for the Generic
-> mode. SW_TAGS mode is expected to be soon implemented for x86-64, and
-> that mode uses different checking function names.
+Nice catch, thank you!
 
-I guess I can move most of the kconfig options that currently are in the
-`default y if ...` into dedicated `depends on ...` lines, and just keep
-a `default y if KASAN`, something like:
+> 
+> Signed-off-by: wang wei <a929244872@163.com>
 
-  config BPF_JIT_KASAN
-          bool
-          depends on HAVE_EBPF_JIT_KASAN
-          depends on KASAN_GENERIC
-          depends on KASAN_VMALLOC
-          depends on VMAP_STACK
-          depends on BPF_JIT
-          default y if KASAN
+Reviewed-by: SJ Park <sj@kernel.org>
 
-> Would also be great to add description for this config option.
+This patch is applied to damon/next [1] tree.  If this patch is not added to
+mm.git in short term (~1 week?), I will ask mm.git maintainer (Andrew Morton)
+to pick this.  So, no action from your side is needed for now.  If it seems I
+also forgot doing that or you cannot wait for my action, please feel free to
+directly ask that to Andrew.
 
-I can fill a help field with a basic description, but it will be visible
-only by reading the Kconfig file, it will not appear in menuconfig
-unless we make the knob user-selectable, which I would like to avoid.
+[1] https://origin.kernel.org/doc/html/latest/mm/damon/maintainer-profile.html#scm-trees
+
 
 Thanks,
+SJ
 
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+[...]
