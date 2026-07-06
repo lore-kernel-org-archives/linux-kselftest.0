@@ -1,182 +1,123 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234F52475F7
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 08:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E5C407576
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 08:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783327911; cv=none; b=bf6AC85KEVGY6prDz7a++nq2w1WykPMNrVO8zgCUvWVbhQNdLilyqI3qRq4f361xbYlz8bVS2kVoCQSdektH5SeoiaYwU2OJB9vW3fYJNnSW4nf6Q0RLHkrK1OUp7I7hPLyxcrYfpIcJWYsT7WCUc4Gt3Y2ROK0YwWMa1Hs9yLU=
+	t=1783328136; cv=none; b=kgVmOwDs0sCmns9vmrSQmkUswD7IKdknXDZvh0vN+ypBRIkSjBZPemCidYP7sZTVL2gqhe/urxo0NMFo6FzaHe1vge7kFEm44KILZjIsGdT7dNgGvGSYFW5LOWxToxxTBKlg7XAMDEHuQ+u9uOeXzaVkjOYA31BBkdaH5/aBsRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783327911; c=relaxed/simple;
-	bh=yVESiWj5i22ODaL63YhHXsLyvxNOobWdb6lP19hItgo=;
+	s=arc-20240116; t=1783328136; c=relaxed/simple;
+	bh=bpYuhahQxSh9LrOGKBTOyfmIRDnue+zLmdcwJtnlxQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=noKE2c6DMDE40XlSHAqSkwnkZ77wOAtywHCC4Eh6shKrnUs0cAZ0sTCzZsohgOzI8gokwkeeVhJVb+3eTBeiqN28tbD2Yulpj0B7r8Oe32fDHjX/hDzDPe+/dFtiBXr4ORyotSpa2zeqkBRoVoLKi0jq7zcr3cRDlUg/5hVoyLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kt0mKmKc; arc=none smtp.client-ip=209.85.216.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=pSOD2Wd/t25MAcp5LqCjh03CS+bZLZV6OkwqXw3Af3+TsWQbgVm0xI3x3w2S2rbCl2Cln9AVwN7MIBrcOSXgESHm481I5i53HGnsmOjhNqDD/uqtaoMkIQgvM8u63+2ZlyWF1V+cDKKYcxh1BMKhjiA7KRVXRThgw5bLE7RnwQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffC0JBXm; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kt0mKmKc"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-382ef647e20so1675656a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 01:51:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffC0JBXm"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8482074a000so241197b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 01:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783327903; x=1783932703; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783328130; x=1783932930; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T0gzeXbVPPuDm6MFw6rW3cSp3Szz2VQxXfM+6OAkUTo=;
-        b=kt0mKmKctLIjmGVS2vT/oJk7PRa9XW3iWWbIL88wiWUXomvQ1bcaGHP7xImmQSDNqK
-         XlN8s4AWbNkl0mBHg8ic4qidz8YiRkhFWh+j5VSDPI5vwoEKxIBziAGLGZ8a2EHNZyaN
-         1y+SzuOi4+N22zkVxbH/cmHAgyk35QdjDPtIpVL/XD6J757o41CtkAJ3ovjStnzFW7Pt
-         +IVw8g4FH5XAhsAIYK7kfe545Do35TzCedIZ6sNr3VsYK97RIHuVxqo6ZrNnWsbTtRL4
-         ab21ezZ09BIS4DN9r9VEVPODu5h9fkkEszBHQly31/9ZKxDn4o3vNNGhvNVipr5hQMy4
-         0n9g==
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=E3v+HDjcgZfmVu7uYp2p3M9sp3YfufYRorQ2bJY9UiY=;
+        b=ffC0JBXmIMjuoiRWf+Skv4TgFQmmvfAkrrRJ7543e4VH0ZpzWA8l/tpOP6dkcdNPIx
+         JJAYKGSzJvl49lXJgeabBJN5d7hUuSnBMuqQF3YpiRxdSfooCs+UeNrZ3Vvbwj3jAdKW
+         3nfj1D9HmrR8QqLCHEudnDBCxKYozMp9C2Wvz8wrRAWgAKtxdLENyEDLyUpxIikb/LEY
+         ma/p5ckGNljBcfIbh/hD3DVbLpIUCT9Lhr/xm9c/Bq7+/A2oQb+OyChJzdCAIXk8GM2E
+         x8cWuQFQE66z95QNsXXqhifx3hHAGgcRmbs8V0XWXycGmZhfA6qwZ+0BBJELCFYa9K5o
+         TJ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783327903; x=1783932703;
+        d=1e100.net; s=20251104; t=1783328130; x=1783932930;
         h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T0gzeXbVPPuDm6MFw6rW3cSp3Szz2VQxXfM+6OAkUTo=;
-        b=QzAWF8LdQpxM5ge4pLD7x4c1tJISnplN6vMKF2Twf+Av/bNKbVouCDQU7eo/sPcDXZ
-         W5gK/untnvrsHl+Ep0QqYcX+JjZLrIhWkTiJCWZEsmSPjGyv/hDSrul4WUZgL0a6aLqq
-         gvPFl5EM13CWuOWwvESeIVtPHHCObstezhlyC7BJOp1IGqW6XfMmw+lmBCXKeVU1beHS
-         axYYqFVWo+nz5XIczn+Nh0v0Je0gZ9Qa6VcLdHRULWOT63FWsufKUC3Ni0DJHp+1n9vP
-         7QFKA3Ur0sy9ujtCFf+SSX4MdzJ2YMpJkzG1J1QtOrkAl76CT2OTUAMpyMwSpvFS7jcw
-         4rmw==
-X-Forwarded-Encrypted: i=1; AHgh+RqrqoERUGI0FEuQB2IqrOT2KzWR0SoasOqriakxtRFuTUhTfDUkBX9hExTE1h79SHfotCcQd8gTnF52B1lPeLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRLgVtol6H8GeK85sdsCsYIiCNIru6NqaHrC7uK+MugJn9LhtP
-	ixKpWJXNIjB7KFF2S42yO2blRaGZSaSK8AQEa8oGGtkY5w3HxBlsMpPlEa4hecFu
-X-Gm-Gg: AfdE7ckO1xr+FYYv+/6GFUL4P2LFkJJJh36tajiOx5GFr2E4DbSAaXYCuorBtA/T1Xu
-	ElslxbQtQJOvWABefIcKeDbtIpmQhC2Tp6IHNj+JQvmyjc7rG97jsFc17Fa/UPefEex6X89vluB
-	OdudqoN+onIe/PqOF/AzasqQ3FQU1vf1QeUnfV34p/H0e9ltIhBwc+4mgHO+QHEpSnsf6omXCW0
-	Fo3MVAA0LtzobBdm7nn3srAOoSGRmfLHJqJNBv2F8wvmv8Znf6/GJjlishRFcKw00vwBR4uyhbn
-	6fsrIdJuixxCRLYQiOMXQO2XZqNPjSJSK/NxcteJfiJvF0devgbjTnAAxmfPoKxAaXZt67JVAAt
-	EfpWCoNByvxiy0OK9Q2FNZWZKkHQLPyFpGrV+O6GBCy8xPakmDCl4sxCxK7OeI6+gLhPUJ4oz1x
-	pe829mRVsCB3Nf2c6UrvzyoldMW3556HC2Cr+pHkrAPD5ArhgOUG7fkwgstA==
-X-Received: by 2002:a17:90b:3a50:b0:381:cef1:11b0 with SMTP id 98e67ed59e1d1-382a01beeb4mr9152255a91.33.1783327902707;
-        Mon, 06 Jul 2026 01:51:42 -0700 (PDT)
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=E3v+HDjcgZfmVu7uYp2p3M9sp3YfufYRorQ2bJY9UiY=;
+        b=B+CUCN0zBfKNxDIbkq/kxr0gW3MC98/garlHZoOzSjOBkg3TrIuQPEbI/S/AiS31wK
+         T1Jdk12QAah+tyevqbFWP+bxZAqQMb36R1i9LdgU+sLz0dIax6deMfbVj55+dm8eTYLx
+         +gaOhOvGzjoYgrjDdHEcXnbV8Fwk0lmb7YpDkKQUVMdT9Ai8AXFzX/s8dTymMiU2wXty
+         GwjUOVp8vwG4jeAmTit+IU89P3emc/r9DJBOHZfHODE0ufHhkCYvD725qfBkxTVP+/iL
+         udduLsWJX258ky88RG9hgTEFFwlguNe8ZJHiDYVh1Mqv7EQo0KUYUwBO///2FsSGH7Vb
+         eqxQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3KI8YWHDk67TX7Jpa6Tj1UYi67gyj7DMmAGl4gteBHzCnMZLyyacvA/VAQxqzXhqp0ewcwMjHYPt6NEGx6lk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqRuNw99dmpRceatCVjD8x+la9MIEn+1EgpVJz8WlVNmE8ERrL
+	iU95ZGGniYaqrCanoCvGiRLLmvOfVBle2z6UqemZ6XHo97hHB7vNIit8
+X-Gm-Gg: AfdE7cmG9B0jXtOqREj4Xxxh+GsqoR/5+8jxmqWJR+ccJ8vgi3NHA5zV2VhzeqdQdlY
+	nJ7Km9lO5AhzP87Fm09bNKaVhxyAm3WZ2baqwAGU4qMnT5bHo9oNtW2x8uaxN4dNigTlKOK28NK
+	M6KUWS1COUATYFXRF3zmT+N+q2KHVvoaRg3GJoaLPyU7rzduPlOtTf7Xd79Hgb1xptdM0FCz/Pw
+	tJC5ToQNN6CqLwV5s+2bDLjA/oJBVXcua68krkup5gVIiMC5Rsp8Vaw8bS3SzyWYeFLUbT2mNA8
+	Dxk9hhM+J2a9t7nPwmPTHFMZa1R8Bozlpcd4n82lsOaw/TvZ//D2bDz+GQSsFc6uOOoInMlueWj
+	H/1xL1AozZannIL8SU9AGb9DPGzqrCioOYp+iu1FOotZD2X7OtNsGVUia0rFpzSkat7HIMIJdWU
+	N1kMCYZwAZXWkFR2UO0chTs00bSylq1PpGQOj5os9bh19XwImR/ogHchiLrg==
+X-Received: by 2002:a05:6a21:32a3:b0:3b4:b24e:27b4 with SMTP id adf61e73a8af0-3c03e1ff0b4mr11851439637.1.1783328130255;
+        Mon, 06 Jul 2026 01:55:30 -0700 (PDT)
 Received: from computer ([2405:201:d015:d26b:41c5:151e:6e02:36c7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31164c1c422sm4055231eec.13.2026.07.06.01.51.36
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b3c85bde6sm79992955c88.9.2026.07.06.01.55.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 01:51:42 -0700 (PDT)
-Date: Mon, 6 Jul 2026 14:21:33 +0530
+        Mon, 06 Jul 2026 01:55:29 -0700 (PDT)
+Date: Mon, 6 Jul 2026 14:25:19 +0530
 From: Varun R Mallya <varunrmallya@gmail.com>
-To: Pu Lehui <pulehui@huawei.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
 Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
 	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, bjorn@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, pulehui@huawei.com,
 	alex@ghiti.fr, martin.lau@linux.dev, song@kernel.org,
 	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
-	puranjay@kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/3] riscv, bpf: Add support for BPF exceptions
-Message-ID: <aktslXMz29C9twvo@computer>
-References: <20260621144259.288135-1-varunrmallya@gmail.com>
- <20260621144259.288135-3-varunrmallya@gmail.com>
- <b6e8c677-5fff-4de1-8483-fc23361898dc@huawei.com>
- <akDOkptnqJt9LDtj@computer>
- <d5810b66-a2f9-4449-a808-c588e4a2ff1c@huawei.com>
+	puranjay@kernel.org, shuah@kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/3] riscv, bpf: Remove BPF exceptions from
+ BPF CI denylist
+Message-ID: <akttdwZOqvgj4h39@computer>
+References: <20260628081710.113333-1-varunrmallya@gmail.com>
+ <20260628081710.113333-4-varunrmallya@gmail.com>
+ <878q7yy28o.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d5810b66-a2f9-4449-a808-c588e4a2ff1c@huawei.com>
+In-Reply-To: <878q7yy28o.fsf@all.your.base.are.belong.to.us>
 
-On Mon, Jun 29, 2026 at 10:53:26AM +0800, Pu Lehui wrote:
+On Sun, Jun 28, 2026 at 11:00:07AM -0700, Björn Töpel wrote:
+> Varun R Mallya <varunrmallya@gmail.com> writes:
 > 
-> On 2026/6/28 15:34, Varun R Mallya wrote:
-> > On Tue, Jun 23, 2026 at 10:11:57AM +0800, Pu Lehui wrote:
-> > > 
-> > > We don't need to duplicate code. Please merge it.
-> > 
-> > Making this change in the next version!
-> > 
-> > > > +
-> > > > +		if (!aux->exception_cb && aux->exception_boundary) {
-> > > > +			/*
-> > > > +			 * Boundary program: allocate the frame and save the
-> > > > +			 * full callee-saved set, capturing the caller's values.
-> > > > +			 */
-> > > > +			emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
-> > > > +			for (i = 0; i < ARRAY_SIZE(rv_exception_csave_regs); i++) {
-> > > > +				emit_sd(RV_REG_SP, store_offset,
-> > > > +					rv_exception_csave_regs[i], ctx);
-> > > > +				store_offset -= 8;
-> > > > +			}
-> > > > +			emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
-> > > > +		} else {
-> > > > +			/*
-> > > > +			 * Exception callback, reuse the boundary program's
-> > > > +			 * frame, whose frame pointer is passed in a2. Setting
-> > > 
-> > > something confusedâ€”why is it A2? I feel like I missed something.
-> > 
-> > bpf_throw() invokes the exception callback as
-> > bpf_exception_cb(cookie, sp, bp, 0, 0) , whose 3rd argument (which,
-> > according to RISC-V's calling convention resides in A2) is the boundary
-> > prog's frame pointer. Since this else branch handles
-> > the callback, it expects A2 to have the frame pointer. The arm
-> > implementation does something very similar with emit(A64_MOV(1, A64_FP, A64_R(2)), ctx)
-> > where A64_R(2) is the third arg.
+> > This patch removes BPF exceptions from riscv64 denylist on
+> > BPF selftests since support for exceptions has been added now.
+> >
+> > Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+> > Reviewed-by: Pu Lehui <pulehui@huawei.com>
+> > ---
+> >  tools/testing/selftests/bpf/DENYLIST.riscv64 | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
+> > index 4fc4dfdde293..9268351ce4c1 100644
+> > --- a/tools/testing/selftests/bpf/DENYLIST.riscv64
+> > +++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
+> > @@ -1,3 +1,2 @@
+> >  # riscv64 deny list for BPF CI and local vmtest
+> > -exceptions					# JIT does not support exceptions
 > 
-> ok, so it would be better to clear in the comments that it is the third
-> parameter.
->
+> Hmm, reading your cover the kselftest run still says "#113
+> exceptions:FAIL", so from a CI perspective this is not much help. ;-)
+> Can we restructure/split so that we're not bitten by the lack of
+> BPF-to-BPF calls and tail calls?
 
-Will do that in v3. Sorry for being very late to reply to this. There
-are BTF issues I am encountering while running RISC-V kernels which I
-have found the cause for and will send a report and propose a fix soon.
+Yeah, that was pretty foolish of me. My next version won't include a
+denylist change, but if [1] lands, then we won't have to
+worry about this anymore!
 
-> > 
-> > > > +			 * SP = FP - stack_adjust lines the epilogue's loads up
-> > > > +			 * with the registers the boundary saved.
-> > > > +			 */
-> > > > +			emit_mv(RV_REG_FP, RV_REG_A2, ctx);
-> > > > +			emit_addi(RV_REG_SP, RV_REG_FP, -stack_adjust, ctx);
-> > > > +		}
-> > > > +
-> > > > +		goto tail_setup;
-> > > > +	}
-> > > > +
-> > > >    	if (seen_reg(RV_REG_RA, ctx))
-> > > >    		stack_adjust += 8;
-> > > >    	stack_adjust += 8; /* RV_REG_FP */
-> > > > @@ -2082,6 +2173,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
-> > > >    	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
-> > > > +tail_setup:
-> > > >    	if (bpf_stack_adjust)
-> > > >    		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-> > > > @@ -2157,3 +2249,13 @@ bool bpf_jit_supports_fsession(void)
-> > > >    {
-> > > >    	return true;
-> > > >    }
-> > > > +
-> > > > +bool bpf_jit_supports_exceptions(void)
-> > > > +{
-> > > > +	/*
-> > > > +	 * bpf_throw() unwinds by walking the frame-pointer chain from inside
-> > > > +	 * the kernel back into the BPF frames (see arch_bpf_stack_walk()), so
-> > > > +	 * exceptions require the frame-pointer unwinder to be enabled.
-> > > > +	 */
-> > > > +	return IS_ENABLED(CONFIG_FRAME_POINTER);
-> > > 
-> > > riscv select ARCH_WANT_FRAME_POINTERS, so this will always true
-> > 
-> > I checked that the kernel compiled even when I turned
-> > CONFIG_FRAME_POINTER explicitly off, so not gating this
-> > would be a mistake, right ? ARCH_WANT_FRAME_POINTERS makes
-> > CONFIG_FRAME_POINTER user selectable and makes it default to
-> > true, but it's not always true. What does force it is PERF_EVENTS=y but if
-> > that too is turned off, then CONFIG_FRAME_POINTER can also be turned
-> > off.
+[1]: https://lore.kernel.org/bpf/bf647816-d292-419c-b79f-fc048122aebc@huaweicloud.com
+
 > 
-> alright, lgtm
-> > 
-> > Thanks for the review!!
-> > - Varun
-> > > > +}
+> Thanks,
+> Björn
