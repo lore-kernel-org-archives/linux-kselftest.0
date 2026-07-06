@@ -1,159 +1,236 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A90B43C7D8
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 21:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9851E42B311
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 21:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783371790; cv=none; b=cKE1+kAhifLLaaLVZvxHZxGxCg48PLHHvVrvWivsjHsiUsl+RgbC4DFlaiMvCss9nEnm4XUCsB2mmL/i1e2KyTnKrxvTLpGx7hqHSjJIWQkmvYE1ZeBtcIwO4n/g+YXXHAIFaZQ/FmlG+iw7OLeWb1qxRq9aHl6or/SkD1oId9g=
+	t=1783372409; cv=none; b=d8YZOZFTezsZBqGZUCV0o48DvhS6kOmp3k9HqSrffMCqzuapAMthO54BQeD8s6BAakxfM27JlGTQvbcRgXipZH1PV/YydM9uiwiv2JmqMPRiqfwh902cfozEV3PZ5tHmWvppNKVznQed4VUHwl5hN4qj2uv28SqS4KjcIEtWli8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783371790; c=relaxed/simple;
-	bh=fRwVRAmzazXUDn32KSeqZ5ViQIt0hag1CTDsltSIb9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UQlTyvVNTEZff9HF/ErTl0hfVg5fGYA3aNA1PbVv3T1NS4uX/EsYYA1HlXUZJ0hxCgYS9oBXDqu5lAwBW259POn5LF3/hCrel661PcqqT+/ydEm1zcoEJaN+lp3ZV2Q9QtGUXumbTzgxH6CwGEBzpS9T6wgjeg25AhTw60jOIwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XyFFul4N; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1783372409; c=relaxed/simple;
+	bh=S+PkDhZh3t6IN3EjUsWlEzchoPCNlIc+JZiP3q67Xjc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LgO161szN8IIMyyDLgYmYyxjmb/ikKZ/HqSxz2fWP46viGmXZ3gBfcFxgAVXujM05kg5ciptPDnQf8+de3vXiVl64epxg7Q6+nU/aUh+CS2O39UATo+02NTl3+fZ5FvmnWFw+eOXc7e/4YblQDiX2O3HFX9My1PC83KB6pE4Wcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q/4KGCGK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XyFFul4N"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so2243319a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 14:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783371788; x=1783976588; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/hCewW54bhoxJS9ZE+EEQyKSlMWHdo4kMqBhJSyC7fA=;
-        b=XyFFul4NVqYYqAss5c0IilFj4FXi7EWrPY6HBItGy7gxNAGmOG4Icnlt0woRQL6PwA
-         vP5Z7TkKAQ7+9Z51X2DoJf30VnR/3oeWIYahENBV0m5sGxpf+3Ytr7u6BW3aXyu7hhSf
-         cYZl7qPuxkZ2sDUeTWlrqsetDfITGpXluA6ExnP4EzM0bqBFu0JmYLlolfY5mWLGQyJu
-         oOuAMXSRpDYNEjuw57dPZ1icP0bkYslKKLKLBqPMgO/GBoY0z/S7eB+FkOvjEO7bLa2G
-         6+WcTaaPZcwkmLuEzE5cmv8OFJr4WJQZ49WsYsrsI9XuBqW8elxbGAf5yKUz1C+vsHSc
-         2YWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783371788; x=1783976588;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/hCewW54bhoxJS9ZE+EEQyKSlMWHdo4kMqBhJSyC7fA=;
-        b=mAcZV9pREIc25O50EmBJZ/30NhsSQWSL09vEXF68ft89GKZeZ67iXZUlCvSwD9JB0m
-         S0xf4GFimmNFFD9xb65ZhxI3jp48+EA+OBnXasu3ERtgXzdtMZNmseFTKH41UKfNS35u
-         Hd22UZRB90Kcg35jBMSdf51R5Y6i9D32djnRpiuW20xZhSgfaMpFIe+UK9z6R9mkbYBp
-         UZseaOofgt7+P0bfEcp9Unx+UkQlHN3Dnco/D2M7yfxqXN1Fe8GfQjjPQVRoRHj+aw3a
-         WDHV14s9JmjVFT3pfdbzmFhn/JbjgiQlRVqCv1AAsNE5zWG50fX2VgV4SLUTbj2Sp99d
-         weGA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqh6V91gizuZYLesRp32eSfpF4movfyI+UoZjFpwtKJOeOvvRdRERlE5WvPNxzr/ixOx4PgtbnCxqctfGUce/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxn0rfdHYhlexc/1hX/wx02d9SoBBJ/prhxWzA4yW2oI4eGZxkQ
-	hwGcU9k4tiwBAnB53+uLlZm7GPGnsVjnuTV7Y0vGeDZHS1+T+/IXNGi4Ylwwhj3Ltw==
-X-Gm-Gg: AfdE7cnAN94xXrJ94/hd+G2/JxbpKgtgEhYQJPuDc5BpSEjkdT1gm7iG1H2EK+ferVc
-	AcoJPIHLPGzMNWSWkbmL5Zof/RrUfWoKmhr0ev9ozHf6l2C4WbyyoZBAC//8itdT76sxC80FL8x
-	fUfgdd6C3+36DVgqTKlKNI62kKhfDIN+paE0dQbXkVvYSoND57hcsI75aOcs8k5r15SzO2j0WT3
-	mj44TlqE3XjVvA3tq7R8bQK03VcsXcE6R0tWIjpj0gSr7hAbXsSWSl04ZNQYVMprf4sQN9fh95c
-	i4OSkBqnAammn+vMwaLspnfSPs7yZDQi6D2ufo6jvs3FKi5QDIq0vmIFXlTv2VbdH6ORhhX5ara
-	fyVaija7bxYHlvSstnOO0+rCveMDqiiqbaDqTosO3CV9qhGVGole31Y5EDAOjFMKOqM/fCStpLU
-	eghWzeuB/gojn/qQvnQUzQhRqU4Zzg5vK7sVQuwaSWEzNIkFW+lTM=
-X-Received: by 2002:a17:90b:51cf:b0:37f:eda5:5169 with SMTP id 98e67ed59e1d1-38755d40263mr2591393a91.13.1783371784418;
-        Mon, 06 Jul 2026 14:03:04 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-387d3d66036sm146a91.17.2026.07.06.14.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 14:03:03 -0700 (PDT)
-Date: Mon, 6 Jul 2026 21:03:01 +0000
-From: David Matlack <dmatlack@google.com>
-To: Josh Hilke <jrhilke@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Vipin Sharma <vipinsh@google.com>,
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Alex Williamson <alex.williamson@nvidia.com>
-Subject: Re: [PATCH v2 07/10] selftests/vfio: Add vfio_pci_irq_reenable()
- helper
-Message-ID: <akwYBagw3pFsN0Mt@google.com>
-References: <20260526235417.2058313-1-jrhilke@google.com>
- <20260526235417.2058313-8-jrhilke@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q/4KGCGK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783372404;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=K/IiNVEaBSIhPlU7hh3s8hLrT9rD+6NyA4ZJlm2HBq0=;
+	b=Q/4KGCGK44ky/q415er8a9s3SM8sDctyJJOTEXp5oND/QcNrf2YX9lXjlGohN0h06qyPgh
+	r/Kqj/neTS73gfcm7pD32eK3WazCWR5EmRpLCA3JoLdhvu4GgGLEZqU+8jpXSHqN7DICq2
+	dsyPmbJBrheN7agflsjPxvl3f79O5eM=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-d3cR-lOhO8aQZU2ET1gsFg-1; Mon,
+ 06 Jul 2026 17:13:19 -0400
+X-MC-Unique: d3cR-lOhO8aQZU2ET1gsFg-1
+X-Mimecast-MFC-AGG-ID: d3cR-lOhO8aQZU2ET1gsFg_1783372396
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 745901955DAF;
+	Mon,  6 Jul 2026 21:13:16 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.81.35])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A72D18005AA;
+	Mon,  6 Jul 2026 21:13:14 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org,  echaudro@redhat.com,  i.maximets@ovn.org,
+  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
+  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org,
+  dev@openvswitch.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests/net/openvswitch: add SCTP flow key test
+In-Reply-To: <20260702090908.1253688-1-houminxi@gmail.com> (Minxi Hou's
+	message of "Thu, 2 Jul 2026 05:09:08 -0400")
+References: <20260702090908.1253688-1-houminxi@gmail.com>
+Date: Mon, 06 Jul 2026 17:13:13 -0400
+Message-ID: <f7to6gj255i.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526235417.2058313-8-jrhilke@google.com>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 2026-05-26 11:54 PM, Josh Hilke wrote:
-> From: Alex Williamson <alex.williamson@nvidia.com>
-> 
-> Selftest drivers that recover from a fault by issuing VFIO_DEVICE_RESET
-> need to re-arm device interrupts afterwards.  VFIO_DEVICE_RESET tears
-> down the kernel-side IRQ trigger so a subsequent VFIO_DEVICE_SET_IRQS
-> is required, but the user-side eventfds (and any fd cached in a test
-> fixture) are still valid and must be preserved.
-> 
-> vfio_pci_irq_enable() refuses to be called for vectors that already
-> have an eventfd (VFIO_ASSERT_LT), and vfio_pci_irq_disable() closes
-> all eventfds before resetting the trigger, so neither is suitable.
-> 
-> Add vfio_pci_irq_reenable(device, index, vector, count) which asserts
-> that the requested range has existing eventfds and re-issues
-> VFIO_DEVICE_SET_IRQS using them.  Signature mirrors vfio_pci_irq_enable().
-> 
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
+Hi Minxi,
+
+Minxi Hou <houminxi@gmail.com> writes:
+
+> Register OVS_KEY_ATTR_SCTP in the flow key parser so that sctp()
+> can be used in flow specifications. The ovs_key_sctp class already
+> exists (with src/dst fields matching the TCP/UDP siblings) but was
+> not wired into the parser, so the token was silently dropped and the
+> kernel rejected the flow.
+>
+> Add test_sctp_connect_v4 exercising the SCTP flow key with
+> port-specific matching: sctp(dst=4443) for client-to-server and
+> sctp(src=4443) for server-to-client, mirroring the SCTP four-way
+> handshake direction. The test verifies connectivity with flows
+> installed, confirms failure after flow removal, then reinstalls
+> and verifies recovery.
+>
+> Signed-off-by: Minxi Hou <houminxi@gmail.com>
 > ---
->  .../lib/include/libvfio/vfio_pci_device.h     |  2 ++
->  .../selftests/vfio/lib/vfio_pci_device.c      | 22 +++++++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> index 2858885a89bb..a362e2b2bfda 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> @@ -68,6 +68,8 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
->  void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
->  			 u32 vector, int count);
->  void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
-> +void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
-> +			   u32 vector, int count);
 
-Let's add vfio_pci_msi{,x}_reenable() static inline wrappers below
-alongside the existing enable/disable wrappers. And use the msix helper
-in the next driver patch for consistency.
+One issue I think will happen with this patch is that the other two
+in-flight patches will also collide.  I'm thinking it may require
+rebasing.
 
->  void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector);
+A better strategy going forward would be to bundle the new test
+additions in one series.  That's just for going forward, do not resubmit
+the existing patches I've acked unless a maintainer asks for it.
+
+>  .../selftests/net/openvswitch/openvswitch.sh  | 92 +++++++++++++++++++
+>  .../selftests/net/openvswitch/ovs-dpctl.py    |  5 +
+>  2 files changed, 97 insertions(+)
+>
+> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> index 2954245129a2..dd4d0b3bcc23 100755
+> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> @@ -32,6 +32,7 @@ tests="
+>  	dec_ttl					ttl: dec_ttl decrements IP TTL
+>  	flow_set				flow-set: Flow modify
+>  	action_set				set: SET action rewrites fields
+> +	sctp_connect_v4				sctp: SCTP flow key matching
+>  	psample					psample: Sampling packets with psample"
 >  
->  static inline void fcntl_set_nonblock(int fd)
-> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> index fc75e04ef010..7b8394d0ac50 100644
-> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> @@ -106,6 +106,28 @@ void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index)
->  	vfio_pci_irq_set(device, index, 0, 0, NULL);
+>  info() {
+> @@ -443,6 +444,97 @@ test_action_set() {
+>  	return 0
 >  }
 >  
-> +/*
-> + * Re-issue VFIO_DEVICE_SET_IRQS for an already-enabled vector range using
-> + * the existing eventfds.  Intended for drivers that need to re-arm device
-> + * interrupts after a VFIO_DEVICE_RESET, which tears down the kernel-side
-> + * IRQ trigger but leaves user-side eventfds intact.  Recreating the
-> + * eventfds would invalidate any test-fixture cache of the fd, so this
-> + * helper deliberately preserves them.
-> + */
-> +void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
-> +			   u32 vector, int count)
-> +{
-> +	int i;
+> +# sctp_connect_v4 test
+> +# - sctp(dst=4443) matches client-to-server INIT
+> +# - sctp(src=4443) matches server-to-client INIT-ACK
+> +# - remove flows and verify connection fails, reinstall and recover
+> +test_sctp_connect_v4() {
+> +	local t="test_sctp_connect_v4"
+> +	which ncat >/dev/null 2>&1 || return $ksft_skip
+> +	modprobe -q sctp 2>/dev/null || return $ksft_skip
 > +
-> +	check_supported_irq_index(index);
+> +	sbx_add "$t" || return $?
+> +	ovs_add_dp "$t" sctp4 || return 1
 > +
-> +	for (i = vector; i < vector + count; i++)
-> +		VFIO_ASSERT_GE(device->msi_eventfds[i], 0,
-> +			       "vector %d eventfd not allocated\n", i);
+> +	info "create namespaces"
+> +	for ns in client server; do
+> +		ovs_add_netns_and_veths "$t" "sctp4" "$ns" \
+> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
+> +	done
 > +
-> +	vfio_pci_irq_set(device, index, vector, count, device->msi_eventfds + vector);
+> +	ip netns exec client ip addr add 172.31.110.10/24 dev c1
+> +	ip netns exec client ip link set c1 up
+> +	ip netns exec server ip addr add 172.31.110.20/24 dev s1
+> +	ip netns exec server ip link set s1 up
+> +
+> +	# ARP forwarding
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0806),arp()' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0806),arp()' \
+> +	    '1' || return 1
+> +
+> +	# SCTP port matching: dst for request, src for reply
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
+> +	    '1' || return 1
+> +
+> +	echo "server" | \
+> +		ovs_netns_spawn_daemon "$t" "server" \
+> +				ncat --sctp -l 172.31.110.20 -vn 4443
+> +	sleep 0.1
+
+Instead of this pattern, we can probably do an ovs_wait on the Listening
+string.  That way we aren't relying only on the sleep, but on the actual
+Ncat output.  Something like
+
+   ovs_wait sh -c
+     "[ \$(grep 'Ncat: Listening on ....' ${ovs_dir}/stderr) ]" || \
+     return 1
+
+Or you could use a count and do '-ge <number>'
+
+That way if the ncat spawn takes time to start up, it can be ready in
+time.
+
+> +	info "verify SCTP association with port-keyed flows"
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    ncat --sctp -i 1 -zv 172.31.110.20 4443 \
+> +	    || return 1
+> +
+> +	ovs_del_flows "$t" sctp4
+> +
+> +	info "verify connection fails without flows"
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0806),arp()' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0806),arp()' \
+> +	    '1' || return 1
+> +
+> +	echo "server2" | \
+> +		ovs_netns_spawn_daemon "$t" "server" \
+> +				ncat --sctp -l 172.31.110.20 -vn 4443
+> +	sleep 0.1
+> +
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    ncat --sctp -w 2 -zv 172.31.110.20 4443 \
+> +	    >/dev/null 2>&1 \
+> +	    && { info "FAIL: connection should fail without flows"
+> +	         return 1; }
+> +
+> +	info "reinstall flows and verify recovery"
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
+> +	    '1' || return 1
+> +
+> +	echo "server3" | \
+> +		ovs_netns_spawn_daemon "$t" "server" \
+> +				ncat --sctp -l 172.31.110.20 -vn 4443
+> +	sleep 0.1
+> +
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    ncat --sctp -i 1 -zv 172.31.110.20 4443 \
+> +	    || return 1
+> +
+> +	return 0
 > +}
 > +
->  static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
->  			     struct vfio_irq_info *irq_info)
->  {
-> -- 
-> 2.54.0.794.g4f17f83d09-goog
-> 
+>  # psample test
+>  # - use psample to observe packets
+>  test_psample() {
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index e1ecfad2c03e..7cfc29ec7e59 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -1982,6 +1982,11 @@ class ovskey(nla):
+>                  "icmp",
+>                  ovskey.ovs_key_icmp,
+>              ),
+> +            (
+> +                "OVS_KEY_ATTR_SCTP",
+> +                "sctp",
+> +                ovskey.ovs_key_sctp,
+> +            ),
+>              (
+>                  "OVS_KEY_ATTR_TCP_FLAGS",
+>                  "tcp_flags",
+
