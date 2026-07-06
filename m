@@ -1,215 +1,250 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA355389110
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 22:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F35C434E50;
+	Mon,  6 Jul 2026 22:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783377194; cv=none; b=FrR7hL57hEYfzYW+kZdg/cnAdk1j/HbEB92DAPYGj0PiWPESGuNPqw832gMkVAecKPSrYuVtgF41X52giU5jfKPwmfbzt2zwX+pTLF1TAyn7AvW6OIFGVldW4tHYqcXVc3XPnp8yci/grAiigUQD+vJXN5WUcBE2Y+hAaR/YCM0=
+	t=1783377345; cv=none; b=falLtvaWw1H4raV7TIIFmjUVL1eBelD7yH/822MQWPvL8y6x+VYj7VDvJ49grjIYGb9DzhqE6LDFG9aM9qlGBxPcvTN91crGmXCyrcm81svtnd+4/wsVgZSQ1EhAG0SIDWnNWJY5dfrBeFgHMDSsl4AS6Czc45vJDfpyObaGXcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783377194; c=relaxed/simple;
-	bh=6VlEHJJ9RCs0CTWH1mW/aapB6WFc7FGf1VClG202CPY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qmzjx69Pg76z9xkd28cyo++y/EQ3fjv1Zxuka2RlGzi/+IlaYzPYc/DpRkfG/CKknyOEMG8OPhkz5RtRnYtx/TOaaRT9EjfcjmGNzdh+4GfICr26uBEi0Y1fxYXv3C26xCr8qmPpBp1skpuma8c/LRLI8Bd9wu4jGlyrpQYfoMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aT8dT+pE; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1783377345; c=relaxed/simple;
+	bh=5xW0Je1r/s8tU9FKAdzH8VS2dCLUKRAZPS9x3TJeUEs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tECa9P3bnYgmVXs7BhDWuoCiAXWUaeQ5i7VhsLtEV70zNHVmLWcdCcij/RxOnHB7bzHfUN/QdI2l+C0iPrw5yi26KWMwQ9K4PNNtUxCH6tYAqFCYasBmxOFnus+EGfvPm+IH4w6R0bnjK6VFEYvsmf6u1JK5R3LrreMfBxwnR5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iq1mSIOf; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aT8dT+pE"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cad8076b01so45452985ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 15:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783377192; x=1783981992; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NLISTG3dFW5I5kNcviXxweIC3TjRqyQCTxs/vtB3b5o=;
-        b=aT8dT+pEObDWZGU8JMHEOHF7HaZMc8NjcMRGlCcqKQkPV0LTjPp+QVuCA1kFw7n3oz
-         /VI9bhH5xpRIZbmxwHJ/MjWAKBgnQHSsGrt6D0v2/UrB7kslDOsC1LvAOWbVUBQbH8I1
-         tU1tcC3aOI5nGJO1P+qtNbBZ0brKmF73LYUcp1/mq5+yExtna9RqXmuo8BAgU4ef9XGN
-         TW+Qk7z4Na1gwXEQ8MmHy4Ta5gwaiMqltCtTZBKUsVI2GOjiCUwh78Prp1y1pAimhGCS
-         wQz7Ni93rqZGBVx2VVBvR9nK51aVb2qbkhBVbHjT+IlIvdNcPp9UFfLI/YNo61ePYqQQ
-         60Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783377192; x=1783981992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NLISTG3dFW5I5kNcviXxweIC3TjRqyQCTxs/vtB3b5o=;
-        b=D7WbzQEAl/5g4IuEN819NwHW1Gd0/FW4Cl3TTaVKUAECiqTOilKqkj9nSrboQlQZg8
-         IrnNfGrd76+pTmiMSKZatTppUhLjg5EJQvgkqlk0ao9VwEpXivCjiuMLyBIapd3l0sq/
-         i9BYjdlWR745D68R+te7TXPh72Y06mViZ7NHClms8N2oTSTHRNBCJKzPsuZycJEmV8xB
-         ylSLokkBKCtj927tGJPquQP2B0Kt6EXA9rTJd/9skFr6VUIGn/cqT7N76mvzjTPAEdHS
-         CpNDvW9efb/1NKfCfRYlydzSJJbNY7bfZbZheuxFOyq9fatniDC4rUbF2ByDlJZR791X
-         /UPw==
-X-Forwarded-Encrypted: i=1; AHgh+RpmVaVqnd5Dltt8hzVDHfqkvQ90MqIzP6XVTUVT3HY+z2Nt36rai0m8CXO1lBxsVSkXu9q3ayRwil8QLN65CiE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHrK2eEegIugzSku1v18873KEA2awg2ENS5VPoE/ipGPLeub4z
-	WlfPugr0Yhh0LctNIhzRN7jtXaamfEnpYNfCm7KLguh4AvqC7iyLsxNNWKFOe8V3dw==
-X-Gm-Gg: AfdE7clGW6OsFmGsuEr08tZFnpeLbKn8YdFRinhi8umVp3nK48DI5NlZrqpUdoy9mvz
-	G2jQBbXcEWoqrN6/Vz+tcYbgGd2DnbZNOVh+z+ZZSap8ZhS4R/aAEhA2Wvkbewl6FNRDPEoT7Lb
-	OtjHK019juCTq+R/vywEarrK/sKuJaLY8q5C0s2mEuhW0vPySuB8JIlQvJtFkAthZXf3NO9qXgm
-	9qFx4dyjdLjpy00u6lhxyAkj9+bfSGPSvZ46lTUUZNUx4iD4DNDtViyRGqxUuSe6NhNn/XG9ZPF
-	aDrpatKrZMBjT+xZnqvuZecCxei3HK8lEZv6kjpcwsOyxA/E7GaRyGOmjjco6S3Y0K3f5FqiOwO
-	50E7jrcH3I4hbcUC/mjW9bsFpSMiGrhA4pWo+2ZFAA0vXKHFSmaO+Od8bD+TRYetiLYEBz6CEhR
-	m1gdxtMd26eM75QEIT/d0cjb0HxXXiQr5ur80XY+VPXZwoeAa9ceQ=
-X-Received: by 2002:a17:903:19c7:b0:2c6:a772:7e43 with SMTP id d9443c01a7336-2ccbeb1d9a4mr27892525ad.18.1783377191425;
-        Mon, 06 Jul 2026 15:33:11 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb86bsm1300745ad.11.2026.07.06.15.33.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 15:33:10 -0700 (PDT)
-Date: Mon, 6 Jul 2026 22:33:07 +0000
-From: David Matlack <dmatlack@google.com>
-To: Narayana Murty N <nnmlinux@linux.ibm.com>
-Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
-	sbhat@linux.ibm.com, harshpb@linux.ibm.com
-Subject: Re: [RFC PATCH 4/6] selftests/vfio: Exercise sPAPR DDW path for
- hugepage DMA mappings
-Message-ID: <akwtI2ixuRBHYCyy@google.com>
-References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
- <20260703032806.40946-5-nnmlinux@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="iq1mSIOf"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2FC81C01;
+	Mon,  6 Jul 2026 15:35:36 -0700 (PDT)
+Received: from [10.57.37.79] (unknown [10.57.37.79])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 17BE53F905;
+	Mon,  6 Jul 2026 15:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1783377341; bh=5xW0Je1r/s8tU9FKAdzH8VS2dCLUKRAZPS9x3TJeUEs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=iq1mSIOfXLG3hXRFL9Kzv3yFJEcMbbMa8QmqTZzQVZz0ukxoYCO9wIEiV1IhNjKF2
+	 JiQVfDNJORA0W4vyoEAG9Nv9JW4K9btsU/AGo0ZlZ8x2kv+Mcd5RWNMOyYQOn4y5fc
+	 wcc/AlC5LPxEhlwBgbOmsH+v7PRJKr3UQqfOja48=
+Message-ID: <6835134e-7f45-4d2c-b825-b45120e53d57@arm.com>
+Date: Mon, 6 Jul 2026 23:35:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260703032806.40946-5-nnmlinux@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 13/46] KVM: guest_memfd: Add base support for
+ KVM_SET_MEMORY_ATTRIBUTES2
+Content-Language: en-GB
+To: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-13-9d2959357853@google.com>
+ <114e2488-97ed-4740-a8e8-1edd991f26c5@arm.com>
+ <CAEvNRgFKbKfTMkqh_XF-igm07qYWfRwYJ5SH7wHcLZnqesCzTw@mail.gmail.com>
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CAEvNRgFKbKfTMkqh_XF-igm07qYWfRwYJ5SH7wHcLZnqesCzTw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2026-07-02 11:28 PM, Narayana Murty N wrote:
-> Prepare the DMA window before IOVA allocation in the DMA mapping tests.
+On 06/07/2026 19:17, Ackerley Tng wrote:
+> Suzuki K Poulose <suzuki.poulose@arm.com> writes:
 > 
-> Anonymous mappings use the default sPAPR DMA window. HugeTLB mappings force
-> a DDW with the requested page size, allowing the test to exercise DDW
-> creation, mapping, unmapping, and cleanup.
+>>
+>> [...snip...]
+>>
+>>> +static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+>>> +				     size_t nr_pages, uint64_t attrs)
+>>> +{
+>>> +	struct address_space *mapping = inode->i_mapping;
+>>> +	struct gmem_inode *gi = GMEM_I(inode);
+>>> +	pgoff_t end = start + nr_pages;
+>>> +	struct maple_tree *mt;
+>>> +	struct ma_state mas;
+>>> +	int r;
+>>> +
+>>> +	mt = &gi->attributes;
+>>> +
+>>> +	filemap_invalidate_lock(mapping);
+>>> +
+>>> +	mas_init(&mas, mt, start);
+>>> +	r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
+>>> +	if (r)
+>>> +		goto out;
+>>> +
+>>> +	/*
+>>> +	 * From this point on guest_memfd has performed necessary
+>>> +	 * checks and can proceed to do guest-breaking changes.
+>>> +	 */
+>>> +
+>>> +	kvm_gmem_invalidate_start(inode, start, end);
+>>
+>> I added support for Arm CCA KVM patches with the inplace conversion and
+>> I am hitting the following issue.
+>>
+>> 1. I am supporting INIT_SHARED + MMAP flags.
+>> 2. VMM creates the Gmem_fd with both the flags above.
+>> 3. Uses the shared gmem-mmap to load the initial payloads (kernel, dtb).
+>> 4. At the VM finalization time, Populate the loaded regions one by one
+>>      by
+>>       a) copying the images to a temparory buffer - Since CCA can't really
+>>          load the contents in-place.
 > 
-> Skip gracefully when hugepage allocation fails or when the platform does
-> not support the requested DDW characteristics. Also skip unmap-all when
-> the backend cannot pair it with the sPAPR memory unregister flow.
+> Sounds good :). I see that you blocked this in the kernel by returning
+> -EOPNOTSUPP if (!src_page) [0].
+
+We could do the copy in kernel with src_page == dst_page, but that would
+affect the batching of Granule delegation (and at which point we might
+need a temparory buffer in the kernel as big as the vma_pagesize)
+
 > 
-> Signed-off-by: Narayana Murty N <nnmlinux@linux.ibm.com>
-> ---
->  .../selftests/vfio/vfio_dma_mapping_test.c    | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>>       b) Set the "region" to Private in the gmem_fd (via
+>> SET_MEMORY_ATTRIBUTES2)
+>>       c) Invoke CCA backend to populate the private memory via
+>>          ioctl(KVM_ARM_RMI_POPULATE,..) [0]
+>>
 > 
-> diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-> index 7d0de8c79de1..4411fdbd56da 100644
-> --- a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-> +++ b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  #include <stdio.h>
-> +#include <string.h>
->  #include <sys/mman.h>
->  #include <unistd.h>
->  
-> @@ -119,8 +120,19 @@ FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_1gb, SZ_1G, MAP_HUGETLB |
->  
->  FIXTURE_SETUP(vfio_dma_mapping_test)
->  {
-> +	const u64 page_size = variant->size ?: getpagesize();
-> +	const bool force_dynamic = !!variant->size;
-
-This is kind of arbitrary right? Should we add explicit variants for
-dynamic/default windows (see below). But we need some way to skip the dynamic
-window tests on non-spapr iommus...
-
-diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-index cd2d3276a46c..b54c529ebedb 100644
---- a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-+++ b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-@@ -103,15 +103,21 @@ FIXTURE_VARIANT(vfio_dma_mapping_test) {
-        const char *iommu_mode;
-        u64 size;
-        int mmap_flags;
-+       bool dynamic_window;
- };
-
--#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _size, _mmap_flags) \
--FIXTURE_VARIANT_ADD(vfio_dma_mapping_test, _iommu_mode ## _ ## _name) {               \
--       .iommu_mode = #_iommu_mode,                                            \
--       .size = (_size),                                                       \
--       .mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE | (_mmap_flags),             \
-+#define __FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _size, _mmap_flags, _dynamic_window) \
-+FIXTURE_VARIANT_ADD(vfio_dma_mapping_test,_iommu_mode ## _ ## _name) {   \
-+       .iommu_mode = #_iommu_mode,                                                               \
-+       .size = (_size),                                                                          \
-+       .mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE | (_mmap_flags),                                \
-+       .dynamic_window = _dynamic_window,                                                        \
- }
-
-+#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _size, _mmap_flags)  \
-+__FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name, _size, _mmap_flags, false); \
-+__FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode, _name ## _dynamic_window, _size, _mmap_flags, true) \
-+
- FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous, 0, 0);
- FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_2mb, SZ_2M, MAP_HUGETLB | MAP_HUGE_2MB);
- FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_1gb, SZ_1G, MAP_HUGETLB | MAP_HUGE_1GB);
-@@ -121,14 +127,13 @@ FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(anonymous_hugetlb_1gb, SZ_1G, MAP_HUGETLB |
- FIXTURE_SETUP(vfio_dma_mapping_test)
- {
-        const u64 page_size = variant->size ?: getpagesize();
--       const bool force_dynamic = !!variant->size;
-        int ret;
-
-        self->iommu = iommu_init(variant->iommu_mode);
-        self->device = vfio_pci_device_init(device_bdf, self->iommu);
-
-        ret = iommu_prepare_dma_window(self->iommu, page_size, page_size,
--                                      force_dynamic);
-+                                      variant->dynamic_window);
-        if (ret)
-                SKIP(return, "DMA window unavailable: %s (%d)\n",
-                     strerror(-ret), -ret);
-
-> +	int ret;
-> +
->  	self->iommu = iommu_init(variant->iommu_mode);
->  	self->device = vfio_pci_device_init(device_bdf, self->iommu);
-> +
-> +	ret = iommu_prepare_dma_window(self->iommu, page_size, page_size,
-> +				       force_dynamic);
-> +	if (ret)
-> +		SKIP(return, "DMA window unavailable: %s (%d)\n",
-> +		     strerror(-ret), -ret);
-> +
->  	self->iova_allocator = iova_allocator_init(self->iommu);
->  }
->  
-> @@ -227,6 +239,7 @@ FIXTURE_SETUP(vfio_dma_map_limit_test)
->  	u64 region_size = getpagesize();
->  	iova_t last_iova;
->  	u32 nranges;
-> +	int ret;
->  
->  	/*
->  	 * Over-allocate mmap by double the size to provide enough backing vaddr
-> @@ -236,6 +249,13 @@ FIXTURE_SETUP(vfio_dma_map_limit_test)
->  
->  	self->iommu = iommu_init(variant->iommu_mode);
->  	self->device = vfio_pci_device_init(device_bdf, self->iommu);
-> +
-> +	ret = iommu_prepare_dma_window(self->iommu, region_size, region_size,
-> +				       false);
-> +	if (ret)
-> +		SKIP(return, "DMA window unavailable: %s (%d)\n",
-> +		     strerror(-ret), -ret);
-> +
->  	region->vaddr = mmap(NULL, self->mmap_size, PROT_READ | PROT_WRITE,
->  			     MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
->  	ASSERT_NE(region->vaddr, MAP_FAILED);
-> @@ -277,6 +297,8 @@ TEST_F(vfio_dma_map_limit_test, unmap_all)
->  	u64 unmapped;
->  	int rc;
->  
-> +	if (!iommu_supports_unmap_all(self->iommu))
-> +		SKIP(return, "IOMMU backend does not support unmap-all\n");
->  	iommu_map(self->iommu, region);
->  	ASSERT_EQ(region->iova, to_iova(self->device, region->vaddr));
->  
-> -- 
-> 2.51.1
+> This flow sounds right.
 > 
+>> [0]
+>> https://lore.kernel.org/all/20260513131757.116630-27-steven.price@arm.com/
+>>
+>>
+>> 5. Additionally, VMM can mark the entire RAM to be private before the VM
+>>      starts running, again via SET_MEMORY_ATTRIBUTES2. On CCA, this
+>> action is measured and doesn't require the Host to "commit" memory to
+>> the VM.
+>> Instead the host can lazily donate memory on a fault.
+>>
+> 
+> For both TDX and SNP, the host can also lazily donate memory,
+> guest_memfd supports this.
+> 
+>> But step (5) triggers the invalidation of both private and shared
+>> mappings of the gmem area, from the kvm_gmem_invalidate_start()
+>> above.
+>>
+>> This is because, the entire DRAM now has, some portions PRIVATE (the
+>> loaded regions) and the rest are SHARED (from the Gmem_fd creation).
+>>    Thus, kvm_gmem_get_invalidate_filter(Dram_start, Dram_end) causes the
+>> invalidation of both "PRIVATE" and "SHARED" regions, which results
+>> in the destruction of the already loaded data and things go south.
+>>
+> 
+> This destruction will happen for TDX as well. I think we managed to get
+> around this because we didn't apply conversion on the already-private
+> ranges.
+> 
+> IIUC on SNP, zapping pages in the stage 2 page tables doesn't destroy
+> the data, so that's probably why it has been fine for SNP.
+
+Additionally, the Guest at boot, will try to mark the entire DRAM
+as Private (RIPAS_RAM in CCA), which would trigger this anyways.
+
+Suzuki
+
+
+> 
+>> When we know that the kvm_gmem_invalidate_xx is triggered by a
+>> conversion, we don't need to invalidate the existing pages that
+>> are in the requested state. i.e., the following patch on top of
+>> this series does the trick for me :
+>>
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index a97fcac34a0e..62e0427a49f4 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -250,16 +250,23 @@ static void __kvm_gmem_invalidate_start(struct
+>> gmem_file *f, pgoff_t start,
+>>                   KVM_MMU_UNLOCK(kvm);
+>>    }
+>>
+>> +static void kvm_gmem_invalidate_start_filter(struct inode *inode,
+>> pgoff_t start,
+>> +                                            pgoff_t end,
+>> +                                            enum kvm_gfn_range_filter
+>> attr_filter)
+>> +{
+>> +       struct gmem_file *f;
+>> +
+>> +       kvm_gmem_for_each_file(f, inode)
+>> +               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
+>> +}
+>> +
+>>    static void kvm_gmem_invalidate_start(struct inode *inode, pgoff_t start,
+>>                                         pgoff_t end)
+>>    {
+>>           enum kvm_gfn_range_filter attr_filter;
+>> -       struct gmem_file *f;
+>> -
+>>           attr_filter = kvm_gmem_get_invalidate_filter(inode, start, end);
+>>
+>> -       kvm_gmem_for_each_file(f, inode)
+>> -               __kvm_gmem_invalidate_start(f, start, end, attr_filter);
+>> +       kvm_gmem_invalidate_start_filter(inode, start, end, attr_filter);
+>>    }
+>>
+>>    static void __kvm_gmem_invalidate_end(struct gmem_file *f, pgoff_t start,
+>> @@ -724,9 +731,14 @@ static int __kvm_gmem_set_attributes(struct inode
+>> *inode, pgoff_t start,
+>>           /*
+>>            * From this point on guest_memfd has performed necessary
+>>            * checks and can proceed to do guest-breaking changes.
+>> +        * Also, we don't have to invalidate the regions that
+>> +        * may already be in the requested state. Hence, we could
+>> +        * explicitly filter the invalidations to the opposite
+>> +        * state.
+>>            */
+>>
+>> -       kvm_gmem_invalidate_start(inode, start, end);
+>> +       kvm_gmem_invalidate_start_filter(inode, start, end,
+>> +                                       to_private ? KVM_FILTER_SHARED :
+>> KVM_FILTER_PRIVATE);
+>>
+> 
+> I think this makes sense. Thanks for catching this.
+> 
+>>           if (!to_private)
+>>                   kvm_gmem_invalidate(inode, start, end);
+>>
+>>
+>> Thoughts ?
+>>
+>> Suzuki
+>>
+>>
+>>>
+>>> [...snip...]
+>>>
+
