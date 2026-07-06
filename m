@@ -1,32 +1,31 @@
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED06D3AC0F8;
-	Mon,  6 Jul 2026 15:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B696B31F9BA;
+	Mon,  6 Jul 2026 16:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783353156; cv=none; b=F4F7oHBTw7etJ0Bu7vjXm3rPQjKblmi5Q97UjZUZuFkEuw6xxDoHWT2X8+Z/8+NOAArX2E3l36YlnNQly4HqxFBk+bjvp6JcGZPbzMDMEVxou++N9zwLowN0NoDZTWOBpDcJXYE8mGr2jnKuMaCalaPKWjeqm9qoAWTEZRmZxGA=
+	t=1783353686; cv=none; b=t/MXksuE5yuf9SdPHRBRflGpFbfSgo1Swn0NWiI+w07ElTXGLbO1Qse+Ob4mykMAlhc2T9yI6iX9Dq9Ym595VyYte+uF+m7rzFwj51OX6mRZFMwK/oaXyfUxSPvsPQ1IjvL5IASPyY8zJKWQa7HJQsT0Zl47ha9OTodsy3Fn6YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783353156; c=relaxed/simple;
-	bh=lNmQTJpRqFjD9+cHnuUjqegGN5BYTDCre50nGYzm+DM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TEUvozFgRo49P/l9btw0MJZR4W1iQT7QxFnjUP+7UOD4kRRTTrqZWwtQsA1F2EA7HfW/1Q04bOGE7BD2/mTQHk7cxvGAUjGYRXAqQLbfI5THvxLIK5GL+gG5cDY8TpZTNnwvJTRp9ynNA2Y4ikHkHMAlBjOHbdMMygGBpapy6T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=OyQDDgaf; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1783353686; c=relaxed/simple;
+	bh=vCKa3tHYjrHa3FtjHkl8GSix2F/vIqRMdeiR5urB4iY=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=hI0otXHOKzG/iVi0RUh7CDC3CE64O/Chx7ORH+9k+q9rWxzrRTLPq2LEd1CCSfD45c6FVEIAhOL13pkpsaJnD4RtXYyBglHYZcw8bERUilzdaPCKnwaU7qveIAJGpGC/D7PKWFKHKevIjwmEBBrPUL0BvnlNv28tghcaXZTG3Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=okefVVjP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="OyQDDgaf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=D0twh6MECjMf2CKI5tLP4DdD2BYfKv4ooXvTnqEDVTg=; b=OyQDDg
-	afvkqb4lOjhaCbo+DdTDiUJGeOxOf+YUufT2tTsRfLSA+FetWr/ywxhyIXPsZCTb
-	sc9SkhTjJGLnn0Y4up2X+vzWFisR+tiKC8EvJ8Q2xC8Q5+U1YmjacGn+pf4Ca9Ra
-	yxfN1D7ztL1SCiMsMOHNnZO/lNi835nFjxBkc=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web5 (Coremail) with SMTP id zAQGZQC3bb0sz0tqPl8AAw--.17381S2;
-	Mon, 06 Jul 2026 23:52:12 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next 0/2] bpf: Reject out-of-range arena free addresses
-Date: Mon, 06 Jul 2026 23:52:09 +0800
-Message-Id: <20260706-f01-31-arena-free-bpf-next-v1-0-3ad6e7384285@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="okefVVjP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E671F000E9;
+	Mon,  6 Jul 2026 16:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783353685;
+	bh=zIjsvZIGtDb45yOCtzuITMhCZIXsn/rA4+SmB8HdYiE=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=okefVVjPOvMtHSgZqi2LcJfAfJkW74KQqZku3zSnBXSyjlCmqe9KJoEheA1JNDmWa
+	 kQ0jbGkAdaakorgQF1UuIQyCN0/dt95BjlXgTJyQZk792sDw6TIAgBlITpL3P/aZc2
+	 sSAy2ylA+7R80ZTW7k8GNzAtWFXjj22FDWktB/TgoYVOeXiScTv2Lg7/+NbDK+j3H/
+	 QsZXlB569wdyYIOy7CXF+3jfqmqXhmtWlonHwz63z/DNFy2xO04JEkwkJ/fV2tPXjk
+	 4E09L/U4YOhPiSOg+iETgj2CXxZyygHAgfn5VARj2dix+DJkKJhR7yskyg1yrh7U6v
+	 muMvUHAqXU54A==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,74 +34,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACnPS2oC/zXMywrCMBCF4Vcps3YgiVovr1JcZNoTHRexTKoUS
- t/dqLj8OYdvoQJTFDo3CxleWvSRa/hNQ/0t5itYh9oUXGjdwbWcnOet52jIkZMBLGPijHniYxC
- RveAkw44qMBqSzl+8o/+LLr+lPOWOfvrYtK5v3XKExogAAAA=
-X-Change-ID: 20260706-f01-31-arena-free-bpf-next-82bbb5be9bd4
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org, 
+Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
+ interpreter selection
+From: Christian Brauner <brauner@kernel.org>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: brauner@kernel.org, david.laight.linux@gmail.com, jack@suse.cz, 
+ jannh@google.com, kees@kernel.org, linux-fsdevel@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783353134; l=1173;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=lNmQTJpRqFjD9+cHnuUjqegGN5BYTDCre50nGYzm+DM=;
- b=mFehq9yQcGWr/da9WyVBj0OUu2cJ0xELBWSxwF/IGcHGvKI2Kc8qfh4/OIPvhWT3T4xIbgbUO
- 3yr8GX4rd1PACMCtaVrXPuqq/hTfWjDKA6CtnHcbt2p/Oeyg2j7XPg2
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:zAQGZQC3bb0sz0tqPl8AAw--.17381S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF4DXr1Dur4xKr43WF4kZwb_yoWkCrg_Gr
-	WvkF9rGr4DGF1xCFy7Cr1rZryfC3yxKry5ur1vvryxJryYqa1xGF4Sy3WrtF97Ga15tr95
-	Cr4akwn7Cry3ZjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb-8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
-	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7
-	xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84AC
-	jcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcV
-	Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8Ww4U
-	Jr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI
-	8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK
-	67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2IqxV
-	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-	6r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
-	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQ0edUUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAQIAA2pLXR+foQAAsd
+ linux-mm@kvack.org, mail@johnericson.me, shuah@kernel.org, 
+ viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
+In-Reply-To: <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+ <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+Date: Mon, 06 Jul 2026 18:01:19 +0200
+Message-Id: <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+X-Mailer: b4 0.16-dev-4217c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2085; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=vCKa3tHYjrHa3FtjHkl8GSix2F/vIqRMdeiR5urB4iY=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR5XwxStPp6qOYYR5k0Iytj7zmukvqTzkzVBhPVDDPXX
+ 7hl95Sxo5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCKfVjD84WuOE9jCfejZzJNC
+ LZ7JfKdd23v/b1lxJVdS+52jyh5OPUaGe+yr2ft+SZgxavO2Nb3jbS3WTLe+nWA5q+rtbaNfdZG
+ 8AA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-bpf_arena_free_pages() accepts scalar arena addresses. The free path
-masks the low 32 bits, computes the full user address, and clips only
-against arena->user_vm_end before inserting the range into the arena
-free range tree.
+> Historically binfmt_misc has only matched binaries by magic bytes or file
+> extension, and always redirects a match to a fixed interpreter recorded in
+> the registration. This is insufficient when the match requires parsing the
+> binary header (e.g. inspecting ELF program headers) or when the interpreter
+> must be computed per-binary rather than hard-coded.
+> 
+> Introduce a new 'B' (BPF) handler type. A pinned SOCKET_FILTER program is
+> registered in place of the magic/mask, and no interpreter is recorded:
+> 
+>   echo ':name:B:<bpf_pinned_path>::::<flags>' \
+>       > /proc/sys/fs/binfmt_misc/register
+> 
+> When a binary is executed, binfmt_misc runs the program with the
+> BINPRM_BUF_SIZE file-header buffer as context. Returning 1 selects the
+> handler; returning 0 falls through to the remaining handlers.
+> 
+> Unlike magic/extension handlers, a 'B' handler carries no interpreter of its
+> own: the program chooses it via a new helper, bpf_binprm_set_interp(). This
+> lets the program compute the interpreter path however it sees fit (for example
+> relative to the binary). A 'B' handler is therefore a strict superset of the
+> existing magic handlers -- any of them can be expressed as a program that
+> matches on the header and sets a fixed interpreter.
+> 
+> bpf_binprm_set_interp() is exposed to SOCKET_FILTER programs and stashes the
+> chosen path on a per-CPU area that binfmt_misc reads back immediately after
+> the run under migrate_disable(); only a match that set an interpreter
+> allocates.
+> 
+> Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 
-A scalar address below arena->user_vm_start can therefore produce an
-out-of-domain page offset. A later allocation can consume that offset
-from the free range tree and return an address outside the arena range.
+Ignoring the blatant bpf abuse here I think this is quite workable. So
+this can be turned into an actual design and patch imho...
 
-Reject frees whose computed full address is below the arena start before
-clipping the end of the range, and add a verifier selftest for the
-out-of-range free case.
+Note that binfmt_misc is namespaced and can be mounted inside of user
+namespace + mount namespaces fwiw. So a container mounting binfmt_misc
+(a fresh instance - few do) would escape that bpf program. On the other
+hand it would allow to register a custom bpf program per container if
+needed...
 
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
-Nuoqi Gui (2):
-      bpf: Reject out-of-range arena free addresses
-      selftests/bpf: Cover out-of-range arena free addresses
-
- kernel/bpf/arena.c                                 |  2 ++
- tools/testing/selftests/bpf/progs/verifier_arena.c | 26 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
----
-base-commit: 87bfe634b1193db90e5170e1ddbad04a63ef4501
-change-id: 20260706-f01-31-arena-free-bpf-next-82bbb5be9bd4
-
-Best regards,
---  
-Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-
+-- 
+Christian Brauner <brauner@kernel.org>
