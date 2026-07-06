@@ -1,280 +1,132 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A403B47ECE4
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 21:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783374223; cv=pass; b=Lzn6ksMjTRaNqj62YEBp1749aUXKTRDE8NyOqcOrfNALyWuT9xtxB3v0xt0d94qRFbgc/eH1wTHKZeETHWFQ33ohWkSOKLbrppp/oBqcPgwvVGNNaofzVXNoi+BAIJERuNQ+3u6DqQUZ+qWcbmUPSHU2h+zU1PAQtYqB7VQjppQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783374223; c=relaxed/simple;
-	bh=a/jl1rx8dOX/dC+MfPZ6CQEdkj0uDKTZ96LbQlnHLJw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m/xWAXFML1cnlDjrRzwecJj6ekC7zZUBmTKNQgo+d5r7BoHyuaqUcqnaxtzv9sYom+BWNzTJ3srx1wFcOkNuiRuVZ7i6Gm5pLsYUXAFFdv0+ErEG0/u4h/falDEPkfDJEu7KgZCNWSj2Hk5/S4dl9E0pe4FDyL4mUbkp2XNseug=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VRL7bYNT; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813C447D920
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jul 2026 21:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783374549; cv=none; b=gAtV44zUlU7/YX6UCV8j1VQAzf5bmt7dyOlwSWXg5yPXdUh36Qq7M3KKcfSLqvecz/dJwfmqVSgD3Orf2jayDyd8B+E/7kBguv+FI5RC8rrQvhHS8mi1xNOg3ujlXfPOELj0x/ypV4lLNA+87zpLCW7is8tEAusk0aoeDSd2Awk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783374549; c=relaxed/simple;
+	bh=e675eE0ZMFoT1AEyjyOTLomvpLfl+YMD+jiR6g7h4TI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCsQLjUpr1XTKXqwQPhD8JVhzHziOZnzw33gtDlSurk/6kdzYHC/o+JuHiUW+4OVJPFt8u6PZM+FjCZ9DJr2RP+A2tGGFFPCA1rRijB2ewRIQISwRl2SveBpmXIjBZJa7UmcrnumOvvkB3p1Zu85KgtUe+QDD+SJI+RtJyeVGUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qzoi2T4k; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VRL7bYNT"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66666bad8beso3819237d50.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 14:43:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783374221; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SsLtRtFO1EsZufXje9an7Mz2NESrSX30AxtAVNUCQOSmVGK/UBeAwHJDNDe2+8lFgI
-         aEUICpLWWubDHaR6o7aIvBzWI27Gzo8D/Uti7ValpvuMneUh34qODT78CJNdHTM4Tu1/
-         JunobjYiZOMYtcYVbTcjFJBKs/CuGbB3buPwFedgywtBwxh9a7K/nJ6ghz6XC0l/Dh8a
-         Z1q+rEYc98NvRXS7cvlJJKJVA3cwFes+2koxHkAb9EYJvP+BQ5R8JYCtN27+Mcbn0TQX
-         YrmWWdP0Cmo8TNKCXEKsIJAvBEI6bAGpIJuskekt1FpJfdOWdpAQKVJ9Qa/6SmbgyBDB
-         /2wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=YP0sLeGhPZWhSFAyWvIhO82/I9Xh3Du1fmVbsCCpN4c=;
-        fh=z4r0A8GXQZT2NSRftwZXA9L84082qoz5VKbpPCfgHKo=;
-        b=JYLhWTCtk8fa2F8sfG8sN7GFL35520MtjqYGnZ0C7scLghw2kvv8/0/7QiwtxCwDJF
-         T+7u661wOR+ad45adBKGpgGJraLd48GaaWhl4DnnaI7id+JnHvhpkdF/fhXXqMuEMtBy
-         a2FgGbGY6C+CB4wsYV4KTcM5ne/ATLgugjxloePSSqodo8jK2ePzmDevoUJTikWq4Ihw
-         Io6xiAiSLzSdiBRUCtX14QKhU9isPAu4cj4HT4N+FH1XgdSRtCVGpeWxcXc9ZkCkqAR2
-         8LfKGu/eDeSg3dfGC6bhFPI52c2Y35aeANGNdyMN1Ct/Vvu0rQu3D28iw+IBNAPvlUs6
-         tGkg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qzoi2T4k"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-381891a9525so3241132a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 14:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783374221; x=1783979021; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YP0sLeGhPZWhSFAyWvIhO82/I9Xh3Du1fmVbsCCpN4c=;
-        b=VRL7bYNTbaYXaRXqMCqExxV57wQJ36m/o8PVpu9M+g2/W9MwZS/f3ZWwvjJb2N++Px
-         vHvGbS1DNSIZ90whVbvcdrcUZvjjchWYXO3krJ8pPTq+lx4MhfuZ4Phjio5k5pIrF4m0
-         DEDLrNJtUk65MCPFSgeqaM0Jdvt52tFz0P0itT157XBtkA8KEa18URtbH7n2FAxIrbyk
-         d3cafosDOARjN+YhucMLRCPM2wMueZ/vsx6or68/h8F68tuKBi3WGqYy2O1OdiDwHoXv
-         BMejJhcOzzq/ZzCOcjfOhxahi8sD/RMbo7558pUlSs+NYXdQWqvXG129HaubJBIf50D6
-         /AXA==
+        d=google.com; s=20251104; t=1783374548; x=1783979348; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/fz4zBeCM+AKNVXg8StRUyGYLTlPNg6xC0itoPf18c=;
+        b=Qzoi2T4k3Xt2ynqtGbHWJVq+JYc0ZL4SKpwcAPQBG5A+FHwgG3IMqBcDphrm5lBH2x
+         EGHePMkrD+T3ai7TRwfbbt8OJEzqXLTWMXA22SRulPoFpqaWh8A5Y3As5cFCzW572UG3
+         wBDY3E28rldwyQeY2nQzxF1ODDP0pDsB6lsoVDsbri/lFrAR0yWPopfTS4ZQFinZV8zu
+         S3K2pHjcgL471gbeXWQpGpDa/RNdoX/c9T0D+2G6BKvJwVEu8PyVPt2MYlPxu0s8j08N
+         18PGVulgJFawSDiDklP8vowR5X7YBvtkbYJN8ctbqOWU9yKV8e7kIT5A03HcIJtgkpf9
+         2pYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783374221; x=1783979021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YP0sLeGhPZWhSFAyWvIhO82/I9Xh3Du1fmVbsCCpN4c=;
-        b=NMZco7nO4hJveflUuQIwtYKPgrZQqCGafWJrkukAqHtI5EnD5qrJhuD1aNp/YUpk9+
-         S8MTLKxza3n5vmB2SwpeTUt4gZewvZjnFVzybgOzqEkL+c2ORrLMSk3ZG9heeJqaiXar
-         bVWnBhbN7VeDpAoJvpAurhgHQUYE5oBc9Y9EjxGlnhlDhf9nefP9CVN0HjEC0v1lQ1+7
-         JObJ11MZRxJt5VRvEe24cCNiRaBcOm1CNrTp3m2TEawXnnbdZjBN6VrQELAVIuk4xPeI
-         KVXpBJ+QA3Bdqj44emW60nrd1vvqYMpA6X7czN5q/t7VzsaJGJUdhwBlzwuiTslxQMnK
-         xe+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpWv8HbP7TEI7eSISza4U1AmcUig8kSFYgVLScCQTzIPyu1uYtGeYCQqKvEgX7XJIeiD5jhjFhC/PHB34z5PRk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykdkYpsMYZSH9ESIkPqhXAKMQqn9ND3g1a8yHUCJFvtwDRt5TV
-	irXH1AIJfW1uEO+BHRH7fAynPIiAKdS4AKeUHg94mFAN++keaW0OE6+hOBbHxpDAbMAzrMimi1f
-	0NG9jffoyNcijtZUxQ8CtwlOs1suv/Dg=
-X-Gm-Gg: AfdE7cmQ/Edj++8PGAlKADOF9B6UYv5BtcSMdXzjvGKUH05FOnTRjCaiIXk2UmToEIW
-	uON0oKIBU/S0JIdq9dzYrZIFAGUEmJiKdJ1wa23BVk7b9NLLENzAGuBgvr0QU/Owzz6rQo+PrV3
-	9Gr00Dw219619vF/bVHh79jGClQ7gTLgTbhLcJaJfbmkAL5sEWK9Xy7D/GEH0Z0Ugcx0kp82phZ
-	0I6ly0ppQ/5NV0J0MVkVOZrT8WKvy5w16r/5x/lbEIa9udhfshh1SjteBbPkCFq0lV7BYYp
-X-Received: by 2002:a05:690e:4083:b0:65d:dca1:ff89 with SMTP id
- 956f58d0204a3-6677fa0c67fmr1983136d50.12.1783374220502; Mon, 06 Jul 2026
- 14:43:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783374548; x=1783979348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j/fz4zBeCM+AKNVXg8StRUyGYLTlPNg6xC0itoPf18c=;
+        b=e/QdhqwzX7jlQPJWVi25Q3REHuBB/x94WcOE3jD7ya+UYyfIP3ikDFsa2C8zBh6Xza
+         J51yG/SQ4OsOups07oMRIHEudZRfnWoYVQ9U7nH4aCSfoA8YR6DaF8vsdVGVEHps3l1N
+         bQJXmqFh4shSvGGXQPqgN7lg16ROSfYeid50WFcvSsQRtK4qRypS0fYUhmHriBc2e7ZH
+         pt/leX44I2Fp0VWjOPqI5o48ZqvafBob2VIm29vZV7iyLH4fiWOl6I5zE7YkXMVGdos9
+         dte9T6v052tHke8VJAaJcqX2aU+MfNBKd7C/nU8c4r0ui0QiJpnleY7DCeOHNzbcPx9C
+         DumQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqChSjGd0kHENQuNlCIVR65QNCYOJquZTmnNZsx8+Vhe3FBXqYob2Cp+hXddQrobY+IYzY/SD197FEyJvjBZg8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhJbcXcwGxTkQQBp7Yt34x3jg2m91VNhfVxHbqeSCsh5sDQdJv
+	SXgnAYGY4TrFV0w/5RK1XDyC+X9odrNavy3QXkbd9bAKn4W/X390sfUdYs5oLY97/9gpU+x6EBp
+	+en2utQ==
+X-Gm-Gg: AfdE7clU5UEbXmhI6ewNfxFnWCSLRnaRc/6SPwiCRkyexPG9KaP4QyHPThEn5AAq8BJ
+	C6SKfAxWqW99EDfnH4IPuwRkG8shEr51xovFXlv4V+vGGOKIoCVqLJnorJhHq7s1U+oGm9LONXe
+	en4YFx3OsTIcLh+kh9AmT2Ym+m6X/14JC6k9MewP71cydbdZPk75vep4R7VjZiJfsLZBn3uOzMZ
+	YA/mR/QHbeIw2LBPCM1is/Zmvk3Ii3cju5H4tjEiHOH+Fon7uchjvbipL+zNIy0ghI9cHPOWme7
+	BpFu3ZOroNsPE2dueTUFg9jPQIzGe4JLoq8JykHbZWo0nh+UQrxmoQc4jUdwF46U9jk336fddY3
+	fJsHN26yvLnPSgf6xk4ysBZvp5EKX4F/pHO4LXig9iYQm2XnkmKHfds8Y+FCnkLAEZ2obeojFWD
+	0CRZaJeO1Bqyv3K8jVqdJSjXuHpEBhR4eogHf6T0iDXMiDysZKApU=
+X-Received: by 2002:a17:90a:d003:b0:37f:e326:6557 with SMTP id 98e67ed59e1d1-387555738ccmr2308385a91.4.1783374547192;
+        Mon, 06 Jul 2026 14:49:07 -0700 (PDT)
+Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-387ceb724b0sm44659a91.0.2026.07.06.14.49.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 14:49:06 -0700 (PDT)
+Date: Mon, 6 Jul 2026 21:49:03 +0000
+From: David Matlack <dmatlack@google.com>
+To: Narayana Murty N <nnmlinux@linux.ibm.com>
+Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
+	sbhat@linux.ibm.com, harshpb@linux.ibm.com
+Subject: Re: [RFC PATCH 1/6] selftests/vfio: allow selecting IOMMU backend
+ from environment
+Message-ID: <akwiz5fpVRSWQEBC@google.com>
+References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
+ <20260703032806.40946-2-nnmlinux@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1782807039.git.chenyy23@mails.tsinghua.edu.cn> <4b8c8a81102ba4b595011434c881194f264ddc59.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
-In-Reply-To: <4b8c8a81102ba4b595011434c881194f264ddc59.1782807039.git.chenyy23@mails.tsinghua.edu.cn>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 6 Jul 2026 14:43:29 -0700
-X-Gm-Features: AVVi8CfOQNFAb1sxakwFijfWdiCRi0fgYTYhaLAZZkqxxVqfdB86GvTgG1Ozw6E
-Message-ID: <CAMB2axOJ7hAb+gtgNFFwL8uT5+KqWsRkPQkJfLL_rPQaS23oRg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Reject MEM_ALLOC BTF accesses past
- object bounds
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260703032806.40946-2-nnmlinux@linux.ibm.com>
 
-On Tue, Jun 30, 2026 at 1:45=E2=80=AFAM Yiyang Chen
-<chenyy23@mails.tsinghua.edu.cn> wrote:
->
-> BTF struct walks relax the struct-size check for accesses through a
-> trailing flexible array. That is valid for ordinary BTF type walking, but
-> PTR_TO_BTF_ID | MEM_ALLOC values point to objects allocated with the stat=
-ic
-> BTF type size.
->
-> When walking a MEM_ALLOC object, reject the access before applying the
-> flexible-array relaxation if the access range extends past the struct siz=
-e.
-> Apply the same policy to struct ID matching so kfunc and kptr type checks
-> do not walk past the allocated object bounds either.
->
-> Fixes: 958cf2e273f0 ("bpf: Introduce bpf_obj_new")
-> Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local=
- percpu kptr")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+On 2026-07-02 11:28 PM, Narayana Murty N wrote:
+> Add support for selecting the IOMMU mode through the environment
+> variable VFIO_SELFTESTS_IOMMU_MODE. This allows tests to be run
+> with different IOMMU backends without modifying test code.
+> 
+> The environment variable is validated against the list of supported
+> modes. On PowerPC, this includes the sPAPR TCE v2 mode which will
+> be added in a subsequent patch.
+> 
+> If the environment variable is not set, tests use their default
+> mode, preserving existing behavior.
+> 
+> Signed-off-by: Narayana Murty N <nnmlinux@linux.ibm.com>
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-
-> ---
->  include/linux/bpf.h   |  2 +-
->  kernel/bpf/btf.c      | 17 +++++++++++------
->  kernel/bpf/verifier.c | 11 +++++++----
->  3 files changed, 19 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 7719f6528..314d606dc 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3146,7 +3146,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
->  bool btf_struct_ids_match(struct bpf_verifier_log *log,
->                           const struct btf *btf, u32 id, int off,
->                           const struct btf *need_btf, u32 need_type_id,
-> -                         bool strict);
-> +                         bool strict, bool walk_flex_arrays);
->
->  int btf_distill_func_proto(struct bpf_verifier_log *log,
->                            struct btf *btf,
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 64572f85e..dff5c0d91 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7108,7 +7108,7 @@ enum bpf_struct_walk_result {
->  static int btf_struct_walk(struct bpf_verifier_log *log, const struct bt=
-f *btf,
->                            const struct btf_type *t, int off, int size,
->                            u32 *next_btf_id, enum bpf_type_flag *flag,
-> -                          const char **field_name)
-> +                          const char **field_name, bool walk_flex_arrays=
-)
+> diff --git a/tools/testing/selftests/vfio/vfio_pci_device_test.c b/tools/testing/selftests/vfio/vfio_pci_device_test.c
+> index 93c11fd5e081..45b8bf60527a 100644
+> --- a/tools/testing/selftests/vfio/vfio_pci_device_test.c
+> +++ b/tools/testing/selftests/vfio/vfio_pci_device_test.c
+> @@ -29,7 +29,7 @@ FIXTURE(vfio_pci_device_test) {
+>  
+>  FIXTURE_SETUP(vfio_pci_device_test)
 >  {
->         u32 i, moff, mtrue_end, msize =3D 0, total_nelems =3D 0;
->         const struct btf_type *mtype, *elem_type =3D NULL;
-> @@ -7135,11 +7135,14 @@ static int btf_struct_walk(struct bpf_verifier_lo=
-g *log, const struct btf *btf,
->                 *flag |=3D PTR_UNTRUSTED;
->
->         if (off + size > t->size) {
-> +               struct btf_array *array_elem;
-> +
-> +               if (!walk_flex_arrays)
-> +                       goto error;
-> +
->                 /* If the last element is a variable size array, we may
->                  * need to relax the rule.
->                  */
-> -               struct btf_array *array_elem;
-> -
->                 if (vlen =3D=3D 0)
->                         goto error;
->
-> @@ -7404,7 +7407,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
->
->         t =3D btf_type_by_id(btf, id);
->         do {
-> -               err =3D btf_struct_walk(log, btf, t, off, size, &id, &tmp=
-_flag, field_name);
-> +               err =3D btf_struct_walk(log, btf, t, off, size, &id, &tmp=
-_flag,
-> +                                     field_name, !type_is_alloc(reg->typ=
-e));
->
->                 switch (err) {
->                 case WALK_PTR:
-> @@ -7463,7 +7467,7 @@ bool btf_types_are_same(const struct btf *btf1, u32=
- id1,
->  bool btf_struct_ids_match(struct bpf_verifier_log *log,
->                           const struct btf *btf, u32 id, int off,
->                           const struct btf *need_btf, u32 need_type_id,
-> -                         bool strict)
-> +                         bool strict, bool walk_flex_arrays)
+> -	self->iommu = iommu_init(default_iommu_mode);
+> +	self->iommu = iommu_init(vfio_selftests_get_iommu_mode());
+>  	self->device = vfio_pci_device_init(device_bdf, self->iommu);
+>  }
+>  
+> @@ -121,7 +121,7 @@ FIXTURE_VARIANT_ADD(vfio_pci_irq_test, msix) {
+>  
+>  FIXTURE_SETUP(vfio_pci_irq_test)
 >  {
->         const struct btf_type *type;
->         enum bpf_type_flag flag =3D 0;
-> @@ -7482,7 +7486,8 @@ bool btf_struct_ids_match(struct bpf_verifier_log *=
-log,
->         type =3D btf_type_by_id(btf, id);
->         if (!type)
->                 return false;
-> -       err =3D btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL)=
-;
-> +       err =3D btf_struct_walk(log, btf, type, off, 1, &id, &flag, NULL,
-> +                             walk_flex_arrays);
->         if (err !=3D WALK_STRUCT)
->                 return false;
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 25aea4271..4d3bb7156 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4379,7 +4379,8 @@ static int map_kptr_match_type(struct bpf_verifier_=
-env *env,
->          */
->         if (!btf_struct_ids_match(&env->log, reg->btf, reg->btf_id, reg->=
-var_off.value,
->                                   kptr_field->kptr.btf, kptr_field->kptr.=
-btf_id,
-> -                                 kptr_field->type !=3D BPF_KPTR_UNREF))
-> +                                 kptr_field->type !=3D BPF_KPTR_UNREF,
-> +                                 !type_is_alloc(reg->type)))
->                 goto bad_type;
->         return 0;
->  bad_type:
-> @@ -7970,7 +7971,7 @@ static int check_reg_type(struct bpf_verifier_env *=
-env, struct bpf_reg_state *re
->
->                         if (!btf_struct_ids_match(&env->log, reg->btf, re=
-g->btf_id,
->                                                   reg->var_off.value, btf=
-_vmlinux, *arg_btf_id,
-> -                                                 strict_type_match)) {
-> +                                                 strict_type_match, !typ=
-e_is_alloc(reg->type))) {
->                                 verbose(env, "%s is of type %s but %s is =
-expected\n",
->                                         reg_arg_name(env, argno),
->                                         btf_type_name(reg->btf, reg->btf_=
-id),
-> @@ -11429,7 +11430,8 @@ static int process_kf_arg_ptr_to_btf_id(struct bp=
-f_verifier_env *env,
->         reg_ref_t =3D btf_type_skip_modifiers(reg_btf, reg_ref_id, &reg_r=
-ef_id);
->         reg_ref_tname =3D btf_name_by_offset(reg_btf, reg_ref_t->name_off=
-);
->         struct_same =3D btf_struct_ids_match(&env->log, reg_btf, reg_ref_=
-id, reg->var_off.value,
-> -                                          meta->btf, ref_id, strict_type=
-_match);
-> +                                          meta->btf, ref_id, strict_type=
-_match,
-> +                                          !type_is_alloc(reg->type));
->         /* If kfunc is accepting a projection type (ie. __sk_buff), it ca=
-nnot
->          * actually use it -- it must cast to the underlying type. So we =
-allow
->          * caller to pass in the underlying type.
-> @@ -11876,7 +11878,8 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_ver=
-ifier_env *env,
->         et =3D btf_type_by_id(field->graph_root.btf, field->graph_root.va=
-lue_btf_id);
->         t =3D btf_type_by_id(reg->btf, reg->btf_id);
->         if (!btf_struct_ids_match(&env->log, reg->btf, reg->btf_id, 0, fi=
-eld->graph_root.btf,
-> -                                 field->graph_root.value_btf_id, true)) =
-{
-> +                                 field->graph_root.value_btf_id, true,
-> +                                 !type_is_alloc(reg->type))) {
->                 verbose(env, "operation on %s expects arg#1 %s at offset=
-=3D%d "
->                         "in struct %s, but arg is at offset=3D%d in struc=
-t %s\n",
->                         btf_field_type_name(head_field_type),
-> --
-> 2.34.1
->
->
+> -	self->iommu = iommu_init(default_iommu_mode);
+> +	self->iommu = iommu_init(vfio_selftests_get_iommu_mode());
+>  	self->device = vfio_pci_device_init(device_bdf, self->iommu);
+>  }
+
+Rather than forcing the user to pass in the mode via environment
+variable, can vfio_selftests_get_iommu_mode() pick a reasonable default
+based on what the host supports? i.e. Is it possible for
+vfio_selftests_get_iommu_mode() to now when to pick
+MODE_VFIO_SPAPR_TCE_V2_IOMMU as the default mode?
+
+The new KVM device-posted interrupt test that uses the VFIO selftests
+library also wants this to pick between MODE_IOMMUFD and
+MODE_VFIO_TYPE1_IOMMU.
+
+  https://lore.kernel.org/kvm/aiIG2L_KdPwuxYA1@google.com/
+
+And this would also fix VFIO selftests that get run on kernels where
+IOMMUFD is not enabled.
