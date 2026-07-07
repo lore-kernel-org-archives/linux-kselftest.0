@@ -1,106 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271C2264FBD;
-	Tue,  7 Jul 2026 11:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF921264FBD
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 11:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783424092; cv=none; b=eEEStXzlhuUynMEwVfbk7hKPyqCpLJjATHFHMyKzDH4OzOp8xuiMqY0Cl8cIzpNZis3uTi/N67spt5gSP8Ig5mO5XlxwNe0etEMYJ7XenLZdA5bXrrluWb0kwgvyJ44swY5O8T062qWONTSfjA9cuvLQzVgVk2nEXuwj5x/YgCU=
+	t=1783424197; cv=none; b=kiDxT5HZO+nVoashEnzBDk/Q2SLL+0aZ1HyYLThBJaRRJK0YSTGxOcoKlHzCIl8mXxwGA/Y6WtU6IvwE4KvLD7Bw65we02+Sdo/5QP3rBPEdSkzuPPMQiiIdCZ8H240GWGujwQkdauP2dxxdyqgUYDxS9atJPSRK0zMUSs/o0HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783424092; c=relaxed/simple;
-	bh=zBPUW+WQ/GjuRupYdwz/7FHmp89KGxrLyUS9t0y2NyU=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=si+YwiR8P42BiX8Fa9XFtIneVgTbq3tdEWjrbRnlUJKmt+03BN81b0F2DlLsmwbQn9bFLzIVQ7rJVcnnnvUFQiLjvx6Zt8WVOerdIp0fcs/6ckpCp0M1HzFYAX+oG3iCCcsq+6CPeSiZvrPmcN1ZyF0P3DmCZrRVoqxn79A5yv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxElatQY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783424197; c=relaxed/simple;
+	bh=zisHKAD74OWux5/tK8lytmVqjM6h3AIY4NHgLxcwVtg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eiayQ2ppD2EAeRtryeeb+n2aTOH72a80Kd2R4oH7QQzm04LkAI5GDQN8n9rDkr7ShQL2+fVUh6WgzIrZDBHcWgWkZUXfue0RzeCm2S6k7+aTkMJbyKaHjFioZFNoo3lq+/VejS6eDRHlDvchpnNMbKXkCki8IsZ3ZL/LguThols=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=TJ9+WCJu reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxElatQY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386571F000E9;
-	Tue,  7 Jul 2026 11:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783424090;
-	bh=xD7a/PykFMk76eX8/Vohs5LQ/Ovej1+QHxfa9aUv6iI=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=KxElatQYxv1NDV7ZRp28MI4mwxdFDntYF6Wepqb+KQ0fCpXULtGhYLd1ZwhCpwE5t
-	 smUsPY7tDXC1bPg67nofX7s8Zo74QTynRz1eShZn35qt2duFR5eYxL6JmgjGjMtXhv
-	 zsMPeiuJAJi1POB0mFeQRQynkJe56KdkvaxghcaRLcFsNZOHNBnnXqmO+380NF0w0z
-	 MlrXBWM5TER/rH5e6S4PzGWlxXoSKiQnmgXK3blzKFGetTn5VZlGGnH0Pn7GRKNSOk
-	 Dxpmkz2e1ZSjzv43OudYSdCbrS5nXC1YDfyJVuKikpnW7HN1XZIx/uCusz4ZEFkQzD
-	 boLajUpNZhiiw==
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="TJ9+WCJu"
+Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 667BaXR6009375
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 7 Jul 2026 20:36:33 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=PC9H9+hfBUgJc1h9fKgLECYX3wbgWyiwPKt7KOMjAiE=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20250326; t=1783424194; v=1;
+        b=TJ9+WCJuvN2HY9GfRKpGwzZshGSjYSg+ZCQPyx+qgt+W3BRyH5dvAMZNxppn7WPz
+         KWg4fLBC8zWUuwbNrQrvtEciEtr3hzWw2BgyPziP7Tz9IAtBBJ96qe1kaSSZyN1a
+         CtNdBeuNKcYX6EG9UT8iaiSkatol3VYDd+FkjSQqNMVCD0ajPTR8LH/cQd2teirB
+         WhZc42jMhxC7y3nYH4eeUVst6bLixn5KanS+l+9ciFjtWUfnH5ZfdaGif2Sg3Z0o
+         iUTu6Pc2W3lxcodV0dFvbkAQDmL18va8K84f1tATGhEOsG/TV0InJ0JkrkuR1WFR
+         driv6wIpea3cPdDdCv26EA==
+Message-ID: <db672f83-a6c4-4d94-a959-930a624a7915@rsg.ci.i.u-tokyo.ac.jp>
+Date: Tue, 7 Jul 2026 20:36:32 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-From: Christian Brauner <brauner@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, david.laight.linux@gmail.com, 
- jack@suse.cz, jannh@google.com, kees@kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, 
- shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
-In-Reply-To: <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
-Date: Tue, 07 Jul 2026 13:34:46 +0200
-Message-Id: <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
-X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1976; i=brauner@kernel.org;
- h=from:subject:message-id; bh=zBPUW+WQ/GjuRupYdwz/7FHmp89KGxrLyUS9t0y2NyU=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT5PAm/Ib/tm2Wn+4vyDv75We5Ws38unHZes8Mkw9zG6
- JnkzP62jlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIm8/cnIcGRNwrINtdMr/8eX
- hyzkbDET+dxxbnX9Zz5vrp1LRfL2rWT4Z7Dz3jdV9ijN8xOEfghc5k3QOpNw8bz073THWa7T38i
- asgAA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 6/7] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+To: Oliver Upton <oupton@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu
+ <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+ <20260706-hybrid-v8-6-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+ <akvsuBcqCCzlrBLk@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <akvsuBcqCCzlrBLk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2026-07-06 09:47:53-07:00, Farid Zakaria wrote:
-> On Mon, Jul 6, 2026 at 9:01 AM Christian Brauner <brauner@kernel.org> wrote:
+On 2026/07/07 2:58, Oliver Upton wrote:
+> On Mon, Jul 06, 2026 at 07:03:29PM +0900, Akihiko Odaki wrote:
+>> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
+>> +------------------------------------------------------
+>> +
+>> +:Parameters: no additional parameter in kvm_device_attr.addr
+>> +
+>> +:Returns:
+>> +
+>> +	 =======  ==================================================
+>> +	 -EBUSY   PMUv3 already initialized, a VCPU has already run,
+>> +		  an event filter has already been set or
+>> +		  a hardware PMU has already been specified
+>> +	 -ENXIO   Attempted to get before setting
+>> +	 -ENODEV  Attempted to set while PMUv3 not supported
+>> +	 =======  ==================================================
+>> +
+>> +If set, KVM emulates PMUv3 without programmable event counters. Only fixed
+>> +counters are exposed to the guest: the cycle counter today, and the instruction
+>> +counter if support for FEAT_PMUv3_ICNTR is added.
 > 
-> > Ignoring the blatant bpf abuse here I think this is quite workable. So
-> > this can be turned into an actual design and patch imho...
+> Drop the mention of cycle counter and FEAT_PMUv3_ICNTR, I want to avoid
+> the argument later down the line when ICNTR support is added to this
+> mode.
 > 
-> Glad to see you think this proposal is in the right direction.
-> Just for my edification, when you say "balatant bpf abuse", you mean
-> how it abuses the socket bpf type?
-> If so, do you have any guidance on a new type or should I just take a
-> stab at it.
+> The expectation is that the VMM discovers the feature set using the ID
+> registers just like every other CPU feature. KVM documentation doesn't
+> need to describe the architecture.
+I'll drop it with the next version.
+
 > 
-> For the proper RFC patch unbastardized with tests, should I start a
-> new thread or is
-> the convention to keep attaching it to this same thread?
-
-Always start a new thread and bump the version number. So we're at v3
-now, if I'm counting correctly.
-
-Fwiw, if you have access to an LLM you can try and setup b4 to manage
-patch series. It's quite easy once you get the hang of it.
-
-> > Note that binfmt_misc is namespaced and can be mounted inside of user
-> > namespace + mount namespaces fwiw. So a container mounting binfmt_misc
-> > (a fresh instance - few do) would escape that bpf program. On the other
-> > hand it would allow to register a custom bpf program per container if
-> > needed...
+>> +With programmable counters disabled, the VCPU can run on any physical CPU.
+>> +This is particularly useful on heterogeneous systems where different hardware
+>> +PMUs cover different physical CPUs. All VCPUs in a VM share this attribute.
 > 
-> That makes sense -- but you will need CAP_BPF etc.. to load the new
-> programs though
-> if inside a userns.
+>    When this attribute is enabled, the vCPU can run on any physical CPU
+>    that has a PMU, regardless of the underlying implementation. This
+>    attribute is VM-scoped.
+> 
+> The documentation is focused on unambiguously representing the UAPI, not
+> providing application recommendations.
 
-Right, bpf tokens exist to delegate bpf access to containers. Not always
-ideal but it works for such cases. My main point was to communicate that
-containers are able to disconnect themselves from being able to execute
-binaries by mounting an empty binfmt_misc instance, iirc. I should
-remember that as I did that work but I kinda don't exactly. :)
+I agree. I'll use your wording for the next version.
 
-In any case, I think it wouldn't be crazy to allow registering "default"
-handlers that appear in all binfmt_misc instances if needed so
-containers with separate binfmt_misc always have the bpf program
-available. Just thinking out loud...
+> 
+>>   2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
+>>   =================================
+>>   
+>> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+>> index 1c13bfa2d38a..39a1a1e412e6 100644
+>> --- a/arch/arm64/include/uapi/asm/kvm.h
+>> +++ b/arch/arm64/include/uapi/asm/kvm.h
+>> @@ -437,6 +437,7 @@ enum {
+>>   #define   KVM_ARM_VCPU_PMU_V3_FILTER		2
+>>   #define   KVM_ARM_VCPU_PMU_V3_SET_PMU		3
+>>   #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS	4
+>> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY	5
+>>   #define KVM_ARM_VCPU_TIMER_CTRL		1
+>>   #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER		0
+>>   #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER		1
+>> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+>> index 40cad183376c..ad9ff4d0d89c 100644
+>> --- a/arch/arm64/kvm/pmu-emul.c
+>> +++ b/arch/arm64/kvm/pmu-emul.c
+>> @@ -1149,11 +1149,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>>   		arm_pmu = entry->arm_pmu;
+>>   		if (arm_pmu->pmu.type == pmu_id) {
+>>   			if (kvm_vm_has_ran_once(kvm) ||
+>> +			    kvm_pmu_fixed_counters_only(kvm) ||
+>>   			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
+>>   				ret = -EBUSY;
+>>   				break;
+>>   			}
+>>   
+>> +			set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
+> 
+> Why is this flag necessary? kvm->arch.arm_pmu is NULL if no PMU
+> implementation was selected by userspace.
 
+The explicit flag is there because kvm->arch.arm_pmu is also populated
+by KVM_ARM_VCPU_INIT through kvm_arm_set_default_pmu(). I wanted to keep
+allowing userspace to enable FIXED_COUNTERS_ONLY after that default PMU
+selection, as long as PMUv3 has not been initialized and the VM has not
+run, while still rejecting it after an explicit SET_PMU.
 
+> 
+>>   			kvm_arm_set_pmu(kvm, arm_pmu);
+>>   			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
+>>   			ret = 0;
+>> @@ -1164,6 +1166,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>>   	return ret;
+>>   }
+>>   
+>> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct kvm *kvm = vcpu->kvm;
+>> +
+>> +	lockdep_assert_held(&kvm->arch.config_lock);
+>> +
+>> +	if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
+>> +	    test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
+>> +		return -EBUSY;
+>> +
+>> +	set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
+>> +	kvm_arm_set_nr_counters(kvm, 0);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+>>   {
+>>   	struct kvm *kvm = vcpu->kvm;
+>> @@ -1238,7 +1256,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>>   		     filter.action != KVM_PMU_EVENT_DENY))
+>>   			return -EINVAL;
+>>   
+>> -		if (kvm_vm_has_ran_once(kvm))
+>> +		if (kvm_vm_has_ran_once(kvm) || kvm_pmu_fixed_counters_only(kvm))
+> 
+> There's no reason for doing this, just let userspace create an event
+> filter. Even with the current PMU implementation it's possible that the
+> fixed cycle counter gets filtered.
+
+This check was added as the consequence of the discussion in the 
+following thread:
+https://lore.kernel.org/all/327f74e4-78b8-4629-a418-d1d3ba78859f@rsg.ci.i.u-tokyo.ac.jp/
+
+Regards,
+Akihiko Odaki
