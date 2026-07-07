@@ -1,98 +1,154 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD4833F390
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 19:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE792E7372
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 19:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783451643; cv=none; b=m0Lds967uizyQgIK/nrcOMY23fX8MkNEY4+lSV2yH3wvqDr8NfCNDl6RzHhFv9IMjk11uUSXjWR5u5YISKWc5a9Imdy1wEkqaUxdE3g0Odxy49IFNq4GRFo6hqg71JgsMYpqxncncAxFGc0cf9P1ONKPffTSWOc93JgKGlXN7jM=
+	t=1783451810; cv=none; b=dsKqA/1UsjiHKalJrHfUbflvhCPASWbK6isRpDjIwOBPSUZ/1Sx8dhXncs6MPylBqU4WweyElRwnUdQY0eKH47l2baoqP+hJOdFfqvQdlQicKGroQJZpQRNudicE0qMY1L/L4ATo68r6HC0l0olSHfqjWToIGAJl0e2KtUDJpQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783451643; c=relaxed/simple;
-	bh=Q0yebGwL8eWx1vNOrVrrq1jpOqA3B/QDaiR5qfl5as8=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=CsFbgv8eVh8LJU+KL1Fk0DpFOI6OygIZpUrVIy2bmcB6kzR+d0bKpWSksUUkHr74iQExJFTA0qghJ3vkFQVnNK/fbxUMwyBap57GpSzOJohZUG4iZ6bpxGCBjm4xcfH3iM8fs7Eueqgf9H2nWinxvoDoz9OFwkh9olvx9FAqdik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GRmR70lc; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1783451810; c=relaxed/simple;
+	bh=Rrr5x5ig8JyhfrhHMWQeKgUULcODUkkp8jUbPOWouu8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=AUjueERvki74rAjwPKefNlCIH4VBX/qL1uxJlPf8XadRYUtnuuWDFpsh9Fa9x1APCmS+3ShWwmESxtSOBwsm/z4Hm1ox4BBLo8uYYdSh8Xx/ZO93rvmuIfs7y+0ahGbl8/LDNBtPwDtmgy8u0WWGDm8UFVRkjNSTTIIZYmW5tXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ETqJJpmd; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GRmR70lc"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-92e622cc874so2783085a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 12:14:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ETqJJpmd"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2cca3673560so39706495ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 12:16:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1783451640; x=1784056440; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SGfDZeEdLGeen0qW0nrFDO6a/FMS/fYRJh5VUHrysIk=;
-        b=GRmR70lczsMV8NilnhewKXlOJqrtkmcEsfcu7rEYi/zAiio08xkrPeUoHb+AtS3hBj
-         nRqAIsGV6+YyHkJdFC3WSFGvSUSaVLzkxykuPo48EOiGPQchnS4bHoZAWl5vtFQOyt7b
-         65IHe3/lIwhc2Q4acrnQNwGT9uoaN03byQY+zthYe92pvfuzZXTzOPDhKrofQy2kMd6L
-         RmQ1p3NCvrEJgPQmvqmSKCr4148hqTcMIHI7vn0fW2QdHoKkzN1UCFj2r6hGSECBzTvj
-         qI9n/CGjHFKLFjc/j6Y3KvEjoZF33Cvkf1RA0x7iDW5ezyuaIZ5rpXbJ4cgP8WVpO3Az
-         bwhA==
+        d=google.com; s=20251104; t=1783451809; x=1784056609; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mwyS52Ee+fzpPLsIt5St9y7+nrmgCj0h4goGGRZrAxg=;
+        b=ETqJJpmdyeC0qYTGLXXDRdCkC+QbfAEHHDMXbrHzMNmyEwlfZUhE4rrePTNnA6pR46
+         +cv8VIVbYipsW+z/uio4pskwbJ5DCST/6QWg5eZHa396wUZ7gxZfBrvnSyCOH8A8SEdb
+         EKHbUC0bpeX/NnSTVVEueFzY/J9+AIwT2Hv6AAT7sq6tpzBtHITL2suMlRsqKpIaWJTv
+         gqvbrXi62AzRVlwZ7HpCqHoRSe4DcrV/yyQBobhvjJofxOiKgNP1JlDLST2DTKucj2QO
+         t4WT/+foyIhNLo0j7RFuNcGd4ZONoOgRgnBqbbh4FBGle/nBXZDu+fnGdYuNVv0k5UbS
+         kxJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783451640; x=1784056440;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SGfDZeEdLGeen0qW0nrFDO6a/FMS/fYRJh5VUHrysIk=;
-        b=Pjep7FtcoqAtE0gnTS8gE5u43SeePCgJg/38CYstY6YIbddAFghUg2UixlCti9uc6d
-         V+7dEtpGKkkE7OQl+N0zCN1W8A/UgCO6Ld951KMffmtDQD/hUkraIMRPHTq0oZeinlMB
-         fZMb+GL5OTDv6zUaFSlTjVa0DrFaqO0GWzrYSO5zxR2ClYFXPGg4MdzRb6bTCJS6Lgds
-         IdlE3ARFyutmdzT6A97I30+59C9zQMjcXfhFftTMFtRu8E37tqjOdvnL/q4bAKBXGnJ4
-         UDv7OkS086E3jmoRtheQxBMBFp2ULdS4iji7avSC+kYjDveO9GWxe95+pi6K/jSHQ52K
-         cXNg==
-X-Forwarded-Encrypted: i=1; AHgh+Rry8NA/t0Dz0Dov2VgnoMbczu6942JM7oYecENczi5X17H7Nm/es6tJ9tTdDhwLjFvS/ebeUXKCv6OWRaKnYKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhTjz17hQyLNannNsZLt6w/rFi6AJZGRtTAaphjnQiNo9P9VYI
-	EpYcG36JV7sWfol2iHKWDATFMJGnIrZx4fozgrhIx0sS5bUsgDpGOmK66OL26Q/+Ag==
-X-Gm-Gg: AfdE7clyc7lUIqw24/X8B2QPR/ohsiq1dOJJrc8TOF0PvLne7JlPNyS1CpRmC7IunRO
-	Lg01nyAYlsY3plVIu5fSH+7LKYERPlg6GqmvEAQ0zVUFp58siUQx3KWyPDiLRVtQPOgg3je/vWi
-	pMVf0upNt7Qw24A/Hdj7dIq8vD/CzbyvoqbXOtagx2Ip5tZdjK2k/7qdDZrcayk/ZQAgQYfdwq3
-	KHVIjK2L9LEFcYjLyOZaVBEN85knsTn2H1PChOV7GOL4ebYrWyn9o+vHnWfEdxs9U3mWp4tcCO/
-	L7Y7eAH4wQMsQxX3esl3PuOniMzX7GYF1kjqnUbiHeJPG5FNyVUGj2Ad+qcS0/NccOLWFvUJFMi
-	8TXF05Uf3JR03SR79n+g/E3riMOVbWxW+r64FuCIB7ralxwIpwQ35Moyb00521r/zlSWL6/O6Cv
-	1fNStipZUwa2pwwDZseLjUOkMEIpeH2sI2NNIi5OOxNmmMyDkYTBeXR6cCaA==
-X-Received: by 2002:a05:620a:4515:b0:915:7fe4:cac5 with SMTP id af79cd13be357-92ebb57dfcbmr743131685a.49.1783451640236;
-        Tue, 07 Jul 2026 12:14:00 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e90ba4209sm1318251385a.12.2026.07.07.12.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 12:13:58 -0700 (PDT)
-Date: Tue, 07 Jul 2026 15:13:58 -0400
-Message-ID: <14023e3368d98072f369e6fe1607c7d5@paul-moore.com>
+        d=1e100.net; s=20251104; t=1783451809; x=1784056609;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mwyS52Ee+fzpPLsIt5St9y7+nrmgCj0h4goGGRZrAxg=;
+        b=QloijXGhYK0Y7xvqt4/IyZshqZTazG+ytjR8g+ZV6Z7R+39mTctbHIP3SnR/dBU8QO
+         vNrSfVhdmEYxqpOVepdkQNMTDeEREVeOYBR5HcL03xiFO1JNxfeSGoBWQgEAB1OOq15W
+         hHqz/J+ecg5zM/bvlSFrdyK7D75fQ02qEEy3s23J5TjtW+3tTGr71aodswf4l4VAtDSg
+         sbLhndrZDFwSBT3Izeo0lX5Tq8cFNxVGkCD8l7Wl/J8OeDpdFv47YPRw+pOLmNmGdFAV
+         OZVijop33txOkv25x/UO+MS/EiIyg12p1ayrivVnCVgo6Li6gkaqy1v3O7k+fJYkToDw
+         iQKQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rri9kwvdvnZT/ngg3FafEXmA4PgTk7Vyh5+i3uPHWod+QxQR/aWwUq2qdM9jpWlUz85QJLLYfog8GVNSjuRaLw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBtr+ldF6hZx4wiULRQJ/hQYNY3Jm3lPfqruu43JMNF9zGnmoB
+	nU70QGmEHQhEUSOSYFbHhpXbWPaVJOxTbSsCtu+whomC9ae/fB8LrinqyrvDilvY/WP+zPaxJI/
+	uWyJXLA==
+X-Received: from plbkf8.prod.google.com ([2002:a17:903:5c8:b0:2bd:40d4:e407])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f60d:b0:2ba:6518:a6d4
+ with SMTP id d9443c01a7336-2ccbe7232f3mr60167385ad.20.1783451808480; Tue, 07
+ Jul 2026 12:16:48 -0700 (PDT)
+Date: Tue, 7 Jul 2026 12:16:47 -0700
+In-Reply-To: <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260707_1504/pstg-lib:20260707_1258/pstg-pwork:20260707_1504
-From: Paul Moore <paul@paul-moore.com>
-To: Wang Yan <wangyan01@kylinos.cn>, bill.c.roberts@gmail.com
-Cc: casey@schaufler-ca.com, jmorris@namei.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, mic@digikod.net, serge@hallyn.com, shuah@kernel.org, wangyan01@kylinos.cn
-Subject: Re: [PATCH v2] selftests/lsm: Fix memory leak in attr_lsm_count
-References: <20260703120951.1622491-1-wangyan01@kylinos.cn>
-In-Reply-To: <20260703120951.1622491-1-wangyan01@kylinos.cn>
+Mime-Version: 1.0
+References: <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+ <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
+ <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
+ <ak0QE7mP_TeZmzeS@google.com> <CALMp9eTycB8Z94V8j-xyfDeah5KaJypRrPfFNHfQSUzgrr7FkQ@mail.gmail.com>
+ <ak0dRzS4Ap-JREvg@google.com> <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
+Message-ID: <ak1Qn5miCXvvRnyF@google.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Jul  3, 2026 Wang Yan <wangyan01@kylinos.cn> wrote:
-> 
-> The calloc-allocated buffer in attr_lsm_count() is never released on
-> any exit path, including both the normal return path and the early
-> return when read_sysfs_lsms fails, resulting in a heap memory leak.
-> 
-> Add free() for the buffer on all return branches to fix the leak.
-> 
-> Fixes: d3d929a8b0cd ("LSM: selftests for Linux Security Module syscalls")
-> Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
-> Reviewed-by: William Roberts <bill.c.roberts@gmail.com>
-> Tested-by: William Roberts <bill.c.roberts@gmail.com>
-> ---
->  tools/testing/selftests/lsm/common.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On Tue, Jul 07, 2026, Jim Mattson wrote:
+> On Tue, Jul 7, 2026 at 8:37=E2=80=AFAM Sean Christopherson <seanjc@google=
+.com> wrote:
+> >
+> > On Tue, Jul 07, 2026, Jim Mattson wrote:
+> > > On Tue, Jul 7, 2026 at 7:41=E2=80=AFAM Sean Christopherson <seanjc@go=
+ogle.com> wrote:
+> > > >
+> > > >         insn =3D ctxt->fetch.data;
+> > > >         if (ctxt->eip =3D=3D kvm_rip_read(vcpu))
+> > > >                 insn_len =3D ctxt->fetch.end - ctxt->fetch.ptr;
+> > > >
+> > > >         for (len =3D X86_MAX_INSTRUCTION_LENGTH - insn_len; len >=
+=3D 0; len--) {
+> > > >                 if (!kvm_fetch_guest_virt(vcpu, kvm_rip_read(vcpu) =
++ insn_len,
+> > > >                                           &insn[insn_len], len, NUL=
+L))
+> > > >                         break;
+> > > >         }
+> > >
+> > > This split doesn't bother you?
+> >
+> > What split?  Do you mean reading some bytes from the emulator, and some=
+ at the
+> > time of #VMEXIT?  If so: no.  IMO, the most important thing in practice=
+ is to
+> > capture the actual bytes used to decode the instruction that led to the=
+ #NPF.
+>=20
+> Yes, that was the split I was referring to.
+>=20
+> > Exactly how and when the "CPU" reads the bytes is a micro-architectural=
+ detail,
+> > so I don't have any qualms from an architectural-correctness perspectiv=
+e.
+>=20
+> When I requested this feature, I think I made it clear that I wanted
+> the actual instruction bytes used to decode the instruction, rather
+> than bytes asynchronously fetched through the data path.
 
-Merged into lsm/dev, thanks!
+FWIW, what I'm suggesting gets us as close to that ideal as is possible, I =
+think.
+If KVM emulates an instruction in response to an #PF or #NPF exit, then the
+emulator will use the information from the VMCB, and so the above code will=
+ also
+use the code stream that hardware provided.  If hardware provided fewer tha=
+n
+15 bytes for whatever, KVM will try to fill in the gaps, but KVM can't poss=
+ibly
+have decoded those bytes, so there's disconnect between what was emulated v=
+ersus
+what was read later on.
 
---
-paul-moore.com
+If KVM emulates without information from the VMCB, then the emulator's code=
+ fetch
+is the "source of truth", and everything else in the above again holds true=
+.
+
+> It wasn't until I encountered the Naples erratum that I realized AMD hadn=
+'t
+> implemented the feature as requested.
+
+Yeah.  I've poked AMD folks about this once or twice, the answer is (amusin=
+gly)
+that plumbing the bytes from fetch+decode all the way to the #VMEXIT is pai=
+nful,
+and so hardware just reads memory at the time of #VMEXIT.
+
+> Since there is no guarantee that the instruction bytes are actually
+> relevant, I concede that 'exactly how and when the "CPU" reads the
+> bytes is a micro-architectural detail.'
+
+KVM's emulator would actually be doing better than hardware, because at lea=
+st KVM
+wouldn't report different bytes than what it emulated :-)
