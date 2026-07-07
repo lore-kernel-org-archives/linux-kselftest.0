@@ -1,257 +1,82 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F697275AFD
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 02:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A019223DE9;
+	Tue,  7 Jul 2026 03:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783392412; cv=none; b=IFKU41LzQD0nrLTfJ3CDQwtwWmaKtG6hgEpVh57jcegcUUn+WY27n8u/OjdO7YJhO3EF3ngAR4nA75k66hD1QYqY8AZma59o3A0rqEFU8UTov4MRpedNKmjm0pijXHGOzzGBnBnuRXwMPy2isPlbkdUaMiGiFyg3B8zIuwX5Xgg=
+	t=1783394312; cv=none; b=qYJxIhercVGwW5eUsJz788SZmjq78EveF87Xsq0Hv3A55RGjKbTyDyNZViD/C9JqfzHSaxQOzJZMrrFDvb2NF9icsikcMBVqUMte+OywZ3xDAgT8eYoMtlCKw9AOgdpF4Fk0qUrQlXPTlZHAeapsvuqtyCovqQvlMdU3qR96iCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783392412; c=relaxed/simple;
-	bh=lRiqjFf04MnEC+CrmqPUzkUqYQMTfmDEzEzuWOONfT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jpIf51dANKibrOSsr1PxvRkuzXHKH3LBipLAXx565TbQi7xAjJO4ZJAkuQ2gVUAVPYFmPw3+7D8zWxuzesyQa6tw/tCHaLq86vNY6JwlpeCeirJn6lPyNuBnrzbZTp79cyK0x6tMyrKVxZwh59fvdicnTLrVkmBD43TgnFjf4Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PSOK6d5w; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSOK6d5w"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cacd69a9c0so31182335ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 19:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783392411; x=1783997211; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2/fxWwb3oyYd4m0R5LKJRcZCrGk+3eTcmW2x4VDQgPg=;
-        b=PSOK6d5wToBiMcKpKbNuQ+9ANwLjDKobuGTLUdt8rcbGNp8m7u6Kw44JfQqbA9DV66
-         GROu19/9jbCuGNw0maxjp1GKRjnxHHwRuUjxXJUMssoJIqCUIJt9g25ZqJimYzIkKWKD
-         EgoJrOJ/zqB+NBqICoK9kC7Gp729c0W2ljJQsVVU3Rym5ITUubfhtn++9nt0tFiQIkGr
-         HhPaxNAr25g+9x+dWq2CCFTFpAin+iFSxeHupOh8xCARfmZC+9M2UkFSyfaEssIi/kJ3
-         /a5QIMDwwJBK40xsW03XLxGXAumJy3ly3VDFELKdoCQ/f13doW6FTzI4f+Vw9TBWajc6
-         oS8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783392411; x=1783997211;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2/fxWwb3oyYd4m0R5LKJRcZCrGk+3eTcmW2x4VDQgPg=;
-        b=TZc3RtHuBHfRdHLtPvlN7Yttz8jbkzU/K8kV1hSJplrjgckAIFZtWrqAaqSyyKNoTN
-         B3dOgP14NEeUhdklC8d97oLOeZwFQXL2ZjQ0HwKhsa9w1cAW7nt9HvMd0vpUKSr8wrzV
-         IojvssZpV3Mr7sLjWuJvsgk5NWJ046jQKHNyBJaxMRoxE/TjI/Cry5lVqKnDoaS7oXEC
-         RavNOFQImIKFmIGPkBJ+m6gD2rXZN6eSnInJAheDyiP5nxonW0qfQeu3D3o+U4LztHAD
-         IuAguhPtkkl6kPqZPEC/0VgaVBS8Otjo246WR5wZzvec+Y0nt74Sixecw+om+FBkGNMf
-         ShbQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpbyoDypg/tnR+3bzyiqiwQzF6m+dmPFjhWO51qr2Ic2ye9Omn4nES1adrijgYzclCG4DWP5g2ifwQvyTHgVs8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0AgLPwK36zm+aNfBl4JuJhCn7PyxYUQATY7HRfmALJX5RFBKE
-	wsKZ+JO17LpqEhxBBWnttyA3fx0c/5QCLfxCZkglI1HOJRjv/fg2Ly49
-X-Gm-Gg: AfdE7cnWWGBD1QoySSVqAGE5VS6oYhdOHR4xWdfXJ5wQvxhsZ9TDXFjdV/2EfIz8VuC
-	pZ81rNjwXJe3mGyUnB7ohdqs9riQ1dEi9XEIVIG3xe2e5JysTybKwI6fw7/VZmR6Ae3DWmOGikv
-	dDDUeTalpEV26b7mUk45eSrAvvzfAfH3gNCUmnfOi39rv7IOtYxULItwFhe6KyqmzajVWIr8Jp3
-	Tbieeuc99yu8WyTkRMwAf5DC9wK6UWj/VsllGx/Xyd2ZQAGA3Q/BHaznNDHjf/w9YuTQcCXrXn+
-	bYQ2NA7yQNrp338G8dhoYQYpJ9pYaH2r/YyDekbEp/tx2BtyQHAulYt+0uYdHNECf/Upkw/uwAp
-	9D6C/EcnmRWEic1KmdyEtbWkSEIx3vvdkckVCn6o+cTMx0D8H5CM9mLwWsw7qAIWA
-X-Received: by 2002:a17:903:1a0e:b0:2c1:ee75:56bb with SMTP id d9443c01a7336-2ccbe618242mr29826855ad.20.1783392410361;
-        Mon, 06 Jul 2026 19:46:50 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bfd443sm3388815ad.30.2026.07.06.19.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 19:46:49 -0700 (PDT)
-Date: Tue, 7 Jul 2026 10:46:14 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Anup Patel <anup@brainfault.org>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Atish Patra <atish.patra@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Sergey Matyukevich <geomatsi@gmail.com>, Thomas Huth <thuth@redhat.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, Deepak Gupta <debug@rivosinc.com>, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, Yixun Lan <dlan@gentoo.org>, 
-	Longbin Li <looong.bin@gmail.com>, Quan Zhou <zhouquan@iscas.ac.cn>
-Subject: Re: [PATCH v5 1/8] RISC-V: KVM: Add support for Svadu FWFT features
-Message-ID: <akxm_sT7R9u4OIXo@inochi.infowork>
-References: <20260706022046.214956-1-inochiama@gmail.com>
- <20260706022046.214956-2-inochiama@gmail.com>
+	s=arc-20240116; t=1783394312; c=relaxed/simple;
+	bh=A1X8M+pjAl4BeHCqRli1wRJs1qVgzDYrUoJlomYBsT0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dgOYO3l9tWy5Y1LYY3+ezbRpFTgxlO1+QYfSIsRjBuwBsFHS4LaatwsutKK0/GIG4L0BchcR9auRTFkNUWULqzOsxbI4zAWMbMGgdRC04t66+dfcLLWaZXMzJsC9tudTJVHTzqC2j2Zf+M/jD7y/00wnNFY53H4v29qZ8KFLuNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 808ee67279b211f1aa26b74ffac11d73-20260707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:51ea2373-ddc2-4a0d-8919-dfb60ae5136e,IP:0,U
+	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:25
+X-CID-META: VersionHash:e7bac3a,CLOUDID:8e792fd55241433fa81c38229c2845db,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
+	5|50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:
+	0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 808ee67279b211f1aa26b74ffac11d73-20260707
+X-User: yanlonglong@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yanlonglong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1096364418; Tue, 07 Jul 2026 11:18:19 +0800
+From: longlong yan <yanlonglong@kylinos.cn>
+To: rppt@kernel.org
+Cc: akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	yanlonglong@kylinos.cn
+Subject: [PATCH v2] selftests/mm/mseal_test: Fix mmap return value check in test_seal_zero_address
+Date: Tue,  7 Jul 2026 11:17:45 +0800
+Message-ID: <20260707031745.1039-1-yanlonglong@kylinos.cn>
+X-Mailer: git-send-email 2.47.1.windows.2
+In-Reply-To: <akuQbvgVR8vrEFvo@kernel.org>
+References: <akuQbvgVR8vrEFvo@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706022046.214956-2-inochiama@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 06, 2026 at 10:20:37AM +0800, Inochi Amaoto wrote:
-> Hardware updating of PTE A/D bits is controlled through ADUE bit in
-> henvcfg Expose the feature only if both Svadu and Svade are supported
-> for VS-mode.
-> 
-> Allow the VMM to enable/disable this feature by change the ISA
-> extension state in the guest.
-> 
-> Assisted-by: YuanSheng:claude-4.7-opus
-> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
-> ---
->  arch/riscv/include/uapi/asm/kvm.h |  1 +
->  arch/riscv/kvm/vcpu_sbi_fwft.c    | 77 +++++++++++++++++++++++++++++++
->  2 files changed, 78 insertions(+)
-> 
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> index 504e73305343..7bbea8812d92 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -240,6 +240,7 @@ struct kvm_riscv_sbi_fwft_feature {
->  struct kvm_riscv_sbi_fwft {
->  	struct kvm_riscv_sbi_fwft_feature misaligned_deleg;
->  	struct kvm_riscv_sbi_fwft_feature pointer_masking;
-> +	struct kvm_riscv_sbi_fwft_feature pte_ad_hw_updating;
->  };
->  
->  /* If you need to interpret the index values, here is the key: */
-> diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwft.c
-> index ab39ac464ffd..01db40b53295 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_fwft.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
-> @@ -11,6 +11,7 @@
->  #include <linux/kvm_host.h>
->  #include <asm/cpufeature.h>
->  #include <asm/sbi.h>
-> +#include <asm/kvm_nacl.h>
->  #include <asm/kvm_vcpu_sbi.h>
->  #include <asm/kvm_vcpu_sbi_fwft.h>
->  
-> @@ -94,6 +95,45 @@ static bool kvm_fwft_is_defined_feature(enum sbi_fwft_feature_t feature)
->  	return false;
->  }
->  
-> +static void kvm_sbi_fwft_env_flag_reset_helper(struct kvm_vcpu *vcpu,
-> +					       u64 flag)
-> +{
-> +	vcpu->arch.cfg.henvcfg &= ~flag;
-> +}
-> +
-> +static long kvm_sbi_fwft_env_flag_set_helper(struct kvm_vcpu *vcpu,
-> +					     struct kvm_sbi_fwft_config *conf,
-> +					     bool one_reg_access,
-> +					     unsigned long value, u64 flag)
-> +{
-> +	struct kvm_vcpu_config *cfg = &vcpu->arch.cfg;
-> +
-> +	if (value == 0)
-> +		cfg->henvcfg &= ~flag;
-> +	else if (value == 1)
-> +		cfg->henvcfg |= flag;
-> +	else
-> +		return SBI_ERR_INVALID_PARAM;
-> +
-> +	if (!one_reg_access) {
-> +		ncsr_write(CSR_HENVCFG, vcpu->arch.cfg.henvcfg);
-> +		if (IS_ENABLED(CONFIG_32BIT))
-> +			ncsr_write(CSR_HENVCFGH, vcpu->arch.cfg.henvcfg >> 32);
-> +	}
-> +
-> +	return SBI_SUCCESS;
-> +}
-> +
+The return value for a failed mmap function is MAP_FAILED.
+According to the definition of FAIL_TEST_IF FALSE,ptr must be
+determined to be distinct from MAP_FAILED
 
-Hi, Anup,
+Fixes: 4926c7a52de7 ("selftest mm/mseal memory sealing")
+Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+---
+ tools/testing/selftests/mm/mseal_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The sashiko bot point out calling NACL helper is not safe here as
-preemption is not allowed when calling this_cpu_ptr() and it is 
-used by the NACL helper. Since I have no idea about how to fix it,
-is it acceptable to use csr read/write directly here as other FWFT
-feature?
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+index faad4833366a..277c8fda3f5e 100644
+--- a/tools/testing/selftests/mm/mseal_test.c
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -482,7 +482,7 @@ static void test_seal_zero_address(void)
+ 	/* use mmap to change protection. */
+ 	ptr = mmap(0, size, PROT_NONE,
+ 		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+-	FAIL_TEST_IF_FALSE(ptr == 0);
++	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
+ 
+ 	size = get_vma_size(ptr, &prot);
+ 	FAIL_TEST_IF_FALSE(size == 4 * page_size);
+-- 
+2.43.0
 
-Regards,
-Inochi
-
-
-The original reply from the bot is 
-
-Is it safe to call ncsr_write() here without preemption disabled?
-
-KVM handles SBI ecalls with preemption enabled. The ncsr_write() macro
-evaluates nacl_shmem(), which relies on this_cpu_ptr(). Using this_cpu_ptr()
-with preemption enabled will trigger a CONFIG_DEBUG_PREEMPT warning.
-
-Could the thread be migrated to another CPU after computing the pointer but
-before writing to it, resulting in per-CPU memory corruption by writing to
-the NACL shared memory of another physical CPU?
-
-Additionally, when NACL is disabled, it falls back to csr_write(), which
-writes directly to the physical CPU's host CSRs (CSR_HENVCFG). Could this
-leave the host with modified hardware state if the vCPU thread migrates?
-
-
-> +static long kvm_sbi_fwft_env_flag_get_helper(struct kvm_vcpu *vcpu,
-> +					     struct kvm_sbi_fwft_config *conf,
-> +					     bool one_reg_access,
-> +					     unsigned long *value, u64 flag)
-> +{
-> +	*value = (vcpu->arch.cfg.henvcfg & flag) == flag;
-> +
-> +	return SBI_SUCCESS;
-> +}
-> +
->  static bool kvm_sbi_fwft_misaligned_delegation_supported(struct kvm_vcpu *vcpu)
->  {
->  	return misaligned_traps_can_delegate();
-> @@ -137,6 +177,34 @@ static long kvm_sbi_fwft_get_misaligned_delegation(struct kvm_vcpu *vcpu,
->  	return SBI_SUCCESS;
->  }
->  
-> +static bool kvm_sbi_fwft_pte_ad_hw_updating_supported(struct kvm_vcpu *vcpu)
-> +{
-> +	return riscv_isa_extension_available(vcpu->arch.isa, SVADU) &&
-> +		riscv_isa_extension_available(vcpu->arch.isa, SVADE);
-> +}
-> +
-> +static void kvm_sbi_fwft_reset_pte_ad_hw_updating(struct kvm_vcpu *vcpu)
-> +{
-> +	if (kvm_sbi_fwft_pte_ad_hw_updating_supported(vcpu))
-> +		kvm_sbi_fwft_env_flag_reset_helper(vcpu, ENVCFG_ADUE);
-> +}
-> +
-> +static long kvm_sbi_fwft_set_pte_ad_hw_updating(struct kvm_vcpu *vcpu,
-> +						struct kvm_sbi_fwft_config *conf,
-> +						bool one_reg_access, unsigned long value)
-> +{
-> +	return kvm_sbi_fwft_env_flag_set_helper(vcpu, conf, one_reg_access,
-> +						value, ENVCFG_ADUE);
-> +}
-> +
-> +static long kvm_sbi_fwft_get_pte_ad_hw_updating(struct kvm_vcpu *vcpu,
-> +						struct kvm_sbi_fwft_config *conf,
-> +						bool one_reg_access, unsigned long *value)
-> +{
-> +	return kvm_sbi_fwft_env_flag_get_helper(vcpu, conf, one_reg_access,
-> +						value, ENVCFG_ADUE);
-> +}
-> +
->  #ifndef CONFIG_32BIT
->  
->  static bool try_to_set_pmm(unsigned long value)
-> @@ -246,6 +314,15 @@ static const struct kvm_sbi_fwft_feature features[] = {
->  		.set = kvm_sbi_fwft_set_misaligned_delegation,
->  		.get = kvm_sbi_fwft_get_misaligned_delegation,
->  	},
-> +	{
-> +		.id = SBI_FWFT_PTE_AD_HW_UPDATING,
-> +		.first_reg_num = offsetof(struct kvm_riscv_sbi_fwft, pte_ad_hw_updating.enable) /
-> +				 sizeof(unsigned long),
-> +		.supported = kvm_sbi_fwft_pte_ad_hw_updating_supported,
-> +		.reset = kvm_sbi_fwft_reset_pte_ad_hw_updating,
-> +		.set = kvm_sbi_fwft_set_pte_ad_hw_updating,
-> +		.get = kvm_sbi_fwft_get_pte_ad_hw_updating,
-> +	},
->  #ifndef CONFIG_32BIT
->  	{
->  		.id = SBI_FWFT_POINTER_MASKING_PMLEN,
-> -- 
-> 2.55.0
-> 
