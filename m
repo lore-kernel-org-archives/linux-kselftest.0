@@ -1,82 +1,161 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A019223DE9;
-	Tue,  7 Jul 2026 03:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32DF33D503
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 03:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783394312; cv=none; b=qYJxIhercVGwW5eUsJz788SZmjq78EveF87Xsq0Hv3A55RGjKbTyDyNZViD/C9JqfzHSaxQOzJZMrrFDvb2NF9icsikcMBVqUMte+OywZ3xDAgT8eYoMtlCKw9AOgdpF4Fk0qUrQlXPTlZHAeapsvuqtyCovqQvlMdU3qR96iCc=
+	t=1783394490; cv=none; b=kbOkZA0iSFZdB9nDoiLf1lUmGqpfKevJbJ0e4k7fGTPuJU4KeufpheCqkN28UFsv1X8PpzB2n9q/rMkYuDapOd3kDzuVZ53ABZDr+l47xTU6oqCS7HWcCocOgr/f2U7XUS8Zx5l4Piy/Q2ibBesQShmhH6ANOkDF18u2bvzv2ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783394312; c=relaxed/simple;
-	bh=A1X8M+pjAl4BeHCqRli1wRJs1qVgzDYrUoJlomYBsT0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dgOYO3l9tWy5Y1LYY3+ezbRpFTgxlO1+QYfSIsRjBuwBsFHS4LaatwsutKK0/GIG4L0BchcR9auRTFkNUWULqzOsxbI4zAWMbMGgdRC04t66+dfcLLWaZXMzJsC9tudTJVHTzqC2j2Zf+M/jD7y/00wnNFY53H4v29qZ8KFLuNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 808ee67279b211f1aa26b74ffac11d73-20260707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:51ea2373-ddc2-4a0d-8919-dfb60ae5136e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:8e792fd55241433fa81c38229c2845db,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
-	5|50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:
-	0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 808ee67279b211f1aa26b74ffac11d73-20260707
-X-User: yanlonglong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yanlonglong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1096364418; Tue, 07 Jul 2026 11:18:19 +0800
-From: longlong yan <yanlonglong@kylinos.cn>
-To: rppt@kernel.org
-Cc: akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	yanlonglong@kylinos.cn
-Subject: [PATCH v2] selftests/mm/mseal_test: Fix mmap return value check in test_seal_zero_address
-Date: Tue,  7 Jul 2026 11:17:45 +0800
-Message-ID: <20260707031745.1039-1-yanlonglong@kylinos.cn>
-X-Mailer: git-send-email 2.47.1.windows.2
-In-Reply-To: <akuQbvgVR8vrEFvo@kernel.org>
-References: <akuQbvgVR8vrEFvo@kernel.org>
+	s=arc-20240116; t=1783394490; c=relaxed/simple;
+	bh=MsTfG6JcbfCM2twbdG81+d65qpetG18xhuYgt0QOSZI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=tlXcr68ot/4bvmluJf6SZa0mZ35MTXNJof1xIQV2wHJvNuYDpggs9mTaSBGVjHB1BHq8C0JgX58QVu2t8sCtQo+zYXEkym8KBxUJqF2BYkaemy27x8F53coDvjbDQOQv+kUAH2o1ERyX7nLCQ9Pb9h9MwV4cm06F4Inx47oZfpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AiSmZwRp; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AiSmZwRp"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2cc77a6943eso84357615ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 20:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783394488; x=1783999288; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=4DaDc3Kbo2F0+gLPnDRRq0qCXtYzK1Rw09RDMbRFeLA=;
+        b=AiSmZwRpyPBGA9KqjJYnT6BVrfgWrRalY4bApqNEipU1ODWb/PjrWQ4/XAZpanQxGu
+         jbd6Qd26OeSK6TbYxe3z7kJ8NtehdbnAbQ8Qg7WsM2NXMgMCHgnqgk2EeF19R1ITeR5q
+         nt8VjRtwwTOpQlAIB5w0AfTA2wtUl3yB1dVEXWuDhcN/UiNRen//fZfxvMfrbKXfZzqX
+         pvmK+OMqTJ9B0sRYLNFrz41uRwUsVskW3016cQtaENx+P8qyuiBwaAu27zuom1+V6+SD
+         TQWLpKg1Vd/SoGHPSpt8IIxK4GiJVH9y7TsTEAM6doiRzjlWTPdfcpj1d0/2vRlI2eyr
+         sC4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783394488; x=1783999288;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4DaDc3Kbo2F0+gLPnDRRq0qCXtYzK1Rw09RDMbRFeLA=;
+        b=HHzSkqfOlosZHW7miemsGlKcqIiXEoF9FKWS+nMPMEnMjlg4u50PRv1SkGwHe97dQD
+         E8R1xQ87Yzy+uxUtBdYyBuNGjXikX+fqwIxpArOmEZRKvSOObp3/BQToY1DZXDfmWLVu
+         ovvNwMEtW/oKhREt+bIi74yuA4Uu52CZIeRo+oUzfTK0qULXVy76Knly/bztvG3DqIlY
+         Lh8+HPsvS9q/xpB0b1PR9Gi7TDJ0YhoQTrq33exrxr98LbExFDpgJoSQBb0csUBMOZ6O
+         KI6qr4imEzPlRFAmYkD1f8zXdoP52YZ+F27fgpyJC1YXlVSGeGV80UakPK+hQbxNKE9x
+         Wjow==
+X-Forwarded-Encrypted: i=1; AHgh+RqzbEHjnXaDqbBF2ymVVR+/lcpehAunONVzMWQItmK3qvU+Vto7hqInphLajRKYwF6aHFIlkzUcWwjjZY8tEBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH1NUwXZIgv4n0vT8J5vRb0t2Pe/2DXIrqxR9600kIqU0S3tzF
+	F6Sg3yyL+iW94xVpxefr9T9zYnP2gv2M/6wSJQSbJe+2Q37wvIUsdW4p/GKn6Qe+mTnbFO7iAM+
+	df+jtLA==
+X-Received: from plq4.prod.google.com ([2002:a17:903:2f84:b0:2cc:73ae:7d4c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cec4:b0:2ca:ca48:c380
+ with SMTP id d9443c01a7336-2ccbf1ace49mr32602895ad.47.1783394487964; Mon, 06
+ Jul 2026 20:21:27 -0700 (PDT)
+Date: Mon, 6 Jul 2026 20:21:27 -0700
+In-Reply-To: <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+ <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+ <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+ <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net>
+Message-ID: <akxwt1mX6blSnkxI@google.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+From: Sean Christopherson <seanjc@google.com>
+To: Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Jim Mattson <jmattson@google.com>, mlevitsk@redhat.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The return value for a failed mmap function is MAP_FAILED.
-According to the definition of FAIL_TEST_IF FALSE,ptr must be
-determined to be distinct from MAP_FAILED
+On Tue, Jul 07, 2026, Tina Zhang wrote:
+>=20
+>=20
+> On 7/7/2026 9:32 AM, Jim Mattson wrote:
+> > On Mon, Jul 6, 2026 at 5:02=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco=
+.net> wrote:
+> >=20
+> > > I will take another look for the next version and try to handle the
+> > > remaining pieces properly, while also making sure we don't expose sta=
+le
+> > > or incorrectly synthesized decode-assist state for emulated exits.
+> >=20
+> > Naples erratum 1096 seems to imply that the instruction bytes stored
+> > in the VMCB are not necessarily the same instruction bytes that were
+> > fetched and decoded to lead to the #PF/#NPF. Hence, in the case of
+> > emulation, it might be sufficient to read the instruction bytes quite
+> > late in nested_svm_vmexit(). That would certainly simplify the
+> > plumbing.
 
-Fixes: 4926c7a52de7 ("selftest mm/mseal memory sealing")
-Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
----
- tools/testing/selftests/mm/mseal_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The plumbing doesn't seem all that complex though.
 
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index faad4833366a..277c8fda3f5e 100644
---- a/tools/testing/selftests/mm/mseal_test.c
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -482,7 +482,7 @@ static void test_seal_zero_address(void)
- 	/* use mmap to change protection. */
- 	ptr = mmap(0, size, PROT_NONE,
- 		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
--	FAIL_TEST_IF_FALSE(ptr == 0);
-+	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
- 
- 	size = get_vma_size(ptr, &prot);
- 	FAIL_TEST_IF_FALSE(size == 4 * page_size);
--- 
-2.43.0
+> Thanks for the suggestion, and for pointing me at Naples erratum 1096. I
+> wasn't aware of that erratum.
+>=20
+> My understanding is that late fetching/decoding from guest RIP is not
+> strictly equivalent to preserving the exact bytes observed by the origina=
+l
+> decoder, as the code bytes or translations could theoretically change in
+> between. But the suggested workaround for erratum 1096 also tells the
+> hypervisor to decode the instruction at the instruction pointer when
+> GuestInstrBytes cannot be used, so it seems that this is an acceptable
+> model/fallback.
+>=20
+> For KVM-synthesized/emulated #PF/#NPF nested VM-Exits there is no fresh
+> hardware GuestInstrBytes state to propagate to VMCB12. So I agree that it
+> should be simpler to avoid plumbing instruction bytes from the emulator, =
+and
+> instead fetch the bytes late when constructing the nested VM-Exit for L1.
+>=20
+> I'll try this direction first.
 
+I'd rather not, at least not as the primary way.  It's going to raise a dif=
+ferent
+set of issues, e.g. how to behave if reading guest memory fails.  That's pr=
+obably
+unavoidable, e.g. if reading the INVPCID descriptor fails, then KVM doesn't=
+ even
+have a pre-decoded instruction to work with, but it should ideally be a las=
+t
+resort.
+
+E.g. where the NULL case triggers an on-demand read of guest memory.
+
+diff --git arch/x86/kvm/svm/nested.c arch/x86/kvm/svm/nested.c
+index ba985a02208a..812af3a8d8b9 100644
+--- arch/x86/kvm/svm/nested.c
++++ arch/x86/kvm/svm/nested.c
+@@ -42,6 +42,7 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu *v=
+cpu,
+        struct vcpu_svm *svm =3D to_svm(vcpu);
+        struct vmcb *vmcb =3D svm->vmcb;
+        u64 fault_stage;
++       u8 *insn_bytes;
+=20
+        /*
+         * For hardware NPF exits, the GUEST_FAULT_STAGE bits are only
+@@ -68,7 +69,14 @@ static void nested_svm_inject_npf_exit(struct kvm_vcpu *=
+vcpu,
+                                    (fault->error_code & ~PFERR_GUEST_FAULT=
+_STAGE_MASK);
+        vmcb->control.exit_info_2 =3D fault->address;
+=20
+-       nested_svm_vmexit(svm);
++       if (from_hardware)
++               insn_bytes =3D svm->nested.vmcb02.ptr->control.insn_bytes;
++       else if (vcpu->arch.emulate_ctxt->eip =3D=3D kvm_rip_read(vcpu))
++               insn_bytes =3D vcpu->arch.emulate_ctxt->fetch.data
++       else
++               insn_bytes =3D NULL;
++
++       nested_svm_vmexit(svm, insn_bytes);
+ }
+=20
+ static u64 nested_svm_get_tdp_pdptr(struct kvm_vcpu *vcpu, int index)
