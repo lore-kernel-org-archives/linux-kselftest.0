@@ -1,49 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486E23D648A;
-	Tue,  7 Jul 2026 22:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA364D98E6;
+	Tue,  7 Jul 2026 22:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783463323; cv=none; b=XHFMsXASaPVrw8lCE5kiGohMm0xEh76q774uHXTs+eldKkL5ToQgJT0k0AwZUJgBetM9RAmiUtElKfnk+FdZf8V6mQVeHzaJSChgTdwqkjvx/Mb6iEEtilTjdvn8N0THQIF9NsnPLq5NKXKxgVRXU3+5/RqFHiq0x5SNMXiGrDQ=
+	t=1783463689; cv=none; b=jKxfgzfENX6oVuWNCvdVBsX80ZN4R2gXwIFwONe0bYF922OW0FcaxJXITAUDV+iqF8oQBItM55Ilftdh6tQv4xwR71zzLnsCIJl2yc6Z0WP1es66+Uwi65Kuct9sK3S/FxqNmGgZatg+THV2QcaPAFECHLm0Mb2967a1O5pa73E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783463323; c=relaxed/simple;
-	bh=xGDYk6xDOKByKK05UQxie3eir73pAUq12CctMIuRkOM=;
+	s=arc-20240116; t=1783463689; c=relaxed/simple;
+	bh=bFzFZIrgvScmQOfBlKGtj1Un8PzPUgnSxbixr9vJ92Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ffmOt6T9n58e7g+l84wMMzzhUZZfIYcNfQEA1xjxWSvy9haT2H9jw1FDpEDZS4EQJdrpEfZvdvH5EZta5zG/MdYiLVNYAiV8DqZP9Gm3ELKkR18NkNtIeb0VIsA/utzUjpuPvQFileCS6zi8L4TCE1Xrk2Fj6gonoNrfdxBoQ5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOBVJ4rD; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SPw8n5zkgJ/sgR6MzaSYrbzB6AANcd2WhBvsuEflKWSp9NRUR83HM3bWN71CE6BjAGtKLUCxA4vn9pB0uilCl+bAnRyZ6ojEpyTDlAArzilGGDxHNiEJXvG4l2PcPeYaar2HZE2R6rbSBFAknchefVxlkCq5/U5IYcyxkcRSh9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSwQFQOZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOBVJ4rD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC171F000E9;
-	Tue,  7 Jul 2026 22:28:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSwQFQOZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2314F1F000E9;
+	Tue,  7 Jul 2026 22:34:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783463321;
-	bh=gRwsNtR9CmtI1lg+FRZhNFP3aUE1T9mC+krBoHEi9x4=;
+	s=k20260515; t=1783463688;
+	bh=w2I3+NzokwBuBeybC2iHSFJtH/AgD6ldKaO+dRqR4Hg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FOBVJ4rD5rTTQo3ydEtA3gAO9+lIGI/CrNJ8ssAZ4DAYgwFZpMeoTFKCV+sJUEuae
-	 7VC5wJWuZ8EgPLQfZzDm3hsFwOzJ8GaZw2t+XEGov7LfPlSe+HL+8/iYeQtjJ3G5UF
-	 WDdG6dFwpxpBhr0i+IhPPtJRFSDOmz6C/LG+zOeA4im1A8BgNLOjeiYsK64Dv0QnHd
-	 cdeaWbicwd1r9Ua/g/c4bLWDvHNgWjKX2VB7e9xd4sM1fZBlXqUTlxLs67iJImtLZu
-	 zC/fXH/oT8idmoroS8l7xYg8cfuP+AtXx4KDFhWDOdm81Sg0CKjHW++PKrsa7xZhTp
-	 pjx7Fw2TwUmyQ==
-Date: Tue, 7 Jul 2026 15:28:40 -0700
-From: Oliver Upton <oupton@kernel.org>
-To: Congkai Tan <congkai@amazon.com>
-Cc: kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Haris Okanovic <harisokn@amazon.com>,
-	Geoff Blake <blakgeof@amazon.com>,
-	Stanislav Spassov <stanspas@amazon.de>, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	b=OSwQFQOZq1xAeN9omkNaS0sXXxhA0FcLXvBOgjaIayyORDy0a+3TeKukLIHg1wJjY
+	 2YNYGqVB+af4562g9m2wBneexd6/sa+q9bqCcsxY+coWgQ+wbPGg6uVoVImSOrJQOl
+	 2L/l/vFD3uwpRqb9tlyzvi8iXOtv0ipbZFvcm4QAXaTMkW7faghlt+5XRrnAIk+CVK
+	 aP+THCgciI+/RyGR4EAIdlixBr7GrrqkORw/0vCJnGTYH1Iq2v0dOiTKD+3ht4HVBK
+	 bZAlHaMzbsjhdVBZ+UtXX6gAJRdgipfBJlYeY9GXTpTbZNlLrDfdEB0Cfc7a4GeAXB
+	 LMsRriWy+THww==
+Date: Tue, 7 Jul 2026 22:34:46 +0000
+From: Yosry Ahmed <yosry@kernel.org>
+To: Tina Zhang <zhang_wei@open-hieco.net>
+Cc: Sean Christopherson <seanjc@google.com>, 
+	Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] KVM: arm64: Expose PMMIR_EL1.SLOTS to guests
-Message-ID: <ak19mPPWcupFwfuE@kernel.org>
-References: <20260702190421.420992-1-congkai@amazon.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+Message-ID: <ak1-vF3qUjeszzSC@google.com>
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,54 +44,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260702190421.420992-1-congkai@amazon.com>
+In-Reply-To: <20260629125205.52394-1-zhang_wei@open-hieco.net>
 
-Hi Congkai,
-
-Thanks for respinning.
-
-On Thu, Jul 02, 2026 at 07:04:18PM +0000, Congkai Tan wrote:
-> Today when the perf tool runs in a guest on cores with PMUv3p4, it fails
-> to parse the default metrics with "Failure to read '#slots'", since perf
-> can only read 0 from sysfs caps/slots, which is backed by PMMIR_EL1.SLOTS
-> that KVM traps as RAZ/WI.
+On Mon, Jun 29, 2026 at 08:52:03PM +0800, Tina Zhang wrote:
+> The SVM DecodeAssists feature is reported in CPUID
+> Fn8000_000A_EDX[7].  When available, hardware provides the length and bytes
+> of the intercepted instruction in the VMCB, allowing a hypervisor to consume
+> the decode information directly instead of re-decoding the instruction in
+> software on relevant VM-Exit paths.
 > 
-> Taking into account backward compatibility and heterogeneous systems, the
-> exposure of PMMIR_EL1.SLOTS is gated behind a new vCPU feature flag:
+> KVM currently does not expose DecodeAssists to nested SVM guests, even when
+> the host supports it, and does not propagate the hardware-provided
+> instruction length and bytes from VMCB02 to VMCB12 on nested VM-Exit.  This
+> leaves L1 with an incomplete virtual SVM CPUID model and prevents L1 from
+> using the same hardware-assisted decode information that KVM receives for
+> L2 exits.
 > 
-> - Patch 1 adds the new flag KVM_ARM_VCPU_PMU_V3_STRICT. When set, KVM does
->   not create a default PMU during vCPU init, and the VMM must select one
->   explicitly via KVM_ARM_VCPU_PMU_V3_SET_PMU before the first KVM_RUN.
-> - Patch 2 exposes PMMIR_EL1.SLOTS of the selected PMU under the flag, and
->   adds userspace get/set for PMMIR_EL1 so that SLOTS can be reset to 0
->   for backward compatibility.
-> - Patch 3 stops masking STALL_SLOT* in PMCEID1 under the flag.
+> The missing virtualization was observed in practice with Hyper-V as L1,
+> where the absence of DecodeAssists prevented nested SVM from being made
+> available to L2 guests.  The fix is not Hyper-V specific.  Complete nested
+> SVM virtualization of DecodeAssists by advertising the feature to L1 when
+> supported by hardware, and by copying the decode-assist fields into VMCB12
+> on nested VM-Exit.
+> 
+> Add a selftest that triggers a nested page fault from L2 and verifies that
+> L1 sees a non-zero instruction length and instruction bytes matching the
+> faulting instruction.
 
-I think the series is starting to shape up. Few more things to address:
-
- - Didn't mention it in v1, but writes to PMCR_EL0.N should be ignored
-   when V3_STRICT is set. We now have a vCPU attribute for configuring
-   event counters and the register-based thing is just broken :)
-
- - The vCPU feature flag needs a corresponding KVM_CAP so userspace can
-   detect it
-
- - In terms of patch ordering, the vCPU flag / KVM_CAP exposure should
-   come last after all the behavior changes are implemented (and
-   flag-guarded)
-
- - Move enforcement of a non-NULL arm_pmu to kvm_arm_pmu_v3_init() since
-   userspace must call KVM_ARM_VCPU_PMU_V3_INIT before KVM_RUN
-
- - Prevent the PMU event filter from being configured until a hardware
-   PMU has been selected
-
-I've addressed all of this locally and pushed to my tree [*]. Untested,
-as always :) Would you be able to give it a spin?
-
-Also, do you have VMM patches for using the new feature flag?
-
-[*]: https://git.kernel.org/pub/scm/linux/kernel/git/oupton/linux.git/log/?h=kvm-arm64/pmu-7.3
-
-Thanks,
-Oliver
+Taking a large step back from all the discussions in the other replies:
+Is there a measurable performance improvement? Not trying to say we
+shouldn't do this, but we should at least see what we're trading this
+complexity for, it's obviously not straigtforward to fully virtualize
+decode assists.
