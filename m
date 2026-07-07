@@ -1,47 +1,57 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A1623E334;
-	Tue,  7 Jul 2026 08:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5491130E828;
+	Tue,  7 Jul 2026 08:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783412161; cv=none; b=f8p3p2qz2d7pj1oOTDQakMqA+ENZ8vlTa7AgHIRCx/U0RDwYZ4DbTfpiIXZAsBRbokHWhbEUiEDKDXM1bVuuGRSmuXYx8BXzq5E3YVVC0aPlQRlOMtT4pSEfFqK8NaG4SOumXt91sKLKD5xBoAUXbeXzlIaf8JsXVBaVTMe3/KM=
+	t=1783412259; cv=none; b=kKYe7v9cWtyi0+WuAKOkODqDfX0vsPU+/0tB0LzZq1F0XJhN9DbNJKniznbZqqawFGR4zAEu8O29eW32xAoY808Be60zte1CmoOLTCiioVdlvsVj7A0htvPcls1bjG7ETgHtbHrdLraWY2tf3vH3CSEJwkCNubigS22eRynsQfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783412161; c=relaxed/simple;
-	bh=QqoJU/JG16Ze/tMMCEdTlKiakq3ltdOJBhDrntajUUU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JGEOeNIguLu5w3Rfu7DlyfJ4+fJDOxH5ZN7KleBcGZYmwTPyl8BQDkltCbH54MOjcsjfgHG42MwpE6Ep38pFJdf45SI6yU7Zmj/VGwe89K2JzK3b5z2Zry7xmm1Tlu8nRaKFeRZ1P+y9gsFbv6UL9RtlInWjXt07MKKlSWJQkuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gcQUa6OU; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1783412259; c=relaxed/simple;
+	bh=D4WUkoQaUPJo2oVQHmTUMdxUZq1ZzTk7Cf3+fZ9QUcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iy6Xiti0Vp3KiQo4f6yPg/52jBvvIoBWk86dkWnU+UpIecWLrAUHrLX1t2d5VcvGb5A9d6YZA6MLStmXvdw6Uu16zPz7xDpHRJ/7WFM1uHrnuWE8F6ifyqHr8mRwEPfx4FXJsIUeN0UAwVh1OqsZnp3cgWowlTF8dvtkeKos34c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=jt6Jcxn0; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gcQUa6OU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=ho
-	dYro4wZAm6E+qsMZuopCMoS+bPSflPCXm/NCusRIQ=; b=gcQUa6OUdmHP126iKI
-	gnIqCIYP2TqdEE59LkU6ktX2oBBHn17Wx4F9VswMxjjoGwuHY8AnsjQbpC//1EE4
-	OUxP/SVbqqrjC7OKmPYL4jKSUjo2efnE/QhWXqGItIazO65u52IElwTOw9UvHEW5
-	bJXFlTcXCw9OWh0gwY198k0SQ=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wAnL8xqtUxq1q4tIA--.53457S2;
-	Tue, 07 Jul 2026 16:14:36 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com
-Cc: bpf@vger.kernel.org,
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="jt6Jcxn0"
+Received: from hwang4-g16.bbrouter (unknown [120.238.231.45])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id F3EA93FA33;
+	Tue,  7 Jul 2026 08:17:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1783412247;
+	bh=otMAzx7L+EJebfLdNISLzbMHGsQZXuDqmd8aKwVYc/E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=jt6Jcxn0VYub3FkHe82hTT3pEN+eoES0gf7ubygT9lWMEF181m6AU4aTZ5VOpIAsb
+	 hlzltzbipxfTABlDYYnhMVVjc8q9i6g/x2vvUL1C5bAXcQdBZvWu+WwhcmrpZo9CO9
+	 4OWZiFgR34V+DM9jf8pFVkX6x7WYlrahUjiVWHmxfn5o/gq2VX+FuPZm83KChwbTIy
+	 X+VEnyoscPHPJusZgOWy91yYnU1SjXXAklFhM4w4qgbd0E5RECGtsDK3yGaLVjAlIG
+	 TnCA3sN8XINmn9yNecqF8TWP6mRBbFe/BGsHn0vWyOP7qD0XyrYtqSwnifKroGfwmB
+	 OopHLPPMj9CwnH2OucrOfJ9t+VvYZHgYBtoy0W4nDS78tbJRz5kL23VxFOjqb3jDCh
+	 B76U77e8o59DTHMUx27GfTzP41f2jKLzp6phPaChoCFxGS+G6x0ItDd0fol0EWvSMz
+	 OwkU5I8/8vzaobaoGsd1q3zhddlhqx71EEfDh+MqmAYqAp1oCsCWx8DNqKPfA672YS
+	 AMkTsPOd6ZE4Fw/MgoThW8FBV0K2p5KJH7jUFRaoq0H+QQVuX9Mocb/dku3ieT4j2e
+	 6gjZs7pJmKFkJf9ZPOprLOPyrYcaC1Nas5wKlYe0CmJEI0Nx0tEljUQ+ETc+EetIKJ
+	 9DqZNvQxehSS4bkYnfxhYF+A=
+From: Hui Wang <hui.wang@canonical.com>
+To: mathieu.desnoyers@efficios.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	paulmck@kernel.org,
+	boqun@kernel.org,
+	zhouquan@iscas.ac.cn,
+	ajones@ventanamicro.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Fix memory leak in msg_alloc_iov
-Date: Tue,  7 Jul 2026 16:14:34 +0800
-Message-Id: <20260707081434.539327-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	linux-riscv@lists.infradead.org
+Cc: stable@vger.kernel.org,
+	hui.wang@canonical.com
+Subject: [PATCH] selftests/rseq: Fix a buliding error for riscv arch
+Date: Tue,  7 Jul 2026 16:17:20 +0800
+Message-ID: <20260707081720.36510-1-hui.wang@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,39 +59,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnL8xqtUxq1q4tIA--.53457S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XF45Gw4UCr17tr4rZr43ZFb_yoWDZFg_Wr
-	40qwn7C3yqyF95Gw18Wr45Crs5Kan3Wr47JrZxXFy3Kr12qa15JFsF9rnYvay5WrZ8CryS
-	yF9YgryxtF15CjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8e6wtUUUUU==
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8Qw2rmpMtWzODQAA3Z
 
-From: Feng Yang <yangfeng@kylinos.cn>
+RISC-V rseq selftests include asm/fence.h from tools/arch/riscv,
+but the rseq Makefile only adds tools/include in the CFLAGS, this
+results in the building failure both for native and cross build:
 
-In the msg_alloc_iov function, the iov pointer is only assigned to
-msg->msg_iov after all memory allocations complete successfully.
-Therefore, when a calloc failure triggers the unwind_iov cleanup branch,
-we should use the local variable iov instead of msg->msg_iov.
+    In file included from rseq.h:131,
+                     from rseq.c:37:
+    rseq-riscv.h:11:10: fatal error: asm/fence.h: No such file or directory
 
-Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+To fix it, add the matching tools/arch/$(ARCH)/include path in the
+CFLAGS and derive ARCH from SUBARCH for standalone native builds where
+ARCH is not set.
+
+Fixes: c92786e179e0 ("KVM: riscv: selftests: Use the existing RISCV_FENCE macro in `rseq-riscv.h`")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
 ---
- tools/testing/selftests/bpf/test_sockmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/rseq/Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 3e6be455d158..aaf2050e8845 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -435,7 +435,7 @@ static int msg_alloc_iov(struct msghdr *msg,
- 	return 0;
- unwind_iov:
- 	for (i--; i >= 0 ; i--)
--		free(msg->msg_iov[i].iov_base);
-+		free(iov[i].iov_base);
- 	free(iov);
- 	return -ENOMEM;
- }
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index 50d69e22ee7a..aba6317f6cb8 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -5,9 +5,13 @@ CLANG_FLAGS += -no-integrated-as
+ endif
+ 
+ top_srcdir = ../../../..
++include $(top_srcdir)/scripts/subarch.include
++ARCH ?= $(SUBARCH)
++LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
+ 
+ CFLAGS += -O2 -Wall -g -I./ $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=./ \
+-	  $(CLANG_FLAGS) -I$(top_srcdir)/tools/include
++	  $(CLANG_FLAGS) -I$(top_srcdir)/tools/include \
++	  -I$(LINUX_TOOL_ARCH_INCLUDE)
+ LDLIBS += -lpthread -ldl
+ 
+ # Own dependencies because we only want to build against 1st prerequisite, but
 -- 
 2.43.0
 
