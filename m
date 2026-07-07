@@ -1,116 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FDC23BD1D;
-	Tue,  7 Jul 2026 09:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1E33BB135;
+	Tue,  7 Jul 2026 09:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783417248; cv=none; b=SsFPUhuyIhXXXRMjR+Qtq0m4lItGvs9j9go376fcorEPD4dj1zccHdgA8X3UhSOOOyVqAcHprZLuxQ1BNbKbHgGintgvyEuzcpe2ELeXY0cjuezgwFUKmcZEiaAktNg0a959R1pxSUXPhQWeNFT3/HGpt2mH5Hoqs0Fq4pxvXzU=
+	t=1783417298; cv=none; b=JnLcDyxJ2ms8aZ9Tp89uSvEmUajhEp+upwqEp8paFwUnXQugAY3kG2HLjsgK5t9ZWtDjBYR8INPCKPPXBbR5VeIDYVEAdRF9bUYDhUKcr8cGU1IFmFU3W9Yu03NIk+QGACnpMZB87MtQTwHTzAH18PQW0CIXHNNDqnHGIM+iLp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783417248; c=relaxed/simple;
-	bh=2SvJG9DL3UqCvuRg7Vo6qhQ4H7IzR1naPKn5y4+0hpI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UZg3avxRiUeNs4QYADgLutU0pUM6Z3xULRodJ6oHA+ds7L6M6Ne5QN89ut8aT6WVDfnkmuLVafVkBcpfOwRjXwMwmO6DAdR93+IH8Akdigt/4RkPGM8VC9CD9Qjf+G4mmgPMNwbUFGQGfuY86KaN/uzpEoLRloLQXSMRhlzE1qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maIQV6fr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783417298; c=relaxed/simple;
+	bh=C2QbuCacjTPszwp8554QdsIjQ5yl4pwtYb4k2JRAQzY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W/TyKib9JT32zF+c7lr+Hb4NyHcwXKpCc7sqlKUcl32LnMxmACn0he2Sx81nC8autuQzjh2ADqu9iT1xuAPlEqid1tuQW/yA+7f9m3yig51+4Vrt7wNQA7fP8iFldmveLowgGKdA41zgddjyvOTI65lsvEANWMHMSwV2WTbgxas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfUUXnPj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maIQV6fr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8761F000E9;
-	Tue,  7 Jul 2026 09:40:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfUUXnPj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0054E1F000E9;
+	Tue,  7 Jul 2026 09:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783417247;
-	bh=6uJPozj/uhbrq91wleQ/hPHYt4I/QFVwHZxnDm65VnU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=maIQV6frxWzq57q2+mzWiIBsx546dKVfAEfuRxFY3qTAYTBdavS1NcqcIlgKNF7fl
-	 DPhrbrl6/3XvFUDXQ+qQd9yDqZYra3fHxiIVJdd6jKJl5J8E8YPSsypeZitq0lu+Ni
-	 jEDtfFnua+72m+Pena7SLoubtroRQFPrX/4UQsyaOEPjopE7RcVi8BbfTqN0SBmApH
-	 hqog+vLCxpLf1DsQA2lAvAolJtd7L2WHCEh64aV75WgOzVb0p0AQ33FO0W4qE9PBYm
-	 fvf8K9SFL9LpHZ6AEpaQfqIzpIv6ccJHLEyfux4ZJ3DXSDuSSGcbKccvtZJnFI6Ykd
-	 8yB3eclpGVDZQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0CB03925473;
-	Tue,  7 Jul 2026 09:40:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1783417297;
+	bh=edq9/jN03tElaw6k+IpT0Yftpb/niEsz9qEsQVfwHiM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=QfUUXnPj15wViNjXPs9pgLJxKLcvzihhyeuHVy4vGQCrz2E0tXuQaFrhHxHojpPnY
+	 VochgGMZmL24b+nFmBaH7AlT+eqcZc67eWDCE/mWMI8b9o75cyUarVZeOGsGq9Wx32
+	 SA5MXJYpcaHdep/0UVXHAU/YkGhArhBHAuCLWGEMO82dfHUmOdTzfUIvsr+vlE/lKj
+	 bsBgRetjbjUFLoO9wW1SouScNkN4w53t+4BicQvI2GUe/YQfmmpXLOPjQEGRhVYZFf
+	 wSCeq0FZFUQiX32OXwx2OnBXymuO8MVhf0yM8is5OEnM6Gw5jwX4q0cA/82XZKZdfw
+	 eCC5ZlDxjZcEw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wh2J4-00000002KzE-30Of;
+	Tue, 07 Jul 2026 09:41:34 +0000
+Date: Tue, 07 Jul 2026 10:41:34 +0100
+Message-ID: <868q7np25t.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oupton@kernel.org>
+Cc: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	devel@daynix.com,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 0/7] KVM: arm64: PMU: Use multiple host PMUs
+In-Reply-To: <aky0abet4NfzK4z8@kernel.org>
+References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+	<akvzxDwZbj_sZ4pI@kernel.org>
+	<86bjcjp6x1.wl-maz@kernel.org>
+	<aky0abet4NfzK4z8@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next V10 00/14] devlink and mlx5: Support
- cross-function
- rate scheduling
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178341722764.1458887.13873598911208666533.git-patchwork-notify@kernel.org>
-Date: Tue, 07 Jul 2026 09:40:27 +0000
-References: <20260701073254.754518-1-tariqt@nvidia.com>
-In-Reply-To: <20260701073254.754518-1-tariqt@nvidia.com>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- ajayachandra@nvidia.com, bobbyeshleman@meta.com, cjubran@nvidia.com,
- cratiu@nvidia.com, daniel@iogearbox.net, danielj@nvidia.com,
- daniel.zahka@gmail.com, dw@davidwei.uk, donald.hunter@gmail.com,
- dtatulea@nvidia.com, jiri@nvidia.com, jiri@resnulli.us, joe@dama.to,
- corbet@lwn.net, kees@kernel.org, leon@kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, mbloch@nvidia.com, moshe@nvidia.com,
- ohartoov@nvidia.com, parav@nvidia.com, petrm@nvidia.com,
- rkannoth@marvell.com, saeedm@nvidia.com, shshitrit@nvidia.com,
- shayd@nvidia.com, shuah@kernel.org, skhan@linuxfoundation.org,
- horms@kernel.org, sdf@fomichev.me, willemb@google.com, gal@nvidia.com
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@kernel.org, odaki@rsg.ci.i.u-tokyo.ac.jp, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, kees@kernel.org, gustavoars@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, skhan@linuxfoundation.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Wed, 1 Jul 2026 10:32:40 +0300 you wrote:
-> Hi,
+On Tue, 07 Jul 2026 09:10:17 +0100,
+Oliver Upton <oupton@kernel.org> wrote:
 > 
-> This series by Cosmin adds support for cross-function rate scheduling in
-> devlink and mlx5.
-> See detailed explanation by Cosmin below [0].
+> On Tue, Jul 07, 2026 at 08:58:50AM +0100, Marc Zyngier wrote:
+> > On Mon, 06 Jul 2026 19:28:20 +0100,
+> > Oliver Upton <oupton@kernel.org> wrote:
+> > > 
+> > > On Mon, Jul 06, 2026 at 07:03:23PM +0900, Akihiko Odaki wrote:
+> > > > Akihiko Odaki (7):
+> > > >       KVM: arm64: Disallow vPMU when pPMUs do not cover all CPUs
+> > > >       KVM: arm64: PMU: Protect the list of PMUs with RCU
+> > > >       KVM: arm64: PMU: Pass the pPMU to kvm_map_pmu_event()
+> > > >       KVM: arm64: PMU: Pass the target CPU to kvm_pmu_probe_armpmu()
+> > > >       KVM: arm64: PMU: Implement fixed-counters-only emulation
+> > > >       KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+> > > >       KVM: arm64: selftests: Test PMU_V3_FIXED_COUNTERS_ONLY
+> > > 
+> > > Thanks for respinning the series, I left some comments. I'd really like
+> > > to get this feature picked up, hope you have cycles to work on it soon.
+> > > 
+> > > FWIW, we're considering adding a new vCPU feature flag to deprecate all
+> > > the ugliness of the old PMUv3 UAPI. I'm tempted to say that the
+> > > FIXED_COUNTERS_ONLY feature is conditioned on the new feature flag...
+> > 
+> > It'd be good to have a strawman proposal on the list if we are going
+> > to change add a new API, specially if this is likely to gate new code.
+> > 
 > 
-> Regards,
-> Tariq
-> 
-> [...]
+> Patch 1 [*] of the series I linked does exactly this, no? Needs some
 
-Here is the summary with links:
-  - [net-next,V10,01/14] devlink: Update nested instance locking comment
-    https://git.kernel.org/netdev/net-next/c/3bf4c5970ca8
-  - [net-next,V10,02/14] devlink: Add a helper for getting a nested-in instance
-    https://git.kernel.org/netdev/net-next/c/9f2d908cc34e
-  - [net-next,V10,03/14] devlink: Migrate from info->user_ptr to info->ctx
-    https://git.kernel.org/netdev/net-next/c/e48abacd6e83
-  - [net-next,V10,04/14] devlink: Decouple rate storage from associated devlink object
-    https://git.kernel.org/netdev/net-next/c/db078bc2b031
-  - [net-next,V10,05/14] devlink: Add parent dev to devlink API
-    https://git.kernel.org/netdev/net-next/c/b5f90fd4580c
-  - [net-next,V10,06/14] devlink: Allow parent dev for rate-set and rate-new
-    https://git.kernel.org/netdev/net-next/c/58132b6fc4a5
-  - [net-next,V10,07/14] devlink: Allow rate node parents from other devlinks
-    https://git.kernel.org/netdev/net-next/c/6bbd1bce3099
-  - [net-next,V10,08/14] net/mlx5: qos: Use mlx5_lag_query_bond_speed to query LAG speed
-    https://git.kernel.org/netdev/net-next/c/f8128b13df66
-  - [net-next,V10,09/14] net/mlx5: qos: Refactor vport QoS cleanup
-    https://git.kernel.org/netdev/net-next/c/89a0881183d1
-  - [net-next,V10,10/14] net/mlx5: qos: Model the root node in the scheduling hierarchy
-    https://git.kernel.org/netdev/net-next/c/22d32def3ced
-  - [net-next,V10,11/14] net/mlx5: qos: Remove qos domains and use shd
-    https://git.kernel.org/netdev/net-next/c/450ed6b182de
-  - [net-next,V10,12/14] net/mlx5: qos: Support cross-device tx scheduling
-    https://git.kernel.org/netdev/net-next/c/2bc38232047c
-  - [net-next,V10,13/14] selftests: drv-net: Add test for cross-esw rate scheduling
-    https://git.kernel.org/netdev/net-next/c/b2aa7390967e
-  - [net-next,V10,14/14] net/mlx5: Document devlink rates
-    https://git.kernel.org/netdev/net-next/c/403ac520e893
+Ah, I overlooked that, apologies.
 
-You are awesome, thank you!
+> attention like a KVM_CAP to make the bit discoverable by the VMM but
+> gets the general idea across.
+
+Not sure that's the ideal approach, specially in the light of this
+"multiple PMU" series. This "strict" API mandates the selection of a
+PMU (singular), while this stuff is the exact opposite (grab all the
+possible PMUs).
+
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.
