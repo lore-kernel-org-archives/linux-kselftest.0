@@ -1,144 +1,96 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB1A376A0B;
-	Tue,  7 Jul 2026 04:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CB937F75A
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 05:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783398309; cv=none; b=BIdu7Wfo9QzDbE8WjLqB8ArB49MZY2qogpZD16IzOzzi2jRRFozpVomGd94UpztZgHreJkvaT9C9V0c47q7VgQ/g4yBpxFYLWhnlNExdXInYrUbBBSpaRdTqNVCiYTV6q11Dp//0/+Nj/NBvsX/OptknGC0L2KxB9KFPfB9qzUQ=
+	t=1783401043; cv=none; b=qN+NxGyVRHP2KFotwguBtzU/W0UqCz6/PQEBV5Go0VHFzK7KC+/kyjL6RLlKUvtfZuijX8pLRRw+t5Qb3vnPqDwE97fXnppJfonIXlyk8jSoytg5Xoc3jt1H6ZVscRSxyo8JiikhY+Ip1TEaqoi4YxzXs4dlmGUU0bkeLY9Zb1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783398309; c=relaxed/simple;
-	bh=opHTuuL9qw5T8tWLSEXG0Rt1luagGrS4UY1zmwZHa6k=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NwHoRgNreO7OFmIs+TFlt9vi2ji15Bq5HNZhrX95astN+EHJHVQHi5ZcvbXUR3rBq3Q7Aae4+YmyssgeHJS95dKsK6lm4Qqb3LrD+8Oipb4QAFzNmMgRufQoE5oQu4GRwIbpisNziWpGb0ZuBRCqtDXlXMG+fwxXexhLExYZLow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=toXSCDNN; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1783401043; c=relaxed/simple;
+	bh=09pBjauv0838HDn3fbf/w3Lov5kSiWIMIHEO6sJqUyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b2nxaM4HC/0r7uOKUD3KM3zfqj/VJxIj86u1XM6bMJthMSbpl3GJKWE73U6j86eWOGNpifCjXsuYUmi5DNb47tdebnouQl0wl4faoJh4PNoVS52TROApszCTlpcYQTXTE3ebbRBKnFJrxtJqbKx9O0HSJsgzP+xSbO6x4zexio0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gxz9G32z; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="toXSCDNN"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wgxMa-00DUhX-Q1; Tue, 07 Jul 2026 06:24:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=VEDYRANxd2n4E7p/Uqpqw4YEwTx+raQSJRg3dXH1x+U=
-	; b=toXSCDNNz9MfJeIbpiWA0UzebKuDxG6j9ppanpNhNsEqgCZ+XMZ3NFXtszEoNik73B3kv54DB
-	RN6tDStprnMIPPpYSBOWxB7EJCZp0DjXyMPOtn3a+gxb84ZGBYtSq3OoU95LWZb+b9MtQT3+3V8fE
-	y6u0DcRa0T2jA5wNsfRlAXi9HGXhH5/gg54hP5zqMGLbjlZDD6CGS6p3o4C0+L3fVqQc5Zy+nyNaf
-	lu3Tj6fsn/pXA7CwRv2YQh7+Wc5rwNSypTyziOvSQZh9ORTcYTPkq4mYR9Y9DUwdWi6kNu3n58/EM
-	D/WJ+XxuwHth2bVEY7jOOui4CpfSO0fjAg8A2Q==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wgxMZ-0004lH-Bi; Tue, 07 Jul 2026 06:24:51 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wgxMO-00Ctdi-HG;
-	Tue, 07 Jul 2026 06:24:40 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf v4 0/4] bpf, sockmap: Fix sockmap leaking UDP socks
-Date: Tue, 07 Jul 2026 06:23:55 +0200
-Message-Id: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gxz9G32z"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3817f800c8bso2762846a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 22:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1783401042; x=1784005842; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0rCviGYAxqKCjjniGYaw42oP7QrFMhf2K89fW3sESE4=;
+        b=gxz9G32z6Fuha7706aYmJCCdJ9F+c/0ekkZdL9PRSKbR1dKMC9ADBnlTVqQ60bJIKh
+         LSazmAKQfglXZ3irnCQoKizVXbNzYNAsxbqN1wAw976mHdyjzwsOLE/CMcGycNc7zc/B
+         4VKGr4cEIT6WEN7zLXgj2YfRwqhiltxP8BevM+s+glFXkQ84uD4u0Qd9XQP7OGBPgFyX
+         R1DcW0/Mg1itjUh0rkJSYL3NiEt82Cgzevhmwp5LI3VjJ7tDjSqeYOblfBMC/uWw7h9N
+         Ns7Ge25zso7RHDnTXRCZ7Kf3wVmPl2Z+3JKWLJqshhXAi8Rk6qflg1uQ5CWrF4UD72bH
+         1SsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783401042; x=1784005842;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0rCviGYAxqKCjjniGYaw42oP7QrFMhf2K89fW3sESE4=;
+        b=Fhh1RWjv6VZuATR7hwrtCpt4WcWulwGlia3+Byu9WNV/jOpyUcnR+jW2mguUB0V/nm
+         /aHAR792Gc9RTnYSGnnSR5k2SI0axRMpYCZwF+F+T9ik72zmCE1nywdLGzJnh99jHfV3
+         p8KXqAOzirVw0Sh4LcLPTPzCPFg1BMGtfBxWJQl4ym4qucQZdvkA5qmPsbtuf/PgV1A3
+         L0kWTyofwAJPjFWxf29uh/sXG/qwkSL84e5PxYdep8bAgNcQJ5SMVGWE/kTkEE9/1bcR
+         zMyxgpeD+hxkhB0U8Ob9ge14T98BBPPbts65dq1X92v567FrACa9EezP6bDpkhIdGVza
+         HO2A==
+X-Forwarded-Encrypted: i=1; AHgh+Rpav7jLdyG8xBZmIeihxqyHNJnau7umhjQvhBH/Ax+7Zq54jj12LZwV2nd2vMGtQqESUFwkIYkBfqvdSi+d9QE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrxaD9JlReU3ASY00UszC1UPvY7NA+1BL/c/Dgb7sjTj2trmqz
+	35wZ6hjT1ye4xC73D8ewla8IUwItqdxiXJjmbkwuTN9+3DvoVRCFMYgMeNb1Wl9lU20=
+X-Gm-Gg: AfdE7clti3sOmrM9TgefC09hVLCJ9CQ2JL37wsNFz+ybBY9CBk4BeF7EY1l5GHQHmDA
+	iBhB6MPUo2VpPKFgU9gaflpT7JmnyDY9I4m9Ne7fvulSZGx4ukSyzpwvVfIGIouClvGvvRtyKeQ
+	tW9YK0ZxyNMkj2xEvvYKQ7EswvQNx3VDQjh9661Bmy/5FAV2OuyiNagNyOEmGuQ/ZTAXUgHSb12
+	6D5hX/7XEnc9bs5Cc0pcKEmQuSMM0HGabEPRWv8q7TJA1T6n9KtHcjTaAVb8gjCmN+nm0dqFCfg
+	UiL9NXGiT4JiegipetY/AwBDZ73rUaRK0vBqAKFfsBsHtbY2OrysMbkI96EtGjm+7ARNphudkzl
+	07+kN+DPu4S8O/bx68heItJnCL/tO6X0S2cypSTO1bwY24SwamEl+UOxtjlVMXmqHwWhsxmgbDG
+	JA4DMxQdb4H1Bi
+X-Received: by 2002:a17:90b:5403:b0:380:9504:9780 with SMTP id 98e67ed59e1d1-38758062363mr3539509a91.29.1783401041657;
+        Mon, 06 Jul 2026 22:10:41 -0700 (PDT)
+Received: from localhost ([122.172.82.94])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311747f7293sm3810292eec.3.2026.07.06.22.10.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 22:10:40 -0700 (PDT)
+Date: Tue, 7 Jul 2026 10:40:37 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Jinseok Kim <always.starving0@gmail.com>
+Cc: rafael@kernel.org, shuah@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/cpufreq: Remove unused local variables
+ from switch_show_governor()
+Message-ID: <oz7lhcfan7rpy5ixlqlaea7rqjhagepqqzpssueai4qcwe357y@ilky5ez6eyd4>
+References: <20260706143857.3306-1-always.starving0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNQQ6DIBAF0KsY1qUBRMGueo+mC8WhUlsxoMbGe
- PeiLmwX7mYmf96fkAdnwKNLNCEHg/HGNmHhpwipKm8egE0ZdsQIS0lKBfZW1e+8xS9r677FfRl
- GyGtcKA6JSrikpUDhu3WgzbjKN1S0Gt23o++LJ6huMZdYZXxn3WftH+ga3qpYfFg1UEwwSSThO
- ouJBH51hR3Pyq4dA/tV0mOFBUWAAEaoyhKa/yvxrgjCjpU4KFrLEqSQjKdyV+Z5/gLSI6/LXwE
- AAA==
-X-Change-ID: 20260617-sockmap-lookup-udp-leak-bc4e5c5481d7
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- Jiayuan Chen <jiayuan.chen@linux.dev>, Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, Cong Wang <cong.wang@bytedance.com>
-Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260706143857.3306-1-always.starving0@gmail.com>
 
-Fix for UDP sockets getting leaked during sockmap lookup/release.
-Accompanied by selftests updates.
+On 06-07-26, 23:38, Jinseok Kim wrote:
+> switch_show_governor() assigns the current governor and frequency
+> to local variables before switching governors.
+> 
+> However, these variables are never referenced afterwards. The function
+> does not restore the previous governor or use the saved frequency, as
+> backup_governor() and restore_governor() already handle state preservation
+> elsewhere.
+> 
+> Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
+> ---
+>  tools/testing/selftests/cpufreq/governor.sh | 5 -----
+>  1 file changed, 5 deletions(-)
 
-Two Sashiko's concerns to be addressed separately:
-https://lore.kernel.org/bpf/20260626205814.BAC3C1F000E9@smtp.kernel.org/
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
-Changes in v4:
-- selftest: drop redundant `if (err)` [Sashiko]
-- Link to v3: https://patch.msgid.link/20260702-sockmap-lookup-udp-leak-v3-0-ff8de8782468@rbox.co
-
-Changes in v3:
-- selftest: better error handling, ASSERT_*() macros [Sashiko]
-- selftest: fix grammar, reorder patches [Kuniyuki]
-- Link to v2: https://patch.msgid.link/20260626-sockmap-lookup-udp-leak-v2-0-7e7e201c951a@rbox.co
-
-Changes in v2:
-- selftest: drop the original, adapt old tests
-- fix: change approach to rejecting unbound UDP [Kuniyuki]
-- Link to v1: https://patch.msgid.link/20260623-sockmap-lookup-udp-leak-v1-0-05804f9308e4@rbox.co
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Shuah Khan <shuah@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: Eric Dumazet <edumazet@google.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Willem de Bruijn <willemb@google.com>
-To: "David S. Miller" <davem@davemloft.net>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Simon Horman <horms@kernel.org>
-To: Cong Wang <cong.wang@bytedance.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-
----
-Michal Luczaj (4):
-      selftests/bpf: Ensure UDP sockets are bound
-      bpf, sockmap: Reject unhashed UDP sockets on sockmap update
-      selftests/bpf: Adapt sockmap update error handling
-      selftests/bpf: Fail unbound UDP on sockmap update
-
- net/core/sock_map.c                                 |  2 ++
- .../selftests/bpf/prog_tests/sockmap_basic.c        |  6 +++---
- .../selftests/bpf/prog_tests/sockmap_listen.c       | 21 +++++++++++----------
- tools/testing/selftests/bpf/test_maps.c             | 13 ++++++-------
- 4 files changed, 22 insertions(+), 20 deletions(-)
----
-base-commit: 17566290dc802b03a8127729b19c5962d63a7947
-change-id: 20260617-sockmap-lookup-udp-leak-bc4e5c5481d7
-
-Best regards,
---  
-Michal Luczaj <mhal@rbox.co>
-
+-- 
+viresh
