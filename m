@@ -1,243 +1,154 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F80B672
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 12:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF25E40D560
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 12:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783428775; cv=none; b=G9snDVzW1Kr7qVepylgBTX7WLTkqFaYUe2vTrIazq4DWcff1zWEcvucuxn154HE9Y+ncxE0/Y1jqN2X3uCPSR4iIS2+YANvb34iDJMoaHYP8jlskk+y+FCggwzhVHwctTUKPH/x28nsLUkM5XDduALmWQIxnm9JUDGQV7mBhd8A=
+	t=1783429129; cv=none; b=bXEX0TJ2P8+hrivG/WMcDPv7byyYuVuZa/JZCRQBtjqGf+UHY6Q2c96oK9DAP/wAdmf723sTeDQr3ItI+LeEzBT29T1SExOEGbR9vkAPwzqfB6+xiTxnSlEaTqsDswZH/rFyKmkwOk5hrqG6GfU3vx9BZdKb7/k+CBzzUOUhWHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783428775; c=relaxed/simple;
-	bh=Xb+YqBjRz0qD+o6CKIOqq56fPsxW6/yG2jq8gj08s6w=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pD5d4zy6PEKDTL8gFmNinPOntB+bZdfCQBEW2h0PxhlF3bVawftGb34FyWdJQT0BSM11BJcPFSOZV8cihkJbHcH1/4mooZolvIHHKzDD03kpsMGjAEs28Z3uK8IckJtADGYpqYHBbAU7/J1dn+LkjnUVSELDPcOYirZHAAc2Ms0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=R81RxZKK reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1783429129; c=relaxed/simple;
+	bh=hWtm8ZM2aIA2ZT1KJL0dTdHDIf+NYjTE56/Vi9ewZDg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pGEtRqbGam68sW5l3vx2JB2FVvCLrsPZ760R0HSoVFpyj2FJ4LW2TkepFNWDPQZ3c1uaM09uOz2aWkLbTX2GYY65ZWt9Vi6nqdWow8bxVqzZ1+8iul+7SXaQGcKUiEPY9azoMiRvZjJuqnFab1fDEwUzfVgVlEzHxZ9B2iuud0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DX12F3De; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=YAQczb83; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="R81RxZKK"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 667Cqolx003077
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 7 Jul 2026 21:52:50 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=Q8mzB5h+eiRPcyM+Q6UnMUdYQq5QX0PPqK6QKz/gjn8=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1783428770; v=1;
-        b=R81RxZKKr830m5okZVbuAUx4R8H9TjeZgWqeLdmsDWICaaofU7CAqfRjVh3fvZD3
-         mrliymgWKokZgwSB89BSujTeGSgjgItUFlZ9M/0gs0AnaVlRp91/oo2sR+MHyrRE
-         u/iC4N79tmrHs+w/SIt3Sqt8TuyTZQpZf0Mkvwea9OXeOiS6J2KTyJE2gN2hjwRU
-         G5EVKOY9d3cqJ2LUpgO0t9O8tlPEaetmyhzQxG/P8NrievxGEtr5Nqjr1/75WN2J
-         kc4fCJhY3PMJKabOSTXG+qkwTxV6xFS6PmaWS1iBzxNRPqn7Wj8u5ZNaOoX/+aDE
-         xixulSsKGWtekmOPgcjeWg==
-Message-ID: <5e66748a-bfda-41a9-8614-88cbf2fe1f09@rsg.ci.i.u-tokyo.ac.jp>
-Date: Tue, 7 Jul 2026 21:52:49 +0900
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DX12F3De";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="YAQczb83"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667C9NQx3740993
+	for <linux-kselftest@vger.kernel.org>; Tue, 7 Jul 2026 12:58:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=07HWQhr0mW5AKge6itfDXP0o6z4eCVE5Fz7
+	ySaPNK+A=; b=DX12F3DeAwO+uo7rfH9oy/SRxcPIO6ddg6c8OO1d+2z9KG6Y0Jt
+	OfCx8vQ5HavN4oVCoCNygsCZPI2ZYI9thuXK7s6WLwiQZ8buuWs8CDwaP/6VwEz5
+	d3XLk/n901rtSw5tOF0hNLxd8z4+uBXaVvbHf7db790+lEZ3u4QlsPLe5NiEtUKf
+	HjPeDbK/9qsLEULYBl9U4O85856tI4tD5Rochhu5UDFtImO5aYd6FqhEKkUidMY+
+	32rxF2P4vPsbwEKchJ7Hl3qHooBWvUBhgAqJR2oDA7VprL7z3IZm+HIFg97+Hn6w
+	zFx/DLt0juu+WhiujUPafnvcCHTC7UqcoyA==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4f8v9a9hjf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 12:58:46 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-51c12e43b98so51469031cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 05:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1783429126; x=1784033926; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=07HWQhr0mW5AKge6itfDXP0o6z4eCVE5Fz7ySaPNK+A=;
+        b=YAQczb83wsw8szNYa4aY/2r/AwJ2ihOKBDreehlKuGZDVIWKXXG+u7bPZWEtgyaskS
+         QlHRnL/VoSlLZCPhkR/vPgJT1gOzGtG41biCeGjK6s+DkJPapJMJsA+Hs3RzPXEzCJ7D
+         FqbVikZriCYXdK0FeDOjSSaERyG8nZdbn87mJhfaGvOAl5271fEwFGsjBePX7iQJK0It
+         wwAG77Eo/QcpuQ1ZKV+ngg9c2wrpU2ZZRzemUazEyB9GJI4TbQJk6kARG8zkEKmp6HhX
+         PUMYGabKdpe7nDQNeIAhX8uMiiUKgh7brG5VgHs0lKyS+qGJFSHajtlVnKs2sJq+uEPf
+         XqiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783429126; x=1784033926;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07HWQhr0mW5AKge6itfDXP0o6z4eCVE5Fz7ySaPNK+A=;
+        b=FmbSIOIJkcKFdeGURlLHNN/k2mRYs1aI+QrHFvkBct1fvHk3Rd36Z2IAxbwkD1aK6Z
+         AXxrQAozjKXtQTBvPxO8KGS+38HGyrPOysg2hMcmfCUaaYgOY8H0YzCz5eg0ZkI4le4x
+         fF7wVn70U8TsoYM1m4QrBIxnRriZHERzLFH1IshDjOcDD8wPUMQUGSGlxHaESsanGQFa
+         nZFDRSqqey5lfh760FtCi9DOLi9i6Qx5YJdEcNqH5o6Bry4q57vsqA8Bx9utoGPAjmUF
+         EQgO8hbcTCVqWDN2lSXk2ueeea8jJPLA0xweYf6Hdy0J7HemtlIqM58rtGY2gH538sLF
+         9iAQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rowe8G19sKxPmQyEL1woa3bhMwDpwehjRNLrlJqwGhMEikms6lxi4W5WQbD6nI/FP6Kz9jrwYfITlXSbXlrgPU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTPEx15D4ewDvP7vh8iqyDggOjtcCxfiIKrNnKy4T44lQMxtiz
+	qVu2hK7kUB7ETs/s+Y1rrH1aZmVHS4tV+J1db9H8gtJjQl5cz5j1v6eAaekh87S+hUnXN3koiIe
+	pmS+iT01YuzvbMzdHxoMsH9P2yoga0W6RhC9jS0q6TFKmwMbS1EVA9UdwMnVNmpmVY5kpTF8=
+X-Gm-Gg: AfdE7cn1Po4eHU1FwQPosZME7Rrza6gbAlF3T6TgLHn6iArttE99Emo2dSWvyHQo/ix
+	Wq7HY2XSnQBLVJOh7kESyjyzt7odSe73bP8s5Yk+wx1E8EeYbD94wvBcVCDV6AVWthOGMJDQaJ2
+	lHgmkVMk0Il4wEviAvkSii6WUyoVMew3ZX022YqrUKZrM1+IQAGF9DKj2kTyzw0iSrQPoiQD88+
+	bhC6Y8IvSptv/mB2kU+Ue12IMK+CFDDzLwqra796lRpzjW85Lcp5MlDhrAyn6J82nPijBOZRkuW
+	1eFxPZoaOGetGX932HoR3TFiHdfMPP//73B9/4EmetU3QdI61R3Te+X5VEsDu51rsCih3bWr3ZK
+	oHWovdtUsp/lH/BitemP3oYSIQxlBmMyBALK80qw=
+X-Received: by 2002:ac8:7e88:0:b0:51c:4dc:287b with SMTP id d75a77b69052e-51c7479f5e1mr54015091cf.7.1783429126381;
+        Tue, 07 Jul 2026 05:58:46 -0700 (PDT)
+X-Received: by 2002:ac8:7e88:0:b0:51c:4dc:287b with SMTP id d75a77b69052e-51c7479f5e1mr54014531cf.7.1783429125444;
+        Tue, 07 Jul 2026 05:58:45 -0700 (PDT)
+Received: from brgl-qcom.home ([2a01:cb1d:dc:7e00:47a8:72a4:c756:37f3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47a9e4d83bdsm34539417f8f.13.2026.07.07.05.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 05:58:44 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+To: Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>,
+        Albert Esteve <aesteve@redhat.com>, Kees Cook <kees@kernel.org>,
+        Alessandro Carminati <acarmina@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        brgl@kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] bug: fix warning suppressions with kunit built as module
+Date: Tue,  7 Jul 2026 14:58:37 +0200
+Message-ID: <20260707125837.57256-1-bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 5/7] KVM: arm64: PMU: Implement fixed-counters-only
- emulation
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <20260706-hybrid-v8-5-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <akvyvclUQ2b2YHiU@kernel.org>
- <cb5d5f13-a1a9-47dd-a717-5533a8b32b20@rsg.ci.i.u-tokyo.ac.jp>
-Content-Language: en-US
-In-Reply-To: <cb5d5f13-a1a9-47dd-a717-5533a8b32b20@rsg.ci.i.u-tokyo.ac.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: tLgtjEyFYWNtPnkbkV1V2pyuUxeiB55w
+X-Proofpoint-ORIG-GUID: tLgtjEyFYWNtPnkbkV1V2pyuUxeiB55w
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA3MDEyNiBTYWx0ZWRfXy2tzanNOof4L
+ 8qcDVbB8mjmPpU6xPEeEqQUjYLpgu5IrJumcLhtd/Rl1R2S4DJDPUxxR9kGIRmWtUrIfR++98ff
+ XSBc/L3mfpchB+ii5zX6EPX3TJ2Ea3g=
+X-Authority-Analysis: v=2.4 cv=b9yCJNGx c=1 sm=1 tr=0 ts=6a4cf807 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=RAioF0-LDSMA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
+ a=ZpdpYltYx_vBUK5n70dp:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=AttVjD3uJjTWtuEPW6QA:9 a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA3MDEyNiBTYWx0ZWRfX/oUPJwMKUVB6
+ i3KSKEajxZpOPhDmKti9bYvJlSLhK3Jk1EMFF8Px29+IRDRFdA2AeqqYB+xRxJLHDUBVLtbbdvP
+ 2S7wdT4cPm8beV5ef2ICSYljbnNXDYpWItk1UYg6HYIRVAkdPWIbYZRlCJ/YW/7bVE4JGu/rBGx
+ cCZnTFtasOgx8R1vtFvz/ClXPihOpVJeoYORjCy5L0DlXlUH2S5u79Sx5TMNF8CX9dWcGGnsL2T
+ uZunNhjhrwRUjchgu59Au2tiG62+Kobi/rM1Okrpc7b4VDry1+OLhLvul1NXdTJRACS12qS83ci
+ sJV9LFfWkOawIUMtWnpthLReDckx7c7PH+8Fa+GBoLi62/TAxF6GVwV7DanFyU8mMC7gGA5CDJz
+ knpI35wURiQKe4vT5ljxHDUvLFGoBTKn3FstIMzvJPmkzF7rEw+lx5790oAvz3TF2sPFcoenOR7
+ WHppwXzlhd/kp3mNdHw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-07_03,2026-07-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607070126
 
-On 2026/07/07 20:23, Akihiko Odaki wrote:
-> On 2026/07/07 3:23, Oliver Upton wrote:
->> On Mon, Jul 06, 2026 at 07:03:28PM +0900, Akihiko Odaki wrote:
->>> Add internal state for PMUv3 emulation without programmable event
->>> counters. When fixed-counters-only mode is active, KVM reports no
->>> programmable counters and hides PMCEID, avoiding event-counter state
->>> whose behavior can depend on the selected hardware PMU.
->>>
->>> The cycle counter still uses a host perf event. Unlike the normal PMU
->>> path, fixed-counters-only mode may create that event from the hardware
->>> PMU attached to the VCPU's current pCPU. If the VCPU later loads on a
->>> pCPU that is not covered by the existing event's PMU, request a PMU
->>> reload so the cycle counter can be recreated against the new pCPU's PMU.
->>> Keep this affinity check limited to fixed-counters-only VMs; the normal
->>> programmable-counter mode continues to use the VM-wide PMU and does not
->>> need per-load reload decisions.
->>>
->>> Add a separate internal flag for explicit userspace PMU selection. The
->>> UAPI wiring added later will use it to keep explicit PMU selection and
->>> fixed-counters-only mode mutually exclusive while still allowing
->>> fixed-counters-only mode to replace the default PMU selected during
->>> KVM_ARM_VCPU_INIT.
->>>
->>> The UAPI wiring that sets the fixed-counters-only flag and records
->>> explicit PMU selection is added later in the series.
->>>
->>> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
->>> ---
->>>   arch/arm64/include/asm/kvm_host.h |  4 ++++
->>>   arch/arm64/kvm/arm.c              |  1 +
->>>   arch/arm64/kvm/pmu-emul.c         | 43 ++++++++++++++++++++++++++++ 
->>> +++++++++--
->>>   include/kvm/arm_pmu.h             |  2 ++
->>>   4 files changed, 48 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/ 
->>> asm/kvm_host.h
->>> index 0c39d9db7d57..aa07b05b8231 100644
->>> --- a/arch/arm64/include/asm/kvm_host.h
->>> +++ b/arch/arm64/include/asm/kvm_host.h
->>> @@ -353,6 +353,10 @@ struct kvm_arch {
->>>   #define KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS        10
->>>       /* Unhandled SEAs are taken to userspace */
->>>   #define KVM_ARCH_FLAG_EXIT_SEA                11
->>> +    /* PMUv3 is emulated with an explicitly specified hardware PMU */
->>> +#define KVM_ARCH_FLAG_PMU_V3_EXPLICIT            12
->>> +    /* PMUv3 is emulated without progammable event counters */
->>> +#define KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY    13
->>>       unsigned long flags;
->>>       /* VM-wide vCPU feature set */
->>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
->>> index 68767bb08285..1cc7754d5ace 100644
->>> --- a/arch/arm64/kvm/arm.c
->>> +++ b/arch/arm64/kvm/arm.c
->>> @@ -687,6 +687,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, 
->>> int cpu)
->>>       if (has_vhe())
->>>           kvm_vcpu_load_vhe(vcpu);
->>>       kvm_arch_vcpu_load_fp(vcpu);
->>> +    kvm_vcpu_load_pmu(vcpu);
->>>       kvm_vcpu_pmu_restore_guest(vcpu);
->>>       if (kvm_arm_is_pvtime_enabled(&vcpu->arch))
->>>           kvm_make_request(KVM_REQ_RECORD_STEAL, vcpu);
->>> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
->>> index e70628653e4b..40cad183376c 100644
->>> --- a/arch/arm64/kvm/pmu-emul.c
->>> +++ b/arch/arm64/kvm/pmu-emul.c
->>> @@ -96,6 +96,11 @@ u64 kvm_pmu_evtyper_mask(struct kvm *kvm)
->>>       return mask;
->>>   }
->>> +static bool kvm_pmu_fixed_counters_only(struct kvm *kvm)
->>> +{
->>> +    return test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm- 
->>> >arch.flags);
->>> +}
->>> +
->>>   /**
->>>    * kvm_pmc_is_64bit - determine if counter is 64bit
->>>    * @pmc: counter context
->>> @@ -343,7 +348,11 @@ u64 kvm_pmu_implemented_counter_mask(struct 
->>> kvm_vcpu *vcpu)
->>>   static void kvm_pmc_enable_perf_event(struct kvm_pmc *pmc)
->>>   {
->>> -    if (!pmc->perf_event) {
->>> +    struct kvm_vcpu *vcpu = kvm_pmc_to_vcpu(pmc);
->>> +
->>> +    if (!pmc->perf_event ||
->>> +        (kvm_pmu_fixed_counters_only(vcpu->kvm) &&
->>> +         !cpumask_test_cpu(vcpu->cpu, &to_arm_pmu(pmc->perf_event- 
->>> >pmu)->supported_cpus))) {
->>>           kvm_pmu_create_perf_event(pmc);
->>>           return;
->>>       }
->>> @@ -720,6 +729,12 @@ static void kvm_pmu_create_perf_event(struct 
->>> kvm_pmc *pmc)
->>>       int eventsel;
->>>       u64 evtreg;
->>> +    if (kvm_pmu_fixed_counters_only(vcpu->kvm)) {
->>> +        arm_pmu = kvm_pmu_probe_armpmu(vcpu->cpu);
->>> +        if (WARN_ON_ONCE(!arm_pmu))
->>> +            return;
->>> +    }
->>> +
->>>       evtreg = kvm_pmc_read_evtreg(pmc);
->>>       kvm_pmu_stop_counter(pmc);
->>> @@ -748,7 +763,7 @@ static void kvm_pmu_create_perf_event(struct 
->>> kvm_pmc *pmc)
->>>        * Don't create an event if we're running on hardware that 
->>> requires
->>>        * PMUv3 event translation and we couldn't find a valid mapping.
->>>        */
->>> -    eventsel = kvm_map_pmu_event(vcpu->kvm->arch.arm_pmu, eventsel);
->>> +    eventsel = kvm_map_pmu_event(arm_pmu, eventsel);
->>>       if (eventsel < 0)
->>>           return;
->>> @@ -878,6 +893,9 @@ u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, 
->>> bool pmceid1)
->>>       u64 val, mask = 0;
->>>       int base, i, nr_events;
->>> +    if (kvm_pmu_fixed_counters_only(vcpu->kvm))
->>> +        return 0;
->>> +
->>
->> Even if we advertise bits in PMCEID, does it matter? There's no PMC that
->> the guest could use to count it.
->>
->> I understand it isn't aesthetic but I really want to minimize the
->> special-casing that has to be done for this feature.
-> 
-> This strictly ensures that sysregs are stable after migrating across 
-> physical CPUs, which may have different PMCEID values.
-> 
->>
->>> +void kvm_vcpu_load_pmu(struct kvm_vcpu *vcpu)
->>> +{
->>> +    /*
->>> +     * ARMV8_PMU_INSTR_IDX will need the same check once
->>> +     * FEAT_PMUv3_ICNTR is supported.
->>> +     */
->>> +    struct kvm_pmc *pmc = kvm_vcpu_idx_to_pmc(vcpu, 
->>> ARMV8_PMU_CYCLE_IDX);
->>> +    struct arm_pmu *cpu_pmu;
->>> +
->>> +    if (!kvm_pmu_fixed_counters_only(vcpu->kvm) ||
->>> +        !kvm_pmu_counter_is_enabled(pmc) || !pmc->perf_event)
->>> +        return;
->>> +
->>> +    cpu_pmu = to_arm_pmu(pmc->perf_event->pmu);
->>> +    if (!cpumask_test_cpu(vcpu->cpu, &cpu_pmu->supported_cpus))
->>> +        kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
->>
->> Just detect the changing PMU implementation here, KVM_REQ_RELOAD_PMU
->> will need to detect the PMCs that require an update anyway. Stash the
->> last cpu in kvm_arch_vcpu_load() and pass it to this:
->>
->> void kvm_vcpu_load_pmu(struct kvm_vcpu *vcpu, int last_cpu)
->> {
->>     if (!kvm_pmu_fixed_counters_only(vcpu->kvm) || vcpu->cpu == last_cpu)
->>         return;
->>
->>     if (kvm_pmu_probe_armpmu(vcpu->cpu) != 
->> kvm_pmu_probe_armpmu(last_cpu))
->>         kvm_make_request(KVM_REQ_RELOAD_PMU);
->> }
-> 
-> It is a nice way to simplify the code and to avoid hardcoding 
-> ARMV8_PMU_INSTR_IDX. I'll use the code for the next version.
+CONFIG_KUNIT is a tristate symbol but the warning suppression code in
+lib/bug.c is only built if it's built-in. Use IS_ENABLE(CONFIG_KUNIT) to
+enable it for a loadable kunit module as well. When using a plain #ifdef,
+the suppressions only work if kunit is built-in.
 
-I tried this but unfortunately it doesn't seem to work. 
-kvm_arch_vcpu_put() sets vcpu->cpu to -1 so we cannot simply read it to 
-get the last cpu in kvm_arch_vcpu_load().
+Cc: stable@vger.kernel.org
+Fixes: 85347718ab0d ("bug/kunit: Core support for suppressing warning backtraces")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+---
+ lib/bug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Akihiko Odaki
+diff --git a/lib/bug.c b/lib/bug.c
+index 292420f45811..b9820a0226f5 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -219,7 +219,7 @@ static enum bug_trap_type __report_bug(struct bug_entry *bug, unsigned long buga
+ 	no_cut   = bug->flags & BUGFLAG_NO_CUT_HERE;
+ 	has_args = bug->flags & BUGFLAG_ARGS;
+ 
+-#ifdef CONFIG_KUNIT
++#if IS_ENABLED(CONFIG_KUNIT)
+ 	/*
+ 	 * Before the once logic so suppressed warnings do not consume
+ 	 * the single-fire budget of WARN_ON_ONCE().
+-- 
+2.47.3
+
