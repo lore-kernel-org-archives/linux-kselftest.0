@@ -1,118 +1,138 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B423559CA;
-	Tue,  7 Jul 2026 03:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783394736; cv=none; b=UPnWaCrpEVbz2ijB+6sF1v/cHmqjUnjYZs6UEIlZEGWs+K0Em8Ub0v1ijJlRUQFVvd1/RJrvWPwqUv8UMhgtUC2EVqogMtqm+40aRxAn5csPUjoFU02QlnzOOWLS7r9EebhjlYO9c4rbW/oKlEJa6e582QV16if72uAqZbIhe6A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783394736; c=relaxed/simple;
-	bh=Czg6JlvYcDcAgZCT995EwyC7TpJNK+rKmmwv2rdNYSI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Jko9mFC2xfrCt3hefFdD1Zj7tRGmnaa8+Z4jr54M9G4+F93jhIvK1vyrAv4K83tIjKG9apvmWdAdK2XemfdK5QazA1pE7VafJPYxUUfgyZjYta9gojJR6B2Ni4PjBEuddWisoWzinNd5VBdrwrUNZoyYKBz18yCPXkAFkUjp8Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7edffda679b311f1aa26b74ffac11d73-20260707
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:de2c9d99-1ad0-48d0-a199-11bd1859cbc1,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:de2c9d99-1ad0-48d0-a199-11bd1859cbc1,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:8f47211fc9ae32c51164c1a04e61ee7a,BulkI
-	D:260707072851LA5JZ863,BulkQuantity:1,Recheck:0,SF:10|64|66|78|80|81|82|83
-	|102|127|136|841|850|865|898,TC:nil,Content:-10|0|15|50,EDM:-3,IP:-2,URL:0
-	,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:N
-	O,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7edffda679b311f1aa26b74ffac11d73-20260707
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 647136457; Tue, 07 Jul 2026 11:25:25 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: akpm@linux-foundation.org
-Cc: david@kernel.org,
-	hongfu.li@linux.dev,
-	jhubbard@nvidia.com,
-	joey.gouly@arm.com,
-	keith.lucas@oracle.com,
-	kevin.brodsky@arm.com,
-	liam@infradead.org,
-	lihongfu@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.anjum@collabora.com,
-	vbabka@kernel.org,
-	yury.khrustalev@arm.com,
-	zwisler@google.com
-Subject: Re: [PATCH v10 0/6] selftests/mm: refactor pkey helpers and fix mmap error handling
-Date: Tue,  7 Jul 2026 11:25:06 +0800
-Message-Id: <20260707032506.4155410-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260706162841.b34d9bc1ba1aaa4be4f6254e@linux-foundation.org>
-References: <20260706162841.b34d9bc1ba1aaa4be4f6254e@linux-foundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2878642086A
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 03:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783395148; cv=pass; b=LD4ArnDtCHsr5nlOPsSqdvQuQpsvF806iJgYdOm7Qxl7jBm4ZQ1kNIkpjbq6tadPQicFg07Y4Cm8dGhYBTPMy6M4O8sNuFSCFNAui1zaWJ5t45qEfSp0KvNfh1IdTbdJ+rYUEoqJeAa5Z4IBa7RZAZ48ulyc9pnfyHuWH+PO2qY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783395148; c=relaxed/simple;
+	bh=JHMabzQ1PB0pYgpwx3N1IWMZXeMArHJvTraVIbD6+WI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J+AROgDTt/z4NP6KZ3wPI7D3fMu87NeAchfZrvnWh5exl4qF4hwt7+jeSEoC4XkFeGUZ4LAC12vjxlOyvJ3B6LQdirZl2ZXM47Uy59yy1Da+24Nc4AtLFVBd2jJ3HH701o2bgn+cAY4XgxKzbbUnCnw8oYo4K/XlNEUwr89GEmk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rMeajcfV; arc=pass smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rMeajcfV"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-69a19eb2e6dso1731a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 20:32:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783395145; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JHT7b+W23zQWL33Ms1+IMTtfTxl15hwaNjQFnEkUKi9wlepvBsnbPTcz6nNFJUvDLN
+         QFX1knaXylO/oDkmuWyhlAKiw+Q+Q7A16NW/zAYSYYbndlg2ocBvprrtzXNUcg2RyU0R
+         f/JHRyvv+hA9BYIVxxGeQUfxtxXcpXoH5zPhIB4FvPgqMZoIa/D+ZvfsdrZsWHiz+zAY
+         HCk7bxH0ZGmA9E9MQitx424hgelEQsenAa4WmHcimUpGjIVTvL+/yXBbPsKNJsz2nB4x
+         x6IvaZz5SjR+g3Za1wwUCoG+VSuffVZ2kg+dHpE8r2sKYehsgHaG8xI/5lkWmDOlnL1V
+         oNig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=JHMabzQ1PB0pYgpwx3N1IWMZXeMArHJvTraVIbD6+WI=;
+        fh=kjICNwuoDxWhil0PLKVW/OpyXzurPt7lhivdTD93FiI=;
+        b=fNunHG2RvNzFDHCmgAKJ8jBbj5fErcLl1HCuyGUl1BwZ0VZ957JfKerSyIp+ZBho1f
+         ciGqOlR+fHO1hGgruZXyZrrZvlBaDfsUf00H9OCcrPkVgtroDvXlKJBrPCtWgcjeDCot
+         kNqoIDxb4wYsJrvKjpWAtmozuvLqvFJ5vXXDrDLogDFgUFEqXct+uSPzDJM9Ov3/nYNg
+         mbvdCM9IqdjEYcnehm1nj/t3HllN4CwIwKNQFM2TWGzQbGkZJ4JdgDlgGTRSdUMDl6P6
+         eUDoQ/tGrBAj2/BxPC1Ng8XLtoTOaJ4Rm1oBv8XSEOJjbEApj1stSZbZ16+tu9UHqtfy
+         REww==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783395145; x=1783999945; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JHMabzQ1PB0pYgpwx3N1IWMZXeMArHJvTraVIbD6+WI=;
+        b=rMeajcfVta9/RZaUTUW4oYlg5J4YztwXQKaKnMtP3viZtscgDS839UnB4lhyveD3Uc
+         Ii8TMcKj6nU9+s18vMI+t5TqGsRWJez1aeWHVCxJz30jPdTuJDMJ3Tu350PbPML9tGLJ
+         cV+uOTyPPok1RWsz2i4WR8YqezoAfLJvpyA72zTAszB+pxnUOtsvCcYCJ1G394Yn+Y3i
+         8NntVcieDRHP4d8P3Wxnrx+AHBRq0ZZ7ZQWZKFIPUJxREiTi3XFMo2vQIZNb1me2H6a5
+         riVocoPTEuPcLBPTriGpo/JAiP24IVc1pNHHKj1uUxkubIaSE0RjGD+0YC7LMjYxJXWY
+         /XjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783395145; x=1783999945;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JHMabzQ1PB0pYgpwx3N1IWMZXeMArHJvTraVIbD6+WI=;
+        b=DDdS5N7sFhtMVwI/6hnm2twGdn2iRtIUIG9v6/V5aUYQg5hnuYJBouYmeX3hJXBMCD
+         O00S8HtnDOxL0i8fHY/G3yBdDG/MFcSRSoLNzENrWo7UxF63LweXAgtcWplDP5DyFVTq
+         o8Bvufn6M9khQjtX+m6ys3xPCAnBvZz6eVs4qDjYdYYYVlrWErndowii0e3/KPf0BFQr
+         CjC6IWtOmvRMUbaz4mY6cx8N2ALLRTK1U+kfoiq9B1fKtn4lht1j9jZLc1/wNkELBxdz
+         urzrctIZwNYrBBZ2qdjyzTQ9wyt2MKWT+stDzsgcRfZSsdn53q1pQhGehs29DMs47tsR
+         P+WA==
+X-Forwarded-Encrypted: i=1; AHgh+RosUHdlPaknLdwd3lgrepsmIW/jT087XVygyR9u1K2aH4vKpg8aYhWi8gXjtkZVVz4MP0aruchHobyf92eywc8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQbGV2/xBh0MvdhvpZeDp33jPwcWh10qB7h60LDvRK8N/EqDY3
+	7sZS7y05siU8fB3nWVhbn0wx54k5Z7gnFqlSHLGGlWhdH9L+Y1Aft63dCbybxvlMKkvxBPCM/fN
+	lxfC6rHw59mwx5k8WAClQXCGDYI1F8MeBMoMRXRQV
+X-Gm-Gg: AfdE7clekbU5oMakk8vLrLQLvbfXyuEGHwb0O7k/yR4EVJV+bGANyTcHFRJ2CXn9SbR
+	LjaF3794mnDMUWDBnLWm5n733+pKJAXvXooP4/BlxePE87+c9+uftN9hVPuy+b9zkmhgpVhzPP1
+	M6HJY7re9IPVOOvaloPvfdByt7cxQvHSqnxwawQXumwLWxQXhLgd1Nz8mLq3ao9yFDCoR/YHxtN
+	v4VDMlx++LmdOuZwmUaqiqiptALCeenJ5jnXWrER10hkVRL0UuIk4w5mOmKKQpmtk7WoEkGI2BY
+	+trq3zI=
+X-Received: by 2002:a05:6402:5648:b0:68a:e1ba:9cc0 with SMTP id
+ 4fb4d7f45d1cf-69a91343a05mr10004a12.8.1783395145232; Mon, 06 Jul 2026
+ 20:32:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+ <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+ <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+ <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
+ <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
+In-Reply-To: <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Mon, 6 Jul 2026 20:32:12 -0700
+X-Gm-Features: AVVi8CcATv0-eokO_Wpr1SytCQ95kvkWSmREbAjSgHaHchSuV2W_ugKT4eGqcTg
+Message-ID: <CALMp9eQXGYevLQJnEV+Kx6hvp84vPQ=2U8AfZHiZrZj=CVM2hQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+To: Sean Christopherson <seanjc@google.com>
+Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Jul 6, 2026 at 8:25=E2=80=AFPM Jim Mattson <jmattson@google.com> wr=
+ote:
+>
+> On Mon, Jul 6, 2026 at 8:21=E2=80=AFPM Sean Christopherson <seanjc@google=
+.com> wrote:
+> >
+> > On Tue, Jul 07, 2026, Tina Zhang wrote:
+> > >
+> > >
+> > > On 7/7/2026 9:32 AM, Jim Mattson wrote:
+> > > > On Mon, Jul 6, 2026 at 5:02=E2=80=AFPM Tina Zhang <zhang_wei@open-h=
+ieco.net> wrote:
+> > > >
+> > > > > I will take another look for the next version and try to handle t=
+he
+> > > > > remaining pieces properly, while also making sure we don't expose=
+ stale
+> > > > > or incorrectly synthesized decode-assist state for emulated exits=
+.
+> > > >
+> > > > Naples erratum 1096 seems to imply that the instruction bytes store=
+d
+> > > > in the VMCB are not necessarily the same instruction bytes that wer=
+e
+> > > > fetched and decoded to lead to the #PF/#NPF. Hence, in the case of
+> > > > emulation, it might be sufficient to read the instruction bytes qui=
+te
+> > > > late in nested_svm_vmexit(). That would certainly simplify the
+> > > > plumbing.
+> >
+> > The plumbing doesn't seem all that complex though.
 
-> > The main changes in this series are to refactor shared tracing and assertion
-> > helpers into a common file, unify both pkey selftests on pkey_assert() and
-> > per-test tracing for consistent diagnostics, and add missing mmap() return
-> > checks with MAP_FAILED used throughout for readability and consistency.
-> 
-> Thanks, I've updated mm.git to this version.
-> 
-> > v10:
-> > - Add patch 6/6 to fix a pre-existing cleartid race: remove unused
-> >   settid/cleartid clone flags and wait for the clone child to exit in
-> >   the sigsegv test.
-> 
-> Below is how v10 altered mm.git.  As you mentioned, this is all from
-> the addition of [patch 6/6].
-> 
-> btw, I thought the official way to wait for a child thread to exit is
-> pthread_join()?  Why is that sched_yield() loop used?
-
-Thanks a lot for your question.
-
-As I understand it, the primary reason is pthread_create automatically
-enables rseq on all threads, which corrupts the isolated pkey signal
-handling kernel context this selftest is designed to exercise. We use
-raw clone_raw explicitly to avoid rseq interference as noted in the
-code comment.
-
-Besides, pthread_join cannot work here. Since the thread is created via
-raw clone instead of pthread_create, it is not tracked by libpthread at
-all, so invoking pthread_join with its TID will return EINVAL.
-
-Best regards,
-Hongfu
+What about the case of a userspace-injected #PF while running L2, when
+L1 intercepts #PF?
