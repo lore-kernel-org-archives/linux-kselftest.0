@@ -1,196 +1,129 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF921264FBD
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 11:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892C3FBB50
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 12:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783424197; cv=none; b=kiDxT5HZO+nVoashEnzBDk/Q2SLL+0aZ1HyYLThBJaRRJK0YSTGxOcoKlHzCIl8mXxwGA/Y6WtU6IvwE4KvLD7Bw65we02+Sdo/5QP3rBPEdSkzuPPMQiiIdCZ8H240GWGujwQkdauP2dxxdyqgUYDxS9atJPSRK0zMUSs/o0HU=
+	t=1783425700; cv=none; b=SFVdoc7C9Yz2yFvNp8iVyiQH5e/W0BlcyA+eMuYTzSGMI0opP+ekfMgPYQCL+Mlvvg4NI6v8FhprcGET1e1Utn9mBF4JHdVWdRL52T3Lpw3IkbdtP8vDs/BANJXIXS9lhD9OMLB36R/DGCPhb6zrBdRNeU7o0kj8FulljwsChzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783424197; c=relaxed/simple;
-	bh=zisHKAD74OWux5/tK8lytmVqjM6h3AIY4NHgLxcwVtg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eiayQ2ppD2EAeRtryeeb+n2aTOH72a80Kd2R4oH7QQzm04LkAI5GDQN8n9rDkr7ShQL2+fVUh6WgzIrZDBHcWgWkZUXfue0RzeCm2S6k7+aTkMJbyKaHjFioZFNoo3lq+/VejS6eDRHlDvchpnNMbKXkCki8IsZ3ZL/LguThols=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=TJ9+WCJu reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1783425700; c=relaxed/simple;
+	bh=/8GUkb5deBcpAM3zS7bUZUXYwSqR4M6QK/IwDpzwj60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d1CDoJ/7QfHckd1JNzSB1WQuOj3/1T+/1NIg5gkQjjIEAq8KDFEFH1sG/eGuBjlhyuB6vMO+BHctj1E/PO69DFdFt0tGsGWb9mR3HQqChvEZx31WB6mHxrNKKeFlrnx7Mgbqcs7cNZjQiDUsmdW0/XHQ+FxW3ku34dKLA2qFxT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ovf3ok1t; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="TJ9+WCJu"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 667BaXR6009375
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 7 Jul 2026 20:36:33 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=PC9H9+hfBUgJc1h9fKgLECYX3wbgWyiwPKt7KOMjAiE=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1783424194; v=1;
-        b=TJ9+WCJuvN2HY9GfRKpGwzZshGSjYSg+ZCQPyx+qgt+W3BRyH5dvAMZNxppn7WPz
-         KWg4fLBC8zWUuwbNrQrvtEciEtr3hzWw2BgyPziP7Tz9IAtBBJ96qe1kaSSZyN1a
-         CtNdBeuNKcYX6EG9UT8iaiSkatol3VYDd+FkjSQqNMVCD0ajPTR8LH/cQd2teirB
-         WhZc42jMhxC7y3nYH4eeUVst6bLixn5KanS+l+9ciFjtWUfnH5ZfdaGif2Sg3Z0o
-         iUTu6Pc2W3lxcodV0dFvbkAQDmL18va8K84f1tATGhEOsG/TV0InJ0JkrkuR1WFR
-         driv6wIpea3cPdDdCv26EA==
-Message-ID: <db672f83-a6c4-4d94-a959-930a624a7915@rsg.ci.i.u-tokyo.ac.jp>
-Date: Tue, 7 Jul 2026 20:36:32 +0900
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ovf3ok1t"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-493bf73ec2aso25976155e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 05:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1783425696; x=1784030496; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2foD8/m5jsx3KDxdM1AXAhJaa/uPNeOmtxQBIkqM8nk=;
+        b=Ovf3ok1t7gVBe80wsLEjTuo3DgGqyi/DXr4UQhWI4DK2bkjClmH4+pm+2RmBOMk0ow
+         KUl6UcVQAqd3d4IzcNbDM3VOek+jvB+maiS8e2q/RYmkXtypKIj5OdTVbIs+6AdHAStB
+         huEIkoHs7/w42DD7qa/qSsKr2MfLsQjQFMWCjJxKWr+hTI7XXr6fwSYzwVM9sH0NKHHP
+         D4HD29nh/PxwCAyiBEuLIMPWby8OzY1J3XY8s9djumhxmAFYcswmy30tFggRfHlZ+Xg7
+         72D49KoSa7Pnwkqk1Fp7Mu5YqhAKixjqGs0WLLolGdNluGEaAmQ94lEFnMxwkJrRKQxp
+         CIzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783425696; x=1784030496;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2foD8/m5jsx3KDxdM1AXAhJaa/uPNeOmtxQBIkqM8nk=;
+        b=Y2SGNaDY9cTQ08Sm0LzcOhr3cJ9E0jxV+EUA+ZhZuBjyisXu/5FybwqJencLZjYHeX
+         qnbiZIB5l+YWMMZyOXgqrFpYBd7V8OEkGv7zAJKQMm2681mtsxsUgL+20jCWzskFlA1G
+         zhPYEafIatDOQr0jA1Ey2cTjaKZn+IrRvQvQTF6xA7pZ9PHDpCsVXfxrz2DYItvfu21X
+         A5IgPUIh/HwGr+GuXXkHAipkXYTXNLJ3lVTfvmgyUdtkogXkkLZiNErfGgYR7/AT3DcF
+         cBivLZddyWzzJwAP2VazmUBU9MwfjABmGOHH0fEakuKyA7EPDbxEabUEHvfrStmtp1m7
+         BV+g==
+X-Forwarded-Encrypted: i=1; AHgh+Roe7gLxUCD8s5IFd07bp5ZS8IRVK61cG2pgLVz2hrXIBtac23Ung5G0nzNNK4hOZxq4Cfr/Blg++Gp8yGl5JUA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLvbu4VYG9SfK1fQXA4nSCWrS+zYUUMPO6NmV59r9FZKmPadmL
+	PTSdERMHK/xPwA9Tqw7ATUkHps1QJmhm7K+tHuqRcMkZe5gtAW/0uc0ie9LL1L/CWPI=
+X-Gm-Gg: AfdE7ckfyLCit+aCozYZJVZVuk0FygPqVNRq5YOWLNuNCJShe5TsMAV3hF3qRmbWyoG
+	LXlxiOBUMEsmqx46JiEvRWGvvFVPo/XYx8/Wmx6ILWM35UguEAL98CG5o3UmxGFL8BHexUF1nK4
+	Ae+UPdAcBdEOW/NXPHjsVVO8F3M1TEn8QnDTgn1j6XfuqqGnlKlTrnCbhG7bkOp9kX/au3uuWHv
+	TqoyTS57LfA/6HMFDwryt2WPeCBG99BYsdM5rx3jHCVTfqIgHbOYy1uLPq9bbKlGEbnwtrI8HVB
+	9QDOybRVx/HmLwTiGrg6VAOutktwT0W8WPFleP0iMgWAb3bJ6BG4CuYVisu48PSQJtK/r8/37q+
+	OOfT0jKxSVFHla8JGiBcEvKKjx+XY6Ueytv6YAEEW7ApDqzO6tazrkpw6dnIdKzv98nBqllLoEE
+	V9R28BR2MejElj7hr2+9cDbB7e4ZWSbL7vQO29cA==
+X-Received: by 2002:a05:600c:3b01:b0:493:b91c:6bf with SMTP id 5b1f17b1804b1-493df0a74c1mr48992425e9.18.1783425696112;
+        Tue, 07 Jul 2026 05:01:36 -0700 (PDT)
+Received: from localhost.localdomain (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039ae44sm32347941f8f.23.2026.07.07.05.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 05:01:35 -0700 (PDT)
+Date: Tue, 7 Jul 2026 14:01:33 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Zenghui Yu <zenghui.yu@linux.dev>
+Cc: linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, hannes@cmpxchg.org, 
+	yosry@kernel.org, nphamcs@gmail.com, chengming.zhou@linux.dev, tj@kernel.org, 
+	Shuah Khan <shuah@kernel.org>, mhocko@kernel.org, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Li Wang <li.wang@linux.dev>
+Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
+ test program"
+Message-ID: <akzpi93tZry0cCCe@localhost.localdomain>
+References: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 6/7] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <20260706-hybrid-v8-6-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <akvsuBcqCCzlrBLk@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <akvsuBcqCCzlrBLk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="n32fxil2i3lu57lp"
+Content-Disposition: inline
+In-Reply-To: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
 
-On 2026/07/07 2:58, Oliver Upton wrote:
-> On Mon, Jul 06, 2026 at 07:03:29PM +0900, Akihiko Odaki wrote:
->> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->> +------------------------------------------------------
->> +
->> +:Parameters: no additional parameter in kvm_device_attr.addr
->> +
->> +:Returns:
->> +
->> +	 =======  ==================================================
->> +	 -EBUSY   PMUv3 already initialized, a VCPU has already run,
->> +		  an event filter has already been set or
->> +		  a hardware PMU has already been specified
->> +	 -ENXIO   Attempted to get before setting
->> +	 -ENODEV  Attempted to set while PMUv3 not supported
->> +	 =======  ==================================================
->> +
->> +If set, KVM emulates PMUv3 without programmable event counters. Only fixed
->> +counters are exposed to the guest: the cycle counter today, and the instruction
->> +counter if support for FEAT_PMUv3_ICNTR is added.
-> 
-> Drop the mention of cycle counter and FEAT_PMUv3_ICNTR, I want to avoid
-> the argument later down the line when ICNTR support is added to this
-> mode.
-> 
-> The expectation is that the VMM discovers the feature set using the ID
-> registers just like every other CPU feature. KVM documentation doesn't
-> need to describe the architecture.
-I'll drop it with the next version.
 
-> 
->> +With programmable counters disabled, the VCPU can run on any physical CPU.
->> +This is particularly useful on heterogeneous systems where different hardware
->> +PMUs cover different physical CPUs. All VCPUs in a VM share this attribute.
-> 
->    When this attribute is enabled, the vCPU can run on any physical CPU
->    that has a PMU, regardless of the underlying implementation. This
->    attribute is VM-scoped.
-> 
-> The documentation is focused on unambiguously representing the UAPI, not
-> providing application recommendations.
+--n32fxil2i3lu57lp
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
+ test program"
+MIME-Version: 1.0
 
-I agree. I'll use your wording for the next version.
+Hello Zenghui.
 
-> 
->>   2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
->>   =================================
->>   
->> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
->> index 1c13bfa2d38a..39a1a1e412e6 100644
->> --- a/arch/arm64/include/uapi/asm/kvm.h
->> +++ b/arch/arm64/include/uapi/asm/kvm.h
->> @@ -437,6 +437,7 @@ enum {
->>   #define   KVM_ARM_VCPU_PMU_V3_FILTER		2
->>   #define   KVM_ARM_VCPU_PMU_V3_SET_PMU		3
->>   #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS	4
->> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY	5
->>   #define KVM_ARM_VCPU_TIMER_CTRL		1
->>   #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER		0
->>   #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER		1
->> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
->> index 40cad183376c..ad9ff4d0d89c 100644
->> --- a/arch/arm64/kvm/pmu-emul.c
->> +++ b/arch/arm64/kvm/pmu-emul.c
->> @@ -1149,11 +1149,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
->>   		arm_pmu = entry->arm_pmu;
->>   		if (arm_pmu->pmu.type == pmu_id) {
->>   			if (kvm_vm_has_ran_once(kvm) ||
->> +			    kvm_pmu_fixed_counters_only(kvm) ||
->>   			    (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
->>   				ret = -EBUSY;
->>   				break;
->>   			}
->>   
->> +			set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
-> 
-> Why is this flag necessary? kvm->arch.arm_pmu is NULL if no PMU
-> implementation was selected by userspace.
+On Tue, Jul 07, 2026 at 05:38:13PM +0800, Zenghui Yu <zenghui.yu@linux.dev>=
+ wrote:
+> Hi,
+>=20
+> Running cgroup/test_zswap on my arm64 box failed immediately with:
+>=20
+>   [root@localhost cgroup]# ./test_zswap=20
+>   TAP version 13
+>   1..8
+>   # zswpout does not increase after test program
+>   not ok 1 test_zswap_usage
+>   [...]
 
-The explicit flag is there because kvm->arch.arm_pmu is also populated
-by KVM_ARM_VCPU_INIT through kvm_arm_set_default_pmu(). I wanted to keep
-allowing userspace to enable FIXED_COUNTERS_ONLY after that default PMU
-selection, as long as PMUv3 has not been initialized and the VM has not
-run, while still rejecting it after an explicit SET_PMU.
+What version of the tests do you run?
+Namely, does it have the recent patches from Li [1]?
 
-> 
->>   			kvm_arm_set_pmu(kvm, arm_pmu);
->>   			cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
->>   			ret = 0;
->> @@ -1164,6 +1166,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
->>   	return ret;
->>   }
->>   
->> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
->> +{
->> +	struct kvm *kvm = vcpu->kvm;
->> +
->> +	lockdep_assert_held(&kvm->arch.config_lock);
->> +
->> +	if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
->> +	    test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
->> +		return -EBUSY;
->> +
->> +	set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
->> +	kvm_arm_set_nr_counters(kvm, 0);
->> +
->> +	return 0;
->> +}
->> +
->>   static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
->>   {
->>   	struct kvm *kvm = vcpu->kvm;
->> @@ -1238,7 +1256,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
->>   		     filter.action != KVM_PMU_EVENT_DENY))
->>   			return -EINVAL;
->>   
->> -		if (kvm_vm_has_ran_once(kvm))
->> +		if (kvm_vm_has_ran_once(kvm) || kvm_pmu_fixed_counters_only(kvm))
-> 
-> There's no reason for doing this, just let userspace create an event
-> filter. Even with the current PMU implementation it's possible that the
-> fixed cycle counter gets filtered.
+Thanks,
+Michal
 
-This check was added as the consequence of the discussion in the 
-following thread:
-https://lore.kernel.org/all/327f74e4-78b8-4629-a418-d1d3ba78859f@rsg.ci.i.u-tokyo.ac.jp/
+[1] 83476cc97bc63 ("Merge tag 'cgroup-for-7.2' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/tj/cgroup") v7.2-rc1~136
 
-Regards,
-Akihiko Odaki
+--n32fxil2i3lu57lp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCakzqcRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AjPxQD/TSp3AgFunXblm/wv+t06
+iUtOKzzPQFXPcFo4roUGy6UBAPI9Y58AN6NvZtotdqoeb85Dry7/rdwq9AfzhNfP
+8pEH
+=dE8U
+-----END PGP SIGNATURE-----
+
+--n32fxil2i3lu57lp--
