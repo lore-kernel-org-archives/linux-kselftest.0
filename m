@@ -1,109 +1,203 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27D93F39DF
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 14:26:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A008542A158
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 14:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783434363; cv=none; b=Mvjm0kNucvSC+vZc6wbRoBmEybCrdaDqmDCH09XfKETgLtsFm4T5Zh6q9BVhs5BlADFJNoDBhoPoxA1/iDP2HW54vc7hVpgSPWclHlaRT2S1gNl4nB6XLfr0D7qLq2lQ6AakVoDGWm+i8fqxUvZVm5YCjbkr0pjY4V6nOUzUZqw=
+	t=1783435287; cv=none; b=QeW+CuQGf5H1rjdNj25wwgTsZj2fxzi8XZxwbWQcGnll/01pjWB/LugMf1fAfdcJH9FtF/kal6PPUAdNr5XXbkaF1efRX34Pe+6/apyuNYTf52fguyOxPdgfbZJJrMNVRdMHabBunAA3+LpFql9Kj+Koho4aiP5LkRZjM918wDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783434363; c=relaxed/simple;
-	bh=xGf+twjfwFTEdiC1e/+J+01uu+OuSW6e7ZPWRm+BAG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MtBGht0lIz9jeIeaQoLCnMYgj/l02fWRK99RFtkVpMkrBJYDMJazYO80dOvYUDo4AkmGnGdpP1Tt28qYV2rH3C5wpn6S25ST4x75CJsY1gvesfNqb0ZpGdlmIRq4xE+I4hy2W/mRVSjzn0y5qFxvFtXc3XSUuHlXUlUVv2tjqOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxm5kR8G; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783435287; c=relaxed/simple;
+	bh=qQMEdtTXz171I2WTbhzn4FopszL/mXnqaNRzJolC+1k=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=PTFItnRQ2eWEa23ryIUf3fnO8x+8n6/nTOFfJKmJ2dtyHz3/FmY8rcv6kOhJm1IpwO1X9nNlvCzJrbDpoimQ8jjZUbsErppGsmSsBjyh/gquYfD/j9BxPmSD9bxzExWAf+LhsaMInP1NW6lRqqx0vl9KAYVWws+inYWMrespX50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pyYhN6zL; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxm5kR8G"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cca24023edso30934045ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 07:26:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pyYhN6zL"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ccb6823efcso16360565ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 07:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783434360; x=1784039160; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0Xej5JFnQ1aHA2JgsyhmNNKCDzVPH/sjRZ+7VR4tcg=;
-        b=bxm5kR8GItLnMBss/rV+9Q3amL7Zx+1l3EaEHjFqsdZsHHPoOgM/9YXKU26bW+Ixvu
-         vxIJQ+zFSvkN6PQupcgh8QkiWZ2iwVQkvYD8+vYTiG3/N0OZJw2dTgLPP4oNSc2OEllI
-         QtsTGxZqMiJ6lNSNf6cHkJefhD97YTKBXvDMXeB/daw5tuG2GM0NPWtzIOaRcy5zB1g8
-         PhqKlwNV4N6JBCgtYT9UiQfvAjz9952xspuHVQbvhe2GE00A1Bj+FCCDzhVTaLgRoynB
-         r9xrose5QUgsECELUjhJH8kyJG33vFZLDF6VlF9qAvJu8HnkzUnjJndc+uvzDVGsmiL2
-         MekQ==
+        d=google.com; s=20251104; t=1783435284; x=1784040084; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bNGkGjbaNilzZHQiJqPUU/gSkzxHznR2T+Wqp2o4/zI=;
+        b=pyYhN6zL2voML2m9uRhDUELW72AQjZaOIPSDMXfvooCSYh58leTrlG2Gbv7WMN/1jY
+         M9t+no7FA4/qNoai6D7wuWQCmSrf0ReQH3uXpbMnL5w13+tPEk6xu/NuUfgd15ZVEQ+b
+         oFiRjYxvt6lNUh5cEe6XCIeUmiyv5IcYTDokmthY9DBROkWubBdhpFNRQ1o3ZhqCyqig
+         cuugkqJIIsoqOoPX6rEQklrhhDH0Ik4kbcrKxzPOFXRtzHCTe7CYh37cSn5R3Y+ElqwS
+         ULV2xwnVcBBcnF9jlg7rrLS+CS5DXs6wzvvKQDyDGm0yh2rUroJ//sd7OoneTl7O2zjq
+         c+aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783434360; x=1784039160;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y0Xej5JFnQ1aHA2JgsyhmNNKCDzVPH/sjRZ+7VR4tcg=;
-        b=TQfwIF6rsJYlv9Hjf8TxIRDUAsmCIM5sg+svyNiXrFN+tUYdte0wqpVNtF1rn0E9la
-         ZXjUhLp2TZSP2evIX6zsc9DNXc8bN3P/HGUq5/ce8Pj1cgQNsYbLOObagSTr4VP257nb
-         M/+qocJtUZiaIdZXdca4Njzl3gzl5fx2cGCc8ZL1FHlPjsFTebUnzSiV510bz6NV5hoK
-         2CeNvM0fsEJD+CJ22inEZ/bY8alnQWFgr/QbcrQz3KsqOYoSCrkqIE4XL+JQw8hBN6+q
-         1KaKwnDsZouiEoR+nDSUhnyElgvRf1+xuZQ8paSw92wMJT9FzB5IYjBBEnCcPK9wgvWc
-         GwUg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr7l38xKMFlcCWoxSfJ49BASkyxWcbeg/plcqSHaxqyfWnxb6wNhn4gINZXOD58ar/KapJCYBEXzXMoiJu5mh8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2fVBDp9vFAk9ZyOCr729TjZuQ5MKkDncJPc2FXCBfM4Sve70a
-	O/j7YpOtYoQSsDzTAGeOog0z6LsWe3zZFMpcVt+OerKH3MuLQcUhtMb5
-X-Gm-Gg: AfdE7cntEZXo5IpTbr2fpqfzly0e1t6Pcu1c17fxm08seXWaA90D8kf+g8FSB4Z6+eZ
-	7GYELzHvgLR1VVAhcDiIcJZtxOaD2YayWETKQxMVwLUZd2jE1ko2kawaEi9lWBRhCgHtLI39Gvv
-	jmd/dUujHRMmcSD9rRPqOeSEodXAIqZxz3HWXaXtpTTbaBqnKJemYmxAmODxnFJaPdxbHp34t22
-	+dQoJAP3tPB4Joh8r9EhGhp4ei/W+XwzyANyCcVpYoLgTbMfVeM7FfOULG7hbvvcYPRULwk5Pga
-	JQhsLGg5eay0cHxujjPajR7FnfYmmnGv3xAai649pI7qCyXaW4W37lRn5KoZKyux7NREB4TruI0
-	x1JsbnIBztg4piLLIpg0GxM9EIkbe86iAYFQ+UEJFFRuVLnJWOw9scaUozgC7iKJyEXD+vt90nV
-	qzDQlOuqeVeA==
-X-Received: by 2002:a17:902:d58a:b0:2c9:d55d:2d3 with SMTP id d9443c01a7336-2ccbe615a18mr54950605ad.15.1783434359661;
-        Tue, 07 Jul 2026 07:25:59 -0700 (PDT)
-Received: from john-p8 ([98.97.43.67])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb9a3sm13105655ad.13.2026.07.07.07.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 07:25:58 -0700 (PDT)
-Date: Tue, 7 Jul 2026 07:25:56 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Feng Yang <yangfeng59949@163.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
-	daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix memory leak in msg_alloc_iov
-Message-ID: <ak0MRJD7nsf9BaWM@john-p8>
-References: <20260707081434.539327-1-yangfeng59949@163.com>
+        d=1e100.net; s=20251104; t=1783435284; x=1784040084;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bNGkGjbaNilzZHQiJqPUU/gSkzxHznR2T+Wqp2o4/zI=;
+        b=a9z1RaY0+UmOSc5MI+WgmncUDEl2vlmPI0GIslt4tb3PdoV6qLQ8PVasYmzYr2DaYW
+         HtmcvOofsqgK3UJ6ZqFf25qsliGHbUa+Ko0ndcDnUlDOPdJrQiuvj9cn8Qd1fFXizMGF
+         NkMt+Db2CcwSX4kdvEP5GvffG7HmhWk53Q18AbVBO27rZrxlfcGtTeIGcNwtBQd8FRz6
+         GbUAa2k8cuqSVerUf9o5IsN8wNS9E58f+A6lq/dtYs/KL+6Sf384+95MC2MfBv/qHmqP
+         GYKMCvA2OsgNNFOICe2UEoumqrvFas2n8YngcxCB4SHZ4c10ckZnhr1D2ZA6KSixuYGG
+         f52w==
+X-Forwarded-Encrypted: i=1; AHgh+RpFC6tospD3Sm0Q9Mb4q66qOWqfDL+Y/Kbj3IQR+NaUUyaT2/Pb0Xv8wtBdxPcZz3ZHIiliD4oIlUmGL31r31g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa7HiqHZEETUo31jhVvC73fJa2HfSNIh77ELJm6TxdjyYKqSA1
+	7suSz9bRr4DY6QeiYyApbwDwVxsZGZ0QbJmKmH1poTHwRuKW2iLctnLf7aWLgiMTSHg9UpekxR4
+	4esn2qg==
+X-Received: from plbkf14.prod.google.com ([2002:a17:903:5ce:b0:2ca:5dc9:51d3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3550:b0:2c9:d539:61e7
+ with SMTP id d9443c01a7336-2ccbe6267f4mr52774855ad.19.1783435283848; Tue, 07
+ Jul 2026 07:41:23 -0700 (PDT)
+Date: Tue, 7 Jul 2026 07:41:23 -0700
+In-Reply-To: <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260707081434.539327-1-yangfeng59949@163.com>
+Mime-Version: 1.0
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+ <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+ <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+ <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
+ <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
+Message-ID: <ak0QE7mP_TeZmzeS@google.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 07, 2026 at 04:14:34PM +0800, Feng Yang wrote:
->From: Feng Yang <yangfeng@kylinos.cn>
->
->In the msg_alloc_iov function, the iov pointer is only assigned to
->msg->msg_iov after all memory allocations complete successfully.
->Therefore, when a calloc failure triggers the unwind_iov cleanup branch,
->we should use the local variable iov instead of msg->msg_iov.
->
->Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
->Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
->---
-> tools/testing/selftests/bpf/test_sockmap.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
->index 3e6be455d158..aaf2050e8845 100644
->--- a/tools/testing/selftests/bpf/test_sockmap.c
->+++ b/tools/testing/selftests/bpf/test_sockmap.c
->@@ -435,7 +435,7 @@ static int msg_alloc_iov(struct msghdr *msg,
-> 	return 0;
-> unwind_iov:
-> 	for (i--; i >= 0 ; i--)
->-		free(msg->msg_iov[i].iov_base);
->+		free(iov[i].iov_base);
-> 	free(iov);
-> 	return -ENOMEM;
+On Mon, Jul 06, 2026, Jim Mattson wrote:
+> On Mon, Jul 6, 2026 at 8:21=E2=80=AFPM Sean Christopherson <seanjc@google=
+.com> wrote:
+> > > For KVM-synthesized/emulated #PF/#NPF nested VM-Exits there is no fre=
+sh
+> > > hardware GuestInstrBytes state to propagate to VMCB12. So I agree tha=
+t it
+> > > should be simpler to avoid plumbing instruction bytes from the emulat=
+or, and
+> > > instead fetch the bytes late when constructing the nested VM-Exit for=
+ L1.
+> > >
+> > > I'll try this direction first.
+> >
+> > I'd rather not, at least not as the primary way.  It's going to raise a=
+ different
+> > set of issues, e.g. how to behave if reading guest memory fails.  That'=
+s probably
+> > unavoidable, e.g. if reading the INVPCID descriptor fails, then KVM doe=
+sn't even
+> > have a pre-decoded instruction to work with, but it should ideally be a=
+ last
+> > resort.
+> >
+> > E.g. where the NULL case triggers an on-demand read of guest memory.
+> >
+> > diff --git arch/x86/kvm/svm/nested.c arch/x86/kvm/svm/nested.c
+> > index ba985a02208a..812af3a8d8b9 100644
+> > --- arch/x86/kvm/svm/nested.c
+> > +++ arch/x86/kvm/svm/nested.c
+> > @@ -42,6 +42,7 @@ static void nested_svm_inject_npf_exit(struct kvm_vcp=
+u *vcpu,
+> >         struct vcpu_svm *svm =3D to_svm(vcpu);
+> >         struct vmcb *vmcb =3D svm->vmcb;
+> >         u64 fault_stage;
+> > +       u8 *insn_bytes;
+> >
+> >         /*
+> >          * For hardware NPF exits, the GUEST_FAULT_STAGE bits are only
+> > @@ -68,7 +69,14 @@ static void nested_svm_inject_npf_exit(struct kvm_vc=
+pu *vcpu,
+> >                                     (fault->error_code & ~PFERR_GUEST_F=
+AULT_STAGE_MASK);
+> >         vmcb->control.exit_info_2 =3D fault->address;
+> >
+> > -       nested_svm_vmexit(svm);
+> > +       if (from_hardware)
+> > +               insn_bytes =3D svm->nested.vmcb02.ptr->control.insn_byt=
+es;
+> > +       else if (vcpu->arch.emulate_ctxt->eip =3D=3D kvm_rip_read(vcpu)=
+)
+> > +               insn_bytes =3D vcpu->arch.emulate_ctxt->fetch.data
+>=20
+> Won't this be shy of the architected 15 bytes if RIP is within 15
+> bytes of a page crossing and the instruction ends before the page
+> crossing?
 
-Thanks,
+Ugh, x86 is so annoying.  Though we need to plumb the number of bytes even =
+when
+when pulling from vmcb02.
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Expose kvm_fetch_guest_virt() and wire up a wrapper for the emulator, then =
+this?
+
+	int insn_len =3D 0, len;
+	u8 *insn =3D NULL;
+	u64 fault_stage;
+=09
+
+	/*
+	 * For hardware NPF exits, the GUEST_FAULT_STAGE bits are only
+	 * available in the hardware exit_info_1, since the guest_mmu
+	 * walker doesn't know whether the faulting GPA was a page table
+	 * page or final page from L2's perspective.
+	 */
+	if (from_hardware)
+		fault_stage =3D vmcb->control.exit_info_1 &
+			      PFERR_GUEST_FAULT_STAGE_MASK;
+	else
+		fault_stage =3D fault->error_code & PFERR_GUEST_FAULT_STAGE_MASK;
+
+	/*
+	 * All nested page faults should be annotated as occurring on the
+	 * final translation *or* the page walk. Arbitrarily choose "final"
+	 * if KVM is buggy and enumerated both or neither.
+	 */
+	if (WARN_ON_ONCE(hweight64(fault_stage) !=3D 1))
+		fault_stage =3D PFERR_GUEST_FINAL_MASK;
+
+	vmcb->control.exit_code =3D SVM_EXIT_NPF;
+	vmcb->control.exit_info_1 =3D fault_stage |
+				    (fault->error_code & ~PFERR_GUEST_FAULT_STAGE_MASK);
+	vmcb->control.exit_info_2 =3D fault->address;
+
+	if (fault->error_code & PFERR_FETCH_MASK)
+		goto synthesize_vmexit;
+
+	if (from_hardware) {
+		insn =3D svm->nested.vmcb02.ptr->control.insn_bytes;
+		insn_len =3D svm->nested.vmcb02.ptr->control.insn_len;
+		goto synthesize_vmexit;
+	}
+=09
+	if (WARN_ON_ONCE(!ctxt))
+		goto synthesize_vmexit;
+
+	insn =3D ctxt->fetch.data;
+	if (ctxt->eip =3D=3D kvm_rip_read(vcpu))
+		insn_len =3D ctxt->fetch.end - ctxt->fetch.ptr;
+
+	for (len =3D X86_MAX_INSTRUCTION_LENGTH - insn_len; len >=3D 0; len--) {
+		if (!kvm_fetch_guest_virt(vcpu, kvm_rip_read(vcpu) + insn_len,
+					  &insn[insn_len], len, NULL))
+			break;
+	}
+
+synthesize_vmexit:
+	nested_svm_vmexit(svm, insn, insn_len);
+
+> > +       else
+> > +               insn_bytes =3D NULL;
+> > +
+> > +       nested_svm_vmexit(svm, insn_bytes);
+> >  }
+> >
+> >  static u64 nested_svm_get_tdp_pdptr(struct kvm_vcpu *vcpu, int index)
