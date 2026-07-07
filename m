@@ -1,49 +1,88 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51A4347BA9;
-	Tue,  7 Jul 2026 06:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47656217F27
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 06:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783404506; cv=none; b=PRXYm95GXJPdkjLlEIgQX5IfmGg2TeXuK8tBKvvHfaqPGDSubpqUqXx2ejc/j3KxLJ2yXAbD8tGNrBfZl5CyBbco8ovBi1QMptQshJ1te2/nUT1oJq5BLNJRQ7SNGg03NhXenIJJceJlcxqAWlrjX2UIUhWW2E766mqHjTYRIb4=
+	t=1783404510; cv=none; b=bJbn9fvJA1FD1UOgWL/OeifdzksH/FqhVu8O8t1PTWWpSfi26vqE4IWsKTHbSMWgz5ZBEjm3KxCzELTu0bD1G2x8a3KK1uLMk29tOZ/5BkrPROEpYkfBOrVcCOze3DqZ7t/QpDbDXIkLrYCl9b2MCEKj4qfQzweDg8dvDI9zEog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783404506; c=relaxed/simple;
-	bh=WksgIUkXjqj1KPOcbhLTowPkWDTc+0pEkWLBeWEz8ao=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=h+begkY6wllErJE0uOqFAsGk7/pzs/+MWza2+hkFWOXKic8uEmFrOZe0YaxUzOUx/gdCF0C58wjgHaJk26Em4nNBXm4Uqj2g4X6dh6oxksjNTQpUdSUDJYYBb/B014Kc+k+PYk3YhcmCufmWxWURtWgVEZLRGdATGNkXNytclgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3ea803fc79ca11f1aa26b74ffac11d73-20260707
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:38aed175-766c-4fad-8cf9-35507b534818,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:54fd8fcea6665db57fd660727f37e98c,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
-	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3ea803fc79ca11f1aa26b74ffac11d73-20260707
-X-User: gonglinkai@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <gonglinkai@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 912493711; Tue, 07 Jul 2026 14:08:16 +0800
-From: gonglinkai <gonglinkai@kylinos.cn>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1783404510; c=relaxed/simple;
+	bh=zMs7nSz36jZxUeTahMo0usqAkAszaWwPA1Hx749fPe0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gJT9brdyoR5MkkX5/KSkYVIdNjXXwTiFQ+bXikUfUyDsssMQDbYgWov1naYNxeKij9J6I5G8ySTmBUxveriBJkSzOD+ybl/Lt2uHMIxiYTwA6ZpYof8VOZVM8T2msqDb5Abq53zA1+iP/jAHjs1Dy5D/Qe/Cgl6pJppx+kOWS5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MRsg5RsU; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MRsg5RsU"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c96cb024ee0so2660892a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 23:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783404508; x=1784009308; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gpg9LG+O76eplxZLK8lJGM9FCJbB7J7EQAwbljKS/SQ=;
+        b=MRsg5RsUjzCkDOHjgzJS6q+dooiX9Rn1pbwRAkk4AQV94Lk5PoMpR3nXGGsFoHnZR+
+         BJw0BwlnE5b5wzeGQuzJYuza/V16UXlhY5OPL+JEKYP6JwNfQkuNL+a9Uw5+GMJ60az0
+         d6zzpzfgxDpKqXX8nnQxSwnbDfCnzkevrkWdheQ54OuMN1ptAuqg+0i3mFz3wEfK7VEv
+         oeP1YqNd1B1vDIDJYcrax20y1IA9qniDpJw+Smt3wJhw+qQpIHUM39L9UMTtzOOu4dvK
+         hjT/hihrVujrgQsz9YtQ37L7lefPBGhOfmM1vlPeBi/0YjpM3o1Kk2lN9BCOUHLk36xE
+         xNHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783404508; x=1784009308;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gpg9LG+O76eplxZLK8lJGM9FCJbB7J7EQAwbljKS/SQ=;
+        b=NiM90NOTIBZv9lHrRVxi/zLTTuEPN0pevxNmLW57W1uQxYl+9X1Hn1LVDQMKtxbelr
+         LnZhHXwC4jI0QNvtxr2sI2/Y0kbYpqB5vm/5XvpIeEqCmUnieH4eOckt86z4nTkopTs6
+         n3GkqUCOtVkHDJANB3UuJoCYQtE4yDNTcfQC4pPPpneIRL85ES764HHa0Zmnc6aOIsAO
+         kts6sGeKtH0ESOTKMxEwf+pkG4PMl4C6vIxnaakG+ovJ+HeVowyg62rY+dlnF73K3INW
+         0TzqJHDJZEYpl6iXzcMdQOdB/XyfXkqMCPWU81AZeQYaMBhAuLUCSKO2Yj/nZYkRG8a2
+         0aCw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr9rt7I/FcITRXT5ik75yL8f4nNofEEqY8O12CpNOojk5NpNO6zNk89K/7VVKYlzszDgljUJeooOmn7ES60rF8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfaaLAQtbUtwlPkbMpAc/y0jqa95IrHpMtgbhB3pRsZ4poWx+Y
+	8a0XPta1bYMCQWRFj5qsvw2GqLZIWvKxl9Mmf4L3pxVnkqtmeIa8EP9R
+X-Gm-Gg: AfdE7cmBx0EEPC3UoHu8AGNSqBhUBmGASlVW0J7qNPOCFIN+a3wsWe6gHwDq+wR77cR
+	9fQnc9Zju09dxUZPWQRs84HDbCFz15DoBbDNoOBK/UhkxF1YFCCdBKPX5FA+31duktPCKv1VKnM
+	A2Oh2OZu6WpjC3u6puC4MphAcUZ4NP2SwioHGJQVA9vdnSW415g3MmPanE2DVgZyKP4U3UYApLM
+	pkqF5bRQ/hWZMYDma/Cm39tKaBRtZd17ip9y9ZSSEgV5xBxTocVm0mUoJu8mvsgGszWvLW2j2gw
+	Mr9H6clnxpLGf92mZyD0DlvPLEMxOyRt4cl9EC1GrwKhUo1718rkR9cBm04LHouJKCBknWl8VoY
+	ugEmicEregX9Nw5JpBiQaXc9FYIGfzjGlSWsJNry7tRQIOQn+EJXj4Bm0iP/duZGRXOLcu/BiJ1
+	UoahT/1/y8fmtC7z8PTCpdfJtXEjGmRf2kOGXFenqci485OKiciLcsS+X3rgKltbrTeWmZ/Pl4r
+	qdP1TPsaCZeme1wTXJA0JN1U5aEhbVreA==
+X-Received: by 2002:a05:6300:618d:b0:3bf:a698:ce4c with SMTP id adf61e73a8af0-3c08f001b9fmr4812556637.58.1783404508412;
+        Mon, 06 Jul 2026 23:08:28 -0700 (PDT)
+Received: from u2404-VMware-Virtual-Platform.tailf6b5e0.ts.net ([24.4.24.156])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311747f5975sm4101507eec.4.2026.07.06.23.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2026 23:08:27 -0700 (PDT)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	mmullins@fb.com,
 	linux-kernel@vger.kernel.org,
-	gonglinkai <gonglinkai@kylinos.cn>
-Subject: [PATCH 2/2] selftests: watchdog: fix block comment style in file header
-Date: Tue,  7 Jul 2026 14:07:35 +0800
-Message-Id: <20260707060735.1469033-3-gonglinkai@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260707060735.1469033-1-gonglinkai@kylinos.cn>
-References: <20260707060735.1469033-1-gonglinkai@kylinos.cn>
+	linux-kselftest@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: Reject negative const offsets for buffer pointers
+Date: Mon,  6 Jul 2026 23:08:03 -0700
+Message-ID: <20260707060804.93561-2-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260707060804.93561-1-sun.jian.kdev@gmail.com>
+References: <20260707060804.93561-1-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,40 +91,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-checkpatch reports BLOCK_COMMENT_STYLE for the file header because the
-'*' on the description lines is not aligned with the trailing '*/'.
+The verifier rejects variable offsets for PTR_TO_TP_BUFFER and PTR_TO_BUF
+accesses, but it currently accepts a constant negative offset produced by
+pointer arithmetic.
 
-Align the block comment. No functional change.
+For example, a raw tracepoint writable program can load ctx[0] as a
+PTR_TO_TP_BUFFER, move it by -8, and then access the adjusted pointer.
+The access is before the tracepoint writable buffer base and should be
+rejected.
 
-Signed-off-by: gonglinkai <gonglinkai@kylinos.cn>
+Compute the signed effective buffer offset before updating max access
+accounting. Reject negative effective offsets and use the checked access
+end for max_tp_access and other buffer max access accounting.
+
+Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 ---
- tools/testing/selftests/watchdog/watchdog-test.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/bpf/verifier.c | 40 ++++++++++++++++++++++++++++++++++------
+ 1 file changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 74a581250829..8b2c9a63439d 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -1,12 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
--* Watchdog Driver Test Program
--* - Tests all ioctls
--* - Tests Magic Close - CONFIG_WATCHDOG_NOWAYOUT
--* - Could be tested against softdog driver on systems that
--*   don't have watchdog hardware.
--*
--* Reference: Documentation/watchdog/watchdog-api.rst
-+ * Watchdog Driver Test Program
-+ * - Tests all ioctls
-+ * - Tests Magic Close - CONFIG_WATCHDOG_NOWAYOUT
-+ * - Could be tested against softdog driver on systems that
-+ *   don't have watchdog hardware.
-+ *
-+ * Reference: Documentation/watchdog/watchdog-api.rst
-  */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 21a365d436a5..b4ed6d519630 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 				 const char *buf_info,
+ 				 const struct bpf_reg_state *reg,
+-				 argno_t argno, int off, int size)
++				 argno_t argno, int off, int size,
++				 u32 *access_end)
+ {
++	s64 start, var_off;
++
+ 	if (off < 0) {
+ 		verbose(env,
+ 			"%s invalid %s buffer access: off=%d, size=%d\n",
+ 			reg_arg_name(env, argno), buf_info, off, size);
+ 		return -EACCES;
+ 	}
++
+ 	if (!tnum_is_const(reg->var_off)) {
+ 		char tn_buf[48];
  
- #include <errno.h>
+@@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	var_off = (s64)reg->var_off.value;
++	if (check_add_overflow(var_off, (s64)off, &start)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start < 0) {
++		verbose(env,
++			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
++			reg_arg_name(env, argno), buf_info, off, var_off);
++		return -EACCES;
++	}
++
++	if (start > U32_MAX || size < 0 ||
++	    check_add_overflow((u32)start, (u32)size, access_end)) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%lld, size=%d\n",
++			reg_arg_name(env, argno), buf_info, start, size);
++		return -EACCES;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -5351,14 +5378,14 @@ static int check_tp_buffer_access(struct bpf_verifier_env *env,
+ 				  const struct bpf_reg_state *reg,
+ 				  argno_t argno, int off, int size)
+ {
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size);
++	err = __check_buffer_access(env, "tracepoint", reg, argno, off, size, &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
+-					    env->prog->aux->max_tp_access);
++	env->prog->aux->max_tp_access = max(access_end, env->prog->aux->max_tp_access);
+ 
+ 	return 0;
+ }
+@@ -5370,13 +5397,14 @@ static int check_buffer_access(struct bpf_verifier_env *env,
+ 			       u32 *max_access)
+ {
+ 	const char *buf_info = type_is_rdonly_mem(reg->type) ? "rdonly" : "rdwr";
++	u32 access_end;
+ 	int err;
+ 
+-	err = __check_buffer_access(env, buf_info, reg, argno, off, size);
++	err = __check_buffer_access(env, buf_info, reg, argno, off, size, &access_end);
+ 	if (err)
+ 		return err;
+ 
+-	*max_access = max(reg->var_off.value + off + size, *max_access);
++	*max_access = max(access_end, *max_access);
+ 
+ 	return 0;
+ }
 -- 
-2.25.1
+2.43.0
 
