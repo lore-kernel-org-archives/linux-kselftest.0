@@ -1,117 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA8626AC5;
-	Tue,  7 Jul 2026 18:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783448408; cv=none; b=hCulSriXt3FgexwqVI9uphryGEol5GMOQRVTZG6NNCBz/ZtxWVf+zNtuj/+5McE8WFcyHoo12RdcgOIspXFp62L5RDjPLv392g36BfxkkEvzXJ/n3178tUiKMsacTmuurtidUVcPkSSSl4p+1TGxwRr5Da4qp6d5UnLgsFUeznQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783448408; c=relaxed/simple;
-	bh=I86E8RIIAR6boEDHK81W0I51tU6/MnrPYSU5+rKgpT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CB36AO/ByDNDm2HQevYjQjOXGz6RRwbBeDWMtz6vHgXVTK778sTYFxizk6cjSl/iyngWtTlHw6Lb0cGJqOz/qZKtN+RErFCJnl5Heh2nknRzYQm+sOwwQ4UlSh3UevOYILiZ8dG/cF/2c/+EMbIkeQS4MFwsnSlth5npYaayCps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ep0suLij; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DEC43C7DE
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783448618; cv=pass; b=hpyEHA7u/xBdvvDy5tpJWc26Ucld2l/TcH1V97cCnbZuvd1XrKIJ8CX7NqiQiQV7zYXgT0Xs8SQgX4uPMLqQ4jOnbnFS90xvycaFAiXUbMyGNlN7wvMJ+rfxKboqTru5CJJUzCGk8lPUyMXjF7d/La9z393A5p4tLJjVx51WIHE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783448618; c=relaxed/simple;
+	bh=rlf3tHuXC+J9H9qoGU4eEn6pWPRGEeYT1LPxkFxhje4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bH7CZEhSVYFHhkdKFu4erKp76lG3nUqyCgDiO3VDIfIUdCI6lO9epzsh94PKd3zKd9KwSRKZ+tu4025HtkeH5t3dSR97EQLTGeWACpVp3pAOViCxGVcseZrjjh80is9uG1blq0GeodY8oYr3K0nZEb0hTBWhhiXulMXkGyOnOD4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MalPC7ts; arc=pass smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ep0suLij"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF961F000E9;
-	Tue,  7 Jul 2026 18:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783448407;
-	bh=AWIzIpH8a00nMIO23YrefbZEhT8NbDGs3/Ve9oenG9g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ep0suLijWN3eWlVd2Fpqz+yCycdYo+MNXSN0RmNnb84pJ7Ym/zvlHhZ+yQCzN7Fln
-	 mBRJ2yMJDx9RWbXnfb1dBoY+nskN7XRxrU3hfUM99tCczOI2mCyvieaC61VDUbyyml
-	 1z2swx2WCvXQFjqpB3T2YArm4OfIGpw0hV9mr5reikdj4MpRhuK3BSQt/l3/RwWO9V
-	 PxLSCgIAFC2hf+yYA+dBuRxho7Qh57l7zrQNFjmhlgUP7aSj597ytZycegiTG+FMuq
-	 RS8diYtYN1HGOY9ZestohQsiYB9rBLFD+L8zfbiw6Zsf5p/TJoaARjDEFzGzGrAGL4
-	 UaN10YmI1I4mw==
-Date: Tue, 7 Jul 2026 11:20:05 -0700
-From: Oliver Upton <oupton@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 1/7] KVM: arm64: Disallow vPMU when pPMUs do not cover
- all CPUs
-Message-ID: <ak1DVUs0bgkpZh0N@kernel.org>
-References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <20260706-hybrid-v8-1-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <akvgIWqBjAp_VA_A@kernel.org>
- <e03f17b2-a765-4912-adf6-3da26e7eeecd@rsg.ci.i.u-tokyo.ac.jp>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MalPC7ts"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-698b78c05b0so1159a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 11:23:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783448615; cv=none;
+        d=google.com; s=arc-20260327;
+        b=iznNAML3O8MSQVchwqmR5QFg6Kv5rGzUftmHFM+cfydWTJtOEfcwF/W0BdakFO4Ftd
+         a7WuluBQRGlh6jvqmzr1YYujwdyAR9FtI4Ct5AGrdXxzdLeM5RJ/vguQsUbNo4ZrPuLj
+         gTiWnRxHHKZsQY76ASPBo6q0Gb74fDPe8FrhryYsmC/F94ttPjPOpg70sQ2YrmRYt2CW
+         fa2+oidkdF3U1T4hStwa+9pAwW4uQ9by2EQfhzWAp6uUQRlSdY8JBy7zS9wcx3UIqaDs
+         cdSBrS5E3UnbKe6kypylJEKjzRcnB7pvF7wOZy2xSnoCpImqRywXK89Qe26bj0dbFsxE
+         JvVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
+        fh=Gza8ckkdf4P0bekDg9keaPQLgug22dDcgs2wCsin74o=;
+        b=bvE41K3rNYmYwQEqiyOtVeujdfVOSmfqoPriVRMeEc9GWJWhMcvrPQS24aaLmP5b3T
+         qvWjGwKhICVdXQdM7/1TCe36XvLKCnZIjsSaseQAD1eWceCgvAgObnhOgZ++2+2YE/WH
+         XGcXkRTbaay1Ik3fu8JPV/r9UoennRhyaRvbO/InXx3Rr0UXCza7E/VxyYZQUowGPPVw
+         UWKta9clIRqOnnnK69g7s59HqTI4UyE/8/FrHBJEiX7ly4532acu0VkYc3smuZw+T1RG
+         GjfiK08KVdGRdHCvz6ewdudke4jdgk1WsG3Crhyd99/1ZnzreYJBFKCYFFrCSL1wp2Nk
+         3vFA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783448615; x=1784053415; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
+        b=MalPC7tsOEfl6t+SGqr5q1OkqWADzkKctrHvzVWlgdPyJmRePGZcDWuztqKmf+l5/Y
+         U58VcvVBWMpUF/5pXXBl57dPBGax02dvdwI/PI6EqVabcZdjs1XYxuYiQsThhfyQ8Zru
+         pF7JQaY3p8Dey6p9a3n7WIayP0IdhADVUHljnhFXRw9YPr7ieNXs9+QfiQIyNwQHhfml
+         zta5TLZN/UkabDamuRIGvPihOMpN/qtz/RQT3Dfh+rNXcBhKE6JgKJXEjZ5Nhj6Tb9KB
+         fba+3hHytRwgIWBDwmcBcSNCEGw7S2RMkbJgzvZ6ufLYddthvwN2P2rku++LB+PNlANm
+         BSIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783448615; x=1784053415;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
+        b=a2G/2hnL8D1tGKR6RSkIywZHCqiK1ABd0yLkgfGCfKdkpTCTmoS5PfkjXBslXw/Q8o
+         QtyAKdfgH1NUr+JTQ/AxgyDW9YcHcEJWnw1+WVy0aJyqTwixHNH+S3Ck+5NcmyupHmdg
+         bvgyZlIa1FjamBkiG6yFAR6+raF9R2AT/QLg8WR8S1oWMRoYkPjhAlS/EBT4l0Yxty61
+         bXM+vL2E3VFut1zVsBl2NPJ/QXuqq4MRl2GwUM+phiv8oWg+7eiDcSKwXzSxYwdTxJ7R
+         rwZvFOy7mEDTl6FKUXcI3FgGLUrMnxJ+tgE9LPx12jCsHMF3h/n4UjkwYLLaRL+fksON
+         z7gA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq2crF3lew7g6Uei2om0cS5hcr580ok9mNiAgFgbaHwuY5YOTyL4UoD7W0C1Nk4JiGwqtz7rilBQC7SwYJI++s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMMh/vgGYIm08xcAR9eVlWyDVQx4Sh4+Y+B57d000Wx99otG81
+	8xIuRVVnb6+5nzHVnrQKgPdLr8n6JJ/u1yxJQTYRTMccXdGNibqd7Ktj8cd7P5jRbbnw5TUBiae
+	flNwYk/MzRGsA03QkblxDOQmSV6ncbfS3sCEdVphwGwuy461OLZUW77zCQy4=
+X-Gm-Gg: AfdE7cm38DuEpeAzwdouEHf7iJ7KUxrLX4Z1ujiECc/LWiqgqeSUFWve9YfBJla0XGo
+	s/kHb4mM5EveLB/tcOCeoRvTfc7C5fuqRtjNvyj+sFbFFdxS7IV6rrO+3nQPKWoEuE+/kTApWsa
+	bviw+eAz371FYC1zoaf9Dp0TQyBNQE7DcRuoVXnRwKHrfmCDP65ZrVXeEJWF8VTLQoRsDaDZbtn
+	q7hCEtPEucUPPzXxLoh/EV3gh2MqXv72RVlOxZKFRu3kkXHZscw1JS+ezGgJd4WO5OXj6uP
+X-Received: by 2002:aa7:d614:0:b0:697:7f69:48e3 with SMTP id
+ 4fb4d7f45d1cf-69a9134f82amr62168a12.10.1783448614909; Tue, 07 Jul 2026
+ 11:23:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e03f17b2-a765-4912-adf6-3da26e7eeecd@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+ <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+ <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+ <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
+ <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
+ <ak0QE7mP_TeZmzeS@google.com> <CALMp9eTycB8Z94V8j-xyfDeah5KaJypRrPfFNHfQSUzgrr7FkQ@mail.gmail.com>
+ <ak0dRzS4Ap-JREvg@google.com>
+In-Reply-To: <ak0dRzS4Ap-JREvg@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 7 Jul 2026 11:23:22 -0700
+X-Gm-Features: AVVi8CdfxH9KPwBG1cPjxuI_GW1P0iEniD5Mku_K1NYa8qNEH3FQUGW2WLHpSig
+Message-ID: <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+To: Sean Christopherson <seanjc@google.com>
+Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 07, 2026 at 08:08:03PM +0900, Akihiko Odaki wrote:
-> On 2026/07/07 2:04, Oliver Upton wrote:
-> > Hi,
-> > 
-> > On Mon, Jul 06, 2026 at 07:03:24PM +0900, Akihiko Odaki wrote:
-> > > Commit ec3eb9ed6081 ("KVM: arm64: PMU: Disallow vPMU on non-uniform
-> > > PMUVer") made KVM reject vPMU unless the system-wide PMUVer is usable.
-> > > That covers systems where PMUv3 is absent or non-uniform, as well as
-> > > systems where IMPDEF PMUv3 sysreg traps are unavailable.
-> > > 
-> > > However, KVM can still accept vPMU when all CPUs uniformly trap PMUv3
-> > > sysregs, but the pPMUs registered with KVM only cover a subset of
-> > > possible CPUs.
-> > > 
-> > > Reject vPMU unless the registered pPMUs cover every possible CPU.
-> > > This avoids carrying support for partial pPMU coverage into the
-> > > fixed-counters-only UAPI introduced later in the series.
-> > 
-> > Doesn't CPU hotplug screw this up? I could online a CPU that doesn't
-> > have a PMU after creating the VM.>
-> > I'd rather just change ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS to become a
-> > system feature. That way any CPU which breaks the system-wide assumption
-> > cannot be onlined.
-> 
-> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS only says that IMPDEF PMUv3 sysregs are
-> trapped. It does not say that KVM has a driver-backed PMU usable for PMUv3
-> emulation. This patch checks that extra requirement.
-> 
-> I re-checked CPU hotplug. Onlining a CPU without a PMU later does not make
-> an accepted VM unsafe, since the check is against cpu_possible_mask.
+On Tue, Jul 7, 2026 at 8:37=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Tue, Jul 07, 2026, Jim Mattson wrote:
+> > On Tue, Jul 7, 2026 at 7:41=E2=80=AFAM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> > >
+> > >         insn =3D ctxt->fetch.data;
+> > >         if (ctxt->eip =3D=3D kvm_rip_read(vcpu))
+> > >                 insn_len =3D ctxt->fetch.end - ctxt->fetch.ptr;
+> > >
+> > >         for (len =3D X86_MAX_INSTRUCTION_LENGTH - insn_len; len >=3D =
+0; len--) {
+> > >                 if (!kvm_fetch_guest_virt(vcpu, kvm_rip_read(vcpu) + =
+insn_len,
+> > >                                           &insn[insn_len], len, NULL)=
+)
+> > >                         break;
+> > >         }
+> >
+> > This split doesn't bother you?
+>
+> What split?  Do you mean reading some bytes from the emulator, and some a=
+t the
+> time of #VMEXIT?  If so: no.  IMO, the most important thing in practice i=
+s to
+> capture the actual bytes used to decode the instruction that led to the #=
+NPF.
 
-Sorry, I missed that this was against the possible mask.
+Yes, that was the split I was referring to.
 
-> The problem is the reverse case on ACPI: this check can disable vPMU when a
-> possible CPU is offline. DT populates supported_cpus at boot, while ACPI
-> initially populates it only from online CPUs and grows it as matching CPUs
-> come online.
-> 
-> That makes this patch too conservative. In practice, I do not expect systems
-> to mix CPUs with and without a usable PMU. A better approach is probably to
-> treat such a host as out of spec and add TAINT_CPU_OUT_OF_SPEC. We already
-> do that for architectural PMUv3 by detecting mismatches in
-> ID_AA64DFR0_EL1.PMUVer; we can do the same for
-> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS with non-standard PMUs.
+> Exactly how and when the "CPU" reads the bytes is a micro-architectural d=
+etail,
+> so I don't have any qualms from an architectural-correctness perspective.
 
-The presence of the workaround is, by definition, out of spec. I just
-never bothered tainting the kernel because these machines are already
-TAINT_CPU_OUT_OF_SPEC by way of the broken VGIC.
+When I requested this feature, I think I made it clear that I wanted
+the actual instruction bytes used to decode the instruction, rather
+than bytes asynchronously fetched through the data path. It wasn't
+until I encountered the Naples erratum that I realized AMD hadn't
+implemented the feature as requested.
 
-Ok, so how about you keep the check that you're doing here and promote
-IMPDEF_TRAPS to a system-wide feature? That would satisfy the two
-preconditions we have for PMU emulation, which is system register traps
-and a backing arm_pmu that understands PMUv3 events.
-
-Thanks,
-Oliver
+Since there is no guarantee that the instruction bytes are actually
+relevant, I concede that 'exactly how and when the "CPU" reads the
+bytes is a micro-architectural detail.'
