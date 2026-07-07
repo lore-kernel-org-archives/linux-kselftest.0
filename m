@@ -1,251 +1,155 @@
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D92D202C48
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 03:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758CB36C9F4;
+	Tue,  7 Jul 2026 04:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783396054; cv=none; b=jN8zEfqQFDGetBzx86ozLPxxInPQx/UXuNacnPY8idbJDwYu1xIrHtKbwhdqtPBBUqoJKvjuyyC7sPiorT2j6EIhI5wDTbBtTlOD0kZIrzQBLW+HvARZKog3OFQ6DWn30rJ7Kk+eZ/v0ScApfHUTs+b6C2rO/V3dXy1v+TdXgA0=
+	t=1783398305; cv=none; b=h1sXaDpXTqzw28AmzuDsL4RLDcLt00VmXxSRggd3ReAaIJiz/dAR2EkHScI/X4wOEYjhkcSWYRsm2PCcgQZtDGRJBXwHHRH4Bv0AnVe+GjxEGWat+q2cz5k8JgeikmIOK2HVzKfXhZblw20/Z2328Ry9k0LsIHmGMF1bYHY6r/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783396054; c=relaxed/simple;
-	bh=bIpel2MisZarxPESn/8XO7PTy6ZrPetEUgx8Jkn5Qic=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JGLktDlK/G9tIsOt9ZTyqeXQN3nhT3+0sUQQJmcuo+iW0M4dRZl/e0vJrEApdliuDE1EwiMIpWXiNSkM1Izc/3VFTqWOBFP/T+T8rraYOSyj8pCiUT5qCxNd2xb6K4buI+YoZ1QFKaswAWyFHW+T6J4XJbiGKWJ9qruoWJ7O+vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g5QYT0VT; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783398305; c=relaxed/simple;
+	bh=hoQ+njDruRZA2fYr+9bliB6+6hXbxa/ta81thoEAfiE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VCzU/5iiHYpIOmd2UWagyk5UWxQXvb6UFsTdwxBlqYVyLNfU+7P26G2oCuXqjVYwC+koi64RGkJ/C3wmQ9Cq1JMxL96+dQchsbRnIR1F2LYirMNM+6ZeY1sZMWbpHEqqL3AY0GvEtg3+ECCwDGODM/iWBq165y2eqxlyTpleiiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=PoaYtoDh; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g5QYT0VT"
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-7387ac7d28cso924797137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jul 2026 20:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783396052; x=1784000852; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7eoG/lm2vamJEnKh3aUV46HcL7smzTZx56E3ZGcUYAQ=;
-        b=g5QYT0VTkobFNkhLAvT+n3q8rKdazVZJ1hK14hvFaapSWuAeR7PrmyJVcYMpNEtKsG
-         BurxxjOAKFPMsBW8yi51nRsbKwP3jEFta1pJDghdQJCDzXX7k1aZGyMFcrtAIS5L+KsF
-         eDncPMPuDxk1tQEZ4hRP8tSG8fUwwvzIxwwks+LMduTg9Tdt1CE0bx+A3jSofGHIrXw8
-         pG+CHp6HC8r0Zdx4PWnjwkHT5IW1gcrHoglDfQ11wbjCiZUb+UJ4pC5Yd2v0H3BsAR+t
-         yom9ertYNW3iBjfRvnCCMVYZbIWXLn6Kl6pEJrAynnwyLOiBxH4G4GY3JgB6q4/07DEC
-         R67Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783396052; x=1784000852;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7eoG/lm2vamJEnKh3aUV46HcL7smzTZx56E3ZGcUYAQ=;
-        b=GBN2HSiHXTyYfYHGJlt91PU8xQkhOwhbpgwHlqPbd5H9A87WjBX/QxNL52r06Qbljd
-         fXlxQyvJUHdMAozUklEzgAA0cfaTSTcIIS/15+0YjvPUjCi8nXz2sS8bgxv3LT4chwpi
-         aN+u5qQQX0xJP0x6sARNv8EmaeXkMl6cX+QH7DdmODAzjSV4T5fFtz3zbk4+LxkX8Hh/
-         +tvbe8+w0UgNheA8INEOMDsLbUxI2S9MVedr8tXZJVlcBnaI3djaboCTHCLT0RLhKqAS
-         Yx/IkU0tvyhJo7pO576Ij+ztI9q4l17XBBIOYmL3pfNYzCxjRqaCv1qhRT36B+K/ckJc
-         uPOQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpnVkPf1L7vjkQO956PextI1nPtz1ap98TFbyKn22oMjYgPKQzR5WZPH2A6zHqXTlvSelY4WhquT7632jSHLV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOprAKPHwfcgveqUTjvUocO7x1QKGgdFPrZAPr8kIcMImgHm0l
-	8WZz3Wlsmj7uyvrik5KpbloGzyfYOSHv52792K+9pL9Qi+RbzQUXoiBq
-X-Gm-Gg: AfdE7cl1r/oD5GK5ABwq0g7E1wqLH95UydPni5Acr5OlkmfDDVSOVrD7MCE2PkMQYVT
-	vdtUQvIBux+9Lz3S7sdWFfq+rlkWiOw502m/zKzEFK5E1WNUbcUTI/GedFTAXfoVqpkmnYevv6X
-	oxHp/hsbgobpjKf2Okfr9isjxZO8ryy34SmeA6anO0iZCoid61YvKZSnixluqYPUIIgxSxvCqud
-	1xuVCa8bqItg5ImFg+2FfwZ+sEBrLkRs/x5XMpZOWJo7fgZC71GILVJCs+h3lqmTQaA2WvgGC+1
-	k0GUXF6fwzoEM6JpryA1M8oGVrBuhCiAx+7+gy0j+WLOa5CK+uZuYoy7WUNA7GHjFa3tOuJB2eM
-	j2ZfNFE6aMEAkRg6Z2Zu0RL9dmssAwnOvMGPauLVxFbjVZUheN1uJEgiIjuV/ZeoAOQ+wewDjAR
-	Wl7zqZG0FrABpLXA==
-X-Received: by 2002:a05:6102:6898:b0:631:2dc6:2f5c with SMTP id ada2fe7eead31-744b7853919mr1736452137.0.1783396051770;
-        Mon, 06 Jul 2026 20:47:31 -0700 (PDT)
-Received: from houminxi ([61.170.226.21])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-73e19f3f781sm6597392137.2.2026.07.06.20.47.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 20:47:31 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	i.maximets@redhat.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v2] selftests/net/openvswitch: add SCTP flow key test
-Date: Mon,  6 Jul 2026 23:47:18 -0400
-Message-ID: <20260707034718.2717982-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="PoaYtoDh"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wgxMa-00DUhY-Pa; Tue, 07 Jul 2026 06:24:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=UTH7OiFh1ARrWMmMRsngXeh99jzhBAy7BatQuxWO90Q=; b=PoaYtoDh4qwiH57DwrxBsf4y7s
+	ab6syiU3gq3pSX6QniPwUGXAD3yaQ9HZFBfQT+RVsjbPZAbvGW7yZxiiCpYaIIlJ27H40QM+Se67G
+	E6nud8hj7Ys91xu2GwM4oY/NPqQTmRgbRkS9icrCAWMR06I4ZywTp6cw1JJlUyvbK/W/5oYy6jMDs
+	+pFBbM/lcevmamCfmcjhRwZXiu8x+wiv08X9OouGVQPlbKRNsUaBxySSydX8B1FLxEq6fe/zzWBVv
+	W0YOQRjrLRGUZzGu0LIC1FaKb/YhwZdPu0YZtGtRMln3T8GtgVgC70netVaYVVluSe83zj7CFl77a
+	9P1BUHvg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wgxMZ-00076S-J1; Tue, 07 Jul 2026 06:24:51 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wgxMS-00Ctdi-6U;
+	Tue, 07 Jul 2026 06:24:44 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Tue, 07 Jul 2026 06:23:58 +0200
+Subject: [PATCH bpf v4 3/4] selftests/bpf: Adapt sockmap update error
+ handling
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260707-sockmap-lookup-udp-leak-v4-3-f878346f27ab@rbox.co>
+References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
+In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Cong Wang <cong.wang@bytedance.com>
+Cc: Michal Luczaj <mhal@rbox.co>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org
+X-Mailer: b4 0.15.2
 
-Register OVS_KEY_ATTR_SCTP in the flow key parser so that sctp()
-can be used in flow specifications. The ovs_key_sctp class already
-exists (with src/dst fields matching the TCP/UDP siblings) but was
-not wired into the parser, so the token was silently dropped and the
-kernel rejected the flow.
+Update sockmap_listen to accommodate the recent change in sockmap that
+rejects unbound UDP sockets.
 
-Add test_sctp_connect_v4 exercising the SCTP flow key with
-port-specific matching: sctp(dst=4443) for client-to-server and
-sctp(src=4443) for server-to-client.
+TCP: Reject unbound and bound (unless established or listening).
+UDP: Accept only bound sockets.
 
-Wait for ncat readiness with ovs_wait instead of a fixed sleep so
-the test does not race against ncat startup. Use grep -c on the
-listening message to distinguish between successive ncat instances
-that share the same stderr log. Kill the previous server before
-respawning to avoid EADDRINUSE on the SCTP port.
+While at it, migrate to ASSERT_* and enforce reverse xmas tree.
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-v1 -> v2: replace sleep with ovs_wait on ncat listening output,
-          kill previous ncat server before respawning to avoid
-          port conflict (Aaron review feedback)
+ .../selftests/bpf/prog_tests/sockmap_listen.c       | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
- .../selftests/net/openvswitch/openvswitch.sh  | 102 ++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    |   5 +
- 2 files changed, 107 insertions(+)
-
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 2954245129a2..9c364eeb2ec2 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -32,6 +32,7 @@ tests="
- 	dec_ttl					ttl: dec_ttl decrements IP TTL
- 	flow_set				flow-set: Flow modify
- 	action_set				set: SET action rewrites fields
-+	sctp_connect_v4				sctp: SCTP flow key matching
- 	psample					psample: Sampling packets with psample"
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index cc0c68bab907..1c96a3cf4b97 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -53,8 +53,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+ 			       int family, int sotype, int mapfd)
+ {
+ 	u32 key = 0;
+-	u64 value;
+ 	int err, s;
++	u64 value;
  
- info() {
-@@ -443,6 +444,107 @@ test_action_set() {
- 	return 0
+ 	s = xsocket(family, sotype, 0);
+ 	if (s == -1)
+@@ -63,11 +63,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+ 	errno = 0;
+ 	value = s;
+ 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+-	if (sotype == SOCK_STREAM) {
+-		if (!err || errno != EOPNOTSUPP)
+-			FAIL_ERRNO("map_update: expected EOPNOTSUPP");
+-	} else if (err)
+-		FAIL_ERRNO("map_update: expected success");
++	ASSERT_ERR(err, "map_update");
++	ASSERT_EQ(errno, EOPNOTSUPP, "errno");
+ 	xclose(s);
  }
  
-+# sctp_connect_v4 test
-+# - sctp(dst=4443) matches client-to-server INIT
-+# - sctp(src=4443) matches server-to-client INIT-ACK
-+# - remove flows and verify connection fails, reinstall and recover
-+test_sctp_connect_v4() {
-+	local t="test_sctp_connect_v4"
-+
-+	which ncat >/dev/null 2>&1 || return $ksft_skip
-+	modprobe -q sctp 2>/dev/null || return $ksft_skip
-+
-+	sbx_add "$t" || return $?
-+	ovs_add_dp "$t" sctp4 || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "$t" "sctp4" "$ns" \
-+		    "${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 172.31.110.10/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 172.31.110.20/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	# ARP forwarding
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(1),eth(),eth_type(0x0806),arp()' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(2),eth(),eth_type(0x0806),arp()' \
-+	    '1' || return 1
-+
-+	# SCTP port matching: dst for request, src for reply
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
-+	    '1' || return 1
-+
-+	echo "server" | \
-+		ovs_netns_spawn_daemon "$t" "server" \
-+				ncat --sctp -l 172.31.110.20 -vn 4443
-+	local server_pid=$pid
-+	ovs_wait sh -c \
-+	    "[ \$(grep -c 'Ncat: Listening' ${ovs_dir}/stderr) -ge 1 ]" \
-+	    || return 1
-+
-+	info "verify SCTP association with port-keyed flows"
-+	ovs_sbx "$t" ip netns exec client \
-+	    ncat --sctp -i 1 -zv 172.31.110.20 4443 \
-+	    || return 1
-+
-+	ovs_del_flows "$t" sctp4
-+
-+	info "verify connection fails without flows"
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(1),eth(),eth_type(0x0806),arp()' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(2),eth(),eth_type(0x0806),arp()' \
-+	    '1' || return 1
-+
-+	kill -TERM $server_pid 2>/dev/null
-+	echo "server2" | \
-+		ovs_netns_spawn_daemon "$t" "server" \
-+				ncat --sctp -l 172.31.110.20 -vn 4443
-+	server_pid=$pid
-+	ovs_wait sh -c \
-+	    "[ \$(grep -c 'Ncat: Listening' ${ovs_dir}/stderr) -ge 2 ]" \
-+	    || return 1
-+
-+	ovs_sbx "$t" ip netns exec client \
-+	    ncat --sctp -w 2 -zv 172.31.110.20 4443 \
-+	    >/dev/null 2>&1 \
-+	    && { info "FAIL: connection should fail without flows"
-+	         return 1; }
-+
-+	info "reinstall flows and verify recovery"
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp4 \
-+	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
-+	    '1' || return 1
-+
-+	kill -TERM $server_pid 2>/dev/null
-+	echo "server3" | \
-+		ovs_netns_spawn_daemon "$t" "server" \
-+				ncat --sctp -l 172.31.110.20 -vn 4443
-+	ovs_wait sh -c \
-+	    "[ \$(grep -c 'Ncat: Listening' ${ovs_dir}/stderr) -ge 3 ]" \
-+	    || return 1
-+
-+	ovs_sbx "$t" ip netns exec client \
-+	    ncat --sctp -i 1 -zv 172.31.110.20 4443 \
-+	    || return 1
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index e1ecfad2c03e..7cfc29ec7e59 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1982,6 +1982,11 @@ class ovskey(nla):
-                 "icmp",
-                 ovskey.ovs_key_icmp,
-             ),
-+            (
-+                "OVS_KEY_ATTR_SCTP",
-+                "sctp",
-+                ovskey.ovs_key_sctp,
-+            ),
-             (
-                 "OVS_KEY_ATTR_TCP_FLAGS",
-                 "tcp_flags",
+@@ -77,8 +74,8 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
+ 	struct sockaddr_storage addr;
+ 	socklen_t len = 0;
+ 	u32 key = 0;
+-	u64 value;
+ 	int err, s;
++	u64 value;
+ 
+ 	init_addr_loopback(family, &addr, &len);
+ 
+@@ -93,8 +90,12 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
+ 	errno = 0;
+ 	value = s;
+ 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+-	if (!err || errno != EOPNOTSUPP)
+-		FAIL_ERRNO("map_update: expected EOPNOTSUPP");
++	if (sotype == SOCK_STREAM) {
++		ASSERT_ERR(err, "map_update");
++		ASSERT_EQ(errno, EOPNOTSUPP, "errno");
++	} else {
++		ASSERT_OK(err, "map_update");
++	}
+ close:
+ 	xclose(s);
+ }
+@@ -1289,7 +1290,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 		/* insert */
+ 		TEST(test_insert_invalid),
+ 		TEST(test_insert_opened),
+-		TEST(test_insert_bound, SOCK_STREAM),
++		TEST(test_insert_bound),
+ 		TEST(test_insert),
+ 		/* delete */
+ 		TEST(test_delete_after_insert),
+
 -- 
 2.55.0
 
