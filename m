@@ -1,387 +1,117 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F14383C8D
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA8626AC5;
+	Tue,  7 Jul 2026 18:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783447649; cv=none; b=g8RReN9J3qcyjAbBR4Eg/Ft2/xzGMOKlrNsLRQZHDD8oW0dQ6j/kFdSi540fckf1mvCtR+pnP067OmHxqmzUhV8BSoZqT0TAn7Mh3V2KSp253Ly6MppUXyiuEo1eA5krIhn+pB0RMZIrmVTGs0nUwyU9VNd079xSzaZb6jDdFk8=
+	t=1783448408; cv=none; b=hCulSriXt3FgexwqVI9uphryGEol5GMOQRVTZG6NNCBz/ZtxWVf+zNtuj/+5McE8WFcyHoo12RdcgOIspXFp62L5RDjPLv392g36BfxkkEvzXJ/n3178tUiKMsacTmuurtidUVcPkSSSl4p+1TGxwRr5Da4qp6d5UnLgsFUeznQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783447649; c=relaxed/simple;
-	bh=vcki7oBvw1sLDftOfNNiIqiR2vQwgZTYBbexjDEXxW8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Vf5aQ2+0rSDyXmUpIh204d/31FQ30Bas7rRvJUMJDjZMjNDLT0JtdfKQd0S1IFS662KirUI9fdnp6ikerzAEs3gEbsC3n2eVJnI49DpDFX4LOo1vV4zOEIatHQKk0JBtpUSrhPs7j9mOpeKAAMTFWJuAGL5hDXUVvzdffwj41Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=H01hJZr8; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1783448408; c=relaxed/simple;
+	bh=I86E8RIIAR6boEDHK81W0I51tU6/MnrPYSU5+rKgpT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CB36AO/ByDNDm2HQevYjQjOXGz6RRwbBeDWMtz6vHgXVTK778sTYFxizk6cjSl/iyngWtTlHw6Lb0cGJqOz/qZKtN+RErFCJnl5Heh2nknRzYQm+sOwwQ4UlSh3UevOYILiZ8dG/cF/2c/+EMbIkeQS4MFwsnSlth5npYaayCps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ep0suLij; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="H01hJZr8"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-846970f0acaso4394150b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 11:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1783447647; x=1784052447; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=adKQv1s51c2HukqV2OIYDY9VO+GH/YDmDfRrvcoAyQU=;
-        b=H01hJZr8VyCBCGj5J1vtlVRNng2MuJ3ofUzY3I21S4QNPA2Ezgkt2Qrbb4tPK0VFiZ
-         DNnb1rp2kgKNUR9EVJXDT7tnwr015KsYldyL5bQHW9q0Y6Z1V0nTH97tSB3G273mh0KG
-         3CGre1kkLn897Q/iSTebbdFcEr+FBJzRuttY9oATs4286NuQLolf7e1K/+WyQ2k9jjPy
-         uLjyKDmb9ptWit/U2SW/+ZQ2nFaOPywERmjbXOFfAQ30b+vleur8wogZ7PqZufzm4fLa
-         7EZGgTPKrHl44I6vaQ70+W5AWyoDsIceIZHZlKIO6vLsZ1ytwn6R9aZ4qdKI/Hx7Tn4H
-         QNPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783447647; x=1784052447;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=adKQv1s51c2HukqV2OIYDY9VO+GH/YDmDfRrvcoAyQU=;
-        b=kGWYlCj3ff4nX7QDd6PafuQdz2C2JfI8ReZkrKpHhIJvxRq8bBSEFVTAamvz3M4TnM
-         GBSJcVc4sT+tnqPgJP5qJuyfEtRSGexp5/2uFX+c6akm/fKQiZkCyYphemUkabOLPDCb
-         pdBolAOrcDRf8MPq3hl99bijxF2RlFQ2l59HiIOCUZBFZPBFRV5mZwqr3zJIaN8VmTAO
-         jC034rHo7QfXuwwCHTYJvB1M9CFJV3VykstrnX//L/xe8ybyAZwcifjfTybxAj58pHDI
-         1H7nPcvHScNEew0btlrdk+GFghGpcq/1JmU0sLjT6a68FgBTAOqyjStpSYYw/KLXZ+7N
-         i8Kg==
-X-Forwarded-Encrypted: i=1; AHgh+RpVgRErjCqLTATnYq+SbhshWm9Xarxx4qEi2q/B3WkGX5CXBlmBVVUgWt2+KWnpN4xeNz+eB/UNxIMio5gcKoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaK/sD+pHAKUtWC7vmflWTJXoMW91B9zYCM3wjqC/Qa6dsZXvk
-	SIJ8OrO0gRs/yqvjS7FkEw+vQhWjnP3KiyaWI8FTLsGzZO+a5xZIeqJ0GSjX21IeLgI=
-X-Gm-Gg: AfdE7cmXyr4FYhmtjKDlvR+hnPF7kyPkeNJBSLP2h1ifsIqSxFcfodICWcr3Qmavk1g
-	rdkdnk7nFWz8BZx4c922Dv+UvZ6GNjW2aYTf9dCimgU2PQJu5m4yKZhmp8uCQ1BiUqGLdHyXC2p
-	UIqXK5jDUCf/7EW83B40KWhxmXrqPbahOcoQxNevc2nlVXGjrSG/gH6se9MMD7bUaF181m/plqz
-	Ck8mslmABmxF1TxNsAlGNwIveyZnAfJPliM16bbudBeFad5IxCpmj+7VAXygf1x4Wvurr1zu5BG
-	xECd6AbLawlFX8S9AJhcrWW3OI41FRU6QXIGnLo5WelhLGZRZ/S3Tw1uoWd9LX+vJcwP9Y18xvi
-	/h0mCWxHRSlgckJn3n3Ggqt3pKpSB3oeTm2p60HJsA0QFitQM/upFci7pgiyaAfx09du6TgeEi9
-	HGnvK+9fdZLjX1/kLKLD0AYCoUKFGGnvLbreBUQSa8Ug==
-X-Received: by 2002:a05:6a20:cf88:b0:3c0:9c19:6589 with SMTP id adf61e73a8af0-3c09c196d09mr5103844637.67.1783447646809;
-        Tue, 07 Jul 2026 11:07:26 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf76dbsm16476255ad.21.2026.07.07.11.07.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2026 11:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ep0suLij"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF961F000E9;
+	Tue,  7 Jul 2026 18:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783448407;
+	bh=AWIzIpH8a00nMIO23YrefbZEhT8NbDGs3/Ve9oenG9g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ep0suLijWN3eWlVd2Fpqz+yCycdYo+MNXSN0RmNnb84pJ7Ym/zvlHhZ+yQCzN7Fln
+	 mBRJ2yMJDx9RWbXnfb1dBoY+nskN7XRxrU3hfUM99tCczOI2mCyvieaC61VDUbyyml
+	 1z2swx2WCvXQFjqpB3T2YArm4OfIGpw0hV9mr5reikdj4MpRhuK3BSQt/l3/RwWO9V
+	 PxLSCgIAFC2hf+yYA+dBuRxho7Qh57l7zrQNFjmhlgUP7aSj597ytZycegiTG+FMuq
+	 RS8diYtYN1HGOY9ZestohQsiYB9rBLFD+L8zfbiw6Zsf5p/TJoaARjDEFzGzGrAGL4
+	 UaN10YmI1I4mw==
+Date: Tue, 7 Jul 2026 11:20:05 -0700
+From: Oliver Upton <oupton@kernel.org>
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 1/7] KVM: arm64: Disallow vPMU when pPMUs do not cover
+ all CPUs
+Message-ID: <ak1DVUs0bgkpZh0N@kernel.org>
+References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+ <20260706-hybrid-v8-1-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
+ <akvgIWqBjAp_VA_A@kernel.org>
+ <e03f17b2-a765-4912-adf6-3da26e7eeecd@rsg.ci.i.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 07 Jul 2026 14:07:24 -0400
-Message-Id: <DJSJFDD2MQ4Q.2ECD6WSD2AFAA@etsalapatis.com>
-Cc: <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <emil@etsalapatis.com>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <shuah@kernel.org>,
- <hawk@kernel.org>, <yatsenko@meta.com>, <leon.hwang@linux.dev>,
- <kpsingh@kernel.org>, <a.s.protopopov@gmail.com>, <ameryhung@gmail.com>,
- <rongtao@cestc.cn>, <eyal.birger@gmail.com>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <toke@redhat.com>, <dsahern@kernel.org>
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to
- bpf_fib_lookup() helper
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Avinash Duduskar" <avinash.duduskar@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260704092159.1256823-1-avinash.duduskar@gmail.com>
- <20260704092159.1256823-2-avinash.duduskar@gmail.com>
-In-Reply-To: <20260704092159.1256823-2-avinash.duduskar@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e03f17b2-a765-4912-adf6-3da26e7eeecd@rsg.ci.i.u-tokyo.ac.jp>
 
-On Sat Jul 4, 2026 at 5:21 AM EDT, Avinash Duduskar wrote:
-> bpf_fib_lookup() returns the FIB-resolved egress ifindex straight
-> from the fib result. When the egress is a VLAN device, the returned
-> ifindex is the VLAN netdev's, which has no XDP xmit handler; XDP
-> programs that want to forward the frame (e.g. xdp-forward) must
-> instead target the underlying physical device and push the VLAN tag
-> themselves. Today the program has no way to learn either the
-> underlying ifindex or the VLAN tag without maintaining its own
-> VLAN-to-ifindex map in userspace and refreshing it on netlink
-> events.
->
-> Add BPF_FIB_LOOKUP_VLAN. When the caller sets this flag and the fib
-> result is a VLAN device whose immediate parent is a real (non-VLAN)
-> device in the same network namespace, populate the existing output
-> fields params->h_vlan_proto and params->h_vlan_TCI from the VLAN
-> device and replace params->ifindex with the parent's ifindex.
-> params->h_vlan_TCI carries the VID only, with PCP and DEI bits zero; a
-> consumer wanting to set egress priority writes PCP itself.
-> params->smac is the VLAN device's own address, which can differ from
-> the parent's.
->
-> Only the immediate parent is resolved, via vlan_dev_priv(dev)->real_dev
-> and not vlan_dev_real_dev(), which walks to the bottom of a stack. When
-> the immediate parent is not a real device in the same namespace, the
-> lookup returns BPF_FIB_LKUP_RET_VLAN_FAILURE and leaves params->ifindex
-> at the input. This covers a stacked VLAN (QinQ), where the immediate
-> parent is itself a VLAN device and one h_vlan_proto/h_vlan_TCI pair
-> cannot describe two tags, and a parent in another network namespace (a
-> VLAN device can be moved while its parent stays), whose ifindex would
-> be meaningless in the caller's namespace. A program that wants the VLAN
-> device's own ifindex re-issues the lookup without BPF_FIB_LOOKUP_VLAN,
-> so the unreducible case stays distinct from a physical egress. That
-> distinction matters for XDP: a program cannot xmit on a VLAN device, so
-> a success carrying the VLAN ifindex would make it redirect to a device
-> with no ndo_xdp_xmit and drop the frame at xdp_do_flush(). The swap and
-> the vlan fields are written only on the reduce path; other output
-> fields keep their existing behaviour, so a frag-needed result still
-> reports the route mtu in params->mtu_result.
->
-> BPF_FIB_LOOKUP_VLAN is only useful to XDP, which cannot redirect to a
-> VLAN device. A tc program can redirect to the VLAN device directly, so
-> bpf_skb_fib_lookup() rejects the flag with -EINVAL; bpf_xdp_fib_lookup()
-> accepts it. When the flag is not set, behaviour is unchanged:
-> h_vlan_proto and h_vlan_TCI are zeroed and ifindex is left at the FIB
-> result.
->
-> The new block is compiled only under CONFIG_VLAN_8021Q since
-> vlan_dev_priv() is not defined otherwise; without that config
-> is_vlan_dev() is constant false and the flag is accepted but never
-> acts. That is safe because no VLAN device can exist there, so every
-> egress is already physical.
->
-> This lets an XDP redirect target the physical device and learn the
-> tag to push in a single lookup, which xdp-forward's optional VLAN
-> mode (xdp-project/xdp-tools#504) wants from the kernel side.
->
-> The helper's input semantics are unchanged; the reverse direction
-> (supplying a tag as lookup input) is added in the following patch.
->
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Acked-by: David Ahern <dsahern@kernel.org>
-> Signed-off-by: Avinash Duduskar <avinash.duduskar@gmail.com>
+On Tue, Jul 07, 2026 at 08:08:03PM +0900, Akihiko Odaki wrote:
+> On 2026/07/07 2:04, Oliver Upton wrote:
+> > Hi,
+> > 
+> > On Mon, Jul 06, 2026 at 07:03:24PM +0900, Akihiko Odaki wrote:
+> > > Commit ec3eb9ed6081 ("KVM: arm64: PMU: Disallow vPMU on non-uniform
+> > > PMUVer") made KVM reject vPMU unless the system-wide PMUVer is usable.
+> > > That covers systems where PMUv3 is absent or non-uniform, as well as
+> > > systems where IMPDEF PMUv3 sysreg traps are unavailable.
+> > > 
+> > > However, KVM can still accept vPMU when all CPUs uniformly trap PMUv3
+> > > sysregs, but the pPMUs registered with KVM only cover a subset of
+> > > possible CPUs.
+> > > 
+> > > Reject vPMU unless the registered pPMUs cover every possible CPU.
+> > > This avoids carrying support for partial pPMU coverage into the
+> > > fixed-counters-only UAPI introduced later in the series.
+> > 
+> > Doesn't CPU hotplug screw this up? I could online a CPU that doesn't
+> > have a PMU after creating the VM.>
+> > I'd rather just change ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS to become a
+> > system feature. That way any CPU which breaks the system-wide assumption
+> > cannot be onlined.
+> 
+> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS only says that IMPDEF PMUv3 sysregs are
+> trapped. It does not say that KVM has a driver-backed PMU usable for PMUv3
+> emulation. This patch checks that extra requirement.
+> 
+> I re-checked CPU hotplug. Onlining a CPU without a PMU later does not make
+> an accepted VM unsafe, since the check is against cpu_possible_mask.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Sorry, I missed that this was against the possible mask.
 
-> ---
->  include/uapi/linux/bpf.h       | 31 ++++++++++++++++++++++++++++++-
->  net/core/filter.c              | 33 +++++++++++++++++++++++++++++----
->  tools/include/uapi/linux/bpf.h | 31 ++++++++++++++++++++++++++++++-
->  3 files changed, 89 insertions(+), 6 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 89b36de5fdbb..e00f0392e728 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3532,6 +3532,29 @@ union bpf_attr {
->   *			Use the mark present in *params*->mark for the fib lookup.
->   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
->   *			as it only has meaning for full lookups.
-> + *		**BPF_FIB_LOOKUP_VLAN**
-> + *			If the fib lookup resolves to a VLAN device whose
-> + *			parent is a real (non-VLAN) device, set
-> + *			*params*->h_vlan_proto and *params*->h_vlan_TCI from
-> + *			the VLAN device and replace *params*->ifindex with the
-> + *			parent's ifindex. *params*->h_vlan_TCI carries the VID
-> + *			only, with PCP and DEI bits zero; a consumer wanting to
-> + *			set egress priority writes PCP itself. *params*->smac is
-> + *			the VLAN device's own address, which can differ from the
-> + *			parent's. Only the immediate parent is resolved; if it
-> + *			is itself a VLAN device (QinQ) or in another namespace,
-> + *			the egress cannot be reduced to a physical device plus
-> + *			one tag and the lookup returns
-> + *			**BPF_FIB_LKUP_RET_VLAN_FAILURE** with *params*->ifindex
-> + *			left at the input. Re-issue without
-> + *			**BPF_FIB_LOOKUP_VLAN** to obtain the VLAN device's own
-> + *			ifindex. The swap and the vlan fields
-> + *			are written only on success; other output fields keep
-> + *			the helper's existing behaviour, so a frag-needed result
-> + *			still reports the route mtu in *params*->mtu_result.
-> + *			This flag is only valid for XDP programs; tc programs
-> + *			receive -EINVAL since they can redirect to the VLAN
-> + *			device directly.
->   *
->   *		*ctx* is either **struct xdp_md** for XDP programs or
->   *		**struct sk_buff** tc cls_act programs.
-> @@ -7327,6 +7350,7 @@ enum {
->  	BPF_FIB_LOOKUP_TBID    =3D (1U << 3),
->  	BPF_FIB_LOOKUP_SRC     =3D (1U << 4),
->  	BPF_FIB_LOOKUP_MARK    =3D (1U << 5),
-> +	BPF_FIB_LOOKUP_VLAN    =3D (1U << 6),
->  };
-> =20
->  enum {
-> @@ -7340,6 +7364,7 @@ enum {
->  	BPF_FIB_LKUP_RET_NO_NEIGH,     /* no neighbor entry for nh */
->  	BPF_FIB_LKUP_RET_FRAG_NEEDED,  /* fragmentation required to fwd */
->  	BPF_FIB_LKUP_RET_NO_SRC_ADDR,  /* failed to derive IP src addr */
-> +	BPF_FIB_LKUP_RET_VLAN_FAILURE, /* VLAN egress, parent unresolvable */
->  };
-> =20
->  struct bpf_fib_lookup {
-> @@ -7393,7 +7418,11 @@ struct bpf_fib_lookup {
-> =20
->  	union {
->  		struct {
-> -			/* output */
-> +			/*
-> +			 * output with BPF_FIB_LOOKUP_VLAN: set from the
-> +			 * resolved egress VLAN device (see the flag); zeroed
-> +			 * on other successful lookups.
-> +			 */
->  			__be16	h_vlan_proto;
->  			__be16	h_vlan_TCI;
->  		};
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 2e96b4b847ce..b5a45485a54b 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -6201,10 +6201,29 @@ static const struct bpf_func_proto bpf_skb_get_xf=
-rm_state_proto =3D {
->  #endif
-> =20
->  #if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
-> -static int bpf_fib_set_fwd_params(struct bpf_fib_lookup *params, u32 mtu=
-)
-> +static int bpf_fib_set_fwd_params(struct net_device *dev,
-> +				  struct bpf_fib_lookup *params,
-> +				  u32 flags, u32 mtu, u32 in_ifindex)
->  {
->  	params->h_vlan_TCI =3D 0;
->  	params->h_vlan_proto =3D 0;
-> +
-> +#if IS_ENABLED(CONFIG_VLAN_8021Q)
-> +	if ((flags & BPF_FIB_LOOKUP_VLAN) && is_vlan_dev(dev)) {
-> +		struct net_device *real_dev =3D vlan_dev_priv(dev)->real_dev;
-> +
-> +		if (!is_vlan_dev(real_dev) &&
-> +		    net_eq(dev_net(real_dev), dev_net(dev))) {
-> +			params->h_vlan_proto =3D vlan_dev_vlan_proto(dev);
-> +			params->h_vlan_TCI =3D htons(vlan_dev_vlan_id(dev));
-> +			params->ifindex =3D real_dev->ifindex;
-> +		} else {
-> +			params->ifindex =3D in_ifindex;
-> +			return BPF_FIB_LKUP_RET_VLAN_FAILURE;
-> +		}
-> +	}
-> +#endif
-> +
->  	if (mtu)
->  		params->mtu_result =3D mtu; /* union with tot_len */
-> =20
-> @@ -6216,6 +6235,7 @@ static int bpf_fib_set_fwd_params(struct bpf_fib_lo=
-okup *params, u32 mtu)
->  static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *p=
-arams,
->  			       u32 flags, bool check_mtu)
->  {
-> +	u32 in_ifindex =3D params->ifindex;
->  	struct neighbour *neigh =3D NULL;
->  	struct fib_nh_common *nhc;
->  	struct in_device *in_dev;
-> @@ -6347,7 +6367,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, str=
-uct bpf_fib_lookup *params,
->  	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
-> =20
->  set_fwd_params:
-> -	return bpf_fib_set_fwd_params(params, mtu);
-> +	return bpf_fib_set_fwd_params(dev, params, flags, mtu, in_ifindex);
->  }
->  #endif
-> =20
-> @@ -6357,6 +6377,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, str=
-uct bpf_fib_lookup *params,
->  {
->  	struct in6_addr *src =3D (struct in6_addr *) params->ipv6_src;
->  	struct in6_addr *dst =3D (struct in6_addr *) params->ipv6_dst;
-> +	u32 in_ifindex =3D params->ifindex;
->  	struct fib6_result res =3D {};
->  	struct neighbour *neigh;
->  	struct net_device *dev;
-> @@ -6486,13 +6507,14 @@ static int bpf_ipv6_fib_lookup(struct net *net, s=
-truct bpf_fib_lookup *params,
->  	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
-> =20
->  set_fwd_params:
-> -	return bpf_fib_set_fwd_params(params, mtu);
-> +	return bpf_fib_set_fwd_params(dev, params, flags, mtu, in_ifindex);
->  }
->  #endif
-> =20
->  #define BPF_FIB_LOOKUP_MASK (BPF_FIB_LOOKUP_DIRECT | BPF_FIB_LOOKUP_OUTP=
-UT | \
->  			     BPF_FIB_LOOKUP_SKIP_NEIGH | BPF_FIB_LOOKUP_TBID | \
-> -			     BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_MARK)
-> +			     BPF_FIB_LOOKUP_SRC | BPF_FIB_LOOKUP_MARK | \
-> +			     BPF_FIB_LOOKUP_VLAN)
-> =20
->  BPF_CALL_4(bpf_xdp_fib_lookup, struct xdp_buff *, ctx,
->  	   struct bpf_fib_lookup *, params, int, plen, u32, flags)
-> @@ -6541,6 +6563,9 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, sk=
-b,
->  	if (flags & ~BPF_FIB_LOOKUP_MASK)
->  		return -EINVAL;
-> =20
-> +	if (flags & BPF_FIB_LOOKUP_VLAN)
-> +		return -EINVAL;
-> +
->  	if (params->tot_len)
->  		check_mtu =3D true;
-> =20
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index 89b36de5fdbb..e00f0392e728 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -3532,6 +3532,29 @@ union bpf_attr {
->   *			Use the mark present in *params*->mark for the fib lookup.
->   *			This option should not be used with BPF_FIB_LOOKUP_DIRECT,
->   *			as it only has meaning for full lookups.
-> + *		**BPF_FIB_LOOKUP_VLAN**
-> + *			If the fib lookup resolves to a VLAN device whose
-> + *			parent is a real (non-VLAN) device, set
-> + *			*params*->h_vlan_proto and *params*->h_vlan_TCI from
-> + *			the VLAN device and replace *params*->ifindex with the
-> + *			parent's ifindex. *params*->h_vlan_TCI carries the VID
-> + *			only, with PCP and DEI bits zero; a consumer wanting to
-> + *			set egress priority writes PCP itself. *params*->smac is
-> + *			the VLAN device's own address, which can differ from the
-> + *			parent's. Only the immediate parent is resolved; if it
-> + *			is itself a VLAN device (QinQ) or in another namespace,
-> + *			the egress cannot be reduced to a physical device plus
-> + *			one tag and the lookup returns
-> + *			**BPF_FIB_LKUP_RET_VLAN_FAILURE** with *params*->ifindex
-> + *			left at the input. Re-issue without
-> + *			**BPF_FIB_LOOKUP_VLAN** to obtain the VLAN device's own
-> + *			ifindex. The swap and the vlan fields
-> + *			are written only on success; other output fields keep
-> + *			the helper's existing behaviour, so a frag-needed result
-> + *			still reports the route mtu in *params*->mtu_result.
-> + *			This flag is only valid for XDP programs; tc programs
-> + *			receive -EINVAL since they can redirect to the VLAN
-> + *			device directly.
->   *
->   *		*ctx* is either **struct xdp_md** for XDP programs or
->   *		**struct sk_buff** tc cls_act programs.
-> @@ -7327,6 +7350,7 @@ enum {
->  	BPF_FIB_LOOKUP_TBID    =3D (1U << 3),
->  	BPF_FIB_LOOKUP_SRC     =3D (1U << 4),
->  	BPF_FIB_LOOKUP_MARK    =3D (1U << 5),
-> +	BPF_FIB_LOOKUP_VLAN    =3D (1U << 6),
->  };
-> =20
->  enum {
-> @@ -7340,6 +7364,7 @@ enum {
->  	BPF_FIB_LKUP_RET_NO_NEIGH,     /* no neighbor entry for nh */
->  	BPF_FIB_LKUP_RET_FRAG_NEEDED,  /* fragmentation required to fwd */
->  	BPF_FIB_LKUP_RET_NO_SRC_ADDR,  /* failed to derive IP src addr */
-> +	BPF_FIB_LKUP_RET_VLAN_FAILURE, /* VLAN egress, parent unresolvable */
->  };
-> =20
->  struct bpf_fib_lookup {
-> @@ -7393,7 +7418,11 @@ struct bpf_fib_lookup {
-> =20
->  	union {
->  		struct {
-> -			/* output */
-> +			/*
-> +			 * output with BPF_FIB_LOOKUP_VLAN: set from the
-> +			 * resolved egress VLAN device (see the flag); zeroed
-> +			 * on other successful lookups.
-> +			 */
->  			__be16	h_vlan_proto;
->  			__be16	h_vlan_TCI;
->  		};
+> The problem is the reverse case on ACPI: this check can disable vPMU when a
+> possible CPU is offline. DT populates supported_cpus at boot, while ACPI
+> initially populates it only from online CPUs and grows it as matching CPUs
+> come online.
+> 
+> That makes this patch too conservative. In practice, I do not expect systems
+> to mix CPUs with and without a usable PMU. A better approach is probably to
+> treat such a host as out of spec and add TAINT_CPU_OUT_OF_SPEC. We already
+> do that for architectural PMUv3 by detecting mismatches in
+> ID_AA64DFR0_EL1.PMUVer; we can do the same for
+> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS with non-standard PMUs.
 
+The presence of the workaround is, by definition, out of spec. I just
+never bothered tainting the kernel because these machines are already
+TAINT_CPU_OUT_OF_SPEC by way of the broken VGIC.
+
+Ok, so how about you keep the check that you're doing here and promote
+IMPDEF_TRAPS to a system-wide feature? That would satisfy the two
+preconditions we have for PMU emulation, which is system register traps
+and a backing arm_pmu that understands PMUv3 events.
+
+Thanks,
+Oliver
