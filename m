@@ -1,172 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738D8225791;
-	Tue,  7 Jul 2026 18:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50EB432BD2
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783447360; cv=none; b=qhcdcUwjLV9Ba5F85Wt3bZ4B0+fFibMzSDi4fCCnopFap95dbJnJwwErK4SafWQGbT6JzQtq/r/Bg37m1v1a6aYURSfslnHhj4qNPiL9wFfLAnM6LHdhje0Mgr8/TGoxCldoHq7zT2MT1OxKz1xTGOn5RG/sHFoGxH489ALO5QI=
+	t=1783447377; cv=none; b=ugb0wEsoNIfC1pTqgHjVZeZEN2Il1HSmG0XMJYhg0FoATIspG8CGWES1lt58xfxtMBxXB2FEHT6xtrXq/D/JpMpZ/eVEsbeWAoB7uHzIHSpXW54Cl+QS5ZC4lVCk7gZ8NYI5HdMplIiHdxlARDLjexlr2wysB/jzeFhlrUJn+xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783447360; c=relaxed/simple;
-	bh=v5UE4CN/5U1UeycwVcqpmK3ZPN8kJbKTuuCG+EL1iLU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Il+ij5X9Y384JJmfhQppciOmcycKQD6liBipyP2qW191VinXaxH/s01uXSlaIelFhcCfum3GZyQe2uh9rl3ISv0GnuTALH8x1LMCM6HP2HcGvOYk0M9nQeHayh/z4Sp+BakD+FVrPlvT4bCXKmKq+PMZL8xz+hpeEwq8VaDn5NQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+Vnbwou; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783447377; c=relaxed/simple;
+	bh=//cvW4gSOO1r60LHv9TAkyXpGY3vFsGKdM0tUjAHR9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gL0MU3PJdkN6i/Fzs8F9ApYhPgOhdl3yEjClaTg++4TZVqRagFA48TVKQKO00tFeJQ3QGfN7xCaP6dy1LAtEh4k0l2em82vWsFql+nIaZcWJB38iaFjLAuMOpL050Qt2xMZ0xxmNfWFv3YBsPEeVLUQz0FAr8OEg55y2K0+tr4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TbUuBrhy; arc=none smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+Vnbwou"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B41221F000E9;
-	Tue,  7 Jul 2026 18:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783447359;
-	bh=FryudSw1T2aBIUC8yNaOKfA0SsyG7mefxgdiOUUg/jo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=N+Vnbwoua/QGFqX1FJgxTZEeQArxQywA5ZLkb+cuyiLT1RyZBO8UKEnY1TN1bRU+y
-	 mmImothqrfHNURIQLWJ/FVvuF+nGkjn62x3ctvrxuKVMdasv+rz8+EhJWbyE9bVMAP
-	 XeXPvElu8iOFTsq5ShjS+JCrJ+t9w6iHaJZ2BvoL54Gs1evNMASXj19FeDmeueAseD
-	 M7yO3DIThFb6/MbvZUUbt+47vSyWcwfhLN5nmXrCiCUy18/Fgo7e71ItmXyNIni1sr
-	 e1Cudg/8AwbbkWQxfyGpEJeGE//8QxHgz5emwJUSZxpzTmnrZQg99BNpuQfCaJSKtR
-	 0RMZFg5mGzjig==
-Date: Tue, 7 Jul 2026 11:02:37 -0700
-From: Oliver Upton <oupton@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 5/7] KVM: arm64: PMU: Implement fixed-counters-only
- emulation
-Message-ID: <ak0_PSnxyAWm9_Fu@kernel.org>
-References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <20260706-hybrid-v8-5-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <akvyvclUQ2b2YHiU@kernel.org>
- <cb5d5f13-a1a9-47dd-a717-5533a8b32b20@rsg.ci.i.u-tokyo.ac.jp>
- <5e66748a-bfda-41a9-8614-88cbf2fe1f09@rsg.ci.i.u-tokyo.ac.jp>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TbUuBrhy"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-664a09bc459so6058722d50.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 11:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783447375; x=1784052175; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=70oQwU88o+IMY5KYIKx2if+Hd1u/ko0kAaOQAuxSTHY=;
+        b=TbUuBrhyrQPxkAfVtVlz8O3SeK5Fr24ORjYO9pdnQ2q0g9JIAhrm8jEUoNLuFjYmEZ
+         +qMQIVg647VuGP8p0+2W/apnkvcOIfoonBo7n4Eov03xRvwRtBhjotx9NRmVmZSIeXIG
+         /2ljjGxgVvnNucx6guO8W4YGuTqKILkTi5eShXbw87OgfQ016h071ed1F706Fr5E3NJ5
+         yB3d7AIXhgGWoYg310Epj6kVILsa0epVrFtbHsZ4uWFQ3BrfTCuS9+FOMnhIZFx8wKvo
+         KgjXUnSLzk7ZRXMsQPOAi6wQQ5Kvq5qDUFHi80bPekM9qTYRajEi6v0k/dhP0P9xp7Df
+         wSVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783447375; x=1784052175;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=70oQwU88o+IMY5KYIKx2if+Hd1u/ko0kAaOQAuxSTHY=;
+        b=hAtZd//kWTWXrOMWhkS98tfuCephDJOKw6Gjrbv8W4zR3QIVcVbgqHtRglzL6bnS4D
+         wknzKhty7RuAT+MYkLli2gPVswxXQL2+rSJp/EX9PmIgV9HNU2cqNMXH2fR32goBLxUc
+         lpOsSexVSjZ8/yPP6Qnw81uEzhyyyosazFgYN/x2t5ZV+LWObvURYWcgGMSoASgyaq9C
+         No2RzciURrHFBlUnIMD2UqYIHrvSeN1Kl1zBOnIMJAxSy/caILyYa/LTyxIp9bFtsIst
+         GI+8qVxsTkc1T0H0Ncg3QWzGRgOYyN0cVoLydCQISbLsd3vpMjhPFyUu71CGUP4QtFDk
+         Sg2A==
+X-Forwarded-Encrypted: i=1; AHgh+RpDbZDritsppsxEbdaXRMKEEI5ZedFSoOpRId55elujPBIEV8hHXe4b9wFRt5S0nDMwOvqeK0Ahol5ALw8VTQ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwysSh7A/jpLXrNj54tI+T1ryszgtxu6or7ltc8UElCDcXmUX3
+	qt1HJ0FKutUSMpcHi55SbCDV/qazk+QWkrPFoq9uuN+z7sxPACuhbTYo
+X-Gm-Gg: AfdE7cmIUMLadRmT+rKa7jQa+ujUFBNdtZnFH5S9TJXtNbtYzJ3x2ThR+Ttsm/dIhHr
+	OcbNDyg2DVdQ1o4fgfxflTI+LcV2ea5X8yIaMqeRqs6D7cxgrum0mQ5/LEdSQnBOnknEKGwzkng
+	AMSXzS3nFrWbP/67JKms784RGaIsv8l8ufeK8fvZmn75xMLvPVWKu00cv3898jkpmyTlL2q/4XM
+	QK2AR2DDW861sOcOAsK6r/MS7sBPEaTiOst3PT+zOZ5L7qCme2p8x5ueFoRyP4gpHKuUibrv+hg
+	7LiupV87qrQFo4CvcQBuWXuolflZnNmUc4/Msn4g4zmHbl6m5q9ZRSdDvndqeMEN+Cjt7oEiSmk
+	eJXNzqtxDTuXD++bioQWCU12ae6jXaklx4xqQpNhyQ2cIhp/RFnq4M2jyQ1yOAMZy0vw0ZqXjwH
+	csizaAKUqILnqw+KS3xodyWAAHYsZvg8k+ye/uZUxipzkwFAh341hElMSXSnsCC8/GS+IUbZObG
+	7SjTQHd7gzznh5GuHZb03MdYoIWDKva
+X-Received: by 2002:a53:d015:0:b0:664:d786:3321 with SMTP id 956f58d0204a3-6677fc69000mr4400946d50.62.1783447370059;
+        Tue, 07 Jul 2026 11:02:50 -0700 (PDT)
+Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46e27d555sm165184196d6.7.2026.07.07.11.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 11:02:49 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Beau Belgrave <beaub@linux.microsoft.com>,
+	XIAO WU <xiaowu.417@qq.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] selftests/user_events: wait for deferred event teardown after unregister
+Date: Tue,  7 Jul 2026 14:02:40 -0400
+Message-ID: <20260707180240.2887081-1-michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5e66748a-bfda-41a9-8614-88cbf2fe1f09@rsg.ci.i.u-tokyo.ac.jp>
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 07, 2026 at 09:52:49PM +0900, Akihiko Odaki wrote:
-> On 2026/07/07 20:23, Akihiko Odaki wrote:
-> > On 2026/07/07 3:23, Oliver Upton wrote:
-> > > Just detect the changing PMU implementation here, KVM_REQ_RELOAD_PMU
-> > > will need to detect the PMCs that require an update anyway. Stash the
-> > > last cpu in kvm_arch_vcpu_load() and pass it to this:
-> > > 
-> > > void kvm_vcpu_load_pmu(struct kvm_vcpu *vcpu, int last_cpu)
-> > > {
-> > >     if (!kvm_pmu_fixed_counters_only(vcpu->kvm) || vcpu->cpu == last_cpu)
-> > >         return;
-> > > 
-> > >     if (kvm_pmu_probe_armpmu(vcpu->cpu) !=
-> > > kvm_pmu_probe_armpmu(last_cpu))
-> > >         kvm_make_request(KVM_REQ_RELOAD_PMU);
-> > > }
-> > 
-> > It is a nice way to simplify the code and to avoid hardcoding
-> > ARMV8_PMU_INSTR_IDX. I'll use the code for the next version.
-> 
-> I tried this but unfortunately it doesn't seem to work. kvm_arch_vcpu_put()
-> sets vcpu->cpu to -1 so we cannot simply read it to get the last cpu in
-> kvm_arch_vcpu_load().
+Unregistering a user event now defers the drop of the enabler's event
+reference (and the freeing of the enabler) past an RCU grace period. As a
+result DIAG_IOCSDEL can transiently fail with -EBUSY while that last
+reference is still being dropped, where it previously succeeded
+immediately.
 
-Urgh, there's no reason for doing that any more. Let's fix it, I want a
-straightforward way to detect pCPU migrations. There may be other
-reasons for using it in the future.
+Two tests assumed the delete takes effect the instant the unregister
+returns:
 
-Untested, but could you give this a whirl?
+  - abi_test "flags" deletes the event right after disabling it.
+  - perf_test's fixture teardown clear() deletes __test_event before the
+    next test registers the same name; a stale event makes the following
+    registration fail with -EADDRINUSE.
 
-From bb5af058030aada66f5c9eafa54db604979acf55 Mon Sep 17 00:00:00 2001
-From: Oliver Upton <oupton@kernel.org>
-Date: Tue, 7 Jul 2026 09:50:00 -0700
-Subject: [PATCH] KVM: arm64: Don't clear vcpu->cpu in kvm_arch_vcpu_put()
+Retry the delete until it succeeds (or the event is already gone) with a
+bounded wait, matching the existing wait_for_delete() idiom in the same
+suite, so the tests are robust to the deferred teardown.
 
-commit e9b152cb957c ("arm/arm64: kvm: Set vcpu->cpu to -1 on vcpu_put")
-reset vcpu->cpu in order for the VGIC to determine if there was any vCPU
-running at the time of access. The VGIC has gone through an entire
-rewrite since then, and with commit 7d450e282171 ("KVM: arm/arm64:
-vgic-new: Add userland access to VGIC dist registers") the user
-accessors just grab all vCPU mutexes instead.
-
-Drop this remaining vestige such that kvm_arch_vcpu_load() can properly
-detect a CPU migration. While at it, rework kvm_reset_vcpu() to do a
-much more pedantic check that the provided vCPU is actually what's
-running on the present CPU.
-
-Signed-off-by: Oliver Upton <oupton@kernel.org>
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
 ---
- arch/arm64/kvm/arm.c   |  1 -
- arch/arm64/kvm/reset.c | 15 ++++++++++-----
- 2 files changed, 10 insertions(+), 6 deletions(-)
+This resends only the selftest patch; the tracing/user_events fix that
+was patch 1/2 of the v2 series is unchanged and being applied separately.
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 50adfff75be8..735acc42b50b 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -749,7 +749,6 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
- 	kvm_arm_vmid_clear_active();
- 
- 	vcpu_clear_on_unsupported_cpu(vcpu);
--	vcpu->cpu = -1;
+v2 -> v3:
+  - abi_test wait_for_event_delete(): only retry the delete on -EBUSY,
+    treat an already-deleted event (-ENOENT) as success, and return any
+    other error immediately instead of spinning for the full 10s timeout.
+    perf_test's clear() already discriminated on errno this way; the two
+    now match. Reported by Sashiko automated review.
+
+ .../testing/selftests/user_events/abi_test.c  | 29 ++++++++++++++++++-
+ .../testing/selftests/user_events/perf_test.c | 26 +++++++++++++++--
+ 2 files changed, 51 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/user_events/abi_test.c b/tools/testing/selftests/user_events/abi_test.c
+index 85892b3b719cc..b71813eaf5c04 100644
+--- a/tools/testing/selftests/user_events/abi_test.c
++++ b/tools/testing/selftests/user_events/abi_test.c
+@@ -132,6 +132,33 @@ static int event_delete(void)
+ 	return ret;
  }
  
- static void __kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu)
-diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
-index b963fd975aac..6aba085c0673 100644
---- a/arch/arm64/kvm/reset.c
-+++ b/arch/arm64/kvm/reset.c
-@@ -190,7 +190,8 @@ static void kvm_vcpu_reset_sve(struct kvm_vcpu *vcpu)
- void kvm_reset_vcpu(struct kvm_vcpu *vcpu)
++/*
++ * Deleting an event drops its last reference, but an unregister may defer
++ * that put (and the freeing of the associated enabler) past an RCU grace
++ * period. The delete can therefore transiently fail with -EBUSY while the
++ * previous reference is still being dropped. Retry only on that transient
++ * failure; treat an already-deleted event (-ENOENT) as success and return
++ * any other error immediately rather than spinning for the full timeout.
++ */
++static int wait_for_event_delete(void)
++{
++	int i, ret;
++
++	for (i = 0; i < 10000; ++i) {
++		ret = event_delete();
++
++		if (ret == 0 || errno == ENOENT)
++			return 0;
++
++		if (errno != EBUSY)
++			return ret;
++
++		usleep(1000);
++	}
++
++	return ret;
++}
++
+ static int reg_enable_multi(void *enable, int size, int bit, int flags,
+ 			    char *args)
  {
- 	struct vcpu_reset_state reset_state;
--	bool loaded;
-+	struct kvm_vcpu *running;
-+	bool loaded = false;
- 	u32 pstate;
+@@ -262,7 +289,7 @@ TEST_F(user, flags) {
+ 	ASSERT_TRUE(event_exists());
  
- 	spin_lock(&vcpu->arch.mp_state_lock);
-@@ -198,10 +199,15 @@ void kvm_reset_vcpu(struct kvm_vcpu *vcpu)
- 	vcpu->arch.reset_state.reset = false;
- 	spin_unlock(&vcpu->arch.mp_state_lock);
+ 	/* Ensure we can delete it */
+-	ASSERT_EQ(0, event_delete());
++	ASSERT_EQ(0, wait_for_event_delete());
  
--	preempt_disable();
--	loaded = (vcpu->cpu != -1);
--	if (loaded)
-+	guard(preempt)();
+ 	/* USER_EVENT_REG_MAX or above is not allowed */
+ 	ASSERT_EQ(-1, reg_enable_flags(&self->check, sizeof(int), 0,
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index cafec0e52eb31..5727cb5b914cf 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -85,6 +85,7 @@ static int get_offset(void)
+ static int clear(int *check)
+ {
+ 	struct user_unreg unreg = {0};
++	int i, ret;
+ 
+ 	unreg.size = sizeof(unreg);
+ 	unreg.disable_bit = 31;
+@@ -99,13 +100,32 @@ static int clear(int *check)
+ 		if (errno != ENOENT)
+ 			return -1;
+ 
+-	if (ioctl(fd, DIAG_IOCSDEL, "__test_event") == -1)
+-		if (errno != ENOENT)
++	/*
++	 * Deleting the event drops its last reference, but the unregister
++	 * above defers that put (and the freeing of the enabler) past an RCU
++	 * grace period. The delete can therefore transiently fail with -EBUSY
++	 * until that reference is dropped. Retry for up to ~10 seconds so the
++	 * event is actually gone before the next test registers the same name.
++	 */
++	for (i = 0; i < 10000; ++i) {
++		ret = ioctl(fd, DIAG_IOCSDEL, "__test_event");
 +
-+	if ((running = kvm_get_running_vcpu())) {
-+		if (KVM_BUG_ON(running != vcpu, vcpu->kvm))
-+			return;
++		if (ret == 0 || errno == ENOENT) {
++			ret = 0;
++			break;
++		}
 +
-+		loaded = true;
- 		kvm_arch_vcpu_put(vcpu);
++		if (errno != EBUSY) {
++			close(fd);
+ 			return -1;
++		}
++
++		usleep(1000);
 +	}
  
- 	if (!kvm_arm_vcpu_sve_finalized(vcpu)) {
- 		if (vcpu_has_feature(vcpu, KVM_ARM_VCPU_SVE))
-@@ -269,7 +275,6 @@ void kvm_reset_vcpu(struct kvm_vcpu *vcpu)
+ 	close(fd);
  
- 	if (loaded)
- 		kvm_arch_vcpu_load(vcpu, smp_processor_id());
--	preempt_enable();
+-	return 0;
++	return ret;
  }
  
- u32 kvm_get_pa_bits(struct kvm *kvm)
+ FIXTURE(user) {
 -- 
-2.47.3
+2.53.0
 
