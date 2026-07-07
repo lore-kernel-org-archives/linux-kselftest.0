@@ -1,82 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4383101CE;
-	Tue,  7 Jul 2026 05:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977514204E;
+	Tue,  7 Jul 2026 06:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783403877; cv=none; b=Bq+TQUwHnYBS5q1jSuUka7lF+YnKh2tm9u0spoQE2dUJEdO/09Spi0IFVIbkO9Eo9T+GYAHYPhgHbjq9jPqFVQoPnYo0xaSkie4AAE8LPNCcBf5/iilMWDAaLufHtGd/IUyQTNB9cI+z+kj0b0ZVYgN6Ecto+8W+pXhvVluhtFU=
+	t=1783404467; cv=none; b=P/nW/l3Ix0CwOjxQJM+OO/D8xWZBi9PcsKJjzf2r/T4OfW98WG54u8uVzWsRncoNNaJERUavVdNw0Fe4Xmw75fByVVAMUwvtb5+QTPzcU/I0P6g45938sa0K5ifUkFMfyYpj9Ja5Mq7Xd4jSkyGthKiTuFnHpR7RbqaOBhm+yWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783403877; c=relaxed/simple;
-	bh=Hco3LTWoWt84qIm5xEnlVsLfJknqcTHANQ7mTmAF+Wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AT7EezaA/+xJ2ghYH41j6UwAo5QGcVIcQ4muwAt14QEIHIu7weXmta93cjAkFirvaqex7WVCpf7OXhWMf/jMbLfgDrNqOC5k1bZ+jIuqHXQhNZi8+sNBlY2i0x1kP1OE6djfj+/GvQ+ASJrPDh/I5wAfP4rrfZTx76vuBrhX14g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQ9kTZVH; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQ9kTZVH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767161F000E9;
-	Tue,  7 Jul 2026 05:57:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783403876;
-	bh=3iJynP4kRwvLyws2F7vEyjqsIEzMYchfgfzrFW9gLc4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dQ9kTZVHkjSf2cdBbNxi7liZaZFy9C7kpYceHELbwh8LOTRGi+a6Bm4/mUVcc66e0
-	 TfoWbDpBPeIH9OLm7Oxrs003CBLJKe63+VfM1Ac7hPXDxzLsdnPtntBZ639nz/qTaE
-	 Evqb/q6Y3oKHVZQ+lrHTP9OqbqX75V3bADemQr2lq8KtG6jU38zDi3ftORuPAztetF
-	 MdzRBQYWXGoRdVa3AYzhERTEG4zolLkrZGtjS8FDw/rN1EzW/HRQRl2pDuiIdMi313
-	 aoM83Cu01DJ7iOLz+Vcq4CP4tVQPdoIKlYNxMBO43dOz+DqwK5VcyflS2hNAPUVvGs
-	 6muiVlGaNUhdg==
-Date: Tue, 7 Jul 2026 08:57:50 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: longlong yan <yanlonglong@kylinos.cn>
-Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2] selftests/mm/mseal_test: Fix mmap return value check
- in test_seal_zero_address
-Message-ID: <akyVXpECB19-H9Q8@kernel.org>
-References: <akuQbvgVR8vrEFvo@kernel.org>
- <20260707031745.1039-1-yanlonglong@kylinos.cn>
+	s=arc-20240116; t=1783404467; c=relaxed/simple;
+	bh=RfO9Bl1VU4R3c5pt5zhdLyh9eGJHCv6DqWCxZX69WRA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GQ96Ox3ZIOX2Jm43GUX2t6V3L2fGHq47roWTst6gskDdKYdIl++6Ge95Lzmam2yLsuMZ3D1IYgz1CtEizJF6Y+VjG/vOCq1HjXQ/ngMWNgv6SITJtknHt53kYNM5GMBUQGgefJa7YsyousHOPFTNTbR4f2+eRb26LedjKyNlOZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 28448d5679ca11f1aa26b74ffac11d73-20260707
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:0e75bcc5-358b-4dac-b72a-57b28b533ffd,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:48b47292785d03c2d9ec75d873650513,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
+	50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 28448d5679ca11f1aa26b74ffac11d73-20260707
+X-User: gonglinkai@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <gonglinkai@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 342158271; Tue, 07 Jul 2026 14:07:39 +0800
+From: gonglinkai <gonglinkai@kylinos.cn>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	gonglinkai <gonglinkai@kylinos.cn>
+Subject: [PATCH 0/2] selftests: watchdog: clean up file header comment
+Date: Tue,  7 Jul 2026 14:07:33 +0800
+Message-Id: <20260707060735.1469033-1-gonglinkai@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260707031745.1039-1-yanlonglong@kylinos.cn>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 07, 2026 at 11:17:45AM +0800, longlong yan wrote:
-> The return value for a failed mmap function is MAP_FAILED.
-> According to the definition of FAIL_TEST_IF FALSE,ptr must be
-> determined to be distinct from MAP_FAILED
-> 
-> Fixes: 4926c7a52de7 ("selftest mm/mseal memory sealing")
-> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+Two small cleanups for the file header comment in watchdog-test.c:
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+  1. Drop the WDIOC_GETTEMP TODO that was already done in
+     commit ec7b4511185b ("selftests/watchdog: add test for
+     WDIOC_GETTEMP").
+  2. Fix block comment alignment flagged by checkpatch.
 
-> ---
->  tools/testing/selftests/mm/mseal_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-> index faad4833366a..277c8fda3f5e 100644
-> --- a/tools/testing/selftests/mm/mseal_test.c
-> +++ b/tools/testing/selftests/mm/mseal_test.c
-> @@ -482,7 +482,7 @@ static void test_seal_zero_address(void)
->  	/* use mmap to change protection. */
->  	ptr = mmap(0, size, PROT_NONE,
->  		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-> -	FAIL_TEST_IF_FALSE(ptr == 0);
-> +	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
->  
->  	size = get_vma_size(ptr, &prot);
->  	FAIL_TEST_IF_FALSE(size == 4 * page_size);
-> -- 
-> 2.43.0
-> 
+No functional change.
 
+gonglinkai (2):
+  selftests: watchdog: drop obsolete WDIOC_GETTEMP TODO
+  selftests: watchdog: fix block comment style in file header
+
+ tools/testing/selftests/watchdog/watchdog-test.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
