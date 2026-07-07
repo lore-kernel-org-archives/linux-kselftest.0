@@ -1,112 +1,86 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out28-53.mail.aliyun.com (out28-53.mail.aliyun.com [115.124.28.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCCE30F535
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 01:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756A3375ADF;
+	Tue,  7 Jul 2026 02:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783389025; cv=none; b=onSGFWl9q+Ejfxth8RWSSmMKpQsl91+AZtoHQzNNJZ7Cmd/nDIQ9I5Ruvd2Sq2PrVW5Q7hhousnqD2J/jCSYNSqd0xh7/ac3pZqNpzEMLkGYWgRaa74E25FvSJHqsH7r2HG4bUvCFN7TglHjimsQ+euTjTfsCMQNO6oIpJQG67g=
+	t=1783392292; cv=none; b=ptfopZRQSV9SikE9k3LPzJSh4qVQV9ym0r6QcAu8U1rB21oqKHNOiDOdCfv4ge7bIkIEeJjIZ1dyB193ayi9O5n+rR+YFaBfnDitVuI15vkJq5EN22Yw0AQCBbCSU2brg2iQimU8yKuVkPQDhQ5LheabxQ7zhKvffsOyQ0TOI4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783389025; c=relaxed/simple;
-	bh=C9KKzrMhbHQ4j6vaR8/cSitMU7Oq2QiOexBUmdy+Mi8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R+PITl791VXwO1jZ3VMbPxt9VKVmhi5M1JaAFH+uqZb4v9rLVA6BEeOnlpBjOU0Y/dL7FOrzPCFMY1hHBp1qufdIXcRnkVneHWEkQWsXmipeYvIZ41tPtrI9GbkMcat5jFLKLW5IfRD84CtH6WFZQ3miB/tba4FW/kyCqHFyUpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iGuO03Qb; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iGuO03Qb"
-Date: Mon, 6 Jul 2026 18:50:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783389012;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pTk3bWiQbEnp9NY0pyiBv+XodrV//lC9BoLhtxJEGoA=;
-	b=iGuO03QbteJKA9aIihTwgX5AqWkgRqrX05rDKfDWlAWxDk7BNPcW0y5ca39Xps5t56uFb/
-	16s4rxVCluAQKhlh0zAY3smINquMtK0ZkTszFMX2OyuRCmfoPf5vVYOqLwrcLGYWDiEW8h
-	Qjag8AlxR8nfinWL6s7frKd+vQzT4ls=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Ziyang Men <ziyang.meme@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, kernel-team@meta.com, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] selftests/bpf: compare BPF and memory.stat memcg
- stat readers
-Message-ID: <akxW5dzvR9e2CfGq@linux.dev>
-References: <20260704045617.487664-1-ziyang.meme@gmail.com>
- <bc12730fe6eccde10d36e6544607ae2464357e05.camel@gmail.com>
+	s=arc-20240116; t=1783392292; c=relaxed/simple;
+	bh=s8le8rz75dPMvH3KLAL0pyss5QP5CG9SRaMBPk1Lkrc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XCnjDn2FSRyPZbDQP8PflU8ezVIMugcXifVG+O4Cop8305tIjayZbGqdkIIL/fMZDTB0i7Uf9JSwZcmNOnBbt+If8P3ByZamNs/iKUU9g3kelqcXSw96qYrFZ9/iCJ9StP4oA7gqxNjNwOpp6s2u6G7afPngqjeqWy6NyWkwCCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1020282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00380951-0.000328731-0.995862;FP=9179448279238174455|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037017159;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.iEvCEd._1783392276;
+Received: from 172.18.22.107(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.iEvCEd._1783392276 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Tue, 07 Jul 2026 10:44:39 +0800
+Message-ID: <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net>
+Date: Tue, 7 Jul 2026 10:44:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc12730fe6eccde10d36e6544607ae2464357e05.camel@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
+To: Jim Mattson <jmattson@google.com>
+Cc: mlevitsk@redhat.com, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+ <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
+ <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
+ <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net>
+ <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+Content-Language: en-US
+From: Tina Zhang <zhang_wei@open-hieco.net>
+In-Reply-To: <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 06, 2026 at 05:17:50PM -0700, Eduard Zingerman wrote:
-> On Fri, 2026-07-03 at 21:56 -0700, Ziyang Men wrote:
-> 
-> [...]
-> 
-> Hi Ziyang,
-> 
-> I'm a bit hesitant adding 2.5K lines of code to the BPF selftests,
-> as this code would need to be (a) maintained, (b) run at each CI invocation.
-> Hence, the tests added need to be relevant for the BPF sub-system.
-> 
-> Regarding the benchmarking part, as you state yourself:
-> 
->   > In my testing (a 60-CPU VM) the BPF path is roughly an order of magnitude
->   > faster than the per-cgroup memory.stat parse for a whole-tree scan, mainly
->   > because it avoids the per-cgroup open/read and string parsing.
-> 
-> With this, I think the benchmarking code can be dropped altogether.
-> 
-> Next, the three memcg_stat_{reader,churn,churn_percpu}.c files share a
-> lot of utility code almost verbatim (e.g. tree definition/construction).
-> Such duplication should be avoided.
-> 
-> Finally, from the BPF point of view the test exercises the following functionality:
-> - kfuncs:
->   - bpf_mem_cgroup_page_state
->   - bpf_mem_cgroup_vm_events
->   - bpf_put_mem_cgroup
->   - bpf_get_mem_cgroup
-> - main iterator logic.
-> 
-> All kfuncs but bpf_get_mem_cgroup() are thin wrappers around mm/memcontrol.c code,
-> all kfuncs including the bpf_get_mem_cgroup() are already exercised in the selftests.
-> The iterator logic itself is covered by 8 sub-tests in the prog_tests/cgroup_iter.c.
-> Hence two questions:
-> - What do these new tests add in terms of tests coverage?
-> - Why do BPF selftests need to exercise the churn and churn_percpu scenarios?
-> 
-> Shakeel, could you please comment as well?
 
-Hi Eduard,
 
-Thanks a lot for taking a look. The main motivation I had behind requesting
-Ziyang to send this series (beside making him learn the tooling and process of
-sending patches to lkml) was to have a reference implementation and performance
-comparison for BPF based cgroup/memcg stats collection.
+On 7/7/2026 9:32 AM, Jim Mattson wrote:
+> On Mon, Jul 6, 2026 at 5:02 PM Tina Zhang <zhang_wei@open-hieco.net> wrote:
+> 
+>> I will take another look for the next version and try to handle the
+>> remaining pieces properly, while also making sure we don't expose stale
+>> or incorrectly synthesized decode-assist state for emulated exits.
+> 
+> Naples erratum 1096 seems to imply that the instruction bytes stored
+> in the VMCB are not necessarily the same instruction bytes that were
+> fetched and decoded to lead to the #PF/#NPF. Hence, in the case of
+> emulation, it might be sufficient to read the instruction bytes quite
+> late in nested_svm_vmexit(). That would certainly simplify the
+> plumbing.
 
-However you have correctly pointed out that selftests might not be the right
-place for such kind of code as selftests are more focused on functional tests
-and run by a lot of CIs while this is a performance benchmarking code.
+Thanks for the suggestion, and for pointing me at Naples erratum 1096. 
+I wasn't aware of that erratum.
 
-I am wondering if there is a place for this benchmarking code in kernel under
-tools folder but archiving it on lkml might be good enough and should be easily
-searchable. Anyways thanks again for your time.
+My understanding is that late fetching/decoding from guest RIP is not 
+strictly equivalent to preserving the exact bytes observed by the 
+original decoder, as the code bytes or translations could theoretically 
+change in between. But the suggested workaround for erratum 1096 also 
+tells the hypervisor to decode the instruction at the instruction 
+pointer when GuestInstrBytes cannot be used, so it seems that this is an 
+acceptable model/fallback.
 
-thanks,
-Shakeel
+For KVM-synthesized/emulated #PF/#NPF nested VM-Exits there is no fresh 
+hardware GuestInstrBytes state to propagate to VMCB12. So I agree that 
+it should be simpler to avoid plumbing instruction bytes from the 
+emulator, and instead fetch the bytes late when constructing the nested 
+VM-Exit for L1.
+
+I'll try this direction first.
+
+
+
+Thanks,
+Tina
+
