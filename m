@@ -1,149 +1,130 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DEC43C7DE
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783448618; cv=pass; b=hpyEHA7u/xBdvvDy5tpJWc26Ucld2l/TcH1V97cCnbZuvd1XrKIJ8CX7NqiQiQV7zYXgT0Xs8SQgX4uPMLqQ4jOnbnFS90xvycaFAiXUbMyGNlN7wvMJ+rfxKboqTru5CJJUzCGk8lPUyMXjF7d/La9z393A5p4tLJjVx51WIHE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783448618; c=relaxed/simple;
-	bh=rlf3tHuXC+J9H9qoGU4eEn6pWPRGEeYT1LPxkFxhje4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83F943B6D3
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783448730; cv=none; b=FCdlb4pAntyQAu+9oA1z3Jsnh5p9jyhrRZ5RkanyR4YB3P6XtlhD7ri6cl2YE2Oq9lTvfcWOfqfbVUuBwLwrUYEx0A0oaccEqSRuSuUc/uC/KQ8rCrYtlW+PMTBdaqvaRag3RtZutYVT7TdTAG9Qv1EK+8YXbfibbS+Nh/FCHE4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783448730; c=relaxed/simple;
+	bh=WDatReQ1diJxMnQ27gX5bGDxa/1pmcVJt3crJPRj6lE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bH7CZEhSVYFHhkdKFu4erKp76lG3nUqyCgDiO3VDIfIUdCI6lO9epzsh94PKd3zKd9KwSRKZ+tu4025HtkeH5t3dSR97EQLTGeWACpVp3pAOViCxGVcseZrjjh80is9uG1blq0GeodY8oYr3K0nZEb0hTBWhhiXulMXkGyOnOD4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MalPC7ts; arc=pass smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=Ut2d4JrMPvZ2UtP0RAqYxmDt3eIWbxKd/6Vk4ssVb9NXult0gv13q8ZgLyX47EAp25TpmU8p4JBVj+LrzbKc7GHZuNjEDvwizxajbFjZq/I54B2R3F7JbpEuePyJsZDZaE2WMIPLrtb5pHoGlXg8jf2+GJP19Tp9RkGXmFggYxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8R9IeOm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MalPC7ts"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-698b78c05b0so1159a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 11:23:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783448615; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iznNAML3O8MSQVchwqmR5QFg6Kv5rGzUftmHFM+cfydWTJtOEfcwF/W0BdakFO4Ftd
-         a7WuluBQRGlh6jvqmzr1YYujwdyAR9FtI4Ct5AGrdXxzdLeM5RJ/vguQsUbNo4ZrPuLj
-         gTiWnRxHHKZsQY76ASPBo6q0Gb74fDPe8FrhryYsmC/F94ttPjPOpg70sQ2YrmRYt2CW
-         fa2+oidkdF3U1T4hStwa+9pAwW4uQ9by2EQfhzWAp6uUQRlSdY8JBy7zS9wcx3UIqaDs
-         cdSBrS5E3UnbKe6kypylJEKjzRcnB7pvF7wOZy2xSnoCpImqRywXK89Qe26bj0dbFsxE
-         JvVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
-        fh=Gza8ckkdf4P0bekDg9keaPQLgug22dDcgs2wCsin74o=;
-        b=bvE41K3rNYmYwQEqiyOtVeujdfVOSmfqoPriVRMeEc9GWJWhMcvrPQS24aaLmP5b3T
-         qvWjGwKhICVdXQdM7/1TCe36XvLKCnZIjsSaseQAD1eWceCgvAgObnhOgZ++2+2YE/WH
-         XGcXkRTbaay1Ik3fu8JPV/r9UoennRhyaRvbO/InXx3Rr0UXCza7E/VxyYZQUowGPPVw
-         UWKta9clIRqOnnnK69g7s59HqTI4UyE/8/FrHBJEiX7ly4532acu0VkYc3smuZw+T1RG
-         GjfiK08KVdGRdHCvz6ewdudke4jdgk1WsG3Crhyd99/1ZnzreYJBFKCYFFrCSL1wp2Nk
-         3vFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783448615; x=1784053415; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
-        b=MalPC7tsOEfl6t+SGqr5q1OkqWADzkKctrHvzVWlgdPyJmRePGZcDWuztqKmf+l5/Y
-         U58VcvVBWMpUF/5pXXBl57dPBGax02dvdwI/PI6EqVabcZdjs1XYxuYiQsThhfyQ8Zru
-         pF7JQaY3p8Dey6p9a3n7WIayP0IdhADVUHljnhFXRw9YPr7ieNXs9+QfiQIyNwQHhfml
-         zta5TLZN/UkabDamuRIGvPihOMpN/qtz/RQT3Dfh+rNXcBhKE6JgKJXEjZ5Nhj6Tb9KB
-         fba+3hHytRwgIWBDwmcBcSNCEGw7S2RMkbJgzvZ6ufLYddthvwN2P2rku++LB+PNlANm
-         BSIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783448615; x=1784053415;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=n6UTQhybf0qp+uwC136gBcEg4wQiDp++XoD04H2aZkc=;
-        b=a2G/2hnL8D1tGKR6RSkIywZHCqiK1ABd0yLkgfGCfKdkpTCTmoS5PfkjXBslXw/Q8o
-         QtyAKdfgH1NUr+JTQ/AxgyDW9YcHcEJWnw1+WVy0aJyqTwixHNH+S3Ck+5NcmyupHmdg
-         bvgyZlIa1FjamBkiG6yFAR6+raF9R2AT/QLg8WR8S1oWMRoYkPjhAlS/EBT4l0Yxty61
-         bXM+vL2E3VFut1zVsBl2NPJ/QXuqq4MRl2GwUM+phiv8oWg+7eiDcSKwXzSxYwdTxJ7R
-         rwZvFOy7mEDTl6FKUXcI3FgGLUrMnxJ+tgE9LPx12jCsHMF3h/n4UjkwYLLaRL+fksON
-         z7gA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq2crF3lew7g6Uei2om0cS5hcr580ok9mNiAgFgbaHwuY5YOTyL4UoD7W0C1Nk4JiGwqtz7rilBQC7SwYJI++s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMMh/vgGYIm08xcAR9eVlWyDVQx4Sh4+Y+B57d000Wx99otG81
-	8xIuRVVnb6+5nzHVnrQKgPdLr8n6JJ/u1yxJQTYRTMccXdGNibqd7Ktj8cd7P5jRbbnw5TUBiae
-	flNwYk/MzRGsA03QkblxDOQmSV6ncbfS3sCEdVphwGwuy461OLZUW77zCQy4=
-X-Gm-Gg: AfdE7cm38DuEpeAzwdouEHf7iJ7KUxrLX4Z1ujiECc/LWiqgqeSUFWve9YfBJla0XGo
-	s/kHb4mM5EveLB/tcOCeoRvTfc7C5fuqRtjNvyj+sFbFFdxS7IV6rrO+3nQPKWoEuE+/kTApWsa
-	bviw+eAz371FYC1zoaf9Dp0TQyBNQE7DcRuoVXnRwKHrfmCDP65ZrVXeEJWF8VTLQoRsDaDZbtn
-	q7hCEtPEucUPPzXxLoh/EV3gh2MqXv72RVlOxZKFRu3kkXHZscw1JS+ezGgJd4WO5OXj6uP
-X-Received: by 2002:aa7:d614:0:b0:697:7f69:48e3 with SMTP id
- 4fb4d7f45d1cf-69a9134f82amr62168a12.10.1783448614909; Tue, 07 Jul 2026
- 11:23:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8R9IeOm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF37A1F00ACA
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 18:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783448729;
+	bh=UodfhMWHJOTmOaDJSgPxCuKgMVhusPF/cnVjRAHGFO4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=B8R9IeOmQ/w6CN0kw35IGwlxxnZpEu99nbMX4c/Uz0ZcV4rgegRJI/jZiko7++/tb
+	 c7yvthhV1zfsHkolcBeQOX7HTX0sx6KH3vp7Q3YMAFi/s1gGzciFZzeli/XT38Q9XE
+	 jIUj0Ye1Vn5XWYnys16iy4Z9wVohuuK2k9yXDeBgmwTe3+cqlvBbVGw5OjeRnTJXaA
+	 62BCKeNy8ZiHZVWFCkEqfEs0r5Bljrmi6XyIu93HnVEejHreDAPSoHcaQutzY/dk8r
+	 cqIupSIZo4R9LvAy9nA4m6/IzjGrfi2efqDUvgDh8BiMKdxtEm00EAfxT4kT2Xs2Xg
+	 r6ZyRyoPdR1gA==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-691c5776f35so7013495a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 11:25:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+DSc5JyHGk0BNbubyqWSgvSwHo9e5NM+v3OZw+b9o9XyfK+wQV0WUfrKZLSnJrQpLhJA9bXe0R81pt7V7aSs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2M/8G7RsSAuL1GjiW8yqp6CJtplTUJCdu2mQS6z8ZDgWdVxZi
+	+B/m5dslgKRaIHrJq/9EUu5HJqNXXMG/B9f9FSW/flCC8+NACsJ9TZEcvqokkL510S325q0YvWT
+	wrFb3Jlpvz5OIimX9jNdo1JkeQA1ptA8=
+X-Received: by 2002:a17:907:ea8:b0:c15:b27d:51e4 with SMTP id
+ a640c23a62f3a-c15b27d5823mr202693266b.20.1783448728654; Tue, 07 Jul 2026
+ 11:25:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
- <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
- <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
- <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
- <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
- <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
- <ak0QE7mP_TeZmzeS@google.com> <CALMp9eTycB8Z94V8j-xyfDeah5KaJypRrPfFNHfQSUzgrr7FkQ@mail.gmail.com>
- <ak0dRzS4Ap-JREvg@google.com>
-In-Reply-To: <ak0dRzS4Ap-JREvg@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Tue, 7 Jul 2026 11:23:22 -0700
-X-Gm-Features: AVVi8CdfxH9KPwBG1cPjxuI_GW1P0iEniD5Mku_K1NYa8qNEH3FQUGW2WLHpSig
-Message-ID: <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-To: Sean Christopherson <seanjc@google.com>
-Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
+In-Reply-To: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Tue, 7 Jul 2026 11:25:16 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zNJh65SZzdW8Cc8_8N5Wr+ORuRtU3kuaAX_DhLaESFYTA@mail.gmail.com>
+X-Gm-Features: AVVi8CfOmsujy8Bb6nVmdtBpnu4IHHs228GbFDG2jlrs3NnSjCrtP5K0xKzG314
+Message-ID: <CAO9r8zNJh65SZzdW8Cc8_8N5Wr+ORuRtU3kuaAX_DhLaESFYTA@mail.gmail.com>
+Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
+ test program"
+To: Zenghui Yu <zenghui.yu@linux.dev>
+Cc: linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	hannes@cmpxchg.org, nphamcs@gmail.com, chengming.zhou@linux.dev, 
+	tj@kernel.org, mkoutny@suse.com, Shuah Khan <shuah@kernel.org>, mhocko@kernel.org, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 7, 2026 at 8:37=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
+On Tue, Jul 7, 2026 at 2:38=E2=80=AFAM Zenghui Yu <zenghui.yu@linux.dev> wr=
+ote:
 >
-> On Tue, Jul 07, 2026, Jim Mattson wrote:
-> > On Tue, Jul 7, 2026 at 7:41=E2=80=AFAM Sean Christopherson <seanjc@goog=
-le.com> wrote:
-> > >
-> > >         insn =3D ctxt->fetch.data;
-> > >         if (ctxt->eip =3D=3D kvm_rip_read(vcpu))
-> > >                 insn_len =3D ctxt->fetch.end - ctxt->fetch.ptr;
-> > >
-> > >         for (len =3D X86_MAX_INSTRUCTION_LENGTH - insn_len; len >=3D =
-0; len--) {
-> > >                 if (!kvm_fetch_guest_virt(vcpu, kvm_rip_read(vcpu) + =
-insn_len,
-> > >                                           &insn[insn_len], len, NULL)=
-)
-> > >                         break;
-> > >         }
-> >
-> > This split doesn't bother you?
+> Hi,
 >
-> What split?  Do you mean reading some bytes from the emulator, and some a=
-t the
-> time of #VMEXIT?  If so: no.  IMO, the most important thing in practice i=
-s to
-> capture the actual bytes used to decode the instruction that led to the #=
-NPF.
+> Running cgroup/test_zswap on my arm64 box failed immediately with:
+>
+>   [root@localhost cgroup]# ./test_zswap
+>   TAP version 13
+>   1..8
+>   # zswpout does not increase after test program
+>   not ok 1 test_zswap_usage
+>   [...]
+>
+> I'm sure that pages are successfully written into zswap by checking the
+> count_memcg_events(.., idx=3DZSWPOUT, ..) trace events. But "zswpout_afte=
+r"
+> in test_zswap_usage() is 0 and results in this failure.
+>
+> I guess the problem is that (in this particular case) the memcg stats has
+> not been flushed when userspace reads it.
+>
+>  memcg_stat_format()
+>    mem_cgroup_flush_stats()
+>      __mem_cgroup_flush_stats(.., force=3Dfalse)
+>        needs_flush =3D memcg_vmstats_needs_flush();
+>
+>  static bool memcg_vmstats_needs_flush(struct memcg_vmstats *vmstats)
+>  {
+>         return atomic_long_read(&vmstats->stats_updates) >
+>                 MEMCG_CHARGE_BATCH * num_online_cpus();
+>  }
+>
+> I can image that memcg_vmstats_needs_flush() will return false because I'=
+m
+> testing a 16k-page-size kernel on a box with 96 cpus..
+>
+> As we have a periodic flusher flushed all the stats every 2 seconds, I us=
+e
+> the following diff to wait the flusher to expose the accurate stats to
+> userspace.
+>
+> diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/tes=
+ting/selftests/cgroup/lib/cgroup_util.c
+> index 3ce134509041..9596f294da0b 100644
+> --- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
+> +++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
+> @@ -95,6 +95,8 @@ int cg_read(const char *cgroup, const char *control, ch=
+ar *buf, size_t len)
+>
+>         snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+>
+> +       sleep(2);
+> +
+>         ret =3D read_text(path, buf, len);
+>         return ret >=3D 0 ? 0 : ret;
+>  }
+>
+> I have no idea how to "fix" it properly. Please have a look!
 
-Yes, that was the split I was referring to.
+We were discussing a way for userspace to explicitly trigger a flush
+before, which would come in handy for testing. However, we decided not
+to expose flushing as a concept to userspace.
 
-> Exactly how and when the "CPU" reads the bytes is a micro-architectural d=
-etail,
-> so I don't have any qualms from an architectural-correctness perspective.
-
-When I requested this feature, I think I made it clear that I wanted
-the actual instruction bytes used to decode the instruction, rather
-than bytes asynchronously fetched through the data path. It wasn't
-until I encountered the Naples erratum that I realized AMD hadn't
-implemented the feature as requested.
-
-Since there is no guarantee that the instruction bytes are actually
-relevant, I concede that 'exactly how and when the "CPU" reads the
-bytes is a micro-architectural detail.'
+Unfortunately I think the only way to "fix" the test is to allocate
+more memory, enough to trigger a flush on most interesting setups.
+Perhaps we should scale the amount of memory with the number of CPUs
+so that we don't have to keep playing whack-a-mole.
