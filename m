@@ -1,154 +1,182 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE792E7372
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 19:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783451810; cv=none; b=dsKqA/1UsjiHKalJrHfUbflvhCPASWbK6isRpDjIwOBPSUZ/1Sx8dhXncs6MPylBqU4WweyElRwnUdQY0eKH47l2baoqP+hJOdFfqvQdlQicKGroQJZpQRNudicE0qMY1L/L4ATo68r6HC0l0olSHfqjWToIGAJl0e2KtUDJpQw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783451810; c=relaxed/simple;
-	bh=Rrr5x5ig8JyhfrhHMWQeKgUULcODUkkp8jUbPOWouu8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AUjueERvki74rAjwPKefNlCIH4VBX/qL1uxJlPf8XadRYUtnuuWDFpsh9Fa9x1APCmS+3ShWwmESxtSOBwsm/z4Hm1ox4BBLo8uYYdSh8Xx/ZO93rvmuIfs7y+0ahGbl8/LDNBtPwDtmgy8u0WWGDm8UFVRkjNSTTIIZYmW5tXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ETqJJpmd; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE16E34750A
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 19:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783452276; cv=pass; b=I5AnmA+QuZMYvYpHIDRQRvaHXtdA13t+r0YuagrgsetU0no6cSoINNWh0gbSJz41DHOz2Bj4pnMDzl5+Mmb+zEB23s7vBbEhTayx4BoJ+erGrUxJX1WFdoiFuxGc/OaOMCruaw3MqvQC9vszInC0qlaO+n+WP0AFVm5y00UBWcI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783452276; c=relaxed/simple;
+	bh=lqIqD3byUVDYSUFyysmtpZVvkzId65XXgC2avO2Zwzk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HhFzWGCfN0tkCNdimImF3/yhhs4jhIE5rPyQ0VktfOUx+4BKiAax4qB6HhAnWthhIOAZBwqAINxBh8ZkZ3BXqfUp/uYjOLj3vtpfFsrxbdd0YVikBOUlMj6+kKtlSpuZ0dAkaf5/Wb+tgIorj+Fs0qPlmn6RXBiDgYoKORjvKcg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oQpdttfb; arc=pass smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ETqJJpmd"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2cca3673560so39706495ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 12:16:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oQpdttfb"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cab97c86bdso22195ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 12:24:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783452274; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rQow0lwy/Qh2iNbe60nCdHcm94YQAVpvvXWYfse+XaqoFLQkSOox0glE9zNcHW7Apw
+         YCVAFJs0ILb8xL9Pw5i0PvldqH/62I9eGH7mEyK2H9rZyLaxOxORPIeQoynXz3HJOwPX
+         2RQZLie/OjXi0JYFs143ph4JUwKAZTtKZrrPblRxCAoraz6RpD954UFdeYcUlfrLN98F
+         uc6xfdKT8QTtth9IPqBukyZv6Mwm5SzeK7LwAzf9QFKxS+H5N3YHFXpM1GrIhVcS/K2S
+         KnkS7xhGkkvK1nZZUwucp42kWc5wIKT/I+F0pl6VRLlcJHkKq9PD9HhhRznYm4TIkp4I
+         yAlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6Fm7QjNSE0IJ2/34q+H/eGUWaQNYPo+v65MhhotHihY=;
+        fh=UV2pd5SJKS2LlPwadcKKULUZfe5XqXHuJjzfetCnTeI=;
+        b=qCNt0Bp9tXF3xdazKmWFMtgmK9I2shJQ3pgAI3c6j2OjO2T3CGAcBnOFPnKuqbOEex
+         rfDlq0Uq9+re143in1wczBnh4ZR8Pk36nkTtH1Qnkl48jjz+kAaMsEs7vd++RXFpQ7HM
+         QYWViqdWlBA6XVDEZEvdRfCXv5OfwsWAN7Ha7y+X46DbufCJOzBSRqu+5X3GG5JSo0+5
+         SNCByJt29D9wsuxMs5GvswyTdJUP30iWZ5NDe3dKuwSWKR9tAzguPbzzk64XkvZjxOYR
+         x/QYGg+rMiFCstho4s9tRC6dO/rWEaPZOIQ4X+sUpRckOImS/PLc4eOU7M4ssSZIpxdt
+         LWqw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783451809; x=1784056609; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mwyS52Ee+fzpPLsIt5St9y7+nrmgCj0h4goGGRZrAxg=;
-        b=ETqJJpmdyeC0qYTGLXXDRdCkC+QbfAEHHDMXbrHzMNmyEwlfZUhE4rrePTNnA6pR46
-         +cv8VIVbYipsW+z/uio4pskwbJ5DCST/6QWg5eZHa396wUZ7gxZfBrvnSyCOH8A8SEdb
-         EKHbUC0bpeX/NnSTVVEueFzY/J9+AIwT2Hv6AAT7sq6tpzBtHITL2suMlRsqKpIaWJTv
-         gqvbrXi62AzRVlwZ7HpCqHoRSe4DcrV/yyQBobhvjJofxOiKgNP1JlDLST2DTKucj2QO
-         t4WT/+foyIhNLo0j7RFuNcGd4ZONoOgRgnBqbbh4FBGle/nBXZDu+fnGdYuNVv0k5UbS
-         kxJw==
+        d=google.com; s=20251104; t=1783452274; x=1784057074; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=6Fm7QjNSE0IJ2/34q+H/eGUWaQNYPo+v65MhhotHihY=;
+        b=oQpdttfb2FUCW91i+sJsbmx+R2UJzLCXaTuMELV3Qmry2LGXg5KMg9biadhTxnUize
+         +dmbSO4yp/DpFMZIFGP/lDL1QbLOnCo69SlucqmyKG24GOjeOOxfUbaqwRk4VMG7Tf52
+         llgULpThfoHNPXiGK6oM4oKc2S+haSl0KS1ThuIxH5qbfDEdK1BbyApiX3ggKfi1qLKH
+         jgYqXCOQyQIflRXCoXZdlyJ3jkeBBPaADEgvuLOzDiW60E+KUxHdPPyel/jn9OMR6qLa
+         QakHO0SF3XoMmf3Bie5rOn3xa7kZ4Auz+Hl6szRPsfoes+n4KG2Wa3tgcMPwXCup9dAm
+         DbQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783451809; x=1784056609;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
+        d=1e100.net; s=20251104; t=1783452274; x=1784057074;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mwyS52Ee+fzpPLsIt5St9y7+nrmgCj0h4goGGRZrAxg=;
-        b=QloijXGhYK0Y7xvqt4/IyZshqZTazG+ytjR8g+ZV6Z7R+39mTctbHIP3SnR/dBU8QO
-         vNrSfVhdmEYxqpOVepdkQNMTDeEREVeOYBR5HcL03xiFO1JNxfeSGoBWQgEAB1OOq15W
-         hHqz/J+ecg5zM/bvlSFrdyK7D75fQ02qEEy3s23J5TjtW+3tTGr71aodswf4l4VAtDSg
-         sbLhndrZDFwSBT3Izeo0lX5Tq8cFNxVGkCD8l7Wl/J8OeDpdFv47YPRw+pOLmNmGdFAV
-         OZVijop33txOkv25x/UO+MS/EiIyg12p1ayrivVnCVgo6Li6gkaqy1v3O7k+fJYkToDw
-         iQKQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rri9kwvdvnZT/ngg3FafEXmA4PgTk7Vyh5+i3uPHWod+QxQR/aWwUq2qdM9jpWlUz85QJLLYfog8GVNSjuRaLw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBtr+ldF6hZx4wiULRQJ/hQYNY3Jm3lPfqruu43JMNF9zGnmoB
-	nU70QGmEHQhEUSOSYFbHhpXbWPaVJOxTbSsCtu+whomC9ae/fB8LrinqyrvDilvY/WP+zPaxJI/
-	uWyJXLA==
-X-Received: from plbkf8.prod.google.com ([2002:a17:903:5c8:b0:2bd:40d4:e407])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f60d:b0:2ba:6518:a6d4
- with SMTP id d9443c01a7336-2ccbe7232f3mr60167385ad.20.1783451808480; Tue, 07
- Jul 2026 12:16:48 -0700 (PDT)
-Date: Tue, 7 Jul 2026 12:16:47 -0700
-In-Reply-To: <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
+        bh=6Fm7QjNSE0IJ2/34q+H/eGUWaQNYPo+v65MhhotHihY=;
+        b=kL3CzjL3yOtxzpYnz2d/H4ml3IgK3cd7cAzUL3vk3K6/A7opyN+D46o8U2CpOe10vm
+         88vxNsr7aFcBbHcdMgYEv44zRW4T406tenC8X4vdGuPik3cnZGAPQ1EmQF4Y4XUkjVNM
+         Ej3AQ7A8RUkPZVYPcvT0ZtsKg1Jj1aUpPtK0ILmt6smhJcCxWwKgk6p6kY2utqmCzGMM
+         B/7kk4D8fHKzGHNEA1jOK05q8i8aYy7v2L1h6RITLdjeeQVCro1pr2h1VOwBAdrduuV5
+         HaZjvR0/vqSjspQE/ou4n6dk2luxQ3vtIMI6juhDLdWVsdYU6dxRBpXKKAYW+aXzMPPx
+         Sz7w==
+X-Forwarded-Encrypted: i=1; AHgh+RrN7/Z1HXXmjuVmIBTclrR7rurBlXjxjefy6aRKnlYfR/tjnBDCO1UQpdlcSRD6JLnfZqICfiUsCGv7OVDXY+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG/CXT7vpVgOTPD2BFaKk4jHUbC0bkFnFmSf+ZpyoRD543ZLzy
+	Fx/9zUs817SEZa4aKEJAPIEGZ2w/ZGJUUHnjgvjXJxWwJX+CYGDJSLplTQA3+hlANFnYFZfHisi
+	7cWhDD+0IFOkYg7oZrUDffTmzqxCRV6umblCyk8fv
+X-Gm-Gg: AfdE7cnZQXz5PArx2NtLVbNnQTeTCwO0sHG535kaRdCsVWwj4OfXthPuOgnYI/dEes3
+	+rRUDon/f9lgAnR8r1DICfoW8wTnuochEs3zSuSNqbtTMZWOrNSNQOyUz6l6wvIiZ1MV2CVto4i
+	vM9VBC+Pg4LQoogEebUxUSripMNM7YVP+SxiEm1wbP8gGSjtSXq5elDEUu4YFz+J/Fy8vY+XUZc
+	5x7cw2OidBuRmEC0H3c4fJjBcAhYKtoODWZEZa1WIAH6S2cuIcaJKf5Qnp8eBcpYSj5tspJO5X9
+	elRenjBlaROg9ugXa/VFhzSQvVA=
+X-Received: by 2002:a17:903:13c6:b0:2cc:a859:d404 with SMTP id
+ d9443c01a7336-2cce6093926mr513125ad.23.1783452273682; Tue, 07 Jul 2026
+ 12:24:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
- <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
- <d5645a47-c346-4e63-a5c6-c88bb39a3ee1@open-hieco.net> <akxwt1mX6blSnkxI@google.com>
- <CALMp9eTr0iJ5QgbZJ0YtOZg89XVFSesbyoGGdtkz+f8c60DcDA@mail.gmail.com>
- <ak0QE7mP_TeZmzeS@google.com> <CALMp9eTycB8Z94V8j-xyfDeah5KaJypRrPfFNHfQSUzgrr7FkQ@mail.gmail.com>
- <ak0dRzS4Ap-JREvg@google.com> <CALMp9eQ4JZ8E5BTr7Cde5M=djBg1oMNLbfn_ZoVPL62ijna3AQ@mail.gmail.com>
-Message-ID: <ak1Qn5miCXvvRnyF@google.com>
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20260701-tcpdm-large-niovs-v4-0-ca4654f37570@meta.com>
+In-Reply-To: <20260701-tcpdm-large-niovs-v4-0-ca4654f37570@meta.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 7 Jul 2026 12:24:21 -0700
+X-Gm-Features: AVVi8Cf2zkjvZFmISVUtPxc7XWtQGIP2yN30jA4uYxFxIOpN1CJ2PCF-gRvgh1w
+Message-ID: <CAHS8izOmA_U=Q6WOO5mcoi2vBps_JFEtAQa3gXk=JcL3rqE1BA@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 0/3] net: devmem: allow rx-buf-size >
+ PAGE_SIZE per binding
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
+	sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net, 
+	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk, 
+	Joe Damato <joe@dama.to>, Bobby Eshleman <bobbyeshleman@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 07, 2026, Jim Mattson wrote:
-> On Tue, Jul 7, 2026 at 8:37=E2=80=AFAM Sean Christopherson <seanjc@google=
+(I'm kinda reviewing this very late here. Some suggestions/comments
+but feel free to ignore if not useful).
+
+On Wed, Jul 1, 2026 at 12:22=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail=
 .com> wrote:
-> >
-> > On Tue, Jul 07, 2026, Jim Mattson wrote:
-> > > On Tue, Jul 7, 2026 at 7:41=E2=80=AFAM Sean Christopherson <seanjc@go=
-ogle.com> wrote:
-> > > >
-> > > >         insn =3D ctxt->fetch.data;
-> > > >         if (ctxt->eip =3D=3D kvm_rip_read(vcpu))
-> > > >                 insn_len =3D ctxt->fetch.end - ctxt->fetch.ptr;
-> > > >
-> > > >         for (len =3D X86_MAX_INSTRUCTION_LENGTH - insn_len; len >=
-=3D 0; len--) {
-> > > >                 if (!kvm_fetch_guest_virt(vcpu, kvm_rip_read(vcpu) =
-+ insn_len,
-> > > >                                           &insn[insn_len], len, NUL=
-L))
-> > > >                         break;
-> > > >         }
-> > >
-> > > This split doesn't bother you?
-> >
-> > What split?  Do you mean reading some bytes from the emulator, and some=
- at the
-> > time of #VMEXIT?  If so: no.  IMO, the most important thing in practice=
- is to
-> > capture the actual bytes used to decode the instruction that led to the=
- #NPF.
->=20
-> Yes, that was the split I was referring to.
->=20
-> > Exactly how and when the "CPU" reads the bytes is a micro-architectural=
- detail,
-> > so I don't have any qualms from an architectural-correctness perspectiv=
-e.
->=20
-> When I requested this feature, I think I made it clear that I wanted
-> the actual instruction bytes used to decode the instruction, rather
-> than bytes asynchronously fetched through the data path.
+>
+> Every devmem dmabuf binding hands the page_pool PAGE_SIZE niovs today.
+> On NICs that consume one descriptor per netmem, this caps a single RX
+> descriptor at PAGE_SIZE and burns CPU on buffer churn.
+>
+> In this series, we add a bind-time netlink attribute,
+> NETDEV_A_DMABUF_RX_BUF_SIZE, that lets userspace request a larger niov si=
+ze
+> (power of two >=3D PAGE_SIZE).
 
-FWIW, what I'm suggesting gets us as close to that ideal as is possible, I =
-think.
-If KVM emulates an instruction in response to an #PF or #NPF exit, then the
-emulator will use the information from the VMCB, and so the above code will=
- also
-use the code stream that hardware provided.  If hardware provided fewer tha=
-n
-15 bytes for whatever, KVM will try to fill in the gaps, but KVM can't poss=
-ibly
-have decoded those bytes, so there's disconnect between what was emulated v=
-ersus
-what was read later on.
+FWIW we may be able to support arbitrary sizes with devmem. Because
+the genpool supports byte-aligned allocations AFAIR. Also the
+dma-mapping happens with the dma-buf size, so the actual niov size
+doesn't matter. The only thing I can think off which may not be
+flexible to arbitrary sizes is the driver itself. IDK what happens if
+you ask the driver to dma into a buffer that is frag size 5023 or
+something like that.
 
-If KVM emulates without information from the VMCB, then the emulator's code=
- fetch
-is the "source of truth", and everything else in the above again holds true=
-.
+But that is something that can be relaxed in the future.
 
-> It wasn't until I encountered the Naples erratum that I realized AMD hadn=
-'t
-> implemented the feature as requested.
+> Drivers must opt in via
+> queue_mgmt_ops.QCFG_RX_PAGE_SIZE.
+>
 
-Yeah.  I've poked AMD folks about this once or twice, the answer is (amusin=
-gly)
-that plumbing the bytes from fetch+decode all the way to the #VMEXIT is pai=
-nful,
-and so hardware just reads memory at the time of #VMEXIT.
+nit that probably doesn't matter: ...QCFG_RX_NETMEM_SIZE, or
+(...NIOV_SIZE). This doesn't actually work with pages, right?
 
-> Since there is no guarantee that the instruction bytes are actually
-> relevant, I concede that 'exactly how and when the "CPU" reads the
-> bytes is a micro-architectural detail.'
+If you decide to extend to arbrary sizes, I would add to the
+queue_mgmt ops supports_netmem_size(size_t size) function, and let the
+driver enforce "it has to be power of 2" if it needs to. AFAICT core
+doesn't need to.
 
-KVM's emulator would actually be doing better than hardware, because at lea=
-st KVM
-wouldn't report different bytes than what it emulated :-)
+> Selftests use udmabuf, but udmabuf sgtables were previously hardcoded to
+> PAGE_SIZE. This series modifies udmabuf to respect folio sizes in its exp=
+orted
+> sgtable. The result is that when backing udmabuf with MFD_HUGETLB 2MB pag=
+es,
+> the sgtable is populated with 2MB entries, allowing devmem's gen_pool to =
+carve
+> out large (eg. 64K) niovs.
+>
+> Measurements
+> ------------
+>
+> Setup: kperf devmem RX/TX cuda, 4 flows, 64 MB messages, 60s, dctcp,
+> num-rx-queues=3D4, dmabuf-rx/tx-size-mb=3D2048, 10 runs per niov size,
+> mlx5.
+>
+>    niov       RX dev Gbps   RX flow avg Gbps         app sys %
+>   -----  ----------------  -----------------  ----------------
+>      4K  300.63 +/- 53.21    75.16 +/- 13.30   54.15 +/- 10.23
+>     16K  321.35 +/- 28.20    80.34 +/-  7.05   41.05 +/-  8.87
+>     32K  347.63 +/-  2.20    86.91 +/-  0.55   44.54 +/-  3.51
+>     64K  332.11 +/- 14.26    83.03 +/-  3.56   35.47 +/-  3.11
+>
+> RX app sys % drops ~19% from 4K to 64K.
+>
+
+Hard to read the columns for me but seems like good perf data. Did
+performance become worse from 32K to 64K? I wonder why.
+
+I have some devmem performance fixes that are very critical for our
+production that I haven't gotten around to upstreaming yet. I wonder
+if I can send them to you for upstream submission. Are you potentially
+interested?
+
+--=20
+Thanks,
+Mina
