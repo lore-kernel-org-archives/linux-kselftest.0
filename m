@@ -1,78 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA364D98E6;
-	Tue,  7 Jul 2026 22:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE89B31ED81
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 22:45:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783463689; cv=none; b=jKxfgzfENX6oVuWNCvdVBsX80ZN4R2gXwIFwONe0bYF922OW0FcaxJXITAUDV+iqF8oQBItM55Ilftdh6tQv4xwR71zzLnsCIJl2yc6Z0WP1es66+Uwi65Kuct9sK3S/FxqNmGgZatg+THV2QcaPAFECHLm0Mb2967a1O5pa73E=
+	t=1783464302; cv=none; b=diKX/1zKIA+fJrlmNC749ZvrNoAZnd1gEz59uwhhirNz9P8eKf9jJ2ncdQGo0cEbXF+S2k6diZQNvYaZDkq4P9jgTYLCZ8rwAgQZEhobXl3fqy6ROV/gYxQrwC4KRal1UGWrFSNJ8eH18T4DxWs7GSVCsm3QFLdDKBCAwMTcGfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783463689; c=relaxed/simple;
-	bh=bFzFZIrgvScmQOfBlKGtj1Un8PzPUgnSxbixr9vJ92Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SPw8n5zkgJ/sgR6MzaSYrbzB6AANcd2WhBvsuEflKWSp9NRUR83HM3bWN71CE6BjAGtKLUCxA4vn9pB0uilCl+bAnRyZ6ojEpyTDlAArzilGGDxHNiEJXvG4l2PcPeYaar2HZE2R6rbSBFAknchefVxlkCq5/U5IYcyxkcRSh9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSwQFQOZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783464302; c=relaxed/simple;
+	bh=lCug1I8b6MFkPMgcf/mWWZNgVLJfCCmW1l4/5r+/VRc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=H0AhKkvhw+ppIZSTTG3/ZCXxP/bJuub4+eRnZkv0KOYi9aZQPvyoXPpY30lxqAvla/EvrV1IoOfcPwDAW6wW6ay31Kv1mPlsPOoox9bl7Rf6PDPZD5HN1iJXgtA/1cgMQ9M1JiUkSaVcgeuGj5EPFJjsNGstl9WWtuD0ioZxMqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GBwLv6VB; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSwQFQOZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2314F1F000E9;
-	Tue,  7 Jul 2026 22:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783463688;
-	bh=w2I3+NzokwBuBeybC2iHSFJtH/AgD6ldKaO+dRqR4Hg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OSwQFQOZq1xAeN9omkNaS0sXXxhA0FcLXvBOgjaIayyORDy0a+3TeKukLIHg1wJjY
-	 2YNYGqVB+af4562g9m2wBneexd6/sa+q9bqCcsxY+coWgQ+wbPGg6uVoVImSOrJQOl
-	 2L/l/vFD3uwpRqb9tlyzvi8iXOtv0ipbZFvcm4QAXaTMkW7faghlt+5XRrnAIk+CVK
-	 aP+THCgciI+/RyGR4EAIdlixBr7GrrqkORw/0vCJnGTYH1Iq2v0dOiTKD+3ht4HVBK
-	 bZAlHaMzbsjhdVBZ+UtXX6gAJRdgipfBJlYeY9GXTpTbZNlLrDfdEB0Cfc7a4GeAXB
-	 LMsRriWy+THww==
-Date: Tue, 7 Jul 2026 22:34:46 +0000
-From: Yosry Ahmed <yosry@kernel.org>
-To: Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Jim Mattson <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-Message-ID: <ak1-vF3qUjeszzSC@google.com>
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GBwLv6VB"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-380cda7f00cso66226a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 15:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783464300; x=1784069100; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lCug1I8b6MFkPMgcf/mWWZNgVLJfCCmW1l4/5r+/VRc=;
+        b=GBwLv6VBG7GZu+zlpTktIcqayzF0lT+Fo0R0s+6wilMe96dz9sRvJZT6OEph3bu0AL
+         FFvjK4AJAI1RzHjk6EbILw59xxO7zIJ27VzuUguLiMu1PPwbfQp2ANEjL6M/FevhHdz6
+         papacuoumpNPDKSZMLsI2g0JVbHfUv30u9gzkTiVRB6Yac93uryBp1c1e7oKL7zypORK
+         xEbh+vqJn36yvn9yffLnGDK/sEB+gFBF2pPi/s4z3T63AIz2xMZfxgPe5ulhWApxGEOI
+         Ovx2hnuhra7/WWpLA8xfEidKq0Ofv0jx1hU7lB8jlF3pY3zBXkzDDTL5Vn4AHY79zudA
+         J9rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783464300; x=1784069100;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lCug1I8b6MFkPMgcf/mWWZNgVLJfCCmW1l4/5r+/VRc=;
+        b=N02QXpz8MgiaxXy7MXWGK+3ro0uG928/tqdGLeSiWHDqTyaVg9tMEd8y5pfMC76KDG
+         3r9UKLBeLqt5oJxm2H68c07lEoIcudFWZ4FTVrxVvGd/F+zVD4VPOGei4NskxukUW6YR
+         YWM8fhz8jj21S5d5e6KZf9sTPDeyIBgMKAJltP1+zrZxaEWd6jxz3SizQO5N5uMEbugn
+         09KnPP8Myd2Dp9eVQaMOmY591V6gCu35wgnkvSOAiT2jba4kHHTDnmzAAOvTVKGgtiAI
+         dLymrnHQIRZsX0r8wRROSbyggIOp2uCjmDGOOoE9wHW7CcLTH8217fO9MC0K9iVaLzha
+         ZNMg==
+X-Forwarded-Encrypted: i=1; AHgh+RomQkWJpOjemVokqKYbg3YQeAiyCOMeM5Jru5wtTUMBF/GJGtCnRXlLQ9LQ51BUqrD9G+ybSobhvH+cl27jzr0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiuG6SdNNuDXFYNu/bbevQ0vHpWfDSRRj4nLqKLSxptWY4ZnIF
+	YEbMkqW4/sPf0eVPtAjGfR9CSzL4SUc2QxOaHWQVOp7DfRk8OwjIVbio
+X-Gm-Gg: AfdE7ckEZ7pway6HGUtWebJ3liq0cHZk7XC8ae+PPqkkwlxsSmarDEz26/21CtoL2Zk
+	IHJPh4PMaY826GeWPclTjRIE22BEQbcBeilXs3rO9E2UkHLmFe91AU3RzY7IWHKo4w/PRVldlBt
+	CeHrCTIzSwyeWV9jeM7I+I/oLI7q0YUIZTiWK7eGgqsmGh81Xr7S2uLNfL+n50esr3eQWu9QCHO
+	K3mLs4X6BGwrCJmduAlJqVo5fSn+qyGMt5UXBPtB9cAtHrJZL6ePfbBNiABgpfugNMD2TiWGgCT
+	Oxr4eOIR3Iz0oDhOcKc5NC9RP5NkKQpghcawvYw8qOu/3biaMG9mOy2BIfqKTT/QxqugeEc9uXx
+	EtKxIryGgyF1Pvmowul0sxVfruqgE4UO066fq6LSOaU7x84MDq4AUVZzySzKEqLOX/xoXZ8/zgc
+	MneD0=
+X-Received: by 2002:a17:90b:53ce:b0:381:973e:fa08 with SMTP id 98e67ed59e1d1-38756ce1588mr6842488a91.18.1783464300250;
+        Tue, 07 Jul 2026 15:45:00 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:500::3:c1a1])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311747f5975sm11695855eec.4.2026.07.07.15.44.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2026 15:44:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260629125205.52394-1-zhang_wei@open-hieco.net>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 07 Jul 2026 15:44:58 -0700
+Message-Id: <DJSPBVXTF02G.3SKLB9EO89GPT@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: "Farid Zakaria" <farid.m.zakaria@gmail.com>,
+ <david.laight.linux@gmail.com>, <jack@suse.cz>, <jannh@google.com>,
+ <kees@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-mm@kvack.org>, <mail@johnericson.me>, <shuah@kernel.org>,
+ <viro@zeniv.linux.org.uk>, "Gemini" <assistant@google.com>
+Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
+ interpreter selection
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+ <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+ <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+ <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
+ <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
+ <20260707-wortreich-kanal-zensor-9386ef4f38f7@brauner>
+In-Reply-To: <20260707-wortreich-kanal-zensor-9386ef4f38f7@brauner>
 
-On Mon, Jun 29, 2026 at 08:52:03PM +0800, Tina Zhang wrote:
-> The SVM DecodeAssists feature is reported in CPUID
-> Fn8000_000A_EDX[7].  When available, hardware provides the length and bytes
-> of the intercepted instruction in the VMCB, allowing a hypervisor to consume
-> the decode information directly instead of re-decoding the instruction in
-> software on relevant VM-Exit paths.
-> 
-> KVM currently does not expose DecodeAssists to nested SVM guests, even when
-> the host supports it, and does not propagate the hardware-provided
-> instruction length and bytes from VMCB02 to VMCB12 on nested VM-Exit.  This
-> leaves L1 with an incomplete virtual SVM CPUID model and prevents L1 from
-> using the same hardware-assisted decode information that KVM receives for
-> L2 exits.
-> 
-> The missing virtualization was observed in practice with Hyper-V as L1,
-> where the absence of DecodeAssists prevented nested SVM from being made
-> available to L2 guests.  The fix is not Hyper-V specific.  Complete nested
-> SVM virtualization of DecodeAssists by advertising the feature to L1 when
-> supported by hardware, and by copying the decode-assist fields into VMCB12
-> on nested VM-Exit.
-> 
-> Add a selftest that triggers a nested page fault from L2 and verifies that
-> L1 sees a non-zero instruction length and instruction bytes matching the
-> faulting instruction.
+On Tue Jul 7, 2026 at 12:45 PM PDT, Christian Brauner wrote:
+> On 2026-07-07 13:34 +0200, Christian Brauner wrote:
+>> On 2026-07-06 09:47:53-07:00, Farid Zakaria wrote:
+>> > On Mon, Jul 6, 2026 at 9:01=E2=80=AFAM Christian Brauner <brauner@kern=
+el.org> wrote:
+>> >=20
+>> > > Ignoring the blatant bpf abuse here I think this is quite workable. =
+So
+>> > > this can be turned into an actual design and patch imho...
+>> >=20
+>> > Glad to see you think this proposal is in the right direction.
+>> > Just for my edification, when you say "balatant bpf abuse", you mean
+>> > how it abuses the socket bpf type?
+>> > If so, do you have any guidance on a new type or should I just take a
+>> > stab at it.
+>
+> I drafted a POC for you that should be closer to how this should look
+> like with the bpf people in Cc. I'll let you lead from now on. I just
+> wanted to help you out and illustrate a more viable direction. Might be
+> that the bpf people want it done differentely. Let's see.
 
-Taking a large step back from all the discussions in the other replies:
-Is there a measurable performance improvement? Not trying to say we
-shouldn't do this, but we should at least see what we're trading this
-complexity for, it's obviously not straigtforward to fully virtualize
-decode assists.
+Cool. I just saw the POC.
+(I'm trying out aerc to view the patch series. I will also try b4, I've
+never set it up before)
+I will rework my qemu demo to use the struct_ops and go through my own
+testing to see it work.
+
+That looks very similar to what I was researching with an LLM. I was
+just going over the idea of struct_ops bpf (a new concept to me) and
+using traditional bpftool load, a new bpf program type and kfuncs.
+
+You put out a surprising amount of polished code -- thank you.
+I would have had to lean on an LLM (heavily) and from the patches I've
+put up so far they still have quite the gap to cover in terms of polish.
+
+What does "take it from here" mean in practicality?
+I will test & validate the changes and just wait for comments.
+If there are none and it works....then I guess it's done ;P
