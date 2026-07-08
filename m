@@ -1,57 +1,56 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B913F077F;
-	Wed,  8 Jul 2026 06:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D389A3DF012;
+	Wed,  8 Jul 2026 06:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783494002; cv=none; b=kY5M9RyReM3cd72xF1YpZom2G7OnVqmG3YOQfjNCADzTbACeHsyptOOjO906dT3PCxi9bUxlVSlPk8w7ytCRefJfLLVUO+hf6GrJEa+eTfLhrwGxHNat/1saAJMXwnNGg4DxLqtNd4oX43QXZLb4W160mZo8sgysZX5v3de0znw=
+	t=1783494014; cv=none; b=cU6V99vDIlO/Ut8drX7iVBIpBxSJpZUhRvd9387R0aEiEdoDxvmooan3PFRTu4NHU0bsjTI8Dq4ixgtPrkTh3/5lr4ChwAFpcST8Ab867JYfPPCPv0wbX9BTdzsuqbWp2tJqQb6ZTOWbgiKjShkJ7eXKNNWvKemnbjaMhSNekEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783494002; c=relaxed/simple;
-	bh=t97KtW/EYavDS7tzAZ9NlgE3vjif/J5OEdSkpFIzGaI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fJSmP6xUBBRO7zAag6E/pcU4VKPp8xHm2XCWxqC5GgJ/V7feg2xC8aUS5SSM2hFmbroFMIT7bPrf6R8M2qfgCitj/RD3H1+hFKQpAEnqZ3zej0OaMVjc5/S70S5wqWYVuFKJwxk1V9O0mgkRx55zILY6dhdESMChYHWJPJEOPZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dkuEZmhT; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1783494014; c=relaxed/simple;
+	bh=6sCxdi8onCERA7eVWG2Qe8owrA+ODMpdNA4Xbna0XOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DL76AncKna7u+A3keoMGCCi8NQnPCVdz3UDZAOTeVVkBnNNUSi/dsw8WTHzdh5/OXrnzsDgrqctgnXf6Ret40tYu4WryGcf0BYXWd5qLOVzYhNK8HzePCf+9s9vbe7mVQJL3rm2JqTuffGI9lAvBDXPlTyTRZOfTioR4b1yjHGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Sl8pgYrq; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dkuEZmhT"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667MmjCZ820438;
-	Wed, 8 Jul 2026 06:59:24 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Sl8pgYrq"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667MmWLp920747;
+	Wed, 8 Jul 2026 06:59:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=TsZVxA7BjJ3emCSF8
-	jcHeodL8J9hqmMJ403jQnMFE4Y=; b=dkuEZmhTVIBPbCgXa4GNAYqVlZwt1h25J
-	/eZvOrNPhxjTIWUDTd+Ubk6zEchmtT4spSbomg4Y3YmSa5QpbEdpe4BV8UeEphCN
-	6gg8va9WykMSo29E4Mg9GHQks3Kq2UOtZ0yYtzlQoL4hk3MBb3XS7gb9MzYJvBvp
-	ZK5oGzIQsIs43/NfFm+s0A3C6JNF9JSQP4aFo3ymdX6gDhL0H8JCBKwpPyw97JGJ
-	988zrKKeSx+gY7wRdjKY5zKsaEbi7TXKNArcIbsJrX8wnbL16gOy3SIVlctAzGQJ
-	6kzJJouylOOENwC1zKcpTLmVL/XjiLJlfUXMgUFheCZoTyfmmbEnw==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6sw4u3kq-1
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=SsVDbaxlApNyEIKakZ6DuVBmV/2sKJEYi6us2+0Q1
+	qU=; b=Sl8pgYrq3ADYRyRG/uHsdHepp/kPvPycL7mPA/XfWTxwWXnR22PFigT2e
+	VIR1SvLENVDRf70fA96yUn4yJMBzEmzOsvMTMegpQLPRxE5pDpz2KiiGFnNf6RXU
+	bIivEwWcT6/XUT6jWwlvFoHavrtvPzkOeVs+JZIcnlbif8wPoW+1FQ2TApyYv5+G
+	LcXyIE8WOFGWiUjO1d8s70qnqV6xA4jiajiSuFyVi4HQD3WG2WhP5SzrhR1043ZP
+	bv2q6UJqCULw4gv+1Tha8qxowsOMtuNc9/m5ohV1QXpCFs6969GPq0QFZ4JHhVVB
+	SADW2oSoWMh+NqYuPlPIZDtleStPg==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6sp3u5er-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jul 2026 06:59:23 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6686nh1a003930;
-	Wed, 8 Jul 2026 06:59:22 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7eqg6786-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jul 2026 06:59:22 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6686xIKI30606014
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 08 Jul 2026 06:59:19 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6686nZBZ009362;
 	Wed, 8 Jul 2026 06:59:18 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7f6y63sd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Jul 2026 06:59:18 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6686xE3x51380730
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 8 Jul 2026 06:59:14 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 79EFB2004B;
-	Wed,  8 Jul 2026 06:59:18 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ACFBA20043;
+	by IMSVA (Postfix) with ESMTP id 494222004D;
 	Wed,  8 Jul 2026 06:59:14 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 95CA920043;
+	Wed,  8 Jul 2026 06:59:10 +0000 (GMT)
 Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  8 Jul 2026 06:59:14 +0000 (GMT)
+	Wed,  8 Jul 2026 06:59:10 +0000 (GMT)
 From: Sayali Patil <sayalip@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -64,12 +63,10 @@ Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
         linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
         Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
         Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v3 1/3] selftests/mm: handle EINVAL when configuring gigantic hugepages
-Date: Wed,  8 Jul 2026 12:29:05 +0530
-Message-ID: <2e3b585cbb30b2fc495dcd49d75de6f6da61861c.1783446924.git.sayalip@linux.ibm.com>
+Subject: [PATCH v3 0/3] selftests/mm: avoid false failures in hugetlb and KSM tests
+Date: Wed,  8 Jul 2026 12:29:04 +0530
+Message-ID: <cover.1783446924.git.sayalip@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1783446924.git.sayalip@linux.ibm.com>
-References: <cover.1783446924.git.sayalip@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,170 +76,105 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: ioicNcoU_7qVXelEbhiWeOPRPalrLy6A
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfX8b0dPl/ZlKPk
- P17jlU4zkouRIxlLlCDFIMuvHVdE/I9JM3e8kYbdU+rDWfNSaOSgrmeBSiu0tqF27VhU/sbuAOJ
- b+KkxDQtokpkYs1S4UWsus+ZVDAOx11QF7of8Z1P/JpD5rHDfNA7K/1KfyRxaGzps9QK1Eql6Jo
- uk6E+WJ4Ndm7A/QtNEWLyZft2/VwOuu+chYPs0osTCjfxxMl2LRjxdr2/BXKvBi88aqMBMAUgyt
- hv0IcO9NXzIRuQHWu2d/lgURnJjH9sVt8+/6htXk5u9JYcXSrL45e6m1/MPRpFxqwfB9bNTSOj9
- PqMQzK5KVdOZpzc3bpz2PSh0c+siF/ilQpl5qUPathRNwgqT1CySYOIFNjRi8abvlHpXMxa6wCZ
- sRj6kzHJ3A6db/uxxQwDHHGjNnrR2DdpSEIgf3Q+/dmBJi57wZcLd0C6q0cUsbdYMXTkn/IZNVl
- A1Mfq/uU1UVskXNvSAw==
-X-Proofpoint-ORIG-GUID: 49F5ztNCHHM6IidBwiFDF6EODmsos4U4
-X-Authority-Analysis: v=2.4 cv=FqQ1OWrq c=1 sm=1 tr=0 ts=6a4df54b cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Authority-Analysis: v=2.4 cv=KsJ9H2WN c=1 sm=1 tr=0 ts=6a4df547 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=PxWHJGSCjing4dSroFoA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfX0iM9bqS9iCw8
- sFB+RMAXD4CGQKfmOqyU+2X/BjqW85s3yjFMZFIUpFAavvpM2IOuT0yP87AmBOIdRXoTcpmSna0
- hwJV9h8nkw2weXAVb4UWgspEuvzuD9Y=
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=dIJUXHJssPmyVruG4BkA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfX0F5MFB5eM4kc
+ tMesEeflz+3BAkmpi5TapmtE5v5ZFOBWiA9i2aA6WoBOoC+ElulcGgZ+INfKnjd35aiGySeinhv
+ kXqSkJTdmb5c0xpCqFm2Wyn3pz8RcyI=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfX2rY/0FQRL3NV
+ mS3kzUg8IGKV9Pj9FStS27+H5/62OUpzN0QrNuAwWh2OdvBjQcnneAPRuAZY6F26PA+aFhv9hWq
+ dR3T7NIJB9DQgNKY2ig4WRjx3j1iIY+XJ91bTJ4iY6+RH7he33qlhI/yb/LSKlijO3MaNlTBohj
+ UQsqgOM4w6ZYq0O2vOugaGxXdcmHNA4oiVCy/lpi98hkrw13w/lLPE1jLx6nPoCMtw0RuRBGkEE
+ Gg9/FvpAWibOijWwDIwPRRHDW1JVtYNaV+nGOPaUJOipB+5B0rPEVYaB9A3SkQipwO5846RGtC9
+ sqYHMaWBxXwF5B2mowl6P1T1KqV6ea71M8iSYhpXnOMZgoJx11sHtXY5k1NYjobn52pYQHziv7j
+ sRtkf2n37OhwaxboShjFoyGO2kYCFF+7ZNS6SENM1skpBKvx8tOY1MBPjo17dxaqnqAzWa0M9ND
+ Z9xOcDhckWgFQGdSWlg==
+X-Proofpoint-ORIG-GUID: PSuWbsLmgZVv-t8ijao20URokJlRqGvk
+X-Proofpoint-GUID: VW-XIngojpvDJ0MK-njfKsLTYVG7YB7r
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-07_06,2026-07-06_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 spamscore=0 adultscore=0 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0 phishscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607080063
 
-Some MM selftests attempt to configure the amount of
-HugeTLB pages of different sizes by writing to nr_hugepages.
+Hi all,
 
-PowerPC hash MMU pSeries systems advertise gigantic hugepage sizes
-but do not support runtime allocation of such pages, writes
-to the corresponding nr_hugepages file fail with -EINVAL.
-This causes the test to bail out even though the failure is due
-to a platform limitation rather than the
-functionality being tested.
+This series fixes issues in the hugetlb and KSM MM selftest categories
+that can report failures when the prerequisites for the tests are not
+satisfied.
 
-Ignore -EINVAL when configuring nr_hugepages so that tests continue to
-run on systems where gigantic hugepage allocation is unsupported.
+Patch 1 updates the hugetlb selftest helpers to handle -EINVAL when
+attempting to configure gigantic HugeTLB pages via nr_hugepages.
+PowerPC hash MMU pSeries systems expose gigantic hugepage sizes
+but do not allow runtime allocation of such pages,
+causing the sysfs write to fail. Handle this case gracefully and
+continue running the test instead of aborting.
 
-Before patch:
-   -------------------------
-   running ./hugetlb-madvise
-   -------------------------
-   TAP version 13
-   1..1
-     [INFO] detected hugetlb page size: 16777216 KiB
-     [INFO] detected hugetlb page size: 16384 KiB
-    ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
-    Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-    Bail out! /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
-    write(0) failed: Invalid argument
-    Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-    [FAIL]
+Patch 2 fixes the KSM NUMA merge test on systems with memoryless NUMA
+nodes. The test currently relies on the number of configured NUMA nodes
+and may attempt allocations on nodes that have no memory, resulting in
+spurious failures. Use the existing helpers to identify
+NUMA nodes that contain memory and skip the test when fewer than two
+such nodes are available.
 
-After patch:
-   -------------------------
-   running ./hugetlb-madvise
-   -------------------------
-   TAP version 13
-   1..1
-    [INFO] detected hugetlb page size: 16777216 KiB
-    [INFO] detected hugetlb page size: 16384 KiB
-   ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
-   Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-   [PASS]
+Patch 3 fixes a pre-existing operator precedence issue in ksm_tests,
+where a ternary expression combined with logical OR operators could be
+evaluated differently than intended. Added parentheses to ensure the
+correct evaluation order.
 
-Fixes: 27477b28b74f ("selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages")
-Co-developed-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+These changes improve handling of unsupported test configurations and
+unmet test prerequisites, avoiding spurious failures.
+
+Thanks,
+Sayali
 ---
- .../testing/selftests/mm/hugepage_settings.c  |  2 +-
- tools/testing/selftests/mm/vm_util.c          | 26 ++++++++++++++++---
- tools/testing/selftests/mm/vm_util.h          |  1 +
- 3 files changed, 24 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 2eab2110ac6a..d7917dce3aba 100644
---- a/tools/testing/selftests/mm/hugepage_settings.c
-+++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -437,7 +437,7 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
- 
- 	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
- 
--	write_num(path, nr);
-+	write_num_ignore_einval(path, nr);
- }
- 
- unsigned long hugetlb_free_pages(unsigned long size)
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 311fc5b4513e..ef1ea11981a7 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -719,7 +719,7 @@ int read_file(const char *path, char *buf, size_t buflen)
- 	return (unsigned int) numread;
- }
- 
--void write_file(const char *path, const char *buf, size_t buflen)
-+static void __write_file(const char *path, const char *buf, size_t buflen, bool ignore_einval)
- {
- 	int fd, saved_errno;
- 	ssize_t numwritten;
-@@ -735,14 +735,22 @@ void write_file(const char *path, const char *buf, size_t buflen)
- 	saved_errno = errno;
- 	close(fd);
- 	errno = saved_errno;
--	if (numwritten < 0)
-+	if (numwritten < 0) {
-+		if (ignore_einval && errno == EINVAL)
-+			return;
- 		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
- 				buf, strerror(errno));
-+	}
- 	if (numwritten != buflen - 1)
- 		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
- 				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
- }
- 
-+void write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	__write_file(path, buf, buflen, /* ignore_einval = */ false);
-+}
-+
- unsigned long read_num(const char *path)
- {
- 	char buf[21];
-@@ -753,12 +761,22 @@ unsigned long read_num(const char *path)
- 	return strtoul(buf, NULL, 10);
- }
- 
--void write_num(const char *path, unsigned long num)
-+static void __write_num(const char *path, unsigned long num, bool ignore_einval)
- {
- 	char buf[21];
- 
- 	sprintf(buf, "%lu", num);
--	write_file(path, buf, strlen(buf) + 1);
-+	__write_file(path, buf, strlen(buf) + 1, ignore_einval);
-+}
-+
-+void write_num(const char *path, unsigned long num)
-+{
-+	return __write_num(path, num, /* ignore_einval = */ false);
-+}
-+
-+void write_num_ignore_einval(const char *path, unsigned long num)
-+{
-+	return __write_num(path, num, /* ignore_einval = */ true);
- }
- 
- static unsigned long shmall, shmmax;
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index ea8fc8fdf0eb..7799154b67ee 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -168,6 +168,7 @@ void write_file(const char *path, const char *buf, size_t buflen);
- int read_file(const char *path, char *buf, size_t buflen);
- unsigned long read_num(const char *path);
- void write_num(const char *path, unsigned long num);
-+void write_num_ignore_einval(const char *path, unsigned long num);
- 
- void shm_limits_prepare(unsigned long length);
- void __shm_limits_restore(void);
+V2 -> V3:
+- For "selftests/mm: handle EINVAL when configuring gigantic hugepages":
+  Reworked the implementation to use internal helper functions with an 
+  ignore_einval flag, as suggested by David Hildenbrand.
+  Added __write_file() and __write_num() helpers to optionally ignore
+  -EINVAL from sysfs writes.
+  Added write_num_ignore_einval() wrapper for callers that need to tolerate
+  unsupported hugepage configurations.
+
+V2: https://lore.kernel.org/all/cover.1782811071.git.sayalip@linux.ibm.com/
+
+---
+
+V1 -> V2:
+- For "selftests/mm: handle EINVAL when configuring gigantic hugepages":
+  Added a dedicated hugetlb_write_num() helper to handle the expected EINVAL
+  returned by gigantic hugepage configuration, in the
+  hugepage setup code rather than modifying the generic write_file() helper.
+- For "selftests/mm: fix ksm NUMA merge test for systems with memoryless NUMA nodes":
+  Updated implementation as per David's review comment to build upon
+  existing helpers get_next_mem_node().
+- Added new patch "selftests/mm: fix ternary operator precedence in ksm_tests"
+  to address a pre-existing issue identified during Sahiko's review.
+
+V1: https://lore.kernel.org/all/cover.1782365671.git.sayalip@linux.ibm.com/
+
+---
+
+Sayali Patil (3):
+  selftests/mm: handle EINVAL when configuring gigantic hugepages
+  selftests/mm: fix ksm NUMA merge test for systems with memoryless NUMA
+    nodes
+  selftests/mm: fix ternary operator precedence in ksm_tests
+
+ .../testing/selftests/mm/hugepage_settings.c  |  2 +-
+ tools/testing/selftests/mm/ksm_tests.c        | 28 ++++++++++---------
+ tools/testing/selftests/mm/vm_util.c          | 26 ++++++++++++++---
+ tools/testing/selftests/mm/vm_util.h          |  1 +
+ 4 files changed, 39 insertions(+), 18 deletions(-)
+
 -- 
 2.52.0
 
