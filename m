@@ -1,165 +1,114 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95E32BE7AC
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 13:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1122E737D;
+	Wed,  8 Jul 2026 13:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783516418; cv=none; b=Ew9wsn/3ZyGbt9d6HnHlTp3NLhUmQhGKwKcXaFoYb35PhGPG7f7t0R0U0eK2pTemkUiYkB8XVWGlF64Lhfxsb/OzWkcOzqAAdtkjaYFr9W44+U6h0Nlpsv+DNAdwepIJJLdAMbbDBoZOi6CCOcOLOYMUymtVRtKtx+b17vgSOSE=
+	t=1783516521; cv=none; b=k1P/GWePtYqiKHxLGFOm/hX4rwcqYPiQSKo8FBdyzSreUZQvQ33T5jwn3sgZbiCqpOLCV7dokzdCo73J5ECfAcVQ8nimd4Egstgmi2z4WdJoRV3PwwjBLCJ076oXUWQzIGB64L7Xm5V1ewoEIoYiFLdEVueLwF6NoKN2tcgdzqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783516418; c=relaxed/simple;
-	bh=JmX7s0EIPqd9t8N5KHt8I/muMfShONzCYy2F/a/pPug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0J+4mdswivT/0iNT/lXoQMgk8XjIBSMPYr6DEJzDIJ5sphEIXvN7Ezs15CEXipHrX4GqQ7OLVD+jtKds9esCgrmoXj5r4hUuvY5cUjg21eiQ6ITa25N3z+kzB3TF+QJ1Km4Cl1XEyKA1KJVF2OB7TC5Trdq9Mv9VL5hczpwGFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RGTseQPc; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783516521; c=relaxed/simple;
+	bh=xno2Qbpl6NvpQDIEyD6T95p8C6vNIoQnTpsmQ3PA91E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BzaB7DEp0HgXgpcZioSFU3GjwHWX/KuIwHr9q8t+HZOHUW6XbN/Kp+NycNSh6qkKj0BApP6ZvgzDpZucBz7xdIlXyNWag4LW0OqDeX2b4yrNpVUZb7wNo6pEH3k8MkrL8fkPwWmEb7PIbe8EVaLWGHz/IiDKAJ4TjhTte5zLdXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m4CaoWpn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RGTseQPc"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4938d5f86f3so4397315e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 06:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783516415; x=1784121215; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1JyDujhG3Sgv6jNuFackk7ytJpNfqoiBKPjDFE83CQ=;
-        b=RGTseQPcZtZCy+GKu8slT+uU23KKVJi0Hg6QKpofzMUFoqzr4nv/1+x3VgIee0StBM
-         rsgFTb/h6nbReydwTcouZ0k5aHSVBN3mq7fYTft6TCkcuTr4Tc3kLt7ayVjOSF+TcOXy
-         4EId9V14dif9/4WkwECtqq2L3+sWBN9ie+giCOcsMSPk+La6iwfuaP51+kxYYmvB1L8Z
-         /XyXkQZU2/2YQqeZR7XEX2caF51nFeSz2cNNq2q6ECsv2IsQ4Pcskh11oW/rFrJd9uv6
-         WESFMca7xn+71R9nAut/6oWrrevN3zdFE8+rF57s7YZpw8ofQHDJKiwIVpn0r0Vga5+N
-         EgzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783516415; x=1784121215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1JyDujhG3Sgv6jNuFackk7ytJpNfqoiBKPjDFE83CQ=;
-        b=dzFVJKaZY/82vIiErwR0hTCeKNnp9yuTbXRybx5X/1reyMjpOv5X/PTxSZi6+bCym9
-         iHywY+wFkxIAOKm+hq2WdYUKE3mh0BhzG10t16oHHWRHL3Z9unaf9e55g32/WaZeRZcR
-         QwVAmWgp/KEJCs13I9Jdjw5rOOumcBqr1waIqcuXEJENnT5qJcys88wFR4OotYdOJkAV
-         +KgDYC85anrCynx6oLcazUWNX4WXh2ABBgIFzSlkXDnzvrwLwMUy6xveS97q9RdEh9C/
-         cQ2RQ000rNtOE034F54qd1MrwMHtznQHfFQKu8/OFEzOczPOsnVZaP3UTAh7S51pEx31
-         2bFA==
-X-Forwarded-Encrypted: i=1; AHgh+Rplny0JbHMYIPzR8/X3cekNpJZrA9bnFLFMsuO/kUpSs7DT0F+DP8n/TeXSFC1Ij9lEgcmLevcYuMMLuQtOSUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7Bva7U69XYryCwtWMN9bMu8Rji08AVBSc9I8Yt31ZnN6OOoR6
-	Ud61okeoHNvPvhQ26DV/OdDu3jTz9MdT3l/fn4vTWB3JoD715/fo4tY6sKpZmCuseY8=
-X-Gm-Gg: AfdE7cmhr3Vj9xoobs5uB1jSHB2oa2MUGbIipN7KZmMzeD7mkymz2Wc7AkQvn5oamdT
-	wwrMVhE5gmkxryPv5yDd5pJDI7bGPFH7K7TjY1Auv17YOfTW6TzAKZH2DoNc9gqTHZ0kPIrg1Ey
-	f3futFeLmItRL4GPDaUBaf6tt3OaTA8EA0ikdhU4e1IsDKk5ZPcoCfE2YHWWr1MKihIyOMu05bg
-	MOFUy4jIK90FB99fA7qdPiQrcSzmvZROxS8RjM1JjejBkZ6hAmC9PGG7s6uYax334nNbMDfdnzV
-	swQUpaCvcuJxNHmm8MtiVKJBBxiOUn+KttNcd8gQXK2yOV2/VrR+fa6pCTM7zA+yXemqe+qO9UB
-	j9fVV8nkglv0+EtBAIRZd3VSnvDAuVrphw9H770dmbfCD2EdDfLT1wMyNDRxrY9+P0f9/HQc3XD
-	94MfkW+oU2csNZP2lqe8aD5R1xXxiLIfCqNF5Y+dg=
-X-Received: by 2002:a05:600c:49a7:b0:493:b240:6a8b with SMTP id 5b1f17b1804b1-493e10358a8mr44551725e9.14.1783516414979;
-        Wed, 08 Jul 2026 06:13:34 -0700 (PDT)
-Received: from u94a (61-227-80-86.dynamic-ip.hinet.net. [61.227.80.86])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b3a2bf6bsm2461568a12.27.2026.07.08.06.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 06:13:33 -0700 (PDT)
-Date: Wed, 8 Jul 2026 21:13:18 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <ak5HLLrYK3R_g2y_@u94a>
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m4CaoWpn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28BF31F000E9;
+	Wed,  8 Jul 2026 13:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783516516;
+	bh=GyGf/9avokCc92WCSxG5vN8MV6XQhHIld2RcElUm2ps=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=m4CaoWpnXwaXu1tZmkUPfyDPPHDc/MGGsD9l4vDVSoM1wJDe1FzkZ6qG5rCf9q2R7
+	 QvcvwSaXDCwppCgRj2JsqW9ptj9sdEHdPfIm5U9HRi2HLxlmaZ/rW1gbBveafQIaLd
+	 VY8YVznnP21zjReawBRuyvuOe20279sk3V7byUU8068PYwjYl7davMV2x8ZxS933Le
+	 6YHS5elXtnY46/ZxigI72BU/AMAA+je7V+QDTbmro24a+8CzLQvBc3qysDq8L4JO8t
+	 tLxrcKN6vNaCkf2LJ+a3rYyKdr+8R2+29JJOhs7iHjw4JbA1XAQxbpoeV+S4dMy+Gs
+	 rqHraFsC+Kxvw==
+Message-ID: <a9b3885b-b764-49ce-9335-6efce3e67b77@kernel.org>
+Date: Wed, 8 Jul 2026 15:15:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Fix memleak in migration benchmark
+To: Hongfu Li <lihongfu@kylinos.cn>, jgg@ziepe.ca, leon@kernel.org,
+ akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, hongfu.li@linux.dev
+References: <20260708103705.840679-1-lihongfu@kylinos.cn>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260708103705.840679-1-lihongfu@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 08, 2026 at 02:01:50AM -0700, Sun Jian wrote:
-[...]
-> Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+On 7/8/26 12:37, Hongfu Li wrote:
+> Several early return paths in run_migration_benchmark() skip
+> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
+> label.
+> 
 
-Agree that above is the commit that introduced the issue.
+Probably best to add a Fixes: even when not really critical.
 
-More comments below.
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
 
-[...]
-> @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
->  static int __check_buffer_access(struct bpf_verifier_env *env,
->  				 const char *buf_info,
->  				 const struct bpf_reg_state *reg,
-> -				 argno_t argno, int off, int size)
-> +				 argno_t argno, int off, int size,
-> +				 u32 *access_end)
->  {
-> +	s64 start, var_off;
-> +
->  	if (off < 0) {
->  		verbose(env,
->  			"%s invalid %s buffer access: off=%d, size=%d\n",
->  			reg_arg_name(env, argno), buf_info, off, size);
->  		return -EACCES;
->  	}
-> +
->  	if (!tnum_is_const(reg->var_off)) {
->  		char tn_buf[48];
->  
-> @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
->  		return -EACCES;
->  	}
->  
-> +	var_off = (s64)reg->var_off.value;
-> +	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF) {
-> +		verbose(env, "%s %s buffer offset %lld is not allowed\n",
-> +			reg_arg_name(env, argno), buf_info, var_off);
-> +		return -EACCES;
-> +	}
-> +
-> +	start = var_off + off;
-> +	if (start < 0) {
-> +		verbose(env,
-> +			"%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
-> +			reg_arg_name(env, argno), buf_info, off, var_off);
-> +		return -EACCES;
-> +	}
+Nothing jumped at me
 
-I was thinking of suggest to just do a single unsigned check
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
-  var_off = reg->var_off.value;
-  if (var_off >= BPF_MAX_VAR_OFF) {
-    ...
+-- 
+Cheers,
 
-But looking at the code before 022ac0750883, what you have is closer
-aligned to the previous behavior, let's stick to this.
-
-> +
-> +	if (size < 0) {
-> +		verbose(env, "%s invalid %s buffer access: off=%lld, size=%d\n",
-> +			reg_arg_name(env, argno), buf_info, start, size);
-> +		return -EACCES;
-> +	}
-
-`size` comes from bpf_size_to_bytes(bpf_size) in check_mem_access(), and
-is already checked to be not negative; plus other check_* helpers does
-not check for this, so I think it can be dropped.
-
-Otherwise, LGTM:
-
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-
-> +
-> +	*access_end = (u32)start + (u32)size;
-
-If you want, this could use a quick one-line comments regarding the fact
-that it won't overflow, or even verifier_bug_if().
-
-> +
->  	return 0;
->  }
->  
-[...]
+David
