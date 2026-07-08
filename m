@@ -1,98 +1,99 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1896837F739;
-	Wed,  8 Jul 2026 10:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B593438B7
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 10:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783505028; cv=none; b=aGxr6PwVNji3XD7yY+cDWrpSkmzrFQZYy8UsrjuRUWY7uipNYJD0De6gDCXNs96Aqc5eJCh/zlHWFNx3okY2Njv8z9mftYbywbNjMDtXmv+UjsS7/vcLqqyRosknO+1oTjePLjVBC7sDgBsIMHuHx9mtxiMaC4z4CgtrxJIuGgg=
+	t=1783505264; cv=none; b=i6JK4FVqddr09corSyyV0/utCY3FsSIZcrZ1aidtF6Bp7AouS5rE2wMMtSJSzXC9HtYBXAJRmM8wHjf7X5+e/s+gCoRMqDrQjKEvTE4GNaTfIwXbNRJC/vBlvL4o8eBib7UZ6uKvvKmSYuZGGJ+oWVf/+UKiLYwBnBp2atTTBug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783505028; c=relaxed/simple;
-	bh=99VawtomK1HW3/fySWTZPlKvsLK3E35s/W95572iyQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OOBSrFVXLGdw08FXlRQ1devwXquu0tbcOGFpnThYtXaZUrOguEUC4xb+4df/eNOLKtU1eHRDoMys0PstyxtLLefm16mRE5QqwyaI8UCYPbidbbdnLbZfnRUiXG6PV8C9tuhVZlLDJRGVEHqeB0g6l7/sCd/AsaDVVY6o3S6UdG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 816D51EA685; Wed,  8 Jul 2026 18:03:38 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 193981EA67A;
-	Wed,  8 Jul 2026 18:03:36 +0800 (AWST)
-Message-ID: <ece47e97-0287-4e83-b9fc-294407393f82@davidgow.net>
-Date: Wed, 8 Jul 2026 18:03:31 +0800
+	s=arc-20240116; t=1783505264; c=relaxed/simple;
+	bh=1qkcjBIfbcNWm48MG23VXF7DyZGMyiuQnaU1T34dIQM=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n8bzEX2slmnjl6QQzB6saMqTO9O3dZffipAHFJoKorR45QvoZQzDMphaoZJm5JlGR5mP3s7DkZMMaKyp+Kv97gxAK1KXvaez+bDsTfA3hv0m3n9dC+bf0Foj97oRbbaBNnMiZUqPqiooTYKUQOFKHEQDe6yioYuazy9mIdFa4FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xd+P5Nbr; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xd+P5Nbr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2611A1F00A3D
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 10:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783505263;
+	bh=1qkcjBIfbcNWm48MG23VXF7DyZGMyiuQnaU1T34dIQM=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=Xd+P5NbrYYbBPeZyIeWioVteK8iIAYBiO2GHThMz3MQ6BxwM0+8238HbvGqOK5rjg
+	 qfHOxR0vb01o7xgK72bCcwpT3q105Ux09/9j2aQQHxtTBAagq7TKVuLyjCjm6dRHmr
+	 mdUUdmLw7Puoz/YVAxqsLAhwT/+a5P9OlSNe6mhZWb2Iw9OBhTbK6UefBBPfWYDH3s
+	 YIc1c/XyY5atgR9787utbeWOpEerdKiXjMbjnTKQ7IAw/1k6W2RRrSInDo1e4h78pm
+	 2Ef2KShIY2EcAiPPgPOwLLc1iMOSw+FzmVql6OePWFElC9/HxlNfG02WJyjIK2BRgF
+	 awjZ/7Au1iXew==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3997a448ecbso5267921fa.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 03:07:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrxoAkaa8YuhGI+1OysG+q76Lo/41vgJdOnx7s6eC1cDx/AMV200xAn87YiXrYjfcTQKcEMI2qFcgXUPbV4ns0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjCeEWTcw26n0tkan5ieFTd6ujnSUhzt4dYR/s9bvNZMiCN/6g
+	PBjCHB222bbilcm/EbgEP5QnliUHPTuNgDR+wU66aaCzghewkXl0LhZX/cNcFMvNC59nU4WFZWR
+	0EJQCHFSiNg+rGxS7jeEXYVkb552wby6WQSnSzo0STQ==
+X-Received: by 2002:a2e:bcc6:0:b0:399:87c9:4573 with SMTP id
+ 38308e7fff4ca-39c79a15074mr4505271fa.22.1783505261713; Wed, 08 Jul 2026
+ 03:07:41 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 8 Jul 2026 03:07:40 -0700
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 8 Jul 2026 03:07:40 -0700
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <ece47e97-0287-4e83-b9fc-294407393f82@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] bug: fix warning suppressions with kunit built as
- module
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
- Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>,
- Albert Esteve <aesteve@redhat.com>, Kees Cook <kees@kernel.org>,
- Alessandro Carminati <acarmina@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- brgl@kernel.org, stable@vger.kernel.org
-References: <20260708095459.12111-1-bartosz.golaszewski@oss.qualcomm.com>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <20260708095459.12111-1-bartosz.golaszewski@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260708095459.12111-1-bartosz.golaszewski@oss.qualcomm.com> <ece47e97-0287-4e83-b9fc-294407393f82@davidgow.net>
+Date: Wed, 8 Jul 2026 03:07:40 -0700
+X-Gmail-Original-Message-ID: <CAMRc=MfSMmzXnsOipfJvTQDGB6FtnpErmSk7S-bGnid3bfDi=w@mail.gmail.com>
+X-Gm-Features: AVVi8CeVRdkZ8z6wRoAOxG8XT-CMZbU8H7DKdkDiAdkSqkcQKplmq4WyL2m445w
+Message-ID: <CAMRc=MfSMmzXnsOipfJvTQDGB6FtnpErmSk7S-bGnid3bfDi=w@mail.gmail.com>
+Subject: Re: [PATCH v2] bug: fix warning suppressions with kunit built as module
+To: David Gow <david@davidgow.net>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	brgl@kernel.org, stable@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Albert Esteve <aesteve@redhat.com>, Kees Cook <kees@kernel.org>, 
+	Alessandro Carminati <acarmina@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 08/07/2026 à 5:54 PM, Bartosz Golaszewski a écrit :
-> CONFIG_KUNIT is a tristate symbol but the warning suppression code in
-> lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
-> rendering warning suppressions broken for kunit build as loadable module.
-> 
-> kunit_is_suppressed_warning() already has a stub for when kunit is
-> disabled so drop that guard entirely.
-> 
-> Suggested-by: Albert Esteve <aesteve@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: 85347718ab0d ("bug/kunit: Core support for suppressing warning backtraces")
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
-> Changes in v2:
-> - drop the guard entirely instead of switching to IS_ENABLED()
-> 
+On Wed, 8 Jul 2026 12:03:31 +0200, David Gow <david@davidgow.net> said:
+> Le 08/07/2026 =C3=A0 5:54 PM, Bartosz Golaszewski a =C3=A9crit=C2=A0:
+>> CONFIG_KUNIT is a tristate symbol but the warning suppression code in
+>> lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
+>> rendering warning suppressions broken for kunit build as loadable module=
+.
+>>
+>> kunit_is_suppressed_warning() already has a stub for when kunit is
+>> disabled so drop that guard entirely.
+>>
+>> Suggested-by: Albert Esteve <aesteve@redhat.com>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 85347718ab0d ("bug/kunit: Core support for suppressing warning ba=
+cktraces")
+>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com=
+>
+>> ---
+>> Changes in v2:
+>> - drop the guard entirely instead of switching to IS_ENABLED()
+>>
+>
+> Thanks very much. Works well here.
+>
+> Reviewed-by: David Gow <david@davidgow.net>
+>
+> Happy to take this via kselftest/kunit, but if you'd prefer it go in via
+> mm-nonmm, that's fine too.
+>
 
-Thanks very much. Works well here.
+I sent a v2 as suggested by Albert. I don't have a strong opinion on which
+one should go upstream.
 
-Reviewed-by: David Gow <david@davidgow.net>
-
-Happy to take this via kselftest/kunit, but if you'd prefer it go in via
-mm-nonmm, that's fine too.
-
-Cheers,
--- David
-
->  lib/bug.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/lib/bug.c b/lib/bug.c
-> index 292420f45811..7c1c2c27f58e 100644
-> --- a/lib/bug.c
-> +++ b/lib/bug.c
-> @@ -219,14 +219,12 @@ static enum bug_trap_type __report_bug(struct bug_entry *bug, unsigned long buga
->  	no_cut   = bug->flags & BUGFLAG_NO_CUT_HERE;
->  	has_args = bug->flags & BUGFLAG_ARGS;
->  
-> -#ifdef CONFIG_KUNIT
->  	/*
->  	 * Before the once logic so suppressed warnings do not consume
->  	 * the single-fire budget of WARN_ON_ONCE().
->  	 */
->  	if (warning && kunit_is_suppressed_warning(true))
->  		return BUG_TRAP_TYPE_WARN;
-> -#endif
->  
->  	disable_trace_on_warning();
->  
-
+Bart
