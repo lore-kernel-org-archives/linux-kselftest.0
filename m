@@ -1,175 +1,164 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0779F36AB56
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 12:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885854611EE
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 12:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783514897; cv=pass; b=JAR3rwMaw22C1oUHcveR3W13XaibaRsLPf1jpgnqtb72qDTFrIp004NVO7Cj1Ij2bWPBqvFESwQxwB0JwZnaBn1Te2aWQLRHJVnd36icK2ZXlfCiRJR53bemS5ni+LxzjqNkAROD4tZKEkoDUc7QG5RvHfFRL7ZY2mQolMBS7Dg=
+	t=1783515126; cv=pass; b=UASE95AbuV4rBb1hZw/ymfahaegV0U8gLOfhibLDEhjFNjy1WC0G2UxvDvKF/pCeJhBt5o8hQgazvHvBsDxmqmAln0t7Ly9azIZh0z4RimSOxRnmhi2zQBHsm6eLeeUfCbpd5kq1GCCY020gSdCXraDOyYbQKTBmh61giuVvj3M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783514897; c=relaxed/simple;
-	bh=Qv6p33Ms7lJZNhDoMpL46zV2EdNVYCWJ4HAmnz49Hbg=;
+	s=arc-20240116; t=1783515126; c=relaxed/simple;
+	bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CB+uFItOlNDXGvIjwnvqfDKLv8xKx5WT1CSqc+L3xj3x42XhnV46egDAwrTzgun4g6EZgEdCzdvpkPF5RpnGWAnAfYSS746zUXAjS3IeyOEkcnignUNqvsztLmyIhfp+UGTFkb7+80u78q2HWISGCO9LhbaxtyBWKnY7mlDhNKo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FCo7hwM6; arc=pass smtp.client-ip=209.85.221.53
+	 To:Cc:Content-Type; b=HYpU/vFdT7SHYU9/yiJdZWalwwtQ1I5Dc+ojMeeSaBaSHFicSqSzjy3JhgYAMbPuPHgMyAolG4DbdDwJLKOHCgz0WApaZDtznVEfVuu5Hh9oVPiSmU1AQOIpBW2LvnetOAH9v/hxNilPjIyBoNDwJb3qUWzJ69PKQVE4t3IJfes=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJ8YmyNG; arc=pass smtp.client-ip=209.85.219.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FCo7hwM6"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4798bea72f9so437300f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 05:48:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783514894; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cJ8YmyNG"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8f1e274ccb9so3224146d6.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 05:52:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783515123; cv=none;
         d=google.com; s=arc-20260327;
-        b=d7REyq/Fh/Au6DzNkFJjM02Fx1pXL8BmAulBh8nuole6jhL8/KwVLWSdRRB3XVULKf
-         2cI+sd7leiJtiPxDppRD66I+UjphiIRALwC33vvJ7V31jHPQ4QVlyhYlg3RSej6yAA2i
-         YKVhpLWvaNkrKSJSmBhu5q0ZyHC9YOxMScVZMbetX74BTS+umpiRFxJVsYYfMwuxQ5wR
-         oHnwG8qGO768ee1fNonnySfOok1t4bhOgNAQpp2jL+WvgwVUf7PhpObO8xbUfoZNbPQk
-         +zvLirwy7YKX7ZMyEosMgxOu0COKJHBfgA6CVMBkRct9cfSIxBpsnj2/V3Js9tnPkbll
-         jWEQ==
+        b=NDQGyZHOXW6fe+2di134D5V42cM9ZhFlxk5DeW13kH95XhhT5NrZ9IMlMdwess6M5Z
+         IBBU5zJp2YRUg4fkkTiBbBHw4dYidwQYylhR3SwiVqAxQgXmf2XYHLHQ/hoJibft77xZ
+         LXpIDBp5vG8IrilZ57VXffvrM31c/Su2I04ZEYAY2F0fBbxMRI+ydLhiVTwef9IcXVrv
+         WRdg4zfDBdKN4bIZfuxccbbhibju+xTUm/ODYRuO1AT7TfgRHH0qvCe4ZFPxg5fjjbar
+         2ccpTtaQaepTYXYayhj6PLklq4+agrtPkxph6hsiDNdw++YRITr4kn0b0CSQnigSK7tq
+         f+7w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=oM6cgiCUs2LYUfxBySpkCDnF3AdZ7CElaEXYvjTJo6I=;
-        fh=0h2TSN+IG7GIpRf5L4yFCv0lIx2k9rh+WEYbudpmwws=;
-        b=qpxtndnhBRKiqHIMCKb/a6Xi2KXC6CfrJAmmYSIgW006R8M4pP9MnkI2ZTqna0DBue
-         BG25Bunq3c+df5vv7/xThtVQ4q7y6dK/CKQ/hEPZdo3sdjMqepkDF5BSrTpnQdU9LJY4
-         TLQYS4QLReBArc/2fUW55//dnK4Isd9JGVKMWqV70w9yYYa9UmvZd0vSkxntZQBdMlVE
-         0yx+iXKXWvuY8vflVrVOfMZguV+UVbeCCCdgXDI1AxqnnhktfHODbCRU4wdASFMPeU9o
-         5N3iBcvZ5NY9nt/3NCxFLsetmVZOyuCws3tYemke5rFmGwk1i/cIvmSSutJ9ICJ/Tio5
-         NmiA==;
+        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
+        fh=ZQxMmbJlWzHMSe4ro88IH7iuTKsaNJ8KNZd9JrbVDKg=;
+        b=CeolupZX3o29ahebLLowKOjO1aU1L/c7tiIGR5mIprrnTjn5itomdjMdJuUzbt9dlr
+         zc2KsISp/orDRXeUw/jwqUEYia4h2khb0VPDLdbSYNoaRpdyxNomlhZ3nSbjQnmQyuJ3
+         b/MO5ihsl6WF+Njg5bJ5UC1a54o6lwcvHNP+yQI3S0enJV2LpMsyPsuzyzHbJ/hoo00N
+         kU+sX9yud7ZsB7Lrbl0doANrWim6t2ROVivb/qjs3hdGP3mBuBCU5pfyk8b+nf7bQypx
+         9erpcI4xfTMuXqo419pv1OOVjNYSXAI/D65OemR4VBPdbx/boEpr5v+Vf0iwGOtzLEIx
+         xUwg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783514894; x=1784119694; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oM6cgiCUs2LYUfxBySpkCDnF3AdZ7CElaEXYvjTJo6I=;
-        b=FCo7hwM691FMRO4KcjWPYfQk0oXREgyCTygmI/HzVPL7JnQoPUuiSgcIic+GEiAP6S
-         iojMeBOHBpcVHi2+lfbBdp9auiXly6azMHlRXsODihN10jTudtBl36vIGVv5l9gNEEq8
-         iUGW8j8GjgvfxNbMHZIvbZwtiAduBt7y1+VDkBieQuivVCMIOAM3xaAiJ1TE0SooHjvV
-         NTsMhGANbC6bMF+sck6B701Ea8OxemuORdG3BW6H1nj/3AiQm2C2ivgvJgZQ2NNPZMBH
-         nn8MWCiugnb8M0ATHuseUyek/se2ZnYHdg4SPuRLilHkGyaVq8VNz0cV4NBSAWoDftEy
-         gBsg==
+        d=gmail.com; s=20251104; t=1783515123; x=1784119923; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
+        b=cJ8YmyNGzcUVkugDcbDFSV9hG1XDIYcPXiertRg0HgzcUcju9zF9S1QddQvl1IpWUU
+         4k5nyw2V0IVysz1RCrUdJrEDo/h/A2qbnGEkhOL3pMSeZq9aNdhek1gxoF3bPioxNI3d
+         ggeFj1wflW8RofhZngweDB2Ewf+1+x6kpdbS6g61gDANdxSQ8inNYw98Euig7Tflxz79
+         yJ8j6vynosLrChyjPyPwAlM/tzP8CcmxcP2N9+hHViX91g/XicWPJjt9i8qCxLFKR4ur
+         hbNv49Trj68z0qWIkUNyQKuPp7su1TchELfMq/n41YFkTwA8KS5WkUEWYHQo3mp6OZbs
+         /R0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783514894; x=1784119694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oM6cgiCUs2LYUfxBySpkCDnF3AdZ7CElaEXYvjTJo6I=;
-        b=UbIyDjNihg2w1jnFSSGZLbH4HtFkUlNxtyWS6G44Y5g9nuiU/GptSgO9gFKw944bLH
-         w5UKKdmnzrxDptz8r6+X3QtpmfR9xTDQPQcGGxc3vt93IKVNU7f3NJLgRTMgbRDn80A/
-         P+B2b5Xpi6Hb9+dB44ByJYO8HfXQLADtChtroOWQVScTLCxQV3Qjk2t+Yk3EIuppQawX
-         1zllT6war6T1OiGiYgkDfQaNm9+7sJe+k1f1uMDQmzwrfp97nHZ4mCR3NNrkLMOcL+Cf
-         BUdjGihtRC3GT7YpLF/e45aw3zsmOs8V7JHIYm/9xopmxQjYhGOs6kK3DE/S5/1hX+M9
-         JiRQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rowu45P/i9J0PIwWMbI1fvAnzh3O0s4TK0WCzOvfKV15Bd7O7/j7HgAvSYcUooldRSG8zmX6cKwr9KuBBA+SKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvERGgjTkDhI5dJkW80wjYgnLvDg5nZQQs+tIbHthiY3IZbHq0
-	hzKYu+EDUfy3iKjG3SAJeRPhk+swuKPgOXpJnoweSUfsKEbSH+T4aP2+87Vda/RpWJfsDAMU1c0
-	bORzuUw7WIaT3fHp6IQn20/fxX04LVmk=
-X-Gm-Gg: AfdE7clU7NtVo15bpYsIuY8k7cF471pIcY+kMQlkLzitfDuZqu7BHN5lraMsx+htNc6
-	V+olRWxa3QjhrC9kpZkj12hszyimBm5mv3gRJDwFJ00a5dHADsbXjL4QaaAzKwNA2iStkReZrc/
-	nZVxQt7bZyPWcvygykqXwyVnTtRUOLLtIIO1ivEZgEeZuTMAgvgnYUc+F7LstPqeOgzfnlKRAPy
-	StHeLcVRFkNAyedRpyBv4/SASW7BzoX88rXY3r7teGhDyYaorswyFERklvWbkxVbbE+fqZdRYt7
-	qyLbxdEajnd3y8sef+Dmi0TAmm1EO2s=
-X-Received: by 2002:a05:6000:2510:b0:46f:f12b:e453 with SMTP id
- ffacd0b85a97d-47df075e3d3mr2403687f8f.28.1783514894199; Wed, 08 Jul 2026
- 05:48:14 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783515123; x=1784119923;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
+        b=LeCVY4d6pQwOR5eln94cnwfEkJYpRybG+cGZAdUTTx2Ssbq7WePPcfd5p+bc/UdWHa
+         B+7mbjKIF79lxU/KckOw2ViJMlO0cuYuunsSQxNtsRqSAFjFM5jxE62wJx2hvKxS/prj
+         uhgt6fKmH/EPqBeDpgVG028ZQGIlsZqAn3kzy2cuehcFWWmH/CWLfQvf65S9Pc8lPUkt
+         zZYJ20EbeJTg9eIUK/m50Iy/SZ0eAYgT5Vz/6jWubPwffGZeI1C4bTviIsyd3at3COIC
+         ICwO8DGN2GeZGkEwEbiXspCuVmJWAOF4iY9CemKY66xqDPGTSWIJst3Z42w8knB6ledd
+         SdEQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoY2yQkIZAsUuSHTtws5/EtkietlYD8W/BCFRJSua2VlBNM5vBQ6GHz2BBD/qoqjS4JFELOOM33MxXClCmliKM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz61c5CpXcFEoDPJK1e/8Ilnk2D7IdqFD6SemgO2XxiEqLpS8+y
+	Q1WLo5snEIm9ZBnJlHoeEm2GawYtb9djUwIOlw7vSlJtHLVNwAbIoCEePTcAAjZZcOcgofJgrU7
+	2XgC0CoYAxfX5i3UCvSqp9XzjHL7VRH4=
+X-Gm-Gg: AfdE7ckhnkSpZcjNb8D8YZgOJESipdbhpLI3Cq5IqUQ67hRLDhUkhYUMwgWlR3Gjc37
+	wkNddbpc2fOz96EFXGn/36SXhr71KbG/FFQCiXo/Wz64FDqYFC3bRobp5xJ+VtKc5GHqIYOldWR
+	cP277cfIFYrYVGMx/X3Ec3QZr0V8ftm5/aFyMGKbw/ZV/ylKSYeXXxFpQ+y9enTXKLRhVtG4KVm
+	cW8AZMjglhvGI2evTqVc/mpWRcAeWkwMn80xYsj9B3nNsJw0zH8VWaH1wlm3clq5YR6tAzBts90
+	DQNCEQycIdFPwBmkzm5h99aHdys=
+X-Received: by 2002:a05:6214:328c:b0:8fd:6df3:b37a with SMTP id
+ 6a1803df08f44-8fec361db53mr20328306d6.62.1783515123475; Wed, 08 Jul 2026
+ 05:52:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708-kasan-v4-0-d5c177ab8227@bootlin.com> <20260708-kasan-v4-3-d5c177ab8227@bootlin.com>
-In-Reply-To: <20260708-kasan-v4-3-d5c177ab8227@bootlin.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Wed, 8 Jul 2026 14:48:02 +0200
-X-Gm-Features: AVVi8Ce28NN5OLVzXOb8-dZK-ndefrPCpQQGxxaCTFUnm6OWPadXfj-wXhMK9LA
-Message-ID: <CA+fCnZcOPADt=dkhApCQwD40EB1WWP45PvdBtJ=hk1u1DAMUiQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 03/10] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+References: <20260708000956.46138-1-dwindsor@gmail.com> <DJSV0P2OINKE.34OCOC34KFEEF@gmail.com>
+In-Reply-To: <DJSV0P2OINKE.34OCOC34KFEEF@gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Wed, 8 Jul 2026 08:51:52 -0400
+X-Gm-Features: AVVi8CfU37Brxag2yfG62kEk96iHc-RKohKljtHAIy8Sn1Fk6Gh-XV62bqUwhO4
+Message-ID: <CAEXv5_j96aUkmSEg4brvk2q-A3SyYzXZ7jyutoXfrc-oDykZYQ@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 0/3] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	ebpf@linuxfoundation.org, Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 8, 2026 at 10:02=E2=80=AFAM Alexis Lothor=C3=A9 (eBPF Foundatio=
-n)
-<alexis.lothore@bootlin.com> wrote:
+On Tue, Jul 7, 2026 at 11:12=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
-> generic KASAN (Kernel Address SANitizer) memory access checks for
-> JIT-compiled BPF programs as well, when both KASAN (and more
-> specifically, generic KASAN with KASAN_VMALLOC) and JIT compiler are
-> enabled. This new Kconfig is not a user selectable one: it is either
-> automatically enabled if KASAN is enabled on a compatible platform. When
-> enabled, the JIT compiler will emit shadow memory checks before memory
-> loads and stores to detect use-after-free or out-of-bounds accesses at
-> runtime. The option is gated behind HAVE_EBPF_JIT_KASAN, as it needs
-> proper arch-specific implementation.
+> On Wed Jul 8, 2026 at 2:09 AM CEST, David Windsor wrote:
+> > Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
+> > extended attributes. For these LSMs, atomic labeling during inode
+> > creation is critical: if the inode becomes accessible before its xattr
+> > is set, it is briefly unlabeled, which can disrupt LSMs making policy
+> > decisions based on file labels.
+> >
+> > Existing LSMs solve this by setting xattrs directly in the
+> > inode_init_security hook, which runs before the inode becomes
+> > accessible. BPF LSM programs currently lack this capability because
+> > the hook uses an output parameter (xattr_count) that BPF programs
+> > cannot write to, and existing kfuncs like bpf_set_dentry_xattr
+> > require a dentry that isn't available until after the inode is
+> > accessible.
+> >
+> > This series introduces the bpf_init_inode_xattr() kfunc, which takes
+> > the combined inode_init_security xattr context argument and claims a
+> > slot in it via the new security_lsmxattr_add() LSM helper.
+> >
 >
-> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boot=
-lin.com>
-> ---
-> Changes in v4:
-> - reorganize dependencies (Andrey)
-> - drop VMAP_STACK dependency
+> There are various CI failures in newly added tests, I don't think any of =
+them
+> are passing. Please fix before respinning.
 >
-> Changes in v2:
-> - add dependency on kasan for vmalloc and vmalloc'ed stack
-> ---
->  kernel/bpf/Kconfig | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> https://github.com/kernel-patches/bpf/pull/12730
 >
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f0..e1f3850d2f5a 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
->  config HAVE_EBPF_JIT
->         bool
->
-> +# KASAN support for JIT compiler
-> +config HAVE_EBPF_JIT_KASAN
-> +       bool
-> +
->  # Used by archs to tell that they want the BPF JIT compiler enabled by
->  # default for kernels that were compiled with BPF JIT support.
->  config ARCH_WANT_DEFAULT_BPF_JIT
-> @@ -101,4 +105,17 @@ config BPF_LSM
->
->           If you are unsure how to answer this question, answer N.
->
-> +config BPF_JIT_KASAN
-> +       bool
-> +       depends on HAVE_EBPF_JIT_KASAN
-> +       depends on KASAN_GENERIC
-> +       depends on KASAN_VMALLOC
-> +       depends on BPF_JIT
-> +       default y if KASAN
-> +       help
-> +         Makes JIT compiler insert generic outline KASAN checks in BPF
-> +         programs when they are inserted in the kernel. This feature is
-> +         automatically enabled if the needed set of KASAN and BPF
-> +         configuration options is enabled.
-> +
->  endmenu # "BPF subsystem"
->
-> --
-> 2.54.0
+> E.g. both test_init_inode_xattr and test_init_inode_xattr_slot do not hav=
+e
+> expected results.
 >
 
-Acked-by: Andrey Konovalov <andreyknvl@gmail.com>
+This is happening because the path "/tmp" in bpf ci isn't mounted on
+tmpfs, rather on 9p:
 
-Thanks!
+[ 5.813072] VFS: Mounted root (9p filesystem) on device 0:22.
+[ 5.924390] vmtest: Mounting tmpfs at /dev/shm
+[ 5.971012] vmtest: Mounting tmpfs at /run
+[ 6.096271] vmtest: Mounting tmpfs at /mnt
+
+... which doesn't call inode_init_security. Changing the test to
+create its file in /dev/shm, which has a real tmpfs, fixes this. We
+can update the test to skip on filesystems where the hook doesn't
+fire.
+
+I'll wait to gather feedback from Alexei and Paul before sending v6.
+
+> pw-bot: cr
+>
+> > [...]
