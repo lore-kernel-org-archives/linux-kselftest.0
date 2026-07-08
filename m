@@ -1,98 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1567433BA0;
-	Wed,  8 Jul 2026 11:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F8243CEC4
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 12:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783510834; cv=none; b=KXfaYLZUrUawUmdimMKE+CMLvsWsTaeEvnxvUCNgs9X+6gIhd2Bsbx0K67fkLY9zBCCOf9Z6qrOpsYmLeusSCkMCwq5KKDuEMiwK05pP6ENXl7tz5TsvO3ReESV6muQeiM0Ddcooz8H2XN/C6oyYMDymAJRhM4jzREd4d8m0VKM=
+	t=1783512948; cv=none; b=bcYNM8hQxESIDW4ugPZAyj/W3BsiRq6RthF0f7o/0808wD121st7cznDcqxMEvsMtkKAVQaZPZWiVSeRQKm4rHogrCmwYVmRvrGk5pj4BMU4KdJ3tlYCJeGplvk0HNyQ86b3wVOll8Wvdt8g3No8C+m00qPa00Ooe3NbAt4Iebo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783510834; c=relaxed/simple;
-	bh=dpLYqUgKFJe2E1L9qfI5UGDCSJeERNm5s4u56p1sYPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SXzUz3EoNhkj3K6vKwdimaF2Gf+vsj8jVAASE3oSCRtD3BI8Pk/ficBHSyhKw1wK8c4tKOIWHMH6bVdWuG+xobdEzG1s2VYFrovyb44hq60NxaxbME9vb81T1Db85XCDZgndBi95uN027jWGDDEVM6QCa3Bm5KNCLGx8mJBlyE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c9ot8YXq; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1783512948; c=relaxed/simple;
+	bh=PoNqBwmkV3X6OXW5GPoMzkg2VINY88A+CzL8t5gKFnY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nzkDbFzQfZfGNahDkWsXo8E5dgvmpJ1dyY7cCUjL7Im2e77OYKabDbM3DqpAo9+OC+F+whuM8nAua70rwW6kOxCH7FV5usOAbUUjQ6joKnBdh4qP1jiUG47oZueNdMuv/cYY8vebIU2O77ZkhCaMnd6qZJfjxxd1C192oBlSIzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=md9XOUQc; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c9ot8YXq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783510833; x=1815046833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dpLYqUgKFJe2E1L9qfI5UGDCSJeERNm5s4u56p1sYPk=;
-  b=c9ot8YXqSoa0EqJ98uVkwgnega3UiMZEiIKnzGOTn87/BNNjpCfzHeEi
-   XqqKGe0r9u91Zy/donf4077E0xJp4hQ83K+but47OGNcYkbZjbKKcwEC/
-   kAvD3lsH743p6hUam/a1vm661Mu6RtabDfo7hVCfTBJkKwnuotSYYqtp6
-   nSnN34MnrwUSY5yx53h2/Jgkg9LMJreanwxPQuMDcuG/wLISupE3WAJ3d
-   itD5Wg/94Gplf4uSAuHJze+M067BG/DTTzQafjMLfOrJesgjWg9pPUzxO
-   ft2UYYoo0UpsPqTq8kW2zC9uBkDicUZ7qXuooY3O/6qOn8sXwOjwerbsz
-   Q==;
-X-CSE-ConnectionGUID: x0DaG3eZQverG8lWpZ/HBg==
-X-CSE-MsgGUID: HYZEOTMCR7K5zdO4dT3b/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11840"; a="101593695"
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="101593695"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 04:40:33 -0700
-X-CSE-ConnectionGUID: OsXS0JGsQzOIdQReTdx6aA==
-X-CSE-MsgGUID: wpZWCAdIS16CO26XRFJI0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="258570827"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.100])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 04:40:28 -0700
-Date: Wed, 8 Jul 2026 14:40:26 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] software node: add kunit tests for fw_devlink
- support
-Message-ID: <ak43KoUF1pPo55gY@ashevche-desk.local>
-References: <20260706-swnode-fw-devlink-v2-0-f39b09d50112@oss.qualcomm.com>
- <20260706-swnode-fw-devlink-v2-3-f39b09d50112@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="md9XOUQc"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-847e78d656bso1553609b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 05:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783512946; x=1784117746; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xrenUMVEDaQLL0EiqmFqHG8anxrMumEsEg3sZeCsfEk=;
+        b=md9XOUQcgzn26XNwHnd0kG4u797/hOflbpV0Z068bi+Uk6fqcXKyAqb0BrWmZdy4V2
+         JwJq7z8SnSq/hne91DMzzYFBWa0+Uleaf/awwGo+Hf5O6ZEqPNmZkUVV0rSEytd5d30a
+         TWKFOjh4ZX279HSNXoUauip048UrBYdJQ+26VbWaSfHYQPBvQVzccxAnqwqd9jJInSvY
+         HH479KaMhPrvCh/cuqHM94FdXnHg3RHSDYj8Ai/JR0CQmVqfsEel1jykeIAAbEg3XwLu
+         +Kcw28G9in5gwsEKHv+sMKWB6oiwgdKiM/jVsuVRYTi/vHOnSukXiylEH0KCJURpMEhd
+         bL7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783512946; x=1784117746;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xrenUMVEDaQLL0EiqmFqHG8anxrMumEsEg3sZeCsfEk=;
+        b=UeN8SmeJQ1C0F4b38Vu6z8b4o74xax8m23kThC0KPJOGs2gIF+MSWv8L3xHIUGjrOv
+         /Xjh2fZKVFF/Swc8pMnsKbV6AwuVu/E/k3V7WQw0xxDgK51PspKAAEPc6TV2WLodaT0w
+         teC0T/31RyBggmSxcOoDjaUKRDx5Wj6QbtUyokfCLAz/nxH6Dd5Omx5VUIW0eMQmg3p5
+         yoVg4J3Fb3XMBfKxzr7r5myE3AxWJMiMUzuRIaLWataFLJlCXLfxm5NbFro4xwy0uvm5
+         XWzggCceUUL4JlUTxkwQxaQHIKxk8MqoKrl/PHUGpV9QCNRgxokuWOG3HBwPLfjBV4rY
+         uMNg==
+X-Gm-Message-State: AOJu0YzzaAivVuZznQVb1RfEXDCW9tJ18XJoM1XgQIqrX+/fCsD26p9R
+	pZYy2UiwcoJKpiX75qj1XdXRRmaNwBk0KHw5M/RLdfHvPaWvjbJHY4ZvkuzstMWLzUPMnLeTa/u
+	YmQ==
+X-Received: from pfmu13.prod.google.com ([2002:aa7:838d:0:b0:847:7599:7277])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:6c9a:b0:848:2f7a:2e57
+ with SMTP id d2e1a72fcca58-848438a63damr2652177b3a.70.1783512946318; Wed, 08
+ Jul 2026 05:15:46 -0700 (PDT)
+Date: Wed,  8 Jul 2026 12:15:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706-swnode-fw-devlink-v2-3-f39b09d50112@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
+Message-ID: <20260708121544.583552-1-wakel@google.com>
+Subject: [PATCH] selftests: timers: Use CPU time for CPU timers in
+ posix_timers test
+From: Wake Liu <wakel@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jul 06, 2026 at 02:54:10PM +0200, Bartosz Golaszewski wrote:
-> Add a kunit test suite for fw_devlink support for software nodes.
-> 
-> Most cases call add_links() directly and inspect the resulting fwnode
-> supplier/consumer lists: a single reference, multiple references, a
-> reference to an unregistered node, a "remote-endpoint" reference and a
-> reference array. The last case is end-to-end - it registers real consumer
-> and supplier platform devices together with their drivers, adds the
-> consumer first and checks that fw_devlink defers its probe until the
-> supplier has been bound.
+The posix_timers test compares the elapsed real time (GTOD) with the
+expected timer delay to verify if the timer expired. This works fine for
+real-time timers (ITIMER_REAL), but is flaky for CPU-time timers
+(ITIMER_PROF, ITIMER_VIRTUAL, and CLOCK_*_CPUTIME_ID) on loaded systems
+(like shared test runners) because the test process might be scheduled
+out, resulting in elapsed real time being larger than the consumed CPU
+time.
 
-Always in favour for the new test cases!
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fix this by using the appropriate measurement method for each timer:
+- Use CPU process/thread time (via clock_gettime or getrusage) for CPU
+  timers.
+- Keep using monotonic clock (real time) for real-time timers.
 
+This makes the test robust against scheduling delays.
+---
+ tools/testing/selftests/timers/posix_timers.c | 65 +++++++++++++------
+ 1 file changed, 46 insertions(+), 19 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index 6f78b6068589..55c5f96ea6c8 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -79,16 +79,39 @@ static void sig_handler(int nr)
+ 	done = 1;
+ }
+ 
+-/*
+- * Check the expected timer expiration matches the GTOD elapsed delta since
+- * we armed the timer. Keep a 0.5 sec error margin due to various jitter.
+- */
+-static int check_diff(struct timeval start, struct timeval end)
++#include <sys/resource.h>
++
++static long long get_clock_time_us(clockid_t clock_id)
++{
++	struct timespec ts;
++	if (clock_gettime(clock_id, &ts) < 0)
++		return -1;
++	return (long long)ts.tv_sec * USECS_PER_SEC + ts.tv_nsec / 1000;
++}
++
++static long long get_itimer_time_us(int which)
++{
++	struct rusage usage;
++
++	switch (which) {
++	case ITIMER_REAL:
++		return get_clock_time_us(CLOCK_MONOTONIC);
++	case ITIMER_PROF:
++		return get_clock_time_us(CLOCK_PROCESS_CPUTIME_ID);
++	case ITIMER_VIRTUAL:
++		if (getrusage(RUSAGE_SELF, &usage) < 0)
++			return -1;
++		return (long long)usage.ru_utime.tv_sec * USECS_PER_SEC + usage.ru_utime.tv_usec;
++	default:
++		return -1;
++	}
++}
++
++static int check_diff_us(long long start, long long end)
+ {
+ 	long long diff;
+ 
+-	diff = end.tv_usec - start.tv_usec;
+-	diff += (end.tv_sec - start.tv_sec) * USECS_PER_SEC;
++	diff = end - start;
+ 
+ 	if (llabs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+ 		printf("Diff too high: %lld..", diff);
+@@ -100,7 +123,7 @@ static int check_diff(struct timeval start, struct timeval end)
+ 
+ static void check_itimer(int which, const char *name)
+ {
+-	struct timeval start, end;
++	long long start, end;
+ 	struct itimerval val = {
+ 		.it_value.tv_sec = DELAY,
+ 	};
+@@ -114,8 +137,9 @@ static void check_itimer(int which, const char *name)
+ 	else if (which == ITIMER_REAL)
+ 		signal(SIGALRM, sig_handler);
+ 
+-	if (gettimeofday(&start, NULL) < 0)
+-		fatal_error(name, "gettimeofday()");
++	start = get_itimer_time_us(which);
++	if (start < 0)
++		fatal_error(name, "get_itimer_time_us()");
+ 
+ 	if (setitimer(which, &val, NULL) < 0)
+ 		fatal_error(name, "setitimer()");
+@@ -127,15 +151,16 @@ static void check_itimer(int which, const char *name)
+ 	else if (which == ITIMER_REAL)
+ 		idle_loop();
+ 
+-	if (gettimeofday(&end, NULL) < 0)
+-		fatal_error(name, "gettimeofday()");
++	end = get_itimer_time_us(which);
++	if (end < 0)
++		fatal_error(name, "get_itimer_time_us()");
+ 
+-	ksft_test_result(check_diff(start, end) == 0, "%s\n", name);
++	ksft_test_result(check_diff_us(start, end) == 0, "%s\n", name);
+ }
+ 
+ static void check_timer_create(int which, const char *name)
+ {
+-	struct timeval start, end;
++	long long start, end;
+ 	struct itimerspec val = {
+ 		.it_value.tv_sec = DELAY,
+ 	};
+@@ -149,18 +174,20 @@ static void check_timer_create(int which, const char *name)
+ 	if (signal(SIGALRM, sig_handler) == SIG_ERR)
+ 		fatal_error(name, "signal()");
+ 
+-	if (gettimeofday(&start, NULL) < 0)
+-		fatal_error(name, "gettimeofday()");
++	start = get_clock_time_us(which);
++	if (start < 0)
++		fatal_error(name, "get_clock_time_us()");
+ 
+ 	if (timer_settime(id, 0, &val, NULL) < 0)
+ 		fatal_error(name, "timer_settime()");
+ 
+ 	user_loop();
+ 
+-	if (gettimeofday(&end, NULL) < 0)
+-		fatal_error(name, "gettimeofday()");
++	end = get_clock_time_us(which);
++	if (end < 0)
++		fatal_error(name, "get_clock_time_us()");
+ 
+-	ksft_test_result(check_diff(start, end) == 0,
++	ksft_test_result(check_diff_us(start, end) == 0,
+ 			 "timer_create() per %s\n", name);
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.55.0.795.g602f6c329a-goog
 
