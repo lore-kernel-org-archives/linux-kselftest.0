@@ -1,112 +1,207 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F8E43DA54
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 14:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783519491; cv=none; b=Z+t9q1KJ9qBLKZfNNkVl8lKu3rOPYjhHTjvdAkBs3rXiTwUG51bxhginpIOgOxuU5nAU4wC7h24e3Tg7ubP5YQ7AxQC9Qp7K/aQhDUP5dAwc5ONRNlWu89AaBxRCPysPqj3mHHI3UzIk+yXwAYxcuFiJtEEb6z9Z2zrit9kXWAQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783519491; c=relaxed/simple;
-	bh=VDqnd98Y3F+WCkp6CVStlwKiEamh19fMC2n1d0p2he8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FVSnDET32NTPwApk51Jwy14l44ncx+yDjXctLZbL6DuQNB2eo+IzqMolnoUmmvMmG8t8hw2SPPV4KYgYmHjhGkXpJbV/YYoyyNc27J7Q2QpwTIdjh9O3vSn99Br8ysQh4KIjP3sT77lj4/OadQFVDnWogWjtOt8tYJxQPE8vlz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dJ/jLqsA; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204524534AE
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 14:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783519879; cv=pass; b=RU4NZLRidbWCwL6lR39K1YtQT3hWiNgousWEIZsqqcyJbPqsY290PsZsmDUXxqAPsqbmwu4+YEKPncA3oZ9ntv6jAlBrSpNQXNuHGcPITg2fmYyIG/0ccfJDXN5+Im+WX0spK5uCdOTzJulXxfrmycD35AE4j5yy5nYwBMt+q70=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783519879; c=relaxed/simple;
+	bh=JcmAKN11GlEZlCK3Tb7glDhGWHCZKu3R/gZN0IxBi44=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dsLLs50xjMyzIMSwGqm460r0C+harrkII+L3wtyPiK2o6SulGepxboVvYEPIUGMiRfZ/r+oUnC8hXrDYmydDws3HBfwAL3H6D2+6LNKKthFCvsy7LGckLfkGJGosTpI5q/chUyH8AROhmLJoYyts+ZxVXglWrP6E0n3dPy8rxsQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbjqtztN; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dJ/jLqsA"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-845bc2e658aso861236b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 07:04:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbjqtztN"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-80b9993928dso10820307b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 07:11:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783519877; cv=none;
+        d=google.com; s=arc-20260327;
+        b=KDVBDw35OKD4eZ+WtTP4pqFhiAhg2eTKcDSWxBLarRStp1GHg5hZOn2Ny1OqlfW9U6
+         1kwJw5BGY6Dw0dtnax7s7tzv0LIPvM85IW2VzQUTrDfG9wjPRCHe9Dm9t5flpVl9fxIZ
+         OpNaGui33C8aJM4SRIeZfATxEoGiWZ9ypOoPBiiGBsCI5sbQuBb4JVAPEp7w7aYE3QHp
+         gMHGmicLWaPTirs4TgsL9nv0cEokS5lpJov6/4tx+cO0fI3DJa69RQVmTJgoZQ1H3uxt
+         YIVJOS/jjt77uNz/tkwJEc+iIc8J1zyYOnSThTPkB6YsT4V0HCGhrPoqYcV2UeHMhaVt
+         XlGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
+        fh=l7+XdxF2QLR4TZagDNwED2pS9a6FuWhxJSI0pX8CXvg=;
+        b=dCN7Bk50MXtPwsUDg30zKo5D3DcJNtUrB4nl6g3DcuxJjjfb/ixLAXJw9kNTubvXqq
+         HiNLhwxOlOrVAywe1l9j3kv4GOaMdRam6uhd0YB9ncIyJN7zQAZWVlJ4m1iFrtwyB+tP
+         HbXfMEXs1zuMbeqHTD3jLTIMbN44PqLjNyvpjzG6Lfk00K2xs0GtantvGBL6IyzvS53g
+         O68gI1F1l7H9JNMTCMoFQvxthQrusFZYXziyA/K9kpNwH5EfkW47nAAV4+iVDsJ47xM3
+         chzi0KdcCLUJAb2hvV3yjaoTLjVjmNM8dsM7weDImaIAG+NuC3jHnZ418dYEJRxWhZkM
+         swIw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783519489; x=1784124289; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AYqhNi51VCSViGg3RpcK/Rx0LOdHhkEWxN1ahKQcyxQ=;
-        b=dJ/jLqsAD+teKxkANpipbo9aow+OLWOqkbbIsATJ9tT40pHlTn222PSKcyFzf8Q4NR
-         ECRsHIGtip2YK9Z7h7HrvZv88JRcui/duhQIdNJnQYnWKyUU9ERKlpg+FaQ5H0RhabCs
-         8tCGsFWF8DfesXsnWvxebMtzMJixJo+WMptHKFUosH4lHj7BjvFt2U5fZIyKdlBplpET
-         FKoJtHRyjsDNvrmT0iVm9TCiMOv9Fnz69jGVIyFV59GutEeF5Wnnr9dytIcH02Ak90OV
-         YWk3X4jUL1tgVeW+q/PoM/RRZxW+VVXmhrRv+sRILlZxW2xWwe6Cq1KEX7fdhi6zjpcg
-         21JQ==
+        d=gmail.com; s=20251104; t=1783519877; x=1784124677; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
+        b=gbjqtztNoCnSOFk58/N4v30ST5t6baL6hHcN50mbJl6CmU5VbccQeXjnL4PncELpl5
+         UAbyoWVrI9X6UHzpSuNhqLFFA4lIHydFw/SR0nN7yw9zhXoYv6SHakpmkMxf040xssUa
+         CIYTpeOzFxwjLTbtsEIwEwZ338gV/YwEBkMMVRsID1VdgawM0zAz3tShpyF5k1FOJroJ
+         TPsexkiD0RHbqx8NrrnkwlNNtIRG3nAxx8Mwn+Sius47U2bY22luyBvYOC0FD18mbJO7
+         N8vPYOWkh1PAPUdiu418vQGiMm29jvrF2ImYTcBi0zMR3SpLEbJmOa2nfm+JqgbYxVvr
+         7sIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783519489; x=1784124289;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AYqhNi51VCSViGg3RpcK/Rx0LOdHhkEWxN1ahKQcyxQ=;
-        b=ITN2cpiEvQjTjIxFxah1IKWVgZxhCDbw2PPR65YhONle3hVdQ/FCazxMK+2NexNzMO
-         v6WNGFBX9OpBLkHbe+yqi/QI1EAoBZtocjTL0UOn6icFjRlxKfpmQA9OwGA7ecXihJBL
-         H7v9Ydq1zTkevjIio8vpeyBwuflQ7Ihr9ExerU4wbWGH2hb7BlUuP0RntIw4XHGKEGOH
-         cfuXMttkHlQPrx7TQY4aqIDgTY6y/qL8S9vadOn3FNWElEjt2Sj8KhSCp/ozupJnd8fE
-         sCkuiJ7Ot3oo/egJaaxcau1T/JaMCaXnLklK0sGkHw5ROKv9lLbUDXAIkV/W4PcEFweo
-         QqLw==
-X-Forwarded-Encrypted: i=1; AHgh+Robp0Lfm5s+Pu28H/LPeGnHYZZExYkRBDLUaMjISM+SnFmg6KR5LrTkUOwetG/Qq4Hq0AxcaFxvY6eNBJpHwn8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXzMQbYJUBdSnh6swyeQdMVuxlBDldql46ICGxR6gwPGCXa/bH
-	NYkkpBNx4TCbT5oMe0V3s/Y1gpkSdvS+8L7szcR6BOmKgD9wswIqOpFMuSx/sWg6L1auj1uowLI
-	5Ltxe2A==
-X-Received: from pfbdr7.prod.google.com ([2002:a05:6a00:4a87:b0:846:5d01:2319])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:6f18:b0:848:4810:2b67
- with SMTP id d2e1a72fcca58-84848102d18mr1731912b3a.21.1783519489171; Wed, 08
- Jul 2026 07:04:49 -0700 (PDT)
-Date: Wed, 8 Jul 2026 07:04:48 -0700
-In-Reply-To: <56649d82-bce1-4fac-b639-345376d219be@open-hieco.net>
+        d=1e100.net; s=20251104; t=1783519877; x=1784124677;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=F6iCbqiFD/hdmKTE2DrZqekV252eUYkKKpzBqjT3c4Y=;
+        b=l6EjUzNd80YdoxU3p85fxHJJu2kVmmFnDkI0/RnW4MWdq77j/V5Vb5/Bw+t/qjbi/o
+         sbegHdSrZI5BgDivb9uPZ2NpGA67Me1h/aiHS2fRKnJV4z8l39hw5MwZ1ajkxn4Rdak8
+         qoBMWWgZHwgOgKFVIOI9uyxADK1tihYC/lz2/f5m39S6eJB7fXiQesmBQCKVemON/vvw
+         p8/RpQ+3rohFDn3wnXHYOlIbFLpGYMd6eqEYBXSZhzx0Og4URwK1rGvmiuPw2JymQvG0
+         6dMp7zrnC+6QaX8cYobM/T+RepwYtWJ+SAEIHNVOLQXh16AsBIH3Gx9NLAuUKUdShJTp
+         8N1w==
+X-Forwarded-Encrypted: i=1; AHgh+RoBEbbtnad3RFFAl7U9Z9BHX0f9913ajUjy2sbg3PJ7tMpKo5vbBVOXHxkith9txgNxQW7xgYz+5T5gYi1XGow=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHo2cTmlBJJDFEl6Iige9PCXma9puITqm8jHdQ/OtQOGdfuCEu
+	QTwbV1ZiTsg6o15qUyoCSUtDEyKWXZ50ep6Hh7jzDvOpWK8UhVhXhJhrd1ilDAJsgW2p7i80UDf
+	L27PdgdWTFvvDelGz9BxB6BXikuzpaRE=
+X-Gm-Gg: AfdE7cmBUH0+udPq8/Idvz0Ev+sl8WgX4S+FFaBkGacZwZVMuLjXpNRunZp/xi1cS/t
+	3CRx6PcqvA6XjJlcjKy0o8pLn5eKoLXs9Mj10U2seX8eHulNzbvRBVbPKBPDLBgKWo6Frm4ryFB
+	gPEVKCnhNfbGOjhvzKIz/RARGGtl8KRusLyU7t5VFdYcq7MUTMLBnenZQv8mrTWbqHc502/WTkc
+	sbu7vkJ6oGeiLLE1TGrV/azqmIgnV1bjrqzHxkrJoirscdWbq/lNHUgso8Vhg4BIzfQlzSNv4CJ
+	2heUqEYS+LHO8yo1zdPQg2pmKzA44tzjWhTxBvcA
+X-Received: by 2002:a05:690c:9b11:b0:81c:c77b:3546 with SMTP id
+ 00721157ae682-81dbc7217dbmr21323267b3.21.1783519876972; Wed, 08 Jul 2026
+ 07:11:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
- <ak1-vF3qUjeszzSC@google.com> <56649d82-bce1-4fac-b639-345376d219be@open-hieco.net>
-Message-ID: <ak5ZANYxYeWmDGEL@google.com>
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-From: Sean Christopherson <seanjc@google.com>
-To: Tina Zhang <zhang_wei@open-hieco.net>
-Cc: Yosry Ahmed <yosry@kernel.org>, Jim Mattson <jmattson@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+ <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
+In-Reply-To: <ak5HLLrYK3R_g2y_@u94a>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 8 Jul 2026 22:11:01 +0800
+X-Gm-Features: AVVi8Ce9tfUoastI5qlwZvx2Zc16Cxa5m1L5o1cpFV_Bz3b7ElwfOC-N99L74kg
+Message-ID: <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 08, 2026, Tina Zhang wrote:
-> On 7/8/2026 6:34 AM, Yosry Ahmed wrote:
-> > On Mon, Jun 29, 2026 at 08:52:03PM +0800, Tina Zhang wrote:
-> > > The SVM DecodeAssists feature is reported in CPUID
-> > > Fn8000_000A_EDX[7].  When available, hardware provides the length and bytes
-> > > of the intercepted instruction in the VMCB, allowing a hypervisor to consume
-> > > the decode information directly instead of re-decoding the instruction in
-> > > software on relevant VM-Exit paths.
-> > > 
-> > > KVM currently does not expose DecodeAssists to nested SVM guests, even when
-> > > the host supports it, and does not propagate the hardware-provided
-> > > instruction length and bytes from VMCB02 to VMCB12 on nested VM-Exit.  This
-> > > leaves L1 with an incomplete virtual SVM CPUID model and prevents L1 from
-> > > using the same hardware-assisted decode information that KVM receives for
-> > > L2 exits.
-> > > 
-> > > The missing virtualization was observed in practice with Hyper-V as L1,
-> > > where the absence of DecodeAssists prevented nested SVM from being made
-> > > available to L2 guests.  The fix is not Hyper-V specific.  Complete nested
-> > > SVM virtualization of DecodeAssists by advertising the feature to L1 when
-> > > supported by hardware, and by copying the decode-assist fields into VMCB12
-> > > on nested VM-Exit.
-> > > 
-> > > Add a selftest that triggers a nested page fault from L2 and verifies that
-> > > L1 sees a non-zero instruction length and instruction bytes matching the
-> > > faulting instruction.
-> > 
-> > Taking a large step back from all the discussions in the other replies:
-> > Is there a measurable performance improvement? Not trying to say we
-> > shouldn't do this, but we should at least see what we're trading this
-> > complexity for, it's obviously not straigtforward to fully virtualize
-> > decode assists.
-> 
-> I don't have a meaningful performance number yet. My current understanding
-> is that the main value of the series is more about architectural
-> completeness and enabling the Hyper-V L1 use case than about a direct
-> performance win.
+On Wed, Jul 8, 2026 at 9:13=E2=80=AFPM Shung-Hsi Yu <shung-hsi.yu@suse.com>=
+ wrote:
+>
+> On Wed, Jul 08, 2026 at 02:01:50AM -0700, Sun Jian wrote:
+> [...]
+> > Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for poi=
+nters")
+>
+> Agree that above is the commit that introduced the issue.
+>
+> More comments below.
+>
+> [...]
+> > @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_ver=
+ifier_env *env)
+> >  static int __check_buffer_access(struct bpf_verifier_env *env,
+> >                                const char *buf_info,
+> >                                const struct bpf_reg_state *reg,
+> > -                              argno_t argno, int off, int size)
+> > +                              argno_t argno, int off, int size,
+> > +                              u32 *access_end)
+> >  {
+> > +     s64 start, var_off;
+> > +
+> >       if (off < 0) {
+> >               verbose(env,
+> >                       "%s invalid %s buffer access: off=3D%d, size=3D%d=
+\n",
+> >                       reg_arg_name(env, argno), buf_info, off, size);
+> >               return -EACCES;
+> >       }
+> > +
+> >       if (!tnum_is_const(reg->var_off)) {
+> >               char tn_buf[48];
+> >
+> > @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_veri=
+fier_env *env,
+> >               return -EACCES;
+> >       }
+> >
+> > +     var_off =3D (s64)reg->var_off.value;
+> > +     if (var_off >=3D BPF_MAX_VAR_OFF || var_off <=3D -BPF_MAX_VAR_OFF=
+) {
+> > +             verbose(env, "%s %s buffer offset %lld is not allowed\n",
+> > +                     reg_arg_name(env, argno), buf_info, var_off);
+> > +             return -EACCES;
+> > +     }
+> > +
+> > +     start =3D var_off + off;
+> > +     if (start < 0) {
+> > +             verbose(env,
+> > +                     "%s invalid negative %s buffer offset: off=3D%d, =
+var_off=3D%lld\n",
+> > +                     reg_arg_name(env, argno), buf_info, off, var_off)=
+;
+> > +             return -EACCES;
+> > +     }
+>
+> I was thinking of suggest to just do a single unsigned check
+>
+>   var_off =3D reg->var_off.value;
+>   if (var_off >=3D BPF_MAX_VAR_OFF) {
+>     ...
+>
+> But looking at the code before 022ac0750883, what you have is closer
+> aligned to the previous behavior, let's stick to this.
+>
+> > +
+> > +     if (size < 0) {
+> > +             verbose(env, "%s invalid %s buffer access: off=3D%lld, si=
+ze=3D%d\n",
+> > +                     reg_arg_name(env, argno), buf_info, start, size);
+> > +             return -EACCES;
+> > +     }
+>
+> `size` comes from bpf_size_to_bytes(bpf_size) in check_mem_access(), and
+> is already checked to be not negative; plus other check_* helpers does
+> not check for this, so I think it can be dropped.
+>
+> Otherwise, LGTM:
+>
+> Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+>
+> > +
+> > +     *access_end =3D (u32)start + (u32)size;
+>
+> If you want, this could use a quick one-line comments regarding the fact
+> that it won't overflow, or even verifier_bug_if().
+>
+> > +
+> >       return 0;
+> >  }
+> >
+> [...]
 
-Yeah, and I wouldn't be at all surprised if VMware follows suit in the future.
-E.g. see commit 176bfc5b17fe ("KVM: nSVM: Advertise support for flush-by-ASID").
+Thanks for taking another look, and thanks for the Ack.
+
+I agree that the size check is redundant given the current call path. I=E2=
+=80=99ll leave
+v4 as-is for now to avoid another respin unless maintainers prefer dropping=
+ it
+or adding a short comment around the access_end calculation.
+
+Best Regards
+Sun Jian
