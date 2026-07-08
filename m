@@ -1,87 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74804219FD;
-	Wed,  8 Jul 2026 10:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051DA428465
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 10:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783507240; cv=none; b=TDvEMHjcCjMVuK2XjrXTmHgF+z6GbLM+aL/N483IvcLv/5fl6tSkf/0L1OgkuIitXcMaGSwORJeGA3FnO17MeEmV2BY6kqBhEnTzx5s2/KV7apYyDbC16FRsmO8KTf8lAuU6cfpmGei1hZcVcYgWE7YnuuWEpqg45u/bAnxqGx8=
+	t=1783507362; cv=none; b=YP1PhqaR70EARMzwgQviRvJh6NTeDvzaRU6eIXM7XuROVolbEVgQyFixTrzzCHH3nuGRi2SfekZoTID7GmSszZEq8K3WdHzz0cTx3dO8mXzoXGI6zveMc2QOdlmGVXnKvXnsis3MhC1SMfeqBDBimxUqLlqRXZ4GNx5CtZjFokk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783507240; c=relaxed/simple;
-	bh=BSDQi9TTEUGku/M+2NpuaJTxk/kr4HgYxgNVRyZ6Pvc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=N58a6TyfD7LyS80+tQh0fY2jzti2PtMiwn8Wnh8vikcRwYXvjfvkMUSrPs/a1N1234PovbF++s0e6pbG280/+1PzbYw/LMXJOMfFwuplYVRquOCF4Qlx2CshpAKIMWUW+OhXNxzSccbmiDx61QfInXy8Qp+oWy7Tw7XN+31419o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aEAmveca; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783507362; c=relaxed/simple;
+	bh=VZgUdV2A7pZjLp6C/BH+7oAEipYUhSeWuVMjB9UBZSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z9GACmIltBngt7kxLucjNUKWbYb0GuilgXVXnr9kB6cK52gLlz5dGCqsa0VlHRU4RppLlDtjV2uoZLKmRbMTWeQw50Hv4/bZUGknohOKFNPWMjDvH1AH1oDVzjjYOkab7wRDh3yDiKQkcgZaYNl58apxVOBX5whjgpOIGNWaj1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=nIK2iBP4; arc=none smtp.client-ip=84.16.66.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aEAmveca"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1DC1F00A3A;
-	Wed,  8 Jul 2026 10:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783507230;
-	bh=wKwCsubqRnhqkGvjZy/M9ofAXQ/VIpdAisUsS/v0yaI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=aEAmveca5ky1UhGeknPgIFeaLKODYveKeq4BEONnlpIe4lPfKtxhxw8lH7txazxaf
-	 Jp7NToObec2xsYXB/Nr09NRuKoRrCqtw9F/4wHUU/RfSiaN51n9ZPED7xyUg791d9n
-	 zEzMo6fZpp2Uuku7hzKv/ZmNAE8GDAJWELY1i4LK+8kaa1wkTT9l0BB6HyWhDdAcIY
-	 dXWygo0YVS5jGpHgEVMvOnxPHYkHfo3sERkDnCKISWmWh0vE07RoNdtmEf28GJtzWm
-	 LQ6NxyJ3XUZ7atMHi5zsdfmD2IN0+Us2o4dTNkPIOSkv09zHg6DBSRnimULYBIh4BL
-	 GqR9tO7kh7Ypg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C9215392666D;
-	Wed,  8 Jul 2026 10:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="nIK2iBP4"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gwF6B4WdSzD1M;
+	Wed,  8 Jul 2026 12:42:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1783507346;
+	bh=Wg6f8s2e6QLWTvt1elGbzdKqXJ9qbnt5tU9p1LjHfq4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nIK2iBP4vM0qd3XgRSYJQB5+67ybWxa1r1r823kbFdX56HIuk+9zscjmNCcj2SSe1
+	 bGRZQy6PDBMWy+w1Pc/T25Qz/rj9DyslsW5PUcjCGOzr2VPd85f3gtgaucJZVlR6B4
+	 FlO9JiHXPWU4lFVSQr1s0WpiDN+pYNwGWfX7w3Ik=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4gwF695pr1zPtL;
+	Wed,  8 Jul 2026 12:42:25 +0200 (CEST)
+Date: Wed, 8 Jul 2026 12:42:23 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Wang Yan <wangyan01@kylinos.cn>
+Cc: gnoack@google.com, shuah@kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/landlock: fix spelling error in fs_test
+ comment
+Message-ID: <20260708.toQuea2Gi4zi@digikod.net>
+References: <20260702015823.368529-1-wangyan01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] selftests: drv-net: run XDP tests with both
- IP
- versions
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178350720939.2431187.11844691575013845734.git-patchwork-notify@kernel.org>
-Date: Wed, 08 Jul 2026 10:40:09 +0000
-References: <20260702062348.2123960-1-noren@nvidia.com>
-In-Reply-To: <20260702062348.2123960-1-noren@nvidia.com>
-To: Nimrod Oren <noren@nvidia.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, bobbyeshleman@meta.com, willemb@google.com, weibunny@fb.com,
- dw@davidwei.uk, cratiu@nvidia.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260702015823.368529-1-wangyan01@kylinos.cn>
+X-Infomaniak-Routing: alpha
 
-Hello:
+Applied, thanks!
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu, 2 Jul 2026 09:23:46 +0300 you wrote:
-> The driver selftest environment picks a single address family for tests
-> which use the generic address fields. When both IPv4 and IPv6 are
-> available it prefers IPv6, which can leave IPv4 paths untested and hide
-> IPv4-only bugs.
+On Thu, Jul 02, 2026 at 09:58:23AM +0800, Wang Yan wrote:
+> Fix typo "allowes" -> "allows" in Landlock filesystem test comment.
 > 
-> This happened recently in the XDP selftest, where an IPv4 checksum bug
-> was missed when IPv6 was also configured. XDP traffic handling has
-> IP-version-specific code paths, and the follow-up discussion concluded
-> that the XDP tests should run against both IP versions [1].
+> Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
+> ---
+>  tools/testing/selftests/landlock/fs_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/2] selftests: drv-net: allow switching env IP version
-    https://git.kernel.org/netdev/net-next/c/432f4bab1ada
-  - [net-next,2/2] selftests: drv-net: xdp: run with both IP versions
-    https://git.kernel.org/netdev/net-next/c/47467501cb88
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+> index 86e08aa6e0a7..e672089e9329 100644
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
+> @@ -6927,7 +6927,7 @@ TEST_F_FORK(layout2_overlay, same_content_different_file)
+>  		ASSERT_EQ(0, test_open(path_entry, O_RDWR));
+>  	}
+>  
+> -	/* Only allowes access to the merge hierarchy. */
+> +	/* Only allows access to the merge hierarchy. */
+>  	enforce_fs(_metadata, ACCESS_RW, layer5_merge_only);
+>  
+>  	/* Checks new accesses on lower layer. */
+> -- 
+> 2.25.1
+> 
+> 
