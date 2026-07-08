@@ -1,105 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F027A4CB5B;
-	Wed,  8 Jul 2026 13:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBEC2E3AF1
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 13:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783518263; cv=none; b=YxubggQkcZoJoiZdJWCgIf72N46TcpYRyw+cVEpFA2L6j6+TnzYvcM1atjQCah2rzDTfXygf6HfOVwO2hGmUlmybXJpFNELcTmccuqBd13HTEVQCL9fITu/PikMBWlaYMs0WFfNw3eEsA5sEtX/2abQTAFkA83oAabuZCLRSr5E=
+	t=1783518553; cv=none; b=om1my9kNFvsqY9wNTzI44oq/UAQTZSX4qIGKNR/oMqzfRzXIS/luDlBl8XnZvJVursTMvub6ShLUycUiWbDe+W3C0I7lXtQpz7fxAr7nakGCtWRU8zlDZ8PiYueJ++HLyrUI85/8SMzqz4t80Uq1y0uXCgAeSPveTUAqoSjWDqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783518263; c=relaxed/simple;
-	bh=BF6Vb9hnwvSdbolPZGWPh9gCFlsO3dx2jY2KJay9g4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EdcgR631xG/6dFTuwtcsVWUpmf5Xtlk6N/UM5tDgBTPH6nvabnJtVViKUmn5ECcoBimReyALRPRt0TDWTWL0RdrllXc7cCo9yUcoEE8Je99Mj0OIqizOPK/U5QWtulvHQKwXphv0vtPsNendXpfs5W3CwrsiPBtGq9qzwVrEUjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sc1Wd/9Z; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1783518553; c=relaxed/simple;
+	bh=tKvFGGxeRm9+aPjHwPPw9jq2Xo1UZNf4SZGRpSI8yv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NxSbiRuX/ZK2Y8j6RWhcX43l0FFNOfQJsGTiv6nENocoCb+/ScFrILvT4j4eu4j095ck8cvNCcbg9R75EiGPIoUiojKshoJNWBBma1HrGVa87IDcj+73dII8HM3aS0Jlovus/opQyH/SNgI12QUX4ujdBMOAanQNt+USYZPueRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mXbZxdXN; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sc1Wd/9Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783518262; x=1815054262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BF6Vb9hnwvSdbolPZGWPh9gCFlsO3dx2jY2KJay9g4I=;
-  b=Sc1Wd/9ZvrAMUc833ySY9byGEgJ4Y8EEgKcmDk1PeVZb6E5x50REJvA6
-   mdgNAVaJFaRRhB0xuDKBHetbLqPUnZXAJs+flqDlfSCtvDOUAqxpHq7S3
-   fi4YO5LCBceXT7nePrHyz/KK3XdxkgKkArdw2etUVEIdkQzuqNhdTnsgH
-   yIe5HvKfPgYJ0yRc681xn+jspmKHRegFHtSUx960CjskNo+n5fydoGwRA
-   uZ6aZ+Zi3XUcofJkZz8c2YVZxq42k6JVoYpsqw4yPqfX3xZ0BLFDAkGw7
-   WtzVRUgfW607obSnjRctEPuAQluAsTEQzQP8N2X7uyHRoEtkTAjz+eG8V
-   A==;
-X-CSE-ConnectionGUID: wl5Ff1axQZWCrOoIzaHuJQ==
-X-CSE-MsgGUID: eUaoH71LSW6ypai1h9y4ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="95336394"
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="95336394"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 06:44:21 -0700
-X-CSE-ConnectionGUID: Gx8sd6jtTYa87WSIeMFO5A==
-X-CSE-MsgGUID: DQCjphV1SfCz7AcSJLEtNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="249847324"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.100])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 06:44:16 -0700
-Date: Wed, 8 Jul 2026 16:44:14 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] gpio: kunit: add test cases verifying swnode
- devlink support
-Message-ID: <ak5ULrwZfvA4hdsP@ashevche-desk.local>
-References: <20260706-swnode-fw-devlink-v2-0-f39b09d50112@oss.qualcomm.com>
- <20260706-swnode-fw-devlink-v2-5-f39b09d50112@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mXbZxdXN"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783518539;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TEGzzoFWcnNWGGmasKpR7vNO3wPHNttV6bHdoJJUeuk=;
+	b=mXbZxdXNK8zwfiH+BaVAX/a14LKht5ZVC+Wv7EwJmNmgfH7LWboOjRCpvZuv44yqZ92n+L
+	HTpOJmwORQJdus2K/nxg2k5sHDV24WBE1jpcCO3Xmgfz/8evz+Zw4qadzjqXk+l1Ie5Dkb
+	HqYuO1oM26W/bUjStsW0rqIMNmJO8nA=
+From: Usama Arif <usama.arif@linux.dev>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Usama Arif <usama.arif@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ritesh Harjani <ritesh.list@gmail.com>,
+	David Hildenbrand <david@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Oscar Salvador <osalvador@suse.de>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Liam.Howlett@oracle.com,
+	linuxppc-dev@lists.ozlabs.org,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] selftests/mm: handle EINVAL when configuring gigantic hugepages
+Date: Wed,  8 Jul 2026 06:48:50 -0700
+Message-ID: <20260708134851.4153021-1-usama.arif@linux.dev>
+In-Reply-To: <2e3b585cbb30b2fc495dcd49d75de6f6da61861c.1783446924.git.sayalip@linux.ibm.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706-swnode-fw-devlink-v2-5-f39b09d50112@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jul 06, 2026 at 02:54:12PM +0200, Bartosz Golaszewski wrote:
-> The software node fw_devlink support already has its own kunit suite, but
-> that verifies the fwnode links in isolation. Add GPIO tests that prove
-> the ordering works in a real-life use-case: a GPIO consumer that
-> references its provider via a software node.
+On Wed,  8 Jul 2026 12:29:05 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+
+> Some MM selftests attempt to configure the amount of
+> HugeTLB pages of different sizes by writing to nr_hugepages.
 > 
-> The first suite registers the provider's software node, adds the consumer
-> device first and checks that fw_devlink defers its probe until the
-> provider has been added and bound. The second covers the fallback:
-> with the provider's software node not yet registered no supplier link is
-> created, so the consumer probes, devm_gpiod_get() returns -EPROBE_DEFER
-> and the consumer only binds once the provider shows up.
+> PowerPC hash MMU pSeries systems advertise gigantic hugepage sizes
+> but do not support runtime allocation of such pages, writes
+> to the corresponding nr_hugepages file fail with -EINVAL.
+> This causes the test to bail out even though the failure is due
+> to a platform limitation rather than the
+> functionality being tested.
 > 
-> While at it: the existing gpio_unbind_with_consumers() test keeps the
-> consumer bound while the provider goes away and then operates the orphaned
-> descriptor. With software nodes now being covered by fw_devlink that would
-> instead force-unbind the consumer along with the provider, so opt it out
-> by setting FWNODE_FLAG_LINKS_ADDED.
+> Ignore -EINVAL when configuring nr_hugepages so that tests continue to
+> run on systems where gigantic hugepage allocation is unsupported.
+> 
+> Before patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>      [INFO] detected hugetlb page size: 16777216 KiB
+>      [INFO] detected hugetlb page size: 16384 KiB
+>     ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>     Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     Bail out! /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
+>     write(0) failed: Invalid argument
+>     Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     [FAIL]
+> 
+> After patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>     [INFO] detected hugetlb page size: 16777216 KiB
+>     [INFO] detected hugetlb page size: 16384 KiB
+>    ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>    Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>    [PASS]
+> 
+> Fixes: 27477b28b74f ("selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages")
+> Co-developed-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+> ---
+>  .../testing/selftests/mm/hugepage_settings.c  |  2 +-
+>  tools/testing/selftests/mm/vm_util.c          | 26 ++++++++++++++++---
+>  tools/testing/selftests/mm/vm_util.h          |  1 +
+>  3 files changed, 24 insertions(+), 5 deletions(-)
+> 
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Acked-by: Usama Arif <usama.arif@linux.dev>
+ 
