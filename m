@@ -1,67 +1,66 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C343C3B9952
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 03:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BCF3BB673
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 03:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783481791; cv=none; b=e3tf5l79i9OFSCZhs9XrUbLyKBnJP7tRyDDGZCEtjwwBSblQ1uz1o2vS5WCxgbkstvcSi0vyJD4CVFstYWV+IkZsoEzC3IClXvW6id1aGNRVElitTOvkQQwT644N0VTXTk5WXkZ+UnQD5/jA0uQ+Y7EZnObR1mFLy2P2T22Z/t0=
+	t=1783481794; cv=none; b=DXFNjeH/ZmmBssq3PpgrITsb4dqdpSMtHMBLPD4+67IbQe/G/W75nJ/2c84POzoPPUB6z0OqnUyfsEJRWCsZcEsfACiA0YF+XXtN2yuMweVZUXAFHHEX3akJlzFyiXkzrlIgpD8JKavhTyXBXaeLSc+sw4Ssr92jDJfxTO6Fpvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783481791; c=relaxed/simple;
-	bh=1tICEVIvaC4ZLr/Ax7sSaci3FTAyWazsJABtM7N8+oQ=;
+	s=arc-20240116; t=1783481794; c=relaxed/simple;
+	bh=DCPKi33NYT6bX9zlswitk1aeo+c7wEE6BumaxclqcxQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dTfIVFZXhFC7m5IP0otyVTgf7atSUS382sN+1aNqstn6+VpB1EA/MDJzPbnGQrYOgwhqrgnpHFXpIqoA/laXhF0c1buBA9qMEVxGhfKVSDSjTlWVS60yx3uFOBywCejNy1P68WfougTUNGMCIygytYAlx9qc25KbRg+WNQl4DnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQdEABsf; arc=none smtp.client-ip=209.85.216.43
+	 In-Reply-To:To:Cc; b=fgBu6N8oTsQejC5AhUzEsbDnF+4QCDzEP6OzgazzPcgxT0l+nCfXGwx2uDanDUO1To13k2d+aKWeFIB/9/4g1pqSIfPdenlnInogRtlRhA2EnHxd3RzJAmgAPs/+DfPkRLf1iQGbIDDLUSJsJPk+TCFQQUqpqltpfqGJ60+Tm5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lri5tohc; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQdEABsf"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-382ef647e20so244653a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 20:36:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lri5tohc"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-388b404ea89so272943a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 20:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783481789; x=1784086589; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783481791; x=1784086591; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+Vl1jMHF6Mz50lVaHNGk62U0kiVIW8sN4jisG45xdAs=;
-        b=FQdEABsfK1wFFcf+1jwBPa6x7DkVDzKux6mLoL5krPkBPomwVVTk55i0hLMIe9KyPq
-         pHCfs5QffhTKBYYmrpXt/vpV6iz3kImqoWwXZZeatvt5Yr5EQVD0OLKtR7w9WHyEjbO1
-         OMlXWb0c/U6+aZWRdjtqyPEbmrQGZZyQjroC8qjy/Ty8ZnlDPq0INQgng4UMW1OW1B5M
-         zikHc6THyeWCTNS6eaZcerI9r9vsQMvzISirVkdu0VNA1vkJ6n0f1fL0qZwPju2djtsA
-         cDr3cudmATK3yGkGevOrhdmWW/xv5brlSE6N3yccWgNGLz9Ee3tvV75KT3Rr3bKYzB/8
-         Si/g==
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7uwJLmhKNEIHTwQycd7laGxNA3BK/zUUdv4a0SBN/M4=;
+        b=Lri5tohcjBZunv9ewOIov+3BKrwWekZrFv+MSdaPFYkQnkipWHzIQHMCWyO0xDWjht
+         aCBir20aA/kFrGhJL1PxQAxXm4NqEx43iesFJLKTGpJo3Y6gWGvCQizIQLV6wwn+Qw9z
+         InyyM3eapUlXXGMzkhJBV71txHQ+Ruktu5XM7dUvzWoMF+mvDF/ixB4qgf5pHQrCVTQ5
+         D3xG8YOB4yGRaFCFWl1HzTUs3NtqReL/dRl+PUIph3SW/17Q8zyG4asRn6K1irnF1AGi
+         WHrK7pUZmK9WJ4O9V+FXJWxJVBw0k4Cp4cr7foxBVT9X57Iaq0dLr4cPFgT5pIDA5DM1
+         nx8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783481789; x=1784086589;
+        d=1e100.net; s=20251104; t=1783481791; x=1784086591;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+Vl1jMHF6Mz50lVaHNGk62U0kiVIW8sN4jisG45xdAs=;
-        b=kdBZVdqKjbJQmW+BHTawZ5f7aDx86OrCxRbQhnoBZT4nXiaI/xPO4m8OBTtsWPYPfv
-         xpcq06vMH40oZl6czN7bhZWncdNlo8vJ1cnvEDMMx1CMm7YZCBSmujmTN5ccFoJQKoti
-         4FdXHPEDlPZFrlRA+Y7V94JClLSBrSKyZvNVI4dp+qZgiZUGwprus+tYEy7yIBd5ADhw
-         D2PW2/vfocYphP1TVaSzbAZt+X/aeHtTNDTBXmB8t1NX3RBkACZ5tfZEoQPt62VB93yh
-         mjderYGsJ9i9gT5zK+bApYvSb7GSF0+Fe8FAA8pQUsqxekNqjEjJU4RHbaksGfOPYnHI
-         Hq8g==
-X-Forwarded-Encrypted: i=1; AHgh+Rof55TRlYdgFte74Ljja7fiB784/PXvuLe/tyEG284yQy9FgIzy1V99pwJ+0VPhMZNUTgRp9jHdEhMgRGsxYXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL8E9hq1SeokxCtqyCO1nKxggY5Xyz3+GsdFkWvb2WWBe4zjSg
-	bEEpPrm6fBHeztfw5LC8FJLunxcZfpvD6zNIgxLcir0W43WWbvmnhJ0oCLRl9F4Q
-X-Gm-Gg: AfdE7cmde23Eff29fCUX1JLXXGmKXbyGXk+/qBCQ5voq8LqOxfWtd4+/aSQFus7g9h2
-	wcgcA8pqGd244JVW8oCUXSqCs10NZsdG1mwF2SP0qAyugLigeaFgAij8bE2+uUust058fMemqaD
-	f2/71NOWyYJeUO+Wd/04uyFTICDD1EyCGFesJMlyqjpjKxL7Zmpvu+d7IZdSA6TpfvUv+8mAuaq
-	Dekx8kfdssjbQ0YpDFIPqUnjm6KSgBSEp78WbdfGv+JytUX1jl6QYBCNgnR4Op54FzMweZ08MAI
-	nOUEMe487cTadIbuwfdqepLya8xotlgWCN/Vcn2F1+6XWhqoWfDpuzNoLF7oT1gBbp3iJHqxQ9i
-	TDPsq4Q+byfOSOVUBlpB8KNd/cU8nrMECLO3IpnNcca2F0wstWUcjx+A4jg49na2TpU4PWHMn8I
-	D3EgwDBlf7s1wyrHqu+zUXcegqROPqWrNYnc4m1dMHcIVrReYtsA==
-X-Received: by 2002:a17:90b:4b81:b0:387:e0db:3d8c with SMTP id 98e67ed59e1d1-38943954dc4mr623537a91.39.1783481789129;
-        Tue, 07 Jul 2026 20:36:29 -0700 (PDT)
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7uwJLmhKNEIHTwQycd7laGxNA3BK/zUUdv4a0SBN/M4=;
+        b=K4rpdhOlnr2MaOY2XV9uuTCXdJOPLBK7PEEtOz4W9bv47oGtc99OLo+B+fzBXuX9Cy
+         Tu3HtfsSytt5GQjfVNsQ3pb8cO3XCdepXpEzeRF7q7Zvtd0tCzee/JsfF3ezsLRNjaPM
+         qYS2DHmDWSGh8ZQzs824/n+KYMoIs8TNN6mFqjpH0JuiCYL5hLtr9r5YBDdaoMFwT7sf
+         ry+uNP25QJCxDf3iLFXFhYyLY9pB6uoEWBv4HoWalhpmn3uBH5AvLAtdYgB73Z3gXGeB
+         7Zf0X7c8fwsXXMviLyAuMT9QuKv6Qc+8VW2FCHFIKPkP/siWkQZZojIAUMXWn3iogP/+
+         PzUQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqm7TLn5W11SuVLhOtaUoYdsrdUYd/8Rs+o/4Dymm5Ss9sxFC3MvCdtPSeHQVbk6gxMzk9yUg+5KrwvQeczS7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2qS8He2WyRs70pK9hMS+3vptrW9I7yDA+z8jjkEHAX/NrLXXT
+	qU/i+6gS2XGNCFMeX+aYxHc4Ei5LZJtcwqIlYoseyqxhG4TroCY2694k7omOb4g/
+X-Gm-Gg: AfdE7cnNCm6VqhtRpusQYBxbYTHtF91PpvzqNP8eReTGsUQOHXdA/pi0V62GEtmAVgw
+	uKgYG5yes8TPVERMqRDdSgW/Ag8PWbWN6KWLEPrjevxqPfHs5UW9dp8SiXd4LrM8BdDYDax8CH5
+	gu17621XW3GgRH46iZzxAEydtEC31JmiPchJ2wbDMVXAPP0lNu1BRhuu4jkvhHfYFsSPX4MjD8M
+	7GKYoy1LJXpzohTTIhypfIkYuyXmLU2CPE2QGNteOEtJktNg42Gf1pW5ERk/OvWt35iA6oadMig
+	DqmMkqoW0GKfiUoFK1YJeRdQM2LYew8nak+v+OWc1F02mH3DKlk2t3g+l7Q1LA3YB38tk5cJES7
+	liLjUW8o5atOvodNJ7q6jNGcAFlG6DSue5PlQUPebHPZ+l/+UDKOW8Xs1BUQ3UMlwSAAjANTssu
+	LtHZelL9AfLWaK2tathUBtXWT9y1nJFgcaWDro3Hs=
+X-Received: by 2002:a17:90b:5544:b0:36b:de66:92c3 with SMTP id 98e67ed59e1d1-387d880b730mr5823258a91.10.1783481791130;
+        Tue, 07 Jul 2026 20:36:31 -0700 (PDT)
 Received: from [10.0.0.65] ([2601:647:6700:64d0::94ac])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accae5sm21092850eec.29.2026.07.07.20.36.27
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accae5sm21092850eec.29.2026.07.07.20.36.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 20:36:28 -0700 (PDT)
+        Tue, 07 Jul 2026 20:36:30 -0700 (PDT)
 From: Charlie Jenkins <thecharlesjenkins@gmail.com>
-Date: Tue, 07 Jul 2026 20:34:29 -0700
-Subject: [PATCH v3 06/17] riscv: cfi: Use generated instruction headers
+Date: Tue, 07 Jul 2026 20:34:30 -0700
+Subject: [PATCH v3 07/17] riscv: Maintain epc on misaligned emulation error
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260707-riscv_insn_table-v3-6-3f8e5f75ba97@gmail.com>
+Message-Id: <20260707-riscv_insn_table-v3-7-3f8e5f75ba97@gmail.com>
 References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
 In-Reply-To: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
 To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -85,49 +84,61 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  Charlie Jenkins <thecharlesjenkins@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783481777; l=1198;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783481777; l=1589;
  i=thecharlesjenkins@gmail.com; s=20260605; h=from:subject:message-id;
- bh=1tICEVIvaC4ZLr/Ax7sSaci3FTAyWazsJABtM7N8+oQ=;
- b=Po1xRMgYDA5PIVVjKPxjGPmEu+M69/hx3ymY++n6Om1HumSakJPKNAgz3tx1U5lGTyl+yk573
- kGum7EZxUnEABIJkspZZYr9uErQy5kunYsr5p3GGMpMq3eU7v6ZVH+f
+ bh=DCPKi33NYT6bX9zlswitk1aeo+c7wEE6BumaxclqcxQ=;
+ b=zvComs8b88dWvy8jLEjCRmfCDTkUEyxqVH8c14cT2/SUZEuhkK2O/aL6Gz7C5H53JvlCy3eJM
+ ZgtW3tHJOY9B6zTgPHaM+IBbpBPY7YSN2Dmbugepwe7vF4SZTq+lmse
 X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
  pk=ajnnRQ98PIdwKp4HeMkq9U32okYbnh6Zb4G3o5XXvkg=
 
-Migrate the code that is decoding cfi instructions to use the generated
-instruction headers.
+Currently the epc is set to zero when there is a misaligned emulation
+error. This will print a misleading error message with the current epc
+value of zero instead of the epc value that triggered the emulation.
+Avoid setting epc to zero to maintain the state of epc.
 
 Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
-
 ---
+ arch/riscv/kernel/traps_misaligned.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-This function generates the same assembly as before.
----
- arch/riscv/kernel/cfi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/riscv/kernel/cfi.c b/arch/riscv/kernel/cfi.c
-index 6ec9dbd7292e..e38d5f863747 100644
---- a/arch/riscv/kernel/cfi.c
-+++ b/arch/riscv/kernel/cfi.c
-@@ -40,16 +40,16 @@ static bool decode_cfi_insn(struct pt_regs *regs, unsigned long *target,
- 	if (!riscv_insn_is_beq(insn))
- 		return false;
+diff --git a/arch/riscv/kernel/traps_misaligned.c b/arch/riscv/kernel/traps_misaligned.c
+index 81b7682e6c6d..524215a186e0 100644
+--- a/arch/riscv/kernel/traps_misaligned.c
++++ b/arch/riscv/kernel/traps_misaligned.c
+@@ -238,8 +238,6 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
+ 	if (get_insn(regs, epc, &insn))
+ 		return -1;
  
--	*type = (u32)regs_ptr[RV_EXTRACT_RS1_REG(insn)];
-+	*type = (u32)regs_ptr[riscv_insn_beq_extract_xs1(insn)];
+-	regs->epc = 0;
+-
+ 	if ((insn & INSN_MASK_LW) == INSN_MATCH_LW) {
+ 		len = 4;
+ 		shift = 8 * (sizeof(unsigned long) - len);
+@@ -303,7 +301,6 @@ static int handle_scalar_misaligned_load(struct pt_regs *regs)
+ 		shift = 8 * (sizeof(ulong) - len);
+ 		insn = RVC_RS2S(insn) << SH_RD;
+ 	} else {
+-		regs->epc = epc;
+ 		return -1;
+ 	}
  
- 	if (get_kernel_nofault(insn, (void *)regs->epc) ||
- 	    get_kernel_nofault(insn, (void *)regs->epc + GET_INSN_LENGTH(insn)))
- 		return false;
+@@ -349,8 +346,6 @@ static int handle_scalar_misaligned_store(struct pt_regs *regs)
+ 	if (get_insn(regs, epc, &insn))
+ 		return -1;
  
- 	if (riscv_insn_is_jalr(insn))
--		rs1_num = RV_EXTRACT_RS1_REG(insn);
-+		rs1_num = riscv_insn_jalr_extract_xs1(insn);
- 	else if (riscv_insn_is_c_jalr(insn))
--		rs1_num = RVC_EXTRACT_C2_RS1_REG(insn);
-+		rs1_num = riscv_insn_c_jalr_extract_xs1(insn);
- 	else
- 		return false;
+-	regs->epc = 0;
+-
+ 	val.data_ulong = GET_RS2(insn, regs);
+ 
+ 	if ((insn & INSN_MASK_SW) == INSN_MATCH_SW) {
+@@ -405,7 +400,6 @@ static int handle_scalar_misaligned_store(struct pt_regs *regs)
+ 		len = 2;
+ 		val.data_ulong = GET_RS2S(insn, regs);
+ 	} else {
+-		regs->epc = epc;
+ 		return -1;
+ 	}
  
 
 -- 
