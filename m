@@ -1,56 +1,56 @@
 Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0014D39A805
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 23:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE933B27C4
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 23:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783552746; cv=none; b=bHuRSrJ+8gaOWK+NPNSZEeQBQWVvCZu8FGJQwMg31hejNnJN4165Doovo2jwipXCerCQX9fXAO/MFNWXeE7eDBB42wjKIAUffBijj2EOPNvWucIR9AWHLC1Mdbt0n3vKNoqiZRZ64orTQxFkW10pB/C5bOmIOIqakUP+o0SSvK8=
+	t=1783552748; cv=none; b=AzG6iolBNTpGXh4TVQhFMWHVv6rV2xTQseY+eJq0Jopfp5vgpIBzDDbYyB4Stgri3v0eJb/ALH7FKxkMEv5oQGSHm1qhZG0EZdAdhySHGtiDyS1j2jlLG0ws8SIit7UJ/D026X7t9C6LGb907SsTzAc5zzjg/+UjZHMBDNKg8w0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783552746; c=relaxed/simple;
-	bh=Asrc2jqLWZ8McUsNCl8V+brf3DaScqJp6GiYRksFOaI=;
+	s=arc-20240116; t=1783552748; c=relaxed/simple;
+	bh=15txIjHGpudmFhG7+GJagjUMBXbzz9ex0zDYfR201nk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KR28GzuMmc+tAqwT9UkN0RYVvvjx7TafVxk36PsfNBV6Iw2xKHYUaOpnmscF/lbDrcUg6/SDRP5u3DAyS1jSKczCfBguQruo/FSvztT6ROlydwhcL+1WcsPC/UnC/rydtezUKnQ2z02+e8+WRIFWndxaBRPIcIW6Fo/CQLu1qjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EjwnSatQ; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=uxHC1AnMNhA5/zL6i7siv88K7iiQY6ZJ8/bi1/KMApJyBUGxZKMCGUzDd22Wzf3XMekwuDU3f2307wJlCAvwqUJ7Rru+xS0E7QzcK4Rh45lFWQakeBGosBilxFY3O4M2/KqX2le2JDqYufaGZFfs6HMJXZ1kWLZ2MFaSmXPE8Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=icZXrlKy; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EjwnSatQ"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c88aab7c1d4so1251679a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 16:19:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="icZXrlKy"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c891ed872ddso1983851a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 16:19:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783552744; x=1784157544; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1783552746; x=1784157546; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jpna3TQ6YosBT2JOPlPkJdlqdBE0UdDtIn99NEOpE50=;
-        b=EjwnSatQHkj2A7sy+jEbTM/pC08a2pWtAdU7a3iEi75NS63Gh41T2Lj0GaIjBZfosW
-         hFLWBNv00ChPHNrZIzhRGT0RVnaysdI3+ND++yLHlNncUSktqkcyrJk7uB8uFTSs4egE
-         0c7dLgK30S0Elp9LcDF8OnbEZcyhRlLYjyqunuH6a5pkLFsaazJsEVqbuVFEHrUyIOQR
-         dxGZwS+rg7UvbUTZX2lXJ2xqbvf3ORjlg3X9s/cXOONzBt7TQFCI+3MwnZcdHFYC5o9f
-         xvzw6W1dLNbyOWdMlN1vbWHvoMTafHhzOf7jqHU44Yi6ZAXLDo4dgOG2M1TfiG/HZ0Xt
-         G7dA==
+        bh=q6mpE+1DYhQST2Lq8stccPrw6SlzcA9MgaY8lZpHwgE=;
+        b=icZXrlKy9jBBsVpIuvFTFKp7ljfZakwm9dim2ZaFGkBu7Fv6IpJD3AuPkaHIoFwcxN
+         awBAuzWBCQg1pJotUoPahHjjlTl1kFI7w+pbsFupxExqenh0PPB2PbgFMe92jT8KBpil
+         IIsD6Zy/Mj0Vf7XHmz+7+Zyk2CiJ7zXnWAUvekoHG3kNgYTh/wdb7SOaVdRiW015CPqY
+         oRbNu5KWiFYlxi6e4spcRR85kZgI1Rf6AaJ9GU8sFcsF3+7r/1T0W/jVBDg1ebwdMYi2
+         +WH7PxJta+pAZdmiK91XK55KHEk8X6Kluk4dRz9xXEPi5k4sHB3NlCvyLuknCHAuhhDJ
+         3J8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783552744; x=1784157544;
+        d=1e100.net; s=20251104; t=1783552746; x=1784157546;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jpna3TQ6YosBT2JOPlPkJdlqdBE0UdDtIn99NEOpE50=;
-        b=mIocxOt4Fz1QUSomwLZXbb51O1TWSsmz+I2bGa1SHfbIEZEWwWyu3FHcItEnqG+0SB
-         spiZ7C3DYUfuH1/wCmhA/ZWiY6mOmJ11s1Od0GLnGhYKqzWHFUuG42Qdvpbpjw+v5vDJ
-         dL0rgACIrZ9vILWX8L2ZsXWhN6PEhw57D8aU/uBb9V7joAuPWi4AOXGtTTDft2HG+O2t
-         x98MLkIfvB0EvmPUYeyrFX+60dBQUfpbyROHSw3zv7Dz4SxrRpy4Ph74AhakyXdp2gic
-         PaTLIln9i6QBRya49jXrz1bAbypvTnYzRIyEtFkSlnsgjZEFyjMT+IqHuCbF+w2fFWUR
-         ixDg==
-X-Forwarded-Encrypted: i=1; AHgh+RpX6q2/2SGbyhwxDnFtzmf6g9C0ugGnnS4xXgnPg0GqRFgG3cFGwt9rkzNuOOV4gpjZWlY/2d0AGCQMpQ/AuEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWynAg8gxqbJNt+3TJ1zbTliwjScj7qn9W2gOJasj1SHpAJlnK
-	rSEyr8OlIZCT2IBxxMoFdcX4gct5lWoXE3EOB8fq/6mRzEhvIeHKC92yJwChdUvVJpxBCuh/oIX
-	tYmgNg/4v
-X-Received: from pgjf11.prod.google.com ([2002:a63:dc4b:0:b0:c9a:53ea:434a])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a394:b0:3bf:6c04:a812
- with SMTP id adf61e73a8af0-3c0bd159be5mr6111912637.51.1783552744017; Wed, 08
- Jul 2026 16:19:04 -0700 (PDT)
-Date: Wed, 08 Jul 2026 23:18:52 +0000
+        bh=q6mpE+1DYhQST2Lq8stccPrw6SlzcA9MgaY8lZpHwgE=;
+        b=ddhsUTJEakEMDBvYrB9rr0/WmYTJY83ly5ZIR5ObCfvbE3Ehso6LOP4JF15xwYCNmw
+         T+XZ1rzuOcKtgccMWO1BrS6lwsxxiY+PM9fzAbeNNoDqDMkTxTnGpEnJgDQe4f0DRfiD
+         f8UF59pynwDHcfIZgQnSZ8Ig535K+Hi1RURSzisGMbSCZNvpaAI7xpja7zWAyJsNztX+
+         R7o2xUDzoX1Lbb1tBePyD0Rz+osBEo4XzMh0o+110hvIKAMOIc0gc9uEeSWA2cXAk3zh
+         NnbO2cJdqjr9UEyG0o6dvZwUx4d9aY8L5TvPg0v1kB4QBLt3ipyE3Komx2+GA1EAMyvI
+         aAjQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqJOQGNE1nnQW8ruoO9GqtVJXb2HvOOxjzx921S+zEiNdJZ9xwEu1cYtyodlD+87485/Ko9qgrCIE+ynas5LUc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy73g4RRYrTQUWT06Arr4Uv/HcY7ZD9SKMlmUAe4LKeboDVwSPh
+	8QhcDFOlGsrANuS7Vq/jCSQMgcItIq2R/AyDezWRWz6LJIuHysjHFxXXPmXqNfColu5Uto8V2iw
+	zZwOvD0HB
+X-Received: from pgjm22.prod.google.com ([2002:a63:fd56:0:b0:c9e:1b4c:6a93])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a96:b0:3bf:e2f1:1b12
+ with SMTP id adf61e73a8af0-3c0bcbc0460mr5510827637.41.1783552745955; Wed, 08
+ Jul 2026 16:19:05 -0700 (PDT)
+Date: Wed, 08 Jul 2026 23:18:53 +0000
 In-Reply-To: <20260708-igb_v3_b4-v3-0-1272650ca614@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,9 +60,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260708-igb_v3_b4-v3-0-1272650ca614@google.com>
 X-Mailer: b4 0.14.3
-Message-ID: <20260708-igb_v3_b4-v3-5-1272650ca614@google.com>
-Subject: [PATCH v3 5/9] vfio: selftests: igb: Extend memcpy completion timeout
- for line-rate hardware
+Message-ID: <20260708-igb_v3_b4-v3-6-1272650ca614@google.com>
+Subject: [PATCH v3 6/9] vfio: selftests: igb: Disable PCIe completion timeout retries
 From: Josh Hilke <jrhilke@google.com>
 To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -72,60 +71,46 @@ Content-Type: text/plain; charset="utf-8"
 
 From: Alex Williamson <alex.williamson@nvidia.com>
 
-The submitted driver waits at most 1 ms (100 * 10 us) for the last RX
-descriptor to be written back.  QEMU's emulated loopback is synchronous:
-by the time igb_memcpy_wait() runs, the receive descriptors are already
-written back.  Real 82576 hardware processes the descriptor ring at
-line rate.
+The mix_and_match test intentionally submits TX descriptors with an
+unmapped source IOVA so that the DMA read fails.  By default the 82576
+re-sends the request after a PCIe completion timeout (datasheet section
+8.6.1, GCR.Completion_Timeout_Resend, bit 16, initial value 1b).  On
+real hardware this turns a single fault into a stream of retried reads,
+keeping PCIe AER and IOMMU error handling busy and interfering with
+reset recovery.
 
-max_memcpy_size is (RING_SIZE - 1) * IGB_MAX_CHUNK_SIZE, approximately
-4 MB, split into 4095 1 KB frames.  At 1 Gb/s line rate (~125 MB/s),
-4 MB takes ~32 ms on the wire, plus per-frame preamble, SFD,
-inter-frame gap and FCS overhead (~3%) and descriptor fetch/writeback
-latency.  The 1 ms cap times out long before any valid transfer can
-complete.
-
-Wait up to ~200 ms (200 iterations * 1 ms) for descriptor writeback
-before returning -ETIMEDOUT.  ~6x the line-rate floor leaves comfortable
-headroom for host scheduling jitter while keeping the intentional
-invalid-DMA tests (mix_and_match) so they recover quickly on real faults.
+Clear GCR.Completion_Timeout_Resend during device initialization so a
+failed read fails once and stays failed.
 
 Assisted-by: Claude:claude-opus-4-7
 Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
 ---
- tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-index 637d05e872de..1848be6cd46c 100644
+index 1848be6cd46c..a7a30660b23e 100644
 --- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
 +++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-@@ -412,12 +412,23 @@ static int igb_memcpy_wait(struct vfio_pci_device *device)
- 	prev_tail = (igb->rx_tail + RING_SIZE - 1) % RING_SIZE;
- 	rx = &igb->rx_ring[prev_tail];
- 
--	retries = 100;
-+	/*
-+	 * Real 82576 hardware processes the descriptor ring at line rate.
-+	 * max_memcpy_size = (RING_SIZE - 1) * IGB_MAX_CHUNK_SIZE ~= 4 MB,
-+	 * split into 4095 1 KB frames.  At 1 Gb/s (~125 MB/s) the worst
-+	 * valid memcpy takes ~32 ms on the wire, plus per-frame preamble,
-+	 * SFD, IFG and FCS overhead (~3%) and descriptor fetch/writeback
-+	 * latency.  Wait up to ~200 ms before declaring the device hung;
-+	 * ~6x the line-rate floor leaves comfortable headroom for host
-+	 * scheduling jitter while keeping the intentional invalid-DMA
-+	 * tests bounded.
-+	 */
-+	retries = 200;
- 	while (retries-- > 0) {
- 		status = le32_to_cpu(READ_ONCE(rx->wb.status_error));
- 		if (status & 1)
- 			break;
--		usleep(10);
-+		usleep(1000);
+@@ -219,6 +219,18 @@ static void igb_init(struct vfio_pci_device *device)
+ 		vfio_pci_config_writew(device, PCI_COMMAND, cmd_reg);
  	}
  
- 	igb_irq_clear(igb);
++	/*
++	 * Disable DMA re-send on PCIe completion timeout (82576 datasheet
++	 * section 8.6.1, GCR.Completion_Timeout_Resend, bit 16).  The
++	 * mix_and_match test intentionally submits descriptors targeting
++	 * unmapped IOVAs; with the default (set) value, the device keeps
++	 * retrying the failed read indefinitely, which keeps PCIe AER and
++	 * IOMMU error handling busy and interferes with reset recovery.
++	 */
++	ctrl = igb_read32(igb, E1000_GCR);
++	ctrl &= ~E1000_GCR_CMPL_TMOUT_RESEND;
++	igb_write32(igb, E1000_GCR, ctrl);
++
+ 	/* Configure PHY internal loopback for testing. */
+ 	igb_setup_loopback(igb);
+ 
 
 -- 
 2.55.0.795.g602f6c329a-goog
