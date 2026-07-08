@@ -1,671 +1,293 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5203F6606;
-	Wed,  8 Jul 2026 10:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D752240913C;
+	Wed,  8 Jul 2026 10:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783506852; cv=none; b=nD/Uf8cmRzCXOHUtrm5pG0WQCENVLstmz1JdtuDV5G/c4crD/giZxoNlF95RCll51S4Cg1J16CxHhtqR8qr0N+Kz0/oHVNs1GCldDJp45xtCL1R/iWAfK1S21aZq7pSGJkteiMtXXvqBKeGt1YNaOA/QMeF9KJxHYvVa8Yz+iIk=
+	t=1783506884; cv=none; b=l1NRLwQ7aXS9NCAT87IXC/WfeIKY1eiBSY0EUI7XkD6fyk3hWfS+FsgspLW/TYeNeD853DdOb4OqUkzFD5JttgSDZxjClENdyhvB5alsKUdif+V+BOwN1IMmF2Ruu2FT/MUixLwygg5NlvOXmhQsnGlgSmzG2sLlflZCCOEuid8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783506852; c=relaxed/simple;
-	bh=kO9MH9U9Ll8GRijT80us/3aIUVPVcob9amL9ysABxik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W9Xg8/jLAd8BNBwucNH46luOECmel6I/VgHMslBtCLmRDA2paY8cjIcmObgC6Xyn6hbuf/ygfHL5+TwGxW+0DV0Nj0s5owjP4rAX1lBrV1RWDJTxu18tvmk+j06GSqswlO5zw2sxjRt3Nvgh+kH0QhRaNWiFZL5YOUHI41962l0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gR6Usnq7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783506884; c=relaxed/simple;
+	bh=sB5GmOPx9Utf7L6/OTIi4AFfWeCPHcUN4T5nv0kMOhI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j6eTa93hkRqbR5FX4dbXZ5Kz9U5hn4+nKCutLeDKLwhbNQsGy2pNLQMsCK0VK6snGVAvzhbS6KV9Kt4M+aPDLcWLC8tmf6g2hkZ7fBmQjqa7gLItpdESZro8rAoXRW38sa+nHXPgWLTNODWaXx1KHxsGPApUAw6yZBUvm0XEZ0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=kIUtDK6S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mMMCYaSE; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gR6Usnq7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B961F000E9;
-	Wed,  8 Jul 2026 10:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783506841;
-	bh=4XQ0wLbsM/AS7qA52MIZH67Ua3KezvjkhA2tS6lMiJs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gR6Usnq7B8n7kg/b2ZH5jlJH3PyqWYzHUTSp20hBE553UOQt9GxZpMb4t9WXHASxG
-	 l6A7OnZXV+TBBy0EclhYaH8vtpACh3VS8FHx+UtTNa95QO4U7HWtuRq8Pl/TYwaKbf
-	 iK8VTDe8oWTGDtJo52d7lCmiT8mD2bCA3NuTrRvj84Kf1j6IsO3lqOjF/Dz/jDnYAy
-	 9V63U9XVD+G2xWim6WusbSa9bLyMVnSOFS/7VZAkEm7Q2Sjy5Xq1w0xaI8V5HiIVVe
-	 5EU1tMceL7ytYksChrm8KZfAGetucCXFr37cVwuwyJFhw5c7mzvhnI9jrfD82v6XMe
-	 SNCe4+xTeV/8w==
-Date: Wed, 8 Jul 2026 12:33:58 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Felix Fietkau <nbd@nbd.name>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH nf-next v4 5/6] net: netfilter: Add SIT tunnel flowtable
- acceleration
-Message-ID: <ak4nltE006uDesMl@lore-desk>
-References: <20260703-b4-flowtable-sw-accel-ip6ip-v4-0-00398cd12382@kernel.org>
- <20260703-b4-flowtable-sw-accel-ip6ip-v4-5-00398cd12382@kernel.org>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="kIUtDK6S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mMMCYaSE"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 000777A0118;
+	Wed,  8 Jul 2026 06:34:31 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Wed, 08 Jul 2026 06:34:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm3; t=1783506871; x=1783593271; bh=2h8jyIfaVx
+	T1n76UeixMaq5PQ/5hlh5CP4XoQBQpKN0=; b=kIUtDK6S2SV3BHIbHpNl7150il
+	Xcjgv7aU6Ne6bpWk7peFRq8DpfiAEmxYjBzx/XXbAU2KgVnb+iZ1UbJ2eU5dtSrc
+	fcefdE+1n0c+zBEvVir1GmyozLbViF414gqRnsIQcHU7sQLhbVQVSa4r44chvEqk
+	4xftnLFdx+c1kEeUnHl5DD4ZwU3akEK3phC7EuZeG9NAsCyaOn6cVNBEZod6/CQO
+	BpcOVEwAG7IDLFde3Snx6jebdnaE8pdgtI7qS04rAcS4wkhdrBu/8xytKsJdfSbK
+	TKUXNs+EmH/nqoprbNafhoSFyvE7IUl6lix20ooD83w91KXIAI7+tKqRgfpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1783506871; x=1783593271; bh=2h8jyIfaVxT1n76UeixMaq5PQ/5hlh5CP4X
+	oQBQpKN0=; b=mMMCYaSEWrHESHn4kTMSGlkrX7InDtJHWZfYd8n2TD4PxeT8I+b
+	VJGPpZl0yUjjURUx7znzca6Ddmk7KZrUT0tzigfm4qqqutBgDLuzVQpCZ8s+BNP8
+	smDa47wzd7nihw9YiSMY7mdeDEnrpPoZiQeFrqtLI2aD82iXZirOl1qsrmt9EKaD
+	6h4Xij7HHOQk3egZbQMoOtxydMIOn9LiZDVgYjrwuQqpfSMWqWRzy0qxRVj0iyEW
+	oqbwchMkGXCwzeL/ZcM6P5eBY7bymWW3ujGm7mLrbzM8HjnqniJKI9s5qhvoJPea
+	sM/rY2K0S+N3DpZhA9jNhUgozs9xVK2QzAg==
+X-ME-Sender: <xms:tidOartV0wIEmIOf0xW-mAYOFIVHVU3Iqa7Up9AKyQA8bQu4G0bLWw>
+    <xme:tidOajbgSFrrObj0ODgBCl0jv1EV_XrMCzLe6K_KpgyMZYUQq7GPrRmjNIEN7lst5
+    M_VpBAA7fio8N7durg3-Mtk11GADrp3ozBsrcBE5VSGbmamU8TeYe0>
+X-ME-Received: <xmr:tidOaj1NLyKGtfVtk3H-JYqehPwbSJ8c00zNDRb4H8fqkp-cQRCtDfAnhZf5Wg>
+X-ME-Proxy-Cause: dmFkZTFi9VmUiW6GoSgieIDCNHZMP6Q4DB8+o7rZTrkdeg57rA0WNV4UEMbgfG0zqEFRUN
+    bXrFMDzJDmZVhoVTGiGO/YRZN4+1ov2mMJFLC5jX/nlhFoDFmzTj8HNBkDkHBGBbyyKNkf
+    xZyAkkud2L2K5Av8QUdjQ5XYi8pC5FMJ9A1ss/qdDvFmJlh+CQ6jFJwaNX0ej5Siij9oFZ
+    cP0MKYvpt39/1cQ3CBE3x8ZOPmF/uGsecIgtn1+CV1GNHhyQ4cOMS01XDL40bu5rWXZprv
+    BWtgM3ddnbRujsfBq+Fby5hiFsr6MLJ86Q8b7L7JJxrVIwGb0u9jFP9lAv+zowk++T7YB6
+    HOp4mtnq70dVslAGbj3R2UOMUBNZYJPdTV0DnCz3sQCR0Ek0+QQxnRlIF3JB58ygEszI25
+    p4oYA5aFORyfRBSBqv1I8QCaPHQPsfLaYbWOLk2WrRj8Y79U/KL6Nx/tsXtaMydAm9Tes5
+    Mc1/rFgMwhq6lPUtSoiJpgHrFify7+Xbn+wbI+hSH74ekV6owJG2yDPKf7PDin/JadrBDa
+    CCy2A3i7dD+EkUwWBamz61NVgNQCCLDmfhurQjHdOlK0YdpinJ79m3XCX999cNur+mPXji
+    DuqIyzIZE1sjoMgFv/Fwp5bD2A/vxM0aPV9PThvHFbmin+zESmqICQg5mu9A
+X-ME-Proxy: <xmx:tidOahXpekzdcOJWgMsRZQaihlEpSI84kMkNVgBSEc2QCHz6j74NVQ>
+    <xmx:tidOamsQeS1_J8zdCYwbRdXomYM9AymNteYnMTnTj6V-0BrXlKLorw>
+    <xmx:tidOagX3wYp3u8_ZPY3-tqCV2NjE0KHtChFS14L2dc320tsRm3TpUw>
+    <xmx:tidOaqXzbJrykAwT5pEjXxVYvh2ZmPuDHw6-j9gZqiMBGo-CKJaomw>
+    <xmx:tydOarwHV-PCon1kFV8UbIIIzFdPO9Y-Wi8ZAokZAu8erJB6G63gxMh_>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Jul 2026 06:34:30 -0400 (EDT)
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: akpm@linux-foundation.org
+Cc: usama.anjum@collabora.com,
+	peterx@redhat.com,
+	liam@infradead.org,
+	ljs@kernel.org,
+	vbabka@kernel.org,
+	jannh@google.com,
+	pfalcato@suse.de,
+	david@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH v2] fs/proc/task_mmu: fix PAGEMAP_SCAN written state for PMD holes
+Date: Wed,  8 Jul 2026 11:34:29 +0100
+Message-ID: <20260708103429.150655-1-kirill@shutemov.name>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NkuvXEfgx3dvazRZ"
-Content-Disposition: inline
-In-Reply-To: <20260703-b4-flowtable-sw-accel-ip6ip-v4-5-00398cd12382@kernel.org>
+Content-Transfer-Encoding: 8bit
 
+From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
---NkuvXEfgx3dvazRZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written
+(pagemap_page_category() and the PAGE_IS_WRITTEN fast path), but a range
+with no page table at all -- a PMD hole -- is skipped.
+pagemap_scan_pte_hole() evaluates the hole against p->cur_vma_category,
+which pagemap_scan_test_walk() builds from only PAGE_IS_WPALLOWED and
+PAGE_IS_SOFT_DIRTY, so PAGE_IS_WRITTEN is never set: the hole is neither
+reported nor, under PM_SCAN_WP_MATCHING, armed.
 
-commenting on sashiko's report:
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260703-b4-flowtable-s=
-w-accel-ip6ip-v4-0-00398cd12382%40kernel.org
+This is reachable. An anonymous THP is write-protected in place as a huge
+PMD (change_huge_pmd(), anon is not split), and a full-PMD MADV_DONTNEED
+clears it to pmd_none. A WP-async consumer such as CRIU then misses the
+2MB drop -- the range is not reported written and the next incremental
+dump keeps stale data. (A file/shmem THP is split on write-protect, so a
+later DONTNEED leaves a populated page table of pte_none entries, which
+are already reported; only anon THP reaches the hole path.)
 
-> Introduce sw flowtable acceleration for the TX/RX paths of
-> SIT tunnels, relying on the netfilter flowtable infrastructure.
-> The feature can be tested with a forwarding scenario between two
-> NICs (eth0 and eth1), where a SIT tunnel is used to reach a remote
-> site via eth1 as the underlay device:
->=20
->     ETH0 -- TUN0 <=3D=3D> ETH1 -- [IP network] -- TUN1 (192.168.2.2)
->=20
-> [IP configuration]
->=20
-> 6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state U=
-P group default qlen 1000
->     link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
->     inet6 2001:db8:1::2/64 scope global nodad
->        valid_lft forever preferred_lft forever
-> 7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state U=
-P group default qlen 1000
->     link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
->     inet 192.168.2.1/24 scope global eth1
->        valid_lft forever preferred_lft forever
-> 8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue stat=
-e UNKNOWN group default qlen 1000
->     link/sit 192.168.2.1 peer 192.168.2.2
->     inet6 2001:db8:200::1/64 scope global nodad
->        valid_lft forever preferred_lft forever
->=20
-> $ ip route show
-> 192.168.2.0/24 dev eth1 proto kernel scope link src 192.168.2.1
->=20
-> $ ip -6 route show
-> 2001:db8:1::/64 dev eth0 proto kernel metric 256 pref medium
-> 2001:db8:200::/64 dev tun0 proto kernel metric 256 pref medium
-> default via 2001:db8:200::2 dev tun0 metric 1024 pref medium
->=20
-> $ nft list ruleset
-> table inet filter {
->     flowtable ft {
->         hook ingress priority filter
->         devices =3D { eth0, eth1 }
->     }
->=20
->     chain forward {
->         type filter hook forward priority filter; policy accept;
->         meta l4proto { tcp, udp } flow add @ft
->     }
-> }
->=20
-> When reproducing this scenario using veth interfaces, the following
-> results were observed:
->=20
-> - TCP stream received from SIT tunnel:
->   - net-next (baseline):                ~118 Gbps
->   - net-next + SIT flowtable support: ~148 Gbps
->=20
-> - TCP stream transmitted to SIT tunnel:
->   - net-next (baseline):                ~131 Gbps
->   - net-next + SIT flowtable support: ~147 Gbps
->=20
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  net/ipv6/sit.c                   |  26 ++++
->  net/netfilter/nf_flow_table_ip.c | 290 +++++++++++++++++++++------------=
-------
->  2 files changed, 182 insertions(+), 134 deletions(-)
->=20
-> diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> index a38b24fb8384..0ac6f7839878 100644
-> --- a/net/ipv6/sit.c
-> +++ b/net/ipv6/sit.c
-> @@ -1365,6 +1365,31 @@ ipip6_tunnel_ctl(struct net_device *dev, struct ip=
-_tunnel_parm_kern *p,
->  	}
->  }
-> =20
-> +static int ipip6_tunnel_fill_forward_path(struct net_device_path_ctx *ct=
-x,
-> +					  struct net_device_path *path)
-> +{
-> +	struct ip_tunnel *tunnel =3D netdev_priv(ctx->dev);
-> +	const struct iphdr *tiph =3D &tunnel->parms.iph;
-> +	struct rtable *rt;
-> +
-> +	rt =3D ip_route_output(dev_net(ctx->dev), tiph->daddr, 0, 0, 0,
-> +			     RT_SCOPE_UNIVERSE);
-> +	if (IS_ERR(rt))
-> +		return PTR_ERR(rt);
-> +
-> +	path->type =3D DEV_PATH_TUN;
-> +	path->tun.src_v4.s_addr =3D tiph->saddr;
-> +	path->tun.dst_v4.s_addr =3D tiph->daddr;
-> +	path->tun.l3_proto =3D IPPROTO_IPV6;
-> +	path->tun.encap_proto =3D AF_INET;
-> +	path->dev =3D ctx->dev;
-> +
-> +	ctx->dev =3D rt->dst.dev;
-> +	ip_rt_put(rt);
-> +
-> +	return 0;
+Add PAGE_IS_WRITTEN to the categories evaluated for a hole in a
+non-hugetlb uffd-wp VMA, matching the pte_none handling in
+pagemap_page_category(). The existing PM_SCAN_WP_MATCHING path then also
+arms the range: uffd_wp_range() allocates the page table and installs
+markers under WP_UNPOPULATED, so the next scan sees it clean until
+re-written.
 
-- Is tiph->daddr always meaningful here?  SIT supports several modes where
-  tunnel->parms.iph.daddr is either zero or a placeholder and the real
-  outer IPv4 endpoint is derived per-packet from the inner IPv6
-  destination:
-    - ISATAP (dev->priv_flags & IFF_ISATAP), resolved by
-      ipip6_tunnel_dst_find(..., true)
-    - 6rd / 6to4, resolved per-packet via try_6rd() / check_6rd()
-    - NBMA / point-to-multipoint (tiph->daddr =3D=3D 0), resolved by
-      ipip6_tunnel_dst_find(..., false)
-  In these cases ip_route_output(daddr=3D0) will fall through to the default
-  route, ctx->dev gets resolved to the wrong underlay, and every
-  accelerated packet is encapsulated toward 0.0.0.0 (or a fixed unicast
-  that does not match the flow) regardless of the actual inner
-  destination.
-  Compare ip6_tnl_fill_forward_path() which returns -EOPNOTSUPP when it
-  detects unsupported tunnel features; would something equivalent make
-  sense here, at least for !tiph->daddr, IFF_ISATAP, and 6rd configured
-  tunnels?
-  Does this path also need to consider tunnel->encap?  SIT supports FOU
-  and GUE via ip_tunnel_encap(skb, &tunnel->encap, &protocol, &fl4) in the
-  slow path, and there is no rejection here when tunnel->encap.type is
-  not TUNNEL_ENCAP_NONE.  Once a SIT tunnel that was configured with
-  encap fou/gue is attached to a flowtable, the fast path pushes a plain
-  IPv4 outer header via nf_flow_tunnel_ipip_push() and skips the FOU/GUE
-  encapsulation entirely.  ip6_tnl_fill_forward_path() has an
-  -EOPNOTSUPP guard for its own analogous case (encaplimit); would a
-  similar guard work here?
-  The slow path in ipip6_tunnel_xmit() uses flowi4_init_output() with
-  tunnel->parms.link (oif), tunnel->fwmark, tos & INET_DSCP_MASK, and
-  tiph->saddr:
-      flowi4_init_output(&fl4, tunnel->parms.link, tunnel->fwmark,
-                         tos & INET_DSCP_MASK, RT_SCOPE_UNIVERSE,
-                         IPPROTO_IPV6, 0, dst, tiph->saddr, ...);
-  The call above passes 0 for saddr, dscp and oif and does not pass a
-  fwmark.  For a SIT tunnel bound to a specific link, using fwmark-based
-  policy routing, or configured with a source address, can the fast-path
-  route lookup diverge from what the slow path would pick, so that
-  rt->dst.dev (which becomes ctx->dev and drives the flowtable egress)
-  ends up on a different underlay device than slow-path packets on the
-  same tunnel?
-  - I will fix it in v5.
+hugetlb is excluded on purpose: an allocated-but-empty huge entry reads
+as not-written via pagemap_hugetlb_category(), so reporting an
+unallocated hugetlb hole (which also reaches this path) as written would
+be inconsistent within the same VMA. hugetlb hole handling is left as-is.
 
-- Is it safe to hardcode IPPROTO_IPV6 here?  sit_tunnel_xmit() dispatches
-  on skb->protocol and legitimately supports ETH_P_IP (IPv4-in-IPv4 via
-  IPPROTO_IPIP) and, if CONFIG_MPLS is set, ETH_P_MPLS_UC (IPPROTO_MPLS);
-  ipip6_valid_ip_proto() also accepts both on the receive side.
-  If flowtable acceleration engages for a flow whose inner payload is
-  IPv4 or MPLS through a SIT device, the outer iph->protocol that
-  nf_flow_tunnel_ipip_push() synthesises from tuple->tun.l3_proto will be
-  IPPROTO_IPV6, and the receiver will drop or misparse the packet.
-  ip6_tnl_fill_forward_path() selects l3_proto from ctx->ether_type
-  (ETH_P_IP =3D> IPPROTO_IPIP, else IPPROTO_IPV6) =E2=80=94 would something=
- similar
-  be appropriate here?
-  - I will fix it in v5.
+Add a pagemap_ioctl selftest that forms an anon THP, drops it with
+MADV_DONTNEED and checks the resulting PMD hole is reported written.
 
-Regards,
-Lorenzo
+Fixes: 2bad466cc9d9 ("mm/uffd: UFFD_FEATURE_WP_UNPOPULATED")
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+Assisted-by: Claude:claude-fable-5
+---
 
-> +}
-> +
->  static int
->  ipip6_tunnel_siocdevprivate(struct net_device *dev, struct ifreq *ifr,
->  			    void __user *data, int cmd)
-> @@ -1401,6 +1426,7 @@ static const struct net_device_ops ipip6_netdev_ops=
- =3D {
->  	.ndo_siocdevprivate =3D ipip6_tunnel_siocdevprivate,
->  	.ndo_get_iflink =3D ip_tunnel_get_iflink,
->  	.ndo_tunnel_ctl =3D ipip6_tunnel_ctl,
-> +	.ndo_fill_forward_path =3D ipip6_tunnel_fill_forward_path,
->  };
-> =20
->  static void ipip6_dev_free(struct net_device *dev)
-> diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_tab=
-le_ip.c
-> index 4b6de16bd4f3..f02e71ae5448 100644
-> --- a/net/netfilter/nf_flow_table_ip.c
-> +++ b/net/netfilter/nf_flow_table_ip.c
-> @@ -338,7 +338,7 @@ static bool nf_flow_ip4_tunnel_proto(struct nf_flowta=
-ble_ctx *ctx,
->  	if (iph->ttl <=3D 1)
->  		return false;
-> =20
-> -	if (iph->protocol =3D=3D IPPROTO_IPIP) {
-> +	if (iph->protocol =3D=3D IPPROTO_IPIP || iph->protocol =3D=3D IPPROTO_I=
-PV6) {
->  		ctx->tun.proto =3D iph->protocol;
->  		ctx->tun.hdr_size =3D size;
->  		ctx->offset +=3D ctx->tun.hdr_size;
-> @@ -464,21 +464,6 @@ static void nf_flow_encap_pop(struct nf_flowtable_ct=
-x *ctx,
->  		nf_flow_ip_tunnel_pop(ctx, skb);
->  }
-> =20
-> -static struct flow_offload_tuple_rhash *
-> -nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
-> -		       struct nf_flowtable *flow_table, struct sk_buff *skb)
-> -{
-> -	struct flow_offload_tuple tuple =3D {};
-> -
-> -	if (!nf_flow_skb_encap_protocol(ctx, skb, htons(ETH_P_IP)))
-> -		return NULL;
-> -
-> -	if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
-> -		return NULL;
-> -
-> -	return flow_offload_lookup(flow_table, &tuple);
-> -}
-> -
->  static int nf_flow_offload_forward(struct nf_flowtable_ctx *ctx,
->  				   struct nf_flowtable *flow_table,
->  				   struct flow_offload_tuple_rhash *tuplehash,
-> @@ -606,19 +591,33 @@ static int nf_flow_tunnel_ipip_push(struct net *net=
-, struct sk_buff *skb,
->  				    struct flow_offload_tuple *tuple,
->  				    __be32 *ip_daddr)
->  {
-> -	struct iphdr *iph =3D (struct iphdr *)skb_network_header(skb);
->  	struct rtable *rt =3D dst_rtable(tuple->dst_cache);
-> -	u8 tos =3D iph->tos, ttl =3D iph->ttl;
-> -	__be16 frag_off =3D iph->frag_off;
-> -	u32 headroom =3D sizeof(*iph);
-> +	__be16 frag_off =3D 0;
-> +	struct iphdr *iph;
-> +	u8 tos =3D 0, ttl;
-> +	u32 headroom;
->  	int err;
-> =20
-> +	if (tuple->tun.l3_proto =3D=3D IPPROTO_IPV6) {
-> +		struct ipv6hdr *ip6h;
-> +
-> +		ip6h =3D (struct ipv6hdr *)skb_network_header(skb);
-> +		tos =3D ipv6_get_dsfield(ip6h);
-> +		ttl =3D ip6h->hop_limit;
-> +	} else {
-> +		iph =3D (struct iphdr *)skb_network_header(skb);
-> +		frag_off =3D iph->frag_off;
-> +		tos =3D iph->tos;
-> +		ttl =3D iph->ttl;
-> +	}
-> +
->  	err =3D iptunnel_handle_offloads(skb, SKB_GSO_IPXIP4);
->  	if (err)
->  		return err;
-> =20
-> -	skb_set_inner_ipproto(skb, IPPROTO_IPIP);
-> -	headroom +=3D LL_RESERVED_SPACE(rt->dst.dev) + rt->dst.header_len;
-> +	skb_set_inner_ipproto(skb, tuple->tun.l3_proto);
-> +	headroom =3D sizeof(*iph) + LL_RESERVED_SPACE(rt->dst.dev) +
-> +		   rt->dst.header_len;
->  	err =3D skb_cow_head(skb, headroom);
->  	if (err)
->  		return err;
-> @@ -629,6 +628,7 @@ static int nf_flow_tunnel_ipip_push(struct net *net, =
-struct sk_buff *skb,
->  	/* Push down and install the IP header. */
->  	skb_push(skb, sizeof(*iph));
->  	skb_reset_network_header(skb);
-> +	skb->protocol =3D htons(ETH_P_IP);
-> =20
->  	iph =3D ip_hdr(skb);
->  	iph->version	=3D 4;
-> @@ -723,16 +723,6 @@ static int nf_flow_tunnel_push(struct net *net, stru=
-ct sk_buff *skb,
->  	}
->  }
-> =20
-> -static int nf_flow_tunnel_v6_push(struct net *net, struct sk_buff *skb,
-> -				  struct flow_offload_tuple *tuple,
-> -				  struct in6_addr **ip6_daddr)
-> -{
-> -	if (tuple->tun_num)
-> -		return nf_flow_tunnel_ip6ip6_push(net, skb, tuple, ip6_daddr);
-> -
-> -	return 0;
-> -}
-> -
->  static int nf_flow_encap_push(struct sk_buff *skb,
->  			      struct flow_offload_tuple *tuple,
->  			      struct net_device *outdev)
-> @@ -830,103 +820,6 @@ static unsigned int nf_flow_queue_xmit(struct net *=
-net, struct sk_buff *skb,
->  	return NF_STOLEN;
->  }
-> =20
-> -unsigned int
-> -nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
-> -			const struct nf_hook_state *state)
-> -{
-> -	struct flow_offload_tuple_rhash *tuplehash;
-> -	struct nf_flowtable *flow_table =3D priv;
-> -	struct flow_offload_tuple *other_tuple;
-> -	enum flow_offload_tuple_dir dir;
-> -	struct nf_flowtable_ctx ctx =3D {
-> -		.in	=3D state->in,
-> -	};
-> -	struct nf_flow_xmit xmit =3D {};
-> -	struct in6_addr *ip6_daddr;
-> -	struct flow_offload *flow;
-> -	struct neighbour *neigh;
-> -	struct rtable *rt;
-> -	__be32 ip_daddr;
-> -	int ret;
-> -
-> -	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
-> -	if (!tuplehash)
-> -		return NF_ACCEPT;
-> -
-> -	ret =3D nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
-> -	if (ret < 0)
-> -		return NF_DROP;
-> -	else if (ret =3D=3D 0)
-> -		return NF_ACCEPT;
-> -
-> -	if (unlikely(tuplehash->tuple.xmit_type =3D=3D FLOW_OFFLOAD_XMIT_XFRM))=
+Changes since v1 [1], addressing Sashiko AI review:
+  - Exclude hugetlb from the hole PAGE_IS_WRITTEN report. An unallocated
+    hugetlb slot also reaches pagemap_scan_pte_hole(), and reporting it
+    written while an allocated-but-empty huge entry reads not-written
+    (pagemap_hugetlb_category()) would be inconsistent within the VMA.
+    This also keeps the pre-existing pagemap_scan_hugetlb_hole_wp() range
+    concern out of scope here.
+
+Based on the pte_none fix [2] (same selftest file).
+
+[1] https://lore.kernel.org/all/20260708093444.145566-1-kirill@shutemov.name/
+[2] https://lore.kernel.org/all/20260707151349.92143-1-kirill@shutemov.name/
+ fs/proc/task_mmu.c                         | 25 ++++++++-
+ tools/testing/selftests/mm/pagemap_ioctl.c | 60 +++++++++++++++++++++-
+ 2 files changed, 82 insertions(+), 3 deletions(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index d45c729ab6bb..fad648f9a40c 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -3049,12 +3049,33 @@ static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
  {
-> -		rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> -		memset(skb->cb, 0, sizeof(struct inet_skb_parm));
-> -		IPCB(skb)->iif =3D skb->dev->ifindex;
-> -		IPCB(skb)->flags =3D IPSKB_FORWARDED;
-> -		return nf_flow_xmit_xfrm(skb, state, &rt->dst);
-> -	}
-> -
-> -	dir =3D tuplehash->tuple.dir;
-> -	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> -	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> -	ip_daddr =3D other_tuple->src_v4.s_addr;
-> -
-> -	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> -				&ip6_daddr) < 0)
-> -		return NF_DROP;
-> -
-> -	switch (tuplehash->tuple.xmit_type) {
-> -	case FLOW_OFFLOAD_XMIT_NEIGH: {
-> -		struct dst_entry *dst;
-> -
-> -		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.ifid=
-x);
-> -		if (!xmit.outdev) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		if (other_tuple->tun.encap_proto =3D=3D AF_INET6 ||
-> -		    ctx.tun.proto =3D=3D IPPROTO_IPV6) {
-> -			struct rt6_info *rt6;
-> -
-> -			rt6 =3D dst_rt6_info(tuplehash->tuple.dst_cache);
-> -			neigh =3D ip_neigh_gw6(rt6->dst.dev,
-> -					     rt6_nexthop(rt6, ip6_daddr));
-> -			dst =3D &rt6->dst;
-> -		} else {
-> -			rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> -			neigh =3D ip_neigh_gw4(rt->dst.dev,
-> -					     rt_nexthop(rt, ip_daddr));
-> -			dst =3D &rt->dst;
-> -		}
-> -		if (IS_ERR(neigh)) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		xmit.dest =3D neigh->ha;
-> -		skb_dst_set_noref(skb, dst);
-> -		break;
-> -	}
-> -	case FLOW_OFFLOAD_XMIT_DIRECT:
-> -		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.out.=
-ifidx);
-> -		if (!xmit.outdev) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		xmit.dest =3D tuplehash->tuple.out.h_dest;
-> -		xmit.source =3D tuplehash->tuple.out.h_source;
-> -		break;
-> -	default:
-> -		WARN_ON_ONCE(1);
-> -		return NF_DROP;
-> -	}
-> -	xmit.tuple =3D other_tuple;
-> -	xmit.needs_gso_segment =3D tuplehash->tuple.needs_gso_segment;
-> -
-> -	return nf_flow_queue_xmit(state->net, skb, &xmit);
-> -}
-> -EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
-> -
->  static void nf_flow_nat_ipv6_tcp(struct sk_buff *skb, unsigned int thoff,
->  				 struct in6_addr *addr,
->  				 struct in6_addr *new_addr,
-> @@ -1111,8 +1004,16 @@ static int nf_flow_offload_ipv6_forward(struct nf_=
-flowtable_ctx *ctx,
->  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> =20
->  	mtu =3D flow->tuplehash[dir].tuple.mtu + ctx->offset;
-> -	if (flow->tuplehash[!dir].tuple.tun_num)
-> +	switch (flow->tuplehash[!dir].tuple.tun.encap_proto) {
-> +	case AF_INET:
-> +		mtu -=3D sizeof(struct iphdr);
-> +		break;
-> +	case AF_INET6:
->  		mtu -=3D sizeof(*ip6h);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> =20
->  	if (unlikely(nf_flow_exceeds_mtu(skb, mtu)))
->  		return 0;
-> @@ -1146,6 +1047,25 @@ static int nf_flow_offload_ipv6_forward(struct nf_=
-flowtable_ctx *ctx,
->  	return 1;
->  }
-> =20
-> +static struct flow_offload_tuple_rhash *
-> +nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
-> +		       struct nf_flowtable *flow_table, struct sk_buff *skb)
-> +{
-> +	struct flow_offload_tuple tuple =3D {};
-> +
-> +	if (!nf_flow_skb_encap_protocol(ctx, skb, htons(ETH_P_IP)))
-> +		return NULL;
-> +
-> +	if (ctx->tun.proto =3D=3D IPPROTO_IPV6) {
-> +		if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0)
-> +			return NULL;
-> +	} else if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0) {
-> +		return NULL;
-> +	}
-> +
-> +	return flow_offload_lookup(flow_table, &tuple);
-> +}
-> +
->  static struct flow_offload_tuple_rhash *
->  nf_flow_offload_ipv6_lookup(struct nf_flowtable_ctx *ctx,
->  			    struct nf_flowtable *flow_table,
-> @@ -1166,6 +1086,108 @@ nf_flow_offload_ipv6_lookup(struct nf_flowtable_c=
-tx *ctx,
->  	return flow_offload_lookup(flow_table, &tuple);
->  }
-> =20
-> +unsigned int
-> +nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
-> +			const struct nf_hook_state *state)
-> +{
-> +	struct flow_offload_tuple_rhash *tuplehash;
-> +	struct nf_flowtable *flow_table =3D priv;
-> +	struct flow_offload_tuple *other_tuple;
-> +	enum flow_offload_tuple_dir dir;
-> +	struct nf_flowtable_ctx ctx =3D {
-> +		.in	=3D state->in,
-> +	};
-> +	struct nf_flow_xmit xmit =3D {};
-> +	struct in6_addr *ip6_daddr;
-> +	struct flow_offload *flow;
-> +	struct neighbour *neigh;
-> +	struct rtable *rt;
-> +	__be32 ip_daddr;
-> +	int ret;
-> +
-> +	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
-> +	if (!tuplehash)
-> +		return NF_ACCEPT;
-> +
-> +	if (ctx.tun.proto =3D=3D IPPROTO_IPV6)
-> +		ret =3D nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash,
-> +						   skb);
-> +	else
-> +		ret =3D nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
-> +	if (ret < 0)
-> +		return NF_DROP;
-> +	else if (ret =3D=3D 0)
-> +		return NF_ACCEPT;
-> +
-> +	if (unlikely(tuplehash->tuple.xmit_type =3D=3D FLOW_OFFLOAD_XMIT_XFRM))=
+ 	struct pagemap_scan_private *p = walk->private;
+ 	struct vm_area_struct *vma = walk->vma;
++	unsigned long categories;
+ 	int ret, err;
+ 
+-	if (!vma || !pagemap_scan_is_interesting_page(p->cur_vma_category, p))
++	if (!vma)
+ 		return 0;
+ 
+-	ret = pagemap_scan_output(p->cur_vma_category, p, addr, &end);
++	/*
++	 * An unpopulated range with no page table -- e.g. a 2MB anon THP
++	 * dropped via MADV_DONTNEED, which pagemap_page_category() never sees
++	 * -- reads as written on a uffd-wp VMA, matching the pte_none case
++	 * there. Reporting it also lets the PM_SCAN_WP_MATCHING arming below
++	 * install markers (uffd_wp_range() allocates the page table under
++	 * WP_UNPOPULATED), so the next scan sees it clean until re-written.
++	 *
++	 * hugetlb is excluded: an allocated-but-empty huge entry reads as
++	 * not-written via pagemap_hugetlb_category(), so reporting an
++	 * unallocated hugetlb hole as written here would be inconsistent
++	 * within the same VMA.
++	 */
++	categories = p->cur_vma_category;
++	if (userfaultfd_wp(vma) && !is_vm_hugetlb_page(vma))
++		categories |= PAGE_IS_WRITTEN;
++
++	if (!pagemap_scan_is_interesting_page(categories, p))
++		return 0;
++
++	ret = pagemap_scan_output(categories, p, addr, &end);
+ 	if (addr == end)
+ 		return ret;
+ 
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 550d1f2c059b..c0e45d0f7478 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -25,6 +25,10 @@
+ #include "kselftest.h"
+ #include "hugepage_settings.h"
+ 
++#ifndef MADV_COLLAPSE
++#define MADV_COLLAPSE 25
++#endif
++
+ #define PAGEMAP_BITS_ALL		(PAGE_IS_WPALLOWED | PAGE_IS_WRITTEN |	\
+ 					 PAGE_IS_FILE | PAGE_IS_PRESENT |	\
+ 					 PAGE_IS_SWAPPED | PAGE_IS_PFNZERO |	\
+@@ -1102,6 +1106,59 @@ static void unpopulated_scan_test(void)
+ 	munmap(mem, mem_size);
+ }
+ 
++/*
++ * A 2MB anon THP dropped with MADV_DONTNEED leaves a pmd_none hole with no
++ * page table, which pagemap_page_category() never sees. PAGEMAP_SCAN must
++ * still report it as written on a uffd-wp VMA, via pagemap_scan_pte_hole().
++ */
++static void unpopulated_thp_hole_test(void)
++{
++	long npages, written = 0, ret, i;
++	struct page_region regions[16];
++	char *area, *mem;
++
++	if (!hpage_size) {
++		ksft_test_result_skip("%s THP not supported\n", __func__);
++		return;
++	}
++	npages = hpage_size / page_size;
++
++	/* Get a PMD-aligned range so the range can be a single THP. */
++	area = mmap(NULL, 2 * hpage_size, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (area == MAP_FAILED)
++		ksft_exit_fail_msg("%s mmap failed\n", __func__);
++	mem = (char *)(((unsigned long)area + hpage_size - 1) & ~(hpage_size - 1));
++
++	memset(mem, 1, hpage_size);
++	if (madvise(mem, hpage_size, MADV_COLLAPSE) ||
++	    !check_huge_anon(mem, 1, hpage_size)) {
++		ksft_test_result_skip("%s could not form a THP\n", __func__);
++		munmap(area, 2 * hpage_size);
++		return;
++	}
++
++	wp_init(mem, hpage_size);
++
++	/* Drop the whole PMD: it is cleared to a pmd_none hole. */
++	if (madvise(mem, hpage_size, MADV_DONTNEED))
++		ksft_exit_fail_msg("%s MADV_DONTNEED failed\n", __func__);
++
++	ret = pagemap_ioctl(mem, hpage_size, regions, 16, 0, 0,
++			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
++	if (ret < 0)
++		ksft_exit_fail_msg("%s scan failed\n", __func__);
++	for (i = 0; i < ret; i++)
++		written += LEN(regions[i]);
++
++	ksft_test_result(written == npages,
++			 "%s pmd-hole reported written (%ld of %ld)\n",
++			 __func__, written, npages);
++
++	wp_free(mem, hpage_size);
++	munmap(area, 2 * hpage_size);
++}
++
+ int sanity_tests(void)
  {
-> +		rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> +		memset(skb->cb, 0, sizeof(struct inet_skb_parm));
-> +		IPCB(skb)->iif =3D skb->dev->ifindex;
-> +		IPCB(skb)->flags =3D IPSKB_FORWARDED;
-> +		return nf_flow_xmit_xfrm(skb, state, &rt->dst);
-> +	}
-> +
-> +	dir =3D tuplehash->tuple.dir;
-> +	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> +	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> +	ip_daddr =3D other_tuple->src_v4.s_addr;
-> +	ip6_daddr =3D &other_tuple->src_v6;
-> +
-> +	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> +				&ip6_daddr) < 0)
-> +		return NF_DROP;
-> +
-> +	switch (tuplehash->tuple.xmit_type) {
-> +	case FLOW_OFFLOAD_XMIT_NEIGH: {
-> +		struct dst_entry *dst;
-> +
-> +		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.ifid=
-x);
-> +		if (!xmit.outdev) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		if (other_tuple->tun.encap_proto =3D=3D AF_INET6 ||
-> +		    ctx.tun.proto =3D=3D IPPROTO_IPV6) {
-> +			struct rt6_info *rt6;
-> +
-> +			rt6 =3D dst_rt6_info(tuplehash->tuple.dst_cache);
-> +			neigh =3D ip_neigh_gw6(rt6->dst.dev,
-> +					     rt6_nexthop(rt6, ip6_daddr));
-> +			dst =3D &rt6->dst;
-> +		} else {
-> +			rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> +			neigh =3D ip_neigh_gw4(rt->dst.dev,
-> +					     rt_nexthop(rt, ip_daddr));
-> +			dst =3D &rt->dst;
-> +		}
-> +		if (IS_ERR(neigh)) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		xmit.dest =3D neigh->ha;
-> +		skb_dst_set_noref(skb, dst);
-> +		break;
-> +	}
-> +	case FLOW_OFFLOAD_XMIT_DIRECT:
-> +		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.out.=
-ifidx);
-> +		if (!xmit.outdev) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		xmit.dest =3D tuplehash->tuple.out.h_dest;
-> +		xmit.source =3D tuplehash->tuple.out.h_source;
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return NF_DROP;
-> +	}
-> +	xmit.tuple =3D other_tuple;
-> +	xmit.needs_gso_segment =3D tuplehash->tuple.needs_gso_segment;
-> +
-> +	return nf_flow_queue_xmit(state->net, skb, &xmit);
-> +}
-> +EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
-> +
->  unsigned int
->  nf_flow_offload_ipv6_hook(void *priv, struct sk_buff *skb,
->  			  const struct nf_hook_state *state)
-> @@ -1182,6 +1204,7 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buf=
-f *skb,
->  	struct flow_offload *flow;
->  	struct neighbour *neigh;
->  	struct rt6_info *rt;
-> +	__be32 ip_daddr;
->  	int ret;
-> =20
->  	tuplehash =3D nf_flow_offload_ipv6_lookup(&ctx, flow_table, skb);
-> @@ -1209,10 +1232,11 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_b=
-uff *skb,
->  	dir =3D tuplehash->tuple.dir;
->  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
->  	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> +	ip_daddr =3D other_tuple->src_v4.s_addr;
->  	ip6_daddr =3D &other_tuple->src_v6;
-> =20
-> -	if (nf_flow_tunnel_v6_push(state->net, skb, other_tuple,
-> -				   &ip6_daddr) < 0)
-> +	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> +				&ip6_daddr) < 0)
->  		return NF_DROP;
-> =20
->  	switch (tuplehash->tuple.xmit_type) {
-> @@ -1226,10 +1250,8 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_bu=
-ff *skb,
->  		}
->  		if (other_tuple->tun.encap_proto =3D=3D AF_INET ||
->  		    ctx.tun.proto =3D=3D IPPROTO_IPIP) {
-> -			__be32 ip_daddr =3D other_tuple->src_v4.s_addr;
->  			struct rtable *rt4;
-> =20
-> -			skb->protocol =3D htons(ETH_P_IP);
->  			rt4 =3D dst_rtable(tuplehash->tuple.dst_cache);
->  			neigh =3D ip_neigh_gw4(rt4->dst.dev,
->  					     rt_nexthop(rt4, ip_daddr));
->=20
-> --=20
-> 2.55.0
->=20
+ 	unsigned long long mem_size, vec_size;
+@@ -1610,7 +1667,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	if (!hugetlb_setup_default(4))
+ 		ksft_print_msg("HugeTLB test will be skipped\n");
+ 
+-	ksft_set_plan(118);
++	ksft_set_plan(119);
+ 
+ 	page_size = getpagesize();
+ 	hpage_size = read_pmd_pagesize();
+@@ -1790,6 +1847,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 
+ 	/* 18. Unpopulated pte scan-path consistency */
+ 	unpopulated_scan_test();
++	unpopulated_thp_hole_test();
+ 
+ 	close(pagemap_fd);
+ 	ksft_finished();
 
---NkuvXEfgx3dvazRZ
-Content-Type: application/pgp-signature; name=signature.asc
+base-commit: 9795ad96d277c4af049fe30de1cebd4e39d7bcbe
+-- 
+2.54.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCak4nlgAKCRA6cBh0uS2t
-rOh5AP9fOGNYzlTp7AR2qFPq8VS8a6YuIHmKAzD1VpsxUjVTmwD8D+8nU13rcQk+
-V1y0WA1OUphgiW0Tj3vJT8Xs7OmmRQI=
-=0lEd
------END PGP SIGNATURE-----
-
---NkuvXEfgx3dvazRZ--
