@@ -1,80 +1,151 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B678A2E7378;
-	Wed,  8 Jul 2026 20:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5173E00BD
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 20:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783542939; cv=none; b=LVVsyWxNKDA8kzqKXGAmr1i/NXHwNUiUO+ILLjk7YX5WRrKgd0rKs6S08Ifa9D8qV4y+h/i68yZGaGCBKBssgedbrCnTh+WJAISm6F8sOqnSH94rnWWKrp3wr2mdaRvZgOxKxlb5turiHfwefWun/7H7qia8dWXdQZTLLGH8nBE=
+	t=1783542954; cv=none; b=phFNNfAK2suhBtQMEnl+YDEZFqUgfLcmhvnXEUUqlrAwTk8oB3UiIxFVIFMaFyGVza+FfmCO5MHhCw108xALS2fGBYcSkE4w0/iZpMnFHJEwKbQwFUC2a0sAlKMGLu5rN5Y+lhwyFaJX0KVIJOe4r7BtXWeDG+LR7S19vK2zJWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783542939; c=relaxed/simple;
-	bh=uJ/al909Jw5KQaOQUGDEhmhbqX9/CNuZenlTkjYA8Q8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nL5C5gxBpG9EWf4Ke11xx7EvexhTVIO5fao1fRjE+JygaIoB+iEpEWg7p+KkPeHxujLB/qq9IckEFCefZb3jZfWM0IF0dJ9tpIKP7rHzm8KcLTQfxtFsLOvG+iatyI/Dg1DGjVsLdfQRCeGjDBvdVlDMWw1HmdttSmfPrZOv3ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 1B95E1A02D9;
-	Wed,  8 Jul 2026 20:35:36 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id 18E3D20038;
-	Wed,  8 Jul 2026 20:35:34 +0000 (UTC)
-Date: Wed, 8 Jul 2026 16:35:39 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, Shuah Khan
- <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests/tracing: Have trigger-hist-poll.tc use
- sched_process_exit
-Message-ID: <20260708163539.1e1d845d@gandalf.local.home>
-In-Reply-To: <20260708163436.058cc3df@gandalf.local.home>
-References: <20260708163436.058cc3df@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1783542954; c=relaxed/simple;
+	bh=3I3mp7KJKi0CVH2nIGOLczzk5TWZIUatXfsGuzb8OvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TnsS7BZ1AMxp7V2wTGPs4Qa8abHsqd6ThnJ+TboRfxIIBvjU5Yv1GYr7H+y9hG9Ga3o8hFPsdBVBaRmEr+/BbZgAT0EjfW9TQik2GXS9Veh+KLbXm2NNIY+UQOPoRuLPpTBXX3ENSLaubkAyQ07TxyBB2vKvD+AA1o40a3MoW0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ip9XoIOX; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ip9XoIOX"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-48d6c621a67so82795b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 13:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783542952; x=1784147752; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=24xTmwwfHf8GGJ8ej4fMcb3MXrY9M9ELYMVJ6Iyw0KE=;
+        b=ip9XoIOXuDEuy1U/8yUG9fQeLr/aaQuWlysRfx7lToefvfkhYNJivSwd1xNSjjl7hL
+         clKp27SMWNTJuJijxX3seC5f5CETXySWxhrbnU7I+B08k5y2pJFSb9O2t4JpDHi2FXys
+         M73WP5sC1BZigPbqC+7n+l++QsA54baGpliS1fJCymlKxIbsABlzNB/upmQKSMVbOQ7Z
+         d0xdq247GSoaPXl3IRFZAsPej6qXUU4XMA7KWlE7LHlMT/PO2pLUtvv+daJOAns6HKZM
+         852GFl9wavYTn/WJKiiIiBveGigDrHXL1Gn/S5Nv5K31K7O7cgVkcg50PH4LPLVzk0d+
+         108g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783542952; x=1784147752;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=24xTmwwfHf8GGJ8ej4fMcb3MXrY9M9ELYMVJ6Iyw0KE=;
+        b=F42Xwqh+IerEZDHO3E0H5KDA0KqszKVvaOeezmZnKlhQCjKU8uzEB8qYXsPvWmIPQy
+         jPmzl49HNtS2SnkjyQefe3dyTjMjGUcTmceIGQ9JYys7T4Zoe6zt15GPIvGfEBBToutM
+         bTFvYlWOXoCueuPnHHoXH1JN5n6H/VzCpGiIWBC9B0ZVHR5qwEZcLrRysclapWa8gO6U
+         pSweU47A4ffEk7KYTBT6Jc7rWAxZvbIAWRuWC1EKpItbP/v7uOnGPbW9idgHWW1NNWMl
+         7sFlulXwumB1SrabxQOMo7PEHMEJyaYjSbzgBaT6wETjiGowWXr6orhJ44J5JAAFym31
+         gH0g==
+X-Forwarded-Encrypted: i=1; AFNElJ81OE1UWFDnYWFR2DU5ovnfJgBAG9ALq8EK1SYh+0PQgjR+YO/dZuVdlyJAX42vX9lX46Ptbpj8gnBQ81HJiw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw34dCNQVaUlV6z9HPrOAaibLypXHVTJxj3nO/iLGeccZi74G1i
+	i3sRrZCpMSEvLMlZ76kjmR6ggZxvgz7iKfHQ2A2pTwi/BZg9BTqjNES8
+X-Gm-Gg: AfdE7cmnh3AYcmlhPMPEw3guC6do5nXrUOUEEAzmU9ZQu/t/4eSdRnajqFSfg8vYcJf
+	FNjheiNAvKQLvt5l6YkjDfu8fU3PdpYlq7uCHC9U0KckJQT5oOS/QoJ1CNDWPNEiQ8COg6pcU4V
+	9JAd5tYD67+h61IrReaTRXppws2AhuO33FtNBhXVM3WRAQA9doKpaq9yy4wbEzItkFhDMHU0YVO
+	lTiSAixKAtWbM21HsKWoqf7pA3XWG1ED6yyOGpO1D9rtmDe124KJmjH4NUDBvLUSxTa/TfK4Y/k
+	0nW7LH73Yr0AKwlI7hBdMwjjE0y61RrG6s7kU7QW3rjIIGap0nwLQV42OIIci9kGgzQAbN6uip5
+	CK+hmIhpddbhpKp7WSg22+/X5Ni79c2XpV4E5oTcrignxjrx5W953DM06hKSdsL0nisc8OxcexI
+	D1HdAynW2SKKqdvucAN4IY1fnaAfoKVX8H
+X-Received: by 2002:a05:6808:6d8a:b0:486:4212:d728 with SMTP id 5614622812f47-4a206116affmr3560063b6e.43.1783542951653;
+        Wed, 08 Jul 2026 13:35:51 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:a::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4a1afde6cffsm2535573b6e.11.2026.07.08.13.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2026 13:35:49 -0700 (PDT)
+Date: Wed, 8 Jul 2026 13:35:44 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Mina Almasry <almasrymina@google.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
+	razor@blackwall.org, daniel@iogearbox.net, matttbe@kernel.org,
+	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v4 1/3] net: devmem: allow rx-buf-size >
+ PAGE_SIZE per dmabuf binding
+Message-ID: <ak60menMXAbi/SCw@devvm29614.prn0.facebook.com>
+References: <20260701-tcpdm-large-niovs-v4-0-ca4654f37570@meta.com>
+ <20260701-tcpdm-large-niovs-v4-1-ca4654f37570@meta.com>
+ <CAHS8izNdJ1LTOr_pLjXef6Yv-=JOFPe1GcZtcbStD93Tkpy1XQ@mail.gmail.com>
+ <15e72c82-ca99-481b-bd53-744fabd503b0@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 18E3D20038
-X-Stat-Signature: xos39t5dr4rttfu48kcu3t5ttzme17ok
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/SBzRJUUXL9BDUEWPAJ2i5aX/sn2hzb3Y=
-X-HE-Tag: 1783542934-279708
-X-HE-Meta: U2FsdGVkX18bv8rWv1DfqOBVv4ss3CPLvysZcjyqSoL61XPLnkmGyOFlPFrzxharbLSpBIavWYmn+pe02r4xgL0fx6Epd6SNLkfA9NV9lVPQMIHE0zKfXbrMtxXVUUP3DneBb2oQN43hQRRNFENP4ViuMibEGjoQ2I4ZdqxfVVJCBUzXnyJlzy+eS6ueNK99pUA66kUJ1U2F/d/XdTf5okIDYBmeg2Fkc6Leq3EVFwLC+QKJ5XdDBah0YFKwt3nYYWdAVsR0tE9MVCzHfRLQyrk/miKyMJm67DGV97jLxKWhRlz61Q7X6Q/mf4dA0lsjQPMiV/jPC1Or7QevIVh/kS6xTWdKvirCGMLN1+53Bw5v7ZQrMJyb0B2CVTyZGs3R
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <15e72c82-ca99-481b-bd53-744fabd503b0@redhat.com>
 
-On Wed, 8 Jul 2026 16:34:36 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, Jul 08, 2026 at 12:50:07PM +0200, Paolo Abeni wrote:
+> On 7/7/26 10:36 PM, Mina Almasry wrote:
+> > On Wed, Jul 1, 2026 at 12:22 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
+> >>
+> >> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> >>
+> >> Every devmem dmabuf binding today hands the page_pool PAGE_SIZE niovs.
+> >> This caps a single RX descriptor at PAGE_SIZE, burning CPU on buffer
+> >> churn for large flows.
+> >>
+> >> Add a bind-time netlink attribute, NETDEV_A_DMABUF_RX_BUF_SIZE, that
+> >> lets userspace request a larger niov size. The value must be a power of
+> >> two >= PAGE_SIZE.
+> >>
+> >> Measurements
+> >> ------------
+> 
+> Checkpatch complains about this separator usage:
+> 
+> ERROR: Invalid commit separator - some tools may have problems applying this
+> #15:
+> ------------
+> 
+> Please replace or remove it in the next revision
+> 
+> >> @@ -90,16 +90,17 @@ net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> >>         struct dmabuf_genpool_chunk_owner *owner;
+> >>         unsigned long dma_addr;
+> >>         struct net_iov *niov;
+> >> -       ssize_t offset;
+> >> -       ssize_t index;
+> >> +       size_t offset;
+> >> +       size_t index;
+> >>
+> > 
+> > nit: I would keep this signed. Some of the most frustrating issues I
+> > ran into is some of the underflowing and then passing a > check or
+> > something. Although if the LLM is not complaining about this
+> > particular case, there is probably no issue with it. I also notice a
+> > lot of existing code that deals with indexes and offsets goes for
+> > signed.
+> 
+> At very least the above change should go in a separate patch, as is
+> quite unrelated from the rest.
+> 
+> /P
+> 
 
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> Currently trigger-hist-poll.tc uses sched_process_free to test the polling
-> of the histogram file. The way it does that is to run sleep, then execute
-> the poll.c code that polls on the sched_process_free for up to 4 seconds
-> to test that when sleep triggers the sched_process_free trace event, it
-> will update the histogram and wake the poll.c code up.
-> 
-> The issue is that sched_process_free trace event is called by
-> delayed_put_task_struct() which is called after a RCU grace period has
-> ended. If CONFIG_RCU_LAZY is enabled, RCU callbacks are batched together
-> and do not execute right away. This causes the delayed_put_task_struct()
-> to be called after the poll.c function finishes and it will report an
-> error that it did not wake up on the event. That's because the event
-> didn't trigger during its wait time.
-> 
-> Use sched_process_exit instead, which is called when a process exits and
-> doesn't depend on RCU callbacks that may be delayed.
-> 
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-> ---
+Sounds good, I'll drop the type change.
 
-I forgot to mention that I tested this with and without CONFIG_RCU_LAZY.
-With that config disabled, the test passes. With it enabled, it always
-fails.
-
--- Steve
+Thanks,
+Bobby
