@@ -1,100 +1,169 @@
-Received: from out198-14.us.a.mail.aliyun.com (out198-14.us.a.mail.aliyun.com [47.90.198.14])
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFCB3ABD99;
-	Wed,  8 Jul 2026 01:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866CC37C912;
+	Wed,  8 Jul 2026 01:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783472965; cv=none; b=ArvyRvwByVs0Kqi4rCZ+B7kjy1n1vl5xQLX+VRmcjzDxdC2Rm90KV+hRskKAPnlfaDqJtGtVPkVOKQT2Ty/EgcjPmMdCXzozjxJcOb6ANB23xuxgvei8I6f9TAt3HaJfg7YE9idcP5uVL+v3Mw3D9FzTu1NKnDF4mwz7XdjPoqU=
+	t=1783475689; cv=none; b=rb4gPM7CdVCfbYHGBnI7XjOGu/98DI87FuWZDkjCCDGBcFBLFS5SQBfVVuji9ZTyiE6WozueXCNSihnHSzq8SMYKu3hY0z78+65IW6W086aNqo4JkslFbniJcE9Zun9XlpbFCxVV45vpPX+tSEm6MxUtTkHYhKSDrD8JxJpBrFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783472965; c=relaxed/simple;
-	bh=4qC54mTYEWQ1nrnfnLFSqKH9SBmC/kjLOY8lESFQn4o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l5sAeZNBgY8tT9/o6flm0lXF63vpKEjd1q0CqsR5Kk8xhWoq3XMn4A4aOJcjiZMOqY8KJzgu61biuUhkGCgfFnF6D6pVTNeMlDF5mT60W3IjmHcFryL2ZIp99ufrwCMPKHnKuG8+LvWxAhWCDEo8RRiKGKlh0Ajbd9LoLVIWCD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1317011|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0477482-0.011172-0.94108;FP=7414045747534480883|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037032089;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.iFoP-Nf_1783471996;
-Received: from 172.18.22.107(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.iFoP-Nf_1783471996 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Jul 2026 08:53:18 +0800
-Message-ID: <56649d82-bce1-4fac-b639-345376d219be@open-hieco.net>
-Date: Wed, 8 Jul 2026 08:53:15 +0800
+	s=arc-20240116; t=1783475689; c=relaxed/simple;
+	bh=ezSo2s8J84oSOzaGRrRDBaT9Ou1x9hBwc6XiIatCj0E=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=U74D4GWVfTUK4Lc4eI1l5FnDtUqOnSDDpGu8tEVRX/bJhmv1ehgi2T4Qpepuep/q0PTv1h4v+8KrzRqvYKgswyZZdAAg3JnLGP6owE+llTIZOfBYUeIYwamMt727yc5rVu3qd057dLUPNz98qO2vzjUqL5x4EGnEMLpDPbSL4NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=EwsbdKqH; arc=none smtp.client-ip=162.62.57.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="EwsbdKqH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1783475674;
+	bh=Vjg9NXgO9MrQ31Pkpy/LFaNqjZrfegwoToH3rS8tBgE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=EwsbdKqHeFd2jzbMx2xiCRcfCo7bp23dz6veIPVaHcoTE6IgaGhPmDOCv17iCijW5
+	 BWh09x756mvHP4/PaUPP6Y4TxoX6AOhqv4WXjNQSsvj64XhrLLII1GoeSkO49OPsJS
+	 IvCAxRUK2kzfIspTYOPlfYqcxRH+lDdMV6MSG8pI=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.153])
+	by newxmesmtplogicsvrszc56-0.qq.com (NewEsmtp) with SMTP
+	id D9D84CCD; Wed, 08 Jul 2026 09:54:29 +0800
+X-QQ-mid: xmsmtpt1783475669t8ay06xbe
+Message-ID: <tencent_9C5F035DDB450CDC0CE3ACAE39E75E796908@qq.com>
+X-QQ-XMAILINFO: NT7uTz3cNku2LFS4dFBWF8LZvT6i1ZFD2wh7AX1UOE1SSrtvQiBaEUFIg24t7J
+	 P1K9ifEZpWrOHdBbRMb1vlX9n0oIBh2odYQDKBA/Qdd4aaR1dripdE/UlYe9WOX7YRWdii+vVA2/
+	 ZvI+hivEf8hIEGZCZOwltizqIY9hu+fQxna7CONeddUG20luSyA/wj+tHTHW9AG3sjwHbFzL31l6
+	 QZHbxVgqF4rYO/04pySFEF83/8qsQIrscdTqJqdRCq0To99Do44eZIuTHsFA3cbo6LOd0To1sk57
+	 z/U8CF1RQ605gkPEeC2XTVIuxWOw3Y94aNetlfwfgVGPNI6NB82w7hVuY4LQub+9YqvO8eSdp7CI
+	 ImLV14xwd7tS7/Nxe+NNDKfCtkAbNzklozDri8FyJUaJmtDD3611O7oDyioK2u7h3BMhNu6raeZD
+	 ZxRCj7ZbuBuFqkxpexB21kvJu0vbWGCb5vXnBRL9r6l/Z1jzas1hr42Ot75k1VgfNRvJCcVkptm9
+	 MPqHWh2C+/SEdI1SL/T4Jl3z6jR7CgePCqJme9QdTbf+AignwNKL6hj2T6s9KxxBdC25s7BoHyiJ
+	 67IYuPSlUBsOwp9Yt+lwX3u5JKQOPy/624cTr3xO16KVt80mUzl8Rr8yObwyCXfUfzNx2+cRH+ny
+	 zuqVNO0gu0M8W4TOSLYUrpSNWSH3RiqORqlmnzR0qEJ5heV5FDwAweQPNNMDVtoO04WJd/0m2pkC
+	 TLqib8s3iyKCpgBoN8EyWfReUYsaxQokxeOQvncw0FDp/R0/z8t7RhMCA12MY3Zru9gURyh81zCz
+	 yUl4q5JAmSLuTvc9aXEwsAIuJXhhrGU5UIt+W8QrHiwePigsUQVxj9BprieFLFX/9gMhUm9NAjYv
+	 /sID9hPh2QxXlyLyNbfr8Qz5RNhHCGx8TA534+8vSD1PiS0f/cbicUtAoRN625LZBs/e2TA1kUn1
+	 XC1sYBjHqgBMmRYlkIMWQ4w0XFnAkr4GuffPiBaGK8nUsD3QlmYeVUopL7Ik4gWoNNhV7uNJkE8n
+	 6Upl8G2cbsL5qLqVDFAo2VqM192SXYd2+uMoxnrz8Nfr8NI51F+a7U13uoHhP96CfGDi265g==
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+From: Yuwen Chen <ywen.chen@foxmail.com>
+To: tglx@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	broonie@kernel.org,
+	colin.i.king@gmail.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	edliaw@google.com,
+	justinstitt@google.com,
+	kernel-team@android.com,
+	licayy@foxmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	luto@mit.edu,
+	mark.rutland@arm.com,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	peterz@infradead.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com,
+	wakel@google.com,
+	ywen.chen@foxmail.com
+Subject: Re: [PATCH v8 2/2] selftests/futex: fix the failed futex_requeue test issue
+Date: Wed,  8 Jul 2026 09:54:29 +0800
+X-OQ-MSGID: <20260708015429.2690179-1-ywen.chen@foxmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87cxwys7fi.ffs@fw13>
+References: <87cxwys7fi.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: Sean Christopherson <seanjc@google.com>, Jim Mattson
- <jmattson@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
- kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, zhouyanjing@hygon.cn,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
- <ak1-vF3qUjeszzSC@google.com>
-Content-Language: en-US
-From: Tina Zhang <zhang_wei@open-hieco.net>
-In-Reply-To: <ak1-vF3qUjeszzSC@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On Wed, 08 Jul 2026 01:31:45 +0200, Thomas Gleixner wrote:
 
+> Do you have /proc/ disabled by chance or is it not accessible for the
+> test case?
+...
+> Seems to correlate with the test case failure: Connection timed out :)
 
-On 7/8/2026 6:34 AM, Yosry Ahmed wrote:
-> On Mon, Jun 29, 2026 at 08:52:03PM +0800, Tina Zhang wrote:
->> The SVM DecodeAssists feature is reported in CPUID
->> Fn8000_000A_EDX[7].  When available, hardware provides the length and bytes
->> of the intercepted instruction in the VMCB, allowing a hypervisor to consume
->> the decode information directly instead of re-decoding the instruction in
->> software on relevant VM-Exit paths.
->>
->> KVM currently does not expose DecodeAssists to nested SVM guests, even when
->> the host supports it, and does not propagate the hardware-provided
->> instruction length and bytes from VMCB02 to VMCB12 on nested VM-Exit.  This
->> leaves L1 with an incomplete virtual SVM CPUID model and prevents L1 from
->> using the same hardware-assisted decode information that KVM receives for
->> L2 exits.
->>
->> The missing virtualization was observed in practice with Hyper-V as L1,
->> where the absence of DecodeAssists prevented nested SVM from being made
->> available to L2 guests.  The fix is not Hyper-V specific.  Complete nested
->> SVM virtualization of DecodeAssists by advertising the feature to L1 when
->> supported by hardware, and by copying the decode-assist fields into VMCB12
->> on nested VM-Exit.
->>
->> Add a selftest that triggers a nested page fault from L2 and verifies that
->> L1 sees a non-zero instruction length and instruction bytes matching the
->> faulting instruction.
-> 
-> Taking a large step back from all the discussions in the other replies:
-> Is there a measurable performance improvement? Not trying to say we
-> shouldn't do this, but we should at least see what we're trading this
-> complexity for, it's obviously not straigtforward to fully virtualize
-> decode assists.
+I used the following patch to simulate the situation where the proc file
+system is not mounted on the system. The log is very similar to that of
+the current problem.
 
-I don't have a meaningful performance number yet. My current 
-understanding is that the main value of the series is more about 
-architectural completeness and enabling the Hyper-V L1 use case than 
-about a direct performance win.
+--- a/tools/testing/selftests/futex/include/futex_thread.h
++++ b/tools/testing/selftests/futex/include/futex_thread.h
+@@ -62,7 +62,8 @@ static inline int futex_wait_for_thread(struct futex_thread *t, struct __test_me
+        int res;
+ 
+        snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
+-       fp = fopen(fname, "r");
++       errno = ENOENT;
++       fp = NULL;
+        if (!fp) {
+                /* If /proc/... is not available, sleep */
+                if (errno != ENOENT)
 
-The practical issue that triggered this is Hyper-V as L1 in Hyper-V 
-appears to require DecodeAssists before enabling nested SVM for L2, so 
-the visible benefit is enabling that nested virtualization 
-configuration. Without exposing DecodeAssists to L1 Hyper-V, the nested 
-svm cases like this (L0 KVM + L1 Hyper-V + L2 KVM) would be broken, 
-because the Hyper-V doesn't think the platform have the nested 
-virtualization capability, although the hardware supports it.
+The corresponding logs are as follows:
 
-I agree that fully virtualizing DecodeAssists is not straightforward, 
-and the complexity needs to be justified.  My intent is to keep the 
-implementation biased toward propagating already-available decode state: 
-hardware VMCB02 bytes for hardware exits, emulator-provided bytes for 
-synthesized exits when available, and only using an on-demand fetch as a 
-fallback where no decoded state is available.
+  TAP version 13
+  1..2
+  # Starting 2 tests from 1 test cases.
+  #  RUN           global.requeue_single ...
+  # ../include/futex_thread.h:71:requeue_single:/proc/$PID/wchan not accessible, continue with sleep()
+  # futex_requeue.c:28:requeue_single:Expected res (-1) == 0 (0)
+  # futex_requeue.c:52:requeue_single:Expected futex_cmp_requeue(f1, 0, &f2, 0, 1, 0) (0) == 1 (1)
+  # futex_requeue.c:53:requeue_single:Expected futex_wake(&f2, 1, 0) (0) == 1 (1)
+  # futex_requeue.c:29:requeue_single:waiter failed errno 110: Connection timed out
+  # requeue_single: Test failed
+  #          FAIL  global.requeue_single
+  not ok 1 global.requeue_single
+  #  RUN           global.requeue_multiple ...
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # futex_requeue.c:28:requeue_multiple:Expected res (-1) == 0 (0)
+  # futex_requeue.c:29:requeue_multiple:waiter failed errno 110: Connection timed out
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # ../include/futex_thread.h:71:requeue_multiple:/proc/$PID/wchan not accessible, continue with sleep()
+  # futex_requeue.c:80:requeue_multiple:Expected futex_cmp_requeue(f1, 0, &f2, 3, 7, 0) (0) == 10 (10)
+  # futex_requeue.c:81:requeue_multiple:Expected futex_wake(&f2, INT_MAX, 0) (0) == 7 (7)
+  # requeue_multiple: Test failed
+  #          FAIL  global.requeue_multiple
+  not ok 2 global.requeue_multiple
+  # FAILED: 0 / 2 tests passed.
+  # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:0 error:0
 
-Thanks,
-Tina
+I suggested adding a parameter for the waiting time to the futex_wait_for_thread function.
+In this way, when the proc file system is not mounted on the system, the old solution
+can still be used.
+
+Thanks.
 
