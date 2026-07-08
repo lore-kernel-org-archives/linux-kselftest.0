@@ -1,37 +1,37 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5396C2820C6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A46F274B3C;
 	Wed,  8 Jul 2026 13:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783516269; cv=none; b=KOgg1TbZKuav2q02I3rzIc4NFBkttDHyxEKhZQ0w5AyY1c7UoEqUDG9ZiO4tKUQ8kDLceM4zRZfmtTISvDNDohv8OIe1Yxc4BE0UIjmENj9bg7TpOrztMJDwVEIyou9ZKuZxjOWi48eyZOmreIJzXj7rgvFQZ/DnskZkg6uAhXc=
+	t=1783516270; cv=none; b=qySZLc+ZGcZOBovpJDkoeoCwZ02bGo3YhhFGmBuuCSGBFUMaOrvN4/9MuPL+k8fBgt4tgVDttwTK67kL74yUKWpEpy8TXcVDQjH6FxiVQlQSnY0OFUyrwzmhFZ2HClxYrLhObMyeKoe/3IoGaBnnugP9VlfIdEJgaJHkhSLIdZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783516269; c=relaxed/simple;
-	bh=eElheoCkxhqCcnHAHuHAMFo+oy3GhkaMPcphEdBYmKA=;
+	s=arc-20240116; t=1783516270; c=relaxed/simple;
+	bh=ZMUyjLAUmLzhST28f/dCYbqU/rukUVVEL0SliRH4Yh4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k62pPY/U0XFTe7YXFUFks/UHTywi4Mogh2bJ+UBgqjzwhnYEYySnsxG2frgDBST4w81VGQv/cKncD9mhjs6tt7OMsFfprnw6jU8T05uI5omWjUgILohEFVzkIMDmd7KNjcvarP2RzFVjQnR8ojRJiwbV4T+OnZPQdN4vDnAoT58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=h6HLYRhc; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=b7JI34zHnPXPjSkr24nuUDrEqcFY7R7/rXDmk5t7oOmRyJxT2m7xAKAPCUj2guMcLLf9/G6qclySy+2pEM7ndbs8iUfoq3lDsrlreBdPGb0pm8pYlS9u19jKIl8bGqzjycykTUgEordOK2vAikSVPrIF3HT/K++45XS4tO02Xqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ATEZ8fC2; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="h6HLYRhc"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ATEZ8fC2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=QLJ99nCgFgJOv66DmJHby7F0GCFR95dwG3N7DBlvEhY=; b=h6HLYRhc0dxvufZq+X2Mo97N8q
-	H/hAfS6Y08278kkEyYqaEU6mGHAM7Sf1boT0cz51dmcCtWH2dhoklQCbMONhEA8n9gfQYfblGBb0c
-	BvgplWNRdHnTBJFdYD19bGdV3Qwrf+CDn71yTvNhlzRaaPXuWDA3pBu/TIPgTjVcvK3neKwobkLYE
-	T/cYnZyYeuqYAHGw+DweGxl75KfPt1wzmRaAON5Qf8d2ylpr5exvcH9gSN2vnHWbSPC2qcHJBi2Qr
-	h1kVJnRJM8PMn3KA71fw1wDCdTVipRgCLzj00gyoFyxEyyy8Zk+50nSUGs13auMlnlm6gAnAtsfGS
-	djHuuyYQ==;
+	bh=IU6VyyEMKqW7FQYx5w5EtAKP5xrjjXJbEWmPRyazH20=; b=ATEZ8fC2imd9GKmxaJZeV6Ib/Q
+	zUOWY0Irm6yLG5h4r5ZRWtYAl9AJnTgdb3FuwfF9wANL1XhN1X689EUK3v0uopXYVhhbofnLzzPoB
+	t83EYXJ0W8cshI6cn4oHV209XkShcGYYrlh1QtRW6ZBJOoHxTqERJ1MZ6OuCDyJHOoQoBXrVOngRV
+	3rOIncSzK4iAFLtgOET0XLk65UtmAEz3UtZPJ3FaxiuJsbOwc81bxo5FFZo+BRwAm9Oev3O2yr/En
+	FXx06rUDuX8bFg6fBrSM3l4Q0v/9cqbubYPHZPLJG7j7I9QyincWd93cWXZ/i1VawQ7Wgb/DD+5nR
+	T1FU1FrQ==;
 Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1whS3J-00BiU4-Rl; Wed, 08 Jul 2026 15:11:01 +0200
+	id 1whS3L-00BiUF-QR; Wed, 08 Jul 2026 15:11:03 +0200
 From: Luis Henriques <luis@igalia.com>
 To: Miklos Szeredi <miklos@szeredi.hu>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -42,9 +42,9 @@ Cc: fuse-devel@lists.linux.dev,
 	Matt Harvey <mharvey@jumptrading.com>,
 	kernel-dev@igalia.com,
 	Luis Henriques <luis@igalia.com>
-Subject: [RFC PATCH v1 1/5] Documentation: fuse: add document on caches being used by FUSE
-Date: Wed,  8 Jul 2026 14:11:18 +0100
-Message-ID: <20260708131122.2917-2-luis@igalia.com>
+Subject: [RFC PATCH v1 5/5] selftests/filesystems: add fuse ACLs caching test
+Date: Wed,  8 Jul 2026 14:11:22 +0100
+Message-ID: <20260708131122.2917-6-luis@igalia.com>
 In-Reply-To: <20260708131122.2917-1-luis@igalia.com>
 References: <20260708131122.2917-1-luis@igalia.com>
 Precedence: bulk
@@ -55,104 +55,425 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This new file aims at documenting the caches that are used by FUSE.  At
-the moment only the symlink and the ACLs caches are described.
+This patch adds a simple test that allows to verify that ACLs caching is
+working as expected.  I.e. it verifies that, if FUSE_POSIX_ACL flag is set,
+user-space is only called once when accessing an inode ACL and that
+subsequent accesses are cached in the kernel.
 
 Signed-off-by: Luis Henriques <luis@igalia.com>
 ---
- .../filesystems/fuse/fuse-caches.rst          | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+ .../selftests/filesystems/fuse/.gitignore     |   2 +
+ .../selftests/filesystems/fuse/Makefile       |  13 +-
+ .../selftests/filesystems/fuse/acl_fs.c       | 216 ++++++++++++++++++
+ .../selftests/filesystems/fuse/acl_test.sh    |  66 ++++++
+ .../selftests/filesystems/fuse/setgetacl.c    |  62 +++++
+ 5 files changed, 357 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/acl_fs.c
+ create mode 100755 tools/testing/selftests/filesystems/fuse/acl_test.sh
+ create mode 100644 tools/testing/selftests/filesystems/fuse/setgetacl.c
 
-diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentation/filesystems/fuse/fuse-caches.rst
+diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
+index cfdc5ca3ded4..1733ebb9d7fd 100644
+--- a/tools/testing/selftests/filesystems/fuse/.gitignore
++++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+@@ -2,3 +2,5 @@
+ fuse_mnt
+ fusectl_test
+ symlink_fs
++acl_fs
++setgetacl
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index 342da0878006..3bbf9d837e9a 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -3,8 +3,8 @@
+ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
+ 
+ TEST_GEN_PROGS := fusectl_test
+-TEST_PROGS := symlink_test.sh
+-TEST_GEN_FILES := fuse_mnt symlink_fs
++TEST_PROGS := symlink_test.sh acl_test.sh
++TEST_GEN_FILES := fuse_mnt symlink_fs acl_fs setgetacl
+ 
+ include ../../lib.mk
+ 
+@@ -18,8 +18,17 @@ ifeq ($(VAR_LDLIBS),)
+ VAR_LDLIBS := -lfuse3 -pthread
+ endif
+ 
++ACL_CFLAGS := $(shell pkg-config libacl --cflags 2>/dev/null)
++ACL_LDLIBS := $(shell pkg-config libacl --libs 2>/dev/null)
++
+ $(OUTPUT)/fuse_mnt: CFLAGS += $(VAR_CFLAGS)
+ $(OUTPUT)/fuse_mnt: LDLIBS += $(VAR_LDLIBS)
+ 
+ $(OUTPUT)/symlink_fs: CFLAGS += $(VAR_CFLAGS)
+ $(OUTPUT)/symlink_fs: LDLIBS += $(VAR_LDLIBS)
++
++$(OUTPUT)/acl_fs: CFLAGS += $(VAR_CFLAGS)
++$(OUTPUT)/acl_fs: LDLIBS += $(VAR_LDLIBS)
++
++$(OUTPUT)/setgetacl: CFLAGS += $(ACL_CFLAGS)
++$(OUTPUT)/setgetacl: LDLIBS += $(ACL_LDLIBS)
+diff --git a/tools/testing/selftests/filesystems/fuse/acl_fs.c b/tools/testing/selftests/filesystems/fuse/acl_fs.c
 new file mode 100644
-index 000000000000..52b2558b5a68
+index 000000000000..4b5e0073ab4f
 --- /dev/null
-+++ b/Documentation/filesystems/fuse/fuse-caches.rst
-@@ -0,0 +1,86 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/filesystems/fuse/acl_fs.c
+@@ -0,0 +1,216 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+===========
-+FUSE Caches
-+===========
++/*
++ * Simple filesystem to test FUSE ACLs cache
++ *
++ * This is a simple FUSE filesystem that contains a single object (a file named
++ * 'file') and which allows to set the 'system.posix_acl_access' ACL on that
++ * object.  Whenever this ACL is read from the FUSE filesystem, a counter is
++ * incremented.  And value for this counter can be obtained from reading from
++ * this file.
++ *
++ * When ACLs are being cached (the '--cache' argument was used to mount this
++ * filesystem), this counter will only be incremented the first time the ACL is
++ * read, as the kernel won't be calling into user-space again until that cache
++ * is invalidated.
++ */
++#define FUSE_USE_VERSION FUSE_MAKE_VERSION(3, 12)
 +
-+Introduction
-+============
++#include <fuse_lowlevel.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <time.h>
++#include <sys/stat.h>
++#include <sys/param.h>
++#include <sys/xattr.h>
 +
-+This document summarises the different types of caches that are used in FUSE.
-+For each cache type, it attempts to document the rules that are followed to
-+insert, validate and invalidate data into the cache.
++#define FILE	"file"
++#define TIMEOUT	86400.0f
 +
-+symlink caching
-+===============
++static struct options {
++	int cache_acls;
++} options;
 +
-+Whenever there's a link resolution request, the VFS will call into
-+``fuse_get_link()`` which will then send a ``FUSE_READLINK`` request to the
-+user-space FUSE server. However, the server can ask the kernel to cache all
-+links resolutions by setting the ``FUSE_CACHE_SYMLINKS`` flag during the
-+``FUSE_INIT`` negotiation.
++static const struct fuse_opt option_spec[] = {
++	{ "--cache", offsetof(struct options, cache_acls), 1 },
++	FUSE_OPT_END
++};
 +
-+If this flag is set, FUSE will immediately call into the VFS
-+``__page_get_link()`` from the ``->get_link()`` inode operation. The first time
-+this is done for a specific link, it will end-up sending the ``FUSE_READLINK``
-+to user-space but the link contents will then be added into page-cache. The next
-+time the link needs to be resolved, it will use the link content that is already
-+cached, and will only fallback into sending the request to use-space if the
-+folio isn't up-to-date.
++static int getxattr_counter = 0;
 +
-+ACL caching
-+===========
++static void acl_init(void *userdata, struct fuse_conn_info *conn)
++{
++	if (options.cache_acls)
++		fuse_set_feature_flag(conn, FUSE_CAP_POSIX_ACL);
++	else
++		fuse_unset_feature_flag(conn, FUSE_CAP_POSIX_ACL);
++}
 +
-+FUSE has allowed the usage of POSIX ACLs for a long time as they could be set
-+and accessed simply as extended attributes. However, it was only with the
-+addition of the ``FUSE_POSIX_ACL`` flag that ACLs started to be fully supported.
-+Without this flag, ACLs can still be set, but the VFS won't use them for
-+performing permission checks - that would be the user-space server's
-+responsibility.
++static int acl_stat(fuse_ino_t ino, struct stat *stbuf)
++{
++	char data[64];
 +
-+Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by the kernel.
-+In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be set to
-+``ACL_DONT_CACHE``.
++	stbuf->st_ino = ino;
++	switch (ino) {
++	case 1:
++		stbuf->st_mode = S_IFDIR | 0755;
++		stbuf->st_nlink = 2;
++		break;
++	case 42:
++		stbuf->st_mode = S_IFREG | 0444;
++		stbuf->st_nlink = 1;
++		stbuf->st_size = sprintf(data, "%d\n", getxattr_counter);
++		break;
++	default:
++		return -1;
++	}
 +
-+On the other hand, if ``FUSE_POSIX_ACL`` is set during ``FUSE_INIT``, when an
-+ACL is accessed the VFS layer will first check if it's already cached. If it is
-+not, FUSE ``->get_acl`` operation is called, which will eventually send a
-+user-space request. Future accesses to this inode ACL will then use the cached
-+data.
++	stbuf->st_uid = getuid();
++	stbuf->st_gid = getgid();
++	stbuf->st_atime = stbuf->st_mtime = stbuf->st_ctime = time(NULL);
 +
-+Setting an ACL in an inode, however, won't cache it immediately. It will send
-+user-space a request with the new ACL, and the FUSE server may perform some
-+modifications before storing it.
++	return 0;
++}
 +
-+On the other hand, ACLs will be removed for the cache in the following
-+situations:
++static void acl_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
++{
++	struct fuse_entry_param e;
 +
-+-  When setting an ACL in an inode and the user-space server has set the
-+   ``FUSE_POSIX_ACL`` flag, all previously cached ACLs for this inode will be
-+   invalidated.
-+-  When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` operation.
-+-  When ``->d_revalidate()`` is called for a dentry that requires a lookup (e.g.
-+   it has expired) and that lookup operation is successful.
-+-  When the VFS needs to check access rights for an inode (by calling
-+   ``->permission()``), attributes may need to be refreshed. If that happens,
-+   any cached ACLs for that inode will be invalidated.
-+-  After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is sent to
-+   user-space), the user-space server may have also updated the ACLs, so any
-+   cached ACLs for this inode are also invalidated.
-+-  While processing ``FUSE_READDIRPLUS`` and a new dentry is added (unless this
-+   dentry is already being looked up (``DCACHE_PAR_LOOKUP``))
-+-  In general, when there is the need to sent a ``FUSE_STATX`` or
-+   ``FUSE_GETATTR`` to user-space (e.g. because the attributes have expired).
-+   This may happen in the following cases:
++	memset(&e, 0, sizeof(e));
 +
-+   -  When doing an ``->llseek()`` on a file with ``SEEK_END``, ``SEEK_HOLE`` or
-+      ``SEEK_DATA``.
-+   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time (to
-+      automatically invalidate cached pages), and a buffered read
-+      (``->read_iter()``) past EOF is done on a non-passthrough file.
-+   -  When the ``FUSE_WRITEBACK_CACHE`` flag is set at ``INIT`` time, and a
-+      buffered write (``->write_iter()``) past EOF is done on a non-passthrough
-+      file.
-+   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time and the VFS
-+      needs to read a directory contents (``->iterate_shared()``) for a
-+      directory that is allowed to be cached.
++	if (parent != 1 || strcmp(name, FILE) != 0)
++		fuse_reply_err(req, ENOENT);
++	else {
++		e.ino = 42;
++		e.attr_timeout = TIMEOUT;
++		e.entry_timeout = TIMEOUT;
++		acl_stat(e.ino, &e.attr);
++		fuse_reply_entry(req, &e);
++	}
++}
++
++static void acl_getattr(fuse_req_t req, fuse_ino_t ino,
++			struct fuse_file_info *fi)
++{
++	struct stat attr;
++
++	memset(&attr, 0, sizeof(struct stat));
++	if (acl_stat(ino, &attr) == -1)
++		fuse_reply_err(req, ENOENT);
++	else
++		fuse_reply_attr(req, &attr, TIMEOUT);
++}
++
++static void acl_read(fuse_req_t req, fuse_ino_t ino, size_t size,
++		     off_t off, struct fuse_file_info *fi)
++{
++	char data[64];
++	int len;
++
++	len = sprintf(data, "%d\n", getxattr_counter);
++	if (off < len)
++		fuse_reply_buf(req, data + off, MIN(len - off, size));
++	else
++		fuse_reply_buf(req, NULL, 0);
++}
++
++char *xattr_value = NULL;
++size_t xattr_value_sz = 0;
++
++static void acl_setxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
++			 const char *value, size_t size, int flags)
++{
++	int ret = 0;
++
++	if (ino != 42)
++		ret = ENOENT;
++	else if (!strcmp(name, "system.posix_acl_access")) {
++		if (xattr_value)
++			free(xattr_value);
++		xattr_value = malloc(size);
++		memcpy(xattr_value, value, size);
++		xattr_value_sz = size;
++	} else
++		ret = ENOTSUP;
++
++	fuse_reply_err(req, ret);
++}
++
++static void acl_getxattr(fuse_req_t req, fuse_ino_t ino, const char *name,
++			 size_t size)
++{
++	if (ino != 42)
++		fuse_reply_err(req, ENOENT);
++	else if (!xattr_value || strcmp(name, "system.posix_acl_access"))
++		fuse_reply_err(req, ENODATA);
++	else if (size) {
++		fuse_reply_buf(req, xattr_value, xattr_value_sz);
++		getxattr_counter++;
++	} else
++		fuse_reply_xattr(req, xattr_value_sz);
++}
++
++static const struct fuse_lowlevel_ops acl_op = {
++	.init           = acl_init,
++	.lookup		= acl_lookup,
++	.getattr	= acl_getattr,
++	.getxattr	= acl_getxattr,
++	.setxattr	= acl_setxattr,
++	.read		= acl_read,
++};
++
++int main(int argc, char *argv[])
++{
++	struct fuse_session *se;
++	struct fuse_loop_config *config;
++	struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
++	struct fuse_cmdline_opts opts;
++	int ret = -1;
++
++	options.cache_acls = 0;
++
++	if (fuse_parse_cmdline(&args, &opts) != 0)
++		return ret;
++
++	if (opts.mountpoint == NULL) {
++		printf("usage: %s [options] <mountpoint>\n", argv[0]);
++		goto out_args;
++	}
++
++	if (fuse_opt_parse(&args, &options, option_spec, NULL) == -1)
++		goto out_args;
++
++	se = fuse_session_new(&args, &acl_op, sizeof(acl_op), NULL);
++	if (!se)
++		goto out_args;
++	if (fuse_set_signal_handlers(se))
++		goto out_session;
++	if (fuse_session_mount(se, opts.mountpoint))
++		goto out_signal;
++
++	fuse_daemonize(opts.foreground);
++	if (opts.singlethread) {
++		ret = fuse_session_loop(se);
++	} else {
++		config = fuse_loop_cfg_create();
++		fuse_loop_cfg_set_clone_fd(config, opts.clone_fd);
++		fuse_loop_cfg_set_max_threads(config, opts.max_threads);
++		ret = fuse_session_loop_mt(se, config);
++		fuse_loop_cfg_destroy(config);
++		config = NULL;
++	}
++	fuse_session_unmount(se);
++
++out_signal:
++	fuse_remove_signal_handlers(se);
++out_session:
++	fuse_session_destroy(se);
++out_args:
++	free(opts.mountpoint);
++	fuse_opt_free_args(&args);
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/filesystems/fuse/acl_test.sh b/tools/testing/selftests/filesystems/fuse/acl_test.sh
+new file mode 100755
+index 000000000000..9070c51c6784
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/acl_test.sh
+@@ -0,0 +1,66 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++exit_cleanup()
++{
++	fusermount -u ./mnt
++	rmdir ./mnt
++}
++
++assert_value ()
++{
++	if [ $1 -ne $2 ]; then
++		echo "FAILED"
++		echo $3
++		exit 1
++	fi
++}
++
++set -e
++
++trap exit_cleanup EXIT
++
++mkdir -p mnt
++
++#sudo su -
++#cd /home/miguel/kernel/linux/tools/testing/selftests/filesystems/fuse
++#dmesg -c > /dev/null
++#tmux -S ./bla -f a
++#./acl_fs -d --cache ./mnt
++#setfacl -m u:daemon:r mnt/file
++#getfacl mnt/file
++
++./acl_fs ./mnt
++
++echo -n "Testing ACLs without cache: "
++
++# set ACL
++./setgetacl ACCESS u::rw-,g::rw-,o::rw-,u:nobody:r--,m::rw- mnt/file
++
++# When symlink caching is disabled every access to a symlink is expected to
++# result in a call to user-space
++for i in $(seq 1 10); do
++	./setgetacl ACCESS mnt/file > /dev/null
++done
++
++res=$(cat ./mnt/file)
++assert_value $res $i "Got $res, expected $i"
++echo "PASSED"
++
++fusermount -u ./mnt
++
++./acl_fs --cache ./mnt
++
++echo -n "Testing ACLs with cache: "
++
++# set ACL
++./setgetacl ACCESS u::rw-,g::rw-,o::rw-,u:nobody:r--,m::rw- mnt/file
++
++# With caching enabled, there will be a single call into user-space
++for i in $(seq 1 10); do
++	./setgetacl ACCESS mnt/file > /dev/null
++done
++res=$(cat ./mnt/file)
++assert_value $res 1 "Got $res, expected 1"
++
++echo "PASSED"
+diff --git a/tools/testing/selftests/filesystems/fuse/setgetacl.c b/tools/testing/selftests/filesystems/fuse/setgetacl.c
+new file mode 100644
+index 000000000000..035e7daa1c5d
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/setgetacl.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/* Simple ACL set/get wrapper */
++
++#include <stdio.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/acl.h>
++
++int main(int argc, char *argv[])
++{
++	acl_t acl;
++	acl_type_t type;
++	char *buf;
++
++	if ((argc != 3) && (argc != 4)) {
++		fprintf(stderr, "Usage: %s <acl type> [<value>] <file>\n",
++			argv[0]);
++		fprintf(stderr, "where <acl type> is ACCESS or DEFAULT\n");
++		return 1;
++	}
++
++	if (!strcmp(argv[1], "ACCESS"))
++		type = ACL_TYPE_ACCESS;
++	else if (!strcmp(argv[1], "DEFAULT"))
++		type = ACL_TYPE_DEFAULT;
++	else {
++		fprintf(stderr, "Invalid ACL type\n");
++		return 1;
++	}
++
++	if (argc == 3) {
++		/* Get ACL */
++		acl = acl_get_file(argv[2], type);
++		if (acl == NULL) {
++			perror("acl_get_file");
++			return 1;
++		}
++		buf = acl_to_text(acl, NULL);
++		if (buf == NULL)
++			perror("acl_from_text");
++		else {
++			fprintf(stdout, "%s\n", buf);
++			acl_free(buf);
++		}
++	} else {
++		/* Set ACL */
++		acl = acl_from_text(argv[2]);
++		if (acl == NULL) {
++			perror("acl_from_text");
++			return 1;
++		}
++		if (acl_set_file(argv[3], type, acl) != 0)
++			perror("acl_set_file");
++	}
++
++	acl_free(acl);
++
++	return 0;
++}
