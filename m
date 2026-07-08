@@ -1,135 +1,213 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CA41A9F82
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 03:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A13637AA77
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 03:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783481426; cv=none; b=tZsiRtx8pQzve+vzCJ2pYu7k+39TaiA84nzmm1nc3V96ZFgyZoJX9647AwG8z4ep/vdrSeHTc1603sgv1vs/z3wx1HC23XRch/6et+lJEXP5HzgXpWdCGIbf8i+ZiDOQD/KCoHcjQEyCjKBsspaau85C40d3cLWiYrxlv+MFJKU=
+	t=1783481783; cv=none; b=VGtf6SB18G0HM6KCeh7v/++Gmjeauz6BO+iDHCg+21R1sQz7F6Ib5V4mMursOBri7uFQEAqC3C6QNWRpua6r0wVQEm7HhRiC5hNhbq2AlmVOaafBPjjmsa+8hwJHCaphH2QePdxSNNZtGx0pJiUh4MBTA/uDp9Q3ZbtRC4sC1rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783481426; c=relaxed/simple;
-	bh=4SeRtoGkiJ0YU+DChKH2d4yuDJUGWWHBlkzM6OpeQFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CmN1QQvjNwzWs9fQNh6kCxqjbEImgGxQegzcScXhCpAU/kyMvMeEHMHg1oI3dpmtuDJRejkyEnYQS7ispM654wDkT1qZzFT3+avhUTcfKr/Jw0+iJYvVzVC4ouuvzjsaegEY9qxT/s+uFwH+Ewy9mb62hoLz/tIPzYEUs2yFy20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KeC+qsRv; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783481783; c=relaxed/simple;
+	bh=j+4xd4UFPYMx31RI3oZhzKH55RnIh5Q4blgoRCeJwgw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=I4AleWxe8i9fz46sv3UGPWBH3ScL/uEsWrXanXMX9m1TzOOo/s2dxLiDbz7iwvUX2GSaxhxmfCqHWPKo3q5Acp71No3CU2nN28HiL0vCFD01BvBHbJvvwYlrSh+ws+DrCzhDEMNJEm0hzJplffNN/M2nEgzdZVw6ackYgATplsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rGsXCwUa; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KeC+qsRv"
-Message-ID: <6702d2f1-dcd4-4b68-b1ac-daa8661235a0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783481422;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hAfIYp1qkUw5nv6HMpuzXiAFinGF8d61HsxbLIT9CoI=;
-	b=KeC+qsRvkercaCeJMK0baG7g9L7IgTKrKgPQLRzPzmRJhODWz3t6hFjU3qk3vjnirrr/PY
-	LEAGp/rwAN1aiEXn0JNmpcePjQBzkbz42gsEWfYnJ5dCk0RlqCHZAPCVHFv3oTVnUGadbf
-	4XsOUfePghJg0y58QGJAtrnwoi4vNvk=
-Date: Wed, 8 Jul 2026 11:30:06 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rGsXCwUa"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c99eaa1f020so170183a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 20:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783481779; x=1784086579; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CvczDvHK6doetNfCiPotMmHZg7w7Gu6Nh6hG9FaOUNw=;
+        b=rGsXCwUaFc3GQ/AO89+VIaUcdNRBjvi+xzfgPE1mPga8Gm4pUnonzo6AtCcSensqdu
+         cSqZ7Nizc6G73BtGDDgXFLVn3k0Z9QbiyqstDlKBRBaLL/S3u3G1mkuqsq+Mgk10bI9Q
+         URy+2w5Z/wtqO2hY7YOjI3vZIzihSR8oNCjR2vx5yeemOW6HLeW251I/ieDRPfLqSiFQ
+         AcDfH9Oc6SP3pK0wcjq9h/LBYJR9bPXmYr/aNzOQb79MKQb9r00qFC7M0f1+VyvCXHJe
+         I43aJ/tHJyAKZKEHbsuhXn/BieQjQGyzrm7Palqyh2FNgrldSxTN5tSA6kzIqD9XdlE+
+         cynw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783481779; x=1784086579;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CvczDvHK6doetNfCiPotMmHZg7w7Gu6Nh6hG9FaOUNw=;
+        b=UxvGUqsw4XJqLPAUjY3Vg3drKXEPaEB08RGKqIkbA8yUfJXVgL9hRs21DYsJ9cWX0k
+         NTze44hcA3QAHQ9Nz3D3iQEnIm/D+1Rpid4t4SLA6iK2dMQ1QLp5akfLzG1iX47hd0HG
+         zNpHgvjpOKRPLzmKtdObxtoP6Bcn1g4O4bMuTF2uFOF3OdSfxN7Ph9nJSd06Ah9bcIeD
+         ObrVkXNNd+Hd1l+evyx2yFD+ZXUeBZeq7ke2xXCv7PARPjlEwnbbLg1t38yl/HhAF+JJ
+         8XiflwsdWF52PfSBOdOuzaM8Bc51jDXHvK7yh18YznAxGGRJOAcVa5JIg9LnClwTS/Du
+         zTQA==
+X-Forwarded-Encrypted: i=1; AHgh+RoW1QX5dGQug+gdySWE0eBt7zAjBNnYVjouL4ffWk/4docVayrsydlbGK1swT3g9LO9PNyPNXZh9BAhNO9q/bE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTWp8H2VY54gyLx/J//pAILF6U3CvAbKN/ltKMVUPCb615F47z
+	G3xl9L3+Tz6LCgLWFNjQahIn3NpF4bPuJfMeq3vJwp0VxFdhL4H0SQXhtbp/bceq
+X-Gm-Gg: AfdE7cm6wnZNXfmrljfNur9Y75btleXrLTG7WaAVIR9dfzhakNl0PYlzQzoZrRN/KJl
+	jwPm92z58PQf0uXmBrmBMZuZ5dorqWlryt3FE2BL40+lo37DS/k+PyNEEPBA0HXDWBvjGxk3uHD
+	k8tB/DzajBgKBugKzaBbRLCJJMWba2YPQP2Cvraym686pTJVK5j8PRxb5CqrDD463AMXDFvl1zw
+	4yzso37X/vBjOUOUByXVEJ8cJTr97uP49xDRefp1cFQhzQ+eqMeO1FBoZII0N1UVo+7HhRyj8KE
+	Svpib2ebIlZD2h9FuqJLIsDHOEyicNFyEc7Zo7Ei33kBatT4BUXVRCky6Pi5OGIp8LEhhNg8NRQ
+	1ClKtkcqoeCSgybAaO4qOJKZ6s7SIK7Er1W/u4xSWa8eCCcFXqiFVUH9xNCnLX64iuQmcpTjbse
+	DPjwGoPRdGKD05bo4udABPh6TwySwln5b9+8J3lww=
+X-Received: by 2002:a05:6a21:400d:b0:3c0:9c1b:d0b5 with SMTP id adf61e73a8af0-3c0bd2ab6e9mr593638637.64.1783481779487;
+        Tue, 07 Jul 2026 20:36:19 -0700 (PDT)
+Received: from [10.0.0.65] ([2601:647:6700:64d0::94ac])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174accae5sm21092850eec.29.2026.07.07.20.36.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2026 20:36:18 -0700 (PDT)
+From: Charlie Jenkins <thecharlesjenkins@gmail.com>
+Subject: [PATCH v3 00/17] riscv: Generate riscv instruction functions
+Date: Tue, 07 Jul 2026 20:34:23 -0700
+Message-Id: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 1/2] bpf, x86: Fix FineIBT #CP in BPF dispatcher's
- indirect-jump fallback
-Content-Language: en-US
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H . Peter Anvin" <hpa@zytor.com>, "David S . Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <c5a6bff16c0885d3ec756a1cdfb623636d0bdb4a.1783479101.git.dwindsor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23NSwqDMBCA4atI1k3JS2O76j1KkaijDmhSEgkt4
+ t0b7aKFFmbzD8w3CwngEQI5ZwvxEDGgsynkISPNYGwPFNvURDBRMM4V9RiaWKENtppNPQKVpTr
+ ladqulSSd3T10+NjJ6y31gGF2/rl/iHzbvjHF9C8WOWU0V7XSsjActL70k8Hx2LiJbFgUH6AQ/
+ A8gEqA7VnIGIIRW38C6ri/RvYl08QAAAA==
+X-Change-ID: 20260114-riscv_insn_table-38495495dfd3
+To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Nam Cao <namcao@linutronix.de>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+ Conor Dooley <conor@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <radim.krcmar@oss.qualcomm.com>, 
+ Jesse Taube <jtaubepe@redhat.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-kselftest@vger.kernel.org, 
+ Charlie Jenkins <thecharlesjenkins@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783481777; l=5854;
+ i=thecharlesjenkins@gmail.com; s=20260605; h=from:subject:message-id;
+ bh=j+4xd4UFPYMx31RI3oZhzKH55RnIh5Q4blgoRCeJwgw=;
+ b=74eWphOVMu50WOZqGrtcoyw4AkgM3MK/BcaxvTUNxBiKAeL2V+Dwf1fwKvxtcqNIRQUDzq+pX
+ UPNo3RbM/isDYKuYo8hYptrVM53U/y987iMR9BJFZ9OW4w9uDqv1I4a
+X-Developer-Key: i=thecharlesjenkins@gmail.com; a=ed25519;
+ pk=ajnnRQ98PIdwKp4HeMkq9U32okYbnh6Zb4G3o5XXvkg=
 
-On 8/7/26 10:57, David Windsor wrote:
-> commit 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call") updated
-> emit_cfi() to emit FineIBT preambles for JIT-compiled BPF programs, but
-> did not update emit_bpf_dispatcher(). When prog->bpf_func is not in the
-> dispatcher table (e.g. an XDP_REDIRECT target program in a CPUMAP or
-> DEVMAP, or BPF_PROG_TEST_RUN of an unattached prog), the dispatcher
-> still jumps directly to prog->bpf_func. Without a FineIBT caller
-> sequence, under FineIBT this raises #CP:
-> 
->   Missing ENDBR: __cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
->   ------------[ cut here ]------------
->   kernel BUG at arch/x86/kernel/cet.c:133!
->   Oops: invalid opcode: 0000 [#1] SMP NOPTI
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
->   RIP: 0010:do_kernel_cp_fault+0x126/0x130
->   Call Trace:
->    <TASK>
->    exc_control_protection+0x46/0x80
->    asm_exc_control_protection+0x2b/0x30
->   RIP: 0010:__cfi_bpf_prog_..._xdp_dispatcher_unattached+0x10/0x10
->    bpf_prog_test_run+0xda/0x1b0
->    __sys_bpf+0x70b/0x990
->    __x64_sys_bpf+0x2d/0x50
->    x64_sys_call+0x1079/0x2d40
->    do_syscall_64+0x12a/0x3c0
->    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->    </TASK>
-> 
-> To fix this, we precede the indirect jump in emit_bpf_dispatcher() with
-> the FineIBT caller sequence: load cfi_bpf_hash into %eax and subtract
-> cfi_get_offset() from the target so it enters the preamble's real ENDBR.
-> Only needed for CFI_FINEIBT.
-> 
-> Fixes: 4f9087f16651 ("x86/cfi,bpf: Fix BPF JIT call")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index de7515ea1bea..1c8249d8ca3b 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -3740,6 +3740,15 @@ static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 *image,
->  		if (err)
->  			return err;
->  
-> +		/* If running under FineIBT, enter the preamble so the following
-> +		 * indirect jump lands on a real ENDBR instead of the poison.
-> +		 */
+There is a lot of code that is manually manipulating riscv instructions.
+Constructing these headers for new instructions is time consuming and
+error prone.
 
+The first patch in this series introduces the instruction definition
+table along with a script that runs at compile time to create all of the
+associated instruction manipulation functions. The remaining patches
+migrate all of the manual instruction code to use these generated
+functions.
 
-Comment style: /* should stay at its own line.
+The instruction definition table is generated from the
+riscv-unified-db[1], an open source RVI project for instruction
+specifications. I got this table generation merged into
+riscv-unified-db, that PR can be accessed on github [2].
 
-> +		if (cfi_mode == CFI_FINEIBT) {
-> +			EMIT1_off32(0xb8, cfi_bpf_hash);	/* mov $cfi_bpf_hash, %eax */
-> +			EMIT1(add_1mod(0x48, BPF_REG_3));	/* sub rdx, cfi_get_offset() */
-> +			EMIT2_off32(0x81, add_1reg(0xE8, BPF_REG_3), cfi_get_offset());
-> +		}
+After a format update PR is merged [3], I will link the commit hash of
+the generated instructions.
 
+A lot of the validation for these changes is from running all possible
+32-bit or 16-bit integers through these functions to see that any given
+instruction will produce to expected result. I give more detail on the
+test cases in the notes of the first couple of patches.
 
-Better to emit_cfi()?
+For the KVM patches, I also introduce two test cases to ensure that the
+instruction manipulation is working as expected.
 
-Thanks,
-Leon
+[1] https://github.com/riscv/riscv-unified-db
+[2] https://github.com/riscv/riscv-unified-db/pull/1780
+[3] https://github.com/riscv/riscv-unified-db/pull/1869
 
-> +
->  		emit_indirect_jump(&prog, BPF_REG_3 /* R3 -> rdx */, image + (prog - buf));
->  
->  		*pprog = prog;
+Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+---
+Changes in v3:
+- A lot of Sashiko suggestions
+- Introduced new patch "riscv: Maintain epc on misaligned emulation
+  error" that will help with error handling
+- Use CONFIG_32BIT/CONFIG_64BIT instaed of __riscv_xlen for generated
+  instructions
+- Link to v2: https://patch.msgid.link/20260621-riscv_insn_table-v2-0-7f0810ee2274@gmail.com
+
+Changes in v2:
+- rebased on v7.1
+- I dropped the patch fixing the mmio bug in kvm because in the
+  meantime that bug has been fixed in a different patch
+- Calls to panic() for instructions not support on current hardware have
+  been changed into BUG_ON()
+- Fixed incorrect handling of branches in simulate_*()
+- Added CONFIG_RISCV_KPROBES_SIMULATE_KUNIT for more detailed
+  simulate_*() testing
+- Updated insn.tbl based on new merged in changes to riscv-unified-db
+- Link to v1: https://lore.kernel.org/r/20260407-riscv_insn_table-v1-0-54b4736a1e77@gmail.com
+
+---
+Charlie Jenkins (17):
+      riscv: Introduce instruction table generation
+      riscv: alternatives: Use generated instruction headers for patching code
+      riscv: kgdb: Use generated instruction headers
+      riscv: Add kprobes instruction simulation KUnit
+      riscv: kprobes: Use generated instruction headers
+      riscv: cfi: Use generated instruction headers
+      riscv: Maintain epc on misaligned emulation error
+      riscv: Use generated instruction headers for misaligned loads/stores
+      riscv: kvm: Use generated instruction headers for csr code
+      KVM: device: Add test device
+      KVM: riscv: selftests: Add mmio test
+      riscv: kvm: Use generated instruction headers for mmio emulation
+      riscv: kvm: Add emulated test csr
+      KVM: riscv: selftests: Add csr emulation test
+      riscv: kvm: Use generated instruction headers for csr emulation
+      riscv: kexec: Use generated instruction headers for kexec relocations
+      riscv: Remove unused instruction headers
+
+ arch/riscv/Kconfig.debug                           |    1 +
+ arch/riscv/Makefile                                |    3 +
+ arch/riscv/include/asm/Kbuild                      |    1 +
+ arch/riscv/include/asm/insn.h                      |  563 +-------
+ arch/riscv/include/asm/kvm_host.h                  |   10 +
+ arch/riscv/include/asm/kvm_vcpu_insn.h             |    5 +-
+ arch/riscv/include/asm/kvm_vcpu_test_csr.h         |   15 +
+ arch/riscv/kernel/alternative.c                    |   23 +-
+ arch/riscv/kernel/cfi.c                            |    6 +-
+ arch/riscv/kernel/kgdb.c                           |  102 +-
+ arch/riscv/kernel/machine_kexec_file.c             |   55 +-
+ arch/riscv/kernel/probes/decode-insn.c             |    7 +-
+ arch/riscv/kernel/probes/simulate-insn.c           |  253 ++--
+ arch/riscv/kernel/probes/simulate-insn.h           |    7 +-
+ arch/riscv/kernel/tests/Kconfig.debug              |   13 +
+ arch/riscv/kernel/tests/kprobes/Makefile           |    2 +
+ .../kernel/tests/kprobes/test-kprobes-simulate.c   |  250 ++++
+ arch/riscv/kernel/tests/kprobes/test-kprobes.h     |    6 +
+ arch/riscv/kernel/traps_misaligned.c               |  209 ++-
+ arch/riscv/kvm/Kconfig.debug                       |   16 +
+ arch/riscv/kvm/Makefile                            |    1 +
+ arch/riscv/kvm/vcpu_insn.c                         |  264 ++--
+ arch/riscv/kvm/vcpu_test_csr.c                     |   21 +
+ arch/riscv/tools/Makefile                          |   22 +
+ arch/riscv/tools/insn.tbl                          | 1392 ++++++++++++++++++++
+ arch/riscv/tools/insn_tbl.sh                       |  258 ++++
+ include/uapi/linux/kvm.h                           |    2 +
+ lib/Kconfig.debug                                  |    6 +
+ tools/testing/selftests/kvm/Makefile.kvm           |    2 +
+ tools/testing/selftests/kvm/riscv/csr_test.c       |  133 ++
+ tools/testing/selftests/kvm/riscv/mmio_test.c      |  189 +++
+ virt/kvm/Kconfig.debug                             |   16 +
+ virt/kvm/Makefile.kvm                              |    1 +
+ virt/kvm/kvm_main.c                                |    8 +
+ virt/kvm/mmio_test.c                               |  103 ++
+ virt/kvm/mmio_test.h                               |   18 +
+ 36 files changed, 2951 insertions(+), 1032 deletions(-)
+---
+base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
+change-id: 20260114-riscv_insn_table-38495495dfd3
+
+Best regards,
+--  
+- Charlie
 
