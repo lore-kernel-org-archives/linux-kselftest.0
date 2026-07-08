@@ -1,75 +1,102 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E87F3803C6
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jul 2026 23:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA35618AFE
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 00:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783468666; cv=none; b=X1D++balFoTNbTgRFPA3qnRtAh7DIabv7EcBv+YroaPqlaKWGuLp+ApaJaiZqIi/ZJZH56Qh0QMJGKzwiWIiVw32uyFooyDpOJVONIx826T6U55yeAdJjp0rO+PJonixnvBIQRM7vat9y208wbx4ED4lHeI2QNbhAwCt3BAFXDk=
+	t=1783469403; cv=none; b=HAvC2Is9Xq72iKqrUuop/e06GbjSJTsss2VEGCkHdVHAU4WC1+zowtkEH0G9F0c/ecxJlhQRjz9DtggHhLitg/ccd0jp6bO4AfCAiz190iSOZqG0z5ZNAfz5y/F7OSW63xyx+Jsw4Nww8qAM7AxyqeM1GCVK1tGn/6uUvFqu3Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783468666; c=relaxed/simple;
-	bh=mGH2HAOi0TNj45O+XuKLfX/dRuUkO7FRMffdRyeFGoA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ipOpCy7xeT0bG3nDPn6WPKTPAxLFQrx527vWQGi/hIdGLHodg5rnIbpBKovg9E80WtWrKBUbu4tGbMqsSmXluUDeCJUaehuhEULnLzjU4nxZvXI4dP9MVgPJrTr/A1/5e+Wv84BspvYZjfVCXGQBzr+2qlBcyh6IQKLbKmKeLgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gR39VxgR; arc=none smtp.client-ip=209.85.210.43
+	s=arc-20240116; t=1783469403; c=relaxed/simple;
+	bh=c58fnOiwEsN7lUj0DmXeQk2wWyvK7VT5Pt/ChD76cJU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IPJLHpq2BJ2M9szy+/iJca5gWCEGrfxB41BuBT/mGk82tKd2QASIquZvMyOSeTQlZ04TfcmI0WMbbxlD8HJYZk+M61sXFMTlIJsNv4RtfpsP5w6bgCKhDWFoWFmfkUGKRKVKvB/NL1Bx2ukf8EpAuiU7PvExPJiKu7fLF4ugsy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PUVlOCJr; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gR39VxgR"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7eb34c17b96so81893a34.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 16:57:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUVlOCJr"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e5d6f35c1so5862085a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 17:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783468663; x=1784073463; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783469400; x=1784074200; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=er6pkGgqUgqjUSkeHs8hENATy3dGAIc5vSPhqVqK9VM=;
-        b=gR39VxgRgKDdHRfOuUYBmh+PVE5MUGxH4RKllaera4Brdv1kj9cY7NbVVCNJdJ2Lwb
-         SV8B7h0MT0JbUAsnUkXzhjGysLkY2byyxT2Pa6Av9IA4zTWp2nSJqE1pUDlnX3WBBXPa
-         7jjGLj+Cb8ldxNZkuO18JyKO5WMI90oxI08iD8H9VByvkeWQoOdg72/A8U3egL+LjWfJ
-         n/7BtjTXuhJHjXr159c5bi9vwjicnNwc/vv7ya/BQghuqL+norRpjVNhvE9zGzLx9wh2
-         cIelL1hJx1BhF0W8AwV7zLeb5NDQdY4YcRPFcYI/Jjma8xVee/EEW1nZ612rzYKzl813
-         BmAg==
+        bh=X5YW1Vp33W4R7ClL7Q/jKwGiZ/RqUWzBm7jRzsfKd+8=;
+        b=PUVlOCJrUkLuEsI+OMjFuJKsGa+l4JaMsu7vrh3aCQKgwbb6G2N1kmia8DPz4HVdQW
+         CgRC71bA4obYOXHAljFXW1RsJygheVmQXgOH8GfoeQiCjiYwPH++jG1H2rhl4xkmgVq/
+         AeLgvgRCUMyjM1il7xFIyGlUUkZJjllO41FTEEb3q9IebTucD21lXmIUojFRckwKQoiA
+         QWDWqRcdEh9x8qJb+Qe5JJf8RXJSPMqJSEhj1tPFT0DYuT/RbEAeTxiMfhzIhZ0Cqb9K
+         6x2A6ikZZnJTYl8pqUs+JsE5QVVWuhRDYn4D6WoQay6FzWEiKoKJE/Xx8sI/9Xu/jRCN
+         2FIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783468663; x=1784073463;
+        d=1e100.net; s=20251104; t=1783469400; x=1784074200;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=er6pkGgqUgqjUSkeHs8hENATy3dGAIc5vSPhqVqK9VM=;
-        b=FXqbQC3FkzE2I+nCRPYMMufw7P7jWEBxTJ7eCK3Ew08eB2vvPa4NhtaAzhRGVBNpNU
-         zBHGVvBrued84z2a+3hyYLRKbk3i0OYab3pmjHh/nrrFMr8i/VUvhLPpO3hECf+I8CYd
-         nT/k/9lNJ0gUGpNA86G8MZSbBolrQKdgTJZ4jTl9vFlE6zT/LzikdExEIr2i3oGCm3AL
-         jdE12ihJbwz+v1nR/NqT6zoNsnFPoDRFUFVpFrtNoaOV5ouidqRHNpXBQmqhVgIcAo41
-         yynGDhJg+I21b039SLhyB4M5JJyRSz6biOYYPjSaInBTMSLfYvVwoqWsqHIwJnWuEuB5
-         loYQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9ONvH6LzSvU34OrnquK79IbH+aekd1L4LeP6yzOln2hGcpkMaesoVoTKEtM4AQcNK6s6Uwoj1bJmjTvEGFomE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUx5Erh0WHRd3yZOC87PAIyy7/S6X9VllJVRSSwhAjJAKe3Hko
-	wvR84zd9eB6GIxF2KM+zeeq+5XG4Qm0pevKsvC9NIUdrKrZ9RWUwNKAh
-X-Gm-Gg: AfdE7cmG03ydUk9ysIrjsNtnXj8f07mrmXo8m91zanmHloF4uKrmhlWYm0aNQg82P5f
-	zOpATjh5NmZAHnNTk7qkMw56SeEmJlrTrDZ0Q0BHu0oqNYz32REVjIkSGcvbfS6rKA4OnSjjjR6
-	FPVT7XKZ9npkN93AI7SlYtBwJl/Na4inVSLvh+SnkJrpYN68yAlDmJKJvP3Lr/qBIH81+lX2k+Y
-	K8RJ7P5nzL4FhQ/Ud8C/IYl+b7OXSI8uSp3z/tcwMfBhsoYpm5nK36oGx8XRJeS1a3EfNVhVamN
-	5xKgmD3CEQcNcDPBKobxc7ODXLFNOUo5fWu23tmC52VN4+FSbqsBU8Gcbce1GxVLKmZ57+swlTG
-	c0WZEuxXzWo8HMG2GwItS6jGFdDJM1YlLAOLpxd3FBUAYR9q2cjpPehbIxHXl07qlDiavqAUABm
-	m31NFWsT0=
-X-Received: by 2002:a05:6820:f023:b0:6a2:9bbd:367a with SMTP id 006d021491bc7-6a36d8735c1mr193412eaf.12.1783468662946;
-        Tue, 07 Jul 2026 16:57:42 -0700 (PDT)
-Received: from fedora ([187.142.231.66])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a36a5ef513sm763159eaf.6.2026.07.07.16.57.41
+        bh=X5YW1Vp33W4R7ClL7Q/jKwGiZ/RqUWzBm7jRzsfKd+8=;
+        b=YG/35TeIh/5+HmnuY5Be8LIt6x/Lm8UTJZhFdm2YoKT9LmT+P0ScsNrx8s/u+H5zu9
+         R3kjHQmrFe8jtcPEa0+q2ghJrBA/mluL72uTRnbT86jOstSvmDHC7QmjOOslvdoY0xDr
+         XVqYjbgEn5wZ6JDhLXANZXqQoh4IVKp5Fyj70Rh5/si5xWJDu3kCbI+/nfLKen1elEEU
+         GJfeIgg8tsvN7/KV0kkc4ouJfixRO3cmCVTQjxXwu9pcn7LnPYUiuFhaNs+PnsurY2M3
+         nnKKaN7P14e+cTApjAaIHF7qb/x+EQ/a5iuk88DRJT0BA5pOMUa2RdtnerreQI7qvpn0
+         ULJw==
+X-Forwarded-Encrypted: i=1; AHgh+RraGOJGJa26WL9xiScUFNXRICda+qA1qH67q0g5kYh3QRSuK7Dy496EZVzpOvGskxVrj2VxWWWkRV1dov2Y8gY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHl/1LZgmXtw3jGa9ZPkfKk07PGAWLq5uZI5CmCsrjUgs/v9yA
+	7OyuItrjtRHUnIU3MGv0GKBPyFHeyLLRRAs1eO4C/WbwLazr/WySAVJe
+X-Gm-Gg: AfdE7ck+3qMvyt1J+37uKGgL074Wjil1Zv61hIBrYv52pHri0Jcnr3ZhPGqC7vmuUkQ
+	yGqktT3nIG6+m7ibNQFmCxUzG2RTAkYwkBgfA93nTqIZ2FDAacJC/eZ2s2/y/Rn7Kag4b7lnoPN
+	pYrd+kemwEDywTH1diPMxVNJuanNJ3FYOcW0srRna70TTwY+mZRODiawzr8iKwio+ADeuZppVhu
+	zp9NdGZeQvcHYAS4hjIv4cnPZAWVxcAnE2XtF2WUQASatLFP9JZdfHBPm9SsgEjpcPQAWmOcUq7
+	iBGsBZMWEAJhloOwKvT3PU2XwbE9J2si9cb13xzRRt46IA9AfsaYbmEjDfIDwBlAQuKlfypyxGA
+	enicfB+x2rH2RnBppvoelG4UQSYH59cXQ8VprBZxYBnmLHjdIpEcllHwmPgPdUuay+zW08d/WFR
+	NSxw36Tn1wL/DPa24CbfEHUWyGbKowFga/ZAII2k12MhndQUD1aM+MlCkVSclo3hGLzcnSDwwqr
+	TBJ13EyODJ/gcM=
+X-Received: by 2002:a05:620a:2b4d:b0:920:6061:816e with SMTP id af79cd13be357-92ecf629324mr5879185a.7.1783469400172;
+        Tue, 07 Jul 2026 17:10:00 -0700 (PDT)
+Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e93ea5ed3sm1191281885a.29.2026.07.07.17.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 16:57:42 -0700 (PDT)
-From: Cihan Karadag <cihan.cihan@gmail.com>
-To: Bartosz Golaszewski <brgl@kernel.org>,
-	Linus Walleij <linusw@kernel.org>
-Cc: Cihan Karadag <cihan.cihan@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Bamvor Jian Zhang <bamv2005@gmail.com>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	linux-gpio@vger.kernel.org,
+        Tue, 07 Jul 2026 17:09:59 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: gpio: add gpio-cdev-uaf to .gitignore
-Date: Tue,  7 Jul 2026 17:57:05 -0600
-Message-ID: <20260707235707.1349969-1-cihan.cihan@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	linux-kernel@vger.kernel.org,
+	David Windsor <dwindsor@gmail.com>
+Subject: [PATCH v5 bpf-next 0/3] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+Date: Tue,  7 Jul 2026 20:09:53 -0400
+Message-ID: <20260708000956.46138-1-dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,29 +105,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit c7f92042d3f3 ("selftests: gpio: Add gpio-cdev-uaf tests") added
-the gpio-cdev-uaf binary to TEST_GEN_PROGS_EXTENDED but never added it
-to .gitignore. Building it with:
+Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
+extended attributes. For these LSMs, atomic labeling during inode
+creation is critical: if the inode becomes accessible before its xattr
+is set, it is briefly unlabeled, which can disrupt LSMs making policy
+decisions based on file labels.
 
-    make -C tools/testing/selftests/gpio TARGETS=gpio
+Existing LSMs solve this by setting xattrs directly in the
+inode_init_security hook, which runs before the inode becomes
+accessible. BPF LSM programs currently lack this capability because
+the hook uses an output parameter (xattr_count) that BPF programs
+cannot write to, and existing kfuncs like bpf_set_dentry_xattr
+require a dentry that isn't available until after the inode is
+accessible.
 
-leaves gpio-cdev-uaf as an untracked file.
+This series introduces the bpf_init_inode_xattr() kfunc, which takes
+the combined inode_init_security xattr context argument and claims a
+slot in it via the new security_lsmxattr_add() LSM helper.
 
-Fixes: c7f92042d3f3 ("selftests: gpio: Add gpio-cdev-uaf tests")
-Signed-off-by: Cihan Karadag <cihan.cihan@gmail.com>
----
- tools/testing/selftests/gpio/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+v5:
+  - make the kfunc non-sleepable to avoid an ext4 deadlock (sashiko)
+  - move xattr creation logic to security_lsmxattr_add() (Paul)
+  - use distinct xattr names in init_inode_xattr_slot_limit
 
-diff --git a/tools/testing/selftests/gpio/.gitignore b/tools/testing/selftests/gpio/.gitignore
-index ededb077a3a69..16f74de479f17 100644
---- a/tools/testing/selftests/gpio/.gitignore
-+++ b/tools/testing/selftests/gpio/.gitignore
-@@ -2,3 +2,4 @@
- gpio-mockup-cdev
- gpio-chip-info
- gpio-line-name
-+gpio-cdev-uaf
+v4:
+  - introduce struct lsm_xattrs in separate patch (Alexei, Paul)
+  - rename struct xattr_ctx to struct lsm_xattrs (Paul)
+  - make lsm_xattrs.xattr_count unsigned int (Paul)
+  - drop new_xattrs/xattr_count locals in
+    security_inode_init_security() (Paul)
+  - fold __bpf_init_inode_xattr() into bpf_init_inode_xattr() (Paul)
+  - drop bpf_fs_kfuncs_filter() attach-point check; rely on verifier
+    type enforcement (Alexei)
+  - drop attach-time cap; enforce slot budget in the kfunc (Alexei)
+  - allocate the combined xattr with GFP_NOFS (sashiko-bot)
+  - replace init_inode_xattr_attach_cap selftest with runtime
+    init_inode_xattr_slot_limit
+
+v3:
+  - rename struct lsm_xattr_ctx to struct xattr_ctx (Paul)
+  - increase BPF_LSM_INODE_INIT_XATTRS to 4 (Song)
+  - enforce per-hook attachment cap at attach time to prevent
+    runtime rejection (Paul)
+  - add init_inode_xattr_attach_cap selftest
+
+v2:
+  - pass the xattr state as a combined context object and drop the
+    verifier fixup path (Kumar)
+  - restrict bpf_init_inode_xattr labels to bpf.* namespace (Matt)
+  - cap bpf_init_inode_xattr() at BPF_LSM_INODE_INIT_XATTRS slots per
+    invocation (AI)
+
+David Windsor (3):
+  security: rework inode_init_security xattr handling
+  bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+  selftests/bpf: add tests for bpf_init_inode_xattr kfunc
+
+ fs/bpf_fs_kfuncs.c                            |  36 +++++
+ include/linux/bpf_lsm.h                       |   3 +
+ include/linux/evm.h                           |   9 +-
+ include/linux/lsm_hook_defs.h                 |   4 +-
+ include/linux/lsm_hooks.h                     |  16 +--
+ include/linux/security.h                      |  15 +++
+ security/bpf/hooks.c                          |   1 +
+ security/integrity/evm/evm_main.c             |   8 +-
+ security/security.c                           | 108 +++++++++++++--
+ security/selinux/hooks.c                      |   4 +-
+ security/smack/smack_lsm.c                    |  27 ++--
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |   5 +
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 124 ++++++++++++++++++
+ .../bpf/progs/test_init_inode_xattr.c         |  31 +++++
+ 14 files changed, 344 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
+
+
+base-commit: 602701718649936eb287bf6c7ecf870ec54c6f71
 -- 
-2.54.0
+2.53.0
 
