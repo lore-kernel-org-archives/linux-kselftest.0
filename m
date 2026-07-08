@@ -1,62 +1,64 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF0A349CDF
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 00:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87830345725
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 00:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783470919; cv=none; b=A8/vx5qLU/nvSrkipwen+ZbyVQ/lo/1HOg5DBE8pXAq9LUgyxkDIeZbruf9FNk9To5zD+p4AOhQEjG/qBNsCWZSlxr8N1H/gvbYdeN6xjpKRZP964DkYnFvUayGaG0aoqiiemdj8QqAUzcs+ZvP1XIiBc/5a7yz9f0o5dpfo1bg=
+	t=1783470924; cv=none; b=UWAN/cI8S3gqArsWJllOgXihIHoww0M78NQ+SKK8ROSIfYWOBqyh5cR9RG1LBz1/+mIoJdipOYwpw0n/8C6gqNjiZn024OG50j1z3eLnchnARK9I84keNqqtSrIbb8fcbZoj8p+pOvJChiv46lgKuPrdhaWPRicyIjcecAu50ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783470919; c=relaxed/simple;
-	bh=wE80HFXVS6gE6NCftxK7/wkblCU0qQfZy8JtjREzIzA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tRZHILyjEHabaom7CNTG1QomumZc7UVhULlHkqtmPYgXPpqnQj020VhLyEzCAVK5m/LYoxoCclGmcDvjVTf7FxhhrRJeYH1TESawBYznjZyqkavXFg0ONdPF22DbhtS6exA8wLLQH05500JvTh50bScbOlP+5qCfVnymgsczEg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aKS4NB4H; arc=none smtp.client-ip=209.85.167.43
+	s=arc-20240116; t=1783470924; c=relaxed/simple;
+	bh=kpQ7K618WEDQIaw+8rgkuKiLsx6rUKb4VMi31896/HY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HPHDuWoDh9ptMZUqP7y0/3tynjBp1o8oeRSlLQCqo6mfTcBZusoyeRdj6VbejzKl5dMNTjhDraJBgmbkQabSvtXAzTtQxvQGGGNe0gwb5oqhzF70Z6oxMVQIWlcE2jlXUMWOBXdes7pMNtxaJkCiRUhyL3G64V4fn1QlEOeNZHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9ivoAUG; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aKS4NB4H"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5aeb78090edso96916e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 17:35:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9ivoAUG"
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5aec201b582so120513e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jul 2026 17:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783470914; x=1784075714; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=b/YjhnuuQIuAnyjd3cyhNurxxO1PKF/cEV7P1mXkplQ=;
-        b=aKS4NB4HMNGGx065gJKx+bqwtqDevf6pw6cqVQVrnXfN6md6IJwzqABgIFxMxDR9dn
-         F6cSt1vGdttAsG1dWNyPfohmB58WGslGivoq0XqQWECJFQktV8XMKoqHYwfSIcs3gotz
-         JkaiQiwD0A0o5cJR3FmkFBw7Gqj4Fxmc3wl9+SCMUGvOvhvGYomL6oRw9Et+dNwETQ+p
-         RIHqQc/62expsGylgK4vyAoKVg+migEEgR7RXhkd56/4aULUz0cUVR3f7v/tBEwdLtEd
-         X8SI8uGe5hxKjBg7HMkEUUAsluX3FAgPXK0bZJxVwT3CF4U1iQJtYtzhYaXbI2aXZD75
-         xqFA==
+        d=gmail.com; s=20251104; t=1783470918; x=1784075718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gt8g1rhydfsnfi2/drmvhXiESWtFs9rzFECjecYmKDc=;
+        b=F9ivoAUGbUlXnjJFjNDR3nPKDPwkFYAeo+x1O7FFpJK9iUlQ+MfrDsH9RX8/n6FyLd
+         ahSadjFp9U//rHdqY8HSbSAjqv7BSLZyIjeKcxoUVkljvdwMBVhJpLJomONnFJohY1BF
+         ESAaYVI8heMqJb6UHcAUkd6I00XhnvKBF4t/ZCbJl530Yf7S/WIbqShG0gfhZafqSK29
+         gOq1Rgg81uXhs1BOqnvG73hfI1w6fMS+M607/8ObyIXujEferL8inLaW0XdSyz1Yj5x4
+         TZGEJ2uzfBQeqLaghXy2K+rdaDqsKsLiy7yR4DUmd4B+j/9XP71ehnlGA8sjQsNRzreL
+         53Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783470914; x=1784075714;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=b/YjhnuuQIuAnyjd3cyhNurxxO1PKF/cEV7P1mXkplQ=;
-        b=lXwbhwPgFN1xI/c7cnBUEdQeTJCwDynMfEFJilVgwu/sQcV3PwKjkxh7I+QgSq8wOZ
-         6QWGIgtSOiJETuuvuGoPHkX5JzVE5XtuT9Fz+RW3tqMrgyT7kiQWrZIF/vDgSIdoPg77
-         Gs2XDaPMZk21l2yTLzOJrXaDncnG+eGXS7J/P8BIHlosmZNBe1TthlVO+7EVDslNo01m
-         PCBYYhm8TgbV8g4/ouV8BOkOboEPgcRUm5itaxwpGcnfE30yU8N1Aua/5lIrAqKhTDJz
-         32aqTD12HwTxkdq5HEtBi3NNm8DFQ3OJFfhxr4/aldj9H2AN0sTvoWWFYmXTefxW09Nn
-         gddA==
-X-Forwarded-Encrypted: i=1; AHgh+RrjGLbRJ3NZRA93o7NelLWcPl8mrYTeoVXGzmRFB0vzLAEUtexnwIqx9KAAe9C8suIo5K6zXvS6wKl9UQPfr68=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzP84cAgshJiD1HNeFLbGzyjcBj/fh2KuzNI2ZaH9bD3fqLNmv4
-	JOGO++2ruLQl8HWwvSTBwFBnvf2aMu1nuIq/hQOrH18dM1vi/+98AWtZ+zd+/rKTHVjXPA==
-X-Gm-Gg: AfdE7clh37dWXxURv9xvKJuFXRnuIyXZLdsM7hGpQ1ewUpYw2BnfQ8aSfCJDJe8s7BE
-	dF0k2g+kbpt3jVyol80Cpv2DAMK9aD0ShLlyAI1hMxonogT7EIcK1ZSZ7UDJvXeGtls1HJN5Ica
-	lytHpS2x0Wajh/jSBBz5Ur/D+441TBDUN0ISvG5y4xRcIGF4S+v5nXsa1VE4cjJS4/+TPZbFvVo
-	+cS8UqZA7em/ArbwfKk6UT4JaTbWFlCY6zp3yuLgE27QMmq8hdm8Lxd9NAN2xyoIWtEJvvSF/Me
-	E8Wh4Q+atsPWLHOdajHddus1B8SXSFzA09dM5C5O0ss3SpI4UETHgSvYdti5UzNqB779kTkmOlJ
-	dhB9muF7waZtIScDGYryvINjF713soRxWj9WN2lIJrL/lcfMMPEtW1i9xSTJrcxcic9Jrp/aWoT
-	SxjWiAjllYOxukjRp508o9Pak4rklqV+c3ld6g4637tzLmCak5b6UWmxkgYCVJD31svsFhOtm5+
-	NKr
-X-Received: by 2002:a05:6512:2398:b0:5ae:ba93:9116 with SMTP id 2adb3069b0e04-5b0114381b4mr65019e87.2.1783470913891;
-        Tue, 07 Jul 2026 17:35:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783470918; x=1784075718;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gt8g1rhydfsnfi2/drmvhXiESWtFs9rzFECjecYmKDc=;
+        b=Qh4Ja+jnK9zLV6n+ttbqnBuSh8tQqVw7JAnCJVHRJcg8+rxaQV0MXAer5k/2ImYBqi
+         MlmZUmIJ+dLvJrj9RqNNir659VGTHFVJV1zoZ+2QVfqBKwmv/WlD6+hycpIzD13y7s1t
+         CLt1t+hu7O5VhOlBJmVa2feD+3BU1AqdlEj1KLeyn8QYlfDH+0ZIGn5Gyn0VtBaj8+1W
+         7QZDURq7GU6PXCTEfn90DPHNkUkAG1qgvtwjTt57BV/Va/VVuuVpp7Q2un21/duqwWkF
+         iPQ9QXIsXyW4zkcyEUYH8ScZ7TnNpHFUHJqSeLQv6g8322GnhSuNfwvKVPhYraVUmG5K
+         Gf3g==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3FsHu7v8k/kDwLrqVxAGOjOfHrWqxYCMV80pWFzK1ePzd1nP0S6jN8giPj0XJP5xS7u8Ca1mVofzeF3Yc1Ik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbEB35Z+h9yf+U3SNhlaSDSYEuRdjAGZz5V5crf9lCiOmYDNdL
+	fGtNNTlCHlI9PKnQzYUQ+wMog2ejXlRATpOrh1fk+CwfPEXvMwDjygP9
+X-Gm-Gg: AfdE7cnXUfljjhoyUhy9c1mEcXT4USyi3a/MdU1m2/VTIWKyfypbVOK587I3utbpSjJ
+	0tV1dDEMg04eWO8A5NsdA2Yfz3QrohgNLbaNu0+R/izpwalJEMRRVtr/7gDCXs/9JZhnvcOGFn5
+	JBAmpN4F5jQgm/Rw72hlkPLj45tl5eZeQoulbW00thGyDvSLQnbpIHxX+CxUd1F2oesPERr/0Nb
+	K6IzjJfiSPihaLSAo+MHTJ5qgll5Mt+gw7C0EhMaIzK74EM3bmtomB5weK9y4rxleAmj6q+Y6Th
+	EkT2e5DcHmoYYkuHkqumJ1pSRLIJhbiUdjfxd8AL7prcosHQqvLcRR1w+vZtf656GZC+N1pvMY8
+	ZkJ77BF3dIUf2yWsZeQcJSA03v95Mtroly7KPhaGtHpysFX3zc2zRxRX5oi3j+44gmPVN/iuyl4
+	wQesuh5PyObZkY5ZpG4Ua8j7e9mS76DMumT+QQVN6A97+k+Z+d6iA7/5QkRPMciEjdUWNuo7ikN
+	XjW
+X-Received: by 2002:a05:6512:4604:b0:5ae:b952:6c with SMTP id 2adb3069b0e04-5b01141c3a9mr78738e87.13.1783470917699;
+        Tue, 07 Jul 2026 17:35:17 -0700 (PDT)
 Received: from dau-home-pc.megasoftware.org ([95.139.182.77])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aed136f8dcsm4083867e87.11.2026.07.07.17.35.09
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5aed136f8dcsm4083867e87.11.2026.07.07.17.35.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 17:35:11 -0700 (PDT)
+        Tue, 07 Jul 2026 17:35:15 -0700 (PDT)
 From: Anton Danilov <littlesmilingcloud@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Willem de Bruijn <willemb@google.com>,
@@ -69,10 +71,12 @@ Cc: Willem de Bruijn <willemb@google.com>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v6 0/2] udp: fix FOU/GUE over multicast
-Date: Wed,  8 Jul 2026 03:35:02 +0300
-Message-ID: <cover.1783372173.git.littlesmilingcloud@gmail.com>
+Subject: [PATCH net-next v6 1/2] udp: fix encapsulation packet resubmit in multicast deliver
+Date: Wed,  8 Jul 2026 03:35:03 +0300
+Message-ID: <5372ccac062193147e02b991d5328a5c3fa3a85a.1783372173.git.littlesmilingcloud@gmail.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <cover.1783372173.git.littlesmilingcloud@gmail.com>
+References: <cover.1783372173.git.littlesmilingcloud@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,107 +85,94 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-UDP encapsulation (FOU, GUE) has never worked correctly with multicast
-destination addresses. When a FOU-encapsulated packet arrives at a
-multicast address, it enters __udp4_lib_mcast_deliver() /
-__udp6_lib_mcast_deliver() which call consume_skb() on packets that
-need resubmission to the inner protocol handler, silently dropping
-them instead.
+When a UDP encapsulation socket (e.g., FOU) receives a multicast
+packet, __udp4_lib_mcast_deliver() and __udp6_lib_mcast_deliver()
+call consume_skb() when udp_queue_rcv_skb() returns a positive value.
+A positive return value from udp_queue_rcv_skb() indicates that the
+encap_rcv handler (e.g., fou_udp_recv) has consumed the UDP header
+and wants the packet to be resubmitted to the IP protocol handler
+for further processing (e.g., as a GRE packet).
 
-The unicast delivery paths handle this correctly by propagating the
-return value up to ip[6]_protocol_deliver_rcu() for resubmission, but
-the multicast paths were never updated to support UDP encapsulation
-resubmit.
+The unicast paths handle this correctly by propagating the return
+value up to ip_protocol_deliver_rcu() / ip6_protocol_deliver_rcu()
+for resubmission. However, the multicast paths destroy the packet
+via consume_skb() instead of resubmitting it, causing silent packet
+loss.
 
-This causes silent packet loss for FOU/GRETAP tunnels configured with
-multicast remote addresses (both IPv4 and IPv6).
+This affects any UDP encapsulation (FOU, GUE) combined with multicast
+destination addresses.
 
-Reproducing the issue (IPv4):
+Fix this by returning the value from udp_queue_rcv_skb() when it is
+positive, matching the behavior of the corresponding unicast paths.
+Note the sign difference between IPv4 and IPv6:
 
-  ip netns add ns_a && ip netns add ns_b
-  ip link add veth0 netns ns_a type veth peer name veth1 netns ns_b
+  - IPv4: udp_unicast_rcv_skb() returns -ret, and
+    ip_protocol_deliver_rcu() resubmits when ret < 0
+    (using -ret as the protocol number).
+  - IPv6: udp6_unicast_rcv_skb() returns ret, and
+    ip6_protocol_deliver_rcu() resubmits when ret > 0
+    (using ret as the nexthdr).
 
-  ip -n ns_a addr add 10.0.0.1/24 dev veth0 && ip -n ns_a link set veth0 up
-  ip -n ns_b addr add 10.0.0.2/24 dev veth1 && ip -n ns_b link set veth1 up
+Both mcast paths now follow the same convention as their respective
+unicast paths.
 
-  ip -n ns_a route add 239.0.0.0/8 dev veth0
-  ip -n ns_b route add 239.0.0.0/8 dev veth1
+Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+Signed-off-by: Anton Danilov <littlesmilingcloud@gmail.com>
+Assisted-by: Claude:claude-opus-4-6
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+---
+ net/ipv4/udp.c | 6 ++++--
+ net/ipv6/udp.c | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-  # Disable early demux to expose the issue (otherwise it's partially masked)
-  ip netns exec ns_b sysctl -w net.ipv4.ip_early_demux=0
-
-  # Join multicast group on receiver
-  ip -n ns_b addr add 239.0.0.1/32 dev veth1 autojoin
-
-  # Sender: GRETAP with FOU encap
-  ip -n ns_a link add eoudp0 type gretap \
-      remote 239.0.0.1 local 10.0.0.1 \
-      encap fou encap-sport 4797 encap-dport 4797 key 239.0.0.1
-  ip -n ns_a link set eoudp0 up
-  ip -n ns_a addr add 192.168.99.1/24 dev eoudp0
-
-  # Receiver: FOU listener + GRETAP
-  ip netns exec ns_b ip fou add port 4797 ipproto 47
-  ip -n ns_b link add eoudp0 type gretap \
-      remote 239.0.0.1 local 10.0.0.2 \
-      encap fou encap-sport 4797 encap-dport 4797 key 239.0.0.1
-  ip -n ns_b link set eoudp0 up
-  ip -n ns_b addr add 192.168.99.2/24 dev eoudp0
-
-  # Static neigh: ARP replies can't traverse unidirectional mcast tunnel
-  recv_mac=$(ip -n ns_b link show eoudp0 | awk '/ether/{print $2}')
-  ip -n ns_a neigh add 192.168.99.2 lladdr $recv_mac dev eoudp0
-
-  # Test: ping through the FOU/GRETAP tunnel
-  ip netns exec ns_a ping -c 100 192.168.99.2
-  # -> without this patch: 0 packets received on eoudp0
-  # -> with this patch: all packets received on eoudp0
-
-IPv6 (using fou6 + ip6gretap) exhibits the same silent drop with a
-different fix (see 1/2 for the sign-of-ret difference between
-ip_protocol_deliver_rcu() and ip6_protocol_deliver_rcu()).
-
-AI assistance (Claude, claude-opus-4-6) was used during root cause
-analysis of the kernel source code (tracing the call chain from
-udp[6]_queue_rcv_skb through encap_rcv to ip[6]_protocol_deliver_rcu,
-comparing unicast/GSO/multicast paths) and during patch and selftest
-authoring.
-
-v6:
-  - selftest: use the lib.sh ktap helpers (log_test / log_test_skip)
-    so the IPv6-unavailable case reports KSFT_SKIP properly (Willem
-    de Bruijn)
-  - selftest: add CONFIG_IPV6_FOU / CONFIG_IPV6_FOU_TUNNEL to
-    tools/testing/selftests/net/config (Willem de Bruijn)
-  - selftest: speed up the ping loop with -i 0.01
-v5: https://lore.kernel.org/netdev/cover.1783218197.git.littlesmilingcloud@gmail.com/
-  - Fix IPv6 patch: return ret, not -ret (Willem de Bruijn)
-  - selftest: add IPv6 test case
-  - selftest: create the veth pair inside the namespaces (Willem de Bruijn)
-v4: https://lore.kernel.org/netdev/cover.1782945956.git.littlesmilingcloud@gmail.com/
-  - Promoted from RFC to PATCH; no functional changes since v3.
-v3: https://lore.kernel.org/netdev/cover.1777934869.git.littlesmilingcloud@gmail.com/
-  - Use return -ret instead of calling ip_protocol_deliver_rcu()
-    directly, matching the unicast path (Kuniyuki Iwashima)
-  - Replace Python packet generator with ping through a real
-    FOU/GRETAP tunnel in the selftest
-v2: https://lore.kernel.org/netdev/ad_dal164gVmImWl@dau-home-pc/
-  - Moved inline Python packet generator into a separate helper
-  - Fixed author email typo in Signed-off-by
-v1 (RFC): https://lore.kernel.org/netdev/ad7MsSJOuUU6EGwS@dau-home-pc/
-
-Anton Danilov (2):
-  udp: fix encapsulation packet resubmit in multicast deliver
-  selftests: net: add FOU multicast encapsulation resubmit test
-
- net/ipv4/udp.c                                |   6 +-
- net/ipv6/udp.c                                |   6 +-
- tools/testing/selftests/net/Makefile          |   1 +
- tools/testing/selftests/net/config            |   2 +
- .../testing/selftests/net/fou_mcast_encap.sh  | 172 ++++++++++++++++++
- 5 files changed, 183 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/net/fou_mcast_encap.sh
-
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 59248a59358c..d3ddcbfc8477 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2476,6 +2476,7 @@ static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	struct udp_hslot *hslot;
+ 	struct sk_buff *nskb;
+ 	bool use_hash2;
++	int ret;
+ 
+ 	hash2_any = 0;
+ 	hash2 = 0;
+@@ -2520,8 +2521,9 @@ static int __udp4_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	}
+ 
+ 	if (first) {
+-		if (udp_queue_rcv_skb(first, skb) > 0)
+-			consume_skb(skb);
++		ret = udp_queue_rcv_skb(first, skb);
++		if (ret > 0)
++			return -ret;
+ 	} else {
+ 		kfree_skb(skb);
+ 		__UDP_INC_STATS(net, UDP_MIB_IGNOREDMULTI);
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 392e18b97045..0910cc171776 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -949,6 +949,7 @@ static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	struct udp_hslot *hslot;
+ 	struct sk_buff *nskb;
+ 	bool use_hash2;
++	int ret;
+ 
+ 	hash2_any = 0;
+ 	hash2 = 0;
+@@ -998,8 +999,9 @@ static int __udp6_lib_mcast_deliver(struct net *net, struct sk_buff *skb,
+ 	}
+ 
+ 	if (first) {
+-		if (udpv6_queue_rcv_skb(first, skb) > 0)
+-			consume_skb(skb);
++		ret = udpv6_queue_rcv_skb(first, skb);
++		if (ret > 0)
++			return ret;
+ 	} else {
+ 		kfree_skb(skb);
+ 		__UDP6_INC_STATS(net, UDP_MIB_IGNOREDMULTI);
 -- 
 2.47.3
 
