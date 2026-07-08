@@ -1,375 +1,158 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826C83AC0F4;
-	Wed,  8 Jul 2026 15:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330C6242D9D
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 15:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783524364; cv=none; b=Y9uS7Vi85XDWcfPIJ1V03op3iGxJb7tQVxGYmTpW47YN4idSY40FDa3lwU5/U6LGkWUru8jC+CtBITqvXMRAzwFEDF0CuydMGSEzYIYjd2RBnqpwo/Ia01QxIYn8sB70lz6YHWBEvu1J6VT0xomg8rYXqELvX6oBOz71gvTDSGk=
+	t=1783524472; cv=none; b=hl6R0hzD09V8EvbmGIfVnQGFEZtX6gADJGE/cQrAVxmmX7YDOTEI0FHxMRw6GgBsulgenBpa2DLsSSV2xE03hfGilgArAC9SD6Fya72T+Mf+8J5cWMbNUIwDaOq5xrVeo20Yj+vN5o655yaUsKHphAMFZSOknLX2kdlnv0YKEd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783524364; c=relaxed/simple;
-	bh=Qc5J1mA5nOpSmBhZlE7Db0dGxN2luX9BQPzOnxfX7AA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ld7GlAOMv/R1dwBq7yJFXu5QeEj6s9i8DE6ph7oPaW3JgzMH/B7R7FoO4YTIsrAhQAtE+kHmt4y/SHDJ8gWjjfHo0x+FU7YOAPFJYwDYCZ9+u817J8uHkL9y2lKS6kKxlABiw4eFg/wcknnLrEyKCnuTDKXnznyE5awGQl6BICw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=A9oldg6t; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1783524472; c=relaxed/simple;
+	bh=6jHqdZXH2o25X4C8Qo1lrHLPG4nFtCmtPQ4a4mwT6EQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YPEfKUeByxl8qqHs2NdNYiP+38zHtysE28LAPPm062iM7KjYawyRGFDglLqI/m1P9VLLaehu5IO0jyhntZ9x1VYoPct+NS+spDvaHBYT5h35vOtn3Q3DphEngz3b6AgPXikk7M48A0DULSlO8VX+tblP7Da623fMeb0W5BBvVeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=LVH2xcyX; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="A9oldg6t"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73CB91CDD;
-	Wed,  8 Jul 2026 08:25:57 -0700 (PDT)
-Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0C2A3F905;
-	Wed,  8 Jul 2026 08:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783524361; bh=Qc5J1mA5nOpSmBhZlE7Db0dGxN2luX9BQPzOnxfX7AA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A9oldg6tDXUovM58m4WZv7a3flqXTX9FrkBp6XO1ebw9wAuCQqkt7usuayaiINyAX
-	 DN6paf1W4f4fxdob1OW7EuUdpxxDJz3/ARYbTYmaxF89h0lnJbwJr3H6HMxV9doYMJ
-	 9MhupGujSbxqhuZuhpkUJkac1YQIf0+Cd6view3E=
-Date: Wed, 8 Jul 2026 16:25:55 +0100
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Jack Thomson <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com,
-	joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-	shuah@kernel.org, corbet@lwn.net, vladimir.murzin@arm.com,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	isaku.yamahata@intel.com, Jack Thomson <jackabt@amazon.com>
-Subject: Re: [PATCH v5 2/5] KVM: arm64: Add pre_fault_memory implementation
-Message-ID: <ak5sAxb3G6hhFmBF@raptor>
-References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
- <20260612162354.73378-3-jackabt.amazon@gmail.com>
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="LVH2xcyX"
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4B8F93F581
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 15:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1783524467;
+	bh=zlcM7dYOWNF3Lzm/T73XtTla6vOUEX6Hfc1lNEV//wM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=LVH2xcyX0NZCOQz406/bopsTwmweFHcKRlCgzuDnV+fDEIJzWnY/r7DMtgTBdLnZX
+	 x6wbOWp5OFBllBbFlyVEmkbHqUZvy8D332B/0yiWnsvqKaAaYvZw+7cqj9cjOPK8V0
+	 6OgL1yq06hSULyhSiOveD51KJu+mbLYygPuE7lPEFzOTpXoWCqz941QtAW2XUrcpk9
+	 0SdnVBbhsIPWJ897KLcP0mkARLmFr2OVjej1wrOU58561QZpbHeO9LrgS512UQh8QH
+	 ys+6Sk7sQbYL6onCdPhS/CoNu4Wv18wrsu57MYKTf6t1lByIU9/+J9MRjuwsi8Q78i
+	 UzPMFK0yuAARy9Y4nAn/+IxSwuUYdKRqQXvS3+1I84afMwqntnQgtmAVSVAUXCXs8x
+	 R9W5W6VOKnn6GuhOMwzWpxJPP1iWJQl2M4HgwV9YBaAVrwimbNu0l9hOm6j/ScD0U3
+	 U3Obp7wbCpVPPJ+T7r5FJJx5VhkijtcpHWeluh7s6N+AuqzJ05WLIKFZo2dViPimGF
+	 F1UvPJ4skidwdRwo4+RvC4U0tziPLlNEZ/K/uGyH31wZuxPADVxY66oWTUjis2Qcsm
+	 Ww0XDOL2cB65+FSllWHKKTjm3x0ToxrCTg0J/3fzthnk+Nu233964Jn24CKBtS5FzE
+	 ck8YRfojoU6l/lMHXHnN3m1g=
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-493ae2a6a72so7929145e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 08:27:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783524467; x=1784129267;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zlcM7dYOWNF3Lzm/T73XtTla6vOUEX6Hfc1lNEV//wM=;
+        b=ehD3eG+ZTtE8Ecru7BZ7bLGz8wZz2HB8lj0f6YVmeeZ1XdqCMXMAOOVPHNQY79Kwce
+         OiYoY19QjDMlLWmyY8wkoBjfW4ls9e0onJxwmbiCvaZSogkbz5ARKtCxEnYtMAfhg0fx
+         ZcHApvaTJ87CvTNbuJYVMmHeCCVOADOfHT5rukq/I3Wqh3P52pGk90cZwmK8vTcKNMtT
+         QUmt8rrZoO2nLZk1JO2cAfjj8J492ysbA+dgGpjknbpENocOaVSd1kQgG8Soj3dWA+xs
+         Eol0xmpIm+MTh57VAv8zXUO4ZRwRqFmaFJkVlau1FRmFN6vddV423+Q0QVSrI0xKN99M
+         WSDg==
+X-Forwarded-Encrypted: i=1; AHgh+RqaTX8eELFBvvRbo3g8uTnQPeqDO0XamUd231Ur+cHYwsTj05EfMkY+h3DhmOl6Ar+/+s53/Nv03NLJhRsBBBg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbPhkHszg+JXZY56nrU2Wh9tRC7j9RMvsIlqJqy91Q2iNMyYLm
+	/NnpigpGTPE1X3ClhmUn6hHHLIujfIxFI3fu87RWRtIwwqKKkuxSuVrsWWw5p5FrJ1ETel3hiYD
+	ACugUao8krIQDeSCYK855CQNottEMgFR5GG6FI/roU75e9L1K63Dh42/jtoZGOiPfaPZd4IpEG1
+	stCmVpjLF2BQ==
+X-Gm-Gg: AfdE7clJkN/Gs0zrzy/rykCyPIB8k4aqLWcoCIOU/B3+ij/r9627oJYqEhOsIcwJNk/
+	hlSCixeG2Vh0Kpf3SS7vM5AMLicJHOHz7X7MKC46QHqUvwbbZ18gnzE5/Rtl5FTV4EDchCb3wO7
+	cx3EutElOTHgm0GxP2kvjL2KQ0CA/0Jb47HIIBMmVIG580DfPUg+x3F2ByE9lQgz+PA8kgh64zt
+	p8SKhEDTOM00p5Q0Vc1jkaDZnjcVziv/+w4eGnD8d9OE7i/H+x7sfTW6tnCTewiYM1Lq4ua1cK3
+	Ck/NNfQwGd/wJGAev6cGV2yElMB1YGUVSaKtHeQupni3jnlZHpksxnffGktuHD3L0UmfrDLQY9r
+	tpc5hWsg3SSaLE1HQLSrzVjjXvYHUmSsV8mBHHOoBY9UBvVpMxT5h/XQBan0ORd2sFaYm9hDVYf
+	i88C1b/Q==
+X-Received: by 2002:a05:600c:204c:b0:493:c453:6002 with SMTP id 5b1f17b1804b1-493e68eff16mr19928285e9.35.1783524466882;
+        Wed, 08 Jul 2026 08:27:46 -0700 (PDT)
+X-Received: by 2002:a05:600c:204c:b0:493:c453:6002 with SMTP id 5b1f17b1804b1-493e68eff16mr19927945e9.35.1783524466471;
+        Wed, 08 Jul 2026 08:27:46 -0700 (PDT)
+Received: from localhost (93-40-86-183.ip38.fastwebnet.it. [93.40.86.183])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0faee30sm125274565e9.10.2026.07.08.08.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2026 08:27:46 -0700 (PDT)
+From: Alessio Faina <alessio.faina@canonical.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Alessio Faina <alessio.faina@canonical.com>,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	Andrea Mayer <andrea.mayer@uniroma2.it>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH net-next] selftests/net: Skip srv6_end_dt46_l3vpn_test::host_vpn_tests if iproute2 too old
+Date: Wed,  8 Jul 2026 17:27:45 +0200
+Message-ID: <20260708152745.2430714-1-alessio.faina@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260612162354.73378-3-jackabt.amazon@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Jack,
+In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
+the End.DT46 support is not available and the host_vpn_tests test contained
+in the srv6_end_dt46_l3vpn_test.sh file is failing in some kernel backports.
+This is the result of those tests:
 
-I've been trying to review the patch, until I realised that I don't
-understand what KVM_PRE_FAULT_MEMORY is supposed to do.
+################################################################################
+TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+################################################################################
 
-Does it guarantee that, after it completes and returns to userspace, the
-address range [gpa, gpa + size] is mapped in the VM's stage 2 tables? Or
-does it guarantee that the address range was mapped at stage 2 at some
-point during the ioctl's execution, but parts, or all of it, might not be
-mapped after the ioctl completes and returns to userspace?
+    TEST: IPv6 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
 
-Thanks,
-Alex
+    TEST: IPv4 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
 
-On Fri, Jun 12, 2026 at 05:23:50PM +0100, Jack Thomson wrote:
-> From: Jack Thomson <jackabt@amazon.com>
-> 
-> Add arm64 support for KVM_PRE_FAULT_MEMORY by synthesizing a read data
-> abort and routing it through the existing stage-2 fault handlers. Treat
-> the requested GPA as an IPA in the userspace-owned VM's memslot space
-> and always target the canonical stage-2, even if the vCPU last ran with
-> a nested/shadow MMU selected.
-> 
-> If the vCPU last ran in a nested context, switch to the canonical
-> stage-2 with the vCPU put/load helpers so VMID, VNCR and shadow-MMU
-> refcount state stay consistent. Leave the switch in place for the ioctl;
-> vcpu_put() at ioctl exit drops the hw_mmu and the next vcpu_load()
-> reselects the correct MMU from vCPU state.
-> 
-> Check existing mappings with a shared page-table walk under the MMU read
-> lock, and use the resulting walk level when constructing the synthetic
-> fault. Report poisoned pages through the ioctl return path with
-> -EHWPOISON instead of also queueing SIGBUS, and use the installed
-> mapping size to advance the prefault range.
-> 
-> Advertise KVM_CAP_PRE_FAULT_MEMORY on arm64. Protected VMs remain
-> unsupported: pKVM filters the capability, and the ioctl returns
-> -EOPNOTSUPP if invoked anyway.
-> 
-> Signed-off-by: Jack Thomson <jackabt@amazon.com>
-> ---
->  Documentation/virt/kvm/api.rst |  18 +++-
->  arch/arm64/kvm/Kconfig         |   1 +
->  arch/arm64/kvm/arm.c           |   1 +
->  arch/arm64/kvm/mmu.c           | 162 +++++++++++++++++++++++++++++++++
->  4 files changed, 178 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 52bbbb553ce1..657e05656fa6 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6462,7 +6462,7 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
->  ---------------------------
->  
->  :Capability: KVM_CAP_PRE_FAULT_MEMORY
-> -:Architectures: none
-> +:Architectures: x86, arm64
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_pre_fault_memory (in/out)
->  :Returns: 0 if at least one page is processed, < 0 on error
-> @@ -6470,11 +6470,14 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
->  Errors:
->  
->    ========== ===============================================================
-> +  EAGAIN     A memslot update raced with the ioctl before any page was
-> +             processed.
->    EINVAL     The specified `gpa` and `size` were invalid (e.g. not
->               page aligned, causes an overflow, or size is zero).
->    ENOENT     The specified `gpa` is outside defined memslots.
->    EINTR      An unmasked signal is pending and no page was processed.
->    EFAULT     The parameter address was invalid.
-> +  EHWPOISON  A poisoned host page was encountered.
->    EOPNOTSUPP Mapping memory for a GPA is unsupported by the
->               hypervisor, and/or for the current vCPU state/mode.
->    EIO        unexpected error conditions (also causes a WARN)
-> @@ -6494,7 +6497,14 @@ Errors:
->  KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
->  for the current vCPU state.  KVM maps memory as if the vCPU generated a
->  stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
-> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
-> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
-> +Accessed.  On arm64, newly created stage-2 PTEs are marked Accessed.
-> +
-> +On arm64, `gpa` is interpreted as an IPA in the userspace-owned VM's
-> +memslot address space.  If the vCPU most recently ran a nested guest, KVM
-> +still targets the VM's canonical stage-2, and does not interpret `gpa` as
-> +a nested guest IPA or target the nested/shadow stage-2 selected by the
-> +vCPU's last run state.
->  
->  In the case of confidential VM types where there is an initial set up of
->  private guest memory before the guest is 'finalized'/measured, this ioctl
-> @@ -6507,9 +6517,9 @@ case, the ioctl can be called in parallel.
->  
->  When the ioctl returns, the input values are updated to point to the
->  remaining range.  If `size` > 0 on return, the caller can just issue
-> -the ioctl again with the same `struct kvm_map_memory` argument.
-> +the ioctl again with the same `struct kvm_pre_fault_memory` argument.
->  
-> -Shadow page tables cannot support this ioctl because they
-> +On x86, shadow page tables cannot support this ioctl because they
->  are indexed by virtual address or nested guest physical address.
->  Calling this ioctl when the guest is using shadow page tables (for
->  example because it is running a nested guest with nested page tables)
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index 449154f9a485..6b89262e8ba7 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -24,6 +24,7 @@ menuconfig KVM
->  	select HAVE_KVM_CPU_RELAX_INTERCEPT
->  	select KVM_MMIO
->  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> +	select KVM_GENERIC_PRE_FAULT_MEMORY
->  	select VIRT_XFER_TO_GUEST_WORK
->  	select KVM_VFIO
->  	select HAVE_KVM_DIRTY_RING_ACQ_REL
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 9453321ef8c6..dcb92bee13af 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -392,6 +392,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_COUNTER_OFFSET:
->  	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
->  	case KVM_CAP_ARM_SEA_TO_USER:
-> +	case KVM_CAP_PRE_FAULT_MEMORY:
->  		r = 1;
->  		break;
->  	case KVM_CAP_SET_GUEST_DEBUG2:
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index c720f07cb82e..4bf048bbcf8b 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1571,6 +1571,8 @@ struct kvm_s2_fault_desc {
->  	struct kvm_s2_trans	*nested;
->  	struct kvm_memory_slot	*memslot;
->  	unsigned long		hva;
-> +	unsigned long		*page_size;
-> +	bool			prefault;
->  };
->  
->  static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
-> @@ -1882,6 +1884,13 @@ static int kvm_s2_fault_pin_pfn(const struct kvm_s2_fault_desc *s2fd,
->  				      &s2vi->map_writable, &s2vi->page);
->  	if (unlikely(is_error_noslot_pfn(s2vi->pfn))) {
->  		if (s2vi->pfn == KVM_PFN_ERR_HWPOISON) {
-> +			/*
-> +			 * When prefaulting, report the poison via -EHWPOISON
-> +			 * only; don't also queue a SIGBUS as the run path
-> +			 * does for the faulting vCPU thread.
-> +			 */
-> +			if (s2fd->prefault)
-> +				return -EHWPOISON;
->  			kvm_send_hwpoison_signal(s2fd->hva, __ffs(s2vi->vma_pagesize));
->  			return 0;
->  		}
-> @@ -2053,6 +2062,9 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
->  	kvm_release_faultin_page(kvm, s2vi->page, !!ret, writable);
->  	kvm_fault_unlock(kvm);
->  
-> +	if (s2fd->page_size && !ret)
-> +		*s2fd->page_size = mapping_size;
-> +
->  	/*
->  	 * Mark the page dirty only if the fault is handled successfully,
->  	 * making sure we adjust the canonical IPA if the mapping size has
-> @@ -2757,3 +2769,153 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
->  
->  	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled, now_enabled);
->  }
-> +
-> +/*
-> + * Prefaulting always targets the canonical stage-2.  If the vCPU last ran
-> + * in a nested context, swap in the canonical MMU via the vCPU put/load
-> + * helpers so that preemption, VMID, VNCR fixmap and shadow-MMU refcount
-> + * state stay consistent.
-> + *
-> + * The swap is deliberately not undone: nothing runs in between the
-> + * per-page invocations of kvm_arch_vcpu_pre_fault_memory() except the
-> + * generic prefault loop, and the vcpu_put() at ioctl exit discards
-> + * vcpu->arch.hw_mmu anyway (see kvm_vcpu_put_hw_mmu()), so the next
-> + * vcpu_load() re-derives the correct MMU from the vCPU's context.  If the
-> + * prefault task is preempted in the meantime, kvm_vcpu_put_hw_mmu()
-> + * keeps the canonical MMU in place for the reload.  Leaving the swap in
-> + * place also bounds the cost to at most one put/load pair per ioctl,
-> + * rather than two pairs per prefaulted page.
-> + */
-> +static void kvm_pre_fault_load_canonical_mmu(struct kvm_vcpu *vcpu)
-> +{
-> +	if (!vcpu_has_nv(vcpu) || vcpu->arch.hw_mmu == &vcpu->kvm->arch.mmu)
-> +		return;
-> +
-> +	preempt_disable();
-> +	kvm_arch_vcpu_put(vcpu);
-> +	vcpu->arch.hw_mmu = &vcpu->kvm->arch.mmu;
-> +	kvm_arch_vcpu_load(vcpu, smp_processor_id());
-> +	preempt_enable();
-> +}
-> +
-> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> +				    struct kvm_pre_fault_memory *range)
-> +{
-> +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
-> +	struct kvm_vcpu_fault_info fault_backup = *fault_info;
-> +	s8 walk_level = KVM_PGTABLE_LAST_LEVEL;
-> +	unsigned long page_size = PAGE_SIZE;
-> +	struct kvm_memory_slot *memslot;
-> +	phys_addr_t gpa = range->gpa;
-> +	struct kvm_pgtable *pgt;
-> +	phys_addr_t end;
-> +	kvm_pte_t pte;
-> +	hva_t hva;
-> +	gfn_t gfn;
-> +	long ret;
-> +
-> +	if (vcpu_is_protected(vcpu))
-> +		return -EOPNOTSUPP;
-> +
-> +	/*
-> +	 * Interpret range->gpa in the userspace-owned VM's IPA space, not in
-> +	 * any nested guest IPA space that may have been active on the vCPU's
-> +	 * last run.  Always target the canonical stage-2.
-> +	 */
-> +	kvm_pre_fault_load_canonical_mmu(vcpu);
-> +
-> +	if (gpa >= kvm_phys_size(vcpu->arch.hw_mmu)) {
-> +		ret = -ENOENT;
-> +		goto out;
-> +	}
-> +
-> +	gfn = gpa_to_gfn(gpa);
-> +	memslot = gfn_to_memslot(vcpu->kvm, gfn);
-> +	if (!memslot) {
-> +		ret = -ENOENT;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * A racing memslot deletion or move installs an invalid slot before
-> +	 * zapping stage-2.  Ask userspace to retry once the update settles.
-> +	 */
-> +	if (memslot->flags & KVM_MEMSLOT_INVALID) {
-> +		ret = -EAGAIN;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * pKVM stage-2 mappings aren't directly walkable from the host; let
-> +	 * the fault path handle both new and existing mappings.
-> +	 */
-> +	if (!is_protected_kvm_enabled()) {
-> +		pgt = vcpu->arch.hw_mmu->pgt;
-> +		scoped_guard(read_lock, &vcpu->kvm->mmu_lock) {
-> +			ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &walk_level,
-> +						   KVM_PGTABLE_WALK_SHARED);
-> +		}
-> +		if (ret)
-> +			goto out;
-> +
-> +		if (kvm_pte_valid(pte)) {
-> +			page_size = kvm_granule_size(walk_level);
-> +			if (!(pte & KVM_PTE_LEAF_ATTR_LO_S2_AF))
-> +				handle_access_fault(vcpu, gpa);
-> +			goto out_success;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Synthesize a read translation fault for the canonical IPA, at the
-> +	 * level where the stage-2 walk currently ends (the last level under
-> +	 * pKVM, where stage-2 isn't walkable from the host).
-> +	 */
-> +	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
-> +		ESR_ELx_IL | ESR_ELx_FSC_FAULT_L(walk_level);
-> +	fault_info->hpfar_el2 = HPFAR_EL2_NS |
-> +		FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
-> +
-> +	struct kvm_s2_fault_desc s2fd = {
-> +		.vcpu		= vcpu,
-> +		.fault_ipa	= gpa,
-> +		.nested		= NULL,
-> +		.memslot	= memslot,
-> +		.page_size	= &page_size,
-> +		.prefault	= true,
-> +	};
-> +
-> +	/*
-> +	 * As in the run path, -EAGAIN from the abort handlers is treated as
-> +	 * progress: either a parallel fault installed the mapping, or a racing
-> +	 * invalidation is in flight and the next access will refault.
-> +	 */
-> +	if (kvm_slot_has_gmem(memslot)) {
-> +		ret = gmem_abort(&s2fd);
-> +	} else {
-> +		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-> +		if (kvm_is_error_hva(hva)) {
-> +			ret = -EFAULT;
-> +			goto out;
-> +		}
-> +
-> +		s2fd.hva = hva;
-> +		ret = user_mem_abort(&s2fd);
-> +	}
-> +
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +out_success:
-> +	end = ALIGN_DOWN(gpa, page_size) + page_size;
-> +	ret = min_t(u64, range->size, end - gpa);
-> +out:
-> +	/*
-> +	 * Restore the synthetic fault state so a subsequent KVM_RUN does not
-> +	 * observe it. kvm_handle_mmio_return() runs before guest entry can
-> +	 * refresh fault.esr_el2 from hardware, so leaving the synthetic ESR
-> +	 * in place would corrupt the completion of a pending MMIO exit.
-> +	 */
-> +	*fault_info = fault_backup;
-> +	return ret;
-> +}
-> -- 
-> 2.43.0
-> 
-> 
+    TEST: IPv6 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
+
+    TEST: IPv6 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
+
+    TEST: IPv6 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
+
+To amend this, check the current running iproute2 supports the required
+feature and, if not, just skip the test to avoid a failure.
+
+
+Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+---
+ .../selftests/net/srv6_end_dt46_l3vpn_test.sh       | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+index a5e959a080bb..406c6a3d253e 100755
+--- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+@@ -510,12 +510,15 @@ host2gateway_tests()
+ host_vpn_tests()
+ {
+ 	log_section "SRv6 VPN connectivity test among hosts in the same tenant"
++	if ip route add help 2>&1 | grep -q -i End.DT46; then
++		check_and_log_hs_connectivity 1 2 100
++		check_and_log_hs_connectivity 2 1 100
+ 
+-	check_and_log_hs_connectivity 1 2 100
+-	check_and_log_hs_connectivity 2 1 100
+-
+-	check_and_log_hs_connectivity 3 4 200
+-	check_and_log_hs_connectivity 4 3 200
++		check_and_log_hs_connectivity 3 4 200
++		check_and_log_hs_connectivity 4 3 200
++	else
++		echo "SKIP: SRv6 End.DT46 is unsupported by the installed iproute2 version"
++	fi
+ }
+ 
+ host_vpn_isolation_tests()
+-- 
+2.43.0
+
