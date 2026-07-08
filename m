@@ -1,31 +1,33 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59A93E3C4F;
-	Wed,  8 Jul 2026 09:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3973FC5A5;
+	Wed,  8 Jul 2026 09:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783502061; cv=none; b=FQY7GcGdm78J7HmtXJj+OOOy89dCP4kXms1BjRhlm70idnmFwB87KygRaFwPv/Iey3LhaZYJpivaSO8iZQEPS+Wpl/TdSHLK+q5NCMc5H3NtI39BQlqetXPNVvUcs5LFAn9x7bnWgiPrVlhbZehFYb7ApGTKRo8dmL0ZjmP7vX0=
+	t=1783502705; cv=none; b=dsORfnNnstVG9ghMWOilK+xRVxzCKY8i2l8omsAFpZO0Je7kH447UP3myxXoG5I+PMN2eQEFcKfs8SIvWM+Omylku6Hxb4rlBerB/HArIYJzHpy8/t5jX+9GbOJDM007NunytxxpWRyTUmklAaEhIFreL7loKPJaa7xYjxoRIUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783502061; c=relaxed/simple;
-	bh=nQTJehsrNjH/qX4EOyzAlTO+RBHcG/yjYW9gYuuUFIA=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=To7PLUTDovCA5wlF5oLc3Gaz+QTJ6bp/iFKfg2G8nN24Vwm3+LYN5emhKJ903iY4Xl2VWiJL47D4cshKzrCwVWEjh3AxhtIsblSP7biJro8PnLuU63zfwybVbMlPsxTihbC6AB5y3UrDnrl5UsAkQSFPJLxSVv2eWoIihqCWABA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SDfjEVLN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783502705; c=relaxed/simple;
+	bh=FbcaszoG3ccSi2fUtQzilA+nmkbiUWWnKM46qc2It2w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=h3h+hLYUna364DIx/TPwbu2cTJS+1qeTw0SGDdisSICCqoiHdaws9yFTWK2joDWwrvGelzWhKNpAAIgQVIvnMRMgkhv8fUL3Iwuw9JjQZHYLIZodKtGkoOy+KDYz4t3dmHKZeuHs8N8RYoU6PXuTYnrS2c1BkvVDQu8NfRyZilg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YtEe2JQa; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SDfjEVLN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 511C11F000E9;
-	Wed,  8 Jul 2026 09:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783502060;
-	bh=AXXHqKxP6hZn4M2zHTw2/0ZaLNmtz5Sx6sgLJ6b0uwI=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=SDfjEVLNuk28Tl68PJynCZdX2Kqgk26eXL56PM60LwXTOto0CWSTAjFNmFJ1ICrYq
-	 vqKrIquj1RTSThYPAkkuZKFMEJJILzNSscRunJ+pgIFSSh08YkyGtgsH+nZaKdzukn
-	 iMDAjHrz9fsaEewNzgyTNI9QMu4QTS+qbl27g0QQgeEfdyLidSY4tBRWjVFvII4m6L
-	 Mg/MUO6Uw6puC7rRRegBzohlNiUOQs2CdfsxP6+YUfd7hMmehUFo1qX1cTgCMUcWIL
-	 wqzswdBa2dXxFUhqGkvLSZImHcXAPEpFi5jpruDOtR2AEu7JW3YD54smjQflkIk7t1
-	 p8lCaVreY3Ppg==
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="YtEe2JQa"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85C691E5E;
+	Wed,  8 Jul 2026 02:24:58 -0700 (PDT)
+Received: from e142502.arm.com (unknown [10.57.31.65])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E8FE3F85F;
+	Wed,  8 Jul 2026 02:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1783502702; bh=FbcaszoG3ccSi2fUtQzilA+nmkbiUWWnKM46qc2It2w=;
+	h=From:Date:Subject:To:Cc:From;
+	b=YtEe2JQaueKBOD88qFZsp9kODyad6uiVEdCiWncXS6vGcoy0Db1lC4UADVfvs5cEa
+	 n6fkekCRELNRoAEkic8cRdoHLPou06/mbMQ69QmO4N8dF0FV0yboa8+q9w9c1it3tC
+	 q5qFnMxGmK790tCGa5Uve+K5CE6e6XtRpKBWLNgs=
+From: Arthur Cassegrain <arthur.cassegrain@arm.com>
+Date: Wed, 08 Jul 2026 11:24:43 +0200
+Subject: [PATCH] selftests/filesystems: include fcntl.h in fclog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -33,84 +35,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-From: Christian Brauner <brauner@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, david.laight.linux@gmail.com, 
- jack@suse.cz, jannh@google.com, kees@kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, 
- shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
-In-Reply-To: <DJSPBVXTF02G.3SKLB9EO89GPT@gmail.com>
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
- <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
- <20260707-wortreich-kanal-zensor-9386ef4f38f7@brauner>
- <DJSPBVXTF02G.3SKLB9EO89GPT@gmail.com>
-Date: Wed, 08 Jul 2026 11:14:09 +0200
-Message-Id: <20260708-welken-dystopie-ertrugen-56a3b5f7ab66@brauner>
-X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2372; i=brauner@kernel.org;
- h=from:subject:message-id; bh=nQTJehsrNjH/qX4EOyzAlTO+RBHcG/yjYW9gYuuUFIA=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT5iTy+4ej3eN+rzKsRBx4ms/YfnOB6fLmtKfum3MBTZ
- v/k56+f1VHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjARdy1Ght8F4v9ZvLd8PqCw
- cTPv7+My2zQPTK7c/yLBYM7VFfW/Jr1iZPh6ZUP0oay2dbVyE06brmj+s+j8sXc2qYsnh76+F7G
- 2WJ8LAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260708-fclog-fix-include-v1-1-50b361964d6a@arm.com>
+X-B4-Tracking: v=1; b=H4sIAFsXTmoC/yXMUQqDMBCE4avIPnchVTSkV5E+2DjRFYmSqAji3
+ Rv18WOY/6CIIIj0yQ4K2CTK5BPer4xs3/gOLG0y5SqvlFaanR2njp3sLN6OawuGK5SpNExRGkq
+ /OSDNd7P+Po7rb4BdrhCd5x+HtN3qdQAAAA==
+X-Change-ID: 20260707-fclog-fix-include-ef30967e9359
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ NeilBrown <neilb@ownmail.net>, 
+ Arthur Cassegrain <arthur.cassegrain@arm.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1524;
+ i=arthur.cassegrain@arm.com; h=from:subject:message-id;
+ bh=FbcaszoG3ccSi2fUtQzilA+nmkbiUWWnKM46qc2It2w=;
+ b=owGbwMvMwCXGNdGrovDKHw7G02pJDFl+4jmPzi//2Jvv07H5zL1tXxcrX33CLaBcuPL3W9kfC
+ 0+Ka7VydZSyMIhxMciKKbJ471KqfLmtdaHetseLYeawMoEMYeDiFICJhP5lZNj7XKFmkYBPjZaO
+ 4/WEjm/GbVdvF2isffxfopHDVpnxzVmG/871uptzuT7UnVx7+pnc/obOat+aZYqMqYEdHZmOQo+
+ n8wIA
+X-Developer-Key: i=arthur.cassegrain@arm.com; a=openpgp;
+ fpr=4BBA2279E9B685A12EB6E3A30A914A7871D4FC08
 
-On 2026-07-07 15:44 -0700, Farid Zakaria wrote:
-> On Tue Jul 7, 2026 at 12:45 PM PDT, Christian Brauner wrote:
-> > On 2026-07-07 13:34 +0200, Christian Brauner wrote:
-> >> On 2026-07-06 09:47:53-07:00, Farid Zakaria wrote:
-> >> > On Mon, Jul 6, 2026 at 9:01 AM Christian Brauner <brauner@kernel.org> wrote:
-> >> > 
-> >> > > Ignoring the blatant bpf abuse here I think this is quite workable. So
-> >> > > this can be turned into an actual design and patch imho...
-> >> > 
-> >> > Glad to see you think this proposal is in the right direction.
-> >> > Just for my edification, when you say "balatant bpf abuse", you mean
-> >> > how it abuses the socket bpf type?
-> >> > If so, do you have any guidance on a new type or should I just take a
-> >> > stab at it.
-> >
-> > I drafted a POC for you that should be closer to how this should look
-> > like with the bpf people in Cc. I'll let you lead from now on. I just
-> > wanted to help you out and illustrate a more viable direction. Might be
-> > that the bpf people want it done differentely. Let's see.
-> 
-> Cool. I just saw the POC.
-> (I'm trying out aerc to view the patch series. I will also try b4, I've
-> never set it up before)
-> I will rework my qemu demo to use the struct_ops and go through my own
-> testing to see it work.
-> 
-> That looks very similar to what I was researching with an LLM. I was
-> just going over the idea of struct_ops bpf (a new concept to me) and
-> using traditional bpftool load, a new bpf program type and kfuncs.
-> 
-> You put out a surprising amount of polished code -- thank you.
+fclog.c uses open(), O_RDONLY, O_CLOEXEC and AT_FDCWD, but it does
+not include <fcntl.h>, where they are declared or defined.
 
-I would not call this polished and it also lacks any tests... I've not
-given the locking much thought and maybe there's easy wins on the table
-I haven't been considering.
+This was hidden while <sys/mount.h> pulled in <fcntl.h> indirectly.
+glibc stopped providing that transitive include in [1], which exposes
+the missing direct dependency.
 
-> I would have had to lean on an LLM (heavily) and from the patches I've
-> put up so far they still have quite the gap to cover in terms of polish.
+Include <fcntl.h> explicitly so fclog.c builds with glibc 2.44
+development headers.
 
-This isn't my first bpf ride in both kernel and userspace.
+[1] glibc -- change 419245719ccb ("include: isolate __O_CLOEXEC flag for
+    sys/mount.h and fcntl.h")
+Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=419245719ccb
 
-> What does "take it from here" mean in practicality?
+Fixes: df579e471111 ("selftests/filesystems: add basic fscontext log tests")
+Reported-by: NeilBrown <neilb@ownmail.net>
+Closes: https://lore.kernel.org/all/178331747789.27465.4739600418387513587@noble.neil.brown.name/
+Signed-off-by: Arthur Cassegrain <arthur.cassegrain@arm.com>
+---
+ tools/testing/selftests/filesystems/fclog.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Bring it over the finish line so I can merge it into my tree. :)
-If the bpf people have no comments or worries than we're done. If they
-want changes I'd appreciate if you could make them and slap you
-Co-developed-by onto the whole thing as necessary.
+diff --git a/tools/testing/selftests/filesystems/fclog.c b/tools/testing/selftests/filesystems/fclog.c
+index 551c4a0f395a..df0767a7e01d 100644
+--- a/tools/testing/selftests/filesystems/fclog.c
++++ b/tools/testing/selftests/filesystems/fclog.c
+@@ -6,6 +6,7 @@
+ 
+ #include <assert.h>
+ #include <errno.h>
++#include <fcntl.h>
+ #include <sched.h>
+ #include <stdio.h>
+ #include <stdlib.h>
 
-Also, please ensure that this works for all the cases you're
-considering.
+---
+base-commit: 0e35b9b6ec0ffcc5e23cbdec09f5c622ad532b53
+change-id: 20260707-fclog-fix-include-ef30967e9359
+
+Best regards,
+--  
+Arthur Cassegrain <arthur.cassegrain@arm.com>
 
