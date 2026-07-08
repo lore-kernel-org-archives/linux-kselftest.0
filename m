@@ -1,655 +1,760 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8905C3AB5B8;
-	Wed,  8 Jul 2026 08:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862923F4DE1;
+	Wed,  8 Jul 2026 08:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783498683; cv=none; b=AFDzbq8sNe923SH3jmhvZ9ZwbHC5694Q1L/2ZXiryz4ZLboHjaMF9d49TdZ5DSZNi2OZpzJd3Ha/InCWUfdlv8C338at5JCq5Eygxkd1h6+1e0l4XefLDkUIL9GSqoQ3I9w8D+wiHAkcGJrcBxrF789onkt0RUibQy5+OAjOl3g=
+	t=1783498935; cv=none; b=GV/+HpOx81FNlZ1BZMY5JYQuFI2UcxfhkUF0G4JOgDT54eGdBTKIet98wqd25axV/ROeza1GhzlTHX5m0MAW9K9SgCzj91PcgdSotrHudj+vWcuD962X80+hQbzyh/Kn8HS+Dq0mmvfIrSqnr+tMU7AaMEBtG3mYhMDHp+zv5so=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783498683; c=relaxed/simple;
-	bh=IOp4ADjo0lhhLGWkZ1OUALRZpZmzVGqP5oZpOV9pSk0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmguIrEyqwpKiAf8C+dFiwpbG3pss1i/iXtdVO4fuAo8HSFo1woOexDOPikE3XQJkt5/Tai1ggmU0IsMNx6WoEVQRhEmd5tatw5qfT/d/VWCdAnK00yruDwKFknl89ruUOo+4zKJ/Inf/37q/lakn9pErgLvtkgwzuSv8vLd97c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhPnM10a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783498935; c=relaxed/simple;
+	bh=YG7rfC0Dn4EhL2hKkz77+q5TXuFEzQiHhnRCBrP44I0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PsUo5FWBJG7Blh6OzUiiN5SfW9Nbv73GYC0Zxd/w8oUbqyU48J5Yr9fHHujfPWCk7TIfmTzAzMwLy0SgY4GRmuKlm9tYZh+svSAT2x2OJSm2Vh8RwC6qNDKVQi6ZcXuUfcZL9AqTl2no3LuOWVxiMZgEc28BZlXdYEaE4RfIqYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=BkxPrFgb; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhPnM10a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABAB91F000E9;
-	Wed,  8 Jul 2026 08:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783498681;
-	bh=Nm52Xlrw1GluHl4mcq4+4Pp2e2HBmEU2CFEZNaVo9gI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YhPnM10a9gwlKMBNycSZUM39DOUl9zyRQXQ1wVzwd8qDtzBS4/kf0Qs1WVXhaadDQ
-	 LNtTMKeIQzPf95tCxGqavdjN9ptDFWSCrxVt6OQTrBWl7i3c8NZl/q23pyYKRKvXip
-	 lR1lbJ5J5/6ND3wXMbQQAbNC8GMtWtWWBQKhxQss7Yo/HnpiPEkSGm2Bx6HEz4usW/
-	 16llHLVN7Aj+uQtbN1SRDjK63it1I6ffHly8O7CH3Y+YYf5LPkdjLy1spE9ChW4XJV
-	 gTERzkKKKoJDl9n/10ggCw1QZDzQSdBnguf2iMh/MRrlnJ6qktrEcTbWdeKaWTNqEP
-	 83xqSULzzJC+A==
-Date: Wed, 8 Jul 2026 10:17:58 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Felix Fietkau <nbd@nbd.name>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH nf-next v4 5/6] net: netfilter: Add SIT tunnel flowtable
- acceleration
-Message-ID: <ak4HthcJhms-_tfT@lore-desk>
-References: <20260703-b4-flowtable-sw-accel-ip6ip-v4-0-00398cd12382@kernel.org>
- <20260703-b4-flowtable-sw-accel-ip6ip-v4-5-00398cd12382@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="BkxPrFgb"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1783498921; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=SQsDS1L91w/G9lqcOn6k3MvZHpaFZ4vNhIVYEbzI4yc=;
+	b=BkxPrFgbL27WPcwGxMwCTPiZklPN23tLBI1V4yDWGgNaYh6cHpxWFwURgNy4vYqOjvISrq9xfa0bc1ln9B74CuvQTEaviqciYKRfhDgjE3Cfm5g/yWcdZVR/C32Bv5vaVFKk515YsRsvHadzEEa8xIQjfZZWrwvNpnFmXObM2u8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X6h5sBc_1783498917;
+Received: from 30.246.161.237(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X6h5sBc_1783498917 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Jul 2026 16:21:59 +0800
+Message-ID: <6d8abfaf-5cd7-4dc0-8976-dd5339a80913@linux.alibaba.com>
+Date: Wed, 8 Jul 2026 16:21:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Oz9APxSaQ2vAwgoj"
-Content-Disposition: inline
-In-Reply-To: <20260703-b4-flowtable-sw-accel-ip6ip-v4-5-00398cd12382@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 RESEND 5/7] riscv: stacktrace: switch to frame-pointer
+ based unwinder
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+ Oleg Nesterov <oleg@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ Marcos Paulo de Souza <mpdesouza@suse.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
+ <20260629072713.3273743-6-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260629072713.3273743-6-wanghan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---Oz9APxSaQ2vAwgoj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-> Introduce sw flowtable acceleration for the TX/RX paths of
-> SIT tunnels, relying on the netfilter flowtable infrastructure.
-> The feature can be tested with a forwarding scenario between two
-> NICs (eth0 and eth1), where a SIT tunnel is used to reach a remote
-> site via eth1 as the underlay device:
->=20
->     ETH0 -- TUN0 <=3D=3D> ETH1 -- [IP network] -- TUN1 (192.168.2.2)
->=20
-> [IP configuration]
->=20
-> 6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state U=
-P group default qlen 1000
->     link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
->     inet6 2001:db8:1::2/64 scope global nodad
->        valid_lft forever preferred_lft forever
-> 7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state U=
-P group default qlen 1000
->     link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
->     inet 192.168.2.1/24 scope global eth1
->        valid_lft forever preferred_lft forever
-> 8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue stat=
-e UNKNOWN group default qlen 1000
->     link/sit 192.168.2.1 peer 192.168.2.2
->     inet6 2001:db8:200::1/64 scope global nodad
->        valid_lft forever preferred_lft forever
-
-commenting on sashiko's report:
-https://sashiko.dev/#/patchset/20260703-b4-flowtable-sw-accel-ip6ip-v4-0-00=
-398cd12382%40kernel.org
-
->=20
-> $ ip route show
-> 192.168.2.0/24 dev eth1 proto kernel scope link src 192.168.2.1
->=20
-> $ ip -6 route show
-> 2001:db8:1::/64 dev eth0 proto kernel metric 256 pref medium
-> 2001:db8:200::/64 dev tun0 proto kernel metric 256 pref medium
-> default via 2001:db8:200::2 dev tun0 metric 1024 pref medium
->=20
-> $ nft list ruleset
-> table inet filter {
->     flowtable ft {
->         hook ingress priority filter
->         devices =3D { eth0, eth1 }
->     }
->=20
->     chain forward {
->         type filter hook forward priority filter; policy accept;
->         meta l4proto { tcp, udp } flow add @ft
->     }
-> }
->=20
-> When reproducing this scenario using veth interfaces, the following
-> results were observed:
->=20
-> - TCP stream received from SIT tunnel:
->   - net-next (baseline):                ~118 Gbps
->   - net-next + SIT flowtable support: ~148 Gbps
->=20
-> - TCP stream transmitted to SIT tunnel:
->   - net-next (baseline):                ~131 Gbps
->   - net-next + SIT flowtable support: ~147 Gbps
->=20
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+On 6/29/26 3:27 PM, Wang Han wrote:
+> Replace the open-coded frame-pointer walker in arch_stack_walk() with a
+> robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
+> and retargeted to the RISC-V {fp, ra} frame record convention. The new
+> walker tracks stack bounds, consumes frame records monotonically,
+> understands the metadata pt_regs records added in the previous frame
+> record metadata patch, and recovers return addresses replaced by
+> function graph tracing and kretprobes.
+> 
+> This commit introduces arch_stack_walk_reliable() but does not yet
+> select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
+> patch so this commit can be reviewed and bisected as a pure unwinder
+> replacement. Until that Kconfig change lands, livepatch is not yet
+> enabled and arch_stack_walk_reliable() has no in-tree caller.
+> 
+> Three related callers are updated to keep the same frame-record
+> assumptions everywhere:
+> 
+>    * Function graph tracing: the old RISC-V unwinder matched function
+>      graph return-stack entries by the saved return-address slot. That
+>      was consistent with the static mcount path, but not with the dynamic
+>      ftrace path where the parent slot is ftrace_regs::ra. Use the
+>      architectural frame pointer as the function graph return-address
+>      cookie, matching the kunwind walker.
+> 
+>    * Perf callchains: route kernel callchain collection through
+>      arch_stack_walk() so perf sees the same frame-pointer unwind
+>      behaviour as dump_stack() and the upcoming livepatch path.
+> 
+>    * dump_backtrace() / __get_wchan() / show_stack(): these now go
+>      through arch_stack_walk(); the explicit "Call Trace:" header is
+>      moved into dump_backtrace() to preserve the original output.
+> 
+> The non-frame-pointer fallback walker is kept untouched for
+> !CONFIG_FRAME_POINTER builds.
+> 
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 > ---
->  net/ipv6/sit.c                   |  26 ++++
->  net/netfilter/nf_flow_table_ip.c | 290 +++++++++++++++++++++------------=
-------
->  2 files changed, 182 insertions(+), 134 deletions(-)
->=20
-> diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> index a38b24fb8384..0ac6f7839878 100644
-> --- a/net/ipv6/sit.c
-> +++ b/net/ipv6/sit.c
-> @@ -1365,6 +1365,31 @@ ipip6_tunnel_ctl(struct net_device *dev, struct ip=
-_tunnel_parm_kern *p,
->  	}
->  }
-> =20
-> +static int ipip6_tunnel_fill_forward_path(struct net_device_path_ctx *ct=
-x,
-> +					  struct net_device_path *path)
+>   arch/riscv/kernel/ftrace.c         |   6 +-
+>   arch/riscv/kernel/perf_callchain.c |   2 +-
+>   arch/riscv/kernel/stacktrace.c     | 559 ++++++++++++++++++++++++-----
+>   3 files changed, 471 insertions(+), 96 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> index b430edfb83f4..5d55199a9230 100644
+> --- a/arch/riscv/kernel/ftrace.c
+> +++ b/arch/riscv/kernel/ftrace.c
+> @@ -242,7 +242,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+>   	 */
+>   	old = *parent;
+>   
+> -	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
+> +	if (!function_graph_enter(old, self_addr, frame_pointer,
+> +				  (void *)frame_pointer))
+>   		*parent = return_hooker;
+>   }
+>   
+> @@ -264,7 +265,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>   	 */
+>   	old = *parent;
+>   
+> -	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
+> +	if (!function_graph_enter_regs(old, ip, frame_pointer,
+> +				       (void *)frame_pointer, fregs))
+>   		*parent = return_hooker;
+>   }
+>   #endif /* CONFIG_DYNAMIC_FTRACE */
+> diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
+> index b465bc9eb870..436af96ea59c 100644
+> --- a/arch/riscv/kernel/perf_callchain.c
+> +++ b/arch/riscv/kernel/perf_callchain.c
+> @@ -44,5 +44,5 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+>   		return;
+>   	}
+>   
+> -	walk_stackframe(NULL, regs, fill_callchain, entry);
+> +	arch_stack_walk(fill_callchain, entry, NULL, regs);
+>   }
+> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+> index c7555447149b..c43bf9a84207 100644
+> --- a/arch/riscv/kernel/stacktrace.c
+> +++ b/arch/riscv/kernel/stacktrace.c
+> @@ -11,98 +11,16 @@
+>   #include <linux/sched/task_stack.h>
+>   #include <linux/stacktrace.h>
+>   #include <linux/ftrace.h>
+> +#include <linux/kprobes.h>
+> +#include <linux/llist.h>
+>   
+>   #include <asm/stacktrace.h>
+>   
+> -#ifdef CONFIG_FRAME_POINTER
+> -
+>   /*
+> - * This disables KASAN checking when reading a value from another task's stack,
+> - * since the other task could be running on another CPU and could have poisoned
+> - * the stack in the meantime.
+> + * Non-frame-pointer fallback unwinder.
+> + * Only compiled when CONFIG_FRAME_POINTER is not enabled.
+>    */
+> -#define READ_ONCE_TASK_STACK(task, x)			\
+> -({							\
+> -	unsigned long val;				\
+> -	unsigned long addr = x;				\
+> -	if ((task) == current)				\
+> -		val = READ_ONCE(addr);			\
+> -	else						\
+> -		val = READ_ONCE_NOCHECK(addr);		\
+> -	val;						\
+> -})
+> -
+> -extern asmlinkage void handle_exception(void);
+> -extern unsigned long ret_from_exception_end;
+> -
+> -static inline int fp_is_valid(unsigned long fp, unsigned long sp)
+> -{
+> -	unsigned long low, high;
+> -
+> -	low = sp + sizeof(struct stackframe);
+> -	high = ALIGN(sp, THREAD_SIZE);
+> -
+> -	return !(fp < low || fp > high || fp & 0x07);
+> -}
+> -
+> -void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+> -			     bool (*fn)(void *, unsigned long), void *arg)
+> -{
+> -	unsigned long fp, sp, pc;
+> -	int graph_idx = 0;
+> -	int level = 0;
+> -
+> -	if (regs) {
+> -		fp = frame_pointer(regs);
+> -		sp = user_stack_pointer(regs);
+> -		pc = instruction_pointer(regs);
+> -	} else if (task == NULL || task == current) {
+> -		fp = (unsigned long)__builtin_frame_address(0);
+> -		sp = current_stack_pointer;
+> -		pc = (unsigned long)walk_stackframe;
+> -		level = -1;
+> -	} else {
+> -		/* task blocked in __switch_to */
+> -		fp = task->thread.s[0];
+> -		sp = task->thread.sp;
+> -		pc = task->thread.ra;
+> -	}
+> -
+> -	for (;;) {
+> -		struct stackframe *frame;
+> -
+> -		if (unlikely(!__kernel_text_address(pc) || (level++ >= 0 && !fn(arg, pc))))
+> -			break;
+> -
+> -		if (unlikely(!fp_is_valid(fp, sp)))
+> -			break;
+> -
+> -		/* Unwind stack frame */
+> -		frame = (struct stackframe *)fp - 1;
+> -		sp = fp;
+> -		if (regs && (regs->epc == pc) && fp_is_valid(frame->ra, sp)) {
+> -			/* We hit function where ra is not saved on the stack */
+> -			fp = frame->ra;
+> -			pc = regs->ra;
+> -		} else {
+> -			fp = READ_ONCE_TASK_STACK(task, frame->fp);
+> -			pc = READ_ONCE_TASK_STACK(task, frame->ra);
+> -			pc = ftrace_graph_ret_addr(task, &graph_idx, pc,
+> -						   &frame->ra);
+> -			if (pc >= (unsigned long)handle_exception &&
+> -			    pc < (unsigned long)&ret_from_exception_end) {
+> -				if (unlikely(!fn(arg, pc)))
+> -					break;
+> -
+> -				pc = ((struct pt_regs *)sp)->epc;
+> -				fp = ((struct pt_regs *)sp)->s0;
+> -			}
+> -		}
+> -
+> -	}
+> -}
+> -
+> -#else /* !CONFIG_FRAME_POINTER */
+> +#ifndef CONFIG_FRAME_POINTER
+>   
+>   void notrace walk_stackframe(struct task_struct *task,
+>   	struct pt_regs *regs, bool (*fn)(void *, unsigned long), void *arg)
+> @@ -133,7 +51,12 @@ void notrace walk_stackframe(struct task_struct *task,
+>   	}
+>   }
+>   
+> -#endif /* CONFIG_FRAME_POINTER */
+> +#endif /* !CONFIG_FRAME_POINTER */
+> +
+> +/*
+> + * Common trace helpers.
+> + * These are used by both the FP (kunwind) and non-FP (walk_stackframe) paths.
+> + */
+>   
+>   static bool print_trace_address(void *arg, unsigned long pc)
+>   {
+> @@ -146,12 +69,12 @@ static bool print_trace_address(void *arg, unsigned long pc)
+>   noinline void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+>   		    const char *loglvl)
+>   {
+> -	walk_stackframe(task, regs, print_trace_address, (void *)loglvl);
+> +	printk("%sCall Trace:\n", loglvl);
+> +	arch_stack_walk(print_trace_address, (void *)loglvl, task, regs);
+>   }
+>   
+>   void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
+>   {
+> -	pr_cont("%sCall Trace:\n", loglvl);
+>   	dump_backtrace(NULL, task, loglvl);
+>   }
+>   
+> @@ -171,17 +94,467 @@ unsigned long __get_wchan(struct task_struct *task)
+>   
+>   	if (!try_get_task_stack(task))
+>   		return 0;
+> -	walk_stackframe(task, NULL, save_wchan, &pc);
+> +	arch_stack_walk(save_wchan, &pc, task, NULL);
+>   	put_task_stack(task);
+>   	return pc;
+>   }
+>   
+> -noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
+> -		     struct task_struct *task, struct pt_regs *regs)
+> +/*
+> + * Frame-pointer-based kernel unwind infrastructure.
+> + * Only compiled when CONFIG_FRAME_POINTER is enabled.
+> + *
+> + * See: arch/arm64/kernel/stacktrace.c for the reference implementation.
+> + */
+> +#ifdef CONFIG_FRAME_POINTER
+> +
+> +/*
+> + * Per-cpu stacks are only accessible when unwinding the current task in a
+> + * non-preemptible context.
+> + */
+> +#define STACKINFO_CPU(task, name)				\
+> +	({							\
+> +		(((task) == current) && !preemptible())		\
+> +			? stackinfo_get_##name()		\
+> +			: stackinfo_get_unknown();		\
+> +	})
+> +
+> +enum kunwind_source {
+> +	KUNWIND_SOURCE_UNKNOWN,
+> +	KUNWIND_SOURCE_FRAME,
+> +	KUNWIND_SOURCE_CALLER,
+> +	KUNWIND_SOURCE_TASK,
+> +	KUNWIND_SOURCE_REGS_PC,
+> +};
+> +
+> +union unwind_flags {
+> +	unsigned long	all;
+> +	struct {
+> +		unsigned long	fgraph : 1,
+> +				kretprobe : 1;
+> +	};
+> +};
+> +
+> +/*
+> + * Kernel unwind state
+> + *
+> + * @common:    Common unwind state.
+> + * @task:      The task being unwound.
+> + * @graph_idx: Used by ftrace_graph_ret_addr() for optimized stack unwinding.
+> + * @kr_cur:    When KRETPROBES is selected, holds the kretprobe instance
+> + *             associated with the most recently encountered replacement ra
+> + *             value.
+> + */
+> +struct kunwind_state {
+> +	struct unwind_state common;
+> +	struct task_struct *task;
+> +	int graph_idx;
+> +#ifdef CONFIG_KRETPROBES
+> +	struct llist_node *kr_cur;
+> +#endif
+> +	enum kunwind_source source;
+> +	union unwind_flags flags;
+> +	struct pt_regs *regs;
+> +};
+> +
+> +static __always_inline void
+> +kunwind_init(struct kunwind_state *state,
+> +	     struct task_struct *task)
 > +{
-> +	struct ip_tunnel *tunnel =3D netdev_priv(ctx->dev);
-> +	const struct iphdr *tiph =3D &tunnel->parms.iph;
-> +	struct rtable *rt;
+> +	unwind_init_common(&state->common);
+> +	state->task = task;
+> +	state->source = KUNWIND_SOURCE_UNKNOWN;
+> +	state->flags.all = 0;
+> +	state->regs = NULL;
+> +}
 > +
-> +	rt =3D ip_route_output(dev_net(ctx->dev), tiph->daddr, 0, 0, 0,
-> +			     RT_SCOPE_UNIVERSE);
-
-- Does this handle NBMA (ISATAP/6to4/6rd) SIT tunnels correctly? For these
-  tunnels, tiph->daddr is typically 0 since the remote destination is resol=
-ved
-  per-packet.
-  If we unconditionally query the routing table here with tiph->daddr, it
-  will route to 0.0.0.0, causing the flow offload tuple to use 0.0.0.0 as t=
-he
-  outer encapsulation destination. Could this result in all offloaded traff=
-ic
-  for these tunnels being silently dropped?
-  - I will fix it in v5
-
-> +	if (IS_ERR(rt))
-> +		return PTR_ERR(rt);
+> +/*
+> + * Start an unwind from a pt_regs.
+> + *
+> + * The unwind will begin at the PC within the regs.
+> + *
+> + * The regs must be on a stack currently owned by the calling task.
+> + */
+> +static __always_inline void
+> +kunwind_init_from_regs(struct kunwind_state *state,
+> +		       struct pt_regs *regs)
+> +{
+> +	kunwind_init(state, current);
 > +
-> +	path->type =3D DEV_PATH_TUN;
-> +	path->tun.src_v4.s_addr =3D tiph->saddr;
-> +	path->tun.dst_v4.s_addr =3D tiph->daddr;
-> +	path->tun.l3_proto =3D IPPROTO_IPV6;
-
-- Is it safe to hardcode path->tun.l3_proto to IPPROTO_IPV6 here?
-  SIT tunnels can also support IPv4 payloads. If an IPv4 flow is offloaded
-  over a SIT tunnel, the flow tuple will erroneously record the payload as
-  IPv6. During encapsulation, nf_flow_tunnel_ipip_push() might then parse
-  the inner IPv4 header as an IPv6 header, which could corrupt TOS and TTL
-  extraction.
-  - I will fix it in v5
-
-> +	path->tun.encap_proto =3D AF_INET;
-> +	path->dev =3D ctx->dev;
+> +	state->regs = regs;
+> +	state->common.fp = frame_pointer(regs);
+> +	state->common.pc = instruction_pointer(regs);
+> +	state->source = KUNWIND_SOURCE_REGS_PC;
+> +}
 > +
-> +	ctx->dev =3D rt->dst.dev;
-> +	ip_rt_put(rt);
+> +/*
+> + * Start an unwind from a caller.
+> + *
+> + * The unwind will begin at the caller of whichever function this is inlined
+> + * into.
+> + *
+> + * The function which invokes this must be noinline.
+> + */
+> +static __always_inline void
+> +kunwind_init_from_caller(struct kunwind_state *state)
+> +{
+> +	unsigned long fp = (unsigned long)__builtin_frame_address(0);
+> +	struct frame_record *record = (struct frame_record *)fp - 1;
+> +
+> +	kunwind_init(state, current);
+> +
+> +	state->common.fp = READ_ONCE(record->fp);
+> +	state->common.pc = READ_ONCE(record->ra);
+> +	state->source = KUNWIND_SOURCE_CALLER;
+> +}
+> +
+> +/*
+> + * Start an unwind from a blocked task.
+> + *
+> + * The unwind will begin at the blocked task's saved PC (i.e. the caller of
+> + * __switch_to).
+> + *
+> + * The caller should ensure the task is blocked in __switch_to for the
+> + * duration of the unwind, or the unwind will be bogus. It is never valid to
+> + * call this for the current task.
+> + */
+> +static __always_inline void
+> +kunwind_init_from_task(struct kunwind_state *state,
+> +		       struct task_struct *task)
+> +{
+> +	kunwind_init(state, task);
+> +
+> +	state->common.fp = task->thread.s[0];
+> +	state->common.pc = task->thread.ra;
+> +	state->source = KUNWIND_SOURCE_TASK;
+> +}
+> +
+> +static __always_inline int
+> +kunwind_recover_return_address(struct kunwind_state *state)
+> +{
+> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> +	if (state->task->ret_stack &&
+> +	    state->common.pc == (unsigned long)return_to_handler) {
+> +		unsigned long orig_pc;
+> +
+> +		orig_pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
+> +						state->common.pc,
+> +						(void *)state->common.fp);
+> +		if (state->common.pc == orig_pc) {
+> +			WARN_ON_ONCE(state->task == current);
+> +			return -EINVAL;
+> +		}
+> +		state->common.pc = orig_pc;
+> +		state->flags.fgraph = 1;
+> +	}
+> +#endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+> +
+> +#ifdef CONFIG_KRETPROBES
+> +	if (is_kretprobe_trampoline(state->common.pc)) {
+> +		unsigned long orig_pc;
+> +
+> +		orig_pc = kretprobe_find_ret_addr(state->task,
+> +						  (void *)state->common.fp,
+> +						  &state->kr_cur);
+> +		if (!orig_pc)
+> +			return -EINVAL;
+> +		state->common.pc = orig_pc;
+> +		state->flags.kretprobe = 1;
+> +	}
+> +#endif /* CONFIG_KRETPROBES */
 > +
 > +	return 0;
 > +}
 > +
->  static int
->  ipip6_tunnel_siocdevprivate(struct net_device *dev, struct ifreq *ifr,
->  			    void __user *data, int cmd)
-> @@ -1401,6 +1426,7 @@ static const struct net_device_ops ipip6_netdev_ops=
- =3D {
->  	.ndo_siocdevprivate =3D ipip6_tunnel_siocdevprivate,
->  	.ndo_get_iflink =3D ip_tunnel_get_iflink,
->  	.ndo_tunnel_ctl =3D ipip6_tunnel_ctl,
-> +	.ndo_fill_forward_path =3D ipip6_tunnel_fill_forward_path,
->  };
-> =20
->  static void ipip6_dev_free(struct net_device *dev)
-> diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_tab=
-le_ip.c
-> index 4b6de16bd4f3..f02e71ae5448 100644
-> --- a/net/netfilter/nf_flow_table_ip.c
-> +++ b/net/netfilter/nf_flow_table_ip.c
-> @@ -338,7 +338,7 @@ static bool nf_flow_ip4_tunnel_proto(struct nf_flowta=
-ble_ctx *ctx,
->  	if (iph->ttl <=3D 1)
->  		return false;
-> =20
-> -	if (iph->protocol =3D=3D IPPROTO_IPIP) {
-> +	if (iph->protocol =3D=3D IPPROTO_IPIP || iph->protocol =3D=3D IPPROTO_I=
-PV6) {
->  		ctx->tun.proto =3D iph->protocol;
->  		ctx->tun.hdr_size =3D size;
->  		ctx->offset +=3D ctx->tun.hdr_size;
-> @@ -464,21 +464,6 @@ static void nf_flow_encap_pop(struct nf_flowtable_ct=
-x *ctx,
->  		nf_flow_ip_tunnel_pop(ctx, skb);
->  }
-> =20
-> -static struct flow_offload_tuple_rhash *
-> -nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
-> -		       struct nf_flowtable *flow_table, struct sk_buff *skb)
-> -{
-> -	struct flow_offload_tuple tuple =3D {};
-> -
-> -	if (!nf_flow_skb_encap_protocol(ctx, skb, htons(ETH_P_IP)))
-> -		return NULL;
-> -
-> -	if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
-> -		return NULL;
-> -
-> -	return flow_offload_lookup(flow_table, &tuple);
-> -}
-> -
->  static int nf_flow_offload_forward(struct nf_flowtable_ctx *ctx,
->  				   struct nf_flowtable *flow_table,
->  				   struct flow_offload_tuple_rhash *tuplehash,
-> @@ -606,19 +591,33 @@ static int nf_flow_tunnel_ipip_push(struct net *net=
-, struct sk_buff *skb,
->  				    struct flow_offload_tuple *tuple,
->  				    __be32 *ip_daddr)
->  {
-> -	struct iphdr *iph =3D (struct iphdr *)skb_network_header(skb);
->  	struct rtable *rt =3D dst_rtable(tuple->dst_cache);
-> -	u8 tos =3D iph->tos, ttl =3D iph->ttl;
-> -	__be16 frag_off =3D iph->frag_off;
-> -	u32 headroom =3D sizeof(*iph);
-> +	__be16 frag_off =3D 0;
-> +	struct iphdr *iph;
-> +	u8 tos =3D 0, ttl;
-> +	u32 headroom;
->  	int err;
-> =20
-> +	if (tuple->tun.l3_proto =3D=3D IPPROTO_IPV6) {
-> +		struct ipv6hdr *ip6h;
-> +
-> +		ip6h =3D (struct ipv6hdr *)skb_network_header(skb);
-> +		tos =3D ipv6_get_dsfield(ip6h);
-> +		ttl =3D ip6h->hop_limit;
-> +	} else {
-> +		iph =3D (struct iphdr *)skb_network_header(skb);
-> +		frag_off =3D iph->frag_off;
-> +		tos =3D iph->tos;
-> +		ttl =3D iph->ttl;
-> +	}
-> +
->  	err =3D iptunnel_handle_offloads(skb, SKB_GSO_IPXIP4);
->  	if (err)
->  		return err;
-> =20
-> -	skb_set_inner_ipproto(skb, IPPROTO_IPIP);
-> -	headroom +=3D LL_RESERVED_SPACE(rt->dst.dev) + rt->dst.header_len;
-> +	skb_set_inner_ipproto(skb, tuple->tun.l3_proto);
-> +	headroom =3D sizeof(*iph) + LL_RESERVED_SPACE(rt->dst.dev) +
-> +		   rt->dst.header_len;
-
-- This isn't a bug introduced by this patch, but is it correct to calculate
-  the headroom using rt->dst.dev?
-  The rt variable is derived from the reply direction tuple, so rt->dst.dev
-  points to the internal ingress device (e.g. eth0) rather than the egress
-  underlay device (e.g. eth1).
-  If the physical egress device requires more headroom than the internal
-  device, this allocation might be too small and trigger an skb_under_panic
-  during encapsulation.
-  - This is already fixed by a Pablo's fix
-
->  	err =3D skb_cow_head(skb, headroom);
->  	if (err)
->  		return err;
-> @@ -629,6 +628,7 @@ static int nf_flow_tunnel_ipip_push(struct net *net, =
-struct sk_buff *skb,
->  	/* Push down and install the IP header. */
->  	skb_push(skb, sizeof(*iph));
->  	skb_reset_network_header(skb);
-> +	skb->protocol =3D htons(ETH_P_IP);
-> =20
->  	iph =3D ip_hdr(skb);
->  	iph->version	=3D 4;
-> @@ -723,16 +723,6 @@ static int nf_flow_tunnel_push(struct net *net, stru=
-ct sk_buff *skb,
->  	}
->  }
-> =20
-> -static int nf_flow_tunnel_v6_push(struct net *net, struct sk_buff *skb,
-> -				  struct flow_offload_tuple *tuple,
-> -				  struct in6_addr **ip6_daddr)
-> -{
-> -	if (tuple->tun_num)
-> -		return nf_flow_tunnel_ip6ip6_push(net, skb, tuple, ip6_daddr);
-> -
-> -	return 0;
-> -}
-> -
->  static int nf_flow_encap_push(struct sk_buff *skb,
->  			      struct flow_offload_tuple *tuple,
->  			      struct net_device *outdev)
-> @@ -830,103 +820,6 @@ static unsigned int nf_flow_queue_xmit(struct net *=
-net, struct sk_buff *skb,
->  	return NF_STOLEN;
->  }
-> =20
-> -unsigned int
-> -nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
-> -			const struct nf_hook_state *state)
-> -{
-> -	struct flow_offload_tuple_rhash *tuplehash;
-> -	struct nf_flowtable *flow_table =3D priv;
-> -	struct flow_offload_tuple *other_tuple;
-> -	enum flow_offload_tuple_dir dir;
-> -	struct nf_flowtable_ctx ctx =3D {
-> -		.in	=3D state->in,
-> -	};
-> -	struct nf_flow_xmit xmit =3D {};
-> -	struct in6_addr *ip6_daddr;
-> -	struct flow_offload *flow;
-> -	struct neighbour *neigh;
-> -	struct rtable *rt;
-> -	__be32 ip_daddr;
-> -	int ret;
-> -
-> -	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
-> -	if (!tuplehash)
-> -		return NF_ACCEPT;
-> -
-> -	ret =3D nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
-> -	if (ret < 0)
-> -		return NF_DROP;
-> -	else if (ret =3D=3D 0)
-> -		return NF_ACCEPT;
-> -
-> -	if (unlikely(tuplehash->tuple.xmit_type =3D=3D FLOW_OFFLOAD_XMIT_XFRM))=
- {
-> -		rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> -		memset(skb->cb, 0, sizeof(struct inet_skb_parm));
-> -		IPCB(skb)->iif =3D skb->dev->ifindex;
-> -		IPCB(skb)->flags =3D IPSKB_FORWARDED;
-> -		return nf_flow_xmit_xfrm(skb, state, &rt->dst);
-
-- Since ctx.tun.proto can now be IPPROTO_IPV6 for an inner IPv6 packet
-  encapsulated in IPv4, is it safe to unconditionally cast the route to
-  rtable and initialize IPCB(skb) here?
-  - This is not a real problem since IP tunnel flowtable acceleration is not
-    supported for FLOW_OFFLOAD_XMIT_XFRM xmit_type.
-
-Regards,
-Lorenzo
-
-> -	}
-> -
-> -	dir =3D tuplehash->tuple.dir;
-> -	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> -	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> -	ip_daddr =3D other_tuple->src_v4.s_addr;
-> -
-> -	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> -				&ip6_daddr) < 0)
-> -		return NF_DROP;
-> -
-> -	switch (tuplehash->tuple.xmit_type) {
-> -	case FLOW_OFFLOAD_XMIT_NEIGH: {
-> -		struct dst_entry *dst;
-> -
-> -		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.ifid=
-x);
-> -		if (!xmit.outdev) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		if (other_tuple->tun.encap_proto =3D=3D AF_INET6 ||
-> -		    ctx.tun.proto =3D=3D IPPROTO_IPV6) {
-> -			struct rt6_info *rt6;
-> -
-> -			rt6 =3D dst_rt6_info(tuplehash->tuple.dst_cache);
-> -			neigh =3D ip_neigh_gw6(rt6->dst.dev,
-> -					     rt6_nexthop(rt6, ip6_daddr));
-> -			dst =3D &rt6->dst;
-> -		} else {
-> -			rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> -			neigh =3D ip_neigh_gw4(rt->dst.dev,
-> -					     rt_nexthop(rt, ip_daddr));
-> -			dst =3D &rt->dst;
-> -		}
-> -		if (IS_ERR(neigh)) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		xmit.dest =3D neigh->ha;
-> -		skb_dst_set_noref(skb, dst);
-> -		break;
-> -	}
-> -	case FLOW_OFFLOAD_XMIT_DIRECT:
-> -		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.out.=
-ifidx);
-> -		if (!xmit.outdev) {
-> -			flow_offload_teardown(flow);
-> -			return NF_DROP;
-> -		}
-> -		xmit.dest =3D tuplehash->tuple.out.h_dest;
-> -		xmit.source =3D tuplehash->tuple.out.h_source;
-> -		break;
-> -	default:
-> -		WARN_ON_ONCE(1);
-> -		return NF_DROP;
-> -	}
-> -	xmit.tuple =3D other_tuple;
-> -	xmit.needs_gso_segment =3D tuplehash->tuple.needs_gso_segment;
-> -
-> -	return nf_flow_queue_xmit(state->net, skb, &xmit);
-> -}
-> -EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
-> -
->  static void nf_flow_nat_ipv6_tcp(struct sk_buff *skb, unsigned int thoff,
->  				 struct in6_addr *addr,
->  				 struct in6_addr *new_addr,
-> @@ -1111,8 +1004,16 @@ static int nf_flow_offload_ipv6_forward(struct nf_=
-flowtable_ctx *ctx,
->  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> =20
->  	mtu =3D flow->tuplehash[dir].tuple.mtu + ctx->offset;
-> -	if (flow->tuplehash[!dir].tuple.tun_num)
-> +	switch (flow->tuplehash[!dir].tuple.tun.encap_proto) {
-> +	case AF_INET:
-> +		mtu -=3D sizeof(struct iphdr);
-> +		break;
-> +	case AF_INET6:
->  		mtu -=3D sizeof(*ip6h);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> =20
->  	if (unlikely(nf_flow_exceeds_mtu(skb, mtu)))
->  		return 0;
-> @@ -1146,6 +1047,25 @@ static int nf_flow_offload_ipv6_forward(struct nf_=
-flowtable_ctx *ctx,
->  	return 1;
->  }
-> =20
-> +static struct flow_offload_tuple_rhash *
-> +nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
-> +		       struct nf_flowtable *flow_table, struct sk_buff *skb)
+> +/*
+> + * When we reach an exception boundary marked by a metadata frame record,
+> + * extract pt_regs from the stack and continue unwinding from the saved
+> + * context (epc and s0/fp).
+> + *
+> + * On RISC-V, fp points above the metadata record, so the record's
+> + * frame_record portion is at fp - sizeof(struct frame_record).
+> + */
+> +static __always_inline int
+> +kunwind_next_regs_pc(struct kunwind_state *state)
 > +{
-> +	struct flow_offload_tuple tuple =3D {};
+> +	struct stack_info *info;
+> +	unsigned long fp = state->common.fp;
+> +	struct pt_regs *regs;
 > +
-> +	if (!nf_flow_skb_encap_protocol(ctx, skb, htons(ETH_P_IP)))
-> +		return NULL;
+> +	regs = container_of((unsigned long *)(fp - sizeof(struct frame_record)),
+> +			    struct pt_regs, stackframe.record.fp);
 > +
-> +	if (ctx->tun.proto =3D=3D IPPROTO_IPV6) {
-> +		if (nf_flow_tuple_ipv6(ctx, skb, &tuple) < 0)
-> +			return NULL;
-> +	} else if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0) {
-> +		return NULL;
-> +	}
+> +	info = unwind_find_stack(&state->common, (unsigned long)regs,
+> +				 sizeof(*regs));
+> +	if (!info)
+> +		return -EINVAL;
 > +
-> +	return flow_offload_lookup(flow_table, &tuple);
+> +	unwind_consume_stack(&state->common, info, (unsigned long)regs,
+> +			     sizeof(*regs));
+> +
+> +	state->regs = regs;
+> +	state->common.pc = regs->epc;
+> +	state->common.fp = frame_pointer(regs);
+> +	state->source = KUNWIND_SOURCE_REGS_PC;
+> +	return 0;
 > +}
 > +
->  static struct flow_offload_tuple_rhash *
->  nf_flow_offload_ipv6_lookup(struct nf_flowtable_ctx *ctx,
->  			    struct nf_flowtable *flow_table,
-> @@ -1166,6 +1086,108 @@ nf_flow_offload_ipv6_lookup(struct nf_flowtable_c=
-tx *ctx,
->  	return flow_offload_lookup(flow_table, &tuple);
->  }
-> =20
-> +unsigned int
-> +nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
-> +			const struct nf_hook_state *state)
+> +/*
+> + * Handle a metadata frame record embedded in pt_regs.
+> + *
+> + * On RISC-V, fp points above the record (fp = metadata + 16), so the
+> + * frame_record_meta starts at fp - sizeof(struct frame_record).
+> + *
+> + * FRAME_META_TYPE_FINAL: This is the outermost exception entry
+> + *   (user -> kernel). Unwinding terminates successfully.
+> + * FRAME_META_TYPE_PT_REGS: This is a nested exception entry
+> + *   (kernel -> kernel). Continue unwinding from the saved context.
+> + */
+> +static __always_inline int
+> +kunwind_next_frame_record_meta(struct kunwind_state *state)
 > +{
-> +	struct flow_offload_tuple_rhash *tuplehash;
-> +	struct nf_flowtable *flow_table =3D priv;
-> +	struct flow_offload_tuple *other_tuple;
-> +	enum flow_offload_tuple_dir dir;
-> +	struct nf_flowtable_ctx ctx =3D {
-> +		.in	=3D state->in,
-> +	};
-> +	struct nf_flow_xmit xmit =3D {};
-> +	struct in6_addr *ip6_daddr;
-> +	struct flow_offload *flow;
-> +	struct neighbour *neigh;
-> +	struct rtable *rt;
-> +	__be32 ip_daddr;
+> +	struct task_struct *tsk = state->task;
+> +	unsigned long fp = state->common.fp;
+> +	unsigned long meta_base = fp - sizeof(struct frame_record);
+> +	struct frame_record_meta *meta;
+> +	struct stack_info *info;
+> +
+> +	info = unwind_find_stack(&state->common, meta_base, sizeof(*meta));
+> +	if (!info)
+> +		return -EINVAL;
+> +
+> +	meta = (struct frame_record_meta *)meta_base;
+> +	switch (READ_ONCE(meta->type)) {
+> +	case FRAME_META_TYPE_FINAL:
+> +		if (meta == &task_pt_regs(tsk)->stackframe)
+> +			return -ENOENT;
+> +		WARN_ON_ONCE(tsk == current);
+> +		return -EINVAL;
+> +	case FRAME_META_TYPE_PT_REGS:
+> +		return kunwind_next_regs_pc(state);
+> +	default:
+> +		WARN_ON_ONCE(tsk == current);
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +/*
+> + * Unwind from one frame record to the next.
+> + *
+> + * On RISC-V, the frame record sits at fp - sizeof(struct frame_record),
+> + * immediately below the address pointed to by fp/s0. This applies to both
+> + * normal frame records and metadata frame records (embedded in pt_regs).
+> + *
+> + * A metadata record is identified by both fp and ra being zero in the
+> + * frame_record portion, with a type value following at fp + 16.
+> + */
+> +static __always_inline int
+> +kunwind_next_frame_record(struct kunwind_state *state)
+> +{
+> +	unsigned long fp = state->common.fp;
+> +	struct frame_record *record;
+> +	struct stack_info *info;
+> +	unsigned long new_fp, new_pc;
+> +	unsigned long record_base;
+> +
+> +	if (fp & 0x7)
+> +		return -EINVAL;
+> +
+> +	record_base = fp - sizeof(*record);
+> +
+> +	info = unwind_find_stack(&state->common, record_base, sizeof(*record));
+> +	if (!info)
+> +		return -EINVAL;
+> +
+> +	record = (struct frame_record *)record_base;
+> +	new_fp = READ_ONCE(record->fp);
+> +	new_pc = READ_ONCE(record->ra);
+> +
+> +	if (!new_fp && !new_pc)
+> +		return kunwind_next_frame_record_meta(state);
+> +
+> +	unwind_consume_stack(&state->common, info, record_base,
+> +			     sizeof(*record));
+> +
+> +	state->common.fp = new_fp;
+> +	state->common.pc = new_pc;
+> +	state->source = KUNWIND_SOURCE_FRAME;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Unwind from one frame record (A) to the next frame record (B).
+> + *
+> + * We terminate early if the location of B indicates a malformed chain of frame
+> + * records (e.g. a cycle), determined based on the location and fp value of A
+> + * and the location (but not the fp value) of B.
+> + */
+> +static __always_inline int
+> +kunwind_next(struct kunwind_state *state)
+> +{
+> +	int err;
+> +
+> +	state->flags.all = 0;
+> +
+> +	switch (state->source) {
+> +	case KUNWIND_SOURCE_FRAME:
+> +	case KUNWIND_SOURCE_CALLER:
+> +	case KUNWIND_SOURCE_TASK:
+> +	case KUNWIND_SOURCE_REGS_PC:
+> +		err = kunwind_next_frame_record(state);
+> +		break;
+> +	default:
+> +		err = -EINVAL;
+> +	}
+> +
+> +	if (err)
+> +		return err;
+> +
+> +	return kunwind_recover_return_address(state);
+> +}
+> +
+> +typedef bool (*kunwind_consume_fn)(const struct kunwind_state *state, void *cookie);
+> +
+> +static __always_inline int
+> +do_kunwind(struct kunwind_state *state, kunwind_consume_fn consume_state,
+> +	   void *cookie)
+> +{
 > +	int ret;
 > +
-> +	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
-> +	if (!tuplehash)
-> +		return NF_ACCEPT;
+> +	ret = kunwind_recover_return_address(state);
+> +	if (ret)
+> +		return ret;
 > +
-> +	if (ctx.tun.proto =3D=3D IPPROTO_IPV6)
-> +		ret =3D nf_flow_offload_ipv6_forward(&ctx, flow_table, tuplehash,
-> +						   skb);
-> +	else
-> +		ret =3D nf_flow_offload_forward(&ctx, flow_table, tuplehash, skb);
-> +	if (ret < 0)
-> +		return NF_DROP;
-> +	else if (ret =3D=3D 0)
-> +		return NF_ACCEPT;
-> +
-> +	if (unlikely(tuplehash->tuple.xmit_type =3D=3D FLOW_OFFLOAD_XMIT_XFRM))=
- {
-> +		rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> +		memset(skb->cb, 0, sizeof(struct inet_skb_parm));
-> +		IPCB(skb)->iif =3D skb->dev->ifindex;
-> +		IPCB(skb)->flags =3D IPSKB_FORWARDED;
-> +		return nf_flow_xmit_xfrm(skb, state, &rt->dst);
+> +	while (1) {
+> +		if (!consume_state(state, cookie))
+> +			return -EINVAL;
+> +		ret = kunwind_next(state);
+> +		if (ret == -ENOENT)
+> +			return 0;
+> +		if (ret < 0)
+> +			return ret;
 > +	}
-> +
-> +	dir =3D tuplehash->tuple.dir;
-> +	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> +	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> +	ip_daddr =3D other_tuple->src_v4.s_addr;
-> +	ip6_daddr =3D &other_tuple->src_v6;
-> +
-> +	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> +				&ip6_daddr) < 0)
-> +		return NF_DROP;
-> +
-> +	switch (tuplehash->tuple.xmit_type) {
-> +	case FLOW_OFFLOAD_XMIT_NEIGH: {
-> +		struct dst_entry *dst;
-> +
-> +		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.ifid=
-x);
-> +		if (!xmit.outdev) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		if (other_tuple->tun.encap_proto =3D=3D AF_INET6 ||
-> +		    ctx.tun.proto =3D=3D IPPROTO_IPV6) {
-> +			struct rt6_info *rt6;
-> +
-> +			rt6 =3D dst_rt6_info(tuplehash->tuple.dst_cache);
-> +			neigh =3D ip_neigh_gw6(rt6->dst.dev,
-> +					     rt6_nexthop(rt6, ip6_daddr));
-> +			dst =3D &rt6->dst;
-> +		} else {
-> +			rt =3D dst_rtable(tuplehash->tuple.dst_cache);
-> +			neigh =3D ip_neigh_gw4(rt->dst.dev,
-> +					     rt_nexthop(rt, ip_daddr));
-> +			dst =3D &rt->dst;
-> +		}
-> +		if (IS_ERR(neigh)) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		xmit.dest =3D neigh->ha;
-> +		skb_dst_set_noref(skb, dst);
-> +		break;
-> +	}
-> +	case FLOW_OFFLOAD_XMIT_DIRECT:
-> +		xmit.outdev =3D dev_get_by_index_rcu(state->net, tuplehash->tuple.out.=
-ifidx);
-> +		if (!xmit.outdev) {
-> +			flow_offload_teardown(flow);
-> +			return NF_DROP;
-> +		}
-> +		xmit.dest =3D tuplehash->tuple.out.h_dest;
-> +		xmit.source =3D tuplehash->tuple.out.h_source;
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return NF_DROP;
-> +	}
-> +	xmit.tuple =3D other_tuple;
-> +	xmit.needs_gso_segment =3D tuplehash->tuple.needs_gso_segment;
-> +
-> +	return nf_flow_queue_xmit(state->net, skb, &xmit);
 > +}
-> +EXPORT_SYMBOL_GPL(nf_flow_offload_ip_hook);
 > +
->  unsigned int
->  nf_flow_offload_ipv6_hook(void *priv, struct sk_buff *skb,
->  			  const struct nf_hook_state *state)
-> @@ -1182,6 +1204,7 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buf=
-f *skb,
->  	struct flow_offload *flow;
->  	struct neighbour *neigh;
->  	struct rt6_info *rt;
-> +	__be32 ip_daddr;
->  	int ret;
-> =20
->  	tuplehash =3D nf_flow_offload_ipv6_lookup(&ctx, flow_table, skb);
-> @@ -1209,10 +1232,11 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_b=
-uff *skb,
->  	dir =3D tuplehash->tuple.dir;
->  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
->  	other_tuple =3D &flow->tuplehash[!dir].tuple;
-> +	ip_daddr =3D other_tuple->src_v4.s_addr;
->  	ip6_daddr =3D &other_tuple->src_v6;
-> =20
-> -	if (nf_flow_tunnel_v6_push(state->net, skb, other_tuple,
-> -				   &ip6_daddr) < 0)
-> +	if (nf_flow_tunnel_push(state->net, skb, other_tuple, &ip_daddr,
-> +				&ip6_daddr) < 0)
->  		return NF_DROP;
-> =20
->  	switch (tuplehash->tuple.xmit_type) {
-> @@ -1226,10 +1250,8 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_bu=
-ff *skb,
->  		}
->  		if (other_tuple->tun.encap_proto =3D=3D AF_INET ||
->  		    ctx.tun.proto =3D=3D IPPROTO_IPIP) {
-> -			__be32 ip_daddr =3D other_tuple->src_v4.s_addr;
->  			struct rtable *rt4;
-> =20
-> -			skb->protocol =3D htons(ETH_P_IP);
->  			rt4 =3D dst_rtable(tuplehash->tuple.dst_cache);
->  			neigh =3D ip_neigh_gw4(rt4->dst.dev,
->  					     rt_nexthop(rt4, ip_daddr));
->=20
-> --=20
-> 2.55.0
->=20
+> +static __always_inline int
+> +kunwind_stack_walk(kunwind_consume_fn consume_state,
+> +		   void *cookie, struct task_struct *task,
+> +		   struct pt_regs *regs)
+> +{
+> +	struct task_struct *tsk = task ?: current;
+> +	struct stack_info stacks[] = {
+> +		stackinfo_get_task(tsk),
+> +		STACKINFO_CPU(tsk, irq),
+> +#ifdef CONFIG_VMAP_STACK
+> +		STACKINFO_CPU(tsk, overflow),
+> +#endif
+> +	};
+> +	struct kunwind_state state = {
+> +		.common = {
+> +			.stacks = stacks,
+> +			.nr_stacks = ARRAY_SIZE(stacks),
+> +		},
+> +	};
+> +
+> +	if (regs) {
+> +		if (tsk != current)
+> +			return -EINVAL;
+> +		kunwind_init_from_regs(&state, regs);
+> +	} else if (tsk == current) {
+> +		kunwind_init_from_caller(&state);
+> +	} else {
+> +		kunwind_init_from_task(&state, tsk);
+> +	}
+> +
+> +	return do_kunwind(&state, consume_state, cookie);
+> +}
+> +
+> +struct kunwind_consume_entry_data {
+> +	stack_trace_consume_fn consume_entry;
+> +	void *cookie;
+> +};
+> +
+> +static __always_inline bool
+> +arch_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
+> +{
+> +	struct kunwind_consume_entry_data *data = cookie;
+> +
+> +	return data->consume_entry(data->cookie, state->common.pc);
+> +}
+> +
+> +static __always_inline bool
+> +arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
+> +{
+> +	/*
+> +	 * At an exception boundary we can reliably consume the saved PC. We do
+> +	 * not know whether ra was live when the exception was taken, and
+> +	 * so we cannot perform the next unwind step reliably.
+> +	 *
+> +	 * All that matters is whether the *entire* unwind is reliable, so give
+> +	 * up as soon as we hit an exception boundary.
+> +	 */
+> +	if (state->source == KUNWIND_SOURCE_REGS_PC)
+> +		return false;
+> +
+> +	return arch_kunwind_consume_entry(state, cookie);
+> +}
+> +
+> +#endif /* CONFIG_FRAME_POINTER */
+> +
+> +/*
+> + * arch_stack_walk - dual implementation.
+> + *
+> + * When CONFIG_FRAME_POINTER is enabled, uses the kunwind infrastructure for
+> + * robust frame-pointer-based unwinding, consistent with arch_stack_walk_reliable.
+> + *
+> + * When CONFIG_FRAME_POINTER is disabled, falls back to the simple stack scan
+> + * in walk_stackframe().
+> + */
+> +#ifdef CONFIG_FRAME_POINTER
+> +
+> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> +				      void *cookie, struct task_struct *task,
+> +				      struct pt_regs *regs)
+> +{
+> +	struct kunwind_consume_entry_data data = {
+> +		.consume_entry = consume_entry,
+> +		.cookie = cookie,
+> +	};
+> +
+> +	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
+> +}
+> +
+> +#else
+> +
+> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> +				      void *cookie, struct task_struct *task,
+> +				      struct pt_regs *regs)
+>   {
+>   	walk_stackframe(task, regs, consume_entry, cookie);
+>   }
+>   
+> +#endif /* CONFIG_FRAME_POINTER */
+> +
+> +/*
+> + * Reliable stack walk for livepatch (CONFIG_FRAME_POINTER only).
+> + */
+> +#ifdef CONFIG_FRAME_POINTER
+> +
+> +noinline noinstr int arch_stack_walk_reliable(stack_trace_consume_fn consume_entry,
+> +					      void *cookie,
+> +					      struct task_struct *task)
+> +{
+> +	struct kunwind_consume_entry_data data = {
+> +		.consume_entry = consume_entry,
+> +		.cookie = cookie,
+> +	};
+> +
+> +	return kunwind_stack_walk(arch_reliable_kunwind_consume_entry, &data,
+> +				  task, NULL);
+> +}
+> +
+> +#endif /* CONFIG_FRAME_POINTER */
+> +
+>   /*
+>    * Get the return address for a single stackframe and return a pointer to the
+>    * next frame tail.
 
---Oz9APxSaQ2vAwgoj
-Content-Type: application/pgp-signature; name=signature.asc
+LGTM.
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCak4HtgAKCRA6cBh0uS2t
-rGpOAQDCkU3Vscylv74eHnaaoL0n+IhBoXjPk01p6STMIWJHlwD/WI3QrHCtFS9G
-4OFbvq1Mlh6WhzD625CmYluuRt3z5w0=
-=WL9c
------END PGP SIGNATURE-----
+Thanks.
+Shuai
 
---Oz9APxSaQ2vAwgoj--
