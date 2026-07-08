@@ -1,60 +1,32 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D27B3E63B6;
-	Wed,  8 Jul 2026 07:02:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531353E6DD8;
+	Wed,  8 Jul 2026 07:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783494135; cv=none; b=eUnRsGog4viy+CbA2kjVC478K32gp2rkHp6RTp6OjJ8LXFTC+/A44NcmwOrHbrNMSPQrVv+L0AA/H7bjXtzwnGDUlIqPcuD45lKBuuyx2lWyikLC5BI7bZhCDFHgDCX04RPEtRAeGXwAaoqYJ8RGeSnZlhDBCgHBAqlOY7yXsAw=
+	t=1783494310; cv=none; b=lwWG6HFUgqJDEzA44/9lHNAJ8rMjadZRHvtQjMqC/3P6eCsGazeXq0IK1EReubVaQ+fROxHemPGqso+6xGBS3V79WKkLuH6+LVRVWE6C1b3rjBiIXtZWZPhwZ+2uq48wgXcotKMUZEyctgEa5PNVHvMrYTnbCiIEh402P/ShwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783494135; c=relaxed/simple;
-	bh=6PbN40edeBOUf6v+skBg1zGdDXmZeMENUy5Q0L/+Myk=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Q5r65wHMXydpWfwbbd3Ih65RmSadS+w/hQgOClmw01n2l8Fbu5IwTzhXN6ESra/QNBWBUMRv3yo+jByfNs0vlpygsGjQKsrxkudwpyiZ9M+bLOGTeyv60gN+NJj0lYgVrQ6EStYXIkjl/ZddlL9ieE1Nc4M0upGJIkGY/rHJAnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oLv/pNsJ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1783494310; c=relaxed/simple;
+	bh=Kfrb3+5tYPOiLtvz4HJtKv6RKCL/qDqvGfR0DV4LxG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rfcs8RGURAXefMa4tLHfhjCfZMvU/USe4Q9FIWx5aykqchHhySf9DH1u5H3wqO8sm/jZ+zybsznFvm9rmGBXy98+XmvhHfgvMPv/AoewzB0wkVYAIBF93zIyMQQXaFJ4yo61wgjo2SQ7v7vBKRKfgEhZEsB98wfX1Xjx0F2opfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ldyH6F58; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oLv/pNsJ"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667MmZOa820082;
-	Wed, 8 Jul 2026 07:01:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=tlSCzq
-	7tAckvaGb5Epq4YxWuV6DFOJs4JkORikwFt1o=; b=oLv/pNsJaox34oLaY3htgj
-	B3VUUjdSNdTeloJ5QsdxtK6VVoh4TMsam8WNv7k4P7azwz6/UPHOH4eV2vMH2uiE
-	QMP2oqK0+wu4uUFlVMHSsPl7TsQPPidUY+Do3tMPhe59+OnUqp+eNoY1hms3nzL6
-	JZKHsiQEaeLPApDgZSjEPV3UB3uBU755Kwve+iX/thaOrOEuVlTzDkO2rKwagQq0
-	YjsqJqudT5pNFEfmIwWG67g6cqqfuYU98833gcOoOyLaZvO925dJxUwCxEpuSZRC
-	MCx4KRSVwQHU6Fd7XzzMpDaBP3IqyYgzLn34L1cmg4L65T50hIhsgd8Gn8rRkguw
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6sw4u3y8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jul 2026 07:01:38 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6686nZUx009369;
-	Wed, 8 Jul 2026 07:01:37 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7f6y649d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jul 2026 07:01:37 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66871bUZ11731554
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 Jul 2026 07:01:37 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1D43458064;
-	Wed,  8 Jul 2026 07:01:37 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 138D05803F;
-	Wed,  8 Jul 2026 07:01:32 +0000 (GMT)
-Received: from [9.123.3.209] (unknown [9.123.3.209])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  8 Jul 2026 07:01:31 +0000 (GMT)
-Message-ID: <198eac9f-3b77-4376-8ae6-9c0ae13d60cd@linux.ibm.com>
-Date: Wed, 8 Jul 2026 12:31:30 +0530
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ldyH6F58"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1783494285; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=VqOzBHcezIdJbCw9H20f4ApkMFhu+ojhnSlVxGo7tKM=;
+	b=ldyH6F58hjVNhnMeZOfXhTo4aBYq11lEHFs+602BQUdrjf3OxaHRpFCr3mJwm120e22u8mM0r99KRz3T4Zxx4yALrToHw7sbXOdQfyR+AVEPXCUx84dzb/XwDOnj4gnJOkBOBjax/baNiaaKv7NoURMDXsSWTjKRVJ0E3cLHAo0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X6gnBaq_1783493952;
+Received: from 30.246.161.237(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X6gnBaq_1783493952 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Jul 2026 14:59:14 +0800
+Message-ID: <9228c07a-8879-41de-ba87-b9f879648ba8@linux.alibaba.com>
+Date: Wed, 8 Jul 2026 14:59:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,269 +34,106 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v2 1/3] selftests/mm: handle EINVAL when configuring
- gigantic hugepages
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1782811071.git.sayalip@linux.ibm.com>
- <3d394c8cd59fe380d4e2d13b051544f241918f07.1782811071.git.sayalip@linux.ibm.com>
- <ccba342f-1ed0-43fe-ac59-9b8bbfb168d4@kernel.org>
- <968b496a-a83e-491a-950c-3f6f975fa5f5@linux.ibm.com>
- <32a42e83-3e5e-4b00-b78c-d762094b9d76@kernel.org>
-Content-Language: en-IN
-In-Reply-To: <32a42e83-3e5e-4b00-b78c-d762094b9d76@kernel.org>
+Subject: Re: [PATCH v4 RESEND 4/7] riscv: stacktrace: introduce stack-bound
+ tracking helpers
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+ Oleg Nesterov <oleg@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ Marcos Paulo de Souza <mpdesouza@suse.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
+ <20260629072713.3273743-5-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260629072713.3273743-5-wanghan@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: r3dXjv-RqikqydcFtavczmSqNEMVv7tV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfXwooKDUeozWUo
- H8QB9aQOVjbhX7YPyhQjrozwXzVLFZQkNq8mDVE9S0x4+uFWR1crOH57qFHBavHmwOgViy3J0nK
- rRCQ6Kdf+S2CzXucGF/YQPhCwzXOfuhN0puC2dsv0gBeIOsV8XPBRA2sOZMN0h9h/HLyb3IpcKa
- kl4ZuGegq07u2r0I5Uh1hR5nienVBEmuYyrvgp0dUSOaBTXLyFozcEYPDCdxJ9Lx7YLnGjDsWp7
- WMCeeIu7nDZ/1upERCrxoLhmhPXm573+KLWpAgmRDe9QbHuWhBKwM3Bq2cDp+OWMcnu4bhxhFjQ
- /WwNlcU6CB0hSX5MAkDnoVEGku5XZPOb51dEcD3nGycYzlXI8F3dcADfCuvZGXUEeYkX5iGwBi0
- 9Wx3msNRm6IW1MxpRs4rsSRdSLuJhkwmwNpEQcuuMHI0wOsAJVGLZVa5PGowbNzjTRrzVgz/AYO
- UX9ok2Cm4+XD73DGEhQ==
-X-Proofpoint-ORIG-GUID: yKrqzthyQVTlRAJNvd2CzFqN2bjXXBux
-X-Authority-Analysis: v=2.4 cv=FqQ1OWrq c=1 sm=1 tr=0 ts=6a4df5d3 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=FC1D3BymJF1NogjcMuUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA4MDA2MyBTYWx0ZWRfX3IRK1JPVVoRO
- FP5L2axnfRFdgA6AOCn9fIix+rS5wjYGJHJ60al/DLo82FufFJUDJqB8N8JKt8f0hdGQJqUPD7Z
- mLQcaWAAJYJtHtAYkP4FSmffwx+FIDg=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-07_06,2026-07-06_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607080063
+Content-Transfer-Encoding: 7bit
 
 
 
-On 01/07/26 14:18, David Hildenbrand (Arm) wrote:
-> On 6/30/26 22:20, Sayali Patil wrote:
->>
->>
->> On 30/06/26 16:15, David Hildenbrand (Arm) wrote:
->>> On 6/30/26 11:32, Sayali Patil wrote:
->>>> Some MM selftests attempt to configure the amount of
->>>> HugeTLB pages of different sizes by writing to nr_hugepages.
->>>>
->>>> PowerPC hash MMU pSeries systems advertise gigantic hugepage sizes
->>>> but do not support runtime allocation of such pages, writes
->>>> to the corresponding nr_hugepages file fail with -EINVAL.
->>>> This causes the test to bail out even though the failure is due
->>>> to a platform limitation rather than the
->>>> functionality being tested.
->>>>
->>>> Treat -EINVAL from the sysfs write as a skipped configuration request
->>>> and continue running the test instead of failing.
->>>>
->>>> Before patch:
->>>>      -------------------------
->>>>      running ./hugetlb-madvise
->>>>      -------------------------
->>>>      TAP version 13
->>>>      1..1
->>>>        [INFO] detected hugetlb page size: 16777216 KiB
->>>>        [INFO] detected hugetlb page size: 16384 KiB
->>>>       ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
->>>>       Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>>       Bail out! /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
->>>>       write(0) failed: Invalid argument
->>>>       Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>>       [FAIL]
->>>>
->>>> After patch:
->>>>      -------------------------
->>>>      running ./hugetlb-madvise
->>>>      -------------------------
->>>>      TAP version 13
->>>>      1..1
->>>>       [INFO] detected hugetlb page size: 16777216 KiB
->>>>       [INFO] detected hugetlb page size: 16384 KiB
->>>>      ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
->>>>      Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
->>>>      /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
->>>>      write(0) failed: Invalid argument
->>>>      [PASS]
->>>>
->>>> Fixes: 27477b28b74f ("selftests/mm: hugepage_settings: add APIs to get and
->>>> set nr_hugepages")
->>>> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
->>>> ---
->>>>    .../testing/selftests/mm/hugepage_settings.c  | 32 ++++++++++++++++++-
->>>>    .../testing/selftests/mm/hugepage_settings.h  |  1 +
->>>>    2 files changed, 32 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/
->>>> selftests/mm/hugepage_settings.c
->>>> index 2eab2110ac6a..ce38ae3da01a 100644
->>>> --- a/tools/testing/selftests/mm/hugepage_settings.c
->>>> +++ b/tools/testing/selftests/mm/hugepage_settings.c
->>>> @@ -422,6 +422,36 @@ static void hugetlb_sysfs_path(char *buf, size_t buflen,
->>>>             size / 1024, attr);
->>>>    }
->>>>    +void hugetlb_write_num(const char *path, unsigned long num)
->>>> +{
->>>> +    int fd, saved_errno;
->>>> +    ssize_t numwritten;
->>>> +    char buf[21];
->>>> +
->>>> +    sprintf(buf, "%lu", num);
->>>> +
->>>> +    fd = open(path, O_WRONLY);
->>>> +    if (fd == -1)
->>>> +        ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
->>>> +
->>>> +    numwritten = write(fd, buf, strlen(buf));
->>>> +    saved_errno = errno;
->>>> +    close(fd);
->>>> +    errno = saved_errno;
->>>> +
->>>> +    /* Treat EINVAL as a skipped configuration (e.g., unsupported gigantic
->>>> pages) */
->>>> +    if (numwritten < 0 && errno == EINVAL) {
->>>> +        ksft_print_msg("%s write(%s) failed: %s\n", path, buf,
->>>> strerror(errno));
->>>
->>> Should we even print anything here? Rather confusing. It's just like we cannot
->>> allocate anything (no memory).
->>>
->>> In general, you are copy-pasting a lot of write_num()+write_file() content,
->>> which is really suboptimal.
->>>
->>> All you want is an option for write_num -> write_file to skip on -EINVAL,
->>> correct?
->>>
->>> There are not that many write_num / write_file users ...
->>>
->>
->> Hi David,
->>
->> Yes, all I need is to ignore the expected -EINVAL when attempting to
->> configure gigantic hugepages via nr_hugepages.
->>
->> I looked at extending write_num()/write_file() for this as in v1
->> (https://lore.kernel.org/
->> all/8bfa921e30eb94072685103f6496784aa23bb166.1782365671.git.sayalip@linux.ibm.com/),
->> but these helpers are shared by several other selftests.
->> For example, write_file() is used by split_huge_page_test setup and by
->> khugepaged tests for drop_caches, and is also used for various THP and
->> khugepaged settings where -EINVAL would indicate a genuine setup
->> failure. This concern was also raised during the v1 review.
->>
->> Because the expected -EINVAL is specific to gigantic hugepage runtime
->> allocation, I kept the handling local to the hugetlb setup path rather
->> than changing the semantics of the common helpers.
->>
->> I also agree that printing a message is not particularly useful in this
->> case, and we can simply return without emitting any output.
+On 6/29/26 3:27 PM, Wang Han wrote:
+> A reliable unwinder needs to validate that every frame record it reads
+> is fully contained in a known kernel stack, and it needs to refuse to
+> walk back into a stack it has already left. Add the building blocks
+> for that:
 > 
-> We can either convert the functions to use flags, or hide it in some internal helpers, like the following:
+>    * struct stack_info / struct unwind_state in a new
+>      asm/stacktrace/common.h, modelled on the arm64 reference
+>      implementation.
+>    * stackinfo_get_irq() / stackinfo_get_task() / stackinfo_get_overflow()
+>      plus the corresponding on_*_stack() predicates in asm/stacktrace.h,
+>      so callers can ask "is this object on stack X?" by stack kind
+>      rather than open-coded address arithmetic.
+>    * unwind_init_common(), unwind_find_stack() and
+>      unwind_consume_stack() helpers that enforce the
+>      forward-progress-only invariant required for reliability.
 > 
->  From 1b1b8ad51f1f0be469cb191736300254b9521fe4 Mon Sep 17 00:00:00 2001
-> From: "David Hildenbrand (Arm)" <david@kernel.org>
-> Date: Wed, 1 Jul 2026 10:45:16 +0200
-> Subject: [PATCH] tmp
+> No existing user is wired up to these helpers in this commit; the
+> unwinder switch comes in a follow-up. The header changes leave
+> on_thread_stack() with the same semantics as before, just expressed in
+> terms of the new helpers.
 > 
-> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 > ---
->   tools/testing/selftests/mm/vm_util.c | 28 ++++++++++++++++++++++++----
->   tools/testing/selftests/mm/vm_util.h |  1 +
->   2 files changed, 25 insertions(+), 4 deletions(-)
+>   arch/riscv/include/asm/stacktrace.h        |  65 ++++++++-
+>   arch/riscv/include/asm/stacktrace/common.h | 159 +++++++++++++++++++++
+>   2 files changed, 222 insertions(+), 2 deletions(-)
+>   create mode 100644 arch/riscv/include/asm/stacktrace/common.h
 > 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 311fc5b4513eb..362070f817e9b 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -719,7 +719,8 @@ int read_file(const char *path, char *buf, size_t buflen)
->   	return (unsigned int) numread;
->   }
+> diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
+> index b1495a7e06ce..bc87c4940379 100644
+> --- a/arch/riscv/include/asm/stacktrace.h
+> +++ b/arch/riscv/include/asm/stacktrace.h
+> @@ -3,8 +3,13 @@
+>   #ifndef _ASM_RISCV_STACKTRACE_H
+>   #define _ASM_RISCV_STACKTRACE_H
 >   
-> -void write_file(const char *path, const char *buf, size_t buflen)
-> +static int __write_file(const char *path, const char *buf, size_t buflen,
-> +		bool ignore_einval)
->   {
->   	int fd, saved_errno;
->   	ssize_t numwritten;
-> @@ -735,14 +736,23 @@ void write_file(const char *path, const char *buf, size_t buflen)
->   	saved_errno = errno;
->   	close(fd);
->   	errno = saved_errno;
-> -	if (numwritten < 0)
+> +#include <linux/percpu.h>
+>   #include <linux/sched.h>
+> +#include <linux/sched/task_stack.h>
 > +
-> +	if (numwritten < 0) {
-> +		if (ignore_einval && errno == EINVAL)
-> +			return;
->   		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
->   				buf, strerror(errno));
-> +	}
->   	if (numwritten != buflen - 1)
->   		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
->   				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
->   }
+> +#include <asm/irq_stack.h>
+>   #include <asm/ptrace.h>
+> +#include <asm/stacktrace/common.h>
 >   
-> +static void write_file(const char *path, const char *buf, size_t buflen)
+>   struct stackframe {
+>   	unsigned long fp;
+> @@ -16,14 +21,70 @@ extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *re
+>   extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+>   			   const char *loglvl);
+>   
+> -static inline bool on_thread_stack(void)
+> +/*
+> + * IRQ stack accessors
+> + */
+> +static inline struct stack_info stackinfo_get_irq(void)
 > +{
-> +	__write_file(path, bug, buflen, /* ignore_einval = */ false);
-> +}
-> +
->   unsigned long read_num(const char *path)
->   {
->   	char buf[21];
-> @@ -753,12 +763,22 @@ unsigned long read_num(const char *path)
->   	return strtoul(buf, NULL, 10);
->   }
->   
-> -void write_num(const char *path, unsigned long num)
-> +static void __write_num(const char *path, unsigned long num, bool ignore_einval)
->   {
->   	char buf[21];
->   
->   	sprintf(buf, "%lu", num);
-> -	write_file(path, buf, strlen(buf) + 1);
-> +	write_file(path, buf, strlen(buf) + 1, ignore_einval);
-> +}
-> +
-> +void write_num(const char *path, unsigned long num)
-> +{
-> +	return __write_num(path, num, /* ignore_einval = */ false);
-> +}
-> +
-> +void write_num_ignore_einval(const char *path, unsigned long num)
-> +{
-> +	return __write_num(path, num, /* ignore_einval = */ true);
->   }
->   
->   static unsigned long shmall, shmmax;
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index ea8fc8fdf0eb0..7799154b67eed 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -168,6 +168,7 @@ void write_file(const char *path, const char *buf, size_t buflen);
->   int read_file(const char *path, char *buf, size_t buflen);
->   unsigned long read_num(const char *path);
->   void write_num(const char *path, unsigned long num);
-> +void write_num_ignore_einval(const char *path, unsigned long num);
->   
->   void shm_limits_prepare(unsigned long length);
->   void __shm_limits_restore(void);
+> +	unsigned long low = (unsigned long)raw_cpu_read(irq_stack_ptr);
 
-Thanks, David. I've sent out v3 incorporating the suggested changes.
-V3:https://lore.kernel.org/all/cover.1783446924.git.sayalip@linux.ibm.com/
+ From https://sashiko.dev/#/patchset/20260629072713.3273743-1-wanghan%40linux.alibaba.com
+
+Will this cause a link error when CONFIG_IRQ_STACKS is disabled?
+Looking at arch/riscv/kernel/irq.c, irq_stack_ptr is defined inside an
+#ifdef CONFIG_IRQ_STACKS block. Since stackinfo_get_irq() unconditionally
+references it here, it seems this might result in an undefined reference
+to irq_stack_ptr during linking.
+
+Should this accessor be conditionally compiled, or should it provide a
+fallback when CONFIG_IRQ_STACKS is not set?
+
+Thanks.
+Shuai
