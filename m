@@ -1,91 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FD93C3453
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 19:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C6035959;
+	Wed,  8 Jul 2026 19:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783537694; cv=none; b=pZxRpZDCSSac9HsLYUO6zoblPeaBgAWqi6nyEfW5tdDwWtK0dVZdlHNDy+evitGySPz5Uu9iLo4CkO+Rn4Q0+XK73XnjjB8IxC3MnSh5Ksw681vP+YGPfdPVOrBVkzTe0rnY7qvircu0Y0Q3iklNeO4vu+xozjG0llk4hJ31o9w=
+	t=1783539166; cv=none; b=ln4Dchf6up7wua2YIhKp/EQMuwrjyBl0a6BAhqSAlrPCM5p8uYz96NLPG0dfergzSqF2seiUQYDjn6ypK98v0vgqE7ZQ3/Tr/XvZkNTSGeFMRUY+nJwg3JvswzE579ZPaCpjeHqky1InyOiIQZ2m2MEAUvz7HyFzrd9GubU79fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783537694; c=relaxed/simple;
-	bh=yiBkA9xQHooEcgjjRAQRu3aK1yHlnq/UeMyE5vEXoEM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vpad8HI0fTDzfelMYaaTNgVcYdauw+XB8f36SQIHiUhncePNYJf3Q6Bcqb3mxgYe+hbn954kQd/3dxOdLKsW2HPwNKTT17tlZUavce8E7ZecpaJkdR+UHmixA6CpSDp9Gv7GWGCEBtyPKdGLQjfDLM387rKAxZ9rWY28xVZzpwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JX1w5xxl; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JX1w5xxl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5181F01559
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 19:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783537693;
-	bh=yiBkA9xQHooEcgjjRAQRu3aK1yHlnq/UeMyE5vEXoEM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=JX1w5xxlZ7d0rlN3bIaPU9Yb1jxSFKZfedoZtGcsE+sngcvCXrnoGwvc6MLooVNXE
-	 4lA6rIFmchXAe7hNCyBX8Q5pkx1k4Nfaf1+47IOHiUfIvJl+FlMRueQE3BgIddpBXR
-	 LiJn90bD6okxSyv2Sss453Tad72ouC/YgBsBIMGAYNhI9ZFC2jmFEZkjY8nZMoH1VY
-	 OekxpQz7JVsB95w2OJHIuUxinRS8BEEGD2hr2FQ8StOUHpJGvJRg1zt/F0dkPpkHge
-	 K1yY/II+hKH8H8S905VbpHaHmTCtKTFlhoIr+CIzH/VFfsRfzDldCEexOA4S485F9v
-	 9b1fy5gC18gbQ==
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c15c7d22070so15161366b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 12:08:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrsJ52tNFEj7NgP312PPcvrif1P/2QTl13cUGQNAnVdWJVkeNo9f6LQHnF+7yVqQEsLYIzPpXLRLKRFo6Omolw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJV+4R/cMZo1BwO5o4FpSj6fFavA+QPX5zI5jLg0h/Nl0WomTm
-	wA/MmRmrfE1xBGTwy152TBYALD0g5d4sZPHrTjWuhk3oapTmA1XU3WNFkRIt85R4XPoKISSXr0E
-	AZQpmjYD86m194YmKP5/Ccye6JmX+5H0=
-X-Received: by 2002:a17:906:c14a:b0:c05:b9db:68cc with SMTP id
- a640c23a62f3a-c15cdc8ac7amr170635966b.0.1783537692118; Wed, 08 Jul 2026
- 12:08:12 -0700 (PDT)
+	s=arc-20240116; t=1783539166; c=relaxed/simple;
+	bh=v9hEdK7ccL/Br4fOnWNLLTTEFWkkKvXC2qQt1c7kEYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ns/BxB/x5kxEDxWVCZIc2SxQaftp0CZ6JFTuZ6VbCZyhcEk3kA8g3tOjugjh2+39iw+LKs/edyZyTBlCeRx0pfq9KvQo3JoV/qA1AUWosFVkeuySxa2puj6GvgpqIc5jIm/2Yy4eqe/b0OQQGoq3DorMxgNsAFrTtcvsV3dwGj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf03.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 571A81A0299;
+	Wed,  8 Jul 2026 19:32:36 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 865CA6000D;
+	Wed,  8 Jul 2026 19:32:34 +0000 (UTC)
+Date: Wed, 8 Jul 2026 15:32:39 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>
+Subject: [PATCH] selftests/ftrace: Fix reading enabled_functions in
+ add_remove_fprobe_module test
+Message-ID: <20260708153239.055d56dd@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
- <CAO9r8zNJh65SZzdW8Cc8_8N5Wr+ORuRtU3kuaAX_DhLaESFYTA@mail.gmail.com>
- <CAKEwX=MMXdq7KTzcEgXfNt2L-eTmAVa+nijdyiujVOAhXQsHSg@mail.gmail.com>
- <CAO9r8zO-nAys0PJfXVRwLgAzwJLa9KxpMXKQKXJR7cnYKgmhRQ@mail.gmail.com>
- <CAKEwX=M7axSs2FJDq0KF3GBDpd6G0J=gP_2boUJraNf8M2n3Bw@mail.gmail.com>
- <CAO9r8zM8qk9g6+B6GiCV3oytjViMTEhbr0KjrccU+bF4+PMfTA@mail.gmail.com> <ak6c2TaOlcGxZ2Ih@localhost.localdomain>
-In-Reply-To: <ak6c2TaOlcGxZ2Ih@localhost.localdomain>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Wed, 8 Jul 2026 12:08:00 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zPiOyri2wVxRvB0bwEXf9bCKoPsQmRzOpj01XozA8hqUw@mail.gmail.com>
-X-Gm-Features: AVVi8Ce2aMsGuquiDYnmvYMN9gnK32qIskLfiFxzN_JVMoIyoVCs7MHxGrMZ-QE
-Message-ID: <CAO9r8zPiOyri2wVxRvB0bwEXf9bCKoPsQmRzOpj01XozA8hqUw@mail.gmail.com>
-Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
- test program"
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Nhat Pham <nphamcs@gmail.com>, Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, hannes@cmpxchg.org, chengming.zhou@linux.dev, 
-	tj@kernel.org, Shuah Khan <shuah@kernel.org>, mhocko@kernel.org, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 865CA6000D
+X-Stat-Signature: huzn7b6patbwzkijx4xm84ztdgaom1m3
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+n/ySaWf43UDPFEsJ3v98FwEVEIy13QV0=
+X-HE-Tag: 1783539154-577436
+X-HE-Meta: U2FsdGVkX19O2YlSsS4HEzRZGjTMcJxdZEQM3EHEKir5CivE9h7Pw2XA/153+NaQpVWqCCldLovEgUSe9SYLFHuRWCkk7bQPz+wWxyNTHNbgQe/GHHYa1c589M+5aZ4nhltMboj6ZYe2/3/u/Ra8TxTT4aWpES+f7lkVmv7366dl5y/OFNFR+mm6Zj8j3k9WGm9xcuxNGswGqtSPLJbnbkFF2dKtQp4tOcgH+uBnya7evlV4Zj2YDbFkAoxqa4VPSnu1mPC+aagByQYL7dt8lm+cN29Sv4AD3qHSJzc/e5/0mO3ZgdZEdabasgxg9Sw3F8uQQa3XsUJaU1icEfvpEQGwQ8bnngJHCl3jbEnkTj5ajgOAtf5R08EO+sFYxVO/
 
-On Wed, Jul 8, 2026 at 12:00=E2=80=AFPM Michal Koutn=C3=BD <mkoutny@suse.co=
-m> wrote:
->
-> On Tue, Jul 07, 2026 at 02:49:56PM -0700, Yosry Ahmed <yosry@kernel.org> =
-wrote:
-> > I would honestly rather use more memory. I think there might be cases
-> > where the flusher is delayed. The flush being slightly delayed is not
-> > technically a bug that we want to see a failure for, but if a large
-> > stats change is not visible that's a user-noticeable behavior that we
-> > want a failure for.
-> >
-> > WDYT?
->
-> There's already the (recent) page size-based scaling, so the idea with
-> nr_cpus scaling could make the selftest useful on wider range of setups
-> (even page size can be considered as a slight implementation detail
-> leak, thus the justification of nr_cpus dependency).
->
-> Also, I still think that internally the threshold should be changed to
-> the "harmonic" formula [1] but the selftest can go with the linear
-> dependency for more pronounced effects.
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Yeah I agree the threshold formula can be improved, but we need to
-make sure performance doesn't regress.
+The add_remove_fprobe_module test checks the number of functions added to
+the enabled_functions file to make sure that the functions added or
+removed is as expected. The issue is that it expects this file to be empty
+on start up.
+
+Now that systemd uses BPF that attaches to functions via ftrace, this file
+is not empty in several systems:
+
+ # cat /sys/kernel/tracing/enabled_functions
+ bpf_lsm_file_open (1) R   D   M 	tramp: ftrace_regs_caller+0x0/0x61 (call_direct_funcs+0x0/0x50)
+	direct(jmp)-->bpf_trampoline_6442529439+0x0/0xe9
+
+Change the test to read the number of lines in enabled_functions at the
+start of the test and subtract that from the value of the count for the
+checks within the test.
+
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ .../dynevent/add_remove_fprobe_module.tc      | 27 ++++++++++++-------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_module.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_module.tc
+index 2915206777b6..89660a9adf44 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_module.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_module.tc
+@@ -16,23 +16,32 @@ echo > dynamic_events
+ FUNC1='foo_bar*'
+ FUNC2='vfs_read'
+ 
++:;: "Save enabled functions count" ;:
++ecount=`cat enabled_functions | wc -l`
++
++count_enabled_functions() {
++    count=`cat enabled_functions | wc -l`
++    count=$(($count-$ecount))
++    echo $count
++}
++
+ :;: "Add an event on the test module" ;:
+ echo "f:test1 $FUNC1" >> dynamic_events
+ echo 1 > events/fprobes/test1/enable
+ 
+ :;: "Ensure it is enabled" ;:
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -ne 0
+ 
+ :;: "Check the enabled_functions is cleared on unloading" ;:
+ rmmod trace-events-sample
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -eq 0
+ 
+ :;: "Check it is kept clean" ;:
+ modprobe trace-events-sample
+ echo 1 > events/fprobes/test1/enable || echo "OK"
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -eq 0
+ 
+ :;: "Add another event not on the test module" ;:
+@@ -40,19 +49,19 @@ echo "f:test2 $FUNC2" >> dynamic_events
+ echo 1 > events/fprobes/test2/enable
+ 
+ :;: "Ensure it is enabled" ;:
+-ofuncs=`cat enabled_functions | wc -l`
++ofuncs=`count_enabled_functions`
+ test $ofuncs -ne 0
+ 
+ :;: "Disable and remove the first event"
+ echo 0 > events/fprobes/test1/enable
+ echo "-:fprobes/test1" >> dynamic_events
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $ofuncs -eq $funcs
+ 
+ :;: "Disable and remove other events" ;:
+ echo 0 > events/fprobes/enable
+ echo > dynamic_events
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -eq 0
+ 
+ rmmod trace-events-sample
+@@ -63,12 +72,12 @@ echo "f:test1 $FUNC1" >> dynamic_events
+ echo 1 > events/fprobes/test1/enable
+ echo "f:test2 $FUNC2" >> dynamic_events
+ echo 1 > events/fprobes/test2/enable
+-ofuncs=`cat enabled_functions | wc -l`
++ofuncs=`count_enabled_functions`
+ test $ofuncs -ne 0
+ 
+ :;: "Unload module (ftrace entry should be removed)" ;:
+ rmmod trace-events-sample
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -ne 0
+ test $ofuncs -ne $funcs
+ 
+@@ -77,7 +86,7 @@ echo 0 > events/fprobes/test2/enable
+ echo "-:fprobes/test2" >> dynamic_events
+ 
+ :;: "Ensure ftrace is disabled." ;:
+-funcs=`cat enabled_functions | wc -l`
++funcs=`count_enabled_functions`
+ test $funcs -eq 0
+ 
+ echo 0 > events/fprobes/enable
+-- 
+2.53.0
+
