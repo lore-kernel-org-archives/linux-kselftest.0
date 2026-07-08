@@ -1,130 +1,109 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CD03AE6E9
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jul 2026 08:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4CE3E7BC6;
+	Wed,  8 Jul 2026 08:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783497891; cv=none; b=lZJRSRvtf+9gG27bgLJk5ST4Eif7e5D8z4R6CTruLpRybVr5XcbaNo0As0gurxMPeM04bwWH+qalDp0+2EbuzZI64QMaSwOYKjSM6e5R50uhKTWHV2Re1dD+Y4IiFJTeSsLxVZbBMMpWQwYKueFW0NelNNjaS43DQy0OIakUmHo=
+	t=1783498050; cv=none; b=ZzC4pyBUGS8VO1bJzCHLAvZ1Vh4oS6F925tzahlmTj4gaWoLLq4KosCd6UaJH79HHZurHriTrX9ZEy7r7XH1eXQvKl1QcDcwBvH2WRrw82cwN7zGFqBnnMHCGygGOxdGa8IpWAjjveZ4orj3C8fNcTg0nC0lOhATKjcWnfIWlyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783497891; c=relaxed/simple;
-	bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LtTExfs8pvG3RfAvlIkAxnfCsqYINYORUldJ8ESI+J7OOm0/Yo0mlQLEvMDoyZV9l+3c6cCrTmn/HoxiSB+2IJspp6bKGnDBrgtzE36EuSB2UOZjrHEWRK5ZWH+DJdj/VE+nfVHJtr7Tx25OMMtUkv1sqaUOuroOmAsdmf+zO5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tESaesU1; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783498050; c=relaxed/simple;
+	bh=t5aDYhWDsenCSPBFg8sFWKNzaG45c943wAdMkXPrlFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THeHqoLaQ/wF/DutuY30wicWI5GBtLSae9pPl1ybFqUgOIt7dL+H6Cusy9Um30nzlJVsWHcmDlisNOrOLT6R75u2+z3D25HBxMyFQyT6kV4sOWScfoEBkxeCrbJC1wRrTrYJPVFX3I2/U0cL2pCaukEdVcgFbY4VlQ4Bgop1rgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=TSI9Owt9; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tESaesU1"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca2fad0ae38so240973a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 01:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783497885; x=1784102685; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-        b=tESaesU1raCpuNWf2JvAnEeXLHI8sUQcmt9PGuNv5NbzcwZYHvL6troiP83gF6gWI8
-         NYcUj2N80mkAuGimeoTMcot4YlSmdqA/N3BFU9ofrgtB/fhL7J/uDmglEPxZhRzdWuYL
-         dD9p/b+0lfeCjxAPW1AT5JEkQH1vz6xiKjxv7q+OuszVamrdoxraPLmEpV/MB+MAMK2g
-         nilJV/I+veph0rnnV92UMTinF73W1/iObmDdTSH1dZJWQwUhjf+/9CssPM5pDC91+lNT
-         XUhvu42LseRDdw8rw7xhxoTK9w4S7MNCPbmRPMt817MXLVUXDc0DfnkqsfeUnytQAq5k
-         BMeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783497885; x=1784102685;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lhKSffhkWzsZ0/8rfDC7YE2ivqQOUh/Jm8bDdf9qJW4=;
-        b=Wc13Kdv3iLDvK88BUzDbistgi7h8mYNFqcVtkcKNvTm6ogOnkDMkMWMLH+F1Q/tozC
-         x9+BAw2ww82iSTn//SEqQKIwT18Q90FG5qLVDCgOLYJPjkpzsQ5iTeeVb1pDp4kkeKjm
-         s+bAfqDPWTJ0kr3dGcdvphwSMsxIeHgvYSKGlWsHuVt+MwYzJJ9LND1C+QKuKkSWLDDd
-         LFhv1bZpv4ldDaGAWkpQPaerS9n7vIx5LKqbvWpoNxw0Q0iFuB+PsHgCRiUdWFM0dF2U
-         DEQqZ3a0BaiAMXBycFMzNHW8RtloPU3vP/iwLuxRXSgz4EMItKhQzYXS7JCwebfjKwli
-         lAwg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrx0fTFlIV1fxDSuv8HQsTZ9QL8dYvtl4HXFe+E81pilyX7DMEQ7lnLKb+WwYRgrX4mdEmGAzUCRzJ4/2ApeA0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCbta/ItYakvu+kTkPKU38k+wTjc2E4EcMNL/fNVhbBtsD2ANS
-	RN7Q26OqBhjpvx+CqflScd3QZUNqgVpnkPSzUI9DGoCpIAkev7jpVKZA
-X-Gm-Gg: AfdE7cmUHH+GBt6yjnFiXEZADE4/mz3DWFK5cl5IKFzGea9Hc1y/a4MaSmwl8ZQ2Q2P
-	g4Qey48QoPQ71hk6vpuLG6EQ0sBPst1zav3wNo4NR2cXaciFFt3gr+bPMMu8HVndWMqVqc3czq4
-	qKYQtBevlq3h0t+kxx696RkWpR6zCWS4XrwhkhfFF/fNw6CEH6fidP19p6RH6Fg9hnlQuz8lw+K
-	8FITlbOA5d6h6uRfyotJG4ocJE7Opb5pBOKH/6o2mbOiB27yTAQVwH/z8ztTLqTeiWMAdJOghzH
-	VrFm+Ju3F0u+eAQGZ8tn1wx7gOml85ZUxw1o8L+ax8uyxdjDgYOJ4xLH7VDyqMpQvWR6XUQE/nh
-	GgrKjd24WF4FeQuPiJE9wkkWOpFbrsRxZEaiKuLdAt+HzRe/81TzYbfzWdbmLIbENbVm+kXQsVk
-	owev1gVDcfxcPuF2VVsu9s2fGweWwPMO5NjhHX3r/DB9GH7phhyYbP3k3/vYO0
-X-Received: by 2002:a05:6a20:1587:b0:3b2:86cb:929e with SMTP id adf61e73a8af0-3c0bd206b59mr1755177637.46.1783497885553;
-        Wed, 08 Jul 2026 01:04:45 -0700 (PDT)
-Received: from r912.tailbb6e1e.ts.net ([182.70.116.80])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-311950eb930sm2220581eec.8.2026.07.08.01.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 01:04:45 -0700 (PDT)
-From: Avinash Duduskar <avinash.duduskar@gmail.com>
-To: toke@redhat.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net
-Cc: a.s.protopopov@gmail.com,
-	ameryhung@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	emil@etsalapatis.com,
-	eyal.birger@gmail.com,
-	hawk@kernel.org,
-	horms@kernel.org,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	kuba@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	rongtao@cestc.cn,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	yatsenko@meta.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Add BPF_FIB_LOOKUP_VLAN flag to bpf_fib_lookup() helper
-Date: Wed,  8 Jul 2026 13:34:34 +0530
-Message-ID: <20260708080434.732503-1-avinash.duduskar@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260704092159.1256823-2-avinash.duduskar@gmail.com>
-References: <20260704092159.1256823-1-avinash.duduskar@gmail.com> <20260704092159.1256823-2-avinash.duduskar@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="TSI9Owt9"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1783498041; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=7aX7B+3xkHbNhiVcp4PAYQLzOnDUqkKktfRxNWYRSCI=;
+	b=TSI9Owt9xFK3U5bQlUri1HJ35iDcK98p5Wj7bR1IfzPOqUOG7bGCt6Fsp9bgDmvdgAScS2KdXjeb9kjdFyM2WQj76YOjBenDgO7hHntCduFoTbHwu1GGE4ectC0NmrLSM5VqfFxrmHuWzFEDlvkLv7h/9YdIYUujG3Sds2psbeQ=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X6h5OsU_1783498037;
+Received: from 30.246.161.237(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X6h5OsU_1783498037 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Jul 2026 16:07:19 +0800
+Message-ID: <9986b3bf-e80e-4ffc-afd6-6b82baa1e9d0@linux.alibaba.com>
+Date: Wed, 8 Jul 2026 16:07:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 RESEND 2/7] riscv: stacktrace: disable KASAN and KCOV
+ instrumentation for stacktrace.o
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+ Oleg Nesterov <oleg@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ Marcos Paulo de Souza <mpdesouza@suse.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
+ <20260629072713.3273743-3-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260629072713.3273743-3-wanghan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The bpf ci bot flagged the VLAN_FAILURE re-issue advice in the uapi doc
-here, and the finding is real. By the time the lookup fails,
-params->tbid is gone (the h_vlan fields it shares storage with are
-zeroed on entry to bpf_fib_set_fwd_params()) and params->mark is gone
-on the resolved-neighbour path (overwritten by the smac output). A
-program that follows the advice with the same struct and DIRECT|TBID or
-MARK set runs the second lookup with a zero tbid or a garbage mark. The
-selftests did not catch it because every arm re-initializes params,
-which is the safe pattern.
 
-Toke, the re-issue recovery came from
-https://lore.kernel.org/all/87jyrwf9g1.fsf@toke.dk/, so before I
-respin: my preference is to keep the mechanics and fix the sentence,
-"repeat the lookup without the flag, re-initializing *params* first;
-output fields overwrite the inputs they share storage with".
-Overwriting inputs on the way out is the helper's existing behaviour on
-every path (rt_metric lands on top of tos/flowinfo even on NO_NEIGH),
-so one rule, re-initialize before any reuse, seems better than making
-VLAN_FAILURE the only return code that preserves inputs. If you would
-rather VLAN_FAILURE restore tbid and mark the way it already restores
-ifindex, or lose the advice sentence entirely, I will do that instead.
 
-Avi
+On 6/29/26 3:27 PM, Wang Han wrote:
+> KASAN records stack traces for every alloc/free, which means it walks
+> the unwinder very frequently. Instrumenting the stack trace collection
+> code itself adds substantial overhead and makes the traces themselves
+> noisier.
+> 
+> KCOV instruments every basic-block edge. The unwinder is a hot path,
+> especially with KASAN enabled, so KCOV instrumentation has the same kind
+> of cost and noise problem here.
+> 
+> Mark stacktrace.o as not KASAN- or KCOV-instrumented, matching the x86
+> treatment of its stack unwinding code. RISC-V keeps the relevant unwinder
+> code in stacktrace.o, so a single translation-unit annotation covers the
+> equivalent scope. This is a prerequisite preference for the upcoming
+> reliable unwinder, but the change is valid on its own.
+> 
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+> ---
+>   arch/riscv/kernel/Makefile | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index cabb99cadfb6..c565a72a36f3 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -44,6 +44,12 @@ CFLAGS_REMOVE_return_address.o	= $(CC_FLAGS_FTRACE)
+>   CFLAGS_REMOVE_sbi_ecall.o = $(CC_FLAGS_FTRACE)
+>   endif
+>   
+> +# When KASAN is enabled, a stack trace is recorded for every alloc/free, which
+> +# can significantly impact performance. Avoid instrumenting the stack trace
+> +# collection code to minimize this impact.
+> +KASAN_SANITIZE_stacktrace.o := n
+> +KCOV_INSTRUMENT_stacktrace.o := n
+> +
+>   always-$(KBUILD_BUILTIN) += vmlinux.lds
+>   
+>   obj-y	+= head.o
+
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks.
+Shuai
