@@ -1,109 +1,218 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4CE3E7BC6;
-	Wed,  8 Jul 2026 08:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB573F4DEF;
+	Wed,  8 Jul 2026 08:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783498050; cv=none; b=ZzC4pyBUGS8VO1bJzCHLAvZ1Vh4oS6F925tzahlmTj4gaWoLLq4KosCd6UaJH79HHZurHriTrX9ZEy7r7XH1eXQvKl1QcDcwBvH2WRrw82cwN7zGFqBnnMHCGygGOxdGa8IpWAjjveZ4orj3C8fNcTg0nC0lOhATKjcWnfIWlyU=
+	t=1783498103; cv=none; b=GwURmjxm37zhXNHWJLBJvAvCqVHOFN5lV+n5fe7NNhuUsGX9JeEo69Ldxd+lLBVHwKxBCFt3cqCsHDLiQIuZpWOIOS9GU0V3RLA/LuvKEz618Jg7r1O+Ds+OH9pgvx1YJ8PEIsTA5Wj/JyYCFCtAABzt5zF2947Dxe3PCITli1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783498050; c=relaxed/simple;
-	bh=t5aDYhWDsenCSPBFg8sFWKNzaG45c943wAdMkXPrlFM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=THeHqoLaQ/wF/DutuY30wicWI5GBtLSae9pPl1ybFqUgOIt7dL+H6Cusy9Um30nzlJVsWHcmDlisNOrOLT6R75u2+z3D25HBxMyFQyT6kV4sOWScfoEBkxeCrbJC1wRrTrYJPVFX3I2/U0cL2pCaukEdVcgFbY4VlQ4Bgop1rgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=TSI9Owt9; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1783498103; c=relaxed/simple;
+	bh=kVJ+n25NCF48jwWLHGOXf+HOLaVba97+bUM7oARLDPE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=KWqPM+cU1TXou4PEa67wrd9wjkuYEiVD4BoPyvlgrj3S4weeEjUopRzJlwZdGDYxhJp20+g7SOktRz04FROtT5eBRhsS9lQjgkjnxekhtmC/ShmpKdtHUfyj78U2RFBtTrkNp8ma1oPP3vRyoK1z2UGTAeuChp06PbsEG5fHj20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pg6S4CyV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="TSI9Owt9"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1783498041; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=7aX7B+3xkHbNhiVcp4PAYQLzOnDUqkKktfRxNWYRSCI=;
-	b=TSI9Owt9xFK3U5bQlUri1HJ35iDcK98p5Wj7bR1IfzPOqUOG7bGCt6Fsp9bgDmvdgAScS2KdXjeb9kjdFyM2WQj76YOjBenDgO7hHntCduFoTbHwu1GGE4ectC0NmrLSM5VqfFxrmHuWzFEDlvkLv7h/9YdIYUujG3Sds2psbeQ=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X6h5OsU_1783498037;
-Received: from 30.246.161.237(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X6h5OsU_1783498037 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Jul 2026 16:07:19 +0800
-Message-ID: <9986b3bf-e80e-4ffc-afd6-6b82baa1e9d0@linux.alibaba.com>
-Date: Wed, 8 Jul 2026 16:07:17 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pg6S4CyV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333051F000E9;
+	Wed,  8 Jul 2026 08:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783498100;
+	bh=0pb9KLB2OAk2PZbvib9drysuZTQE7wK4Q4yrxrPVL9g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=Pg6S4CyVfynRqytxPdCtLwxFBJbwYK78aABttlDawzwmd8M2SKmBOT+dmic9gIvqV
+	 WiSyegcsNWmN/cSx24NsqvFOOQ/p2vqN4UY5j+T2Z+7pFU+mjhIOezSuqCu4FIm/+d
+	 ZyVqZ4zWE7v+fsyaY2KP2Me3IBcBbgQeEGgu7DarP4BJ69KxZsjGcsag/BI+e5MXzE
+	 ugdNxOLJ9TzQJ+e0LwyWb1dv+2WTiL+rFNjKaRydYUYdav8ZOybKIuIW6gV8J3DVp5
+	 5sAjd5EsIeoB0Zg/2pDh1664L2Oonfn4O3A/LvlkbBYhCE4yAO/H0pjgjjTpZjFT0E
+	 nL2sXL4pQeVgQ==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Yuwen Chen <ywen.chen@foxmail.com>
+Cc: akpm@linux-foundation.org, andrealmeid@igalia.com,
+ bigeasy@linutronix.de, broonie@kernel.org, colin.i.king@gmail.com,
+ dave@stgolabs.net, dvhart@infradead.org, edliaw@google.com,
+ justinstitt@google.com, kernel-team@android.com, licayy@foxmail.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ luto@mit.edu, mark.rutland@arm.com, mingo@redhat.com, morbo@google.com,
+ nathan@kernel.org, ndesaulniers@google.com, peterz@infradead.org,
+ shuah@kernel.org, usama.anjum@collabora.com, wakel@google.com,
+ ywen.chen@foxmail.com
+Subject: Re: [PATCH v8 2/2] selftests/futex: fix the failed futex_requeue
+ test issue
+In-Reply-To: <tencent_9C5F035DDB450CDC0CE3ACAE39E75E796908@qq.com>
+References: <87cxwys7fi.ffs@fw13>
+ <tencent_9C5F035DDB450CDC0CE3ACAE39E75E796908@qq.com>
+Date: Wed, 08 Jul 2026 10:08:17 +0200
+Message-ID: <87a4s1sy32.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 RESEND 2/7] riscv: stacktrace: disable KASAN and KCOV
- instrumentation for stacktrace.o
-To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
- Oleg Nesterov <oleg@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
- Shuah Khan <shuah@kernel.org>, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- Marcos Paulo de Souza <mpdesouza@suse.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
- <20260629072713.3273743-3-wanghan@linux.alibaba.com>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260629072713.3273743-3-wanghan@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
+On Wed, Jul 08 2026 at 09:54, Yuwen Chen wrote:
+> On Wed, 08 Jul 2026 01:31:45 +0200, Thomas Gleixner wrote:
+>
+>> Do you have /proc/ disabled by chance or is it not accessible for the
+>> test case?
+> ...
+>> Seems to correlate with the test case failure: Connection timed out :)
+>
+> I used the following patch to simulate the situation where the proc file
+> system is not mounted on the system. The log is very similar to that of
+> the current problem.
+>
+> --- a/tools/testing/selftests/futex/include/futex_thread.h
+> +++ b/tools/testing/selftests/futex/include/futex_thread.h
+> @@ -62,7 +62,8 @@ static inline int futex_wait_for_thread(struct futex_thread *t, struct __test_me
+>         int res;
+>  
+>         snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
+> -       fp = fopen(fname, "r");
+> +       errno = ENOENT;
+> +       fp = NULL;
+>         if (!fp) {
+>                 /* If /proc/... is not available, sleep */
+>                 if (errno != ENOENT)
 
+Sure. But that's _NOT_ the problem. /proc/ is accessible and my tired
+brain asked the wrong question yesterday. Why?
 
-On 6/29/26 3:27 PM, Wang Han wrote:
-> KASAN records stack traces for every alloc/free, which means it walks
-> the unwinder very frequently. Instrumenting the stack trace collection
-> code itself adds substantial overhead and makes the traces themselves
-> noisier.
-> 
-> KCOV instruments every basic-block edge. The unwinder is a hot path,
-> especially with KASAN enabled, so KCOV instrumentation has the same kind
-> of cost and noise problem here.
-> 
-> Mark stacktrace.o as not KASAN- or KCOV-instrumented, matching the x86
-> treatment of its stack unwinding code. RISC-V keeps the relevant unwinder
-> code in stacktrace.o, so a single translation-unit annotation covers the
-> equivalent scope. This is a prerequisite preference for the upcoming
-> reliable unwinder, but the change is valid on its own.
-> 
-> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-> ---
->   arch/riscv/kernel/Makefile | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index cabb99cadfb6..c565a72a36f3 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -44,6 +44,12 @@ CFLAGS_REMOVE_return_address.o	= $(CC_FLAGS_FTRACE)
->   CFLAGS_REMOVE_sbi_ecall.o = $(CC_FLAGS_FTRACE)
->   endif
->   
-> +# When KASAN is enabled, a stack trace is recorded for every alloc/free, which
-> +# can significantly impact performance. Avoid instrumenting the stack trace
-> +# collection code to minimize this impact.
-> +KASAN_SANITIZE_stacktrace.o := n
-> +KCOV_INSTRUMENT_stacktrace.o := n
-> +
->   always-$(KBUILD_BUILTIN) += vmlinux.lds
->   
->   obj-y	+= head.o
+Do you see any of those messages in the log Mark provided?
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>   # ../include/futex_thread.h:71:requeue_single:/proc/$PID/wchan not accessible, continue with sleep()
 
-Thanks.
-Shuai
+Obviously not.
+
+So /proc/.../wchan _IS_ accessible, but futex does not show up there,
+which makes the loop wait for the full timeout. That in turn causes the
+waiter to time out because that timeout is the same and in the multi
+waiter case it's even worse.
+
+So the real question is what is read from wchan on that machine.
+
+> I suggested adding a parameter for the waiting time to the
+> futex_wait_for_thread function.  In this way, when the proc file
+> system is not mounted on the system, the old solution can still be
+> used.
+
+That does not solve anything and that can be made to work in the helper
+code without magic parameters. Both issues have the same root cause and
+no, we are not papering over it with some magic parameters.
+
+Mark, can you give the below a spin?
+
+That survives when I make the strncmp fail by changing the compare
+string to "futil" :) It's slow and noisy, but works.
+
+Can you please provide the output of that run?
+
+Thanks,
+
+        tglx
+---
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -13,16 +13,23 @@
+ #include "futex_thread.h"
+ #include "kselftest_harness.h"
+ 
+-#define FUTEX_WAIT_TIMEOUT_SECS			2
++struct waiter_args {
++	struct __test_metadata	*_metadata;
++	unsigned int		n_threads;
++};
+ 
+ volatile futex_t *f1;
+ 
+ static int waiterfn(void *arg)
+ {
+-	struct __test_metadata *_metadata = (struct __test_metadata *)arg;
+-	struct timespec to = { .tv_sec = FUTEX_WAIT_TIMEOUT_SECS };
++	struct __test_metadata *_metadata;
++	struct waiter_args *wargs = arg;
++	struct timespec to = { };
+ 	int res;
+ 
++	_metadata = wargs->_metadata;
++	to.tv_sec = (wargs->n_threads + 1) * WAIT_FOR_THREAD_SECS;
++
+ 	res = futex_wait(f1, *f1, &to, 0);
+ 	if (res) {
+ 		EXPECT_EQ(res, 0)
+@@ -34,6 +41,7 @@ static int waiterfn(void *arg)
+ 
+ TEST(requeue_single)
+ {
++	struct waiter_args wargs = { ._metadata = _metadata, .n_threads = 1 };
+ 	struct futex_thread waiter;
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+@@ -43,7 +51,7 @@ TEST(requeue_single)
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	ASSERT_EQ(futex_thread_create(&waiter, waiterfn, _metadata), 0)
++	ASSERT_EQ(futex_thread_create(&waiter, waiterfn, &wargs), 0)
+ 		TH_LOG("pthread_create failed");
+ 
+ 	ASSERT_EQ(futex_wait_for_thread(&waiter, _metadata), 0)
+@@ -57,6 +65,7 @@ TEST(requeue_single)
+ 
+ TEST(requeue_multiple)
+ {
++	struct waiter_args wargs = { ._metadata = _metadata, .n_threads = 10 };
+ 	struct futex_thread waiter[10];
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+@@ -68,7 +77,7 @@ TEST(requeue_multiple)
+ 	 * At futex_wake, wake INT_MAX (should be exactly 7).
+ 	 */
+ 	for (int i = 0; i < 10; i++) {
+-		ASSERT_EQ(futex_thread_create(&waiter[i], waiterfn, _metadata), 0)
++		ASSERT_EQ(futex_thread_create(&waiter[i], waiterfn, &wargs), 0)
+ 			TH_LOG("pthread_create failed for waiter %d", i);
+ 	}
+ 
+--- a/tools/testing/selftests/futex/include/futex_thread.h
++++ b/tools/testing/selftests/futex/include/futex_thread.h
+@@ -11,7 +11,7 @@
+ #include "kselftest_harness.h"
+ 
+ #define USEC_PER_SEC		1000000L
+-#define WAIT_FOR_THREAD_SECS	2
++#define WAIT_FOR_THREAD_SECS	1
+ #define WAIT_FOR_THREAD_USECS	(WAIT_FOR_THREAD_SECS * USEC_PER_SEC)
+ #define WAIT_THREAD_RETRIES	100
+ 
+@@ -24,7 +24,7 @@ struct futex_thread {
+ 	int			retval;
+ };
+ 
+-static inline int __wait_for_thread(FILE *fp)
++static inline int __wait_for_thread(FILE *fp, struct __test_metadata *_metadata)
+ {
+ 	unsigned int sleep_time_us = WAIT_FOR_THREAD_USECS / WAIT_THREAD_RETRIES;
+ 	char buf[80] = "";
+@@ -37,7 +37,9 @@ static inline int __wait_for_thread(FILE
+ 		usleep(sleep_time_us);
+ 		rewind(fp);
+ 	}
+-	return ETIMEDOUT;
++
++	TH_LOG("/proc/$PID/wchan contains \"%s\". Trying to continue.", buf);
++	return 0;
+ }
+ 
+ static void *__futex_thread_fn(void *arg)
+@@ -72,7 +74,7 @@ static inline int futex_wait_for_thread(
+ 		return 0;
+ 	}
+ 
+-	res = __wait_for_thread(fp);
++	res = __wait_for_thread(fp, _metadata);
+ 	fclose(fp);
+ 	return res;
+ }
