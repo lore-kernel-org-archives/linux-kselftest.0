@@ -1,122 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D7A3E1203;
-	Wed,  8 Jul 2026 07:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5033EE1EE;
+	Wed,  8 Jul 2026 07:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783495847; cv=none; b=GQusanU0HDUW8qVhByT+93qH1PsCb97z+A5kqiAMk88eN6umGEbeS1ZwRD8B8Xs9vcjUwqw2TJsiX6puSJqfM8sWHnPe5MfU3REZ/xXuCzJ1pTB3WNrq5uAqCxZOztxk4LmTB2uDx2q1AcPfXuVWULmYoZOsB0v5j+KC8EQ/24A=
+	t=1783496308; cv=none; b=OuSfAMCuioCwkWMkFWi7Iu/BLvFbRpkclUSOiSIg3QLlrtrQ6Fivswi128GYkhlasxzhf2N801KmX6kU5nuS7t7zgpMaxa3D1UxhDSLE26+jxoTgmUBsSXLlkNpafiPQ6pktlNloo56XWsM0e7Sxtl1M/erMK6JsBv/L0v8ZBCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783495847; c=relaxed/simple;
-	bh=N/ejXwA4KZO0DC2Z/HcSEn8yZfsKlTnk2ktXyvCQZtY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kW/MwQUGCd+9T2UGEgUWUCIz/NQKmbMutPSDhm+AwBxj62DsBdPqPP390AZE0ZvNHTvqUNYgUDjSAdM7bK5qJvg6+HnFrKCyqCBlMYh6sSxzRnGz9qbZfkY33KXL/DJLknYj+iWjCQtxk0IuwcUWTakvIX6UCXxL3p6C69JWh/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwqlhTDa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783496308; c=relaxed/simple;
+	bh=DgIuzybQTeRfUzIZJZeU6zcgmIkujtQEsqfPhpqopvI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b9QfZrretZibqStiCgTIkaDZA67S/ks28/KJFIRpYJmUTBhskk180TrSYU5IOJ1qJybDIoUAgI1HuFNzkHr0IzEQ1ce+Bnj/wTDe5nhTD7MRQ+9hD9DrRHies2yfPygTo6FTEAFESPubsgpzielFDR+YLk8/HcCVl/PncMxplTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iRkeyb0p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwqlhTDa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3D21F00A3A;
-	Wed,  8 Jul 2026 07:30:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iRkeyb0p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89E01F000E9;
+	Wed,  8 Jul 2026 07:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783495828;
-	bh=6XPCFtqPmjIBOfArNEHzU0v8CdudEoKzUfONk1mxyWs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=KwqlhTDaQqRylyKDCQc64J/xr0ZZUKLtdJ0u//WfIwq01nHTSJc9ZbSmfhk+5Csmv
-	 7PcMLRDYbGYCbJGFvsWGEIxgn6twSeIUnY/IVcHt/hqJFmsjV3B+Dw5xpxf1pjYB6P
-	 yePp4LiNzte683pBkGJZ8dKsnoAP4ycLLk+bsnQc4MAu4kr/u1AwhDpvfR73nebWGG
-	 Z5Gi6fYgoiDkKNDAMw/Bd3rXsHKZZXiP/m7kI03ynStt3Vw4jsOjwHGtDIMElfASLY
-	 crnEPX04QPhKnEwnlAUlTYQ5pNiF04+Rdlf7/uQfbRhSBxahJDfA3pSJqT7wEkyYFZ
-	 i0oLb+JsvykwQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AB53926257;
-	Wed,  8 Jul 2026 07:30:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1783496296;
+	bh=1y4jc2fBbDjyCrVGAy6/YgB+rmoA+uy8MNL/iS7r1vQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iRkeyb0p2wqqTAQJyNyGAumfISj9bl3bMW9XFVv2w5TZLSDK+k2q9sQvUE9+Zb0iX
+	 A3p3DuU5foVBM/LFlq37Yd+z8E4kSlHhYhfnoRLuoLXq4f/j1bgBOd9CSlJVCwPKRf
+	 fooj/5P8YFzYdxa5lrUODecDyNFKqWtHZnBf3/1pF6oUKbH8GcTfkRpztAckO6WKMa
+	 Uitenc22fKTlEplnUXz/S7nF9xs7jzUbAlZwYosLEfsXh5T/JFF+nyB5xpdyw3bL0j
+	 iq53ZXJ2aOMOLCh46AoJVqVNmaPtQkmAqhvXP2tWn5d4aqjWGYALuWyDjrV2sOiIb/
+	 KOP87SvcBZbNA==
+Message-ID: <eb7b4bf5-e2d9-4328-9a65-2139749346e0@kernel.org>
+Date: Wed, 8 Jul 2026 09:38:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 00/17] riscv: hwprobe: Expose RVA23U64 base behavior
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <178349580738.2343578.10382638352162559486.git-patchwork-notify@kernel.org>
-Date: Wed, 08 Jul 2026 07:30:07 +0000
-References: <20260701-rva23u64-hwprobe-v2-v5-0-2c61f94a695a@gmail.com>
-In-Reply-To: <20260701-rva23u64-hwprobe-v2-v5-0-2c61f94a695a@gmail.com>
-To: Guodong Xu <docular.xu@gmail.com>
-Cc: linux-riscv@lists.infradead.org, corbet@lwn.net,
- skhan@linuxfoundation.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, zong.li@sifive.com, debug@rivosinc.com,
- anup@brainfault.org, atish.patra@linux.dev, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, dlan@kernel.org,
- unicorn_wang@outlook.com, inochiama@gmail.com, chen.wang@linux.dev,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, paul.walmsley@sifive.com, conor@kernel.org,
- jtaubepe@redhat.com, thecharlesjenkins@gmail.com,
- andrew.jones@oss.qualcomm.com, devicetree@vger.kernel.org,
- spacemit@lists.linux.dev, sophgo@lists.linux.dev,
- linux-kselftest@vger.kernel.org, conor.dooley@microchip.com,
- charlie@rivosinc.com, jesse@rivosinc.com, qingwei.hu@bytedance.com,
- andybnac@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] selftests/mm: handle EINVAL when configuring
+ gigantic hugepages
+To: Sayali Patil <sayalip@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Ritesh Harjani <ritesh.list@gmail.com>
+Cc: Zi Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>,
+ Oscar Salvador <osalvador@suse.de>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+ Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Miaohe Lin <linmiaohe@huawei.com>,
+ Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+References: <cover.1783446924.git.sayalip@linux.ibm.com>
+ <2e3b585cbb30b2fc495dcd49d75de6f6da61861c.1783446924.git.sayalip@linux.ibm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <2e3b585cbb30b2fc495dcd49d75de6f6da61861c.1783446924.git.sayalip@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to riscv/linux.git (fixes)
-by Paul Walmsley <pjw@kernel.org>:
-
-On Wed, 01 Jul 2026 08:52:13 -0400 you wrote:
-> This series builds on Andrew Jones's earlier RFC [1]. It lets userspace
-> check for RVA23U64 conformance in one call, instead of walking hwprobe +
-> prctl across every mandatory extension.
+On 7/8/26 08:59, Sayali Patil wrote:
+> Some MM selftests attempt to configure the amount of
+> HugeTLB pages of different sizes by writing to nr_hugepages.
 > 
-> The series adds a small framework that resolves profile-class bases (IMA
-> and RVA23U64) from the kernel's ISA extension bitmap at init time, and
-> surfaces the result through both /proc/cpuinfo and hwprobe. Later patches
-> can add RVA23S64, and backward RVA22 / RVA20 detection, to
-> riscv_set_isa_bases() without changes to the surrounding code.
+> PowerPC hash MMU pSeries systems advertise gigantic hugepage sizes
+> but do not support runtime allocation of such pages, writes
+> to the corresponding nr_hugepages file fail with -EINVAL.
+> This causes the test to bail out even though the failure is due
+> to a platform limitation rather than the
+> functionality being tested.
 > 
-> [...]
+> Ignore -EINVAL when configuring nr_hugepages so that tests continue to
+> run on systems where gigantic hugepage allocation is unsupported.
+> 
+> Before patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>      [INFO] detected hugetlb page size: 16777216 KiB
+>      [INFO] detected hugetlb page size: 16384 KiB
+>     ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>     Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     Bail out! /sys/kernel/mm/hugepages/hugepages-16777216kB/nr_hugepages
+>     write(0) failed: Invalid argument
+>     Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>     [FAIL]
+> 
+> After patch:
+>    -------------------------
+>    running ./hugetlb-madvise
+>    -------------------------
+>    TAP version 13
+>    1..1
+>     [INFO] detected hugetlb page size: 16777216 KiB
+>     [INFO] detected hugetlb page size: 16384 KiB
+>    ok 1 MADV_DONTNEED and MADV_REMOVE on hugetlb
+>    Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>    [PASS]
+> 
+> Fixes: 27477b28b74f ("selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages")
+> Co-developed-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 
-Here is the summary with links:
-  - [v5,01/17] dt-bindings: riscv: sort multi-letter Z extensions alphanumerically
-    https://git.kernel.org/riscv/c/e0776dde101a
-  - [v5,02/17] riscv: hwprobe.rst: Make indentation consistent
-    https://git.kernel.org/riscv/c/dbff3646369c
-  - [v5,03/17] riscv: hwprobe.rst: Document EXT_ZICFISS and EXT_ZICFILP
-    https://git.kernel.org/riscv/c/a914034334c4
-  - [v5,04/17] riscv: Standardize extension capitalization
-    (no matching commit)
-  - [v5,05/17] riscv: Add Zicclsm to cpufeature and hwprobe
-    (no matching commit)
-  - [v5,06/17] riscv: Add Ziccamoa, Ziccif, Ziccrse, and Za64rs to cpufeature and hwprobe
-    (no matching commit)
-  - [v5,07/17] riscv: Add B to hwcap and hwprobe
-    (no matching commit)
-  - [v5,08/17] dt-bindings: riscv: Require block-size for Zicbom, Zicbop, and Zicboz
-    (no matching commit)
-  - [v5,09/17] dt-bindings: riscv: Add Zic64b extension description
-    (no matching commit)
-  - [v5,10/17] riscv: Add Zic64b to cpufeature and hwprobe
-    (no matching commit)
-  - [v5,11/17] riscv: dts: spacemit: k3: Add Zic64b ISA extension
-    (no matching commit)
-  - [v5,12/17] riscv: dts: spacemit: k1: Add Zic64b ISA extension
-    (no matching commit)
-  - [v5,13/17] riscv: dts: sophgo: sg2044: Add Zic64b ISA extension
-    (no matching commit)
-  - [v5,14/17] riscv: Add a getter for user PMLEN support
-    (no matching commit)
-  - [v5,15/17] riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection
-    (no matching commit)
-  - [v5,16/17] riscv: cpu: Output isa bases lines in cpuinfo
-    (no matching commit)
-  - [v5,17/17] riscv: hwprobe: Introduce rva23u64 base behavior
-    (no matching commit)
+LGTM. Using proper flags would maybe be nicer, but no need for that for this
+corner case for now.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Cheers,
 
-
+David
