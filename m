@@ -1,83 +1,149 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004AB28D8DA;
-	Thu,  9 Jul 2026 03:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E507F28CF5D;
+	Thu,  9 Jul 2026 03:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783566237; cv=none; b=ar+zxJQR6w86PNBwsYmcnTiUy19rwc6Rou2+KhaEQ+2l+V2NQmQyotVshxuwyviOos8oYrddlVyQ6dqczUb5HpDw8d5sOB454tL9os93OPZ6Z+UILsQ3k/WSux7w7RtYWiQfvBVmvcLw4DYj9d3jR2oLM6uwrzyzRnBXc4tB+Jg=
+	t=1783566527; cv=none; b=F9lBRzNqNhgrEpzB0fis0BfJww4AuhTN2+fw+0yRsC+e4uY+QLGmFdHOCZ/fX2GVQcDmhuWy8Ni/qPTX8gsw9hBq9edeDPlgeGnXPMdwqJOIdZ8dCfsSIzT+Lj+Svw4snqkJBMNII1nT/dWrnnhC00lseEBkrdtSGPx6RDiAmac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783566237; c=relaxed/simple;
-	bh=0oxQk0+cRorqgDrgLhM9agFbByyiNqfb9y4sv4MiBYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bD0OI+hMOpw6a7aiguBpTqRoK4i+Ytyz9DGaAbMEdSGwtwoMXJtQ766Xskaxe9Tx6bU5DB0kmQbKg6AbKFJtszTplypO/qwqmXNYMeRb6WdFFF533CFxQN1GATpE+HjMZ5S8MbL5Yoimzzl+Q4E2Qk+qDSTlAbCFUQ6NT/KL4no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ce9ad4a27b4211f1aa26b74ffac11d73-20260709
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_7B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_MAILER_MTBG
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, UD_TRUSTED, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:e883fde6-ce4f-4abd-b8f5-b11a700601e7,IP:10,
-	URL:70,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:80
-X-CID-INFO: VERSION:1.3.12,REQID:e883fde6-ce4f-4abd-b8f5-b11a700601e7,IP:10,UR
-	L:70,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-	N:quarantine,TS:80
-X-CID-META: VersionHash:e7bac3a,CLOUDID:0de3d54f95152217951725f6c7d421f6,BulkI
-	D:260708211528KWIAZP6K,BulkQuantity:3,Recheck:0,SF:10|38|64|66|78|80|81|82
-	|83|127|841|865|898|1209,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:11|14|93|
-	82|1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_ASC,TF_CID_SPAM_ULN,TF_CID_SPAM_UPP,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: ce9ad4a27b4211f1aa26b74ffac11d73-20260709
-X-User: lihongfu@kylinos.cn
-Received: from [192.168.109.123] [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 717094302; Thu, 09 Jul 2026 11:03:48 +0800
-Message-ID: <06b77011-4c48-4d9e-a27e-e50f23e729f6@kylinos.cn>
-Date: Thu, 9 Jul 2026 11:03:44 +0800
+	s=arc-20240116; t=1783566527; c=relaxed/simple;
+	bh=NLc4X44T9Vce74ZKNgbX4isMukjGLWN6HzsJ+ZFZyl8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=AUHzXIagCotnik6To7+n8vtpXQnYUE71tsCmh7j5sbv+0JCMWBRxN9rI2JyNzjv9yPi+iM/GVdaX0N0ASBhSB6XdkWCidwbBibyNfBQasrCEaaG7Qc0NVA/dOn1T4fE69rsTfgenwSQ1ibfp6AHEG7CRC/rx7i9HFrSWQGxdjDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=vnxP+MdO; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="vnxP+MdO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1ADE1F000E9;
+	Thu,  9 Jul 2026 03:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1783566525;
+	bh=0C50gLb1Rx6vC8vebMbmFW9FfipWim9v9MXHOz8ZbLA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=vnxP+MdOVlsjmHdBRs/H3ZPG+GDpJbCcjRF7ezT70sAgYv93ijEZxuZWrm8S0+ANX
+	 FbaMuA0+VH2nxPVMoyyzfLg/UhgWU/OdctHjIpZ8t33pWjwEQCCd/zM6pj/e7oilT3
+	 ZKTtxEKk3Nem7wh4ixtq6Uc8ZA7wIn8oc7jimZo8=
+Date: Wed, 8 Jul 2026 20:08:44 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: usama.anjum@collabora.com, peterx@redhat.com, liam@infradead.org,
+ ljs@kernel.org, vbabka@kernel.org, jannh@google.com, pfalcato@suse.de,
+ david@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2] fs/proc/task_mmu: fix PAGEMAP_SCAN written state for
+ PMD holes
+Message-Id: <20260708200844.09b42937d19bf733849d2886@linux-foundation.org>
+In-Reply-To: <20260708103429.150655-1-kirill@shutemov.name>
+References: <20260708103429.150655-1-kirill@shutemov.name>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix memleak in migration benchmark
-To: Andrew Morton <akpm@linux-foundation.org>, Hongfu Li <lihongfu@kylinos.cn>
-Cc: jgg@ziepe.ca, leon@kernel.org, david@kernel.org, ljs@kernel.org,
- liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260708103705.840679-1-lihongfu@kylinos.cn>
- <20260708193721.5aae192c95bd8c7840e9c1b0@linux-foundation.org>
-From: Hongfu Li <lihongfu@kylinos.cn>
-In-Reply-To: <20260708193721.5aae192c95bd8c7840e9c1b0@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Wed,  8 Jul 2026 11:34:29 +0100 Kiryl Shutsemau <kirill@shutemov.name> wrote:
 
-On 7/9/26 10:37 AM, Andrew Morton wrote:
->> Several early return paths in run_migration_benchmark() skip
->> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
->> label.
-> Thanks.  Sashiko found a bug:
-> 	https://sashiko.dev/#/patchset/20260708103705.840679-1-lihongfu@kylinos.cn
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written
+> (pagemap_page_category() and the PAGE_IS_WRITTEN fast path), but a range
+> with no page table at all -- a PMD hole -- is skipped.
+> pagemap_scan_pte_hole() evaluates the hole against p->cur_vma_category,
+> which pagemap_scan_test_walk() builds from only PAGE_IS_WPALLOWED and
+> PAGE_IS_SOFT_DIRTY, so PAGE_IS_WRITTEN is never set: the hole is neither
+> reported nor, under PM_SCAN_WP_MATCHING, armed.
+> 
+> This is reachable. An anonymous THP is write-protected in place as a huge
+> PMD (change_huge_pmd(), anon is not split), and a full-PMD MADV_DONTNEED
+> clears it to pmd_none. A WP-async consumer such as CRIU then misses the
+> 2MB drop -- the range is not reported written and the next incremental
+> dump keeps stale data. (A file/shmem THP is split on write-protect, so a
+> later DONTNEED leaves a populated page table of pte_none entries, which
+> are already reported; only anon THP reaches the hole path.)
+> 
+> Add PAGE_IS_WRITTEN to the categories evaluated for a hole in a
+> non-hugetlb uffd-wp VMA, matching the pte_none handling in
+> pagemap_page_category(). The existing PM_SCAN_WP_MATCHING path then also
+> arms the range: uffd_wp_range() allocates the page table and installs
+> markers under WP_UNPOPULATED, so the next scan sees it clean until
+> re-written.
+> 
+> hugetlb is excluded on purpose: an allocated-but-empty huge entry reads
+> as not-written via pagemap_hugetlb_category(), so reporting an
+> unallocated hugetlb hole (which also reaches this path) as written would
+> be inconsistent within the same VMA. hugetlb hole handling is left as-is.
+> 
+> Add a pagemap_ioctl selftest that forms an anon THP, drops it with
+> MADV_DONTNEED and checks the resulting PMD hole is reported written.
 
-Thanks a lot for the reminder. I'll address it in the next revision of this patch.
+hoo boy, that was heavy going.
 
-Best regards,
-Hongfu
+> Assisted-by: Claude:claude-fable-5
 
+OK ;)
+
+But what do our users see?  afaict the result of the bug is "the next
+incremental CRIU dump keeps stale data".  Why is this a problem?  How
+would operators look at a user bug report and figure out that this
+patch will address it?  Is there some Reported-by/Closes?
+
+In other words, (please train Claude to) always describe the userspace
+visible effects of a bug when fixing it.
+
+>
+> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+> @@ -25,6 +25,10 @@
+>  #include "kselftest.h"
+>  #include "hugepage_settings.h"
+>  
+> +#ifndef MADV_COLLAPSE
+> +#define MADV_COLLAPSE 25
+> +#endif
+
+Why would this be undefined?  It's right there in mman-common.h?
+
+> +/*
+> + * A 2MB anon THP dropped with MADV_DONTNEED leaves a pmd_none hole with no
+> + * page table, which pagemap_page_category() never sees. PAGEMAP_SCAN must
+> + * still report it as written on a uffd-wp VMA, via pagemap_scan_pte_hole().
+> + */
+> +static void unpopulated_thp_hole_test(void)
+> +{
+> +	long npages, written = 0, ret, i;
+> +	struct page_region regions[16];
+> +	char *area, *mem;
+> +
+> +	if (!hpage_size) {
+> +		ksft_test_result_skip("%s THP not supported\n", __func__);
+> +		return;
+> +	}
+> +	npages = hpage_size / page_size;
+> +
+> +	/* Get a PMD-aligned range so the range can be a single THP. */
+> +	area = mmap(NULL, 2 * hpage_size, PROT_READ | PROT_WRITE,
+> +		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (area == MAP_FAILED)
+> +		ksft_exit_fail_msg("%s mmap failed\n", __func__);
+> +	mem = (char *)(((unsigned long)area + hpage_size - 1) & ~(hpage_size - 1));
+
+Do selftests not have ALIGN and friends?  Seems not, given how many of
+them have own implementations.
+
+> +
+> +	memset(mem, 1, hpage_size);
+> +	if (madvise(mem, hpage_size, MADV_COLLAPSE) ||
+> +	    !check_huge_anon(mem, 1, hpage_size)) {
+> +		ksft_test_result_skip("%s could not form a THP\n", __func__);
+> +		munmap(area, 2 * hpage_size);
+> +		return;
+> +	}
+>
+> ...
+>
