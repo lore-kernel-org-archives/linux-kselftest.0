@@ -1,160 +1,191 @@
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A6E3C4579
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 06:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A4714BF92
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 06:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783578392; cv=none; b=azMyrskFJEk+5Cdzq1AtqgBNYv7P9h81Hb2U4Ia/xxtLdcUCvbGFuIT62z1I5CRDIRQRak173z9Ofz8AqJQlmEg/5Pvt6t98UByLB1P/drD7amdFLAjuSik2lrB4Iuzxrc3P4HNoW+2TrO4i/oGKfdWOGVRXobkOl9b3Not9uUU=
+	t=1783579648; cv=none; b=aVxR14nLCwg5G+tZgVyNlkthFryboOWO1UfFOVmad630sPgBjBLIzjpBB2jHvx8qlVd3FlscARw8QD5eZ2k88P+KMTAenZe49Hr/SKL7ZGmboDkQVcUUbXTdiRCAEzxYnVkPxI+NJwStJAD9zrCxfw68t1Gvf4VaH2mJfmKBdA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783578392; c=relaxed/simple;
-	bh=bymmM7itjNf6NASDeVGA5S1tohPd/mGFdJxsI2iR/Ec=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=Tx/AyUsuA2+uvo55iQWT2FJ08WdpGtS0snCOnzKWB2kM0iI+zKJoUtg2G0owIkkH56TB9GEWEsQ0jBzGDXZyUuIsQl+yzkrTlIFZnas3bw3qBQ4KRhd3UW54jnmN0fJE3Hec1+e56RLxjj9vJ6w5uxNf0hcXKNerYgMn7MaO6CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7eb6429750eso2139381a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 23:26:25 -0700 (PDT)
+	s=arc-20240116; t=1783579648; c=relaxed/simple;
+	bh=P3DdR4s1kLt7WzVKHUj6fTXk+PI5dgeDUEMELoOfajg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qvdx6ZCzXWowJxJaYgNtyhDWhQvffADbsD+O90nbw0lzKUjyKtbds/YJLu4ZS3lWodL+vLRuLBXB/ykBQMmqVjy+RaHSfI7EcWS6kDgzvuJBvDCMM2oDcyBM8E2KH4T8KBagoNf57JY22kWQx7anObH1D2xGnInOQ4sihEIpN0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UPx+Wyct; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UPx+Wyct"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-698ae09e356so743434a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 23:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1783579645; x=1784184445; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=h3B/Dq0dBNn27ZKW7Kn4NVCyOhndmbS7oy98sHeCH+0=;
+        b=UPx+WyctGb1piyweU10L55Y8bUQW/MCOHJ3vM3TW0oCsCE2xIG7a9mioBZSXY7LVzc
+         qIU8ni8gQz0Qn6IFpXtPMDjnVsvOgKXjDUNX1nCxFWc/BT8M33/quXqePZL+uLqFgI1S
+         MhkllHKcYgrlj/o7xwGJDz+gbfCnEs4RCNsH9vHpZ7lbOdcrFmPOsjV+LR3vES82OPBj
+         uzkXEh+NJOCX1txEcwsADiaz/yAe/rzEXL5a+5YNvCBVStumBOXJHRJKSX6kWkNNXDik
+         Vi62PJQOLTk6mNAZvFX+QZlrJ1uZnXKUJi4es9MLH0mjQ9zXz6BZDcjsCNPOkmbfTvsU
+         tAng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783578383; x=1784183183;
-        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20251104; t=1783579645; x=1784184445;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=aGYb6cIYWCwKklV7e199C3toXW7ue1Oty8gsT7/cke4=;
-        b=m0s5dOPEfP8z3gZrWC4+VTx4m0csGPGgC6ASxcnU57z9zjq2OF994uX7uSTvwKTAq/
-         YWp1OFIg3nfXJj6eNKuLuwAKZsfL7fp8EQy+cms9geAkp0IHYW9CjSxv/jO0OKU9UoHZ
-         nRuGIX7HzT7aNV6A0fk0JG3yHVYRwm8i7WGDDvAjFdVUbkUAnCQ7F9k2xVnf2W6HWH2b
-         NsLZOUxwTLTNeNas0xDEgp5TIbzDDOErlEuQdXAHkUCm1NDriCSRvaRYi6htfrZNbvxc
-         WNhAlb3NxUgN9/AlB/4WOSJyIOXEGKxg+CNrjjVUlvaxLRkclJ39RwfENOSs54mj8N1l
-         2aOQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+pc3ql2SZd2vgXEX8pbykHW5IZOJwf3tJwdeAOpeDxDIyxSXuT8LvVxoBllENT1aQvtrLm1W+C9/1IZbsj+sU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHoeN8Sqm6ZSYSN0O4iaUaUAyBjAnd0Y8LHCXJ6VvefKCt9VVO
-	/ltM9F2XPk79Lsxp4EpZeO/Fw+7UDdZSjbiA8onVCVjI1wPXUHSkf/IX0Wego2iG+kTvgEihf/f
-	K0tQhxWTdv2W4QgiBi/inwn0UxIBKurVuxtebnRUx9uKxexvXUf0z7kiagag=
+        bh=h3B/Dq0dBNn27ZKW7Kn4NVCyOhndmbS7oy98sHeCH+0=;
+        b=KlQTF9zlVWPVC6LJ7eRr8auFLd2sRDAyHIOkU+eAubyxUqKLBDh20hiHOJgC7uJM7g
+         tyGze0QjxgwdPQ0y5INcgqfbW5xNvWtr/zW+zgiybUQbIJaUmyDsG90v5JhzLZmZzsxM
+         ecYmRiIwCjrwQ5/eqXjVPbNEvF5E0Kov5T8GOam3Xci+JsAZXJ/k3Eo4rv+hEkbAdqtx
+         vvzHFio5WexBsWmQmHR9Ol6rUSfPSJFZU8LqC+yzq+p/4Z6dKmePRM5fgiimPjU9oHDZ
+         QEpy8wHYDzDrnqB1/453OyfHIonAfDpzNClwNpEDiAbJB4SzUDg+ceA/63x1+zi+YypR
+         qR9Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrDacrnzCde9XO7A1KMgPWFzQcPu9LNvS7+b36p7NNyRrGE0uKBgf2ifzmlOtPATE5Joep5wXTtcesSqfTNiKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSic6gf7bERCnQbS+yi+9MFMOuhoouSvQcRJ178QrV25taYeIR
+	O9CBIjzV4zXB+ImjFmxssC6uACq4dFu8cvRH8m371dTyTFpRaW6HcQqWxgPR+m63VI0=
+X-Gm-Gg: AfdE7ckRbDSPjGLtrR7fLPyDdHxcppeAyGTL8L8U5VCPVDOTE8HL3RUE2GQOrkPsn5n
+	uKzn2cD1V6fKVHcud84UWtDEorYb1sHeUKdERAleXoAOF7NegBRsB3V4lu8Anud1/OywujTq7ym
+	LVwe/ElBs6Ts68L1rJTTc/j9XrzG8gsNSfPKvWz9LPeZmCck7mRPtd0ETxWRLW/VtsbnkYqta6N
+	OU2Drevwy0CSAhupLCyrD5/6L62uw+KIMcwLdISHXBiOsoMYlOZ81ncdgb56OopKdwnG1bufjEf
+	BIJOSg2Wv+eGOpP8/posv2bFx3zL6zCijLAfvWXyYicDsPmcnOZAhNgUqjocQcU9sWIWEYWGS9P
+	Ia2MtjEXi8rfDF1rbwxg8eU7t74AqbnlM0tixc+3lYByiyuhOEQt5841rIVjFjrK8C0l+Yph34m
+	zKxs63r4C/AhmXn+9t9tkE9kLzcdIJt5EGQRc=
+X-Received: by 2002:a17:907:1c0e:b0:c15:b68a:55c with SMTP id a640c23a62f3a-c15cdffedb4mr269256466b.24.1783579644714;
+        Wed, 08 Jul 2026 23:47:24 -0700 (PDT)
+Received: from u94a (27-53-128-132.adsl.fetnet.net. [27.53.128.132])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-848530c5a12sm969893b3a.5.2026.07.08.23.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2026 23:47:23 -0700 (PDT)
+Date: Thu, 9 Jul 2026 14:47:03 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
+ pointers
+Message-ID: <ak8XSRiLKx5WcIQw@u94a>
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+ <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+ <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2d09:b0:6a3:66dd:c9fa with SMTP id
- 006d021491bc7-6a36da10ff8mr3986082eaf.55.1783578382884; Wed, 08 Jul 2026
- 23:26:22 -0700 (PDT)
-Date: Wed, 08 Jul 2026 23:26:22 -0700
-In-Reply-To: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a4f3f0e.57639fcc.86d58.001b.GAE@google.com>
-Subject: [syzbot ci] Re: riscv: Generate riscv instruction functions
-From: syzbot ci <syzbot+ci19dac46105b003f7@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, alex@ghiti.fr, anup@brainfault.org, 
-	atish.patra@linux.dev, conor@kernel.org, jtaubepe@redhat.com, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, namcao@linutronix.de, palmer@dabbelt.com, 
-	pbonzini@redhat.com, pjw@kernel.org, radim.krcmar@oss.qualcomm.com, 
-	shuah@kernel.org, thecharlesjenkins@gmail.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
 
-syzbot ci has tested the following series
+On Wed, Jul 08, 2026 at 10:11:01PM +0800, sun jian wrote:
+[...]
+> > > @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+> > >  static int __check_buffer_access(struct bpf_verifier_env *env,
+> > >                                const char *buf_info,
+> > >                                const struct bpf_reg_state *reg,
+> > > -                              argno_t argno, int off, int size)
+> > > +                              argno_t argno, int off, int size,
+> > > +                              u32 *access_end)
+> > >  {
+> > > +     s64 start, var_off;
+> > > +
+> > >       if (off < 0) {
+> > >               verbose(env,
+> > >                       "%s invalid %s buffer access: off=%d, size=%d\n",
+> > >                       reg_arg_name(env, argno), buf_info, off, size);
+> > >               return -EACCES;
+> > >       }
+> > > +
+> > >       if (!tnum_is_const(reg->var_off)) {
+> > >               char tn_buf[48];
+> > >
+> > > @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+> > >               return -EACCES;
+> > >       }
+> > >
+> > > +     var_off = (s64)reg->var_off.value;
+> > > +     if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF) {
+> > > +             verbose(env, "%s %s buffer offset %lld is not allowed\n",
+> > > +                     reg_arg_name(env, argno), buf_info, var_off);
+> > > +             return -EACCES;
+> > > +     }
+> > > +
+> > > +     start = var_off + off;
+> > > +     if (start < 0) {
+> > > +             verbose(env,
+> > > +                     "%s invalid negative %s buffer offset: off=%d, var_off=%lld\n",
+> > > +                     reg_arg_name(env, argno), buf_info, off, var_off);
+> > > +             return -EACCES;
+> > > +     }
+> >
+> > I was thinking of suggest to just do a single unsigned check
+> >
+> >   var_off = reg->var_off.value;
+> >   if (var_off >= BPF_MAX_VAR_OFF) {
+> >     ...
+> >
+> > But looking at the code before 022ac0750883, what you have is closer
+> > aligned to the previous behavior, let's stick to this.
 
-[v3] riscv: Generate riscv instruction functions
-https://lore.kernel.org/all/20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com
-* [PATCH v3 01/17] riscv: Introduce instruction table generation
-* [PATCH v3 02/17] riscv: alternatives: Use generated instruction headers for patching code
-* [PATCH v3 03/17] riscv: kgdb: Use generated instruction headers
-* [PATCH v3 04/17] riscv: Add kprobes instruction simulation KUnit
-* [PATCH v3 05/17] riscv: kprobes: Use generated instruction headers
-* [PATCH v3 06/17] riscv: cfi: Use generated instruction headers
-* [PATCH v3 07/17] riscv: Maintain epc on misaligned emulation error
-* [PATCH v3 08/17] riscv: Use generated instruction headers for misaligned loads/stores
-* [PATCH v3 09/17] riscv: kvm: Use generated instruction headers for csr code
-* [PATCH v3 10/17] KVM: device: Add test device
-* [PATCH v3 11/17] KVM: riscv: selftests: Add mmio test
-* [PATCH v3 12/17] riscv: kvm: Use generated instruction headers for mmio emulation
-* [PATCH v3 13/17] riscv: kvm: Add emulated test csr
-* [PATCH v3 14/17] KVM: riscv: selftests: Add csr emulation test
-* [PATCH v3 15/17] riscv: kvm: Use generated instruction headers for csr emulation
-* [PATCH v3 16/17] riscv: kexec: Use generated instruction headers for kexec relocations
-* [PATCH v3 17/17] riscv: Remove unused instruction headers
+Actually looking again at 022ac0750883, moving the `off < 0` after
+tnum_is_const() and bringing back the `off += reg->off` removed from
+check_mem_access() is perhaps the more faithful restoration of the
+original behavior. 
 
-and found the following issue:
-WARNING in kvm_io_bus_unregister_dev
+Though reg->off no longer exists, we have to use reg->var_off.value
+instead. IIUC any register of pointer type should already have its
+var_off bounded to +-BPF_MAX_VAR_OFF by adjust_ptr_min_max_vals() in
+theory, and thus shouldn't overflow `int off`.
 
-Full report is available here:
-https://ci.syzbot.org/series/f3c61796-0ca0-4bfd-add1-23a20352fb7b
+See the diff below.
 
-***
+[...]
 
-WARNING in kvm_io_bus_unregister_dev
+> I agree that the size check is redundant given the current call path. I’ll leave
+> v4 as-is for now to avoid another respin unless maintainers prefer dropping it
+> or adding a short comment around the access_end calculation.
 
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      8cd9520d35a6c38db6567e97dd93b1f11f185dc6
-arch:      amd64
-compiler:  Debian clang version 22.1.6 (++20260514074242+fc4aad7b5db3-1~exp1~20260514074407.73), Debian LLD 22.1.6
-config:    https://ci.syzbot.org/builds/65190eb6-0d65-4629-b225-e3b7089a0b10/config
-syz repro: https://ci.syzbot.org/findings/fa2c789e-ba9f-4d55-b3ba-0d5f22f78a4d/syz_repro
-
-------------[ cut here ]------------
-debug_locks && !(lock_is_held(&(&kvm->slots_lock)->dep_map) != 0)
-WARNING: arch/x86/kvm/../../../virt/kvm/kvm_main.c:6027 at kvm_io_bus_unregister_dev+0x4b0/0x580 virt/kvm/kvm_main.c:6027, CPU#1: syz.2.19/5828
-Modules linked in:
-CPU: 1 UID: 0 PID: 5828 Comm: syz.2.19 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:kvm_io_bus_unregister_dev+0x4b0/0x580 virt/kvm/kvm_main.c:6027
-Code: 3f fc ff ff e8 a1 ce 86 00 48 c7 c7 40 f7 c1 8b e8 a5 29 e9 ff 48 89 ef e8 ed 00 00 00 b8 f4 ff ff ff eb a3 e8 81 ce 86 00 90 <0f> 0b 90 e9 cd fb ff ff 48 c7 c1 e0 bb 2f 90 80 e1 07 80 c1 03 38
-RSP: 0018:ffffc900032afc30 EFLAGS: 00010293
-RAX: ffffffff813e81af RBX: ffff88816b133688 RCX: ffff888160aba540
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffc900032afb7f R09: 0000000000000000
-R10: ffffc900032afb70 R11: ffffffff81404850 R12: dffffc0000000000
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff8881a5354000
-FS:  000055555b90c500(0000) GS:ffff8882a92b9000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b33663fff CR3: 00000001bceb8000 CR4: 0000000000352ef0
-Call Trace:
- <TASK>
- mmio_test_destroy+0x66/0x90 virt/kvm/mmio_test.c:83
- kvm_destroy_devices virt/kvm/kvm_main.c:1251 [inline]
- kvm_destroy_vm virt/kvm/kvm_main.c:1296 [inline]
- kvm_put_kvm+0x902/0xae0 virt/kvm/kvm_main.c:1332
- kvm_vm_release+0x43/0x50 virt/kvm/kvm_main.c:1355
- __fput+0x418/0xa50 fs/file_table.c:510
- task_work_run+0x1d9/0x270 kernel/task_work.c:233
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
- exit_to_user_mode_loop+0x193/0x6b0 kernel/entry/common.c:98
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:207 [inline]
- syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:230 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:318 [inline]
- do_syscall_64+0x353/0x580 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f2f43d9ce59
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffde9296e78 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 00007ffde9296f60 RCX: 00007f2f43d9ce59
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 0000000000011938 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000001b32a20000 R11: 0000000000000246 R12: 00007ffde9296fa0
-R13: 00007f2f44015fac R14: 0000000000011971 R15: 00007f2f44015fa0
- </TASK>
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
+Agree and make sense. Let's see what @Eduard thinks.
 
 ---
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
-To test a patch for this bug, please reply with `#syz test`
-(should be on a separate line).
-
-The patch should be attached to the email.
-Note: arguments like custom git repos and branches are not supported.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d46f7db20d8f..e116b33ad83e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5359,12 +5359,6 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 				 const struct bpf_reg_state *reg,
+ 				 argno_t argno, int off, int size)
+ {
+-	if (off < 0) {
+-		verbose(env,
+-			"%s invalid %s buffer access: off=%d, size=%d\n",
+-			reg_arg_name(env, argno), buf_info, off, size);
+-		return -EACCES;
+-	}
+ 	if (!tnum_is_const(reg->var_off)) {
+ 		char tn_buf[48];
+ 
+@@ -5375,6 +5369,14 @@ static int __check_buffer_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
++	off += reg->var_off.value;
++	if (off < 0) {
++		verbose(env,
++			"%s invalid %s buffer access: off=%d, size=%d\n",
++			reg_arg_name(env, argno), buf_info, off, size);
++		return -EACCES;
++	}
++
+ 	return 0;
+ }
+ 
