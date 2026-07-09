@@ -1,90 +1,117 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F1034F474
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 19:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467AF44999A;
+	Thu,  9 Jul 2026 20:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783624159; cv=none; b=KFoPTcI/4fPBoFUAA/EeGoPBQjEXEXO6YfRE1nXG1a7cn32sfrzk/doz7AhFmC5LfPbHOajtfCBKM4A82M2rcPV9yaYQvlJ4nuEzGSDl0yu7IfqkRryMORVMMCbUMsG6fXVOeIG/avrPDMlD/sfhL69v0MqTHD447XUTCiEY7Ig=
+	t=1783627303; cv=none; b=XE+f8fYNSYVU1nKaEyYniDth4eHk9E4dJrsB7IlrLPcAVaCSh+X5XPGMx1+sg77HSwk3Of08qZ7H2lvSRU48gR9gMOc3zJ7B6YCUDCT20xZNEJGbgbLT30Tm+gcK2vdN1tMKk0U2mr6y5JW5vn0ho2koPgoekvPH7xIxFDr9d3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783624159; c=relaxed/simple;
-	bh=R7HWf3GJUlv5P0O9wSsR8LMDaiyKoH5T4uuupZQaexw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=ofw0J29wSVhAEPXHQKV3KgzR60+RYYODLzmoU4Gj6fWjGUW5av9apA763IW4jOyfsoCnDvswlm7mHeAU6mhaU1QrLHYjUI0WB0euyOEzJZ1aFURLsGAm44lOqtfB+n/W0rqnS67PGiXIi762zhZRzsyzz9GZUpUTwYU/5JJQrcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RFY1KXs5; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783627303; c=relaxed/simple;
+	bh=CeMM0B0qcj6ewFqS35ZZ/kiWtBn7Q1jqgx2fBeb/gLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=skd325xvAK0Z2RGc+8BdrFRT42V2UQpkl2G6gDKK3QO+79pcjXiXIh23yibvuchRXYAoxRO4YCfO6tgoS39P2f0chDcMFWEk/nOjmDkIL+Uk5A2RrMeb5oKw2BNrx+e8tybWzkzh1FF+q9PCbMf1ApQoTH5DeStKulC+h88ODm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ply6acT2; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RFY1KXs5"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 231701A0EF6;
-	Thu,  9 Jul 2026 19:09:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DE42960340;
-	Thu,  9 Jul 2026 19:09:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D2A111BD1D5A;
-	Thu,  9 Jul 2026 21:09:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783624153; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=R7HWf3GJUlv5P0O9wSsR8LMDaiyKoH5T4uuupZQaexw=;
-	b=RFY1KXs5ObjKOmwaNBRfBJ0IgZJ0Hhblb8SoyJxuHyBorCM2G4twAMMyHbAul8ad4nKwpd
-	xxJ/yOEGiH/p2KZ08ttpV4EQijwKvoqJQad6mLtidOzAXBwA6UTsPHGfk2wU1fCL5f3uBw
-	Fcj61+AzcK/9ytTLGJVys7pKTtZKYaON5qfk/3++l8E6txp2RjjAu6lSebMGqdCGOyB1cT
-	ty9fqqdMEVFcre30bAsQcEMRCqqSesVPrI2KIncaaU1gL6ABIKOlim/2wQWxTBa9NMt4zO
-	eZLNeG2zuqpIoM03cixcnW5osgBmgz6uOMc+8vd9BGZIZbd2eVn7grSJ3y71/Q==
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ply6acT2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=UAWvgdFAf/8CeLWdRcuD8jP8ushvhPSTsLSESkZgTuo=; b=ply6acT2fZnIJR5eKI4onZSYxJ
+	aSr5DWLmCvvE6s00MXXYtv7u7hwCL/ixr/K8CoDVlqZTM99W55pmVZjufq+8V3qO0T1oCkkJ/CidF
+	P9h+ZbSCyQ/rZJS1f647PNMhIDPZjemDp4OO9ZIVUPR8nDEp+hfJOhxEsIwteL9Zd0D8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1whuvu-00BXx6-J0; Thu, 09 Jul 2026 22:01:18 +0200
+Date: Thu, 9 Jul 2026 22:01:18 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+	Linux Stable <stable@vger.kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+Message-ID: <14350a31-ffc7-41fd-84d3-6cfb2cb96841@lunn.ch>
+References: <20260709101327.9508-1-royujjal@gmail.com>
+ <2026070925-delay-gauntlet-bc7c@gregkh>
+ <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
+ <2026070954-activist-left-8303@gregkh>
+ <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
+ <2026070948-lively-exchange-a458@gregkh>
+ <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 09 Jul 2026 21:09:07 +0200
-Message-Id: <DJU9ZPPQAX50.27PV0Y22APNXI@bootlin.com>
-Subject: Re: [PATCH bpf-next v5 00/10] bpf: add support for KASAN checks in
- JITed programs
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>,
- <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Borislav Petkov" <bp@alien8.de>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709185359.GAak_uRxyxfsSjCSyA@fat_crate.local>
-In-Reply-To: <20260709185359.GAak_uRxyxfsSjCSyA@fat_crate.local>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
 
-On Thu Jul 9, 2026 at 8:53 PM CEST, Borislav Petkov wrote:
-> On Thu, Jul 09, 2026 at 12:01:41PM +0200, Alexis Lothor=C3=A9 (eBPF Found=
-ation) wrote:
->> Hello,
->> this is v5 of the series aiming to bring basic support for KASAN checks
->> to BPF JITed programs.
->
-> Can we slow down a bit here please?
+> > > History: The multicast stack currently supports decoding of IGMPv3 and
+> > > MLDv2 exponential timer field encodings, but lacks the corresponding
+> > > encoding logic when generating multicast query packets.
 
-Yes, sure, my bad for the noise. I may have been a bit over-enthusiastic
-here, while iterating on the many issues raised by Sashiko.
+RFC 3376 says:
 
-Alexis
+4.1.1. Max Resp Code
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+   The Max Resp Code field specifies the maximum time allowed before
+   sending a responding report.  The actual time allowed, called the Max
+   Resp Time, is represented in units of 1/10 second and is derived from
+   the Max Resp Code as follows:
+
+   If Max Resp Code < 128, Max Resp Time = Max Resp Code
+
+   If Max Resp Code >= 128, Max Resp Code represents a floating-point
+   value as follows:
+
+       0 1 2 3 4 5 6 7
+      +-+-+-+-+-+-+-+-+
+      |1| exp | mant  |
+      +-+-+-+-+-+-+-+-+
+
+   Max Resp Time = (mant | 0x10) << (exp + 3)
+
+   Small values of Max Resp Time allow IGMPv3 routers to tune the "leave
+   latency" (the time between the moment the last host leaves a group
+   and the moment the routing protocol is notified that there are no
+   more members).  Larger values, especially in the exponential range,
+   allow tuning of the burstiness of IGMP traffic on a network.
+
+Let me check i understand the issue. If the user configures a value >
+127, linux continues to use the linear encoding, but a peer decodes it
+as a floating value.
+
+128 linear is 0 | 0x10) << (0 + 3) = 0x40 = 64. So the peer sends the
+reports earlier than required?
+
+255 linear is (0xf | 0x10) << (7 + 3) = 0x1F0000 = 2031616. So the
+peer can send the reports much later than the 255 1/10 of a second
+than userspace expected.
+
+What is useful here is, 'maximum time allowed'. The RFC does not
+appear to say how to pick a value between 0 and the maximum time
+allowed. Which gives us some flexibility.
+
+I think a much simpler fix for stable is to clamp the user space
+request for setting the max response time to 127. That seems like a
+one line patch.
+
+    Andrew
 
