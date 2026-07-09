@@ -1,81 +1,94 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0520C217704
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 12:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9802F1DDC38;
+	Thu,  9 Jul 2026 12:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783601386; cv=none; b=Z0r5VXbO4aXrbvMu9bmIPjMFXIN12H1dleF49FzYe9MzPwsWL7mXvsXM5KByy4vXMd5aKxSob1yBDHSw5X+6zwLon5XAX/vmnF/KxGZRumPqSTc/84oCtQ4hmknD923eWFz9U5Sr5ZVQfSrMId3Laxw+Vhgnf7L29tG+dxNv19k=
+	t=1783601606; cv=none; b=V9fdo/NqmdxOoYso1vakEAARyziysGgtsGOic4t+TYjpGDIYEcaI4sm9Oo/lG2474BHME/IE+9qGxdh0N/2MegrRGCzC12v/jFJLEmkeLufSgoJGHH33oCamMt1XYZ+O4RHDLBHxZVBGy40Iku/BfIBsNPrxNpqnzzKQyJjEMvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783601386; c=relaxed/simple;
-	bh=oXQdALHg4uYvvHbhSSwvl5vtMFqFgC2PBXf00i2OquM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MiIK1Y9DcbHgl6K5Mf0k5Ev0vIAPJxUI9IhcjLuDA85Nqs96IINBf4cInUgtaTf4Xn/F3iEDJCjSfdSisfhNAm2+SprX0FudjgN5GmD4iFHGj5qUBB/qLebkrLrUXaUzKDowz9zmDX/grk1xXJe9cNQSqv8J7f0b9xX2Wa4mwaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: a55d5b6c7b9411f1aa26b74ffac11d73-20260709
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:5de5cda1-7cfb-4b74-8811-b5056a8f3c30,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:3df98d8a7e353cf3344612617964cdc6,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
-	DM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: a55d5b6c7b9411f1aa26b74ffac11d73-20260709
-X-User: yanlonglong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yanlonglong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2011261336; Thu, 09 Jul 2026 20:49:38 +0800
-From: longlong yan <yanlonglong@kylinos.cn>
-To: maddy@linux.ibm.com,
-	mpe@ellerman.id.au
-Cc: npiggin@gmail.com,
-	chleroy@kernel.org,
-	ganeshgr@linux.ibm.com,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	longlong yan <yanlonglong@kylinos.cn>
-Subject: [PATCH] selftests/powerpc: Check mmap return value in inject-ra-err
-Date: Thu,  9 Jul 2026 20:49:18 +0800
-Message-ID: <20260709124919.616-1-yanlonglong@kylinos.cn>
-X-Mailer: git-send-email 2.47.1.windows.2
+	s=arc-20240116; t=1783601606; c=relaxed/simple;
+	bh=Gks40DwTF7lpnNGUWCq6Su2IsxFpLdIIk05dTz1WGzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z+64z+egBnV3vwpOh3AOKbDysDf02OoufHm4V8h28PFmQfuIDzbuNamVIKtKnfGL8g+t3Y1DWl7L6jEpAY+4jgHyAaYua/tRISMoSOcNcE2EfekWKPdhlfXR4NLmb/L4cwycwevoCRYzZ/ri4gVY5dlTUmXc1cHDk6ymraUoDQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TfPkLmUg; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TfPkLmUg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C82B1F000E9;
+	Thu,  9 Jul 2026 12:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1783601605;
+	bh=LqGl0ixyq4SH9RTf2iFKxtFYd+p29Yp4u/jnU1NbX74=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TfPkLmUgTqMzB9VMEz8wZkp5JPfZpRCHBRWfkD4BQrmLjXeEmDDu7lAsvCleKXWQC
+	 5SZCrv0py30AH/ppfaki1zJ4ZCaDA//byzamlddmG4nWlUybQxxNeRIDV6xKV8CR+w
+	 w8k6cpM7nKgYMcN1R+PO8atjiG9o6XlfCBv9IPDQ=
+Date: Thu, 9 Jul 2026 14:53:21 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: Linux Stable <stable@vger.kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+Message-ID: <2026070954-activist-left-8303@gregkh>
+References: <20260709101327.9508-1-royujjal@gmail.com>
+ <2026070925-delay-gauntlet-bc7c@gregkh>
+ <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
 
-mmap() in test_ra_error() is not checked for MAP_FAILED. On failure,
-the subsequent write *paste_addr = 1 dereferences an invalid pointer
-and segfaults. Add a FAIL_IF() check, consistent with the rest of the
-function.
+On Thu, Jul 09, 2026 at 06:12:40PM +0530, Ujjal Roy wrote:
+> On Thu, Jul 9, 2026 at 4:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Jul 09, 2026 at 10:13:27AM +0000, Ujjal Roy wrote:
+> > > Hi Greg,
+> > >
+> > > Please consider backporting the following bridge multicast fix series to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
+> > >
+> > > 726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation")
+> > > 12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+> > > 95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+> > > e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+> > > 529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
+> >
+> > Why is any of this needed in older kernels?
+> >
+> > And 7.0.y is long end-of-life.
+> >
+> > And why, if this does fix issues, was it not tagged for stable to start
+> > with?
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> I already explained this in the email thread, "Please backport bridge
+> multicast exponential field encoding fix series to stable kernels".
 
-Fixes: 0f4ef8a3bf78 ("selftests/powerpc: Add test for real address error handling")
-Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
----
- tools/testing/selftests/powerpc/mce/inject-ra-err.c | 1 +
- 1 file changed, 1 insertion(+)
+Sorry, but that's not here (remember, some of us get 1000+ emails a
+day.)
 
-diff --git a/tools/testing/selftests/powerpc/mce/inject-ra-err.c b/tools/testing/selftests/powerpc/mce/inject-ra-err.c
-index 94323c34d9a6..0622fd814114 100644
---- a/tools/testing/selftests/powerpc/mce/inject-ra-err.c
-+++ b/tools/testing/selftests/powerpc/mce/inject-ra-err.c
-@@ -47,6 +47,7 @@ static int test_ra_error(void)
- 	FAIL_IF(sigaction(SIGBUS, &act, NULL) != 0);
- 
- 	paste_addr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0ULL);
-+	FAIL_IF(paste_addr == MAP_FAILED);
- 
- 	/* The following assignment triggers exception */
- 	mb();
--- 
-2.43.0
+Please explain why patches need to be backported when asking for them to
+be backported.
 
+thanks,
+
+greg k-h
