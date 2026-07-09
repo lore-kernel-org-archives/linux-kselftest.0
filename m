@@ -1,87 +1,127 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876DB3BB69E
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 14:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8112387371
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 14:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783608913; cv=none; b=dHHNLZyyJF73fDluHXikdVqgleY7lnzRvgL8iLB0Eybn11boe25jVeHxrswcwA4o7JIgBYoh5DimdCojYA6kPGH1fNXPUO7fFxI59gBnf9pJYj/4oQLumLzN8AOEXK1ipCcILIw+qAu4gvuPDvDi1Zjoco7ErnDTRc+qBNqIKwk=
+	t=1783609035; cv=none; b=LzgQnLwyILznIo7aff+ai6LuNiT8E0yj0BmZbsWaUde8cHrR7NdW14JXFBxpqBIgZyED/1kHj77GEjfv+i0s74j56G9M8Yli6snoGR7MmJeuQyDuNSqPk7RinkIitsRipcqG4vKFVtv1QqyjeN4U34BZkPKw3TrZOsn8hgwfDBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783608913; c=relaxed/simple;
-	bh=Z92wjpo4T3gw0Y2zNCG2Jd/Ba3+9EzNo1LTP87sUDGw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MS5Ony6SWy0gBEvwT9Tjmq9SGLbjz8Ot1V8iU9JW4TPVQCWu6jr+Z5f6ODWsNcXYuGLOJYvqc3cZgjjIkg3CD+iK/vejhucz6xnBILzbEd0wQvB+F3Lgcctet5iP+nvqTt4tKbVNbQ9dPBffqqtiSxg/EVNTnZ48IPPwVADW8Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rV2ozypf; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1783609035; c=relaxed/simple;
+	bh=tjgdvByW5WBZqyhrd7wFuCriBR6z1oBevpMfu6TVGNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rG5aLTmTDBpUwLLdSRMtKbcFOyJwo5AXOXwYll1lqXSvxgD6JrJfO6Glub0DRW5Vm79HyB3uPFz1eIvJokvw8j/Gl0ErxUHtpxtSuQO599yU1/0ItSteEX22ARDjvyIxsgc61Wd2A1Qw8L1uTw25Y82E30Pjhq4dxqPP0Z+GsI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=TCMqfGI7; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rV2ozypf"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-848568a6f62so1881878b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 07:55:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="TCMqfGI7"
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8f032b47e3cso40846d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 07:57:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783608912; x=1784213712; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fvTDmaZA4veBPk22tfgJT4gMaQFjXb/XSia/PA9AeFU=;
-        b=rV2ozypfHj2TGjGNnzUB71uX65+x8VyG9TDAJbVbPYBAdrwcGgUaocBlYfzgD5A41x
-         MIMKO3djb3MP0xx9JP0PYrCZ3mMu/p4sGaMVURBr9fx7kLZK5on/oUW3B0jB7PEMl3ei
-         wUh7XWMJ/Ju0hR06vZY+ncv2DNhdgS0Ha9LdFY5WV/laQ8a6ntijLABy3HZIpJKajAIS
-         xlbfu9COFxHkCEFB6GoEgpBsKS1INFLJdi9bOTyNEcDqzg+p+47J2G0m8YDL211M+skH
-         ta18t0kmK7QYJDNCF8oQ263z9yzInF4V0k0/CUnBiYHUyB0zZTgyIWgTw3mgk2uP+ab6
-         0qiA==
+        d=gourry.net; s=google; t=1783609033; x=1784213833; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cUc0YxX2OnLyX2sI3kys65ZvVtk8+5Y5AOwoYWzDFOM=;
+        b=TCMqfGI7JdxQTtJlHSthwI0j8quYtYJeY8RBzzPK2VfrMHMjRiALGQ0Eiuwwj2B7VC
+         RWwy1xBBzHUCe+qvPWlHySd/VMdwpNS8BNo76mQeWipiYA5ILkD3oK6pzEkF3sEeZqjt
+         QkqssvgxLUbqdGJvMT9oDSZ8G59SLH6XimKp+HJE0x4SPHQvK+xZDI01ClfeapABqG0m
+         0Q8reXbl1XMca7Sxu4fDNtetFRtZGZW9I+6sll8tPglYtEklTIwrXkU8MHPl4NJejqx/
+         MLV1fIWuYt8JQJlGPzlpxHF6yIYSrGsatFAiu9srMIJ8Pbg/IBt25xOCMDI2rQjW3dW2
+         RVMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783608912; x=1784213712;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fvTDmaZA4veBPk22tfgJT4gMaQFjXb/XSia/PA9AeFU=;
-        b=ZFjhXj9yN8JOhnPzp4OUC1jKSQDLfVAGzejnUuxqvRnSfCgZ1NuPhHsOX63K6aL02B
-         7rjIGaHwj+gkFpH0SyAE2eO5yrSc1kH1f44XAiozY07S44G9eQWzWUuiJVQmLetJgLCN
-         whcGUiP6WS42bki1IywPL8svsqEQPVDyOmkGXJRFDlUypPYDU7MduDQT0S+BCuyQON4f
-         tODAS28HbBsR1Ogqa3VqxUCDyWot9LKLrajX4InzP+pZZf68GjC5WILoUxzYAkdfcDvu
-         uN2KJNw1QuCOPCF+nAHz7x/2ENjMth0yYLcjlcQE+h2hct+PsCWlOgKAeD9S4FTK1VQZ
-         S9OQ==
-X-Forwarded-Encrypted: i=1; AHgh+RruirNQzHRszG7Zgy9CdIC+w91c3FlXAYZ1zDDSAGwuPdizDUuVPk8r74T+/pP4/TJEu0xpXcYCXINFpVOE3qA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFZVSYB+JddA6NXbFT/DEmU56ZiUZhYwYSf2rTqaWgOY7XnBy0
-	49gvSu2kg9WnZH2SxugMOTL1YuIhl/phL3IEG/OEddrcW+EIR/LmlFycZxRAgbLxOku1+goaCO7
-	XbmSA6w==
-X-Received: from pfxx22.prod.google.com ([2002:a05:6a00:116:b0:848:5740:db83])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4191:b0:847:7f3c:b5f5
- with SMTP id d2e1a72fcca58-84842ed2020mr7288680b3a.11.1783608911583; Thu, 09
- Jul 2026 07:55:11 -0700 (PDT)
-Date: Thu, 9 Jul 2026 07:55:10 -0700
-In-Reply-To: <20260625070914.2175124-1-piotr.zarycki@gmail.com>
+        d=1e100.net; s=20251104; t=1783609033; x=1784213833;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cUc0YxX2OnLyX2sI3kys65ZvVtk8+5Y5AOwoYWzDFOM=;
+        b=ngAtjKuvt5+PzQlpKg6fn0oqTQcfO1RHh70DC6QuGrSY3U2eBbkof9bmrv9px0Jyi+
+         jAuMHtDsN0g6t5++dPnY39yIUwOc4MxOnkEj5esab+jtJNBKDpLtSLWZVbpxJvYYZH+9
+         2U7LjkgAyiimTarqJbslZSS3lhSwjTQYcjr2+n31HmyVTkeVqtsZ33icV4DA4XJEGvO0
+         kwlKRmcu8T0VgLnYlFEbE+YbtXHxGcFtf6iMMLzr6XxXjOFF86+BIGyMQuwZKmnYRgCd
+         JOgyVs9xN/A689T7bGMr2RybquWoiORxKKMcOIv+r2Va8GID82+2VZ3YiMBaCfqJ+ZFB
+         hluA==
+X-Forwarded-Encrypted: i=1; AHgh+RrDl4OdkpXZXVU7CsKBLu/Ny0zQuiMjAiy5rQQOp9xq/YcXKRdfn2zTlnPu+87ZFFmSLUOD7jXIeDx2e+NVB44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjgQw9dFOrqBWwpJ7EY1WSPLPxl5OFnWlGMh8WzxXipNIVYFri
+	GOwOIAHD7afcCGgpO5gfeERNDza1yVx6POfM6YgZ+/3b6kLKEqv6c8GoaaeLy0QVWC8=
+X-Gm-Gg: AfdE7clK4+E3NwYSCLwCnyIeHnYRXCJtR1ICHgOmrcW40zQ7zxoSUJgekZapVh5R/zT
+	azxLa1+suc5hHaV1/khJ7xVFufwghicRUvt9g4Fu18YPVgpceEpRKeqDId6N5Qj8bFt/9xmrVqa
+	tSQdN/Yt/dIx7qk8d4dMeipC83Km7gVskeC5+Zbqv07SLfsr9sBhJCv1W34nw7RIxndHXEcqpDw
+	Gp6kUSkvjeYSCAgD6qlxLld9PmEnrINSJd56vUbgX5l8VrdeKOSfBJU6IL5U0i5P63jJdYG0BVs
+	w43tQRJ2OOixv9rpIMjGa0PJI3hmik7a6JWZnKbzUCkh6P1SFKNrwdbpL7YBSqk8SDjm2WwEMIh
+	EjJHqGvSyorv7yKybq4bAjh4z7DE+wdOOuPxJMtGghMV5KxP2LkGGRauFzC6bCViAFbBxNFmjHd
+	kYukQ6IYd4V97HZx/mYncB0NftRFBUDFmMCNilTCQkzR1VLhcH/VXWv4Rf8/d91b/FCkTw
+X-Received: by 2002:a05:620a:460f:b0:92d:e54e:72db with SMTP id af79cd13be357-92ecf54a01bmr728326285a.22.1783609032712;
+        Thu, 09 Jul 2026 07:57:12 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e90cedfe0sm1725553985a.43.2026.07.09.07.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 07:57:12 -0700 (PDT)
+Date: Thu, 9 Jul 2026 10:57:07 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com,
+	Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
+ whole-device hotplug
+Message-ID: <ak-2w-aHp5huBa2N@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-10-gourry@gourry.net>
+ <ak9TSx-I-53dX6fx@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260528154003.3594107-1-piotr.zarycki@gmail.com> <20260625070914.2175124-1-piotr.zarycki@gmail.com>
-Message-ID: <ak-2To4F5tNjyolt@google.com>
-Subject: Re: [PATCH v3] selftests: add swap() macro to kselftest.h
-From: Sean Christopherson <seanjc@google.com>
-To: Piotr Zarycki <piotr.zarycki@gmail.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, vkuznets@redhat.com, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ak9TSx-I-53dX6fx@MWDK4CY14F>
 
-On Thu, Jun 25, 2026, Piotr Zarycki wrote:
-> Add swap() to tools/testing/selftests/kselftest.h with an #ifndef guard.
+On Thu, Jul 09, 2026 at 04:07:31PM +0800, Richard Cheng wrote:
+> > +	if (dax_kmem_state_is_online(data->state)) {
+> > +		dev_warn(dev, "Hotplug regions stuck online until reboot\n");
+> > +		any_hotremove_failed = true;
+> > +		return;
 > 
-> Guard the local swap() definition in mm/uffd-stress.c with #ifndef to
-> prevent a redefinition warning.
+> Hi Gregory,
 > 
-> Use swap() in hyperv_tlb_flush.c to replace the open-coded PTE swap and
-> remove the TODO comment.
+> I suppose data->state is only updated when writing to the new daxX.Y/state file?
+> If the blocks are offlined through the old per-block interface, data->state
+> still says online and we will hit this early return.
+> Everything is leaked and a later rebind fails -EBUSY.
 > 
-> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
-> ---
-> Changes in v3:
-> - Add #ifndef guard to mm/uffd-stress.c to fix a redefinition warning;
->   uffd-stress.c defines its own swap() without a guard, which conflicts
->   when kselftest.h is included first via uffd-common.h.
+> Current behavior is using remove_memory(), and it succeeds on offlined blocks
+> and fails safely with -EBUSY on online ones, no offlining from unbind context
+> either way.
+> 
+> Your changelog state "on unbind fallback to legacy if still online", but the
+> fallback only runs for data->state == MMOP_OFFLINE.
+> Maybe drop this early return and just try dax_kmem_remove_ranges() here too?
+> 
 
-Why not explicitly include kselftest.h in mm/uffd-stress.c and drop uffd-stress.c's
-version of swap()?
+Hm, I think you are right.  When doing some testing I bounced between
+tests which race with dax/state and block/state, and I missed the
+obvious case of the whole device being offline but dax/state being stale.
+
+I think this entire chunk actually just drops to:
+
+dax_kmem_remove_ranges(dev_dax, data);
+
+And the internal error catches the condition to the log.
+
+Thanks! I will spin a new version next week.
+
+~Gregory
