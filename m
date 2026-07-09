@@ -1,130 +1,132 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E317530B517
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 17:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0605038F24B
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 17:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783617325; cv=none; b=nLH+1T1hrbS7h+fuogZFOj7Cza4oPKA1cUAEvzEbbqnLKTP0wHm1qh+vCWHfpsnzHVuH8zggmO8nnkGrjJsvsmCAMzA9mZaDqdvqH5Edbb6EdLtvZvR0xoXenO7W6204hPY28q+O+S4OGZ/LipfrcSkYcHpBPOPcPecwTbtm3Ag=
+	t=1783619404; cv=none; b=iqugzHV3cJP5r6Ppt+rkOqUzg3621Zl2i8fasQWgviIjnGAkDJeR1H/y3camiIBQeaqwxxopow/QDrQqPvrBW/d3JyRLudUpW2J8K24Pe7+zzLkZtZv0aStJAq5wnym+qNz8VcS/W3Clo9PNjVnMt1lNhmYyBc4NXDXdGJJWnWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783617325; c=relaxed/simple;
-	bh=SzROYG8BwD/EB/+MUjQ4u1vhoaHs3/zZwllWfULF+qU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GU6UXce7BIR8O+P2lnuH1ru6I9Hpf/98mhtFPtXBIWOH+8njDKOCMzhmRMIJEgDF7lTRgTgaCnkQH7b2DmQDoVtCE7h8h+cUmwNr2JXGHYlEVCAiWaKLMyltkWWXNscr4zhR0066hr2jYyDVRx0RiIFmuRdggccK9wL0WZ4LtKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gk0zhMxP; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1783619404; c=relaxed/simple;
+	bh=RHIFkS5bIy/SpZfntsDxPdmrMtdDGggrbSjRzG9iFFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QcBwV7wf3hzaezXIQo0WlSeO5673zZeqUfwRthg98wvCA4p/HDcoJtZVfuCQLAMlwd2sdF830U6y+S/1jWp1ni4tiQTZ2Aeh2t5sYAlqygRSIJLKexeXJnZFivdCRWl8QBmVDxJQNNWA4iRM3KGvnx3wOR9/j+sw9mhW63+BlBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VCkRqPyk; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gk0zhMxP"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8ea70ca4fc8so706086d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 10:15:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VCkRqPyk"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-37fc02e660bso310317a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 10:50:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783617323; x=1784222123; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=46UkRwT/i/djJx+KopbYZyKUrVPhRVpwIJdu7TzJpII=;
-        b=gk0zhMxPCwdMeia9k1VETsBkdLdlSUiHgtr/lxI34cIdfLJu788hSwNC4UXQj5RHLF
-         mex7yejvsPB2SSYb0a4ATL4mvLDHXVUcofAXP/G3aV+/e0HzaKcNf7cLVkkR85oNiD9m
-         LoDWnj2LMAt7utzVlJ+XOrCTJtE7qaFqyJFxZygEzxhwSHJrCxDozHyHA1XvlQH+Jrbc
-         imd7n4XXsQhloWf3R6EbXswShRm0e35oZVkp68wjNPOA5N6uqxNHp9O3nOq0N97Y+El4
-         7JS46cJLFNDyaPU2IWeXp0FUfg5eqh6HlWZMjjHIIOI/dAnwK60yX0GXfS4seLtNgcRL
-         L6tw==
+        d=gmail.com; s=20251104; t=1783619402; x=1784224202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vhCE1WQAfzh+0PXxIbWqFOicy2jfr4E0e1kNUeNK4VU=;
+        b=VCkRqPykrbI3X0Erw6W4UnHtXTXlVpes4BQMuUb5GH2Lq+J0FTLiK7BKicAVArcZos
+         gLGMvetk5ohhg/Pk+Ob8S8eS5ppGdrGu4RDDGKRILTkobbk3vkC0z+5hblzGgCRJ76Tg
+         uaOvnKGxIEX1EvpSfLGuRx5h2CWhd93+iqipCl2UpvUR3GKSwM4i7BjvJtTtr/7LAqaE
+         mXaNgoP0YlUHfJurg4F8h10IpnPcupVl3W6gRQ1gZ5JmLaC5oPKB1ZARVJtQVW9X4por
+         /ANlDHVahb+0wiEyrsGw4l+4aR3pobOj9DDbtpLHSsStU4nRPmHja4GFffpHn6zBSnSx
+         qsrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783617323; x=1784222123;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=46UkRwT/i/djJx+KopbYZyKUrVPhRVpwIJdu7TzJpII=;
-        b=qX9BZSicq54uQCIfmPZDREAUMv6rlViuPKCGf2h9m57mVzqiGAikN5LGauvNtO3aAi
-         Uda/nNN2rt3hyEg5JfTQYFhd+zfXRz3k/cjSosBuKnbEo4E3M2cW8R9VJkv9gf1wVwxt
-         iG/GxtS5inBaz3z6sIIL/ZCPmLkS3Ab7qoauQnp3PL68ZyhyJ4oWINmk6jkxBIXmpG3m
-         9p3wMJJtCbbxW5RjxQc5vPTK6YbW4EwCoN/SVOww+1nfRHLWhLc3cYFl91Khxg45iXTg
-         d5ZcT9kPnF+RbzAQzjCqrY1n9R3f1aE/P3VTg/na5rum1sVSfsxKzGFW8+VhwsG+Xc8+
-         Vi2Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rrq7/+c9qhG9OfvVFoDs5680TkOj7bZrsVksglYh/Vh0S3ZAwZHQuSZc95fXqO1OWhaHLzZWZYFq601TBQ7yXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMaXUAhfqUTWNWcMGgJxUWXgcdDktiVjaBKEuVzvye9RINAzMl
-	8Vjv+XRlrN4Vd4Icg/6Fz9hmp7ReGsF+RvE/72bbFBlGz9nLb0enG7BXybE0hwGKXLI=
-X-Gm-Gg: AfdE7cld+EkQvVRAIfqIUsqgz8AO7ip3y3xVza2R6YjNfMPXuLoy9FMHIt39PB3Mvxh
-	S9YzVJPajTx3USOl649c0HV/1k2/5D+FLKKNp8EYYPByZigSVoOS05CrKOyNS1C+P8MAd0CC0pj
-	BihPZh/HNia+xD5lUNMLX5lnsN6rG9nvi6Jv34tJbsiNc9pxT3TvqxQcBu35G4MnmjdBe2PKM2e
-	jaRQgAQA80hfSMZiUYmAO8VwcBLuoHdKBQkZEVBqDRDJ6hn8c0uzL2evhWzOW+AkmMcc31tuXef
-	OiC2FPRI5jZfCMVI4m8je79kG7am5IrklMjdPA7912NqBFiTGUFqdkjCB4rPZRvgnFs/k8ktTo0
-	ajDFZjTxlm7j4jxhId7clu4hiRqFMNfIqnmeYkrFgTFajhCzH6kl6mkKjNA51cupuD/6wgunqa6
-	vFTIcI5J3tO7Qu6EMYOXuEiflG8HwOCqJOBn0XuOsAJJJNQK+tiMGAGX3PDauSEyOLNf9L
-X-Received: by 2002:a05:6214:6014:b0:8e9:f45f:107b with SMTP id 6a1803df08f44-90242143c3amr1641696d6.34.1783617322803;
-        Thu, 09 Jul 2026 10:15:22 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd7c1d8fcsm22085656d6.25.2026.07.09.10.15.21
+        d=1e100.net; s=20251104; t=1783619402; x=1784224202;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vhCE1WQAfzh+0PXxIbWqFOicy2jfr4E0e1kNUeNK4VU=;
+        b=W1JdlyS3BjTJXMH4lTmpXxm8TXESIGR4PqXSToYrSHyCfiZbECmnR/IGxFdPdWQmaY
+         1wXnBKoZ6z5N3IakQbl7BTgRV+BuiKmPjxTYDVSKPcJjUYTaAQtNAFFdUaNdMUjrMxB6
+         V65FU6gTcb7VRrordOfX8FR1VDuUA0MjtIJuErc3jS5fBdRVHzmIJ32jDWnarBF+QQyF
+         Bqi8HFYMJ6cB09GzyXTNGmniMyn7tKchyGj9yf/3Eba7FCII4OfL9EthJxcCPldrOg1m
+         pdO8sYSuhmAO8npKkeUgvCQiTQ64m9XI01q8O67t4ob1AHFeK4rTwXCaTiVGn8rQIDpU
+         P7lQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpuSfhlppUray/55tvMyfmszFm4AN1AOmbIuVKNK3hobpBoLY5EltBfMOGd7cFj1cR/pPziUqWAtq70bW7FF3o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVwPlsEAzT1jDhtHoAHGOGmoEJcn7Bn1ePDjz0kjtkAatFEU5g
+	TPB7PjvHs8Jebm5X+4r1k0Dtuv8FXYJ3LB6B0/mLi7Dk2umRDLCXlgJw
+X-Gm-Gg: AfdE7cnDDnEBuhxys4v/M9tA4D2a3wybHfBq2Q6x/FZMcslKqvXG339ajmesoSSUkoR
+	nxTz/HG4U/X0/IEr468KTjCvrN6eRklK583KutWFzwGfcLRRB3990KvhLdyzx33siPxn6BNSFmT
+	BjGBmrBPJvlkQ6JgLjVwxUtO7Dm7AVbCWbkX1dJrPhn/EkmC3a6DxNbogh6/ZJF+4K6zYXWdlRS
+	lG6rhZUjng76Kxb4B4MsZwSr7LIfh467XD1MQMrbixgz/rhXLQdpB5AkktX0CH2YmsBRPIB7uf+
+	cvNDVicpV6VwbdmbuvjYzHOWd/6BqsaqIOa0mwrwDvdZm+WRpVZSjgypzzZZ9s6uv9PwPmnPhrT
+	2etN7EmP6tQAtYvNCQhpiD7RTIwR13toWb6yuTrve2AIRuHpUYWNSAvhce1YLHtW4HtzS6iRjTq
+	GPNUXKDmcetz4jROKq2zLD5SURhTsClbWZ/aw=
+X-Received: by 2002:a17:90b:58e4:b0:380:9157:d6c with SMTP id 98e67ed59e1d1-3893fd5f712mr9180284a91.10.1783619402465;
+        Thu, 09 Jul 2026 10:50:02 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3120c8e41fcsm2206765eec.15.2026.07.09.10.49.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 10:15:22 -0700 (PDT)
-Date: Thu, 9 Jul 2026 13:15:17 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Richard Cheng <icheng@nvidia.com>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-Subject: Re: [PATCH v6 06/10] mm/memory_hotplug: add
- offline_and_remove_memory_ranges()
-Message-ID: <ak_XJWglABmKfSiU@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-7-gourry@gourry.net>
- <ak9ee95F7pJpCKMo@MWDK4CY14F>
+        Thu, 09 Jul 2026 10:50:02 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hemanth Selam <hemanth.selam@gmail.com>
+Subject: [PATCH v2 0/2] KVM: selftests: SEV: address two TODOs in the SEV tests
+Date: Thu,  9 Jul 2026 23:19:53 +0530
+Message-ID: <20260709174955.628913-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20260709164751.621326-1-hemanth.selam@gmail.com>
+References: <20260709164751.621326-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ak9ee95F7pJpCKMo@MWDK4CY14F>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 09, 2026 at 04:45:51PM +0800, Richard Cheng wrote:
-> On Tue, Jun 30, 2026 at 05:18:38PM +0800, Gregory Price wrote:
-> > +/**
-> > + * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
-> > + * @ranges: array of physical address ranges to offline and remove
-> > + * @nr_ranges: number of entries in @ranges
-> > + *
-> > + * Offline and remove several memory ranges as one operation, serialized
-> > + * against other hotplug operations by a single lock_device_hotplug().
-> > + *
-> > + * This offlines all ranges before removing any of them.  If offlining any
-> > + * range fails, the entire process is reverted and nothing is removed.
-> > + * This provides a fully atomic semantic for unplugging an entire device.
-> > + *
-> > + * Each range must be memory-block aligned in start and size.
-> > + *
-> > + * Return: 0 on success, negative errno otherwise.  On failure no range has
-> > + * been removed.
-> > + */
-> 
-> I think this can return 1, and it shouldn't.
-> device_offline() returns 1 when a block is already offline, and phase 1 passes that value through as-is.
-> 
+This small series fills in two pre-existing TODOs in the x86 SEV
+selftests. Both are test-only changes; there is no functional change to
+the kernel.
 
-I just realized try_offline_memory_block() already clamps the value to 0
+Patch 1 adds negative coverage to sev_init2_tests: when the platform
+does not support a given SEV VM type (SEV-ES or SEV-SNP), it verifies
+that KVM_CREATE_VM rejects that type with -EINVAL. Previously the test
+only exercised the VM types that were supported, so a mismatch between
+KVM_CAP_VM_TYPES and the actual KVM_CREATE_VM enforcement would have
+gone unnoticed.
 
-static int try_offline_memory_block(struct memory_block *mem, void *arg)
-{
-...
-    rc = device_offline(&mem->dev);
-...
-    /* Ignore if already offline. */
-    return rc < 0 ? rc : 0;
-}
+Patch 2 makes sev_smoke_test capture the launch measurement returned by
+KVM_SEV_LAUNCH_MEASURE for SEV and SEV-ES guests and asserts that it is
+not all zeros, instead of discarding it. A full attestation-style
+validation is not possible from the selftest (userspace does not hold
+the transport keys used to derive the measurement), but a non-zero
+check catches a PSP/plumbing failure that silently leaves the buffer
+untouched. SEV-SNP uses a different launch flow and is skipped.
 
-But this is a bit non-obvious, let me see about making this a little
-bit clearer.
+Testing: built and run on an AMD EPYC 9755 (Turin) host running this
+tree (7.2.0-rc2), with sev/sev_es/sev_snp all enabled. Both tests pass.
+The new rejection path was additionally exercised by reloading kvm_amd
+with sev_snp=0 so the unsupported types are rejected: under strace,
+KVM_CREATE_VM for the SEV-ES and SNP types both return -EINVAL and the
+test passes. checkpatch --strict is clean on both patches.
 
-~Gregory
+Changes in v2:
+ - Patch 1: fix unreachable fd cleanup in test_create_invalid_type().
+   TEST_ASSERT() aborts on failure, so the trailing "if (fd >= 0)
+   close(fd)" could never run; close the fd (and latch errno) before
+   the assert instead, so an unexpectedly-created VM is not leaked.
+   Reported-by: Sashiko AI review.
+ - Trimmed the added in-code comments to short high-level notes and
+   moved the detailed rationale into the commit messages.
+ - No functional change to patch 2.
+
+v1: https://lore.kernel.org/all/20260709164751.621326-1-hemanth.selam@gmail.com/
+
+Hemanth Selam (2):
+  KVM: selftests: SEV: Verify unsupported VM types are rejected at
+    creation
+  KVM: selftests: SEV: Sanity check the launch measurement
+
+ .../selftests/kvm/x86/sev_init2_tests.c       | 27 +++++++++++++++++--
+ .../selftests/kvm/x86/sev_smoke_test.c        | 23 +++++++++++++++--
+ 2 files changed, 46 insertions(+), 4 deletions(-)
+
+-- 
+2.43.7
+
