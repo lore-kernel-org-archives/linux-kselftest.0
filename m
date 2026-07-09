@@ -1,126 +1,137 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-vs1-f74.google.com (mail-vs1-f74.google.com [209.85.217.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463D5423160
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 15:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783612301; cv=pass; b=dOBu1EBuCzOFk4P+QmYJ9zKYpMacpf7tlSVi3aysyXVsV4JpzGRqUyyNS6WgLGYEClW4eHDgZ/3I39HiicEw7ewjLMFLC0pasv74NlpsRIbXNQsAhTpuHTg0CEheBaGWtpOy63j0qTA01PtQYSZun9d5kKxIoqyQvdujho+CBIY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783612301; c=relaxed/simple;
-	bh=CnOR5RamZJxR2OSD6C6EdtUaJE3sBF8ndNgsESSRB5Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YA/5K8V7TWLgXPujMIH8uWd4seaQ8ypfZ5bqeyS1Oit4bIn6DYc/PidbbNWposVarJdofE1Rg5fwVb2GC5auP2JULwhNJAo0huL4htuEUJ6xmD3MGDkRrkUjEPHb9TeJ/YlECDi+OXOte7mJP+LX5e9gl6K8B3rvswvn92DrDxA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eMc1jOq8; arc=pass smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC763AF656
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 16:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783613298; cv=none; b=dws3R57Ahj+1YJ65cmkeHoT/s6nTLNvkfBOUC2d5oQ1ezAzJ+cUf/EYyg/YzReubji7rucF0zsV1h3mypu8ngnxLrrQxW6Kn0L5cmc9GHda6r+Jku5cTBJof9m2yi6ByWvwf55FrXbYokJm2ny04hAsZaSrwoXIJmkAm4hoEnbo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783613298; c=relaxed/simple;
+	bh=roYk69iMq6nB9nkznQVm0tE4qPdmgYL5OzMoK1GJxnA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=H5NAZFO05pbo0uYJoo1innIdjHpUU1l8kul1hoS5G//xHjppjrvMccK92cppXHO5tUapMWBBdGlGjIfOcK0fZRNyaVkujSRbkPj9BftJF9mIGCjfUQDFqO1dm63kocNESFIUQxQZOxlfr428O+3Rt+eRj62mwwxBAkiewslqyyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tphj0uzG; arc=none smtp.client-ip=209.85.217.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eMc1jOq8"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c9d1fc053e0so1660185a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 08:51:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783612300; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gbXhpldQp0SULlv3vzc+x2EIFtgM2lZGW+a1djM0/RjFNsbVrX9SD6lM6KD3YeuF7a
-         6JPziw9I8iW6peeuf5oZR9jnVY70wVstjMHicZgturfaj1+61btLEXwLu/+ckL7ALFZ+
-         +N3CU032prRm9YroLrH9UJSjY+/tnyONQT4WSZYaGky4ZqWEoBwe61J71mEf2MpdL55y
-         740KgsNxJwTOod9JEMpPYmbSAMWryubLlhJrZbdzQZxO7DhQmwrltNXfxiMWTfIcGNnf
-         TnCgO5xch2Mc2RdY/smbmprRf9UXIvwYk+R0OTSC/BG4Y9ZkCxTb/E9Xi8ggaoR+sQhf
-         gAYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zYq7+F39g3Uh2HbdpTybELtY+tupvf/1ejmIDLIb7hQ=;
-        fh=jQsbDF71GJKr92Vyx+X4ydib8kvnZphl9+Tm4IbgsFY=;
-        b=B1XBz/qwG0KL9bvde20acxg75XWzPO8yTdQkRbDLKvgIpW5VYlNWpJ5e23SVgZkBCE
-         IDIg/CWQsDUINbWeJPYJa4ABDaLs2fy/yOR+HBbxqPJTdMbaB/iprQYm6z/KMCN+AvIr
-         a6/H9OniIweyA1ifi4Jl5VeyWYSEpyg4Jt5sZzH5PVBwPqF7uXVD9d4z90UQNiDD/0yg
-         nsfw6xR5vQByyuURSPAmM5xqMbHtktrD0peN5fgrsVsZzBkmzS6h0z7SqYIAUVL8gIdc
-         WqrKN+jyYFRTY0hoROdZAZUh9UjqT1Xct71D1+0UwHOheikISe11hO4C3gQ9vmeezg9/
-         tDyQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tphj0uzG"
+Received: by mail-vs1-f74.google.com with SMTP id ada2fe7eead31-744e7890eceso6059137.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 09:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783612300; x=1784217100; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zYq7+F39g3Uh2HbdpTybELtY+tupvf/1ejmIDLIb7hQ=;
-        b=eMc1jOq8TDxaW9BjAF+TgUMtJtDglYCmQ7IIsYQ05Io9mzOebWrhexHbJd4crx3x5Q
-         twQVC/+AOiFQgBJim4Txj9FQbhgAM0Fxy+at/YYVU57M6bj3CC2QDYnDB+ZS9BJ0xK1p
-         sfks8SZ3ENOclIWGGcEM/m65jzIlioxc8I36xBpbpzkGgBcoDQ8qO+uIL+FBp5EH3NHF
-         oclvWLrhnJLTkJa6ayUuBWexlckWddPdiLd7jDo5CVhixVXqUgbJ5AtU08clT1TuQpV1
-         MYl3BN1MZCIyg0rae5RmIzh3OS88/fGcR5qktZFpkEgqMLM0wsVSZGD7Fq1g6BKt0fkZ
-         KKjw==
+        d=google.com; s=20251104; t=1783613292; x=1784218092; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gJNcw7M2sNVblZ4y7vGqfJIKNb5SV5gkezFVrk+oIbM=;
+        b=Tphj0uzGYGkINP65VBq4QfP4eenVWzss64bQk7EWwq1N7oN53LpXJc4AisJOmfoMLl
+         XH+sn8xEe34xKNA68BfhZzsHsJRr+fE3bwegO5+wK8IW7XW3OPgBP8blwrk1Lj9D63Qs
+         uNvqYAX6du85SXagkCisMdbqafCPMqpWL2zJ5/CmMgHTJ2FfL9KSU6+JBQCwUoR6LJuO
+         Mh8f6ZmoL6LhYy5VtiTKWB3SkuRQgCGZTaXmbCLM8bEyjuvFev3/kjaD3nlHXtNvmCcX
+         14R9/ppHLSuB4W4IhaWQaTbRJHGryhUj/AF82tn/CVfraEdbkR1x3rPkXVJp3/nhLJ+4
+         4Dgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783612300; x=1784217100;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1783613292; x=1784218092;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zYq7+F39g3Uh2HbdpTybELtY+tupvf/1ejmIDLIb7hQ=;
-        b=ZVuNIE1x/uHDxJNikG+0WeftNfVqzSpisbIkOVtVQY44SOIZoVYZqyMkToSvk87SmQ
-         BqB/WrQuVzVLRkUIt1VgHElrL34T3cBGR6gWnfMRfwUKzIBQ12cCeU54Qpk+r5xvYm6U
-         cCA9dzActNDePGE0aq49Y+HT6JRyFf8Z8aemVXhcGJHoDZ1sjBRYcujCjGRFMf+DhsZa
-         GUXyUDdzqqnqKqotBhRKn2aGg04Zd7FOXewXwKIE06Dnx4PA5LMPb6ChbLFu3x9U94k5
-         vFDHZDB+8UM5UOlpS/uKNxOpE6X3nj3IFB89bFSMrT1aR/jNJ/CX7SsO0wtckcNcjYhM
-         vv4Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpTujni1NJOEEw4kOplwWGdoGGkWNqyQh+7Dwl2/ua0e14x29w79PsO02Op2JyLX9gMISPDRUF2Y8Z5w0WFYMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh1XnqVwrwTXC9EcN3AEHZKMtEMzWq8wAD3t3VpGygH2IfWzBW
-	cSdFudBdHxA5ApqGq/U/PKMQE38NOH4dBQ7VctgKCc3aNsR59n8Fz+jbc8BR2P/WeBfhZX4jkzE
-	6zMk5cXG3+W+WPsH9ypv8oq9NWFQBd4+zFLGTiuGwtth9DN418wLEIvaQ
-X-Gm-Gg: AfdE7ckwF/qQ7NmfsNT+292DBA0fES9no6j9/kMIiZ7MC9x6V4ouR8f22JYaA1Exwtn
-	e3GqM0T1LlTO6kMkh9yXjTZB5VFsc78PAyco6pVZOTLW6wiykn5YLbEcY/Au5BrozfzKtCREgcn
-	/oCn+wzjP+vX9VU+HEnAzOf5+4PdXLs2hLkYoGrcdJIkaw6Mx2dglezeZAKOdG1+o07M/3B9zyf
-	/me2IMVQ1CwxnULyo5ZWUgJKr0kAJE34oN2WUbLJO3ySWZfM11omvyf3rR4Qwp3WiprJXhR
-X-Received: by 2002:a05:6a20:430b:b0:398:77ae:8d8b with SMTP id
- adf61e73a8af0-3c0bcf163d7mr9590607637.10.1783612299159; Thu, 09 Jul 2026
- 08:51:39 -0700 (PDT)
+        bh=gJNcw7M2sNVblZ4y7vGqfJIKNb5SV5gkezFVrk+oIbM=;
+        b=p/6TLH0yaueJH4GFtNG53KlKnJMvJLZuoRg3zgZE+RNgM9AoMNEnPP6y4gwOLbaxlq
+         tnyQ9t75ExnrHUaR/xl2jFlzkXSFNZrTt/MkFingyarmpi3WGf/Py2uPgm6fLW+XaBh2
+         SHMothf+itV65zw3evcxI+twScLcrfDx61OUnHcqW5q425WkAH95/03II2Qg9MYpuFEX
+         eJz+KmZ+8K2IPG2oKXqjLOuoyFVu0S06/TN+RYfk1bU0lv4zg6xSinEcTt4hGyMS1Iy3
+         XGh2dGO2pyiGkS6UHKimypqvA2wc30pCsf4mSGfLAGf//UW1izGJVtfzL/8+pFCfI80o
+         aTrA==
+X-Forwarded-Encrypted: i=1; AHgh+RqG6++8xIQHXUgEZv/vEdaIidwQqltXgcKzEwWTc4YeWpCGrd2V9lTyvNvWkCtJnTmcpa5p+npqMXN2fzXkKVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx40WCoIqwsAI2uSarXByGEYsSNdRbi5TXnLQQZw+0TFnutMErB
+	PV53gTMSdwo9PfDt8A0ovWloK0EM8DNnYJXCvBrtBaXac3UcxIH8VPkozobrPpIcP3dbjiTfY8y
+	DktIMuX8q7irtTPTno5zubcRxUQ==
+X-Received: from uaap17-n1.prod.google.com ([2002:a05:6130:8291:10b0:969:2d14:ca9c])
+ (user=thaisonphan job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6102:162b:b0:73e:751a:167c with SMTP id ada2fe7eead31-744e008f257mr4655084137.17.1783613291828;
+ Thu, 09 Jul 2026 09:08:11 -0700 (PDT)
+Date: Thu,  9 Jul 2026 16:08:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
- <akwyZvbv7Fg8mfB2@google.com> <afb9bf4d-2258-4731-a28e-7f4eaa01ee0b@linux.ibm.com>
-In-Reply-To: <afb9bf4d-2258-4731-a28e-7f4eaa01ee0b@linux.ibm.com>
-From: David Matlack <dmatlack@google.com>
-Date: Thu, 9 Jul 2026 08:51:11 -0700
-X-Gm-Features: AVVi8CfpfsqwkcJZWry_SVaBgp7lq6qU6G2-M-O5llXVY_AFh-tgNmotP1cgLe8
-Message-ID: <CALzav=eB5NwrHNq4bm2ooSFmTtGk3sfUk7_k+iE+Kwm+Jc9LFA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] selftests/vfio: Add sPAPR TCE v2 coverage
-To: Narayana Murty N <nnmlinux@linux.ibm.com>
-Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com, sbhat@linux.ibm.com, 
-	harshpb@linux.ibm.com, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
+Message-ID: <20260709160807.23650-1-thaisonphan@google.com>
+Subject: [PATCH net-next] selftests: net: update wait mechanism for relocating
+ netdevsim to a new ns
+From: Thaison Phan <thaisonphan@google.com>
+To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: Fengyuan Gong <gfengyuan@google.com>, Stan Iliev <stani@google.com>, 
+	Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>, Petr Machata <petrm@nvidia.com>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thaison Phan <thaisonphan@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 9, 2026 at 1:49=E2=80=AFAM Narayana Murty N <nnmlinux@linux.ibm=
-.com> wrote:
+When netdevsim devices are reloaded into a non-default network namespace
+via 'devlink dev reload', the host's udev daemon does not receive the
+subsequent device creation events since it is generally associated to the
+default network namespace, so the host udevd queue never officially clears.
+As a result, running 'udevadm settle' blocks indefinitely and eventually
+times out.
 
-> >> Feedback is requested from the VFIO and PowerPC communities on:
-> >> 1. whether the sPAPR TCE v2 helpers should remain in the common VFIO
-> >> selftest library or move into a sPAPR-specific test helper?
-> > Responded in the patch. Let's move to their own file.
-> Will do. v2 will have:
->
->    lib/iommu_spapr.c         =E2=80=94 all sPAPR logic, compiled only on =
-powerpc
->    lib/iommu_spapr_stub.c    =E2=80=94 empty stubs returning -EOPNOTSUPP,
->                                compiled on all other architectures
->    lib/include/libvfio/iommu_spapr.h =E2=80=94 declarations
+Fixed this by bypassing 'udevadm settle' when a namespace ('ns') is
+provided by utilizing the namespace-aware 'self.wait_for_netdevs()'
+helper to poll the namespace's sysfs until the interfaces are visible.
+For host-only configurations (where 'ns' is None), preserve the original
+'udevadm settle' behavior to ensure udev renaming rules are completed.
 
-Just one small thing here: You can put all the stubs in iommu_spapr.h
-as static inlines, then you don't need the extra C file. e.g.
+Also fixed minor bug in wait_for_devs() where wrong exception was caught
+from if get_ifnames() failed. Now the if get_ifnames() results in a
+command failure exception, wait_for_devs() will catch the exception and
+set an empty list for the interface names rather than the exception
+propogating upward.
 
-#ifdef __powerpc__
+Tested that tools/testing/selftests/drivers/net/ping.py and
+tools/testing/selftests/drivers/net/psp.py still pass when using
+software network devices in a QEMU x86_64 environment.
 
-... prototypes ...
+Signed-off-by: Thaison Phan <thaisonphan@google.com>
+---
+ tools/testing/selftests/net/lib/py/nsim.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-#else
+diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
+index 7c640ed64c0b..a01491c2d1b6 100644
+--- a/tools/testing/selftests/net/lib/py/nsim.py
++++ b/tools/testing/selftests/net/lib/py/nsim.py
+@@ -6,7 +6,7 @@ import os
+ import random
+ import re
+ import time
+-from .utils import cmd, ip
++from .utils import cmd, ip, CmdExitFailure
+ 
+ 
+ class NetdevSim:
+@@ -76,8 +76,11 @@ class NetdevSimDev:
+         if ns:
+             cmd(f"devlink dev reload netdevsim/netdevsim{addr} netns {ns.name}")
+             self.ns = ns
+-
+-        cmd("udevadm settle", ns=self.ns)
++            # udev daemon is not guaranteed to get notified of netdevs being created
++            # when in a new netns, so poll until we see the netdevs appear.
++            self.wait_for_netdevs(port_count)
++        else:
++            cmd("udevadm settle", ns=self.ns)
+         ifnames = self.get_ifnames()
+ 
+         self.dfs_dir = "/sys/kernel/debug/netdevsim/netdevsim%u/" % addr
+@@ -116,7 +119,7 @@ class NetdevSimDev:
+         while True:
+             try:
+                 ifnames = self.get_ifnames()
+-            except FileNotFoundError as e:
++            except CmdExitFailure:
+                 ifnames = []
+             if len(ifnames) == port_count:
+                 break
+-- 
+2.55.0.795.g602f6c329a-goog
 
-... static inline stubs ...
-
-#endif
