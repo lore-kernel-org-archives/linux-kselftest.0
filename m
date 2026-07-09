@@ -1,137 +1,233 @@
-Received: from mail-vs1-f74.google.com (mail-vs1-f74.google.com [209.85.217.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC763AF656
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 16:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5B7399374
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 16:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783613298; cv=none; b=dws3R57Ahj+1YJ65cmkeHoT/s6nTLNvkfBOUC2d5oQ1ezAzJ+cUf/EYyg/YzReubji7rucF0zsV1h3mypu8ngnxLrrQxW6Kn0L5cmc9GHda6r+Jku5cTBJof9m2yi6ByWvwf55FrXbYokJm2ny04hAsZaSrwoXIJmkAm4hoEnbo=
+	t=1783615503; cv=none; b=VvnbuUeRPs6+il73NDAKJQH6Mcx/gDUfCjkW4pBYPal9xVh8odd97wsLzvCw0vq03DPSbrRhUudd0Tm4BXGzn9xZqJOKGoqGEJ7dfoX0gt571mkeH60bSj76Sm01u48LXe8UIBzQnnvxBHWLlmwCzw2e5SFk3EOm2BoIcjsS3/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783613298; c=relaxed/simple;
-	bh=roYk69iMq6nB9nkznQVm0tE4qPdmgYL5OzMoK1GJxnA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=H5NAZFO05pbo0uYJoo1innIdjHpUU1l8kul1hoS5G//xHjppjrvMccK92cppXHO5tUapMWBBdGlGjIfOcK0fZRNyaVkujSRbkPj9BftJF9mIGCjfUQDFqO1dm63kocNESFIUQxQZOxlfr428O+3Rt+eRj62mwwxBAkiewslqyyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tphj0uzG; arc=none smtp.client-ip=209.85.217.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--thaisonphan.bounces.google.com
+	s=arc-20240116; t=1783615503; c=relaxed/simple;
+	bh=SQ7GBMLnXX5I3bFBCOmeZQZl5xHUI3hMGXJu0wAGPhE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CsAY+U8wGFSf6yMSsoga+2oYS2nRYTceWRba1hB/Aa2WsUKdSAvS+jzTRvbHy1HJjIrCs4rvoO40Uulxzb97Du/5FARpWqJ3bAxX45kCUjjPkdF8N7WhBPrJitMZNd3f5TIXATFLhhuLWpiPA4lvxqBFF0aaZBJlR6Hr87IsZo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bMNtp/uM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tphj0uzG"
-Received: by mail-vs1-f74.google.com with SMTP id ada2fe7eead31-744e7890eceso6059137.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 09:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783613292; x=1784218092; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gJNcw7M2sNVblZ4y7vGqfJIKNb5SV5gkezFVrk+oIbM=;
-        b=Tphj0uzGYGkINP65VBq4QfP4eenVWzss64bQk7EWwq1N7oN53LpXJc4AisJOmfoMLl
-         XH+sn8xEe34xKNA68BfhZzsHsJRr+fE3bwegO5+wK8IW7XW3OPgBP8blwrk1Lj9D63Qs
-         uNvqYAX6du85SXagkCisMdbqafCPMqpWL2zJ5/CmMgHTJ2FfL9KSU6+JBQCwUoR6LJuO
-         Mh8f6ZmoL6LhYy5VtiTKWB3SkuRQgCGZTaXmbCLM8bEyjuvFev3/kjaD3nlHXtNvmCcX
-         14R9/ppHLSuB4W4IhaWQaTbRJHGryhUj/AF82tn/CVfraEdbkR1x3rPkXVJp3/nhLJ+4
-         4Dgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783613292; x=1784218092;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gJNcw7M2sNVblZ4y7vGqfJIKNb5SV5gkezFVrk+oIbM=;
-        b=p/6TLH0yaueJH4GFtNG53KlKnJMvJLZuoRg3zgZE+RNgM9AoMNEnPP6y4gwOLbaxlq
-         tnyQ9t75ExnrHUaR/xl2jFlzkXSFNZrTt/MkFingyarmpi3WGf/Py2uPgm6fLW+XaBh2
-         SHMothf+itV65zw3evcxI+twScLcrfDx61OUnHcqW5q425WkAH95/03II2Qg9MYpuFEX
-         eJz+KmZ+8K2IPG2oKXqjLOuoyFVu0S06/TN+RYfk1bU0lv4zg6xSinEcTt4hGyMS1Iy3
-         XGh2dGO2pyiGkS6UHKimypqvA2wc30pCsf4mSGfLAGf//UW1izGJVtfzL/8+pFCfI80o
-         aTrA==
-X-Forwarded-Encrypted: i=1; AHgh+RqG6++8xIQHXUgEZv/vEdaIidwQqltXgcKzEwWTc4YeWpCGrd2V9lTyvNvWkCtJnTmcpa5p+npqMXN2fzXkKVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx40WCoIqwsAI2uSarXByGEYsSNdRbi5TXnLQQZw+0TFnutMErB
-	PV53gTMSdwo9PfDt8A0ovWloK0EM8DNnYJXCvBrtBaXac3UcxIH8VPkozobrPpIcP3dbjiTfY8y
-	DktIMuX8q7irtTPTno5zubcRxUQ==
-X-Received: from uaap17-n1.prod.google.com ([2002:a05:6130:8291:10b0:969:2d14:ca9c])
- (user=thaisonphan job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6102:162b:b0:73e:751a:167c with SMTP id ada2fe7eead31-744e008f257mr4655084137.17.1783613291828;
- Thu, 09 Jul 2026 09:08:11 -0700 (PDT)
-Date: Thu,  9 Jul 2026 16:08:07 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bMNtp/uM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783615501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N1EhtpTNPWeURbn3yhN8uvjzdNLJOl63hKvo6ZRXyxc=;
+	b=bMNtp/uMsgY4ZuuORPsypYX0iGkEfnx8KfOvbHymrlix/rEJ264Z6Wi1FGYuQxJDSrlbrU
+	aX4BLaMLKBGrDoL5mWfdhMvFvFo2QKgwms2ZQtcJw7UDwcXyvLeNXIY4qL0Orwi6EEQvFW
+	Jhr1NCXTeIT2fgW14MlOGf9rLtroaU0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-513-7QAmzfxFPCGgsOgKlzBNJg-1; Thu,
+ 09 Jul 2026 12:43:49 -0400
+X-MC-Unique: 7QAmzfxFPCGgsOgKlzBNJg-1
+X-Mimecast-MFC-AGG-ID: 7QAmzfxFPCGgsOgKlzBNJg_1783615428
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E4EE2180267E;
+	Thu,  9 Jul 2026 16:43:47 +0000 (UTC)
+Received: from thuth-p1g4.redhat.com (unknown [10.44.50.9])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5FFE1195608A;
+	Thu,  9 Jul 2026 16:43:42 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	linux-security-module@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rbriggs@redhat.com
+Subject: [PATCH] selftests/landlock: Fix screwed up pointers in the scoped_signal_test
+Date: Thu,  9 Jul 2026 18:43:40 +0200
+Message-ID: <20260709164340.339656-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
-Message-ID: <20260709160807.23650-1-thaisonphan@google.com>
-Subject: [PATCH net-next] selftests: net: update wait mechanism for relocating
- netdevsim to a new ns
-From: Thaison Phan <thaisonphan@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Fengyuan Gong <gfengyuan@google.com>, Stan Iliev <stani@google.com>, 
-	Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>, Petr Machata <petrm@nvidia.com>, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Thaison Phan <thaisonphan@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-When netdevsim devices are reloaded into a non-default network namespace
-via 'devlink dev reload', the host's udev daemon does not receive the
-subsequent device creation events since it is generally associated to the
-default network namespace, so the host udevd queue never officially clears.
-As a result, running 'udevadm settle' blocks indefinitely and eventually
-times out.
+From: Thomas Huth <thuth@redhat.com>
 
-Fixed this by bypassing 'udevadm settle' when a namespace ('ns') is
-provided by utilizing the namespace-aware 'self.wait_for_netdevs()'
-helper to poll the namespace's sysfs until the interfaces are visible.
-For host-only configurations (where 'ns' is None), preserve the original
-'udevadm settle' behavior to ensure udev renaming rules are completed.
+The scoped_signal_test uses pthread_join(..., (void **)&ret)) in
+a couple of places, i.e. the return value of the thread is stored
+in the shape of a "void *" into the memory location of &ret.
+Pointers are 64-bit on modern computers, but the ret variable is
+declared as a simple "enum thread_return" which is only 32 bits.
+So the pthread_join() will overflow the ret variable by 4 byte.
 
-Also fixed minor bug in wait_for_devs() where wrong exception was caught
-from if get_ifnames() failed. Now the if get_ifnames() results in a
-command failure exception, wait_for_devs() will catch the exception and
-set an empty list for the interface names rather than the exception
-propogating upward.
+The problem is very visible on big endian systems like s390x
+where the test is failing: The least significant byte that carries
+the return code of the thread is not written into the ret variable
+here, but somewhere else in the stack frame, so the comparison
+for the right return code is failing here.
 
-Tested that tools/testing/selftests/drivers/net/ping.py and
-tools/testing/selftests/drivers/net/psp.py still pass when using
-software network devices in a QEMU x86_64 environment.
+Fix it by getting rid of the enum and defining the THREAD_* constants
+and "ret" variables as proper "void *" pointers. This way we can
+also get rid of some ugly (void *) castings in a couple of spots.
 
-Signed-off-by: Thaison Phan <thaisonphan@google.com>
+Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- tools/testing/selftests/net/lib/py/nsim.py | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../selftests/landlock/scoped_signal_test.c   | 44 +++++++++----------
+ 1 file changed, 21 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
-index 7c640ed64c0b..a01491c2d1b6 100644
---- a/tools/testing/selftests/net/lib/py/nsim.py
-+++ b/tools/testing/selftests/net/lib/py/nsim.py
-@@ -6,7 +6,7 @@ import os
- import random
- import re
- import time
--from .utils import cmd, ip
-+from .utils import cmd, ip, CmdExitFailure
+diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
+index f24f2c28f62e5..58d25157fe781 100644
+--- a/tools/testing/selftests/landlock/scoped_signal_test.c
++++ b/tools/testing/selftests/landlock/scoped_signal_test.c
+@@ -249,12 +249,10 @@ TEST_F(scoped_domains, check_access_signal)
+ 		_metadata->exit_code = KSFT_FAIL;
+ }
  
+-enum thread_return {
+-	THREAD_INVALID = 0,
+-	THREAD_SUCCESS = 1,
+-	THREAD_ERROR = 2,
+-	THREAD_TEST_FAILED = 3,
+-};
++#define THREAD_INVALID		((void *)0)
++#define THREAD_SUCCESS		((void *)1)
++#define THREAD_ERROR		((void *)2)
++#define THREAD_TEST_FAILED	((void *)3)
  
- class NetdevSim:
-@@ -76,8 +76,11 @@ class NetdevSimDev:
-         if ns:
-             cmd(f"devlink dev reload netdevsim/netdevsim{addr} netns {ns.name}")
-             self.ns = ns
--
--        cmd("udevadm settle", ns=self.ns)
-+            # udev daemon is not guaranteed to get notified of netdevs being created
-+            # when in a new netns, so poll until we see the netdevs appear.
-+            self.wait_for_netdevs(port_count)
-+        else:
-+            cmd("udevadm settle", ns=self.ns)
-         ifnames = self.get_ifnames()
+ static void *thread_sync(void *arg)
+ {
+@@ -262,15 +260,15 @@ static void *thread_sync(void *arg)
+ 	char buf;
  
-         self.dfs_dir = "/sys/kernel/debug/netdevsim/netdevsim%u/" % addr
-@@ -116,7 +119,7 @@ class NetdevSimDev:
-         while True:
-             try:
-                 ifnames = self.get_ifnames()
--            except FileNotFoundError as e:
-+            except CmdExitFailure:
-                 ifnames = []
-             if len(ifnames) == port_count:
-                 break
+ 	if (read(pipe_read, &buf, 1) != 1)
+-		return (void *)THREAD_ERROR;
++		return THREAD_ERROR;
+ 
+-	return (void *)THREAD_SUCCESS;
++	return THREAD_SUCCESS;
+ }
+ 
+ TEST(signal_scoping_thread_before)
+ {
+ 	pthread_t no_sandbox_thread;
+-	enum thread_return ret = THREAD_INVALID;
++	void *ret = THREAD_INVALID;
+ 	int thread_pipe[2];
+ 
+ 	drop_caps(_metadata);
+@@ -285,7 +283,7 @@ TEST(signal_scoping_thread_before)
+ 	EXPECT_EQ(0, pthread_kill(no_sandbox_thread, 0));
+ 	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
+ 
+-	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
++	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
+ 	EXPECT_EQ(THREAD_SUCCESS, ret);
+ 
+ 	EXPECT_EQ(0, close(thread_pipe[0]));
+@@ -295,7 +293,7 @@ TEST(signal_scoping_thread_before)
+ TEST(signal_scoping_thread_after)
+ {
+ 	pthread_t scoped_thread;
+-	enum thread_return ret = THREAD_INVALID;
++	void *ret = THREAD_INVALID;
+ 	int thread_pipe[2];
+ 
+ 	drop_caps(_metadata);
+@@ -310,7 +308,7 @@ TEST(signal_scoping_thread_after)
+ 	EXPECT_EQ(0, pthread_kill(scoped_thread, 0));
+ 	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
+ 
+-	EXPECT_EQ(0, pthread_join(scoped_thread, (void **)&ret));
++	EXPECT_EQ(0, pthread_join(scoped_thread, &ret));
+ 	EXPECT_EQ(THREAD_SUCCESS, ret);
+ 
+ 	EXPECT_EQ(0, close(thread_pipe[0]));
+@@ -327,20 +325,20 @@ void *thread_setuid(void *ptr)
+ 	char buf;
+ 
+ 	if (read(arg->pipe_read, &buf, 1) != 1)
+-		return (void *)THREAD_ERROR;
++		return THREAD_ERROR;
+ 
+ 	/* libc's setuid() should update all thread's credentials. */
+ 	if (getuid() != arg->new_uid)
+-		return (void *)THREAD_TEST_FAILED;
++		return THREAD_TEST_FAILED;
+ 
+-	return (void *)THREAD_SUCCESS;
++	return THREAD_SUCCESS;
+ }
+ 
+ TEST(signal_scoping_thread_setuid)
+ {
+ 	struct thread_setuid_args arg;
+ 	pthread_t no_sandbox_thread;
+-	enum thread_return ret = THREAD_INVALID;
++	void *ret = THREAD_INVALID;
+ 	int pipe_parent[2];
+ 	int prev_uid;
+ 
+@@ -367,7 +365,7 @@ TEST(signal_scoping_thread_setuid)
+ 	EXPECT_EQ(arg.new_uid, getuid());
+ 	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
+ 
+-	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
++	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
+ 	EXPECT_EQ(THREAD_SUCCESS, ret);
+ 
+ 	clear_cap(_metadata, CAP_SETUID);
+@@ -667,20 +665,20 @@ static void *thread_setown_scoped(void *arg)
+ 	ruleset_fd =
+ 		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
+ 	if (ruleset_fd < 0)
+-		return (void *)THREAD_ERROR;
++		return THREAD_ERROR;
+ 	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) ||
+ 	    landlock_restrict_self(ruleset_fd, 0)) {
+ 		close(ruleset_fd);
+-		return (void *)THREAD_ERROR;
++		return THREAD_ERROR;
+ 	}
+ 	close(ruleset_fd);
+ 
+ 	/* Makes this process group own the SIGIO source. */
+ 	if (fcntl(fd, F_SETSIG, SIGURG) || fcntl(fd, F_SETOWN, -getpgrp()) ||
+ 	    fcntl(fd, F_SETFL, O_ASYNC))
+-		return (void *)THREAD_ERROR;
++		return THREAD_ERROR;
+ 
+-	return (void *)THREAD_SUCCESS;
++	return THREAD_SUCCESS;
+ }
+ 
+ /*
+@@ -702,7 +700,7 @@ TEST(sigio_to_pgid_self)
+ {
+ 	int trigger[2];
+ 	pthread_t thread;
+-	enum thread_return ret = THREAD_INVALID;
++	void *ret = THREAD_INVALID;
+ 	int i;
+ 
+ 	drop_caps(_metadata);
+@@ -722,7 +720,7 @@ TEST(sigio_to_pgid_self)
+ 	 */
+ 	ASSERT_EQ(0, pthread_create(&thread, NULL, thread_setown_scoped,
+ 				    &trigger[0]));
+-	ASSERT_EQ(0, pthread_join(thread, (void **)&ret));
++	ASSERT_EQ(0, pthread_join(thread, &ret));
+ 	ASSERT_EQ(THREAD_SUCCESS, ret);
+ 
+ 	/* Fans SIGURG out to the process group. */
 -- 
-2.55.0.795.g602f6c329a-goog
+2.55.0
 
