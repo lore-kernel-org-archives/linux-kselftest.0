@@ -1,81 +1,80 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8579D3112B2
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 20:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4073A2549
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 20:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783627877; cv=none; b=jjO9sbj2XVHCKeEZPcNMxY9HFNxT8bI8cdm3o3TvQDsUUJYMnzjaWbvj2mVWVeEgW3m1MD1Ml7katFVM54ag6eMKicqpQ1TPlLZp2iVocemorgWrIh180fwMDUTEh33+J6Xe0D4/N+k1heTymQun8pW+HomOszbPHPifHGWqMxs=
+	t=1783628006; cv=none; b=qdHDQMuO45/WeoYxOjcWQt+vMpj2fqSV3oiwVbUG1WRGWxMGxtMrnuF75Msmxnelrgp+NCwG5ezmgC2P7RaxanPBkwxASR/tipnspg+4zvu1fXemVpGhIL6vWjL/C+rnwMp3BEZerLEpg599n8VE+g9lV1EOUga6zTxpjXMo3bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783627877; c=relaxed/simple;
-	bh=4VRlIT3ZBlyJ4lDFsiB1qMzVSbBMDnfmen3AFlovMQc=;
+	s=arc-20240116; t=1783628006; c=relaxed/simple;
+	bh=T+GhzX9+HMfNc1mPl7NUwWfpwuwo0OQ6m2yczx+qhDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etYWkbw64nP/hba0gxb2z2GAFv8o3SbmcGsLt0WQ/OIreyDhmM9UvVXROz42XXdvnBOezCzFCKgSaoRmyH1M76n+oZD3gKaXfIiCm0Czyxwsq8FGrXy4XkSxP150u4MWZ+y2WDwXGeITdEPT7ns2+ClVA3la+8k5/c26Z7RfBeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oJQGrk9C; arc=none smtp.client-ip=209.85.218.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=XJ32CB3JudIgqQINauXO4mdLTiCsKLq5eYiOSGjYt4MNyrfPTls+qQzInDkBFmBlZfLAR3hYg6ZAREH3+J3dM+WObHp47/ZTt7Xxz3UeMlueyktkb4PmiGKxEaWmGp8NWiF51YWftFz2daMfsKxOGQSMixhSFueHmGGo2oopOqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fIPEpG29; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oJQGrk9C"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c15e2dab83eso40603966b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 13:11:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIPEpG29"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493ae59eca6so924105e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 13:13:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783627875; x=1784232675; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783628003; x=1784232803; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=yROAaYjafivesMnTmLgsnm47xYMDJuFO4ZbZMka+vDE=;
-        b=oJQGrk9CWVLaFCLsiZ0uV6nVFSUAmJQW0QLImL9n8gQHD9UiSfrxfXUY5+m0GwIY2E
-         nF6qmBNS3tvIW30ScpuUiCbgDLPIJcpKrLDcB7CjetAR0tWMRliQ9+18/9SWFxk7SRDq
-         723d4JD3wT858Ly6av7rcWPmylQSGw4mHmX5aojlzx1yODB1vDvROmWAjAskpvFLq0+S
-         y/FZ9T+2Vs6MsXVV9nFiTEXIjwqzEOf6WWOUKav7wt65lZIF56fHRMK0qLHvtyY1mRHi
-         toCd3ANxa1dErysegLgkKz1s+hHCehe/J1NnRA9QHmvaQs3SVvaJPC2WCpIKe8wvxmMo
-         FPmA==
+        bh=eJkGeObDaOcMT+Iq1Xd1zHQwKIn2ZUrSxLhR2bO5jzg=;
+        b=fIPEpG29nG9h/AXvJtL+F0NewzC3yozxUlNxQR7BcUL0yqfHo+rtC1v7dxoKYtsl3F
+         8q/FBfDDk/jrdCCr/HXF3hxpr7sAm0lCdJq/cqwCVpF92KX83d2c98u5EKO/4+/fkAbT
+         kP9sL+O81H5PcMnZtXgRZDQ0T151Xw0nzXzAns1hwL3P0MlvCrrQv4fNUrzrCT87JQdq
+         o4+n+lNuj50/GO6JpoF/RvUppGkWSzD3SwdwGuU+4QZYbhGjNn6eS22fd7C570Kbt4fq
+         sRHly98ewLokwSElExUm12/inpqF4b9vqSrn56+SCaop5kBWu4bowcGZmOgl7yH35eYw
+         rc1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783627875; x=1784232675;
+        d=1e100.net; s=20251104; t=1783628003; x=1784232803;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yROAaYjafivesMnTmLgsnm47xYMDJuFO4ZbZMka+vDE=;
-        b=NGzbzsoTTaHJtVUpaFOGvzaXgjfb12PuWqV+Sp2Xba71yS2BzU9jk3FvW4Fy2VJtMa
-         zVOJOIxdpSLG5a4DQ2J8oopW+7kCSmK6mjpgbIdTO5MTemCI/CNhZFcil2d5JvoWH9o3
-         TyEieQbrDaMW+9TpDl0jnOOjGh/HDf+gaMUUzpWOMy+98PNPTrT1it+eEIUVXQkxTgKl
-         usklrVUMqUfF2VXq7XX2FnpifyufAAZpE7gcfhlVEVw4xROtOOQZuNoOkWLzE8gBxCdH
-         tVC2NNkk26UaxKx/tp6sg+kvsnuU1j2CjNhRuuQGF2MDAAfJyTuVmxeA9KbjcRu6EoS/
-         4Skg==
-X-Forwarded-Encrypted: i=1; AHgh+RoaGKq21+d5oJXwq1mc+LZdvyFm50VpidK5768dfQCuo+hN6hmaXAmV3hUHv6HHb1M+K42wB8nxPdR3VE0ireE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHGcFX8cyo5/jfqyEwpRIJUXsacS2rA1rh12I74l9GO32xQTVJ
-	NuaQZJvY4fgCM9f6TuiPtNU7N1R6xhMCfdZCtoqY+MUb2mnMOMWWAIOY
-X-Gm-Gg: AfdE7cm70zzyxK4mZK9hrnmGIl5nkRcUiGbTMm0QmLiR6wmLTINsRfTanWc47rh9sdg
-	T15WYLuN85utBpStDBSs+N1bflN5hG4CQxhk0hbuee2d0m2tTT1c3Lp1pv3ofaVOE6pyMeeFPao
-	PZrx0Hk0MQZquzh1AVJY73vroglQ30bYrGVpQBuGhl9vuSJLe39v5xrbPbH/4MxddPvapk+soid
-	2XgkOVix/lARYoNDJ3EPdHNYlsyBYeBIdJ+jUO9XjrBQaRiSVmbfb56NtJY24RAIrOXlbALiNHq
-	mswE7tKDYzttEG4cKC/+xWkpnouC8KKrYk2s5kVw7icpO3sJ8mBoKntqDfc5O0UDU2bK203HmvP
-	mIMJzVAaExNatPcGWYJaVQG9BpPhL9dt3wJxobzn5WLMzxqfKv+OA0lA/VsSpMqrwQ8PBti7tL0
-	ufFLmyrnGBHch74sGEd/5hs3jvjqx0MegBYAbhYYB6FtVCDzeAC04Xd4aHgf6D1IC7Ig==
-X-Received: by 2002:a17:906:4fca:b0:c15:f704:4e05 with SMTP id a640c23a62f3a-c15f7044ea8mr74668766b.38.1783627874887;
-        Thu, 09 Jul 2026 13:11:14 -0700 (PDT)
-Received: from dau-home-pc ([95.164.115.35])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c15d0c3cf1esm308319666b.44.2026.07.09.13.11.12
+        bh=eJkGeObDaOcMT+Iq1Xd1zHQwKIn2ZUrSxLhR2bO5jzg=;
+        b=o0gF5eVePlgmqKrzhFrTV4QATP6WNERu4v3cH4cquPpwVB7xCW0IIkdNwdgTTRAo9q
+         7dUghKmzSBstWKgBNX6KNZpS8oJx34v9qHdne37AObIQ4Lsu0g6GNWn9su3MtDoIwSvv
+         ersN2B1MW/v4sMGH4vV2/arEAOQU0wcs0bzF3GA2ur/5FFWNeE7YRBrRZEBiCI1+lnYE
+         4qU4B3BWob6LJEfu0oNU30wauWwcZEpb4AevgouprhBZKqnVabmtzLdtILm1kReFTPdk
+         WA3zk3yFs0mnb1IS4MkYNjUCBnPlsa71OuQaMP9v2xPuG85x63asbEVH0Ev8l3Tun44Z
+         9fYg==
+X-Forwarded-Encrypted: i=1; AHgh+RqQ7J1hholHQeCU9+E7hshUsrv3fU9pHNAuqtUsrKNZmcL6UqJcb1nX7mXiFkzyQlThUOSSNQZfRV1hFMWxbJY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYMHW0vpkGKik0urMzMQ7jrfQO3zSTnwY1F884uQx7xeFTaq4c
+	LGD+1VwiDyLR5qzbigNLJx5aLJkW8A/gv11qX8wSuioPk6t5L0lKvxJ3lowWnapL
+X-Gm-Gg: AfdE7cnhJVyfEN1PFaLvHC2uVRSbXxrhZw0IJ1z0WqwxMsLbVowF/CcBvz8+/FvJGLi
+	0QUzaF2NLi8XI8GyZ1D8z6sBJ+uh2AJmNHFuCvFMNM5K7u2qUth8PYagDa8DUkpYcJOGGyb4NLS
+	vMOnBoc3wAsLDmQTp4SYo5a48G0XB9Yfo/ELNVnxA4ZJpYl+PEWXQfv1PE1LABM63/IVlhIK54I
+	0f3DJdwVyfTB23cyKwk/b1+J6QOigZ23tX51Q2OS1MKVblKpG4IPgLSxQBpydMMnj8YEWvUPSDJ
+	7PMcYsEgXpFjeCHa58FqnNSVo/Sbub8nn1mMSwIm1hqrBoCRoyA6LG5xsJi+Gft4Uqrcov7W4C3
+	TmSbW9H3+puo/GJxwR+IJay1bRcfADQIqVeC8pRTdgiyVq/De8qYaPu91S57k9OUzaXXJT8qLl6
+	wWOW/2CAiYwPq4V1koKFApIrPbDyzbcTJXzY4HP8KW
+X-Received: by 2002:a05:600c:3515:b0:493:bc92:2a2f with SMTP id 5b1f17b1804b1-493e6894936mr89946805e9.1.1783628002879;
+        Thu, 09 Jul 2026 13:13:22 -0700 (PDT)
+Received: from archlinux ([143.58.204.65])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa039b0cesm54980016f8f.22.2026.07.09.13.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 13:11:14 -0700 (PDT)
-Date: Thu, 9 Jul 2026 23:11:10 +0300
-From: Anton Danilov <littlesmilingcloud@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, Willem de Bruijn <willemb@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v6 1/2] udp: fix encapsulation packet resubmit
- in multicast deliver
-Message-ID: <alAAXv60KUZ9KYx1@dau-home-pc>
-References: <cover.1783372173.git.littlesmilingcloud@gmail.com>
- <5372ccac062193147e02b991d5328a5c3fa3a85a.1783372173.git.littlesmilingcloud@gmail.com>
- <willemdebruijn.kernel.2a3e532d3c28f@gmail.com>
+        Thu, 09 Jul 2026 13:13:22 -0700 (PDT)
+Date: Thu, 9 Jul 2026 21:13:21 +0100
+From: Andre Carvalho <asantostc@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next v11 7/7] selftests: netconsole: validate target
+ resume
+Message-ID: <ak__tD5QKz1jX99T@archlinux>
+References: <20260118-netcons-retrigger-v11-0-4de36aebcf48@gmail.com>
+ <20260118-netcons-retrigger-v11-7-4de36aebcf48@gmail.com>
+ <f398373e-2cb4-4649-a491-9763df94d98b@kernel.org>
+ <ak6jtwbct3C5lZPA@archlinux>
+ <1fb14039-b56d-4757-add9-22b97d3c9f44@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,35 +83,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <willemdebruijn.kernel.2a3e532d3c28f@gmail.com>
+In-Reply-To: <1fb14039-b56d-4757-add9-22b97d3c9f44@kernel.org>
 
-On Wed, Jul 08, 2026 at 09:24:10PM -0400, Willem de Bruijn wrote:
-> This helps the case of one encap_rcv socket in the multicast receiver
-> group, so is a useful fix on its own.
+On Thu, Jul 09, 2026 at 12:21:29PM +0200, Matthieu Baerts wrote:
+> Good! I will send this patch.
 > 
-> But is Sashiko correct that this would still leave the same issue for
-> other sockets in the group? If so, something to address in this series
-> or leave for later?
-> 
-> Might be worthwhile to extend the test to capture that case too.
+> Just to avoid a deadlock, do you plan to send one to handle the MAC
+> address that has not been modified (and eventually one to get more debug
+> messages in case of errors)?
 
-The clone loop is not reachable for encapsulation sockets, so there is
-no remaining gap.
+Ack! I'll send a patch to making the test handle the MAC address unchanged
+scenario (taking your suggestion above) in the next couple of days. I'll follow
+up on improving debuggability across this and other netconsole selftests as well
+as a lot of them share the same issues.
 
-FOU/GUE tunnel sockets are created via udp_sock_create() /
-setup_udp_tunnel_sock() and do not set SO_REUSEADDR or SO_REUSEPORT.
-Without either, a UDP socket cannot share its port, so an encap socket
-is always the only socket bound to its port. In
-__udp[46]_lib_mcast_deliver() it is therefore always delivered as
-'first', and the clone loop -- which handles the second and subsequent
-sockets in the group -- never runs for it. The positive (resubmit)
-return from udp_queue_rcv_skb() only happens for encap sockets; plain
-UDP sockets return 0 or a negative value there. So the resubmit case
-in the clone loop cannot occur.
+> Cheers,
+> Matt
 
-For the same reason a selftest cannot exercise it: a second socket
-cannot bind to the FOU port.
+Sorry for the noise here and thank you for testing the fix!
 
-If useful, I can add a brief comment above the clone loop documenting
-why no resubmit is needed there.
-
+-- 
+Andre Carvalho
