@@ -1,169 +1,80 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D053A34A78F
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 04:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A9043935E;
+	Thu,  9 Jul 2026 04:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783570080; cv=none; b=Mcb3JIaTrpfTThGQT6424cxJjSP85vc6wXHp1TZXguQZBtvhjulh62V6cUcCdRO2ZGqSm1JGtZfwu8wV6bF1gOOo8qXE0i2RIY/tAZlfOCpcsz2G9lbLOH8ym8oRFYhX4mrBtshMv26AGn+rT9WL+If6AoSEhCSVl+c/zUd5bAQ=
+	t=1783573116; cv=none; b=s68RTmQf4PrOlSFTEB9aHsjsMg+FYQm1ljl6KcowrF8tawGNR1NV6JgdmtOQDL6tMLFXHFy4VFRub4dnRCGgR6YLtVEZp9rvi2/bjLHHEDBMn6oF2lZ/EOGVMpiODZep0j0A9fN0tcFdhO1ey21sLJzv1ccAj7MEOSzrVyvOL/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783570080; c=relaxed/simple;
-	bh=Crtfz5KV1Al7PMtvIhrkTgnEZORSLTlbXnKkW2fA9FY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=gc93/cWTiYYqx2OQpehG5EDcpXDvLO+5UkBLSLnK8vooySHUHXQ/4cXyMx4q2ruRpb3AsoAX2XgyaOJPOiss1OhtOpbezx47bRoFvFiNVvNPa2G10R2rvyO4FPIY76BhAyFb7L2yizohgnbvhHLuDfQxXXRbIVjXvfNQdWh7/Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oy0Ly8sn; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783573116; c=relaxed/simple;
+	bh=q8N2HEg9Je9eXNf7TF+79CneoSXOsknAkBNJW/OONtU=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=UqYXt2pqDOpMi110D4Vumojjjpicv5LpqIdHRnv+Q+ttY0xl6AG5/MjZNlAhqoIetTmVANF7x/5m61eyg18qTgHheps4KxxrgyLwtXOedcSFhsXXwWiV97nyrl3ML7bts/63qInYcukvIdFI/9dSUTeiKJaHrf60pzchiOkGQ9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aq+je7F+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oy0Ly8sn"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c96c92c0980so866498a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jul 2026 21:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783570078; x=1784174878; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=HyZ+lDUPV2qqTCzi6+PUCRvlBqToBMfsYAo+J6mLUsA=;
-        b=oy0Ly8sndgAs8L5ihF4YwVqkhMvfxEWnBxhWZAgJHduZnywoeMJos6nSs9oNKk/aOK
-         GgC99jD2Jb0JM8t78/qL7pwBxNjPoqUVIm6zit75VdB34UVVFTnJbNX4Iz2Aq72emlp7
-         6citr+t1WHpxJe0HHN1dyVrZdMHAC6MO1/8X3FGi16vJ4xF3JZeqxbAbeWjxTI+lwyHg
-         M0ucKnP1OC9FCimv+6Mhz2u2jgz91m6D1Kg45XFamw+jNlaPx2SBkQ2cDcOvYePlWYyJ
-         BJE159/DjZj0hi3vrPKrrw4t6aAwya++YGirFayUyS8OhxpgOy9+qme8QfIFa8EF659Y
-         3TkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783570078; x=1784174878;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HyZ+lDUPV2qqTCzi6+PUCRvlBqToBMfsYAo+J6mLUsA=;
-        b=XWPdnjlpud//7iBzAHSTKpTPTAWYLEoBgzNrMNi9bCXoAkTunN8CNIKt5b9PfCiNsa
-         b5hCPRMIAUZWin+zkAkdu5eLBMuDG0IA2Ix14vE337es7eUedJGV5AGGIB3Ug1MtGFbB
-         k6XCekAN6TeO6j27lyYgonvUKXB54jSEOE72KqX6vcc/14/a96NWdue6IUeEl+Ah0Wou
-         6p2Gr8Lh9aVF5IMjz8v+TZnpt/ooZ2KoRkzkJ7J8nSX84moqySInLmW9cD4EsRkVPqbW
-         7kc9dDvEFZIiBkGO3viJF3ibSbwYH7D3XY/bnhVtV/XeakEOS9cMVgqnfiTomlzokc18
-         BkQQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrDYFi+pnNtT8dZPGfC4+g5whbBFycDWKyEroUVSQvU9q5uWd0en+pCbxjWSCqWHYjPYA+8yE5yVFJa5i7fgbU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4Z6qwh7RXmdIc6ynVVYMZL4ulz2VCHY5FZ/DsI76wXsInAIi4
-	WqtXol8C8A5nGIjP7N6tVLP5YgVFzlObONpKQRbToi1B0RibTcHLyzxq
-X-Gm-Gg: AfdE7clZh/8qgq5TrkwGCCm+Q22B3BZMY63buW1Ymg8JDrhoZJDuiU2ILl/TKxUmwMW
-	tDudhOY0qgzt9CdamYnVFz2c0z27h2EusqQkV7Upb7R5JFqrlEnsn/cs/e/qFVbO/EWqZ3mLl7e
-	b7giDZMmHkpddKW5gnczD+frcH4PtROVmyOaA9ejCmcUwRFlDmGhaGL0a6R+rHwSkl6TiaDqK/7
-	/LVhq9n7+bvDvIE+u4hNCFHO/HLF/FRVnTxQUTSvUSWZM61N16jnNjyAPAq1iyvKM7pdGuZXExY
-	AmhgKwfrKQH0XOgh8NqolCYHUWVux7LN5Y0rnqejIKteKzZ2HdG5gH40+AOYhXo6bZGq+ALGieN
-	Eis6Z8Ez4chrmwu/lrcTg9GSlKFm685xaeRnarMv92j1mG2mj1bwJ2oZWRPmqzdtapJC81n3gnt
-	q9LgxP0ap1hwc0yA==
-X-Received: by 2002:a05:6a21:690:b0:3b3:fc6:622d with SMTP id adf61e73a8af0-3c0bcb7e418mr5738391637.38.1783570077959;
-        Wed, 08 Jul 2026 21:07:57 -0700 (PDT)
-Received: from localhost ([98.35.8.117])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b65960d88sm22118188c88.6.2026.07.08.21.07.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jul 2026 21:07:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aq+je7F+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69CE1F000E9;
+	Thu,  9 Jul 2026 04:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783573114;
+	bh=bgbxzt2X00yGRcHUIikp6blheELKqubbVW8qGItt7Ic=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=aq+je7F+HveCplWyPvJR6z1Qd0+ZejulZ5T3TZaOKnkZEoUTUYejyOuVcd03iufLw
+	 ijp49X7ZPBtu3DWEgVft/+aAmxOuuz311ZT4V636ASpg4aSFPhZECJA6qSiNFUw28k
+	 izjYd4g2U+W46EtCzouVHxj42Uo9CzTuIDnGBFAtN71SNZi518/5HboYGzfkG7nqT0
+	 qOX39GFG7NPioSsiEih+3BcKJnywmfsidB7jxkCqCSU5KfAOAvJ+84feMnCWMoNxqN
+	 yly9XuNp6WhDWhKM+L8fjDpYzgo+HKTh7AV8xgjssi4680u0rb7kQ+pxzmfyu9XpOr
+	 0VeNswVMG9rNQ==
+Date: Thu, 9 Jul 2026 13:58:32 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/tracing: Have trigger-hist-poll.tc use
+ sched_process_exit
+Message-Id: <20260709135832.8aeb6cd3f4e26650a033e8c5@kernel.org>
+In-Reply-To: <20260708163731.566a86aa@gandalf.local.home>
+References: <20260708163436.058cc3df@gandalf.local.home>
+	<20260708163539.1e1d845d@gandalf.local.home>
+	<20260708163731.566a86aa@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 08 Jul 2026 21:07:55 -0700
-Message-Id: <DJTQTPG7QZSH.1YIDYKL3O985U@gmail.com>
-Cc: "Farid Zakaria" <farid.m.zakaria@gmail.com>,
- <david.laight.linux@gmail.com>, <jack@suse.cz>, <jannh@google.com>,
- <kees@kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-mm@kvack.org>, <mail@johnericson.me>, <shuah@kernel.org>,
- <viro@zeniv.linux.org.uk>, "Gemini" <assistant@google.com>
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
- <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
- <20260707-wortreich-kanal-zensor-9386ef4f38f7@brauner>
- <DJSPBVXTF02G.3SKLB9EO89GPT@gmail.com>
- <20260708-welken-dystopie-ertrugen-56a3b5f7ab66@brauner>
- <20260708-kordel-laben-kopfhaar-1c0dd234aae5@brauner>
-In-Reply-To: <20260708-kordel-laben-kopfhaar-1c0dd234aae5@brauner>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed Jul 8, 2026 at 9:47 AM PDT, Christian Brauner wrote:
-> On 2026-07-08 11:14 +0200, Christian Brauner wrote:
->> On 2026-07-07 15:44 -0700, Farid Zakaria wrote:
->> > On Tue Jul 7, 2026 at 12:45 PM PDT, Christian Brauner wrote:
->> > > On 2026-07-07 13:34 +0200, Christian Brauner wrote:
->> > >> On 2026-07-06 09:47:53-07:00, Farid Zakaria wrote:
->> > >> > On Mon, Jul 6, 2026 at 9:01=E2=80=AFAM Christian Brauner <brauner=
-@kernel.org> wrote:
->> > >> >=20
->> > >> > > Ignoring the blatant bpf abuse here I think this is quite worka=
-ble. So
->> > >> > > this can be turned into an actual design and patch imho...
->> > >> >=20
->> > >> > Glad to see you think this proposal is in the right direction.
->> > >> > Just for my edification, when you say "balatant bpf abuse", you m=
-ean
->> > >> > how it abuses the socket bpf type?
->> > >> > If so, do you have any guidance on a new type or should I just ta=
-ke a
->> > >> > stab at it.
->> > >
->> > > I drafted a POC for you that should be closer to how this should loo=
-k
->> > > like with the bpf people in Cc. I'll let you lead from now on. I jus=
-t
->> > > wanted to help you out and illustrate a more viable direction. Might=
- be
->> > > that the bpf people want it done differentely. Let's see.
->> >=20
->> > Cool. I just saw the POC.
->> > (I'm trying out aerc to view the patch series. I will also try b4, I'v=
-e
->> > never set it up before)
->> > I will rework my qemu demo to use the struct_ops and go through my own
->> > testing to see it work.
->> >=20
->> > That looks very similar to what I was researching with an LLM. I was
->> > just going over the idea of struct_ops bpf (a new concept to me) and
->> > using traditional bpftool load, a new bpf program type and kfuncs.
->> >=20
->> > You put out a surprising amount of polished code -- thank you.
->>=20
->> I would not call this polished and it also lacks any tests... I've not
->> given the locking much thought and maybe there's easy wins on the table
->> I haven't been considering.
->>=20
->> > I would have had to lean on an LLM (heavily) and from the patches I've
->> > put up so far they still have quite the gap to cover in terms of polis=
-h.
->>=20
->> This isn't my first bpf ride in both kernel and userspace.
->>=20
->> > What does "take it from here" mean in practicality?
->>=20
->> Bring it over the finish line so I can merge it into my tree. :)
->> If the bpf people have no comments or worries than we're done. If they
->> want changes I'd appreciate if you could make them and slap you
->> Co-developed-by onto the whole thing as necessary.
->>=20
->> Also, please ensure that this works for all the cases you're
->> considering.
->
-> I have another cleanup series for binfmt_misc btw. That code is quite
-> old. There might be a few additional series coming out of this work that
-> we base the bpf bits on.
+On Wed, 8 Jul 2026 16:37:31 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Sounds good. I just saw the patch series.
-My plan at the least by the weekend is to:
-* apply your binfmt_misc cleanup series
-  * I will try b4 with aerc. Here  is my config if anyone wants to crib it =
-[1].
-* apply your POC series for the bpf to validate
-* make any changes if necessary or just add selftests if it works as is
+> On Wed, 8 Jul 2026 16:35:39 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > I forgot to mention that I tested this with and without CONFIG_RCU_LAZY.
+> > With that config disabled, the test passes. With it enabled, it always
+> > fails.
+> 
+> And I also traced it with:
+> 
+>   trace-cmd set -p function_graph -l event_hist_poll -O funcgraph-retval
+> 
+> and it shows the sched_process_free being called for the sleep process
+> *after* the poll finishes.
 
-[1]: https://github.com/fzakaria/nix-home/blob/aaee67c3a6d035d06a62cb753926=
-57563de58f4a/users/fmzakari/aerc.nix=20
+Thanks for fix and tested!!
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
