@@ -1,71 +1,162 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBE121638D;
-	Thu,  9 Jul 2026 09:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0FB3F888A
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 09:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783589881; cv=none; b=nS6Wky1vTjD77COMJTgDUddCE8dri6/bEmQT/0MmqidJiKjxEHfSPyJ2T6pJg6EZii6LlhBiickrW5mCa1Q36Px+B2Q+HvJ2VEbw9mKnynaJss3SQUVuUUaKXCGi+ydmHf9thJ17ygvgoCe5UxSoXUg7I1fly5apyEJmkb87Lyk=
+	t=1783590939; cv=none; b=CP/DB+9WjbCBJXJn6RVnDKedb9V7WQVI0UMvgVWGRYDL9RQ+5DnG1hKtRg6uGcPWmD85esmncT2NAFSkix4KmKCxUOIFXlspA0GYiYgTWxUml/yaGArPKvDpZuVwXOqEoktl8uhzYXOlCM1SKNDEDYUpLG6gbwb5I4d51KzUKtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783589881; c=relaxed/simple;
-	bh=jRCInG3afP5itRbOxnB/Kw3VpkQae5qsb3RUTlTobJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g0ECt+OQU5ext8mUzgWtESK/zVClquJafDKbdLZ1YB2jThXLkMhssYtjRJjJzwSGoGz8Q3H/uLvMIpm0COFEM6HuXEy3g43dGETFt0o5HdQ/8XiOKpvB3Dht/RDoPr+0WECqXOEubkWH8wYVH8MxR7/T75yye92O4bKLpi/uw7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=etkGFSaA; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1783590939; c=relaxed/simple;
+	bh=6v4UEKMGI0CObOrgOsS9xS28THfpqNdtIwk41b4i1C4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MWtZfK+eKu2rT+6rXGcJrCTyULeQCvPBUOryHtefFhCRyhAz5BQQHLqqe+qR21y6/1D4m29Zx4X9HjSHe/rKwOq3kRnh6PfkSw8iYBO/pg0GvYrhFp5esEuX3qWC58UWbfbeovyIfMsmLFPB95vM38ED5LYO/+QmaPBFoIHem30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=tVF77iwP; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="etkGFSaA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=J3go5mxmIJSmLAr8Enxl2wMPSVOmksps62bomS7mxCs=; b=etkGFSaAQHoEtL6sczR4Px5E3O
-	ujXu/k86cFaIdF2z/xMor82em6zgXVjrnjs2pnCzKDk3b8LmhMHQE20FWWEl5ak0ik9XiJW8HkiKN
-	52mEeY0GHG+FC9lm4p7OHmMcGG4DXSwbrTLmnzBiMC+9WSbJS/36wtOJjdAnBIE3AVhkUYtqUKGZ3
-	C/2Ct3kbO5ISSbrkoCME4COfFS4cgqUD7dTSD+3cK2Hwzbd9cmjU4djsbvMjzxZUJ9vJIdWplRdFx
-	3jC23Ij2UbAOV/O9fJlyE/ZzoZkAJIpXXZ0edfJRn4NWIVa/GVHioOgnrRoMUFbsGVlqhn5xfrtSq
-	q7xK+JRg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1whlCY-003cWq-2Q;
-	Thu, 09 Jul 2026 09:37:51 +0000
-Date: Thu, 9 Jul 2026 02:37:44 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	Mateusz Guzik <mjguzik@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev, jlayton@kernel.org, oleg@redhat.com, 
-	axboe@kernel.dk, kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] fs/pipe: reduce pipe->mutex contention by
- pre-allocating outside the lock
-Message-ID: <ak9re6AYFpQLz59L@gmail.com>
-References: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="tVF77iwP"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4629051c9d1so925293f8f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 02:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1783590936; x=1784195736; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FmCpTn/G1BPPqIynBfpobYxeMvV2yASv7FeNNa9VjUc=;
+        b=tVF77iwP1Ox/DAzUEBzdrOQ8mS6gW+oByL/ghjEynEnKN+tjSSSmc/M0RT+qrXQZHw
+         BRK2YhNV4rAqY0PimJRQCX6t8kyx8IRm8j/r/EjpwWFlBCfKAA80psHboQv/KKdI+gH0
+         s3UCnon8+ODyAp+fSGaZvODXKrsZDAW/CCxPZXI9Hgv8bZzhHCPUO45d1tv9RaHr4AaW
+         tbhz/uwntIp7F2ELvMwIrVNi2xcK9mQM1TKCMW+TWnSCf6sQaCNvg0GIP5jMsBlLE2r4
+         iEM5JeRYs6GXj2Wn5/us9A8wLGK1WrOYWk0CkwmWAsA2zt4CFHNK6Cy4qw/ndvMj1iOU
+         MvIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783590936; x=1784195736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FmCpTn/G1BPPqIynBfpobYxeMvV2yASv7FeNNa9VjUc=;
+        b=k9/pdwWAar/QnEHhjPs183V9/h145JvWwDyIerM5beH9Omv/b27FU0LWJmJfvIFAHm
+         2hp5PfD45TQYvAEJWIeABeO4f+4r9oRz27Stv+kQA0uh2Zz/iXuGXBsTTLwuPRAL0l+l
+         4Ab1WyM/MvaAY78peamuElkR8O/UB56Klo/pu9Lhnd9m597fZDEk8DvH0YC5zdRnssGG
+         A0XSXXjZHFR5zMTnV2a1uB09y/HIxdg05GwMyLJ/Z/ZzQDmPOUcNCodDuyNZVbVEs1ah
+         tp2q1HAG/1XnrmyKyjfO1ehsrePl2H+NoB3PCL5AMvOLm2L7snNMQaWQQ3WbSHfPnI7U
+         XCPw==
+X-Forwarded-Encrypted: i=1; AHgh+RooZDev+Xz2zQb+1j7mSSF8Iv1kQZ0prkryCUGIq3eSu7ZvIliLqb3tDbBaoen9MbWb5dvR7WJD7wwFSiA4WlM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKyySA1oRUiID6Fi6AMcv+shKyXAzEXJchWAJwluyVFsuWYjfv
+	ziEPru3IM/aULaNsIiI6lAni4b0ez804sgn0JcqTWnvEUwl/3d/4EnNj9xOQQg+vCVA=
+X-Gm-Gg: AfdE7clzLriA9B3vghG1shJ4qsuyJM/gxd+060cW90lgcL7Vh3bhIe2mjuE4V/Yi1Oe
+	55yZrBuUAMYpuyjr6tqX0TtYrktC0Ql0ww4RhJ3ZbXNJXCicSWYyk90iSzUAdarpI+3efbyex5V
+	ac5u/ka4LG/1V00jW+dYDvdxnvdyiQXf+h+i5UKmTxvu4nG963ZLrGSB8YfWVaE+YUFBxwOh1Xo
+	mvRmcXJS/rNvh4azJzFyxbanHysz8Kpu6wWnrO5j2B14ToKQlxhlnRBGkPy9kojoCuMVOq7G7kT
+	aasQewXvnsZkGqQSJlxOJXqpvsJDDGknsV1p9jFpHppCnef/Wy7T8PL2of2dKeqc+xneo6Icy+N
+	Psn8RwdYbdIimGI0jQHnSwrZggAWYW8+3/ZjjDIs2bSs6WFGcw1rh6ojApcghRc3r0KAeSXO6iQ
+	NEwmRaxsFqQ24v5S6itqEljQ==
+X-Received: by 2002:a05:6000:144e:b0:47d:dfea:f729 with SMTP id ffacd0b85a97d-47df07a18bcmr7413288f8f.4.1783590935982;
+        Thu, 09 Jul 2026 02:55:35 -0700 (PDT)
+Received: from localhost ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47df6a31dd5sm5243415f8f.16.2026.07.09.02.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 02:55:35 -0700 (PDT)
+From: Jiri Pirko <jiri@resnulli.us>
+To: linux-rdma@vger.kernel.org
+Cc: cgroups@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	parav@nvidia.com,
+	mbloch@nvidia.com,
+	cmeiohas@nvidia.com,
+	roman.gushchin@linux.dev,
+	bvanassche@acm.org,
+	zyjzyj2000@gmail.com,
+	shuah@kernel.org,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	hannes@cmpxchg.org,
+	alibuda@linux.alibaba.com,
+	dust.li@linux.alibaba.com,
+	sidraya@linux.ibm.com,
+	wenjia@linux.ibm.com
+Subject: [PATCH rdma-next 00/13] RDMA: Make device names unique per net namespace
+Date: Thu,  9 Jul 2026 11:55:19 +0200
+Message-ID: <20260709095532.855647-1-jiri@resnulli.us>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260524-fix_pipe-v3-0-bb4a75d23a90@debian.org>
-X-Debian-User: leitao
 
-On Sun, May 24, 2026 at 07:44:57AM -0700, Breno Leitao wrote:
-> Throughput improves +6% to +28% and average write latency drops 5%
-> to 22% across every configuration.
+From: Jiri Pirko <jiri@nvidia.com>
 
-FWIW: Kernel Test Robot detected similar and slightly better numbers
-with this patch, and reported 29.1% improvement on lmbench3
+RDMA device names are unique system-wide today:
+__ib_device_get_by_name() checks a requested name against every
+registered device regardless of the network namespace it lives in.
+A device in one network namespace therefore cannot use a name already
+taken in another, even in exclusive netns mode (netns_mode=0) where
+the two are otherwise isolated. Net devices have no such restriction -
+their names only need to be unique within a network namespace.
 
-         %stddev     %change         %stddev
-             \          |                \
-     37316           +29.1%     48191 ±  2%  lmbench3.PIPE.bandwidth.MB/sec
-      5690 ±  9%    +153.5%     14426 ± 18%  lmbench3.time.involuntary_context_switches
+This series makes RDMA device names unique per network namespace,
+matching net device semantics, and adapts the users that assumed
+system-wide unique names.
 
-https://lore.kernel.org/all/202607091015.c3936260-lkp@intel.com/
+Scoping reuses the existing rdma_dev_access_netns() predicate, so
+behavior only changes in exclusive mode:
+  - shared mode (default): names stay unique system-wide, no change;
+  - exclusive mode: names only need to be unique within a namespace;
+  - CONFIG_NET_NS=n: everything is init_net, names stay system-wide
+    unique.
+
+There are two users that cannot be made per-namespace and are
+documented as known limitations instead of changed:
+  - the rdma_cm configfs tree: configfs has no network namespace
+    support, so it cannot represent two same-named devices;
+  - SELinux ibendport labelling: endports are labelled by (device
+    name, port) from a global policy; distinguishing same-named
+    devices would need net namespace support in the SELinux policy
+    language and tooling.
+
+Tested with the new rxe_netns_names kselftest added in the last patch.
+
+Jiri Pirko (13):
+  RDMA/core: Pass the net namespace to the device name lookups
+  RDMA/core: Handle device name conflicts when changing net namespace
+  RDMA/core: Support renaming a device when changing its net namespace
+  RDMA/nldev: Report net namespace move errors through extack
+  RDMA/nldev: Allow setting the device name while changing net namespace
+  net/smc: Look up the pnetid ib device within the net namespace
+  RDMA/srp: Make the SRP sysfs class net namespace aware
+  RDMA/cgroup: Scope rdma cgroup device visibility to the net namespace
+  RDMA/cma: Document that CM configfs cannot be net namespace scoped
+  RDMA/core: Document the SELinux ibendport net namespace limitation
+  RDMA/core: Make device names unique per net namespace
+  RDMA/rxe: Implement disassociate_ucontext callback
+  RDMA/selftests: Add rxe_netns_names test
+
+ Documentation/ABI/testing/configfs-rdma_cm    |   4 +
+ Documentation/admin-guide/cgroup-v2.rst       |   7 +
+ drivers/infiniband/core/cgroup.c              |  12 +
+ drivers/infiniband/core/cma_configfs.c        |   4 +
+ drivers/infiniband/core/core_priv.h           |  15 +-
+ drivers/infiniband/core/device.c              | 256 +++++++++++++---
+ drivers/infiniband/core/nldev.c               |  26 +-
+ drivers/infiniband/core/security.c            |   6 +
+ drivers/infiniband/sw/rxe/rxe_verbs.c         |   5 +
+ drivers/infiniband/ulp/srp/ib_srp.c           |  16 +-
+ include/linux/cgroup_rdma.h                   |  10 +
+ include/uapi/rdma/rdma_netlink.h              |   5 +-
+ kernel/cgroup/rdma.c                          |  20 +-
+ net/smc/smc_pnet.c                            |  20 +-
+ tools/testing/selftests/rdma/Makefile         |   3 +-
+ tools/testing/selftests/rdma/config           |   2 +
+ .../testing/selftests/rdma/rxe_netns_names.sh | 282 ++++++++++++++++++
+ 17 files changed, 639 insertions(+), 54 deletions(-)
+ create mode 100755 tools/testing/selftests/rdma/rxe_netns_names.sh
+
+-- 
+2.54.0
+
