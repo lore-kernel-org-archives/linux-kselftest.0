@@ -1,159 +1,177 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB833248F66
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 13:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783602269; cv=none; b=NKC9g8raUH0uKatO7FDjuJUB9NNDAJTpMmli4iQndYfRCi2Ljmn17gUciPqMdSgomUM8Bg3kF/XHVM4vJE5CazVQ2dA4xct26+EfG5yLCS/+l5i4NuVN22LTgFenUeu9OqVsWlhgYVGv42dAaH2x0niUiAEbzybnjBqTHeTRI0Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783602269; c=relaxed/simple;
-	bh=pomWuPe/tr64a82692VQtY4Wk2PnNc+aTLslFAls9Aw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eQ/zx5QbVkm0qPd1L/fgxQGSMhpTNsVFJaeUtYXfaf+BOqfu8iLJnk8WyKki7DmvHgWDhRSeue95AVQqIZMgNRaoEUu3MZV8xSqjt3Nuck1K5EjFTtwZa/2ru3oU1EZgX73iGf4sVTFxoq7TfpMxiWkJpqKXCeVKalHZZcSJIwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GH6Q3lUU; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9059B23C50A
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 13:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783602320; cv=pass; b=SGSsFW1lxNj1XQKgG8YFSCJQdmHyPNdbDHlM+Oy8vR2IlmbN8QTXAjS3bauNmucBaRuE1eJWgp2WUjK9wfKxX+1KqDil+ZpTgtsU0GJpvapik0sdRv4PA/8EQIYL8anfNpimiQzdRSSBsFda6qPkWHzdLfCPTfg8i0C5wfu/Ahk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783602320; c=relaxed/simple;
+	bh=w2zFUzgmtAuk8hs2S7KZhdwkyppPnKoB5X6Mdgo9p/8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SvbDI8aSKyR7rehoGopsAFB3/Mgdg0XIjqh5+ixHOcd7O/3Z7qFkblWXhwKOoumjgEL4DkLxY7BXVDj2b7n/WCVTF0E4UdgsiWZ5si4/CZ0ocUoKyE/D1YAJo12m4iBRdEkqh2JV0V21Z4VumPPbAZbg1blMCjek5DsPsPI/fk0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IShI0upr; arc=pass smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GH6Q3lUU"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493bf73ec2aso11231675e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 06:04:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IShI0upr"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c029505b389so146486266b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 06:05:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783602317; cv=none;
+        d=google.com; s=arc-20260327;
+        b=R8paKEH2BmggRR6vyckrRcGbtEGYBeCyFVRUgYm2jA5I/c1CrK/cvC6UUi9dWdXga/
+         5pLroJCgBDmQv40fU46ZDjnzGItlFLK+u7eZ+N+Bb3J5pxqxo6MC8e3a/rXqxahenKFk
+         j4ywmCf73R6y6vOeD9GGyH5lMqGFUQUqIxkd7dBlCEOyZIZThij6VdPOv2p1GUmcoPNi
+         4I/dfw1NWydPrnqwqTSIVSre8snlbo2P35uINKBzbNTmrXxyvHWD/q0bV7sydBgHGZtI
+         PEQ1Zbh2aJHalQY+T/ACzuERE7cSw43JLHpLm/BxbKp2jV7ea9FwaYfHLf7ueF3h/djo
+         W+Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=w2zFUzgmtAuk8hs2S7KZhdwkyppPnKoB5X6Mdgo9p/8=;
+        fh=OcyI7KH3iUegT9nTc2FUnNa+y3lK1Hzd8gMQT4687Qg=;
+        b=e3V/KVD412YpuqRSfTy1LV3lG5FBTs6kZjPX4j9201SaSfqHobFwPN1X5ZxrCFAHuy
+         PpRHRq1MaoSFTI8WzmGPZiT3LZSO6vjUpD5sjQm5S1vLXTvDojLmYdg4sk/qk4Ix4DMf
+         JhTKYu+CSNRMxzRCH+fQAROja3Uh3Z1R8RG10WqmBQy5rxpDMS/iliioB0ZzugpCODeQ
+         4hBJT3shfOhvFpHZoZI3Y7ySHE9Dgnom7SRiWolLnzYNl5p4sCrWxmokr0S+buDEoElY
+         K7SNw/QEsHn/IqouLIBSKCL5nknfPVPQmJgUMv5Hnx3P/Lf93iameVJNrNcH2XFEANAf
+         /5gA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783602266; x=1784207066; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1783602317; x=1784207117; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=fOOmFkjlODizpn7Pcs0slVGKdf2bx5h/bU795bDZqXU=;
-        b=GH6Q3lUUH5Jiyx1mink2Jtohp84TSDDEwackmOd/AdtmidnqTqsXgdvLLyetR8RVeK
-         lYMoyOeS8Ai9Rwkx8+q7VssbZtSYDSxbj9whzWtRuZvOBLIWBbNx2INXa/0s+13BvPxk
-         96qyo7AZNuJCGKyKsOaXepdd5rNpoDg/1+xvjfV5rIlrbjkeHeM7CLoxCnzFl8CDlgYQ
-         jIWtgmx+/T0Ej2CKK3kpkA7HGtUg7Ii4PBMMj3tx1p8NgvtubSTu5BLVTLvXAAlpfy+L
-         6g8NY3Do4fJXTEY1MdkqcOLUL/LUMjieUgAJ8jO/P4DSceQnZvVlACJ4A/zW6HgOL/HB
-         rtLQ==
+        bh=w2zFUzgmtAuk8hs2S7KZhdwkyppPnKoB5X6Mdgo9p/8=;
+        b=IShI0uprFbe7kJ58S81204LrdNUpadM0QEWf1oeBRHmDRrOGgLGbwPYNyepVlqGj0C
+         c2dj/56IBfIXJBT0rX2e9WU7UH4o9HgjJGVMavhDlm9//zxswr0RKAGKSI+v9KOK7q1F
+         dTvMZlgag8NhcTlobH2veQ4PLjFEbjcZIKETddW1SmAT1DHj8jiuZI3cQ2qcPtd0QLWd
+         ks5i6CRCdVbSUJcLbdd6hweDcrjbIzmEKq15ecTDW+ZGfLbZ1YgYMAJQMoFYOIzdzx2C
+         XlIpTKvv9zVv7hbbFZqX8He2BZp3J3Vcodj8r9XtjIZtTsaNlHgTbufJCPX81YIdnpzk
+         OMnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783602266; x=1784207066;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1783602317; x=1784207117;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fOOmFkjlODizpn7Pcs0slVGKdf2bx5h/bU795bDZqXU=;
-        b=Jjp595QfWihscmEQlsZxqEasFq8f7ya4WEjeQPx1GFjWRVXYm5NG3CckDLBrYhtWA2
-         Z8NIKYNCPQcAb28zjCX7Q9nV4gEXrmBcUsY54IEG7ZSyEpBRCNHaKzhrBWgN9HwWSch2
-         fQdRuHoxpxJ9tG5c7AO8uTvHzGerwxxUIHXrIVI3zp+eNln/HTr7x8QvurBaKa4jbJWb
-         Y6u5SyO7Sq5HC7nK1dClpzd8Q0YBSD3eGltllkWT56ahpMrk3dcpblfaA9glPw5vCnqf
-         XogmV3KuUSHxiZYJVgkOiwjYY3BpUh0YdPeK2TMqbboFWigKj+6qIBmfDayCl9q1wUoM
-         Dpaw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3LmG5nrTVwfDp5zQV4SWtNyZzmQrCfa9G16aA3cfloc9L0XVW4ZQJEgU+Wfk3h0Pcgqo2zH/QRAAgmVZiV5E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4DIqTkY4/XDWtDEa/w3+112ewlUoYl4ROQ+OSMKH11V4Dh6Xm
-	ksYnW/pX3F323uO7N9nodG9uXfs2MZBjzHhqw8cSR/gzynkhWI4iaCHNulR40ZsyafA=
-X-Gm-Gg: AfdE7cmvjxnfddxjeQHR4L3PKM+tiTArTK9WJfVhqKriowsInzgWju9UAPgfOm1q+ht
-	tGcI8PoirBKSrOXsaYy4l9hB9ZFLAy30vsHtzfCLxEbPl6id1NoU9MMoqpwZwphjRM3oSUUgKP2
-	Mn6hL8Oc0afQU89kZ1mzhEei+NRMk/PhQ0iCNq08a6L1Fyxiee4E4hjmXaWJjWlSWl7Dsp+7GHh
-	y7p1mxGWZbWU0ynyuBxPI8P2li+rpS5oSabNBiyt+83c4Q7Ic7crnq+NlejGxVS5ODhAyKkExkS
-	VgrD5XBMebyNcJOPodpOUS5IKtDeo/ffI86blooB4k2+F+sbcAKSKpGbQ4ZuVprIQOLern6wajF
-	nIsqm7Dxg5j8maxEbSGGUlZu/mJEORPzeGmJSgdovSAZV7M+NnI0c3+VUd9tFrwLAlRCvAye5LJ
-	9MBh5LIwztxvvTbzgZSSqumk3i5tid3eAy+3a1vA==
-X-Received: by 2002:a05:600c:6206:b0:493:d078:796 with SMTP id 5b1f17b1804b1-493e6a4a8a4mr66442385e9.17.1783602266150;
-        Thu, 09 Jul 2026 06:04:26 -0700 (PDT)
-Received: from localhost.localdomain (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb6fb526sm69825665e9.15.2026.07.09.06.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 06:04:25 -0700 (PDT)
-Date: Thu, 9 Jul 2026 15:04:23 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: linux-rdma@vger.kernel.org, cgroups@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	jgg@ziepe.ca, leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, 
-	cmeiohas@nvidia.com, roman.gushchin@linux.dev, bvanassche@acm.org, 
-	zyjzyj2000@gmail.com, shuah@kernel.org, tj@kernel.org, hannes@cmpxchg.org, 
-	alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com, 
-	wenjia@linux.ibm.com
-Subject: Re: [PATCH rdma-next 08/13] RDMA/cgroup: Scope rdma cgroup device
- visibility to the net namespace
-Message-ID: <ak-Z071LrWhnI5lK@localhost.localdomain>
-References: <20260709095532.855647-1-jiri@resnulli.us>
- <20260709095532.855647-9-jiri@resnulli.us>
+        bh=w2zFUzgmtAuk8hs2S7KZhdwkyppPnKoB5X6Mdgo9p/8=;
+        b=cCWPx9OnaSa+KIi3pRGe41hPBkxa5hwyL/xud4BsAC8UkUDXsM3a5rlf8ssDSUqWvl
+         E8RPMMB8KLSyq5iJqeYnwahf03tMXUq0kU14XwJxcbiznhRRYYsHfdPYTTswZREfM1uf
+         87NXH967EICdgvjIEfF0hpUa0IZ2eYrA39gR0nAdiU58qOIK8U1XcWoXFPAY2T1beOmf
+         JLON0gHaGn+bIavw8nOcUek64CgXsgrdkffxusBszFrKM6bEpw5nqnfGt5tsyg0MPlzP
+         UIftD74CdSBptIHPrArFFCm/Ax9769jZp15fzzLD6abeYGHE6f/dA6U3/G41wzzF+FyC
+         tvfQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ropgp+4icA3b2IssXPINRVWj6s4ceOeow2glawSJduX1BRTvh9cvotfJBPfyKKj4EPadKmnV49uGufJOfNoLu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRLBS5ytRP63kagc/B2RIJFMljx3tBLEPBEvAiXR8TVlnw87RV
+	3vqgLxow1rtfsHZdbN9+OT9JjC0WwsuCpXbDe5WoSBjJDTSFoLTG9vMa3t/acbckASnXsGSSx/d
+	C2GYqQG5W9lh5rCLfsYhIaY6Gh1iMR28=
+X-Gm-Gg: AfdE7cnk3IQ1rWTL8r94dltzRs8vM2zWy3XX6vkUiYXr0gh+oiLLm3+Ak8Ru6/B2fWs
+	UZLF+x/6KVNEfiV1edXiXq6PhgtTfIJ1bCwhkrIyDwxDlSC92Iihi64Y+7x+hbO/td+k5GCGLKP
+	jcOKyznVtcoexpdsNVQQyORNSmsDQG5zwpfMtpKJ6oKg8+q9kgPuPR9Yokg9uJT54Uc4tFtLNvk
+	QgS+6TbOJBPHz+NghE+HyKNfuEy1luMZxj0PdTCoGzpRdWLvFw9trXy2euuoFcbFX0wr0fD0mWN
+	DX+xhg==
+X-Received: by 2002:a17:907:268e:b0:c12:4b0f:5d12 with SMTP id
+ a640c23a62f3a-c15e77d185cmr145016966b.23.1783602316748; Thu, 09 Jul 2026
+ 06:05:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="y2qmoqgw5gkrylpt"
-Content-Disposition: inline
-In-Reply-To: <20260709095532.855647-9-jiri@resnulli.us>
-
-
---y2qmoqgw5gkrylpt
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20260709101327.9508-1-royujjal@gmail.com> <2026070925-delay-gauntlet-bc7c@gregkh>
+ <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com> <2026070954-activist-left-8303@gregkh>
+In-Reply-To: <2026070954-activist-left-8303@gregkh>
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Thu, 9 Jul 2026 18:35:04 +0530
+X-Gm-Features: AVVi8Cf41M_ijpHkKYz8M_XktE0qZUV9t_0z2x75RapbDuAjnTo52sPGA365USE
+Message-ID: <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux Stable <stable@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, 
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, 
+	bridge@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH rdma-next 08/13] RDMA/cgroup: Scope rdma cgroup device
- visibility to the net namespace
-MIME-Version: 1.0
 
-Hi.
+On Thu, Jul 9, 2026 at 6:23=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Thu, Jul 09, 2026 at 06:12:40PM +0530, Ujjal Roy wrote:
+> > On Thu, Jul 9, 2026 at 4:34=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
+org> wrote:
+> > >
+> > > On Thu, Jul 09, 2026 at 10:13:27AM +0000, Ujjal Roy wrote:
+> > > > Hi Greg,
+> > > >
+> > > > Please consider backporting the following bridge multicast fix seri=
+es to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
+> > > >
+> > > > 726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplif=
+y calculation")
+> > > > 12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+> > > > 95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+> > > > e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+> > > > 529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encod=
+ing tests")
+> > >
+> > > Why is any of this needed in older kernels?
+> > >
+> > > And 7.0.y is long end-of-life.
+> > >
+> > > And why, if this does fix issues, was it not tagged for stable to sta=
+rt
+> > > with?
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > I already explained this in the email thread, "Please backport bridge
+> > multicast exponential field encoding fix series to stable kernels".
+>
+> Sorry, but that's not here (remember, some of us get 1000+ emails a
+> day.)
+>
+> Please explain why patches need to be backported when asking for them to
+> be backported.
+>
+> thanks,
+>
+> greg k-h
 
-On Thu, Jul 09, 2026 at 11:55:27AM +0200, Jiri Pirko <jiri@resnulli.us> wro=
-te:
-> index 993446ab66d0..4523c1884d67 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2752,6 +2752,13 @@ RDMA
->  The "rdma" controller regulates the distribution and accounting of
->  RDMA resources.
-> =20
-> +When RDMA devices are isolated per network namespace (exclusive mode),
-> +device names are unique only within a network namespace. The device lines
-> +below are therefore scoped to the reading or writing process's network
-> +namespace: only devices accessible from that namespace are listed, and a
-> +limit is applied to the device of that name in that namespace. Configure
-> +limits from the same network namespace as the workloads.
+Sorry for breaking the thread. I understand your point, I will
+maintain this in the future.
+How should I send the patchset that addresses the conflicts on 5.10.y
+and 7.1.y? Shall I send the conflicts patchset as a series via a
+different thread or how? I've never done this before, so I'm asking.
 
-OK.
+Here is the explanation for why the patches need to be backported:
 
-> --- a/include/linux/cgroup_rdma.h
-> +++ b/include/linux/cgroup_rdma.h
-> @@ -7,6 +7,7 @@
->  #define _CGROUP_RDMA_H
-> =20
->  #include <linux/cgroup.h>
-> +#include <net/net_namespace.h>
-> =20
->  enum rdmacg_resource_type {
->  	RDMACG_RESOURCE_HCA_HANDLE,
-> @@ -34,6 +35,15 @@ struct rdmacg_device {
->  	struct list_head	dev_node;
->  	struct list_head	rpools;
->  	char			*name;
-> +	/*
-> +	 * Net namespace the device belongs to. @netns_shared mirrors
-> +	 * ib_devices_shared_netns: when true the device is visible from every
-> +	 * net namespace (shared mode); otherwise @net is the only namespace
-> +	 * that may see and configure it. @netns_shared is updated when the
-> +	 * sharing mode changes, so use {READ,WRITE}_ONCE() to access it.
-> +	 */
-> +	possible_net_t		net;
-> +	bool			netns_shared;
+History: The multicast stack currently supports decoding of IGMPv3 and
+MLDv2 exponential timer field encodings, but lacks the corresponding
+encoding logic when generating multicast query packets. As a result,
+query intervals and response codes exceeding the linear encoding range
+can be transmitted incorrectly. This can cause multicast queriers and
+listeners to interpret different timing values, resulting in protocol
+interoperability issues, membership timeouts, and premature multicast
+group expiration.
 
-Any reason to store the netns_shared split per device? (IIUC, it's a
-global parameter.)
+Testing: The series adds the missing encoding support for both IGMPv3
+and MLDv2 and includes selftests that validate the behavior.
+I backported the series to v6.6.123.2 and verified the accompanying
+selftests. The selftests fail on the unpatched kernel and pass after
+applying the series, demonstrating both the bug and the effectiveness
+of the fix.
 
-Thanks,
-Michal
-
---y2qmoqgw5gkrylpt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCak+cKRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AgSmgD/Vgg6K9wF0JX4NBgdz4NM
-xV33/zTua20t6++MDiv2LGQA/iiwBIKorFXkq2bd30gmVkdyXN6gNLUnmclqxnfK
-+M0P
-=L3DZ
------END PGP SIGNATURE-----
-
---y2qmoqgw5gkrylpt--
+Given that this is a protocol correctness issue affecting multicast
+query generation, please consider backporting the complete series to
+all applicable stable kernels.
