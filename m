@@ -1,187 +1,127 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4CA376475
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 23:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DC43A2E0A;
+	Thu,  9 Jul 2026 23:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783638406; cv=none; b=r+7JDXa8mQXxT3iAJvgjoJCPOKkACV9oFmDw2RRvp7UHYmgQ5rhuqqw5q8V3veO7R2s8P2uuxyteKf32TTN0m64RNmhhwRkbJpCUeK+UOLzHwgynr4KOYyI9uIKZQSdzvI4LCOwetj3XzHjYQRHwcmlzGvgGmHmvIitPhmPS/JI=
+	t=1783641455; cv=none; b=AL7ANBPjN3J/L3sdUTTqlGgh+w9YwgYtzfhGjGypFb1Ah9hiaJm08sSPbnyin1VZYDpiXHr8sepHIZBVYfDCRGm/5XOF7uL8lHGKvN/1KKnWRtUvY7dcY365GJhIsdlR/dl51/Bd5Dp47Bp4Q5/t2dteFPsuaLwN0JQKO9d8ED0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783638406; c=relaxed/simple;
-	bh=Nr20FWjG2NroNbXZwhjr1SjTV8yECc1KxfDUU9MIAqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=haTm3ReCSIU9uNPBRyxVO5MyyNtktGgfL49akK3D6NMYT5ElvYxyx6p8xxs8gzQR0QzBDz+cjb66+GjNN8Zm2tdiSMUc6/aGVpV5o89BQRZiabl89kTYLFlM8RDWgp0H1rWsQpDY73ATbiM/wyjjtbgnSj/U3lE0GDBH+ccpGAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=QFPJ0QaM; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1783641455; c=relaxed/simple;
+	bh=ijeMi1ynINCbfpsysZOXJoU1MZ/yQ6o1QBJh/Ou0gAQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=sNhPR/87LSf050OAfQ53FuqQRj7IV/6wsOjLbWlyaot6XMUDNFfAWJw3Y8cC2SKuTozo3XCsPGNB72S4kdL+MFMwkuJtL6/s7EfxdAK3GZhuzXC/zpGRwJqUbC/GbNEsQm+rB76CPBglAMqD6+pCpfytxlcPbk4VOZzT31bYXTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VGvMFIuG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="QFPJ0QaM"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-92e855da580so23115585a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 16:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783638404; x=1784243204; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=G+I1Kh+neFzTKmOmQym2AfGZpWjdwKJKu5WX9LjuS6A=;
-        b=QFPJ0QaM+jKDmbawT46PNA7NSUWM3GHu5Dt3+ThjlsbAtweovklcUWNS4npkS1zU6J
-         Gb9vQ3RDvclrvCUwaEFG0UjsnsjtM0WQFNctTffzLQkfPRR1uqhH2hsnphY+kygwGSEV
-         02KNN+Skz5mc6WxDH3IxsRCEzMB5M5KCFfwZuwIF6yXkaAdEnAe4hOYn4PZjJY41Lg3B
-         yddNhJMmqP3KRURfQPiJXP5FpTH6MjbU4nmpgKJEnR9h0BzN9I07T35+zWly+Wu+UQW7
-         Uk7ViFJk6wdA8Gi0TRDBp+9MaVtNAs0qlSUbg0QwD+zLp40l0HQ0eRXLRHzXaJ02LTOl
-         dhnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783638404; x=1784243204;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=G+I1Kh+neFzTKmOmQym2AfGZpWjdwKJKu5WX9LjuS6A=;
-        b=d27ffWvVGPrN0GXg0P+hme+0AgorU3HIdJ7XzG0VQqXlYnitpzz6IuIAk3dRT9Ylr6
-         fBny98I7GAkz2OFGS3N1omZz/hwcrkNebsYt4dXQ3x4liA6rxNgiMjCPMxielZyScOnr
-         OGXrqSdafejB+ks/QKLSdMLv41AU01Ony7F4myO5WDx6Xbp4I9h071+p7XAiJutWfXmO
-         7hnUx1FfDHX7+c19uDuPTQhy0nJWnvutFCpRWSLbjdZG6R9PNUvdl0w431ISatnHKW5R
-         WrhplE14Cqs4JukvIVtv404WcwehpA6ShhFI9TbJgwC5a69nlgAKj99hFp85mGUOWBdB
-         Jl7Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrZn0fqBTOop6rDI0FaZjeXgG5wEUwfkwDEgPSIIY9AYjswiAAIxrmnlAyY9orDFLTnsyTCNaRRFVvKJME+iH4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzjkem40an6mUyOxdCmSoYSL6LzjQLvYe46sxqjAkyq2FWwtLou
-	tvnWmANWaVtLOp+JJKaT6YqfT18a7KEdfosr5zbRqDa1tWKWdXoOX3/CCL2nlBAmaJk=
-X-Gm-Gg: AfdE7ckI8nr1bQjmdUgmAdCj3IacuvgxoLB+0KeOnMG86/qdWdBx3rn1w8N5cn+xumJ
-	Q5A8Kgxg7dz0me7aucEm3l6mR7wfa+hxddOypsQQmpOO3Cv7cO0V7CbNEKhCyX6NMeNHfl+kxio
-	FC/9zoKVvOQzr+Fvs1qs3DqCacBrPvb2ywsH2YwFOef287xpMBt6YvII34+jz784Vj1GWNHigYs
-	Lh1bHzWeXaf0FEBPLBCrVSEQ5b14HT30A2zhLOaargPx3tur25qO/TPAOW/KW5HNuDC+8j0qvgo
-	67YlLi4GsqG8RgijX6LlGF3/nNcKQEIT4fbSTujn3zRVUDoAHT5apOqrnDO7NlDT/MEd74K15uO
-	8PyQbNz8MTaMd9qP5iCBw6UrDiWYpDKjOTkBZk+TbJhXxsaxxEPS2iLz+75VJdQ091pta3f6kXh
-	V9gGru0O9N5isZ+lC8RAjqjy8gMazEfM4E8o1wOr6hCgP2nk9Zth5G1rVqWvDs2ZZ/PRP5
-X-Received: by 2002:a05:620a:31aa:b0:92e:7db8:1e86 with SMTP id af79cd13be357-92ecf6aa487mr1099339185a.58.1783638403562;
-        Thu, 09 Jul 2026 16:06:43 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5b4b1bbsm59189185a.2.2026.07.09.16.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 16:06:42 -0700 (PDT)
-Date: Thu, 9 Jul 2026 19:06:38 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Dan Williams (nvidia)" <djbw@kernel.org>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com,
-	Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-Message-ID: <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VGvMFIuG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DD251F000E9;
+	Thu,  9 Jul 2026 23:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783641454;
+	bh=NL6KkE+XGM13rjECEPlDsP8sDmlO2+4iY80eSoJW34k=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=VGvMFIuGD04PIRzU/JMeGvWpJXoTWA+IBrWJ4DETddqsvMfFiGavTTa9l63r0ClWv
+	 X2UUQqNqpZqczRFyLqhZ+Zy8m15reHdQPTxmbUIl38NqaY/9+pMPbWiYC4uxdsvauQ
+	 wiyhThJeiv2vh4H7xyufBRg8Jf3VvutnySvhp/UkfByFzJVEb/o6mL59688vpOGA8E
+	 /KtI4FyfFU6/yE1N8/6ajHygAZKQzXhv4MUIjJQ7ZlAJqRmRYhZpdgugODmzwu+OMS
+	 LmeVZGAdUBW7l7GzygghdDpLsz0oELPEdGv7JVw3JmP3iGheo/4T7jidFlKAypbciy
+	 7bI+bsP27Yw9A==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 5ED64F40068;
+	Thu,  9 Jul 2026 19:57:32 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 09 Jul 2026 19:57:32 -0400
+X-ME-Sender: <xms:bDVQalWT3kkP1O_nPlEUgaGq8m8QWlO5PPNjznrDe7d1CpTWIfMANg>
+    <xme:bDVQalv5hmJ1CwhK2dgiJKfqcKH5_0MDF8nquspQ3CIiab0qCEzQOUNU3wTkB6jqA
+    qux6Ekbzjl6ev_KByOlE4DpQciHdJVr0JS7N5fHu8-OEkyJk7RLkY4>
+X-ME-Received: <xmr:bDVQavNLOvwweJeepDKvjUahneSQU-R9SYF3Ap5jl8v4MTmiRC2Md5MF496hZvJ_k9lFsj2yuAX9-jTBk3671HtMbzuA8Bg0NRc>
+X-ME-Proxy-Cause: dmFkZTFRjNBlnTz3PRsAmwjqRoF0mrjGm979SwqAKHEfthIBDq5uh/i9WRUkVW7VZSf//w
+    YDoaw7hRG798DaAYdC6UbfhFGRdHF+jU+/jGu6HBle2Ytf+9RWyMwBDwRmckEaZLf/nUyQ
+    SKi5sJRgbDjlp94ASRYw/4muCvkc2xHnl/vxqUx1y1DhspUjPMoJnbB/bl00rpb5PWiQyg
+    GTtZWI4G6plLyhOdjNWH8CBGphBXLtH3D2Pvho0pAK+KnWiAORXsSOpMdV4xD7ID8QXYje
+    a9mh9aiUSp78AdFrJ9O2B3vkzu06KG1gqyHdViPBwiRVrcIhbVPJi05ziCPPBR/N6vYfer
+    6lrpXziKcnjva9wT7p5QUwgxDdC5jjdwT7fXiZidMKAEs3vLpiGVt16GoilNTbBE1Swe66
+    lq1nYogPtBgSjvZCHT/YZLpCIqUO4TamHC1Gj5FtyOihURCc/3jiGGJS5HrnflvJVUhjxl
+    uPu1tEET6rrY+yW5GgTNYjuDoKs+MzBD57qey3Z58xdp6wOjNRKNBRIG8N4BLdwR9dsmCv
+    A4RIo/MDKkVvsbyt2hA+z7nruReU0o4mcD3lQXH5OqBkbo9AE/nGnLS1/bS/nnG97VTtRr
+    clacuChAjPCOEchopHVZNuyYh3E0NUuVP+WPVNPQEQOSK3N74GMuftNUjPxA
+X-ME-Proxy: <xmx:bDVQasnnBxeuM7jroXxksAQB9zn6duvpKmyvN9LZYwI-PdaHUkJUKA>
+    <xmx:bDVQatz0AT56AL-iX_O4imnfAPCevJDLonBYOOcGBR4lexJTusoU-A>
+    <xmx:bDVQalDdKFvxjIjyCfZD792xaNLb2nqmtQGGLIeFu5A_OdS7ISVbsQ>
+    <xmx:bDVQal5BbtDERhJ51QOg_cveb9aqQk1z5niWGshAPguYIvTxzRtlwA>
+    <xmx:bDVQap1K540U56JdRBFV8JSNUnGOGG8a2VUV2cYjZ6gcar-XwgSzqP4U>
+Feedback-ID: i67ae4b3e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Jul 2026 19:57:31 -0400 (EDT)
+Date: Thu, 09 Jul 2026 16:57:30 -0700
+From: "Dan Williams (nvidia)" <djbw@kernel.org>
+To: Gregory Price <gourry@gourry.net>, 
+ "Dan Williams (nvidia)" <djbw@kernel.org>
+Cc: linux-mm@kvack.org, 
+ nvdimm@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, 
+ linux-cxl@vger.kernel.org, 
+ driver-core@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, 
+ kernel-team@meta.com, 
+ david@kernel.org, 
+ osalvador@suse.de, 
+ gregkh@linuxfoundation.org, 
+ rafael@kernel.org, 
+ dakr@kernel.org, 
+ vishal.l.verma@intel.com, 
+ dave.jiang@intel.com, 
+ alison.schofield@intel.com, 
+ akpm@linux-foundation.org, 
+ ljs@kernel.org, 
+ liam@infradead.org, 
+ vbabka@kernel.org, 
+ rppt@kernel.org, 
+ surenb@google.com, 
+ mhocko@suse.com, 
+ shuah@kernel.org, 
+ iweiny@kernel.org, 
+ Smita.KoralahalliChannabasappa@amd.com, 
+ apopple@nvidia.com, 
+ Hannes Reinecke <hare@suse.de>
+Message-ID: <6a50356aa7a4a_3cabcb1008a@djbw-dev.notmuch>
+In-Reply-To: <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
 References: <20260630211842.2252800-1-gourry@gourry.net>
  <20260630211842.2252800-10-gourry@gourry.net>
  <6a502267b17cc_3b7ee51008f@djbw-dev.notmuch>
+ <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
+Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
+ whole-device hotplug
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a502267b17cc_3b7ee51008f@djbw-dev.notmuch>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 09, 2026 at 03:36:23PM -0700, Dan Williams (nvidia) wrote:
-> Gregory Price wrote:
-> > +	ranges = kmalloc_array(dev_dax->nr_range, sizeof(*ranges), GFP_KERNEL);
+Gregory Price wrote:
+> > So the "unknown" case does not need to be here.
+> >
 > 
-> The new hotness is:
+> mhp_online_type_to_str can technically return NULL, seems better to not
+> just let a NULL dereference sit latent even if we can visually tell it
+> can't happen today?
+
+Oh, makes sense I was thinking "unknown" was only a result of the
+drvdata missing case.
+
+> > > +	if (dax_kmem_state_is_online(data->state)) {
+> > > +		dev_warn(dev, "Hotplug regions stuck online until reboot\n");
+> > 
+> > I like that the BUG() is avoided, but I think these should stay
+> > dev_err() given the severity.
+> > 
 > 
-> ranges = kmalloc_objs(*ranges, dev_dax->nr_range);
-> 
+> I had to go back to calling remove_memory() by default given different
+> feedback, but I think if anything I will just modify the BUG() to a
+> WARN() and call it a day.
 
 ack.
-
-> > +static ssize_t state_show(struct device *dev,
-> > +			    struct device_attribute *attr, char *buf)
-> > +{
-> > +	struct dax_kmem_data *data = dev_get_drvdata(dev);
-> > +	const char *state_str;
-> > +
-> > +	if (!data)
-> > +		return -ENXIO;
-> 
-> Cannot happen with a dev_group attribute. If probe succeeds then drvdata
-> is present. If probe fails, attribute never appears.
-> 
-> When unplugging, dev_groups are unregistered before drvdata is cleared.
-> 
-
-Ah good to know.  I am always paranoid, but i'll drop.
-
-> > +
-> > +	if (data->state == DAX_KMEM_UNPLUGGED)
-> > +		state_str = "unplugged";
-> > +	else
-> > +		state_str = mhp_online_type_to_str(data->state);
-> > +
-> > +	return sysfs_emit(buf, "%s\n", state_str ?: "unknown");
-> 
-> So the "unknown" case does not need to be here.
->
-
-mhp_online_type_to_str can technically return NULL, seems better to not
-just let a NULL dereference sit latent even if we can visually tell it
-can't happen today?
-
-> > +	/* Always create blocks for backward compatibility, even if offline */
-> 
-> Unless maybe a driver knows better and wants to preclude the possibility
-> of legacy per-block hotplug policy firing? I.e. driver asks for dax_kmem
-> to start in the unplugged mode per my "should DAX_KMEM_UNPLUGGED be a
-> online_type with a different sentinel".
-> 
-
-I suppose I can put DAX_KMEM_UNPLUGGED in the header and allow this.
-That seems reasonable, and makes sense why to differentiate
-DEFAULT/UNPLUGGED.
-
-ack.
-
-> > +	rc = device_create_file(dev, &dev_attr_state);
-> > +	if (rc)
-> > +		dev_warn(dev, "failed to create state sysfs entry\n");
-> 
-> Always prefer statically declared attributes. In this case an attribute
-> that only appears while the driver is attached would be something like:
-> 
-
-ack.
-
-> > -	success = dax_kmem_do_hotremove(dev_dax, data);
-> > -	if (success < dev_dax->nr_range) {
-> > -		dev_err(dev, "Hotplug regions stuck online until reboot\n");
-> > +	if (dax_kmem_state_is_online(data->state)) {
-> > +		dev_warn(dev, "Hotplug regions stuck online until reboot\n");
-> 
-> I like that the BUG() is avoided, but I think these should stay
-> dev_err() given the severity.
-> 
-
-I had to go back to calling remove_memory() by default given different
-feedback, but I think if anything I will just modify the BUG() to a
-WARN() and call it a day.
-
-ack on dev_err().
-
-> > +	struct device *dev = &dev_dax->dev;
-> > +
-> > +	device_remove_file(dev, &dev_attr_state);
-> > +
-> 
-> One less cleanup to do if the attribute is registered statically.
-> Attributes are shutdown prior to this point.
-> 
-
-ack.
-
-~Gregory
