@@ -1,134 +1,209 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942EF32694E
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 15:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783609625; cv=none; b=FRFNeM8osvWej5k+wnfLWrIaWjl4xsDHCt7s2G8SIX1syVWCRRvuicpkOwOZHwyEhPU3Sdjia1VX0s9VxwksNuMzWzqhKH56kbmt7YPdJtCL7LijIOtXsztkkpLF++rtziceK0HyTusxe7EDCfZ2gylDlncYkRbBOx7V1vU1XCE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783609625; c=relaxed/simple;
-	bh=/grVSRUciXotV+M5DyGJv/gSDKzJoMKn2myJZvg9YgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RR2HJSmmvWnPuS2+7pBTGBzbCGls25S86N2WQyPyTeEA3b6Cu0heotlIrGJv/5HpyF3GkG8jAaofGnpxYMMsY/AZoYN5nCcRGhUtR7yRbENSADzHN9b9x5hQv+vlP5WF2tuPEFm1VXJHsOZsX9mTSb1XaD/++Va2qOX66PKCLxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=KgZDfzEV; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D43F375F65
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 15:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783610033; cv=pass; b=azw5fKMdV7X9d2TnjDp84mMJsq2rmJvpSN6K/QAs9AlFJX0nx/sh9jY9dYrbc18Is5vuItLQySv+9E5JeUZLaAFV++1LjsjafNDX3vEWG99CFcECV6p3kPbBo/2HPW/Ukfzn4BhRUtoMOjJoRzxPndd99qEuGg3LOeD5vCQZ/OE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783610033; c=relaxed/simple;
+	bh=lm+iwZuldvNfgm8Lzbku/fwQXnHvxwIB+0za3JCHtHk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dt0vpwVjQUBijgtE/TUQoXMUE+BLSaztMDYZmWIoiDNRo1vab61YwDuXyCOVkb/8RrxfMUCDv7zd0+M7WuT2pJLOMABsLkuI7OWHcO1D+bldSu8qXZpB8SLRde4tJkW2VhEGs/cMGN6zj9hrygr3+eUGC4ynwg+Sw1BKUm1K1h4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZShSS8r; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="KgZDfzEV"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51c22c61795so13764251cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 08:07:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZShSS8r"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c15f47e6297so2373566b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 08:13:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783610030; cv=none;
+        d=google.com; s=arc-20260327;
+        b=HPQhdKUJNtah5UHVrhNgdMAGj86YgHQu7emhZiCBMzOCrP+NyVklYQNRBFleywzbAB
+         t8AHwReULXXi56+MZB7yKLA3CSquy9zOxfEOGJKJnEIgOyVlFW/oYXqdCzvcozQl6enW
+         GpNNbjpX3zGLHchpAPF6cmMr9LrUaBk7KRdqDsRMmrLzaXmB/vraSVyixKhGIWiy62BN
+         rcRHe6mwdiuI/7wHsgj11t5p71kky5JS3wdFH2KMitfFRIBRRypBdaE3q9b3Rlxdfi+7
+         NSDGTa7g2RzWUG1WIUI1NdGQ4yiljHqRi8rWHqGHrDwLuwP3H2PDimguzyF1RNENB/wH
+         OcCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lm+iwZuldvNfgm8Lzbku/fwQXnHvxwIB+0za3JCHtHk=;
+        fh=x0HoQvV2wthJg7xh/Al50YqfyxL0Hg7JZMcYPJSLxgc=;
+        b=TwHQxAZ6sRMT7EhUOesh2LP5OqxsRCN7M3VaiDxGGBXWkf56xrz6uf+hcYo2jxIrac
+         o8R4uEAISafDM47NpxxwwV8vBlCmQikuThU2t9HJL3BT4hjr9xntsQC/q4eFGOQdCTek
+         i3r7wYMXyOCOZ0p7xB4wdGD0Aja+OR+vE7L61WYLHrsNkH+giRG+VgNbWU0jcvp/Zh+g
+         E9zC4j6sDeJxtXXDbsFn9vKnKMSbTw4Fp9/vJNqslvYVMvHE9t4f3KDQ1xUOCl2cr1PA
+         Mm9smLw1LZqNDTtNWgLePGeCF7XbleFFsMA+pGEtJZJzqvHyDLGmgLZygE3N77x04I6W
+         Coag==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783609622; x=1784214422; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1783610030; x=1784214830; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=LA4FqejTaFf1jVYUF/eNvlLLZJZ5tRpTNigHNeOPvho=;
-        b=KgZDfzEVrSihwClIha5vLHr7gLsNnyeQqcYHGIdkMpi7tEj8SqpYCn0XECKw1bhxcX
-         yNLWW0PW/Cd4/BjP8l8jOyjsK9N+8tKkeLG6FxKIuhJUmcOkmdmXeRV62p/NKrEHu+Iq
-         K4spBhoXhSjSPGEvFM0J7Av9oNHz3OWaHpLozVega43cShCUdxyJ9C149A6Y4Vw8IuOO
-         RVySdQslv7NpErUZrG9VzAUOmwrMD1lXcZpAGkrVglvRyT3OiW+6Ru93fHAU3KNjpPi4
-         GiwnWhDvUCl1sNL9HDBu3nKjD6bqZqcA4JnwHWfErw1u3UI+HnFjGVrin4t+4k2qV393
-         NfmA==
+        bh=lm+iwZuldvNfgm8Lzbku/fwQXnHvxwIB+0za3JCHtHk=;
+        b=cZShSS8ro0THpxKUvnqocyUpAo9soBXcXvDp47ckLhenrBhPQ4tyd8EgkuJyqEpedz
+         Oqy8pQnBufM2azAaXoVITXgjgXjm5gIRGUUctc3JpFFFt4lxLafzDe/H/TZPlx9P/9f5
+         MKacuUcSnVUzfgRrbScM/zrSNXAw+G0+JCAwxID5SKn47zNpFcuB5R67QtMe6fugaxjW
+         vzNrVUyE3/O4N/f4kQA/I3Aw3sm5YnTU4tWoHydMSFE/7T1ngHtUncDPtlvYVaz5oIq/
+         XaiqR3rdwn7uMOTnzFX1ba4h+KnthRIOTFc+jdn4avr8ApxEuTrBZrt1XzHuYprYhRjU
+         z5WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783609622; x=1784214422;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1783610030; x=1784214830;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LA4FqejTaFf1jVYUF/eNvlLLZJZ5tRpTNigHNeOPvho=;
-        b=DnQw4S2bzg/B4NqXXl6zW+S0myBPzfJbSe4QFKo/zhjC9MnEAeLGYjDaqKxCfk3whY
-         Sa7F8pg71VSDcsbJKc3X6g97iWsqAnKa1Pz0ibiAcKAHuJByB6JY5VHhXG/Ii5s9623r
-         PKAJsazorS8EpVAsmf/soR3o2yWR1FKoSYjbY1HGDtMxChX6FHn+ICNI9rHEK+FEw1sP
-         jz2DvdV80SqutGp3dJ0xiZN79PtXGnURGpaV2gz9m+U/4WiOvfT/+hGO+Vt6pvXLYxur
-         jAw/ykICs1F40y7iSlIbrv77TTcUNA8Uwpdh/81j8yJfmUDGu6YlLQMCLE5GptPlwisI
-         6qLA==
-X-Forwarded-Encrypted: i=1; AHgh+Rrn4L7ctwPp5+7gZhVYj3rQdhorEgRKuKmwNeXyAT28YYDe57hExetMBjxs+xqbZpY+3/5J+UCC8DgC0hu9A9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3C2fyna2rEAP5lYLv82bz/tICmz1+W8iFnKa2x/8NQqRwxY2v
-	K2sZzmsJtjT1mR1/J6vqY17IXky6t0ld4kPh6oP8kR/5H5ucASWUZpaa8NvR9PX5MtI=
-X-Gm-Gg: AfdE7clbbeOLzF58rLCcYOAFzPpG6fCrScxSNjXEl5U4k9zRFoYowPl68GwPko+ec8P
-	1AHG45E3Pg0Bwi5ZK0OA08Ftm1F7hp+KkXDfXLVNmMvRhKMHZIqbpYXyJavZYFDbGsqCIk2VH7A
-	A0gVAm0rqK9DLbkxJiYgaOd2kBBqM+RMHVVnEnTDoaNHhj0x6WY5rCjVVjbz02+7drYEsURP0Bm
-	XQ3hepdaQ3AmUjabREkkJkqd1gOWZzqPSzkcLtyFG/4z8eihv5suqxzPZiL6UTApa99aNHOzVGW
-	3IAnI34Y58Y+nwkQasZhePxytCN2Pm/nTSSPylFooxZ6IZLjMUu/4Bza4ckpRpijlX/iYgpHVfx
-	Hcc3Cv70TasLNRKkZ6TUsUCkDzgD/JaDYHPQ5SX5uiA0V7FkknzvCcjgHNougVUBm5DtqDC6+uB
-	e/xjTOVSw9dg35hJ+2v3Jje+YNVSG+lHgp0FECEhjGa8HhxBnxiC+qVazYXglt5jl8uYyTwK+m0
-	mYEnr4=
-X-Received: by 2002:a05:622a:1791:b0:51c:7b12:5fee with SMTP id d75a77b69052e-51c8b40f651mr77711651cf.74.1783609622533;
-        Thu, 09 Jul 2026 08:07:02 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51c42038c4bsm160321251cf.31.2026.07.09.08.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 08:07:02 -0700 (PDT)
-Date: Thu, 9 Jul 2026 11:06:57 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Richard Cheng <icheng@nvidia.com>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-Subject: Re: [PATCH v6 06/10] mm/memory_hotplug: add
- offline_and_remove_memory_ranges()
-Message-ID: <ak-5EXwL56O3G_J_@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-7-gourry@gourry.net>
- <ak9ee95F7pJpCKMo@MWDK4CY14F>
+        bh=lm+iwZuldvNfgm8Lzbku/fwQXnHvxwIB+0za3JCHtHk=;
+        b=hyNLB6xa0Y84v9KmYL7Tm0pRyN13EKBeO/YHtrLukhdj57fRoICXvCBqZqkWD2V+P9
+         qBUIEpGEDQtx2MkYqU0+4RzZQ8cQLJGZBWofB/h5dgWOlRfQcui0TKWPo90fd+CKJTU9
+         q+JTSIav1cQD4pSycSp65oa2O5gp+caVOBA/DM52Si0XgWtLgUPXfNDpIq376CndptY5
+         WXYSELFV8sTlVvooT/6x72yDLaK4BLwHqZjl5FqDvh0HknVCugmuqvYzGawjKdEKlrF9
+         eBHS6sy60nnJbDc0XhqpshRNItqBXjLulRFrnYb9jYJGvRfFMXO1qdD43NucYABvwUds
+         FP5Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpGuhrA8ZZJYNmECnLQu1iGmPVrjKCqqG7HwA9zxLwTn6s4C/NAPYqzbm+THXQsMo8DJMNagWeyKmaMEAk0XlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEd2TDg77slKtzleXfnxQkuYsiANjfCVecX/4JAL1clHCLE3fE
+	hE76yCCr5KO9Ka7Y3QD286CE2S5X0xXPBRC6ew7bU5PLvvEqwsrJa8U3lRj6WkdOssQlism3Qbc
+	bgYZY+LsjQpPAn8Kh+w1A5GrazF9ilrc=
+X-Gm-Gg: AfdE7ckHGZgi7gkhd70DmnAHfCjc0e+LmIjDCUH68Rcl1qinBaBfEmYbJhc9WJD3IUR
+	XftEYP/IX/Vpo4zy+KffKhe94aVvpeuN1LWGsRVtZoZ5heaoVdsxJP3/hbqBbcPjSZ8QHFglFRo
+	Ex2g46LarnGOR0KUeECgcrTFzxBS3XLunmPkRTdGIUfCbjEoXUUQBV98N8UtqXFZv1HOX+lH3DA
+	sLcS5mBfFBcm//0V7gDZkWRAhbom2zF3Q/D+kADrMdrm+BgovcDg1lvSZJAqIXprXNf8lw=
+X-Received: by 2002:a17:907:1b1c:b0:bed:19af:f89a with SMTP id
+ a640c23a62f3a-c15cde8c84dmr329373166b.7.1783610029787; Thu, 09 Jul 2026
+ 08:13:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ak9ee95F7pJpCKMo@MWDK4CY14F>
+References: <20260709101327.9508-1-royujjal@gmail.com> <2026070925-delay-gauntlet-bc7c@gregkh>
+ <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
+ <2026070954-activist-left-8303@gregkh> <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
+ <2026070948-lively-exchange-a458@gregkh>
+In-Reply-To: <2026070948-lively-exchange-a458@gregkh>
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Thu, 9 Jul 2026 20:43:37 +0530
+X-Gm-Features: AVVi8CfKbtzcJnRxXIx3ULOTra4r8qYMzKp7zTKSzETyFRYKJOujtPr221wvxYo
+Message-ID: <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux Stable <stable@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, 
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, 
+	bridge@lists.linux.dev, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 09, 2026 at 04:45:51PM +0800, Richard Cheng wrote:
-> On Tue, Jun 30, 2026 at 05:18:38PM +0800, Gregory Price wrote:
-> > +/**
-> > + * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
-> > + * @ranges: array of physical address ranges to offline and remove
-> > + * @nr_ranges: number of entries in @ranges
-> > + *
-> > + * Offline and remove several memory ranges as one operation, serialized
-> > + * against other hotplug operations by a single lock_device_hotplug().
-> > + *
-> > + * This offlines all ranges before removing any of them.  If offlining any
-> > + * range fails, the entire process is reverted and nothing is removed.
-> > + * This provides a fully atomic semantic for unplugging an entire device.
-> > + *
-> > + * Each range must be memory-block aligned in start and size.
-> > + *
-> > + * Return: 0 on success, negative errno otherwise.  On failure no range has
-> > + * been removed.
-> > + */
-> 
-> I think this can return 1, and it shouldn't.
-> device_offline() returns 1 when a block is already offline, and phase 1 passes that value through as-is.
-> 
-> Easy to hit with patch 0, offline one memory block via memoryN/state, then write
-> "unplugged" to daxX.Y/state. The store returns 1, userspace treats it as a partial write of 1 byte,
-> and retries the write with the rest of the string.
-> 
-> Maybe
-> """
-> if (rc > 0)
->     rc = -EBUSY;
-> """
+On Thu, Jul 9, 2026 at 7:52=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Thu, Jul 09, 2026 at 06:35:04PM +0530, Ujjal Roy wrote:
+> > On Thu, Jul 9, 2026 at 6:23=E2=80=AFPM Greg KH <gregkh@linuxfoundation.=
+org> wrote:
+> > >
+> > > On Thu, Jul 09, 2026 at 06:12:40PM +0530, Ujjal Roy wrote:
+> > > > On Thu, Jul 9, 2026 at 4:34=E2=80=AFPM Greg KH <gregkh@linuxfoundat=
+ion.org> wrote:
+> > > > >
+> > > > > On Thu, Jul 09, 2026 at 10:13:27AM +0000, Ujjal Roy wrote:
+> > > > > > Hi Greg,
+> > > > > >
+> > > > > > Please consider backporting the following bridge multicast fix =
+series to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
+> > > > > >
+> > > > > > 726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and sim=
+plify calculation")
+> > > > > > 12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi(=
+)")
+> > > > > > 95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields"=
+)
+> > > > > > e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+> > > > > > 529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field e=
+ncoding tests")
+> > > > >
+> > > > > Why is any of this needed in older kernels?
+> > > > >
+> > > > > And 7.0.y is long end-of-life.
+> > > > >
+> > > > > And why, if this does fix issues, was it not tagged for stable to=
+ start
+> > > > > with?
+> > > > >
+> > > > > thanks,
+> > > > >
+> > > > > greg k-h
+> > > >
+> > > > I already explained this in the email thread, "Please backport brid=
+ge
+> > > > multicast exponential field encoding fix series to stable kernels".
+> > >
+> > > Sorry, but that's not here (remember, some of us get 1000+ emails a
+> > > day.)
+> > >
+> > > Please explain why patches need to be backported when asking for them=
+ to
+> > > be backported.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Sorry for breaking the thread. I understand your point, I will
+> > maintain this in the future.
+> > How should I send the patchset that addresses the conflicts on 5.10.y
+> > and 7.1.y? Shall I send the conflicts patchset as a series via a
+> > different thread or how? I've never done this before, so I'm asking.
+> >
+> > Here is the explanation for why the patches need to be backported:
+> >
+> > History: The multicast stack currently supports decoding of IGMPv3 and
+> > MLDv2 exponential timer field encodings, but lacks the corresponding
+> > encoding logic when generating multicast query packets. As a result,
+> > query intervals and response codes exceeding the linear encoding range
+> > can be transmitted incorrectly. This can cause multicast queriers and
+> > listeners to interpret different timing values, resulting in protocol
+> > interoperability issues, membership timeouts, and premature multicast
+> > group expiration.
+> >
+> > Testing: The series adds the missing encoding support for both IGMPv3
+> > and MLDv2 and includes selftests that validate the behavior.
+> > I backported the series to v6.6.123.2 and verified the accompanying
+> > selftests. The selftests fail on the unpatched kernel and pass after
+> > applying the series, demonstrating both the bug and the effectiveness
+> > of the fix.
+> >
+> > Given that this is a protocol correctness issue affecting multicast
+> > query generation, please consider backporting the complete series to
+> > all applicable stable kernels.
+> >
+>
+> But this really seems like a new feature being added, it's not fixing a
+> regression of something that previously worked, right?
+>
+> WHy can't people just update to the latest kernel release to get this if
+> they need it for their environments?
+>
+> thanks,
+>
+> greg k-h
 
-Oh weird, I thought I'd solved this problem at some point.  I must have
-botched a rebase or something.  Good catch.
+This is a corner case when people set the query timer value higher
+than 128. People usually use the default value and don't change it, so
+they may not encounter this issue. But I found it when I changed the
+value during some extensive validation of protocol timeouts.
 
-I'd originaly had some tests that race memoryN/state and dax/state, but
-I dropped them because it caused long testing cycles (mostly because i
-was testing force unplugging).  Maybe I'll re-introduce some of these
-partial tests and just avoid the destructive ones.
+If one host doesn't have this fix, clients will observe premature
+multicast group expiration. For example, a set-top box channel might
+disconnect early.
 
-~Gregory
+But we can ignore this until few more people request this fix for older ker=
+nels.
