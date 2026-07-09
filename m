@@ -1,448 +1,237 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235CF3F8243;
-	Thu,  9 Jul 2026 08:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86327289367;
+	Thu,  9 Jul 2026 08:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783586821; cv=none; b=cydUjkAU2z2q3Ku2FglJhDi5+GirEXmik6fsf0PVfH1suBCxlqQPSBnOfPF8k9qHqZZOgDkPxyaCJjkic4ickC7Lh1Pou8sz9tzwu24wjTT6HQrGaxrnEpVfs2fgDTHLdyijDBGmg4EkXuczNNvCMRMVh5IZUV7qLC7k2Je6Vwg=
+	t=1783586979; cv=none; b=CqPOxtulB6vvg2OHECGEOVdbtfX+iOqY7LDhBLs0O+9lBa+mdymiiFCZMFV61JRO5H+NDdp04Vx5W7QvwUEZaJM0PWDVFoReylu6OlpNPmdCI2aNhhUbx2uZn84RcwEqTCGsLzigSeRbTbWpprl7T45MbLqv5gHlELv/ItGlcN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783586821; c=relaxed/simple;
-	bh=AzAQtl4Trv2My5JPBvdfgIXHoc/Oeyu9y0cA3CW67k4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j3W26FhipaEEgLyJgGgViQbbUuZG8ZowlsOEJNZBZko4E+WVeoVpsNi1JZ05GHks78OnoJYDU5JUEPGY9WwxhRcOg4cdxBrAnZUu31cAnfsAsI9ZWPZ6kwytcMbVYnlZ82k5lfPQ8XMQJjQaK3OFo54BWc7pKFz/rBc8dHALjHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBSldxOd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783586979; c=relaxed/simple;
+	bh=Amn5rNTuGI2wjuJOT5oDxgt162PmZcU3IBZqRhe8fu0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jpkh/WTuPtekVGzxU32TzIwe2WrjL4Ys6ZZdh3m20WdvIDzTA2Z3ASgjJdtjhTJoYBMESlk+cNV+hhhaOdaWzY2HZMcRPChmkTNS4YVy28/OXlwbAYGHTDslY+DNKm2hosXUHKyY0PQFntWNeCQTms1XSSzg01NuQBl/GQV/JbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vy9lXI3a; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBSldxOd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B1E1F00A3F;
-	Thu,  9 Jul 2026 08:46:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783586818;
-	bh=mRZq5csL5hUNDy0QIxQvRraRTIooykr0ndYA3Ihtjl4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HBSldxOd1OT5zXPN3a1odB2dmyiw8TrN+4d1Gw7m3d/CL9q66iVrXfGiiTtI9wiCO
-	 EeFUp5cVScV+TNykS0qn9JfgUMavTojFnkakG28zvB9WDrXLadsrV95yPNDySkp/iP
-	 hwQfAQsUZOqTJ1t/yChGxMqchDFohGzCwJKID7Wbt75x17NVBqZpj3Yt18U8c6yUTP
-	 1Wp4TjpxUysxyteciKfm6Q/RXCSk2Ddhm03NiDFqzxGrpIL5ZiY0OwBX/Nba+YLTqN
-	 2QZgNe2XSyKOfhnbRYf8/vaauCmhJsk5YfnmZPF6qlVLOcZx+IcL8WsyzhWdPAh9HQ
-	 47khgETVRVZEw==
-Date: Thu, 9 Jul 2026 10:46:52 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: david.laight.linux@gmail.com, jack@suse.cz, jannh@google.com, 
-	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me, shuah@kernel.org, 
-	viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-Message-ID: <20260709-quizsendung-glasdach-ausmerzen-05ebd412a86d@brauner>
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
- <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
- <20260707-wortreich-kanal-zensor-9386ef4f38f7@brauner>
- <DJSPBVXTF02G.3SKLB9EO89GPT@gmail.com>
- <20260708-welken-dystopie-ertrugen-56a3b5f7ab66@brauner>
- <20260708-kordel-laben-kopfhaar-1c0dd234aae5@brauner>
- <DJTQTPG7QZSH.1YIDYKL3O985U@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vy9lXI3a"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6696ILeb479979;
+	Thu, 9 Jul 2026 08:49:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=QxqMyy
+	ELcoPLCOnceqkZYKaZhHxorYENz84bJREuy1w=; b=Vy9lXI3a0bXIZ8ZFD/JvBZ
+	ptmpzRBWHRR2FQNrwfxKirzgRTpJu0GmWyd+o3sQ3zG+8qCtvU8LQpEybmEJ3pkI
+	M5apXkPK7ueqQmgTjhTZqzzbtqhcgWzm/KtIHV0D4ZdhtFT5xFDxRaHyxFNGQNtU
+	vB/nkd4fDUyUwbYSgQcHclOw9Fe57gpAHTTNuMgLZ9kCzIziCzV/xE49HfblNGlz
+	BENc0jAEftLxzsTiyebTrKPSf8PT8kqScFLEa6+uVrBAMd5S8XlFPSlr44ym9Hqm
+	JHbdU7HZJ9jztv9XfoUODmqwyLPp5rStlbfcIzY12rm/4GIB2i3859OjLVyOl3RA
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6stt14q0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jul 2026 08:49:26 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6698Ya92019285;
+	Thu, 9 Jul 2026 08:49:25 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7eqgc4dj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jul 2026 08:49:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6698nLlw23265616
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 9 Jul 2026 08:49:21 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0A9942004D;
+	Thu,  9 Jul 2026 08:49:21 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D166F20040;
+	Thu,  9 Jul 2026 08:49:18 +0000 (GMT)
+Received: from [9.123.1.138] (unknown [9.123.1.138])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  9 Jul 2026 08:49:18 +0000 (GMT)
+Message-ID: <afb9bf4d-2258-4731-a28e-7f4eaa01ee0b@linux.ibm.com>
+Date: Thu, 9 Jul 2026 14:19:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="7accz5oj66ddjm3r"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/6] selftests/vfio: Add sPAPR TCE v2 coverage
+To: David Matlack <dmatlack@google.com>
+Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
+        sbhat@linux.ibm.com, harshpb@linux.ibm.com,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
+ <akwyZvbv7Fg8mfB2@google.com>
+Content-Language: en-US
+From: Narayana Murty N <nnmlinux@linux.ibm.com>
+In-Reply-To: <akwyZvbv7Fg8mfB2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DJTQTPG7QZSH.1YIDYKL3O985U@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: TdtOjoZw52V3LxMSYgVcH93H6d3ymUJn
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA5MDA4MyBTYWx0ZWRfXz90cxHTG4Fh4
+ ALJzMSZ1q0NLfynz6xGHzahjAE/1BAStWp218zZkP83poQTKKCloLMbSVw3qbeL0FT1iLZies2B
+ XD38K5wsatF4GXPtasqopDd9JNDnUdo=
+X-Authority-Analysis: v=2.4 cv=DKW/JSNb c=1 sm=1 tr=0 ts=6a4f6096 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=Hgq_jSvlLlN-46ChCOsA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Q3D5RgkkFA9AsxJAip9BZAGKVNTkHHno
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA5MDA4MyBTYWx0ZWRfX6CogzajSCG+e
+ NzmgFKBdXTGwER/S6FI715b6sFDR1UYcKqHIOHWiZRr/w/Ma5jthghSOcn5C6+HAWmrUUH36sAm
+ ocnHcYIRjn0tr2JX0AC4j6EyPNDJe4qbL2nI9C9qzB7EwrpYST/mZHIcgNLrVftFEz+J/mvxFSM
+ S2AjOgezH0i4ZgZBDVZAB5xjUUbc/engbRmHChcyFxeK6WNXleCj2mPk+p7EFggTlA7FQCKv3EB
+ 9PIMY9ykdQJ8sX+zsWdFhe1QMaaKbhdXC54SRVqMI6EySq8iNIDMH2klqhD0BLGFPJR0kZG2Wwd
+ V/Efnvn30J2Mf7HZmQpZplVG4/m3qYw8hk2rj1qT2wfTcrodW+ydfbncpe1EXcv4KFQnhj2psAi
+ EzjwOhFXoY482drfsdDFvI0vNAWkTLO7HhQZlvPJF1Xsc5/0YbAFAipzRC3C4EhPoSHSExgXXaG
+ Zd+GIJszdGmuIESDpZA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-09_01,2026-07-08_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 bulkscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607090083
 
 
---7accz5oj66ddjm3r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Hi David,
+Thank you for your detailed review comments on this series.
 
-On Wed, Jul 08, 2026 at 09:07:55PM -0700, Farid Zakaria wrote:
-> On Wed Jul 8, 2026 at 9:47 AM PDT, Christian Brauner wrote:
-> > On 2026-07-08 11:14 +0200, Christian Brauner wrote:
-> >> On 2026-07-07 15:44 -0700, Farid Zakaria wrote:
-> >> > On Tue Jul 7, 2026 at 12:45 PM PDT, Christian Brauner wrote:
-> >> > > On 2026-07-07 13:34 +0200, Christian Brauner wrote:
-> >> > >> On 2026-07-06 09:47:53-07:00, Farid Zakaria wrote:
-> >> > >> > On Mon, Jul 6, 2026 at 9:01 AM Christian Brauner <brauner@kernel.org> wrote:
-> >> > >> > 
-> >> > >> > > Ignoring the blatant bpf abuse here I think this is quite workable. So
-> >> > >> > > this can be turned into an actual design and patch imho...
-> >> > >> > 
-> >> > >> > Glad to see you think this proposal is in the right direction.
-> >> > >> > Just for my edification, when you say "balatant bpf abuse", you mean
-> >> > >> > how it abuses the socket bpf type?
-> >> > >> > If so, do you have any guidance on a new type or should I just take a
-> >> > >> > stab at it.
-> >> > >
-> >> > > I drafted a POC for you that should be closer to how this should look
-> >> > > like with the bpf people in Cc. I'll let you lead from now on. I just
-> >> > > wanted to help you out and illustrate a more viable direction. Might be
-> >> > > that the bpf people want it done differentely. Let's see.
-> >> > 
-> >> > Cool. I just saw the POC.
-> >> > (I'm trying out aerc to view the patch series. I will also try b4, I've
-> >> > never set it up before)
-> >> > I will rework my qemu demo to use the struct_ops and go through my own
-> >> > testing to see it work.
-> >> > 
-> >> > That looks very similar to what I was researching with an LLM. I was
-> >> > just going over the idea of struct_ops bpf (a new concept to me) and
-> >> > using traditional bpftool load, a new bpf program type and kfuncs.
-> >> > 
-> >> > You put out a surprising amount of polished code -- thank you.
-> >> 
-> >> I would not call this polished and it also lacks any tests... I've not
-> >> given the locking much thought and maybe there's easy wins on the table
-> >> I haven't been considering.
-> >> 
-> >> > I would have had to lean on an LLM (heavily) and from the patches I've
-> >> > put up so far they still have quite the gap to cover in terms of polish.
-> >> 
-> >> This isn't my first bpf ride in both kernel and userspace.
-> >> 
-> >> > What does "take it from here" mean in practicality?
-> >> 
-> >> Bring it over the finish line so I can merge it into my tree. :)
-> >> If the bpf people have no comments or worries than we're done. If they
-> >> want changes I'd appreciate if you could make them and slap you
-> >> Co-developed-by onto the whole thing as necessary.
-> >> 
-> >> Also, please ensure that this works for all the cases you're
-> >> considering.
-> >
-> > I have another cleanup series for binfmt_misc btw. That code is quite
-> > old. There might be a few additional series coming out of this work that
-> > we base the bpf bits on.
-> 
-> Sounds good. I just saw the patch series.
-> My plan at the least by the weekend is to:
-> * apply your binfmt_misc cleanup series
->   * I will try b4 with aerc. Here  is my config if anyone wants to crib it [1].
-> * apply your POC series for the bpf to validate
-> * make any changes if necessary or just add selftests if it works as is
-> 
-> [1]: https://github.com/fzakaria/nix-home/blob/aaee67c3a6d035d06a62cb75392657563de58f4a/users/fmzakari/aerc.nix 
+On 07/07/26 4:25 AM, David Matlack wrote:
+> On 2026-07-02 11:28 PM, Narayana Murty N wrote:
+>> This RFC adds PowerPC sPAPR TCE v2 support to VFIO selftests.
+> nit: Please use "vfio: selftests: ..." for commit shortlogs.
+Agree, will fix all commit shortlogs in v2.
+>
+>> The series adds a selftest IOMMU mode for the legacy VFIO container
+>> backend, adds helpers for default and dynamic DMA windows, and exercises
+>> the sPAPR DDW path through the DMA mapping tests.
+> Thanks for sending. Is there anyway I could run these tests on PowerPC,
+> e.g. with QEMU, to try things out? I don't have access to any hardware.
+I had tested this patch series on real power h/w (pseries and powernv).
+However I am not sure if the required firmware support is implemented in 
+QEMU.
+I will check and get back on this.
+>> sPAPR TCE v2 remains a legacy VFIO container backend. This series does
+>> not add iommufd or VFIO cdev support for sPAPR.
+>>
+>> The main points are
+>> 1. add VFIO_SELFTESTS_IOMMU_MODE for selecting a backend
+>> 2. add vfio_spapr_tce_v2_iommu as the PowerPC VFIO backend
+>> 3. preserve the platform default DMA window
+>> 4. create and tear down only selftest-created DDWs
+>> 5. prepare the DMA window before IOVA allocation
+>> 6. exercise DDW creation for hugepage DMA mappings
+>> 7. accept sPAPR-specific errno for invalid DMA ranges
+>>
+>> Example:
+>>
+>> VFIO_SELFTESTS_IOMMU_MODE=vfio_spapr_tce_v2_iommu
+>> ./vfio_dma_mapping_test <BDF>
+>>
+>> Observed coverage includes anonymous mappings through the default window
+>> and 2MB hugetlb mappings through a DDW. 1GB hugetlb mappings may skip when
+>> the platform rejects the requested DDW characteristics.
+>>
+>> Feedback is requested from the VFIO and PowerPC communities on:
+>> 1. whether the sPAPR TCE v2 helpers should remain in the common VFIO
+>> selftest library or move into a sPAPR-specific test helper?
+> Responded in the patch. Let's move to their own file.
+Will do. v2 will have:
 
-I hade some vibe-coded tests somewhere. Let me see if I can find them...
-Ok, appending them. There's an elf-section parsing test and a $ORIGIN
-test.
+   lib/iommu_spapr.c         — all sPAPR logic, compiled only on powerpc
+   lib/iommu_spapr_stub.c    — empty stubs returning -EOPNOTSUPP,
+                               compiled on all other architectures
+   lib/include/libvfio/iommu_spapr.h — declarations
 
---7accz5oj66ddjm3r
-Content-Type: text/x-csrc; charset=utf-8
-Content-Disposition: attachment; filename="elf_sections.bpf.c"
+iommu.c will call the sPAPR helpers unconditionally with no #ifdefs in
+function bodies.
+>> 2. whether DDW setup through hugepage mappings is the right initial
+>> coverage?
+> One thing I'm not sure is how much value you get out of exercising the
+> DDW stuff through that test specifically. Would it make more sense to
+> have a DDW-specific test so you can test all the edge cases you care
+> about directly instead? Then vfio_dma_mapping_test can stay generic.
+Agreed. For v2 I plan to introduce a dedicated vfio_spapr_ddw_test that
+covers DDW creation, window selection, page-size negotiation, and
+removal directly, and keep vfio_dma_mapping_test generic. The hugepage
+variants in vfio_dma_mapping_test will then just exercise the mapping
+path itself without being the primary DDW coverage vehicle.
+>
+> BTW, is that the only test that passes right now? What is the status of
+> the other VFIO selftests on PowerPC after this series?
+   vfio_dma_mapping_test    — anonymous and 2 MB hugetlb variants PASS;
+   vfio_dma_mapping_mmio_test  — PASS (overflow test passes with -ENXIO 
+fix).
+   vfio_pci_device_test     — PASS.
+Below tests are not supported:
+   vfio_pci_driver_test
+   vfio_iommufd_setup_test
+currently it fails unsupported tests when triggred via scripts/run.sh
 
-// SPDX-License-Identifier: GPL-2.0
-/*
- * elf_sections.bpf.c - walking ELF section headers from a binfmt_misc_ops
- * program.
- *
- * Demonstrates full section-table parsing via the file dynptr: locate a
- * section by name (through e_shstrndx/shstrtab) and read its contents.
- * The demo looks up ".comment" and dumps it, then declines so the binary
- * is loaded normally.
- */
-#include "vmlinux.h"
-#include <bpf/bpf_helpers.h>
-#include <bpf/bpf_tracing.h>
+I will start including test logs in cover letter starting with RFC V2.
+>
+>> 3. whether the sPAPR-specific overflow errno expectation should be
+>> accepted, skipped, or hidden behind a backend helper?
+> Responded in the patch. Let's keep the check but base it off IOMMU mode
+> not __powerpc__. Also it'd be good to avoid duplicating the code with a
+> helper function or macro but that's a small thing.
+Agreed. Will replace the #ifdef __powerpc__ guard with a runtime check:
 
-char _license[] SEC("license") = "GPL";
+   int expected = iommu_is_spapr(self->iommu) ? -ENXIO : -EOVERFLOW;
+   ASSERT_EQ(rc, expected);
+I will add a helper to avoid code duplication.
+>> 4. whether PowerPC should generate only the sPAPR TCE v2 fixture variants,
+>> or keep the generic IOMMU-mode matrix and skip unsupported modes.
+> For (4), I think skipping unsupported modes would be a good improvement.
+> Even on x86 and ARM we would want that feature. e.g. It's possible for
+> someone to run VFIO selftests on a kernel that has VFIO Type1 IOMMUs
+> enabled but not IOMMUFD. Today that will cause all the tests to fail.
+> But ideally it would wouldn't. Tests that just want the default IOMMU
+> mode should use Type1, and tests that want to replicate across all IOMMU
+> modes should skip the IOMMUFD variants. Same thing applies to the SPAPR
+> IOMMU mode.
+This is a great point and it also addresses the concern raised in the
+Patch 1/6 review about forcing the user to set VFIO_SELFTESTS_IOMMU_MODE.
 
-#define EI_CLASS	4
-#define ELFCLASS64	2
-#define SHT_NOBITS	8
-#define SHN_UNDEF	0
-#define SHN_LORESERVE	0xff00
-#define MAX_SHDRS	64
-#define SEC_NAME_MAX	64
-#define DUMP_MAX	64
+Once again thanks for the thorough review.
+I shall address all the review comments on the series before sending v2.
 
-extern int bpf_dynptr_from_file(struct file *file, __u32 flags,
-				struct bpf_dynptr *ptr__uninit) __ksym;
-extern int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr) __ksym;
+Regards,
+Narayana
+>> TODO: vfio_spapr_tce_v1_iommu yet to be covered.
+>>
+>> Narayana Murty N (6):
+>>    selftests/vfio: allow selecting IOMMU backend from environment
+>>    selftests/vfio: add sPAPR TCE v2 IOMMU mode
+>>    selftests/vfio: add sPAPR TCE v2 DMA window helpers
+>>    selftests/vfio: Exercise sPAPR DDW path for hugepage DMA mappings
+>>    selftests/vfio: Accept sPAPR errno for DMA range overflow
+>>    selftests/vfio: Enable VFIO selftests on ppc64 and ppc64le
+>>
+>>   .../selftests/vfio/lib/include/libvfio.h      |   9 +
+>>   .../vfio/lib/include/libvfio/iommu.h          |  26 ++
+>>   tools/testing/selftests/vfio/lib/iommu.c      | 280 +++++++++++++++++-
+>>   tools/testing/selftests/vfio/lib/libvfio.c    |  37 +++
+>>   .../selftests/vfio/vfio_dma_mapping_test.c    |  30 ++
+>>   .../selftests/vfio/vfio_pci_device_test.c     |   4 +-
+>>   tools/testing/selftests/vfio/Makefile         |   2 +-
+>>   7 files changed, 382 insertions(+), 6 deletions(-)
+>>
+>> -- 
+>> 2.51.1
+>>
 
-/* Look up a section by name; @name_len includes the NUL. */
-static __always_inline int find_section(struct bpf_dynptr *dp,
-					const struct elf64_hdr *ehdr,
-					const char *name, __u32 name_len,
-					struct elf64_shdr *out)
-{
-	char nbuf[SEC_NAME_MAX];
-	struct elf64_shdr sh;
-	__u64 shoff = ehdr->e_shoff;
-	__u32 shnum = ehdr->e_shnum;
-	__u64 stroff, strsz;
-	int i, j;
-
-	if (!shoff || !shnum || shnum >= SHN_LORESERVE)
-		return -1;
-	if (ehdr->e_shentsize != sizeof(sh))
-		return -1;
-	if (ehdr->e_shstrndx == SHN_UNDEF || ehdr->e_shstrndx >= shnum)
-		return -1;
-	if (!name_len || name_len > sizeof(nbuf))
-		return -1;
-
-	/* The section-name string table. */
-	if (bpf_dynptr_read(&sh, sizeof(sh), dp,
-			    shoff + ehdr->e_shstrndx * sizeof(sh), 0))
-		return -1;
-	stroff = sh.sh_offset;
-	strsz = sh.sh_size;
-
-	bpf_for(i, 0, shnum) {
-		bool match = true;
-
-		if (i >= MAX_SHDRS)
-			break;
-		if (bpf_dynptr_read(&sh, sizeof(sh), dp,
-				    shoff + i * sizeof(sh), 0))
-			return -1;
-		/* Name (incl. NUL) must fit inside shstrtab. */
-		if (sh.sh_name >= strsz || strsz - sh.sh_name < name_len)
-			continue;
-		if (bpf_dynptr_read(nbuf, name_len, dp, stroff + sh.sh_name, 0))
-			continue;
-		bpf_for(j, 0, name_len) {
-			if (j >= SEC_NAME_MAX || nbuf[j] != name[j]) {
-				match = false;
-				break;
-			}
-		}
-		if (!match)
-			continue;
-		*out = sh;
-		return 0;
-	}
-	return -1;
-}
-
-#define FIND_SECTION(dp, ehdr, lit, out) \
-	find_section(dp, ehdr, lit, sizeof(lit), out)
-
-SEC("struct_ops.s/load")
-int BPF_PROG(elf_sections_load, struct linux_binprm *bprm)
-{
-	char data[DUMP_MAX] = {};
-	struct elf64_hdr ehdr;
-	struct elf64_shdr sh;
-	struct bpf_dynptr dp;
-	__u32 n;
-
-	if (bprm->buf[0] != 0x7f || bprm->buf[1] != 'E' ||
-	    bprm->buf[2] != 'L' || bprm->buf[3] != 'F' ||
-	    bprm->buf[EI_CLASS] != ELFCLASS64)
-		return 0;
-
-	if (bpf_dynptr_from_file(bprm->file, 0, &dp))
-		goto out;
-	if (bpf_dynptr_read(&ehdr, sizeof(ehdr), &dp, 0, 0))
-		goto out;
-
-	if (FIND_SECTION(&dp, &ehdr, ".comment", &sh))
-		goto out;
-	/* SHT_NOBITS (.bss-like) sections have no file content. */
-	if (sh.sh_type == SHT_NOBITS || !sh.sh_size)
-		goto out;
-
-	n = sh.sh_size;
-	if (n > sizeof(data) - 1)
-		n = sizeof(data) - 1;
-	if (bpf_dynptr_read(data, n, &dp, sh.sh_offset, 0))
-		goto out;
-
-	bpf_printk("elf_sections: .comment @%llu +%llu: %s",
-		   (__u64)sh.sh_offset, (__u64)sh.sh_size, data);
-out:
-	bpf_dynptr_file_discard(&dp);
-	return 0;	/* observer only: always decline */
-}
-
-SEC(".struct_ops.link")
-struct binfmt_misc_ops elf_sections = {
-	.load = (void *)elf_sections_load,
-	.name = "elf_sections",
-};
-
---7accz5oj66ddjm3r
-Content-Type: text/x-csrc; charset=utf-8
-Content-Disposition: attachment; filename="nix_origin.bpf.c"
-
-// SPDX-License-Identifier: GPL-2.0
-/*
- * nix_origin.bpf.c - $ORIGIN-relative PT_INTERP resolution
- *
- * A binfmt_misc_ops handler that makes relocatable (Nix-style) ELF
- * binaries work: if PT_INTERP starts with "$ORIGIN/", the loader is
- * resolved relative to the directory of the binary being executed and
- * selected via bpf_binprm_set_interp(). Anything else is declined so
- * regular binaries fall through untouched.
- *
- * Activate with:
- *   bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
- *   echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/register
- */
-#include "vmlinux.h"
-#include <bpf/bpf_helpers.h>
-#include <bpf/bpf_tracing.h>
-
-char _license[] SEC("license") = "GPL";
-
-#define PATH_MAX	4096
-#define EI_CLASS	4
-#define ELFCLASSXX	2	/* ELFCLASS64; flip to 1 for 32-bit */
-#define PT_INTERP	3
-#define MAX_PHDRS	64
-
-#define ORIGIN		"$ORIGIN"
-#define ORIGIN_LEN	(sizeof(ORIGIN) - 1)
-
-#define ENOENT		2
-#define ENAMETOOLONG	36
-
-extern int bpf_dynptr_from_file(struct file *file, __u32 flags,
-				struct bpf_dynptr *ptr__uninit) __ksym;
-extern int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr) __ksym;
-extern int bpf_path_d_path(const struct path *path, char *buf,
-			   size_t buf__sz) __ksym;
-extern int bpf_binprm_set_interp(struct linux_binprm *bprm, const char *path,
-				 size_t path__sz) __ksym;
-
-struct scratch {
-	char interp[PATH_MAX];	/* PT_INTERP as embedded in the binary */
-	char path[PATH_MAX];	/* d_path of the binary, becomes the result */
-};
-
-/* Keyed by pid: execs run concurrently and the program can sleep. */
-struct {
-	__uint(type, BPF_MAP_TYPE_HASH);
-	__uint(max_entries, 512);
-	__type(key, __u64);
-	__type(value, struct scratch);
-} scratch_map SEC(".maps");
-
-static const struct scratch zero_scratch;
-
-SEC("struct_ops.s/load")
-int BPF_PROG(nix_origin_load, struct linux_binprm *bprm)
-{
-	__u32 isz, sfx, rsz, slash;
-	struct elf64_phdr phdr;
-	struct elf64_hdr ehdr;
-	struct bpf_dynptr dp;
-	struct scratch *sc;
-	bool found = false;
-	__u64 id;
-	int ret = 0, len, i;
-
-	/* Cheap reject from the prefetched header. */
-	if (bprm->buf[0] != 0x7f || bprm->buf[1] != 'E' ||
-	    bprm->buf[2] != 'L' || bprm->buf[3] != 'F' ||
-	    bprm->buf[EI_CLASS] != ELFCLASSXX)
-		return 0;
-
-	if (bpf_dynptr_from_file(bprm->file, 0, &dp))
-		goto out;
-
-	if (bpf_dynptr_read(&ehdr, sizeof(ehdr), &dp, 0, 0))
-		goto out;
-	if (ehdr.e_phentsize != sizeof(struct elf64_phdr))
-		goto out;
-
-	bpf_for(i, 0, ehdr.e_phnum) {
-		if (i >= MAX_PHDRS)
-			break;
-		if (bpf_dynptr_read(&phdr, sizeof(phdr), &dp,
-				    ehdr.e_phoff + i * sizeof(phdr), 0))
-			goto out;
-		if (phdr.p_type == PT_INTERP) {
-			found = true;
-			break;
-		}
-	}
-	if (!found)
-		goto out;
-
-	isz = phdr.p_filesz;
-	if (isz <= ORIGIN_LEN + 1 || isz > sizeof(sc->interp))
-		goto out;
-
-	id = bpf_get_current_pid_tgid();
-	if (bpf_map_update_elem(&scratch_map, &id, &zero_scratch, BPF_ANY))
-		goto out;
-	sc = bpf_map_lookup_elem(&scratch_map, &id);
-	if (!sc)
-		goto out_del;
-
-	if (bpf_dynptr_read(sc->interp, isz, &dp, phdr.p_offset, 0))
-		goto out_del;
-	if (sc->interp[isz - 1] != '\0')
-		goto out_del;
-
-	/* Not "$ORIGIN/..."? Decline, the elf loader owns it. */
-	if (sc->interp[0] != '$' || sc->interp[1] != 'O' ||
-	    sc->interp[2] != 'R' || sc->interp[3] != 'I' ||
-	    sc->interp[4] != 'G' || sc->interp[5] != 'I' ||
-	    sc->interp[6] != 'N' || sc->interp[7] != '/')
-		goto out_del;
-
-	/*
-	 * From here on the binary is ours: resolution failures fail the
-	 * exec instead of falling back to binfmt_elf, which would resolve
-	 * the literal "$ORIGIN/..." relative to the caller's cwd.
-	 */
-	ret = -ENOENT;
-	len = bpf_path_d_path(&bprm->file->f_path, sc->path, sizeof(sc->path));
-	if (len <= 0 || len > sizeof(sc->path))
-		goto out_del;
-	/* Unreachable or unlinked ("... (deleted)") binaries can't resolve. */
-	if (sc->path[0] != '/')
-		goto out_del;
-
-	/* $ORIGIN = dirname of the binary. */
-	slash = 0;
-	bpf_for(i, 1, len - 1) {
-		if (i >= sizeof(sc->path))
-			break;
-		if (sc->path[i] == '/')
-			slash = i;
-	}
-
-	/* Splice the suffix (leading '/' and NUL included) onto the dir. */
-	sfx = isz - ORIGIN_LEN;
-	rsz = slash + sfx;
-	if (rsz > sizeof(sc->path)) {
-		ret = -ENAMETOOLONG;
-		goto out_del;
-	}
-	bpf_for(i, 0, sfx) {
-		__u32 s = ORIGIN_LEN + i, d = slash + i;
-
-		if (s >= sizeof(sc->interp) || d >= sizeof(sc->path))
-			break;
-		sc->path[d] = sc->interp[s];
-	}
-
-	ret = bpf_binprm_set_interp(bprm, sc->path, rsz);
-	if (!ret)
-		ret = 1;
-out_del:
-	bpf_map_delete_elem(&scratch_map, &id);
-out:
-	bpf_dynptr_file_discard(&dp);
-	return ret;
-}
-
-SEC(".struct_ops.link")
-struct binfmt_misc_ops nix_origin = {
-	.load = (void *)nix_origin_load,
-	.name = "nix_origin",
-};
-
---7accz5oj66ddjm3r--
