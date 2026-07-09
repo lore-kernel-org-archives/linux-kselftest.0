@@ -1,82 +1,130 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA36A39DBE5;
-	Thu,  9 Jul 2026 17:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E317530B517
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 17:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783617048; cv=none; b=SQFLyDFuacJaVlhFY98ZZrqyRv2zEHo7UoOd/yLc9tlV0ioHXbhV0ta34KOuoQYiFrvz6y16YnND71mRxHz9CnesdCDgU0iLwhxqe1/9aLHyOUrw+5vFGB3hvy85dpNW113HV1ZBgOERh7NbzDf7OV5CQJXuKCLf3dVh4a2in4g=
+	t=1783617325; cv=none; b=nLH+1T1hrbS7h+fuogZFOj7Cza4oPKA1cUAEvzEbbqnLKTP0wHm1qh+vCWHfpsnzHVuH8zggmO8nnkGrjJsvsmCAMzA9mZaDqdvqH5Edbb6EdLtvZvR0xoXenO7W6204hPY28q+O+S4OGZ/LipfrcSkYcHpBPOPcPecwTbtm3Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783617048; c=relaxed/simple;
-	bh=ujrkHBBbACdZtRRZVnvsCYywvPhs0LrGXCxbReccc8Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p1gZsO/fuPi21DOkdGII5DrhnSHN783+opL1Ux4+Xyz6dS+2SiaE8ccGBoJlSJjr+hWs0b2UoJxYnjrIfUzfQjyKgcJ+xLlU9EUnZbgrVXw+pxXSmqX825rwZOumUydnRBZqghJ0K82r/sF/g/EuVTdeyDPSfaHom8kvabPsYNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IR7P8s9K; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783617325; c=relaxed/simple;
+	bh=SzROYG8BwD/EB/+MUjQ4u1vhoaHs3/zZwllWfULF+qU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GU6UXce7BIR8O+P2lnuH1ru6I9Hpf/98mhtFPtXBIWOH+8njDKOCMzhmRMIJEgDF7lTRgTgaCnkQH7b2DmQDoVtCE7h8h+cUmwNr2JXGHYlEVCAiWaKLMyltkWWXNscr4zhR0066hr2jYyDVRx0RiIFmuRdggccK9wL0WZ4LtKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gk0zhMxP; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IR7P8s9K"
-Message-ID: <35b80b88-f298-4ed6-8b63-d18fb3b19d8a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783617035;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VgOpjqF52B/S822e7B/IqpRWQIZC+4biZ7kPndH2s0o=;
-	b=IR7P8s9K0MtTisRttjtRLj3QFSuUbaA9IFF1XGPE/YuIt2M8jTEphhzo7G4F8IEHLnJmsZ
-	UdP387FOsMD+KkqJ63FADc0ugVUe3ywumfNT7wDVL6o9W3F4YKgduM36yjmkHCL0icfUPf
-	3izD0vsgj7Xfowujb3YYeoiIvA/nOjA=
-Date: Fri, 10 Jul 2026 01:10:29 +0800
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gk0zhMxP"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8ea70ca4fc8so706086d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 10:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1783617323; x=1784222123; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=46UkRwT/i/djJx+KopbYZyKUrVPhRVpwIJdu7TzJpII=;
+        b=gk0zhMxPCwdMeia9k1VETsBkdLdlSUiHgtr/lxI34cIdfLJu788hSwNC4UXQj5RHLF
+         mex7yejvsPB2SSYb0a4ATL4mvLDHXVUcofAXP/G3aV+/e0HzaKcNf7cLVkkR85oNiD9m
+         LoDWnj2LMAt7utzVlJ+XOrCTJtE7qaFqyJFxZygEzxhwSHJrCxDozHyHA1XvlQH+Jrbc
+         imd7n4XXsQhloWf3R6EbXswShRm0e35oZVkp68wjNPOA5N6uqxNHp9O3nOq0N97Y+El4
+         7JS46cJLFNDyaPU2IWeXp0FUfg5eqh6HlWZMjjHIIOI/dAnwK60yX0GXfS4seLtNgcRL
+         L6tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783617323; x=1784222123;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=46UkRwT/i/djJx+KopbYZyKUrVPhRVpwIJdu7TzJpII=;
+        b=qX9BZSicq54uQCIfmPZDREAUMv6rlViuPKCGf2h9m57mVzqiGAikN5LGauvNtO3aAi
+         Uda/nNN2rt3hyEg5JfTQYFhd+zfXRz3k/cjSosBuKnbEo4E3M2cW8R9VJkv9gf1wVwxt
+         iG/GxtS5inBaz3z6sIIL/ZCPmLkS3Ab7qoauQnp3PL68ZyhyJ4oWINmk6jkxBIXmpG3m
+         9p3wMJJtCbbxW5RjxQc5vPTK6YbW4EwCoN/SVOww+1nfRHLWhLc3cYFl91Khxg45iXTg
+         d5ZcT9kPnF+RbzAQzjCqrY1n9R3f1aE/P3VTg/na5rum1sVSfsxKzGFW8+VhwsG+Xc8+
+         Vi2Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rrq7/+c9qhG9OfvVFoDs5680TkOj7bZrsVksglYh/Vh0S3ZAwZHQuSZc95fXqO1OWhaHLzZWZYFq601TBQ7yXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMaXUAhfqUTWNWcMGgJxUWXgcdDktiVjaBKEuVzvye9RINAzMl
+	8Vjv+XRlrN4Vd4Icg/6Fz9hmp7ReGsF+RvE/72bbFBlGz9nLb0enG7BXybE0hwGKXLI=
+X-Gm-Gg: AfdE7cld+EkQvVRAIfqIUsqgz8AO7ip3y3xVza2R6YjNfMPXuLoy9FMHIt39PB3Mvxh
+	S9YzVJPajTx3USOl649c0HV/1k2/5D+FLKKNp8EYYPByZigSVoOS05CrKOyNS1C+P8MAd0CC0pj
+	BihPZh/HNia+xD5lUNMLX5lnsN6rG9nvi6Jv34tJbsiNc9pxT3TvqxQcBu35G4MnmjdBe2PKM2e
+	jaRQgAQA80hfSMZiUYmAO8VwcBLuoHdKBQkZEVBqDRDJ6hn8c0uzL2evhWzOW+AkmMcc31tuXef
+	OiC2FPRI5jZfCMVI4m8je79kG7am5IrklMjdPA7912NqBFiTGUFqdkjCB4rPZRvgnFs/k8ktTo0
+	ajDFZjTxlm7j4jxhId7clu4hiRqFMNfIqnmeYkrFgTFajhCzH6kl6mkKjNA51cupuD/6wgunqa6
+	vFTIcI5J3tO7Qu6EMYOXuEiflG8HwOCqJOBn0XuOsAJJJNQK+tiMGAGX3PDauSEyOLNf9L
+X-Received: by 2002:a05:6214:6014:b0:8e9:f45f:107b with SMTP id 6a1803df08f44-90242143c3amr1641696d6.34.1783617322803;
+        Thu, 09 Jul 2026 10:15:22 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd7c1d8fcsm22085656d6.25.2026.07.09.10.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 10:15:22 -0700 (PDT)
+Date: Thu, 9 Jul 2026 13:15:17 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	djbw@kernel.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+Subject: Re: [PATCH v6 06/10] mm/memory_hotplug: add
+ offline_and_remove_memory_ranges()
+Message-ID: <ak_XJWglABmKfSiU@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-7-gourry@gourry.net>
+ <ak9ee95F7pJpCKMo@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 15/17] selftests/verification: Fix wrong errexit
- assumption
-To: Gabriele Monaco <gmonaco@redhat.com>, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>,
- Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
- Tomas Glozar <tglozar@redhat.com>, John Kacur <jkacur@redhat.com>
-References: <20260625121440.116317-1-gmonaco@redhat.com>
- <20260625121440.116317-16-gmonaco@redhat.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Wen Yang <wen.yang@linux.dev>
-In-Reply-To: <20260625121440.116317-16-gmonaco@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ak9ee95F7pJpCKMo@MWDK4CY14F>
 
-
-
-On 6/25/26 20:14, Gabriele Monaco wrote:
-> RV selftest rely on bash errexit (set -e) to terminate with error, when
-> a step is expected to return false, the following syntax is used:
+On Thu, Jul 09, 2026 at 04:45:51PM +0800, Richard Cheng wrote:
+> On Tue, Jun 30, 2026 at 05:18:38PM +0800, Gregory Price wrote:
+> > +/**
+> > + * offline_and_remove_memory_ranges - offline and remove multiple memory ranges
+> > + * @ranges: array of physical address ranges to offline and remove
+> > + * @nr_ranges: number of entries in @ranges
+> > + *
+> > + * Offline and remove several memory ranges as one operation, serialized
+> > + * against other hotplug operations by a single lock_device_hotplug().
+> > + *
+> > + * This offlines all ranges before removing any of them.  If offlining any
+> > + * range fails, the entire process is reverted and nothing is removed.
+> > + * This provides a fully atomic semantic for unplugging an entire device.
+> > + *
+> > + * Each range must be memory-block aligned in start and size.
+> > + *
+> > + * Return: 0 on success, negative errno otherwise.  On failure no range has
+> > + * been removed.
+> > + */
 > 
->    ! cmd
+> I think this can return 1, and it shouldn't.
+> device_offline() returns 1 when a block is already offline, and phase 1 passes that value through as-is.
 > 
-> This however prevents the test from exiting when cmd is false (desired)
-> but doesn't exit if cmd is true, since commands prefixed with ! are
-> explicitly excluded from errexit.
-> 
-> Use the syntax
-> 
->    ! cmd || false
-> 
-> Which ends up checking the exit value of ! cmd and supplies a false
-> command for errexit to evaluate.
-> 
-> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 
+I just realized try_offline_memory_block() already clamps the value to 0
 
-Reviewed-by: Wen Yang <wen.yang@linux.dev>
+static int try_offline_memory_block(struct memory_block *mem, void *arg)
+{
+...
+    rc = device_offline(&mem->dev);
+...
+    /* Ignore if already offline. */
+    return rc < 0 ? rc : 0;
+}
 
+But this is a bit non-obvious, let me see about making this a little
+bit clearer.
 
---
-Best wishes,
-Wen
+~Gregory
