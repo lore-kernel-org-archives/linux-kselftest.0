@@ -1,51 +1,86 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF7A404BDA;
-	Thu,  9 Jul 2026 10:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB83409614
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 10:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783591436; cv=none; b=g/Z108EosmYrv8YS4wlUHPPojeZBGQKiieufcPMeMT0x3EV0s1BlS0/fjf3Nl47JXvckuzGrtABPaYniVCPVRptpk2cMAbXR/yY4EQ9hkXvPn320ig7FAiEDZu8tGzXCOD7W26QEE3InbrXyQExleifx1DuR7wQGjljLLpLe85Q=
+	t=1783592021; cv=none; b=ncBYFzInjTD/P4p+TR6dIpKoBOPCuVU0D7xCSQwWhv2jCBqTLwdTgjHKS3xyGPTBFXpZrqxsNopFis4BaT68H5LKDCodQ5EioOmzUhQdAx8EMgyMGGrSSv9TPutSY84WS5yr7zERwXdMBGGRCJSCcOkeUHNIqDzEZwahGM4fivg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783591436; c=relaxed/simple;
-	bh=SPSqxrxCg9nNyXrn+amFHxw6m8DxxJhuS+jpQ/rJGpo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ptkYoouRLxjc1pHF29cL59zOFHOnRHQJ0lBKoWObhOFRc6jZas6VI+tDEIbPmcEZ3CeSOGsdAHCm2rL8bAFqBSMjfC09mvZt5swL+BmjKd/u35PbNIj5uDIjS9gDGqLYlTEsx4TcpBKrZMd7ABQMhYI67wJRj3yuDJCz/xG2XBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 78e426547b7d11f1aa26b74ffac11d73-20260709
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:28960dec-cc1a-4cbe-ac97-421d9e426cc8,IP:0,U
-	RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:b03dd38be0da544b870e93eaf6194f83,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|123|850|865|898,TC:nil,Content:0|15|
-	50,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,
-	OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 78e426547b7d11f1aa26b74ffac11d73-20260709
-X-User: luoliang@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luoliang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1470025836; Thu, 09 Jul 2026 18:03:45 +0800
-From: luoliang@kylinos.cn
-To: Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: sched-ext@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1783592021; c=relaxed/simple;
+	bh=xQmBxphDa1xFrmI6W+JXkKRcOnX9uJkuJ+MRhIqYj0o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GUzwwkhm78xmq+l6/sdIg9JVYWrgOdjaohRdXZU+bfuZPOsQsa4cK0AuXY+GY4tW9AxABAA31YNoN9aNEqbXWxltgCpdnUh7HmBdED0qr8f0QKnC2rQGPcI128698hPanKoSXIyESCQ1yxecFZ08Q6KaN5h+c26rOHJYtN6Ltt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a1tQ9V74; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a1tQ9V74"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3811e59df58so1103810a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 03:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783592019; x=1784196819; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xQmBxphDa1xFrmI6W+JXkKRcOnX9uJkuJ+MRhIqYj0o=;
+        b=a1tQ9V74DAsM5NBDHGa2IFBd6HkM2fDLdkXmM1gSeVz7Pd3B7GPOvmIuPzneR4R70I
+         1vkjaGVHGrUpho4k840zDoL5UKT1F6CQn3ztONvHaKoBGmqoq8zV0RFLoLJgdhj74sBH
+         iLF2PfOdMKEoKrfOigOWORRhaZqxORbcO/AwaQwBEU+ZTtMo8wl9Im6pt86qBkFfnnvG
+         jnQkYwqEozQ8D8iZ7Fc7AQVhD4PO/G7sIAEyj7MU9+hVkal1AJQ1zBIy3bpcaz3QbFx3
+         woJ2D5ndDgOwcIDnrlHYUeQIMCr/96eXoFbnqYkCR62Tkw8FT8GMmJr2Lbq+DG9LuIO8
+         V52g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783592019; x=1784196819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xQmBxphDa1xFrmI6W+JXkKRcOnX9uJkuJ+MRhIqYj0o=;
+        b=cZE6iN7d9tT0RLT0SCNb83b8KK9zQkSha6YVpiMDuJRQ+1wtDnKgM/tPIMs8jKfVT1
+         4rCW+Fh0eaIkwLUsZ+ceO3R7fwzrH0MnNTCeFh67nT8D5ZRP/ekBGX/Sj55f1D2/SCFU
+         UUCQIcrP0WkLLso95A6KDXpLmLf2r6ba0q/WpZ5LkMJqbA2m4MFTjUxmFq+5XypXCRi2
+         t/+LTxu1XVHrDRuky9rHQE7sLVEuGqjs94hYwtjy0VaE41iGqy4igpeQE+Kc68zBXkFs
+         IRVgT/ao5IWBuZCxm63OlDDoNRkKD5w8sgrWZs6ctu0IcRGZ33MX50irhi6VqMzVfXOd
+         4uwA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq/SrWVoYnr4br3UjgPs1lt6FqNBBXtJZN1loTDVOHF+QHqLIl2z+b8MLGW9adk9/0sILWVp0yvS0dCKymM9+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOwxGYgP1RpjHXtNqaThjQPXYX5BihBpaNMsMpY65QDg22sTWE
+	xHmQDg8N2o24w4HYdk5ff8as9MOgBxyFXwu6xIZ0AHRRmeJUv99N+LZt
+X-Gm-Gg: AfdE7clgYdv4BYIEHbenyvD2OQvyuBAW8WLOopzeU9qCo2QWJdqNnLnoIA7g45z/UYI
+	LbsNGg8iz14Cx69HJsVgoKtaAb6L9ql7C0wvbCpUi2pVBX6kimdAs+vXDrqI75A+aTrhaZJxzl7
+	NMe4h2xLHVVvrOBfHahv4R8v5iIkMg0qarGzHKmJRKtA3dsoYjhnliMxveQVjezoLvWIuJtd44K
+	tAV7ycTxIGFKoXyR6biVx6idvZjipuNsYU2Yz9Ek1fRCG6iv2JxAlw1k2b489Fjs+8Jaylnu5ql
+	TPd+9GfiekeAcIuH68zz8WHAtlSPKtjiWn/YBBUOfCqEBF4t7dDYENIrX3IqhN/PODb+dGr7ECB
+	WodlTXYYd3thrKEAp4U2SeWQI921ebDknqygHRPF46mqGTCH2DOyGKSIaRGJ0YVSbwfKZrAN9ze
+	sD78jR3MDPLDwPOCCKaSQ/6HiljIHtQZp2Nib+8w==
+X-Received: by 2002:a17:90b:3849:b0:381:cef1:11ac with SMTP id 98e67ed59e1d1-389402490c1mr6834337a91.10.1783592018896;
+        Thu, 09 Jul 2026 03:13:38 -0700 (PDT)
+Received: from DESKTOP-82PPU4A.www.groyaloy.local ([202.8.116.32])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174ae6cd9sm32071423eec.31.2026.07.09.03.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 03:13:38 -0700 (PDT)
+From: Ujjal Roy <royujjal@gmail.com>
+To: Linux Stable <stable@vger.kernel.org>,
+	Greg KH <greg@kroah.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>
+Cc: Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Liang Luo <luoliang@kylinos.cn>
-Subject: [PATCH] selftests/sched_ext: Fix bpf_link leak on early return in prog_run
-Date: Thu,  9 Jul 2026 18:03:40 +0800
-Message-Id: <20260709100340.706670-1-luoliang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-kselftest@vger.kernel.org
+Subject: Please backport bridge multicast exponential field encoding fix series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+Date: Thu,  9 Jul 2026 10:13:27 +0000
+Message-ID: <20260709101327.9508-1-royujjal@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,86 +89,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Liang Luo <luoliang@kylinos.cn>
+Hi Greg,
 
-In prog_run's run(), the bpf_link is attached early but only destroyed
-on the success path. The three SCX_EQ assertions between attach and
-destroy expand to a direct 'return SCX_TEST_FAIL', so if any of them
-triggers, bpf_link__destroy() is never reached and the BPF scheduler
-stays loaded. All subsequent tests then fail to attach because SCX is
-not in the DISABLED state.
+Please consider backporting the following bridge multicast fix series to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
 
-Convert those assertions to explicit checks that jump to a unified
-'out' label which always runs the cleanup, matching the pattern used
-in cyclic_kick_wait.c.
+726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation")
+12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
 
-Signed-off-by: Liang Luo <luoliang@kylinos.cn>
----
- tools/testing/selftests/sched_ext/prog_run.c | 34 +++++++++++++++-----
- 1 file changed, 26 insertions(+), 8 deletions(-)
+This series was merged via: db314398f618 ("net: bridge: mcast: support
+exponential field encoding")
 
-diff --git a/tools/testing/selftests/sched_ext/prog_run.c b/tools/testing/selftests/sched_ext/prog_run.c
-index 05974820ca69..1129ec2aaddc 100644
---- a/tools/testing/selftests/sched_ext/prog_run.c
-+++ b/tools/testing/selftests/sched_ext/prog_run.c
-@@ -28,7 +28,8 @@ static enum scx_test_status setup(void **ctx)
- static enum scx_test_status run(void *ctx)
- {
- 	struct prog_run *skel = ctx;
--	struct bpf_link *link;
-+	struct bpf_link *link = NULL;
-+	enum scx_test_status status = SCX_TEST_PASS;
- 	int prog_fd, err = 0;
- 
- 	prog_fd = bpf_program__fd(skel->progs.prog_run_syscall);
-@@ -42,23 +43,40 @@ static enum scx_test_status run(void *ctx)
- 	link = bpf_map__attach_struct_ops(skel->maps.prog_run_ops);
- 	if (!link) {
- 		SCX_ERR("Failed to attach scheduler");
--		close(prog_fd);
--		return SCX_TEST_FAIL;
-+		status = SCX_TEST_FAIL;
-+		goto out;
- 	}
- 
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	SCX_EQ(err, 0);
-+	if (err) {
-+		SCX_ERR("BPF_PROG_RUN failed (%d)", err);
-+		status = SCX_TEST_FAIL;
-+		goto out;
-+	}
- 
- 	/* Assumes uei.kind is written last */
- 	while (skel->data->uei.kind == EXIT_KIND(SCX_EXIT_NONE))
- 		sched_yield();
- 
--	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_UNREG_BPF));
--	SCX_EQ(skel->data->uei.exit_code, 0xdeadbeef);
-+	if (skel->data->uei.kind != EXIT_KIND(SCX_EXIT_UNREG_BPF)) {
-+		SCX_ERR("Unexpected exit kind: %llu",
-+			(unsigned long long)skel->data->uei.kind);
-+		status = SCX_TEST_FAIL;
-+		goto out;
-+	}
-+	if (skel->data->uei.exit_code != 0xdeadbeef) {
-+		SCX_ERR("Unexpected exit code: %lld",
-+			(long long)skel->data->uei.exit_code);
-+		status = SCX_TEST_FAIL;
-+		goto out;
-+	}
-+
-+out:
- 	close(prog_fd);
--	bpf_link__destroy(link);
-+	if (link)
-+		bpf_link__destroy(link);
- 
--	return SCX_TEST_PASS;
-+	return status;
- }
- 
- static void cleanup(void *ctx)
--- 
-2.43.0
+I checked that the above upstream commits cherry-picked cleanly onto the following stable branches:
 
+linux-7.0.y
+linux-6.18.y
+linux-6.12.y
+linux-6.6.y
+linux-6.1.y
+
+Thanks,
+Ujjal
