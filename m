@@ -1,35 +1,40 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9061B43B4A9;
-	Thu,  9 Jul 2026 18:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203AF43B488
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 18:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783622539; cv=none; b=p/lcFoYaJ/HIKbeihBRMHdJf1ht2DqTj6pTo413T1GxMtbqBNICYkbDt2g0lj088vncV27zJuW2jsRoG9e13K0+chnhgvmdzwqkOQiRraJN2eZd+AR0RxYrNO0asAahuitoxn0CH63yamzicNh5rOBgH527V3MJDeKLs4bfW+yg=
+	t=1783622612; cv=none; b=mUVhmDZuRJwuD3/YZw/iFwDHTkk02ij4meOqnyzokqLS2gprGIgbuAzM+lNo9jcF6y4st2NRReflpDo9JVesYvjR1ujeYCkRgwl8QOVTiYEIimOzPDgzu1rm2AzUJ7m3wQNj4Kz7c/Gby/zRKuQgoZf4+eY1f/OcnzXGk0pDW10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783622539; c=relaxed/simple;
-	bh=q7gRFDO7XUzOJdjKk7dinZEmMYgpMJThzBI3Uxs/+tg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pFLNJoiIaqnxL+mpzNpmkdRMdqwl3RCA7OOsoeZV3VKZLfbGmUvIFuieEa58HHTQQ+17tSaE+m48yxQC4P6uTtgMZVglTKr8KSxIpsPPjVWSS4GnjhNCPLCnZVKzIfQYTyZgQgyo6l7LwXm2pH9FUANx5MnsrvRQofZtaBslFIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om4MN8j4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783622612; c=relaxed/simple;
+	bh=sGKvpf/QolsF8B3US3BSnAcyhFALmJV0Gbk8a2lp17s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YO1mr5S53pDRkSKeUgHMoBgzNWzNPqIIgNx3AhH0PsefyxlCkiDNmIc+I7swjOq756P0tSbsoNbYwUdmEL/zn/Dvrq+12fP67cm/idpt2JHJRsudP7MGxLqod51qB6QtYc7F6T885WvGam1N2x2RucIq3gReXnzactfHImTHHJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AKawgpCg; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om4MN8j4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB121F000E9;
-	Thu,  9 Jul 2026 18:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783622538;
-	bh=XECF9ZZpHN11rgO/zTL5kqZIcvgfBhcTmPU6H51lc1c=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=om4MN8j4T9S1gJ6RcrNGwq31Rui8bwxb6u5K24PkOrExLur4vrArun7m/ayyKeybG
-	 DRlOMhyvmeLyWYQkLI5/B/VCaZUrFC58STn6nN+nTMg02ksEUH+tbTNG73dHEsbtDj
-	 mjByXFjQWoZ77wWc89xctPmMXs+HpIq6nrfHvihBquOzFzPr4TeZRhVNj3ARHFL8Jp
-	 De3V+DCU4Ws7I58/u9BL0Yixu8GGbR6Y56/LSAjqmYpnoA1WRo41LuCmcr6ydpfU/v
-	 sJgUX26c7s+yLglWdgBcO9aSr4MjWakdqqbrv7rydFDJoLWWHDrRrvdFOIn0gua5uY
-	 i5TxpzpHs6Uew==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 09 Jul 2026 19:27:50 +0100
-Subject: [PATCH v12 29/29] KVM: arm64: selftests: Add SME to set_id_regs
- test
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AKawgpCg"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 48D6F4E40D22;
+	Thu,  9 Jul 2026 18:43:26 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id EDA7660340;
+	Thu,  9 Jul 2026 18:43:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0D88511BD1CE5;
+	Thu,  9 Jul 2026 20:43:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783622604; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=ECdrYG8dwHRiuDm3ZbmP7UJ+mDiYsTvFq8PM3WBfyoY=;
+	b=AKawgpCgEk+Df6j++oOru7xDW23+JIAlGdyHfTneum87ziQRuF7HQ7QMGuAcanW6KrpJI5
+	d88ofjfrG9tpP190XWn/JmIKz+VNuSbdBw2z3Ei471BMIY5y8lcUWyNZJECDDrzx4D6Yl9
+	0AJdqYLeaR9rlf/ddhY7aKWLj5DNtz8DvdKeuXaiqLi4KbmP6ZHrt2IrB1waqJhn9HaETa
+	uBaZ8H1obUg/r/gPDPYV+20z5IENaz0V9GhMpQHI4op2FDhFfY2/0psB96l6hVgM531zbN
+	gBgIwO0OCnslFCJ16e5wtNSe/oQSCd7ufDIMhGRS9sxx/6c7e9/coTN4zhrQNQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Thu, 09 Jul 2026 20:42:59 +0200
+Subject: [PATCH bpf-next] selftests/bpf: remove redundant config option
+ from selftests fragments
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,107 +42,124 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260709-kvm-arm64-sme-v12-29-d0301d79ef58@kernel.org>
-References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
-In-Reply-To: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>, 
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>, 
- Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
- Jean-Philippe Brucker <jpb@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Peter Maydell <peter.maydell@linaro.org>, 
- Eric Auger <eric.auger@redhat.com>, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3538; i=broonie@kernel.org;
- h=from:subject:message-id; bh=q7gRFDO7XUzOJdjKk7dinZEmMYgpMJThzBI3Uxs/+tg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqT+sAuw7myrbcgUVgJNZQ/jetM2DjXieP+8OEe
- UPSUnc0/tKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCak/rAAAKCRAk1otyXVSH
- 0DLXB/9PWTecBw9vRlEMUmyTZnUDGsd+6k0m+yErwCEEBlLJYYI/+3QolnJWwgqe+cXdKbYe3mG
- vMk1TXUu6KCx2yJNhCnqnMbQp1PQwVo0PbCJEHLRSNTyZuKEZwZuiBBpFbT+z/nL90BKC0cS8Pn
- a/wZ+C8k3HwcpCQ50JLe2doxOLmwu1q+LseQoBxEmPk58cjN0fJitLPg0fARl/h8n+nQwKfDPn6
- LxIZz9hpYHSGysP985W5+rikM37TqfqEiBIqsaRxcfxiXJcRgV6E4iZG+O38R9pHPtZj3fdSQeR
- EkJy9cso+vX8Sd9RYbdSrbIID0rA1c5M+QTd8O7FaauC7hb1
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260709-testing-fragments-v1-1-65244b0650ff@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMzQrCQAwGX6Xk7ELaQ/15FfHQbr9dIxjLJpVC6
+ bu76nEYZjYyFIHRpdmo4C0mL63QHhqK90EzgkyVqeOu5yOfg8NcNIdUhvyEugVmRLTg/jQx1W4
+ uSLL+nlca5xQUq9Ptb2wZH4j+XdK+fwBHM9n0fwAAAA==
+X-Change-ID: 20260709-testing-fragments-00ece1e068d0
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, Jakub Sitnicki <jakub@cloudflare.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-Add coverage of the SME ID registers to set_id_regs, ID_AA64PFR1_EL1.SME
-becomes writable and we add ID_AA64SMFR0_EL1 and it's subfields.
+CONFIG_IPV6_SEG6_LWTUNNEL is currently enabled in each arch-specific
+config fragment for the BPF selftests. Commit 33a971d549d8
+("selftests/bpf: Add LWT encap tests for skb metadata") has enabled this
+config in the generic config as well, resulting in a small warning when
+configuring a kernel for selftests:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+ $ cat tools/testing/selftests/bpf/{config,config.vm,config.x86_64}>.config
+ $ make olddefconfig
+   HOSTCC  scripts/kconfig/conf.o
+   HOSTCC  scripts/kconfig/confdata.o
+   HOSTLD  scripts/kconfig/conf
+ config:269:warning: override: reassigning to symbol IPV6_SEG6_LWTUNNEL
+ #
+ # configuration written to .config
+ #
+
+Now that IPV6_SEG6_LWTUNNEL is set in the general config fragment, drop
+it from the arch-specific fragments.
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- tools/testing/selftests/kvm/arm64/set_id_regs.c | 30 +++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/testing/selftests/bpf/config.aarch64 | 1 -
+ tools/testing/selftests/bpf/config.ppc64el | 1 -
+ tools/testing/selftests/bpf/config.riscv64 | 1 -
+ tools/testing/selftests/bpf/config.s390x   | 1 -
+ tools/testing/selftests/bpf/config.x86_64  | 1 -
+ 5 files changed, 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-index da9349bf31ab..26db507f6e73 100644
---- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
-@@ -155,6 +155,7 @@ static const struct reg_ftr_bits ftr_id_aa64pfr0_el1[] = {
- static const struct reg_ftr_bits ftr_id_aa64pfr1_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, DF2, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, CSV2_frac, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, SME, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, SSBS, ID_AA64PFR1_EL1_SSBS_NI),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64PFR1_EL1, BT, 0),
- 	REG_FTR_END,
-@@ -212,6 +213,33 @@ static const struct reg_ftr_bits ftr_id_aa64mmfr3_el1[] = {
- 	REG_FTR_END,
- };
- 
-+static const struct reg_ftr_bits ftr_id_aa64smfr0_el1[] = {
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, FA64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, LUTv2, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SMEver, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I16I64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F64F64, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I16I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, B16B16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F16F16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F8F16, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F8F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, I8I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F16F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, B16F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, BI32I32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, F32F32, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8FMA, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8DP4, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SF8DP2, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SBitPerm, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, AES, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SFEXPA, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, STMOP, 0),
-+	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64SMFR0_EL1, SMOP4, 0),
-+	REG_FTR_END,
-+};
-+
- static const struct reg_ftr_bits ftr_id_aa64zfr0_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ZFR0_EL1, F64MM, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ZFR0_EL1, F32MM, 0),
-@@ -244,6 +272,7 @@ static struct test_feature_reg test_regs[] = {
- 	TEST_REG(SYS_ID_AA64MMFR1_EL1, ftr_id_aa64mmfr1_el1),
- 	TEST_REG(SYS_ID_AA64MMFR2_EL1, ftr_id_aa64mmfr2_el1),
- 	TEST_REG(SYS_ID_AA64MMFR3_EL1, ftr_id_aa64mmfr3_el1),
-+	TEST_REG(SYS_ID_AA64SMFR0_EL1, ftr_id_aa64smfr0_el1),
- 	TEST_REG(SYS_ID_AA64ZFR0_EL1, ftr_id_aa64zfr0_el1),
- };
- 
-@@ -263,6 +292,7 @@ static void guest_code(void)
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR1_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR2_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64MMFR3_EL1);
-+	GUEST_REG_SYNC(SYS_ID_AA64SMFR0_EL1);
- 	GUEST_REG_SYNC(SYS_ID_AA64ZFR0_EL1);
- 	GUEST_REG_SYNC(SYS_MPIDR_EL1);
- 	GUEST_REG_SYNC(SYS_CLIDR_EL1);
+diff --git a/tools/testing/selftests/bpf/config.aarch64 b/tools/testing/selftests/bpf/config.aarch64
+index 7efad36ceb26..fc85257701dc 100644
+--- a/tools/testing/selftests/bpf/config.aarch64
++++ b/tools/testing/selftests/bpf/config.aarch64
+@@ -71,7 +71,6 @@ CONFIG_INPUT_EVDEV=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IPVLAN=y
+ CONFIG_JUMP_LABEL=y
+ CONFIG_KERNEL_UNCOMPRESSED=y
+diff --git a/tools/testing/selftests/bpf/config.ppc64el b/tools/testing/selftests/bpf/config.ppc64el
+index b53afb5e0b71..5685fa4ee82b 100644
+--- a/tools/testing/selftests/bpf/config.ppc64el
++++ b/tools/testing/selftests/bpf/config.ppc64el
+@@ -39,7 +39,6 @@ CONFIG_INET=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_JUMP_LABEL=y
+ CONFIG_KALLSYMS_ALL=y
+ CONFIG_KPROBES=y
+diff --git a/tools/testing/selftests/bpf/config.riscv64 b/tools/testing/selftests/bpf/config.riscv64
+index 7bee24a79a71..655cb05a7689 100644
+--- a/tools/testing/selftests/bpf/config.riscv64
++++ b/tools/testing/selftests/bpf/config.riscv64
+@@ -30,7 +30,6 @@ CONFIG_HARDLOCKUP_DETECTOR=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_HUGETLBFS=y
+ CONFIG_INET=y
+-CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+diff --git a/tools/testing/selftests/bpf/config.s390x b/tools/testing/selftests/bpf/config.s390x
+index db61878148e4..755d1cfcd9e0 100644
+--- a/tools/testing/selftests/bpf/config.s390x
++++ b/tools/testing/selftests/bpf/config.s390x
+@@ -56,7 +56,6 @@ CONFIG_INET=y
+ CONFIG_IP_ADVANCED_ROUTER=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IPVLAN=y
+ CONFIG_JUMP_LABEL=y
+ CONFIG_KERNEL_UNCOMPRESSED=y
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index 42ad817b00ae..523e0d29bbd4 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -114,7 +114,6 @@ CONFIG_IP_ROUTE_VERBOSE=y
+ CONFIG_IPV6_MIP6=y
+ CONFIG_IPV6_ROUTE_INFO=y
+ CONFIG_IPV6_ROUTER_PREF=y
+-CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IPV6_SUBTREES=y
+ CONFIG_IRQ_POLL=y
+ CONFIG_JUMP_LABEL=y
 
--- 
-2.47.3
+---
+base-commit: f42b070ac285f5ef306e60e65debb58ba519659a
+change-id: 20260709-testing-fragments-00ece1e068d0
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
