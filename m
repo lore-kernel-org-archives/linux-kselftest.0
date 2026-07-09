@@ -1,79 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D299140628C;
-	Thu,  9 Jul 2026 10:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF2131ED83;
+	Thu,  9 Jul 2026 11:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783593632; cv=none; b=q4pS0W6MaoXcWqmL9dBwdT40fFXC1fIEvAGwGW04oIMssjvx8xxx9H8STt1iMMgWcA2RsFtDVDKelsVnBFs+ROy2ZUd9/BeqxzsBXGVUK5rfhkbTsGV66hcV+P1GKSxdgq8PtZOvuZ60Mi3qx/1Vjz6L5zjAR1RPmjdDfks6VWA=
+	t=1783595047; cv=none; b=mS5AjW7thYvK8w4q/Dm6RAjqHbXznx5IernkDJypyePGd7OKwnhkS3bgRPdICAc6G/enzkiY+JrhFiHtk5EysDZM5srdZNHOQRott//Qzv2nZhva7TbusEXAGF4tpa511be/TeQoFVXIfpD57n4BnpHGJfOcJJURD1AhidPhAeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783593632; c=relaxed/simple;
-	bh=GWwclCBpeV2Cq6fJVK1v3rRfOVXzB7wH2YAo3pnIoZo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kV+Wv7q6qgPv1T+uEP2HtVlg+jaE9em1JhWQLp7bVXCTD8GSjslfanyMP/3VU5z3+QDMHk+K0rbVEar8p33/ASjxcG9avNccxi5sp6HUWzumm+SaJOXf6du+2VoyCESwMPLYNlyMPhjy/FUuqN1P4yNIrQmfUHDeBQbGjbkKROM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IE7eG/o9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783595047; c=relaxed/simple;
+	bh=a0Siylbpou4kYnKcPL7wNvEXfvWgd5TCFMcUKiXyTl8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EqkHAEawIxdVqRUvW65J6nlZMyis9zbLiW8LV7APaN1ICBIZzAdDJYPCbvdrBcfNp+U9ZhtKKFKhpWo9+ZNymbzACeH0wxL8EZnQ6aaq21f/iMS1LjTir5pqmZ7f+v1+Qt2FwZP3jb0rJmCdUo0bgOb4WsEnPZHQ+8Soi39CK6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KeVOrZr9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IE7eG/o9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4201F00A3A;
-	Thu,  9 Jul 2026 10:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783593630;
-	bh=C9FKNrNA8q+iO/rANodd+gADIq21KYWiq+7C8UVnt8w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=IE7eG/o9iazHUZwIumf5va/7XaPY+bKGEtYvYGhgvjjwYC+gXBpZm/Ik3Vff9egwt
-	 aQI4O4ayn8emEW/NUWxWmHRze9l9y8MxjajcjJnfb60sFpCpfDyQmlFRQ0ktdWt/vX
-	 NaKbdO8rs7t3DQ4DUeFlS0vJDm00jBPsk9Qv5dT2iadNEgv2cxSPxktFywWjfmMdt9
-	 +w6Yx5tgy+1l4cv+pumoprHlXlD/w7CyaS/Wv3oo9uck5P0ApJUBDZmHc4T2LnGsre
-	 RxFm7SitJ2sr5pjA1+KPO+7SBzTrrYJdFw2OIWp+v83TyZjZnflJneDmTUx6DfWu1T
-	 Gg46Sdc0W5pBw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1996639D609B;
-	Thu,  9 Jul 2026 10:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KeVOrZr9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3EFF1F000E9;
+	Thu,  9 Jul 2026 11:04:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1783595046;
+	bh=jaqLbl+X8iIgOO/YVJKeKF+iO97X7C5yc74usd3ZoMo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KeVOrZr9G+Tl9U4Y53ZLTpbeQZr2VooekAi15A5lP9PRGFkCn5iXglCpjnjOQkvzd
+	 N2/dCqdBLSwxZT3A0XyNGlUnWX2XamduTJBftZqFkm9OsCz9pSNQo88JCoGs5szn5V
+	 r57H8f563WbujTtAC/TazuCLhV930BEbM33tq8Sk=
+Date: Thu, 9 Jul 2026 13:04:03 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: Linux Stable <stable@vger.kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+Message-ID: <2026070925-delay-gauntlet-bc7c@gregkh>
+References: <20260709101327.9508-1-royujjal@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: drv-net: rss_ctx: Add retries to
- test_rss_context_overlap to reduce flakes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178359360864.3403147.1744210090391033845.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Jul 2026 10:40:08 +0000
-References: <20260702164932.2832916-1-limzhineng2@gmail.com>
-In-Reply-To: <20260702164932.2832916-1-limzhineng2@gmail.com>
-To: Zinc Lim <limzhineng2@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, zinclim@meta.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260709101327.9508-1-royujjal@gmail.com>
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu,  2 Jul 2026 09:49:31 -0700 you wrote:
-> Similar to commit 690043b95c18 ("selftests: drv-net: rss: Add
-> retries to test_rss_key_indir to reduce flakes"), implement the
-> retry mechanism for test_rss_context_overlap. This gives the test
-> more attempts to distribute the flow evenly, as the chance of
-> flow skewing to one queue is high.
+On Thu, Jul 09, 2026 at 10:13:27AM +0000, Ujjal Roy wrote:
+> Hi Greg,
 > 
-> Example failures:
+> Please consider backporting the following bridge multicast fix series to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
 > 
-> [...]
+> 726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation")
+> 12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+> 95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+> e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+> 529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
 
-Here is the summary with links:
-  - [net-next] selftests: drv-net: rss_ctx: Add retries to test_rss_context_overlap to reduce flakes
-    https://git.kernel.org/netdev/net-next/c/fe3e786ef4eb
+Why is any of this needed in older kernels?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+And 7.0.y is long end-of-life.
 
+And why, if this does fix issues, was it not tagged for stable to start
+with?
 
+thanks,
+
+greg k-h
