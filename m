@@ -1,186 +1,83 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82C318EC4
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 12:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523DE3EDE76;
+	Thu,  9 Jul 2026 12:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783598952; cv=none; b=nro3hNQzfqpXfTvgIjdD1grMM/d9b4JzFcj1vzlo4+037B1AbyaS81JMDQgf2+tXTi3/8TbTd6US5Q6sT8eMYbWYQuRFJqA+gSSEUe0Y6SFZfnzKbKzm/YAhhXvugTAFOpQJg1zs5r0hoQiOgZmL2xqhG9iaRXKiHUw7I4WOleE=
+	t=1783599234; cv=none; b=s+cjkPPkjUgn800rnQwMVRv0e2Dz0Vtp1++ERsCJ5phqhPSsFw4dkvupjTUYPDFvwi/MYGGUVKv5TEGE877sFcQ39KsMd0rqDD8CfXKAlgkQbg29suWl5fZ1bTudfYL+xpSt3QTa7V1jt2gDUqaPCGAUOiZ4kC8IJNFocPWhw6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783598952; c=relaxed/simple;
-	bh=3a9pgwxWrLLuvuTwQFg/tCaqfqW0jQ0Y87hVWHCHY+A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AjJpC2PryHwPtwMqIUhrgRZrzxsnK1MaQY+wzSHkgF9wHTetkmzwzI5u660i4DPNpnBmjUYFOCCru/AP/tqvLg7ph1JBvbebdJyUrN34OQTV/0AMMSTWmDgU43ntEJQz7P8+2Ls4UiAAAsL/OhBR534iKmgcpsPYn4ogIDZxBVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r/TWmo6f; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r/TWmo6f"
-X-Forwarded-Encrypted: i=1; AHgh+Ro6dEuAdMXtRfN7yf9/Alj4uqFjLK573WgOuQRui4SRermK2rg7IJxuxqy9fn98SA51thkh9WRkz95RWav1PSw=@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783598949;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BmsvLtE51JsvqUb4kaVyH7ncNDCmu7y58Wka6Jpy3e4=;
-	b=r/TWmo6fZNYdw5aZOb3ShqtRDawAfayB3brwvmtiLLTobJ7XpCslvmI1V+4O1lCbVr8OIS
-	4BnEbpJ7Vu0JKqQ4sCUn0MTTgyDacp092pxc54JCetJIZ87bIhw3BID67L04GmWK2SjOny
-	H+J/QEeLYr7Jlu/HkZJyc0x5CMNYMs0=
-X-Gm-Message-State: AOJu0YyrqRFmEjgk9hFE0I7sVthimPpYe3bog58m3BR0KNph680wx93T
-	o5i2GG+57rx3DdL4Cq3djfelIan6exkuGvPp3AvQh59iOxRuPubDU9H+uH84jQPP5JKgtgL/q5d
-	gecH6teLtCm/SGfsJ+MkbooeI3bJAALhT4zUzfokh
-X-Received: by 2002:a05:622a:1f0d:b0:51c:d16:b48e with SMTP id
- d75a77b69052e-51c9a8c1f20mr7564121cf.22.1783598945046; Thu, 09 Jul 2026
- 05:09:05 -0700 (PDT)
+	s=arc-20240116; t=1783599234; c=relaxed/simple;
+	bh=BSt95ioqsL/ZA9evJxwy8Ml35meDwLBIzmjX+oU23OE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZCxwttIfSveShrnnKd+T4bn4lEW4oFJNFrw75MymqUu2MxU2pc+XF+8EvQLzVMbXBOwkhwCicsaobwDfTD12RFH9PyZHhvAgEtbF6xQjg+vExEkKbpoaGgeX873Nojb2y6+Lrmwzks8wcPOSuLHttDI1Hy3adDsNLvwVq2xCXIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a02f2ecc7b8f11f1aa26b74ffac11d73-20260709
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:ca2a10d2-9e6c-4719-a2d2-b294517b707f,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:4c7f5ea66089d6d731670797b0fbd645,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
+	DM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA
+	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: a02f2ecc7b8f11f1aa26b74ffac11d73-20260709
+X-User: yanlonglong@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yanlonglong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1675967005; Thu, 09 Jul 2026 20:13:42 +0800
+From: longlong yan <yanlonglong@kylinos.cn>
+To: tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org
+Cc: hpa@zytor.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	longlong yan <yanlonglong@kylinos.cn>
+Subject: [PATCH] selftests/x86/fsgsbase: Check mmap return value
+Date: Thu,  9 Jul 2026 20:13:22 +0800
+Message-ID: <20260709121323.591-1-yanlonglong@kylinos.cn>
+X-Mailer: git-send-email 2.47.1.windows.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260709-kvm-arm64-sme-v11-0-32799f66db9d@kernel.org>
- <CA+EHjTyAxBx4jhGq-Gme5hPi1ZyDAkL2CP_U22ykkQemD1dUhg@mail.gmail.com>
- <ak-Fyvzpj9SkF75j@J2N7QTR9R3> <CA+EHjTydGzbgi9FwWQaFjuRNqUFC_HeOfHggZAHhPL4FfLYBog@mail.gmail.com>
- <ak-Kzyv0eXq05QQA@J2N7QTR9R3>
-In-Reply-To: <ak-Kzyv0eXq05QQA@J2N7QTR9R3>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Thu, 9 Jul 2026 13:08:28 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTxzKJ=UxdvPmboNSo6KBppDtr88z3_BdqghJ-6f_ttqMA@mail.gmail.com>
-X-Gm-Features: AUfX_myJfL1pQLx--A1TjYYVTKJyGE6cEnwXXwo5heMGbxsjfkRXSVoLh7fWFO8
-Message-ID: <CA+EHjTxzKJ=UxdvPmboNSo6KBppDtr88z3_BdqghJ-6f_ttqMA@mail.gmail.com>
-Subject: Re: [PATCH v11 00/29] KVM: arm64: Implement support for SME
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
-	Ben Horgan <ben.horgan@arm.com>, Jean-Philippe Brucker <jpb@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Peter Maydell <peter.maydell@linaro.org>, 
-	Eric Auger <eric.auger@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-Hi Mark and Mark,
+mmap() in main() returns MAP_FAILED on error, but the return value is
+not checked. Subsequent dereferences of shared_scratch (e.g. in
+test_ptrace_write_gsbase) would segfault. Add a MAP_FAILED check using
+err(), consistent with the rest of the file.
 
-On Thu, 9 Jul 2026 at 12:49, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Thu, Jul 09, 2026 at 12:31:45PM +0100, Fuad Tabba wrote:
-> > On Thu, 9 Jul 2026 at 12:28, Mark Rutland <mark.rutland@arm.com> wrote:
-> > >
-> > > On Thu, Jul 09, 2026 at 11:26:41AM +0100, Fuad Tabba wrote:
-> > > > > base-commit: 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37
-> > > >
-> > > > I think this SHA is local to your tree. I can't locate it, and neit=
-her
-> > > > could Sashiko [1, 2].
-> > >
-> > > That's the tagged commit for v7.2.-rc2. See:
-> > >
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-commit/?id=3D4c45e14df2f4e77982ad70d6d8e3fe750edd4c37
-> > >
-> > > I think that neither you nor sashiko have fetched mainline recently.
-> >
-> > Thanks, I have 7.2-rc2, but `git show
-> > 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37` gives me `fatal: bad object
-> > 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37` . The SHA for rc2 is
-> > 8cdeaa50eae8dad34885515f62559ee83e7e8dda (which is what shows in the
-> > link above, not sure what ID is, which is the part that matches your
-> > SHA.
->
-> Sorry, 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37 is the tag object for
-> v7.2-rc2, which points to commit object
-> 8cdeaa50eae8dad34885515f62559ee83e7e8dda.
->
-> The odd thing is that we see different behaviour; for me (with git
-> 2.30.2) running:
->
->         git show 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37
->
-> ... gives me the description of the tag as per the example in the
-> context below.
->
-> I'm surprised that git show doesn't find that for you.
->
-> > That's what confused both Sashiko and I, since it's used as the base-co=
-mmit SHA.
->
-> Sure; I'm just surprised as above that git show doesn't find the tag
-> object.
+Fixes: 697096b14444 ("selftests/x86/fsgsbase: Fix some test case bugs")
+Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+---
+ tools/testing/selftests/x86/fsgsbase.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Two different issues that manifested in the same way:
-- Sashiko wasn't advancing HEAD after fetch (
-https://github.com/sashiko-dev/sashiko/pull/317 )
-- Neither Sashiko nor I were fetching tags
+diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
+index 0a75252d31b6..6e4df4c2d0e9 100644
+--- a/tools/testing/selftests/x86/fsgsbase.c
++++ b/tools/testing/selftests/x86/fsgsbase.c
+@@ -572,6 +572,8 @@ int main()
+ 
+ 	shared_scratch = mmap(NULL, 4096, PROT_READ | PROT_WRITE,
+ 			      MAP_ANONYMOUS | MAP_SHARED, -1, 0);
++	if (shared_scratch == MAP_FAILED)
++		err(1, "mmap");
+ 
+ 	/* Do these tests before we have an LDT. */
+ 	test_ptrace_write_gs_read_base();
+-- 
+2.43.0
 
-Thanks for this, and sorry for the noise.
-
-Cheers,
-/fuad
-
->
-> Mark.
->
-> >
-> > Cheers,
-> > /fuad
-> >
-> > >
-> > > I have it locally after fetching from Linus's tree, as below.
-> > >
-> > > Mark.
-> > >
-> > > | [mark@lakrids:~/src/linux]% git describe 4c45e14df2f4e77982ad70d6d8=
-e3fe750edd4c37
-> > > | v7.2-rc2
-> > > | [mark@lakrids:~/src/linux]% git show 4c45e14df2f4e77982ad70d6d8e3fe=
-750edd4c37
-> > > | tag v7.2-rc2
-> > > | Tagger:     Linus Torvalds <torvalds@linux-foundation.org>
-> > > | TaggerDate: Sun Jul 5 14:44:06 2026 -1000
-> > > |
-> > > | Linux 7.2-rc2
-> > > | -----BEGIN PGP SIGNATURE-----
-> > > |
-> > > | iQFSBAABCgA8FiEEq68RxlopcLEwq+PEeb4+QwBBGIYFAmpK+lYeHHRvcnZhbGRz
-> > > | QGxpbnV4LWZvdW5kYXRpb24ub3JnAAoJEHm+PkMAQRiGsv8H/Rn7Hr3Hp8t6au8B
-> > > | xQueZThJWjqQ4v8pyLnXF6OomKiDR24OTXMCrFgDkcmZ7RK2ALqowI3tQVwLUTuI
-> > > | yUN0qL2z2y+LyTcO0CYf3Lple8KlgLAXYMsv7pGLsOvhS7BW2jW97/bcbpUNxoHb
-> > > | eghxqbIEnyRImUbbyg+nW7VVk65RKdPUNkBPXfQ2NMVwe+SDE5Rl+NXNVqDNjGad
-> > > | soDTUBrD9yXkWX+4s0myleE62UzzH5nYgGPQeQgYmzWgq7LybH6WBlbQK9D7ODJR
-> > > | Cw3LCq1hwZZ2w04Yx+XwMHquGJYHW8L2pj77h95uhzksz8buKnM0AGwBCTC6RMoi
-> > > | AyUQvdc=3D
-> > > | =3DJUWl
-> > > | -----END PGP SIGNATURE-----
-> > > |
-> > > | commit 8cdeaa50eae8dad34885515f62559ee83e7e8dda (HEAD, tag: v7.2-rc=
-2, kernel-org-tip/locking/debug, kernel-org-stable/master, kernel-org-rw-pm=
-/master, kernel-org-rw-pm/fixes, kernel-org-powerpc/topic/ppc-kvm, kernel-o=
-rg-powerpc/next-test, kernel-org-powerpc/next, kernel-org-powerpc/fixes-tes=
-t, kernel-org-powerpc/fixes, google-android-kvm/master)
-> > > | Author:     Linus Torvalds <torvalds@linux-foundation.org>
-> > > | AuthorDate: Sun Jul 5 14:44:06 2026 -1000
-> > > | Commit:     Linus Torvalds <torvalds@linux-foundation.org>
-> > > | CommitDate: Sun Jul 5 14:44:06 2026 -1000
-> > > |
-> > > |     Linux 7.2-rc2
-> > > |
-> > > | diff --git a/Makefile b/Makefile
-> > > | index b9c5792c79e01..b4035d3cef266 100644
-> > > | --- a/Makefile
-> > > | +++ b/Makefile
-> > > | @@ -2,7 +2,7 @@
-> > > |  VERSION =3D 7
-> > > |  PATCHLEVEL =3D 2
-> > > |  SUBLEVEL =3D 0
-> > > | -EXTRAVERSION =3D -rc1
-> > > | +EXTRAVERSION =3D -rc2
-> > > |  NAME =3D Baby Opossum Posse
-> > > |
-> > > |  # *DOCUMENTATION*
-> > >
