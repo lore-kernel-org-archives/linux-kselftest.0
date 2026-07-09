@@ -1,116 +1,138 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AF627E1DC
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 14:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9372221E098;
+	Thu,  9 Jul 2026 14:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783606123; cv=none; b=ef5UWZ8sY9CG4AiHUy3BMJQXeRKKSn71GtIWn7zpF9pr3ovyJTXoUio38jQYFSIwU7gZU1hDnScuvWShlQIqLptuaKw78Am49elqRaIlu1tdTYyueiEaAiXe8myNloFqEta63t6RhqMkfFCMu8NH/bTeHSUj60Za/Gfa1DYMVpU=
+	t=1783606947; cv=none; b=G3TcFU1Osv+KJs6twasILJhXc10im7p99+1DPaaSj1VqIScpKEzOrdbLFXHsxi3TFs0Ebxo2O7KAYFBLnnYxTafi/QrZSVMl7WvHxLnCV/GrLi2RhdaDi7SlHeiFJ6bCWNmSS+pAfY+9i2I4GV/BXDY3yEgVaBBx0dz9/fihTGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783606123; c=relaxed/simple;
-	bh=LJQ+Wy5qFlw23RxcEXk2UYe+R7vipLE6QRbmbH5p65M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fdVJeTVYgtV5Qw4k4U25oblp9W6WpyS+2bAt6Rg5YsB2kfyR/KCnQ7Rm0b9matN2db68buwWWRwudbMHT3ZXYEl8U33Ed4mLCtWtOwYslAyHSvF6DRBIMs0CEziuz/2+iudolpVpHSE37gUCxXFxDrqKfT9m/eCwrUzcDwpzCk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bfBg0JQs; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1783606947; c=relaxed/simple;
+	bh=s5381n1trsYscNMAirkC5WSZZqb4jbYbyDzi7jZd+i0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JK9eRW9u8fGNwJNenAALNVwYXaIQhy7cgBI8IDNhC04SqXerNsUnMWpJrkDpmjnNyQtJ72uer9PvbBBPnJcpV+Sz0yjHN9CzzCAK6lK1Z/TxARj37S2lTcT0nbC/tIiu5yer/7fyiLK4EK4pm+rGfxHk3N77E7QYxgOkYPu976I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pFzKKCK5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bfBg0JQs"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c9667280edeso1638285a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 07:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783606121; x=1784210921; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KgH/ydIU7zEHefclnHmkpwsTp6JMOkXk2hxaj+W5rx0=;
-        b=bfBg0JQsn9Gxbuqkb/5sA9a0f3mMZtpc/n5XCztCZl4TxCNXpsZEnCcbEblwpJoGRo
-         V0GLXaaCNsKoBXuMC2CfURdt5wMD7va4EYxpcMzomf3LwHMJERAnMxQTc39Nl3EyO+kN
-         P4wnTcgiCjCHZFneK5yLqdrK18D+hNmTiEWTA/YQBGctcG2UMvyGpkK9z8CCNt/9p+MC
-         nxxNFWBPt1W7Q67ph8C4G2HFpm4XvFCPdoiE/qfJF5brrAJyNbaJWJZzYEEgeSljwcEx
-         qCbQUzuu1IgWiKKzMvWTM3wtbgJSdWXG6giCo7Z9FOfnD07IoUaw9vCaoGjS6UL411dD
-         hbrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783606121; x=1784210921;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KgH/ydIU7zEHefclnHmkpwsTp6JMOkXk2hxaj+W5rx0=;
-        b=KBqxXJE1p0lsi+ObUdhcY2PK4Wv+D6YNE4YCtv4JTU9rPBeN8qweONrShXb5Ckz2qN
-         AdDwCPKSrgaMf6g/nGxy7yyMAcs4ycumZ9b/o4P8+mOb+x+iIY0m8X5deKxaVDk5fK9u
-         dsfhbUljrgpBuuPiHnSL2OMOtfWYNxt9pK3HY6H7YmFTShr3CeyiSOpWg47j2UJB1YPr
-         QdC9alLlLp83kGgq8x62ie8X6QIlYyinyYeDwEvxeUMmEBXlk0TP1WdxudPH3IjL9KIU
-         +l4ZCD/gSkPo4O9hg32/tSSDbGDhW+wtujIgkgSJp21tW3cieaF9COfry5N/xZ0bbwEG
-         cv5g==
-X-Forwarded-Encrypted: i=1; AHgh+RrWaS0ftW9C/rqAXtyuA38l/eB58Q2h3iKco0xeisU3Zzp0HoUx3o6+gjrdf3teFDYp3Q324zax4YX/HM5TGPs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDySqytPpE3pyGDWpEhcDhXngxxYJHJFjwYZF+WhuQXwwVjn0C
-	nrlnNNqqHeAMwNH6foYlo3pEjYlqSPtHaUwDuz8DKnXlAOQo6EX0DE5uGWDJFBeoJHldB5VhDFU
-	RAQ7c/w==
-X-Received: from pgbfm1.prod.google.com ([2002:a05:6a02:4981:b0:c96:4086:38b5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3d0b:b0:3b3:f46:1efa
- with SMTP id adf61e73a8af0-3c0bd0fa172mr9218633637.42.1783606121082; Thu, 09
- Jul 2026 07:08:41 -0700 (PDT)
-Date: Thu, 9 Jul 2026 07:08:40 -0700
-In-Reply-To: <CAA0tLEpxE-YAigp-j6jC4pyQTv9vOPbs030Fs3kVFkczC9Etkg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pFzKKCK5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD191F000E9;
+	Thu,  9 Jul 2026 14:22:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1783606946;
+	bh=sgXrUQkmCDVtsWqbs4V36y920B23PeNjLAPQUUnUwSo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=pFzKKCK50fniSEB/52TnzsE7Y/2SpWWP6em9d3vP2BEHEmEj3+MV3JwnxQf/HEW7+
+	 U/WJYzKqpGVDIM/X54k4uzuKgKhdOM4e9u7NyRsQZenH99C8Ubob7KbEubRB6VBuEQ
+	 3jHXrHn5955OALFjxDieS0cZ/g+fednSXu/4O/J0=
+Date: Thu, 9 Jul 2026 16:22:22 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: Linux Stable <stable@vger.kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>, David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>, Petr Machata <petrm@nvidia.com>,
+	Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+Message-ID: <2026070948-lively-exchange-a458@gregkh>
+References: <20260709101327.9508-1-royujjal@gmail.com>
+ <2026070925-delay-gauntlet-bc7c@gregkh>
+ <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
+ <2026070954-activist-left-8303@gregkh>
+ <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260629125205.52394-1-zhang_wei@open-hieco.net>
- <CALMp9eSLH7pT7X22es+AotxhRMQ1VyziWWELQu6_ZRsyuQ=xzw@mail.gmail.com>
- <0e576fd8d8cd2ed1739cee36eba393fea7745506.camel@redhat.com>
- <f70b4a3b-1ac1-4269-ab7c-0ed1fb42c357@open-hieco.net> <CALMp9eR5jVLGeQck89kro1ocEX5aZcovdGMK+fuzXjqK1NR7kQ@mail.gmail.com>
- <CAA0tLEpxE-YAigp-j6jC4pyQTv9vOPbs030Fs3kVFkczC9Etkg@mail.gmail.com>
-Message-ID: <ak-raI43liqnqGKb@google.com>
-Subject: Re: [PATCH 0/2] KVM: nSVM: Expose DecodeAssists to L1
-From: Sean Christopherson <seanjc@google.com>
-To: Venkatesh Srinivas <venkateshs@chromium.org>
-Cc: Jim Mattson <jmattson@google.com>, Tina Zhang <zhang_wei@open-hieco.net>, mlevitsk@redhat.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	zhouyanjing@hygon.cn, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
 
-On Wed, Jul 08, 2026, Venkatesh Srinivas wrote:
-> On Mon, Jul 6, 2026 at 6:34=E2=80=AFPM Jim Mattson <jmattson@google.com> =
-wrote:
+On Thu, Jul 09, 2026 at 06:35:04PM +0530, Ujjal Roy wrote:
+> On Thu, Jul 9, 2026 at 6:23 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 > >
-> > On Mon, Jul 6, 2026 at 5:02=E2=80=AFPM Tina Zhang <zhang_wei@open-hieco=
-.net> wrote:
+> > On Thu, Jul 09, 2026 at 06:12:40PM +0530, Ujjal Roy wrote:
+> > > On Thu, Jul 9, 2026 at 4:34 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Thu, Jul 09, 2026 at 10:13:27AM +0000, Ujjal Roy wrote:
+> > > > > Hi Greg,
+> > > > >
+> > > > > Please consider backporting the following bridge multicast fix series to 6.1.y, 6.6.y, 6.12.y, 6.18.y and 7.0.y.
+> > > > >
+> > > > > 726fa7da2d8c ("ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation")
+> > > > > 12cfb4ecc471 ("ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()")
+> > > > > 95bfd196f0dc ("ipv4: igmp: encode multicast exponential fields")
+> > > > > e51560f4220a ("ipv6: mld: encode multicast exponential fields")
+> > > > > 529dbe762de0 ("selftests: net: bridge: add MRC and QQIC field encoding tests")
+> > > >
+> > > > Why is any of this needed in older kernels?
+> > > >
+> > > > And 7.0.y is long end-of-life.
+> > > >
+> > > > And why, if this does fix issues, was it not tagged for stable to start
+> > > > with?
+> > > >
+> > > > thanks,
+> > > >
+> > > > greg k-h
+> > >
+> > > I already explained this in the email thread, "Please backport bridge
+> > > multicast exponential field encoding fix series to stable kernels".
 > >
-> > > I will take another look for the next version and try to handle the
-> > > remaining pieces properly, while also making sure we don't expose sta=
-le
-> > > or incorrectly synthesized decode-assist state for emulated exits.
+> > Sorry, but that's not here (remember, some of us get 1000+ emails a
+> > day.)
 > >
-> > Naples erratum 1096 seems to imply that the instruction bytes stored
-> > in the VMCB are not necessarily the same instruction bytes that were
-> > fetched and decoded to lead to the #PF/#NPF. Hence, in the case of
-> > emulation, it might be sufficient to read the instruction bytes quite
-> > late in nested_svm_vmexit(). That would certainly simplify the
-> > plumbing.
->=20
-> Would not passing through this feature when erratum 1096 is present
-> simplify this?
+> > Please explain why patches need to be backported when asking for them to
+> > be backported.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Sorry for breaking the thread. I understand your point, I will
+> maintain this in the future.
+> How should I send the patchset that addresses the conflicts on 5.10.y
+> and 7.1.y? Shall I send the conflicts patchset as a series via a
+> different thread or how? I've never done this before, so I'm asking.
+> 
+> Here is the explanation for why the patches need to be backported:
+> 
+> History: The multicast stack currently supports decoding of IGMPv3 and
+> MLDv2 exponential timer field encodings, but lacks the corresponding
+> encoding logic when generating multicast query packets. As a result,
+> query intervals and response codes exceeding the linear encoding range
+> can be transmitted incorrectly. This can cause multicast queriers and
+> listeners to interpret different timing values, resulting in protocol
+> interoperability issues, membership timeouts, and premature multicast
+> group expiration.
+> 
+> Testing: The series adds the missing encoding support for both IGMPv3
+> and MLDv2 and includes selftests that validate the behavior.
+> I backported the series to v6.6.123.2 and verified the accompanying
+> selftests. The selftests fail on the unpatched kernel and pass after
+> applying the series, demonstrating both the bug and the effectiveness
+> of the fix.
+> 
+> Given that this is a protocol correctness issue affecting multicast
+> query generation, please consider backporting the complete series to
+> all applicable stable kernels.
+> 
 
-I don't think so?  I'd be fine with KVM propagating the erratum to the gues=
-t,
-i.e. not trying to fixup the decode-assist information if hardware failed t=
-o
-provide it.
+But this really seems like a new feature being added, it's not fixing a
+regression of something that previously worked, right?
 
-Jim mentioned the erratum because the only way for the erratum to exist is =
-if
-hardware re-reads memory after the initial fetch, and so exactly how and wh=
-en
-hardware/KVM reads the bytes is a micro-architectural detail.  I.e. the mer=
-e
-existence of the erratum simplifies KVM's implementation, because we don't =
-have
-to strictly read and propagate the entire 15 bytes from KVM's equilavent of=
- the
-fetch phase.
+WHy can't people just update to the latest kernel release to get this if
+they need it for their environments?
+
+thanks,
+
+greg k-h
