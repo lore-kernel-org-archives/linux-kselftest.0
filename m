@@ -1,56 +1,73 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5B7399374
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 16:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8562F8EAD
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 16:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783615503; cv=none; b=VvnbuUeRPs6+il73NDAKJQH6Mcx/gDUfCjkW4pBYPal9xVh8odd97wsLzvCw0vq03DPSbrRhUudd0Tm4BXGzn9xZqJOKGoqGEJ7dfoX0gt571mkeH60bSj76Sm01u48LXe8UIBzQnnvxBHWLlmwCzw2e5SFk3EOm2BoIcjsS3/c=
+	t=1783615680; cv=none; b=INFT5y0eoHrBPgBHynH7/+UojwUJQnaAAumJcz+V+qM6eNgcObfVFfOyEQFx0ICeyoeRJxCPS5O5amw+8Wd6r0aWRpMUX9MzlbJh7CU6dV5oYoPR6qXjgs0r+nPIoTmZJROOsWl+XMoHzmRHgOR+aS3lI8rsFy7j/0+LSdmayQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783615503; c=relaxed/simple;
-	bh=SQ7GBMLnXX5I3bFBCOmeZQZl5xHUI3hMGXJu0wAGPhE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CsAY+U8wGFSf6yMSsoga+2oYS2nRYTceWRba1hB/Aa2WsUKdSAvS+jzTRvbHy1HJjIrCs4rvoO40Uulxzb97Du/5FARpWqJ3bAxX45kCUjjPkdF8N7WhBPrJitMZNd3f5TIXATFLhhuLWpiPA4lvxqBFF0aaZBJlR6Hr87IsZo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bMNtp/uM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783615680; c=relaxed/simple;
+	bh=l8azDO1V+A9zH7SZVFYyRnG3Q6u3OzWf/+Ivbv+sPKQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fZjkrRaptES43AmB7RHBMHz/T7DbPTiiy0Vey82PdvEer9luB9Z0Zo+WvvS2qkN7cUsM9IAcTym0oyg4ZWwTgc1e7RlUzoKFMlbdvj7qDqXpvsTkl1gzpmz4+I76soyXBShfTJtRgGTqfMMJFdC8WDS/wHwXXUx35vY2UA0+P+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hkc4PfeD; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bMNtp/uM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783615501;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=N1EhtpTNPWeURbn3yhN8uvjzdNLJOl63hKvo6ZRXyxc=;
-	b=bMNtp/uMsgY4ZuuORPsypYX0iGkEfnx8KfOvbHymrlix/rEJ264Z6Wi1FGYuQxJDSrlbrU
-	aX4BLaMLKBGrDoL5mWfdhMvFvFo2QKgwms2ZQtcJw7UDwcXyvLeNXIY4qL0Orwi6EEQvFW
-	Jhr1NCXTeIT2fgW14MlOGf9rLtroaU0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-513-7QAmzfxFPCGgsOgKlzBNJg-1; Thu,
- 09 Jul 2026 12:43:49 -0400
-X-MC-Unique: 7QAmzfxFPCGgsOgKlzBNJg-1
-X-Mimecast-MFC-AGG-ID: 7QAmzfxFPCGgsOgKlzBNJg_1783615428
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E4EE2180267E;
-	Thu,  9 Jul 2026 16:43:47 +0000 (UTC)
-Received: from thuth-p1g4.redhat.com (unknown [10.44.50.9])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5FFE1195608A;
-	Thu,  9 Jul 2026 16:43:42 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	linux-security-module@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hkc4PfeD"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c9d1fc053e0so34546a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 09:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783615679; x=1784220479; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Bugrw9ZAn9zVjHgJbS8tolPWSEIE1MhjgoMVhvy2STM=;
+        b=Hkc4PfeD4Rw6Ahgud1zBQSFM5LzRawNvlv+JLDShmbc+gWBRjaUz+vIX7h+zWRqIns
+         A1+nIFvAGbIIF5Hjpp+mwtmV01gzQPJ3DytJ/FM8vxsvxhwLijCRslH/3pQbD1bsi7lq
+         q4rRnar8JHAD4XebwoYldv1+lfsKV3pfVnhYVbCfZf4lIvIltGY22vhBCBdnTfv5Wdk1
+         qBS1bgSIJGiEDvwqDRIVszNQHP8PMZ/svpX9tNXhztQJ8946xP0WmhjkGlRnMkh/1tbl
+         xkVH3kuu3tmsaqYPbTmZPGLsMDY+m3AvP0Q6AGBr8VwI2M8wN0p2rpL2Y+CfgI6jk9hx
+         3hmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783615679; x=1784220479;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Bugrw9ZAn9zVjHgJbS8tolPWSEIE1MhjgoMVhvy2STM=;
+        b=Ivfvq/DDdZSQK/nJyNXyvSl7zWoAD8GS7rirSIZs3TTfo6nwQPyrzmeS47hk61emOW
+         mG+05Rc2I6fCJ2URNyf04PTv6Xbg/ZVvXPS1lTgIchQUG1KZcE1ykWcIMaQaZEtC0IeC
+         YU1jhNXEaC9awwLkyxLXUfFIo9COv+q7Qj6wOXqqNKIjgFTuC3uMW9XYpAAJSSy/UNgf
+         XrEGdzKF7in9Q7LUHxscn3MvF87mufqF3rQWAKOxkXAYSAPsEu/LxlG/G8mnydVeuIiR
+         rjKUMb3wAKz4LflA/BUvR1zuHa9JR/xHNbI5RTbcUboBymx3tEiLfONsauy8aodW01dV
+         c/AA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq80jNvgtdym9H9nJPu68stYBECGSZ3g7/dofPFdP4/lYtVGNnnIyjcVDGCc/nH9GAtv80ShorjQ4E+3SxL+BA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq9mkbSpw0xUAnwPHHSypEg7Jasg8m74Xr2BCMTtkiAzwpQW7+
+	G5ivYDnbMof+DhlsMy+pGn9Zz1eU3NA7ayLU6dDzVsHpY2ItRg8CNrty
+X-Gm-Gg: AfdE7cmAj64WRb+wPgukGtYfu4byY9hPevV3tDC14W2+2aoom3a3dC9A0KLKMw95k56
+	NlRALvqO5MtbdCCKCYjUNme7RNiiY+bzFd+aATM6D0XRr0wZtaBZH4osiPyngfbLwYlMAXGaWKa
+	CGxzKOmdcUj3LrHlSPqmXUjtJAiHvYAf0RmaRYBqfQKWGvUom9kSyULvTHOqwdGfinJ2KUCdP8b
+	sZ8SHHXGUwjAaGfHHK5SwgKPt652+ZanVXHLHphn3hKVCP8oXHFqSDJys3/tv9BNThUqlbTRnZs
+	vwxb6ye4G8s4jlRPWMTy48SYfOBuZPawzfdy7aJQ8UprS5NrHnHtrN6XsZHaONRU/ZdEFgWgf1i
+	01llMFDT2uz0S2dAlppEH4HcYHjouq3qp/ZSNfVFNPuH1TCssxjbTyXaWT59DKP/bMILUI2tWgJ
+	ec9jc0NRmnzkmYkg54eI15IGpS1IHn6f3J+0E=
+X-Received: by 2002:a05:6a20:3d0b:b0:3bf:6c08:2842 with SMTP id adf61e73a8af0-3c0bd1a82abmr10253601637.49.1783615678611;
+        Thu, 09 Jul 2026 09:47:58 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b6593c4ddsm35709287c88.1.2026.07.09.09.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 09:47:58 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	rbriggs@redhat.com
-Subject: [PATCH] selftests/landlock: Fix screwed up pointers in the scoped_signal_test
-Date: Thu,  9 Jul 2026 18:43:40 +0200
-Message-ID: <20260709164340.339656-1-thuth@redhat.com>
+	Hemanth Selam <hemanth.selam@gmail.com>
+Subject: [PATCH v1 0/2] KVM: selftests: SEV: address two TODOs in the SEV tests
+Date: Thu,  9 Jul 2026 22:17:49 +0530
+Message-ID: <20260709164751.621326-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,176 +75,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-From: Thomas Huth <thuth@redhat.com>
+This small series fills in two pre-existing TODOs in the x86 SEV
+selftests. Both are test-only changes; there is no functional change to
+the kernel.
 
-The scoped_signal_test uses pthread_join(..., (void **)&ret)) in
-a couple of places, i.e. the return value of the thread is stored
-in the shape of a "void *" into the memory location of &ret.
-Pointers are 64-bit on modern computers, but the ret variable is
-declared as a simple "enum thread_return" which is only 32 bits.
-So the pthread_join() will overflow the ret variable by 4 byte.
+Patch 1 adds negative coverage to sev_init2_tests: when the platform
+does not support a given SEV VM type (SEV-ES or SEV-SNP), it verifies
+that KVM_CREATE_VM rejects that type with -EINVAL. Previously the test
+only exercised the VM types that were supported, so a mismatch between
+KVM_CAP_VM_TYPES and the actual KVM_CREATE_VM enforcement would have
+gone unnoticed.
 
-The problem is very visible on big endian systems like s390x
-where the test is failing: The least significant byte that carries
-the return code of the thread is not written into the ret variable
-here, but somewhere else in the stack frame, so the comparison
-for the right return code is failing here.
+Patch 2 makes sev_smoke_test capture the launch measurement returned by
+KVM_SEV_LAUNCH_MEASURE for SEV and SEV-ES guests and asserts that it is
+not all zeros, instead of discarding it. A full attestation-style
+validation is not possible from the selftest (userspace does not hold
+the transport keys used to derive the measurement), but a non-zero
+check catches a PSP/plumbing failure that silently leaves the buffer
+untouched. SEV-SNP uses a different launch flow and is skipped.
 
-Fix it by getting rid of the enum and defining the THREAD_* constants
-and "ret" variables as proper "void *" pointers. This way we can
-also get rid of some ugly (void *) castings in a couple of spots.
+Testing: built and run on an AMD EPYC 9755 (Turin) host running this
+tree, across two boot configurations:
+ - SEV + SEV-ES enabled, SEV-SNP disabled
+ - SEV + SEV-SNP enabled (SEV-ES unusable)
+Together these exercised both new rejection branches (SEV-ES and
+SEV-SNP) and the launch-measurement check for SEV/SEV-ES, plus SEV-SNP
+guest creation and launch. Both tests pass in every configuration, and
+checkpatch is clean on both patches.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- .../selftests/landlock/scoped_signal_test.c   | 44 +++++++++----------
- 1 file changed, 21 insertions(+), 23 deletions(-)
+Hemanth Selam (2):
+  KVM: selftests: SEV: Verify unsupported VM types are rejected at
+    creation
+  KVM: selftests: SEV: Sanity check the launch measurement
 
-diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-index f24f2c28f62e5..58d25157fe781 100644
---- a/tools/testing/selftests/landlock/scoped_signal_test.c
-+++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-@@ -249,12 +249,10 @@ TEST_F(scoped_domains, check_access_signal)
- 		_metadata->exit_code = KSFT_FAIL;
- }
- 
--enum thread_return {
--	THREAD_INVALID = 0,
--	THREAD_SUCCESS = 1,
--	THREAD_ERROR = 2,
--	THREAD_TEST_FAILED = 3,
--};
-+#define THREAD_INVALID		((void *)0)
-+#define THREAD_SUCCESS		((void *)1)
-+#define THREAD_ERROR		((void *)2)
-+#define THREAD_TEST_FAILED	((void *)3)
- 
- static void *thread_sync(void *arg)
- {
-@@ -262,15 +260,15 @@ static void *thread_sync(void *arg)
- 	char buf;
- 
- 	if (read(pipe_read, &buf, 1) != 1)
--		return (void *)THREAD_ERROR;
-+		return THREAD_ERROR;
- 
--	return (void *)THREAD_SUCCESS;
-+	return THREAD_SUCCESS;
- }
- 
- TEST(signal_scoping_thread_before)
- {
- 	pthread_t no_sandbox_thread;
--	enum thread_return ret = THREAD_INVALID;
-+	void *ret = THREAD_INVALID;
- 	int thread_pipe[2];
- 
- 	drop_caps(_metadata);
-@@ -285,7 +283,7 @@ TEST(signal_scoping_thread_before)
- 	EXPECT_EQ(0, pthread_kill(no_sandbox_thread, 0));
- 	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
- 
--	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
-+	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
- 	EXPECT_EQ(THREAD_SUCCESS, ret);
- 
- 	EXPECT_EQ(0, close(thread_pipe[0]));
-@@ -295,7 +293,7 @@ TEST(signal_scoping_thread_before)
- TEST(signal_scoping_thread_after)
- {
- 	pthread_t scoped_thread;
--	enum thread_return ret = THREAD_INVALID;
-+	void *ret = THREAD_INVALID;
- 	int thread_pipe[2];
- 
- 	drop_caps(_metadata);
-@@ -310,7 +308,7 @@ TEST(signal_scoping_thread_after)
- 	EXPECT_EQ(0, pthread_kill(scoped_thread, 0));
- 	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
- 
--	EXPECT_EQ(0, pthread_join(scoped_thread, (void **)&ret));
-+	EXPECT_EQ(0, pthread_join(scoped_thread, &ret));
- 	EXPECT_EQ(THREAD_SUCCESS, ret);
- 
- 	EXPECT_EQ(0, close(thread_pipe[0]));
-@@ -327,20 +325,20 @@ void *thread_setuid(void *ptr)
- 	char buf;
- 
- 	if (read(arg->pipe_read, &buf, 1) != 1)
--		return (void *)THREAD_ERROR;
-+		return THREAD_ERROR;
- 
- 	/* libc's setuid() should update all thread's credentials. */
- 	if (getuid() != arg->new_uid)
--		return (void *)THREAD_TEST_FAILED;
-+		return THREAD_TEST_FAILED;
- 
--	return (void *)THREAD_SUCCESS;
-+	return THREAD_SUCCESS;
- }
- 
- TEST(signal_scoping_thread_setuid)
- {
- 	struct thread_setuid_args arg;
- 	pthread_t no_sandbox_thread;
--	enum thread_return ret = THREAD_INVALID;
-+	void *ret = THREAD_INVALID;
- 	int pipe_parent[2];
- 	int prev_uid;
- 
-@@ -367,7 +365,7 @@ TEST(signal_scoping_thread_setuid)
- 	EXPECT_EQ(arg.new_uid, getuid());
- 	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
- 
--	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
-+	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
- 	EXPECT_EQ(THREAD_SUCCESS, ret);
- 
- 	clear_cap(_metadata, CAP_SETUID);
-@@ -667,20 +665,20 @@ static void *thread_setown_scoped(void *arg)
- 	ruleset_fd =
- 		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
- 	if (ruleset_fd < 0)
--		return (void *)THREAD_ERROR;
-+		return THREAD_ERROR;
- 	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) ||
- 	    landlock_restrict_self(ruleset_fd, 0)) {
- 		close(ruleset_fd);
--		return (void *)THREAD_ERROR;
-+		return THREAD_ERROR;
- 	}
- 	close(ruleset_fd);
- 
- 	/* Makes this process group own the SIGIO source. */
- 	if (fcntl(fd, F_SETSIG, SIGURG) || fcntl(fd, F_SETOWN, -getpgrp()) ||
- 	    fcntl(fd, F_SETFL, O_ASYNC))
--		return (void *)THREAD_ERROR;
-+		return THREAD_ERROR;
- 
--	return (void *)THREAD_SUCCESS;
-+	return THREAD_SUCCESS;
- }
- 
- /*
-@@ -702,7 +700,7 @@ TEST(sigio_to_pgid_self)
- {
- 	int trigger[2];
- 	pthread_t thread;
--	enum thread_return ret = THREAD_INVALID;
-+	void *ret = THREAD_INVALID;
- 	int i;
- 
- 	drop_caps(_metadata);
-@@ -722,7 +720,7 @@ TEST(sigio_to_pgid_self)
- 	 */
- 	ASSERT_EQ(0, pthread_create(&thread, NULL, thread_setown_scoped,
- 				    &trigger[0]));
--	ASSERT_EQ(0, pthread_join(thread, (void **)&ret));
-+	ASSERT_EQ(0, pthread_join(thread, &ret));
- 	ASSERT_EQ(THREAD_SUCCESS, ret);
- 
- 	/* Fans SIGURG out to the process group. */
+ .../selftests/kvm/x86/sev_init2_tests.c       | 23 +++++++++++++--
+ .../selftests/kvm/x86/sev_smoke_test.c        | 29 +++++++++++++++++--
+ 2 files changed, 47 insertions(+), 5 deletions(-)
+
+base-commit: 0e35b9b6ec0ffcc5e23cbdec09f5c622ad532b53
 -- 
-2.55.0
+2.43.7
 
