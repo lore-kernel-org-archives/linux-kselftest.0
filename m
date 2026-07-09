@@ -1,220 +1,270 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011018.outbound.protection.outlook.com [40.93.194.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881643DA7EC;
-	Thu,  9 Jul 2026 20:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783629138; cv=fail; b=aSooDczWMJnr7IgvWjNELxRwftNBItp/9ZVR+R7q4caf64W+lwgkp0uTBzqNZdleCj8qoOVN7JK3q7lQlJ5tr1haXvcCf9zs50EEvA1WHk8m5kVTtcMRFnBuFp2xA+Q7+xR+HN8gQTLW/UryBXkd1t/B6L45b5V8YvLRPpeDhGo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783629138; c=relaxed/simple;
-	bh=1DlfxEt9ldfynIyEvosb+smGwlUIrpiy8VKvwh4S3gQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=HrzNYltlHQjDE7wGbBeat8LalD8/zFKx6L7Z1D56BMM8S3Lo5D98vcSG0q/XMHMNYh41KpE6c6osCXTCcV29Zjh9NBHheO0xQIN92qlBFT6Y0YgeafaDTYFf3Kt2j5KGVya8XXwFBfzsUmG9bsr81TPZnME/sWts2zxoE8CBq8I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=c2UDZ1qA; arc=fail smtp.client-ip=40.93.194.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52D21A9F82;
+	Thu,  9 Jul 2026 21:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783631246; cv=none; b=SaZz92iAW1pcpLhD4eDg3+NwqDxnAoEyWV2OKmwyr/qYUWL19pbZh1pSLxR4/FmIdIae0zfZgylRXzu61billgmxE9Fy9pRJ6dp9QxUT0PQc/9xtz1SJ3RCcXkic8xiKfjd4xqQuwuOE8TtkAnZudPSEV/30Sp0gcrZJU+vOl2E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783631246; c=relaxed/simple;
+	bh=CcbzFpuqxbP31RWAKcPyqR+DOuQ1YM3H4ZPQJpHMvx0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GtVdMyVR0HA9NY0GMVZqbg6Wee7WMJKkZKHdWbd3NYyvGIcaji7af/2oNcgUZR5tgt3ap/GGDlrdD+Vjd5DL4eBmtKqjDKiKBP9hFw4RK0KT19NdgbbEGceUDckJyPXrWDEH7Kmk7cDt6j/1QZ9IHZwp97LLfXCZpbpUTeaiGRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W6TmvzfL; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="c2UDZ1qA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uJ1Czs7IsHy7aOWeJEMXVjHLrR7fHV1LQQ5khBoBpH/VdjraBSpJB2PRuxwNqPmjP2TWUrVRxfwLp8QwaJKQuJcAUKLp3OUbYzXyK1iUOl/6gBgSTM3Y0hlPxoVZUVzHbIC2DpCTilrrJ1QmYKonNiMxT8l0welPe3clVtQNHAt0inj0DwHziq7jKYCamyWwjQno3stZbdelb/LhwHUgB3viBeiucM+seYO4IFEcvLoql2YAoJ71GL1UqlGc63G7SNChS9MUzub6/7gBORTyE9WmhElKcBh29sY9vziMBnouLvgUjRysN24EAK2bVsJIufri/dsiAy9v62Mo0QF3mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P3YRbfMcXytxVFrxjZoc+9zc5SCHw1UlTmnDpy7+noI=;
- b=pdMqS7N2Rdu+K/2XUOKNaOJLnBMsjMZ9OxYQkfqV/KWc7cI3EraJfDS5/qHAtc7SQxR1cVYRxeORj6c8YU4/kZoNlkm6Z0f0OQhP0BtqCI+pJozDViY6/6T4n2O8OK9InnEsWOzO2v71cOqIcUZ03EiDmKFtdeW5rL/4NG3ORV7zyS1hYmZ8AOgBWmiPxOrxBlZQuXANuTpJ+fTdFa0gKnpo1iSSUR/rg/vsplA3PfSSlsRxO02zVTWzb3PvjPAGO2p1eNgx6FyLjMWFG503IVYICnpV3443eD3vZ8Hbtkw9Cm9LlTeWkwRJI0dkTye440jRn71z15Hca5nLKaDbTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P3YRbfMcXytxVFrxjZoc+9zc5SCHw1UlTmnDpy7+noI=;
- b=c2UDZ1qAvN5JswSjUo3rA+2jotIunXsHiuqeeVgqxf2qG2G0sSzYaAto+gBe9d9tt9wDZVt9fw2tF1gZm54+TlHBP9bjYeb7g6EgjnRcDNDcpbY6Cx+jQJuQu5/fQIAvcqf2ZFsm4T7Wct4916a7ftQpIrKSND1HStOvib16G1klVNrgWapZWrrSwhPko0FmceSCGF4EDn4726iMEC5pKxgfDMqkDMdrrCZB+zsn2/Wxx2ysEej5jLfnAeVvmEJZzEavB1Df+E5H5WZ1tUaBgYTFAPHLIfqd7FZgq+YwjZtRqQ5lDni824KL1i7axVQUn/iiwAlXfSdzd/+YAOhUIg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
- by DS0PR12MB999079.namprd12.prod.outlook.com (2603:10b6:8:302::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.15; Thu, 9 Jul
- 2026 20:32:09 +0000
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c%3]) with mapi id 15.21.0181.014; Thu, 9 Jul 2026
- 20:32:09 +0000
-Date: Thu, 9 Jul 2026 22:32:00 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: luoliang@kylinos.cn
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
-	sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/sched_ext: Fix bpf_link leak on early return
- in prog_run
-Message-ID: <alAFQFupPov3YxMX@gpd4>
-References: <20260709100340.706670-1-luoliang@kylinos.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260709100340.706670-1-luoliang@kylinos.cn>
-X-ClientProxiedBy: MI2P293CA0012.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:45::10) To DM6PR12MB4827.namprd12.prod.outlook.com
- (2603:10b6:5:1d6::14)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W6TmvzfL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783631243; x=1815167243;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CcbzFpuqxbP31RWAKcPyqR+DOuQ1YM3H4ZPQJpHMvx0=;
+  b=W6TmvzfLAr6pKB77c9Gzsb/blBmAepoz3OymitylHQzJkO1HDSEeItPT
+   e0QiygeYokJf32gXjmkC5NZzQFFOPOTx1Ki/hr6TLPqNL5ESzvusb+au3
+   OViHan04zCTsUTeYlkfMWsIw1gQa8mXrDvsCZFH4t8el4YW6Wo+IVCX4a
+   xXraCHE4jpPtE5W3eJoa5p+9THv36rYzUARDnIUcmlxedoPhKlpCw3BD2
+   +ABuoWS7yqsNyJTaDmmaW3qkWglzfj73AXDRgFSeat9loRKO7nNSdTpgE
+   92b2TiuSKooet8si5uMyFsXWAN10rwLWi66jm3I61sxq35bk4U83aeFOc
+   A==;
+X-CSE-ConnectionGUID: 9j1a47TiRxCJduc6cMul6w==
+X-CSE-MsgGUID: u7OlXSTiQSO3VNf0quif6w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="71854364"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="71854364"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 14:07:22 -0700
+X-CSE-ConnectionGUID: HCOrVRvIQYiPh/zZ0nyc9g==
+X-CSE-MsgGUID: ZJq6SJJxQbec8bcZ2BSGCQ==
+X-ExtLoop1: 1
+Received: from bradocaj-mobl.ger.corp.intel.com (HELO [10.125.111.142]) ([10.125.111.142])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 14:07:20 -0700
+Message-ID: <8ad8e025-ffea-4bc8-8797-6a280ecc229f@intel.com>
+Date: Thu, 9 Jul 2026 14:07:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|DS0PR12MB999079:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5c73538-1ecf-459e-7b50-08deddf9267e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|6133799003|22082099003|18002099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	HlCriry36JYQ+ZCSx1iJUoeS/GwHWRqiyywsNN+hYqZ61LynWt7irRiHBTySdwEe+51qqsjT7Eccb1gwL+vH1Klyc3KFHNGdKqzfTAUIl1YxKQpAD8Bh4EJ6nrtVpMXTxPCnyM5D4sPto9Bwcj7KvyDGgYNymE/1GYDizFufhlKbEtw/10UNzmCmfHi6f18Sla4XoIaiVvhVaHNYdSosw2WEyaUXZovZHXEq6Fg3QuoVFXVXKm48Swln/rjgk5cgK6en/Ro7qGhdVduI/y9CkCQba9DC4sJ2nzF7+aJBKBevMcu/FvG8r6ZiGr24/6ngFQUpTsJ3PRfDB1r4cmPo3dWP7bmndMVjcOvPPLYq9EptJzjChOkGFSYbD6ijYwZLDFiqlBzmq/fCZdI3SnDyTabVb2JkOk/90JljLyVtMQAFXyZcZMcHrtZA3/AX0fDsv71lWcdbxkl0s3vBPflVdiQx9XwcWuJi48roWhcJF5iaKNTz8WsgAxKFqrXYJXOYS3VLLp6wcyGL9QDvCp+WCh8JE+ezE3G5OYGpt48xlheT2VJDIwiz/CcshA0WxEgN5c8YLa8RubTRzHAufEHYwIWS3v1KMyYeA3Mp2jB2THFR3XQWZmir607dh+hVCFbfSKR+AHSadesKzPk68RCqoTqg4GMVpSJZGWeYUzj6/wE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(6133799003)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?VBdBL9LSq9fJGP7cRI3B9nWPZoCDtgf9Em8MkXXaCdUtqg1Iq6NkUsMYx9LQ?=
- =?us-ascii?Q?PQbNIMYSWO6eaCwZ4DwL5Y2j8QLvFXuMpD5BnMmLMiv8gOrADVhtiuQZyqzm?=
- =?us-ascii?Q?IeGXzPhGl7nBxcxVTcMHbzqJryNGqWPnAZTlehHozyOuHOdhkQjv6/b1EF5G?=
- =?us-ascii?Q?WgtNdpfrwpqnT4dqmExmpB8yi+UIQ9d6ty8XJ2tjeTB2bYCeWqMCGwIsbQCx?=
- =?us-ascii?Q?frCnwHITd8+DDWerKFjjQPx3jXa/BOlnRhoIhLzk8DbEat2H/pn3tE3yYiHu?=
- =?us-ascii?Q?fotBe4ettLueVA3dGB12A1rQ39VmzGu/4d5um0agKdvv9NDlWCC9kdkgcmWu?=
- =?us-ascii?Q?8KwBQkzTCXXxKgXXzg6z7bEQMTZJDwH6ZFGtAETelw7Ra98BCUFL0F27LfQY?=
- =?us-ascii?Q?fFbB5ceJoR8yPrpHDbsIBxqoJdrR/W9A4QP5VMgzc+YqlAoNl+pBNYnSgK3E?=
- =?us-ascii?Q?85qjRus+SdlXTT2zLSKVY1M9fV4iEhjqGTipECa8H1KHEKQAIVwBJ38nLjy6?=
- =?us-ascii?Q?FFRrc8PrGLJQsYgVqABqNNuKEmyvWAFyQWPCzGBtMpKaBNq0luVh1OeK7W78?=
- =?us-ascii?Q?P/rvSAgY3Plxx8ZqLvAD5+WHXzYknktEky/YT3gC4cZZr1e9ffJL07VrUiR9?=
- =?us-ascii?Q?la9bLvmrBHDxVq3d7m9nuRJ9ncAX6qCASVdEVxa42zqFXWIn/T+bkX6ic7nz?=
- =?us-ascii?Q?J4yYktXpPvNFEba7MpvlF3RPj/xLudvJLRaWCtfl+Tgsm+URjvWCHDtcyzAE?=
- =?us-ascii?Q?aILkK06OGs6sOVXgxiQOO22o3FORHGUDcvGwYcVFyBMPubXPdlJdVLtrI3B1?=
- =?us-ascii?Q?lva3zWbePB4NS17vxMtQNBpxElOaTyHldwX0ZafwmQfdV/XuNWkGmvvq7/cF?=
- =?us-ascii?Q?r+579IY1MXD9xOdPAJ/TCk5bj4f8+0vhwrtgwnSXI8kIBf6aYEvF/IFm6n5d?=
- =?us-ascii?Q?/egZOzVdxV96zEg9VfI2ROAsgXnZkG2ji/wYH9ir4uVD0xKKbxS+rmbvvdjA?=
- =?us-ascii?Q?3yNJxFmSehWJrjvBf+ikOnPRIft4jTT9BaFLnV+beyPHB5tgkSy+HoaOjF6H?=
- =?us-ascii?Q?Rs1t/+0OyQO1AoynfrwD83Zh0Zvz95oiGtEYk09aC719DG354rfDSQOQbPd2?=
- =?us-ascii?Q?/4bVCswLV9FSJy3AjOulJjOHke8QIaIjlsV00jE1Qs3P7XE3zIdkpGCWwxV5?=
- =?us-ascii?Q?DzABq2nxcXNGli+9dJvSS+nZsLm+N5+lU127vuy0bN07FRNVE0R5g/tHXfzo?=
- =?us-ascii?Q?+T3zMa+C37otNJJc8IjouLSJtr7ebsMMvB6jbmaIp7mMUUSSkr5VijXluagS?=
- =?us-ascii?Q?NnXg1SQltcr3uj9n7zExmiABeU1TXG49BBV6SbBpB86T0lu6bQr2fyW9mvN2?=
- =?us-ascii?Q?IAxBZM6m5Uz4mRZtqWd1iNOzQm+07ZQGYTvDsPMeBPZWdW1uafo3msjYFTeT?=
- =?us-ascii?Q?6XlYfHpVJiriBXJvm8w96r9wbBq7ljOoDXMTMOziIXRTi5oSykkSrBIm53Gk?=
- =?us-ascii?Q?lpJaP3WnCXJZh9Uu48ZAWjDgUNjPkYHhs4G70uffttnFDeV0WrG675F3RCpc?=
- =?us-ascii?Q?fo9bg4425j0TFKvPCZu2CXP3VoTTlTKZbm+lFkziNcWOfm9aCpPiBgSowREv?=
- =?us-ascii?Q?DCg7heWIAYCpNoUUrttrHSpYzaVXEqxEdPLhM6Vud7S9a+t+UMkGKF6LG5XC?=
- =?us-ascii?Q?BS3RxZ9xpJfPbxOx3Hq5GTalLhztuciyQtyl+Wsw4jcXy5nlqhcQ56xy5xsE?=
- =?us-ascii?Q?HQKNw7VLoQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5c73538-1ecf-459e-7b50-08deddf9267e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2026 20:32:09.6980
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dcsin4M/ENa0osgesv0rA6M9HUbrTkuX5N8lytKmIb7H5oRejdp+XAMEMjeOVuQptKOQwvY1DYQTSW6afa7GnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB999079
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 07/10] dax: plumb hotplug online_type through dax
+To: Gregory Price <gourry@gourry.net>, linux-mm@kvack.org
+Cc: nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-cxl@vger.kernel.org, driver-core@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com, david@kernel.org,
+ osalvador@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
+ dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com,
+ alison.schofield@intel.com, akpm@linux-foundation.org, ljs@kernel.org,
+ liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, iweiny@kernel.org,
+ Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-8-gourry@gourry.net>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20260630211842.2252800-8-gourry@gourry.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Liang,
 
-On Thu, Jul 09, 2026 at 06:03:40PM +0800, luoliang@kylinos.cn wrote:
-> From: Liang Luo <luoliang@kylinos.cn>
+
+On 6/30/26 2:18 PM, Gregory Price wrote:
+> There is no way for drivers leveraging dax_kmem to plumb through a
+> preferred auto-online policy - the system default policy is forced.
 > 
-> In prog_run's run(), the bpf_link is attached early but only destroyed
-> on the success path. The three SCX_EQ assertions between attach and
-> destroy expand to a direct 'return SCX_TEST_FAIL', so if any of them
-> triggers, bpf_link__destroy() is never reached and the BPF scheduler
-> stays loaded. All subsequent tests then fail to attach because SCX is
-> not in the DISABLED state.
+> Add 'enum mmop' field to DAX device creation path to allow drivers
+> to specify an auto-online policy when using the kmem driver.
 > 
-> Convert those assertions to explicit checks that jump to a unified
-> 'out' label which always runs the cleanup, matching the pattern used
-> in cyclic_kick_wait.c.
+> Capturing the system default would otherwise break the ABI, because
+> the system default can change - but we would be statically assigning
+> the value at device creation time.
 > 
-> Signed-off-by: Liang Luo <luoliang@kylinos.cn>
+> To resolve this we add DAX_ONLINE_DEFAULT, which defaults devices to
+> the current behavior, while providing a clean way to override it.
+> 
+> No behavioural change for existing callers (still the system default).
 
-We could also add (optionally):
+behavioral
 
-Fixes: a5db7817af78 ("sched_ext: Add selftests")
+> 
+> Signed-off-by: Gregory Price <gourry@gourry.net>
 
-Other than that, looks good to me.
-
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
-
-Thanks,
--Andrea
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
 > ---
->  tools/testing/selftests/sched_ext/prog_run.c | 34 +++++++++++++++-----
->  1 file changed, 26 insertions(+), 8 deletions(-)
+>  drivers/dax/bus.c         |  3 +++
+>  drivers/dax/bus.h         |  9 +++++++++
+>  drivers/dax/cxl.c         |  1 +
+>  drivers/dax/dax-private.h |  4 ++++
+>  drivers/dax/hmem/hmem.c   |  1 +
+>  drivers/dax/kmem.c        | 11 +++++++++--
+>  drivers/dax/pmem.c        |  1 +
+>  7 files changed, 28 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/sched_ext/prog_run.c b/tools/testing/selftests/sched_ext/prog_run.c
-> index 05974820ca69..1129ec2aaddc 100644
-> --- a/tools/testing/selftests/sched_ext/prog_run.c
-> +++ b/tools/testing/selftests/sched_ext/prog_run.c
-> @@ -28,7 +28,8 @@ static enum scx_test_status setup(void **ctx)
->  static enum scx_test_status run(void *ctx)
->  {
->  	struct prog_run *skel = ctx;
-> -	struct bpf_link *link;
-> +	struct bpf_link *link = NULL;
-> +	enum scx_test_status status = SCX_TEST_PASS;
->  	int prog_fd, err = 0;
+> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+> index 492573b47f66..4a03b323b003 100644
+> --- a/drivers/dax/bus.c
+> +++ b/drivers/dax/bus.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright(c) 2017-2018 Intel Corporation. All rights reserved. */
+>  #include <linux/memremap.h>
+> +#include <linux/memory_hotplug.h>
+>  #include <linux/device.h>
+>  #include <linux/mutex.h>
+>  #include <linux/list.h>
+> @@ -394,6 +395,7 @@ static ssize_t create_store(struct device *dev, struct device_attribute *attr,
+>  			.size = 0,
+>  			.id = -1,
+>  			.memmap_on_memory = false,
+> +			.online_type = DAX_ONLINE_DEFAULT,
+>  		};
+>  		struct dev_dax *dev_dax = __devm_create_dev_dax(&data);
 >  
->  	prog_fd = bpf_program__fd(skel->progs.prog_run_syscall);
-> @@ -42,23 +43,40 @@ static enum scx_test_status run(void *ctx)
->  	link = bpf_map__attach_struct_ops(skel->maps.prog_run_ops);
->  	if (!link) {
->  		SCX_ERR("Failed to attach scheduler");
-> -		close(prog_fd);
-> -		return SCX_TEST_FAIL;
-> +		status = SCX_TEST_FAIL;
-> +		goto out;
->  	}
+> @@ -1527,6 +1529,7 @@ static struct dev_dax *__devm_create_dev_dax(struct dev_dax_data *data)
+>  	ida_init(&dev_dax->ida);
 >  
->  	err = bpf_prog_test_run_opts(prog_fd, &topts);
-> -	SCX_EQ(err, 0);
-> +	if (err) {
-> +		SCX_ERR("BPF_PROG_RUN failed (%d)", err);
-> +		status = SCX_TEST_FAIL;
-> +		goto out;
-> +	}
+>  	dev_dax->memmap_on_memory = data->memmap_on_memory;
+> +	dev_dax->online_type = data->online_type;
 >  
->  	/* Assumes uei.kind is written last */
->  	while (skel->data->uei.kind == EXIT_KIND(SCX_EXIT_NONE))
->  		sched_yield();
+>  	inode = dax_inode(dax_dev);
+>  	dev->devt = inode->i_rdev;
+> diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
+> index 5909171a4428..3bc76bc0a145 100644
+> --- a/drivers/dax/bus.h
+> +++ b/drivers/dax/bus.h
+> @@ -3,6 +3,7 @@
+>  #ifndef __DAX_BUS_H__
+>  #define __DAX_BUS_H__
+>  #include <linux/device.h>
+> +#include <linux/memory_hotplug.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/range.h>
+>  #include <linux/workqueue.h>
+> @@ -16,6 +17,13 @@ struct dax_region;
+>  #define IORESOURCE_DAX_STATIC BIT(0)
+>  #define IORESOURCE_DAX_KMEM BIT(1)
 >  
-> -	SCX_EQ(skel->data->uei.kind, EXIT_KIND(SCX_EXIT_UNREG_BPF));
-> -	SCX_EQ(skel->data->uei.exit_code, 0xdeadbeef);
-> +	if (skel->data->uei.kind != EXIT_KIND(SCX_EXIT_UNREG_BPF)) {
-> +		SCX_ERR("Unexpected exit kind: %llu",
-> +			(unsigned long long)skel->data->uei.kind);
-> +		status = SCX_TEST_FAIL;
-> +		goto out;
-> +	}
-> +	if (skel->data->uei.exit_code != 0xdeadbeef) {
-> +		SCX_ERR("Unexpected exit code: %lld",
-> +			(long long)skel->data->uei.exit_code);
-> +		status = SCX_TEST_FAIL;
-> +		goto out;
-> +	}
+> +/*
+> + * online_type sentinel: the device was created without an explicit online
+> + * policy, so the system default is resolved when the kmem driver binds,
+> + * (not at device-creation time, which would freeze a stale policy).
+> + */
+> +#define DAX_ONLINE_DEFAULT	(-1)
 > +
-> +out:
->  	close(prog_fd);
-> -	bpf_link__destroy(link);
-> +	if (link)
-> +		bpf_link__destroy(link);
+>  struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+>  		struct range *range, int target_node, unsigned int align,
+>  		unsigned long flags);
+> @@ -26,6 +34,7 @@ struct dev_dax_data {
+>  	resource_size_t size;
+>  	int id;
+>  	bool memmap_on_memory;
+> +	int online_type;	/* enum mmop, or DAX_ONLINE_DEFAULT sentinel */
+>  };
 >  
-> -	return SCX_TEST_PASS;
-> +	return status;
->  }
+>  struct dev_dax *devm_create_dev_dax(struct dev_dax_data *data);
+> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
+> index 3ab39b77843d..1a7ec6212213 100644
+> --- a/drivers/dax/cxl.c
+> +++ b/drivers/dax/cxl.c
+> @@ -27,6 +27,7 @@ static int cxl_dax_region_probe(struct device *dev)
+>  		.id = -1,
+>  		.size = range_len(&cxlr_dax->hpa_range),
+>  		.memmap_on_memory = true,
+> +		.online_type = DAX_ONLINE_DEFAULT,
+>  	};
 >  
->  static void cleanup(void *ctx)
-> -- 
-> 2.43.0
-> 
+>  	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
+> diff --git a/drivers/dax/dax-private.h b/drivers/dax/dax-private.h
+> index 81e4af49e39c..902e922dc4e4 100644
+> --- a/drivers/dax/dax-private.h
+> +++ b/drivers/dax/dax-private.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/device.h>
+>  #include <linux/cdev.h>
+>  #include <linux/idr.h>
+> +#include <linux/memory_hotplug.h>
+>  
+>  /* private routines between core files */
+>  struct dax_device;
+> @@ -79,6 +80,8 @@ struct dev_dax_range {
+>   * @dev: device core
+>   * @pgmap: pgmap for memmap setup / lifetime (driver owned)
+>   * @memmap_on_memory: allow kmem to put the memmap in the memory
+> + * @online_type: MMOP_* online type for memory hotplug, or DAX_ONLINE_DEFAULT
+> + *		 to resolve the system default policy when kmem binds
+>   * @nr_range: size of @ranges
+>   * @ranges: range tuples of memory used
+>   */
+> @@ -95,6 +98,7 @@ struct dev_dax {
+>  	struct device dev;
+>  	struct dev_pagemap *pgmap;
+>  	bool memmap_on_memory;
+> +	int online_type;	/* enum mmop, or DAX_ONLINE_DEFAULT sentinel */
+>  	int nr_range;
+>  	struct dev_dax_range *ranges;
+>  };
+> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
+> index af21f66bf872..2de3bc925172 100644
+> --- a/drivers/dax/hmem/hmem.c
+> +++ b/drivers/dax/hmem/hmem.c
+> @@ -37,6 +37,7 @@ static int dax_hmem_probe(struct platform_device *pdev)
+>  		.id = -1,
+>  		.size = region_idle ? 0 : range_len(&mri->range),
+>  		.memmap_on_memory = false,
+> +		.online_type = DAX_ONLINE_DEFAULT,
+>  	};
+>  
+>  	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 592171ec10f4..0a184c0878dd 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -72,6 +72,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  	int i, rc, mapped = 0;
+>  	mhp_t mhp_flags;
+>  	int numa_node;
+> +	int online_type;
+>  	int adist = MEMTIER_DEFAULT_DAX_ADISTANCE;
+>  
+>  	/*
+> @@ -132,6 +133,11 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		goto err_reg_mgid;
+>  	data->mgid = rc;
+>  
+> +	/* Resolve system default at bind time in case it changed */
+> +	online_type = dev_dax->online_type;
+> +	if (online_type == DAX_ONLINE_DEFAULT)
+> +		online_type = mhp_get_default_online_type();
+> +
+>  	for (i = 0; i < dev_dax->nr_range; i++) {
+>  		struct resource *res;
+>  		struct range range;
+> @@ -172,8 +178,9 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		 * Ensure that future kexec'd kernels will not treat
+>  		 * this as RAM automatically.
+>  		 */
+> -		rc = add_memory_driver_managed(data->mgid, range.start,
+> -				range_len(&range), kmem_name, mhp_flags);
+> +		rc = __add_memory_driver_managed(data->mgid, range.start,
+> +				range_len(&range), kmem_name, mhp_flags,
+> +				online_type);
+>  
+>  		if (rc) {
+>  			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
+> diff --git a/drivers/dax/pmem.c b/drivers/dax/pmem.c
+> index bee93066a849..e7adace69195 100644
+> --- a/drivers/dax/pmem.c
+> +++ b/drivers/dax/pmem.c
+> @@ -63,6 +63,7 @@ static struct dev_dax *__dax_pmem_probe(struct device *dev)
+>  		.pgmap = &pgmap,
+>  		.size = range_len(&range),
+>  		.memmap_on_memory = false,
+> +		.online_type = DAX_ONLINE_DEFAULT,
+>  	};
+>  
+>  	return devm_create_dev_dax(&data);
+
