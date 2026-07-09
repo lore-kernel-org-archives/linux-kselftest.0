@@ -1,84 +1,79 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBD13890F8
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jul 2026 10:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D299140628C;
+	Thu,  9 Jul 2026 10:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783592848; cv=none; b=ER75cv4170JTPiYQUnjMWnt8IJHBc8R//PttK5qnyf8qrVJZPAnDKtrfvjVnSo4odWZaMtjqq+yF0PXzpqs0jfbzLJ7Bzfb0IdtIC+L3moh7QeBnj0exgMY1uAmkCpccGezTzKmuHRiS/1aqiOupedzowhUMgK9j3jCaAYeR1+A=
+	t=1783593632; cv=none; b=q4pS0W6MaoXcWqmL9dBwdT40fFXC1fIEvAGwGW04oIMssjvx8xxx9H8STt1iMMgWcA2RsFtDVDKelsVnBFs+ROy2ZUd9/BeqxzsBXGVUK5rfhkbTsGV66hcV+P1GKSxdgq8PtZOvuZ60Mi3qx/1Vjz6L5zjAR1RPmjdDfks6VWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783592848; c=relaxed/simple;
-	bh=MxLey4kR4pPKpR8Eqs6jpbSuCMQEbnoM8JXbBb9w8kA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FVckXTYJNWY2/KmExci/u1ZK0IHJctgR8mEvyaTc6TRwun/hcIt3bkd8SGPw3C9Qyr156+WZhgtKeBtB3NUax6IOip9hh7ZanVZ9/Fq/YIyvtWa/np/yTsy4hfFH0KB2aLh9T3B6N9OThvAtO1asGBgTgbRUYtwR8AZVl2cKsAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IY8wixN/; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783593632; c=relaxed/simple;
+	bh=GWwclCBpeV2Cq6fJVK1v3rRfOVXzB7wH2YAo3pnIoZo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kV+Wv7q6qgPv1T+uEP2HtVlg+jaE9em1JhWQLp7bVXCTD8GSjslfanyMP/3VU5z3+QDMHk+K0rbVEar8p33/ASjxcG9avNccxi5sp6HUWzumm+SaJOXf6du+2VoyCESwMPLYNlyMPhjy/FUuqN1P4yNIrQmfUHDeBQbGjbkKROM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IE7eG/o9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IY8wixN/"
-X-Forwarded-Encrypted: i=1; AHgh+Rp5t201CVk7S9NsZosUUn3Q9CDFGYt3hYc6wJaxkjqbZbO24dTZQCmerICH2vVnva2TdN/VtvSA3W3WN9PnKaU=@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783592844;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MxLey4kR4pPKpR8Eqs6jpbSuCMQEbnoM8JXbBb9w8kA=;
-	b=IY8wixN/eC6C4tjBLwgEqMTMeF6WdPsnfnA+uQPi7JnrSzA+KaDPuOvmR4bw44e264ZTq5
-	Z0W+AlMjVssTk9YmPVZG7nPNBhBYI+xd0wLjAwtmStvDhzsh2T+4SRnrc8EOBcTuwBMOvc
-	Zc6Lrvvom2htVMKgdggH7vM70dWcLNI=
-X-Gm-Message-State: AOJu0Yw80VFNpror6rKooJlBg0wvmv9epzH5oz0WQ445KCHJetKwVI8T
-	5G+fA3YXi7jI1f+nqjtppYlwYG96cYC6wCh+NbhlO5bJJunfexhZFx2umFhQEOv3cd8KGsBAGOE
-	qtvurEHmAsapaNCkBZYJk8XuCKIcoJebQwnZqvR7F
-X-Received: by 2002:a05:622a:248b:b0:517:5ac7:332e with SMTP id
- d75a77b69052e-51c9a7990e9mr6344801cf.6.1783592838569; Thu, 09 Jul 2026
- 03:27:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IE7eG/o9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4201F00A3A;
+	Thu,  9 Jul 2026 10:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783593630;
+	bh=C9FKNrNA8q+iO/rANodd+gADIq21KYWiq+7C8UVnt8w=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=IE7eG/o9iazHUZwIumf5va/7XaPY+bKGEtYvYGhgvjjwYC+gXBpZm/Ik3Vff9egwt
+	 aQI4O4ayn8emEW/NUWxWmHRze9l9y8MxjajcjJnfb60sFpCpfDyQmlFRQ0ktdWt/vX
+	 NaKbdO8rs7t3DQ4DUeFlS0vJDm00jBPsk9Qv5dT2iadNEgv2cxSPxktFywWjfmMdt9
+	 +w6Yx5tgy+1l4cv+pumoprHlXlD/w7CyaS/Wv3oo9uck5P0ApJUBDZmHc4T2LnGsre
+	 RxFm7SitJ2sr5pjA1+KPO+7SBzTrrYJdFw2OIWp+v83TyZjZnflJneDmTUx6DfWu1T
+	 Gg46Sdc0W5pBw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1996639D609B;
+	Thu,  9 Jul 2026 10:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260709-kvm-arm64-sme-v11-0-32799f66db9d@kernel.org>
-In-Reply-To: <20260709-kvm-arm64-sme-v11-0-32799f66db9d@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Thu, 9 Jul 2026 11:26:41 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTyAxBx4jhGq-Gme5hPi1ZyDAkL2CP_U22ykkQemD1dUhg@mail.gmail.com>
-X-Gm-Features: AUfX_mwpyfAsKpUMf2tNxcvppePr82pc_iCQFLAefIFcUoHnYHNmsUIYIv4f_m4
-Message-ID: <CA+EHjTyAxBx4jhGq-Gme5hPi1ZyDAkL2CP_U22ykkQemD1dUhg@mail.gmail.com>
-Subject: Re: [PATCH v11 00/29] KVM: arm64: Implement support for SME
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
-	Jean-Philippe Brucker <jpb@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Peter Maydell <peter.maydell@linaro.org>, Eric Auger <eric.auger@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: rss_ctx: Add retries to
+ test_rss_context_overlap to reduce flakes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178359360864.3403147.1744210090391033845.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Jul 2026 10:40:08 +0000
+References: <20260702164932.2832916-1-limzhineng2@gmail.com>
+In-Reply-To: <20260702164932.2832916-1-limzhineng2@gmail.com>
+To: Zinc Lim <limzhineng2@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, zinclim@meta.com,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-Hi Mark,
+Hello:
 
-[snip]
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> base-commit: 4c45e14df2f4e77982ad70d6d8e3fe750edd4c37
+On Thu,  2 Jul 2026 09:49:31 -0700 you wrote:
+> Similar to commit 690043b95c18 ("selftests: drv-net: rss: Add
+> retries to test_rss_key_indir to reduce flakes"), implement the
+> retry mechanism for test_rss_context_overlap. This gives the test
+> more attempts to distribute the flow evenly, as the chance of
+> flow skewing to one queue is high.
+> 
+> Example failures:
+> 
+> [...]
 
-I think this SHA is local to your tree. I can't locate it, and neither
-could Sashiko [1, 2]. For a series this big and complex, it would be
-good to get Sashiko to review it. Could you please fix that?
+Here is the summary with links:
+  - [net-next] selftests: drv-net: rss_ctx: Add retries to test_rss_context_overlap to reduce flakes
+    https://git.kernel.org/netdev/net-next/c/fe3e786ef4eb
 
-Thanks,
-/fuad
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[1] https://sashiko.dev/#/patchset/20260709-kvm-arm64-sme-v11-0-32799f66db9d%40kernel.org
-[2] https://sashiko.dev/#/log/baseline/42725/0
 
-> change-id: 20230301-kvm-arm64-sme-06a1246d3636
->
-> Best regards,
-> --
-> Mark Brown <broonie@kernel.org>
->
