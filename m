@@ -1,178 +1,70 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3553426EA2
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA5E3C3428;
+	Fri, 10 Jul 2026 15:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783694917; cv=none; b=SKyVGCMi2OcGQCk57/f8X73ovAFvS8/GFM3JqVxuR9K9LVYyi9Ger9VNk9JGZ44TApiuqmO4uyGKNrunm+xttIRffcTVINF0NQ4AGLiSy524RsErmqggX9jDCC8/g0RA3k3PSuU53jc5fkU34w848Wy6gzYXApfIPOEVCw2NZHU=
+	t=1783697910; cv=none; b=aqxLKJA+BoEmMdCoaoDt1ydUVmhhIPNbBjMMfFsgTGXnRvQi4oIdKHMs5DrbYUj2hYRfif3AZh/VlOfNQDRD3zIkqNgQDMtBYsmlivPq8jsEiXaBF1vukRd9VXGXjy5xnQR8crF7R+4CjxGufe6OA9V8iqpjtP63ZwsSZ5QieJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783694917; c=relaxed/simple;
-	bh=+ivvFCVcIX6Ey0qTaN6FIumo0sAr9nIVFmqzpE8YKE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DgQLKtXta1n4kzaKQrMF2TumfKJT7Fd9ODznYM8Rb+JSR/gIful7sJygw6uP9Fa6IdyHeXj9DCe/LDzU9vyCZOQvpT4dgmy1h7wpG9yK/pXBVo67SPBhlfArCxqt4v0vBso1fhzeR46UTv40DTtQDMm4/yWtwSWb24GjEDA/aRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sDW/301c; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783697910; c=relaxed/simple;
+	bh=DtT7FTjGMjq2zY8aPWsbFGoVCnYTdBVrw1mVaw21aRg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=kehjZQVwNWGw5qqWtVQ/A1hIsx6OUhiobYlgcL0PSYPlCpVf4Ey1TTQaYndCy5pOJmGfMYwKcUFI8Xco66XBkHxU1hqf/0iA8UVSci2I+VopSMolwVPLC+2px3NKbohJtjbQ6bmZSyFe9wRgsjonEGCIzHym+MYkxCRA1islPt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvNemzKX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sDW/301c"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783694912;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W+N5SCtUgPXUqSQ00mfrHzf3536myFSz8dVuOkZSBg0=;
-	b=sDW/301c8t0HhcetTdOYJBO0tIIp+m5sq1/j9l/gL5pgANfollrCNtk+iqRo3GIB7JZXlB
-	fpkOMwL29RNiMRKGrMgCeCds3Q/93KxME03uvVESO9tGYPWpOhwAQP+adDEyOQ+CzfBW4a
-	6e4yTl8OEzCCgwPLP15W6Sa6Fo6TkZk=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test fentry link after tracing_multi link
-Date: Fri, 10 Jul 2026 22:47:34 +0800
-Message-ID: <20260710144734.78203-3-leon.hwang@linux.dev>
-In-Reply-To: <20260710144734.78203-1-leon.hwang@linux.dev>
-References: <20260710144734.78203-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvNemzKX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3F11F000E9;
+	Fri, 10 Jul 2026 15:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783697909;
+	bh=iSOEINRoO6HE5NOxott3HWiwrBXL02Ivy5qz/Rs9LVY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=LvNemzKXlLuF5PyX5QEtUAjG+TXppzsaWgClX8JhswGVZ0r9V25dllYEI2yiwP0Q3
+	 duHRsJdwq8Ls0X0R7DDX1qZ413SQ9TOyqElSWAW2IK7y9kVcQ4bIRu524bQcZ847Oe
+	 FRmkWMG0VyShfnX+IbQJJ0Fve0g9yTVG1qG5zNKy9G6kPUFETMJMOr6kOErQRXgyUl
+	 icu6JZDOneRTC51oeDROaVvnmiCGsSWJ2P6wfXaPvevBjbg7+xcG0iF7BPV7bJ+9dB
+	 Urj+HmLxyPJrWLKIbflz+3fzngu70c2gNAA29PMa4qu011G9EZR4XMwjoXuzUVoha+
+	 mH63FWO1iGyKg==
+Date: Fri, 10 Jul 2026 09:38:25 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Wang Yan <wangyan01@kylinos.cn>
+cc: shuah@kernel.org, pjw@kernel.org, palmer@dabbelt.com, 
+    aou@eecs.berkeley.edu, alex@ghiti.fr, geomatsi@gmail.com, 
+    andybnac@gmail.com, andrew.jones@oss.qualcomm.com, 
+    thecharlesjenkins@gmail.com, linux-kselftest@vger.kernel.org, 
+    linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/riscv: ptrace: Fix memory leak of regset_data
+ in vector tests
+In-Reply-To: <20260710083437.489648-1-wangyan01@kylinos.cn>
+Message-ID: <5ad27d5d-a396-341b-324d-ff2ca7bae26f@kernel.org>
+References: <20260710083437.489648-1-wangyan01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
 
-Verify that there's no any issue to attach tracing_multi link, then attach
-fentry link.
+On Fri, 10 Jul 2026, Wang Yan wrote:
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/tracing_multi.c  | 69 +++++++++++++++++++
- .../progs/tracing_multi_intersect_attach.c    |  8 +++
- 2 files changed, 77 insertions(+)
+> The regset_data buffer allocated with calloc() in the parent process
+> of several vector ptrace tests is never freed before returning,
+> causing memory leaks in:
+> 
+> - ptrace_v_not_enabled
+> - ptrace_v_early_debug
+> - ptrace_v_syscall_clobbering
+> - v_csr_invalid/ptrace_v_invalid_values
+> - v_csr_valid/ptrace_v_valid_values
+> 
+> Add free(regset_data) before kill(pid, SIGKILL) to release the
+> allocated buffer.
+> 
+> Signed-off-by: Wang Yan <wangyan01@kylinos.cn>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index f02ffc7f41d7..0aa9532a05cf 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -460,6 +460,73 @@ static void test_intersect(void)
- 	tracing_multi_intersect__destroy(skel);
- }
- 
-+static void test_fentry_after_multi(void)
-+{
-+	static const char * const funcs[] = {
-+		"bpf_fentry_test1",
-+	};
-+	struct bpf_link *fentry_link = NULL, *multi_link = NULL;
-+	struct tracing_multi_intersect *skel = NULL;
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	__u32 *ids = NULL;
-+	int err;
-+
-+	skel = tracing_multi_intersect__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_intersect__open_and_load"))
-+		return;
-+
-+	skel->bss->pid = getpid();
-+
-+	ids = get_ids(funcs, ARRAY_SIZE(funcs), NULL);
-+	if (!ASSERT_OK_PTR(ids, "get_ids"))
-+		goto cleanup;
-+
-+	opts.ids = ids;
-+	opts.cnt = ARRAY_SIZE(funcs);
-+	multi_link = bpf_program__attach_tracing_multi(skel->progs.fentry_1, NULL, &opts);
-+	if (!ASSERT_OK_PTR(multi_link, "attach_multi"))
-+		goto cleanup;
-+
-+	fentry_link = bpf_program__attach(skel->progs.fentry);
-+	if (!ASSERT_OK_PTR(fentry_link, "attach_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 1, "multi_fentry");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry");
-+
-+	err = bpf_link__destroy(fentry_link);
-+	fentry_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_multi"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_only");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_detached");
-+
-+	err = bpf_link__destroy(multi_link);
-+	multi_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_multi"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_detached"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_detached");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_still_detached");
-+
-+cleanup:
-+	bpf_link__destroy(fentry_link);
-+	bpf_link__destroy(multi_link);
-+	free(ids);
-+	tracing_multi_intersect__destroy(skel);
-+}
-+
- static void test_session(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
-@@ -957,4 +1024,6 @@ void test_tracing_multi_test(void)
- 	if (test__start_subtest("attach_api_fails"))
- 		test_attach_api_fails();
- 	RUN_TESTS(tracing_multi_verifier);
-+	if (test__start_subtest("fentry_after_multi"))
-+		test_fentry_after_multi();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-index cd5be0bb6ffd..5ebbe3b602a4 100644
---- a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-@@ -11,6 +11,14 @@ __u64 test_result_fentry_1 = 0;
- __u64 test_result_fentry_2 = 0;
- __u64 test_result_fexit_1 = 0;
- __u64 test_result_fexit_2 = 0;
-+__u64 test_result_fentry = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry, int a)
-+{
-+	test_result_fentry += a == 1;
-+	return 0;
-+}
- 
- SEC("fentry.multi")
- int BPF_PROG(fentry_1)
--- 
-2.55.0
+Thanks, queued for v7.2-rc.
 
+
+- Paul
