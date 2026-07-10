@@ -1,116 +1,169 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B089D3EFFD5
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 08:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3B83F0A9E
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 08:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783671417; cv=none; b=o0OmcCgD3W1OvEk89uKAbzxMtibKvtNu9x4hHTV3firCLPs7uG2QccpHm3tv09scXCqmUEPljVIGta6crYL3AL3taHYh3cpk/KP2td9xiSoVNYDrpfcjVdX1eWTfnHSv5nYGYwX27S4OMefVB/T1NGufh4gJrjNPwP8XHYbn2PM=
+	t=1783672310; cv=none; b=Hd61ZZlPk4mr9x9BiwwB0N6vJ/+LZE+Hw+2FdhQro4ri9KHiuK0N9JXiXXRZNUAU6ncIQVA9h76dQi1cKXy8gVud2uu8S0LZ0hrbWg72Php2ecSzzdPCrSUpZoQ9nfTYe7RLph8RaTIWDKUeUjDrQr/fXiLLoquzuivpzBmTMyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783671417; c=relaxed/simple;
-	bh=7KIc5ogxZwWrfJnko7PciiNQQWmWczwA7bDSRUvGObU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QfRgMDTha5LC5hYDEX5bEUg2EeCVJ81L5loTA4ANduHTZERNKdEOCIskY+02Ol38S2OM7gfQqBiahW24D1vSsMj2rgXDxLMqrQJkhjfEcwdP53Zi5QPxQUo9LuYtqo13znOtn7PPMKQkkAEfYDFPYfUDFubh41yq4SZbI9NnZmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DatQq7zq; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1783672310; c=relaxed/simple;
+	bh=B82fUdr3FIRmXEGo5N2knauT/Vi17F2UJb4hCihO1wk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l27Sl8UOBcaljxmQGzXN37w04wM8eExXxJ65AyVM1driuBC3y9XbtfU8erpF72toyTrxnr5tAf3NNR0vd/5wheuV3j2B9fixecJiNAZ2sEZqakvgYw0jgvYrhUJ6Xt+KoBeUMSNhk4cx55bopjyXoLBN8SZWpqizAawQ5JRZPuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g9CSv6kM; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fvcip7TD; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DatQq7zq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g9CSv6kM";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fvcip7TD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783671414;
+	s=mimecast20190719; t=1783672306;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=v4vUaGFk2l9Uqurf0ksjXpb4C/iQo+zejwWRDADYgb8=;
-	b=DatQq7zqepbmgjCIt7HS+hWbHHc+5miqP+mKJjX0WAR8XYqL0zvYwDG7i8yYQm80VFzT0L
-	gHB6r73LdkBoQ7+P5mgkCagmGMh0y0AHrvq5E/E5D2G9FjBigo49xOnZ2WF1kIU5PvYg5L
-	Knsha/KR87+nPWjVr6vSApyMmfMJoQ0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-516-rJpTrNr0MlibO6VsPMNLIg-1; Fri,
- 10 Jul 2026 04:16:49 -0400
-X-MC-Unique: rJpTrNr0MlibO6VsPMNLIg-1
-X-Mimecast-MFC-AGG-ID: rJpTrNr0MlibO6VsPMNLIg_1783671408
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 13E6A1801BE5;
-	Fri, 10 Jul 2026 08:16:48 +0000 (UTC)
-Received: from thuth-p1g4.redhat.com (unknown [10.44.49.56])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3ACA8180028B;
-	Fri, 10 Jul 2026 08:16:43 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	linux-security-module@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=4kQemOIUwz1M/CXyOgmbczAyLfNUg0B0dvAv2SyUZZs=;
+	b=g9CSv6kMOEWxdGFTkfs6Bv8l/5UPAbdJgBSVw8WO/Gr5Ub410j9vTehwVZ5sFKB/PFq6rk
+	UBudwPF0ieJ7jZ7rT8ZpRKAsqzA210Lsuu/FGjRxpPGs169zjE1Urd3n3m40v1DNIZUkL3
+	8u5vt+eDCK220Yl+qGCDAyW7sJRV+sI=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-108-07YJwV2pNDKAOC437bmTdA-1; Fri, 10 Jul 2026 04:31:44 -0400
+X-MC-Unique: 07YJwV2pNDKAOC437bmTdA-1
+X-Mimecast-MFC-AGG-ID: 07YJwV2pNDKAOC437bmTdA_1783672304
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-493ae2a6a72so7645085e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 01:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1783672303; x=1784277103; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=4kQemOIUwz1M/CXyOgmbczAyLfNUg0B0dvAv2SyUZZs=;
+        b=fvcip7TDOjyOF+FhvhhUCr6OoTn1DRV0vSnCUjid+Gg+Z3NyKdtR/5tMc8ycumGg+J
+         U61+kigE+yZayyGc5EZcTsnKuEmlMgbjKhIdpNNQfnlv78e89bmbtuia3yv3KVTHt2NN
+         ahK9Y0xQX3Ecw69ikoLxzWmXexnNdfgksmmQaD5MaDbHtnbviCakgUk/Uc7biZTxb9k8
+         WaQvlrsf5q8tYx8pcVHlUGw5x8PCEu9wFP0fyzhv1vQxICU/edijIsFTTaAiCrguvyRC
+         gMTJ9tOQ5UVVOwHhBfaiFBOa5mKfzqOKnvjHZRLfqckND+QBki8SLS4iaB5malGFNE7T
+         SEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783672303; x=1784277103;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=4kQemOIUwz1M/CXyOgmbczAyLfNUg0B0dvAv2SyUZZs=;
+        b=b2wH3isnGtmy77C9MXSaMAulCWqVF1LZlaATQniLncrXzS+LVlaKciJ9YTqHol4Nr2
+         zITrXi6CwabvAAMswa68ocTPdD3rk8dOmC4deaWasHWMyG8kxtKDSOH4tLVijAw6lVsl
+         A1a78a7VM3ydnZSlC8zqaocMz5CP9fLxMM1rzS2R9Mo8RS0sWytxrY1q5FgVS1rxQQPc
+         mqFGOV1vgG7b0s8jr+OQItDs57uN4ypWNWoK84TVIdZ17Z8AZPxmGanBx/2u0jtMM1K8
+         wMboU5XRgxVoiDaN7twzho2dgFAvkHQ6lU3gpt5oF7LzBBmQrD1YgPwCmXb8IvTBFvpa
+         qP5Q==
+X-Forwarded-Encrypted: i=1; AHgh+RoIQqaWIzcxUWI/0gD2H923E050WVi6BNKyKKmq+xw7wp7XMuGXWx4/Ydi9dmk2q+za7SgKuSmaGdMmLU5dy7o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6nSfiHCfqaj9rrpL/0AFFtSRBZTy3Ngqs2A9x6VIVq2H55BAZ
+	HXEznrW+HZt2TlVp2zPqJ8eEcuAUFGXUxLOrqu0a44eif7IYK9d0pXbUnuU1L3iCMDsXj9OEVeJ
+	BEwO/jcTGeOYkD4k4+tzhyAKgjoR2HOYnfkM0X8zzuuPzm29WGwghuc2YrV7mUpms5SaUfA==
+X-Gm-Gg: AfdE7cnpmutkyk6TXyZOL5MDbWO3apUFDyOepeXnsHKO6jfoONJDgBOiHQ5AHvMZ2A8
+	nIvQvs4KPhEwCVXqOtnA73clYs9j6OOdsIjYtL1asOTSnTcNwWBb7WlSH5kR9fmXMl/+MBhDMJ8
+	LVJYOJlmP4DPSXFPycFacF/uPmqGQ9wSMi5ONY4T0dLQ6xXAEnygH8yL/1Fi6fv7OKO+YdZrzn/
+	E7yvxX0X0d6H6ThUM3Ygys06MPpAeysVMm01j84KTYryhA45MdhlR0xc+5IdBVqIe9nOfwU+vNU
+	EAzl6abE6ljGcnUafcFJ1UW3gxv51mE2JVOe4+h8ki77xLv3hczEbJxVtjFfZvPo4vV/5JSQ9t9
+	rXTgDPuJ2gK2PJSAs27jIXLkEl3yhyoIdFPSXTvcMeR+rciqXnb0H8QPbp9SkMroThrQ4Fiebps
+	GG96D6
+X-Received: by 2002:a05:600c:4e0d:b0:493:c14a:a1ca with SMTP id 5b1f17b1804b1-493f3a5de04mr20017275e9.3.1783672303658;
+        Fri, 10 Jul 2026 01:31:43 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e0d:b0:493:c14a:a1ca with SMTP id 5b1f17b1804b1-493f3a5de04mr20016645e9.3.1783672303123;
+        Fri, 10 Jul 2026 01:31:43 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (212-8-243-115.hosted-by-worldstream.net. [212.8.243.115])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47df6a31dd5sm12792241f8f.16.2026.07.10.01.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 01:31:42 -0700 (PDT)
+Message-ID: <b971748dea21a7a6eec3be8b95f4c18aec2d0552.camel@redhat.com>
+Subject: Re: [PATCH v3 16/17] selftests/verification: Rearrange the
+ wwnr_printk test
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Wen Yang <wen.yang@linux.dev>, linux-trace-kernel@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/landlock: Skip scoped_signal subtest with MSG_OOB if not available
-Date: Fri, 10 Jul 2026 10:16:42 +0200
-Message-ID: <20260710081642.405916-1-thuth@redhat.com>
+Cc: Nam Cao <namcao@linutronix.de>, Thomas Weissschuh	
+ <thomas.weissschuh@linutronix.de>, Tomas Glozar <tglozar@redhat.com>, John
+ Kacur <jkacur@redhat.com>, Steven Rostedt <rostedt@goodmis.org>, Shuah Khan
+ <shuah@kernel.org>, 	linux-kselftest@vger.kernel.org
+Date: Fri, 10 Jul 2026 10:31:40 +0200
+In-Reply-To: <cd0a678b-1eec-42d8-b027-0d27b9c804a3@linux.dev>
+References: <20260625121440.116317-1-gmonaco@redhat.com>
+	 <20260625121440.116317-17-gmonaco@redhat.com>
+	 <cd0a678b-1eec-42d8-b027-0d27b9c804a3@linux.dev>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: Thomas Huth <thuth@redhat.com>
+On Fri, 2026-07-10 at 01:08 +0800, Wen Yang wrote:
+> > =C2=A0 load() { # returns true if there was a reaction
+> > -	local lines_before num
+> > +	local lines_before num load_pid ret
+> > =C2=A0=C2=A0	num=3D$((($(nproc) + 1) / 2))
+> > =C2=A0=C2=A0	lines_before=3D$(dmesg | wc -l)
+> > -	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q
+> > -	dmesg | tail -n $((lines_before + 1)) | grep -q "rv: monitor wwnr
+> > does not allow event"
+> > +	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q &
+> > +	load_pid=3D$!
+> > +	timeout 5 dmesg -w | tail -n +$((lines_before + 1)) | grep -m 1 -q
+> > "rv: monitor wwnr does not allow event"
+>=20
+>=20
+> Minor nit: could we add a small delay (e.g., sleep 0.1) before dmesg?
 
-MSG_OOB might be disabled in the kernel for unix sockets (by not
-selecting CONFIG_AF_UNIX_OOB), and in this case the related tests
-of the scoped_signal_test are currently failing.  Add a runtime
-probe using socketpair() to detect MSG_OOB support and skip the
-test gracefully if it is unavailable.
+I don't get what the benefit would be.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- .../selftests/landlock/scoped_signal_test.c   | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+The intent of that line is to run a continuous dmesg (-w) for up to 5s (tim=
+eout)
+but stopping if an occurrence is found (grep -m 1 would close the pipe).
 
-diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-index 58d25157fe781..3cf20d769f2bc 100644
---- a/tools/testing/selftests/landlock/scoped_signal_test.c
-+++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-@@ -398,6 +398,24 @@ static int setup_signal_handler(int signal)
- 	return sigaction(SIGURG, &sa, NULL);
- }
- 
-+/*
-+ * MSG_OOB might be disabled in the kernel via the CONFIG_AF_UNIX_OOB
-+ * switch, so this function can be used for probing for its availability.
-+ */
-+static bool has_af_unix_oob(void)
-+{
-+	bool available = false;
-+	int sp[2];
-+
-+	if (socketpair(AF_UNIX, SOCK_STREAM, 0, sp) == 0) {
-+		available = (send(sp[0], ".", 1, MSG_OOB) == 1);
-+		close(sp[0]);
-+		close(sp[1]);
-+	}
-+
-+	return available;
-+}
-+
- /* clang-format off */
- FIXTURE(fown) {};
- /* clang-format on */
-@@ -460,6 +478,9 @@ TEST_F(fown, sigurg_socket)
- 	int pipe_parent[2], pipe_child[2];
- 	pid_t child;
- 
-+	if (!has_af_unix_oob())
-+		SKIP(return, "CONFIG_AF_UNIX_OOB / MSG_OOB not available");
-+
- 	memset(&server_address, 0, sizeof(server_address));
- 	set_unix_address(&server_address, 0);
- 
--- 
-2.55.0
+Do you see a case in which this wouldn't happen?
+
+>=20
+> Reviewed-by: Wen Yang <wen.yang@linux.dev>
+>=20
+> > +	ret=3D$?
+> > +	kill "$load_pid"
+> > +	wait "$load_pid"
+> > +	return $ret
+> > =C2=A0 }
+> > =C2=A0=20
+> > =C2=A0 echo 1 > monitors/wwnr/enable
+> > =C2=A0 echo printk > monitors/wwnr/reactors
+> > =C2=A0=20
+> > -load
+> > -
+> > =C2=A0 echo 0 > monitoring_on
+> > =C2=A0 ! load || false
+> > =C2=A0 echo 1 > monitoring_on
+> > =C2=A0=20
+> > -load
+> > -
+> > =C2=A0 echo 0 > reacting_on
+> > =C2=A0 ! load || false
+> > =C2=A0 echo 1 > reacting_on
+> > =C2=A0=20
+> > +load
+> > +
+> > =C2=A0 echo nop > monitors/wwnr/reactors
+> > =C2=A0 echo 0 > monitors/wwnr/enable
 
