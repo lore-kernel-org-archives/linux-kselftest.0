@@ -1,229 +1,194 @@
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847EB40B398
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36B3416D11;
+	Fri, 10 Jul 2026 11:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783682421; cv=none; b=A8BPV8FNloM2Ou+8MGxZcB7gLv+i+UhbQDh8NalVTBiHlz8/r8CaOmpNhCmdt/AXRuKGgp8WN1I5fU9wy42f1fN2esQMgfcilYjGQNo72A2yGmvZsakTcGQ6pEgwgj4EzMDuqA8KQXbw2Wm+dQaTeiSgmIB4FqQZ4fiX7orbjZw=
+	t=1783682475; cv=none; b=SpMQrSDhIkPneSSvtH4uQq76jyhmFkpGOhiHgvmrkaxrPcewLJ0sGkJmezdJkgUhaVgUYzP953WVl8ximbOy8FAT+LVqLfotsatk/n4JdEx5+Ez18rEgv+yQnmoEbEOBgTzbqFL80qrAyRtzNRCJ3qw/MsBrnS+urjKClJ7lYlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783682421; c=relaxed/simple;
-	bh=KEp1AMyryYhUge8PND3TbWoobQrjJ6UnXXvN7a0wGLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uEseth51LLo/52q5/z2jeWMlvSErLsApHxa4g4UsVyFO1sPVovVyE4PjaExnLPuBqVzK3DycToXeo+TWZhU/exuLN8ttmDpG/W/bmpW0XBwARQqro3EtFGNo++3DsQTPXOfchMz6DOxLHL2HeW3mPTLGkVSBkKn65D5vVI1uV8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=QqKKoYOc; arc=none smtp.client-ip=84.16.66.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1783682475; c=relaxed/simple;
+	bh=8hhDq85vcHcF/9BQ2Qz8axGKuQb8hlF+J1dMzI4UNmY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=KMKSvXxLQNiWpDuU7/qX96FO88WQtmNPr3vKBj4cQdACD7nV60TE1AG9c+Fd3NvFlnl2GxRgQ2hdF0P0yVbpmGiIqOPjtNwpmRtAwfCloSzMF5U0WcG8OEKJ41Lj3//s8+EmWMTKPFd6zEBBf4n9RtSCxXvaBPykAHjMfdPe7wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=Sn1So8LC reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="QqKKoYOc"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gxTd53YbSzJQM;
-	Fri, 10 Jul 2026 13:10:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1783681801;
-	bh=43+ELjAOn+JDbZ1pkoZ9+pdyhdBGnnfDGLYu7ucwcZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QqKKoYOcr/Y5Pk8o17VrEiYlrGGIzSkJmeVUTlufsbZRrst3jat5zx0j774og3DlS
-	 EIrqIv65Mh+RJpiKsrWfTcLQioOC3nz7w81tf7+JDR3QFpaSUEnZzENUlsPahT8n10
-	 nNVe4q+wDJ7LT9a5LtM28slfCS2gxGttZn7/EeQc=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4gxTd44m6HzRXf;
-	Fri, 10 Jul 2026 13:10:00 +0200 (CEST)
-Date: Fri, 10 Jul 2026 13:09:55 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Thomas Huth <thuth@redhat.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	linux-security-module@vger.kernel.org, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rbriggs@redhat.com
-Subject: Re: [PATCH] selftests/landlock: Fix screwed up pointers in the
- scoped_signal_test
-Message-ID: <20260710.aeLeem2aR4ue@digikod.net>
-References: <20260709164340.339656-1-thuth@redhat.com>
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="Sn1So8LC"
+Received: from h183.csg.ci.i.u-tokyo.ac.jp (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66ABEvsM024946
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 10 Jul 2026 20:15:11 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=JO1RytCw7CQxlD6804FsBIdj143RrsQgoAnMa93zRJU=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-Id:To:Subject:Date;
+        s=rs20250326; t=1783682112; v=1;
+        b=Sn1So8LCm6eWjVT03slVIzGiyZKxQj59xS4Rhcvk2+0PpBg1xfn2gXjacJRyu4lJ
+         xwOeEmNdZfDO88q38SO9mBsTObZhdMm9DQ0eVjUjybBT0s+1lB/CAtGJtX7HqCSN
+         jWxD3PhFxHOYPyz5nwOibOQCmxb4pll3fwekDkMm9ABfdXZXMiWQ0Whesc0OsQGO
+         KaAHg6hmZhe1xLzzkjeVY+qM6s6AvmL/68NVxCpwTcxrHzMP41OXErA4Xq+GFV4i
+         M7gv16In+ylUzyBTz3dl9jyf28ARCO9dF6WqO2fFkO7yR0RtNs6ELfChYUPYfCZA
+         CFymPnJwTvS4XrHRVHITfw==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Date: Fri, 10 Jul 2026 20:15:02 +0900
+Subject: [PATCH v8 08/11] KVM: arm64: PMU: Pass the target CPU to
+ kvm_pmu_probe_armpmu()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260709164340.339656-1-thuth@redhat.com>
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260710-hybrid-v8-8-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.16-dev-925f5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4094;
+ i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
+ bh=8hhDq85vcHcF/9BQ2Qz8axGKuQb8hlF+J1dMzI4UNmY=;
+ b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ1bAFctzlZG1FnqW6+Q/dl6r396ypmleA5Mem9UTBr9rz
+ D9qrz/oKGVhEONikBVTZEkp2s2tEV37qTAhvgVmDisTyBAGLk4BmIhXNcP/gLNFnXNNbJUPLN/9
+ 7m7Fq8bgbaaHBXXlarbsz3T7ZzH3LcN/R3PBwwe0ZvjzuR65cs/j7C6OMJULjfZyLTWWGezX/3x
+ lAgA=
+X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
+ fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
 
-Applied (with a Fixes tag), thanks!
+kvm_pmu_probe_armpmu() currently samples the current CPU internally,
+which ties the helper to default PMU selection.
 
-On Thu, Jul 09, 2026 at 06:43:40PM +0200, Thomas Huth wrote:
-> From: Thomas Huth <thuth@redhat.com>
-> 
-> The scoped_signal_test uses pthread_join(..., (void **)&ret)) in
-> a couple of places, i.e. the return value of the thread is stored
-> in the shape of a "void *" into the memory location of &ret.
-> Pointers are 64-bit on modern computers, but the ret variable is
-> declared as a simple "enum thread_return" which is only 32 bits.
-> So the pthread_join() will overflow the ret variable by 4 byte.
-> 
-> The problem is very visible on big endian systems like s390x
-> where the test is failing: The least significant byte that carries
-> the return code of the thread is not written into the ret variable
-> here, but somewhere else in the stack frame, so the comparison
-> for the right return code is failing here.
-> 
-> Fix it by getting rid of the enum and defining the THREAD_* constants
-> and "ret" variables as proper "void *" pointers. This way we can
-> also get rid of some ugly (void *) castings in a couple of spots.
-> 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  .../selftests/landlock/scoped_signal_test.c   | 44 +++++++++----------
->  1 file changed, 21 insertions(+), 23 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-> index f24f2c28f62e5..58d25157fe781 100644
-> --- a/tools/testing/selftests/landlock/scoped_signal_test.c
-> +++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-> @@ -249,12 +249,10 @@ TEST_F(scoped_domains, check_access_signal)
->  		_metadata->exit_code = KSFT_FAIL;
->  }
->  
-> -enum thread_return {
-> -	THREAD_INVALID = 0,
-> -	THREAD_SUCCESS = 1,
-> -	THREAD_ERROR = 2,
-> -	THREAD_TEST_FAILED = 3,
-> -};
+Move that policy to kvm_arm_set_default_pmu() by passing
+raw_smp_processor_id() from the caller, and make the helper search for
+the pPMU covering an explicit CPU. Move the helper above
+kvm_pmu_create_perf_event() so later code can reuse it when creating
+PMU events for a VCPU's current pCPU.
 
-I just added clang-format markups.
+This preserves the existing default PMU selection behavior while
+preparing fixed-counters-only mode to select a pPMU at runtime.
 
-> +#define THREAD_INVALID		((void *)0)
-> +#define THREAD_SUCCESS		((void *)1)
-> +#define THREAD_ERROR		((void *)2)
-> +#define THREAD_TEST_FAILED	((void *)3)
->  
->  static void *thread_sync(void *arg)
->  {
-> @@ -262,15 +260,15 @@ static void *thread_sync(void *arg)
->  	char buf;
->  
->  	if (read(pipe_read, &buf, 1) != 1)
-> -		return (void *)THREAD_ERROR;
-> +		return THREAD_ERROR;
->  
-> -	return (void *)THREAD_SUCCESS;
-> +	return THREAD_SUCCESS;
->  }
->  
->  TEST(signal_scoping_thread_before)
->  {
->  	pthread_t no_sandbox_thread;
-> -	enum thread_return ret = THREAD_INVALID;
-> +	void *ret = THREAD_INVALID;
->  	int thread_pipe[2];
->  
->  	drop_caps(_metadata);
-> @@ -285,7 +283,7 @@ TEST(signal_scoping_thread_before)
->  	EXPECT_EQ(0, pthread_kill(no_sandbox_thread, 0));
->  	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
->  
-> -	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
-> +	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
->  	EXPECT_EQ(THREAD_SUCCESS, ret);
->  
->  	EXPECT_EQ(0, close(thread_pipe[0]));
-> @@ -295,7 +293,7 @@ TEST(signal_scoping_thread_before)
->  TEST(signal_scoping_thread_after)
->  {
->  	pthread_t scoped_thread;
-> -	enum thread_return ret = THREAD_INVALID;
-> +	void *ret = THREAD_INVALID;
->  	int thread_pipe[2];
->  
->  	drop_caps(_metadata);
-> @@ -310,7 +308,7 @@ TEST(signal_scoping_thread_after)
->  	EXPECT_EQ(0, pthread_kill(scoped_thread, 0));
->  	EXPECT_EQ(1, write(thread_pipe[1], ".", 1));
->  
-> -	EXPECT_EQ(0, pthread_join(scoped_thread, (void **)&ret));
-> +	EXPECT_EQ(0, pthread_join(scoped_thread, &ret));
->  	EXPECT_EQ(THREAD_SUCCESS, ret);
->  
->  	EXPECT_EQ(0, close(thread_pipe[0]));
-> @@ -327,20 +325,20 @@ void *thread_setuid(void *ptr)
->  	char buf;
->  
->  	if (read(arg->pipe_read, &buf, 1) != 1)
-> -		return (void *)THREAD_ERROR;
-> +		return THREAD_ERROR;
->  
->  	/* libc's setuid() should update all thread's credentials. */
->  	if (getuid() != arg->new_uid)
-> -		return (void *)THREAD_TEST_FAILED;
-> +		return THREAD_TEST_FAILED;
->  
-> -	return (void *)THREAD_SUCCESS;
-> +	return THREAD_SUCCESS;
->  }
->  
->  TEST(signal_scoping_thread_setuid)
->  {
->  	struct thread_setuid_args arg;
->  	pthread_t no_sandbox_thread;
-> -	enum thread_return ret = THREAD_INVALID;
-> +	void *ret = THREAD_INVALID;
->  	int pipe_parent[2];
->  	int prev_uid;
->  
-> @@ -367,7 +365,7 @@ TEST(signal_scoping_thread_setuid)
->  	EXPECT_EQ(arg.new_uid, getuid());
->  	EXPECT_EQ(1, write(pipe_parent[1], ".", 1));
->  
-> -	EXPECT_EQ(0, pthread_join(no_sandbox_thread, (void **)&ret));
-> +	EXPECT_EQ(0, pthread_join(no_sandbox_thread, &ret));
->  	EXPECT_EQ(THREAD_SUCCESS, ret);
->  
->  	clear_cap(_metadata, CAP_SETUID);
-> @@ -667,20 +665,20 @@ static void *thread_setown_scoped(void *arg)
->  	ruleset_fd =
->  		landlock_create_ruleset(&ruleset_attr, sizeof(ruleset_attr), 0);
->  	if (ruleset_fd < 0)
-> -		return (void *)THREAD_ERROR;
-> +		return THREAD_ERROR;
->  	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) ||
->  	    landlock_restrict_self(ruleset_fd, 0)) {
->  		close(ruleset_fd);
-> -		return (void *)THREAD_ERROR;
-> +		return THREAD_ERROR;
->  	}
->  	close(ruleset_fd);
->  
->  	/* Makes this process group own the SIGIO source. */
->  	if (fcntl(fd, F_SETSIG, SIGURG) || fcntl(fd, F_SETOWN, -getpgrp()) ||
->  	    fcntl(fd, F_SETFL, O_ASYNC))
-> -		return (void *)THREAD_ERROR;
-> +		return THREAD_ERROR;
->  
-> -	return (void *)THREAD_SUCCESS;
-> +	return THREAD_SUCCESS;
->  }
->  
->  /*
-> @@ -702,7 +700,7 @@ TEST(sigio_to_pgid_self)
->  {
->  	int trigger[2];
->  	pthread_t thread;
-> -	enum thread_return ret = THREAD_INVALID;
-> +	void *ret = THREAD_INVALID;
->  	int i;
->  
->  	drop_caps(_metadata);
-> @@ -722,7 +720,7 @@ TEST(sigio_to_pgid_self)
->  	 */
->  	ASSERT_EQ(0, pthread_create(&thread, NULL, thread_setown_scoped,
->  				    &trigger[0]));
-> -	ASSERT_EQ(0, pthread_join(thread, (void **)&ret));
-> +	ASSERT_EQ(0, pthread_join(thread, &ret));
->  	ASSERT_EQ(THREAD_SUCCESS, ret);
->  
->  	/* Fans SIGURG out to the process group. */
-> -- 
-> 2.55.0
-> 
-> 
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+---
+ arch/arm64/kvm/pmu-emul.c | 72 +++++++++++++++++++++++------------------------
+ 1 file changed, 35 insertions(+), 37 deletions(-)
+
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index 1d03d0cb62f3..1dd8aa6a027d 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -677,6 +677,23 @@ static int kvm_map_pmu_event(struct arm_pmu *pmu, unsigned int eventsel)
+ 	return eventsel;
+ }
+ 
++static struct arm_pmu *kvm_pmu_probe_armpmu(int cpu)
++{
++	struct arm_pmu_entry *entry;
++	struct arm_pmu *pmu;
++
++	guard(rcu)();
++
++	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
++		pmu = entry->arm_pmu;
++
++		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
++			return pmu;
++	}
++
++	return NULL;
++}
++
+ /**
+  * kvm_pmu_create_perf_event - create a perf event for a counter
+  * @pmc: Counter context
+@@ -806,42 +823,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
+ 	list_add_tail_rcu(&entry->entry, &arm_pmus);
+ }
+ 
+-static struct arm_pmu *kvm_pmu_probe_armpmu(void)
+-{
+-	struct arm_pmu_entry *entry;
+-	struct arm_pmu *pmu;
+-	int cpu;
+-
+-	guard(rcu)();
+-
+-	/*
+-	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
+-	 * the same value is used for the entirety of the loop. Given this, and
+-	 * the fact that no percpu data is used for the lookup there is no need
+-	 * to disable preemption.
+-	 *
+-	 * It is still necessary to get a valid cpu, though, to probe for the
+-	 * default PMU instance as userspace is not required to specify a PMU
+-	 * type. In order to uphold the preexisting behavior KVM selects the
+-	 * PMU instance for the core during vcpu init. A dependent use
+-	 * case would be a user with disdain of all things big.LITTLE that
+-	 * affines the VMM to a particular cluster of cores.
+-	 *
+-	 * In any case, userspace should just do the sane thing and use the UAPI
+-	 * to select a PMU type directly. But, be wary of the baggage being
+-	 * carried here.
+-	 */
+-	cpu = raw_smp_processor_id();
+-	list_for_each_entry_rcu(entry, &arm_pmus, entry) {
+-		pmu = entry->arm_pmu;
+-
+-		if (cpumask_test_cpu(cpu, &pmu->supported_cpus))
+-			return pmu;
+-	}
+-
+-	return NULL;
+-}
+-
+ static u64 __compute_pmceid(struct arm_pmu *pmu, bool pmceid1)
+ {
+ 	u32 hi[2], lo[2];
+@@ -1076,7 +1057,24 @@ static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
+  */
+ int kvm_arm_set_default_pmu(struct kvm *kvm)
+ {
+-	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu();
++	/*
++	 * It is safe to use a stale cpu to iterate the list of PMUs so long as
++	 * the same value is used for the entirety of the loop. Given this, and
++	 * the fact that no percpu data is used for the lookup there is no need
++	 * to disable preemption.
++	 *
++	 * It is still necessary to get a valid cpu, though, to probe for the
++	 * default PMU instance as userspace is not required to specify a PMU
++	 * type. In order to uphold the preexisting behavior KVM selects the
++	 * PMU instance for the core during vcpu init. A dependent use
++	 * case would be a user with disdain of all things big.LITTLE that
++	 * affines the VMM to a particular cluster of cores.
++	 *
++	 * In any case, userspace should just do the sane thing and use the UAPI
++	 * to select a PMU type directly. But, be wary of the baggage being
++	 * carried here.
++	 */
++	struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu(raw_smp_processor_id());
+ 
+ 	if (!arm_pmu)
+ 		return -ENODEV;
+
+-- 
+2.55.0
+
