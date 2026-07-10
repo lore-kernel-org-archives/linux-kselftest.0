@@ -1,658 +1,399 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2C13D6CB0
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 08:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46383CEB98;
+	Fri, 10 Jul 2026 08:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783673909; cv=none; b=CBLsPsVBP6PzDx0ZFlrVIUvF8JV5nG7URiPzji/KhtGxw39sf1ZOWXK2L/EMMMTKC/PidV0oAld59eU+OzeOnhF6btU9+bmhFkpPIFY2y3JczJqbxW3ATEFB99koWDk6w/2q11kcYlACpHbyxK/py6SpJhgInWJ8hOe+GBCqg/8=
+	t=1783673982; cv=none; b=QQ38fv/dYBepEwAMUNsEp+4YB4NPHwMQhRcBnSVRp/UdxpH0VJm0gdSfIpV/hKxZQ1TebRoWamVswpScFsIBfa5TmgcQuAQbLCF4nK8uNM+61wkiluTdHIWpz2Kn4S2qG2Mcv9Ad55Cx7WtkHzFbHpMS/M+3OKoBb+yFQBIwGx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783673909; c=relaxed/simple;
-	bh=ndX6aQet6+bY8N8rkyjG+9hY1rp5uolLAQLvAF+KO2Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tLYrG8VtXHGylQz2suZp4G/1kjg5qxB7LDqJcPXYazVZCQiCIGDBVxPtsvNY47U5JP4Je/EK/4w6JPmkPocAbI4QhFddLAG2okL4psu0WoEZ0m4LPCkbh40HwofhuqBMk+I31kL3R9rjKxw1Y99Umx2qbobXnTnzEJ5gbiYYuik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7uVzNcq; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783673982; c=relaxed/simple;
+	bh=ySeEdVyfLJ1FoqK1KDCiOu5dWvFOr79CGcqcGkC6+pU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O1JqJ//9dbxUuGsFkusmvDyqaShLZ0hVP3sKiA40HF/T6wVLTR1R2/Zw14NraRpOyVcm+iY+6pIDzWkcTs8TWsmWRDQpOVIS6vZQgbYDEQykRcFFWF+3McyDR/sdXJN9gO+mRuyoigsHR+CKX7ndXmHoFaVukqs7USL0/7bqEUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MBuZ6mNk; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7uVzNcq"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc97653887so7077075ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 01:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783673907; x=1784278707; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6OkQKVlwvD+WNl1QpiIUbf+i0jakbMBoOvXvnGzvw6Q=;
-        b=k7uVzNcqrqsRAahz8VcgJGwHWzsRnrde6H2CIDd3QaXn/8Amm0mGopcEppgRpJJMw1
-         yGCmO89bqX5CO3NP8yQL+6833K62wYli4ewRa3G/9D6MfUnzrFL1/0bzqMSbYiDKqaRg
-         UNjwlwfYdQM/cxPIXbruYxtdpZLajsIZQ4r+DgSd8DdNCjydvl0S5iSu3ZoAdfSWPdzL
-         v98zUmF982eLhoBwFGb9gIk90j6YF9ndSeMiCCfkyz5zCT7BMbCHMtcwxPy96v50Gbjy
-         wdmql52iwmhP2KKgmWS6K76z1pYYXfl8C6hkropGNN9gokn0lRJ9C7LUZo+cTXljUyXT
-         6OSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783673907; x=1784278707;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6OkQKVlwvD+WNl1QpiIUbf+i0jakbMBoOvXvnGzvw6Q=;
-        b=dOcmtlUSVOUXmDdW1g3omAfUdnPPf6irI7VFPBeOV+xmKOGu99GwWZYTrdKxrB4K7p
-         qOsHmOJehkY6JWOatPERJaf9Qr9H1cUatFhFK+N+vJRr8seVzFN+x0QN9bpG41DChsU/
-         X5/vUBorXQV2OINWG6varGb9kQzZVSOyMFWZY/ysu5y/QAyRJpYd6zjt1JY0ip4d9Gj/
-         oWFwCDsiSljXRZ1eWGyQi5FyXhHzgAjDMI0xhtlfr2HFt/uslojkU6SphZHzulZAb/fE
-         BeIG+znSUqSJ8Twfz61EI0R8FgpHGLe3qVw2xzYXIGEx1W1+Kga9GVKIdmpJHgoT9xT+
-         wEkw==
-X-Forwarded-Encrypted: i=1; AHgh+RovBmuRe7ZPlzbn4J0EFtfdmD9m8KEE0nEtJu7ZVe8feQn16djSdPx/EQhm6cFuSf4L3KmdmS5aeiKKgw/vC0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylhW1RjBj7461ZT/PK9vYAxtis1yT/7dDswsUHU49rj2yyRvcy
-	OJ5FrD3yx1gBHBFMpRaRuGD0fms+PidVzje5cHUxHfOr12ewf54WATAs
-X-Gm-Gg: AfdE7cnfh/h1mKntuqAot7YZsmQH07cJNrpgjpjjOthVLvmPZNfBCLSIKmImriCEvs4
-	k2tHtY0D2KpoVi+Mu7Fc3LB8Vhm2rVhQp/HTN3uYi/7Cl1la1v/8vNbdsmTp5t476DisUoGhhlG
-	I/cEJByg8u+PPJjj2l9sVlZNB4ZFX4+Rpp593ithLsRdNHFTt9wIzmhiKmOCXJQ6xVQ4fjiusme
-	JfBZmFrfFLbyn5y69HxdZOIXB3d/xMGIrORHKQ6Wsm2cEroHLtCJzZJYXGKwiv1n0QvwqcPYLUw
-	BL97rVMeX5MjZryu3zXs4MDaDlmT4ff6BgQtO4HUto98MyygfZ54zyXCza38fQSD3vgRGRewaFc
-	/7/ga4Cis0PwULx5q+YdyUfIvueA0c5JJ/4c2ouzTbc72xUWFJot6DrKbDA4G4HfVJrBFrmlSVs
-	5O8TJ1qXf+470v0xV8CydhWzg=
-X-Received: by 2002:a17:903:1a08:b0:2cc:fe03:dc75 with SMTP id d9443c01a7336-2ccfe03ebf4mr81373155ad.27.1783673906628;
-        Fri, 10 Jul 2026 01:58:26 -0700 (PDT)
-Received: from [163.43.103.131] ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3da55sm56674275ad.71.2026.07.10.01.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 01:58:25 -0700 (PDT)
-From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Date: Fri, 10 Jul 2026 17:58:17 +0900
-Subject: [PATCH RFC net-next 2/2] selftests: seg6: add selftest for End.MAP
- behavior
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MBuZ6mNk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1783673980; x=1815209980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ySeEdVyfLJ1FoqK1KDCiOu5dWvFOr79CGcqcGkC6+pU=;
+  b=MBuZ6mNkP/0S/zbN231bu5DjQckZiPlbcRWtjXxemb7K9wwMpGz5MD7p
+   gJq7FrPdxrAV/YuTr82t5GynMDPCDpNcZ2kw4BWb5+esWAa9qIZaAHTgC
+   wKPS8t3xVpnlJLo6Z1i1F2GlZ9HmUXdkAWTiAErrqUfB8m5VI68K5bkv3
+   G8W13m1XmtPBHNVk72nt2gGg3Q/Hmrz/yDgdLadQAAbhX103v+BUNiZNf
+   SRqI6llW4mF6vvy2ngOpS5cd76+YLNt6tt93iwPxM/P26nuCHittrMcVs
+   uEvBQsKYfc5ppl3OeNXtbVz9WjFMbyMmjWGvEmIruxG/0p4CmQJPe/Mvm
+   g==;
+X-CSE-ConnectionGUID: 93p7ykEDR4iIaWuQKtugoQ==
+X-CSE-MsgGUID: d97xofyKSd+Bzpg62yGSuw==
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="asc'?scan'208";a="59540370"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 01:59:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.43; Fri, 10 Jul 2026 01:59:32 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.58 via Frontend
+ Transport; Fri, 10 Jul 2026 01:59:29 -0700
+Date: Fri, 10 Jul 2026 09:58:34 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>, Alex Ousherovitch
+	<aousherovitch@rambus.com>, Conor Dooley <conor+dt@kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, Rob
+ Herring <robh@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexandre Ghiti
+	<alex@ghiti.fr>, <devicetree@vger.kernel.org>, Joel Wittenauer
+	<Joel.Wittenauer@cryptography.com>, <linux-api@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, Shuah Khan <skhan@linuxfoundation.org>,
+	Thi Nguyen <thin@rambus.com>
+Subject: Re: [PATCH v2 01/19] dt-bindings: crypto: add Rambus CryptoManager
+ Hub
+Message-ID: <20260710-siding-unmatched-5e066fbe4c01@wendy>
+References: <20260709203037.1884436-1-skrishnamoorthy@rambus.com>
+ <20260709203037.1884436-2-skrishnamoorthy@rambus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-seg6-mobile-end-map-v1-2-99be02d68143@gmail.com>
-References: <20260710-seg6-mobile-end-map-v1-0-99be02d68143@gmail.com>
-In-Reply-To: <20260710-seg6-mobile-end-map-v1-0-99be02d68143@gmail.com>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
- Andrea Mayer <andrea@common-net.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
- Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Yuya Kusakabe <yuya.kusakabe@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17841;
- i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
- bh=ndX6aQet6+bY8N8rkyjG+9hY1rp5uolLAQLvAF+KO2Y=;
- b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqULQp+ZXxPG7wcdcD6qqIPSvsWyE/KR5fJ7w0l
- xm0mek0griJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCalC0KQAKCRAq19F1Kl0b
- Tcm0D/9PJmh78M/HePx1+5k0Y9uvjYbT/gFq70tfBunZUVoi8K1fdPUt9hmcwnX7Z49sY41FIlA
- eQRgn92t6ao4CHh6YLoTDzkNi+rptb2FvhgSJeobRGsmSRPCOEeXRC4mwOKnLisbS6ULsFAf9I+
- Q7tGK9+TSE4ZIm7K56QsVQtTYPcSEZl58kFzD9Ba/8lxWf/XCS+WLxe3O1czn8VvgyKRUqkd9z0
- 1VpnswipX7nmey58LJ6RPz7BLbu+mycysllIpf0qyHITPajvquUCAVBTOr579su0x7NxbWKbx+N
- QtNryU8OPTLy2yCv0kaix8OXaOsZjlOtCV4xmJ63khahdEIAhwfnZy7O7lyPRkBTiqv3VcGjZYF
- PVBE27QK/ktAgPs+DOW6MXhgUMFxgrF7BfdponqVAC/MJNxrULgYNm6GeLUx6pk2HPuFr47DPJa
- ATbgXVvhCSTw4HbcWmxEIvnI1H42gQOio1EtUyYjODPY81Nj96MFHGR5WTuyYPzpXW7tHdzDDRQ
- 2nfNmv1n5qqIMx73Opm421CfxcJAaTUoOHJnWg74/l6aegJ8E9iZYysK88RnGKRYYHc+TASbSOw
- iP+zAdh+7Yl/6MTwPsSD7w5deOZvSpTO6rs0E0M1+t2lVkHd2u/CY5xeKN0AfNxd/WLKZ3ZXGTY
- QSWrOkp7rX7dXJA==
-X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
- fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="tVV5lCAGuauPQznU"
+Content-Disposition: inline
+In-Reply-To: <20260709203037.1884436-2-skrishnamoorthy@rambus.com>
 
-Add tools/testing/selftests/net/srv6_end_map_test.sh covering the
-End.MAP behavior over a three-node topology (the script header
-documents the address plan).  Five cases are exercised: SRH-absent,
-SRH-present (H.Encaps) and SRH-inline (H.Insert) forwarding verified
-by ICMPv6 echo with Icmp6InCsumErrors asserted to stay zero, a
-malformed routing header verified to be dropped via the route's own
-errors counter, and a Hop Limit expiring at the End.MAP node answered
-with an ICMPv6 Time Exceeded.  The original and replacement addresses
-are chosen with different 16-bit word sums so a transport-checksum
-regression cannot cancel out.  The malformed packet is crafted by a
-small C helper (srv6_mobile_send) added to TEST_GEN_FILES; the test
-SKIPs when iproute2 lacks the seg6mobile keyword.
+--tVV5lCAGuauPQznU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
----
- tools/testing/selftests/net/Makefile             |   2 +
- tools/testing/selftests/net/srv6_end_map_test.sh | 360 +++++++++++++++++++++++
- tools/testing/selftests/net/srv6_mobile_send.c   | 139 +++++++++
- 3 files changed, 501 insertions(+)
+Hey,
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 708d960ae07d..9acdd4187762 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -91,6 +91,7 @@ TEST_PROGS := \
- 	srv6_end_dx4_netfilter_test.sh \
- 	srv6_end_dx6_netfilter_test.sh \
- 	srv6_end_flavors_test.sh \
-+	srv6_end_map_test.sh \
- 	srv6_end_next_csid_l3vpn_test.sh \
- 	srv6_end_x_next_csid_l3vpn_test.sh \
- 	srv6_hencap_red_l3vpn_test.sh \
-@@ -161,6 +162,7 @@ TEST_GEN_FILES := \
- 	so_netns_cookie \
- 	so_rcv_listener \
- 	socket \
-+	srv6_mobile_send \
- 	stress_reuseport_listen \
- 	tcp_fastopen_backup_key \
- 	tcp_inq \
-diff --git a/tools/testing/selftests/net/srv6_end_map_test.sh b/tools/testing/selftests/net/srv6_end_map_test.sh
-new file mode 100755
-index 000000000000..2a45997b6728
---- /dev/null
-+++ b/tools/testing/selftests/net/srv6_end_map_test.sh
-@@ -0,0 +1,360 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Selftest for the SRv6 End.MAP behavior (RFC 9433).
-+#
-+#   +------+    2001:db8:1::/64    +------+    2001:db8:2::/64    +------+
-+#   | rt-1 | --------------------- | rt-2 | --------------------- | rt-3 |
-+#   +------+         veth1         +------+         veth2         +------+
-+#                                 (End.MAP)
-+#
-+# rt-2 holds the End.MAP route for 2001:db8:f::/64 that replaces the
-+# IPv6 destination with 2001:db8:3::3 (an address on rt-3's loopback,
-+# also used as the final SRv6 segment in the SRH-present scenarios).
-+#
-+# The original destination 2001:db8:f::1 and the replacement
-+# 2001:db8:3::3 have different 16-bit word sums, so any regression in
-+# the transport-checksum diff update would corrupt the ICMPv6
-+# checksum and bump Icmp6InCsumErrors -- this test asserts that the
-+# counter stays at zero across the run.
-+#
-+# Five cases are exercised:
-+#
-+#   1. SRH absent     -- plain ICMPv6 echo to the End.MAP SID.
-+#   2. SRH present    -- the destination is reached through an
-+#                        H.Encaps wrapper that carries an SRH with
-+#                        two segments; End.MAP must leave the SRH
-+#                        structurally intact.
-+#   3. SRH inline     -- the destination is reached through an
-+#                        H.Insert wrapper that inserts an SRH whose
-+#                        first hop is the End.MAP SID; End.MAP must
-+#                        NOT patch the L4 checksum, because the
-+#                        receiver's SRv6 processing restores the
-+#                        destination from segments[0] before the
-+#                        ICMPv6 handler verifies it.
-+#   4. SRH malformed  -- a C helper sends a packet whose Routing
-+#                        Header type is not 4; End.MAP must drop it.
-+#                        The behavior's own errors counter binds the
-+#                        assertion to the drop.
-+#   5. Hop Limit      -- an echo whose Hop Limit is 1 on arrival at
-+#                        the End.MAP node must yield an ICMPv6 Time
-+#                        Exceeded from that node, confirming Hop Limit
-+#                        handling is delegated to the ip6_forward path.
-+
-+source lib.sh
-+
-+readonly PING_TIMEOUT_SEC=4
-+readonly END_MAP_PREFIX="2001:db8:f::/64"
-+readonly END_MAP_SID="2001:db8:f::1"
-+readonly RT3_SID="2001:db8:3::3"
-+HELPER_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-+readonly HELPER_DIR
-+readonly HELPER="${HELPER_DIR}/srv6_mobile_send"
-+
-+ret=0
-+nsuccess=0
-+nfail=0
-+
-+PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
-+
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ "${rc}" -eq "${expected}" ]; then
-+		nsuccess=$((nsuccess + 1))
-+		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
-+	else
-+		ret=1
-+		nfail=$((nfail + 1))
-+		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read -r a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+}
-+
-+print_log_test_results()
-+{
-+	printf "\nTests passed: %3d\n" "${nsuccess}"
-+	printf "Tests failed: %3d\n"   "${nfail}"
-+}
-+
-+cleanup()
-+{
-+	cleanup_all_ns
-+}
-+
-+trap cleanup EXIT
-+
-+check_dependencies()
-+{
-+	if [ "$(id -u)" -ne 0 ]; then
-+		echo "SKIP: need root privileges"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	for cmd in ip ping; do
-+		if ! command -v "$cmd" >/dev/null; then
-+			echo "SKIP: ${cmd} is required"
-+			exit "${ksft_skip}"
-+		fi
-+	done
-+
-+	if [ ! -x "${HELPER}" ]; then
-+		echo "SKIP: ${HELPER} not built"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	if ! ip route help 2>&1 | grep -qF "seg6mobile"; then
-+		echo "SKIP: iproute2 lacks seg6mobile support"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	if ! ip route help 2>&1 | grep -qF "End.MAP"; then
-+		echo "SKIP: iproute2 lacks End.MAP action"
-+		exit "${ksft_skip}"
-+	fi
-+}
-+
-+setup()
-+{
-+	setup_ns rt1 rt2 rt3
-+
-+	ip -n "$rt1" link set lo up
-+	ip -n "$rt2" link set lo up
-+	ip -n "$rt3" link set lo up
-+
-+	ip link add veth1 netns "$rt1" \
-+		type veth peer name veth1-rt2 netns "$rt2"
-+	ip link add veth2 netns "$rt2" \
-+		type veth peer name veth2-rt3 netns "$rt3"
-+
-+	ip -n "$rt1" addr add 2001:db8:1::1/64 dev veth1 nodad
-+	ip -n "$rt2" addr add 2001:db8:1::2/64 dev veth1-rt2 nodad
-+	ip -n "$rt2" addr add 2001:db8:2::1/64 dev veth2 nodad
-+	ip -n "$rt3" addr add 2001:db8:2::2/64 dev veth2-rt3 nodad
-+	# rt-3 also owns the End.MAP replacement SID / SRH endpoint.
-+	ip -n "$rt3" addr add "$RT3_SID/128" dev lo nodad
-+
-+	ip -n "$rt1" link set veth1 up
-+	ip -n "$rt2" link set veth1-rt2 up
-+	ip -n "$rt2" link set veth2 up
-+	ip -n "$rt3" link set veth2-rt3 up
-+
-+	ip netns exec "$rt2" sysctl -wq net.ipv6.conf.all.forwarding=1
-+
-+	# rt-3 must accept SRv6 packets so ipv6_srh_rcv lets the
-+	# extension header chain through to local delivery.
-+	ip netns exec "$rt3" sysctl -wq net.ipv6.conf.all.seg6_enabled=1
-+	ip netns exec "$rt3" \
-+		sysctl -wq net.ipv6.conf.veth2-rt3.seg6_enabled=1
-+	ip netns exec "$rt3" sysctl -wq net.ipv6.conf.lo.seg6_enabled=1
-+
-+	# Disable HW checksum offload so the kernel software checksum
-+	# path runs unconditionally and any csum bug surfaces.
-+	ip netns exec "$rt1" ethtool -K veth1 tx off rx off 2>/dev/null
-+	ip netns exec "$rt2" ethtool -K veth1-rt2 tx off rx off \
-+		2>/dev/null
-+	ip netns exec "$rt2" ethtool -K veth2 tx off rx off 2>/dev/null
-+	ip netns exec "$rt3" ethtool -K veth2-rt3 tx off rx off \
-+		2>/dev/null
-+
-+	# rt-1: route the End.MAP locator into rt-2.
-+	ip -n "$rt1" -6 route add "$END_MAP_PREFIX" via 2001:db8:1::2
-+
-+	# rt-1: a separate H.Encaps route for the SRH-present scenario,
-+	# wrapping the inner ICMPv6 echo in an outer IPv6+SRH carrying
-+	# [End.MAP_SID, RT3_SID].
-+	ip -n "$rt1" -6 route add "$RT3_SID/128" via 2001:db8:1::2 \
-+		encap seg6 mode encap \
-+		segs "$END_MAP_SID","$RT3_SID" \
-+		dev veth1
-+
-+	# rt-2: End.MAP -- swap DA from the End.MAP SID to RT3_SID
-+	# (an address on rt-3) and forward via the IPv6 FIB.  "count"
-+	# enables the per-behavior counters the malformed-SRH test reads.
-+	ip -n "$rt2" -6 route add "$END_MAP_PREFIX" \
-+		encap seg6mobile action End.MAP nh6 "$RT3_SID" count \
-+		dev veth2
-+
-+	# rt-2: reach RT3_SID (on rt-3's loopback) through the
-+	# directly connected neighbour 2001:db8:2::2.
-+	ip -n "$rt2" -6 route add "$RT3_SID/128" via 2001:db8:2::2
-+
-+	# rt-3: return route for the ICMPv6 echo reply.
-+	ip -n "$rt3" -6 route add 2001:db8:1::/64 via 2001:db8:2::1
-+}
-+
-+read_nstat_counter()
-+{
-+	local ns=$1
-+	local name=$2
-+
-+	# nstat -az reports a counter that has never incremented as 0,
-+	# which is what we rely on for a clean before/after delta.
-+	ip netns exec "$ns" nstat -az "$name" \
-+		| awk -v n="$name" '$1 == n {print $2}'
-+}
-+
-+read_route_errors()
-+{
-+	# The End.MAP route carries "count", so its errors counter
-+	# increments once for every packet the behavior drops.  Reading it
-+	# binds the negative test to the drop itself rather than to any
-+	# unrelated loss on the path to rt-3.
-+	ip -n "$rt2" -j -s -6 route show "$END_MAP_PREFIX" \
-+		| grep -oE '"errors":[0-9]+' | grep -oE '[0-9]+'
-+}
-+
-+# Test 1: SRH absent.
-+test_srh_absent()
-+{
-+	local before after rc=0
-+
-+	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+
-+	if ! ip netns exec "$rt1" \
-+			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" "$END_MAP_SID" \
-+			>/dev/null 2>&1; then
-+		rc=1
-+	fi
-+
-+	if [ "$rc" -eq 0 ]; then
-+		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+		[ "$before" != "$after" ] && rc=1
-+	fi
-+
-+	log_test "$rc" 0 "End.MAP forwards an ICMPv6 echo without an SRH"
-+}
-+
-+# Test 2: SRH present (H.Encaps from rt-1).
-+#
-+# The packet rt-1 emits carries an SRH whose only intermediate
-+# segment is the End.MAP SID; the final segment is RT3_SID.  End.MAP
-+# rewrites the outer destination from END_MAP_SID to RT3_SID
-+# without touching the SRH, so on rt-3 the SRH processing advances
-+# to segments[0] = RT3_SID (local) and the encapsulated inner
-+# packet is decapsulated and replied to.  A regression that mangles
-+# the SRH (e.g. flipping bits in segments_left) would break the chain
-+# and the ping would not return.
-+test_srh_present()
-+{
-+	local before after rc=0
-+
-+	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+
-+	if ! ip netns exec "$rt1" \
-+			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" "$RT3_SID" \
-+			>/dev/null 2>&1; then
-+		rc=1
-+	fi
-+
-+	if [ "$rc" -eq 0 ]; then
-+		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+		[ "$before" != "$after" ] && rc=1
-+	fi
-+
-+	log_test "$rc" 0 "End.MAP preserves an SRH carried by H.Encaps"
-+}
-+
-+# Test 3: SRH inserted in-place by H.Insert (mode inline).
-+#
-+# rt-1 inserts an SRH between the IPv6 header and the L4 payload;
-+# segments[0] is the original DA (2001:db8:2::2), segments[1] is the
-+# End.MAP SID.  End.MAP rewrites the outer DA to RT3_SID but must
-+# NOT patch the L4 checksum, because the kernel's standard SRv6
-+# processing on rt-3 will decrement Segments Left to 0 and restore
-+# the destination to segments[0] before the ICMPv6 handler verifies
-+# the checksum against the original pseudo-header.  Over-patching the
-+# checksum would corrupt it and bump Icmp6InCsumErrors.
-+test_srh_inline()
-+{
-+	local before after rc=0
-+
-+	ip -n "$rt1" -6 route add 2001:db8:2::2/128 via 2001:db8:1::2 \
-+		encap seg6 mode inline segs "$END_MAP_SID" \
-+		dev veth1
-+
-+	before=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+
-+	if ! ip netns exec "$rt1" \
-+			ping -6 -c 1 -W "$PING_TIMEOUT_SEC" 2001:db8:2::2 \
-+			>/dev/null 2>&1; then
-+		rc=1
-+	fi
-+
-+	if [ "$rc" -eq 0 ]; then
-+		after=$(read_nstat_counter "$rt3" Icmp6InCsumErrors)
-+		[ "$before" != "$after" ] && rc=1
-+	fi
-+
-+	log_test "$rc" 0 "End.MAP preserves L4 csum across mode inline SRH"
-+}
-+
-+# Test 4: SRH malformed (negative test).
-+#
-+# A C helper crafts an IPv6 packet whose Routing Header type is 0
-+# rather than 4 (SRH), then sends it from rt-1 toward the End.MAP
-+# SID.  End.MAP's seg6_mobile_get_and_validate_srh() must return
-+# MALFORMED and the handler must drop the packet.  The assertion reads
-+# the behavior's own errors counter, so it is satisfied only by the
-+# End.MAP drop and not by any unrelated loss.
-+test_srh_malformed()
-+{
-+	local before after rc=0
-+
-+	before=$(read_route_errors)
-+
-+	ip netns exec "$rt1" "$HELPER" 2001:db8:1::1 "$END_MAP_SID" \
-+		>/dev/null 2>&1
-+
-+	after=$(read_route_errors)
-+	[ "$((after - before))" -eq 1 ] || rc=1
-+
-+	log_test "$rc" 0 "End.MAP drops a packet carrying a malformed SRH"
-+}
-+
-+# Test 5: Hop Limit expiry.
-+#
-+# End.MAP delegates the Hop Limit check and decrement to the ip6_forward
-+# path.  An echo whose Hop Limit is 1 when it reaches rt-2 must elicit
-+# an ICMPv6 Time Exceeded from rt-2 instead of being forwarded, so
-+# rt-2's Icmp6OutTimeExcds increments by exactly one.
-+test_hoplimit_expiry()
-+{
-+	local before after rc=0
-+
-+	before=$(read_nstat_counter "$rt2" Icmp6OutTimeExcds)
-+
-+	ip netns exec "$rt1" \
-+		ping -6 -c 1 -t 1 -W "$PING_TIMEOUT_SEC" "$END_MAP_SID" \
-+		>/dev/null 2>&1
-+
-+	after=$(read_nstat_counter "$rt2" Icmp6OutTimeExcds)
-+	[ "$((after - before))" -eq 1 ] || rc=1
-+
-+	log_test "$rc" 0 "End.MAP delegates Hop Limit expiry to ip6_forward"
-+}
-+
-+main()
-+{
-+	check_dependencies
-+	setup
-+
-+	test_srh_absent
-+	test_srh_present
-+	test_srh_inline
-+	test_srh_malformed
-+	test_hoplimit_expiry
-+
-+	print_log_test_results
-+	exit "${ret}"
-+}
-+
-+main "$@"
-diff --git a/tools/testing/selftests/net/srv6_mobile_send.c b/tools/testing/selftests/net/srv6_mobile_send.c
-new file mode 100644
-index 000000000000..37d75df3704b
---- /dev/null
-+++ b/tools/testing/selftests/net/srv6_mobile_send.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Helper for SRv6 Mobile (RFC 9433) selftests.
-+ *
-+ * Usage: srv6_mobile_send <src-addr> <dst-addr>
-+ */
-+
-+#include <arpa/inet.h>
-+#include <errno.h>
-+#include <netinet/in.h>
-+#include <netinet/ip6.h>
-+#include <netinet/icmp6.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/socket.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+/* RFC 8200 Routing header common fields are 4 bytes; an additional
-+ * 4 bytes of type-specific data follow (the Reserved field for the
-+ * deprecated type 0, or first_segment/flags/tag for SRH type 4).  The
-+ * segment list then runs in 16-byte units, giving a total of 24 bytes
-+ * for one segment -- which is what ip6r_len = 2 advertises.
-+ */
-+struct srh {
-+	struct ip6_rthdr rthdr;
-+	uint32_t type_data;
-+	struct in6_addr segments[];
-+};
-+
-+#define SRH_ONE_SEG_LEN (sizeof(struct srh) + sizeof(struct in6_addr))
-+
-+static uint16_t csum_fold(uint32_t sum)
-+{
-+	while (sum >> 16)
-+		sum = (sum & 0xffff) + (sum >> 16);
-+	return ~sum;
-+}
-+
-+static uint32_t csum_partial(const void *buf, size_t len, uint32_t sum)
-+{
-+	const uint16_t *p = buf;
-+
-+	while (len > 1) {
-+		sum += *p++;
-+		len -= 2;
-+	}
-+	if (len)
-+		sum += *(const uint8_t *)p;
-+	return sum;
-+}
-+
-+static uint16_t icmpv6_checksum(const struct in6_addr *src,
-+				const struct in6_addr *dst,
-+				const void *payload, size_t len)
-+{
-+	uint32_t nexthdr = htonl(IPPROTO_ICMPV6);
-+	uint32_t plen = htonl(len);
-+	uint32_t sum;
-+
-+	sum = csum_partial(src, sizeof(*src), 0);
-+	sum = csum_partial(dst, sizeof(*dst), sum);
-+	sum = csum_partial(&plen, sizeof(plen), sum);
-+	sum = csum_partial(&nexthdr, sizeof(nexthdr), sum);
-+	sum = csum_partial(payload, len, sum);
-+	return csum_fold(sum);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	uint8_t frame[sizeof(struct ip6_hdr) + SRH_ONE_SEG_LEN +
-+		      sizeof(struct icmp6_hdr)];
-+	struct sockaddr_in6 dst_addr = {};
-+	struct icmp6_hdr *icmp6;
-+	struct ip6_hdr *ip6;
-+	struct srh *srh;
-+	ssize_t res;
-+	int fd;
-+
-+	if (argc != 3) {
-+		fprintf(stderr, "usage: %s <src-addr> <dst-addr>\n", argv[0]);
-+		return 1;
-+	}
-+
-+	memset(frame, 0, sizeof(frame));
-+	ip6 = (struct ip6_hdr *)frame;
-+	srh = (struct srh *)(frame + sizeof(*ip6));
-+	icmp6 = (struct icmp6_hdr *)(frame + sizeof(*ip6) + SRH_ONE_SEG_LEN);
-+
-+	ip6->ip6_flow = htonl(6u << 28);
-+	ip6->ip6_plen = htons(SRH_ONE_SEG_LEN + sizeof(*icmp6));
-+	ip6->ip6_nxt = IPPROTO_ROUTING;
-+	ip6->ip6_hops = 64;
-+	if (inet_pton(AF_INET6, argv[1], &ip6->ip6_src) != 1) {
-+		fprintf(stderr, "invalid src %s\n", argv[1]);
-+		return 1;
-+	}
-+	if (inet_pton(AF_INET6, argv[2], &ip6->ip6_dst) != 1) {
-+		fprintf(stderr, "invalid dst %s\n", argv[2]);
-+		return 1;
-+	}
-+
-+	srh->rthdr.ip6r_nxt = IPPROTO_ICMPV6;
-+	srh->rthdr.ip6r_len = 2;		/* (1 + ip6r_len) * 8 = 24 */
-+	srh->rthdr.ip6r_type = 0;		/* RFC 8754: SRH is type 4 */
-+	srh->rthdr.ip6r_segleft = 0;
-+	srh->segments[0] = ip6->ip6_dst;
-+
-+	icmp6->icmp6_type = ICMP6_ECHO_REQUEST;
-+	icmp6->icmp6_code = 0;
-+	icmp6->icmp6_cksum = 0;
-+	icmp6->icmp6_dataun.icmp6_un_data16[0] = htons(0x1234);
-+	icmp6->icmp6_dataun.icmp6_un_data16[1] = htons(1);
-+	icmp6->icmp6_cksum =
-+		icmpv6_checksum(&ip6->ip6_src, &ip6->ip6_dst,
-+				icmp6, sizeof(*icmp6));
-+
-+	fd = socket(AF_INET6, SOCK_RAW, IPPROTO_RAW);
-+	if (fd < 0) {
-+		perror("socket");
-+		return 1;
-+	}
-+
-+	dst_addr.sin6_family = AF_INET6;
-+	dst_addr.sin6_addr = ip6->ip6_dst;
-+
-+	res = sendto(fd, frame, sizeof(frame), 0,
-+		     (struct sockaddr *)&dst_addr, sizeof(dst_addr));
-+	if (res != (ssize_t)sizeof(frame)) {
-+		perror("sendto");
-+		close(fd);
-+		return 1;
-+	}
-+
-+	close(fd);
-+	return 0;
-+}
+On Thu, Jul 09, 2026 at 01:30:19PM -0700, Saravanakrishnan Krishnamoorthy w=
+rote:
+> From: Alex Ousherovitch <aousherovitch@rambus.com>
+>=20
+> Add device tree binding schema for the CRI CryptoManager Hub (CMH)
+> hardware crypto accelerator.  The binding covers the parent SoC-level
+> node with register region, interrupt, DMA properties, and per-core
+> child nodes identified by compatible string and unit address.
+>=20
+> Register the 'cri' vendor prefix for Cryptography Research, Inc.
 
--- 
-2.50.1
+This company no longer exists, you should probably introduce a rambus
+vendor prefix instead.
 
+>=20
+> Co-developed-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.=
+com>
+> Signed-off-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.co=
+m>
+> Signed-off-by: Alex Ousherovitch <aousherovitch@rambus.com>
+> Reviewed-by: Joel Wittenauer <Joel.Wittenauer@cryptography.com>
+> Reviewed-by: Thi Nguyen <thin@rambus.com>
+> ---
+>  .../devicetree/bindings/crypto/cri,cmh.yaml   | 222 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  2 files changed, 224 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/cri,cmh.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/crypto/cri,cmh.yaml b/Docu=
+mentation/devicetree/bindings/crypto/cri,cmh.yaml
+> new file mode 100644
+> index 000000000000..db41132e0591
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/crypto/cri,cmh.yaml
+> @@ -0,0 +1,222 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/crypto/cri,cmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CRI CryptoManager Hub (CMH) Hardware Crypto Accelerator
+> +
+> +maintainers:
+> +  - Alex Ousherovitch <aousherovitch@rambus.com>
+> +  - Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
+> +  - Joel Wittenauer <Joel.Wittenauer@cryptography.com>
+> +
+> +description: |
+> +  The CRI CryptoManager Hub (CMH) is a hardware cryptographic accelerato=
+r accessed
+> +  via a mailbox-based VCQ (Virtual Command Queue) interface.  The host
+> +  writes VCQ command sequences into per-mailbox DMA queue buffers and
+> +  rings a doorbell; the CMH eSW processes them and signals completion
+> +  via interrupt.
+> +
+> +  Supported algorithm families: SHA-2, SHA-3, SM3, AES, SM4,
+> +  ChaCha20-Poly1305, RSA, ECDSA, EdDSA, ECDH, SM2, ML-KEM, ML-DSA,
+> +  SLH-DSA, LMS, XMSS, DRBG.
+> +
+> +properties:
+> +  compatible:
+> +    const: cri,cmh
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      SIC (System Interface Controller) MMIO region.  Mailbox instance
+> +      registers are at offsets N * 0x1000 within this region.
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 64
+> +    description:
+> +      Per-mailbox completion/error interrupts from the CryptoManager Hub,
+> +      matching the real CMH ch_sys_interrupt_mbx[N-1:0] topology.
+> +      Entry i corresponds to MBX instance i.  The driver maps each
+> +      configured mailbox (cri,mbx-instances) to its DT interrupt
+> +      index and registers a separate threaded IRQ handler per MBX.
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 64
+> +    items:
+> +      pattern: '^mbx[0-9]+$'
+> +    description:
+> +      Names for each mailbox interrupt, matching the interrupts array.
+> +      Format is "mbxN" where N is the mailbox instance index.
+> +
+> +  cri,mbx-instances:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 64
+> +    description:
+> +      Array of 0-based mailbox instance indices to configure.
+> +      Each index N maps to register offset N * 0x1000 within the
+> +      SIC region.  If absent, defaults to instances 0 and 1.
+
+This property seems like it could be replaced by having a reg entry for
+each mailbox.
+
+> +  cri,mbx-slots-log2:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 64
+> +    description:
+> +      Per-mailbox slot count as log2.  Valid range 1..15.
+> +      Array length must match cri,mbx-instances.
+> +      Default is 5 (32 slots).
+
+This looks like it should be deducible from a device-specific compatible.
+
+> +
+> +  cri,mbx-strides-log2:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 64
+> +    description:
+> +      Per-mailbox stride (bytes per slot) as log2.  Valid range 7..10.
+> +      Array length must match cri,mbx-instances.
+> +      Default is 7 (128 bytes per slot).
+
+Ditto here.
+
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^(hc|aes|sm4|sm3|hcq|qse|pke|drbg|ccp)@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      Per-core-type child nodes.  Each child represents one crypto core
+> +      instance available in the hardware.  The driver enumerates these at
+> +      probe to discover which algorithm families are present.
+
+This whole subnode thing seems like it is only required because you
+don't have device-specific compatibles to deduce what is supported.
+
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +        description:
+> +          Hardware core ID for this core type (e.g. 0x02 for HC, 0x03 fo=
+r AES).
+> +          Must match the CORE_ID_* values defined by the CMH hardware.
+> +
+> +      cri,mbx:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description:
+> +          Pin this core instance to a specific mailbox instance index.
+> +          Multiple child nodes of the same core type may each specify a
+> +          different cri,mbx value to spread instances across mailboxes.
+> +          When absent, the driver auto-assigns a mailbox via round-robin
+> +          across the instances listed in cri,mbx-instances.
+
+With the mailboxes converted to individual reg entries, this could
+probably be handled via reg-names? If the reg name is "aes" or w/e, use
+that mailbox for aes only, if it is $something-generic then it's
+available for round robin assignment.
+
+pw-bot: changes-requested
+
+Cheers,
+Conor.
+
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +        #address-cells =3D <2>;
+> +        #size-cells =3D <2>;
+> +
+> +        crypto@a4800000 {
+> +            compatible =3D "cri,cmh";
+> +            reg =3D <0x0 0xa4800000 0x0 0x41000>;
+> +            interrupts =3D <1 2>;
+> +            interrupt-names =3D "mbx0", "mbx1";
+> +            cri,mbx-instances =3D <0 1>;
+> +            cri,mbx-slots-log2 =3D <5 5>;
+> +            cri,mbx-strides-log2 =3D <7 7>;
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <0>;
+> +
+> +            hc@2 {
+> +                reg =3D <0x02>;
+> +            };
+> +
+> +            aes@3 {
+> +                reg =3D <0x03>;
+> +            };
+> +
+> +            sm4@4 {
+> +                reg =3D <0x04>;
+> +            };
+> +
+> +            sm3@5 {
+> +                reg =3D <0x05>;
+> +            };
+> +
+> +            hcq@8 {
+> +                reg =3D <0x08>;
+> +            };
+> +
+> +            qse@9 {
+> +                reg =3D <0x09>;
+> +            };
+> +
+> +            pke@a {
+> +                reg =3D <0x0a>;
+> +                cri,mbx =3D <1>;
+> +            };
+> +
+> +            drbg@f {
+> +                reg =3D <0x0f>;
+> +            };
+> +
+> +            ccp@18 {
+> +                reg =3D <0x18>;
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    /* Multi-instance: two AES cores on separate MBXes (future eSW suppo=
+rt) */
+> +    soc {
+> +        #address-cells =3D <2>;
+> +        #size-cells =3D <2>;
+> +
+> +        crypto@a4800000 {
+> +            compatible =3D "cri,cmh";
+> +            reg =3D <0x0 0xa4800000 0x0 0x41000>;
+> +            interrupts =3D <1 2>;
+> +            interrupt-names =3D "mbx0", "mbx1";
+> +            cri,mbx-instances =3D <0 1>;
+> +            cri,mbx-slots-log2 =3D <5 5>;
+> +            cri,mbx-strides-log2 =3D <7 7>;
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <0>;
+> +
+> +            hc@2 {
+> +                reg =3D <0x02>;
+> +            };
+> +
+> +            aes@3 {
+> +                reg =3D <0x03>;
+> +                cri,mbx =3D <0>;
+> +            };
+> +
+> +            /* Second AES instance at core ID 0x06, pinned to MBX 1 */
+> +            aes@6 {
+> +                reg =3D <0x06>;
+> +                cri,mbx =3D <1>;
+> +            };
+> +
+> +            pke@a {
+> +                reg =3D <0x0a>;
+> +                cri,mbx =3D <1>;
+> +            };
+> +
+> +            drbg@f {
+> +                reg =3D <0x0f>;
+> +            };
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
+umentation/devicetree/bindings/vendor-prefixes.yaml
+> index 396044f368e7..8b7187ea0194 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -375,6 +375,8 @@ patternProperties:
+>      description: Crane Connectivity Solutions
+>    "^creative,.*":
+>      description: Creative Technology Ltd
+> +  "^cri,.*":
+> +    description: Cryptography Research, Inc.
+>    "^crystalfontz,.*":
+>      description: Crystalfontz America, Inc.
+>    "^csky,.*":
+> --=20
+> 2.43.7
+>=20
+
+--tVV5lCAGuauPQznU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCalC0JQAKCRB4tDGHoIJi
+0lDOAP4lM7VqD2SV+kzpePgkDgsK+A4p1hJGMNL/A0QhQxSjSgD8C+6gZEUcIcPi
+73MwrF0YJ8Q/LuZsV0RCYOPYGqMSIAc=
+=1fAE
+-----END PGP SIGNATURE-----
+
+--tVV5lCAGuauPQznU--
