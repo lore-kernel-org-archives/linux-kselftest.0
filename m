@@ -1,117 +1,174 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-pz2-f0.google.com (mail-pz2-f0.google.com [74.125.228.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6721374A12
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783709489; cv=pass; b=a0MvKlkb6RHHEgwbNvOSDXexXHhy6DCDbcXonDK/Oz+pIrhTPmlzmj0+GeBkK9SsKFVvAoLitpKm56pnoVjuSeZ71+phyZgQKPMuIKSawE5UbPgLcM+LqxcFT2J9ANJ0Kcx6cp6kgEYhyie6fOPt9/39RshsKseLtnMBp+Mh6Ic=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783709489; c=relaxed/simple;
-	bh=n5p78zc2rjIyApVm9wtHFVD/tFOi9RjzwbbxuAlVOl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=itCxAj/PP3NqspefmF7xExyxTzoe6rpE7pMTpcvCRFv/Yo/4CgMwPnjEbKFnyOvs7/bBpA5zq9GlKzOkZq4dM0xDV1GOOjWAn7AByHfIQdmb5/y4+UDmgBo3aiovs9xHZgy1Dk7pqlBUErQexBA84oeNt5SXLkxiOtRQChmbuBE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tZVSbLdW; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3010537FF63
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 19:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.0
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783710439; cv=none; b=nsukFhOG+SokwwUWkKFZS9MgN49lvq+bFrMzVKWSMOXROkkUNBg323z/5VZeZoLu4H17PKT1y/YRq7kclQJdcQnThCUVGr3WbJGvpoFeqx4pm46jNT/WxMNbHdjq7xMNDf2Jg1EW4GSTu8VB5zkZndEmuXhDom+D/Nb1Qt4xqZM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783710439; c=relaxed/simple;
+	bh=SEmPD7JblkDJEFTqqdJbX3FS5ZS5bnh861fzGASB8Vs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fa06b04CapoFwlUEQOatiTCFov+mzwb6I1fkSNTg0b5kg0YeDJsgAaH0kLmkx2ahMJUR4wF3yd1OwH7eVKMKOm3WOgqflMMIlefOriwCNOMFZjhXSR3iclxIIF+//Bz5JzX7WD4+lfFXQsipRxjztvn4X21w6H1hXQ6wqVTatg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VY16zhBd; arc=none smtp.client-ip=74.125.228.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tZVSbLdW"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-69532288224so2299243a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:51:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783709486; cv=none;
-        d=google.com; s=arc-20260327;
-        b=deuh0Dc3KkqmB6UFRBe7v49FNULKQYIoN7l8BNCojqWRfTDwFyiUXjUsSUm9YXm3Kb
-         ku2FA4zEDAe2b8sFA0GcI9+Yb62aMv6yclyN1BeyUEJN1WtBZtHCQQAH89Zmkh45ORfF
-         y5RgsCQixeP9tse/IhDaUx2Hur8cKHAY4uGjNs4HMjmV1vm3W0KJhEnNYRdYOB76OG2+
-         DQL3/vTHgy05z9vgaI1DB9mbzGBX2NWRndJ4fpZWhXnDJ6Ch+EwCfjDf19G6YKLqueYj
-         c2DW8n3RZVNjZnVOZoBY3ZBk0UanHoESuwPAMhdx7tfxPf5FlS41u9fzdHvCIN1jYjoW
-         jVfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=n5p78zc2rjIyApVm9wtHFVD/tFOi9RjzwbbxuAlVOl8=;
-        fh=JTiqcOzc452tbwca+MKGqZz/mK6f3cDbMRqHxkJRvg8=;
-        b=QUtgSjVGYc31lXtbpFq8lxgVh/6Mca2IHxsplrzsSEDp3DJMOB/bEpJsc/dRkEHmUj
-         aWK7KzwF/YETDjqASm7iG8o8fsGkEMlr86d3796xDGpsZ3ztji4dyRjrFWgS/2ZuZrDJ
-         7sDAz6OS99xDBxUBDAzk0B107/fEQqXL/Wf9YJc43cP/1AHLLNPCJtV3dsv8iWHj8BXN
-         h4ZaW6km44JJ11nw+/jHwmTj8n6Asehr92ORb1FxqtPTEoIFFoE6rtLg1zDubsXalsN4
-         UWYeEX/UdVSsF12vofJDwiXL9Zrj1NtHBSC1Lsez4r8egHgtpCki7TvskiJbpNyQ7I/M
-         dR0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VY16zhBd"
+Received: by mail-pz2-f0.google.com with SMTP id 41be03b00d2f7-c95bd574471so512870a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 12:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783709486; x=1784314286; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1783710437; x=1784315237; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=n5p78zc2rjIyApVm9wtHFVD/tFOi9RjzwbbxuAlVOl8=;
-        b=tZVSbLdWfOSR/J9P/LE8swlGv5Op6QPCC/DUsnme/OZG8G/f3pghh7WSEztp6dp6ml
-         pPiOQjHSjmyEMMcSl1aqbeP3BnKA6GukqBlmSwzYwQMhPNDk48aS3gv6G46HMNvCdWTW
-         h6muqa6eeldp0u2ui6yg3seyK2wFwaeubIDDtGrrkPK94LCKJnVd6V2aPUWwjkrtw1wr
-         r4yXrMr/mp34UTclBT0R0CDwRm1GvMzbw/KlsC95hwmOKSPyVELq4VmzTdTvyVciJiUu
-         SzVLUrWHLMBkr1ykId6gAKOahRgeGY9ZKFM4d+eymmLcorSsYDAM8mDULva/9IbcaaNJ
-         8fPA==
+        bh=VWBjaJanp528VpTu2TOH4GFEEplwcn9VXFowenlC8oo=;
+        b=VY16zhBdtvy8kx0Qv3/hNaOhjnG+AsRpAtHwJdWQXyXY2iDIpqNvSe3OR78QpwFJef
+         9Z4Rs7WoagyIscid+iGekoOmkLJIqKgciOgSz9eTfjt12R/+DlUB8fotKygOdh8rXi2n
+         USfusKgkb56lRVfYj7taPDzNhnNkJOIjQZhrejCe2z8kmXi9eU5+nZmbfDWh9TiUpwOP
+         LzyCPX8mnj32gowWADaZ7I+kuMYEtm3khD5+2OmkGFCupUiM8n55Stk2+gxghiAc8tuj
+         rxszWrSknPTCWkBnTabQxFOZDUedGK20qcgPYyERN4ZwEPCYlDX8J7eUEYt+H92bRFO7
+         51mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783709486; x=1784314286;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1783710437; x=1784315237;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=n5p78zc2rjIyApVm9wtHFVD/tFOi9RjzwbbxuAlVOl8=;
-        b=dbUoopimTZZMFyEGByY8dZ0ZdBTpPhhhEfZAheFsUE1kJ44UPrKFMg28BZm+8P2GAI
-         8ANXeWsnbq+YDiAfXa84b+Iss2syh/spBVvWXS452o7xvee693CTJX0d1IO/P8OH1BpG
-         C0+oWwmFwagHRy5KHhed7iNxfeczztviqq31ZMPuu+3idirpRHEuyfcosfFAAvAXm45F
-         0IB3KVvqgxIa+47w7SVrMecyJG6cgU6EgyogxrrbQsUDg8HbhaZ160y+SMWrpTJua+K8
-         fjEqKxqF3T4pWP41VNT09Ei3BHg68TWvtE4d6V1ghufuN9o3St0kL5mYOGcBM/ygU7bk
-         1TmQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqHWJ3c8IFoTfmfPY+SYCZkdOtSBZcFV4ket/MlQ2/LbzGxsDJ8udLZNG/SlIEyG+KlCM9lWIK5Qp4CargKpzE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6zw+hMORAtq1VkLJm5qg0NflOKFaqBWDliZbd0QtKUi5oRvid
-	JWXu7RVUrzVrL/9hqxIEJIyyLzVWFSBMB+SZLNZ4yxMps//ZvrH08uq8FJiy7CztRCIhexH09pj
-	1s7008iufykCikvvemD0p/TAlicO73EgXFc0/oLzn
-X-Gm-Gg: AfdE7ckxOi6rjTQ5qFMiMig0Z+gHsKlypvr9/X7c2PL2LfExr6YaKVcaeIGPN9DCy4T
-	LEeXxLpiYYOMaojdl50M0DAcvM79emRtb7E1F7e8+/4l+DnX4MMCSh4SfgWbI8FYEc9qalKvo3a
-	hujjIUspxMLL7r98jGQsaURNZB4PLYkQ940BfVSs96ZEw37u7YerNkMXaK03KFath8J0FbGMbPw
-	jIg4ehsstYG1QcoCCLQvseVYBANMOOul1N/Z5NbV7y8cLoH20MxzTmtipNIuGuDSiDG/FUYHauy
-	nKBKsemz2/IvJmDFyGYPN1mvd6566EOrE56sNzKWW34BgXyLnoVPe6SNIs0w0r5/UJlr93eXVu0
-	CyOir4MzGVsxlxmpLLWh/KafbxpNq9ojKI+jG0xS1Ow==
-X-Received: by 2002:a05:6402:13c4:b0:698:e595:a54 with SMTP id
- 4fb4d7f45d1cf-69c5f22db6cmr205883a12.25.1783709485858; Fri, 10 Jul 2026
- 11:51:25 -0700 (PDT)
+        bh=VWBjaJanp528VpTu2TOH4GFEEplwcn9VXFowenlC8oo=;
+        b=WBFo8mN/JfMTC+KyBHJAj6JCB8WdCHb6FNV2vvcZbV4l924itcE4xlXZ842/jK2bPf
+         4Z30JydIgz9tczXKDXlIwq0vuIHHL4a3UewPa5Z+XQ3GdVlYMkUlICFA1P+jiXHn2vqW
+         g/aXScaq4PrmrNvYGQv5hWvNl0QWfl3hn+yJMquUqxOIjRWiG8NEEkzflpksVrLCpZFQ
+         VFf1y4HrluSHUdDi4e+pFjuB1mYHFYch1KLE7eh12q1S4DFbz//34EyqkrN34GjzFdGD
+         +cWCn8dQhb9L7uuHqHz0gRvTDBoKjv7jc8r7R9399wB3niLhUk4d759rImI8aL6YusEM
+         GowA==
+X-Forwarded-Encrypted: i=1; AHgh+Rpgu/Xma6KnBvGXljrNaKM/NzOIW54fgEIXlBrhEKBhWM92PhHjHs7NeCWx2VJ/sI52G2DX4+HZfZ4sIHkSUb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX/ZHZ9K0e6Fywci4yPjprCzGspHhQ9TB7kW+/9WxCmTTp8ger
+	v0Rv4jOb4fCLIs0XSS6wz+dbsSvhQ/Z9ig/EjrmU5ztSSsaINC/+F+fw
+X-Gm-Gg: AfdE7clC/dDYDuHVQIK8Ql5TQeMHVCO/nP5luf6Hma/iAUFMFHLCkt0prlCuPbfo+mH
+	KxAdCn9aj4+CVSDsHqeRwGXZoQGqL84knmYRmkostj7uJW9MWThW574xhT7ZxKIeWojEZmERj+h
+	smS7H6RTxVm7ShoOpBQkBOFzU9D+QRoPfuDmWF3UX3Pibw87x8Wz2VOtAeotOqEMgii6D4r8iJN
+	er/UwF5vSjxegNeOql9mLbf9CEIvhCDL9abgSKXzl+bVtf1U7nfJp8H27q9Qv+Z7pXfgWP74p/f
+	t8WnnqnxNMn0nbuD3LZyX1EiWjOIjp6OiXcHvByn6D0OlxQCuGjo3GrnuF+l45Rdwz9AxZAgFzT
+	OboO85gj21afrAzDRs87bjpOOanoEC7Gwid7tFgV8rW3VUU/oaYxlKdqb9Qtc+uj2CKFhm/fVqI
+	C/hEsA4oT8P7KPS0ec
+X-Received: by 2002:a05:6a00:180b:b0:848:2eac:bfb2 with SMTP id d2e1a72fcca58-848895db4e2mr303610b3a.13.1783710437502;
+        Fri, 10 Jul 2026 12:07:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4f::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84856e7c8edsm3299574b3a.36.2026.07.10.12.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 12:07:17 -0700 (PDT)
+Date: Fri, 10 Jul 2026 12:05:23 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Vladimir Vdovin <deliran@verdict.gg>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
+References: <20260708203410.45121-1-deliran@verdict.gg>
+ <20260708203410.45121-2-deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org> <20260710-net-sft-fix-containers-v1-1-a2915c294ef5@kernel.org>
-In-Reply-To: <20260710-net-sft-fix-containers-v1-1-a2915c294ef5@kernel.org>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 10 Jul 2026 11:51:11 -0700
-X-Gm-Features: AUfX_myqvOzaMsIaJBI9tHYQ2GZKEYBZ6ZeliutyzZ2d-SAppn0G7CeVtue5cr0
-Message-ID: <CAAVpQUC18R6CHS9sDyN-dqjzkU_qePVCbLN+qs+R3+uLeJ0scw@mail.gmail.com>
-Subject: Re: [PATCH net 1/7] selftests: af_unix: add USER_NS config
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260708203410.45121-2-deliran@verdict.gg>
 
-On Fri, Jul 10, 2026 at 11:05=E2=80=AFAM Matthieu Baerts (NGI0)
-<matttbe@kernel.org> wrote:
->
-> This is required to use unshare(CLONE_NEWUSER).
->
-> This has not been seen on NIPA before, because the 'af_unix' tests are
-> executed with the 'net' ones, merging their config files. USER_NS is
-> present in tools/testing/selftests/net/config.
->
-> This issue is visible when only the af_unix config is used on top of the
-> default one. This is the recommended way to execute selftest targets.
->
-> Fixes: ac011361bd4f ("af_unix: Add test for sock_diag and UDIAG_SHOW_UID.=
-")
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+On 07/08, Vladimir Vdovin wrote:
+> From: Lorenzo Bianconi <lorenzo@kernel.org>
+> 
+> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> checksum will be use by devices capable of exposing receive checksum
+> result via bpf_xdp_metadata_rx_checksum().
+> Moreover, introduce xmo_rx_checksum netdev callback in order to allow
+> the eBPF program bound to the device to retrieve the RX checksum result
+> computed by the hw NIC and reported via DMA descriptors.
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> ---
+>  Documentation/netlink/specs/netdev.yaml |  5 ++++
+>  include/net/xdp.h                       | 18 ++++++++++++++
+>  include/uapi/linux/netdev.h             |  3 +++
+>  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
+>  tools/include/uapi/linux/netdev.h       |  3 +++
+>  5 files changed, 61 insertions(+)
+> 
+> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> index 5f143da7458c..6d0d90d3a614 100644
+> --- a/Documentation/netlink/specs/netdev.yaml
+> +++ b/Documentation/netlink/specs/netdev.yaml
+> @@ -61,6 +61,11 @@ definitions:
+>          doc: |
+>            Device is capable of exposing receive packet VLAN tag via
+>            bpf_xdp_metadata_rx_vlan_tag().
+> +      -
+> +        name: checksum
+> +        doc: |
+> +          Device is capable of exposing receive checksum result via
+> +          bpf_xdp_metadata_rx_checksum().
+>    -
+>      type: flags
+>      name: xsk-flags
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c35..e255ff786131 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+>  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+>  			   bpf_xdp_metadata_rx_vlan_tag, \
+>  			   xmo_rx_vlan_tag) \
+> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> +			   bpf_xdp_metadata_rx_checksum, \
+> +			   xmo_rx_checksum)
+>  
+>  enum xdp_rx_metadata {
+>  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
+>  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
+>  };
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+[..]
+ 
+> +/* Please note the driver is required to invalidate the checksum if the NIC
+> + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF program
+> + * modifies the packet since it can change some fields validated by the
+> + * checksum.
+> + */
+
+Sorry, a bit confused about this part. IIUC this is in response to this
+discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
+
+Looking at a few drivers:
+- bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+- mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
+  bpf prog attached
+- fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+- gve (gve_rx) - can do COMPLETE even with xdp attached?
+
+So none of the drivers invalidate anything (and nether the bpf machinery), some
+choose to (correctly?) not report COMPLETE when there is XDP. So was the
+discussion about documenting this and giving some guidance? This probably
+belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
+
+Also, can you add your new rx_checksum to
+Documentation/networking/xdp-rx-metadata.rst's list of supported kfuncs?
