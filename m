@@ -1,68 +1,68 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87269438019
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 16:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914643B49C
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 16:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783701552; cv=none; b=ND7hhWiayz7zOqqvtmvDgtETR72AX2AdmK7K756hv/nQIQICzw19Y6BpEsNOzHyf3l6swg56GjsTbph/r1CoHbQjHBzqfXPqdDXq1giEtRVd5w/fb6M11FllwJCw0W8Mk26taOc0MiiBS8idhlYL4WBz1230KO/rn1WLiYtP/Ws=
+	t=1783701665; cv=none; b=clfl70G8hRZ9v2UnnP08yjMzgInHZRhjDGPhNZrR1dU+RuvDfl3Q5/IST8LaE7sHHoXDcIRl/22WfftAoVA/Dv9kk9AdfzZUfgnjj545hSPewSGAlRNuhZjM+IrqGFycmxCJlLduETbIKltW+MjvQffmvwa1FSCmC6kRozcx6nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783701552; c=relaxed/simple;
-	bh=PXWpFGDjo49ebvD3J1EZhbbcBn9lhFalPM090sNNP24=;
+	s=arc-20240116; t=1783701665; c=relaxed/simple;
+	bh=97gDvxv4aZQT4UUmzVBR2oQfVgbx3iRf3Vdj/SRY1i0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AGkCADlIOyJQfweJHlM8sdbLvjRiUt39Ml/34h76SvE6MayoyFKN5WUy+F9cjI4dII84kqXktZXGEa5YHZGnQ1iET4GGCtlwquJIODzGzBJ2r3NxsjbJNBZyIXMqWyoCsTRiPLRGdWkOGYIEAoU5CtLL/Vsa0y3bBxtHQrVv49o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=V44Ncneu; arc=none smtp.client-ip=209.85.222.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=GdnjZD4Ned90Vh/aESqLrnycrqgw1kSWif8f3FCxP+FKf9OJpdqGEER1HdGtTUZq25xYhOpAFSTaO0zsKfXA9dyotd2u+yKAWplpi4j2AHAjTLOIh8PJRmfwf7YG13fn48pcUmbI4E1o+2DkU7N0WtFZkqjlieRAR+H9jlVIJI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=ZRBAEdjI; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="V44Ncneu"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e7632b193so69667185a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 09:39:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ZRBAEdjI"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51c01089e8aso6039511cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 09:41:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1783701549; x=1784306349; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1783701660; x=1784306460; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Pz9Az2A5A+eQsiowkEP3oUH5xkba/HyvmJjmLQ4f6yE=;
-        b=V44NcneuBmSKEBchN78CSp+SaMfBLy1//YCpr9I1tT1XRDcFXG5+tSyEJHEeaYeVfz
-         NIrEue9qNfNKDSL2SyQc22uCFfZIccdEKlzTvZiVjxSs7yW8ymKPTbjh3h5fCx8J6VRE
-         ruw7a7Zb4wsfuusky6aj8N5Zh51FpvSSoGJh81s9qefwupZ1P5l5cIhrHg0UWBRhHCZF
-         uNQncP6VKhKSu8y8EbYfIk2ibfq5mUb/raxQxKixeDH/8G6mZA13O+UEHcgJY563IsTS
-         5NsI1Y3ojGWLdbyGmeRkfxWy2e+I5uI8lgN5cqIFUUap3X2wvZlttOnhG3/sjVeBLu5G
-         WuaQ==
+        bh=z7U3THTZDjx6I8tSiQ91l//DDsukKiO5Egsu4KIAjvc=;
+        b=ZRBAEdjIeQtxxaryQLV/DV1M6etRXRRZeJZTBzc3/D5Jje14ctDu1qTn0m1JV8zpds
+         Pp4m1qoAU/VDjCMVBeX4OSKQOcE5veBAo/TST3hsT2nTEcuadmb3cinmOGbMXw19nxVc
+         mOpb1qm4dFhtftaATu4oF55dQxbjqBss94bmOeknL4rTJtLOabGpf/D1FqZ+Sg7AEBMs
+         LrQffX/B7EQ55m8kbqt4A8evJBTuCPUlF/U4sWOAbeCD0VFS8MAhd3nJmM3MgCYEPSCh
+         J2k45cMnPosDIq6gu284SEDm/ZaRv4T/PjTaV65pA4U+7OCTehCqqvw9JrFtwG5LUuVv
+         6Ruw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783701549; x=1784306349;
+        d=1e100.net; s=20251104; t=1783701660; x=1784306460;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Pz9Az2A5A+eQsiowkEP3oUH5xkba/HyvmJjmLQ4f6yE=;
-        b=sler6TBqnTTYFXDvXQHqQ4Vj1QcCldvnsOcJa9zVrkXI/glWigai+AxXtVrOqSR0Xw
-         vk5nHZQgL+erHFVuwtcLcKhq7b2+jGesjmodLod7QXwP9axu16kHFSjs3Z4a1GRMW5fl
-         MwNL+7krGXKQgpp/btk9cgVu7GnCUxjTHqOQDwXEZRSe6smupwKqGD97aycIfshNGYv0
-         vxHXgzxCHr5Xut/MTxlkdhaY8z1aHkCa4+OLfMNfAoazXHLiHtATa+eiLwcjt6UBx/8S
-         1LqiVGgGmaMXIGDz4XhzJ0SB1/Du22ZxbOaT26Y5uEZCT48VJzXk1rr09ExJimQpCNCn
-         ausg==
-X-Forwarded-Encrypted: i=1; AHgh+RpbZSebSz00c56idg+hmLRay+QXBnpeKPI/DsNpSQDGyizjrxOFud1oPvkfPYOT54Oab87ISkbYi4QxfZI1OBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHAjBtrT0dVde9bYHrGtoHzHaeF0Wzar2XnW2oBW9Wd2YDYG3n
-	lsnblnzziNZzzMrzKA1Dzls5J8Gc1J+IBLWS7b8Q8JiSJudP+lTMMBhTw8VjDo2dnEA=
-X-Gm-Gg: AfdE7cmSqYiVodVdu4jNOCNnQi4EBHP1jTbOHTJp/BZDXYlf4jyqFqVkv+WNFvnGaSF
-	8+C64B389tNCjsEANvRRSShwLyUjgYc4TcAFaxXUERvb3MFoL/DWRLO/ofkRgQmH+l9kx0ieoqE
-	Z34uFdLBx6rpk157AtGTkLb3D/3UhHTT2A8PIvjdDv35RxtqNzW6nhZrCzM8u8/sNAvI4/4qT6w
-	WTxqS7ZGrOjMTdEUzGc0pjoosjC3jypA2U2QNDr3XGDPbL/r6DDQU8BWqlWgjyxihYG+rET/5Wl
-	iX0fphGOpoZyrd56T0SEHgMnS4owOrcphUuYOcf6J6gxia+Gfy/JIK03nJAw9kPL9pVx6XFjcHO
-	KrffB2U70XkgEYn10C7t8oCvAOquDmm22k22XKCkrnPCMV758ClI7HHWC7D+b
-X-Received: by 2002:a05:620a:2842:b0:92e:44eb:1e7a with SMTP id af79cd13be357-92ecf5f0e37mr1356630085a.29.1783701549520;
-        Fri, 10 Jul 2026 09:39:09 -0700 (PDT)
+        bh=z7U3THTZDjx6I8tSiQ91l//DDsukKiO5Egsu4KIAjvc=;
+        b=RjEWCzeVLEJ9xHIXyeCDtCSLtI3qPvxJdqt3MTuVXw+vTf0+pC0dY8ckHmtY2JhgMV
+         nyXIVOMM0xikAPs/XR+eRsa3uyVL8iPIqXFY0if5fAdrU8NTYk+/XklAXbfO7xs9hX15
+         YqxJWX3safQTfMU8gj+BsUwPPMwAcXz4Z2yVSOitvV1YFyJniz+2XlScT9RJ6Fglo0tO
+         LrTQIzUD3P29BI0Im/MXir5f/ZD0OzHQ4NKUYTWoTUSj+fXLyYb0dtE5pq4NYDXAVoue
+         1djTKsRFZ/DLxs4EVhe1Pxx3kzLXilOH/siTVRU5v8u8RgTQqHwoJr2V4BgMgewsFM9a
+         r2BQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoYUsTizQMPgwmRYbUR72JmaNSZ5oLofqEickhs605CRnWOKfjZb5rPudD7wvBzXcUDxBOmr2L1DQ8Fn4eqtdY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp+yOHNGqLQp+gv8Al20ulLdyArZCFCGI3rG3vcL198y14D0a5
+	8NlslX7hAHsYyKdyVTkDJU/4iXiZqnW+/v59o0UYdIhIwn6AnmJ2TyxOKXq8f9p+cSU=
+X-Gm-Gg: AfdE7cm2d3wZQ8Ca1Vq3NIEdT/ABB75lDyOoVIuwAbqSN/fcN2sbOlZyZav87Ss81qg
+	M4dOBpb1lzYvmFxFu+O5tCdaqIylwFI8C4GGshKH5ru1kIi9SMgHPO7mEAnaeYcwmofRZvZiM/l
+	HmfX+Y39rEA7ChFJWBOBXIbhJHY/R7wu1PYY/2tOGGQmFd9ZJwa19HXB1cg2qfzjROOjWaZWlIU
+	vbshKnq9yPiXOlt83CYW2OZYSkBm2t4b4dO5unJE0lfD+98sv+HQlVG9hl5ddoifrNEmsYaJ7es
+	Gf3QqrGqhXPA5x8vC0z17mTdAal6QWrITkeOONJ0nyPjSsDtepdkFNPkoBRZGaMeJkD4hwqPO7G
+	8j9r7Wj7V72Lqpv5GPJIKwd62RWSIZO69oNOs0B9VTKm6SwwvIplZqAj1N+mO237mC88VCsQ=
+X-Received: by 2002:a05:622a:558d:b0:51c:164b:b241 with SMTP id d75a77b69052e-51c8b2d5582mr133755821cf.13.1783701660503;
+        Fri, 10 Jul 2026 09:41:00 -0700 (PDT)
 Received: from ziepe.ca ([159.2.72.92])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5bcb074sm235123285a.21.2026.07.10.09.39.08
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd50e0347sm45334476d6.2.2026.07.10.09.40.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 09:39:08 -0700 (PDT)
+        Fri, 10 Jul 2026 09:40:59 -0700 (PDT)
 Received: from jgg by wakko with local (Exim 4.97)
 	(envelope-from <jgg@ziepe.ca>)
-	id 1wiEFo-00000007YRj-1Qzt;
-	Fri, 10 Jul 2026 13:39:08 -0300
-Date: Fri, 10 Jul 2026 13:39:08 -0300
+	id 1wiEHb-00000007Yc5-1TXt;
+	Fri, 10 Jul 2026 13:40:59 -0300
+Date: Fri, 10 Jul 2026 13:40:59 -0300
 From: Jason Gunthorpe <jgg@ziepe.ca>
 To: Stanislav Kinsburskii <skinsburskii@gmail.com>
 Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
@@ -80,11 +80,11 @@ Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
 	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v7 4/8] mshv: Use hmm_range_fault_unlocked_timeout() for
- region faults
-Message-ID: <20260710163908.GS118978@ziepe.ca>
+Subject: Re: [PATCH v7 5/8] drm/nouveau: Use
+ hmm_range_fault_unlocked_timeout() for SVM faults
+Message-ID: <20260710164059.GT118978@ziepe.ca>
 References: <178345345668.660027.2952911919681614557.stgit@skinsburskii>
- <178345363584.660027.14063544694872741718.stgit@skinsburskii>
+ <178345364273.660027.15274510603185163961.stgit@skinsburskii>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,30 +93,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <178345363584.660027.14063544694872741718.stgit@skinsburskii>
+In-Reply-To: <178345364273.660027.15274510603185163961.stgit@skinsburskii>
 
-On Tue, Jul 07, 2026 at 12:47:15PM -0700, Stanislav Kinsburskii wrote:
-> MSHV currently faults movable memory regions by taking mmap_read_lock()
-> around hmm_range_fault(). That prevents the fault path from handling VMAs
-> whose fault handlers need to drop mmap_lock, such as userfaultfd-backed
-> mappings.
+On Tue, Jul 07, 2026 at 12:47:22PM -0700, Stanislav Kinsburskii wrote:
+> nouveau_range_fault() takes mmap_read_lock() only to call
+> hmm_range_fault(). It also keeps a single HMM_RANGE_DEFAULT_TIMEOUT
+> deadline across both HMM -EBUSY retries and post-fault
+> mmu_interval_read_retry() retries.
 > 
-> Use hmm_range_fault_unlocked_timeout() instead. Passing a timeout of 0
-> preserves MSHV's existing unbounded retry behavior while letting the HMM
-> helper own mmap_lock acquisition and refresh range->notifier_seq internally
-> before walking the range. After the fault succeeds, MSHV still takes
-> mreg_mutex and checks mmu_interval_read_retry() before installing the pages
-> into the region, so the existing invalidation synchronization is preserved.
+> Use hmm_range_fault_unlocked_timeout() instead. The HMM helper now owns
+> the mmap lock and refreshes range->notifier_seq for its internal retries.
+> Nouveau keeps its existing absolute deadline in the outer loop and passes
+> the remaining jiffies to the helper for each fault attempt, so retries
+> caused by mmu_interval_read_retry() do not reset the overall retry budget.
 > 
-> Fold the small fault-and-lock helper into mshv_region_range_fault(), since
-> the remaining retry path is just the standard "fault, take the driver lock,
-> check the interval notifier sequence" pattern.
+> Nouveau still validates the interval notifier sequence while holding
+> svmm->mutex before programming the GPU mapping.
 > 
 > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 > ---
->  drivers/hv/mshv_regions.c |   54 ++++++++-------------------------------------
->  1 file changed, 10 insertions(+), 44 deletions(-)
+>  drivers/gpu/drm/nouveau/nouveau_svm.c |   11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+> -		range.notifier_seq = mmu_interval_read_begin(range.notifier);
+> -		mmap_read_lock(mm);
+> -		ret = hmm_range_fault(&range);
+> -		mmap_read_unlock(mm);
+> -		if (ret) {
+> -			if (ret == -EBUSY)
+> -				continue;
+> +		ret = hmm_range_fault_unlocked_timeout(&range,
+> +				       max_t(long, timeout - jiffies, 1UL));
+
+Avoid max_t, 1L should be a signed long.
+
+Though I'm even more concerned about the timeout if drivers are now
+wrapping the whole thing in a timeout... That's not sensible at all
 
 Jason
