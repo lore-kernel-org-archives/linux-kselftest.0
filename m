@@ -1,68 +1,68 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914643B49C
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 16:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14E3263F5E
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 16:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783701665; cv=none; b=clfl70G8hRZ9v2UnnP08yjMzgInHZRhjDGPhNZrR1dU+RuvDfl3Q5/IST8LaE7sHHoXDcIRl/22WfftAoVA/Dv9kk9AdfzZUfgnjj545hSPewSGAlRNuhZjM+IrqGFycmxCJlLduETbIKltW+MjvQffmvwa1FSCmC6kRozcx6nE=
+	t=1783701800; cv=none; b=t5XneePU4N2WcvoWBDiaBD2Xy+tJJOjLnCb/nza2q5KBJupzg3nQSPPNBN9JAebe2jeZIlCVZjb3UEM3PLkG/Ta2EyJ2azMbRd9ny9ab3sOL57Dep+DwoIdS6gAvXxD4hVZeoUYSfl4KI43oFiLQNNbW9gRyeGyALMyZ76rNEwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783701665; c=relaxed/simple;
-	bh=97gDvxv4aZQT4UUmzVBR2oQfVgbx3iRf3Vdj/SRY1i0=;
+	s=arc-20240116; t=1783701800; c=relaxed/simple;
+	bh=ZL2zX2D9UZwwCtPCpSQDsF4TpGKLC8vJlz83DhiVqG4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GdnjZD4Ned90Vh/aESqLrnycrqgw1kSWif8f3FCxP+FKf9OJpdqGEER1HdGtTUZq25xYhOpAFSTaO0zsKfXA9dyotd2u+yKAWplpi4j2AHAjTLOIh8PJRmfwf7YG13fn48pcUmbI4E1o+2DkU7N0WtFZkqjlieRAR+H9jlVIJI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=ZRBAEdjI; arc=none smtp.client-ip=209.85.160.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=bcD/NYhGwYjkF7RGaey/DTj1D0jBiQFRGSYla495m9Gj7hMu67k+i+/amQNA2yhrOp0uzv8Mb/GM8AlZTG1bu99VZGtYfltJU1k6ReC421Jy7gmCSb/zmZYVLVAaeJp2UCxj5UZAGYXHnJb7mlKwbFxXQxFwngsU+93D1oZ3vYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=nNEMWVJM; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ZRBAEdjI"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51c01089e8aso6039511cf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 09:41:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="nNEMWVJM"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8efcfdb2b43so7501356d6.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 09:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1783701660; x=1784306460; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1783701797; x=1784306597; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=z7U3THTZDjx6I8tSiQ91l//DDsukKiO5Egsu4KIAjvc=;
-        b=ZRBAEdjIeQtxxaryQLV/DV1M6etRXRRZeJZTBzc3/D5Jje14ctDu1qTn0m1JV8zpds
-         Pp4m1qoAU/VDjCMVBeX4OSKQOcE5veBAo/TST3hsT2nTEcuadmb3cinmOGbMXw19nxVc
-         mOpb1qm4dFhtftaATu4oF55dQxbjqBss94bmOeknL4rTJtLOabGpf/D1FqZ+Sg7AEBMs
-         LrQffX/B7EQ55m8kbqt4A8evJBTuCPUlF/U4sWOAbeCD0VFS8MAhd3nJmM3MgCYEPSCh
-         J2k45cMnPosDIq6gu284SEDm/ZaRv4T/PjTaV65pA4U+7OCTehCqqvw9JrFtwG5LUuVv
-         6Ruw==
+        bh=cCrA5GvcNcomQ8YHAskvpnsx6mUAVwyB/JWdGkfbiJc=;
+        b=nNEMWVJModhaBRCINi+FBpUkRF42YITDUmaNfZzSBHvPg9NrZ5EOLuypsRSdQlefg7
+         oxcYZ19D8SEX6K4I0Lms+75ZlmArcj5nl+qk1BmuOaaTbYB9ax53/jER1y7CLNG4oWj3
+         gUBLFBEwrsTU6tYh1gd2hNMX+69CEtCjCqYqVVfFvwliKbIff/rbnjtI9XMujtL5ligK
+         8mnT2a+QOt9R4GAiwAN31xOSjAB0ygXLbNdv5D+OHihGYrgALqujJActN8caqbdDTDBs
+         vQ7lt3H7VOzFpb7aTndu51FdomfRuXmRy2jMv76FmmRkrNC+hC5St8uDirIRn6ubESiC
+         MDdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783701660; x=1784306460;
+        d=1e100.net; s=20251104; t=1783701797; x=1784306597;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=z7U3THTZDjx6I8tSiQ91l//DDsukKiO5Egsu4KIAjvc=;
-        b=RjEWCzeVLEJ9xHIXyeCDtCSLtI3qPvxJdqt3MTuVXw+vTf0+pC0dY8ckHmtY2JhgMV
-         nyXIVOMM0xikAPs/XR+eRsa3uyVL8iPIqXFY0if5fAdrU8NTYk+/XklAXbfO7xs9hX15
-         YqxJWX3safQTfMU8gj+BsUwPPMwAcXz4Z2yVSOitvV1YFyJniz+2XlScT9RJ6Fglo0tO
-         LrTQIzUD3P29BI0Im/MXir5f/ZD0OzHQ4NKUYTWoTUSj+fXLyYb0dtE5pq4NYDXAVoue
-         1djTKsRFZ/DLxs4EVhe1Pxx3kzLXilOH/siTVRU5v8u8RgTQqHwoJr2V4BgMgewsFM9a
-         r2BQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoYUsTizQMPgwmRYbUR72JmaNSZ5oLofqEickhs605CRnWOKfjZb5rPudD7wvBzXcUDxBOmr2L1DQ8Fn4eqtdY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp+yOHNGqLQp+gv8Al20ulLdyArZCFCGI3rG3vcL198y14D0a5
-	8NlslX7hAHsYyKdyVTkDJU/4iXiZqnW+/v59o0UYdIhIwn6AnmJ2TyxOKXq8f9p+cSU=
-X-Gm-Gg: AfdE7cm2d3wZQ8Ca1Vq3NIEdT/ABB75lDyOoVIuwAbqSN/fcN2sbOlZyZav87Ss81qg
-	M4dOBpb1lzYvmFxFu+O5tCdaqIylwFI8C4GGshKH5ru1kIi9SMgHPO7mEAnaeYcwmofRZvZiM/l
-	HmfX+Y39rEA7ChFJWBOBXIbhJHY/R7wu1PYY/2tOGGQmFd9ZJwa19HXB1cg2qfzjROOjWaZWlIU
-	vbshKnq9yPiXOlt83CYW2OZYSkBm2t4b4dO5unJE0lfD+98sv+HQlVG9hl5ddoifrNEmsYaJ7es
-	Gf3QqrGqhXPA5x8vC0z17mTdAal6QWrITkeOONJ0nyPjSsDtepdkFNPkoBRZGaMeJkD4hwqPO7G
-	8j9r7Wj7V72Lqpv5GPJIKwd62RWSIZO69oNOs0B9VTKm6SwwvIplZqAj1N+mO237mC88VCsQ=
-X-Received: by 2002:a05:622a:558d:b0:51c:164b:b241 with SMTP id d75a77b69052e-51c8b2d5582mr133755821cf.13.1783701660503;
-        Fri, 10 Jul 2026 09:41:00 -0700 (PDT)
+        bh=cCrA5GvcNcomQ8YHAskvpnsx6mUAVwyB/JWdGkfbiJc=;
+        b=XRHevItJ6NksIebvc5bZaPZMbNx77QcKpNIEgBTdxWtAOIJmgfraaCzIZWZTYJ7iKE
+         JtKaWbjMULN11G56rYtR8iDyX7Hw5xPI1AJcQL02fYYXbrnm3pqn+MWY83Yd7SkliIIC
+         BNJyJsmSw7BAckPFZQrItr7YLcelahGxSDlES89rahfaviwfCnBVNdzbqUmUEylQ1hil
+         8GIO4BVhzzK2eJ5EePlwJWp16Fmps9L86mTk8ih6XGxoEikbSIlyz5s8hdPPFHUTOiv1
+         P5nU8qQQ+tfgmE16kDnU4lpNFc2OiELNK2gdc4/Hiv4O6/AWNwDuxh4OdsL7PpCWPrMk
+         H5gA==
+X-Forwarded-Encrypted: i=1; AHgh+RqpHxt3Wn5WTZ8x4NYQ8nxIJedDe/jxH1MPQhgCtItyyOrhZKGPhSkDrboaYb+nrn2c6favyFXJMLX62Ou2I0o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwidlaxMBuU+6YwoFDgMkL+E3E76YqDkrGJnx4mjK+fy4s/PQJk
+	Pgeriuv9RmmqaRJzW0+7cxNBKc2F7jjY1g2rMIkB8jYIpGLnlY0Hy0fAEfN8WVuPQ8M=
+X-Gm-Gg: AfdE7cmv2S5RuaMopIMMlXCa9qqw2aci0W9uVcLrAV+itPwWFdUOkG/Ji/T3XuBOozH
+	fwWKaAHwgO2fIwcxCPf9dD83c1IKbSswisheMD0xBJG4l6vCObTtVRUhEh6/VZpEkH7G0hIDavc
+	yA9YGoWJeL8EcVKQU9OpfU0BGOoju/r3SrkDpjMaYW9sEuUDkgnCvJj4raUnO5rx1DT1j+e+tE9
+	fE2ha9kBTQmO9kTkjw4Mn4NCO80Mb2UglACZrCVuIraAz6P2Pk6waKEmjIujntRaCbQACoD/Urt
+	t01AdHmZ3eDEwNVF51v885F6LtTDS3acTN85CjA9l2LnOPFNCOd48V4xCp3aoOLtMWtA5l/DC7W
+	M+IA8MOHRCBzIiNQCrzI62+h6c+uXmBF0I6VDfyPufZg/o/FZBT1pAUojrk/t
+X-Received: by 2002:a05:6214:43c8:b0:8f4:4d6:8adb with SMTP id 6a1803df08f44-8fec1d808a6mr146369176d6.22.1783701792723;
+        Fri, 10 Jul 2026 09:43:12 -0700 (PDT)
 Received: from ziepe.ca ([159.2.72.92])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd50e0347sm45334476d6.2.2026.07.10.09.40.59
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-900a7f8f5d6sm30725036d6.15.2026.07.10.09.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 09:40:59 -0700 (PDT)
+        Fri, 10 Jul 2026 09:43:12 -0700 (PDT)
 Received: from jgg by wakko with local (Exim 4.97)
 	(envelope-from <jgg@ziepe.ca>)
-	id 1wiEHb-00000007Yc5-1TXt;
-	Fri, 10 Jul 2026 13:40:59 -0300
-Date: Fri, 10 Jul 2026 13:40:59 -0300
+	id 1wiEJj-00000007Yof-1AFg;
+	Fri, 10 Jul 2026 13:43:11 -0300
+Date: Fri, 10 Jul 2026 13:43:11 -0300
 From: Jason Gunthorpe <jgg@ziepe.ca>
 To: Stanislav Kinsburskii <skinsburskii@gmail.com>
 Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
@@ -80,11 +80,11 @@ Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
 	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v7 5/8] drm/nouveau: Use
- hmm_range_fault_unlocked_timeout() for SVM faults
-Message-ID: <20260710164059.GT118978@ziepe.ca>
+Subject: Re: [PATCH v7 6/8] RDMA/umem: Use hmm_range_fault_unlocked_timeout()
+ for ODP faults
+Message-ID: <20260710164311.GU118978@ziepe.ca>
 References: <178345345668.660027.2952911919681614557.stgit@skinsburskii>
- <178345364273.660027.15274510603185163961.stgit@skinsburskii>
+ <178345364975.660027.8790629832830633290.stgit@skinsburskii>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,43 +93,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <178345364273.660027.15274510603185163961.stgit@skinsburskii>
+In-Reply-To: <178345364975.660027.8790629832830633290.stgit@skinsburskii>
 
-On Tue, Jul 07, 2026 at 12:47:22PM -0700, Stanislav Kinsburskii wrote:
-> nouveau_range_fault() takes mmap_read_lock() only to call
-> hmm_range_fault(). It also keeps a single HMM_RANGE_DEFAULT_TIMEOUT
-> deadline across both HMM -EBUSY retries and post-fault
-> mmu_interval_read_retry() retries.
+On Tue, Jul 07, 2026 at 12:47:29PM -0700, Stanislav Kinsburskii wrote:
+> ib_umem_odp_map_dma_and_lock() takes mmap_read_lock() only around
+> hmm_range_fault(), then retries -EBUSY until HMM_RANGE_DEFAULT_TIMEOUT
+> expires.
 > 
 > Use hmm_range_fault_unlocked_timeout() instead. The HMM helper now owns
 > the mmap lock and refreshes range->notifier_seq for its internal retries.
-> Nouveau keeps its existing absolute deadline in the outer loop and passes
-> the remaining jiffies to the helper for each fault attempt, so retries
-> caused by mmu_interval_read_retry() do not reset the overall retry budget.
+> ODP keeps using HMM_RANGE_DEFAULT_TIMEOUT for each HMM fault attempt,
+> while interval invalidation retries continue to be handled by the existing
+> outer loop.
 > 
-> Nouveau still validates the interval notifier sequence while holding
-> svmm->mutex before programming the GPU mapping.
+> ODP still validates the interval notifier sequence while holding umem_mutex
+> before DMA mapping pages.
 > 
 > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 > ---
->  drivers/gpu/drm/nouveau/nouveau_svm.c |   11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+>  drivers/infiniband/core/umem_odp.c |   18 +++++-------------
+>  1 file changed, 5 insertions(+), 13 deletions(-)
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-> -		range.notifier_seq = mmu_interval_read_begin(range.notifier);
-> -		mmap_read_lock(mm);
-> -		ret = hmm_range_fault(&range);
-> -		mmap_read_unlock(mm);
-> -		if (ret) {
-> -			if (ret == -EBUSY)
-> -				continue;
-> +		ret = hmm_range_fault_unlocked_timeout(&range,
-> +				       max_t(long, timeout - jiffies, 1UL));
-
-Avoid max_t, 1L should be a signed long.
-
-Though I'm even more concerned about the timeout if drivers are now
-wrapping the whole thing in a timeout... That's not sensible at all
 
 Jason
