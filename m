@@ -1,180 +1,68 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BE53B14C8
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 08:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928683E0255;
+	Fri, 10 Jul 2026 08:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783670442; cv=none; b=gG5cmShLHuklKppKtEOPTc5K897iipKPRAPTo/GA+A+Tj1bizQK51WNqXs7/vzYE3GFv0PEo/wVpTXU1PvBzXoVBGIpg8Z1Rut2jWziLZm2w/zzu7lVXcAn1bvneuvVmi9GIxBXSUsDLjiNGWdWDTgM2gBvYOd/pA+X+fAd9qhw=
+	t=1783670894; cv=none; b=BB3EpLAewefj+jNvKJtI52Ohcti+MfRXzgZTNnd9uwokbSXBptJOd7jeNwjk2oCdHawS1jCwCEPwnARecEBkdhAoSXV0B6LTks8rs8AaFSFoERXUxcRqJaa72oQuyk9ktIMhIVACW+ZmaY2ZqS736S5Hf1tQg1QEVBevVm4RwsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783670442; c=relaxed/simple;
-	bh=pUv5EBpxAawNlfz6TfnjQheGLcQNgrCAdjNiETQ0vk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RjHuTM4M7FVR2esZ/19wLxmJp9pD+rSl4fhanEui6f4HDiD6iT1o5Nl7eDInY913Kv+8rhh2tWdo+TDJepnLDON9W4fYoEpezYqCET0MAZAslcDeBpMjb3Og69bU+Jk6HCnkRss5lS7HA6Cg8gRMk/A3aM/0DOqI0vFVa2KXBcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IxqafOfA; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783670894; c=relaxed/simple;
+	bh=45ANQ3Vsy+d3pK3uw4SKVkvifHlIRlVJm9qalhetqcg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=uegQRgzLDWMT5hvbSqnLED3SQUM6+Zls1IZKSaemN6m2wdRFPtLQce9i0wrS2XuzdfiQ2K15bGLDyXiZCp4MKeKTzeaXZHbVl3f4P6WIWqA5NIVl/cYHHpZxgbFu5+O5L0Gt4Wf7MAvgc7sfqP9iwuIs1cm9AZakKytP3tI98cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhTkA77o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IxqafOfA"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c12614b81c9so119348166b.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 01:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783670439; x=1784275239; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7NAnOHyxoVPYpVNY9WSaqu/dYx79TRxCODHHV36sDoU=;
-        b=IxqafOfA/N/hHWXo+zgtXGrWDCI4I3NG0MxoJxFEGrJufNpZSsnHBObPaMiiyj9AZR
-         FOnuDybmGNgRs50gsMIatM5RyTYOWhUS+/MCJacUwsJSUdtxUjp5e8mhVO3GTUYna5o8
-         WpMWFUypAmcsx/XVlcYl72mE9QadR20R+upDxs/6+L6yx46W8ZxD9eKiWXI66xuTVFTr
-         tAnQtMj1+ta0QngmU24L6k8IZgzUQ6+i8vFAk/IK1vNlq1DptpCA1lnO9Baat2PywGVP
-         /lb9XfMm94Dz5nsQXDY38p5BqZdTPhWo1Jj4WP6x3PKcWj+ZJBmnPXtzmkThmyRCn7ik
-         FILQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783670439; x=1784275239;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=7NAnOHyxoVPYpVNY9WSaqu/dYx79TRxCODHHV36sDoU=;
-        b=IQZiTaZy98N7WSBi7a8dE2/XtZUJU0rUc7g2oO3CrUPDJ8L/qiJfcliI6LMpfGwyM4
-         5TELX5a5ie8R/EQhobWGO0uVQj4498oXjnph8iCt0zDY7x6XBe69O2xPKLAewIfY8G/3
-         Fpzd7qMmzOSCZYNuZhUR2gi5RRTMUG4Plh3AuTH885MqFHfTofxbzgTDiYguvV6IL4rd
-         jBwbiQ0JjJlQsnE17YgSgieSTji5R4nBijtiNvPa3UZ/KPUsiVJtvfSiDugNjkvT0vjD
-         1bRiriC9y7rVK8j5+fsGosBTz6f5Ex4WdfS+3/lyOM9wl4bHY/Dnyk/QQxB2CtnVrpwR
-         wMHA==
-X-Forwarded-Encrypted: i=1; AHgh+RoTllZX1FLUZ5FQbcs0X4PyPkczjxPPhE+FpnkdBPBk2DxM2IDNW1GKdONk4frJZj1gQYTH7hWuC9VmRe76KRk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp0to0vXLTl5L8V5sctEV7LgI5EpC1E9OhI8zIE37Z3AbHGVAZ
-	sY19hILZCAW1RSOWVg8L8xUBc844fcNtWAZwsy2ylZTusZL1VXlgNHq6W2C0JwVlrpE=
-X-Gm-Gg: AfdE7cmi4cZWOqDm1jenbe6QqvRc/YX38yrIdH34Jdiezkwkx08L1FKSObK22kocqRK
-	u++2ouhjqWEUIBwKR+EUl7NhF8FNHPFQ1vNwEaU7ZcceQg6V9tTU58RXhQktmFl3BI1JsyMGwsN
-	EbAT8G/Swf8y4qjkzx3jUKCCuGSwBUkJ3/PhBvj6qZd5gakKtWqylkSNc7iJ8rXHW7SqZT6JJgo
-	h5asaQgXaEHhPqOA3hK/KE+G5Nb1jFbj9GKy/Kjpw6TvWns6eckE3k9/jr9h/JQ6ubrtGODy9Gv
-	x+Ex8VlA/YVUqrmv+kZvj9abLAyHiG2SyJCI0S2w5Khg1uZGVX6I6YAOUglFnme8E2aY7S3mYqx
-	ZkpY2CANi6fVlW6106Zm06qMj49sGufNztnao28CRuFeImhV/EA7H/LnnwpboPlUv3RQvEFRMNn
-	7JWYLaTbE00C96S2GfJDYSlcHLRs0RhmiyMqo=
-X-Received: by 2002:a17:907:6093:b0:c15:d5f0:dbfd with SMTP id a640c23a62f3a-c15d5f0e8afmr428879566b.62.1783670438684;
-        Fri, 10 Jul 2026 01:00:38 -0700 (PDT)
-Received: from u94a (27-53-185-121.adsl.fetnet.net. [27.53.185.121])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf8f26sm56534285ad.27.2026.07.10.01.00.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 01:00:37 -0700 (PDT)
-Date: Fri, 10 Jul 2026 16:00:27 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: sun jian <sun.jian.kdev@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <alCgmxFh9q-vjE0O@u94a>
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com>
- <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a>
- <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhTkA77o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15DAE1F000E9;
+	Fri, 10 Jul 2026 08:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783670893;
+	bh=neUUMderc8pK3/GUtT7QKblcYRV+0mOiXacxP6rJpzQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=EhTkA77ocVxsAwxNyvNg6nf7rP4PKUWF8V2L6ucOfkTTEsnQ2ehMAbqkm45XNNyam
+	 GCO8ZuLKZp7lQ18Xsn7iax43NCh7dzlRm5HdVzz6vV82TidJYJ1ALkn7yWZFqx1RFo
+	 41oGuo1zr1oa+sub9rVE199yzEDdfuAgvULv15L17btyB8PiILyNu8S8mcjUfxvI60
+	 R+6vEfbtrsmA6xQidW1Z+VbaS/CrDE8wbg7SbrY/piKRC1GDWGpEVp/MXhSDBaCX/S
+	 ZZZXs/TO3YWAhCRANnBkGViJE+JNoz+ETrW6i2+4qEbqX0d2pZcUfy9wnB0DYA8v5l
+	 MHDqsFoAUJCDQ==
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+ Pratyush Yadav <pratyush@kernel.org>, Mike Rapoport <rppt@kernel.org>
+Cc: Jordan Richards <jordanrichards@google.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Willy Tarreau <w@1wt.eu>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kexec@lists.infradead.org
+In-Reply-To: <20260626-luo-vmtest-v0-v4-1-e7d3111cd5b3@kernel.org>
+References: <20260626-luo-vmtest-v0-v4-1-e7d3111cd5b3@kernel.org>
+Subject: Re: [PATCH v4] selftests/liveupdate: add end to end test
+ infrastructure and scripts
+Message-Id: <178367088448.4074012.5903750066567618189.b4-ty@b4>
+Date: Fri, 10 Jul 2026 11:08:04 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev
 
-On Fri, Jul 10, 2026 at 01:52:26PM +0800, sun jian wrote:
-> On Fri, Jul 10, 2026 at 2:21 AM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> > On Thu, 2026-07-09 at 14:47 +0800, Shung-Hsi Yu wrote:
-> > > On Wed, Jul 08, 2026 at 10:11:01PM +0800, sun jian wrote:
-[...]
-> > > Actually looking again at 022ac0750883, moving the `off < 0` after
-> > > tnum_is_const() and bringing back the `off += reg->off` removed from
-> > > check_mem_access() is perhaps the more faithful restoration of the
-> > > original behavior.
-> > >
-> > > Though reg->off no longer exists, we have to use reg->var_off.value
-> > > instead. IIUC any register of pointer type should already have its
-> > > var_off bounded to +-BPF_MAX_VAR_OFF by adjust_ptr_min_max_vals() in
-> > > theory, and thus shouldn't overflow `int off`.
-> > >
-> > > See the diff below.
-[...]
-> >
-> > I don't understand what this patch is attempting to fix.
-> > If you run the selftests from patch #2 against current bpf-next both
-> > would be rejected. If you extend these test cases to exercise a truly
-> > negative offset, that would be rejected as well.
+On Fri, 26 Jun 2026 12:15:36 +0300, Mike Rapoport wrote:
+> selftests/liveupdate: add end to end test infrastructure and scripts
 
-I tried to exercise a truly negative offset, and it was indeed rejected
-on bpf-next. I had thought it would pass.
+Applied to misc branch of liveupdate/linux.git tree, thanks!
 
-But more below.
+[1/1] selftests/liveupdate: add end to end test infrastructure and scripts
+      commit: 89dd1421c554515e0f562ec67d976e6309f2710b
 
-> Thanks for pushing on this. I rechecked the issue more carefully.
-> 
-> This series targets the bpf tree, with base 12091470c6b4. On that base,
-> with only the selftest change applied, the negative-offset verifier case
-> is not rejected at load time. The test fails with an unexpected load
-> success:
-> 
-> #664/2 verifier_raw_tp_writable/raw_tracepoint_writable: reject
-> negative const offset:FAIL
-> run_subtest:FAIL:unexpected_load_success unexpected success: 0
-> 
-> It is possible that current bpf-next rejects this earlier through another
-> path, but on the target bpf base it does not.
+tree: https://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux
+branch: misc
 
-So I think I now have a better picture of what's going on. Before
-022ac0750883, negative const offset is rejected at *load* time because
-the const offset is accumulated into `off` before the negative check:
+--
+Sincerely yours,
+Mike.
 
-    // check_mem_access()
-    off += reg->off
-	// __check_buffer_access()
-	if (off < 0) return return -EACCES;
-	if (!tnum_is_const(reg->var_off) || reg->var_off.value) return -EACCES;
 
-After 022ac0750883 the const offset accumulation does not happen, and
-thus now negative const offset is no longer rejected at load time.
-
-	// __check_buffer_access()
-	if (off < 0) return return -EACCES;
-	if (!tnum_is_const(reg->var_off)) return -EACCES;
-
-> > And this does not rely on UB.
-> > Consider the current code:
-> >
-> >         env->prog->aux->max_tp_access = max(reg->var_off.value + off + size,
-> >                                             env->prog->aux->max_tp_access);
-> >
-> >
-> > The types of the expressions involved:
-> >
-> >   reg->var_off.value + off + size
-> >   u64                  int   int
-> >
-> > The promotion/conversion rules:
-> >
-> >   u64 + (u64)(s64)int -> u64
-> >
-> > In other words, 'off' and 'size' would be sign extended to s64 and
-> > then treated as u64. Hence any negative offset would be represented
-> > as a large unsigned value in max_tp_access.
-
-I entirely missed that, yes, the attached-time check does prevented the
-negative offset going through. So there isn't a bug, but the behavior
-has changed, and it seems better to restore to the one where we
-straightout reject negative offset during load time.
-
-That can be done by reordering `off < 0` check after tnum_is_const(),
-similar to how check_ptr_to_btf_access() was update in commit
-022ac0750883.
-
-[...]
