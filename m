@@ -1,331 +1,199 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB9A3BED59
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 21:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783718796; cv=none; b=scwnN4owDGtS0jr1ogpIZGGuKkXHoLg9cibrlHpTbXuc3D8Z7r3hz6CCNhEFrJJEwflWrb8gk9l3OuMybYbUS3WQ9SZZi4Uq3sfBSt8jpb9QWwrEve8CdXT3aCLDEOhdiaOSaDjU0T4Wr5j6NxMgEXqlBPJ9hDuA3SFpnBJ5Nq4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783718796; c=relaxed/simple;
-	bh=EkKsxGxbwqoAEVoChmNYdEJ3T6vK01FnBsNC9G9arvg=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ONjqhIdfb59Ha51VdcTtIZQx/kKd1Bg8nb3lriWssCNdOOZRcTlBsId4yrk9aTPdT6s1vyY4W6rU07cbTP1eqj/wzaVPF8fo4a71P9ldSNCDEkic5RD9kC3s1JCLod5taTvdSqY7+DF/q4CTrSPnrfAyREpttU/1NkWo5LtDk3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pYM/HePd; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790FA3C13F8
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 21:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.145.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783718800; cv=fail; b=Y25gmYNaOVXb9H1TtbtKOLpJI4NDtF357Qnam4ZZBLf6mvq7N5nLhYO3/TD2J/tEj3OIRk9Lj6AvY/5Qs3PG26vE9gdQe5k/qi5X+KKR/sw6wIviIZebdBn9jw8bXmU5k3zjMahA1OGehiUrP4bYnLghguJprp4yvzelurY32XU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783718800; c=relaxed/simple;
+	bh=VkC6ASY6hMpcb2N3FQ3m7UCF3tlkExQIcMsQcc5KFgQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TvPL6mOiEuncIn4Arcna1rORbxDxyBAIdU5jr5iDMB1yw8980sXUVtGhZSrfmBQ1scHXI269xf2NffmclnlYa9DUFv0nCCyU5g51wCig2jCBwJ/ZTZf//oJIcW7TlMguU3Wm02eKMpxM4sn+N31odOc+To76wZ3v18Fa+/Y0UjE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=MHyYFJ8T; arc=fail smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pYM/HePd"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso1400205a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783718790; x=1784323590; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:subject:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=8+MHxD8uf0HO8SRBYZIasl4vPo7jNKxT6S73gN/spU8=;
-        b=pYM/HePdkgyz9sRexjpJV2zNuxQ2oEBuxzV6Ka9zhgeN46Z9DKBPNHWs2kZOkzzWG5
-         s91VJ3OkYi6vnMsRR21zJaJL+o9Y5Cm6SLT/NyxRYH3B/JcOK1C4ZYSEJH797j/O1bl4
-         /fV0KtTWVZOyi3fzodS2JYUS6s8DiT+hZs73wHgkp7jK8Fvc6cPr0WmDlQ6QOvrZX0dZ
-         G2XKVFWmYC426FW2LgQWoktCarpPPsuZbq5hz1Am7DF82m6kMwTENLsVh8BQt7uh6I52
-         pM9p+KV1HuO00992Usj8eOmO6NBFI6MA8hMkwrPE228sKQs3ETtFwsg48ATnDo5Utby+
-         ZxKw==
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="MHyYFJ8T"
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66AK2fGP2468858
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:26:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=4rVTCVe8LWbzPm0wjrSAG/mKG3KG/lwpsyIV2TiZsYM=; b=MHyYFJ8T0cAB
+	L2thTi2mW0tU4fKtEkEPlTuNlGSYNbAUHm2cGN71mq4XJ4e9JRvXbECAO+LUE4wt
+	K1IoCs6xDb82FhZ25qMZbkgIExbpGLxJb+j7vZQklv61ikYvgVa3EdM8bUKoN2kn
+	qVAEIzWte1NFNwu9+oa2TdM0NR/dky97cKPGNGaJFWix6NXSrHe/BFvk2SDDVAKM
+	E9UpXcQv9/N0fhLIFCRg7OHIzQeeZ6I1uG2uWvQ0XeZG1mAzAhXXnkNT0bLeIzcc
+	ALSpjILyQaLkuXvHF8KPQQBD1/CJXMd9rnIQNZB/myvXMIMoLEeh/K7YDpFPbdMZ
+	F1lIpqYrqg==
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4fa8q93h5h-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:26:33 -0700 (PDT)
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c15c32294e1so134481366b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:26:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783718792; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GRbpRDv648kg/7kQaVuS7tbod8uo0LCeU7a4NgIZal23YdtYF+qCZrpMl7/BfJpguh
+         pBkUxbEehe8R/9x+lXFcCmDUbl02qsYUtFLdPw2x7yPsz1FlJtDZCLQuG4SUydQJf2FI
+         caYjdeNunAmppCGL4O/XIC31fYsVc9XhJ/WwzqIxI99edDTtaCHsvbcFYamP4BYFZD7j
+         Kz5KIbfhLIUseyfW2WGdW4RZy31h8+Ruzc8sIazSXLjYMlvsS/n4Pra5lJUX5JfShE/B
+         rULhgI7nR9IhmL6OAMEYZ90rr/hsDPeYBbytXS/+3k+a74fynO/3GDZUzgH4OFJCF8rF
+         Aozg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version;
+        bh=FNJYGUchRZc+yyibQEoFJBWXm2WlrbE2kAvLAMOngVI=;
+        fh=csfodUZ1WADaDb9ID+FMr6ReBWQj6YhEjka9vV0qcB8=;
+        b=V9V92V34XrSxITUO/Om55w48kpcmdAZbISwPPnzBt6VzH3pJmGE8qHZQ7/6OyV0BER
+         MsyQIGqyRLW+IpLBTbejGpl2jaxzqUjKMmh2d5x5dJDBnsc7nzLR2+xi33R34Zu//dVA
+         Qg0HJpI7K8nFmv5tdwVX/yYp43hGdXPf954Do0evgw4SkaSYsbZlTKT1+Yy+HpB00VtO
+         F7XEIcT4kZ3ZiXy3yLk71PuqsA/uAbx5F3Mx4aZ0tOm5XwjLQQ3txhJAGWV3lS/fKzZX
+         5/fafvIfKtpAfk4f2fQ/LxDH6N0VRvhCtI4Fq4+vMwvbqLptPTdPGFJ/kwL03SoMTYPo
+         enuQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783718790; x=1784323590;
-        h=content-transfer-encoding:content-type:mime-version:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:subject:x-gm-gg
+        d=1e100.net; s=20251104; t=1783718792; x=1784323592;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8+MHxD8uf0HO8SRBYZIasl4vPo7jNKxT6S73gN/spU8=;
-        b=rIZzfOi9iwGVwMtCkhKglvUMBYj4m0oq89KHUFXca4LyD6DgJUq1sbGDmwyCln4vdI
-         KjQiYqLFjevI3X05UnTUdUWNu6HmF7xye8tcezidGWrcDcF9tlXw2G51XxqPiwjj6bb0
-         k+iSgk4VgSju+Lz3ckYRCRHEpN0He3GTQnlV/wZE1rmvoEtJi/bzNnIfzC7ZTVkCKZNL
-         SGxq1RpRwOIexqYcin+TjOiHk7Eshh3c6NCWNtuZytr8lMPL/Syekg8CuAiVoHq/VUx9
-         Uvk9vAoXafsAIims+MH7nFjcw78N1d2hkE7CbCYvxuI7PqvHh+GTT+yjKRerjmBJtC4l
-         iBBg==
-X-Forwarded-Encrypted: i=1; AHgh+RrC7+Fdkf5ifyV9jr5yz/o9c16qt+9e9bfty/HxH3WDOCmoDIMg2PsEJqqJ5uFXiM5Awax66A00zXu6qd7jZVw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhjMP8bAQWb3urOmxMAgJUc5q1wv9hBVnldPGirz4TYv5kWPzH
-	SzJYVZFBGdTid/ChIyfvtIjPHvSzovl66spR9ZITwac527srq1atifQB
-X-Gm-Gg: AfdE7cnazA6T+DosADrWAqZ4GEyPSeVP7EfWMJdmLTIk+XqmUSWc7Jq/en8Wy09rxT5
-	OzO2c/P+A+/UuHxBsbGu5qV37zBQwnpyu7w8k9Q6yP42urcS0hOMLS/JnfnWqNYYhqPBPTiIfcF
-	s26lDaCfmT8oqFW29M2EJxFACi1qPKjqVNsH1ydP+/1g5LRbJZPfU22X7hlLRoN6PWkSRiVajv3
-	nKm8+5kVLubumzhwIF41Q/SApzu+kWBgMM8uux9uEL4Xu9tBYLFVhmUvm5b14EodqNjsNfzSAMF
-	vyo8cr4GwobGjvIhWLsSLlbTAX92KUNqlLA7h+6ONW+tcEA7RaBiY0jo6N+daxe3c5iNIvr7Yvr
-	C41I/vwEJvNfAhqcXtboV2YBl+MF6InJH8L/FJ6r5/7dKO+lmvIHNkK1KR4EgDDQ3kz6Mj0XJKd
-	Rpmqq1YnIqbBbLoIpj0/Tp6GdYWv4tFdJ6/yQRfDw3XjUN/P9ui2AxKAxJUfc=
-X-Received: by 2002:a17:90a:e705:b0:38c:e9e9:e7ce with SMTP id 98e67ed59e1d1-38dc74c5007mr567748a91.3.1783718790283;
-        Fri, 10 Jul 2026 14:26:30 -0700 (PDT)
-Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38a55557f39sm3404785a91.6.2026.07.10.14.26.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 14:26:29 -0700 (PDT)
-Subject: [PATCH v8 1/8] mm/hmm: move page fault handling out of walk callbacks
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
- corbet@lwn.net, dakr@kernel.org, david@kernel.org, decui@microsoft.com,
- haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org, kys@microsoft.com,
- leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
- longli@microsoft.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
- mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
- nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
- rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
- skhan@linuxfoundation.org, skinsburskii@gmail.com, surenb@google.com,
- tzimmermann@suse.de, vbabka@kernel.org, wei.liu@kernel.org,
- skinsburskii@gmail.com
-Cc: dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org
-Date: Fri, 10 Jul 2026 14:26:27 -0700
-Message-ID: <178371878774.900500.3975008123082170472.stgit@skinsburskii>
-In-Reply-To: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
-References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
-User-Agent: StGit/0.19
+        bh=FNJYGUchRZc+yyibQEoFJBWXm2WlrbE2kAvLAMOngVI=;
+        b=Rd9L5M6/nd+Mgqm3rqDqsjBPo+rx/ts1nT+3+zv7im7x+oi9LuxFXm29qnPYmC35fe
+         Z17ygcmPraloatSpNBhsmZvWHBRNfMzCBIjZ+efqTO1RP+iumz+PGawd1pTMPKfW5jNQ
+         wLgCZ8vvO59C2oAo3LALs13dtRYtjKzb1is8kLi71wR7uLfO7rRvVz9lSRsERfvXd+9l
+         n8+yGr78mS+sYsoP4CP5tAd+4bgoTAwiAwa0XntqvFz/+Bw2usYl+SHI4UkPFJrypYcL
+         rpoF9XCJCD8+JshrDhkprUvA4RCSi/1g1eebGMeFE8ofVTSFwfvgyWbkHjdSGQGhVcDQ
+         30Fw==
+X-Forwarded-Encrypted: i=1; AHgh+RotpkUeQfev8OJU6G3XUfrtBQwmRPxksuYcS/3KkU3CpInSrgXHwjX6ugtsAV/8ULfjNfYwxrFiS2edaXq3SHs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2mgYWm7+2bKEAfuOcn/ArOJFjWC4v2patOg/m6NMDHJLnjV0O
+	TU5qHwdw4UKamis2/XSCZYklBqyBfL6R2SbDPTtoa5K0itWyONpv0aS3iJ4xlG7M4+c03a1IDMM
+	dGsQokw1NAPblfwvaeXkgDsVc9JmnpG6LCxw4J9Q8X/iVYz1S3vFFzZPkOqZH5oT++FYKGVD182
+	4k7iTjtvo05VbICRsAIVxR95w4q/x17QtWi0LkgbzeZA==
+X-Gm-Gg: AfdE7clYLLB7ZgG2gl7uNzTCGx1WFmXlsMUeFy5qVrh/ICGZwmyCbNFDHhoohnm7Mws
+	CZzJg9kcs62JK4KahGCtjwH9GpiffZJOOUfIj3ZWaSCWzy88qk8qOXjQHleEuC4GsIOSwJ0jl82
+	5dSEahjbF1yC3FI+LPriuZiR5qI0BjbNIdDm+p+3WzMAvNHWenE1IJg5HxIcg7W+1COusGjvKO
+X-Received: by 2002:a17:907:c084:b0:c0e:883e:93fd with SMTP id a640c23a62f3a-c161ea934b9mr22612566b.48.1783718792375;
+        Fri, 10 Jul 2026 14:26:32 -0700 (PDT)
+X-Received: by 2002:a17:907:c084:b0:c0e:883e:93fd with SMTP id
+ a640c23a62f3a-c161ea934b9mr22610966b.48.1783718791996; Fri, 10 Jul 2026
+ 14:26:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org> <20260710-net-sft-fix-containers-v1-6-a2915c294ef5@kernel.org>
+In-Reply-To: <20260710-net-sft-fix-containers-v1-6-a2915c294ef5@kernel.org>
+From: Wei Wang <weibunny@meta.com>
+Date: Fri, 10 Jul 2026 14:26:20 -0700
+X-Gm-Features: AVVi8CfAds6-1QvMPvHqFEOGQj6cDhKRwM4ua7wpqufDJTfdW3NOUKcxL1Pga9E
+Message-ID: <CADe0Y=tMSQerM4or_QNO6tjc6GaEiysaGpmcHnWhaDKQocN86w@mail.gmail.com>
+Subject: Re: [PATCH net 6/7] selftests: drv-net: add missing kconfig for psp.py
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Mohsin Bashir <mohsin.bashr@gmail.com>, David Wei <dw@davidwei.uk>,
+        Wei Wang <weibunny@fb.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEwMDIxNCBTYWx0ZWRfX//9yQtkrbR3J
+ ZkJayOO/3Om28J+3QtCTBDIS6wvS//+oJYtzuuOUuEbfBvh38qHvar2Lm4pAA876TfegnQWvYhf
+ 3rcDDO0QaFPcR6x1NnJ+f4KNCJGPWWM=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEwMDIxNCBTYWx0ZWRfX3AE8YiIZ/A7t
+ /lt0D7IGmvSSQmucYVXtPiXVnPbaD8gTwoaSZZJUSPFS8WsknWDxNcCP/iguUatF5SZCrdbsJ6P
+ +lzJMHGCsTWxOSNzMQg/K/K6DzMTxNV7CSSDG/8qTFg2scO/A6Iz9oFUOeCEyp0lcvr/X2+YLEn
+ PAjte4TeYnMLvD19rmFVD3XAnoTb3yUN7s/VFfnWT1jD3MoUcRF0elai6emkEUIENgz4wp6+Dmz
+ Z9ubf7a/RT38WMYD7sRWVRTEdRtXNDA56pRM/6dPMPx1VAaER0wMYTfzDKdhB12g9+UpC8q10Ld
+ LJQMM80eFa1t4ZIeyKjxa4X67/LzLV6umLix3ftQBFtXjmhzNLz2jDf9kdaYaXXrjO/uIxNaVuC
+ SF91TUyXGT3z5mM4Owr9H8J8D22FhYnR6q56nnle7YH1hijgU/esSOUBESd1BRHxAgEniq659YG
+ lkXQYS9F1FwAeUNcaNw==
+X-Proofpoint-ORIG-GUID: tTcjUUAJVR6h5LnpaT2JqjGuYsDtuIZY
+X-Proofpoint-GUID: tTcjUUAJVR6h5LnpaT2JqjGuYsDtuIZY
+X-Authority-Analysis: v=2.4 cv=cJPQdFeN c=1 sm=1 tr=0 ts=6a516389 cx=c_pps
+ a=D+UBI74RbQA8i2EYnbuvxw==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=crHB47gyY4rKiduisYu9:22
+ a=VwQbUJbxAAAA:8 a=hWMQpYRtAAAA:8 a=pGLkceISAAAA:8 a=FOH2dFAWAAAA:8
+ a=ctOhbmcJb_RA1L7furcA:9 a=QEXdDO2ut3YA:10 a=PsfoTyiJ_72bb7xyA04f:22
+ a=KCsI-UfzjElwHeZNREa_:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-10_06,2026-07-10_01,2025-10-01_01
 
-hmm_range_fault() currently triggers page faults from inside the page-table
-walk callbacks: hmm_vma_walk_pmd(), hmm_vma_walk_pud(),
-hmm_vma_walk_hugetlb_entry() and the pte-level helper all call
-hmm_vma_fault(), which in turn calls handle_mm_fault() while the walker
-still holds nested locks.  The pte spinlock is dropped explicitly by each
-caller, and the hugetlb path manually drops and retakes
-hugetlb_vma_lock_read around the fault to dodge a deadlock against the walk
-framework's unconditional unlock.
+On Fri, Jul 10, 2026 at 11:05=E2=80=AFAM Matthieu Baerts (NGI0)
+<matttbe@kernel.org> wrote:
+>
+> >
+> This psp.py selftest was failing on my side when only using the
+> drivers/net config file on top of the default one -- the recommended way
+> to execute selftest targets.
+>
+> It looks like some kernel config are needed to execute the new tc
+> commands.
+>
+> Note that this was not visible on NIPA, because these tests are executed
+> with the drivers/net/hw ones, combining the two config files, and the hw
+> one contains the missing ones.
+>
+> Fixes: 3f74d5bb807e ("selftests/net: Add env for container based tests")
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> ---
+> To: Andrew Lunn <andrew+netdev@lunn.ch>
+> To: Alexei Starovoitov <ast@kernel.org>
+> To: Daniel Borkmann <daniel@iogearbox.net>
+> To: Jesper Dangaard Brouer <hawk@kernel.org>
+> To: John Fastabend <john.fastabend@gmail.com>
+> To: Stanislav Fomichev <sdf@fomichev.me>
+> To: Mohsin Bashir <mohsin.bashr@gmail.com>
+> To: David Wei <dw@davidwei.uk>
+> Cc: Wei Wang <weibunny@fb.com>
+> Cc: bpf@vger.kernel.org
+> ---
 
-This layering does not extend cleanly to fault handlers that may release
-mmap_lock (VM_FAULT_RETRY, VM_FAULT_COMPLETED). If the lock is dropped
-while walk_page_range() is mid-traversal, the VMA can be freed before the
-walk framework's matching hugetlb_vma_unlock_read(), turning that unlock
-into a use-after-free.
+The fix makes sense to me.
 
-Split the responsibilities the way get_user_pages() does. Walk callbacks
-become inspect-only: when they detect a range that needs to be faulted in,
-they record it in struct hmm_vma_walk and return a private sentinel
-(HMM_FAULT_PENDING). The outer loop in hmm_range_fault() then drops out of
-walk_page_range(), invokes a new helper hmm_do_fault() that calls
-handle_mm_fault() with only mmap_lock held, and restarts the walk so the
-now-present entries are collected into hmm_pfns.
+Reviewed-by: Wei Wang <weibunny@fb.com>
 
-No functional change for existing callers. As a side effect the hugetlb
-callback no longer needs the hugetlb_vma_{un}lock_read dance, and every
-fault-path exit from the callbacks now releases the pte spinlock on a
-single, common path. This refactor is also a precursor for adding an
-unlockable variant of hmm_range_fault() in a follow-up patch.
-
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
----
- mm/hmm.c |  118 +++++++++++++++++++++++++++++++++++++++-----------------------
- 1 file changed, 75 insertions(+), 43 deletions(-)
-
-diff --git a/mm/hmm.c b/mm/hmm.c
-index e5c1f4deed24..bc9361a715fa 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -33,8 +33,17 @@
- struct hmm_vma_walk {
- 	struct hmm_range	*range;
- 	unsigned long		last;
-+	unsigned long		end;
-+	unsigned int		required_fault;
- };
- 
-+/*
-+ * Internal sentinel returned by walk callbacks when they need a page fault.
-+ * The callback stores end/required_fault in hmm_vma_walk; the outer loop
-+ * consumes the sentinel and never propagates it to the caller.
-+ */
-+#define HMM_FAULT_PENDING	-EAGAIN
-+
- enum {
- 	HMM_NEED_FAULT = 1 << 0,
- 	HMM_NEED_WRITE_FAULT = 1 << 1,
-@@ -60,37 +69,25 @@ static int hmm_pfns_fill(unsigned long addr, unsigned long end,
- }
- 
- /*
-- * hmm_vma_fault() - fault in a range lacking valid pmd or pte(s)
-- * @addr: range virtual start address (inclusive)
-- * @end: range virtual end address (exclusive)
-- * @required_fault: HMM_NEED_* flags
-- * @walk: mm_walk structure
-- * Return: -EBUSY after page fault, or page fault error
-+ * hmm_record_fault() - record a range that needs to be faulted in
-  *
-- * This function will be called whenever pmd_none() or pte_none() returns true,
-- * or whenever there is no page directory covering the virtual address range.
-+ * Called by the walk callbacks when they discover that part of the range
-+ * needs a page fault.  The callback records what to fault and returns
-+ * HMM_FAULT_PENDING; the outer loop in hmm_range_fault() drops back out of
-+ * walk_page_range() and invokes handle_mm_fault() from a context where no
-+ * page-table or hugetlb_vma_lock is held.
-  */
--static int hmm_vma_fault(unsigned long addr, unsigned long end,
--			 unsigned int required_fault, struct mm_walk *walk)
-+static int hmm_record_fault(unsigned long addr, unsigned long end,
-+			    unsigned int required_fault,
-+			    struct mm_walk *walk)
- {
- 	struct hmm_vma_walk *hmm_vma_walk = walk->private;
--	struct vm_area_struct *vma = walk->vma;
--	unsigned int fault_flags = FAULT_FLAG_REMOTE;
- 
- 	WARN_ON_ONCE(!required_fault);
- 	hmm_vma_walk->last = addr;
--
--	if (required_fault & HMM_NEED_WRITE_FAULT) {
--		if (!(vma->vm_flags & VM_WRITE))
--			return -EPERM;
--		fault_flags |= FAULT_FLAG_WRITE;
--	}
--
--	for (; addr < end; addr += PAGE_SIZE)
--		if (handle_mm_fault(vma, addr, fault_flags, NULL) &
--		    VM_FAULT_ERROR)
--			return -EFAULT;
--	return -EBUSY;
-+	hmm_vma_walk->end = end;
-+	hmm_vma_walk->required_fault = required_fault;
-+	return HMM_FAULT_PENDING;
- }
- 
- static unsigned int hmm_pte_need_fault(const struct hmm_vma_walk *hmm_vma_walk,
-@@ -174,7 +171,7 @@ static int hmm_vma_walk_hole(unsigned long addr, unsigned long end,
- 		return hmm_pfns_fill(addr, end, range, HMM_PFN_ERROR);
- 	}
- 	if (required_fault)
--		return hmm_vma_fault(addr, end, required_fault, walk);
-+		return hmm_record_fault(addr, end, required_fault, walk);
- 	return hmm_pfns_fill(addr, end, range, 0);
- }
- 
-@@ -209,7 +206,7 @@ static int hmm_vma_handle_pmd(struct mm_walk *walk, unsigned long addr,
- 	required_fault =
- 		hmm_range_need_fault(hmm_vma_walk, hmm_pfns, npages, cpu_flags);
- 	if (required_fault)
--		return hmm_vma_fault(addr, end, required_fault, walk);
-+		return hmm_record_fault(addr, end, required_fault, walk);
- 
- 	pfn = pmd_pfn(pmd) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
- 	for (i = 0; addr < end; addr += PAGE_SIZE, i++, pfn++) {
-@@ -328,7 +325,7 @@ static int hmm_vma_handle_pte(struct mm_walk *walk, unsigned long addr,
- fault:
- 	pte_unmap(ptep);
- 	/* Fault any virtual address we were asked to fault */
--	return hmm_vma_fault(addr, end, required_fault, walk);
-+	return hmm_record_fault(addr, end, required_fault, walk);
- }
- 
- #ifdef CONFIG_ARCH_HAS_PMD_SOFTLEAVES
-@@ -371,7 +368,7 @@ static int hmm_vma_handle_absent_pmd(struct mm_walk *walk, unsigned long start,
- 					      npages, 0);
- 	if (required_fault) {
- 		if (softleaf_is_device_private(entry))
--			return hmm_vma_fault(addr, end, required_fault, walk);
-+			return hmm_record_fault(addr, end, required_fault, walk);
- 		else
- 			return -EFAULT;
- 	}
-@@ -517,7 +514,7 @@ static int hmm_vma_walk_pud(pud_t *pudp, unsigned long start, unsigned long end,
- 						      npages, cpu_flags);
- 		if (required_fault) {
- 			spin_unlock(ptl);
--			return hmm_vma_fault(addr, end, required_fault, walk);
-+			return hmm_record_fault(addr, end, required_fault, walk);
- 		}
- 
- 		pfn = pud_pfn(pud) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
-@@ -564,21 +561,8 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
- 	required_fault =
- 		hmm_pte_need_fault(hmm_vma_walk, pfn_req_flags, cpu_flags);
- 	if (required_fault) {
--		int ret;
--
- 		spin_unlock(ptl);
--		hugetlb_vma_unlock_read(vma);
--		/*
--		 * Avoid deadlock: drop the vma lock before calling
--		 * hmm_vma_fault(), which will itself potentially take and
--		 * drop the vma lock. This is also correct from a
--		 * protection point of view, because there is no further
--		 * use here of either pte or ptl after dropping the vma
--		 * lock.
--		 */
--		ret = hmm_vma_fault(addr, end, required_fault, walk);
--		hugetlb_vma_lock_read(vma);
--		return ret;
-+		return hmm_record_fault(addr, end, required_fault, walk);
- 	}
- 
- 	pfn = pte_pfn(entry) + ((start & ~hmask) >> PAGE_SHIFT);
-@@ -637,6 +621,44 @@ static const struct mm_walk_ops hmm_walk_ops = {
- 	.walk_lock	= PGWALK_RDLOCK,
- };
- 
-+/*
-+ * hmm_do_fault - fault in a range recorded by a walk callback
-+ *
-+ * Called from the outer loop in hmm_range_fault() after a callback
-+ * returned HMM_FAULT_PENDING.  At this point we hold only mmap_lock;
-+ * the page-table spinlock and any hugetlb_vma_lock acquired by the walk
-+ * framework have already been released by the unwind.
-+ *
-+ * Returns -EBUSY on success (all pages faulted, caller should re-walk).
-+ * Returns a negative errno on failure.
-+ */
-+static int hmm_do_fault(struct mm_struct *mm,
-+			struct hmm_vma_walk *hmm_vma_walk)
-+{
-+	unsigned long addr = hmm_vma_walk->last;
-+	unsigned long end = hmm_vma_walk->end;
-+	unsigned int required_fault = hmm_vma_walk->required_fault;
-+	unsigned int fault_flags = FAULT_FLAG_REMOTE;
-+	struct vm_area_struct *vma;
-+
-+	vma = vma_lookup(mm, addr);
-+	if (!vma)
-+		return -EFAULT;
-+
-+	if (required_fault & HMM_NEED_WRITE_FAULT) {
-+		if (!(vma->vm_flags & VM_WRITE))
-+			return -EPERM;
-+		fault_flags |= FAULT_FLAG_WRITE;
-+	}
-+
-+	for (; addr < end; addr += PAGE_SIZE)
-+		if (handle_mm_fault(vma, addr, fault_flags, NULL) &
-+		    VM_FAULT_ERROR)
-+			return -EFAULT;
-+
-+	return -EBUSY;
-+}
-+
- /**
-  * hmm_range_fault - try to fault some address in a virtual address range
-  * @range:	argument structure
-@@ -674,6 +696,16 @@ int hmm_range_fault(struct hmm_range *range)
- 			return -EBUSY;
- 		ret = walk_page_range(mm, hmm_vma_walk.last, range->end,
- 				      &hmm_walk_ops, &hmm_vma_walk);
-+		/*
-+		 * When HMM_FAULT_PENDING is returned a walk callback
-+		 * recorded a range that needs handle_mm_fault();
-+		 * hmm_do_fault() runs the fault outside walk_page_range()
-+		 * (so no page-table or hugetlb_vma_lock is held) and
-+		 * returns -EBUSY so the loop re-walks and picks up the
-+		 * now-present entries.
-+		 */
-+		if (ret == HMM_FAULT_PENDING)
-+			ret = hmm_do_fault(mm, &hmm_vma_walk);
- 		/*
- 		 * When -EBUSY is returned the loop restarts with
- 		 * hmm_vma_walk.last set to an address that has not been stored
-
-
+>  tools/testing/selftests/drivers/net/config | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/s=
+elftests/drivers/net/config
+> index 91d4fd410914..2070e890e064 100644
+> --- a/tools/testing/selftests/drivers/net/config
+> +++ b/tools/testing/selftests/drivers/net/config
+> @@ -4,6 +4,8 @@ CONFIG_DEBUG_INFO_BTF_MODULES=3Dn
+>  CONFIG_INET_PSP=3Dy
+>  CONFIG_IPV6=3Dy
+>  CONFIG_MACSEC=3Dm
+> +CONFIG_NET_CLS_ACT=3Dy
+> +CONFIG_NET_CLS_BPF=3Dy
+>  CONFIG_NETCONSOLE=3Dm
+>  CONFIG_NETCONSOLE_DYNAMIC=3Dy
+>  CONFIG_NETCONSOLE_EXTENDED_LOG=3Dy
+> @@ -11,6 +13,7 @@ CONFIG_NETDEVSIM=3Dm
+>  CONFIG_NETKIT=3Dy
+>  CONFIG_NET_SCH_ETF=3Dm
+>  CONFIG_NET_SCH_FQ=3Dm
+> +CONFIG_NET_SCH_INGRESS=3Dy
+>  CONFIG_PPP=3Dy
+>  CONFIG_PPPOE=3Dy
+>  CONFIG_VLAN_8021Q=3Dm
+>
+> --
+> 2.53.0
+>
