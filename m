@@ -1,141 +1,118 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D3237B02A
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57142DAFAF;
+	Fri, 10 Jul 2026 18:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783706864; cv=none; b=RvmKP9wcMXyX/7zIW9EQEoCz4eXeRBi+UYjLe+/613kiKsPS90S0/1sJgN4KUxwK01xuOC19ID2LcBDUcE758DwRCR9I34hIolsk0hle7DgCZAKtDZpcVgd6eZh+AUCou8BvFjE3GVYPv6bIH4o7ys5DhnOlZFQYrQWU8O4tBHU=
+	t=1783707737; cv=none; b=MRMZH7PNUAYJBgxHC/WREwQjTh3yIV3z0hr3oqgN2wXiijg+tLrzjdYKef3Xw1W5RUkiTBAe1BY++qkZaK37Lghq5R3q2q8Gg/J0QiJyZPl6Dt3cVGS1Huv1BsEWRVsKv9U+eWL76dz27DnDd+EaUdxzCn/EO/IWWtfZK2ykEaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783706864; c=relaxed/simple;
-	bh=O6OimzKD1xlS6Frl91Eg4/jvdk/NA4Un3exe+7jonxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HrlM0PqPrcEvQy8gV5pMoVtTgL+aT+apFkspmbpSENDJvgaa0y/xCu1dcEp2lqna+gzjwiWit242CM/7fIJXcMRvBUHKCm4lNad2Vi9RjJGfrd7aUvCPjG/PleVNrIbcn1/jk6t6lWmJWh/S1jLi//sanNPODq7TX9jG6LkuZpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+mmqZdc; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783707737; c=relaxed/simple;
+	bh=8IbHgRbcl8gGxfUT1yl6/Oi4MeYat92Blo5R0JV3D+c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YUpeqSR8XcbsvLLdmw2NL2OGU+JBCwum0Axpa5WViVgRBcXylYoLPnt214h+mXQzDLikvk0ymRnxmdKrOsYCPJ/WoowgOPzdMJC/cm7atJoz3jD3I1ytE3HMYpZvn4MzBOWZcqAj/ObpuF3pt1orK9ak5/CEKGFXrTkwkA7h7+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ppbabuem; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+mmqZdc"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cc6dd436c6so13124095ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783706847; x=1784311647; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vK1yycrFvPnOHneU0oNi6DrjeWKqgXkTtqXMvxDGhZQ=;
-        b=G+mmqZdcs0jO8PwuouqUz0af25DOsf8ysUuT6w/JdUZb+86uc/n1BimKSReR18OYbe
-         9PkImlmJYekN/rctDqMv722YFQbGc2miKIz//KKcS18x756BAUG+70UV100zLJdYIdPe
-         OS19SaJBHmrsHD0pqZdoubdYrky89nXRiGoTmYNmZCejXcRXuOtliw6+NG/7FtsTixdp
-         gwRWecJb33MKp3I4QDqGw/46GM9u1GJnbpZ+Umbassa4Y0V+jH+xvonuYtWP4hCR7pOt
-         2gU11ttWG8V0k/7ObjIPilGj4NEepzXluwL+HEfOqrzAKOp+iXkZIEXngdF/VkMaNtFM
-         s5sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783706847; x=1784311647;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vK1yycrFvPnOHneU0oNi6DrjeWKqgXkTtqXMvxDGhZQ=;
-        b=H9gwhi+Ch01Pyb75W4cviNnR6DNb4D3VHkbkbFU+G2S+ikBPF8X3L6d533jRSx0CXO
-         6qV5VxMVGlpcDgdwB3BUVXEDLrYOykhbxBE53NebLgoLAVSHSll2z0K8gzfeG5tz0tT2
-         GQWGEJJZpM5dN5ilu3ugGYnpKZDR/JKK2KvicVkgq9zQ/JD8pCSfxGmkfRwSOJ4k7w77
-         5GGXN/dKpN871rwYY5QLr+QFChSL/1pCGRQpf/Ly8hfHzFPO+Ps2owFdpluOju7+HHrQ
-         7EEHWoXrQZRLHs80vOd+IyEikQHaqAWS4SUf2oPDXv1Kv+i69ajF/yNWx+t2btS+zdxx
-         5Qpg==
-X-Forwarded-Encrypted: i=1; AHgh+RrwuKP6tv0BjK8xu034VacUDW9j3Ion8/ofq66f8WdgC+C5PLwu63Ap3h/YFVvOtArgwzbZeMFkQximMruxa1g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGZwZyQfe43i5bdG5N2Uef5vW57xJeomld4lQBLrGaDHu6HiQj
-	0rvkk55VEzNfcWk0INx+SdTx2TVrkVdFK1/6gmuQ2+FX5nLajAdf2Xl2
-X-Gm-Gg: AfdE7cnD0rcXNyzYJcglsHC1XTn6odUy0yYGW9UTobKJBnDIzyBX6d3vC4jsD2Ktdk1
-	nPlag7frDkN+mRYB1pKvC2tMed2NE9iae+vc/7rLawxsrEDqoX9722coNWts0+MGFhgRKTaN5Vg
-	TnkOFrGKWsVhhgSDL/z9b3q5OWVj00dg3ustMkjQVPIxzcbTEeiJKskK3A+vXWNTBQgx18004Z/
-	4B1hzuclod9+wYy9ZomunUUChV6pGb/4KK1JwM7yuJMZTrV0xRuzgLhvvlxjO6XIhZ82aa4nSHH
-	ZLSck8qcD+PDWd8GP+KoV/1R/TEKmZwhWULwNqAanI5MrmXtpT0ELcbBNuwifRIm7wmYcd3yvYX
-	CLqi+34gwPtsxWR3ci9sitwtcNZTlPg6XoF+eQoRrYPYfx+SoaSkAzf9aBTfExnTUMNdX6NZG98
-	+5SjguTeDA+tGYlfpGcKyOrHJWnbWAcMJ3nc4tIoxbpSHho4ZdhJOy4FE=
-X-Received: by 2002:a17:903:2a88:b0:2c9:d8c6:1db8 with SMTP id d9443c01a7336-2ce9f284e45mr2337085ad.28.1783706847144;
-        Fri, 10 Jul 2026 11:07:27 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf74cbsm63356135ad.18.2026.07.10.11.07.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 11:07:26 -0700 (PDT)
-Date: Fri, 10 Jul 2026 11:07:23 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
-	corbet@lwn.net, dakr@kernel.org, david@kernel.org,
-	decui@microsoft.com, haiyangz@microsoft.com, kees@kernel.org,
-	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
-	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
-	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
-	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
-	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
-	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
-	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
-	vbabka@kernel.org, wei.liu@kernel.org,
-	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] mm/hmm: add hmm_range_fault_unlocked_timeout()
- for mmap lock-drop support
-Message-ID: <alE028DsCGeUwNh6@skinsburskii>
-References: <178345345668.660027.2952911919681614557.stgit@skinsburskii>
- <178345362182.660027.12809852179204464964.stgit@skinsburskii>
- <20260710162749.GP118978@ziepe.ca>
- <20260710164743.GX118978@ziepe.ca>
- <alElv0EKjLQXMNK8@skinsburskii>
- <20260710180312.GD1803712@ziepe.ca>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ppbabuem"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6BED31A0F46;
+	Fri, 10 Jul 2026 18:22:14 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3F13F60342;
+	Fri, 10 Jul 2026 18:22:14 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6FB3511BD2BB8;
+	Fri, 10 Jul 2026 20:22:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1783707733; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=tV292ZGhVFQsmqBqRz+ghzzmcfpHApqX9NDMUq/JrC4=;
+	b=PpbabuemKE2jRYaU/wV9QBn/TuZsHUbpMLxutqGCaL3v3kjYFa5gTrLPUNQBV9ihVGOWHX
+	ghxQ30gFQNjm+EdhTTs5NMafY60I/3PajOgE8yLI2zuC0PZUZeZxKBHPSKvnEKveKWSKGf
+	XgH6RyqVTMANCYcuRK3X2pjVukX3FPsLWQtps80c8tgsbGXWz19ywjBLC/WBocV6RGUvaK
+	gX+O3ktt9UHQ3IEZvYnniOAeVV7cVZsO3ifKGJzuey3BtZ847w4Zz3mqmYXXrI7PrtVrKe
+	e+rhuVecV5KLjkMMhkcU0mTgvDu47YaJ/CTcn6+NEkUcE2mpBskFtagY4bIEOQ==
+From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Subject: [PATCH v2 0/7] clk: Add support for clock nexus
+Date: Fri, 10 Jul 2026 20:21:55 +0200
+Message-Id: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260710180312.GD1803712@ziepe.ca>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3NQQoCMQxG4asMWRtIg1r0KuKitr9OFtaS6iAMc
+ 3eLy2/z3kodbuh0nlZyLNbtVQd0N1GeU32ArQyTih4lBuGe5worcF4iK3sODGsqgT+tvx3pyWk
+ fBQek20kLjVBz3O37n1yu2/YDZFOomHQAAAA=
+X-Change-ID: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Pascal EBERHARD <pascal.eberhard@se.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
+ Herve Codina <herve.codina@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Jul 10, 2026 at 03:03:12PM -0300, Jason Gunthorpe wrote:
-> On Fri, Jul 10, 2026 at 10:02:55AM -0700, Stanislav Kinsburskii wrote:
-> > The main customer for this new feature I have in mind is the MSHV driver
-> > which backs VMs memory with HMM, requires userfaultfd support for
-> > post-copy live migration and fast restore and it doesn't timeout.
-> > 
-> > I agree, that this current timeout value used by the other callers might
-> > not be enough to repopulate the mappings with userfaultfd, but there
-> > drivers would get -EFAULT for uderfaultfd-backed mappings without this
-> > change anyway, so getting -EBUSY with the change instead doesn't look
-> > like a significant change to the behaviour from my POV.
-> 
-> It sounds like it won't be reliable either then.
-> 
-> > > So, maybe the deadline should be resetting after every handled fault?
-> > > ie the timeout really is only about the mmu notifier and we don't
-> > > count the time spent handling faults or walking?
-> >
-> > The timeout was inherited from existing HMM users rather than introduced
-> > as a new HMM policy. Some GPU drivers use HMM_RANGE_DEFAULT_TIMEOUT as a
-> > budget for the whole range population operation, including HMM retries
-> > and subsequent driver mapping work.
-> 
-> Yes, because we always had a timeout around the notifier because that
-> scheme can sort of live lock. The timeout was to protect that only, ie
-> limit the number of notifier retries.
-> 
-> Expanding the timeout to be outside what is bounded by the notifier
-> retry is not right, and heavy stuff like mapping should be done after
-> the hmm side succeeds and the notifiers concluded so they can rely on
-> normal locking instead.
-> 
-> This is why I'm suggesting to reset the deadline as hmm makes forward
-> progress, we really only want to bound the notifier retry loop not
-> anything else.
-> 
+Adding support for clock nexus had some prerequisites requested by
+Stephen, such as adding new selftests, the initial discussions come from:
 
-Sure, I'll modify accordingly.
+Link: https://lore.kernel.org/linux-clk/20260129201003.288605-1-miquel.raynal@bootlin.com/
 
-Thanks,
-Stanislav
+Then there has been a bigger series (including patches for other
+subsystems) to show the big picture, but let's split again and focus on
+one subsystem at a time:
 
-> Jason
+Changes in v2:
+- Collected tags.
+- Rebased on top of v7.2-rc1
+- Exported (test) clock symbols using the _IF_KUNIT() variant, and
+  imported the NS in the test file.
+- Fixed a leaking node reported by Brian in the tests. Also used
+  existing helpers to simplify the test implementation as he wisely
+  suggested.
+- Reworded the nexus node binding description as suggested by Stephen.
+- Dropped redundant and non restraining properties from the Nexus
+  node as suggested by Rob.
+- Assigned clock/clock-rate properties now traverse Nexus nodes.
+- Rename helpers following Stephen proposals.
+- Rework tests following Stephen hints.
+- Link to v1: https://lore.kernel.org/r/20260327-schneider-v7-0-rc1-crypto-v1-0-5e6ff7853994@bootlin.com
+
+Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+---
+Miquel Raynal (Schneider Electric) (7):
+      dt-bindings: clock: Introduce nexus nodes
+      clk: tests: Add clk_parse_clkspec() Kunit testing
+      clk: tests: Add Kunit testing for of_clk_get_parent_name()
+      clk: Improve a couple of comments
+      clk: Use the generic OF phandle parsing in only one place
+      clk: Add support for clock nexus dt bindings
+      clk: tests: Add Kunit testing for nexus nodes
+
+ .../bindings/clock/clock-nexus-node.yaml           |  30 +++++
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-conf.c                             |  12 +-
+ drivers/clk/clk.c                                  |  13 +-
+ drivers/clk/clk_kunit_helpers.c                    |  31 +++++
+ drivers/clk/clk_test.c                             | 146 +++++++++++++++++++++
+ drivers/clk/kunit_clk_parse_clkspec.dtso           |  31 +++++
+ include/kunit/clk.h                                |   2 +
+ 8 files changed, 254 insertions(+), 12 deletions(-)
+---
+base-commit: 7f26e010764df304602f33912a0550dcf46e72c2
+change-id: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+
+Best regards,
+-- 
+Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+
