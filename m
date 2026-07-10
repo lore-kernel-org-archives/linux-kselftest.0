@@ -1,118 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B65424E4C6;
-	Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310ED224234
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783704793; cv=none; b=fNBSkTpJq29qtXbtX4rZD8Vnp57F+FzaXxVgPNXqyCELHIzSzPLTypPRIPcqLmK4H1EbCYsv5nM1dvxTHCFL/ftHwsP7ve4DYme/+kMgloeYsH83zpsFz7lhYoPY6mR99ZQdGE0VU77T7AEB+fIRsgnzHMJ9PRNo8xNfPUR+A18=
+	t=1783706596; cv=none; b=iJE93jmxJ3WIz1A2DKKJbH5w0NmRRV0hm6NkOWYRaREAvlNlOQAaY+XoTQeEqdVud0AUYTFcBp3qB7dKaAb+RiS9y9FaKP8zyDjJjPknvEXnD7wjJp6dRrwPfAgVNdEkz29PALbpAj1A1zplHjz8YGkQk0A8sgztdVBvIj0vBZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783704793; c=relaxed/simple;
-	bh=UJd/lifO1h0XitO6NT3vGGEKpw/eqLw9ZhxfAXrAsPw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pLek6cAr/Xf9AXDIbfwl/zp95cIBfYkOr2K2kXWwtzSO1x0NuLvrDJzgEdYrX1H0JzDemHF8z1u4bNXHs3/KFpVxD3nXXzPR3vpy3QqpcaoyqemzF7pm1Axur7rpDsUTDaEkuJLsE+x+hN5e6MHslEtOYwcLSrfQ4KrOE9kmiA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFvs++jZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783706596; c=relaxed/simple;
+	bh=JK0Z967O7a8Bl55D2zvwLZqTqZpUiSqVWqaZiixu9aY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DyYLlmjAaBDrKu08alk1IUO6un6ucG0FHcCtAJjoylW54+fimuUjbUa0DK942xhbkAd7F4DwblbOIKwqspiWurBtJTJZyIwLN3Nsz14E/2SjNQ8/H41SMS199azMp+pjFYgB0dgViBTz2f1OVVhx0+gkFu1PwYz45hvT6JDe3SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=XwYTQHDC; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFvs++jZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F421F000E9;
-	Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783704791;
-	bh=4gNuVtfUygql4wlr6WnLsGdK2iQ/6LjP/qz20++PmCo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FFvs++jZW9HMGOG+7jXgjZ+BnBDxbPIn1Mr64ntSj3fuSkkxUublHnhPWtXWHJ8qj
-	 v+NSbmTaPGdPQhTs7RLg20vaoutJzyIGsMWj2D8x/gOOZCvKAlUZqI475e8HijyVwx
-	 YWFfRgxMmDGZxgmvv7pKY43rxN/76tTfR8Nwd+iTcrXHSEjThjrnsid/yi4CGpaSjP
-	 U0sds/+99iWScCmBDQTbRiS74+73RzP3J+qTUhksGYqWAwnKYJCR/MjgIGcxJYdp2B
-	 wGDuZ5yXs24sEhNM4hL5+pc8H9Fhd/4SWbrzoFtuT4L5tS2iyh1XYuY26UufhfR9Nr
-	 avNa721GdoE5A==
-Content-Type: multipart/mixed; boundary="===============4403372005652049611=="
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="XwYTQHDC"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-51bfbe05683so7212431cf.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1783706594; x=1784311394; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=pchhQjIZYIsHA+IyTP+kMOXOCiYK49mahPv3eolm7bw=;
+        b=XwYTQHDCXEb07KED5ajRKK6taRPykEMNgPlbxgCoJ4mfSIU0+sBiMJHRZvdL3kDHT8
+         WQDYq82uKGVSKALSD9uEckizEuWQ2DNoYU63JJ+9rkYmF4JV6xkEWtvhkBJBR7bOI8Ve
+         hdLqNf/imepRfwD/zhfXO415m1vIlJmlKR/Q8WaW2vExCXpBIfva58QADaj8xAfogDMx
+         Nmes74qpwPyzJV1r7mdIV8ROCQq1aSF4UabkGgEs/994EN5u8W9eaU4JK49IMLDDM9Hd
+         JAnfM7tOFwVTmMx0vJEgkpnMbRCPvl8dHdpcEhdItpTA+2L8Ss1sw4xDaMYfAX6TCA09
+         Bg/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783706594; x=1784311394;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pchhQjIZYIsHA+IyTP+kMOXOCiYK49mahPv3eolm7bw=;
+        b=rhJFvK+RTKFhmPflbMUyvvMlk/aGDirqY0A7f1xaedVQly4Abfphrc4KVxbrw1fY66
+         9ZLOScnJv9XywlWzVYl0qo2UTUbjcWwtg1P4MxSs13XxPNnhTZ8/1gMy8QRQSmBmZnjn
+         1TE6J3adKamUIDafTHc2/dVikwwsc7Dpnj3KsF7Un01avXU/iTRN8joo+KoY1k0TfWXB
+         /WdmOFRYZHtZIggyO8GovcB7r63WVm7cSG48+nnHxXJNJdB8Am5LMApdv40EchSnW5Sp
+         g8ZAJ16mWTqTNN0Uqr3Yr5fTsQysu1aKSrc2KHnpmhMGsWQ7a6Iv6TNM8M2ovz7b5ZQw
+         Ytzw==
+X-Forwarded-Encrypted: i=1; AHgh+RpehBP81Du/DqfcVKs6A7QyyZVCei0IISTk4yHvA7GVFhnX3Nf95CkVzPv+YiyyV+XEdYwDJcJEMyYl9nLivCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMTpM0BFBd4mgDa7+BLZRBquYgKcr+JqficWmUez16uVD/s/TX
+	EL9/a2kii5Kpp8LeOclWA4alTSuzHZLmroSJ9M3Z+EVjXg78cea4T/wgP868LJOgTrw=
+X-Gm-Gg: AfdE7ckHKGrzLI7Id7nVzLOvaLY3Q8Xw8LgRoAx0ncuryZmSsYCE/HQASgOuRZ1AOgS
+	Zy4L5AfvJQ9z7TwBNNJnBGuivk5WLz4WDz+VZv23d6+sxUWcEDb/czl7iBAexwBAvL6dZeY1Pmg
+	2rI6aK/AY/znNMxF0EVLXwCxtli+ZsWX3PEQp2J2Tef9kHY/hhkEHv6te4edkxh0BgLcr6iR7Uz
+	AXr4lrlp42Pah/9PpBjzYmO6HnBB/Xi46bA1WT4H5yxO8BHktXycBiQvfIeQ70uoSahQHxDdgZK
+	apsCF3gQzgc/ql18KCv6Gd6G7u2s33Y5V+WPqNkWUJdqjwevD4QvMDM9zo9rAvUOBaS2mlSC36R
+	juA3lM277/4zcte5DRhnBgDiPuWGT2UrgvD0Uxuq8yPlyPAXH847esKBrvFoa
+X-Received: by 2002:ac8:7e8c:0:b0:51c:7b13:62fa with SMTP id d75a77b69052e-51c8b438c0dmr129494461cf.80.1783706594020;
+        Fri, 10 Jul 2026 11:03:14 -0700 (PDT)
+Received: from ziepe.ca ([159.2.72.92])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd7c1fd2bsm47060696d6.27.2026.07.10.11.03.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 11:03:13 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wiFZA-00000007fhc-13JV;
+	Fri, 10 Jul 2026 15:03:12 -0300
+Date: Fri, 10 Jul 2026 15:03:12 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
+	corbet@lwn.net, dakr@kernel.org, david@kernel.org,
+	decui@microsoft.com, haiyangz@microsoft.com, kees@kernel.org,
+	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, wei.liu@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] mm/hmm: add hmm_range_fault_unlocked_timeout()
+ for mmap lock-drop support
+Message-ID: <20260710180312.GD1803712@ziepe.ca>
+References: <178345345668.660027.2952911919681614557.stgit@skinsburskii>
+ <178345362182.660027.12809852179204464964.stgit@skinsburskii>
+ <20260710162749.GP118978@ziepe.ca>
+ <20260710164743.GX118978@ziepe.ca>
+ <alElv0EKjLQXMNK8@skinsburskii>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <35e5413b43191284440eea77999ac72ceba991460975b3b7cb7d32c8e43f087a@mail.kernel.org>
-In-Reply-To: <20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com>
-References: <20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com>
-Subject: Re: [PATCH bpf] selftests/bpf: keep polling connection that is still in progress
-From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alElv0EKjLQXMNK8@skinsburskii>
 
---===============4403372005652049611==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Jul 10, 2026 at 10:02:55AM -0700, Stanislav Kinsburskii wrote:
+> The main customer for this new feature I have in mind is the MSHV driver
+> which backs VMs memory with HMM, requires userfaultfd support for
+> post-copy live migration and fast restore and it doesn't timeout.
+> 
+> I agree, that this current timeout value used by the other callers might
+> not be enough to repopulate the mappings with userfaultfd, but there
+> drivers would get -EFAULT for uderfaultfd-backed mappings without this
+> change anyway, so getting -EBUSY with the change instead doesn't look
+> like a significant change to the behaviour from my POV.
 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index b82f572641b7..97ddbe589e53 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
+It sounds like it won't be reliable either then.
 
-[ ... ]
-
-> @@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
->  		return -1;
->  	}
+> > So, maybe the deadline should be resetting after every handled fault?
+> > ie the timeout really is only about the mmu notifier and we don't
+> > count the time spent handling faults or walking?
 >
-> -	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> -		log_err("Failed to connect to server");
-> -		save_errno_close(fd);
-> -		return -1;
-> +	err = connect(fd, (const struct sockaddr *)addr, addrlen);
-> +	if (err && errno == EINPROGRESS) {
-> +		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
-> +
-> +		err = 0;
-> +		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
+> The timeout was inherited from existing HMM users rather than introduced
+> as a new HMM policy. Some GPU drivers use HMM_RANGE_DEFAULT_TIMEOUT as a
+> budget for the whole range population operation, including HMM retries
+> and subsequent driver mapping work.
 
-This isn't a bug, but the err = 0; here is immediately overwritten by the
-poll() result on the very next line:
+Yes, because we always had a timeout around the notifier because that
+scheme can sort of live lock. The timeout was to protect that only, ie
+limit the number of notifier retries.
 
-	err = 0;
-	err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
+Expanding the timeout to be outside what is bounded by the notifier
+retry is not right, and heavy stuff like mapping should be done after
+the hmm side succeeds and the notifiers concluded so they can rely on
+normal locking instead.
 
-Could the err = 0; assignment be dropped?
+This is why I'm suggesting to reset the deadline as hmm makes forward
+progress, we really only want to bound the notifier retry loop not
+anything else.
 
-> +
-> +		if (err <= 0) {
-> +			if (err == 0) {
-> +				log_err("Connection timeout");
-> +				errno = ETIMEDOUT;
-> +			} else {
-> +				log_err("Failed to poll connection status");
-> +			}
-> +			goto close;
-> +		}
-> +
-> +		errlen = sizeof(err);
-> +		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
-> +			log_err("Failed to getsockopt");
-> +			goto close;
-> +		}
-> +
-> +		if (err) {
-> +			log_err("Failed to connect to server");
-> +			errno = err;
-> +			goto close;
-> +		}
-> +	} else if (err) {
-> +		goto close;
->  	}
->
->  	return fd;
-> +close:
-> +	save_errno_close(fd);
-> +	return -1;
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29109351717
---===============4403372005652049611==--
+Jason
