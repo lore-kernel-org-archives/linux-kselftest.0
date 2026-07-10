@@ -1,183 +1,243 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802A914AD0D
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 13:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3391A6825
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 13:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783690324; cv=none; b=iGMBBN/dw8ynH5YYu7D04qbZdlzsRQoL/Zv7xC1fB4kJ1tbWuzIhtK2qVddwPTDIbtKFPtKMQrOnHSiXesI4+urBV3sEUEBXXgEZwM4/1ZSHUgDxCm3FRtv0YkD+2RbNePuDngiZzvQ6m3xEYYdJ5fhNo5bQZmC+Zycz6V2ElYU=
+	t=1783691510; cv=none; b=DkUtCoKeYlscI2MW7VzSPEAb07hbujtcNy55XEataxRI6iwAptnDmvhIg9BbOPTB4Ok4RnZZVlwhyoqQW6+tv4OESRA8+lWu+2QW/v1ZAEsAzxZcVt39+RKheAaNS2gtbo7wVauuQkINFSXyNRsRfiviKPTS3mnwVCEUeDUI7Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783690324; c=relaxed/simple;
-	bh=0kCTodwMNybNFHvFl8c20+Pfoq3qaWcGnR+gA/Fw/Ow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fsRrEEq/vIq6OA+JGY1TJ8/0rFROLrTam6TnqURkq8h6wS/2hqVQOddT85IPl23yCAhXwZu06cSgBc5JVzhLlD/AUmc5lqS4CAILJm8ThHO/+StvJxBNCHM6fVU2aD2KcZK546m3pUsDiOqs0FbwE2992p6S4zq7iiPG59sIgVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=YVmQEGeK; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1783691510; c=relaxed/simple;
+	bh=neo7zHO1q22f/Aj8nISxBtgyyCitpGrHRzWxXr7ijA4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PBp05svdMtoVt9/cRbLFFk8i+fDGnHzMetkgjkJB+IV/oOGnSyKmz+VrAHjdnmwHLzk2XaTVisOPccKWDw7kJo6jojA+9hVRkdX2y/PSJCuwcC9Fwr447DfYvJyVnC+eyoXNMH95XvQCmmFK5NfhhSCtydIn0MMrToFMUGMqxXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GpI3GCWo; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Th4gwyoI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="YVmQEGeK"
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 82E973F7D1
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 13:31:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1783690313;
-	bh=CRjw6u/TimhdsdLAKCBwY2E0h0Xmbg9SBDdL+xLx6es=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=YVmQEGeKY5DNRktZoKSqGEt8BiPYMVyZMYXPgU/duGMIcAGT8so5ZTKE9pQODcdxN
-	 uq4uZoAwgapyNhL1DxwOkT22AcOAXxTjTEl5EhEou+iMbA6klRphIfmU/b1mCjO7YS
-	 fBXs7N9iSaiVX3MFqj0bo3BtDMSxohPzMLqNhTMHXKMwrdK77/39wGakakqEqLu8N1
-	 ncVK3i4ufqzAbNXjLI8Hob+DmDmG0JY6QhhbSjEborizmi+8Nmi9ZHyaFRX8gd8/8l
-	 lY4GkRR/qCsF6B8S4kr4CDh6NXmYQxrq7CoBRAWoDuhnkAeIZzIQHFbTdUl3xnGUQl
-	 ux/4ZH+7UfKlfh84CiKUMIp3mCbxeV452p5uAv/+fHv+jCD9o2h2b71vUPP+NLvZCg
-	 fANV4XgU2Mkl70mFvYL6Kjkg9MTCOcXbXdNB1GEBhFo46Ax0ipoB81Dv3gsImEgTYb
-	 dae5uye8XvblBKttKflPEw6JRph5zRunfaxD5lrIDYWUljGIX2kaApGBtM8hgd1DX2
-	 qr9FFltEubEugJ11dYGKZk9vCNzoBuR+H1CQytRDAJEV1HJ4dJBtpe+CnE8vy50qgk
-	 T11LuQ4T5AigknyEQP8+CLIqI3Ynlr0mug9u++JHcjNzBn2hV0HvZiHtpCyeuAXOFf
-	 ShSveZyy8NtOnks/5MG897C4=
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-492714d002cso6794555e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 06:31:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GpI3GCWo";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Th4gwyoI"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66AD70kO872527
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 13:51:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=IsDPLn2lxw6fgPhVuow78b
+	DKudDYUVZdfPodAAJcnlg=; b=GpI3GCWo4qYF8lG4IA7aUoXMwsJK8fc6WcX8vc
+	3e0iA9Z2CKwLGwwxJAbklvLehOq8z8YiEQSsa2Hi4pQiMYnewqTsgHltwxBm40R6
+	qQQESFLSQWfwwij9jFEaDNmDv3/Crr4EnKNwO3HsewgrjUQJk3S15rJLlEWK91fa
+	419/C8M9lNGO7GX1jPhy55fePpcW8j3R2qh8oazr27yLgNSQVFB03PveuvoBqKVs
+	9KyosVczGwwo4pEUcMhy436XfVSznR9VU4ODjQY1N5iYD6klWh9JTwQnOOcQjLtn
+	qPo3fSZfUBXyj1jb2vQSPepfL2gO2ZRWJe94mLacbSV5TzqA==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4faxyg8puh-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 13:51:48 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-51a87ef9713so21848111cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 06:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1783691507; x=1784296307; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=IsDPLn2lxw6fgPhVuow78bDKudDYUVZdfPodAAJcnlg=;
+        b=Th4gwyoI41bdrZLS0NMyjPlyohdodfEagMwJQAjU5UgNdIIe98aJcb1ji/u12YM5g5
+         TQNwF9aUQwi+KQzpSDy5DYdBXEh4Te33z35dIp51k6TRw2E9Wl9So1+buRKevbR5Fm//
+         dn+a0yhRoRlDuPAVaOc0mmXQ5T2MAgF2uOXStX7WrAx/xqgNJYiklIuGVxsyEYv9+l0T
+         sSQg5uYwwFjzJY1s8erolqxFhPaZ2j2ILo+Uig5oXeQgWXZbKH/pesDKnZswcGwiFwHr
+         378WtC46WRyiKA0zooZDRSE/HTCc9k1nlN7PcxvR24H8rXeu7ZyFmrVlmaIyIRACEImj
+         Kg0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783690313; x=1784295113;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CRjw6u/TimhdsdLAKCBwY2E0h0Xmbg9SBDdL+xLx6es=;
-        b=IW9B5AMYb+9aRnt2nNMMhpu3SMnjYw8v5MYRsh1iWztkxgWxUMXUml2nISMIfUO0jZ
-         zkR1DLH7etkyvi3tLenf4Aq4h9CXH0Rve82nPA0KzJKaC47PS5S89WbfS+FnecsbAg2X
-         8ReJTqhSm6h2yQ+kKHyof6LM6E1vnH/AhJPR5bd6q+FHQk4GvUEbssjkhhT1P01TombL
-         tVrYRhOrDOnOUOclQwqcY0DcSVJ1lcvlLkXBlkw1bG1/YC5mFUebR5cAHe9kiGD6Rx8T
-         f9iaciLunr/i5Ozgts08rlBEkJhXCE4zL/3bF3COcjRv13WKFviIKd8JMrzm8t6ACzYX
-         jkvg==
-X-Forwarded-Encrypted: i=1; AHgh+RrDU0e5HWhDsL6EcBd4/u1ZQhOhPq4/j0OW4C6XIDT0IVaqu+irH+qfLoQD0NBiUPXMnDEMvGlWr49fVvAdISQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBPZlfs/7rdyHKF6iRH9VbOQkHesyEIoZ2V9PNbYQqwVXiyG64
-	r8CmHnqnlYxU9BPWkCFrTGV5sBT8ATyaAU4/NyNsaUZdwIUcctqvvxAu6YMSFcZtvn3v4kUxeR0
-	f2v0rt5zOpW575IqU7D1NQGvcnQi3EdoIsIv0hO6mO/SbojJcPpxgOSN93fwfJoAqa97SiS0lJT
-	I0d+3hkqvIclc3Vbff5Q==
-X-Gm-Gg: AfdE7ckbeHjcdsDVs1EJ20Vz7OJ+eCBJiziLBO7EFy9Guv01W2tFZcsF/gflvqxEhYf
-	j4prpED8qptzB+Q4WZ/G2Gg2KsRLw9BPsrMue2MAne0182Q4RfYOrqWsyZDDZclGN5fxdHdEbX9
-	p6U1dOEydPuX2jIjp1M9wx+GzmGhop3x04W30RjaJPqMCRSHoAr9jtHdP0KPiE3TFy5+NC/428Z
-	qSrcNY/KTrtZcxw4qJmHuelSlM+YuhLXG+iIaEwbr2gu5Yhdp6b6hZg1CrYGQZX7B4LyFbmJqEp
-	Hn0N5x/djUHBF0nmn5vR11HsqAY0aADe8jOk1PX8zsVPQ6gd+9qgy7aEDF2P8vgYyS+EOgqZBem
-	12JGpfTRr6C7ZEeCA3mfBFupJAizO1vmltIeddbHiwMvPBnBtv8+cmcuQLBurecdrmv3nL9F0Fp
-	CpDMeB/Q==
-X-Received: by 2002:a05:600c:4692:b0:493:b750:bd20 with SMTP id 5b1f17b1804b1-493e68a5f91mr120361665e9.15.1783690312838;
-        Fri, 10 Jul 2026 06:31:52 -0700 (PDT)
-X-Received: by 2002:a05:600c:4692:b0:493:b750:bd20 with SMTP id 5b1f17b1804b1-493e68a5f91mr120360905e9.15.1783690312205;
-        Fri, 10 Jul 2026 06:31:52 -0700 (PDT)
-Received: from localhost (93-40-74-111.ip37.fastwebnet.it. [93.40.74.111])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493f567eadfsm37394065e9.6.2026.07.10.06.31.51
+        d=1e100.net; s=20251104; t=1783691507; x=1784296307;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=IsDPLn2lxw6fgPhVuow78bDKudDYUVZdfPodAAJcnlg=;
+        b=gWCp94uKtePOi7JoGlFohI+V0C2hK3AvrRyaJjbGxrrODzlIUVpM4WLxnWHzedbcuv
+         gqpsOy8ulqP5DhF/a8RbIhgzgel4xULyqrIQzIw2HstQSyaVT6/hJyADw2hdgSiRbWxY
+         cn2FOyDfrP/kzxz/jiA2qyheXxCBpqL6AkCkASekQzBNWLGE/MlSvpB++RLFgq5tEYeL
+         sbe+Vk9h/Fj7Hn7QTwjU3z4RZFXZLcRqgnU+JBfdtDsZvwVEF+6v/dCiBpK6b1FALGXg
+         +/TBFs5T1Fh19T99T6AGPJPFFmQM0y49vUH3SpsqwswfCpWCt1Wd8yPDE4gbfIbN89Fp
+         aykw==
+X-Forwarded-Encrypted: i=1; AHgh+RqAZgI9jNa7YkBdGWa5+w7iuHuvkR7qB+XzFV2IBeWfjC+5PhuIJP0q2FNtJOimEl38/0SNLiBdACUk5ueZy4I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4vXQWSin31ecpg/CkHH3vdl6wf6s2KRn6AZP9HOCr0wYVRU52
+	wjpCxHPJvd2VT9wjGN7TbaOY7xXQZKDm6DTrAfJa8We4T6ZY/mS13FB6VGtCrenymGz+nPOcfKk
+	1EvKmqJbCS3dBBNaFkEgKOCDVRz5f34ZkpVRPQg5Gh/dA/x7A3/pvMJC97gwfRpab/Ec5hVA=
+X-Gm-Gg: AfdE7ckjLxfaemJj14rB0zIxxCFZ+0ktEwwyLoN1ZD2XfW/ldCjPE9jIGFla8xtLlB+
+	Pi4ehX0+ikcbHAY4avOTwWB4+Btchq2VaoBJ0prj8fKazgUNeSRvFL7e2GwRXZCa11oMLex8q2+
+	sQMabZNT9jNxEttgbcW0u2PXZJYTG3UzMxT2OtFc4DP6y3ttDSAE9SqhJJaShQyuoWGrpJK6I3W
+	wijtzlJy3xD8BiHYMcBLuy7u10AyVGx4pDYoKTxjg9G9nFZFbsxT7FS6KsMBb6uVg63RWLC1/KR
+	rKhRE3iT3UNM3o1cwcp+ezdxmJnpkAuEwd4C6bgKCJryvHMVjCwSpAFZK7apGjeubMKksuIj80D
+	YfWbs1MwAzbUs+CIBB1q17fkPIAv2+PX8XQkfgBAZ
+X-Received: by 2002:ac8:7f8d:0:b0:51c:7aa7:e0f1 with SMTP id d75a77b69052e-51caa1a7e08mr37155231cf.44.1783691507360;
+        Fri, 10 Jul 2026 06:51:47 -0700 (PDT)
+X-Received: by 2002:ac8:7f8d:0:b0:51c:7aa7:e0f1 with SMTP id d75a77b69052e-51caa1a7e08mr37154861cf.44.1783691506844;
+        Fri, 10 Jul 2026 06:51:46 -0700 (PDT)
+Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:adb6:d740:6427:4097])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb670a41sm135669295e9.0.2026.07.10.06.51.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 06:31:51 -0700 (PDT)
-Date: Fri, 10 Jul 2026 15:31:50 +0200
-From: Alessio Faina <alessio.faina@canonical.com>
-To: Andrea Mayer <andrea@common-net.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	stefano.salsano@uniroma2.it,
-	Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net-next] selftests/net: Skip
- srv6_end_dt46_l3vpn_test::host_vpn_tests if iproute2 too old
-Message-ID: <alD0RtS0XKiXbDPf@cicciput>
-References: <20260708152745.2430714-1-alessio.faina@canonical.com>
- <20260710152211.63eb25d604ea0aa2b3707d68@common-net.org>
+        Fri, 10 Jul 2026 06:51:45 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [PATCH v3 0/5] software node: provide support for fw_devlink
+Date: Fri, 10 Jul 2026 15:51:19 +0200
+Message-Id: <20260710-swnode-fw-devlink-v3-0-993f31874e40@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260710152211.63eb25d604ea0aa2b3707d68@common-net.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANf4UGoC/23NSw7CIBCA4asY1tIM9GFx5T2MiwJTS2xBQamm6
+ d2ljYmbbib5J5lvJhLQGwzkuJuIx2iCcTZFvt8R1TX2itTo1IQDr6ACQcNonUbajlRj7I29UaV
+ VrVWBpZIFSXd3j615r+b5kroz4en8Z30R2bL9aXxLi4wClQKgrGXB6lycXAjZ49X0yg1DlgZZ0
+ Mj/0AGqLYgnqM2FBKFLYIxvQPM8fwHSVGPgAgEAAA==
+X-Change-ID: 20260609-swnode-fw-devlink-cdc8dc4e5cb4
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Danilo Krummrich <dakr@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org,
+        driver-core@lists.linux.dev, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3949;
+ i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
+ bh=neo7zHO1q22f/Aj8nISxBtgyyCitpGrHRzWxXr7ijA4=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBqUPjmjh6ryAQpnavue1CEEpD3WG6mmgQPBO2J8
+ +YOqIF0EVGJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCalD45gAKCRAFnS7L/zaE
+ wwzbD/9ClSYchp9fPns+RvmXAQpK1xzqoPyU1vKbu5gynMkYlsxSABd8WOVXhZWC00z6yPdxcFv
+ ZjJhOsW4Fvf0g82/FiDYSFKXJaaV5Uwr6aet6lBVy5ThMLU46BlkaEPGCkVaf9IJx5wC3hRHxca
+ S1kwWM7IbTS1BIa+A8fjNRlz8TP9PlwuEKrOSrVt3U4mQyAuZj+0XL/6Y0FXjNpySKLZhyfylZK
+ MRaZUUR6RFYHgmzIYoLBCtlUo8O6JfEnqZ/zMXAq4iVLTT4eIngstRIuUzvgTjF4VvMTwxUPC7O
+ fnLI6Q4JL2hRbqBm8j1E7JbFYm+X1exIeLy5+FuwI31XY9qXX5gJG3JKZ6A232NQGMsqjBMjwCK
+ 5GzIuOvCefA1//PjZnrzhr0OkQvVi0mAOkEaH2rEp33gPuWtYw/axIRre90E0ZXcCoihTZIOIN5
+ fwdDLKc6kQ7Wja2NowtvMQ5N/vYTg1Os6RA5R/U48ILDuXfLafSLW+JFyO9ZlLMIbbAvRcxbopu
+ O3aUM6nE6GBFhQF5ryAZNNQ5cHYhS0I/NSiUCHovR+Os8YqFgYZuYYBQJ8iKrzImRhZSFEZ8IEu
+ VZPdVO+kzLslXOnDCawwYzo4ZlTHVeawqUiHQuEqjbI1hLJ2eN7rQLucVV4nh7EbS0m3YWsuoKk
+ B8NJmOGQOAPdjcA==
+X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+X-Proofpoint-ORIG-GUID: Cg9i9jrL3CnfQovVhxXYrr3YzvKdxdkf
+X-Authority-Analysis: v=2.4 cv=PLg/P/qC c=1 sm=1 tr=0 ts=6a50f8f4 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22 a=bC-a23v3AAAA:8
+ a=EUspDBNiAAAA:8 a=Je3Peepqufej3slHyXgA:9 a=QEXdDO2ut3YA:10
+ a=a_PwQJl-kcHnX1M80qC6:22 a=FO4_E8m0qiDe52t0p3_H:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEwMDEzNyBTYWx0ZWRfX5i8ZLGwXNAmM
+ 7vnqaCyUYbsyiITZktuM37Gb3nuz/Adc2aRAK9u6VVPhvisSbGQ+X5Ly0ORKElEnKKd8DeE8k78
+ xfhK5c2VeneDBSRVbUDmnap/PFzDuUg=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEwMDEzNyBTYWx0ZWRfXz+lJalG9P/hz
+ mMY52HPWutHL5si2hOSWLyW8aosDRKprWqT0DzHJZhuY21mY60JPY2bIyap7ZmhpSFUpdkZey3z
+ 7Se3fWXUSduYFnMHYV3+jR5WHraYWxQPDddJPayXRqQyCgfTDjyKfyYtsqGKUUq9EBUrs+dudt/
+ u1v3TbxQwmykIU1yTDXVZ30YOqBVNXwsa68Qx94tcXyYz8fZ1adPibC17Dt1nMNwF2GWBfSnZyw
+ mWel9PAyh1ryNDntW3use+TRxDQIoqFd/SCMwZcyKhDM0kj1Didt/RZW1ajiuAtI7Song1TfGgH
+ BmirkhBz+fWtzX9L7RCI4Tnq9RnBc5qQj17MSyfN5o0W3Zc/ekiHgOVDqk7XFaA8H33+GkxqbpH
+ eKt+VDT0hISR83qqeTOD9CmXupdE9Yudxhg0D0j8ecoojDhg9Fpurs4JeyPPkmhOE6TBSs57vWd
+ RQ45yuFcWAlDEFSdkjA==
+X-Proofpoint-GUID: Cg9i9jrL3CnfQovVhxXYrr3YzvKdxdkf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-10_03,2026-07-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607100137
 
-On Fri, Jul 10, 2026 at 03:22:11PM +0200, Andrea Mayer wrote:
-> On Wed,  8 Jul 2026 17:27:45 +0200
-> Alessio Faina <alessio.faina@canonical.com> wrote:
-> 
-> > In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
-> > the End.DT46 support is not available and the host_vpn_tests test contained
-> > in the srv6_end_dt46_l3vpn_test.sh file is failing in some kernel backports.
-> > This is the result of those tests:
-> > 
-> > ################################################################################
-> > TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
-> > ################################################################################
-> > 
-> >     TEST: IPv6 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
-> > 
-> >     TEST: IPv4 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
-> > 
-> >     TEST: IPv6 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
-> > 
-> >     TEST: IPv4 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
-> > 
-> >     TEST: IPv6 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
-> > 
-> >     TEST: IPv4 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
-> > 
-> >     TEST: IPv6 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
-> > 
-> >     TEST: IPv4 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
-> > 
-> > To amend this, check the current running iproute2 supports the required
-> > feature and, if not, just skip the test to avoid a failure.
-> > 
-> > 
-> > Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
-> > ---
-> >  .../selftests/net/srv6_end_dt46_l3vpn_test.sh       | 13 ++++++++-----
-> >  1 file changed, 8 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-> > index a5e959a080bb..406c6a3d253e 100755
-> > --- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-> > +++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-> > @@ -510,12 +510,15 @@ host2gateway_tests()
-> >  host_vpn_tests()
-> >  {
-> >  	log_section "SRv6 VPN connectivity test among hosts in the same tenant"
-> > +	if ip route add help 2>&1 | grep -q -i End.DT46; then
-> > +		check_and_log_hs_connectivity 1 2 100
-> > +		check_and_log_hs_connectivity 2 1 100
-> >  
-> > -	check_and_log_hs_connectivity 1 2 100
-> > -	check_and_log_hs_connectivity 2 1 100
-> > -
-> > -	check_and_log_hs_connectivity 3 4 200
-> > -	check_and_log_hs_connectivity 4 3 200
-> > +		check_and_log_hs_connectivity 3 4 200
-> > +		check_and_log_hs_connectivity 4 3 200
-> > +	else
-> > +		echo "SKIP: SRv6 End.DT46 is unsupported by the installed iproute2 version"
-> > +	fi
-> >  }
-> 
-> Hi Alessio,
-> 
-> Rather than inlining the check inside host_vpn_tests(), I think it would be
-> better to follow the pattern already used in srv6_hencap_red_l3vpn_test.sh,
-> where test_iproute2_supp_or_ksft_skip() is called before setup(). A similar
-> function here could exit the whole script with $ksft_skip if End.DT46 is not
-> supported by the installed iproute2.
-> 
-> Thanks,
-> 
-> Ciao
-> Andrea
+Currently only devicetree systems have their devices' probe ordered
+against their suppliers automatically by fw_devlink. Software nodes have
+lately been used extensively treewide to describe references to resource
+suppliers: most notably, the GPIO subsystem uses it in many places. Now
+that the conversion of "dangling" GPIO chip software nodes to using real
+links is almost done, it makes sense to ensure no needless probe
+deferrals by implementing the add_links() callback from the fwnode
+interface.
 
-Hi Andrea,
+This series extends software node support to use fw_devlink and adds test
+coverage for the new behaviour.
 
-Thanks for your feedback, I will send a V2 with the requested changes.
+Patch 1 adds new kunit helpers that will be used later on for test
+cases.
 
-Kind regards,
+Patch 2 implements software_node_add_links() modelled on
+of_fwnode_add_links(): for every reference property it resolves the
+supplier and links to it. There's no allowlist like in DT - a software
+node only carries a reference when its author explicitly wants one, so
+every reference is an intentional supplier dependency. Graph
+"remote-endpoint" references, unregistered supplier software nodes and
+self-references are skipped. It also mirrors the device pointer onto a
+secondary software node so fw_devlink can find the supplier device, and
+purges the fwnode links on release.
 
-    -Alessio
+Patches 3 and 5 add the tests: a kunit suite for the add_links() op
+itself and GPIO tests for a real-life use-case: a GPIO consumer
+referencing its provider via a software node.
+
+Patch 4 proposes to add myself as a reviewer of software nodes.
+
+Caveats: a supplier software node must be registered before the consumer
+device is added, If the swnode is registered after the consumer was added,
+add_links() has already run and set FWNODE_FLAG_LINKS_ADDED, so the late
+supplier is missed. Graph/remote- endpoint ordering is left out for now as
+well as there are no known users.
+
+Merging strategy: with an Ack from Kunit maintainers, the entire series
+can go through the driver core tree.
+
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+---
+Changes in v3:
+- Use device_match_fwnode() where applicable
+- Fix a race between the actions on the device_link_mq and the GPIO
+  test cases' swnode management
+- Link to v2: https://patch.msgid.link/20260706-swnode-fw-devlink-v2-0-f39b09d50112@oss.qualcomm.com
+
+Changes in v2:
+- Use loop-local variables where applicable
+- Reformat a long comment
+- Keep trailing commas on array initializations which may potentially be
+  extended in the future
+- Add missing headers
+- Update MAINTAINERS in commit adding a new file
+- Initialize arrays at declaration
+- Fix signedness of ints where needed
+- Remove unneeded DISABLE_STRUCTLEAK_PLUGIN switch for swnode tests
+- Link to v1: https://patch.msgid.link/20260629-swnode-fw-devlink-v1-0-b90058b41839@oss.qualcomm.com
+
+---
+Bartosz Golaszewski (5):
+      kunit: provide a set of fwnode-oriented helpers
+      software node: add fw_devlink support
+      software node: add kunit tests for fw_devlink support
+      MAINTAINERS: add myself as reviewer of software node support
+      gpio: kunit: add test cases verifying swnode devlink support
+
+ MAINTAINERS                             |   2 +
+ drivers/base/swnode.c                   |  79 ++++++++
+ drivers/base/test/Kconfig               |   5 +
+ drivers/base/test/Makefile              |   2 +
+ drivers/base/test/swnode-devlink-test.c | 339 ++++++++++++++++++++++++++++++++
+ drivers/gpio/gpiolib-kunit.c            | 286 ++++++++++++++++++++++++++-
+ include/kunit/fwnode.h                  |  26 +++
+ lib/kunit/Makefile                      |   1 +
+ lib/kunit/fwnode.c                      | 116 +++++++++++
+ 9 files changed, 849 insertions(+), 7 deletions(-)
+---
+base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+change-id: 20260609-swnode-fw-devlink-cdc8dc4e5cb4
+
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+
