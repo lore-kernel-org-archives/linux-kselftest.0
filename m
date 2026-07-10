@@ -1,143 +1,97 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8E8345CBE
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 17:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783704646; cv=pass; b=SVga24e8OHGj8KV4sY8ulZWo4eBQRMjHFVvJFk1gwMValTzc5bbII0fLAXRolsUMGNjNAEI2rq+kjPZtOFr/AsihsXgcmQKclDwMXFhiD1i+EqS2xS6LQBmTK0XlYqXrs0mlM7aEXSsIpnBHa9Gkcrr7+vwSnnL6YSiK330L+N4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783704646; c=relaxed/simple;
-	bh=WP7giIq6JORl1AU1d3jmZFpFIM0XkPQ7s5H7vFgoW3A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hZB5VyjhvtEkOyacxrzkhCIkY6AYPTT1C+YNnUrSevUn4ifIJGruKNyGgRiWH8aduGL/JEFRYF8ZQF9uTPi6CZgObg0JH/FCRTm6m948t6VZqGoZfPYjzwFJMaeGdLzAuyCnnffs6wUo4l9JPwBKBap+Bk5QggTqLp1fDcDgYy8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sud/MdKw; arc=pass smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9212E7F17
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 17:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783704679; cv=none; b=Xr/XB2nXMNkfJUIynHG9SEs3/ii74j2To5+y51fsBFYBsg5dNll/+MT3VhSuHKro+SNNp0O5saze0P48u3kGs9CsO8Q8Z4kHm+wW8N/APhgMu0lvK6nh8BMSwdy8zpNpDiFEf1pa0tZMlZytKw+kQYOu2/E+VRm/muMVCvtUFBc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783704679; c=relaxed/simple;
+	bh=z2C8CVEChR8wGjCxGwBW35WZ9ORNbC6kr+MOgf81bCY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=My1ChQz2qMMA2/Lrfdlwiaoa2bWaCHUc/NuQWhtbT/qD87d3PNnU5FjpJ4DEvKISwJYFLhh0dLTnf72ytg44Gp54ugXszBHpOAAzfiwbyr1AZObk6LXzwb4IW7c/rNnEEob07WbFgV9VnHD208Zuvk6aJvA6e9Bn81beJdCCngo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f63QTJp9; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sud/MdKw"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4758b2a9e2aso768191f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 10:30:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783704641; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LuRGZ7OLywWrJCxo9CHi1ko8SXTza+UdZAn+5XjuJqsTNgM0axX36WiuJGmKtZXFOy
-         3fA9xwL9wJzdYBeuG/hbNRZfMviaeVN2zAN80gANbqICwjtty4HX+PP5q1y1CuB7/Ljf
-         EXesZ+8LsiDbTIzUnkznCjFtGrQJ0tnjOWXONWMph0se98Qi2DvcD/OQsSeAFRaXSQlJ
-         E7g3ldfIprB67U2FOh97ALAwilIjQZYzHnbGBywYuqcVj0SQ4Zd4nafdu+fUk6Ew5yio
-         BIIIHmk9c9Eqx0BPn2LxvhTVSOtgznTOhTKqdQW9LAV5DgVN5sv3NjOH0TdJ7Wvm3B13
-         VpkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WP7giIq6JORl1AU1d3jmZFpFIM0XkPQ7s5H7vFgoW3A=;
-        fh=pU9//w2i2YOC0eRQxnWyBN87LbmTYFGOtUCZGnrDbUU=;
-        b=ltBUL/9LMw2mFkUiDeOFP8fWXS64MDjlXpSB9DPQ9vsPe410WxKyzAO/yJm7yNiDd5
-         YRQscfJSkZI1zgKoOWcvsXh/E6uwj1LXsooNUc0m3QPRwU0cRSrap/lnMpvgnL5iXbwc
-         Kc0fwKskrZV9JW7wT+tEDKlF9mPO0JJFxqt2nKoSv4EQsofKrLFDirxYi5BHgifxSDRB
-         sWgzFPR68CzEXRWWBFLetTrfWqKwQxKIYTnkBCh9tSrWJCbzyd6I5X67VddbWVRSOY3X
-         eZ08NJ+qe4FjQGziYkKSuW8QawqiPNzXUzLvWG+j3U/XGONoabJ084/U9ZrCwzjemKRM
-         BmDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f63QTJp9"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e9ef94c0e2so599364a34.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 10:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783704641; x=1784309441; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WP7giIq6JORl1AU1d3jmZFpFIM0XkPQ7s5H7vFgoW3A=;
-        b=Sud/MdKwBO3/uo+uCB4GlvVspHekxy8IYFzuVkmQjWxrl3tRlQBSG+VVp0+PAkA4ff
-         CwDZ49MBL3z/YNzl1qkm5J+041iRF1LfMTJo6hkWzvaZhUL6aIo1yjE8rs3Zq/EhUkBo
-         /UFdJ3WoBRnhgs1fPSbLr9M2NqdnMVudoNdQfZpUM6P7WpwyZRYt4fTMwUIVFGnBLuEU
-         Fv1wAwBZOhGpX2HJYILO8QVtbxZJEQKnqEoJ6Ds+obT99xKEhLVGYzO/V4NRwBX0Fb/z
-         oHz6necV8WfCFDksDA/u1EEXULxXOWsMJfQI9h5hH+p+DzbuH2w5cYlyzdbCIurwHsmi
-         GNkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783704641; x=1784309441;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=linuxfoundation.org; s=google; t=1783704676; x=1784309476; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WP7giIq6JORl1AU1d3jmZFpFIM0XkPQ7s5H7vFgoW3A=;
-        b=cBQkFfM+hH35RYQPeZQlM8gqGSn24vD71lXf/mabCu6dcr7Y90tZJ4h7Fxob0PgHQg
-         zWvzakbIpAoY0YNkLjTYLfGBylMNTYRASwQewOusu3wPliaykhV0GPLM1o84K4aB1Zc6
-         KlGfFBrb9/yBJrrpxP01HcH6h+kPaXO85+XsTauFCttt1hXR8X9HZunjKtCfQdXWTazM
-         qaWkW0qO2AJWegpxEgYgv7Tca/Oi5i/K1/ib8R6BqVMRoHf7BSKkvR5ktA1bPud0L+PD
-         K0y3POXsZ8U+4iIRpMGB2s8tN+OUo64F38zB+C6HqEWBANcGwUtOu3PgDku/pM26deGu
-         OaBQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr4634hOGyv6sbdSMk+01TMHlXGF1Jxs//N94HevUOndCF8yvQ4Q4NYnhiduIzpby4Hf3pIJ9tXRx0kQWxM6AE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwhM5wMKB4+PoAtyEME2tbZ48DXnt59w2RveP2WlWjL6bpCxG3
-	88WGgn4vubBzZhG0a8VPUVpYMh9sPbNFfN6AoO/FQDp+Y6yYYzqjvKR+5T3VPQ+uEXZ3zZWhG/S
-	F3yQYtantqMNxl0B19oWPBEBZzDE0BGA=
-X-Gm-Gg: AfdE7cmkrrwwEXAS6jf5ppS5tUHq/fLCkQVQiNm0OAJSpdAZfI6Ra5/Gl59QNAMvmLC
-	E2ys+rkS9T5+CVvkXVfJhGGq5FGPD/ACA7kN/1grYOPOX112M6xL5Qj1Jzs7zVlsX1+7vL0CClD
-	QrDlqx9baPuGPzeSPbzpBzvYy9CCYi9a23q0NwYH6IO68wIG3sow1NvVQHkkIOYESXK5nAO05sb
-	sCQgTeinnzEPNuSxJDxY7wefLxZJ3EZBOQyVSzAchu7xcb417+O8GG+sFuliH1hodSHkJLulapW
-	wqxUNnwJWdSd1EActZZgo2hbQSQWc5xHTvyGg5w=
-X-Received: by 2002:a5d:64c8:0:b0:47f:2bce:6f38 with SMTP id
- ffacd0b85a97d-47f2bce71f2mr1605932f8f.28.1783704641136; Fri, 10 Jul 2026
- 10:30:41 -0700 (PDT)
+        bh=l4+NLBnB0rHrMKuhhVwyzWB3Dd7RcWNPm8QZ4toNsA8=;
+        b=f63QTJp9Cw65pGJsUDqkHZO2OQimp8PM815IYB0idpMJAn9mm5Y4uwpTi62eniTGlO
+         Soy8V3qvjzWW7JeigKx0oxC30I4hv/04AEWpybeFbBhmK03VuecM+dQ4PblypvScOVc0
+         Ko1iQ+YsHxwGXXhfSOqeG1/H1lgc7j/4exozI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783704676; x=1784309476;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=l4+NLBnB0rHrMKuhhVwyzWB3Dd7RcWNPm8QZ4toNsA8=;
+        b=RrAklT0xP4iZeKQ0E1dFjqiId80PQJS0CW3+M1l2kB+/QVBVJ2IJ8rxsjeZIP8JxZX
+         N5gOCztwqXvRxK4XpfWiZvAdJFT9DbOj9XXaXBBUwOxjvisCPR89JSJR8k85wN0ZKuPg
+         5D/hEAbxpnqJBcv+A57Z0oNj6AyXfqUHGKRDQIWVtwsBW8NwpLHCGhB+vs7XcppCnyEK
+         OVQkkULGAPxyXrh2LECvjfTRQgkkbKZDFfh8JVlFTmFdiMSXnZfu5ePNQNpmThoN2Xwb
+         X9+h7mFExlUWnTo/o/Jpl09id/nqXIcO4IBJKC2hmZusqA2NsHkSAFyGSFxt9W6Ms/Wc
+         x/HQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+uiPgBko54BMcubyesVmVSaUcb/O8WP8fefHbFyEOHg7Gmy8ZWlOCEfG5HcBRfSAaYYAxkcMPRWfapgmZyKoo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV68E6aROmEuP79lGcGsFp+CpI3y49Z7nhnpf68YPHvfWoT1SA
+	497Nsu7VUXBDi5NdBSwoWiN9TpRvZa7CSieaoBkBkOOGym7LeACIAKDWrywsVjQ1iOY=
+X-Gm-Gg: AfdE7clq+/dhSxFehUfKt7iexUu4bu0aCWq0IMygWvBFbFqFc3aY4l3DfZM4ryDORcM
+	5KcoLgNg6YT4hTNhG/h9YljgG4dbnXkipxkeV93fMRYZ7/ZY1r2DekvlmQHMzCg/uPsR1v9RT4W
+	2mByj7s1sIsQWju59BEL1VMrwNIp8IK3oANZkLjOzxRBVs3opw3AqhXYVtL9kEupqs6E5C5ruT9
+	/os9f5BY3FISRGfQ3tG5p7kbRdwfEHljNTr9Ozyso9N8/lC0QBaOiYCJFIn6iS7T8eteuA/2Sam
+	4xDc+RWr+yiGAYfov2feL0ntqOF3yTGg5Be75zc6nDA3XbThsx5JVytzs1Vwn+gipoJEuP2vt6P
+	U3spp9tOBYP08sNrLNT4zQr7fb/+uh8itXpfHpVfM6nR1TPEJIkYSaqeHmqKJA+gLdw+yftyJJ3
+	DtvoukqPXaUXbNXLCemqHcfAyXWESr6a7l
+X-Received: by 2002:a05:6830:6119:b0:7e9:e709:44f6 with SMTP id 46e09a7af769-7ebcfe99c23mr9582153a34.12.1783704675799;
+        Fri, 10 Jul 2026 10:31:15 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcb2bda95sm6635283a34.24.2026.07.10.10.31.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jul 2026 10:31:15 -0700 (PDT)
+Message-ID: <58d4411c-000a-4031-8a0d-e5858f056c82@linuxfoundation.org>
+Date: Fri, 10 Jul 2026 11:31:12 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
- <CAO9r8zNJh65SZzdW8Cc8_8N5Wr+ORuRtU3kuaAX_DhLaESFYTA@mail.gmail.com>
- <CAKEwX=MMXdq7KTzcEgXfNt2L-eTmAVa+nijdyiujVOAhXQsHSg@mail.gmail.com>
- <CAO9r8zO-nAys0PJfXVRwLgAzwJLa9KxpMXKQKXJR7cnYKgmhRQ@mail.gmail.com>
- <CAKEwX=M7axSs2FJDq0KF3GBDpd6G0J=gP_2boUJraNf8M2n3Bw@mail.gmail.com>
- <CAO9r8zM8qk9g6+B6GiCV3oytjViMTEhbr0KjrccU+bF4+PMfTA@mail.gmail.com>
- <ak6c2TaOlcGxZ2Ih@localhost.localdomain> <CAO9r8zPiOyri2wVxRvB0bwEXf9bCKoPsQmRzOpj01XozA8hqUw@mail.gmail.com>
-In-Reply-To: <CAO9r8zPiOyri2wVxRvB0bwEXf9bCKoPsQmRzOpj01XozA8hqUw@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Fri, 10 Jul 2026 10:30:28 -0700
-X-Gm-Features: AUfX_mwd51QhDhOxXEqljZbVmcwLnRoGIaPgZBSLTfEB8WOHhjbjcuIKoDcPaYY
-Message-ID: <CAKEwX=PLauANTu8nDLbDmViQ6u9gvh7HbKffUAzUXuBa6Jes=g@mail.gmail.com>
-Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
- test program"
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	hannes@cmpxchg.org, chengming.zhou@linux.dev, tj@kernel.org, 
-	Shuah Khan <shuah@kernel.org>, mhocko@kernel.org, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/ftrace: fix spelling error in poll test
+ comment
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, shuah@kernel.org,
+ Wang Yan <wangyan01@kylinos.cn>
+Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260702015634.366201-1-wangyan01@kylinos.cn>
+ <20260702142719.4e5f6ed1691c6dedaf2a0cd6@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260702142719.4e5f6ed1691c6dedaf2a0cd6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 8, 2026 at 12:08=E2=80=AFPM Yosry Ahmed <yosry@kernel.org> wrot=
-e:
->
-> On Wed, Jul 8, 2026 at 12:00=E2=80=AFPM Michal Koutn=C3=BD <mkoutny@suse.=
-com> wrote:
-> >
-> > On Tue, Jul 07, 2026 at 02:49:56PM -0700, Yosry Ahmed <yosry@kernel.org=
-> wrote:
-> > > I would honestly rather use more memory. I think there might be cases
-> > > where the flusher is delayed. The flush being slightly delayed is not
-> > > technically a bug that we want to see a failure for, but if a large
-> > > stats change is not visible that's a user-noticeable behavior that we
-> > > want a failure for.
-> > >
-> > > WDYT?
-> >
-> > There's already the (recent) page size-based scaling, so the idea with
-> > nr_cpus scaling could make the selftest useful on wider range of setups
-> > (even page size can be considered as a slight implementation detail
-> > leak, thus the justification of nr_cpus dependency).
-> >
-> > Also, I still think that internally the threshold should be changed to
-> > the "harmonic" formula [1] but the selftest can go with the linear
-> > dependency for more pronounced effects.
->
-> Yeah I agree the threshold formula can be improved, but we need to
-> make sure performance doesn't regress.
+On 7/1/26 23:27, Masami Hiramatsu (Google) wrote:
+> Hi,
+> 
+> This looks good to me.
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Shuah, can you pick this through your tree?
+> 
 
-Yeah that's a separate discussion indeed. For now I'm fine with fixing
-the selftests by using more memory.
+Applied to linux-kselftest next for Linux 7.3-rc1.
 
-Is there a good generic formula for this? I understand there will be
-hardcode values, but at least making it scalable (by how much memory
-we have, page size, # of cpus) if possible? :)
+thanks,
+-- Shuah
