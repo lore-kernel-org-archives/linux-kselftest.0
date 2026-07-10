@@ -1,290 +1,388 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94543DB31E
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 09:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783675478; cv=none; b=I+qZhrKwXzatwDU8QiiYEVbfybwZBq9DmImN3tx6VS1afq53KoK4Y0wXraDJ9UEBAyYJMfC93+Kyj/Bmrtgr9XTOXIIn9l2wt3xGCmO8HESNuSYTz68tDTR2KclHirgTZmseAGynGqWRN+EdNGtnmw+ti/rlMq++nFQZX952uII=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783675478; c=relaxed/simple;
-	bh=6KRORgrjHHCi1pgc/lNRWVr1mWlJr76tSwhx8sFHMps=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CxoB7SZCpiFACYRCFQCoZ5cM5uZ5KRX9oPDi1y39IezEVHTpX5yL2OzeVu2qWvytdVdaJ77dhfgm+p+va+Vmd9kzvLuTlU9eEtLtcChVtvhnCu5hfl1WKjy7RJnIEjyn4pdTFn4XimEWNFg615zgdm/YZQnRH2KhmzH8VNaGMZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=K/6AvtOl; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B5A4499BC;
+	Fri, 10 Jul 2026 10:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783678152; cv=fail; b=gJarX873xAL6NXTFlUkyO3BiM7xWAVk67l3vJ1sWV0VAsLQgIu3W+ELp79/+iD81Q9qdp8UyepmLeH+tkUbCTHnRbZH8gG+qUeFdWoB80ZYKv5DW5x+KuOlQMeGvyBcrjvIERrgqDDwa0V32oHrkxk2YP66OZIEYB00IUen35mE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783678152; c=relaxed/simple;
+	bh=yzNulAacOpy59RdMpJLtIue+mcD1nUlYwe4czWfMQyg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=A8uEj40fXPEbGQdAEy9NrjKxjcUcqzLd4ssL5yad01Eh4h2+OjKII9ct10B5iSiALLEzNeX/QwUf0hLw/q92rk/iR5wPDc5OcJhEtGFgErDdhJU6H5J9rxu8IYYqgrayijI5+XMf0gg5kBWUM5vcULruldnHUP0oTQBCklps9n8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdJhtUjR; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="K/6AvtOl"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso5620165ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 02:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1783675475; x=1784280275; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dgywglFUIwjru+wdRX3rW0UAMsUidjYqKDAc3zGlpNk=;
-        b=K/6AvtOlXQxE3NXLeiUFrBBaK2ac3k8MXxFUl013Qxe7PNvkEShvQ1Xv/Kz7qGpU0c
-         IPazX+W1FRDhpl6a69wvTSJti5yrFCCnvvImURD78o9JHAwmAJTlm7+WVvYNRaXS6c77
-         t3idsPj1QL9IluQlUZUom5FARtXs1WcNzldAyuqaAbUqv2gDVPwPW9QCn7TBtuffTMt2
-         jh6JVEQLm+/gSSKfV7sCNPOaYgapUdYF7YGrFDTyKXH1GYXVKiqrP+ysNSP1p1k3XS7B
-         oiEfVva0Rp71rVkr7+MebXclqUAzUwyr6w+IghTJ7PIPX5XRio469meaQr0EB3XgEimy
-         NRog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783675475; x=1784280275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dgywglFUIwjru+wdRX3rW0UAMsUidjYqKDAc3zGlpNk=;
-        b=KKrropU8FrBJdB4hE56gbKvfmG2HR57SnAtXqxYg+hvHLtOODznr1ZyMA4JMcWpHEE
-         5Tl4o4rVQkFon/FA260d8pa6EGiRtVFUueWsEHpGgrm5HGNJpqYzV+RBYGCqHRPvxsSE
-         w3CpwJjM269/AbqJcV9ss82YMe19Mo1irLQun0w/D7E1EsCQcwzFsTeiW0hJemTKZajg
-         N/Jk0rWzxR1oB86sErH950aQ5RrplF/LCC++MGRZt+ruO7qYeIlYVJ4kqi6dUlyDOrxe
-         /dzyQvBH4sWQSyIDGWpAzn93qOrQAsKcICCPvY+H89heLakXNtWfmPibqkUlfZsysHOp
-         O21w==
-X-Forwarded-Encrypted: i=1; AHgh+RqRZALsLa8lejzv/sxFbDjSDCUTiyeCF3JSQwHe8/kGCXuuUnKM94ZuUMuD1V4+xd1/4bBUv0qUzOZ0c3l8+R0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPGqRc48XvyVQvkSxk92UN+ieObYUO/ivWuE24HcHtlYO/+hxt
-	103zN/bG96HGtSUVJUvaB4x+lmNou+6q2OE4YNJel9eCTBQTw5B+PvlhllxETqTZOpe7swHHads
-	qZ/RHIfU=
-X-Gm-Gg: AfdE7ckpiq/XgQPNvSaYuFGAhOUXJ7hfgYvb+Zc6yyhDSyNu2XJEUF6o2t1P2HLD7I3
-	rIluMPV8gtlei3XS8iz09vAEJM7nvhB7EVnhyBX3snvLov3B1AVNJVyP6VgmzdyrwJETPGOrbLC
-	Bg6BSEFPliVoXKaOu6eu6DhBr9wrmZX7XE+oNB4TftJ6HqwIzBMVjittfmFJHZSlZf2wKmpgnMG
-	GB8fC14qnlbZ1EIfnE0UXhiaD0AynOssW8gyJp1eVi+6dOJkeuB7FUkh8lKMaO7Lb9p5gVWKdFz
-	rLa6VCEaYTJs26dl8pk4Hew/MOn4dOJNBm8gIteDkAIPw9brkqWp1s6qOAXhgfhyEpLVViPKHGK
-	/1TbvNZReRVLOvnCehE2U1nuu6QC9wWrLjiEllA+vksjXO7BqB/o5yhEUSDOHgW1i4NefTbieUf
-	pIHxE428i1ldFC2HZOvk2mwdUDApvI40kT
-X-Received: by 2002:a17:902:fc8e:b0:2ca:ddbd:a19b with SMTP id d9443c01a7336-2ccea40b65emr107793175ad.28.1783675474937;
-        Fri, 10 Jul 2026 02:24:34 -0700 (PDT)
-Received: from n232-176-004.byted.org ([36.110.163.98])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb72fsm56827995ad.6.2026.07.10.02.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 02:24:33 -0700 (PDT)
-From: Muchun Song <songmuchun@bytedance.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Muchun Song <songmuchun@bytedance.com>,
-	muchun.song@linux.dev
-Subject: [PATCH] selftests/mm: remove obsolete hugetlb vmemmap test
-Date: Fri, 10 Jul 2026 17:24:27 +0800
-Message-ID: <20260710092427.3459121-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdJhtUjR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783678150; x=1815214150;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=yzNulAacOpy59RdMpJLtIue+mcD1nUlYwe4czWfMQyg=;
+  b=gdJhtUjRNVex6bzDgug5m/8zqIcsTN7bpOKXD6UMKOuHoCR9E+WgIR4e
+   7xdXMrOzOLAff4WeYPT3GzD8pKANdFtNYg2ST+H4KMRZwbQxEh8epoNkG
+   WBj+9p/zcYnOZ/WSmwqsxpib645joGPLbUW9h319gKTWPbGwHLFKr1rFu
+   Zx3XzVBSH7X188cBb5HB4XHUh0CpLxaHFBuV/wH9o4lD5LyPHnts+8u+U
+   W180OSUWVQijcRXMW8iuGSWndLAB6uuA4Np2EWNT3DvZ5O2GCZcTIlHRQ
+   a9K4Rj6052mjT1RpvvJUZn6XnMN45frTBoCp5OAgGN4MPhnUJqqHQ3qFO
+   g==;
+X-CSE-ConnectionGUID: wek1Xg9eSi+Jykw6M7JWQw==
+X-CSE-MsgGUID: YVkSlDNdRdqQ9Ie1rqNHYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="95529148"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="95529148"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 03:09:09 -0700
+X-CSE-ConnectionGUID: AoxEI526RZqY3Q2LTQCF/g==
+X-CSE-MsgGUID: vfY45/7uR4GYmi+XElIoSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="278089133"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 03:09:08 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Fri, 10 Jul 2026 03:09:07 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Fri, 10 Jul 2026 03:09:07 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.63) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Fri, 10 Jul 2026 03:09:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rX0fYDWVZE3VW6yDYNHy5jsTpcL3jA4KNOjnohlmivB+T/0lCeW7j5m1QiD71ny7n+tmeIPBSvpOPPosn4jTcnGRq2SL/WhhVQd7pf57TMHxpoYw2xV7Pw7i1mR40k1aXYg2ows5NHmqWns/+1mwxupKuXItkLnAalcSw+qQkU0cf3XpubDnV6XXC3YMvEzOkj8TAGpp+TgCLKHT/wZIWiWupddguFdFP1IvJnl8HWMjnEQZgwm2Pi6fDezKMo6jWm90rwSgxDXlrH9Muc3YslkucGG69sZiJoJ8UvdKX25W7mtD1fn32aEW+qDTItPelWskYvUGNly02J6yujlkng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zE0aOwgzXjB77Mj9jO7PhfyC5euNyy8WXLKUGkrpXzA=;
+ b=hpNVqaWs9xEjYAcbEsfTVsQCPP672HgJn7+j9pmrzdfMJTLed1IoDajP1mb2p3IH+cdqjYDXy/3nA2sapiC5fE7eOoxwjlOgKhilSlNBZa0xIAMyITOWlv8jV7jaJ9qFN9OEme7HsqYHHlw1dgMDooPvDHs1hUz7UZB02Fd5xv/pkwYL8UzCU/A05weK3iSg2dZ70i5HyBMEG+duRBXaePKDWfaS/sSW4FvzrAyN0y1oyOLvJRJPnwbXk/CmO3IxfpNckuUY09j/hRX0BMJptd6FbJzMxIsSK8XDqhECkKq0uSeSMTVEd/ivr094sSXEgD0kmmjLqgclZs3hPCzBWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com (2603:10b6:208:577::21)
+ by LV8PR11MB8509.namprd11.prod.outlook.com (2603:10b6:408:1e6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.8; Fri, 10 Jul
+ 2026 10:09:02 +0000
+Received: from IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c]) by IA3PR11MB8986.namprd11.prod.outlook.com
+ ([fe80::e6f0:6afb:6ef9:ab5c%6]) with mapi id 15.21.0181.014; Fri, 10 Jul 2026
+ 10:09:02 +0000
+From: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+To: Vladimir Vdovin <deliran@verdict.gg>, Lorenzo Bianconi
+	<lorenzo@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+	<kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, "Nguyen, Anthony L"
+	<anthony.l.nguyen@intel.com>, "Kitszel, Przemyslaw"
+	<przemyslaw.kitszel@intel.com>, "Lobakin, Aleksander"
+	<aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song
+ Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, "KP Singh"
+	<kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+	<jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, "Fijalkowski, Maciej"
+	<maciej.fijalkowski@intel.com>
+CC: Jakub Sitnicki <jakub@cloudflare.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Thread-Topic: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Thread-Index: AQHdDxlIFTEtJ/W0m0qzpkQ9OeV8mLZmifuw
+Date: Fri, 10 Jul 2026 10:09:02 +0000
+Message-ID: <IA3PR11MB8986F269901513518E3B90A6E5FD2@IA3PR11MB8986.namprd11.prod.outlook.com>
+References: <20260708203410.45121-1-deliran@verdict.gg>
+ <20260708203410.45121-2-deliran@verdict.gg>
+In-Reply-To: <20260708203410.45121-2-deliran@verdict.gg>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA3PR11MB8986:EE_|LV8PR11MB8509:EE_
+x-ms-office365-filtering-correlation-id: 1ba5a1f4-8c23-43ce-6633-08dede6b445b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|7416014|23010399003|376014|366016|1800799024|38070700021|6133799003|56012099006|11063799006|921020|5023799004|4143699003|22082099003|18002099003;
+x-microsoft-antispam-message-info: lVQ5k7HjJ69+ZwBoCD+wsg3A80A7w7VyBOmb+/N5C/KMyapfUiFV2tHo+PbLmbQ/LeoRpYu9eq8KH1jjnNMRn6J65PmS6aBXXS61bsD5IHENC1tTyinHyXXQs/OTwJWK/blHCZUNGOz8nrtsUDCBdL0EAWAqS7lmf4k4Wad5mplODwxJKwOeHXvtM+Aieu0dgbC9Ta1jAv3wMCp5m1dSdKrNSf68eHB4K1AKW/WuiMXqeHkDRWpYDfAUcR7kPOFjnrSZks2xuvm0GiAxjV+D1lxklRcJ1jPrhNstYsOAtGP9GjoVEh/rVMUXCVZnS0cAv0O3VMObv+4+TS31A3LOR8b3P48riLsepqG8jOgUuhmWWazXIbRyAbJ++d2KNUZUt6QtEixmxl7tXrTbqgN32J4EfpQ5xsrM49depVAznkJGlTSpVFtb1h5+JuXUMq+u7z9gnCCxjsvF4af+Je5gJipzOogOlF4a2FA2Do/dMF4zs/PNg+XPYSegA7o9wSDFGxuRRphBEXHtTrsAzdi3lTpp6WeUVW0HAq1u0fg2n1AzE7WpPUUAok9LTpAV1bYslzzE4x7WJ1pRTk5G7ICcV+5w17sugspf5NR6xNKufMX/cHiCmqPUzw66dljn3yx3uD2n9fb9UvYqf9eoWMl6AgGeS5YfZlrPEaB+siAI7c2bIDTpIwNstdMgoyvESn945KdO/2GUA4BMbIzcSwXcdz+GHWP/OG/QdvKx0K+azjzro8ZBoftuS3nneG/yuAhI
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA3PR11MB8986.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(366016)(1800799024)(38070700021)(6133799003)(56012099006)(11063799006)(921020)(5023799004)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nWeQcKmcXNhDPYwCzdt2yJD1BbQT73TuqcUuMLWPgBH86Q1KhDdGZIt3MlOS?=
+ =?us-ascii?Q?UlIWFlx/gsqbLq5JWjlIybshgCY4TakY/NpHzGuFYRY+vqaiYgpi21FGrCuy?=
+ =?us-ascii?Q?9qJiu1rKT6/ox2pdvNEFen5GNkgbLKAM1gu5neUcqp2NXRPeeIH6P2hdcTa7?=
+ =?us-ascii?Q?u9A04cUk3J7OSYrxSPpE89a5GZ1Ia4+16F8rzQY3DiGJSx+cxr7L20YqpS7K?=
+ =?us-ascii?Q?RTdNvd4NCHXxXeOgRr3+4xJ5QpW42d77lBVZfgmB26NJwpVDeRUUkRo8nCEX?=
+ =?us-ascii?Q?8u8EsV+dR6cKjKS7ZtK2IsUGtiUD/KzU7xQ30r9Al1lwaqYHEZaA6e0hzj/i?=
+ =?us-ascii?Q?to8TYs9c50eNoGhIzK+xCU+/Q05dbHS5iVqtx3015WtxjqPmygulVaZxd//Q?=
+ =?us-ascii?Q?UE8SD+kksWDR38m2f5iorsKPh9H667xM/uGxS+Ci68NvW7Hdnax6FpR7R/Uc?=
+ =?us-ascii?Q?e1Fax+XfsNQgA1NN5UfFFfMzi2xlJmqnuUgc7v71sDBnMI6iVcrGJp/LwGAP?=
+ =?us-ascii?Q?8FCEH6mH9nP+R289axpmyPTLDNB0JedYbAK4SQnf7oKhr3NCONoXSo261CSY?=
+ =?us-ascii?Q?6UpakBB/k6dBLFx/1jOAsiFgpQ5lV0MEMVK5d+tmRIEs4QcIia6WtoyQwpnu?=
+ =?us-ascii?Q?WzKnn2XL0OwbYelhcWbsRuKhrtcXK0HTzcA+aA4eT0qYNLj7EBPhhrbnHXb1?=
+ =?us-ascii?Q?V4jco2o7kbhjYze5Bwub/X11lCYTF6HbX0hLvmTWs6K6Jh2MSzCohBB3gQXs?=
+ =?us-ascii?Q?88JdacVUPLOL6YmJqsXzMik2RtztrcjMNG6FsqmjpuxCBebCqbYkWnkII9QD?=
+ =?us-ascii?Q?Hdc/N7WUUDBwJh9+FBD5sFVqKRHfA+kxFDDcfL8Yq9S++u5ERYp/PXkVoAcV?=
+ =?us-ascii?Q?xbq+8YYCyEvx2OwcRJBO3ZdZ/atWlEcI929VGoEn036t2SA7ShuA9ccNzoaw?=
+ =?us-ascii?Q?VyT/btoasHSnBf2GoRnEFHETFeCPAKhrPrqZmiC2kso+h62iyeaSjLi0t3SX?=
+ =?us-ascii?Q?5iq6lln5xDrkEvM39IaEIXEh0nS80wMdmukqrjSC5zTvB1ym8/AwugmXZ/uO?=
+ =?us-ascii?Q?Qalb2OvaKDjwv1qKreCJpIKC/ANCjOs9bl6Zt4bRc+e9+19IYXR7i4bYl6BA?=
+ =?us-ascii?Q?K5otRfO494RM6E9EegA/mXbUlk+BRlUQb5qzb/daEJZipY5faYUy22O+1ibY?=
+ =?us-ascii?Q?0nDjyQgDUPZC5G23nIxAVKigYUdow7PFMuW4nlGJshnBxdlDEuZn/v1hYZGX?=
+ =?us-ascii?Q?QDoQ5X+DuMVa5Vvzizqzf1f7lADtgxGVEZRFuvyYSeMhqOB36u2itZFLnowj?=
+ =?us-ascii?Q?ZmaaYwMcVNL5Q7zoNY6tDo5klrUwJxUCw5EedNAwZ8YgbjDd9Ptu/h2K2iBb?=
+ =?us-ascii?Q?a9yeGoG8XMPnCSBplOqd2cCoTX2twspcHYPQEqpnFevm9qX5FPPIaVdNb6l/?=
+ =?us-ascii?Q?6z3b/FnLh6VeANlbqEZoP8JaWNIRbyDEsegvf1wh+29RQtRB0oOkkrSkmlEO?=
+ =?us-ascii?Q?pwMAl7/RrX6+SHQLcvG2XdDsLUEs1G4KpFrmzppXMU3qWw0pYq9WKSd2U2re?=
+ =?us-ascii?Q?e/ipV56rF/QcI5zNghmExi39b3MqB4e9d44iXqOFHU95ueWv3b9SQ6TD/v/f?=
+ =?us-ascii?Q?xKnmTF5aAc21fleQf0BK8+pktdlmPGO2vGPd/SgBjF9VHgaG0E2Qp7XPnHPY?=
+ =?us-ascii?Q?RPQogudyGIiC95bR1ApTasCMCTb2tEKjXeDT3zeoQkuw9VsnPYWW+WWAaQsD?=
+ =?us-ascii?Q?qORIH1bmycxFG9YYqbtIifFjKBzV5ZQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Exchange-RoutingPolicyChecked: NbGupqzEXioCBXb5WrDbbjR+e/WI33aoj/DqwN+DrjPcta+un5yEgYMA7Rq2Q6348O9IfDUW/2wt5xnSEdB3ka4EjeIs7pHeuavkcXWyqy1iMzSMQYxU8aUYmpLZeHZFNQlBMStWOZV3XLoLrkYqqHpxW8hxSsAfnKrhv/xJzUxcVj4bZ51yPGJ8+YYGLfho/jI4vRN5OpumLdl/Ziu9SPMci4leStPpTGnWtp7XLIJqxXc2sl8Q2EPS0/XCc61Pqt8nLH4TvTDFsDmHeYqpsg2v8R/IOvi/GEuYexv+UMrp1xBpazt/5tC1KgUNqrGhFt2e3MqEYs8+U7QHK+7IfA==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA3PR11MB8986.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ba5a1f4-8c23-43ce-6633-08dede6b445b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2026 10:09:02.2352
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +rx4vCcueKCsgGJBYxISw6AgRYGxfgEFFXmtFSlKhGT186QdXHKerlwbItdsbpgLvrnxowYZftXFXw41fIktMqOFI2lkUtnmXDSjPSchAyQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8509
+X-OriginatorOrg: intel.com
 
-The hugetlb vmemmap selftest was added to check the old HVO
-layout where tail vmemmap pages reused the head page.  That
-assumption no longer matches the current HVO mapping layout.
 
-HVO now keeps a private backing page for the head vmemmap page
-and remaps redundant tail vmemmap pages to a shared read-only
-backing page.  The old page flag check is therefore testing an
-obsolete implementation detail rather than the current ABI or
-behavior.
 
-Remove the stale test and its build, run, and ignore entries.
+> -----Original Message-----
+> From: Vladimir Vdovin <deliran@verdict.gg>
+> Sent: Wednesday, July 8, 2026 10:34 PM
+> To: Lorenzo Bianconi <lorenzo@kernel.org>; Donald Hunter
+> <donald.hunter@gmail.com>; Jakub Kicinski <kuba@kernel.org>; David S .
+> Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>;
+> Paolo Abeni <pabeni@redhat.com>; Simon Horman <horms@kernel.org>;
+> Alexei Starovoitov <ast@kernel.org>; Daniel Borkmann
+> <daniel@iogearbox.net>; Jesper Dangaard Brouer <hawk@kernel.org>; John
+> Fastabend <john.fastabend@gmail.com>; Stanislav Fomichev
+> <sdf@fomichev.me>; Andrew Lunn <andrew+netdev@lunn.ch>; Nguyen,
+> Anthony L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> <przemyslaw.kitszel@intel.com>; Lobakin, Aleksander
+> <aleksander.lobakin@intel.com>; Andrii Nakryiko <andrii@kernel.org>;
+> Martin KaFai Lau <martin.lau@linux.dev>; Eduard Zingerman
+> <eddyz87@gmail.com>; Song Liu <song@kernel.org>; Yonghong Song
+> <yonghong.song@linux.dev>; KP Singh <kpsingh@kernel.org>; Hao Luo
+> <haoluo@google.com>; Jiri Olsa <jolsa@kernel.org>; Shuah Khan
+> <shuah@kernel.org>; Fijalkowski, Maciej <maciej.fijalkowski@intel.com>
+> Cc: Jakub Sitnicki <jakub@cloudflare.com>; Loktionov, Aleksandr
+> <aleksandr.loktionov@intel.com>; netdev@vger.kernel.org;
+> bpf@vger.kernel.org; intel-wired-lan@lists.osuosl.org; linux-
+> kselftest@vger.kernel.org; Vladimir Vdovin <deliran@verdict.gg>
+> Subject: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+> capability to XDP metadata specs
+>=20
+> From: Lorenzo Bianconi <lorenzo@kernel.org>
+>=20
+> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> checksum will be use by devices capable of exposing receive checksum
+> result via bpf_xdp_metadata_rx_checksum().
+> Moreover, introduce xmo_rx_checksum netdev callback in order to allow
+> the eBPF program bound to the device to retrieve the RX checksum
+> result computed by the hw NIC and reported via DMA descriptors.
+>=20
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> ---
+>  Documentation/netlink/specs/netdev.yaml |  5 ++++
+>  include/net/xdp.h                       | 18 ++++++++++++++
+>  include/uapi/linux/netdev.h             |  3 +++
+>  net/core/xdp.c                          | 32
+> +++++++++++++++++++++++++
+>  tools/include/uapi/linux/netdev.h       |  3 +++
+>  5 files changed, 61 insertions(+)
+>=20
+> diff --git a/Documentation/netlink/specs/netdev.yaml
+> b/Documentation/netlink/specs/netdev.yaml
+> index 5f143da7458c..6d0d90d3a614 100644
+> --- a/Documentation/netlink/specs/netdev.yaml
+> +++ b/Documentation/netlink/specs/netdev.yaml
+> @@ -61,6 +61,11 @@ definitions:
+>          doc: |
+>            Device is capable of exposing receive packet VLAN tag via
+>            bpf_xdp_metadata_rx_vlan_tag().
+> +      -
+> +        name: checksum
+> +        doc: |
+> +          Device is capable of exposing receive checksum result via
+> +          bpf_xdp_metadata_rx_checksum().
+>    -
+>      type: flags
+>      name: xsk-flags
+> diff --git a/include/net/xdp.h b/include/net/xdp.h index
+> aa742f413c35..e255ff786131 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct
+> xdp_attachment_info *info,
+>  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+>  			   bpf_xdp_metadata_rx_vlan_tag, \
+>  			   xmo_rx_vlan_tag) \
+> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> +			   bpf_xdp_metadata_rx_checksum, \
+> +			   xmo_rx_checksum)
+>=20
+>  enum xdp_rx_metadata {
+>  #define XDP_METADATA_KFUNC(name, _, __, ___) name, @@ -643,12 +647,26
+> @@ enum xdp_rss_hash_type {
+>  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP |
+> XDP_RSS_L3_DYNHDR,  };
+>=20
+> +/* Please note the driver is required to invalidate the checksum if
+> the
+> +NIC
+> + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF
+> +program
+> + * modifies the packet since it can change some fields validated by
+> the
+> + * checksum.
+> + */
+> +enum xdp_checksum {
+> +	XDP_CHECKSUM_NONE		=3D BIT(CHECKSUM_NONE),
+> +	XDP_CHECKSUM_UNNECESSARY	=3D BIT(CHECKSUM_UNNECESSARY),
+> +	XDP_CHECKSUM_COMPLETE		=3D BIT(CHECKSUM_COMPLETE),
+> +};
+> +
+>  struct xdp_metadata_ops {
+>  	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64
+> *timestamp);
+>  	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+>  			       enum xdp_rss_hash_type *rss_type);
+>  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16
+> *vlan_proto,
+>  				   u16 *vlan_tci);
+> +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
+> +				   enum xdp_checksum *ip_summed,
+> +				   u32 *cksum, u8 *cksum_level);
+>  };
+>=20
+>  #ifdef CONFIG_NET
+> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> index 2f3ab75e8cc0..f8caade93c8c 100644
+> --- a/include/uapi/linux/netdev.h
+> +++ b/include/uapi/linux/netdev.h
+> @@ -47,11 +47,14 @@ enum netdev_xdp_act {
+>   *   hash via bpf_xdp_metadata_rx_hash().
+>   * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing
+> receive
+>   *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
+> + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing
+> receive
+> + *   checksum result via bpf_xdp_metadata_rx_checksum().
+>   */
+>  enum netdev_xdp_rx_metadata {
+>  	NETDEV_XDP_RX_METADATA_TIMESTAMP =3D 1,
+>  	NETDEV_XDP_RX_METADATA_HASH =3D 2,
+>  	NETDEV_XDP_RX_METADATA_VLAN_TAG =3D 4,
+> +	NETDEV_XDP_RX_METADATA_CHECKSUM =3D 8,
+>  };
+>=20
+>  /**
+> diff --git a/net/core/xdp.c b/net/core/xdp.c index
+> 9890a30584ba..9bcaa423ad17 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -961,6 +961,38 @@ __bpf_kfunc int
+> bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
+>  	return -EOPNOTSUPP;
+>  }
+>=20
+> +/**
+> + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
+> + * @ctx: XDP context pointer.
+> + * @ip_summed: Return value pointer to a bitmask indicating available
+> checksums.
+> + * @cksum: Return value pointer indicating the hw checksum value.
+> + * @cksum_level: Return value pointer indicating the checksum level
+> result.
+> + *
+> + * In case of success, ``ip_summed`` is set to the RX checksum
+> result.
+> +Possible
+> + * values are:
+> + * ``XDP_CHECKSUM_NONE``
+> + * ``XDP_CHECKSUM_UNNECESSARY``
+> + * ``XDP_CHECKSUM_COMPLETE``
+> + * ``XDP_CHECKSUM_COMPLETE`` | ``XDP_CHECKSUM_UNNECESSARY``
+> + *
+> + * In case of success, ``cksum`` contains the checksum value
+> calculated
+> +by the
+> + * NIC. ``cksum`` is valid only if ``XDP_CHECKSUM_COMPLETE`` is set
+> in
+> + * ``ip_summed``. ``cksum_level`` contains the checksum level
+> reported
+> +by the
+> + * hw. ``cksum_level`` can be considered valid only if
+> + * ``XDP_CHECKSUM_UNNECESSARY`` is set in ``ip_summed``.
+> + *
+> + * Return:
+> + * * Returns 0 on success or ``-errno`` on error.
+> + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
+> + * * ``-ENODATA``    : means no RX-checksum available for this frame
+> + */
+> +__bpf_kfunc int bpf_xdp_metadata_rx_checksum(const struct xdp_md
+> *ctx,
+> +					     enum xdp_checksum *ip_summed,
+> +					     u32 *cksum, u8 *cksum_level)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+>=20
+>  BTF_KFUNCS_START(xdp_metadata_kfunc_ids)
+> diff --git a/tools/include/uapi/linux/netdev.h
+> b/tools/include/uapi/linux/netdev.h
+> index 2f3ab75e8cc0..f8caade93c8c 100644
+> --- a/tools/include/uapi/linux/netdev.h
+> +++ b/tools/include/uapi/linux/netdev.h
+> @@ -47,11 +47,14 @@ enum netdev_xdp_act {
+>   *   hash via bpf_xdp_metadata_rx_hash().
+>   * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing
+> receive
+>   *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
+> + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing
+> receive
+> + *   checksum result via bpf_xdp_metadata_rx_checksum().
+>   */
+>  enum netdev_xdp_rx_metadata {
+>  	NETDEV_XDP_RX_METADATA_TIMESTAMP =3D 1,
+>  	NETDEV_XDP_RX_METADATA_HASH =3D 2,
+>  	NETDEV_XDP_RX_METADATA_VLAN_TAG =3D 4,
+> +	NETDEV_XDP_RX_METADATA_CHECKSUM =3D 8,
+>  };
+>=20
+>  /**
+> --
+> 2.47.0
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- tools/testing/selftests/mm/.gitignore        |   2 -
- tools/testing/selftests/mm/Makefile          |   1 -
- tools/testing/selftests/mm/hugetlb-vmemmap.c | 132 -------------------
- tools/testing/selftests/mm/run_vmtests.sh    |   1 -
- 4 files changed, 136 deletions(-)
- delete mode 100644 tools/testing/selftests/mm/hugetlb-vmemmap.c
-
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 9ccd9e1447e6..227476d8ff1f 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -3,11 +3,9 @@ cow
- hugepage-mmap
- hugepage-mremap
- hugepage-shm
--hugepage-vmemmap
- hugetlb-mmap
- hugetlb-mremap
- hugetlb-shm
--hugetlb-vmemmap
- hugetlb-madvise
- hugetlb-read-hwpoison
- hugetlb-soft-offline
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index ed321ae709da..ee8def9b4c31 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -66,7 +66,6 @@ TEST_GEN_FILES += hugetlb-mremap
- TEST_GEN_FILES += hugetlb-read-hwpoison
- TEST_GEN_FILES += hugetlb-shm
- TEST_GEN_FILES += hugetlb-soft-offline
--TEST_GEN_FILES += hugetlb-vmemmap
- TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += madv_populate
- TEST_GEN_FILES += map_fixed_noreplace
-diff --git a/tools/testing/selftests/mm/hugetlb-vmemmap.c b/tools/testing/selftests/mm/hugetlb-vmemmap.c
-deleted file mode 100644
-index 507df78a158d..000000000000
---- a/tools/testing/selftests/mm/hugetlb-vmemmap.c
-+++ /dev/null
-@@ -1,132 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * A test case of using hugepage memory in a user application using the
-- * mmap system call with MAP_HUGETLB flag.  Before running this program
-- * make sure the administrator has allocated enough default sized huge
-- * pages to cover the 2 MB allocation.
-- */
--#include <stdlib.h>
--#include <stdio.h>
--#include <unistd.h>
--#include <sys/mman.h>
--#include <fcntl.h>
--#include "vm_util.h"
--#include "hugepage_settings.h"
--
--#define PAGE_COMPOUND_HEAD	(1UL << 15)
--#define PAGE_COMPOUND_TAIL	(1UL << 16)
--#define PAGE_HUGE		(1UL << 17)
--
--#define HEAD_PAGE_FLAGS		(PAGE_COMPOUND_HEAD | PAGE_HUGE)
--#define TAIL_PAGE_FLAGS		(PAGE_COMPOUND_TAIL | PAGE_HUGE)
--
--#define PM_PFRAME_BITS		55
--#define PM_PFRAME_MASK		~((1UL << PM_PFRAME_BITS) - 1)
--
--static size_t pagesize;
--static size_t maplength;
--
--static void write_bytes(char *addr, size_t length)
--{
--	unsigned long i;
--
--	for (i = 0; i < length; i++)
--		*(addr + i) = (char)i;
--}
--
--static unsigned long virt_to_pfn(void *addr)
--{
--	int fd;
--	unsigned long pagemap;
--
--	fd = open("/proc/self/pagemap", O_RDONLY);
--	if (fd < 0)
--		return -1UL;
--
--	lseek(fd, (unsigned long)addr / pagesize * sizeof(pagemap), SEEK_SET);
--	read(fd, &pagemap, sizeof(pagemap));
--	close(fd);
--
--	return pagemap & ~PM_PFRAME_MASK;
--}
--
--static int check_page_flags(unsigned long pfn)
--{
--	int fd, i;
--	unsigned long pageflags;
--
--	fd = open("/proc/kpageflags", O_RDONLY);
--	if (fd < 0)
--		return -1;
--
--	lseek(fd, pfn * sizeof(pageflags), SEEK_SET);
--
--	read(fd, &pageflags, sizeof(pageflags));
--	if ((pageflags & HEAD_PAGE_FLAGS) != HEAD_PAGE_FLAGS) {
--		close(fd);
--		ksft_print_msg("Head page flags (%lx) is invalid\n", pageflags);
--		return -1;
--	}
--
--	/*
--	 * pages other than the first page must be tail and shouldn't be head;
--	 * this also verifies kernel has correctly set the fake page_head to tail
--	 * while hugetlb_free_vmemmap is enabled.
--	 */
--	for (i = 1; i < maplength / pagesize; i++) {
--		read(fd, &pageflags, sizeof(pageflags));
--		if ((pageflags & TAIL_PAGE_FLAGS) != TAIL_PAGE_FLAGS ||
--		    (pageflags & HEAD_PAGE_FLAGS) == HEAD_PAGE_FLAGS) {
--			close(fd);
--			ksft_print_msg("Tail page flags (%lx) is invalid\n", pageflags);
--			return -1;
--		}
--	}
--
--	close(fd);
--
--	return 0;
--}
--
--int main(int argc, char **argv)
--{
--	void *addr;
--	unsigned long pfn;
--	int ret;
--
--	ksft_print_header();
--	ksft_set_plan(1);
--
--	if (!hugetlb_setup_default(1))
--		ksft_exit_skip("Not enough free huge pages\n");
--
--	pagesize  = psize();
--	maplength = default_huge_page_size();
--	if (!maplength)
--		ksft_exit_skip("Unable to determine huge page size\n");
--
--	addr = mmap(NULL, maplength, PROT_READ | PROT_WRITE,
--			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
--	if (addr == MAP_FAILED)
--		ksft_exit_fail_perror("mmap");
--
--	/* Trigger allocation of HugeTLB page. */
--	write_bytes(addr, maplength);
--
--	pfn = virt_to_pfn(addr);
--	if (pfn == -1UL) {
--		ksft_perror("virt_to_pfn");
--		munmap(addr, maplength);
--		ksft_exit_fail();
--	}
--
--	ksft_print_msg("Returned address is %p whose pfn is %lx\n", addr, pfn);
--
--	ret = check_page_flags(pfn);
--
--	if (munmap(addr, maplength))
--		ksft_exit_fail_perror("munmap");
--
--	ksft_test_result(!ret, "HugeTLB vmemmap page flags\n");
--	ksft_finished();
--}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 8c296dedf047..a60b9f9f16e7 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -262,7 +262,6 @@ echo "TAP version 13" | tap_output
- CATEGORY="hugetlb" run_test ./hugetlb-mmap
- CATEGORY="hugetlb" run_test ./hugetlb-shm
- CATEGORY="hugetlb" run_test ./hugetlb-mremap
--CATEGORY="hugetlb" run_test ./hugetlb-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- CATEGORY="hugetlb" run_test ./hugetlb_dio
- CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-
-base-commit: 4f441960e691d37c880d2cc004de06bb5b6bd5e4
--- 
-2.54.0
-
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
