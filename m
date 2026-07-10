@@ -1,263 +1,100 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906263F8883
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 10:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783679277; cv=pass; b=XgKMJNGx/KB2NC3nWHJUqE9YvumOpwqNNpmO31YTtXH6dsof9ycmJt7+G1aRdM+gWMIAx6XhwB6lsD+emdJGjeZ36ty0p25DLamHrHfw7q9zB3Jw3wHZQvwaxyrtcaF2CBavUpZxER5d8Bven30JTtTkypNaPoUkazqspwj+ihg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783679277; c=relaxed/simple;
-	bh=YWOH2gdV2ggz9J8J5hR0LhUNueb0cLGyzdzHC2YMZV4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BFtp/Z1nZugE2HRnlCREzMlIBUXrcWkO9T9yLsqc3zfKbxbD403Rzh9tV+NzjIggaUTxU8+skzP5rrOwCpKnYcLgIc7vsCZjQUqtXuus5YntP3KLjz+sbhbybBxdYIDcNV+oi3bYYPodVtmEIEXrDSiWjJHxhYWQvkK1MnDWbzs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3A5qRDT; arc=pass smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F4190403B10;
+	Fri, 10 Jul 2026 11:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783681291; cv=none; b=qmo6WtTBVztINTuU3tOD3mIJQDsUG1ehVXTazqspFqSbQqDQS+/rakQNfNJ3zXjLcxvmC6R2eCP0Sq5iISenN0enJTsdZC2fEp/5/5ogw27qcNpfPnO/2syhe5db1N/L5FiuVGO/C+cYxM3GhFW8vCd1OhTPM1r9Rrl6YcNwpLM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783681291; c=relaxed/simple;
+	bh=8xi/0lhPSxQTlfJQ4w5thzHX9bGE+TZ3W7tHjzlAHxw=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=LMRgD2uswc040/IeVhLE88eKu2a8p2V0F1QSDtlfxmOTUUihdQg6BnFL2SVjdZG87sG3E5Do7DW2LwCi3/+anfInFLbcBTuVo0Cr6fvnSyVJtH8iwnoSwzsLYWZE9cuYSr3xAQEPyhRedCDisZG6iW2QSaZP6+1wESyF2lDelZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZFaJN/r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3A5qRDT"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-81e771226b0so11200937b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:27:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783679275; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oz7FTpoi+Tll5+A4UeiGs1kuIRe4FzEJ6dhmBpKnEJxadpTMtClsf75Kx+XQv2hMmg
-         w7I8ZSOi7i7GybNPJjysvvkdAlmW2B51TBF+gc7RHTfUJNuGeJy8C1lT3sTy86Bv/goL
-         kesiFDpaazNFtW6l7oDFRUP7l7EXX0s1jeuQLXVIcFiJIDrene0w/XzSbZv2a5FyB0qY
-         /zFCV7z+iX60VizFrMHjIZqBREmQePD2FhISBvJxY+opg1TpwvSHITeiwv0qeFiCzpJJ
-         C8vN582NQUWL6t60v7W7Wl2n/Qaz9fFKLrheSK1lu1kYrT/NtjuFV5rK3b+mPxm7r39M
-         Mq/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y+N2R5Z2OVq5oQm+VkZnqkt7jPTNI92i6oG4KqjbCgg=;
-        fh=6cQ5QuTLOzhUDIh/+s22fVj5+KDI+LXwnDPqNw/cims=;
-        b=Bt2BaPaAHpdocZoc0MlcMY7Kt+aLt/KkyO3aPCnMNVzGkE5EqCMKTIgRVXBcDrbRKQ
-         yW0udA72MiRUlcigGNPzJueqOjUoOTO6OkFDlOySk/wb3n2B0J1RoANF1KFQ5+8lJoR5
-         iDJhQ93m4WlPfCsSjRSSDLcsqeUir+4wr0fhLKyZLUb/ylhQpsKEbdz4QbS5WcU3gUxO
-         2IPpNPN+AvIuLdFwikVm6AD0xnMWluyWsHUNtr17e+0ecR6rEU+wITLvAlR33NvvBIF+
-         bEWVbUSZSjLiwIJ6YhDZL6zJ+MTl2AYwed0kbJfsbBqr5I3WgGuE2LiSynVe/8lNm27W
-         ZSCA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783679275; x=1784284075; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y+N2R5Z2OVq5oQm+VkZnqkt7jPTNI92i6oG4KqjbCgg=;
-        b=V3A5qRDTaXIGzz+/D3rxLu1L3OS9IMu5UlPJ3cuFWMPPwcpLZ4dsmbtYcxeLwi3euG
-         mKFWvHDPSQX7Rdb4mIn4IyzJxXzi8kbaeY889HQBzMhnTbklkJhPKhwmEZZngCWPMYI9
-         MuP832EDrTHZAKW9fV8Deu3bQJKK+OvBrWdjXZbtO0hCsaiZzAP5AiFP37IkRvU/yJho
-         x+lQmtGTuxXRRu7hSuIXxBD8LvORc3/tX8rmwD1GPraTOvpZPKrzSrgL8tY5frvH5Rwx
-         Vxcp/iXjvEUGHDFWdsRTuuajtZhJSWAbLh7inVorxe0ubMVYvxy64JfhTpOqaeP270a5
-         W1cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783679275; x=1784284075;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y+N2R5Z2OVq5oQm+VkZnqkt7jPTNI92i6oG4KqjbCgg=;
-        b=Ch2odRIsjsqnrBD3SblYP2Sn14p97xk66InLHZ2yNgYTBmDzurHdFXwrs8CwjWcBeh
-         9Sfkz/vAzQfD/Imqe+2526RFnXimwWA3diO0a5LwsI6S1KX/T08x8OJLlRvcK3Oq2T6r
-         p0/OmnhLKzpTOxt9Mngunmzd7orbJUSs4a14I0pKoYG2LxCqezq0fI+cDB/JREdMjE9+
-         UWZq9xdX6BjQ+Y83H6NvXaBDaanLNE1LmF8fULDVsgq/vEMArBzwgI68Mochz/hWs8pc
-         9nL9vA5R0xSRsrQTsG7gFitUqDyC2+1EcAnIEU+Z5zzurQ7nJ/qFi4BJoGyubYbh1UlW
-         tCVg==
-X-Forwarded-Encrypted: i=1; AHgh+RrwLFEiuPLpsfm/SaabGNoTXlWHPxlX/GUU8btTUjuyWdlCKtaYxQAFz/tzL8JTey1DtGJTwPlpVtsUzvBCO4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwE8t3+ZwFjbyR6ZR8vhgPQ8ACwyyiTGr4IG6mksOx2JblqPgP5
-	jrYI3pxhnOI8tioJDNjaFkjiteP7caAnNpzouwYPNsrkA+vNbtqfBb/L/4Qxp/NlKWq5KOwx1Py
-	uBYUyJp9xKhSGNIlbaUzeIZ9HbkorTrc=
-X-Gm-Gg: AfdE7cnbgUcilid55lXlEgP/htZp6Nifvl3ym3EOr/5vtzrADbBiLN76kXvUfhtg7Lz
-	Lf31No79YP3faFKCFtosbPgXDgk8xrb864fuhYfEOyL0ANRVHhL34lhjSNIkPs/ek6PbLlVXqj2
-	GkjUWgHsmYaQJyL3vlvKim6JEjnt3fv2DWdK58bB+c4tANHoINWZQ3LuO+DgKJhWIJ+Fm6hshWQ
-	w+gJF23vL2oez/Uvx3pYiRHdoqCd607QDXbfM+P8/ppUj1xtPhv/Z69GYP+xz5Nbd2k0aIi9tuC
-	m0zIBz7FITha2bB5POpyZhIXo+ezp9uayehGH1fC
-X-Received: by 2002:a05:690c:111:b0:80c:85b6:75b1 with SMTP id
- 00721157ae682-81dbef6be4fmr87972367b3.58.1783679274561; Fri, 10 Jul 2026
- 03:27:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZFaJN/r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B5DC1F000E9;
+	Fri, 10 Jul 2026 11:01:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783681289;
+	bh=u1in0J6DOoNo1KJyS0K46lG1NFXjsivGf2Yh7PbnBzU=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=mZFaJN/r2g8hweCNJ2/oa/yfwnFv5zbDApI8iMUpY+NUxNgiW/bsaO+kK+YQCW64z
+	 PpaaHmSBJ3KX5fbgKV62ghk8ai+laPAHO70xaUO9vms4nDSieDvezlv/hcXvxFmtUX
+	 Sb3mTwo8TGJ5qHoLpl6FwU+z8MBa07nPhprfiLUlUJp2c5+MwNCXkagCTBRcW/f2gE
+	 qlbr9w7E/3nozUmz9Sq7E+/LnEUwKkvUZe8hrojnknH2jSFniKsuckcmkaLtWVIpXo
+	 Bt6ScxK2RJiqXcPTJgjrwKzYWKNc3ve/vCBgit3SW+5V26w6V6c6AEJC0Jow8CE1hU
+	 5Xw6vWJIEvOiA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
- <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a> <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com> <alCgmxFh9q-vjE0O@u94a>
-In-Reply-To: <alCgmxFh9q-vjE0O@u94a>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Fri, 10 Jul 2026 18:27:41 +0800
-X-Gm-Features: AUfX_mz630YoM6lbLRCoORghuPKQ28m1yv1PsM-GnBec52yS3qAsNIG6LbRoaiA
-Message-ID: <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] selftests/mm: remove obsolete hugetlb vmemmap test
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Muchun Song <songmuchun@bytedance.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>, 
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, muchun.song@linux.dev
+In-Reply-To: <20260710092427.3459121-1-songmuchun@bytedance.com>
+References: <20260710092427.3459121-1-songmuchun@bytedance.com>
+Date: Fri, 10 Jul 2026 12:01:09 +0100
+Message-Id: <178368126920.320109.18235623374053703699.b4-review@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1342; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=8xi/0lhPSxQTlfJQ4w5thzHX9bGE+TZ3W7tHjzlAHxw=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLICLvz6eM1gm4Vs6ZQVSXu3S3BeDt95g01jl8z0J7Fnb
+ x+U+3dRoqOUhUGMi0FWTJHl+Rfx/UEiYfM6L/i7wcxhZQIZwsDFKQATubqG4Z/yr3V6yZrhaxQe
+ KjvWhlz7efTn7OXXHH7GGakYnlMSPHSS4X/MBOO9t837V7KnFp64Lvf82uET7nzZkdw3uu3O3mp
+ lb2UCAA==
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Fri, Jul 10, 2026 at 4:00=E2=80=AFPM Shung-Hsi Yu <shung-hsi.yu@suse.com=
-> wrote:
->
-> On Fri, Jul 10, 2026 at 01:52:26PM +0800, sun jian wrote:
-> > On Fri, Jul 10, 2026 at 2:21=E2=80=AFAM Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
-> > > On Thu, 2026-07-09 at 14:47 +0800, Shung-Hsi Yu wrote:
-> > > > On Wed, Jul 08, 2026 at 10:11:01PM +0800, sun jian wrote:
-> [...]
-> > > > Actually looking again at 022ac0750883, moving the `off < 0` after
-> > > > tnum_is_const() and bringing back the `off +=3D reg->off` removed f=
-rom
-> > > > check_mem_access() is perhaps the more faithful restoration of the
-> > > > original behavior.
-> > > >
-> > > > Though reg->off no longer exists, we have to use reg->var_off.value
-> > > > instead. IIUC any register of pointer type should already have its
-> > > > var_off bounded to +-BPF_MAX_VAR_OFF by adjust_ptr_min_max_vals() i=
-n
-> > > > theory, and thus shouldn't overflow `int off`.
-> > > >
-> > > > See the diff below.
-> [...]
-> > >
-> > > I don't understand what this patch is attempting to fix.
-> > > If you run the selftests from patch #2 against current bpf-next both
-> > > would be rejected. If you extend these test cases to exercise a truly
-> > > negative offset, that would be rejected as well.
->
-> I tried to exercise a truly negative offset, and it was indeed rejected
-> on bpf-next. I had thought it would pass.
->
-> But more below.
->
-> > Thanks for pushing on this. I rechecked the issue more carefully.
-> >
-> > This series targets the bpf tree, with base 12091470c6b4. On that base,
-> > with only the selftest change applied, the negative-offset verifier cas=
-e
-> > is not rejected at load time. The test fails with an unexpected load
-> > success:
-> >
-> > #664/2 verifier_raw_tp_writable/raw_tracepoint_writable: reject
-> > negative const offset:FAIL
-> > run_subtest:FAIL:unexpected_load_success unexpected success: 0
-> >
-> > It is possible that current bpf-next rejects this earlier through anoth=
-er
-> > path, but on the target bpf base it does not.
->
-> So I think I now have a better picture of what's going on. Before
-> 022ac0750883, negative const offset is rejected at *load* time because
-> the const offset is accumulated into `off` before the negative check:
->
->     // check_mem_access()
->     off +=3D reg->off
->         // __check_buffer_access()
->         if (off < 0) return return -EACCES;
->         if (!tnum_is_const(reg->var_off) || reg->var_off.value) return -E=
-ACCES;
->
-> After 022ac0750883 the const offset accumulation does not happen, and
-> thus now negative const offset is no longer rejected at load time.
->
->         // __check_buffer_access()
->         if (off < 0) return return -EACCES;
->         if (!tnum_is_const(reg->var_off)) return -EACCES;
->
-> > > And this does not rely on UB.
-> > > Consider the current code:
-> > >
-> > >         env->prog->aux->max_tp_access =3D max(reg->var_off.value + of=
-f + size,
-> > >                                             env->prog->aux->max_tp_ac=
-cess);
-> > >
-> > >
-> > > The types of the expressions involved:
-> > >
-> > >   reg->var_off.value + off + size
-> > >   u64                  int   int
-> > >
-> > > The promotion/conversion rules:
-> > >
-> > >   u64 + (u64)(s64)int -> u64
-> > >
-> > > In other words, 'off' and 'size' would be sign extended to s64 and
-> > > then treated as u64. Hence any negative offset would be represented
-> > > as a large unsigned value in max_tp_access.
->
+On Fri, 10 Jul 2026 17:24:27 +0800, Muchun Song <songmuchun@bytedance.com> wrote:
+> The hugetlb vmemmap selftest was added to check the old HVO
+> layout where tail vmemmap pages reused the head page.  That
+> assumption no longer matches the current HVO mapping layout.
+> 
+> HVO now keeps a private backing page for the head vmemmap page
+> and remaps redundant tail vmemmap pages to a shared read-only
+> backing page.  The old page flag check is therefore testing an
+> obsolete implementation detail rather than the current ABI or
+> behavior.
+> 
+> Remove the stale test and its build, run, and ignore entries.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
-Thanks for checking this and for the verifier logs.
-The before/after logs match what I see as well. Before 022ac0750883, the
-constant pointer offset was folded into off, so this case was rejected at
-load time with:
-    R6 invalid tracepoint buffer access: off=3D-8, size=3D8
+LGTM, always happy to see red in the diffstat! And we definitely do not want a
+test testing something that isn't real (...!).
 
-After 022ac0750883, the same constant offset remains in reg->var_off.value,
-and the program is accepted at load time with:
-    R6=3Dtp_buffer(imm=3D-8)
-    processed 4 insns
-
-So I agree that the behavior change comes from 022ac0750883, and that the
-right direction is to restore the load-time rejection of negative effective
-buffer offsets.
-
-> I entirely missed that, yes, the attached-time check does prevented the
-> negative offset going through. So there isn't a bug, but the behavior
-> has changed, and it seems better to restore to the one where we
-> straightout reject negative offset during load time.
 >
-
-One detail about the attach-time check: I agree that some negative-offset
-constructions can still be rejected later if the max_tp_access accounting
-produces a large value. But the runtime reproducer I used exercises this
-specific access:
-
-    r6 =3D *(u64 *)(r1 + 0)
-    r6 +=3D -8
-    *(u64 *)(r6 + 0) =3D 0
-
-Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the curre=
-nt
-accounting,
-    reg->var_off.value + off + size
-wraps to 0. So max_tp_access records 0 and the attach-time writable_size ch=
-eck
-does not reject it, even though the effective access starts at -8.
-
-On the bpf base without the verifier fix, the temporary reproducer did load
-and attach successfully:
-    negative_bpf_load: PASS
-    negative_raw_tp_open: PASS
-    negative_test_run: PASS
-and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
-
-So for this particular range, this looks like more than a load-time policy
-difference: the missing lower-bound check leaves the access executable on t=
-he
-bpf tree.
-
-In any case, I agree that v5 should restore the previous load-time rejectio=
-n
-semantics. For v5, I'm inclined to follow the direction you suggested: fold=
- the
-constant reg->var_off.value into off before the negative check, similar to =
-the
-022ac0750883 handling in check_ptr_to_btf_access(), rather than keeping the=
- v4
-explicit access_end form. I'll hold off on respinning until you and Eduard =
-are
-settled on the approach.
-
-> That can be done by reordering `off < 0` check after tnum_is_const(),
-> similar to how check_ptr_to_btf_access() was update in commit
-> 022ac0750883.
 >
-> [...]
+> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+> index 9ccd9e1447e6..227476d8ff1f 100644
+> --- a/tools/testing/selftests/mm/.gitignore
+> +++ b/tools/testing/selftests/mm/.gitignore
+> @@ -3,11 +3,9 @@ cow
+>  hugepage-mmap
+>  hugepage-mremap
+>  hugepage-shm
+> -hugepage-vmemmap
+>  hugetlb-mmap
+>  hugetlb-mremap
+>  hugetlb-shm
+> -hugetlb-vmemmap
+
+It was here twice :) wow.
+
+Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
+
+-- 
+Lorenzo Stoakes <ljs@kernel.org>
