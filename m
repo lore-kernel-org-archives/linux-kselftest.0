@@ -1,126 +1,239 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D9E2E974D
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24D7367292
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783652937; cv=none; b=pMkQy9TzduFDRRZrxKQJ1Al3C/eimE79oGHPiYwCM/r2vzUDfkOY12KdmBKKbpxYU+/KC9d0xF6frLLfm/RzhsM9C5PKBk5IafwZF0ek6tMDyV/bSKO7oUcvq3C++uuXb5O4phz7p79w6zQuRRCAWj235/RmeiqYD3oKo4IuVgw=
+	t=1783654107; cv=none; b=dULVGEDIS6w0VPybXP+Oefze9nAHkA4jnR4v/Vtc0Mg+jnaNvrtzKNmKtH7K0b2pcBKPbw1EXSjHeNTkIKZq+K4UuHB0fC9xR7JLDcLLopVQx6Y6Rc1DfEF2mpuF9xfRz1xwSYSSBtTyybLYuWi2aMY2yUD6tRkj3a4plQWY7/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783652937; c=relaxed/simple;
-	bh=le65lxpxw4W65xyZzPtwOptaX/haFn4+aLgX+gVQMQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sytaF4EIOuWTjS768LxZR4QHI/Ha7d764ybJMYqtqkQfo2NDtu+EzL40lfIw5ioo+mEnC67IkzTPZI7dJag+l1EldMpd9MzoioiBD74QxiQbl9fh/sbUmCFMSM6cSWYhjRcDHQr1i41cd9KdKg000F8Xo639BzEUE8jhcXKeqQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=jcERSOnt; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1783654107; c=relaxed/simple;
+	bh=mig4XcqfSs9jGe1JwCW+tEhYbOeUSyy7jkGAdEvFKT4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WF/spYTa5kvZYpX/HQyYskzMZwOZxCn1V6mDDZGOAxfcPypD56QeByBxEPzBVAJQOcCdGD7fB9nHgQTXXyKKlmPUU6e9souQTv8/zj1PtkZWcX4ZAjAgXpZDp6zeucM7MR3fMKORzNpnBZEhXgkjPMzTHI9EMOlrnti0+eO0bhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hceESrwl; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="jcERSOnt"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-92e5b048375so19251785a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:08:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hceESrwl"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-381891a9525so638641a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783652935; x=1784257735; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kr6wGBD9MJbLbiRkKQ9M+EqleUNYFT/q4nJmIpqWguM=;
-        b=jcERSOntAvY0mbE1/LrlTqzFn5l/R7t2JgCYQpnQtdvKPJq2mL8kvFPCncxlENRBrX
-         oI49UXprOlX1T3TWwNAIka1OFzYXBp6H100E+j02gq1NjyzZ3mi+j+FUxz6h8aiO7Jgr
-         SoDovlnOpT2zT6j9/D2C4Ydg8PO+DcVHiCTKXgpDBAvhvRFqn1m0l2DB02VzrYlUUNTm
-         oD4bZplTjKF90vAabyz6+16lg3hcjQQ0GhrzNY0Xt4hSt80P8yU539hE94lM1CrTj475
-         vIGyH2FEexmQnDFEOX62D0if6xTyFhP2eOBxB+XGbQ9QEDT0c8FgSvcUwm3l1Q8LwY0K
-         psww==
+        d=gmail.com; s=20251104; t=1783654104; x=1784258904; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ArKjKlGhzUaijvYetaer+EHSm9Nlpk5QM4HhQLD/GMg=;
+        b=hceESrwlXY73i9GzfFWQwZlf3OdBQAukch0A3Qr2RqGH1g2dthWDQAxBiujSzx5faN
+         ugXNgz7TVbQbI/Zlku3mvaQG9dtehnB9w3oZ8+1XZKN9lccFP/I1e5ghpqk8Il2Eb9T+
+         8OG6rSqAsRWY+iiApIQOu09GKWP7VHxdUucEMUc6DVGGKyqYu5XQe3RKnMAoAA3T3vGi
+         7B45b2GH6oIBERUB3lFk/26nccwKE3ZG3dIDNq84UG2egXsBCPaZclfOhjUe+rEH277F
+         zFKgijZVTIHDIbRfJDjOrnngD4mtshX+XTzz4snrWIElAMU2IhkuzGyxgJmFqeiHjGmF
+         q5fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783652935; x=1784257735;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kr6wGBD9MJbLbiRkKQ9M+EqleUNYFT/q4nJmIpqWguM=;
-        b=onuFph3+kN4NpQJ4TTFgFnODVkSwhNDgxcVUMQ6wmGUnH4AknDRenrjoJUE5WuPTla
-         3Lj/ZcOQUZx5C0u/qjGF9VPOZ1XRH0FZcQNY3dnrgGNQahOf0Xu3q1dakCDLhOltu0VE
-         /5aBtt4WH8mu917HQPXQ3+egWyfZjaWAwM5ttsC3hV4/9XVgBtUj9pJI08jJzl6o+UhR
-         DlQ7TV6fO5v947zC2/C3jwtlxcbhFrlSdVTWz4It89hO3noIfvZcPfdGO6LxJXYWBD3n
-         WVtmrdOXVFfkmyRxt26xiO4cRU2aq65GTP6g6CllqmeIjady3fcQgwdCdZo9Kr42VsC8
-         HbZg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp3t8H82OJwSJvOBZKZmsqZEFQS2Fgcb/3VebtiT6GyqgLtPYJK4Ee1Vi0EbfHeqDpTbsHEeYLdwjs9LBDOFQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiXT2CL7K4krzvII7DvDpDQGkbhOYZ2fWViWBiqR7OK4SHvuqZ
-	OYHfzFnlEpff16EDIp1pseLUM8NCaQ+TSiD5GbiG/EsYZvdlFdFFPjiKLYp8varT+UI=
-X-Gm-Gg: AfdE7cmoZC7onXTRA/cstV04LwUTAR1qBUHBhInXFzKP7pQ1y5xiWfy32944Nx/h8tF
-	oWc63V0Zq6GEjhbLceq6ng0tR6uH/Emle/l3UV01Ir8AfOgTQH0FZ01yCOMhKUDXD6cATLbRNVT
-	WSgMbQR0+u4dAO4C6s+rtDDTGEG7sMafHmOi3IdgIVVAKeVwOm/I2hdfvvMPMmnDuAgeno6gSnt
-	42Dy0m3DbtdET22tLmXtjUY9OA0mQrOz6XwKgpN/zQoXmRCXL2r3qvE5RROIDeej164qgfCBanQ
-	mbzDBN0YDcph9WK6+zOmCXhUDI7FH0PxysB44dCIqIsfbnCcobEGEAjKmTdCnneedr3wIbWpQ3Y
-	ljxpYxgvohblyq+mDxPBFyLxnmkim8+jVSbs+4gm6yzFwpV61+/TQeLrptPWI4pag+Qp/MkdfjQ
-	JqfLDdkTslk7pgZqnDAv+pecSJ3+DED8PpoD3xs9lsCH8qghDa/nlyfOwC8F2B3sXXzg3iXsVhW
-	uX287E=
-X-Received: by 2002:a05:620a:2701:b0:915:eec4:49ab with SMTP id af79cd13be357-92ecf5dd3bdmr1127366485a.51.1783652934221;
-        Thu, 09 Jul 2026 20:08:54 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5cf78a5sm97038385a.31.2026.07.09.20.08.52
+        d=1e100.net; s=20251104; t=1783654104; x=1784258904;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ArKjKlGhzUaijvYetaer+EHSm9Nlpk5QM4HhQLD/GMg=;
+        b=dz3+sTy6100j7wynyvF2Jy30pg9MYZDL2J8+4fgONdHBMVbXcx1tBT6m14xij3q89V
+         xD70ApqZivs8DoYy3kmBOkS9rvUILQuf0gG2afpZARPS0hqDSCRiFUyDpk1TjihoRtw3
+         tbWac2YPeY44EswlxApCN5sxju04BUonTS/h0zdKreu+mFE3DE3dr17dSgAe8YwCLdW3
+         SYTakggSJeU5lIw7wtyxWOtTbZaAm1CywzvlyEBnabfdIjLMq/In2zEtuqazVXxbSIHM
+         ZjSjre+N4mCKC7BztaOL+vigDRdzEVKQNlsKege+zMoJCU73HV+4tS/5PgkeyDn6m6sw
+         4kNA==
+X-Forwarded-Encrypted: i=1; AHgh+RrRtl8a87rcG3Kyry9DNJKeA3nS1uUp/a3y+uAkI0o9xCbUcUu0gWb5bJ2L5tFxoj6jUFFrqsHg7Msl62kWm7E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxG7f3G+ztHzuUfBVAOjgQEmY1IwuM1SUVwyHDbRFX7L2+C9GnD
+	29gr03wRPVXMIUEBvn8mrdUBUCEWZ195yjDELaVW5q2q9vHPIhXDpAck
+X-Gm-Gg: AfdE7clpkWEARv2lVkdGofJfrtDms1YLDXLyINzWED9ivqlORuHkfYVYvQ/r2c7O/KK
+	+9jbbU2AnyI2GnDTewFobXFtyNnfkKpnwKESxqxC7D0vqXCe8pqbCDTxRX68pjwePXiJCEdlCdV
+	zBJByGSBLNx8cf7VyNqkgJSuHu3h5Wh9hYhcjTuh04EgM0f+PoiMm7rCUd7nt3YX6aoAVoEqIvl
+	9RQn18taVbLXXBZ1AvelUlZ+Ilt7DQPtvhuvtKDMkjkYohtSgGXJDlV+VJK0jkL3rQJqNUwx5SA
+	xuA3Sp2rx4nS4bjRbDIyzMCgyq389rPI3OjHvAxNbfKtTxYP3lTt5h3FpaJHCbAwVWx2mGSxOky
+	RnQw5+BJWl8GxqsZftD/o4VmqbvduqqSlR1Z/zQt8cW91yy6jyybb1aPu67rgw9r0kgJZ8GrApd
+	C1JZbN2CpaKsx5N4w8O0Zr8Q==
+X-Received: by 2002:a17:90b:57cd:b0:37f:9ce1:7369 with SMTP id 98e67ed59e1d1-389416ec46emr8567000a91.31.1783654104099;
+        Thu, 09 Jul 2026 20:28:24 -0700 (PDT)
+Received: from [127.0.1.1] ([138.199.21.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 20:08:53 -0700 (PDT)
-Date: Thu, 9 Jul 2026 23:08:48 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Dan Williams (nvidia)" <djbw@kernel.org>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com,
-	Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
-Message-ID: <alBiQArmsWFg975w@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-10-gourry@gourry.net>
- <6a502267b17cc_3b7ee51008f@djbw-dev.notmuch>
- <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
- <6a50356aa7a4a_3cabcb1008a@djbw-dev.notmuch>
+        Thu, 09 Jul 2026 20:28:23 -0700 (PDT)
+From: Jing Wu <realwujing@gmail.com>
+Subject: [PATCH v4 00/11] Dynamic Housekeeping Management (DHM) via CPUSets
+Date: Fri, 10 Jul 2026 11:28:11 +0800
+Message-Id: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a50356aa7a4a_3cabcb1008a@djbw-dev.notmuch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMxmUGoC/12Qy2rDMBBFfyVoXRVppDhyVv2PUsJYD3uKH0GK1
+ Ybgf68cAk6zm3vhHC5zY8lH8okddzcWfaZE01iCftsx2+HYek6uZAYCKqGF4T/zN40td93ATdD
+ Kg9O1dYYV4Bx9oN+77POr5I7SZYrXuzvD2j40Uj1rMnDBReUCSIsN7t1HOyD173Ya2KrJckMV7
+ AvjiWcJPNCIfbkKXsvaWgRl0YUXPAa78SAqHjxe5ui5u444kD1Rmnp7ntPpIV7XCDxI6RthD/p
+ 1jdpslfz3j6wKCiZI1M6opjLP6LIsf0y1iCdtAQAA
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ "Paul E. McKenney" <paulmck@kernel.org>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+ Joel Fernandes <joelagnelf@nvidia.com>, 
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, 
+ Uladzislau Rezki <urezki@gmail.com>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Tejun Heo <tj@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>
+Cc: Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org, 
+ rcu@vger.kernel.org, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Jing Wu <realwujing@gmail.com>, 
+ Qiliang Yuan <yuanql9@chinatelecom.cn>
+X-Mailer: b4 0.13.0
 
-On Thu, Jul 09, 2026 at 04:57:30PM -0700, Dan Williams (nvidia) wrote:
-> Gregory Price wrote:
-> > > So the "unknown" case does not need to be here.
-> > >
-> > 
-> > mhp_online_type_to_str can technically return NULL, seems better to not
-> > just let a NULL dereference sit latent even if we can visually tell it
-> > can't happen today?
-> 
-> Oh, makes sense I was thinking "unknown" was only a result of the
-> drvdata missing case.
-> 
-> > > > +	if (dax_kmem_state_is_online(data->state)) {
-> > > > +		dev_warn(dev, "Hotplug regions stuck online until reboot\n");
-> > > 
-> > > I like that the BUG() is avoided, but I think these should stay
-> > > dev_err() given the severity.
-> > > 
-> > 
-> > I had to go back to calling remove_memory() by default given different
-> > feedback, but I think if anything I will just modify the BUG() to a
-> > WARN() and call it a day.
-> 
-> ack.
+This series introduces Dynamic Housekeeping Management (DHM) to the Linux
+kernel, enabling runtime reconfiguration of kernel-noise housekeeping
+(nohz_full tick suppression, RCU NOCB offloading, and managed IRQ
+migration) through the existing cgroup v2 cpuset isolated partition
+mechanism — no new kernel ABI required.
 
-Ah, you know, on second look - DAX could never reach this BUG() in the
-first place.  I think this was a hold-over from when i was originally
-refactoring and trying to figure out the right path.
+When a cpuset partition is set to isolated mode, DHM cycles each CPU in
+that partition offline, reconfigures the housekeeping masks (removing the
+CPU from HK_TYPE_KERNEL_NOISE and related types), and brings it back
+online.  The subsystems (tick/nohz, RCU NOCB, genirq) pick up the new
+masks through their existing CPU hotplug callbacks.  Destroying the
+partition reverses the cycle: each CPU is taken offline, restored to all
+housekeeping masks, and brought back online.
 
-If there's a desire to soften these BUG() to WARN(), i can submit that
-separately, but i will close this all out with some comment updates.
+Housekeeping cpumask pointers are RCU-protected to allow lock-free readers
+during updates.  A global dhm_cycling_cpus mask suppresses transient
+cpuset partition invalidation while CPUs are being cycled.
+
+This work is related to Waiman Long's [PATCH-next 00/23] series
+(20260421030351.281436-1-longman@redhat.com), which also targets runtime
+cpuset housekeeping control.  DHM's distinguishing feature is zero-boot-
+parameter activation: nohz_full+nocb isolation can be achieved at runtime
+without any boot-time nohz_full= or rcu_nocbs= parameters.
+
+Signed-off-by: Jing Wu <realwujing@gmail.com>
+Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
+---
+V3 -> V4:
+- Drop apply() callback architecture entirely (struct housekeeping_cbs,
+  pre_validate/apply hooks, housekeeping_update_types() notification).
+  Thomas Gleixner identified concurrent in-kernel mask apply as
+  fundamentally unsafe ("broken beyond repair") and endorsed CPU-by-CPU
+  hotplug cycling as the correct approach.
+- Track A prerequisites (housekeeping boot type isolation, RCU reader
+  protection, cpuset trigger) submitted upstream separately; v4 builds
+  on top of those three committed patches.
+- Fix rcu/nocb lazy_init: remove __init from rcu_organize_nocb_kthreads()
+  forward declaration (tree.h) to prevent GCC from placing the function in
+  .init.text, which caused an NX-protected page fault when
+  rcu_nocb_cpu_isolate() was called at runtime.  Add noinline to
+  rcu_nocb_lazy_init() to preserve the GCC IPA call chain.
+- Fix cpuset remote partition cycling suppression: extend dhm_cycling_cpus
+  guard to the remote-partition disable path in cpuset_hotplug_update_tasks(),
+  preventing false partition invalidation during hotplug cycling steps.
+  Fixes selftest TEST_MATRIX[69] (A2: expected 1-2, got 1-3).
+
+V2 -> V3:
+- Replace notifier chain with explicit per-type callback interface
+  (struct housekeeping_cbs with .name, .pre_validate, .apply fields).
+- RCU-protect all housekeeping cpumask pointers; callers must hold
+  rcu_read_lock() or use housekeeping_cpumask_rcu() in apply() callbacks.
+- Drop 5 patches from v2: HK_TYPE enum separation (upstream aliases are
+  already correct), no-op timer/hrtimer patches, kthread dead code, and
+  workqueue double-update.
+- Fix deadlock in rcu_hk_workfn(): remove cpus_read_lock() wrapper around
+  remove_cpu()/add_cpu() which take cpu_hotplug_lock write side.
+- Fix UAF in rcu_hk_apply(): snapshot the housekeeping cpumask inside the
+  work function under rcu_read_lock(), not at apply() time where the old
+  pointer may be freed by synchronize_rcu() before the work runs.
+- Fix tick apply(): snapshot housekeeping_cpumask_rcu() under
+  rcu_read_lock() as required by lockdep for runtime-mutable types.
+- Activate context_tracking dynamically via ct_cpu_track_user() /
+  ct_cpu_untrack_user() in tick apply(), eliminating the dependency on
+  CONFIG_CONTEXT_TRACKING_USER_FORCE flagged by tglx.
+- Fix genirq apply(): snapshot HK_TYPE_MANAGED_IRQ mask under
+  rcu_read_lock() before the IRQ iteration loop.
+- Simplify cpuset noise_types to BIT(HK_TYPE_KERNEL_NOISE) |
+  BIT(HK_TYPE_MANAGED_IRQ), replacing the redundant per-alias bitmask.
+- housekeeping_update_types(): always use cpu_possible_mask as base
+  for HK_TYPE_KERNEL_NOISE, so de-isolation restores the mask to all
+  possible CPUs rather than leaving it at its last non-trivial value.
+- Initialize watchdog_cpumask from HK_TYPE_KERNEL_NOISE (not
+  HK_TYPE_TIMER) at boot; keep it in sync at runtime via a new
+  housekeeping_cbs callback.
+- Add kernel-noise selftest to test_cpuset_prs.sh, including
+  cpu_in_cpulist() for correct cpulist range membership detection and
+  nohz_full sysfs verification when CONFIG_NO_HZ_FULL is active.
+- Add RCU caller fixes: sched/core (HK_TYPE_KERNEL_NOISE) and
+  drivers/hv (HK_TYPE_MANAGED_IRQ) are required because those types
+  are updated at runtime; hrtimer (HK_TYPE_TIMER) and arm64/topology
+  (HK_TYPE_TICK) are defensive fixes.
+- Reorder patches so all subsystem callbacks are registered before the
+  cpuset patch that triggers housekeeping_update_types().
+
+V1 -> V2:
+- Rebrand series from DHEI to DHM (Dynamic Housekeeping Management).
+- Drop custom sysfs interface entirely.
+- Integrate housekeeping control into cgroup v2 cpuset isolated partition
+  mechanism.
+- Add SMT-aware isolation constraints to prevent splitting SMT siblings.
+- Add comprehensive documentation and cgroup functional selftests.
+- Refactor mask transition logic to use RCU-safe handover.
+
+v3: https://lore.kernel.org/r/20260618-wujing-dhm-v3-0-28f1a4d83b68@gmail.com
+v2: https://lore.kernel.org/r/20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com
+v1: https://lore.kernel.org/all/20260325-dhei-v12-final-v1-0-919cca23cadf@gmail.com
+
+---
+Jing Wu (11):
+      sched/isolation: Add runtime housekeeping mask updates with boot snapshots
+      sched/isolation: RCU-protect runtime-mutable housekeeping cpumask readers
+      cgroup/cpuset: Drive kernel-noise housekeeping updates from isolated partitions
+      context_tracking: allow runtime per-CPU user tracking enable/disable
+      rcu/nocb: support lazy init for runtime CPU isolation
+      watchdog: sync watchdog_cpumask with HK_TYPE_KERNEL_NOISE on isolation
+      tick/nohz: add runtime tick_nohz_full_mask update for CPU isolation
+      cpuset: add dhm_cycling_cpus mask to suppress transient invalidation
+      cpuset: drive kernel-noise isolation via per-CPU hotplug cycling
+      docs: cgroup-v2: document kernel-noise isolation via isolated partitions
+      selftests/cgroup: add kernel-noise isolation test to cpuset selftest
+
+ Documentation/admin-guide/cgroup-v2.rst           |  17 +
+ arch/arm64/kernel/topology.c                      |   9 +-
+ drivers/base/cpu.c                                |  20 +-
+ drivers/hv/channel_mgmt.c                         |  50 +-
+ include/linux/context_tracking.h                  |   2 +
+ include/linux/nmi.h                               |   2 +
+ include/linux/rcupdate.h                          |   2 +
+ include/linux/sched/isolation.h                   |  32 +-
+ include/linux/tick.h                              |   4 +
+ kernel/cgroup/cpuset.c                            | 161 +++++-
+ kernel/context_tracking.c                         |  38 +-
+ kernel/rcu/tree.h                                 |   2 +-
+ kernel/rcu/tree_nocb.h                            |  43 +-
+ kernel/sched/core.c                               |   7 +-
+ kernel/sched/isolation.c                          | 197 +++++++-
+ kernel/sched/sched.h                              |   2 +-
+ kernel/time/hrtimer.c                             |   5 +-
+ kernel/time/tick-sched.c                          |  47 +-
+ kernel/watchdog.c                                 |  26 +-
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 580 +++++++++++++++++++++-
+ 20 files changed, 1181 insertions(+), 65 deletions(-)
+---
+base-commit: eb3f4b7426cfd2b79d65b7d37155480b32259a11
+change-id: 20260408-wujing-dhm-8f43e2d49cd8
+
+Best regards,
+-- 
+Jing Wu <realwujing@gmail.com>
+
