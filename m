@@ -1,97 +1,118 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9212E7F17
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 17:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B65424E4C6;
+	Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783704679; cv=none; b=Xr/XB2nXMNkfJUIynHG9SEs3/ii74j2To5+y51fsBFYBsg5dNll/+MT3VhSuHKro+SNNp0O5saze0P48u3kGs9CsO8Q8Z4kHm+wW8N/APhgMu0lvK6nh8BMSwdy8zpNpDiFEf1pa0tZMlZytKw+kQYOu2/E+VRm/muMVCvtUFBc=
+	t=1783704793; cv=none; b=fNBSkTpJq29qtXbtX4rZD8Vnp57F+FzaXxVgPNXqyCELHIzSzPLTypPRIPcqLmK4H1EbCYsv5nM1dvxTHCFL/ftHwsP7ve4DYme/+kMgloeYsH83zpsFz7lhYoPY6mR99ZQdGE0VU77T7AEB+fIRsgnzHMJ9PRNo8xNfPUR+A18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783704679; c=relaxed/simple;
-	bh=z2C8CVEChR8wGjCxGwBW35WZ9ORNbC6kr+MOgf81bCY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=My1ChQz2qMMA2/Lrfdlwiaoa2bWaCHUc/NuQWhtbT/qD87d3PNnU5FjpJ4DEvKISwJYFLhh0dLTnf72ytg44Gp54ugXszBHpOAAzfiwbyr1AZObk6LXzwb4IW7c/rNnEEob07WbFgV9VnHD208Zuvk6aJvA6e9Bn81beJdCCngo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f63QTJp9; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1783704793; c=relaxed/simple;
+	bh=UJd/lifO1h0XitO6NT3vGGEKpw/eqLw9ZhxfAXrAsPw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pLek6cAr/Xf9AXDIbfwl/zp95cIBfYkOr2K2kXWwtzSO1x0NuLvrDJzgEdYrX1H0JzDemHF8z1u4bNXHs3/KFpVxD3nXXzPR3vpy3QqpcaoyqemzF7pm1Axur7rpDsUTDaEkuJLsE+x+hN5e6MHslEtOYwcLSrfQ4KrOE9kmiA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FFvs++jZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f63QTJp9"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e9ef94c0e2so599364a34.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 10:31:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1783704676; x=1784309476; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=l4+NLBnB0rHrMKuhhVwyzWB3Dd7RcWNPm8QZ4toNsA8=;
-        b=f63QTJp9Cw65pGJsUDqkHZO2OQimp8PM815IYB0idpMJAn9mm5Y4uwpTi62eniTGlO
-         Soy8V3qvjzWW7JeigKx0oxC30I4hv/04AEWpybeFbBhmK03VuecM+dQ4PblypvScOVc0
-         Ko1iQ+YsHxwGXXhfSOqeG1/H1lgc7j/4exozI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783704676; x=1784309476;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=l4+NLBnB0rHrMKuhhVwyzWB3Dd7RcWNPm8QZ4toNsA8=;
-        b=RrAklT0xP4iZeKQ0E1dFjqiId80PQJS0CW3+M1l2kB+/QVBVJ2IJ8rxsjeZIP8JxZX
-         N5gOCztwqXvRxK4XpfWiZvAdJFT9DbOj9XXaXBBUwOxjvisCPR89JSJR8k85wN0ZKuPg
-         5D/hEAbxpnqJBcv+A57Z0oNj6AyXfqUHGKRDQIWVtwsBW8NwpLHCGhB+vs7XcppCnyEK
-         OVQkkULGAPxyXrh2LECvjfTRQgkkbKZDFfh8JVlFTmFdiMSXnZfu5ePNQNpmThoN2Xwb
-         X9+h7mFExlUWnTo/o/Jpl09id/nqXIcO4IBJKC2hmZusqA2NsHkSAFyGSFxt9W6Ms/Wc
-         x/HQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+uiPgBko54BMcubyesVmVSaUcb/O8WP8fefHbFyEOHg7Gmy8ZWlOCEfG5HcBRfSAaYYAxkcMPRWfapgmZyKoo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV68E6aROmEuP79lGcGsFp+CpI3y49Z7nhnpf68YPHvfWoT1SA
-	497Nsu7VUXBDi5NdBSwoWiN9TpRvZa7CSieaoBkBkOOGym7LeACIAKDWrywsVjQ1iOY=
-X-Gm-Gg: AfdE7clq+/dhSxFehUfKt7iexUu4bu0aCWq0IMygWvBFbFqFc3aY4l3DfZM4ryDORcM
-	5KcoLgNg6YT4hTNhG/h9YljgG4dbnXkipxkeV93fMRYZ7/ZY1r2DekvlmQHMzCg/uPsR1v9RT4W
-	2mByj7s1sIsQWju59BEL1VMrwNIp8IK3oANZkLjOzxRBVs3opw3AqhXYVtL9kEupqs6E5C5ruT9
-	/os9f5BY3FISRGfQ3tG5p7kbRdwfEHljNTr9Ozyso9N8/lC0QBaOiYCJFIn6iS7T8eteuA/2Sam
-	4xDc+RWr+yiGAYfov2feL0ntqOF3yTGg5Be75zc6nDA3XbThsx5JVytzs1Vwn+gipoJEuP2vt6P
-	U3spp9tOBYP08sNrLNT4zQr7fb/+uh8itXpfHpVfM6nR1TPEJIkYSaqeHmqKJA+gLdw+yftyJJ3
-	DtvoukqPXaUXbNXLCemqHcfAyXWESr6a7l
-X-Received: by 2002:a05:6830:6119:b0:7e9:e709:44f6 with SMTP id 46e09a7af769-7ebcfe99c23mr9582153a34.12.1783704675799;
-        Fri, 10 Jul 2026 10:31:15 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcb2bda95sm6635283a34.24.2026.07.10.10.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jul 2026 10:31:15 -0700 (PDT)
-Message-ID: <58d4411c-000a-4031-8a0d-e5858f056c82@linuxfoundation.org>
-Date: Fri, 10 Jul 2026 11:31:12 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FFvs++jZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F421F000E9;
+	Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783704791;
+	bh=4gNuVtfUygql4wlr6WnLsGdK2iQ/6LjP/qz20++PmCo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FFvs++jZW9HMGOG+7jXgjZ+BnBDxbPIn1Mr64ntSj3fuSkkxUublHnhPWtXWHJ8qj
+	 v+NSbmTaPGdPQhTs7RLg20vaoutJzyIGsMWj2D8x/gOOZCvKAlUZqI475e8HijyVwx
+	 YWFfRgxMmDGZxgmvv7pKY43rxN/76tTfR8Nwd+iTcrXHSEjThjrnsid/yi4CGpaSjP
+	 U0sds/+99iWScCmBDQTbRiS74+73RzP3J+qTUhksGYqWAwnKYJCR/MjgIGcxJYdp2B
+	 wGDuZ5yXs24sEhNM4hL5+pc8H9Fhd/4SWbrzoFtuT4L5tS2iyh1XYuY26UufhfR9Nr
+	 avNa721GdoE5A==
+Content-Type: multipart/mixed; boundary="===============4403372005652049611=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/ftrace: fix spelling error in poll test
- comment
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, shuah@kernel.org,
- Wang Yan <wangyan01@kylinos.cn>
-Cc: rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260702015634.366201-1-wangyan01@kylinos.cn>
- <20260702142719.4e5f6ed1691c6dedaf2a0cd6@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260702142719.4e5f6ed1691c6dedaf2a0cd6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <35e5413b43191284440eea77999ac72ceba991460975b3b7cb7d32c8e43f087a@mail.kernel.org>
+In-Reply-To: <20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com>
+References: <20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com>
+Subject: Re: [PATCH bpf] selftests/bpf: keep polling connection that is still in progress
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Jul 2026 17:33:11 +0000 (UTC)
+
+--===============4403372005652049611==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 7/1/26 23:27, Masami Hiramatsu (Google) wrote:
-> Hi,
-> 
-> This looks good to me.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Shuah, can you pick this through your tree?
-> 
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index b82f572641b7..97ddbe589e53 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
 
-Applied to linux-kselftest next for Linux 7.3-rc1.
+[ ... ]
 
-thanks,
--- Shuah
+> @@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+>  		return -1;
+>  	}
+>
+> -	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> -		log_err("Failed to connect to server");
+> -		save_errno_close(fd);
+> -		return -1;
+> +	err = connect(fd, (const struct sockaddr *)addr, addrlen);
+> +	if (err && errno == EINPROGRESS) {
+> +		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
+> +
+> +		err = 0;
+> +		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
+
+This isn't a bug, but the err = 0; here is immediately overwritten by the
+poll() result on the very next line:
+
+	err = 0;
+	err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
+
+Could the err = 0; assignment be dropped?
+
+> +
+> +		if (err <= 0) {
+> +			if (err == 0) {
+> +				log_err("Connection timeout");
+> +				errno = ETIMEDOUT;
+> +			} else {
+> +				log_err("Failed to poll connection status");
+> +			}
+> +			goto close;
+> +		}
+> +
+> +		errlen = sizeof(err);
+> +		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
+> +			log_err("Failed to getsockopt");
+> +			goto close;
+> +		}
+> +
+> +		if (err) {
+> +			log_err("Failed to connect to server");
+> +			errno = err;
+> +			goto close;
+> +		}
+> +	} else if (err) {
+> +		goto close;
+>  	}
+>
+>  	return fd;
+> +close:
+> +	save_errno_close(fd);
+> +	return -1;
+>  }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29109351717
+--===============4403372005652049611==--
