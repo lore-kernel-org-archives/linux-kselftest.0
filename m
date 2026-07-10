@@ -1,133 +1,239 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5B1331ECA
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 22:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF843E1689;
+	Fri, 10 Jul 2026 22:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783721966; cv=none; b=mCIRn8dgD889JMEai6mAv71uBClVP8OIKUvRkXhvLNhmMIbrOzZPqSkEHeiFsb7Box2C+E7cxjbiwp/MI4/sGDmNeQ/iNVuTRH7aI9wNTMzdcOtucUWekOuX8kWr/pjaY65VFQqtPYWXjbJuiQpplNaRSU1Q0cfDTwyF3F63i/0=
+	t=1783722215; cv=none; b=LbKnaIWna+yHWTuK/wq5/ycSsGSGgHcRovjPEmrWup1xWnCDQe5abGV2JERi5TDjsx0BzY/miSCJUJzyu+5FBJOgZy8lfWvDuCmXFNEQfYxPm2UGwoheTX2o41elc/TEcQLFXvcirG/6NWSppqKTrkKAyEC9hUQmE4WTpx7mtWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783721966; c=relaxed/simple;
-	bh=rMwXG/xzrygpew45ffALhZX5cO4JIo9QIeLG3lp+VJo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jwDxhbYvb1YICjeO86nu2SXmpUSg5EO3jr6cAGLMmbzT3d65gZJFCTwtbaRmc0PmFehkwZFBFuuD+9sLoyn8WmlO9flDBwlV4hA69vNEw6dkPDnEP4419fMZ1sjIgRT64SO68npVF4KojjIO+MWv/2Mnh/e8d/VEnWFCH0Q1xmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mwnCiyXm; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783722215; c=relaxed/simple;
+	bh=I21kArmQobhISEaMwauu9AYY9BGr3JqrBwtJP8Be4qA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BDrlplaD7n+BVogpvmw57dXTEIi+E0X/D1Ri3s0CSPNrtg5UoOKYR2ioZcahhLksammRFOZtg76BD04XCbIiG50j2w6vBMGOVfY4FVYhJ07oudOs7vQSF2bAMGnWJtP+TUwpkShPxvCmFPMsB0mp9eSuloRDNjxpec5CpYWDyjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=JNQK5jn7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Vr6T9ZC4; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mwnCiyXm"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47c6e9a694bso784362f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 15:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783721963; x=1784326763; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=lHX1102TV+TIQ6w7Elpz5FAV9Km6tggV36g0BGdy0xM=;
-        b=mwnCiyXma9bS/lQ59kjHN5GKJ2pcqdH1XLjqWZGNpEvifLfXjPvzEyFmR6HV3LETxL
-         7n9zxK/FUqvjOmuMHrChAlbyo3n2RkNQh4rf+QzTrO/PPWpRRlMOmPDyeHI5PBonIzkj
-         mr5X2/s/3ir5oBJXD+U2dXYH6lkjhtTrSMD6vRbUiEj+NPITvTuaTOeiMbFAhXs++Hih
-         9H7zXsOp1PEyNYw9M4xEvyUwX7SMpQ+qsiRm6b/7LwEBX6DJfdSaKBdGl/AgKG1mkmuO
-         ZgD/yBzoHDBw2XsAgyD9XcG1CNriVLJv7Z45fgsCBP2keQtBv7Y91wwJhww+83iPy5a4
-         coCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783721963; x=1784326763;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=lHX1102TV+TIQ6w7Elpz5FAV9Km6tggV36g0BGdy0xM=;
-        b=NCGDDgQ1pgl5D+2lI2ySMeRkH1WDvztHZnMydnJyw1Ec6FTNTwITC44ayM6T1jGB16
-         L8exDndf3m7MQp+gqXj2EzJCJneMNipdqvzkfplfcLjsEdGunJsrpQiiI6I9B2DvMYaB
-         8aMUOPEAQX0glgS7I3F0a760QZ2e/dP0SsHBwUPM6Q1EFmPgpgGzqc+pYdQj9hVOpDIv
-         b7cs5b7H2JcgMJ6nbO3WjXmSm638h4Na66m9UrpIWk+cn3Z0VCO4ccHiVIaQRgOhnqF2
-         8fj36fcfcGN5K3NWYSX+W2YcoEQkyzN5Fbr4TaxFCwM7Hd2cUXu4LEVbjRpif/Ofp9yZ
-         2ahw==
-X-Forwarded-Encrypted: i=1; AHgh+RoquJRENcNuDqwmwGMDSohaA3lIyPmk9y7Fde9eGpW//McZ+eaUe+Qz3VKrup+G3PPDrXFFM+yOHe65/knjdVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgUnc9yrNsMym9W62j/c+lpWTyZ/f8w8835EZFXxptVsQEQVcd
-	FdrAZhDiAbYEURKQf2u1zJxYoAGVuWwEyHifKg3GF4Eg3WBF04/GNPoI
-X-Gm-Gg: AfdE7cmESf+gy6LdTt/nr7Qo/bdhOT8di26Yk4CoEp6iAsIifAJ3VJvLkFyR4Mbaazq
-	OXFoMNjv8ma70/bkZhkwu9+g+VauyacnThx7ucaPcUaC4iPbkRKG5CsWRut4BBAtTe7tWDXhT7M
-	BixrSAlWyBwFsz01Frr37KTVx5Bq/VpONapfEZ8tk5HLK3TzB99ltieQUYIr4+7Y7Si7B7a4zOm
-	u9r6jZKARTSxujVI1AvVTTWvkHCcmE+kr3e1XYftQ8mitayhxodimHNVdXE9e0i/x6d6AmpbJeg
-	rTz66UmTvcEtdSF75iTSH5az+O96X6GQfHbnSVrAqWM6QGtCxNONnpLlf2zApu9Ov/XXx77epJ9
-	pLO1BVqeHFixQT5VJK3KOf8bbYwFQmR6Tl5O7Zyhm0C+hTdw7/qiFT5JmUUq/ok2Ppbowy6JMml
-	49kbFhYc7S8QNYEWvJxNfmYlzlA11jWQdSbtg3mHLo8Do8NRjX5FERG55bzZQ=
-X-Received: by 2002:a05:6000:186e:b0:470:7fdf:61fa with SMTP id ffacd0b85a97d-47f2dcf408amr498442f8f.38.1783721962995;
-        Fri, 10 Jul 2026 15:19:22 -0700 (PDT)
-Received: from [192.168.1.243] ([143.58.204.65])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0960634sm64602353f8f.26.2026.07.10.15.19.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 15:19:21 -0700 (PDT)
-From: Andre Carvalho <asantostc@gmail.com>
-Date: Fri, 10 Jul 2026 23:19:17 +0100
-Subject: [PATCH net] selftests: netconsole: only restore MAC when it
- changed on resume
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="JNQK5jn7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Vr6T9ZC4"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfout.phl.internal (Postfix) with ESMTP id ACF92EC01F0;
+	Fri, 10 Jul 2026 18:23:31 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Fri, 10 Jul 2026 18:23:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1783722211;
+	 x=1783808611; bh=+KqIaM30rs2vhbd55aXFiWiPyHLNLUW6M2dTl31PvFU=; b=
+	JNQK5jn7abNbdyfhAKC3QPRumcJMPmbOxqKzAizgg8ck0Ce54U2P5M3fD2wIyGI3
+	xpsk8hguJu55kquD75fndML4ofjp9ZlbAN/vjxqc5arxCkxryP6s8zONoH6XFGzX
+	sNC/OEN3ZxfM1G1yj9Rx4Ku+8VFcyQ043CjZNHSMtRKOEeI3TSjnlVKt9lnO7vfH
+	ivSGwYy3GvACZ8EWFJR8vXsGgxnaTzHT97qtIvdtWz2aEMVkmXMWG1aNprVJGZmH
+	EeF6PpiFT3KxHSlk6oMl2EEO/znj1tMEvYGsyunjf8BkTBmmTr6JtAhLIhUXsaW7
+	n2LM7ICQdhMwWbJDjLPvhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1783722211; x=
+	1783808611; bh=+KqIaM30rs2vhbd55aXFiWiPyHLNLUW6M2dTl31PvFU=; b=V
+	r6T9ZC4A/hRTxpFvGBMeqMgzNkDK5T6siMg/IJ7X9jCHu2yUk77MfFr/DM1NP8hS
+	QLdEoh5lsjeX7NoZzV2dSf0XxGbEgO5SdM37ZcY+YOkFaDLbyAj0kb/DCQ/FrR6e
+	PimzoxDE2SloOlVH5GK2ZkXmnFd8rIsK2A1S9fCG8rp/4V9N2h+rnKF5sdro+73k
+	de0VfIxuuHEBMTJSMn0ecA/eId/j51kaPzw97AbyqkRQ4cg9fHYCb6SYQGyxFV1Z
+	gzdAUOY1cv2d/avgtm8DmODhoPNHRSR540XzsoPaCUByd0oNDoNh/7z6pt1WFzsa
+	4/K//5Uax/sWlhvQG2AhA==
+X-ME-Sender: <xms:43BRasDL1TicnddlqrIbbVGGGkQRcZ-kVo5adfVNqhd2OcoKkNYwFQ>
+    <xme:43BRaruXTrNmfvOQ3wM6u5kf8CaDXdyq79TNm_7oOZfLIBs3b0PhW-hsx2hVZcvPF
+    wt4ddWq4jJ9C9stu6k0GsQIoEEsXGG8gPDjAMBhwLF-IbUU6cyx>
+X-ME-Received: <xmr:43BRakEV5PaMB855CZBEISmVnGMRs4w6JNSn89Hv3Ba-1OIcNnxs1G_kMPQ>
+X-ME-Proxy-Cause: dmFkZTGMzXDuQeY5gEq71VJWijR1DWZ9rbms+1N9AX2oGTr8hArY6bxP2G/am96xUkPFv3
+    Z4ApYv3m2mSWvALuvslRIxWhZTDC+hQKcWUNwhuKD541gUvs8bDfo88o/gmIt/+eiMSKZ/
+    PfsKMxh88JCcjukEpflhKnQPQMXN23KiX+qh8YjqzX+GAfpI0rmfBBb+w/+rK+bUFo73gl
+    aP1foO45G+FVhtVWhkJbcsI9jzwmJY7xKCsU82pHyhFyNjMMJasjWA8bW6xCtbAh+JFQbP
+    zks9zj+srb+k4G3rfqsKY8R4EvGE/Z76nI2YOYsp8f456nw6SAcrEWEs+ztpMzUV1dHFs0
+    JPSG2snu841m3dLHmew39d10z5C7QgoI1AXTNEH/7U90A/L7bcMzpjdsSknHVVvOaMnVMw
+    XP6lSvnqHmbwXRzIgAZhnvrF/EdAOxf/G/5MDM2cI6JZreSxBPXAvvLw7bknMpZmvRUaMU
+    PqzZhgIotgO5wMEwHJQck9i+bWfEQ9GGK8kaJkd3xepGPsbI5/xZgjmsvv7IFvlh/trpL2
+    T/0U753IEBjFOLRx3BS/oG/SudsXzB87qEOZWEeiIddO0IKXW0QFRjhbFmmUlJsDsGr6bJ
+    TrTrVPJ3E52vTnjaXJ5swO4Gct6RngrVwspN2CK7vyqyHJXFyhPwon274RYg
+X-ME-Proxy: <xmx:43BRau956hXrtRVG-NMyVkRDWBX_-dVMGkx2QyOp5A4IPRuctGQntQ>
+    <xmx:43BRaiOKeA_Wd0L2ZCHj0O0mujL-LCoh-Z_04AEvxWe5JAHLOWvcfg>
+    <xmx:43BRasjpw1q5c-OlNsXHXy_va8FNNHthg9XC1tBQkSv8m1Pm8A3FZw>
+    <xmx:43BRapTWzmvkBYaosl0ufnXnEDnsIvtnMvLPTca46Nn5ZNbRd4m3iQ>
+    <xmx:43BRanR7kK-CNDpQxdl2yrUvUgJroeELCm7I4jJSHxOr_mn4t2yjhN6C>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 10 Jul 2026 18:23:29 -0400 (EDT)
+Date: Fri, 10 Jul 2026 16:23:09 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: <mhonap@nvidia.com>
+Cc: <djbw@kernel.org>, <jgg@ziepe.ca>, <jic23@kernel.org>,
+ <dave.jiang@intel.com>, <ankita@nvidia.com>,
+ <alejandro.lucero-palau@amd.com>, <alison.schofield@intel.com>,
+ <dave@stgolabs.net>, <dmatlack@google.com>, <gourry@gourry.net>,
+ <ira.weiny@intel.com>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
+ <vsethi@nvidia.com>, <zhiw@nvidia.com>, <kvm@vger.kernel.org>,
+ <linux-cxl@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ alex@shazbot.org
+Subject: Re: [PATCH v3 08/11] vfio/pci/cxl: Add HDM + COMP_REGS regions and
+ DVSEC clipping shim
+Message-ID: <20260710162309.2c257883@shazbot.org>
+In-Reply-To: <20260625165407.1769572-9-mhonap@nvidia.com>
+References: <20260625165407.1769572-1-mhonap@nvidia.com>
+	<20260625165407.1769572-9-mhonap@nvidia.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-netcons-mac-reload-v1-1-3fb1bcc70b4a@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMywrCMBBFf6XM2oGkYHz8iriI6R0d0UQyVYTSf
- ze1y3O550xkqAqjYzdRxUdNS27gNx2lW8xXsA6NqXd9cDvvOGNMJRs/Y+KKR4kDS5At9kEO8EJ
- NfFWIfv/RE7U/ndfR3pc70rjkaJ5/dEvm9HsAAAA=
-X-Change-ID: 20260710-netcons-mac-reload-f6f5e86f9e1f
-To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, matttbe@kernel.org, 
- Andre Carvalho <asantostc@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783721960; l=1886;
- i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
- bh=rMwXG/xzrygpew45ffALhZX5cO4JIo9QIeLG3lp+VJo=;
- b=SgBukk6tUV0LYwGEDip6kQYCMUZWS2uKsj3fj/4xPkk94B+G/72XHpkXzD4Vt7aVi2bxYhd4g
- n2GvezkO1utAhZo8Qpi+kgr5UbwLpMsMH/KBq/lvQVPqEqPc8fm185T
-X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
- pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-The "mac" bind mode reactivation downs the interface, restores the saved
-MAC and renames it to trigger a target resume. This assumes the recreated
-interface comes back with a different MAC, which is true under
-MACAddressPolicy=none (as on the Netdev CI) but not when MACs are
-persistent. In the persistent case netconsole resumes the target on its
-own, and the down/restore/rename flow instead drops it and fails the test.
+On Thu, 25 Jun 2026 22:24:04 +0530
+<mhonap@nvidia.com> wrote:
+> diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+> index a10ed733f0e3..b9f30a33515a 100644
+> --- a/drivers/vfio/pci/vfio_pci_config.c
+> +++ b/drivers/vfio/pci/vfio_pci_config.c
+> @@ -1898,8 +1898,15 @@ ssize_t vfio_pci_config_rw_single(struct vfio_pci_core_device *vdev,
+>  	/*
+>  	 * Chop accesses into aligned chunks containing no more than a
+>  	 * single capability.  Caller increments to the next chunk.
+> +	 *
+> +	 * For CXL Type-2 devices also clip at the CXL Device DVSEC body
+> +	 * boundary so the generic perm-bits path handles the DVSEC
+> +	 * header bytes and the CXL hook handles the body bytes; without
+> +	 * this clip a 32-bit access at dvsec + 0x08 would span the
+> +	 * generic Header2 word and the CXL CAPABILITY word.
+>  	 */
+>  	count = min(count, vfio_pci_cap_remaining_dword(vdev, *ppos));
+> +	count = min(count, vfio_pci_cxl_config_boundary(vdev, *ppos));
+>  	if (count >= 4 && !(*ppos % 4))
+>  		count = 4;
+>  	else if (count >= 2 && !(*ppos % 2))
+> @@ -1909,6 +1916,30 @@ ssize_t vfio_pci_config_rw_single(struct vfio_pci_core_device *vdev,
+>  
+>  	ret = count;
+>  
+> +	/*
+> +	 * Give the CXL Type-2 hook first claim on this access: if the
+> +	 * range lies inside the CXL Device DVSEC body, forward it to
+> +	 * cxl-core's register-virtualization helpers instead of the
+> +	 * standard perm-bits path.  -ENOENT means "not for me; use the
+> +	 * default path"; any other negative value is a hard error.
+> +	 */
+> +	if (vdev->cxl) {
+> +		__le32 le_val = 0;
+> +		ssize_t cxl_ret;
+> +
+> +		if (iswrite && copy_from_user(&le_val, buf, count))
+> +			return -EFAULT;
+> +		cxl_ret = vfio_pci_cxl_config_rw(vdev, *ppos, count, &le_val,
+> +						 iswrite);
+> +		if (cxl_ret >= 0) {
+> +			if (!iswrite && copy_to_user(buf, &le_val, count))
+> +				return -EFAULT;
+> +			return cxl_ret;
+> +		}
+> +		if (cxl_ret != -ENOENT)
+> +			return cxl_ret;
+> +	}
+> +
 
-Guard the block on the MAC having actually changed so the test passes
-under both policies.
+I think the solution here is just to set the .readfn and .writefn for
+PCI_EXT_CAP_ID_DVSEC to dvsec specific handlers, rather than the raw
+write and direct read handlers.  The new handlers would detect whether
+the reference is to the CXL DVSEC body, possibly via ranges stored in
+vdev->cxl, and either call through to CXL handlers via cxl_ops
+(previously suggested), or fall through to the raw/direct handlers.
 
-Fixes: 6ecc08329bab ("selftests: netconsole: validate target resume")
-Reported-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Closes: https://lore.kernel.org/netdev/f398373e-2cb4-4649-a491-9763df94d98b@kernel.org/
-Signed-off-by: Andre Carvalho <asantostc@gmail.com>
----
- tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>  	cap_id = vdev->pci_config_map[*ppos];
+>  
+>  	if (cap_id == PCI_CAP_ID_INVALID) {
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 05ab4ae59157..2d2dae278d1e 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -501,6 +501,23 @@ static void vfio_pci_core_map_bars(struct vfio_pci_core_device *vdev)
+>  		if (!pci_resource_len(pdev, i))
+>  			continue;
+>  
+> +		/*
+> +		 * cxl-core already holds request_mem_region() on the CXL
+> +		 * component register sub-range of this BAR.  Skip the
+> +		 * full-BAR request so we do not collide with that
+> +		 * sub-region; vfio still owns the BAR via the driver
+> +		 * binding and the iomap below succeeds without a region
+> +		 * claim.
+> +		 */
+> +		if (vdev->cxl && bar == vfio_pci_cxl_get_component_reg_bar(vdev)) {
+> +			vdev->barmap[bar] = pci_iomap(pdev, bar, 0);
+> +			if (!vdev->barmap[bar]) {
+> +				pci_dbg(pdev, "Failed to iomap region %d\n", bar);
+> +				vdev->barmap[bar] = IOMEM_ERR_PTR(-ENOMEM);
+> +			}
+> +			continue;
+> +		}
+> +
+>  		if (pci_request_selected_regions(pdev, 1 << bar, "vfio")) {
+>  			pci_dbg(pdev, "Failed to reserve region %d\n", bar);
+>  			vdev->barmap[bar] = IOMEM_ERR_PTR(-EBUSY);
+> @@ -701,7 +718,10 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
+>  		if (IS_ERR_OR_NULL(vdev->barmap[bar]))
+>  			continue;
+>  		pci_iounmap(pdev, vdev->barmap[bar]);
+> -		pci_release_selected_regions(pdev, 1 << bar);
+> +		/* Mirror the asymmetric setup-time skip in map_bars(). */
+> +		if (!(vdev->cxl &&
+> +		      i == vfio_pci_cxl_get_component_reg_bar(vdev)))
+> +			pci_release_selected_regions(pdev, 1 << bar);
 
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-index cb59cf436dd0..d9111f2102bc 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-@@ -44,7 +44,8 @@ function trigger_reactivation() {
- 	# Restore MACs
- 	ip netns exec "${NAMESPACE}" ip link set "${DSTIF}" \
- 		address "${SAVED_DSTMAC}"
--	if [ "${BINDMODE}" == "mac" ]; then
-+	if [ "${BINDMODE}" == "mac" ] &&
-+		[ "$(mac_get "${SRCIF}")" != "${SAVED_SRCMAC}" ]; then
- 		ip link set dev "${SRCIF}" down
- 		ip link set dev "${SRCIF}" address "${SAVED_SRCMAC}"
- 		# Rename device in order to trigger target resume, as initial
+It would be much less ugly to create
+vfio_pci_{request,release}_selected_region() wrappers that mask whether
+the region is actually requested or released than to disrupt the code
+flow like this.  Likewise below, think about creating wrappers that do
+the right thing for cxl and are no-ops otherwise.  For example, embed
+the vdev->cxl test into the function to cleanup the callers.  Thanks,
 
----
-base-commit: 1cd23ca80784223fa2204e16203f754da4e821f8
-change-id: 20260710-netcons-mac-reload-f6f5e86f9e1f
+Alex
 
-Best regards,
---  
-Andre Carvalho <asantostc@gmail.com>
-
+>  		vdev->barmap[bar] = NULL;
+>  	}
+>  
+> @@ -1051,6 +1071,16 @@ static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
+>  	info.num_regions = VFIO_PCI_NUM_REGIONS + vdev->num_regions;
+>  	info.num_irqs = VFIO_PCI_NUM_IRQS;
+>  
+> +	if (vdev->cxl) {
+> +		ret = vfio_pci_cxl_get_info(vdev, &caps);
+> +		if (ret) {
+> +			pci_warn(vdev->pdev,
+> +				 "Failed to add CXL info capability\n");
+> +			return ret;
+> +		}
+> +		info.flags |= VFIO_DEVICE_FLAGS_CXL;
+> +	}
+> +
+>  	ret = vfio_pci_info_zdev_add_caps(vdev, &caps);
+>  	if (ret && ret != -ENODEV) {
+>  		pci_warn(vdev->pdev,
+> @@ -1093,6 +1123,12 @@ int vfio_pci_ioctl_get_region_info(struct vfio_device *core_vdev,
+>  	struct pci_dev *pdev = vdev->pdev;
+>  	int i, ret;
+>  
+> +	if (vdev->cxl) {
+> +		ret = vfio_pci_cxl_get_region_info(vdev, info, caps);
+> +		if (ret != -ENOTTY)
+> +			return ret;
+> +	}
+> +
+>  	switch (info->index) {
+>  	case VFIO_PCI_CONFIG_REGION_INDEX:
+>  		info->offset = VFIO_PCI_INDEX_TO_OFFSET(info->index);
