@@ -1,68 +1,68 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F84035F5E4
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B97C3672BA
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783654124; cv=none; b=nPil2BJlO9W0nH2R/Jw/qrXCEQH+Z3xwBjU0bmvEjjNXX8bnYQLImk+q1/HPvaAM+2upRkLvW0a7vhT/zz2d8DmSLyIql3x5mPoj00faMiT3zriQ8dnJSDw9MNHziqgGg4FMkN6wq39vgEA7Dz7RRja12VAiuTvYG86S7o+Ii8s=
+	t=1783654131; cv=none; b=a1nF2/zttyGMNlKsxF31+7mX9y7bdBlGZQJJGoc3m+EcZUW0gl+Yar/9Wj264cyoo+nrg4dgd1pUH3UHhZkOmzEO4bVpLxlGknPnlQxM7mJLMLzjIJ3fgbJiRVcmBUsGcYSEI5ZumcLRoDjj3RqOr7Ho5YnL9XBM7SUJkl/Bu2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783654124; c=relaxed/simple;
-	bh=tA9wD3TNXeEArI8ZoxLwOtsaod6AseL+D5l+XBb7lvs=;
+	s=arc-20240116; t=1783654131; c=relaxed/simple;
+	bh=DSH1dsD7ufyJUSitPhujJbKPkynswivD0Ay115xuL8k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UyWBEjlEm8kEsyEEEDvN9M+EUQM3rznAYxwdSLp+7vG7RCX4tb5VGYA0tuFUSjeevxx2Ct5Xcux2s3SjdZJAD2KmtIU4+s6vwv2oT3h2/xOSmJCIyfOKqgd7G8Utkrm52hDpsizQUaot4qIh6izfcvSuBVv6gKEqentvrCteYJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cnDmH4dh; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:To:Cc; b=uVdCfaVjJEn/hjXUutltUNfykxa8XonPWtHrxniYIR5sw4R9/FOU03hOGqOYD7BQ1CmhaBJYnzNdh3mYQae+r3SPU+hNQwJgdfBrY+CQ6xtc0lx9XSIeNI9CBX0UwjNbCsc+Zc0hRIxMbuwfWpotm6kFiC+6pXUva7360lDkzTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOqZeRep; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cnDmH4dh"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2caed617615so3946985ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:28:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOqZeRep"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2c9bd2f8bf7so21460515ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:28:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783654122; x=1784258922; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783654130; x=1784258930; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WRlCpxoiJUvKc2NSwy5g73yIeI0cTYhVnCLSI2ilvTQ=;
-        b=cnDmH4dhfFzZIKi56f3Z4JsrCm7444rLwqcUq0UDgzOHlxqIKVw3lY96f7ZeP+Z3P/
-         +A3SVdvam2tgi3wXs1lJh9R3j5MKtfImQBFyrZ2mGE3Vcp+rXByWnHTZSJKq6ol5ijDp
-         7dNu3QsPyQgy9btje65H/Fg5HUDfRIVw2RqW44iWePsysbFS7hv6n+4DoR7C5+NuP0XM
-         A3BshLDLUxcllOyYU61e25E1tBwEaEDCZ7kcy284Gb39/t08SSi3L5sLn01vs83mHda/
-         qhYvTsMPINHJhrxpRFwXpSTbHPcyqWHTu4SAWd6JvXUeVbNfovE51xiod3AdLqY9UulA
-         S2vg==
+        bh=8OHQR36SH5DHkwv4ahYjdM9a+G5jG41FdFMZ2BcZsNM=;
+        b=TOqZeRep6oegsbqogMXnoxA1Rl9xdeE5wTH4F3P1nrrQZoy03wVa7K5pG04W8Je6N6
+         iYxhrF4ccDJjIVym2aNTT6Pf4ElV2wq6jDKLnoVG5X49+Y5/+e9WeRxIG5KjHM7UM+S7
+         pNa9ryubNJodOkwUmNDEbOYJl+JOnZznJAPznk9MmvXxk+1E/YUfxSJ1+teWOatFBujw
+         U4DyC85XyO0CgHkS1GO8DQHlxXOkmAHNIpHbqEu4ZnxFBgE2eF3cipGp4QbWKlA/EW7k
+         KIwSgYtL2cP9/itQ/izW2ZTrJ0hZph4+HRXDuXMwc6EmBhj6V4wX6QzHzyGLvoX2gEdf
+         kpqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783654122; x=1784258922;
+        d=1e100.net; s=20251104; t=1783654130; x=1784258930;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WRlCpxoiJUvKc2NSwy5g73yIeI0cTYhVnCLSI2ilvTQ=;
-        b=DS9y65xdwhYx0yOBSmOW0t7M764tpIszlrLBBaVoQyvP5mP06/xS7CRwQZnxRq6pkf
-         XmfCyUZ0oyqTMy94299C5Re2JM5WpajN1QPZydigvCvDLciYk7H9c34dOn2q66GJcvSi
-         1S6WoaYuG/EJ9XMDwQJl9jDxraG40UJUyMjC8H6A5+H/T6b+mTvEe/oDnj/4KtQuedto
-         zr1WP2Ai7NfEXzQCNx25Uk2U1dN6fKh50HiMuUcJSUgnS0I6eEJnj+kM4jK58yYL2HYi
-         +70pRTnRHcbuxr5jEC0jFixjxdLIIEmsl9ud1Tnhal6DsUTo8C94GZ1eRh6/a7tNNBQd
-         EMDg==
-X-Forwarded-Encrypted: i=1; AHgh+RqKOyQ1DgMuJ2zkysRpCcCpnSHpDIvCvr5bG4qZndxzW7dBMzPBf0S9ndugOQtlFhDW050hA37XXQLm4u/PRao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkNfVq9OlLilcTomksU4sELubYz3Z+VGi4ZQf1sgBpK0xGXH2S
-	w6mE4CAqIhh9X0J/jh0rwaXqr4nQi55peoqLoUfRM4XAjTquPno+f3wt
-X-Gm-Gg: AfdE7cml6Ch9IY0cZoPWkHo6XJtxZ/itKy1hHuINQGLEyQK6qF+Yr9h9CYqmqyG5k/E
-	XLHZubV4yzEstYLSGkS6zaQ5S2zlJmT9KNr43LlZptu7zwv9c92dy6ZFK/tGZ72puqsyVpUO9an
-	Hg9wHmfwe/3NFa3TNAkphZ3j0jMbIUDwuQVdOlBB8aHMLu63x1oIKRLC+mocym0XjaceCMe4Nt5
-	tRJbT8yhZXd8ur1Uk1rE/X1DzKeUkrPhPjR/tQUYX/A+pD5OJzS5e1TBoHBf1t6AyBdFZ+zaE/e
-	K2jggiQba0W+JJzG0SHqvVJuFuXgzpxGQL6ciGvf1S3zvmGbvvEEOBKVoWEin/U6UErpKR/hYMr
-	K5T259y9HBgA4aDlsiBj3JbT8+D8EkDLu5+zoo1BHEmF9nFmd6rO8mcbRiapozscPaKhTvsP0nu
-	gw2UEnRF+av70=
-X-Received: by 2002:a17:902:db09:b0:2c9:b48c:fdec with SMTP id d9443c01a7336-2ccea3b1266mr100601535ad.12.1783654121956;
-        Thu, 09 Jul 2026 20:28:41 -0700 (PDT)
+        bh=8OHQR36SH5DHkwv4ahYjdM9a+G5jG41FdFMZ2BcZsNM=;
+        b=CG5Ek4ZkylncmxXD/4MKkCAhGbEZx0HgSYYRdMre5Id1PTLboNEU8HVQeyCCiD4xSd
+         KM5nDd+aAZMVNWq5d6hofcHcRKRrVTvrTBUO2d40/V32M8+9AKrBqmsIh1e3Oy+L64SW
+         Zx+YBWE44MiNaYuOs1tCuM3l2I34LRV1ayH5BIOPxWmGmaDNWpDMatELA+9jaqeU+24Y
+         ILpRgys9jEj8kFD/QsP8+VLzAbbh9ZxL6dDvl+hYnNHw7HHLsRdgFMo4IFNC9Ft59R0q
+         +pIaYO75yC94DwR6RowlT47YSGV/end8X/OyDVZIWl6+DD7fTciQbzHTZHQgH2/RskBw
+         8PQQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrOiLWagogQpIRbsl6+gj8ku7x98EPlQ3NgOs9itGJH/5K1X5KpmBEbnp4ioD2l4hGSCj6pi+2h+RaAOwYGzQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4Grw5URKMLzh2pQBL+r2OdkIukwELuhSJQp3SWEqrRPV4yztK
+	j1DureVuu1WIlLsThj4oRH0sawOuFCmG8CR8+kG7EUja3h5kkWKOAukn
+X-Gm-Gg: AfdE7ck9QrZiixSMuCjUPzQ4v64ZkjPvwLiAx6RtnC/kAKEfmuanyESDQfGfIlql7a3
+	1OwCSkiN5sDtRMobt4j6ui6yyr9FstfvJ+680db3y4bflUtOj29cMdQRYxN5Ht4U5otngMxsVlK
+	kFXMQfp16ItwfKYb0z+gUZj07QgkXMA4UO8XvONoH8J7S80nOOEmvLwanbGfIYAuTFdznKvz/0w
+	TYWpErUuK9XYUySU/qjUlzJ8bHxTjrwGKeaBYW7DNSduYIL6baGL2hjRMr6oHXcaBiNRr4anq4e
+	0bD3Mlgy6dqSdpCF+uXRMOhL5i/2zt/+riYrTGjwBi6bL9iF55TauB5/xnojeR9BRJOztvyIss+
+	SgOAOoQYMxMHcUJXolqvdjFCMV1zt0bFwKqarJBA8Hk3WgdOeCWiWeVsvvNIBIXsyIZRs28Tm/K
+	zNFcunBUPHfBA=
+X-Received: by 2002:a17:902:d2c7:b0:2c9:994c:9a5 with SMTP id d9443c01a7336-2ce8298a501mr18775855ad.30.1783654129682;
+        Thu, 09 Jul 2026 20:28:49 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.28.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 20:28:41 -0700 (PDT)
+        Thu, 09 Jul 2026 20:28:49 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Date: Fri, 10 Jul 2026 11:28:13 +0800
-Subject: [PATCH v4 02/11] sched/isolation: RCU-protect runtime-mutable
- housekeeping cpumask readers
+Date: Fri, 10 Jul 2026 11:28:14 +0800
+Subject: [PATCH v4 03/11] cgroup/cpuset: Drive kernel-noise housekeeping
+ updates from isolated partitions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-wujing-dhm-v4-2-2e912e5d9645@gmail.com>
+Message-Id: <20260710-wujing-dhm-v4-3-2e912e5d9645@gmail.com>
 References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 In-Reply-To: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -97,215 +97,70 @@ Cc: Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-Now that HK_TYPE_KERNEL_NOISE and HK_TYPE_MANAGED_IRQ can be updated at
-runtime, their cpumask pointers are swapped and the old masks freed after
-an RCU grace period.  Readers that dereference these masks must do so
-inside an RCU read-side critical section, otherwise the mask can be freed
-while it is still in use.
+An isolated cpuset partition already updates the HK_TYPE_DOMAIN
+housekeeping mask.  Extend it to also update the kernel-noise masks
+(HK_TYPE_KERNEL_NOISE and HK_TYPE_MANAGED_IRQ) so that creating or
+destroying an isolated partition reconfigures the full set of
+housekeeping cpumasks.
 
-Convert the runtime-mutable readers to housekeeping_cpumask_rcu() under
-rcu_read_lock():
+The sched domain mask is updated first because the workqueue flush and
+timer migration paths depend on it; the kernel-noise masks are updated
+afterwards via housekeeping_update_types().
 
-  - get_nohz_timer_target() (HK_TYPE_KERNEL_NOISE)
-  - hrtimer target selection (HK_TYPE_TIMER)
-  - arm64 topology (HK_TYPE_TICK)
-  - Hyper-V channel management (HK_TYPE_MANAGED_IRQ)
-  - the housekeeping sysfs attribute (HK_TYPE_KERNEL_NOISE)
-
-The watchdog boot-time cpumask initialisation is switched from the
-HK_TYPE_TIMER alias to HK_TYPE_KERNEL_NOISE for consistency; both alias
-the same value.
+housekeeping_update() and housekeeping_update_types() are called after
+dropping cpus_read_lock and cpuset_mutex, with only cpuset_top_mutex held
+for mutual exclusion.
 
 Co-developed-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 ---
- arch/arm64/kernel/topology.c |  9 ++++++--
- drivers/base/cpu.c           | 20 +++++++++++++-----
- drivers/hv/channel_mgmt.c    | 50 ++++++++++++++++++++++++++++++--------------
- kernel/sched/core.c          |  3 +--
- kernel/time/hrtimer.c        |  5 ++++-
- kernel/watchdog.c            |  2 +-
- 6 files changed, 62 insertions(+), 27 deletions(-)
+ kernel/cgroup/cpuset.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index b32f13358fbb1..8f4329b57cea7 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -212,8 +212,13 @@ int arch_freq_get_on_cpu(int cpu)
- 			if (!policy)
- 				return -EINVAL;
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 5c33ab20cc208..80f43a24d3c8a 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1347,17 +1347,36 @@ static void cpuset_update_sd_hk_unlock(void)
+ 		rebuild_sched_domains_locked();
  
--			if (!cpumask_intersects(policy->related_cpus,
--						housekeeping_cpumask(HK_TYPE_TICK))) {
-+			bool no_hk_in_policy;
+ 	if (update_housekeeping) {
++		static const unsigned long noise_types =
++			BIT(HK_TYPE_KERNEL_NOISE) | BIT(HK_TYPE_MANAGED_IRQ);
 +
-+			rcu_read_lock();
-+			no_hk_in_policy = !cpumask_intersects(policy->related_cpus,
-+							      housekeeping_cpumask_rcu(HK_TYPE_TICK));
-+			rcu_read_unlock();
-+			if (no_hk_in_policy) {
- 				cpufreq_cpu_put(policy);
- 				return -EOPNOTSUPP;
- 			}
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 875abdc9942e1..e0aa3d34bc41a 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -303,13 +303,23 @@ static DEVICE_ATTR(isolated, 0444, print_cpus_isolated, NULL);
- static ssize_t housekeeping_show(struct device *dev,
- 			     struct device_attribute *attr, char *buf)
- {
--	const struct cpumask *hk_mask;
-+	ssize_t len;
+ 		update_housekeeping = false;
+ 		cpumask_copy(isolated_hk_cpus, isolated_cpus);
  
--	hk_mask = housekeeping_cpumask(HK_TYPE_KERNEL_NOISE);
-+	if (!housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
-+		return sysfs_emit(buf, "\n");
- 
--	if (housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
--		return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(hk_mask));
--	return sysfs_emit(buf, "\n");
-+	/*
-+	 * HK_TYPE_KERNEL_NOISE is runtime-mutable: the mask pointer can be
-+	 * swapped and the old mask freed after an RCU grace period.  Hold the
-+	 * RCU read lock across the dereference and the format so the mask
-+	 * cannot be freed while it is being printed.
-+	 */
-+	rcu_read_lock();
-+	len = sysfs_emit(buf, "%*pbl\n",
-+			 cpumask_pr_args(housekeeping_cpumask_rcu(HK_TYPE_KERNEL_NOISE)));
-+	rcu_read_unlock();
++		mutex_unlock(&cpuset_mutex);
++		cpus_read_unlock();
 +
-+	return len;
- }
- static DEVICE_ATTR_RO(housekeeping);
- 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 84eb0a6a0b546..fc5247e92e1b3 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -750,26 +750,43 @@ static void init_vp_index(struct vmbus_channel *channel)
- {
- 	bool perf_chn = hv_is_perf_channel(channel);
- 	u32 i, ncpu = num_online_cpus();
--	cpumask_var_t available_mask;
-+	cpumask_var_t available_mask, hk_snap;
- 	struct cpumask *allocated_mask;
--	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
- 	u32 target_cpu;
- 	int numa_node;
- 
--	if (!perf_chn ||
--	    !alloc_cpumask_var(&available_mask, GFP_KERNEL) ||
--	    cpumask_empty(hk_mask)) {
--		/*
--		 * If the channel is not a performance critical
--		 * channel, bind it to VMBUS_CONNECT_CPU.
--		 * In case alloc_cpumask_var() fails, bind it to
--		 * VMBUS_CONNECT_CPU.
--		 * If all the cpus are isolated, bind it to
--		 * VMBUS_CONNECT_CPU.
--		 */
-+	if (!perf_chn) {
-+		channel->target_cpu = VMBUS_CONNECT_CPU;
-+		return;
-+	}
+ 		/*
+ 		 * housekeeping_update() is now called without holding
+ 		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
+ 		 * is still being held for mutual exclusion.
+ 		 */
+-		mutex_unlock(&cpuset_mutex);
+-		cpus_read_unlock();
 +
-+	if (!alloc_cpumask_var(&available_mask, GFP_KERNEL)) {
-+		channel->target_cpu = VMBUS_CONNECT_CPU;
-+		hv_set_allocated_cpu(VMBUS_CONNECT_CPU);
-+		return;
-+	}
++		/*
++		 * Update the sched domain mask first; it must succeed
++		 * before the kernel-noise types because workqueue flush
++		 * and timer migration depend on the sched domain mask.
++		 */
+ 		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus));
 +
-+	/*
-+	 * Snapshot HK_TYPE_MANAGED_IRQ cpumask under RCU read lock.
-+	 * housekeeping_update_types() frees the old cpumask after
-+	 * synchronize_rcu(), so we must not hold the pointer beyond an
-+	 * RCU read-side critical section.
-+	 */
-+	if (!alloc_cpumask_var(&hk_snap, GFP_KERNEL)) {
-+		free_cpumask_var(available_mask);
-+		channel->target_cpu = VMBUS_CONNECT_CPU;
-+		hv_set_allocated_cpu(VMBUS_CONNECT_CPU);
-+		return;
-+	}
-+	rcu_read_lock();
-+	cpumask_copy(hk_snap, housekeeping_cpumask_rcu(HK_TYPE_MANAGED_IRQ));
-+	rcu_read_unlock();
-+
-+	if (cpumask_empty(hk_snap)) {
-+		free_cpumask_var(hk_snap);
-+		free_cpumask_var(available_mask);
- 		channel->target_cpu = VMBUS_CONNECT_CPU;
--		if (perf_chn)
--			hv_set_allocated_cpu(VMBUS_CONNECT_CPU);
-+		hv_set_allocated_cpu(VMBUS_CONNECT_CPU);
- 		return;
- 	}
- 
-@@ -788,7 +805,7 @@ static void init_vp_index(struct vmbus_channel *channel)
- 
- retry:
- 		cpumask_xor(available_mask, allocated_mask, cpumask_of_node(numa_node));
--		cpumask_and(available_mask, available_mask, hk_mask);
-+		cpumask_and(available_mask, available_mask, hk_snap);
- 
- 		if (cpumask_empty(available_mask)) {
- 			/*
-@@ -809,6 +826,7 @@ static void init_vp_index(struct vmbus_channel *channel)
- 
- 	channel->target_cpu = target_cpu;
- 
-+	free_cpumask_var(hk_snap);
- 	free_cpumask_var(available_mask);
- }
- 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 79c3349f65bb4..3eb39103f5469 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1272,9 +1272,8 @@ int get_nohz_timer_target(void)
- 		default_cpu = cpu;
- 	}
- 
--	hk_mask = housekeeping_cpumask(HK_TYPE_KERNEL_NOISE);
--
- 	guard(rcu)();
-+	hk_mask = housekeeping_cpumask_rcu(HK_TYPE_KERNEL_NOISE);
- 
- 	for_each_domain(cpu, sd) {
- 		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 5bd6efe598f0f..18e17a9dad67b 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -242,8 +242,11 @@ static bool hrtimer_suitable_target(struct hrtimer *timer, struct hrtimer_clock_
- static inline struct hrtimer_cpu_base *get_target_base(struct hrtimer_cpu_base *base, bool pinned)
- {
- 	if (!hrtimer_base_is_online(base)) {
--		int cpu = cpumask_any_and(cpu_online_mask, housekeeping_cpumask(HK_TYPE_TIMER));
-+		int cpu;
- 
-+		rcu_read_lock();
-+		cpu = cpumask_any_and(cpu_online_mask, housekeeping_cpumask_rcu(HK_TYPE_TIMER));
-+		rcu_read_unlock();
- 		return &per_cpu(hrtimer_bases, cpu);
- 	}
- 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 87dd5e0f6968d..c18c3e9781d7b 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -1389,7 +1389,7 @@ void __init lockup_detector_init(void)
- 		pr_info("Disabling watchdog on nohz_full cores by default\n");
- 
- 	cpumask_copy(&watchdog_cpumask,
--		     housekeeping_cpumask(HK_TYPE_TIMER));
-+		     housekeeping_cpumask(HK_TYPE_KERNEL_NOISE));
- 
- 	if (!watchdog_hardlockup_probe())
- 		watchdog_hardlockup_available = true;
++		/*
++		 * Update the kernel-noise housekeeping masks
++		 * (HK_TYPE_KERNEL_NOISE and HK_TYPE_MANAGED_IRQ).  The tick,
++		 * RCU and managed-interrupt state is reconfigured as the
++		 * affected CPUs are cycled through the CPU hotplug machinery.
++		 */
++		WARN_ON_ONCE(housekeeping_update_types(noise_types,
++						       isolated_hk_cpus));
+ 		mutex_unlock(&cpuset_top_mutex);
+ 	} else {
+ 		cpuset_full_unlock();
 
 -- 
 2.43.0
