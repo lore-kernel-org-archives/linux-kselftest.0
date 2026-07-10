@@ -1,68 +1,68 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BDD3672A5
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65304367293
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783654141; cv=none; b=K80UsTqpCdiDf2rSSD7fPYK1k8Jc2WsHVvG8fqFpLZv0+c0vrAzD8ajE6S3ZFv5zJAQS78VZt/QAyFI7HhSPuxvMEQ96Lb/wDl56NA0Qh8Mf1aZxHhWFEJ7VEhf5SPlTcnRFIzVYZx6oFpc/iZ6tkn9zwq2gJzphCPJclahoQFs=
+	t=1783654152; cv=none; b=bfr+3eNEHRQuh/NBpcztaQNbQ0d5cI7N5LI2HVLG3hqGyeOkRs8r4EbYwVU6fJWXltpIHAPerofdOirfG+NXzIEdWImT97pM+mdz1snh8EEt6T/PFkbKAj73p/FO/G62a427FHdoA7OQjXh2wuYvn6Q/L2NdSUieGyoXun8ibcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783654141; c=relaxed/simple;
-	bh=/7g5rPjTXZCVa2/uRZYg9xonGTIXf23dBk7iXIO7Ns0=;
+	s=arc-20240116; t=1783654152; c=relaxed/simple;
+	bh=cZmplDdace8ka2XP9vD8p3ABtAIzwqaOpdlJ1+3LPG8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wym8fHKf8iCNOp8wCNatq+OmBJ+mj4QgX5P366eA8x82GJXoMe2VzJ3wFYjCiob1R8MtJ2zlq2C8S0BJ9RhY4U03GQEZJcviKKW3kehf/X5mGmTatDQwrs1+COxzmCYnWJpqC2Y7mfqfX5ownjZ225U0ql+O7SOhpfwWUyzi/50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ctctuR/1; arc=none smtp.client-ip=209.85.214.180
+	 In-Reply-To:To:Cc; b=c7NwpEqSm6jtVbmQ7wrOG6ruFrmhpLKVaHlXYzqRqAnPoz7xQ1db7CW644LKLcs/nrs49SMfcUOfCNInSigEEFFf+l5JwwjLJzDBtQGp12TkekUlliX8ZrP/S4/JW8t+y0d2RC5iN1S9+QC6zHLOJJg+cvmQV6BM2YUvUyZNIm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJWYlpQe; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ctctuR/1"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso2750655ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:29:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJWYlpQe"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc84e77e78so3364605ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783654140; x=1784258940; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783654150; x=1784258950; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CdWcLivIGaN7u5tA3Cryx3dVQvByPYpqsiikxpuxuiQ=;
-        b=ctctuR/1r3DuO1xZ+F+26ZuVuh9k62emAj6nfw8tg4tNihn5UI3STRkKRb7pJEHgKO
-         gTg8x9kqXW+KRyQ7hLsgTCUsuxyHRHJ1qz2/ibVxZFUgRqxU98LpMP7OVP9mtfG8WCJu
-         Kwf8nz/PZ7JkWKLwoDFxFWzgTG6mq/V3ofvtzsQ9TUT61VYhBXSaDN55rZSWLYdfxsE/
-         9hG6mKhIQuie5XEYE7PcILmUD/t7gytXx8qzqrxLF4li2f8zcCSdJxFJX6sBDNdSqAVU
-         z6IEDwN9h8XvV1ZXOPqPtTprZDy/g+52goUjSwKSI4dP24HyBdIxgU/DqWx4/MKdsFi9
-         tVLQ==
+        bh=2v7qKSZXWIDgV3PiMinRsvjWO8t8BKfsRKjtUJUHEIk=;
+        b=BJWYlpQePs5LgU89Ap/ztAaLrVUh9Ys/ozCiulN8O8u5mNxv1MOK3uzC1IYFUGz7wn
+         eePjfSa4axkfO4knzEvIEYSVURceFD79DmS5bKamCHTBZcKVAfLPQootUhF/t4M3cSif
+         I2FfqBksYwJagrKjOC6RdJkAJBu3hJK7HPdaQ3v1q8G1gp8ZN2Sf0nHGE86OkE25nw12
+         4rwYkll3DLBPL96HWUv3lRes024hE5y8M4LjZP4Upsjp5wKXN00tRQ35qkRseaBbSQdn
+         JEiYudHwzGv9o/BFNWuxuDE6R9bkC938pHlCfYFaH763xN2jocs6lsjMRLX3UE1qE0iJ
+         88Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783654140; x=1784258940;
+        d=1e100.net; s=20251104; t=1783654150; x=1784258950;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CdWcLivIGaN7u5tA3Cryx3dVQvByPYpqsiikxpuxuiQ=;
-        b=AE+cvY60o3p/TVXNeW/jzt4FoIIj0zk+nDrZoFqhAg5ijuPIToQuE81LpJrpInmBHb
-         BF3oGCJcdvWhjgl9t6kjHV7yP4m/lGKliH3PmRNKmWcTyI3HpyLhwI/4XMK6IUMXFbR5
-         F/vnztJMkTbh23OJkKish3Ivo0eE6rKej4q8Vu/jZA5n9fIyZFYeBWLBRVcEuhN86rik
-         WCW1lgBF7BoszxPHnReGkyukDiXQGf0mKEDmCw08cMrT+KqoV8Dj41ekzi+jXZb2LN2s
-         3WCVAchVZQJBs4VLoE/T7Dh1DBVb16HNXWa7/Tw/2SbSffDsn7UuuVEVtXJJCCrEXYhT
-         s5WA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro+3GW9mG6sfalPB8zyozj2S0lFF4ZMMui3Vv+Q4rfjUdCilXW9QC1nGpHQgeVFJCZc2gewGx2ekS2BTfURPZs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/wbHBVCKBISCcvn4dwfCmzOE1cFfMhnARP6dbc5+Qq01CzQhf
-	aua5Mn+h5Iixg87hRSOLyZ6qfJ/oKN6XSYmyJp0sU3FLv44voNiC5qBe
-X-Gm-Gg: AfdE7clS/ztk12N1d6BbthU3GjWYF0w6xHahGSUxfrdJ1AC/tPj4k5mBxtdsl7gZVBJ
-	Yc4aPFeQgb2nKWyWo73oTFH5/NDM0xJJVIEhv/34YK4pHTrgC2HuNExwNPVn1IzBet9DntwHETW
-	uYik5q4ZH/cJUcLMPhXCkDMj+4wByMiV21dkwz/HzPQmuOiyfkukQFZ0I2hlw38lS/agxdqy0qj
-	SB10vizLbRzQl36nkYy7pB+244TUnlYFCf9tZj9YBvBqzRv9Dl8HL53UmTuDL3eXC5ILAm7JTbU
-	RvVBTIrKt2FssqgbU/4ukRglLw6TV5WpXZMrdnlffFpE/MixirEVGGHgca+rIgx8OxUe9li81Hk
-	yh8Fo2BGzbzP8Zxgjf3sxOHiNvMTKst9F74hEm8OCl7WstTpW5bZfcfDBco7u7DW1rEDhaPbgrB
-	T9DrxoT81sVIk=
-X-Received: by 2002:a17:903:22c1:b0:2bf:9760:b94d with SMTP id d9443c01a7336-2ccea37ace4mr104298875ad.15.1783654139660;
-        Thu, 09 Jul 2026 20:28:59 -0700 (PDT)
+        bh=2v7qKSZXWIDgV3PiMinRsvjWO8t8BKfsRKjtUJUHEIk=;
+        b=Nwtf1q/RQk6ZufBWJwG5dtYjSxYSlXktYMV9Zb0IP9EDcm55tTu95jZTosgeJxvAti
+         50FjYUjy6q3GHhiM3wcYfVBsqtO+hpEZ8tZ4x7xJEVzZzA9U9SaOKiLfUn0RUwV2L45a
+         2h6ZvIIph3dUvgd1KNlK3AAFtz0Dvwmnn1DazlToxgvNL7K0gKtYufQSzHBwCfxjUk8+
+         YUQrrL5o8bCAXstGiBajhnsXg4E8drCBMK/6HkcF+WvitKr5hWNYQ8B2RILfEZD3Dz8n
+         0n7gZGm8FQjEudp5XgkWIysfvPzufUlw/creVfPjFbRkaAGAPFQH71Cob5aeGt6TgYHX
+         KxyA==
+X-Forwarded-Encrypted: i=1; AHgh+RqqbgFRdpEtAslXjcP9JOb43QsHPHALI2uDWIbie57qCBm14fnpimY6nCe8+x3yLZetOD0M8HAIYT74SZpmWLY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyauS/ocZC440NgnsYVP+tLdbT8D4AC7HvnE7s4P0hmOmvD4sgZ
+	K7FFFncF3BcaA4wgunXCV1cjaqPDLxXsaS74ilakn5dluPeCH4dSXEDD
+X-Gm-Gg: AfdE7cm17/52AuTr9Q24352dG4Zqq2yqTtJJhrMyzXI1Wju/6IySsYIrTlCMU17zXOE
+	/KY4JS2+YZUY9x2dualY3CgMLb402+zYrtYAOch+l3HNyuinU1EMlPMEIda11AROUNBZzHbGZZJ
+	29xl2Cifa2NPsLFXO11EBeByFjfx4vJmFFslZbJg9L3USpIMV1FVDunAlPXQ9RXRZlU8F8jHwpW
+	6JkC6RtpyJYHsAlqnMNg8HiX5usZBATroiZ2ubk2yiFsWH7e0iizuwUC6+3QpJCiZQP2S3YogHd
+	NdfGBYLZ3uMEmKjzQJUduAnipKgzVvwjdP8atiIXo8gmtRqLWIjT1uhoNsEKeVmm0pUQVSGYZ6B
+	abkCztN1tuMFOFkoMzgbD/QtQ0Sg7t334a94DmZQx6qB/sk9cZYjD0e4sGU2vNAqWtzlFD+VTqu
+	bAbmhA0MYgSdU=
+X-Received: by 2002:a17:903:3803:b0:2c9:d298:6c06 with SMTP id d9443c01a7336-2ccea45f203mr97612355ad.25.1783654149819;
+        Thu, 09 Jul 2026 20:29:09 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.28.49
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.28.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 20:28:59 -0700 (PDT)
+        Thu, 09 Jul 2026 20:29:08 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Date: Fri, 10 Jul 2026 11:28:15 +0800
-Subject: [PATCH v4 04/11] context_tracking: allow runtime per-CPU user
- tracking enable/disable
+Date: Fri, 10 Jul 2026 11:28:16 +0800
+Subject: [PATCH v4 05/11] rcu/nocb: support lazy init for runtime CPU
+ isolation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-wujing-dhm-v4-4-2e912e5d9645@gmail.com>
+Message-Id: <20260710-wujing-dhm-v4-5-2e912e5d9645@gmail.com>
 References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 In-Reply-To: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -97,128 +97,136 @@ Cc: Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-ct_cpu_track_user() and the context_tracking_key static key are currently
-restricted to boot-time use: the key is __ro_after_init and the function
-is __init with __initdata state.  This prevents enabling nohz_full context
-tracking for CPUs isolated at runtime via cpuset partitions.
+When a cpuset isolated partition first requests kernel-noise isolation,
+it needs to offload RCU callbacks from the affected CPUs. The existing
+rcu_nocb_cpu_offload() requires rcu_nocbs= or nohz_full= at boot so
+that rcu_organize_nocb_kthreads() has already set rdp->nocb_gp_rdp for
+each CPU. Without a boot parameter, nocb_gp_rdp is NULL and offload
+fails immediately.
 
-Split ct_cpu_track_user() into three functions:
+Introduce lazy nocb initialization so that the first call into the
+isolation path triggers the one-time setup automatically:
 
-  ct_cpu_track_user(cpu)      - sets per_cpu(context_tracking.active) and
-                                increments context_tracking_key; callable
-                                at runtime with the CPU offline.
+  rcu_nocb_lazy_init() - allocates rcu_nocb_mask and calls
+    rcu_organize_nocb_kthreads() (now without __init) to set
+    nocb_gp_rdp for every possible CPU. Uses a dedicated mutex
+    for serialization with a fast-path read of nocb_is_setup.
 
-  ct_cpu_untrack_user(cpu)    - reverses the above; for de-isolation.
+  rcu_nocb_cpu_isolate() - exported entry point called per-CPU
+    while the CPU is offline. Calls rcu_nocb_lazy_init() for the
+    one-time setup, spawns the GP and CB kthreads via the existing
+    rcu_spawn_cpu_nocb_kthread(), then finalizes offload through
+    rcu_nocb_cpu_offload(). Adding the CPU to the GP kthread's
+    nocb_head_rdp list is handled by nocb_gp_toggle_rdp() in the
+    GP kthread, so rcu_organize_nocb_kthreads() can run with an
+    empty mask.
 
-  ct_cpu_track_user_init(cpu) - __init wrapper; calls ct_cpu_track_user()
-                                and handles TIF_NOHZ / tasklist setup.
-
-Change context_tracking_key from DEFINE_STATIC_KEY_FALSE_RO to
-DEFINE_STATIC_KEY_FALSE so that static_branch_inc/dec() can be called
-after the __ro_after_init window closes.
-
-Update tick_nohz_init() to call ct_cpu_track_user_init() so boot
-behaviour is unchanged.
-
-This is a prerequisite for DHM (Dynamic Housekeeping Management) runtime
-CPU noise isolation without boot parameters.
+Remove __init from rcu_organize_nocb_kthreads() to allow this
+runtime call path; the function itself has no __initdata dependencies.
 
 Co-developed-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 ---
- include/linux/context_tracking.h |  2 ++
- kernel/context_tracking.c        | 38 ++++++++++++++++++++++++++++++++++----
- kernel/time/tick-sched.c         |  2 +-
- 3 files changed, 37 insertions(+), 5 deletions(-)
+ include/linux/rcupdate.h |  2 ++
+ kernel/rcu/tree.h        |  2 +-
+ kernel/rcu/tree_nocb.h   | 43 ++++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 45 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index af9fe87a09225..735d353d87560 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -12,6 +12,8 @@
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index bfa765132de85..5937485d59118 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -149,6 +149,7 @@ static __always_inline void rcu_irq_work_resched(void) { }
+ void rcu_init_nohz(void);
+ int rcu_nocb_cpu_offload(int cpu);
+ int rcu_nocb_cpu_deoffload(int cpu);
++int rcu_nocb_cpu_isolate(int cpu);
+ void rcu_nocb_flush_deferred_wakeup(void);
  
- #ifdef CONFIG_CONTEXT_TRACKING_USER
- extern void ct_cpu_track_user(int cpu);
-+extern void ct_cpu_untrack_user(int cpu);
-+extern void __init ct_cpu_track_user_init(int cpu);
+ #define RCU_NOCB_LOCKDEP_WARN(c, s) RCU_LOCKDEP_WARN(c, s)
+@@ -158,6 +159,7 @@ void rcu_nocb_flush_deferred_wakeup(void);
+ static inline void rcu_init_nohz(void) { }
+ static inline int rcu_nocb_cpu_offload(int cpu) { return -EINVAL; }
+ static inline int rcu_nocb_cpu_deoffload(int cpu) { return 0; }
++static inline int rcu_nocb_cpu_isolate(int cpu) { return -EINVAL; }
+ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
  
- /* Called with interrupts disabled.  */
- extern void __ct_user_enter(enum ctx_state state);
-diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-index a743e7ffa6c00..a81d9f8b85eed 100644
---- a/kernel/context_tracking.c
-+++ b/kernel/context_tracking.c
-@@ -411,7 +411,7 @@ static __always_inline void ct_kernel_enter(bool user, int offset) { }
- #define CREATE_TRACE_POINTS
- #include <trace/events/context_tracking.h>
+ #define RCU_NOCB_LOCKDEP_WARN(c, s)
+diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+index 7dfc57e9adb18..f3d31918ea322 100644
+--- a/kernel/rcu/tree.h
++++ b/kernel/rcu/tree.h
+@@ -517,7 +517,7 @@ static void rcu_nocb_unlock_irqrestore(struct rcu_data *rdp,
+ 				       unsigned long flags);
+ static void rcu_lockdep_assert_cblist_protected(struct rcu_data *rdp);
+ #ifdef CONFIG_RCU_NOCB_CPU
+-static void __init rcu_organize_nocb_kthreads(void);
++static void rcu_organize_nocb_kthreads(void);
  
--DEFINE_STATIC_KEY_FALSE_RO(context_tracking_key);
-+DEFINE_STATIC_KEY_FALSE(context_tracking_key);
- EXPORT_SYMBOL_GPL(context_tracking_key);
- 
- static noinstr bool context_tracking_recursion_enter(void)
-@@ -674,14 +674,44 @@ void user_exit_callable(void)
+ /*
+  * Disable IRQs before checking offloaded state so that local
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 1047b30cd46b7..694fd615f1809 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1347,6 +1347,47 @@ void __init rcu_init_nohz(void)
+ 	rcu_organize_nocb_kthreads();
  }
- NOKPROBE_SYMBOL(user_exit_callable);
  
--void __init ct_cpu_track_user(int cpu)
-+/**
-+ * ct_cpu_track_user - enable context tracking for a CPU
-+ * @cpu: target CPU (must be offline when called at runtime)
-+ *
-+ * Marks @cpu as actively tracking user/kernel transitions and increments
-+ * the context_tracking_key refcount.  Safe to call at runtime provided
-+ * the CPU is offline so no context-tracking readers are active on it.
-+ */
-+void ct_cpu_track_user(int cpu)
- {
--	static __initdata bool initialized = false;
--
- 	if (!per_cpu(context_tracking.active, cpu)) {
- 		per_cpu(context_tracking.active, cpu) = true;
- 		static_branch_inc(&context_tracking_key);
- 	}
-+}
-+EXPORT_SYMBOL_GPL(ct_cpu_track_user);
++static DEFINE_MUTEX(rcu_nocb_lazy_mutex);
 +
-+/**
-+ * ct_cpu_untrack_user - disable context tracking for a CPU
-+ * @cpu: target CPU (must be offline when called)
-+ *
-+ * Reverses ct_cpu_track_user().  The CPU must be offline so that no
-+ * context-tracking readers are active on it.
++/*
++ * Lazily initialize nocb infrastructure on the first call. Allocates
++ * rcu_nocb_mask and sets nocb_gp_rdp for every possible CPU so that
++ * rcu_nocb_cpu_isolate() can offload callbacks without rcu_nocbs= at boot.
 + */
-+void ct_cpu_untrack_user(int cpu)
++static noinline int rcu_nocb_lazy_init(void)
 +{
-+	if (per_cpu(context_tracking.active, cpu)) {
-+		per_cpu(context_tracking.active, cpu) = false;
-+		static_branch_dec(&context_tracking_key);
++	if (rcu_state.nocb_is_setup)
++		return 0;
++
++	mutex_lock(&rcu_nocb_lazy_mutex);
++	if (!rcu_state.nocb_is_setup) {
++		if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
++			mutex_unlock(&rcu_nocb_lazy_mutex);
++			return -ENOMEM;
++		}
++		rcu_organize_nocb_kthreads();
++		rcu_state.nocb_is_setup = true;
 +	}
++	mutex_unlock(&rcu_nocb_lazy_mutex);
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(ct_cpu_untrack_user);
 +
-+void __init ct_cpu_track_user_init(int cpu)
++/*
++ * Offload RCU callbacks for a CPU entering a kernel-noise isolated partition.
++ * @cpu must be offline. Lazily initializes nocb infrastructure on first use.
++ */
++int rcu_nocb_cpu_isolate(int cpu)
 +{
-+	static __initdata bool initialized = false;
++	int ret;
 +
-+	ct_cpu_track_user(cpu);
- 
- 	if (initialized)
- 		return;
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index cbbb87a0c6e7c..ba7adc671c580 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -677,7 +677,7 @@ void __init tick_nohz_init(void)
- 	}
- 
- 	for_each_cpu(cpu, tick_nohz_full_mask)
--		ct_cpu_track_user(cpu);
-+		ct_cpu_track_user_init(cpu);
- 
- 	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
- 					"kernel/nohz:predown", NULL,
++	ret = rcu_nocb_lazy_init();
++	if (ret)
++		return ret;
++	rcu_spawn_cpu_nocb_kthread(cpu);
++	return rcu_nocb_cpu_offload(cpu);
++}
++EXPORT_SYMBOL_GPL(rcu_nocb_cpu_isolate);
++
+ /* Initialize per-rcu_data variables for no-CBs CPUs. */
+ static void __init rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp)
+ {
+@@ -1439,7 +1480,7 @@ module_param(rcu_nocb_gp_stride, int, 0444);
+ /*
+  * Initialize GP-CB relationships for all no-CBs CPU.
+  */
+-static void __init rcu_organize_nocb_kthreads(void)
++static void rcu_organize_nocb_kthreads(void)
+ {
+ 	int cpu;
+ 	bool firsttime = true;
 
 -- 
 2.43.0
