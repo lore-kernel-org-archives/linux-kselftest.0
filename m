@@ -1,142 +1,301 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441901F4634;
-	Fri, 10 Jul 2026 05:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783660302; cv=none; b=uyyHls/7iQyZhfg6Xf0M9SUuaqnP5hJXKsctBM5YWdlc/djRbNqA7uF2A+I/aueIwzfSItb1Upk4RVivXt8djA0xVwjHWb5KtdUjD9KF3NRoGTDJym9C8ivKOcTzE/QmOVcrUTsdQQteJQyIul290aTvUQG7JxGH73D4M145ddc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783660302; c=relaxed/simple;
-	bh=dME6OgFdwvQ3QIqLtKnDlKNLG71EI67e/Ymtvu9srxw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bVK5WN/Hi6IdsD1AQNEi6l2vfdgfas0IiOutZGhK+1t79lXljN8nST5pheuz9tt5LoaVS13Sb64JlPV2xxr8g3aj9FZwDrxr8c1eyrjzGfGr8CCzKW+/oQ2aa3slN+acLuRnz89Ve7u8EYHTAHf2z4HqBmO2aof3iBz/LxE/8yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ph4b7BZG; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983B5261B8D
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 05:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783662760; cv=pass; b=A5+7YWyS49ojS85mtKu6kCTIGS32Owp708bixEMlzYYWl8VAvscm5He81CE2gGqZyAwVk9nG0h18CouKF7UW0lBnzEKtHxt6XvlCqdZZVNZTpNAKgXX6vFuHr7JzYL+TA3BdKc5FRTty3IZXrEmIXOxXtLn1XSgcZuSe8R9fk30=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783662760; c=relaxed/simple;
+	bh=+MG1Qi9M0mT7yxk5F9FJgfR/GOircb4mwRcPoT9auXA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C0n+fdt0N37mPCQ/BL9fY7ReChsRzqICuRHnEHNJ93ijoZnpkzCAmzTt2HkqLpBfcStYpkyEUAF+eVt/Q/ZM/MoTy4473U5Y+v4SBSs/hH9r2EI0t0BniTZGBTd8kYEBmECD0xNrrMOUM6xxKy8nXl7c0LWt0e98KKmUc+fhlJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gE2ytdvG; arc=pass smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ph4b7BZG"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66A3nZq3075636;
-	Fri, 10 Jul 2026 05:11:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=V70VbE
-	j1ScjUchlU553r0Xd4F46LqK16+8IJ3ntbpQM=; b=ph4b7BZGCLL6yb2U1Xwwcf
-	xa+rUaUVswqAXodKI9w9TNoYs/ySVTgRVV1fS6f4nkR9tq/NE3wz2T21syNHazIc
-	nLpTr2ncrtSfobNuf1flty6Yf8W+cCdO6EhWNYsn4lO9m8o42yL6XmO6hFmnq9O2
-	WRNNEIN0EEo9LfZfeHgmuYF9YbR053pvpZUPVnGT3WCl7OfHyCFztPlYlaMJvzNe
-	BgOWe6Wt05gIBOFHnSW8U4aSkjudNtu3ZBxqhT990FqyvHDpz1YYg2qwtDE16hDf
-	HFuW3pmBuXRgTcWBoJFyheWmf8/VOcmasL+QaaL1j6UWw6oI26tcOianXAl+bFcQ
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6qknvett-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jul 2026 05:11:24 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66A54Z9L017949;
-	Fri, 10 Jul 2026 05:11:23 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7f6yg4x3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jul 2026 05:11:23 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66A5BJ3246596604
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 Jul 2026 05:11:20 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE2A42004B;
-	Fri, 10 Jul 2026 05:11:19 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EE01820040;
-	Fri, 10 Jul 2026 05:11:16 +0000 (GMT)
-Received: from [9.124.216.105] (unknown [9.124.216.105])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 10 Jul 2026 05:11:16 +0000 (GMT)
-Message-ID: <4bea3407-38e1-4d26-8293-7700266a24cf@linux.ibm.com>
-Date: Fri, 10 Jul 2026 10:41:15 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gE2ytdvG"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-804e46366d7so8029877b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 22:52:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783662757; cv=none;
+        d=google.com; s=arc-20260327;
+        b=K1HL1fKuyYJy6t0WwLxabkHw4ppdn/NAtwmTrbUZRzZEIdH1CtYz8akPOXbqZ51fsR
+         +5wDSRiRQKJFhtHh52pSmhVvE5lzsKYSaZ+Irr0cScmXZyS0Lj5n7hB50zX35TttmVOu
+         biNFr3ZC+NrDdWxRCf2D2UXATFdm/0USHyba2HQcF3ARN6rrDeh1r9NAt6x9FTwrTW31
+         LN8NXLLpLZE/pQnTfSdxhXrjLo2yycQ4ier35XTKvqVQY8j77jaT29fVbG550xfwykQS
+         6FQ8RxTUFzvjcVocGoL8bK0JhKHgUk6+eXHXZG2Di5Phr8+q0H2qHWhunweeS2rV2hYY
+         BMpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7O3AJIZeQn9Qrfct+vB6f8IsCssIFPCOzh5f3SgUMkU=;
+        fh=DCdNZrLjY6F9LCHMaeUlSQFnnypQML1OatfzW8BaSCQ=;
+        b=njNXdElY8alw9IYCHBg/DaXGGI5zAmSxs3lN3oCz/nw91mIi6aQEmdjFLZlZhCVlq7
+         //qW0Ck/tbHuUarHd5znwJyhwGhX/0ySWepHhb+Bd3fzhfzwO/oRRgJeyfpaom/IdwgR
+         X/iHuWU42hzw7Fy2L9DyOJVwhSf9RNxRrZGYJdLcjLobqfg100htmk/PDUW+a61eMwC3
+         TJ2laJ3pfSdRWIWuYycq8XtFHE+HzTgXJ6P9Q6RqcY8fl+HsOd7jSHmCFPjV5adv0lfm
+         JtPUJoCrrIn12HYxath9sLM5RWIE4GMwQNLXDvg4Vbw5EYC4/yJp8PCVPRS5iUzLww6L
+         ZhUw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783662757; x=1784267557; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7O3AJIZeQn9Qrfct+vB6f8IsCssIFPCOzh5f3SgUMkU=;
+        b=gE2ytdvGyMucMh/MmsRIzvz2d8LtFOn2U7sgmj40Ku7XdU+0atuowDHhZaEsyXZ0zp
+         sx+sZdbIwN803Gf2c2vdDL+MXwP1SaE75pN0YNkAcIJFLBw0wtjDLCCNQZaSrCIh2yiL
+         9dyo+mrNc4thuNvpZkr0/YTjo934YLSUhoH985TdE4WWixULpCh/cgSsMzDedygnD7uh
+         vZjojuCOLzDP9gumLnliuCo6jlZ48go0ZkLq8Mu4ja96SuRe2vx7kvycF/gDIeL70RAK
+         Ik1b2HZA+F3Feghg/mFpbAk8LytNfBgimIqds7aN0f6Rb+BRbOG0HTDyArScL4ChfFm2
+         Lo3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783662757; x=1784267557;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7O3AJIZeQn9Qrfct+vB6f8IsCssIFPCOzh5f3SgUMkU=;
+        b=E5vCqqh7xzoK63awQHD6dFdhI2KBV2EhV4myXuXAXG0iGbz96PFwpqrw9KHJqVWXNf
+         oSl9aesKbY0BNKP6tBeWpqtTMrRwOxmyWrEH5nj2XKzkirAt/KtqYFOHzNqt2AYbRZGQ
+         Myhe1hy0ZHAcg6jQq3UzI+tIkAMzgQW9Cbsq9g1riBkXyUfN0ZSuUCMez6Sq7ftRwavy
+         /hNcn/9qDt/x8UXks1JBtRuIhRcr7ABOfHCm6bnspekc/qa1Gh7jTZyIn67Ah4a0yRfx
+         N7wZCmQFSQu6/tfRORArAlxLKI86QtlNmztu5VSh+nYU85DqfWFL3yYbQzVcJxVGq3EY
+         nliQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqLT7WIXkQs1GdcI9q0z99qe19ObyLsv6CDrZIeevvnzDvHB+76z19Wz0j/N0vnb7XaXPYv8NfwXWFJNerf2QU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzWw8ajg6i4ASzHSohmrkn25KFSlwyY/XBo1XeeuxYpm4gZeYf
+	3zzi4fBXJW+XfZyZXX+ITV8f2NjD/o4QxXT5BLeDv+FC1iYtJQ1P/eTBkw02UFMDW6CsmOqEeJr
+	8XAJtDQ/xUG/AtKSITidqdC+6jxYCiuA=
+X-Gm-Gg: AfdE7clx7qHEDZEHy4cniESVmvZsUL//5xN/wmyfhFdY8Q4VIwVQ1nF07r1LUOkU8VD
+	dNF0GLGK6Psw26eGyTiLmVi1DSJn8EP230NzP7b4Zj8c8vU0uR/sm/I+CBl9T44Is1Aq/zzq3wD
+	9fDAtocCaRPRqgv48V3Ac0CrdBFefwBn4t7OODO5LBo5p5Oz9hO7q36+fpbS+W5Pdv+aYr7p7ey
+	yIR14Gkgrak4xpp02DdgghBn3vJu0XoCV94YHbE2JUt4j6LO6ctBaTFDrXkXzzdS80NcoNgzNoB
+	k+aHbppNHLhMwbrwOwvioDa29Hz3e9SApH29gzVT
+X-Received: by 2002:a05:690c:7347:b0:80b:9f4e:a70 with SMTP id
+ 00721157ae682-81dbed5a177mr76937627b3.26.1783662757537; Thu, 09 Jul 2026
+ 22:52:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/6] selftests/vfio: Add sPAPR TCE v2 coverage
-To: David Matlack <dmatlack@google.com>
-Cc: alex@shazbot.org, shuah@kernel.org, amastro@fb.com, rananta@google.com,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vaibhav@linux.ibm.com,
-        sbhat@linux.ibm.com, harshpb@linux.ibm.com,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20260703032806.40946-1-nnmlinux@linux.ibm.com>
- <akwyZvbv7Fg8mfB2@google.com>
- <afb9bf4d-2258-4731-a28e-7f4eaa01ee0b@linux.ibm.com>
- <CALzav=eB5NwrHNq4bm2ooSFmTtGk3sfUk7_k+iE+Kwm+Jc9LFA@mail.gmail.com>
-Content-Language: en-US
-From: Narayana Murty N <nnmlinux@linux.ibm.com>
-In-Reply-To: <CALzav=eB5NwrHNq4bm2ooSFmTtGk3sfUk7_k+iE+Kwm+Jc9LFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=Q/XiJY2a c=1 sm=1 tr=0 ts=6a507efd cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
- a=VLoToYxrrouXz2LH_DgA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=ZXulRonScM0A:10 a=0lgtpPvCYYIA:10
-X-Proofpoint-GUID: tAg1fWFAaUvzJjsA7pe8fuK0DQwiFHBu
-X-Proofpoint-ORIG-GUID: EXTPp-LVbDKqDrGZm3KQsmZ38b284kHs
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEwMDA0MSBTYWx0ZWRfX8izeTpmsTxGu
- nWVnQNKBO1ZTeDwfFlNjh/cDemT4A9fOmhiQ8N5L6J2GA5RYCSzDY13MTjWaYn5mfwG5LGRLJJ3
- Ma8al5MRjZ4kEnQDhT/POgwjEqK9L6Y=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEwMDA0MSBTYWx0ZWRfX5OyXUVww4uyl
- 61W4qVO7lzu/jl/O3Up+s4BKNnpmP0crFjUktkccodlVM1cv9RsS2K87kHxJdSAnRY52hyCKEWl
- /iXdn+yuQII5f8lGieEjL2gUovHi8RFE4sMag570K2TUgiSCn5M9CkkCbVGlSXmWz4Y346agTNm
- 6njuUR6rLe/8VkbU85/cIIu9Xem7IVzVYvb5WGuumNwr6y9cd9m8zESHnM+vaj3u3HLgMJ0WONf
- hKH288NfPTN4Xd3m2VY3gnyJxtXI3EC2Rati1VkfYLdyBdVMmiF6ABDqAzIWVTQWF5wG7mtYEnU
- PrZRMexy/iXL7GLNBOw7xuAO3PRNxbgr45oUvRjmnmdIipyihVhCkFcUfJ5ScnhVIsxU1NwokVW
- suLbg1mknuUrvIlmabcf6+4xeWm9VIjzUTsolJYFKrqIEof5EAZnqCQydvxhO9fSml7Z2VRsm79
- +/1GDXuTBi2bh/BmUbg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-10_01,2026-07-09_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 impostorscore=0 spamscore=0 phishscore=0 priorityscore=1501
- bulkscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607100041
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+ <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+ <ak8XSRiLKx5WcIQw@u94a> <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+In-Reply-To: <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 10 Jul 2026 13:52:26 +0800
+X-Gm-Features: AUfX_mxoloAOLwnU9E3LfsurTGSW9XTQcbVzKw9ceMG67r-JRVwdu0zaL1nYQso
+Message-ID: <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer pointers
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jul 10, 2026 at 2:21=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Thu, 2026-07-09 at 14:47 +0800, Shung-Hsi Yu wrote:
+> > On Wed, Jul 08, 2026 at 10:11:01PM +0800, sun jian wrote:
+> > [...]
+> > > > > @@ -5326,14 +5326,18 @@ static int check_max_stack_depth(struct b=
+pf_verifier_env *env)
+> > > > >  static int __check_buffer_access(struct bpf_verifier_env *env,
+> > > > >                                const char *buf_info,
+> > > > >                                const struct bpf_reg_state *reg,
+> > > > > -                              argno_t argno, int off, int size)
+> > > > > +                              argno_t argno, int off, int size,
+> > > > > +                              u32 *access_end)
+> > > > >  {
+> > > > > +     s64 start, var_off;
+> > > > > +
+> > > > >       if (off < 0) {
+> > > > >               verbose(env,
+> > > > >                       "%s invalid %s buffer access: off=3D%d, siz=
+e=3D%d\n",
+> > > > >                       reg_arg_name(env, argno), buf_info, off, si=
+ze);
+> > > > >               return -EACCES;
+> > > > >       }
+> > > > > +
+> > > > >       if (!tnum_is_const(reg->var_off)) {
+> > > > >               char tn_buf[48];
+> > > > >
+> > > > > @@ -5344,6 +5348,29 @@ static int __check_buffer_access(struct bp=
+f_verifier_env *env,
+> > > > >               return -EACCES;
+> > > > >       }
+> > > > >
+> > > > > +     var_off =3D (s64)reg->var_off.value;
+> > > > > +     if (var_off >=3D BPF_MAX_VAR_OFF || var_off <=3D -BPF_MAX_V=
+AR_OFF) {
+> > > > > +             verbose(env, "%s %s buffer offset %lld is not allow=
+ed\n",
+> > > > > +                     reg_arg_name(env, argno), buf_info, var_off=
+);
+> > > > > +             return -EACCES;
+> > > > > +     }
+> > > > > +
+> > > > > +     start =3D var_off + off;
+> > > > > +     if (start < 0) {
+> > > > > +             verbose(env,
+> > > > > +                     "%s invalid negative %s buffer offset: off=
+=3D%d, var_off=3D%lld\n",
+> > > > > +                     reg_arg_name(env, argno), buf_info, off, va=
+r_off);
+> > > > > +             return -EACCES;
+> > > > > +     }
+> > > >
+> > > > I was thinking of suggest to just do a single unsigned check
+> > > >
+> > > >   var_off =3D reg->var_off.value;
+> > > >   if (var_off >=3D BPF_MAX_VAR_OFF) {
+> > > >     ...
+> > > >
+> > > > But looking at the code before 022ac0750883, what you have is close=
+r
+> > > > aligned to the previous behavior, let's stick to this.
+> >
+> > Actually looking again at 022ac0750883, moving the `off < 0` after
+> > tnum_is_const() and bringing back the `off +=3D reg->off` removed from
+> > check_mem_access() is perhaps the more faithful restoration of the
+> > original behavior.
+> >
+> > Though reg->off no longer exists, we have to use reg->var_off.value
+> > instead. IIUC any register of pointer type should already have its
+> > var_off bounded to +-BPF_MAX_VAR_OFF by adjust_ptr_min_max_vals() in
+> > theory, and thus shouldn't overflow `int off`.
+> >
+> > See the diff below.
+> >
+> > [...]
+> >
+> > > I agree that the size check is redundant given the current call path.=
+ I=E2=80=99ll leave
+> > > v4 as-is for now to avoid another respin unless maintainers prefer dr=
+opping it
+> > > or adding a short comment around the access_end calculation.
+> >
+> > Agree and make sense. Let's see what @Eduard thinks.
+>
+> I don't understand what this patch is attempting to fix.
+> If you run the selftests from patch #2 against current bpf-next both
+> would be rejected. If you extend these test cases to exercise a truly
+> negative offset, that would be rejected as well.
+>
 
+Thanks for pushing on this. I rechecked the issue more carefully.
 
-On 09/07/26 9:21 PM, David Matlack wrote:
-> On Thu, Jul 9, 2026 at 1:49 AM Narayana Murty N <nnmlinux@linux.ibm.com> wrote:
->
->>>> Feedback is requested from the VFIO and PowerPC communities on:
->>>> 1. whether the sPAPR TCE v2 helpers should remain in the common VFIO
->>>> selftest library or move into a sPAPR-specific test helper?
->>> Responded in the patch. Let's move to their own file.
->> Will do. v2 will have:
->>
->>     lib/iommu_spapr.c         — all sPAPR logic, compiled only on powerpc
->>     lib/iommu_spapr_stub.c    — empty stubs returning -EOPNOTSUPP,
->>                                 compiled on all other architectures
->>     lib/include/libvfio/iommu_spapr.h — declarations
-> Just one small thing here: You can put all the stubs in iommu_spapr.h
-> as static inlines, then you don't need the extra C file. e.g.
->
-> #ifdef __powerpc__
->
-> ... prototypes ...
->
-> #else
->
-> ... static inline stubs ...
->
-> #endif
-Sure, will follow the same.
+This series targets the bpf tree, with base 12091470c6b4. On that base,
+with only the selftest change applied, the negative-offset verifier case
+is not rejected at load time. The test fails with an unexpected load
+success:
 
-regards,
-Narayana
+#664/2 verifier_raw_tp_writable/raw_tracepoint_writable: reject
+negative const offset:FAIL
+run_subtest:FAIL:unexpected_load_success unexpected success: 0
 
+It is possible that current bpf-next rejects this earlier through another
+path, but on the target bpf base it does not.
+
+> And this does not rely on UB.
+> Consider the current code:
+>
+>         env->prog->aux->max_tp_access =3D max(reg->var_off.value + off + =
+size,
+>                                             env->prog->aux->max_tp_access=
+);
+>
+>
+> The types of the expressions involved:
+>
+>   reg->var_off.value + off + size
+>   u64                  int   int
+>
+> The promotion/conversion rules:
+>
+>   u64 + (u64)(s64)int -> u64
+>
+> In other words, 'off' and 'size' would be sign extended to s64 and
+> then treated as u64. Hence any negative offset would be represented
+> as a large unsigned value in max_tp_access.
+>
+
+Agreed, this is not a u64-to-u32 truncation issue. For the problematic
+case the access range is [-8, 0), so the end offset is 0. Since
+max_tp_access only tracks the upper bound, the attach-time writable_size
+check cannot catch the negative start offset. The missing piece is the
+lower-bound check.
+
+> Now, the real head scratcher is whether u64 -> u32 truncation on the
+> assignment can bite here (mask higher bits of a big positive or
+> negative value). Given the bounds on the values involved:
+> - reg->var_off.value is -2**29..2**29
+> - off is -2**16+1..2**16-1
+> - size is 1, 2, 4 or 8
+>
+> It cannot.
+>
+> If one wants to be truly paranoid, one can add a truncation check
+> before the assignment, just to avoid the mental gymnastics.
+> But that won't be a fix for any observable behaviour.
+>
+
+There is an observable effect on the target bpf base. I tested it with a
+temporary raw_tp writable test_run reproducer, not part of the series. It
+attaches a raw_tp writable program to bpf_test_finish and triggers it
+through BPF_PROG_TEST_RUN. The program does:
+
+r6 =3D *(u64 *)(r1 + 0)
+r6 +=3D -8
+*(u64 *)(r6 + 0) =3D 0
+
+With KASAN enabled and the BPF JIT disabled, on the bpf base without the
+verifier fix, the program loads, attaches, executes, and KASAN reports:
+
+BUG: KASAN: stack-out-of-bounds in ___bpf_prog_run
+Write of size 8
+
+with the relevant call trace:
+
+___bpf_prog_run
+__bpf_prog_run32
+bpf_trace_run1
+bpf_test_finish
+bpf_prog_test_run_skb
+bpf_prog_test_run
+__sys_bpf
+
+The report points to the bpf_test_finish stack frame, which matches the
+raw_tp writable program being attached to bpf_test_finish.
+
+With this series applied, the same negative-offset access is rejected at
+load time:
+
+R6 invalid negative tracepoint buffer offset: off=3D0, var_off=3D-8
+
+Rerunning the same reproducer against the fixed kernel, the negative
+program is rejected by bpf_prog_load() and the KASAN log stays clean:
+
+NEGATIVE_RUNTIME_REPRO: negative_bpf_load rejected at load time: fd=3D-13 e=
+rrno=3D13
+
+So the observable behavior is the missing lower-bound check: on the
+target bpf base, the verifier can accept and execute an access before the
+writable tracepoint buffer base. The patch prevents that by rejecting
+negative effective buffer offsets at verification time.
+
+Thanks,
+Sun Jian
+
+> [...]
