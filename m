@@ -1,97 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DC43A2E0A;
-	Thu,  9 Jul 2026 23:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C706FC3;
+	Fri, 10 Jul 2026 01:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783641455; cv=none; b=AL7ANBPjN3J/L3sdUTTqlGgh+w9YwgYtzfhGjGypFb1Ah9hiaJm08sSPbnyin1VZYDpiXHr8sepHIZBVYfDCRGm/5XOF7uL8lHGKvN/1KKnWRtUvY7dcY365GJhIsdlR/dl51/Bd5Dp47Bp4Q5/t2dteFPsuaLwN0JQKO9d8ED0=
+	t=1783645257; cv=none; b=QC+l4BuKMjp49H+DW8UryrtDCsRGHk0gpa3MibEJoemRIAXf7fPKv6G+EzUcEQjTJgg6LOikit/K/dthRMzMxtAWEUaY1pftxmZNUrCz7Je4h25sTHiCGJZSAklHUtEJLZ7AKlZ9WLEPEGN3ehZcZrNwtj8MxtARHMLssCWnZeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783641455; c=relaxed/simple;
-	bh=ijeMi1ynINCbfpsysZOXJoU1MZ/yQ6o1QBJh/Ou0gAQ=;
+	s=arc-20240116; t=1783645257; c=relaxed/simple;
+	bh=D7xsMNqxgtDor3HtGZK+8dics/aLyUyn/u2Y9V+fBsM=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sNhPR/87LSf050OAfQ53FuqQRj7IV/6wsOjLbWlyaot6XMUDNFfAWJw3Y8cC2SKuTozo3XCsPGNB72S4kdL+MFMwkuJtL6/s7EfxdAK3GZhuzXC/zpGRwJqUbC/GbNEsQm+rB76CPBglAMqD6+pCpfytxlcPbk4VOZzT31bYXTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VGvMFIuG; arc=none smtp.client-ip=100.103.45.18
+	 Mime-Version:Content-Type; b=ly8l4OgwK6md09gmbKBu7+JociqAISyfKWOUZXHIPwRUsRcK4mB86ag0b54WElqHZRyjQVemSwqsdsstGbVizEIVsPQoA1PCgw09j1ZX/V4my4PGLw8+2TKpa6eI6ZwmFxiep0I4Yc8oPzLma193KziV/al7G32M3REvU+2/DSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RfVx0UQM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VGvMFIuG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DD251F000E9;
-	Thu,  9 Jul 2026 23:57:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RfVx0UQM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7586C1F00A3D;
+	Fri, 10 Jul 2026 01:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783641454;
-	bh=NL6KkE+XGM13rjECEPlDsP8sDmlO2+4iY80eSoJW34k=;
+	s=k20260515; t=1783645256;
+	bh=15pjR0K6DIp0dkq2ahqu5yknk8ig1dLWMV+egpv0BGA=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=VGvMFIuGD04PIRzU/JMeGvWpJXoTWA+IBrWJ4DETddqsvMfFiGavTTa9l63r0ClWv
-	 X2UUQqNqpZqczRFyLqhZ+Zy8m15reHdQPTxmbUIl38NqaY/9+pMPbWiYC4uxdsvauQ
-	 wiyhThJeiv2vh4H7xyufBRg8Jf3VvutnySvhp/UkfByFzJVEb/o6mL59688vpOGA8E
-	 /KtI4FyfFU6/yE1N8/6ajHygAZKQzXhv4MUIjJQ7ZlAJqRmRYhZpdgugODmzwu+OMS
-	 LmeVZGAdUBW7l7GzygghdDpLsz0oELPEdGv7JVw3JmP3iGheo/4T7jidFlKAypbciy
-	 7bI+bsP27Yw9A==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5ED64F40068;
-	Thu,  9 Jul 2026 19:57:32 -0400 (EDT)
+	b=RfVx0UQMsQWT28bdkNdZ3A0/YpaldVNrhaEqSrNnJDNUtOpgPV7YCw05dYpj3UI3P
+	 vW8UwoAqsTUzeUOkJT95fI2n/Ot1hpubtGQZhByI7cn6l0oozUewMgTmdY5jsBrUBO
+	 o3ZwaHbh/N94CGLaF2NAMFm5V8HO6ecAFRyNSf7l0QatjO1ih9y3/Sp0KHVS5STa26
+	 VKh+enQxXReCA6XYrjMiXquyOZSzG8+rHUjHssYWhOrPalWuv9PR1Rty17BG0s06/s
+	 2Y6SQUwmQJLM0D+I0/Uxm1crE3We9RI3FA74bCOFVUEVM9NC//cnce6hMRePgYoiXU
+	 603Yh5mMX72Lw==
+Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 9EF3FF40068;
+	Thu,  9 Jul 2026 21:00:54 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Thu, 09 Jul 2026 19:57:32 -0400
-X-ME-Sender: <xms:bDVQalWT3kkP1O_nPlEUgaGq8m8QWlO5PPNjznrDe7d1CpTWIfMANg>
-    <xme:bDVQalv5hmJ1CwhK2dgiJKfqcKH5_0MDF8nquspQ3CIiab0qCEzQOUNU3wTkB6jqA
-    qux6Ekbzjl6ev_KByOlE4DpQciHdJVr0JS7N5fHu8-OEkyJk7RLkY4>
-X-ME-Received: <xmr:bDVQavNLOvwweJeepDKvjUahneSQU-R9SYF3Ap5jl8v4MTmiRC2Md5MF496hZvJ_k9lFsj2yuAX9-jTBk3671HtMbzuA8Bg0NRc>
-X-ME-Proxy-Cause: dmFkZTFRjNBlnTz3PRsAmwjqRoF0mrjGm979SwqAKHEfthIBDq5uh/i9WRUkVW7VZSf//w
-    YDoaw7hRG798DaAYdC6UbfhFGRdHF+jU+/jGu6HBle2Ytf+9RWyMwBDwRmckEaZLf/nUyQ
-    SKi5sJRgbDjlp94ASRYw/4muCvkc2xHnl/vxqUx1y1DhspUjPMoJnbB/bl00rpb5PWiQyg
-    GTtZWI4G6plLyhOdjNWH8CBGphBXLtH3D2Pvho0pAK+KnWiAORXsSOpMdV4xD7ID8QXYje
-    a9mh9aiUSp78AdFrJ9O2B3vkzu06KG1gqyHdViPBwiRVrcIhbVPJi05ziCPPBR/N6vYfer
-    6lrpXziKcnjva9wT7p5QUwgxDdC5jjdwT7fXiZidMKAEs3vLpiGVt16GoilNTbBE1Swe66
-    lq1nYogPtBgSjvZCHT/YZLpCIqUO4TamHC1Gj5FtyOihURCc/3jiGGJS5HrnflvJVUhjxl
-    uPu1tEET6rrY+yW5GgTNYjuDoKs+MzBD57qey3Z58xdp6wOjNRKNBRIG8N4BLdwR9dsmCv
-    A4RIo/MDKkVvsbyt2hA+z7nruReU0o4mcD3lQXH5OqBkbo9AE/nGnLS1/bS/nnG97VTtRr
-    clacuChAjPCOEchopHVZNuyYh3E0NUuVP+WPVNPQEQOSK3N74GMuftNUjPxA
-X-ME-Proxy: <xmx:bDVQasnnBxeuM7jroXxksAQB9zn6duvpKmyvN9LZYwI-PdaHUkJUKA>
-    <xmx:bDVQatz0AT56AL-iX_O4imnfAPCevJDLonBYOOcGBR4lexJTusoU-A>
-    <xmx:bDVQalDdKFvxjIjyCfZD792xaNLb2nqmtQGGLIeFu5A_OdS7ISVbsQ>
-    <xmx:bDVQal5BbtDERhJ51QOg_cveb9aqQk1z5niWGshAPguYIvTxzRtlwA>
-    <xmx:bDVQap1K540U56JdRBFV8JSNUnGOGG8a2VUV2cYjZ6gcar-XwgSzqP4U>
+  by phl-compute-12.internal (MEProxy); Thu, 09 Jul 2026 21:00:54 -0400
+X-ME-Sender: <xms:RkRQaixhjYcFLUIlGKbiUyCePNgXUChBwgmx84ppzWv3pr__x5Go8Q>
+    <xme:RkRQajLbYHucSL7ZO0PsAMtRM87ipcbCZ-1P7QyyPkVTpHzz5vF9jMX6TR70kUm82
+    JI3UCX8lpr5avrCBISbl2fVItK6bOtNddS_Z8OahUfW-cRB-UKpeA>
+X-ME-Received: <xmr:RkRQah5RcFMetqbrlzuvSkd4EMeWWkdoNYpjpUGasts8RvbzVGGiZwpCsO_ojTEIjVSDZE2EbXrr04LUMFc719RLrhnKfUUC8Vs>
+X-ME-Proxy-Cause: dmFkZTGsYDfGD7sxNcvTONT2+aJJfxqyPBiaS3Mkdh2jbWQu+fCZIX0aLUIqA6NBOWA8Iy
+    S1d44AqtcsvdKsUpMKxngGixr3adXdgl4ZOuaGBcCL5Atsk7rMj8Y0O+ujZos1nEh+55jA
+    Ie6e3/gtSTxpbAKgKtrC6kwQFFaAICKOvt3RPzvwz0mlrlpz5g/f4kWYD2KuXpKR5O7bHZ
+    yb8re0feSEfVGP7S9Y7KDiYnEJqR5E/fpU1i9KHC/VNkmkjNEBepIvCims16M22easzvDT
+    8Jts+UjL+EwmjLWu/CuntdiXBoWG2jry8Z+lhmCIbzTr/iY/hO79JgBTMA+jXTXoHF61iK
+    9kmeyU/EmT2StFDhfXhISwx2zyjq6HKDkTq5/yWad3UpsDizaxQjfScm9pGnIpcwzSMJd0
+    /N13x23xu2QPfEJkTCwxwKLp/UlwP66Kd9ynet1RdNHeVFPWzD/YgUEuf3raGleW9E6mJD
+    eFtqzl6vMeJ4iHCrPl6FvznMULI0G19Fe7mxybeOnvVhy45kBAfYgKFNRCHOq2eCV7jC5F
+    qFJe5+/P7L+i/Ce4Nk3q4TVyHURA9JgoM95KcBsm0mOEGqAlnJ0SIaIeEjTTP3hVhXMRGF
+    +Z6kDdpTejQe/oNWFiV+HjZkjCC27bLjLabbloy8Qmy3sc8n2QGUH+W82apg
+X-ME-Proxy: <xmx:RkRQaqlN_kciHCe3yx4N5qm5jOMNAgZLdzCwoFdoi-UCaThfLAJ0pg>
+    <xmx:RkRQajJAIeOB-_IGDxeXNlQv2hJy-blrgvVqpuscGUEZngm_eczWhw>
+    <xmx:RkRQarGIF-29iEmu8dHoriQ1WIx36lZEtKBG3B8F2N1OM6Ar_96Y1w>
+    <xmx:RkRQakN5veFz-oz4qh6s7KpyzeKlkgLi6fWKJ_l4YMB9Z7uUvY_41Q>
+    <xmx:RkRQal_kPq7fB6UHch4IBRveGlZwljeuKCzcGVUDLouoDp5SWrBnsHkK>
 Feedback-ID: i67ae4b3e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Jul 2026 19:57:31 -0400 (EDT)
-Date: Thu, 09 Jul 2026 16:57:30 -0700
+ 9 Jul 2026 21:00:54 -0400 (EDT)
+Date: Thu, 09 Jul 2026 18:00:53 -0700
 From: "Dan Williams (nvidia)" <djbw@kernel.org>
-To: Gregory Price <gourry@gourry.net>, 
- "Dan Williams (nvidia)" <djbw@kernel.org>
-Cc: linux-mm@kvack.org, 
- nvdimm@lists.linux.dev, 
- linux-kernel@vger.kernel.org, 
- linux-cxl@vger.kernel.org, 
- driver-core@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, 
- kernel-team@meta.com, 
- david@kernel.org, 
- osalvador@suse.de, 
- gregkh@linuxfoundation.org, 
- rafael@kernel.org, 
- dakr@kernel.org, 
- vishal.l.verma@intel.com, 
+To: mhonap@nvidia.com, 
+ djbw@kernel.org, 
+ alex@shazbot.org, 
+ jgg@ziepe.ca, 
+ jic23@kernel.org, 
  dave.jiang@intel.com, 
+ ankita@nvidia.com, 
+ alejandro.lucero-palau@amd.com, 
  alison.schofield@intel.com, 
- akpm@linux-foundation.org, 
- ljs@kernel.org, 
- liam@infradead.org, 
- vbabka@kernel.org, 
- rppt@kernel.org, 
- surenb@google.com, 
- mhocko@suse.com, 
- shuah@kernel.org, 
- iweiny@kernel.org, 
- Smita.KoralahalliChannabasappa@amd.com, 
- apopple@nvidia.com, 
- Hannes Reinecke <hare@suse.de>
-Message-ID: <6a50356aa7a4a_3cabcb1008a@djbw-dev.notmuch>
-In-Reply-To: <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-10-gourry@gourry.net>
- <6a502267b17cc_3b7ee51008f@djbw-dev.notmuch>
- <alApfp2z9Thyan16@gourry-fedora-PF4VCD3F>
-Subject: Re: [PATCH v6 09/10] dax/kmem: add sysfs interface for atomic
- whole-device hotplug
+ dave@stgolabs.net, 
+ dmatlack@google.com, 
+ gourry@gourry.net, 
+ ira.weiny@intel.com
+Cc: cjia@nvidia.com, 
+ kjaju@nvidia.com, 
+ vsethi@nvidia.com, 
+ zhiw@nvidia.com, 
+ mhonap@nvidia.com, 
+ kvm@vger.kernel.org, 
+ linux-cxl@vger.kernel.org, 
+ linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <6a50444528cae_3c589810050@djbw-dev.notmuch>
+In-Reply-To: <20260625165407.1769572-2-mhonap@nvidia.com>
+References: <20260625165407.1769572-1-mhonap@nvidia.com>
+ <20260625165407.1769572-2-mhonap@nvidia.com>
+Subject: Re: [PATCH v3 01/11] cxl: Add cxl_get_hdm_info() helper for HDM
+ decoder metadata
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -102,26 +94,74 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-Gregory Price wrote:
-> > So the "unknown" case does not need to be here.
-> >
+mhonap@ wrote:
+> From: Manish Honap <mhonap@nvidia.com>
 > 
-> mhp_online_type_to_str can technically return NULL, seems better to not
-> just let a NULL dereference sit latent even if we can visually tell it
-> can't happen today?
-
-Oh, makes sense I was thinking "unknown" was only a result of the
-drvdata missing case.
-
-> > > +	if (dax_kmem_state_is_online(data->state)) {
-> > > +		dev_warn(dev, "Hotplug regions stuck online until reboot\n");
-> > 
-> > I like that the BUG() is avoided, but I think these should stay
-> > dev_err() given the severity.
-> > 
+> cxl_probe_component_regs() finds the HDM decoder block during device
+> probe and caches its location, but does not record the decoder count
+> and does not expose the result outside drivers/cxl/.
 > 
-> I had to go back to calling remove_memory() by default given different
-> feedback, but I think if anything I will just modify the BUG() to a
-> WARN() and call it a day.
+> In-kernel cxl drivers (Type-2 accelerator drivers, vfio-cxl) need the
+> decoder count and the byte offset and size of the HDM block without
+> re-running the probe sequence.
+> 
+> Record decoder_cnt in rmap->count when parsing the HDM capability in
+> cxl_probe_component_regs(), extend struct cxl_reg_map with a count
+> member, and add cxl_get_hdm_info() to return offset, size, and count
+> from the cached map.  Export under the CXL namespace.
+> 
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+>  drivers/cxl/core/pci.c  | 33 +++++++++++++++++++++++++++++++++
+>  drivers/cxl/core/regs.c |  1 +
+>  include/cxl/cxl.h       |  4 ++++
+>  3 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 2bcd683aa286..c917608c16f9 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -449,6 +449,39 @@ int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_hdm_decode_init, "CXL");
+>  
+> +/**
+> + * cxl_get_hdm_info - Get HDM decoder register block location and count
+> + * @cxlds: CXL device state (must have component regs enumerated via
+> + *	   cxl_probe_component_regs())
+> + * @count:  number of HDM decoders (from HDM Capability bits [3:0])
+> + * @offset: byte offset of HDM decoder block within the component register BAR
+> + * @size:   size in bytes of the HDM decoder block
+> + *
+> + * Exported for cxl drivers (in-kernel accelerator drivers, vfio-cxl) that
+> + * need HDM decoder metadata from the cached component-register map without
+> + * re-running the probe sequence.
+> + *
+> + * Return: 0 on success. -ENODEV if the HDM decoder block is not present.
+> + */
+> +int cxl_get_hdm_info(struct cxl_dev_state *cxlds, u8 *count,
+> +		     resource_size_t *offset, resource_size_t *size)
+> +{
+> +	struct cxl_reg_map *hdm = &cxlds->reg_map.component_map.hdm_decoder;
+> +
+> +	if (WARN_ON(!count || !offset || !size))
+> +		return -EINVAL;
+> +
+> +	if (!hdm->valid)
+> +		return -ENODEV;
+> +
+> +	*count	= hdm->count;
+> +	*offset = hdm->offset;
+> +	*size	= hdm->size;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cxl_get_hdm_info, "CXL");
 
-ack.
+This is the same information that the CXL reset patches need to cache on
+the PCI device. Effectively this level of CXL information deserves to be
+as accessible as PCI BAR information, and should not need cxl_dev_state
+context to fetch it.
+
+So it would be good to depend on that rather than invent a new export
+mechanism.
