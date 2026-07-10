@@ -1,182 +1,120 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB8637BE93;
-	Fri, 10 Jul 2026 18:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F376377EAC
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783707757; cv=none; b=bEUwsBStApWCsasguTzqFHN4JUVGmUJNrx+KcPbS48gMIU/d37SUDzwQhaYevilzlmpG+YaD3Qhut3VDJqnwpNkePbwDUVXOGURm/eHICrF8KABpI0uNmkzBPHZiCKLxuA9vz+Zs+wlK09NGtIavPUSGapY8lKTQirWplQxw1aA=
+	t=1783707915; cv=none; b=CRQp/LDQlQcKGlaaAZE645DZJ40+1FGq5yVsnLpsHevn/3eNJ/uzp7XjBjezOTmLEb5mmRk733lfYxCBQWJpLz4X8U2syKAW9rs0FQGLq86cQfq1nY2FtHWl/8ous4QqSu1CgomZsH0N5GipdcAjJ3lJrLlmrztfO24NpVoxeJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783707757; c=relaxed/simple;
-	bh=9BD0frHIllOdYuYH6t1kkSctrb7RdeGSymmOSsqpKhU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nHvhbpdO3vwJqQsarmSySpN8JiNDIAQBeyM4M4GqNtaQCjchLJawz1bzDkZnGYZz5rCM9DettriUlZbiBhF5ja3yi3GLaieYESHWeEL9IdJ5kG0g0TAsf5wwtpVXBbfPhKShq2vgYrEqPpg87OCamGxAH1TaLLZjo3RJRSVFUlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ofdl18DB; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783707915; c=relaxed/simple;
+	bh=ZZekBbFA9NhngbLYIVC+8htxKlJKsz67NZnwnFVfRBM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gVldqJELEgK8uaS/cMUK3CW9znsESdAbC514xym7aluwH3Kb2GIxUBkGsaLQATYoeJXfgv7EFVzaUAxRLTTgGy9/iYE3A/KkWAIvbJOqQd4pS6BzrNJID3NmEZ4JSg6XowZZpIdeIK7rTUSdbgF7Yl3tGH0xmtiZVopgyhRrbks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kK/1O+W3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ofdl18DB"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id D2E5DC2C64E;
-	Fri, 10 Jul 2026 18:22:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EFA4A60342;
-	Fri, 10 Jul 2026 18:22:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3FAB711BD2C24;
-	Fri, 10 Jul 2026 20:22:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783707748; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Z4iMMdJhqEJQ6QA/P5+O9pqvjmWc5U1l7gvdD0BYF6o=;
-	b=ofdl18DBYwlZmpFxpHUXEBogYh+20Q1xgpbDsSLtbS+ORZehcnwURbhUEtZCbfJ1xSe6bL
-	BIsjJRe1JSyssr97hQIBNc8aAzNiG4e3zyRYBF9ovA9o1KVlfQM5aSjx1hC1KcSY4iIYhr
-	J2WEbmlpmSk0xwnr7QhZ8WouCwzx4vlCzaf8o3/tBHtTVcYNuoAyvlVqHY7gBfmmWL/ZL1
-	YFcnER1B+nSsJgW188PXHm4YZ5PcSCdBUuAo5+zF5kJsHxTBqExBSNVjBrcbAN1pOMEjeO
-	4KqHFvHuqyOCwZmTbdF81MiDV31OgtVhQy1v9bpLR+hYiX027IQH8bMnpSNBsQ==
-From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 10 Jul 2026 20:22:01 +0200
-Subject: [PATCH v2 6/7] clk: Add support for clock nexus dt bindings
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kK/1O+W3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446011F00A3F
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783707914;
+	bh=ZZekBbFA9NhngbLYIVC+8htxKlJKsz67NZnwnFVfRBM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=kK/1O+W3osF9lgM9cCR2fSLVCuFSKquZMb8a81GQnUuMXdBkPWJLYf3vkFk2v9aOx
+	 Rq5g37N3VKaT96KU0NhGdys6TP1Zmwo24/ML6c3wsJXjRNZ6mPZTJI8PcUcf+INeR/
+	 oRkxx3luKCThwCDDcc/+HGxyaUYQP3QcZ/OIesIm+aUSkP3CkLha7AVUQQ/q0CBGTF
+	 f6k3SVvuGRznyd6r3MaQG4xDKKa82O92etN9/H3UJux64t2wexnmSRle2dioIGtXiK
+	 6mQ4VXDL1PsditNjwJwTrO4in52ocoOunKlX966sM1PVKUDeWB9OGB5hVdB0EBTMs4
+	 BV2VdAHMRH1CA==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-697bd21fdc2so2047597a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:25:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrJXAkR4RflZE9/zfGlb3snVy7X/7lDO6eWuCrPkz3rfmR6JC7hj9d7a0naVKlDmlM8vEtN2qyc2GhS3/cWiSA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxG5acEra/GRRWr8VmdutT2q9VxtziWjIeqgMql+PUultkHhh1H
+	HeogrRz6IlWEmVDs7jhzFPfWNSL/3zSIw2D7Kv5HU3fRLDbtvyDxVOeQsvFyMNuJUdRG2FstCoh
+	zbZUFDxK8VjAt3/q05C3FJoXZ31jMZCY=
+X-Received: by 2002:a17:907:26c8:b0:c12:6cdf:6071 with SMTP id
+ a640c23a62f3a-c15cdecfa6amr810724166b.4.1783707913208; Fri, 10 Jul 2026
+ 11:25:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-6-b4680787377e@bootlin.com>
-References: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
-In-Reply-To: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Pascal EBERHARD <pascal.eberhard@se.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
- Herve Codina <herve.codina@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+References: <c0970cee-42c2-4844-b88e-229853f08e90@linux.dev>
+ <CAO9r8zNJh65SZzdW8Cc8_8N5Wr+ORuRtU3kuaAX_DhLaESFYTA@mail.gmail.com>
+ <CAKEwX=MMXdq7KTzcEgXfNt2L-eTmAVa+nijdyiujVOAhXQsHSg@mail.gmail.com>
+ <CAO9r8zO-nAys0PJfXVRwLgAzwJLa9KxpMXKQKXJR7cnYKgmhRQ@mail.gmail.com>
+ <CAKEwX=M7axSs2FJDq0KF3GBDpd6G0J=gP_2boUJraNf8M2n3Bw@mail.gmail.com>
+ <CAO9r8zM8qk9g6+B6GiCV3oytjViMTEhbr0KjrccU+bF4+PMfTA@mail.gmail.com>
+ <ak6c2TaOlcGxZ2Ih@localhost.localdomain> <CAO9r8zPiOyri2wVxRvB0bwEXf9bCKoPsQmRzOpj01XozA8hqUw@mail.gmail.com>
+ <CAKEwX=PLauANTu8nDLbDmViQ6u9gvh7HbKffUAzUXuBa6Jes=g@mail.gmail.com>
+In-Reply-To: <CAKEwX=PLauANTu8nDLbDmViQ6u9gvh7HbKffUAzUXuBa6Jes=g@mail.gmail.com>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Fri, 10 Jul 2026 11:25:00 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zPiK44=LA4bzyS=WA1irGFL-YCKmz7u70v-ddEVj5-zSw@mail.gmail.com>
+X-Gm-Features: AVVi8Cclh0zv6h_QCsnP6fSkY8HFOsG8hOvjUqUDiHIONAoQflK4FdYIabyurfE
+Message-ID: <CAO9r8zPiK44=LA4bzyS=WA1irGFL-YCKmz7u70v-ddEVj5-zSw@mail.gmail.com>
+Subject: Re: cgroup/test_zswap failed with "zswpout does not increase after
+ test program"
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	hannes@cmpxchg.org, chengming.zhou@linux.dev, tj@kernel.org, 
+	Shuah Khan <shuah@kernel.org>, mhocko@kernel.org, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A nexus node is some kind of parent device abstracting the outer
-connections. They are particularly useful for describing connectors-like
-interfaces but not only. Certain IP blocks will typically include inner
-blocks and distribute resources to them.
+On Fri, Jul 10, 2026 at 10:30=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
+e:
+>
+> On Wed, Jul 8, 2026 at 12:08=E2=80=AFPM Yosry Ahmed <yosry@kernel.org> wr=
+ote:
+> >
+> > On Wed, Jul 8, 2026 at 12:00=E2=80=AFPM Michal Koutn=C3=BD <mkoutny@sus=
+e.com> wrote:
+> > >
+> > > On Tue, Jul 07, 2026 at 02:49:56PM -0700, Yosry Ahmed <yosry@kernel.o=
+rg> wrote:
+> > > > I would honestly rather use more memory. I think there might be cas=
+es
+> > > > where the flusher is delayed. The flush being slightly delayed is n=
+ot
+> > > > technically a bug that we want to see a failure for, but if a large
+> > > > stats change is not visible that's a user-noticeable behavior that =
+we
+> > > > want a failure for.
+> > > >
+> > > > WDYT?
+> > >
+> > > There's already the (recent) page size-based scaling, so the idea wit=
+h
+> > > nr_cpus scaling could make the selftest useful on wider range of setu=
+ps
+> > > (even page size can be considered as a slight implementation detail
+> > > leak, thus the justification of nr_cpus dependency).
+> > >
+> > > Also, I still think that internally the threshold should be changed t=
+o
+> > > the "harmonic" formula [1] but the selftest can go with the linear
+> > > dependency for more pronounced effects.
+> >
+> > Yeah I agree the threshold formula can be improved, but we need to
+> > make sure performance doesn't regress.
+>
+> Yeah that's a separate discussion indeed. For now I'm fine with fixing
+> the selftests by using more memory.
+>
+> Is there a good generic formula for this? I understand there will be
+> hardcode values, but at least making it scalable (by how much memory
+> we have, page size, # of cpus) if possible? :)
 
-In the case of clocks, there is already the concept of clock controller,
-but this usually indicates some kind of control over the said clock,
-ie. gate or rate control. When there is none of this, an existing
-approach is to reference the upper clock, which is wrong from a hardware
-point of view.
-
-Nexus nodes are already part of the device-tree specification and clocks
-are already mentioned:
-https://github.com/devicetree-org/devicetree-specification/blob/v0.4/source/chapter2-devicetree-basics.rst#nexus-nodes-and-specifier-mapping
-
-Following the introductions of nexus nodes support for interrupts, gpios
-and pwms, here is the same logic applied again to the clk subsystem,
-just by transitioning from of_parse_phandle_with_args() to
-of_parse_phandle_with_args_map():
-
-* Nexus OF support:
-commit bd6f2fd5a1d5 ("of: Support parsing phandle argument lists through a nexus node")
-* GPIO adoption:
-commit c11e6f0f04db ("gpio: Support gpio nexus dt bindings")
-* PWM adoption:
-commit e71e46a6f19c ("pwm: Add support for pwm nexus dt bindings")
-
-Only expected Nexus property:
-- clock-map: maps inner clocks to inlet clocks
-(the other properties have been judged not relevant for clocks)
-
-Here is an example:
-
-Example:
-    soc_clk: clock-controller {
-        #clock-cells = <1>;
-    };
-
-    container: container {
-        #clock-cells = <1>;
-        clock-map = <0 &soc_clk 2>,
-                    <1 &soc_clk 6>;
-
-        child-device {
-            clocks = <&container 1>;
-	    /* This is equivalent to <&soc_clk 6> */
-        };
-    };
-
-The child device does not need to know about the outer implementation,
-and only knows about what the nexus provides. The nexus acts as a
-pass-through, with no extra control.
-
-Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
----
- drivers/clk/clk-conf.c | 12 ++++++------
- drivers/clk/clk.c      |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
-index 303a0bb26e54..5380d43b56a4 100644
---- a/drivers/clk/clk-conf.c
-+++ b/drivers/clk/clk-conf.c
-@@ -25,8 +25,8 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
- 		       node);
- 
- 	for (index = 0; index < num_parents; index++) {
--		rc = of_parse_phandle_with_args(node, "assigned-clock-parents",
--					"#clock-cells",	index, &clkspec);
-+		rc = of_parse_phandle_with_args_map(node, "assigned-clock-parents",
-+						    "clock", index, &clkspec);
- 		if (rc < 0) {
- 			/* skip empty (null) phandles */
- 			if (rc == -ENOENT)
-@@ -47,8 +47,8 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
- 			return PTR_ERR(pclk);
- 		}
- 
--		rc = of_parse_phandle_with_args(node, "assigned-clocks",
--					"#clock-cells", index, &clkspec);
-+		rc = of_parse_phandle_with_args_map(node, "assigned-clocks",
-+						    "clock", index, &clkspec);
- 		if (rc < 0)
- 			goto err;
- 		if (clkspec.np == node && !clk_supplier) {
-@@ -121,8 +121,8 @@ static int __set_clk_rates(struct device_node *node, bool clk_supplier)
- 			rate = rates[index];
- 
- 		if (rate) {
--			rc = of_parse_phandle_with_args(node, "assigned-clocks",
--					"#clock-cells",	index, &clkspec);
-+			rc = of_parse_phandle_with_args_map(node, "assigned-clocks",
-+							    "clock", index, &clkspec);
- 			if (rc < 0) {
- 				/* skip empty (null) phandles */
- 				if (rc == -ENOENT)
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index dad4bac10ad4..73ddd9a6aa2e 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -5207,8 +5207,8 @@ static int of_parse_clkspec(const struct device_node *np, int index,
- 		 */
- 		if (name)
- 			index = of_property_match_string(np, "clock-names", name);
--		ret = of_parse_phandle_with_args(np, "clocks", "#clock-cells",
--						 index, out_args);
-+		ret = of_parse_phandle_with_args_map(np, "clocks", "clock",
-+						     index, out_args);
- 		if (!ret)
- 			break;
- 		if (name && index >= 0)
-
--- 
-2.54.0
-
+The rstat formula depends on the number of CPUs and a constant factor
+(see memcg_vmstats_needs_flush()), but this formula is for the number
+of updates (e.g. number of pages reclaimed), and that value will
+decrease as the page size increases. So I think we want to scale with
+both the page size and the number of CPUs. The amount of memory in the
+system is not a factor for now.
