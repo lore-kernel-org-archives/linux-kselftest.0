@@ -1,419 +1,416 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE01833D6E1;
-	Fri, 10 Jul 2026 16:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6587C434E52;
+	Fri, 10 Jul 2026 16:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783699392; cv=none; b=dh7D+KPjERiKkPRztId2Q7ZjR31dpdBm459tLQzddEtM4KJEMu3kawtGhkTqiXELD2TXdyT+WHNXYiaZF3EEGOR5Hx4A5paTuoQFjwYiDfD/KpHJBLxq/C/0fJld6qqZLPgMZvKb+GLu/DO2onFPxzmwQhlyMNG7VfwlqqJd6kM=
+	t=1783700822; cv=none; b=LFd/HPMes7pHHRgp9AKL+zfnVk2Mcmw9t2pyFJlhAyJqYs7blWHdWM98kAIj6BREa2D04MMxT2KkPjB6K208golpLIamSwN5Gl5QRvG40cjUqqrvGKNcx+NCXzwmQsR6ZNRdUkrYPS76wMf6xZMi/s/JHzUfnFFbZ1hupBqmvgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783699392; c=relaxed/simple;
-	bh=w4QcPe4L/AfEbWOB2TH6d4FyAbBF6jAyqHEdhQriBh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eQwm2ppWYGNr6LSm1S8clXKKzqG83kyJNL47F6Gg+dsWNXD0Rvvwz73gRfngi+3NNTWPk1DHC8hmTfqNKtr0sf0lZRzPOgzRtCBVObjtbLN6RkKRAFrBTOQ9R3pu8TKwZttz+k5FhdVUTJun21avejS1l/sQDFsapQm8gCFWo1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=i6UPeSbm; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1783700822; c=relaxed/simple;
+	bh=IYFVsZWbDUDmjZJgF1r3Y7n9OU4bDSbiqXArEvuUfV8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U3UxDIkxiANO8AuiswKeORfNR7QL18CjzT85q9pH2+I7g/bhvvTLgDmVWKdZ6Jug7W9JCSkSHNR6gdpuvmcyLgJryfMOnCvjOCxCWIuJGKypHqXRYML92+zAopXr0JscNnFIvgdRpN92MbJMFrUi0cI/8UAZluDOWh3KfJNfeIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuvVbg6u; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="i6UPeSbm"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E443616F2;
-	Fri, 10 Jul 2026 09:03:01 -0700 (PDT)
-Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 909623F99C;
-	Fri, 10 Jul 2026 09:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1783699386; bh=w4QcPe4L/AfEbWOB2TH6d4FyAbBF6jAyqHEdhQriBh8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i6UPeSbmOB414XtsacnAMKvzEXCDjdKx9BDHDp7ggwdCQ9btlrZQRFd295P3zd3lQ
-	 YQcI7rQBhbjJBZO8khoTP5cqmqyG4FbZGXFh8Bt4gi7kRt12XxltlEuVj8sWdg4iYB
-	 PyjHuhkOqs+rBVpcnbhxivgMzl84ibuJOijDZSgQ=
-Date: Fri, 10 Jul 2026 17:03:01 +0100
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: Jack Thomson <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com,
-	joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-	shuah@kernel.org, corbet@lwn.net, vladimir.murzin@arm.com,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	isaku.yamahata@intel.com, Jack Thomson <jackabt@amazon.com>
-Subject: Re: [PATCH v5 2/5] KVM: arm64: Add pre_fault_memory implementation
-Message-ID: <alEXtW7w-rqlNG09@raptor>
-References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
- <20260612162354.73378-3-jackabt.amazon@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuvVbg6u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783700818; x=1815236818;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IYFVsZWbDUDmjZJgF1r3Y7n9OU4bDSbiqXArEvuUfV8=;
+  b=FuvVbg6uhf1ApJmlL3C8vt74IqFNCdjG/OBj6qAzrcyxwJg30bmECjqQ
+   lCO+jinNLjc7YSBFq/cI2hcc9tIOXxRru6ZenZecqu3RTD1pOFlq6PDpa
+   1lXbPrgbKCtJzHGdNROhabiw/FpMkNaunQznZXekyJB2963xE9wWtMUnn
+   rEsbwg6DedvOcf9hIRDtUcqahJ9dGK/NvG7Qj1pbfAWcXVhHC2h6tfKnJ
+   XT/i6szjfvIPXwbPiDdyrVM52ZAwQA1Cv9ao/e3BiToEJkTIXYAcmQg6f
+   NyICaWzvhf9ui9onf3FLkMpUj/UiIyD4Ml285l9wXdDDLTJcX55vDn0q4
+   w==;
+X-CSE-ConnectionGUID: HY1TKhXyT1OXFm9P0EjQFg==
+X-CSE-MsgGUID: Zm2OqE92RYSJ2xcejUI8eQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84281236"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="84281236"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 09:26:56 -0700
+X-CSE-ConnectionGUID: K0fZ0+qERy2T/HftTs8OMw==
+X-CSE-MsgGUID: QTAz0LkZTGSq6GM3DaYvYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="250937422"
+Received: from smithj1-mobl2.amr.corp.intel.com (HELO [10.125.111.214]) ([10.125.111.214])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 09:26:54 -0700
+Message-ID: <6f8bf672-8e10-440c-a396-086f2c71b69f@intel.com>
+Date: Fri, 10 Jul 2026 09:26:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260612162354.73378-3-jackabt.amazon@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/11] vfio/pci: Add CXL Type-2 device passthrough
+ support
+To: mhonap@nvidia.com, djbw@kernel.org, alex@shazbot.org, jgg@ziepe.ca,
+ jic23@kernel.org, ankita@nvidia.com, alejandro.lucero-palau@amd.com,
+ alison.schofield@intel.com, dave@stgolabs.net, dmatlack@google.com,
+ gourry@gourry.net, ira.weiny@intel.com
+Cc: cjia@nvidia.com, kjaju@nvidia.com, vsethi@nvidia.com, zhiw@nvidia.com,
+ kvm@vger.kernel.org, linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260625165407.1769572-1-mhonap@nvidia.com>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20260625165407.1769572-1-mhonap@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Jack,
 
-On Fri, Jun 12, 2026 at 05:23:50PM +0100, Jack Thomson wrote:
-> From: Jack Thomson <jackabt@amazon.com>
+
+On 6/25/26 9:53 AM, mhonap@nvidia.com wrote:
+> From: Manish Honap <mhonap@nvidia.com>
 > 
-> Add arm64 support for KVM_PRE_FAULT_MEMORY by synthesizing a read data
-> abort and routing it through the existing stage-2 fault handlers. Treat
-> the requested GPA as an IPA in the userspace-owned VM's memslot space
-> and always target the canonical stage-2, even if the vCPU last ran with
-> a nested/shadow MMU selected.
+> CXL Type-2 accelerators (CXL.mem-capable GPUs and similar) cannot be
+> passed through to virtual machines with stock vfio-pci because the
+> driver has no concept of HDM decoder management, HDM region exposure,
+> or component register virtualization.  This series adds those three
+> pieces, sufficient for a guest to use the device's firmware-committed
+> coherent memory under UVM / ATS.
 > 
-> If the vCPU last ran in a nested context, switch to the canonical
-> stage-2 with the vCPU put/load helpers so VMID, VNCR and shadow-MMU
-> refcount state stay consistent. Leave the switch in place for the ioctl;
-> vcpu_put() at ioctl exit drops the hw_mmu and the next vcpu_load()
-> reselects the correct MMU from vCPU state.
+> v3 is a rewrite of the v2 framework form, responding to Dan's request
+> in the v2 review for "less emulation, narrower interfaces, and a
+> closer mapping to the spec language."
+> In this release, cxl-core exposes four EXPORT_SYMBOL_GPL helpers behind
+> an opaque handle.  vfio-pci becomes a thin transport on top of those.
+> Please see "Changes since v2" and "Reviewer feedback addressed" below for
+> the per-area summary.
 > 
-> Check existing mappings with a shared page-table walk under the MMU read
-> lock, and use the resulting walk level when constructing the synthetic
-> fault. Report poisoned pages through the ioctl return path with
-> -EHWPOISON instead of also queueing SIGBUS, and use the installed
-> mapping size to advance the prefault range.
+> Motivation
+> ==========
 > 
-> Advertise KVM_CAP_PRE_FAULT_MEMORY on arm64. Protected VMs remain
-> unsupported: pKVM filters the capability, and the ioctl returns
-> -EOPNOTSUPP if invoked anyway.
+> A CXL Type-2 device exposes its HDM-mapped device memory through HDM
+> decoders that BIOS programs and commits at boot.  To pass such a
+> device to a guest, vfio-pci has to do three things at once:
 > 
-> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+>   1. Surface the firmware-committed HDM-mapped HPA range as a guest-
+>      mmappable region.
+> 
+>   2. Surface a CXL-spec-compliant view of the CXL Device DVSEC body,
+>      the HDM Decoder Capability block, and the CXL.cache/mem cap-array
+>      prefix, so the guest's CXL driver enumerates the same topology
+>      the host saw.
+> 
+>   3. Keep the host's committed decoder configuration intact (the
+>      physical decoder is never reprogrammed) while letting the guest
+>      observe and manage a shadow that follows the per-field write
+>      semantics in the spec.
+> 
+> The series builds on Alejandro Lucero-Palau's v28 work
+> applied on for-7.3/cxl-type2-enabling [1] (sfc is the in-tree consumer
+> today). vfio-pci becomes the second consumer.
+> 
+> Architecture
+> ============
+> 
+> cxl-core owns the CXL semantics.  A new file
+> drivers/cxl/core/passthrough.c (gated by hidden Kconfig
+> CXL_VFIO_PASSTHROUGH) provides four exported symbols:
+> 
+>     struct cxl_passthrough *
+>     devm_cxl_passthrough_create(struct device *dev,
+>                                 struct cxl_dev_state *cxlds);
+> 
+>     int cxl_passthrough_dvsec_rw(p, off, val, sz, write);
+>     int cxl_passthrough_hdm_rw  (p, off, val,      write);
+>     int cxl_passthrough_cm_rw   (p, off, val,      write);
+> 
+> cxl_passthrough is an opaque handle; vfio-pci sees no cxl-internal
+> struct pointers.  The shadows are snapshotted at create time: the
+> DVSEC body from PCI config space dword by dword, the CM cap-array and
+> HDM block from the cxl-core MMIO mapping at cxlds->reg_map.base.
+> Per-field write semantics follow below:
+> CXL r4.0 8.1.3 DVSEC:
+> - LOCK is RWO,
+> - CONTROL/CONTROL2 are RWL gated on CONFIG_LOCK,
+> - STATUS/STATUS2 are RW1C,
+> - RANGE1 is HwInit, RANGE2 is RsvdZ
+> CXL r4.0 8.2.4.20 HDM:
+> - GLOBAL_CTRL RW,
+> - decoder CTRL implements COMMIT/COMMITTED,
+> - decoder BASE/SIZE RWL gated on COMMITTED or LOCK_ON_COMMIT,
+> - cap header HwInit).
+> 
+> vfio-pci becomes a thin transport.  The new module
+> drivers/vfio/pci/cxl/ exposes two VFIO regions.
+> 
+>   VFIO_REGION_SUBTYPE_CXL (HDM region): mmappable view of the
+>   HDM-mapped HPA. The mmap fault handler calls vmf_insert_pfn() from
+>   the physical HPA. pread/pwrite go through the memremap_wb() kva
+>   captured at bind time.
+> 
+>   VFIO_REGION_SUBTYPE_CXL_COMP_REGS (component register shadow):
+>   pread/pwrite only, dword-aligned (-EINVAL on misalignment).
+>   Each dword dispatches by offset to cxl_passthrough_cm_rw() or
+>   cxl_passthrough_hdm_rw(). No shadow state on the vfio side; cxl-core
+>   enforces the spec.
+> 
+> CXL DVSEC config-space accesses use a clipping shim in
+> vfio_pci_config_rw_single(). A config-space chunk that crosses the
+> DVSEC body boundary is split: header bytes go through the generic
+> perm-bits path, body bytes go through cxl_passthrough_dvsec_rw().
+> The shim replaces v2's approach of repointing ecap_perms[]
+> 
+> Sparse-mmap is exposed on the component BAR so userspace can mmap the
+> non-component portions directly; only the CXL component register
+> sub-range goes through pread/pwrite emulation. The CXL sub-range is
+> also skipped from vfio_pci-core's request_selected_regions() set
+> because cxl-core's devm_cxl_probe_mem() already holds a
+> request_mem_region() on it; the asymmetric skip is matched by an
+> asymmetric release on disable().
+> 
+> Scope and out-of-scope
+> ======================
+> 
+> In scope (rejected at create time with -EOPNOTSUPP otherwise):
+> 
+>   - Firmware-committed devices (HOST_FIRMWARE_COMMITTED set).
+>   - Single HDM decoder (hdm_count == 1).
+>   - No interleave (IW == 0).
+> 
+> Out of scope, deferred for follow-on work:
+> 
+>   - Multi-decoder devices and interleave.
+>   - Guest-driven (non-firmware-committed) HDM commit.
+>   - Hotplug, FLR, and sibling-function reset of CXL Type-2 devices.
+> 
+> Changes since v2
+> ================
+> 
+> This is a rewrite, not an incremental update.  The structure of the
+> series changed (20 patches in v2 to 11 in v3) because v3 collapses
+> v2 patches 9-15 (detection, HDM emulation, media readiness, region
+> management, HDM region, DVSEC emulation) into one cxl-core helper
+> file and one vfio-pci consumer.
+> 
+> Framework replaced by narrow opaque-handle helpers (patches 6, 8)
+> 
+>   v2 carried a generic register-emulation framework split across four
+>   state-machine files in cxl-core.
+>   v3 collapses it into one file: drivers/cxl/core/passthrough.c
+>   exposing the four EXPORT_SYMBOL_GPL helpers above behind a struct
+>   cxl_passthrough opaque handle.
+> 
+> Shadow ownership moved into cxl-core (patches 6, 8)
+> 
+>   vfio-pci no longer keeps any per-field state. It forwards
+>   (offset, value) into cxl-core, and cxl-core enforces the spec
+>   (RWO, RWL, RW1C, HwInit, RsvdZ) with explicit CXL r4.0 section
+>   references in the switch arms.
+> 
+> DVSEC config-space clipping shim (patch 8)
+> 
+>   v2 repointed ecap_perms[] to redirect CXL DVSEC reads and writes.
+>   v3 keeps ecap_perms[] untouched and clips per-config-access chunks
+>   at the DVSEC body boundary in vfio_pci_config_rw_single(); header bytes
+>   go through the generic perm-bits path, body bytes go through
+>   cxl_passthrough_dvsec_rw(). The shim is local to the per-device
+>   path.
+> 
+> CONFIG_VFIO_PCI_CXL gates the new module (patch 7)
+> 
+>   v2 had a CONFIG_VFIO_CXL_CORE Kconfig stub; v3 renames it to
+>   CONFIG_VFIO_PCI_CXL to match the vfio-pci naming convention.
+>   The hidden CXL_VFIO_PASSTHROUGH selects the cxl-core helper file
+>   on demand. With both disabled, the cxl-core size is unchanged.
+> 
+> UAPI rewritten with named fields (patch 5)
+> 
+>   vfio_device_info_cap_cxl in v3 carries:
+>     flags + HOST_FIRMWARE_COMMITTED bit
+>     hdm_region_idx
+>     comp_reg_region_idx
+>     comp_reg_bar
+>     comp_reg_offset
+>     comp_reg_size
+>   The DPA terminology is renamed to HDM region throughout.
+>   CACHE_CAPABLE (HDM-DB indicator) is dropped;
+>   it was informational only in v2 with no caller, and re-adding it
+>   for an active CXL.cache plumbing series later.
+> 
+> Selftests trimmed (patch 9)
+> 
+>   v2 carried selftests for device detection, capability parsing,
+>   region enumeration, HDM register emulation, HDM mmap with
+>   page-fault insertion, FLR invalidation, and DVSEC register
+>   emulation. v3 keeps a smoke-test set of six focused tests:
+> 
+>     device_is_cxl                  GET_INFO advertises FLAGS_CXL
+>                                    and a populated CAP_CXL.
+>     hdm_region_mmap_rw             mmap one page, write+read back.
+>     component_bar_sparse_mmap      SPARSE_MMAP cap excludes the
+>                                    CXL component register sub-range.
+>     comp_regs_cm_cap_array_read    pread of the CM cap-array
+>                                    header at CXL_CM_OFFSET succeeds
+>                                    (CAP_ID == 1).
+>     dvsec_lock_byte_read           pread of the DVSEC CONFIG_LOCK
+>                                    byte through the clipping shim
+>                                    succeeds.
+>     hdm_decoder_commit_fsm         COMMIT / COMMITTED state machine
+>                                    and LOCK_ON_COMMIT behaviour.
+> 
+>   FLR invalidation, page-fault insertion under load, and full
+>   DVSEC field-by-field write coverage are deferred to a follow-on
+>   selftest series. The current six are the minimal set that
+>   exercises the kernel-side contract end-to-end.
+> 
+> cxl-core prep patches split (patches 1-4)
+> 
+>   v3 keeps the cxl-side enablers from v2 patches 1-4 but each as
+>   a standalone change so the cxl maintainer can review the helper
+>   API independently of the vfio consumer:
+> 
+>     [1/11] cxl_get_hdm_info()
+>     [2/11] cxl_await_range_active() split from media-ready wait
+>     [3/11] cxl_register_map records BIR + BAR offset
+>     [4/11] component/HDM register defines moved to uapi/cxl/cxl_regs.h
+> 
+> Reviewer feedback addressed
+> ===========================
+> 
+> Dan
 > ---
->  Documentation/virt/kvm/api.rst |  18 +++-
->  arch/arm64/kvm/Kconfig         |   1 +
->  arch/arm64/kvm/arm.c           |   1 +
->  arch/arm64/kvm/mmu.c           | 162 +++++++++++++++++++++++++++++++++
->  4 files changed, 178 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 52bbbb553ce1..657e05656fa6 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6462,7 +6462,7 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
->  ---------------------------
->  
->  :Capability: KVM_CAP_PRE_FAULT_MEMORY
-> -:Architectures: none
-> +:Architectures: x86, arm64
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_pre_fault_memory (in/out)
->  :Returns: 0 if at least one page is processed, < 0 on error
-> @@ -6470,11 +6470,14 @@ See KVM_SET_USER_MEMORY_REGION2 for additional details.
->  Errors:
->  
->    ========== ===============================================================
-> +  EAGAIN     A memslot update raced with the ioctl before any page was
-> +             processed.
->    EINVAL     The specified `gpa` and `size` were invalid (e.g. not
->               page aligned, causes an overflow, or size is zero).
->    ENOENT     The specified `gpa` is outside defined memslots.
->    EINTR      An unmasked signal is pending and no page was processed.
->    EFAULT     The parameter address was invalid.
-> +  EHWPOISON  A poisoned host page was encountered.
->    EOPNOTSUPP Mapping memory for a GPA is unsupported by the
->               hypervisor, and/or for the current vCPU state/mode.
->    EIO        unexpected error conditions (also causes a WARN)
-> @@ -6494,7 +6497,14 @@ Errors:
->  KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
->  for the current vCPU state.  KVM maps memory as if the vCPU generated a
->  stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
-> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
-> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
-> +Accessed.  On arm64, newly created stage-2 PTEs are marked Accessed.
-> +
-> +On arm64, `gpa` is interpreted as an IPA in the userspace-owned VM's
-> +memslot address space.  If the vCPU most recently ran a nested guest, KVM
-> +still targets the VM's canonical stage-2, and does not interpret `gpa` as
-> +a nested guest IPA or target the nested/shadow stage-2 selected by the
-> +vCPU's last run state.
->  
->  In the case of confidential VM types where there is an initial set up of
->  private guest memory before the guest is 'finalized'/measured, this ioctl
-> @@ -6507,9 +6517,9 @@ case, the ioctl can be called in parallel.
->  
->  When the ioctl returns, the input values are updated to point to the
->  remaining range.  If `size` > 0 on return, the caller can just issue
-> -the ioctl again with the same `struct kvm_map_memory` argument.
-> +the ioctl again with the same `struct kvm_pre_fault_memory` argument.
->  
-> -Shadow page tables cannot support this ioctl because they
-> +On x86, shadow page tables cannot support this ioctl because they
->  are indexed by virtual address or nested guest physical address.
->  Calling this ioctl when the guest is using shadow page tables (for
->  example because it is running a nested guest with nested page tables)
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index 449154f9a485..6b89262e8ba7 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -24,6 +24,7 @@ menuconfig KVM
->  	select HAVE_KVM_CPU_RELAX_INTERCEPT
->  	select KVM_MMIO
->  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> +	select KVM_GENERIC_PRE_FAULT_MEMORY
->  	select VIRT_XFER_TO_GUEST_WORK
->  	select KVM_VFIO
->  	select HAVE_KVM_DIRTY_RING_ACQ_REL
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 9453321ef8c6..dcb92bee13af 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -392,6 +392,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_COUNTER_OFFSET:
->  	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
->  	case KVM_CAP_ARM_SEA_TO_USER:
-> +	case KVM_CAP_PRE_FAULT_MEMORY:
->  		r = 1;
->  		break;
->  	case KVM_CAP_SET_GUEST_DEBUG2:
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index c720f07cb82e..4bf048bbcf8b 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1571,6 +1571,8 @@ struct kvm_s2_fault_desc {
->  	struct kvm_s2_trans	*nested;
->  	struct kvm_memory_slot	*memslot;
->  	unsigned long		hva;
-> +	unsigned long		*page_size;
-
-As far as I know, fault handling was reworked to use struct
-kvm_s2_fault_desc to store the fault information that user_mem_abort()
-needs to handle the fault.  Adding a 'page_size' field, that represents the
-result of the gpa mapping process, might not be desirable.
-
-> +	bool			prefault;
->  };
->  
->  static int gmem_abort(const struct kvm_s2_fault_desc *s2fd)
-> @@ -1882,6 +1884,13 @@ static int kvm_s2_fault_pin_pfn(const struct kvm_s2_fault_desc *s2fd,
->  				      &s2vi->map_writable, &s2vi->page);
->  	if (unlikely(is_error_noslot_pfn(s2vi->pfn))) {
->  		if (s2vi->pfn == KVM_PFN_ERR_HWPOISON) {
-> +			/*
-> +			 * When prefaulting, report the poison via -EHWPOISON
-> +			 * only; don't also queue a SIGBUS as the run path
-> +			 * does for the faulting vCPU thread.
-> +			 */
-> +			if (s2fd->prefault)
-> +				return -EHWPOISON;
->  			kvm_send_hwpoison_signal(s2fd->hva, __ffs(s2vi->vma_pagesize));
->  			return 0;
->  		}
-> @@ -2053,6 +2062,9 @@ static int kvm_s2_fault_map(const struct kvm_s2_fault_desc *s2fd,
->  	kvm_release_faultin_page(kvm, s2vi->page, !!ret, writable);
->  	kvm_fault_unlock(kvm);
->  
-> +	if (s2fd->page_size && !ret)
-> +		*s2fd->page_size = mapping_size;
-> +
->  	/*
->  	 * Mark the page dirty only if the fault is handled successfully,
->  	 * making sure we adjust the canonical IPA if the mapping size has
-> @@ -2757,3 +2769,153 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
->  
->  	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled, now_enabled);
->  }
-> +
-> +/*
-> + * Prefaulting always targets the canonical stage-2.  If the vCPU last ran
-> + * in a nested context, swap in the canonical MMU via the vCPU put/load
-> + * helpers so that preemption, VMID, VNCR fixmap and shadow-MMU refcount
-> + * state stay consistent.
-> + *
-> + * The swap is deliberately not undone: nothing runs in between the
-> + * per-page invocations of kvm_arch_vcpu_pre_fault_memory() except the
-> + * generic prefault loop, and the vcpu_put() at ioctl exit discards
-> + * vcpu->arch.hw_mmu anyway (see kvm_vcpu_put_hw_mmu()), so the next
-> + * vcpu_load() re-derives the correct MMU from the vCPU's context.  If the
-> + * prefault task is preempted in the meantime, kvm_vcpu_put_hw_mmu()
-> + * keeps the canonical MMU in place for the reload.  Leaving the swap in
-> + * place also bounds the cost to at most one put/load pair per ioctl,
-> + * rather than two pairs per prefaulted page.
-> + */
-> +static void kvm_pre_fault_load_canonical_mmu(struct kvm_vcpu *vcpu)
-> +{
-> +	if (!vcpu_has_nv(vcpu) || vcpu->arch.hw_mmu == &vcpu->kvm->arch.mmu)
-> +		return;
-> +
-> +	preempt_disable();
-> +	kvm_arch_vcpu_put(vcpu);
-> +	vcpu->arch.hw_mmu = &vcpu->kvm->arch.mmu;
-> +	kvm_arch_vcpu_load(vcpu, smp_processor_id());
-> +	preempt_enable();
-> +}
-> +
-> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> +				    struct kvm_pre_fault_memory *range)
-> +{
-> +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
-> +	struct kvm_vcpu_fault_info fault_backup = *fault_info;
-
-I'm not sure you need to make a backup here. vcpu->arch.fault is populated
-each time the CPU takes a fault.
-
-> +	s8 walk_level = KVM_PGTABLE_LAST_LEVEL;
-> +	unsigned long page_size = PAGE_SIZE;
-> +	struct kvm_memory_slot *memslot;
-> +	phys_addr_t gpa = range->gpa;
-> +	struct kvm_pgtable *pgt;
-> +	phys_addr_t end;
-> +	kvm_pte_t pte;
-> +	hva_t hva;
-> +	gfn_t gfn;
-> +	long ret;
-> +
-> +	if (vcpu_is_protected(vcpu))
-> +		return -EOPNOTSUPP;
-> +
-> +	/*
-> +	 * Interpret range->gpa in the userspace-owned VM's IPA space, not in
-> +	 * any nested guest IPA space that may have been active on the vCPU's
-> +	 * last run.  Always target the canonical stage-2.
-> +	 */
-> +	kvm_pre_fault_load_canonical_mmu(vcpu);
-> +
-> +	if (gpa >= kvm_phys_size(vcpu->arch.hw_mmu)) {
-> +		ret = -ENOENT;
-> +		goto out;
-> +	}
-> +
-> +	gfn = gpa_to_gfn(gpa);
-> +	memslot = gfn_to_memslot(vcpu->kvm, gfn);
-> +	if (!memslot) {
-> +		ret = -ENOENT;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * A racing memslot deletion or move installs an invalid slot before
-> +	 * zapping stage-2.  Ask userspace to retry once the update settles.
-> +	 */
-> +	if (memslot->flags & KVM_MEMSLOT_INVALID) {
-
-I don't think that's something we should care about, the flag can be set
-immediately after the check as the function doesn't take kvm->slots_lock.
-kvm_vcpu_prefault_memory() takes the srcu lock in read mode, so the
-function is safe to run even if userspace does something silly like
-deleting a memslot at the same time that it's prefaulting the guest memory
-it represents.
-
-> +		ret = -EAGAIN;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * pKVM stage-2 mappings aren't directly walkable from the host; let
-> +	 * the fault path handle both new and existing mappings.
-> +	 */
-> +	if (!is_protected_kvm_enabled()) {
-> +		pgt = vcpu->arch.hw_mmu->pgt;
-> +		scoped_guard(read_lock, &vcpu->kvm->mmu_lock) {
-> +			ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &walk_level,
-> +						   KVM_PGTABLE_WALK_SHARED);
-
-It might not be obvious, but taking kvm->mmu_lock in read mode does not
-guarantee that gpa will be mapped when kvm_pgtable_get_leaf() returns.
-That's because a concurrent kvm_pgtable_stage2_map() for a different gpa
-can destroy the mapping of the current gpa.
-
-> +		}
-
-The kvm->mmu_lock is dropped here, which means that it is possible for a
-MMU notifier callback to have just unmapped the entire stage 2 for the VM.
-
-> +		if (ret)
-> +			goto out;
-> +
-> +		if (kvm_pte_valid(pte)) {
-> +			page_size = kvm_granule_size(walk_level);
-> +			if (!(pte & KVM_PTE_LEAF_ATTR_LO_S2_AF))
-> +				handle_access_fault(vcpu, gpa);
-
-handle_access_fault() will fail if the mapping is gone. But I guess that's
-fine if the ioctl does not guarantee that memory is still mapped after it
-completes.
-
-Also, the documentation that this patch adds says: 'On arm64, newly created
-stage-2 PTEs are marked Accessed'. Does not say anything about marking
-**existing** ptes as accessed. Would be useful to explain the code does it.
-
-> +			goto out_success;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Synthesize a read translation fault for the canonical IPA, at the
-> +	 * level where the stage-2 walk currently ends (the last level under
-> +	 * pKVM, where stage-2 isn't walkable from the host).
-> +	 */
-> +	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
-> +		ESR_ELx_IL | ESR_ELx_FSC_FAULT_L(walk_level);
-> +	fault_info->hpfar_el2 = HPFAR_EL2_NS |
-> +		FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
-> +
-> +	struct kvm_s2_fault_desc s2fd = {
-> +		.vcpu		= vcpu,
-> +		.fault_ipa	= gpa,
-> +		.nested		= NULL,
-> +		.memslot	= memslot,
-> +		.page_size	= &page_size,
-> +		.prefault	= true,
-> +	};
-> +
-> +	/*
-> +	 * As in the run path, -EAGAIN from the abort handlers is treated as
-> +	 * progress: either a parallel fault installed the mapping, or a racing
-> +	 * invalidation is in flight and the next access will refault.
-> +	 */
-> +	if (kvm_slot_has_gmem(memslot)) {
-> +		ret = gmem_abort(&s2fd);
-> +	} else {
-> +		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-
-There's gfn_to_hva_memslot(memslot, gfn), is that what you are looking for?
-
-> +		if (kvm_is_error_hva(hva)) {
-> +			ret = -EFAULT;
-> +			goto out;
-> +		}
-> +
-> +		s2fd.hva = hva;
-> +		ret = user_mem_abort(&s2fd);
-
-If is_protected_kvm_enabled(), this function doesn't check if the mapping
-already exists. user_mem_abort() will call **p**kvm_pgtable_stage2_map()
-(emphasis is mine) to create the mapping, and pkvm_pgtable_stage2_map() will
-return -EAGAIN, and keep returning -EAGAIN until the mapping is destroyed, which
-might be some time away.
-
-Same thing happens **without** pKVM, kvm_pgtable_stage2_map() will return
--EAGAIN if the mapping exists. But that's not such a big issue, when the
-user calls KVM_PRE_FAULT_MEMORY on the remaining range
-kvm_pgtable_get_leaf() will detect the existing mapping. Which you have
-already taken into consideration judging by the comment, so all good here.
-
-Thanks,
-Alex
-
-> +	}
-> +
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +out_success:
-> +	end = ALIGN_DOWN(gpa, page_size) + page_size;
-> +	ret = min_t(u64, range->size, end - gpa);
-> +out:
-> +	/*
-> +	 * Restore the synthetic fault state so a subsequent KVM_RUN does not
-> +	 * observe it. kvm_handle_mmio_return() runs before guest entry can
-> +	 * refresh fault.esr_el2 from hardware, so leaving the synthetic ESR
-> +	 * in place would corrupt the completion of a pending MMIO exit.
-> +	 */
-> +	*fault_info = fault_backup;
-> +	return ret;
-> +}
-> -- 
-> 2.43.0
+> - VFIO exposes HDM/host-visible region, not raw DPA; docs/UAPI say HDM
+>   region, DPA only inside cxl-core where appropriate.
+> - One vfio-pci device = one HDM region / one decoder, no interleave;
+>   hdm_count != 1 → -EOPNOTSUPP.
+> - Global HDM on DVSEC Range Base treated as legacy; RANGE1/RANGE2
+>   read-only snapshot, guest writes dropped.
+> - No guest/kernel lock games; DVSEC LOCK and HDM LOCK_ON_COMMIT RWO,
+>   fixed at create from firmware snapshot.
+> - Opaque cxl_passthrough handle only; vfio gets HPA via memdev probe +
+>   layout via cxl_get_hdm_info(), rw via helpers.
+> - No multi-region accelerator case in v3; single region enforced,
+>   multi-region deferred.
+> - cxl_await_range_active stays in cxl-core probe; not exported, vfio does
+>   not call it.
+> - No guest LOCK→0 reprogram; guest cannot clear LOCK to remap host HPA;
+>   kernel uncommit tied to COMMIT, not LOCK alone.
 > 
+> Jason / Gregory / Dan
+> ---------------------
 > 
+> - memremap(WB) + request_mem_region on HPA; conflicting direct-map/EFI use
+>   fails probe with -EBUSY.
+> 
+> Jonathan
+> --------
+> 
+> - uapi/cxl/cxl_regs.h for register defines so VMMs need no private
+>   kernel headers.
+> - __free() locals on cxl-core/passthrough error paths instead of
+>   struct-owned temporaries.
+> - No "precommitted at probe" assumption; acquire checks COMMITTED in
+>   HDM shadow and refuses if missing.
+> 
+> Dave
+> ----
+> 
+> - memremap(MEMREMAP_WB) for HDM host mapping (not ioremap_cache).
+> - Renamed cap flag to VFIO_CXL_CAP_HOST_FIRMWARE_COMMITTED for clarity.
+> - __free() / DEFINE_FREE() cleanup in new passthrough.c create path.
+> 
+> Patch series
+> ============
+> 
+>  [1/11] cxl: Add cxl_get_hdm_info() helper for HDM decoder metadata
+>  [2/11] cxl: Split cxl_await_range_active() from media-ready wait
+>  [3/11] cxl: Record BIR and BAR offset in cxl_register_map
+>  [4/11] cxl: Move component/HDM register defines to
+>         uapi/cxl/cxl_regs.h
+>  [5/11] vfio: UAPI for CXL Type-2 device passthrough
+>  [6/11] cxl: Add register-virtualization helpers for vfio Type-2
+>         passthrough
+>  [7/11] vfio/pci: Add CONFIG_VFIO_PCI_CXL with bind-time CXL Type-2
+>         acquisition
+>  [8/11] vfio/pci/cxl: Add HDM + COMP_REGS regions and DVSEC clipping
+>         shim
+>  [9/11] selftests/vfio: Add CXL Type-2 device passthrough smoke test
+> [10/11] docs: vfio-pci: Document CXL Type-2 device passthrough
+> [11/11] vfio/pci: Provide opt-out for CXL Type-2 extensions
+> 
+> Dependencies
+> ============
+> 
+> [1] [PATCH v28 0/5] Type2 device basic support
+> https://lore.kernel.org/linux-cxl/20260618181806.118745-1-alejandro.lucero-palau@amd.com/
+> 
+> [2] Previous version of this patch series
+> [PATCH v2 00/20] vfio/pci: Add CXL Type-2 device passthrough support
+> https://lore.kernel.org/linux-cxl/20260401143917.108413-1-mhonap@nvidia.com/
+> 
+> [3] Companion QEMU series
+> [RFC 0/9] QEMU: CXL Type-2 device passthrough via vfio-pci
+> https://lore.kernel.org/linux-cxl/20260427181235.3003865-1-mhonap@nvidia.com/
+> 
+> Manish Honap (11):
+>   cxl: Add cxl_get_hdm_info() helper for HDM decoder metadata
+>   cxl: Split cxl_await_range_active() from media-ready wait
+>   cxl: Record BIR and BAR offset in cxl_register_map
+>   cxl: Move component/HDM register defines to uapi/cxl/cxl_regs.h
+>   vfio: UAPI for CXL Type-2 device passthrough
+>   cxl: Add register-virtualization helpers for vfio Type-2 passthrough
+>   vfio/pci: Add CONFIG_VFIO_PCI_CXL with bind-time CXL Type-2
+>     acquisition
+>   vfio/pci/cxl: Add HDM + COMP_REGS regions and DVSEC clipping shim
+>   selftests/vfio: Add CXL Type-2 device passthrough smoke test
+>   docs: vfio-pci: Document CXL Type-2 device passthrough
+>   vfio/pci: Provide opt-out for CXL Type-2 extensions
+> 
+>  Documentation/driver-api/index.rst            |   1 +
+>  Documentation/driver-api/vfio-pci-cxl.rst     | 282 ++++++
+>  drivers/cxl/Kconfig                           |   7 +
+>  drivers/cxl/core/Makefile                     |   1 +
+>  drivers/cxl/core/passthrough.c                | 590 ++++++++++++
+>  drivers/cxl/core/pci.c                        |  70 +-
+>  drivers/cxl/core/regs.c                       |  35 +
+>  drivers/cxl/cxl.h                             |  52 +-
+>  drivers/vfio/pci/Kconfig                      |   2 +
+>  drivers/vfio/pci/Makefile                     |   1 +
+>  drivers/vfio/pci/cxl/Kconfig                  |  34 +
+>  drivers/vfio/pci/cxl/Makefile                 |   2 +
+>  drivers/vfio/pci/cxl/vfio_cxl_core.c          | 889 ++++++++++++++++++
+>  drivers/vfio/pci/cxl/vfio_cxl_priv.h          |  71 ++
+>  drivers/vfio/pci/vfio_pci.c                   |   9 +
+>  drivers/vfio/pci/vfio_pci_config.c            |  31 +
+>  drivers/vfio/pci/vfio_pci_core.c              |  68 +-
+>  drivers/vfio/pci/vfio_pci_priv.h              |  93 ++
+>  drivers/vfio/pci/vfio_pci_rdwr.c              |  17 +
+>  include/cxl/cxl.h                             |  18 +
+>  include/cxl/passthrough.h                     | 121 +++
+>  include/linux/vfio_pci_core.h                 |   8 +
+>  include/uapi/cxl/cxl_regs.h                   |  63 ++
+>  include/uapi/linux/vfio.h                     |  46 +
+>  tools/testing/selftests/vfio/Makefile         |   1 +
+>  .../selftests/vfio/lib/vfio_pci_device.c      |  11 +-
+>  .../selftests/vfio/vfio_cxl_type2_test.c      | 350 +++++++
+>  27 files changed, 2821 insertions(+), 52 deletions(-)
+>  create mode 100644 Documentation/driver-api/vfio-pci-cxl.rst
+>  create mode 100644 drivers/cxl/core/passthrough.c
+>  create mode 100644 drivers/vfio/pci/cxl/Kconfig
+>  create mode 100644 drivers/vfio/pci/cxl/Makefile
+>  create mode 100644 drivers/vfio/pci/cxl/vfio_cxl_core.c
+>  create mode 100644 drivers/vfio/pci/cxl/vfio_cxl_priv.h
+>  create mode 100644 include/cxl/passthrough.h
+>  create mode 100644 include/uapi/cxl/cxl_regs.h
+>  create mode 100644 tools/testing/selftests/vfio/vfio_cxl_type2_test.c
+> 
+> base-commit: 90cf2e0d702c8a132ccbe72e7687f33c04c14658
+
+Hi Manish,
+b4 seems to be failing with applying on top of this base-commit.
+
+
