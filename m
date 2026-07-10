@@ -1,119 +1,109 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3228B6FC3;
-	Fri, 10 Jul 2026 01:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD6733E351
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 01:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783645501; cv=none; b=oMxzKt/nDwmHmpf9QvlAYGbpDEk9nMeT/h9jJ4dj5BJastGx8UbkvX6/tq6NxQMTURA4a5FZlP5dv97vppLh0c2Nh7B//tqlPXjRMLVvw/eok5XoemxuhBYCU8pba9WdH13uMLOl54ue5eSfdWQffb6i+iHGSNsPV7gxMQ+ghQQ=
+	t=1783647022; cv=none; b=rVyEOFnw50Z5/3gkKGGoQXuYu6gIedLax9GhIhzm57aFbHRCMA5nyduFdVOxd8J2cyeTaDrgcFSt5SNqGFYkvhsZuFbExahv2d3MbYHZDLAWAMG5RcrDc2S+e0ilUzzm7wmJxWFG2Z+d+CF8Gvy80N48ZvFwczoI/vOlTRT8ksU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783645501; c=relaxed/simple;
-	bh=vSI/6JH46QRuCk7VHxcBTsb2eFB7aXDQvaCGhbXab18=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cpBN+UmhsI1xY9kwVSgXxgP+xGnH7T8borEPrcPM/RN9iydKb9OJnZ9zfPbUdbONDcICtejWecM8XNmTqrYEkXmS6HMncnkRay2ReTq8x90blNizWWgGricFioxGjk42YLj7GlEYgG5Z5GAM8f0uJp+PI51RMdTyZIXuaSreZuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cIf5N81i; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1783647022; c=relaxed/simple;
+	bh=3rYTe8e2Wt412qzExNzuhcRev2Wp33ZA51eAifLPzps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jagF005FIYXMgr1WHyVOJNUtQ1Grt3d0sOixbQ35gEUM1gvBZrRGjh0ucJcowU6PmW2BX5H4FEMqDaS2U79KMT1AegUe3HvQwQmD7MsOw6lD0EKMxZ5BF58GvSdAuaREdpzL9i84YGV1zH/8gZ/cpcC5qTQR8Hk5DHAb6jGJHLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=ezt3K41n; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cIf5N81i"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=r0em5pMNZ4xKYprueCCCRKfXhTmoQMeSgXfGFULzODo=; b=cIf5N81iy//LNUKpfZ2HOlkcRK
-	8OA05pKoaYtr720datPqjB+ls/s6YXte8CR6FvzePOyuSql/y1U92bp9Zn9poUR7eI0yKf4A/uQ0I
-	hkjv2Imdk+fudyI10U2oGtPa3UmTH6nJkGysIaDAMApxxBgdJrgw4weijDwKSIJXAqHLLNe/5XV9/
-	jvJeiYV7eolYFfISs+gD4ExEIMRKxBm+nUuLrFZPCrW7xP3yCmzZegIS7YN7dymDA2f4vgFum/r9U
-	qb24QdtoSndJpEyVbn1AkRvXkc0ZDH3CUMiwexB/Gmg5VGI1fmsmk2KSuxeILXjEAr2W9e3K/ojoP
-	7o/eTqcg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1whzfe-00000003twW-1ujf;
-	Fri, 10 Jul 2026 01:04:50 +0000
-Message-ID: <fd2e3b89-339a-4964-9b0c-e24ed7f7b31f@infradead.org>
-Date: Thu, 9 Jul 2026 18:04:49 -0700
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="ezt3K41n"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8f1a8e914a9so3875546d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 18:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1783647020; x=1784251820; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VaPhGtocKLbFXsyQXoR9g3DKOWhugqrS27IBZSVVhcw=;
+        b=ezt3K41ndVI8K/PBTlFKFJBkY+47UWEjGaVnCpfxtVzzaiLbm1NZQP6lwkzck8cAHd
+         nWxzWpxujl/DWdoer7tQfKNaNXZQmPIQVtdWuMXWksgOJiB5bfVbRZYU+Y+LrAKPUVOT
+         ut1oh90UnAc9GcZxvnx/kiCbksRghpUtOSXdGxhPAbQIsCj5NCojyP+4R1JS/tuFlPY9
+         Pw8gCJpbLxPeZj8pFil6k+itECVO5PzKojFiKr3gVw+6Z1oVtednjjAh+hSV8OzDCWdB
+         bSQNJ9stOPQtopOblsEqCLS/USMKedJen9MlXZszjjaMRh8Eph3kP1wJVtoS0CPOVX2F
+         HXVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783647020; x=1784251820;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VaPhGtocKLbFXsyQXoR9g3DKOWhugqrS27IBZSVVhcw=;
+        b=TAzTjuBa/SRSGat+zkFwIZig7wKuFiGSN9aa+KO4qMrh8MS0KD4PfthP3aApKiZNWW
+         k2CmCRP2uV071Zbf4cmR0vzfx5F2KbDwN+SYgz324DC5ObVkhE32e1aNsoFdhmbr+K1D
+         l2jWYkVzd9v1ZkBE5eS4lzl5vnbTjwLQQ5GlOnwZKINlwSGvecvNIJVaxAed/gde33Ne
+         u1Stm24xhq93E3MqEd5TwtlaOFMY6ja/08tzABED2Vrq834fwPBolSKTvfzDAM2KCz+u
+         9DPbnTueaj3f/1woImU+Xrx/XfW28fnvosCgFCV8NWwQ9ZNsoilgG7ZQPZ50mQycKMOb
+         Umjw==
+X-Forwarded-Encrypted: i=1; AHgh+RqwwXGDIdbOO4Ev13onoZBpaFwDUAM9FzcttH/RLMY+CwU0pgCX7nqkALTrHeTTrMgBixWl06XjezAI1UgZyz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4nnY2Ns7hQ1yT5qP9K0NBb2dMIOmT69sUQAtnn/yc0NpBcIT+
+	Ec8ofa9dwnhJnVROu6uIKu7YASo9DelCD72rA03hGqzNz91sUUWpWC9WqloUUDWPxQk=
+X-Gm-Gg: AfdE7ckwKBAECE9GAqhMF22D7Et6BrEMW+vsFTVdSkYBW0kkfRYdV7+2H329M0VIYnn
+	TwyWlj0zIiDfnObnpRHJ0r+hTh/XmMcHkmbwna0M8Owk9XU3iqQn4GFn6mxUl4OvOPb/yBun3uk
+	schjeOf2E6TnLuTrQ9JGGl47EmTZka8c07vvv4Euyh/75ayV7F1ouOqVdJclWi8IqtgWkZxLag+
+	iCHivIdhaKWo2qvEplfRoM9yfvN3Xi4TTNoHJlgJC3CMoOr7hJmvqkVugeA0d7jYW2xzIgKukS/
+	8g5UZngep3v/oKcMEfBrjsih36ZmhRhcTe7pO8PpzIfYVfhOy8YAEIxDBDlUpIcddKufMynTzx5
+	YnTPb732fT84yDuLtv9dg9naplJpeWHXOcVTK4AdlaBdeaBWwzV6fbSZTJBcOu1Fz9ovUaloJHQ
+	OVK6WIFeKI4+MicKBfYQ/Wn6tbq8cygoQEmeiZrBhOoBn9fv7VcvnxfS2QVKeEvRkkpP7A
+X-Received: by 2002:ad4:5c8a:0:b0:8cc:2a92:48e4 with SMTP id 6a1803df08f44-8fec217b8bfmr110693186d6.32.1783647019857;
+        Thu, 09 Jul 2026 18:30:19 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd7c1e8aesm29789146d6.28.2026.07.09.18.30.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2026 18:30:19 -0700 (PDT)
+Date: Thu, 9 Jul 2026 21:30:14 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Dan Williams (nvidia)" <djbw@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+Subject: Re: [PATCH v6 07/10] dax: plumb hotplug online_type through dax
+Message-ID: <alBLJoM86ujz5Fg1@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-8-gourry@gourry.net>
+ <6a5016bf71df4_3b7ee5100b3@djbw-dev.notmuch>
+ <alAb7Q_Ku5dVRKZ7@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 19/19] MAINTAINERS: add Rambus CryptoManager Hub (CMH)
-To: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Alex Ousherovitch <aousherovitch@rambus.com>,
- Conor Dooley <conor+dt@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Herbert Xu <herbert@gondor.apana.org.au>, Jonathan Corbet <corbet@lwn.net>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Palmer Dabbelt
- <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
- Rob Herring <robh@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Ninad Palsule <ninad@linux.ibm.com>, linux-hwmon@vger.kernel.org
-Cc: Alexandre Ghiti <alex@ghiti.fr>, devicetree@vger.kernel.org,
- Joel Wittenauer <Joel.Wittenauer@cryptography.com>,
- linux-api@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
- Shuah Khan <skhan@linuxfoundation.org>, Thi Nguyen <thin@rambus.com>
-References: <20260709203037.1884436-1-skrishnamoorthy@rambus.com>
- <20260709203037.1884436-20-skrishnamoorthy@rambus.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260709203037.1884436-20-skrishnamoorthy@rambus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alAb7Q_Ku5dVRKZ7@gourry-fedora-PF4VCD3F>
 
-
-
-On 7/9/26 1:30 PM, Saravanakrishnan Krishnamoorthy wrote:
-> From: Alex Ousherovitch <aousherovitch@rambus.com>
+On Thu, Jul 09, 2026 at 06:08:45PM -0400, Gregory Price wrote:
+> On Thu, Jul 09, 2026 at 02:46:39PM -0700, Dan Williams (nvidia) wrote:
 > 
-> Add MAINTAINERS entry for the CRI CryptoManager Hub (CMH) hardware
-> crypto accelerator driver under drivers/crypto/cmh/.
+> This was more a matter of having the DEFAULT set consistently across
+> the dax driver variant probe() functions to make the behavior explicit.
+> I didn't want an un-set value bug to creep in here somehow.
 > 
-> Co-developed-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> Signed-off-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> Signed-off-by: Alex Ousherovitch <aousherovitch@rambus.com>
-> Reviewed-by: Joel Wittenauer <Joel.Wittenauer@cryptography.com>
-> Reviewed-by: Thi Nguyen <thin@rambus.com>
-> ---
->  MAINTAINERS | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> Happy to drop them if you think that's unneeded.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d1dbf2f07104..1c153a84f70f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6891,6 +6891,23 @@ F:	kernel/cred.c
->  F:	rust/kernel/cred.rs
->  F:	Documentation/security/credentials.rst
->  
-> +CRI CRYPTOMANAGER HUB (CMH) HARDWARE CRYPTO ACCELERATOR
-> +M:	Alex Ousherovitch <aousherovitch@rambus.com>
-> +M:	Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-> +R:	Joel Wittenauer <Joel.Wittenauer@cryptography.com>
-> +R:	Thi Nguyen <thin@rambus.com>
-> +L:	linux-crypto@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/ABI/testing/cmh-mgmt
-> +F:	Documentation/ABI/testing/debugfs-driver-cmh
-> +F:	Documentation/ABI/testing/sysfs-driver-cmh
-> +F:	Documentation/crypto/device_drivers/cmh.rst
-> +F:	Documentation/devicetree/bindings/crypto/cri,cmh.yaml
-> +F:	Documentation/userspace-api/ioctl/cmh_mgmt.rst
-> +F:	drivers/crypto/cmh/
-> +F:	include/uapi/linux/cmh_mgmt_ioctl.h
-> +F:	tools/testing/selftests/drivers/crypto/cmh/
-> +
 
-Hm, I thought for a moment there that this new CRI entry was out of
-place (alphabetically). No, it's the next entry that is so far
-out of place. :(
+Ah
 
->  INTEL CRPS COMMON REDUNDANT PSU DRIVER
->  M:	Ninad Palsule <ninad@linux.ibm.com>
->  L:	linux-hwmon@vger.kernel.org
+Not setting the value in each of those places is equivalent to setting
+MMOP_OFFLINE (0), so better to just set DEFAULT regardless.
 
--- 
-~Randy
+So unless you have strong feelings i will keep them as-is.
 
+~Gregory
