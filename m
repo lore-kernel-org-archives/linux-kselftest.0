@@ -1,144 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5CB3845D0;
-	Fri, 10 Jul 2026 18:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D3237B02A
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 18:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783706739; cv=none; b=ged0in46Croao4P5M4TawcI/So4Nyz/xNIPSYw42ypxFtpGvkWP86DXyKhtm61Z6ViNzo8OeZAttbVkVh8V6e4jVeteyEo1Zie1l2ow5d2vkVWtw9IPrAfDo3IW/4AbE6RmphEPPA4ZL7YP6FCkHDQJJgF6fBwB+KWgS5nct9Iw=
+	t=1783706864; cv=none; b=RvmKP9wcMXyX/7zIW9EQEoCz4eXeRBi+UYjLe+/613kiKsPS90S0/1sJgN4KUxwK01xuOC19ID2LcBDUcE758DwRCR9I34hIolsk0hle7DgCZAKtDZpcVgd6eZh+AUCou8BvFjE3GVYPv6bIH4o7ys5DhnOlZFQYrQWU8O4tBHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783706739; c=relaxed/simple;
-	bh=/UfvinGjUKzQZZtwXFBpxnI8oZyMN8LjK5sOgdx882U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qQHc7tM/4CNGq1XXtqRzl+2/aupTle6cNPFONuJXMOHB1eaaPmPel1dfGWpplbr9yeuRiEDYOk39uSf9x+1JZ+Irs0VOElPsRFGpVpIOmwOw25OvBfui3aKBRVdw7Tcn0hyJX6Td/+K2xf0OiwPXXhSrC7dhc5wD0fOjioa/JQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KWskom/Q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783706864; c=relaxed/simple;
+	bh=O6OimzKD1xlS6Frl91Eg4/jvdk/NA4Un3exe+7jonxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrlM0PqPrcEvQy8gV5pMoVtTgL+aT+apFkspmbpSENDJvgaa0y/xCu1dcEp2lqna+gzjwiWit242CM/7fIJXcMRvBUHKCm4lNad2Vi9RjJGfrd7aUvCPjG/PleVNrIbcn1/jk6t6lWmJWh/S1jLi//sanNPODq7TX9jG6LkuZpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+mmqZdc; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KWskom/Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CDD1F00A3A;
-	Fri, 10 Jul 2026 18:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783706737;
-	bh=6eGa3Yug+9t29482TOj94SVTS8HfGqHTxEBex1s+pkE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=KWskom/Q+ZsZMTLzDK8txAlb903tDEUit2Y7pJETGFya/HuI+yOoTZezP9DlxJ0+a
-	 sMDItU55yGHyQUR0z20HAEW7wzrdNAZmnQn/8rmFEAFJiYf/rY5/ulRd9Zzzndi+ta
-	 hJIjBI4DaYcHUhIyBBHF8NQuOgr/A6Sk8CiSEnjpthdtWsfEaiNCZVceIthICkc9bo
-	 5ojpE51V49IMdtvtNmlOq5OTcqhO1IxMQMtMmDWrN8cGP3hoWEozi5aWycca41IlEC
-	 FLquHKP05s0qYhYGvR6C3MhIIzAQrgZdQ+actpJpH6rFCgurFOWFKdpYOKtwTMmlY9
-	 XCUWbNHhbOc2A==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 10 Jul 2026 20:04:47 +0200
-Subject: [PATCH net 7/7] selftests: netconsole: ignore busywait errors
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+mmqZdc"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cc6dd436c6so13124095ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783706847; x=1784311647; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vK1yycrFvPnOHneU0oNi6DrjeWKqgXkTtqXMvxDGhZQ=;
+        b=G+mmqZdcs0jO8PwuouqUz0af25DOsf8ysUuT6w/JdUZb+86uc/n1BimKSReR18OYbe
+         9PkImlmJYekN/rctDqMv722YFQbGc2miKIz//KKcS18x756BAUG+70UV100zLJdYIdPe
+         OS19SaJBHmrsHD0pqZdoubdYrky89nXRiGoTmYNmZCejXcRXuOtliw6+NG/7FtsTixdp
+         gwRWecJb33MKp3I4QDqGw/46GM9u1GJnbpZ+Umbassa4Y0V+jH+xvonuYtWP4hCR7pOt
+         2gU11ttWG8V0k/7ObjIPilGj4NEepzXluwL+HEfOqrzAKOp+iXkZIEXngdF/VkMaNtFM
+         s5sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783706847; x=1784311647;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vK1yycrFvPnOHneU0oNi6DrjeWKqgXkTtqXMvxDGhZQ=;
+        b=H9gwhi+Ch01Pyb75W4cviNnR6DNb4D3VHkbkbFU+G2S+ikBPF8X3L6d533jRSx0CXO
+         6qV5VxMVGlpcDgdwB3BUVXEDLrYOykhbxBE53NebLgoLAVSHSll2z0K8gzfeG5tz0tT2
+         GQWGEJJZpM5dN5ilu3ugGYnpKZDR/JKK2KvicVkgq9zQ/JD8pCSfxGmkfRwSOJ4k7w77
+         5GGXN/dKpN871rwYY5QLr+QFChSL/1pCGRQpf/Ly8hfHzFPO+Ps2owFdpluOju7+HHrQ
+         7EEHWoXrQZRLHs80vOd+IyEikQHaqAWS4SUf2oPDXv1Kv+i69ajF/yNWx+t2btS+zdxx
+         5Qpg==
+X-Forwarded-Encrypted: i=1; AHgh+RrwuKP6tv0BjK8xu034VacUDW9j3Ion8/ofq66f8WdgC+C5PLwu63Ap3h/YFVvOtArgwzbZeMFkQximMruxa1g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGZwZyQfe43i5bdG5N2Uef5vW57xJeomld4lQBLrGaDHu6HiQj
+	0rvkk55VEzNfcWk0INx+SdTx2TVrkVdFK1/6gmuQ2+FX5nLajAdf2Xl2
+X-Gm-Gg: AfdE7cnD0rcXNyzYJcglsHC1XTn6odUy0yYGW9UTobKJBnDIzyBX6d3vC4jsD2Ktdk1
+	nPlag7frDkN+mRYB1pKvC2tMed2NE9iae+vc/7rLawxsrEDqoX9722coNWts0+MGFhgRKTaN5Vg
+	TnkOFrGKWsVhhgSDL/z9b3q5OWVj00dg3ustMkjQVPIxzcbTEeiJKskK3A+vXWNTBQgx18004Z/
+	4B1hzuclod9+wYy9ZomunUUChV6pGb/4KK1JwM7yuJMZTrV0xRuzgLhvvlxjO6XIhZ82aa4nSHH
+	ZLSck8qcD+PDWd8GP+KoV/1R/TEKmZwhWULwNqAanI5MrmXtpT0ELcbBNuwifRIm7wmYcd3yvYX
+	CLqi+34gwPtsxWR3ci9sitwtcNZTlPg6XoF+eQoRrYPYfx+SoaSkAzf9aBTfExnTUMNdX6NZG98
+	+5SjguTeDA+tGYlfpGcKyOrHJWnbWAcMJ3nc4tIoxbpSHho4ZdhJOy4FE=
+X-Received: by 2002:a17:903:2a88:b0:2c9:d8c6:1db8 with SMTP id d9443c01a7336-2ce9f284e45mr2337085ad.28.1783706847144;
+        Fri, 10 Jul 2026 11:07:27 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf74cbsm63356135ad.18.2026.07.10.11.07.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 11:07:26 -0700 (PDT)
+Date: Fri, 10 Jul 2026 11:07:23 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
+	corbet@lwn.net, dakr@kernel.org, david@kernel.org,
+	decui@microsoft.com, haiyangz@microsoft.com, kees@kernel.org,
+	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, wei.liu@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] mm/hmm: add hmm_range_fault_unlocked_timeout()
+ for mmap lock-drop support
+Message-ID: <alE028DsCGeUwNh6@skinsburskii>
+References: <178345345668.660027.2952911919681614557.stgit@skinsburskii>
+ <178345362182.660027.12809852179204464964.stgit@skinsburskii>
+ <20260710162749.GP118978@ziepe.ca>
+ <20260710164743.GX118978@ziepe.ca>
+ <alElv0EKjLQXMNK8@skinsburskii>
+ <20260710180312.GD1803712@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-net-sft-fix-containers-v1-7-a2915c294ef5@kernel.org>
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-In-Reply-To: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, Breno Leitao <leitao@debian.org>, 
- Andre Carvalho <asantostc@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4108; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=/UfvinGjUKzQZZtwXFBpxnI8oZyMN8LjK5sOgdx882U=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLICTaKCygWXLv44/0+bo+Pk9z5y7JYXQw7Pm398ioFIV
- QLT65b5HaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABOZ/I6RYZPIhF1au7zKTWV4
- rp6a+Dep9sG7PczPb9Smhz7O+fzgoQ0jw9KWH82zP5xb9296rrq/xNsHOedqneUj4vfsDyiVidr
- tyQgA
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260710180312.GD1803712@ziepe.ca>
 
-In these netconsole tests, bash is used with errexit (set -e). It means
-that if the busywait timeout, the tests finish without printing an error
-message.
+On Fri, Jul 10, 2026 at 03:03:12PM -0300, Jason Gunthorpe wrote:
+> On Fri, Jul 10, 2026 at 10:02:55AM -0700, Stanislav Kinsburskii wrote:
+> > The main customer for this new feature I have in mind is the MSHV driver
+> > which backs VMs memory with HMM, requires userfaultfd support for
+> > post-copy live migration and fast restore and it doesn't timeout.
+> > 
+> > I agree, that this current timeout value used by the other callers might
+> > not be enough to repopulate the mappings with userfaultfd, but there
+> > drivers would get -EFAULT for uderfaultfd-backed mappings without this
+> > change anyway, so getting -EBUSY with the change instead doesn't look
+> > like a significant change to the behaviour from my POV.
+> 
+> It sounds like it won't be reliable either then.
+> 
+> > > So, maybe the deadline should be resetting after every handled fault?
+> > > ie the timeout really is only about the mmu notifier and we don't
+> > > count the time spent handling faults or walking?
+> >
+> > The timeout was inherited from existing HMM users rather than introduced
+> > as a new HMM policy. Some GPU drivers use HMM_RANGE_DEFAULT_TIMEOUT as a
+> > budget for the whole range population operation, including HMM retries
+> > and subsequent driver mapping work.
+> 
+> Yes, because we always had a timeout around the notifier because that
+> scheme can sort of live lock. The timeout was to protect that only, ie
+> limit the number of notifier retries.
+> 
+> Expanding the timeout to be outside what is bounded by the notifier
+> retry is not right, and heavy stuff like mapping should be done after
+> the hmm side succeeds and the notifiers concluded so they can rely on
+> normal locking instead.
+> 
+> This is why I'm suggesting to reset the deadline as hmm makes forward
+> progress, we really only want to bound the notifier retry loop not
+> anything else.
+> 
 
-It is fine to ignore these errors, because the following validate_xxx
-helpers will check the content of the output file, and exit with an
-appropriated error message, e.g. FAIL: File was not generated.
+Sure, I'll modify accordingly.
 
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andre Carvalho <asantostc@gmail.com>
----
- tools/testing/selftests/drivers/net/netconsole/netcons_cmdline.sh     | 2 +-
- .../selftests/drivers/net/netconsole/netcons_fragmented_msg.sh        | 4 ++--
- tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh      | 2 +-
- tools/testing/selftests/drivers/net/netconsole/netcons_sysdata.sh     | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Thanks,
+Stanislav
 
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_cmdline.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_cmdline.sh
-index 96d704b8d9d9..4436567abc94 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_cmdline.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_cmdline.sh
-@@ -50,7 +50,7 @@ do
- 	# Send the message
- 	echo "${MSG}: ${TARGET}" > /dev/kmsg
- 	# Wait until socat saves the file to disk
--	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
- 	# Make sure the message was received in the dst part
- 	# and exit
- 	validate_msg "${OUTPUT_FILE}"
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_fragmented_msg.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_fragmented_msg.sh
-index 0dc7280c3080..fc3db40c1df5 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_fragmented_msg.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_fragmented_msg.sh
-@@ -104,7 +104,7 @@ wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
- # Send the message
- echo "${MSG}: ${TARGET}" > /dev/kmsg
- # Wait until socat saves the file to disk
--busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
- # Check if the message was not corrupted
- validate_fragmented_result "${OUTPUT_FILE}"
- 
-@@ -117,6 +117,6 @@ disable_release_append
- listen_port_and_save_to "${OUTPUT_FILE}" &
- wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
- echo "${MSG}: ${TARGET}" > /dev/kmsg
--busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
- validate_fragmented_result "${OUTPUT_FILE}"
- exit "${ksft_pass}"
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-index cb59cf436dd0..cec6afaba4a3 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_resume.sh
-@@ -107,7 +107,7 @@ do
- 	# Send the message
- 	echo "${MSG}: ${TARGET}" > /dev/kmsg
- 	# Wait until socat saves the file to disk
--	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
- 	# Make sure the message was received in the dst part
- 	# and exit
- 	validate_msg "${OUTPUT_FILE}"
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_sysdata.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_sysdata.sh
-index 3fb8c4afe3d2..7089f7bd1e34 100755
---- a/tools/testing/selftests/drivers/net/netconsole/netcons_sysdata.sh
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_sysdata.sh
-@@ -197,7 +197,7 @@ function runtest {
- 	# Send the message
- 	taskset -c "${CPU}" echo "${MSG}: ${TARGET}" > /dev/kmsg
- 	# Wait until socat saves the file to disk
--	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
- }
- 
- # ========== #
-
--- 
-2.53.0
-
+> Jason
