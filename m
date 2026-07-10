@@ -1,30 +1,32 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6826431AA87
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851673191BA
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 14:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783694903; cv=none; b=hvwSJ7mU1BwY47a/yhjHJz0+RXBjJOuHLDyZxlZ+uXKk7m0P64QDcnO6X0igj/G4WElATyDQiTyEn+1Z04TwlsAB6be8mJZMhfkF879ZtdnGbOWW31iLctqrsXrbxn+F7JGS9q/b+4CEJkuhZubvdJukWUPtGKPx3YmT/i5w0s4=
+	t=1783694910; cv=none; b=KgajfG32G0UqTxTZoKzpfQF8DARc667x8JosNw7O9t1bp5dL9cvj9a90txqggPWBG6UuUyl5QGoxZYTtNStbJIbUezoJOtEytHX7MJtveXaZRrEHxVNHheVrjgjXWRac97S819aZJC5T6SlItHj0OLz7oCSQHCjzT8UaA/4KZds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783694903; c=relaxed/simple;
-	bh=Fzun0pbCgqagkdMATIaCkUd+AoRGLeO2GOi5x47UYy0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NsFZznRRY5QfEitW3Y0J4QoXOU8b/m/YJ0oXBEbmu7dcn090ldyKuXDsGt2iqZcBlKYrA79R0UtvneJG1nqjldhK8d9GIIRPWj8ZJgOiMWFwj1/qACSSuGXJBfAuIbYYgXYIdxAlb9LdhhC2OAuZeoeAFPUUmNSl2g1alNkFOdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kkh481XA; arc=none smtp.client-ip=91.218.175.186
+	s=arc-20240116; t=1783694910; c=relaxed/simple;
+	bh=ikz2NH0HmLH9i3GQLFLN+FlT2xswhVZKdG1nuTo2Xiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ju6gVABjZ3KrB1sSPQ2wwxfUNX5xHnNLUkhV2ydGEVcqAwF4DasNAgwtxCCQJUj8FDGCkx1uQdOaI7KOSeFndbaIMD6wrjWYqSUW7rpPAtAIVTgFMsSS+FLovk7/OfGTJBNjay/NIgEI/ULWx7FRFHacGFp4EzAELUwRpuny9v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ptkm7okA; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kkh481XA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ptkm7okA"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783694898;
+	t=1783694905;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9Gzc+GQ/gUywc6SaUDedG3PHNHMNZAoxutaEWyAZEAI=;
-	b=Kkh481XAbbS/+uISSQ4JkHst2WNDmcM02+RtDDEngCiMXfhncp6uVbDWGPyLrUycARWzJS
-	p/t1IDwLwFnEdyLadAlP7Qyk8VX2h0AZhCiUPVaFp5BbsvuWNIKx6PsmhQR8aTXkAy1Y6k
-	3TidiZAw92F+C0oDc1Syae+PMG5ZY7U=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4uXMXuRn9j+LTje2Yxn9MrG3YrwyITp+GwXCevnXQk=;
+	b=Ptkm7okAdJAK7AnKgzhZAzk+d9rioyfuOj9FMPROP2fVkEcVALvLbISIcmuOSb74Wixpkx
+	IzWh02RE9yvu1LoLeCI4d0Wa/tea8L7g5FPbFQ/d8BJEzG6fgOYNPf0A/2x7dWM31mxk5S
+	W3XqpwfjGICb9e9Oemi981vt3ybOMro=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -43,9 +45,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 0/2] bpf: Fix WARNING in bpf_trampoline_multi_detach
-Date: Fri, 10 Jul 2026 22:47:32 +0800
-Message-ID: <20260710144734.78203-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 1/2] bpf: Mark tracing_multi trampolines as ftrace managed
+Date: Fri, 10 Jul 2026 22:47:33 +0800
+Message-ID: <20260710144734.78203-2-leon.hwang@linux.dev>
+In-Reply-To: <20260710144734.78203-1-leon.hwang@linux.dev>
+References: <20260710144734.78203-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,19 +71,24 @@ then attaching fentry link.
 
 Fix it by setting 'ftrace_managed = true' in register_fentry_multi().
 
-Note: the reason of targeting bpf-next tree is I'm planning to add
-tracing_multi link support for bpf progs, that would rely on the fix and
-have code conflict with the test.
+Fixes: aef4dfa790b2 ("bpf: Add bpf_trampoline_multi_attach/detach functions")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/trampoline.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Leon Hwang (2):
-  bpf: Mark tracing_multi trampolines as ftrace managed
-  selftests/bpf: Test fentry link after tracing_multi link
-
- kernel/bpf/trampoline.c                       |  1 +
- .../selftests/bpf/prog_tests/tracing_multi.c  | 69 +++++++++++++++++++
- .../progs/tracing_multi_intersect_attach.c    |  8 +++
- 3 files changed, 78 insertions(+)
-
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1a721fc4bef5..6eadf64f7ec9 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1536,6 +1536,7 @@ static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_ima
+ 	if (bpf_trampoline_use_jmp(tr->flags))
+ 		addr = ftrace_jmp_set(addr);
+ 
++	tr->func.ftrace_managed = true;
+ 	ftrace_hash_add(data->reg, data->entry, ip, addr);
+ 	tr->cur_image = im;
+ 	return 0;
 -- 
 2.55.0
 
