@@ -1,115 +1,144 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC3D224F3
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 02:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783651908; cv=none; b=Wu9TjlxVwj1Y9AUGuQ/NlAMfZkDGyVwA8mPEG7lLQOdQu66W4W20yurmzYjaC8ntlnEUIOw8oK196wmCSCwo3yBwhTA0uMVI8to+HdD5gwxeVnY5Uwj0tAyHmfypTa+XyaB7/WtC4QeV4xhLZ0DFYHu9Hd/+sFKN+Kk4DAE+nbg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783651908; c=relaxed/simple;
-	bh=+U683y7R5me6dREyPy07yxUQP5UD8ZNU7r7BQeS5FOs=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ip0nnHrLzZGUQqOt/UgSm4w2xy9iWB937IMtbPcf7ihL6yTc7q2z+/Q8LzA3820KN1IrvKErrhdk5JzZr20T0LK+a0Z0nOBdrie9TDipIHSv4M8ZFk7J+XbyJLrSg5yDr5RxIRzJMHUKvLxFewZgucbD3M5iCHWgQDnyHBBLelg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eJ1rsjqF; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D50C3624A6
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783652673; cv=pass; b=YnlD2G/SL5WBnLSWY44S0aK4lCng+39ZKpq2L+se3o/JeAUZZPs8pTXa5M/4xDHcLgNaDOxO7ryge2vBJ9B/CzNxsXfMZAPb1zEqmnjMx17sRfgGziZ/YFmP6HEGq3rV3vGadhJ4RPe5lJy07OFbwumMYnsdCMIkXdetID8hTJ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783652673; c=relaxed/simple;
+	bh=dLcL34IFn1E9Ll2360H52vcSUchibGxDjGdZL0fvGUI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NfVbktu7pHRJ+pTYHbadUoOiybbzAcSI9AdR5wQ/dWapvTNNnIdGtOw+70yDqb1R/VfdWstCMD5qcCTJ7KLTfJkuFmJXVKXXgDU9PO7pkTwVFR/R4Da5NsO9FG8Mowq+Y+j1RnjDaEQVSzfr22vjTeLE4A6j+a4ghCSBQ6QoY+k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eM9zAR/P; arc=pass smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eJ1rsjqF"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ccafc5e82cso4365755ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 19:51:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eM9zAR/P"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c9fe3c9bd5fso1173220a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:04:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783652672; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mpvvjgDG+LteJ6Yta8whLgwJVUTqKHIoacIX9torKRArLmdvfd0SEseVooWJX9BBDg
+         Vy4PTtOoMC6iYTl5n0/GEGWfzQFruDBzi6ZDlJAw5ru1hv3prAZUvTFph8O4w9GStYE5
+         nzIJOUlpcdGqkvWEPmV+MKNfOdQ3LyXUyFeH8wISTRp00FB8AXHJgpfkceJbTtA3qc3M
+         0zfkEJUN5X9c+y4TCc1FkwOWdomvqi3QiHB56EVdTEMKAl1KV78LSDBamtecVVzrhe8m
+         /p+ukedpDmAA/qn4+JJWjY4hrQ60vjz1nFANItfkhib7CE02S1j/Y/FpPMuYliHRoHWx
+         gyzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nOaDP1TZ6EpH/3Af4xsHwklz6kPdgm3ywq3lyASzbzA=;
+        fh=vmisahYbCwACf0ny2LJFrEMCKP69oS5paFGM/3LouU4=;
+        b=bNiZdoKURuZ0p/5IafGrg86TTBkxmkHcRrulAAGWndvXp1SGMOzhYGItKGXGr7evdR
+         Ypp32ETC0V7d9AJrjezPS7LeqE3ZvtVqg3R6o/mAyaZ4jmXkPb2YRc9ZYj8VoYJFqbCz
+         yumkA1tvnszcejJuLBbetD/Humr27DYgYLDrntd+wt22y/2EOr1D83n8Gophh3zh9x3M
+         sA+yOJTfhvnfgF/IQxCQt0Yn4c+SbXWsD+FvhwLYAWPkPw0zDwXa0VzqaqRvzUjZozRo
+         wrQmmHA/U0KXzYWNgAvGXCBu5atRYZKxZKqcF4v+zUI4tApQIajf+Qe1e0ZqVjWvW8is
+         s+Rg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783651906; x=1784256706; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BL5H+fL/wTSfQg6h+aaEmu80X+4MxC2DuWxeidn6HIU=;
-        b=eJ1rsjqF20YYke03+wGD8LTBvEdqQBHZDEoEulVRQyfLNc3W4TRawb8LsrTSYp/SLO
-         MeXS0gdGaz0dJQQ3CB7j/Sye0M8IKdJKHxiaNF/ZgZTIjJ1cwgMFuzwdfMrpkxhTRnfj
-         7tPtIvh4Llu6G7xbVlNFffqKNDsF6fwagmoa2YqryG7+bFaywPlDCoXkk9oUaHAXupFq
-         S/lxvk+dTL2fnM/oYhJsV9vu5iRXDcEZbExo1mEnKDGz3LXoF53G6Vh03CTvFL42Ubb4
-         XKLDVjSsWxDRshB2WJUjENSJH4NaVctMM76IKbabP5XYbJxSQPmJCfNBbrmGe3GtIgnK
-         vpoA==
+        d=google.com; s=20251104; t=1783652672; x=1784257472; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nOaDP1TZ6EpH/3Af4xsHwklz6kPdgm3ywq3lyASzbzA=;
+        b=eM9zAR/P6LwKCnccQeP1uPlXkXFN39Gnf6UhjAJ0CY1iZlyEKYWZ8Gah83nQMUAc/2
+         0f8w+0ttZu0pSnV2mTS78Vyz8lNJg98FURO+Ju+OyZX+TxXPGfmYGy+hH73Nf7NBxI53
+         UAgQyWhdlPaawQa1ubX4eEVEnW7ZLyjqmJg9ENtS5vAP6VhJWz16O3ZTHFQcgo+IBvqU
+         sG81Es05KtHIN9ia0HaELfE/BPQd/PfGj62cC0ozpEMQ/PdidrIzB7iX+Zeh5NCQ0KNn
+         2Ft8leDsB3jPUwsRvJQajFNP82DOh3k2ySdwhkeNK3FIaAYaLI4/IVp39E1jzaAoKlPh
+         W/Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783651906; x=1784256706;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
+        d=1e100.net; s=20251104; t=1783652672; x=1784257472;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BL5H+fL/wTSfQg6h+aaEmu80X+4MxC2DuWxeidn6HIU=;
-        b=Wh3dFi1Q0qdwBxmTNOZzkM35C8CF4xotes3zFElBwnfcfXY4mX0/Ol86dHj5RmxC6M
-         YgEIbqW6fyTCi1K/9hXS8D62c1mbk5kLsJGsD5AgPyeM4izv3u1Q9RFUmBmJNCH6ZirD
-         Y4fPBpGoGpQrE8jjA7tMYVR8iaL2dLJuRFQ1cMJvCFwgLlTUSCTSjBn5gXurKr5Imo9n
-         Exjxb9JQSOVilPeZbVYZxQUVdbmrU5e/z2YQqnVJYoIRT/Yn2wXKu1XpEQrozS03Kjqa
-         w4DEoCntn0hqWWanJdCc4dNW8EyhszCJgZMgZryfHZyw5XReD3DfjKntPpyR7PMhudid
-         lstw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq75VybPZePNT5D+KqVehtTLv+YG3xi647qk/eCsK/Rk8qkRCABqupEdHsR29BOnSN4YkqG3nDR2E+nA1l412c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8DjbafcZK9arwgucttZAvtUlQdnAtp3QOD4UtrxKtLy95pgnD
-	Af50X4dpZZFE/WXxYJtJ7HasKSKp6ALZwWUeeAQmqLZZWY1947RKB0uGt3qSjQeXfA9li6D4f83
-	kGQ==
-X-Received: from pjzz12.prod.google.com ([2002:a17:90b:58ec:b0:37c:5da3:8742])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:e183:b0:381:25ce:bcc2
- with SMTP id 98e67ed59e1d1-3893fb6b6ebmr9232786a91.6.1783651906245; Thu, 09
- Jul 2026 19:51:46 -0700 (PDT)
-Date: Fri, 10 Jul 2026 02:51:44 +0000
+        bh=nOaDP1TZ6EpH/3Af4xsHwklz6kPdgm3ywq3lyASzbzA=;
+        b=cVUlDoAkIvPK4yNWSYNBxrAJ1orEUGHEVbI+HtAMTKeU+QkhiRQfHAFGxWZHDEyWpF
+         MzVEutWrBmcEREv6nnMooHoMij3MkYuHfnjEN6GbgrCG6Smsoz1Ei/8y7WBdCdKP5wHM
+         kuQgfUwsuojkHbV2QM1yprhwBh4DbI0qPt8ifajcRzmAb6GjIDsQSDyQ98n9fXTHlsEz
+         2CM4BB1YBTyfMn8HjAb48IB3bMdv0ykXIOjyXv1kYhGtOENPQbXAfbtykrX5Ug23EHkW
+         uF34eUymM2+3Z7hL0h0NJUAak3RJJcoNQEV3nuiS99cxIVz3RvP+9NP2EITNZphduKiE
+         33aA==
+X-Forwarded-Encrypted: i=1; AHgh+RpT9cqJ6haHIerlLTkdpOz0rAtCinPevSa/LvemoXqItWjfwnQkrv6Mq7kzqDQKgh/wp3oUfw69EGv5IK6eDu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgX0RMW5EqJU7ec0TOp9IdK9VfIf7a/iAinSb5Qt8TludNNDpz
+	lR2+kTYHsgAUWI8IiGJKTjRlWIXazAMRDJW+YTNZWzx9+I+TgS1xpqfAH8/HyJkUPSpOhOdYc7z
+	PNrJfRBZyd2T1S87jrvYko4Sl1v1rImyr11P/CXw=
+X-Gm-Gg: AfdE7cnKiH/pxXfBon4S7abzJJTRVep/+g1xp0faab86uuHfytGRBrgRwq+999ASNy5
+	9c2806Ca5+kwxMMQo64r1CEz6Vjq8xGjLDmLsZGgc/9yH70Uhcdy9pGXjEXXoLtki9IT3+OMvYO
+	YXEjt9TeMGyBCOMK8ekZXOBPbPro5Kq9ZxXree4ePvwGWVpUOcoeQAYz3Co7jbqWFEENxcn1pg4
+	53eo8+k1p6jzDUXiEnSoNsttbFxuyij23XBZ5sURYUstHRBswRz07lsFV8tcbNpLLTD2HON/7Io
+	4kEk03VqvQ5n+/eXuOuUuZezH/soktVwkyAQEYMnCP+6cdKnNv1s0dpA9CiuN7/DTyxrKT2ucIP
+	iguVF384xMcfofFJUih3qvmtc
+X-Received: by 2002:a05:6a21:4688:b0:3c0:4179:b5d5 with SMTP id
+ adf61e73a8af0-3c0f0b72f85mr2270517637.28.1783652671212; Thu, 09 Jul 2026
+ 20:04:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
-Message-ID: <20260710025144.2000000-1-wakel@google.com>
-Subject: [PATCH] selftests: timers: Make sleep time in raw_skew configurable
-From: Wake Liu <wakel@google.com>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, John Stultz <jstultz@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Wake Liu <wakel@google.com>
+MIME-Version: 1.0
+References: <20260710025144.2000000-1-wakel@google.com>
+In-Reply-To: <20260710025144.2000000-1-wakel@google.com>
+From: John Stultz <jstultz@google.com>
+Date: Thu, 9 Jul 2026 20:04:18 -0700
+X-Gm-Features: AVVi8Cd7b32F9NWCK96S1SGVXaCqaVeCIrrLzY8Pt_RoR4QOeYbAjI6S6TI7GYo
+Message-ID: <CANDhNCqqAqVTXXNZvKD8sppJhVY7xjb+n-33Aj1d7Kp3XoMv4Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests: timers: Make sleep time in raw_skew configurable
+To: Wake Liu <wakel@google.com>
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Shuah Khan <shuah@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The raw_skew test currently sleeps for 120 seconds to estimate clock
-drift. This is a very long time for a single test, and can cause
-timeouts in automated test suites or CI systems.
+On Thu, Jul 9, 2026 at 7:51=E2=80=AFPM Wake Liu <wakel@google.com> wrote:
+>
+> The raw_skew test currently sleeps for 120 seconds to estimate clock
+> drift. This is a very long time for a single test, and can cause
+> timeouts in automated test suites or CI systems.
+>
 
-Allow overriding the sleep time via a command line argument,
-so it can be adjusted if needed in different environments, while
-keeping the default at 120 seconds to preserve original behavior.
+Sheesh, nobody has two minutes to spare?  :)
 
-Signed-off-by: Wake Liu <wakel@google.com>
----
- tools/testing/selftests/timers/raw_skew.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+> Allow overriding the sleep time via a command line argument,
+> so it can be adjusted if needed in different environments, while
+> keeping the default at 120 seconds to preserve original behavior.
+>
+> Signed-off-by: Wake Liu <wakel@google.com>
+> ---
+>  tools/testing/selftests/timers/raw_skew.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/se=
+lftests/timers/raw_skew.c
+> index a7bae7d80916..03cdcecba8f4 100644
+> --- a/tools/testing/selftests/timers/raw_skew.c
+> +++ b/tools/testing/selftests/timers/raw_skew.c
+> @@ -92,6 +92,15 @@ int main(int argc, char **argv)
+>         struct timespec mon, raw, start, end;
+>         long long delta1, delta2, interval, eppm, ppm;
+>         struct timex tx1, tx2;
+> +       int sleep_sec =3D 120;
+> +
+> +       if (argc > 1) {
+> +               sleep_sec =3D atoi(argv[1]);
+> +               if (sleep_sec <=3D 0) {
+> +                       printf("Invalid sleep time, using default 120s\n"=
+);
+> +                       sleep_sec =3D 120;
+> +               }
+> +       }
 
-diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
-index a7bae7d80916..03cdcecba8f4 100644
---- a/tools/testing/selftests/timers/raw_skew.c
-+++ b/tools/testing/selftests/timers/raw_skew.c
-@@ -92,6 +92,15 @@ int main(int argc, char **argv)
- 	struct timespec mon, raw, start, end;
- 	long long delta1, delta2, interval, eppm, ppm;
- 	struct timex tx1, tx2;
-+	int sleep_sec = 120;
-+
-+	if (argc > 1) {
-+		sleep_sec = atoi(argv[1]);
-+		if (sleep_sec <= 0) {
-+			printf("Invalid sleep time, using default 120s\n");
-+			sleep_sec = 120;
-+		}
-+	}
- 
- 	setbuf(stdout, NULL);
- 
-@@ -109,9 +118,9 @@ int main(int argc, char **argv)
- 	if (tx1.offset)
- 		printf("WARNING: ADJ_OFFSET in progress, this will cause inaccurate results\n");
- 
--	printf("Estimating clock drift: ");
-+	printf("Estimating clock drift (%ds): ", sleep_sec);
- 	fflush(stdout);
--	sleep(120);
-+	sleep(sleep_sec);
- 
- 	get_monotonic_and_raw(&mon, &raw);
- 	end = mon;
--- 
-2.55.0.795.g602f6c329a-goog
+This probably needs some usage documentation so folks can discover this?
+(Which may mean also supporting -h/--help)
 
+Otherwise seems reasonable.
+
+thanks!
+-john
