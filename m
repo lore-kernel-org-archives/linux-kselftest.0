@@ -1,68 +1,68 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C1C366DC1
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47509361641
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 03:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783654160; cv=none; b=ky1Bg9Q6bjJdbBrGcIh1Pb620m9isP7FfvWBZtassFU74pi0pB1ambrMHvXL/dsdZC2+bWMcb9zZcdhquf9TYdI0uzt8uk7s/7kCgiZTj/F0hF53Y+AvOpwBwBvDGAsACnq0XYlVq7PcmWDG1wMyTi81E5Gs0uedvHI/zAhOZPw=
+	t=1783654169; cv=none; b=QuhClYhSNU4nCdEXod4SDWJuEiCVO0EnAk4eFbpvRncQZ2OjQr28WY4tYa+sRF/+WZCBQbLfNjzcJvy5UnMC5crApYRgDESERrfH6HJW9KHZ5w0Ba6G+zXP3RSgillBX8JhtCRbr9r9+ZaT+Dw68+i3urrpyIfwzR1gPwl/Ob7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783654160; c=relaxed/simple;
-	bh=XLXzIgc0ems38hTXhytSCLWNSTJ6/lnczDaOsWqzk80=;
+	s=arc-20240116; t=1783654169; c=relaxed/simple;
+	bh=Gwt0vIVRdUfUurXNz0U9um8/c6hFVw+sQjNLaLm168U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kEbRTJA2ONfoIJ3gXDTwUgyhkmiSRjavBS1A2ftbXKeolQQtxVXjyttyTDpO8LZukmCBIrMTzyBjSErWLXgApPsSf7JrsOkpDx2OLHErFIMLiP8JOki7TxGopv1TXXiFYr8zcKVIRO00DPMGKmleDco33MLCj5G/5dM2QGPmkwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FAwlXME/; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:To:Cc; b=qQ7xR6ip1SJMJa0B+G1pZiEQQyENoPFv/4yws5tGyzRdmv6Pa3fqsix3gVAr3lACg3p/uL3oZI1qTEdXdLlR/n6wa0Q7OjUES5aFH7K4KtoEQvdFYtdpym2HapTEpXI6A6+tICZ218lH5RRzkgTas9OOKugBmlPbJhkHpBt2B68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfRS0gus; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FAwlXME/"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cce6a0c9c3so3686725ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:29:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfRS0gus"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cc61541f8cso21629805ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 20:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783654158; x=1784258958; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783654168; x=1784258968; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=foKf2OzW/IJk9qSRNXtj3QHT8NO8zJPjssJk6y4CFnQ=;
-        b=FAwlXME/ZU8CIggt766MxOWFrtD1DEAq+1QJV89HtJ/4qNAdyqlrf/mhagoGSGEkRn
-         simFefKR9u1kk0tTchJvpGxeImcfcMQ+B3g9eTnnkDEH9XXJLiKeNBiBoFJhpiNoTROV
-         JPfNXiOvjRdsXCNgbxO6KYKDP20enDacVWXEzfyJzG3eTFqBg1o+IgDB+qgBK4SpH1bV
-         yjUrAOOQSD0c67wB5qVWQYidOMm3XPFPFvlrZxewjKtLcSQg5kZIti0sNZqwA4jlgV1T
-         5fy1b02DQ9S97U8n8/oJN3AhnVlmiLR1Dx9eL1uSHP/O9VPhJb8mU8FiWzuxGLj7+ByE
-         oXkg==
+        bh=6HyVQ93m8I4DnhXDv5rSatBwFHcjRnR8kBcgkmMTv+c=;
+        b=jfRS0gusrHnEQMRd1dhgGrBgdfHybLeQ9ECOlV9GUjmEr3cT0oYfIiX3gea9Wmf2Uy
+         U7pHaSzygXfxwMA6JX/+Mp2DF3Yat95RQu4rTarDlE0EK1twr6zceJfVlxYP0uTJ3BkS
+         SiHdPXVaYYEiNN4bMvZVAie3epJWEdtHrUeQyOQBhS1VAn2dYrKlniXvb92s62idar3y
+         NaUCEvTYX4Exl0JQ0NMe8FyrHge9eGJ97kfDoHmbQf4Vxe7wzgs0O69fEqwSVDXtzwYx
+         c0/2doFPj7ukUyNyPBYqzLiamn4Qi37xwr1FRlVN+SE6QEfeei6IP2wcvIqmVYFSIti8
+         hXZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783654158; x=1784258958;
+        d=1e100.net; s=20251104; t=1783654168; x=1784258968;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=foKf2OzW/IJk9qSRNXtj3QHT8NO8zJPjssJk6y4CFnQ=;
-        b=F87ZIH5N79+znPuUrZds0VwdsObPOU6NmbmNc5H9VgeO6DINSuj/H8who6RhqGQOhh
-         NH+aj+66xUhW+H/BmLXs1iRl5iqL4/KIvEFz/pElhGqSkd3Y63XqDblirelXlA6Rvqx5
-         McQT/oTgqSPZoKpnTVu7v1R98pv9BM0D9JyTq32P8EDE+KSUg+Wkhw2znIah9krTlvtt
-         bOK5J4Y4O32QUg/4synOiHcYQlIfRgG0iVJqFpXfrVZaI6bXJl8Pi0agPPKRRh7j0Cyg
-         RuPuvWRIbVdvgwIbjtMVqc09RVzQG05NbHygUGC3/oisGQBjWoUnqoMP7U9FBHfknWiW
-         INFg==
-X-Forwarded-Encrypted: i=1; AHgh+RpwyTnsf/9v9l/GoU0oJJ32JKwDqD94DgWjKc5EK1dQvUKi5g0H5ROZp17leEbEuAmuBry20wjrb2E9u7uJT0w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX3ejIis2tB/NS6xrYs2+Nzh7LFvkcEWvR/3PB1m4b9+S6uUM+
-	f02QKJKbadHf+lI9Ob9iNxtSQ7GV5FlltR2gFh4pEoyJBm9c2nYFvxA8
-X-Gm-Gg: AfdE7clT8i0yb2S33JNTaMwD/ZLUNg7IYvA6tSBDS33Azt+LDGn/cziy+A87BOQaC3/
-	9THF5pPOUCfx+qYgaLPtAmVpZCBTS3U5sKV95NqesFFRvJmS/ffsNZ3p7oseuQ1S/tnNH8SDyzX
-	01z6FZMYa7ixebHZ52oOVu7vOECQWafYI2qTOs/m0uG8uLGx7Ka3bs0bYI4fjqZJ0ct6eWqUqRc
-	0ZHlaBt1hqTGfwUeKb1KWXKm3mfSH2R9/rGC91v5iiJO6cotZMoo7OFhB06irS5dkq5sde+KR1W
-	wy+vXSScHBRZMT8fnUMk7OxCjyZvlO9KZJYJGuVZSKlIV/xE6Kcj1NWcm8dS7ODd/3Kec3/RCBZ
-	r4JijFXbMNyyRf4UZ7mFUcVJ14zK8GJOa7izh3+nqWUfzPtuZAf+YhZYl/EF5D6mPD8iUeQHplH
-	nezJVd2U+mv1M=
-X-Received: by 2002:a17:902:f78b:b0:2ce:6d4a:5b8a with SMTP id d9443c01a7336-2ce6d4a5c71mr56853935ad.38.1783654158257;
-        Thu, 09 Jul 2026 20:29:18 -0700 (PDT)
+        bh=6HyVQ93m8I4DnhXDv5rSatBwFHcjRnR8kBcgkmMTv+c=;
+        b=oRdwOaU3Ry+SBPrlM/OzE49Dr1KEnGkFBPKypEYxCAIFK7bbEGWHmR0nc14QGkuPJW
+         cjZUcgVye7IM2LWoeX+wnVafYCQvWclqkEoNKgIIuUN+hp9UgHRVf5Jv+z6d6c/ieGGy
+         vAJMaKU9JYIXyerq9an86Zb5MOD290iVWim64wYjgkOa9MhgL3B5p2x1cbkztmdcz0Ni
+         J9dJ7eOPH4ut1rucgDI+Wp2o9FwIuUFpDMoVKP69QG2rOeN50m5s/ykfJdiRFM377xB6
+         daDCgWThzIr6WjIBD6czm4BT7nEd4wXKwNazZDMgQBFzb1AIxe0eIEBDVcV7jjeFfDpi
+         Dl9g==
+X-Forwarded-Encrypted: i=1; AHgh+Rrz6HY8ZqXgzrMRSZwW1UVoYPNik0WTEmnZEefIcRjeppEkCbc55+VwciOxysADePA+eOBoKeRKh2S5nVdr6rY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL3cvbrnrrGqPNlctZgr362LwfcOhY6MrDO1A6ifKBjZL1KonS
+	sNybKR7JG4xAjQI/uyTH99uewCmYB9Va0J3cAiEUmlfOEUd7f9ZEk/dA
+X-Gm-Gg: AfdE7cmIFmOo0kHWZK1zgK7d3UqSSUpZUE1laWcgnXhu7RL8N0C+D1ISEFLEj1MHobK
+	2ybcu6pnfj+PswI8SkZtgLM4Nox25/m6uQSJHxRNG4qav/9f0GIkjB8X3Zj/u1KQXnAvoEd1MEF
+	lo+tJ4migLvkCaY2pM/6genJASZbICeVa6RLnUDVQaqdiAVSRsNhOVSyVCcRvEZodE2thGScdc4
+	jE3GRotofyKA8ijVX+nhpZLT2AXkJwUjUvmzxxA1uUkXI3Gs+EhUusg+xt0PlUqOnuEcnAzRc1a
+	3mp3nW6EapfvfMN5qKwuPRlsFiAjPW4a7sKocnnxSlrN9/2SqbCpD0GXEj/iofol4Nw4bG6ZYFm
+	IsDOS/y8Hdvnvm2a25e+CX6AX0nAe+X074fs6Xj5bSHT8zQcDjwyKLnr3fkxSXjhzAK/4zPCJQF
+	r5iiSvl+fhmro=
+X-Received: by 2002:a17:902:d98b:b0:2c6:8d95:fd7e with SMTP id d9443c01a7336-2ce8285abefmr20003265ad.6.1783654167651;
+        Thu, 09 Jul 2026 20:29:27 -0700 (PDT)
 Received: from [127.0.1.1] ([138.199.21.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.29.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb56fsm53436465ad.15.2026.07.09.20.29.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 20:29:17 -0700 (PDT)
+        Thu, 09 Jul 2026 20:29:27 -0700 (PDT)
 From: Jing Wu <realwujing@gmail.com>
-Date: Fri, 10 Jul 2026 11:28:17 +0800
-Subject: [PATCH v4 06/11] watchdog: sync watchdog_cpumask with
- HK_TYPE_KERNEL_NOISE on isolation
+Date: Fri, 10 Jul 2026 11:28:18 +0800
+Subject: [PATCH v4 07/11] tick/nohz: add runtime tick_nohz_full_mask update
+ for CPU isolation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260710-wujing-dhm-v4-6-2e912e5d9645@gmail.com>
+Message-Id: <20260710-wujing-dhm-v4-7-2e912e5d9645@gmail.com>
 References: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 In-Reply-To: <20260710-wujing-dhm-v4-0-2e912e5d9645@gmail.com>
 To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
@@ -97,101 +97,117 @@ Cc: Waiman Long <longman@redhat.com>, linux-kernel@vger.kernel.org,
  Qiliang Yuan <yuanql9@chinatelecom.cn>
 X-Mailer: b4 0.13.0
 
-The watchdog is initialized at boot to run on all housekeeping CPUs
-(HK_TYPE_KERNEL_NOISE). When a cpuset isolated partition removes CPUs
-from that mask at runtime, watchdog continues running on those CPUs
-because nothing updates watchdog_cpumask.
+When kernel-noise isolation is requested for a CPU at runtime via a
+cpuset isolated partition, tick suppression must be activated on the
+affected CPU without requiring nohz_full= at boot.
 
-Save the boot-time watchdog_cpumask as watchdog_cpumask_boot, which
-captures the user's intended coverage (possibly narrowed via kernel
-parameter or sysctl) before any runtime isolation. Introduce
-lockup_detector_hk_update() which intersects this boot snapshot with
-the current HK_TYPE_KERNEL_NOISE mask and reconfigures the detector.
-This ensures that isolated CPUs are excluded while honoring any
-manual narrowing the admin applied at or after boot.
+tick_nohz_full_mask and tick_nohz_full_running are currently set only
+during boot by tick_nohz_full_setup(). There is no runtime path to add
+or remove CPUs from the full-dynticks set.
 
-lockup_detector_hk_update() snapshots the RCU-protected housekeeping
-mask under rcu_read_lock(), then updates watchdog_cpumask and calls
-__lockup_detector_reconfigure() under watchdog_mutex, matching the
-same locking discipline used by proc_watchdog_cpumask().
+Add tick_nohz_cpu_isolate() and tick_nohz_cpu_deisolate(), both called
+with the target CPU offline (between remove_cpu and add_cpu in the
+hotplug cycling path):
+
+  tick_nohz_cpu_isolate(cpu) - lazily allocates tick_nohz_full_mask
+    if it was never set up at boot, sets the CPU's bit in the mask,
+    sets tick_nohz_full_running, and calls ct_cpu_track_user() to
+    activate per-CPU context tracking so kernel/user transitions
+    suppress the scheduler tick.
+
+  tick_nohz_cpu_deisolate(cpu) - reverses the above: deactivates
+    context tracking via ct_cpu_untrack_user(), clears the CPU's bit,
+    and clears tick_nohz_full_running when the mask becomes empty.
+
+A per-function mutex guards the lazy allocation and running flag
+updates against concurrent isolation requests.
 
 Co-developed-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Qiliang Yuan <yuanql9@chinatelecom.cn>
 Signed-off-by: Jing Wu <realwujing@gmail.com>
 ---
- include/linux/nmi.h |  2 ++
- kernel/watchdog.c   | 24 ++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ include/linux/tick.h     |  4 ++++
+ kernel/time/tick-sched.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index bc1162895f355..0bbe562de67b7 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -37,6 +37,7 @@ extern int sysctl_hardlockup_all_cpu_backtrace;
- static inline void lockup_detector_init(void) { }
- static inline void lockup_detector_retry_init(void) { }
- static inline void lockup_detector_soft_poweroff(void) { }
-+static inline void lockup_detector_hk_update(void) { }
- #endif /* !CONFIG_LOCKUP_DETECTOR */
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index 738007d6f577f..c4038e62533ba 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -210,6 +210,8 @@ extern void tick_nohz_dep_set_signal(struct task_struct *tsk,
+ extern void tick_nohz_dep_clear_signal(struct signal_struct *signal,
+ 				       enum tick_dep_bits bit);
+ extern bool tick_nohz_cpu_hotpluggable(unsigned int cpu);
++extern int tick_nohz_cpu_isolate(int cpu);
++extern void tick_nohz_cpu_deisolate(int cpu);
  
- #ifdef CONFIG_SOFTLOCKUP_DETECTOR
-@@ -120,6 +121,7 @@ void watchdog_hardlockup_enable(unsigned int cpu);
- void watchdog_hardlockup_disable(unsigned int cpu);
+ /*
+  * The below are tick_nohz_[set,clear]_dep() wrappers that optimize off-cases
+@@ -281,6 +283,8 @@ static inline bool tick_nohz_full_cpu(int cpu) { return false; }
+ static inline void tick_nohz_dep_set_cpu(int cpu, enum tick_dep_bits bit) { }
+ static inline void tick_nohz_dep_clear_cpu(int cpu, enum tick_dep_bits bit) { }
+ static inline bool tick_nohz_cpu_hotpluggable(unsigned int cpu) { return true; }
++static inline int tick_nohz_cpu_isolate(int cpu) { return -EINVAL; }
++static inline void tick_nohz_cpu_deisolate(int cpu) { }
  
- void lockup_detector_reconfigure(void);
-+void lockup_detector_hk_update(void);
- 
- #ifdef CONFIG_HARDLOCKUP_DETECTOR_BUDDY
- void watchdog_buddy_check_hardlockup(int hrtimer_interrupts);
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index c18c3e9781d7b..26463f6d3a39d 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -53,6 +53,8 @@ static int __read_mostly watchdog_hardlockup_available;
- 
- struct cpumask watchdog_cpumask __read_mostly;
- unsigned long *watchdog_cpumask_bits = cpumask_bits(&watchdog_cpumask);
-+/* Boot snapshot: user's intended watchdog mask before any runtime isolation. */
-+static struct cpumask watchdog_cpumask_boot __ro_after_init;
- 
- #ifdef CONFIG_HARDLOCKUP_DETECTOR
- 
-@@ -1348,6 +1350,27 @@ static void __init lockup_detector_delay_init(struct work_struct *work)
- 	lockup_detector_setup();
+ static inline void tick_dep_set(enum tick_dep_bits bit) { }
+ static inline void tick_dep_clear(enum tick_dep_bits bit) { }
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index ba7adc671c580..1bc01e2ab525b 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -621,6 +621,51 @@ void __tick_nohz_task_switch(void)
+ 	}
  }
  
-+void lockup_detector_hk_update(void)
++static DEFINE_MUTEX(tick_nohz_cpu_isolate_mutex);
++
++/*
++ * tick_nohz_cpu_isolate - Add a CPU to the full-dynticks set at runtime.
++ * @cpu: the CPU to isolate; must be offline.
++ *
++ * Lazily allocates tick_nohz_full_mask on the first call so that no
++ * nohz_full= boot parameter is required.  Activates per-CPU context
++ * tracking so that kernel/user transitions suppress the scheduler tick.
++ */
++int tick_nohz_cpu_isolate(int cpu)
 +{
-+	cpumask_var_t new_mask;
++	mutex_lock(&tick_nohz_cpu_isolate_mutex);
++	if (!cpumask_available(tick_nohz_full_mask)) {
++		if (!zalloc_cpumask_var(&tick_nohz_full_mask, GFP_KERNEL)) {
++			mutex_unlock(&tick_nohz_cpu_isolate_mutex);
++			return -ENOMEM;
++		}
++	}
++	cpumask_set_cpu(cpu, tick_nohz_full_mask);
++	if (!tick_nohz_full_running)
++		tick_nohz_full_running = true;
++	mutex_unlock(&tick_nohz_cpu_isolate_mutex);
 +
-+	if (!alloc_cpumask_var(&new_mask, GFP_KERNEL))
-+		return;
-+
-+	rcu_read_lock();
-+	cpumask_and(new_mask, &watchdog_cpumask_boot,
-+		    housekeeping_cpumask_rcu(HK_TYPE_KERNEL_NOISE));
-+	rcu_read_unlock();
-+
-+	mutex_lock(&watchdog_mutex);
-+	cpumask_copy(&watchdog_cpumask, new_mask);
-+	__lockup_detector_reconfigure(false);
-+	mutex_unlock(&watchdog_mutex);
-+
-+	free_cpumask_var(new_mask);
++	ct_cpu_track_user(cpu);
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(lockup_detector_hk_update);
++EXPORT_SYMBOL_GPL(tick_nohz_cpu_isolate);
 +
- /*
-  * lockup_detector_retry_init - retry init lockup detector if possible.
-  *
-@@ -1390,6 +1413,7 @@ void __init lockup_detector_init(void)
- 
- 	cpumask_copy(&watchdog_cpumask,
- 		     housekeeping_cpumask(HK_TYPE_KERNEL_NOISE));
-+	cpumask_copy(&watchdog_cpumask_boot, &watchdog_cpumask);
- 
- 	if (!watchdog_hardlockup_probe())
- 		watchdog_hardlockup_available = true;
++/*
++ * tick_nohz_cpu_deisolate - Remove a CPU from the full-dynticks set.
++ * @cpu: the CPU to de-isolate; must be offline.
++ */
++void tick_nohz_cpu_deisolate(int cpu)
++{
++	ct_cpu_untrack_user(cpu);
++
++	mutex_lock(&tick_nohz_cpu_isolate_mutex);
++	cpumask_clear_cpu(cpu, tick_nohz_full_mask);
++	if (cpumask_empty(tick_nohz_full_mask))
++		tick_nohz_full_running = false;
++	mutex_unlock(&tick_nohz_cpu_isolate_mutex);
++}
++EXPORT_SYMBOL_GPL(tick_nohz_cpu_deisolate);
++
+ /* Get the boot-time nohz CPU list from the kernel parameters. */
+ void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+ {
 
 -- 
 2.43.0
