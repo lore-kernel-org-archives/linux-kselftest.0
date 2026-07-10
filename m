@@ -1,109 +1,59 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD6733E351
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 01:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49666823DD;
+	Fri, 10 Jul 2026 01:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783647022; cv=none; b=rVyEOFnw50Z5/3gkKGGoQXuYu6gIedLax9GhIhzm57aFbHRCMA5nyduFdVOxd8J2cyeTaDrgcFSt5SNqGFYkvhsZuFbExahv2d3MbYHZDLAWAMG5RcrDc2S+e0ilUzzm7wmJxWFG2Z+d+CF8Gvy80N48ZvFwczoI/vOlTRT8ksU=
+	t=1783648402; cv=none; b=G4+mGSZoLq4FQRvboZtEiGoYznPIGl+RoN4U0k2kFsLHXgZXeUVSjYs56kJTci1pe/Cxz7GZ4ZJrVhpcY4Ej27ousQrPROU9z0SpCOUYXq4ilLUEp9FkqnzZhvr13tIcyVYdRN58fDE5Yp+h9l5aWSrNWPwu1E0tEqrvYr4b5tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783647022; c=relaxed/simple;
-	bh=3rYTe8e2Wt412qzExNzuhcRev2Wp33ZA51eAifLPzps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jagF005FIYXMgr1WHyVOJNUtQ1Grt3d0sOixbQ35gEUM1gvBZrRGjh0ucJcowU6PmW2BX5H4FEMqDaS2U79KMT1AegUe3HvQwQmD7MsOw6lD0EKMxZ5BF58GvSdAuaREdpzL9i84YGV1zH/8gZ/cpcC5qTQR8Hk5DHAb6jGJHLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=ezt3K41n; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1783648402; c=relaxed/simple;
+	bh=sVzyVc0Ar9AEkdxmDgsE57UuEjYRJKFr4ca0kIDb8Co=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=bhEheQFkYeoQjUIiB+dIJsZpTGLh+RIeuutAavtLzXA8QgW+pdWlCtMTSqNcpdDDkhzvHs60ZS+vhxJwS/hdhOHuIVhKwfXwDN1KM2g7gpVKPzTChCA1yVbyIQLgTGyhTlDdIUD0sxuaWpxmiMaMFk/SIK5sRaT+1hFkYMqf1kY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=1b02jHio; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="ezt3K41n"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8f1a8e914a9so3875546d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jul 2026 18:30:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="1b02jHio"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9CB1F000E9;
+	Fri, 10 Jul 2026 01:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783647020; x=1784251820; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VaPhGtocKLbFXsyQXoR9g3DKOWhugqrS27IBZSVVhcw=;
-        b=ezt3K41ndVI8K/PBTlFKFJBkY+47UWEjGaVnCpfxtVzzaiLbm1NZQP6lwkzck8cAHd
-         nWxzWpxujl/DWdoer7tQfKNaNXZQmPIQVtdWuMXWksgOJiB5bfVbRZYU+Y+LrAKPUVOT
-         ut1oh90UnAc9GcZxvnx/kiCbksRghpUtOSXdGxhPAbQIsCj5NCojyP+4R1JS/tuFlPY9
-         Pw8gCJpbLxPeZj8pFil6k+itECVO5PzKojFiKr3gVw+6Z1oVtednjjAh+hSV8OzDCWdB
-         bSQNJ9stOPQtopOblsEqCLS/USMKedJen9MlXZszjjaMRh8Eph3kP1wJVtoS0CPOVX2F
-         HXVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783647020; x=1784251820;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VaPhGtocKLbFXsyQXoR9g3DKOWhugqrS27IBZSVVhcw=;
-        b=TAzTjuBa/SRSGat+zkFwIZig7wKuFiGSN9aa+KO4qMrh8MS0KD4PfthP3aApKiZNWW
-         k2CmCRP2uV071Zbf4cmR0vzfx5F2KbDwN+SYgz324DC5ObVkhE32e1aNsoFdhmbr+K1D
-         l2jWYkVzd9v1ZkBE5eS4lzl5vnbTjwLQQ5GlOnwZKINlwSGvecvNIJVaxAed/gde33Ne
-         u1Stm24xhq93E3MqEd5TwtlaOFMY6ja/08tzABED2Vrq834fwPBolSKTvfzDAM2KCz+u
-         9DPbnTueaj3f/1woImU+Xrx/XfW28fnvosCgFCV8NWwQ9ZNsoilgG7ZQPZ50mQycKMOb
-         Umjw==
-X-Forwarded-Encrypted: i=1; AHgh+RqwwXGDIdbOO4Ev13onoZBpaFwDUAM9FzcttH/RLMY+CwU0pgCX7nqkALTrHeTTrMgBixWl06XjezAI1UgZyz4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4nnY2Ns7hQ1yT5qP9K0NBb2dMIOmT69sUQAtnn/yc0NpBcIT+
-	Ec8ofa9dwnhJnVROu6uIKu7YASo9DelCD72rA03hGqzNz91sUUWpWC9WqloUUDWPxQk=
-X-Gm-Gg: AfdE7ckwKBAECE9GAqhMF22D7Et6BrEMW+vsFTVdSkYBW0kkfRYdV7+2H329M0VIYnn
-	TwyWlj0zIiDfnObnpRHJ0r+hTh/XmMcHkmbwna0M8Owk9XU3iqQn4GFn6mxUl4OvOPb/yBun3uk
-	schjeOf2E6TnLuTrQ9JGGl47EmTZka8c07vvv4Euyh/75ayV7F1ouOqVdJclWi8IqtgWkZxLag+
-	iCHivIdhaKWo2qvEplfRoM9yfvN3Xi4TTNoHJlgJC3CMoOr7hJmvqkVugeA0d7jYW2xzIgKukS/
-	8g5UZngep3v/oKcMEfBrjsih36ZmhRhcTe7pO8PpzIfYVfhOy8YAEIxDBDlUpIcddKufMynTzx5
-	YnTPb732fT84yDuLtv9dg9naplJpeWHXOcVTK4AdlaBdeaBWwzV6fbSZTJBcOu1Fz9ovUaloJHQ
-	OVK6WIFeKI4+MicKBfYQ/Wn6tbq8cygoQEmeiZrBhOoBn9fv7VcvnxfS2QVKeEvRkkpP7A
-X-Received: by 2002:ad4:5c8a:0:b0:8cc:2a92:48e4 with SMTP id 6a1803df08f44-8fec217b8bfmr110693186d6.32.1783647019857;
-        Thu, 09 Jul 2026 18:30:19 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd7c1e8aesm29789146d6.28.2026.07.09.18.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2026 18:30:19 -0700 (PDT)
-Date: Thu, 9 Jul 2026 21:30:14 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Dan Williams (nvidia)" <djbw@kernel.org>
-Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
-	vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org, iweiny@kernel.org,
-	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
-Subject: Re: [PATCH v6 07/10] dax: plumb hotplug online_type through dax
-Message-ID: <alBLJoM86ujz5Fg1@gourry-fedora-PF4VCD3F>
-References: <20260630211842.2252800-1-gourry@gourry.net>
- <20260630211842.2252800-8-gourry@gourry.net>
- <6a5016bf71df4_3b7ee5100b3@djbw-dev.notmuch>
- <alAb7Q_Ku5dVRKZ7@gourry-fedora-PF4VCD3F>
+	d=linux-foundation.org; s=korg; t=1783648400;
+	bh=V5WePhdn0vM41AQZAytpqz+CRuhLkoEsVRrLRpGTVLs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=1b02jHioGv7QDp+jI0I5SMN7EUOkmf64ry1tpnm7kjslq1G5+6Gz1TDKTYLrC6j4T
+	 MeIbQIL5Z5sRxDPbsmux03xqN4aybxaWzK47JWq6JiSmGh/7JvD3n1GSm48O6Duzfm
+	 LAjyMiPqsIXOMpgUMlUhHRz4Dux9GpLIgLuMYxHg=
+Date: Thu, 9 Jul 2026 18:53:19 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Sayali Patil <sayalip@linux.ibm.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Ritesh
+ Harjani <ritesh.list@gmail.com>, David Hildenbrand <david@kernel.org>, Zi
+ Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
+ <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
+ <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Miaohe Lin <linmiaohe@huawei.com>, Venkat Rao Bagalkote
+ <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v3 0/3] selftests/mm: avoid false failures in hugetlb
+ and KSM tests
+Message-Id: <20260709185319.cbf0c39dd47ee3853d212b7b@linux-foundation.org>
+In-Reply-To: <cover.1783446924.git.sayalip@linux.ibm.com>
+References: <cover.1783446924.git.sayalip@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alAb7Q_Ku5dVRKZ7@gourry-fedora-PF4VCD3F>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 09, 2026 at 06:08:45PM -0400, Gregory Price wrote:
-> On Thu, Jul 09, 2026 at 02:46:39PM -0700, Dan Williams (nvidia) wrote:
-> 
-> This was more a matter of having the DEFAULT set consistently across
-> the dax driver variant probe() functions to make the behavior explicit.
-> I didn't want an un-set value bug to creep in here somehow.
-> 
-> Happy to drop them if you think that's unneeded.
-> 
+On Wed,  8 Jul 2026 12:29:04 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
 
-Ah
+> This series fixes issues in the hugetlb and KSM MM selftest categories
+> that can report failures when the prerequisites for the tests are not
+> satisfied.
 
-Not setting the value in each of those places is equivalent to setting
-MMOP_OFFLINE (0), so better to just set DEFAULT regardless.
-
-So unless you have strong feelings i will keep them as-is.
-
-~Gregory
+Thanks.  AI review asked one question:
+	https://sashiko.dev/#/patchset/cover.1783446924.git.sayalip@linux.ibm.com
