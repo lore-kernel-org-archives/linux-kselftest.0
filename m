@@ -1,110 +1,119 @@
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A4D40FDAD
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 11:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9CD3F0ABA;
+	Fri, 10 Jul 2026 11:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783681823; cv=none; b=CO58QHDn10floLZ2WTCCAGV3I8OT+CxbsgF5XMqluT6OHHQB86rFNL9Gn/2JgP3lkT4RqYj547qi15gpFfXMYSyG5/6HLAtg0UbU4wCkg4sLtFUEF0FBpSzRlSTHpe6awbwFJEinC8Ba06tgNtwPZRR00FliHlQGhbI8C4tWNiE=
+	t=1783681986; cv=none; b=hlkMQbjw2sBfN7a6S2jv5E0HkQ7/rE3C0nXFG3G+msIUKJOyjgDutcNhh1J2jkTCOhOLd0uW3CchvNMdO7grp7jyoZQoSzfMXIJ3gCh8bGWwsddU4RSJffpb6GRGotGw86rhbPEKtkVfd9dGKfBqeSit9a1xDFWZvK2rQ7OzWUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783681823; c=relaxed/simple;
-	bh=jr/OAoxeUGCn9/9dfkc9tVbO3E1fWJ9EVvCmPe8y7ZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XdgwHnu7pYyjHLOEaucIbkdw3EEeVmOOuvXfJEuoNyeUX8Cn4I2MeQWPiKeDIjemybYDTCuI2RJONSYw+rVGKrEl5nRe/ELbEn2bFUCvsmH0l28vERGry7VXbeWa2Ee+drucRYHr2FZK+Gs7fq2lILaCS/MQONXK/uR/r3vXEkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=MlJDq6EI; arc=none smtp.client-ip=83.166.143.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1783681986; c=relaxed/simple;
+	bh=vU5WrKIfuxYOVX6uzl0JiQacH4nS6qTdkicn2onc5WY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VR14wFiEQDsDmI+WHIS4NgeRT3p7Y0TH15I3giHxULC/nm5eGKDa7B2e/QWNwcXbRjxmtm2fIyKg5m708uvYwWlVdED1l01cNjtUihZ0gEa7wV0PZxRCHDCH03PYUKB4bzTY9HLTNh0UYuPKe+1cS6Jx3PgK3zbE1jTm4i94GWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eypDgINp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="MlJDq6EI"
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gxTdK2GplzHMN;
-	Fri, 10 Jul 2026 13:10:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1783681813;
-	bh=uEwzor5CTtpO07iuBsZoVmpm7MR+nLcLGMZpFeyws4E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MlJDq6EIadVGOvPD71QGwzgPAObawSPElOSH6BzFvNdxNRyW/xf/S8sGOOGs/+7V9
-	 d+F+bmgb3MnwpfXN7Jn6yblDrduX0NZ2luPyPOHDdK4Jnuo8W6c16tzwf6bf/mpOjX
-	 xBNiCF/e5t7BymEROE3TJJn/NR3mu3OksnQX7NrU=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4gxTdJ4Ff3zTsX;
-	Fri, 10 Jul 2026 13:10:12 +0200 (CEST)
-Date: Fri, 10 Jul 2026 13:10:11 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Thomas Huth <thuth@redhat.com>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	linux-security-module@vger.kernel.org, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: Skip scoped_signal subtest with
- MSG_OOB if not available
-Message-ID: <20260710.laisaiR2ooci@digikod.net>
-References: <20260710081642.405916-1-thuth@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eypDgINp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE811F000E9;
+	Fri, 10 Jul 2026 11:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783681985;
+	bh=rZb7/pxxnbIVqETA1OR+i/G8TlRTT+kWkE9kl8/ZZJs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=eypDgINp0YdZSkwT6QCh0FbLMJo85+mqtUroPW/6IRw22kqEQ2ySxdu4J8QOfr0g7
+	 EZzmELJ7RVhIYkkdmP+ofS9JM3ph5iB2q9bdqlTRsJaJHmxj7Acw5izjDSjjeC4+7I
+	 PeI8qNFGgv1uQV9DbviVpHveHPVFlGD17PwtTHdEHZ0+TyxYVb5Vvl9C+fugqk7Y+b
+	 GLIytksWVWA9VN9DFFYdryepbQuAbqn89bLIsO0Gk0s7QmgEPBjUI1Di+4Y3JxeRVT
+	 aFSfUCtIbGOdF9q+Hu5QEMW6O6GleavmbtzR/LxLjHuntxhYIgKkdgF5OmY1b5Nsty
+	 PfSvPYt42OYDw==
+Message-ID: <75cfd24a-1372-4c55-9e1c-a3ac374c1011@kernel.org>
+Date: Fri, 10 Jul 2026 13:12:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260710081642.405916-1-thuth@redhat.com>
-X-Infomaniak-Routing: alpha
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: remove obsolete hugetlb vmemmap test
+To: Muchun Song <songmuchun@bytedance.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ muchun.song@linux.dev
+References: <20260710092427.3459121-1-songmuchun@bytedance.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260710092427.3459121-1-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Applied (with a Fixes tag), thanks!
-
-On Fri, Jul 10, 2026 at 10:16:42AM +0200, Thomas Huth wrote:
-> From: Thomas Huth <thuth@redhat.com>
+On 7/10/26 11:24, Muchun Song wrote:
+> The hugetlb vmemmap selftest was added to check the old HVO
+> layout where tail vmemmap pages reused the head page.  That
+> assumption no longer matches the current HVO mapping layout.
 > 
-> MSG_OOB might be disabled in the kernel for unix sockets (by not
-> selecting CONFIG_AF_UNIX_OOB), and in this case the related tests
-> of the scoped_signal_test are currently failing.  Add a runtime
-> probe using socketpair() to detect MSG_OOB support and skip the
-> test gracefully if it is unavailable.
+> HVO now keeps a private backing page for the head vmemmap page
+> and remaps redundant tail vmemmap pages to a shared read-only
+> backing page.  The old page flag check is therefore testing an
+> obsolete implementation detail rather than the current ABI or
+> behavior.
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> Remove the stale test and its build, run, and ignore entries.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 > ---
->  .../selftests/landlock/scoped_signal_test.c   | 21 +++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/landlock/scoped_signal_test.c b/tools/testing/selftests/landlock/scoped_signal_test.c
-> index 58d25157fe781..3cf20d769f2bc 100644
-> --- a/tools/testing/selftests/landlock/scoped_signal_test.c
-> +++ b/tools/testing/selftests/landlock/scoped_signal_test.c
-> @@ -398,6 +398,24 @@ static int setup_signal_handler(int signal)
->  	return sigaction(SIGURG, &sa, NULL);
->  }
->  
-> +/*
-> + * MSG_OOB might be disabled in the kernel via the CONFIG_AF_UNIX_OOB
-> + * switch, so this function can be used for probing for its availability.
-> + */
-> +static bool has_af_unix_oob(void)
-> +{
-> +	bool available = false;
-> +	int sp[2];
-> +
-> +	if (socketpair(AF_UNIX, SOCK_STREAM, 0, sp) == 0) {
-> +		available = (send(sp[0], ".", 1, MSG_OOB) == 1);
-> +		close(sp[0]);
-> +		close(sp[1]);
-> +	}
-> +
-> +	return available;
-> +}
-> +
->  /* clang-format off */
->  FIXTURE(fown) {};
->  /* clang-format on */
-> @@ -460,6 +478,9 @@ TEST_F(fown, sigurg_socket)
->  	int pipe_parent[2], pipe_child[2];
->  	pid_t child;
->  
-> +	if (!has_af_unix_oob())
-> +		SKIP(return, "CONFIG_AF_UNIX_OOB / MSG_OOB not available");
-> +
->  	memset(&server_address, 0, sizeof(server_address));
->  	set_unix_address(&server_address, 0);
->  
-> -- 
-> 2.55.0
-> 
-> 
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
