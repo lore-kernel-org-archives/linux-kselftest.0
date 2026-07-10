@@ -1,192 +1,406 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11022127.outbound.protection.outlook.com [40.93.195.127])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEA9340A46;
-	Fri, 10 Jul 2026 23:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.127
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783725260; cv=fail; b=jZepRbUBxmQ0TZi4d/PWH0ul2zIBEgMJCcuxgY8LPqMcZBNf28h4KV0vLJEF8KezVMSa74rOiI5gw25KvlnqIbsZ8g9vboexO29US7nC9gxRVjZUSc3Lq4Aw1aVc9nV+PneOl6BFKbDSOZ0aPTuE64LMGI463Q4H0E41qhc96oE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783725260; c=relaxed/simple;
-	bh=JI1nOgpMbHbZz9QBC7nmNhlcJEMqsGjSWesFDJnuluM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=UtMI4cg+394DQKhj4J13Ij87jtfHffXh6fTDYxWyV1W7gJPq8awzWr5v5ofoohut9WEkna/zPFaXjh3G6OAQJ04v8eIVhIU42Zeavkqxp5qVbVbTHSCj1DXEsqOPxJduukBV7+yiX7eyxmxewIceJUt+aUOpwRjB9OYXo7nHeL8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=1B/q9c7Q; arc=fail smtp.client-ip=40.93.195.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rambus.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1796E1FD4
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 23:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783727526; cv=none; b=fjN37SU6SlrAydVrhNk7SIe+3U3zn5Z3rJhNYMLdD7gOqzWB/jqqDyhJ9bviBFKMU/pYWPpAEsSsZ7Kc7WRIUCiel4Zzm76CT8M4032LHau5Uqi2HIl8JRL0yBt8vpOfn17bAEYLzJLSy5jqH8irbSIgfL7t+RGmMIYy7/+SpLI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783727526; c=relaxed/simple;
+	bh=O8gtSvZgFfroeKrN4VzmfikT47vC3UulLVIYKCoyNms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Mi9liok4X8fL2up2hQU0IO0sIQC1LCxg2g0GSILeuWGIQB18CbSYkHO0b/XF+qFHck5VMcTJm4boQdd4O6d6J0b9su8FZoKkqBVErvBmHTBnq7pHfzd8O8E8f37dLnE9k4YtxqbgImAO9yyJOdNafxgPQAsXvmQ813DvdGICdZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dt1rK+bK; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="1B/q9c7Q"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fMB7nhjXOkqAu+fWCaQf6UKRAOu+eWxSJySUSfffkCdWpcjXElbgAyLhREL6syuQ4TVYC8tr/xrFdCgsnbRC0z9GbSb2Ep7/G7AX2jhVkI5Rp9ndAKYFFI208usgN566X1SU08Zp9dACxK5hzj/ltq1AG7p6BYQjAKCZ6VDVSWR3KGsaO+hOKMosV8fmw00fLax/gfSjbUjlw7STFH2qrZcvddbOKT70RzzzH7yWIIK7bqnOG3rWYsUfTUg/okCp2x4bZzX+lHSWfaW82cNniYH02MtlqmMCNUXQy5jjeDWvVPUCEGwUV/4OF9HS+a1ZCxqeI7w4rPhz3tKFfb7R6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JI1nOgpMbHbZz9QBC7nmNhlcJEMqsGjSWesFDJnuluM=;
- b=Hy3xmbh25gIvdFWtSXEYEF0FlfNkQ8403KWtunhuZyhkyhVxW8uWOqqYJ6VCa1gvjhC1PalSNfL8NeKI/0lTgwHzMGYM9UeB/CAJAFCcxTWEda3hL4KYe8L7/8yKFi1W2HoPP8rOqtlkj1PfWxjFdXR8OBt3MgIvtYNqMnJDMwNlj8B9DNpQOhn+agcSyms7fZD7/FVjLGdKCzHg5f+/qb1YywFESYgF71zcVpF1JsPRMKa6BnbpT1mdVxMPjLN1RdnaXuakZIEbTY4jcVEk15Xh28BVoxKC+prQsam/4mVRSULQ2Wr/odovQnX9D2S80ASwfdG8OnNiEImEXWvj1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=rambus.com; dmarc=pass action=none header.from=rambus.com;
- dkim=pass header.d=rambus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rambus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JI1nOgpMbHbZz9QBC7nmNhlcJEMqsGjSWesFDJnuluM=;
- b=1B/q9c7Q4c9YqYDyr3O40QaFPu3AWlyeBKWGuZKp8pFYiEekr0Zm+1aZSPZ+OlNQkaknb66qQSV9J14qNK+Y0+n/+pfLjPCD7iRwFMYXzjcsZlaHYJbEJFnJF3HTSuXP703kvH0CLfEDb+8rosz92XR/ILWfMbTb5L5f/G5mTzzyCKFCcNPOuOYFA21Uc+E0nCXxOjVCNuTMKqyGMdHrL6yI8VONx1DK3OhRlRtT7w85ejRtiruk6r8wO3uV8vlnzhxBBsKiU0c/lkWEnrf1SYxQXTr7dM4Nu6neTFR68BXg07Ggz0+kIGhmLYHH6swuEAOi/HbpjE6VQhwo625MaA==
-Received: from SA3PR04MB9001.namprd04.prod.outlook.com (2603:10b6:806:398::17)
- by PH0PR04MB8279.namprd04.prod.outlook.com (2603:10b6:510:105::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.18; Fri, 10 Jul
- 2026 23:14:12 +0000
-Received: from SA3PR04MB9001.namprd04.prod.outlook.com
- ([fe80::3da3:45d7:8860:e196]) by SA3PR04MB9001.namprd04.prod.outlook.com
- ([fe80::3da3:45d7:8860:e196%6]) with mapi id 15.21.0181.017; Fri, 10 Jul 2026
- 23:14:12 +0000
-From: "Ousherovitch, Alex" <aousherovitch@rambus.com>
-To: Conor Dooley <conor.dooley@microchip.com>, "Krishnamoorthy,
- Saravanakrishnan" <skrishnamoorthy@rambus.com>
-CC: Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, Herbert Xu
-	<herbert@gondor.apana.org.au>, Jonathan Corbet <corbet@lwn.net>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul
- Walmsley <pjw@kernel.org>, Rob Herring <robh@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "Wittenauer, Joel"
-	<Joel.Wittenauer@cryptography.com>, "linux-api@vger.kernel.org"
-	<linux-api@vger.kernel.org>, "linux-crypto@vger.kernel.org"
-	<linux-crypto@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, Shuah Khan <skhan@linuxfoundation.org>,
-	"Nguyen, Thi" <thin@rambus.com>
-Subject: RE: [PATCH v2 01/19] dt-bindings: crypto: add Rambus CryptoManager
- Hub
-Thread-Topic: [PATCH v2 01/19] dt-bindings: crypto: add Rambus CryptoManager
- Hub
-Thread-Index: AQHdD+HshuImNmj2q0GDF9X/lpOPwbZmdM8AgADs7vA=
-Date: Fri, 10 Jul 2026 23:14:11 +0000
-Message-ID:
- <SA3PR04MB9001E7DC9B2D4788EDCE2390D7FD2@SA3PR04MB9001.namprd04.prod.outlook.com>
-References: <20260709203037.1884436-1-skrishnamoorthy@rambus.com>
- <20260709203037.1884436-2-skrishnamoorthy@rambus.com>
- <20260710-siding-unmatched-5e066fbe4c01@wendy>
-In-Reply-To: <20260710-siding-unmatched-5e066fbe4c01@wendy>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-dlp-product: dlpe-windows
-dlp-version: 11.11.2.117
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=rambus.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA3PR04MB9001:EE_|PH0PR04MB8279:EE_
-x-ms-office365-filtering-correlation-id: 3d81d6f3-1286-4f69-8186-08deded8f3f9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|38070700021|56012099006|4143699003|11063799006|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- cKElAf2hElcTrc30MNdglEnoajQqDxXtzsqfpiiB6zBA3K2g0M6hNpR4UFd/cKLDwCYEBeVRYNZPCiGhuZgVB+BzitikIwNaZQdgT+5opstrLBwFIb4MkyNY3WWGo9KPEWzoc2PG9fWEShtznbFoauBUJO3gFh+czFcv81zjo8bE3690uLJ8TB3bMFNh7wI5rakJc1sMviOE+XTIAQgCUDmH8BzzqHeCKM8oFVMOKM0vHHlyO/DeA8UNFY97J22ufIVdCQVB5p6Rda0kXkhzTiL7Z/INLUCiCFtEg1h+4CPhbdBSxb5W1yMRN4XJEeAIrO0TwEjrXSsgmXQD+/twsMiGoslUjSkyhhCaMkjSxwTseJ3YM+B5JwBhQ7AGk9cl+2Ic1DYu3iTtsY3s2vrhVvsd0vcaUQYqhmvvZ2kSmozkolFyrKw3ky/zYP6fXIgdvkfFHkmZIYAiytRl4HA8VKDqxDi8NIxaeT5WWgYLe4nDk4EUhVk5SoWgzfqNNNH6ASduclEgL0YkiMeCOwQgDNWimk6DQhqc2pw8dnMB1XZzpXSq1nunWyhs5Vk+6gFa2THfgBc3jDH3Fqz6eu42zkA6+Xze+vprTYJr+5VMAmWiK97p+j+UiXha5mjlGstv2w/3U/rlNOpR/mxvzWF5jDoqXgO4w9kHb0oPqcwmoAdrbaMdw9Mwib5oJRx99fGkleGBtK1At8L5Yl6SBVuaICwwYoiMIkXb5Ro7I8g86AA=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR04MB9001.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(38070700021)(56012099006)(4143699003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?zg89MWmfEpDkNexMjoRsJdbDAbiDg59nAjSJZL/4vLiKPs/K5GovK0idWtno?=
- =?us-ascii?Q?4nSMfxUCwvA1TVD7iKV+Avi/5LijHxI8f5ttY2xIQajFseQYJY/lweqgpBf1?=
- =?us-ascii?Q?5XD/NDJ+9CsUJgQAOvGsXKIvSc/TYtWFO856mem+VGktwddsjD9mw/Wq75Tp?=
- =?us-ascii?Q?1MwpBJQgW6tHwiVqNULyZVRwTgdjjg3A4EN67hVcQvVTIiVM5+kOo6QsM0Oy?=
- =?us-ascii?Q?LADcM4oP7U9V1MPcUeweSXRFqHdoyv1KS2OL0MTtCcBnGytEVwlF2ePw07Gs?=
- =?us-ascii?Q?IRG5Dz4D3Ao70AyRfFkiiefqWXbpoh931arzNADL4tc/6n/RrMfJHx6bpZHV?=
- =?us-ascii?Q?aNOiu+to3V22jd9c37VYoyGlfFFGmzzoNTLO2R+cku58bv5TanBClbFh2Mq6?=
- =?us-ascii?Q?DsN4/w5QtANSKeYad/KQTD31O331EvhqxWNsILV4y17WpOFV7zntMutvNKkx?=
- =?us-ascii?Q?waTrbMrIo4eSBcW24qUlca+NDP6GQ8EDFPigfaKceVbjwX+kNPzV0D9q50UH?=
- =?us-ascii?Q?bAxQ2zoPBQkDOJ/g4ahbBqKxLAhy4KBRFx69SfD/g5WvyrYQ7i1LxBJHPzRY?=
- =?us-ascii?Q?9PRGCU+L9jrEuOfN2k4UFA+UtWbMamLVLDkn+ED0ouwD2r5+6uVz1BQuD3Xy?=
- =?us-ascii?Q?W35/kd5Ih8G1r3BqwcoEFBBBKMGJQExiULeT8bVsf6tZmLcvJR4c/uISaAIy?=
- =?us-ascii?Q?MU3mh9nRJuyTtDhB1us2YYryGPGG9B3Doi8xnSbJygh7KX16ER+Z1pFf/P7V?=
- =?us-ascii?Q?7ffFvafdDDwp8XFPeW1QJDkxHwpIXhKB527JG/AA30R84M8cMy+VC53KSuZU?=
- =?us-ascii?Q?ZNkyh1syLyMCCUAuC/Bm9CpUX3qoQTo9T/Wz5Kpm4foPlBE+VRXpnkIfD2nA?=
- =?us-ascii?Q?xMOUthOVfBoVhJ7YZchoU/AiQGrOvOch1wAgV9Q0jFKJAh0i5cC2IoBUkDwQ?=
- =?us-ascii?Q?PQ0B2j7xkbOuzCfpGjAfRvPMsTl2Qu/5Cv8SUhR/ZJhnF/52cTRB5ndhVUIY?=
- =?us-ascii?Q?fIkfSh62DisxoVjPH0V+c6jg9f82NhaP1bhxHmITWkRfOWiGdrmQxBbFnadW?=
- =?us-ascii?Q?WZSR8+wRvAl/4MLQAm6o5h38qX9WicA1NNaxIcvM7pPFV8mEZQoSrqGqSWEV?=
- =?us-ascii?Q?WMmxOLsj+n6ZI/hwwRqk97JxF92EOAqKrfBT0qO+oJf6ghFZoIzeYC6epEMs?=
- =?us-ascii?Q?3POYDEz26IsG5xQl3NKB1xc9hVaH8wQMroPocRYBh/DGcOTzKSh6/Mo1wBZH?=
- =?us-ascii?Q?QLoF1oxIZ9KI/kXWrvsCBAkgraGjbEf3/D0xsNeHEvc3YC1x28Gs4a3AcEvK?=
- =?us-ascii?Q?2ekWP7f/jWuV5F+EvTdPAxKzgKnn3qeS8LyE2hXgrerNpWOYERUmbb6KpXBH?=
- =?us-ascii?Q?2OGDgY3Ny7ZkPh6acz+f/QHslJkRQQDl5dpJWXcDqdIvAwR4/nW2KSL88DIM?=
- =?us-ascii?Q?B7ueiDdmQobBIdVxSTEE8Y8k6nuHTu8Qk5ZC6Tpn5Ho6eABCFy/gtCadTgJX?=
- =?us-ascii?Q?KATdgwpQg7UWpBealJvsRsEa6HU3M+2UrvS4fLDMapz4oAAa/yKNTaxw7gDR?=
- =?us-ascii?Q?AnPPkmyVkvvTygo7j0hO6wwa5bt9fDmFg07VUCRZK0IFJbMZQWp1oIVaAhBG?=
- =?us-ascii?Q?4FFRdw2Jv6CNDoxrFX69XUoRpyZ42fNYBOIJMHG4uXMzhCSaDT/OuBBFjnN6?=
- =?us-ascii?Q?QWRE8s03zHrbJhZM/ri/GIcgm+FUsl60ktfgCF2bmjPTDWguiMs0eWolWKo2?=
- =?us-ascii?Q?GoA6ZCjkWg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dt1rK+bK"
+Message-ID: <2aec2d14-0000-4595-aa2a-73aa5ae41060@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783727511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eHN3OZqyVBMoc0WzZkstTYo8wC+PciAiKk3q7cpBgqQ=;
+	b=dt1rK+bKIACqT4/0ZiipMUIoxmxuUd1chKCHxd8vIYdox4XZZItHIKR37lNh5ZRLIOnT8A
+	GLjCt+C/uUBz9lF17uqDQ3SVbBTxVKXJcNKhQCUTN1E8CN09L3yhrXu2MVjhzdgpQwWNCh
+	rea8WfnVbxjS6Z/+PNBZYepkzCMc8io=
+Date: Fri, 10 Jul 2026 16:51:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: rambus.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR04MB9001.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d81d6f3-1286-4f69-8186-08deded8f3f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2026 23:14:12.0688
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: bd0ba799-c2b9-413c-9c56-5d1731c4827c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PUbuGh22NwrSEbGxQqb2+hwmWkaheiiISUQ8ylUhdelsOjElDbM0FbVMigZjFzINUBnkeJj7OqrWYznYHFlV+FYSj8fERMV8aNA1c+J/394=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR04MB8279
+Subject: Re: [PATCH rdma-next 13/13] RDMA/selftests: Add rxe_netns_names test
+To: Jiri Pirko <jiri@resnulli.us>, linux-rdma@vger.kernel.org,
+ Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: cgroups@vger.kernel.org, netdev@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, jgg@ziepe.ca,
+ leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, cmeiohas@nvidia.com,
+ roman.gushchin@linux.dev, bvanassche@acm.org, zyjzyj2000@gmail.com,
+ shuah@kernel.org, tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org,
+ alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com,
+ wenjia@linux.ibm.com
+References: <20260709095532.855647-1-jiri@resnulli.us>
+ <20260709095532.855647-14-jiri@resnulli.us>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "yanjun.zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <20260709095532.855647-14-jiri@resnulli.us>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 10, 2026 at 1:59 AM, Conor Dooley <conor.dooley@microchip.com> =
-wrote:
+On 7/9/26 2:55 AM, Jiri Pirko wrote:
+> From: Jiri Pirko <jiri@nvidia.com>
+> 
+> Add a kselftest script that exercises per-netns RDMA device naming
+> with RXE. Cover duplicate names across namespaces, move conflict
+> handling, move-with-rename, and same-namespace rename requests.
 
-> This company no longer exists, you should probably introduce a rambus
-> vendor prefix instead.
+# timeout set to 45
+# selftests: rdma: rxe_netns_names.sh
+# TAP version 13
+# 1..6
+# ok 1 same RDMA device name can exist in two net namespaces
+# ok 2 move without rename fails on destination name conflict
+# ok 3 move then rename succeeds
+# ok 4 move with requested destination name succeeds # SKIP     < --- 
+This testcase skip
 
-Cryptography Research, Inc. does still exist -- it's now a wholly-owned
-subsidiary of Rambus (our co-maintainer is @cryptography.com). The
-prefix names the IP originator, which is consistent with existing
-subsidiary/acquired-vendor prefixes in the tree (e.g. al =3D Annapurna
-Labs under Amazon, mstar noted as acquired by MediaTek, fsl, cavium,
-xlnx). We'd prefer to keep "cri" on that basis, and can annotate the
-description as "Cryptography Research, Inc. (a Rambus company)" to make
-the ownership explicit. Happy to switch if you feel strongly.
+# ok 5 same-netns rename rejects duplicate name
+# # device returned to init_net as 'ibdev35'
+# ok 6 netns delete returns device to init_net and renames on conflict
+# # 1 skipped test(s) detected.  Consider enabling relevant config 
+options to improve coverage.
+# # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:1 error:0
+ok 6 selftests: rdma: rxe_netns_names.sh
 
-> This property seems like it could be replaced by having a reg entry
-> for each mailbox.
+The above are my test results. But one testcase is skipped.
 
-Agreed -- v3 will make each mailbox a subnode with its own reg window
-and drop cri,mbx-instances.
+Zhu Yanjun
 
-> This looks like it should be deducible from a device-specific
-> compatible. [slots/strides]
+> 
+> Signed-off-by: Jiri Pirko <jiri@nvidia.com>
+> ---
+>   tools/testing/selftests/rdma/Makefile         |   3 +-
+>   tools/testing/selftests/rdma/config           |   2 +
+>   .../testing/selftests/rdma/rxe_netns_names.sh | 282 ++++++++++++++++++
+>   3 files changed, 286 insertions(+), 1 deletion(-)
+>   create mode 100755 tools/testing/selftests/rdma/rxe_netns_names.sh
+> 
+> diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
+> index 07af7f15c1bf..a91c14c45006 100644
+> --- a/tools/testing/selftests/rdma/Makefile
+> +++ b/tools/testing/selftests/rdma/Makefile
+> @@ -3,6 +3,7 @@ TEST_PROGS := rxe_rping_between_netns.sh \
+>   		rxe_ipv6.sh \
+>   		rxe_socket_with_netns.sh \
+>   		rxe_test_NETDEV_UNREGISTER.sh \
+> -		rxe_sent_rcvd_bytes.sh
+> +		rxe_sent_rcvd_bytes.sh \
+> +		rxe_netns_names.sh
+>   
+>   include ../lib.mk
+> diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
+> index 4ffb814e253b..e1ff54ec0f57 100644
+> --- a/tools/testing/selftests/rdma/config
+> +++ b/tools/testing/selftests/rdma/config
+> @@ -1,3 +1,5 @@
+>   CONFIG_TUN
+>   CONFIG_VETH
+> +CONFIG_DUMMY
+> +CONFIG_NET_NS
+>   CONFIG_RDMA_RXE
+> diff --git a/tools/testing/selftests/rdma/rxe_netns_names.sh b/tools/testing/selftests/rdma/rxe_netns_names.sh
+> new file mode 100755
+> index 000000000000..a7e57706fdff
+> --- /dev/null
+> +++ b/tools/testing/selftests/rdma/rxe_netns_names.sh
+> @@ -0,0 +1,282 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Exercise RDMA device name handling across network namespaces.
+> +
+> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
+> +
+> +NAME_PREFIX="rxe_netns_names_$$"
+> +NETDEV_PREFIX="rxn$$"
+> +NS1="${NAME_PREFIX}ns1"
+> +NS2="${NAME_PREFIX}ns2"
+> +RXE_A="${NAME_PREFIX}rxe_a"
+> +RXE_B="${NAME_PREFIX}rxe_b"
+> +RXE_SAME="${NAME_PREFIX}rxe_same"
+> +RXE_NEW="${NAME_PREFIX}rxe_new"
+> +DUMMY_A="${NETDEV_PREFIX}a"
+> +DUMMY_B="${NETDEV_PREFIX}b"
+> +OLD_MODE=""
+> +MODE_CHANGED=0
+> +MODS=("dummy" "rdma_rxe")
+> +TEST_SAME_NAMES="same RDMA device name can exist in two net namespaces"
+> +TEST_MOVE_CONFLICT="move without rename fails on destination name conflict"
+> +TEST_MOVE_RENAME="move then rename succeeds"
+> +TEST_COMBINED_MOVE_RENAME="move with requested destination name succeeds"
+> +TEST_SAME_NETNS_DUP_RENAME="same-netns rename rejects duplicate name"
+> +TEST_TEARDOWN_RETURN="netns delete returns device to init_net and renames on conflict"
+> +
+> +ksft_skip()
+> +{
+> +	ktap_skip_all "$*"
+> +	exit "$KSFT_SKIP"
+> +}
+> +
+> +fail()
+> +{
+> +	ktap_exit_fail_msg "$*"
+> +}
+> +
+> +need_cmd()
+> +{
+> +	command -v "$1" >/dev/null 2>&1 || ksft_skip "missing command: $1"
+> +}
+> +
+> +rdma_ns()
+> +{
+> +	local ns=$1
+> +
+> +	shift
+> +	ip netns exec "$ns" rdma "$@"
+> +}
+> +
+> +rdma_dev_exists()
+> +{
+> +	local ns=$1
+> +	local dev=$2
+> +
+> +	if [ -n "$ns" ]; then
+> +		rdma_ns "$ns" dev show "$dev" >/dev/null 2>&1
+> +	else
+> +		rdma dev show "$dev" >/dev/null 2>&1
+> +	fi
+> +}
+> +
+> +add_dummy()
+> +{
+> +	local netdev=$1
+> +
+> +	ip link add "$netdev" type dummy || return 1
+> +	ip link set "$netdev" up || return 1
+> +}
+> +
+> +add_rxe()
+> +{
+> +	local dev=$1
+> +	local netdev=$2
+> +
+> +	rdma link add "$dev" type rxe netdev "$netdev"
+> +}
+> +
+> +rdma_dev_on_netdev()
+> +{
+> +	local netdev=$1
+> +
+> +	rdma link show 2>/dev/null | awk -v want="$netdev" '
+> +		{
+> +			for (i = 1; i < NF; i++)
+> +				if ($i == "netdev" && $(i + 1) == want) {
+> +					dev = $2
+> +					sub(/\/.*/, "", dev)
+> +					print dev
+> +					exit
+> +				}
+> +		}'
+> +}
+> +
+> +wait_rdma_dev_on_netdev()
+> +{
+> +	local netdev=$1
+> +	local dev
+> +	local i
+> +
+> +	for i in $(seq 1 50); do
+> +		dev=$(rdma_dev_on_netdev "$netdev")
+> +		if [ -n "$dev" ]; then
+> +			echo "$dev"
+> +			return 0
+> +		fi
+> +		sleep 0.1
+> +	done
+> +
+> +	return 1
+> +}
+> +
+> +setup_devs()
+> +{
+> +	cleanup_devs
+> +
+> +	add_dummy "$DUMMY_A" || return 1
+> +	add_dummy "$DUMMY_B" || return 1
+> +
+> +	add_rxe "$RXE_A" "$DUMMY_A" || return 1
+> +	add_rxe "$RXE_B" "$DUMMY_B" || return 1
+> +}
+> +
+> +cleanup_devs()
+> +{
+> +	ip link del "$DUMMY_A" 2>/dev/null
+> +	ip link del "$DUMMY_B" 2>/dev/null
+> +}
+> +
+> +setup()
+> +{
+> +	OLD_MODE=$(rdma system show 2>/dev/null |
+> +		   sed -n 's/.*netns \([^ ]*\).*/\1/p')
+> +	[ -n "$OLD_MODE" ] || ksft_skip "failed to read RDMA netns mode"
+> +
+> +	rdma system set netns exclusive >/dev/null 2>&1 ||
+> +		ksft_skip "rdma netns exclusive mode is not supported"
+> +	MODE_CHANGED=1
+> +
+> +	ip netns add "$NS1" || return 1
+> +	ip netns add "$NS2" || return 1
+> +}
+> +
+> +cleanup()
+> +{
+> +	cleanup_devs
+> +
+> +	ip netns del "$NS1" 2>/dev/null
+> +	ip netns del "$NS2" 2>/dev/null
+> +
+> +	if [ "$MODE_CHANGED" -eq 1 ]; then
+> +		rdma system set netns "$OLD_MODE" 2>/dev/null
+> +	fi
+> +
+> +	for m in "${MODS[@]}"; do
+> +		modprobe -r "$m" 2>/dev/null
+> +	done
+> +}
+> +
+> +rdma_supports_combined_move_rename()
+> +{
+> +	rdma dev help 2>&1 | grep -Eq 'netns .*name|name .*netns'
+> +}
+> +
+> +[ "$(id -u)" -eq 0 ] || ksft_skip "must be run as root"
+> +need_cmd ip
+> +need_cmd rdma
+> +need_cmd modprobe
+> +
+> +trap cleanup EXIT
+> +
+> +for m in "${MODS[@]}"; do
+> +	modinfo "$m" >/dev/null 2>&1 || ksft_skip "module $m not found"
+> +	modprobe "$m" || fail "failed to load $m"
+> +done
+> +
+> +setup || fail "failed to create net namespaces"
+> +
+> +ktap_print_header
+> +ktap_set_plan 7
+> +
+> +if setup_devs &&
+> +   rdma dev set "$RXE_A" netns "$NS1" &&
+> +   rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" &&
+> +   rdma dev set "$RXE_B" netns "$NS2" &&
+> +   rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" &&
+> +   rdma_dev_exists "$NS1" "$RXE_SAME" &&
+> +   rdma_dev_exists "$NS2" "$RXE_SAME"; then
+> +	ktap_test_pass "$TEST_SAME_NAMES"
+> +else
+> +	ktap_test_fail "$TEST_SAME_NAMES"
+> +fi
+> +cleanup_devs
+> +
+> +if ! setup_devs ||
+> +   ! rdma dev set "$RXE_A" netns "$NS1" ||
+> +   ! rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" ||
+> +   ! rdma dev set "$RXE_B" netns "$NS2" ||
+> +   ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME"; then
+> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
+> +elif rdma_ns "$NS1" dev set "$RXE_SAME" netns "$NS2" >/dev/null 2>&1; then
+> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
+> +elif rdma_dev_exists "$NS1" "$RXE_SAME" &&
+> +     rdma_dev_exists "$NS2" "$RXE_SAME"; then
+> +	ktap_test_pass "$TEST_MOVE_CONFLICT"
+> +else
+> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
+> +fi
+> +cleanup_devs
+> +
+> +if ! setup_devs; then
+> +	ktap_test_fail "$TEST_MOVE_RENAME"
+> +elif rdma dev set "$RXE_A" netns "$NS2" &&
+> +     rdma_ns "$NS2" dev set "$RXE_A" name "$RXE_NEW"; then
+> +	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
+> +	   ! rdma_dev_exists "" "$RXE_A"; then
+> +		ktap_test_pass "$TEST_MOVE_RENAME"
+> +	else
+> +		ktap_test_fail "$TEST_MOVE_RENAME"
+> +	fi
+> +else
+> +	ktap_test_fail "$TEST_MOVE_RENAME"
+> +fi
+> +cleanup_devs
+> +
+> +if ! rdma_supports_combined_move_rename; then
+> +	ktap_test_skip "$TEST_COMBINED_MOVE_RENAME"
+> +elif ! setup_devs; then
+> +	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
+> +elif rdma dev set "$RXE_A" netns "$NS2" name "$RXE_NEW"; then
+> +	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
+> +	   ! rdma_dev_exists "" "$RXE_A"; then
+> +		ktap_test_pass "$TEST_COMBINED_MOVE_RENAME"
+> +	else
+> +		ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
+> +	fi
+> +else
+> +	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
+> +fi
+> +cleanup_devs
+> +
+> +if ! setup_devs; then
+> +	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
+> +elif rdma dev set "$RXE_A" name "$RXE_SAME" &&
+> +     rdma dev set "$RXE_B" name "$RXE_NEW"; then
+> +	if rdma dev set "$RXE_A" name "$RXE_NEW" >/dev/null 2>&1; then
+> +		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
+> +	elif rdma_dev_exists "" "$RXE_SAME" &&
+> +	     rdma_dev_exists "" "$RXE_NEW"; then
+> +		ktap_test_pass "$TEST_SAME_NETNS_DUP_RENAME"
+> +	else
+> +		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
+> +	fi
+> +else
+> +	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
+> +fi
+> +cleanup_devs
+> +
+> +if ! setup_devs; then
+> +	ktap_test_fail "$TEST_TEARDOWN_RETURN"
+> +elif ! rdma dev set "$RXE_A" name "$RXE_SAME" ||
+> +     ! rdma dev set "$RXE_B" netns "$NS2" ||
+> +     ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" ||
+> +     ! rdma_dev_exists "$NS2" "$RXE_SAME"; then
+> +	ktap_test_fail "$TEST_TEARDOWN_RETURN"
+> +else
+> +	ip netns del "$NS2"
+> +	returned=$(wait_rdma_dev_on_netdev "$DUMMY_B")
+> +	ktap_print_msg "device returned to init_net as '${returned:-<missing>}'"
+> +	if rdma_dev_exists "" "$RXE_SAME" &&
+> +	   [ -n "$returned" ] &&
+> +	   [ "$returned" != "$RXE_SAME" ] &&
+> +	   [ "${returned#ibdev}" != "$returned" ]; then
+> +		ktap_test_pass "$TEST_TEARDOWN_RETURN"
+> +	else
+> +		ktap_test_fail "$TEST_TEARDOWN_RETURN"
+> +	fi
+> +fi
+> +cleanup_devs
+> +
+> +ktap_finished
 
-These aren't fixed per silicon -- they're the per-mailbox layout of the
-VCQ rings in host DMA memory, chosen at platform integration and
-programmed by the driver into the mailbox QUEUE/SLOTS/STRIDE registers.
-They can differ per mailbox on the same silicon, so a compatible can't
-encode them. v3 will keep them as optional, defaulted properties on the
-per-mailbox subnodes.
-
-> This whole subnode thing seems like it is only required because you
-> don't have device-specific compatibles [cores].
-
-Core presence is actually discoverable at runtime from the CORE_ENABLE
-register, so v3 will drop the per-core child nodes entirely and probe
-for enabled cores -- no per-variant compatible needed.
-
-> this could probably be handled via reg-names? [affinity]
-
-Yes -- v3 will express affinity per mailbox (a "role" of a specific core
-type for a dedicated mailbox, or "generic" for the round-robin pool),
-which is the subnode analog of your reg-names idea. One caveat: this
-cleanly covers 1:1 core-to-mailbox dedication plus a shared pool; a
-mailbox dedicated to several specific cores would need multiple role
-tokens.
-
-Thanks -- this restructures nicely.
