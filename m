@@ -1,371 +1,202 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322D62FBE1F
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 02:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAC2E03E4
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 03:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783735603; cv=none; b=b9px29vDa8wfl4vrNvgy/s7rvEseNzqd9KsrYCEj3V9o1Ii5a8bDCV6DX6ReVk5y0wHJq1KPDHfgMsz4gpOnHsPf0LzwhEnp47Ehx6gxmcv97Co3hRfi6O/3hPPUy60RIlZ6eXVLnYmzSGpj+NBkXLZlT3sHRveTJY/1qWJ14wI=
+	t=1783739364; cv=none; b=hAd3uW2UpdcBymrSYK5Xts8prL7DaeK+qS39Is3DvNhpY9Ps/Ua8k45Lvn517lAIxbQbyIqc2hSYXXC9KMIL3YdjdtNk/E3bfV/rEI/+Ja5pFCUZ6adbSdMXzAhUhsbjkZB+GWm38KiCxm4/6ozMUqQbtmddl0pJ2NcYsAwPgh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783735603; c=relaxed/simple;
-	bh=U3XeUnEL+rDTz+vN8wgmKNKJy9pBXpmiepr3NAb/tR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FdsU2K6TICHicEfFDbmLfjnldYrwazLpa0J3JbgjkAanS1OWsyF48MCSEhOaF1sZQ+Q8LEb2q3FsKC201bXmYkE33mJoTPwnvmjdL/iEonJCS/Jvk3O7kAZUyc7TQKybBTHQOSwfciUCcHGdJGhN0CLOaISZ6+AiiW1Z6suex5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WUxOLYtx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783739364; c=relaxed/simple;
+	bh=Talh9NFQCx452XKRUTeh7mUAoB/ijgfuASG+mTSXc/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MYsSSdz5xlVPN78NlOVasOqqkz0tRA9wpMEEhRqNHftz7Iji/DHPgEpMDL+brcx/hoNQxPL/IW0jc/ptIWu4OTNee5jfpREpUYp/OFFCsfH8e6+VJXbI8BgiRi7ly39zBYrC4dil9irwYnrPqWmcpaB0nHQhRDNvXRv6P2bblms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D3qaXtGK; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WUxOLYtx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783735597;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/Qe+95+MXsZNLDf2pjnP57V9Q3yNl9VozQHNGuksZog=;
-	b=WUxOLYtx+t4TtBJNqaEmFrnowdoQ7+Tdjkjfx0YeRlpdDx1nRD3mh02PnjSAl3n9zpxTEq
-	ZRxCnABu9SygX8ExDoiweNw/FM5cn9plKElGDRV24bOIgdAMRIcNlSRMOC3AVA1sUpoNTF
-	MfpteePymze4Q4pctqflF5UgpiBInwE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-380-MsYcP4WBOsSveNRhNeWgMQ-1; Fri,
- 10 Jul 2026 22:06:33 -0400
-X-MC-Unique: MsYcP4WBOsSveNRhNeWgMQ-1
-X-Mimecast-MFC-AGG-ID: MsYcP4WBOsSveNRhNeWgMQ_1783735592
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 42B4A1955F2C;
-	Sat, 11 Jul 2026 02:06:32 +0000 (UTC)
-Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.88.253])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9EABA1955F7B;
-	Sat, 11 Jul 2026 02:06:30 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next 3/3] selftests/cgroup: Add test for cpuset affinity on controller disable
-Date: Fri, 10 Jul 2026 22:05:40 -0400
-Message-ID: <20260711020540.176740-4-longman@redhat.com>
-In-Reply-To: <20260711020540.176740-1-longman@redhat.com>
-References: <20260711020540.176740-1-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D3qaXtGK"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-848595b338cso1740600b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 20:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783739362; x=1784344162; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KBT/pxhbpviyB1eK4ppjTwsrTkYiVk3Lhi/aEEh6q5s=;
+        b=D3qaXtGKb2Xf/9+wr2HRFKL8jmCpHoxmOjnzBKRHFG4bHHCEScpCbA5LpnhM2eS11X
+         nG9M0kPvxBXep+/0ZCyYpRgX9l/ZOilK8nOM71Vgq6QSmbYjtBkKLSTeFdNymLrs/NtM
+         lHJqYdTRaEwaAkny4yNm2SHBIWlKx0LsU1YAI8HL2f/iW6YlZOXXXaHQBlQD9xfTOEEf
+         qaGDiV+BqsVGAnDAlYreU+5w03vSy3s7iByMkQO+PHscZvMeT1dJQUSue75LORCHtvZb
+         OMKMnwjruN3UimS/yQ0MnbqQtL/WsXfSgGLdVFnix7IQ8JsllW63eDEk3VrejGY7F/03
+         vdYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783739362; x=1784344162;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=KBT/pxhbpviyB1eK4ppjTwsrTkYiVk3Lhi/aEEh6q5s=;
+        b=aTR0a+5QE4FwRRHTqbtxs1Po9zuXTa8kNYO5pd53Xy0qbZTFQFal5wQAzZasXbAr3B
+         uMp22qoEcXwcRzUpVBE5vAUmHpMeUREYgSZq3wnot3cjiMsYPEORFjpHtV/yJPScZZRG
+         OnXMlEmc+YYOxwxrL6hlfrBgJSuWFXL3BzAMvSI3Ubt0p+8jNhnkO9gkkbOBe8WYjJB/
+         o5U8Bt9WF5ITzPZ61ee5bWC8vWJWtWXL583gqfa55FR3X7ISw+w/67WgYeEZBoRgq86k
+         dozYhowESZGQq7roRUN02gfnA2tfSsOtSrVu3nGoHcRrlaRwXOwHfKTK7XolbDYPUnxO
+         LKqQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq0HCKNowZVi0X/3YaB4pJh69B7rA66ghbCUes6Wt3k/u795nfGo8g+poTQG+rCapUxSxiS2Zl3bdRNV7etV28=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfw94dc0NQRMKv73VQl9g7Je6H5qLDxf4AqKM9Z5X8tvUnH3Ay
+	rFpr4MqWloCMBYSlTHdBVSAB4rSmshhUyuN/mEL3+tEow/4cxLMoy+Oh
+X-Gm-Gg: AfdE7cnU0QGId8js6/RV4MCnotCrwJaUcleJl65gBbwVGHkS1Za3KoSjxE7AhqN7o+J
+	15YeLaFC36RtBpZtEAmW5uJRDL5uxQZp2Bh3yIOSR1QzK75AFOuxEU/+L6rN7YsetWcHPmAQlmR
+	VXaP5xnpeS2q8nN9NquaPgG/QeIyWqr0eugSQiX+HBAVTXGWBD1vxErPs7UFtYaY/vrqVu88PLY
+	ETKUqrtSM9Ipyu7ZhV6djKW4E/jM0WhpoXUnGadyK8V3MWr/7WjnM7rQp1tL63Hpb0zjIgTpsq7
+	B8Ho5jwsqSlZaPwWuC+v/XBid4bDSYT7cfigaDdbRnFyl2jRjd0NwCCn709c+Tp/1rsdn5VzZrt
+	1Dp0P5vgww/AfPaS/HyERwy2Z2vwAoJZvm3A6Vy4pKgnh19Odlgd4AUXmN+tG2X/p7gDxlkucxb
+	hr2Z1/kU8Yrda2lugBlkXYQ3+jYto/ea/qzfNy/puOiDhnZ0c62qBF/aU=
+X-Received: by 2002:a05:6a00:3404:b0:847:9151:3409 with SMTP id d2e1a72fcca58-84889797ad5mr1318139b3a.55.1783739362452;
+        Fri, 10 Jul 2026 20:09:22 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-847f6db29d1sm11140358b3a.53.2026.07.10.20.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 20:09:21 -0700 (PDT)
+Date: Fri, 10 Jul 2026 20:09:18 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
+	dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+	haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org,
+	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, wei.liu@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v8 2/8] mm/hmm: add hmm_range_fault_unlocked_timeout()
+ for mmap lock-drop support
+Message-ID: <alGz3vywc6W5hvso@skinsburskii>
+References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
+ <178371879503.900500.7148019929226548795.stgit@skinsburskii>
+ <20260710151209.157d7c80b03dc56d73b5884a@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <20260710151209.157d7c80b03dc56d73b5884a@linux-foundation.org>
 
-From: Michal Koutný <mkoutny@suse.com>
+On Fri, Jul 10, 2026 at 03:12:09PM -0700, Andrew Morton wrote:
+> On Fri, 10 Jul 2026 14:26:35 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+> 
+> > hmm_range_fault() requires the caller to hold the mmap read lock for the
+> > duration of the call. This is incompatible with mappings whose fault
+> > handler may release the mmap lock, notably userfaultfd-managed regions,
+> > where handle_mm_fault() can return VM_FAULT_RETRY or VM_FAULT_COMPLETED
+> > after dropping the lock. Drivers that need to populate device page tables
+> > for such mappings have no way to do so today.
+> > 
+> > Add hmm_range_fault_unlocked_timeout() for callers that do not need to hold
+> > mmap_lock across any work outside the HMM fault itself. The helper takes
+> > mmap_read_lock_killable() internally, calls the common HMM fault
+> > implementation, and releases the lock before returning if it is still held.
+> > The timeout is specified in jiffies; passing 0 retries indefinitely, while
+> > a non-zero timeout makes the helper return -EBUSY when the retry budget
+> > expires.
+> > 
+> > When handle_mm_fault() drops mmap_lock, or when the range is invalidated,
+> > hmm_range_fault_unlocked_timeout() refreshes range->notifier_seq and
+> > retries the walk internally. If the lock was dropped, the retry deadline is
+> > also restarted because a lock-dropping fault handler made progress.
+> > Ordinary -EBUSY retries keep the existing deadline, preserving the caller's
+> > timeout policy for repeated mmu-notifier invalidations.
+> > 
+> > The caller only needs to perform the usual post-success
+> > mmu_interval_read_retry() check while holding its update lock before
+> > consuming the pfns. If mmap_lock acquisition is interrupted or a fatal
+> > signal is pending during retry handling, -EINTR is returned instead.
+> > 
+> > The common implementation conditionally sets FAULT_FLAG_ALLOW_RETRY and
+> > FAULT_FLAG_KILLABLE only for hmm_range_fault_unlocked_timeout(). The
+> > existing hmm_range_fault() path still passes no locked state, does not
+> > allow handle_mm_fault() to drop mmap_lock, and remains a thin wrapper
+> > preserving the existing API contract for current callers.
+> > 
+> > The previous refactor that moved page fault handling out of the page-table
+> > walk callbacks is what makes this change small. Faults now run after
+> > walk_page_range() has unwound, with only mmap_lock held, so dropping it
+> > does not interact with the walker's pte spinlock or hugetlb_vma_lock.
+> > Hugetlb regions therefore participate in the unlocked path uniformly with
+> > PTE- and PMD-level mappings; no special case is required.
+> > 
+> > Documentation/mm/hmm.rst is updated with a description of the new API and
+> > the recommended caller pattern.
+> > 
+> > ...
+> >
+> 
+> A trivial thing:
+> 
+> > +int hmm_range_fault_unlocked_timeout(struct hmm_range *range,
+> > +				     unsigned long timeout)
+> > +{
+> > +	struct mm_struct *mm = range->notifier->mm;
+> > +	unsigned long deadline = 0;
+> > +	bool locked = false;
+> 
+> This could be local to the do loop and it needn't be initialized.
+> 
 
-Add a new selftest that exposes a bug in cpuset_attach() where thread
-CPU affinity is not properly updated when the cpuset controller is
-disabled in a threaded cgroup hierarchy.
+Unfortunately, it can’t, because its state is mutated in
+hmm_range_fault_locked() and the resulting state needs to be preserved
+across iterations of the loop as deadline reset depends on it.
 
-The test creates a threaded cgroup hierarchy with two child cgroups
-(A and B) having different cpuset.cpus constraints:
-- Parent: cpuset.cpus=0-1
-- Child A: cpuset.cpus=0-1
-- Child B: cpuset.cpus=1 (restricted to CPU 1 only)
+Thanks,
+Stanislav
 
-A multithreaded process is created with threads placed in different
-cgroups. When the cpuset controller is disabled on the parent, thread
-affinities should be updated to match the parent's cpuset.
-
-Expected behavior:
-- thread_a affinity: {0-1} before and after (unchanged)
-- thread_b affinity: {1} before, {0-1} after (expanded)
-
-Current buggy behavior:
-- thread_b affinity remains {1} after controller disable
-
-Assisted-by: Claude:claude-sonnet-4-5
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
- 1 file changed, 243 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..8b4c4a9dd78b 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#define _GNU_SOURCE
-+#include <assert.h>
- #include <linux/limits.h>
-+#include <pthread.h>
-+#include <sched.h>
- #include <signal.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -232,6 +238,242 @@ static int test_cpuset_perms_subtree(const char *root)
- 	return ret;
- }
- 
-+static int get_cpu_affinity(cpu_set_t *mask)
-+{
-+	CPU_ZERO(mask);
-+	return sched_getaffinity(0, sizeof(*mask), mask);
-+}
-+
-+static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
-+{
-+	cpu_set_t expected;
-+
-+	CPU_ZERO(&expected);
-+	assert(sizeof(mask) < CPU_SETSIZE);
-+
-+	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
-+		if ((1UL << cpu) & mask)
-+			CPU_SET(cpu, &expected);
-+
-+	return CPU_EQUAL(&expected, dst);
-+}
-+
-+enum test_phase {
-+	AFFINITY_SETUP,
-+	AFFINITY_THREAD_A_READY,
-+	AFFINITY_THREADS_READY,
-+	AFFINITY_CONTROLLER_DISABLED,
-+	AFFINITY_COMPLETE,
-+	AFFINITY_ERROR
-+};
-+
-+struct thread_args {
-+	const char *cgroup;
-+	cpu_set_t *affinity_before;
-+	cpu_set_t *affinity_after;
-+	enum test_phase ready_phase;
-+};
-+
-+static pthread_mutex_t test_mutex = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t test_cond = PTHREAD_COND_INITIALIZER;
-+static enum test_phase test_phase;
-+
-+static void *affinity_thread_fn(void *arg)
-+{
-+	struct thread_args *args = (struct thread_args *)arg;
-+
-+	if (cg_enter_current_thread(args->cgroup))
-+		goto fail;
-+
-+	if (get_cpu_affinity(args->affinity_before) != 0)
-+		goto fail;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	if (test_phase < args->ready_phase)
-+		test_phase = args->ready_phase;
-+	pthread_cond_broadcast(&test_cond);
-+
-+	while (test_phase < AFFINITY_CONTROLLER_DISABLED)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (get_cpu_affinity(args->affinity_after) != 0)
-+		goto fail;
-+
-+
-+	return NULL;
-+
-+fail:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_ERROR;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+	return NULL;
-+}
-+
-+/*
-+ * Test that disabling cpuset controller properly updates thread affinity.
-+ *
-+ * This test exposes a bug in cpuset_attach() where threads in child cgroups
-+ * don't get their affinity updated when the cpuset controller is disabled.
-+ *
-+ * Setup:
-+ * - Create parent cgroup with cpuset.cpus=0-1
-+ * - Create child A with cpuset.cpus=0-1
-+ * - Create child B with cpuset.cpus=1
-+ * - Place multithreaded process: group leader + thread_a in A, thread_b in B
-+ * - Disable cpuset controller on parent
-+ *
-+ * Expected: thread_b's affinity should expand from {1} to {0-1}
-+ * Buggy: thread_b's affinity remains {1}
-+ */
-+static int test_cpuset_affinity_on_controller_disable(const char *root)
-+{
-+	char *parent = NULL, *child_a = NULL, *child_b = NULL;
-+	pthread_t thread_a, thread_b;
-+	int thread_a_created = 0, thread_b_created = 0;
-+	cpu_set_t affinity_a_before, affinity_a_after;
-+	cpu_set_t affinity_b_before, affinity_b_after;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_affinity_test");
-+	if (!parent)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_a = cg_name(parent, "A");
-+	if (!child_a)
-+		goto cleanup;
-+	if (cg_create(child_a))
-+		goto cleanup;
-+	if (cg_write(child_a, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_b = cg_name(parent, "B");
-+	if (!child_b)
-+		goto cleanup;
-+	if (cg_create(child_b))
-+		goto cleanup;
-+	if (cg_write(child_b, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	/* Now enable cpuset controller in parent */
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	/* Set CPU affinity constraints */
-+	if (cg_write(parent, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_a, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_b, "cpuset.cpus", "1"))
-+		goto cleanup;
-+
-+	/* Move group leader (main thread) to child A */
-+	if (cg_enter_current(child_a))
-+		goto cleanup;
-+
-+	/* Create threads - they will move themselves to their respective cgroups */
-+	test_phase = AFFINITY_SETUP;
-+
-+	struct thread_args args_a = {
-+		.cgroup = child_a,
-+		.affinity_before = &affinity_a_before,
-+		.affinity_after = &affinity_a_after,
-+		.ready_phase = AFFINITY_THREAD_A_READY,
-+	};
-+	if (pthread_create(&thread_a, NULL, affinity_thread_fn, &args_a))
-+		goto cleanup;
-+	thread_a_created = 1;
-+
-+	struct thread_args args_b = {
-+		.cgroup = child_b,
-+		.affinity_before = &affinity_b_before,
-+		.affinity_after = &affinity_b_after,
-+		.ready_phase = AFFINITY_THREADS_READY,
-+	};
-+	if (pthread_create(&thread_b, NULL, affinity_thread_fn, &args_b))
-+		goto cleanup_threads;
-+	thread_b_created = 1;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	while (test_phase < AFFINITY_THREADS_READY)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+
-+	/* If a thread failed during setup, bail out */
-+	if (test_phase == AFFINITY_ERROR) {
-+		pthread_mutex_unlock(&test_mutex);
-+		goto cleanup_threads;
-+	}
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (!cpu_set_equal(&affinity_a_before, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_before, 0x2)) {
-+		ksft_print_msg("FAIL: thread_b initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	/* Disable cpuset controller - this should trigger affinity update */
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		goto cleanup_threads;
-+
-+	/* Signal threads to save their final affinity and exit */
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_CONTROLLER_DISABLED;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	pthread_join(thread_a, NULL);
-+	pthread_join(thread_b, NULL);
-+
-+	/* Verify thread affinities AFTER disabling controller */
-+	if (!cpu_set_equal(&affinity_a_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a final affinity incorrect\n");
-+		goto cleanup;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_b affinity did not expand to {0-1}\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+	goto cleanup;
-+
-+cleanup_threads:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_COMPLETE;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (thread_a_created)
-+		pthread_join(thread_a, NULL);
-+	if (thread_b_created)
-+		pthread_join(thread_b, NULL);
-+
-+cleanup:
-+	/* Move back to root before cleanup */
-+	cg_enter_current(root);
-+
-+	cg_destroy(child_b);
-+	free(child_b);
-+	cg_destroy(child_a);
-+	free(child_a);
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- 
- #define T(x) { x, #x }
- struct cpuset_test {
-@@ -241,6 +483,7 @@ struct cpuset_test {
- 	T(test_cpuset_perms_object_allow),
- 	T(test_cpuset_perms_object_deny),
- 	T(test_cpuset_perms_subtree),
-+	T(test_cpuset_affinity_on_controller_disable),
- };
- #undef T
- 
--- 
-2.55.0
-
+> > +	int ret;
+> > +
+> > +	do {
+> > +		if (fatal_signal_pending(current))
+> > +			return -EINTR;
+> > +
+> > +		if (timeout) {
+> > +			/*
+> > +			 * If the previous fault dropped mmap_lock, then the fault
+> > +			 * handler made progress. Restart the retry timeout in that
+> > +			 * case, but keep the existing deadline for ordinary -EBUSY
+> > +			 * retries.
+> > +			 */
+> > +			if (!locked)
+> > +				deadline = jiffies + timeout;
+> > +
+> > +			if (time_after(jiffies, deadline))
+> > +				return -EBUSY;
+> > +		}
+> > +
+> > +		range->notifier_seq =
+> > +			mmu_interval_read_begin(range->notifier);
+> > +
+> > +		ret = mmap_read_lock_killable(mm);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		locked = true;
+> > +		ret = hmm_range_fault_locked(range, &locked);
+> > +		if (locked)
+> > +			mmap_read_unlock(mm);
+> > +	} while (ret == -EBUSY);
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL(hmm_range_fault_unlocked_timeout);
+> > +
+> 
