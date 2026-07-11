@@ -1,65 +1,65 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D078423BCEE
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 03:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5767E1A3166
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 03:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783739994; cv=none; b=pmUqAwmP5/i11XRoHnsM5Mb5zYGZUOtY+I58it/CDYirgsb14S5MCkfQwZ0sU6u42utz8WlxoFQewsEOW0XUnjvyoPNcEVlRuOSTThqFgUWZQLp81eD6BEBfqAh6GjuPrTpADbG+2fsqW/EVXy1tbgDMPTClWFpf0DUPIUesnA4=
+	t=1783740159; cv=none; b=lPGgd9pqTVznnrL8PdYkYyQu0CtJN5xqc707nN7owF83Nawu545Ho4srmWgCw7SyGcHN8Zetw93C1k1GVx0ucdr8N9Op/nLhuzyLXErs0c2nWfdmqEgWkXS6VlIVdLJsEAomvC8nWNQfqu1IKf9wHApkUWBSqkdFjPsC4iP7kYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783739994; c=relaxed/simple;
-	bh=71lARMM3Jl3NDTlQGAGPMbgSLaP7ywZLy2GYTYoKFog=;
+	s=arc-20240116; t=1783740159; c=relaxed/simple;
+	bh=Sus7BKnPvFUSij7CjYjdJ5SdK+WtzY+EQEDkUmlaEDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ET2V/dHmexihTuAUBCBGgZY44qdqTZdKmaKHzG5+VJPtwXTmfWTcu5m904kICzx6MMK9hOAgwYKR7X5O/ukU1xSd7yr7ZEw/P/izDI6CCOb7P4McDmfLZDq2KDp46jrn60WrIaeQdqfLQyVQ/ZtRy1bcsuKkI9F853Jhj5xcBNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hktlFisp; arc=none smtp.client-ip=209.85.214.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzm947NXrkeSt9I0y02OwhNTL2cQYYthE/k6yAP4XSceamfekoNT5KNnUtqtJ38iGnzOQ3IFUD3NrlEfh8r13BGZROm/PbJyLDmdfuQ/tlU6BgujBw4U7oFAhsNRcztocVBk/iADbadtZRzGZIAIf/5NaXWTM7gX7vpdyVFOHbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y+T7qVfQ; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hktlFisp"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cce6a0c9c3so14429475ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 20:19:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y+T7qVfQ"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-845c92bc464so1385467b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 20:22:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783739992; x=1784344792; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783740158; x=1784344958; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CYTaMzfdKXyQ96IWRR1Bd78qVpBo65z/nucHslKEHMk=;
-        b=hktlFispw0ReXJzK3IozV1fiAPHm0k4cHxos2ESjizWBwpRk1ilHYB2tUM36yXdal2
-         kyQy3mO/55/PA3qVY7Dy7f+3SsgSoXzZh89BMiKIqHYVppaZsJCXXaPGmK9A2UtkWgWI
-         Bvt642gB4jDf5qKAOHQwKDNU3jLqpoLsWxDH8/tjglYys0krxL+70yU98SIvqib43iX0
-         mJpDvfusI/Yq2RE7Qa+OlYXtjwsXXCy6Y9K2oegdE5y43FJUzt3MKyLyRr3DQ1e1m3B8
-         bzVrqIfyLc4p1Vff13B1EbA0nlkyyZ76GGNEarjltbHIZqFHwkTiGYZECad3gxHoIgdB
-         BrMQ==
+        bh=ZoRTmK7mqG76n1GL0uhVSS5eZwslPyOiLYDvdkV1GQU=;
+        b=Y+T7qVfQB2TUolswh+PJg2roQbg2dl792e74RhbyG/9Vj8N3+WvCQ3UIjHx98pcPsv
+         is2mm7ENnYmfoaDc5bE7/gq6fEKu019fp4/gbj9/v0igV96h2UO0N/1BiaC065sk8ylr
+         lF8EDEi7VXvTRm98EXSCwfFSt/ImJ636rlG3ntOjBtH05FFfcE5YWPgnFnTRrAObJ9Oj
+         aqesQhIYU64Em1aYmKWuSyG3xbGMAbIbH0yzO53DzB1Srir/r4KHX5GTvBRArbmp7/7c
+         cUGiE5LIe23VkhT+2v07URqgvcMoex+PNjQ2n70OnLg+zdPTlwfIENkTQvj1WG5PAEtQ
+         DCXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783739992; x=1784344792;
+        d=1e100.net; s=20251104; t=1783740158; x=1784344958;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CYTaMzfdKXyQ96IWRR1Bd78qVpBo65z/nucHslKEHMk=;
-        b=XAEYSbOc2uwl2eP5/3SNS43slIcR/Gq0y95E93EgGHpoHNk47C/E5C5smLuJ3FMPkw
-         Vr9XoEO791RC6x9pnd5XNNHqrAvwsOYt3SaM6plizAnknzmRyPb+R8PKj9seT86CiSx0
-         gzIURoIoqtyRu96x80bKpyn5xzEny8vdyRC0/jfp5ljOWVH90m2XKMnYislfO84ZXI6/
-         jcyqj6rFLsEqKpuGdMNLi44xLmUVmH2vrRMH1FoydVeYoYGnSmBu4nXDYtMz5HAHwhlr
-         iDKHrqYD8w3ifgkzbZdOfQyXpMXyiKXK4G1es0Z3ryFNKmx6W+o12qnYFMS7Fz1LLYlT
-         lLlQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpSW+3sUbpuaWjikp45MqYqUIi40XGUf7+kZyQqgvt46jTfp3cd3eFZjKXROMzQHC8djpWZ3Og4ZN0ABBDCaGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzettQpY/zvDnWxAGLkKyxmO8VQ0u0IHn7vvUVvkRoPcUMTIbO
-	8GuQkc4mFKdpgS6tgq5yXHQzO2kJwQ12xhAilH2/OqlRgZ2onAO38jTf
-X-Gm-Gg: AfdE7cmximYcmBptA9oTat7fX6raM86LQQzJPZppvltByD3yRmoEIpXJjT3RgodA59t
-	M/jE5vRrUg3eZgmlp4iqSsk5jD66cBBNLUYmfNGXuvIK6M99y/7Mj0fv/xGp8RjF/2AOSLFokhu
-	UVaFUC0ss3fG97jsQDm/yJ9XpxcA/ICQyQ9BGz/wyNsPlp/GfgdZaVLTSaA/pMbYnz46BQlDqQO
-	VDiVt2NDsiPgZuL1AJc6tE/dNuZ9sapLHJTZbjG6qxnn7Z/qroIE7gsQbQEv635M92PhyRcDH+w
-	xGR3Q4XMi4IfBofqENVrcc6FgMJqV5TRwUQKVJV/kOn76vy6GFX9+ERcZG+Svgixje42ihcFWl5
-	rWD+Vnbguqu6BZXj9JrycjdB2KjMFh3IP9dVvEd6lOKgOjQUmHt1FS9AT30gwN2pL998T7gtm0o
-	+bwDjCZdbwIKD2Kooax6MMuFmTmagYMmh7XB9xcI69L24Vmozt2DDju0k=
-X-Received: by 2002:a17:902:d2ca:b0:2c9:97a8:8c1b with SMTP id d9443c01a7336-2ce9f2948camr16114365ad.46.1783739992132;
-        Fri, 10 Jul 2026 20:19:52 -0700 (PDT)
+        bh=ZoRTmK7mqG76n1GL0uhVSS5eZwslPyOiLYDvdkV1GQU=;
+        b=pbd3Cg8lHF9+u6AMoSc4MUotUKBU6xJ74jPyCSMYyTp0pFNkw0676rycOWC0/nY0HD
+         llk/bIur/hRp/I1nvq/GB+y5tNs1f9OW11S+xaeOumg0s8ZVViRf897ObDlr6UXiMUfN
+         OmH/MViYe/6myZfMEO+8lYOcc5KMPLGZMKB84NNBjdyItnxhYtwY8BedOgaVEOubekWq
+         chScpYY5PJVrOyXpRzspr+s+D4zTTjkMbq9uYP1zFno4X7TjtLtYUqIiWifLNCW7rO1n
+         RA7ms9YdZunQRAGIFF9jR6zQMsPYmV5gz8Lq+/iGl9b9/neCKkmVr2F/IiW+kCJjYtao
+         dfog==
+X-Forwarded-Encrypted: i=1; AHgh+Rqy1bjPESTxMQGwKeHpUg89cU2NsWaFq3BPrIDBol5vUxOmP5vId1zCf4zdUjq0HrGYceR0cSCXe5ppAJFaBEs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzenZTlP0ChcoSUQO8+X2McptU08ZmT1f7FLjfuwPpVaTo++9Et
+	nXBxiw79Lu0UxZm0ggTg5Z77FSCNKtuIVItXkl3lMv7D7WzUof3GiCqH
+X-Gm-Gg: AfdE7cnxFbO7aC7oenqD8tKfwwmdFzB+aQ+CeLRIaKQX6WdJ21RnpLQ8/WVBtOdDo2w
+	+SKdQ3ozKL0NN5IiuhYdfDKeDPOvpltRylpBawCTlg+t2FBM0/Z4M6lZGva+0Kgl/WYCAyjxwql
+	bZq/JVGrWwgrP9sh8Kdj0Q/UQ6PPX0AUxG1Aiewr99zCMawyhHNo8wK0T1b+NdG8Thk/hsJj3u+
+	Nt6L5CrIKzpRaLW9oJkBYF6Xk1XVb2xeuDSDpA/NFHA6pF5sj1YrCeuWc6H2eJJuIouc8IWJRXr
+	FHGubewlUQdO0JpGFFJAnwiZCwmA/PNxS/8Pqe4zXvIx8C1RuEGGDbm8pYbvHin3DGQSaCn+eyr
+	f1xCna8KGwjWibnQqfD+7ixIbt8uKL1qsZKONFLhMH3YYUDe6JKGJhYQAkJ6fnFoechhrCPPpdv
+	F3OsZUhjKdKADYvUk3lVCkyGyoBt+sxOlGPnYd4OL1++W8Oj5vUC/Gz6Q=
+X-Received: by 2002:a05:6a00:2303:b0:848:2f74:1d68 with SMTP id d2e1a72fcca58-84889750a60mr1542258b3a.78.1783740157808;
+        Fri, 10 Jul 2026 20:22:37 -0700 (PDT)
 Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d5bdddsm67571165ad.77.2026.07.10.20.19.48
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84856e7c8edsm3652647b3a.36.2026.07.10.20.22.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 20:19:51 -0700 (PDT)
-Date: Fri, 10 Jul 2026 20:19:42 -0700
+        Fri, 10 Jul 2026 20:22:37 -0700 (PDT)
+Date: Fri, 10 Jul 2026 20:22:33 -0700
 From: Stanislav Kinsburskii <skinsburskii@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
@@ -77,12 +77,11 @@ Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
 	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v8 7/8] accel/amdxdna: Use
- hmm_range_fault_unlocked_timeout() for range population
-Message-ID: <alG2TldWdL8Ez8Dq@skinsburskii>
+Subject: Re: [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Message-ID: <alG2-RSitzPWClAX@skinsburskii>
 References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
- <178371883276.900500.12789147320642521200.stgit@skinsburskii>
- <20260710151228.ca22e127b93ec5c6d591fb5f@linux-foundation.org>
+ <20260710151151.1e193eedd0cf2591ae392f76@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,29 +90,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260710151228.ca22e127b93ec5c6d591fb5f@linux-foundation.org>
+In-Reply-To: <20260710151151.1e193eedd0cf2591ae392f76@linux-foundation.org>
 
-On Fri, Jul 10, 2026 at 03:12:28PM -0700, Andrew Morton wrote:
-> On Fri, 10 Jul 2026 14:27:12 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+On Fri, Jul 10, 2026 at 03:11:51PM -0700, Andrew Morton wrote:
+> On Fri, 10 Jul 2026 14:26:20 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 > 
-> > --- a/drivers/accel/amdxdna/aie2_ctx.c
-> > +++ b/drivers/accel/amdxdna/aie2_ctx.c
-> > @@ -1061,22 +1061,11 @@ static int aie2_populate_range(struct amdxdna_gem_obj *abo)
-> >  		return -EFAULT;
-> >  	}
-> >  
-> > -	mapp->range.notifier_seq = mmu_interval_read_begin(&mapp->notifier);
-> > -	mmap_read_lock(mm);
-> > -	ret = hmm_range_fault(&mapp->range);
-> > -	mmap_read_unlock(mm);
-> > +	ret = hmm_range_fault_unlocked_timeout(&mapp->range,
-> > +			max_t(long, timeout - jiffies, 1));
+> > This series extends the HMM framework to support userfaultfd-backed memory
+> > by allowing the mmap read lock to be dropped during hmm_range_fault().
 > 
-> max(timeout - jiffies, 1UL)?
+> Thanks.  This seems fairly mature and mostly-reviewed so I'll give it a
+> spin in mm.git's mm-new branch.
+> 
+> Unfortunately Sashiko wasn't able to apply this or v7.  I'm not sure
+> what base you were using.  Hopefully there's a reason for a v9 so we
+> can retry this.
+> 
 
-"ma" for sure, thank you.
-I have the same quesitong here: will "max(timeout - jiffies, 1UL)"
-handle negative "timeout - jiffies" values correctly?
+I rebased this series on top of mm-new right before sending it out.
+Should I have used a different branch?
 
 Thanks,
 Stanislav
+
+> I have a few niggles, nothing major...
