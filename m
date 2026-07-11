@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBF63191D6;
-	Sat, 11 Jul 2026 18:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8A23A9861;
+	Sat, 11 Jul 2026 18:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783793060; cv=none; b=uuOdM9Y4VpY+smftRBhBwgWCEjux+B/BFX3hMQmQf4hm59GFIFyUYX7yhhZYLcX+9tQ9nHajwgkKYtCrn5LK/F9jgjOLGTfiYqUJLUt4A/cHK+6X+YY+S1USOus31wT8GtWTzrn0PTpi3FkW08USiyMpMLTLow2H4FzPPArT6Kg=
+	t=1783793061; cv=none; b=QsNU+5Oq4MpNxnqaBDb2hUYMHHlVC4NS4RNS5o1k8DSi83SJlVi9LKgjE7wViVZkpmF+nu/+HZAnxWVoUTZKprhky42kpn1zZHq6+itJgi4J1xKhGHW+g7jSxxOULauXQlNU9revw3+RQ/eXyi/hXdkHp16/r3La/kf0ofH+TWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783793060; c=relaxed/simple;
-	bh=01yyRSQtaTOfnZH20TqiP/oxMRX2myPou6PzNMPWG18=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iMWKCMzeoXRTsdQVhkdj/OmrTwuIZrEkY6Uo9ixyKlZaerZZYj3NlmhVrNW127Mf616WKlnXBQwp2VgC8OM5pNc22Zc8lAke54p46PheqWtpvNQkaMMx8wKPrt8HV97k5K2Q9KRI9tUblfAqncJHIT4OZizUopJxLa7R97Zrq+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbgTNZgM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783793061; c=relaxed/simple;
+	bh=/PEZNLM6W5X3AYEfC3MrlYbKHoYFP903LT2sqctGZic=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hl+eyTqtJj7iLaLr+yWY5TsihIw/hglHHcV4ut9mBoE7deUHc+DJu4Ig9VdRskK8vjvixvv6O/R3RdAc/mJNS/900yy/bw6xZXi5luAVNXUi7tCZqZJopSCXoA6begU04qR48ry1qjvfxo/L8DAB1cFMV+03kIIqRNcj4jdViHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlR9W1Qc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbgTNZgM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ABBE1F00A3A;
-	Sat, 11 Jul 2026 18:04:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlR9W1Qc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3660C1F00A3D;
+	Sat, 11 Jul 2026 18:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783793059;
-	bh=t5U9bYvWpBGUn/8z8oM/COrKkhK//jr8XxK8Ubt31Fk=;
-	h=From:To:Cc:Subject:Date;
-	b=WbgTNZgMZLscSz4b9bOglPLjoxPxYzqBAN5UdFSBXU8hAZhkAz3/o5OJO6wAmedZy
-	 xexJs8Se7ZJZCjcQh/17dpRbaD9q2++1LnXAcKhFmaLg0gGsxu9ZfcGVKVdL9JB3X7
-	 oNdyMW6T2niYH6mcj7+cdpKnFa1aBaSzQXCJKlTHAY9L3OjdQclE1HTgGPNB94Z8/1
-	 3NtWdoTL4qWvA+t5wfqwddo5oHlBz7dsYmuLEyGQc9J+EkTZPuniaT7dHNiwJ2S8cr
-	 NTyIf2WyTNjV4mRPLTX9skSSqA2jVbzqUp+x7hG/i8ThBDNOjQCFD600RifBHmMbpN
-	 4hsHqPnYKAsew==
+	s=k20260515; t=1783793060;
+	bh=pbj4M0PCAFhChb2r0bNN0cHfe6XonAYY07ZTVFUWh04=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=NlR9W1Qcz8xV7IqYh9TId8gWx/a84Z1oJt38FZGx/ZhwBtOZqmdUG6YY/SGybTLvO
+	 +QOkqHi6KptogQW+p04qBCVT9NPA0K6Jcq1iXiT7XsoVhiiDqhnqtGWkbzhczFVbTL
+	 nlilupHYRytu7Ms8aO7Ixi2kJgGhoKHLIheM+zE09nWqJRBSLcilBKDrHnmjKFkku8
+	 zj/O+mYJl6D11ahUh871RSWcAMMERFrh0N+7s8K/CpCshntF3sgJM4eZxueJTlSkUM
+	 EAlEqDPphJYMdRFGCt4QJp1/v/tqqjByAck20wRZRkf90wzCGzY3eg2EpKraSriHWX
+	 Xf2nccWV8oHOQ==
 From: SJ Park <sj@kernel.org>
 To: 
 Cc: SJ Park <sj@kernel.org>,
@@ -32,19 +33,18 @@ Cc: SJ Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
-	Fernand Sieber <sieberf@amazon.com>,
-	Leonard Foerster <foersleo@amazon.de>,
 	SeongJae Park <sjpark@amazon.de>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH 0/5] mm/damon: unurgent fixes for infinite loop, NULL de-ref and races
-Date: Sat, 11 Jul 2026 11:04:03 -0700
-Message-ID: <20260711180409.82093-1-sj@kernel.org>
+Subject: [RFC PATCH 2/5] mm/damon/tests/core-kunit: catch test failure in test_merge_regions_of()
+Date: Sat, 11 Jul 2026 11:04:05 -0700
+Message-ID: <20260711180409.82093-3-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260711180409.82093-1-sj@kernel.org>
+References: <20260711180409.82093-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,30 +53,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sashiko found a few issues in DAMON that could cause infinite loop, NULL
-dereference and monitoring results degradation.  The first two sounds
-scary but the infinite loop happens only under unreasonable user setup.
-The NULL dereference is only in a unit test.  Monitoring results
-degradation is trivial since it is only best-effort, and those happens
-from only unlikely races.  Still those are bugs that better to fix if
-possible. Fix those.
+KUNIT_EXPECT_EQ() does not abort the execution of test code when the
+expectation is not met.  But damon_test_merge_regions_of() code after
+its initial KUNIT_EXPECT_EQ() call assumes the expectation is met.  It
+does a per-region test with a hard-coded number of regions that is
+correct only if the expectation was met.  As a result, __nth_region_of()
+could return NULL, and the test code can dereference NULL pointers.  Fix
+the issue by catching the expectation failure and skip the per-region
+tests.
 
-SJ Park (5):
-  mm/damon/core: avoid infinite kdamond_merge_regions() internal loop
-  mm/damon/tests/core-kunit: catch test failure in
-    test_merge_regions_of()
-  mm/damon/vaddr: drop last same folio access check optimization
-  mm/damon/paddr: drop last same folio access check reuse optimization
-  mm/damon/sysfs: read ops_id only once
+The user impact on realistic setups should be negligible, as it is a
+unit test.
 
- mm/damon/core.c             | 13 +++++++++----
- mm/damon/paddr.c            | 20 ++++----------------
- mm/damon/sysfs.c            |  6 ++++--
- mm/damon/tests/core-kunit.h |  3 +++
- mm/damon/vaddr.c            | 26 ++++----------------------
- 5 files changed, 24 insertions(+), 44 deletions(-)
+The issue was discovered [1] by Sashiko.
 
+[1] https://lore.kernel.org/20260710144937.26981-1-sj@kernel.org
 
-base-commit: 65b3b6001701d46d5360097bdc90dfa1c06a1239
+Fixes: 17ccae8bb5c9 ("mm/damon: add kunit tests")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Signed-off-by: SJ Park <sj@kernel.org>
+---
+ mm/damon/tests/core-kunit.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+index 68d30648c612e..fb882a0602ff9 100644
+--- a/mm/damon/tests/core-kunit.h
++++ b/mm/damon/tests/core-kunit.h
+@@ -260,11 +260,14 @@ static void damon_test_merge_regions_of(struct kunit *test)
+ 	damon_merge_regions_of(t, 9, 9999, ctx, true);
+ 	/* 0-112, 114-130, 130-156, 156-170, 170-230, 230-10170 */
+ 	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 6u);
++	if (damon_nr_regions(t) != 6)
++		goto out;
+ 	for (i = 0; i < 6; i++) {
+ 		r = __nth_region_of(t, i);
+ 		KUNIT_EXPECT_EQ(test, r->ar.start, saddrs[i]);
+ 		KUNIT_EXPECT_EQ(test, r->ar.end, eaddrs[i]);
+ 	}
++out:
+ 	damon_free_target(t);
+ 	damon_destroy_ctx(ctx);
+ }
 -- 
 2.47.3
