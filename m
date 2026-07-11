@@ -1,178 +1,100 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FED93C5826;
-	Sat, 11 Jul 2026 12:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C0515E5DC;
+	Sat, 11 Jul 2026 13:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783774147; cv=none; b=t/asI38W8EW5STIm5xfErEJY0JmwnfeydDweW8mFqc8vksaGgCZnyO8UgFzdR7kwgpg69epHwUaTXi7LfNvwilSxbgi9CTTe6n8k4z3vM2QVpdJQMvnG1P/s0Z1xxv2mhH9lEADIEG6EMEu5jHKScFqfMvUohbcCERYVhBPzkWw=
+	t=1783778178; cv=none; b=qElnqAyzYhQE61NynNnfbzcsOpvlgJhq8LCa1i4nXG4uIWhbPRJndn7CP7PRfAgAUv9Md9S5Q/P3RWeuji+Q6I6oPVAQ+NkTB+Ib6pUeW19t5wyxuuSCrbGd9B2iwvRkA4c5jo/opiRte6nRnxmu6psx2L2/wc70H+yFREMSJjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783774147; c=relaxed/simple;
-	bh=0dWDNl7crilbCQSqN9tYgFiSuT0qpf6TG1Zum8iGacE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JPcI2mv6NtO1ILjTt2kz6C7XP4fgC6NOqsc3VXX7zdlUXvc2X3Bj4+qVVctjd6MdPfpJZaKnVJ8lWiEyKBRlf2MtR+hT8V/RSZfBNt/0+WbSeBVAxQ74vdt0utKDG0mEPG1K707WRYSn25v6HpthHka5T2hx0WfT8VK6M5ephXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fZRwj7mZ; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783778178; c=relaxed/simple;
+	bh=Ilxa91/xmSMwAQV50SahUhvBYhDXmrw6AvaV8FO5t+4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LDd6x9S3nlXiv1klVaHAxN7ZmFlR9t8+pYILmyLLZPidiHYAHvq0Dibi1M0d1f9UAqpbS/KmbsjY09p156AxHs+fv229CYRm2SLwQ1MQl6eFeO8cvNWqCu7faOhmhJciyawef7HnEfI0Zjjre32HlswpM+63XYBYa1gdcSiPXwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anZI2NXe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fZRwj7mZ"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783774143;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ai1KcpgNUI4QdqfPIyJUWqcgePxLUR94N3w947XBtW8=;
-	b=fZRwj7mZmfr0znN16LT7kWoxSiTVvFpZ5G3kmSccDrG9F/5rMT3Tc3u9Kv5w0x81Y+4gxX
-	7xKMKzTFb7rIsi+1+sLK4L38D69g7XNXujZjj3juqxC+D/ydu6e5jP+ew9WlAUajUXymX2
-	RVZcTptHYxrghME2bsuZYxrCjZIGVv8=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test fentry link after tracing_multi link
-Date: Sat, 11 Jul 2026 20:48:22 +0800
-Message-ID: <20260711124822.29406-3-leon.hwang@linux.dev>
-In-Reply-To: <20260711124822.29406-1-leon.hwang@linux.dev>
-References: <20260711124822.29406-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anZI2NXe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A4A1F000E9;
+	Sat, 11 Jul 2026 13:56:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783778177;
+	bh=VaIt5SuuNSmwgTajmIj4ItRNOiPXthdr8Oi+LYItYKo=;
+	h=From:Date:Subject:To:Cc;
+	b=anZI2NXegF0Jv+WXpfHyxi5tbL593/efATXYac0IDW0X6YqSk1IbZvErUeN60dheb
+	 mTmiUNW5IVqPthTU1/pBqpFNPlp+e9DdOTqlKFEZgyFlD4lvHpspShlEqRoUCQN54Q
+	 l1j1Efmg6lIkAfWd2oxiJ3DhXiHUOU3Rd6XYQ1WkZBynwNU6fp5KP/vrp40EvXLr8X
+	 mDmWtN1ekDCKmxcVdWEcKKJj88N+ILll5I5bmBazxxi+riIdPG49nB38D+vQITiMK9
+	 gsQJoXlBY92LRPp6LtLDKLilDlgph8yy46/kuNSGf0StoVkgkxicFohZJeh7XB0cJE
+	 P3Ws9PtQx/Z8Q==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Date: Sat, 11 Jul 2026 15:55:57 +0200
+Subject: [PATCH nf] selftests: netfilter: nft_flowtable.sh: check offload
+ counters for IP6IP6 tunnel test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260711-flowtable-selftest-ip6ip6-fix-v1-1-60e9e7384df7@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqDMBAAvyJ77kISJSn9Sukh1Y1dCFGyQQvi3
+ 12Eucwc5gChyiTw6g6otLHwUlTso4PxF8tMyJM6OOO8CdZiysve4jcTCuXUSBry6hVM/Mdhekb
+ vejeE2IM+1kqa7/8bSoLPeV5j9sBgcwAAAA==
+X-Change-ID: 20260711-flowtable-selftest-ip6ip6-fix-4d8a623247a3
+To: Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.3
 
-Verify that there's no any issue to attach tracing_multi link, then attach
-fentry link.
+The IP6IP6 tunnel test uses test_tcp_forwarding() which only verifies
+TCP data integrity but does not verify that flowtable offload actually
+took place. Unlike the non-tunnel and IPIP tests, it omits the
+check_counters() call.
+The reply direction for IP6IP6 tunnel traffic goes through the physical
+interface (oif=veth0), so it is already counted by the existing
+routed_repl counter rule. Add check_counters() after the IP6IP6 test to
+detect offload failures.
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Fixes: 5e5180352193 ("selftests: netfilter: nft_flowtable.sh: Add IP6IP6 flowtable selftest")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- .../selftests/bpf/prog_tests/tracing_multi.c  | 69 +++++++++++++++++++
- .../progs/tracing_multi_intersect_attach.c    |  8 +++
- 2 files changed, 77 insertions(+)
+ tools/testing/selftests/net/netfilter/nft_flowtable.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index f02ffc7f41d7..0aa9532a05cf 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -460,6 +460,73 @@ static void test_intersect(void)
- 	tracing_multi_intersect__destroy(skel);
- }
+diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+index 08ad07500e8a..0ea01a876c8b 100755
+--- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
++++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+@@ -629,7 +629,7 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel"; then
+ fi
  
-+static void test_fentry_after_multi(void)
-+{
-+	static const char * const funcs[] = {
-+		"bpf_fentry_test1",
-+	};
-+	struct bpf_link *fentry_link = NULL, *multi_link = NULL;
-+	struct tracing_multi_intersect *skel = NULL;
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	__u32 *ids = NULL;
-+	int err;
-+
-+	skel = tracing_multi_intersect__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_intersect__open_and_load"))
-+		return;
-+
-+	skel->bss->pid = getpid();
-+
-+	ids = get_ids(funcs, ARRAY_SIZE(funcs), NULL);
-+	if (!ASSERT_OK_PTR(ids, "get_ids"))
-+		goto cleanup;
-+
-+	opts.ids = ids;
-+	opts.cnt = ARRAY_SIZE(funcs);
-+	multi_link = bpf_program__attach_tracing_multi(skel->progs.fentry_1, NULL, &opts);
-+	if (!ASSERT_OK_PTR(multi_link, "attach_multi"))
-+		goto cleanup;
-+
-+	fentry_link = bpf_program__attach(skel->progs.fentry);
-+	if (!ASSERT_OK_PTR(fentry_link, "attach_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 1, "multi_fentry");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry");
-+
-+	err = bpf_link__destroy(fentry_link);
-+	fentry_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_fentry"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_multi"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_only");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_detached");
-+
-+	err = bpf_link__destroy(multi_link);
-+	multi_link = NULL;
-+	if (!ASSERT_OK(err, "destroy_multi"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry_1), &topts);
-+	if (!ASSERT_OK(err, "test_run_detached"))
-+		goto cleanup;
-+	ASSERT_EQ(skel->bss->test_result_fentry_1, 2, "multi_fentry_detached");
-+	ASSERT_EQ(skel->bss->test_result_fentry, 1, "fentry_still_detached");
-+
-+cleanup:
-+	bpf_link__destroy(fentry_link);
-+	bpf_link__destroy(multi_link);
-+	free(ids);
-+	tracing_multi_intersect__destroy(skel);
-+}
-+
- static void test_session(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
-@@ -957,4 +1024,6 @@ void test_tracing_multi_test(void)
- 	if (test__start_subtest("attach_api_fails"))
- 		test_attach_api_fails();
- 	RUN_TESTS(tracing_multi_verifier);
-+	if (test__start_subtest("fentry_after_multi"))
-+		test_fentry_after_multi();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-index cd5be0bb6ffd..5b0af8f4c62f 100644
---- a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-@@ -11,6 +11,14 @@ __u64 test_result_fentry_1 = 0;
- __u64 test_result_fentry_2 = 0;
- __u64 test_result_fexit_1 = 0;
- __u64 test_result_fexit_2 = 0;
-+__u64 test_result_fentry = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fentry, false);
-+	return 0;
-+}
+ if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
+-	echo "PASS: flow offload for ns1/ns2 IP6IP6 tunnel"
++	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel"
+ else
+ 	echo "FAIL: flow offload for ns1/ns2 with IP6IP6 tunnel" 1>&2
+ 	ip netns exec "$nsr1" nft list ruleset
+@@ -683,7 +683,7 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel over vlan"; then
+ fi
  
- SEC("fentry.multi")
- int BPF_PROG(fentry_1)
+ if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
+-	echo "PASS: flow offload for ns1/ns2 IP6IP6 tunnel over vlan"
++	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel over vlan"
+ else
+ 	echo "FAIL: flow offload for ns1/ns2 with IP6IP6 tunnel over vlan" 1>&2
+ 	ip netns exec "$nsr1" nft list ruleset
+
+---
+base-commit: 3f1f755366687d051174739fb99f7d560202f60b
+change-id: 20260711-flowtable-selftest-ip6ip6-fix-4d8a623247a3
+
+Best regards,
 -- 
-2.55.0
+Lorenzo Bianconi <lorenzo@kernel.org>
 
