@@ -1,181 +1,137 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B8E315793
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 06:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A740330650;
+	Sat, 11 Jul 2026 07:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783750736; cv=none; b=fXE5wHupac2nBuOi/3w3Sd3GIKxRH0RW8bm2IJr2xyzZ4NSS3OZdmDEDMXmZ8Q+upju+/C1NmPtjetwrjmYCVAFF//7fmC5kUowjT/e1oZL8VXwCFJVDrZ0rdwmd8guA5/hbusjU04YHYxibYUC0ubw7L7fSvV9NFOMAVf2Vb54=
+	t=1783755090; cv=none; b=ussceP/EERmbITaC24taQKAxNibp0q1VTrN2MrcmQBU36GM3RFQKxg9iyn7E3mLwBjXgf5lUq17UhEk9PMBUOZNeAVKxHQCmtQ4zkFSpQKAVijLFPuBBw/zUVWC9Pxm1PGSZlmekqtvS4zGcympbmktLmT1x/+WaMA4Maqn3wIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783750736; c=relaxed/simple;
-	bh=bVka9Y/pxBnfhMrcVcpVcQlHeE4oraJ+VZOP20yHSxk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=APqcY/uDb27bLMZFdN9EGdJDdkjeO25vGbo890tdHabzvm94StonfhOKvAELBo/qnRPxVmkixJHEBQGzryi2QAa3kactNB2rXZsoMGpLlw8odwFASZ1cj/WCHFev/md3b+B3bzm3LLAWdHcfqKz2hQLDlSRaJ9v3QPdpkeXk3h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=TIktfliC reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1783755090; c=relaxed/simple;
+	bh=DKPgquJCYN9zIomY/o2ia2mQ5GCyHVdSRvRz+k97MOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qV072EW5XnrobajfhZGh4visGqLM+FKcEKNXkhOVKAsRGYSxzo3pkzC/X3n+Gaoj9ViI82dpyIscEBuVoSgo+5OHYs+XukDYBZYxvgk4hAoE/oidpt2A5LoJp3GB3JPq43vUhnbr9cxGWcJ9e23pcq9tn+LWXShntm4247jMokY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KhO/XnPL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="TIktfliC"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66B6IoIf015927
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Sat, 11 Jul 2026 15:18:50 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=jhPYci9Dt8OvtEtcy4b+McdMFRjiobjic+3G8cI6QZI=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1783750731; v=1;
-        b=TIktfliCWLwpd/+swlM0LiA65CD4UnKwP+vi5ebo48IQszOhpbBoisXZWlKlE/dX
-         uAHImhHe1u8Zjp9F1SsNkKIkUb/AXZ9u8Z7NdTlKN2jqD5SOEswuQpbbITyDpknr
-         bQMy8wc6V8eb3bRh5OuNVsh/Fytdus3Lti0kugfIaALxVXZL20RQVbBjguL04sMs
-         aXEazALRVK84+npwac+koioVcBKj9dDnwEKFkIHUTtN1H8w/Ua72wDLMM7mvGBzF
-         WYg5KFzUg1+rIbfhz4gWL1L0e/OW6ioPVpTinpDdvu87eF5MyhfkfpurgzIcIBhd
-         q2uPRk28yyDaK3zl+/06dA==
-Message-ID: <0e5e64ea-2f3c-4ce6-88ac-08b66f13027c@rsg.ci.i.u-tokyo.ac.jp>
-Date: Sat, 11 Jul 2026 15:18:50 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KhO/XnPL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AA91F000E9;
+	Sat, 11 Jul 2026 07:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783755088;
+	bh=pXKkMbE8S50fgci7zV//UdWNphx5itNGzvWESRKObgE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KhO/XnPLypEcN+qXIRTWLzu8O2Y/F16+kdI29zDTSrvLklMfo7TQcpfnonmGvvJG7
+	 pP52IH5+GRUjeVRbg5Yy4rSKY7/AewvEcTgb/jgyIOTouLqc4kxiFUTT56uKE2mmHQ
+	 ItFhV1PI/gf3irZiMqfcv6mG//q1/aSvea078Todvek8GmXbnMs2iJktQkf5aNNVP+
+	 ofJJDnK5Kv2qKXdMj5pPwq6dJeYEhrzbIpFKkwz2zxTb/8vKn1GpPEdiF7H3pOY324
+	 klFrHq8C6cmF7Lh3uFdxDiHR9LbkvO+bcPmUL9IZkzit5qoQogkYEQp4PVfvtmwegY
+	 7SCmG5BTmBNsQ==
+Date: Sat, 11 Jul 2026 08:31:16 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org, 
+	david@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, hongfu.li@linux.dev
+Subject: Re: [PATCH] selftests/mm: Fix memleak in migration benchmark
+Message-ID: <alHxLNTQFJlb3cLV@lucifer>
+References: <20260708103705.840679-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/7] KVM: arm64: Disallow vPMU when pPMUs do not cover
- all CPUs
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260706-hybrid-v8-0-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <20260706-hybrid-v8-1-de459617b59d@rsg.ci.i.u-tokyo.ac.jp>
- <akvgIWqBjAp_VA_A@kernel.org>
- <e03f17b2-a765-4912-adf6-3da26e7eeecd@rsg.ci.i.u-tokyo.ac.jp>
- <ak1DVUs0bgkpZh0N@kernel.org>
- <7bf6c440-5f14-4326-9800-9821adc4e2e4@rsg.ci.i.u-tokyo.ac.jp>
-Content-Language: en-US
-In-Reply-To: <7bf6c440-5f14-4326-9800-9821adc4e2e4@rsg.ci.i.u-tokyo.ac.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260708103705.840679-1-lihongfu@kylinos.cn>
 
-On 2026/07/08 17:32, Akihiko Odaki wrote:
-> On 2026/07/08 3:20, Oliver Upton wrote:
->> On Tue, Jul 07, 2026 at 08:08:03PM +0900, Akihiko Odaki wrote:
->>> On 2026/07/07 2:04, Oliver Upton wrote:
->>>> Hi,
->>>>
->>>> On Mon, Jul 06, 2026 at 07:03:24PM +0900, Akihiko Odaki wrote:
->>>>> Commit ec3eb9ed6081 ("KVM: arm64: PMU: Disallow vPMU on non-uniform
->>>>> PMUVer") made KVM reject vPMU unless the system-wide PMUVer is usable.
->>>>> That covers systems where PMUv3 is absent or non-uniform, as well as
->>>>> systems where IMPDEF PMUv3 sysreg traps are unavailable.
->>>>>
->>>>> However, KVM can still accept vPMU when all CPUs uniformly trap PMUv3
->>>>> sysregs, but the pPMUs registered with KVM only cover a subset of
->>>>> possible CPUs.
->>>>>
->>>>> Reject vPMU unless the registered pPMUs cover every possible CPU.
->>>>> This avoids carrying support for partial pPMU coverage into the
->>>>> fixed-counters-only UAPI introduced later in the series.
->>>>
->>>> Doesn't CPU hotplug screw this up? I could online a CPU that doesn't
->>>> have a PMU after creating the VM.>
->>>> I'd rather just change ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS to become a
->>>> system feature. That way any CPU which breaks the system-wide 
->>>> assumption
->>>> cannot be onlined.
->>>
->>> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS only says that IMPDEF PMUv3 
->>> sysregs are
->>> trapped. It does not say that KVM has a driver-backed PMU usable for 
->>> PMUv3
->>> emulation. This patch checks that extra requirement.
->>>
->>> I re-checked CPU hotplug. Onlining a CPU without a PMU later does not 
->>> make
->>> an accepted VM unsafe, since the check is against cpu_possible_mask.
->>
->> Sorry, I missed that this was against the possible mask.
->>
->>> The problem is the reverse case on ACPI: this check can disable vPMU 
->>> when a
->>> possible CPU is offline. DT populates supported_cpus at boot, while ACPI
->>> initially populates it only from online CPUs and grows it as matching 
->>> CPUs
->>> come online.
->>>
->>> That makes this patch too conservative. In practice, I do not expect 
->>> systems
->>> to mix CPUs with and without a usable PMU. A better approach is 
->>> probably to
->>> treat such a host as out of spec and add TAINT_CPU_OUT_OF_SPEC. We 
->>> already
->>> do that for architectural PMUv3 by detecting mismatches in
->>> ID_AA64DFR0_EL1.PMUVer; we can do the same for
->>> ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS with non-standard PMUs.
->>
->> The presence of the workaround is, by definition, out of spec. I just
->> never bothered tainting the kernel because these machines are already
->> TAINT_CPU_OUT_OF_SPEC by way of the broken VGIC.
->>
->> Ok, so how about you keep the check that you're doing here and promote
->> IMPDEF_TRAPS to a system-wide feature? That would satisfy the two
->> preconditions we have for PMU emulation, which is system register traps
->> and a backing arm_pmu that understands PMUv3 events.
-> 
-> This check turned out to be faulty: it can disable PMU emulation on ACPI
-> systems when a possible CPU is offline, because ACPI grows
-> arm_pmu::supported_cpus as matching CPUs come online.
-> 
-> My current plan is:
-> 
-> - drop the possible-mask coverage check, to avoid breaking ACPI;
-> - promote ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS to
->    ARM64_CPUCAP_EARLY_LOCAL_CPU_FEATURE, so the system will have the
->    feature only if all online CPUs implement it;
-> - explicitly taint hosts with ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS,
->    matching what KVM already does for non-architectural VGICs. The
->    comment will make it clear that this is out of spec because KVM cannot
->    make the usual architectural assumptions about PMUv3 sysreg traps and
->    uniform driver-backed PMU availability.
+On Wed, Jul 08, 2026 at 06:37:05PM +0800, Hongfu Li wrote:
+> Several early return paths in run_migration_benchmark() skip
+> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
+> label.
+>
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 
-I sent a new revision implementing these changes, but due to a rebase
-mistake it was also sent as v8.
+LGTM. With the Fixes tag added as requested by David, feel free to add:
 
-However, it still does not cover every case of non-uniform driver-backed
-PMU availability. With ACPI, if a CPU is brought online whose MIDR was
-not represented by any CPU online during PMU probing, the PMU code
-cannot associate it with an existing arm_pmu or register a new one.
-This can happen even when PMUVer is uniform across CPUs.
+Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
 
-I therefore plan to take a simpler approach: when KVM cannot find a
-registered pPMU for the vCPU's current CPU, emit a one-time warning and
-set TAINT_CPU_OUT_OF_SPEC, matching the treatment of mismatched CPU
-features.
+> ---
+>  tools/testing/selftests/mm/hmm-tests.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index e4c49699f3f7..e8046675a0c3 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -2828,8 +2828,10 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	buffer->ptr = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE,
+>  			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>
+> -	if (buffer->ptr == MAP_FAILED)
+> -		return -1;
+> +	if (buffer->ptr == MAP_FAILED) {
+> +		ret = -1;
+> +		goto cleanup;
+> +	}
+>
+>  	/* Apply THP hint if requested */
+>  	if (use_thp)
+> @@ -2838,7 +2840,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  		ret = madvise(buffer->ptr, buffer_size, MADV_NOHUGEPAGE);
+>
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	/* Initialize memory to make sure pages are allocated */
+>  	ptr = (int *)buffer->ptr;
+> @@ -2848,11 +2850,11 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	/* Warmup iteration */
+>  	ret = hmm_migrate_sys_to_dev(fd, buffer, npages);
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	ret = hmm_migrate_dev_to_sys(fd, buffer, npages);
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	/* Benchmark iterations */
+>  	for (i = 0; i < iterations; i++) {
+> @@ -2861,7 +2863,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>
+>  		ret = hmm_migrate_sys_to_dev(fd, buffer, npages);
+>  		if (ret)
+> -			return ret;
+> +			goto cleanup;
+>
+>  		end = get_time_ms();
+>  		s2d_total += (end - start);
+> @@ -2871,7 +2873,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>
+>  		ret = hmm_migrate_dev_to_sys(fd, buffer, npages);
+>  		if (ret)
+> -			return ret;
+> +			goto cleanup;
+>
+>  		end = get_time_ms();
+>  		d2s_total += (end - start);
+> @@ -2886,8 +2888,9 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  				 (results->dev_to_sys_time / 1000.0);
+>
+>  	/* Cleanup */
+> +cleanup:
+>  	hmm_buffer_free(buffer);
+> -	return 0;
+> +	return ret;
+>  }
+>
+>  /*
+> --
+> 2.25.1
+>
 
-Regards,
-Akihiko Odaki
-
-> 
-> That lets the code keep assuming uniform PMU availability without adding 
-> an ACPI-hostile possible-CPU check, and makes that assumption explicit 
-> for humans like me and tools such as Sashiko [1].
-> 
-> [1] https://sashiko.dev/#/patchset/20260706-hybrid-v8-0- 
-> de459617b59d@rsg.ci.i.u-tokyo.ac.jp?part=6
-> 
-> Regards,
-> Akihiko Odaki
-> 
-
+Cheers, Lorenzo
