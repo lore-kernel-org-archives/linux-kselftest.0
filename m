@@ -1,100 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C0515E5DC;
-	Sat, 11 Jul 2026 13:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006941F151C;
+	Sat, 11 Jul 2026 15:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783778178; cv=none; b=qElnqAyzYhQE61NynNnfbzcsOpvlgJhq8LCa1i4nXG4uIWhbPRJndn7CP7PRfAgAUv9Md9S5Q/P3RWeuji+Q6I6oPVAQ+NkTB+Ib6pUeW19t5wyxuuSCrbGd9B2iwvRkA4c5jo/opiRte6nRnxmu6psx2L2/wc70H+yFREMSJjk=
+	t=1783784102; cv=none; b=Al7MqIZhbIwKseQhbQteIQML3R/SGYHITpAZVeAN1XuvvDAf9b2ycRKIidyscd9wQCYLD6jvIp0rYA9DIaDBZb2+1JbmvPG21dvlRyeSjh/zGmsHqsuI9S/ZqJWEJ2HdnFtWytXlR+EXxYlOOcJJKVVIyvlyJbHeRfEn6+MECiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783778178; c=relaxed/simple;
-	bh=Ilxa91/xmSMwAQV50SahUhvBYhDXmrw6AvaV8FO5t+4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LDd6x9S3nlXiv1klVaHAxN7ZmFlR9t8+pYILmyLLZPidiHYAHvq0Dibi1M0d1f9UAqpbS/KmbsjY09p156AxHs+fv229CYRm2SLwQ1MQl6eFeO8cvNWqCu7faOhmhJciyawef7HnEfI0Zjjre32HlswpM+63XYBYa1gdcSiPXwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anZI2NXe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783784102; c=relaxed/simple;
+	bh=cM8gFIkD/0WD/HP0g9n34l6lpiH5je95D2a8VsuTKCU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gCwlARbI1sG3sjrz2FnbtI+NT/TsIRWhZ8/vgEVfBn07JhXbUm2DXwanrRT4AmRt7CCtEzdri1YTdwBMRWz34We0+O6G2tpPywhsXV+2vYTCJpUiGSYcj394/dYt0TLePe0um0BUBpWr+iay+JtpRE99HLWJA0yuKfR2oex8nxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyFgxcQ8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anZI2NXe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A4A1F000E9;
-	Sat, 11 Jul 2026 13:56:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyFgxcQ8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B861F000E9;
+	Sat, 11 Jul 2026 15:34:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783778177;
-	bh=VaIt5SuuNSmwgTajmIj4ItRNOiPXthdr8Oi+LYItYKo=;
-	h=From:Date:Subject:To:Cc;
-	b=anZI2NXegF0Jv+WXpfHyxi5tbL593/efATXYac0IDW0X6YqSk1IbZvErUeN60dheb
-	 mTmiUNW5IVqPthTU1/pBqpFNPlp+e9DdOTqlKFEZgyFlD4lvHpspShlEqRoUCQN54Q
-	 l1j1Efmg6lIkAfWd2oxiJ3DhXiHUOU3Rd6XYQ1WkZBynwNU6fp5KP/vrp40EvXLr8X
-	 mDmWtN1ekDCKmxcVdWEcKKJj88N+ILll5I5bmBazxxi+riIdPG49nB38D+vQITiMK9
-	 gsQJoXlBY92LRPp6LtLDKLilDlgph8yy46/kuNSGf0StoVkgkxicFohZJeh7XB0cJE
-	 P3Ws9PtQx/Z8Q==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Sat, 11 Jul 2026 15:55:57 +0200
-Subject: [PATCH nf] selftests: netfilter: nft_flowtable.sh: check offload
- counters for IP6IP6 tunnel test
+	s=k20260515; t=1783784100;
+	bh=7rEMm+UIIe8jnjVNugOISwo6rSAeeJHdltnF34dwAcs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=dyFgxcQ8Se3NX+3vE/CJGOVCuPW/WGTV9ebL2HKI2ImshI0QyKEo5IWex4eNLomFx
+	 oVkjvWE/olUk3D+BJsNqFO8qCljsAKziASzY2gDnDea5gFf47lfTS8a+D9ysCNNmam
+	 8cCgGVy7plyt4hUzngwqah/lVczBGC89YQxiPzoPT4GOyZcnICvKlL/9ZlEBkY2ev9
+	 TZPmJeNaE+qpg4wgylMKruu0Z7myBjyz7xlw25CFRNq9JEiD+EBNeBLGV7ZoqnMFZr
+	 KGoHpNDkXueThyjdFlmq0amYr5VEiPHWzqjiAFhRcjp11st+mT+lhNSPXhY9cjODWh
+	 AZ2Gs+BQSGxXQ==
+Message-ID: <faa6bc73-9561-44d1-8631-b066619a233a@kernel.org>
+Date: Sat, 11 Jul 2026 17:34:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests: netconsole: only restore MAC when it
+ changed on resume
+Content-Language: fr
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Breno Leitao <leitao@debian.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260710-netcons-mac-reload-v1-1-3fb1bcc70b4a@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260710-netcons-mac-reload-v1-1-3fb1bcc70b4a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260711-flowtable-selftest-ip6ip6-fix-v1-1-60e9e7384df7@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqDMBAAvyJ77kISJSn9Sukh1Y1dCFGyQQvi3
- 12Eucwc5gChyiTw6g6otLHwUlTso4PxF8tMyJM6OOO8CdZiysve4jcTCuXUSBry6hVM/Mdhekb
- vejeE2IM+1kqa7/8bSoLPeV5j9sBgcwAAAA==
-X-Change-ID: 20260711-flowtable-selftest-ip6ip6-fix-4d8a623247a3
-To: Pablo Neira Ayuso <pablo@netfilter.org>, 
- Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.3
 
-The IP6IP6 tunnel test uses test_tcp_forwarding() which only verifies
-TCP data integrity but does not verify that flowtable offload actually
-took place. Unlike the non-tunnel and IPIP tests, it omits the
-check_counters() call.
-The reply direction for IP6IP6 tunnel traffic goes through the physical
-interface (oif=veth0), so it is already counted by the existing
-routed_repl counter rule. Add check_counters() after the IP6IP6 test to
-detect offload failures.
+Hi Andre,
 
-Fixes: 5e5180352193 ("selftests: netfilter: nft_flowtable.sh: Add IP6IP6 flowtable selftest")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- tools/testing/selftests/net/netfilter/nft_flowtable.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 11/07/2026 00:19, Andre Carvalho wrote:
+> The "mac" bind mode reactivation downs the interface, restores the saved
+> MAC and renames it to trigger a target resume. This assumes the recreated
+> interface comes back with a different MAC, which is true under
+> MACAddressPolicy=none (as on the Netdev CI) but not when MACs are
+> persistent. In the persistent case netconsole resumes the target on its
+> own, and the down/restore/rename flow instead drops it and fails the test.
+> 
+> Guard the block on the MAC having actually changed so the test passes
+> under both policies.
+Thank you for the patch, it fixed the issue on my side when not forcing
+MACAddressPolicy=none.
 
-diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-index 08ad07500e8a..0ea01a876c8b 100755
---- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-@@ -629,7 +629,7 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel"; then
- fi
- 
- if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
--	echo "PASS: flow offload for ns1/ns2 IP6IP6 tunnel"
-+	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel"
- else
- 	echo "FAIL: flow offload for ns1/ns2 with IP6IP6 tunnel" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
-@@ -683,7 +683,7 @@ if ! test_tcp_forwarding_nat "$ns1" "$ns2" 1 "IPIP tunnel over vlan"; then
- fi
- 
- if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
--	echo "PASS: flow offload for ns1/ns2 IP6IP6 tunnel over vlan"
-+	check_counters "flow offload for ns1/ns2 IP6IP6 tunnel over vlan"
- else
- 	echo "FAIL: flow offload for ns1/ns2 with IP6IP6 tunnel over vlan" 1>&2
- 	ip netns exec "$nsr1" nft list ruleset
+Tested-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
----
-base-commit: 3f1f755366687d051174739fb99f7d560202f60b
-change-id: 20260711-flowtable-selftest-ip6ip6-fix-4d8a623247a3
-
-Best regards,
--- 
-Lorenzo Bianconi <lorenzo@kernel.org>
-
+Cheers,
+Matt
