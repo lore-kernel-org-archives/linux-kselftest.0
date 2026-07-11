@@ -1,65 +1,65 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4D52264C0
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 03:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D078423BCEE
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 03:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783739805; cv=none; b=uRocUnC6Ci4Osmx3zv7QyCnRaeVFflMerAjvYNvUyXPRLHMCb1PPa8fn7HCiceOv67aH0cgeZ3GqQGnwvxAY2A1Jgd2fNFtUbBw9iwJi8LO7uSN7+ybo19X3OWSJlhLQKtmbNj4pJi3lbGx5StvJq85KC1341RVSTlknRqgcvM4=
+	t=1783739994; cv=none; b=pmUqAwmP5/i11XRoHnsM5Mb5zYGZUOtY+I58it/CDYirgsb14S5MCkfQwZ0sU6u42utz8WlxoFQewsEOW0XUnjvyoPNcEVlRuOSTThqFgUWZQLp81eD6BEBfqAh6GjuPrTpADbG+2fsqW/EVXy1tbgDMPTClWFpf0DUPIUesnA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783739805; c=relaxed/simple;
-	bh=B3DNccZp5dt31xSN8qydp5e80M3HHyRBCHgLNJEVo70=;
+	s=arc-20240116; t=1783739994; c=relaxed/simple;
+	bh=71lARMM3Jl3NDTlQGAGPMbgSLaP7ywZLy2GYTYoKFog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gEssx+CEuAAKZ2jhR6QOxJSWLW9VGxKvbdmXdp2CUdGM37arB0t51PBEVFQoW5ZD6hPdfDvV8fSsSYJ8rBz6uZKL3bJlKkyMNV0jOzbHOgCPqCLlXy5730mSPOuQgTjiJSiF2xN+KP9zW6MzZeS9zcx1gFR0R+UeX/E0qDYLRXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KcLxFmF6; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=ET2V/dHmexihTuAUBCBGgZY44qdqTZdKmaKHzG5+VJPtwXTmfWTcu5m904kICzx6MMK9hOAgwYKR7X5O/ukU1xSd7yr7ZEw/P/izDI6CCOb7P4McDmfLZDq2KDp46jrn60WrIaeQdqfLQyVQ/ZtRy1bcsuKkI9F853Jhj5xcBNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hktlFisp; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KcLxFmF6"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8485fad302bso1581328b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 20:16:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hktlFisp"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cce6a0c9c3so14429475ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jul 2026 20:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783739804; x=1784344604; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783739992; x=1784344792; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=FBlRq40n+WQNoah/jqkKv0Mdb6DSXF7flMHY66vmfak=;
-        b=KcLxFmF6Yn9X45t/A6xxKDCYHrBSJ41t8fEBK9PkCHLXW/K0gjuF+pSG12tQVenpXI
-         N3z4OgZMhVUgrhCG5U+TVI5t8KErmisE08WqJko8sdkfeloCaffPgjPDyfXaA/gjWl9J
-         5pBqSNIcy87Uwm9vJ2mbkTghXmS2k6qvfxKk4qLohwOSo/GfAlVNaFa6Q5QUidhTz3uc
-         eEDzYFDkJOPdqIx1mwH7enFnVOOSv2zLCNTm8Wmy2hNVfcJmwf/PSC534His1I5bGm4E
-         pOOtvYLdgpI+kh5bLvFNDsocLdlhBtfcCKx3sMe4z7CEgfUfFnqEeBEaWYZOTvMjJkP/
-         3WdA==
+        bh=CYTaMzfdKXyQ96IWRR1Bd78qVpBo65z/nucHslKEHMk=;
+        b=hktlFispw0ReXJzK3IozV1fiAPHm0k4cHxos2ESjizWBwpRk1ilHYB2tUM36yXdal2
+         kyQy3mO/55/PA3qVY7Dy7f+3SsgSoXzZh89BMiKIqHYVppaZsJCXXaPGmK9A2UtkWgWI
+         Bvt642gB4jDf5qKAOHQwKDNU3jLqpoLsWxDH8/tjglYys0krxL+70yU98SIvqib43iX0
+         mJpDvfusI/Yq2RE7Qa+OlYXtjwsXXCy6Y9K2oegdE5y43FJUzt3MKyLyRr3DQ1e1m3B8
+         bzVrqIfyLc4p1Vff13B1EbA0nlkyyZ76GGNEarjltbHIZqFHwkTiGYZECad3gxHoIgdB
+         BrMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783739804; x=1784344604;
+        d=1e100.net; s=20251104; t=1783739992; x=1784344792;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FBlRq40n+WQNoah/jqkKv0Mdb6DSXF7flMHY66vmfak=;
-        b=Jp7FXUd5+l2FX3B2sD6Oj2d1wHO4p9nbcLh/MMLogfjVH7i+xLiRa5xBU8ZyFV6QuS
-         h0L6LY9QIaQaDYoFTpg42EEbF0v95FneR/sH9NIrJZ9yxxY3FUD9Jr+ECJdCQv9bzO7b
-         7wQ392fjIuq1vGk+CMiBG9yz9rUvIVPwdYRlh7gyXff0sCUsV/RukgIRKwbrpOp4hNRe
-         GELCnapRlehXxDSSHQ210iIofJQJ7dxecKHi6YmW7blqKrAcEfsyBK+CcIl3DRHZMWmc
-         9AoyBM6QOPo5c9Or/umWGyotHB4UVtuUT1AhaCp9MJDyKdKXNzBy0WHpqWRuX/SPC+uQ
-         6hFQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrQkByLwWH3KT1wrb2RjQE3Nvk7fSQthSowwDOUcvwWcV9flSqroxcKM5gYoH1gzMNtr+AjzNacAxrM3Qf+EZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytZBhJ9lKiNTroxsQSHD3WGjl8LLAfec6fpySAjNhRKfv5uphX
-	Q7rjVjREVI8KtXvPUKKVVrgvwzWFxQ2AUcw6yac2j1q7ZDVAaWVuEhyk
-X-Gm-Gg: AfdE7ck1SWqBgjJTuOa20t/a5PFwmm5EgO852WrLCNmq50hvLICyDmkBmEpF+S6Llyn
-	81dyAhMzrAiiTavS7t/gtSk5lSdjuTpf8NDXrFZ3dafxrNxMtgWBfbeeBnfkhy03Qwva+8qCXfg
-	V1ztUThRYy9H1wc8R/R07sfe88VgeQQDs5aScuLJQZZVSYhuHZfdYxmNzVMNFhBN5JN+qU+oqTS
-	9r+oG6o8vNefuDJ9/LOTA3WAeMy3/kuvDrmq0O327MPmV9UWYd2M1WVVdmbg8sITF41DTQjjrwq
-	CWOPXICMwuKOoM6rXkXkq5SqmaevkCk2EXPaG4b1pphGCJoaBOXURDrZUnn1JnEpmCv3jk1tVoI
-	pKMzkB9mMMetzU6QNsOYIISKb/uZr0M4SRTp5x2peDEedGY2RYnSRG17zY9G45teYbc9/gMF71m
-	wwThWVhVZIwpbf5yJ8+vG52BS15XPT/lqiSOPwfR1MPpowtJ+HnoP5L4I=
-X-Received: by 2002:a05:6a00:b4f:b0:848:2f77:e2da with SMTP id d2e1a72fcca58-8488979d33dmr1391764b3a.67.1783739803838;
-        Fri, 10 Jul 2026 20:16:43 -0700 (PDT)
+        bh=CYTaMzfdKXyQ96IWRR1Bd78qVpBo65z/nucHslKEHMk=;
+        b=XAEYSbOc2uwl2eP5/3SNS43slIcR/Gq0y95E93EgGHpoHNk47C/E5C5smLuJ3FMPkw
+         Vr9XoEO791RC6x9pnd5XNNHqrAvwsOYt3SaM6plizAnknzmRyPb+R8PKj9seT86CiSx0
+         gzIURoIoqtyRu96x80bKpyn5xzEny8vdyRC0/jfp5ljOWVH90m2XKMnYislfO84ZXI6/
+         jcyqj6rFLsEqKpuGdMNLi44xLmUVmH2vrRMH1FoydVeYoYGnSmBu4nXDYtMz5HAHwhlr
+         iDKHrqYD8w3ifgkzbZdOfQyXpMXyiKXK4G1es0Z3ryFNKmx6W+o12qnYFMS7Fz1LLYlT
+         lLlQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpSW+3sUbpuaWjikp45MqYqUIi40XGUf7+kZyQqgvt46jTfp3cd3eFZjKXROMzQHC8djpWZ3Og4ZN0ABBDCaGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzettQpY/zvDnWxAGLkKyxmO8VQ0u0IHn7vvUVvkRoPcUMTIbO
+	8GuQkc4mFKdpgS6tgq5yXHQzO2kJwQ12xhAilH2/OqlRgZ2onAO38jTf
+X-Gm-Gg: AfdE7cmximYcmBptA9oTat7fX6raM86LQQzJPZppvltByD3yRmoEIpXJjT3RgodA59t
+	M/jE5vRrUg3eZgmlp4iqSsk5jD66cBBNLUYmfNGXuvIK6M99y/7Mj0fv/xGp8RjF/2AOSLFokhu
+	UVaFUC0ss3fG97jsQDm/yJ9XpxcA/ICQyQ9BGz/wyNsPlp/GfgdZaVLTSaA/pMbYnz46BQlDqQO
+	VDiVt2NDsiPgZuL1AJc6tE/dNuZ9sapLHJTZbjG6qxnn7Z/qroIE7gsQbQEv635M92PhyRcDH+w
+	xGR3Q4XMi4IfBofqENVrcc6FgMJqV5TRwUQKVJV/kOn76vy6GFX9+ERcZG+Svgixje42ihcFWl5
+	rWD+Vnbguqu6BZXj9JrycjdB2KjMFh3IP9dVvEd6lOKgOjQUmHt1FS9AT30gwN2pL998T7gtm0o
+	+bwDjCZdbwIKD2Kooax6MMuFmTmagYMmh7XB9xcI69L24Vmozt2DDju0k=
+X-Received: by 2002:a17:902:d2ca:b0:2c9:97a8:8c1b with SMTP id d9443c01a7336-2ce9f2948camr16114365ad.46.1783739992132;
+        Fri, 10 Jul 2026 20:19:52 -0700 (PDT)
 Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84870d76ce7sm2041406b3a.55.2026.07.10.20.16.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d5bdddsm67571165ad.77.2026.07.10.20.19.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2026 20:16:40 -0700 (PDT)
-Date: Fri, 10 Jul 2026 20:16:35 -0700
+        Fri, 10 Jul 2026 20:19:51 -0700 (PDT)
+Date: Fri, 10 Jul 2026 20:19:42 -0700
 From: Stanislav Kinsburskii <skinsburskii@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
@@ -77,12 +77,12 @@ Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
 	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v8 5/8] drm/nouveau: Use
- hmm_range_fault_unlocked_timeout() for SVM faults
-Message-ID: <alG1k3JsoywE2CBM@skinsburskii>
+Subject: Re: [PATCH v8 7/8] accel/amdxdna: Use
+ hmm_range_fault_unlocked_timeout() for range population
+Message-ID: <alG2TldWdL8Ez8Dq@skinsburskii>
 References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
- <178371881847.900500.8789369230260725500.stgit@skinsburskii>
- <20260710151222.ddb35eab9c81a8720491464a@linux-foundation.org>
+ <178371883276.900500.12789147320642521200.stgit@skinsburskii>
+ <20260710151228.ca22e127b93ec5c6d591fb5f@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,31 +91,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260710151222.ddb35eab9c81a8720491464a@linux-foundation.org>
+In-Reply-To: <20260710151228.ca22e127b93ec5c6d591fb5f@linux-foundation.org>
 
-On Fri, Jul 10, 2026 at 03:12:22PM -0700, Andrew Morton wrote:
-> On Fri, 10 Jul 2026 14:26:58 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+On Fri, Jul 10, 2026 at 03:12:28PM -0700, Andrew Morton wrote:
+> On Fri, 10 Jul 2026 14:27:12 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 > 
-> > @@ -683,15 +683,11 @@ static int nouveau_range_fault(struct nouveau_svmm *svmm,
-> >  			goto out;
-> >  		}
+> > --- a/drivers/accel/amdxdna/aie2_ctx.c
+> > +++ b/drivers/accel/amdxdna/aie2_ctx.c
+> > @@ -1061,22 +1061,11 @@ static int aie2_populate_range(struct amdxdna_gem_obj *abo)
+> >  		return -EFAULT;
+> >  	}
 > >  
-> > -		range.notifier_seq = mmu_interval_read_begin(range.notifier);
-> > -		mmap_read_lock(mm);
-> > -		ret = hmm_range_fault(&range);
-> > -		mmap_read_unlock(mm);
-> > -		if (ret) {
-> > -			if (ret == -EBUSY)
-> > -				continue;
-> > +		ret = hmm_range_fault_unlocked_timeout(&range,
-> > +						       max(timeout - jiffies,
-> > +							   1L));
+> > -	mapp->range.notifier_seq = mmu_interval_read_begin(&mapp->notifier);
+> > -	mmap_read_lock(mm);
+> > -	ret = hmm_range_fault(&mapp->range);
+> > -	mmap_read_unlock(mm);
+> > +	ret = hmm_range_fault_unlocked_timeout(&mapp->range,
+> > +			max_t(long, timeout - jiffies, 1));
 > 
-> "1UL" here?  I'd have expected min() to warn, as it likes to do.
+> max(timeout - jiffies, 1UL)?
 
-I'm not sure... The "timeout - jiffies" can become negative.
-Won't 1UL convert both of them to "UL" and thus make the comparison
-overflow?
+"ma" for sure, thank you.
+I have the same quesitong here: will "max(timeout - jiffies, 1UL)"
+handle negative "timeout - jiffies" values correctly?
 
 Thanks,
 Stanislav
