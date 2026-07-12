@@ -1,102 +1,165 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C1B343D9D
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 16:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517471A239A;
+	Sun, 12 Jul 2026 16:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783874937; cv=none; b=dK8/nCaen028RACetNL5m+0vQLQa0pzdCyVgisRqpVYNTaLSd3L4JFAIwnFn1rYuVUIoMZ4YImpKo74O2nqilVdmAgI5h+a+5eDh9T4ciOeKv42uomzWZZZ4B9Bf6DS3WHWe1D82c2XrzHEOxE37mMo+CEJLR80FizUNFQ+kz5c=
+	t=1783875551; cv=none; b=ElcNqiuAHm+iNRM5xxsn46J/mIgtECp/bMaHdC/ff8+GkuCdPyxNtEquNuyUxl3va7+1v7Rz620r3dydJqJzihSnXFwL2t7XaopO9NndUaxyupxBe1jgQL/KKZ/LmFV8shqAbgzXfepubMAjkhG15rbiVHrgmjLRjK5RkUR3AwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783874937; c=relaxed/simple;
-	bh=Qt4v/dZ/atl2InBXlF6Qg0mek0k2Z3U8e5b5n5VxTGE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YC68S0JpSPCoU+scdqGqDbdsS2A6v3K6bkZwnYkZz51+ZoW0xFFhq3kYrwLufMw+T7iUW6dvR/t6NcWKA/rjS6NTCJIZ5Uv0aSb37a5+d5fqztmAJ53hyOM+duxsAKFRWYl5AIKVxtSICeTE4x8xhro8JlNqJPQOOZeQgqk95OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=exA3xckI; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1783875551; c=relaxed/simple;
+	bh=mSp7DKzuJHsvVxwokX8VtjfogrcPbIQ5e7AR3Y3BA7E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=ZhCg6gYZ94Myk1353wtaoLBKleFou4YjyrmBxEW4Llxim1Y5jDzKAeorPThWWnmUU3qmM0I0dhStTKer1G3XiU9LLxlg4gr/8mUVtX257O6Ob5ocSe/LCFKjIJDbLz+K6w+kZYFd+Zx4ez0CNtEmSi6VPTpY8bfwg2vbw6kIs7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jf3Nb94H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="exA3xckI"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-51c0006ea8eso17023191cf.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 09:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783874935; x=1784479735; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jgHRZ2oQs3owZnO2hrgFCKNrpUU4ppVoDgnNpxTspCQ=;
-        b=exA3xckI/kwOvLjpG0265GkWKjFMTEExa03ZRLlisFWFPJgMrfb5xM0MRliv681WIU
-         tfpUoFytMgOC8WbEMQh1al1W3ZRT7YGNy/QLrDnOBOZ7+CL1ZoLPKL94lwd9+/UXGwIq
-         cOn0qemgQaiKz4Vj6MyKnebBkRhnCqJcgQK8qQOT1TWGlG/kwEpRt/D2G822FlmIU+Ys
-         HLTGYpsrY3LOn6Ykla0pbYSNnc5jAVspIrzBR+c0128z1wn2Ay/GoSmE1j9wW4VWVFF7
-         XjnjDLMUPUpDE4yGm+7pr0ho3L6WL05aoXXC1RSbzo9DnQgTqZwhB6uvpugxUuhLbnaq
-         1RNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783874935; x=1784479735;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jgHRZ2oQs3owZnO2hrgFCKNrpUU4ppVoDgnNpxTspCQ=;
-        b=RzrbijGPfEsKDaxspyP8ctVJVcMo5vAB9X8LoMY1J7KY7dWBXEt9HH/TfsoKJLHi/v
-         sL1QkH+a1TcJwW7qjufut8svtc8Pc4iWvxe8WxZe6aTiSCwxg+WWEAKRX11ElvhImq3/
-         wHw5RUfmzsNpkNMVNJmDT+K+tLjYUf3eL01Lj1pLCzYdImf86bC9iy0ho8Qq9ImV2oyb
-         VGpkEwIfcyraw5M5RNgxs55wKaHIjtNT74IzElOdjKEV1/AwugU+aKRcP4Zk4NRjvIwl
-         PDy9vEEmIUyHXYdEHIphaZ3jHSRh8RnBC9imBT2qGcUf8E6pjnXyuh5aME+/ePBJe2tu
-         jZmA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq7EZdYT4DzNhdjn3BBVi++CrljCbvl7ecclwGZrM3OTMD90uKBem0cGM8URqoNAwjji4CO6gGPQZcbaIRsNTs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkyL4KsIg4lCeYBriZbGwRGvEKmmYw9His5/i0vQtx/J7z7ABm
-	bsohnVF/B+yL/Ea+TO7LVb9PxUggVfNNIOVHYvFYqDb1LxCtdWWqd4xXN/wiT23NSZo=
-X-Gm-Gg: AfdE7cmxdpf3oCjfOEtGzVju7p5Vv+xLEZDlnSxmHszIi2H+99uRlKaCLd6HrANft2C
-	eO4V0AMfKwG40CGH2Ncb8xl0mb1GyudfMEBSdxW2FOQb90snO159uAZjuPxpzqzoFvsvplWm7rg
-	zHuyGtyumyVMu6KBS2uJOkTgBFQleq/rqiSkKy2OBZ+aWCWcxK0k4AbKb38w3GPLnouRFXc1Xgm
-	1V/Tm5VVAWvRBWwzKctR3Kwxpq79UMBO53DaqMerpfrFfznu++liKESuXSaSpLaePOk7bdKLRtR
-	MftEpSFQC3LsLzx4n6mcSzNtgu63XhOYZDbRoBkGsb/oecwtMX/sh1CVHQJA+atiOQjw80BYvXT
-	oRNvVO82tGlu0lFY/nGjZMNHYFezV+89q192eyjQFe5anAug/iiuSQpKq8WRikLmNp/QJzQsg+s
-	5A2tr4bbBOF+77Rxbi7sxDKvrd5jgEC4LP6QPYBmtBPx37HTkmivZynpUqEzxa/bLMHHQD
-X-Received: by 2002:a05:622a:7281:b0:51b:f98f:ea5e with SMTP id d75a77b69052e-51cc9d5d02amr30044441cf.22.1783874935089;
-        Sun, 12 Jul 2026 09:48:55 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caae20a40sm68575071cf.15.2026.07.12.09.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 09:48:53 -0700 (PDT)
-Date: Sun, 12 Jul 2026 12:48:49 -0400
-From: Gregory Price <gourry@gourry.net>
-To: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com,
-	david@kernel.org, osalvador@suse.de, gregkh@linuxfoundation.org,
-	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org,
-	vishal.l.verma@intel.com, dave.jiang@intel.com,
-	alison.schofield@intel.com, akpm@linux-foundation.org,
-	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	shuah@kernel.org
-Subject: Re: [PATCH v7 00/10] dax/kmem: atomic whole-device hotplug via sysfs
-Message-ID: <alPFcfjlzSHYk3jA@gourry-fedora-PF4VCD3F>
-References: <20260712154505.3564379-1-gourry@gourry.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jf3Nb94H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE911F000E9;
+	Sun, 12 Jul 2026 16:59:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783875549;
+	bh=e1dmvE3Tlm+yvRV2mRiPOlbKn5bOWrgkA2i+qs4+eRI=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To;
+	b=jf3Nb94HJ4+X2dF/jEl7zUQEbDNo6GB9Tq03LorRZdwonP0lHMsBmz3Fv6fCRsLCV
+	 IDeCKkR6U0e7lufP/J2n4TC8Mqx+Wm8uN+PyESWtp5vhrevY03vekUe5ycBqJeI7n0
+	 waLcZlBx0eTHEafLCAI1lDs2aFxujINJhszYa+rOE5gRmPwREiSCymY3xYbGcWSEVU
+	 KJ70Isq7mj0rqrnyI/2FxiZ9pRbSvUhhz+pRGn0MVbEitS+O7PekvZGFR03ywwkgZk
+	 kybT94jnuKTVL1MXyJPj+6xV4H4QKn6Uv8w2rBiJW/6FH/GawOB0+r2hqUh65yADft
+	 P/Cza+VB4TBuA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260712154505.3564379-1-gourry@gourry.net>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 12 Jul 2026 18:59:04 +0200
+Message-Id: <DJWR3RYAWYAI.LQC41HSN2I94@kernel.org>
+Subject: Re: [PATCH v3 0/5] software node: provide support for fw_devlink
+Cc: "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
+ <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
+ "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Sakari Ailus"
+ <sakari.ailus@linux.intel.com>, "Bartosz Golaszewski" <brgl@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Linus Walleij" <linusw@kernel.org>, "Dmitry Torokhov"
+ <dmitry.torokhov@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <linux-acpi@vger.kernel.org>, <driver-core@lists.linux.dev>,
+ <linux-gpio@vger.kernel.org>
+To: "Bartosz Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260710-swnode-fw-devlink-v3-0-993f31874e40@oss.qualcomm.com>
+In-Reply-To: <20260710-swnode-fw-devlink-v3-0-993f31874e40@oss.qualcomm.com>
 
-On Sun, Jul 12, 2026 at 11:44:54AM -0400, Gregory Price wrote:
-> The dax kmem driver onlines memory during probe using the system
-> default policy, with no atomic control for the state of an entire
-> region at runtime - only by toggling individual memory blocks.
-> 
+On Fri Jul 10, 2026 at 3:51 PM CEST, Bartosz Golaszewski wrote:
+> Bartosz Golaszewski (5):
+>       kunit: provide a set of fwnode-oriented helpers
+>       software node: add fw_devlink support
+>       software node: add kunit tests for fw_devlink support
+>       MAINTAINERS: add myself as reviewer of software node support
+>       gpio: kunit: add test cases verifying swnode devlink support
 
-Took a look at Sashiko reviews.
+Overall looks good, but I think the two issues pointed out by Sashiko are v=
+alid.
+In addition, I also found a memory leak in the gpiolib kunit test:
 
-All are either false-positive, pre-existing issues on isolated patches
-that are actually resolved by later patches, or something we previously
-agreed on (WARN/pass in phase 2 of offline_and_remove_memory_ranges).
+	unreferenced object 0xffff88810296b2c0 (size 32):
+	  comm "kunit_try_catch", pid 1096, jiffies 4294694235
+	  hex dump (first 32 bytes):
+	    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+	    66 6f 6f 00 00 00 00 00 00 00 00 00 00 00 00 00  foo.............
+	  backtrace (crc a62f59c2):
+	    __kmalloc_noprof+0x216/0x510
+	    desc_set_label+0x46/0xc0
+	    gpiod_request_commit+0xd5/0x140
+	    gpiod_request+0x49/0x170
+	    gpiod_find_and_request+0x2be/0x520
+	    gpiod_get_index+0x56/0x70
+	    devm_gpiod_get+0x1b/0x90
+	    0xffffffffc0401ff8
+	    platform_probe+0x58/0x90
+	    really_probe+0x1bc/0x490
+	    __driver_probe_device+0xa2/0x140
+	    driver_probe_device+0x1e/0x110
+	    __device_attach_driver+0xc2/0x140
+	    bus_for_each_drv+0x117/0x170
+	    __device_attach+0xd5/0x1c0
+	    device_initial_probe+0x34/0x50
 
-So series is clean as-is.
+I came up with the following diff to resolve those issues.
 
-~Gregory
+diff --git a/drivers/base/test/swnode-devlink-test.c b/drivers/base/test/sw=
+node-devlink-test.c
+index 6f59f13214fc..143b9c4047a0 100644
+--- a/drivers/base/test/swnode-devlink-test.c
++++ b/drivers/base/test/swnode-devlink-test.c
+@@ -17,6 +17,10 @@
+ #include <kunit/platform_device.h>
+ #include <kunit/test.h>
+
++KUNIT_DEFINE_ACTION_WRAPPER(device_remove_software_node_wrapper,
++                           device_remove_software_node,
++                           struct device *);
++
+ static int swnode_count_suppliers(struct fwnode_handle *fwnode)
+ {
+        struct fwnode_link *link;
+@@ -294,6 +298,9 @@ static void swnode_devlink_test_probe_order(struct kuni=
+t *test)
+
+        ret =3D device_add_software_node(&supplier->dev, &supplier_swnode);
+        KUNIT_ASSERT_EQ(test, ret, 0);
++       ret =3D kunit_add_action_or_reset(test, device_remove_software_node=
+_wrapper,
++                                       &supplier->dev);
++       KUNIT_ASSERT_EQ(test, ret, 0);
+        ret =3D device_create_managed_software_node(&consumer->dev,
+                                                  consumer_props, NULL);
+        KUNIT_ASSERT_EQ(test, ret, 0);
+@@ -313,8 +320,6 @@ static void swnode_devlink_test_probe_order(struct kuni=
+t *test)
+
+        /* Tear down the consumer (and its device link) before the supplier=
+. */
+        kunit_platform_device_unregister(test, consumer);
+-
+-       device_remove_software_node(&supplier->dev);
+ }
+
+ static struct kunit_case swnode_test_cases[] =3D {
+diff --git a/drivers/gpio/gpiolib-kunit.c b/drivers/gpio/gpiolib-kunit.c
+index ad961cf97aee..7798f8a8e602 100644
+--- a/drivers/gpio/gpiolib-kunit.c
++++ b/drivers/gpio/gpiolib-kunit.c
+@@ -449,6 +449,9 @@ static void gpio_swnode_probe_defer_on_unregistered(str=
+uct kunit *test)
+
+        pdata =3D dev_get_platdata(&cons->dev);
+        KUNIT_ASSERT_EQ(test, pdata->gpio_err, 0);
++
++       /* Tear down the consumer before the provider to free the GPIO. */
++       kunit_platform_device_unregister(test, cons);
+ }
+
+ static int gpio_swnode_probe_order_test_init(struct kunit *test)
+@@ -614,9 +617,17 @@ static struct kunit_case gpio_unbind_with_consumers_te=
+sts[] =3D {
+        { }
+ };
+
++static int gpio_unbind_test_init(struct kunit *test)
++{
++       device_link_wait_removal();
++
++       return 0;
++}
++
+ static struct kunit_suite gpio_unbind_with_consumers_test_suite =3D {
+        .name =3D "gpio-unbind-with-consumers",
+        .test_cases =3D gpio_unbind_with_consumers_tests,
++       .init =3D gpio_unbind_test_init,
+ };
+
+ kunit_test_suites(
