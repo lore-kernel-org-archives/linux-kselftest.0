@@ -1,65 +1,65 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838E2E9EC7
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 13:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385943A5E97
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 13:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783862367; cv=none; b=X4Z0N2ZBxS/eJ4ZkPVzjO75DSYHMm6iKgRZCgctes0Ne+t8BDybneNES+uruzh5gD8Fa2kSfqVpikfYkDwGasw3tWtiqYel8U0qLbkyzC0eTqCq34MLIlhshruxh157n+lNJkSAAzxovMqXJvb0GieX0tpgsM3ZnLyqdKQcNyeQ=
+	t=1783862842; cv=none; b=XpgwUwjjysw754TgVZFn/dcSWX75kyf6QjLJ159T/QVgGVI46zfS1oU5AC7ICZ4hFIfSxcEJECp19GacyNJtvTOkxFPTbkUfxGQOIz7MTF5yeBqqmVzp0GCVXD/Z9XqjftXATCXqRKMBaJUAyAy7JQTBxZart0HEsBrPxLweTBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783862367; c=relaxed/simple;
-	bh=GA2n3X3YYxv/xqLwggfAp+Psl9pqkPA1TJ/rGYjWIzA=;
+	s=arc-20240116; t=1783862842; c=relaxed/simple;
+	bh=C1OxfgN3DhSdqYDbXsPTR7ElZOA1GuCHr6TwBj4Hxbk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TOkTtC2nNXNJRFwlkEFk+meqshDbRKaaT30NLSq2/TG4gYAD4ATDv6l6+gKWQ56JWCs7EE9HI6Q/qzVE3cV3uruadmeGw90lHaDaLk2RSpa1XXRvEzjP7HsggyQy4z4QUecH4eiB6/OQ6LtEuIu+3qzZo4PXVXp22xJvEFAWD7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=kolM/bBU; arc=none smtp.client-ip=209.85.222.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=TWY4083nBvBDkPaqZ9R8TJgWzoykNC2RjYSLIC2nhKULD7TXDx/4yQ/i2uqO0A2q5QtOvyILcNrnmCgGj1AGdiLoOhdCn/cBLrwuwn+qsB0JFWC+yU82xgaOLgul8MSSHZEunPWBz8/0LtYQJCRNInk/jdxknPsJBOBrZg5CbRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=UhNOdRPP; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="kolM/bBU"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e6a434cabso126630885a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 06:19:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="UhNOdRPP"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-51c01089e8aso13164711cf.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 06:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783862364; x=1784467164; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1783862840; x=1784467640; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=39bk0iOpnnnuS6FEq1W2d71iiM95MbzJdYJU5SoGT3c=;
-        b=kolM/bBUACGSqhFuyez3cvVLN5p6Lx2CDOAkO6RcWxyxarwmE/PoVGvfqP7kMEFBfg
-         UExX0g6WcFSu743R55JHzbUR/5qC4mCVK9F00WnuAwSrvF1Kt6wI9ffK4EFEYdP5rIy2
-         FBHn/YREwkAxFMF4vwGnBUJfYo+O7xPkJFAtWsToF8VRCyg1MaF2f7W96NYy/QU8dyKD
-         PaUwgwjwBGEFNbumJ2gA3MDr09/RBzoQzobgSjw4R30PMzdVWhOSbosa+HB4WId57JxI
-         5ZHWqxYS6Y9KQYI84APA9H8qrh3yJrs8Lfbjv3XncAy4c6it9Q+N4ZzcKycMKYWnl0ch
-         h7HQ==
+        bh=uSgtWeg1aBZ0AWclvm9S4U5A86HaOMNd5qnnD7jgo3w=;
+        b=UhNOdRPPes1AjVpnpDLyHjcwmHmeTXORQ9ykz9EtNpHRcEVM8fI/I9WwlFXVfk2EAS
+         CqGEX1JwRUWzatPmuMajhwa73aspeM7Ie+NjdeLThhJNFSVNCJRbjQKwx2Jt8Eg7Tggx
+         gGT3vRGnKv0g3kTxOHB496p3h0PpwCrJ2lDQrSe851qTsG5oGZxevLZmA4RbrzPFavaT
+         F4Fb7XhpYvjvjHwPop71GutKDR2ocWAsDOnTN5Oqdagmf6o09saR/jwNFWFnXOuDC4JA
+         IKSylRfxUNcfXysZjmkpbh81XhpUEthvPEIS7jCsxwBfTyrs/ggD/3eRdZXnaPN0Bi67
+         gDKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783862364; x=1784467164;
+        d=1e100.net; s=20251104; t=1783862840; x=1784467640;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=39bk0iOpnnnuS6FEq1W2d71iiM95MbzJdYJU5SoGT3c=;
-        b=tEdc8KycWDRTthO8fU/WXL7jeNMaL49321ED8bt9yHo5S6kudxtPsMKWDvdjK+gAGr
-         xUKRfwOUx55sf0ibJq6bRusB5WjqEh2wSNswIfg8ElXHIs7pgc2MeJ14x4aO2Kysd2fT
-         U8VNLTGUUjhzpTVzTsxoWPl4/rpRepm/Y5V/FXQCTNmQGjnUiyWI+LP2G955cUtZlVNJ
-         Of4t6JuNO4tgAMQ6oNIci/mZHmHrgK4iy0jdMr7MVgLhANB/rdsOWcU/bd+Mh7IMSNyn
-         X6CDgS/7NRSSHw3wdqP6JxfKbMxNesEyQLYu2UbBPE5ajP+yw8p2KQI/u5OPtpJwGRAP
-         M3wQ==
-X-Forwarded-Encrypted: i=1; AHgh+RolP79e7ffB2mJOcQywIgH4lXtn1AgVFjoFqEVZFy8AN02I8rVZU8tVvsKxnwecFMNhl+uDdDfqGlNHwlEqfpQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXO4cmAc1c8qCw+GX3Gy9hjK29eNtuurwH2/50Nafv28+i6QkF
-	1cpJrq690zoVjTtag3+BpJX1vBvby1+7umoyQLt05i/xg7pgemwXCJdio4idbrIo2qk=
-X-Gm-Gg: AfdE7cmbl8z7SrXAZlNNzo3zqsm+TFVtzFgcLlYRqG6GsGmt7po4tVOAKtLmrhdz9Oj
-	ix5DRJO3bvN6OCcRwR12YQaYt7LxJdiN9JNCccRcV7MVymizS+W+8CFADW/rh610dF3dBmE5zFk
-	9vzyptgMAlJERV6gWPT1Kc46FpAEpu5fft51Rx/DX/qh5LM/PYpxjq7Xvbgeo6N7dBqRL3jTGJc
-	p8BJiqvm7gwyA6KkZ9q9DRAfP3nKleedWluisA7mJflz1/RzMczO7BNm0qzyK/gTAExSL5PMeQT
-	ZpFrcd1whMt3oN6ctXPuiSNvMKDaQDNaPfS6tTIGsbLydEUmlWCVIcdqgsuCSAxFyFCRzHa0NLh
-	TvjJGfdEiq27diZxt5lD3/uLpJlNARFZCMbDQQEjruZIZyOJAr/eLpAVfI5xYBNvlDF61dcgx2a
-	vk3+RlfnFtnNbdQJS9FCpwBhFMW14ltmcJI7hhRZsPgiPjAx3KiJNa0l76wYpQeUaxz6+5
-X-Received: by 2002:a05:620a:28cb:b0:92e:94a7:16e8 with SMTP id af79cd13be357-92ef2b354f5mr605721685a.15.1783862364130;
-        Sun, 12 Jul 2026 06:19:24 -0700 (PDT)
+        bh=uSgtWeg1aBZ0AWclvm9S4U5A86HaOMNd5qnnD7jgo3w=;
+        b=KaFglJzZQG/wiTd1Z8AkXLJ5gMek1NJFx2NTlPSFrZZLQ3seAsDn4PvQEB5gspv53J
+         bYuL+PrsHJUUKV09WlItZm4Y+kHTMOktM/LXUjZjt1i2LzMo7Invm2r15Z0O/9H0FNzQ
+         /morUVrCh4iMS1c/agNRelIims7und1FeTSdwCJOBymkEpYg3JUk7Cv936FvMq+DFZr2
+         RXeBseKcAWWXzY+mBBLRRD53URavP7tnbOpuCeBvKkw6sHjOae4IyHX8uTnEoipGEdz+
+         2ViI0F54NWexdznVHoWBwE7VJfLRLHsw8i+NzrEoRQkWAtXQEp2S+uxTHM69zylK7KHc
+         Sb8Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqZWzeM3RtWkOi/lSYqYTEdOwbToyBFPNSAOHzVl4P05nkasejp9yH2dt+sr+gWsDuhgRiUhkjhctlBH3T/p7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAF4wOOZRQZo3MKrGI85u8puUfSQW3vjHXMHMJp7BkhWxOefXF
+	Mof0LwNVIzk5YM/7X/bnqjL/ApRziQsApJkVTzNhTncyFaw4WjP8rqabPY6hCeD/y6k=
+X-Gm-Gg: AfdE7cmWWHLhC9NlFBUpQ3UJacQbJybZiZ8lSoYsG9R5tP9Sclk2ECEKcBKJD6N6cfr
+	y7cVLyHeM3xcC9/adeCGwe83deeF+72HhRKsfwj2sejfAIir4kG9r0Eg3PZ8uXqu0GYGdK1b8sq
+	WWS6tylN/kIUIVOgVyY76bDqA5xHJeFaGCR9g+8kB6L1CquZFxsEeIh8b9Hf0+xKCF1IFFf7V+y
+	BGcEZRBI8C1zzrG1Mmf93lKjbi7XroYy9h/sQlQfOZf+L1pWyCVIOAzeH3YUL5Pupms+5TudcCO
+	O5Zn0Iqk6Xauk49RcCREAm77NSVVNwxHjyJLSFOau9BZKD45dI1y/f9lVWIy4UmGjXL7lgT+UZC
+	mCDzM/U4tf8qTZ2KhE9acv/YTz6ZHfGAwAbc2Sf9BCmsOHFYnQsa6w82m3p8USn689gzd0A89M/
+	fuC52q6RRYG3ZaWhBdJ1tIitPWNaUbma9FVtdLnmafuNL/yIWt1oAefyTTdf1SepsW5MsL
+X-Received: by 2002:ac8:5a47:0:b0:51a:8c99:1f18 with SMTP id d75a77b69052e-51cbf281a2bmr56325921cf.71.1783862840152;
+        Sun, 12 Jul 2026 06:27:20 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5b4b38dsm900591885a.10.2026.07.12.06.19.22
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caab6e9f4sm64833651cf.2.2026.07.12.06.27.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 06:19:23 -0700 (PDT)
-Date: Sun, 12 Jul 2026 09:19:18 -0400
+        Sun, 12 Jul 2026 06:27:19 -0700 (PDT)
+Date: Sun, 12 Jul 2026 09:27:14 -0400
 From: Gregory Price <gourry@gourry.net>
 To: "Dan Williams (nvidia)" <djbw@kernel.org>
 Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
@@ -74,7 +74,7 @@ Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
 	shuah@kernel.org, iweiny@kernel.org,
 	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
 Subject: Re: [PATCH v6 07/10] dax: plumb hotplug online_type through dax
-Message-ID: <alOUVvJCSQDO6yNn@gourry-fedora-PF4VCD3F>
+Message-ID: <alOWMnIBleLQBBke@gourry-fedora-PF4VCD3F>
 References: <20260630211842.2252800-1-gourry@gourry.net>
  <20260630211842.2252800-8-gourry@gourry.net>
  <6a5016bf71df4_3b7ee5100b3@djbw-dev.notmuch>
@@ -87,14 +87,9 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1q15GSERqnHPArbK"
-Content-Disposition: inline
-In-Reply-To: <6a51920acece6_35cf3310061@djbw-dev.notmuch>
-
-
---1q15GSERqnHPArbK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <6a51920acece6_35cf3310061@djbw-dev.notmuch>
 
 On Fri, Jul 10, 2026 at 05:44:58PM -0700, Dan Williams (nvidia) wrote:
 > Gregory Price wrote:
@@ -127,143 +122,10 @@ On Fri, Jul 10, 2026 at 05:44:58PM -0700, Dan Williams (nvidia) wrote:
 > first user arrives. If you are respinning the series and that patch
 > drops, yay. If not, oh well.
 
-if you prefer, i can add the CXL build option to this series instead of
-the follow up (attached).  The code is fully contained in DAX anyway,
-and I have it sitting off in another branch anyway.
+Oh, it took me a second, I see what you're saying better.
 
-I suppose with this, we can terminate the entire series and the first
-user that grows an opinion can add the following:
-
-cxl/cxl.h:
-    struct cxl_dax_region *cxlr_dax {
-    +   int online_type
-    };
-
-dax/cxl.c:
-   data.online_type = (cxlr_dax.online_type == DAX_ONLINE_DEFAULT) ?
-                      cxl_dax_online_type() : cxlr_dax.online_type;
+I can drop .online type and follow up with the .online_type + CXL build
+time patch as a separate series as you suggest.  Keeps this series
+clean.
 
 ~Gregory
-
---1q15GSERqnHPArbK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename=0001-dax-cxl-add-build-time-CXL-RAM-region-auto-online-po.patch
-
-From b2cb5c4f5f03dd698df97ae3db2c0207db4acd83 Mon Sep 17 00:00:00 2001
-From: Gregory Price <gourry@gourry.net>
-Date: Thu, 9 Jul 2026 19:31:28 -0700
-Subject: [PATCH] dax/cxl: add build-time CXL RAM region auto-online policy
-
-CXL devices using kmem follow the single global auto-online policy.
-
-On systems with multiple drivers using memory hotplug, this makes
-management more complex - a single special kmem device forces all
-kmem devices to be managed manually in userland.
-
-Add a build-time option to select CXL device online policy.
-
-  - System default   -> DAX_ONLINE_DEFAULT (default)
-  - Online           -> MMOP_ONLINE
-  - Online (movable) -> MMOP_ONLINE_MOVABLE
-  - Online (kernel)  -> MMOP_ONLINE_KERNEL
-  - Unplugged        -> DAX_KMEM_UNPLUGGED
-
-Default to system default to retain userland backward compatibility.
-
-Signed-off-by: Gregory Price <gourry@gourry.net>
----
- drivers/cxl/Kconfig | 41 +++++++++++++++++++++++++++++++++++++++++
- drivers/dax/cxl.c   | 15 ++++++++++++++-
- 2 files changed, 55 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-index 80aeb0d556bd7..52450225dbb11 100644
---- a/drivers/cxl/Kconfig
-+++ b/drivers/cxl/Kconfig
-@@ -212,6 +212,47 @@ config CXL_REGION
- 
- 	  If unsure say 'y'
- 
-+choice
-+	prompt "CXL Memory Hotplug Policy"
-+	depends on CXL_REGION
-+	default CXL_MEMHP_POLICY_SYSTEM_DEFAULT
-+	help
-+	  Select the online policy the CXL driver requests when a region is
-+	  hotplugged as System RAM.
-+
-+	  If unsure, select "System default".
-+
-+config CXL_MEMHP_POLICY_SYSTEM_DEFAULT
-+	bool "System default"
-+	help
-+	  Follow the system-wide memory hotplug policy.
-+
-+config CXL_MEMHP_POLICY_ONLINE
-+	bool "Online"
-+	help
-+	  Automatically online memory and let the kernel choose the zone.
-+
-+config CXL_MEMHP_POLICY_ONLINE_MOVABLE
-+	bool "Online (movable)"
-+	help
-+	  Automatically online the memory into ZONE_MOVABLE. Choose this for
-+	  memory that may need to be hotremoved later, or if you do not want
-+	  unmovable, kernel allocations to land on this memory.
-+
-+config CXL_MEMHP_POLICY_ONLINE_KERNEL
-+	bool "Online (kernel)"
-+	help
-+	  Automatically online the memory into ZONE_NORMAL. The kernel may
-+	  place unmovable allocations on this memory.
-+
-+config CXL_MEMHP_POLICY_UNPLUGGED
-+	bool "Unplugged"
-+	help
-+	  Create the dax/kmem device but add no memory at bind time.
-+	  Choose this if a userland orchestrator will manage the device.
-+
-+endchoice
-+
- config CXL_REGION_INVALIDATION_TEST
- 	bool "CXL: Region Cache Management Bypass (TEST)"
- 	depends on CXL_REGION
-diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-index 1a7ec62122134..15f70d578c22b 100644
---- a/drivers/dax/cxl.c
-+++ b/drivers/dax/cxl.c
-@@ -6,6 +6,19 @@
- #include "../cxl/cxl.h"
- #include "bus.h"
- 
-+static int cxl_dax_online_type(void)
-+{
-+	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_UNPLUGGED))
-+		return DAX_KMEM_UNPLUGGED;
-+	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE))
-+		return MMOP_ONLINE;
-+	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE_MOVABLE))
-+		return MMOP_ONLINE_MOVABLE;
-+	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE_KERNEL))
-+		return MMOP_ONLINE_KERNEL;
-+	return DAX_ONLINE_DEFAULT;
-+}
-+
- static int cxl_dax_region_probe(struct device *dev)
- {
- 	struct cxl_dax_region *cxlr_dax = to_cxl_dax_region(dev);
-@@ -27,7 +40,7 @@ static int cxl_dax_region_probe(struct device *dev)
- 		.id = -1,
- 		.size = range_len(&cxlr_dax->hpa_range),
- 		.memmap_on_memory = true,
--		.online_type = DAX_ONLINE_DEFAULT,
-+		.online_type = cxl_dax_online_type(),
- 	};
- 
- 	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
--- 
-2.53.0-Meta
-
-
---1q15GSERqnHPArbK--
