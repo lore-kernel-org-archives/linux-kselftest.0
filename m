@@ -1,172 +1,269 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D4AE56A;
-	Sun, 12 Jul 2026 13:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8838E2E9EC7
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 13:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783862144; cv=none; b=PI/GVTtH93zRZJYfmlgPE/IPYyeQAfSEW/SpUcD4YS6BlFV/G+qsru23QTHFqEjmRkNeAbTGMKDyDZjKgLaxayhsahR42tTb6Zu5Eu2KBJcWXyLBiJ99tS9bTMy4JyJjfdWNfcGMNXBrSnGj3gv95aGKwUyOyVEyoadVd8QGGYA=
+	t=1783862367; cv=none; b=X4Z0N2ZBxS/eJ4ZkPVzjO75DSYHMm6iKgRZCgctes0Ne+t8BDybneNES+uruzh5gD8Fa2kSfqVpikfYkDwGasw3tWtiqYel8U0qLbkyzC0eTqCq34MLIlhshruxh157n+lNJkSAAzxovMqXJvb0GieX0tpgsM3ZnLyqdKQcNyeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783862144; c=relaxed/simple;
-	bh=Nh88LM8tcn4ASu2ZHG0sNKD7t6K3lGnx5oaEMxt0uO8=;
+	s=arc-20240116; t=1783862367; c=relaxed/simple;
+	bh=GA2n3X3YYxv/xqLwggfAp+Psl9pqkPA1TJ/rGYjWIzA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a6+aNsdaNJRfyXo5YywUGhi45NcZbY6n8OQuGXn1HWQWzv5rotvomX4fJxhKzNf2t0ZDaQtIrXoERY8tu7gazfJpZtsxUtcHr6ADLOqdWXHCqrB68BuKiVX3aZnnU9j7n5ExpLul4e3cTVcON1q/bf2s8jXIPFUM6FsT9XoaC9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNEtcsuL; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=TOkTtC2nNXNJRFwlkEFk+meqshDbRKaaT30NLSq2/TG4gYAD4ATDv6l6+gKWQ56JWCs7EE9HI6Q/qzVE3cV3uruadmeGw90lHaDaLk2RSpa1XXRvEzjP7HsggyQy4z4QUecH4eiB6/OQ6LtEuIu+3qzZo4PXVXp22xJvEFAWD7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=kolM/bBU; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNEtcsuL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923901F000E9;
-	Sun, 12 Jul 2026 13:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783862142;
-	bh=Nh88LM8tcn4ASu2ZHG0sNKD7t6K3lGnx5oaEMxt0uO8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VNEtcsuLTmU2ucIIDm9TU0aOrgLG0PmCJHk9PDUon1AljI1F9FSR9LpQDVRUf+7qk
-	 mgoU55c86qZCVDWkmdFQ8EMVU9zzS+lyg39dHwDfuEt0lyiZnIZN1ln2xyKpgaenGB
-	 1Y2727IZNQLM6VZGXxCQ61q4lq4S7Lhw8TJAPrzGVverjXFvff/WoZBPjKCiqSd8AB
-	 PzO2NVD8dVg2RkiBjK3Ps9x/u8HE9LkND7+WE21L/Zzx5p2saUMs7W5bdC2yyL5AyN
-	 QfRmoMiFqPmlhSDsF1SJs8Fa3LmWQlgD+YMkIHm2TPCdqKy1fM9X/zs/nekbo1cyxa
-	 9RoBKqvGPRffw==
-Date: Sun, 12 Jul 2026 14:15:36 +0100
-From: Conor Dooley <conor@kernel.org>
-To: "Ousherovitch, Alex" <aousherovitch@rambus.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	"Krishnamoorthy, Saravanakrishnan" <skrishnamoorthy@rambus.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
-	Rob Herring <robh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"Wittenauer, Joel" <Joel.Wittenauer@cryptography.com>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"Nguyen, Thi" <thin@rambus.com>
-Subject: Re: [PATCH v2 01/19] dt-bindings: crypto: add Rambus CryptoManager
- Hub
-Message-ID: <20260712-washable-clapping-5dfb79d1bdef@spud>
-References: <20260709203037.1884436-1-skrishnamoorthy@rambus.com>
- <20260709203037.1884436-2-skrishnamoorthy@rambus.com>
- <20260710-siding-unmatched-5e066fbe4c01@wendy>
- <SA3PR04MB9001E7DC9B2D4788EDCE2390D7FD2@SA3PR04MB9001.namprd04.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="kolM/bBU"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92e6a434cabso126630885a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 06:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1783862364; x=1784467164; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=39bk0iOpnnnuS6FEq1W2d71iiM95MbzJdYJU5SoGT3c=;
+        b=kolM/bBUACGSqhFuyez3cvVLN5p6Lx2CDOAkO6RcWxyxarwmE/PoVGvfqP7kMEFBfg
+         UExX0g6WcFSu743R55JHzbUR/5qC4mCVK9F00WnuAwSrvF1Kt6wI9ffK4EFEYdP5rIy2
+         FBHn/YREwkAxFMF4vwGnBUJfYo+O7xPkJFAtWsToF8VRCyg1MaF2f7W96NYy/QU8dyKD
+         PaUwgwjwBGEFNbumJ2gA3MDr09/RBzoQzobgSjw4R30PMzdVWhOSbosa+HB4WId57JxI
+         5ZHWqxYS6Y9KQYI84APA9H8qrh3yJrs8Lfbjv3XncAy4c6it9Q+N4ZzcKycMKYWnl0ch
+         h7HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783862364; x=1784467164;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=39bk0iOpnnnuS6FEq1W2d71iiM95MbzJdYJU5SoGT3c=;
+        b=tEdc8KycWDRTthO8fU/WXL7jeNMaL49321ED8bt9yHo5S6kudxtPsMKWDvdjK+gAGr
+         xUKRfwOUx55sf0ibJq6bRusB5WjqEh2wSNswIfg8ElXHIs7pgc2MeJ14x4aO2Kysd2fT
+         U8VNLTGUUjhzpTVzTsxoWPl4/rpRepm/Y5V/FXQCTNmQGjnUiyWI+LP2G955cUtZlVNJ
+         Of4t6JuNO4tgAMQ6oNIci/mZHmHrgK4iy0jdMr7MVgLhANB/rdsOWcU/bd+Mh7IMSNyn
+         X6CDgS/7NRSSHw3wdqP6JxfKbMxNesEyQLYu2UbBPE5ajP+yw8p2KQI/u5OPtpJwGRAP
+         M3wQ==
+X-Forwarded-Encrypted: i=1; AHgh+RolP79e7ffB2mJOcQywIgH4lXtn1AgVFjoFqEVZFy8AN02I8rVZU8tVvsKxnwecFMNhl+uDdDfqGlNHwlEqfpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXO4cmAc1c8qCw+GX3Gy9hjK29eNtuurwH2/50Nafv28+i6QkF
+	1cpJrq690zoVjTtag3+BpJX1vBvby1+7umoyQLt05i/xg7pgemwXCJdio4idbrIo2qk=
+X-Gm-Gg: AfdE7cmbl8z7SrXAZlNNzo3zqsm+TFVtzFgcLlYRqG6GsGmt7po4tVOAKtLmrhdz9Oj
+	ix5DRJO3bvN6OCcRwR12YQaYt7LxJdiN9JNCccRcV7MVymizS+W+8CFADW/rh610dF3dBmE5zFk
+	9vzyptgMAlJERV6gWPT1Kc46FpAEpu5fft51Rx/DX/qh5LM/PYpxjq7Xvbgeo6N7dBqRL3jTGJc
+	p8BJiqvm7gwyA6KkZ9q9DRAfP3nKleedWluisA7mJflz1/RzMczO7BNm0qzyK/gTAExSL5PMeQT
+	ZpFrcd1whMt3oN6ctXPuiSNvMKDaQDNaPfS6tTIGsbLydEUmlWCVIcdqgsuCSAxFyFCRzHa0NLh
+	TvjJGfdEiq27diZxt5lD3/uLpJlNARFZCMbDQQEjruZIZyOJAr/eLpAVfI5xYBNvlDF61dcgx2a
+	vk3+RlfnFtnNbdQJS9FCpwBhFMW14ltmcJI7hhRZsPgiPjAx3KiJNa0l76wYpQeUaxz6+5
+X-Received: by 2002:a05:620a:28cb:b0:92e:94a7:16e8 with SMTP id af79cd13be357-92ef2b354f5mr605721685a.15.1783862364130;
+        Sun, 12 Jul 2026 06:19:24 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5b4b38dsm900591885a.10.2026.07.12.06.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jul 2026 06:19:23 -0700 (PDT)
+Date: Sun, 12 Jul 2026 09:19:18 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Dan Williams (nvidia)" <djbw@kernel.org>
+Cc: linux-mm@kvack.org, nvdimm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+	driver-core@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com, david@kernel.org, osalvador@suse.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org,
+	vishal.l.verma@intel.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, akpm@linux-foundation.org,
+	ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	shuah@kernel.org, iweiny@kernel.org,
+	Smita.KoralahalliChannabasappa@amd.com, apopple@nvidia.com
+Subject: Re: [PATCH v6 07/10] dax: plumb hotplug online_type through dax
+Message-ID: <alOUVvJCSQDO6yNn@gourry-fedora-PF4VCD3F>
+References: <20260630211842.2252800-1-gourry@gourry.net>
+ <20260630211842.2252800-8-gourry@gourry.net>
+ <6a5016bf71df4_3b7ee5100b3@djbw-dev.notmuch>
+ <alAb7Q_Ku5dVRKZ7@gourry-fedora-PF4VCD3F>
+ <alBLJoM86ujz5Fg1@gourry-fedora-PF4VCD3F>
+ <6a51920acece6_35cf3310061@djbw-dev.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pwarKFrPpjCIAVeL"
+Content-Type: multipart/mixed; boundary="1q15GSERqnHPArbK"
 Content-Disposition: inline
-In-Reply-To: <SA3PR04MB9001E7DC9B2D4788EDCE2390D7FD2@SA3PR04MB9001.namprd04.prod.outlook.com>
+In-Reply-To: <6a51920acece6_35cf3310061@djbw-dev.notmuch>
 
---pwarKFrPpjCIAVeL
+
+--1q15GSERqnHPArbK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 10, 2026 at 11:14:11PM +0000, Ousherovitch, Alex wrote:
-> On Fri, Jul 10, 2026 at 1:59 AM, Conor Dooley <conor.dooley@microchip.com=
-> wrote:
->=20
-> > This company no longer exists, you should probably introduce a rambus
-> > vendor prefix instead.
+On Fri, Jul 10, 2026 at 05:44:58PM -0700, Dan Williams (nvidia) wrote:
+> Gregory Price wrote:
+> > On Thu, Jul 09, 2026 at 06:08:45PM -0400, Gregory Price wrote:
+> > > On Thu, Jul 09, 2026 at 02:46:39PM -0700, Dan Williams (nvidia) wrote:
+> > > 
+> > > This was more a matter of having the DEFAULT set consistently across
+> > > the dax driver variant probe() functions to make the behavior explicit.
+> > > I didn't want an un-set value bug to creep in here somehow.
+> > > 
+> > > Happy to drop them if you think that's unneeded.
+> > > 
+> > 
+> > Ah
+> > 
+> > Not setting the value in each of those places is equivalent to setting
+> > MMOP_OFFLINE (0), so better to just set DEFAULT regardless.
+> > 
+> > So unless you have strong feelings i will keep them as-is.
+> 
+> Right, the mild feelings are only coming from the changelog mismatch
+> which says "Oh no, device-dax drivers can not specify their online type
+> besides the default" and all this series does is keep the status quo.
+> 
+> That can be had by just having unconditional:
+> 
+>      online_type = mhp_get_default_online_type();
+> 
+> ...in dev_dax_kmem_probe() and get rid of dev_dax->online_type until the
+> first user arrives. If you are respinning the series and that patch
+> drops, yay. If not, oh well.
 
-Please fix your quoting, you need to retain context beyond what I said
-so that people who get 100s of mails per day (me) remember what it was
-in response to.
+if you prefer, i can add the CXL build option to this series instead of
+the follow up (attached).  The code is fully contained in DAX anyway,
+and I have it sitting off in another branch anyway.
 
->=20
-> Cryptography Research, Inc. does still exist -- it's now a wholly-owned
-> subsidiary of Rambus (our co-maintainer is @cryptography.com). The
-> prefix names the IP originator, which is consistent with existing
-> subsidiary/acquired-vendor prefixes in the tree (e.g. al =3D Annapurna
-> Labs under Amazon, mstar noted as acquired by MediaTek, fsl, cavium,
-> xlnx). We'd prefer to keep "cri" on that basis, and can annotate the
+I suppose with this, we can terminate the entire series and the first
+user that grows an opinion can add the following:
 
-I'm not sure that these examples actually aid your cause.
-al has been replaced by amazon, fsl is not used for new devices, new xlnx
-devices use amd (only example for now is the riscv stuff I think),
-cavium has had nothing added in donkey's years etc. mstar I don't see
-anything new in years either.
+cxl/cxl.h:
+    struct cxl_dax_region *cxlr_dax {
+    +   int online_type
+    };
 
-> description as "Cryptography Research, Inc. (a Rambus company)" to make
-> the ownership explicit. Happy to switch if you feel strongly.
->=20
-> > This property seems like it could be replaced by having a reg entry
-> > for each mailbox.
->=20
-> Agreed -- v3 will make each mailbox a subnode with its own reg window
-> and drop cri,mbx-instances.
->=20
-> > This looks like it should be deducible from a device-specific
-> > compatible. [slots/strides]
->=20
-> These aren't fixed per silicon -- they're the per-mailbox layout of the
-> VCQ rings in host DMA memory, chosen at platform integration and
-> programmed by the driver into the mailbox QUEUE/SLOTS/STRIDE registers.
-> They can differ per mailbox on the same silicon, so a compatible can't
+dax/cxl.c:
+   data.online_type = (cxlr_dax.online_type == DAX_ONLINE_DEFAULT) ?
+                      cxl_dax_online_type() : cxlr_dax.online_type;
 
-I'm not sure. Unless there's more than one instance, this definitely
-sounds like something that you can determine from the compatible.
-Generally these kinds of accelerators tend not to have multiple
-instances though, so each platform will have a different compatible,
-and the driver can store an array of mailbox configurations.
+~Gregory
+
+--1q15GSERqnHPArbK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename=0001-dax-cxl-add-build-time-CXL-RAM-region-auto-online-po.patch
+
+From b2cb5c4f5f03dd698df97ae3db2c0207db4acd83 Mon Sep 17 00:00:00 2001
+From: Gregory Price <gourry@gourry.net>
+Date: Thu, 9 Jul 2026 19:31:28 -0700
+Subject: [PATCH] dax/cxl: add build-time CXL RAM region auto-online policy
+
+CXL devices using kmem follow the single global auto-online policy.
+
+On systems with multiple drivers using memory hotplug, this makes
+management more complex - a single special kmem device forces all
+kmem devices to be managed manually in userland.
+
+Add a build-time option to select CXL device online policy.
+
+  - System default   -> DAX_ONLINE_DEFAULT (default)
+  - Online           -> MMOP_ONLINE
+  - Online (movable) -> MMOP_ONLINE_MOVABLE
+  - Online (kernel)  -> MMOP_ONLINE_KERNEL
+  - Unplugged        -> DAX_KMEM_UNPLUGGED
+
+Default to system default to retain userland backward compatibility.
+
+Signed-off-by: Gregory Price <gourry@gourry.net>
+---
+ drivers/cxl/Kconfig | 41 +++++++++++++++++++++++++++++++++++++++++
+ drivers/dax/cxl.c   | 15 ++++++++++++++-
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
+index 80aeb0d556bd7..52450225dbb11 100644
+--- a/drivers/cxl/Kconfig
++++ b/drivers/cxl/Kconfig
+@@ -212,6 +212,47 @@ config CXL_REGION
+ 
+ 	  If unsure say 'y'
+ 
++choice
++	prompt "CXL Memory Hotplug Policy"
++	depends on CXL_REGION
++	default CXL_MEMHP_POLICY_SYSTEM_DEFAULT
++	help
++	  Select the online policy the CXL driver requests when a region is
++	  hotplugged as System RAM.
++
++	  If unsure, select "System default".
++
++config CXL_MEMHP_POLICY_SYSTEM_DEFAULT
++	bool "System default"
++	help
++	  Follow the system-wide memory hotplug policy.
++
++config CXL_MEMHP_POLICY_ONLINE
++	bool "Online"
++	help
++	  Automatically online memory and let the kernel choose the zone.
++
++config CXL_MEMHP_POLICY_ONLINE_MOVABLE
++	bool "Online (movable)"
++	help
++	  Automatically online the memory into ZONE_MOVABLE. Choose this for
++	  memory that may need to be hotremoved later, or if you do not want
++	  unmovable, kernel allocations to land on this memory.
++
++config CXL_MEMHP_POLICY_ONLINE_KERNEL
++	bool "Online (kernel)"
++	help
++	  Automatically online the memory into ZONE_NORMAL. The kernel may
++	  place unmovable allocations on this memory.
++
++config CXL_MEMHP_POLICY_UNPLUGGED
++	bool "Unplugged"
++	help
++	  Create the dax/kmem device but add no memory at bind time.
++	  Choose this if a userland orchestrator will manage the device.
++
++endchoice
++
+ config CXL_REGION_INVALIDATION_TEST
+ 	bool "CXL: Region Cache Management Bypass (TEST)"
+ 	depends on CXL_REGION
+diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
+index 1a7ec62122134..15f70d578c22b 100644
+--- a/drivers/dax/cxl.c
++++ b/drivers/dax/cxl.c
+@@ -6,6 +6,19 @@
+ #include "../cxl/cxl.h"
+ #include "bus.h"
+ 
++static int cxl_dax_online_type(void)
++{
++	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_UNPLUGGED))
++		return DAX_KMEM_UNPLUGGED;
++	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE))
++		return MMOP_ONLINE;
++	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE_MOVABLE))
++		return MMOP_ONLINE_MOVABLE;
++	if (IS_ENABLED(CONFIG_CXL_MEMHP_POLICY_ONLINE_KERNEL))
++		return MMOP_ONLINE_KERNEL;
++	return DAX_ONLINE_DEFAULT;
++}
++
+ static int cxl_dax_region_probe(struct device *dev)
+ {
+ 	struct cxl_dax_region *cxlr_dax = to_cxl_dax_region(dev);
+@@ -27,7 +40,7 @@ static int cxl_dax_region_probe(struct device *dev)
+ 		.id = -1,
+ 		.size = range_len(&cxlr_dax->hpa_range),
+ 		.memmap_on_memory = true,
+-		.online_type = DAX_ONLINE_DEFAULT,
++		.online_type = cxl_dax_online_type(),
+ 	};
+ 
+ 	return PTR_ERR_OR_ZERO(devm_create_dev_dax(&data));
+-- 
+2.53.0-Meta
 
 
-> encode them. v3 will keep them as optional, defaulted properties on the
-> per-mailbox subnodes.
->=20
-> > This whole subnode thing seems like it is only required because you
-> > don't have device-specific compatibles [cores].
->=20
-> Core presence is actually discoverable at runtime from the CORE_ENABLE
-> register, so v3 will drop the per-core child nodes entirely and probe
-> for enabled cores -- no per-variant compatible needed.
-
-No, per-variant compatibles (for the devices/socs that this IP is
-integrated into) are a requirement. While it would have been handy for
-detecting capabilities, it's a requirement for other reasons:
-differences between integrations be that functional or enforcing the
-correct constraints on properties, issues only present on select
-devices, etc.
-
-On that note, I see there's no clocks or resets properties added by your
-patch. While the IP may not have a reset (although I suspect it
-probably does) there's no way it functions without a clock.
-
-Cheers,
-Conor.
-
->=20
-> > this could probably be handled via reg-names? [affinity]
->=20
-> Yes -- v3 will express affinity per mailbox (a "role" of a specific core
-> type for a dedicated mailbox, or "generic" for the round-robin pool),
-> which is the subnode analog of your reg-names idea. One caveat: this
-> cleanly covers 1:1 core-to-mailbox dedication plus a shared pool; a
-> mailbox dedicated to several specific cores would need multiple role
-> tokens.
->=20
-> Thanks -- this restructures nicely.
-
---pwarKFrPpjCIAVeL
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCalOTdAAKCRB4tDGHoIJi
-0lBLAQCfKTJZqqNJen0s99xi2ILKiuhHavFoxTEtPcq0kWgfegEAhX1S0vi0KgKV
-HVl4wR7EAY3dKcF5wQElXIiRRSMQVgM=
-=gP2T
------END PGP SIGNATURE-----
-
---pwarKFrPpjCIAVeL--
+--1q15GSERqnHPArbK--
