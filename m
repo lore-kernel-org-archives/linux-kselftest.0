@@ -1,371 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7387D33F5BE
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 15:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D9EE571;
+	Sun, 12 Jul 2026 15:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783868514; cv=none; b=BNVsFdw7/oxAVHHLU5zBwCwJmdg4hqPzLEJXxoUWwky+njvJkVnNoUc8OC7/ob/WqLujubpbHue2aCIAtCbyE8OcqgzAnOnlQB3WfiQpFWTIqYEcYxhS4u+bw1GlwSV1S1ZkiP/ME7EL+4tsmyckNLFUr4nrJpv53PbIiGMrANQ=
+	t=1783868771; cv=none; b=N1fvtkqZN4O5qPSHyf951RKfnJ1qwosbmdTAIYHlw4E1OHIokYUtMXgDu5TOdKFje/U/bG95JRII9QWqgz43K00RMJavafFBtCypo8OIYocXXx7A2+x1l+QW/e0wfd3T0UR94abdrD1B2QRA3g0HjQ8Tl9DUJ82Jl6BOoGQfhn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783868514; c=relaxed/simple;
-	bh=U3XeUnEL+rDTz+vN8wgmKNKJy9pBXpmiepr3NAb/tR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WaDUh55Ttq4qgI/cByPa0L89fTGUBh1JDolwD/7W7+9T0wfVrs8Ac3pNTwV8voj5IQX+IkTZAfWbNoDCLUcNTL1dFJRpp+WCsz/U8lIyEnyUpDAFB0bhdMD1tKjAH+mpRqSxjC+iznbmdX2WEUQ5MQm9hniY+35f4Qqy9fVijwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qhb+rhnb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783868771; c=relaxed/simple;
+	bh=VGopf73H9uqAXmAMqFk2LuaMYsb22YkF17tv/i4hBLY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VPCUxkzxP6L87Wszm++rDAZCBMHXopz5S0+dOO+4m+twl2kFqsyfurpsSzzFXkqcDrk13J8O1ZTucuibuXSdbHD96revARNWzyUg+cnLrk42ZOfhYgGIR50DV4egnz5a3EITT+7leiKzkB3HZ0PhXE6iHKLaKt92U2+Eh+zDf7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gfun3ID2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qhb+rhnb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783868506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/Qe+95+MXsZNLDf2pjnP57V9Q3yNl9VozQHNGuksZog=;
-	b=Qhb+rhnbvEMWJi1xzmxSQsGunLeVf0tKEigLlZAjlV9ByA7DcmwtCJSAEhXsfbASifSFjk
-	qOrdohOvVZHbnuBtt5xyQKsmM92cgE47YHkRbinm4rrBgtQqtx1czEiTr1sReFeBBhVFXA
-	2VU435lzpuHv3vDhiWKc0wu3Z8iGyY8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-lffXiap-NA6n2b3dfVQDXQ-1; Sun,
- 12 Jul 2026 11:01:42 -0400
-X-MC-Unique: lffXiap-NA6n2b3dfVQDXQ-1
-X-Mimecast-MFC-AGG-ID: lffXiap-NA6n2b3dfVQDXQ_1783868501
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25DCC180064A;
-	Sun, 12 Jul 2026 15:01:41 +0000 (UTC)
-Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.80.43])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 89B9F3000B50;
-	Sun, 12 Jul 2026 15:01:39 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gfun3ID2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A901F00A3A;
+	Sun, 12 Jul 2026 15:06:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783868769;
+	bh=6KslKZnUZBgY/tcRhda+JGqBK+mVKpqlAJXsgjnbxDA=;
+	h=From:To:Cc:Subject:Date;
+	b=Gfun3ID2lvmHQ++lOzVrYIndIbR9oZ6FUmsxuawM3u76hThkh1Kb6nCXQvz/E3Yo8
+	 pnEBW4vCQ3U+Ehxk2HJLFb4Euf2EdR9aTygV54QcdGF196oZo6t6uYDviRAgKj8Ri0
+	 2sG4MOCd45GtbArTzIKBwDiojMxvL9YHYIYKSCLtMkjirT1stVHvto+poeGXLMmAgu
+	 HFyeCj7kSqyOjcnUpYsCm/cLuyqKJU4cTl/aieUsnwaTrTelPzczBJa1WjrwgHvGMg
+	 /mgF5+rgeRmVJVWEOXb8G5f9P2qgmLjcZjE89z1Way+ILXtZkt94iy+kiFU6Ba/UuP
+	 e5l2kj2xK9Waw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
 	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v2 3/3] selftests/cgroup: Add test for cpuset affinity on controller disable
-Date: Sun, 12 Jul 2026 11:01:27 -0400
-Message-ID: <20260712150127.236790-4-longman@redhat.com>
-In-Reply-To: <20260712150127.236790-1-longman@redhat.com>
-References: <20260712150127.236790-1-longman@redhat.com>
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] tracing/probes: Clean up and refactor argument parser
+Date: Mon, 13 Jul 2026 00:06:05 +0900
+Message-ID: <178386876526.3174487.5142283230157728964.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-From: Michal Koutný <mkoutny@suse.com>
+Hi,
 
-Add a new selftest that exposes a bug in cpuset_attach() where thread
-CPU affinity is not properly updated when the cpuset controller is
-disabled in a threaded cgroup hierarchy.
+This series refactors and cleans up the fetcharg parser in the
+trace_probe. The main goals are to improve code readability,
+prevent kernel stack overflow by eliminating recursive function calls,
+and extend the argument string length limit to support complex BTF
+typecast expressions.
 
-The test creates a threaded cgroup hierarchy with two child cgroups
-(A and B) having different cpuset.cpus constraints:
-- Parent: cpuset.cpus=0-1
-- Child A: cpuset.cpus=0-1
-- Child B: cpuset.cpus=1 (restricted to CPU 1 only)
+Previously, parse_probe_arg() recursively called itself when parsing
+nested dereferences and typecasts. Since the kernel stack is limited,
+deep recursion is undesirable. The [5/5] eliminates the recursion
+by converting the nested argument parsing into a loop-based
+implementation utilizing a parse state stack. To prepare it, the
+[1/5] and [2/5] cleanup (decompose) the parser functions.
 
-A multithreaded process is created with threads placed in different
-cgroups. When the cpuset controller is disabled on the parent, thread
-affinities should be updated to match the parent's cpuset.
+Additionally, this series increases the maximum nesting depth from 3
+to 4, extends the argument length limit from 63 to 256 and updates the
+associated ftrace syntax error selftests.
 
-Expected behavior:
-- thread_a affinity: {0-1} before and after (unchanged)
-- thread_b affinity: {1} before, {0-1} after (expanded)
+Patches:
+- Patch 1: Decomposes parse_probe_vars() into smaller, dedicated helper 
+  functions for parsing specific variable types ($retval, $stack, etc.).
+- Patch 2: Decomposes parse_probe_arg() into static helper subroutines for 
+  handling registers, memory/symbols, and immediates.
+- Patch 3: Alphabetizes the ERRORS macros list in trace_probe.h to improve 
+  readability.
+- Patch 4: Extends MAX_ARGSTR_LEN from 63 to 256 for long BTF cast/dereference
+  arguments, and introduces MAX_COMMON_HEAD_LEN to prevent regression on match
+  head commands.
+- Patch 5: Eliminates recursion in parse_probe_arg() using a loop and a parse 
+  state stack integrated into traceprobe_parse_context. It also raises the
+  nesting limit to 4 and updates the selftest scripts.
 
-Current buggy behavior:
-- thread_b affinity remains {1} after controller disable
+Thanks,
 
-Assisted-by: Claude:claude-sonnet-4-5
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Waiman Long <longman@redhat.com>
 ---
- tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
- 1 file changed, 243 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..8b4c4a9dd78b 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#define _GNU_SOURCE
-+#include <assert.h>
- #include <linux/limits.h>
-+#include <pthread.h>
-+#include <sched.h>
- #include <signal.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -232,6 +238,242 @@ static int test_cpuset_perms_subtree(const char *root)
- 	return ret;
- }
- 
-+static int get_cpu_affinity(cpu_set_t *mask)
-+{
-+	CPU_ZERO(mask);
-+	return sched_getaffinity(0, sizeof(*mask), mask);
-+}
-+
-+static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
-+{
-+	cpu_set_t expected;
-+
-+	CPU_ZERO(&expected);
-+	assert(sizeof(mask) < CPU_SETSIZE);
-+
-+	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
-+		if ((1UL << cpu) & mask)
-+			CPU_SET(cpu, &expected);
-+
-+	return CPU_EQUAL(&expected, dst);
-+}
-+
-+enum test_phase {
-+	AFFINITY_SETUP,
-+	AFFINITY_THREAD_A_READY,
-+	AFFINITY_THREADS_READY,
-+	AFFINITY_CONTROLLER_DISABLED,
-+	AFFINITY_COMPLETE,
-+	AFFINITY_ERROR
-+};
-+
-+struct thread_args {
-+	const char *cgroup;
-+	cpu_set_t *affinity_before;
-+	cpu_set_t *affinity_after;
-+	enum test_phase ready_phase;
-+};
-+
-+static pthread_mutex_t test_mutex = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t test_cond = PTHREAD_COND_INITIALIZER;
-+static enum test_phase test_phase;
-+
-+static void *affinity_thread_fn(void *arg)
-+{
-+	struct thread_args *args = (struct thread_args *)arg;
-+
-+	if (cg_enter_current_thread(args->cgroup))
-+		goto fail;
-+
-+	if (get_cpu_affinity(args->affinity_before) != 0)
-+		goto fail;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	if (test_phase < args->ready_phase)
-+		test_phase = args->ready_phase;
-+	pthread_cond_broadcast(&test_cond);
-+
-+	while (test_phase < AFFINITY_CONTROLLER_DISABLED)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (get_cpu_affinity(args->affinity_after) != 0)
-+		goto fail;
-+
-+
-+	return NULL;
-+
-+fail:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_ERROR;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+	return NULL;
-+}
-+
-+/*
-+ * Test that disabling cpuset controller properly updates thread affinity.
-+ *
-+ * This test exposes a bug in cpuset_attach() where threads in child cgroups
-+ * don't get their affinity updated when the cpuset controller is disabled.
-+ *
-+ * Setup:
-+ * - Create parent cgroup with cpuset.cpus=0-1
-+ * - Create child A with cpuset.cpus=0-1
-+ * - Create child B with cpuset.cpus=1
-+ * - Place multithreaded process: group leader + thread_a in A, thread_b in B
-+ * - Disable cpuset controller on parent
-+ *
-+ * Expected: thread_b's affinity should expand from {1} to {0-1}
-+ * Buggy: thread_b's affinity remains {1}
-+ */
-+static int test_cpuset_affinity_on_controller_disable(const char *root)
-+{
-+	char *parent = NULL, *child_a = NULL, *child_b = NULL;
-+	pthread_t thread_a, thread_b;
-+	int thread_a_created = 0, thread_b_created = 0;
-+	cpu_set_t affinity_a_before, affinity_a_after;
-+	cpu_set_t affinity_b_before, affinity_b_after;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_affinity_test");
-+	if (!parent)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_a = cg_name(parent, "A");
-+	if (!child_a)
-+		goto cleanup;
-+	if (cg_create(child_a))
-+		goto cleanup;
-+	if (cg_write(child_a, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_b = cg_name(parent, "B");
-+	if (!child_b)
-+		goto cleanup;
-+	if (cg_create(child_b))
-+		goto cleanup;
-+	if (cg_write(child_b, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	/* Now enable cpuset controller in parent */
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	/* Set CPU affinity constraints */
-+	if (cg_write(parent, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_a, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_b, "cpuset.cpus", "1"))
-+		goto cleanup;
-+
-+	/* Move group leader (main thread) to child A */
-+	if (cg_enter_current(child_a))
-+		goto cleanup;
-+
-+	/* Create threads - they will move themselves to their respective cgroups */
-+	test_phase = AFFINITY_SETUP;
-+
-+	struct thread_args args_a = {
-+		.cgroup = child_a,
-+		.affinity_before = &affinity_a_before,
-+		.affinity_after = &affinity_a_after,
-+		.ready_phase = AFFINITY_THREAD_A_READY,
-+	};
-+	if (pthread_create(&thread_a, NULL, affinity_thread_fn, &args_a))
-+		goto cleanup;
-+	thread_a_created = 1;
-+
-+	struct thread_args args_b = {
-+		.cgroup = child_b,
-+		.affinity_before = &affinity_b_before,
-+		.affinity_after = &affinity_b_after,
-+		.ready_phase = AFFINITY_THREADS_READY,
-+	};
-+	if (pthread_create(&thread_b, NULL, affinity_thread_fn, &args_b))
-+		goto cleanup_threads;
-+	thread_b_created = 1;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	while (test_phase < AFFINITY_THREADS_READY)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+
-+	/* If a thread failed during setup, bail out */
-+	if (test_phase == AFFINITY_ERROR) {
-+		pthread_mutex_unlock(&test_mutex);
-+		goto cleanup_threads;
-+	}
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (!cpu_set_equal(&affinity_a_before, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_before, 0x2)) {
-+		ksft_print_msg("FAIL: thread_b initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	/* Disable cpuset controller - this should trigger affinity update */
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		goto cleanup_threads;
-+
-+	/* Signal threads to save their final affinity and exit */
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_CONTROLLER_DISABLED;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	pthread_join(thread_a, NULL);
-+	pthread_join(thread_b, NULL);
-+
-+	/* Verify thread affinities AFTER disabling controller */
-+	if (!cpu_set_equal(&affinity_a_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a final affinity incorrect\n");
-+		goto cleanup;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_b affinity did not expand to {0-1}\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+	goto cleanup;
-+
-+cleanup_threads:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_COMPLETE;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (thread_a_created)
-+		pthread_join(thread_a, NULL);
-+	if (thread_b_created)
-+		pthread_join(thread_b, NULL);
-+
-+cleanup:
-+	/* Move back to root before cleanup */
-+	cg_enter_current(root);
-+
-+	cg_destroy(child_b);
-+	free(child_b);
-+	cg_destroy(child_a);
-+	free(child_a);
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- 
- #define T(x) { x, #x }
- struct cpuset_test {
-@@ -241,6 +483,7 @@ struct cpuset_test {
- 	T(test_cpuset_perms_object_allow),
- 	T(test_cpuset_perms_object_deny),
- 	T(test_cpuset_perms_subtree),
-+	T(test_cpuset_affinity_on_controller_disable),
- };
- #undef T
- 
--- 
-2.55.0
+Masami Hiramatsu (5):
+      tracing/probes: Refactor parse_probe_vars()
+      tracing/probes: Refactor parse_probe_arg()
+      tracing/probes: Sort ERRORS list in trace_probe.h alphabetically
+      tracing/probes: Extend max length of argument string
+      tracing/probes: Eliminate recursion in parse_probe_arg()
 
+
+ kernel/trace/trace_fprobe.c                        |    2 
+ kernel/trace/trace_kprobe.c                        |    2 
+ kernel/trace/trace_probe.c                         |  843 ++++++++++++--------
+ kernel/trace/trace_probe.h                         |  196 +++--
+ kernel/trace/trace_uprobe.c                        |    2 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    6 
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |    4 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    6 
+ 8 files changed, 635 insertions(+), 426 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
