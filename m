@@ -1,165 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517471A239A;
-	Sun, 12 Jul 2026 16:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F4FEACD;
+	Sun, 12 Jul 2026 17:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783875551; cv=none; b=ElcNqiuAHm+iNRM5xxsn46J/mIgtECp/bMaHdC/ff8+GkuCdPyxNtEquNuyUxl3va7+1v7Rz620r3dydJqJzihSnXFwL2t7XaopO9NndUaxyupxBe1jgQL/KKZ/LmFV8shqAbgzXfepubMAjkhG15rbiVHrgmjLRjK5RkUR3AwE=
+	t=1783875820; cv=none; b=KOP5EDYOVF7kevTQJCEP6FFvVwBGGWV3c7aGO06ZyYhuFchvPrFjTng24rjf0GdCeFW3YQswkjDfbu+VgYarWbrfMiA3j6wJd2iNo2iAA9J7YRpLOQpCsE4llKeZUGb6xeUsCVDgIE4XBuJRtzGe2r6aQ2F5lHGTB/guS7vB2Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783875551; c=relaxed/simple;
-	bh=mSp7DKzuJHsvVxwokX8VtjfogrcPbIQ5e7AR3Y3BA7E=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=ZhCg6gYZ94Myk1353wtaoLBKleFou4YjyrmBxEW4Llxim1Y5jDzKAeorPThWWnmUU3qmM0I0dhStTKer1G3XiU9LLxlg4gr/8mUVtX257O6Ob5ocSe/LCFKjIJDbLz+K6w+kZYFd+Zx4ez0CNtEmSi6VPTpY8bfwg2vbw6kIs7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jf3Nb94H; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783875820; c=relaxed/simple;
+	bh=lKaWi+20BOmLoPajgqIaqRve11K4Tne/sbx0HkpztWE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ucniy+VOnDR21rA32IesgoFsrCu5a4er0GhKqmqGkODl6K1PWdDH24DG3/anUlIjoiYx5D7qplWgNDkEvbc2RXf2XpMDs+DdWQbps2LyqkApI/ZTSi/OJ1xV+cTph9xcEla7VFPBSgfZoh+RvXb2fjnjQu9C4AXWawaKXI+6bsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPADvE44; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jf3Nb94H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE911F000E9;
-	Sun, 12 Jul 2026 16:59:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPADvE44"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505A81F000E9;
+	Sun, 12 Jul 2026 17:03:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783875549;
-	bh=e1dmvE3Tlm+yvRV2mRiPOlbKn5bOWrgkA2i+qs4+eRI=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To;
-	b=jf3Nb94HJ4+X2dF/jEl7zUQEbDNo6GB9Tq03LorRZdwonP0lHMsBmz3Fv6fCRsLCV
-	 IDeCKkR6U0e7lufP/J2n4TC8Mqx+Wm8uN+PyESWtp5vhrevY03vekUe5ycBqJeI7n0
-	 waLcZlBx0eTHEafLCAI1lDs2aFxujINJhszYa+rOE5gRmPwREiSCymY3xYbGcWSEVU
-	 KJ70Isq7mj0rqrnyI/2FxiZ9pRbSvUhhz+pRGn0MVbEitS+O7PekvZGFR03ywwkgZk
-	 kybT94jnuKTVL1MXyJPj+6xV4H4QKn6Uv8w2rBiJW/6FH/GawOB0+r2hqUh65yADft
-	 P/Cza+VB4TBuA==
+	s=k20260515; t=1783875818;
+	bh=b6Hje91CDtF95cA1GOS8FiqBgZ9D0LGrk6SOQDgcIRA=;
+	h=From:To:Cc:Subject:Date;
+	b=DPADvE44OdGjcfTQ/fQBi4gUAEwzjHBOqoGlpFqaw13QV/7IKHEMRAwEgDomyjuDN
+	 Yj7OoSXF+QkhqjwJ23cWxn+yMSVUCgvdhO24kOgWUCVRaQLeEA6pE3XAbjYfQmQ5+l
+	 RSRvqAwR0TSRQhXIn1AlmiG54MAOnjGhNmXBQgFNLgrfbEqeF8FHLFLiEL7rZorx8n
+	 otDZkK2LjgPDstNoG0jQGvB5S0XW33BH57GkZicrXvT3HyR+UkTX8cbRDCKU/scJ3q
+	 IQKT7RcEdLS6yMLqpdavfBZ/0U0RubpyKG3Ra88sk3kdVMqT7+K8MVYG5U/cprbNjV
+	 AucIoElM6yn1g==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	stable@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Fernand Sieber <sieberf@amazon.com>,
+	Leonard Foerster <foersleo@amazon.de>,
+	SeongJae Park <sjpark@amazon.de>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v1.1 0/5] mm/damon: unurgent fixes for infinite loop, NULL de-ref and races
+Date: Sun, 12 Jul 2026 10:03:22 -0700
+Message-ID: <20260712170328.91144-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 12 Jul 2026 18:59:04 +0200
-Message-Id: <DJWR3RYAWYAI.LQC41HSN2I94@kernel.org>
-Subject: Re: [PATCH v3 0/5] software node: provide support for fw_devlink
-Cc: "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
- <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Andy Shevchenko"
- <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
- "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Sakari Ailus"
- <sakari.ailus@linux.intel.com>, "Bartosz Golaszewski" <brgl@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Linus Walleij" <linusw@kernel.org>, "Dmitry Torokhov"
- <dmitry.torokhov@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <linux-acpi@vger.kernel.org>, <driver-core@lists.linux.dev>,
- <linux-gpio@vger.kernel.org>
-To: "Bartosz Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260710-swnode-fw-devlink-v3-0-993f31874e40@oss.qualcomm.com>
-In-Reply-To: <20260710-swnode-fw-devlink-v3-0-993f31874e40@oss.qualcomm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Jul 10, 2026 at 3:51 PM CEST, Bartosz Golaszewski wrote:
-> Bartosz Golaszewski (5):
->       kunit: provide a set of fwnode-oriented helpers
->       software node: add fw_devlink support
->       software node: add kunit tests for fw_devlink support
->       MAINTAINERS: add myself as reviewer of software node support
->       gpio: kunit: add test cases verifying swnode devlink support
+Sashiko found a few issues in DAMON that could cause infinite loop, NULL
+dereference and monitoring results degradation.  The first two sounds
+scary but the infinite loop happens only under unreasonable user setup.
+The NULL dereference is only in a unit test.  Monitoring results
+degradation is trivial since it is only best-effort, and those happens
+from only unlikely races.  Still those are bugs that better to fix if
+possible. Fix those.
 
-Overall looks good, but I think the two issues pointed out by Sashiko are v=
-alid.
-In addition, I also found a memory leak in the gpiolib kunit test:
+Changes from RFC
+- RFC: https://lore.kernel.org/20260711180409.82093-1-sj@kernel.org
+- Rebase to mm-new.
 
-	unreferenced object 0xffff88810296b2c0 (size 32):
-	  comm "kunit_try_catch", pid 1096, jiffies 4294694235
-	  hex dump (first 32 bytes):
-	    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-	    66 6f 6f 00 00 00 00 00 00 00 00 00 00 00 00 00  foo.............
-	  backtrace (crc a62f59c2):
-	    __kmalloc_noprof+0x216/0x510
-	    desc_set_label+0x46/0xc0
-	    gpiod_request_commit+0xd5/0x140
-	    gpiod_request+0x49/0x170
-	    gpiod_find_and_request+0x2be/0x520
-	    gpiod_get_index+0x56/0x70
-	    devm_gpiod_get+0x1b/0x90
-	    0xffffffffc0401ff8
-	    platform_probe+0x58/0x90
-	    really_probe+0x1bc/0x490
-	    __driver_probe_device+0xa2/0x140
-	    driver_probe_device+0x1e/0x110
-	    __device_attach_driver+0xc2/0x140
-	    bus_for_each_drv+0x117/0x170
-	    __device_attach+0xd5/0x1c0
-	    device_initial_probe+0x34/0x50
+SJ Park (5):
+  mm/damon/core: avoid infinite kdamond_merge_regions() internal loop
+  mm/damon/tests/core-kunit: catch test failure in
+    test_merge_regions_of()
+  mm/damon/vaddr: drop last same folio access check optimization
+  mm/damon/paddr: drop last same folio access check reuse optimization
+  mm/damon/sysfs: read ops_id only once
 
-I came up with the following diff to resolve those issues.
+ mm/damon/core.c             | 13 +++++++++----
+ mm/damon/paddr.c            | 20 ++++----------------
+ mm/damon/sysfs.c            |  6 ++++--
+ mm/damon/tests/core-kunit.h |  3 +++
+ mm/damon/vaddr.c            | 26 ++++----------------------
+ 5 files changed, 24 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/base/test/swnode-devlink-test.c b/drivers/base/test/sw=
-node-devlink-test.c
-index 6f59f13214fc..143b9c4047a0 100644
---- a/drivers/base/test/swnode-devlink-test.c
-+++ b/drivers/base/test/swnode-devlink-test.c
-@@ -17,6 +17,10 @@
- #include <kunit/platform_device.h>
- #include <kunit/test.h>
 
-+KUNIT_DEFINE_ACTION_WRAPPER(device_remove_software_node_wrapper,
-+                           device_remove_software_node,
-+                           struct device *);
-+
- static int swnode_count_suppliers(struct fwnode_handle *fwnode)
- {
-        struct fwnode_link *link;
-@@ -294,6 +298,9 @@ static void swnode_devlink_test_probe_order(struct kuni=
-t *test)
-
-        ret =3D device_add_software_node(&supplier->dev, &supplier_swnode);
-        KUNIT_ASSERT_EQ(test, ret, 0);
-+       ret =3D kunit_add_action_or_reset(test, device_remove_software_node=
-_wrapper,
-+                                       &supplier->dev);
-+       KUNIT_ASSERT_EQ(test, ret, 0);
-        ret =3D device_create_managed_software_node(&consumer->dev,
-                                                  consumer_props, NULL);
-        KUNIT_ASSERT_EQ(test, ret, 0);
-@@ -313,8 +320,6 @@ static void swnode_devlink_test_probe_order(struct kuni=
-t *test)
-
-        /* Tear down the consumer (and its device link) before the supplier=
-. */
-        kunit_platform_device_unregister(test, consumer);
--
--       device_remove_software_node(&supplier->dev);
- }
-
- static struct kunit_case swnode_test_cases[] =3D {
-diff --git a/drivers/gpio/gpiolib-kunit.c b/drivers/gpio/gpiolib-kunit.c
-index ad961cf97aee..7798f8a8e602 100644
---- a/drivers/gpio/gpiolib-kunit.c
-+++ b/drivers/gpio/gpiolib-kunit.c
-@@ -449,6 +449,9 @@ static void gpio_swnode_probe_defer_on_unregistered(str=
-uct kunit *test)
-
-        pdata =3D dev_get_platdata(&cons->dev);
-        KUNIT_ASSERT_EQ(test, pdata->gpio_err, 0);
-+
-+       /* Tear down the consumer before the provider to free the GPIO. */
-+       kunit_platform_device_unregister(test, cons);
- }
-
- static int gpio_swnode_probe_order_test_init(struct kunit *test)
-@@ -614,9 +617,17 @@ static struct kunit_case gpio_unbind_with_consumers_te=
-sts[] =3D {
-        { }
- };
-
-+static int gpio_unbind_test_init(struct kunit *test)
-+{
-+       device_link_wait_removal();
-+
-+       return 0;
-+}
-+
- static struct kunit_suite gpio_unbind_with_consumers_test_suite =3D {
-        .name =3D "gpio-unbind-with-consumers",
-        .test_cases =3D gpio_unbind_with_consumers_tests,
-+       .init =3D gpio_unbind_test_init,
- };
-
- kunit_test_suites(
+base-commit: df701015aac3c13b1ecff311fda1a2ada2b9c1b2
+-- 
+2.47.3
