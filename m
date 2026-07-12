@@ -1,85 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402A1373BE4;
-	Sun, 12 Jul 2026 07:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44DD2D7DCE
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 08:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783840353; cv=none; b=fWj0Og0BYd/Hi068nBne1edfQ82vcLzlQD4gOcEed23hVPRuT8rJo9EMVUXmqKBscc8As+koZDJku/2W9COJQPcsb6AMcRIHCvSf2J1kQR7PuqIl2mKb8kaGJxVzoMWQSLOiPOUZHhxg+rGpATX3yCIdpAwYeeRusE9HrjSKw3M=
+	t=1783844330; cv=none; b=pPxmi1ihzXd534yC/BdQGzSeU878JxwoB3FSG8chctvZ/OxvnN6a5oCQPzHfWjAwraO1mCH+WctB52OwAPQ5ptLSUGb6aN00P+Bs7OGw6fgNgrBYtBc2u3AivEAyVuFqc+nImxL7yvmWMftQpC1KvrPvM/JV+q0kgpEoCBSv/sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783840353; c=relaxed/simple;
-	bh=co9Sb5QxtNPAwXjEDe/Y7fKs3jpA+dxwar7P3/WJCyI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=YtyRpekPFmaTsFw6khnP/P0DlURMoyoZFENaaUKO7I5Xj4WopMaPliCbQLnU7Ls23axsivDkZZMqCWJI84aHefjax+DyJO4GYLnZFVYn4qjSerSKvBBIQoz9kr8cPOd5MbQ+0ZtcSfb6ujovdmt38Rq/5+Mvqij5Fd3btpARTz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=En5tPSqw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783844330; c=relaxed/simple;
+	bh=C0pyjdZQVqwifoHGIzoK0dwOSIun05ofQhgr9y/iY4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsQd32jgL7yju+gBX4TN0v498nYnnEIFHlpu3qugeL0ljgY/IDDv1qvQlHjMON0ZQ/R7IgGX+xlwyYrLsEUYpCkE8eiuiNGlc5yj15x/kQxuzuwLPy+DIOPZDYVfEUjg+rO6Fj44wBD0AZyJ7xq/eJ9pSgQfSesMTtAcZLC1HjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=MEWiPyFZ; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="En5tPSqw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7FC1F000E9;
-	Sun, 12 Jul 2026 07:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1783840351;
-	bh=Tpvt6EUERrPYZS7ccCTbDt56ATJBy7ak6+GhKYojzk8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=En5tPSqw1Mre1BipmFeL1T0ps63smtlA2dNlL24BxEx+sWM2i/t5uRUJRbvS3ZUZG
-	 PPe0HZC38SnbxTFwsR8Fh+IiBOxH0MeV2SoSpL0n9nCdU+KTRiGXJ9IAXb3xUQoxQU
-	 TyqI9pwTlStRkhdoKw1kuBcAmecaRjITTXftzwN8=
-Date: Sun, 12 Jul 2026 00:12:30 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Muchun Song <songmuchun@bytedance.com>
-Cc: David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, muchun.song@linux.dev
-Subject: Re: [PATCH] selftests/mm: remove obsolete hugetlb vmemmap test
-Message-Id: <20260712001230.5c3491ee33460c98bef8c22a@linux-foundation.org>
-In-Reply-To: <20260710092427.3459121-1-songmuchun@bytedance.com>
-References: <20260710092427.3459121-1-songmuchun@bytedance.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="MEWiPyFZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=75ub
+	1ZjyI5OqaXxEVT5ISZjS26avsE+iZDfgKAY2wmI=; b=MEWiPyFZReTMXRGm7PFx
+	UAN7gc7KMbteSgPEbjknxZb0LxdTJfKcaEdeG/tgDSGFMppT27TlRwK9cwUY1kCc
+	NGonQ64FNlF1J7BLQfWDyMiRjHEG1fpQcFIxKDLz3/sm0oKMttv/KmYzxI6km0Yz
+	UOvWtRw0SbCRJXPXULRzCX2ZZ6q5iggbrmgMg2I3EDviohXYq89JBMmQc+nXx/79
+	4rYtvtbLjZGnSZa9w2HWetUNOWFkWipRA5/+dzzMxwI44Zz+Ut8xlJg3Faxhyre+
+	j3hZh7RZlcaPa8u0YCyJA1kzmB53uVHRb0nOCvVrau3FSCB7RQQpbxPumiyilfJo
+	TA==
+Received: (qmail 2160944 invoked from network); 12 Jul 2026 10:18:46 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Jul 2026 10:18:46 +0200
+X-UD-Smtp-Session: l3s3148p1@w/lmn2VWvskujnun
+Date: Sun, 12 Jul 2026 10:18:46 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Pascal EBERHARD <pascal.eberhard@se.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH v2 0/7] clk: Add support for clock nexus
+Message-ID: <alNN5qxBJ4EsB3Li@shikoro>
+References: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Fri, 10 Jul 2026 17:24:27 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
-
-> The hugetlb vmemmap selftest was added to check the old HVO
-> layout where tail vmemmap pages reused the head page.  That
-> assumption no longer matches the current HVO mapping layout.
-> 
-> HVO now keeps a private backing page for the head vmemmap page
-> and remaps redundant tail vmemmap pages to a shared read-only
-> backing page.  The old page flag check is therefore testing an
-> obsolete implementation detail rather than the current ABI or
-> behavior.
-> 
-> Remove the stale test and its build, run, and ignore entries.
-> 
-> ...
->
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -3,11 +3,9 @@ cow
->  hugepage-mmap
->  hugepage-mremap
->  hugepage-shm
-> -hugepage-vmemmap
->  hugetlb-mmap
->  hugetlb-mremap
->  hugetlb-shm
-> -hugetlb-vmemmap
->  hugetlb-madvise
->  hugetlb-read-hwpoison
->  hugetlb-soft-offline
-
-We should leave these .gitignore entries in place.  Please see
-https://lore.kernel.org/CAHk-=wiHK5_oBUdUiNAaevmN9f-ORe+QBqbRefAZaw-RbgEn3w@mail.gmail.com
-
-I'll queue a -fix for this.
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZVqbSNm8t340mGQs"
+Content-Disposition: inline
+In-Reply-To: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
 
 
+--ZVqbSNm8t340mGQs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Miquel,
+
+> Then there has been a bigger series (including patches for other
+> subsystems) to show the big picture, but let's split again and focus on
+> one subsystem at a time:
+
+This is a good idea IMO. Sadly, for this series, I won't have time for
+review. If you have a branch available for testing, I could provide
+test-tags, though.
+
+Happy hacking,
+
+   Wolfram
+
+
+--ZVqbSNm8t340mGQs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmpTTeYACgkQFA3kzBSg
+KbYtZg/+On4LkPUnhbxowGKevVHFnDhdpxRu9+Dthux7ECfGg1j+ojbarCC1oSQ6
+igQgK4wFWWN3sjYUykr3lvwaEovz6/nlRKK8Gg3XGF6VBKJaIr2XEom0NucteEKb
+NEWztJ6SXfg2s9osPXrheMjBAFPC514tOEzHKa6zSkNY3szh5PyNa2kkt2nf7+yq
+elV7uwKnbGn7jqhvGa1bsKG47y6IcnTMva8BFfXPJHfGeoNOp03ZjsuBLbBoIT4h
+QdUxz5Za4tbcLAl12EqAAMgw/as0T9XyAGAs5PCD6d+3QS9BAYLhSrICm+IB4a75
+HZJP2CQhaBTYvbKgcPK8tWxENUN0F/Go+Duu1BJqyQLsnL1tPYxd7CkY2goNX5fe
+4oWOPsArOyD62/LH2shDesXE6nIyG+49Ku3sz4DK2BckOXkNnTRGEhtdHs9x8y3G
+Cb7y+bOq7CEv3NeS21pw8g8ob9JjXdyPS4kFKqgTUn3FAgV/BaoJ6wtQZ1NXULKo
+z3en5KXa7pg9V68G6qUPOGZNydNpFB1lyqXEGX6dQcwzIYCTbHc6AJNUTQZbiibd
+PYmnknRdhR2eZVqPQHpk1m0zC+YYuDHggZpo+gSeYE1ka7YV5DIDJE12EPdZaoVj
+pT3/0Hzm89T9SonggBakW9PbhpVqQjOX3CCH4VtDKOe/cpv9yWg=
+=3krj
+-----END PGP SIGNATURE-----
+
+--ZVqbSNm8t340mGQs--
