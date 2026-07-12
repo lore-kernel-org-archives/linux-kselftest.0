@@ -1,149 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555B43126B0;
-	Sun, 12 Jul 2026 12:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D4AE56A;
+	Sun, 12 Jul 2026 13:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783859557; cv=none; b=iejbJR13mF5KXgRJQEwGaxo85V3BDglLl0gO3o1qp/a77npuAhi/5B2P4UsViSe0etXv2HeLVIXxAzTkdd9zhy9DDzUV1znACCHS1PV+nRU7K7gs19NVkidmQSH/7N2S6DMEu4/rNn+QGuRpZzYiYD25QtKpA9zVsAO/wXX5xes=
+	t=1783862144; cv=none; b=PI/GVTtH93zRZJYfmlgPE/IPYyeQAfSEW/SpUcD4YS6BlFV/G+qsru23QTHFqEjmRkNeAbTGMKDyDZjKgLaxayhsahR42tTb6Zu5Eu2KBJcWXyLBiJ99tS9bTMy4JyJjfdWNfcGMNXBrSnGj3gv95aGKwUyOyVEyoadVd8QGGYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783859557; c=relaxed/simple;
-	bh=VU5CHIyaoqNRjqMq+N8FVvGRvPUNlYegA5+LAVSgSdo=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=EZd9z9xl70ofn07ivkByg8OFQbS/jI6bKzmLdVJ+tHFgic6h6sSaWqedqNFc5LqsWExBC4Hlyqqsr0JkXo01+CZLcAXVCfUcWW8BPESq9+HOgOywKesNsnv25YNq7TEBs7DkgvW4b6UjGgnggKud8KvttRPLsUUX1D8y5JSq8eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geJcKo8l; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783862144; c=relaxed/simple;
+	bh=Nh88LM8tcn4ASu2ZHG0sNKD7t6K3lGnx5oaEMxt0uO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a6+aNsdaNJRfyXo5YywUGhi45NcZbY6n8OQuGXn1HWQWzv5rotvomX4fJxhKzNf2t0ZDaQtIrXoERY8tu7gazfJpZtsxUtcHr6ADLOqdWXHCqrB68BuKiVX3aZnnU9j7n5ExpLul4e3cTVcON1q/bf2s8jXIPFUM6FsT9XoaC9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNEtcsuL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geJcKo8l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625101F000E9;
-	Sun, 12 Jul 2026 12:32:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNEtcsuL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923901F000E9;
+	Sun, 12 Jul 2026 13:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783859553;
-	bh=MtkGjiGoIClKqYf6WbMTADgvs1VSC4RCPwgWlBMIBnc=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=geJcKo8lmOCwLH8xvS3pjM6MSkf7G28eQyFiSG6nCT2g2bYC/iGbTzTX5BCP6XbKF
-	 8Rf5ExjwECx/W8ibPyCuvsaX6aIkGQeiXyzKVftKkSGaYcFpgb74pWSYDni7dIY711
-	 YwWiczEPH1l/JKVndl2Wd6OPsX5pkefjuJUQ8pQ58zGRZyM7GKVo50Yg5UJNXFZksh
-	 lgbpBhkNVQtqTbIFDCgXAbTjGE8fS3Ko6ejgWF4SOtfEweQ1AuICRDoUYLG8ex795L
-	 Ib/03fjU59OzPmCxaypFwa3282e1OH6uu7kpx0M0YeW+mz2cd0LFmQ3Pnx4DR9/8gE
-	 qc/wwrqo7bpwA==
+	s=k20260515; t=1783862142;
+	bh=Nh88LM8tcn4ASu2ZHG0sNKD7t6K3lGnx5oaEMxt0uO8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VNEtcsuLTmU2ucIIDm9TU0aOrgLG0PmCJHk9PDUon1AljI1F9FSR9LpQDVRUf+7qk
+	 mgoU55c86qZCVDWkmdFQ8EMVU9zzS+lyg39dHwDfuEt0lyiZnIZN1ln2xyKpgaenGB
+	 1Y2727IZNQLM6VZGXxCQ61q4lq4S7Lhw8TJAPrzGVverjXFvff/WoZBPjKCiqSd8AB
+	 PzO2NVD8dVg2RkiBjK3Ps9x/u8HE9LkND7+WE21L/Zzx5p2saUMs7W5bdC2yyL5AyN
+	 QfRmoMiFqPmlhSDsF1SJs8Fa3LmWQlgD+YMkIHm2TPCdqKy1fM9X/zs/nekbo1cyxa
+	 9RoBKqvGPRffw==
+Date: Sun, 12 Jul 2026 14:15:36 +0100
+From: Conor Dooley <conor@kernel.org>
+To: "Ousherovitch, Alex" <aousherovitch@rambus.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	"Krishnamoorthy, Saravanakrishnan" <skrishnamoorthy@rambus.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Rob Herring <robh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"Wittenauer, Joel" <Joel.Wittenauer@cryptography.com>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"Nguyen, Thi" <thin@rambus.com>
+Subject: Re: [PATCH v2 01/19] dt-bindings: crypto: add Rambus CryptoManager
+ Hub
+Message-ID: <20260712-washable-clapping-5dfb79d1bdef@spud>
+References: <20260709203037.1884436-1-skrishnamoorthy@rambus.com>
+ <20260709203037.1884436-2-skrishnamoorthy@rambus.com>
+ <20260710-siding-unmatched-5e066fbe4c01@wendy>
+ <SA3PR04MB9001E7DC9B2D4788EDCE2390D7FD2@SA3PR04MB9001.namprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
-From: Christian Brauner <brauner@kernel.org>
-To: Farid Zakaria <farid.m.zakaria@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Kees Cook <kees@kernel.org>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Jonathan Corbet <corbet@lwn.net>, Jann Horn <jannh@google.com>, 
- John Ericson <mail@johnericson.me>, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
-References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
-Date: Sun, 12 Jul 2026 14:32:22 +0200
-Message-Id: <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
-X-Mailer: b4 0.16-dev-4217c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4203; i=brauner@kernel.org;
- h=from:subject:message-id; bh=VU5CHIyaoqNRjqMq+N8FVvGRvPUNlYegA5+LAVSgSdo=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQFd8ZM3PJB2fnw3h2pDk1m9m0T/M/E6025wn7fzfpOW
- d7C5AbXjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIkI/GNkeHPQiL3GYesmrc1v
- tSZ2fPxUztu58LPf8We7040t9978e57hr8j8bbGpuRPkD7t/1zq2+011XTWvyL61nwVVJl7m3fb
- NmAMA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pwarKFrPpjCIAVeL"
+Content-Disposition: inline
+In-Reply-To: <SA3PR04MB9001E7DC9B2D4788EDCE2390D7FD2@SA3PR04MB9001.namprd04.prod.outlook.com>
 
-> This is a continuation of Christian's bpf-backed binfmt_misc POC [1], which he offered
-> to hand off to me. I am carrying it forward. The kernel design is his and is
-> unchanged. This series rebases it onto his binfmt_misc locking/cleanup series [2]
-> and adds selftests (+ fixed from the one's shared), and therefore does
-> not apply to mainline alone.
-> 
-> As for motivation for this whole change, Christian did a great VL;MR;
-> write-up [1].
-> 
-> TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter,
-> but it can't match programmatically or compute the interpreter per binary.
-> The Nix community would love to support relocatable binaries, where the
-> correct loader can only be found relative to the binary itself.
-> This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
-> inspects the binary and picks the interpreter with one new kfunc,
-> bpf_binprm_set_interp().
-> 
->   bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
->   echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/register
+--pwarKFrPpjCIAVeL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks! So I've spent some more time working on this because I had some
-future ideas that I needed to make sure could be accomodated by this
-(currently on vacation but hey...). So the version I have givex this a
-better design and has future extensibility in mind:
+On Fri, Jul 10, 2026 at 11:14:11PM +0000, Ousherovitch, Alex wrote:
+> On Fri, Jul 10, 2026 at 1:59 AM, Conor Dooley <conor.dooley@microchip.com=
+> wrote:
+>=20
+> > This company no longer exists, you should probably introduce a rambus
+> > vendor prefix instead.
 
-- The single sleepable load op is split into two ops:
+Please fix your quoting, you need to retain context beyond what I said
+so that people who get 100s of mails per day (me) remember what it was
+in response to.
 
-      struct binfmt_misc_ops {
-      	bool (*match)(struct linux_binprm *bprm);
-      	int (*load)(struct linux_binprm *bprm);
-      	char name[BINFMT_MISC_OPS_NAME_MAX];
-      };
+>=20
+> Cryptography Research, Inc. does still exist -- it's now a wholly-owned
+> subsidiary of Rambus (our co-maintainer is @cryptography.com). The
+> prefix names the IP originator, which is consistent with existing
+> subsidiary/acquired-vendor prefixes in the tree (e.g. al =3D Annapurna
+> Labs under Amazon, mstar noted as acquired by MediaTek, fsl, cavium,
+> xlnx). We'd prefer to keep "cri" on that basis, and can annotate the
 
-  The non-sleepable match program runs from the RCU entry lookup
-  walk itself, exactly like magic and extension matching: same
-  registration order, same first-match-wins semantics, and it can
-  only rely on the prefetched bprm->buf. It must be free of side
-  effects since the walk may be restarted.
+I'm not sure that these examples actually aid your cause.
+al has been replaced by amazon, fsl is not used for new devices, new xlnx
+devices use amd (only example for now is the riscv stuff I think),
+cavium has had nothing added in donkey's years etc. mstar I don't see
+anything new in years either.
 
-  The sleepable load program runs once the walk has committed to the
-  entry and does the file reading and the interpreter selection. Both
-  ops are mandatory, the struct_ops plumbing enforces the sleepability
-  of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
-  program cannot select an interpreter by construction.
+> description as "Cryptography Research, Inc. (a Rambus company)" to make
+> the ownership explicit. Happy to switch if you feel strongly.
+>=20
+> > This property seems like it could be replaced by having a reg entry
+> > for each mailbox.
+>=20
+> Agreed -- v3 will make each mailbox a subnode with its own reg window
+> and drop cri,mbx-instances.
+>=20
+> > This looks like it should be deducible from a device-specific
+> > compatible. [slots/strides]
+>=20
+> These aren't fixed per silicon -- they're the per-mailbox layout of the
+> VCQ rings in host DMA memory, chosen at platform integration and
+> programmed by the driver into the mailbox QUEUE/SLOTS/STRIDE registers.
+> They can differ per mailbox on the same silicon, so a compatible can't
 
-- A match is a commitment. A failing load program fails the exec instead
-  of falling through to later entries. -ENOEXEC keeps its usual meaning
-  and hands the binary to the remaining binary formats, for a handler
-  that discovers it cannot serve the binary after all.
+I'm not sure. Unless there's more than one instance, this definitely
+sounds like something that you can determine from the compatible.
+Generally these kinds of accelerators tend not to have multiple
+instances though, so each platform will have a different compatible,
+and the driver can store an array of mailbox configurations.
 
-  This kills the part of v1 I disliked the most: the skip cursor and the
-  leave-and-rescan loop in load_misc_binary() are gone. The walk is
-  never left and re-entered, and 'B' entries need no special semantics
-  against concurrent (un)registration anymore.
 
-  Your v2 changelog note about keeping the bpf retry loop in the
-  __free() style is moot as a consequence. The loop no longer exists.
+> encode them. v3 will keep them as optional, defaulted properties on the
+> per-mailbox subnodes.
+>=20
+> > This whole subnode thing seems like it is only required because you
+> > don't have device-specific compatibles [cores].
+>=20
+> Core presence is actually discoverable at runtime from the CORE_ENABLE
+> register, so v3 will drop the per-core child nodes entirely and probe
+> for enabled cores -- no per-variant compatible needed.
 
-- The load return convention flipped: 0 now means success after the
-  program called bpf_binprm_set_interp(). Returning 0 without having
-  selected an interpreter or returning a positive value is treated as
-  -ENOEXEC, other negative errnos fail the exec.
+No, per-variant compatibles (for the devices/socs that this IP is
+integrated into) are a requirement. While it would have been handy for
+detecting capabilities, it's a requirement for other reasons:
+differences between integrations be that functional or enforcing the
+correct constraints on properties, issues only present on select
+devices, etc.
 
-  So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-era
-  programs becomes plain "return bpf_binprm_set_interp(...)".
+On that note, I see there's no clocks or resets properties added by your
+patch. While the IP may not have a reset (although I suspect it
+probably does) there's no way it functions without a clock.
 
-- The handler name moved from the offset field to the interpreter field
-  that field consistently names whoever supplies the interpreter, a path
-  for static entries, a handler for 'B' entries. Offset, magic, and mask
-  must be empty:
+Cheers,
+Conor.
 
-	echo ':nix-origin:B::::nix_origin:' > register
+>=20
+> > this could probably be handled via reg-names? [affinity]
+>=20
+> Yes -- v3 will express affinity per mailbox (a "role" of a specific core
+> type for a dedicated mailbox, or "generic" for the round-robin pool),
+> which is the subnode analog of your reg-names idea. One caveat: this
+> cleanly covers 1:1 core-to-mailbox dedication plus a shared pool; a
+> mailbox dedicated to several specific cores would need multiple role
+> tokens.
+>=20
+> Thanks -- this restructures nicely.
 
-- 'C' is allowed now, v1 rejected it. It behaves exactly as for a static
-   entry. The setuid transition stays gated by vfsuid_has_mapping() in
-   the caller's user namespace. Which makes 'B' handlers usable for a
-   per-binary loader over setuid binaries. 'F' stays rejected as there
-   is no fixed interpreter to pre-open (I have other ideas how we'll do
-   something like it later.).
+--pwarKFrPpjCIAVeL
+Content-Type: application/pgp-signature; name=signature.asc
 
-Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
-itself, or the registry/namespacing model.
+-----BEGIN PGP SIGNATURE-----
 
-I can send v3 in a bit if that's ok.
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCalOTdAAKCRB4tDGHoIJi
+0lBLAQCfKTJZqqNJen0s99xi2ILKiuhHavFoxTEtPcq0kWgfegEAhX1S0vi0KgKV
+HVl4wR7EAY3dKcF5wQElXIiRRSMQVgM=
+=gP2T
+-----END PGP SIGNATURE-----
 
--- 
-Christian Brauner <brauner@kernel.org>
+--pwarKFrPpjCIAVeL--
