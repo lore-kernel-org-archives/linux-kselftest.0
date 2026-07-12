@@ -1,85 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CAA2DC32A;
-	Sun, 12 Jul 2026 00:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292611E1E12
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 01:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783814439; cv=none; b=EnyiQr0AnDfHbkIPlrXhFCja2nCsB3qMRLUQiQ9IwpSSVSr7h4YMOkCZynnZcbCSI4Zi9o07DB/59iXl5GIXkGMeCFR6PfNc4lY52RnJrLnFPJGuQjnnz0QKzQoaVtiv6kIqynszKP1dvAkbIbKUZk9f4kB/tNwk04z6wuU5uxY=
+	t=1783818880; cv=none; b=RHwudtR7rYt5JRKWAap7hGMV9c57R/EHx9osRzi6KMsK+GghtJiV2GiGD+NN3GsI3Q7ErLFqbwxCSJn7xz306q/8aSj/X3twHrKFbfdHCNEo4hzjIf3V/GLLSrIExiA+duI3OcbcEW8B/BlZM0OO4cO48gXoH5khJ7FKvNgyGrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783814439; c=relaxed/simple;
-	bh=969haNKGJYNyEjmlfynHxU5MNR8Rj3zWgGZB9MyPVtw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lDJkfvRULq/8qgTXgvkfaUdZ3RcNkPZp5pusO0vKys/3XIPboYQJ7UgYgl/oHy6ufn7WR5Rkmvet8iQl7Za6ehHfUdT5Aas59LJVjxGxE/Du7k7V3mDE8YpjeoRDG5vDEPGQVSHHISJ+/2QhX1MkSkeL66ricnBekIu0yc+P6e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XWE/ttSK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783818880; c=relaxed/simple;
+	bh=GLdRNrfBScn58W+OaBAZaSME4KiOO6jA15XhdGdqKdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ej+hwllGNr61YPPCAdFM5KUrFiA/3dSz+pMoDc7xVenhKu9vgJ6axOvwVNdiENrirRG7DvlsuPXLsap3g01Ql6Jkc5XMOw+QPCwhbTeKXGxV+wxe1LyrmoYVMr1Fh8Oa68Hl4palFmYSC1rZkWm8h0GeIMBM/wLK2O+VvCgbqZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hEVOCcC5; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XWE/ttSK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C801F000E9;
-	Sun, 12 Jul 2026 00:00:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783814437;
-	bh=fLuDaFj4VFkrwrrruWtQy8eNFXxpSe6o2736DOBxNNE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=XWE/ttSKi8XDYG5JG1f2U5CRl2TCjdt8mlrzmdPbJTX7IS8J80Sy/qecT3SXN8O8W
-	 Qqx5+0DYMoEb16RaLkQRZVHhX15zf+vO3lzXhI4yqyLM9hcMSDJzXMQHNK96me/Vzm
-	 TYa4cTAVeRTohGdoxCfK+Dtg4iUjceCu25osSdh+CqCPPNbnWXiYLD+045Fc94wMFF
-	 iLn1qbNKz6MS+fvD1kgHiiJqeCRZVyN4rCD+BT0NnF84TfV/e1lS1NASnfXrVc2fq9
-	 FjBk8/7gTvJSou52dJy2Ty+1A7kvtXmtLnpUXdkYa4dm2K6GvHCiolEYTbJ7HkN4nC
-	 kJersFRGAxlHQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19C0B3924A1A;
-	Sun, 12 Jul 2026 00:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hEVOCcC5"
+Message-ID: <88169a4d-157a-4307-8e21-554b122fb411@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783818865;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xAdjGXolE8bZ9ddc0fiq07hvqt0bNR4iJP1GyPcJcxw=;
+	b=hEVOCcC5p/m7fKRTTlL+957hsqizSlFDzP0U7kz0kjxO2y6Vkr1espBueyl+xR6rd4ZKxj
+	+G+rnXvSaRl0IeWXg76dM1iONq3w5TwjRVeMLSUjwEHWkfdKRTtdg2fm7qT4opDapYquP0
+	V2jHXAvWyeqWQKdWd18SQtEK3qW/QOU=
+Date: Sun, 12 Jul 2026 09:14:12 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix WARNING in
- bpf_trampoline_multi_detach
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178381441365.1241617.6815515077282154741.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Jul 2026 00:00:13 +0000
-References: <20260711124822.29406-1-leon.hwang@linux.dev>
-In-Reply-To: <20260711124822.29406-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+Subject: Re: [PATCH v3] fs/proc/task_mmu: fix PAGEMAP_SCAN written state for
+ PMD holes
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, usama.anjum@collabora.com, peterx@redhat.com,
+ liam@infradead.org, ljs@kernel.org, vbabka@kernel.org, jannh@google.com,
+ pfalcato@suse.de, david@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org, kernel-team@meta.com
+References: <20260709121629.205562-1-kirill@shutemov.name>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zenghui Yu <zenghui.yu@linux.dev>
+In-Reply-To: <20260709121629.205562-1-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+Hi Kiryl,
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
-
-On Sat, 11 Jul 2026 20:48:20 +0800 you wrote:
-> Since tracing_multi link does not set ftrace_managed, it would fail to
-> release the tracing_multi link when attaching tracing_multi link and
-> then attaching fentry link.
+On 7/9/26 8:16 PM, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 > 
-> [    3.714215] WARNING: kernel/bpf/trampoline.c:1727 at bpf_trampoline_multi_detach+0x20b/0x240, CPU#1: test_progs/97
-> ...
-> [    3.733170]  bpf_tracing_multi_link_release+0x14/0x30
-> [    3.733890]  bpf_link_free+0x58/0x130
-> [    3.734414]  bpf_link_release+0x23/0x30
+> PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written, but
+> a range with no page table at all -- a PMD hole -- is skipped:
+> pagemap_scan_pte_hole() tests p->cur_vma_category, which never carries
+> PAGE_IS_WRITTEN, so the hole is neither reported nor (under
+> PM_SCAN_WP_MATCHING) armed.
 > 
-> [...]
+> MADV_DONTNEED has fill-with-zeros semantics: it changes the contents of
+> the range to zeroes (a subsequent read maps the zero page), which write
+> tracking must report as written. An anonymous THP is write-protected in
+> place as a huge PMD, so a full-PMD MADV_DONTNEED clears it to pmd_none --
+> a hole -- and the zeroing goes unreported. A write-tracking
+> checkpoint/migration tool (e.g. CRIU) then treats the range as unchanged
+> and keeps its previous contents, so after restore or live migration the
+> process reads stale data instead of zeroes -- data corruption.
+> 
+> Report a hole in a non-hugetlb uffd-wp VMA as written, matching the
+> pte_none handling in pagemap_page_category(); the existing
+> PM_SCAN_WP_MATCHING path then arms it via uffd_wp_range().
+> 
+> hugetlb is excluded: pagemap_hugetlb_category() reports an empty hugetlb
+> entry (huge_pte_none) as not-written, unlike pagemap_page_category(),
+> which reports pte_none as written. pagemap_scan_pte_hole() fires for a
+> hugetlb slot only when it has no page table; keeping that not-written
+> matches how an allocated-but-empty hugetlb entry reads, so the hole and
+> the empty-entry cases agree within the VMA.
+> 
+> Add a pagemap_ioctl selftest covering the anon-THP PMD-hole case.
+> 
+> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260707151349.92143-1-kirill@shutemov.name
+> Fixes: 2bad466cc9d9 ("mm/uffd: UFFD_FEATURE_WP_UNPOPULATED")
+> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-fable-5
+> ---
+> 
+> Changes since v2 [1], addressing Andrew's review:
+>   - Describe the user-visible effect: MADV_DONTNEED has fill-with-zeros
+>     semantics, so the range must be reported written; otherwise a
+>     checkpoint/migration tool (CRIU) keeps stale data and the process
+>     reads corrupted contents after restore. Add Reported-by/Closes.
+>   - Reword the hugetlb carve-out to rest on the category functions:
+>     pagemap_hugetlb_category() reads an empty hugetlb entry as
+>     not-written, unlike pagemap_page_category().
+>   - Drop the redundant MADV_COLLAPSE fallback #define; it is in
+>     <asm-generic/mman-common.h> and used directly by other mm selftests.
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] bpf: Mark tracing_multi trampolines as ftrace managed
-    https://git.kernel.org/bpf/bpf-next/c/30bdd6d1384d
-  - [bpf-next,v2,2/2] selftests/bpf: Test fentry link after tracing_multi link
-    https://git.kernel.org/bpf/bpf-next/c/539d3edf8e53
+I hit the following compilation error on mm-new:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[root@localhost mm]# make
+  CC       pagemap_ioctl
+pagemap_ioctl.c: In function 'unpopulated_thp_hole_test':
+pagemap_ioctl.c:1130:31: error: 'MADV_COLLAPSE' undeclared (first use in this function); did you mean 'MADV_COLD'?
+ 1130 |  if (madvise(mem, hpage_size, MADV_COLLAPSE) ||
+      |                               ^~~~~~~~~~~~~
+      |                               MADV_COLD
+pagemap_ioctl.c:1130:31: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [../lib.mk:225: /root/code/mm/tools/testing/selftests/mm/pagemap_ioctl] Error 1
 
+Could you consider addressing it like fd5295afae91 ("selftests/mm:
+hmm-tests: include linux/mman.h to access MADV_COLLAPSE")?
 
+Thanks,
+Zenghui
