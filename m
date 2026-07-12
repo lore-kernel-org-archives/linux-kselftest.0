@@ -1,189 +1,134 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B74D36DA18
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 04:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3FB2459E1;
+	Sun, 12 Jul 2026 05:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783831660; cv=none; b=M2HsXNA5r9pL4j0bVvWW3ycWcb8pop7nYorShedviJ4rcrbGW9+PUBGpFMFn9enCb/m3+gCyq4GLNK+9+CAIgroXNmo6L5nZrIGsalFu8knWUjlKB9IWSZ8arRtYZRM/yAD5iGJPHjAcbHhMz25vphFPKTy8npUp/eeKBslu87U=
+	t=1783834703; cv=none; b=LASRgPbltMThPEAwUtCD0qEv2cGtgDJw+K6NCTPZpH8iBv/0r1nG0rLlU+Pfkp0Y+mI5zxh3wnUPSkOgtINtsBFELMZwsst0jWzjMtj4HUT1rdMARWtAFK1ZKXupv0oofr9LG03RLRYzABsr9bk7QaCZQrkVEHEpr9nWIGFHhJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783831660; c=relaxed/simple;
-	bh=gVoVhvIy7NIUB1l7ESMbLeoAjSFDx4L17+1xD7r2jjQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EeeEoVn3jImAgT4OLg9dcUjNJ8G8g/VlJH3cbfs2vUyUp/pCPBxMH6WSposuSFQeh/ZsdbZ7a1SsTAvSVYhSS+3+lsNZPlpvRWHFG/gtto1VB6D/FUZHJ04PDRZJw3XIJRXQTyaHUDeo7KoXc+ipQ0fNzgH7vV7hIVR4/5vz4fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=masoncamara.com; spf=pass smtp.mailfrom=masoncamara.com; dkim=pass (2048-bit key) header.d=masoncamara-com.20251104.gappssmtp.com header.i=@masoncamara-com.20251104.gappssmtp.com header.b=LLIBYAYf; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=masoncamara.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=masoncamara.com
+	s=arc-20240116; t=1783834703; c=relaxed/simple;
+	bh=fL7ZoUt45eAwuZaRg6CIL6JXG7MR+es48ql6H+7BEN0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=da9caYRtNYAyE21HQGY8Mbe6Fun33rffBri0lk+m1ptCnMvYbnMJqe2YU6Rbzgm7Ss/rNSRPv1ishoe4U/aSnssGN3JLbSjKrR7FTf92StO6Acj6hj8IFCTZfvY7jcbM/3rwata9KcFytlm5+nsIixILycBmknM/mtZIgORqako=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tpJ8bAHU; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=masoncamara-com.20251104.gappssmtp.com header.i=@masoncamara-com.20251104.gappssmtp.com header.b="LLIBYAYf"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-ca965de53baso1113824a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 21:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=masoncamara-com.20251104.gappssmtp.com; s=20251104; t=1783831658; x=1784436458; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9oLcv0qVSMsTkgn/ZfSsFOjEguUBCGI4Az7FCb7eMIk=;
-        b=LLIBYAYfk78rs3UXIhrb5OrBnFn25HUkslivUHRccIrf7WckE6ge1IMM6tJ4tqtz6F
-         KVLj53b/Aw3BGiYVYprW2x3UV1/uAqp60Ox2+rdsvB/pNpsRYHb5hv7h2xw7f3X9t5QB
-         2d9luZy9S51vR5Sh1q86KKqehT55/9vh2XypTj5XMUZI/ffmVm9dHiCVkEAUtvVCivAe
-         RoTLILT0ET4dydBsOabvoCVr3iMqywVGwCnDq2pQLTpb9IapOgXupA8ssBVUihcQEGdC
-         xX+z4dBLHCbSv6/UTkhn1+VRqCNKUWKf5JBmlLUoxKRkV8V5NfrQp51CF9SaQDyLwz+x
-         iFmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783831658; x=1784436458;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9oLcv0qVSMsTkgn/ZfSsFOjEguUBCGI4Az7FCb7eMIk=;
-        b=SWz4fKYsBTTjMH8pJOJGwHSQOc0fAVu4c9ntsscg8Jvkfgwk0mbNVQlcBDbZvgCoC5
-         grBdJomHCD375IGuVCWWhJ3SWFTAm1HF0j5qltjTc8ORjlX5L0n0boOLDQ4Eg2lV1JsY
-         tBv1PN8CfL1wof5Hl4BvCgAyu7iveLu6vqyhM5QOB8MXbvUBvLkzxPZ5q3hCzsV4HYLA
-         bS/WfRBINeHYQPZjJxN0WEWIVyFyCUEYqahRJABX1oKkvoSRtJaXucS4iUVi05msueNa
-         oyzcHp6EuxJG0haI6zi84OI7B+2og8RfsWZfmTEraEj+fIO1q9oGZPC08Tp++75h4rE5
-         C0Tg==
-X-Forwarded-Encrypted: i=1; AHgh+Rob99V9rjipkYySqC7z+4Aut9MGX5oWELGpyf76/Z21Mpm/CPGJRrJQXOFjYlIAkY1FcLObeyI5M04Wtt8JMZk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnxX2qbj113w9GOVqwtcbmL/0G1hq+iLtvyk4TM68RL1HFPM+e
-	iuclRadGTLD5VPto0zsOIadC54NHgzazFrk3t2ufPCU5rqFgUKg1ltlBq07UhNOQo5yTZp0OSoB
-	MjYqEu0jm9yo=
-X-Gm-Gg: AfdE7ck/6RmnnOKqp+QLT/q/J3FojY6BTl8xaTInWJa+WP+hSDO7cxYDwKmUgetczQi
-	S7IAHFjaaQZonpDzExiC/iI2nnMP9NsICTeJoLMIp8kl/AkUu3dkUNa52TI2+60gCiOq43TlJFn
-	xX4LKt/8ZsNZmzCA2q902lb0dzuziVmh1WnF0xrWbvAjOXHSQ2g8I5ME7+PEd/3mpzizk2pcBZK
-	TcdakFgenZ6kC4keWR6jLP0jGzcLH7dTV+PghEgA91pqjg57i9wufHiR5uOQk0yVSohLKOBmFcW
-	Stok5OiGF9zDigRnL/aQx6/Gf0LUb8+m0XdLpMRQfIgXjZ2uzQBm2TX1Yjnub7GmCnmAI1zAyUy
-	WdKrfYkfMzPm3ksNj7hCcLZ2cUTfsomUDmYMpM0VAhkMxc5LB76xChIqeZqx9kMT3wkVF43v2Y9
-	Xiea80r1r/iUUnnfYU2dRgE08agVzKfPUcShXsYg==
-X-Received: by 2002:a05:6a21:6e91:b0:39f:2dd0:65d5 with SMTP id adf61e73a8af0-3c110b263e8mr4830981637.39.1783831657914;
-        Sat, 11 Jul 2026 21:47:37 -0700 (PDT)
-Received: from nobara ([69.26.129.115])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3118ee6091dsm59384338eec.14.2026.07.11.21.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2026 21:47:37 -0700 (PDT)
-From: Mason Camara <ping@masoncamara.com>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	John Chen <johnchen902@gmail.com>,
-	linux-input@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/hid: test battery queries with nonzero field offsets
-Date: Sat, 11 Jul 2026 22:47:02 -0600
-Message-ID: <20260712044702.893825-3-ping@masoncamara.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260712044702.893825-1-ping@masoncamara.com>
-References: <20260712044702.893825-1-ping@masoncamara.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tpJ8bAHU"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66C4CC5S2755698;
+	Sun, 12 Jul 2026 05:37:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=FmrEDx
+	8QxMchU1PCvAPUFKd41C7Mk0v0R+yTy+YcmbM=; b=tpJ8bAHUG8kPxxb5vGDVIq
+	6O5OoxQhtwfjsmnXCd2wPVjFCG8s7O6+4vwqq0p+koTTBEr0W06YF+vTNvvcrgXQ
+	uErDvCo4TgxBLBY4BNfMvygotU2aenEgChUqDSCtS1AIxsgnfMmTjyYaMOqBrr2j
+	BZcZME5i+Vgj8lA4KwhMnkGwpmP0SNh6nhgY/R3raZm3LHZPBkLP/KKDrMs1aIAI
+	kKF97QDynKp8g1JKLN2VAPdx2QVslr5MAscOeusdaXc7AHYn76vqHtE0nVSemyZL
+	rLnia2Mx9psjE0pWsyaM7iFbR6U+ukROXTXqHUHANvnP1WhB25kF7Di04iIhH58A
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fbf29uagk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 12 Jul 2026 05:37:48 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66C5YbmF028137;
+	Sun, 12 Jul 2026 05:37:47 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fc0hvrr7k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 12 Jul 2026 05:37:47 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66C5bkdm31261284
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 12 Jul 2026 05:37:46 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8B34F58045;
+	Sun, 12 Jul 2026 05:37:46 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8FC2E58050;
+	Sun, 12 Jul 2026 05:37:40 +0000 (GMT)
+Received: from [9.39.28.183] (unknown [9.39.28.183])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Sun, 12 Jul 2026 05:37:40 +0000 (GMT)
+Message-ID: <ded27d4f-3e66-4cd7-9757-a2e52770c3c4@linux.ibm.com>
+Date: Sun, 12 Jul 2026 11:07:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Sayali Patil <sayalip@linux.ibm.com>
+Subject: Re: [PATCH v3 0/3] selftests/mm: avoid false failures in hugetlb and
+ KSM tests
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        David Hildenbrand
+ <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko
+ <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+References: <cover.1783446924.git.sayalip@linux.ibm.com>
+ <20260709185319.cbf0c39dd47ee3853d212b7b@linux-foundation.org>
+Content-Language: en-IN
+In-Reply-To: <20260709185319.cbf0c39dd47ee3853d212b7b@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEyMDA1MCBTYWx0ZWRfX09MeEcG0vjIt
+ 7v6YhGGQP//AxKeZoVB57S/v5Phrt2sipl8TptJHgH9R3xgwWMmFzFq68NoEhGw4BHn3N6vcK2I
+ uepkizLnWsilGBPM/QUSaAZ6f9RUClY=
+X-Proofpoint-GUID: f_xJzRtk3x_iNQf7hVMdY4rgOoSj3IPX
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEyMDA1MCBTYWx0ZWRfX5DgCAFtuws9Z
+ DIi8QDJ3z9AJL0DbldWqZCL3vjjogx8PrLV8bysPv7AuZB72j8iIUuizKjW9EhXXTvLRI2Cm8ZI
+ OpNtmucVuHtbBpvvaNRNMxiP6Zk0rZN6qzZZeIQaOwkV4FLFNqHLs8jjQ4IJAbhEZvhcLSR/4wN
+ TR4lK8q1CgVZUKo6+hitjdN9koo89CnlqF3saGiGmDIwktXIi0FBYAXrJyZSbRXKd7AyeGTxPy3
+ 63rRzBtxfyj83tWZeuEyVe5DmyCHo1Vw8kMZ9kQuoGv/uq3grwcV7zAm6oVxi/dN8hLspgmrJtS
+ B4VrGo3w5JJLIXKarQRbyKEuHsPyZHG1gvaQe9lMBwkQRqVlXJ9rLwyavr6Dt/m8PhiP2gK7J/K
+ /ZU9IhPpc8cBrFxZjWxn0WADd9mPQQ13vW3gYKOYGxQ8dHkWvQvxvS8dpy2IBPi5ELFVks8PkT2
+ fOJ5YdFensaM4cgXIfQ==
+X-Proofpoint-ORIG-GUID: roN63tJwwzI1npq61pQNk0ybmXMzHcGC
+X-Authority-Analysis: v=2.4 cv=PvajqQM3 c=1 sm=1 tr=0 ts=6a53282c cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=c92rfblmAAAA:8
+ a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8 a=YLSOTn8K_J3FlFHuE84A:9 a=QEXdDO2ut3YA:10
+ a=GvGzcOZaWPEFPQC_NcjD:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-12_02,2026-07-10_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607120050
 
-Add a UHID mouse whose input report 0x90 contains a status byte before
-the capacity field. Answer GET_REPORT with 90 04 5f and read the power
-supply capacity before sending any input report.
 
-On an unpatched kernel, the capacity read returns the status byte (4)
-instead of the capacity value (95), so the test fails. Enable
-CONFIG_HID_BATTERY_STRENGTH in the HID selftest configuration.
 
-Assisted-by: Codex:GPT-5
-Signed-off-by: Mason Camara <ping@masoncamara.com>
----
- tools/testing/selftests/hid/config            |  1 +
- .../testing/selftests/hid/tests/test_mouse.py | 54 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
+On 10/07/26 07:23, Andrew Morton wrote:
+> On Wed,  8 Jul 2026 12:29:04 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+> 
+>> This series fixes issues in the hugetlb and KSM MM selftest categories
+>> that can report failures when the prerequisites for the tests are not
+>> satisfied.
+> 
+> Thanks.  AI review asked one question:
+> 	https://sashiko.dev/#/patchset/cover.1783446924.git.sayalip@linux.ibm.com
 
-diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
-index 1758b055f295..da52335b865a 100644
---- a/tools/testing/selftests/hid/config
-+++ b/tools/testing/selftests/hid/config
-@@ -16,6 +16,7 @@ CONFIG_FTRACE_SYSCALLS=y
- CONFIG_FUNCTION_TRACER=y
- CONFIG_HIDRAW=y
- CONFIG_HID=y
-+CONFIG_HID_BATTERY_STRENGTH=y
- CONFIG_HID_BPF=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_UHID=y
-diff --git a/tools/testing/selftests/hid/tests/test_mouse.py b/tools/testing/selftests/hid/tests/test_mouse.py
-index eb4e15a0e53b..141c1f06905b 100644
---- a/tools/testing/selftests/hid/tests/test_mouse.py
-+++ b/tools/testing/selftests/hid/tests/test_mouse.py
-@@ -11,6 +11,7 @@ import hidtools.hid
- from hidtools.util import BusType
- import libevdev
- import logging
-+import threading
- import pytest
- 
- logger = logging.getLogger("hidtools.test.mouse")
-@@ -598,6 +599,35 @@ class ResolutionMultiplierHWheelMouse(TwoWheelMouse):
-         return 0
- 
- 
-+class BatteryOffsetMouse(BaseMouse):
-+    report_descriptor = [
-+        # Mouse report
-+        0x05, 0x01, 0x09, 0x02, 0xa1, 0x01, 0x85, 0x12,
-+        0x05, 0x09, 0x19, 0x01, 0x29, 0x02, 0x15, 0x00,
-+        0x25, 0x01, 0x95, 0x02, 0x75, 0x01, 0x81, 0x02,
-+        0x95, 0x01, 0x75, 0x06, 0x81, 0x01, 0x05, 0x01,
-+        0x09, 0x01, 0xa1, 0x00, 0x09, 0x30, 0x09, 0x31,
-+        0x15, 0x81, 0x25, 0x7f, 0x75, 0x08, 0x95, 0x02,
-+        0x81, 0x06, 0xc0, 0xc0,
-+        # Battery report: one status byte followed by capacity
-+        0x06, 0x00, 0xff, 0x09, 0x14, 0xa1, 0x01, 0x85,
-+        0x90, 0x05, 0x84, 0x75, 0x01, 0x95, 0x03, 0x15,
-+        0x00, 0x25, 0x01, 0x09, 0x61, 0x05, 0x85, 0x09,
-+        0x44, 0x09, 0x46, 0x81, 0x02, 0x95, 0x05, 0x81,
-+        0x01, 0x75, 0x08, 0x95, 0x01, 0x15, 0x00, 0x26,
-+        0xff, 0x00, 0x09, 0x65, 0x81, 0x02, 0xc0,
-+    ]
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+
-+    def get_report(self, req, rnum, rtype):
-+        if rtype != self.UHID_INPUT_REPORT or rnum != 0x90:
-+            return (1, [])
-+
-+        return (0, [0x90, 0x04, 0x5F])
-+
-+
- class BaseTest:
-     class TestMouse(base.BaseTestCase.TestUhid):
-         def test_buttons(self):
-@@ -1045,3 +1075,27 @@ class TestBadReportDescriptorMouse(base.BaseTestCase.TestUhid):
- 
-     def assertName(self, uhdev):
-         pass
-+
-+
-+class TestBatteryOffsetMouse(base.BaseTestCase.TestUhid):
-+    def create_device(self):
-+        return BatteryOffsetMouse()
-+
-+    def test_queried_battery_field_offset(self):
-+        uhdev = self.uhdev
-+        power_supply = uhdev.power_supply_class
-+        assert power_supply is not None
-+
-+        done = False
-+
-+        def dispatch():
-+            while not done:
-+                uhdev.dispatch(1)
-+
-+        thread = threading.Thread(target=dispatch)
-+        thread.start()
-+        try:
-+            assert power_supply.capacity == 95
-+        finally:
-+            done = True
-+            thread.join()
--- 
-2.55.0
+Hi Andrew,
+I answered this in v2, as the same question was raised by Sashiko:
+https://lore.kernel.org/all/d73ef56f-077e-4995-993b-56b2c58b6b65@linux.ibm.com/
 
+
+Thanks,
+Sayali
