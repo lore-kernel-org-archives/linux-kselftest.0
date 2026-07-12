@@ -1,36 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE93CA6F;
-	Sun, 12 Jul 2026 02:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D292D7814
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 04:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783824434; cv=none; b=Udrt3B3WXYceRpvt42QU5ET/9P/kO2dzg5l7Rb8qXLffDDMdF+pzqZupg7XT5DsfDJZcynqeNiVVTwKNwLPDcXIMvajBLoLdRESBwx82YjhuGWRuDmPKaysRjayVlPrmvhLYIxRTcVaFD064dzN9YCv4J+Fh+Saxw9FW7us1rH0=
+	t=1783829332; cv=none; b=Ch0DVfNRdAiLqxaKOgr1GU0dM/sdcrrB3Eo4TjqxUYHpTVRWTofNBZNRRCXF0YryRGA4v9DAdpYuFFygo2EYC1CjpQFJj9hLNp7qSn7ELP1ucyEkTzywTlDna3GgDfXe/M6wwn6dY2Gj/52mqrb1C7FcZ4Yyk8tdMe9/7C1mZUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783824434; c=relaxed/simple;
-	bh=DFVqX2r5tyR2oLkIHCQAv3+gWcYB5gCOluxfLzmDwEA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r8ykzk0eYn0fqnT4dDjjuC76kF675W1HAqKtyZnGPFiH94SdkC/U8bOYdE/zrb3M5bza/kmmDWQ/Ca76mC21pmgD8Z+N6O6S6/nARk9szzhl1D6rHNeVKQZ7FWU1YlELbXGdrm9JhSWzW+r6u+bP07vxXB2qtBfkyZuW1hCNNqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuQ/6bYH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1783829332; c=relaxed/simple;
+	bh=h6B0OjtVcGTWtjlzNMQQRejqoZpZDRXhjwZUYIoAIUs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bchKJNoNU2f7lxNE5NEZSc3ztYak0bFqwOgXAnn80p/FtNXtEevtzNJuz65YivtLjiYRKjo3ObGy3cjEnYZ2YKs2bMZU4gVKIoygtPhvBbfHIhaXnQBkfybhHIMXUngXkIPMurS0m5oW9C1cYnFMzegUmdIhQ3OR1ZVzgqAxuB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYFO8J+T; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuQ/6bYH"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 162ADC2BCB3;
-	Sun, 12 Jul 2026 02:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1783824434;
-	bh=DFVqX2r5tyR2oLkIHCQAv3+gWcYB5gCOluxfLzmDwEA=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=cuQ/6bYHspIwR3v/ppCZHlUh+Qq3/RfVTkp7Ihbk0bvjqzz7QPAIjT932hDaiu6GW
-	 03L5U7UXnJoBjZsh7xVqjUNRBml5mVyOgb2HlIMImjiFm9NM9GcET9EVfKNxvFIMW/
-	 2U4CYBAE9oSq0Unkgfp1dn+ADQRa2zu7UuAywZSee7/Lusw9feb72LOUS+GbHjCRGa
-	 dlWE7/JWNqZZR1r5hW6Mkvb+KgmJiI6MiwzIE2yxcZLUm/eDPFTsvbVayc16HFb96W
-	 zkuApCLCtvArGKCYIGbj/hagK55cHjmQomLJ21eFY5pSAc37JSgFOUupgFnr9IAkrH
-	 +xet8TBNV4Z6g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2BACC43458;
-	Sun, 12 Jul 2026 02:47:13 +0000 (UTC)
-From: Miles Krause via B4 Relay <devnull+mileskrause5200.gmail.com@kernel.org>
-Date: Sat, 11 Jul 2026 22:47:12 -0400
-Subject: [PATCH] selftests/futex: Give circular-list nodes static storage
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYFO8J+T"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38dd55ad76cso262666a91.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jul 2026 21:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783829330; x=1784434130; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=t37Gu0kxoMG3/ekSSSPa6GLm4FmEdZkOax2Tk1RKTwE=;
+        b=UYFO8J+T9mdKCwwncTHii6Rnnng+fAt2iuWC7rA9o6ZyZtHiG/5RvvgoSv/KW4IGXt
+         sVZegZyK+Mjozbl1VXowKrbo+fGY5aNFMvMff6xD1GpGUtRPwu7sh4INH6h3YKUW1uhx
+         NRoCFlqbzp7thOuoBbiYsF5cpP1N2VXa8gfnLv5FcXM4FtjH2BaJcPK2Rkk+gtcMl3A9
+         2BcLXGKSWm13xJhUNEKBTAmWp3m2+tEzuV/5a+5ir6Rv/XVnMvmAbsbbRcFFiRHaUyWJ
+         76hcA21SlxBM1hL/F/AIdlt1Dy+pUJt70cFAjCZs5k/rgl0wAcgM/V+dikdILKKNobK4
+         3RuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783829330; x=1784434130;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=t37Gu0kxoMG3/ekSSSPa6GLm4FmEdZkOax2Tk1RKTwE=;
+        b=iu6CWPsYQkt9HvxrMMYto4tuajVdOhC/5TVVP8R5iMUwL17NqY46IkfqzvgnuA2TI0
+         6dBZM57cliCcJVF3+FelMNeWWE9bKoPdmUDO2C6dpddmVZ+Kfh4MUZL3pwG71qd1GFF8
+         cGM2vhNKIT185ROEsnOH3IekWQW6dWEH0nb2KjlkOMXW/xg9WmFHaZSkWRPM954/VFTD
+         84zAokv53ciqjtYXd4F8a9MDBASvIfaQqL0WxLmH++oEimue9YaKmUVMUWD/weeiLpZd
+         TfI/xdv0wzY9kKIk665CG0GVMfLZ6cY0S2oEHSesL+LFgadgXs+nRZNNn3zBxl7f2Tmw
+         4/cQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrPohIrH5qY1jXFTKcmGHE0DB5jJ6lwlc5tpd2SM/QS8Bl+GK7EmqzeMTPEREdrwMc6rS+hkSleW4o4MtycoBw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY0JfY+YGmMDqI5GJpzhKKFWdBGrXasA7zwZ/nTgt4U/WphVO6
+	LmcfeziLp63nsRQ1RUIblS0qoAQaqtXCQCibQjqjz9UkQVaXhtsTXqGBrzRISX6q
+X-Gm-Gg: AfdE7ckn7NLM8u4r6GshAGlxZIere1rX8pIy4aPnEFFw+EFnmzleRL/FaEkwzU5JOYF
+	WKLjLFO08ODaHht77Xu83rERQ2GTpFrS1RtnsV2jBmhUNXc9HyKDljyY5B4vbRBKj29xtsqe02X
+	NFcewe2InFeWO1tPVQZmj+uLRIAFr0jI495/Gev093ph3wcqDDRZhx6lUT5vd6ifQ7lWXifcHTp
+	7TDtApHe3UMVyHvfPvTMuE+Z2gutrDROaT2vZtt36X26h4ig8GUjF3eIPi7IUkTNhBYLLoBoQM5
+	CTpL1uHky5sjfc+KHNPUR1BHldk7LBMrkpnZQqQsIfw/92U0ULHyHX8jevK9ao4M9oMyo0FuVsx
+	TAcFRUO2kxJMPEpwJbdB7Yjqk+ag/ii0ZYzMu5jrfCKa5CleGk90tU8TzKGWaH5ZJWFczz6CCEF
+	3rJ4v+AhwWUybGAPbj
+X-Received: by 2002:a17:90b:2585:b0:38d:ec55:7aa7 with SMTP id 98e67ed59e1d1-38dec5589c6mr496049a91.19.1783829330453;
+        Sat, 11 Jul 2026 21:08:50 -0700 (PDT)
+Received: from [127.0.0.2] ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31174839f89sm56808928eec.10.2026.07.11.21.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jul 2026 21:08:49 -0700 (PDT)
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+Subject: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+Date: Sat, 11 Jul 2026 21:08:13 -0700
+Message-Id: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -39,74 +69,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260711-futex-robust-list-static-nodes-v1-1-723754d75cf5@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAC8AU2oC/yWN0QrCMAxFf2Xk2UA71Km/Invo2kwj0kqTymDs3
- 436cuHA5ZwVhCqTwKVbodKbhUs28LsO4j3kGyEnY+hdf3SD9zg3pQVrmZooPtlGNChHzCWR4OD
- 2p2S/c3AHMMmr0szLL3Ad/yxtelDUrxW27QM1Z93EggAAAA==
-X-Change-ID: 20260711-futex-robust-list-static-nodes-7048d7119a05
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Miles Krause <mileskrause5200@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1783824432; l=1518;
- i=mileskrause5200@gmail.com; s=20260710; h=from:subject:message-id;
- bh=08Ia/Sl+qT3Kah/g1jX/YTW/yGaP4wipGXelK9b9UyI=;
- b=W2Kn/c7e1+v/z2sVd7S9lCOi60U7HWm6XdWHZtL6PB5obvihJuqE99467wAdqOTAfQXNdBVZO
- 95s36WHxA6+DOnaERgo5LedR5rnvi5krTmsk1Fwv9ZLSAxDK94RMoN4
-X-Developer-Key: i=mileskrause5200@gmail.com; a=ed25519;
- pk=QNhNjcQarqig3ColJBIEr3DYfWM1PHpP7z+6thxWXaU=
-X-Endpoint-Received: by B4 Relay for mileskrause5200@gmail.com/20260710
- with auth_id=861
-X-Original-From: Miles Krause <mileskrause5200@gmail.com>
-Reply-To: mileskrause5200@gmail.com
+X-B4-Tracking: v=1; b=H4sIAC4TU2oC/y3NQQ7CIBCF4asY1o4B0lpx5T1MY4QO7aQWGmhQ0
+ /TuIrr8XzLfrCxiIIzsvFtZwESRvMsh9ztmhrvrEajLzSSXR94IAZqcnRaYKBrQs4UkgdvaCKu
+ UVtixfDgHtPQq6LXNPVBcfHiXH0l81z/HG3j6MBbn596KmwRwaCqtVG1OFRpxGTE4fBx86Fm7b
+ dsH8KzV07cAAAA=
+X-Change-ID: 20260711-binfmt-misc-bpf-v2-0f5c1f99b9ed
+To: Christian Brauner <brauner@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Jonathan Corbet <corbet@lwn.net>, Jann Horn <jannh@google.com>, 
+ John Ericson <mail@johnericson.me>, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Farid Zakaria <farid.m.zakaria@gmail.com>
+X-Mailer: b4 0.14.3
 
-From: Miles Krause <mileskrause5200@gmail.com>
+This is a continuation of Christian's bpf-backed binfmt_misc POC [1], which he offered
+to hand off to me. I am carrying it forward. The kernel design is his and is
+unchanged. This series rebases it onto his binfmt_misc locking/cleanup series [2]
+and adds selftests (+ fixed from the one's shared), and therefore does
+not apply to mainline alone.
 
-The registered robust-list head has static storage but points at three
-automatic lock nodes. GCC warns about storing the address of a local
-variable in the static head when building the selftest with -Wall.
+As for motivation for this whole change, Christian did a great VL;MR;
+write-up [1].
 
-Give the nodes static storage as well. This keeps every object in the
-circular list alive through child exit without changing the list topology.
+TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter,
+but it can't match programmatically or compute the interpreter per binary.
+The Nix community would love to support relocatable binaries, where the
+correct loader can only be found relative to the binary itself.
+This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
+inspects the binary and picks the interpreter with one new kfunc,
+bpf_binprm_set_interp(). 
 
-Signed-off-by: Miles Krause <mileskrause5200@gmail.com>
+  bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
+  echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/register
+
+Patch 5's nix_origin.bpf.c is Christian's example program with a small fix
+so it passes the verifier. Christian, happy to add a Co-developed-by: and your
+Signed-off-by: if you would like the credit in the trailer.
+
+For those that want to validate this functionality on a NixOS machine,
+you may find my flake.nix handy [3]. It builds the kernel, compiles the
+bpf objects against its BTF, and runs the selftest on boot,
+
+  # be sure to change virtualisation.sharedDirectories in flake.nix to your checkout
+  $ nix build .#nixosConfigurations.micro-vm.config.system.build.vm -o /tmp/vm
+  $ NIXPKGS_QEMU_KERNEL_micro_vm=$PWD/arch/x86/boot/bzImage \
+  $ NIX_DISK_IMAGE=/tmp/vm.qcow2 \
+  $ QEMU_KERNEL_PARAMS="binfmt_autotest console=ttyS0" \
+  $ QEMU_OPTS="-nographic -no-reboot" \
+  /tmp/vm/bin/run-micro-vm-vm
+
+[1] https://lore.kernel.org/r/20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org
+[2] https://lore.kernel.org/all/20260710-work-binfmt_misc-locking-v3-0-a162f7cb58d6@kernel.org/
+[3] https://gist.github.com/fzakaria/0155e11a0882bd3d6e63f4070e7fac0c
+
+To: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Jann Horn <jannh@google.com>
+Cc: John Ericson <mail@johnericson.me>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 ---
-Built with:
-
-  make -C tools/testing/selftests/futex/functional clean
-  make -C tools/testing/selftests/futex/functional robust_list
-
-Tested with:
-
-  tools/testing/selftests/futex/functional/robust_list -t test_circular_list
----
- tools/testing/selftests/futex/functional/robust_list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index b3fab60181d5..2300253a7e35 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -523,7 +523,7 @@ TEST(test_robust_list_multiple_elements)
- static int child_circular_list(void *arg)
- {
- 	static struct robust_list_head head;
--	struct lock_struct a, b, c;
-+	static struct lock_struct a, b, c;
- 	int ret;
- 
- 	ret = set_list(&head);
+Changes in v2:
+- Patch 5 adds new tests that validate the functionality:
+  - a bpf handler matches a synthetic aarch64 header and routes it to a fixed
+     interpreter the program chooses;
+  - a handler resolves a "$ORIGIN/..."-relative PT_INTERP to an
+     interpreter co-located with the binary (i.e, Nix usecase);
+- Patch 3 is rebased to fit the new binfmt_misc code style: the 'B' field parsing is now a
+  parse_bpf_fields() helper matching the new parse_{magic,extension}_fields()
+  split, and load_misc_binary() keeps the bpf retry loop in the
+  __free() cleanup style.
+- Link to v1: https://lore.kernel.org/r/20260707-work-bpf-binfmt_misc-v1-0-74b995c84ec1@kernel.org
 
 ---
-base-commit: 051f5d223dfc1806e216f60e4b29c1bf35f5c2d3
-change-id: 20260711-futex-robust-list-static-nodes-7048d7119a05
+Christian Brauner (4):
+      exec: stash a bpf-selected interpreter in struct linux_binprm
+      binfmt_misc: add binfmt_misc_ops bpf struct_ops
+      binfmt_misc: wire up bpf-backed 'B' entries
+      bpf: allow fs kfuncs for binfmt_misc_ops programs
+
+Farid Zakaria (1):
+      selftests/exec: add binfmt_misc bpf-backed handler test
+
+ Documentation/admin-guide/binfmt-misc.rst        |  40 +++-
+ fs/Kconfig.binfmt                                |  14 ++
+ fs/Makefile                                      |   1 +
+ fs/binfmt_misc.c                                 | 149 +++++++++++-
+ fs/binfmt_misc_bpf.c                             | 275 +++++++++++++++++++++++
+ fs/bpf_fs_kfuncs.c                               |  23 +-
+ fs/exec.c                                        |   1 +
+ include/linux/binfmt_misc.h                      |  49 ++++
+ include/linux/binfmts.h                          |   1 +
+ tools/testing/selftests/exec/Makefile            |  37 +++
+ tools/testing/selftests/exec/binfmt_bpf_app.c    |  12 +
+ tools/testing/selftests/exec/binfmt_bpf_interp.c |  15 ++
+ tools/testing/selftests/exec/binfmt_misc_bpf.c   | 260 +++++++++++++++++++++
+ tools/testing/selftests/exec/bpf_interp.bpf.c    |  52 +++++
+ tools/testing/selftests/exec/nix_origin.bpf.c    | 179 +++++++++++++++
+ 15 files changed, 1091 insertions(+), 17 deletions(-)
+---
+base-commit: 6203a47c1d78f948cd5e9ad1a4c089745e466870
+change-id: 20260711-binfmt-misc-bpf-v2-0f5c1f99b9ed
 
 Best regards,
---  
-Miles Krause <mileskrause5200@gmail.com>
-
+-- 
+Farid Zakaria <farid.m.zakaria@gmail.com>
 
