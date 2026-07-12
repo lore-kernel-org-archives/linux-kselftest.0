@@ -1,88 +1,81 @@
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21133148D8;
-	Sun, 12 Jul 2026 09:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1D72C1584
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 12:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783849439; cv=none; b=FgWo576Czo6a3YGOv6W7sXUsSj2KVT/rec3TNKYKhyK7hWYODTfU0qG3szOB1feD8rP6z2phUyVGmSnWzFV+hR/lzaNTivso3X1oQRDfDzFWmyRb7HT3PNkpaybZY1SPhtgc1N2Ho1VtYFKUPTZfwo/A15yxjaempv9Y3Y2EJMY=
+	t=1783858640; cv=none; b=PCyg+9iDqiJV/CE9Z1UsfbJuuSSorfrDBCdtNtp/vz460gFdZYl/qKeyAK4tzMiPKLcyhZhFFTM/dJBzgrEZGcO0C6Il2ud2TmUkyzhP0RsYZzOQFTHbqU9XbUMX7B0dFau/he269ZQU4wsZKK8IQds3F7dfy8HMu2sedXkV6PE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783849439; c=relaxed/simple;
-	bh=MxoCFw5rMV/jhXspb1VL0pHvwf8Qvv76lJnMPcTAjRk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5/Iw8tIYThajq4EWVsWiwrlkbOUKGq8/uSw0z0MM5tRTwcw4qEd6GivLuQ2th1ZfSXgyp0D7VYPOabDGqVZIzxB/cjujLi20qLJnqAuiH9VoalHQN6PCqi0Chi5tAnSbt3X3lqf1naVe7S2AFwml/ws5NsQj1xcT9jx1jIM3cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=ZfttTx9C; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+	s=arc-20240116; t=1783858640; c=relaxed/simple;
+	bh=GhZd/XfEUa+JlDioXYReZpiTb+QqWsKH4GGipILVAGU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CA9RlRHI8hJ/yz6k2SKIntQhDKCCk7tISj2WbZu7M2cLJrq8A7tg74inzL3TEJn8eUnp72oqcJfaW38aKqpzNVp5HBnw7mMzvSPyfjBDmPYCTstjCN2rQBeJpRcSsgdIpzFQIEnHLWIaUWybwWJu6Iy1kgX9mi1Onb4waX3yGVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pnU3NpW0; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="ZfttTx9C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1783849038; bh=iF+hC7W+Ah7WFeVclAGlVeUrk52rQXvAJGy+4B7TOS0=;
-	h=From:Message-ID:From;
-	b=ZfttTx9CmNNXndRdUcolY5TUqm/RJHuI/HHgTS9bILEE85L4k1gmHamuTBBk6Z5/a
-	 yELEFPl4ENWiZNzVBU/B4l0erdgWt5Q0P3a57L5Loqvg4ouLr9E+OnqKmIKztdm2nu
-	 lpELemj+vqWlQD4jBmEZAKp7w40m/ZIXmgaCcx88=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id 857A6C0A38;
-	Sun, 12 Jul 2026 11:37:18 +0200 (CEST)
-Date: Sun, 12 Jul 2026 11:37:18 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: add debug information
-Message-ID: <alNgTmkDHpYHVCVM@1wt.eu>
-References: <20260707-nolibc-debug-v1-1-31619ec94bbd@weissschuh.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pnU3NpW0"
+Message-ID: <904e6cbe-8774-42e6-8930-c4fc43cdbaec@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783858626;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IOGsiwkurcz5QWt2OlGzDxgCUFJG3Ey9sVuWGXtSkU8=;
+	b=pnU3NpW0AFK47qVGH7i+8a90by6FnkzINb5PnoAG8/qzUNJ0xC5AjRhXkzDt6kAD07Dlv4
+	NI1yVPRdlSn+09FpfvAyfeLyNuZVmFlO2my8yC4iOMGTCRGhQtXQUtL/Z35QUHGNWo+poQ
+	LhYCKEoXhOfMKolyWJtwFUC9LPvU7Ks=
+Date: Sun, 12 Jul 2026 13:16:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260707-nolibc-debug-v1-1-31619ec94bbd@weissschuh.net>
+Subject: Re: [PATCH net 0/2] ptp: fix scaled_ppm_to_ppb() overflow bypassing
+ the max_adj check
+To: Deep Shah <deepshah146@gmail.com>, netdev@vger.kernel.org,
+ Richard Cochran <richardcochran@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+References: <20260712040922.6403-1-deepshah146@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <20260712040922.6403-1-deepshah146@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Thomas,
-
-On Tue, Jul 07, 2026 at 06:42:30PM +0200, Thomas Weiﬂschuh wrote:
-> When working on nolibc, debug information is very valuable.
-> I find myself adding this flag in many patchsets.
+On 12/07/2026 05:09, Deep Shah wrote:
+> ptp_clock_adjtime() validates an ADJ_FREQUENCY request by converting
+> tx->freq to ppb and comparing it against ops->max_adj. On 64-bit systems
+> that conversion can overflow s64 and wrap the result back into range, so
+> a crafted tx->freq bypasses the check and reaches ->adjfine() unclamped.
 > 
-> Enable debug information unconditionally, as there is no downside to it.
-
-Indeed, I would have thought we already had it.
-
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-
-Acked-by: Willy Tarreau <w@1wt.eu>
-
-Thanks!
-Willy
-
-> ---
->  tools/testing/selftests/nolibc/Makefile.include | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch 1 rejects the overflow in ptp_clock_adjtime().
+> Patch 2 adds a regression test that crafts struct timex.freq directly
+> (testptp's int-ppb path cannot express the value) and confirms it is
+> rejected with -ERANGE.
 > 
-> diff --git a/tools/testing/selftests/nolibc/Makefile.include b/tools/testing/selftests/nolibc/Makefile.include
-> index c30ca3a9ef14..ea520eac64a6 100644
-> --- a/tools/testing/selftests/nolibc/Makefile.include
-> +++ b/tools/testing/selftests/nolibc/Makefile.include
-> @@ -5,7 +5,7 @@ _CFLAGS_STACKPROTECTOR ?= $(call try-run, \
->  	echo 'void foo(void) {}' | $(CC) -x c - -o - -S $(CLANG_CROSS_FLAGS) $(__CFLAGS_STACKPROTECTOR) | grep -q __stack_chk_guard, \
->  	$(__CFLAGS_STACKPROTECTOR))
->  _CFLAGS_SANITIZER ?= $(call cc-option,-fsanitize=undefined -fsanitize-trap=all)
-> -CFLAGS_NOLIBC_TEST  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-> +CFLAGS_NOLIBC_TEST  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -ggdb \
->  		-W -Wall -Wextra -Wundef -Wwrite-strings \
->  		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
->  		$(_CFLAGS_STACKPROTECTOR) $(_CFLAGS_SANITIZER)
+> Deep Shah (2):
+>    ptp: reject frequency adjustments that overflow scaled_ppm_to_ppb()
+>    selftests: ptp: add a regression test for the frequency adjustment
+>      overflow
 > 
-> ---
-> base-commit: a3b2181459a2c74c03ddbad585f884eefc8ff8ff
-> change-id: 20260707-nolibc-debug-04c9cedd3eaf
+>   drivers/ptp/ptp_clock.c                       | 14 +++-
+>   tools/testing/selftests/ptp/Makefile          |  2 +-
+>   .../testing/selftests/ptp/ptp_freq_overflow.c | 74 +++++++++++++++++++
+>   3 files changed, 88 insertions(+), 2 deletions(-)
+>   create mode 100644 tools/testing/selftests/ptp/ptp_freq_overflow.c
 > 
-> Best regards,
-> --  
-> Thomas Weiﬂschuh <linux@weissschuh.net>
+> 
+> base-commit: 3f1f755366687d051174739fb99f7d560202f60b
+
+For the series:
+Reviewed-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
