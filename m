@@ -1,371 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B66738E5E9
-	for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 23:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A171175A9D
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 01:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783900536; cv=none; b=gSR1wRs/OlWd4o6Mjb9QIO6/vewLADbRoc4vhZKpxTk57Juv1eLSbhzjSIR+Yxw76g628Jvty3YKCfiBAxFTTHJCvj5OkzYZ4PtVePzAdYWiMxSJuwZsgKYxtbIrgwSAc+Urm/hGqOBX21ekDeCT2+NSMdSMRjkwcbOen9IgMKc=
+	t=1783904630; cv=none; b=FFvVCP4yzYxd0I6AnmwChrVBstunaIP+teMHB4NAXhRjB+405NPlK6JUxUrbUdQzW+6M7/PDL6i2j+EBSafgdv0r8dHCIjePHeoSuyw03WaCz04ldigOgAZUywez/NdNrZQBT+lD6P1KiBqJuGStiVjKzJ5NqO8WS9Uo/91fn9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783900536; c=relaxed/simple;
-	bh=U3XeUnEL+rDTz+vN8wgmKNKJy9pBXpmiepr3NAb/tR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z1ROBYfY4JvgL2rqEbMjk748NO2/YsTHqui7NYT5fDiuTBo+gS9aSBAHz27vvaY5EsEJljYKLdNAQ0dtBdaR9evbqHejYzGg96ImuQYX2QGoOIiBMaQdyDmOxbTcIfr9aIkTpUVCJTFEtqxy5xYu+afX2cbWA9cgEoxweb87hAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YwkN511r; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783904630; c=relaxed/simple;
+	bh=bJ7YEEZL7al7qXr+SKm6fJqbPnGlXft4aexFS9JYmvc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TH5TlwjxuKBRIaEcbytS3nYhRvEyFlllZIh4Er7reu6jNMoDyvbaJ1bRmp15AZCumI3hrRDehnRhD3sCwJRKYxTeQrDDvxAArOK716w5n07CKhpfdVCiqc2MOt0QbYdXR/yQLL8SMPnyZmWiAlKzZPyvTqExG+8OT2GJxDBIGgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZsTfhUM; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YwkN511r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783900533;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/Qe+95+MXsZNLDf2pjnP57V9Q3yNl9VozQHNGuksZog=;
-	b=YwkN511rsygTTr7Vr16OUUm2wNGLsaXFzEzrPMGuKiEQDO/KfATqKQVJH06CckWBaV7OOr
-	Y3HQdrhcckp5FvgEFH7f0D3Ovxq+fUMqcYUujUn9iU1s7IGNU/Hw0u8QmpNOPafI6o9Kou
-	MLEscewu316OhqBk6W+lASa147fhbc4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-423-wHXFajveP5GcYtICJqWLIw-1; Sun,
- 12 Jul 2026 19:55:30 -0400
-X-MC-Unique: wHXFajveP5GcYtICJqWLIw-1
-X-Mimecast-MFC-AGG-ID: wHXFajveP5GcYtICJqWLIw_1783900528
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8DD2A18002C3;
-	Sun, 12 Jul 2026 23:55:28 +0000 (UTC)
-Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.80.43])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2B52C1956053;
-	Sun, 12 Jul 2026 23:55:26 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Ridong Chen <ridong.chen@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZsTfhUM"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84536ecfc5bso2826486b3a.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 18:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783904629; x=1784509429; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PHNlMRDMMMe/DeM+KYptR6x1Xol+X7QDPM1SwrT/UAU=;
+        b=SZsTfhUM7uTJZVdaRra3u08hXLCH3agZjmdiz6KAlvtgcp5LjRW9n+1ljwN4E2cddG
+         E8h9iEp+/CS2C4WEGh2bxSPnh8MvNbUsNsQhGVkkkDL17yIKHljYy37sNp/nhd/8K95d
+         4Aw/95Nh4Flyo9M9DUBSuN3xeSBhyd/xgp6SEaVTpzIAIibggxFy70ikS+I43QyDiXb3
+         vHwLZqK2yWU6gmmp3lg+RXg+JqOmtOjeqCWz+oNhTDpbuuEbJI+2EZLYqlo0r3BVKLPd
+         4IDNNLRAu9PCGsqSD3Wuslae8YvKesywU/w/8ImimE3v3SqueTM+tSUduNqpw5YY1Ool
+         gJow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783904629; x=1784509429;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PHNlMRDMMMe/DeM+KYptR6x1Xol+X7QDPM1SwrT/UAU=;
+        b=Eln1QnEVHBfIA4oVJRD9XtZrqkBohFSU1AMowUDCR2+nloIn6U2GMKgyP85WYXakMv
+         byExgGNTMfcCDiQL54CsutjsnLYhYwurT32Ts6RfqfG2cX0Y3ZYUpFsFsnYQY3OBBCIR
+         XqXGRLlT1dL2qZOpkTnwkvD6/HAg9G66jSB1GKA/5GZiDYoiWoXAgHUC97GYTO+71ILZ
+         CU1DTtBZLSynzl/TmwhjUg3KDkAaAWGSIhnRqcOFy2lVVy0+NwGpaLoS2SmFz596yOQj
+         1iAjIe1JScLrLAXXGcuGZdFBeYzlvqkvbJo2PcelXLvq0X6nCaAT0X9TkezgFgAVM2Kt
+         kASg==
+X-Forwarded-Encrypted: i=1; AHgh+RqsNploHLL6+H3rvrkBCFvITde0r9Ma0/6BkbtPHuP4bXk16IDRlIy2o8tFMxCKtRkvhUTToq2zYAyj/oGg6VM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0ha8ivbI0UCvLXAA5WAr9UEnG+y3id1JGIMsfiRKE5QVMOwvp
+	T/pukxLyyUFqz79f3YvjkPeV1G1JtpVs3tWHpVgsiTEc8Pqv6XAr+Fki
+X-Gm-Gg: AfdE7ckJ0R2QucqCg3lJKJJ56/9gTfa+1dk9fv7GP8osJLhuyBX26F9QS2UlU6F5RID
+	YPcFCPrVoilIIF4xg6dr7yoveFWnPrmf2/aC8TRFRYu/dq1jpfvLiFrN0wVxClHPd/cESM8RQL4
+	ejuBzzgmxU7NX0IEEEaC+Frt6TK8A0EEWrQdaQKUsXxSFR719ZV3T/Z146ckejlXMnI5eTC8qse
+	226W64iRj8DpfVRG0+gyBvjWR7CAGLCs/fuNdObsfBJNaBGSqmJ91XssNAcxEBQab0x/eWKAV8I
+	5TxZcUIWx5nh/c95Df6puovJyCHifP3nL6Ig11DnOp/HlA1Gpjg62tLb3mdtZlaAjnbzqmIuTgx
+	Kb4a7FQUZT4ZPNJSBaJGQnqQLlcQS52wYFSORlNOzIx/8y7bFoYAc6QWXlahNLLzLH5w3nea62F
+	Y=
+X-Received: by 2002:a05:6a00:4fc4:b0:847:7f6a:c56d with SMTP id d2e1a72fcca58-8488967b436mr6947225b3a.30.1783904628530;
+        Sun, 12 Jul 2026 18:03:48 -0700 (PDT)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84909673e32sm2292135b3a.56.2026.07.12.18.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jul 2026 18:03:48 -0700 (PDT)
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andy Chiu <andybnac@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Thomas Huth <thuth@redhat.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Sergey Matyukevich <geomatsi@gmail.com>
+Cc: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH-next v3 3/3] selftests/cgroup: Add test for cpuset affinity on controller disable
-Date: Sun, 12 Jul 2026 19:55:10 -0400
-Message-ID: <20260712235510.373125-4-longman@redhat.com>
-In-Reply-To: <20260712235510.373125-1-longman@redhat.com>
-References: <20260712235510.373125-1-longman@redhat.com>
+	Yixun Lan <dlan@gentoo.org>,
+	Longbin Li <looong.bin@gmail.com>
+Subject: [PATCH v6 0/8] RISC-V: KVM: Add Svadu/Zicfiss/Zicfilp FWFT support
+Date: Mon, 13 Jul 2026 09:02:53 +0800
+Message-ID: <20260713010302.303278-1-inochiama@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-From: Michal Koutný <mkoutny@suse.com>
+This patchset based on the patchset "RISC-V: KVM: Add Zicfiss/Zicfilp
+support".
 
-Add a new selftest that exposes a bug in cpuset_attach() where thread
-CPU affinity is not properly updated when the cpuset controller is
-disabled in a threaded cgroup hierarchy.
+The patch includes all the function of original patchset from Quan:
+adding the Svadu/Zicfiss/Zicfilp FWFT for the RISC-V KVM. And this
+patchset already passes the KVM unit test.
 
-The test creates a threaded cgroup hierarchy with two child cgroups
-(A and B) having different cpuset.cpus constraints:
-- Parent: cpuset.cpus=0-1
-- Child A: cpuset.cpus=0-1
-- Child B: cpuset.cpus=1 (restricted to CPU 1 only)
+Test with the patch applied
+https://lore.kernel.org/all/20260618064406.14508-1-cuiyunhui@bytedance.com/
 
-A multithreaded process is created with threads placed in different
-cgroups. When the cpuset controller is disabled on the parent, thread
-affinities should be updated to match the parent's cpuset.
+Changed from v5:
+- https://lore.kernel.org/kvm/20260706022046.214956-1-inochiama@gmail.com/
+patch 1, 5:
+1. Switch to csr_read()/csr_write() to update csr
+patch 8:
+1. Fix the macro name.
 
-Expected behavior:
-- thread_a affinity: {0-1} before and after (unchanged)
-- thread_b affinity: {1} before, {0-1} after (expanded)
+Changed from v4:
+- https://lore.kernel.org/kvm/20260701020746.170157-1-inochiama@gmail.com/
+patch 1:
+1. Use NACL for csr update
+2. Check ISA mapping before cleaning the ADUE bit
+patch 4:
+1. Clear the zicfiss csr during a VCPU reset
+2. Add zicfiss csr to num_csr_regs()
+patch 6:
+1. Cleanup SPELP after redirecting the trap
+patch 7:
+1. Use interrupt bit instead of number for masking/unmasking
+patch 8:
+1. Add missing entry for the test
+2. Fix the wrong comment.
 
-Current buggy behavior:
-- thread_b affinity remains {1} after controller disable
+Changed from v3:
+- https://lore.kernel.org/kvm/20260607081105.993908-1-inochiama@gmail.com/
+1. rebase to the v7.2-rc1
+2. Tested with the updated Svadu patch
+3. Remove the dependency as it is already merged.
 
-Assisted-by: Claude:claude-sonnet-4-5
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
-Acked-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
- 1 file changed, 243 insertions(+)
+Changed from v2:
+- https://lore.kernel.org/kvm/20260601084336.2601675-1-inochiama@gmail.com/
+1. rebase with Yong-Xuan's patch set
+2. Add SSP CSR context switch/set/get
+3. Move the software-check exception set/unset into FWFT
+4. Only delegate software-check exception when Zicfiss/Zicfilp is enabled.
+5. Make KVM SBI_FWFT_PTE_AD_HW_UPDATING depends on both Svadu and Svade
+   enabled.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..8b4c4a9dd78b 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -1,7 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#define _GNU_SOURCE
-+#include <assert.h>
- #include <linux/limits.h>
-+#include <pthread.h>
-+#include <sched.h>
- #include <signal.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
- 
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -232,6 +238,242 @@ static int test_cpuset_perms_subtree(const char *root)
- 	return ret;
- }
- 
-+static int get_cpu_affinity(cpu_set_t *mask)
-+{
-+	CPU_ZERO(mask);
-+	return sched_getaffinity(0, sizeof(*mask), mask);
-+}
-+
-+static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
-+{
-+	cpu_set_t expected;
-+
-+	CPU_ZERO(&expected);
-+	assert(sizeof(mask) < CPU_SETSIZE);
-+
-+	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
-+		if ((1UL << cpu) & mask)
-+			CPU_SET(cpu, &expected);
-+
-+	return CPU_EQUAL(&expected, dst);
-+}
-+
-+enum test_phase {
-+	AFFINITY_SETUP,
-+	AFFINITY_THREAD_A_READY,
-+	AFFINITY_THREADS_READY,
-+	AFFINITY_CONTROLLER_DISABLED,
-+	AFFINITY_COMPLETE,
-+	AFFINITY_ERROR
-+};
-+
-+struct thread_args {
-+	const char *cgroup;
-+	cpu_set_t *affinity_before;
-+	cpu_set_t *affinity_after;
-+	enum test_phase ready_phase;
-+};
-+
-+static pthread_mutex_t test_mutex = PTHREAD_MUTEX_INITIALIZER;
-+static pthread_cond_t test_cond = PTHREAD_COND_INITIALIZER;
-+static enum test_phase test_phase;
-+
-+static void *affinity_thread_fn(void *arg)
-+{
-+	struct thread_args *args = (struct thread_args *)arg;
-+
-+	if (cg_enter_current_thread(args->cgroup))
-+		goto fail;
-+
-+	if (get_cpu_affinity(args->affinity_before) != 0)
-+		goto fail;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	if (test_phase < args->ready_phase)
-+		test_phase = args->ready_phase;
-+	pthread_cond_broadcast(&test_cond);
-+
-+	while (test_phase < AFFINITY_CONTROLLER_DISABLED)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (get_cpu_affinity(args->affinity_after) != 0)
-+		goto fail;
-+
-+
-+	return NULL;
-+
-+fail:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_ERROR;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+	return NULL;
-+}
-+
-+/*
-+ * Test that disabling cpuset controller properly updates thread affinity.
-+ *
-+ * This test exposes a bug in cpuset_attach() where threads in child cgroups
-+ * don't get their affinity updated when the cpuset controller is disabled.
-+ *
-+ * Setup:
-+ * - Create parent cgroup with cpuset.cpus=0-1
-+ * - Create child A with cpuset.cpus=0-1
-+ * - Create child B with cpuset.cpus=1
-+ * - Place multithreaded process: group leader + thread_a in A, thread_b in B
-+ * - Disable cpuset controller on parent
-+ *
-+ * Expected: thread_b's affinity should expand from {1} to {0-1}
-+ * Buggy: thread_b's affinity remains {1}
-+ */
-+static int test_cpuset_affinity_on_controller_disable(const char *root)
-+{
-+	char *parent = NULL, *child_a = NULL, *child_b = NULL;
-+	pthread_t thread_a, thread_b;
-+	int thread_a_created = 0, thread_b_created = 0;
-+	cpu_set_t affinity_a_before, affinity_a_after;
-+	cpu_set_t affinity_b_before, affinity_b_after;
-+	int ret = KSFT_FAIL;
-+
-+	parent = cg_name(root, "cpuset_affinity_test");
-+	if (!parent)
-+		goto cleanup;
-+	if (cg_create(parent))
-+		goto cleanup;
-+	if (cg_write(parent, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_a = cg_name(parent, "A");
-+	if (!child_a)
-+		goto cleanup;
-+	if (cg_create(child_a))
-+		goto cleanup;
-+	if (cg_write(child_a, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	child_b = cg_name(parent, "B");
-+	if (!child_b)
-+		goto cleanup;
-+	if (cg_create(child_b))
-+		goto cleanup;
-+	if (cg_write(child_b, "cgroup.type", "threaded"))
-+		goto cleanup;
-+
-+	/* Now enable cpuset controller in parent */
-+	if (cg_write(parent, "cgroup.subtree_control", "+cpuset")) {
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	/* Set CPU affinity constraints */
-+	if (cg_write(parent, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_a, "cpuset.cpus", "0-1"))
-+		goto cleanup;
-+	if (cg_write(child_b, "cpuset.cpus", "1"))
-+		goto cleanup;
-+
-+	/* Move group leader (main thread) to child A */
-+	if (cg_enter_current(child_a))
-+		goto cleanup;
-+
-+	/* Create threads - they will move themselves to their respective cgroups */
-+	test_phase = AFFINITY_SETUP;
-+
-+	struct thread_args args_a = {
-+		.cgroup = child_a,
-+		.affinity_before = &affinity_a_before,
-+		.affinity_after = &affinity_a_after,
-+		.ready_phase = AFFINITY_THREAD_A_READY,
-+	};
-+	if (pthread_create(&thread_a, NULL, affinity_thread_fn, &args_a))
-+		goto cleanup;
-+	thread_a_created = 1;
-+
-+	struct thread_args args_b = {
-+		.cgroup = child_b,
-+		.affinity_before = &affinity_b_before,
-+		.affinity_after = &affinity_b_after,
-+		.ready_phase = AFFINITY_THREADS_READY,
-+	};
-+	if (pthread_create(&thread_b, NULL, affinity_thread_fn, &args_b))
-+		goto cleanup_threads;
-+	thread_b_created = 1;
-+
-+	pthread_mutex_lock(&test_mutex);
-+	while (test_phase < AFFINITY_THREADS_READY)
-+		pthread_cond_wait(&test_cond, &test_mutex);
-+
-+	/* If a thread failed during setup, bail out */
-+	if (test_phase == AFFINITY_ERROR) {
-+		pthread_mutex_unlock(&test_mutex);
-+		goto cleanup_threads;
-+	}
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (!cpu_set_equal(&affinity_a_before, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_before, 0x2)) {
-+		ksft_print_msg("FAIL: thread_b initial affinity incorrect\n");
-+		goto cleanup_threads;
-+	}
-+
-+	/* Disable cpuset controller - this should trigger affinity update */
-+	if (cg_write(parent, "cgroup.subtree_control", "-cpuset"))
-+		goto cleanup_threads;
-+
-+	/* Signal threads to save their final affinity and exit */
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_CONTROLLER_DISABLED;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	pthread_join(thread_a, NULL);
-+	pthread_join(thread_b, NULL);
-+
-+	/* Verify thread affinities AFTER disabling controller */
-+	if (!cpu_set_equal(&affinity_a_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_a final affinity incorrect\n");
-+		goto cleanup;
-+	}
-+
-+	if (!cpu_set_equal(&affinity_b_after, 0x3)) {
-+		ksft_print_msg("FAIL: thread_b affinity did not expand to {0-1}\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+	goto cleanup;
-+
-+cleanup_threads:
-+	pthread_mutex_lock(&test_mutex);
-+	test_phase = AFFINITY_COMPLETE;
-+	pthread_cond_broadcast(&test_cond);
-+	pthread_mutex_unlock(&test_mutex);
-+
-+	if (thread_a_created)
-+		pthread_join(thread_a, NULL);
-+	if (thread_b_created)
-+		pthread_join(thread_b, NULL);
-+
-+cleanup:
-+	/* Move back to root before cleanup */
-+	cg_enter_current(root);
-+
-+	cg_destroy(child_b);
-+	free(child_b);
-+	cg_destroy(child_a);
-+	free(child_a);
-+	cg_destroy(parent);
-+	free(parent);
-+
-+	return ret;
-+}
-+
- 
- #define T(x) { x, #x }
- struct cpuset_test {
-@@ -241,6 +483,7 @@ struct cpuset_test {
- 	T(test_cpuset_perms_object_allow),
- 	T(test_cpuset_perms_object_deny),
- 	T(test_cpuset_perms_subtree),
-+	T(test_cpuset_affinity_on_controller_disable),
- };
- #undef T
- 
--- 
+Changed from Quan's v1:
+- https://lore.kernel.org/kvm/cover.1764509485.git.zhouquan@iscas.ac.cn/
+1. rebase to the latest master.
+2. Split Svadu change as separate patch
+3. Fix all build error from the original series
+4. Remove the Svadu check in kvm_riscv_vcpu_config_ran_once() and in
+   favor of the FWFT.
+5. Remove the LPE/SSE setting bit in kvm_riscv_vcpu_config_ran_once()
+   (kvm_riscv_vcpu_setup_config() in original patchset)
+
+Inochi Amaoto (8):
+  RISC-V: KVM: Add support for Svadu FWFT features
+  KVM: riscv: selftests: add Svadu FWFT extension to get-reg-list test
+  RISC-V: KVM: Allow Zicfiss/Zicfilp extensions for Guest/VM
+  RISC-V: KVM: Add ssp context save/restore
+  RISC-V: KVM: Handle software-check exits for VCPU
+  RISC-V: KVM: Delegate SPELP bit to VS/VU mode if landing pad is
+    enabled.
+  RISC-V: KVM: Add support for control-flow integrity FWFT features
+  KVM: riscv: selftests: add Zicfiss/Zicfilp extension to get-reg-list
+    test
+
+ arch/riscv/include/asm/csr.h                  |   1 +
+ arch/riscv/include/asm/kvm_host.h             |   7 +
+ arch/riscv/include/uapi/asm/kvm.h             |  13 ++
+ arch/riscv/kvm/isa.c                          |   2 +
+ arch/riscv/kvm/vcpu.c                         |   7 +
+ arch/riscv/kvm/vcpu_exit.c                    |  11 ++
+ arch/riscv/kvm/vcpu_onereg.c                  |  68 ++++++-
+ arch/riscv/kvm/vcpu_sbi_fwft.c                | 183 ++++++++++++++++++
+ .../selftests/kvm/riscv/get-reg-list.c        |  90 +++++++++
+ 9 files changed, 380 insertions(+), 2 deletions(-)
+
+--
 2.55.0
 
