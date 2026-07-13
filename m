@@ -1,120 +1,244 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2626A438FE7
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 14:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D0D37205D
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 15:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783954507; cv=none; b=JKiPut4rFCYnJNqaG/GPtoFFIFHVhcQrJRfwGP4PEGxubwvrNRqW8Ud4TyqCW+Ta8oJDS4VIlwnnk/rxqR2t3xZvoFpsY+pdNDanYbD7C7oQBwpeaLdsqxWWCeGPMGbPd8tSuljp48EZ4s9lZe8oBH2imq3ooslMQCug97DtO2k=
+	t=1783955969; cv=none; b=lmUeoaxon4q2UeOCIHm897oBQ3MeKRTR7lIOBDhAOIWGLXLXJpY0+2eGcZdyjwqJB4ihWITZunnUfg05QEzOa2V3wzaZByvIfwmogRPcXLBRPdWrS+KHTK6RR/KkQR1gJmbdMJj6Wy7r3AmAND6T2HsovfkDGjKLtttUDuiJPW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783954507; c=relaxed/simple;
-	bh=GEh+g1NiW3mR99aSYCyQ33wt1J/GHPQy/vLk28L6OPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RnK65rEOL9FGmUMlkCesVi1B1XJxWz7PXoLfBmcWNVHEN6Jv2x61HaOE72sYA9xHo/2zjJSnpXI7WgTA/McUbhtAysdgU4r9MCIyq/XJSQje5Ep9uh/BqVp9I38Htr8BVcanNeRqBqx9eClj7QvtpVOkjeDamMiU/z5QZqdYIPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=iXXu18NO; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1783955969; c=relaxed/simple;
+	bh=XgfMyReXk9WbmWlpqj5QpOsH9T7Axa67XF6W7nxC6hw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=V5JLHODvPtKZOQIqld3/BxIOnh/Op2z62FETm6y/9NsbS7ob2qCjFKaLferpvNT8Bx1sb8zrZsvklZZnbmScNykjd42nKOA3T1AmOUq7YIUg7zuexOWvKSzFpPGADR0n4uGgOrL6fk3LCF+H4pObeBzFhimCpxnalUr6Y7NoAcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IE9gFOzQ; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="iXXu18NO"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-51c0c45c580so26154721cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 07:55:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IE9gFOzQ"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c9c26a5fb98so1988275a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 08:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1783954505; x=1784559305; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IZhqR4JgKFkSLvdz8vThCe3gL1K7igiBUDMCwA8QSjs=;
-        b=iXXu18NOzE/K64fJi0fS7XlUycQSsVxXqPVr+DHylcaFLj1ZBGlqbiKaNjYo6pMNIm
-         fSiRCUq6RCQAbt++t9n05E9YILRvIwfGpADmIjWHjg4w9C8rhQ2bV4ZbFCsGOJc2Gi9h
-         q0ipGuVIBlXhdX5gvz/3Y3NfqBQ95zhUsKtWVIxTviWCAqHMhe+FlLmMacP5a1uSsAxy
-         XCa5CdP+NztGm+lo2TBbweNAKDuzXp3OW20FggC18NySuIIp9GsP7Fts37KEB8YucUz/
-         RTJmsqpTBastICdMJa+TDHNa8B0sYSLIawq1pS+VlCcHU8CgR0mFrSEaR9qVNe95TjcZ
-         BA7Q==
+        d=gmail.com; s=20251104; t=1783955967; x=1784560767; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
+        b=IE9gFOzQxBDi0IVIrhm0xXbwtjhN28eJ/IpULeUzVkLrp4WItFQSjycxXQBT8F/RRf
+         ZZDKLuohqee4ndlVWfcJeRLAzaEOAxov7d3xU6on6CPD7dOtfB9dMJ+KpDdJQcax1rPO
+         /iHly/a+oJlxoRMoniQYQ0dRecTsxtPtRRXJ7eCTHymRpN2542pMfENTlXrM17TP0zZr
+         SH2hL9lc9jcxx5xbK9FU8/Rl4hZZGma36UhIX0MwY25wxVho40B2I/jLLdhXeIq4Zxqj
+         /fFquG9TDC48spLnFuf55vNQDeZpXvs1mPYRL/uru0NCAz7cFtsNQF4QoULbvbwe4jj/
+         r0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783954505; x=1784559305;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1783955967; x=1784560767;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IZhqR4JgKFkSLvdz8vThCe3gL1K7igiBUDMCwA8QSjs=;
-        b=Zq4RPJhg8kmZmVd2fVXkE4mQ5s/IleS7Bnvg5NLbM8ipxWYfk+WvUcGtpp/CUP7C9F
-         NtGdXjR9ZqEsJM5E4M2i5no7UVw2mAqxUdOqiwZzgdh/X4Z/Y2wWhetEvu/cYP4v3yoY
-         rg0IBk2QByODcapiD+o94Ch//cyurFEXDGa0ORvHOnYzFtNzxOm3Q0CWyhmoREwFXsPx
-         mhTXV+WsPiGbLtxMjMCWarwW0+3X6XxXOQSjL59hENzXBBVbmerFSUiwy8g5YRJB/M7A
-         7QApva4Unp/Cy2AFNBFffe0zBoUeBciBkUQxoXnKSrSQm5ewNN7j5ly2I6xsip5tqTZB
-         mmQg==
-X-Forwarded-Encrypted: i=1; AHgh+Rpj5J+m6YsQX3GBxRoIaPlpsL2N35/A1Sy6lLEkkum6toXQWxN5ULv5tI3RNyrXw+Ew1ehQ6QLb/ALk/ENtnpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyoS7EwC10BdKLkyHJ5/VOYPJjIqsLl4kmj4P9kP/wBxTVRVxQ
-	vGg0jl3zcdAPcDzWqbi4O9fXKucbUULV8IVsRY653k3qNZOe5LmOzeB+FECSo2Rhgn4=
-X-Gm-Gg: AfdE7cn3U77lEsx4MDpWt831VUzI5+9zHE5biJEKMmBPFr2TIDDeMai7kOdfLnaQXdP
-	ko2tbugKM2BV3HdT49Dj7nfaaGrBsGmOVsRBWE+Iy3oBQaW6T/gkIZwT9csDma0JeE//IKl5igc
-	n7WJBakJofLf2K/0gEXfXKGzOIN9wimzkZtYRYob2i0lM3ZOTrsNqgWURtFNCHlOTmcvUrxLN1A
-	/w+B3H1lXj9o7hAaoJv7sDYjiCzisO3CfwPeWZ42z+CBT5E3JYNJs4pkgunzKWsQQsS8om2eLyB
-	bF08IG2osYifP83q2Qem30IDD/frdL2Jzesn8XRzlZwz0SvIGsDds7/LAEVsoTfFT/nQaseZgAe
-	Wh5iwOAa0bNe8/LBQT1fw3R/4G4iW4obtUb7lahkyXdD0d7fy29njyoW0LW/CQegM2MlDL3w=
-X-Received: by 2002:a05:622a:1911:b0:51c:504:2ef7 with SMTP id d75a77b69052e-51cbf305510mr90471451cf.67.1783954504822;
-        Mon, 13 Jul 2026 07:55:04 -0700 (PDT)
-Received: from ziepe.ca ([159.2.72.92])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caab6d574sm84876451cf.3.2026.07.13.07.55.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 07:55:04 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wjI3j-0000000DQQj-2xH1;
-	Mon, 13 Jul 2026 11:55:03 -0300
-Date: Mon, 13 Jul 2026 11:55:03 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Stanislav Kinsburskii <skinsburskii@gmail.com>, airlied@gmail.com,
-	akhilesh@ee.iitb.ac.in, corbet@lwn.net, dakr@kernel.org,
-	david@kernel.org, decui@microsoft.com, haiyangz@microsoft.com,
-	kees@kernel.org, kys@microsoft.com, leon@kernel.org,
-	liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
-	longli@microsoft.com, lyude@redhat.com,
-	maarten.lankhorst@linux.intel.com, mamin506@gmail.com,
-	mhocko@suse.com, mripard@kernel.org, nouveau@lists.freedesktop.org,
-	ogabbay@kernel.org, oleg@redhat.com, rppt@kernel.org,
-	shuah@kernel.org, simona@ffwll.ch, skhan@linuxfoundation.org,
-	surenb@google.com, tzimmermann@suse.de, vbabka@kernel.org,
-	wei.liu@kernel.org, dri-devel@lists.freedesktop.org,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v8 4/8] mshv: Use hmm_range_fault_unlocked_timeout() for
- region faults
-Message-ID: <20260713145503.GC3133966@ziepe.ca>
-References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
- <178371881034.900500.5214601525971121683.stgit@skinsburskii>
- <20260710151216.0397a6f9ac5c7b4ccd274cc1@linux-foundation.org>
+        bh=Y+ujhi7qr+5PDvfWnrugr3cptYcf6a5ot8pqDt3RfQQ=;
+        b=BZ0Am6Mz4Kf8cgLqs/hrd4yPmz1+DghEM5l0Ew0DVyc8m6ntUCkLURgMzEML0dQCq2
+         oO52Z/a1RNTrfNb650cHsjSmQrQmK06erK7V+PzUr/AjPtbLFay18JwknlCwBe2mzm2A
+         XKSV3nTuz9Pd4vlbMm0xbH9ND8KyWLgmqQMC9Qa5NDx3PoKmuB2cOQjiYIdReF4hn4hh
+         s/0NASRNlU2s9qpBZdKHILR2o8wOcgW1oX1NyfM/o4CZZGueVTA0zQ2aRk0Ge096pfiU
+         XppaAQ4JjTt8g7rVFuX0XMEmXYJX+7eEQ0UpRXFK9DiiVKcAXmPXcMA74PCFlAXGr3Q+
+         ScPA==
+X-Forwarded-Encrypted: i=1; AHgh+RqLNOwjcd5XniHebduPF2exsyDszMtgrbsgFFmiL/C+9Q6e/xZ0UHtknXRd1nnWZ2HHg/ipEyQ8iTUMadJFvfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrUEj/hdLlZCOWBOYnlSCwJ7lVUFcRxj5DkSz4RnXZvwUZPANH
+	nx9cFAMxux3umR7IcWqP3mz/+WLfRA0dt4TF2DLP3gaL3DNjXODul8rc
+X-Gm-Gg: AfdE7ckDiBpRTKIzfdx71V6L9+j+CL3qbnXKDatFI/zTj6DN4CbFAjcPp6xf8heFKFN
+	kXDBLghAj+rr5C3B7NnCeIO0a9j+/AmwCdql1grlzNy4w0NDdXYgdDT+LxYeEf7X8NiKzk464QX
+	m3EBi6+ZBQ04R0DHAOBqPmQUQbOjqlw9GQ47bCvSTLBara8jWMASpnjqr/AisXWk6jg68VN4YPS
+	bj6N5n0yqcmGDAVLEN6tiGAiVBUFydKQN962MwZzUL9NBys8G0oHGgrUMkXJ3MKd/+UnzZXXZXc
+	cPZntKwpJ5yoRQXYGlqE05ss+rGMchCF9e4YVnI7tMiNNPJf5aau1B1Cjuf+DDWhGWwamElTakv
+	HMXzS+69dhzLmr0/gtwKiP6cmDh6UmOlsB7VuDAb5+YgB98kfbxSWhL7SSgjNjcO9ZenaYFld3z
+	vuAFJrLx111bF46Q==
+X-Received: by 2002:a05:6a20:244b:b0:3a0:c246:bb98 with SMTP id adf61e73a8af0-3c0f0b9158emr16049895637.29.1783955966577;
+        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
+Received: from localhost ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b924258a2sm54513605c88.1.2026.07.13.08.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 08:19:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260710151216.0397a6f9ac5c7b4ccd274cc1@linux-foundation.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Jul 2026 08:19:24 -0700
+Message-Id: <DJXJM0838IJN.3AJ9MMQ89SUUR@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan
+ Kara" <jack@suse.cz>, "Jonathan Corbet" <corbet@lwn.net>, "Jann Horn"
+ <jannh@google.com>, "John Ericson" <mail@johnericson.me>,
+ <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
+ <farid.m.zakaria@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
+ <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
+ <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
+ <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
+In-Reply-To: <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
 
-On Fri, Jul 10, 2026 at 03:12:16PM -0700, Andrew Morton wrote:
-> > +	mutex_lock(&region->mreg_mutex);
-> > +
-> > +	if (mmu_interval_read_retry(range.notifier, range.notifier_seq)) {
-> > +		mutex_unlock(&region->mreg_mutex);
-> > +		cond_resched();
-> > +		goto again;
-> > +	}
-> > +
-> 
-> If the calling process has realtime scheduling policy and either a)
-> we're uniprocessor or b) this process and the holder of
-> interval_sub->invalidate_seq are both pinned to the same CPU then
-> cond_resched() won't do anything, and this might be an infinite loop?
+On Mon Jul 13, 2026 at 1:20 AM PDT, Christian Brauner wrote:
+>> > - The single sleepable load op is split into two ops:
+>> >
+>> >       struct binfmt_misc_ops {
+>> >       	bool (*match)(struct linux_binprm *bprm);
+>> >       	int (*load)(struct linux_binprm *bprm);
+>> >       	char name[BINFMT_MISC_OPS_NAME_MAX];
+>> >       };
+>> >
+>> >   The non-sleepable match program runs from the RCU entry lookup
+>> >   walk itself, exactly like magic and extension matching: same
+>> >   registration order, same first-match-wins semantics, and it can
+>> >   only rely on the prefetched bprm->buf. It must be free of side
+>> >   effects since the walk may be restarted.
+>> >
+>>=20
+>> Is relying on brpm->buf enough?
+>> Right now that's only 256 bytes I think, which is not enough to read
+>> segments we might care about. That worked fine when it was just a magic
+>> number but the idea with the eBPF program is to make decisions based on
+>> more data.
+>>=20
+>> In the selftest I provided, the `PT_INTERP` segment is already at file
+>> offset 0x318 (792). I was imaginging NixOS having to support
+>> `PT_INTERP_NIX` in order for the produced binaries to be backwards
+>> compatible with older kernels.
+>>=20
+>> The other idea would be to make the `match()` broad and select
+>> everything but then nearly all ELF64 binaries would match and then pay
+>> the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
+>> make multiple BPF binfmt programs less useful.
+>
+> Ok, so your idea is to have multiple bpf programs that look for
+> different interpreters. Yeah, then you have to be able to sleep because
+> you need to be able to fault. It makes the code uglier but I can see how
+> that's useful. I'll see how nice I can make that.
+>
 
-I think hmm and kvm have had this issue for a long time? I don't see
-anything in the mmu notifier locking scheme that would alleviate it at
-least
+I mean... I thought that's the intent to binfmt_misc, to have multiple
+handlers -- with the expressiveness of eBPF vs. the limited
+magic/extension, it seems like a natural extension to support multiple.
+Otherwise anyone on NixOS would be limited to our single handler for all
+binaries which seems not ideal?
 
-So.. In terms of this series I'd leave it, it is no worse than before?
+I'm not knowledgeable enough to comment on the sleep/faulting aspect so
+I leave that to your expertise.
 
-Jason
+>> >   The sleepable load program runs once the walk has committed to the
+>> >   entry and does the file reading and the interpreter selection. Both
+>> >   ops are mandatory, the struct_ops plumbing enforces the sleepability
+>> >   of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
+>> >   program cannot select an interpreter by construction.
+>> >
+>> > - A match is a commitment. A failing load program fails the exec inste=
+ad
+>> >   of falling through to later entries. -ENOEXEC keeps its usual meanin=
+g
+>> >   and hands the binary to the remaining binary formats, for a handler
+>> >   that discovers it cannot serve the binary after all.
+>> >
+>> >   This kills the part of v1 I disliked the most: the skip cursor and t=
+he
+>> >   leave-and-rescan loop in load_misc_binary() are gone. The walk is
+>> >   never left and re-entered, and 'B' entries need no special semantics
+>> >   against concurrent (un)registration anymore.
+>> >
+>> >   Your v2 changelog note about keeping the bpf retry loop in the
+>> >   __free() style is moot as a consequence. The loop no longer exists.
+>> >
+>> > - The load return convention flipped: 0 now means success after the
+>> >   program called bpf_binprm_set_interp(). Returning 0 without having
+>> >   selected an interpreter or returning a positive value is treated as
+>> >   -ENOEXEC, other negative errnos fail the exec.
+>> >
+>> >   So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-er=
+a
+>> >   programs becomes plain "return bpf_binprm_set_interp(...)".
+>> >
+>> > - The handler name moved from the offset field to the interpreter fiel=
+d
+>> >   that field consistently names whoever supplies the interpreter, a pa=
+th
+>> >   for static entries, a handler for 'B' entries. Offset, magic, and ma=
+sk
+>> >   must be empty:
+>> >
+>> > 	echo ':nix-origin:B::::nix_origin:' > register
+>> >
+>> > - 'C' is allowed now, v1 rejected it. It behaves exactly as for a stat=
+ic
+>> >    entry. The setuid transition stays gated by vfsuid_has_mapping() in
+>> >    the caller's user namespace. Which makes 'B' handlers usable for a
+>> >    per-binary loader over setuid binaries. 'F' stays rejected as there
+>> >    is no fixed interpreter to pre-open (I have other ideas how we'll d=
+o
+>> >    something like it later.).
+>> >
+>> > Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
+>> > itself, or the registry/namespacing model.
+>> >
+>> > I can send v3 in a bit if that's ok.
+>>=20
+>> I don't mind at all you sending v3 and in fact I've been enjoying your
+>> involvement. I didn't know what to expect when I offered this idea up to
+>> the community.=20
+>>=20
+>> I'm happy to keep co-developing this with you within a design you feel
+>> acceptable with. Please let me know how I can remain engaged and
+>> helpful.
+>>=20
+>> One last thing I was thinking about is that we will also need to support
+>> $ORIGIN in the shebang path, however I just tested it and this current b=
+road
+>> BPF solution can largely handle it [1], with a small wrinkle.
+>>=20
+>>   $ printf '#!$ORIGIN/interp\n' > /opt/app/greet
+>>   $ cp ./interp /opt/app/interp     # any interpreter/loader
+>>   $ chmod +x /opt/app/greet /opt/app/interp
+>>=20
+>>   # stock kernel: binfmt_script opens the literal "$ORIGIN/interp"
+>>   $ /opt/app/greet
+>>   bash: /opt/app/greet: $ORIGIN/interp: bad interpreter: No such file or=
+ directory
+>>=20
+>>   # with the handler registered, $ORIGIN resolves to the script's dir
+>>   $ bpftool struct_ops register shebang_origin.bpf.o /sys/fs/bpf
+>>   $ echo ':shebang-origin:B:shebang_origin::::' > /proc/sys/fs/binfmt_mi=
+sc/register
+>>   $ /opt/app/greet
+>>   <runs /opt/app/interp, the loader found next to the script>
+>>=20
+>> The wrinkle is that it can't express today is the single optional argume=
+nt.
+>> (i.e. `#!interp arg" -> argv[1]=3Darg`). We might ned a way to express
+>> that in the load.
+>
+> Ah, fun. binfmt_misc wasn't able to express this at all. It's good to
+> close that gap. This can just be done by adding
+> bpf_binprm_set_interp_arg().
+
+What is "cool" about this is now it's also a net-new feature for shebags
+which the "old" binfmt_misc didn't support. Anyways, I was thining ahead
+about what I would need to support $ORIGIN fully and this was
+a remaining gap. We also explored this idea in a patch pre-BPF [1] but
+now that we've settled on this solution it seems much more natural.
+
+
+I was recently reached out by some Bazel people who are also interested
+in this $ORIGIN support. Interestingly they let me know that
+IllumOS/Solaris had support for it as well.
+
+[1] https://github.com/alurm/relocatable-shebangs/blob/18db0da6cd69ce19bb02=
+73f2548a2d96bdaa82b1/relocatable-shebangs.patch
