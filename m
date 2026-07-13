@@ -1,122 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4829038333C;
-	Mon, 13 Jul 2026 07:17:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2AA36DA03;
+	Mon, 13 Jul 2026 07:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783927057; cv=none; b=CFuVACGImowT9dK2JMNBUJkX7a0qwE2BNa4GV9tqFZdAVKM5ZSkgdY+gIKG7XMaHwzo/zL6GdhRlmEWV3rOgbVCRuMdx+0gnA5KIueh0JULi9jcGq0zqIXOoGUxSozC0ekk/sIA5HG9uUbeihaz5aX/jpoln10XKDJ1lSVv0hqU=
+	t=1783927665; cv=none; b=myZIwzf3SCezMt08uCzducS9qxOw2p0zeoDCQvdrpg/2pCefpI9O5Q2ni1Rv7wbabDSnT1wobLc3jGlewqJ6qMs3JEqdjHNxHIKpqo5gzztdGCLo5bP3OlClXkSaRsEMlfGawpiqDS/wN+2Jb/Jue7ueWp0fNt1bNAM+x/bJ7Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783927057; c=relaxed/simple;
-	bh=V7XXSr1TdJRrGt7usJPyRU02xjG3Q7AKnaJV6x7W3Vg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Xku5iqhbaR5GuM3IcXE7tmkEAlxtsE94ZwuPW4oU07gLOmnwHsCSwM6LMjVSnyYf9dGp66r03+vFp/utDmkfnt6iHzQ9Q465WRY70q2X9DB7J2pd3eIAWeuT/lh/pQUO99ids1VPtrSJpOQRH97Bb3CG8Rq3Y5yQqgS+k0ovMnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACvrqW4n; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783927665; c=relaxed/simple;
+	bh=7Ze6QWJxbeYzeMk2di8RFP6bK54oUY/EI5wHAnDQJw8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OP9Q0EgS/v8fc9Utuasgl36r4nfOtP/6b1oSDQRf5k04j8DRzIyBG09PDyOOadxyJWvAHl0rKifcDSZ7H/FM927pmiO0+ODULSrAb1CrxgoGAq9NQnOkorm07i6J5VJr6OgYy3euwHFDL/Ws/7JWjCSNHErCCIjVAJDipzxKA3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbZVZ++I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACvrqW4n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6EF31F00A3A;
-	Mon, 13 Jul 2026 07:17:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbZVZ++I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A817C1F000E9;
+	Mon, 13 Jul 2026 07:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783927056;
-	bh=53ZHr3cMIylOLjl4WEN6FgAdOLZb+0qyaR+2VpwbnsM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ACvrqW4nfa+YV4T2t6H70bsB8YiZ+Kav799ogaObmItmjDNd2lGHVBcYSvXOijxsd
-	 JgGnPN9XEJb7z+7EGQzQyLcTNlREzteEULMRUjXCmT01aWMHwX/0xir9WiF77x3+XN
-	 mmpewK3GEvMkP83HIHirSAKBlwPMu5bqBPCcJlrlFdbfG0JByaAzHic9zVuYE407i2
-	 S5FSBmvl9vNGK5kXhHXK2JjXOwUse8G3XMs3MLfz27aCzI3bJGTW9KQan/2APzLiJX
-	 Dj2q20as2X2mkKnWYOZyWqo9OoYnBvghIcUhTyjIboe4RKlNEplza4r9O+i7LSbQDO
-	 +XgkIDuVWK0oA==
-Content-Type: multipart/mixed; boundary="===============0820187192493825405=="
+	s=k20260515; t=1783927663;
+	bh=cbBWZOX1wArkZKBGbX+gZQrzhCButI2m7s/E49Kj+Is=;
+	h=From:To:Cc:Subject:Date;
+	b=TbZVZ++IYS6CIvD4opJTfBkmebbznXqCTNgi3UlWDAxUhUU8/q99E428kK732PFJf
+	 bkKk5aD5Jq2s598OI1RfMAUaqMVtpHoaJkSVhUCRBczR1M25U6kKY0pv5hUlep7T/G
+	 EpIaunvqwWCuHtccxBGrwM3/w/Nhdji8PQ+0amll3/itluxgBtjaJkSxZtpb66KM0K
+	 hMc+VUpVBObWfoKlbk1NUsSSCxIrrb3+qrRa5ZP6emz/9Ale5tBm9nc8uEB0MZ7enu
+	 JIRgBHRbxoqyV/LtmuNDjZsw6DetW/LLvMaPejAaHivUDNr0nPdupLYa7Q90rWL+Ve
+	 Q/7wSAU1uy5eA==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/5] tracing/probes: Clean up and refactor argument parser
+Date: Mon, 13 Jul 2026 16:27:40 +0900
+Message-ID: <178392766002.3229912.15711868107734330750.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2cc3bdacec86e02e36a627faa455d53fabfd5333403eb629ad812717288d67d6@mail.kernel.org>
-In-Reply-To: <feb30511a4b3e198253666b5ea2499d0944c153f.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-References: <feb30511a4b3e198253666b5ea2499d0944c153f.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover helper reads of invalid spill siblings
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: chenyy23@mails.tsinghua.edu.cn,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 13 Jul 2026 07:17:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
---===============0820187192493825405==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> selftests/bpf: Cover helper reads of invalid spill siblings
->
->     Add a verifier_spill_fill case that passes an untouched byte next to a
->     one-byte scalar spill to bpf_map_update_elem(). The full-capability load
->     retains the existing uninitialized-stack behavior, while the CAP_BPF-only
->     load must reject the STACK_INVALID helper read.
->
->     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+This is the 2nd version of the series which refactors and cleans up
+the fetcharg parser in the trace_probe. The previous version is here:
 
-This test covers a verifier bug where a helper read accepted an
-uninitialized (STACK_INVALID) sibling byte next to a narrow (<8-byte) scalar
-spill.  That behavior came in when sub-8-byte scalar spill/refill support was
-added, which left sibling bytes STACK_INVALID while the slot still reported a
-spilled scalar.
+  https://lore.kernel.org/all/178386876526.3174487.5142283230157728964.stgit@devnote2/
 
-Should this carry the same Fixes: tag as the companion verifier fix so stable
-backports pull the test in alongside it?
+The main goals are to improve code readability, prevent kernel stack
+overflow by eliminating recursive function calls, and extend the
+argument string length limit to support complex BTF typecast
+expressions.
 
-  Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
+In this version, I fixed the double error log issue in [1/5], make
+MAX_ARGSTR_LEN to 255 [4/5] and update patch description for clarify
+this change updates the behavior (not a cleanup) and
+make TRACEPROBE_MAX_NESTED_LEVEL to 8 (also update testcases)[5/5].
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> index 8b166c42c4e0e..e686f6d8d5656 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+Patches:
+- Patch 1: Decomposes parse_probe_vars() into smaller, dedicated helper 
+  functions for parsing specific variable types ($retval, $stack, etc.).
+- Patch 2: Decomposes parse_probe_arg() into static helper subroutines for 
+  handling registers, memory/symbols, and immediates.
+- Patch 3: Alphabetizes the ERRORS macros list in trace_probe.h to improve 
+  readability.
+- Patch 4: Extends MAX_ARGSTR_LEN from 63 to 255 for long BTF cast/dereference
+  arguments, and introduces MAX_COMMON_HEAD_LEN to prevent regression on match
+  head commands.
+- Patch 5: Eliminates recursion in parse_probe_arg() using a loop and a parse 
+  state stack integrated into traceprobe_parse_context. It also raises the
+  nesting limit to 8 and updates the selftest scripts.
 
-[ ... ]
-
-> @@ -1307,6 +1314,32 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
->  	: __clobber_all);
->  }
->
-> +SEC("socket")
-> +__description("helper read must reject an invalid sibling of a narrow spill")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv __msg_unpriv("invalid read from stack R3 off -7+0 size 1")
-> +__naked void helper_read_invalid_partial_spill_sibling(void)
-> +{
-> +	asm volatile ("r5 = 1;\n\t"
-> +	"*(u8 *)(r10 - 8) = r5;\n\t"
-> +	"r2 = 0;\n\t"
-> +	"*(u32 *)(r10 - 16) = r2;\n\t"
-
-this isn't a bug, but could this asm block use the same backslash
-line-continuation style as the neighbouring tests in this file?  The two
-tests just above it, stack_noperfmon_reject_invalid_read() and
-stack_noperfmon_spill_32bit_onto_64bit_slot(), write a single string with
-trailing tab-backslash, and this is the only "\n\t" per-line block in
-verifier_spill_fill.c.
-
-> +	"r1 = %[map_partial_spill] ll;\n\t"
-> +	"r2 = r10;\n\t"
-> +	"r2 += -16;\n\t"
-> +	"r3 = r10;\n\t"
-> +	"r3 += -7;\n\t"
-> +	"r4 = 0;\n\t"
-> +	"call %[bpf_map_update_elem];\n\t"
-> +	"r0 = 0;\n\t"
-> +	"exit;\n\t"
-> +	:
-> +	: __imm(bpf_map_update_elem),
-> +	  __imm_addr(map_partial_spill)
-> +	: __clobber_all);
-> +}
->
-
+Thanks,
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29229349078
---===============0820187192493825405==--
+Masami Hiramatsu (5):
+      tracing/probes: Refactor parse_probe_vars()
+      tracing/probes: Refactor parse_probe_arg()
+      tracing/probes: Sort ERRORS list in trace_probe.h alphabetically
+      tracing/probes: Extend max length of argument string
+      tracing/probes: Eliminate recursion in parse_probe_arg()
+
+
+ kernel/trace/trace_fprobe.c                        |    2 
+ kernel/trace/trace_kprobe.c                        |    2 
+ kernel/trace/trace_probe.c                         |  829 ++++++++++++--------
+ kernel/trace/trace_probe.h                         |  196 +++--
+ kernel/trace/trace_uprobe.c                        |    2 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    6 
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |    4 
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    6 
+ 8 files changed, 621 insertions(+), 426 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
