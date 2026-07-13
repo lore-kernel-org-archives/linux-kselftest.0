@@ -1,130 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-1-115.ptr.blmpb.com (va-1-115.ptr.blmpb.com [209.127.230.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEEC3E3140;
-	Mon, 13 Jul 2026 09:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868CF3E2AC9
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783935503; cv=none; b=FwmzwXg6oeZ68w5e7oDvDit/d0wzma6sMTST/vum/t8Qqxt4BqAFUD0XYJQPKqO91ub1fPqplFLzQHclfoZUQgUWBMLUDkem5D+E59ZdDRGRDzvMjsgyFLe11CvkcdcI9VGfDMGdz86Za9FnSedjG8Nj93bvupmKf71dhftcWr8=
+	t=1783935822; cv=none; b=HzCBfJ6IIacTut1FDHx/kgprMtAMrKRswZo1Auq700kuuEjN9X5CglZeLANss7AGV+UghGrz4UDtYRjiUZ9O7tyG0Bx+VT1+kpOfMNczZWuZhiPk7Tb8B8lX8RNxQ+7umiNuEOoYw1bksxxqzfC3FzG/fSYOxtxxWEsI3pFBZrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783935503; c=relaxed/simple;
-	bh=1zPKgYubtbjgXObDYgHbOOuIGwrS4y7u8MlXssATgU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=haD5g/XXVmzSPevG494FZKAp1q8pv6C/JgStVWhnUhdJopL0Wh0z/UFSSiv2q61BPkpC7TnLl46yHcjKpYaEu0gWwMLbzgiP3c3Sw39v9Ce4P/4WL5KMPOnKFarFVTAhqtyqXlQz6TqNPKdLlsg/uB4u3Th6ST/HNtce83BOkUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wp5DhGVJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783935822; c=relaxed/simple;
+	bh=eAaxKW5641lnQwnlVt3MsJyeBfX4X3Ntngj5R2NfprE=;
+	h=Subject:Date:Cc:From:Mime-Version:Content-Type:To:Message-Id; b=t/8w/S9Xsska70yTc91bxhmEs1e90Ed3Pp8FbiCawHCdVMqFr1snr7aqz3gFVlacAInzshIQPu9cMlu2YF3kmzXGy6olCRLuqe0TkipqILM1Z0NtlFRGk5Wge+9XjWc7j2IpCB20zKakEEfudBYWYfbDBB0mRaZ4Ldj32FS54U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Vpd08eG5; arc=none smtp.client-ip=209.127.230.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wp5DhGVJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150881F000E9;
-	Mon, 13 Jul 2026 09:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783935498;
-	bh=GpIWDL0FgH5lEtbQIWAV66P0Vbrd9mYJbhObPbGXVGU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Wp5DhGVJo+ej9UpS+M+sWk5WRdlmWHGOMylZaVoBIGrprFmVh9e/Yx8agLZf6sXBb
-	 l6BUgExWTQ2ZDKWfXJiV98ivQ2BTv1hGuW3vBV+xyTMNZkM7INYACfflZ76LRX16Zg
-	 pcsuSdN7CRftaus7t5v8+IouTmPE/0uwoxcRQeTyx+/W/yaAEbGA1w77wPKazyi1eq
-	 VrR+nPAZTyBj0BwmmRqkQT7kpq90Br66it2oOI9IYV+F26VGYXGzF6e8IZNV0NUfi3
-	 mcwYL7NP/d5SyCC1h8I5KUNueeOtAnBYhbPUsfJn7ZMnHeAIlPd0smlpe0TeGHJcsc
-	 uVm5kPsjsBCAQ==
-Message-ID: <63c1b697-5c18-482b-8128-0ad172f9ecf6@kernel.org>
-Date: Mon, 13 Jul 2026 11:38:00 +0200
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Vpd08eG5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1783935807; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=YVmVbtBX3HCj9Ijd0ts5x4Wm1TJDsoimgyijvblmLxM=;
+ b=Vpd08eG5mYOeAXAMCR/jYa2ZDQrFEU4NmYK1Ty0KaLkUctzIVecmT1z/WSJGRLfqaJ5tFb
+ EwV+5ft8pE8RJ+MbKuDzg9lkJZbHhkYOAv1P+t4KTcGJSG3ORTj1twt710VwuWnqWkSngL
+ 42TKTCFo1BSyyuXzn3Uk9BEk13sIgBePePJhUVx1Ba45Q6opSKX90tFuv5CUOPjisaeweN
+ tZfB3BSSskoneXw7nkthA0vZfychvTObwC2t4QA82eRjfNFTG5nEhsi0KNrNIBB/TUxFaE
+ JJgMpvBPQsuT8+vP59Tsr/NbML+3/V4T25MvXes76ku6rHdOzFL4ceGUBsCBoQ==
+Subject: [PATCH RESEND v4] selftests: mincore: count file-mmap readahead on both sides
+Date: Mon, 13 Jul 2026 17:43:19 +0800
+X-Lms-Return-Path: <lba+26a54b33d+6f7f78+vger.kernel.org+wangyijia.yeah@bytedance.com>
+X-Mailer: git-send-email 2.43.0
+Cc: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-mm@kvack.org>, <muchun.song@linux.dev>, 
+	"Yijia Wang" <wangyijia.yeah@bytedance.com>
+From: =?utf-8?q?=E7=8E=8B=E7=BF=8A=E5=98=89?= <wangyijia.yeah@bytedance.com>
+X-Original-From: wangyijia.yeah@bytedance.com
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Fix memleak in migration benchmark
-To: Hongfu Li <lihongfu@kylinos.cn>, Lorenzo Stoakes <ljs@kernel.org>
-Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org,
- liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- hongfu.li@linux.dev
-References: <20260708103705.840679-1-lihongfu@kylinos.cn>
- <alHxLNTQFJlb3cLV@lucifer> <1c0644c0-36e4-454b-adf0-47845036b39d@kylinos.cn>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <1c0644c0-36e4-454b-adf0-47845036b39d@kylinos.cn>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To: <akpm@linux-foundation.org>, <shuah@kernel.org>
+Message-Id: <20260713094319.771550-1-wangyijia.yeah@bytedance.com>
 
-On 7/13/26 10:07, Hongfu Li wrote:
-> Hi, Lorenzo
-> 
-> On 7/11/26 3:31 PM, Lorenzo Stoakes wrote:
->> On Wed, Jul 08, 2026 at 06:37:05PM +0800, Hongfu Li wrote:
->>> Several early return paths in run_migration_benchmark() skip
->>> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
->>> label.
->>>
->>> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
->> LGTM. With the Fixes tag added as requested by David, feel free to add:
->>
->> Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
-> 
-> 
-> Thank you for your review.
-> 
-> As suggested by David, I have added the Fixes tag in v2. The patch
-> has now been applied to the mm-new branch. 
-> 
-> Since the patch has already been merged into the public branch, I am
-> unable to modify the commit message to add your Reviewed-by tag 
-> after merging. However, I truly appreciate your review.
+From: Yijia Wang <wangyijia.yeah@bytedance.com>
 
-If it's not in mm-stable / mm-hotfixes-stable or upstream, Andrew can always
-modify the commit (which I assume he will do) or you can resend.
+check_file_mmap() faults a page in the middle of a file mapping and
+expects the mmap read-around path to make neighbouring pages resident.
+The test currently counts only pages after the faulted page.
 
-So far this patch seems to only be in mm-new ... which is far, far away from
-upstream.
+That misses valid read-around on systems with large base page sizes. On
+arm64 with 64K pages and the default 128K readahead setting, the
+read-around window is two pages wide and centred on the faulting page.
+Faulting page 32 makes pages 31 and 32 resident, so the forward-only
+scan from page 33 reports ra_pages == 0 even though a neighbouring page
+was brought in.
 
+Keep the existing readahead assertion, but count resident neighbouring
+pages on both sides of the faulted page. This fixes the 64K-page false
+failure without teaching the selftest to compute the expected readahead
+window from sysfs or other implementation details.
+
+Signed-off-by: Yijia Wang <wangyijia.yeah@bytedance.com>
+---
+Changes in v4:
+- Drop the sysfs read_ahead_kb helper and skip logic from v3.
+- Keep the existing ra_pages assertion and count resident readahead
+  pages on both sides of the faulted page.
+
+ tools/testing/selftests/mincore/mincore_selftest.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+index 3182043..ebf2b06 100644
+--- a/tools/testing/selftests/mincore/mincore_selftest.c
++++ b/tools/testing/selftests/mincore/mincore_selftest.c
+@@ -243,8 +243,10 @@ TEST(check_file_mmap)
+ 	}
+ 
+ 	/*
+-	 * Touch a page in the middle of the mapping. We expect the next
+-	 * few pages (the readahead window) to be populated too.
++	 * Touch a page in the middle of the mapping. We expect some
++	 * surrounding pages (the readahead window) to be populated too.
++	 * Depending on the page size and readahead setting, the pages may
++	 * land before the faulted page rather than after it.
+ 	 */
+ 	addr[FILE_SIZE / 2] = 1;
+ 	retval = mincore(addr, FILE_SIZE, vec);
+@@ -253,6 +255,12 @@ TEST(check_file_mmap)
+ 		TH_LOG("Page not found in memory after use");
+ 	}
+ 
++	i = FILE_SIZE / 2 / page_size - 1;
++	while (i >= 0 && vec[i]) {
++		ra_pages++;
++		i--;
++	}
++
+ 	i = FILE_SIZE / 2 / page_size + 1;
+ 	while (i < vec_size && vec[i]) {
+ 		ra_pages++;
 -- 
-Cheers,
-
-David
+2.43.0
