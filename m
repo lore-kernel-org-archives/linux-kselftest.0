@@ -1,117 +1,191 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0725240F8C3;
-	Mon, 13 Jul 2026 13:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB4043441F;
+	Mon, 13 Jul 2026 13:53:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783949457; cv=none; b=VmiKKdBcdsx80BaFlhNeXsZwPCpTqPQwcypHz5iH57l4+q8AJ/0CTCAqzF7DfYEs5mXyh4dyd4IwVBlJFQp+biIc7Nql32NFuoqPwHn2T4f49wZXf2K5X1SDUMc7iKuaRyAfizEe942S36+ijzBONmeH387aYcxAVpzUQ6Mg2y8=
+	t=1783950803; cv=none; b=DMaOlCjZN7RqtkWdVno2IoXES7q0DzcuY3tcTY8H/H8V5ozLd9ae0+WphGrmhEq797Wu8ExJJvD7A8fh16Jni5fgc+QSykQ3xRHOxUI7WCiS8YHcQ0Vrb0wnTbxo1RKcO+a5MI+y3LYUKd7xCZIymvoxnvBO+hztr0JwoWQyT9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783949457; c=relaxed/simple;
-	bh=ErzqW2O0g/i8zFRKK9AZyKTYfMW8W9zx1lacXJE/7U0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ku+huRiPaPVQHVakwtTgQymHAqCDHlgYp9sdsK+qOTe1alOxunTHkZ+AjrXbUCAmgaOIJoo7iAv3Aqz/9MIC1AOJLlkhazTabav/VQS8E4qEY8czlYGMbgClm/egC+WyYUJBd1uh1nG7jarfgVycf+3240k+SZHMDCEpkVx1AZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikTp/ZDJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783950803; c=relaxed/simple;
+	bh=v1UpSbzmVIB8EYupcNf3qovayQhHdE6QFZfkEMZ/GqE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VByijcgznei3TlTFZa91uM7atE15D5RAaOvU9kBmnG8gJjRHTicABX0I/l0APGkQin8rdDC5S1bePtmK/90s+sbXFUrDl1vvoeKJWfUMcTq/Uf4XLLZ/Gx6w+WebpB3tkGFDA0AUT3vUVqy3NWFI5VvVIRNZOi9oGrkUAPfxhn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyCiIiJ4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikTp/ZDJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812431F00A3F;
-	Mon, 13 Jul 2026 13:30:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyCiIiJ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355461F000E9;
+	Mon, 13 Jul 2026 13:53:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783949455;
-	bh=2PE3gaGsNLQ/wJ/jx4xmXlbU0Ll5weYz4ZF4wxRh4WY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ikTp/ZDJbKzZqXWQdgJFs4mxUmOx5W44no98j831xxLyCdzKqQoLZo0aubu7A6s4I
-	 pHh+efGT9meohmhUvaKUh/9NhBL49M6U1IfTZLuCDURT9zO31YfLr2SBN3ScUD26+W
-	 VkCFEJFSu9obPyRdJSJ72kzy/VLeOvMf10vfXZpbaCI3wSnfxgcpW76ZRvh3kS/ZHD
-	 Yv06UQBSZoTyN/qEb0fEQmSroyWlJiM4/+bIXwhSR1jQarFKw3ksg2oLI+HqyPRfF2
-	 CvzHlCEH2mrN/QQRWwvlsrczJMPg7BKTRAWndik19UrgS416WGQAAxpSqCM1/v4tJg
-	 yEau/1bCMbsqg==
-Date: Mon, 13 Jul 2026 14:30:47 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	Jean-Philippe Brucker <jpb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v12 22/29] KVM: arm64: Context switch SME state for guests
-Message-ID: <8db1cdd1-5294-4166-99f4-340d124d72c0@sirena.org.uk>
-References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
- <20260709-kvm-arm64-sme-v12-22-d0301d79ef58@kernel.org>
- <CA+EHjTx6P_Wz8=+3fanry_Cs6sqyTD8Swz61WZah46u6-UXP5w@mail.gmail.com>
+	s=k20260515; t=1783950801;
+	bh=1JZ+jUbgiNbISG81jCDR/cTHkAMPJnKZyn2UCpJwgV4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=MyCiIiJ4Z9PQMTe3vSTzQZjL3wKH3oq36AhbOGoKljo9Op8Y16arXocVLbzr5h8ss
+	 u/Mp9/VNgcEY1+mLXvifJSjxQ7PlWOTiqsQaWARzohogCB2BMxl52A4LcnmuRENFy9
+	 RnXgdT3fd7JOWjV0MPZI/0g4tCdPS3qaeQ3DuPdcRZIk2nqi6GS0f9GY5Ans2xY/1/
+	 lcD5BVKPLq5vMStTF5bcK9GDjT6+XJYclDUKo6FcZpHlNoBOf3+Bzu+gEV0k/08+PV
+	 KBDTWYDnUOJF2vfuHAczxsTQNf3Nf7UWXNhNLu7fu5RY+K+kdTNQRs8aUJUkVdzojM
+	 7DOEsnr+LAerA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: Huacai Chen <chenhuacai@kernel.org>,  Mike Rapoport <rppt@kernel.org>,
+  Pasha Tatashin <pasha.tatashin@soleen.com>,  Pratyush Yadav
+ <pratyush@kernel.org>,  Shuah Khan <shuah@kernel.org>,  George Guo
+ <guodongtai@kylinos.cn>,  WANG Xuerui <kernel@xen0n.name>,  Alexander Graf
+ <graf@amazon.com>,  loongarch@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  kexec@lists.infradead.org,
+  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,  Kexin Liu
+ <liukexin@kylinos.cn>
+Subject: Re: [PATCH v3 1/3] LoongArch: kexec: add KHO support for FDT-based
+In-Reply-To: <20260601093930.112758-1-dongtai.guo@linux.dev> (George Guo's
+	message of "Mon, 1 Jun 2026 17:39:28 +0800")
+References: <20260601092823.110362-1-dongtai.guo@linux.dev>
+	<20260601093930.112758-1-dongtai.guo@linux.dev>
+Date: Mon, 13 Jul 2026 15:53:17 +0200
+Message-ID: <2vxzjyqzj8s2.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="v9CtVmyreETBkO2w"
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTx6P_Wz8=+3fanry_Cs6sqyTD8Swz61WZah46u6-UXP5w@mail.gmail.com>
-X-Cookie: Courage is grace under pressure.
+Content-Type: text/plain
 
+On Mon, Jun 01 2026, George Guo wrote:
 
---v9CtVmyreETBkO2w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: George Guo <guodongtai@kylinos.cn>
+>
+> Enable Kexec Handover (KHO) on LoongArch64 for FDT-based systems.
+>
+> - Kconfig: select ARCH_SUPPORTS_KEXEC_HANDOVER for CONFIG_64BIT
+> - kexec.h: add fdt/fdt_mem fields to kimage_arch to hold the KHO FDT
+>   kexec segment virtual and physical addresses
+> - machine_kexec_file.c: add kho_load_fdt() which copies the running
+>   kernel's FDT (initial_boot_params), appends linux,kho-fdt and
+>   linux,kho-scratch properties to /chosen, and loads the result as a
+>   kexec segment; called from load_other_segments().  Returns -EINVAL
+>   when initial_boot_params is NULL (ACPI-only boot) since that path
+>   requires separate handling.
+> - machine_kexec.c: before jumping to the new kernel, update the
+>   DEVICE_TREE_GUID entry in the EFI config table to point to the KHO
+>   FDT segment so the second kernel finds it via efi_fdt_pointer() and
+>   early_init_dt_check_kho() calls kho_populate()
+>
+> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> ---
+>  arch/loongarch/Kconfig                     |   3 +
+>  arch/loongarch/include/asm/kexec.h         |   4 +
+>  arch/loongarch/kernel/machine_kexec.c      |  27 +++++
+>  arch/loongarch/kernel/machine_kexec_file.c | 118 +++++++++++++++++++++
+>  4 files changed, 152 insertions(+)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 606597da46b8..d494418545f5 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -684,6 +684,9 @@ config ARCH_SUPPORTS_KEXEC
+>  config ARCH_SUPPORTS_KEXEC_FILE
+>  	def_bool 64BIT
+>  
+> +config ARCH_SUPPORTS_KEXEC_HANDOVER
+> +	def_bool 64BIT
+> +
+>  config ARCH_SELECTS_KEXEC_FILE
+>  	def_bool 64BIT
+>  	depends on KEXEC_FILE
+> diff --git a/arch/loongarch/include/asm/kexec.h b/arch/loongarch/include/asm/kexec.h
+> index 209fa43222e1..adf54bfcdd49 100644
+> --- a/arch/loongarch/include/asm/kexec.h
+> +++ b/arch/loongarch/include/asm/kexec.h
+> @@ -39,6 +39,10 @@ struct kimage_arch {
+>  	unsigned long efi_boot;
+>  	unsigned long cmdline_ptr;
+>  	unsigned long systable_ptr;
+> +#ifdef CONFIG_KEXEC_HANDOVER
+> +	void *fdt;		/* virtual address of KHO FDT segment buffer */
+> +	unsigned long fdt_mem;	/* physical address of KHO FDT segment */
+> +#endif
+>  };
+>  
+>  #ifdef CONFIG_KEXEC_FILE
+> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
+> index ad27fef098f1..98529c71d001 100644
+> --- a/arch/loongarch/kernel/machine_kexec.c
+> +++ b/arch/loongarch/kernel/machine_kexec.c
+> @@ -6,6 +6,7 @@
+>   */
+>  #include <linux/compiler.h>
+>  #include <linux/cpu.h>
+> +#include <linux/efi.h>
+>  #include <linux/kexec.h>
+>  #include <linux/crash_dump.h>
+>  #include <linux/delay.h>
+> @@ -289,6 +290,32 @@ void machine_kexec(struct kimage *image)
+>  	pr_notice("We will call new kernel at 0x%lx\n", start_addr);
+>  	pr_notice("Bye ...\n");
+>  
+> +#ifdef CONFIG_KEXEC_HANDOVER
+> +	/*
+> +	 * Point the EFI FDTPTR config table entry at the modified FDT so the
+> +	 * second kernel picks up the linux,kho-fdt and linux,kho-scratch
+> +	 * properties via early_init_dt_check_kho().
+> +	 */
+> +	if (internal->fdt_mem) {
+> +		/*
+> +		 * FDT-based system: DEVICE_TREE_GUID already exists in the EFI
+> +		 * config table; just update its pointer to our KHO FDT.
+> +		 */
+> +		efi_system_table_t *st =
+> +			(efi_system_table_t *)TO_CACHE(systable_ptr);
+> +		efi_config_table_t *ct =
+> +			(efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
+> +		unsigned long i;
+> +
+> +		for (i = 0; i < st->nr_tables; i++) {
+> +			if (!efi_guidcmp(ct[i].guid, DEVICE_TREE_GUID)) {
+> +				ct[i].table = (void *)internal->fdt_mem;
+> +				break;
+> +			}
+> +		}
+> +	}
+> +#endif
 
-On Sun, Jul 12, 2026 at 03:40:34PM +0100, Fuad Tabba wrote:
+Honestly this and the ACPI stuff looks worse to me than what your
+previous version did. Now I am not an expert on EFI and architecture
+stuff, and know nothing about Loongarch, but to me this looks hacky and
+I am not sure if it is doing the right thing.
 
-> For a nested guest this folds in the LEN restriction from the guest
-> hypervisor's SMCR_EL2 just above, but not FA64/EZT0. vcpu_has_fa64()
-> and vcpu_has_sme2() are VM-level capabilities (kvm_has_fa64/sme2 on
-> vcpu->kvm), so an L1 that clears SMCR_EL2.FA64 or .EZT0 to deny them to
-> L2 is overridden here: the physical SMCR_EL2 gets the bits set from the
-> VM cap regardless.
+I think you should get some alignment with Loongarch maintainers on what
+the kexec boot protocol looks like. It looked odd to me, but if the
+Loongarch maintainers are fine with using the kernel cmdline for
+bootloader to pass data to the kernel, then I think we should go back to
+that.
 
-Doh, of course.  I've fixed this locally.
+Huacai, do you have any thoughts? For KHO we essentially need a way for
+the pre-kexec kernel to tell the post-kexec kernel about a blob of
+memory that has some information it can use. For x86, we do that via
+setup data. See arch/x86/include/uapi/asm/setup_data.h and struct
+kho_data for example. On arm64, we use the boot FDT's /chosen node. See
+kho_add_chosen() in drivers/of/kexec.c.
 
-> > @@ -128,7 +220,7 @@ static void flush_hyp_vcpu(struct pkvm_hyp_vcpu *hy=
-p_vcpu)
-> >  {
-> >         struct kvm_vcpu *host_vcpu =3D hyp_vcpu->host_vcpu;
-> >
-> > -       fpsimd_sve_flush();
-> > +       fpsimd_sve_flush(host_vcpu);
->=20
-> sync_hyp_vcpu() runs fpsimd_sve_sync() on &hyp_vcpu->vcpu, but flush
-> passes host_vcpu, so the two sides operate on different vCPUs. That
-> asymmetry alone looks wrong: flush and sync should cover the same
-> state.
->=20
-> Concretely it means kvm_sme_configure_traps() programs a protected
-> guest's SVCR/SMCR from host-owned values, so the host can e.g. set
-> SVCR.SM and fault the guest. Keying flush off &hyp_vcpu->vcpu like
-> sync fixes both.
+Ideally, all device tree platforms should use the FDT path. But
+Loongarch also has ACPI only and I don't know what a good idea for that
+is.
 
-Thanks for spotting that, I've updated locally.
+So, do you have any suggestions on where to best place a pointer to this
+blob of data on Loongarch? v1 of this series put it in the kernel
+commandline, but I found that odd and asked if it can be done via DT
+instead. But to me, this code looks even more hacky.
 
-BTW it'd be really helpful to delete unneeded context when replying
+> +
+>  	/* Make reboot code buffer available to the boot CPU. */
+>  	flush_cache_all();
+>  
+[...]
 
---v9CtVmyreETBkO2w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpU6IcACgkQJNaLcl1U
-h9AaOAf+KDIg9SieNgLHu8cIPChCdW1/JE5Q90xi5O9YT1F33j626OleMhM1VngO
-WHezCRNFf8cg4aTf93obOsz6F6jnWTTZaK82gt6bRu3udlizG+33O7jnsnLFd589
-SMe5MOi6iwIgvK0yl8Tf4GAxXgJxMNb/vzvY9hfmke/jCDLYT7BF31PeQMwfDTgq
-pKvDiG9o4dUBK4pNzzKuyqaOxHbKmRBlI2+oYON8XCsp7k6PvWSxwnQcPS2WqoyD
-h9pAC1jb/eUt/5pQtbQOv1a0O+9QPeVg2CywPMriMQhSZERveEm4vNP+n4EmfEfH
-aDQwImKDchI/GbVfMboiAWDd+dLhrw==
-=X8+a
------END PGP SIGNATURE-----
-
---v9CtVmyreETBkO2w--
+-- 
+Regards,
+Pratyush Yadav
