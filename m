@@ -1,114 +1,81 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8225035EDA4
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 21:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B3A2FBE1F;
+	Mon, 13 Jul 2026 22:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783979437; cv=none; b=IEyIC6lSRlPfVPC8MwESn5GQGK5mYY5kVmGr1GD243EeWBXhjoMly//780bObKIiXlHopsi/G2vkgesdG9P8PzHLJPiQvLt+FLm7I3mRjLT7mAXeNPTqo5pObhxOUtolEMdHoPYNBCN8WD3s/v+qsd8ylU2hICUOh1Z4yp5XPro=
+	t=1783982739; cv=none; b=WqzJsvuGWz7B3vm3wdzfJmKwiSLIIuqmpWP9+XuoIKvU9xOVvL4V4kJVeSUfgiSOplpAgj6CWLDqPG3E2n71GNFWP6dLBblsd2Q7cRGs5Ckd9UeiCTACBgbms8C+tyCbnCrBaUPxaC5rDR4TzSI+viOZQ0cAsFGg6yYWFdFkyuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783979437; c=relaxed/simple;
-	bh=cknK5Ss3uLo2RtS0e7PCBty02RMBUc1/0IuYTI2AZPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TDIlUR7UOjw2yl+lRWhQ98UFyIhVdz0LIFk/q7m3Im3lROKPnn1nIePicptqHyV42Df7RDuDsznoGnl+w8GXAajsO3njg1ylGRwXickD7u6bdeQXljD57aRhCkHFCgJN/11X1b3GVYYVf74woYKUubBkF41bgorW+EioFKR/Sqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=q+pvPfzK reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1783982739; c=relaxed/simple;
+	bh=KoZgYoV6LVbvr5a/Ri2RZeRNUucziB4DF0uxNYrmx1U=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=cN1ELu0V9pNAgivsDGp1Qq5NPvvFsfRNi9DDXz5+IHbkfFs7iD0R8tz354h8KrVq6zfOj571HsHg37/NjvnZPglJZHbv805iTmJ89G7UU+pOOKittUWZMwNSyyJ5EnLSZKs6LazAGuBygxYCsQ78wlHlLCH7i1J5upUoraZNheQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DjnhDYqH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="q+pvPfzK"
-Received: from [192.168.10.145] (p865013-ipoe.ipoe.ocn.ne.jp [153.242.222.12])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66DLoXiN028776
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Tue, 14 Jul 2026 06:50:33 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=YQuvSU+rvn/LSkKpcRyfWMx1R3fVRsbIfemsxe/bHdc=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1783979433; v=1;
-        b=q+pvPfzKFHSCkTHNmb/RFGkEuDeEHQA9xBGPxWZit+9tf2IF+rWDbWtk7ztw/ptF
-         +qts/pQlOV9MYwwhT3TkFKpq2vAKva18A6kqasaKTynJQB/QJtST5nTTqqB2fcl/
-         /5t1BcqsT9i0r95mZuDPBghdn3PFh1cJ/jsWRa8768dzLqpPDCsV96BWN5Il9p+3
-         +1zD5gjHAmkatHOVvDZdrYIR7JFnj9FpWL2OipiA+Z5seE6lR8R0A9GOZ0hu49Zu
-         NrB/4ds5LcG2XzYsOY/IDjrwpDZi4as/XfAcGpqGMwZ2QQg1i+Opw04aroZk8XgY
-         sSmITQApacG55s+3lNKtSg==
-Message-ID: <bb1224e8-ff4b-4e5d-babb-b6a2970219ab@rsg.ci.i.u-tokyo.ac.jp>
-Date: Tue, 14 Jul 2026 06:50:33 +0900
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DjnhDYqH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21771F000E9;
+	Mon, 13 Jul 2026 22:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1783982737;
+	bh=adnYTFi3hoT5aFMOesERJpy3+zRYVUFF+RkxLaSOV5A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=DjnhDYqH05eQ/7HFowjW8Rg67YLnpNK8S5WnhB/Caim8Ni6IKziN7IvqqsTpwVRXT
+	 PMtPLLU/mEWJPiMd3fD7JuVerRhg9R6QFlBw+PJJKVNUtuSM691nugGB6JmjFy2ka6
+	 croIvxMU+tK89yt+R7GdUBAIMoJ1m8j6C4g4WY/c=
+Date: Mon, 13 Jul 2026 15:45:35 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
+ dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+ haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org, kys@microsoft.com,
+ leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
+ longli@microsoft.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+ mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+ nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+ rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+ skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+ vbabka@kernel.org, wei.liu@kernel.org, dri-devel@lists.freedesktop.org,
+ linux-mm@kvack.org, linux-doc@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Message-Id: <20260713154535.7656b3a630e2f6f076b4e76e@linux-foundation.org>
+In-Reply-To: <alVRU38lMfvmUFqJ@skinsburskii>
+References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
+	<20260710151151.1e193eedd0cf2591ae392f76@linux-foundation.org>
+	<alG2-RSitzPWClAX@skinsburskii>
+	<20260710224950.53bcb43ce7e564f07a1f6a8c@linux-foundation.org>
+	<alVRU38lMfvmUFqJ@skinsburskii>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 09/11] KVM: arm64: PMU: Implement fixed-counters-only
- emulation
-To: Oliver Upton <oupton@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
- <20260710-hybrid-v8-9-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
- <alSWtwHVfYh0zdPy@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <alSWtwHVfYh0zdPy@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2026/07/13 16:41, Oliver Upton wrote:
-> On Fri, Jul 10, 2026 at 08:15:03PM +0900, Akihiko Odaki wrote:
->> @@ -813,6 +842,15 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
->>   	if (!pmuv3_implemented(kvm_arm_pmu_get_pmuver_limit()))
->>   		return;
->>   
->> +	/*
->> +	 * IMPDEF PMUv3 traps are non-architectural, and KVM cannot assume a
->> +	 * uniform PMUv3-compatible arm_pmu is available on all CPUs.
->> +	 */
->> +	if (cpus_have_final_cap(ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS)) {
->> +		kvm_info("Non-architectural PMU, tainting kernel\n");
->> +		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
->> +	}
->> +
+On Mon, 13 Jul 2026 13:57:55 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+
+> > > I rebased this series on top of mm-new right before sending it out.
+> > > Should I have used a different branch?
+> > 
+> > mm-new is good - Sashiko attempts that.  But it's changing rapidly at
+> > this point in the development cycle.
+> > 
 > 
-> This is an unrelated change, and really the taint should be added with the
-> .cpu_enable() for this capability. That's the point where we flip the
-> magic bit.
-
-I'm abandoning this change because it does not effectively cover all 
-corner cases we don't want to support:
-https://lore.kernel.org/all/0e5e64ea-2f3c-4ce6-88ac-08b66f13027c@rsg.ci.i.u-tokyo.ac.jp/
-
+> I’d like to send another revision addressing a few comments and also
+> replace the `max/max_t` check with something simpler.
 > 
->> +void kvm_vcpu_load_pmu(struct kvm_vcpu *vcpu, int last_cpu)
->> +{
->> +	if (!kvm_pmu_fixed_counters_only(vcpu->kvm) || vcpu->cpu == last_cpu || last_cpu == -1)
-> 										^~~~~~~~~~~~~~
-> 
-> Does this do anything other than avoid a spurious reload on the first KVM_RUN?
+> Which branch should I base it on so that Sashiko can apply it
+> successfully?
 
-Yes. Without this check, the value will be passed to cpu_max_bits_warn() 
-in the following call chain, resulting in a warning ifdef 
-CONFIG_DEBUG_PER_CPU_MAPS:
+mainline Linus would be safest.
 
-1. kvm_vcpu_load_pmu()
-2. kvm_pmu_probe_armpmu()
-3. cpumask_test_cpu()
-4. cpumask_check()
-5. cpu_max_bits_warn()
+> Or would it be better to send fixups against `mm-new`?
 
-Regards,
-Akihiko Odaki
+That should work as well, but it doesn't give us a Sashiko scan of the
+whole patchset.
