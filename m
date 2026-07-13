@@ -1,140 +1,169 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36063353A66
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 21:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FD51E0DE8
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 21:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783977752; cv=none; b=etmx/M1TYbTth203Edk2xvxKofH8w8yA5kqP6MAtaDFqdohGLMgDAwI9CaRbC1XZhyaAU0D14mYTQqlYZtUN5yJOAt27t7olF+uHlifT9vLjYtPYXG4gZn4uRB7LcuX+A6eTMC20ujBySHc73Kd3WMPocmAly/lAbLwatP6bPVY=
+	t=1783978289; cv=none; b=tEI1QODz6QMzxc2AvmMkppmBVh9aw66cbsYFlcGwIEQCFh1IM3zM5oO7dmPWXFvyHxFRvtO65lWkwhBg/kv4bQmU7BJZCx5/i1EeiICibssFGb2tHSMEQZq/Gckm+LPrJJmpLNQCFSw7+ukVzLKDMrDO/j1Q8Dcw1soONNAuE6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783977752; c=relaxed/simple;
-	bh=0911x5z746DSBGrJQdRd7PT2mgv7GWq115asLXG13ZU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VIX7B6PLemk2o/CQAFQ6UR3yVjATd93wE3yA8JiKT14WaXVWePIrDPFXHnerXE5ftPKWlkaNDqnImFO+m1b74LLRnhSDf6k5NT6DsgawZlXraHFfvaz+iLROelKQ+ovtnsW/L4e1C+eezoGZi23Kg90l7UcxCATE2BcyT1F0nag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rI53V3nQ; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783978289; c=relaxed/simple;
+	bh=Z0sMSCAgLgyNWSE7K/gg8WQciaf2vPqoggdSKX7+Z/4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=RJ37hkQhyF0UrkN0CUB2dthKgMkUdMyUc1j/MvZtAp+1DVx8P2Uj2zeMf1GFbomilgwnK7uf9VBlNxrR5ArUP8AvGXP84niLWvxE7lLuD0jjBbBta3/1WZDwLSNSanS3uCE+yKD/1PIAzFn8nH81jfoAi1NY7nQzaifrcEYXfNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=FMjG4TN5 reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rI53V3nQ"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8487b7b3fc7so1538950b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783977750; x=1784582550; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
-        b=rI53V3nQ2ig2TZ8WN48uvIgiYPv7S5jGO939hN+TXwG1MLYZ31CunGTLy6btueEakt
-         GA4uPHOy3s3G/50KVDoXwXWvpMh2f64VRP+JKY6BXhmx6FGie8ltEddOUoZGBXwdQ9s1
-         nVsqkYBjUIfRIS9TLFz30pBsWvaXzkWGFQv1Bvy05o/hlb5ESnchyvHNuuUgiyQf5juB
-         vJlWfr1aqDep5VlM7WQ8gWqM5r6a4ysdIf4iiqJLIvfVNbFCgNi3n2XKxB1AoQRX7HXV
-         j/naa0Qj8rljz6EtIJxfwLplMa7OGcHXCiBIz7MN4LwS8aVK5hI7on8hYu4+87HeVghH
-         Dp0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783977750; x=1784582550;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
-        b=PTzsz/L8XcL5pm3gAhqpE1hX5MuzEKQJLIHqbvNrJXxPhpJAK/yDNZYD8DyXriUn+D
-         1CoaYgSmrMvwMtRDQD3X2/ehOjOkuo0oqQkVAjk4pGpZKAK1zAdXCDsWFrjDdcsFDrAx
-         +fWnkKjpWcYj01vTG9mlHZFcFf1u9A2UuZ95EdzLxL6nngeaxGiNAvIw42tTH5epM4ka
-         7G6CI5RkT9+d5A+85Of6UZmatVlrGNYC9HXsivWA7prdu4FP7qY4x96q9P/eVtnR25DO
-         LastsAb31XNA4QXdyKQUyGv8tcCGTl/NMJ0dwb51pHCupmD7iqPDzcAJ9daXY0A9cMVz
-         WGsA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3t3sKrpvnbw2t3Kz+jpbyqiC4C2d/1shqhEVLMjzRMB0uuvlRokkUoucCokYsrbpVuFLytYlkO+dHQE+3+aE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSDmiwONaTKaD7S37J20xYD14LD3vSpt2Y/tNSxkQy/N2hXx3A
-	7xBh2QyBvHyehY6VWY0T8AqeM6FYJ203sTwjJsf0r+CcbDjeecv12To/
-X-Gm-Gg: AfdE7cl3wICdJ7A12BPShvyAvE3XnASCVbFObfJrryp81rcsfVl5m3zAMdRhzja5kTa
-	FIPdWOCs+AYnwPh8eLkqedmni81lPKURKOrUmf4fBQ/GttLEob2ly26rRZbwJ1RjkV2Zm03IRQ9
-	hafkDq9m1nhl8M+n3A/ycjg6FvWr5mjgUSBEo8HE/LlWx3XT1/w8P9OROuC+lVqVQMqwwpQtwKm
-	sIZt1r0kbVb15Ab1KsH7t1WjfMRQqcDogkmBjJqUmIMUSSLyGDTqJzTf+ViLcgdVR4hmYHIJfMY
-	/VwdEDQZC8luQE+5Oqc3a0e9z5dKxwBiDWe69Ypkl14YkwRdmTHNaY2cN5LeYzF335kbCX3OxBM
-	K3ByswOe0r5MTTwZ2HKoGEzFuSAV0XRV8k10N1h8ItVZRBNQOGJ2a7sZDBO7f5Zz+KERgK5WLkV
-	iXs67klHu8FmJLnMYrv2mvCs16dk0WsHTrvutI6flA
-X-Received: by 2002:a05:6a00:1954:b0:845:c373:6525 with SMTP id d2e1a72fcca58-8488975a5b1mr9606193b3a.41.1783977750383;
-        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf016sm359029b3a.28.2026.07.13.14.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
-Message-ID: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Check byte type when validating
- helper stack reads
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
- 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 13 Jul 2026 14:22:27 -0700
-In-Reply-To: <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-	 <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="FMjG4TN5"
+Received: from [192.168.10.145] (p865013-ipoe.ipoe.ocn.ne.jp [153.242.222.12])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66DLVGmU018090
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 14 Jul 2026 06:31:16 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=7vu1Cqv1kY9MENEn9rk5xVTv4OyzC50IlKtSKEl+6V4=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20250326; t=1783978277; v=1;
+        b=FMjG4TN5ZC4Lzu6aXdhRf2FxBZecWOyitGLFQbs5P8rBoBKp/nTv9LnXYVx8oAxD
+         HioMIzBQr+XCM+O6fR/Pvg6nKp/eg6Ob+S2qp3XmTrIy8hywhIiaoHUcPKYfv4L1
+         tnJOgYvDpM6/vO3n6m3GEtGPLislK5pioqa1KHKC6Q0HGtPyPrQQPbRtYqbyqL/X
+         Rk/vz4oWXClhNVmeJpbg4C1yARqOa+eOIntlSDqXm/NIVdc9unvml6NsgkKFMRVm
+         gCD0Q0c/NpMtRSfDmGd1egtNS9hNUbih+ffwx9egfb+j+Dm1fBhkUBrr5KtBQr9w
+         PiCYTiHTQ1815xOjwOQfSQ==
+Message-ID: <3389f9d7-15cb-4bf8-804b-7dcaee2d252e@rsg.ci.i.u-tokyo.ac.jp>
+Date: Tue, 14 Jul 2026 06:31:16 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Subject: Re: [PATCH v8 01/11] KVM: arm64: Serialize userspace MDCR_EL2 access
+To: Oliver Upton <oupton@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu
+ <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+ <20260710-hybrid-v8-1-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+ <alSU0ZoIQ3sMLo0p@kernel.org>
+Content-Language: en-US
+In-Reply-To: <alSU0ZoIQ3sMLo0p@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2026-07-13 at 06:16 +0000, Yiyang Chen wrote:
-> check_stack_range_initialized() validates helper ranges byte by byte, but
-> bpf_is_spilled_reg() only checks the slot-wide spill marker. For a CAP_BP=
-F
-> load, a narrow scalar spill marks only the covered bytes as STACK_SPILL. =
-An
-> untouched sibling remains STACK_INVALID, but the helper still accepts the
-> read when the slot contains a spilled scalar.
->=20
-> Require the byte being checked to be STACK_SPILL before accepting the
-> slot-wide scalar spill state.
->=20
-> Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
-> =C2=A0kernel/bpf/verifier.c | 3 ++-
-> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 03e2202cca13d..c971cf34c760b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6785,7 +6785,8 @@ static int check_stack_range_initialized(
-> =C2=A0			goto mark;
-> =C2=A0		}
-> =C2=A0
-> -		if (bpf_is_spilled_reg(&state->stack[spi]) &&
-> +		if (*stype =3D=3D STACK_SPILL &&
-> +		=C2=A0=C2=A0=C2=A0 bpf_is_spilled_reg(&state->stack[spi]) &&
+On 2026/07/13 16:33, Oliver Upton wrote:
+> Hi,
+> 
+> On Fri, Jul 10, 2026 at 08:14:55PM +0900, Akihiko Odaki wrote:
+>> kvm_arm_set_nr_counters() updates MDCR_EL2.HPMN for every vCPU while
+>> holding kvm->arch.config_lock. However, KVM_SET_ONE_REG currently writes
+>> MDCR_EL2 through the generic sysreg path without taking the same lock.
+>> Concurrent PMU configuration and register restore can therefore race and
+>> lose updates to unrelated MDCR_EL2 bits.
+> 
+> Ugh, we should just stop updating MDCR_EL2.HPMN altogether. Since this
+> overwrites the previous value (rather than clamping it) we could discard
+> a legal value set by userspace.
+> 
+>  From the UAPI POV all we need to do is ensure the reset value is sane.
+> The documentation says that system registers are reset to their warm
+> reset values when KVM_ARM_VCPU_INIT is called. Which in this would mean
+> HPMN is reset to the number of implemented counters at the time of the
+> ioctl.
+> 
+> If userspace changes the number of counters afterwards, that's their
+> problem.
 
-Sorry, could you please explain again what's wrong with the original check?
-Here it is:
+One wrinkle is that KVM_ARM_VCPU_PMU_V3_SET_PMU and 
+KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS can only be used after 
+KVM_ARM_VCPU_INIT. Thus, either change necessarily occurs after the
+initial MDCR_EL2.HPMN reset value has been established. Userspace can 
+issue KVM_ARM_VCPU_INIT again to reset HPMN from the new counter count.
 
-                if (bpf_is_spilled_reg(&state->stack[spi]) &&
-                    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE=
- || env->allow_ptr_leaks)) {
-                        ... accepted ...
-                }
+This is awkward, but reflects the ordering imposed by the current UAPI. 
+On real hardware, the counter count is fixed before the CPU is reset, 
+whereas the UAPI configures it after the initial vCPU reset. 
+Reinitializing the vCPU is at least consistent with the documented warm
+reset semantics.
 
-And it says: if there is a register spill at 'spi':
-- always allow access if the spilled register is scalar
-- when allow_ptr_leaks is true, allow access when spilled
-  register is either scalar or pointer.
+I'll update the next version to stop rewriting MDCR_EL2.HPMN after vCPU 
+initialization. This also removes the need to serialize userspace 
+MDCR_EL2 access or reject HPMN values.
 
-The goal here is to avoid leaking pointers, and pointers are always 8-bytes=
-.
+Regards,
+Akihiko Odaki
 
-> =C2=A0		=C2=A0=C2=A0=C2=A0 (state->stack[spi].spilled_ptr.type =3D=3D SCA=
-LAR_VALUE ||
-> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 env->allow_ptr_leaks)) {
-> =C2=A0			if (clobber) {
+> 
+>> Add explicit userspace accessors for MDCR_EL2. Serialize them with
+>> config_lock so whole-register userspace writes cannot race with HPMN
+>> rewrites, reject HPMN values above the configured PMU counter count, and
+>> request a PMU reload when HPME changes to match guest trap behavior.
+>>
+>> Fixes: c8823e51b534 ("KVM: arm64: Fix MDCR_EL2.HPMN reset value")
+>> Closes: https://sashiko.dev/#/patchset/20260706-hybrid-v8-0-de459617b59d%40rsg.ci.i.u-tokyo.ac.jp?part=6
+>> Assisted-by: Codex:gpt-5.5
+>> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+>> ---
+>>   arch/arm64/kvm/sys_regs.c | 39 ++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 38 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+>> index d217530359ba..2b2ea33159e9 100644
+>> --- a/arch/arm64/kvm/sys_regs.c
+>> +++ b/arch/arm64/kvm/sys_regs.c
+>> @@ -2949,6 +2949,42 @@ static bool access_mdcr(struct kvm_vcpu *vcpu,
+>>   	return true;
+>>   }
+>>   
+>> +static int get_mdcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+>> +		    u64 *val)
+>> +{
+>> +	struct kvm *kvm = vcpu->kvm;
+>> +
+>> +	guard(mutex)(&kvm->arch.config_lock);
+> 
+> Hrm... I would strongly prefer that we *not* take the config_lock for
+> this register since there's no way for userspace to avoid lock
+> contention. ID registers are special and documented as VM-scoped, so an
+> aware VMM could potentially set these once (avoiding the lock).
+> 
+>> +	*val = __vcpu_sys_reg(vcpu, MDCR_EL2);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int set_mdcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *rd,
+>> +		    u64 val)
+>> +{
+>> +	struct kvm *kvm = vcpu->kvm;
+>> +	u64 old, hpmn = FIELD_GET(MDCR_EL2_HPMN, val);
+>> +
+>> +	guard(mutex)(&kvm->arch.config_lock);
+>> +
+>> +	if (hpmn > vcpu->kvm->arch.nr_pmu_counters)
+>> +		return -EINVAL;
+> 
+> KVM allows userspace to write whatever it wants right now, we can't
+> start rejecting values that were previously valid. The architecture also
+> allows anything to be written to the field, just that unimplemented
+> values have UNKNOWN behavior.
+> 
+> Thanks,
+> Oliver
 
-pw-bot: cr.
