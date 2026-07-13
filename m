@@ -1,177 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE9A3382F4;
-	Mon, 13 Jul 2026 21:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36063353A66
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 21:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783977265; cv=none; b=Puk5RXe5PwXP3zYae8B2XYWsz4ookJwrXC3tvIGotVePZP+DvCopN9GZZgu9mHN43cGjVsrxdaL/3ASjxcqUCRE1LIMe8ZOuNlEpfdIlkcrU7jL3S5fouxdu/I0M6VB53/GhHPPhnlEb9yMzaZGqcbBUBtTdw3nfkjobUuXR/Dw=
+	t=1783977752; cv=none; b=etmx/M1TYbTth203Edk2xvxKofH8w8yA5kqP6MAtaDFqdohGLMgDAwI9CaRbC1XZhyaAU0D14mYTQqlYZtUN5yJOAt27t7olF+uHlifT9vLjYtPYXG4gZn4uRB7LcuX+A6eTMC20ujBySHc73Kd3WMPocmAly/lAbLwatP6bPVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783977265; c=relaxed/simple;
-	bh=hFLJTEOtnPP+/owFXOrP6LuYyD2e+GGiXgitKVu3Klk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=NxDNCrlzg9okSEeQzwcmWyagBBLxlgm+V0QMthPD1clG/U6RG2cWtQiw5/mTfmSYF8SoWJ/xsLnwIZdJzdoQL3ZS2qXQhTRdmY22DXaPqh0RqS+yISihXEeHl2ith4nu+/Qf2wsID/ridYWJOmTh2ykiclTqytDiV9wq94Zzjlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRLvYS10; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783977752; c=relaxed/simple;
+	bh=0911x5z746DSBGrJQdRd7PT2mgv7GWq115asLXG13ZU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VIX7B6PLemk2o/CQAFQ6UR3yVjATd93wE3yA8JiKT14WaXVWePIrDPFXHnerXE5ftPKWlkaNDqnImFO+m1b74LLRnhSDf6k5NT6DsgawZlXraHFfvaz+iLROelKQ+ovtnsW/L4e1C+eezoGZi23Kg90l7UcxCATE2BcyT1F0nag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rI53V3nQ; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRLvYS10"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4631F00A3D;
-	Mon, 13 Jul 2026 21:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783977264;
-	bh=sMBui836HM41KY8s3+Mm8qIHFtVsg0cuQwuzcHoGBGw=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=bRLvYS10AMK0kvxXR59RYA9FSFouJAeQczmz5wHotdAOb74uqEkRikcm5pf+pfEJc
-	 N32c0SXNup4oYQS36yo4Lw2rFyX7svFRyU9E/Z9DxaF7RZM3kPz7f+Iz44z00wbLy6
-	 xBQBrI3T6p91Oy/j2zaSSSRBnQcJjp7E8AWp/IbyE500OfGUjHVLTp+ssakvW2mteY
-	 ga6dVNMXSJZ0hqpksKKkmmENN+wIwLcD8UTyBq9M1S9dbyaq9/wUxWJn6M9Ile2HMg
-	 vN+C6lw/1x6vhf/Hb5XZU41u12CrKTyykSOwdGOq4ujQmoj+zaj9xKc1RPJFsgnjiQ
-	 QsjgcIMVf9ojw==
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5B70AF40119;
-	Mon, 13 Jul 2026 17:14:22 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Mon, 13 Jul 2026 17:14:22 -0400
-X-ME-Sender: <xms:LlVVanX9epxdm6vE5XaKiNEEQE8RKCum1fePyhsn_ISXeIHTZMgGLA>
-    <xme:LlVVakf8QUACxIZ9ofCaRIvRzAE4f99-TaNSXzQNE0oDatgLYxvQ0VHz8z2sV9Keo
-    8I9j3WcFVjgh5iN3qEW2-JAYdbEL6AIGLOdyPxy52uN1QLDYg4Uic0>
-X-ME-Received: <xmr:LlVVag9FYCB5M6mjXULxej9uYDxuBEEl0WiGrWL_gmBJywMTsys5S7PVjWTfqxRETzZixnlc2zD6mbBT22skSFfdSTlgccsSgNI>
-X-ME-Proxy-Cause: dmFkZTFNij3gMh+X8Z9njSKkNHcXU0qZMJw/Gf1R/d3jzfKrxojwVNTxUV2e6GTfe7KByY
-    JijsFbEuiYnrxI0HagcW2l/RzWe8ge82nq9KT9GRAr3TDEmmqpMjDJNV6fEhBUsPJqJH9x
-    hioaW0XiA1PEFvoChOb0xHMAzsHUG1vslBm3qHrmUPMNxNGj55Br7P9rco5to57Ki8PYVN
-    iaTcBCQdQJxD3DftDB7VTuGVCIhM4yJL589c5sJhmWqP6VwwEpGINQtJvK06TFKk4fxN3y
-    88sk4YXX+DCCNUwIBOJwgt0dhTvbEWUISQho5kTNm5pVfdqWp1kocfsy1dWzX6GWcdQpf9
-    CVIycnV+YUFYiz34PXnhpZIOdzVSp7ca6F79kcbcLAJ6aea/zrPCAYyrzCbzMpGonQlCPQ
-    0WeEg2t+0qdX1lNeRjo9wAP/8IN1It6m5yY3lnpHY6NPa23cbE62uvKyGgU3l0+V39NNmc
-    8vYtkF5xdjOHYiED9NDvKTuJz1PRt8qIkJTFaROCBEwZCNxnr+5vUDKNc0y6nQjDIOZSwm
-    tAlrfS6+bUTtfnG8w9M9b1LRhQ3765pbUSEa6RTn+O0HBoIoSy0nUX7c0FokUGtNLPvTHI
-    gd62w4vF1ESfrI5ZbZHGgDvtwUIsaVr8tNPRvGBMcUbO/V2FnrmuI4imfsPw
-X-ME-Proxy: <xmx:LlVVakaxf__zGGvNap-G0VcZCHvGKTgpIknaKFPsN4SFO-CGy9GLfQ>
-    <xmx:LlVVagu4cz_fcZD7XFiW6WYtUDZIBVm6ZqVefKqvPUnAg9cGtZPg0w>
-    <xmx:LlVVahaG7f00MGJ4UGx3l9TQuFmS4wnLstbuR9VYMjrCkyMz2a_jiQ>
-    <xmx:LlVVakQbn33zqUbj-xtZv-5_1D6XSTeM6RfoQyscg_JzCJfnuqjnvQ>
-    <xmx:LlVVaszEyftclIAwPMVRESgjM2bmZBdJHybVxBjcC0cMjCJsDUO-tBMv>
-Feedback-ID: i67ae4b3e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Jul 2026 17:14:21 -0400 (EDT)
-Date: Mon, 13 Jul 2026 14:14:20 -0700
-From: "Dan Williams (nvidia)" <djbw@kernel.org>
-To: Manish Honap <mhonap@nvidia.com>, 
- Alex Williamson <alex@shazbot.org>
-Cc: "djbw@kernel.org" <djbw@kernel.org>, 
- "jgg@ziepe.ca" <jgg@ziepe.ca>, 
- "jic23@kernel.org" <jic23@kernel.org>, 
- "dave.jiang@intel.com" <dave.jiang@intel.com>, 
- Ankit Agrawal <ankita@nvidia.com>, 
- "alejandro.lucero-palau@amd.com" <alejandro.lucero-palau@amd.com>, 
- "alison.schofield@intel.com" <alison.schofield@intel.com>, 
- "dave@stgolabs.net" <dave@stgolabs.net>, 
- "dmatlack@google.com" <dmatlack@google.com>, 
- "gourry@gourry.net" <gourry@gourry.net>, 
- "ira.weiny@intel.com" <ira.weiny@intel.com>, 
- Neo Jia <cjia@nvidia.com>, 
- Krishnakant Jaju <kjaju@nvidia.com>, 
- Vikram Sethi <vsethi@nvidia.com>, 
- Zhi Wang <zhiw@nvidia.com>, 
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
- "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
- Manish Honap <mhonap@nvidia.com>
-Message-ID: <6a55552c98a82_35cf3310082@djbw-dev.notmuch>
-In-Reply-To: <IA1PR12MB9030E175587B09CEA7A4D90FBDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-References: <20260625165407.1769572-1-mhonap@nvidia.com>
- <20260625165407.1769572-6-mhonap@nvidia.com>
- <20260710162322.012be635@shazbot.org>
- <IA1PR12MB9030E175587B09CEA7A4D90FBDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-Subject: RE: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device passthrough
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rI53V3nQ"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8487b7b3fc7so1538950b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783977750; x=1784582550; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
+        b=rI53V3nQ2ig2TZ8WN48uvIgiYPv7S5jGO939hN+TXwG1MLYZ31CunGTLy6btueEakt
+         GA4uPHOy3s3G/50KVDoXwXWvpMh2f64VRP+JKY6BXhmx6FGie8ltEddOUoZGBXwdQ9s1
+         nVsqkYBjUIfRIS9TLFz30pBsWvaXzkWGFQv1Bvy05o/hlb5ESnchyvHNuuUgiyQf5juB
+         vJlWfr1aqDep5VlM7WQ8gWqM5r6a4ysdIf4iiqJLIvfVNbFCgNi3n2XKxB1AoQRX7HXV
+         j/naa0Qj8rljz6EtIJxfwLplMa7OGcHXCiBIz7MN4LwS8aVK5hI7on8hYu4+87HeVghH
+         Dp0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783977750; x=1784582550;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=012KWSmGKH9yQYdoYG3G0PrW1DobnL7zQ0ZLH/2ph6s=;
+        b=PTzsz/L8XcL5pm3gAhqpE1hX5MuzEKQJLIHqbvNrJXxPhpJAK/yDNZYD8DyXriUn+D
+         1CoaYgSmrMvwMtRDQD3X2/ehOjOkuo0oqQkVAjk4pGpZKAK1zAdXCDsWFrjDdcsFDrAx
+         +fWnkKjpWcYj01vTG9mlHZFcFf1u9A2UuZ95EdzLxL6nngeaxGiNAvIw42tTH5epM4ka
+         7G6CI5RkT9+d5A+85Of6UZmatVlrGNYC9HXsivWA7prdu4FP7qY4x96q9P/eVtnR25DO
+         LastsAb31XNA4QXdyKQUyGv8tcCGTl/NMJ0dwb51pHCupmD7iqPDzcAJ9daXY0A9cMVz
+         WGsA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3t3sKrpvnbw2t3Kz+jpbyqiC4C2d/1shqhEVLMjzRMB0uuvlRokkUoucCokYsrbpVuFLytYlkO+dHQE+3+aE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSDmiwONaTKaD7S37J20xYD14LD3vSpt2Y/tNSxkQy/N2hXx3A
+	7xBh2QyBvHyehY6VWY0T8AqeM6FYJ203sTwjJsf0r+CcbDjeecv12To/
+X-Gm-Gg: AfdE7cl3wICdJ7A12BPShvyAvE3XnASCVbFObfJrryp81rcsfVl5m3zAMdRhzja5kTa
+	FIPdWOCs+AYnwPh8eLkqedmni81lPKURKOrUmf4fBQ/GttLEob2ly26rRZbwJ1RjkV2Zm03IRQ9
+	hafkDq9m1nhl8M+n3A/ycjg6FvWr5mjgUSBEo8HE/LlWx3XT1/w8P9OROuC+lVqVQMqwwpQtwKm
+	sIZt1r0kbVb15Ab1KsH7t1WjfMRQqcDogkmBjJqUmIMUSSLyGDTqJzTf+ViLcgdVR4hmYHIJfMY
+	/VwdEDQZC8luQE+5Oqc3a0e9z5dKxwBiDWe69Ypkl14YkwRdmTHNaY2cN5LeYzF335kbCX3OxBM
+	K3ByswOe0r5MTTwZ2HKoGEzFuSAV0XRV8k10N1h8ItVZRBNQOGJ2a7sZDBO7f5Zz+KERgK5WLkV
+	iXs67klHu8FmJLnMYrv2mvCs16dk0WsHTrvutI6flA
+X-Received: by 2002:a05:6a00:1954:b0:845:c373:6525 with SMTP id d2e1a72fcca58-8488975a5b1mr9606193b3a.41.1783977750383;
+        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf016sm359029b3a.28.2026.07.13.14.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 14:22:30 -0700 (PDT)
+Message-ID: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Check byte type when validating
+ helper stack reads
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+ 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 13 Jul 2026 14:22:27 -0700
+In-Reply-To: <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+References: <cover.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+	 <855140e07cebafa6770d577ed107b2541b92f95e.1783920884.git.chenyy23@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-Manish Honap wrote:
-> > -----Original Message-----
-> > From: Alex Williamson <alex@shazbot.org>
-> > Sent: 11 July 2026 03:53
-> > To: Manish Honap <mhonap@nvidia.com>
-> > Cc: djbw@kernel.org; jgg@ziepe.ca; jic23@kernel.org;
-> > dave.jiang@intel.com; Ankit Agrawal <ankita@nvidia.com>;
-> > alejandro.lucero-palau@amd.com; alison.schofield@intel.com;
-> > dave@stgolabs.net; dmatlack@google.com; gourry@gourry.net;
-> > ira.weiny@intel.com; Neo Jia <cjia@nvidia.com>; Krishnakant Jaju
-> > <kjaju@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>; Zhi Wang
-> > <zhiw@nvidia.com>; kvm@vger.kernel.org; linux-cxl@vger.kernel.org;
-> > linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > kselftest@vger.kernel.org; alex@shazbot.org
-> > Subject: Re: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device
-> > passthrough
-> > 
-[..]
-> > 
-> > On Thu, 25 Jun 2026 22:24:01 +0530
-> > <mhonap@nvidia.com> wrote:
-> > > diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-> > > index 5de618a3a5ee..3707d53c4de5 100644
-> > > --- a/include/uapi/linux/vfio.h
-> > > +++ b/include/uapi/linux/vfio.h
-> > > @@ -215,6 +215,7 @@ struct vfio_device_info {
-> > >  #define VFIO_DEVICE_FLAGS_FSL_MC (1 << 6)    /* vfio-fsl-mc device */
-> > >  #define VFIO_DEVICE_FLAGS_CAPS       (1 << 7)        /* Info supports
-> > caps */
-> > >  #define VFIO_DEVICE_FLAGS_CDX        (1 << 8)        /* vfio-cdx
-> > device */
-> > > +#define VFIO_DEVICE_FLAGS_CXL        (1 << 9)        /* vfio-cxl
-> > Type-2 device */
-> > 
-> > Would we define a different flag for type-1/3 if we ever found a need to
-> > expose them through vfio?
-> 
-> Yes. The current flag is named VFIO_DEVICE_FLAGS_CXL and refers to
-> Type-2 specifically. If Type-1 or Type-3 support is added later, a
-> separate flag (or a VFIO_DEVICE_INFO_CAP sub-type field) would
-> distinguish them. I can rename it VFIO_DEVICE_FLAGS_CXL_TYPE2 now if
-> that is preferable; please advise.
+On Mon, 2026-07-13 at 06:16 +0000, Yiyang Chen wrote:
+> check_stack_range_initialized() validates helper ranges byte by byte, but
+> bpf_is_spilled_reg() only checks the slot-wide spill marker. For a CAP_BP=
+F
+> load, a narrow scalar spill marks only the covered bytes as STACK_SPILL. =
+An
+> untouched sibling remains STACK_INVALID, but the helper still accepts the
+> read when the slot contains a spilled scalar.
+>=20
+> Require the byte being checked to be STACK_SPILL before accepting the
+> slot-wide scalar spill state.
+>=20
+> Fixes: 354e8f1970f8 ("bpf: Support <8-byte scalar spill and refill")
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+> =C2=A0kernel/bpf/verifier.c | 3 ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 03e2202cca13d..c971cf34c760b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6785,7 +6785,8 @@ static int check_stack_range_initialized(
+> =C2=A0			goto mark;
+> =C2=A0		}
+> =C2=A0
+> -		if (bpf_is_spilled_reg(&state->stack[spi]) &&
+> +		if (*stype =3D=3D STACK_SPILL &&
+> +		=C2=A0=C2=A0=C2=A0 bpf_is_spilled_reg(&state->stack[spi]) &&
 
-The CXL specification itself has deprecated the "Type" names because
-they are ambiguous. For example, you can have a "Type-3" device that
-supports "device memory (HDM-DB)", Type-2 is a superset of Type-1 in
-many cases, etc.
+Sorry, could you please explain again what's wrong with the original check?
+Here it is:
 
-This flag will never be able to capture a coherent / standard set of
-device capabilities. It can really only be a plain "CXL" flag with
-an implementation that is ready for the superset of capabilities:
-CXL.cache, HDM-H (host-only memory expansion), HDM-D (legacy device
-memory), HDM-DB (device memory via device cache management
-back-invalidate).
+                if (bpf_is_spilled_reg(&state->stack[spi]) &&
+                    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE=
+ || env->allow_ptr_leaks)) {
+                        ... accepted ...
+                }
 
-I think the HDM-{H,D,DB} difference are not relevant to VFIO, it is all
-just CXL HDM.
+And it says: if there is a register spill at 'spi':
+- always allow access if the spilled register is scalar
+- when allow_ptr_leaks is true, allow access when spilled
+  register is either scalar or pointer.
 
-The capabilities that may need a different VFIO implementation model are
-interleaved devices and maybe dynamic capacity devices, but that is not
-a type designation.
+The goal here is to avoid leaking pointers, and pointers are always 8-bytes=
+.
 
-[..]
-> > Does that leave this device level capability describing the device as
-> > type-2 (by existence), with only a flags field to declare HDM as
-> > firmware committed, for future compatibility should we support non-fw
-> > committed?  Thanks,
-> > 
-> > Alex
-> 
-> Yes, I will shape the v4 in this direction. The device-level CAP_CXL
-> shrinks to "this is a CXL device" (by existence) plus a flags field whose
-> only defined bit today is HOST_FIRMWARE_COMMITTED, leaving
-> room for a future non-fw-committed mode. Everything else moves to region
-> caps. Thanks for this suggestion.
+> =C2=A0		=C2=A0=C2=A0=C2=A0 (state->stack[spi].spilled_ptr.type =3D=3D SCA=
+LAR_VALUE ||
+> =C2=A0		=C2=A0=C2=A0=C2=A0=C2=A0 env->allow_ptr_leaks)) {
+> =C2=A0			if (clobber) {
 
-How can VFIO discern if the HDM is host firwmare committed? If
-devm_cxl_probe_mem() grows to auto-activate unmapped capacity rather
-than finds firmware committed decoders, can VFIO even tell the
-difference?
+pw-bot: cr.
