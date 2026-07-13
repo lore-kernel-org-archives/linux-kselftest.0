@@ -1,88 +1,88 @@
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B403876DF
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3E1389DEC
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783941312; cv=none; b=HL70LaQg35pY6H6vQ8iaOtWBA+XLM0JwmxZdvYI0bWNbzcZZ1ZU9bAn3XRAlqI2g0RgoJJymerRZlFYrJEO4vI7ynOoXhTcBpVKubZvOusjvn6pNJcEXdXJjtWZrteEFyoBu+8Ya9xkOWAAIFZtt2EcQoXP9RhUZWllAdh5l8jQ=
+	t=1783941318; cv=none; b=X46aNpI+3I1b3MCUmIahvnulyoSblC45s6/xXBpPYtQYyQ88+pZGY2KWCM6v2/77AB4dhH3Ze4GZplLqq5VY5eTjtRyQSu2NuaHJsNFVBk1KNJdr9kFts6U25NZVyA5O9hiGcwd2G92/Z2kGgPeh/dtLdSNtPnmOLOdRbdmMolg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783941312; c=relaxed/simple;
-	bh=O9NkHL6JYILIp7mfm0RnOgr/0S6YPfzPn6jbv5EJbjU=;
+	s=arc-20240116; t=1783941318; c=relaxed/simple;
+	bh=VYz0TYRwzOI7K0hlO+3u24CfmURLK/h7puPMYIu7DoE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IFDj40h0CR/7a2ENhk4pSI1XM38qKkmMP8/Via/c3GHGvFO3P+oeSS1af0nAMbF8LfCkhrehBCKAu0OJruGO5V/zlsr2ZzR+qyLFoBPkPYNapVgn5tGw1qVyGXEV0CCjtwS1dpXTsku/yGb1hBISAiEJmnpsSlkmqg0ToXCjSfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RYh6cDyp; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SvfnpIz3; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:Cc; b=SrpXO8pj/IrtXg7NQ+A3QYupQlKDIpHFBKWw+gMHI7qK8y+x3Wrq/7nJa7IboN+mzw955qYhIwGTgQDBgf+BoNvbMa2HSRyIdeuLwg0aFoCINQURzCmIhdy199cwAFflDrgD8lxwaa0N8++IpzjLOQY6qtN74+Esf05N5Yh5ljA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jK5OFX8y; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZvLSG0D/; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RYh6cDyp";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SvfnpIz3"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66D9eBNx956484
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:09 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jK5OFX8y";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZvLSG0D/"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66D9RGRO1123141
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	okGnys6Dq42n97G+YBE9VPTayEfByn7CtWc7od0TY/Y=; b=RYh6cDypsF1bP+QG
-	Z4qVwPP2cR80gKUg1fPaK8tCo5IUPTfgtNOdxx+2W7pEdbGDur+HOudFcd4TDtbh
-	br1ltp21Qa7t10NW2C13DhyQTGwIK71YNSCB1xv2dFKwz626Uxpvm49ksJixSCZR
-	JV1mvp2ZRzKutzAqRYbuxK6FXhJQiyLM9NewJ++A4ctoJrtyQ1e5XAzf0S+XsrS4
-	AcXrWrf7Y6eDycSdp0Bt1Nce1QdWrW+WvoltYjX09lzXXwT3A39XFJTifJsuHB8d
-	piaGTAp/oXfq9Ji6N9qRkptvEKBb1dP3j4qVhDQXFnZxSo6hPRpF3dW+rIC6WNbx
-	pnKJkA==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fcwk9ran1-1
+	G1ndrEIR7n7BpzBb/bC1xzKI/CnXvp4qobfU8FGyanY=; b=jK5OFX8yDhdtk95h
+	qV90IMpyKSbjgVEUlCVkTMXZtgXsLjkDcCFIOihzkzl09kMXg5b90oDpSI6EAfY1
+	A8XEpZMjaOL9Fr2OO/Y4fBkIqJ0T5tbjrcraAsD+w0LA36mYz7oLEzyF9JB6GDlb
+	EHIIUgZu6xhLW26JzwGch0vUSVkPAYgn75/gHdza0yKA84yiLrK5ZdokP9jl3r7C
+	l7uj1/jL9ksIE8sN59WJiyrU23dwt50mlKK6YnND8mZBrU7rN0Teuy3eIEpwmWeM
+	uRlO3uvTWT/fF0Go3Q35OrBAR024uwLNkTt+K8BuHJXlKho3L6+zTlnc+TThAJHz
+	hFIk8A==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fcwda0cdf-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:09 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-51c07f25de2so30660281cf.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 04:15:09 -0700 (PDT)
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 11:15:14 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-5174a236220so45178461cf.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 04:15:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1783941309; x=1784546109; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1783941313; x=1784546113; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=okGnys6Dq42n97G+YBE9VPTayEfByn7CtWc7od0TY/Y=;
-        b=SvfnpIz3gUQR6aUwNSQPUPAvk/7HjD1IWvbxWHTJzWI9KSYtl0YB5Jb9wcNcXpQsyK
-         Xp/VY6G6BsSlteDhOlZkQA2wo3WIEm08z+mthjVsg9XWM/cWq7ul77Yzfo1g0daXlkqg
-         vvvkpH37o5P/n6PlV/FSXVgcwCkKq2Ctn1G/cuEOPmIotKNCLAq5S3WRujfg7wW48Osy
-         Hkg12R0jP0Yf75TZcZzcwFdV+eI5FYctZYXzKBngF9z72Hs7pZ5XlDs5txKJfwCNDspF
-         E2QDtqqkuj9fB9m4vLvY9llfuv/B9R/eNvbOaVpNu7sQ5Uuvfa0nFV1IeisJQ4UHx8AQ
-         dqHA==
+        bh=G1ndrEIR7n7BpzBb/bC1xzKI/CnXvp4qobfU8FGyanY=;
+        b=ZvLSG0D/5YtiX1aqdsOxskilMOE/8P+jGw7PXgjBt78nq/VSsyaE8ScNi9fAMBrQNj
+         k3/YYuStwv1f9bvgXkyGRPfEp9mWGkdZhSzIxiwSg/BI/IrTocukWLg/EQXDpisSjX8/
+         8EwDlIMg271ziRr7l3OeEInVQLa7EcvNF2dNWRpf+U9SYriuX2SZuhpYHoQko0Yx2/MN
+         OxvYjUWjhSEKJWiJVg1mooQzw0fLM/JHKZoMsyb2iLqC66VFRplxoVUxjg7fR/z4upip
+         emK+1l48gHyoPBN1D6RfjpH6Ryrop1+Y3mY9iYFBfhThD+Z4FZ6rpxDLK9GJ1PySaAh0
+         VwmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783941309; x=1784546109;
+        d=1e100.net; s=20251104; t=1783941313; x=1784546113;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=okGnys6Dq42n97G+YBE9VPTayEfByn7CtWc7od0TY/Y=;
-        b=Kleur9b1ec2dHx8cmM9VJnytlXdylf8+MmXRxUYkp0xzalZlL3f+eELpUqKebEaJ2f
-         J7gj5we7G0nTUtsxiBjS4ie+AoA0/7RVMeev1qtn8uJVYbx3zUDWauPTh5z24sO8mSaE
-         QVrvqns+YqFPShyYcMy0dz2WADrkSO6uHn5DXoORT5pXLgSkNd3Ysi0l+Ml6Wou02+1Y
-         257b7xowXG54YM/kmd1Nhp/bVeSlGx0vzG3Mphp/CFDMFkGh0VVdAcoEJNPBgiYylhUT
-         t1YAA51GsByLE8rRTEPfK4G6M0Mcs17lI1tTyXip6EhUvX1mPSn8yrtY1ySJKMH1zBki
-         Wz2A==
-X-Forwarded-Encrypted: i=1; AHgh+Ro+iyoIYyCZM2GHQc1AM6xxv2FnvEIq8aodYJQHZhdcPqg6K7Hxy6KkXb2v1aRb0O43YybmJDnYLnkz1P5rRHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqRj2wdovm1TGgKkmtZ6Dnl2LIlE4dRcowUNu+y45FKvETZpWp
-	Zg/z8pSSA5m14bUZyn7ve6PZNsINgb486hVjeIh+eVj8ANJXqS6ybmk16nnU9aXXOzQWJwzNrlj
-	nzq1e+0mqvtvxOxjJy1wpOzgIWP3xA8wEIfjzX1OPshTmTGGbx04kMB4x2GQ9GXHawQywpKtVD2
-	fq27k=
-X-Gm-Gg: AfdE7clRYrovy7nMt62S9bURUsNwYzP36UA+fNg3g6Dn9xFr7WxqpJ2wga8fgUER0z9
-	+NBq50EZz6XZw4/zFyIQoE8iKWIDyXzXwxJc0FwrSHYbvmSsgCmIzK6aGeKATMMaTOzRQ0M/tqn
-	KkyYwr4qsMbulG0E3s4UlWLqcLOI/o+dfD8Hr5h1gOnj9ExG+R++cuVOBQm8S9GnPMOmSaBn3GY
-	ML7opbvw5yzKR14/Hw2koKuJtalVY3GE8kLl/YoKrbngeTXEiveYGCOJNYv7g9vt4q3WebrNNhY
-	x+xxzGni1MA/hPGGAim8IPSFx4h464nI9IV/XUC/y4Kv3Q4FRM/r0xBZu2QC10X7QG3uIB5gwOb
-	MCcxcURDTpJ28Y8mlpRHe6htggJ48JcK0fP5i8kHw
-X-Received: by 2002:a05:622a:1828:b0:51a:8c9b:649f with SMTP id d75a77b69052e-51cbf38ef7emr84447431cf.67.1783941308481;
-        Mon, 13 Jul 2026 04:15:08 -0700 (PDT)
-X-Received: by 2002:a05:622a:1828:b0:51a:8c9b:649f with SMTP id d75a77b69052e-51cbf38ef7emr84446991cf.67.1783941308020;
-        Mon, 13 Jul 2026 04:15:08 -0700 (PDT)
+        bh=G1ndrEIR7n7BpzBb/bC1xzKI/CnXvp4qobfU8FGyanY=;
+        b=i3VvU+GorI6uileTDV/h0HP7d88Nlf0Uhg+GUcuiA88Jkyd/JgY71Y6UFCPDvuSpMx
+         QNtlLW37yfD1tdyarVO4Hqp6oa3kqAvf334Cd7nkC4k4cTdO2B0k2E5YRhTHdG9bux+3
+         00KD8K3n/V23hBr6+FG1cFGMMgY/ZKCCyRs360Q+aqiW5ZigtinwIavfF2QuIA+O8r18
+         tuKkkIsrSNHb8cXmz0SEjlXUxsDJLotj+jLzqOaiqkTmAhGy53rYjPYlL7zXWtnNTHg0
+         hFU56mmXeu8c+zAqeQ5ts7YT9Sm+Rrguh2jo1NyHunFwQtIOIsu720MCXR2g6plU/Cou
+         eDbw==
+X-Forwarded-Encrypted: i=1; AHgh+RoIP+bU+KqNBNxTfGA1RIWlr/FhYaXNb4ZH1elObLYNhmMs6LSaqgvv33S1+zctmlIRLEkG3/HCBPHbR3m4ijY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqzwiJ/FRcJVDqMafZ4LwLhKvfcFL2QmFHxtkUhxjI67dCVx0d
+	aktgZ6wx269tMTDgquGj4DVPgNncWv3MemZ8uW5w9BeYZe1EBQRgXmltwNFAjno8936to8KW5sc
+	XbtnEbN5UKQ3hZPR4VF5+BA20YK9tB1NCrJiLxqflAhjO7vR2HWGy1UlGBMpGN1uFwrv+Viw=
+X-Gm-Gg: AfdE7cm3lVNHewEWsQXCxCTmkFhBLHiRwYouXLlXVl5OWblc6ov53vbyfzbhEzTXb1P
+	affTns5SjFHBkrj8P1WwR08XvEyYenqP7Hq1GqpM8oK5a6fp2UF9nqVm/L6UCtZakIYzPz+WkzK
+	rp36zhLssuFe/lrbwpZi/P45g+uUx1iBcFBc8B3z43WPUx+t+0n/hmonTt+cEiEzGHOQHklm6Jy
+	+kZmpmQNVmoWpWv2G6yGL5f6K3G4IArgBQy7/xYpNMrTGq/sJs0wAHYKVsUlgogMcYgIjF72/fC
+	FdTEXpX1D5/p1npQMeWSQ6s5su0UXbl7eP5bonxcwAJfpoxTws5isd41Kiojs13T2RQEcJErRwO
+	3rrEq8XMGesnVJjcpEwfeYSP2hePM9FVl4jP/IKg6
+X-Received: by 2002:a05:622a:1918:b0:51c:8fb:fa45 with SMTP id d75a77b69052e-51cbf2fab81mr88878191cf.58.1783941312980;
+        Mon, 13 Jul 2026 04:15:12 -0700 (PDT)
+X-Received: by 2002:a05:622a:1918:b0:51c:8fb:fa45 with SMTP id d75a77b69052e-51cbf2fab81mr88877321cf.58.1783941312140;
+        Mon, 13 Jul 2026 04:15:12 -0700 (PDT)
 Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:8881:83b8:89fa:1a2a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0f214d2sm82323160f8f.33.2026.07.13.04.15.05
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0f214d2sm82323160f8f.33.2026.07.13.04.15.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 04:15:06 -0700 (PDT)
+        Mon, 13 Jul 2026 04:15:09 -0700 (PDT)
 From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Date: Mon, 13 Jul 2026 13:14:45 +0200
-Subject: [PATCH v4 2/5] software node: add fw_devlink support
+Date: Mon, 13 Jul 2026 13:14:46 +0200
+Subject: [PATCH v4 3/5] software node: add kunit tests for fw_devlink
+ support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,7 +91,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-swnode-fw-devlink-v4-2-d4f2dee27ad9@oss.qualcomm.com>
+Message-Id: <20260713-swnode-fw-devlink-v4-3-d4f2dee27ad9@oss.qualcomm.com>
 References: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
 In-Reply-To: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
 To: Brendan Higgins <brendan.higgins@linux.dev>,
@@ -110,205 +110,449 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         driver-core@lists.linux.dev, linux-gpio@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5990;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13715;
  i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
- bh=O9NkHL6JYILIp7mfm0RnOgr/0S6YPfzPn6jbv5EJbjU=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBqVMiv3n7DWmU3bTgDtMHhn+McKk6aAxv9PFD8+
- L/kGkkHH4mJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCalTIrwAKCRAFnS7L/zaE
- w1WRD/0fycoaLESQF+jB+f8IxtpFfiLvdJ4cwDu4+Kgo2CXBydcgbhsuo1LEVLLC4eTXh4qJuSW
- vApZWytxW6u84Gd7RM2JZAhrrfFH7sgRGvgkn9jSRG/kwqWkq4QrSm16TPglgLGyavF2tcwV3JP
- fojBN2IHhuKKAjC4IVvuV/GuJvRgQHaObu9v0SJcNT8WNjUkQU5uC6Bs3p/shCnyZcuwg17Q1Lh
- fdi+CpEr5nFWo2/g7j50IVzqAzswifIj9kPn0pMTuU7oVo1zNjrw89jGpoYYMGYP6WoYvHzNZkE
- ylnU9iiVIo4cBd/8oRK9V8We2blZBWx8AhhLXGiicXDt+mbJxmxhkx9kk58vMSjXhejoqa+B/5r
- /bolt61WnOR0t5DQWGt1raUCyJoNV8Lg5/g1NjvAtjUqZVBetnpHwFYUV3lW2VQ7v1fF/uOMKJK
- 8uZU0ZqVUXOKd0gRaaz+e5j7QfOqwkXVjtnkxo59mY1TJmfGR+7udlroTFzyY8dL0sNw99k8a35
- 0J6Auidrd1W+GLC9m6PGDGorsJBQin0gFlKR5mK+hZujM1D8+biy4yUcaFNGDDbdnXrbF4Zo+JH
- CEYzBnKn00I9as4is4jyBwNZIQckRnXjKh46IIROikmeDpe1hiD6ae0LUp1if2DVhMB0BaUGKAW
- vyjg97iHRtLLOFA==
+ bh=VYz0TYRwzOI7K0hlO+3u24CfmURLK/h7puPMYIu7DoE=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBqVMiwKqOvnQ53efJ+Gdvxj32YrXGjDJCupbdAS
+ hOlNL2qYGeJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCalTIsAAKCRAFnS7L/zaE
+ w+WZD/wLXZP4GYrLA8mBNJtgA29WG2H+RCY4Za27dUOwLErpZ5h10IUhuObHX1hNl0gTIieh7d4
+ ckbBw6udTFyxfAdz5DmNYO7UxIqYI1sZcITsZYQe5Ux+1/MM2CckJesxyTXcDcojFpPfDxsA7wE
+ guftCRAdYVUGALM8tchVFSVK2EFjcbGphenY/yGkzOf4ryBbQEgdkbGXzzNnk3D3WR7PJadoKZZ
+ 1V659cFXZ9bG0xZUFPbuFWrtoQ9t2P1Wt9hYmWIFN1Zj0l7aM0e/RREEMjYdj7TAbWeUWSaI3rh
+ K0x5BaV6HHHhTC9YC0z2K4JCEs92dpCAvuwb+ruJ4gdGCfljhIFUwhQTqHAPgo48apjJVnuPRp+
+ 0loYSMbGwkSuMfaZ8AbHXwYm2jqtzSuMy7EJo34SHgJdTLwJzLDjtKd19vrcwHOYQOi6mF6f6r/
+ /hbSICWu+JjTtAr/SU9s8a9kPSFCWUTsyNudU2DTPu04ILH9VN/F9oVVx3cEREBHebHuJB2QoO6
+ +/nvifSEMRR+cF+w70b0j/lLxYC7+dGN4cJbmYdFO48boD4RYbXRIM1ZSSqJ/HehIwVkRp08bhR
+ wR0vBSS0i+H8LD7G47I6qoSWO8R+zEFExDhGnWJqF+4MTp1JBqKoWX1F2PVCUSL4SxH1Bam+T+z
+ 0tu7cLHxVMWEFOw==
 X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
  fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEzMDExNyBTYWx0ZWRfX086aorltuFg7
- YiT9oYJhBj3KI/g1sVZ5aOGgBk9fdmTsQo4vygy02AdhUGSOOBZIMAoCVB7e2wt8u8hDyysWjls
- rWlfgGzPaq9HQfgqkYLLYgjDxY0x21AglrAFUk8Mc20R+ZN0sPTXgyhQq9lseexh8Gg87YE/uLz
- oO8U4g7FE25CZsPAWhflxiJXjbE5iRjUg/itmIRnFt1ONieY38vUBK3JVWCWIc50PjQXBJ+63Ha
- gidD4qkU4wVdWEVJDD68O/BcpU1ft8eZT98RzGV8/gdU224igg6fz7xz+vWjI8WIBHDGPUMqumf
- eq2IBvLMnzO9tE1srzJXa4cq1stC2KraZ2hBxlgf7kBVPkpgrO2EOU3lgGHyscwcPgxgNTrXjI6
- AeVxMVk/szGzLW6PIhxOXKA8pidO/qDGUvSV/kyzIk7LUPBzfgTdraGiOSjsMUQNVIB6raKXtU/
- o6EuGWXycS6stW9SC4g==
-X-Proofpoint-ORIG-GUID: 7T8e6MeDZS4KmgxA_jRHpmwM9HfB_xB6
-X-Authority-Analysis: v=2.4 cv=UMHt2ify c=1 sm=1 tr=0 ts=6a54c8bd cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEzMDExNyBTYWx0ZWRfX88OOD1lWpNC9
+ Lw+h+gEhR4cB0TwlJRQhk8cSfBaA7Zj6WYuLQ02Yif+okytAg88LaJmPX0/5IcxXuLHiONk8XM0
+ Wl6Fs+XLs9PSBkXaCDyU0G9IC6xlnwg=
+X-Authority-Analysis: v=2.4 cv=cNbQdFeN c=1 sm=1 tr=0 ts=6a54c8c2 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=RAioF0-LDSMA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=QyXUC8HyAAAA:8
- a=EUspDBNiAAAA:8 a=fLzRGSmVK1lo7flavS8A:9 a=QEXdDO2ut3YA:10
- a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-GUID: 7T8e6MeDZS4KmgxA_jRHpmwM9HfB_xB6
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzEzMDExNyBTYWx0ZWRfX1LPuMJENaJjg
- J49LodnY9ehMyuZ/Ni2fOPsGRK5dgdl5g82bAC965ace+hs6go912NB245srhkJZv1t+6jmArb/
- othevMf94lXEXraKvK22ccFTACS8Vog=
+ a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=QyXUC8HyAAAA:8
+ a=nzuXsxulAAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=9zVEpjMGfH8rPmTIezIA:9
+ a=QEXdDO2ut3YA:10 a=dawVfQjAaf238kedN5IG:22 a=Jn5cl5okm61iLnyvC_SE:22
+X-Proofpoint-GUID: HMmS2Jm-aDPPGTYyfyU-anKv9qvve541
+X-Proofpoint-ORIG-GUID: HMmS2Jm-aDPPGTYyfyU-anKv9qvve541
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzEzMDExNyBTYWx0ZWRfX5if2+XgUyfY4
+ PJqCuWATMB4gcH+ogmsRu0PevJKjYrRE9KLN+7u9jPKpdTnRb75jiXkabDSOnyvF0Xli2rYcPHU
+ ghEJkfQkTyV++yUwZ+mEnke3IOAvHPokEEACxLlnqqSUaL8jYsJHXSh6JmdtOA7+A0IJaELYddw
+ 7ijyPsUj6LWb7hDBPIcVGigFks7kkjZwZPG/G7Boq8chwGwN0xb9O7rrZIzSH7I1Eo+Vn1PJ2hC
+ NXAiyWf3zqyhyDSj+pYWmUHN4Oqp1/Mx8kaQTksvMNEfzCgALWL2QgL61Uo/Q5NCgzv+EYzC6qQ
+ l1EvX5VoRrVJQB/xUk8noRnwL8Z/khQB8NMPb9Ow31EHVLGibynwpXwZd5C9nqak2AegFisFw/P
+ PDjU85OCKKE3GxUyZ0BxCuuOYPtwlYzRkix1l7u1RocCJ2t8NNMES6iUGfcLs3VIPucgiZiTH8n
+ IfmCrvjX5ChxcSbFuRw==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-13_02,2026-07-10_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 spamscore=0 clxscore=1015 adultscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2607130117
+ priorityscore=1501 bulkscore=0 spamscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607130117
 
-Software nodes can be used to describe supplier-consumer relationships
-between devices they represent using reference property entries. Unlike
-for OF-nodes, driver core cannot yet use these references to create a
-probe order that avoids needless probe deferrals on missing providers.
+Add a kunit test suite for fw_devlink support for software nodes.
 
-Implement software_node_add_links() modelled on of_fwnode_add_links().
-For every DEV_PROP_REF property we resolve each referenced supplier and
-create an fwnode link from the node to it. The driver core later promotes
-these to device links and defers the consumer until the suppliers are
-ready.
-
-There's no allowlist like the one DT needs - devicetree phandles appear
-in plenty of non-supplier contexts, but a software node only carries a
-reference property when its author explicitly points at another node, so
-we treat every reference as an intentional supplier dependency and link
-all of them. Graph "remote-endpoint" references are skipped for now: they
-go 2-ways between endpoint nodes and would create graph cycles without
-the port-parent lifting DT does via get_con_dev(). References to
-suppliers that aren't registered yet and self-references are ignored.
-
-fw_devlink resolves the supplier device through fwnode->dev but the core
-only records the owning device on the primary fwnode. When the software
-node is a device's secondary fwnode, mirror the device pointer onto it in
-software_node_notify() so the consumer can actually find the supplier
-instead of deferring forever.
-
-While at it: purge the fwnode links in software_node_release() now that
-software nodes can own them.
+Most cases call add_links() directly and inspect the resulting fwnode
+supplier/consumer lists: a single reference, multiple references, a
+reference to an unregistered node, a "remote-endpoint" reference and a
+reference array. The last case is end-to-end - it registers real consumer
+and supplier platform devices together with their drivers, adds the
+consumer first and checks that fw_devlink defers its probe until the
+supplier has been bound.
 
 Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: David Gow <david@davidgow.net>
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 ---
- drivers/base/swnode.c | 79 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ MAINTAINERS                             |   1 +
+ drivers/base/test/Kconfig               |   5 +
+ drivers/base/test/Makefile              |   2 +
+ drivers/base/test/swnode-devlink-test.c | 337 ++++++++++++++++++++++++++++++++
+ 4 files changed, 345 insertions(+)
 
-diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
-index 869228a65cb365567ddac7db6ad7b8743e0dbca9..1f2315858cc3e04c7ff197324f1862c32a2ffa31 100644
---- a/drivers/base/swnode.c
-+++ b/drivers/base/swnode.c
-@@ -699,6 +699,62 @@ software_node_graph_parse_endpoint(const struct fwnode_handle *fwnode,
- 	return 0;
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 806bd2d80d153537393761df322165f683954d50..f9dfb14b9d477fc0331441f96c158b0474f63026 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -25106,6 +25106,7 @@ L:	linux-acpi@vger.kernel.org
+ S:	Maintained
+ F:	drivers/base/property.c
+ F:	drivers/base/swnode.c
++F:	drivers/base/test/swnode-devlink-test.c
+ F:	include/linux/fwnode.h
+ F:	include/linux/property.h
  
-+static int software_node_add_links(struct fwnode_handle *fwnode)
-+{
-+	const struct software_node_ref_args *ref, *ref_array;
-+	struct swnode *swnode = to_swnode(fwnode);
-+	const struct property_entry *prop;
-+	struct fwnode_handle *refnode;
-+	unsigned int count;
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 2756870615ccab67ec26d8671c1e4dba69342134..1ecf0791241a1b2eee7e1e787772217724abacb9 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -18,3 +18,8 @@ config DRIVER_PE_KUNIT_TEST
+ 	tristate "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	default KUNIT_ALL_TESTS
 +
-+	if (!swnode || !swnode->node->properties)
-+		return 0;
++config DRIVER_SWNODE_KUNIT_TEST
++	tristate "KUnit Tests for software node fw_devlink links" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index e321dfc7e92266d2073d442f652cadb6e911dba5..9ced7bbd569fc49ba2719aa0cab57c7d8245dde1 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -6,3 +6,5 @@ obj-$(CONFIG_DM_KUNIT_TEST)	+= platform-device-test.o
+ 
+ obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
+ CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
++
++obj-$(CONFIG_DRIVER_SWNODE_KUNIT_TEST) += swnode-devlink-test.o
+diff --git a/drivers/base/test/swnode-devlink-test.c b/drivers/base/test/swnode-devlink-test.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..f53549e926118fd4a1e109ece67d58d45d52193d
+--- /dev/null
++++ b/drivers/base/test/swnode-devlink-test.c
+@@ -0,0 +1,337 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) Qualcomm Technologies, Inc. and/or its subsidiaries
++ */
++
++#include <linux/array_size.h>
++#include <linux/device.h>
++#include <linux/fwnode.h>
++#include <linux/list.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/time.h>
++#include <linux/types.h>
++#include <linux/wait.h>
++
++#include <kunit/fwnode.h>
++#include <kunit/platform_device.h>
++#include <kunit/test.h>
++
++static int swnode_count_suppliers(struct fwnode_handle *fwnode)
++{
++	struct fwnode_link *link;
++	unsigned int count = 0;
 +
 +	/*
-+	 * Unlike Device Tree, where phandles appear in many non-supplier
-+	 * contexts and a curated allowlist is required, a software node only
-+	 * carries a DEV_PROP_REF property when the author explicitly describes
-+	 * a reference to another node. Every such reference is therefore an
-+	 * intentional supplier dependency, so we create fwnode links for all
-+	 * of them.
++	 * The suppliers and consumers lists should typically only be accessed
++	 * with the fwnode_link_lock taken but it's private to the driver core.
++	 *
++	 * These are tests and at this point nobody should be modifying them so
++	 * let's just access the list.
 +	 */
-+	for (prop = swnode->node->properties; prop->name; prop++) {
-+		if (prop->type != DEV_PROP_REF || prop->is_inline)
-+			continue;
++	list_for_each_entry(link, &fwnode->suppliers, c_hook)
++		count++;
 +
-+		/*
-+		 * TODO: Graph "remote-endpoint" references go both ways
-+		 * between endpoint child nodes and would create endpoint
-+		 * cycles. Let's leave it out for now until we have potential
-+		 * users.
-+		 */
-+		if (!strcmp(prop->name, "remote-endpoint"))
-+			continue;
++	return count;
++}
 +
-+		ref_array = prop->pointer;
-+		count = prop->length / sizeof(*ref_array);
++/* True if a supplier link con->sup exists, checked from both list ends. */
++static bool swnode_has_link(struct fwnode_handle *consumer,
++			    struct fwnode_handle *supplier)
++{
++	bool from_con = false, from_sup = false;
++	struct fwnode_link *link;
 +
-+		for (unsigned int i = 0; i < count; i++) {
-+			ref = &ref_array[i];
++	list_for_each_entry(link, &consumer->suppliers, c_hook) {
++		if (link->supplier == supplier && link->consumer == consumer)
++			from_con = true;
++	}
 +
-+			if (ref->swnode)
-+				refnode = software_node_fwnode(ref->swnode);
-+			else if (ref->fwnode)
-+				refnode = ref->fwnode;
-+			else
-+				continue;
++	list_for_each_entry(link, &supplier->consumers, s_hook) {
++		if (link->supplier == supplier && link->consumer == consumer)
++			from_sup = true;
++	}
 +
-+			/* Supplier not registered yet, or self-reference. */
-+			if (!refnode || refnode == &swnode->fwnode)
-+				continue;
++	return from_con && from_sup;
++}
 +
-+			fwnode_link_add(&swnode->fwnode, refnode, 0);
-+		}
++/* A single reference creates exactly one supplier link, on both list ends. */
++static void swnode_devlink_test_single_ref(struct kunit *test)
++{
++	static const struct software_node supp_swnode = {
++		.name = "swnode-devlink-test-supplier",
++	};
++
++	struct fwnode_handle *cons_fwnode, *supp_fwnode;
++	int ret;
++
++	const struct property_entry props[] = {
++		PROPERTY_ENTRY_REF("supplier", &supp_swnode),
++		{ }
++	};
++
++	supp_fwnode = kunit_software_node_register(test, &supp_swnode);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, supp_fwnode);
++
++	cons_fwnode = kunit_fwnode_create_software_node(test, props, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cons_fwnode);
++
++	ret = fwnode_call_int_op(cons_fwnode, add_links);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(cons_fwnode), 1);
++	KUNIT_EXPECT_TRUE(test, swnode_has_link(cons_fwnode, supp_fwnode));
++}
++
++/* Multiple distinct references create multiple supplier links. */
++static void swnode_devlink_test_multiple_refs(struct kunit *test)
++{
++	static const struct software_node supp1_swnode = {
++		.name = "swnode-devlink-test-supplier-1",
++	};
++	static const struct software_node supp2_swnode = {
++		.name = "swnode-devlink-test-supplier-2",
++	};
++	static const struct software_node *supp_nodes[] = {
++		&supp1_swnode, &supp2_swnode, NULL
++	};
++
++	const struct property_entry props[] = {
++		PROPERTY_ENTRY_REF("foo", &supp1_swnode),
++		PROPERTY_ENTRY_REF("bar", &supp2_swnode),
++		{ }
++	};
++
++	struct fwnode_handle *fwnode;
++	int ret;
++
++	ret = kunit_software_node_register_node_group(test, supp_nodes);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	fwnode = kunit_fwnode_create_software_node(test, props, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
++
++	ret = fwnode_call_int_op(fwnode, add_links);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(fwnode), 2);
++	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp1_swnode)));
++	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp2_swnode)));
++}
++
++/* A reference to an unregistered node creates no link (graceful skip). */
++static void swnode_devlink_test_unregistered_ref(struct kunit *test)
++{
++	static const struct software_node supp_swnode = {
++		.name = "swnode-devlink-test-supplier",
++	};
++
++	const struct property_entry props[] = {
++		PROPERTY_ENTRY_REF("supplier", &supp_swnode),
++		{ }
++	};
++
++	struct fwnode_handle *fwnode;
++	int ret;
++
++	fwnode = kunit_fwnode_create_software_node(test, props, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
++
++	ret = fwnode_call_int_op(fwnode, add_links);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(fwnode), 0);
++}
++
++/* Graph "remote-endpoint" references are excluded. */
++static void swnode_devlink_test_remote_endpoint_excluded(struct kunit *test)
++{
++	static const struct software_node ep_swnode = {
++		.name = "swnode-devlink-test-end-point"
++	};
++
++	const struct property_entry props[] = {
++		PROPERTY_ENTRY_REF("remote-endpoint", &ep_swnode),
++		{ }
++	};
++
++	struct fwnode_handle *cons_fwnode, *supp_fwnode;
++	int ret;
++
++	supp_fwnode = kunit_software_node_register(test, &ep_swnode);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, supp_fwnode);
++
++	cons_fwnode = kunit_fwnode_create_software_node(test, props, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, cons_fwnode);
++
++	ret = fwnode_call_int_op(cons_fwnode, add_links);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(cons_fwnode), 0);
++}
++
++/* A reference array creates one link per registered element. */
++static void swnode_devlink_test_ref_array(struct kunit *test)
++{
++	static const struct software_node supp1_swnode = {
++		.name = "swnode-devlink-test-supplier-1",
++	};
++	static const struct software_node supp2_swnode = {
++		.name = "swnode-devlink-test-supplier-2",
++	};
++	static const struct software_node *supp_nodes[] = {
++		&supp1_swnode, &supp2_swnode, NULL
++	};
++	static const struct software_node_ref_args refs[] = {
++		SOFTWARE_NODE_REFERENCE(&supp1_swnode),
++		SOFTWARE_NODE_REFERENCE(&supp2_swnode, 4, 2),
++	};
++
++	const struct property_entry props[] = {
++		PROPERTY_ENTRY_REF_ARRAY("suppliers", refs),
++		{ }
++	};
++
++	struct fwnode_handle *fwnode;
++	int ret;
++
++	ret = kunit_software_node_register_node_group(test, supp_nodes);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	fwnode = kunit_fwnode_create_software_node(test, props, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
++
++	ret = fwnode_call_int_op(fwnode, add_links);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++
++	KUNIT_EXPECT_EQ(test, swnode_count_suppliers(fwnode), 2);
++	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp1_swnode)));
++	KUNIT_EXPECT_TRUE(test, swnode_has_link(fwnode, software_node_fwnode(&supp2_swnode)));
++}
++
++/*
++ * End-to-end test: fw_devlink must defer a consumer's probe until its
++ * supplier has probed.
++ *
++ * The reference created by software_node_add_links() is only useful if the
++ * driver core promotes it to a real device_link and uses it to order probing.
++ * This test drives actual probing through the platform bus and asserts the
++ * supplier binds before the consumer.
++ */
++
++#define SWNODE_DEVLINK_TEST_SUPPLIER	"swnode-link-supplier"
++#define SWNODE_DEVLINK_TEST_CONSUMER	"swnode-link-consumer"
++#define SWNODE_DEVLINK_TEST_TIMEOUT_MS	(2 * MSEC_PER_SEC)
++
++struct swnode_test_probe_order {
++	/* Names in the order their drivers' .probe ran. */
++	const char *probed[2];
++	unsigned int count;
++	wait_queue_head_t wq;
++};
++
++static int swnode_test_record_probe(struct platform_device *pdev)
++{
++	struct swnode_test_probe_order *order = platform_get_drvdata(pdev);
++
++	if (order && order->count < ARRAY_SIZE(order->probed)) {
++		order->probed[order->count++] = dev_name(&pdev->dev);
++		wake_up_interruptible(&order->wq);
 +	}
 +
 +	return 0;
 +}
 +
- static const struct fwnode_operations software_node_ops = {
- 	.get = software_node_get,
- 	.put = software_node_put,
-@@ -716,6 +772,7 @@ static const struct fwnode_operations software_node_ops = {
- 	.graph_get_remote_endpoint = software_node_graph_get_remote_endpoint,
- 	.graph_get_port_parent = software_node_graph_get_port_parent,
- 	.graph_parse_endpoint = software_node_graph_parse_endpoint,
-+	.add_links = software_node_add_links,
- };
- 
- /* -------------------------------------------------------------------------- */
-@@ -787,6 +844,8 @@ static void software_node_release(struct kobject *kobj)
- {
- 	struct swnode *swnode = kobj_to_swnode(kobj);
- 
-+	fwnode_links_purge(&swnode->fwnode);
++static struct platform_driver swnode_test_supplier_driver = {
++	.probe = swnode_test_record_probe,
++	.driver = {
++		.name = SWNODE_DEVLINK_TEST_SUPPLIER,
++	},
++};
 +
- 	if (swnode->parent) {
- 		ida_free(&swnode->parent->child_ids, swnode->id);
- 		list_del(&swnode->entry);
-@@ -1105,6 +1164,17 @@ void software_node_notify(struct device *dev)
- 	if (!swnode)
- 		return;
- 
-+	/*
-+	 * When the software node is the device's secondary firmware node,
-+	 * the core only records the owning device on the primary fwnode
-+	 * (see device_add()). fw_devlink resolves a supplier device through
-+	 * fwnode->dev, so without this a consumer referencing the software
-+	 * node could never find the supplier device and would defer forever.
-+	 * Make fwnode.dev point to its owner in that case.
-+	 */
-+	if (!device_match_fwnode(dev, &swnode->fwnode) && !swnode->fwnode.dev)
-+		swnode->fwnode.dev = dev;
++static struct platform_driver swnode_test_consumer_driver = {
++	.probe = swnode_test_record_probe,
++	.driver = {
++		.name = SWNODE_DEVLINK_TEST_CONSUMER,
++	},
++};
 +
- 	swnode_get(swnode);
- 	ret = sysfs_create_link(&dev->kobj, &swnode->kobj, "software_node");
- 	if (ret)
-@@ -1127,6 +1197,15 @@ void software_node_notify_remove(struct device *dev)
- 
- 	sysfs_remove_link(&swnode->kobj, dev_name(dev));
- 	sysfs_remove_link(&dev->kobj, "software_node");
++static void swnode_devlink_test_probe_order(struct kunit *test)
++{
++	static const struct software_node supplier_swnode = {
++		.name = "swnode-devlink-test-supplier",
++	};
 +
-+	/*
-+	 * Drop the device pointer mirrored onto a secondary software node in
-+	 * software_node_notify(). For a primary software node the core owns
-+	 * fwnode->dev and clears it in device_del().
-+	 */
-+	if (!device_match_fwnode(dev, &swnode->fwnode) && swnode->fwnode.dev == dev)
-+		swnode->fwnode.dev = NULL;
++	const struct property_entry consumer_props[] = {
++		PROPERTY_ENTRY_REF("supplier-ref", &supplier_swnode),
++		{ }
++	};
 +
- 	swnode_put(swnode);
- 
- 	if (swnode->managed) {
++	struct platform_device *supplier, *consumer;
++	struct swnode_test_probe_order *order;
++	struct fwnode_handle *fwnode;
++	int ret;
++
++	order = kunit_kzalloc(test, sizeof(*order), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, order);
++	init_waitqueue_head(&order->wq);
++
++	fwnode = kunit_software_node_register(test, &supplier_swnode);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fwnode);
++
++	ret = kunit_platform_driver_register(test, &swnode_test_supplier_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	ret = kunit_platform_driver_register(test, &swnode_test_consumer_driver);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	supplier = kunit_platform_device_alloc(test, SWNODE_DEVLINK_TEST_SUPPLIER,
++					       PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, supplier);
++	consumer = kunit_platform_device_alloc(test, SWNODE_DEVLINK_TEST_CONSUMER,
++					       PLATFORM_DEVID_NONE);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, consumer);
++
++	platform_set_drvdata(supplier, order);
++	platform_set_drvdata(consumer, order);
++
++	ret = kunit_device_add_software_node(test, &supplier->dev, &supplier_swnode);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	ret = device_create_managed_software_node(&consumer->dev,
++						  consumer_props, NULL);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = kunit_platform_device_add(test, consumer);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++	ret = kunit_platform_device_add(test, supplier);
++	KUNIT_ASSERT_EQ(test, ret, 0);
++
++	ret = wait_event_interruptible_timeout(order->wq,
++					       order->count == 2,
++					       msecs_to_jiffies(SWNODE_DEVLINK_TEST_TIMEOUT_MS));
++	KUNIT_ASSERT_GT(test, ret, 0);
++
++	KUNIT_EXPECT_STREQ(test, order->probed[0], SWNODE_DEVLINK_TEST_SUPPLIER);
++	KUNIT_EXPECT_STREQ(test, order->probed[1], SWNODE_DEVLINK_TEST_CONSUMER);
++
++	/* Tear down the consumer (and its device link) before the supplier. */
++	kunit_platform_device_unregister(test, consumer);
++}
++
++static struct kunit_case swnode_test_cases[] = {
++	KUNIT_CASE(swnode_devlink_test_single_ref),
++	KUNIT_CASE(swnode_devlink_test_multiple_refs),
++	KUNIT_CASE(swnode_devlink_test_unregistered_ref),
++	KUNIT_CASE(swnode_devlink_test_remote_endpoint_excluded),
++	KUNIT_CASE(swnode_devlink_test_ref_array),
++	KUNIT_CASE(swnode_devlink_test_probe_order),
++	{ }
++};
++
++static struct kunit_suite swnode_test_suite = {
++	.name = "software-node-links",
++	.test_cases = swnode_test_cases,
++};
++
++kunit_test_suite(swnode_test_suite);
++
++MODULE_DESCRIPTION("Test module for software node fw_devlink support");
++MODULE_AUTHOR("Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>");
++MODULE_LICENSE("GPL");
 
 -- 
 2.47.3
