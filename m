@@ -1,50 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.68.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03292437465;
-	Mon, 13 Jul 2026 13:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD4E2D47FF;
+	Mon, 13 Jul 2026 14:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.68.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783951128; cv=none; b=Q3ufc94JJZdi3ITXqRrEFK+N9OC8XM3TifoTpZWIZoEkQfxHRwfpNDmAsGKIFegqtJtmm82IzlVn6LVkS2IjQ+PHsGrKOalS5EK9Mmez0pfNY8rU0ZlPg4OzZaJ6F1D1m/sQZGvgZOonBuLXtVTf2K93RfyV/meDTHF4hGZU7qI=
+	t=1783951937; cv=none; b=P68gKiSPKTbsFIEtIGdP1zslzOJpaEFlZovILE3WhpQqwMW41uNe9hh2KD5gucEKb68KcMgMJuv21Yfz6NOe+R6JQNCm5PaO8Sa4KmfJAKWKrP/2IzH1Yfod1GDBGFqfR4aDWT9hd+aHRNm34zWSzgCrYO+PW7ep01jJhGZ4wiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783951128; c=relaxed/simple;
-	bh=NMKcm1pkCs64lfIHYa2THibb8WzHVI8aMRYFrV5tuv8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c3gr9jE+00ENba2MuQL2IktcD7lu0GjIOyFphrELgsR9lSoY3I/j1ObITTh1uRYPWDHjY47ebruGVGiiBPSq+8BwFJLPmI2O/LYsqr7/BSknEsGak3FiVSFmkE83+FMF+X0vYcrgPgTFp8+9QUyMKlkE+tWWHiRNsCeuddtqxyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5R975aO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783951937; c=relaxed/simple;
+	bh=sVvVU7SZrOByNfcvMhp2k29M+KzZ2+Lij7PMj5z9cbw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V7E2MwuJxiYIZ8dypVjvZFxd2wPBTddv6Ua1J2BCZirxxHzE2ZCH+4ok06yxDqlFt/RLZtJDcgnUSqX4gyKC1pb3GDKR9tX+FVLvI0XEIXc42Zmlgh3Skd072MdDExBuEOa3OjTbbpKmab2hm4/Vik3x6JOCPN626DfX4UxfstU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=dOk/anWG; arc=none smtp.client-ip=44.246.68.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5R975aO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A171F00A3A;
-	Mon, 13 Jul 2026 13:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783951125;
-	bh=kw48eNAzxFRXO6yZLVXQ5NvQIurCQHZvh9V8CBG541c=;
-	h=From:To:Cc:Subject:Date;
-	b=Y5R975aOCRLNoN4CCClsQVWkZ2zFMRMZznKjqildidyehZoUelNcs6ATVc3mjonKW
-	 A18YnBR5cIur/f3whvlhNNuah1hRPblBSy1hd3uqGawgTIQFjpK+WXqn/lFZmdHfA2
-	 hZEcSj/xhioRp4fTT47PJGTQHhCt1xIcGj91Jo1AhY21n675b+mlSokY3/0KnQNC1i
-	 PlifB5A1j0TlHIPDT47wu/8VYo+584fQQ68909KnlC4UIHGc5BQ06b41eVdHz1xi7b
-	 E7s5eufe1vv68EP5xHYuv3576UvvEuz4n1x4kIaCmpuFtoH7tt5JQutxxgYLpKfgCO
-	 BRMhdprJ47juw==
-From: SJ Park <sj@kernel.org>
-To: 
-Cc: SJ Park <sj@kernel.org>,
-	stable@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	Fernand Sieber <sieberf@amazon.com>,
-	Leonard Foerster <foersleo@amazon.de>,
-	SeongJae Park <sjpark@amazon.de>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v1.2 0/5] mm/damon: unurgent fixes for infinite loop, NULL de-ref and races
-Date: Mon, 13 Jul 2026 06:58:31 -0700
-Message-ID: <20260713135838.32730-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="dOk/anWG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1783951936; x=1815487936;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sVvVU7SZrOByNfcvMhp2k29M+KzZ2+Lij7PMj5z9cbw=;
+  b=dOk/anWG/07l8259+PUICxZ8I3KttOuKI9HlDDAs4kD9TgpvRUwanBCA
+   COBdKh8p/5HLFyJQ8kBrjoqoON0TIE/nb1cBkSFO6r935BPqJWQTtdWlJ
+   JkZPEpNs2oXC+fg2g8nukU0qdUsQQBFCXneQqukNETd/z7FS62OEXBVum
+   kjhXfdALFkTx0YEjOgQwQx6jnbvZ3hgk1O+Cx/am1yH5ql4SLEaBP+nGU
+   Bj6HmaiOqf5iz7lH9LMjN1blClq8VBJ54u2erT+u188zeAjJGOu7a+4nI
+   g+0Dh7gkTljDcC5aBk29oRZoYHglOeOUDmjNVV07ByZKKlqKQxM22xyAw
+   w==;
+X-CSE-ConnectionGUID: UFazFn6eR7quOZEhmGcc/Q==
+X-CSE-MsgGUID: r6LDZvdeRWCy1vn7rAru8g==
+X-IronPort-AV: E=Sophos;i="6.25,154,1779148800"; 
+   d="scan'208";a="23589592"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 14:12:15 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:6927]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.175:2525] with esmtp (Farcaster)
+ id 0907596a-dae2-48ee-8b8a-e7f622515fba; Mon, 13 Jul 2026 14:12:15 +0000 (UTC)
+X-Farcaster-Flow-ID: 0907596a-dae2-48ee-8b8a-e7f622515fba
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Mon, 13 Jul 2026 14:12:15 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Mon, 13 Jul 2026 14:12:14 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+CC: <fuse-devel@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-api@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Shuah Khan
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 0/2] fuse: allow FUSE_SYNCFS for privileged userspace servers
+Date: Mon, 13 Jul 2026 14:12:03 +0000
+Message-ID: <20260713141203.2838402-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260619170251.1154562-1-jamz@amazon.com>
+References: <20260619170251.1154562-1-jamz@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,38 +65,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D032UWB002.ant.amazon.com (10.13.139.190) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Sashiko found a few issues in DAMON that could cause infinite loop, NULL
-dereference and monitoring results degradation.  The first two sounds
-scary but the infinite loop happens only under unreasonable user setup.
-The NULL dereference is only in a unit test.  Monitoring results
-degradation is trivial since it is only best-effort, and those happens
-from only unlikely races.  Still those are bugs that better to fix if
-possible. Fix those.
+Hi Miklos,
 
-Changes from RFC v1.1
-- RFC v1.1: https://lore.kernel.org/20260712170328.91144-1-sj@kernel.org
-- Remove same_target param from __damon_va_check_access().
-Changes from RFC
-- RFC: https://lore.kernel.org/20260711180409.82093-1-sj@kernel.org
-- Rebase to mm-new.
+Gentle ping on v2 - I've added CAP_SYS_ADMIN checks at /dev/fuse open
+time. I hope this addresses your concerns. Let me know if there's
+anything else you'd like changed.
 
-SJ Park (5):
-  mm/damon/core: avoid infinite kdamond_merge_regions() internal loop
-  mm/damon/tests/core-kunit: catch test failure in
-    test_merge_regions_of()
-  mm/damon/vaddr: drop last same folio access check optimization
-  mm/damon/paddr: drop last same folio access check reuse optimization
-  mm/damon/sysfs: read ops_id only once
-
- mm/damon/core.c             | 13 +++++++++----
- mm/damon/paddr.c            | 20 ++++----------------
- mm/damon/sysfs.c            |  6 ++++--
- mm/damon/tests/core-kunit.h |  3 +++
- mm/damon/vaddr.c            | 33 ++++++---------------------------
- 5 files changed, 26 insertions(+), 49 deletions(-)
-
-
-base-commit: 9d192aa422c3f9c503a40e5eb98093df671accf8
--- 
-2.47.3
+Thank you,
+Jimmy
