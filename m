@@ -1,91 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011018.outbound.protection.outlook.com [52.101.62.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E0A3F482A;
-	Mon, 13 Jul 2026 12:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783944457; cv=none; b=LHOgFLcuqBnDsVPV/A9z8Qb7P1PNRja87b2I3iiO81LLqb48qgEr825lX8Jx7RtpqsvvF5vggZspm7tyuxwH45050DcRXakR8gwzjINESMBYgXFJFr/bd2eNJodSRvoxcYxQA/vD1Hjuvz9OS+ABTNJoLC9cNzxo/ewmTVbPSLo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783944457; c=relaxed/simple;
-	bh=7jDZSD0ZXBMKU0DnAOHmPPwvUaOFC7qe+/DOFXEBCrM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WbKdtb6zWVOpvitJARAQ5mb0/nDJquvkPXCJYDitJ2CeG4wu01Uih8D0B3++/dGwItnJTzK+c6uui7UVqVQ9ljyzw3hD4nerSGJHVwnLg23BVmH8x4LvY4+pyUwIIOnn2HOZPb4qTxhG0QV42eoGrNGtPJgvKFb19C3UU5rNnTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpA+61ub; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320312E414;
+	Mon, 13 Jul 2026 12:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783945441; cv=fail; b=jnuNU/ebECrcspoOOXjl8un0HQJ1tvaChq/mj8GpUG/wXPruQvq7INP+O5rkWaXGG+Fd2Ukv1Mf9Oj53opA7QKPc6Q1soxs+wVMLGeB84L2+zL59HKIdnf5ynw6bH8V59M+PGJB5YyO5YnY1fsZaHSwGyTlPTl1LOKfuMGPWbeY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783945441; c=relaxed/simple;
+	bh=XQzL8vAkuV6tPraSLZPl0bRUpANrWo2Iw3baZgQVOYU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=BgmQx2WXE23ed/z0c//xGoc7nYPc57jITFK+IppHDVJEWSeemg6bKhkoCnn+JvZ+hJTowBMbowxqEtX9AdJSRCzQTzAJ7oVHBiZd+qEPZMZK0rafLWTPOF5qjqo9VZP1bkn6ERdi7pb/iZVa2eA/gZo9qr77tb2aI2EwtzXZnDI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Hw3QrDO/; arc=fail smtp.client-ip=52.101.62.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpA+61ub"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF2191F00A3A;
-	Mon, 13 Jul 2026 12:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783944455;
-	bh=7jDZSD0ZXBMKU0DnAOHmPPwvUaOFC7qe+/DOFXEBCrM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BpA+61ubk0J051AHcwHvcJDrGcIq7CrWdik61tyJi8gKjWK/Bh6rOoauz4nnoATP9
-	 z9B7lFZLzJDrHlyAzSokl43P2diwlF4AwhbABdmReNTjUMnKd3YKN2oGjFTDCS0boM
-	 z0MNQ52CSqHNk3Tr2wOwfuQ+QcTTesZW3Ksc0KM/lPg00H8Olnz7IF/j3Xud1wfUAc
-	 vgKXYEMmk2C1/RznpAzIjCIb8xHtq1ACvc2WEEJKd+k2G/XgS3DENa2uT6HvvpArcA
-	 ZMPqyJRjF7xI/aIAcegBvA9wwIEhREtkzqapyHKncikPXnkwI86yBPj2yiyibNP1ok
-	 SffBMTrce85bQ==
-Date: Mon, 13 Jul 2026 13:07:29 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	Jean-Philippe Brucker <jpb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v12 00/29] KVM: arm64: Implement support for SME
-Message-ID: <2b521e6d-be72-4d6f-b9f2-87b4d1175803@sirena.org.uk>
-References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
- <CA+EHjTw4uz9UjezNdHynMV38P0jORwfcxSSv834nQ8Q1JqW0Jg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Hw3QrDO/"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FdNDUAHlVdEcStnycsv8vaOARqZ8idJh2VflzxzqqhTPjTVCQXwJLcHzOhC3fzcusARrHSG0qTuCSdR0KXQaYf4su1lFFG6CmozQPfdbNH7p4cm/7l5tW0RE4G9yNy7BNiwwnMuWQVBguBxp+0QiKXKs+Gvw3R+sBnx3gZPGcjDYzx+alCkRIfPojO1uLC0ErOiLPAugR0J7Zf7BHeEvB0PhAVaNBMm6DW6oanNYpuCF75dWdkeKi+8Kw59sTl91zxjDYY4HhOa/FYyJd8aymyy+ArLpSpQrA8gEAoKOLxkTVZ6egv+x2K2oPrZniAhmo2BoxIuty0qVoj5o1B9oJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kajdhxabYxVE93f5Jw711hrTUl4X2MzCH3HJeH2YASA=;
+ b=uT6VE7OHC6i4RG+xl7JRUYDyjyCPxDRfP6mtpJaH+tWZlPcYs0sm3w9b4Nie6feXcYdrHYrsa3BdAloCPAjO6ryAF6AqcHkoIiw0ng3eb3d29COMZTL1/jO9xKkZ0OWQY9PiC+yZyX92Jk4oG5wBEy7wskOt/IM5ytrcNRxGMmrXBD9Gm/bTKc3xZT6eJrtaSa1LrM8/mPabGQCNE6Rl7MO7nvpoiFRMsp/x8PqprBS/jgNtnKyqxODYmKlTbQ254ZcRcn8/qEdp2GymvmYwk1ssHKwNIOix719SMG78ToM84m5tfvLJGUFZI8I6BM1aFdPh8LdGf+k7LPOBhh8RJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kajdhxabYxVE93f5Jw711hrTUl4X2MzCH3HJeH2YASA=;
+ b=Hw3QrDO/GvFqfYXHmw9ERUa+6c/1ob6Mj7j3nT5tGuDOl7ZoYWOoyM9Zj59fTKrbHfnXLIeMTwIYa5JcKOu3O9zusyqRed5zIEt0TqGWCrrtQcGXkoGGT6eIKh24NNx0J9gtU3TMPfafexfMwZoks7/wLBffTGGU6SzXTH0L63UtpOm/e2pY3QRqu+f6A/d15xHyPCtINb51/kcGc8XFG1A/bctdV4bu0Et6hHg7pw6LV1GV5iqdQkQNucK5vQJtKvUjyv2My3OxwhNbksEhdr7TCUfFSYvCtw5byRAInrL48SjsZWgQ4dav60ZcJaI3cgi543wX46MQn9Oz3k9OyA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by CY8PR12MB7172.namprd12.prod.outlook.com (2603:10b6:930:5b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Mon, 13 Jul
+ 2026 12:23:52 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0202.014; Mon, 13 Jul 2026
+ 12:23:48 +0000
+Date: Mon, 13 Jul 2026 15:23:39 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Jack Ma <jack4it@gmail.com>
+Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/3] net: nexthop: per-nexthop UDP dst port for
+ fdb (VXLAN) nexthops
+Message-ID: <20260713122339.GA548566@shredder>
+References: <20260712191218.236-1-jack4it@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260712191218.236-1-jack4it@gmail.com>
+X-ClientProxiedBy: TL2P290CA0002.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::12) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/XZSrZTLgS9atLBV"
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTw4uz9UjezNdHynMV38P0jORwfcxSSv834nQ8Q1JqW0Jg@mail.gmail.com>
-X-Cookie: Courage is grace under pressure.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|CY8PR12MB7172:EE_
+X-MS-Office365-Filtering-Correlation-Id: cde293c8-49e8-49a4-a4ea-08dee0d996e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|23010399003|7416014|366016|1800799024|22082099003|18002099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	VOYvWWL6hRGvWoppc9WWxXqdj7LGm0lSIA+NopCx3ryEo9RohwBWMmhWrbvgssy3GjqU+30ZevS9vySG8r58lXnPGzJG7+p1LxqC/rUQC41B96HwUIfiPWJAIUWCY6eCEZdOMq1j94aogCFfbQNCzlrSmj6mYo4KSZ7XQw41fz4up/3a3ZC5mqRexfpaECuze2zCaACnhZ0oVXXFNvaEh6E8IRonWlpuY8d9IML7D7hf5dHOb6kLSxNB2+08KSA+UD5fJyDUs9CgPlmeZossfcQ1hK/sLYsUkM7mSqzkON+pzGFlSPa5jEKRLcI8yhoKfOvpZQE2YJhHDCSp5eZeAouSQ8+zGH0fDIdlCWnmnbk9DxQARQXZakBZVOqtBOnJVOMNUgZAz04T+sqhHABFqsDqcbsVE/ry9HTVophp4BKE310EARlXdcIZih3cE6wRRyyGsRSCm7TkStusR3k7r9IrU+F0WSxP3O1nhAG7wZVZWZQRWd7Xt02MXF/aKj12Um1FLRj6EyxQG6xn7+Ux/DPtVALnGiaS3jyRVEhszWm1C2Ri76PWAbxqvu2h2MyzY/jdXu2b8jQ6JsPXtcQ4CeXszoqoQVgqz+0gCv9ogDkmGa+koRHjggiJvFefTFLFeMEWtWeDoMhYKEqrP3dW+tZwyXOVORZaGTAkdP4zg80=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(366016)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bLYnzMBDZYVfFkE4atc8+B9SRQQM616Mnz1JaB2Ldrl3HlnoIzVu37+wzlh8?=
+ =?us-ascii?Q?gspPzMri0dig5iOIs3wib2dOOh2PxxwvKCom6phYWxFOLfETmxe/qDJjSDQY?=
+ =?us-ascii?Q?W2eHZptk0xod68y1vKXjdxIhhysWoJojXF3IRuTrD2VgGMnq2ECzsAk22DBN?=
+ =?us-ascii?Q?W6taWB4WflkxsYqfiNuYgA6xPgj1mMfYvG+qMvFdk0KTLoaw1FmJhcXr8w5Y?=
+ =?us-ascii?Q?yEkpUZK7rEoUZtw58jUfx3Z1X80NiL4lESsDW7UE5rS4IXS6ZefQRaxmJH3N?=
+ =?us-ascii?Q?aL7qfVZT7jXP3HYkVGLMES7te/Mjf77BRWP2UKiXxFvjFDzbxM9NMIu7CA/q?=
+ =?us-ascii?Q?NOPAn6zMZ9Jz7XlWS3q03QteIjNXq3Zr5InkX9vTMAtdGAkD0QX/YuVBXj0U?=
+ =?us-ascii?Q?A88RwLMg7FbbnYYQ0cA57VtIyi/b9aupdsCpRwTH1ANNSaV3Kg3gcON+TgSH?=
+ =?us-ascii?Q?nfZMyR8CpoQtzjxNtgLLzYgz2HVIEwGNOP/uszJtORpY0xhLpbm5H6MjGfRM?=
+ =?us-ascii?Q?g4UPc/B287/h0wfh+c+r//ltE4AJCuIxvaUCYBMSUKacRKB+Iqil5qP+wXf/?=
+ =?us-ascii?Q?Zms8NjLZqH9g0vL8xeH0OgPShZ1NHyikH2qtaGnt0Brdgp1ZxrEGqFcQnPcf?=
+ =?us-ascii?Q?++BVkahITuJqp3njidrbxrF2aC2p7WPH2akBxJSwW4Aaz6rpRAH8teX3ec9r?=
+ =?us-ascii?Q?xZ/+FSIuL1CG+K5KCQaOKegg42iB4oGGHlLmn7ULp64yZKyNQThAjXRhJEzY?=
+ =?us-ascii?Q?NgHa/wR6qUeVgnqHPFTjtR9avF/2HSBT0b1AiQR063588jxM2wlwQAoOGBTt?=
+ =?us-ascii?Q?csTQ5D+zojOTvIdiyN3p9EBJzodkivQPtjOZYAS2ysVY6G842uaz9X4nSwn2?=
+ =?us-ascii?Q?3Mk2Xt31rC+6zprBjfGQbQfAVNNYntuSrSOjCMy6YcZ7G22Fy6BszIl0j3Ee?=
+ =?us-ascii?Q?+U0lDCbMlW8R13JEj+VOdY3Phn/UADVCIRiSERzWLqXFGW0ZILSXptEPgDDF?=
+ =?us-ascii?Q?VGxnW0KEvDaWZxV4QvTTsB6I7iv2W0lzafRw0W/u9t6+k27FS0U6Q2N9guk7?=
+ =?us-ascii?Q?o9+fnfOhtu4EEhHhxqGGJtApPzBzJhuJ4GXgf3p/RJwy6VNlMLET0A7TPHLJ?=
+ =?us-ascii?Q?bUPBnfP34vTKdBObE2NZpujtAZm3WGiR8fqJ7dtn68ZQh/WnKb4458zBej6H?=
+ =?us-ascii?Q?OGoBWS6sm+NvDqQVmvatu3wuk5CejrSetn0gG6xZpaAb816q2mT9whHWY4Ld?=
+ =?us-ascii?Q?diH/hG6hNJ5y7szoS7GRsHnD/t8+Kl8HXb6E+/F7ltU3XpGpdSCjLy+R0dQd?=
+ =?us-ascii?Q?IJIYyyRUq+PCFlK3HbPLaHUjp2nQpHJxBDO+ZdEaB4vKTCX5uDr4yq5fnUfT?=
+ =?us-ascii?Q?+nXNuBvZfeTwRQoLrdtmu25CBu2n6G6siI8+CNMiohoMpT5oOUq6SXRPV0Ht?=
+ =?us-ascii?Q?Xjb2GqW7aSraUQkmLgJQUS+TlbpG6I8hRsw7vPh3eq50/638M2upDRZZeY4M?=
+ =?us-ascii?Q?2FoOJC12sws8UyxvQNJlA9FGZ761kYugy2WXjgvpWfnjxZkjYUO2b9wJy85+?=
+ =?us-ascii?Q?ds3idZt46rfvRATD0t9IosP7xegBWWa5T4SiRmJa1yidBJ3/0KVcAM5x/qHh?=
+ =?us-ascii?Q?61y7VDF7KiC4aHkad5I7GvnNJQnLpZ45ELTXSFfJGEhYgV7Z8OaXZnLrwjQq?=
+ =?us-ascii?Q?3HVLFvRRjYyya9TTbMnXssdMUD5+Tf+IjZ+Vf7rOETNAu1Ww?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cde293c8-49e8-49a4-a4ea-08dee0d996e7
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 12:23:48.0312
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ln3WAuxgzlxeUZnpfzZXpwymMIHoS5b10Kp1AkqNGZjIMbGTLCq1djgTDUC5S9SVZIdPjCJNfL1RBJ0ESEhkeg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7172
 
+On Sun, Jul 12, 2026 at 07:12:15PM +0000, Jack Ma wrote:
+> FDB nexthops let a VXLAN fdb entry point at a group of remote VTEPs, with the
+> kernel flow-hashing across the group (commit 1274e1cc4226 ("vxlan: ecmp support
+> for mac fdb entries")).  Each leg carries its own remote IP, but the UDP
+> destination port is always taken from the VXLAN device (vxlan->cfg.dst_port)
+> and cannot be set per leg.
+> 
+> Some deployments pack several receivers behind a single underlay IP and tell
+> them apart by UDP destination port.  To spread flows across such receivers they
 
---/XZSrZTLgS9atLBV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I don't understand the "tell them apart" phrasing. Aren't all of these
+receivers interchangeable given you are load balancing between them?
 
-On Sun, Jul 12, 2026 at 03:03:59PM +0100, Fuad Tabba wrote:
+> need a nexthop group whose legs share the remote IP but differ in UDP port,
+> which is not currently expressible.
 
-> Unrelated: on the get-reg-list restructuring you mention deferring to
-> a separate series: since ZA, ZT0 and SME_VLS are the
-> migration-critical SME state, it'd be good if that series also covered
-> a save/restore round-trip for them, not just get-reg-list enumeration.
+I think you will need to provide more details about the use case given
+you are asking us to accept new uAPI which we will need to maintain
+forever. The FDB nexthop groups make sense when you want to spread
+overlay traffic between several distinct VTEPs. In the EVPN-MH use case
+these VTEPs are different TOR switches. In your use case, why can't the
+load balancing happen at the target host (e.g., using XDP / TC /
+SO_REUSEPORT / flow classification)?
 
-Yes, better testing for the register interface in general would be good.
+To be clear, I'm not strictly against the idea (we can talk about the
+implementation later), but I would like to understand why your use case
+can't be addressed using existing mechanisms (or why it's undesirable).
 
---/XZSrZTLgS9atLBV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpU1QAACgkQJNaLcl1U
-h9DypAf/W0SOgAJEKLIa3gvYV64Dx0urVRKR0KeM2AmELN/5bT9A/YfIHa92+vNh
-LfoAgKaikhNdRjiuGg+BQF7lBPZLLXEvXtZMY8MC1oYyioWaiFvyb/xwvcby6LNP
-RoTvjFB1ONxEfKsdrMhJvWbBJKu5AUc+9LRVSqzdQ5A0RfpKIneMV6kyjSVi2Io4
-1wyPtODfqjf4qCSnqAODl2i/YGv+yROouYCFA24iCMJ9sVpc0UwBHAQb3AFfIWlm
-ETQgCJpqueXMCMJNTXqUqMc1natNGA81jOPIg7CB3a3fxCRb4HxwOf5P8JrUmPWo
-1VvaTIAG01p4n0S8IKjjG34RHqBxkQ==
-=cZj9
------END PGP SIGNATURE-----
-
---/XZSrZTLgS9atLBV--
+Thanks
