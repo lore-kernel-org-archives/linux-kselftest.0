@@ -1,121 +1,130 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D1735A952
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 20:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C918935DA43
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 20:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783975644; cv=none; b=Pl8inqVOjnpRVX2GZer9gOdMt5VUszOAITz3FPSObR2raqG8fjohQbKHqM1i5A3V4qx3HwYLB+iyUKI2Vl6oAw0gG0DIJkCleKGNWrEvYeePnI1BtUFrdOuJXDB3mWYnmTfP0H1KrnIbjRTEvxYpwi8otBveji5e0M+XsqGRay0=
+	t=1783976281; cv=none; b=ISTRg57PyyKI9cIb22Mjk+pOlINnPYTs0zqU/Y4qot23NnE57W9mZ9pu9J+nbTWqK+vexbTZ7/fBVnp6MLCRT4Ux36h15TZkjf/yN7eRvh9PYU+szWNrnPbYGnnQMqnis4r+xyHrbU84KbvUo9gEuXP7lhpTY2BK6GypEv2DUmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783975644; c=relaxed/simple;
-	bh=MHwslCC2Nt+IsAJw+WSX1C2a7l1sagCPXjQr23Cn9CE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=X0Pww3Pd7oyaFauUwpWpFrl7bylIGdzZ3WunwI3e5rZ6iKMfCCx78V3qRKCfHkPDRJyM1Q5rUUfFz9ejcWAvNPIZ1yD+5GPz+0x2fjZ6MbNBQwmdUvCb8e1tgX3P5lAOsCqwEFC1FJlkbisN1cU30nfxuo6crGySxGi6tYQkpEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kgPFK9P+; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1783976281; c=relaxed/simple;
+	bh=D3eahPIAIk1fvhyOZkYEJP6bQ6n0at+bhFjOvvkmzpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZUnr3sIqyRU0OHbp1QRBE77py2vECuVMuh3dnW7GuSbw/J/qBE20TWvNn/84STTt+8KZWZ/1qus83jiGVfEqeBTbEkzV9rlEBSLUUsDjXAIltTMtQvf4Xd3AVLhSVqJcepNDSVCFRd+ub387/ke+3fdn2JgX92l6SQ5tRS0F4Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NgBrxDlp; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kgPFK9P+"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8485b358552so3942877b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 13:47:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NgBrxDlp"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-384c94c9414so272118a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 13:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783975643; x=1784580443; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=MHwslCC2Nt+IsAJw+WSX1C2a7l1sagCPXjQr23Cn9CE=;
-        b=kgPFK9P+xZkg3yKM2nqWJatyNEpv8NmsYeKomGm7nPnAxC9LFSEAr3SwbVhA9UlqSw
-         7oPYzN16QFZzK5BbEjQBFVACSk60Yf2de2G0F2n2pez/7vaxgfDhYzTaMrl58MpM0s99
-         kzh05ugi65oJbz5uunb4rhph78691DLbc4OOpCzCSVQQ7XJtfFiviq/VrlHyz4mNDjhg
-         7lSkYXNgr9vvoAbyPgEuJsE6IGAcND2h5E9A/yZ6zwEqLxtb/3QIoElrlBeTgQWMzJey
-         k9pGgJha1WoJhkNzpOCmF9sYYo5B6I5+5JyjBnMrH3PcfMcE8XHI55SUPy0zKoYgw61T
-         GUSw==
+        d=gmail.com; s=20251104; t=1783976279; x=1784581079; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oNqruOZIzwruIpGvkzB4DJORZxeTGWU0clCn+vXfCzI=;
+        b=NgBrxDlpDoknd6Zv5Ca/Oeewg5yuANlXmHDRnnhqXDWhgDP2P44OrR0s0/MTMy34mZ
+         n3zXMmcIfGoNR7Sd680LfEr1/geQl8EGetahP7W6fUt1MxIqIdI/L1VUVBggJAmQ51v0
+         jXoSwvwvp/CrIoMSWg71PL3DRpm2hdJGate6aUcUOOKGl8xTstjSeqi6gEKS96UO7Zjd
+         lb2a22B/uNSSHg5FZmQ48yi/TVkiA9sVtHA1/za6mSwdA5n6CL1pr/nmcJGtyJ1Z/Prh
+         VUKEcE5b/3E9zbq5R57HBRuSsc33Y7ePwJV08k/0UBOriBpPl9MhiDN0KZiEmLww+N0n
+         mgVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783975643; x=1784580443;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MHwslCC2Nt+IsAJw+WSX1C2a7l1sagCPXjQr23Cn9CE=;
-        b=MqOTfhWEH+uzaKrOBudYoYi7FLCosEQ7IpWSyjhr2tP6XTOYl8/xKpLvZW3z8uDWSD
-         o7339qb0RG+sOkEgz5+cPSN2IjDk/Nbi5ZyZch0FLNJIcsQOv38rnO/bA3w32/tBEQR1
-         z7yVD5EfgA3o9CuXKaUx4UoPVyljoaT8ihyX0rkzJvQTYvmT75m85OSFOyqlG1RUQPY+
-         V4bR85XpG7bkoGZQTdFs/Ru2kW+igHcsCeXBmo3wxaaIDb4X4QmAE6J2DBMcRzftJyF9
-         zhZIWjQ7ZBbKOv0K6fR0w8OFMSePyx8UwKz4Ow4tUT53z59cMLOMP6BkRGfIlug5X4WK
-         MNzA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3YjMRgEIfoHn4fux1/KCM+o24jBYOn8KziXrvqZIEQKKkiPEDG5uWRzEu2wupmqJW3rr72BwBGMlZn6KMGeQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk3o5nu3/sfzjWdATTZEJT1o1CbIt+qo82wMrkSHIYtRai/Kp1
-	00TMX8JRSvLzppLVkLtlwxIHH9ZGsHhjL9WmO5zGVXlORwbXal4RYwhG
-X-Gm-Gg: AfdE7cnd8rewHVx9zn4SiSmSoVbDfFD9oeitzU6nnOevDqVa255eIHSh6iK9WLQ8Jq2
-	JbneYJQXUewICzUZgDpzKWOJHjZByE/NfSRLvva3ONnNyEyrTwS0JYplKrOEn/Rx8ejWohmPOKU
-	dr3UpSXXENU4vBHhhl6NXZ+autIeYBeoRTAqkLzWm4xFSpHNA2YCaVbAP1Z0nxtxx8EBTvv1o5/
-	gTQeNFl9MJVHP185iwZjIOa3tJvg711zVy1uqcW2X/tdTAQvDs7NH7owxSuePwOvYrJ+x+uoapU
-	Kh4d7Ld8Ly6WN3uIag5uHq/3QP/cDoo6X5wKQ/PEXzxZXJHd+njT54+xKc5UBKGtNEdkV0Y9Ri9
-	/cRtWye0bV8O7+GWVt7O4GN1QXI0KBngXgB6OyCpn4Tlgfi0d0yOaIXUfFdeeAf1kgXWvyFAIcr
-	4rXi/eWNTzkCvampVgG1NgOLS/6zKvV6Qi3PoVEIej
-X-Received: by 2002:a05:6a00:94ee:b0:848:2f84:72c with SMTP id d2e1a72fcca58-848898b9283mr10236647b3a.63.1783975642656;
-        Mon, 13 Jul 2026 13:47:22 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f23a600sm362593b3a.6.2026.07.13.13.47.21
+        d=1e100.net; s=20251104; t=1783976279; x=1784581079;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=oNqruOZIzwruIpGvkzB4DJORZxeTGWU0clCn+vXfCzI=;
+        b=gWK2OlfqfrghERk7BXVo0ysrF5orUWNWKwd29luBEHuquLrEoPNF3fm/0CWYP0f0mS
+         iGnSS+sec+pg/LFnOMv2uaMK7nbgBMacmlgakUBQ1H0mJgvF1QQljcnZS10yJqUhCwYf
+         Dtu2apRs+MqP/IHda8s8leOMFo830ykRIMRbjJ5TDNd2j6l1q5/hYIaOGUfxDs2/tC02
+         X9FrhNbZg40wNlvMz9tTqz+ohyZbrtaMA/h3qliEccbqH53+aKQ9+FI+1T++ySIKWqvn
+         /c112vHIxcVGyjbuAsCvpYke+3b6CYqOee6hMOsW2W/zabtxXOaz8BD9QXUZWjLPfr2v
+         KMXw==
+X-Forwarded-Encrypted: i=1; AHgh+RrFXqbAoBCRTS5gRWZ9Pcz2ne9dB2gxhFUskse/ehnRjg5UDWP92defBxYEX0RIfGtxkAm14m279NUx3I1d2vE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOK7YnfAkYNjl7SigbXKyXkPL7h8abHsK/+6qgSNqWwaWKSiGT
+	hQFib/8Plh8zKcG8Nn0DQ4S1GwOUTXasfZmbVENS5RntsWbAc9aGbwBY
+X-Gm-Gg: AfdE7cnCpjTT5/X0gWJqHhei293hyKNx8otUQAkbWFuzNpzvR0U8Kmfw5/AvYnWp4qD
+	bdpysXHWbU5TOG3B3HUe3Z38c/Q8J4fWfzhVup4RpDLjJisIqISN+nm+omsb3LW7GLKMQ7pmI/D
+	lyJF13HGezZyts1FCnngZluhWgGi36V/q9L1V5tMslSW7pH2VG+tGXzbR9TRo44XllW3lzzjf+h
+	2H7RIIIBRJWGLPxvVNCEEeDZBFWSy5Zop4WLhzYGLuB0HCGrovruZGErXGaTRVg/zECrgzq7qav
+	nxTSTX5MhAg5QlTm8YWTdCgQQoR8YzKfxBWngDDY28+ncOv1q5QwUhcO8t9eZPz8keyoop0lClo
+	c+kqH1C5HfvJbN2k54DHv00NLyLE3ghHpEqYccCpqwLQjUO+gmRYw8tEiNCcHT85lkQu9MFv41F
+	Ln7o1YHoF/N+nNHgFq9RuGJUXAler2mgpOOQ4ab7do+2autZ8MAzA+x8NieEbySqUDtA==
+X-Received: by 2002:a17:90a:d88b:b0:381:528a:808c with SMTP id 98e67ed59e1d1-38dc75e3d4fmr9572711a91.12.1783976279067;
+        Mon, 13 Jul 2026 13:57:59 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172b6ce6sm403816a91.1.2026.07.13.13.57.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 13:47:22 -0700 (PDT)
-Message-ID: <08508d2133284d49e1da297895c85cf854a97bf3.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/1] selftests/bpf: Enable BLK_DEV_NBD for
- raw_tp_writable_reject_nbd_invalid
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, sun jian	
- <sun.jian.kdev@gmail.com>, Matt Mullins <mmullins@mmlx.us>, 
-	stable@vger.kernel.org
-Date: Mon, 13 Jul 2026 13:47:18 -0700
-In-Reply-To: <20260713063513.215781-1-shung-hsi.yu@suse.com>
-References: <20260713063513.215781-1-shung-hsi.yu@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        Mon, 13 Jul 2026 13:57:58 -0700 (PDT)
+Date: Mon, 13 Jul 2026 13:57:55 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
+	dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+	haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org,
+	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, wei.liu@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Message-ID: <alVRU38lMfvmUFqJ@skinsburskii>
+References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
+ <20260710151151.1e193eedd0cf2591ae392f76@linux-foundation.org>
+ <alG2-RSitzPWClAX@skinsburskii>
+ <20260710224950.53bcb43ce7e564f07a1f6a8c@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260710224950.53bcb43ce7e564f07a1f6a8c@linux-foundation.org>
 
-On Mon, 2026-07-13 at 14:35 +0800, Shung-Hsi Yu wrote:
->=20
-> The raw_tp_writable_reject_nbd_invalid test relies on availability of the
-> nbd_send_request tracepoint, which is only present if the selftest kernel=
- is
-> built with CONFIG_BLK_DEV_NBD=3Dy and the kernel built from current BPF s=
-elftests
-> config lacks.
->=20
-> Without it, the bpf_raw_tracepoint_open() call always returns with -2, le=
-aving
-> raw_tp_writable_reject_nbd_invalid test always passing without exercising=
- the
-> checks bpf_probe_register().
->=20
-> Cc: <stable@vger.kernel.org> # 5.2.0
-> Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> ---
-> Not sure if fixes tag is the right thing to use here, so use the cc
-> stable tag instead to get this config change propogated to other stable
-> branches to make stable BPF CI's job easier.
+On Fri, Jul 10, 2026 at 10:49:50PM -0700, Andrew Morton wrote:
+> On Fri, 10 Jul 2026 20:22:33 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+> 
+> > On Fri, Jul 10, 2026 at 03:11:51PM -0700, Andrew Morton wrote:
+> > > On Fri, 10 Jul 2026 14:26:20 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+> > > 
+> > > > This series extends the HMM framework to support userfaultfd-backed memory
+> > > > by allowing the mmap read lock to be dropped during hmm_range_fault().
+> > > 
+> > > Thanks.  This seems fairly mature and mostly-reviewed so I'll give it a
+> > > spin in mm.git's mm-new branch.
+> > > 
+> > > Unfortunately Sashiko wasn't able to apply this or v7.  I'm not sure
+> > > what base you were using.  Hopefully there's a reason for a v9 so we
+> > > can retry this.
+> > > 
+> > 
+> > I rebased this series on top of mm-new right before sending it out.
+> > Should I have used a different branch?
+> 
+> mm-new is good - Sashiko attempts that.  But it's changing rapidly at
+> this point in the development cycle.
+> 
 
-Shung-Hsi,
+I’d like to send another revision addressing a few comments and also
+replace the `max/max_t` check with something simpler.
 
-Thank you for figuring this out.
-I'd suggest we switch to bpf_testmod_test_writable_bare_tp() [1]
-from the test module to avoid the config dependency and let
-Sun pack all of this as a single patch-set to simplify backports
-(if such are necessary). Wdyt?
+Which branch should I base it on so that Sashiko can apply it
+successfully?
 
-[1] https://lore.kernel.org/bpf/3430dc0a2a141769a596ab21d7abdd86a0a804db.ca=
-mel@gmail.com/2-tp-test.diff
+Or would it be better to send fixups against `mm-new`?
+
+Thanks, Stanislav
