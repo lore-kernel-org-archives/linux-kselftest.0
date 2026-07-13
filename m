@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2CC3EEAE9;
-	Mon, 13 Jul 2026 11:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948CC3BB104;
+	Mon, 13 Jul 2026 11:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783943323; cv=none; b=IL031m95jVEtCIZlSqxBplMKh/YncFUhVx032A0it/5iaDfDICFdI406MEEYv8+al/xZl2WYol+tSeVb+tkraCyUA5lP+MfLvyjl4rWXk/YSMYcRfLQOMjubgE4SVifM7o7TavXVa5/Eroq1XVDLxanwiZ2SN/768xjg97GtLR4=
+	t=1783943326; cv=none; b=mdIJ+L0S4hVTL8/UHvN18/LQWtR9APIV2gUi6lpf40XQxlC19rOhgfcrwH54BjmlJPMYfD8rBU1/lkpdzwAAHOiIhDBq3kSVDq0HnmsoKk3DsK8qVqcTjqzsuKbBwSIesOPgmXhVYEoVMHQtODQOfQXPZmjf3A6bVpzB8LW1x/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783943323; c=relaxed/simple;
-	bh=6m0sGE2RD1Jzdr/pWFz6NTrp36wLFw+6shhzF/VGRDY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rI5XihHY9SuBlh1Nj6ZQWBNHNokimTi769bFihJRKpAppucNOdu6QNsJNOyDaYkQONjTuSh8kg9OFNqEjPNInHWEVS7H066cwNBZKhSsaHbkg5mmUlL0ovSe0xpTjqJeWAmGhDKPgH9pBcTcRQKS2Iloeo7I7oGFk7jcmhz3e0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=f1cjNPoi; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1783943326; c=relaxed/simple;
+	bh=YBPJ0mqcwhJO4nOJvC72HAXZ4ErujEc7xC2rk3ArDDU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=GBLM+APHqo7UdTt1GOd/e+4vOZVH0apPHHzkgQ8hVMpp7IlxjXIFdEmAD/A79ipNmYFkUKo+CSp1lUkJKp/AUBwj+mEgijCfKXPGCB/pUByMzd9UkC+wXFFFXVZoxlo5k358xO8HftV19aRGg531oykRhBXcTF+bAz6fmTRCiAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=N8JkedrF; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="f1cjNPoi"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="N8JkedrF"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=h+ewRGwRCC5f80UYTJvZsM+OSAaYeVd+91q2pbM6EL8=; b=f1cjNPoiNOYteBMDkMB+7j4YaX
-	RviPxa+xWHKln17FzBOhhYXqWHOCZH7cXydmBHTEZmXxtF1EhzTj8FiHIEGKx6fDvMzvoX0IDlIHF
-	caeBMjAdLKBY7vnwoPQeQ5nJs86dk83uDk6efM9KkhGcqcv67KFalEqcJPbc4Ot96BSJXFpy5/pyV
-	DKd7nUcT56uRQOM2YERUyvSzEiNrWqISOR+8Xl+ZSUX3ytAEIeKbu4XNh9ufVbzKZC7he4RlFdTCx
-	eZvZik5E1vuMANBEpjx9UuSHSDwvTw3zI3CnwLCqCx9x52FILOuy10yEURygM+xBvh3MP4wxksI3u
-	M4xFACOQ==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=3PyMSDdhZBE9vEjgfp5OzX/2Lfp7N6HnZTWVkO5qI/k=; b=N8JkedrFp067HCVQay8inu9u1z
+	h83J6ZhcSMk1hIUwslGZNCaiZyFqnaWOOsJk78AZTNS1tiI5I5lutnyQ2lLdSgfVpCv13fvzq4W5w
+	Jesr6LxsBYoDyr92CCet2I/Gr2FmfW8wZ2E6riiDe1JTrJ57enaSMpbor/2nvGGwNCRhOvbvmOVLy
+	x5celDTdld0oC5m6x5c6wGkRexupSwwMHuD5jJG27ycFpFJwLD7XYlZIh++WdVURcDUyiP1qifAeo
+	uUMSzIAsax437bwUusG8r2IbBGIWZwFdvIU4e/nnPfnxxFyUm+BUxZRCLOXNtqFqpYbU7Mg7k0kkN
+	u50fa91Q==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wjF96-001Tib-33;
-	Mon, 13 Jul 2026 11:48:25 +0000
+	id 1wjF9H-001Tiq-0i;
+	Mon, 13 Jul 2026 11:48:35 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH 0/4] mm: kmemleak: reduce transient false positives by
- confirming leaks
-Date: Mon, 13 Jul 2026 04:48:03 -0700
-Message-Id: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
+Date: Mon, 13 Jul 2026 04:48:05 -0700
+Subject: [PATCH 2/4] mm: kmemleak: report leaks only after N consecutive
+ unreferenced scans
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,10 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHTQVGoC/x3MWwqAIBAF0K0M9zuhBxi4lYiYbKyBsNCIQNp70
- FnAKciSVDIcFSS5NesR4aipCH7juIrRBY7Q1q2t+6Yzni/eNU7ndZhlZh+snaULjIpwJgn6/Ns
- wvu8HWfvr7V0AAAA=
-X-Change-ID: 20260713-catalin_pto-dbacf66be3fa
+Message-Id: <20260713-catalin_pto-v1-2-5b93b1131089@debian.org>
+References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
+In-Reply-To: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
@@ -60,67 +59,123 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1856; i=leitao@debian.org;
- h=from:subject:message-id; bh=6m0sGE2RD1Jzdr/pWFz6NTrp36wLFw+6shhzF/VGRDY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqVNCD4ZdAePawtg7VFuLqpysw6wnTe3c8T79Pi
- IxLUJCR7AqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCalTQgwAKCRA1o5Of/Hh3
- bSzbD/93Jr74YAW1SERbtRFp9A4hsP+JaCLfhTQJmzuI91RIOjGm26p3wu/yg23uwGf3BdWdl+g
- HKb/xjTyk6syZUlmGnkx3qFOrFnS8reOIWRm4tsAUjnbsYVhu3DO3doYDTrRIdDITFT1HyOPF2i
- ZXJSXhRtG61AQIWxdhabJnPv9aaNfYUvtx6Ktq0x7oDL6tDL8uaZozRHEaBgQm0ydyhe0VL904j
- uEgGL25/iVLwyzgwvmo2u2J4RVwijPG1sKw4yIOZkSsyCLiJNbE8RhQk2Q2PZZQuow9WpZ5rV8F
- cgDnXqmOUWSX1Fojftf+G1ts/LC3+ZtzaOLs/ZvjgKmY9/i7We87yGpJk6pEKohdwZ4dZp+hzsS
- KfA/ZpfkTQFuWjyFjT2/js8xwBqWv1SNwTiMPmS8qqsnAdzDG/YXTdVdUofkcYyTjazc+rRLdzc
- 87T/Hfie08URotG2WoJjm3EUwkPSh6bJL70vk27Jj7Lh/OORX1FpJwGTeL7SeinGd8jSocIZIDV
- DlFN+uf3YtpSZQ3XLhaKu2ZKV/vGviJaiIPn0g1fbFq8GOMJA9rxxUMgKK+WBXXkbSon5EVfWMr
- eMidKO4e7D8ULHtdI1s+j0x4NrdQ33l8AzKS9XiY0yCY7S+OS4A32XBpKy1TXyPESuCyNdmzTFi
- vcGu4LnSRsUvz7A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4344; i=leitao@debian.org;
+ h=from:subject:message-id; bh=YBPJ0mqcwhJO4nOJvC72HAXZ4ErujEc7xC2rk3ArDDU=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqVNCDmJoWE4BMqrcZuuBB18LglsrEY2eFnhOvK
+ 1EfO5TjQAmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCalTQgwAKCRA1o5Of/Hh3
+ bXuAD/9lsfBVuMajHKh8kGKHEKDGGScReuyPF9mfQyBxoY4s107cMCBzbUi/pMqEBi2m0B67sEy
+ 6XWG7EZlOGqW6IgVcv+vDl0/RMSWBMf3BETrnbSI43C1Qf+bE0McySykdVWWvddgc3cFEqkpx4U
+ cPJZlZr5W7wOSZdUXez+yZYFAr8F8/ZYLWtUaYY3a1PoKpvVgsmUDS4XBjA5UDGmfztDO9uShm9
+ hhLlpKkkxUnnnYjEvvxTWpIiQvAzkMP+vScEtsw0bnhx+Y8ew4prxijoLTrWvUs6beu5FLVOhkV
+ 5AL71WmJyCoy3z5wEM0L46Kvq/h8NT2tC9gbl/gDciQZKo9xlIBOXph51YULGnEpyLzty2/4/DF
+ u1DLJviSgu0j2pbe/GOO1i3GhQStWMpCg+88eOmRLdMZpAx4a5aOFSjRnbXLlnj0Uut3PjQ7eiX
+ k5+QryctC9FgYRhpPxD8+d8glFwRbl407dt8GcAsc2UClwaFg//FbzivwKOYtx2LKY0vJ1qEJb4
+ JBYCWKWCb9u0EhicC0FTNbGF1ol1e1KuMVa57VtOWBkJILZdrBudqSfm9kMlJFDtAmW7JBeFgJp
+ r8O/yymkSwOa1Y7akjrjyXPXCegs+pVJ21VAb9dFaM4LVlH3BDdOuVZuZntJl5PxJ0HWU6j7CST
+ VaIvB0nICkpc5/Q==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-This series combines two kmemleak enhancements that were originally submitted
-separately but both required rebasing after commit 79c37ae3733e9 ("mm/kmemleak:
-fix checksum computation for per-cpu objects").
+kmemleak reports an object the first scan it is found unreferenced. Its
+mark phase runs without stopping the rest of the kernel and without a
+write barrier, so a live object whose only reference is briefly invisible
+during a concurrent RCU update -- e.g. a VMA moved between maple tree
+nodes, or a page-cache xa_node -- can be seen as unreferenced for that one
+scan. Because an object is flagged as reported only once, such a transient
+race turns into a permanent false positive.
 
-The first feature introduces a second scan to confirm suspected leaks:
+Track how many consecutive scans each object has been seen unreferenced
+and only report it once that reaches min_unref_scans, a new module
+parameter. It defaults to 1, leaving the behaviour unchanged; setting it
+higher (e.g. 2) still reports a genuine leak, one scan later, while an
+object referenced again before the threshold restarts its run and is never
+reported.
 
-        https://lore.kernel.org/all/20260709173347.689607-1-catalin.marinas@arm.com/
-
-The second feature adds a module parameter controlling the minimum number of
-consecutive unreferenced scans before a leak is reported, as discussed in:
-
-        https://lore.kernel.org/all/20260626-kmemleak_twice-v1-0-ab28f7cc0971@debian.org/
-
-Changes from v1:
-Now that commit 79c37ae3733e9 is upstream, the selftest includes an additional
-priming phase scan as requested by Catalin.
-
-Additionally, I've factored out the leak-detection conditional into a helper
-function to be more digestible for the reader's eye.
-
-This 4-patch series resolves all outstanding kmemleak issues I've been
-tracking.
+min_unref_scans can be set at boot with kmemleak.min_unref_scans=<n> or at
+run-time via /sys/module/kmemleak/parameters/min_unref_scans.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
-Breno Leitao (3):
-      mm: kmemleak: report leaks only after N consecutive unreferenced scans
-      mm: kmemleak: factor leak confirmation into a helper
-      selftests: mm: test kmemleak's N-consecutive-scan leak confirmation
+ Documentation/dev-tools/kmemleak.rst |  8 ++++++++
+ mm/kmemleak.c                        | 13 ++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-Catalin Marinas (1):
-      mm: kmemleak: confirm suspected leaks with a second scan
+diff --git a/Documentation/dev-tools/kmemleak.rst b/Documentation/dev-tools/kmemleak.rst
+index 7d784e03f3f9d..a8a83bc69ceb8 100644
+--- a/Documentation/dev-tools/kmemleak.rst
++++ b/Documentation/dev-tools/kmemleak.rst
+@@ -198,6 +198,14 @@ systems, because of pointers temporarily stored in CPU registers or
+ stacks. Kmemleak defines MSECS_MIN_AGE (defaulting to 1000) representing
+ the minimum age of an object to be reported as a memory leak.
+ 
++The ``min_unref_scans`` module parameter (default 1) requires an object to
++be seen unreferenced in that many consecutive scans before it is reported.
++Keeping it at 1 preserves the historical behaviour; higher values filter
++the transient false positives described above, at the cost of delaying
++genuine reports by up to that many scans. It can be set at boot with
++``kmemleak.min_unref_scans=<n>`` or at run-time via
++``/sys/module/kmemleak/parameters/min_unref_scans``.
++
+ Limitations and Drawbacks
+ -------------------------
+ 
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index ac77bab580688..2fff11637e490 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -151,6 +151,8 @@ struct kmemleak_object {
+ 	int min_count;
+ 	/* the total number of pointers found pointing to this object */
+ 	int count;
++	/* consecutive scans the object has been seen unreferenced */
++	unsigned int unref_scans;
+ 	/* checksum for detecting modified objects */
+ 	u32 checksum;
+ 	depot_stack_handle_t trace_handle;
+@@ -234,6 +236,9 @@ static unsigned long max_percpu_addr;
+ static struct task_struct *scan_thread;
+ /* used to avoid reporting of recently allocated objects */
+ static unsigned long jiffies_min_age;
++/* consecutive scans an object must stay unreferenced before reporting */
++static unsigned int min_unref_scans = 1;
++module_param(min_unref_scans, uint, 0644);
+ static unsigned long jiffies_last_scan;
+ /* delay between automatic memory scannings */
+ static unsigned long jiffies_scan_wait;
+@@ -692,6 +697,7 @@ static struct kmemleak_object *__alloc_object(gfp_t gfp)
+ 	object->excess_ref = 0;
+ 	object->count = 0;			/* white color initially */
+ 	object->checksum = ~0;
++	object->unref_scans = 0;
+ 	object->del_state = 0;
+ 
+ 	/* task information */
+@@ -1890,6 +1896,9 @@ static int __kmemleak_scan(bool full)
+ 				__paint_it(object, KMEMLEAK_BLACK);
+ 		}
+ 
++		/* referenced last scan: restart the unreferenced run */
++		if (!color_white(object))
++			object->unref_scans = 0;
+ 		/* reset the reference count (whiten the object) */
+ 		object->count = 0;
+ 		if (full)
+@@ -2064,9 +2073,11 @@ static void kmemleak_scan(void)
+ 		raw_spin_lock_irq(&object->lock);
+ 		trace_handle = 0;
+ 		dedup_print = false;
++
+ 		if (unreferenced_object(object) &&
+ 		    (object->flags & OBJECT_SUSPECT) &&
+-		    !(object->flags & OBJECT_REPORTED)) {
++		    !(object->flags & OBJECT_REPORTED) &&
++		    ++object->unref_scans >= min_unref_scans) {
+ 			object->flags |= OBJECT_REPORTED;
+ 			if (kmemleak_verbose) {
+ 				trace_handle = object->trace_handle;
 
- Documentation/dev-tools/kmemleak.rst               |   8 ++
- mm/kmemleak.c                                      |  90 +++++++++++++-
- tools/testing/selftests/mm/Makefile                |   1 +
- .../testing/selftests/mm/ksft_kmemleak_confirm.sh  | 132 +++++++++++++++++++++
- 4 files changed, 225 insertions(+), 6 deletions(-)
----
-base-commit: bee763d5f341b99cf472afeb508d4988f62a6ca1
-change-id: 20260713-catalin_pto-dbacf66be3fa
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
