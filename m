@@ -1,273 +1,249 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012037.outbound.protection.outlook.com [40.93.195.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF5134D4FE;
-	Mon, 13 Jul 2026 17:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783964439; cv=fail; b=jqu6dbuDCUsQZbQYS11Yqt0GD1EdohxxdoOTVHFSt7Bb03/lDKXLA+Qu0OUNYyTQjJcolY3lzhtX4uuvYBMHlciby0NSWtUxKZcYwgTBPVtS/Rb+jpb7b8bW31ilOcEotvjW9Nfhku6RSidohHETs3zk0xr2O3hPB/+WRtfDL7g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783964439; c=relaxed/simple;
-	bh=K4hThv6lnbTUWCF6clTHQQXceHRbFrYyIOJH8mz9GC8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=t8zyKZLnBQu3p9y5iZYdKiRpkblLhVba/OD9VGN8ystJm4NsQna9mlsDoUAy/t0ApnhfBCbf1lUU4rKiJz8Y84BJAP0eOYicyF26uKgeXCONtaBUdEERYxJ466dhGa4q1XmxRXXOBio+fVpFz1TFfvCv+i5p8uKBEFOUjwJn/Rk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=S2/FTYnb; arc=fail smtp.client-ip=40.93.195.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2F335DA43
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 20:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783975463; cv=none; b=ucbCh0YccW/b693whxttAnp9bMWxfjHnFqZHLaT0e5Lb2A9rXytREQizEKmll7L9KfhzTrMYr9l2DxAYcyc8opQeOFHMi2BOwtVW0LilKWh1Ha3LmV9BYIUOmwUq1fJgabDsPJCpYuwDJ/ck6xiLHPIy5CYshZ5xOsygpenEXWY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783975463; c=relaxed/simple;
+	bh=Q8Lc0DQVCIbsi1docguk8WDNau+BZVJwSOlPmEFTfAs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jM426I1Mo2a+41t1a0sdl/YSWPVNzKctU5RxHDpOGHtVzrKIyiauFgr8UlYpCtJXr0UWQYfwxEkEu0yPATSF018EUgygZGyHR/fIy9MiTE3hOvOCOKOl//zpCElAEgzurox8cGMABXgAlNulbOHvhiz6XhPXe+myYadu/spkUj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7RniHZF; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="S2/FTYnb"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J2+EX3PbSFgEJjN5xBGn9juVeZBN4hYJOtXIQtBS8FKRZ2EHIvo1TiyhQakwSYjDOSnfp7a7/vUI7PmPY0HbhwbCF58DeeQhd7Eof/H+T720tBlSAfFjNsVpR/VEWhvwxqU5Al/pKpqIy1SEFWNOY8BSBzimyOEwiMT3LBDDotqXblp7uDyAOLmxsa2DB1qTqfdIF9LDq2AjaOksVYU/Mo6PAH1Sjl0E2z1iqdCRpps1XUpzPe7WwSV8DLsMuDtBpQW57ID6A3mJf/krr0XybyqL2TBSiGX85ocTs5SYsbHEUsyKgsq7b7xKvlLZCHPSsOSevZ8vnMYyHRAvcM2Z9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cq8RP8jngoGDxJ542K0U/HE7eWn/mffYzdyUDBEd03Y=;
- b=uSUJIceXo/RkcSBxjxrIT9rq6XUsxC26sAvRRvCyZXSRKXTvTjeW6kXQf8xWXeE6y2mH/klwWB1LD4feER1EHrnGxwbsICIQ5BR3+tP+fQaqMGF1WyiCKcyIGfCzecZjZA1qIpUtiWd8O/EhNQSqcujtSX50H+JGS9tSiVUJ/Efb56Ns7QwS06cBhRTu+9qAPPYFvo/DvXn6EpVFJgYgEydBd3eqmSKb8Ubpm9pve8u4b3/I16wzQMmpGmxAEyXZLGiCASHo6/pZ0WWHDAmST+TUTmPefwQ2yhgJD1hxdq22R9pkvodgJho0t1YRn7B5iNsFQEzbXjC6kwgqLZxFXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cq8RP8jngoGDxJ542K0U/HE7eWn/mffYzdyUDBEd03Y=;
- b=S2/FTYnbLPHsyvfLUMkgMbzLrtqKgFF9fmTj/DDwkqVsmGHjHeBef3kNZt5RWmP+oH7xSIuHxfMkD93L2adHar1sNmfm9Y2TGxOG1yUbp4rXtQmQK2GkIpc+jTAZagK1u0T5dbThbqra6pPZRDC53zeWp5Sfm7ZiH+it338pCoaCsalBHXGpSNvwPOnYSlmBPdeOQ9ulod6rjmgd9UVBQ1xfl8RTbdult+19UPPOQmvh7JGmb+GDAJSGEWBQoFqSt5BkU1671n06CKxG4AFFtCGUxB6dmp7yTZ2fjD3H9fF9+CN6l5EbtPhCBQE8y1eCBEFlwR8QXki+3K4FDAQ9Mg==
-Received: from IA1PR12MB9030.namprd12.prod.outlook.com (2603:10b6:208:3f2::22)
- by SA1PR12MB8119.namprd12.prod.outlook.com (2603:10b6:806:337::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.18; Mon, 13 Jul
- 2026 17:40:29 +0000
-Received: from IA1PR12MB9030.namprd12.prod.outlook.com
- ([fe80::2c1d:ed27:b53a:97d2]) by IA1PR12MB9030.namprd12.prod.outlook.com
- ([fe80::2c1d:ed27:b53a:97d2%7]) with mapi id 15.21.0202.014; Mon, 13 Jul 2026
- 17:40:29 +0000
-From: Manish Honap <mhonap@nvidia.com>
-To: Alex Williamson <alex@shazbot.org>
-CC: "djbw@kernel.org" <djbw@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jic23@kernel.org" <jic23@kernel.org>, "dave.jiang@intel.com"
-	<dave.jiang@intel.com>, Ankit Agrawal <ankita@nvidia.com>,
-	"alejandro.lucero-palau@amd.com" <alejandro.lucero-palau@amd.com>,
-	"alison.schofield@intel.com" <alison.schofield@intel.com>,
-	"dave@stgolabs.net" <dave@stgolabs.net>, "dmatlack@google.com"
-	<dmatlack@google.com>, "gourry@gourry.net" <gourry@gourry.net>,
-	"ira.weiny@intel.com" <ira.weiny@intel.com>, Neo Jia <cjia@nvidia.com>,
-	Krishnakant Jaju <kjaju@nvidia.com>, Vikram Sethi <vsethi@nvidia.com>, Zhi
- Wang <zhiw@nvidia.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, Manish
- Honap <mhonap@nvidia.com>
-Subject: RE: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device passthrough
-Thread-Topic: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device passthrough
-Thread-Index: AQHdBMN4xuDJHQfm/UCI06mb/0iNl7Zna+gAgARCZHCAACGZkA==
-Date: Mon, 13 Jul 2026 17:40:29 +0000
-Message-ID:
- <IA1PR12MB90301288F11754F9EE9A992CBDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-References: <20260625165407.1769572-1-mhonap@nvidia.com>
-	<20260625165407.1769572-6-mhonap@nvidia.com>
- <20260710162322.012be635@shazbot.org>
- <IA1PR12MB9030E175587B09CEA7A4D90FBDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-In-Reply-To:
- <IA1PR12MB9030E175587B09CEA7A4D90FBDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR12MB9030:EE_|SA1PR12MB8119:EE_
-x-ms-office365-filtering-correlation-id: 1620f6ed-52b2-48c2-be5c-08dee105d48e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|23010399003|376014|366016|1800799024|22082099003|18002099003|6133799003|56012099006|4143699003|11063799006|38070700021;
-x-microsoft-antispam-message-info:
- WcRcjlBHaCwKMvUlTlJ6FPJZA62THOxNT1NNDmBMSbCfskcWazhYj+qLN+zUvZlhkAi1F8M7lZzPXJXzWPOn8bWxOQO8vKJroa8x5J3Awaxa2twsiGCz4mmEkQ6nYP5t6S1iw0ih3aXgP7gtFXaUS7KWgMkmRVGVF+3J65JyXLNyxCUR5Y6axHhTpduUTDSHv4Sk8fjyotQSWQWR0hM7R+kzvKuNxVcA5rtZYGEIRRyOjB4s59pDBI+sscSWmcm2WpCsP41mIAx00X8vlUeeV8DD3pgDFvmiORj3qPdr+psjYV9dw/2sezAHMf8eDBa/Gdgn2xUvh9NaPBeaxTBOdA5T1+G+KSkgX3XoRMiDWOdWwMUVQ/uSJ8Q0ENOaaHfIAGBIlW8+Xhg6lMxgaePrEFIcaPyET07CsoJ7PAhrzWJesut/H2P2ck4cllStvi5ShLP5TdwRNivNfrn7E8QB3t/IvBdYVWiFUNWI4w8tAEQ/yBh6Q92KV6j3RphNAM+ZDYiNv4eSdWIvQtXCRM90Zp8ntuwAt6MyZpkemuFgoGHn7nZeM1hx58MucT2D8UxAWwyPlFvcnoUBM+HOP3QxHgCLp73UcpB7xphyakAEJQNlIPtPuQ4tzMhkqouoRBs91y53USS+g4iYDeJiAB3V7M0ejgDrbsVouBpodw+0Ncm0C/vQ3Z1vy8U7gnxPMhFiRCoKW5rihxvj9hopilxu4XPU+zfBsh7Cqtukkbc2IZY=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB9030.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(366016)(1800799024)(22082099003)(18002099003)(6133799003)(56012099006)(4143699003)(11063799006)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?2w93eFZu+lBq9zAymnX9AxUt+cSa94vXB1vMMBZ6X3Q9Z7FAz18FiKa1tyv5?=
- =?us-ascii?Q?vlH0msHQ303LxfNnEX5dpMIiu3/un1PuJE67fSqLHMiVuWQ+OfevLPLHsLMZ?=
- =?us-ascii?Q?ll/R7WkRax8FHzhpNdP+gFWBNNqSgqr+5vBjKRJjgA2YL0Qb5lQb2mrKi/5L?=
- =?us-ascii?Q?5IaTBej11xHEicTVAYk0UKPMcdyl6le5b2aNCw26tm7QZPwuPUoEUiikNjRJ?=
- =?us-ascii?Q?vpkD7WO1GC8mXnfYUdjrWEd+X79qDkKWaw3AAvUv8TDymhD3JBAPynsdUZfz?=
- =?us-ascii?Q?AWj1VHz+E54959xA2X1U+BIqHVwL7a3rBIilThOsqD4kGx0+wlEWQoWXQZgi?=
- =?us-ascii?Q?qRPEfyp2NK8ITVgD1m97ZL5wIv08dmIW2uK3NFUGvOxMfTUETWoYmuQd+UJv?=
- =?us-ascii?Q?prpvzjdskIcys/BJ8ozXFgs0ARH2HPlk9wpAvpWrcP9d1uVPNBfrMxbJ4rlK?=
- =?us-ascii?Q?JeDZAhDV693mDlX51DM19P7VB/uIpnWi1PLTiiqxXfUlddhb7+MqpK6ccZwA?=
- =?us-ascii?Q?b2vCvcneufP+M7DvcSi5zUoNJ3WPds+ZMoEA5KlAw7PDFKXvLnrFH4FZ6jUk?=
- =?us-ascii?Q?XutF2wqkiqLXLno/CWf87SF2NDczhOPCheAvTVYFbVi9XOYSDRxqIynk0n0O?=
- =?us-ascii?Q?YzKZln4P/qZMUq8AcvS5P34FbyMNOt3dasP7hGJ0BYUT7j6a0Ugya6+YsCy0?=
- =?us-ascii?Q?8qwzDPpxT8mdhOIrkzLEov+51uvBtkBQqKa+fJUtChzzyDfgtXwLWPUBIdKs?=
- =?us-ascii?Q?4B/hWUcFXMZfdFxt9oMZsykpA3xHpx5BX/O1REONiCLj6vttzHHrgTii43YG?=
- =?us-ascii?Q?CMvCCvd94bygSHa1gyjIJKcniP0uZL7ICxRZBeiDuZOWnJiPSsZmm8uDp17K?=
- =?us-ascii?Q?Eu5Ryey518hceqKLswjsUukdOK6HRGJkA6odPQMv7LLc7yQjsld3dCc18l2A?=
- =?us-ascii?Q?Q297s5wCFKXFOa5YnKCgaCKq7ftWPcNPl6/eQbCY6bjYvUmOjAw3dnq2KuqR?=
- =?us-ascii?Q?go3jM2btsiyyJ1pwBiGvQETLNsUjaftNj2cPPQp+FkCX1UaH9xyG9lmk3oSZ?=
- =?us-ascii?Q?9YHexSB2ac4A/5PRlacVMXaqcV46IGwTrrSyivgAOdh2tJrOE+EP83HPpHgT?=
- =?us-ascii?Q?xMPHIX8FSnQhLX5Lqh8a2XkteMRUnv01rUa0eo1I3hArNTeouo0YZbnGqjgh?=
- =?us-ascii?Q?2bNiJdbFLqcytkbOvRpP1ET0sulpV+gwM6g2riQ+oNxEChFAVvX3sbxS94nI?=
- =?us-ascii?Q?SaUug0B/SCJICZm+3wivyvTOVpSo5sXmWyUf0n40RwmQLNG7hKvwSePizUn9?=
- =?us-ascii?Q?S8tyHJJ2x/4K50uR8MptxYEdBMhk7qH6kcNRrwDAoL9uXJXD23YyyIOuZ/9F?=
- =?us-ascii?Q?4LWAlHTxeoYw+QuuNhJeeOAQFc/DSa0pCPWbQwlPVKdWpBE0VWIkd7B2ZlDM?=
- =?us-ascii?Q?UTm6KYbtlrnEwpO1X/BuBrC0bkxaHIkibYKaFoTBoC/ABS0c8dGMard65VJM?=
- =?us-ascii?Q?tc2UAy8EJPNiQBHZws+2K+D2QxUdaLh2nscze2PgUBNPqUiq4L4TD3tzLESF?=
- =?us-ascii?Q?TDKWDP71Ji/zPSWDMAumEOUwSyuO3t2bIBld57vFmK337fbl4VKSfLWUWeCU?=
- =?us-ascii?Q?1giuRKHulMEvLt+7fki4d+ccCqdh0Lru7vEUfsYOuWfKnNt7miP2nxNb1RoC?=
- =?us-ascii?Q?chJWai/bqMxnFc1jXXYDuz0q4gss9reui6WWDiNarnZEnWIA?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7RniHZF"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38175907a56so251226a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 13:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783975462; x=1784580262; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-type:references:in-reply-to:date:cc
+         :to:from:subject:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=NcRJzQ/iAkhbWmpqB0xxcKXTayHV0TvapnZsPmIM4yU=;
+        b=j7RniHZFt416VRItGK+7Q1bNJmSU2/IQB2T2p+ldkWTwELy6N3BZkn6DHkFwfUfdDO
+         oPyw2bGrGfghkCAsSH9BQKK0myfecUK1psAQLPZCrI/+OTjIdYsVbTxP3OMcChWHNPgz
+         BguOdU9umXfl17zKtXvDlgwIQSzamAA4UThPDL5QW1YWzcswT6yJxbpYb+eRSmAeofw8
+         kCaig2erTCNwxSJzA9k27TEw68COlXJe5sM8I+H3gn++3PGHzLd11P/blrESMiBXhgpR
+         25hxN6I+NYePwpRsEJL3mAnFkNX9yx/6caa8SzVxveNaUmf3ZXvyUM50OmXF7sEsDKj5
+         i5zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783975462; x=1784580262;
+        h=mime-version:user-agent:content-type:references:in-reply-to:date:cc
+         :to:from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=NcRJzQ/iAkhbWmpqB0xxcKXTayHV0TvapnZsPmIM4yU=;
+        b=q8RtEEPw/RYMDb61rzsMQtsuZUocjUoG3IzLjkLm7kLqHkz0Hd4r8FHznnRGPslTlQ
+         pMw9qHb+XaFshhbSTxP2WoiN3DH7t/MiB3njemLm3wjmatDakTFOJnoZIS24bmY7qdaI
+         r8DwxHOwhI5lBFX6jTyujd3tRow1ZIyVG8gdvxDpoZlQyeMXvFbYoR5SG0FH+7M6EFl8
+         Py08g8H5y0j2ztmTecaaROKTsPnPZ9j5VbSppNoX3b7Qh6irlR99AzRXQjLPF2K91iKr
+         4GEmD2HSgyMV1S9S5kUWCZgdfDn9qPepbG0oLA0IBG8DykNJgt56JcHrX/VVWtuZSgKM
+         Tffg==
+X-Forwarded-Encrypted: i=1; AHgh+Rov5t2DzYrl4o5XdO7YY2qeInvr9ilfpEj0ML6jz7DL4mUwBWLQTmeHvvr61ExRClt9bBvjkBh2EqPy50e3eRY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjR34sBiJicAWSpubeEx/fi91VZxnmeCb6LZevOxbbrVzrxMOS
+	2YY/VZMa4GAW9YD5HFdy+bMd1eJiL4KNmkABMmkHGHBqFgj2jP89o+21
+X-Gm-Gg: AfdE7cm4WS592S8XpBeRb+UCmj9LXh5g+9UOECwjXcxYSAzc2tp+duBAqX5j3Ly++Z5
+	WNYldbDlrhWxVsOj64djNF9Wqd1h2SP+qGT7p4hb3uU67wMWv6cA4NgLYTV8yv5InQd2ECTJl5Y
+	RMtpcXVcVstYyvMiPVRJUTpPtr436r8FJeHUk6hJS+K3xi2QF/DdcxBDR178W8809f4UBfLjLjD
+	Mglp6HD6tO6DZi2mlIeyFbqprxFDrWiHjssiOkpUPDI+LGyQoVTFALS4wPn332zTPT4/4jdStDT
+	+WFYk3tuut2TECP5OfozQ7Ba/gxEQ/G5Pm70t+72Kdu7LA+62efFsaWS+LpJIEwI6c4XPfT32Ri
+	VP5fxQJUdW7C0Pu6UGi0+KXApC+5ITDuwvg6vig3dPpvf3M80Swf1sc+PJZ+xdBSM79zAvURI0k
+	OZGXUlxhOS0S1qnENWrp2oTx1Z2y30hkGBjcCD8VX7
+X-Received: by 2002:a17:90a:d00f:b0:387:d5bd:6231 with SMTP id 98e67ed59e1d1-38dc8499094mr7990388a91.20.1783975461728;
+        Mon, 13 Jul 2026 13:44:21 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172b6d2csm398879a91.4.2026.07.13.13.44.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 13:44:21 -0700 (PDT)
+Message-ID: <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for
+ buffer pointers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, sun jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, 	emil@etsalapatis.com, shuah@kernel.org, mmullins@fb.com,
+ 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Mon, 13 Jul 2026 13:44:18 -0700
+In-Reply-To: <alRtilWhKw4zzMkI@u94a>
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+	 <20260708090151.151729-2-sun.jian.kdev@gmail.com> <ak5HLLrYK3R_g2y_@u94a>
+	 <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+	 <ak8XSRiLKx5WcIQw@u94a>
+	 <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+	 <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+	 <alCgmxFh9q-vjE0O@u94a>
+	 <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
+	 <alRtilWhKw4zzMkI@u94a>
+Content-Type: multipart/mixed; boundary="=-IIJTSNM/Z9i81nFKcIdL"
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB9030.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1620f6ed-52b2-48c2-be5c-08dee105d48e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2026 17:40:29.0299
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zc5xJQ9w3t4J9XImIzjsBmmR78zfHiSacr5sAogabTeLk+qlq06mm1P9VPaSfagZGbYg1NH/juHqLB5prxkN3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8119
+
+--=-IIJTSNM/Z9i81nFKcIdL
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, 2026-07-13 at 13:05 +0800, Shung-Hsi Yu wrote:
+> On Fri, Jul 10, 2026 at 06:27:41PM +0800, sun jian wrote:
+> [...]
+> > One detail about the attach-time check: I agree that some negative-offs=
+et
+> > constructions can still be rejected later if the max_tp_access accounti=
+ng
+> > produces a large value. But the runtime reproducer I used exercises thi=
+s
+> > specific access:
+> >=20
+> > =C2=A0=C2=A0=C2=A0 r6 =3D *(u64 *)(r1 + 0)
+> > =C2=A0=C2=A0=C2=A0 r6 +=3D -8
+> > =C2=A0=C2=A0=C2=A0 *(u64 *)(r6 + 0) =3D 0
+> >=20
+> > Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the c=
+urrent
+> > accounting,
+> > =C2=A0=C2=A0=C2=A0 reg->var_off.value + off + size
+> > wraps to 0. So max_tp_access records 0 and the attach-time writable_siz=
+e check
+> > does not reject it, even though the effective access starts at -8.
+>=20
+> Yes, that should had been rejected.
+>=20
+> > On the bpf base without the verifier fix, the temporary reproducer did =
+load
+> > and attach successfully:
+> > =C2=A0=C2=A0=C2=A0 negative_bpf_load: PASS
+> > =C2=A0=C2=A0=C2=A0 negative_raw_tp_open: PASS
+> > =C2=A0=C2=A0=C2=A0 negative_test_run: PASS
+> > and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
+> >=20
+> > So for this particular range, this looks like more than a load-time pol=
+icy
+> > difference: the missing lower-bound check leaves the access executable =
+on the
+> > bpf tree.
+>=20
+> Actually I got this reproduced in the *bpf-next* tree now. And I think I
+> know why Eduard wasn't able to reproduce the issue.
+>=20
+> The main problem was that CONFIG_BLK_DEV_NBD was not enabled in the
+> default BPF selftests configuration, so nbd_send_request wasn't
+> available, and thus the attachment always fail with -2 without
+> exercising the checks that we have in bpf_probe_register().
+>=20
+> With CONFIG_BLK_DEV_NBD enabled, and negative_var_off_program[] updated
+> to do use offset of 0 (instead of 28 + 8), I was able to reproduce the
+> issue on top of commit `9a3a07d06e7d` "Merge branch
+> 'bpf-fix-warning-in-bpf_trampoline_multi_detach'" with the following
+> updated version of your patch.
+>=20
+> =C2=A0 0: R1=3Dctx() R10=3Dfp0
+> =C2=A0 0: (79) r6 =3D *(u64 *)(r1 +0)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ; R1=3Dctx() R6=3Dtp_buffer()
+> =C2=A0 1: (07) r6 +=3D -8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ; R6=3Dtp_buffer(imm=3D-8)
+> =C2=A0 2: (79) r0 =3D *(u64 *)(r6 +0)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ; R0=3Dscalar() R6=3Dtp_buffer(imm=3D-8)
+> =C2=A0 3: (95) exit
+> =C2=A0 processed 4 insns (limit 1000000) max_states_per_insn 0 total_stat=
+es 0 peak_states 0 mark_read 0
+> =C2=A0 tp_fd: 8
+> =C2=A0 check_nbd_attach_reject:FAIL:nbd_invalid_negative_var_off unexpect=
+ed nbd_invalid_negative_var_off: actual 8 >=3D expected 0
+> =C2=A0 #319=C2=A0=C2=A0=C2=A0=C2=A0 raw_tp_writable_reject_nbd_invalid:FA=
+IL
+>=20
+> So I would say a fixes tag that points to 022ac0750883 is still needed
+> after all.
+
+Hi Shung-Hsi, Sun,
+
+Shung-Hsi, thank you for figuring out the quirk with the config.
+Indeed if I modify the test to be config independent the following
+program is both accepted at load and attached:
+
+  *r6 =3D *(u64 *)(r1 +0)
+  r6 +=3D -8
+  r0 =3D *(u64 *)(r6 +0)
+
+Worse yet, the mechanism affects both PTR_TO_TP_BUFFER and PTR_TO_BUF.
+The PTR_TO_BUF is reachable from helpers/kfuncs with custom 'size' assignme=
+nts,
+as far as I understand.
+
+Sun, of checks added by this patch:
+
+>	var_off =3D (s64)reg->var_off.value;
+>	if (var_off >=3D BPF_MAX_VAR_OFF || var_off <=3D -BPF_MAX_VAR_OFF)
+
+This should hold already.
+
+>	start =3D var_off + off;
+>	if (start < 0)
+
+This one is necessary.
+
+>	if (size < 0) {
+
+Technically this one is bounded by 1,2,4,8 in case of instructions and
+by BPF_MAX_VAR_SIZ in case of a helper/kfunc (see check_mem_size_reg()).
+
+Let's respin v5 keeping minimal necessary checks and also update the
+test case:
+- use sub-tests.
+- move raw_tp_writable_reject_nbd_invalid.c to use tracepoing from
+  the test module instead of nbd, to avoid nbd config dependency
+  (as in the attachment).
+- if possible, could you please add a test that shows missing negative
+  offset access check to PTR_TO_BUF?
+
+[...]
+
+--=-IIJTSNM/Z9i81nFKcIdL
+Content-Disposition: attachment; filename="tp-test.diff"
+Content-Type: text/x-patch; name="tp-test.diff"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Jhd190
+cF93cml0YWJsZV9yZWplY3RfbmJkX2ludmFsaWQuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L2JwZi9wcm9nX3Rlc3RzL3Jhd190cF93cml0YWJsZV9yZWplY3RfYmFkX2FjY2Vzcy5jCnNpbWls
+YXJpdHkgaW5kZXggNzUlCnJlbmFtZSBmcm9tIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9w
+cm9nX3Rlc3RzL3Jhd190cF93cml0YWJsZV9yZWplY3RfbmJkX2ludmFsaWQuYwpyZW5hbWUgdG8g
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvcmF3X3RwX3dyaXRhYmxlX3Jl
+amVjdF9iYWRfYWNjZXNzLmMKaW5kZXggMjE2YjBkZmFjMGZlLi5lMGExY2EzYzFlNmEgMTAwNjQ0
+Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Jhd190cF93cml0
+YWJsZV9yZWplY3RfbmJkX2ludmFsaWQuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvcHJvZ190ZXN0cy9yYXdfdHBfd3JpdGFibGVfcmVqZWN0X2JhZF9hY2Nlc3MuYwpAQCAtMSwx
+MCArMSwxMCBAQAogLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKIAogI2luY2x1
+ZGUgPHRlc3RfcHJvZ3MuaD4KLSNpbmNsdWRlIDxsaW51eC9uYmQuaD4KKyNpbmNsdWRlICJ0ZXN0
+X2ttb2RzL2JwZl90ZXN0bW9kLmgiCiAjaW5jbHVkZSAiYnBmX3V0aWwuaCIKIAotdm9pZCB0ZXN0
+X3Jhd190cF93cml0YWJsZV9yZWplY3RfbmJkX2ludmFsaWQodm9pZCkKK3ZvaWQgdGVzdF9yYXdf
+dHBfd3JpdGFibGVfcmVqZWN0X2JhZF9hY2Nlc3Modm9pZCkKIHsKIAlfX3UzMiBkdXJhdGlvbiA9
+IDA7CiAJY2hhciBlcnJvcls0MDk2XTsKQEAgLTEzLDkgKzEzLDkgQEAgdm9pZCB0ZXN0X3Jhd190
+cF93cml0YWJsZV9yZWplY3RfbmJkX2ludmFsaWQodm9pZCkKIAljb25zdCBzdHJ1Y3QgYnBmX2lu
+c24gcHJvZ3JhbVtdID0gewogCQkvKiByNiBpcyBvdXIgdHAgYnVmZmVyICovCiAJCUJQRl9MRFhf
+TUVNKEJQRl9EVywgQlBGX1JFR182LCBCUEZfUkVHXzEsIDApLAotCQkvKiBvbmUgYnl0ZSBiZXlv
+bmQgdGhlIGVuZCBvZiB0aGUgbmJkX3JlcXVlc3Qgc3RydWN0ICovCisJCS8qIG9uZSBieXRlIGJl
+eW9uZCB0aGUgZW5kIG9mIHRoZSB3cml0YWJsZSBjb250ZXh0IHN0cnVjdCAqLwogCQlCUEZfTERY
+X01FTShCUEZfQiwgQlBGX1JFR18wLCBCUEZfUkVHXzYsCi0JCQkgICAgc2l6ZW9mKHN0cnVjdCBu
+YmRfcmVxdWVzdCkpLAorCQkJICAgIHNpemVvZihzdHJ1Y3QgYnBmX3Rlc3Rtb2RfdGVzdF93cml0
+YWJsZV9jdHgpKSwKIAkJQlBGX0VYSVRfSU5TTigpLAogCX07CiAKQEAgLTMyLDcgKzMyLDcgQEAg
+dm9pZCB0ZXN0X3Jhd190cF93cml0YWJsZV9yZWplY3RfbmJkX2ludmFsaWQodm9pZCkKIAkJICAi
+ZmFpbGVkOiAlZCBlcnJubyAlZFxuIiwgYnBmX2ZkLCBlcnJubykpCiAJCXJldHVybjsKIAotCXRw
+X2ZkID0gYnBmX3Jhd190cmFjZXBvaW50X29wZW4oIm5iZF9zZW5kX3JlcXVlc3QiLCBicGZfZmQp
+OworCXRwX2ZkID0gYnBmX3Jhd190cmFjZXBvaW50X29wZW4oImJwZl90ZXN0bW9kX3Rlc3Rfd3Jp
+dGFibGVfYmFyZV90cCIsIGJwZl9mZCk7CiAJaWYgKENIRUNLKHRwX2ZkID49IDAsICJicGZfcmF3
+X3RyYWNlcG9pbnRfd3JpdGFibGUgb3BlbiIsCiAJCSAgImVycm9uZW91c2x5IHN1Y2NlZWRlZFxu
+IikpCiAJCWdvdG8gb3V0X2JwZmZkOwo=
 
 
-
-> -----Original Message-----
-> From: Manish Honap <mhonap@nvidia.com>
-> Sent: 13 July 2026 22:15
-> To: Alex Williamson <alex@shazbot.org>
-> Cc: djbw@kernel.org; jgg@ziepe.ca; jic23@kernel.org;
-> dave.jiang@intel.com; Ankit Agrawal <ankita@nvidia.com>;
-> alejandro.lucero-palau@amd.com; alison.schofield@intel.com;
-> dave@stgolabs.net; dmatlack@google.com; gourry@gourry.net;
-> ira.weiny@intel.com; Neo Jia <cjia@nvidia.com>; Krishnakant Jaju
-> <kjaju@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>; Zhi Wang
-> <zhiw@nvidia.com>; kvm@vger.kernel.org; linux-cxl@vger.kernel.org;
-> linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> kselftest@vger.kernel.org; Manish Honap <mhonap@nvidia.com>
-> Subject: RE: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device
-> passthrough
->=20
->=20
->=20
-> > -----Original Message-----
-> > From: Alex Williamson <alex@shazbot.org>
-> > Sent: 11 July 2026 03:53
-> > To: Manish Honap <mhonap@nvidia.com>
-> > Cc: djbw@kernel.org; jgg@ziepe.ca; jic23@kernel.org;
-> > dave.jiang@intel.com; Ankit Agrawal <ankita@nvidia.com>;
-> > alejandro.lucero-palau@amd.com; alison.schofield@intel.com;
-> > dave@stgolabs.net; dmatlack@google.com; gourry@gourry.net;
-> > ira.weiny@intel.com; Neo Jia <cjia@nvidia.com>; Krishnakant Jaju
-> > <kjaju@nvidia.com>; Vikram Sethi <vsethi@nvidia.com>; Zhi Wang
-> > <zhiw@nvidia.com>; kvm@vger.kernel.org; linux-cxl@vger.kernel.org;
-> > linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > kselftest@vger.kernel.org; alex@shazbot.org
-> > Subject: Re: [PATCH v3 05/11] vfio: UAPI for CXL Type-2 device
-> > passthrough
-> >
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Thu, 25 Jun 2026 22:24:01 +0530
-> > <mhonap@nvidia.com> wrote:
-> > > diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-> > > index 5de618a3a5ee..3707d53c4de5 100644
-> > > --- a/include/uapi/linux/vfio.h
-> > > +++ b/include/uapi/linux/vfio.h
-> > > @@ -215,6 +215,7 @@ struct vfio_device_info {
-> > >  #define VFIO_DEVICE_FLAGS_FSL_MC (1 << 6)    /* vfio-fsl-mc device
-> */
-> > >  #define VFIO_DEVICE_FLAGS_CAPS       (1 << 7)        /* Info
-> supports
-> > caps */
-> > >  #define VFIO_DEVICE_FLAGS_CDX        (1 << 8)        /* vfio-cdx
-> > device */
-> > > +#define VFIO_DEVICE_FLAGS_CXL        (1 << 9)        /* vfio-cxl
-> > Type-2 device */
-> >
-> > Would we define a different flag for type-1/3 if we ever found a need
-> > to expose them through vfio?
->=20
-> Yes. The current flag is named VFIO_DEVICE_FLAGS_CXL and refers to
-> Type-2 specifically. If Type-1 or Type-3 support is added later, a
-> separate flag (or a VFIO_DEVICE_INFO_CAP sub-type field) would
-> distinguish them. I can rename it VFIO_DEVICE_FLAGS_CXL_TYPE2 now if
-> that is preferable; please advise.
-
-For this patchseries, I think keeping name as VFIO_DEVICE_FLAGS_CXL_TYPE2
-is a better choice since Type-2 is the only supported case now; a separate
-flag can be added when Type-1/3 support arrives.
-
->=20
-> >
-> > >       __u32   num_regions;    /* Max region index + 1 */
-> > >       __u32   num_irqs;       /* Max IRQ index + 1 */
-> > >       __u32   cap_offset;     /* Offset within info struct of first
-> > cap */
-> > > @@ -257,6 +258,36 @@ struct vfio_device_info_cap_pci_atomic_comp {
-> > >       __u32 reserved;
-> > >  };
-> > >
-> > > +/*
-> > > + * VFIO_DEVICE_INFO capability for CXL Type-2 passthrough devices.
-> > > + * Present when VFIO_DEVICE_FLAGS_CXL is set on
-> > vfio_device_info::flags.
-> > > + *
-> > > + * @flags: VFIO_CXL_CAP_HOST_FIRMWARE_COMMITTED indicates the host
-> > CXL
-> > > + *   subsystem committed the endpoint HDM decoder.
-> > > + * @hdm_region_idx: VFIO region index for the HDM memory region
-> > > + *   (subtype VFIO_REGION_SUBTYPE_CXL).
-> > > + * @comp_reg_region_idx: VFIO region index for the CXL Component
-> > > + *   Register shadow (subtype VFIO_REGION_SUBTYPE_CXL_COMP_REGS).
-> >
-> > These regions are self describing via the noted CXL subtypes, what's
-> > the purpose of double reporting them here?
->=20
-> Agreed; I will try to minimize the noise here.
->=20
-> >
-> > > + * @comp_reg_bar: PCI BAR index that contains the CXL component
-> > > + *   register block.  Get-region-info on this BAR returns a
-> > > + *   VFIO_REGION_INFO_CAP_SPARSE_MMAP that excludes the CXL block.
-> > > + * @comp_reg_offset: byte offset of the CXL component register
-> block
-> > > + *   within @comp_reg_bar.
-> > > + * @comp_reg_size: byte size of the CXL component register block.
-> >
-> > Why don't we describe all of these via a capability on the relevant
-> > region info?
->=20
-> okay, I will have v4 to remove hdm_region_idx, comp_reg_region_idx,
-> comp_reg_bar, comp_reg_offset, and comp_reg_size from
-> vfio_device_info_cap_cxl. The device-level cap will only have flags.
->=20
-> This will also result in component register details to move to a new
-> VFIO_REGION_INFO_CAP_CXL_COMP_REGS capability on the comp-reg region
-> info, carrying comp_reg_bar, comp_reg_offset, and comp_reg_size.
->=20
-> Regions will remain self-describing via VFIO_REGION_SUBTYPE_CXL and
-> VFIO_REGION_SUBTYPE_CXL_COMP_REGS.
->=20
-> >
-> > Does that leave this device level capability describing the device as
-> > type-2 (by existence), with only a flags field to declare HDM as
-> > firmware committed, for future compatibility should we support non-fw
-> > committed?  Thanks,
-> >
-> > Alex
->=20
-> Yes, I will shape the v4 in this direction. The device-level CAP_CXL
-> shrinks to "this is a CXL device" (by existence) plus a flags field
-> whose only defined bit today is HOST_FIRMWARE_COMMITTED, leaving room
-> for a future non-fw-committed mode. Everything else moves to region
-> caps. Thanks for this suggestion.
-
+--=-IIJTSNM/Z9i81nFKcIdL--
