@@ -1,136 +1,134 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61FC43802A
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 16:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783961432; cv=pass; b=PrrMpnfpbpEw7891QyA/stMQj6cS34YHCxgx9yCKPlBXuhSEjp/A9G/YQVlIElI41tbsiu3fDr83m8/likAiYn1VFtz6V4u1CW1ovm8oL/EGwCRhdUKQFwas3PyuFGqLoz7VSkAwkx9rz8obf1csYalehwClHyxHBLfajjx6mNk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783961432; c=relaxed/simple;
-	bh=aCrBFhBH4b55ElTrOxI8l+7LTfo9SGbV+OTj6Ct9UmY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N9JCePgyezura4b6S/MVDx5KqvlkhRWdHfD+JFF2DZ0H/EzUlFyvShiRqpOa8wsvssdr8JiV8UYOFXK4etC+VbqF4xotdS8+K3JAYNMrYnimdGvac7TZhq9Mc3ApwUPx4wkp12jxbejF601SGX5KlvupC3DDwhSKbRDdXXCJXHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b9XNzrbu; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110CE330647
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 16:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783961777; cv=none; b=cUKDLc2H2t3pK2I3FgIJH4SctQpWKg/ML6VHSqEtwssxJFKSLi3E1z+k0SeUYmTuF1dR+YKVm7fObZZZLx+5VTsjiktG5Y2s3j8TmFjRsFsruJ5kT4EUHpV6M0nEYp7hTGvppyqYcjF16j5+iTckdk2jU7i1blkq77OBNOfd+3A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783961777; c=relaxed/simple;
+	bh=wYe7kym3kczWr73lptfB1bTj81zD5wvAqQaXYZ4DW5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IwpLszAuZcRowUgzyIkDfyO4/Fw730uR1YlbVnUHkUv4rlkVr8VcF0aAhpjcT7zQgCjGNPUtZmz8+TIFf/wPwjs+ODhzMoskYRu6dl11X48iOh410zLlYUMyXqSz5x35WY7fK9qaeZ6tNVZXzw0goHE4EAcjrktbzqqttxxxsDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZ6p7Hie; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b9XNzrbu"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-698411099d6so235a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:50:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783961429; cv=none;
-        d=google.com; s=arc-20260327;
-        b=o227m+jnMCnJEuYEVVm5msZ2yES1cy89KXqzEmIXi1T5D/illWoXY3K0yDBaPJvZU2
-         R5ZY/X0f2rCkF+/nzJ+ctz2+INBlVx2V5/vTznzkSs/67U2fPTNfTVgUnEocYjGy1CyF
-         nunSt4GbveAeXclH7IuPX75hTlgw6lp7fZvaVOZu8Sa+hDi6Z63hNLb3pjmIAc/yz3J2
-         D9Gayjcozx2kZ3YeXVJGnCpMtjRmicAx+Z5c1rUSqY/r7d+7GNqj4AQ7XKenQB4KGtTu
-         f8nWNGYZFR0A11nJO7eDpOjpjrPsPfyKkrSyXe1zTzrU86ZamjMwkJloPZuCk+wVpnAd
-         nHoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aCrBFhBH4b55ElTrOxI8l+7LTfo9SGbV+OTj6Ct9UmY=;
-        fh=N6tnLgJQfMqshAIWu+CJ219cQSHWXXq/T6Qm8ym5j4k=;
-        b=G7f3jq/ZW9VNrnUPrHsVMtF1HGPRs+UaTJjUPEFJyKyfjeRHEI2NYXFJ1Bt7+aTFPS
-         1/Uu1ec1TGo3GA7LCpzCgEi9wCaN4w3k26bbQdcMffkWYiOnAk9iTpS7yF9vv7CS5qOV
-         IQHD9TfS66Q5zsaFaOimgz2iMfAHC2Ipw39PzGSk09BYmTvEa0IrHy0XO5VlFuo3LvRE
-         3DWaxDxlKlF2vAi0Nqlc+flB7AExrN89i/0n9bZJ238DUZy7gZ3yrqHP2tQNj3gQu9If
-         C4rTpbxzN9ApJqZeOe/lyTFtSeeqa5qiJtDh/vAIft3MZUT63RSfScL7TlSD2ONPWCvI
-         J1Pg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZ6p7Hie"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-388b404ea89so105080a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:56:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783961429; x=1784566229; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aCrBFhBH4b55ElTrOxI8l+7LTfo9SGbV+OTj6Ct9UmY=;
-        b=b9XNzrbu5oM7fAcz/wCXSJxMRQqVJROXDEln4rrCupUOG8pYkIKfyjElLsQxa8NANJ
-         XpMiNbeBxIQ5iSWFKwsNY+IfWB4INz6rRGuhiDULOyCLqW7mm5P3qBzgIAgz1Kzd/yMj
-         +E/8fFNa4+fMNsbIgUPglJKjqGCnGedZj+BPBRwef3zpTaYg+/RJrm5T7XxKrzC1mgz5
-         y50RWYHITTfsxI7UbGL6xE/FRZnyqOI+eF+sNDHJFMJjSBJbKf5VXe9AWdK8bRzWc7aT
-         x3N4AwFWFTDl+K5+J8yu+2gynl6DcYtf+Bf8kSDj31+Eibb+rovjfasjADTs/CHAVc0b
-         uJvg==
+        d=gmail.com; s=20251104; t=1783961775; x=1784566575; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+wyTThpzWI663yfCX7yR0ohXV0bj+fwjL2+oCBrswHw=;
+        b=pZ6p7Hie+ZuMyCjYswdbNFYtHYwpTiPQJeBxQDgIy7EmtqA3YwrisiUmulxHWcgh7p
+         mSzANG/LXXobjGulyTi2kSjzBvp+JDDbq1wXipDZgrSJWUj1crZjkt2sxlTMK/zueLf7
+         5yPmfr75fWWklrWpWcDCcHrcGG157arPtZtcY2FARd/IaVTlv1jRZfHH+eqHXs12qk3G
+         A1xBemqKnmwrdUlPtwZs8SH4WDWAbkeFi8shvGawPWatfrORXtRU+Zq89GODYbZc/wYa
+         2Pe75HEhtpy9RKIUzBPRBHmH6bodAKIQlnOkVGuH4YWIkHJyDGjDsclp+F/R+JU8qqkD
+         UxpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783961429; x=1784566229;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aCrBFhBH4b55ElTrOxI8l+7LTfo9SGbV+OTj6Ct9UmY=;
-        b=gLh0P9pjQGdlwGSNchweTyPmwNb7hoQG7d47aepumfZaqxW070cFah4HYLwLFk843A
-         nGyGkNJNb1VVbBnaQ3W6bAmob4ofswfbeKh5edtTpO1UF7DF44BrJSZef70xeYsyu4Wn
-         RFWj5SMv17oZHhg5R9oWJt8dgfXi6+kptRwudc5dWURyJfZ8QMsR3XpLVG3mzIbOPr8d
-         kTXK79+2Rf+8oCh3BYBv4C9UnjXN9XLIMUPpxJX3l13i5Zawfvz6tmK45/p8kAYD5pkl
-         3he/YR7H2yDW4Gej7E8OzHssZ/LALj67hdMexRK9kknm0FBF0yzuTCLWtSSbxEtFimRl
-         RJvQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoL0/SHZG8f52s8+vjoq9AbQtWrRocBju6f30JwWuCJtJD8SWlhGw7jjRA22MJGFpMghnOnHKAOsQ6Bbkdoyyk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLywh1zJnLwKjN9F+Me2AVedimanqM5SgwbwEfXXM0ULUhMuKQ
-	rM5h8wuZYUGZxJGjM8PyLD91xCOlOktUeIdyZ6pyJzYXLMJa8+hXxocIFafZL6UGWfKKsd02v03
-	Tjhj1ux7dqSna3y0MH5incX9BX2n5XeoTKoiWHDwr
-X-Gm-Gg: AfdE7cnVC5sIDhpl7nhwQIXUZ7L15Jiule/OtYPlXhK3qoXAdVJGn245ZT/Q7qxRLeI
-	WRbNRdf3Owdfrd3pb09lJ/T4F1DKMTiHi+rwGuZO0XzJOb0RjbHnqFjeMgNSqHCOyPYNvAuNVIB
-	tczcZKjlWeRdbwxKseYgKKLHICltNVWUjUY7Kcd7IMWBlP314BoHFiw2N3viVgdNqJ2LmJQA967
-	TA3ScnF/ANSRVNFJkucbfaIyIFVT/dorrJ5I8zhhKGUUqrSvw8d7TDqhnD1L8/wBDl7wPhihIwC
-	L4RbtmHky7M4B50BbOpUHweuXsk=
-X-Received: by 2002:aa7:da44:0:b0:672:117e:55d4 with SMTP id
- 4fb4d7f45d1cf-69cceedafffmr35162a12.0.1783961428842; Mon, 13 Jul 2026
- 09:50:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783961775; x=1784566575;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=+wyTThpzWI663yfCX7yR0ohXV0bj+fwjL2+oCBrswHw=;
+        b=en6OHPqIj10zv3A3gfD9GDjgN+v25Yo0kLpsbD9NontTYczdSW6BWvvoQnp8JJhZmL
+         iyKQcmlT5qFXfj7fT/rQW0yIhnBlOaOgwhAlS8b+dtvA3QH05f3Kdg3dUbn6Pkc2ARg2
+         mmM6B+YXP37FvP4qkyFX743ZAM6kWaUq8x+knvFCBG1Rs/tTfHtknI7Ok4kFJYkM7BPE
+         L5O+j1ss2aLEXREiaBe0oYlOHnA0ALHaELOIVWLBOV0j76ubfb5WtfC2YYFSzH5PqC2r
+         giOawYypGoGvAIDozGOEp+/713nsLbzkQ9QHqoVE6jDZlEb4xPNS7l7uFCnBTI60R8E0
+         laXw==
+X-Forwarded-Encrypted: i=1; AHgh+Roi8oT6+z0ufmVk7oamWdjikQI6sneVskccFtngN/9wVv0EsiHb9GQxBYeCa3bRWDSV3+G3zFPYd0PHXMagQSw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZLZku7hrEmaODxrSd9qnW4qVd3DFBu0S55x5FuJ0S/lKTx5X3
+	ePlOpGUheWPjSshxfp0yYYEBnSAf7wRjk9Fw10JTTC5O6NcCmIMTrqHI
+X-Gm-Gg: AfdE7cncsCZIw4n9S4jWnihTpfJmo4GZopoEl8tvSrLrBgIO15pF8v0Wj8/6hc+14OE
+	cf2w3cvhpxRj90xcP4Sr10fdMxXvB6kOb2WIS/IhO8EUKlV5iz95d4zGbvkm/FVjkdP96g6bDkY
+	lCXtjN8MmWnwdbCJmR1YEqRe0b5BRO75sXVahURDEyGyg4+ZdSjpcssgNSEXPBpII/WLsDX9DyU
+	Eel6IT0GMouIC3fyNWwwgcGsNialLLTVl3sTGnTCGPAHQ0b5YEe6RAf1YZVpYkjz9zZv0nHL41q
+	lqUalqOg8oBO+6tbS54Hxly8aBCFWDDc/rl95HkQ1zglFVWuUfRBykjeFRxSo4eennNMpbPrLgA
+	OSvB+KaTHvY74pt30nmIr/tVy6c5I8Gzjtn+MpAvIy5EigeVxqXhwp9/dvcQ39LwwDNuZZJpXP3
+	Dzi7/oeXEi1uyNjt8JjEsNhLEHf8+uC4837E3Q6daoAMxHTnENLlwpQkU=
+X-Received: by 2002:a17:90b:57cb:b0:36b:769c:c037 with SMTP id 98e67ed59e1d1-38dc81978ecmr7351194a91.5.1783961775319;
+        Mon, 13 Jul 2026 09:56:15 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e1745a596sm180718a91.15.2026.07.13.09.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 09:56:14 -0700 (PDT)
+Date: Mon, 13 Jul 2026 09:56:12 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
+	dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+	haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org,
+	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, wei.liu@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v8 4/8] mshv: Use hmm_range_fault_unlocked_timeout() for
+ region faults
+Message-ID: <alUYrESVcHR_p-S_@skinsburskii>
+References: <178371866223.900500.12312667138651735591.stgit@skinsburskii>
+ <178371881034.900500.5214601525971121683.stgit@skinsburskii>
+ <20260710151216.0397a6f9ac5c7b4ccd274cc1@linux-foundation.org>
+ <alG1JwgUK44dCiN4@skinsburskii>
+ <20260710224606.69235ab5c49b5987fd33e924@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260612214512.464146-1-vipinsh@google.com> <ajLtfkuMP4DEGlqe@kernel.org>
- <20260617190754.GC2704872.vipinsh@google.com>
-In-Reply-To: <20260617190754.GC2704872.vipinsh@google.com>
-From: Vipin Sharma <vipinsh@google.com>
-Date: Mon, 13 Jul 2026 09:49:51 -0700
-X-Gm-Features: AVVi8Cel2bn_2UuHYJ25Jh3NaRKUpct5Z2YiVdgR0SBKqnQpE3MSXtvH7sX7PyY
-Message-ID: <CAHVum0dL+p-j1EwQf69p87MU1s8Er9RsOaMMbprFnmNeEdS6-g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] Make liveupdate selftests library
-To: Mike Rapoport <rppt@kernel.org>
-Cc: pasha.tatashin@soleen.com, pratyush@kernel.org, tarunsahu@google.com, 
-	skhawaja@google.com, shuah@kernel.org, dmatlack@google.com, 
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260710224606.69235ab5c49b5987fd33e924@linux-foundation.org>
 
-On Wed, Jun 17, 2026 at 12:08=E2=80=AFPM Vipin Sharma <vipinsh@google.com> =
-wrote:
->
-> On Wed, Jun 17, 2026 at 09:54:54PM +0300, Mike Rapoport wrote:
-> > Hi Vipin,
-> >
-> > On Fri, Jun 12, 2026 at 02:45:10PM -0700, Vipin Sharma wrote:
-> > > Hello,
-> > >
-> > > This is v3 series of refactoring liveupdate selftests as a library. I=
-t
-> > > exposes common liveupdate ioctls as a library which can be used by ot=
-her
-> > > selftests like VFIO and IOMMU.
-> >
-> > Let's revisit this after -rc1 is out.
-> > I don't think there would a need to change anything, it's just the matt=
-er
-> > of applying the patches to the right base :)
->
-> Sounds good, thank you!
-> >
-> > > Currently, there are no users of this change but it is being used in
-> > > VFIO and iommu liveupdate series.
-> >
+On Fri, Jul 10, 2026 at 10:46:06PM -0700, Andrew Morton wrote:
+> On Fri, 10 Jul 2026 20:14:47 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+> 
+> > > > +	mutex_lock(&region->mreg_mutex);
+> > > > +
+> > > > +	if (mmu_interval_read_retry(range.notifier, range.notifier_seq)) {
+> > > > +		mutex_unlock(&region->mreg_mutex);
+> > > > +		cond_resched();
+> > > > +		goto again;
+> > > > +	}
+> > > > +
+> > > 
+> > > If the calling process has realtime scheduling policy and either a)
+> > > we're uniprocessor or b) this process and the holder of
+> > > interval_sub->invalidate_seq are both pinned to the same CPU then
+> > > cond_resched() won't do anything, and this might be an infinite loop?
+> > 
+> > Yes, looks like it might.
+> > What can be done to prevent this?
+> 
+> Well the best way is remove the polling loop and use a proper sleep/wakeup
+> mechanism - mutex_lock()/prepare_to_wait()/etc.
+> 
+> If the polling loop is to be retained then maybe msleep(1) or
+> usleep_range()?
 
-(Resending below message because by mistake I sent it as HTML and it
-got rejected from the list)
+Well, running MSHV - or, I suppose, any other VM - on a uniprocessor host
+would not be very efficient.
 
-Hi Mike,
+I’m not sure whether this corner case needs to be handled explicitly.
+But even if it does, supporting or explicitly forbidding it would be a
+separate change. As Jason noted, this is not a regression introduced by
+this series.
 
-Let me know if you are still planning to take it as is or if you would
-like me to rebase on the latest liveupdate repo.
-
-Thanks
-Vipin
+Thanks,
+Stanislav
