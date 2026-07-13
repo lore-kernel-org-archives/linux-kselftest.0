@@ -1,132 +1,143 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD5C369D6E
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992753E170E
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783934909; cv=none; b=eVqO3ZPSQ/Jz0df1hyFtN6dMebF0bqhx6zjfXSgEOCuqT/JORj3c5RLviolj25bZpODzcYTGAtrKkzPSpkz6OVbk+t/y/vFaSRxMPksLKxfVSLpWTRYaOz4ah4dSRAl11k8BEpKW6n7UCFv6lFHNmoiMUFb/ekPs+7Bw6KXkj+8=
+	t=1783935260; cv=none; b=jX5h4rE1xFps0nW0/wYdY8eJP2uCcftjLgO4wypPVHgDk9zrpzLhPkFNnsYe+SJV7OrN2T1WG00jdyiVDasPaJpdNICtBEJtk41266hWnNoOSH5jPtnuyeoIa6Q1kpgtPWzh7mybhm4bCN/hkPPL77L90dp9CRtQLvBSzzhpusY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783934909; c=relaxed/simple;
-	bh=sDWk28xBuFZTTizpUURrHrIa51+ATw6mlf2LRdxFbyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pR1gFNUfwAiUBHnRKBSE6rAtT+D6JodzTf/pFckCQEgA35tIRgFi+I8zVeWmMMxGs5qwBmleodFAtIt5yV1uJ2A7aJYyLgw7gwIjExJ5utVhfRGoB8nNhQPG/9yXvHQ0qBzTPccZHY9GurrXQeUW+H0iztv5Z89oFHu73yzr4DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H4Z76j5D; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783935260; c=relaxed/simple;
+	bh=/T6nGTlY9/Sd8116vHsTUgpGQQf+hD3A6HYvzjdH4E0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZctQN1Ex/mLDe7e4+oSsbKNJ0bWMsPbN+TpZ9eJkVaCGpIl1a09PzeJSI6BO+DJKs4/fd5GFvpGn5qvGwtZHiMw19rABfh0i58w4KT0CW7WX8bAYGI1VIZ3pweZWFnuOUZaIYiXnXEdqbDHHpc8/KsODGThsTaEuuzMo+1BYGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=jK3b4xZu; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H4Z76j5D"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so1381442a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 02:28:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="jK3b4xZu"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b0f19bea2fso1528494e87.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 02:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783934907; x=1784539707; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4623BPbRgjIujmWqWQj6M4QygEbpjJiFDAO4rapy8N4=;
-        b=H4Z76j5DdsoiZc+sWXEadhMw8YRmgzEHculdvPcoN4TjsemeLPTrFzcxF9utO+ByFw
-         79VAWsrjth+iJUw3kQ0D8wVQjon8QsMCFWmEApk7h2ySROjoQQ2ACwb2dDcbNZJ1BIs2
-         Pi7cv5SCK5gqTWheJ4WnlKKVnQX32PSuvR9N/+hlOXPlkwUClKQwafwXptjhj2XNhCUu
-         Z1bvewx57aFY+7ow4KIVJV6skRCrLA54OZRwuBOy202xZaqEC2y5HtfaAYK5TaYySsZd
-         qtAO+xxqLK3RNcvfZGh/oXrU1t6uij18EKVQPod4HbZlqfTpxJD7jmBtfTRN6v8Mjnqv
-         Md0w==
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1783935255; x=1784540055; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=JO+WCMaAc1ZEkPF4Q2mmZ3+RjhHJAnIrQtg7/j50Rd8=;
+        b=jK3b4xZuqPyzHx3pRi1OBVkyNbBxF721SyuQkKQZ4lsI0ymUF0PC99M6/kVcYeyy5O
+         uf0mqWJ7g3pWcaW+S+cvotn/Ml94T4Ax8DxEfAdzv266YoT1pvKja3gjs3g7R6f3qJwi
+         5VSR/NfEODcueUMVixXaU0BGP7xc8Jrp/cOvN7ip1DIeqFCwWQK78If5FKAahUR2OZJ7
+         +TYmqJpthqralDYs2bSltZVWk85MQhu8WgjKDBaQH418HNtSIMwPghtnk3UOOZmLnme/
+         gs1ua3FWUCHTy8y0CPDBF9alsyHpcDcDf8ti/Q0Dkl9kQ25Ar+TF+qq0zhZL5/bIK9rg
+         GpCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783934907; x=1784539707;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=4623BPbRgjIujmWqWQj6M4QygEbpjJiFDAO4rapy8N4=;
-        b=o66nHWPPUm1N7yJW/Z8AvnDaJ6wvKljGqVBEVjvtPqhiRo0eJgz3WmGPthJQpUeXQU
-         OA/IcXumO0LdmzGJLzx0ReRV4iWw4js9k8ymLb9JoKwO4EMhGW3jJLrNM9tSjwldM3ne
-         1wlPihEoITgnwiOG4VOMKrUD/Lf4XJCYdaBiMc4LXDoBnlpGeeIC+6N+Ubdink9lCc7P
-         imOQXdCDQqPWbh8N2O/gKV8heRrTNOnnet6vhMQSk+69ARo8ucmt9Rh1LNo1kS4e7XFr
-         Cq+GqrrGPTL6aNm9jG76NA1lihix804s3NcJmAkZXB7HOTnLEtWeblEo2lCZCmaoZTe7
-         74fg==
-X-Forwarded-Encrypted: i=1; AHgh+RprmI37VUdY9oduqOn4wrAh3L+uzDGQnnweJuPXRUIVgIytq23lm4+WU7OTLFDB8dazS/6lfVyJjchRmOD15wE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxUYXmzVkD3MeRtk2HKPM5D7Y8S8Jk0TasibkB4rLaYK8NcDzN
-	yR0Xr9+TY1qsbyHwSPPuZiX3A1Yw+oMjLk66pW18pbg5/0PerR+wwRSe
-X-Gm-Gg: AfdE7cn/kMklkkW3xBgVCl3P8+zWqhc6Pe0E/EXDUkgIHSfvUJdWDWOneZIrqfi0oYy
-	G8BheuifLxHN976ZsJMH6kPSHKO/8eTkIFHIm3wOR0x7sX0j3boe1bX0C2TMSbvqHBFHy1uyqCG
-	R++rged7xZAHuU6cfpO0BqoPfhdveEWB8zG7Ldi8rlpmt3SY1NQk3C+o4FzY5ijbXdEpunuQn8D
-	M20avd7nStyUOJiXxldGN94pHu9vHu5rdgrXraW+ep1UoKdpz7KB9tC1HkEu6yV6WU2YMkMHYo2
-	59CfKjU3xmJ1gtMQ0IyPQXM8HArG+b0jg8eq3jH/vGLUYW8rY7jbk92mqhrjN8zXrmLPM4u0KRu
-	Jxivz9MDs5qhcR6cgjC3LdiVHAMfnKEyZx3TOETLuacjhKKAvaio64Em2n1hWVYtQxxLD4WplJq
-	dbD9uBDOeOxD4=
-X-Received: by 2002:a17:90b:1c91:b0:380:534f:58c2 with SMTP id 98e67ed59e1d1-38dc7b81c27mr7444738a91.30.1783934907345;
-        Mon, 13 Jul 2026 02:28:27 -0700 (PDT)
-Received: from lima-kernel ([104.28.160.216])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38a5564f58csm6293039a91.8.2026.07.13.02.28.25
+        d=1e100.net; s=20251104; t=1783935255; x=1784540055;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JO+WCMaAc1ZEkPF4Q2mmZ3+RjhHJAnIrQtg7/j50Rd8=;
+        b=djjGzPhb3NY2OArtYgszBSj+oJ6xJa0nHJPN/7l3zYoCz3LmSTJJohWF8JswAAA7y1
+         Nfc19chsY8LUVKheIx0kJQmvBt7c8GjaDFBA6zafNZ5/YdPd2dIVOUr4aIVFWCPlvzjM
+         I0l7B0maJmf3gryhD+30jE6kkVQf5m52A8By0U2SykAlqufybG4Dem0d+dRLCq7//7Nb
+         U1UZTKEmsvGu/xlN0+Jq+7ctL9Fs3hej8UC0WBi8QLYN/mZbPMDwL8d3tPiRAcm/LQT/
+         lFcqVeIxsaSNK/GiHstwrSLaSt/Q3C1vy/EIRamw+KkTVImOOktMBD+wrU5LRmugyCK/
+         L+lQ==
+X-Forwarded-Encrypted: i=1; AHgh+RowBjf/aAs+Y/u0rOJMVCe6bIOrg+jQ5Yi+lNhxXgku22lx+Ka2LOC4R4PdaKxOC2wn42ak28Noq+k9HIUDxL8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBuSPA62OlPb1AJb63gCfot5JakuzMpoXrfZXVRyLShv2Eh5Vq
+	pqEDjDL/wdB57kVDVw5jQa5q60AsYLzeymRpaXOS2cxnzx38B7rsNsgs6wxzHHN8jzY=
+X-Gm-Gg: AfdE7cmZufA+DQs+Kgr30XwSDUQgV1AIryXhnYEXBS0F7XghO2PK9JLGmRF/tpJwZS8
+	Rx10IFdoauClbPQt9qL/5L2waqN0TmGulwCv/MMD6dYRWiD7Eoe2aU4FPRm9vPyrux/aGV2rU1C
+	aedFPWL4IoGY4rbJeybqVgraYMpyE8JLtWdzSyRKxRkwwwOvUrrBKhyo49rpObTMkTFO+IdTSgN
+	CHXhNB3MUxs5XJIrUTU89r27wZiVbzSqEJWPAKp4A56OCAdI9PZr6RXTI2R68ruuRotpmKTaAYW
+	DAq09VflUCpEhx3WfAJ50CFZHhMZ0jkC8LU7tbCzUodAhBmc5ehlFxUnVfuU37Yg0E4Kaa66Rs5
+	XO30Tj2COIat79PoZL2gaQkOdbvhJGJ//1o1j2fCvmEvFcE7NQj+9v6ZZCh6LQRWcyNngKk188u
+	2dWjrJUrGnxMDwyOgXllSIlg==
+X-Received: by 2002:a05:6512:519:b0:5b0:1af0:2a2a with SMTP id 2adb3069b0e04-5b0236bd3a7mr1125113e87.61.1783935255328;
+        Mon, 13 Jul 2026 02:34:15 -0700 (PDT)
+Received: from localhost ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b01ca4a572sm2679126e87.2.2026.07.13.02.34.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 02:28:27 -0700 (PDT)
-From: Injae Ryou <injaeryou@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Injae Ryou <injaeryou@gmail.com>,
-	Brendan Jackman <jackmanb@google.com>
-Subject: [PATCH] selftests/mm: fix on-fault-limit false failure under sudo-rs
-Date: Mon, 13 Jul 2026 18:27:00 +0900
-Message-ID: <20260713092700.464376-1-injaeryou@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Mon, 13 Jul 2026 02:34:14 -0700 (PDT)
+Date: Mon, 13 Jul 2026 11:34:10 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: linux-rdma@vger.kernel.org, cgroups@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	jgg@ziepe.ca, leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, 
+	cmeiohas@nvidia.com, roman.gushchin@linux.dev, bvanassche@acm.org, 
+	zyjzyj2000@gmail.com, shuah@kernel.org, tj@kernel.org, hannes@cmpxchg.org, 
+	alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com, 
+	wenjia@linux.ibm.com
+Subject: Re: [PATCH rdma-next 08/13] RDMA/cgroup: Scope rdma cgroup device
+ visibility to the net namespace
+Message-ID: <alSxB0wziQnNuyfn@FV6GYCPJ69>
+References: <20260709095532.855647-1-jiri@resnulli.us>
+ <20260709095532.855647-9-jiri@resnulli.us>
+ <ak-Z071LrWhnI5lK@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ak-Z071LrWhnI5lK@localhost.localdomain>
 
-run_vmtests.sh runs on-fault-limit as the nobody user via
-"sudo -u nobody ./on-fault-limit", guarded by a check that nobody
-can access the binary ("sudo -u nobody ls ./on-fault-limit").
+Thu, Jul 09, 2026 at 03:04:23PM +0200, mkoutny@suse.com wrote:
+>Hi.
+>
+>On Thu, Jul 09, 2026 at 11:55:27AM +0200, Jiri Pirko <jiri@resnulli.us> wrote:
+>> index 993446ab66d0..4523c1884d67 100644
+>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>> @@ -2752,6 +2752,13 @@ RDMA
+>>  The "rdma" controller regulates the distribution and accounting of
+>>  RDMA resources.
+>>  
+>> +When RDMA devices are isolated per network namespace (exclusive mode),
+>> +device names are unique only within a network namespace. The device lines
+>> +below are therefore scoped to the reading or writing process's network
+>> +namespace: only devices accessible from that namespace are listed, and a
+>> +limit is applied to the device of that name in that namespace. Configure
+>> +limits from the same network namespace as the workloads.
+>
+>OK.
+>
+>> --- a/include/linux/cgroup_rdma.h
+>> +++ b/include/linux/cgroup_rdma.h
+>> @@ -7,6 +7,7 @@
+>>  #define _CGROUP_RDMA_H
+>>  
+>>  #include <linux/cgroup.h>
+>> +#include <net/net_namespace.h>
+>>  
+>>  enum rdmacg_resource_type {
+>>  	RDMACG_RESOURCE_HCA_HANDLE,
+>> @@ -34,6 +35,15 @@ struct rdmacg_device {
+>>  	struct list_head	dev_node;
+>>  	struct list_head	rpools;
+>>  	char			*name;
+>> +	/*
+>> +	 * Net namespace the device belongs to. @netns_shared mirrors
+>> +	 * ib_devices_shared_netns: when true the device is visible from every
+>> +	 * net namespace (shared mode); otherwise @net is the only namespace
+>> +	 * that may see and configure it. @netns_shared is updated when the
+>> +	 * sharing mode changes, so use {READ,WRITE}_ONCE() to access it.
+>> +	 */
+>> +	possible_net_t		net;
+>> +	bool			netns_shared;
+>
+>Any reason to store the netns_shared split per device? (IIUC, it's a
+>global parameter.)
 
-The guard resolves the relative path from the inherited working
-directory, which only requires search permission on the test
-directory itself. Classic sudo passes the relative path through to
-execve() the same way, so the two agree. However, sudo-rs (the
-default sudo implementation since Ubuntu 25.10) canonicalizes the
-command to an absolute path before executing it, which requires
-search permission on every ancestor directory. When the kernel tree
-lives under a private home directory (mode 0750, the Ubuntu default
-for new users since 21.04), the guard passes but the execution fails
-with "command not found", and the test is reported as a false FAIL:
+No reason, changed.
 
-  # running sudo -u nobody ./on-fault-limit
-  sudo: './on-fault-limit': command not found
-  # [FAIL]
+Thanks!
 
-Wrap the command in "sh -c" so that sudo only resolves the shell
-binary, and the relative path is resolved by nobody's shell from the
-inherited working directory, matching what the guard checks. This is
-the only "sudo -u nobody" invocation in the script; uid, cwd,
-rlimits (including RLIMIT_MEMLOCK, which this test exercises) and
-the exit status are unchanged through sh.
+>
+>Thanks,
+>Michal
 
-Verified on Ubuntu 26.04 (sudo-rs 0.2.13): the test now runs and
-passes instead of failing. Verified on Ubuntu 24.04 (sudo 1.9.15p5):
-behavior is unchanged.
-
-Fixes: 5d2146a3354f ("selftests/mm: skip mlock tests if nobody user can't read it")
-Cc: Brendan Jackman <jackmanb@google.com>
-Signed-off-by: Injae Ryou <injaeryou@gmail.com>
----
- tools/testing/selftests/mm/run_vmtests.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index a60b9f9f16e..687d115e3bd 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -302,7 +302,7 @@ CATEGORY="compaction" run_test ./compaction_test
- 
- if command -v sudo &> /dev/null && sudo -u nobody ls ./on-fault-limit >/dev/null;
- then
--	CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
-+	CATEGORY="mlock" run_test sudo -u nobody sh -c ./on-fault-limit
- else
- 	echo "# SKIP ./on-fault-limit"
- fi
--- 
-2.53.0
 
