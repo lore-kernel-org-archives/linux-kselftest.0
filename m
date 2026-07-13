@@ -1,135 +1,144 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012048.outbound.protection.outlook.com [40.93.195.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB70023A564;
-	Mon, 13 Jul 2026 01:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783906561; cv=fail; b=M1cnbWLNaVAPA73OvowS/9zImk2ikuw/94VEHDjvghzyvOyBaCUP4jtkHBHHbvt3ro5SC4jTLcF09i5+7VunLReWbP7+z1YBlNLAs66eVzPDoj9UoDIx3f+sN+2SAeYSlxbff9SNA7C06+yLwA3JduFhH3T+NNWKTeCdeRzU8sQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783906561; c=relaxed/simple;
-	bh=lP5HDYpxOdTCaP6yPxVOqcDS/dhpCEIsU53/R7VjWVA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ZQYTzO8jkFwcjcTIwVhvDv48xN+aSGwKLU+Sh4HUIQSWFoIMhIs8GuwBXMm3emovzbYrBePBjEMbLSWO5Nhthg+lBYS3e8AknI78VOgScSLxwAuJU6psJqocyCU/tmAPeKoVyHNWaLS9ivjxwPuKeQimJ+0jTqWkSdLrwgGdt+Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=V/ESUSAr; arc=fail smtp.client-ip=40.93.195.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3927B4502F
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 02:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783908058; cv=none; b=tyaSnB+h+W6Gz0vvkWDdTH9JX/9nXSoqLKlBwyAD+U8UnGRntwCR+CuNPAF5O4G5FFTVovHXVcl8XR5+UwkTwn0vtms5HhA10rf/HfFflr1SVdMUOV+6T2krHFiCUQUePoEgyxvqJJFLnN1J5mFZsyHGwbEVa7OrEhXEDwocaIU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783908058; c=relaxed/simple;
+	bh=NJvX4kCRFksJa0wb0RXVmH2j/5ZLTl9fmErLszuC8Ko=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=cbxGieKSpAfvokc5wIBECwHMpa+AKuhVb0GiIJcuNDXA48fJ8qFgRiKbWmMgLJ5GuDnTQfPhEjWaDdh+4CkfczvC2RSi2nhX6nMiurLNMnXNWJzocgfskJB7gu/cdShKl8VWcVJfjZQ+kv92hH0wBOtvxnQImgB/1QOLRxCnVNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KEQRsBy2; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="V/ESUSAr"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oO8MxAn5TK+2AE0DkQkULasWrh2EfHEGJeU0WOpkh5ALPaBJSHoBj1//blxtZv9kyicNQe3jj23n8eXhnxnVEyJb90YX7wLJj7YLBo0OBEjsWSQMY69YdymIIm5wIcwPzydVd9/vKrfNczQQ4nOQNXHZIZNIfeg2mR+qJQxyrqP6FmnsCSqLP8HW7nwxGnkAeW6ZoilFSqt9Jvm014U+y14+Wb+m/InKiCglO9w/rPGIZK+rBsE7cpiyyVcjn6zG+99KT+oo9ez57bzIWOJk2frl/uGTeV6EAtRlonRJsXzfEHQ7L3zRmIglnoCNc6N6FhRZSjwGC+aDK5kCLttGMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z+6tft/9e3XwymgV9dO/L+ZMECpCe0LuMjUJ83Wf9IM=;
- b=gD0cEE22MVhu0bo0d0b2eXWX3iRo71t06HFbM94QgoeIugARk+DHpF1B2q5tjXGmRTuMfis0givqEJWguRm2WjmBqt+uXkG5+MY+jvKrch+S+ohERhdOE6PIKnO1HTvkP4KufwOconQtzyERVX1H5aFSxOyDMmTnAINQPkxVGxhd40V5Fcb3JdWiRy5v/06DOtRJX3OJU7hxnTIW5T6E2wVjqHsAiwo4h4rVP0j4pgWHFJG7FEhb/HLX7ahZ6FdA40/3u7n4S3tU2rOM58OfbcKYiUsvaAFlltDHQ/rapG1cXffuMBobg1fNT0wU/+N5Bke2V6v873pLssXz06D+Zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z+6tft/9e3XwymgV9dO/L+ZMECpCe0LuMjUJ83Wf9IM=;
- b=V/ESUSAryFWRyrtvmvfM8feg6o7Oa5UTU5b6zXwIDWlN29aHnmCBNpMwmRWU8wlutvHA8Z81/5DvMts/qMbuCf/ubN2gfRii64aL9wqWNe/ecZudUk7IB/zqPJemycFevqlMPq6TjYvXDuFTw68TpPIuTwJUKz/kxa9vzFaVNYp9YwwWM5YI+40tzEvG0LhV+G0E3rAVFU9CuEkq0UoGc0jHKNfKAVnHjgfoleCXZ91x7/QOcCaT+wyfg05o+lnohTsXIpPQgJsfEcFCY1vVzX2HJRBdQKWr1TQfxds212u0IyyEk8RCrpYsJw3mrrJGV/woELpvkQPYn1fSDJedtw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com (2603:10b6:610:61::18)
- by SN7PR12MB7300.namprd12.prod.outlook.com (2603:10b6:806:298::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.22; Mon, 13 Jul
- 2026 01:35:56 +0000
-Received: from CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe]) by CH2PR12MB5001.namprd12.prod.outlook.com
- ([fe80::89e3:6df0:de90:8dfe%3]) with mapi id 15.21.0181.014; Mon, 13 Jul 2026
- 01:35:56 +0000
-Date: Mon, 13 Jul 2026 11:35:51 +1000
-From: Balbir Singh <balbirs@nvidia.com>
-To: Hongfu Li <lihongfu@kylinos.cn>
-Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org, 
-	david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, 
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	hongfu.li@linux.dev, SJ Park <sj@kernel.org>
-Subject: Re: [PATCH v2] selftests/mm: Fix memleak in migration benchmark
-Message-ID: <alRAtI7BfpK7Toy2@parvat>
-References: <20260709081843.1451202-1-lihongfu@kylinos.cn>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260709081843.1451202-1-lihongfu@kylinos.cn>
-X-ClientProxiedBy: MEWPR01CA0267.ausprd01.prod.outlook.com
- (2603:10c6:220:1ed::11) To CH2PR12MB5001.namprd12.prod.outlook.com
- (2603:10b6:610:61::18)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KEQRsBy2"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-385d2703b64so3674306a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 19:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783908055; x=1784512855; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/aKXi+914ETzc5OT00HoyBu/yEdiUI+Jo2Zkp+kvf+M=;
+        b=KEQRsBy2hgmfMDBWwEWlZEYvqz5sRlowjyLskqZzKT9ybGhGg2JXQ4AzbTc1oC6wqH
+         ZDvnBIFCe8NNl9usuBgNFM9zpqBRVXXUwdAb2plhq9oJvNSjb6LzWGanFQ1z8X+geowJ
+         B6jD/tiC8EFdLEQHrzRwndLZwrH0YmfOBylFp6DAmf4Rg5+2DTBwd5R2wDVOH4zc3J4/
+         EzZQfppUC6MufEBdbgxX0YNhhwtatfstl3uQnHy0tYj1d2DHpDNQLOxO+x6AKYXRNq6/
+         wlJcmQ4kTM+8Il2wyaHpZRVYFGmAfebb/JUhXErv+TZAEXSYaJd7qrPlbr/Pp6xLMBCf
+         p4JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783908055; x=1784512855;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/aKXi+914ETzc5OT00HoyBu/yEdiUI+Jo2Zkp+kvf+M=;
+        b=RJ/5Rgjbx77iVT5mnk6OdNZ3jBQNlM859uT4y4tRzSnNTftsXxfSdn7a+32lY+nnhz
+         sOq33Iofceah6UJRyqp+Ucyy25IxDgFNKTb5RC+HAkxAK4UYFbe/rv4TtoHsFg4eBeOe
+         854nfV97Zinj0HR1HmQQ6k10JRyZ7NWZi1bXQTtgwgj74TemH0KDY+R3dYJQNnG+RNxd
+         R6k7lRRDxRZUKIeCBqqN5ko09gVzj6xEp6XSvskw46Xbp19UuNAsj2bL6CeYUb+qqPRi
+         +uJGIoLrEL0Un2lc8RWI8Jqs/n53sldqzPBffkH6iH/hkUVVUp9iGmtjcC4R0dyQmTiA
+         GoQQ==
+X-Forwarded-Encrypted: i=1; AHgh+RroyzoRMgjk1tSZxrM56EOp7q+D9GC+dSO6RXi4UIcuImboSP3vjEilveGor2zNpacztRGEZSycc/yXCudjOu4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxew/DOIN2OMEiKqJi4ss0nxTCbbdzkM9niiKegrvZwN7VBvHK5
+	hc6s8VPNBrPR6XaV6yVgCW5xYSNGS6K76KSoPNN8MhMugtGV+KwRZmEnkKyAcRW9vactoOXxR01
+	d7w==
+X-Received: from pjvd13.prod.google.com ([2002:a17:90a:d98d:b0:38d:f086:96])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3901:b0:37f:d265:18d2
+ with SMTP id 98e67ed59e1d1-38dc81b0ec8mr5882908a91.7.1783908055110; Sun, 12
+ Jul 2026 19:00:55 -0700 (PDT)
+Date: Mon, 13 Jul 2026 02:00:53 +0000
+In-Reply-To: <20260710025144.2000000-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5001:EE_|SN7PR12MB7300:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7088d594-ad24-427a-cb2d-08dee07f159c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|56012099006|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	UzbOnOqg7JNMdeND5CQ/TjzA+IZos93OfMwU7S2c2BY4DdAmnaKvaqLEjSbyyxaWo++ocYMOYWIz2+psSoKR4rTZjO/8UKrU3dQiBNZXSa0mFFyZA8nXLrV2/AgOPpVPQIsFzhOpMODOEL+5qPvvtNscb6jE7zTbvmDaIRsRUAf79sfQKDyZQaQeWIqjs9hJRAaqtwS6aLDnOjOyjbmhRxKnohUcscL7s1fmGYi3O16p6fBxTLLUTxQRrm3DO+997ClajuspH9G1zlcGKhfq8K7jtdZs2wjRexbhm1ogVyFcz4seAVsynPiNodTrcNdsFNNRZqEmHuRFUiWAAREj3APm29fATtbnomz6Cvt12km3exGUGPPHWf/feoEDgU6wXoYdJ08JQ7DapUevKiOTTrfu0gHq0gi4NauwsIjIRL37u37I6eBDmOO9kKA0iX4hDK4VeDkH/tzBG7zU/thwbohS1778iDqJHMsB5Ilvv3c6dwARJWAdT3gsicshrm+HYqllwkqqvBjuLH8krtEpUBo37Fk3wLZ7E31++PxVFYw01gpN/6zKOSIlJa7f07vKd9g8+dPEtVRMbhooauj+oT6fLGj14GRrsxeARjqNrUFLmyurmp7fjpmjs06dmaMnNVnYotBetcgeYeX2MvAl1SHID+rVExJUzBRlxnLwaeg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB5001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3iP3xPdEZh5rNlGAhDt5PgsD766j64OCuoVL3/k1jDGav8YgLvQdOaqInnMZ?=
- =?us-ascii?Q?69QyIPFD73BMPDuLPKc7aORfBEF5Hgk19clP0e0zb77vhVwjLhbH2z1ji7fy?=
- =?us-ascii?Q?UGGdjMdRDKu+NjVLNOFE7036o3HjqK2eAJ0kanOpQej+oQyZAiwF8jafXR6A?=
- =?us-ascii?Q?V2syF1lI09+t79IcqY6lRxrw8+eC0/q/9Y90vjS2Ds2cOeO61QWzQCulLOo0?=
- =?us-ascii?Q?PfGlqoIspFb28snECCdMHSfLlkc25+n4OrLDT3+nJD0gBuEmFMd08CjvubZ0?=
- =?us-ascii?Q?jOV+AGzBy+M0vJUGg8yzr/5O51CcM5K5dv5EkYXzsgqgeI51u5C0fvs113FI?=
- =?us-ascii?Q?8ilSjLU3d4APGvA71mqVqJxLIEYB7WayzFNK6rvuyA1pIqg3TNmOyr2iUMxR?=
- =?us-ascii?Q?2vy0zcp2As8+cju6N1SpUla5qkNi69IbsGlylYfk7rQ8FGZ29uJCqUHNKQE8?=
- =?us-ascii?Q?1uOb7DQ1hlrSnCnpvru6kjNleX3pdOvfQX900+oL4s8oO6cyyN7eqGf261na?=
- =?us-ascii?Q?ph1K1wII6weJTCwnGcbVc8zqHHIFdqc7d5eBCgZuZqdlpYFeoxxaAaSA635a?=
- =?us-ascii?Q?HXiL72ACFDq9x1TmhT7pbfJlySNiipDafvB4Y+39JSoe017P+mazVExvsduk?=
- =?us-ascii?Q?sskyTEAKdpG3MusHyQivdMu95lv20nc3SP+bZTX2+KBfpNIwFrHwaUkMQY9l?=
- =?us-ascii?Q?T3jC6lth/kT0uVmSbKsWkaYt+/Q249LYGKoCeWGwI+vpUIrF2U3yQ38p6UBX?=
- =?us-ascii?Q?gl3p8QmPgvbdZH4GXuILuFX8EDdOEqFrHjBxgOLBO7Tv+SC+paG7Pd3XePIJ?=
- =?us-ascii?Q?JvdUlpa5w4YUyFJfC2Z762ulplj8mKKnKIJGexQwmt1j7uS4UfXyaPDmdGa5?=
- =?us-ascii?Q?iWqO+vfZoC/xyICUa5kkZCr5bcOH1iCjBHYWy8YCDSMVaPHtjSAFQz6FwVWm?=
- =?us-ascii?Q?ZMT3pY81TuNWbYjLu7bSYKG/PoygRgASB3agre08R3y5wVSxM+skuLmmfYlP?=
- =?us-ascii?Q?u8uCV/fK1L1/inuSCMNV8fFj8tluV9MYFb1JTFDweQwhRUATkTY9cblxfZd+?=
- =?us-ascii?Q?ownGkOnlyusLOnaxsw5DHjg/noTNg9Y+kt8kFtu/v3Ng0tgV3V4/m6vVLrAD?=
- =?us-ascii?Q?yyOEZSGAOixXnX9J0aPmm5nYXOq6x4rhED0M5diwjM91Lx7/T9Fopbpn57dT?=
- =?us-ascii?Q?shVO30syVIBorFKxCokYFCrzuW5wjmUGFEKwu1xbCtDc4w7qUIZJUo/taZbB?=
- =?us-ascii?Q?5CP001dlizdCvHGOz7cWFvuGohzpvxqOSozVvI0yR5HoHwiSgjKG2cNVWLHT?=
- =?us-ascii?Q?l7DahULc1BbJsnY925K7ofht0BKuRAzbArNKmG/q7AMKOg08yAtJYBpRze2Z?=
- =?us-ascii?Q?jpt1VFdBP9LFkvAFnlwGt4BTbqPROIqVabbShup3kT7fqvWdS4RxGWJrKuBf?=
- =?us-ascii?Q?fcBrftQ8jCjB+fQ7HdqMAURjQ9bM6MoMpt+VeTZ0OIa1c8v1dFz10iz5rDUn?=
- =?us-ascii?Q?eubeKW+5hyBsn6kaLvs94M/W5U4V0Uz6sc3wr8mOfPm50HfMxG2mRcnpXhz8?=
- =?us-ascii?Q?TJ2ii0XwfFvgcfMX+1WDTNwWSdT/eMYx3AXFzba8VmBSEaIpzoAD6/fZE/+4?=
- =?us-ascii?Q?BONIyHIBI1PjPyliR1ZdmsowdjvrWE+WhTiknERDP8EJO8SCh4/EItGjM0Ah?=
- =?us-ascii?Q?GbKUzMI0iR7ZovF7hNOKJlItKj+It4Q6FIUJ9EILcY1a1bNb?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7088d594-ad24-427a-cb2d-08dee07f159c
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5001.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 01:35:56.2923
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RB7verAbpHGStHJWmnBL8VZ6R6kwN+axHTE6mcpMCpgCHCNH98Yey4DHaz5mBcvuA+oj4JS6MGTN5Zvo31ZTXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7300
+Mime-Version: 1.0
+References: <20260710025144.2000000-1-wakel@google.com>
+X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
+Message-ID: <20260713020053.3897259-1-wakel@google.com>
+Subject: [PATCH v2] selftests: timers: Make sleep time in raw_skew configurable
+From: Wake Liu <wakel@google.com>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, John Stultz <jstultz@google.com>, Shuah Khan <shuah@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 09, 2026 at 04:18:43PM +0800, Hongfu Li wrote:
-> Several early return paths in run_migration_benchmark() skip
-> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
-> label.
-> 
-> Fixes: 271a7b2e3c13 ("selftests/mm/hmm-tests: new throughput tests including THP")
-> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
-> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: SJ Park <sj@kernel.org>
-> ---
+The raw_skew test currently sleeps for 120 seconds to estimate clock
+drift. This is a very long time for a single test, and can cause
+timeouts in automated test suites or CI systems.
 
-Thanks!
+Allow overriding the sleep time via a command line argument,
+so it can be adjusted if needed in different environments, while
+keeping the default at 120 seconds to preserve original behavior.
 
-Acked-by: Balbir Singh <balbirs@nvidia.com>
+Also add -h/--help support to document this option.
+
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/timers/raw_skew.c | 24 +++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index a7bae7d80916..5fff3eaf1307 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -27,6 +27,7 @@
+ #include <time.h>
+ #include <include/vdso/time64.h>
+ #include "kselftest.h"
++#include <string.h>
+ 
+ #define shift_right(x, s) ({		\
+ 	__typeof__(x) __x = (x);	\
+@@ -87,11 +88,30 @@ void get_monotonic_and_raw(struct timespec *mon, struct timespec *raw)
+ 	}
+ }
+ 
++static void usage(char *argv0)
++{
++	printf("Usage: %s [sleep_secs]\n", argv0);
++	printf("  sleep_secs: time to sleep in seconds to estimate clock drift (default: 120s)\n");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	struct timespec mon, raw, start, end;
+ 	long long delta1, delta2, interval, eppm, ppm;
+ 	struct timex tx1, tx2;
++	int sleep_sec = 120;
++
++	if (argc > 1) {
++		if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
++			usage(argv[0]);
++			ksft_exit_pass();
++		}
++		sleep_sec = atoi(argv[1]);
++		if (sleep_sec <= 0) {
++			printf("Invalid sleep time, using default 120s\n");
++			sleep_sec = 120;
++		}
++	}
+ 
+ 	setbuf(stdout, NULL);
+ 
+@@ -109,9 +129,9 @@ int main(int argc, char **argv)
+ 	if (tx1.offset)
+ 		printf("WARNING: ADJ_OFFSET in progress, this will cause inaccurate results\n");
+ 
+-	printf("Estimating clock drift: ");
++	printf("Estimating clock drift (%ds): ", sleep_sec);
+ 	fflush(stdout);
+-	sleep(120);
++	sleep(sleep_sec);
+ 
+ 	get_monotonic_and_raw(&mon, &raw);
+ 	end = mon;
+-- 
+2.55.0.795.g602f6c329a-goog
+
