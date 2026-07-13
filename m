@@ -1,190 +1,241 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC4E7262B;
-	Mon, 13 Jul 2026 02:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F743164D8
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 03:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783908989; cv=none; b=jWSxvvr7p2MIkFBo3AmyRSsxkOhn/9s/zJVJrmKS4JzXEfrqvSvIByPuXjgCvA+6M3o0CLkNrWTkGnwajSAJsgRZsgjhkZzskhoraO7MttyVqm5hB6jsYbt2mssV487GpwHB+bzsheulnGMue38L5DcBLDloer+fXodN/PEqnqw=
+	t=1783913374; cv=none; b=ZJDJmawpPxzmd+73CHQVukczLK59jXO5CIeLu6FF26hu5+YVXUz+aULAyffrmCpEQqEmZxsbMD4qKR/e8YX/a0E86Y6OQ/VIaBmoVk6IOgNpr9RjFT7zmcG6FQpjcSnX0tazhw/UEuJhHXjQscuej8KsjDvKTILl08JLxXq5s3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783908989; c=relaxed/simple;
-	bh=dGF7xPfKvWbgXDdOai1l5M80C/P3hvIHfMKdaVHUE6c=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=NNQjgslskxFOKFzRQwB5iQ1WNp1JyueAdVAsgmnfTif16yIi+u65Unkvj4ldmAqPC0IhkNaHyXFqEpmbrtQch4ktrPm77zKrRbCP2wFENE/9H/ZRz/Wp0xs6aH5bVxNObCR2+gR+ng2CUA0oEAQZynQ/odfO3tZ+R2DK/odImbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jR3FcJwl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783913374; c=relaxed/simple;
+	bh=yPcb2yhm4K2GOkEJfjvSUv790XphbvJ6WzOdoBRLa/g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=IVPntJUKpn28y6Go43Tf9payJzDedbcVM0cLGl2Rsds8khlqVCieljf6NJ9x6Q5bBsngsNkGLRCU8N8alog8IQNyq0WhXbUIFKiMLFHsChJwqV1uRba3LpK1ATBb2C2Zsp9Mq6OKj3EuHp3KFRw+LbPgw9ZtY3goKbPzghJB2gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abWHddLW; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jR3FcJwl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F3D1F000E9;
-	Mon, 13 Jul 2026 02:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783908987;
-	bh=br9FhVYJuPRVoM9lVCAAChWOr0wLAcBU1znUuGfC0yc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=jR3FcJwlDRti3QVIqRaiPv4Zm+2+TGc1dcjjVxG/8zGXzm0KoYX90rnA4ZmX2GyEn
-	 adYWCj22e+XxSrBbiZlHg+V38A5Zbj3u3MW8oPoR7uXoO57O1UxHdc8j+y8a1/NCbP
-	 RzqvCKk7nyX3XMBMnjc8rrd9+YXJxju7a0C/HP4yYBSYOPxg5gI1BdfDONQsLvTplu
-	 +1hIfghtwvt7gpOMqS1RVUknFeYTcVKOJfxXasS9iC/lrFhKL0jqxIB4ikSatdxpuT
-	 QaGjuZAEQVwpOWv0EeqLd32dl6VKTHAtkdbV+vFpXLgPM5mhd4eMpc3KZkou5GTwGC
-	 QDIoT+tjgUDfA==
-Date: Mon, 13 Jul 2026 11:16:23 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 4/5] tracing/probes: Extend max length of argument
- string
-Message-Id: <20260713111623.bae8f26476740a0467b03521@kernel.org>
-In-Reply-To: <178386880215.3174487.982264935084717241.stgit@devnote2>
-References: <178386876526.3174487.5142283230157728964.stgit@devnote2>
-	<178386880215.3174487.982264935084717241.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abWHddLW"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cca0c5799eso26856535ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 20:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783913370; x=1784518170; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=N5LwUqjbpPHissd18BCl9UcC6YRNwOX+ZmfwwTb7nug=;
+        b=abWHddLW8gruXrxJtTArQg2G0cJAjmJcTESDjp943KYljubchkU1a9PALBxN50vj69
+         N0u6t3ou/ROShlxyary2jM4S1K9/pdHiVenqpRg52bMx8xlOrT81j2nJNKSLUjH2sekN
+         BMiYLwwJq4Ux45SMyTzvy//pobtLpND14rQmgfKMZZIQ4Y8c4IcVhyo2JjYsP0DJtMHC
+         3lLYqfHAcqtUgSW5XjqGyxGuk6VYXoSyROf7CUduOTo7lt9oUNrQhP4UEkdl7dVnbPrg
+         OZPzuMAqMfcoFyV06J4RaHbb/Ne93xqUJ7hEj0q2+YBzZfMC1ZGTJvxyAce7kCfEQ7qP
+         aEIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783913370; x=1784518170;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N5LwUqjbpPHissd18BCl9UcC6YRNwOX+ZmfwwTb7nug=;
+        b=VGuogEMxZZo6ugkMtP0/z6byx6eMH/TUdwmRx2ZcgTYVxSnjAVQiApZbrwU8nz39wk
+         OXvXWjPBYIxIjwI6a3xSiukKtMtyevDKzKi2UmPMUzy8C9YgZux6y+7LkA44y4Z1azZa
+         QDrNiBRBpj5OQoVtgaLGGOe6x36eO2NJJxZjUKrQE2A2n2M/0l1DNqUn/8/rx1XFAFpH
+         N9u8VWghTQbeNxkKEWPDirbBDSeqjPmOupVDiVRG4rc7oxUkE4LPaaqIlvZyJRTgS0hW
+         R2OV9EUcGjrXeVjsPwTWSB37sW3mcvbFB05MbJwf9B1jK1koHKa72CxnAh0egVbBd63G
+         3IBQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro94P/viRRiuUmDtd0lsRF2xEMPJ5FqE++N2SG8zuhXVY73AXycJGspSSo/c2TocgEDzEH22DG/OFd7IPUQbsU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5mX+zid5WBMr3z56f3WkxUY7gDNkbH95nHwMf+y8EpUdRBfK2
+	UISbRIcjpoLik6iRbv17WA/DnJE4gbMTOqT/I4xidrlPCsIfBn5L9Xx7
+X-Gm-Gg: AfdE7clpYXWhs2+GTDRPrXft9Tf0pQZYjlGbDY6W+TGiGcd97/UK0gr92MNYEZomsD5
+	kyNfKhf61dY/TvsL/eekjLrwzu55nh5zpHBzQxANvSPo4MChN3ngkXcq4toGSXSul+Gj9x5IUip
+	IN0iPRFn8FSulkcxec0JATiBWTubHUxcL3nizH2dIbkGH35dZ3z9X7k4vJXeZVcesKyefpT2wB4
+	dWoWfbbAfjy5KqU/fONxpjYjatEXgZmFkx9Ux3Yv9nDUiB666Q01Vs4YCmsWdBEo1IWFLuKgCN4
+	gMbhF8oJ3xQJzK/XiE9EsdAVmvQgGE1+MFBFvIfWNafaGl7w8r8+7F6hHRQUh8kdEPywR7nYUeq
+	QP+pRY5PXRQWqd8CSU/GkYM4XN03Q2F0crEpVq+efrJE84rPC4RhJlcvCq8i1hJOahDmQULRmcs
+	Zkj9idVAVNy8YdUsmu7JjPujFs
+X-Received: by 2002:a05:6a21:4d8f:b0:3c0:9c1a:894f with SMTP id adf61e73a8af0-3c110b33403mr8114739637.71.1783913370254;
+        Sun, 12 Jul 2026 20:29:30 -0700 (PDT)
+Received: from localhost ([98.35.8.117])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b84d6ce15sm26187778c88.5.2026.07.12.20.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jul 2026 20:29:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 12 Jul 2026 20:29:27 -0700
+Message-Id: <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Shuah
+ Khan" <shuah@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan
+ Kara" <jack@suse.cz>, "Jonathan Corbet" <corbet@lwn.net>, "Jann Horn"
+ <jannh@google.com>, "John Ericson" <mail@johnericson.me>,
+ <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Farid Zakaria"
+ <farid.m.zakaria@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
+ <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
+In-Reply-To: <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
 
-On Mon, 13 Jul 2026 00:06:42 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Sun Jul 12, 2026 at 5:32 AM PDT, Christian Brauner wrote:
+>> This is a continuation of Christian's bpf-backed binfmt_misc POC [1], wh=
+ich he offered
+>> to hand off to me. I am carrying it forward. The kernel design is his an=
+d is
+>> unchanged. This series rebases it onto his binfmt_misc locking/cleanup s=
+eries [2]
+>> and adds selftests (+ fixed from the one's shared), and therefore does
+>> not apply to mainline alone.
+>>=20
+>> As for motivation for this whole change, Christian did a great VL;MR;
+>> write-up [1].
+>>=20
+>> TL;DR: binfmt_misc can match a binary and hand it to a fixed interpreter=
+,
+>> but it can't match programmatically or compute the interpreter per binar=
+y.
+>> The Nix community would love to support relocatable binaries, where the
+>> correct loader can only be found relative to the binary itself.
+>> This adds a 'B' handler type: a binfmt_misc_ops struct_ops program that
+>> inspects the binary and picks the interpreter with one new kfunc,
+>> bpf_binprm_set_interp().
+>>=20
+>>   bpftool struct_ops register nix_origin.bpf.o /sys/fs/bpf
+>>   echo ':nix-origin:B:nix_origin::::' > /proc/sys/fs/binfmt_misc/registe=
+r
+>
+> Thanks! So I've spent some more time working on this because I had some
+> future ideas that I needed to make sure could be accomodated by this
+> (currently on vacation but hey...). So the version I have givex this a
+> better design and has future extensibility in mind:
+>
 
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> To support BTF argument parsing (such as accessing fields within nested
-> structures via typecasting), the maximum argument string length needs
-> to be extended. Extend MAX_ARGSTR_LEN from 63 to 256.
-> 
-> Since MAX_ARGSTR_LEN was previously reused to format command heads in
-> trace_*probe_match_command_head() functions, introduce a dedicated
-> MAX_COMMON_HEAD_LEN (63) macro for matching command heads and switch
-> these functions to use the new macro.
-> 
-> Assisted-by: Antigravity:gemini-3.5-flash
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I also enjoy hacking over my vacation. I'm often told to take break but
+some of the best ideas come when on vacation :)
 
-Sashiko asked to extend other macros, 
-> Does this code also need to increase MAX_BTF_ARGS_LEN and MAX_DENTRY_ARGS_LEN?
+> - The single sleepable load op is split into two ops:
+>
+>       struct binfmt_misc_ops {
+>       	bool (*match)(struct linux_binprm *bprm);
+>       	int (*load)(struct linux_binprm *bprm);
+>       	char name[BINFMT_MISC_OPS_NAME_MAX];
+>       };
+>
+>   The non-sleepable match program runs from the RCU entry lookup
+>   walk itself, exactly like magic and extension matching: same
+>   registration order, same first-match-wins semantics, and it can
+>   only rely on the prefetched bprm->buf. It must be free of side
+>   effects since the walk may be restarted.
+>
 
-I don't agree this. MAX_BTF_ARGS_LEN is only for expanding "$args" into
-each parameter names. The other arguments are kept on the same memory.
+Is relying on brpm->buf enough?
+Right now that's only 256 bytes I think, which is not enough to read
+segments we might care about. That worked fine when it was just a magic
+number but the idea with the eBPF program is to make decisions based on
+more data.
 
-MAX_DENTRY_ARGS_LEN is already 256, so I think if that is too long,
-it should be rejected.
-(But MAX_ARGSTR_LEN should be 255.)
+In the selftest I provided, the `PT_INTERP` segment is already at file
+offset 0x318 (792). I was imaginging NixOS having to support
+`PT_INTERP_NIX` in order for the produced binaries to be backwards
+compatible with older kernels.
 
-BTW, both macro names are a bit complicated because those are just
-buffer size, not max length of something.
-
-Thank you,
-
-> ---
->  kernel/trace/trace_fprobe.c                        |    2 +-
->  kernel/trace/trace_kprobe.c                        |    2 +-
->  kernel/trace/trace_probe.h                         |    3 ++-
->  kernel/trace/trace_uprobe.c                        |    2 +-
->  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    2 +-
->  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |    2 +-
->  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    2 +-
->  7 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> index 536781cd4c47..5638a90e61cc 100644
-> --- a/kernel/trace/trace_fprobe.c
-> +++ b/kernel/trace/trace_fprobe.c
-> @@ -238,7 +238,7 @@ static bool trace_fprobe_is_busy(struct dyn_event *ev)
->  static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
->  					    int argc, const char **argv)
->  {
-> -	char buf[MAX_ARGSTR_LEN + 1];
-> +	char buf[MAX_COMMON_HEAD_LEN + 1];
->  
->  	if (!argc)
->  		return true;
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index cfa807d8e760..cc24e992732c 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -149,7 +149,7 @@ static bool trace_kprobe_is_busy(struct dyn_event *ev)
->  static bool trace_kprobe_match_command_head(struct trace_kprobe *tk,
->  					    int argc, const char **argv)
->  {
-> -	char buf[MAX_ARGSTR_LEN + 1];
-> +	char buf[MAX_COMMON_HEAD_LEN + 1];
->  
->  	if (!argc)
->  		return true;
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index e64e323244a5..e6aee800a7d9 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -32,7 +32,8 @@
->  #include "trace_output.h"
->  
->  #define MAX_TRACE_ARGS		128
-> -#define MAX_ARGSTR_LEN		63
-> +#define MAX_ARGSTR_LEN		256
-> +#define MAX_COMMON_HEAD_LEN	63
->  #define MAX_ARRAY_LEN		64
->  #define MAX_ARG_NAME_LEN	32
->  #define MAX_BTF_ARGS_LEN	128
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index b2e264a4b96c..67bd8fd91e3e 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -281,7 +281,7 @@ static bool trace_uprobe_is_busy(struct dyn_event *ev)
->  static bool trace_uprobe_match_command_head(struct trace_uprobe *tu,
->  					    int argc, const char **argv)
->  {
-> -	char buf[MAX_ARGSTR_LEN + 1];
-> +	char buf[MAX_COMMON_HEAD_LEN + 1];
->  	int len;
->  
->  	if (!argc)
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-> index e9d7e6919c7f..984ab94df213 100644
-> --- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-> @@ -75,7 +75,7 @@ check_error 'f vfs_read ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_L
->  check_error 'f vfs_read ^=@11'			# NO_ARG_NAME
->  check_error 'f vfs_read ^var.1=@11'		# BAD_ARG_NAME
->  check_error 'f vfs_read var1=@11 ^var1=@12'	# USED_ARG_NAME
-> -check_error 'f vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
-> +check_error 'f vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
->  check_error 'f vfs_read arg1=^'			# NO_ARG_BODY
->  
->  
-> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
-> index ffe8ffef4027..2d0905b2c8b7 100644
-> --- a/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
-> @@ -61,7 +61,7 @@ check_error 't kfree ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_LOG
->  check_error 't kfree ^=@11'			# NO_ARG_NAME
->  check_error 't kfree ^var.1=@11'		# BAD_ARG_NAME
->  check_error 't kfree var1=@11 ^var1=@12'	# USED_ARG_NAME
-> -check_error 't kfree ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
-> +check_error 't kfree ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
->  check_error 't kfree arg1=^'			# NO_ARG_BODY
->  
->  
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> index 21ce8414459f..d28f63b7e8a9 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-> @@ -71,7 +71,7 @@ check_error 'p vfs_read ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_L
->  check_error 'p vfs_read ^=@11'			# NO_ARG_NAME
->  check_error 'p vfs_read ^var.1=@11'		# BAD_ARG_NAME
->  check_error 'p vfs_read var1=@11 ^var1=@12'	# USED_ARG_NAME
-> -check_error 'p vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
-> +check_error 'p vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
->  check_error 'p vfs_read arg1=^'			# NO_ARG_BODY
->  
->  # instruction boundary check is valid on x86 (at this moment)
-> 
+The other idea would be to make the `match()` broad and select
+everything but then nearly all ELF64 binaries would match and then pay
+the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
+make multiple BPF binfmt programs less useful.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>   The sleepable load program runs once the walk has committed to the
+>   entry and does the file reading and the interpreter selection. Both
+>   ops are mandatory, the struct_ops plumbing enforces the sleepability
+>   of each, and since bpf_binprm_set_interp() is KF_SLEEPABLE a match
+>   program cannot select an interpreter by construction.
+>
+> - A match is a commitment. A failing load program fails the exec instead
+>   of falling through to later entries. -ENOEXEC keeps its usual meaning
+>   and hands the binary to the remaining binary formats, for a handler
+>   that discovers it cannot serve the binary after all.
+>
+>   This kills the part of v1 I disliked the most: the skip cursor and the
+>   leave-and-rescan loop in load_misc_binary() are gone. The walk is
+>   never left and re-entered, and 'B' entries need no special semantics
+>   against concurrent (un)registration anymore.
+>
+>   Your v2 changelog note about keeping the bpf retry loop in the
+>   __free() style is moot as a consequence. The loop no longer exists.
+>
+> - The load return convention flipped: 0 now means success after the
+>   program called bpf_binprm_set_interp(). Returning 0 without having
+>   selected an interpreter or returning a positive value is treated as
+>   -ENOEXEC, other negative errnos fail the exec.
+>
+>   So the "return bpf_binprm_set_interp(...) ?: 1" idiom from the v1-era
+>   programs becomes plain "return bpf_binprm_set_interp(...)".
+>
+> - The handler name moved from the offset field to the interpreter field
+>   that field consistently names whoever supplies the interpreter, a path
+>   for static entries, a handler for 'B' entries. Offset, magic, and mask
+>   must be empty:
+>
+> 	echo ':nix-origin:B::::nix_origin:' > register
+>
+> - 'C' is allowed now, v1 rejected it. It behaves exactly as for a static
+>    entry. The setuid transition stays gated by vfsuid_has_mapping() in
+>    the caller's user namespace. Which makes 'B' handlers usable for a
+>    per-binary loader over setuid binaries. 'F' stays rejected as there
+>    is no fixed interpreter to pre-open (I have other ideas how we'll do
+>    something like it later.).
+>
+> Nothing changed in the exec patch, the fs kfuncs patch, the kfunc
+> itself, or the registry/namespacing model.
+>
+> I can send v3 in a bit if that's ok.
+
+I don't mind at all you sending v3 and in fact I've been enjoying your
+involvement. I didn't know what to expect when I offered this idea up to
+the community.=20
+
+I'm happy to keep co-developing this with you within a design you feel
+acceptable with. Please let me know how I can remain engaged and
+helpful.
+
+One last thing I was thinking about is that we will also need to support
+$ORIGIN in the shebang path, however I just tested it and this current broa=
+d
+BPF solution can largely handle it [1], with a small wrinkle.
+
+  $ printf '#!$ORIGIN/interp\n' > /opt/app/greet
+  $ cp ./interp /opt/app/interp     # any interpreter/loader
+  $ chmod +x /opt/app/greet /opt/app/interp
+
+  # stock kernel: binfmt_script opens the literal "$ORIGIN/interp"
+  $ /opt/app/greet
+  bash: /opt/app/greet: $ORIGIN/interp: bad interpreter: No such file or di=
+rectory
+
+  # with the handler registered, $ORIGIN resolves to the script's dir
+  $ bpftool struct_ops register shebang_origin.bpf.o /sys/fs/bpf
+  $ echo ':shebang-origin:B:shebang_origin::::' > /proc/sys/fs/binfmt_misc/=
+register
+  $ /opt/app/greet
+  <runs /opt/app/interp, the loader found next to the script>
+
+The wrinkle is that it can't express today is the single optional argument.
+(i.e. `#!interp arg" -> argv[1]=3Darg`). We might ned a way to express
+that in the load.
+
+Anywyas, thanks again. All your ideas made sense modulo I'm unsure if
+`bprm->buf` is enough to make a decision...
+
+[1] https://gist.github.com/fzakaria/2e1e1c44fa488a951674f8761c672366
+
