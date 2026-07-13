@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A323F076E;
-	Mon, 13 Jul 2026 11:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB163EEAEF;
+	Mon, 13 Jul 2026 11:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783943332; cv=none; b=c9n+dK3LXooV4GPjp+KfzVL/ZGcKnVKskddXDjVX5KUc884fylNbLUYA9WrN8a1GgxbBbwa8qq4+b5Lw/NfsM2BMwoAIFDAy3VH25C55OK+GF+590TgsShqHBgH06xXFl0NHYrltIaDgSjlSZsGvyQlMYiHyGya0jcYb/rcs8uA=
+	t=1783943338; cv=none; b=sLTJELz4o88RRCXyvvRMFuZhyMY6tl1d9GH46x93baiBvwy1j/DCjBzTw/Q0Ug4Ih+8950qCVnzzdhND/TcUXw1Q4bfN6If2gLKoAWcLm2SETz+pAJQbCFm8qjQcufhYYtrrEAI943MkO48N/oZpE5I7l6KNagLYB4CBDRTDWiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783943332; c=relaxed/simple;
-	bh=k5syoIA9ysnV4wrEyuCwDG5+YSh/+ARvdAvSvQ1nHGE=;
+	s=arc-20240116; t=1783943338; c=relaxed/simple;
+	bh=3eQR/Kd3kFCe8YoRP/xKeQGlrrGIS3gsS7iBDPNwGWE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Lab/YRGi1TVRRQPt4rF3mTjMmQHwlZJ0cFD6qYNSresgiTRydASR6Px1VIeG9dFwDX/2GfobwKKI1c0t3AqRwbvfVAxB7s1GCv6tOhg09utvlG4eUliNZ2v5kBZYLyfedwmb17ts8ABaI/+3+/Rr2GQAGuzC8WPSHglu/OUNIzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=b8FGLVCJ; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=hItxZWoQVn7WjzpuIo3qkiXM9CUjscfztnOxdA/ds9pzTrEN5grGVK7cvlUOtCamR+Gwv+DTIu4FOcX8tj52bXnKzSCLXxBkOIPSjwQO3BtGyiaTJFdxhF/LNcRn58gosPqbnrlRFRmF25CWvaCxudxXi+Gu8ahkQRbmToLXofo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=O4dNFxzZ; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="b8FGLVCJ"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="O4dNFxzZ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=XFSQUx8TCZyAA/EWJdMDpeVC+kFXZt9qXST9blJikws=; b=b8FGLVCJ2eKvCoKVZHHQKvWQHF
-	MVLYqoWxGVp02+HcmJfS3idd/2A0b3yUUxp0ooxKtpVaQRe4nCXBBBFeQHuWUVqRaMYEvOizMDxG9
-	2J+USEj/5SZNlDUZAfYY44XDdPOHEV/U38/WfYN9xVCpRJgl8BQP2RmdNqt3YohAS/hBSy5YwSMl2
-	zKzQtn2VLd+RWtzTDKl1ITOqUUPmEL87SuUwMhrB0XKcixNSp6Bc7OBDDnEyt5YAXcy8DCimL9NlB
-	VnCxT8dNVkenBHebr5dLp7nvTNFJxt8NO/qAdVVp3oP8bUknz7ACwL7jmIJc+VN1rI2vquQJ93ihb
-	Y6QC6xaw==;
+	bh=J+3Dbo69/AiAclmmo0zFVcKt382p+VuW4vPQJlc8PVc=; b=O4dNFxzZco/bBX6I7886Md286z
+	BQdURH8Wz2iXtTqc7u1PFtdADvAk6Pv75xV0JNWaucThbzig+4x3+wWCLuWGzwwLJVFMeG6dcl1yw
+	qurQvJggsW8mwlI0sToNfH/sCmpveQGapeCYfdO8FQN7scPzfeaA0wIxb2xV4cxVEMDlp+qFBlgFY
+	t75mvoaPJ/wD3M3vkPM7VjrKdgEJx43WP3UisV25dqzvL4uJLKsSmM2EXvgAIhHfvJfhULflyge9L
+	ms1K+O5ue209ncKJXF6/OyAJoJEOmoAo0da3nZnMHpvR0ZGzhoGDpWJowZUHWdIE4vmDxWBgtpBL3
+	hsMjYyWQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wjF9M-001TjD-0n;
-	Mon, 13 Jul 2026 11:48:40 +0000
+	id 1wjF9R-001Tjd-1y;
+	Mon, 13 Jul 2026 11:48:45 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Mon, 13 Jul 2026 04:48:06 -0700
-Subject: [PATCH 3/4] mm: kmemleak: factor leak confirmation into a helper
+Date: Mon, 13 Jul 2026 04:48:07 -0700
+Subject: [PATCH 4/4] selftests: mm: test kmemleak's N-consecutive-scan leak
+ confirmation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-catalin_pto-v1-3-5b93b1131089@debian.org>
+Message-Id: <20260713-catalin_pto-v1-4-5b93b1131089@debian.org>
 References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
 In-Reply-To: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -58,83 +59,193 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2095; i=leitao@debian.org;
- h=from:subject:message-id; bh=k5syoIA9ysnV4wrEyuCwDG5+YSh/+ARvdAvSvQ1nHGE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqVNCDS3n2w9ikiBluKn3vjF/Zn4wkchKX7fc89
- 7Nrft+gaBSJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCalTQgwAKCRA1o5Of/Hh3
- bbCID/wKUKccUQxdsMVZO1R4Q7HhjfNs9AH2FcscwKsWjIPGbXxfqVrrLXVMlYkLmFnxT5C8wLp
- EvwBeNeklecRZlmsQEAG4SvVFaTUIYFbpOpW0rRrFfhCU5K6w3FWOsb6TGBKAxA6FFyLf+7LbGe
- gBjdJZlYQt14eBFnTWqofAttBeVdQvUzOkbJ4wqSlvRgUWnL1zpSFdNHSImQF/zaMbNwmYwG8Vb
- Lvi3FcYhlwkjH0lI+Y/z31xmqQmNd2R/Ci8ddMtfu/kxgseY8cLbeM6WzAo2pQ4Ga5T0gr3bJo3
- o4BieTxQdMSHE6YYDnGpns5aNHshdebQyRatmVq9WTz62xsvEVrQ5oxUPTGcIIgNpn61ijsyH8d
- n78QcKFX/elGtBxP0bYjQxiynlpb8pwXI6i4IlU5B69Y3PKQi27na84Su57z/BSnOqCQgRi0zsF
- YRzOWBQCrvNG6NoQjHZ3LFoeDZgE6Dfz/O2K1kqDJMBmvvuggpULbNjjSwb+79+2V3u+YOIb3Oh
- fUcW7n3ULWCZL7NWyg8YoxQ5ewc95SfJjI8neE17OsSBB9Tq59FXfEFk4Z43+QYF8+rWqk90OiQ
- tiuXyJ95Chv+1WhyyT246ylon36UWQy+w6/wI33/53rpYpnnkrKoVtuAp8od2HKQcF7kPjFO1rK
- XKTq4QzgpdQCq7Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7712; i=leitao@debian.org;
+ h=from:subject:message-id; bh=3eQR/Kd3kFCe8YoRP/xKeQGlrrGIS3gsS7iBDPNwGWE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqVNCEK5BL8aTovIa4ZM4PGTSVv0NXeVIOLzzHd
+ QS5UNwaN1aJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCalTQhAAKCRA1o5Of/Hh3
+ bT3fD/9z7pPIA0FZEM18v9wAENnYMgC5wBEQ92lbjmm0+47fWixv3W1cLGZJ9XQK5jTaO7zWayd
+ ZAlGg5VlwjSzjYaaqtw1+fySCVdYHPtEeb79re7GpXkvgn0shL0Z/dlDS2e6qGZQrD2QHoQVKif
+ +IrXlqd+e8TlUyNvMcso2iJzEEc0772PlC7y/2z9O0vjGYSzRMP7vC0mhrIZ9TE2Vgva/HvJfx3
+ tOV8j0eDI/4Rh3+LS3jmbRetY4vGP4vFbhgwuNlspydCoJRU3lAnTp8x+b1I4K8LiDjzHFqE899
+ XYUMnjbaaHSzT0RIwAm3PmFlmNyJVFmCLcSMGdKq51XzQKWgKs/u+IUW0HlEyC5VHlcUMpCowy+
+ tdrjS+gMpHrTQXinSsJj7NvU9qPjKZpM2ju/leu9WpMRENOOj0jqdDKrkWdJhXCDjf93BHEjJfK
+ 9rmbj6keQk2/Jc7wHG/REuHe2HuLTHFDPQ227mX7SXkCJvDt9hMpy36BRG0j/JgVckLIWP3LN9H
+ iF/YcAPoJC7KqrZBnLj9QRR2aoWZBI+E3jGWBzrTNbFxWzusUM1yGx4pP2JgNNXFr5+B7ut7H7i
+ 9/j/FddfwKk2KPC5xoJC6seTdwTrQBVnKbRatCz706fyFqxzBgLEvd6ginAAI42COkKwnAGqb4F
+ AWZ/LjSek/G+Q3w==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-The reporting loop in kmemleak_scan() decided whether to tag an object as
-a reported leak with a four-term compound condition whose last operand
-also had a side effect (++object->unref_scans). Mixing the candidate
-tests with the counter update made the check hard to read.
+Add a functional test for the min_unref_scans kmemleak module parameter.
+Using samples/kmemleak's helper module it checks that min_unref_scans=1
+reports an orphan on the first scan, min_unref_scans=2 reports nothing on
+the first scan but does on the second, and that the parameter reads back
+what was written.
 
-Move the state transition into confirm_leak(): it returns true when a
-still-unreferenced suspect crosses min_unref_scans consecutive scans and
-is newly flagged OBJECT_REPORTED, leaving only the reporting bookkeeping
-in the caller. No functional change.
+It counts only the helper module's own orphans (matched by their
+[kmemleak_test] backtrace, with the module kept loaded so the symbols
+resolve) so unrelated leaks already present on the system do not perturb
+the result. The test skips when run as non-root, without
+CONFIG_DEBUG_KMEMLEAK / CONFIG_SAMPLE_KMEMLEAK, on a kernel without the
+parameter, or when the helper yields no detectable orphan.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- mm/kmemleak.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/Makefile                |   1 +
+ .../testing/selftests/mm/ksft_kmemleak_confirm.sh  | 132 +++++++++++++++++++++
+ 2 files changed, 133 insertions(+)
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 2fff11637e490..85f18b17e79c4 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -2014,6 +2014,26 @@ static int __kmemleak_scan(bool full)
- 	return nr_suspects;
- }
- 
-+/*
-+ * Promote a suspected object to a reported leak once it has stayed
-+ * unreferenced for min_unref_scans consecutive scans. Called with
-+ * object->lock held; returns true when the object is newly reported.
-+ */
-+static bool confirm_leak(struct kmemleak_object *object)
-+{
-+	if (!unreferenced_object(object) ||
-+	    !(object->flags & OBJECT_SUSPECT) ||
-+	    (object->flags & OBJECT_REPORTED))
-+		return false;
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index ed321ae709dac..786b1d73d93b0 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -150,6 +150,7 @@ TEST_PROGS += ksft_gup_test.sh
+ TEST_PROGS += ksft_hmm.sh
+ TEST_PROGS += ksft_hugetlb.sh
+ TEST_PROGS += ksft_hugevm.sh
++TEST_PROGS += ksft_kmemleak_confirm.sh
+ TEST_PROGS += ksft_kmemleak_dedup.sh
+ TEST_PROGS += ksft_ksm.sh
+ TEST_PROGS += ksft_ksm_numa.sh
+diff --git a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
+new file mode 100755
+index 0000000000000..3a8576e835c8d
+--- /dev/null
++++ b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
+@@ -0,0 +1,132 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Functional test for kmemleak's N-consecutive-scan leak confirmation
++# (the min_unref_scans module parameter).
++#
++# kmemleak only reports an object once it has stayed unreferenced for
++# min_unref_scans consecutive scans. The default of 1 reports on the first
++# scan (historical behaviour); higher values filter transient false
++# positives where a live object's only reference is briefly invisible to a
++# single scan (e.g. an RCU tree update in flight while the scan runs). The
++# test loads samples/kmemleak's helper module to create orphan allocations
++# and, counting only those orphans (matched by their [kmemleak_test]
++# backtrace so unrelated leaks already present on the system are ignored),
++# checks that:
++#   - a freshly allocated object is greyed on its first scan (its checksum
++#     settles then), so nothing can be reported before that priming scan;
++#     each case below primes once first,
++#   - with the default threshold (min_unref_scans=1) one scan after priming
++#     reports the orphans,
++#   - raising the threshold to 2 needs two scans after priming: one is not
++#     enough, the second reports,
++#   - the parameter reads back what was written.
++#
++# The "one post-prime scan is not enough at min_unref_scans=2" check is the
++# core regression test: raising min_unref_scans must push the report
++# strictly later. Like ksft_kmemleak_dedup.sh, if the module yields no
++# detectable orphan at all in the running environment the test skips rather
++# than failing.
++#
++# Author: Breno Leitao <leitao@debian.org>
 +
-+	object->unref_scans += 1;
-+	if (object->unref_scans < min_unref_scans)
-+		return false;
++# KTAP output helpers (ktap_skip_all, ktap_exit_fail_msg, ktap_test_pass, ...).
++DIR="$(dirname "$(readlink -f "$0")")"
++# shellcheck source=../kselftest/ktap_helpers.sh
++source "${DIR}"/../kselftest/ktap_helpers.sh
 +
-+	object->flags |= OBJECT_REPORTED;
-+	return true;
++KMEMLEAK=/sys/kernel/debug/kmemleak
++PARAM=/sys/module/kmemleak/parameters/min_unref_scans
++MODULE=kmemleak-test
++AGE=6		# seconds; must exceed kmemleak's 5s minimum object age
++
++ktap_print_header
++
++[ "$(id -u)" -eq 0 ] || { ktap_skip_all "must run as root"; exit "$KSFT_SKIP"; }
++[ -r "$KMEMLEAK" ] ||
++	{ ktap_skip_all "no kmemleak debugfs (CONFIG_DEBUG_KMEMLEAK)"; exit "$KSFT_SKIP"; }
++[ -w "$PARAM" ] ||
++	{ ktap_skip_all "min_unref_scans module parameter not present"; exit "$KSFT_SKIP"; }
++modinfo "$MODULE" >/dev/null 2>&1 ||
++	{ ktap_skip_all "$MODULE not built (CONFIG_SAMPLE_KMEMLEAK)"; exit "$KSFT_SKIP"; }
++
++# kmemleak can be present but disabled at runtime (kmemleak=off boot arg,
++# or it self-disabled after an internal error); a "scan" then returns
++# EPERM. Probe once and skip if so.
++echo scan > "$KMEMLEAK" 2>/dev/null ||
++	{ ktap_skip_all "kmemleak is disabled (check dmesg or kmemleak= boot arg)"; exit "$KSFT_SKIP"; }
++
++prev=$(cat "$PARAM")
++# shellcheck disable=SC2317  # invoked indirectly via trap
++cleanup() {
++	echo "$prev" > "$PARAM" 2>/dev/null		# restore the parameter
++	echo scan=on > "$KMEMLEAK" 2>/dev/null		# re-enable auto scan
++	rmmod "$MODULE" 2>/dev/null
++	echo clear > "$KMEMLEAK" 2>/dev/null
++}
++trap cleanup EXIT
++
++# Stop the automatic scan thread: only our manual scans should advance an
++# object's consecutive-unreferenced run. An auto scan landing between two
++# manual scans would change the result and make the test flaky.
++echo scan=off > "$KMEMLEAK" 2>/dev/null
++
++# Create a fresh, aged set of orphan objects from the helper module's init
++# path (its kmalloc/vmalloc/percpu allocations are dropped right away).
++# Pre-existing reported leaks are greyed first ("clear") so only our
++# orphans are counted. The module is left loaded on purpose: once it is
++# unloaded its symbols are gone, so the orphan backtraces no longer resolve
++# to [kmemleak_test] and could not be matched below.
++gen_orphans() {
++	rmmod "$MODULE" 2>/dev/null
++	echo clear > "$KMEMLEAK"
++	modprobe "$MODULE" ||
++		{ ktap_skip_all "failed to load $MODULE"; exit "$KSFT_SKIP"; }
++	sleep "$AGE"
 +}
 +
- /*
-  * Scan the memory and report the unreferenced objects as leaks. Must be
-  * called with the scan_mutex held.
-@@ -2074,11 +2094,7 @@ static void kmemleak_scan(void)
- 		trace_handle = 0;
- 		dedup_print = false;
- 
--		if (unreferenced_object(object) &&
--		    (object->flags & OBJECT_SUSPECT) &&
--		    !(object->flags & OBJECT_REPORTED) &&
--		    ++object->unref_scans >= min_unref_scans) {
--			object->flags |= OBJECT_REPORTED;
-+		if (confirm_leak(object)) {
- 			if (kmemleak_verbose) {
- 				trace_handle = object->trace_handle;
- 				dedup_print = true;
++scan() { echo scan > "$KMEMLEAK"; }
++
++# Number of helper-module orphans currently reported by kmemleak. Matching
++# the module's own backtrace ([kmemleak_test]) keeps the count immune to
++# unrelated leaks on the running system. kmemleak only lists an object here
++# once it has been reported, so this reflects the confirmation gating.
++count_orphans() {
++	c=$(grep -c '\[kmemleak_test\]' "$KMEMLEAK" 2>/dev/null)
++	echo "${c:-0}"
++}
++
++# 0) the parameter reads back what was written.
++echo 3 > "$PARAM"
++[ "$(cat "$PARAM")" = "3" ] || ktap_exit_fail_msg "min_unref_scans did not read back as 3"
++
++# Priming scan: kmemleak greys a freshly allocated object on its first scan
++# (its checksum settles then), so nothing can be reported until a second
++# scan. Every case below runs this priming scan before counting.
++prime() { scan; }
++
++# 1) min_unref_scans=1 (default): one scan after priming reports the
++#    orphans. This also establishes that the helper produces detectable
++#    orphans here.
++echo 1 > "$PARAM"
++gen_orphans
++prime
++scan
++first=$(count_orphans)
++[ "$first" -gt 0 ] ||
++	{ ktap_skip_all "$MODULE produced no detectable orphans (cannot test min_unref_scans)"; exit "$KSFT_SKIP"; }
++
++# 2) min_unref_scans=2: after priming, one scan is not enough (still
++#    gated), the second reports. The gated-scan-zero check is the core
++#    regression.
++echo 2 > "$PARAM"
++gen_orphans
++prime
++scan; s1=$(count_orphans)
++scan; s2=$(count_orphans)
++[ "$s1" -eq 0 ] || ktap_exit_fail_msg "min_unref_scans=2: $s1 orphan(s) after 1 post-prime scan (must be 0)"
++[ "$s2" -gt 0 ] || ktap_exit_fail_msg "min_unref_scans=2: no report after 2 post-prime scans (false negative)"
++
++ktap_set_plan 1
++ktap_test_pass "min_unref_scans=1 reported $first orphan(s) one scan after priming; =2 held them one scan longer ($s1 after one scan, $s2 after two); param read-back ok"
++ktap_finished
 
 -- 
 2.53.0-Meta
