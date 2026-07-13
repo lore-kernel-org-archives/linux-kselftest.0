@@ -1,116 +1,126 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D5A17993
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 12:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC4A40C5C0;
+	Mon, 13 Jul 2026 12:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783946209; cv=none; b=ZQ8jpDwXMyZkM+L/hDd+iSWyUOpiPUT4bPlONrPVVJo86I+RkHVk0BzoDyE+PXbu+w2z7ysFfdblMXUDcyL+2RPBh3bWNIH52PXvVjWcsQyxyB0JwHProTak3z6KMSGOblLPE26rgMUZtmuMKAhAOP8pMBOg0zTCz9qPU5Od2Eg=
+	t=1783946806; cv=none; b=IN/UUnFHc+otGnBvPJZnXLGQwj2gVskeMGjGo8qcBOBQIvvTc1YqtCZ8Ux1JxckoaFYSVfxgf1fbYSOdufIp0LaBCeFOlGHIKsGuuf1Ccffwr1XWX8kexF6OC39rjhZnjl3FtKuOKkwnKaep43ZIGed8xHzOiGwCPLfpUoGj380=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783946209; c=relaxed/simple;
-	bh=eP+6L9APW6Fk/DPuUcN47xss7LE2be5MSQjekTkQ5uw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jZCM0mlmHSiOLKgXIKZH92doE5CxshmdYDkFyhXAxr6yQJ1TU9pyV4TBBJ1TUYUxyD11AqqZGm7n2MPyDFwcPyNy3Y3RCADYgIASXfbsrhJbOi1mbZCNFMshKHTfa/Ztcqps9MsnKuDnEYUkX/FhIKJoyXr2PjXgbNsDqOX5tag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-69ccd6483acso355872a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 05:36:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783946206; x=1784551006;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=t/6DNcSK6X/uGZ1IYS4q2R1Z6al9GC0dZL0uRll37ZA=;
-        b=pJhrH8F8grrY/lzOby83MCRy9kVZxoPQ/mq6pRjqfcQaZqyKV3dNuZoc+NATP8HVnT
-         o8wtOqBI4tZmJqkQSt6XCQwGqxMKeB488vLNmIVCsd7NADt8+nelWZ2NDKrFnwoxemk5
-         EnhjCGaxdXhp1EUrGl/NVXIDnUAzsqwOuJ6Mtl5zaipfggEvZ8N63jJ7VEOmLjy2qCWV
-         z6ik8IwcDIiRmXFIAkhuEwsOJsZR8S92Q5YaqlGSGjMR8s9PpIMLu462+e2Xx1e0jNqn
-         GmzCMjwmM92WkUbC+NUmtg/uNrlwN/4wxa3R/CoQdgMvUH9UANAjs1AoEX+IncMq0bFs
-         wftA==
-X-Forwarded-Encrypted: i=1; AHgh+RpPYPHF1Xm/igEwt32rzNJBVXumX+4Nm2DbSV05fF3UpiPAmgU2TxJlS5qb/aHV49jLxyo/hHD8VqNkx+3/JE4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCdlaZb1UXgTJR2UkrXipEWMlbYV3IWwks7EsY1EwU2Mc4pii8
-	wzoVcVSlr0C/EAkHTtLUMl4TdA0LTNFwBNqQ12mfldJNi28UE036uiZq3Xoa0oPB/9I=
-X-Gm-Gg: AfdE7cnYENJ0okuIdqIbIwrT39hS3dpMZ1VT4NE3MIeA3A0JaaDrYLv4y3Nl4bmvCQ+
-	TD+vL2iImgfR/p/mUIy/OCAj3hZYAhpKFylvTRzH93JsvSvAhbnLlBodamxnl3DhZPZI6CVTnaB
-	vazqzmnXd4BACCJwa50dqoMjKkivCozDvSOjzq2VNU7mxDjUjBzDA0tNhkt837LVBG9EPc0CA27
-	sllkfefHOM9sG7xj6P8nZ6f/DpkYNg057aWkvgG3xQ5iVYgYxMHw17OHq7a2pKLazrkX+YknLbt
-	mLLxdk3pvAmFSgG+qishIWNdXe8StruHkj2sQjAsJyUx7f+Jcxpw51S9xUSMCpENbZQuEs0eIvj
-	WuRawkr640IaPxqcrPB5zgrbcba5EHThTvsJMCiAw6NUwNNP/zPemF42Ef6NmSi/vwYlupRpfwK
-	oRGGi4NjwZzRmrybe9tGvtUBhHkUJZlgvs4JplkSwXB4yz2ysA6A==
-X-Received: by 2002:a05:6402:524f:b0:698:3b7c:7e4e with SMTP id 4fb4d7f45d1cf-69c5f24f9a1mr3865653a12.36.1783946205617;
-        Mon, 13 Jul 2026 05:36:45 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69a19d799dfsm16545944a12.17.2026.07.13.05.36.43
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2026 05:36:43 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-69ccd6483acso355738a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 05:36:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rr50IyrANJEmv2xQN6EXbZAuALGFoZeti0fkSmOHeNi3ErJKyTokNw1Yvpb4qiquvPf4Ap6FXJy76XjGK9NZ8o=@vger.kernel.org
-X-Received: by 2002:a05:6402:a29c:20b0:69c:7ac7:c740 with SMTP id
- 4fb4d7f45d1cf-69c7ac7c96dmr1680487a12.13.1783946203526; Mon, 13 Jul 2026
- 05:36:43 -0700 (PDT)
+	s=arc-20240116; t=1783946806; c=relaxed/simple;
+	bh=WqY4kgObe7k+Ht3BPmidAur8oJyfvHtuANHiwv7xrmM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NFPb7VG+4XwOBDbG1KAYogno0DbJw/qx7afh2bs1nQMc5JyjBPw2c3cWHhPDxD3XWuKaX5i0c4nATuCgtAAD5Dy+hENqtY/usa50lMWyJ3N914VbycJ3leb/dtuJVt6uXksUdcmUzUrSOVq7djKCOHDgCUao1ToGC6IfuFdYU5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jy3/LEc2; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jy3/LEc2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B001F000E9;
+	Mon, 13 Jul 2026 12:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783946802;
+	bh=ELuP+JlstmobvcR8nFgZQhy9eTzAwZCD1GxbQQU5DDk=;
+	h=From:Subject:Date:To:Cc;
+	b=Jy3/LEc2ASJAPC7O0145GxG1rBT5NuM4BR2cL2E5+LR27kRFZViXGf/Q4buygkV7z
+	 aYDpRIYl/wG8r2HIZzQa109+oMkukZEj6hFjkSZjVoBc5CcAA990h0bIKU8Au9KHGa
+	 nyYbKfvDq8HZ1sqfKy4HvlxQNIOquxqUSoS/qGBHR9imO6piXaxqa2PQe6aIZPTzrs
+	 LPj+mIz9Oc/64mr85zjEG/y1Wwg1G9r5HT1osSoDe3S4X7hAdEQUsoFjXDH++iiqoz
+	 RXR99vqwp1NmZELpzOy7lBBicQ94SWdQzT3YhG8/UienZE0ngwBbBf2O7QkARlz6RP
+	 lYga6LXF42BmQ==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH nf-next v6 0/6] Add IPv4 over IPv6 and SIT flowtable SW
+ acceleration
+Date: Mon, 13 Jul 2026 14:46:17 +0200
+Message-Id: <20260713-b4-flowtable-sw-accel-ip6ip-v6-0-33f0155fc658@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org> <20260713-catalin_pto-v1-1-5b93b1131089@debian.org>
-In-Reply-To: <20260713-catalin_pto-v1-1-5b93b1131089@debian.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 13 Jul 2026 14:36:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWBQ-Vn4XzbrfV31adY7cEjLvmGuwu5_x7rn1NBkEC5mA@mail.gmail.com>
-X-Gm-Features: AUfX_myop1qSR0uweNQ9TGaDUdl1iHj4R-fufo4jIbPM1JPRHa_hqCZvJROVzWA
-Message-ID: <CAMuHMdWBQ-Vn4XzbrfV31adY7cEjLvmGuwu5_x7rn1NBkEC5mA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mm: kmemleak: confirm suspected leaks with a second scan
-To: Breno Leitao <leitao@debian.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43QTWrDMBAF4KsErasijf676j1KF7I8SkSNbCTjp
+ ATfvcKbuhhMl48H3xvmSSqWhJW8XZ6k4JJqGnML+uVCws3nK9LUt0yAgWaKKdpJGofxPvtuQFr
+ v1IeAA02TThM1nHEmZOi5NKQJU8GYHpv+QXKkGR8z+WzFLdV5LN/b6sK3+l8DC6eMOh+ECyE49
+ O79C0vG4XUs1w1eYI/pcwwaJoWLvQRjQOMBEztM8HNMNExpDxZ0FGCOl8lfzDBxjsmGMSacba8
+ EYeGAqT3mzjHVMAs2oI9Wdb77g63r+gPOv/GPBAIAAA==
+X-Change-ID: 20260505-b4-flowtable-sw-accel-ip6ip-7101034cd147
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Felix Fietkau <nbd@nbd.name>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>, Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
+ Shuah Khan <shuah@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, netdev@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.14.3
 
-Hi Breno,
+Similar to IPIP and IP6I6 tunnels, introduce sw acceleration for IPv4 over
+IPv6 and SIT tunnels in the netfilter flowtable infrastructure.
 
-On Mon, 13 Jul 2026 at 13:48, Breno Leitao <leitao@debian.org> wrote:
-> From: Catalin Marinas <catalin.marinas@arm.com>
->
-> The kmemleak marking phase is not atomic. While the object graph is
-> traversed, the kernel can modify pointers, free objects or allocate new
-> ones. If a reference to an object is moved from one location to another,
-> kmemleak scanning may miss it. We have explicit annotations like
-> kmemleak_transient_leak() but identifying and maintaining them is not
-> trivial.
->
-> Given that such transient leaks are short-lived, rather than just
-> reporting such objects as leaks, do another scan to confirm the
-> suspected objects. If no new leaks are found during the first scan, skip
-> the confirmation one.
->
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Assisted-by: Claude:claude-opus-4-8
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+Changes in v6:
+- Rebase on top of nf-next and fixed conflicts.
+- Fix the case when both ingress and egress interfaces are IP tunnels.
+- Link to v5: https://lore.kernel.org/r/20260709-b4-flowtable-sw-accel-ip6ip-v5-0-828ceaf85bab@kernel.org
 
-Thanks for your patch!
+Changes in v5:
+- Fix ipip6_tunnel_fill_forward_path() to take into account not only
+  IPv6 packet since SIT tunnels can encapsulate even IPv4/MPLS traffic.
+- Return an error in ipip6_tunnel_fill_forward_path() if tunnel daddr is
+  not set since NBMA tunnels are not supported yet.
+- Return an error in ipip6_tunnel_fill_forward_path() if encap.type is
+  not TUNNEL_ENCAP_NONE
+- cosmetics
+- Link to v4: https://lore.kernel.org/r/20260703-b4-flowtable-sw-accel-ip6ip-v4-0-00398cd12382@kernel.org
 
-For how long does this postpone the reporting of a real leak?
-I am asking, because I have a few known leaks in my local tree,
-and it already takes a while before they are reported.
+Changes in v4:
+- Rebase on top of nf-next and fixed conflicts.
+- Link to v3: https://lore.kernel.org/r/20260531-b4-flowtable-sw-accel-ip6ip-v3-0-56a2826f3279@kernel.org
 
-Gr{oetje,eeting}s,
+Changes in v3:
+- Drop nf_flow_tunnel_v4_push and nf_flow_tunnel_v6_push routines
+- Rebase on top of net-next tree.
+- Link to v2: https://lore.kernel.org/r/20260506-b4-flowtable-sw-accel-ip6ip-v2-0-439fd427726e@kernel.org
 
-                        Geert
+Changes in v2:
+- Fix MTU check in nf_flow_offload_forward() and in
+  nf_flow_offload_ipv6_forward()
+- Add SIT sw acceleration support
+- Link to v1: https://lore.kernel.org/r/20260505-b4-flowtable-sw-accel-ip6ip-v1-0-9ac39ccc9ea9@kernel.org
 
+---
+Lorenzo Bianconi (6):
+      net: netfilter: add ether_type to net_device_path_ctx
+      net: netfilter: add encap_proto to flow_offload_tunnel
+      net: netfilter: add IPv4 over IPv6 tunnel flowtable acceleration
+      selftests: netfilter: nft_flowtable.sh: add IPv4 over IPv6 flowtable selftest
+      net: netfilter: add SIT tunnel flowtable acceleration
+      selftests: netfilter: nft_flowtable.sh: add SIT flowtable selftest
+
+ drivers/net/ethernet/airoha/airoha_ppe.c           |  13 +-
+ drivers/net/ethernet/mediatek/mtk_ppe_offload.c    |  13 +-
+ include/linux/netdevice.h                          |   5 +-
+ include/net/netfilter/nf_flow_table.h              |   1 +
+ net/core/dev.c                                     |   6 +-
+ net/ipv4/ipip.c                                    |   1 +
+ net/ipv6/ip6_tunnel.c                              |   6 +-
+ net/ipv6/sit.c                                     |  60 +++
+ net/netfilter/nf_flow_table_core.c                 |  19 +-
+ net/netfilter/nf_flow_table_ip.c                   | 424 +++++++++++++--------
+ net/netfilter/nf_flow_table_path.c                 |  20 +-
+ tools/testing/selftests/net/netfilter/config       |   1 +
+ .../selftests/net/netfilter/nft_flowtable.sh       |  86 ++++-
+ 13 files changed, 461 insertions(+), 194 deletions(-)
+---
+base-commit: 0150128b9506b5869d8d2000c6e71bef0719d6ce
+change-id: 20260505-b4-flowtable-sw-accel-ip6ip-7101034cd147
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Lorenzo Bianconi <lorenzo@kernel.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
