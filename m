@@ -1,66 +1,66 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA86A3A48E4
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 08:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9972936897C
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 08:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783930606; cv=none; b=rYCdxmLSlMfc678MPpHQzhDAxTTJ/thbyW1TdsVUF1G8goo212FqMSSbL58Uq8yCEtN8CpNSX2TtupPi2dJAhk8wLTfBy/S3feEXEXG0qpkP5kYkjrFIFMXY+wSUxXQ8ZYXSf/vgM6T4RrnY07k3Y/70tdRT1L9yDkxmo7Qnga8=
+	t=1783930634; cv=none; b=hZCTOsXZj438vvMJ3J5tre12YueGgqKwGBy1cFGq7YVZWQF4e8ByiVSlWRJSK0JYvrscCaPuaIVkdceeZNM9KHrtFoV/u1DR9uR4arrdzM1UD1niHtRof69VRsZz7rKk7NnYh2BkgywaOnkhLGL+ke4nquN8bCHsWxbi9qt/oB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783930606; c=relaxed/simple;
-	bh=GT0aA4Hs0v+V8d/oRMBUp9nulXdAlA703EAOOYn8eTY=;
+	s=arc-20240116; t=1783930634; c=relaxed/simple;
+	bh=e7biIQWq4ayHoPrEIMSf8dlPvUrUBRV5RYriupriJE0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E+/wSVlEMHBJPmwgSrbTeHwn/YaxVsNIynawWuzATr75HXnfSAHLqcFUI4TrgUupnnsi+R+8c1J7rs9lEt8DdOFPHNjEAASNO4emlpLATkVROm4zC5Y0GyA/IPCul46xQ80zf34Z+Z7LGglr6+6bPhJ20lHB/2d8jW6SmyxowVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CBy4T9Oc; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=j4NQlD5y1MVkqDAAK4S1NtE6cFbdnOsY0CvQvhl+d7meaOiSWWLIBOqvjDXdr6jYzTwzns0KXab3wso6iJYl49QcEuun8qAbowb4Es+2NT+SZ0osgjWg/M+ZgJja+hVMAfztSl9Y28aqNSYZqjk7mFfc1JRtkpwj84wp7eHvqa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qjjq3s+R; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CBy4T9Oc"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-493ce08a6b4so25455165e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 01:16:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qjjq3s+R"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-493bf840a69so20692215e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 01:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783930602; x=1784535402; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1783930631; x=1784535431; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Gq7CBsOOfXmcQmDqY44O8+unztSFjXGh8YCUzgZnM2I=;
-        b=CBy4T9Oc1W9slLmuqbek3QiQXa0pY8mAs59+mPaRd4L5Z/MBnekMl9+qdPCafhy+H3
-         kKcXEzG9cTHhj+4+WercAoOnZt88DMFs1ygG04i1DZA2cHQTuP5mfJyahApznK9XxXqT
-         bytziYHBwdS0gm0mzxC4DrhpOirK+VHpCxDjzqyiQFeNJxd+3DFfxUO7S8E94orvpnF5
-         o/KOJm+5J7AzK2LoIPwlsX+9GJvcxAnv8Gcrn6rxKpAirad8iF2VlYpC2Z+d/mUX6dDI
-         Kol5hknYHC1C/8SeNDSgIJcXTQgbXcnazfK/gTH2rdZE9TrXWzi/aN6pJ1TaRYIHUm4d
-         JIaA==
+        bh=e7biIQWq4ayHoPrEIMSf8dlPvUrUBRV5RYriupriJE0=;
+        b=qjjq3s+RFS6qbO3JTGK72AL/nlAHYi9B8SqBHxXSiIgAA3LpsbTlUTI2JWT6EIW/IB
+         FPxIakPznrCdq6XUTIfcG6TfRy6p7fO6l0+N9WScJeZU70/PL84ZtaYm+iO0mcvUqcB+
+         07oW4syGW2NIi7eU7rRWgl0zX+K6UFY/GwLqHFUoiRf7lgykyqIj0U7LiE1Gs+vClPlT
+         hYpSmVGiHocqOqNtpZGdaCLccVT/QtEEOyhx8C9RdM2n72ERl3cw8WIh4eRVPN6dbFQD
+         MyotRj1p2UUJAzRRbBwhPrnOn4PU8YfF63oOV41qRvIo7VrFLgqMWu5MRo5r8dzN4vtB
+         sc0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783930602; x=1784535402;
+        d=1e100.net; s=20251104; t=1783930631; x=1784535431;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Gq7CBsOOfXmcQmDqY44O8+unztSFjXGh8YCUzgZnM2I=;
-        b=g3u6tbDZZN9WwZbe5hWc7uwQisMKfslojFoGMYkwpfdV3nHP4zif2WfRaoULfy56dF
-         DYn4rIuTQaW2cZdQ9Ym4riRvojCxoDjn1dsfKZL63MSvj9YiDLaCt3/cLX/nv693errs
-         +u1GngmlmsBeiuEPv+3ju8IN7DUfMSd7wVycDRItkbWdTvW0Z8GAhBmKO3XBooDo8uqQ
-         P0IdOwVGjsdXLzPFbiEGEC0nxb1taeZarqwooEnDI+VQZrOMpRDw2ZSlo2zF3an5vild
-         jZd7WDnw4Khtmir9FQB8VvyP9SIQnvB0zvhqBBkUiLolpXkuDjcDmyqCdBJ+7JNeRgne
-         nxiA==
-X-Forwarded-Encrypted: i=1; AHgh+RpUVB4qSr7z7HLGOoTccJHg45EbKzjerXjdSr1diuT7C5DOsVFF+9UDiAUmP8dLLKOy86XUNkNFubzSixqy4U8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws++gBH4mhrsR39/JHXLqMm1OR9BQ8E839u04g2TucH6USRlCK
-	t0Pvd4UWX08mQg6qbZ578sYAH2wPK3twTGhYqf0eUK9I+SEnqti4mfbA1RSlgr55gVkSB3oIGQS
-	hoe5rGmOUPYgy68StVg==
-X-Received: from wmrn16.prod.google.com ([2002:a05:600c:5010:b0:493:d1b8:3df5])
+        bh=e7biIQWq4ayHoPrEIMSf8dlPvUrUBRV5RYriupriJE0=;
+        b=OHCBsUsHqJbkKM1i5hwClsHszdhdqPP8eVLcBvuR5UScAeT7LTX46kyXa1kjYInx6U
+         W+keKgcFCuCjL8RbnNaMBpoEBvqW6ix+pIOicr6lb7UtqHVOIx1THecFOCskUdBCJOfX
+         r1t5+ABM7ntM+jR7G0ufmq5pLZS4dx3v9caZ6sEQgxEIAg4QOnnfwFXfjXx/MwLgiaxR
+         vyIlI/Hasc9PMDhsaZHlwBR2TXdIisH3IxSoLAEapMOEN2Eki1Oq/cjn2FdVBRekMjGP
+         VZxSu3kMmfH22bp92iLe85HmdPsGfxHDK8nnjkn7ObtjZGe/OV5HkYpECoEj9945mJ4m
+         XIVg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr8/Nk+4of8SADH0tVREMm8YMyKwzNElOxOCSztvnzEhSvWj7cLNRkwaeS+oQ2nu/ekGY4T34FrCfsAlSjz2S4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1snDbC7F99oNMkDJmDtQzxWhSN7VKCVKvFEESQfBiwfOP9yf/
+	9OP2rsTq3l6vuRwjB540vEg2MqVVB4l/3QWLRrYL2FaD2N5lS8U4KVSZZYSbXIOXKz/YvkQiZ+j
+	kfWQvAKtec+l06Xsv5w==
+X-Received: from wmpu18.prod.google.com ([2002:a05:600c:4d12:b0:493:f522:9fbe])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:464a:b0:492:7083:e5a with SMTP id 5b1f17b1804b1-493f882b117mr52089545e9.31.1783930601636;
- Mon, 13 Jul 2026 01:16:41 -0700 (PDT)
-Date: Mon, 13 Jul 2026 08:16:40 +0000
-In-Reply-To: <20260713-fix-fops-owner-v8-10-2495cfa82d47@linux.dev>
+ 2002:a05:600c:4f91:b0:493:72d3:4a81 with SMTP id 5b1f17b1804b1-493f87e5bd2mr75050475e9.16.1783930630723;
+ Mon, 13 Jul 2026 01:17:10 -0700 (PDT)
+Date: Mon, 13 Jul 2026 08:17:09 +0000
+In-Reply-To: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev> <20260713-fix-fops-owner-v8-10-2495cfa82d47@linux.dev>
-Message-ID: <alSe6PsvdrSYP_Z0@google.com>
-Subject: Re: [PATCH v8 10/10] rust: module: update MAINTAINERS to cover module.rs
+References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
+Message-ID: <alSfBXoFjX-W_Ch1@google.com>
+Subject: Re: [PATCH v8 00/10] Fix missing fops.owner in Rust DRM/misc abstractions
 From: Alice Ryhl <aliceryhl@google.com>
 To: Alvin Sun <alvin.sun@linux.dev>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
@@ -86,35 +86,10 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <ga
 	netdev@vger.kernel.org, linux-pci@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Mon, Jul 13, 2026 at 02:45:31PM +0800, Alvin Sun wrote:
-> Module types now live in `rust/kernel/module.rs` alongside
-> `rust/kernel/module_param.rs`. Update the MODULE SUPPORT file pattern
-> from `rust/kernel/module_param.rs` to `rust/kernel/module*.rs` so both
-> files are covered.
-> 
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Assisted-by: opencode:glm-5.2
-> Link: https://lore.kernel.org/rust-for-linux/8ea21b29-9baf-4926-a16f-7d21c5a1a1b8@suse.com
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e035a3be797c4..74733de3e41ee 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17984,7 +17984,7 @@ F:	include/linux/module*.h
->  F:	kernel/module/
->  F:	lib/test_kmod.c
->  F:	lib/tests/module/
-> -F:	rust/kernel/module_param.rs
-> +F:	rust/kernel/module*.rs
->  F:	rust/macros/module.rs
->  F:	scripts/module*
->  F:	tools/testing/selftests/kmod/
+On Mon, Jul 13, 2026 at 02:45:21PM +0800, Alvin Sun wrote:
+> During tyr debugfs development, a kernel NULL pointer dereference was
+> encountered after `rmmod tyr` while gnome-shell still held /dev/card1 open:
 
-Is there a reason why this is a separate commit from the commit that
-introduces rust/kernel/module.rs file?
+I left a few minor comments, but otherwise LGTM.
 
-Alice
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
