@@ -1,1082 +1,242 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C65F1C5F27;
-	Mon, 13 Jul 2026 03:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1985935F192
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 05:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783913561; cv=none; b=VRI1uyaVza3fdJBe72wxJq5V0YdOogvKJwp/kMhoNjK+XBK/7p1W5vd8VuMLiAY9MscC4jF1kS4ltUmdXAb+FZIukD+TiDRZCs/MSKERzyTuCmEWeXO8uyiP4uezyO09etTO3kzXhYu+cTa+X78dlQpGRl0KAR23WGrd0J14faI=
+	t=1783919149; cv=none; b=T7pomyROK87a7sz8wcPiIjf52f0ggAAO+qQDFpgqjg1ayHGL6lOnuQDgL9Yym7rHQZEGLqZ6HOqxHd6PKUVgYmXa8pDqw4cBMHXhehWYd3F5u7IMzACR1y1EEvfW2/acRBVxx/PXodHRw+wocj/vt7/p3u5nNOrtm76h1TTxRN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783913561; c=relaxed/simple;
-	bh=1U1RWYmibHDZqtMVl1DYhUIwEKiikHpHWQ2q8xwAOLE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xg1LZVRI8iuDdrZCCoFuc7GOpxqr9tpUXLk5MpEYaa1oZyhi5as7ONyYncIR1VwpF5lwTuLzRgKYbJS3bqRIL2ytPybNuHW54/b3j7+JuxhSpzk9xf9zm1UXz2aWTEUjcB+AwHSIGZG7NXqGxLkSYp7pVQLrNsZEqipruMlqyuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 7938cf247e6b11f1aa26b74ffac11d73-20260713
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:fd3d6d66-f4e1-4f96-af51-d6206ca05e0e,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:fd3d6d66-f4e1-4f96-af51-d6206ca05e0e,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:0378ea0926e0eb69057a3bd9c4a7f702,BulkI
-	D:26071311323113UJW878,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|850
-	|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:ni
-	l,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE
-	:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 7938cf247e6b11f1aa26b74ffac11d73-20260713
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 375960602; Mon, 13 Jul 2026 11:32:28 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: jgg@ziepe.ca,
-	leon@kernel.org,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	hongfu.li@linux.dev,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/mm: Factor out hmm_buffer_alloc() to consolidate buffer setup
-Date: Mon, 13 Jul 2026 11:32:09 +0800
-Message-Id: <20260713033209.280435-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1783919149; c=relaxed/simple;
+	bh=m0A8EozCH90mxhahYcpCYb0x5lm8UVBXtH/iWhiwtjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j0w+K1zccBEEhK2QZ00TgG1RQygwaHqR2Y7+8MzTyhUGScO8wO5Yc9vtEi0FzDlvei1MGh6j8AZItw/uUVHY2h2fHkS90uozO8Co/5wOfCq8DVz8vraixrepnCJbllxWpZZAYcxxIFlKQ+k5ruF45C78MIkZUZtTS64ukNjHEGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YAcr+4+K; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YAcr+4+K"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4938d5f86f3so20001425e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 22:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1783919146; x=1784523946; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=noLX6ODwuKJAk11/kbsaLVVFKD51XS5bO5LrY4X2cno=;
+        b=YAcr+4+K8zuEV2BH5mHpAkS3IrnT4P4KGrySkzkhgeTSM0ci2l3dmhM4qqOHbM0lXS
+         RivXcQAtul2K15K/acrhWRXvkbbbYcOMquXv0+ttpIz8HXoPsJaKFHxRvbrQIDY4cywx
+         FvtV23k6vkBih3UKJAB2WU5fAkMEtR2eZ13JKaWlP5jyGvvZxkFqdWILPV1WLm6DcLTY
+         QP2cvs01jOGdUrj1SOQpW5Mye8UygxN8mu1VdCWR2Xo+okJSaxHE1IoBImPBt1uQIRQc
+         eiVD44zwRdD/9jXoPsR3qAZFhMIAlX5KECQjHICRJtc67yWEn463Pf+MIZL5VW/t+PkW
+         lI6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783919146; x=1784523946;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=noLX6ODwuKJAk11/kbsaLVVFKD51XS5bO5LrY4X2cno=;
+        b=klr7dnFJtHa3E0y/G0e2AMWk0flsgtX6oL42yF58MxnnmAtx/OaiOBOHxA/qRzuQD8
+         32WIV+UPAvaU8yr3GnvpNVxUFdZpoHrZPHqyFIOHGW+cBDqKNYhBYr4aWnsNQoe5z+Nr
+         3SyaW3/JA0vgG60J/tPnkbh8bRU6o3qGC61EpRsqi05utEVOndzJ1Ybbn68r3bvRTaMi
+         3TYHbyaEwOanGLKxm3KDmzbVW/tISjNXyPy4ViZCpqxxL0M0LqfvxERuguyAwcYhpm2X
+         RRDB5xt72czMI8Qxu30ddCw5ORB3aCd6sLOeVrZB0JYngpz0CRVdsN68gJ0gwG4mqK5h
+         EE1Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rovz0t2M9J/PRrrC9HCiskmPH6UqgkjccCmEPG9Aeqm6SWfY/XfNSIVmBLdhDt88ccXb4KxnizLGJ1lH/hQ4tg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxINfIHoHY7XgA/PIArC0l1i6TMCnIDB+CnICGAolKlxqXcUTiN
+	4Osr+DUR3AcGxqQhVplXrntHFZaGoo1obsmVa9IHA6GaokG4nKkILHPMn3pakLaiznM=
+X-Gm-Gg: AfdE7cmWXmUngrBWEofyBKwkb3Sw1+T2pZR4kkkHdy0MYBOCOazEIhrAtzIDt9wc0Ho
+	JodXMIyRxGSrb9iKa7EEFM6krkEM6qt5dqoGXTBlDpEBEHZlcpRPFofuck3QgsyQeM1sRtffL5T
+	8DtI7lC6kl79k/7k9U08hb4o3due6pHtJR7MFkzYzOWFlp/qcYzEvRcSrs9PfBAgwguvusSXcEb
+	ZskW8YZHH7VRSzdA5+YcijGTRbTjmMXwMiGIP549xDm4eC0pA7ZhYDffUm95NO/PzwcZ1XIqWy1
+	eJAEOuaq+TN+rBWJb/IWdN2yD60AHY857KwmGNRCMXsLRyZtF1WlDjztpJzLtXmUhfRAmCLYzxj
+	XjEb7dNgV0+IIac5BbVOVbs72534q+f4+9bqK8SJgExY2cUgQkByetaKqHs/DcauVkLm1fFVLl0
+	u4MdQvJJ+3/mGETnJuer0i60yRzjXU7RBkZMNjKoqF
+X-Received: by 2002:a05:600c:998:b0:493:a63b:1f62 with SMTP id 5b1f17b1804b1-493f2ac8ca3mr74593225e9.16.1783919146276;
+        Sun, 12 Jul 2026 22:05:46 -0700 (PDT)
+Received: from u94a (27-51-9-144.adsl.fetnet.net. [27.51.9.144])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-451916f31d4sm12679932fac.16.2026.07.12.22.05.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jul 2026 22:05:44 -0700 (PDT)
+Date: Mon, 13 Jul 2026 13:05:03 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: sun jian <sun.jian.kdev@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
+ pointers
+Message-ID: <alRtilWhKw4zzMkI@u94a>
+References: <20260708090151.151729-1-sun.jian.kdev@gmail.com>
+ <20260708090151.151729-2-sun.jian.kdev@gmail.com>
+ <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+ <ak8XSRiLKx5WcIQw@u94a>
+ <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+ <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+ <alCgmxFh9q-vjE0O@u94a>
+ <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
 
-Each HMM test open-codes the same buffer initialization sequence:
-allocate main buffer, assign file descriptor and size, allocate mirror
-buffer, then perform mmap mapping. Factor out this repeated logic into
-a standalone hmm_buffer_alloc() helper to eliminate ~35 open-coded
-copies.
+On Fri, Jul 10, 2026 at 06:27:41PM +0800, sun jian wrote:
+[...]
+> One detail about the attach-time check: I agree that some negative-offset
+> constructions can still be rejected later if the max_tp_access accounting
+> produces a large value. But the runtime reproducer I used exercises this
+> specific access:
+> 
+>     r6 = *(u64 *)(r1 + 0)
+>     r6 += -8
+>     *(u64 *)(r6 + 0) = 0
+> 
+> Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the current
+> accounting,
+>     reg->var_off.value + off + size
+> wraps to 0. So max_tp_access records 0 and the attach-time writable_size check
+> does not reject it, even though the effective access starts at -8.
 
-The new helper supports distinct mmap_size and mirror_size parameters
-to fit scenarios with THP alignment padding or per-page snapshot flags.
-It also exposes prot, flags and fd arguments, enabling support for
-MAP_SHARED, MAP_HUGETLB and file-backed mappings.
+Yes, that should had been rejected.
 
-Eliminates ~360 lines of redundant boilerplate code. Fixes a missing
-NULL pointer check bug in the hmm_buffer_alloc() previously used only
-by the migration benchmark, now subsumed by this new unified helper.
+> On the bpf base without the verifier fix, the temporary reproducer did load
+> and attach successfully:
+>     negative_bpf_load: PASS
+>     negative_raw_tp_open: PASS
+>     negative_test_run: PASS
+> and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
+> 
+> So for this particular range, this looks like more than a load-time policy
+> difference: the missing lower-bound check leaves the access executable on the
+> bpf tree.
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+Actually I got this reproduced in the *bpf-next* tree now. And I think I
+know why Eduard wasn't able to reproduce the issue.
+
+The main problem was that CONFIG_BLK_DEV_NBD was not enabled in the
+default BPF selftests configuration, so nbd_send_request wasn't
+available, and thus the attachment always fail with -2 without
+exercising the checks that we have in bpf_probe_register().
+
+With CONFIG_BLK_DEV_NBD enabled, and negative_var_off_program[] updated
+to do use offset of 0 (instead of 28 + 8), I was able to reproduce the
+issue on top of commit `9a3a07d06e7d` "Merge branch
+'bpf-fix-warning-in-bpf_trampoline_multi_detach'" with the following
+updated version of your patch.
+
+  0: R1=ctx() R10=fp0
+  0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
+  1: (07) r6 += -8                      ; R6=tp_buffer(imm=-8)
+  2: (79) r0 = *(u64 *)(r6 +0)          ; R0=scalar() R6=tp_buffer(imm=-8)
+  3: (95) exit
+  processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+  tp_fd: 8
+  check_nbd_attach_reject:FAIL:nbd_invalid_negative_var_off unexpected nbd_invalid_negative_var_off: actual 8 >= expected 0
+  #319     raw_tp_writable_reject_nbd_invalid:FAIL
+
+So I would say a fixes tag that points to 022ac0750883 is still needed
+after all.
+
 ---
- tools/testing/selftests/mm/hmm-tests.c | 625 +++++++------------------
- 1 file changed, 165 insertions(+), 460 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index 402c6f6f5f09..b9388ef4de59 100644
---- a/tools/testing/selftests/mm/hmm-tests.c
-+++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -223,6 +223,53 @@ static void hmm_buffer_free(struct hmm_buffer *buffer)
- 	free(buffer);
- }
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index adb25146e88c..e1797bd87904 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -1,4 +1,5 @@
+ CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_NBD=y
+ CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
+ CONFIG_BPF=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+index 216b0dfac0fe..0ed1d560a2f4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
++++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
+@@ -4,12 +4,34 @@
+ #include <linux/nbd.h>
+ #include "bpf_util.h"
  
-+/*
-+ * Allocate a buffer structure with memory mapping and mirror.
-+ *
-+ * @mmap_size:   total size of the mmap region (may differ from @mirror_size
-+ *               for alignment padding in THP tests).
-+ * @mirror_size: size of the mirror data buffer (the actual working set).
-+ * @prot:        protection flags for the mmap (e.g. PROT_READ | PROT_WRITE).
-+ * @flags:       flags for the mmap (e.g. MAP_PRIVATE, MAP_SHARED,
-+ *               MAP_ANONYMOUS, MAP_HUGETLB).
-+ * @fd:          file descriptor for the mmap; pass -1 for MAP_ANONYMOUS.
-+ *
-+ * All internal allocations are checked; returns NULL and cleans up on any
-+ * failure. Caller must ASSERT_NE or otherwise check the return value.
-+ */
-+static struct hmm_buffer *hmm_buffer_alloc(unsigned long mmap_size,
-+						unsigned long mirror_size,
-+						int prot, int flags,
-+						int fd)
++static void check_nbd_attach_reject(const char *name,
++				    const struct bpf_insn *program, size_t prog_len)
 +{
-+	struct hmm_buffer *buffer;
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
++	char error[8192];
++	int bpf_fd, tp_fd;
 +
-+	buffer = malloc(sizeof(*buffer));
-+	if (!buffer) {
-+		perror("malloc buffer");
-+		return NULL;
-+	}
++	opts.log_level = 2;
++	opts.log_buf = error;
++	opts.log_size = sizeof(error);
 +
-+	buffer->fd = fd;
-+	buffer->size = mmap_size;
-+	buffer->mirror = malloc(mirror_size);
-+	if (!buffer->mirror) {
-+		perror("malloc mirror");
-+		free(buffer);
-+		return NULL;
-+	}
++	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
++			       program, prog_len, &opts);
++	if (!ASSERT_GE(bpf_fd, 0, "prog_load"))
++		return;
 +
-+	buffer->ptr = mmap(NULL, mmap_size, prot, flags, fd, 0);
-+	if (buffer->ptr == MAP_FAILED) {
-+		perror("mmap");
-+		free(buffer->mirror);
-+		free(buffer);
-+		return NULL;
-+	}
++	printf("verifier log: %s", error);
 +
-+	return buffer;
++	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
++	printf("tp_fd: %d\n", tp_fd);
++	if (!ASSERT_LT(tp_fd, 0, name))
++		close(tp_fd);
++
++	close(bpf_fd);
 +}
 +
- /*
-  * Create a temporary file that will be deleted on close.
-  */
-@@ -313,20 +360,11 @@ TEST_F(hmm, anon_read)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
+ void test_raw_tp_writable_reject_nbd_invalid(void)
+ {
+-	__u32 duration = 0;
+-	char error[4096];
+-	int bpf_fd = -1, tp_fd = -1;
+-
+ 	const struct bpf_insn program[] = {
+ 		/* r6 is our tp buffer */
+ 		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
+@@ -19,25 +41,17 @@ void test_raw_tp_writable_reject_nbd_invalid(void)
+ 		BPF_EXIT_INSN(),
+ 	};
  
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.log_level = 2,
+-		.log_buf = error,
+-		.log_size = sizeof(error),
+-	);
++	const struct bpf_insn negative_var_off_program[] = {
++		/* r6 is our tp buffer */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
++		/* eight bytes before the start of the nbd_request struct */
++		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_6, 0),
++		BPF_EXIT_INSN(),
++	};
  
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/*
- 	 * Initialize buffer in system memory but leave the first two pages
- 	 * zero (pte_none and pfn_zero).
-@@ -376,20 +414,11 @@ TEST_F(hmm, anon_read_prot)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -435,20 +464,11 @@ TEST_F(hmm, anon_write)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize data that the device will write to buffer->ptr. */
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -483,20 +503,11 @@ TEST_F(hmm, anon_write_prot)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Simulate a device reading a zero page of memory. */
- 	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_READ, buffer, 1);
- 	ASSERT_EQ(ret, 0);
-@@ -558,20 +569,10 @@ TEST_F(hmm, anon_write_child)
- 			ASSERT_NE(npages, 0);
- 			size = npages << self->page_shift;
- 
--			buffer = malloc(sizeof(*buffer));
-+			buffer = hmm_buffer_alloc(size * 2, size,
-+						  PROT_READ | PROT_WRITE,
-+						  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 			ASSERT_NE(buffer, NULL);
--
--			buffer->fd = -1;
--			buffer->size = size * 2;
--			buffer->mirror = malloc(size);
--			ASSERT_NE(buffer->mirror, NULL);
--
--			buffer->ptr = mmap(NULL, size * 2,
--					   PROT_READ | PROT_WRITE,
--					   MAP_PRIVATE | MAP_ANONYMOUS,
--					   buffer->fd, 0);
--			ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 			old_ptr = buffer->ptr;
- 			if (use_thp) {
- 				map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
-@@ -660,20 +661,11 @@ TEST_F(hmm, anon_write_child_shared)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_SHARED | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_SHARED | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer->ptr so we can tell if it is written. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -735,20 +727,10 @@ TEST_F(hmm, anon_write_huge)
- 
- 	size = 2 * read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	size /= 2;
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
-@@ -794,22 +776,11 @@ TEST_F(hmm, anon_write_hugetlbfs)
- 	size = ALIGN(TWOMEG, default_hsize);
- 	npages = size >> self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
--	ASSERT_NE(buffer, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--				   PROT_READ | PROT_WRITE,
--				   MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
--				   -1, 0);
--	if (buffer->ptr == MAP_FAILED) {
--		free(buffer);
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1);
-+	if (!buffer)
- 		SKIP(return, "Huge page could not be allocated");
--	}
--
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
- 
- 	/* Initialize data that the device will write to buffer->ptr. */
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
-@@ -851,14 +822,11 @@ TEST_F(hmm, file_read)
- 	fd = hmm_create_file(size);
- 	ASSERT_GE(fd, 0);
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ,
-+				  MAP_SHARED, fd);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = fd;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
- 	/* Write initial contents of the file. */
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -866,12 +834,6 @@ TEST_F(hmm, file_read)
- 	ASSERT_EQ(len, size);
- 	memset(buffer->mirror, 0, size);
- 
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ,
--			   MAP_SHARED,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Simulate a device reading system memory. */
- 	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_READ, buffer, npages);
- 	ASSERT_EQ(ret, 0);
-@@ -906,20 +868,11 @@ TEST_F(hmm, file_write)
- 	fd = hmm_create_file(size);
- 	ASSERT_GE(fd, 0);
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_SHARED, fd);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = fd;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_SHARED,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize data that the device will write to buffer->ptr. */
- 	for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -959,20 +912,11 @@ TEST_F(hmm, migrate)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1009,20 +953,11 @@ TEST_F(hmm, migrate_file_private)
- 	fd = hmm_create_file(size);
- 	ASSERT_GE(fd, 0);
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE, fd);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = fd;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1057,20 +992,11 @@ TEST_F(hmm, migrate_fault)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1113,18 +1039,11 @@ TEST_F(hmm, migrate_release)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS, buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1163,20 +1082,11 @@ TEST_F(hmm, migrate_shared)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_SHARED | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_SHARED | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Migrate memory to device. */
- 	ret = hmm_migrate_sys_to_dev(self->fd, buffer, npages);
- 	ASSERT_EQ(ret, -ENOENT);
-@@ -1200,20 +1110,10 @@ TEST_F(hmm2, migrate_mixed)
- 	npages = 6;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_NONE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	/* Reserve a range of addresses. */
--	buffer->ptr = mmap(NULL, size,
--			   PROT_NONE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
- 	p = buffer->ptr;
- 
- 	/* Migrating a protected area should be an error. */
-@@ -1294,20 +1194,11 @@ TEST_F(hmm, migrate_multiple)
- 	size = npages << self->page_shift;
- 
- 	for (c = 0; c < NTIMES; c++) {
--		buffer = malloc(sizeof(*buffer));
-+		buffer = hmm_buffer_alloc(size, size,
-+					  PROT_READ | PROT_WRITE,
-+					  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 		ASSERT_NE(buffer, NULL);
- 
--		buffer->fd = -1;
--		buffer->size = size;
--		buffer->mirror = malloc(size);
--		ASSERT_NE(buffer->mirror, NULL);
--
--		buffer->ptr = mmap(NULL, size,
--				   PROT_READ | PROT_WRITE,
--				   MAP_PRIVATE | MAP_ANONYMOUS,
--				   buffer->fd, 0);
--		ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 		/* Initialize buffer in system memory. */
- 		for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 			ptr[i] = i;
-@@ -1353,20 +1244,11 @@ TEST_F(hmm, anon_read_multiple)
- 	size = npages << self->page_shift;
- 
- 	for (c = 0; c < NTIMES; c++) {
--		buffer = malloc(sizeof(*buffer));
-+		buffer = hmm_buffer_alloc(size, size,
-+					  PROT_READ | PROT_WRITE,
-+					  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 		ASSERT_NE(buffer, NULL);
- 
--		buffer->fd = -1;
--		buffer->size = size;
--		buffer->mirror = malloc(size);
--		ASSERT_NE(buffer->mirror, NULL);
--
--		buffer->ptr = mmap(NULL, size,
--				   PROT_READ | PROT_WRITE,
--				   MAP_PRIVATE | MAP_ANONYMOUS,
--				   buffer->fd, 0);
--		ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 		/* Initialize buffer in system memory. */
- 		for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 			ptr[i] = i + c;
-@@ -1419,20 +1301,11 @@ TEST_F(hmm, anon_teardown)
- 		int *ptr;
- 		int rc;
- 
--		buffer = malloc(sizeof(*buffer));
-+		buffer = hmm_buffer_alloc(size, size,
-+					  PROT_READ | PROT_WRITE,
-+					  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 		ASSERT_NE(buffer, NULL);
- 
--		buffer->fd = -1;
--		buffer->size = size;
--		buffer->mirror = malloc(size);
--		ASSERT_NE(buffer->mirror, NULL);
--
--		buffer->ptr = mmap(NULL, size,
--				   PROT_READ | PROT_WRITE,
--				   MAP_PRIVATE | MAP_ANONYMOUS,
--				   buffer->fd, 0);
--		ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 		/* Initialize buffer in system memory. */
- 		for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 			ptr[i] = i + c;
-@@ -1473,22 +1346,11 @@ TEST_F(hmm, mixedmap)
- 	npages = 1;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, npages,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE, self->fd);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(npages);
--	ASSERT_NE(buffer->mirror, NULL);
--
--
--	/* Reserve a range of addresses. */
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE,
--			   self->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Simulate a device snapshotting CPU pagetables. */
- 	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_SNAPSHOT, buffer, npages);
- 	ASSERT_EQ(ret, 0);
-@@ -1518,20 +1380,10 @@ TEST_F(hmm2, snapshot)
- 	npages = 7;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, npages,
-+				  PROT_NONE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(npages);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	/* Reserve a range of addresses. */
--	buffer->ptr = mmap(NULL, size,
--			   PROT_NONE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
- 	p = buffer->ptr;
- 
- 	/* Punch a hole after the first page address. */
-@@ -1625,21 +1477,11 @@ TEST_F(hmm, compound)
- 	size = ALIGN(TWOMEG, default_hsize);
- 	npages = size >> self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
--	ASSERT_NE(buffer, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--				   PROT_READ | PROT_WRITE,
--				   MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
--				   -1, 0);
--	if (buffer->ptr == MAP_FAILED) {
--		free(buffer);
+-	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
+-			       program, ARRAY_SIZE(program),
+-			       &opts);
+-	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
+-		  "failed: %d errno %d\n", bpf_fd, errno))
 -		return;
--	}
 -
--	buffer->size = size;
--	buffer->mirror = malloc(npages);
--	ASSERT_NE(buffer->mirror, NULL);
-+	buffer = hmm_buffer_alloc(size, npages,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1);
-+	if (!buffer)
-+		SKIP(return, "Huge page could not be allocated");
- 
- 	/* Initialize the pages the device will snapshot in buffer->ptr. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
-@@ -1706,21 +1548,11 @@ TEST_F(hmm2, double_map)
- 	npages = 6;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
+-	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
+-	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
+-		  "erroneously succeeded\n"))
+-		goto out_bpffd;
 -
--	/* Reserve a range of addresses. */
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1782,20 +1614,11 @@ TEST_F(hmm, exclusive)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1836,20 +1659,11 @@ TEST_F(hmm, exclusive_mprotect)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1891,20 +1705,11 @@ TEST_F(hmm, exclusive_cow)
- 	ASSERT_NE(npages, 0);
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -1992,20 +1797,11 @@ TEST_F(hmm, hmm_gup_test)
- 	npages = 4;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -2078,20 +1874,11 @@ TEST_F(hmm, hmm_cow_in_device)
- 	npages = 4;
- 	size = npages << self->page_shift;
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
- 
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
--
--	buffer->ptr = mmap(NULL, size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	/* Initialize buffer in system memory. */
- 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 		ptr[i] = i;
-@@ -2151,21 +1938,12 @@ TEST_F(hmm, migrate_anon_huge_empty)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, size,
-+				  PROT_READ,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, size);
- 
--	buffer->ptr = mmap(NULL, 2 * size,
--			   PROT_READ,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 	ret = madvise(map, size, MADV_HUGEPAGE);
-@@ -2203,21 +1981,12 @@ TEST_F(hmm, migrate_anon_huge_zero)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, size,
-+				  PROT_READ,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, size);
- 
--	buffer->ptr = mmap(NULL, 2 * size,
--			   PROT_READ,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 	ret = madvise(map, size, MADV_HUGEPAGE);
-@@ -2266,21 +2035,12 @@ TEST_F(hmm, migrate_anon_huge_free)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, size);
- 
--	buffer->ptr = mmap(NULL, 2 * size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 	ret = madvise(map, size, MADV_HUGEPAGE);
-@@ -2328,21 +2088,12 @@ TEST_F(hmm, migrate_anon_huge_fault)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, size);
- 
--	buffer->ptr = mmap(NULL, 2 * size,
--			   PROT_READ | PROT_WRITE,
--			   MAP_PRIVATE | MAP_ANONYMOUS,
--			   buffer->fd, 0);
--	ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 	old_ptr = buffer->ptr;
-@@ -2424,21 +2175,11 @@ TEST_F(hmm, migrate_partial_unmap_fault)
- 
- 	for (use_thp = 0; use_thp < 2; ++use_thp) {
- 		for (j = 0; j < ARRAY_SIZE(offsets); ++j) {
--			buffer = malloc(sizeof(*buffer));
-+			buffer = hmm_buffer_alloc(2 * size, size,
-+						  PROT_READ | PROT_WRITE,
-+						  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 			ASSERT_NE(buffer, NULL);
--
--			buffer->fd = -1;
--			buffer->size = 2 * size;
--			buffer->mirror = malloc(size);
--			ASSERT_NE(buffer->mirror, NULL);
- 			memset(buffer->mirror, 0xFF, size);
--
--			buffer->ptr = mmap(NULL, 2 * size,
--					   PROT_READ | PROT_WRITE,
--					   MAP_PRIVATE | MAP_ANONYMOUS,
--					   buffer->fd, 0);
--			ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 			npages = size >> self->page_shift;
- 			map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 			if (use_thp)
-@@ -2504,21 +2245,11 @@ TEST_F(hmm, migrate_remap_fault)
- 					if (dont_unmap)
- 						flags |= MREMAP_DONTUNMAP;
- 
--					buffer = malloc(sizeof(*buffer));
-+					buffer = hmm_buffer_alloc(8 * size, size,
-+								  PROT_READ | PROT_WRITE,
-+								  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 					ASSERT_NE(buffer, NULL);
--
--					buffer->fd = -1;
--					buffer->size = 8 * size;
--					buffer->mirror = malloc(size);
--					ASSERT_NE(buffer->mirror, NULL);
- 					memset(buffer->mirror, 0xFF, size);
--
--					buffer->ptr = mmap(NULL, buffer->size,
--							   PROT_READ | PROT_WRITE,
--							   MAP_PRIVATE | MAP_ANONYMOUS,
--							   buffer->fd, 0);
--					ASSERT_NE(buffer->ptr, MAP_FAILED);
--
- 					npages = size >> self->page_shift;
- 					map = (void *)ALIGN((uintptr_t)buffer->ptr, size);
- 					if (use_thp)
-@@ -2589,18 +2320,13 @@ TEST_F(hmm, migrate_anon_huge_err)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, 2 * size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(2 * size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, 2 * size);
- 
--	old_ptr = mmap(NULL, 2 * size, PROT_READ | PROT_WRITE,
--			MAP_PRIVATE | MAP_ANONYMOUS, buffer->fd, 0);
--	ASSERT_NE(old_ptr, MAP_FAILED);
-+	old_ptr = buffer->ptr;
- 
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)old_ptr, size);
-@@ -2684,18 +2410,13 @@ TEST_F(hmm, migrate_anon_huge_zero_err)
- 
- 	size = read_pmd_pagesize();
- 
--	buffer = malloc(sizeof(*buffer));
-+	buffer = hmm_buffer_alloc(2 * size, 2 * size,
-+				  PROT_READ,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
- 	ASSERT_NE(buffer, NULL);
--
--	buffer->fd = -1;
--	buffer->size = 2 * size;
--	buffer->mirror = malloc(2 * size);
--	ASSERT_NE(buffer->mirror, NULL);
- 	memset(buffer->mirror, 0xFF, 2 * size);
- 
--	old_ptr = mmap(NULL, 2 * size, PROT_READ,
--			MAP_PRIVATE | MAP_ANONYMOUS, buffer->fd, 0);
--	ASSERT_NE(old_ptr, MAP_FAILED);
-+	old_ptr = buffer->ptr;
- 
- 	npages = size >> self->page_shift;
- 	map = (void *)ALIGN((uintptr_t)old_ptr, size);
-@@ -2765,19 +2486,6 @@ static double get_time_ms(void)
- 	return (tv.tv_sec * 1000.0) + (tv.tv_usec / 1000.0);
+-	close(tp_fd);
+-out_bpffd:
+-	close(bpf_fd);
++	check_nbd_attach_reject("nbd_invalid", program, ARRAY_SIZE(program));
++	check_nbd_attach_reject("nbd_invalid_negative_var_off",
++				negative_var_off_program,
++				ARRAY_SIZE(negative_var_off_program));
  }
- 
--static inline struct hmm_buffer *hmm_buffer_alloc(unsigned long size)
--{
--	struct hmm_buffer *buffer;
--
--	buffer = malloc(sizeof(*buffer));
--
--	buffer->fd = -1;
--	buffer->size = size;
--	buffer->mirror = malloc(size);
--	memset(buffer->mirror, 0xFF, size);
--	return buffer;
--}
--
- static void print_benchmark_results(const char *test_name, size_t buffer_size,
- 				     struct benchmark_results *thp,
- 				     struct benchmark_results *regular)
-@@ -2822,17 +2530,14 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
- 	int ret, i;
- 	int *ptr;
- 
--	buffer = hmm_buffer_alloc(buffer_size);
--
--	/* Map memory */
--	buffer->ptr = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE,
--			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
--
--	if (buffer->ptr == MAP_FAILED) {
--		buffer->ptr = NULL;
-+	buffer = hmm_buffer_alloc(buffer_size, buffer_size,
-+				  PROT_READ | PROT_WRITE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1);
-+	if (!buffer) {
- 		ret = -1;
- 		goto cleanup;
- 	}
-+	memset(buffer->mirror, 0xFF, buffer_size);
- 
- 	/* Apply THP hint if requested */
- 	if (use_thp)
--- 
-2.25.1
-
