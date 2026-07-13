@@ -1,156 +1,190 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626F92116F4
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 02:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783908455; cv=pass; b=MOKpRLP3Eg29R5SQLAF4JC8yIA9u19l+PjOs0TPWYl7QNsRYgsnqSTGcf/aSHOgYHHOG1X4Omtw/vRGUTkemv/RgeFeZHqdMg9FUfJZiaxsSC+MpJMsLw5I9DOSRpUINbCuSDiAMpvas9zjr+ZI1YYL0VtAqQE/FuaiNp8Wa0Ic=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783908455; c=relaxed/simple;
-	bh=B4CP/5mOgM5w/hZ9MMzFXqj8QduMR1BQXiOkWHP5tk0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qr0m72XDOKlnZQ09UBNeBPHoYbcnTI48tONFrhUcJUuAD56wBL8tCOpb0JXAKMBsqSl9ZhGG2acVkfbRw1iXQSsa+IYULKws5J+2xozgRLxHgeQka1ACryiqYu+L8/zE+ZooC6gRoAuLiu7gvBZ3WmmonD7TmWNO47t9Nb3+5Fg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M1fDV2zP; arc=pass smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC4E7262B;
+	Mon, 13 Jul 2026 02:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783908989; cv=none; b=jWSxvvr7p2MIkFBo3AmyRSsxkOhn/9s/zJVJrmKS4JzXEfrqvSvIByPuXjgCvA+6M3o0CLkNrWTkGnwajSAJsgRZsgjhkZzskhoraO7MttyVqm5hB6jsYbt2mssV487GpwHB+bzsheulnGMue38L5DcBLDloer+fXodN/PEqnqw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783908989; c=relaxed/simple;
+	bh=dGF7xPfKvWbgXDdOai1l5M80C/P3hvIHfMKdaVHUE6c=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=NNQjgslskxFOKFzRQwB5iQ1WNp1JyueAdVAsgmnfTif16yIi+u65Unkvj4ldmAqPC0IhkNaHyXFqEpmbrtQch4ktrPm77zKrRbCP2wFENE/9H/ZRz/Wp0xs6aH5bVxNObCR2+gR+ng2CUA0oEAQZynQ/odfO3tZ+R2DK/odImbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jR3FcJwl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M1fDV2zP"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-80a123ef90aso41731307b3.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 19:07:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783908453; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LDFzSsbG9BnkNz+vd+0PRmGXHrdKiu2rbQCNyz2YGLZzmF8Df4mEuLKFCJI2vucl4N
-         R4JAs4FFDXS934ZlwLPmGik21gVHARdeO/RorP3qKcboGEhowgsd5zPeb0vQc+vPx8rT
-         DZR+5dR3nlfLisnS7iyPYYhhPSyQRySSGeINISQvo/jZWaZvrBy85sUaLQKqgiM40bVW
-         50QaAaKGbSjRolVQFOryPHhGFO08FbktHZrFRpLjkHKo/3eon407DyIy+TZCbccxjg8W
-         PIRe0mO739U1TxSqiVM9LwbqsMLkBVSxeYwq6uVlf8KHpWL48337zhyT0hKEojtlWqSt
-         l1Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6spuyYVOVitIL40cBcBL/hduox+1UpSH0BYXqXfaKNc=;
-        fh=K7MBHSh+QxsPltAAtOi0YIzg40PefkMNx9q1M1fmDwA=;
-        b=KtDZes/GdU+icacLFfQhJfLDbHVEKEyR6a3p6TLDgnqzAtrzIPC2ww0NszAVLPdNkD
-         mcYYQIwtqaxZSWqq0wouCXORIO+SZrObHBkbiI+04liiwIO/mgzZBNsNZ8zHRY10DzRC
-         teoIgsyPV9Ee4R5eYmISKH0R8ZmS7n+GrfnWwbltD2AtbnCgZab5lftwwOmhZUSJvNVb
-         r8rIieWtD0E4j8moWd4tG6k5gYldfXu2rJhkSEYmArpqPW5gm9Vafsw3OeDER97xgpxc
-         Hv68E7xjMU2QW2B8eSEroJBFyWNp1lKeBVfoxELO/3A2jR+Jf4BJrq0bTHazTr/CRYxn
-         I2uQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783908453; x=1784513253; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6spuyYVOVitIL40cBcBL/hduox+1UpSH0BYXqXfaKNc=;
-        b=M1fDV2zPMunZLePEe7KounHa4/VwcUbffYCJ8qE4hFlduB70q39TF0Gj6QJ13Zl340
-         ecY15c4Q3rOONmwaAHNuOxOfsGcoHWekcYiF90fUvQNk6BNyqaNVS0ejqrDLK/Hih9Vz
-         +KMMTcAOZytkNLeIKDtDUtRiAI1myLBel1SIgP+6Oz/9Fc2OGKml0mJ3vBjcvjfE3Llk
-         bSUSCEK3VfyYy5XzsQZfqPCrXqE5+0HiqkEA6MeLZDW3iYiGBMeF5959xbHu6fi+n/+g
-         tiANU5OWx1tQ89wI73lo9Ue2zmzZLZfVVZ8KPZuzIctTmtW+1RzlpNT9W6oHYmukxnNL
-         ayKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783908453; x=1784513253;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6spuyYVOVitIL40cBcBL/hduox+1UpSH0BYXqXfaKNc=;
-        b=dTnrOhKfhf/vaJojkcvO1NpM8Em38YCVtNkXuLJ7yG9C5PiDsslMKtrxOCH4tkSp8A
-         w2mSjfwj6LY/Cc27vQr28/T5q7lx9MbU7NWLYT3+WvpYpP/W91iGuiQsmR0j3UCpCTtO
-         ZyjxZyKhZnBzSNx+QAX7Xvdq1WzHJxiKiIJDOBusu0BYUB4EQVsp6ve1a5iPFDI0KGVt
-         nOCHLPc2IDX6A8xlBiIxb6FCsfQfvYI2tC9+SGLSpsgEWMJZj0p1K2PMw2qV0hQkSosU
-         Sl8I3MycvWMOmYy3PvYZD0udFzKRoQIn4XpBnc+3mGferYd8rZdYyTp1jouCaa4swwxM
-         pw6g==
-X-Forwarded-Encrypted: i=1; AHgh+RrmHPTBPvVJTpOGL/JBRHlhKITC+ffcsz2W26FlmdI/VhIv0Ra4g6irqMm6930iUMV4kUlwMakAob0ZhALhUpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZYmEygUlAY5QezdWcHP/2ZydsY00ubDcL1J9Zn5Tb/ncuBZ0P
-	8PllmChUGWx1o9qp1kw27GQJX7uGZ/XBQdSGl8AjTK8jdeSWf61RYiR3Nz9DiKWVF+Q6coPc5EA
-	MBlRfkC0R+iq8A9WTTsnY7UKnBX37Cbr7Iz17gqZJ
-X-Gm-Gg: AfdE7clvZsn174amWnu/CDjQLbnSYugzaiFFRbkRgsG0Mo5ZTGuv85deYDtTIgihWgR
-	3eqqYxRFv4cX/+8MoyVhvuypx2ijEzW1AE0xsQeIq0O+ekdcvqiHj9yO9QS4LJGqNcIoPNrzoX2
-	HN4ASplvrDJqnxH0rdCln1Ica/Qpa3X4QSXyhEeFBTJD4rHhPUiRj4acSGY8cucaTFY+7F+vvhs
-	b3KYcWDydkNEfzWHqje3HpA+B7bUDBRVl38292y48gFcDaXvKtEoKiBe3TuNv22FOOi+zlY+ON1
-	zozUKT826Y5oIn/pmJuw68dY8Cs=
-X-Received: by 2002:a05:690c:688a:b0:81e:6563:72ee with SMTP id
- 00721157ae682-81e9073930emr53439507b3.14.1783908452925; Sun, 12 Jul 2026
- 19:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jR3FcJwl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F3D1F000E9;
+	Mon, 13 Jul 2026 02:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783908987;
+	bh=br9FhVYJuPRVoM9lVCAAChWOr0wLAcBU1znUuGfC0yc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=jR3FcJwlDRti3QVIqRaiPv4Zm+2+TGc1dcjjVxG/8zGXzm0KoYX90rnA4ZmX2GyEn
+	 adYWCj22e+XxSrBbiZlHg+V38A5Zbj3u3MW8oPoR7uXoO57O1UxHdc8j+y8a1/NCbP
+	 RzqvCKk7nyX3XMBMnjc8rrd9+YXJxju7a0C/HP4yYBSYOPxg5gI1BdfDONQsLvTplu
+	 +1hIfghtwvt7gpOMqS1RVUknFeYTcVKOJfxXasS9iC/lrFhKL0jqxIB4ikSatdxpuT
+	 QaGjuZAEQVwpOWv0EeqLd32dl6VKTHAtkdbV+vFpXLgPM5mhd4eMpc3KZkou5GTwGC
+	 QDIoT+tjgUDfA==
+Date: Mon, 13 Jul 2026 11:16:23 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 4/5] tracing/probes: Extend max length of argument
+ string
+Message-Id: <20260713111623.bae8f26476740a0467b03521@kernel.org>
+In-Reply-To: <178386880215.3174487.982264935084717241.stgit@devnote2>
+References: <178386876526.3174487.5142283230157728964.stgit@devnote2>
+	<178386880215.3174487.982264935084717241.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260710025144.2000000-1-wakel@google.com> <CANDhNCqqAqVTXXNZvKD8sppJhVY7xjb+n-33Aj1d7Kp3XoMv4Q@mail.gmail.com>
-In-Reply-To: <CANDhNCqqAqVTXXNZvKD8sppJhVY7xjb+n-33Aj1d7Kp3XoMv4Q@mail.gmail.com>
-From: Wake Liu <wakel@google.com>
-Date: Mon, 13 Jul 2026 10:06:56 +0800
-X-Gm-Features: AUfX_mwuJN1dE_PB3zTCuCZX0N75GKuoMW2HZuSaCkaMteTBmB0eeMKpuMcpNwk
-Message-ID: <CAOcRiAHxZEQ1h9svyQrWbw0STjJkwy2xgazFgevBecxwhwq+NA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: timers: Make sleep time in raw_skew configurable
-To: John Stultz <jstultz@google.com>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Shuah Khan <shuah@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thanks for the review :)
-I've sent out v2 which addresses this by adding -h/--help support and
-usage documentation.
+On Mon, 13 Jul 2026 00:06:42 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-On Fri, Jul 10, 2026 at 11:04=E2=80=AFAM John Stultz <jstultz@google.com> w=
-rote:
->
-> On Thu, Jul 9, 2026 at 7:51=E2=80=AFPM Wake Liu <wakel@google.com> wrote:
-> >
-> > The raw_skew test currently sleeps for 120 seconds to estimate clock
-> > drift. This is a very long time for a single test, and can cause
-> > timeouts in automated test suites or CI systems.
-> >
->
-> Sheesh, nobody has two minutes to spare?  :)
->
-> > Allow overriding the sleep time via a command line argument,
-> > so it can be adjusted if needed in different environments, while
-> > keeping the default at 120 seconds to preserve original behavior.
-> >
-> > Signed-off-by: Wake Liu <wakel@google.com>
-> > ---
-> >  tools/testing/selftests/timers/raw_skew.c | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/=
-selftests/timers/raw_skew.c
-> > index a7bae7d80916..03cdcecba8f4 100644
-> > --- a/tools/testing/selftests/timers/raw_skew.c
-> > +++ b/tools/testing/selftests/timers/raw_skew.c
-> > @@ -92,6 +92,15 @@ int main(int argc, char **argv)
-> >         struct timespec mon, raw, start, end;
-> >         long long delta1, delta2, interval, eppm, ppm;
-> >         struct timex tx1, tx2;
-> > +       int sleep_sec =3D 120;
-> > +
-> > +       if (argc > 1) {
-> > +               sleep_sec =3D atoi(argv[1]);
-> > +               if (sleep_sec <=3D 0) {
-> > +                       printf("Invalid sleep time, using default 120s\=
-n");
-> > +                       sleep_sec =3D 120;
-> > +               }
-> > +       }
->
-> This probably needs some usage documentation so folks can discover this?
-> (Which may mean also supporting -h/--help)
->
-> Otherwise seems reasonable.
->
-> thanks!
-> -john
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> To support BTF argument parsing (such as accessing fields within nested
+> structures via typecasting), the maximum argument string length needs
+> to be extended. Extend MAX_ARGSTR_LEN from 63 to 256.
+> 
+> Since MAX_ARGSTR_LEN was previously reused to format command heads in
+> trace_*probe_match_command_head() functions, introduce a dedicated
+> MAX_COMMON_HEAD_LEN (63) macro for matching command heads and switch
+> these functions to use the new macro.
+> 
+> Assisted-by: Antigravity:gemini-3.5-flash
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Sashiko asked to extend other macros, 
+> Does this code also need to increase MAX_BTF_ARGS_LEN and MAX_DENTRY_ARGS_LEN?
+
+I don't agree this. MAX_BTF_ARGS_LEN is only for expanding "$args" into
+each parameter names. The other arguments are kept on the same memory.
+
+MAX_DENTRY_ARGS_LEN is already 256, so I think if that is too long,
+it should be rejected.
+(But MAX_ARGSTR_LEN should be 255.)
+
+BTW, both macro names are a bit complicated because those are just
+buffer size, not max length of something.
+
+Thank you,
+
+> ---
+>  kernel/trace/trace_fprobe.c                        |    2 +-
+>  kernel/trace/trace_kprobe.c                        |    2 +-
+>  kernel/trace/trace_probe.h                         |    3 ++-
+>  kernel/trace/trace_uprobe.c                        |    2 +-
+>  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    2 +-
+>  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |    2 +-
+>  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    2 +-
+>  7 files changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+> index 536781cd4c47..5638a90e61cc 100644
+> --- a/kernel/trace/trace_fprobe.c
+> +++ b/kernel/trace/trace_fprobe.c
+> @@ -238,7 +238,7 @@ static bool trace_fprobe_is_busy(struct dyn_event *ev)
+>  static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
+>  					    int argc, const char **argv)
+>  {
+> -	char buf[MAX_ARGSTR_LEN + 1];
+> +	char buf[MAX_COMMON_HEAD_LEN + 1];
+>  
+>  	if (!argc)
+>  		return true;
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index cfa807d8e760..cc24e992732c 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -149,7 +149,7 @@ static bool trace_kprobe_is_busy(struct dyn_event *ev)
+>  static bool trace_kprobe_match_command_head(struct trace_kprobe *tk,
+>  					    int argc, const char **argv)
+>  {
+> -	char buf[MAX_ARGSTR_LEN + 1];
+> +	char buf[MAX_COMMON_HEAD_LEN + 1];
+>  
+>  	if (!argc)
+>  		return true;
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index e64e323244a5..e6aee800a7d9 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -32,7 +32,8 @@
+>  #include "trace_output.h"
+>  
+>  #define MAX_TRACE_ARGS		128
+> -#define MAX_ARGSTR_LEN		63
+> +#define MAX_ARGSTR_LEN		256
+> +#define MAX_COMMON_HEAD_LEN	63
+>  #define MAX_ARRAY_LEN		64
+>  #define MAX_ARG_NAME_LEN	32
+>  #define MAX_BTF_ARGS_LEN	128
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index b2e264a4b96c..67bd8fd91e3e 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -281,7 +281,7 @@ static bool trace_uprobe_is_busy(struct dyn_event *ev)
+>  static bool trace_uprobe_match_command_head(struct trace_uprobe *tu,
+>  					    int argc, const char **argv)
+>  {
+> -	char buf[MAX_ARGSTR_LEN + 1];
+> +	char buf[MAX_COMMON_HEAD_LEN + 1];
+>  	int len;
+>  
+>  	if (!argc)
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> index e9d7e6919c7f..984ab94df213 100644
+> --- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+> @@ -75,7 +75,7 @@ check_error 'f vfs_read ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_L
+>  check_error 'f vfs_read ^=@11'			# NO_ARG_NAME
+>  check_error 'f vfs_read ^var.1=@11'		# BAD_ARG_NAME
+>  check_error 'f vfs_read var1=@11 ^var1=@12'	# USED_ARG_NAME
+> -check_error 'f vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
+> +check_error 'f vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
+>  check_error 'f vfs_read arg1=^'			# NO_ARG_BODY
+>  
+>  
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+> index ffe8ffef4027..2d0905b2c8b7 100644
+> --- a/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+> @@ -61,7 +61,7 @@ check_error 't kfree ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_LOG
+>  check_error 't kfree ^=@11'			# NO_ARG_NAME
+>  check_error 't kfree ^var.1=@11'		# BAD_ARG_NAME
+>  check_error 't kfree var1=@11 ^var1=@12'	# USED_ARG_NAME
+> -check_error 't kfree ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
+> +check_error 't kfree ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
+>  check_error 't kfree arg1=^'			# NO_ARG_BODY
+>  
+>  
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> index 21ce8414459f..d28f63b7e8a9 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> @@ -71,7 +71,7 @@ check_error 'p vfs_read ^arg123456789012345678901234567890=@11'	# ARG_NAME_TOO_L
+>  check_error 'p vfs_read ^=@11'			# NO_ARG_NAME
+>  check_error 'p vfs_read ^var.1=@11'		# BAD_ARG_NAME
+>  check_error 'p vfs_read var1=@11 ^var1=@12'	# USED_ARG_NAME
+> -check_error 'p vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))'	# ARG_TOO_LONG
+> +check_error 'p vfs_read ^+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(+1234567(@1234))))))))))))))))))))))))))'	# ARG_TOO_LONG
+>  check_error 'p vfs_read arg1=^'			# NO_ARG_BODY
+>  
+>  # instruction boundary check is valid on x86 (at this moment)
+> 
 
 
-
---=20
-Best Regards,
-Wake Liu
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
