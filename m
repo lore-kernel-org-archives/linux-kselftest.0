@@ -1,67 +1,91 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2125B34040A;
-	Mon, 13 Jul 2026 09:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466153E3163
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783936061; cv=none; b=NUe7jKvbYS4ov4J8mLT8d+SqUyVIVXzbT0wwfE00G/UavnzxPfN36eVU2R92LCOz0c4uz1q7pE0cn3UITk7Pks3aOwxa63LOwE7FqyvhNgSB0U/1Z3A5OJa49gyHQf83xLRnmkjVFAAOwl6/35OsLrVXhnr/55LEfS9NrdahIT0=
+	t=1783936678; cv=none; b=G2O39UiR30gXKCZWqwbX0zYfTEKKpS9xBGFfeV8vYKhXNVoIadz4hSuf6381k14JgqPJgwXSSSoVmNxninOaEeaLMQDpKRZjEHNntoWMWSETCWSz6AaVNwej2UCFgPivguBKXl9lWDCpO4kFUKWPzoPKd3Q9xnORzUmNccGElSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783936061; c=relaxed/simple;
-	bh=biFiedicgMMcJVCplTQ7ne5PXu5whq2tWlAOf+mfUI8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=giEQaIpt8B9oIEu8utW0xMQ54w4xVHBCFyeTGurwXUipJE1sw14Mx2TPCProWR2wgs4JiIgiGoO5/oTPKssc0O0VymVfE6n+3VwNfjkkGKXkUfNImiDDaNfKZpYBPJ587RyjAI02PQIemx9C57NykkiSygJu3TfkoeaWXLYPozY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: df5f0e927e9f11f1aa26b74ffac11d73-20260713
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_FG_IT
-	GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:60d8362c-6cef-45a9-a263-4c8bf58ea623,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:60d8362c-6cef-45a9-a263-4c8bf58ea623,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:3f7e6dd9bb0a844e91e4071a92d53dab,BulkI
-	D:2607131747341JOPC8F2,BulkQuantity:0,Recheck:0,SF:10|64|66|78|80|81|82|83
-	|102|127|841|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File
-	:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DK
-	R:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: df5f0e927e9f11f1aa26b74ffac11d73-20260713
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 185128032; Mon, 13 Jul 2026 17:47:33 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: yanlonglong@kylinos.cn
-Cc: bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1783936678; c=relaxed/simple;
+	bh=l3UTbUymYlRN5imGRu4IpkEBSuVXCR++q+L9zDNJTN8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TEQkhHSEo9y6IxS8dZtSMLic0a1+2NyALRw1hd52uUqHGXZyCx/U/R60FK5d5g91jVu+iI9ctReEM4rCN9cT265eCBYgTwY2j6kllnuTZzzrTKf+dvGHT2QLaMbX4/bH356AeBDvm2dodrAbiko++A2qqrHgx95I2kyIZmWG6Ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=CIJHWb9f; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="CIJHWb9f"
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E981C3F286
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 09:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1783936672;
+	bh=APSxiqpB9sfMOUfH2IGy4ikKFokKYtX5pknrKsKxMHQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=CIJHWb9ffc6zxCJxAfa7Vg3jzwQ5rDGFbTA87yaMc3oRXEwT7lhFZ6i5PRdDEMfWS
+	 a2kLkFWIftrAstway2E93YV/o6xq8WumsfPGSxAcfOIhQsDvHcRl+QYnd0FHsuXG/C
+	 E1yVIuvyP11nLWeJQPeNVi6+7ju9yymbFEzbNjQ8tNcvdtl+JgQ4r8uzycIU3qU+sq
+	 QxJqrml4j6WSJ73PF2GuXOFOTQ0eQHZp97NMkLlZlx8l8IhoZ120h01QbWoJXGaHTY
+	 hj0LkngzGZqpm4c2cOtGFQRgxLLfU0OdSR0aF3BYm1Prd4Kw+I8/HB2W8PzWG4Rv0l
+	 wxkcLvzoVdQl0Y6mYNUuMt7TKS4TQSQkJnZuGiwnOoug+h5Y7aM6jrkHLZ47KURTmr
+	 kbWHHzQrSVfDXCwbwFtfzhQgJPfk0qvyZfhHboTJ0dsvgzJQm4h/FJPNay6nb/GUnd
+	 5DoH/km0LFrJ4A57blCaH0OZ6OkCDr+22pY2qfoeA+G5tOLaeC00ccoTj+FSNnkXrR
+	 8BNnjP5pXDmK2ufiCIf1rDL0XYWzlPrw+8RU5s4PuzpW4Y5HE63CDXawM66WgO61+j
+	 uFNAw05eoe/zVDnJG0pb+oLyTTBuq6qGcZGcZqYGWZ77X6q11jufWlub2Ux9l5xXKT
+	 QoIXazt2Kl0KHEkiL9mpXoEI=
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-47dfc23ac71so2404595f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 02:57:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783936672; x=1784541472;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=APSxiqpB9sfMOUfH2IGy4ikKFokKYtX5pknrKsKxMHQ=;
+        b=R80teVyvUZZGZ5T9WU2SLu2q128lP+2IXTwOmCidPPeSTIPMU/3bJ+yTl/pLbQ7rWO
+         rs3qOmyvJUoB1H7YBb99+zQaqa/3cjiBrnpxiNee4s6pDwyda8WSU/rqEX8hJhUTk2B0
+         ZVgOsUunsIT6VasNHA07BBXy/A3Lg0C3jM+SDrbfdkCCOqKrlX2tbbDEetSdYzAmjuav
+         bnnGM3tfEU/q2VFK2Ra8m2gH9ts4f73Ztdfh4Had8zF1+YC5eq4tc8FeLGW2vmvqzzIw
+         mMIud0uUjwXb0Bo0c3JOESNiSZ/YxmwUuYjvZk9l31crWkhnE0TbqQBoNXY2a4XXjVhn
+         ECLw==
+X-Forwarded-Encrypted: i=1; AHgh+Rpllbzowk2AM/Q5ktws43xMF0DEqpEGfWIbwP6HE6kutwRedlXbxKUvHivZtzLw84UYuYeqR4D9xHJBJp7x9j0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2q93lV4+nwtu7DMXdsj7FJbB1277BNMhgMQP/TabrPQpKh+sg
+	2Z0NQUDB+z5K8R2xddtJT7dQlwm3rcZ4oiwtiTh20M3aBv6R83jygdFXa1naCMP50Y6xq4+mmoR
+	LF2tNNeX1++huRFIOioq+uDEYeTUW9ChU6beRyOMfvakmlfAGdKTKyzwMGh7qlqCoXcNVDad0si
+	NBkFVH7iXHtA==
+X-Gm-Gg: AfdE7cltrU1NqTPxe6Fibe37whL9m7LVkvO6Cm9F4kuU14CSuydl4r+obEKCNvn2Pra
+	qqTwuhb0mBQO1zk1C3CJni0vT2K/9nsSxnXjgBpAOO/UHwksLKCSqObI65B++Asw+9vAPZNW3G1
+	lmvrKk0Q12Ydb9rGdlCGV/4PJ2jKeSRabBMXHmRtBIYEGwI6V8/GPUnYyUdxNby8F7u94Z7CqQE
+	B3TeLjGGRw9ICXH7MaTJVULhw6/77Supf176DGjtPNI5fKAVEkg2iwQmL4krloVmJAI9x4hIzrV
+	fF1O6V0uVLBabssxY/TCy/p4Xb08HE4vL7W3iojhzvXdgxHQZFD3Km3Hs9xKsOG76fc67bjWw5B
+	VoNGVrUyS9ImIPAV7E02rJZK+4w+aMYstAjZ0zlkIW43daJOZ269JB469mTv62Civ5BE07qHOii
+	zlL7I=
+X-Received: by 2002:a05:6000:4713:b0:460:3233:beef with SMTP id ffacd0b85a97d-47f2dd016d9mr8632704f8f.43.1783936672523;
+        Mon, 13 Jul 2026 02:57:52 -0700 (PDT)
+X-Received: by 2002:a05:6000:4713:b0:460:3233:beef with SMTP id ffacd0b85a97d-47f2dd016d9mr8632685f8f.43.1783936672160;
+        Mon, 13 Jul 2026 02:57:52 -0700 (PDT)
+Received: from localhost (93-40-44-74.ip37.fastwebnet.it. [93.40.44.74])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0960b06sm84973523f8f.28.2026.07.13.02.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 02:57:51 -0700 (PDT)
+From: Alessio Faina <alessio.faina@canonical.com>
+To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	mingo@redhat.com,
-	tglx@kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH] selftests/x86/fsgsbase: Check mmap return value
-Date: Mon, 13 Jul 2026 17:47:13 +0800
-Message-Id: <20260713094713.497199-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260709121323.591-1-yanlonglong@kylinos.cn>
-References: <20260709121323.591-1-yanlonglong@kylinos.cn>
+	Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: Alessio Faina <alessio.faina@canonical.com>,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH net-next v2] selftests/net: Skip srv6_end_dt46_l3vpn_test::host_vpn_tests if iproute2 too old
+Date: Mon, 13 Jul 2026 11:57:50 +0200
+Message-ID: <20260713095750.2671173-1-alessio.faina@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,21 +94,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi, longlong
+In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
+the End.DT46 support is not available and the host_vpn_tests test contained
+in the srv6_end_dt46_l3vpn_test.sh file is failing in some kernel backports.
+This is the result of those tests:
 
-> mmap() in main() returns MAP_FAILED on error, but the return value is
-> not checked. Subsequent dereferences of shared_scratch (e.g. in
-> test_ptrace_write_gsbase) would segfault. Add a MAP_FAILED check using
-> err(), consistent with the rest of the file.
-> 
-> Fixes: 697096b14444 ("selftests/x86/fsgsbase: Fix some test case bugs")
-> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+################################################################################
+TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+################################################################################
 
-Thank you for your patch.
-I notice that the fix for this issue has already been addressed by my
-previous patch [1]. Could you please take a look?
+    TEST: IPv6 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
 
-[1] https://lore.kernel.org/all/20260626094646.1292754-1-lihongfu@kylinos.cn/
+    TEST: IPv4 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
 
-Best regards,
-Hongfu
+    TEST: IPv6 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
+
+    TEST: IPv6 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
+
+    TEST: IPv6 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
+
+    TEST: IPv4 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
+
+To amend this, check the current running iproute2 supports the required
+feature and, if not, just skip the test to avoid a failure.
+
+
+Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+---
+v2: 
+	- skip entire test suite if iproute2 is too old
+v1: https://lore.kernel.org/netdev/20260708152745.2430714-1-alessio.faina@canonical.com/
+
+ .../testing/selftests/net/srv6_end_dt46_l3vpn_test.sh  | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+index a5e959a080bb..cd7ac03e3907 100755
+--- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
+@@ -536,6 +536,14 @@ host_vpn_isolation_tests()
+ 	done
+ }
+ 
++test_iproute2_supp_or_ksft_skip()
++{
++        if ! ip route add help 2>&1 | grep -qo "End.DT46"; then
++                echo "SKIP: Missing SRv6 End.DT46 support in iproute2"
++                exit "${ksft_skip}"
++        fi
++}
++
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+ 	exit $ksft_skip
+@@ -546,6 +554,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_iproute2_supp_or_ksft_skip
++
+ modprobe vrf &>/dev/null
+ if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
+         echo "SKIP: vrf sysctl does not exist"
+-- 
+2.43.0
+
