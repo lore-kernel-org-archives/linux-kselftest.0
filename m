@@ -1,152 +1,116 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011018.outbound.protection.outlook.com [52.101.62.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320312E414;
-	Mon, 13 Jul 2026 12:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783945441; cv=fail; b=jnuNU/ebECrcspoOOXjl8un0HQJ1tvaChq/mj8GpUG/wXPruQvq7INP+O5rkWaXGG+Fd2Ukv1Mf9Oj53opA7QKPc6Q1soxs+wVMLGeB84L2+zL59HKIdnf5ynw6bH8V59M+PGJB5YyO5YnY1fsZaHSwGyTlPTl1LOKfuMGPWbeY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783945441; c=relaxed/simple;
-	bh=XQzL8vAkuV6tPraSLZPl0bRUpANrWo2Iw3baZgQVOYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=BgmQx2WXE23ed/z0c//xGoc7nYPc57jITFK+IppHDVJEWSeemg6bKhkoCnn+JvZ+hJTowBMbowxqEtX9AdJSRCzQTzAJ7oVHBiZd+qEPZMZK0rafLWTPOF5qjqo9VZP1bkn6ERdi7pb/iZVa2eA/gZo9qr77tb2aI2EwtzXZnDI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Hw3QrDO/; arc=fail smtp.client-ip=52.101.62.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Hw3QrDO/"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FdNDUAHlVdEcStnycsv8vaOARqZ8idJh2VflzxzqqhTPjTVCQXwJLcHzOhC3fzcusARrHSG0qTuCSdR0KXQaYf4su1lFFG6CmozQPfdbNH7p4cm/7l5tW0RE4G9yNy7BNiwwnMuWQVBguBxp+0QiKXKs+Gvw3R+sBnx3gZPGcjDYzx+alCkRIfPojO1uLC0ErOiLPAugR0J7Zf7BHeEvB0PhAVaNBMm6DW6oanNYpuCF75dWdkeKi+8Kw59sTl91zxjDYY4HhOa/FYyJd8aymyy+ArLpSpQrA8gEAoKOLxkTVZ6egv+x2K2oPrZniAhmo2BoxIuty0qVoj5o1B9oJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kajdhxabYxVE93f5Jw711hrTUl4X2MzCH3HJeH2YASA=;
- b=uT6VE7OHC6i4RG+xl7JRUYDyjyCPxDRfP6mtpJaH+tWZlPcYs0sm3w9b4Nie6feXcYdrHYrsa3BdAloCPAjO6ryAF6AqcHkoIiw0ng3eb3d29COMZTL1/jO9xKkZ0OWQY9PiC+yZyX92Jk4oG5wBEy7wskOt/IM5ytrcNRxGMmrXBD9Gm/bTKc3xZT6eJrtaSa1LrM8/mPabGQCNE6Rl7MO7nvpoiFRMsp/x8PqprBS/jgNtnKyqxODYmKlTbQ254ZcRcn8/qEdp2GymvmYwk1ssHKwNIOix719SMG78ToM84m5tfvLJGUFZI8I6BM1aFdPh8LdGf+k7LPOBhh8RJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kajdhxabYxVE93f5Jw711hrTUl4X2MzCH3HJeH2YASA=;
- b=Hw3QrDO/GvFqfYXHmw9ERUa+6c/1ob6Mj7j3nT5tGuDOl7ZoYWOoyM9Zj59fTKrbHfnXLIeMTwIYa5JcKOu3O9zusyqRed5zIEt0TqGWCrrtQcGXkoGGT6eIKh24NNx0J9gtU3TMPfafexfMwZoks7/wLBffTGGU6SzXTH0L63UtpOm/e2pY3QRqu+f6A/d15xHyPCtINb51/kcGc8XFG1A/bctdV4bu0Et6hHg7pw6LV1GV5iqdQkQNucK5vQJtKvUjyv2My3OxwhNbksEhdr7TCUfFSYvCtw5byRAInrL48SjsZWgQ4dav60ZcJaI3cgi543wX46MQn9Oz3k9OyA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by CY8PR12MB7172.namprd12.prod.outlook.com (2603:10b6:930:5b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Mon, 13 Jul
- 2026 12:23:52 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0202.014; Mon, 13 Jul 2026
- 12:23:48 +0000
-Date: Mon, 13 Jul 2026 15:23:39 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Jack Ma <jack4it@gmail.com>
-Cc: netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/3] net: nexthop: per-nexthop UDP dst port for
- fdb (VXLAN) nexthops
-Message-ID: <20260713122339.GA548566@shredder>
-References: <20260712191218.236-1-jack4it@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260712191218.236-1-jack4it@gmail.com>
-X-ClientProxiedBy: TL2P290CA0002.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:2::12) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D5A17993
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 12:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783946209; cv=none; b=ZQ8jpDwXMyZkM+L/hDd+iSWyUOpiPUT4bPlONrPVVJo86I+RkHVk0BzoDyE+PXbu+w2z7ysFfdblMXUDcyL+2RPBh3bWNIH52PXvVjWcsQyxyB0JwHProTak3z6KMSGOblLPE26rgMUZtmuMKAhAOP8pMBOg0zTCz9qPU5Od2Eg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783946209; c=relaxed/simple;
+	bh=eP+6L9APW6Fk/DPuUcN47xss7LE2be5MSQjekTkQ5uw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jZCM0mlmHSiOLKgXIKZH92doE5CxshmdYDkFyhXAxr6yQJ1TU9pyV4TBBJ1TUYUxyD11AqqZGm7n2MPyDFwcPyNy3Y3RCADYgIASXfbsrhJbOi1mbZCNFMshKHTfa/Ztcqps9MsnKuDnEYUkX/FhIKJoyXr2PjXgbNsDqOX5tag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-69ccd6483acso355872a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 05:36:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783946206; x=1784551006;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=t/6DNcSK6X/uGZ1IYS4q2R1Z6al9GC0dZL0uRll37ZA=;
+        b=pJhrH8F8grrY/lzOby83MCRy9kVZxoPQ/mq6pRjqfcQaZqyKV3dNuZoc+NATP8HVnT
+         o8wtOqBI4tZmJqkQSt6XCQwGqxMKeB488vLNmIVCsd7NADt8+nelWZ2NDKrFnwoxemk5
+         EnhjCGaxdXhp1EUrGl/NVXIDnUAzsqwOuJ6Mtl5zaipfggEvZ8N63jJ7VEOmLjy2qCWV
+         z6ik8IwcDIiRmXFIAkhuEwsOJsZR8S92Q5YaqlGSGjMR8s9PpIMLu462+e2Xx1e0jNqn
+         GmzCMjwmM92WkUbC+NUmtg/uNrlwN/4wxa3R/CoQdgMvUH9UANAjs1AoEX+IncMq0bFs
+         wftA==
+X-Forwarded-Encrypted: i=1; AHgh+RpPYPHF1Xm/igEwt32rzNJBVXumX+4Nm2DbSV05fF3UpiPAmgU2TxJlS5qb/aHV49jLxyo/hHD8VqNkx+3/JE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCdlaZb1UXgTJR2UkrXipEWMlbYV3IWwks7EsY1EwU2Mc4pii8
+	wzoVcVSlr0C/EAkHTtLUMl4TdA0LTNFwBNqQ12mfldJNi28UE036uiZq3Xoa0oPB/9I=
+X-Gm-Gg: AfdE7cnYENJ0okuIdqIbIwrT39hS3dpMZ1VT4NE3MIeA3A0JaaDrYLv4y3Nl4bmvCQ+
+	TD+vL2iImgfR/p/mUIy/OCAj3hZYAhpKFylvTRzH93JsvSvAhbnLlBodamxnl3DhZPZI6CVTnaB
+	vazqzmnXd4BACCJwa50dqoMjKkivCozDvSOjzq2VNU7mxDjUjBzDA0tNhkt837LVBG9EPc0CA27
+	sllkfefHOM9sG7xj6P8nZ6f/DpkYNg057aWkvgG3xQ5iVYgYxMHw17OHq7a2pKLazrkX+YknLbt
+	mLLxdk3pvAmFSgG+qishIWNdXe8StruHkj2sQjAsJyUx7f+Jcxpw51S9xUSMCpENbZQuEs0eIvj
+	WuRawkr640IaPxqcrPB5zgrbcba5EHThTvsJMCiAw6NUwNNP/zPemF42Ef6NmSi/vwYlupRpfwK
+	oRGGi4NjwZzRmrybe9tGvtUBhHkUJZlgvs4JplkSwXB4yz2ysA6A==
+X-Received: by 2002:a05:6402:524f:b0:698:3b7c:7e4e with SMTP id 4fb4d7f45d1cf-69c5f24f9a1mr3865653a12.36.1783946205617;
+        Mon, 13 Jul 2026 05:36:45 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69a19d799dfsm16545944a12.17.2026.07.13.05.36.43
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 05:36:43 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-69ccd6483acso355738a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 05:36:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rr50IyrANJEmv2xQN6EXbZAuALGFoZeti0fkSmOHeNi3ErJKyTokNw1Yvpb4qiquvPf4Ap6FXJy76XjGK9NZ8o=@vger.kernel.org
+X-Received: by 2002:a05:6402:a29c:20b0:69c:7ac7:c740 with SMTP id
+ 4fb4d7f45d1cf-69c7ac7c96dmr1680487a12.13.1783946203526; Mon, 13 Jul 2026
+ 05:36:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|CY8PR12MB7172:EE_
-X-MS-Office365-Filtering-Correlation-Id: cde293c8-49e8-49a4-a4ea-08dee0d996e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|7416014|366016|1800799024|22082099003|18002099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	VOYvWWL6hRGvWoppc9WWxXqdj7LGm0lSIA+NopCx3ryEo9RohwBWMmhWrbvgssy3GjqU+30ZevS9vySG8r58lXnPGzJG7+p1LxqC/rUQC41B96HwUIfiPWJAIUWCY6eCEZdOMq1j94aogCFfbQNCzlrSmj6mYo4KSZ7XQw41fz4up/3a3ZC5mqRexfpaECuze2zCaACnhZ0oVXXFNvaEh6E8IRonWlpuY8d9IML7D7hf5dHOb6kLSxNB2+08KSA+UD5fJyDUs9CgPlmeZossfcQ1hK/sLYsUkM7mSqzkON+pzGFlSPa5jEKRLcI8yhoKfOvpZQE2YJhHDCSp5eZeAouSQ8+zGH0fDIdlCWnmnbk9DxQARQXZakBZVOqtBOnJVOMNUgZAz04T+sqhHABFqsDqcbsVE/ry9HTVophp4BKE310EARlXdcIZih3cE6wRRyyGsRSCm7TkStusR3k7r9IrU+F0WSxP3O1nhAG7wZVZWZQRWd7Xt02MXF/aKj12Um1FLRj6EyxQG6xn7+Ux/DPtVALnGiaS3jyRVEhszWm1C2Ri76PWAbxqvu2h2MyzY/jdXu2b8jQ6JsPXtcQ4CeXszoqoQVgqz+0gCv9ogDkmGa+koRHjggiJvFefTFLFeMEWtWeDoMhYKEqrP3dW+tZwyXOVORZaGTAkdP4zg80=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(366016)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?bLYnzMBDZYVfFkE4atc8+B9SRQQM616Mnz1JaB2Ldrl3HlnoIzVu37+wzlh8?=
- =?us-ascii?Q?gspPzMri0dig5iOIs3wib2dOOh2PxxwvKCom6phYWxFOLfETmxe/qDJjSDQY?=
- =?us-ascii?Q?W2eHZptk0xod68y1vKXjdxIhhysWoJojXF3IRuTrD2VgGMnq2ECzsAk22DBN?=
- =?us-ascii?Q?W6taWB4WflkxsYqfiNuYgA6xPgj1mMfYvG+qMvFdk0KTLoaw1FmJhcXr8w5Y?=
- =?us-ascii?Q?yEkpUZK7rEoUZtw58jUfx3Z1X80NiL4lESsDW7UE5rS4IXS6ZefQRaxmJH3N?=
- =?us-ascii?Q?aL7qfVZT7jXP3HYkVGLMES7te/Mjf77BRWP2UKiXxFvjFDzbxM9NMIu7CA/q?=
- =?us-ascii?Q?NOPAn6zMZ9Jz7XlWS3q03QteIjNXq3Zr5InkX9vTMAtdGAkD0QX/YuVBXj0U?=
- =?us-ascii?Q?A88RwLMg7FbbnYYQ0cA57VtIyi/b9aupdsCpRwTH1ANNSaV3Kg3gcON+TgSH?=
- =?us-ascii?Q?nfZMyR8CpoQtzjxNtgLLzYgz2HVIEwGNOP/uszJtORpY0xhLpbm5H6MjGfRM?=
- =?us-ascii?Q?g4UPc/B287/h0wfh+c+r//ltE4AJCuIxvaUCYBMSUKacRKB+Iqil5qP+wXf/?=
- =?us-ascii?Q?Zms8NjLZqH9g0vL8xeH0OgPShZ1NHyikH2qtaGnt0Brdgp1ZxrEGqFcQnPcf?=
- =?us-ascii?Q?++BVkahITuJqp3njidrbxrF2aC2p7WPH2akBxJSwW4Aaz6rpRAH8teX3ec9r?=
- =?us-ascii?Q?xZ/+FSIuL1CG+K5KCQaOKegg42iB4oGGHlLmn7ULp64yZKyNQThAjXRhJEzY?=
- =?us-ascii?Q?NgHa/wR6qUeVgnqHPFTjtR9avF/2HSBT0b1AiQR063588jxM2wlwQAoOGBTt?=
- =?us-ascii?Q?csTQ5D+zojOTvIdiyN3p9EBJzodkivQPtjOZYAS2ysVY6G842uaz9X4nSwn2?=
- =?us-ascii?Q?3Mk2Xt31rC+6zprBjfGQbQfAVNNYntuSrSOjCMy6YcZ7G22Fy6BszIl0j3Ee?=
- =?us-ascii?Q?+U0lDCbMlW8R13JEj+VOdY3Phn/UADVCIRiSERzWLqXFGW0ZILSXptEPgDDF?=
- =?us-ascii?Q?VGxnW0KEvDaWZxV4QvTTsB6I7iv2W0lzafRw0W/u9t6+k27FS0U6Q2N9guk7?=
- =?us-ascii?Q?o9+fnfOhtu4EEhHhxqGGJtApPzBzJhuJ4GXgf3p/RJwy6VNlMLET0A7TPHLJ?=
- =?us-ascii?Q?bUPBnfP34vTKdBObE2NZpujtAZm3WGiR8fqJ7dtn68ZQh/WnKb4458zBej6H?=
- =?us-ascii?Q?OGoBWS6sm+NvDqQVmvatu3wuk5CejrSetn0gG6xZpaAb816q2mT9whHWY4Ld?=
- =?us-ascii?Q?diH/hG6hNJ5y7szoS7GRsHnD/t8+Kl8HXb6E+/F7ltU3XpGpdSCjLy+R0dQd?=
- =?us-ascii?Q?IJIYyyRUq+PCFlK3HbPLaHUjp2nQpHJxBDO+ZdEaB4vKTCX5uDr4yq5fnUfT?=
- =?us-ascii?Q?+nXNuBvZfeTwRQoLrdtmu25CBu2n6G6siI8+CNMiohoMpT5oOUq6SXRPV0Ht?=
- =?us-ascii?Q?Xjb2GqW7aSraUQkmLgJQUS+TlbpG6I8hRsw7vPh3eq50/638M2upDRZZeY4M?=
- =?us-ascii?Q?2FoOJC12sws8UyxvQNJlA9FGZ761kYugy2WXjgvpWfnjxZkjYUO2b9wJy85+?=
- =?us-ascii?Q?ds3idZt46rfvRATD0t9IosP7xegBWWa5T4SiRmJa1yidBJ3/0KVcAM5x/qHh?=
- =?us-ascii?Q?61y7VDF7KiC4aHkad5I7GvnNJQnLpZ45ELTXSFfJGEhYgV7Z8OaXZnLrwjQq?=
- =?us-ascii?Q?3HVLFvRRjYyya9TTbMnXssdMUD5+Tf+IjZ+Vf7rOETNAu1Ww?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cde293c8-49e8-49a4-a4ea-08dee0d996e7
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 12:23:48.0312
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ln3WAuxgzlxeUZnpfzZXpwymMIHoS5b10Kp1AkqNGZjIMbGTLCq1djgTDUC5S9SVZIdPjCJNfL1RBJ0ESEhkeg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7172
+References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org> <20260713-catalin_pto-v1-1-5b93b1131089@debian.org>
+In-Reply-To: <20260713-catalin_pto-v1-1-5b93b1131089@debian.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 13 Jul 2026 14:36:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWBQ-Vn4XzbrfV31adY7cEjLvmGuwu5_x7rn1NBkEC5mA@mail.gmail.com>
+X-Gm-Features: AUfX_myop1qSR0uweNQ9TGaDUdl1iHj4R-fufo4jIbPM1JPRHa_hqCZvJROVzWA
+Message-ID: <CAMuHMdWBQ-Vn4XzbrfV31adY7cEjLvmGuwu5_x7rn1NBkEC5mA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] mm: kmemleak: confirm suspected leaks with a second scan
+To: Breno Leitao <leitao@debian.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, workflows@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Jul 12, 2026 at 07:12:15PM +0000, Jack Ma wrote:
-> FDB nexthops let a VXLAN fdb entry point at a group of remote VTEPs, with the
-> kernel flow-hashing across the group (commit 1274e1cc4226 ("vxlan: ecmp support
-> for mac fdb entries")).  Each leg carries its own remote IP, but the UDP
-> destination port is always taken from the VXLAN device (vxlan->cfg.dst_port)
-> and cannot be set per leg.
-> 
-> Some deployments pack several receivers behind a single underlay IP and tell
-> them apart by UDP destination port.  To spread flows across such receivers they
+Hi Breno,
 
-I don't understand the "tell them apart" phrasing. Aren't all of these
-receivers interchangeable given you are load balancing between them?
+On Mon, 13 Jul 2026 at 13:48, Breno Leitao <leitao@debian.org> wrote:
+> From: Catalin Marinas <catalin.marinas@arm.com>
+>
+> The kmemleak marking phase is not atomic. While the object graph is
+> traversed, the kernel can modify pointers, free objects or allocate new
+> ones. If a reference to an object is moved from one location to another,
+> kmemleak scanning may miss it. We have explicit annotations like
+> kmemleak_transient_leak() but identifying and maintaining them is not
+> trivial.
+>
+> Given that such transient leaks are short-lived, rather than just
+> reporting such objects as leaks, do another scan to confirm the
+> suspected objects. If no new leaks are found during the first scan, skip
+> the confirmation one.
+>
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> Assisted-by: Claude:claude-opus-4-8
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
 
-> need a nexthop group whose legs share the remote IP but differ in UDP port,
-> which is not currently expressible.
+Thanks for your patch!
 
-I think you will need to provide more details about the use case given
-you are asking us to accept new uAPI which we will need to maintain
-forever. The FDB nexthop groups make sense when you want to spread
-overlay traffic between several distinct VTEPs. In the EVPN-MH use case
-these VTEPs are different TOR switches. In your use case, why can't the
-load balancing happen at the target host (e.g., using XDP / TC /
-SO_REUSEPORT / flow classification)?
+For how long does this postpone the reporting of a real leak?
+I am asking, because I have a few known leaks in my local tree,
+and it already takes a while before they are reported.
 
-To be clear, I'm not strictly against the idea (we can talk about the
-implementation later), but I would like to understand why your use case
-can't be addressed using existing mechanisms (or why it's undesirable).
+Gr{oetje,eeting}s,
 
-Thanks
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
