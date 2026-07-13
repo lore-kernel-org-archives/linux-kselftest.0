@@ -1,252 +1,173 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021086.outbound.protection.outlook.com [52.101.100.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB163EEAEF;
-	Mon, 13 Jul 2026 11:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783943338; cv=none; b=sLTJELz4o88RRCXyvvRMFuZhyMY6tl1d9GH46x93baiBvwy1j/DCjBzTw/Q0Ug4Ih+8950qCVnzzdhND/TcUXw1Q4bfN6If2gLKoAWcLm2SETz+pAJQbCFm8qjQcufhYYtrrEAI943MkO48N/oZpE5I7l6KNagLYB4CBDRTDWiY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783943338; c=relaxed/simple;
-	bh=3eQR/Kd3kFCe8YoRP/xKeQGlrrGIS3gsS7iBDPNwGWE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hItxZWoQVn7WjzpuIo3qkiXM9CUjscfztnOxdA/ds9pzTrEN5grGVK7cvlUOtCamR+Gwv+DTIu4FOcX8tj52bXnKzSCLXxBkOIPSjwQO3BtGyiaTJFdxhF/LNcRn58gosPqbnrlRFRmF25CWvaCxudxXi+Gu8ahkQRbmToLXofo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=O4dNFxzZ; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF154028F9;
+	Mon, 13 Jul 2026 12:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783944450; cv=fail; b=iV9YnLP9vlTr8nkvM3YpSvniZfz1U6uphBnb6+byjkiC4ohhzFUdZ8ZUw/cfJ1yCDQF4oLOpWho3Ci6HBV5nlW25eoTjcOBC9GZHxdbmZ2Sh5h+MZ1yKwmWLvBz48FHJqa48ioGT6n7qghfOHtYNN0jjIkOnT+pyKpLb1FtlRFQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783944450; c=relaxed/simple;
+	bh=EeyTyLNifURwcN/tRH3j/7EDGOnFDum9wss0Y68BVFg=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:References:
+	 In-Reply-To:MIME-Version; b=G6bEoTRa5MgO5Jarqyakf2+b6sdheKOXp6qkGq4WXWRrrXJMJPD1oCjbtS9pDnjJErLQJWQFyXrlv5pMQid0PEb7niiOV5Rn+CQQeslSzW/jiZCsxdqgPGExnigp34sPby0p20KhpLheb/Q7AydHYY+WLl98/P3PMwHW8sWbkv0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=EvkqveAU; arc=fail smtp.client-ip=52.101.100.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="O4dNFxzZ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=J+3Dbo69/AiAclmmo0zFVcKt382p+VuW4vPQJlc8PVc=; b=O4dNFxzZco/bBX6I7886Md286z
-	BQdURH8Wz2iXtTqc7u1PFtdADvAk6Pv75xV0JNWaucThbzig+4x3+wWCLuWGzwwLJVFMeG6dcl1yw
-	qurQvJggsW8mwlI0sToNfH/sCmpveQGapeCYfdO8FQN7scPzfeaA0wIxb2xV4cxVEMDlp+qFBlgFY
-	t75mvoaPJ/wD3M3vkPM7VjrKdgEJx43WP3UisV25dqzvL4uJLKsSmM2EXvgAIhHfvJfhULflyge9L
-	ms1K+O5ue209ncKJXF6/OyAJoJEOmoAo0da3nZnMHpvR0ZGzhoGDpWJowZUHWdIE4vmDxWBgtpBL3
-	hsMjYyWQ==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wjF9R-001Tjd-1y;
-	Mon, 13 Jul 2026 11:48:45 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 13 Jul 2026 04:48:07 -0700
-Subject: [PATCH 4/4] selftests: mm: test kmemleak's N-consecutive-scan leak
- confirmation
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="EvkqveAU"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Pxx3vf3iWRGRxk273JbXcDK4MB9JgIWtA8yElwQ545z82OG+WtzC1z5YgbFKJ2iynlA3ix0HXf6uNM9GXgYCE2plnBcAkzKAKQTkV3mwRUMhAs/qdW/Ag6yqRh0418jyt7NvUtvahOT6IGBNoNoPAL7xInlWdav8zTcwSw0oIJyOa6o5M0jUtUpNSVTzy7DBxK2rkwEgCZx9r/oAb3U7RZDFQH3mbs9D397I+SqdOuOntFIGZGM8H7T7tD2JKPRdoj+uMKk9WgvlLGFkdiE3CLL98fEtYtFAaiQBW+cVH3yyUkQopS04yi+2Ts1w0VmKTC2aM+4cwbQqwJGzfYvQRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3qirLLX/ZhQD3j7TnLcMoexVuF2EazNr5u8vL+5VLNE=;
+ b=iZUX5ORQFjYztha8b/vMcd1W68I68u092vtDiIIisfeGhcZr7ETFkNo51apA+KyNr4H66ftCXdpGu2NZSPRVyvn/Lg6hzy7laL3IMgrogBxo+O33tnjQiP5BVgd3czJMtB4TNqDG12DwnProeOJkV/qh2lboBOJ+6R/O91Zhda6GrFcAXYjRgFFkHyI5m+1NEdpL+bM+Lu3LYbJ+nAUWsTPiQcqe1U17+4fMAn//+0zrm5lJK76U7SdzB4/wwemSEHkvmulPv3HuzjONSTX9BpcFvE6czMpQRx05jCneFNbyJyz7Qm+Hi44yAm6y+JAzB3y6WKPYFwkjCG6KV9VQDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3qirLLX/ZhQD3j7TnLcMoexVuF2EazNr5u8vL+5VLNE=;
+ b=EvkqveAU2zWjkyYiaLcVSzSg2gtdPgO9VZrfOR2jHOLDXfMR0pjoum+Ywea1sCJx1qAULBfC6LbHOJmXAnhLCSVzZiZjnYl7k4keD2EK+jJo7q/zAAAnakxPUhdAQlU8g2V8qGvsj/aEKA/+lYYTx30qTk/ehNTgdNTosTwX4dc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:27c::13)
+ by LO0P265MB6995.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2ec::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Mon, 13 Jul
+ 2026 12:07:25 +0000
+Received: from CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::6c9e:93c8:10db:e995]) by CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::6c9e:93c8:10db:e995%3]) with mapi id 15.21.0202.014; Mon, 13 Jul 2026
+ 12:07:25 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Jul 2026 13:07:24 +0100
+Message-Id: <DJXFJ00EOKDK.CNXCIN7TMZU3@garyguo.net>
+From: "Gary Guo" <gary@garyguo.net>
+To: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
+ <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
+ "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
+ Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Igor
+ Korotin" <igor.korotin@linux.dev>, "FUJITA Tomonori"
+ <fujita.tomonori@gmail.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
+ <tkjos@android.com>, "Christian Brauner" <brauner@kernel.org>, "Carlos
+ Llamas" <cmllamas@google.com>
+Cc: <rust-for-linux@vger.kernel.org>, <linux-modules@vger.kernel.org>,
+ <driver-core@lists.linux.dev>, <dri-devel@lists.freedesktop.org>,
+ <nova-gpu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+ <kunit-dev@googlegroups.com>, <linux-block@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v8 07/10] rust: configfs: use `LocalModule` for
+ `THIS_MODULE`
+X-Mailer: aerc 0.21.0
+References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
+ <20260713-fix-fops-owner-v8-7-2495cfa82d47@linux.dev>
+In-Reply-To: <20260713-fix-fops-owner-v8-7-2495cfa82d47@linux.dev>
+X-ClientProxiedBy: LO3P265CA0016.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:bb::21) To CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:400:27c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260713-catalin_pto-v1-4-5b93b1131089@debian.org>
-References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
-In-Reply-To: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7712; i=leitao@debian.org;
- h=from:subject:message-id; bh=3eQR/Kd3kFCe8YoRP/xKeQGlrrGIS3gsS7iBDPNwGWE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqVNCEK5BL8aTovIa4ZM4PGTSVv0NXeVIOLzzHd
- QS5UNwaN1aJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCalTQhAAKCRA1o5Of/Hh3
- bT3fD/9z7pPIA0FZEM18v9wAENnYMgC5wBEQ92lbjmm0+47fWixv3W1cLGZJ9XQK5jTaO7zWayd
- ZAlGg5VlwjSzjYaaqtw1+fySCVdYHPtEeb79re7GpXkvgn0shL0Z/dlDS2e6qGZQrD2QHoQVKif
- +IrXlqd+e8TlUyNvMcso2iJzEEc0772PlC7y/2z9O0vjGYSzRMP7vC0mhrIZ9TE2Vgva/HvJfx3
- tOV8j0eDI/4Rh3+LS3jmbRetY4vGP4vFbhgwuNlspydCoJRU3lAnTp8x+b1I4K8LiDjzHFqE899
- XYUMnjbaaHSzT0RIwAm3PmFlmNyJVFmCLcSMGdKq51XzQKWgKs/u+IUW0HlEyC5VHlcUMpCowy+
- tdrjS+gMpHrTQXinSsJj7NvU9qPjKZpM2ju/leu9WpMRENOOj0jqdDKrkWdJhXCDjf93BHEjJfK
- 9rmbj6keQk2/Jc7wHG/REuHe2HuLTHFDPQ227mX7SXkCJvDt9hMpy36BRG0j/JgVckLIWP3LN9H
- iF/YcAPoJC7KqrZBnLj9QRR2aoWZBI+E3jGWBzrTNbFxWzusUM1yGx4pP2JgNNXFr5+B7ut7H7i
- 9/j/FddfwKk2KPC5xoJC6seTdwTrQBVnKbRatCz706fyFqxzBgLEvd6ginAAI42COkKwnAGqb4F
- AWZ/LjSek/G+Q3w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CW1P265MB8877:EE_|LO0P265MB6995:EE_
+X-MS-Office365-Filtering-Correlation-Id: 962ce0e8-cd1a-400e-47af-08dee0d74d81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003|23010399003|921020|18002099003|22082099003|56012099006|4143699003;
+X-Microsoft-Antispam-Message-Info:
+	PwJe6ZszOhIvyq8wDahoMSzBsEiSw7nZB8jX8hPmfFA05i8jCrVlhnUJ0sLp2Di1Z7Jtx0qBwQVcf/M43ObaXllEv4VrqbWGLVj72cuTg9qxPgPq/9q73A8cc8f69Cqg3/JR5TM0XBICNxU9s5m4kpwHBHws4U61VneB2UB19zVv+BqMTWwCN1/aGppLY5z6NCPAhfN6ZHhAsNmfVyeyW8vHEUXUlVSze3oBAwhO6qZ0oLsFrAQ2N8rz1/bH6xN8Il+z82DrX4ttcWjJv2j94xP7LBbVI2L5qNUReoRbK4HHC0NGzH7IyqhaHLsUmEwntw2tfb3FQJDijJR94ej+sLqqKLsI+EmCLK6VL3mSaIdB1mMmE+naRoI89xa386OQj354IRYs2W70fOw6BWolY0Des599JUuGbUzHN/7zRIj+X+6bQ2/RTiGpzxwewjGqQDHMn4wyk0rSiVEVqmyI9a0C6nSDYkf1ThiW3KASpK5kA25Dbv7wL2X1CN77sQqT4JVoNsaWp55V5IUCrFV5Rj+hD3SafaonNvTFU5x36U9ptHmm7NqkYHfOrxZwFJTKYSBUcedi9qRX3BywTCLZpdIUwxuk1xuSWu+O+s2d36LIKW77UHGqH92QTUy1kF+FSNahCsFRI7WxGbhlygHtZ1Qs+WyHuuCs/TdxmpuEg4bcmQI0rCYel4zKHZquZd3m
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003)(23010399003)(921020)(18002099003)(22082099003)(56012099006)(4143699003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZjRSTWJYWlRmbk05WUlUOCtDemFJbC9lWkZEakxQc0ZWUlRqeUc5aWpKWUxQ?=
+ =?utf-8?B?dFlad3JaVEkrWDU2VnE1Q1UvaXI4bm8vNGdtZDZuUzdDNEo0WXYvVFh3Nno0?=
+ =?utf-8?B?MUUwNlhUQmU1UEN6QjVXbUR0NW5hNm15LzNxTmdVK25RNVBacTZQcFdUdHlu?=
+ =?utf-8?B?bno0YjNoaEUzVURSSWJoNkdGcXJ3UmNLZEwySkdqaFQxUExnR0RibkJuQXYr?=
+ =?utf-8?B?dWN6bU9FUFN5dXpvTnZkUWRZZTIvVkFkTkRWN0RldzNocUdhc012YkdsTU9h?=
+ =?utf-8?B?Q2JvREZmd3VIYnlJQzlGN3BySXpnczVLNTNCZXNRc0p0cllvT2Y1NlgvamhR?=
+ =?utf-8?B?UDlleGxranNnWEdKSEZLbWdMQzFMTSs2UEpLRWh1S3IySkNNb3Byb1RkaU84?=
+ =?utf-8?B?dXlXcHp0UzZlbVlIL2E1MlYzUUJYUWZtWGVYb1BETjJoWW4zaEhEdWZCZVBF?=
+ =?utf-8?B?bGE0NzhOd1VnQWtUcTFVeWdSeEpiOUZWNXNmZ1dTNWx1Rit1a2E0dlcwajh0?=
+ =?utf-8?B?SjB2dytrM0xKN1cwMTJIUEM5WkZmU1BMYndDbmpLb3dIcEludHZoMkQrNGZv?=
+ =?utf-8?B?dXJqNUJtQXhzbHNPaE9QTDUxWXU0VlR4UVpuSlBabEMyeTBWK2M1UlZmSlVF?=
+ =?utf-8?B?eGZiRkNxOGV5aTRkZU9BK0JTYnU1M1VYWVQ5K0F5MEh5Y2NGbzd0TUR4L2h4?=
+ =?utf-8?B?Uk5YWno3TE1yV2JHYlRuZldqbHFtVGdlRmF2dW9wSnNVaVY3ZzJMVW51UWZJ?=
+ =?utf-8?B?VTFFTGNsdkxWYTJaMm5VbjNQc3l3RnBZcXRjbjhVTm53SXNQQXhpeWhjM0s3?=
+ =?utf-8?B?UXpsemZqSmdROGJzR2E0TTV6MmZNL1FXVDlQNmErYUpUR0JwR29ndGxRTjBh?=
+ =?utf-8?B?bGxBaCtWOUVRc0lianc1K2lBeUp0L2tFUWl4WExXSUdBaFVvRnhDTis1dXNy?=
+ =?utf-8?B?SnRnbzRVb1l5Yjd1SUh5dXpDU3crUVYxenUyckhRYjZOODl6K3NjQ2c1Vlk4?=
+ =?utf-8?B?VVhZQzY0aG9ZditzdWFWMXFNZXJCNVJNMTVhM3R6WmpEYU84ZVpZODFuNVdE?=
+ =?utf-8?B?N0s0NXh0aWYvWFkydXA2WjdXdU12dHYvbFEzSE1hRDRjbUhSTW44TjErQ2l1?=
+ =?utf-8?B?Z0R0aVhQaEdnK0lVQ0R5VFFETSthY1VQTFpOODN4V3A4bFRoZzkxcll0TUZN?=
+ =?utf-8?B?MXpZZ3F1ZzAxWittWGZXeTNnaEIxRTk0VS9iZGNqaTVETUVPY3YzWW15dmtP?=
+ =?utf-8?B?d3ZXVXdPdm9BOUFDL3pWU244dWpuQXNpY2thRVMydTNRMjh4R2hIY0hvS2FB?=
+ =?utf-8?B?Z2YxOG1Nb0J4U0ZyTVJPQkRxVjhxY21zTVgvSzZVRHE0bHgyYm43dFh2ZExG?=
+ =?utf-8?B?Qlo3bUkwYmlqbEJicGtUelBUMTFOUjBWOFlFUElueVJYWTJybWFqQWRtK2pH?=
+ =?utf-8?B?em1hZEZDSFZuT2VZU0lRdkluOW5BVEEzQlNMT3BkYk1rZGlpT3JnUWcxS21H?=
+ =?utf-8?B?VEx4cElUZjE2d3hNUXNkYmRCNUhwK2dJNnNwbWkxT29DNlZyV1NRdE4vcGgw?=
+ =?utf-8?B?NXpSOWNoQTJGMjRpRS9yN1lMdHF5UjNQbDhZVzV3SzBXVTlJRmNNVGxZbE5K?=
+ =?utf-8?B?cEM4WGZXZGY3U0FOMHhOOXdKRHliS1IyTWJaYTdZd1N2TWNmMkZ6blBPcytu?=
+ =?utf-8?B?azl5WlZBb2Z6eG9icmFqUlUybzBZbE5WQ0V4NXdlUkExaTU2NXRFOGFFMVlv?=
+ =?utf-8?B?MXEwL1dEcUI3cEwzTmw4QlZWeFE5eE1QTGNpSW9TVlJzSWs2OWNySFY1MnpU?=
+ =?utf-8?B?NXhzTWtGSm1WTnpDSWkvM0VXY3hqN1RPaWpQdWQ1OXNHUnExbjFnNGxRaktN?=
+ =?utf-8?B?SGpHQkdZY25DR0lKR3U5QVF0RGJ2WXhsVmtyOWYydlBaVExLR2FWVkNYUmNH?=
+ =?utf-8?B?VDM1NnRZR2dFVEhzZUtJRjZONk96Q1lZM3hxUk5Ba0FTYkFVOW96emxIV1E2?=
+ =?utf-8?B?a0tpdDdBMldrY1pHK3dYdTdpaHhnYmVmQ00ybjhPVXMwWDhGSTRKdkY2R2k1?=
+ =?utf-8?B?R3FsemJOVzIzTU12QzQyOVp0RWk3WSs0Q2JWU3lnZVZsQk12eTZoUTBybUpo?=
+ =?utf-8?B?ZG95VlBFS1Bna2pSVE9IS2l3T1YzVlJZWW0rTWJiR1BENHV2UXB1L2h0QmVn?=
+ =?utf-8?B?cnpyOUNZVnUvSXdvZkxpWldYVGlvUVM1Tnk5cWhsaWxGR3FXRk91NVN4QjFB?=
+ =?utf-8?B?MTd5eXcxWkdDRVhRMHVFeG1SY3k4T1d4N2lnTnFiUnBYQmx4a1F6MEZjZDd6?=
+ =?utf-8?B?bXR6RERUVUhIYkc1K1pnOVZaRTlqcXA0c3k3TklnVzczMndvVEg4Zz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 962ce0e8-cd1a-400e-47af-08dee0d74d81
+X-MS-Exchange-CrossTenant-AuthSource: CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2026 12:07:25.7333
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l9vU4FMqa6vZWMbev4hqWyBPSLty0QuHXD/Lc1QATdjQDB2VLyVSZMxxoLXCyPy1JR8bTfRv3mapYfUwTDPPbg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6995
 
-Add a functional test for the min_unref_scans kmemleak module parameter.
-Using samples/kmemleak's helper module it checks that min_unref_scans=1
-reports an orphan on the first scan, min_unref_scans=2 reports nothing on
-the first scan but does on the second, and that the parameter reads back
-what was written.
+On Mon Jul 13, 2026 at 7:45 AM BST, Alvin Sun wrote:
+> Replace the `THIS_MODULE` static reference in the `configfs_attrs!`
+> macro with `this_module::<LocalModule>()`, and update
+> rnull to import `LocalModule` instead of `THIS_MODULE`, consistent
+> with the move of `THIS_MODULE` into the `ModuleMetadata` trait.
+>=20
+> Assisted-by: opencode:glm-5.2
+> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 
-It counts only the helper module's own orphans (matched by their
-[kmemleak_test] backtrace, with the module kept loaded so the symbols
-resolve) so unrelated leaks already present on the system do not perturb
-the result. The test skips when run as non-root, without
-CONFIG_DEBUG_KMEMLEAK / CONFIG_SAMPLE_KMEMLEAK, on a kernel without the
-parameter, or when the helper yields no detectable orphan.
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/Makefile                |   1 +
- .../testing/selftests/mm/ksft_kmemleak_confirm.sh  | 132 +++++++++++++++++++++
- 2 files changed, 133 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index ed321ae709dac..786b1d73d93b0 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -150,6 +150,7 @@ TEST_PROGS += ksft_gup_test.sh
- TEST_PROGS += ksft_hmm.sh
- TEST_PROGS += ksft_hugetlb.sh
- TEST_PROGS += ksft_hugevm.sh
-+TEST_PROGS += ksft_kmemleak_confirm.sh
- TEST_PROGS += ksft_kmemleak_dedup.sh
- TEST_PROGS += ksft_ksm.sh
- TEST_PROGS += ksft_ksm_numa.sh
-diff --git a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
-new file mode 100755
-index 0000000000000..3a8576e835c8d
---- /dev/null
-+++ b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
-@@ -0,0 +1,132 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Functional test for kmemleak's N-consecutive-scan leak confirmation
-+# (the min_unref_scans module parameter).
-+#
-+# kmemleak only reports an object once it has stayed unreferenced for
-+# min_unref_scans consecutive scans. The default of 1 reports on the first
-+# scan (historical behaviour); higher values filter transient false
-+# positives where a live object's only reference is briefly invisible to a
-+# single scan (e.g. an RCU tree update in flight while the scan runs). The
-+# test loads samples/kmemleak's helper module to create orphan allocations
-+# and, counting only those orphans (matched by their [kmemleak_test]
-+# backtrace so unrelated leaks already present on the system are ignored),
-+# checks that:
-+#   - a freshly allocated object is greyed on its first scan (its checksum
-+#     settles then), so nothing can be reported before that priming scan;
-+#     each case below primes once first,
-+#   - with the default threshold (min_unref_scans=1) one scan after priming
-+#     reports the orphans,
-+#   - raising the threshold to 2 needs two scans after priming: one is not
-+#     enough, the second reports,
-+#   - the parameter reads back what was written.
-+#
-+# The "one post-prime scan is not enough at min_unref_scans=2" check is the
-+# core regression test: raising min_unref_scans must push the report
-+# strictly later. Like ksft_kmemleak_dedup.sh, if the module yields no
-+# detectable orphan at all in the running environment the test skips rather
-+# than failing.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+# KTAP output helpers (ktap_skip_all, ktap_exit_fail_msg, ktap_test_pass, ...).
-+DIR="$(dirname "$(readlink -f "$0")")"
-+# shellcheck source=../kselftest/ktap_helpers.sh
-+source "${DIR}"/../kselftest/ktap_helpers.sh
-+
-+KMEMLEAK=/sys/kernel/debug/kmemleak
-+PARAM=/sys/module/kmemleak/parameters/min_unref_scans
-+MODULE=kmemleak-test
-+AGE=6		# seconds; must exceed kmemleak's 5s minimum object age
-+
-+ktap_print_header
-+
-+[ "$(id -u)" -eq 0 ] || { ktap_skip_all "must run as root"; exit "$KSFT_SKIP"; }
-+[ -r "$KMEMLEAK" ] ||
-+	{ ktap_skip_all "no kmemleak debugfs (CONFIG_DEBUG_KMEMLEAK)"; exit "$KSFT_SKIP"; }
-+[ -w "$PARAM" ] ||
-+	{ ktap_skip_all "min_unref_scans module parameter not present"; exit "$KSFT_SKIP"; }
-+modinfo "$MODULE" >/dev/null 2>&1 ||
-+	{ ktap_skip_all "$MODULE not built (CONFIG_SAMPLE_KMEMLEAK)"; exit "$KSFT_SKIP"; }
-+
-+# kmemleak can be present but disabled at runtime (kmemleak=off boot arg,
-+# or it self-disabled after an internal error); a "scan" then returns
-+# EPERM. Probe once and skip if so.
-+echo scan > "$KMEMLEAK" 2>/dev/null ||
-+	{ ktap_skip_all "kmemleak is disabled (check dmesg or kmemleak= boot arg)"; exit "$KSFT_SKIP"; }
-+
-+prev=$(cat "$PARAM")
-+# shellcheck disable=SC2317  # invoked indirectly via trap
-+cleanup() {
-+	echo "$prev" > "$PARAM" 2>/dev/null		# restore the parameter
-+	echo scan=on > "$KMEMLEAK" 2>/dev/null		# re-enable auto scan
-+	rmmod "$MODULE" 2>/dev/null
-+	echo clear > "$KMEMLEAK" 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+# Stop the automatic scan thread: only our manual scans should advance an
-+# object's consecutive-unreferenced run. An auto scan landing between two
-+# manual scans would change the result and make the test flaky.
-+echo scan=off > "$KMEMLEAK" 2>/dev/null
-+
-+# Create a fresh, aged set of orphan objects from the helper module's init
-+# path (its kmalloc/vmalloc/percpu allocations are dropped right away).
-+# Pre-existing reported leaks are greyed first ("clear") so only our
-+# orphans are counted. The module is left loaded on purpose: once it is
-+# unloaded its symbols are gone, so the orphan backtraces no longer resolve
-+# to [kmemleak_test] and could not be matched below.
-+gen_orphans() {
-+	rmmod "$MODULE" 2>/dev/null
-+	echo clear > "$KMEMLEAK"
-+	modprobe "$MODULE" ||
-+		{ ktap_skip_all "failed to load $MODULE"; exit "$KSFT_SKIP"; }
-+	sleep "$AGE"
-+}
-+
-+scan() { echo scan > "$KMEMLEAK"; }
-+
-+# Number of helper-module orphans currently reported by kmemleak. Matching
-+# the module's own backtrace ([kmemleak_test]) keeps the count immune to
-+# unrelated leaks on the running system. kmemleak only lists an object here
-+# once it has been reported, so this reflects the confirmation gating.
-+count_orphans() {
-+	c=$(grep -c '\[kmemleak_test\]' "$KMEMLEAK" 2>/dev/null)
-+	echo "${c:-0}"
-+}
-+
-+# 0) the parameter reads back what was written.
-+echo 3 > "$PARAM"
-+[ "$(cat "$PARAM")" = "3" ] || ktap_exit_fail_msg "min_unref_scans did not read back as 3"
-+
-+# Priming scan: kmemleak greys a freshly allocated object on its first scan
-+# (its checksum settles then), so nothing can be reported until a second
-+# scan. Every case below runs this priming scan before counting.
-+prime() { scan; }
-+
-+# 1) min_unref_scans=1 (default): one scan after priming reports the
-+#    orphans. This also establishes that the helper produces detectable
-+#    orphans here.
-+echo 1 > "$PARAM"
-+gen_orphans
-+prime
-+scan
-+first=$(count_orphans)
-+[ "$first" -gt 0 ] ||
-+	{ ktap_skip_all "$MODULE produced no detectable orphans (cannot test min_unref_scans)"; exit "$KSFT_SKIP"; }
-+
-+# 2) min_unref_scans=2: after priming, one scan is not enough (still
-+#    gated), the second reports. The gated-scan-zero check is the core
-+#    regression.
-+echo 2 > "$PARAM"
-+gen_orphans
-+prime
-+scan; s1=$(count_orphans)
-+scan; s2=$(count_orphans)
-+[ "$s1" -eq 0 ] || ktap_exit_fail_msg "min_unref_scans=2: $s1 orphan(s) after 1 post-prime scan (must be 0)"
-+[ "$s2" -gt 0 ] || ktap_exit_fail_msg "min_unref_scans=2: no report after 2 post-prime scans (false negative)"
-+
-+ktap_set_plan 1
-+ktap_test_pass "min_unref_scans=1 reported $first orphan(s) one scan after priming; =2 held them one scan longer ($s1 after one scan, $s2 after two); param read-back ok"
-+ktap_finished
-
--- 
-2.53.0-Meta
+> ---
+>  drivers/block/rnull/configfs.rs | 5 +----
+>  rust/kernel/configfs.rs         | 9 ++++++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
