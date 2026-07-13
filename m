@@ -1,175 +1,132 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4064843CEF4
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 15:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDA43090D9;
+	Mon, 13 Jul 2026 15:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783957294; cv=none; b=YtFSTyh8Vz2V2SZnBrjT6XeyhXWpFNRTrBaOvkT4k2KmMVSPti7MabdZJto54ji7bgsFizKYUEi83/fqWAyxxhr6ZKYbKRnubCy82+oZrvr7rkYP2doHqjI1I0nALYms8wf5Xdqg8SDjU1BzludHlp41esMxs7vAy3/mRRpQlSc=
+	t=1783958291; cv=none; b=tQJSGs5yUb8No5FJILYH923M/rOklnLg9Ml8z2FHbnPmTDeqW+KFcvUxx0cPasBlMCR/K26Fs6/g1hRZNVAMaMQvao/DC5N9dfAT25H28Q8HhOWIWUOxHcwcPqKPZukrOze9MonDl7hUviK863fesD+turA9iAEmwa1n1T/tijo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783957294; c=relaxed/simple;
-	bh=me6OL90Ypr8Ilpx+65NnZrX1cBHotrcVrQNa58+nAzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nN3A75WF74qyBN4x9fb4Zvw+fX9yWJPcAQWM4I+N5vDHvgvdSC4+iLYLLLoRvCgeTzHt1ZP3CjbYnJo9xqHPV8XHnff8/U7x+Xi5KvDm5PkvUXluFDgt9gvsz9t5B1uP7DYVqNVFca9Br8lylf2VXlX5UTORu2NBAlHT/0soN2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ULHY483k; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783958291; c=relaxed/simple;
+	bh=W7eem1hxKBhR+qpjzH9sJ9OjOv3VJKcUDquaXYlqrJc=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=M70R8XpYKphNeG1F/GU1YmXPdVjlnyy6wDsrr0PQUweb8ggn0ViY0D8xmFLizci+tHFhxTEhorMphyfdYqtysSvivOCqu+OCcwrp1ay+flX9NfLpax85RW1JxfDXuHL9uIOBMYNZpJL+LXSr6hJWJVfL6luJrh8FrnSWUt+Wfq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aeYsF86g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ULHY483k"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783957291;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GBQaFEoNYmmYAMbxysMsFS3t2NOHg74qWyOBvlWdFCc=;
-	b=ULHY483koL9sC6MgP4q98U/tGVB3OyyOKvHVJb3avAq3UqKnxVrQR6/hKi3puct2ZsdH21
-	ws6LLJgEf+HQ93/7KsSBbKjroCeAZzv+FvpVZMfqHYkYxS12T3i8piV3FROZUJCd/2eDY9
-	jHIfvwnoLGtLTnw8bQQvpp3GmQrwXaA=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v9 9/9] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Mon, 13 Jul 2026 23:40:24 +0800
-Message-ID: <20260713154024.30851-10-leon.hwang@linux.dev>
-In-Reply-To: <20260713154024.30851-1-leon.hwang@linux.dev>
-References: <20260713154024.30851-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aeYsF86g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405271F00ADB;
+	Mon, 13 Jul 2026 15:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783958288;
+	bh=7wJM8DAMKw46GCCUOJ84lZ1VhKPOJwTAzm+VqeGupW8=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=aeYsF86gJr53IfRDB1RqxivdjUIvzEMc74CYICJbuuLw/2SubhKRONGhF10y02Lkp
+	 jV/9Z0boG1fR3xQa7N/s2ORvWWPb4F38nF1FYHaxG3OEY54gDKpBA0Kbnqq5ZGxpEB
+	 rq3CZfewRRceQekqpp32X4ATzDl7hSJV+2QXNfmYEJllA4wFpGB1jg1+ZrADZaUM6E
+	 gl83aR4yG7HhApOgNXIGTueLSOSZAxLobIak9OSxjZnfw6j2V/FKsNZHpnnFTV1ldm
+	 wQEPtaYIkX/zFlhR/nYE0HnCZM2Sz0/lrrlQaAGkatqlQ3iVOAhgYnp1ESE6pLZo5C
+	 pxFc0nAnBn5TA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 0/5] binfmt_misc: bpf-backed binary type handlers
+From: Christian Brauner <brauner@kernel.org>
+To: Farid Zakaria <farid.m.zakaria@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Jonathan Corbet <corbet@lwn.net>, Jann Horn <jannh@google.com>, 
+ John Ericson <mail@johnericson.me>, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <DJXJM0838IJN.3AJ9MMQ89SUUR@gmail.com>
+References: <20260711-binfmt-misc-bpf-v2-v2-0-d6591ceaf207@gmail.com>
+ <20260712-abluft-brutkasten-aufladen-c8063a4a1a0a@brauner>
+ <DJX4IFO55D9S.3IV3K5XICJAEV@gmail.com>
+ <20260713-unerlaubt-luftkammer-kosmetik-46532d395f9b@brauner>
+ <DJXJM0838IJN.3AJ9MMQ89SUUR@gmail.com>
+Date: Mon, 13 Jul 2026 17:57:53 +0200
+Message-Id: <20260713-gekreische-membran-samtpfoten-6e0eb34e2a41@brauner>
+X-Mailer: b4 0.16-dev-4217c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3021; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=W7eem1hxKBhR+qpjzH9sJ9OjOv3VJKcUDquaXYlqrJc=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSFcrOc2nn2/tZvaXmvTeZkTFpuxnHv7D3Xa1O+fLnM9
+ 2Z31HoV/Y5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJdJszMvRu8XQ8odlSoLbg
+ R9yru1zSvLEL93Lx9R6dMFfslWqImQgjw5weq6gb9nMM2Pe/CLVbr61ZMHVyiM+zwtQLyts3nrs
+ rxwUA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On 2026-07-13 08:19 -0700, Farid Zakaria wrote:
+> On Mon Jul 13, 2026 at 1:20 AM PDT, Christian Brauner wrote:
+> >> > - The single sleepable load op is split into two ops:
+> >> >
+> >> >       struct binfmt_misc_ops {
+> >> >       	bool (*match)(struct linux_binprm *bprm);
+> >> >       	int (*load)(struct linux_binprm *bprm);
+> >> >       	char name[BINFMT_MISC_OPS_NAME_MAX];
+> >> >       };
+> >> >
+> >> >   The non-sleepable match program runs from the RCU entry lookup
+> >> >   walk itself, exactly like magic and extension matching: same
+> >> >   registration order, same first-match-wins semantics, and it can
+> >> >   only rely on the prefetched bprm->buf. It must be free of side
+> >> >   effects since the walk may be restarted.
+> >> >
+> >> 
+> >> Is relying on brpm->buf enough?
+> >> Right now that's only 256 bytes I think, which is not enough to read
+> >> segments we might care about. That worked fine when it was just a magic
+> >> number but the idea with the eBPF program is to make decisions based on
+> >> more data.
+> >> 
+> >> In the selftest I provided, the `PT_INTERP` segment is already at file
+> >> offset 0x318 (792). I was imaginging NixOS having to support
+> >> `PT_INTERP_NIX` in order for the produced binaries to be backwards
+> >> compatible with older kernels.
+> >> 
+> >> The other idea would be to make the `match()` broad and select
+> >> everything but then nearly all ELF64 binaries would match and then pay
+> >> the price to `load()` and ultimately `-ENOEXEC`. Seems like it would
+> >> make multiple BPF binfmt programs less useful.
+> >
+> > Ok, so your idea is to have multiple bpf programs that look for
+> > different interpreters. Yeah, then you have to be able to sleep because
+> > you need to be able to fault. It makes the code uglier but I can see how
+> > that's useful. I'll see how nice I can make that.
+> >
+> 
+> I mean... I thought that's the intent to binfmt_misc, to have multiple
+> handlers -- with the expressiveness of eBPF vs. the limited
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+I was thinking of having one bpf program per type (elf, python, etc) but
+I can see how it's useful to have multiple elf bpf handlers...
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 598b7dde6581..e5a40ea36ee7 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -283,6 +283,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -299,4 +349,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index b852a0b07508..8b1f625017d1 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -53,4 +53,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+> > Ah, fun. binfmt_misc wasn't able to express this at all. It's good to
+> > close that gap. This can just be done by adding
+> > bpf_binprm_set_interp_arg().
+> 
+> What is "cool" about this is now it's also a net-new feature for shebags
+> which the "old" binfmt_misc didn't support. Anyways, I was thining ahead
+> about what I would need to support $ORIGIN fully and this was
+> a remaining gap. We also explored this idea in a patch pre-BPF [1] but
+> now that we've settled on this solution it seems much more natural.
+> 
+> 
+> I was recently reached out by some Bazel people who are also interested
+> in this $ORIGIN support. Interestingly they let me know that
+
+Yeah, for build systemd it's very nice ofc.
+
+> IllumOS/Solaris had support for it as well.
+
+The whole $ORIGIN thing comes from Illumos/Solaris afair. So no big
+surprise.
 
