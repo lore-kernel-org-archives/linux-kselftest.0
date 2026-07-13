@@ -1,123 +1,168 @@
-Received: from mail-ej2-f0.google.com (mail-ej2-f0.google.com [74.125.228.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125CD3815FA
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 06:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E0A17A300;
+	Mon, 13 Jul 2026 06:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783924532; cv=none; b=L0EBXiwBddNb5JZ+ZF7YkYcPGSmItkaIV973Adun7vkA9P8ufFofIWuaM39+evW40yjz/7huoKCzTdUxJbesmkntxJMQYeF0nrtQtHQL8AF8rzT+VuuyXSahwfmXonUxIcYjiyX7oTIdeDz2g6N/cfGL9b+oDzLnJ7XQphB4fAE=
+	t=1783925318; cv=none; b=oRl1LnOrfhCvn3mSqeTsL8Gb1X7mvFfoSnKVvXKY+WJG+T367NiizO5bLGVd+VKokZ8r0ukXMnjZLSwCLIunHlVAQV3EvistuSXIgF0RnB678DP3voR82OD6PVCX7MHyn9zl53dnP7FyzOqWASGYFm00xFFGFX0bPgJpO4b58Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783924532; c=relaxed/simple;
-	bh=BEORnXxM6ZYhnHtAqG/+pG3egOgrrwmAumn/RU0cg3c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LCVyIdTjbBdQKylSin119WdDf5ixRrkiDZW38wWfOuFTjMrXU/UPtktGZMqOpenfNacxZNM81ujlzv+QQlPHv3+E71yGgp0Wm8/xZjr1kWD0+wPhoevU1pcn9/6xSdkH/ako40AsC+YkmZsMTaA2iqr7OdiLyE/xNLdEYLGxnMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=e6V3KcTt; arc=none smtp.client-ip=74.125.228.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783925318; c=relaxed/simple;
+	bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DM2NaLYTX50U/xxxow8Co3xi7FKy3Jd2dx4qGNtMMxPlnnMvvAeYDNH7rFHY1pXzmELRLrEYfRN+9SwAQyX86uhp27yqKJ8aMVuuEzk6C4Udq+YBzci42Hbdwaa6wXF16JLscvhLCK8Ligtz4anISVrTk6mLcJlN/wm2pzNzBdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nk/H4GWE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="e6V3KcTt"
-Received: by mail-ej2-f0.google.com with SMTP id a640c23a62f3a-c15e57b7128so180127366b.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jul 2026 23:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783924529; x=1784529329; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h7vE7Szm3XNqCxlRDi2ZCo5mo4ITxmNYPLIe9N/Lh5s=;
-        b=e6V3KcTtU1nidHXUy0FCya7HuXMYKPCqDSrA6ShZ5fHZe6NelMvR9aHnFV4Nh1hUC9
-         HNIyOK6D+1Qf7JeQfL0FF1WoqhMo5sOEw7+kOgjsNyyrj2ziBVujWWBPK1UpgQ2sNQn5
-         tGolzTOesew44igiCUX0Sd1SzXDKiCAZ3trRlUCV7YS+/pQMIzKNptJDzqDVvn4Fcngg
-         vBj+vwEPzIyXm4ms+x98Ntw6iOaLQfB24t/isu0CUHd+YKcuSHelJX3Oqq8GTZxEGvxz
-         WMKuIPW+TDNBSHQUvD2fcobuamztg0OcvTHN+jyjXwY7J2CxbIuqxPs3Fial7aeqsIjS
-         3Y9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783924529; x=1784529329;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=h7vE7Szm3XNqCxlRDi2ZCo5mo4ITxmNYPLIe9N/Lh5s=;
-        b=GzMejov1vXZISkcX9DmSX43f6SJ30bpXJvGyRdyNr5n06BsMDeU++1XIpCX4Tc/usp
-         SLEOsTTgBNejp75IK552g0YARn26EcPuxpaI9ykJhNvvFPno89guo2L6VD1HXEwxTLwl
-         n+n+nesngD2Ho+iJqbSGGzd/ZIL8EQLzD2BY9p7SX+Dz+D+O6CF/RkQ1iH9QvX5hqNcb
-         o7etExy4/30lJK2tu6LYKor2J0YzAAdCA+7STILZYyrMQkdrSBGplXe4JzslzHhwnNYG
-         V9ss52sYN6y5chrCKgQ6qWH8DG6YjAcgVFlFiU11dPfPqGl+TxpUBFo/FhDo8ebqLyG0
-         Wgfg==
-X-Forwarded-Encrypted: i=1; AHgh+RqwyoBIltyPY6uujw/7kaIKqz6yPF4qwupgl0oDdvv8l0qMkNGmDNzqIjHgFg6XS0ORBnb4AELYhR3/j22az4k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJG+s2Wam12usC6YHJb11WaDEw0McDjbhZXnVzOuRSVfnXMcrQ
-	Pk1PDK75+IkBBN36S8XVmhtB4yTaei0NamyeR6BAUuX7LbOZEkVrNQcStBJJRqBCWyY=
-X-Gm-Gg: AfdE7cn1/sEGN0PLl0OoGj8o5ArJhEGl0S6DclpXhC6yVBBDHtUAINjzJCOe1jMjbeU
-	fyENVkOCAuvLOmCFTlVg6fEOAUbweSt0NDEzDaCLh5kYUnBWvHW80xnk3gVav3H5qbPCUBZAcr0
-	m4ur5Muw5ffg/foYioJA5FENuVxzWP5/G7tTbfXoXy7OE5Xq1MVClFPdOO8vhfmM7u6qNUe33Y/
-	dGmu+oo/aV3bfZpk7Z9bep4JHI6SVvyuctSnN+AF0zK5TpHkI/acMONpZ9MgK8n1JJQZM9k3kLV
-	Qb/9gamSeB87fOEPN6+QJSccAHvDin6ZKp15ocNKJV91SMnJp2Gjzx2od7h69WEI1LzLdII+Q6O
-	fJ2OL7FkYvypd/UqyV4hbPhCUMRs9e9W+Ia5Yr7ffLbZeioctEhr0fV48fST9cOZ+oVGTdFG/n4
-	hPZs5HDC0+yXGnyjFdj3ySm8Opwsr7ghq3FnMF
-X-Received: by 2002:a17:907:e1d3:20b0:c15:c81c:d6fc with SMTP id a640c23a62f3a-c161e9416a9mr199248766b.9.1783924529478;
-        Sun, 12 Jul 2026 23:35:29 -0700 (PDT)
-Received: from localhost (27-51-9-144.adsl.fetnet.net. [27.51.9.144])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4a42ae81f1esm5074320b6e.11.2026.07.12.23.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 23:35:27 -0700 (PDT)
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: bpf@vger.kernel.org
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	sun jian <sun.jian.kdev@gmail.com>,
-	Matt Mullins <mmullins@mmlx.us>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf 1/1] selftests/bpf: Enable BLK_DEV_NBD for raw_tp_writable_reject_nbd_invalid
-Date: Mon, 13 Jul 2026 14:35:11 +0800
-Message-ID: <20260713063513.215781-1-shung-hsi.yu@suse.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nk/H4GWE"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BF08C4AF0E;
+	Mon, 13 Jul 2026 06:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1783925318; bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Nk/H4GWEC1G3ljwWjl/RPZn81zppqgdCuFj/5IPYiYXeNvKHJTSZHFIiNZz6JJw+o
+	 rXPZmS7XHUcvDY5Hny+iOmhuIaUDVXZshwLwsrOEQXadqbFOZZ76je6jrlE7Cuv5qK
+	 eBYuIcTbMfr2qMy4ZYo8ee1ARl+8CSOWcpqzxV2Q=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BF8EC44506;
+	Mon, 13 Jul 2026 06:48:38 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Date: Mon, 13 Jul 2026 14:45:23 +0800
+Subject: [PATCH v8 02/10] rust: module: add `THIS_MODULE` const to
+ `ModuleMetadata` trait
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260713-fix-fops-owner-v8-2-2495cfa82d47@linux.dev>
+References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
+In-Reply-To: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
+ Igor Korotin <igor.korotin@linux.dev>, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
+ Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783925315; l=3594;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=aF47iLMPZHY8ikZj0/3fPMH5Q4mRqmYCLQexdlk5/mo=;
+ b=KD3Zyzbn7jRK/dQ8MUOgMLyaZFAQKRhRfDNkn/mVbczDhNcrZ237isvWV08DsrpsF3AMGxM20
+ 7WzG/DPMcw0BvnQ8Tpl9jEZ2eFDxId3TevKsipUYKKjPOxnBesfhmpL
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
+Since `const_refs_to_static` has been stable as of the MSRV bump, a
+`ThisModule` pointer can now be used in const contexts.
 
-The raw_tp_writable_reject_nbd_invalid test relies on availability of the
-nbd_send_request tracepoint, which is only present if the selftest kernel is
-built with CONFIG_BLK_DEV_NBD=y and the kernel built from current BPF selftests
-config lacks.
+Add a `THIS_MODULE` const to the `ModuleMetadata` trait so that modules
+can provide their `ThisModule` pointer in const contexts such as static
+`file_operations`.
 
-Without it, the bpf_raw_tracepoint_open() call always returns with -2, leaving
-raw_tp_writable_reject_nbd_invalid test always passing without exercising the
-checks bpf_probe_register().
+Add a `this_module()` helper to retrieve the `THIS_MODULE` pointer of a
+given module type, and update `__init` to use it instead of the
+`THIS_MODULE` static generated by the `module!` macro.
 
-Cc: <stable@vger.kernel.org> # 5.2.0
-Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+The `static THIS_MODULE` generated by the `module!` macro is retained
+for backwards compatibility with existing users and removed in a later
+patch once all references have been migrated.
+
+Assisted-by: opencode:glm-5.2
+Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Acked-by: Danilo Krummrich <dakr@kernel.org>
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
-Not sure if fixes tag is the right thing to use here, so use the cc
-stable tag instead to get this config change propogated to other stable
-branches to make stable BPF CI's job easier.
----
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+ rust/kernel/module.rs |  9 +++++++++
+ rust/macros/module.rs | 18 +++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index adb25146e88c..e1797bd87904 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,4 +1,5 @@
- CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_NBD=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
- CONFIG_BPF=y
+diff --git a/rust/kernel/module.rs b/rust/kernel/module.rs
+index be242a82e86d2..d713705984477 100644
+--- a/rust/kernel/module.rs
++++ b/rust/kernel/module.rs
+@@ -42,6 +42,15 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::erro
+ pub trait ModuleMetadata {
+     /// The name of the module as specified in the `module!` macro.
+     const NAME: &'static crate::str::CStr;
++
++    /// The module's `THIS_MODULE` pointer.
++    const THIS_MODULE: ThisModule;
++}
++
++/// Returns a reference to the `THIS_MODULE` of the given module type.
++#[inline]
++pub const fn this_module<M: ModuleMetadata>() -> &'static ThisModule {
++    &M::THIS_MODULE
+ }
+ 
+ /// Equivalent to `THIS_MODULE` in the C API.
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 06c18e2075083..aa9a618d5d19e 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -519,6 +519,22 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+ 
+         impl ::kernel::ModuleMetadata for #type_ {
+             const NAME: &'static ::kernel::str::CStr = #name_cstr;
++
++            #[cfg(MODULE)]
++            const THIS_MODULE: ::kernel::ThisModule = {
++                extern "C" {
++                    static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
++                }
++
++                // SAFETY: `__this_module` is constructed by the kernel at load time
++                // and lives until the module is unloaded.
++                unsafe { ::kernel::ThisModule::from_ptr(__this_module.get()) }
++            };
++
++            #[cfg(not(MODULE))]
++            const THIS_MODULE: ::kernel::ThisModule = unsafe {
++                ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
++            };
+         }
+ 
+         // Double nested modules, since then nobody can access the public items inside.
+@@ -616,7 +632,7 @@ pub extern "C" fn #ident_exit() {
+                 /// This function must only be called once.
+                 unsafe fn __init() -> ::kernel::ffi::c_int {
+                     let initer = <super::super::LocalModule as ::kernel::InPlaceModule>::init(
+-                        &super::super::THIS_MODULE
++                        ::kernel::module::this_module::<super::super::LocalModule>()
+                     );
+                     // SAFETY: No data race, since `__MOD` can only be accessed by this module
+                     // and there only `__init` and `__exit` access it. These functions are only
+
 -- 
-2.54.0
+2.43.0
+
 
