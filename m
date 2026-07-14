@@ -1,242 +1,150 @@
-Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA29B441613;
-	Tue, 14 Jul 2026 09:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7749F357702;
+	Tue, 14 Jul 2026 10:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022368; cv=none; b=R0HOR2+FJHGU0Mh5y3bgPWkWQVTvbtS9HJuv27v0XOWaHjl4jVs3WC9ugW43lyF+oZtQpdjTM/zJ24WhGOySr2TT65+C5e1jqSq+8m2ZjVmc3uMH7/HsQ5ZmLRD13z9P9QzBPAXbinvr9yTsp2Jbs5eqKc9DY3uyf+LxyFcny/Q=
+	t=1784023656; cv=none; b=OGJNPbEOdK37SYU/Mff5Pgg1AR05ea8lgd0tC3acQA1HKHSzMBn9rDf2o3ByLGdO8WBtRrNkZRaMfR6oB2uSBdKl2AnVJEiEQOU26ew8F7FwDNH0j0R4LelNIySIEiQg1wtC0O4SNFQjqsgY472iFvX1kwVNBuOGnuPap/WShEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784022368; c=relaxed/simple;
-	bh=7DZojIV83VfeEs1eSZKvWEnlFjmvJ6B9z8heL1XThlo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PR3RKwEFjDkB3uwCR1SFpf6ibRRZAXyHmBFmn6WiwcETB7Ga4I5HkSa1IuI+WI10fwS6bcTAl61m/we+XLHZTtog85O/meIvPGdNnv/ztyPF/APHDhs8KpzFyjdd/OFjIEIA8Lf5lVsldXoCiPvUwqwi6jX0UDdDdOt7Hzb5yvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
-Received: from nat-wifi0.uniroma3.it ([193.204.167.180] helo=alea)
-	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <equinox@diac24.net>)
-	id 1wjZiB-000000022cr-4BNF;
-	Tue, 14 Jul 2026 11:46:00 +0200
-Received: from equinox by alea with local (Exim 4.99.2)
-	(envelope-from <equinox@diac24.net>)
-	id 1wjZdP-00000000ZUu-1Z3K;
-	Tue, 14 Jul 2026 11:41:03 +0200
-From: David 'equinox' Lamparter <equinox@diac24.net>
-To: Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>
-Cc: David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Lorenzo Colitti <lorenzo@google.com>,
-	=?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-	Patrick Rohr <prohr@google.com>,
-	netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	David 'equinox' Lamparter <equinox@diac24.net>,
-	Jen Linkova <furry13@gmail.com>
-Subject: [PATCH net-next 7/9] net/ipv6: support RFC6724 rule 5.5 via subtrees
-Date: Tue, 14 Jul 2026 11:40:10 +0200
-Message-ID: <20260714094030.136317-8-equinox@diac24.net>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260714094030.136317-1-equinox@diac24.net>
-References: <20260714094030.136317-1-equinox@diac24.net>
+	s=arc-20240116; t=1784023656; c=relaxed/simple;
+	bh=PqeCepdYL0vcZ1zaORMjFyWWLZx+O4lwJSJ8B6jsKDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ol52c9UadC3GvUKQvB6eWTosefbBBcHGvC5DbdIPlPm/rBRP9aQEoURT3IaipKIjCPeqd619ffZ0sr0/YQSxJimaWlrYtqy9ST53e876yyKY33crWErgRn5ehPbmjkci1wsvcCvfES0Q5YuB/BvsAh3LmSh0v178jGN1KUi/eGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJyD9QEX; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJyD9QEX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F6B1F00A3A;
+	Tue, 14 Jul 2026 10:07:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784023655;
+	bh=/175y28NB+ZFC3yHKio3eZe/JFspmgrkZa1O3kEAj9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gJyD9QEXespHpA+2dReUkty/xaWk1Mf7m6uy1vuLe2wGx4K5bgW81Pj7zaGIuljgD
+	 2RejCTkR9Evunw8dM4kLlDUXTVeEA7HkjN2GZqqURC0rLNiyFW2UdarzMyUlwtvfG/
+	 r7yXxQdWlIvMk+pgiO8txJjuFf9FV4aAN8S7FTBHKfdz5xQDpUmMpEZbdEMfu4MSLe
+	 v17e88C4bRLQoO4zPMJIgh+xb2ZWBU6Dm1+7nGGN181gf9rkIfyoQa597Uo+eSphpn
+	 jVEr3A3ANQwx7/tmM2xN9oJ7GTaz5jjThOBeYxsgbX5VgqqCjyW2dqFqrlXlTL4Q6J
+	 zhoEm847xH63g==
+Date: Tue, 14 Jul 2026 11:07:21 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org, 
+	david@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org, balbirs@nvidia.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	hongfu.li@linux.dev, SJ Park <sj@kernel.org>
+Subject: Re: [PATCH v2] selftests/mm: Fix memleak in migration benchmark
+Message-ID: <alYJzrQOXY1AoV6j@lucifer>
+References: <20260709081843.1451202-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260709081843.1451202-1-lihongfu@kylinos.cn>
 
-RFC6724 says:
-   Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
-   If SA or SA's prefix is assigned by the selected next-hop that will
-   be used to send to D and SB or SB's prefix is assigned by a different
-   next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
-   assigned by the next-hop that will be used to send to D and SA or
-   SA's prefix is assigned by a different next-hop, then prefer SB.
+On Thu, Jul 09, 2026 at 04:18:43PM +0800, Hongfu Li wrote:
+> Several early return paths in run_migration_benchmark() skip
+> hmm_buffer_free(), leaking the buffer. Replace with a single cleanup
+> label.
+>
+> Fixes: 271a7b2e3c13 ("selftests/mm/hmm-tests: new throughput tests including THP")
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+> Reviewed-by: SJ Park <sj@kernel.org>
 
-As it turns out, this behavior is immensely useful in handling
-renumbering, multihoming, and source address liveliness checks.
+LGTM, so:
 
-That said, just implementing this as an one-shot in source address
-selection is not particularly useful if output routing then meanders
-between multiple nexthops.  To actually make this work (and work well),
-installing source-specific routes for prefixes seen in PIOs is a good
-way to go.
+Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-To actually select a source address, there's still the route lookup with
-an empty source as before, which will select some particular nexthop.
-Now, for the various candidate source addresses, this does another
-lookup and checks if we got the same nexthop, and prefers those source
-addresses - rule 5.5 behavior.
+> ---
+> v2:
+>  - Set buffer->ptr to NULL on mmap failure to avoid passing MAP_FAILED
+>    to munmap() in hmm_buffer_free()
+>  - Drop the redundant "/* Cleanup */" comment
+>  - Add Fixes tag for the commit that introduced the leak
+>  - Collect Reviewed-by tags from David Hildenbrand and SJ Park
+> ---
+>  tools/testing/selftests/mm/hmm-tests.c | 21 ++++++++++++---------
+>  1 file changed, 12 insertions(+), 9 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index e4c49699f3f7..402c6f6f5f09 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -2828,8 +2828,11 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	buffer->ptr = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE,
+>  			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>
+> -	if (buffer->ptr == MAP_FAILED)
+> -		return -1;
+> +	if (buffer->ptr == MAP_FAILED) {
+> +		buffer->ptr = NULL;
+> +		ret = -1;
+> +		goto cleanup;
+> +	}
+>
+>  	/* Apply THP hint if requested */
+>  	if (use_thp)
+> @@ -2838,7 +2841,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  		ret = madvise(buffer->ptr, buffer_size, MADV_NOHUGEPAGE);
+>
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	/* Initialize memory to make sure pages are allocated */
+>  	ptr = (int *)buffer->ptr;
+> @@ -2848,11 +2851,11 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	/* Warmup iteration */
+>  	ret = hmm_migrate_sys_to_dev(fd, buffer, npages);
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	ret = hmm_migrate_dev_to_sys(fd, buffer, npages);
+>  	if (ret)
+> -		return ret;
+> +		goto cleanup;
+>
+>  	/* Benchmark iterations */
+>  	for (i = 0; i < iterations; i++) {
+> @@ -2861,7 +2864,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>
+>  		ret = hmm_migrate_sys_to_dev(fd, buffer, npages);
+>  		if (ret)
+> -			return ret;
+> +			goto cleanup;
+>
+>  		end = get_time_ms();
+>  		s2d_total += (end - start);
+> @@ -2871,7 +2874,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>
+>  		ret = hmm_migrate_dev_to_sys(fd, buffer, npages);
+>  		if (ret)
+> -			return ret;
+> +			goto cleanup;
+>
+>  		end = get_time_ms();
+>  		d2s_total += (end - start);
+> @@ -2885,9 +2888,9 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	results->throughput_d2s = (buffer_size / (1024.0 * 1024.0 * 1024.0)) /
+>  				 (results->dev_to_sys_time / 1000.0);
+>
+> -	/* Cleanup */
+> +cleanup:
+>  	hmm_buffer_free(buffer);
+> -	return 0;
+> +	return ret;
+>  }
+>
+>  /*
+> --
+> 2.25.1
+>
 
-Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Cc: Patrick Rohr <prohr@google.com>
-Cc: Maciej Żenczykowski <maze@google.com>
-Cc: Jen Linkova <furry13@gmail.com>
----
- net/ipv6/addrconf.c | 101 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 100 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 0ba46ed518a9..f5c04928aa14 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -1522,6 +1522,7 @@ enum {
- 	IPV6_SADDR_RULE_HOA,
- #endif
- 	IPV6_SADDR_RULE_OIF,
-+	IPV6_SADDR_RULE_PIO_BY_NEXTHOP,
- 	IPV6_SADDR_RULE_LABEL,
- 	IPV6_SADDR_RULE_PRIVACY,
- 	IPV6_SADDR_RULE_ORCHID,
-@@ -1542,13 +1543,14 @@ struct ipv6_saddr_score {
- };
- 
- struct ipv6_saddr_dst {
--	const struct flowi6 *fl6;
-+	struct flowi6 *fl6;
- 	const struct dst_entry *dst;
- 	const struct sock *sk;
- 	int ifindex;
- 	int scope;
- 	int label;
- 	unsigned int prefs;
-+	struct net *net;
- };
- 
- static inline int ipv6_saddr_preferred(int type)
-@@ -1593,6 +1595,80 @@ static bool ipv6_allow_optimistic_dad(const struct net *net,
- #endif
- }
- 
-+/* "source address is preferable if the chosen nexthop advertised it as a PIO"
-+ * => consider 'advertised as a PIO' to be 'the routes for the source's subtree
-+ *    include one with the same nexthop'
-+ *
-+ * NB: there is no backtracking in the subtree here, this is intentional -
-+ * each prefix seen (and accepted) in PIOs creates essentially a "zone" which
-+ * is our search scope.
-+ */
-+static int ipv6_saddr_rule5p5(struct ipv6_saddr_score *score,
-+			      struct ipv6_saddr_dst *saddr_dst)
-+{
-+	const struct rt6_info *rt, *cmp_rt;
-+	struct dst_entry *cmp_dst;
-+	struct fib6_info *f6i;
-+	int ret = 0;
-+
-+	rt = container_of(saddr_dst->dst, struct rt6_info, dst);
-+
-+	/* fl6->saddr is ::, cf. check at the top of ipv6_common_get_saddr() */
-+	saddr_dst->fl6->saddr = score->ifa->addr;
-+	cmp_dst = ip6_route_output(saddr_dst->net, saddr_dst->sk,
-+				   saddr_dst->fl6);
-+	memset(&saddr_dst->fl6->saddr, 0, sizeof(saddr_dst->fl6->saddr));
-+
-+	if (cmp_dst->error)
-+		goto out_release_dst;
-+
-+	cmp_rt = container_of(cmp_dst, struct rt6_info, dst);
-+
-+	/* this must work if _any_ nexthop matches; the non-subtree best may
-+	 * not be in same order as subtree best
-+	 */
-+	for (f6i = rcu_dereference(cmp_rt->from); f6i;
-+	     f6i = rcu_dereference(f6i->fib6_next)) {
-+		struct fib6_nh *f6n = f6i->fib6_nh;
-+		struct fib6_info *sibling;
-+
-+		/* non-subtree route: says nothing about router advertising this source */
-+		if (f6i->fib6_src.plen == 0)
-+			continue;
-+
-+		if (f6n->nh_common.nhc_dev != saddr_dst->dst->dev ||
-+		    f6n->nh_common.nhc_gw_family != AF_INET6)
-+			continue;
-+
-+		if (ipv6_addr_equal(&f6n->nh_common.nhc_gw.ipv6,
-+				    &rt->rt6i_gateway)) {
-+			ret = 1;
-+			goto out_release_dst;
-+		}
-+
-+		if (!f6i->fib6_nsiblings)
-+			continue;
-+
-+		list_for_each_entry(sibling, &f6i->fib6_siblings, fib6_siblings) {
-+			f6n = sibling->fib6_nh;
-+
-+			if (f6n->nh_common.nhc_dev != saddr_dst->dst->dev ||
-+			    f6n->nh_common.nhc_gw_family != AF_INET6)
-+				continue;
-+
-+			if (ipv6_addr_equal(&f6n->nh_common.nhc_gw.ipv6,
-+					    &rt->rt6i_gateway)) {
-+				ret = 1;
-+				goto out_release_dst;
-+			}
-+		}
-+	}
-+
-+out_release_dst:
-+	dst_release(cmp_dst);
-+	return ret;
-+}
-+
- static int ipv6_get_saddr_eval(struct net *net,
- 			       struct ipv6_saddr_score *score,
- 			       struct ipv6_saddr_dst *dst,
-@@ -1677,6 +1753,24 @@ static int ipv6_get_saddr_eval(struct net *net,
- 		ret = (!dst->ifindex ||
- 		       dst->ifindex == score->ifa->idev->dev->ifindex);
- 		break;
-+	case IPV6_SADDR_RULE_PIO_BY_NEXTHOP:
-+		/* Rule 5.5: Prefer sources advertised by chosen next-hop */
-+
-+		/* Without subtrees, the source address will make no difference
-+		 * in the ip6_route_output call in rule5p5.  Therefore the rule
-+		 * 5.5 check becomes useless.  This wouldn't result in any
-+		 * errors, but ip6_route_output isn't free, so if subtrees are
-+		 * disabled save some cycles by skipping this entirely.
-+		 *
-+		 * This is done through subtrees_enabled to have the code
-+		 * compiled regardless.
-+		 */
-+		if (fib6_routes_require_src(net) && dst->dst
-+		    && !dst->dst->error)
-+			ret = ipv6_saddr_rule5p5(score, dst);
-+		else
-+			ret = 1;
-+		break;
- 	case IPV6_SADDR_RULE_LABEL:
- 		/* Rule 6: Prefer matching label */
- 		ret = ipv6_addr_label(net,
-@@ -1835,7 +1929,12 @@ int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst_entry,
- 	int hiscore_idx = 0;
- 	int ret = 0;
- 
-+	/* we should never end up here with a non-empty saddr. */
-+	if (WARN_ON_ONCE(!ipv6_addr_any(&fl6->saddr)))
-+		return 0;
-+
- 	dst_type = __ipv6_addr_type(&fl6->daddr);
-+	dst.net = net;
- 	dst.fl6 = fl6;
- 	dst.sk = sk;
- 	dst.dst = dst_entry;
--- 
-2.53.0
-
+Cheers, Lorenzo
