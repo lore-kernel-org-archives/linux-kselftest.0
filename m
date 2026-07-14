@@ -1,56 +1,56 @@
 Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD53935E952
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 15:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88A649551E
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 15:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784042118; cv=none; b=TS3iP35IgcfDjMnEAtW+oNvMZS0wgjd9tE/JojM63en/MrQrDT6j9tPPNOq1wBBodaWvaQq3lA2cgYLGZOpe5tv5rZAOoqW0+Fg3ur0hGI0/8YE3QMIiety8AdSm37gzJMloripUYxWxm8CUW0wCFkG7Clu3sX6odVrOlxe1694=
+	t=1784042120; cv=none; b=Wob3Czhbx0I3Nj1qmWUQfkuLG6/h3hVCGgJXaJie5TBPROXdcmOl7p2vxuxs/aD4b+P0oKj5NivNFsoBMPZpL7PD6nc9HumwFd5uUyD9s443D8MlgJGExhKpWHt8YyLJLdBb2g5YSUPwpYluwC5tBook8zaVp1toBQGHkb1ekgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784042118; c=relaxed/simple;
-	bh=YVc+pKa6Xq4074+to6tFg828NsW4PA06kR2BHhEiYWA=;
+	s=arc-20240116; t=1784042120; c=relaxed/simple;
+	bh=aKGWYiSzEZ4niXjLldUisRuvryDVWAvVanTamVNf5F8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HiA/OoqCkVS3TSADikvnaD/9vo0elAoQZ4BSNOcoK3XFs1xVQGgXKs6excSzwbM4WTCr5P7yZociQ+EC1JeT+F4fzdGAXXp8iFcGSrCAC0fP0vPdTl5RFUzFnKN9rskStjdhkSoM9HT86MlEb2XmWUyu8S7p6kSvTukh0Y5jeHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K4t2rlcF; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=Dd+8P2NmMc5kAqHk0zEe6HCpazPp6M8qb3sGhxTt3b4R6ELo+xK5r37uDLmirp8UFI3jFxQQvVfSbhVW+gXCjnadiTAf8qvGhQp/W9Kg6Q8tvC6rrFqx8DtdKTcFHGHtpW5bDRsODbKqCDlFtPGFQWAaNSsPNJx+PHvlBXYMSa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kLJM4HRA; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K4t2rlcF"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-8482b95574dso5639115b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 08:15:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kLJM4HRA"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84865f326efso4917080b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 08:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784042114; x=1784646914; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784042117; x=1784646917; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NsilKFLygw8IS3OsjN731JV3UeNVYFWUky8KZoNrr2s=;
-        b=K4t2rlcF3KYL3tUet10Vhgi5pW8myoazkA0EXJwCQmfspyzYTzKSmHJzDNfaeGroes
-         tCbeqGVNsJ4dd2Nuqx1ApzTwwtw6PBDgkeUJHHCPpOrBA16NrC62Bb5R+lz7CWci9J9d
-         Q2i0o5rpsCpIIESANYDmqbPiDeVjtUrFvNBgg53wmeiXgvBh+F3EJ2pYzi/o99rUxsTO
-         CbMjHdpR/rpEf7P16STgHd+xuHWlJeLL8vmStl5ViYP0Jcg4bP6sNvqE15/eZFDr/Ip4
-         NDs41oKa1UOYLzn/JRWcSyf5z6WrtPHzPiFIxdb+LZc0N0pkXt8R6wdR8h5IKMWOhP0X
-         nkNg==
+        bh=/JxusoxEn+ehjTRVvbJo8Z2+RthtKj17Kn8IH4fWGXA=;
+        b=kLJM4HRAEfedtLhhHWD0BQCFBly2bVG1r1HtPoJB5UqPJUkZjxtXQPt+DPgPBexBsR
+         Fl9ungd9E63hblkBowIewt1qFRYxcH1Z9qo2wFKjhNy76Gf/Ya8fXTI4nGP0OO6QNkUr
+         Kz1qLIRQNAmf2JzAnGIjJUG5DvKkMLnzB9xAmsnih5nI17dGh0cXnxvVKlAUvmCpQ5IO
+         mlle5DpQyauOLmoybs8JaAH8Zf2nKONStAPaOZF1EEEZjakColhv2wY+toChaRV0axVB
+         7fQ10m4ESEWqPtKY65ZjsTGCHZtsOPBXprL2+W27CSD+jKm4ex2bEVgHgobGIm7SXRjC
+         DMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784042114; x=1784646914;
+        d=1e100.net; s=20251104; t=1784042117; x=1784646917;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NsilKFLygw8IS3OsjN731JV3UeNVYFWUky8KZoNrr2s=;
-        b=PPDVEv/leAzmra/Cmh8EhQ5lbHcEmtxwUjX9GsJUS5w2jBOJqphzsmD1dl0O2n7N7Z
-         itFn14nEDvFtniPmKfIzHCb9xCBex2Xe17Lpbkk2/3mR3PFOFRvZch9iUOzVXdlYa5yM
-         soFa8sXHTS2tDc2RRnWq1W5EkqWrjPWpx6ABkjKtumno6KegR/rxsdxGSDkw2Gq9HnEq
-         rTZ64SGgzWh9ythzrrOt1UqgGswUInH7dnHlWBszc9ZyRzNDrHKWFLzusENSxDWlL66T
-         tjmCsO4B283v3E98X5T7k+aE+e9qzHMqRz+ndQP9KJCzg1BbaJDPY3foJxNLh8pwJ+6M
-         wPZQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrdfp3/1GmkDylWhZd15GlnSbAASmUVTuMyFrkmQ1xkwdCnX1a7/8KJo9GnhRt0ivCXBDSMSc97HFHXLAkiY5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbIZ5x+turVPWEAjOenxlAwbOE5Ho+Q/NeUNtnIOPrYAAMigg7
-	eZPqOU7SnUVZgjP+DnljofeLWdZpc8+xCqFPqfQl+9HxGee5fRgYIYWviz0H/oQTq/tIwEChRMy
-	cpGXmrQHjuQ==
-X-Received: from pfff9.prod.google.com ([2002:a05:6a00:bd09:b0:848:487e:d23c])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:992:b0:848:65f3:23c1
- with SMTP id d2e1a72fcca58-848897d7661mr12194779b3a.69.1784042113533; Tue, 14
- Jul 2026 08:15:13 -0700 (PDT)
-Date: Tue, 14 Jul 2026 08:14:49 -0700
+        bh=/JxusoxEn+ehjTRVvbJo8Z2+RthtKj17Kn8IH4fWGXA=;
+        b=UueAxkuLOzBAWvaLTZjyHwK/tLKXoyrbu36I/p715c5p9nz6CJqPlRwarEd2HZuh/Y
+         JTr2F9O5Rcxzua/S2A+1BfZ7EELVaOdBq19LuEHbXNTvDfyR80qJup/ESf0i+PZPmDdm
+         Ter6MlieDGy7HO91NEKR3LjZsgN6hFbIriqgnHCys35NJs8lvBfaeoBECx7krRqfJoSn
+         73djud9dJGrYD5Fjt4pqS/vYpZ5/fJJ1XkTnG8d7wfY5o4MtRJVamw7drdUppSF/pgHy
+         niVjMSklajIX7FL5oXw6ugOWtX+nysjZsEdQ1W9c6jOJOQ/d2UrbAPQXUuZKD9UvAIhe
+         JhKQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoROYCLd0nZgwuoc2mngGHv79DvUA2DGXrzpmkopDD3sgUA6sGcoAaWaWvAR9W/D+RYmo0/pguP7K4+5C6etRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs5msHRra9/0iqMroKSXPIpeC+WACc+ZT2cfuW1xaT/2DNJpF2
+	kCJgFyduNEZiSwud0eMvzjUDtjgba8j/jWeZGwuYj9Fn06IizLq0zrJX8V4aXT7CA+0bkJ5NhTt
+	fJtDHsP0HJA==
+X-Received: from pfbcr14.prod.google.com ([2002:a05:6a00:f0e:b0:84a:2de2:315f])
+ (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:94f5:b0:82f:2b0:2809
+ with SMTP id d2e1a72fcca58-84889637281mr13764500b3a.1.1784042116875; Tue, 14
+ Jul 2026 08:15:16 -0700 (PDT)
+Date: Tue, 14 Jul 2026 08:14:52 -0700
 In-Reply-To: <20260714151505.3466855-1-vipinsh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260714151505.3466855-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
-Message-ID: <20260714151505.3466855-5-vipinsh@google.com>
-Subject: [PATCH v5 04/20] liveupdate: Export symbols needed by modules
+Message-ID: <20260714151505.3466855-8-vipinsh@google.com>
+Subject: [PATCH v5 07/20] vfio: Introduce vfio_find_device() helper
 From: Vipin Sharma <vipinsh@google.com>
 To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
@@ -81,35 +81,138 @@ Cc: ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com,
 	yi.l.liu@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-Export liveupdate_register_file_handler() and
-liveupdate_unregister_file_handler(). All of these will be used by
-vfio-pci in a subsequent commit, which can be built as a module.
+Introduce vfio_find_device() to discover a registered vfio_device from
+vfio_device_class matching user-provided criteria.
 
-Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
-Reviewed-by: Pranjal Shrivastava <praan@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
+To ensure safe lifecycle handling, vfio_find_device() acquires a
+registration reference (device->refcount) via
+vfio_device_try_get_registration() rather than relying solely on
+device.kref taken in class_find_device(). Holding only kref allows
+vendor modules to unload while external callers hold device pointers,
+leading to a kernel panic on release. Callers must release the device
+via vfio_device_put_registration().
+
+Additionally, move refcount_set() prior to vfio_device_add() in
+__vfio_register_dev() so device->refcount is initialized before the
+device is published to class lookups, avoiding registration data races.
+
+On vfio_device_add() failure, the error path drops the initial
+registration reference and waits for completion to drain any reference
+taken by a concurrent lookup before returning the error to the driver.
+
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- kernel/liveupdate/luo_file.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/vfio/vfio_main.c | 64 +++++++++++++++++++++++++++++++++++++---
+ include/linux/vfio.h     |  2 ++
+ 2 files changed, 62 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-index c39f96961a85..dd4e26ac34f0 100644
---- a/kernel/liveupdate/luo_file.c
-+++ b/kernel/liveupdate/luo_file.c
-@@ -909,6 +909,7 @@ int liveupdate_register_file_handler(struct liveupdate_file_handler *fh)
- 	up_write(&luo_register_rwlock);
- 	return err;
- }
-+EXPORT_SYMBOL_GPL(liveupdate_register_file_handler);
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 2437af031169..e91fd83dc58d 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -13,6 +13,7 @@
+ #include <linux/cdev.h>
+ #include <linux/compat.h>
+ #include <linux/device.h>
++#include <linux/device/class.h>
+ #include <linux/fs.h>
+ #include <linux/idr.h>
+ #include <linux/iommu.h>
+@@ -359,17 +360,20 @@ static int __vfio_register_dev(struct vfio_device *device,
+ 		goto err_out;
+ 	}
  
- /**
-  * liveupdate_unregister_file_handler - Unregister a liveupdate file handler
-@@ -926,3 +927,4 @@ void liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
- 	luo_flb_unregister_all(fh);
- 	list_del(&ACCESS_PRIVATE(fh, list));
+-	ret = vfio_device_add(device);
+-	if (ret)
+-		goto err_out;
+-
+ 	/* Refcounting can't start until the driver calls register */
+ 	refcount_set(&device->refcount, 1);
+ 
++	ret = vfio_device_add(device);
++	if (ret)
++		goto err_add;
++
+ 	vfio_device_group_register(device);
+ 	vfio_device_debugfs_init(device);
+ 
+ 	return 0;
++err_add:
++	vfio_device_put_registration(device);
++	wait_for_completion(&device->comp);
+ err_out:
+ 	vfio_device_remove_group(device);
+ 	return ret;
+@@ -1797,6 +1801,58 @@ int vfio_dma_rw(struct vfio_device *device, dma_addr_t iova, void *data,
  }
-+EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
+ EXPORT_SYMBOL(vfio_dma_rw);
+ 
++struct vfio_device_match_data {
++	const void *data;
++	device_match_t match;
++};
++
++static int vfio_device_match_fn(struct device *dev, const void *data)
++{
++	struct vfio_device *vdev = container_of(dev, struct vfio_device, device);
++	const struct vfio_device_match_data *mdata = data;
++
++	if (mdata->match(dev, mdata->data)) {
++		if (vfio_device_try_get_registration(vdev))
++			return 1;
++	}
++	return 0;
++}
++
++/**
++ * vfio_find_device - Find a registered VFIO device matching search criteria
++ * @data: Context data passed to the @match function
++ * @match: Device match callback function
++ *
++ * Finds a registered VFIO device in the vfio_device_class matching the search
++ * criteria specified by @match.
++ *
++ * On success, this function acquires a registration reference on the matched
++ * device via vfio_device_try_get_registration(). This pins the device and
++ * prevents its vendor driver module from unloading or unbinding while the
++ * reference is held.
++ *
++ * Return: Pointer to the matching vfio_device on success, or NULL if no
++ * matching device is found. The caller MUST release the acquired registration
++ * reference using vfio_device_put_registration() when finished with the device.
++ */
++struct vfio_device *vfio_find_device(const void *data, device_match_t match)
++{
++	struct vfio_device_match_data mdata = { .data = data, .match = match };
++	struct device *device;
++
++	device = class_find_device(&vfio_device_class, NULL, &mdata, vfio_device_match_fn);
++	if (!device)
++		return NULL;
++
++	/*
++	 * Drop standard kref reference. Caller holds reference from
++	 * vfio_device_try_get_registration().
++	 */
++	put_device(device);
++	return container_of(device, struct vfio_device, device);
++}
++EXPORT_SYMBOL_GPL(vfio_find_device);
++
+ /*
+  * Module/class support
+  */
+diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+index cf0d941d0410..42c3a9ae3a85 100644
+--- a/include/linux/vfio.h
++++ b/include/linux/vfio.h
+@@ -430,4 +430,6 @@ int vfio_virqfd_enable(void *opaque, int (*handler)(void *, void *),
+ void vfio_virqfd_disable(struct virqfd **pvirqfd);
+ void vfio_virqfd_flush_thread(struct virqfd **pvirqfd);
+ 
++struct vfio_device *vfio_find_device(const void *data, device_match_t match);
++
+ #endif /* VFIO_H */
 -- 
 2.55.0.795.g602f6c329a-goog
 
