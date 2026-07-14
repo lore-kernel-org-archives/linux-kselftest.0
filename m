@@ -1,229 +1,193 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590134D8DB0
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 16:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC9A39CCFF;
+	Tue, 14 Jul 2026 17:08:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784047309; cv=none; b=SrUlw1OmTS/zvTYaXPB7ik+PYDBgWU/mdjKrz3dch5aKVALaPY0P7X4HDVC41aF0mw1sroM68KFEblhTVarFFsJ4QeEaReVyA6VRJemICsZ08ARHmlrl3u/IXlvkOE6a+IG3b+lBCakIfVUZ3pkTm4Izgcbgzrw1lRoUpG3XcbU=
+	t=1784048936; cv=none; b=rGckSu5q01QXqhnO9VLzMKVP7e7iUwGTrF17IK1qKemu8HcSCppENfpv4NI5fyeUY3YQzwyr7B7tGeQuRs11nYFYS9Nvu5NKU8OV4Bu8ThA3wkCUY9P1zCwSXgMSUy2s4XrBWc0sxPvtJsNg/Iwk3njGtxYGyLfot0cQUdZBQps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784047309; c=relaxed/simple;
-	bh=+UZ2C/SIqj6Dtle1yIQ62BUp8tDwxi+DEhc0LgCFf7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HJ+1alNnddpU61J3n/LL8b8gSmN7IDsIoqNXHmwaI0S9vi28tPAYltX69lNWMRaJZTLSIdD4CoD09pOxFR9H08RBDV29BLs1TFCUcbAKxH8M0nAh8DvLTDX/sJuhzuVuxn9uRI/aDwrWe3oMCOoKAl7/byLXPjqO6I4szLygw9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jfk2OvY6; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1784048936; c=relaxed/simple;
+	bh=pXbKaqo3/BQgyZxsoqQbZAzKiU+B4SdXcj/pETX3txI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a+Ys538H4xyAq5SRNo+7ZDdI7kIJLRPO7Qpi0f3uJXB9HSFR5WOUFrlA/o6WaY+eDIQkuv2VjUGC7OZSs5OJGmPbVStW9odnOxGomBjc4d+UURqTETU7XKklFg3wGU4QgdQKmnRJ41OPE+BRl90RdX6vXf8hmdcRm7Pwz9YJag8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byVwXbtL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jfk2OvY6"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4758bd3731bso931376f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 09:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784047305; x=1784652105; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dAGdTmKiRz8gSXgEL0AxMvGfkn4LlPlutVrGbCWXhWI=;
-        b=jfk2OvY6itIAXcb2MHEYmlCw1DRTYcd5IMg8HjTKyj7b8d+cf2jF9cRdMzUdo+X+FL
-         HIBxDTQVyHNx3nq5zHhphZpi+9/XqYmFMqA/vrLSPT+np3UW1VUlyDMGEsEsSfBHeLxK
-         yCzm6VHhSpnlcBW/HW+3Z+k1QiDBEodhkGDKEFFjg/dcZItkzuuFiHL7JOQ1tCioUc+p
-         7qyaw9HlV6+a9mXXh9WmW81Hwtg0BGvQ94ZMN9+DhVHoqd1JL+VvPZhp+3ROPp1w+H8W
-         nCXTM4614VmuS8QGXBWzdCcnETsfH1Uk305vkm0WclSp522qa8SkDT8LtIqJhGS0Pl2S
-         IuHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784047305; x=1784652105;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dAGdTmKiRz8gSXgEL0AxMvGfkn4LlPlutVrGbCWXhWI=;
-        b=W4K3MMpn3q1yLdrPeHXT1haMvgCaC15o3mnjpC0UxDbfQGsSRqP6w428iLRRdrEzYn
-         q25BUS448p8fxVI3c9oUcCfA3rNIj9EQ+vwMMoIJrLwMywik5M2cBd2sxHfn/ti+md3G
-         ku96OOpyR9NEho8uQIY0Bo5o1YU74g3wuqzHKqMYJmaowVqsJpuNo5ENnZB6mu3yxx/O
-         KiEBEu05dNLBLVIe2dxAhjv7Fig9OV1sLMNcMA5LmlpgqeyI3vSF1J8Yta0w2O8UytiX
-         JTpm+yAEXPtz34tNh4q0CVzQXZJxPaK4PSa/Bq9KSYpO1BR9I//OMjleTC/xtF2oRxJs
-         9g3Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrXZEk2Pkfc+WzoMcPaTVASr/CMXOsFIP/l6h5udeJh0KY9/B1XsB9KZeZe/5bygFXr3032t33N+vsGUuCnQzw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmQf7N87XiGKZVbkHExE9aEMc12p1806Uavciyk5IlAzyr9Duc
-	jzCeLJrODJP73UelrxKG/mm3+6FtG0OuEkAU9p0YWF2QFYw/ID4FRHybJGEn3u8+n00=
-X-Gm-Gg: AfdE7cmrstgDblaaAkjM7FZLh+t8EQ2CUca3saIlTQb1pMPUhoA8EadEsUqJoUSW9zC
-	EoE/V9fKMybZfc+rp5hKRDNtorQ0s6R8Q86SPrl9jKa+7fzEuUUlCxDU4toiYQnvp+dylHBr5Ai
-	9dMdROXeHUyve/dx/2wCkQzmHUEXXldNqQW+Bdy06zzVpii9/NsOIfLlPfs6pEn3oTlcSl1Em8p
-	SNeafq9Lk6vbUeB+NRYN9uCfkqoXAYg0YK6OxheNOt0a59LiRmYp8gREMxtHVnRLtifDrtUtwib
-	xs9JziCGXFFmRZBIiF9wRH09SJLE81WmNosPjJxjNeZjueKod1nYs/uDi7Oc1Qjie6Y1amD0yGQ
-	NRQbdJ/Utl2DUv+DH3h+ky2+NntSaEgymjorKxUtCLtOY6Rus5GjmTQG9nOYIjywSAMp8biVuqK
-	rgCo3PRUzSJUdQAWlQQhU2Rg==
-X-Received: by 2002:a05:6000:184d:b0:474:3708:c8 with SMTP id ffacd0b85a97d-47f2dcc0d79mr17004061f8f.15.1784047305565;
-        Tue, 14 Jul 2026 09:41:45 -0700 (PDT)
-Received: from [172.27.236.80] ([212.187.182.161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635aa34sm8766325f8f.15.2026.07.14.09.41.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2026 09:41:45 -0700 (PDT)
-Message-ID: <a8d4ab9b-b2e3-407c-9898-1b9f7339f448@linaro.org>
-Date: Tue, 14 Jul 2026 17:41:43 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byVwXbtL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB86C1F000E9;
+	Tue, 14 Jul 2026 17:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784048934;
+	bh=Kh2P97NR23r0bPnBVfJUq5G6C7YiA7uuewthu/bIN7I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=byVwXbtL6pok60WoSXAQqDT9TWgMfVeTqOGTrFMFwA6AltQP5sZCa7aNR3xUn08rn
+	 98GWpxt2dYNmGN3CJfXbCsFPoQPyYPMQI3kXe6SG80ABed69gGNkY5Rp2sd/Lt2Awv
+	 p705lkbKrb86dy2CiTMLuTug1WxXpWM//OVfutelgu9l8QdbINaOd00urKNlK09LaY
+	 WVTNVNF88fHrRfCN7D+T5MpHamui9ymXS5/O9MsHoSNXn0GiIT+fAuFqoG9QVKh6l/
+	 OPEf8UexSOkk1UttwLnKuzJutIP/3N35XinvooYC6gdBZqJYcBqsUWKs419va0ZZgA
+	 RZQu0vRoP673g==
+Date: Tue, 14 Jul 2026 19:08:51 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Vladimir Vdovin <deliran@verdict.gg>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <alZtI782RGKb8y4Y@lore-desk>
+References: <20260708203410.45121-1-deliran@verdict.gg>
+ <20260708203410.45121-2-deliran@verdict.gg>
+ <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
- <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
- <c366293c-7bcd-4e28-b3c4-575203403489@linux.dev>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <c366293c-7bcd-4e28-b3c4-575203403489@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KHFfhBMWGk3EjgnD"
+Content-Disposition: inline
+In-Reply-To: <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
 
+--KHFfhBMWGk3EjgnD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+> On 07/08, Vladimir Vdovin wrote:
+> > From: Lorenzo Bianconi <lorenzo@kernel.org>
+> >=20
+> > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> > checksum will be use by devices capable of exposing receive checksum
+> > result via bpf_xdp_metadata_rx_checksum().
+> > Moreover, introduce xmo_rx_checksum netdev callback in order to allow
+> > the eBPF program bound to the device to retrieve the RX checksum result
+> > computed by the hw NIC and reported via DMA descriptors.
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> > ---
+> >  Documentation/netlink/specs/netdev.yaml |  5 ++++
+> >  include/net/xdp.h                       | 18 ++++++++++++++
+> >  include/uapi/linux/netdev.h             |  3 +++
+> >  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
+> >  tools/include/uapi/linux/netdev.h       |  3 +++
+> >  5 files changed, 61 insertions(+)
+> >=20
+> > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/ne=
+tlink/specs/netdev.yaml
+> > index 5f143da7458c..6d0d90d3a614 100644
+> > --- a/Documentation/netlink/specs/netdev.yaml
+> > +++ b/Documentation/netlink/specs/netdev.yaml
+> > @@ -61,6 +61,11 @@ definitions:
+> >          doc: |
+> >            Device is capable of exposing receive packet VLAN tag via
+> >            bpf_xdp_metadata_rx_vlan_tag().
+> > +      -
+> > +        name: checksum
+> > +        doc: |
+> > +          Device is capable of exposing receive checksum result via
+> > +          bpf_xdp_metadata_rx_checksum().
+> >    -
+> >      type: flags
+> >      name: xsk-flags
+> > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > index aa742f413c35..e255ff786131 100644
+> > --- a/include/net/xdp.h
+> > +++ b/include/net/xdp.h
+> > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_in=
+fo *info,
+> >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> >  			   bpf_xdp_metadata_rx_vlan_tag, \
+> >  			   xmo_rx_vlan_tag) \
+> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > +			   bpf_xdp_metadata_rx_checksum, \
+> > +			   xmo_rx_checksum)
+> > =20
+> >  enum xdp_rx_metadata {
+> >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
+> >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_=
+L3_DYNHDR,
+> >  };
+>=20
+> [..]
+> =20
+> > +/* Please note the driver is required to invalidate the checksum if th=
+e NIC
+> > + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF prog=
+ram
+> > + * modifies the packet since it can change some fields validated by the
+> > + * checksum.
+> > + */
+>=20
+> Sorry, a bit confused about this part. IIUC this is in response to this
+> discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
+>=20
+> Looking at a few drivers:
+> - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+> - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
+>   bpf prog attached
+> - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+> - gve (gve_rx) - can do COMPLETE even with xdp attached?
+>=20
+> So none of the drivers invalidate anything (and nether the bpf machinery)=
+, some
+> choose to (correctly?) not report COMPLETE when there is XDP. So was the
+> discussion about documenting this and giving some guidance? This probably
+> belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
 
-On 10/07/2026 23:29, Ihor Solodrai wrote:
-> On 5/18/26 2:03 AM, James Clark wrote:
->> Documentation/kbuild/llvm.rst mentions that readelf is included in the
->> LLVM toolchain, but it's not currently included in this block.
->>
->> Add it so that LLVM=... options also apply to readelf. Users in tools/
->> were Perf which was hardcoding it, and another was the BPF makefile.
->> Both already include Makefile.include so convert them to use the new
->> variable.
->>
->> It also didn't have the cross compile prefix, so either readelf didn't
->> mind opening cross binaries, or it wasn't working for cross builds.
-> 
-> I'm pretty sure it's the former. readelf/llvm-readelf are only used
-> libbpf makefile to read ELF symbol tables, which should be arch-independent.
-> 
-> We've been cross-compiling the kernel (and libbpf) on BPF CI for a
-> long time. So the unprefixed readelf is already working, and adding
+Hi Stanislav,
 
-I think "working" isn't technically correct when you take into account 
-the documented behavior of the versioned LLVM= option [1]. You would get 
-one version of the toolchain used for some of the build and a different 
-version used here. That's what caused the build failure in Perf that 
-resulted in the tidyup, because they're not always compatible.
+re-reading the previous upstream discussion, I guess we should just documen=
+t the
+expected driver behaviour (invalidate the cksum for both COMPLETE and
+UNNECESSARY cases when the XDP program running on the NIC returns XDP_PASS)=
+ and
+add a given kselftest for it. Agree?
 
-[1]: Documentation/kbuild/llvm.rst
+>=20
+> Also, can you add your new rx_checksum to
+> Documentation/networking/xdp-rx-metadata.rst's list of supported kfuncs?
 
-> the $(CROSS_COMPILE) prefix only adds a new requirement.
-> 
-> I don't think this change in tools/lib/bpf/Makefile is a good idea,
-> we could potentially break some environments. Even though hardcoded
-> readelf doesn't look nice.
-> 
-> 
+ack, I will do it in the next iteration.
 
-IMO it's worth the risk for the cleanup, it also helps to stop 
-propagating it with future copy pastes.
+Regards,
+Lorenzo
 
-Do you think it's likely that someone has CROSS_COMPILE set but doesn't 
-have that readelf installed? Installing gcc-aarch64-linux-gnu on 
-Debian/Ubuntu gives you aarch64-linux-gnu-readelf, so it would have to 
-be a unique setup to not have it.
+--KHFfhBMWGk3EjgnD
+Content-Type: application/pgp-signature; name=signature.asc
 
-It sounds like maybe you want this bpf makefile to explicitly use 
-'HOSTREADELF', if you're really sure it never requires arch specific 
-stuff? If we added that it would fit better with the rest of the 
-cleanup. But I think 'READELF' is less confusing and take the risk of 
-some build breakages.
+-----BEGIN PGP SIGNATURE-----
 
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->>   tools/lib/bpf/Makefile         | 8 ++++----
->>   tools/perf/Makefile.perf       | 1 -
->>   tools/scripts/Makefile.include | 2 ++
->>   3 files changed, 6 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
->> index 168140f8e646..180dca9c57c8 100644
->> --- a/tools/lib/bpf/Makefile
->> +++ b/tools/lib/bpf/Makefile
->> @@ -114,12 +114,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
->>   
->>   TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
->>   
->> -GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
->> +GLOBAL_SYM_COUNT = $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
->>   			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
->>   			   sed 's/\[.*\]//' | \
->>   			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>   			   sort -u | wc -l)
->> -VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
->> +VERSIONED_SYM_COUNT = $(shell $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
->>   			      sed 's/\[.*\]//' | \
->>   			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>   			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
->> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
->>   		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
->>   		     "Please make sure all LIBBPF_API symbols are"	 \
->>   		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
->> -		readelf -s --wide $(BPF_IN_SHARED) |			 \
->> +		$(READELF) -s --wide $(BPF_IN_SHARED) |			 \
->>   		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
->>   		    sed 's/\[.*\]//' |					 \
->>   		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
->>   		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
->> -		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
->> +		$(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
-> 
->>   		    sed 's/\[.*\]//' |					 \
->>   		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
->>   		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
->> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
->> index 0aba14f22a06..63276bf55856 100644
->> --- a/tools/perf/Makefile.perf
->> +++ b/tools/perf/Makefile.perf
->> @@ -215,7 +215,6 @@ FLEX    ?= flex
->>   BISON   ?= bison
->>   STRIP   = strip
->>   AWK     = awk
->> -READELF ?= readelf
->>   
->>   # include Makefile.config by default and rule out
->>   # non-config cases
->> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->> index e81e5b479c56..380ad84ac51e 100644
->> --- a/tools/scripts/Makefile.include
->> +++ b/tools/scripts/Makefile.include
->> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
->>     $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
->> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
->>   else
->>     # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
->>     $(call allow-override,CC,$(CROSS_COMPILE)gcc)
->> @@ -80,6 +81,7 @@ else
->>     $(call allow-override,LD,$(CROSS_COMPILE)ld)
->>     $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->>     $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
->> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
->>   
->>     # Host versions aren't prefixed
->>     $(call allow-override,HOSTAR,ar)
->>
-> 
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCalZtIwAKCRA6cBh0uS2t
+rGL6AQCi2BM+G5ULVwlhiTQ9mResmshhs2Y13j4jDPNLyIsVpAEAnHqdZsYDNeis
+roaeeQ5EZov1q2vIZr/DExysvRJVBAg=
+=iMpE
+-----END PGP SIGNATURE-----
 
+--KHFfhBMWGk3EjgnD--
