@@ -1,56 +1,56 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2284CA277
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 15:15:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3428B4CA273
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 15:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784042134; cv=none; b=sn21vSuHtVg1XveFjEpp3sr++toWqQJLlVTt933uFirwNmGw12v6c1nbEeEKCq8E6Pw+pU+3HW3V179j10vELUVublhHaf8fFToitVQZwDuoEgU1155NfJiyDkextoERgiYKiTIiXosgI4AZV+oEqleBlIMMINhrA0Uw2t9cf38=
+	t=1784042137; cv=none; b=pSUZxS8+99gwaRcTx75LUhlNh2GdSbk40pzdtHIHQ7vXyn2hw18r8x39xIZ3h/7wBFfDBrYXvEK+r1XxbPERJ4ah+DKU3QIu6mDs0vfxSuSAXjS4+/qGZ33ibHKHnapzwjwJMM+ySN/VrWC2QsN5d5sjmz4KLQOyriV2vQOV7HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784042134; c=relaxed/simple;
-	bh=qNh2OB7o9DY+fchan5SBAgPmk4q+K1nnzSrJogXCq6o=;
+	s=arc-20240116; t=1784042137; c=relaxed/simple;
+	bh=8CBMauhZZenpn+a2yQ87Rr2EfyqC5lFfzuVr5bte59U=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J9Jff7pKY0qbBNlvh/5dPELestmYxxUKPjCsjJchlE2L3BUiCpgH22kcVqi78bBSoQ9XTx83UyeKSGnI6h7IAG1k9tkLYyZi0TdM5LZG8caq4c9HFLB8bIkwVvpB6LfOTrDSCCAoNnAqf71CclXqXca2MfEfVcp0U3CWPvt26iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cpkYYYAf; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=U6jre/oN8Vpyhu5IiJxSgDes1AJqEb9gJzEZVsW5j/1sbybacLdInXaHBD8PqfNb9hAGCn/Nt2KHvlEay42u7UxZ1HurNTldRqH0Et32QmvTlklsXtjFjqtd2pj2ayRBEUzkYXMgaWXUliQqHqL/lPNBfQ6Htzg9+Cqq8nlGQEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CbeLsf7O; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cpkYYYAf"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-84a4d8fd6deso1478932b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 08:15:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CbeLsf7O"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2cc8bde6318so82381165ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 08:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784042129; x=1784646929; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784042131; x=1784646931; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JcpQuk6vjGQSe9CsOI/pxanFsfOSXhryIEYWt4/hbIA=;
-        b=cpkYYYAfmMzDHs0nc3O/FTomvuJ7iQRO9EFunIBdLjddq3HRe6dHFNletndhvkfMub
-         k1+Dat20s9WImy8KxaxOMpYuTgGG4PgbsB84eWmNwQ0QJGM5G+0ABVVGbURsXBemGT6d
-         wWxfsYZqDlW94p5TcS8dpCv0oEInhoVnhdZ17CZ2FUE/G4MCinThX2TpWx5lQRwDFx9A
-         7zxMltZ3chK/4YQc07tIwv0qH9vIEzQYItdGp1Fv7nbkjwLPZ2FPqLxqX0SL7WJNjDNH
-         l6zsQUsOg0TEOSDitFnBJD8PKzRovgdpPl6jRKbZkzTmHdiY2hle0HAHbbZVYL3gr/7O
-         FaHw==
+        bh=xjEe04qswGeo8Cvf7F1uxuMmAPxZARk/R3E4HFO0u5g=;
+        b=CbeLsf7ODiv/CAWg1Rr/dD33QZT/TGVzG4/d5rqy2hjIksaoqkfjs9in7QEiV4flMZ
+         RvIcM4ZQ06NW5ZyxK+AcRRryMs5MC4jN0kCBTT90OQmhpY+luRhXRfxyJdjO0G/Pshul
+         7n0HfAM5GKt8OAtuk/DaIWQIHJaWuQvX5dljn9BLw/6HQ3dKWO+GdlRf1XhMkw4bnu8a
+         Qv2dySadfBIrnjObPZ9r5fmGX4UKxrd68Nx9QHxAlWTjrZyJewymgHL2HRJyP0f3j5An
+         q6DaHfZW1SBGtNFTrb3Pmm9Jo+9Bgl45BXyWpvtcc4UIMg+3jYoHzARufkmN+awQ8vmJ
+         JgZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784042129; x=1784646929;
+        d=1e100.net; s=20251104; t=1784042131; x=1784646931;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JcpQuk6vjGQSe9CsOI/pxanFsfOSXhryIEYWt4/hbIA=;
-        b=YO9OA8fdQrkgNH9IUil+2uI8Lq7JU2G1CSf6chzU72pxzcrtdsD0gS1QwV8BejsDpD
-         hKrAOn6Hd9BRDpRONbVkRYpIhRwYS1c+tbt81X57HgdRR4tn64znJF3eD2zH93IIIll2
-         T1OvxCaz7rs/AHUQuUeoBpAgEXeF/MvFgQNv8zeui6Rij1LTCkQ4ssBpJi93v/d9bo9P
-         K5cXTpYW3rAeYCGAplcd6DLn20hyYcqq2xaP48zIypT82NpDInnNbt3ZSAKYtLW5pbcI
-         f9tLnYp+4+ZKR5O5ZF5ANhyIcaJHdxD/C6aspCJYwIiiudxV1CGSiO0La626pWKKr8Ks
-         oGBw==
-X-Forwarded-Encrypted: i=1; AHgh+RpWD0DSYMs1BabgpAtBMdyY051XWZDDNzQAJMg3UA6awzZq8rz9AENOl2M3VND+InETTO7zVzpGMuYX1fa4Pds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuwVI+KIGbABtYci4z7NLTJVJ9uBLyzCyp4x8aznxdW4G5JuBi
-	+GdvlULrulL7baiV+t4RuUKcUjAh/WinC2qY/MzdfjrXVa4Y0LtHFy6ntq7bZw1aZXjQLnaepIm
-	p1md26UXxPA==
-X-Received: from pfx27.prod.google.com ([2002:a05:6a00:a45b:b0:848:5415:1869])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:bd8a:b0:848:70e7:f053
- with SMTP id d2e1a72fcca58-8488980f75dmr11709317b3a.54.1784042128707; Tue, 14
- Jul 2026 08:15:28 -0700 (PDT)
-Date: Tue, 14 Jul 2026 08:15:03 -0700
+        bh=xjEe04qswGeo8Cvf7F1uxuMmAPxZARk/R3E4HFO0u5g=;
+        b=eUunrEes8FOxsZMAap2z/ic6q2SshvYUmBy9khSebH5Zqm2CTci2Q0jlRMYb057B5I
+         Keg216eH54coPVeSK0WICC0Zwbogwm7cvmJdVcK07elPkVhACu+CkAAuEujvVXv1plot
+         fDhpyO7W8gNqMcpuDs25fEnZptKg6DFZfRhzoUMYXzt2kcjI3+uJUpldKAcCHPRtuUhu
+         oLDyJf/ZGUdpG2mZNYvY6cXHw3sijvbuatccGwEG1Vl/K9k2WDZZzi0DxA1derfFjaZu
+         7A/wvwwClrHTZPcVKB+OPOxoFCn2cm37vPkZ5bAKw/FgCa+j+cP+vP2K3GEZjlmR1+Vh
+         RcPQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpEJ/ed6EiFAlBoj6+9PZ76zth86NwyPMMpsdACD9o7tFF9ehYPpVf8zEmhV/oSVgVjmyzMRKZPpct1EUTyV3M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjMSJaLMbOZQv1OFowAqxcib/fnjQYi1I00ULijsSjU4C2AGFO
+	D7MrpfK7J/HBFf87GTfV2OxKvFPQkgkEx5HLpYBuWEfGpYCwh4yHKwbNx+o5bEQbNECsGWiM/4/
+	HwJNVXO060A==
+X-Received: from plbl21.prod.google.com ([2002:a17:902:eb15:b0:2cc:da2c:8085])
+ (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:120c:b0:2ce:d1dc:1e1
+ with SMTP id d9443c01a7336-2cef1332689mr29905365ad.39.1784042130777; Tue, 14
+ Jul 2026 08:15:30 -0700 (PDT)
+Date: Tue, 14 Jul 2026 08:15:05 -0700
 In-Reply-To: <20260714151505.3466855-1-vipinsh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260714151505.3466855-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.55.0.795.g602f6c329a-goog
-Message-ID: <20260714151505.3466855-19-vipinsh@google.com>
-Subject: [PATCH v5 18/20] vfio: selftests: Expose iommu_modes to tests
+Message-ID: <20260714151505.3466855-21-vipinsh@google.com>
+Subject: [PATCH v5 20/20] vfio: selftests: Add continuous DMA to vfio_pci_liveupdate_kexec_test
 From: Vipin Sharma <vipinsh@google.com>
 To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
@@ -83,51 +83,206 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: David Matlack <dmatlack@google.com>
 
-Expose the list of iommu_modes to enable tests that want to iterate
-through all possible iommu modes.
+Add a long-running DMA memcpy operation to
+vfio_pci_liveupdate_kexec_test so that the device attempts to perform
+DMAs continuously during the Live Update.
+
+At this point iommufd preservation is not supported and bus mastering is
+not kept enabled on the device across the kexec, so most of these DMAs
+will be dropped. However this test ensures that the current device
+preservation support does not lead to system instability or crashes if
+the device is active. And once iommufd and bus mastering are preserved,
+this test can be relaxed to check that the DMA operations completed
+successfully.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- tools/testing/selftests/vfio/lib/include/libvfio/iommu.h | 2 ++
- tools/testing/selftests/vfio/lib/iommu.c                 | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ .../vfio/vfio_pci_liveupdate_kexec_test.c     | 129 ++++++++++++++++++
+ 1 file changed, 129 insertions(+)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h b/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
-index e9a3386a4719..4b9cbe262159 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/iommu.h
-@@ -15,6 +15,8 @@ struct iommu_mode {
- 	unsigned long iommu_type;
- };
+diff --git a/tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c b/tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c
+index ec3fe8f19502..51b2f24f352c 100644
+--- a/tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c
++++ b/tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c
+@@ -1,8 +1,16 @@
+ // SPDX-License-Identifier: GPL-2.0-only
  
-+extern const struct iommu_mode iommu_modes[];
-+extern const int nr_iommu_modes;
- extern const char *default_iommu_mode;
- 
- struct dma_region {
-diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
-index 035dac069d60..95a494f829d2 100644
---- a/tools/testing/selftests/vfio/lib/iommu.c
-+++ b/tools/testing/selftests/vfio/lib/iommu.c
-@@ -23,7 +23,7 @@
- const char *default_iommu_mode = MODE_IOMMUFD;
- 
- /* Reminder: Keep in sync with FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES(). */
--static const struct iommu_mode iommu_modes[] = {
-+const struct iommu_mode iommu_modes[] = {
- 	{
- 		.name = MODE_VFIO_TYPE1_IOMMU,
- 		.container_path = "/dev/vfio/vfio",
-@@ -49,6 +49,8 @@ static const struct iommu_mode iommu_modes[] = {
- 	},
- };
- 
-+const int nr_iommu_modes = ARRAY_SIZE(iommu_modes);
++#include <linux/sizes.h>
++#include <sys/mman.h>
 +
- static const struct iommu_mode *lookup_iommu_mode(const char *iommu_mode)
+ #include <libliveupdate.h>
+ #include <libvfio.h>
+ 
++#define MEMCPY_SIZE SZ_1G
++#define DRIVER_SIZE SZ_1M
++#define MEMFD_SIZE (MEMCPY_SIZE + DRIVER_SIZE)
++
++static struct dma_region memcpy_region;
+ static const char *device_bdf;
+ 
+ static char state_session[LIVEUPDATE_SESSION_NAME_LENGTH];
+@@ -11,8 +19,89 @@ static char device_session[LIVEUPDATE_SESSION_NAME_LENGTH];
+ enum {
+ 	STATE_TOKEN,
+ 	DEVICE_TOKEN,
++	MEMFD_TOKEN,
+ };
+ 
++static void dma_memcpy_one(struct vfio_pci_device *device)
++{
++	void *src = memcpy_region.vaddr, *dst;
++	u64 size;
++
++	size = min_t(u64, memcpy_region.size / 2, device->driver.max_memcpy_size);
++	dst = src + size;
++
++	memset(src, 1, size);
++	memset(dst, 0, size);
++
++	printf("Kicking off 1 DMA memcpy operations of size 0x%lx...\n", size);
++	vfio_pci_driver_memcpy(device,
++			       to_iova(device, src),
++			       to_iova(device, dst),
++			       size);
++
++	VFIO_ASSERT_EQ(memcmp(src, dst, size), 0);
++}
++
++static void dma_memcpy_start(struct vfio_pci_device *device)
++{
++	void *src = memcpy_region.vaddr, *dst;
++	u64 count, size;
++
++	size = min_t(u64, memcpy_region.size / 2, device->driver.max_memcpy_size);
++	dst = src + size;
++
++	/*
++	 * Rough Math: If we assume the device will perform memcpy at a rate of
++	 * 30GB/s then 7200GB of transfers will run for about 4 minutes.
++	 */
++	count = (u64)7200 * SZ_1G / size;
++	count = min_t(u64, count, device->driver.max_memcpy_count);
++
++	memset(src, 1, size / 2);
++	memset(dst, 0, size / 2);
++
++	printf("Kicking off %lu DMA memcpy operations of size 0x%lx...\n", count, size);
++	vfio_pci_driver_memcpy_start(device,
++				     to_iova(device, src),
++				     to_iova(device, dst),
++				     size, count);
++}
++
++static void dma_memfd_map(struct vfio_pci_device *device, int fd)
++{
++	void *vaddr;
++
++	vaddr = mmap(NULL, MEMFD_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	VFIO_ASSERT_NE(vaddr, MAP_FAILED);
++
++	memcpy_region.iova = SZ_4G;
++	memcpy_region.size = MEMCPY_SIZE;
++	memcpy_region.vaddr = vaddr;
++	iommu_map(device->iommu, &memcpy_region);
++
++	device->driver.region.iova = memcpy_region.iova + memcpy_region.size;
++	device->driver.region.size = DRIVER_SIZE;
++	device->driver.region.vaddr = vaddr + memcpy_region.size;
++	iommu_map(device->iommu, &device->driver.region);
++}
++
++static void dma_memfd_setup(struct vfio_pci_device *device, int session_fd)
++{
++	int fd, ret;
++
++	fd = memfd_create("dma-buffer", 0);
++	VFIO_ASSERT_GE(fd, 0);
++
++	ret = fallocate(fd, 0, 0, MEMFD_SIZE);
++	VFIO_ASSERT_EQ(ret, 0);
++
++	printf("Preserving memfd of size 0x%x in session\n", MEMFD_SIZE);
++	ret = luo_session_preserve_fd(session_fd, fd, MEMFD_TOKEN);
++	VFIO_ASSERT_EQ(ret, 0);
++
++	dma_memfd_map(device, fd);
++}
++
+ static void before_kexec(int luo_fd)
  {
- 	int i;
+ 	struct vfio_pci_device *device;
+@@ -32,6 +121,27 @@ static void before_kexec(int luo_fd)
+ 	ret = luo_session_preserve_fd(session_fd, device->fd, DEVICE_TOKEN);
+ 	VFIO_ASSERT_EQ(ret, 0);
+ 
++	dma_memfd_setup(device, session_fd);
++
++	/*
++	 * If the device has a selftests driver, kick off a long-running DMA
++	 * operation to exercise the device trying to DMA during a Live Update.
++	 * Since iommufd preservation is not supported yet, these DMAs should be
++	 * dropped. So this is just looking to verify that the system does not
++	 * fall over and crash as a result of a busy device being preserved.
++	 */
++	if (device->driver.ops) {
++		vfio_pci_driver_init(device);
++		dma_memcpy_start(device);
++
++		/*
++		 * Disable interrupts on the device or freeze() will fail.
++		 * Unfortunately there isn't a way to easily have a test for
++		 * that here since the check happens during shutdown.
++		 */
++		vfio_pci_msix_disable(device);
++	}
++
+ 	close(luo_fd);
+ 	daemonize_and_wait();
+ }
+@@ -78,6 +188,7 @@ static void after_kexec(int luo_fd, int state_session_fd)
+ 	struct iommu *iommu;
+ 	int session_fd;
+ 	int device_fd;
++	int memfd;
+ 	int stage;
+ 
+ 	check_open_vfio_device_fails();
+@@ -88,6 +199,10 @@ static void after_kexec(int luo_fd, int state_session_fd)
+ 	session_fd = luo_retrieve_session(luo_fd, device_session);
+ 	VFIO_ASSERT_GE(session_fd, 0);
+ 
++	printf("Retrieving memfd from LUO\n");
++	memfd = luo_session_retrieve_fd(session_fd, MEMFD_TOKEN);
++	VFIO_ASSERT_GE(memfd, 0);
++
+ 	printf("Finishing the session before retrieving the device (should fail)\n");
+ 	VFIO_ASSERT_NE(luo_session_finish(session_fd), 0);
+ 
+@@ -109,9 +224,23 @@ static void after_kexec(int luo_fd, int state_session_fd)
+ 	 */
+ 	device = __vfio_pci_device_init(device_bdf, iommu, device_fd);
+ 
++	dma_memfd_map(device, memfd);
++
+ 	printf("Finishing the session\n");
+ 	VFIO_ASSERT_EQ(luo_session_finish(session_fd), 0);
+ 
++	/*
++	 * Once iommufd preservation is supported and the device is kept fully
++	 * running across the Live Update, this should wait for the long-
++	 * running DMA memcpy operation kicked off in before_kexec() to
++	 * complete. But for now we expect the device to be reset so just
++	 * trigger a single memcpy to make sure it's still functional.
++	 */
++	if (device->driver.ops) {
++		vfio_pci_driver_init(device);
++		dma_memcpy_one(device);
++	}
++
+ 	vfio_pci_device_cleanup(device);
+ 	iommu_cleanup(iommu);
+ }
 -- 
 2.55.0.795.g602f6c329a-goog
 
