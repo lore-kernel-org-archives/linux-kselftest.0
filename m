@@ -1,230 +1,183 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3F73C0605
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 12:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8973612DB;
+	Tue, 14 Jul 2026 13:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784031439; cv=none; b=mPL9Bz22dKLo1dl2PRis5iM1rj/4F5dKjXFAd8pqRgxFWwaJVuRlxtA3grUuvsLJ18xtQ/gDCm6jVt2n18e62Xm4XoEM9bEEp9ueTF8wpTDnr2uft8NZE+bajRO9CWd8RX6wRHSu9jAKwQRo0It23A0aGDC5h6RCj2TVe/2qq6c=
+	t=1784034077; cv=none; b=mxOLyjkTZodjzf5lQfEmmSAkTmFSuzfLXx38bUjbzdwct0Xf67jeMpgNDemtUvXKYmi6MJzPjy1xd+Jl1VjjyWjDTCUcecMDitj8bQE1czQCFPso+Y/s6ODtEGiIx1v7TRwPqI3YDmMsxy6XU9IK4bzWwT17lyA1HMS3AW4GJnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784031439; c=relaxed/simple;
-	bh=YEpNs6pmYVxz4PQh8SzmAkXFrjWAYq6cWXXi9C3jIkw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=u6SGF3E0hMlOwXCbdmKceqDoC16awAHw9IXcG5ddWPUzQ/fKxCryc7l7wxvtg363G+9ALfiloNMu8wSfHDoYxBSKE6Ql9jmNCqCxCRKnxHJN/Tuwi00jyqVRRjAH0tt2u0tLaMvGTrFKOf0pzVwDGAuTSnUQkkO4hX49EVQl28g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-493d43b6c28so3783225e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 05:17:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784031433; x=1784636233;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:cc:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=egZiSxqHD1w/P79BBVFkvOie28f1koI4NWZWuHndLxE=;
-        b=DwHBarnsCinOJZ/V7YY44nHmNSHHqCCXzB+i0s0uZWzHajumZN0bmc9vpSu1id/WR1
-         8Z9XTZiit24AJ+M3z0z/tgf/6GVybkszfhwMHJzCVon6Q1fiRjFuAXz/mWGfrK6uv23j
-         SMsYDoxjDM8BbPBTG+z6t7QmKIljvwjCvNJ9LTEU2qvUBTcXhstfrXKqVVmrnnI/kbpw
-         zTgbA3iHTuEL21NdIFJKMLh44lqlCs4tPm5s4A+jA0fcv4Tzy4Gw9QIuaqPo4l/fJXfQ
-         W1qt9LG9eSSnKE/SoW5uGLzsTpEw1d/oLLtO4kpfdqEbAUVypb/m+1BAVFUlFMT6/8h5
-         I4Qw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr+qSWUDg4eyN07m6wHSE1Q7avwq6D76fZNQ4TLCcFJZVToWmICgVzePM/R1OsymITdC2J8WhgtGTnlI6d3GJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBbY99tFaSxi2DFD6ecW8u3m4OUKxFdxNL7Qh9OR7u3qvEJAPU
-	KFT1dm3oDG03rKaie4+Z5fBMCBNB5SkhnMkDduReTMynlZBrGPg2tlI7
-X-Gm-Gg: AfdE7clW3QiSUHz66SPI2wyhQT6AOvp7/HbVKw8/lZ291EJ1SUn2HBEgS1kK/RZSXom
-	y+Or9QhvrlZBMRR/lnJ4Jnd4HwOAYue9ZHoGl0vp061muSQrCg0tVIB0uq0uYe4ZwCNpJkTjXb5
-	RkTtvAPzPrYXQgUUxuVAh9avUh1dboAjsUBRX8Gvqfl6kHTWIf6ECP+eLAFcth20xfUEzpsvaid
-	lrV2lVFjzXnhrBKNCBWsWaI1XI2RrYpliFLABm71gtxdZ+fFt8aEwmuNk9oZeGAW2nIK/y/fjdb
-	sSqXP4i2E9UEARrRc+5yWFIob6KzhWEPetYxz+pGnMBT6yrTVcEJ0O7jIBAO89R4UzEarBs/0aW
-	ybCe+Y15odmk/PakeCvfbN+Gvqf/3ynERDyY6Y94j8xuuxGrPCuePl5asZSWWl2+WLx4jOn30BD
-	605dyWpUj4bNY5Ew7RNsDtm8CzXiKfuQ6dnfeFOv+3s0MbrhDhmA==
-X-Received: by 2002:a05:600c:1f87:b0:493:f870:fbf0 with SMTP id 5b1f17b1804b1-493f88b3693mr166046515e9.34.1784031432765;
-        Tue, 14 Jul 2026 05:17:12 -0700 (PDT)
-Received: from [192.168.88.241] (78-80-108-129.customers.tmcz.cz. [78.80.108.129])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950871cbd6sm84393335e9.3.2026.07.14.05.17.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2026 05:17:12 -0700 (PDT)
-Message-ID: <87f03ccc-5f60-4e8e-a6ef-8f5f8dcb4e12@ovn.org>
-Date: Tue, 14 Jul 2026 14:17:09 +0200
+	s=arc-20240116; t=1784034077; c=relaxed/simple;
+	bh=7CeV2JqxygSEcV7QVYtBYJkoFG8rn1xPd64XyHQGA9g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=M532kVrTeyogswW3xuOpqqnoVi4qwYSW8G//M3vAnLsNO6OpcHKVZhgqZr4ApO9y7FPy61I477ptYUIH4+FhSPRxEmgXTYg4ZXxxeRdEx2apr0+Z8uG+XMoRBm5skF0BaKblxj6R1ecwSPLhKe0rlS4ioWqtGuBgYKB7cA4Ly7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=rZ/lK5jD; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="rZ/lK5jD"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3C6D3410E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1784034074; bh=N7EMk0B6AUtZUiM/QA5lBMqbPP1I3abAcQ9/YZ6+Tzk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=rZ/lK5jDFFbj57Sl/24gU1iFuYlaluvoVZ5Ug1idxSk24WOPCmZ88zIRW5f+YEzVX
+	 OzhkNgXiPh9OlddACJ4HW/nAE0hrweCLvZ3Br47g8RTMD/2YI7NWfraTs/0jrI5bfA
+	 wxL1aA/kuV0bUH9ibIbKx8O5AkiBKjJbp6cqIqHf+4LNGJdlv4surZ7bloLjRvWGDB
+	 gXaXax69FImiTwDeRIWMhBVy8YdBnFw7wCtTCrrj/dpLNvTlQrRPsZ3LTIwCxxYc0E
+	 X363mMGut+t5vLTp43fHZdEuLl9FLOjoLmIz4ZpDAr5I/3Uz8a9+z0JZRgQeW/b/we
+	 S28cEuHBv0YFQ==
+Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 3C6D3410E2;
+	Tue, 14 Jul 2026 13:01:14 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: David 'equinox' Lamparter <equinox@diac24.net>, Paolo Abeni
+ <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>, Ido Schimmel
+ <idosch@nvidia.com>
+Cc: David Ahern <dsahern@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Fernando
+ Fernandez Mancera <fmancera@suse.de>, Lorenzo Colitti
+ <lorenzo@google.com>, Maciej =?utf-8?Q?=C5=BBenczykowski?=
+ <maze@google.com>, Patrick Rohr
+ <prohr@google.com>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, David 'equinox' Lamparter
+ <equinox@diac24.net>
+Subject: Re: [PATCH net-next 9/9] net: document RFC6724 rule 5.5 implementation
+In-Reply-To: <20260714094030.136317-10-equinox@diac24.net>
+References: <20260714094030.136317-1-equinox@diac24.net>
+ <20260714094030.136317-10-equinox@diac24.net>
+Date: Tue, 14 Jul 2026 07:01:13 -0600
+Message-ID: <87zeztg1ye.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: i.maximets@ovn.org, dev@openvswitch.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, edumazet@google.com,
- horms@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- davem@davemloft.net
-Subject: Re: [ovs-dev] [PATCH net-next v2] selftests/net/openvswitch: add SCTP
- flow key test
-To: =?UTF-8?B?5L6v5pWP54aZ?= <houminxi@gmail.com>
-References: <20260707034718.2717982-1-houminxi@gmail.com>
- <f92c4b8a-601a-4e22-822a-ba00705fe60c@ovn.org>
- <CAJ0BgHeDpvS1-stvrDp0HpUgQY8ZSdJZvAiw7fLpL2EHPeRwHg@mail.gmail.com>
- <CAJ0BgHc_3fRLFpaUkb2P2jY4avtB3XJQmk0jE-4UC=1abtKLaQ@mail.gmail.com>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <CAJ0BgHc_3fRLFpaUkb2P2jY4avtB3XJQmk0jE-4UC=1abtKLaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 7/14/26 2:01 PM, 侯敏熙 wrote:
-> Hi Ilya,
-> 
-> Thanks for pointing this out.  I looked into this and found that
-> nc (netcat-openbsd) on Debian/Ubuntu does not have SCTP support at
-> all. The upstream OpenBSD nc only handles TCP, UDP, and
-> Unix-domain sockets, and the Debian patches don't add SCTP either.
+David 'equinox' Lamparter <equinox@diac24.net> writes:
 
-AFAICT, 'nc' in netdev CI is the nmap version of netcat, it's not
-the openbsd one.  Does nmap version support sctp?  Google seems to
-think so at least.  The test should be skipped though if sctp is
-not supported.
+> RFC6724 rule 5.5 is anything but obvious, especially if trying to do it
+> well.  (RFC8028 and its errata kinda proves the point.)
+>
+> This documents what exactly the Linux kernel does for RFC6724 rule 5.5,
+> especially what the routing table needs to look like for it to work.
+>
+> Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
+> ---
+>  Documentation/networking/ipv6-addrsel.rst | 75 +++++++++++++++++++++++
+>  MAINTAINERS                               |  1 +
+>  2 files changed, 76 insertions(+)
+>  create mode 100644 Documentation/networking/ipv6-addrsel.rst
 
-Note: sashiko had some comments on the daemon pid handling in v2.
+You need to add this new document to the index.rst file or it won't be
+part of the docs build...you should have seen a warning when you built
+the docs.
 
-Best regards, Ilya Maximets.
+> diff --git a/Documentation/networking/ipv6-addrsel.rst b/Documentation/networking/ipv6-addrsel.rst
+> new file mode 100644
+> index 000000000000..bed032e69570
+> --- /dev/null
+> +++ b/Documentation/networking/ipv6-addrsel.rst
+> @@ -0,0 +1,75 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +====================================
+> +IPv6 source address selection trivia
+> +====================================
+> +
+> +
+> +RFC6724 rule 5.5 support
+> +------------------------
 
-> 
-> I see two cleaner alternatives that already have precedent in the
-> kernel selftests:
-> 
-> 1. socat: net/netfilter/nft_queue.sh already uses
->    "socat -u SCTP-LISTEN:PORT STDOUT" for SCTP data-plane testing.
->    Many drivers/net/ selftests already gate on require_cmd("socat").
-> 
-> 2. A small C helper: similar to sctp_hello.c used by sctp_vrf.sh
->    and conntrack_sctp_collision.sh.  The shell test would call
->    "./sctp_test server/client IP PORT" instead of ncat.
-> 
-> Which approach would you prefer for v3?
-> 
-> Best regards,
-> Minxi
-> 
-> 侯敏熙 <houminxi@gmail.com> 于2026年7月13日周一 11:02写道：
-> 
->> Ah so many thanks for your suggestions, Please forgive me,
->> I've always used ncat to write test cases.
->>
->> I will re-spin this patch.
->>
->> Ilya Maximets <i.maximets@ovn.org> 于2026年7月13日周一 10:39写道：
->>
->>> On 7/7/26 5:47 AM, Minxi Hou wrote:
->>>> Register OVS_KEY_ATTR_SCTP in the flow key parser so that sctp()
->>>> can be used in flow specifications. The ovs_key_sctp class already
->>>> exists (with src/dst fields matching the TCP/UDP siblings) but was
->>>> not wired into the parser, so the token was silently dropped and the
->>>> kernel rejected the flow.
->>>>
->>>> Add test_sctp_connect_v4 exercising the SCTP flow key with
->>>> port-specific matching: sctp(dst=4443) for client-to-server and
->>>> sctp(src=4443) for server-to-client.
->>>>
->>>> Wait for ncat readiness with ovs_wait instead of a fixed sleep so
->>>> the test does not race against ncat startup. Use grep -c on the
->>>> listening message to distinguish between successive ncat instances
->>>> that share the same stderr log. Kill the previous server before
->>>> respawning to avoid EADDRINUSE on the SCTP port.
->>>>
->>>> Signed-off-by: Minxi Hou <houminxi@gmail.com>
->>>> ---
->>>> v1 -> v2: replace sleep with ovs_wait on ncat listening output,
->>>>           kill previous ncat server before respawning to avoid
->>>>           port conflict (Aaron review feedback)
->>>>
->>>>  .../selftests/net/openvswitch/openvswitch.sh  | 102 ++++++++++++++++++
->>>>  .../selftests/net/openvswitch/ovs-dpctl.py    |   5 +
->>>>  2 files changed, 107 insertions(+)
->>>>
->>>> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh
->>> b/tools/testing/selftests/net/openvswitch/openvswitch.sh
->>>> index 2954245129a2..9c364eeb2ec2 100755
->>>> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
->>>> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
->>>> @@ -32,6 +32,7 @@ tests="
->>>>       dec_ttl                                 ttl: dec_ttl decrements
->>> IP TTL
->>>>       flow_set                                flow-set: Flow modify
->>>>       action_set                              set: SET action rewrites
->>> fields
->>>> +     sctp_connect_v4                         sctp: SCTP flow key
->>> matching
->>>>       psample                                 psample: Sampling packets
->>> with psample"
->>>>
->>>>  info() {
->>>> @@ -443,6 +444,107 @@ test_action_set() {
->>>>       return 0
->>>>  }
->>>>
->>>> +# sctp_connect_v4 test
->>>> +# - sctp(dst=4443) matches client-to-server INIT
->>>> +# - sctp(src=4443) matches server-to-client INIT-ACK
->>>> +# - remove flows and verify connection fails, reinstall and recover
->>>> +test_sctp_connect_v4() {
->>>> +     local t="test_sctp_connect_v4"
->>>> +
->>>> +     which ncat >/dev/null 2>&1 || return $ksft_skip
->>>
->>> Not a full review, but can we avoid ncat?  We already use nc in other
->>> tests, using different implementations of the same thing in different
->>> tests doesn't sound like a good idea.  On mnay systems nc and ncat
->>> will be different implementations with different options and behavior.
->>>
->>> Best regards, Ilya Maximets.
->>>
->>
-> _______________________________________________
-> dev mailing list
-> dev@openvswitch.org
-> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
-> 
+Please stick with the section markup guidelines in
+Documentation/doc-guide/sphinx.rst. 
 
+> +RFC6724 rule 5.5 is a very short paragraph in a complex RFC that has turned
+> +out quite tricky, but also immensely useful in multihoming scenarios.  For
+> +reference, it says:
+> +
+> +::
+
+You'll likely get more visually pleasing results if you just leave out
+the "::" here; you don't need literal formatting.
+
+> +   Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
+> +   If SA or SA's prefix is assigned by the selected next-hop that will
+> +   be used to send to D and SB or SB's prefix is assigned by a different
+> +   next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
+> +   assigned by the next-hop that will be used to send to D and SA or
+> +   SA's prefix is assigned by a different next-hop, then prefer SB.
+> +
+> +The way this works on Linux is as follows:
+> +
+> +- prior to any source address selection happening, when receiving a RA, more
+> +  than the installation of a default route (or ::/128 route) needs to happen:
+> +  for each PIO, a source-specific (subtree) route is *additionally* installed.
+> +  The effect of this is that *after* a source address has been selected, one
+> +  of the routers that advertised it will remain in use (this is *not* RFC 6724
+> +  related, but rather RFC 8028.)  At the same time, these extra routes serve
+> +  to remember which router advertised what.
+> +
+> +- per usual, a route lookup for the IPv6 destination address in consideration
+> +  is done first.  This is passed around in kernel as a dst_entry.
+> +
+> +- the source address selection code iterates through the various rules in
+> +  RFC 6724.
+> +
+> +- if/when rule 5.5 is reached, first of all, there is a check if *any* source
+> +  specific routes exist in the routing table.  If there are none, the entire
+> +  code for 5.5 is skipped because it cannot have any effect, but is not free
+> +  to execute (can involve multiple routing lookups.)  **In applications that
+> +  use a lot of unbound (e.g. UDP) sockets, installing subtree routes should
+> +  therefore be avoided to not incur this cost on each source address selection
+> +  pass.**  Alternatively, applications should bind their sockets to a specific
+> +  source address such that the selection code is never hit.
+> +
+> +- if subtree routes do exist, the source address selection code now repeats
+> +  the routing lookup done before source address selection is entered, except
+> +  with the source address under consideration filled in.  This lookup will hit
+> +  the subtree routes that were installed (see first item), giving a fresh
+> +  dst_entry.  If the new dst_entry matches the original dst_entry, that means
+> +  the original router has in fact sent RAs with PIOs for this source address,
+> +  so it is preferred.  Otherwise it is not.
+> +
+> +
+> +There are a few caveats to consider:
+> +
+> +- the kernel currently does not create the subtree routes mentioned in the
+> +  first item.  This is a separate work item, partially done at the time of
+> +  writing this.  But this can equally well be performed in userspace processing
+> +  of RAs, e.g. NetworkManager or plain static configuration.
+> +
+> +- since addresses can also be acquired from DHCPv6, even RA/PIO combinations
+> +  that didn't result in the creation of any addresses (e.g. A=0) should have
+> +  subtree routes added.  Those routes *may* be relevant for DHCPv6-generated
+> +  addresses.
+> +
+> +- the "announce check" lookup does not backtrack.  Only the destination prefix
+> +  that provided the "unspecific" (::/128) match is checked for source prefixes
+> +  to see what routers advertised what.  This means that for e.g. RIOs, subtree
+> +  routes also have to be created.  (Backtracking for this case would further
+> +  increase the cost of source address selection, for a pretty rare situation
+> +  that has an easy fix/workaround.)
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f3218abefd0c..4edf48362a07 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18912,6 +18912,7 @@ F:	Documentation/netlink/specs/rt-addr.yaml
+>  F:	Documentation/netlink/specs/rt-neigh.yaml
+>  F:	Documentation/netlink/specs/rt-route.yaml
+>  F:	Documentation/netlink/specs/rt-rule.yaml
+> +F:	Documentation/networking/ipv6-addrsel.rst
+
+It seems weird to add this one file here - I wonder why there isn't just
+an entry for Documentation/networking ?
+
+Thanks,
+
+jon
