@@ -1,64 +1,63 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B329F47F2C0
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E965347F2E3
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784039430; cv=none; b=A9sajyLMn86Kvk/ehzIYeiwcpUFirKh2z4eFlBp1uvfYw9qyI0OHtIqj061ssszEXJO7osU420EXw7Cpmt+T8+1MI6JbA5SxUtEdURRbYY/6OV5pRpgUUj4YZaioxb70VfUwSJU/hJv9CEBAiFXF+p2KwHgTxh6alDwIWqdkn4E=
+	t=1784039434; cv=none; b=BlpYextCSseznl5zGTB3m9lhtfggjCbbh5O08IYOd8euvPrS8qbJn3+G02j3hT1pD9bDCWxfS30kUr4Ir5q0XyVgnHgWQE8U2/rF5iSGEOXcmJupPXcJ2/azHV5OQbcTAQ8ATmjsshjxMvuOMNu0/oTytfStG3g6kTIF59YDlow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784039430; c=relaxed/simple;
-	bh=AlWKq+WCpJ6jqrd7bHxM+xUmQDKopJjD0aSNOnzQ77Q=;
+	s=arc-20240116; t=1784039434; c=relaxed/simple;
+	bh=960S5iptwnOdh1L34bpBnIhUf77x6qeM1FXyW6xT8y4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c9dg8uEzmtxND149tccTOWpTPTUKONkSWv/m3L1VeEanbJuz3m+akHWG9daTG9Ok4pesw9FC5QgFokuI4EGSbfJp/ZTxfwV6o85gkeGkEmu/88MfX5iViBIuTbGPM34QfhUgd6nAY63pdMkg53kv5zEqoPpU13gPoGtw6XFC0DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=eU3KBUJN; arc=none smtp.client-ip=209.85.167.48
+	 MIME-Version; b=i02JyNQJj5uaXsMIIxENFzt2Lmthy37nsytwBeOHeZd0SYO9WWcud6vg+4WlcBUSUlNlQhy2alfqzEhI1CgfLdrO3wTRZt4fRkW3KZS1lWgk4h0DrADzdQCEe8HfctMvtEnWa/mxQc76TvU6IIrBPVSLSuoi7tU6pccmCpZOD74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=pghxMhYW; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="eU3KBUJN"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5b0231a3e86so3558140e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:30:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="pghxMhYW"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5aec201b582so4088751e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:30:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784039426; x=1784644226; darn=vger.kernel.org;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784039431; x=1784644231; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1DAcALuj6CLiGGxg2YU+zPjUKqyxKHB8HUr7MGOtyF0=;
-        b=eU3KBUJNoAxPw7pVvTRmdsZuqaSzCsRc5zvDXfoqhEXRqsJzYvuCRa20VFhhOE30sb
-         sWtoh0VOxwrR+Wb36oLsaQftZjmTMtTyQP12VJTgjqGIjHpLrJvZp22+mGbjtUrHEnLK
-         E1vLqDUj+W90vyHhsS3oCNcAYLtdwzSIyDEzeia2vKHmBOAnyGZ7P0q/biZofagDyyUn
-         AL/jhBP9LWECGNjpAecCcCpnOU28iuPSNFx7TOAYJrvWsa76PoYR84qCM9sVeej+/ZJC
-         wvCGEd27wgcXw3FDtvWPSGPQU2gWz6+mI4NbxdtFcOLSYzfZLHA0l+sYEJf/RPt5kGzP
-         csWQ==
+        bh=6F7fWu7LXunT/iWIpd58af5xjBk4X++kSvjcZu1SGqU=;
+        b=pghxMhYWKkt/AW9OC13IySZTe4Pn1JGsvhABMS+J/1ecRsswQhzw5eOgmARU/j9o8Z
+         orYGVtFmD/zQg23G5gNf+BQ4lJI32HaTTzFea2iXy7xZYSnfJUToB1aeiPRgO2jGCfQr
+         hDo6pGLr0UwG8In3X8CwgfsP6S5b3J6A8OiD8nyCpQsxG2btHiHxUx+nCEVCj5KHOjbu
+         hBd/lP4/33/wHNGuNVm7gmoax5KKlURwL6vW1RMbLp4H4oSbKDh0qAgAXxdAmSHrir49
+         xTjieNysNBmxm70BMcYM7UWEGqypatz5/vS5Ud2Eze7EhHEntYyotJiOmhnyN1jxsXsH
+         WNsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784039426; x=1784644226;
+        d=1e100.net; s=20251104; t=1784039431; x=1784644231;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1DAcALuj6CLiGGxg2YU+zPjUKqyxKHB8HUr7MGOtyF0=;
-        b=TiBc/4pfVhviULNxYP7kgMiByWWbUcSsoul2UufqyO1Acmdlm8UF9ppt4zBb7i0aJk
-         UiF1L8zlKlBa1TmorFGWqW0DU38wozqFuVvssRaBaDn2k8lwje7hikWULpE/TC/KXfeb
-         y2fIAuW1RdSrIQsn2rs4sNzbScEqApIrW0ldO7jRNjIpYiAiKKSGtilwQm9XfXWReryg
-         ED+c3K9nnLyPyMmavQC5cQMgJpDbi2Ca8S0/FvczYqHq7J6CeAYJcYtt8TTWgCFSoOC3
-         c3qJZskDnHZeyznFwRv6S+1jqppO01VCE4M3wHn5CHzdqRqT3byF8ljC5D5RnjsEWSTo
-         WjXg==
-X-Forwarded-Encrypted: i=1; AHgh+RpNZSy/SDmUUKM0NkBjfqeXcvfur1HQ6eZ7K9waempHIKUKv1EPxdAVOarsAB3P2flVhd3y+rGEB8aMM+ZMbUM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDb7wg0mYyFHQ6Tat3Zy2plo0ss3EwmGFiCcOesB3T6cDa0KHP
-	sP+t1QW3FBM67gZ2E6hevTbOlUBKKHYwC6y9J6TiDJvrwf251JZ8tF15d0/woku1SKDv71O3V47
-	EWqe1
-X-Gm-Gg: AfdE7cnvAlwkuobSQpWJ132eVEhEkSh3r/iiFls51w7iwT3YqMKlK9GD3QPL0n6X4jN
-	eUHToTf8uJO+1VBWzphs9IL/Cjj26+ktBGCdeUAG5DbTaRAZs3ecEHexPyVYH9p4/IBs286zUfg
-	HagUejoyWqS7p2541SzEflKtf4AgqaDVXwvZD8J3I2OJVS+XgLqjoTRLzVao5JrU21T0LQArcf8
-	/lkqcTSZEXtYKXR++xgtEYHE+Ltxdug+Ka/vaI3k+htS2BxOkwy/pKP/F+Wm8iZoHiX3qLEWjbY
-	53/TqOo5cCDJapxaDy44DXMcmnL3NHZt8x6TIW51qibPKsgFZRUF9RAGSkEv9hIsYRP+/cLMae6
-	JkFdEz1m5UmvBu5AwMgzqGKfVnvbeVxe/jy6foyUvFpOGuFJHZXYiCRPa+Olc8dOuxx4SqCCFDk
-	9LQHCcGfQpLW8zQyc1tv7P1MI=
-X-Received: by 2002:ac2:51d1:0:b0:5b0:bc3:dc05 with SMTP id 2adb3069b0e04-5b02369c7cdmr2818323e87.40.1784039424734;
-        Tue, 14 Jul 2026 07:30:24 -0700 (PDT)
+        bh=6F7fWu7LXunT/iWIpd58af5xjBk4X++kSvjcZu1SGqU=;
+        b=mGc2lZ/EA+l+7uqVDBlXdFbHwCKQ7YyOyd+n7NWSMXBysMxrcBscNF/32uzBk1FB2p
+         p/fGaxA2kak/d1H2VYj2osy5+YVbLzOuPNNYaGIjV2apxo1LNIXAlVcJq7K7cyBCzfvJ
+         z5RaefFKPZy5HfouovdpMW9yEL2egTfU/ORazX8H+SbyA92EySLTYaxxwCDrmQI8XmVr
+         eVAmiLzxibIY/DoD2hZyEw/MKfZR+Vj566BdK+fHSbYfiucL2GAw49t7cl9LnAo8PHOT
+         sxoCYsNPuXB1mydgUMw/dRZIUhBLMuAqx9C759xGEB+gAzqr73lLrGjNhB/gP9Ahg2Y/
+         TrWA==
+X-Forwarded-Encrypted: i=1; AHgh+RrQcHPisIA5LocdQdQJNjZlj78Ht/zwIdiJvofpNV+faz7/EZTvDDYvbB7t4BQ8OL6mFKqwjPeoX6EWU0bz9pU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7/YXY2QuDrUnvB3z5Eulepc6S4pO4VZfRI89fFj7ODyLRLUiU
+	1x8JGO4SkPrXgh7j8hZKMgPWtpGzs3uKZuMdu7ijHryEsugngrtN2HsRpuOCLCOimjw=
+X-Gm-Gg: AfdE7cmgU2AUftV3cYfVM/kiwOE8bstrC7zgnQNFdTY8sMa1oAXrV0tmf8Pc+sN5Vai
+	IzNEYzHUyR546SDHqw9Yvcy0ak6hBDNHYCutoBtY8EuQcAccGop41T43j9TOq5zoPtHM/ibnAfb
+	/nnmhKIXA7FJoMIJl5I8CxBOxMqCL07xiGlWlR8oIrab9D0oMwNGkiesC9ks5LEH8nCjpTbRTVO
+	pL75kUxZ95qWr05MT0VF9zBbisyw1beFCAYdrdkYx0DPnrOjhT3LRHTAME/3W4WQ+sgpMiwPvUB
+	HGIUFM7VnatrsVb955f82X80pHTqh7Ev6W48hllfLGCxCXyT2A2NNuGPgnynfvnKq9R30MmdBOC
+	t9xKnKVTHct70btzD+MK92mCE2r6h0vLdLTDFgi1znQuTXep40CYHXLPQPHglckac1VdOAbeqGP
+	19dUCTY4Jce63e+srePcAp7pc=
+X-Received: by 2002:ac2:51cf:0:b0:5ae:b6b1:5fcd with SMTP id 2adb3069b0e04-5b02356bc9emr2660432e87.10.1784039430809;
+        Tue, 14 Jul 2026 07:30:30 -0700 (PDT)
 Received: from localhost ([140.209.217.211])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b01ca4a2e9sm3573711e87.1.2026.07.14.07.30.23
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b01ca5002fsm3579450e87.27.2026.07.14.07.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 07:30:23 -0700 (PDT)
+        Tue, 14 Jul 2026 07:30:30 -0700 (PDT)
 From: Jiri Pirko <jiri@resnulli.us>
 To: linux-rdma@vger.kernel.org
 Cc: cgroups@vger.kernel.org,
@@ -83,9 +82,9 @@ Cc: cgroups@vger.kernel.org,
 	wenjia@linux.ibm.com,
 	yanjun.zhu@linux.dev,
 	cui.tao@linux.dev
-Subject: [PATCH rdma-next v2 13/14] RDMA/rxe: Implement disassociate_ucontext callback
-Date: Tue, 14 Jul 2026 16:29:26 +0200
-Message-ID: <20260714142927.1298897-14-jiri@resnulli.us>
+Subject: [PATCH rdma-next v2 14/14] RDMA/selftests: Add rxe_netns_names test
+Date: Tue, 14 Jul 2026 16:29:27 +0200
+Message-ID: <20260714142927.1298897-15-jiri@resnulli.us>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260714142927.1298897-1-jiri@resnulli.us>
 References: <20260714142927.1298897-1-jiri@resnulli.us>
@@ -99,42 +98,333 @@ Content-Transfer-Encoding: 8bit
 
 From: Jiri Pirko <jiri@nvidia.com>
 
-Implement an empty disassociate_ucontext() callback so the RDMA core
-can move rxe devices between net namespaces. The core requires this
-callback to reset user contexts without waiting for userspace.
-
-rxe needs no teardown here: its user-mapped queues live in
-reference-counted vmalloc memory (see rxe_mmap.c) that stays valid
-while userspace holds the mappings.
+Add a kselftest script that exercises per-netns RDMA device naming
+with RXE. Cover duplicate names across namespaces, move conflict
+handling, move-with-rename, and same-namespace rename requests.
 
 Signed-off-by: Jiri Pirko <jiri@nvidia.com>
 ---
- drivers/infiniband/sw/rxe/rxe_verbs.c | 5 +++++
- 1 file changed, 5 insertions(+)
+v1->v2:
+- fixed ktap_set_plan
+- s/RXE_A/RXE_SAME/ in dup rename
+---
+ tools/testing/selftests/rdma/Makefile         |   3 +-
+ tools/testing/selftests/rdma/config           |   2 +
+ .../testing/selftests/rdma/rxe_netns_names.sh | 282 ++++++++++++++++++
+ 3 files changed, 286 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/rdma/rxe_netns_names.sh
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_verbs.c b/drivers/infiniband/sw/rxe/rxe_verbs.c
-index 1ec130fee8ea..6eb10d2f0653 100644
---- a/drivers/infiniband/sw/rxe/rxe_verbs.c
-+++ b/drivers/infiniband/sw/rxe/rxe_verbs.c
-@@ -240,6 +240,10 @@ static void rxe_dealloc_ucontext(struct ib_ucontext *ibuc)
- 		rxe_err_uc(uc, "cleanup failed, err = %d\n", err);
- }
+diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
+index 07af7f15c1bf..a91c14c45006 100644
+--- a/tools/testing/selftests/rdma/Makefile
++++ b/tools/testing/selftests/rdma/Makefile
+@@ -3,6 +3,7 @@ TEST_PROGS := rxe_rping_between_netns.sh \
+ 		rxe_ipv6.sh \
+ 		rxe_socket_with_netns.sh \
+ 		rxe_test_NETDEV_UNREGISTER.sh \
+-		rxe_sent_rcvd_bytes.sh
++		rxe_sent_rcvd_bytes.sh \
++		rxe_netns_names.sh
  
-+static void rxe_disassociate_ucontext(struct ib_ucontext *ibuc)
+ include ../lib.mk
+diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
+index 4ffb814e253b..e1ff54ec0f57 100644
+--- a/tools/testing/selftests/rdma/config
++++ b/tools/testing/selftests/rdma/config
+@@ -1,3 +1,5 @@
+ CONFIG_TUN
+ CONFIG_VETH
++CONFIG_DUMMY
++CONFIG_NET_NS
+ CONFIG_RDMA_RXE
+diff --git a/tools/testing/selftests/rdma/rxe_netns_names.sh b/tools/testing/selftests/rdma/rxe_netns_names.sh
+new file mode 100755
+index 000000000000..a4fabf86bdf7
+--- /dev/null
++++ b/tools/testing/selftests/rdma/rxe_netns_names.sh
+@@ -0,0 +1,282 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Exercise RDMA device name handling across network namespaces.
++
++source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
++
++NAME_PREFIX="rxe_netns_names_$$"
++NETDEV_PREFIX="rxn$$"
++NS1="${NAME_PREFIX}ns1"
++NS2="${NAME_PREFIX}ns2"
++RXE_A="${NAME_PREFIX}rxe_a"
++RXE_B="${NAME_PREFIX}rxe_b"
++RXE_SAME="${NAME_PREFIX}rxe_same"
++RXE_NEW="${NAME_PREFIX}rxe_new"
++DUMMY_A="${NETDEV_PREFIX}a"
++DUMMY_B="${NETDEV_PREFIX}b"
++OLD_MODE=""
++MODE_CHANGED=0
++MODS=("dummy" "rdma_rxe")
++TEST_SAME_NAMES="same RDMA device name can exist in two net namespaces"
++TEST_MOVE_CONFLICT="move without rename fails on destination name conflict"
++TEST_MOVE_RENAME="move then rename succeeds"
++TEST_COMBINED_MOVE_RENAME="move with requested destination name succeeds"
++TEST_SAME_NETNS_DUP_RENAME="same-netns rename rejects duplicate name"
++TEST_TEARDOWN_RETURN="netns delete returns device to init_net and renames on conflict"
++
++ksft_skip()
 +{
++	ktap_skip_all "$*"
++	exit "$KSFT_SKIP"
 +}
 +
- /* pd */
- static int rxe_alloc_pd(struct ib_pd *ibpd, struct ib_udata *udata)
- {
-@@ -1478,6 +1482,7 @@ static const struct ib_device_ops rxe_dev_ops = {
- 	.destroy_srq = rxe_destroy_srq,
- 	.detach_mcast = rxe_detach_mcast,
- 	.device_group = &rxe_attr_group,
-+	.disassociate_ucontext = rxe_disassociate_ucontext,
- 	.enable_driver = rxe_enable_driver,
- 	.get_dma_mr = rxe_get_dma_mr,
- 	.get_hw_stats = rxe_ib_get_hw_stats,
++fail()
++{
++	ktap_exit_fail_msg "$*"
++}
++
++need_cmd()
++{
++	command -v "$1" >/dev/null 2>&1 || ksft_skip "missing command: $1"
++}
++
++rdma_ns()
++{
++	local ns=$1
++
++	shift
++	ip netns exec "$ns" rdma "$@"
++}
++
++rdma_dev_exists()
++{
++	local ns=$1
++	local dev=$2
++
++	if [ -n "$ns" ]; then
++		rdma_ns "$ns" dev show "$dev" >/dev/null 2>&1
++	else
++		rdma dev show "$dev" >/dev/null 2>&1
++	fi
++}
++
++add_dummy()
++{
++	local netdev=$1
++
++	ip link add "$netdev" type dummy || return 1
++	ip link set "$netdev" up || return 1
++}
++
++add_rxe()
++{
++	local dev=$1
++	local netdev=$2
++
++	rdma link add "$dev" type rxe netdev "$netdev"
++}
++
++rdma_dev_on_netdev()
++{
++	local netdev=$1
++
++	rdma link show 2>/dev/null | awk -v want="$netdev" '
++		{
++			for (i = 1; i < NF; i++)
++				if ($i == "netdev" && $(i + 1) == want) {
++					dev = $2
++					sub(/\/.*/, "", dev)
++					print dev
++					exit
++				}
++		}'
++}
++
++wait_rdma_dev_on_netdev()
++{
++	local netdev=$1
++	local dev
++	local i
++
++	for i in $(seq 1 50); do
++		dev=$(rdma_dev_on_netdev "$netdev")
++		if [ -n "$dev" ]; then
++			echo "$dev"
++			return 0
++		fi
++		sleep 0.1
++	done
++
++	return 1
++}
++
++setup_devs()
++{
++	cleanup_devs
++
++	add_dummy "$DUMMY_A" || return 1
++	add_dummy "$DUMMY_B" || return 1
++
++	add_rxe "$RXE_A" "$DUMMY_A" || return 1
++	add_rxe "$RXE_B" "$DUMMY_B" || return 1
++}
++
++cleanup_devs()
++{
++	ip link del "$DUMMY_A" 2>/dev/null
++	ip link del "$DUMMY_B" 2>/dev/null
++}
++
++setup()
++{
++	OLD_MODE=$(rdma system show 2>/dev/null |
++		   sed -n 's/.*netns \([^ ]*\).*/\1/p')
++	[ -n "$OLD_MODE" ] || ksft_skip "failed to read RDMA netns mode"
++
++	rdma system set netns exclusive >/dev/null 2>&1 ||
++		ksft_skip "rdma netns exclusive mode is not supported"
++	MODE_CHANGED=1
++
++	ip netns add "$NS1" || return 1
++	ip netns add "$NS2" || return 1
++}
++
++cleanup()
++{
++	cleanup_devs
++
++	ip netns del "$NS1" 2>/dev/null
++	ip netns del "$NS2" 2>/dev/null
++
++	if [ "$MODE_CHANGED" -eq 1 ]; then
++		rdma system set netns "$OLD_MODE" 2>/dev/null
++	fi
++
++	for m in "${MODS[@]}"; do
++		modprobe -r "$m" 2>/dev/null
++	done
++}
++
++rdma_supports_combined_move_rename()
++{
++	rdma dev help 2>&1 | grep -Eq 'netns .*name|name .*netns'
++}
++
++[ "$(id -u)" -eq 0 ] || ksft_skip "must be run as root"
++need_cmd ip
++need_cmd rdma
++need_cmd modprobe
++
++trap cleanup EXIT
++
++for m in "${MODS[@]}"; do
++	modinfo "$m" >/dev/null 2>&1 || ksft_skip "module $m not found"
++	modprobe "$m" || fail "failed to load $m"
++done
++
++setup || fail "failed to create net namespaces"
++
++ktap_print_header
++ktap_set_plan 6
++
++if setup_devs &&
++   rdma dev set "$RXE_A" netns "$NS1" &&
++   rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" &&
++   rdma dev set "$RXE_B" netns "$NS2" &&
++   rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" &&
++   rdma_dev_exists "$NS1" "$RXE_SAME" &&
++   rdma_dev_exists "$NS2" "$RXE_SAME"; then
++	ktap_test_pass "$TEST_SAME_NAMES"
++else
++	ktap_test_fail "$TEST_SAME_NAMES"
++fi
++cleanup_devs
++
++if ! setup_devs ||
++   ! rdma dev set "$RXE_A" netns "$NS1" ||
++   ! rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" ||
++   ! rdma dev set "$RXE_B" netns "$NS2" ||
++   ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME"; then
++	ktap_test_fail "$TEST_MOVE_CONFLICT"
++elif rdma_ns "$NS1" dev set "$RXE_SAME" netns "$NS2" >/dev/null 2>&1; then
++	ktap_test_fail "$TEST_MOVE_CONFLICT"
++elif rdma_dev_exists "$NS1" "$RXE_SAME" &&
++     rdma_dev_exists "$NS2" "$RXE_SAME"; then
++	ktap_test_pass "$TEST_MOVE_CONFLICT"
++else
++	ktap_test_fail "$TEST_MOVE_CONFLICT"
++fi
++cleanup_devs
++
++if ! setup_devs; then
++	ktap_test_fail "$TEST_MOVE_RENAME"
++elif rdma dev set "$RXE_A" netns "$NS2" &&
++     rdma_ns "$NS2" dev set "$RXE_A" name "$RXE_NEW"; then
++	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
++	   ! rdma_dev_exists "" "$RXE_A"; then
++		ktap_test_pass "$TEST_MOVE_RENAME"
++	else
++		ktap_test_fail "$TEST_MOVE_RENAME"
++	fi
++else
++	ktap_test_fail "$TEST_MOVE_RENAME"
++fi
++cleanup_devs
++
++if ! rdma_supports_combined_move_rename; then
++	ktap_test_skip "$TEST_COMBINED_MOVE_RENAME"
++elif ! setup_devs; then
++	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
++elif rdma dev set "$RXE_A" netns "$NS2" name "$RXE_NEW"; then
++	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
++	   ! rdma_dev_exists "" "$RXE_A"; then
++		ktap_test_pass "$TEST_COMBINED_MOVE_RENAME"
++	else
++		ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
++	fi
++else
++	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
++fi
++cleanup_devs
++
++if ! setup_devs; then
++	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
++elif rdma dev set "$RXE_A" name "$RXE_SAME" &&
++     rdma dev set "$RXE_B" name "$RXE_NEW"; then
++	if rdma dev set "$RXE_SAME" name "$RXE_NEW" >/dev/null 2>&1; then
++		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
++	elif rdma_dev_exists "" "$RXE_SAME" &&
++	     rdma_dev_exists "" "$RXE_NEW"; then
++		ktap_test_pass "$TEST_SAME_NETNS_DUP_RENAME"
++	else
++		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
++	fi
++else
++	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
++fi
++cleanup_devs
++
++if ! setup_devs; then
++	ktap_test_fail "$TEST_TEARDOWN_RETURN"
++elif ! rdma dev set "$RXE_A" name "$RXE_SAME" ||
++     ! rdma dev set "$RXE_B" netns "$NS2" ||
++     ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" ||
++     ! rdma_dev_exists "$NS2" "$RXE_SAME"; then
++	ktap_test_fail "$TEST_TEARDOWN_RETURN"
++else
++	ip netns del "$NS2"
++	returned=$(wait_rdma_dev_on_netdev "$DUMMY_B")
++	ktap_print_msg "device returned to init_net as '${returned:-<missing>}'"
++	if rdma_dev_exists "" "$RXE_SAME" &&
++	   [ -n "$returned" ] &&
++	   [ "$returned" != "$RXE_SAME" ] &&
++	   [ "${returned#ibdev}" != "$returned" ]; then
++		ktap_test_pass "$TEST_TEARDOWN_RETURN"
++	else
++		ktap_test_fail "$TEST_TEARDOWN_RETURN"
++	fi
++fi
++cleanup_devs
++
++ktap_finished
 -- 
 2.54.0
 
