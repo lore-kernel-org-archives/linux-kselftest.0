@@ -1,128 +1,107 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD733A4538;
-	Tue, 14 Jul 2026 02:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55793B95E3
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 03:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783997948; cv=none; b=SXT/vqX6HXPYN1VdYeP32/vKN2X4KZ+8md4K4NqsiO4HyNvZRtXBy5ga+N522INNX9pMf2uD91zM0SQiP7ZJhGzAKFnDE9Pzc7OMcRUxQmyhaS0IruW52N+FxX3XHvViqqAIQU32PlAALvvjf+2jBjHnQpHANRx7oQF3fnXsr64=
+	t=1783998044; cv=none; b=qspGTx1zq30C3EaCaqFi/9v5j2PZhmg5e6eLiVL838Isz1ZQ+p+TCrV3Q4S1aftw7dU4Epv+AnaZFptHHPrhA46hI5qgjVq+L5Zp99ek6145OiPPSoFPIRjjntfnFgZF2C5xwq6mhmJ8gnxkKq/po+59vJO8xQmBYtxW1/Lw7Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783997948; c=relaxed/simple;
-	bh=5NywWBlykHVOZbOzLt+0oX8VDeG1m0AdbO8w6fA1Huk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hh1t/qwDQ/xUNHWSAo6MqaFznLDOLVHzeTs8/4iWwVZ/zzlKG5lzyhqshLeegFy4hzB+P/1Fq1zwXpr4oAijq9zTEk6hgageWo8GPnyIBmesdylqTLx4Ahz/0EaeI5lF+c8Lzsm5xKQSD+1THhW0o9tCcC57UU7nERzcu7dB+bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f492c6067f2f11f1aa26b74ffac11d73-20260714
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:2d567e89-31da-45c9-bdce-b7fe0aa86610,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:009636d5aa90da7489c7442e6d3d4e9e,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
-	5|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: f492c6067f2f11f1aa26b74ffac11d73-20260714
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 169250657; Tue, 14 Jul 2026 10:58:56 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Tue, 14 Jul 2026 10:58:49 +0800
-Subject: [PATCH 2/2] selftests/bpf: enable timed may_goto tests for riscv64
+	s=arc-20240116; t=1783998044; c=relaxed/simple;
+	bh=22yk4dtBcV8Fk6ccHwis66VNqhMb7AAYAoTRbQtrkes=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=TmvC9KCCmvWytKuzrlAMB/RN/w8HE5aqm1KD/xR1ChqTq6sPHTwaZIIXa8qKTKHXYptOr5U2kRza/zTCQwROhf676PBzvboa6baBwOB7PQDCDvYgwLVUQCOWrH6/VQwY4c8vNJl1RpD4va5VtkU4hvL9wtP7P0xqbhemVXVODNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SWuFUOhZ; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SWuFUOhZ"
+Message-ID: <e60ca749-ddeb-46f1-baf8-01db8a2df1b9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783998028;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u4XC4Tt2Er5SVTqQ4QRZas9ffsbGhNq4gF6E+smuGPU=;
+	b=SWuFUOhZ2qAjtWWzx8WPyPnFFagUYtKh3FmiI2Eo4/FG8MdhayLP+WXKB1zAuW1Q6eGqQK
+	0iVHmFzsQNm0SAPBgDarv8HbpIHA8q5h3T0c9SRpswbEuNvcmu4SNtHBhLsZgFNhXAXSAo
+	rWUWU/ho9C6k7xPsFvGg7knT0IW+gWs=
+Date: Tue, 14 Jul 2026 11:00:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260714-riscv-bpf-timed-may-goto-v1-2-3988601fe6ac@kylinos.cn>
-References: <20260714-riscv-bpf-timed-may-goto-v1-0-3988601fe6ac@kylinos.cn>
-In-Reply-To: <20260714-riscv-bpf-timed-may-goto-v1-0-3988601fe6ac@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+Cc: cui.tao@linux.dev, muchun.song@linux.dev, osalvador@suse.de,
+ david@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+ roman.gushchin@linux.dev, shakeel.butt@linux.dev, tj@kernel.org,
+ mkoutny@suse.com, shuah@kernel.org, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] selftests/cgroup: fix missing TAP output in
+ test_hugetlb_memcg
+To: Song Hu <husong@kylinos.cn>, linux-mm@kvack.org
+References: <20260714021511.1063700-1-husong@kylinos.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260714021511.1063700-1-husong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Enable verifier_may_goto_1 (raw instruction tests) and stream_cond_break
-(250ms timeout path) on riscv64 now that the JIT supports timed may_goto.
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/progs/stream.c              | 1 +
- tools/testing/selftests/bpf/progs/verifier_may_goto_1.c | 4 ++++
- 2 files changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-index 92ba1d72e0ec..8d8e53d37266 100644
---- a/tools/testing/selftests/bpf/progs/stream.c
-+++ b/tools/testing/selftests/bpf/progs/stream.c
-@@ -64,6 +64,7 @@ SEC("syscall")
- __arch_x86_64
- __arch_arm64
- __arch_s390x
-+__arch_riscv64
- __success __retval(0)
- __stderr("ERROR: Timeout detected for may_goto instruction")
- __stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 4bdf4256a41e..f47b9d540a17 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -11,6 +11,7 @@ __description("may_goto 0")
- __arch_x86_64
- __arch_s390x
- __arch_arm64
-+__arch_riscv64
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -31,6 +32,7 @@ __description("batch 2 of may_goto 0")
- __arch_x86_64
- __arch_s390x
- __arch_arm64
-+__arch_riscv64
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -53,6 +55,7 @@ __description("may_goto batch with offsets 2/1/0")
- __arch_x86_64
- __arch_s390x
- __arch_arm64
-+__arch_riscv64
- __xlated("0: r0 = 1")
- __xlated("1: exit")
- __success
-@@ -79,6 +82,7 @@ __description("may_goto batch with offsets 2/0")
- __arch_x86_64
- __arch_s390x
- __arch_arm64
-+__arch_riscv64
- __xlated("0: *(u64 *)(r10 -16) = 65535")
- __xlated("1: *(u64 *)(r10 -8) = 0")
- __xlated("2: r12 = *(u64 *)(r10 -16)")
+在 2026/7/14 10:15, Song Hu 写道:
+> main() in test_hugetlb_memcg never calls ksft_print_header(),
+> ksft_set_plan(), or ksft_finished(), so its output has no TAP plan and is
+> not valid TAP, unlike the sibling test_memcontrol and test_kmem tests.
+> Add the header/plan/finished calls following the same pattern.
+> 
+> Signed-off-by: Song Hu <husong@kylinos.cn>
+> ---
+>  tools/testing/selftests/cgroup/test_hugetlb_memcg.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> index b627d84358b1..8c5aced813b6 100644
+> --- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> +++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+> @@ -199,7 +199,10 @@ static int test_hugetlb_memcg(char *root)
+>  int main(int argc, char **argv)
+>  {
+>  	char root[PATH_MAX];
+> -	int ret = EXIT_SUCCESS, has_memory_hugetlb_acc;
+> +	int has_memory_hugetlb_acc;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+>  
+>  	has_memory_hugetlb_acc = proc_mount_contains("memory_hugetlb_accounting");
+>  	if (has_memory_hugetlb_acc < 0)
+> @@ -211,7 +214,7 @@ int main(int argc, char **argv)
+>  	if (get_hugepage_size() != 2048) {
+>  		ksft_print_msg("test_hugetlb_memcg requires 2MB hugepages\n");
+>  		ksft_test_result_skip("test_hugetlb_memcg\n");
+> -		return ret;
+> +		ksft_finished();
+>  	}
+>  
+>  	if (cg_find_unified_root(root, sizeof(root), NULL))
+> @@ -233,10 +236,9 @@ int main(int argc, char **argv)
+>  		ksft_test_result_skip("test_hugetlb_memcg\n");
+>  		break;
+>  	default:
+> -		ret = EXIT_FAILURE;
+>  		ksft_test_result_fail("test_hugetlb_memcg\n");
+>  		break;
+>  	}
+>  
+> -	return ret;
+> +	ksft_finished();
+>  }
 
--- 
-2.25.1
+This one looks good to me — it mirrors the test_memcontrol/test_kmem
+pattern and the exit-code semantics are preserved.
 
+Reviewed-by: Tao Cui <cuitao@kylinos.cn>
