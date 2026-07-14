@@ -1,183 +1,232 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8973612DB;
-	Tue, 14 Jul 2026 13:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46F3466B65
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784034077; cv=none; b=mxOLyjkTZodjzf5lQfEmmSAkTmFSuzfLXx38bUjbzdwct0Xf67jeMpgNDemtUvXKYmi6MJzPjy1xd+Jl1VjjyWjDTCUcecMDitj8bQE1czQCFPso+Y/s6ODtEGiIx1v7TRwPqI3YDmMsxy6XU9IK4bzWwT17lyA1HMS3AW4GJnU=
+	t=1784034436; cv=none; b=Nc4S4as39bTNZwF8f+0kc62e8LBHEdo1vBdHmAn6Ui/pLwaKnT/ktZN+cJikBZk3ZqJHKJvBNzTk12hAVxP46TaQPB1bUamw0OaHRY5+tIy5keVzPiQARn5IECOdPo1fhkMmrgW4jVRLLOB5VFLq+tn3nUHEO4+R3aM/WHFgTmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784034077; c=relaxed/simple;
-	bh=7CeV2JqxygSEcV7QVYtBYJkoFG8rn1xPd64XyHQGA9g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=M532kVrTeyogswW3xuOpqqnoVi4qwYSW8G//M3vAnLsNO6OpcHKVZhgqZr4ApO9y7FPy61I477ptYUIH4+FhSPRxEmgXTYg4ZXxxeRdEx2apr0+Z8uG+XMoRBm5skF0BaKblxj6R1ecwSPLhKe0rlS4ioWqtGuBgYKB7cA4Ly7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=rZ/lK5jD; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1784034436; c=relaxed/simple;
+	bh=aWDiGhV/lDLqtQxlDd4E/xz/jeCA3Oakf6qbhhaXsOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E96eDq8DB6C18bW2iKo17iWvvLjz8b3vY78IUK3bYwIVL3lLQhdM3bKRt3ix4KxXGZiMm0Ech/06Qpr6pGuprcUpSzY/lNav0tzkFwwYCb07qQBm6SUI3Xhg5AcG7BQdE1xHUH37x4vg7baGbqiyxJTWtPO8c+fWtNF4eXr41j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=ga44ZEdv; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="rZ/lK5jD"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3C6D3410E2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1784034074; bh=N7EMk0B6AUtZUiM/QA5lBMqbPP1I3abAcQ9/YZ6+Tzk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=rZ/lK5jDFFbj57Sl/24gU1iFuYlaluvoVZ5Ug1idxSk24WOPCmZ88zIRW5f+YEzVX
-	 OzhkNgXiPh9OlddACJ4HW/nAE0hrweCLvZ3Br47g8RTMD/2YI7NWfraTs/0jrI5bfA
-	 wxL1aA/kuV0bUH9ibIbKx8O5AkiBKjJbp6cqIqHf+4LNGJdlv4surZ7bloLjRvWGDB
-	 gXaXax69FImiTwDeRIWMhBVy8YdBnFw7wCtTCrrj/dpLNvTlQrRPsZ3LTIwCxxYc0E
-	 X363mMGut+t5vLTp43fHZdEuLl9FLOjoLmIz4ZpDAr5I/3Uz8a9+z0JZRgQeW/b/we
-	 S28cEuHBv0YFQ==
-Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 3C6D3410E2;
-	Tue, 14 Jul 2026 13:01:14 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: David 'equinox' Lamparter <equinox@diac24.net>, Paolo Abeni
- <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>, Ido Schimmel
- <idosch@nvidia.com>
-Cc: David Ahern <dsahern@kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Fernando
- Fernandez Mancera <fmancera@suse.de>, Lorenzo Colitti
- <lorenzo@google.com>, Maciej =?utf-8?Q?=C5=BBenczykowski?=
- <maze@google.com>, Patrick Rohr
- <prohr@google.com>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, David 'equinox' Lamparter
- <equinox@diac24.net>
-Subject: Re: [PATCH net-next 9/9] net: document RFC6724 rule 5.5 implementation
-In-Reply-To: <20260714094030.136317-10-equinox@diac24.net>
-References: <20260714094030.136317-1-equinox@diac24.net>
- <20260714094030.136317-10-equinox@diac24.net>
-Date: Tue, 14 Jul 2026 07:01:13 -0600
-Message-ID: <87zeztg1ye.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="ga44ZEdv"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7e9ecb1e13bso1675161a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 06:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1784034433; x=1784639233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Zu2x7nRWgqnkpJB6Jzio2t+71M646t61MeaMLyeHe/o=;
+        b=ga44ZEdv2hBcSKs8eePpyVl7ELdR5AqElHamCr5n8Vns9vyc5oUt/WHFhy3vKgddwe
+         On0sozs3BgdjFUfBcLByNwK0Y2164MCU9eliyYbNYBZo322PmFpF0Gbb/N21iv8m0o6R
+         0ooQHhf5h4glazwG5CtdUP8hDxXhb7MB2h1d7hLkMRXdwBcBYuOWWSzq1vVLQBT8pIjm
+         cuB8PGP5C4J6XLVt+6OXe/QN2lsyLWEARyENQA1BE0re3WPm04sbGeY4dCLolXU4S7DL
+         sNDsbkWRYA3+7KaKTX5ez7JCRurWG6TLzm1JapTIFgD0hEQrJmKsn/L84yYUSqXHWaoB
+         qdWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784034433; x=1784639233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Zu2x7nRWgqnkpJB6Jzio2t+71M646t61MeaMLyeHe/o=;
+        b=C5+GJ0fjxbNUiXnZXVc1cgqxdWFSvzk5tfIrqsdhugeOT80Enrk9GDEmA8ysSsvAZ3
+         4RuxhJtXom19z+M9MZcvSHqKnBXGsMGvjROfvCr4mF1oAWmckkb2NbRKuBDRyxulT6uH
+         j8KohK3xDuI2UqU284+uuvNast9Fked4hZV21QV79nhv+1EHDlp702lz00LjWsbrr6PH
+         b0McEaczfAp9DTXIAgARrF4LCEaURfoFBnt/zReudey6LPQQWjbsq/mwgFaoMmoIdY5K
+         bVYRTV8qd4fmDWG2Hl27TScAxHJHN0XfvjKyoL3Ast9VtJUrhNaunzaDWGFs4biAiHn2
+         Td8A==
+X-Forwarded-Encrypted: i=1; AFNElJ+swefK4MEfwZS6I3o0rc1NXjewEOZJLn/2dSPGMzpLu5tHaRB+klbXW5/eNPsu/UqB12f5BsujkubJvYIrElI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUW0FlvMUrBU5etMIf7/8fFepGY9J5+NXv+fzBmWw2DKbyY4Lq
+	ilvNuYrZson9OQYbJT67uIK7Cw9uAqb/oAk1EkFk93t4KLklqa9wmbiBGi2XP2Q2Wfc=
+X-Gm-Gg: AfdE7cmqmrl/FpEiqFIAA+DAp2zcMd8xZkofGB8kixr6m+YTn09EkBvi7zWfxqsBgDL
+	8I28xUbE8CoK1Hv/UbLEAp6zBOTxaGAKhh5Dlss6sMlpewGFr06dS3gDDs6a1vxNmgVsV58/Aep
+	37oi2NZf0EtJ4U+wYCazN/2PZQ/XIN0kax1exlr1l34KxHXKVIh2YM+PpkAKYP8uhXBlwdLEykA
+	re7P1fr/zFL6Iot6PY8DQzJ+s60OX6Mug2CAka1gxajpCHWY5R7xZVW2/eD/HqWIVyfU2ngTwih
+	mOpBjvho5umXlyvqghMQ8i/KXx/EiPB4V7mwxT2mF7y2gs0VyWaSHWc3yYp79raSOEYMbr8Q6XR
+	Q3xp5EYPvw9MXGQIxuzPOBx2n4hfghsTM0oA8KzxUBauhX2rkVb3dNIX8UEC+XQA4Xeqm3aTlAt
+	cc9LxYn0qqKjkGn3gA8AnYdUDhYTFJ/csUFwwz12ozfEjtoyeA8WTPoNkdVz6+Ag==
+X-Received: by 2002:a05:6830:4412:b0:7e7:45f:ce3c with SMTP id 46e09a7af769-7ec096ac473mr7449408a34.14.1784034432564;
+        Tue, 14 Jul 2026 06:07:12 -0700 (PDT)
+Received: from FJ7FR2JRQ3.bytedance.net ([178.93.176.7])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcab8efc3sm14657738a34.0.2026.07.14.06.07.01
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 14 Jul 2026 06:07:12 -0700 (PDT)
+From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+To: joro@8bytes.org,
+	palmer@dabbelt.com,
+	tony.luck@intel.com,
+	reinette.chatre@intel.com,
+	tomasz.jeznach@linux.dev
+Cc: will@kernel.org,
+	robin.murphy@arm.com,
+	fustini@kernel.org,
+	pjw@kernel.org,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	Dave.Martin@arm.com,
+	james.morse@arm.com,
+	babu.moger@amd.com,
+	corbet@lwn.net,
+	shuah@kernel.org,
+	jgg@ziepe.ca,
+	kevin.tian@intel.com,
+	cuiyunhui@bytedance.com,
+	yuanzhu@bytedance.com,
+	iommu@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	x86@kernel.org
+Subject: [RFC PATCH 0/7] riscv: iommu: Add QoS ID support for resctrl device assignment
+Date: Tue, 14 Jul 2026 21:06:50 +0800
+Message-ID: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-David 'equinox' Lamparter <equinox@diac24.net> writes:
+This RFC extends RISC-V CBQRI/resctrl support to external requesters
+behind a RISC-V IOMMU.
 
-> RFC6724 rule 5.5 is anything but obvious, especially if trying to do it
-> well.  (RFC8028 and its errata kinda proves the point.)
->
-> This documents what exactly the Linux kernel does for RFC6724 rule 5.5,
-> especially what the routing table needs to look like for it to work.
->
-> Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
-> ---
->  Documentation/networking/ipv6-addrsel.rst | 75 +++++++++++++++++++++++
->  MAINTAINERS                               |  1 +
->  2 files changed, 76 insertions(+)
->  create mode 100644 Documentation/networking/ipv6-addrsel.rst
+The RISC-V IOMMU QoS ID extension associates a resource-control ID
+(RCID) and monitoring ID (MCID) with IOMMU-related memory requests [2].
+For a translated device request, the IOMMU obtains the IDs from the
+device context translation attributes (DC.ta) and supplies them to the
+I/O bridge after a successful translation. The bridge and downstream
+CBQRI-controlled resources can then apply their existing allocation and
+monitoring policy to the request.
 
-You need to add this new document to the index.rst file or it won't be
-part of the docs build...you should have seen a warning when you built
-the docs.
+The series is based directly on Drew Fustini's v4 RISC-V Ssqosid and
+CBQRI resctrl series [1]. That dependency provides CPU-side QoS ID
+plumbing and CBQRI-backed resctrl support. This series extends the same
+resctrl identity to device requests translated by a RISC-V IOMMU.
 
-> diff --git a/Documentation/networking/ipv6-addrsel.rst b/Documentation/networking/ipv6-addrsel.rst
-> new file mode 100644
-> index 000000000000..bed032e69570
-> --- /dev/null
-> +++ b/Documentation/networking/ipv6-addrsel.rst
-> @@ -0,0 +1,75 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +====================================
-> +IPv6 source address selection trivia
-> +====================================
-> +
-> +
-> +RFC6724 rule 5.5 support
-> +------------------------
+The RISC-V names map to the existing resctrl identifiers as follows:
 
-Please stick with the section markup guidelines in
-Documentation/doc-guide/sphinx.rst. 
+    resctrl CLOSID  ->  RISC-V RCID
+    resctrl RMID    ->  RISC-V MCID
 
-> +RFC6724 rule 5.5 is a very short paragraph in a complex RFC that has turned
-> +out quite tricky, but also immensely useful in multihoming scenarios.  For
-> +reference, it says:
-> +
-> +::
+Userspace first creates a resctrl resource group. The new "devices"
+file then assigns an external requester to that group:
 
-You'll likely get more visually pleasing results if you just leave out
-the "::" here; you don't need literal formatting.
+    userspace
+       |
+       | mkdir /sys/fs/resctrl/<group>
+       |
+       | echo "iommu_group:<id>" > /sys/fs/resctrl/<group>/devices
+       v
+    generic resctrl devices file
+       |
+       | (closid, rmid)
+       v
+    RISC-V CBQRI IOMMU binding backend
+       |
+       | (rcid, mcid)
+       v
+    RISC-V IOMMU DC.ta.{RCID,MCID}
 
-> +   Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
-> +   If SA or SA's prefix is assigned by the selected next-hop that will
-> +   be used to send to D and SB or SB's prefix is assigned by a different
-> +   next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
-> +   assigned by the next-hop that will be used to send to D and SA or
-> +   SA's prefix is assigned by a different next-hop, then prefer SB.
-> +
-> +The way this works on Linux is as follows:
-> +
-> +- prior to any source address selection happening, when receiving a RA, more
-> +  than the installation of a default route (or ::/128 route) needs to happen:
-> +  for each PIO, a source-specific (subtree) route is *additionally* installed.
-> +  The effect of this is that *after* a source address has been selected, one
-> +  of the routers that advertised it will remain in use (this is *not* RFC 6724
-> +  related, but rather RFC 8028.)  At the same time, these extra routes serve
-> +  to remember which router advertised what.
-> +
-> +- per usual, a route lookup for the IPv6 destination address in consideration
-> +  is done first.  This is passed around in kernel as a dst_entry.
-> +
-> +- the source address selection code iterates through the various rules in
-> +  RFC 6724.
-> +
-> +- if/when rule 5.5 is reached, first of all, there is a check if *any* source
-> +  specific routes exist in the routing table.  If there are none, the entire
-> +  code for 5.5 is skipped because it cannot have any effect, but is not free
-> +  to execute (can involve multiple routing lookups.)  **In applications that
-> +  use a lot of unbound (e.g. UDP) sockets, installing subtree routes should
-> +  therefore be avoided to not incur this cost on each source address selection
-> +  pass.**  Alternatively, applications should bind their sockets to a specific
-> +  source address such that the selection code is never hit.
-> +
-> +- if subtree routes do exist, the source address selection code now repeats
-> +  the routing lookup done before source address selection is entered, except
-> +  with the source address under consideration filled in.  This lookup will hit
-> +  the subtree routes that were installed (see first item), giving a fresh
-> +  dst_entry.  If the new dst_entry matches the original dst_entry, that means
-> +  the original router has in fact sent RAs with PIOs for this source address,
-> +  so it is preferred.  Otherwise it is not.
-> +
-> +
-> +There are a few caveats to consider:
-> +
-> +- the kernel currently does not create the subtree routes mentioned in the
-> +  first item.  This is a separate work item, partially done at the time of
-> +  writing this.  But this can equally well be performed in userspace processing
-> +  of RAs, e.g. NetworkManager or plain static configuration.
-> +
-> +- since addresses can also be acquired from DHCPv6, even RA/PIO combinations
-> +  that didn't result in the creation of any addresses (e.g. A=0) should have
-> +  subtree routes added.  Those routes *may* be relevant for DHCPv6-generated
-> +  addresses.
-> +
-> +- the "announce check" lookup does not backtrack.  Only the destination prefix
-> +  that provided the "unspecific" (::/128) match is checked for source prefixes
-> +  to see what routers advertised what.  This means that for e.g. RIOs, subtree
-> +  routes also have to be created.  (Backtracking for this case would further
-> +  increase the cost of source address selection, for a pretty rare situation
-> +  that has an easy fix/workaround.)
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f3218abefd0c..4edf48362a07 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18912,6 +18912,7 @@ F:	Documentation/netlink/specs/rt-addr.yaml
->  F:	Documentation/netlink/specs/rt-neigh.yaml
->  F:	Documentation/netlink/specs/rt-route.yaml
->  F:	Documentation/netlink/specs/rt-rule.yaml
-> +F:	Documentation/networking/ipv6-addrsel.rst
+The "devices" file is an assignment and membership interface only. It
+does not describe a new resctrl resource, schema, or monitoring domain;
+resource policy remains in the existing schemata and info files.
 
-It seems weird to add this one file here - I wonder why there isn't just
-an entry for Documentation/networking ?
+Common IOMMU helpers:
 
-Thanks,
+The userspace ABI names an IOMMU group by the numeric ID already used by
+/sys/kernel/iommu_groups. Patch 1 adds iommu_group_get_by_id() as a
+narrow, reference-counted lookup for that existing identifier.
 
-jon
+Updating a group also needs stronger iteration semantics than separate
+iommu_group_for_each_dev() calls can provide. All devices must be
+validated before any device context is changed, and group membership
+must not change between validation and update. Patch 2 therefore adds
+iommu_group_update_devices():
+
+    lock group->mutex
+      for each device: check()          /* may fail, no state changed */
+      for each device: update()         /* non-failing callback */
+    unlock group->mutex
+
+The helper contains no resctrl or QoS policy. It only provides an
+all-or-none validation boundary for a group-wide update while keeping
+IOMMU group internals private. The RISC-V IOMMU QoS code is its first
+caller.
+
+RISC-V IOMMU programming:
+
+For translated device requests, the per-device-context QoS IDs are
+programmed in DC.ta. Active contexts are invalidated after an update so
+cached translations do not retain stale IDs. BARE mode cannot safely
+represent per-IOMMU-group assignment because only the per-IOMMU
+iommu_qosid global default is available, so group assignment rejects
+BARE mode.
+
+The RISC-V IOMMU also has a per-IOMMU iommu_qosid register. The series
+exposes it as:
+
+    /sys/class/iommu/<iommu>/qosid
+
+This sysfs attribute programs the global RCID and MCID used for
+IOMMU-originated DDT, CQ, FQ, PQ, and MSI accesses. In BARE mode,
+device-originated requests also use these IDs. It is not a resctrl group
+assignment interface.
+
+Open questions for this RFC:
+
+  * whether a common resctrl "devices" file is the right ABI for
+    associating external requesters with a resource group;
+  * whether iommu_group_get_by_id() is an acceptable narrow common
+    helper for resolving the numeric IOMMU group ID passed through that
+    ABI; and
+  * whether iommu_group_update_devices() provides the right common
+    contract for checked group-wide updates.
+
+[1] Drew Fustini's CBQRI v4 series:
+https://lore.kernel.org/linux-riscv/20260706-dfustini-atl-sc-cbqri-dt-v4-0-e75c20201d64@kernel.org/
+[2] RISC-V IOMMU QoS ID extension:
+https://docs.riscv.org/reference/cbqri/qos_iommu.html
+
+Zhanpeng Zhang (7):
+  iommu: Add group lookup by ID
+  iommu: Add checked group device update helper
+  resctrl: Add a devices file for external requester assignment
+  iommu/riscv: Program QoS IDs for assigned groups
+  iommu/riscv: Expose global QoS IDs in sysfs
+  riscv_cbqri: Assign IOMMU groups to resource groups
+  selftests/iommu: Add RISC-V IOMMU QoS smoke test
+
+ .../ABI/testing/sysfs-class-iommu-riscv-iommu |  27 +
+ Documentation/filesystems/resctrl.rst         |  26 +
+ MAINTAINERS                                   |  12 +
+ arch/Kconfig                                  |   6 +
+ arch/riscv/include/asm/qos.h                  |  28 +
+ drivers/iommu/iommu.c                         | 140 +++-
+ drivers/iommu/riscv/iommu-bits.h              |  15 +
+ drivers/iommu/riscv/iommu.c                   | 419 ++++++++++-
+ drivers/iommu/riscv/iommu.h                   |  22 +-
+ drivers/resctrl/Kconfig                       |   6 +
+ drivers/resctrl/Makefile                      |   1 +
+ drivers/resctrl/cbqri_iommu.c                 | 276 ++++++++
+ fs/resctrl/rdtgroup.c                         | 206 +++++-
+ include/linux/iommu.h                         |  30 +
+ include/linux/resctrl.h                       |  45 ++
+ tools/testing/selftests/iommu/Makefile        |   2 +
+ .../selftests/iommu/iommu_qos_smoke.sh        | 649 ++++++++++++++++++
+ 17 files changed, 1886 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+ create mode 100644 drivers/resctrl/cbqri_iommu.c
+ create mode 100755 tools/testing/selftests/iommu/iommu_qos_smoke.sh
+
+
+base-commit: ab754eba620f5a66e7277b7b2d0e706aa7743e8a
+-- 
+2.50.1 (Apple Git-155)
