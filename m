@@ -1,16 +1,16 @@
 Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9869C3EE1C0;
-	Tue, 14 Jul 2026 09:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7F543B494;
+	Tue, 14 Jul 2026 09:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022097; cv=none; b=f7ZyBGTkF4OEyjz5s8/n0JRj/UJ/pX+Xhc2GjRgTCNUe8SrW07lCiD5lEo+YiAoEfiFZl8A3lgTCMA4AGqdvnG2Wf4acmXBd2RBs3HC3Mu0FcPt79UWv+QwJEnijpM9KRYzysIWOFxDhwLQIas0O49aVYbYCsZpSIHN2Kn78qSk=
+	t=1784022329; cv=none; b=Z06+UJtf6+5E1S2nkngND8bidz+1tTak/ygrVRZma+10LZxIRlYudlV4DDiEp0uPEQd5huHSF3nyhqxOWERBXs1hbXTB5oJLVTPsixP63Y79plMp820Qdto/fu4EU2jJMqpWc+cSEfUHmnpqe520wr6fFcfsRboN6dwjmFCHn8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784022097; c=relaxed/simple;
-	bh=lfrCeaqTmCJ2tP3X9wDmq7RPLxjm4JWDEbDGgIWt6Fc=;
+	s=arc-20240116; t=1784022329; c=relaxed/simple;
+	bh=6D+ENfztM5kvvtcs5es63ToWxgKGph8PPD9AOMV/wp4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QTKuFKd5iNfAGlRzS/7/YdG4adHwExG0kooo7cPbNjE1T3sCuLE+o23Lx6G7HzysfeSHFqIBrMcVWqzVhe+BbNzuKi/dr5lV2t1vilHfIb6KdlFxkszObsNb/DKyy0JyA4j4OFB1cspgssmkeBn9qftF20xi08YkeHVdLz8XIuQ=
+	 MIME-Version; b=ftGaCh6VoPgOH0aadY3/ENSkZxY7IqrPuGSpRRb+TCAyZscNGPaFUv3URMjk61abrmRWGUAif7nwefHTY9SNVuLtfXOZ7epaReF9NH+QyhtAnhL2WPMcHZzgXmtUMcYo1x1cS3VwhACqPN7BWI7cQVXEVEZXuVUGa4PEOmKYvCE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
@@ -18,12 +18,12 @@ Received: from nat-wifi0.uniroma3.it ([193.204.167.180] helo=alea)
 	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wjZdi-000000022Sy-1kNU;
-	Tue, 14 Jul 2026 11:41:22 +0200
+	id 1wjZhW-000000022cr-2zgE;
+	Tue, 14 Jul 2026 11:45:18 +0200
 Received: from equinox by alea with local (Exim 4.99.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wjZdL-00000000ZUb-3ZRd;
-	Tue, 14 Jul 2026 11:40:59 +0200
+	id 1wjZdQ-00000000ZV6-1kgE;
+	Tue, 14 Jul 2026 11:41:04 +0200
 From: David 'equinox' Lamparter <equinox@diac24.net>
 To: Paolo Abeni <pabeni@redhat.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -42,9 +42,9 @@ Cc: David Ahern <dsahern@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	David 'equinox' Lamparter <equinox@diac24.net>
-Subject: [PATCH net-next 3/9] net/ipv6: create ipv6_fl_get_saddr
-Date: Tue, 14 Jul 2026 11:40:06 +0200
-Message-ID: <20260714094030.136317-4-equinox@diac24.net>
+Subject: [PATCH net-next 8/9] selftests: net: RFC6724 rule 5.5 tests
+Date: Tue, 14 Jul 2026 11:40:11 +0200
+Message-ID: <20260714094030.136317-9-equinox@diac24.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260714094030.136317-1-equinox@diac24.net>
 References: <20260714094030.136317-1-equinox@diac24.net>
@@ -56,131 +56,282 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds passing the relevant flow information as well as selected
-nexthop into the source address selection code, to allow the RFC6724
-rule 5.5 code to look at its details.
+This throws a couple of situations at the IPv6 source address selection
+logic, primarily to check that RFC6724 rule 5.5 is applied as expected.
+
+This requires `CONFIG_IPV6_SUBTREES=y`, so that's added to
+selftests/net/config.  (The patchset also changes the default on that,
+but arguably better to be explicit.)
 
 Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
 ---
- include/net/addrconf.h |  4 ++++
- net/ipv6/addrconf.c    | 45 +++++++++++++++++++++++++++++++-----------
- 2 files changed, 38 insertions(+), 11 deletions(-)
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   1 +
+ .../net/ipv6_saddr_rfc6724rule5p5.py          | 231 ++++++++++++++++++
+ 3 files changed, 233 insertions(+)
+ create mode 100644 tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py
 
-diff --git a/include/net/addrconf.h b/include/net/addrconf.h
-index 8ced27a8229b..7bc0711b8717 100644
---- a/include/net/addrconf.h
-+++ b/include/net/addrconf.h
-@@ -142,6 +142,10 @@ struct inet6_ifaddr *ipv6_get_ifaddr(struct net *net,
- int ipv6_dev_get_saddr(struct net *net, const struct net_device *dev,
- 		       const struct in6_addr *daddr, unsigned int srcprefs,
- 		       struct in6_addr *saddr);
-+int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst,
-+		      const struct net_device *dst_dev,
-+		      const struct sock *sk, unsigned int srcprefs,
-+		      struct flowi6 *fl6);
- int ipv6_get_lladdr(struct net_device *dev, struct in6_addr *addr,
- 		    u32 banned_flags);
- bool inet_rcv_saddr_equal(const struct sock *sk, const struct sock *sk2,
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f1fe9ede1edb..0ba46ed518a9 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -1542,7 +1542,9 @@ struct ipv6_saddr_score {
- };
- 
- struct ipv6_saddr_dst {
--	const struct in6_addr *addr;
-+	const struct flowi6 *fl6;
-+	const struct dst_entry *dst;
-+	const struct sock *sk;
- 	int ifindex;
- 	int scope;
- 	int label;
-@@ -1619,7 +1621,7 @@ static int ipv6_get_saddr_eval(struct net *net,
- 		break;
- 	case IPV6_SADDR_RULE_LOCAL:
- 		/* Rule 1: Prefer same address */
--		ret = ipv6_addr_equal(&score->ifa->addr, dst->addr);
-+		ret = ipv6_addr_equal(&score->ifa->addr, &dst->fl6->daddr);
- 		break;
- 	case IPV6_SADDR_RULE_SCOPE:
- 		/* Rule 2: Prefer appropriate scope
-@@ -1697,11 +1699,11 @@ static int ipv6_get_saddr_eval(struct net *net,
- 		 *	    non-ORCHID vs non-ORCHID
- 		 */
- 		ret = !(ipv6_addr_orchid(&score->ifa->addr) ^
--			ipv6_addr_orchid(dst->addr));
-+			ipv6_addr_orchid(&dst->fl6->daddr));
- 		break;
- 	case IPV6_SADDR_RULE_PREFIX:
- 		/* Rule 8: Use longest matching prefix */
--		ret = ipv6_addr_diff(&score->ifa->addr, dst->addr);
-+		ret = ipv6_addr_diff(&score->ifa->addr, &dst->fl6->daddr);
- 		if (ret > score->ifa->prefix_len)
- 			ret = score->ifa->prefix_len;
- 		score->matchlen = ret;
-@@ -1819,9 +1821,10 @@ static int ipv6_get_saddr_master(struct net *net,
- 	return hiscore_idx;
- }
- 
--int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
--		       const struct in6_addr *daddr, unsigned int prefs,
--		       struct in6_addr *saddr)
-+int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst_entry,
-+		      const struct net_device *dst_dev,
-+		      const struct sock *sk, unsigned int prefs,
-+		      struct flowi6 *fl6)
- {
- 	struct ipv6_saddr_score scores[2], *hiscore;
- 	struct ipv6_saddr_dst dst;
-@@ -1832,11 +1835,13 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
- 	int hiscore_idx = 0;
- 	int ret = 0;
- 
--	dst_type = __ipv6_addr_type(daddr);
--	dst.addr = daddr;
-+	dst_type = __ipv6_addr_type(&fl6->daddr);
-+	dst.fl6 = fl6;
-+	dst.sk = sk;
-+	dst.dst = dst_entry;
- 	dst.ifindex = dst_dev ? dst_dev->ifindex : 0;
- 	dst.scope = __ipv6_addr_src_scope(dst_type);
--	dst.label = ipv6_addr_label(net, daddr, dst_type, dst.ifindex);
-+	dst.label = ipv6_addr_label(net, &fl6->daddr, dst_type, dst.ifindex);
- 	dst.prefs = prefs;
- 
- 	scores[hiscore_idx].rule = -1;
-@@ -1911,11 +1916,29 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
- 	if (!hiscore->ifa)
- 		ret = -EADDRNOTAVAIL;
- 	else
--		*saddr = hiscore->ifa->addr;
-+		fl6->saddr = hiscore->ifa->addr;
- 
- 	rcu_read_unlock();
- 	return ret;
- }
-+EXPORT_SYMBOL(ipv6_fl_get_saddr);
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 708d960ae07d..c07d2aebad69 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -53,6 +53,7 @@ TEST_PROGS := \
+ 	ipv6_flowlabel.sh \
+ 	ipv6_force_forwarding.sh \
+ 	ipv6_route_update_soft_lockup.sh \
++	ipv6_saddr_rfc6724rule5p5.py \
+ 	ipvtap_test.sh \
+ 	l2_tos_ttl_inherit.sh \
+ 	l2tp.sh \
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index e1ce35c2abbe..b0b66412b9f3 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -48,6 +48,7 @@ CONFIG_IPV6_ROUTER_PREF=y
+ CONFIG_IPV6_RPL_LWTUNNEL=y
+ CONFIG_IPV6_SEG6_LWTUNNEL=y
+ CONFIG_IPV6_SIT=y
++CONFIG_IPV6_SUBTREES=y
+ CONFIG_IPV6_VTI=y
+ CONFIG_IPVLAN=m
+ CONFIG_IPVTAP=m
+diff --git a/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py b/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py
+new file mode 100644
+index 000000000000..682b39ba991d
+--- /dev/null
++++ b/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py
+@@ -0,0 +1,231 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2023-2026  David 'equinox' Lamparter
++"""
++RFC 6724 (IPv6 source address selection) rule 5.5 tests
 +
-+int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
-+		       const struct in6_addr *daddr, unsigned int prefs,
-+		       struct in6_addr *saddr)
-+{
-+	struct flowi6 fl6;
-+	int ret;
++For reference:
 +
-+	memset(&fl6, 0, sizeof(fl6));
-+	fl6.daddr = *daddr;
++   Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
++   If SA or SA's prefix is assigned by the selected next-hop that will
++   be used to send to D and SB or SB's prefix is assigned by a different
++   next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
++   assigned by the next-hop that will be used to send to D and SA or
++   SA's prefix is assigned by a different next-hop, then prefer SB.
 +
-+	ret = ipv6_fl_get_saddr(net, NULL, dst_dev, NULL, prefs, &fl6);
-+	if (!ret)
-+		*saddr = fl6.saddr;
++(and since it provides the "counterpoint":)
 +
-+	return ret;
-+}
- EXPORT_SYMBOL(ipv6_dev_get_saddr);
- 
- static int __ipv6_get_lladdr(struct inet6_dev *idev, struct in6_addr *addr,
++   Rule 8: Use longest matching prefix.
++   If CommonPrefixLen(SA, D) > CommonPrefixLen(SB, D), then prefer SA.
++   Similarly, if CommonPrefixLen(SB, D) > CommonPrefixLen(SA, D), then
++   prefer SB.
++
++Note rule 5.5 was originally optional but made mandatory by
++draft-ietf-6man-rfc6724-update (which at the point of creation of this test
++was already "done" at the IETF but waiting in the RFC editor queue due to a
++blocking dependency.)
++"""
++
++from socket import socket, AF_INET6, SOCK_DGRAM
++from functools import wraps
++from typing import Callable
++
++from lib.py import ksft_run, ksft_exit, ksft_eq
++from lib.py import NetNS, NetNSEnter
++from lib.py import ip
++
++
++def select_addr(dest):
++    """
++    connect() + getsockname() to figure out what was selected as source address
++    """
++    sock = socket(AF_INET6, SOCK_DGRAM, 0)
++    sock.connect((dest, 12345))
++    return sock.getsockname()[0]
++
++
++def in_netns(func: Callable[[], None]) -> Callable[[], None]:
++    """
++    python decorator to put test function in netns
++    """
++
++    @wraps(func)
++    def wrapped() -> None:
++        with NetNS() as testns:
++            with NetNSEnter(str(testns)):
++                func()
++
++    return wrapped
++
++
++@in_netns
++def test_basic() -> None:
++    """
++    Simple & most common case for RFC6724 rule 5.5: multiple default routes
++    """
++    ip("link add type veth")
++    ip("link set veth0 up")
++    ip("link set veth1 up")
++    ip("addr add 2001:db8:10::1/64   dev veth0 nodad")
++    ip("addr add 2001:db8:1000::1/64 dev veth0 nodad")
++    ip("-6 route add default via fe80::1 dev veth0 metric 100")
++    ip("-6 route add default via fe80::2 dev veth0 metric 200")
++    ip("-6 route add default from 2001:db8:10::/48   via fe80::1 dev veth0")
++    ip("-6 route add default from 2001:db8:1000::/48 via fe80::2 dev veth0")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    # rule 8 would result in the use of the :1001: address, but rule 5.5 applies before.
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:10::1", "rule 5.5 > rule 8")
++
++    ip("-6 route del default via fe80::1 dev veth0 metric 100")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:1000::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:1000::1", "rule 5.5 > rule 8")
++
++
++@in_netns
++def test_nh_obj() -> None:
++    """
++    Same as above, but with nexthop objects for the default route
++
++    NB: The kernel doesn't currently allow nexthop objects for subtree routes.
++    """
++
++    ip("link add type veth")
++    ip("link set veth0 up")
++    ip("link set veth1 up")
++    ip("addr add 2001:db8:10::1/64   dev veth0 nodad")
++    ip("addr add 2001:db8:1000::1/64 dev veth0 nodad")
++
++    # distinct nexthop objects are used, because what matters is the nexthop
++    # itself, not the nexthop object.  To cover everything, make a group.
++    ip("nexthop add id 101 via fe80::1 dev veth0")
++    ip("nexthop add id 201 group 101")
++    ip("nexthop add id 102 via fe80::2 dev veth0")
++    ip("nexthop add id 202 group 102")
++
++    ip("-6 route add default nhid 201 metric 100")
++    ip("-6 route add default nhid 202 metric 200")
++    ip("-6 route add default from 2001:db8:10::/48   via fe80::1 dev veth0")
++    ip("-6 route add default from 2001:db8:1000::/48 via fe80::2 dev veth0")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    # rule 8 would result in the use of the :1001: address, but rule 5.5 applies before.
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:10::1", "rule 5.5 > rule 8")
++
++    ip("-6 route del default nhid 201 metric 100")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:1000::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:1000::1", "rule 5.5 > rule 8")
++
++
++@in_netns
++def test_low_metric() -> None:
++    """
++    Check that subtree routes take effect even if they are higher metric
++
++    For checking that "router advertised prefix", metric is irrelevant.  It
++    matters for the initial unspecific lookup to find a nexthop to begin with.
++    (The later source address check lookup doesn't change the nexthop, i.e.
++    the effects of metrics are already done.)
++    """
++    ip("link add type veth")
++    ip("link set veth0 up")
++    ip("link set veth1 up")
++    ip("addr add 2001:db8:10::1/64   dev veth0 nodad")
++    ip("addr add 2001:db8:1000::1/64 dev veth0 nodad")
++    ip("-6 route add default via fe80::1 dev veth0 metric 100")
++    ip("-6 route add default via fe80::2 dev veth0 metric 200")
++    ip("-6 route add default from 2001:db8:10::/48   via fe80::1 dev veth0")
++    ip("-6 route add default from 2001:db8:1000::/48 via fe80::2 dev veth0 metric 1000")
++    ip("-6 route add default from 2001:db8:1000::/48 via fe80::3 dev veth0 metric 50")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    # rule 8 would result in the use of the :1001: address, but rule 5.5 applies before.
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:10::1", "rule 5.5 > rule 8")
++
++    ip("-6 route del default via fe80::1 dev veth0 metric 100")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:1000::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:1001::"), "2001:db8:1000::1", "rule 5.5 > rule 8")
++
++
++@in_netns
++def test_no_subtree() -> None:
++    """
++    Ensure that matching on a non-subtree route doesn't trigger rule 5.5
++
++    (This was non-obviously broken in earlier versions of the implementations,
++    a non-subtree route would still match.  Make sure it doesn't break again.)
++    """
++    ip("link add type veth")
++    ip("link set veth0 up")
++    ip("link set veth1 up")
++    ip("addr add 2001:db8:10::1/64 dev veth0 nodad")
++    ip("addr add 2001:db8:1000::1/64 dev veth0 nodad")
++    ip("-6 route add default via fe80::1 dev veth0 metric 100")
++    ip("-6 route add default via fe80::2 dev veth0 metric 200")
++    ip("-6 route add default from 2001:db8:10::/48 via fe80::1 dev veth0")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    ksft_eq(
++        select_addr("2001:db8:1001::"),
++        "2001:db8:10::1",
++        "rule 5.5 > rule 8, ignoring non-SADR",
++    )
++
++
++@in_netns
++def test_longer() -> None:
++    """
++    Check functionality for non-default destination.
++
++    This is expected to be very rare in actual practice, and doesn't do
++    backtracking (also refer to kernel docs.)
++    """
++    ip("link add type veth")
++    ip("link set veth0 up")
++    ip("link set veth1 up")
++    ip("addr add 2001:db8:10::1/64 dev veth0 nodad")
++    ip("addr add 2001:db8:1000::1/64 dev veth0 nodad")
++    ip("-6 route add default           via fe80::1 dev veth0 metric 100")
++    ip("-6 route add 2001:db8:500::/48 via fe80::2 dev veth0 metric 100")
++    ip("-6 route add default           from 2001:db8:10::/48   via fe80::1 dev veth0")
++    ip("-6 route add 2001:db8:500::/48 from 2001:db8:1000::/48 via fe80::2 dev veth0")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:500::"), "2001:db8:1000::1", "rule 5.5")
++    ksft_eq(select_addr("2001:db8:500:aaa::"), "2001:db8:1000::1", "rule 5.5")
++
++    ip("-6 route add 2001:db8:500:aaa::/64 via fe80::2 dev veth0 metric 100")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:500::"), "2001:db8:1000::1", "rule 5.5")
++    ksft_eq(select_addr("2001:db8:500:aaa::"), "2001:db8:10::1", "no backtracking")
++
++    ip("-6 route del 2001:db8:500::/48 from 2001:db8:1000::/48 via fe80::2 dev veth0")
++    ip("-6 route add default           from 2001:db8:1000::/48 via fe80::2 dev veth0")
++
++    ksft_eq(select_addr("2001:db8:11::"), "2001:db8:10::1", "baseline pass")
++    ksft_eq(select_addr("2001:db8:500::"), "2001:db8:10::1", "no backtracking")
++    ksft_eq(select_addr("2001:db8:500:aaa::"), "2001:db8:10::1", "no backtracking")
++
++
++def main() -> None:
++    """
++    RFC6724 rule 5.5 test driver
++    """
++    ksft_run(
++        [
++            test_basic,
++            test_nh_obj,
++            test_low_metric,
++            test_no_subtree,
++            test_longer,
++        ]
++    )
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.53.0
 
