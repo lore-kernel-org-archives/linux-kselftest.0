@@ -1,66 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC9A39CCFF;
-	Tue, 14 Jul 2026 17:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D67417BD1;
+	Tue, 14 Jul 2026 17:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784048936; cv=none; b=rGckSu5q01QXqhnO9VLzMKVP7e7iUwGTrF17IK1qKemu8HcSCppENfpv4NI5fyeUY3YQzwyr7B7tGeQuRs11nYFYS9Nvu5NKU8OV4Bu8ThA3wkCUY9P1zCwSXgMSUy2s4XrBWc0sxPvtJsNg/Iwk3njGtxYGyLfot0cQUdZBQps=
+	t=1784050918; cv=none; b=ZEiB3MEJ24Rsj2Beepevun4KXOtYBWDlyWxud2JytbuG1hoHG72PJ0JigTZ/Iwg7+GVLHoeYlla7ctsDMyNFvg313/tAOfZTRuxGsX9lEQyuO7bMBvi2+5LTwbPJK4aPegt7zgQFPz58tgMb602orWlJ3sbmiGqBW4nmZRNBbQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784048936; c=relaxed/simple;
-	bh=pXbKaqo3/BQgyZxsoqQbZAzKiU+B4SdXcj/pETX3txI=;
+	s=arc-20240116; t=1784050918; c=relaxed/simple;
+	bh=ot+TH7xtaDoqo2780r8tQzRKJYbXrIF/nHOdSdhfUSM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a+Ys538H4xyAq5SRNo+7ZDdI7kIJLRPO7Qpi0f3uJXB9HSFR5WOUFrlA/o6WaY+eDIQkuv2VjUGC7OZSs5OJGmPbVStW9odnOxGomBjc4d+UURqTETU7XKklFg3wGU4QgdQKmnRJ41OPE+BRl90RdX6vXf8hmdcRm7Pwz9YJag8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byVwXbtL; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=q3T1+xfMPu3rELnw+HsGar1a645EwBAnlmQPSSG4Xid67usGASHm/C0KG6phbMG9E5VACpt3eyaiJXNZaI4f4un3+kItMryJcvMWjmoXtYvjM7ErivvvG7/WCvSJaNu2waQVxJv7dWMfHglBQ41p49kq4y3QJyoDw0awyBFidRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdlCqQgy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byVwXbtL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB86C1F000E9;
-	Tue, 14 Jul 2026 17:08:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdlCqQgy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAFB1F000E9;
+	Tue, 14 Jul 2026 17:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784048934;
-	bh=Kh2P97NR23r0bPnBVfJUq5G6C7YiA7uuewthu/bIN7I=;
+	s=k20260515; t=1784050916;
+	bh=61F0uUcPwOxHP6TcMwnpaiAfrRg0DqC7fQAdp1F+GoE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=byVwXbtL6pok60WoSXAQqDT9TWgMfVeTqOGTrFMFwA6AltQP5sZCa7aNR3xUn08rn
-	 98GWpxt2dYNmGN3CJfXbCsFPoQPyYPMQI3kXe6SG80ABed69gGNkY5Rp2sd/Lt2Awv
-	 p705lkbKrb86dy2CiTMLuTug1WxXpWM//OVfutelgu9l8QdbINaOd00urKNlK09LaY
-	 WVTNVNF88fHrRfCN7D+T5MpHamui9ymXS5/O9MsHoSNXn0GiIT+fAuFqoG9QVKh6l/
-	 OPEf8UexSOkk1UttwLnKuzJutIP/3N35XinvooYC6gdBZqJYcBqsUWKs419va0ZZgA
-	 RZQu0vRoP673g==
-Date: Tue, 14 Jul 2026 19:08:51 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Vladimir Vdovin <deliran@verdict.gg>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <alZtI782RGKb8y4Y@lore-desk>
-References: <20260708203410.45121-1-deliran@verdict.gg>
- <20260708203410.45121-2-deliran@verdict.gg>
- <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
+	b=RdlCqQgypM6LiNF8St6l8I98qiWsx8gJRJCipt6iVTF5RKgcb1RhDj8LlGcHjL+XT
+	 S/vN1atOs1jkoIlkvlQ1dbjmi3TYYCBKiGscmlIGNRESkyF+INzVAL0/aYtNnnE9MY
+	 wnrBQsediBp25GOINl53fZjS4K82Gb3LCyls+knbR6wenHYaHXPB8ZqHYddWfurGwB
+	 DJmRHGsf72y+SwizCifG+hCIMqL3Mz+NCjiXqqL7GYC7eh+VAVikOi6K3+DvOjA3eU
+	 Yy5MenPgO2O4ZwCNrmlO/bzcfT5YVexANrQzaVPkA3Xsi5JL6DNNZmNqvkjL/hELVk
+	 EVbdY3Mmfb8wg==
+Date: Tue, 14 Jul 2026 18:41:49 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Yuwen Chen <ywen.chen@foxmail.com>, akpm@linux-foundation.org,
+	andrealmeid@igalia.com, bigeasy@linutronix.de,
+	colin.i.king@gmail.com, dave@stgolabs.net, dvhart@infradead.org,
+	edliaw@google.com, justinstitt@google.com, kernel-team@android.com,
+	licayy@foxmail.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, luto@mit.edu, mingo@redhat.com,
+	morbo@google.com, nathan@kernel.org, ndesaulniers@google.com,
+	peterz@infradead.org, shuah@kernel.org, usama.anjum@collabora.com,
+	wakel@google.com, mark.rutland@arm.com
+Subject: Re: [PATCH v8 2/2] selftests/futex: fix the failed futex_requeue
+ test issue
+Message-ID: <7b5aa640-da5b-4b59-b6c0-f4940b66958f@sirena.org.uk>
+References: <tencent_A68F2BD3395C9EFE1759975A511BB7D9F806@qq.com>
+ <tencent_76B9DE9C9FE5C57F6D74B5149970DF8CCF0A@qq.com>
+ <a8886f13-e6e4-4561-a2b1-db2bd3f77a6a@sirena.org.uk>
+ <87cxwys7fi.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,126 +52,64 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KHFfhBMWGk3EjgnD"
+	protocol="application/pgp-signature"; boundary="f3SPXGhwDEF95W0b"
 Content-Disposition: inline
-In-Reply-To: <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
+In-Reply-To: <87cxwys7fi.ffs@fw13>
+X-Cookie: Neutrinos have bad breadth.
 
---KHFfhBMWGk3EjgnD
+
+--f3SPXGhwDEF95W0b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-> On 07/08, Vladimir Vdovin wrote:
-> > From: Lorenzo Bianconi <lorenzo@kernel.org>
-> >=20
-> > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
-> > checksum will be use by devices capable of exposing receive checksum
-> > result via bpf_xdp_metadata_rx_checksum().
-> > Moreover, introduce xmo_rx_checksum netdev callback in order to allow
-> > the eBPF program bound to the device to retrieve the RX checksum result
-> > computed by the hw NIC and reported via DMA descriptors.
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
-> > ---
-> >  Documentation/netlink/specs/netdev.yaml |  5 ++++
-> >  include/net/xdp.h                       | 18 ++++++++++++++
-> >  include/uapi/linux/netdev.h             |  3 +++
-> >  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
-> >  tools/include/uapi/linux/netdev.h       |  3 +++
-> >  5 files changed, 61 insertions(+)
-> >=20
-> > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/ne=
-tlink/specs/netdev.yaml
-> > index 5f143da7458c..6d0d90d3a614 100644
-> > --- a/Documentation/netlink/specs/netdev.yaml
-> > +++ b/Documentation/netlink/specs/netdev.yaml
-> > @@ -61,6 +61,11 @@ definitions:
-> >          doc: |
-> >            Device is capable of exposing receive packet VLAN tag via
-> >            bpf_xdp_metadata_rx_vlan_tag().
-> > +      -
-> > +        name: checksum
-> > +        doc: |
-> > +          Device is capable of exposing receive checksum result via
-> > +          bpf_xdp_metadata_rx_checksum().
-> >    -
-> >      type: flags
-> >      name: xsk-flags
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index aa742f413c35..e255ff786131 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_in=
-fo *info,
-> >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
-> >  			   bpf_xdp_metadata_rx_vlan_tag, \
-> >  			   xmo_rx_vlan_tag) \
-> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
-> > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
-> > +			   bpf_xdp_metadata_rx_checksum, \
-> > +			   xmo_rx_checksum)
-> > =20
-> >  enum xdp_rx_metadata {
-> >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-> > @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
-> >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_=
-L3_DYNHDR,
-> >  };
->=20
-> [..]
-> =20
-> > +/* Please note the driver is required to invalidate the checksum if th=
-e NIC
-> > + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF prog=
-ram
-> > + * modifies the packet since it can change some fields validated by the
-> > + * checksum.
-> > + */
->=20
-> Sorry, a bit confused about this part. IIUC this is in response to this
-> discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
->=20
-> Looking at a few drivers:
-> - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
-> - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
->   bpf prog attached
-> - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
-> - gve (gve_rx) - can do COMPLETE even with xdp attached?
->=20
-> So none of the drivers invalidate anything (and nether the bpf machinery)=
-, some
-> choose to (correctly?) not report COMPLETE when there is XDP. So was the
-> discussion about documenting this and giving some guidance? This probably
-> belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
+On Wed, Jul 08, 2026 at 01:31:45AM +0200, Thomas Gleixner wrote:
+> On Tue, Jul 07 2026 at 23:28, Mark Brown wrote:
 
-Hi Stanislav,
+> > I'm seeing failures on arm64 (running a system with 4xA53) in -next in
+> > this test which bisect to this commit, the commit seems obviously
+> > plausible but I didn't actually investigate:
 
-re-reading the previous upstream discussion, I guess we should just documen=
-t the
-expected driver behaviour (invalidate the cksum for both COMPLETE and
-UNNECESSARY cases when the XDP program running on the NIC returns XDP_PASS)=
- and
-add a given kselftest for it. Agree?
+> >  # Starting 2 tests from 1 test cases.
+> >  #  RUN           global.requeue_single ...
+> >  # futex_requeue.c:28:requeue_single:Expected res (-1) == 0 (0)
+> >  # futex_requeue.c:29:requeue_single:waiter failed errno 110: Connection timed out
+> >  # futex_requeue.c:49:requeue_single:Expected futex_wait_for_thread(&waiter, _metadata) (110) == 0 (0)
+> >  # futex_requeue.c:50:requeue_single:Wait for thread failed
 
->=20
-> Also, can you add your new rx_checksum to
-> Documentation/networking/xdp-rx-metadata.rst's list of supported kfuncs?
+> Do you have /proc/ disabled by chance or is it not accessible for the
+> test case?
 
-ack, I will do it in the next iteration.
+I've had another poke at this, I'm still seeing it with today's -next:
 
-Regards,
-Lorenzo
+   https://lava.sirena.org.uk/scheduler/job/2973947#L5558
 
---KHFfhBMWGk3EjgnD
-Content-Type: application/pgp-signature; name=signature.asc
+It looks like we start seeing connection timeout reports a bit earlier on:
+
+   https://lava.sirena.org.uk/scheduler/job/2973947#L4231
+
+though the test succeeds.
+
+On another arm64 system I can reproduce with a current kernel in a
+kvmtool VM (so a rather distinct userspace, though also Debian based),
+but not directly in the host where the kernel is Debian's
+6.12.95+deb13-cloud-arm64.  The kvmtool VM does mount /proc read only,
+remounting it read/write doesn't seem to help.
+
+At the very least it feels like we need better diagnostics here.
+
+--f3SPXGhwDEF95W0b
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCalZtIwAKCRA6cBh0uS2t
-rGL6AQCi2BM+G5ULVwlhiTQ9mResmshhs2Y13j4jDPNLyIsVpAEAnHqdZsYDNeis
-roaeeQ5EZov1q2vIZr/DExysvRJVBAg=
-=iMpE
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpWdNwACgkQJNaLcl1U
+h9BamQf/TQ1b48+4PRI4EetzWZNFGwiJYK/VKxWNYEyRxSjHw+xgNBM4MIxBV/0u
+eeoGv5kRUyTdAZd3CMvLiEy3BkmI6JhokIQrAdvXILb3hHzL4yFOgwLVd/o/MWbE
+EQl/jphtygVWw+5VxMhl6fi7LKxyjWXtqWttYBvPyFQEfmA9CZvHLPfNBt4vNsX8
+edShs1Dd6UZ1IQPeiZg6HRdH4kkWi+F3MDNrGK9mh2dzSU8aiijGNbIE0h4ZZddh
+qqj7HbewQ37VYmFcFREZ+HwUwUK0GZlzudUkSJQRIXJxsXgvV4fvG1zGJP+oNhLR
+jXAsEfb08vJR7bcM8TjnCJEAfHQJEw==
+=PA8W
 -----END PGP SIGNATURE-----
 
---KHFfhBMWGk3EjgnD--
+--f3SPXGhwDEF95W0b--
