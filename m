@@ -1,214 +1,198 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449771C6FF5
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 04:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0634E1C861D;
+	Tue, 14 Jul 2026 04:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784003515; cv=none; b=WCivIT2+llO9GB+m5AFpSkm+ECWmjkmeSJUCKGAMMER9G3p6s2PTn6YBWU+Mg0CQzuUjXqg3wkHpVSNA5IsLeJxqKb7GoxhvmWNJlcjuffN9Gw692buIwjRHt2MI2Vq+3sHqYHLuk95ynyXjoEcXmM5ZO7Q9XlDcLd6llbTMufw=
+	t=1784003527; cv=none; b=Mwzfx+pdeahVFwQ+3hqDGN/nSpu2yXiLavuSXEAVRFiAfPAsbgJfGQPUX5IOS1M2s3w0AxjQuUDFoNvxHI/HCkZzyhRLpu6LRP++qcP2OAJAYAX162V+dHEQQctnkeumFAbsu1jaxB2EcTpPmjRIzL9nflvyDH3gOoMNMvk/X00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784003515; c=relaxed/simple;
-	bh=amcnccEfV2zMP1CmqZTPxJKIVmiE92ewOOkbR/0ra+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eJ+vJ6okF9Ttga8lFbU5NsMraN3U1WnGOE8X9xEddwDHwe2tma2furWhGGmtE2I4dw4glVn+p7n2cTJgedaxgUwfO+sQUb7wosZwabXySja4eFnwLqSypQuszgVbMhtWBIfxf1mtKwvwRkDm93aGsB8ykZzM5PiU6Cy5L7oFwUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DS/PD253; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784003527; c=relaxed/simple;
+	bh=XM7VGBlv67NNumr+kynwEza1GVf1p/tMWmPt/JIhuv8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=p0ro9gcsHzPx6CUDdM+UliNoFP3oEVmcmN1oH31YGOwrNfQjFtDF54SSx9OMSJGYPHyiUyVNT1lxAEU0dBn2tzV318rYAg7ts1kRaQzKgy0px1o2eCzuGOkHtHkrpZ55a2QPMZi2AULSQedve+k9x73WO2My/ZWGxlRWTyozFAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cw28kQU9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DS/PD253"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c15d111ca99so375661966b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 21:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784003512; x=1784608312; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5QjGoG5qAeIc1Na3vyNRDThJoCp+F3AJc5d4xY+kAQs=;
-        b=DS/PD253eqzhAgKlUyYRQArdVNddzxBQ4DWdN9ld/umA7XgYdwBc2eKRgDj/FOOh+L
-         6as1CRTWNVK6FvvsAzCJsdac+YZH2Ul5XoznPmdEA9AxH3IyFaJsNa8nL2uCYsuZUi8e
-         zDxSOl5OqgCmWHoTa9iMV/6csmmML+kfGdMawqyKODgxd/FdGr2cVVksPHArBPLgow6I
-         rmnh2Shn9bi+qIdFks3wZSQYDrf2XAPde8D+zH2Rlor8OVXQctSL28p5MEkrPSt0nhxS
-         bXje33XABMIolW9bXAQ93AZQ+B5xrOAsW0zg0QKQY6+gD7kXIECq7VPmShtKi8YLsySk
-         08ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784003512; x=1784608312;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=5QjGoG5qAeIc1Na3vyNRDThJoCp+F3AJc5d4xY+kAQs=;
-        b=N6ZoJ3VNtWFvrbmdCpMNr2+H50lkNSCB/mXV48Tu6rs4rjxLFYW408NJenQhaVS90+
-         Yoff6RYoZsj71FVbArIFXyQVLLiNKlu9wrmZX1wgn/Tf95itdWBrYWj/q1BkyHP7OSmF
-         GmreVFtx2Y3OIF25PLIM/tsSU1/CEsYwnpl/rEPMIijKPrFSWYENZhs9Ws9qDhfnmHOY
-         ZyUo6omVqzcfY6qI3p0O/A9S2jH9JUkZcG7+UZaT3jcUoAoRE7onhuxEkpkEe8FjhBLy
-         Uq2uW8D+9V6M/h/jad0mhpuuvBeEPab8HNUlaa0TQmL3NN2mnKZJxYSQU064xrvmsdFD
-         g/KQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrPLZ2WZ40tbNt4YEuUYYAkbfYxJzcI6pa31GWspAFrklMW1GMcLx2r8Q7NNSDGTWOqP/EB5scnqZc48XCmkWg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUyWsoeFaJMuGQ7Daf1kKliToInF4dTDllTALJJ5DGo82sErYf
-	+mAsWuGRiAB2jSYhdXGn6ERfJd4rULdz7vKnpy838tnQM39v0FlO4hxKcNPpdkkfxtY=
-X-Gm-Gg: AfdE7cm0t+O8fW9jIe/blMyXSxPjx98ZVL0S/Quze0GIT2ezFtX0lLHoDnbcvjQevmr
-	WZ0hUdS+CMhx1FZ1qN7FQsTGjIyIR+HVMUeSG4YRs56v5qJ/lGRYm6lnngLwEJ3CaaWti9Wz8mX
-	7Ve2sqaSj3seZbxo/D9XreblQAh7sqjyZ0F7iXY8Qjx+K8xCA3m1MU8N5TpIERMeDZaSoalF6fE
-	W6MhiW0XcsdKk5SN5juKNVzh0//fTt+aj8Jha9FR0qYF4EeARMF749kBfbFknQl7gjSCbR5Ea8h
-	n3IgE8sTkIda/DDs5hcH2sWtl1nioRblMh/mrNP5sDlmMCdjtDRIJjdSQNbg5s1L7FTEZgkJLdR
-	nhUSgxWKXAhWDHwbDDhFPP9DDD++11qkzrXjH4nVEN7Oin4dbuP0VVMCjvww8rmkZxy605xhQZp
-	07O2o1VTzmEoYCA/I692Z5glqENtW6op7tK8uTMSHkdxE=
-X-Received: by 2002:a17:907:6e89:b0:c11:ff2c:4f33 with SMTP id a640c23a62f3a-c161f3886bdmr502412366b.45.1784003512434;
-        Mon, 13 Jul 2026 21:31:52 -0700 (PDT)
-Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcafdf8f2sm14419654a34.11.2026.07.13.21.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 21:31:50 -0700 (PDT)
-Date: Tue, 14 Jul 2026 12:31:38 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: sun jian <sun.jian.kdev@gmail.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
- pointers
-Message-ID: <alWvvwpn3z9Nn0zw@u94a>
-References: <20260708090151.151729-2-sun.jian.kdev@gmail.com>
- <ak5HLLrYK3R_g2y_@u94a>
- <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
- <ak8XSRiLKx5WcIQw@u94a>
- <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
- <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
- <alCgmxFh9q-vjE0O@u94a>
- <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
- <alRtilWhKw4zzMkI@u94a>
- <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cw28kQU9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB3B1F000E9;
+	Tue, 14 Jul 2026 04:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784003525;
+	bh=ICf9OHjwxFwehYXqEt5J3kn7A2kZgUciQx2f6MzCt2Y=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Cw28kQU9Q7qkkxmx6Z3DSxUWp63+4DGC3B5EAGwfpBGLONzWJ9AYjB0Y1Ot2C7MMw
+	 u5rUj6mfq4a+VcnGUPNjmu3Wyk7/PKVPIUs5+/eo9GGokw00Z5qbahr/WiOTGQP86N
+	 yMIFEKhTmaslxb/GYbDUhHPMRoDe2dK52XxYo6ez65monSOWUOxOBTWSrHt2dvmJti
+	 coXk0WnF2HWBB49mncjS7SmCWRA9r94d/t2F7heWX/M4kU+gWt88oLDiK6TUKf13qH
+	 sKBkvoKgEbTIyXnPZNNIYXQCUn6Q1EMz4PapA3yQJN6NjlQiiD0ykPSnmFeGvtbxAP
+	 YUGVYtNTyZGig==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 4EC2FF40078;
+	Tue, 14 Jul 2026 00:32:04 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Tue, 14 Jul 2026 00:32:04 -0400
+X-ME-Sender: <xms:xLtVarN6dk6rsOmCkO-hvq2gJutn2hmcYU2JOjSRSc0fi3AkkOV9ew>
+    <xme:xLtVaq0DBDSAFo0Y760y9W7A4ziv7FNxyEMR1Ly7CC_JlHyw73eHHkuE0DMVm_n1x
+    TeMCHOKzqdfWkwAV63jdG_QgaxiUJh7wsgWcIRfzFK2y-GaAZyxJIs>
+X-ME-Received: <xmr:xLtVan0Pq4IxK_mW93Uam745vAuJ2f_c89w59gk_tIIS9-eAVoiO639-v9Vb-YCv3RR1fhYhXw46W-rY0bI5hNWZAb4sImHT9ao>
+X-ME-Proxy-Cause: dmFkZTETAL60usH4lwlQ+4JamyiGMB40vHl7RgBXxsRW+Q/t46XOvYKxjtcqB7DgAdPC6i
+    zMIujK7PY4sEwXxazD+cu/TeVDF4gGUKmmd54dtA25ch6rGoXJwCupkApom8abyimHWxjk
+    DLdaPpsTwRaHCE++9rktMWDjVDFmr6CU0Jm7oQH94vJ7v+mplgl45VZFu0bVcmqSldtmyP
+    TsPb5ggmXk5spRxfJAiNTZnPUydufMtrYp4tqcSf/n46+m3l7r38cEHazhwn6Qp7DP25OL
+    +7gmDJ3RA06dy6rPvT8Slk3sgoDnnQ42j+hY5zYQVGCGqQspCGSx7XiOjPEtOtzmpVcxbM
+    sxpp+PgECi1Nk6EOwSE5+G77XfTW+06KOFWMcYwxpsclj/vLEOOGfHjhEgQtQFRjAsmBq1
+    nz0rZySu2yEuP/cuXXREFPtFMgH07FMuR3pMx57MagjZ4O+loKKKSoNHSPcieSeJ5/HZ6S
+    hL7IRiKeWLeEuHKkbK7NktIMhi89NtiFQZw9e7Nt9G4HsFIJW3kpfnAgqzFOnHxsva95hS
+    ssbW7ZxM53LmT9XKcEr50YysPX0vTrRoxmSGzMq16mukrhzOEBRx6jRmrY5j3iYbbvaFZe
+    V0B3jQYtoJ58Zt7Wqu5UJn8rTsTND9kyp3b7TO/B8nNfcJPnZi0TK1Mem4bA
+X-ME-Proxy: <xmx:xLtVahy2ngywLag-bMOt0yjyZRXwzIkHthZsohlCWRjaN92gSyj23A>
+    <xmx:xLtVaikLSb0O6jdVHHApcpNpF9jpnWGMImdDuINYgaQtAWqL5qE1cA>
+    <xmx:xLtVatzdFt6uVf1Kd6-ggDleOTtMVSJ_r4dg92V5tJ2S53s2ryETsg>
+    <xmx:xLtVapJenbLv68dmWS4szRfchpH2gaL2c3Rl2STOKCitqmiivYnw2w>
+    <xmx:xLtVagKBbKwjiBvK_qMG6wu9fLclvcCKO5KvhGBOnRpLAcnWoYdg7qjy>
+Feedback-ID: i67ae4b3e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Jul 2026 00:32:03 -0400 (EDT)
+Date: Mon, 13 Jul 2026 21:32:02 -0700
+From: "Dan Williams (nvidia)" <djbw@kernel.org>
+To: Manish Honap <mhonap@nvidia.com>, 
+ Alex Williamson <alex@shazbot.org>
+Cc: "djbw@kernel.org" <djbw@kernel.org>, 
+ "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+ "jic23@kernel.org" <jic23@kernel.org>, 
+ "dave.jiang@intel.com" <dave.jiang@intel.com>, 
+ Ankit Agrawal <ankita@nvidia.com>, 
+ "alejandro.lucero-palau@amd.com" <alejandro.lucero-palau@amd.com>, 
+ "alison.schofield@intel.com" <alison.schofield@intel.com>, 
+ "dave@stgolabs.net" <dave@stgolabs.net>, 
+ "dmatlack@google.com" <dmatlack@google.com>, 
+ "gourry@gourry.net" <gourry@gourry.net>, 
+ "ira.weiny@intel.com" <ira.weiny@intel.com>, 
+ Neo Jia <cjia@nvidia.com>, 
+ Krishnakant Jaju <kjaju@nvidia.com>, 
+ Vikram Sethi <vsethi@nvidia.com>, 
+ Zhi Wang <zhiw@nvidia.com>, 
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+ "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+ Manish Honap <mhonap@nvidia.com>
+Message-ID: <6a55bbc276b96_f7ebd100e4@djbw-dev.notmuch>
+In-Reply-To: <IA1PR12MB90309355D97FE886A1DA77BABDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
+References: <20260625165407.1769572-1-mhonap@nvidia.com>
+ <20260625165407.1769572-8-mhonap@nvidia.com>
+ <20260710162316.29cf8107@shazbot.org>
+ <IA1PR12MB90309355D97FE886A1DA77BABDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
+Subject: RE: [PATCH v3 07/11] vfio/pci: Add CONFIG_VFIO_PCI_CXL with bind-time
+ CXL Type-2 acquisition
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 13, 2026 at 01:44:18PM -0700, Eduard Zingerman wrote:
-> On Mon, 2026-07-13 at 13:05 +0800, Shung-Hsi Yu wrote:
-> > On Fri, Jul 10, 2026 at 06:27:41PM +0800, sun jian wrote:
-> > [...]
-> > > One detail about the attach-time check: I agree that some negative-offset
-> > > constructions can still be rejected later if the max_tp_access accounting
-> > > produces a large value. But the runtime reproducer I used exercises this
-> > > specific access:
-> > > 
-> > >     r6 = *(u64 *)(r1 + 0)
-> > >     r6 += -8
-> > >     *(u64 *)(r6 + 0) = 0
-> > > 
-> > > Here reg->var_off.value is (u64)-8, off is 0, and size is 8. With the current
-> > > accounting,
-> > >     reg->var_off.value + off + size
-> > > wraps to 0. So max_tp_access records 0 and the attach-time writable_size check
-> > > does not reject it, even though the effective access starts at -8.
-> > 
-> > Yes, that should had been rejected.
-> > 
-> > > On the bpf base without the verifier fix, the temporary reproducer did load
-> > > and attach successfully:
-> > >     negative_bpf_load: PASS
-> > >     negative_raw_tp_open: PASS
-> > >     negative_test_run: PASS
-> > > and KASAN reported the stack-out-of-bounds write in ___bpf_prog_run.
-> > > 
-> > > So for this particular range, this looks like more than a load-time policy
-> > > difference: the missing lower-bound check leaves the access executable on the
-> > > bpf tree.
-> > 
-> > Actually I got this reproduced in the *bpf-next* tree now. And I think I
-> > know why Eduard wasn't able to reproduce the issue.
-> > 
-> > The main problem was that CONFIG_BLK_DEV_NBD was not enabled in the
-> > default BPF selftests configuration, so nbd_send_request wasn't
-> > available, and thus the attachment always fail with -2 without
-> > exercising the checks that we have in bpf_probe_register().
-> > 
-> > With CONFIG_BLK_DEV_NBD enabled, and negative_var_off_program[] updated
-> > to do use offset of 0 (instead of 28 + 8), I was able to reproduce the
-> > issue on top of commit `9a3a07d06e7d` "Merge branch
-> > 'bpf-fix-warning-in-bpf_trampoline_multi_detach'" with the following
-> > updated version of your patch.
-> > 
-> >   0: R1=ctx() R10=fp0
-> >   0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
-> >   1: (07) r6 += -8                      ; R6=tp_buffer(imm=-8)
-> >   2: (79) r0 = *(u64 *)(r6 +0)          ; R0=scalar() R6=tp_buffer(imm=-8)
-> >   3: (95) exit
-> >   processed 4 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-> >   tp_fd: 8
-> >   check_nbd_attach_reject:FAIL:nbd_invalid_negative_var_off unexpected nbd_invalid_negative_var_off: actual 8 >= expected 0
-> >   #319     raw_tp_writable_reject_nbd_invalid:FAIL
-> > 
-> > So I would say a fixes tag that points to 022ac0750883 is still needed
-> > after all.
-> 
-> Hi Shung-Hsi, Sun,
-> 
-> Shung-Hsi, thank you for figuring out the quirk with the config.
-> Indeed if I modify the test to be config independent the following
-> program is both accepted at load and attached:
-> 
->   *r6 = *(u64 *)(r1 +0)
->   r6 += -8
->   r0 = *(u64 *)(r6 +0)
-> 
-> Worse yet, the mechanism affects both PTR_TO_TP_BUFFER and PTR_TO_BUF.
-> The PTR_TO_BUF is reachable from helpers/kfuncs with custom 'size' assignments,
-> as far as I understand.
-> 
-> Sun, of checks added by this patch:
-> 
-> >	var_off = (s64)reg->var_off.value;
-> >	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF)
-> 
-> This should hold already.
+Manish Honap wrote:
+[..]
+> > > vfio_pci_cxl_acquire() implements the bind sequence:
+> > >
+> > >   - pcie_is_cxl() and CXL Device DVSEC discovery (-ENODEV if absent=
 
-FWIW, I had thought so, but after checking I realize that the verifier
-only ensure that
+> > >     or if MEM_CAPABLE clear =E2=80=94 caller falls back to plain vf=
+io-pci)
+> > >   - devm_cxl_dev_state_create() with struct vfio_pci_cxl_state
+> > >     embedding cxl_dev_state at offset 0 (required by the 7-arg
+> > >     macro's static_assert in include/cxl/cxl.h)
+> > >   - pci_enable_device_mem(), cxl_pci_setup_regs(), cxl_get_hdm_info=
+()
+> > >     (rejecting hdm_count !=3D 1), cxl_regblock_get_bar_info(),
+> > >     cxl_await_range_active()
+> > =
 
-  -BPF_MAX_VAR_OFF < smin < BPF_MAX_VAR_OFF
+> > The cover letter claims otherwise:
+> > =
 
-holds true in check_reg_sane_offset_{scalar,ptr}(), and does not check
-smax, so technically var_off.value can be greater than BPF_MAX_VAR_OFF
-when we reach here, just that it doesn't really matter much as it is
-rejected anyway. And if it is a constant then smin=smax, so for a
-constant value it does always falls between +-BPF_MAX_VAR_OFF.
+> >   "- cxl_await_range_active stays in cxl-core probe; not exported, vf=
+io
+> >   does not call it."
+> > =
 
-  0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
-  1: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
-  2: (bf) r2 = r0                       ; R0=scalar(id=1) R2=scalar(id=1)
-  3: (67) r2 <<= 32                     ; R2=scalar(smax=0x7fffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000))
-  4: (77) r2 >>= 32                     ; R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
-  5: (07) r2 += 536870911               ; R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
-                /* r2 is now [2^29 - 1, 2^32 + 2^29 - 2] */
-  6: (0f) r6 += r2
-  7: R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff)) R6=tp_buffer(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
-  7: (79) r0 = *(u64 *)(r6 +0)
-  R6 invalid variable buffer offset: off=0, var_off=(0x0; 0x1ffffffff)
+> > It's exported in 2/ and called below.
 
-In short, it is much simpler to just check tnum_is_const() right away
-before using var_off.value.
+This feels like a gap on the CXL side. devm_cxl_probe_mem() should take
+care to only succeed after memory is active, or fail with a timeout.
 
-> >	start = var_off + off;
-> >	if (start < 0)
-> 
-> This one is necessary.
-> 
-> >	if (size < 0) {
-> 
-> Technically this one is bounded by 1,2,4,8 in case of instructions and
-> by BPF_MAX_VAR_SIZ in case of a helper/kfunc (see check_mem_size_reg()).
+Recall that the current cxl_await_range_active() export is for the
+"internal" cxl_pci driver. Now that there are external consumers
+devm_cxl_probe_mem() should return a fully validated and awaited memory
+range. Do not make every driver remember this part of the setup flow.
 
-Oh right, missed the check_mem_size_reg() case. But as Eduard said, this
-should still be bounded, so can drop this check.
+> > >   - devm_cxl_passthrough_create() to snapshot the DVSEC body, HDM
+> > >     block, and CM cap-array shadows owned by cxl-core
+> > >   - pci_disable_device() =E2=80=94 clears PCI_COMMAND_MASTER but NO=
+T
+> > >     PCI_COMMAND_MEMORY, so cxl-core MMIO accesses from the next ste=
+p
+> > >     still succeed
+> > >   - devm_cxl_probe_mem() to register the cxl_memdev, enumerate the
+> > >     endpoint port, and attach the firmware-committed autoregion
+> > >   - request_mem_region() + memremap_wb() of the autoregion's HPA so=
 
-[...]
+> > >     the HDM VFIO region can serve guest accesses through it
+> > =
+
+> > How does this interact with:
+> > =
+
+> >  - The device making use of low power states while idle
+> >  - Repeatability per tenant instance
+> >  - Protection of tenant data per instance
+> > =
+
+> > The culmination of all of these, plus the basic housekeeping of
+> > maintaining the lightest touch on the device, including keeping the
+> > device in the minimum state of functionality outside of an actual use=
+r,
+> > is why I would expect to perform acquire/release as part of open/clos=
+e.
+> =
+
+> The cover letter description is wrong. During my earlier thought proces=
+s,
+> creating a region during probe seemed a correct option as any later req=
+uirement
+> where region needs to be already created at probe emerged, we will have=
+ easier
+> way to handle it. I will give some more thought to update v4 to acquire=
+
+> CXL state in open_device() and release it in close_device(), matching z=
+pci.
+
+This is going to run up against a current design wart of
+devm_cxl_probe_mem() that does not have a teardown flow implemented
+outside of the typical ->remove() to devres_release_all() flow. Even if
+that was fixed I do not see it affecting the listed concerns.
+devm_cxl_probe_mem() for firmware committed decoders is mostly just
+reading resource values.
+
+For power state management the power management that vfio-pci performs
+only informs the CXL.io portion of device power. CXL.cache and CXL.mem
+are dynamically managed by the device.
+
+For repeatability I do think discarding and reinitializing the shadow
+configuration makes sense, but the base HDM configuration does not
+require teardown.
+
+For tenant data protection that arises from the data retention after
+reset policy, not impacted by unloading the HDM configuration.
+
+I assume VFIO likely would want to build a capability to zero HDM memory
+if the device leaves the state ambiguous / implementation defined?
+
+That is a good note for the CXL Reset series as well. If VFIO issued
+resets are for tenant handoff the make sure that CXL Reset requests
+memory clearing.
