@@ -1,198 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0634E1C861D;
-	Tue, 14 Jul 2026 04:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2211613D886
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 04:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784003527; cv=none; b=Mwzfx+pdeahVFwQ+3hqDGN/nSpu2yXiLavuSXEAVRFiAfPAsbgJfGQPUX5IOS1M2s3w0AxjQuUDFoNvxHI/HCkZzyhRLpu6LRP++qcP2OAJAYAX162V+dHEQQctnkeumFAbsu1jaxB2EcTpPmjRIzL9nflvyDH3gOoMNMvk/X00=
+	t=1784004007; cv=none; b=bvoUOIXZnqF5izdv1E3mK3fBDVtlnSbeQ1kwKXou0BCcV4/cflXfYQN1dPNxd6imOk9D+2ZtGYnPz+Ks2/hIDEYAtMdfVz3/eg8r0scMq4wMXoUU0KUgVt4AcbFy3kEfuuPFQS74AeseRSnyBiArreFkJN9tdPHqFtLfXghv2r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784003527; c=relaxed/simple;
-	bh=XM7VGBlv67NNumr+kynwEza1GVf1p/tMWmPt/JIhuv8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=p0ro9gcsHzPx6CUDdM+UliNoFP3oEVmcmN1oH31YGOwrNfQjFtDF54SSx9OMSJGYPHyiUyVNT1lxAEU0dBn2tzV318rYAg7ts1kRaQzKgy0px1o2eCzuGOkHtHkrpZ55a2QPMZi2AULSQedve+k9x73WO2My/ZWGxlRWTyozFAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cw28kQU9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784004007; c=relaxed/simple;
+	bh=9qVrGhPdhq9FjsNNSsb71bZv8WukBF3ygKxpSD8P4E8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h9XY+YDJnDCpAYuMa1r+nbFnVt4PYtkFldBNVxRSzHfWXoQLs0yMpOT2HGiTG416JWI1UwD9AJ9/GXKbDbxQPP+t92F5yN+NociHHAxVEyqXM75bMlG4BmcH20PdMo5HLkGLr3TP2t/wnqkZc9Wmwyv5eZLdQC75C6J3IWKmcWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=EbS3oRv5; arc=none smtp.client-ip=185.125.188.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cw28kQU9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB3B1F000E9;
-	Tue, 14 Jul 2026 04:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784003525;
-	bh=ICf9OHjwxFwehYXqEt5J3kn7A2kZgUciQx2f6MzCt2Y=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Cw28kQU9Q7qkkxmx6Z3DSxUWp63+4DGC3B5EAGwfpBGLONzWJ9AYjB0Y1Ot2C7MMw
-	 u5rUj6mfq4a+VcnGUPNjmu3Wyk7/PKVPIUs5+/eo9GGokw00Z5qbahr/WiOTGQP86N
-	 yMIFEKhTmaslxb/GYbDUhHPMRoDe2dK52XxYo6ez65monSOWUOxOBTWSrHt2dvmJti
-	 coXk0WnF2HWBB49mncjS7SmCWRA9r94d/t2F7heWX/M4kU+gWt88oLDiK6TUKf13qH
-	 sKBkvoKgEbTIyXnPZNNIYXQCUn6Q1EMz4PapA3yQJN6NjlQiiD0ykPSnmFeGvtbxAP
-	 YUGVYtNTyZGig==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 4EC2FF40078;
-	Tue, 14 Jul 2026 00:32:04 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Tue, 14 Jul 2026 00:32:04 -0400
-X-ME-Sender: <xms:xLtVarN6dk6rsOmCkO-hvq2gJutn2hmcYU2JOjSRSc0fi3AkkOV9ew>
-    <xme:xLtVaq0DBDSAFo0Y760y9W7A4ziv7FNxyEMR1Ly7CC_JlHyw73eHHkuE0DMVm_n1x
-    TeMCHOKzqdfWkwAV63jdG_QgaxiUJh7wsgWcIRfzFK2y-GaAZyxJIs>
-X-ME-Received: <xmr:xLtVan0Pq4IxK_mW93Uam745vAuJ2f_c89w59gk_tIIS9-eAVoiO639-v9Vb-YCv3RR1fhYhXw46W-rY0bI5hNWZAb4sImHT9ao>
-X-ME-Proxy-Cause: dmFkZTETAL60usH4lwlQ+4JamyiGMB40vHl7RgBXxsRW+Q/t46XOvYKxjtcqB7DgAdPC6i
-    zMIujK7PY4sEwXxazD+cu/TeVDF4gGUKmmd54dtA25ch6rGoXJwCupkApom8abyimHWxjk
-    DLdaPpsTwRaHCE++9rktMWDjVDFmr6CU0Jm7oQH94vJ7v+mplgl45VZFu0bVcmqSldtmyP
-    TsPb5ggmXk5spRxfJAiNTZnPUydufMtrYp4tqcSf/n46+m3l7r38cEHazhwn6Qp7DP25OL
-    +7gmDJ3RA06dy6rPvT8Slk3sgoDnnQ42j+hY5zYQVGCGqQspCGSx7XiOjPEtOtzmpVcxbM
-    sxpp+PgECi1Nk6EOwSE5+G77XfTW+06KOFWMcYwxpsclj/vLEOOGfHjhEgQtQFRjAsmBq1
-    nz0rZySu2yEuP/cuXXREFPtFMgH07FMuR3pMx57MagjZ4O+loKKKSoNHSPcieSeJ5/HZ6S
-    hL7IRiKeWLeEuHKkbK7NktIMhi89NtiFQZw9e7Nt9G4HsFIJW3kpfnAgqzFOnHxsva95hS
-    ssbW7ZxM53LmT9XKcEr50YysPX0vTrRoxmSGzMq16mukrhzOEBRx6jRmrY5j3iYbbvaFZe
-    V0B3jQYtoJ58Zt7Wqu5UJn8rTsTND9kyp3b7TO/B8nNfcJPnZi0TK1Mem4bA
-X-ME-Proxy: <xmx:xLtVahy2ngywLag-bMOt0yjyZRXwzIkHthZsohlCWRjaN92gSyj23A>
-    <xmx:xLtVaikLSb0O6jdVHHApcpNpF9jpnWGMImdDuINYgaQtAWqL5qE1cA>
-    <xmx:xLtVatzdFt6uVf1Kd6-ggDleOTtMVSJ_r4dg92V5tJ2S53s2ryETsg>
-    <xmx:xLtVapJenbLv68dmWS4szRfchpH2gaL2c3Rl2STOKCitqmiivYnw2w>
-    <xmx:xLtVagKBbKwjiBvK_qMG6wu9fLclvcCKO5KvhGBOnRpLAcnWoYdg7qjy>
-Feedback-ID: i67ae4b3e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jul 2026 00:32:03 -0400 (EDT)
-Date: Mon, 13 Jul 2026 21:32:02 -0700
-From: "Dan Williams (nvidia)" <djbw@kernel.org>
-To: Manish Honap <mhonap@nvidia.com>, 
- Alex Williamson <alex@shazbot.org>
-Cc: "djbw@kernel.org" <djbw@kernel.org>, 
- "jgg@ziepe.ca" <jgg@ziepe.ca>, 
- "jic23@kernel.org" <jic23@kernel.org>, 
- "dave.jiang@intel.com" <dave.jiang@intel.com>, 
- Ankit Agrawal <ankita@nvidia.com>, 
- "alejandro.lucero-palau@amd.com" <alejandro.lucero-palau@amd.com>, 
- "alison.schofield@intel.com" <alison.schofield@intel.com>, 
- "dave@stgolabs.net" <dave@stgolabs.net>, 
- "dmatlack@google.com" <dmatlack@google.com>, 
- "gourry@gourry.net" <gourry@gourry.net>, 
- "ira.weiny@intel.com" <ira.weiny@intel.com>, 
- Neo Jia <cjia@nvidia.com>, 
- Krishnakant Jaju <kjaju@nvidia.com>, 
- Vikram Sethi <vsethi@nvidia.com>, 
- Zhi Wang <zhiw@nvidia.com>, 
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
- "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>, 
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
- Manish Honap <mhonap@nvidia.com>
-Message-ID: <6a55bbc276b96_f7ebd100e4@djbw-dev.notmuch>
-In-Reply-To: <IA1PR12MB90309355D97FE886A1DA77BABDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-References: <20260625165407.1769572-1-mhonap@nvidia.com>
- <20260625165407.1769572-8-mhonap@nvidia.com>
- <20260710162316.29cf8107@shazbot.org>
- <IA1PR12MB90309355D97FE886A1DA77BABDFA2@IA1PR12MB9030.namprd12.prod.outlook.com>
-Subject: RE: [PATCH v3 07/11] vfio/pci: Add CONFIG_VFIO_PCI_CXL with bind-time
- CXL Type-2 acquisition
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="EbS3oRv5"
+Received: from hwang4-g16.DHCP (unknown [58.248.157.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7F36B40373;
+	Tue, 14 Jul 2026 04:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1784003477;
+	bh=Gi0KRZCr7B+KqdLo/T8hwC2wZEnpSHWjct+XZQ6HPwM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=EbS3oRv5AWR9hZU3JpzBgp7gMoSMfw4y/wItycZ5pi6/8h7p4/Qb65NN6KhIcw/i0
+	 /pY9IbAlocArtUIV/+cWdOlHuBK+4dtWfTiVcr/qMJa0yX2LAakkUhpEHdkBChpekC
+	 fFqdcB+8J5LlQ+E76uxrst6JCLy2LnzTbHwSm4YtC5sSSBRP29MXrMY8aDqMhfp0nt
+	 6C0L6sgZkEHSi+GCMPDfRdIJ85Tdkq9JD62cAj8w/CXxIZuAUhbbOHWiKo0ipBwXmZ
+	 Zou3FWJ4gwDCRrMhKD7ycdUOOjiRTjEFh4tvdWoTAMpJtT9xsu2ro2k2tXt9l/kHBg
+	 +fXVty4PavAz0aOwnbllF1me99glKuKhm2ErnaIJFGv9y6D/2veHmpmkcd048cosL5
+	 9JOAGca8BDalfXSU+kCg7gW7zMyRvk8ucZ3YauhKr16X7B8u4s08Y8XsmkDL38uCc9
+	 fgOoF5jWiDkJbQ6Bhz2ufN/ig4/5tTxxJfB375k3KIirIN4OLRY1LmE/B6rLslwm80
+	 GiqjAv1Z9LmIVcSkllqwkj2IHvtHBCsvEcXoB6DQkF4/hEfaO4WZATk13LdQaXrV94
+	 LUZz69cWkAsqR4N7y9EXv/2NlPsGfo+me+EF4uKmyuAtvbXZ6tIX0bUWtoYrvREj3q
+	 Biez+F549EY7NDxFV9ET2U2g=
+From: Hui Wang <hui.wang@canonical.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	shuah@kernel.org,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	debug@rivosinc.com,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: hui.wang@canonical.com
+Subject: [PATCH] kselftest/riscv: Improve building under native riscv64 environment
+Date: Tue, 14 Jul 2026 12:31:08 +0800
+Message-ID: <20260714043108.24114-1-hui.wang@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Manish Honap wrote:
-[..]
-> > > vfio_pci_cxl_acquire() implements the bind sequence:
-> > >
-> > >   - pcie_is_cxl() and CXL Device DVSEC discovery (-ENODEV if absent=
+When we build the kselftest natively, we usually don't pass an ARCH=
+parameter. In this case if I build kselftest/riscv under a riscv64
+environment, the testcase will not be built at all because 'uname -m'
+returns riscv64 instead of riscv.
 
-> > >     or if MEM_CAPABLE clear =E2=80=94 caller falls back to plain vf=
-io-pci)
-> > >   - devm_cxl_dev_state_create() with struct vfio_pci_cxl_state
-> > >     embedding cxl_dev_state at offset 0 (required by the 7-arg
-> > >     macro's static_assert in include/cxl/cxl.h)
-> > >   - pci_enable_device_mem(), cxl_pci_setup_regs(), cxl_get_hdm_info=
-()
-> > >     (rejecting hdm_count !=3D 1), cxl_regblock_get_bar_info(),
-> > >     cxl_await_range_active()
-> > =
+    make -C tools/testing/selftests TARGETS=riscv
+    make: Entering directory 'linux/tools/testing/selftests'
+    make[1]: Entering directory 'linux/tools/testing/selftests/riscv'
+    make[1]: Leaving directory 'linux/tools/testing/selftests/riscv'
+    make: Leaving directory 'linux/tools/testing/selftests'
 
-> > The cover letter claims otherwise:
-> > =
+This issue can be fixed by getting ARCH from scripts/subarch.include,
+whose SUBARCH normalizes 'riscv64' to 'riscv'. This also aligns with
+how other selftests (e.g. arm64, x86) already resolve ARCH.
 
-> >   "- cxl_await_range_active stays in cxl-core probe; not exported, vf=
-io
-> >   does not call it."
-> > =
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+---
+ tools/testing/selftests/riscv/Makefile | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> > It's exported in 2/ and called below.
+diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
+index 5671b4405a12..43eddb919705 100644
+--- a/tools/testing/selftests/riscv/Makefile
++++ b/tools/testing/selftests/riscv/Makefile
+@@ -1,8 +1,12 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Originally tools/testing/arm64/Makefile
+ 
++# A proper top_srcdir is needed by KSFT(lib.mk)
++top_srcdir = $(realpath ../../../../)
++
+ # When ARCH not overridden for crosscompiling, lookup machine
+-ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++include $(top_srcdir)/scripts/subarch.include
++ARCH ?= $(SUBARCH)
+ 
+ ifneq (,$(filter $(ARCH),riscv))
+ RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector cfi
+@@ -12,9 +16,6 @@ endif
+ 
+ CFLAGS := -Wall -O2 -g
+ 
+-# A proper top_srcdir is needed by KSFT(lib.mk)
+-top_srcdir = $(realpath ../../../../)
+-
+ # Additional include paths needed by kselftest.h and local headers
+ CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+ 
+-- 
+2.43.0
 
-This feels like a gap on the CXL side. devm_cxl_probe_mem() should take
-care to only succeed after memory is active, or fail with a timeout.
-
-Recall that the current cxl_await_range_active() export is for the
-"internal" cxl_pci driver. Now that there are external consumers
-devm_cxl_probe_mem() should return a fully validated and awaited memory
-range. Do not make every driver remember this part of the setup flow.
-
-> > >   - devm_cxl_passthrough_create() to snapshot the DVSEC body, HDM
-> > >     block, and CM cap-array shadows owned by cxl-core
-> > >   - pci_disable_device() =E2=80=94 clears PCI_COMMAND_MASTER but NO=
-T
-> > >     PCI_COMMAND_MEMORY, so cxl-core MMIO accesses from the next ste=
-p
-> > >     still succeed
-> > >   - devm_cxl_probe_mem() to register the cxl_memdev, enumerate the
-> > >     endpoint port, and attach the firmware-committed autoregion
-> > >   - request_mem_region() + memremap_wb() of the autoregion's HPA so=
-
-> > >     the HDM VFIO region can serve guest accesses through it
-> > =
-
-> > How does this interact with:
-> > =
-
-> >  - The device making use of low power states while idle
-> >  - Repeatability per tenant instance
-> >  - Protection of tenant data per instance
-> > =
-
-> > The culmination of all of these, plus the basic housekeeping of
-> > maintaining the lightest touch on the device, including keeping the
-> > device in the minimum state of functionality outside of an actual use=
-r,
-> > is why I would expect to perform acquire/release as part of open/clos=
-e.
-> =
-
-> The cover letter description is wrong. During my earlier thought proces=
-s,
-> creating a region during probe seemed a correct option as any later req=
-uirement
-> where region needs to be already created at probe emerged, we will have=
- easier
-> way to handle it. I will give some more thought to update v4 to acquire=
-
-> CXL state in open_device() and release it in close_device(), matching z=
-pci.
-
-This is going to run up against a current design wart of
-devm_cxl_probe_mem() that does not have a teardown flow implemented
-outside of the typical ->remove() to devres_release_all() flow. Even if
-that was fixed I do not see it affecting the listed concerns.
-devm_cxl_probe_mem() for firmware committed decoders is mostly just
-reading resource values.
-
-For power state management the power management that vfio-pci performs
-only informs the CXL.io portion of device power. CXL.cache and CXL.mem
-are dynamically managed by the device.
-
-For repeatability I do think discarding and reinitializing the shadow
-configuration makes sense, but the base HDM configuration does not
-require teardown.
-
-For tenant data protection that arises from the data retention after
-reset policy, not impacted by unloading the HDM configuration.
-
-I assume VFIO likely would want to build a capability to zero HDM memory
-if the device leaves the state ambiguous / implementation defined?
-
-That is a good note for the CXL Reset series as well. If VFIO issued
-resets are for tenant handoff the make sure that CXL Reset requests
-memory clearing.
