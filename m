@@ -1,15 +1,16 @@
 Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A980409635;
-	Tue, 14 Jul 2026 09:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9869C3EE1C0;
+	Tue, 14 Jul 2026 09:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784022097; cv=none; b=G/PT9bN87Dm+jcBER7/uuybMuhzzzWfqF0HvmK4PSj537cQq6rwreEHQmLt/YoGHd+kBvxGueo9aEX3GoDA9s3faDnhwTOkLlbM8k2ArdWzuvdiAIfvNR+IXGhh4KrA8bLyoj4L2YxONy0l3dSpPvWcDrc9dzHJVvAEY9TZq+mQ=
+	t=1784022097; cv=none; b=f7ZyBGTkF4OEyjz5s8/n0JRj/UJ/pX+Xhc2GjRgTCNUe8SrW07lCiD5lEo+YiAoEfiFZl8A3lgTCMA4AGqdvnG2Wf4acmXBd2RBs3HC3Mu0FcPt79UWv+QwJEnijpM9KRYzysIWOFxDhwLQIas0O49aVYbYCsZpSIHN2Kn78qSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784022097; c=relaxed/simple;
-	bh=abX2ieiikA0TbFT1zTqvQszUwOCUtRg1p/sBZP+bufo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HSQiEyqVsgSUVLt3Mas8Sf2FH6+K3LFhXlve1Dv1fxzR+sMkyROlKTYzREgKaoMH/ZOths0ll2LaHAjPDGOScvSdXkI4tDxcBbw6Y/4zYrOpvwANCvm8zVCrU/+Sug9/GCiHtlZad4kUJ+rIn0ZGxFVkMRFcZfMJX3HF2tPkha4=
+	bh=lfrCeaqTmCJ2tP3X9wDmq7RPLxjm4JWDEbDGgIWt6Fc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QTKuFKd5iNfAGlRzS/7/YdG4adHwExG0kooo7cPbNjE1T3sCuLE+o23Lx6G7HzysfeSHFqIBrMcVWqzVhe+BbNzuKi/dr5lV2t1vilHfIb6KdlFxkszObsNb/DKyy0JyA4j4OFB1cspgssmkeBn9qftF20xi08YkeHVdLz8XIuQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
@@ -17,12 +18,12 @@ Received: from nat-wifi0.uniroma3.it ([193.204.167.180] helo=alea)
 	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wjZdb-000000022Sj-0MVl;
-	Tue, 14 Jul 2026 11:41:15 +0200
+	id 1wjZdi-000000022Sy-1kNU;
+	Tue, 14 Jul 2026 11:41:22 +0200
 Received: from equinox by alea with local (Exim 4.99.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wjZdE-00000000ZUF-3ffY;
-	Tue, 14 Jul 2026 11:40:52 +0200
+	id 1wjZdL-00000000ZUb-3ZRd;
+	Tue, 14 Jul 2026 11:40:59 +0200
 From: David 'equinox' Lamparter <equinox@diac24.net>
 To: Paolo Abeni <pabeni@redhat.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -39,89 +40,147 @@ Cc: David Ahern <dsahern@kernel.org>,
 	Patrick Rohr <prohr@google.com>,
 	netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 0/9] RFC 6724 rule 5.5 support
-Date: Tue, 14 Jul 2026 11:40:03 +0200
-Message-ID: <20260714094030.136317-1-equinox@diac24.net>
+	linux-kselftest@vger.kernel.org,
+	David 'equinox' Lamparter <equinox@diac24.net>
+Subject: [PATCH net-next 3/9] net/ipv6: create ipv6_fl_get_saddr
+Date: Tue, 14 Jul 2026 11:40:06 +0200
+Message-ID: <20260714094030.136317-4-equinox@diac24.net>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260714094030.136317-1-equinox@diac24.net>
+References: <20260714094030.136317-1-equinox@diac24.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+This adds passing the relevant flow information as well as selected
+nexthop into the source address selection code, to allow the RFC6724
+rule 5.5 code to look at its details.
 
+Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
+---
+ include/net/addrconf.h |  4 ++++
+ net/ipv6/addrconf.c    | 45 +++++++++++++++++++++++++++++++-----------
+ 2 files changed, 38 insertions(+), 11 deletions(-)
 
-this patchset implements RFC6724 rule 5.5.  For the unaquainted:
-
-   Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
-   If SA or SA's prefix is assigned by the selected next-hop that will
-   be used to send to D and SB or SB's prefix is assigned by a different
-   next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
-   assigned by the next-hop that will be used to send to D and SA or
-   SA's prefix is assigned by a different next-hop, then prefer SB.
-
-The way this is done is through IPv6 subtree routes.  If a router
-advertises some prefix in its RA/PIOs, source specific subtree routes
-should be created for the default route (and RIOs) installed as a result
-of processing that RA.
-
-This may initially sound like a weird way to do it, but for one RFC8028
-requires the subtree routes anyway, and also I did try the more obvious
-approaches (explicitly tracking it, putting it on the address, putting
-it on the neighbor entry) and all of them break in some scenarios.
-
-I've put together a selftest, there's also a rather hacky test suite
-created for an IETF hackathon: https://github.com/eqvinox/rule5p5-tests
-(it's not specific to this patchset.)  I've also been dogfooding these
-patches on my personal devices for more than a year.
-
-Rule 5.5 itself has extensive history at the IETF, including changing
-from optional to mandatory in the recent 6724 update.  It is immensely
-useful (really: required) to make multihoming, renumbering and failover
-work.
-
-@Jakub you had previously asked me to resubmit the "prep" patches since
-it was at a poor time (cf. Fri, Jul 25, 2025 at 05:39:58PM -0700).
-(I had tried submitting the preparation bits on its own.)
-
-@Paolo you had looked at the lookup fix:
-On Tue, Nov 11, 2025 at 11:13:30AM +0100, Paolo Abeni wrote:
-> The patch LGTM, and I agree this should go via net-next, given that it's
-> really a corner case and I could miss nasty side-effects.
->
-> It looks like you have some testing scenario handy: it would be great to
-> include it as a paired self-test; could you please add it?
-
-Cheers,
-
-
-equi (David)
-
-
-P.S.: I also happen to be around at netdevconf in Rome, in case anyone
-happens to see this and have questions.  Of course being at a conference
-generally means not looking at random patch mails, so this is mostly
-just in case you see the Subject lines or this cover letter.  Apologies,
-it wasn't possible for me to submit this ahead of the conference.
-
-
-diffstat:
- Documentation/networking/ipv6-addrsel.rst                |  75 ++++++++++++++++++++++++++++++++
- MAINTAINERS                                              |   1 +
- include/net/addrconf.h                                   |   4 ++
- include/net/ip6_route.h                                  |  26 ------------
- net/ipv6/Kconfig                                         |  18 ++++++--
- net/ipv6/addrconf.c                                      | 144 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
- net/ipv6/ip6_fib.c                                       |   5 ++-
- net/ipv6/ip6_output.c                                    |  26 +++++++++---
- net/ipv6/route.c                                         |  16 +++++--
- tools/testing/selftests/net/Makefile                     |   1 +
- tools/testing/selftests/net/config                       |   1 +
- tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py | 231 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 12 files changed, 497 insertions(+), 51 deletions(-)
+diff --git a/include/net/addrconf.h b/include/net/addrconf.h
+index 8ced27a8229b..7bc0711b8717 100644
+--- a/include/net/addrconf.h
++++ b/include/net/addrconf.h
+@@ -142,6 +142,10 @@ struct inet6_ifaddr *ipv6_get_ifaddr(struct net *net,
+ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dev,
+ 		       const struct in6_addr *daddr, unsigned int srcprefs,
+ 		       struct in6_addr *saddr);
++int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst,
++		      const struct net_device *dst_dev,
++		      const struct sock *sk, unsigned int srcprefs,
++		      struct flowi6 *fl6);
+ int ipv6_get_lladdr(struct net_device *dev, struct in6_addr *addr,
+ 		    u32 banned_flags);
+ bool inet_rcv_saddr_equal(const struct sock *sk, const struct sock *sk2,
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index f1fe9ede1edb..0ba46ed518a9 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -1542,7 +1542,9 @@ struct ipv6_saddr_score {
+ };
+ 
+ struct ipv6_saddr_dst {
+-	const struct in6_addr *addr;
++	const struct flowi6 *fl6;
++	const struct dst_entry *dst;
++	const struct sock *sk;
+ 	int ifindex;
+ 	int scope;
+ 	int label;
+@@ -1619,7 +1621,7 @@ static int ipv6_get_saddr_eval(struct net *net,
+ 		break;
+ 	case IPV6_SADDR_RULE_LOCAL:
+ 		/* Rule 1: Prefer same address */
+-		ret = ipv6_addr_equal(&score->ifa->addr, dst->addr);
++		ret = ipv6_addr_equal(&score->ifa->addr, &dst->fl6->daddr);
+ 		break;
+ 	case IPV6_SADDR_RULE_SCOPE:
+ 		/* Rule 2: Prefer appropriate scope
+@@ -1697,11 +1699,11 @@ static int ipv6_get_saddr_eval(struct net *net,
+ 		 *	    non-ORCHID vs non-ORCHID
+ 		 */
+ 		ret = !(ipv6_addr_orchid(&score->ifa->addr) ^
+-			ipv6_addr_orchid(dst->addr));
++			ipv6_addr_orchid(&dst->fl6->daddr));
+ 		break;
+ 	case IPV6_SADDR_RULE_PREFIX:
+ 		/* Rule 8: Use longest matching prefix */
+-		ret = ipv6_addr_diff(&score->ifa->addr, dst->addr);
++		ret = ipv6_addr_diff(&score->ifa->addr, &dst->fl6->daddr);
+ 		if (ret > score->ifa->prefix_len)
+ 			ret = score->ifa->prefix_len;
+ 		score->matchlen = ret;
+@@ -1819,9 +1821,10 @@ static int ipv6_get_saddr_master(struct net *net,
+ 	return hiscore_idx;
+ }
+ 
+-int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+-		       const struct in6_addr *daddr, unsigned int prefs,
+-		       struct in6_addr *saddr)
++int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst_entry,
++		      const struct net_device *dst_dev,
++		      const struct sock *sk, unsigned int prefs,
++		      struct flowi6 *fl6)
+ {
+ 	struct ipv6_saddr_score scores[2], *hiscore;
+ 	struct ipv6_saddr_dst dst;
+@@ -1832,11 +1835,13 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+ 	int hiscore_idx = 0;
+ 	int ret = 0;
+ 
+-	dst_type = __ipv6_addr_type(daddr);
+-	dst.addr = daddr;
++	dst_type = __ipv6_addr_type(&fl6->daddr);
++	dst.fl6 = fl6;
++	dst.sk = sk;
++	dst.dst = dst_entry;
+ 	dst.ifindex = dst_dev ? dst_dev->ifindex : 0;
+ 	dst.scope = __ipv6_addr_src_scope(dst_type);
+-	dst.label = ipv6_addr_label(net, daddr, dst_type, dst.ifindex);
++	dst.label = ipv6_addr_label(net, &fl6->daddr, dst_type, dst.ifindex);
+ 	dst.prefs = prefs;
+ 
+ 	scores[hiscore_idx].rule = -1;
+@@ -1911,11 +1916,29 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+ 	if (!hiscore->ifa)
+ 		ret = -EADDRNOTAVAIL;
+ 	else
+-		*saddr = hiscore->ifa->addr;
++		fl6->saddr = hiscore->ifa->addr;
+ 
+ 	rcu_read_unlock();
+ 	return ret;
+ }
++EXPORT_SYMBOL(ipv6_fl_get_saddr);
++
++int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
++		       const struct in6_addr *daddr, unsigned int prefs,
++		       struct in6_addr *saddr)
++{
++	struct flowi6 fl6;
++	int ret;
++
++	memset(&fl6, 0, sizeof(fl6));
++	fl6.daddr = *daddr;
++
++	ret = ipv6_fl_get_saddr(net, NULL, dst_dev, NULL, prefs, &fl6);
++	if (!ret)
++		*saddr = fl6.saddr;
++
++	return ret;
++}
+ EXPORT_SYMBOL(ipv6_dev_get_saddr);
+ 
+ static int __ipv6_get_lladdr(struct inet6_dev *idev, struct in6_addr *addr,
+-- 
+2.53.0
 
