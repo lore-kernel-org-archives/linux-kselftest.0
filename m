@@ -1,63 +1,63 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784E747279B
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB974466B69
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784034507; cv=none; b=Q1CXyzynxA2GDLsP04CVxLkzfVco01R/Uo6Qgasc6FLJaXWB4KLfK3MYOcaIuk02RmFPjyxqj4lDgB2ZpoomOOfHVDOvnYhJOleyZP0+txmTZFCjX3pl/JxcxuGQ6EXb+fbgdlavtLLFzOsycLImT0hrwaCCH49YfgHc6SDuxyw=
+	t=1784034520; cv=none; b=iVzJXqKKNGhOiITLkF5mgqVnWdyPrnvqShigEqX7ZYOycY3/wa/rn6r6FC3Xr+Fe4QWh43PQ4/ZI5j7Fy3uwf4LVNJcX5Uk0AqjbBMm9+/sCR6jcmnQahAJM2+L+e0/Mri9tSkxjnQ5cRra/De9T5Rr/4F3lByM+R07ndr4igms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784034507; c=relaxed/simple;
-	bh=88hFgKCg+bUuFow9gcc2rzIqGEA2+sQ8+uzIG1WjY5E=;
+	s=arc-20240116; t=1784034520; c=relaxed/simple;
+	bh=5Y43Y7fyHYZyPGuirU3OoYI1Mwv1k+B9YukPppo9vUM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sGlHTkJxheNcjmVz+cBs26UYjXS6xFjkfVVrCPH/8KCui3p2O07/OaL1RpG0tXsYtiIqkC/FQ4Qv69znQgHSdO/Lt7eZWGnRw8eETDPSHTES/hDW1WyjyNrw7ZFaHgrgnb0Z8KFjTaWjdwObW0VNcYttnREUUN9hqXAWDCgbdKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=JhoqJraW; arc=none smtp.client-ip=209.85.210.48
+	 MIME-Version; b=e+gMfxbmywpFOh7J2xT59xfqwoPg/UkXtTB7rBwALMp4w6aGsboPme9Fo3Zc2WZx91Dbh2haGreoZiPGb2dytbsL9QXJZ7LDd2U/cZHABjcTLCIslFErefRNy4XDez38uWJZRcwuqv2PlFAW71+nSZ6zN3+RrIR8MArX7AF0ALs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=aHJRZvhM; arc=none smtp.client-ip=209.85.210.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="JhoqJraW"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7ec49608332so196595a34.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 06:08:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="aHJRZvhM"
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7ec1e9d3359so1283985a34.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 06:08:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1784034504; x=1784639304; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1784034516; x=1784639316; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0MZi7cORh66e/+tuz0lS/dEufQyLW2u/I7nsyx5ACQE=;
-        b=JhoqJraWwbSfQTOjo0oznYZNpmDNhAiy/r6HZRTPyF+CdqMfenm5c/A/JvYkH9psOR
-         Vgf+90E88B2SXXxJDXYdss5dU8Ag2JW96MK0cPmP2JltbwLO4qX8YAKQlGnruIeGMr8T
-         kp0JYI1zx3rgy4UeBzqEAUtVyDBa9O9081OyVKHSBYZ5KvbroPJz5rtvDy/+5MBk512H
-         0ENXJr6fZFxetNGDDUAI9l4dEcOO1APo+aXabh7T2GGc7ScVLNP68g+Oxqiyw31bOF4t
-         B4G1PDvdwmiZMNE7QzsbJwwAqqAs6pwu0f3D43RxMoGqm6sqCJLme7utXF4Cn9mN6/on
-         91yA==
+        bh=emzLt0cm2On/W2Ip4YweG2bRFCgDp+q5PQrHqypf35c=;
+        b=aHJRZvhMwBpG2iZPPm5KYoM8YtLkws5inCZR6EdnsR3rQ0+Z6gmsT/tHYgDJ32YRi1
+         cINQDkgdNMFKgqOdokd38eXmJQJWK+TH/BfUZpWdqh4tnaRyYZ06HMTon58bJaBFJ7nX
+         Ye9MCh3EfNOubt8f8L3QRHWwnAR0wtGlQjoVaa0UkLQ1RzM3hhhKylCIj0MzF17tZxVV
+         KWEDVRwEHbqprjnvJZVot/PsjiArG/ykDTvJV6YTHmzXynPCTPR3ZPsnnSvYIOAq2IuY
+         YM0qc5u0G9Au1sW9Dgs+zYgzQFcyCp02nm0qiu9Ge0hju8eOVJJuwcjzmEnvUX42Y0ZW
+         z3qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784034504; x=1784639304;
+        d=1e100.net; s=20251104; t=1784034516; x=1784639316;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0MZi7cORh66e/+tuz0lS/dEufQyLW2u/I7nsyx5ACQE=;
-        b=QkdRBTEP+OReLmJsmyaz454PVcGfb/pbl+CVKtq/N069tMa9+IAms7oCwZLlm4HNeB
-         m+PXxv7gIfuFDYilk1fDQN+Pkg/O3Hwy4pQ98zN2mMx0OG0MIaEuKak+wk1lhiM3IOkG
-         +qp89n2+vKauoYxYg40bsZmLpelwh9hUyjlFUNelsXHf8966RqkUh8tepVfxMS+nSmv7
-         KO+JRx7kr3zD9iGEyrV0dVVdkYDiBhu9Ak0Ds3g+4hwgwSr2Xla01PJlRC0USYogOGEp
-         Dr4XJ5FOY+TqFetow5Gpo0Lx6RjK8vGIInLXISwAGvkU2CgeEZjL/deWA6/rOOUnDHfe
-         dDOA==
-X-Forwarded-Encrypted: i=1; AFNElJ9CqLzRQtmuzHonfTey9sTBYmY6MRU2WSqRNyEVIKxUFd0hPLPN6OuaaRZacd2qciu/4vYG5pbxv6+icRoVw+A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDl/LDUq8YjoeQsv50rx8UrHMpptxdQU46mZE06LN1srlQE9qa
-	4LxB13/kS2wnYbKxll85hA+nALhrnA2CGnctknRANZRzF7h+vc3hhMolbfUArrOtbvI=
-X-Gm-Gg: AfdE7cl/NaCPub2k+GVo+Qs45WhzHYO5MoOpsLtoemGiYegOokCMbq6jRqTSXB0pKd/
-	6gFkJYF5WBzuXTiciAIU+EjPM+FmHcRBVxeBzBTgxBSJiOgSuvseTNr5wQrD8mSNMVbAG52Y8Bg
-	bV7rOyZT0I2FEyXnd5ltmMKl2mZn6w4oIYDKn97990BwNzzkVVGkBOJ0CfyXIuJLWnBWgIml3oG
-	AoWvagdGyhFFnGZKi8LViQrBl9htMYlzx7Fdv0fDJ5YSrLlBxQqqRzhNFIH3DM5mBLR6Nbw2QNH
-	+8AXr6sRy8Q47vdW3tRiDDarWVnwfSGf9j76OeuF+NRqQnkTWQZ3OE77G4XOYeD0KKS+molRFmr
-	Hu0VrCZnucxvzbzvprCyLf6i4xxFZvu3lkXvdzMbbvBKqjYGzbWUdBkklRhRvBUotpazvCE5n4Z
-	/PHc/1EMcbivW5/hijnfBoCWzPzv45p1IfsGGLznDS0GJBSUWq4Q+tABIjP9Dr8hnC24NujGwd
-X-Received: by 2002:a05:6830:3817:b0:7e1:cbe3:bb1b with SMTP id 46e09a7af769-7ec4a5cda29mr1176418a34.0.1784034503802;
-        Tue, 14 Jul 2026 06:08:23 -0700 (PDT)
+        bh=emzLt0cm2On/W2Ip4YweG2bRFCgDp+q5PQrHqypf35c=;
+        b=BRBtK6CsOA1dxNvBws28qqYhj03klVA2SqV+u0vqMPS7nQRLjJSbCfF3XnccB2sBFW
+         n6cSYYtGuxny7mYhhW4Pxtd0tRPzRSE5acQmQ4ke3V5laRohL8RfC3IaXyosPfm0XWu5
+         w5WS12o/lSmSXGM3kUKeBreGrgyTZ0ZlzxhZ9tjd9yFRiRhurDb6hMJxwDQfFp8Ce2Ly
+         MnRGcJ3Q0hKqd/76CxAnG+wjYwLDsfmU6rqWdLcwI4Jehi5k0mfomeiJUL8kn41iGafs
+         cU9vDJw+Uz2F+7cTBHGnTX1F0eGgIKELhqzda1HyK+hnq44/KTDAdApoZJrxUWiLexCn
+         +/Eg==
+X-Forwarded-Encrypted: i=1; AFNElJ/lolwvSMzFO/b48oyY8mj/mbaBVkEoISf0oajfHziG5Re/tkO1P0s+BZKtiFEbC6enPbk6D6Q9dT8obn23H3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/fgQo70geDRP/p/aG5nDsiTzxNL9xXMcBUb73qGj9FMiLBGoV
+	0f4QQRXPrLPPe9YHdXsuBm9fV3PxbqtxB0PQs9nDPKk0JRo+WeLoWwDIa69LKu84/K0=
+X-Gm-Gg: AfdE7cmkeie+pQbnJrV+xY5DAv1x0c5hyDpvCPLN6ma25SS4t1L+QNx9lx8ozAUPLi6
+	0YSXZC07/3SCffcz6/c49qSSB2MX6XVM6z1fmrifraTM7I0QkMGSODpbslgDI0kQuDpobnt7r0H
+	BU9H1thavw9quCUPs6/PhcQeEeowIlltpOao6s3xNZC0SbgYsbDj8q9QnegdicYsqvVdtxUQaYG
+	DMafo5mjt31GRENIV3h79AKRLPB3LB6OBcz+59xg1VEjCq5Gde7kREpZG4zuHHgT4A8rqlOWFqL
+	ikMiszqoQPTqKF2MkBEI1r/edzdB8tydjmxMyvT8ywQQmLS5jsAMX4ud6kodBE3FPCQr9/PgF7y
+	3WpgqQ3EenL/gEuOhOHwgGV5E+88/T+zecGKv1mdOd0oDyv8Qra5dkKVJjQex5UEUIPXsiuBa3U
+	DUv3YG27zZ4b4lzRb1k8n7sIZl7f2++5dSVEDsQYlpeYWKhUeTg7ebdJCS33y0yw==
+X-Received: by 2002:a05:6830:4884:b0:7e9:b537:102c with SMTP id 46e09a7af769-7ec4239b1acmr2074489a34.25.1784034516373;
+        Tue, 14 Jul 2026 06:08:36 -0700 (PDT)
 Received: from FJ7FR2JRQ3.bytedance.net ([178.93.176.7])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcab8efc3sm14657738a34.0.2026.07.14.06.08.11
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcab8efc3sm14657738a34.0.2026.07.14.06.08.24
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Jul 2026 06:08:23 -0700 (PDT)
+        Tue, 14 Jul 2026 06:08:35 -0700 (PDT)
 From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 To: joro@8bytes.org,
 	palmer@dabbelt.com,
@@ -85,9 +85,9 @@ Cc: will@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [RFC PATCH 6/7] riscv_cbqri: Assign IOMMU groups to resource groups
-Date: Tue, 14 Jul 2026 21:06:56 +0800
-Message-ID: <20260714130657.46963-7-zhangzhanpeng.jasper@bytedance.com>
+Subject: [RFC PATCH 7/7] selftests/iommu: Add RISC-V IOMMU QoS smoke test
+Date: Tue, 14 Jul 2026 21:06:57 +0800
+Message-ID: <20260714130657.46963-8-zhangzhanpeng.jasper@bytedance.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
 References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
@@ -99,551 +99,707 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Allow the resctrl devices file to accept iommu_group:<id> tokens on
-RISC-V and map the target resource group's closid and rmid values to
-RCID and MCID.
+Add a RISC-V IOMMU QoS smoke test for the resctrl devices assignment ABI
+and the per-IOMMU global qosid sysfs attribute.
 
-Record non-default assignments in an RCU-protected binding list rather
-than inferring membership from hardware IDs, which may be shared. Keep a
-parent reference obtained by numeric group lookup so the binding does not
-keep an empty group's devices kobject active, and prune bindings after
-their group becomes inactive.
+Probe for a usable IOMMU group with a non-default child-group assignment
+without disturbing groups already assigned by the system. Cover valid
+assignment and reset, devices-file readback, malformed and missing group
+IDs, strict decimal parsing, tasks-file rejection, group removal and
+pseudo-lock protection, and cleanup before child-group removal.
 
-Publish an explicit UPDATING state while hardware changes. Paging-domain
-attachment rejects that transient state. Static FSC=Bare transitions
-preserve the current IDs so a mandatory release-domain attachment cannot
-fail. After the checked group update succeeds, publish the packed IDs. A
-validation failure restores the previous active state without partially
-changing hardware.
-
-Moving an IOMMU group to the default resource group resets its hardware
-state and removes the software binding. Device contexts created later for
-an assigned group inherit the IDs through the RCU lookup path.
+When the global qosid attribute is present, cover its readback format,
+valid rewrite and restore, malformed input, missing separators, range
+checking, and integer overflow. Keep child-group coverage optional so an
+environment without allocatable resctrl resources can still exercise
+the root IOMMU QoS paths.
 
 Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 ---
- MAINTAINERS                   |   1 +
- arch/riscv/include/asm/qos.h  |  12 ++
- drivers/iommu/riscv/iommu.c   |  70 +++++++--
- drivers/iommu/riscv/iommu.h   |  16 +-
- drivers/resctrl/Kconfig       |   6 +
- drivers/resctrl/Makefile      |   1 +
- drivers/resctrl/cbqri_iommu.c | 276 ++++++++++++++++++++++++++++++++++
- 7 files changed, 369 insertions(+), 13 deletions(-)
- create mode 100644 drivers/resctrl/cbqri_iommu.c
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/iommu/Makefile        |   2 +
+ .../selftests/iommu/iommu_qos_smoke.sh        | 649 ++++++++++++++++++
+ 3 files changed, 652 insertions(+)
+ create mode 100755 tools/testing/selftests/iommu/iommu_qos_smoke.sh
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index c59be02c8f02..162ad5a1780f 100644
+index 162ad5a1780f..9facf8ac79a2 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -23288,6 +23288,7 @@ L:	iommu@lists.linux.dev
- L:	linux-riscv@lists.infradead.org
+@@ -23289,6 +23289,7 @@ L:	linux-riscv@lists.infradead.org
  S:	Maintained
  F:	Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
-+F:	drivers/resctrl/cbqri_iommu.c
+ F:	drivers/resctrl/cbqri_iommu.c
++F:	tools/testing/selftests/iommu/iommu_qos_smoke.sh
  
  RISC-V MICROCHIP SUPPORT
  M:	Conor Dooley <conor.dooley@microchip.com>
-diff --git a/arch/riscv/include/asm/qos.h b/arch/riscv/include/asm/qos.h
-index daa758d4efff..84a93739c6ff 100644
---- a/arch/riscv/include/asm/qos.h
-+++ b/arch/riscv/include/asm/qos.h
-@@ -8,6 +8,18 @@
+diff --git a/tools/testing/selftests/iommu/Makefile b/tools/testing/selftests/iommu/Makefile
+index 84abeb2f0949..2d22a10c17fc 100644
+--- a/tools/testing/selftests/iommu/Makefile
++++ b/tools/testing/selftests/iommu/Makefile
+@@ -7,4 +7,6 @@ TEST_GEN_PROGS :=
+ TEST_GEN_PROGS += iommufd
+ TEST_GEN_PROGS += iommufd_fail_nth
  
- struct iommu_group;
- 
-+#ifdef CONFIG_RISCV_CBQRI_IOMMU
-+int riscv_resctrl_iommu_group_get_qosid(struct iommu_group *group,
-+					u32 *rcid, u32 *mcid);
-+#else
-+static inline int
-+riscv_resctrl_iommu_group_get_qosid(struct iommu_group *group, u32 *rcid,
-+				    u32 *mcid)
-+{
-+	return -ENOENT;
-+}
-+#endif
++TEST_PROGS += iommu_qos_smoke.sh
 +
- #ifdef CONFIG_RISCV_IOMMU
- int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid,
- 				u32 mcid);
-diff --git a/drivers/iommu/riscv/iommu.c b/drivers/iommu/riscv/iommu.c
-index e85da9eef58e..1a7d8a582959 100644
---- a/drivers/iommu/riscv/iommu.c
-+++ b/drivers/iommu/riscv/iommu.c
-@@ -1188,16 +1188,50 @@ static void riscv_iommu_iodir_iotinval(struct riscv_iommu_device *iommu,
-  * device is not quiesced might be disruptive, potentially causing
-  * interim translation faults.
-  */
--static void riscv_iommu_iodir_update(struct riscv_iommu_device *iommu,
--				     struct device *dev, u64 fsc, u64 ta)
-+static int riscv_iommu_iodir_update(struct riscv_iommu_device *iommu,
-+				    struct device *dev, u64 fsc, u64 ta)
- {
- 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
- 	struct riscv_iommu_dc *dc;
- 	struct riscv_iommu_command cmd;
- 	bool sync_required = false;
-+	u64 group_qos_ta = 0;
-+	bool has_group_qos;
-+	u32 group_rcid;
-+	u32 group_mcid;
- 	u64 tc;
-+	int ret = 0;
-+	int qos_ret;
- 	int i;
- 
-+	/* Serialize DC.ta updates with resctrl IOMMU group QoS changes. */
-+	mutex_lock(&iommu->qosid_lock);
-+
-+	qos_ret = riscv_resctrl_iommu_group_get_qosid(dev->iommu_group,
-+						      &group_rcid, &group_mcid);
-+	if (qos_ret == -EAGAIN) {
-+		/* Static domain transitions must not fail during device release. */
-+		if (fsc != RISCV_IOMMU_FSC_BARE) {
-+			ret = -EBUSY;
-+			goto unlock;
-+		}
-+		qos_ret = -ENOENT;
-+	}
-+	has_group_qos = !qos_ret;
-+	if (has_group_qos) {
-+		if (!(iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID) ||
-+		    iommu->ddt_mode <= RISCV_IOMMU_DDTP_IOMMU_MODE_BARE) {
-+			ret = -EOPNOTSUPP;
-+			goto unlock;
-+		}
-+		if (group_rcid > FIELD_MAX(RISCV_IOMMU_DC_TA_RCID) ||
-+		    group_mcid > FIELD_MAX(RISCV_IOMMU_DC_TA_MCID)) {
-+			ret = -ERANGE;
-+			goto unlock;
-+		}
-+		group_qos_ta = riscv_iommu_qosid_ta(group_rcid, group_mcid);
-+	}
-+
- 	for (i = 0; i < fwspec->num_ids; i++) {
- 		dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
- 		tc = READ_ONCE(dc->tc);
-@@ -1233,11 +1267,12 @@ static void riscv_iommu_iodir_update(struct riscv_iommu_device *iommu,
- 		tc = READ_ONCE(dc->tc);
- 		dc_ta = ta;
- 		if (iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID) {
--			dc_ta |= READ_ONCE(dc->ta) &
--				 (RISCV_IOMMU_DC_TA_RCID |
--				  RISCV_IOMMU_DC_TA_MCID);
--			ta_mask |= RISCV_IOMMU_DC_TA_RCID |
--				   RISCV_IOMMU_DC_TA_MCID;
-+			if (has_group_qos)
-+				dc_ta |= group_qos_ta;
-+			else
-+				dc_ta |= READ_ONCE(dc->ta) &
-+					 RISCV_IOMMU_DC_TA_QOSID;
-+			ta_mask |= RISCV_IOMMU_DC_TA_QOSID;
- 		}
- 		tc |= dc_ta & RISCV_IOMMU_DC_TC_V;
- 
-@@ -1259,6 +1294,9 @@ static void riscv_iommu_iodir_update(struct riscv_iommu_device *iommu,
- 	}
- 
- 	riscv_iommu_cmd_sync(iommu, RISCV_IOMMU_IOTINVAL_TIMEOUT);
-+unlock:
-+	mutex_unlock(&iommu->qosid_lock);
-+	return ret;
- }
- 
- /*
-@@ -1324,6 +1362,7 @@ static int riscv_iommu_attach_paging_domain(struct iommu_domain *iommu_domain,
- 	struct riscv_iommu_info *info = dev_iommu_priv_get(dev);
- 	struct pt_iommu_riscv_64_hw_info pt_info;
- 	u64 fsc, ta;
-+	int ret;
- 
- 	pt_iommu_riscv_64_hw_info(&domain->riscvpt, &pt_info);
- 
-@@ -1338,7 +1377,11 @@ static int riscv_iommu_attach_paging_domain(struct iommu_domain *iommu_domain,
- 	if (riscv_iommu_bond_link(domain, dev))
- 		return -ENOMEM;
- 
--	riscv_iommu_iodir_update(iommu, dev, fsc, ta);
-+	ret = riscv_iommu_iodir_update(iommu, dev, fsc, ta);
-+	if (ret) {
-+		riscv_iommu_bond_unlink(domain, dev);
-+		return ret;
-+	}
- 	riscv_iommu_bond_unlink(info->domain, dev);
- 	info->domain = domain;
- 
-@@ -1413,9 +1456,12 @@ static int riscv_iommu_attach_blocking_domain(struct iommu_domain *iommu_domain,
- {
- 	struct riscv_iommu_device *iommu = dev_to_iommu(dev);
- 	struct riscv_iommu_info *info = dev_iommu_priv_get(dev);
-+	int ret;
- 
- 	/* Make device context invalid, translation requests will fault w/ #258 */
--	riscv_iommu_iodir_update(iommu, dev, RISCV_IOMMU_FSC_BARE, 0);
-+	ret = riscv_iommu_iodir_update(iommu, dev, RISCV_IOMMU_FSC_BARE, 0);
-+	if (ret)
-+		return ret;
- 	riscv_iommu_bond_unlink(info->domain, dev);
- 	info->domain = NULL;
- 
-@@ -1435,8 +1481,12 @@ static int riscv_iommu_attach_identity_domain(struct iommu_domain *iommu_domain,
- {
- 	struct riscv_iommu_device *iommu = dev_to_iommu(dev);
- 	struct riscv_iommu_info *info = dev_iommu_priv_get(dev);
-+	u64 ta = RISCV_IOMMU_PC_TA_V;
-+	int ret;
- 
--	riscv_iommu_iodir_update(iommu, dev, RISCV_IOMMU_FSC_BARE, RISCV_IOMMU_PC_TA_V);
-+	ret = riscv_iommu_iodir_update(iommu, dev, RISCV_IOMMU_FSC_BARE, ta);
-+	if (ret)
-+		return ret;
- 	riscv_iommu_bond_unlink(info->domain, dev);
- 	info->domain = NULL;
- 
-diff --git a/drivers/iommu/riscv/iommu.h b/drivers/iommu/riscv/iommu.h
-index 13ea67b7e42d..e7804ec65647 100644
---- a/drivers/iommu/riscv/iommu.h
-+++ b/drivers/iommu/riscv/iommu.h
-@@ -11,13 +11,11 @@
- #ifndef _RISCV_IOMMU_H_
- #define _RISCV_IOMMU_H_
- 
-+#include <linux/errno.h>
- #include <linux/iommu.h>
- #include <linux/iopoll.h>
- #include <linux/mutex.h>
- #include <linux/types.h>
--#ifdef CONFIG_RISCV_IOMMU_32BIT
--#include <linux/spinlock.h>
--#endif
- 
- #include "iommu-bits.h"
- 
-@@ -26,6 +24,18 @@ struct riscv_iommu_device;
- int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid,
- 				u32 mcid);
- 
-+#ifdef CONFIG_RISCV_CBQRI_IOMMU
-+int riscv_resctrl_iommu_group_get_qosid(struct iommu_group *group,
-+					u32 *rcid, u32 *mcid);
-+#else
-+static inline int
-+riscv_resctrl_iommu_group_get_qosid(struct iommu_group *group, u32 *rcid,
-+				    u32 *mcid)
-+{
-+	return -ENOENT;
-+}
-+#endif
-+
- struct riscv_iommu_queue {
- 	atomic_t prod;				/* unbounded producer allocation index */
- 	atomic_t head;				/* unbounded shadow ring buffer consumer index */
-diff --git a/drivers/resctrl/Kconfig b/drivers/resctrl/Kconfig
-index b7db6ff9d054..4e10c813e647 100644
---- a/drivers/resctrl/Kconfig
-+++ b/drivers/resctrl/Kconfig
-@@ -60,3 +60,9 @@ endif
- config RISCV_CBQRI_RESCTRL_FS
- 	bool
- 	default y if RISCV_CBQRI && RESCTRL_FS
-+
-+config RISCV_CBQRI_IOMMU
-+	bool
-+	depends on RISCV_CBQRI_RESCTRL_FS && RISCV_IOMMU
-+	select ARCH_HAS_RESCTRL_DEVICES
-+	default y
-diff --git a/drivers/resctrl/Makefile b/drivers/resctrl/Makefile
-index c8339113ef1f..148b2e28c6a3 100644
---- a/drivers/resctrl/Makefile
-+++ b/drivers/resctrl/Makefile
-@@ -8,3 +8,4 @@ obj-$(CONFIG_RISCV_CBQRI)			+= cbqri.o
- cbqri-y						+= cbqri_devices.o
- cbqri-$(CONFIG_RISCV_CBQRI_RESCTRL_FS)		+= cbqri_resctrl.o
- cbqri-$(CONFIG_RISCV_CBQRI_CAPACITY)		+= cbqri_capacity.o
-+cbqri-$(CONFIG_RISCV_CBQRI_IOMMU)			+= cbqri_iommu.o
-diff --git a/drivers/resctrl/cbqri_iommu.c b/drivers/resctrl/cbqri_iommu.c
-new file mode 100644
-index 000000000000..4086c32546bd
+ include ../lib.mk
+diff --git a/tools/testing/selftests/iommu/iommu_qos_smoke.sh b/tools/testing/selftests/iommu/iommu_qos_smoke.sh
+new file mode 100755
+index 000000000000..1a81bca39460
 --- /dev/null
-+++ b/drivers/resctrl/cbqri_iommu.c
-@@ -0,0 +1,276 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/iommu/iommu_qos_smoke.sh
+@@ -0,0 +1,649 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++# Smoke test for RISC-V IOMMU QoS resctrl integration.
++#
++# This intentionally tests the IOMMU group QoS control path:
++#   resctrl/devices -> iommu_group:<id> parser -> IOMMU group QoS assignment
++#   explicit reset to the default group before resctrl group removal
++# and the per-IOMMU global default QoS ID sysfs path used by BARE mode.
 +
-+#include <linux/capability.h>
-+#include <linux/errno.h>
-+#include <linux/iommu.h>
-+#include <linux/kernel.h>
-+#include <linux/limits.h>
-+#include <linux/list.h>
-+#include <linux/rculist.h>
-+#include <linux/rcupdate.h>
-+#include <linux/resctrl.h>
-+#include <linux/seq_file.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/types.h>
++KSFT_PASS=0
++KSFT_FAIL=1
++KSFT_SKIP=4
 +
-+#include <asm/qos.h>
++RESCTRL=/sys/fs/resctrl
++RESCTRL_FS=resctrl
++IOMMU_GROUPS=/sys/kernel/iommu_groups
++LAST_STATUS=$RESCTRL/info/last_cmd_status
++ROOT_DEVICES=$RESCTRL/devices
++IOMMU_CLASS=/sys/class/iommu
 +
-+#define IOMMU_GROUP_TOKEN	"iommu_group:"
++pass_count=0
++fail_count=0
++skip_count=0
++group=""
++child_group=""
++qosid_file=""
++tmp_dir=""
++lock_dir=""
++lock_taken=0
++mounted_by_test=0
++qosid_rcid=""
++qosid_mcid=""
 +
-+/*
-+ * RISC-V IOMMU RCID and MCID fields are 12 bits each, so an active binding
-+ * cannot contain U64_MAX.
-+ */
-+#define QOS_IOMMU_BINDING_UPDATING	U64_MAX
-+
-+/* Records the resctrl QoS ID assignment for one IOMMU group. */
-+struct qos_iommu_group_binding {
-+	struct list_head node;
-+	struct rcu_head rcu;
-+	struct iommu_group *group;
-+	int group_id;
-+	/* Packed IDs, or QOS_IOMMU_BINDING_UPDATING during a hardware update. */
-+	u64 state;
-+};
-+
-+/*
-+ * resctrl owns IOMMU group membership bookkeeping. Do not infer membership by
-+ * reading RCID/MCID back from hardware: the same IDs may be shared by multiple
-+ * resctrl users. Writers are serialized by rdtgroup_mutex. IOMMU attach paths
-+ * read the list under RCU so newly attached devices can inherit an existing
-+ * group assignment without taking locks in the opposite order to resctrl.
-+ */
-+static LIST_HEAD(qos_iommu_bindings);
-+
-+static u64 qos_iommu_group_ids_pack(struct resctrl_group_ids ids)
++log()
 +{
-+	return (u64)ids.closid << 32 | ids.rmid;
++	printf '%s\n' "$*"
 +}
 +
-+static struct resctrl_group_ids qos_iommu_group_ids_unpack(u64 ids)
++pass()
 +{
-+	return (struct resctrl_group_ids) {
-+		.closid = upper_32_bits(ids),
-+		.rmid = lower_32_bits(ids),
-+	};
++	pass_count=$((pass_count + 1))
++	log "PASS: $*"
 +}
 +
-+static bool qos_iommu_group_ids_match(u64 packed, struct resctrl_group_ids ids)
++fail()
 +{
-+	return packed != QOS_IOMMU_BINDING_UPDATING &&
-+	       packed == qos_iommu_group_ids_pack(ids);
++	fail_count=$((fail_count + 1))
++	log "FAIL: $*"
 +}
 +
-+static bool qos_iommu_group_ids_default(struct resctrl_group_ids ids)
++skip()
 +{
-+	return ids.closid == RESCTRL_RESERVED_CLOSID &&
-+	       ids.rmid == RESCTRL_RESERVED_RMID;
++	log "SKIP: $*"
++	exit $KSFT_SKIP
 +}
 +
-+static struct qos_iommu_group_binding *
-+qos_iommu_group_find_binding(int group_id)
++skip_optional()
 +{
-+	struct qos_iommu_group_binding *binding;
-+
-+	list_for_each_entry(binding, &qos_iommu_bindings, node) {
-+		if (binding->group_id == group_id)
-+			return binding;
-+	}
-+
-+	return NULL;
++	skip_count=$((skip_count + 1))
++	log "SKIP: $*"
 +}
 +
-+static void qos_iommu_group_free_binding(struct qos_iommu_group_binding *binding)
++cleanup()
 +{
-+	list_del_rcu(&binding->node);
-+	iommu_group_put_by_id(binding->group);
-+	kfree_rcu(binding, rcu);
++	if [ -n "$child_group" ] && [ -d "$child_group" ]; then
++		if [ -n "$group" ]; then
++			printf '%s\n' "iommu_group:$group" > "$ROOT_DEVICES" 2>/dev/null || true
++		fi
++		rmdir "$child_group" 2>/dev/null || true
++	fi
++
++	if [ "$mounted_by_test" = "1" ]; then
++		umount "$RESCTRL" 2>/dev/null || true
++	fi
++
++	if [ "$lock_taken" = "1" ] && [ -n "$lock_dir" ]; then
++		rmdir "$lock_dir" 2>/dev/null || true
++	fi
++
++	if [ -n "$tmp_dir" ]; then
++		rm -rf "$tmp_dir"
++	fi
 +}
 +
-+static void qos_iommu_group_prune_inactive(void)
++need_root()
 +{
-+	struct qos_iommu_group_binding *binding;
-+	struct qos_iommu_group_binding *tmp;
-+
-+	list_for_each_entry_safe(binding, tmp, &qos_iommu_bindings, node) {
-+		if (!iommu_group_is_active(binding->group))
-+			qos_iommu_group_free_binding(binding);
-+	}
++	[ "$(id -u)" = "0" ] || skip "requires root"
 +}
 +
-+static int qos_iommu_group_set(struct iommu_group *group,
-+			       struct resctrl_group_ids ids)
++init_tmp_dir()
 +{
-+	/* RISC-V IOMMU QoS maps closid->rcid and rmid->mcid 1:1. */
-+	return riscv_iommu_group_set_qosid(group, ids.closid, ids.rmid);
++	tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/iommu_qos_smoke.XXXXXX") ||
++		skip "failed to create temporary directory"
 +}
 +
-+int resctrl_arch_devices_write(char *tok, struct resctrl_group_ids ids)
++take_global_lock()
 +{
-+	struct qos_iommu_group_binding *binding;
-+	struct qos_iommu_group_binding *new_binding = NULL;
-+	struct iommu_group *group;
-+	u64 old_state = QOS_IOMMU_BINDING_UPDATING;
-+	bool default_ids;
-+	int group_id;
-+	int ret;
++	lock_dir=${TMPDIR:-/tmp}/iommu_qos_smoke.lock
 +
-+	if (strncmp(tok, IOMMU_GROUP_TOKEN, strlen(IOMMU_GROUP_TOKEN))) {
-+		resctrl_last_cmd_printf("Unsupported device token %s\n", tok);
-+		return -EOPNOTSUPP;
-+	}
++	if mkdir "$lock_dir" 2>"$tmp_dir/lock.err"; then
++		lock_taken=1
++		pass "acquired global IOMMU QoS test lock"
++		return
++	fi
 +
-+	tok += strlen(IOMMU_GROUP_TOKEN);
-+	if (kstrtoint(tok, 10, &group_id) || group_id < 0) {
-+		resctrl_last_cmd_printf("IOMMU group parsing error %s%s\n",
-+					IOMMU_GROUP_TOKEN, tok);
-+		return -EINVAL;
-+	}
++	skip "another IOMMU QoS smoke test instance is running"
++}
 +
-+	if (!capable(CAP_SYS_ADMIN)) {
-+		resctrl_last_cmd_puts("No permission to move IOMMU group\n");
-+		return -EPERM;
-+	}
++ensure_resctrl_mounted()
++{
++	if ! grep -qw resctrl /proc/filesystems; then
++		skip "resctrl filesystem is not available"
++	fi
 +
-+	default_ids = qos_iommu_group_ids_default(ids);
-+	qos_iommu_group_prune_inactive();
-+	binding = qos_iommu_group_find_binding(group_id);
-+	if (!binding) {
-+		group = iommu_group_get_by_id(group_id);
-+		if (!group) {
-+			resctrl_last_cmd_printf("No IOMMU group %d\n", group_id);
-+			return -ENOENT;
-+		}
++	mkdir -p "$RESCTRL" 2>/dev/null || true
 +
-+		if (default_ids) {
-+			ret = qos_iommu_group_set(group, ids);
-+			iommu_group_put_by_id(group);
-+			if (ret)
-+				resctrl_last_cmd_printf("Failed to reset IOMMU group %d QoS (%d)\n",
-+							group_id, ret);
-+			return ret;
-+		}
++	if grep -qs " $RESCTRL resctrl " /proc/mounts; then
++		pass "resctrl already mounted"
++		return
++	fi
 +
-+		new_binding = kzalloc_obj(*new_binding, GFP_KERNEL);
-+		if (!new_binding) {
-+			iommu_group_put_by_id(group);
-+			resctrl_last_cmd_puts("Unable to allocate IOMMU group QoS binding\n");
-+			return -ENOMEM;
-+		}
-+		binding = new_binding;
-+		binding->group = group;
-+		binding->group_id = group_id;
-+		binding->state = QOS_IOMMU_BINDING_UPDATING;
-+		list_add_tail_rcu(&binding->node, &qos_iommu_bindings);
-+	} else {
-+		group = binding->group;
-+		old_state = READ_ONCE(binding->state);
-+		WRITE_ONCE(binding->state, QOS_IOMMU_BINDING_UPDATING);
-+	}
-+
-+	ret = qos_iommu_group_set(group, ids);
-+	if (ret) {
-+		if (new_binding)
-+			qos_iommu_group_free_binding(binding);
-+		else
-+			WRITE_ONCE(binding->state, old_state);
-+		resctrl_last_cmd_printf("Failed to move IOMMU group %d QoS (%d)\n",
-+					group_id, ret);
-+		return ret;
-+	}
-+
-+	if (default_ids)
-+		qos_iommu_group_free_binding(binding);
++	if mount -t resctrl "$RESCTRL_FS" "$RESCTRL" 2>"$tmp_dir/mount.err"; then
++		mounted_by_test=1
++		pass "mounted resctrl"
 +	else
-+		WRITE_ONCE(binding->state, qos_iommu_group_ids_pack(ids));
-+
-+	return 0;
++		log "mount error: $(cat "$tmp_dir/mount.err" 2>/dev/null)"
++		skip "failed to mount resctrl"
++	fi
 +}
 +
-+int riscv_resctrl_iommu_group_get_qosid(struct iommu_group *group, u32 *rcid,
-+					u32 *mcid)
++ensure_devices_file()
 +{
-+	struct qos_iommu_group_binding *binding;
-+	int ret = -ENOENT;
-+
-+	if (!group)
-+		return -ENODEV;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(binding, &qos_iommu_bindings, node) {
-+		struct resctrl_group_ids ids;
-+		u64 state;
-+
-+		if (binding->group != group)
-+			continue;
-+		state = READ_ONCE(binding->state);
-+		if (state == QOS_IOMMU_BINDING_UPDATING) {
-+			ret = -EAGAIN;
-+			break;
-+		}
-+
-+		ids = qos_iommu_group_ids_unpack(state);
-+		if (rcid)
-+			*rcid = ids.closid;
-+		if (mcid)
-+			*mcid = ids.rmid;
-+		ret = 0;
-+		break;
-+	}
-+	rcu_read_unlock();
-+
-+	return ret;
++	[ -e "$ROOT_DEVICES" ] || skip "resctrl devices file is not available"
++	[ -w "$ROOT_DEVICES" ] || skip "$ROOT_DEVICES is not writable"
 +}
 +
-+void resctrl_arch_devices_show(struct seq_file *s, struct resctrl_group_ids ids)
++create_child_group()
 +{
-+	struct qos_iommu_group_binding *binding;
++	child_group=$RESCTRL/iommu_qos_test_$$
 +
-+	qos_iommu_group_prune_inactive();
-+	list_for_each_entry(binding, &qos_iommu_bindings, node) {
-+		if (qos_iommu_group_ids_match(READ_ONCE(binding->state), ids))
-+			seq_printf(s, "iommu_group:%d\n", binding->group_id);
-+	}
++	if mkdir "$child_group" 2>"$tmp_dir/mkdir.err"; then
++		pass "created child resctrl group"
++		return
++	fi
++
++	log "mkdir error: $(cat "$tmp_dir/mkdir.err" 2>/dev/null)"
++	child_group=""
++	skip "failed to create a child resctrl group"
 +}
 +
-+bool resctrl_arch_devices_assigned(struct resctrl_group_ids ids)
++iommu_group_is_assigned()
 +{
-+	struct qos_iommu_group_binding *binding;
++	candidate=$1
 +
-+	qos_iommu_group_prune_inactive();
-+	list_for_each_entry(binding, &qos_iommu_bindings, node) {
-+		if (qos_iommu_group_ids_match(READ_ONCE(binding->state), ids))
-+			return true;
-+	}
-+
-+	return false;
++	find "$RESCTRL" -type f -name devices \
++		-exec grep -qx "iommu_group:$candidate" {} \; -print \
++		2>/dev/null | grep -q .
 +}
 +
-+int resctrl_arch_devices_reset_all(struct resctrl_group_ids default_ids)
++pick_iommu_group()
 +{
-+	struct qos_iommu_group_binding *binding;
-+	struct qos_iommu_group_binding *tmp;
-+	u64 old_state;
-+	int first_ret = 0;
-+	int ret;
++	populated=0
++	unsupported=0
 +
-+	qos_iommu_group_prune_inactive();
-+	list_for_each_entry_safe(binding, tmp, &qos_iommu_bindings, node) {
-+		old_state = READ_ONCE(binding->state);
-+		WRITE_ONCE(binding->state, QOS_IOMMU_BINDING_UPDATING);
-+		ret = qos_iommu_group_set(binding->group, default_ids);
-+		if (ret) {
-+			WRITE_ONCE(binding->state, old_state);
-+			if (!first_ret)
-+				first_ret = ret;
-+			resctrl_last_cmd_printf("Failed to reset IOMMU group %d QoS (%d)\n",
-+						binding->group_id, ret);
-+			continue;
-+		}
++	[ -d "$IOMMU_GROUPS" ] || skip "no IOMMU groups sysfs directory"
 +
-+		qos_iommu_group_free_binding(binding);
-+	}
++	for path in "$IOMMU_GROUPS"/*; do
++		[ -d "$path" ] || continue
++		case "${path##*/}" in
++		*[!0-9]*|'')
++			continue
++			;;
++		esac
 +
-+	return first_ret;
++		[ -d "$path/devices" ] || continue
++		if ! find "$path/devices" -mindepth 1 -maxdepth 1 2>/dev/null |
++			grep -q .; then
++			continue
++		fi
++
++		populated=$((populated + 1))
++		candidate=${path##*/}
++		if iommu_group_is_assigned "$candidate"; then
++			log "skip IOMMU group $candidate with an existing resctrl assignment"
++			continue
++		fi
++
++		if printf '%s\n' "iommu_group:$candidate" > "$child_group/devices" \
++				2>"$tmp_dir/group_$candidate.err"; then
++			group=$candidate
++			if ! printf '%s\n' "iommu_group:$group" > "$ROOT_DEVICES" \
++					2>"$tmp_dir/group_${candidate}_reset.err"; then
++				log "reset error:"
++				cat "$tmp_dir/group_${candidate}_reset.err" 2>/dev/null
++				fail "failed to restore probed IOMMU group $group"
++				return 1
++			fi
++			pass "selected group $group using non-default QoS assignment"
++			return 0
++		fi
++
++		if last_status_is_iommu_qos_unsupported; then
++			unsupported=$((unsupported + 1))
++			continue
++		fi
++
++		log "group $candidate write error:"
++		cat "$tmp_dir/group_$candidate.err" 2>/dev/null
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "IOMMU group $candidate failed QoS capability probing"
++	done
++
++	[ "$populated" -gt 0 ] || skip "no populated IOMMU group found"
++	if [ "$unsupported" -eq "$populated" ]; then
++		skip "no populated IOMMU group supports QoS ID programming"
++	fi
++
++	return 1
 +}
++
++last_status_contains()
++{
++	pattern=$1
++
++	[ -f "$LAST_STATUS" ] || return 1
++	grep -qi "$pattern" "$LAST_STATUS"
++}
++
++last_status_is_iommu_qos_unsupported()
++{
++	[ -f "$LAST_STATUS" ] || return 1
++	grep -Eiq \
++		'IOMMU group .* QoS \(-95\)|IOMMU QoSID.*not supported|not supported' \
++		"$LAST_STATUS"
++}
++
++pick_missing_iommu_group()
++{
++	max=0
++
++	for path in "$IOMMU_GROUPS"/*; do
++		[ -d "$path" ] || continue
++		id=${path##*/}
++		case "$id" in
++		*[!0-9]*|'')
++			continue
++			;;
++		esac
++		if [ "$id" -gt "$max" ]; then
++			max=$id
++		fi
++	done
++
++	if [ "$max" -ge 2147483647 ]; then
++		skip "cannot choose a missing IOMMU group id"
++	fi
++
++	missing=$((max + 1))
++	while [ -e "$IOMMU_GROUPS/$missing" ]; do
++		if [ "$missing" -ge 2147483647 ]; then
++			skip "cannot choose a missing IOMMU group id"
++		fi
++		missing=$((missing + 1))
++	done
++}
++
++pick_qosid_file()
++{
++	for file in "$IOMMU_CLASS"/*/qosid; do
++		[ -e "$file" ] || continue
++		qosid_file=$file
++		return 0
++	done
++
++	return 1
++}
++
++parse_qosid()
++{
++	line=$1
++
++	case "$line" in
++	rcid=[0-9]*" "mcid=[0-9]*)
++		qosid_rcid=${line%% *}
++		qosid_rcid=${qosid_rcid#rcid=}
++		qosid_mcid=${line##* }
++		qosid_mcid=${qosid_mcid#mcid=}
++		;;
++	*)
++		return 1
++		;;
++	esac
++
++	case "$qosid_rcid" in
++	*[!0-9]*|'')
++		return 1
++		;;
++	esac
++	case "$qosid_mcid" in
++	*[!0-9]*|'')
++		return 1
++		;;
++	esac
++
++	return 0
++}
++
++test_malformed_group_rejected()
++{
++	if printf '%s\n' 'iommu_group:bad' > "$ROOT_DEVICES" \
++			2>"$tmp_dir/badtoken.err"; then
++		fail "malformed IOMMU group token was accepted"
++		return
++	fi
++
++	if last_status_contains "IOMMU group parsing error"; then
++		pass "malformed IOMMU group token is rejected with useful status"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "malformed IOMMU group rejection status is unclear"
++	fi
++}
++
++test_trailing_separator_rejected()
++{
++	if printf '%s\n' "iommu_group:$group," > "$ROOT_DEVICES" \
++			2>"$tmp_dir/trailing_separator.err"; then
++		fail "IOMMU group token with trailing separator was accepted"
++		return
++	fi
++
++	if last_status_contains "Device list parsing error"; then
++		pass "trailing device-list separator is rejected"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "trailing separator rejection status is unclear"
++	fi
++}
++
++test_missing_group_rejected()
++{
++	pick_missing_iommu_group
++
++	if printf '%s\n' "iommu_group:$missing" > "$ROOT_DEVICES" \
++			2>"$tmp_dir/missing.err"; then
++		fail "missing IOMMU group was accepted"
++		return
++	fi
++
++	if last_status_contains "No IOMMU group $missing"; then
++		pass "missing IOMMU group is rejected with useful status"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "missing IOMMU group rejection status is unclear"
++	fi
++}
++
++test_non_decimal_group_rejected()
++{
++	if printf '%s\n' "iommu_group:0x$group" > "$ROOT_DEVICES" \
++			2>"$tmp_dir/non_decimal.err"; then
++		fail "non-decimal IOMMU group ID was accepted"
++		return
++	fi
++
++	if last_status_contains "IOMMU group parsing error"; then
++		pass "non-decimal IOMMU group ID is rejected"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "non-decimal IOMMU group rejection status is unclear"
++	fi
++}
++
++test_tasks_rejects_iommu_token()
++{
++	if printf '%s\n' "iommu_group:$group" > "$RESCTRL/tasks" \
++			2>"$tmp_dir/tasks_token.err"; then
++		fail "tasks accepted an IOMMU group token"
++		return
++	fi
++
++	if last_status_contains "Task list parsing error pid iommu_group:$group"; then
++		pass "tasks rejects IOMMU group tokens"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "tasks rejection status is unclear"
++	fi
++}
++
++test_global_qosid_sysfs()
++{
++	if ! pick_qosid_file; then
++		skip_optional "no RISC-V IOMMU qosid sysfs file is available"
++		return
++	fi
++
++	if ! line=$(cat "$qosid_file" 2>"$tmp_dir/qosid_read.err"); then
++		log "read error: $(cat "$tmp_dir/qosid_read.err" 2>/dev/null)"
++		fail "failed to read IOMMU global qosid"
++		return
++	fi
++
++	if parse_qosid "$line"; then
++		pass "read IOMMU global qosid from sysfs"
++	else
++		log "qosid content: $line"
++		fail "IOMMU global qosid has unexpected format"
++		return
++	fi
++
++	if printf '%s\n' "$line" > "$qosid_file" \
++			2>"$tmp_dir/qosid_rewrite.err"; then
++		pass "IOMMU global qosid accepts readback format"
++	else
++		log "write error: $(cat "$tmp_dir/qosid_rewrite.err" 2>/dev/null)"
++		fail "failed to rewrite IOMMU global qosid readback"
++		return
++	fi
++
++	if printf '%s\n' "bad" > "$qosid_file" 2>"$tmp_dir/qosid_bad.err"; then
++		fail "IOMMU global qosid accepted malformed input"
++		return
++	fi
++	pass "IOMMU global qosid rejects malformed input"
++
++	if printf '%s\n' "rcid=0mcid=1" > "$qosid_file" \
++			2>"$tmp_dir/qosid_separator.err"; then
++		fail "IOMMU global qosid accepted missing token separator"
++		return
++	fi
++	pass "IOMMU global qosid requires a token separator"
++
++	if printf '%s\n' "rcid=4096 mcid=0" > "$qosid_file" \
++			2>"$tmp_dir/qosid_range.err"; then
++		fail "IOMMU global qosid accepted out-of-range RCID"
++		return
++	fi
++	pass "IOMMU global qosid rejects out-of-range RCID"
++
++	if printf '%s\n' "rcid=4294967296 mcid=0" > "$qosid_file" \
++			2>"$tmp_dir/qosid_overflow.err"; then
++		fail "IOMMU global qosid accepted overflowed RCID"
++		return
++	fi
++	pass "IOMMU global qosid rejects overflowed RCID"
++
++	if printf '%s\n' "rcid=$qosid_rcid mcid=$qosid_mcid" > "$qosid_file" \
++			2>"$tmp_dir/qosid_restore.err"; then
++		pass "IOMMU global qosid accepts current RCID/MCID"
++	else
++		log "write error: $(cat "$tmp_dir/qosid_restore.err" 2>/dev/null)"
++		fail "failed to write current IOMMU global qosid"
++		return
++	fi
++
++	if line=$(cat "$qosid_file" 2>/dev/null) &&
++			[ "$line" = "rcid=$qosid_rcid mcid=$qosid_mcid" ]; then
++		pass "IOMMU global qosid readback matches restored value"
++	else
++		log "qosid content: $line"
++		fail "IOMMU global qosid readback mismatch"
++	fi
++}
++
++test_valid_group_write()
++{
++	if printf '%s\n' "iommu_group:$group" > "$ROOT_DEVICES" \
++		2>"$tmp_dir/valid.err"; then
++		pass "write iommu_group:$group to root resctrl devices"
++	else
++		log "write error: $(cat "$tmp_dir/valid.err" 2>/dev/null)"
++		fail "valid IOMMU group write failed"
++		return
++	fi
++
++	if last_status_contains ^ok; then
++		pass "last_cmd_status reports ok"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "last_cmd_status is not ok after valid write"
++	fi
++
++	# The root control group represents the default QoS IDs. The kernel
++	# applies the reset but intentionally does not keep a software binding
++	# for default assignments, so the root devices file should stay empty.
++	if grep -qx "iommu_group:$group" "$ROOT_DEVICES"; then
++		log "devices content:"
++		cat "$ROOT_DEVICES" 2>/dev/null
++		fail "root devices unexpectedly shows default iommu_group:$group"
++	else
++		pass "root devices omits default iommu_group:$group"
++	fi
++
++}
++
++test_child_group_write()
++{
++	if printf '%s\n' "iommu_group:$group" > "$child_group/devices" \
++			2>"$tmp_dir/child.err"; then
++		pass "write iommu_group:$group to child resctrl group"
++	else
++		log "write error: $(cat "$tmp_dir/child.err" 2>/dev/null)"
++		fail "valid child IOMMU group write failed"
++		return
++	fi
++
++	if last_status_contains ^ok; then
++		pass "last_cmd_status reports ok after child group write"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "last_cmd_status is not ok after child group write"
++	fi
++
++	if grep -qx "iommu_group:$group" "$child_group/devices"; then
++		pass "child devices shows iommu_group:$group after set/get"
++	else
++		log "child devices content:"
++		cat "$child_group/devices" 2>/dev/null
++		fail "child devices does not show iommu_group:$group"
++	fi
++
++	if grep -qx "iommu_group:$group" "$ROOT_DEVICES"; then
++		log "root devices content:"
++		cat "$ROOT_DEVICES" 2>/dev/null
++		fail "root devices still shows iommu_group:$group after child move"
++	else
++		pass "root devices no longer shows iommu_group:$group after child move"
++	fi
++
++}
++
++test_child_pseudo_locksetup_rejected()
++{
++	[ -d "$child_group" ] || return
++
++	if [ ! -e "$child_group/mode" ]; then
++		skip_optional "resctrl mode file is not available"
++		return
++	fi
++
++	if printf '%s\n' "pseudo-locksetup" > "$child_group/mode" \
++			2>"$tmp_dir/pseudo_locksetup.err"; then
++		printf '%s\n' "shareable" > "$child_group/mode" 2>/dev/null || true
++		fail "pseudo-locksetup accepted a group with assigned devices"
++		return
++	fi
++
++	if last_status_contains \
++			"Move devices out before entering pseudo-locksetup group"; then
++		pass "pseudo-locksetup rejects group with assigned devices"
++	elif last_status_contains "Unknown or unsupported mode"; then
++		skip_optional "pseudo-locksetup mode is not supported"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "pseudo-locksetup rejection status is unclear"
++	fi
++}
++
++test_child_group_rmdir()
++{
++	[ -d "$child_group" ] || return
++
++	if rmdir "$child_group" 2>"$tmp_dir/rmdir_busy.err"; then
++		fail "rmdir child resctrl group with IOMMU group was accepted"
++		# The child group no longer exists, so cleanup() cannot reset this.
++		if ! printf '%s\n' "iommu_group:$group" > "$ROOT_DEVICES" \
++				2>"$tmp_dir/rmdir_unexpected_move_root.err"; then
++			log "move error after unexpected rmdir:"
++			cat "$tmp_dir/rmdir_unexpected_move_root.err" 2>/dev/null
++		fi
++		child_group=""
++		return
++	fi
++
++	if last_status_contains "Move devices out before removing group"; then
++		pass "rmdir rejects child group while IOMMU group is assigned"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "rmdir rejection status is unclear"
++	fi
++
++	if printf '%s\n' "iommu_group:$group" > "$ROOT_DEVICES" \
++			2>"$tmp_dir/rmdir_move_root.err"; then
++		pass "move iommu_group:$group back to root before rmdir"
++	else
++		log "move error: $(cat "$tmp_dir/rmdir_move_root.err" 2>/dev/null)"
++		fail "failed to move iommu_group:$group back to root"
++		return
++	fi
++
++	if rmdir "$child_group" 2>"$tmp_dir/rmdir.err"; then
++		pass "rmdir child resctrl group after moving IOMMU group out"
++	else
++		log "rmdir error: $(cat "$tmp_dir/rmdir.err" 2>/dev/null)"
++		fail "failed to rmdir child resctrl group after moving IOMMU group out"
++		return
++	fi
++	child_group=""
++
++	if last_status_contains ^ok; then
++		pass "last_cmd_status reports ok after child group rmdir"
++	else
++		log "last_cmd_status: $(cat "$LAST_STATUS" 2>/dev/null)"
++		fail "last_cmd_status is not ok after child group rmdir"
++	fi
++
++	if grep -qx "iommu_group:$group" "$ROOT_DEVICES"; then
++		log "root devices content:"
++		cat "$ROOT_DEVICES" 2>/dev/null
++		fail "root devices still shows iommu_group:$group after default move"
++	else
++		pass "root devices does not show iommu_group:$group after default move"
++	fi
++
++}
++
++trap cleanup EXIT
++need_root
++init_tmp_dir
++take_global_lock
++ensure_resctrl_mounted
++ensure_devices_file
++create_child_group
++if ! pick_iommu_group; then
++	log "FAIL: $fail_count failure(s), $pass_count pass(es)"
++	exit $KSFT_FAIL
++fi
++test_malformed_group_rejected
++test_trailing_separator_rejected
++test_missing_group_rejected
++test_non_decimal_group_rejected
++test_tasks_rejects_iommu_token
++test_global_qosid_sysfs
++test_valid_group_write
++test_child_group_write
++test_child_pseudo_locksetup_rejected
++test_child_group_rmdir
++
++if [ "$fail_count" -gt 0 ]; then
++	log "FAIL: $fail_count failure(s), $pass_count pass(es)"
++	exit $KSFT_FAIL
++fi
++
++if [ "$skip_count" -gt 0 ]; then
++	log "PASS: $pass_count checks passed, $skip_count optional check(s) skipped"
++else
++	log "PASS: $pass_count checks passed"
++fi
++exit $KSFT_PASS
 -- 
 2.50.1 (Apple Git-155)
 
