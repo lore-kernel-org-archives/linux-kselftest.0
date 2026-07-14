@@ -1,111 +1,135 @@
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2211613D886
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 04:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D30D2D7DEF
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 05:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784004007; cv=none; b=bvoUOIXZnqF5izdv1E3mK3fBDVtlnSbeQ1kwKXou0BCcV4/cflXfYQN1dPNxd6imOk9D+2ZtGYnPz+Ks2/hIDEYAtMdfVz3/eg8r0scMq4wMXoUU0KUgVt4AcbFy3kEfuuPFQS74AeseRSnyBiArreFkJN9tdPHqFtLfXghv2r8=
+	t=1784005307; cv=none; b=mU7ZnrWOnRv2EdGGGlCoKeGgIjqfOFMlM5ieFXFeu1RnvCbCPDR14KQ1vycqcULnzYXJBuhVl0jfXEf7EkNzzJn5lg0iowXNUrqnBuW1fLLtWZcJbZRgbnw+pbZ8jCz5UPhoDNEQYEyPJWTdFIkq/2SOvUtdiMUaw4/HzeXYo6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784004007; c=relaxed/simple;
-	bh=9qVrGhPdhq9FjsNNSsb71bZv8WukBF3ygKxpSD8P4E8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h9XY+YDJnDCpAYuMa1r+nbFnVt4PYtkFldBNVxRSzHfWXoQLs0yMpOT2HGiTG416JWI1UwD9AJ9/GXKbDbxQPP+t92F5yN+NociHHAxVEyqXM75bMlG4BmcH20PdMo5HLkGLr3TP2t/wnqkZc9Wmwyv5eZLdQC75C6J3IWKmcWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=EbS3oRv5; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1784005307; c=relaxed/simple;
+	bh=FCPW8Mm9ioFQS/wDdx5VCJNPs/X3lZS2KcJ9ZczL4JU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SomuqN84DdRuyReN8j3CHJdz2oeIThbWA9U7pa41fruFBZrMK42sYGZaAKrt75dGzvenCy3XQeJbtc22OJNfi+T8jb5jvR2x0bpynpFDP5bHH9l5TOz5p81NboB2i+eR2UZbwZ+rc5IaTMbMGEMM83rYmBgPg5K6Ibbf9MNCh4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OqvFkh+C; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="EbS3oRv5"
-Received: from hwang4-g16.DHCP (unknown [58.248.157.21])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7F36B40373;
-	Tue, 14 Jul 2026 04:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1784003477;
-	bh=Gi0KRZCr7B+KqdLo/T8hwC2wZEnpSHWjct+XZQ6HPwM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=EbS3oRv5AWR9hZU3JpzBgp7gMoSMfw4y/wItycZ5pi6/8h7p4/Qb65NN6KhIcw/i0
-	 /pY9IbAlocArtUIV/+cWdOlHuBK+4dtWfTiVcr/qMJa0yX2LAakkUhpEHdkBChpekC
-	 fFqdcB+8J5LlQ+E76uxrst6JCLy2LnzTbHwSm4YtC5sSSBRP29MXrMY8aDqMhfp0nt
-	 6C0L6sgZkEHSi+GCMPDfRdIJ85Tdkq9JD62cAj8w/CXxIZuAUhbbOHWiKo0ipBwXmZ
-	 Zou3FWJ4gwDCRrMhKD7ycdUOOjiRTjEFh4tvdWoTAMpJtT9xsu2ro2k2tXt9l/kHBg
-	 +fXVty4PavAz0aOwnbllF1me99glKuKhm2ErnaIJFGv9y6D/2veHmpmkcd048cosL5
-	 9JOAGca8BDalfXSU+kCg7gW7zMyRvk8ucZ3YauhKr16X7B8u4s08Y8XsmkDL38uCc9
-	 fgOoF5jWiDkJbQ6Bhz2ufN/ig4/5tTxxJfB375k3KIirIN4OLRY1LmE/B6rLslwm80
-	 GiqjAv1Z9LmIVcSkllqwkj2IHvtHBCsvEcXoB6DQkF4/hEfaO4WZATk13LdQaXrV94
-	 LUZz69cWkAsqR4N7y9EXv/2NlPsGfo+me+EF4uKmyuAtvbXZ6tIX0bUWtoYrvREj3q
-	 Biez+F549EY7NDxFV9ET2U2g=
-From: Hui Wang <hui.wang@canonical.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	debug@rivosinc.com,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: hui.wang@canonical.com
-Subject: [PATCH] kselftest/riscv: Improve building under native riscv64 environment
-Date: Tue, 14 Jul 2026 12:31:08 +0800
-Message-ID: <20260714043108.24114-1-hui.wang@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OqvFkh+C"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-698beff7178so6707753a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 22:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784005304; x=1784610104; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=w9LEcgwtvSHopCw2U3XmWpNwJWVPsCyK67cqWbn8b9c=;
+        b=OqvFkh+Cy8Be9BClbFua91QIIJlCGrcYXLDSrUQZUjsS/s4tTGq58Jn2aPRedXmiUr
+         WMnWwuzlzhwaHH20xWXnrDeA82//r9cs532AfovHS0IhpXFpjoVgt2s5KTu2asS15PXo
+         gGiDEz0Okege71OplohtQvfJYayxZ/B2Fr29Uopkh8hnzfVB3UK4RX1OqDztWBW8vohv
+         gOTUrrhq8k8ya9SxIJAxQjWTnLPu4zVcHW15PKyWim4BX+IQP5bAGU9iinCcDw44RV7O
+         E9LNIg3Y1DPPkv+BGtUlK0awaLHecr8NVqfndw9rcQAkta0ZFAvJ1yMuXRKzhCwD+Gwn
+         8Bug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784005304; x=1784610104;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=w9LEcgwtvSHopCw2U3XmWpNwJWVPsCyK67cqWbn8b9c=;
+        b=NX0Gu+hQWnqkS4NkjnO4HuZlJti3Z81fhbjmqRcLaxkWVAvwpnDfwow1ZCw8xnAz2w
+         M8NzB5GmnmtzX+yDtOHjvZWXXV+eilEmocPaEPfB7xu5tBxXLmlfYJ5rvxVC2mkkVgGI
+         Z6ymwudw0aMeSqmaPSEmbV/NC7PyxJOolMiJOV8SWL7sCtNAiskNVLl7OhFqqoKoo8I/
+         9kTkRS+RxQegHtSf+mVqUTgWIyZreLKzVfUS63esbCRm064ISIkHrmiy5iXcSf4PCTEB
+         7YZnM7pVHxXtXrR4eBQhf6BOtU9uFrh5EeThpdQQaJ1CeejJ5UNSGOd5iVg9ZjUWaHuO
+         FD0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqcRBiPpddRPBUCRVao12uBO67Ms8yD6nLTbr9MIN8Anc1ghrJGgZgx3pXihF/aTiii6D/p7xUla6wBjLZJjIE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPEZWcKg8McDQSz4qd3zV+K93bTXcWXJRCQ929GrCil2IqQDD6
+	7U3DjLTcauiK+NVral/stnch/OGjp1QtJ5fHffIxJUQMVlt6smtmnbVpn5eX6PyO2B0=
+X-Gm-Gg: AfdE7ckDaSU3FXMpIEDpB0m3eQRpHNSVzMUYhPcBYkRnuSpVxNcoVV4CWzYYEqYfWLU
+	gSsMgYkE1q5wjoBVTGkD46Vy6UWVuMOWYFKsYu6JoTYjVIF+zPQx53c8gQojxxRNoFrFmkGAdE8
+	dDpBihb/xgArngsCr3uny6phUVKIHg37UIdjDU2BpNqD+BKDxcJGzOdbiOWKv6RD68SmhEnXUxN
+	G9hfreSnMyDnsTSJncsa9aBClZYIiclzYefBGJr8TRAgmnjt8aePYzWVg7NUIHexm6dqCx6Nt8m
+	/vWne99SBgOuwBdlLkGNGB3vhbKPT5yhAuinNucvQmEUf5YhpE/QhW83VkTpct469rF5i8LBv7j
+	NRQqFfc6mh4iZnAINYbrHpSPBEN6IFlFyW7TTufPCxchtHsMxRo2sG+RqOCQDZmZmPRdj5PeGIZ
+	WFoEJ/Dur84/n++AGJ2WsdCMpi310M+UyK
+X-Received: by 2002:a17:907:1ca0:b0:c15:f005:63fb with SMTP id a640c23a62f3a-c161e940115mr425942166b.3.1784005303928;
+        Mon, 13 Jul 2026 22:01:43 -0700 (PDT)
+Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcae1dce3sm14429042a34.3.2026.07.13.22.01.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2026 22:01:42 -0700 (PDT)
+Date: Tue, 14 Jul 2026 13:01:32 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: sun jian <sun.jian.kdev@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	shuah@kernel.org, mmullins@fb.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v4 1/2] bpf: Reject negative const offsets for buffer
+ pointers
+Message-ID: <alXBjNMotfDYXeNX@u94a>
+References: <ak5HLLrYK3R_g2y_@u94a>
+ <CABFUUZHpPwuTk69hb54WugJwssFuvoqFFPv34dZRbKLLc1PwwQ@mail.gmail.com>
+ <ak8XSRiLKx5WcIQw@u94a>
+ <1f8aad47f61fbf85eb55276e4bb01bfcff61393e.camel@gmail.com>
+ <CABFUUZEXYduca34g22YZ1ESyYe3Yc3kYQrTEWLMxB5X0ZmYn8w@mail.gmail.com>
+ <alCgmxFh9q-vjE0O@u94a>
+ <CABFUUZEnd9f7tV-+jT+cgL7sFVp7pL5-tjdwMvxcR9ist1s-xg@mail.gmail.com>
+ <alRtilWhKw4zzMkI@u94a>
+ <3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com>
+ <alWvvwpn3z9Nn0zw@u94a>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alWvvwpn3z9Nn0zw@u94a>
 
-When we build the kselftest natively, we usually don't pass an ARCH=
-parameter. In this case if I build kselftest/riscv under a riscv64
-environment, the testcase will not be built at all because 'uname -m'
-returns riscv64 instead of riscv.
+On Tue, Jul 14, 2026 at 12:31:38PM +0800, Shung-Hsi Yu wrote:
+...
+> > >	var_off = (s64)reg->var_off.value;
+> > >	if (var_off >= BPF_MAX_VAR_OFF || var_off <= -BPF_MAX_VAR_OFF)
+> > 
+> > This should hold already.
+> 
+> FWIW, I had thought so, but after checking I realize that the verifier
+> only ensure that
+> 
+>   -BPF_MAX_VAR_OFF < smin < BPF_MAX_VAR_OFF
+> 
+> holds true in check_reg_sane_offset_{scalar,ptr}(), and does not check
+> smax, so technically var_off.value can be greater than BPF_MAX_VAR_OFF
+> when we reach here...
 
-    make -C tools/testing/selftests TARGETS=riscv
-    make: Entering directory 'linux/tools/testing/selftests'
-    make[1]: Entering directory 'linux/tools/testing/selftests/riscv'
-    make[1]: Leaving directory 'linux/tools/testing/selftests/riscv'
-    make: Leaving directory 'linux/tools/testing/selftests'
+Scratch that, it cannot. Below just shows that (var_off.value |
+var_off.mask) can be greater than BPF_MAX_VAR_OFF, not var_off.value.
 
-This issue can be fixed by getting ARCH from scripts/subarch.include,
-whose SUBARCH normalizes 'riscv64' to 'riscv'. This also aligns with
-how other selftests (e.g. arm64, x86) already resolve ARCH.
+So what Eduard said is correct, and
+  
+  -BPF_MAX_VAR_OFF < var_off.value < BPF_MAX_VAR_OFF
 
-Signed-off-by: Hui Wang <hui.wang@canonical.com>
----
- tools/testing/selftests/riscv/Makefile | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+does always hold.
 
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-index 5671b4405a12..43eddb919705 100644
---- a/tools/testing/selftests/riscv/Makefile
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -1,8 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0
- # Originally tools/testing/arm64/Makefile
- 
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = $(realpath ../../../../)
-+
- # When ARCH not overridden for crosscompiling, lookup machine
--ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+include $(top_srcdir)/scripts/subarch.include
-+ARCH ?= $(SUBARCH)
- 
- ifneq (,$(filter $(ARCH),riscv))
- RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector cfi
-@@ -12,9 +16,6 @@ endif
- 
- CFLAGS := -Wall -O2 -g
- 
--# A proper top_srcdir is needed by KSFT(lib.mk)
--top_srcdir = $(realpath ../../../../)
--
- # Additional include paths needed by kselftest.h and local headers
- CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
- 
--- 
-2.43.0
-
+> ..., just that it doesn't really matter much as it is
+> rejected anyway. And if it is a constant then smin=smax, so for a
+> constant value it does always falls between +-BPF_MAX_VAR_OFF.
+> 
+>   0: (79) r6 = *(u64 *)(r1 +0)          ; R1=ctx() R6=tp_buffer()
+>   1: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
+>   2: (bf) r2 = r0                       ; R0=scalar(id=1) R2=scalar(id=1)
+>   3: (67) r2 <<= 32                     ; R2=scalar(smax=0x7fffffff00000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xffffffff00000000))
+>   4: (77) r2 >>= 32                     ; R2=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
+>   5: (07) r2 += 536870911               ; R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
+>                 /* r2 is now [2^29 - 1, 2^32 + 2^29 - 2] */
+>   6: (0f) r6 += r2
+>   7: R2=scalar(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff)) R6=tp_buffer(smin=umin=0x1fffffff,smax=umax=0x11ffffffe,var_off=(0x0; 0x1ffffffff))
+>   7: (79) r0 = *(u64 *)(r6 +0)
+>   R6 invalid variable buffer offset: off=0, var_off=(0x0; 0x1ffffffff)
+> 
+[...]
