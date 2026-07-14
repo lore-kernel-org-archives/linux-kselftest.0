@@ -1,90 +1,180 @@
-Received: from smtph3-08.21cn.com (smtph3-08.21cn.com [150.223.194.133])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D259F3DB310;
-	Tue, 14 Jul 2026 06:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.223.194.133
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1A3EEAE1
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784011400; cv=none; b=qUPqJRxipSE8B2yb5Wgaga5t/dh/Duo/vnFkgSebReRk/ZTlnA8hF+AuPeYxXnO71FaJu73d8xunFZR/eQ2jD3mLRg+jbSBP4PEDBpdO7ez/IsM62thBVMJPJKBPUZAtuCDWDfpJqz+21hYKK1o3+GbwAcPS2wNx2HWNmzgmj3g=
+	t=1784014803; cv=none; b=RcUYnuqaIHBbn3l2oQY7SfnDJiGJTn5gLsX1IcHhhxbxdclY49Aq14blHKfEq6OV8PBsDJRnTSb7DE0O5XdLk7FJcqJqH7jEUL7q1zwUNUsKvrK0TaQHozowfrg7TtGQ8wVxAG3ANDoOnXLqQstLXIjoxnLpDPluH5v4pTZ7Rn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784011400; c=relaxed/simple;
-	bh=hl2mc+SiuYGSLcFxilPqreeKz41deeqjQvPyMoshNwc=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=PiMiwq5FRSPqdKPwGzvkd+qJvG/9m3faxf4bGxOo7X9YmAcMZc0j+rUYPpYSWqW+Qmb+ii8Hsh4ks6MVE3gEYMcM3xRyRXMInEZvLcE7E2kId3YXT1RgzQwR9BhsTGUruqehLN6uFRQsVBYriSTWE9Kn7LZLzJ8AmNtM4QRg9vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn; spf=pass smtp.mailfrom=chinatelecom.cn; arc=none smtp.client-ip=150.223.194.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chinatelecom.cn
-HMM_SOURCE_IP:172.27.0.98:0.1526737248
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-139.200.108.11 (unknown [172.27.0.98])
-	by smtph3-08.21cn.com (HERMES) with SMTP id C358B1407C19D;
-	Tue, 14 Jul 2026 14:35:16 +0800 (CST)
-X-189-SAVE-TO-SEND: +pengqh1@chinatelecom.cn
-Received: from  ([139.200.108.11])
-	by gateway-ssl-dep-657b8df9db-d66cm with ESMTP id c120d3a4b3ba41ac9674a6a7513b7a17 for shuah@kernel.org;
-	Tue, 14 Jul 2026 14:35:43 CST
-X-Transaction-ID: c120d3a4b3ba41ac9674a6a7513b7a17
-X-Real-From: pengqh1@chinatelecom.cn
-X-Receive-IP: 139.200.108.11
-X-MEDUSA-Status: 0
-Sender: pengqh1@chinatelecom.cn
-From: QianhengPeng <pengqh1@chinatelecom.cn>
-To: shuah@kernel.org,
-	broonie@kernel.org,
-	jackmanb@google.com,
-	liuhangbin@gmail.com,
-	rbm@suse.com
-Cc: skhan@linuxfoundation.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pengqh1@chinatelecom.cn
-Subject: [PATCH] selftests: runner.sh: avoid overriding kselftest_cmd_args with empty variable
-Date: Tue, 14 Jul 2026 14:34:43 +0800
-Message-Id: <1784010883-25386-1-git-send-email-pengqh1@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
+	s=arc-20240116; t=1784014803; c=relaxed/simple;
+	bh=Ii4QglIlNfk2AF9Ta5Xci6IGgX7bNyNYfS9+14rJzNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tzMRmTdAWT8eJaalzdkTwFAvSnDDLwtzByQmj9/Y+p9G4lMqvmBvU+/P5DSVqkjGvx2Q5QIZaRrH0iNtSkIHBdzIzrDeMltSpT/+ren8vnLKhyVSu15UaDyTEwULW4JL1/g4+F+qVH53+mpCGBf5Vh0lD319WGweAFRiQU1c9SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=MXGbOTxb; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="MXGbOTxb"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493ba701891so4715575e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 00:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784014798; x=1784619598; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7C5iWjcphG9+X8eLvvIf+CpqUo2Z4rnWqlw/CwVzzuA=;
+        b=MXGbOTxb/bWGnJSaW6/5X7OBDtdY5cRnC3WhClHMgp+BSOmlZyRVXImcF77gCuruCm
+         JABkSDaLE4PVCwElIQtzeRBaqXfMR3PpBt6qPdPC5uBXSlyAuFjCMHaLLjfp0Mt7swqP
+         as9OJpiGN+iybBbWENmIMOzoGxLznGHJzWF3KkEYSRddBIqZlhxs1IgNh5COjZRpafJa
+         VsA3ozpE/9f7aJ7SPQkdjW7lQxqUD0sNDYZYhXNmaNxtXjaSjL+h8DSkLZ828gGWtcT0
+         Rln1x8RKDBYr+cxoGWwi6+x6sb7xkooEkMGJHt+njcSi4vLJZlcWfPoK9ojLCvFIP0Zv
+         lhSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784014798; x=1784619598;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=7C5iWjcphG9+X8eLvvIf+CpqUo2Z4rnWqlw/CwVzzuA=;
+        b=i6uLDPnekA22sTnW6cL8rtZ5Je+fzlomQ2i22ho2EWjZz8u21NfmZUtbFauf8wTzna
+         9UqwN/V4CXuVQOqaP+oVoLmmD2nyNe3Q14337oz10yogLrtWgcsUrAKX4YOvJhXcqBAp
+         GupImm8fJgMOTCE8SEwKYyUnIjmvuyz3asOImp9hAiRl4UpEn0gHXd25JHAP05XA4uoc
+         eW3cEBwx6aJVJd2JFyjFlrK4Ej1ja53A3ckqAlzL52F/SdZUE9vhQVaGUBqS5XDm/wVn
+         pS+PpUrlgp4G4R8ZVXzFE8+99dvTsDiiHuMUO+RJz8bGIfmjGsAlj6N+o1xJSDlswsiq
+         Nbeg==
+X-Forwarded-Encrypted: i=1; AHgh+Rp+tCuiZfO0M89oryr5Io+ki87hBjrX3Mm9uPD1Lif5nckSgEgKegB1fPljNPyUxDa2zAgFsKurZSJD2r/MUkU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8PdYsFFGn6Tjo3C0ZG1/rKwXegkPKmLoNi+oXHCizcAt3jZ79
+	6NLrOKgMrDUDF9Bi7kibHSbSMm4KnIiIBAmeyJj7uhqnVhti+Lmaf+h71Iga+VtwDRQ=
+X-Gm-Gg: AfdE7ck8Ulpaln2VSy4jPnZ1FpHnL+ogyADy8SOQulPljV5ix/DOXof9a9KMqpHmA37
+	NYVwESKzyk6CWMX5H6kjDzhsOUOt98SOqijGK79xqh9J7ZZ+fF49HFlbXBqk6WiaFOfagwaV9ZD
+	k0bZFrszfRuuozzEDyltuF7QU7+Z3Uf4t9Z55JHrCekL68rqcgQqUphtghEi8Vf4RdSfjLI1Lhi
+	irfb4ynLdPq/U6+bm1APBA6FBwbUYm4IVqd2EZ9uBo30heDPBa62ZF4XOQ7USmqZBlaznr7fK1w
+	8mzjRrE6ulkwdOiN1Pv4UI96bt+oVUd9BB46d6NWTMDMlsKbUuVwAsWr3z0vdLh8nY+h2AmwW48
+	OVOiSk8CX8EWsBiXY2QBf4d2yDd/IBew0GrWVT2TQPjEWufXT7kLwAubmQv3LWR4lZvubYrCQ5d
+	9a0ZjwprqDYszBKaVm34YVgg==
+X-Received: by 2002:a05:600c:1f87:b0:493:f870:fbf0 with SMTP id 5b1f17b1804b1-493f88b3693mr153093885e9.34.1784014797971;
+        Tue, 14 Jul 2026 00:39:57 -0700 (PDT)
+Received: from localhost ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a322bcbsm63449225e9.9.2026.07.14.00.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 00:39:57 -0700 (PDT)
+Date: Tue, 14 Jul 2026 09:39:53 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	linux-rdma@vger.kernel.org, cgroups@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, jgg@ziepe.ca, leon@kernel.org, 
+	parav@nvidia.com, mbloch@nvidia.com, cmeiohas@nvidia.com, roman.gushchin@linux.dev, 
+	bvanassche@acm.org, zyjzyj2000@gmail.com, shuah@kernel.org, tj@kernel.org, 
+	hannes@cmpxchg.org, alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, 
+	sidraya@linux.ibm.com, wenjia@linux.ibm.com
+Subject: Re: [PATCH rdma-next 08/13] RDMA/cgroup: Scope rdma cgroup device
+ visibility to the net namespace
+Message-ID: <alXmwzDASDFaeVNZ@FV6GYCPJ69>
+References: <20260709095532.855647-1-jiri@resnulli.us>
+ <20260709095532.855647-9-jiri@resnulli.us>
+ <ak-Z071LrWhnI5lK@localhost.localdomain>
+ <alSxB0wziQnNuyfn@FV6GYCPJ69>
+ <2fc297ce-7259-4410-9d86-ccc32485622f@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2fc297ce-7259-4410-9d86-ccc32485622f@linux.dev>
 
-Normally the value of kselftest_cmd_args can be read from settings file,
-but it will be overridden by KSELFTEST_TEST_KMOD_SH_ARGS which can be
-empty if user did not give it a real value.So it should be better to
-check if KSELFTEST_TEST_KMOD_SH_ARGS is emty before referring its
-value to kselftest_cmd_args.
+Tue, Jul 14, 2026 at 04:28:01AM +0200, cui.tao@linux.dev wrote:
+>
+>
+>在 2026/7/13 17:34, Jiri Pirko 写道:
+>> Thu, Jul 09, 2026 at 03:04:23PM +0200, mkoutny@suse.com wrote:
+>>> Hi.
+>>>
+>>> On Thu, Jul 09, 2026 at 11:55:27AM +0200, Jiri Pirko <jiri@resnulli.us> wrote:
+>>>> index 993446ab66d0..4523c1884d67 100644
+>>>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>>>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>>>> @@ -2752,6 +2752,13 @@ RDMA
+>>>>  The "rdma" controller regulates the distribution and accounting of
+>>>>  RDMA resources.
+>>>>  
+>>>> +When RDMA devices are isolated per network namespace (exclusive mode),
+>>>> +device names are unique only within a network namespace. The device lines
+>>>> +below are therefore scoped to the reading or writing process's network
+>>>> +namespace: only devices accessible from that namespace are listed, and a
+>>>> +limit is applied to the device of that name in that namespace. Configure
+>>>> +limits from the same network namespace as the workloads.
+>>>
+>>> OK.
+>>>
+>>>> --- a/include/linux/cgroup_rdma.h
+>>>> +++ b/include/linux/cgroup_rdma.h
+>>>> @@ -7,6 +7,7 @@
+>>>>  #define _CGROUP_RDMA_H
+>>>>  
+>>>>  #include <linux/cgroup.h>
+>>>> +#include <net/net_namespace.h>
+>>>>  
+>>>>  enum rdmacg_resource_type {
+>>>>  	RDMACG_RESOURCE_HCA_HANDLE,
+>>>> @@ -34,6 +35,15 @@ struct rdmacg_device {
+>>>>  	struct list_head	dev_node;
+>>>>  	struct list_head	rpools;
+>>>>  	char			*name;
+>>>> +	/*
+>>>> +	 * Net namespace the device belongs to. @netns_shared mirrors
+>>>> +	 * ib_devices_shared_netns: when true the device is visible from every
+>>>> +	 * net namespace (shared mode); otherwise @net is the only namespace
+>>>> +	 * that may see and configure it. @netns_shared is updated when the
+>>>> +	 * sharing mode changes, so use {READ,WRITE}_ONCE() to access it.
+>>>> +	 */
+>>>> +	possible_net_t		net;
+>>>> +	bool			netns_shared;
+>>>
+>>> Any reason to store the netns_shared split per device? (IIUC, it's a
+>>> global parameter.)
+>> 
+>> No reason, changed.
+>> 
+>Hi Jiri,
+>
+>A question on the v2 you mentioned to Michal.
+>
+>Once netns_shared stops being cached per rdmacg_device,
+>rdmacg_device_visible() in kernel/cgroup/rdma.c still needs the current
+>sharing mode, whose authoritative value lives in the IB core
+>(ib_devices_shared_netns). How do you plan to expose it there without
+>the generic cgroup controller reaching back into drivers/infiniband/?
+>Exporting the global, or keeping an IB-side update hook, both feel a bit
+>awkward; it would be good to see which direction you took.
 
-Signed-off-by: QianhengPeng <pengqh1@chinatelecom.cn>
----
- tools/testing/selftests/kselftest/runner.sh | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Exposing this from ib side is not doable, as IB may be compiled as a
+module. So what I do is I intrododuce "static bool rdmacg_netns_shared"
+in cgroup/rdma.c and exported function rdmacg_set_netns_shared() to set
+it from IB.
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 311811d..a99147a 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -103,6 +103,15 @@ run_one()
- 		ktap_print_msg "timeout set to $kselftest_timeout" >> "$logfile"
- 	fi
- 
-+	# Exported environment variable overrides the settings file
-+	eval kselftest_eval_cmd_args="\$${kselftest_cmd_args_ref:-}"
-+	if [ -n "$kselftest_eval_cmd_args" ]; then
-+		kselftest_cmd_args=$kselftest_eval_cmd_args
-+		ktap_print_msg "overriding cmd_args to $kselftest_cmd_args" >> "$logfile"
-+	elif [ -n "$kselftest_cmd_args" ]; then
-+		ktap_print_msg "cmd_args set to $kselftest_cmd_args" >> "$logfile"
-+	fi
-+
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
-@@ -113,7 +122,6 @@ run_one()
- 		if [ -x /usr/bin/stdbuf ]; then
- 			stdbuf="/usr/bin/stdbuf --output=L "
- 		fi
--		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
- 		if [ -x "$TEST" ]; then
- 			cmd="$stdbuf ./$BASENAME_TEST $kselftest_cmd_args"
- 		elif [ -x "./ksft_runner.sh" ]; then
--- 
-1.8.3.1
 
+>
+>On the mechanism itself: it's the right call that rdmacg_try_charge()
+>stays out of the scoping. Charging takes the rdmacg_device pointer
+>directly (no name lookup), and a task can only charge a device it
+>already holds a handle to, so applying visibility there would be wrong.
+>The scoping deliberately touches only the name-based lookup (the write
+>path) and the enumeration (read/show) paths -- worth keeping that
+>invariant in mind so a later patch doesn't grow the filter.
+>
+>Thanks,
+>Tao> Thanks!
+>> 
+>>>
+>>> Thanks,
+>>> Michal
+>> 
+>> 
+>> 
+>
