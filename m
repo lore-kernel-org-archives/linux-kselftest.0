@@ -1,98 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85880478E50;
-	Tue, 14 Jul 2026 13:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9F043CEFC
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784037162; cv=none; b=fra0qhzt0dAYhIVEr/W7bAx4ulFyO9hgmYov2ua6XOFdEEkOsG/Rz+eCXt4ZQJXCOetZiouZUxSQAITnaYecjDhZERf9Nsmt0y9gKEsGgiMZLztj20+S5VJ1hQibOKck+K9YJYa8ScH/iavi9tIHGlCbsp9HJZ7hA73b/d4NyqE=
+	t=1784037820; cv=none; b=qWYvzSZTULTD76wohUVhzuPJCCNXDkmYG+g6dh7nNbKR0njQKUqt8udoKnbbNsxDrLALimGRnvLt3OA4QlH1CliPqfvIFuQ2PUyL3sUY9dpQF3n+JldqhFBEI4tbhH8cV4gXiZ+/pK9wjKPCjNYg4NlHlLa1VOz2EL6r3J1tGE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784037162; c=relaxed/simple;
-	bh=oa/Api2m6C6paRLqdcrPW1anhL7pYe2ZAUU7W+EEjsg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c3O20P+XdOoDfYlr29TFrQSEdA88/wwHmTMuJ0U+rUs6cA5BvlwTmoQwoNB7ZkafmgPpm98p5OG5Ess5yLzlxrsTGBhfjj9659YEfnLNYqk+/2imF9o0FjqhAVyldKYuCWJL0miI4AG1O6sCjLKAoiEkwI9QF7k1z52jHsh075E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2Mu32fe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784037820; c=relaxed/simple;
+	bh=x7vkr5xuv03n5zI2/6X6/P9TOOIWoiQal4W8kv8GZCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sxmJSc7ecUKodsYC5dlf/mhUtxUxEO9T4eOCl36KB+RN/SaIMET1wNn1BwFnq6fM/BXFF0v4jguJkU5OcxDLfFPaaSan2E/uDE3zahAGFxi/m94VVfJAXUejdddUpcwTreGax/SvcPOzZmcI5z/yJztYIgqK+GuO6JmQDZL20AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=LfD1dCie; arc=none smtp.client-ip=209.85.161.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2Mu32fe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E051D1F00A3D;
-	Tue, 14 Jul 2026 13:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784037161;
-	bh=Csk2Bs95SoFAJpGitaPFL2lXi5OcS5tAvUkrHnWNWRA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=o2Mu32feVKP83fD7JNCE+FPeaLoTggU2hLWV+t91Oq6Xo/b7T0n91PDrKGBicdpIT
-	 tpx7pkI6XwSagk62CiGVmhne6IeOKo8WbVk+n3mogaHWHsVIDCTFl2ar8xwch0Kc1Q
-	 4DxxOJ66fjwEMNPC8Gx/UtamMjq5vnz2drmQ2Ms2q/x0xLhSQSZYEl8WQ+zvrcQCz2
-	 4n/elR7mws1pVx6Rfn7PvRVZYtRNH1JfJnMdtcSCP5/9dTyxKcWpQimVMabUYxJNKM
-	 /2kZJa3E83DkUVcmNqKZbkYKgnyEdquT4xc4eSqF1wqV77KN8xdgkWTJsDDc5HNOCO
-	 xnu1NV3GuDpfg==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	stable@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	SeongJae Park <sjpark@amazon.de>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 2/5] mm/damon/tests/core-kunit: catch test failure in test_merge_regions_of()
-Date: Tue, 14 Jul 2026 06:52:30 -0700
-Message-ID: <20260714135236.92699-3-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260714135236.92699-1-sj@kernel.org>
-References: <20260714135236.92699-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="LfD1dCie"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6a397db52c1so2234360eaf.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1784037817; x=1784642617; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lIWNtYbjtsZ0PQI9/iIL6fWurRq5Hy1V2922aR85kK4=;
+        b=LfD1dCiegdJE37ELt9oebGIyXbPcxFRMQ6YoHYmm/+LW0FfWf6YTFaO6D5uYvrZUdT
+         Qvj4EWYiBbvvRiD8dZ3CW/P2N0jcKObP5KbUyhx89LCwqznKgDT5K8bdFwWixULJ3PSw
+         H/F07f6MQ4il62sG/Tq/jVNGNjtxH0I+CFEg6MSgyDn03WtKo3p6MJ7cLxs7T3/Bvu09
+         8lUPSdIu5kDGGino2Ze6UhKQPH313+G35l34TaZcC6sVXd22Xj7XoBNRIp3NcqXt7Reo
+         TMY6zkEQksLU+aMVznW0UmtwmIc0QcTbJ0mdR9/rfBnwOvaDNLRQjszHbuoq09qrpH90
+         oqWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784037817; x=1784642617;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lIWNtYbjtsZ0PQI9/iIL6fWurRq5Hy1V2922aR85kK4=;
+        b=YWU3WmYqDjdIlwPtmuVdVtdlDZknrt5zEkUa2sEqWJIZWXFPsCL9l2xpvIuL88KePZ
+         MLR+GYpeqMf3uqn+J5g3hb9AKqZeyx/krlFb+B5SyPHgURL16z4FJ1zCVzl8SX7leeoQ
+         MvGyTmb7CYIK2OHv7QS2i/8XCybDjZMpjNwfyZyTJuoPon5EZ5CV3jO8/D6VusCvGG+P
+         YdUeScAW/1ZT73LzO+h0xu/RKqBobl2zhgIWaJtXnDUeeodZeIao83piphOmoD4CXQzP
+         ScIuHqJkA2uFvA71Nybi63HjjxrsYZXRbgSALg0un7T+JaPsm5Bwv6pI0+3D7qF4++/Y
+         x2AA==
+X-Forwarded-Encrypted: i=1; AFNElJ/gE5g2sKdthYIbtU78+JGK2SkKJ9cB0QT327RVVmUm0vNTpFYRqWhNFrxzHZNckNYCIstS9+PiU39/rh+YOK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSF/13hjo+6qmquyqr6cdq1WG/mVNv4KaFwFobbhksIHs+R3St
+	RiVrvp03e48aqGPOiX8md2RPJ8x77ZjCB5cx7MawI+xChBnpOezcchUgvYR3cLqZJtk=
+X-Gm-Gg: AfdE7cm8jd9sEOeNMlOxRXfJGGfGVhJwnsFEeqyqSEH04EA1sqiaN8Sm/n4MQw8el50
+	5DYbWtK8pbGk3QUJ6ylVr53J5wV46t+tcobbYG7JD8VD3gMDdx3iq927IX54feLsL1sJnIe09Ff
+	DwSUC+1Y5aJsX+CIghS1SC7QZGsk+g3kOptluvusFftya8EBYX3zC4gGbzAJvmn/2x5LOo8pVPO
+	GsBP79hBij1k5nFvrT01cQVLysBKQftrmQ5mtJsiCcACwCAzpX+tJvQDkRcAip6eALaQmPqYRva
+	x7B8XnLIHAttG1KF2uZV4UdDzgvBTw2zm5mZUJXxaU/n0jmBC21VIRdqPUeh2GCyH44wP+JGtAe
+	ctrZzesDNrLHAW8FZhv+6gUy4745LDhOUcntkcF40g2d8wtcWeKV68GblNMfKInsmHsOdMuM=
+X-Received: by 2002:a05:6820:1f12:b0:6a3:1dc5:3557 with SMTP id 006d021491bc7-6a39a5b34bbmr8055289eaf.16.1784037817485;
+        Tue, 14 Jul 2026 07:03:37 -0700 (PDT)
+Received: from ziepe.ca ([159.2.72.92])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-92ee5d6a77csm1521115685a.45.2026.07.14.07.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 07:03:36 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wjdjU-0000000FeUS-19dr;
+	Tue, 14 Jul 2026 11:03:36 -0300
+Date: Tue, 14 Jul 2026 11:03:36 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com,
+	reinette.chatre@intel.com, tomasz.jeznach@linux.dev,
+	will@kernel.org, robin.murphy@arm.com, fustini@kernel.org,
+	pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com,
+	corbet@lwn.net, shuah@kernel.org, kevin.tian@intel.com,
+	cuiyunhui@bytedance.com, yuanzhu@bytedance.com,
+	iommu@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, x86@kernel.org
+Subject: Re: [RFC PATCH 1/7] iommu: Add group lookup by ID
+Message-ID: <20260714140336.GA3716926@ziepe.ca>
+References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
+ <20260714130657.46963-2-zhangzhanpeng.jasper@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714130657.46963-2-zhangzhanpeng.jasper@bytedance.com>
 
-KUNIT_EXPECT_EQ() does not abort the execution of test code when the
-expectation is not met.  But damon_test_merge_regions_of() code after
-its initial KUNIT_EXPECT_EQ() call assumes the expectation is met.  It
-does a per-region test with a hard-coded number of regions that is
-correct only if the expectation was met.  As a result, __nth_region_of()
-could return NULL, and the test code can dereference NULL pointers.  Fix
-the issue by catching the expectation failure and skip the per-region
-tests.
+On Tue, Jul 14, 2026 at 09:06:51PM +0800, Zhanpeng Zhang wrote:
+> Add iommu_group_get_by_id() so callers can resolve an IOMMU group from
+> the numeric ID used in /sys/kernel/iommu_groups.
+> 
+> An ID lookup must keep the group object alive without also keeping an
+> otherwise empty group active. Embed the devices kobject in struct
+> iommu_group so its address remains valid until the parent group is
+> released, and return a reference on the parent kobject to ID lookup
+> callers. Add iommu_group_put_by_id() to release that reference and
+> iommu_group_is_active() to detect when the devices kobject has become
+> inactive.
+> 
+> Serialize lookup against group teardown with iommu_group_kset_mutex and
+> only return groups whose devices kobject still has a live reference.
+> This prevents a concurrent lookup from dereferencing a stale child
+> kobject while allowing external users to discard bindings to empty
+> groups.
+> 
+> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+> ---
+>  drivers/iommu/iommu.c | 107 +++++++++++++++++++++++++++++++++++++-----
+>  include/linux/iommu.h |  17 +++++++
+>  2 files changed, 113 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index e8f13dcebbde..da269d10f6bf 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -40,6 +40,7 @@
+>  #include "iommu-priv.h"
+>  
+>  static struct kset *iommu_group_kset;
+> +static DEFINE_MUTEX(iommu_group_kset_mutex);
+>  static DEFINE_IDA(iommu_group_ida);
 
-The user impact on realistic setups should be negligible, as it is a
-unit test.
+I think it would be better to change the ida to an xarray than to use
+a string search on a kset..
 
-The issue was discovered [1] by Sashiko.
-
-[1] https://lore.kernel.org/20260710144937.26981-1-sj@kernel.org
-
-Fixes: 17ccae8bb5c9 ("mm/damon: add kunit tests")
-Cc: <stable@vger.kernel.org> # 5.15.x
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 485472ddebd19..eba643762132f 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -260,11 +260,14 @@ static void damon_test_merge_regions_of(struct kunit *test)
- 	damon_merge_regions_of(t, 9, 9999, ctx, true);
- 	/* 0-112, 114-130, 130-156, 156-170, 170-230, 230-10170 */
- 	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 6u);
-+	if (damon_nr_regions(t) != 6)
-+		goto out;
- 	for (i = 0; i < 6; i++) {
- 		r = __nth_region_of(t, i);
- 		KUNIT_EXPECT_EQ(test, r->ar.start, saddrs[i]);
- 		KUNIT_EXPECT_EQ(test, r->ar.end, eaddrs[i]);
- 	}
-+out:
- 	damon_free_target(t);
- 	damon_destroy_ctx(ctx);
- }
--- 
-2.47.3
+Jason
