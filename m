@@ -1,63 +1,63 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45611472786
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E77478874
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784034482; cv=none; b=YRBWHRqiUhZxKELVR2UEtuGM1CXFk/prbQOLmWVfjcl/toOBweGusgbtbPYyKmM2J68sKXiD5HEnenOyWew6AhQxeaSkjp4VjcE8FV2CDK+HLl5iMGUB3ZlNaBcbv80DeuZlsr0q+ugqBq2t4BmE4SOCgCrgLtyh2y9PDLT7BdQ=
+	t=1784034494; cv=none; b=KVTfgT/pVf7ZkH/gH9k3SRVYPjLsGqCjLCLHc/PBWQF2U1ddIasksMk17XPf7K2S+QrTeGFMSoQc1Pequ6Eu3dMPpCqhYbCthZXIAILWlMhsA8kOrbQg5zhK/S/DymBkWl2ZH7iceFaG27Ql5cUUEDflKEXKbXXYMPoq+yi9zWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784034482; c=relaxed/simple;
-	bh=qsNLCYeMQllqAlZI5ZYlNbddWlxsI+AfKPo9caZQY2c=;
+	s=arc-20240116; t=1784034494; c=relaxed/simple;
+	bh=8nc2OVUHCKRxT0Ws6HOAWmw/VzTaZ0aIVfDSOxFg04M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J0T6rZHt+m42s2rbKXfPxI03GM6G21ZripHambhyeoEOiw9/jfv/TCyJe39aUB3JndVpF0ENw11EOtt0dwtL8W6n4pPO75zIFx3VieVtHrSfqvKTwoNuGQHdah9FmRWQ4vGN1DMN2HGSM5FYdUs3uV9CY3TjxfNYekm2tvVtNm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=M+67DoGQ; arc=none smtp.client-ip=209.85.210.45
+	 MIME-Version; b=tPvTOW3Le9AfIB/DblHhuNT82BBk6aZBktRJIFXNEwLMaWM7du1PLpc2PztcmPipxnA6LvRFJJ0EyDSvBHGsxTwrZVUFcX2xR/rA2S6nPmmjBjQKi+45FJq1AFhVm5KfezVptUOvxBA2JZK8XV6VhZtwnJTNC2sTh56U/6BR3ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=ZRdWoDgf; arc=none smtp.client-ip=209.85.210.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="M+67DoGQ"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7e9f829d75aso611198a34.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 06:08:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="ZRdWoDgf"
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7e9ecd7216cso503430a34.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 06:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1784034479; x=1784639279; darn=vger.kernel.org;
+        d=bytedance.com; s=google; t=1784034491; x=1784639291; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JpT9/sOjxA5cBGNsD1q8lvPgS5awws3sRPjnLJKoBtI=;
-        b=M+67DoGQ2zaj+EWGWrH1WO6mgRguxmYHJ08P4bn2fRmjSNnkAamQuQ5GuCJ8fjPy5W
-         O7y5/tQvHqABTw34AxVkpgdh+dbEN34+KRFUDBVOvCaYZ+Qus2nRQhkS1u2VnprEG7mX
-         Qc6gl/4NRyAsFK6lrebi6p//Izukh4WM3RszfBluOtNd4VoRDNEmllXukJKUmX/wo49F
-         4nRG7msK3NqYgHCqpj11DAUbQ7xn3Bkw0JQ/koqh2iQ2h5b+KsHEk/qpfF5DvKidL5Yf
-         gbH/BGWz0kERDRI0m/gwebvvkyln0qdIZtkqpqLsv8Mc4tzVOF9Fm7N4cSC2oRMUXQe0
-         Is9A==
+        bh=tyPwfho2+gt5VglzPQUkATM5bIbB7AhJfPglM91knA4=;
+        b=ZRdWoDgf5101ckJp+EfC9RoQvSMN8/RQV5Va1lyGKpYIqxuBWrYzecZffmq2hkLJCX
+         ua18RsNNESGqnJxLBBiWPVlIcwwivywhQ4vy/rglmjX1e7YD3IuyU4PpT5FLDfqAAwRc
+         CV/klMmhlN9QZibUeDxe6fWIslsHMa62qaN04BHAuE0nHLTiWIJ9LHZo5Tqt1z1ZLGel
+         Jb9E4tVXT12XpBiMYeIp8m9g23IrlAPYm09m62M4ysPU4PSAlol7jUjqv8V7bfCSizDi
+         TLQBUVsRqxoCfcchN0hIYZsUN4BGdQanofXi56n8ZbfS3CMzxmRUntZ4TiE2mH0AY04V
+         zxvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784034479; x=1784639279;
+        d=1e100.net; s=20251104; t=1784034491; x=1784639291;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JpT9/sOjxA5cBGNsD1q8lvPgS5awws3sRPjnLJKoBtI=;
-        b=gzZiWZPRrQ2SexoWR/iAN4oD5514p4V8ANodQRiBzSo1Mb0tVK0jxixfaWri0xFdgq
-         2JMAqfrJ85b9JkgzpZfpfi6YQAFX0R5xR7NHJly+53t0jc58ZhXnihO0SABT/I42vy5P
-         XOlvt83kNBfdMxvUXuJuYnpi+RL0nboCK5yb7Otw+hwUEqAblIqC1vwLI6MBFPsRhys5
-         Pjy5MjtMpYL/MOIDSB5P9F542YrfSDD+4bDYQ5MsBvPZfMYBDPqe6KPNgzaXnc2ZMwZS
-         2vsBBLdJP0kap2/kkvqcssgoPssQSNumXAtvl/rt6RIaeYtg9GLOkWky+rBhlcj7Vxqy
-         DrxQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8CPTAkKjkxVNXIUTkcELzri+MOPMfXqWUDYGuzC9aPEiCpbT2B1GvG//J5/QjGrgBAY8FyGVZDSuLldbGpAEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypSJwdm0ggnHlW3o6p8B0ebia+S0z/ISVztLFi97R5PzaO0j/W
-	vhysa4m2SgO1vN55dg89UddAqm8S4xE0NhrPGziRSkO1IFc0DV1wPrWSi8QO3U4ihFY=
-X-Gm-Gg: AfdE7ckNOestj+RRO/DTJqzzIKCrHUawPXnfrPXkT8o6KSIDZvNQ0kXqzys1QI92/sQ
-	JGS7Gnc2TGFa/7qbm1c42wdbGl32s+4WIQB+QknmR3g8H1bC9h4T8ItyBfSv6pxjuTbN4WnuzSa
-	nqDO4WlGsroZcSniU8sFooWRV1NiDxmu+XK5mqm+73y2vI+7T0M6totvZ1J96hQnUjFDQHA4k29
-	jMs5f9Yc8eFxbm0B7Fqa+alvtcPkgYRfFTRX+BDJmfVsMkCBElizDRShkUEHjmpNsrxsCsBUWl2
-	mky481tI5NAggE7tsf/WVZKhYvCNB/wdRJYFX0DSkmFag3eK2ugbhZtTGJdWTMl+3DwdbWVXrGj
-	dhYFBi07h5T61ynM0aytTMsg7pFVFB5HU3qgAAXb+2ESfusgsnXLfNF1WWvz15LeWRC+9VAuJnf
-	geU5J6jsoUokQuKBWj16wKaMrblfeopJjYuaEXShQY0ifEg9OqbJgrqRknbplGgA==
-X-Received: by 2002:a05:6830:b13:b0:7e6:da40:b7fa with SMTP id 46e09a7af769-7ec0983a65bmr8871169a34.24.1784034478996;
-        Tue, 14 Jul 2026 06:07:58 -0700 (PDT)
+        bh=tyPwfho2+gt5VglzPQUkATM5bIbB7AhJfPglM91knA4=;
+        b=TTwHP6ihDC6J+WMzBp/a7JNg44XTLRJAyG4mZ3HhtQ6hN5frAN1GS0c5KQxm5KrPby
+         j7/qZ8B9GCFbTPwA/EvHE8Oale62xzp2reZpbf5ZKUw2iUN2+kRt+cP9Bz3mMnnJmz31
+         KnY3BV6h4SDunn8iVoUy9iBqX+t957rXzAJxDa3Cyy1m1VUa5FFWEUhLsj6r2M0kljG5
+         CDhoKB9HCxvmDNOsiX28q/qLiOH/H71moUP+fMihOEMhHxvaBQi4qMPev9/ala/41M50
+         4/pHcHqSDwTi25/TNxX4CdXVHkOn4xw+hDqOlLr+T60Un6q9ttHfTCeMwZUJw2Wv0OWq
+         ABKw==
+X-Forwarded-Encrypted: i=1; AFNElJ+czU7fWPrTRmqKv+NuIJiSWN/1d3K6BYmPRkV9u6GBH3YJL6n+jgjOasfzfKFOFe7w59uf0zBaxJtH1VPhjs8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1xwk5ii+q3MDOh23lM8l1rnAuxr1CurSAfxt8uw8mZiLNkd/K
+	dzsBjBwh8DmKh8TdT2lf0fCXXLl+SrHyiuuablI7ypEO/F1MtjvMNwY7rfbsyvsIkX4=
+X-Gm-Gg: AfdE7clmHKAgiZloU5VlWHiRtIbgPQlrTxkEapR+BeJ5Pbs1RCXK1DuPyONi8JAZmCd
+	wz+AmSO9bE8L3PZhjM1RxZFLnWgvIEDS+dol8PdjMmm2nTUaTTFW+dcPpSeQIkLYUkphNAJnm2F
+	z2rwlkHjStQGLVedn9QWP4U14NkRrbhNI/1UVhqxgzcc8ibCPQyWxhO1g5sPqsigow0gfCBvzTT
+	nZrKZaiy0/URTKSaSYCZBINdEgl3pWQ6iYs4BpP61tVrebeZRt+qMy3aLEFJ7DodsfbktCTyZQO
+	KS7PWoRIbOL6fFH3RMKzW87kdSIteaRMHwZcufGD4APo+NRL/CrDn2irrGY3IRoXzM+FDXU6gAq
+	8kCEuDfwDtBmtP6s3iSirvAS8GsF8ZdLFTJ5K3xVl8q9pea30zHNHR052k8jhwsVazr/LZFPllS
+	QILGNaCjYeZpsULkmWscWJy7fJG0ieG4bAliguBiPINfhBsHAZJa9HJsUZW0E5yw==
+X-Received: by 2002:a05:6830:82ad:b0:7eb:3af8:8c1a with SMTP id 46e09a7af769-7ec096ecdc5mr8483705a34.9.1784034490998;
+        Tue, 14 Jul 2026 06:08:10 -0700 (PDT)
 Received: from FJ7FR2JRQ3.bytedance.net ([178.93.176.7])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcab8efc3sm14657738a34.0.2026.07.14.06.07.47
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcab8efc3sm14657738a34.0.2026.07.14.06.07.59
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Jul 2026 06:07:58 -0700 (PDT)
+        Tue, 14 Jul 2026 06:08:10 -0700 (PDT)
 From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 To: joro@8bytes.org,
 	palmer@dabbelt.com,
@@ -85,9 +85,9 @@ Cc: will@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [RFC PATCH 4/7] iommu/riscv: Program QoS IDs for assigned groups
-Date: Tue, 14 Jul 2026 21:06:54 +0800
-Message-ID: <20260714130657.46963-5-zhangzhanpeng.jasper@bytedance.com>
+Subject: [RFC PATCH 5/7] iommu/riscv: Expose global QoS IDs in sysfs
+Date: Tue, 14 Jul 2026 21:06:55 +0800
+Message-ID: <20260714130657.46963-6-zhangzhanpeng.jasper@bytedance.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
 References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
@@ -99,354 +99,321 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Program RCID and MCID for RISC-V IOMMU groups through the device context
-TA fields. The resctrl group assignment is per device group, so reject
-BARE mode where only the per-IOMMU iommu_qosid global default is
-available.
+The RISC-V IOMMU QoS extension provides iommu_qosid as a per-IOMMU
+global default tag. It is used for IOMMU-originated DDT, CQ, FQ, PQ, and
+MSI accesses, and for device-originated requests when DDTP is in BARE
+mode.
 
-Validate every group member, firmware ID, device context, field value,
-and QoS ID capability before changing hardware. Then update all members
-through the checked IOMMU group helper so a validation failure leaves the
-group unchanged.
+Initialize iommu_qosid to RCID 0 and MCID 0 when the hardware advertises
+QOSID support. Preserve reserved and WPRI bits with read-modify-write,
+and use register readback to reject values which the WARL fields do not
+retain.
 
-Serialize DC.ta changes with context setup under qosid_lock. Change only
-the RCID and MCID fields with ordinary accesses so fixed DDT mappings are
-not subject to atomic LR/SC operations, invalidate active device contexts
-after an update, and clear the IDs when a device is released.
+Add a qosid attribute to the RISC-V IOMMU class device. Reading returns
+the current RCID and MCID values. Writing the documented
+'rcid=<rcid> mcid=<mcid>' form updates both fields while preserving the
+other register bits.
+
+Keep this interface separate from resctrl group QoS. The sysfs attribute
+controls the IOMMU-wide default, while resctrl device assignment programs
+per-device DC.ta in translated modes.
 
 Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 ---
- arch/riscv/include/asm/qos.h     |  16 +++
- drivers/iommu/riscv/iommu-bits.h |  15 +++
- drivers/iommu/riscv/iommu.c      | 200 ++++++++++++++++++++++++++++++-
- drivers/iommu/riscv/iommu.h      |   3 +
- 4 files changed, 232 insertions(+), 2 deletions(-)
+ .../ABI/testing/sysfs-class-iommu-riscv-iommu |  27 +++
+ MAINTAINERS                                   |  10 ++
+ drivers/iommu/riscv/iommu.c                   | 159 +++++++++++++++++-
+ drivers/iommu/riscv/iommu.h                   |   9 +-
+ 4 files changed, 202 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
 
-diff --git a/arch/riscv/include/asm/qos.h b/arch/riscv/include/asm/qos.h
-index cf19e8438bb9..daa758d4efff 100644
---- a/arch/riscv/include/asm/qos.h
-+++ b/arch/riscv/include/asm/qos.h
-@@ -2,7 +2,23 @@
- #ifndef _ASM_RISCV_QOS_H
- #define _ASM_RISCV_QOS_H
- 
-+#include <linux/errno.h>
- #include <linux/percpu-defs.h>
-+#include <linux/types.h>
+diff --git a/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu b/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+new file mode 100644
+index 000000000000..b0cd68997f17
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+@@ -0,0 +1,27 @@
++What:		/sys/class/iommu/<iommu>/qosid
++Date:		June 2026
++KernelVersion:	6.18
++Contact:	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
++Description:
++		The RISC-V IOMMU global default QoS IDs for this IOMMU.
++		The file is present only when the IOMMU reports the QOSID
++		capability.
 +
-+struct iommu_group;
++		Reading the file returns the RCID and MCID fields from the
++		iommu_qosid register:
 +
-+#ifdef CONFIG_RISCV_IOMMU
-+int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid,
-+				u32 mcid);
-+#else
-+static inline int riscv_iommu_group_set_qosid(struct iommu_group *group,
-+					      u32 rcid, u32 mcid)
-+{
-+	return -EOPNOTSUPP;
-+}
++		  rcid=<rcid> mcid=<mcid>
 +
-+#endif
- 
- #ifdef CONFIG_RISCV_ISA_SSQOSID
- 
-diff --git a/drivers/iommu/riscv/iommu-bits.h b/drivers/iommu/riscv/iommu-bits.h
-index f2ef9bd3cde9..782de5c92727 100644
---- a/drivers/iommu/riscv/iommu-bits.h
-+++ b/drivers/iommu/riscv/iommu-bits.h
-@@ -63,6 +63,7 @@
- #define RISCV_IOMMU_CAPABILITIES_PD8		BIT_ULL(38)
- #define RISCV_IOMMU_CAPABILITIES_PD17		BIT_ULL(39)
- #define RISCV_IOMMU_CAPABILITIES_PD20		BIT_ULL(40)
-+#define RISCV_IOMMU_CAPABILITIES_QOSID		BIT_ULL(41)
- #define RISCV_IOMMU_CAPABILITIES_NL		BIT_ULL(42)
- #define RISCV_IOMMU_CAPABILITIES_S		BIT_ULL(43)
- 
-@@ -274,6 +275,14 @@ enum riscv_iommu_hpmevent_id {
- #define RISCV_IOMMU_TR_RESPONSE_SZ	BIT_ULL(9)
- #define RISCV_IOMMU_TR_RESPONSE_PPN	RISCV_IOMMU_PPN_FIELD
- 
-+/* 6.27 IOMMU QoS IDs for IOMMU-initiated requests (32bits) */
-+#define RISCV_IOMMU_REG_IOMMU_QOSID	0x0270
-+#define RISCV_IOMMU_IOMMU_QOSID_RCID	GENMASK(11, 0)
-+#define RISCV_IOMMU_IOMMU_QOSID_MCID	GENMASK(27, 16)
++		Writing the file updates the RCID and MCID fields while
++		preserving reserved/WPRI bits:
 +
-+#define RISCV_IOMMU_IOMMU_QOSID_RCID_SHIFT	0
-+#define RISCV_IOMMU_IOMMU_QOSID_MCID_SHIFT	16
++		  rcid=<rcid> mcid=<mcid>
 +
- /* 5.27 Interrupt cause to vector (64bits) */
- #define RISCV_IOMMU_REG_ICVEC		0x02F8
- #define RISCV_IOMMU_ICVEC_CIV		GENMASK_ULL(3, 0)
-@@ -371,6 +380,12 @@ enum riscv_iommu_dc_iohgatp_modes {
++		Writes fail with ERANGE when either value cannot be represented
++		by the IOMMU. A successful write is verified by reading the WARL
++		fields back from the register.
++
++		The iommu_qosid register is a per-IOMMU global default. It
++		tags IOMMU-originated DDT, CQ, FQ, PQ and MSI accesses, and
++		in BARE mode device-originated requests. It does not assign
++		per-device or per-IOMMU-group QoS IDs in translated modes.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0b5d38b772e0..c59be02c8f02 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23279,6 +23279,16 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git
+ F:	Documentation/devicetree/bindings/iommu/riscv,iommu.yaml
+ F:	drivers/iommu/riscv/
  
- /* Translation attributes fields */
- #define RISCV_IOMMU_DC_TA_PSCID		GENMASK_ULL(31, 12)
-+/*
-+ * QoS IDs for translated device requests and IOMMU accesses with a
-+ * device context (when capabilities.QOSID == 1).
-+ */
-+#define RISCV_IOMMU_DC_TA_RCID		GENMASK_ULL(51, 40)
-+#define RISCV_IOMMU_DC_TA_MCID		GENMASK_ULL(63, 52)
- 
- /* First-stage context fields */
- #define RISCV_IOMMU_DC_FSC_PPN		RISCV_IOMMU_ATP_PPN_FIELD
++RISC-V IOMMU QoS
++M:	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
++R:	Tomasz Jeznach <tomasz.jeznach@linux.dev>
++R:	Drew Fustini <fustini@kernel.org>
++R:	yunhui cui <cuiyunhui@bytedance.com>
++L:	iommu@lists.linux.dev
++L:	linux-riscv@lists.infradead.org
++S:	Maintained
++F:	Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
++
+ RISC-V MICROCHIP SUPPORT
+ M:	Conor Dooley <conor.dooley@microchip.com>
+ M:	Daire McNamara <daire.mcnamara@microchip.com>
 diff --git a/drivers/iommu/riscv/iommu.c b/drivers/iommu/riscv/iommu.c
-index cec3ddd7ab10..deab646bb1ea 100644
+index deab646bb1ea..e85da9eef58e 100644
 --- a/drivers/iommu/riscv/iommu.c
 +++ b/drivers/iommu/riscv/iommu.c
-@@ -48,6 +48,8 @@
- static DEFINE_IDA(riscv_iommu_pscids);
- #define RISCV_IOMMU_MAX_PSCID		(BIT(20) - 1)
+@@ -1658,6 +1658,7 @@ int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid, u32 mcid)
+ 	};
+ 	int ret;
  
-+static const struct iommu_ops riscv_iommu_ops;
-+
- /* Device resource-managed allocations */
- struct riscv_iommu_devres {
- 	void *addr;
-@@ -1091,6 +1093,28 @@ static void riscv_iommu_iotlb_inval(struct riscv_iommu_domain *domain,
- }
++	/* Resctrl IDs are bounded by the system's reported controller counts. */
+ 	if (rcid > FIELD_MAX(RISCV_IOMMU_DC_TA_RCID) ||
+ 	    mcid > FIELD_MAX(RISCV_IOMMU_DC_TA_MCID))
+ 		return -ERANGE;
+@@ -1688,9 +1689,154 @@ static const struct iommu_ops riscv_iommu_ops = {
+ 	.release_device	= riscv_iommu_release_device,
+ };
  
- #define RISCV_IOMMU_FSC_BARE 0
-+#define RISCV_IOMMU_DC_TA_QOSID \
-+	(RISCV_IOMMU_DC_TA_RCID | RISCV_IOMMU_DC_TA_MCID)
-+
-+static u64 riscv_iommu_qosid_ta(u32 rcid, u32 mcid)
++static int riscv_iommu_set_default_qosid(struct riscv_iommu_device *iommu,
++					 u32 rcid, u32 mcid)
 +{
-+	return FIELD_PREP(RISCV_IOMMU_DC_TA_RCID, rcid) |
-+	       FIELD_PREP(RISCV_IOMMU_DC_TA_MCID, mcid);
-+}
-+
-+static void riscv_iommu_dc_update_qosid(struct riscv_iommu_device *iommu,
-+					struct riscv_iommu_dc *dc,
-+					u32 rcid, u32 mcid)
-+{
-+	u64 qos_ta = riscv_iommu_qosid_ta(rcid, mcid);
-+	u64 ta;
-+
-+	lockdep_assert_held(&iommu->qosid_lock);
-+	ta = READ_ONCE(dc->ta);
-+	ta = (ta & ~RISCV_IOMMU_DC_TA_QOSID) | qos_ta;
-+	WRITE_ONCE(dc->ta, ta);
-+}
-+
- /*
-  * This function sends IOTINVAL commands as required by the RISC-V
-  * IOMMU specification (Section 6.3.1 and 6.3.2 in 1.0 spec version)
-@@ -1202,12 +1226,23 @@ static void riscv_iommu_iodir_update(struct riscv_iommu_device *iommu,
- 	 * is stored as DC_TC_V bit (both sharing the same location at BIT(0)).
- 	 */
- 	for (i = 0; i < fwspec->num_ids; i++) {
-+		u64 dc_ta;
-+		u64 ta_mask = RISCV_IOMMU_PC_TA_PSCID;
-+
- 		dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
- 		tc = READ_ONCE(dc->tc);
--		tc |= ta & RISCV_IOMMU_DC_TC_V;
-+		dc_ta = ta;
-+		if (iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID) {
-+			dc_ta |= READ_ONCE(dc->ta) &
-+				 (RISCV_IOMMU_DC_TA_RCID |
-+				  RISCV_IOMMU_DC_TA_MCID);
-+			ta_mask |= RISCV_IOMMU_DC_TA_RCID |
-+				   RISCV_IOMMU_DC_TA_MCID;
-+		}
-+		tc |= dc_ta & RISCV_IOMMU_DC_TC_V;
- 
- 		WRITE_ONCE(dc->fsc, fsc);
--		WRITE_ONCE(dc->ta, ta & RISCV_IOMMU_PC_TA_PSCID);
-+		WRITE_ONCE(dc->ta, dc_ta & ta_mask);
- 		/* Update device context, write TC.V as the last step. */
- 		dma_wmb();
- 		WRITE_ONCE(dc->tc, tc);
-@@ -1474,13 +1509,174 @@ static struct iommu_device *riscv_iommu_probe_device(struct device *dev)
- 	return &iommu->iommu;
- }
- 
-+static void riscv_iommu_qosid_invalidate_did(struct riscv_iommu_device *iommu,
-+					     unsigned int did)
-+{
-+	struct riscv_iommu_command cmd;
-+
-+	riscv_iommu_cmd_iodir_inval_ddt(&cmd);
-+	riscv_iommu_cmd_iodir_set_did(&cmd, did);
-+	riscv_iommu_cmd_send(iommu, &cmd);
-+}
-+
- static void riscv_iommu_release_device(struct device *dev)
- {
- 	struct riscv_iommu_info *info = dev_iommu_priv_get(dev);
-+	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-+	struct riscv_iommu_device *iommu = dev_to_iommu(dev);
-+	bool sync_required = false;
-+	unsigned int i;
-+
-+	if (iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID) {
-+		mutex_lock(&iommu->qosid_lock);
-+		for (i = 0; fwspec && i < fwspec->num_ids; i++) {
-+			struct riscv_iommu_dc *dc;
-+			u64 tc;
-+
-+			dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
-+			if (!dc)
-+				continue;
-+
-+			tc = READ_ONCE(dc->tc);
-+			riscv_iommu_dc_update_qosid(iommu, dc, 0, 0);
-+			if (!(tc & RISCV_IOMMU_DC_TC_V))
-+				continue;
-+
-+			dma_wmb();
-+			riscv_iommu_qosid_invalidate_did(iommu, fwspec->ids[i]);
-+			riscv_iommu_iodir_iotinval(iommu, false, dc->iohgatp,
-+						   dc, NULL);
-+			sync_required = true;
-+		}
-+
-+		if (sync_required)
-+			riscv_iommu_cmd_sync(iommu,
-+					     RISCV_IOMMU_IOTINVAL_TIMEOUT);
-+		mutex_unlock(&iommu->qosid_lock);
-+	}
- 
- 	kfree_rcu_mightsleep(info);
- }
- 
-+struct riscv_iommu_qosid_hw_ctx {
-+	u32 rcid;
-+	u32 mcid;
-+	bool has_devices;
-+	bool has_qosid;
-+	bool reset;
-+};
-+
-+static int riscv_iommu_qosid_validate_dev(struct device *dev, void *data)
-+{
-+	struct riscv_iommu_qosid_hw_ctx *ctx = data;
-+	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-+	struct riscv_iommu_device *iommu;
-+	unsigned int i;
-+
-+	ctx->has_devices = true;
-+
-+	if (!dev->iommu || !dev->iommu->iommu_dev ||
-+	    dev->iommu->iommu_dev->ops != &riscv_iommu_ops)
-+		return -EOPNOTSUPP;
-+
-+	if (!fwspec || !fwspec->num_ids)
-+		return -ENODEV;
-+
-+	iommu = dev_to_iommu(dev);
++	u32 old_qosid;
++	u32 qosid;
++	int ret = 0;
 +
 +	if (!(iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID))
-+		return ctx->reset ? 0 : -EOPNOTSUPP;
-+
-+	ctx->has_qosid = true;
-+
-+	/*
-+	 * IOMMU group QoS is a per-device assignment. BARE mode only has the
-+	 * per-IOMMU iommu_qosid register, which is a global default rather
-+	 * than a safe target for moving an individual group between resctrl
-+	 * groups.
-+	 */
-+	if (iommu->ddt_mode <= RISCV_IOMMU_DDTP_IOMMU_MODE_BARE)
 +		return -EOPNOTSUPP;
 +
-+	for (i = 0; i < fwspec->num_ids; i++) {
-+		if (!riscv_iommu_get_dc(iommu, fwspec->ids[i]))
-+			return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static void riscv_iommu_qosid_apply_dev(struct device *dev, void *data)
-+{
-+	struct riscv_iommu_qosid_hw_ctx *ctx = data;
-+	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
-+	struct riscv_iommu_device *iommu;
-+	bool sync_required = false;
-+	unsigned int i;
-+
-+	iommu = dev_to_iommu(dev);
-+	if (!(iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID))
-+		return;
-+
-+	mutex_lock(&iommu->qosid_lock);
-+	for (i = 0; i < fwspec->num_ids; i++) {
-+		struct riscv_iommu_dc *dc;
-+		bool dc_is_valid;
-+		u64 tc;
-+
-+		dc = riscv_iommu_get_dc(iommu, fwspec->ids[i]);
-+		if (WARN_ON_ONCE(!dc))
-+			continue;
-+
-+		tc = READ_ONCE(dc->tc);
-+		dc_is_valid = tc & RISCV_IOMMU_DC_TC_V;
-+
-+		riscv_iommu_dc_update_qosid(iommu, dc, ctx->rcid, ctx->mcid);
-+		dev_dbg(dev, "set QoS ID DC.ta did=%u rcid=%u mcid=%u\n",
-+			fwspec->ids[i], ctx->rcid, ctx->mcid);
-+
-+		if (dc_is_valid) {
-+			dma_wmb();
-+			riscv_iommu_qosid_invalidate_did(iommu, fwspec->ids[i]);
-+			riscv_iommu_iodir_iotinval(iommu, false, dc->iohgatp,
-+						   dc, NULL);
-+			sync_required = true;
-+		}
-+	}
-+
-+	if (sync_required)
-+		riscv_iommu_cmd_sync(iommu, RISCV_IOMMU_IOTINVAL_TIMEOUT);
-+	mutex_unlock(&iommu->qosid_lock);
-+}
-+
-+int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid, u32 mcid)
-+{
-+	struct riscv_iommu_qosid_hw_ctx hw = {
-+		.rcid = rcid,
-+		.mcid = mcid,
-+		.reset = !rcid && !mcid,
-+	};
-+	int ret;
-+
-+	if (rcid > FIELD_MAX(RISCV_IOMMU_DC_TA_RCID) ||
-+	    mcid > FIELD_MAX(RISCV_IOMMU_DC_TA_MCID))
++	if (rcid > FIELD_MAX(RISCV_IOMMU_IOMMU_QOSID_RCID) ||
++	    mcid > FIELD_MAX(RISCV_IOMMU_IOMMU_QOSID_MCID))
 +		return -ERANGE;
 +
-+	ret = iommu_group_update_devices(group, &hw,
-+					 riscv_iommu_qosid_validate_dev,
-+					 riscv_iommu_qosid_apply_dev);
++	/*
++	 * iommu_qosid is a per-IOMMU global default. It tags IOMMU-originated
++	 * DDT/CQ/FQ/PQ and MSI accesses, and in BARE mode device-originated
++	 * requests. Per-device group QoS is still handled separately through
++	 * DC.ta.
++	 */
++	mutex_lock(&iommu->qosid_lock);
++	old_qosid = riscv_iommu_readl(iommu, RISCV_IOMMU_REG_IOMMU_QOSID);
++	qosid = old_qosid & ~(RISCV_IOMMU_IOMMU_QOSID_RCID |
++				RISCV_IOMMU_IOMMU_QOSID_MCID);
++	qosid |= FIELD_PREP(RISCV_IOMMU_IOMMU_QOSID_RCID, rcid) |
++		 FIELD_PREP(RISCV_IOMMU_IOMMU_QOSID_MCID, mcid);
++	riscv_iommu_writel(iommu, RISCV_IOMMU_REG_IOMMU_QOSID, qosid);
++
++	qosid = riscv_iommu_readl(iommu, RISCV_IOMMU_REG_IOMMU_QOSID);
++	if (FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_RCID, qosid) != rcid ||
++	    FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_MCID, qosid) != mcid) {
++		riscv_iommu_writel(iommu, RISCV_IOMMU_REG_IOMMU_QOSID,
++				   old_qosid);
++		ret = -ERANGE;
++	}
++	mutex_unlock(&iommu->qosid_lock);
 +	if (ret)
 +		return ret;
-+	if (!hw.has_devices)
-+		return -ENODATA;
-+	if (!hw.has_qosid && !hw.reset)
++
++	dev_dbg(iommu->dev, "set global QoS IDs rcid=%u mcid=%u\n",
++		(u32)FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_RCID, qosid),
++		(u32)FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_MCID, qosid));
++
++	return ret;
++}
++
++static int riscv_iommu_get_default_qosid(struct riscv_iommu_device *iommu,
++					 u32 *rcid, u32 *mcid)
++{
++	u32 qosid;
++
++	if (!(iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID))
 +		return -EOPNOTSUPP;
 +
-+	pr_debug("set qosid: group=%d rcid=%u mcid=%u\n",
-+		 iommu_group_id(group), rcid, mcid);
++	qosid = riscv_iommu_readl(iommu, RISCV_IOMMU_REG_IOMMU_QOSID);
++	if (rcid)
++		*rcid = FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_RCID, qosid);
++	if (mcid)
++		*mcid = FIELD_GET(RISCV_IOMMU_IOMMU_QOSID_MCID, qosid);
++
 +	return 0;
 +}
 +
- static const struct iommu_ops riscv_iommu_ops = {
- 	.of_xlate = riscv_iommu_of_xlate,
- 	.identity_domain = &riscv_iommu_identity_domain,
++static int riscv_iommu_init_default_qosid(struct riscv_iommu_device *iommu)
++{
++	if (!(iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID))
++		return 0;
++
++	/* Avoid probing the live WARL fields with all-ones while in BARE mode. */
++	return riscv_iommu_set_default_qosid(iommu, 0, 0);
++}
++
++static struct riscv_iommu_device *dev_to_riscv_iommu(struct device *dev)
++{
++	struct iommu_device *iommu = dev_to_iommu_device(dev);
++
++	return iommu ? container_of(iommu, struct riscv_iommu_device, iommu) : NULL;
++}
++
++static ssize_t qosid_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	struct riscv_iommu_device *iommu = dev_to_riscv_iommu(dev);
++	u32 rcid, mcid;
++	int ret;
++
++	if (!iommu)
++		return -ENODEV;
++
++	ret = riscv_iommu_get_default_qosid(iommu, &rcid, &mcid);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "rcid=%u mcid=%u\n", rcid, mcid);
++}
++
++static ssize_t qosid_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
++{
++	struct riscv_iommu_device *iommu = dev_to_riscv_iommu(dev);
++	char *args, *key, *value;
++	char *input;
++	u32 rcid, mcid;
++	int ret = -EINVAL;
++
++	if (!iommu)
++		return -ENODEV;
++
++	input = kstrdup(buf, GFP_KERNEL);
++	if (!input)
++		return -ENOMEM;
++
++	args = strim(input);
++	args = next_arg(args, &key, &value);
++	if (!value || strcmp(key, "rcid") || kstrtou32(value, 10, &rcid))
++		goto out;
++
++	args = next_arg(args, &key, &value);
++	if (!value || strcmp(key, "mcid") || kstrtou32(value, 10, &mcid) ||
++	    *skip_spaces(args))
++		goto out;
++
++	ret = riscv_iommu_set_default_qosid(iommu, rcid, mcid);
++out:
++	kfree(input);
++	return ret ? ret : count;
++}
++
++static DEVICE_ATTR_RW(qosid);
++
++static struct attribute *riscv_iommu_attrs[] = {
++	&dev_attr_qosid.attr,
++	NULL,
++};
++
++static const struct attribute_group riscv_iommu_group = {
++	.attrs = riscv_iommu_attrs,
++};
++
++static const struct attribute_group *riscv_iommu_groups[] = {
++	&riscv_iommu_group,
++	NULL,
++};
++
+ static int riscv_iommu_init_check(struct riscv_iommu_device *iommu)
+ {
+ 	u64 ddtp;
++	int ret;
+ 
+ 	/*
+ 	 * Make sure the IOMMU is switched off or in pass-through mode during
+@@ -1721,6 +1867,10 @@ static int riscv_iommu_init_check(struct riscv_iommu_device *iommu)
+ 			return -EINVAL;
+ 	}
+ 
++	ret = riscv_iommu_init_default_qosid(iommu);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Distribute interrupt vectors, always use first vector for CIV.
+ 	 * At least one interrupt is required. Read back and verify.
+@@ -1753,10 +1903,12 @@ void riscv_iommu_remove(struct riscv_iommu_device *iommu)
+ 
+ int riscv_iommu_init(struct riscv_iommu_device *iommu)
+ {
++	const struct attribute_group **sysfs_groups = NULL;
+ 	int rc;
+ 
+ 	RISCV_IOMMU_QUEUE_INIT(&iommu->cmdq, CQ);
+ 	RISCV_IOMMU_QUEUE_INIT(&iommu->fltq, FQ);
++	mutex_init(&iommu->qosid_lock);
+ 
+ 	rc = riscv_iommu_init_check(iommu);
+ 	if (rc)
+@@ -1788,8 +1940,11 @@ int riscv_iommu_init(struct riscv_iommu_device *iommu)
+ 	if (rc)
+ 		goto err_queue_disable;
+ 
+-	rc = iommu_device_sysfs_add(&iommu->iommu, NULL, NULL, "riscv-iommu@%s",
+-				    dev_name(iommu->dev));
++	if (iommu->caps & RISCV_IOMMU_CAPABILITIES_QOSID)
++		sysfs_groups = riscv_iommu_groups;
++
++	rc = iommu_device_sysfs_add(&iommu->iommu, NULL, sysfs_groups,
++				    "riscv-iommu@%s", dev_name(iommu->dev));
+ 	if (rc) {
+ 		dev_err_probe(iommu->dev, rc, "cannot register sysfs interface\n");
+ 		goto err_iodir_off;
 diff --git a/drivers/iommu/riscv/iommu.h b/drivers/iommu/riscv/iommu.h
-index 46df79dd5495..2c57625637bf 100644
+index 2c57625637bf..13ea67b7e42d 100644
 --- a/drivers/iommu/riscv/iommu.h
 +++ b/drivers/iommu/riscv/iommu.h
-@@ -19,6 +19,9 @@
+@@ -12,8 +12,12 @@
+ #define _RISCV_IOMMU_H_
  
- struct riscv_iommu_device;
+ #include <linux/iommu.h>
+-#include <linux/types.h>
+ #include <linux/iopoll.h>
++#include <linux/mutex.h>
++#include <linux/types.h>
++#ifdef CONFIG_RISCV_IOMMU_32BIT
++#include <linux/spinlock.h>
++#endif
  
-+int riscv_iommu_group_set_qosid(struct iommu_group *group, u32 rcid,
-+				u32 mcid);
+ #include "iommu-bits.h"
+ 
+@@ -50,6 +54,9 @@ struct riscv_iommu_device {
+ 	u64 caps;
+ 	u32 fctl;
+ 
++	/* Serializes QoS updates to iommu_qosid and device contexts. */
++	struct mutex qosid_lock;
 +
- struct riscv_iommu_queue {
- 	atomic_t prod;				/* unbounded producer allocation index */
- 	atomic_t head;				/* unbounded shadow ring buffer consumer index */
+ 	/* available interrupt numbers, MSI or WSI */
+ 	unsigned int irqs[RISCV_IOMMU_INTR_COUNT];
+ 	unsigned int irqs_count;
 -- 
 2.50.1 (Apple Git-155)
 
