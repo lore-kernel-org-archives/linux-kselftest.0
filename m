@@ -1,64 +1,66 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8856D418A40
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 20:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8777841D65A
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 20:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784060007; cv=none; b=EwUOGSlpFoGr03aA7ZkgCdYJqvKBaI4wEovuv3LH38JSDaIYrOcEJAuwlc4UrE9KMDOY5XdpqP7QjDt3RdXTcR4HXw8tZY8JatciszebxqdId2QsA+FX65qRhVGD9IEvd0L0Sy/v2KiVRrwxHCvyMcaDIOv+i0q9JpvHaXSQdzQ=
+	t=1784060014; cv=none; b=g3fREjv6ofUff52ez7A8L38lnXJNelbQAVUVZkeKdpRdUMea7rSxPdsKBTR3ZeO2VdDUN6g9tgCgSo1bKT3yEnQK5KQ38hG3SWUBltSMHWy6agWQTSJSR9jzm4y+kAUOBK0diAjSytrWmAX44OIJ8xvvs2Oa/QzF75FcvQuOKTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784060007; c=relaxed/simple;
-	bh=M3iXyfmpsqnLTOm4C9JQljZWWPFlOSzSAIkxUKB+CuM=;
-	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=o1QDf4HVP9UV6dPhWRM1v3GqlS29UCKo1AEo3OCNL/Drb1ilNNbkpK5jFoniVkBSB/h9099uAmFR/ytNxrkEUWlH+w+JGShB5l18HkpNwSAIS75tGZy5yFpI17Q1ejRsNrZGVBBcF6z9tiUWwviLKBhXfgUjp3cU81jyim0H2SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k6lFJE3e; arc=none smtp.client-ip=209.85.210.169
+	s=arc-20240116; t=1784060014; c=relaxed/simple;
+	bh=bwr01/9WY7csMe3oixAvNcmOUvWfBdhgJjR3WJyG5E4=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nikurc1TEesaHQP26bYZmRLWtVBYh+AgYIZlcNNvYY5y+lx7QyRg52yasQwhKdlW+4Ea+y0fo8Dd/AVRQB4iZQFQMgWkvYcIBMjl5089bEqB1FOEvMJE2ekad0wsA/bM5Jq87I+M4ilNNBliBR4VqSGSQM0s3MWsU7zI0TwjjdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqGVP3fr; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k6lFJE3e"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8485b358552so5219755b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:13:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqGVP3fr"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-848882fdb18so1315986b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784060006; x=1784664806; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784060013; x=1784664813; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:user-agent
-         :message-id:date:cc:to:from:subject:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TgA5/ZNNqpom9Ojeo649tW4NqgfWq3ikZU/yXXQBBgI=;
-        b=k6lFJE3eKj2hmZ3Yy4wyePNrZYKYIgZz5P/UI4UA4IKlS0oB/+8bq4IoSuCCLwsHuJ
-         IvQtFLkaoFqtMUobJ805Gtn6+BUGYQGBpeb2Y9opKbcnf8j/VqD/DnsqnPHFsvHSX+wx
-         zRVn0rE2MoUlWf9mAKT/c4YdzI2R/np9m3yAB8BtLfL0J5qt+1fd4JrwaP1xwUJGXewj
-         oFbEKm350y+MYJ53a3oMAdOTEjfNhoTLIuUyB5N3z7wRAWQZ0ZX+C2WHEIaC5A4/hrAd
-         En3W/kTVRnX/IOTcPCdHH0Pu11FyFyXpK7ruyXY5/bJMSEwwD/z9XKH/yPs6BpIUzQhQ
-         Z3Eg==
+         :references:in-reply-to:message-id:date:cc:to:from:subject:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Vc1a4EA+CKVDZWmxoam2W7gn+VW7+IE4FDUnuymM6t4=;
+        b=BqGVP3fr3VzcAYMgIEHBrBODNP8u+OiMZeEEj0Sup4UbdHg8E9p+JCzlVbb10OglAe
+         QVX7x/AgHKHFCnqyfJdqWvTtvMh61GMPtH1SBZZGBYzNZcv9Cm6cVhV61HGkkzjKceUg
+         4J2vlcXWIGc6/k+R/x1EB1wN9wX+rM/uJei10xMgDWeUKfr19ERBBirTSLiQJiHLgyZv
+         Jf4fRJNLJziqgmT4YnpaydBF1AOUxCMPhPBnfZVYKNvCWp8C15GhAScasNW3YgNFTl3v
+         upuHbaQi5XFirl31yUo9rbXHXSpIPu/SNW1wtiACNrw0SVlZWQdqD0JTJT3eFEkmZMBM
+         icuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784060006; x=1784664806;
+        d=1e100.net; s=20251104; t=1784060013; x=1784664813;
         h=content-transfer-encoding:content-type:mime-version:user-agent
-         :message-id:date:cc:to:from:subject:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TgA5/ZNNqpom9Ojeo649tW4NqgfWq3ikZU/yXXQBBgI=;
-        b=rTLPGhRe1Khqx62x7p6lDivBr16F4lFqoM4ZVjAu5y74/WitBAo/pDvs8q0AlYqF//
-         UNWJ7VSkB/AYSV9QTRoSgvB5QkYyz4i9gskO2TyYPLwS9fwiXA3JY/+5Qf+O/XAlPkar
-         JE7YmFRdE23KR02YcNV5U4nB6/A3pnqcGb85xMT2IdScwdeR0h8QgqXt1AyWrxRg+qtp
-         cojPDm5yF6jA3NstnWRfZFrTW3lSOi4Zu22SyvOPPEg5NDGar05TXtv6F8L9GKBROAOI
-         Qtxe5kwbX2CxBwFmq8+f7VO0WbA/sxjpTV/cNtHl199vMfBIa/27oQlES9zL4JO120cn
-         s5nQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8c/Xk8YNUbETS/zBX5UuOin5Ybf2X8TroDhYls4hIF1ShqfRYdosqZZDQh4L52zg6ExGHlKzocopOnKwC/3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlB8Wk4d3FCuyCj5WBZDYGHpWk78OGvLNSxeYltECmrSb3dp2O
-	mY8shHDXGXPkARTxDXXyss1ECmIxBVk8DTuYqXmQWyOPheIf06UJlgF1H0qwUXwI
-X-Gm-Gg: AfdE7cnvIeZxQsw0tqOw27LvYkojqv/Rd5CDC643YOUUSASAbDbXMh94l0G8WETVirs
-	kBSO9XPTo8MX2DHQsiuN5Yoqc3nVgi+AptMNvvT0BX9HNPe/opPDv5P59nE7KB7d0rtin2JCKMx
-	hcbs5ef6sXHrlwG9OtnFOVcVENnhB8ajg1BqefeDNloA3jhmqlwP42iarqIBFkiGAiVZ8B4ULiY
-	J0lCL/z5YEJbMILBmvok4fyDOZ4Xhilomfp755T6/7RqckvZps5rgKBDcWkTSW5PJi1u6rnC2DO
-	i9y6wVke9FA3I2s8m5AxnENGc9YKUhhzYSYvCSAvi++0/0mlnpAMSovJz5WZqcB02hCOmAvFReX
-	9Ez7bQp610zBZ24sFpkPEbj3fc+oFiaTbbKtYBFvY9xZMOkWdgCkshZZosAVDTza/WCOUTkBIZa
-	pn63Xc+DFknI5kAZlB6/J511IehHVuebYnCvWsRfJz2ZWieEg46KrSngvg9LPEvObwbVk2Sg==
-X-Received: by 2002:a05:6a00:1f14:b0:845:e9e5:cdec with SMTP id d2e1a72fcca58-84a559bb7dfmr3412771b3a.62.1784060005776;
-        Tue, 14 Jul 2026 13:13:25 -0700 (PDT)
+         :references:in-reply-to:message-id:date:cc:to:from:subject:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vc1a4EA+CKVDZWmxoam2W7gn+VW7+IE4FDUnuymM6t4=;
+        b=mXq7lBO/mHf+iyxhQBVmGh5YpauG0d3AB0Z+3uJ0lGAKo3Ik5ID8lEpBuVvC3UFg5Z
+         RftubGPpb7SOp+FrQbbqkOwiDprjFnOAwRBUiSN+g9wvdho7AOe5hMG0cyHU0IajaTpn
+         9QnFeO6gdUPq3fEbJF1qGdPEJgfKuKW4Zv0Xsnheyv3G5xBYH0k/aW3R1ZFYbcyRK1Xv
+         +JXfDWC5RIwQDS/mR9q03rM1SiQC62IzeE9/B3/r33/urEJuL25LPk4k2KYSpNcoaOJd
+         vL9a48S9p21SdmRemRGxMrJ83MpKHn/K7Usrx60MmVLiwoqHpCxf6OM/VnX7GFpahzVP
+         egSA==
+X-Forwarded-Encrypted: i=1; AHgh+RreBAyWI1LCmVeSjfQqSbF9yKx+kVRRL3n/3L+I4knp/k8+1q1XAiHbUTT9JxOTDd7mj2Yd9aNk2QZ4kp0W2fE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYja6eX7sgV6ajMlpLMDJA3x37ih2lN3CABD2RwrErjXAWuKW/
+	G0xDg47E3IVBpiQfhPHlX0pqfraoBXvQd3oELdN3U4wU79QG9zuo37V1JaLWU14m
+X-Gm-Gg: AfdE7cm63fwyvf7ePfXjXo6bfBFDvT7OLz+K6FJUoyLVW7Q76bc7ixcz8QPfNQeZNhR
+	my2yBnxdXyZ898QdTECDz1eD8ri0CFJ2syvqJHXXq6x7DO6HQlXaWca2Cu6t17HVTu5XR13aiLf
+	yswehRvJGOJf9p4hhYtyT6BkLVlbgVXJsh6LEJ4wRu5DiqGZT14G/yVEEtMBGJfZst/6baYC0mm
+	XG6veKPVsCS2T0XmoadDPOIjmmwjfoE+2XI1jyWTMD+wNJcpqGFhaH4L8a+BlpZtY2T+4TJ92iT
+	Ai6hjE170CJii/8F8+phonPdJAIh1DcRCmUeGdB5SJm6k761MznqvLej2X5Hq4rXTdrqIaRewdl
+	NEEk0+EBEj79kQdEv7YjPRGQA6EwpcphkdpVYbf7HUuqWzlXTEKlOadiSrGMYkNGpaeBvU6ZLka
+	B6UYdLcqkZG7PvHRdpAvJahSbKkEjfvOK+lpubztD+WsyDXJItOw+z9k1PKOE=
+X-Received: by 2002:a05:6a00:2341:b0:848:2f84:f429 with SMTP id d2e1a72fcca58-84a6738a72fmr16414b3a.66.1784060012852;
+        Tue, 14 Jul 2026 13:13:32 -0700 (PDT)
 Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f7dade0sm1998127b3a.46.2026.07.14.13.13.24
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bf5ecsm1974797b3a.29.2026.07.14.13.13.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 13:13:25 -0700 (PDT)
-Subject: [PATCH 0/4] mm/hmm: Clarify notifier retry state and scope HMM
- timeouts
+        Tue, 14 Jul 2026 13:13:32 -0700 (PDT)
+Subject: [PATCH 1/4] fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for
+ mmap lock-drop support
 From: Stanislav Kinsburskii <skinsburskii@gmail.com>
 To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
  corbet@lwn.net, dakr@kernel.org, david@kernel.org, jgg@ziepe.ca,
@@ -72,8 +74,10 @@ To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
 Cc: dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Date: Tue, 14 Jul 2026 13:13:23 -0700
-Message-ID: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
+Date: Tue, 14 Jul 2026 13:13:31 -0700
+Message-ID: <178406001098.1082778.7615814555318834246.stgit@skinsburskii>
+In-Reply-To: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
+References: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
 User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -84,37 +88,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 
-This small fixup series applies on top of:
+The hmm_range_fault_unlocked_timeout() example checks for a concurrent
+mmu_interval_notifier invalidation after the HMM fault has succeeded.
+The sequence number used for that check is stored in range->notifier_seq
+by hmm_range_fault_unlocked_timeout(), so the retry check should use the
+same notifier stored in range as well.
 
-  [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for userfaultfd-backed mappings
+Update the example to pass range.notifier to mmu_interval_read_retry(),
+and spell out that the retry check uses the notifier and sequence number
+stored in range by the HMM fault helper. This makes the relationship
+between the HMM walk and the later invalidation check explicit.
 
-The first patch updates the HMM documentation example to make the
-mmu_interval_read_retry() state explicit: callers should use the notifier and
-notifier_seq stored in the same hmm_range that was passed to
-hmm_range_fault_unlocked_timeout().
-
-The remaining patches adjust nouveau, amdxdna, and drm_gpusvm users so the
-timeout passed to hmm_range_fault_unlocked_timeout() is treated as a relative
-HMM retry budget. These callers no longer keep an absolute deadline around
-their outer driver retry loops or pass a computed remaining time into HMM.
-
-This keeps the timeout scoped to HMM's internal mmu-notifier retry handling. If
-HMM succeeds and the driver later observes an invalidation through
-mmu_interval_read_retry(), the driver retries the operation with a fresh HMM
-retry budget.
-
+Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 ---
+ Documentation/mm/hmm.rst |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Stanislav Kinsburskii (4):
-      fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
-      fixup! drm/nouveau: use hmm_range_fault_unlocked_timeout() for SVM faults
-      fixup! accel/amdxdna: use hmm_range_fault_unlocked_timeout() for range population
-      fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout() for range faults
+diff --git a/Documentation/mm/hmm.rst b/Documentation/mm/hmm.rst
+index 5c88d2cf0818..fc1b8dc19825 100644
+--- a/Documentation/mm/hmm.rst
++++ b/Documentation/mm/hmm.rst
+@@ -206,7 +206,7 @@ The usage pattern is::
+           goto out_put;
+ 
+       take_lock(driver->update);
+-      if (mmu_interval_read_retry(&interval_sub, range.notifier_seq)) {
++      if (mmu_interval_read_retry(range.notifier, range.notifier_seq)) {
+           release_lock(driver->update);
+           goto again;
+       }
+@@ -225,7 +225,8 @@ The usage pattern is::
+ The driver->update lock is the same lock that the driver takes inside its
+ invalidate() callback. That lock must be held before calling
+ mmu_interval_read_retry() to avoid any race with a concurrent CPU page table
+-update.
++update. The retry check must use the same notifier and sequence number stored
++in ``range`` by ``hmm_range_fault_unlocked_timeout()``.
+ 
+ Holding the mmap lock across HMM faults
+ =======================================
 
-
- Documentation/mm/hmm.rst              |    5 +++--
- drivers/accel/amdxdna/aie2_ctx.c      |   12 ++++--------
- drivers/gpu/drm/drm_gpusvm.c          |   21 ++++++---------------
- drivers/gpu/drm/nouveau/nouveau_svm.c |   30 ++++++++++--------------------
- 4 files changed, 23 insertions(+), 45 deletions(-)
 
