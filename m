@@ -1,180 +1,98 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1A3EEAE1
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F98643B487
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 08:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784014803; cv=none; b=RcUYnuqaIHBbn3l2oQY7SfnDJiGJTn5gLsX1IcHhhxbxdclY49Aq14blHKfEq6OV8PBsDJRnTSb7DE0O5XdLk7FJcqJqH7jEUL7q1zwUNUsKvrK0TaQHozowfrg7TtGQ8wVxAG3ANDoOnXLqQstLXIjoxnLpDPluH5v4pTZ7Rn0=
+	t=1784019493; cv=none; b=gkCsaSiW2IgU5/YZTVEjJG3SmSOiPqz8lhykotjjYm/5sA4fV2JPKMYMjizAj9xXXMkt6aefgqJPbDGknZNFwLz0spU5cDTy/3kk7Ow00Ro1a/q8o+93OGATlOfFCgE47yw/6tEN3KRbR8BrBa9lGPL8Y9fLH4ahjK0utmyKW7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784014803; c=relaxed/simple;
-	bh=Ii4QglIlNfk2AF9Ta5Xci6IGgX7bNyNYfS9+14rJzNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tzMRmTdAWT8eJaalzdkTwFAvSnDDLwtzByQmj9/Y+p9G4lMqvmBvU+/P5DSVqkjGvx2Q5QIZaRrH0iNtSkIHBdzIzrDeMltSpT/+ren8vnLKhyVSu15UaDyTEwULW4JL1/g4+F+qVH53+mpCGBf5Vh0lD319WGweAFRiQU1c9SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=MXGbOTxb; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+	s=arc-20240116; t=1784019493; c=relaxed/simple;
+	bh=qwRP4V+B9iDlbvfwesX2cvK8FhtV6iIKfYBrR6kvmBY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RI38AIUYdyeP6FJP+J6V1VkpH2xC1RzmEKexUoYMKwk5abhjCKSs8fpc6Vq3IuixFZqkVX3zf/hKqy66eEETNFFjNKplFGlkS+IGuh8o4U+Q1NEgPzmGdDMuxZAEPqma8rqbmX9A+nWgi55KTfWHm3BV6yDVtXgJdy6fTis0aUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cvL8JFVI; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="MXGbOTxb"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-493ba701891so4715575e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 00:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784014798; x=1784619598; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7C5iWjcphG9+X8eLvvIf+CpqUo2Z4rnWqlw/CwVzzuA=;
-        b=MXGbOTxb/bWGnJSaW6/5X7OBDtdY5cRnC3WhClHMgp+BSOmlZyRVXImcF77gCuruCm
-         JABkSDaLE4PVCwElIQtzeRBaqXfMR3PpBt6qPdPC5uBXSlyAuFjCMHaLLjfp0Mt7swqP
-         as9OJpiGN+iybBbWENmIMOzoGxLznGHJzWF3KkEYSRddBIqZlhxs1IgNh5COjZRpafJa
-         VsA3ozpE/9f7aJ7SPQkdjW7lQxqUD0sNDYZYhXNmaNxtXjaSjL+h8DSkLZ828gGWtcT0
-         Rln1x8RKDBYr+cxoGWwi6+x6sb7xkooEkMGJHt+njcSi4vLJZlcWfPoK9ojLCvFIP0Zv
-         lhSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784014798; x=1784619598;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=7C5iWjcphG9+X8eLvvIf+CpqUo2Z4rnWqlw/CwVzzuA=;
-        b=i6uLDPnekA22sTnW6cL8rtZ5Je+fzlomQ2i22ho2EWjZz8u21NfmZUtbFauf8wTzna
-         9UqwN/V4CXuVQOqaP+oVoLmmD2nyNe3Q14337oz10yogLrtWgcsUrAKX4YOvJhXcqBAp
-         GupImm8fJgMOTCE8SEwKYyUnIjmvuyz3asOImp9hAiRl4UpEn0gHXd25JHAP05XA4uoc
-         eW3cEBwx6aJVJd2JFyjFlrK4Ej1ja53A3ckqAlzL52F/SdZUE9vhQVaGUBqS5XDm/wVn
-         pS+PpUrlgp4G4R8ZVXzFE8+99dvTsDiiHuMUO+RJz8bGIfmjGsAlj6N+o1xJSDlswsiq
-         Nbeg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp+tCuiZfO0M89oryr5Io+ki87hBjrX3Mm9uPD1Lif5nckSgEgKegB1fPljNPyUxDa2zAgFsKurZSJD2r/MUkU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8PdYsFFGn6Tjo3C0ZG1/rKwXegkPKmLoNi+oXHCizcAt3jZ79
-	6NLrOKgMrDUDF9Bi7kibHSbSMm4KnIiIBAmeyJj7uhqnVhti+Lmaf+h71Iga+VtwDRQ=
-X-Gm-Gg: AfdE7ck8Ulpaln2VSy4jPnZ1FpHnL+ogyADy8SOQulPljV5ix/DOXof9a9KMqpHmA37
-	NYVwESKzyk6CWMX5H6kjDzhsOUOt98SOqijGK79xqh9J7ZZ+fF49HFlbXBqk6WiaFOfagwaV9ZD
-	k0bZFrszfRuuozzEDyltuF7QU7+Z3Uf4t9Z55JHrCekL68rqcgQqUphtghEi8Vf4RdSfjLI1Lhi
-	irfb4ynLdPq/U6+bm1APBA6FBwbUYm4IVqd2EZ9uBo30heDPBa62ZF4XOQ7USmqZBlaznr7fK1w
-	8mzjRrE6ulkwdOiN1Pv4UI96bt+oVUd9BB46d6NWTMDMlsKbUuVwAsWr3z0vdLh8nY+h2AmwW48
-	OVOiSk8CX8EWsBiXY2QBf4d2yDd/IBew0GrWVT2TQPjEWufXT7kLwAubmQv3LWR4lZvubYrCQ5d
-	9a0ZjwprqDYszBKaVm34YVgg==
-X-Received: by 2002:a05:600c:1f87:b0:493:f870:fbf0 with SMTP id 5b1f17b1804b1-493f88b3693mr153093885e9.34.1784014797971;
-        Tue, 14 Jul 2026 00:39:57 -0700 (PDT)
-Received: from localhost ([140.209.217.211])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a322bcbsm63449225e9.9.2026.07.14.00.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 00:39:57 -0700 (PDT)
-Date: Tue, 14 Jul 2026 09:39:53 +0200
-From: Jiri Pirko <jiri@resnulli.us>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
-	linux-rdma@vger.kernel.org, cgroups@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, jgg@ziepe.ca, leon@kernel.org, 
-	parav@nvidia.com, mbloch@nvidia.com, cmeiohas@nvidia.com, roman.gushchin@linux.dev, 
-	bvanassche@acm.org, zyjzyj2000@gmail.com, shuah@kernel.org, tj@kernel.org, 
-	hannes@cmpxchg.org, alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, 
-	sidraya@linux.ibm.com, wenjia@linux.ibm.com
-Subject: Re: [PATCH rdma-next 08/13] RDMA/cgroup: Scope rdma cgroup device
- visibility to the net namespace
-Message-ID: <alXmwzDASDFaeVNZ@FV6GYCPJ69>
-References: <20260709095532.855647-1-jiri@resnulli.us>
- <20260709095532.855647-9-jiri@resnulli.us>
- <ak-Z071LrWhnI5lK@localhost.localdomain>
- <alSxB0wziQnNuyfn@FV6GYCPJ69>
- <2fc297ce-7259-4410-9d86-ccc32485622f@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cvL8JFVI"
+Message-ID: <007856c9-3506-4888-9818-8e4630b37fdc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784019480;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zdNrMq8bCxTLGPFwSKxLND/cn4ZHbHVtNZy8gkOzFEo=;
+	b=cvL8JFVI8hI1XSYBlYnTgG96ED8LBxldfSLuxN6z+Sksjj+kcaYQFUC71DKj/S2ZoO9LR5
+	uctNSsErdebcnnCIwrv66TbBoismLninA/PKyb0Qq2iMO2BwSOPAMhFpjTKO+kyiWC1NbD
+	1zWI4Nuz19MM1tJSfX2uIoCvpxgAM60=
+Date: Tue, 14 Jul 2026 16:57:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH-next v3 0/3] cgroup/cpuset: Support multiple destination
+ cpusets for cpuset_*attach()
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260712235510.373125-1-longman@redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20260712235510.373125-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2fc297ce-7259-4410-9d86-ccc32485622f@linux.dev>
-
-Tue, Jul 14, 2026 at 04:28:01AM +0200, cui.tao@linux.dev wrote:
->
->
->在 2026/7/13 17:34, Jiri Pirko 写道:
->> Thu, Jul 09, 2026 at 03:04:23PM +0200, mkoutny@suse.com wrote:
->>> Hi.
->>>
->>> On Thu, Jul 09, 2026 at 11:55:27AM +0200, Jiri Pirko <jiri@resnulli.us> wrote:
->>>> index 993446ab66d0..4523c1884d67 100644
->>>> --- a/Documentation/admin-guide/cgroup-v2.rst
->>>> +++ b/Documentation/admin-guide/cgroup-v2.rst
->>>> @@ -2752,6 +2752,13 @@ RDMA
->>>>  The "rdma" controller regulates the distribution and accounting of
->>>>  RDMA resources.
->>>>  
->>>> +When RDMA devices are isolated per network namespace (exclusive mode),
->>>> +device names are unique only within a network namespace. The device lines
->>>> +below are therefore scoped to the reading or writing process's network
->>>> +namespace: only devices accessible from that namespace are listed, and a
->>>> +limit is applied to the device of that name in that namespace. Configure
->>>> +limits from the same network namespace as the workloads.
->>>
->>> OK.
->>>
->>>> --- a/include/linux/cgroup_rdma.h
->>>> +++ b/include/linux/cgroup_rdma.h
->>>> @@ -7,6 +7,7 @@
->>>>  #define _CGROUP_RDMA_H
->>>>  
->>>>  #include <linux/cgroup.h>
->>>> +#include <net/net_namespace.h>
->>>>  
->>>>  enum rdmacg_resource_type {
->>>>  	RDMACG_RESOURCE_HCA_HANDLE,
->>>> @@ -34,6 +35,15 @@ struct rdmacg_device {
->>>>  	struct list_head	dev_node;
->>>>  	struct list_head	rpools;
->>>>  	char			*name;
->>>> +	/*
->>>> +	 * Net namespace the device belongs to. @netns_shared mirrors
->>>> +	 * ib_devices_shared_netns: when true the device is visible from every
->>>> +	 * net namespace (shared mode); otherwise @net is the only namespace
->>>> +	 * that may see and configure it. @netns_shared is updated when the
->>>> +	 * sharing mode changes, so use {READ,WRITE}_ONCE() to access it.
->>>> +	 */
->>>> +	possible_net_t		net;
->>>> +	bool			netns_shared;
->>>
->>> Any reason to store the netns_shared split per device? (IIUC, it's a
->>> global parameter.)
->> 
->> No reason, changed.
->> 
->Hi Jiri,
->
->A question on the v2 you mentioned to Michal.
->
->Once netns_shared stops being cached per rdmacg_device,
->rdmacg_device_visible() in kernel/cgroup/rdma.c still needs the current
->sharing mode, whose authoritative value lives in the IB core
->(ib_devices_shared_netns). How do you plan to expose it there without
->the generic cgroup controller reaching back into drivers/infiniband/?
->Exporting the global, or keeping an IB-side update hook, both feel a bit
->awkward; it would be good to see which direction you took.
-
-Exposing this from ib side is not doable, as IB may be compiled as a
-module. So what I do is I intrododuce "static bool rdmacg_netns_shared"
-in cgroup/rdma.c and exported function rdmacg_set_netns_shared() to set
-it from IB.
+X-Migadu-Flow: FLOW_OUT
 
 
->
->On the mechanism itself: it's the right call that rdmacg_try_charge()
->stays out of the scoping. Charging takes the rdmacg_device pointer
->directly (no name lookup), and a task can only charge a device it
->already holds a handle to, so applying visibility there would be wrong.
->The scoping deliberately touches only the name-based lookup (the write
->path) and the enumeration (read/show) paths -- worth keeping that
->invariant in mind so a later patch doesn't grow the filter.
->
->Thanks,
->Tao> Thanks!
->> 
->>>
->>> Thanks,
->>> Michal
->> 
->> 
->> 
->
+
+On 7/13/2026 7:55 AM, Waiman Long wrote:
+>   v3:
+>    - Swap the first 2 patches as the original patch 1 can introduce serious bug
+>      without patch 2. Doing patch 2 first will be less problematic.
+> 
+
+Would it make sense to squash these two patches into one?
+
+>   v2: https://lore.kernel.org/lkml/20260712150127.236790-1-longman@redhat.com
+>    - Make sure that attach_ctx.old_cs won't be set to a source cpuset that is
+>      also the destination cpuset.
+> 
+>   v1: https://lore.kernel.org/lkml/20260711020540.176740-1-longman@redhat.com
+> 
+> This is a follow-up patch series to [1] to properly handle a special case
+> for cpuset task migration operation where the source and destination
+> cpusets are the same.
+> 
+> Patch 1 enables cpuset_*attach() to handle the case where there are many
+> destination cpusets from enabling cpuset controller. Patch 2 handles
+> those tasks that have the same source and destination cpuset by skipping
+> them as they are not migrating with respect to cpuset. Patch 3 adds a
+> new test case into test_cpuset to test proper handling of cpu affinity
+> when cpuset controller is disabled.
+> 
+> [1] https://lore.kernel.org/lkml/20260702214757.579012-1-longman@redhat.com
+> 
+> Michal Koutný (1):
+>    selftests/cgroup: Add test for cpuset affinity on controller disable
+> 
+> Waiman Long (2):
+>    cgroup/cpuset: Support multiple destination cpusets for
+>      cpuset_*attach()
+>    cgroup/cpuset: Handle the special case of non-moving tasks in
+>      cpuset_can_attach()
+> 
+>   kernel/cgroup/cpuset.c                       | 131 ++++++----
+>   tools/testing/selftests/cgroup/test_cpuset.c | 243 +++++++++++++++++++
+>   2 files changed, 321 insertions(+), 53 deletions(-)
+> 
+
+-- 
+Best regards
+Ridong
+
