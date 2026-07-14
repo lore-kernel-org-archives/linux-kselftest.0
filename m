@@ -1,225 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542B33C13E2
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 12:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3F73C0605
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 12:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784031425; cv=none; b=R/zCHM+jsv8d/VRpWYavfuQiXg/S2eL3x4KvxkHc5Urt0nItCNFTXq/rv7KRlTA/yZmwQw/0N3kslMcG/UZEXBEFCFWs561sfZbU6BRLp9uSWa/FKjSVL384BWWaZLcH4dI1wUqzNE1a3Y9yKPSTNzyVwV2QSLR4G21kGPcZ8Rw=
+	t=1784031439; cv=none; b=mPL9Bz22dKLo1dl2PRis5iM1rj/4F5dKjXFAd8pqRgxFWwaJVuRlxtA3grUuvsLJ18xtQ/gDCm6jVt2n18e62Xm4XoEM9bEEp9ueTF8wpTDnr2uft8NZE+bajRO9CWd8RX6wRHSu9jAKwQRo0It23A0aGDC5h6RCj2TVe/2qq6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784031425; c=relaxed/simple;
-	bh=4FOmCbRkjtyqUknu75vO3Enpin5oL1Kk7tq0fO5zQWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AuoqVScI4xnxp1bU4Ynhp7JbAObiev3e9N3GA/Ghmj9zDqeZSlmeIpqokd3C1ddsob6cIIZe4XY/Mc0EegIzo+Q2yl+CeI9e44aN5sq5xgh61doaa1iY5jsQBXZCBSN2u8of8xtP78FYwiLQb/7dAHWOhgPkadAM8eCtQQ4MfUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daQnjhci; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daQnjhci"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313651F00A3E
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 12:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784031421;
-	bh=ObYWkLNfQi85p38uahLx6yranNyzKYkaSbUyvi+K6ZM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=daQnjhcicbJzzzDaAuFYC6b8ZcYAs9CAE+dZjOfq5dbSgkVQwiNPgO9MRAxwXqH3M
-	 frDdW60C9rIy4AQot91BiEaZCb0SCnuGD61TraVaNNcc5VsahjP/J8WpPGZthzFyE3
-	 wqHvAQmiLyFXK8cFDxO5QeMIdXDFc7fWF/UcVBYpg8XrvEZIMixtV9kxHwgSz4HZvR
-	 gJzt3e4715WhNhMLe2N7EbbM8orlnN7teYudfE692wxRhsI1aVImOeJaucjq2DZ2/t
-	 QC7jxAMJ+OrLhzuv9LF7i3GZ9sqF1S0C/Ie48KpNLLEiDr5Gb8IRo9oVZx9NVlnO7b
-	 zZFswpfh9K8pg==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-697bd21fdc2so1623815a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 05:17:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrPEfF/zzBoPGsskS0772ghwgLvqFhtKMj8nQ0JiJ3yEwy4zx0vW9KWs+UyKNoOqMz2o20F6OqQwNHq4Yc03Yk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Vr57HT3UzBFAROxzj0iTITiZQj1h3FjhijfUq3+kMpKR1te6
-	ukQ4UKshVHBtJvQI5/hdZjk1/XvYrCGHJW7369iSSHcjixPL0SBAbF05c3LTbG4hicvVhM16mYH
-	wtIU3s8c8UXwnEwy5AKnK55c3dCrdEHw=
-X-Received: by 2002:a05:6402:5187:b0:698:5610:76e5 with SMTP id
- 4fb4d7f45d1cf-69c5ef85585mr5895270a12.6.1784031419744; Tue, 14 Jul 2026
- 05:16:59 -0700 (PDT)
+	s=arc-20240116; t=1784031439; c=relaxed/simple;
+	bh=YEpNs6pmYVxz4PQh8SzmAkXFrjWAYq6cWXXi9C3jIkw=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=u6SGF3E0hMlOwXCbdmKceqDoC16awAHw9IXcG5ddWPUzQ/fKxCryc7l7wxvtg363G+9ALfiloNMu8wSfHDoYxBSKE6Ql9jmNCqCxCRKnxHJN/Tuwi00jyqVRRjAH0tt2u0tLaMvGTrFKOf0pzVwDGAuTSnUQkkO4hX49EVQl28g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-493d43b6c28so3783225e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 05:17:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784031433; x=1784636233;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:cc:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=egZiSxqHD1w/P79BBVFkvOie28f1koI4NWZWuHndLxE=;
+        b=DwHBarnsCinOJZ/V7YY44nHmNSHHqCCXzB+i0s0uZWzHajumZN0bmc9vpSu1id/WR1
+         8Z9XTZiit24AJ+M3z0z/tgf/6GVybkszfhwMHJzCVon6Q1fiRjFuAXz/mWGfrK6uv23j
+         SMsYDoxjDM8BbPBTG+z6t7QmKIljvwjCvNJ9LTEU2qvUBTcXhstfrXKqVVmrnnI/kbpw
+         zTgbA3iHTuEL21NdIFJKMLh44lqlCs4tPm5s4A+jA0fcv4Tzy4Gw9QIuaqPo4l/fJXfQ
+         W1qt9LG9eSSnKE/SoW5uGLzsTpEw1d/oLLtO4kpfdqEbAUVypb/m+1BAVFUlFMT6/8h5
+         I4Qw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr+qSWUDg4eyN07m6wHSE1Q7avwq6D76fZNQ4TLCcFJZVToWmICgVzePM/R1OsymITdC2J8WhgtGTnlI6d3GJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBbY99tFaSxi2DFD6ecW8u3m4OUKxFdxNL7Qh9OR7u3qvEJAPU
+	KFT1dm3oDG03rKaie4+Z5fBMCBNB5SkhnMkDduReTMynlZBrGPg2tlI7
+X-Gm-Gg: AfdE7clW3QiSUHz66SPI2wyhQT6AOvp7/HbVKw8/lZ291EJ1SUn2HBEgS1kK/RZSXom
+	y+Or9QhvrlZBMRR/lnJ4Jnd4HwOAYue9ZHoGl0vp061muSQrCg0tVIB0uq0uYe4ZwCNpJkTjXb5
+	RkTtvAPzPrYXQgUUxuVAh9avUh1dboAjsUBRX8Gvqfl6kHTWIf6ECP+eLAFcth20xfUEzpsvaid
+	lrV2lVFjzXnhrBKNCBWsWaI1XI2RrYpliFLABm71gtxdZ+fFt8aEwmuNk9oZeGAW2nIK/y/fjdb
+	sSqXP4i2E9UEARrRc+5yWFIob6KzhWEPetYxz+pGnMBT6yrTVcEJ0O7jIBAO89R4UzEarBs/0aW
+	ybCe+Y15odmk/PakeCvfbN+Gvqf/3ynERDyY6Y94j8xuuxGrPCuePl5asZSWWl2+WLx4jOn30BD
+	605dyWpUj4bNY5Ew7RNsDtm8CzXiKfuQ6dnfeFOv+3s0MbrhDhmA==
+X-Received: by 2002:a05:600c:1f87:b0:493:f870:fbf0 with SMTP id 5b1f17b1804b1-493f88b3693mr166046515e9.34.1784031432765;
+        Tue, 14 Jul 2026 05:17:12 -0700 (PDT)
+Received: from [192.168.88.241] (78-80-108-129.customers.tmcz.cz. [78.80.108.129])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950871cbd6sm84393335e9.3.2026.07.14.05.17.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2026 05:17:12 -0700 (PDT)
+Message-ID: <87f03ccc-5f60-4e8e-a6ef-8f5f8dcb4e12@ovn.org>
+Date: Tue, 14 Jul 2026 14:17:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260601092823.110362-1-dongtai.guo@linux.dev>
- <20260601093930.112758-1-dongtai.guo@linux.dev> <2vxzjyqzj8s2.fsf@kernel.org>
-In-Reply-To: <2vxzjyqzj8s2.fsf@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 14 Jul 2026 20:17:25 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5B6Mj2-AffkstJ4f8EEmvvPOGXoDy2QNudKD2kSz2XkA@mail.gmail.com>
-X-Gm-Features: AUfX_mxp11E4giDW39QHMMI9j_IZOTy-7xjXpv5wTuK8FeqnLx4XCv9zSCzZnnY
-Message-ID: <CAAhV-H5B6Mj2-AffkstJ4f8EEmvvPOGXoDy2QNudKD2kSz2XkA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] LoongArch: kexec: add KHO support for FDT-based
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: George Guo <dongtai.guo@linux.dev>, Mike Rapoport <rppt@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Shuah Khan <shuah@kernel.org>, 
-	George Guo <guodongtai@kylinos.cn>, WANG Xuerui <kernel@xen0n.name>, 
-	Alexander Graf <graf@amazon.com>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, Kexin Liu <liukexin@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Cc: i.maximets@ovn.org, dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, edumazet@google.com,
+ horms@kernel.org, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ davem@davemloft.net
+Subject: Re: [ovs-dev] [PATCH net-next v2] selftests/net/openvswitch: add SCTP
+ flow key test
+To: =?UTF-8?B?5L6v5pWP54aZ?= <houminxi@gmail.com>
+References: <20260707034718.2717982-1-houminxi@gmail.com>
+ <f92c4b8a-601a-4e22-822a-ba00705fe60c@ovn.org>
+ <CAJ0BgHeDpvS1-stvrDp0HpUgQY8ZSdJZvAiw7fLpL2EHPeRwHg@mail.gmail.com>
+ <CAJ0BgHc_3fRLFpaUkb2P2jY4avtB3XJQmk0jE-4UC=1abtKLaQ@mail.gmail.com>
+Content-Language: en-US
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <CAJ0BgHc_3fRLFpaUkb2P2jY4avtB3XJQmk0jE-4UC=1abtKLaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi, Pratyush,
+On 7/14/26 2:01 PM, 侯敏熙 wrote:
+> Hi Ilya,
+> 
+> Thanks for pointing this out.  I looked into this and found that
+> nc (netcat-openbsd) on Debian/Ubuntu does not have SCTP support at
+> all. The upstream OpenBSD nc only handles TCP, UDP, and
+> Unix-domain sockets, and the Debian patches don't add SCTP either.
 
-On Mon, Jul 13, 2026 at 9:53=E2=80=AFPM Pratyush Yadav <pratyush@kernel.org=
-> wrote:
->
-> On Mon, Jun 01 2026, George Guo wrote:
->
-> > From: George Guo <guodongtai@kylinos.cn>
-> >
-> > Enable Kexec Handover (KHO) on LoongArch64 for FDT-based systems.
-> >
-> > - Kconfig: select ARCH_SUPPORTS_KEXEC_HANDOVER for CONFIG_64BIT
-> > - kexec.h: add fdt/fdt_mem fields to kimage_arch to hold the KHO FDT
-> >   kexec segment virtual and physical addresses
-> > - machine_kexec_file.c: add kho_load_fdt() which copies the running
-> >   kernel's FDT (initial_boot_params), appends linux,kho-fdt and
-> >   linux,kho-scratch properties to /chosen, and loads the result as a
-> >   kexec segment; called from load_other_segments().  Returns -EINVAL
-> >   when initial_boot_params is NULL (ACPI-only boot) since that path
-> >   requires separate handling.
-> > - machine_kexec.c: before jumping to the new kernel, update the
-> >   DEVICE_TREE_GUID entry in the EFI config table to point to the KHO
-> >   FDT segment so the second kernel finds it via efi_fdt_pointer() and
-> >   early_init_dt_check_kho() calls kho_populate()
-> >
-> > Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> > Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> > Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> > ---
-> >  arch/loongarch/Kconfig                     |   3 +
-> >  arch/loongarch/include/asm/kexec.h         |   4 +
-> >  arch/loongarch/kernel/machine_kexec.c      |  27 +++++
-> >  arch/loongarch/kernel/machine_kexec_file.c | 118 +++++++++++++++++++++
-> >  4 files changed, 152 insertions(+)
-> >
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index 606597da46b8..d494418545f5 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -684,6 +684,9 @@ config ARCH_SUPPORTS_KEXEC
-> >  config ARCH_SUPPORTS_KEXEC_FILE
-> >       def_bool 64BIT
-> >
-> > +config ARCH_SUPPORTS_KEXEC_HANDOVER
-> > +     def_bool 64BIT
-> > +
-> >  config ARCH_SELECTS_KEXEC_FILE
-> >       def_bool 64BIT
-> >       depends on KEXEC_FILE
-> > diff --git a/arch/loongarch/include/asm/kexec.h b/arch/loongarch/includ=
-e/asm/kexec.h
-> > index 209fa43222e1..adf54bfcdd49 100644
-> > --- a/arch/loongarch/include/asm/kexec.h
-> > +++ b/arch/loongarch/include/asm/kexec.h
-> > @@ -39,6 +39,10 @@ struct kimage_arch {
-> >       unsigned long efi_boot;
-> >       unsigned long cmdline_ptr;
-> >       unsigned long systable_ptr;
-> > +#ifdef CONFIG_KEXEC_HANDOVER
-> > +     void *fdt;              /* virtual address of KHO FDT segment buf=
-fer */
-> > +     unsigned long fdt_mem;  /* physical address of KHO FDT segment */
-> > +#endif
-> >  };
-> >
-> >  #ifdef CONFIG_KEXEC_FILE
-> > diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/ker=
-nel/machine_kexec.c
-> > index ad27fef098f1..98529c71d001 100644
-> > --- a/arch/loongarch/kernel/machine_kexec.c
-> > +++ b/arch/loongarch/kernel/machine_kexec.c
-> > @@ -6,6 +6,7 @@
-> >   */
-> >  #include <linux/compiler.h>
-> >  #include <linux/cpu.h>
-> > +#include <linux/efi.h>
-> >  #include <linux/kexec.h>
-> >  #include <linux/crash_dump.h>
-> >  #include <linux/delay.h>
-> > @@ -289,6 +290,32 @@ void machine_kexec(struct kimage *image)
-> >       pr_notice("We will call new kernel at 0x%lx\n", start_addr);
-> >       pr_notice("Bye ...\n");
-> >
-> > +#ifdef CONFIG_KEXEC_HANDOVER
-> > +     /*
-> > +      * Point the EFI FDTPTR config table entry at the modified FDT so=
- the
-> > +      * second kernel picks up the linux,kho-fdt and linux,kho-scratch
-> > +      * properties via early_init_dt_check_kho().
-> > +      */
-> > +     if (internal->fdt_mem) {
-> > +             /*
-> > +              * FDT-based system: DEVICE_TREE_GUID already exists in t=
-he EFI
-> > +              * config table; just update its pointer to our KHO FDT.
-> > +              */
-> > +             efi_system_table_t *st =3D
-> > +                     (efi_system_table_t *)TO_CACHE(systable_ptr);
-> > +             efi_config_table_t *ct =3D
-> > +                     (efi_config_table_t *)TO_CACHE((unsigned long)st-=
->tables);
-> > +             unsigned long i;
-> > +
-> > +             for (i =3D 0; i < st->nr_tables; i++) {
-> > +                     if (!efi_guidcmp(ct[i].guid, DEVICE_TREE_GUID)) {
-> > +                             ct[i].table =3D (void *)internal->fdt_mem=
-;
-> > +                             break;
-> > +                     }
-> > +             }
-> > +     }
-> > +#endif
->
-> Honestly this and the ACPI stuff looks worse to me than what your
-> previous version did. Now I am not an expert on EFI and architecture
-> stuff, and know nothing about Loongarch, but to me this looks hacky and
-> I am not sure if it is doing the right thing.
->
-> I think you should get some alignment with Loongarch maintainers on what
-> the kexec boot protocol looks like. It looked odd to me, but if the
-> Loongarch maintainers are fine with using the kernel cmdline for
-> bootloader to pass data to the kernel, then I think we should go back to
-> that.
->
-> Huacai, do you have any thoughts? For KHO we essentially need a way for
-> the pre-kexec kernel to tell the post-kexec kernel about a blob of
-> memory that has some information it can use. For x86, we do that via
-> setup data. See arch/x86/include/uapi/asm/setup_data.h and struct
-> kho_data for example. On arm64, we use the boot FDT's /chosen node. See
-> kho_add_chosen() in drivers/of/kexec.c.
->
-> Ideally, all device tree platforms should use the FDT path. But
-> Loongarch also has ACPI only and I don't know what a good idea for that
-> is.
->
-> So, do you have any suggestions on where to best place a pointer to this
-> blob of data on Loongarch? v1 of this series put it in the kernel
-> commandline, but I found that odd and asked if it can be done via DT
-> instead. But to me, this code looks even more hacky.
-I don't know which is the best way, but I can give some information.
+AFAICT, 'nc' in netdev CI is the nmap version of netcat, it's not
+the openbsd one.  Does nmap version support sctp?  Google seems to
+think so at least.  The test should be skipped though if sctp is
+not supported.
 
-ARM64 and RISC-V create a FDT to contain all needed boot information
-(EFI system table, command line, etc.) in efistub. In other words,
-both ACPI booting and FDT booting have an existing FDT to pass the
-blob.
+Note: sashiko had some comments on the daemon pid handling in v2.
 
-But LoongArch is different, the efistub doesn't create a FDT, instead
-it passes the EFI system table and command line to the core kernel
-directly.
+Best regards, Ilya Maximets.
 
+> 
+> I see two cleaner alternatives that already have precedent in the
+> kernel selftests:
+> 
+> 1. socat: net/netfilter/nft_queue.sh already uses
+>    "socat -u SCTP-LISTEN:PORT STDOUT" for SCTP data-plane testing.
+>    Many drivers/net/ selftests already gate on require_cmd("socat").
+> 
+> 2. A small C helper: similar to sctp_hello.c used by sctp_vrf.sh
+>    and conntrack_sctp_collision.sh.  The shell test would call
+>    "./sctp_test server/client IP PORT" instead of ncat.
+> 
+> Which approach would you prefer for v3?
+> 
+> Best regards,
+> Minxi
+> 
+> 侯敏熙 <houminxi@gmail.com> 于2026年7月13日周一 11:02写道：
+> 
+>> Ah so many thanks for your suggestions, Please forgive me,
+>> I've always used ncat to write test cases.
+>>
+>> I will re-spin this patch.
+>>
+>> Ilya Maximets <i.maximets@ovn.org> 于2026年7月13日周一 10:39写道：
+>>
+>>> On 7/7/26 5:47 AM, Minxi Hou wrote:
+>>>> Register OVS_KEY_ATTR_SCTP in the flow key parser so that sctp()
+>>>> can be used in flow specifications. The ovs_key_sctp class already
+>>>> exists (with src/dst fields matching the TCP/UDP siblings) but was
+>>>> not wired into the parser, so the token was silently dropped and the
+>>>> kernel rejected the flow.
+>>>>
+>>>> Add test_sctp_connect_v4 exercising the SCTP flow key with
+>>>> port-specific matching: sctp(dst=4443) for client-to-server and
+>>>> sctp(src=4443) for server-to-client.
+>>>>
+>>>> Wait for ncat readiness with ovs_wait instead of a fixed sleep so
+>>>> the test does not race against ncat startup. Use grep -c on the
+>>>> listening message to distinguish between successive ncat instances
+>>>> that share the same stderr log. Kill the previous server before
+>>>> respawning to avoid EADDRINUSE on the SCTP port.
+>>>>
+>>>> Signed-off-by: Minxi Hou <houminxi@gmail.com>
+>>>> ---
+>>>> v1 -> v2: replace sleep with ovs_wait on ncat listening output,
+>>>>           kill previous ncat server before respawning to avoid
+>>>>           port conflict (Aaron review feedback)
+>>>>
+>>>>  .../selftests/net/openvswitch/openvswitch.sh  | 102 ++++++++++++++++++
+>>>>  .../selftests/net/openvswitch/ovs-dpctl.py    |   5 +
+>>>>  2 files changed, 107 insertions(+)
+>>>>
+>>>> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>>> b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>>>> index 2954245129a2..9c364eeb2ec2 100755
+>>>> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>>>> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+>>>> @@ -32,6 +32,7 @@ tests="
+>>>>       dec_ttl                                 ttl: dec_ttl decrements
+>>> IP TTL
+>>>>       flow_set                                flow-set: Flow modify
+>>>>       action_set                              set: SET action rewrites
+>>> fields
+>>>> +     sctp_connect_v4                         sctp: SCTP flow key
+>>> matching
+>>>>       psample                                 psample: Sampling packets
+>>> with psample"
+>>>>
+>>>>  info() {
+>>>> @@ -443,6 +444,107 @@ test_action_set() {
+>>>>       return 0
+>>>>  }
+>>>>
+>>>> +# sctp_connect_v4 test
+>>>> +# - sctp(dst=4443) matches client-to-server INIT
+>>>> +# - sctp(src=4443) matches server-to-client INIT-ACK
+>>>> +# - remove flows and verify connection fails, reinstall and recover
+>>>> +test_sctp_connect_v4() {
+>>>> +     local t="test_sctp_connect_v4"
+>>>> +
+>>>> +     which ncat >/dev/null 2>&1 || return $ksft_skip
+>>>
+>>> Not a full review, but can we avoid ncat?  We already use nc in other
+>>> tests, using different implementations of the same thing in different
+>>> tests doesn't sound like a good idea.  On mnay systems nc and ncat
+>>> will be different implementations with different options and behavior.
+>>>
+>>> Best regards, Ilya Maximets.
+>>>
+>>
+> _______________________________________________
+> dev mailing list
+> dev@openvswitch.org
+> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+> 
 
-Huacai
-
->
-> > +
-> >       /* Make reboot code buffer available to the boot CPU. */
-> >       flush_cache_all();
-> >
-> [...]
->
-> --
-> Regards,
-> Pratyush Yadav
