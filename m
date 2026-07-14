@@ -1,52 +1,57 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D54B3CA4B9;
-	Tue, 14 Jul 2026 18:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB4C4156DA
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 18:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784052383; cv=none; b=rKJsJxS8TN8ZeBTKNzI1ctjlP+INsbkfCq4vVgU1URC25vGHKSyCz16Lc1NoXiODaQoTwm5s1YZBgzuP4D4O61RE7cHPtwV6o+FRNvDqGICMuTi6FhNHn22jNiXVELDDFSkk1y12BPDaHnst7sWjEnoDrdX40+m3m9BaSnzYb18=
+	t=1784054091; cv=none; b=hpOZmBqMi/ouVxtwIhRYKUrA7CUuzuhdhuv46UEhXLHXqPcOtlpJN/B+eC4fqhczyug8jlunJDcOKAK30rXDW+vBPcpdyTJww5OmjgskOrzbNdr+T0bRczGbcXBV8/s/6BG62Y5StTEmOnlM7n0KbW1UaGHonQK+3SJjBdEPoYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784052383; c=relaxed/simple;
-	bh=I4vFO55K1s9+271KQFTCPFyP2QEfRBU94YL8Fjlva8E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZM8BorNbQW4fOlpVal9BR1ivQ9F3F454g0Tmv1uOOlfUJk5+JpoMRHE2742AbsCfTHntv2RmRz3bZ/e6wyNAsUsFaYYB0vzApQkikJNH6/B6DjrDZEnkBs4C6rpP9UESryKgHuODqxPPWUJ+Th81m2lwP6RcA/NnBFv+L4rQ8m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=mMSDxHOI; arc=none smtp.client-ip=209.97.182.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1784054091; c=relaxed/simple;
+	bh=n7tA+JtthjCpt5jYdK/6ZMA5a1orybyfZ9MbxgkmU5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PjzwV38gaJxQcVoky+XXEaileqk0seW4XsHd9nf3U33cMMRwqJWheXBHhD2gRUo8bdm028TskPkJsA3klsXHVyQBDjZ5m1OlRzmpBAmRuNUOAeoanu7ai+Xwljx+dzn1CZ7kqvCsMD/KOOYXN0tQc/vBVE7o12+SK28/3USbMqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KCdHsnuT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="mMSDxHOI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=FIj06gQZO2J73HIo/WORiPffzOUtPsehf5
-	3MLXgA94k=; b=mMSDxHOI0HaJ7JlBoM5Erp+l/MMFHGcEo/kd08i8zquad2hE3n
-	95PWMZKRGJ0V+tdcCsiy1PZDzEVyTpCdTKmhIR1IBohcnKDwz/5To7zNp/g1XXZ7
-	JvJMZ65tQSMvrE72a7BNvzVQKIWi2w02GCqWT6HArTebXt10oH+AigeIs=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web2 (Coremail) with SMTP id yQQGZQAXwZNlelZq_PPtAg--.1090S2;
-	Wed, 15 Jul 2026 02:05:52 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	chenyy23@mails.tsinghua.edu.cn,
-	daniel@iogearbox.net,
-	emil@etsalapatis.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KCdHsnuT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784054089;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=t120cvhZNXeUe/p+SXy1bzc4SzG5CODrSc2c+k96MwQ=;
+	b=KCdHsnuTwjzLwLKACCNfSxeGppAZz+VQM16X9t7CmLlrxnj7oWSPoQKeHfeMQuWuYjRRcb
+	VC3YnrOICna4FuBH8cof7vqt98dQf1moVTlN68lk+XTeOh4V6I3ceY+f9tkBvQ4lBlrYdf
+	gIDI0kIo7lOlMzPTpfwNsfBvTYijJDk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-686-v2QOTTi3PbmBzNphDqPq8A-1; Tue,
+ 14 Jul 2026 14:34:46 -0400
+X-MC-Unique: v2QOTTi3PbmBzNphDqPq8A-1
+X-Mimecast-MFC-AGG-ID: v2QOTTi3PbmBzNphDqPq8A_1784054084
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 71020180061E;
+	Tue, 14 Jul 2026 18:34:44 +0000 (UTC)
+Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.65.193])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C7B5319560A3;
+	Tue, 14 Jul 2026 18:34:42 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next 1/2] bpf: Check byte type when validating helper stack reads
-Date: Tue, 14 Jul 2026 18:05:11 +0000
-Message-Id: <20260714180512.3910011-1-chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
-References: <77e5d785ca08a5fa57c661d9494f4551d0b55425.camel@gmail.com>
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH] selftests/cgroup: Fix intermittent test_cgfreezer_ptrace test failures
+Date: Tue, 14 Jul 2026 14:31:25 -0400
+Message-ID: <20260714183125.521650-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,82 +59,55 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yQQGZQAXwZNlelZq_PPtAg--.1090S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZrWrJFW3GFy3Jw4rWrWxJFb_yoW5Ww4UpF
-	4rGw13Wr1kXrZ7C3ZIvF4xta4rGrZ5JFy5uFs5WryUCry5uryaqFWfKrW5CFnrCr1vqayF
-	yF4Sq398ua98AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-	1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-	x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4
-	vE14v_XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUrhL8U
-	UUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Mon, 2026-07-13 at 21:22 +0000, Eduard Zingerman wrote:
-> Sorry, could you please explain again what's wrong with the original check?
-> Here it is:
->
->                 if (bpf_is_spilled_reg(&state->stack[spi]) &&
->                     (state->stack[spi].spilled_ptr.type == SCALAR_VALUE || env->allow_ptr_leaks)) {
->                         ... accepted ...
->                 }
->
-> And it says: if there is a register spill at 'spi':
-> - always allow access if the spilled register is scalar
-> - when allow_ptr_leaks is true, allow access when spilled
->   register is either scalar or pointer.
->
-> The goal here is to avoid leaking pointers, and pointers are always 8-bytes.
+It is found that the test_cgfreezer_ptrace test of test_freezer can
+intermittently fail on some architectures like arm64 and ppc64.
 
-You're right that this block is a pointer-leak check, and a scalar spill
-can't leak a pointer -- so the fix isn't justified on those grounds. The
-invariant it targets is the other one this function enforces: rejecting
-reads of uninitialized stack when !allow_uninit_stack.
+After further tracing of the mechanics of the test_cgfreezer_ptrace test,
+it is found that the ptrace(PTRACE_DETACH) call temporaily unfreezes the
+cgroup and then freezes it again afterward in the detaching process. The
+reading of the frozen flag from cgroup.events is done from a different
+process running maybe on a different CPU. As a result, racing is possible
+and the intermediate unfrozen state can be read leading to occasional test
+failures especially on architectures with a weak memory model like arm64.
 
-The block just above already gates that:
+Fix that by adding a short 1 ms delay before reading the frozen state
+to ensure that the final frozen value will be read.
 
-  /* verifier.c:6780 */
-  if ((*stype == STACK_ZERO) ||
-      (*stype == STACK_INVALID && env->allow_uninit_stack)) { ... goto mark; }
+By running test_freezer 100 times in a loop, there were 28
+test_cgfreezer_ptrace failures out of 100 on an arm64 test system before
+the patch. After applying the patch, there was no test failure at all
+in 100 runs of test_freezer.
 
-For a CAP_BPF-only load allow_uninit_stack is false, so a STACK_INVALID
-byte should reach the -EACCES below. allow_ptr_leaks and allow_uninit_stack
-are both keyed on CAP_PERFMON today but are separate flags; reads-of-invalid
-is independent of pointer leaks. The existing fix for the related
-producer-side bug, 69772f509e08 ("bpf: Don't mark STACK_INVALID as
-STACK_MISC in mark_stack_slot_misc"), frames it the same way:
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ tools/testing/selftests/cgroup/test_freezer.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-  "we should not upgrade STACK_INVALID to STACK_MISC when allow_ptr_leaks
-   is false, since invalid contents shouldn't be read unless the program
-   has the relevant capabilities."
-
-After a 1-byte scalar spill to fp-8, save_register_state() marks only the
-covered byte STACK_SPILL; the sibling fp-7 goes to mark_stack_slot_misc(),
-which (verifier.c:1234) won't promote STACK_INVALID. So slot_type[7]
-(fp-8) is STACK_SPILL and slot_type[6] (fp-7) is STACK_INVALID. When the
-helper walk reaches fp-7, the uninit gate above fails correctly, but the
-spill block accepts it anyway -- bpf_is_spilled_reg() tests
-slot_type[BPF_REG_SIZE-1], the fp-8 sibling, not the fp-7 byte being checked.
-
-The patch makes the fast path cover only bytes it actually marked, so the
-invalid sibling falls through to the -EACCES the upper gate chose for it.
-It's the consumer-side counterpart to 69772f509e08 (producer side) and its
-direct-read selftest f513c3635078: the direct read was already covered, the
-helper-argument path was not.
-
-Runtime: for a CAP_BPF-only load, passing fp-7 as the value to
-bpf_map_update_elem() after the spill to fp-8 exports a byte the program
-never wrote. A direct read of fp-7 rejects; only the helper path accepts.
-
-The commit message should say this rather than just restating the mechanism
--- I'll send a v2. Happy to move the fix elsewhere if you'd prefer.
+diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+index 0569e93fa6b0..8e2cca74d212 100644
+--- a/tools/testing/selftests/cgroup/test_freezer.c
++++ b/tools/testing/selftests/cgroup/test_freezer.c
+@@ -625,6 +625,18 @@ static int test_cgfreezer_ptrace(const char *root)
+ 	if (ptrace(PTRACE_DETACH, pid, NULL, NULL))
+ 		goto cleanup;
+ 
++	/*
++	 * The ptrace(PTRACE_DETACH) call will temporaily unfreeze the cgroup
++	 * and then freeze it again afterward in the detaching process. The
++	 * reading of the frozen flag from cgroup.events is done from a
++	 * different process running maybe on a different CPU. As a result,
++	 * racing is possible and the intermediate unfrozen state can be read
++	 * leading to occasional test failure especially on architectures with
++	 * a weak memory model like arm64. This intermittent test failure can
++	 * be avoided by adding a 1ms short delay before reading the frozen
++	 * state.
++	 */
++	usleep(1000);
+ 	if (cg_check_frozen(cgroup, true))
+ 		goto cleanup;
+ 
+-- 
+2.55.0
 
