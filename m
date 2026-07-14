@@ -1,185 +1,192 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D874741D645
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 20:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C3E26B2CE
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 20:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784060037; cv=none; b=pqyTfMtq2Lq2279GbdTZ7mGqeadyp+//S4eXL+Qzu6rNcDhgeqm9EcJF7mPpIOcrCNo1FrbzTG21khNnkj5zNNu5jZWov1tRbJJYsaAhLbA2vD1nuQO/c7SttVnR1eXDbwbD9mWDpcC2+ifrmtxSzJTYaydTuoEJ4Ge3vjxo4bE=
+	t=1784062680; cv=none; b=Xc3K003YezhSgiB2doD2+S+acRKcd+x5b69OrGLvFHzWrii5zNJQvFwuqEhkwYPwCA2mXkhQIuQ7veBl3tjWDzVvThf1GxNiQ4gdmNfDit83/8L/MKzLukkPa/+/57bXV9TcdBHO1xz9ORcZIc9PYbtGaxl1BlkmYZDKs0zFyMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784060037; c=relaxed/simple;
-	bh=Q8uBbE9XdPRVXQaZ0ExTI42TK7zcMOJJhXBlrcrT8a4=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G/fKc7b+iPy1wTr/L8gVCHtY4+eZWftM/D9FMnCGsIwV9IOqKTidt6Vqh8JovCQzwNCyqocK0HIOfIhSxG7VWy7AlnWv0s8YlfMEjnbkH+8YZg5C4zro7Y5QDK6B/ta+AtfcVKck+iH5HNG2T36syKzC9FBt/8k19+1EYtufMiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pC1DnLXs; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784062680; c=relaxed/simple;
+	bh=9gcR7HvP2KVUYsA1XwWA0eR6QDaw8AQ1VuLJtUoJiH4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=d6RQEZdQGJd9PzEnLw6a2ZvI63N6l5AeYnYWiW+MQf7w389ZY4lnBGEthw36u+VYar97wuYNk5OA2li/HYf9HOyVoukxHV/sYInkoYRvO8Zyb4DYhg7nmttchMu/4MjuqMEMPinn3QfW5G5W8lvfMUisp34YGgNbM0XN8oscp+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uIANFmII; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pC1DnLXs"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc97653887so54594095ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:13:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uIANFmII"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2cc640dfde3so16839785ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 13:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784060035; x=1784664835; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:subject:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=EUZJ2b06rpE59kyPt/lRc7T/ATHNB4Peeih6JEYSOE8=;
-        b=pC1DnLXsM9pmrYwdczi94TaLLqpfQzcoJ8YoVM1oFGZFe07rDd/ZCswe0khlgNZrJ1
-         bnZTQhA9whkBaPIDABjABX27M3zaGGfUO76Dkj5z00rDODdddWT6Euq7TCJeurqS0iI3
-         +eHgc2AwQ67JCkvEgbI1biks0xb/SD55hvZpvaIsGXP9UULODby2vYd0uE/y1WHYsLXo
-         KP8oZnUlz/rrrGvauR7PVCczqYe+AYH80h0j9wQGrBsbXdSvplOqRnTqBfpFTMMQNRpz
-         1jD00Q96/vaw21V2zPNgvEJegojwXZXA6TOPslb58rOSvT4N87aKlLO+AFVZUacP7NV4
-         RIqQ==
+        d=google.com; s=20251104; t=1784062677; x=1784667477; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eAGqVJILZLq4bP+7ZV1P5jt91DTzcodBnQZuTGxkl6k=;
+        b=uIANFmIIKLuizBJ+NfT+8btU8JnwsfwpM6rP7Hb9/yHZdwvqdN0IVi8zgjy/1GGsho
+         HgGGFXcOOnJDNnXQX87a9HkOLO3pI7BNHoqntqeptNEo+gDRDs9jaZlTXCxcLohDTuj7
+         AwncHumMbQb78yYanJOi/+JW867nk/rVXVzyMGBFFUSPnw4qJYPHtAp7TAK2lv8jOTdI
+         llyomUC1Ucf2dXieRT+qCcurynmPMJ0ryXffTpZ52ANeHtV9st08IzUthnYbbPMy0psj
+         LKY8iRFWcln4qYxCCyDdSU3Rr0cO6+EOFAG5YgYjZGgINZaQ3LhPAJPJxvEkl5OJ/RXs
+         xyIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784060035; x=1784664835;
-        h=content-transfer-encoding:content-type:mime-version:user-agent
-         :references:in-reply-to:message-id:date:cc:to:from:subject:x-gm-gg
+        d=1e100.net; s=20251104; t=1784062677; x=1784667477;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EUZJ2b06rpE59kyPt/lRc7T/ATHNB4Peeih6JEYSOE8=;
-        b=oWUzXh7mDslHoukmpuqgraKOWjWLotMtue4g8CtVj5ONfad/NXC9aRbbUwuTWug+Bd
-         QXimwF8jCyBCyyfPpGE47H8z70W3Gk2MKvmBWzgc5HZelDsZbZp5J2cV1z5GxXVt0FJH
-         mjLE9Y3VjOPOh/4m+1JivwpyLkoIhnsz6m8tW+xXJsIKSiHo5diREXadSdEJSzoXE7rN
-         rwEW7EdRQJzXM1Dyc6p0pnk0OC0a2vNuV1NN1u3y9Ue6dXWTtZuIqwgn1OPuu4MVWe/X
-         mv7+ziMY+7U/Xdfdou8k7QY/HyoBTKUX3Z91zuiEHnMtkhKTZy8WQY/ZitTWM/WbuvmT
-         pcDg==
-X-Forwarded-Encrypted: i=1; AHgh+RrTSsXxItfG9YMh900vV6SfscKIFlfRdZf2AwrxKu6iOo02QWzzPZJxkwVQ61KN7ss8CD1bvQ8LSwRlAA0tO9E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw32mccUV/x8kYbUdwTHLHV1mPR403mC5BxMhJUJPuHZJDaiuSX
-	yPx6oN+1GJYdY+zspETqPBsdGpXBbCEyFmDIgnBbeLunb1LdhG7TTw+JLk+vTK9g
-X-Gm-Gg: AfdE7cl6Rz1/ft0Lii6yxkZkIZGKUNk6FhJ3BllLzfexrKVKgIuQcJr290QjcwyoFY3
-	0YqKZeEzpPRcpDJFcHDUkR6kYBzs9RSFsCoOnCIKUtVKoiJB1F1JHznh/RZV/S1pIJlo1CJennA
-	/IkEHaxj6uy21uOPcpR4QPjyMgkZudxayNH09HfZiiflZcWKezC3r5xBLVnX/A11M1YiBoOwaXm
-	gDAaPSGvZI70HbUi0tTiaOkiZlQPIGeM1OALi/lXn0g4dhyTd+L56BegLWWiGbIjrBskRq8o0ru
-	IpsFmaHeriamnfQq4PAZ7YBDiCo2733ZpjEj+A1UknNDCw/7VPl6blUoIZd7pDlHEyeAQdTend4
-	v7HdgQ7qZ1wfi8JlHFXmh21rvBp/bBNCB0FOG7zb3ObF8/s/rSryLUBI482fTi7aAb3PiNhuFq1
-	pFslaCCEhIvZMyybLlm5UhUDwi+GmN4BzxJywezEhpWriTBRjtw5wZNHfWficWpkeEc1uyKQ==
-X-Received: by 2002:a17:902:fc8f:b0:2c9:97a8:afe5 with SMTP id d9443c01a7336-2ce9f27e6dbmr139524545ad.40.1784060035193;
-        Tue, 14 Jul 2026 13:13:55 -0700 (PDT)
-Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb877sm120937885ad.14.2026.07.14.13.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 13:13:54 -0700 (PDT)
-Subject: [PATCH 4/4] fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout()
- for range faults
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
- corbet@lwn.net, dakr@kernel.org, david@kernel.org, jgg@ziepe.ca,
- kees@kernel.org, leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com,
- ljs@kernel.org, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
- mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
- nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
- rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
- skhan@linuxfoundation.org, skinsburskii@gmail.com, surenb@google.com,
- tzimmermann@suse.de, vbabka@kernel.org
-Cc: dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Date: Tue, 14 Jul 2026 13:13:53 -0700
-Message-ID: <178406003318.1082778.16211328573488321338.stgit@skinsburskii>
-In-Reply-To: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
-References: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
-User-Agent: StGit/0.19
+        bh=eAGqVJILZLq4bP+7ZV1P5jt91DTzcodBnQZuTGxkl6k=;
+        b=Dc7dRA5IE3Lnk9v6Zj+7qx/i/qlFSlEAGMYLadFvfyeCg816wCR1ku2Cijy64RhrEx
+         RPmJR+IeCRZZsWAmFSi58Iiese99LXaF2rhHzYwm2UbNF9Nz1wMCSK9mr6BIKvu9o1et
+         9Uw5Rg7q/0Oain17Vof/atq1FULJwWZyd//YeXXSHHoZ2XbX0EMJz5nkzQ5rvwEXi2XE
+         iy7EqWvxMg1lte9BRxjKXYDblgpjD7XfI6KUH4uVFNft//sPTx3DGacDx8Z30etd4VoV
+         YnBv//MUvzkudXO7p0q8OyDsUhYjoJRjVUt7iyl6FAcR9alaxhy4O/8nL9LonBOsGk/q
+         AdsQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpDnkQ9s8b5+UzMlzu6bDgS42F0t571dotViEWk6JrCB9noNCNE7qlQWios5UozjoUJx9Kfz2y6WT6JsFUoWGY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzooadbmmLO/bQsRMJGgJhZn3Xn5AZaYNAshrXBVbVmiF4D21/X
+	1GkuVMUz9zVxWJJ5Khc8lbWyGgKBF+9BmKXPDJkmgX1JnIV5T3rDVoxMyaOk8iSOF1L9MyF0gbo
+	X7fNSEp0m
+X-Received: from plbmu11.prod.google.com ([2002:a17:903:b4b:b0:2ce:fc90:1592])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:32c2:b0:2c9:b48c:fdde
+ with SMTP id d9443c01a7336-2ce9f285258mr157803295ad.26.1784062676447; Tue, 14
+ Jul 2026 13:57:56 -0700 (PDT)
+Date: Tue, 14 Jul 2026 20:57:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMCiVmoC/03MSwrCMBSF4a2UOzaSd6gj9yGl2HhNL2gjiQSlZ
+ O/G4sDhfzh8K2RMhBkO3QoJC2WKSwuz68DP5yUgo0trkFxa7rhjFKaxqHHSTPei115o5ZSH9n8 kvNJrs05D65nyM6b3Rhf9XX+K4H9K0YwzY9GhNM56L44hxnDDvY93GGqtH16xxBijAAAA
+X-Change-Id: 20260707-igb_v3_b4-49194c14373c
+X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784062676; l=5364;
+ i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
+ bh=9gcR7HvP2KVUYsA1XwWA0eR6QDaw8AQ1VuLJtUoJiH4=; b=unawleeUdKi8mUhMeA1t337eMzLAohYXWgrFI24/uS9kdp0aZ95qFGkq9l9MSxNmy8Y4fRuIk
+ puITf3C9qxQBaiYFEzuOMAZ72Zj85S6z7O8CC+er4S3y2A//EWTeF4r
+X-Mailer: b4 0.14.3
+Message-ID: <20260714-igb_v3_b4-v5-0-91503eddb98b@google.com>
+Subject: [PATCH v5 0/5] vfio: selftests: Add driver for Intel Ethernet Gigabit
+ Controller (IGB)
+From: Josh Hilke <jrhilke@google.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
+	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
 
-The timeout passed to hmm_range_fault_unlocked_timeout() is a relative
-retry budget for HMM's internal mmu-notifier retry loop. drm_gpusvm was
-still keeping an absolute deadline around the outer driver retry logic
-and passing the remaining time into HMM.
+This v5 of a series which adds a VFIO selftest driver for the Intel
+Gigabit Ethernet controller (IGB), specifically targeting the 82576
+device. IGB is fully virtualized in QEMU, making it suitable for running
+VFIO selftests without specialized hardware.
 
-Pass HMM_RANGE_DEFAULT_TIMEOUT directly to
-hmm_range_fault_unlocked_timeout() on each HMM fault attempt instead.
-If HMM succeeds but the later drm_gpusvm-side mmu_interval_read_retry()
-check observes an invalidation, retry with a fresh HMM retry budget.
+v4: https://lore.kernel.org/kvm/20260710-igb_v3_b4-v4-0-56e7e2576cc1@google.com/
 
-This keeps the timeout focused on repeated notifier retries inside HMM,
-while avoiding an outer deadline that also accounts unrelated driver-side
-work after HMM has made progress.
+I restructured the series by folding Alex Williamson's advanced
+descriptor support, MSI-X routing configuration, and completion timeout
+patches directly into the initial driver patch. Hopefully this ensures a
+clean baseline driver so that Sashiko doesn't complain about bugs which
+are fixed in later patches in the series.
 
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Also enabled Multicast Promiscuous (MPE) and Broadcast Accept (BAM)
+modes because any test data where the first byte's least significant bit
+is 1 will be treated as a multicast/broadcast frame and dropped by the
+hardware's MAC filter.
+
+Implemented a few other minor fixes from Sashiko. See changelog.
+
+Testing
+=======
+- VFIO selftests builds clean at every commit
+- vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
+  command to run the tests:
+
+  vng \
+  --run arch/x86/boot/bzImage \
+  --user root \
+  --disable-microvm \
+  --memory 32G \
+  --cpus 8 \
+  --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+  --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
+  --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
+  --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
+  --exec "modprobe vfio-pci && \
+          ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
+          ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
+--------
+Changelog:
+
+v4 -> v5:
+- Reordered igb_remove() to reset the device before disabling MSI-X (Sashiko)
+- Refactored hardware reset logic into igb_reset() helper.
+- Simplified reset completion check to usleep + assertion instead of retry loop (Sashiko).
+- Allow arbitrary test data by enabling Multicast Promiscuous (MPE)
+  and Broadcast Accept (BAM) modes (Sashiko).
+- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number (Sashiko).
+
+v3 -> v4
+- Enable MSI-X mode in GPIE (Sashiko)
+- Fix hardware initilization order to avoid race conditions (Alex/Sashiko)
+- Add memory barrier to prevent speculative reads (Alex/Sashiko)
+- Clean up stale references in commit messages and comments (Alex/Sashiko)
+- Add a comment to address software/firmware semaphore (Alex/Sashiko)
+
+v2 -> v3
+- Poll reset bit and document the required wait time (David/Sashiko)
+- Fix the logic for enabling PCI_COMMAND_MEMORY (David/Sashiko)
+- Fail the test if autonegotation fails (David/Sashiko)
+- Handle endianness conversions (David/Sashiko)
+- Use real IGB headers at the start of the series (David)
+- Add E1000_TXD_CMD_IFCS to the TX descriptor command word (Sashiko)
+
+v1 -> v2
+- Removed the chunking loop in igb_memcpy_start() (David)
+- Removed redundant writes to status_error and hdr_addr (David)
+- Include official IGB header files (David)
+
+Signed-off-by: Josh Hilke <jrhilke@google.com>
 ---
- drivers/gpu/drm/drm_gpusvm.c |   21 ++++++---------------
- 1 file changed, 6 insertions(+), 15 deletions(-)
+Changes in v5:
+- Restructured the series from 9 to 5 code patches by folding advanced descriptor
+  support, MSI-X routing configuration, extended memcpy completion timeout, and
+  PCIe completion timeout retry disable directly into the initial driver patch.
+  This ensures a clean, fully-functional baseline driver from PATCH 01 and avoids
+  intermediate legacy descriptor, timeout, and bus-spamming bugs.
+- Reordered igb_remove() to reset the device before disabling MSI-X.
+- Switched igb_irq_clear() to write-to-clear as required by the datasheet when
+  EIAC is programmed.
+- Refactored hardware reset logic into igb_reset() helper with proper sleep
+  (1ms mandated by datasheet section 4.2.1.6.1) and poll-assertion.
+- Simplified reset completion check to usleep + assertion instead of retry loop.
+- Allowed arbitrary loopback test data by enabling Multicast Promiscuous (MPE)
+  and Broadcast Accept (BAM) modes.
+- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number.
+- Link to v4: https://lore.kernel.org/r/20260710-igb_v3_b4-v4-0-56e7e2576cc1@google.com
 
-diff --git a/drivers/gpu/drm/drm_gpusvm.c b/drivers/gpu/drm/drm_gpusvm.c
-index b8f2dd9982f5..76e8a0028c7f 100644
---- a/drivers/gpu/drm/drm_gpusvm.c
-+++ b/drivers/gpu/drm/drm_gpusvm.c
-@@ -852,8 +852,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
- 		.end = end,
- 		.dev_private_owner = dev_private_owner,
- 	};
--	unsigned long timeout =
--		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
- 	enum drm_gpusvm_scan_result state = DRM_GPUSVM_SCAN_UNPOPULATED, new_state;
- 	unsigned long *pfns;
- 	unsigned long npages = npages_in_range(start, end);
-@@ -867,8 +866,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
- 	hmm_range.hmm_pfns = pfns;
- 
- retry:
--	err = hmm_range_fault_unlocked_timeout(&hmm_range,
--					       max(timeout - jiffies, 1L));
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
- 	if (err)
- 		goto err_free;
- 
-@@ -1459,8 +1457,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 		.dev_private_owner = ctx->device_private_page_owner,
- 	};
- 	void *zdd;
--	unsigned long timeout =
--		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
- 	unsigned long i, j;
- 	unsigned long npages = npages_in_range(pages_start, pages_end);
- 	unsigned long num_dma_mapped;
-@@ -1478,9 +1475,6 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 		return -EINVAL;
- 
- retry:
--	if (time_after(jiffies, timeout))
--		return -EBUSY;
--
- 	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
- 	if (drm_gpusvm_pages_valid_unlocked(gpusvm, svm_pages))
- 		goto set_seqno;
-@@ -1495,8 +1489,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 	}
- 
- 	hmm_range.hmm_pfns = pfns;
--	err = hmm_range_fault_unlocked_timeout(&hmm_range,
--				max_t(long, timeout - jiffies, 1));
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
- 	mmput(mm);
- 	if (err)
- 		goto err_free;
-@@ -1718,8 +1711,7 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
- 		.end = drm_gpusvm_range_end(range),
- 		.dev_private_owner = NULL,
- 	};
--	unsigned long timeout =
--		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
- 	unsigned long *pfns;
- 	unsigned long npages = npages_in_range(drm_gpusvm_range_start(range),
- 					       drm_gpusvm_range_end(range));
-@@ -1734,8 +1726,7 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
- 		return -ENOMEM;
- 
- 	hmm_range.hmm_pfns = pfns;
--	err = hmm_range_fault_unlocked_timeout(&hmm_range,
--				max_t(long, timeout - jiffies, 1));
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
- 
- 	kvfree(pfns);
- 	mmput(mm);
+---
+Alex Williamson (4):
+      vfio: selftests: igb: Use PHY internal loopback on 82576
+      vfio: selftests: Add helpers to re-enable interrupts
+      vfio: selftests: igb: Factor hardware programming into igb_hw_init()
+      vfio: selftests: igb: Recover after DMA-read faults
 
+Josh Hilke (1):
+      vfio: selftests: igb: Add driver for Intel 82576 device
+
+ .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 564 +++++++++++++++++++++
+ .../vfio/lib/include/libvfio/vfio_pci_device.h     |  14 +
+ tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c |  22 +
+ tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   2 +
+ 8 files changed, 606 insertions(+)
+---
+base-commit: de61419bb27f985cb878b19942a55b026c9c865a
+change-id: 20260707-igb_v3_b4-49194c14373c
+
+Best regards,
+-- 
+Josh Hilke <jrhilke@google.com>
 
