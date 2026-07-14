@@ -1,170 +1,181 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C189042B75D
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 21:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB123377A97;
+	Tue, 14 Jul 2026 21:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784064842; cv=none; b=Wtk7+6O9eRcgArPp8yR7D6lWn0XAR3ZsQdGh0yFRvGLLE8wmVaqB1fQhcTS7CWGlnKD7rbhnhu1m0oO/rKd9oF5HHOGp8JjHwgntKcb5WX3HtcUODcYBhgR8uouMqm8p4Hy5REuj8wwbD6Y6FhTj2oRTwcBCAeEWnU31uLfGLOE=
+	t=1784066037; cv=none; b=joPZZ0jPMRl6IN2KB6ZQttYHObl+txs9In7KpidwMuGZX8GOgPY38lr85/mIgj/J84M3kgvjoy2SzHLIwjvmTQJ5/faQg7rn3NCrgd77a5wIyx/eqCrXQzTZdLJbtsivg677gXNUzASpmSb+eoTIlVcGt4+7vOUpxKoCVlIfn6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784064842; c=relaxed/simple;
-	bh=tb1NJ6THbO4fGAOt71qmHzyuduWdHm5vzycR/NKaFuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ctJD+YSXJ8WyLXbUki9VxZEgopxusAdY7qFqO3ycfrYjZx3/MWcvIW2OLoDsJ1JBJvmwiwlElIy9n6RH1JTw/xFARRCsgj2su03juRRv69xy3fmQYr5sjyKDgXkWxA3wxR0GLvYVTpLlGoZ+prZhdJ2RueIk3xhSH90g+c9W5NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SLrF5G+b; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SLrF5G+b"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ced3386430so13090425ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784064837; x=1784669637; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zebbIro5mkXbuDBJ5TKnPBr9hFGew4CMfA/H27lS0KU=;
-        b=SLrF5G+b5i9n/3C+1ZCCGVOL+lo2aSb4ZZhaf/rOZiKtc9rVJfvZKeHs2nrXG+wB3x
-         tiCGoJwbkDuR/llcQ3wcdd1xxS9UcpyE8YlGZjA9fiKSz7ICkEK8V3rFElngGU3OTq6v
-         Iy8hsiYVV83MwrwEjbBXfpgu3CQPHa11v8Uf+n5T9Hoz05Zp6NdbU/4uzpe+B5JVU6gN
-         S5cesmj/yjPfUXsPIf29kOL9A4rHxMDZhPI5f2vKUsMj9lCCFPyEFzAPF7sQWd/y+hA1
-         jzCX2Gnl+XvAR7uu/KLQXeM78j3wMGuS6xo/xfxQk911dNDqI4Vn+8B7AwMYQbw0Y661
-         b08A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784064837; x=1784669637;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zebbIro5mkXbuDBJ5TKnPBr9hFGew4CMfA/H27lS0KU=;
-        b=LWTIJD13M8ki3OGMPs6XZPiUyV5OVlClfJdzWp8V8R9qZFYNyBU/0PO3lDGv+iAB30
-         2Mg/SinzZXlJdBdHB6T6CBXrIOsqzaGKSUnX7fYiJ7OMz7BvR9O7FOQ7+8liuG8fGPwH
-         /4jO0ej18QRqi7Sr+l7wxG8sM3iHjQ0HFVlGIGVq2FUAgGeKt/7nKxkKSjr0798lTlBi
-         kAu7lraudPhb38GR5Tgkbo3+oOItkAq7BKkyc+5s9U3BFUoYobj1iEydYfg6mivdVw2r
-         JOp8KtlhF66Pz6nTEwpTdN3g4wfTupE5PsLJiDgmYFBcpAt1yTYL+3hmPgDEu36dIvY2
-         A4WQ==
-X-Forwarded-Encrypted: i=1; AHgh+RplEPU0qCx9Ug30cifkp64tc4aM7rMfP4Q0wkfmH0oYjbXatGCFTWkmjsFxNYJHK1/HEmpF8PjkYB1I94BpNOk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwchG/6IRwjBtOXbEk7u7TdS0VrtaYr1w0pX6EkEBffpFerLHQI
-	Bjs+wvZPKOWGHXAo9VoXoHZeubEuHtzw+98dXgeRIj0BpAcAKltGhz7c
-X-Gm-Gg: AfdE7clbXQmRA88MKQo81EeUGxLaq/ealjZI4d0heWGmATnOypjMUVj87qAWvvgawYL
-	VK8QlO5wMTx6yNLGaJgy/RrptzLQkgdEqkeaUVn3KYXycXNDTph+1PYEJ101z56ZK8xPWbUZkGc
-	1ux/SgdwwFVnFyoXd6gj0LxuiEwEEg+cCySyWx/YSw8qDxI2bvBBa02cMDKUc9/HDiFN9albpe7
-	uxeieMWo5dVlFaktyB1xnIDwKNekBkt/pFvNq5p6FvVN01sd9ILnG0eMtepILcXnJzi8ahS0lCR
-	zexJh+zlcFePBkNtn0pdmu/pFnwsadbebMpOd+Xtxi7Tms6FF2cEP4vQLjJ0zdvGrKX4npAEHsO
-	IkcvzQz03Jjjn5UTZeyZeH3ucZA17fZwDQTNhBIPt/zrZSVzEF40ih0wXgYka/kVQLCr5ReKMhk
-	j4CjS+rF8/iKJKUpGBb0TjnMQJU+kYMfptVEA3EAnACvH5X1JVG1kGzQT5HuszLFfbtg==
-X-Received: by 2002:a17:903:240c:b0:2c8:1c05:16bb with SMTP id d9443c01a7336-2ce9ec0f108mr142192545ad.24.1784064836947;
-        Tue, 14 Jul 2026 14:33:56 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cea6507b5csm55058005ad.72.2026.07.14.14.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 14:33:56 -0700 (PDT)
-Date: Tue, 14 Jul 2026 14:33:53 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
-	corbet@lwn.net, dakr@kernel.org, david@kernel.org, jgg@ziepe.ca,
-	kees@kernel.org, leon@kernel.org, liam@infradead.org,
-	lizhi.hou@amd.com, ljs@kernel.org, lyude@redhat.com,
-	maarten.lankhorst@linux.intel.com, mamin506@gmail.com,
-	mhocko@suse.com, mripard@kernel.org, nouveau@lists.freedesktop.org,
-	ogabbay@kernel.org, oleg@redhat.com, rppt@kernel.org,
-	shuah@kernel.org, simona@ffwll.ch, skhan@linuxfoundation.org,
-	surenb@google.com, tzimmermann@suse.de, vbabka@kernel.org
-Cc: dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 2/4] fixup! drm/nouveau: use
- hmm_range_fault_unlocked_timeout() for SVM faults
-Message-ID: <alarQbmnjwtgdBUB@skinsburskii>
-References: <178405975214.1082778.5193079941156341151.stgit@skinsburskii>
- <178406001808.1082778.17299764648397654220.stgit@skinsburskii>
+	s=arc-20240116; t=1784066037; c=relaxed/simple;
+	bh=x2Gh8QmklIM9C4aWufS1h0NEo7ZJy5Y4fu+SOBaQUzE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AByN9mLMf9AwHAYmtElo9siopRPsxRvVB5R9RP+f2GutLATG7GBjahPHlnNCuCmMW70vvs+ZwKRQ55FmVb/C0DVQwinATqDwnDODfVdEtcIWLJonN5iEeppO+mvf+nsoAwCBb+FAAoVFztgKOT+xUWZww8oJVYSBRK47LBR0GVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf02.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 22BA1C02B1;
+	Tue, 14 Jul 2026 21:53:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 50B3B8000E;
+	Tue, 14 Jul 2026 21:53:51 +0000 (UTC)
+Date: Tue, 14 Jul 2026 17:53:55 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Li Pengfei <ljdlns1987@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ lipengfei28@xiaomi.com, zhangbo56@xiaomi.com
+Subject: Re: [RFC PATCH v4 2/3] trace: integrate stackmap into ftrace stack
+ recording path
+Message-ID: <20260714175355.1951b317@gandalf.local.home>
+In-Reply-To: <20260616064119.438063-3-lipengfei28@xiaomi.com>
+References: <20260616064119.438063-1-lipengfei28@xiaomi.com>
+	<20260616064119.438063-3-lipengfei28@xiaomi.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <178406001808.1082778.17299764648397654220.stgit@skinsburskii>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 50B3B8000E
+X-Stat-Signature: bw3tchexy4hy9p6wtxur8cyu9p5w985i
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/5R3tem202lJ/8uS3/VH8+Yl0L4TJiYuY=
+X-HE-Tag: 1784066031-212943
+X-HE-Meta: U2FsdGVkX1+y8UQMoheRgHjVtTaIzkHJqlOnFcEhwu8Xdu6uo3Z4DRZg53S996Q1b1m5Kcv5eHW8XL3iP6BwL1ne96U4hB4CDGtA6JotS0eSqCRUyfe8z+7rBH/ObcuaVvj+nxx1IDHwqvT2TFQsv9qW1LhnGSY6LvpfCceNDVq2rtlICWB2opAc6Qsp3ZKU5KG543vtzECxuOMo9hGj5f25k9n6w2zl11jpu+o/DqIhCdLvQY1AgTdRHx5vgoXe6NMNWWVyZIxygHaR+ctL2/0qmsMRFPQKAfM9cNZRJWGrd7l6HnfTIcIngsL+l37DOBL7zqMQNW/ajVY3rpOLN3LRhLJ5Uj2m
 
-On Tue, Jul 14, 2026 at 01:13:38PM -0700, Stanislav Kinsburskii wrote:
-> nouveau_range_fault() now uses hmm_range_fault_unlocked_timeout() for
-> the HMM fault path. The timeout passed to that helper is meant to bound
-> HMM's internal mmu-notifier retry loop, not the whole nouveau retry loop
-> around mmu_interval_read_retry().
-> 
-> Pass the full relative HMM_RANGE_DEFAULT_TIMEOUT value to
-> hmm_range_fault_unlocked_timeout() on each attempt, and retry from the
-> nouveau-side mmu_interval_read_retry() check with a fresh HMM retry
-> budget. This lets HMM continue when it has made progress, while still
-> preserving a timeout for repeated notifier invalidation retries inside
-> one HMM fault attempt.
-> 
-> This also removes the open-coded absolute deadline and remaining-time
-> calculation from nouveau_range_fault().
-> 
+On Tue, 16 Jun 2026 14:41:18 +0800
+Li Pengfei <ljdlns1987@gmail.com> wrote:
 
-Sashiko is right. I'll need to do it differently.
-There will be a v2 of this series.
-
-Thanks,
-Stanislav
-
-
-> Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_svm.c |   30 ++++++++++--------------------
->  1 file changed, 10 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouveau/nouveau_svm.c
-> index 4cfb6eb7c771..b1415c2e49fc 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_svm.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
-> @@ -655,8 +655,7 @@ static int nouveau_range_fault(struct nouveau_svmm *svmm,
->  			       unsigned long hmm_flags,
->  			       struct svm_notifier *notifier)
+>  int set_tracer_flag(struct trace_array *tr, u64 mask, int enabled)
 >  {
-> -	unsigned long timeout =
-> -		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> +	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
->  	/* Have HMM fault pages within the fault window to the GPU. */
->  	unsigned long hmm_pfns[1];
->  	struct hmm_range range = {
-> @@ -677,25 +676,16 @@ static int nouveau_range_fault(struct nouveau_svmm *svmm,
->  	range.start = notifier->notifier.interval_tree.start;
->  	range.end = notifier->notifier.interval_tree.last + 1;
+>  	switch (mask) {
+> @@ -3993,6 +4091,33 @@ int set_tracer_flag(struct trace_array *tr, u64 mask, int enabled)
+>  	if (!!(tr->trace_flags & mask) == !!enabled)
+>  		return 0;
 >  
-> -	while (true) {
-> -		if (time_after(jiffies, timeout)) {
-> -			ret = -EBUSY;
-> -			goto out;
-> -		}
-> -
-> -		ret = hmm_range_fault_unlocked_timeout(&range,
-> -						       max(timeout - jiffies,
-> -							   1L));
-> -		if (ret)
-> -			goto out;
-> +again:
-> +	ret = hmm_range_fault_unlocked_timeout(&range, timeout);
-> +	if (ret)
-> +		goto out;
+> +#ifdef CONFIG_FTRACE_STACKMAP
+> +	/*
+> +	 * STACKMAP is intentionally global-instance-only: the dedup map,
+> +	 * its tracefs files (stack_map / stack_map_stat / stack_map_bin)
+> +	 * and the lifetime/reset semantics are tied to the global trace
+> +	 * array. options/stackmap is hidden on secondary instances via
+> +	 * TOP_LEVEL_TRACE_FLAGS, but writes still reach set_tracer_flag()
+> +	 * through the aggregate trace_options file. Reject the enable on
+> +	 * a secondary instance so it cannot be silently accepted and then
+> +	 * become a no-op in the hot path (where tr->stackmap is NULL and
+> +	 * the code falls back to a full stack trace).
+> +	 *
+> +	 * On the global instance, allow the enable while init is still
+> +	 * pending (boot-time trace_options=stackmap is applied before the
+> +	 * tracefs init work creates the map; the hot path falls back
+> +	 * until the map is published). Only reject once init has
+> +	 * permanently failed, so options/stackmap never reports an
+> +	 * enabled no-op. READ_ONCE() suffices: this only inspects the
+> +	 * init state, it does not dereference the map (the hot path uses
+> +	 * smp_load_acquire(&tr->stackmap) for that).
+> +	 */
+> +	if (mask == TRACE_ITER(STACKMAP) && enabled &&
+> +	    (tr != &global_trace ||
+> +	     READ_ONCE(stackmap_init_state) == STACKMAP_INIT_FAILED))
+> +		return -EINVAL;
+> +#endif
+> +
+>  	/* Give the tracer a chance to approve the change */
+>  	if (tr->current_trace->flag_changed)
+>  		if (tr->current_trace->flag_changed(tr, mask, !!enabled))
+> @@ -9222,6 +9347,91 @@ static __init void tracer_init_tracefs_work_func(struct work_struct *work)
+>  			NULL, &tracing_dyn_info_fops);
+>  #endif
 >  
-> -		mutex_lock(&svmm->mutex);
-> -		if (mmu_interval_read_retry(range.notifier,
-> -					    range.notifier_seq)) {
-> -			mutex_unlock(&svmm->mutex);
-> -			continue;
-> -		}
-> -		break;
-> +	mutex_lock(&svmm->mutex);
-> +	if (mmu_interval_read_retry(range.notifier,
-> +				    range.notifier_seq)) {
-> +		mutex_unlock(&svmm->mutex);
-> +		goto again;
->  	}
->  
->  	nouveau_hmm_convert_pfn(drm, &range, args);
-> 
-> 
+> +#ifdef CONFIG_FTRACE_STACKMAP
+> +	{
+> +		struct ftrace_stackmap *smap;
+> +		struct dentry *map_file;
+> +
+> +		smap = ftrace_stackmap_create(&global_trace);
+> +		if (!IS_ERR(smap)) {
+> +			/*
+> +			 * Failure-atomic init: stack_map is the single
+> +			 * required tracefs file (it doubles as the reset
+> +			 * interface and the human-readable resolver). If
+> +			 * we cannot create it, the hot path must not be
+> +			 * able to emit <stack_id N> events that no one can
+> +			 * resolve or clear, so refuse to publish the map
+> +			 * and tear it down.
+> +			 *
+> +			 * Create stack_map BEFORE smp_store_release() so an
+> +			 * observed non-NULL global_trace.stackmap implies
+> +			 * its resolver/reset file exists.
+> +			 */
+> +			map_file = trace_create_file("stack_map",
+> +						     TRACE_MODE_WRITE, NULL,
+> +						     smap,
+> +						     &ftrace_stackmap_fops);
+> +			if (!map_file) {
+> +				pr_warn("ftrace stackmap init: stack_map create failed, dedup disabled\n");
+> +				ftrace_stackmap_destroy(smap);
+> +				/*
+> +				 * Permanent failure. Record it and clear a
+> +				 * STACKMAP flag that a boot-time
+> +				 * trace_options=stackmap may have set, so
+> +				 * options/stackmap does not report an
+> +				 * enabled no-op and later userspace enables
+> +				 * return -EINVAL.
+> +				 */
+> +				WRITE_ONCE(stackmap_init_state,
+> +					   STACKMAP_INIT_FAILED);
+> +				global_trace.trace_flags &=
+> +					~TRACE_ITER(STACKMAP);
+
+80 columns is no longer a hard requirement. 100 is more the default, so the
+above should be:
+
+				WRITE_ONCE(stackmap_init_state, STACKMAP_INIT_FAILED);
+				global_trace.trace_flags &= ~TRACE_ITER(STACKMAP);
+
+
+
+> +			} else {
+> +				/*
+> +				 * smp_store_release pairs with the
+> +				 * smp_load_acquire() in
+> +				 * __ftrace_trace_stack(). Publishing only
+> +				 * after the required file exists keeps
+> +				 * "smap visible" => "resolver/reset
+> +				 * available".
+> +				 */
+
+> +				smp_store_release(&global_trace.stackmap,
+> +						  smap);
+> +				WRITE_ONCE(stackmap_init_state,
+> +					   STACKMAP_INIT_DONE);
+
+Same with the above two.
+
+> +				/*
+> +				 * stat and bin are auxiliary observability
+> +				 * surfaces. If they fail to be created we
+> +				 * keep dedup enabled (the kernel side still
+> +				 * works, and stack_map alone is enough to
+> +				 * resolve and reset); trace_create_file()
+> +				 * already pr_warn()s on failure.
+> +				 */
+> +				trace_create_file("stack_map_stat",
+> +						  TRACE_MODE_READ, NULL,
+> +						  smap,
+> +						  &ftrace_stackmap_stat_fops);
+> +				trace_create_file("stack_map_bin",
+> +						  TRACE_MODE_READ, NULL,
+> +						  smap,
+> +						  &ftrace_stackmap_bin_fops);
+> +			}
+
+-- Steve
