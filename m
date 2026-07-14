@@ -1,63 +1,63 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF7847ECD3
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC89447F2C0
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 14:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784039383; cv=none; b=ArwUHd9+jNvR0nhe7BwZ3fmHqLt/GGOo/JWRHUC6zaljW3d4ayI0OITcdo4s06OIk5tJbEqFhomNBKTTeC0Yj12oDjjiINDHFctewktfL8Mb3o1hCRbb5af0KDoWejWiNxAf9fQJFMeVHpN8o7l7xj5+ZlrFY56cMyHmQ5peeSA=
+	t=1784039387; cv=none; b=cMUA4BaUjR+MZPn4U3vqeM7uNDXaLBQW9j2Li9AD+m/tKL/ZpDiTG5BT6WkJqcpIt3rYiwnA/RnCL0h7PCBz8p1zesr2mX+4viloNvdGRGaTZPcx9daiQCh/mwi6OMu2X0r3EG+z1Xpbypn3c9ybUTa5n7aLNxLcfJUizqJ8OEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784039383; c=relaxed/simple;
-	bh=xYIlox2SQ+4UB1RFtEe4FSeCAxKFSI3cv55PHK+xnzM=;
+	s=arc-20240116; t=1784039387; c=relaxed/simple;
+	bh=wA8BNmGtATPpMY/ZSlkPeyL8zmIVQzgdWs9Vab6JUfs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DWPm69+PAuGHjg0J+SbOmOV1KZqJiAtgc0YP4l3e98sTm9BW3P2gSvl8FEV2MDqnqmiN26tZEXbfVAfo5t8ZVjgcubXkoHWztrFH6XIQUIzuw6oaYT1yMp8oMArT5aXW9hp2vlitKQXQRk0NijSuVLRas3cpHsf4PaM0xiTYBLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=wfYMSB3g; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=ZAVgTR/jrbfJ20mphTFr+eL6wOaf46trWn6CSrXO5vHD00feYcbqVhSUC9NfirBORhn+PyY+5Da+nd2Bb+yYHPyGuteC5GHwpS2rhIc5ElTOAEnubtDmpHMZAwyn6EYpazJmOQoU+gLZ/P2EZpZ+bqLHQMIV9QWAYu3kQhRu4nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=XpmPHl6k; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="wfYMSB3g"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493ce08a75bso17303875e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:29:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="XpmPHl6k"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-47defd0c1c5so806559f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 07:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784039379; x=1784644179; darn=vger.kernel.org;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1784039382; x=1784644182; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Egg9UqRa3VYtmMuxvoK7cdAlsyCKR7YQS9Zx9k/wtMM=;
-        b=wfYMSB3gCqcSuPZCLSRWRLzld204vD7ugudVWxsdzATsuGfckdtdwSpMJRBvX+bWtm
-         A2OvRDgNZnamgGFX1qJ05/H1yGDGWFptpJKqqFO0EL1aA0sWqCKLBxqHG81l9f5ZuVUB
-         ctCRzn6YzK2IO9bTp0QWBDrXrJbNvVnu9K078BbdtoBHOqBe9IFXRGjowKtubT78hr74
-         QavmQ5dA1S4u47U0jHNSGf8IynQg6UBfovj7D1g91KJhn4gNiG7cAalwtrW1WC4X5VJj
-         lmpruvBBvDrsCyEehWgA7MRNmeYMbFAyw1fgq+iSGC4zjf+XwJvX5Bsnw6H+CSGFfupp
-         HWIw==
+        bh=6vRi0FyHKR2HrcrI2hLHxbpKJ44GeP97d/xvetjGhOQ=;
+        b=XpmPHl6ks4O77Umwor1uQQIRRhHXoTIlhBsbjyrQo2PkbikdEBYurwZsIi/cji+EFQ
+         4AyP/1fI+ryXebC4jDMm2bDWtmQFJRI4s5R16swkj3glQktUeVx7MLy2943UqQM73LSr
+         RbCGdYHTsl8VHUUmLRgYyEMRaK9LXgeEhvrQOSO7GdkNdo7XBgAWPeE8kXuTedEoAbai
+         wdcbH7j6yydRVxMdmlXQxLc8TxK6uGr8ZbvqACDgHOulyRfZD+wrbbARwXLIgWHR1HeA
+         bmSw7RpuFcfcO/QjHHYohb4nvcVUl5Lpp+3tPBBqbzOcMQVrjQ7eEgvt98LDNNE+C8Bb
+         mmKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784039379; x=1784644179;
+        d=1e100.net; s=20251104; t=1784039382; x=1784644182;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Egg9UqRa3VYtmMuxvoK7cdAlsyCKR7YQS9Zx9k/wtMM=;
-        b=qleuXRGmN9ATiDvKJCs4fVd794N4o595n3Ws6fptkGth+VjP9dCyB+ll58LoMPP7el
-         ozgu6k0fBKNGIVs6JXTq69lS6+x71+KmBvvI/L7CDeBzdNluJsNXzGGbaPZN4rh1ubzV
-         DwZ4ZW1lt+UJSMeFGS4WY6Wq44ajXJcxRHdYM+QrOKMHSUmybztjfX5l19woBjuhfCvi
-         92OnE5t3tU2Epn7OWSxyILabEfakMSU9nPvSzeabtMuu1Id8c6CJsS2xby+M5x4d1q77
-         6qf1DlZMwYwhtnWKHw8dimAtlwO6FZV4Gbp9npnRg+WRuU1pFUX6B51ixE+cxqXDA/sH
-         Oo5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqiTf1PLQE7OWb2k9b2HE6hGU9XyIBUXnOCioW+Qkf4T2IQCKkLxuy6b/xh+/q6cO9YIVz0Oq55KNEyTZJ96z4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyaz+oTNmquIINlBI6JfaMgaZzb4uCSdZtK+A+qJmxBY0Cjnpfc
-	5zG50Qx1qxMfhk63QA7J8ZmAjA3d4jvDWRYBeTRPPApk+ZKlKU9EsCEowfScQB5CL1g=
-X-Gm-Gg: AfdE7clabUXu8ZhnvSXZ38+TWNAGUDDljycxw8PpPHM6oUJk/8PPEaBxA9rXW66Irlo
-	1OmOCcOFok/VvK3JNM+gCwkzNFUVU56AAtxAoLhu+ZW5IbdmDceqNtsfgFGmq3O/RooCET5LZ3i
-	TT7eBAZ8bNhR4jYDXWYRX3XlQ0vRLopBO/KH0Xspqm7GjJW5YyqV3B/DiNXAnqlGJXSylNUxMBb
-	pRItylIrt7FbGEPeUnIJ2cVhwKfBLkiRyUFN24ChZ4MpYUBfFjxznBD4ElhAyxjxUygK6LaHKiP
-	AFxjItSyhviCyb7333T3DiLhqNEYzho/DPOKQcSR57eGp6yusiVnAMtmRd2Af8+8/MQw8R9TQ7t
-	MxZB6w+iOt7rgRqpYejDdlHFrxcugi/ESUYTkfv149Oj7QJQn7b4FnVkW6cGQzFXc5i0p5lY6Ev
-	QLsB0a7smXmfAc0yJa2UL2Hg==
-X-Received: by 2002:a05:600c:8705:b0:493:b61c:72c3 with SMTP id 5b1f17b1804b1-49518312cd6mr45181935e9.32.1784039378858;
-        Tue, 14 Jul 2026 07:29:38 -0700 (PDT)
+        bh=6vRi0FyHKR2HrcrI2hLHxbpKJ44GeP97d/xvetjGhOQ=;
+        b=SrHCoqLbvbVrAtBZTjl9/Uw942RkYo/hmrO5ah4AOb1cn55lpU1p3Ts2NNXpHxQ7F5
+         fQNBVvCDxRXXudYQwLecRLbfa3qrTFljj0y0CnPnjXrA2yF6xS0DmsomEB6GGQEjLZcx
+         aVKVtxZRDcs0N17lndfD7yUmYqE6ILkbsYlPYHq2EUy5Tb/j2LIdq2g2xNMBte1WkSSC
+         P/0KSfCVcd6ebZ5r/a8ymoRdj9Kt/HYWj1+SMqabqtUtPv4KeYFPOhOgAaY1XD5uT2sF
+         dYV8oC0rzoG/g/UoP5cTI2JWRi3Alto0zWSXDKpgvTuww1nfOcFLhsiWmGhyiqbv4tqw
+         0Mwg==
+X-Forwarded-Encrypted: i=1; AHgh+RpH8QLH5fzXsdhtx9ds7xGZFgx/qxcgvVCXI6GABR/GZzmIOf9Zk/DWzgisPSGPyGTPDkIaoLobxiFIHTrO6N8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzve2QzkcVplTFBYcwEMsUFwtlrRv9m9dJ0QjRmvxnTinuuA+na
+	pCPuU/LWNxf7xV7Szlpi+VgPPpF1nwPo7uVDhb3IDPMI0jALFllKN9VbZfP3KrhfXbM=
+X-Gm-Gg: AfdE7ck9HOHnZTNPHoq/TbacktCXuyoz3dRfgcfozMPBt3EGYWknVbIbQKQn9FPAzgl
+	MIYbpPtqQX7oN2rPyxcgEl4X7mszJjm2e3gf9NPBOrQm+VQxRACGAMYSXnhmaYa2/tWb8oIb4ft
+	ai0K8R+6iOrcEIGLsJsy/HwB3KKU6KqonyBZQKtQd11q/7oGT2jMaNTSIUbe3EYEGKrpVm0x/iM
+	mJ9/GzR0rhAh1TvZfhI6oKdt/8GLOFPYe3jGizdCfiAs5Rwn02tbDWRA/1gkWlpr2JU6iadKZlx
+	rlBnNt79UzSlcCf1jr3+VLFMzQuIwH5LwbP2hlwRjbrDffMTBD3POX45DmcXc91hty3Q/bsHWGx
+	LQBkmZ3sT133fHj4RV6D+UOcQNSZEBnCfccRUwUoR0Lw6WRrqqQc46nQlwR9ytHLvTmx72X+aPb
+	SCY3anWswlAGjwptX0dYzTjA==
+X-Received: by 2002:a05:6000:2903:b0:46f:a93b:f404 with SMTP id ffacd0b85a97d-47f2dc9babdmr15641615f8f.19.1784039382211;
+        Tue, 14 Jul 2026 07:29:42 -0700 (PDT)
 Received: from localhost ([140.209.217.211])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49508727fc0sm78924175e9.6.2026.07.14.07.29.37
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f464a96fdsm9228379f8f.24.2026.07.14.07.29.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 07:29:38 -0700 (PDT)
+        Tue, 14 Jul 2026 07:29:41 -0700 (PDT)
 From: Jiri Pirko <jiri@resnulli.us>
 To: linux-rdma@vger.kernel.org
 Cc: cgroups@vger.kernel.org,
@@ -82,9 +82,9 @@ Cc: cgroups@vger.kernel.org,
 	wenjia@linux.ibm.com,
 	yanjun.zhu@linux.dev,
 	cui.tao@linux.dev
-Subject: [PATCH rdma-next v2 02/14] RDMA/core: Handle device name conflicts when changing net namespace
-Date: Tue, 14 Jul 2026 16:29:15 +0200
-Message-ID: <20260714142927.1298897-3-jiri@resnulli.us>
+Subject: [PATCH rdma-next v2 03/14] RDMA/core: Support renaming a device when changing its net namespace
+Date: Tue, 14 Jul 2026 16:29:16 +0200
+Message-ID: <20260714142927.1298897-4-jiri@resnulli.us>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260714142927.1298897-1-jiri@resnulli.us>
 References: <20260714142927.1298897-1-jiri@resnulli.us>
@@ -98,272 +98,168 @@ Content-Transfer-Encoding: 8bit
 
 From: Jiri Pirko <jiri@nvidia.com>
 
-Prepare namespace moves for per-netns names. Check user-initiated moves for
-destination-name conflicts before disabling the device, keep same-netns
-moves as no-ops, and make teardown moves detach from the exiting namespace
-even if fallback naming fails.
+Allow namespace moves to request a destination device name. Keep requested
+names on the same literal-name path as the existing RDMA rename operation,
+and keep teardown fallback naming on the trusted kernel-controlled path.
 
 Signed-off-by: Jiri Pirko <jiri@nvidia.com>
 ---
-v1->v2:
-- fixed possible bogus race-triggered-WARN in rdma_dev_exit_net()
----
- drivers/infiniband/core/device.c | 155 ++++++++++++++++++++++++++-----
- drivers/infiniband/core/nldev.c  |   3 +
- 2 files changed, 137 insertions(+), 21 deletions(-)
+ drivers/infiniband/core/core_priv.h |  2 +-
+ drivers/infiniband/core/device.c    | 48 ++++++++++++++++++++---------
+ drivers/infiniband/core/nldev.c     |  2 +-
+ 3 files changed, 35 insertions(+), 17 deletions(-)
 
+diff --git a/drivers/infiniband/core/core_priv.h b/drivers/infiniband/core/core_priv.h
+index 19104c542b27..3bd5bb7135a3 100644
+--- a/drivers/infiniband/core/core_priv.h
++++ b/drivers/infiniband/core/core_priv.h
+@@ -356,7 +356,7 @@ void ib_port_unregister_client_groups(struct ib_device *ibdev, u32 port_num,
+ 				     const struct attribute_group **groups);
+ 
+ int ib_device_set_netns_put(struct sk_buff *skb,
+-			    struct ib_device *dev, u32 ns_fd);
++			    struct ib_device *dev, u32 ns_fd, const char *name);
+ 
+ int rdma_nl_net_init(struct rdma_dev_net *rnet);
+ void rdma_nl_net_exit(struct rdma_dev_net *rnet);
 diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index de610f52c9b2..b55fb075d0ae 100644
+index b55fb075d0ae..c0b6613dba4c 100644
 --- a/drivers/infiniband/core/device.c
 +++ b/drivers/infiniband/core/device.c
-@@ -268,7 +268,7 @@ static struct notifier_block ibdev_lsm_nb = {
+@@ -268,7 +268,8 @@ static struct notifier_block ibdev_lsm_nb = {
  };
  
  static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
--				 struct net *net);
-+				 struct net *net, const char *fallback_pattern);
+-				 struct net *net, const char *fallback_pattern);
++				 struct net *net, const char *requested_name,
++				 const char *fallback_pattern);
  
  /* Pointer to the RCU head at the start of the ib_port_data array */
  struct ib_port_data_rcu {
-@@ -437,7 +437,8 @@ int ib_device_set_dim(struct ib_device *ibdev, u8 use_dim)
- }
- 
- /* Pick a free index for the '%d' style @name pattern. */
--static int alloc_name_id(struct net *net, const char *name)
-+static int __alloc_name_id(struct net *net, const char *name,
-+			   const struct ib_device *skip)
- {
- 	struct ib_device *device;
- 	unsigned long index;
-@@ -450,6 +451,8 @@ static int alloc_name_id(struct net *net, const char *name)
- 	xa_for_each (&devices, index, device) {
- 		char buf[IB_DEVICE_NAME_MAX];
- 
-+		if (device == skip)
-+			continue;
- 		if (sscanf(dev_name(&device->dev), name, &i) != 1)
- 			continue;
- 		if (i < 0 || i >= INT_MAX)
-@@ -469,6 +472,11 @@ static int alloc_name_id(struct net *net, const char *name)
- 	return rc;
- }
- 
-+static int alloc_name_id(struct net *net, const char *name)
-+{
-+	return __alloc_name_id(net, name, NULL);
-+}
-+
- static int alloc_name(struct ib_device *ibdev, const char *name)
- {
- 	int id;
-@@ -1160,8 +1168,17 @@ static void rdma_dev_exit_net(struct net *net)
- 
- 		/*
- 		 * If the real device is in the NS then move it back to init.
-+		 * Provide a fallback pattern so a name conflict in init_net
-+		 * cannot make the teardown move fail.
+@@ -1173,7 +1174,7 @@ static void rdma_dev_exit_net(struct net *net)
  		 */
--		rdma_dev_change_netns(dev, net, &init_net);
-+		if (net_eq(net, read_pnet(&dev->coredev.rdma_net))) {
-+			ret = rdma_dev_change_netns(dev, net, &init_net,
-+						    "ibdev%d");
-+			if (ret && ret != -ENODEV)
-+				WARN(1,
-+				     "Failed to move RDMA device %s to init_net on netns exit: %d\n",
-+				     dev_name(&dev->dev), ret);
-+		}
- 
- 		put_device(&dev->dev);
- 		down_read(&devices_rwsem);
-@@ -1680,14 +1697,71 @@ void ib_unregister_device_queued(struct ib_device *ib_dev)
+ 		if (net_eq(net, read_pnet(&dev->coredev.rdma_net))) {
+ 			ret = rdma_dev_change_netns(dev, net, &init_net,
+-						    "ibdev%d");
++						    NULL, "ibdev%d");
+ 			if (ret && ret != -ENODEV)
+ 				WARN(1,
+ 				     "Failed to move RDMA device %s to init_net on netns exit: %d\n",
+@@ -1714,12 +1715,13 @@ static bool rdma_dev_name_in_netns(struct ib_device *skip, struct net *net,
  }
- EXPORT_SYMBOL(ib_unregister_device_queued);
  
-+static bool rdma_dev_name_in_netns(struct ib_device *skip, struct net *net,
-+				   const char *name)
-+{
-+	struct ib_device *device;
-+	unsigned long index;
-+
-+	lockdep_assert_held_write(&devices_rwsem);
-+
-+	xa_for_each(&devices, index, device)
-+		if (device != skip &&
-+		    !strcmp(name, dev_name(&device->dev)))
-+			return true;
-+
-+	return false;
-+}
-+
-+/*
-+ * Choose the name @device should use in net namespace @net: keep the current
-+ * name when it is free, otherwise use a trusted '%d' @fallback_pattern
-+ * (namespace teardown) to pick a free index. The caller must hold the write
-+ * side of devices_rwsem.
-+ */
-+static int rdma_dev_pick_netns_name(struct ib_device *device, struct net *net,
-+				    const char *fallback_pattern,
-+				    char *buf, size_t buf_len,
-+				    const char **new_name)
-+{
-+	int id;
-+
-+	lockdep_assert_held_write(&devices_rwsem);
-+
-+	if (!rdma_dev_name_in_netns(device, net, dev_name(&device->dev))) {
-+		*new_name = dev_name(&device->dev);
-+		return 0;
-+	}
-+
-+	if (!fallback_pattern)
-+		return -EEXIST;
-+
-+	snprintf(buf, buf_len, "ibdev%u", device->index);
-+	if (!rdma_dev_name_in_netns(device, net, buf)) {
-+		*new_name = buf;
-+		return 0;
-+	}
-+
-+	id = __alloc_name_id(net, fallback_pattern, device);
-+	if (id < 0)
-+		return id;
-+	snprintf(buf, buf_len, fallback_pattern, id);
-+	*new_name = buf;
-+	return 0;
-+}
-+
  /*
-  * The caller must pass in a device that has the kref held and the refcount
-  * released. If the device is in cur_net and still registered then it is moved
-  * into net.
-+ *
-+ * Naming rules are handled by rdma_dev_pick_netns_name().
+- * Choose the name @device should use in net namespace @net: keep the current
+- * name when it is free, otherwise use a trusted '%d' @fallback_pattern
+- * (namespace teardown) to pick a free index. The caller must hold the write
+- * side of devices_rwsem.
++ * Choose the name @device should use in net namespace @net. @requested_name
++ * is used as a literal device name when set. Otherwise keep the current name
++ * when it is free, or use a trusted '%d' @fallback_pattern for teardown. The
++ * caller must hold the write side of devices_rwsem.
+  */
+ static int rdma_dev_pick_netns_name(struct ib_device *device, struct net *net,
++				    const char *requested_name,
+ 				    const char *fallback_pattern,
+ 				    char *buf, size_t buf_len,
+ 				    const char **new_name)
+@@ -1728,6 +1730,15 @@ static int rdma_dev_pick_netns_name(struct ib_device *device, struct net *net,
+ 
+ 	lockdep_assert_held_write(&devices_rwsem);
+ 
++	if (requested_name) {
++		if (!rdma_dev_name_in_netns(device, net, requested_name)) {
++			*new_name = requested_name;
++			return 0;
++		}
++
++		return -EEXIST;
++	}
++
+ 	if (!rdma_dev_name_in_netns(device, net, dev_name(&device->dev))) {
+ 		*new_name = dev_name(&device->dev);
+ 		return 0;
+@@ -1758,7 +1769,8 @@ static int rdma_dev_pick_netns_name(struct ib_device *device, struct net *net,
+  * Naming rules are handled by rdma_dev_pick_netns_name().
   */
  static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
--				 struct net *net)
-+				 struct net *net, const char *fallback_pattern)
+-				 struct net *net, const char *fallback_pattern)
++				 struct net *net, const char *requested_name,
++				 const char *fallback_pattern)
  {
-+	char buf[IB_DEVICE_NAME_MAX];
-+	const char *new_name;
- 	int ret2 = -EINVAL;
- 	int ret;
- 
-@@ -1704,30 +1778,63 @@ static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
- 		goto out;
- 	}
- 
-+	if (!fallback_pattern) {
-+		/*
-+		 * Reject a predictable name conflict before tearing anything
-+		 * down, so a doomed user move does not disable a live device.
-+		 */
-+		down_write(&devices_rwsem);
-+		ret = rdma_dev_pick_netns_name(device, net, fallback_pattern,
-+					       buf, sizeof(buf), &new_name);
-+		up_write(&devices_rwsem);
-+		if (ret)
-+			goto out;
-+	}
-+
- 	kobject_uevent(&device->dev.kobj, KOBJ_REMOVE);
- 	disable_device(device);
- 
- 	/*
--	 * At this point no one can be using the device, so it is safe to
--	 * change the namespace.
-+	 * Recompute the destination name under the write side of devices_rwsem
-+	 * now that the device is disabled, closing races with a concurrent
-+	 * registration or rename, then publish the new namespace at the sysfs
-+	 * level.
+ 	char buf[IB_DEVICE_NAME_MAX];
+ 	const char *new_name;
+@@ -1784,8 +1796,9 @@ static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
+ 		 * down, so a doomed user move does not disable a live device.
+ 		 */
+ 		down_write(&devices_rwsem);
+-		ret = rdma_dev_pick_netns_name(device, net, fallback_pattern,
+-					       buf, sizeof(buf), &new_name);
++		ret = rdma_dev_pick_netns_name(device, net, requested_name,
++					       fallback_pattern, buf,
++					       sizeof(buf), &new_name);
+ 		up_write(&devices_rwsem);
+ 		if (ret)
+ 			goto out;
+@@ -1801,8 +1814,9 @@ static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
+ 	 * level.
  	 */
--	write_pnet(&device->coredev.rdma_net, net);
-+	down_write(&devices_rwsem);
-+	ret = rdma_dev_pick_netns_name(device, net, fallback_pattern, buf,
-+				       sizeof(buf), &new_name);
-+	if (ret) {
-+		if (fallback_pattern) {
-+			WARN(1,
-+			     "%s: failed to pick device name during namespace teardown: %d\n",
-+			     __func__, ret);
-+			write_pnet(&device->coredev.rdma_net, net);
-+			ret = 0;
-+		}
-+		goto rename_done;
-+	}
- 
--	down_read(&devices_rwsem);
--	/*
--	 * Currently rdma devices are system wide unique. So the device name
--	 * is guaranteed free in the new namespace. Publish the new namespace
--	 * at the sysfs level.
--	 */
--	ret = device_rename(&device->dev, dev_name(&device->dev));
--	up_read(&devices_rwsem);
-+	write_pnet(&device->coredev.rdma_net, net);
-+	ret = device_rename(&device->dev, new_name);
+ 	down_write(&devices_rwsem);
+-	ret = rdma_dev_pick_netns_name(device, net, fallback_pattern, buf,
+-				       sizeof(buf), &new_name);
++	ret = rdma_dev_pick_netns_name(device, net, requested_name,
++				       fallback_pattern, buf, sizeof(buf),
++				       &new_name);
  	if (ret) {
--		dev_warn(&device->dev,
--			 "%s: Couldn't rename device after namespace change\n",
--			 __func__);
--		/* Try and put things back and re-enable the device */
--		write_pnet(&device->coredev.rdma_net, cur_net);
-+		if (fallback_pattern) {
-+			WARN(1,
-+			     "%s: failed to rename device during namespace teardown: %d\n",
-+			     __func__, ret);
-+			ret = 0;
-+		} else {
-+			dev_warn(&device->dev,
-+				 "%s: Couldn't rename device after namespace change\n",
-+				 __func__);
-+			/* Try and put things back and re-enable the device */
-+			write_pnet(&device->coredev.rdma_net, cur_net);
-+		}
-+	} else {
-+		strscpy(device->name, dev_name(&device->dev),
-+			IB_DEVICE_NAME_MAX);
- 	}
-+rename_done:
-+	up_write(&devices_rwsem);
+ 		if (fallback_pattern) {
+ 			WARN(1,
+@@ -1857,7 +1871,7 @@ static int rdma_dev_change_netns(struct ib_device *device, struct net *cur_net,
+ }
  
- 	ret2 = enable_device_and_get(device);
- 	if (ret2) {
-@@ -1766,6 +1873,12 @@ int ib_device_set_netns_put(struct sk_buff *skb,
+ int ib_device_set_netns_put(struct sk_buff *skb,
+-			    struct ib_device *dev, u32 ns_fd)
++			    struct ib_device *dev, u32 ns_fd, const char *name)
+ {
+ 	struct net *net;
+ 	int ret;
+@@ -1873,9 +1887,12 @@ int ib_device_set_netns_put(struct sk_buff *skb,
  		goto ns_err;
  	}
  
-+	/* Moving a device to the namespace it already lives in is a no-op. */
-+	if (net_eq(net, read_pnet(&dev->coredev.rdma_net))) {
-+		ret = 0;
-+		goto ns_err;
-+	}
-+
- 	/*
- 	 * All the ib_clients, including uverbs, are reset when the namespace is
- 	 * changed and this cannot be blocked waiting for userspace to do
-@@ -1778,7 +1891,7 @@ int ib_device_set_netns_put(struct sk_buff *skb,
+-	/* Moving a device to the namespace it already lives in is a no-op. */
++	/*
++	 * Moving a device to the namespace it already lives in is a no-op; a
++	 * supplied name still renames it in place.
++	 */
+ 	if (net_eq(net, read_pnet(&dev->coredev.rdma_net))) {
+-		ret = 0;
++		ret = name ? ib_device_rename(dev, name) : 0;
+ 		goto ns_err;
+ 	}
+ 
+@@ -1891,7 +1908,8 @@ int ib_device_set_netns_put(struct sk_buff *skb,
  
  	get_device(&dev->dev);
  	ib_device_put(dev);
--	ret = rdma_dev_change_netns(dev, current->nsproxy->net_ns, net);
-+	ret = rdma_dev_change_netns(dev, current->nsproxy->net_ns, net, NULL);
+-	ret = rdma_dev_change_netns(dev, current->nsproxy->net_ns, net, NULL);
++	ret = rdma_dev_change_netns(dev, current->nsproxy->net_ns, net, name,
++				    NULL);
  	put_device(&dev->dev);
  
  	put_net(net);
 diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
-index aae4f3f6bcba..32b6c4d68ca0 100644
+index 32b6c4d68ca0..77a758080148 100644
 --- a/drivers/infiniband/core/nldev.c
 +++ b/drivers/infiniband/core/nldev.c
-@@ -1196,6 +1196,9 @@ static int nldev_set_doit(struct sk_buff *skb, struct nlmsghdr *nlh,
+@@ -1195,7 +1195,7 @@ static int nldev_set_doit(struct sk_buff *skb, struct nlmsghdr *nlh,
+ 		u32 ns_fd;
  
  		ns_fd = nla_get_u32(tb[RDMA_NLDEV_NET_NS_FD]);
- 		err = ib_device_set_netns_put(skb, device, ns_fd);
-+		if (err == -EEXIST)
-+			NL_SET_ERR_MSG(extack,
-+				       "Device name already exists in the target net namespace");
- 		goto put_done;
- 	}
- 
+-		err = ib_device_set_netns_put(skb, device, ns_fd);
++		err = ib_device_set_netns_put(skb, device, ns_fd, NULL);
+ 		if (err == -EEXIST)
+ 			NL_SET_ERR_MSG(extack,
+ 				       "Device name already exists in the target net namespace");
 -- 
 2.54.0
 
