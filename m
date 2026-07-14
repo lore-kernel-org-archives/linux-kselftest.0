@@ -1,123 +1,211 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8E0352C51
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 03:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B47368D73
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 03:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783999963; cv=none; b=NHRUKrETUjjBmARhV1mvOKvXxRzovGHeS4MwcDeqjSvRuyhZpc2W2y9pWTPh9/BpkcTqTj0TGG+L/qQ9O/pkaubEZIKCvUXE0sGh6NDIGWPMYcR1tlHqJzRJ1ixpY+njpaQEkwT7j3LO/V83shnP3Kv4kT54SMargujnoB5BcKk=
+	t=1784000596; cv=none; b=SPiYp2gXbNp7/AJKvpbw6RbI80zOs7G1yplMjS6fIJVMkNxNMrOqfzuryffAiaxo1RPM7DfAo0XEmOkpfhCVtNf0JyM1ubW8a1gKqT+UYybAQhSmm0UFUJJet+cqinnnO9GSiGQHmtAsT5M9s87JShFZjfHK8hyh9jqIZT7Rg0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783999963; c=relaxed/simple;
-	bh=5l6nLVdO88+2acJsOr1UCToSieAPDX3Bwyvphb8xIls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqApxaAymIvH4sk1a+aCqBk/5CDHe/6K044WUTO7x0W2cQelriVuj+MgX9PT0KSY/0pHRJANC744hCCt1c+kYIxmtCLGTNj4yUflUz4uoAjWdPCYAeNSDke1prpelq06NQeE8Ey1ZDHAve0xLBGs6CigEUQUALp3Z1gWPhGLDns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ArqdH1rX; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784000596; c=relaxed/simple;
+	bh=3xsN4uBCWLq5tHOAX5AMM6paFjntauoohN7uitBI7RA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qwXJw/A5ZiebkKJQ+o0bCmdYHXqDxrtep43iOQusoxnp3JXSnLwS6TD6kQ/KiH6nimdU/LtXVvfp87lw0h+2GDj9alXK1oZ0iq/ew7L4Sz+WK/pJnC0ES6nQsAyskLdhvzx7ibcx1Da6ZWN/h7tfH3hreQUgeiydlNuDvr9C1MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBblbe5u; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ArqdH1rX"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-69a50189d25so6703982a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 20:32:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBblbe5u"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cca0c5799eso5844255ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jul 2026 20:43:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783999959; x=1784604759; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1784000594; x=1784605394; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=bdiM3wGZvU9W32ITVwJWXfEY5ZH1jUwmribSUCxIuno=;
-        b=ArqdH1rXOesSkDeZcyrn/gwmYeGCPfhD9ycpZxDFlq1zBr3byohbWaORK5xuqH9P+i
-         Kp7BWm7ILY2LeTUxrHADGfcElxoWDlnPpBhtJ9OwCTU5hkGqqiTWQm0Ywi8VvSYSQhx4
-         +Cg5J5j7gww51+d9kU01an3h1a3e4Rabush3KBhThPMvWOTRQiNcoknZwBpdgg/mzsTi
-         QmsDm3aZlF/Affo/XDS+kP0YFn2VN/nccOxyxycivjBO/FYoSzCL+K9til6FtgxEq2Qd
-         WLyI7qrwMz4UBX9JArXVYtfRCWB0a9sca3WoLrGIZ9Q8L8TRKbN899ZQjDFxMkn3yxz7
-         Tg0A==
+        bh=c15ToLvk2TWn4ce0WK3+PbGKvmB3+LUIwFChhfNis8c=;
+        b=bBblbe5uAuc6QuRb8vRshkiWpL+iRZWwun5o0tBOiDo9AzY19tPXDdsoeD11FYmiSG
+         QQdIp5pgBppsTI6brRkGPYysqylBmziVQSniU1SYtWC/a5hShuSqy/FMRmrO8PZbyzc+
+         rO6TJz65r+qb/zggocYPZ665Qf7vA8SCttgX3TSp29HiHp2DQ9YSAxjMDM++AHPtwFqP
+         4vp5jCYpTuINOcHNaFOXoe/iVpfLiwouh9A3Dgd21PQf+Pj/BYAvL2BSSJOkwG0yP4+B
+         fo7rpSjV4Lc4h8LPq6U5CZPkWxGHz5kuwLHevdkRIXDpdwoDM+xemdLTtDDY+Ez0bKTu
+         NNOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783999959; x=1784604759;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1784000594; x=1784605394;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bdiM3wGZvU9W32ITVwJWXfEY5ZH1jUwmribSUCxIuno=;
-        b=NG0yCUDSVBdtaIm1s/GCnLLeIJAQZOpUwIi4UurIHsqbPUiBcYRauDH9O7YgOWRBf6
-         kTrfyismWYW0r+C7yk0wJsu7s65+6JUa0FVcPQxxMFoIU5hhtoZ1QDA1N2CQSz4tR8TY
-         +vdbGVyutyKv87u6dQGQwy98wS6ITW3l213AJohOBW7AYIUgJb460fMzQqM3jeX+DaJu
-         U3ltujJ8EhCQ9QpFfcSGEceMZJuQAmHB41C2WEVU9qt0EcTi+BVgS1mksJwB5dT0faJg
-         509XVmPsecaHcEWZwyN/8plM9lTIxvBt8QwsEo+eYHRMTo8Oxej/zr0aiJSmJyOpm+VJ
-         HKwA==
-X-Forwarded-Encrypted: i=1; AHgh+RrhXShPCc2WuVbr3OP9D/M1r44vVFaVtHHwqhM67/O9tdp//HCw8Z/YIHHajY4JpCUVuAB7otrN713HsRgj3qo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynrkFFE0YGC2t+750oztVH/w3iNbofmGMpGX11z7LeMeRUdG9v
-	DWpAl1GYkbwgpGFe499N05Yn+b3IIyTKwE3VJuFa6eLwNDXbhn7WETVSqOQL9TV3lA4=
-X-Gm-Gg: AfdE7cnVkpmD1DwtNYZPzB7vSquTvyfM8Z/VFW/TU00sc7sioR1cb7CizI2u2fIZFQc
-	TNNGHdc4W/0/Dier3YnBoIDdP94n8lW0BHllihZD5ftB8jcUHuC8Aa4toZbC3vdgPjjHZ8sv+QI
-	+7gy3Xx6GvfzHSL8ZCASDL7l0e2x1CZfQzflQ7t4KVL3tbHD+UQ+xn6LRuLTnAfDJ0hQPtL4JJO
-	ZjZxgiy1qZRSv9qS6hb47jK5wnFEmkffYXakMvn6TcVMeme40owEmOfUAqdUplLpe+5nPqhKt4y
-	BSKQyJXHoK7RMLitJYevmjhZslZKxJ1r1g1F295k3C+b4i+LL2K8qqeaC2l/antOe1qDXCJmm7B
-	KM98I5MSU5ZP84qWz8qnt4i56Kh8nx1t2UNpZpvvQEA/MWw3j7nfJWX1IzKlh46LTcoB3Lz9Fe7
-	UmJKwzkE1AhMGgRO2m2gUe6OidydLQuXXGpE805jHga+A=
-X-Received: by 2002:a17:906:f587:b0:c15:e8c8:34f with SMTP id a640c23a62f3a-c161e84b4a7mr493269566b.13.1783999959174;
-        Mon, 13 Jul 2026 20:32:39 -0700 (PDT)
-Received: from u94a (27-51-48-151.adsl.fetnet.net. [27.51.48.151])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ebcb2b79c9sm14334466a34.22.2026.07.13.20.32.33
+        bh=c15ToLvk2TWn4ce0WK3+PbGKvmB3+LUIwFChhfNis8c=;
+        b=eKwEDFUKNmKDcPL7UcpS8rrDf7B523WBgAbboRhP0SDJZSSoIJ/0DsvQiMslAuD+at
+         tNfkeyElFAjzovWNGoi/aA6cbzTwv4LNDjbqMxVkP+wKoO9JR8yTgYTOiXdX36BKUX8r
+         xT4PtKrB8ME3qaSnDrIWALQ2yYnR3IPqJ5uqB2KrEnq78GR+bNM7GClno0kStiEHBP5O
+         r+los8KyryXYxZWd4sY1f7uA8KBQlks9HYoHGb66QwE3Vy77H6XJrJW+zFV00JEHvmZS
+         GqIdL/PXENx75q4fZeZbrtbl0+ty/6bReTl/UKjM3Fre8GmhR2lPauvlJKy1HoezwxEu
+         7/Xw==
+X-Forwarded-Encrypted: i=1; AHgh+RpdosrgFO4grIUCrHlMtBbJzXiKwLlpe1ClCMMq0NYkIOPdG2bCsiqo+zDj/vFnih7ClpscTtdrEBJUdeK822E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8rqkfUiGZoI7vXPu7djXSrtUG41SHSrAl6xFjGk/hpftfLcq3
+	eGgnyCsAVx9IAMowZglTfvNd+8XvrGc9G+Q27rm04agdIaWX67qNnDDN
+X-Gm-Gg: AfdE7cmtLofmQYeDEXCvei16YySJ6snv6qbqtkrYOVChz6+2LwHcyLT2Nf0FtTALEXS
+	SAoDZBd+Di0N1uPWGxB41mf+tZdIK/MBmPQITqQW1PpwTZEk1/kbryb4hEpAHKjB0u/hWi3oRTa
+	Id6NcBwCO7HWZjVfEK7S1BPFc/ICc8xNhw/7IEvuNJ2MaRc8NSIA8ccA/w2W08QnBZ/Z5mkPCYt
+	tupPDeFgstggjWRA/7vr6hZWlbRyeOMC89hFQrGLOmdOdE1TgKZC40xXJyGiHYUcD3D8+hnGJ9O
+	US9DiFLs6yz0W9KDFrXb4h/OxZrBYaTJ3dec8+oH2r2QT1umeXc61Nb/XMv88+5mM2KNJprpBFs
+	cy5mQTceFn6YuuOTssqPww+b6rNZb0EfEgP5nutPnHmThssT6sLQjdUq0y5bkCN3Xer1oB57jmu
+	Za3HMRp7m2ErvlOCC0PEHRudo/p50Zi8GgLzxw5/qotLsoiBDSIKz81cst
+X-Received: by 2002:a05:6a21:3116:b0:3bf:ab4b:2d34 with SMTP id adf61e73a8af0-3c110ad50a7mr11817353637.53.1784000594422;
+        Mon, 13 Jul 2026 20:43:14 -0700 (PDT)
+Received: from CPC-mjac-HKWGEZ.redmond.corp.microsoft.com ([70.37.26.37])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca7f626fb78sm7221051a12.13.2026.07.13.20.43.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 20:32:38 -0700 (PDT)
-Date: Tue, 14 Jul 2026 11:32:29 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Eduard Zingerman <eddyz87@gmail.com>, 
-	sun jian <sun.jian.kdev@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Matt Mullins <mmullins@mmlx.us>, stable@vger.kernel.org
-Subject: Re: [PATCH bpf 1/1] selftests/bpf: Enable BLK_DEV_NBD for
- raw_tp_writable_reject_nbd_invalid
-Message-ID: <alWsBzShn4sgDRl-@u94a>
-References: <20260713063513.215781-1-shung-hsi.yu@suse.com>
- <08508d2133284d49e1da297895c85cf854a97bf3.camel@gmail.com>
+        Mon, 13 Jul 2026 20:43:13 -0700 (PDT)
+From: Jack Ma <jack4it@gmail.com>
+To: Ido Schimmel <idosch@nvidia.com>,
+	netdev@vger.kernel.org
+Cc: David Ahern <dsahern@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jack Ma <jack4it@gmail.com>
+Subject: Re: [PATCH net-next 0/3] net: nexthop: per-nexthop UDP dst port for fdb (VXLAN) nexthops
+Date: Tue, 14 Jul 2026 03:43:09 +0000
+Message-ID: <20260714034309.2226-1-jack4it@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260713122339.GA548566@shredder>
+References: <20260712191218.236-1-jack4it@gmail.com> <20260713122339.GA548566@shredder>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08508d2133284d49e1da297895c85cf854a97bf3.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 13, 2026 at 01:47:18PM -0700, Eduard Zingerman wrote:
-> On Mon, 2026-07-13 at 14:35 +0800, Shung-Hsi Yu wrote:
-> > The raw_tp_writable_reject_nbd_invalid test relies on availability of the
-> > nbd_send_request tracepoint, which is only present if the selftest kernel is
-> > built with CONFIG_BLK_DEV_NBD=y and the kernel built from current BPF selftests
-> > config lacks.
-> > 
-> > Without it, the bpf_raw_tracepoint_open() call always returns with -2, leaving
-> > raw_tp_writable_reject_nbd_invalid test always passing without exercising the
-> > checks bpf_probe_register().
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.2.0
-> > Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-> > Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> > ---
-> > Not sure if fixes tag is the right thing to use here, so use the cc
-> > stable tag instead to get this config change propogated to other stable
-> > branches to make stable BPF CI's job easier.
-> 
-> Shung-Hsi,
-> 
-> Thank you for figuring this out.
-> I'd suggest we switch to bpf_testmod_test_writable_bare_tp() [1]
-> from the test module to avoid the config dependency and let
-> Sun pack all of this as a single patch-set to simplify backports
-> (if such are necessary). Wdyt?
+On Mon, Jul 13, 2026 at 03:23:39PM +0300, Ido Schimmel wrote:
+> > Some deployments pack several receivers behind a single underlay IP and tell
+> > them apart by UDP destination port.  To spread flows across such receivers they
+>
+> I don't understand the "tell them apart" phrasing. Aren't all of these
+> receivers interchangeable given you are load balancing between them?
 
-Make sense, that's probably for the better.
+Sorry, that wording conflated two separate things. The load-balancing
+targets are interchangeable; the UDP port is not what makes them
+distinct services, it is how the underlay addresses each one:
 
-pw-bot: changes-requested
+  - Addressing: several VTEPs are packed behind one underlay IP, each
+    reachable at a distinct UDP destination port. The port is the
+    underlay demux that delivers an encapsulated packet to the right
+    VTEP -- it selects *where*, not *which service*.
+  - Load-balancing: when those VTEPs form an HA set (shared inner
+    MAC/IP), a sender spreads flows across them with an fdb nexthop
+    group. The legs are interchangeable, but each one lives at a
+    different (underlay IP, UDP port).
 
-@Sun can you make sure to include the follow tag for [1] when you send
-it? Should give a better guarantee that is will be picked up by AUTOSEL.
-Thanks!
+So the legs are interchangeable endpoints that happen to sit at
+different (IP, port) addresses. A group can already carry a distinct IP
+per leg but not a distinct port, which is the gap here. I'll reword the
+cover and patch 1 to say this explicitly.
 
-  Cc: <stable@vger.kernel.org> # 5.2.0
+> I think you will need to provide more details about the use case [...]
+> In your use case, why can't the load balancing happen at the target
+> host (e.g., using XDP / TC / SO_REUSEPORT / flow classification)?
+
+I think the key difference is that there isn't really a shared
+host-side datapath to load-balance in, and the UDP port is doing demux
+rather than load-balancing. The shape is a bit unusual, so maybe a
+couple of pictures help.
+
+First, how forwarders sit on a receiver node. A forwarder here is
+just the pod that terminates the overlay tunnel (it hosts the VXLAN
+VTEP) and relays traffic to and from one tenant's workload. Many such
+pods share one mesh-routable underlay IP, each demuxed by UDP port:
+
+  receiver node -- one mesh-routable underlay IP (NodeIP_A)
+  +----------------------------------------------------+
+  |  host netns: stateless outer-UDP demux by dst port |
+  |              (host does NOT terminate the tunnel)  |
+  |                                                    |
+  |     dst :40000        dst :40001        dst :40002 |
+  |         |                 |                 |      |
+  |   +-----v----+      +-----v----+      +-----v----+ |
+  |   | pod0 ns  |      | pod1 ns  |      | pod2 ns  | |
+  |   | vxlan    |      | vxlan    |      | vxlan    | |
+  |   | VTEP     |      | VTEP     |      | VTEP     | |
+  |   | decap    |      | decap    |      | decap    | |
+  |   +----------+      +----------+      +----------+ |
+  +----------------------------------------------------+
+  (up to ~10 forwarder pods packed per node)
+
+  These packed pods are unrelated -- different tenants on different
+  VNIs (below) -- so the per-pod UDP port is node-level demux, not an
+  HA construct. A single forwarder's HA replicas are the orthogonal
+  axis: anti-affinity spreads them across nodes (never co-resident),
+  so one member's nexthop group has its legs on distinct node IPs.
+  But each leg is still reachable only at (node IP, that pod's UDP
+  port), so within one group the legs differ in IP *and* port. A
+  group can already carry a distinct IP per leg, but it takes the UDP
+  port from the device (a single value), so it can't send each leg to
+  its own port. That last part is really the gap we keep running into.
+
+The pods sharing a node need not be related: each one belongs to a
+separate tenant on its own VXLAN VNI, and a node can pack forwarders
+for many of them, each on its own UDP port. That per-pod port is what
+lets different tenants co-locate without colliding, and the host --
+which only demuxes outer UDP -- never has to reason about tenancy.
+
+Zooming into one forwarder pod, there isn't really anything to
+load-balance on the host: the tunnel terminates on a vxlan device
+inside the pod's own netns, and the pod reaches the customer through a
+separate NIC:
+
+  one forwarder pod -- its own netns, tenant VNI X
+  +-------------------------------------------------+
+  |                                                 |
+  |   on/off-ramp NIC   <--- customer data plane    |
+  |   |   on-ramp (ingress) / off-ramp (egress)     |
+  |   |   inner packet                              |
+  |   vxlan (VTEP)   encap / decap for VNI X,       |
+  |   |              listens on this pod's UDP port |
+  |   |   outer VXLAN UDP                           |
+  |   eth0 (underlay)   NodeIP:port                 |
+  |   |   to peer VTEPs over the                    |
+  |   v   mesh underlay                             |
+  |                                                 |
+  +-------------------------------------------------+
+
+The load-balancing already happens at the sender -- the fdb nexthop
+group hashes the inner flow and picks a leg. The only missing piece is
+that the selected leg can't carry its own UDP port, so the sender
+reaches the right pod's IP but always the device's port.
+
+The host-side alternatives seem to assume a shared datapath that isn't
+really there in this design:
+
+  - SO_REUSEPORT balances sockets within a single netns; here the
+    receivers are in different netns -- in fact different tenants --
+    so there isn't a shared host socket to reuse.
+  - An XDP/TC host fan-out would mean the host has to become a VTEP --
+    terminate the tunnel and re-dispatch inner traffic across netns
+    and tenant/VNI boundaries -- which puts the host into the tenant
+    data path (today it only does a stateless outer-UDP demux) and
+    largely duplicates what an fdb nexthop group does: hashing an
+    inner flow across a set of endpoints. The group can already vary
+    the leg's IP; the port is the part it can't.
+
+On the uAPI cost: I don't think this adds a new datapath concept. A
+single fdb entry already carries a per-destination UDP port (NDA_PORT),
+and vxlan_xmit_one() already prefers rdst->remote_port when it's set.
+NHA_FDB_PORT is meant to be the nexthop analog of that existing
+attribute: control-plane only, no datapath change, and backward
+compatible (a leg with no port falls back to the device port as today).
+
+Happy to go into the deployment/addressing constraints in more detail if
+that would help.
+
+Thanks for the review.
