@@ -1,315 +1,113 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E523F4139
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 09:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E600743F4C2;
+	Tue, 14 Jul 2026 09:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784021959; cv=none; b=MY+eNiC0egGRoND6IH+W6/jU3K+MsJ5xMLxQzq9VJSMP20WSNv0SUHqwy0IqNRNbNZgGLvZwe7OAoj0YWFBNf2ZJinWWvSSkyGL2Mq6xh/tm/eZgLGD/Rhgb2DDvy2tQP067uYbUwccEUSV+ngghG0hUIHDeQO4urjblX33B46M=
+	t=1784022095; cv=none; b=Jbu306fhf0mLj2VXpCt0zoih8w5NbPUHAEluaX5Ztg3Id/qrYI6mPLgV+SBoaE0wp7t0q/JQhinif95YI6Q7+ljmWYwybnlNRAueJjh8Ud/3wit3fTKlfdUpw41f5gjuu7UWMDFDW7p33LPs963RUGItvi99Kt+hel61nC6bjfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784021959; c=relaxed/simple;
-	bh=r/JDpp9Iimh8FTBDGcm0LfUXUFcOqUVFUp0bIL15etE=;
+	s=arc-20240116; t=1784022095; c=relaxed/simple;
+	bh=O3N4etEHLdyldh1o+j+EaZ/ML4Fadt0x4YGW9LD/JDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lt8f9cOvxIJ2OYJAwZ6FU3FZzweC9L3qcuIOMpJHB0cOBH5271JDIFwtiiGgYjeLKbG9kHVu3flMOdd8v8gpzx3GO3NN6LqkdfnEHVITokv/uKafLgOTEF4VI69ZQiriY2WuVQ3DVY/T6hAmvh7H2uuunnSa1DM8xm/fjmaXSVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EkUAr68F; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EkUAr68F"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-51c29b46382so27672641cf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 02:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784021956; x=1784626756; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TRUF16K+9RX9W6LVqQ9Os239vrltLvcFobxQ5E3uYfY=;
-        b=EkUAr68FD1Tpn54nA37AJN98Lw+fsieXK66U1a1jV4R5z8HwcMQQtmCqyBbA3ttpcO
-         pI8m6y4rAlCavm1/XFZEpoatat+7J4TxEBTthsAG5dIUO/Q6z9+eto5EHS5pppKhVBgT
-         Qf6oUJNhws9ewmKT4NC7OO61llYMIFrNjQCpAApRW28kPATYHxuHigUcD6PrjJ1jMI46
-         krfZJwzyHXZ/Pc+Rt1JD4RJsb1A7AF2sP7XUL208K9vAhdVSEvRO8XLXBTlIGtuzkig3
-         Y8ezaHmKNizCrrMbRYI1pqeZ4ONZgOOg09ANjOXd+Uu6YL5TGuBWimSqUQjDmw2F9yEr
-         rTWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784021956; x=1784626756;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TRUF16K+9RX9W6LVqQ9Os239vrltLvcFobxQ5E3uYfY=;
-        b=Yab2KGSG+z/GLSt4FOn9OfUeAZlfUO4ktdwt9R8xvNLYPkDl7txCgLRsxRaDZ9L8M6
-         EgIk0Cyy5h23IoMQxQjhxEPEQilFXEhtXeKO53nRs52nG8lgrdzKw0seUiu1w+VZMzJt
-         PxY4X9vYUf3vOd0rrHcBOcYlFtK4JixhKtd2QufACJgHwAtInNUUMwAOMjfyDFfeKBOq
-         8nwWhLt30hmQHaZMtRuMGPcGx4sDgdEK41FdFN9UbYKsHIJZhfYwAEhf8JVBXSElVlg/
-         ZZux4CGzFTXOHF+7oE4hm5m0puan5CukHLtO0pKzg+P+7qqY75aBmeehyvi+lNf+wHvo
-         ei1w==
-X-Forwarded-Encrypted: i=1; AHgh+RpkWKGOUZpzVq4JWpfkqPEA/GlLGmfSSZJkgCE54LigSXAePH+o55vaGidx6/XvWi5kRu05Md4yvRrBqZgOWNs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywmo6GwBkGYOJMoK3XOWvM/TzV9CgZVUPdVcL6DipQwaPKtjvlq
-	R9VRiCIvYu7NvOfgHzrG1p1b2MalwLy6rG0vzTVTI5kGVOl1Is3m7v3k
-X-Gm-Gg: AfdE7cn9oyzRNXCqJCmygTGVUYSIjBkodU48e6to2/3odNW6h8UvlKCZ2PCy+5M3q3m
-	2vA7IA2UHggcTjKu9vC9RwFFfbU1uxCp/oU2laJjsZsbM5/aaXWn+lK5PjYLN2DJ8pSZKOIE7Oc
-	0P1gpeZfnC5zKWJW2LPj4NRcTUeNuzskCzixySWOgs75II2LU1nfn+aKWj21dBE+w0OKd5gvEPj
-	Aw7yTwJJT6FoSIhaFI+TsfSzMZD3OpORC9iU13DOFVmUKMxnEEqzylczul8Qp/BrXEk0oi6nerP
-	GgQC2GhrK4bFJ+V9dC02+q7URFdq5g5n+LM1zvOtdkqjw6Ut9Y9oLxiLspmPEGs254xCNvMpNYl
-	UNDRYmoRhONpb2uOdOb07b3NulI36IUMyIboh7J4trAWxQ/3xahXLNriz4wzSUquVuQ6Tb0qwu8
-	6nG5iqJl2L7PGo1AcOV2MidrQp4lsttN2eke/QT6qplEQCejS+KONFCmiQbMVzawL/x3XFoaL8
-X-Received: by 2002:ac8:5fc9:0:b0:51b:9878:8242 with SMTP id d75a77b69052e-51e42364121mr10307501cf.6.1784021955639;
-        Tue, 14 Jul 2026 02:39:15 -0700 (PDT)
-Received: from localhost.localdomain ([202.8.105.115])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51caacf2a75sm111460511cf.13.2026.07.14.02.39.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 02:39:15 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Matt Mullins <mmullins@mmlx.us>,
-	linux-kernel@vger.kernel.org,
+	 MIME-Version:Content-Type; b=Ab8FyNQ2XFI3fiZV6WyXs9lP1j93pwZSuVEjYkJj5GbCfNL0qxRvpVytM4NSfbkaf9in3og4xo2Gtb3xcNCQAByHmHwHkzOyXvXeRLmYvHQA2x4p5PeMDtS+1H9/hUQ+l4S+Eo3kNVvvodvD228apKlfWetA7GqWPnpzS8HTlPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
+Received: from nat-wifi0.uniroma3.it ([193.204.167.180] helo=alea)
+	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <equinox@diac24.net>)
+	id 1wjZdg-000000022Su-3zhY;
+	Tue, 14 Jul 2026 11:41:20 +0200
+Received: from equinox by alea with local (Exim 4.99.2)
+	(envelope-from <equinox@diac24.net>)
+	id 1wjZdJ-00000000ZUT-1321;
+	Tue, 14 Jul 2026 11:40:57 +0200
+From: David 'equinox' Lamparter <equinox@diac24.net>
+To: Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>
+Cc: David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Lorenzo Colitti <lorenzo@google.com>,
+	=?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+	Patrick Rohr <prohr@google.com>,
+	netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer offsets
-Date: Tue, 14 Jul 2026 02:38:46 -0700
-Message-ID: <20260714093846.18159-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
-References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
+	David 'equinox' Lamparter <equinox@diac24.net>
+Subject: [PATCH net-next 1/9] net/ipv6: fix lookup for ::/0 (non-)subtree route
+Date: Tue, 14 Jul 2026 11:40:04 +0200
+Message-ID: <20260714094030.136317-2-equinox@diac24.net>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260714094030.136317-1-equinox@diac24.net>
+References: <20260714094030.136317-1-equinox@diac24.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add verifier coverage for constant negative offsets on PTR_TO_TP_BUFFER
-and PTR_TO_BUF pointers. Both programs adjust the buffer pointer by -8
-and access it at offset zero, so the negative effective start must be
-rejected at load time.
+Assume a scenario with something like the following routes:
+default via fe80::1 dev dummy0
+2001:db8:1::/48 via fe80::10 dev dummy0
+2001:db8:1::/48 from 2001:db8:1:2::/64 via fe80::12 dev dummy0
 
-Switch the raw tracepoint writable attach checks from nbd_send_request
-to bpf_testmod_test_writable_bare_tp, avoiding a dependency on the NBD
-tracepoint. Keep the existing past-end case and add a case with a
-negative var_off compensated by a positive instruction offset. The
-effective start remains non-negative, so the program loads, but its
-access end exceeds the writable context size and
-bpf_raw_tracepoint_open() must return -EINVAL.
+Now if a lookup happens for 2001:db8:1::2345, but with a source address
+*not* covered by the third route, the expectation is to hit the second
+one.  Unfortunately, this was broken since the code, on failing the
+lookup in the subtree, didn't consider the node itself which the subtree
+is attached to, i.e. route #2 above.
 
-Reported-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
-Cc: stable@vger.kernel.org # 5.2.0
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+The fix is simple, check if the subtree is attached to a node that is
+itself a valid route before backtracking to less specific destination
+prefixes.
+
+This case is somewhat rare for several reasons.  To begin with, subtree
+routes are most commonly attached to the default destination.
+Additionally, in the rare cases where a non-default destination prefix
+is host to subtree routes, the fallback on not hitting any subtree route
+is commonly a default route (or a subtree route on that).
+
+(Note that this was working for the "::/0 from ::/0" case since the root
+node is special-cased.  The issue was discovered during RFC 6724 rule
+5.5 testing, trying to find edge cases.)
+
+Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Cc: Patrick Rohr <prohr@google.com>
+Cc: Maciej Żenczykowski <maze@google.com>
 ---
- .../raw_tp_writable_reject_bad_access.c       | 57 +++++++++++++++++++
- .../raw_tp_writable_reject_nbd_invalid.c      | 43 --------------
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_ptr_to_buf.c | 27 +++++++++
- .../bpf/progs/verifier_raw_tp_writable.c      | 16 ++++++
- 5 files changed, 102 insertions(+), 43 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_bad_access.c
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ptr_to_buf.c
+ net/ipv6/ip6_fib.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_bad_access.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_bad_access.c
-new file mode 100644
-index 000000000000..b8538fc4fc3f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_bad_access.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "test_kmods/bpf_testmod.h"
-+#include "bpf_util.h"
-+
-+static void check_attach_reject(const struct bpf_insn *program, size_t prog_len)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-+	char error[4096];
-+	int bpf_fd, tp_fd;
-+
-+	opts.log_level = 2;
-+	opts.log_buf = error;
-+	opts.log_size = sizeof(error);
-+
-+	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
-+			       program, prog_len, &opts);
-+	if (!ASSERT_GE(bpf_fd, 0, "prog_load"))
-+		return;
-+
-+	tp_fd = bpf_raw_tracepoint_open("bpf_testmod_test_writable_bare_tp", bpf_fd);
-+	ASSERT_EQ(tp_fd, -EINVAL, "bpf_raw_tracepoint_open");
-+	if (tp_fd >= 0)
-+		close(tp_fd);
-+
-+	close(bpf_fd);
-+}
-+
-+void test_raw_tp_writable_reject_bad_access(void)
-+{
-+	const struct bpf_insn program[] = {
-+		/* r6 is our tp buffer */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		/* one byte beyond the end of the writable context */
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
-+			    sizeof(struct bpf_testmod_test_writable_ctx)),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	const struct bpf_insn negative_var_off_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		/* make var_off negative, but keep the effective access offset non-negative */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
-+		/* one byte beyond the end of the writable context */
-+		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
-+			    sizeof(struct bpf_testmod_test_writable_ctx) + 8),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	if (test__start_subtest("past_end"))
-+		check_attach_reject(program, ARRAY_SIZE(program));
-+
-+	if (test__start_subtest("negative_var_off_past_end"))
-+		check_attach_reject(negative_var_off_program,
-+				    ARRAY_SIZE(negative_var_off_program));
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-deleted file mode 100644
-index 216b0dfac0fe..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_reject_nbd_invalid.c
-+++ /dev/null
-@@ -1,43 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <test_progs.h>
--#include <linux/nbd.h>
--#include "bpf_util.h"
--
--void test_raw_tp_writable_reject_nbd_invalid(void)
--{
--	__u32 duration = 0;
--	char error[4096];
--	int bpf_fd = -1, tp_fd = -1;
--
--	const struct bpf_insn program[] = {
--		/* r6 is our tp buffer */
--		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
--		/* one byte beyond the end of the nbd_request struct */
--		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
--			    sizeof(struct nbd_request)),
--		BPF_EXIT_INSN(),
--	};
--
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.log_level = 2,
--		.log_buf = error,
--		.log_size = sizeof(error),
--	);
--
--	bpf_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE, NULL, "GPL v2",
--			       program, ARRAY_SIZE(program),
--			       &opts);
--	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable load",
--		  "failed: %d errno %d\n", bpf_fd, errno))
--		return;
--
--	tp_fd = bpf_raw_tracepoint_open("nbd_send_request", bpf_fd);
--	if (CHECK(tp_fd >= 0, "bpf_raw_tracepoint_writable open",
--		  "erroneously succeeded\n"))
--		goto out_bpffd;
--
--	close(tp_fd);
--out_bpffd:
--	close(bpf_fd);
--}
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8a3d69e2453c..be97f6887f0e 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -78,6 +78,7 @@
- #include "verifier_precision.skel.h"
- #include "verifier_prevent_map_lookup.skel.h"
- #include "verifier_private_stack.skel.h"
-+#include "verifier_ptr_to_buf.skel.h"
- #include "verifier_raw_stack.skel.h"
- #include "verifier_raw_tp_writable.skel.h"
- #include "verifier_reg_equal.skel.h"
-@@ -230,6 +231,7 @@ void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
- void test_verifier_precision(void)            { RUN(verifier_precision); }
- void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
- void test_verifier_private_stack(void)        { RUN(verifier_private_stack); }
-+void test_verifier_ptr_to_buf(void)           { RUN(verifier_ptr_to_buf); }
- void test_verifier_raw_stack(void)            { RUN(verifier_raw_stack); }
- void test_verifier_raw_tp_writable(void)      { RUN(verifier_raw_tp_writable); }
- void test_verifier_reg_equal(void)            { RUN(verifier_reg_equal); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ptr_to_buf.c b/tools/testing/selftests/bpf/progs/verifier_ptr_to_buf.c
-new file mode 100644
-index 000000000000..12cf24db46a0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_ptr_to_buf.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+SEC("iter/bpf_map_elem")
-+__description("PTR_TO_BUF: reject negative const offset")
-+__failure
-+__msg("invalid negative rdwr buffer offset")
-+__naked void ptr_to_buf_reject_negative_const_offset(void)
-+{
-+	asm volatile ("r0 = 0;					\
-+	 r2 = *(u64 *)(r1 + %[value_off]);			\
-+	 if r2 == 0 goto l0_%=;					\
-+	 r2 += -8;						\
-+	 r0 = *(u64 *)(r2 + 0);					\
-+l0_%=:								\
-+	 exit;							\
-+	"
-+	:
-+	: __imm_const(value_off,
-+		      offsetof(struct bpf_iter__bpf_map_elem, value))
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-index 14a0172e2141..4055a6443bc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_tp_writable.c
-@@ -47,4 +47,20 @@ l0_%=:	/* shift the buffer pointer to a variable location */\
- 	: __clobber_all);
- }
- 
-+SEC("raw_tracepoint.w")
-+__description("raw_tracepoint_writable: reject negative const offset")
-+__failure
-+__msg("invalid negative tracepoint buffer offset")
-+__naked void tracepoint_writable_reject_negative_const_offset(void)
-+{
-+	asm volatile ("					\
-+	r6 = *(u64 *)(r1 + 0);				\
-+	r6 += -8;					\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
+index a130cdfaebfb..273f2bfc5286 100644
+--- a/net/ipv6/ip6_fib.c
++++ b/net/ipv6/ip6_fib.c
+@@ -1656,8 +1656,11 @@ static struct fib6_node *fib6_node_lookup_1(struct fib6_node *root,
+ 					struct fib6_node *sfn;
+ 					sfn = fib6_node_lookup_1(subtree,
+ 								 args + 1);
+-					if (!sfn)
++					if (!sfn) {
++						if (fn->fn_flags & RTN_RTINFO)
++							return fn;
+ 						goto backtrack;
++					}
+ 					fn = sfn;
+ 				}
+ #endif
 -- 
-2.43.0
+2.53.0
 
