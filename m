@@ -1,79 +1,70 @@
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BB23624B2;
-	Tue, 14 Jul 2026 02:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478FC2E65D;
+	Tue, 14 Jul 2026 02:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783994689; cv=none; b=rl8KTr/Gw8j5IXuS4YBosjWErnzhvsAKgpRSJu6k/rMEvTB2IDG/2lY35vnW8CXnSjln1pBk97xPMlMLuyUEtDHuuXkU/1npUTXmyKJj6riWzcubldyQfhN4VX09a9GNj0vR6/8B9CbfJq/06hW4fZGlxv5gc3z2sAmO/G7dda8=
+	t=1783995346; cv=none; b=uA9t7lGRN3Fsyz4vTGhD2bTYJv29aBq4xQMBvnL/mZP9Kw0sf8NFBVf79iYfdQFuwGaZ2RncPZtibbp+loj/VOZlgZWOfeDzYnzuoPx0Zuzx0ay+wK6beNfDKot5mxBtVNMqJLS0t4BjmoRrX/xVTXDGcwxvWptafig+6lv+cOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783994689; c=relaxed/simple;
-	bh=57qGqSE9tP6lPRw/YAUHjWMVC1tvGg7x5fped7GmMnc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hRh/Yfr8uMQ/Cu8UJxak0jIifm1UmUbrve3skrTzLOo66js1+sf2hUU8lnpz4rw0R3J0GvryDAlm09I/hT2T/pjDnpFzBqsX5heodmXhVlbwSQirSeeMTiVHRPYvaPdJLyLVOYShQjZN24/3drSyLsgxM9fJYqTp6knnHKhqe+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=LsHiFM15; arc=none smtp.client-ip=52.12.53.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="LsHiFM15"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1783994688; x=1815530688;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7zkFcRd5mu9B02BIWtTtfZKps/G89UKhgagGL2Z3qRE=;
-  b=LsHiFM15McvgCm6z7Gz3Nsio2K7iZexrFFVFdEkpeCIoWrjnXeNc7Xo1
-   6v4YDeQ8PsHdTnMawUyqWX5mQ6GsR9ZX9wDq8rHfqVhTgYK8QYzc1Ehln
-   uKy+lGSUzb2Du/SW/KIUwB04rxVJ2e/UNe2ofLGbwfT8DkoyQcD7M/3/Q
-   b0d2c9nL+FZ66zCNbVYbUKS194rrxe+HlCh/dz02ApIJkq7jxEWzqDvQ8
-   wyoSKdIT1I6qzBg6E1hnmvTykreafzCeNsUjoCi3UC13IuWeJrq8ZdWp7
-   UYBPPMy86sK5QEdacHkxcDilLzpbIWUthTRzL/SMmPDrf9TFvBzYNQs5i
-   A==;
-X-CSE-ConnectionGUID: y7v2r35uTYu6w8WzA4mRKg==
-X-CSE-MsgGUID: 5sXAcwIOS5CtsvdHvYfpJw==
-X-IronPort-AV: E=Sophos;i="6.25,154,1779148800"; 
-   d="scan'208";a="23479313"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 02:04:46 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.53:30374]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.40.123:2525] with esmtp (Farcaster)
- id f6d831c8-97fc-40a5-b045-0777f5a74624; Tue, 14 Jul 2026 02:04:45 +0000 (UTC)
-X-Farcaster-Flow-ID: f6d831c8-97fc-40a5-b045-0777f5a74624
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Tue, 14 Jul 2026 02:04:45 +0000
-Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Tue, 14 Jul 2026 02:04:40 +0000
-From: Arthur Kiyanovski <akiyano@amazon.com>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
-	<richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
-	<xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, "Yonatan
- Sarna" <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, "Alexander
- Matushevsky" <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
- Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>, Nafea Bshara
-	<nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal
-	<netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt
-	<benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon
-	<darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik
-	<ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
-	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
-	<skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>,
-	<vadim.fedorenko@linux.dev>
-Subject: [PATCH v4 net-next 7/7] net: ena: Implement gettimexattrs64 callback for PTP attributes
-Date: Tue, 14 Jul 2026 02:03:08 +0000
-Message-ID: <20260714020340.25014-8-akiyano@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260714020340.25014-1-akiyano@amazon.com>
-References: <20260714020340.25014-1-akiyano@amazon.com>
+	s=arc-20240116; t=1783995346; c=relaxed/simple;
+	bh=v5uhv/1qjFqwspDoMpuWCpN77l8nV7wJmt7sO/PhrH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uTl7vW26J+Ofe3EZhAfjgUwtMvC5jYrM39Jo+t99NbdToXkr5usO5LMr4Hwur8fAvF0Mo+FX1pvm6kir1zmUhRYs+5v0XhwVSdglO01QmTaQ6oSc5+cYVdejbsT7GwJaF2utMMgwE+yPzB1rdJRUahXLX9O6XNv24yaEKb0KNXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: e76a86d67f2911f1aa26b74ffac11d73-20260714
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_UNTRUSTED, SN_LOWREP, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:6a112b9f-3c77-4d5b-83d3-c1d74f8425f0,IP:20,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:45
+X-CID-INFO: VERSION:1.3.12,REQID:6a112b9f-3c77-4d5b-83d3-c1d74f8425f0,IP:20,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:45
+X-CID-META: VersionHash:e7bac3a,CLOUDID:dd181884e857344a438163946bfe7c5f,BulkI
+	D:260714101538M9HF7TXP,BulkQuantity:0,Recheck:0,SF:17|19|66|78|102|127|865
+	|898,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:
+	nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,AR
+	C:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: e76a86d67f2911f1aa26b74ffac11d73-20260714
+X-User: husong@kylinos.cn
+Received: from ctao-book.. [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <husong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1422662319; Tue, 14 Jul 2026 10:15:37 +0800
+From: Song Hu <husong@kylinos.cn>
+To: linux-mm@kvack.org
+Cc: muchun.song@linux.dev,
+	osalvador@suse.de,
+	david@kernel.org,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Hu <husong@kylinos.cn>
+Subject: [PATCH 1/2] selftests/cgroup: fix missing TAP output in test_hugetlb_memcg
+Date: Tue, 14 Jul 2026 10:15:11 +0800
+Message-ID: <20260714021511.1063700-1-husong@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,101 +72,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D032UWB001.ant.amazon.com (10.13.139.152) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Implement the gettimexattrs64 callback in the ENA driver to support
-the PTP_SYS_OFFSET_EXTENDED_ATTRS ioctl.
+main() in test_hugetlb_memcg never calls ksft_print_header(),
+ksft_set_plan(), or ksft_finished(), so its output has no TAP plan and is
+not valid TAP, unlike the sibling test_memcontrol and test_kmem tests.
+Add the header/plan/finished calls following the same pattern.
 
-This enables applications to retrieve PHC timestamps with quality
-attributes through the standard PTP ioctl interface.
-
-The ENA device currently reports only error_bound (valid bit set).
-Other attributes are not reported (valid bits unset).
-
-Signed-off-by: Amit Bernstein <amitbern@amazon.com>
-Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+Signed-off-by: Song Hu <husong@kylinos.cn>
 ---
- drivers/net/ethernet/amazon/ena/ena_phc.c | 58 +++++++++++++++++++----
- 1 file changed, 48 insertions(+), 10 deletions(-)
+ tools/testing/selftests/cgroup/test_hugetlb_memcg.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_phc.c b/drivers/net/ethernet/amazon/ena/ena_phc.c
-index 2bcb5af564e2..725c36fe3f6e 100644
---- a/drivers/net/ethernet/amazon/ena/ena_phc.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_phc.c
-@@ -25,6 +25,43 @@ static int ena_phc_feature_enable(struct ptp_clock_info *clock_info,
- 	return -EOPNOTSUPP;
+diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+index b627d84358b1..8c5aced813b6 100644
+--- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
++++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
+@@ -199,7 +199,10 @@ static int test_hugetlb_memcg(char *root)
+ int main(int argc, char **argv)
+ {
+ 	char root[PATH_MAX];
+-	int ret = EXIT_SUCCESS, has_memory_hugetlb_acc;
++	int has_memory_hugetlb_acc;
++
++	ksft_print_header();
++	ksft_set_plan(1);
+ 
+ 	has_memory_hugetlb_acc = proc_mount_contains("memory_hugetlb_accounting");
+ 	if (has_memory_hugetlb_acc < 0)
+@@ -211,7 +214,7 @@ int main(int argc, char **argv)
+ 	if (get_hugepage_size() != 2048) {
+ 		ksft_print_msg("test_hugetlb_memcg requires 2MB hugepages\n");
+ 		ksft_test_result_skip("test_hugetlb_memcg\n");
+-		return ret;
++		ksft_finished();
+ 	}
+ 
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+@@ -233,10 +236,9 @@ int main(int argc, char **argv)
+ 		ksft_test_result_skip("test_hugetlb_memcg\n");
+ 		break;
+ 	default:
+-		ret = EXIT_FAILURE;
+ 		ksft_test_result_fail("test_hugetlb_memcg\n");
+ 		break;
+ 	}
+ 
+-	return ret;
++	ksft_finished();
  }
- 
-+static int ena_phc_gettimexattrs64(struct ptp_clock_info *clock_info,
-+				   struct timespec64 *ts,
-+				   struct ptp_system_timestamp *sts,
-+				   struct ptp_clock_attrs *att)
-+{
-+	struct ena_phc_info *phc_info =
-+		container_of(clock_info, struct ena_phc_info, clock_info);
-+	u32 error_bound_nsec;
-+	unsigned long flags;
-+	u64 timestamp_nsec;
-+	int rc;
-+
-+	spin_lock_irqsave(&phc_info->lock, flags);
-+
-+	ptp_read_system_prets(sts);
-+
-+	rc = ena_com_phc_get_timestamp(phc_info->adapter->ena_dev,
-+				       &timestamp_nsec,
-+				       &error_bound_nsec);
-+
-+	ptp_read_system_postts(sts);
-+
-+	spin_unlock_irqrestore(&phc_info->lock, flags);
-+
-+	if (rc)
-+		return rc;
-+
-+	*ts = ns_to_timespec64(timestamp_nsec);
-+
-+	if (att) {
-+		att->error_bound = error_bound_nsec;
-+		att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
-+	}
-+
-+	return 0;
-+}
-+
- static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
- 			      struct timespec64 *ts,
- 			      struct ptp_system_timestamp *sts)
-@@ -62,16 +99,17 @@ static int ena_phc_settime64(struct ptp_clock_info *clock_info,
- }
- 
- static struct ptp_clock_info ena_ptp_clock_info = {
--	.owner		= THIS_MODULE,
--	.n_alarm	= 0,
--	.n_ext_ts	= 0,
--	.n_per_out	= 0,
--	.pps		= 0,
--	.adjtime	= ena_phc_adjtime,
--	.adjfine	= ena_phc_adjfine,
--	.gettimex64	= ena_phc_gettimex64,
--	.settime64	= ena_phc_settime64,
--	.enable		= ena_phc_feature_enable,
-+	.owner		   = THIS_MODULE,
-+	.n_alarm	   = 0,
-+	.n_ext_ts	   = 0,
-+	.n_per_out	   = 0,
-+	.pps		   = 0,
-+	.adjtime	   = ena_phc_adjtime,
-+	.adjfine	   = ena_phc_adjfine,
-+	.gettimexattrs64   = ena_phc_gettimexattrs64,
-+	.gettimex64	   = ena_phc_gettimex64,
-+	.settime64	   = ena_phc_settime64,
-+	.enable		   = ena_phc_feature_enable,
- };
- 
- /* Enable/Disable PHC by the kernel, affects on the next init flow */
 -- 
-2.47.3
+2.43.0
 
