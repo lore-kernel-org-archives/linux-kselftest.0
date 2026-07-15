@@ -1,158 +1,118 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B753AA9C4
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 02:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784084121; cv=pass; b=cjyi15rA2UYMPbhyEjWFjjE2i44+HGaLXtw1cD3YK2r8Zymrb/fyp6isqp038vr4RowNCiwC2VzDBfLuzm4zVnrCVAsFMOMJDsajZ0BetKK6u2wgIj7KkeNW8qJQfgSTdQtJBbg5dN6cv+r18MNTJYxogPSDuPbyp8FvZSXClBs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784084121; c=relaxed/simple;
-	bh=6eBwj4et6Kll0SOF/dlQ0iXDfU2skh9D1bcyDgpLDWQ=;
-	h=Mime-Version:References:From:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KPT11PTXRFe/hqosmz/Jt40/7k8lkgcGmpycbgGVjgBTZWz0ZtD1nDwB/Lb2dOlGVEYxgxk3fiA+LEcmZ85gCjbjF16kajBys1dM6XGJVA9LYD9y6JRw/AlGdOSEGsjX/fL+ts6wAMg4tQ4D6rmAnFJtmAdwMzR7XRic//6eSWI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=az0I9Lqs; arc=pass smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18362288B8
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 03:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784084539; cv=none; b=d6Xr1ULH3TGkuRIO87v0JBm6R2XhTpUm9+uOOLpbMWTjsLshYe8Nw1t70PgckLm/nMTYTy2fzbUFjNPU5GGbe5jA8ySqz7Et0JAopLoKSYjAu9A1nu5lkpOtY2KEn1S/5jFd8nhAQQSp1sOvOYR9j8Sz/xkpCrrCSW1HpA7A1LA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784084539; c=relaxed/simple;
+	bh=Pyp2DnCViCnJgUi88+R0XBfifCiYiXiV56seNpVS6sg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HkEAZH43l23272B/mbo3ybjq43OuDO9ltEcEfMZqlAGtcjIWuusLTyGVho28RNKMLsyZR51IfvzevbuskjIG041TOcvd27tVCigZJRieW/9S3BWd8qTE6ZBsKZcq7eMylh7YKRcyN23qSdPi3DTbIwTED3Jizf4xCmBgXxxL2/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CgJACLJ9; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="az0I9Lqs"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso54981225ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 19:55:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784084119; cv=none;
-        d=google.com; s=arc-20260327;
-        b=N3VOxopbfx9846Tv/PqUkHGu4ry2sXcw+z9sGkyPBBZVaxUrItlFlkhj8IJ3ZVSRBp
-         KmWt7ZGJqV5pSGxOyD81/LP0va9rEGFFaXiMTwQ1zM6uDAaHigi2XbylRKUvVN8HK7ou
-         9uLQf5ySMAw+DNsRbiQClxhkm04cC9CCOUTwTh7xsjGDD17TatLn2RmxbdAS0ichN5su
-         UsYi3arfklBBkrHRAo6W0f+LCi9nPzwEpOHmrs2yHbkG1/AHZN7qTf7aqD7IuRASg4MQ
-         0dteOcYRhKkIIgc5kEzUzAvBkbb2wKoOCDYy1jW7vv8tm2sWaHhiuP7HiskYwpdPbyZM
-         SiTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:in-reply-to:from:references
-         :user-agent:mime-version:dkim-signature;
-        bh=onc8LBGsosWpMb6oO+llEi3YzErTQezwilYi6725L7E=;
-        fh=6P/eYT5b3vEo8d1ZXsCOLBy1ct75GSXdppq9GidS7Ks=;
-        b=GJF1Yem9voolFo2fOghWwhOFk1ECTLbAIYTRxbqKE6FGWxZg5Qk6N2f0U0xW3mZEbZ
-         irgLBQcAclvcC3MpFQ1m2Nu0aOOJsntvuXzjM61F76chhCalQgRAjUHS59Cec8xX4Vbg
-         5a9Ue24YF/b/uKjWyNVDd1DAYaxlLJ5X8SzkfQ9nzN/JL5GOJe050heOf4v0vLhsdd59
-         sBrOt1gibHzmi+IR9h1eKMxFYZUIq3eKCxthVOvutYrQbZEO9H4Fa612DE6TfcKvCwNV
-         5lfqes+kWcpbrLb0V9vNgBCz5FGml+U58f7c1LXZnHt5Q9cs2UwM46HcDL05CWgqxk1e
-         1yWQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CgJACLJ9"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c15b33f7b23so716404666b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 20:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1784084119; x=1784688919; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:in-reply-to:from
-         :references:user-agent:mime-version:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=onc8LBGsosWpMb6oO+llEi3YzErTQezwilYi6725L7E=;
-        b=az0I9Lqspl/LdgQk34qBFiPFA6yu2QxQ7uKkiwljXC8OEpXwvoYolQ3+YN24c298Hw
-         yL1joghLV8soIWNV+0gPqIN/SMxlejZSSFN9lC3RpNfjfJiNWwMErvhruByUI5L8ygJ5
-         TgsRpLX8rnNsfcPW/wAoSgUa/RKZ8C0zZy7XTzUMP1byZtYnhiwLenztbf73ozM4W9Ri
-         tH53lqVndfnhBXSNizzOCxqzGss+ADo5qK9IHIPGnhesvevGvZk7GlmZ7NDhTEtk7Wqq
-         UmQXogeOZFANqBx18YcrI0XLFUT8pnPg2zirtGjs8/1isc8HwIb1HSkgTOzgkUkhZ/FU
-         VsfQ==
+        d=suse.com; s=google; t=1784084536; x=1784689336; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hOjABmuvBW+jCcuokYEE7Gv19LjuO15ZtZi5onZDlks=;
+        b=CgJACLJ98v8bx0a5WjsLkmXa0c45JEdSrekLF6tl5Fk22ghzpLJUvgFKQNzQTq8Ifl
+         /ETsYk5Eo6xIB43MhUwOTHfm6l/60rKnMk3z77HYo3eisYf7NRzZMM+qx11ZKE/B/IiZ
+         vklNHjKz3M8XNO8/Ulp4B/L3Ont5OEf+hb9qmZq7FfrXmYIOgTLvsYr1mcGB8om87koA
+         eNoJog5ZJsjRDPz3ZRg0hRIWoIoPBCEPrG28tjn73CcgQw9BSKK4PCVnl0TowIaMCQJl
+         cKRfYR0ykvJXtO91SW3ILye1CqC2a48Lpg1PjvVqZVEEk6hLo2Llro4s7MO2IjdwzHBW
+         PEJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784084119; x=1784688919;
-        h=content-type:cc:to:subject:message-id:date:in-reply-to:from
-         :references:user-agent:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=onc8LBGsosWpMb6oO+llEi3YzErTQezwilYi6725L7E=;
-        b=Ny2+dNwxv2ltEP91eA9zZ1kcz4HoVxoYRkztMQ0dJsE/ZeM52dmGguNLRsbJPYZHoj
-         oKSKXtFs5cYGuAoC+rquHfbbG/FHENgn8KfhxILvukpFyssIblpnZfcBNVaBPtnCKjgb
-         UXO2HwUsmsWDPL3J7vcc6IYNHpAdeSCYoAar75hqjm9SxW7XECjkRynp5mqjvpMLhVmD
-         O9aMKAKSz5ILynYJBVlBjHfKyZAaxOJP+cqLeKUGBaQ5mQ2XaIAHQccGhuQIxtgM3a9l
-         B0Cx8h0GQTffaMWWsfy+IjgT1O+rWTkwQkuRnpXBtqg1Y/Qy6MPeKlYkXUK/lA0HzInN
-         zQEw==
-X-Forwarded-Encrypted: i=1; AHgh+RobSDr5rb7m3JprMoAobjtMriYDRN0ZK/Cl7/zx/LXko+hZTpt+LFgUHW0hrQRUdY4wUqQOLbKOwax+3kaczXc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7WxhH5hKh1aKJ32Rb1sUyh3r1UPsRhn3ez9f69gn7QOL8pcf1
-	ini+a98ZpLbBtVRxEvkukO+eK/M6tvqR54JPRkN6vmiJ8pZutCHSOuaZScOp5FA97BkdQNgBdxD
-	1uedRWeSwkk0tDSwO5U+BsP6D+5Ji8DMxYCO/VeOOBw==
-X-Gm-Gg: AfdE7cm+gLYyclpirY742+WsnkzycFFtSClEkqIe7QBqLgcz1FB/ZeCPvGdMI9B1a+m
-	ehbhqkMNeA/Ym2N8HimnJ8AxEyuExagNrtjwiJLZN5XGREgf7ULnA8te3qbZv7GCuiQQ1vBv2bz
-	GB2Flux5OsnMcqRFx5d7p2HCaJfCRh4JzjqSp0XoAFFCMZzs2leeqt8sJG7H/cY7sZ49V4uImMZ
-	jofsLi1PZNY0keBIed/GtEU/LIL1nq713BpW0tvbtjf+i+oJKAZDVbzptt6LW8quQf2W8A=
-X-Received: by 2002:a17:902:f64d:b0:2ca:5d24:720b with SMTP id
- d9443c01a7336-2cee9b82e93mr60194075ad.39.1784084119427; Tue, 14 Jul 2026
- 19:55:19 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 14 Jul 2026 21:55:16 -0500
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 14 Jul 2026 21:55:16 -0500
+        d=1e100.net; s=20251104; t=1784084536; x=1784689336;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hOjABmuvBW+jCcuokYEE7Gv19LjuO15ZtZi5onZDlks=;
+        b=FxrMcZmwMTUDmEEf5af/FRkg5RsPKbHCfRRqJmZW0uzQ5XDmgrUSBiuNdbbYf8YpQ4
+         s7CMceVT0nDPJAe/U/SZPtvW1hVdUPxJxrGbH7nw8uL3LgYW7rlBZDH36IT6QLFNc8EM
+         2rxr1NZXUaXoOKrPwDj+2j3yEH4Zvh7u3djmDjx7QxuHoj8m1BkDLrQBNMZHJ3dGEPZ9
+         kf8nT50ME/HZFFJMc3aKC6dePqmFKSPO5himPjNmkFmdk99Kw2wdCJaZTCn6mzouoVF3
+         Pod0HQrSl2u23RGn4N6AvJBI+It3GUrHLaf99jy+89OA7QAxgs09NgHcqpYtiA1YtSpC
+         bZdg==
+X-Forwarded-Encrypted: i=1; AHgh+RqSR8+HuZcpvXYmC+5iFMudvKIDCqBrCoyIlxOGZi3V6D2uK4QPbng/nNjNSodEMOYF6dq1NRKrpCVJinQ0PTo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBwZ+5dBUi/yT3EHuTN3nmTubUHbLvW1YQtpwqcDBl/CUpwxLA
+	e7MDJYnyt3PV4zukHW0sKiHNUIWdrzKSkfsCeRnpxxraXJWISY1D76+DdoIWX8zBoWY=
+X-Gm-Gg: AfdE7cn5xb4WzIGvgWuU/H8ejWdIkPcw08W9yyVb/Q7UP8PMxSnM3B4j8jmRuHyGBdf
+	hxpiaMUq46aR0ITgS+ZHslMTpzCn/iRuJJAgfWrGCbW0YtypnIjRd5vtzmStW8NmB20puWxUIpa
+	5jON2zOtnoBQYY61MH21LU8LbvoeZWvr8VZOaQCNMDx/rEkcxNwbr4C/xks0v2qd7rkbVy7rGk1
+	n7zNABK6ZjSNL3Q5K3EFdIb8NRb3djRERc2OXKjNvOcCfZNn9BIHDs0/y6qXmlE45M6qnk6R9v5
+	Dbr51ZixDUYKBBjUyjrY9i354tI9pAnRkHJwltvwrVTBdbQ8pMyf/22Ya5qTt19a+N3O4EwY5Mv
+	Q4J7Wgz4pMKtik/EQf9gHXX5wUilhm9T+vSzxa/kvBtYIb1/wjUcBkArt9NciRHxcj8tIKzbWT3
+	PYg8HbgravagNB4W7isOqc9n0ShfMjHkVL
+X-Received: by 2002:a17:907:f815:b0:bb7:eb68:514e with SMTP id a640c23a62f3a-c167940e66bmr67514766b.36.1784084536316;
+        Tue, 14 Jul 2026 20:02:16 -0700 (PDT)
+Received: from u94a (27-51-89-168.adsl.fetnet.net. [27.51.89.168])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6a39a4a7797sm7988739eaf.6.2026.07.14.20.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 20:02:14 -0700 (PDT)
+Date: Wed, 15 Jul 2026 11:02:02 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Matt Mullins <mmullins@mmlx.us>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer
+ offsets
+Message-ID: <alb1fmxTl6-c-HJs@u94a>
+References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
+ <20260714093846.18159-3-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-User-Agent: Mozilla Thunderbird
-References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
- <20260714130657.46963-2-zhangzhanpeng.jasper@bytedance.com> <20260714140336.GA3716926@ziepe.ca>
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-X-Original-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-In-Reply-To: <20260714140336.GA3716926@ziepe.ca>
-Date: Tue, 14 Jul 2026 21:55:16 -0500
-X-Gm-Features: AUfX_mwCsBOf_hgb5yUzS2yT7xbSqsn1sQG_-ZF1ldFSOzP_jx_ehBg3xh3TSj4
-Message-ID: <CACnXVnc4T40uUJKViZH0dzp8=RBjgC08KG6Pjz8btjPJ+aiG8Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] iommu: Add group lookup by ID
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com, 
-	reinette.chatre@intel.com, tomasz.jeznach@linux.dev, will@kernel.org, 
-	robin.murphy@arm.com, fustini@kernel.org, pjw@kernel.org, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, Dave.Martin@arm.com, 
-	james.morse@arm.com, babu.moger@amd.com, corbet@lwn.net, shuah@kernel.org, 
-	kevin.tian@intel.com, cuiyunhui@bytedance.com, yuanzhu@bytedance.com, 
-	iommu@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714093846.18159-3-sun.jian.kdev@gmail.com>
 
-Hi Jason,
+On Tue, Jul 14, 2026 at 02:38:46AM -0700, Sun Jian wrote:
+> Add verifier coverage for constant negative offsets on PTR_TO_TP_BUFFER
+> and PTR_TO_BUF pointers. Both programs adjust the buffer pointer by -8
+> and access it at offset zero, so the negative effective start must be
+> rejected at load time.
+> 
+> Switch the raw tracepoint writable attach checks from nbd_send_request
+> to bpf_testmod_test_writable_bare_tp, avoiding a dependency on the NBD
+> tracepoint. Keep the existing past-end case and add a case with a
+> negative var_off compensated by a positive instruction offset. The
+> effective start remains non-negative, so the program loads, but its
+> access end exceeds the writable context size and
+> bpf_raw_tracepoint_open() must return -EINVAL.
+> 
+> Reported-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> Link: https://lore.kernel.org/bpf/alRtilWhKw4zzMkI@u94a
+> Cc: stable@vger.kernel.org # 5.2.0
+...
 
-On 7/14/26 10:03 PM, Jason Gunthorpe wrote:
-> On Tue, Jul 14, 2026 at 09:06:51PM +0800, Zhanpeng Zhang wrote:
->> Add iommu_group_get_by_id() so callers can resolve an IOMMU group from
->> the numeric ID used in /sys/kernel/iommu_groups.
->>
->> An ID lookup must keep the group object alive without also keeping an
->> otherwise empty group active. Embed the devices kobject in struct
->> iommu_group so its address remains valid until the parent group is
->> released, and return a reference on the parent kobject to ID lookup
->> callers. Add iommu_group_put_by_id() to release that reference and
->> iommu_group_is_active() to detect when the devices kobject has become
->> inactive.
->>
->> Serialize lookup against group teardown with iommu_group_kset_mutex and
->> only return groups whose devices kobject still has a live reference.
->> This prevents a concurrent lookup from dereferencing a stale child
->> kobject while allowing external users to discard bindings to empty
->> groups.
->>
->> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
->> ---
->>   drivers/iommu/iommu.c | 107 +++++++++++++++++++++++++++++++++++++-----
->>   include/linux/iommu.h |  17 +++++++
->>   2 files changed, 113 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
->> index e8f13dcebbde..da269d10f6bf 100644
->> --- a/drivers/iommu/iommu.c
->> +++ b/drivers/iommu/iommu.c
->> @@ -40,6 +40,7 @@
->>   #include "iommu-priv.h"
->>
->>   static struct kset *iommu_group_kset;
->> +static DEFINE_MUTEX(iommu_group_kset_mutex);
->>   static DEFINE_IDA(iommu_group_ida);
->
-> I think it would be better to change the ida to an xarray than to use
-> a string search on a kset..
->
-> Jason
+IMO it is slightly better to split this into two. First part would be
+[1] suggested by Eduard, and the second part would be the addition of
+negative offset test.
 
-Agreed. Using an XArray as both the ID allocator and the group lookup
-table avoids the string-based kset lookup and the additional mutex.
+That said, I checked that with v5.2 we do have PTR_TO_TP_BUFFER and
+PTR_TO_BUF support already (latter as PTR_TO_RDONLY_BUF and
+PTR_TO_RDWR_BUF), so there shouldn't be a problem having these tests
+back in stable.
 
-I will refactor it in the next revision.
+Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 
-Thanks,
-Zhanpeng
+1: https://lore.kernel.org/bpf/3430dc0a2a141769a596ab21d7abdd86a0a804db.camel@gmail.com/2-tp-test.diff
