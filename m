@@ -1,212 +1,153 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FC447CC8C
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 12:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC28A438486;
+	Wed, 15 Jul 2026 12:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784119198; cv=none; b=TprVSYiArlT0pt3UO6YaDv5TvSSUvylYw3g+M3M5mtUkvH5WoJPoqVrTq6b0vyjc0VlwjmTdXcGle9o+O6/lMOzJ7Rte5sXwnrR4M7m+N+LOBbh32jeOX8i+SFdUJr9wASWHMUIv6hwyf3x0Wijx7WxSXyG99WJKV5LDvak5uTA=
+	t=1784119311; cv=none; b=gMN8DMvFjfulzbkGK5awRwlT1FOTJZNBXSejD102h5S0blFlnDMIrrAKwOpsnLQbcyaORe/RcRr2dRJyCisAmaRjwKvHBJieye6fzVRg9HAvZvw2rQQS0NRSFFb5NS9/VbGOTNgptuoVpz/EMBH0HCf4M+MXMCLgwSuXJTjf9LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784119198; c=relaxed/simple;
-	bh=23V8P96JjPI3snxBemAlctSXcXR0vTGgsRT6bW5Z7AI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QDjsg3HEWuS5XV4gpceULGd6yUXa4a6A7UqHBIBRigY0mm64ahLX2K4bSqaszVIZjzpeTc85FN0iiMAmvA9XCTl7R25ATr62NTpndsg1fBOBxqEH1dF5Rft93z5U3bvJsVnWfEbHK7YqDySuXs3Vq9MrS9f5fhVKB3o2pWGAACA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SjUpTcY7; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1784119311; c=relaxed/simple;
+	bh=QuEDZJFL+qyNlITZqW/G2y7tQy4cY9BI1R+tuUMYa5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kPMzE8lelqeCDnj7JZXqfnzMq7DpJPSpgf9lurrRU+x4QPhDP5CPWEU06m5Wt0H2/WIIgtmd/5IKER8vx4S9h7uTEYgdvzmnKaInK5OXfyFC2gPhzeHm0wisFAYJHmn9xNqe3D0YLF+gIeUpZFWq40+qqwGJwTLCltGqZUhaN5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eElLlbTE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SjUpTcY7"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493ec555a26so34866065e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 05:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784119195; x=1784723995; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UbwMtvKC1W3XaLMpZ43nboi/b2XlEYyfJjxYGqiGvfo=;
-        b=SjUpTcY7EQPyVkLOvyzXRXi4+b8F8GrWTwFxgqeBOf9P51eg4XG0tu3GIjbwJpRvc5
-         lyezu1+9o/i+gNITbtRvlTX43SyvPpLcvWaNgDn1ktKk30F7cq2v8ZtzFTWEOjng4K4/
-         0i2u/z5KZMcQXHFx2rcHF6MoY9uKZmWlH65cDGgt0vQqhA5FCbG/vY9gGwBFCWuNe5Im
-         WQa+6VNqknRNpKQJdsAC3QUTSCzbO+3VflRvXsk5eREvTiA2CiXvR9JlArTFZqHm6lEq
-         5EVJlWWte2CJWFRAhLMzoa09qq8RywlGBbGGbHfzeV704MsEUaM+zLqrvZV2Xro9k9F2
-         GsKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784119195; x=1784723995;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UbwMtvKC1W3XaLMpZ43nboi/b2XlEYyfJjxYGqiGvfo=;
-        b=WWAYdZBiTeldDz9mddMfJVjadO2SXQCSmwAyDNGRt2j2sUN+GLBxqwxB8nKVHHWumA
-         B50eAZJ92zbWoiGcSxB0gyGO8zaz10UiXkSIDY62z4uPy7GKPKmXtLy33BiC2Xw/1Fkz
-         ZuIj7wxjtjOJ/2T1Uo/57vApjpVxh53vqFCkGCWAEK7/15T1aDo/S8dNpTGJfDbBtXk+
-         fNXsnF6v1z3hTD5Bbap2HTuNkv0x0VHbj+r0EGzYm7HG1UTYfmipe5Uoj5q6IAi6aaoW
-         y4EjOk6Uioh4+ZFj9MrEOKxwp6EZGKGMT+UI3d96InHE7J3JRnb5IAXDKFENY/cl33kS
-         kA0A==
-X-Forwarded-Encrypted: i=1; AHgh+RqcVaOh5+vNBtJW2kFr2oQXEb9FqMkzMzWD+wJT8RpHIE0pv6oqv77zRP7IuhxmFtysOKpmTKIcp7uWDSheTfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk/VDLej+ORYtMpRX/SP3WoM6n5igXm7BaE3i9GN2kPGR4vLF9
-	rMDY6Ekq715oPWlKWEIOTS7Tee1w0uKKWC/hrzp/R6JPkxumXhuxJIjnYXOY6Pcu3Pc=
-X-Gm-Gg: AfdE7cloZv4BNsUNOFVeoDB7BcQB2DbnyTtBXmIzxB6aGvN5K6qr1TZy6QW4V6uFPlU
-	2xvQtTDmI+hPxkURpKQoJ3d1SypuiOzktltfsFP9jbZYjt8dacmeIObES6l+YFqK545HubI4TuT
-	yfZmEz/uJsjgNWMaEQUOc+Ckulcm7WQspu9SkHnacN7e5BvIJANgHIX9r98XcIhIWmO3b5kIYIF
-	lqRNfd64WNMDAzRa194hHTZiThu1tDWxswtVOJj+hZfboeyPFMdMIvPnunLLb028RIm25P3s7KS
-	hehoHEhsqT7J7EfPmVFMom15P0SM2VSRPLZROFW0Z+tqZhNFuq3CuCk0wZ+YmwumdHGiOvZqMRe
-	htDWaLXBEUzOSCRAMI3qNT4pFcq44QbFjIzH3Ob498kCfjppe2BJOhpyOS4zW1ly3ai9oP//R6A
-	un88Axj+pmGCO+cJ1R9opwaw==
-X-Received: by 2002:a05:600c:8117:b0:493:fa7d:56a0 with SMTP id 5b1f17b1804b1-4953c15f693mr31569305e9.13.1784119194604;
-        Wed, 15 Jul 2026 05:39:54 -0700 (PDT)
-Received: from e133063.arm.com ([212.187.182.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c710facsm32360695e9.2.2026.07.15.05.39.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 05:39:54 -0700 (PDT)
-From: James Clark <james.clark@linaro.org>
-Date: Wed, 15 Jul 2026 13:39:21 +0100
-Subject: [PATCH v3 5/5] tools/build: selftests: Remove some duplicate
- toolchain definitions
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eElLlbTE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0010E1F000E9;
+	Wed, 15 Jul 2026 12:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784119310;
+	bh=LFYijXd/eRRjsT6uSgIi2DnkFRuxM3htkW3xD91av44=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=eElLlbTEYVW/Jv0j5NkpBDZmaXElwE/+fDmcnfu1UvCt7uGcMFYiLv1KaEZA3HCXk
+	 4/R42D0LV7X6nQ8UJ+lhfxI3Mt8el0GSnM3W4P7jD11TilEUq9ug7431XSZPN+fzKN
+	 eXn1hBbLgcDg4YgdjjjBS7zMgJEtBvqu5fhWNjMEP+F82umJBb+ZEs3x2ZSiECEO49
+	 hZQsDTx85qRVroPgev2eTkvGta2k9aySNX5ysXR+OIpRpCqSoDdceLtpthwpSXOKTW
+	 U4BIJCdmMz6pLo4FeuFM4ZgqIBSRbkxbKrmjOtcPaCIdT1KHnVXu7CyH8SUIEYB9OX
+	 467FF/XXPbOLQ==
+Message-ID: <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+Date: Wed, 15 Jul 2026 14:41:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-james-perf-llvm-version-v3-5-8854bfe5af7e@linaro.org>
-References: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
-In-Reply-To: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] mm/hmm: Clarify notifier retry state and scope HMM
+ timeouts
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>, airlied@gmail.com,
+ akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org, corbet@lwn.net,
+ dakr@kernel.org, jgg@ziepe.ca, kees@kernel.org, leon@kernel.org,
+ liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org, lyude@redhat.com,
+ maarten.lankhorst@linux.intel.com, mamin506@gmail.com, mhocko@suse.com,
+ mripard@kernel.org, nouveau@lists.freedesktop.org, ogabbay@kernel.org,
+ oleg@redhat.com, rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+ skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+ vbabka@kernel.org
+Cc: dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Try to remove some, but not all duplicate toolchain definitions. In
-these instances, their makefiles already include
-tools/scripts/Makefile.include which defines these in a consistent way.
+On 7/15/26 00:21, Stanislav Kinsburskii wrote:
+> This small fixup series applies on top of:
+> 
+>   [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for userfaultfd-backed mappings
+> 
+> The first patch updates the HMM documentation example to make the
+> mmu_interval_read_retry() state explicit: callers should use the notifier and
+> notifier_seq stored in the same hmm_range that was passed to
+> hmm_range_fault_unlocked_timeout().
+> 
+> The remaining patches adjust nouveau, amdxdna, and drm_gpusvm users so the
+> timeout passed to hmm_range_fault_unlocked_timeout() is treated as a relative
+> HMM retry budget. These callers no longer keep an absolute deadline around
+> their outer driver retry loops or pass a computed remaining time into HMM.
+> 
+> This keeps the timeout scoped to HMM's internal mmu-notifier retry handling. If
+> HMM succeeds and the driver later observes an invalidation through
+> mmu_interval_read_retry(), the driver retries the operation with a fresh HMM
+> retry budget.
+> 
+> Changes in v2:
+>   - Kept the nouveau outer absolute timeout around the
+>     mmu_interval_read_retry() loop. hmm_range_fault_unlocked_timeout() only
+>     bounds HMM’s internal retries, while nouveau faults are handled from a GPU
+>     fault worker, so userspace fatal signals cannot break an endless stream of
+>     invalidations there.
+>   - Updated nouveau to use time_after_eq() before calling HMM, so the remaining
+>     timeout passed to hmm_range_fault_unlocked_timeout() is always positive and
+>     never 0, which would mean retry indefinitely.
+>   - Updated the nouveau fixup commit message to explain the worker-thread
+>     timeout issue and the time_after_eq() boundary behavior.
+>   - Fixed the amdxdna fixup commit message. It now describes
+>     aie2_populate_range() correctly instead of carrying stale nouveau prose,
+>     and notes that command submission still keeps its broader timeout while HMM
+>     gets a fresh relative retry budget.
+> 
+> 
+> ---
+> 
+> Stanislav Kinsburskii (4):
+>       fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
+>       fixup! drm/nouveau: use hmm_range_fault_unlocked_timeout() for SVM faults
+>       fixup! accel/amdxdna: use hmm_range_fault_unlocked_timeout() for range population
+>       fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout() for range faults
 
-STRIP is the only one that was set with an '=', but I don't think it
-was significant so that difference can be dropped.
-
-Signed-off-by: James Clark <james.clark@linaro.org>
----
- tools/bpf/resolve_btfids/Makefile    | 3 ---
- tools/lib/api/Makefile               | 4 ----
- tools/lib/subcmd/Makefile            | 4 ----
- tools/lib/symbol/Makefile            | 4 ----
- tools/perf/Makefile.perf             | 6 ------
- tools/testing/selftests/bpf/Makefile | 1 -
- 6 files changed, 22 deletions(-)
-
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 7672208f65e4bc245c03603634d3aa0093a91096..6fdb6302e0a28e9166175822f42cfbb4f4eb24e5 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -20,9 +20,6 @@ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)
- 		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
- 
- RM      ?= rm
--HOSTCC  ?= gcc
--HOSTLD  ?= ld
--HOSTAR  ?= ar
- HOSTPKG_CONFIG ?= pkg-config
- CROSS_COMPILE =
- 
-diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
-index 8665c799e0fa7155016e8bc6968ebe76a90e1d13..a228fdb5adba8d7f8282688964a9751a06cb0c79 100644
---- a/tools/lib/api/Makefile
-+++ b/tools/lib/api/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--AR ?= $(CROSS_COMPILE)ar
--LD ?= $(CROSS_COMPILE)ld
--
- MAKEFLAGS += --no-print-directory
- 
- INSTALL = install
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index 8703ab487b68c89406fed575217b57f58e71fb01..9f1ddcf0504d993249991e0af4589db1072465d1 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--LD ?= $(CROSS_COMPILE)ld
--AR ?= $(CROSS_COMPILE)ar
--
- RM = rm -f
- 
- MAKEFLAGS += --no-print-directory
-diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
-index 426b845edfaccf56f7c246c281a549c18d0f3919..d692abe8add6e243d7b024fe556cc0983eb4b443 100644
---- a/tools/lib/symbol/Makefile
-+++ b/tools/lib/symbol/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--AR ?= $(CROSS_COMPILE)ar
--LD ?= $(CROSS_COMPILE)ld
--
- MAKEFLAGS += --no-print-directory
- 
- INSTALL = install
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 4d0d7ae02e06b117487a17691c4e62a138428ac5..ca67d4b6fc38367c63123332360ccf27102fc086 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -174,11 +174,6 @@ endef
- 
- LD += $(EXTRA_LDFLAGS)
- 
--HOSTCC  ?= gcc
--HOSTLD  ?= ld
--HOSTAR  ?= ar
--CLANG   ?= clang
--
- # Some distros provide the command $(CROSS_COMPILE)pkg-config for
- # searching packges installed with Multiarch. Use it for cross
- # compilation if it is existed.
-@@ -213,7 +208,6 @@ FIND    = find
- INSTALL = install
- FLEX    ?= flex
- BISON   ?= bison
--STRIP   = strip
- AWK     = awk
- 
- # include Makefile.config by default and rule out
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index d829979861eeabd33272a0d6eca82e7066eabfd7..49477b03a4607c0c44cf94412d5f75af75c3a766 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -3,7 +3,6 @@ include ../../../build/Build.include
- include ../../../scripts/Makefile.arch
- include ../../../scripts/Makefile.include
- 
--CXX ?= $(CROSS_COMPILE)g++
- OBJCOPY ?= $(CROSS_COMPILE)objcopy
- 
- CURDIR := $(abspath .)
+Why a fixup series instead of properly resending the full thing?
 
 -- 
-2.34.1
+Cheers,
 
+David
