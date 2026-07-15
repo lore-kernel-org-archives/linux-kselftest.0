@@ -1,89 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14E330AAA9;
-	Wed, 15 Jul 2026 08:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36403DBD4E
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 08:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784104840; cv=none; b=F395zsBGHSYnNfNGD2hUpSg6YEuJeJ1wd/KbIwbjnjy0Vq1W2ZaZDq02HzjcCQ9Ozl5lEn5YFamzfEVeBy2r/o9q6mzMuTUN+VMxeR3kGa/bwts4H83Bhuutx0FWm2ZnNgw+ZyXi+cPa2ZbmUFwGc8OPfYRyPagMSzKefLh0R2s=
+	t=1784105684; cv=none; b=lU2GntjK8OErED0Gfu6hSdOu2bAtIt6PJmUs8nHoihlA23jhlx08CJfS0yzlL/oBjY2Z7HwoKo0Obo7su79V+lZtyF/v0nsdHimqjpWtgllUbdpylBwQSH3UVF+S8vMv/SqxK5bc5uAan0Iqe0kf3jrBRYXjFItCAjGl9U4S+CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784104840; c=relaxed/simple;
-	bh=XZ+UP6SL1gjTGREjGTlBL+zx0cwpy4UD3RrZUMJYC4U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HAdInKOIBBZReHBMTwjkYiAdgwppI/CmC4xwjOf8RD93KKAPuoTeGMKBiM/JKBPDqzJlVFIe3IyTP6cCscsemdj9a6SAoqcLQqn9RjxJvuPp/OBKwzFeSyB55l+RkDzTnnwPWP4ZvDInKZj/3SZDfXyAJoHYludjGEUprM6xu5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQ3MIUm3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784105684; c=relaxed/simple;
+	bh=hEYRQSd8L24KsvxuNroVxdJqty75+npmHbQjtSRCciI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sTfVDCjc+iW01yLMKNJihGcvcw0nQPXoTppNpF+SFgIdBShTo4uNk/nRu/AicBnLSyUdNnDKeiFAyY3OBIEuI2tXFpWnaYrEfCuFTKhnqWPuKq1hF91ynadLJOUtjlWoKcxAa28icJ1EW2YbXKWk1ym0RxtON4hkKj2tPj+oSn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SgGL/LHN; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQ3MIUm3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86EAD1F000E9;
-	Wed, 15 Jul 2026 08:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784104838;
-	bh=zAjrGa64tqK/7nRkcEaSFxMhCRl3hQjTgA9NIHb98NE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=VQ3MIUm3hlselemW6SnktNAF6vZ4Za3/HscrWSRlRra1m+kUetXOhxxeu/cX8smhp
-	 ApQe4Dj3lMTtSziawoOgL8c5dFJ8zNaEh/WkJC6TLMMjPRMZuJcxKgtaaVLsXU1i54
-	 kJkmykmHz40LB0mgIEZ4NWkB23pwK6dm8MRx+Eel/B3XynyPDpOjzOtFhw3dznhT2L
-	 fPsaqkCAdkSx+maf5PcbAM1zzQLKZSZ/wD2wsvzI6tCej4xMKz98GYleWeI1H1PLb/
-	 CZE8gmkvDn1X92jt2xJEjJbIP8P2F9rDhhyYNrNLbm+Uqyn3W1nivD/XPU9NLlZRtu
-	 Djy0QMIdKfOLQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AC03938C6F;
-	Wed, 15 Jul 2026 08:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SgGL/LHN"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84a4d8fd6ecso1822966b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 01:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784105681; x=1784710481; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=hEYRQSd8L24KsvxuNroVxdJqty75+npmHbQjtSRCciI=;
+        b=SgGL/LHNYYqQEwqHHCqXbG/Cy4yxAKMTttPUbQ0IV8DJh/nIP5R1mezWVWAqDgX4pT
+         0nWx5vquDD0SMfn42uwkx6a3uxgjDgykmX0F6apPO0eovwnuvHWGtEYhYLyH3Jte+Eqx
+         2lb6ZFVPlzxU8ofmk4pshBM4gh+U8c0o51qnxtVH8Q5uAFpALSvgUC10LPDHumTuMNr5
+         B+YmftYimRJnEcXL5GlcGckbRNXXbMxcMK8Koe5ZsaeeWD3By2jueb05whJlPMaJd968
+         Hh9yitOS7JfsVZIFKbaKCs/V0qg33x1r8GslfTAuW3LUVOjJMW+Pec6Jj6FKxmHckKH5
+         ILqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784105681; x=1784710481;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hEYRQSd8L24KsvxuNroVxdJqty75+npmHbQjtSRCciI=;
+        b=T/SwcOUPJsvamwISmOW73tLla8HeLkUtKcnJi3wnrs7axTqYAxVq2FPJ+s+ThvxQUm
+         BuxBSDyMOWRms/JY1ZPXdfsGoWY20YT+DIuZJ0RDrffu5x8VbR4kFeVgdz/yGcxR4RZF
+         BAU20jePVy6+k4eq7mncwsWDgU37rLypLs0+VTEUhYfZTEsXWmrmNqRhYAyZ7mjeafix
+         uLQxM/EN8c85Gq4YofOmdiuwQcgHK6MhZBBVcm+f/vMs3xF2gSAZq45EZE8RmHxr4hp8
+         riNVDf8wkCDX9URenXQiXZYcHR3XPscVwGQfWM4uVe5wdIbM5pRMJ0V4eEBIR31BOA6A
+         YO8w==
+X-Forwarded-Encrypted: i=1; AHgh+RrwNx1bz/lAY4xipEEFGJkkeqN0o0mbkoXmuLE8H/dAgniFSydMFchwSRHkoDfB9VvgQX25a5/yHbcvqG6UHfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx42JEaPte63bUGg/N9Ox/Bb7XxTakJ5y88vQA24A8tPmxYr9vx
+	XorTRgidTpEEU7aP3OBJbjX1prC3ZXIb3nm3uSNU795bPYreWzfuPiF0
+X-Gm-Gg: AfdE7cmMoIIYYkXPwQPwuO5yg9ZTndiB/8ecOIuwcaQiuZ4zIT+4bQqxd3ApcK+CZSk
+	GepeN25KVfiWctVaiqDOsRK3ZOvxxtf3qYbgkiQHrLmTWq44GGhHx9xDE+qF5B9JcJD/JnRW7di
+	DPyU6vH8b4W5n0O99sH+r3S4ALGU/qfXVE+OHECKWxWHXaj66gsixqQbF6vtc3HzIX5fmFS4aAU
+	+Vkoza8+JcRRb3QGnD0WBQOjcpeBOEuJ3c7YARcXx0Z2eEY4HIHGMF50Lz2+u38w/mrpo1frlpS
+	z1Y/zOuE0jOe2imt7FLZ36+GIOGg4fBxJbzr7XgdGyjOVZLtEwMSio8Z/Dl07+/5VYTv3RP9bxG
+	I/2ESB10QiSbGQv9xNurWIOdrHBy4myYqnZg+eGwRan/R1yt/8A9PkLT/8n/puP5aAP+6n/1dmM
+	kNFmW1lJf9QRDLrOUamaj0znTuPtKXFkDab15IRI3y
+X-Received: by 2002:a05:6a00:368d:b0:848:56ff:6ced with SMTP id d2e1a72fcca58-84a6723d613mr1883067b3a.8.1784105680638;
+        Wed, 15 Jul 2026 01:54:40 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f6bebcesm2787462b3a.32.2026.07.15.01.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 01:54:40 -0700 (PDT)
+Message-ID: <488c235db713648bb2f5c90e4389c96a97ebcdde.camel@gmail.com>
+Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer
+ offsets
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sun jian <sun.jian.kdev@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko	 <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, John
+ Fastabend	 <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan
+ <shuah@kernel.org>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, Matt Mullins <mmullins@mmlx.us>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org
+Date: Wed, 15 Jul 2026 01:54:37 -0700
+In-Reply-To: <CABFUUZFsJsF-C5Z2gb3FkZ7WD=vBavnGdZ7veScP_+dwZLsaMg@mail.gmail.com>
+References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
+	 <20260714093846.18159-3-sun.jian.kdev@gmail.com> <alcGgfNM94zgydlK@u94a>
+	 <alcKV2MXI_5dsaez@u94a>
+	 <CABFUUZFsJsF-C5Z2gb3FkZ7WD=vBavnGdZ7veScP_+dwZLsaMg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/4] bpf, sockmap: Fix sockmap leaking UDP socks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178410481264.3960544.5024095828575176304.git-patchwork-notify@kernel.org>
-Date: Wed, 15 Jul 2026 08:40:12 +0000
-References: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
-In-Reply-To: <20260707-sockmap-lookup-udp-leak-v4-0-f878346f27ab@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, john.fastabend@gmail.com, jakub@cloudflare.com,
- jiayuan.chen@linux.dev, edumazet@google.com, kuniyu@google.com,
- pabeni@redhat.com, willemb@google.com, davem@davemloft.net, kuba@kernel.org,
- horms@kernel.org, cong.wang@bytedance.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
 
-Hello:
+On Wed, 2026-07-15 at 13:26 +0800, sun jian wrote:
 
-This series was applied to bpf/bpf.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+[...]
 
-On Tue, 07 Jul 2026 06:23:55 +0200 you wrote:
-> Fix for UDP sockets getting leaked during sockmap lookup/release.
-> Accompanied by selftests updates.
-> 
-> Two Sashiko's concerns to be addressed separately:
-> https://lore.kernel.org/bpf/20260626205814.BAC3C1F000E9@smtp.kernel.org/
-> 
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> 
-> [...]
+> > Anyway, still recommend adding a regression test that test access to on=
+e
+> > byte before the start of writable context.
+> >=20
+>=20
+> The new tracepoint_writable_reject_negative_const_offset verifier case
+> already covers an access before the start of the writable context:
+>=20
+> =C2=A0=C2=A0=C2=A0 r6 =3D *(u64 *)(r1 + 0);
+> =C2=A0=C2=A0=C2=A0 r6 +=3D -8;
+> =C2=A0=C2=A0=C2=A0 r0 =3D *(u64 *)(r6 + 0);
+>=20
+> Its effective access range is [-8, 0), so it is rejected at load time.
+> This is the direct regression test for the negative-start case.
 
-Here is the summary with links:
-  - [bpf,v4,1/4] selftests/bpf: Ensure UDP sockets are bound
-    https://git.kernel.org/bpf/bpf/c/fe3ff273767e
-  - [bpf,v4,2/4] bpf, sockmap: Reject unhashed UDP sockets on sockmap update
-    https://git.kernel.org/bpf/bpf/c/66efd3368ae1
-  - [bpf,v4,3/4] selftests/bpf: Adapt sockmap update error handling
-    https://git.kernel.org/bpf/bpf/c/30581eda4a07
-  - [bpf,v4,4/4] selftests/bpf: Fail unbound UDP on sockmap update
-    https://git.kernel.org/bpf/bpf/c/203b06932777
+The existing test seem to be sufficient, why would it matter is at
+offset -8 or -1 given that the read is appropriately sized?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+The added test in tools/testing/selftests/bpf/progs/verifier_raw_tp_writabl=
+e.c
+is redundant given the changes in raw_tp_writable_reject_bad_access.c
+but I was going to apply anyway.
