@@ -1,170 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8D43B27E8
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 03:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C668355803
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 04:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784087705; cv=none; b=tXwuvsPIQ8MD9BFqm3jW2TCrVU1TnqNKGN59EBPsmSMVLFKAFJOel+bQRvkSntkktuK/RLvJ1ZB0SA66C0NPTRh0kKJHCSt9IgOX2py5TjPJhVLX6Mjc5G02C5Gui53wQmv7oJ15YwJog1eYNhX3NZb2GvZql5XSzen0hASPaIA=
+	t=1784088920; cv=none; b=UR1UE5HSiWqkESD839aSobwX7bYazXlKqHSEbSE6c5pSzOip+j6AEYdmPNADZSsk09BuA+YrPAKa/L1qnWX9y1eHuxOsLJp5GtshUC006VFITFBJxXqpCJES42Uvgsgl/Xxbk/eQRAr7rL/OizWaRu1Ggso6u5q7Sq4Ma31DSvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784087705; c=relaxed/simple;
-	bh=ewdPb56xBjFmrnI7fXaoa7wPaFo1hdQQpES79KxD2+g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZjULLSnBzTTWNhKWvGob57mFFseZPKeCCmOq/eDoh56ZdclRLBPCwQ2CVnXrE/joqQYoKZFuP8UkeRtUHwCOwB/98wXu+kO4oEp3Y7WTVveldOt0ZI1XLdDe8+vVN0Lpla+HP/dY2OR2ke555rNglQrnvJ1Uuz5CdCh7RHYDY7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AxzwDXYW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784088920; c=relaxed/simple;
+	bh=16DHuToYWDY48zhMFmSTuIb8xl3je5jZqI8M9KYbD6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QRtFAMD+d2gvOCiTt9j1DD4lPfAbo6Et4hcEfupDaiSLKqUahv5CN82YfYYXE3x3l7sm6gM7cngWkzHRfOA5f+OYcuadEVUL6tZ/KjJ+TV48Juw/02VDTJpBE7w9G1eIatC0LXJXfu4VmV7tnsOO6CBS1n/uJ45boxmlZmiV+yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WZkTsYJQ; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AxzwDXYW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784087702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GmK/PKs9sAs6/cDg4W7d1yX1cAFZHAmC6KiaUiX97ac=;
-	b=AxzwDXYWHVlyHi/TwRgCDPtsHMz6RoWWc/Vdxenl9FnCh+f1VDRpqsxfBS4hUb6eC43+7h
-	Os6yWbShCUK6Q6oAe9GVlPqdzqYozC9sKeNWsObJrwupeSBVmw/UJng9uzRV+WUS3uWmUo
-	TSJQWSOpOe7Jdg4ZYUEG4h0YiCdbn8c=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-Nqb5ZOT6P26dU6isF68nVQ-1; Tue,
- 14 Jul 2026 23:54:59 -0400
-X-MC-Unique: Nqb5ZOT6P26dU6isF68nVQ-1
-X-Mimecast-MFC-AGG-ID: Nqb5ZOT6P26dU6isF68nVQ_1784087697
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 892741956089;
-	Wed, 15 Jul 2026 03:54:57 +0000 (UTC)
-Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.89.63])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A402A30001A2;
-	Wed, 15 Jul 2026 03:54:55 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] selftests/cgroup: Fix intermittent test_cgfreezer_ptrace test failures
-Date: Tue, 14 Jul 2026 23:54:46 -0400
-Message-ID: <20260715035446.565625-1-longman@redhat.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WZkTsYJQ"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-69e08ad526cso969660a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 21:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784088917; x=1784693717; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=f5HqzaGK1TaHR8NVrhGDd/lA3x1fxnTO8aG7VNVpk8s=;
+        b=WZkTsYJQvvAdyF7lRNbHfK2PJ8PUqYJBllwwU9sVToozvYWYR10L8UH4S7Jt5Ea9fc
+         AVeGNGMLMwvDYP38QNvzH3aDwCaoAiYv7cyb+7lbdbQ1RGaRvE6zje7ce1xe+/9oYoa8
+         COy4shESM3SbP9ybL2fhuTVAKRbEMVP0CELZ6HOzXiTOkNUo2tgSaiZiPCyLQF8eEAox
+         9m4DrLSQ/u5EDLoieBLYheX+YlUFgoM2Wtfxyz6WCLpIG88AL4K7EOBjN1kS1UkYNV19
+         lztQKadKV72YWVnL0KoO5VNy/YygwQN9hhZTi5Af+mhcsa5PIbrZxCcBvqKwFIEwEfbb
+         ok1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784088917; x=1784693717;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=f5HqzaGK1TaHR8NVrhGDd/lA3x1fxnTO8aG7VNVpk8s=;
+        b=qFmxP/id5sESOasu1HZZ1iwu6d/LH4gh8XY5Q3Pw0kRNP/EdjIjcMZf8673GRsthaV
+         Ga3Q7jvNQohV+HYHCGblslacUuMMojlDDdEXAW35HrGqzVWjQezirAY5Nhmql/xOyg9Q
+         ChM9X/LPxYVDmZPjUDPXIJGIbqMZzUd1MnAZvMmMWY82tZwroqDir6TtESbSLfGQqYy5
+         rdlLVnkRAXcY+C7rXbDZswwlyjyc5sW+GwGY0Bkp/+3lZihPnTATba4TxEQ9lH9xUrqp
+         nC0l/ia50iBhmpviLcf2qfSkKo2WjMgQbcJqW7tdo1YpvxpeHeXe4AQ37HqpvPSsMuav
+         YnJA==
+X-Forwarded-Encrypted: i=1; AHgh+RrI47fBykED63h5u9oA09doSRW6Ygu6JDM1gnWjnqjMW+DheHtHQzqRypyC4z1SQkCI306xW3tjOulvUjuLA+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcQKfnDV66n+RHGJzYfJt9MnOGJFATG9I5J/VQG+IA4TyGUOSI
+	0vBoET7ZfThBnO0LUBuH7i2UXax4Ni8mxeuHJwFAC6AqP9wr1i2YX/jzO4rUO4dagD4=
+X-Gm-Gg: AfdE7claTaixmHQF9KhHg72ufloonI7LOTFNU7HhJrSUSpxEBG/108FUBvh0iWpCXws
+	fCSRl/hRrF2fuzHRXRsv1PtSNrwiOjgTnNVvC1Rcog3qcMpWk1iU14aUHDYHM0OyuhBBAv5HrR0
+	+pFc3GPPiZU535W2DqKPQksxEJ7Neo9Warp3IuMKuTYBMwA0ah18hwsYf6O/5CFGOjlZdKrsOTe
+	GZFPQW+08hmModM+8Mmv1d5RgCpWcED9LOt/4w48pM0qijLouCTT7rTKcWKi/RjJGwsisvm5yyR
+	A9lcMi/cPWU1BJjl0FzWZ/X25LEWNMsOKK2nbCrrl2C17fJN6/GpDUwjWV0fMEBRwnTVU+wK8IS
+	aFzbrxSgbeKS4jcO6yeLwLI+36XzHvq/uja86JckO/TpvRQuXsroaTuh5wd/W+AVzIXi7jW+k4b
+	03sNjo9UqrmaiAxh4WPVWGrano7+620JPe
+X-Received: by 2002:a17:907:3f91:b0:c16:67d8:7a0f with SMTP id a640c23a62f3a-c1667d87c1cmr391012266b.28.1784088916647;
+        Tue, 14 Jul 2026 21:15:16 -0700 (PDT)
+Received: from u94a (27-51-89-168.adsl.fetnet.net. [27.51.89.168])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f238f75sm2427757b3a.9.2026.07.14.21.15.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 21:15:15 -0700 (PDT)
+Date: Wed, 15 Jul 2026 12:15:07 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Matt Mullins <mmullins@mmlx.us>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer
+ offsets
+Message-ID: <alcGgfNM94zgydlK@u94a>
+References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
+ <20260714093846.18159-3-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714093846.18159-3-sun.jian.kdev@gmail.com>
 
-It is found that the test_cgfreezer_ptrace test of test_freezer can
-intermittently fail on some architectures like arm64 and ppc64.
+On Tue, Jul 14, 2026 at 02:38:46AM -0700, Sun Jian wrote:
+> Add verifier coverage for constant negative offsets on PTR_TO_TP_BUFFER
+> and PTR_TO_BUF pointers. Both programs adjust the buffer pointer by -8
+> and access it at offset zero, so the negative effective start must be
+> rejected at load time.
+[...]
+> +	const struct bpf_insn negative_var_off_program[] = {
+> +		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
+> +		/* make var_off negative, but keep the effective access offset non-negative */
+> +		BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -8),
+> +		/* one byte beyond the end of the writable context */
+> +		BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_6,
+> +			    sizeof(struct bpf_testmod_test_writable_ctx) + 8),
+> +		BPF_EXIT_INSN(),
+> +	};
 
-After further tracing of the mechanics of the test_cgfreezer_ptrace test,
-it is found that the ptrace(PTRACE_DETACH) call will spawn another process
-to perform the detach by temporarily unfreezes the cgroup and then freezes
-it again afterward during the detaching process. The reading of the
-frozen flag from cgroup.events is done by the main test_freezer process
-running probably on a different CPU. As a result, racing is possible and
-the intermediate unfrozen state can be read leading to occasional test
-failures especially on architectures with a weak memory model like arm64.
+Come to think of it, perhaps we can add another one that test one byte
+*before* the start of the writable context?
 
-Fix that by using the cg_prepare_for_wait() and cg_wait_for() helpers to
-wait until frozen state is set or it times out. A suppress_debug_msg flag
-is added to suppress the printing of debug message when cg_check_frozen()
-is used during this waiting process.
+I understand that it won't even reach the attachment phase because after
+your 1st patch is applied, access to effective negative offset of will
+be rejected at load time, but the one that tried to access one byte
+before the start of writable context was what that triggered KASAN, and
+would be useful to have it as a regression test.
 
-By running test_freezer 100 times in a loop, there were 28
-test_cgfreezer_ptrace failures out of 100 on an arm64 test system before
-the patch. After applying the patch, there was no test failure at all
-in 100 runs of test_freezer.
+Or alternatively simply change negative_var_off_program[] to be the one
+that test access *before* the start of context. I am not even sure if
+the compiler generate such pattern; if it doesn't, then this test would
+make future refactoring harder without much benefit.
 
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- tools/testing/selftests/cgroup/test_freezer.c | 41 +++++++++++++++++--
- 1 file changed, 38 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
-index 0569e93fa6b0..9edb2d34658c 100644
---- a/tools/testing/selftests/cgroup/test_freezer.c
-+++ b/tools/testing/selftests/cgroup/test_freezer.c
-@@ -14,9 +14,11 @@
- #include "kselftest.h"
- #include "cgroup_util.h"
- 
-+static bool suppress_debug_msg;
-+
- #define DEBUG
- #ifdef DEBUG
--#define debug(args...) fprintf(stderr, args)
-+#define debug(args...) do { if (!suppress_debug_msg) fprintf(stderr, args); } while (0)
- #else
- #define debug(args...)
- #endif
-@@ -585,7 +587,8 @@ static int test_cgfreezer_ptrace(const char *root)
- 	int ret = KSFT_FAIL;
- 	char *cgroup = NULL;
- 	siginfo_t siginfo;
--	int pid;
-+	int fd = -1, pid, retries;
-+	bool frozen;
- 
- 	cgroup = cg_name(root, "cg_test_ptrace");
- 	if (!cgroup)
-@@ -622,15 +625,47 @@ static int test_cgfreezer_ptrace(const char *root)
- 	if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &siginfo))
- 		goto cleanup;
- 
-+	/*
-+	 * The ptrace(PTRACE_DETACH) call spawns a different a process to
-+	 * temporarily unfreeze the cgroup and then freeze it again in the
-+	 * detaching process. The reading of the frozen flag from cgroup.events
-+	 * is done by the main test process running probably on a different CPU.
-+	 * As a result, racing is possible and the intermediate unfrozen state
-+	 * can be read leading to occasional test failure especially on
-+	 * architectures with a weak memory model like arm64.
-+	 *
-+	 * This intermittent test failure can be avoided by using the
-+	 * cg_prepare_for_wait() and cg_wait_for() helpers to wait for change
-+	 * in the frozen state if necessary.
-+	 */
-+	fd = cg_prepare_for_wait(cgroup);
-+	if (fd < 0)
-+		goto cleanup;
-+
- 	if (ptrace(PTRACE_DETACH, pid, NULL, NULL))
- 		goto cleanup;
- 
--	if (cg_check_frozen(cgroup, true))
-+	suppress_debug_msg = true;
-+	frozen = !cg_check_frozen(cgroup, true);
-+	if (!frozen) {
-+		/* Attempt to wait until frozen */
-+		for (retries = 0; retries < 3; retries++) {
-+			if (cg_wait_for(fd))
-+				break;
-+			frozen = !cg_check_frozen(cgroup, true);
-+			if (frozen)
-+				break;
-+		}
-+	}
-+	suppress_debug_msg = false;
-+	if (!frozen)
- 		goto cleanup;
- 
- 	ret = KSFT_PASS;
- 
- cleanup:
-+	if (fd >= 0)
-+		close(fd);
- 	if (cgroup)
- 		cg_destroy(cgroup);
- 	free(cgroup);
--- 
-2.55.0
-
+[...]
