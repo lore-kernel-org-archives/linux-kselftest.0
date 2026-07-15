@@ -1,87 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059F03B27DE;
-	Wed, 15 Jul 2026 20:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365F826738C;
+	Wed, 15 Jul 2026 21:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784146555; cv=none; b=NmYO6q89TsHio5JiBi4lkqOzuuhiPDWc7HNS2yMetNNYhAR4ZxBwOI4X1zzftc5vjLETYkqELQGNrL22ng0ZCacaIDO24ki084jIh9+65AdBk4cgE5TkQ65GG/52i5xhdqK4CGBUuHANTZ3iFnOX4uCBaJIYw7eWjLHupG0x4dE=
+	t=1784150260; cv=none; b=IGU2jiSxAS2S1SS/9WFcSdE8MdlJAnG8SvU+xoVKKwq6DQPPMRdLm+FWsolAuqAtmsvrOU5iCkd3MWxtUtXDl4ROSyfhEJqZAma8p6K4xFJVwy9z1tc/nsHrFmhrXOLkgyi9I4NNLL0MvxvYZ2xKyBPsfEaLXw7iD2anp4RIvAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784146555; c=relaxed/simple;
-	bh=b/0Zm9VOMfU0kjPubegMIN5PqGzcfldrc4gFyQgXX+E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=acGfobqkQrt7U8Mbfyk9O3wvnioXwjt1RL8zW/OQq44e2y+z7ltRoU5BFoJ5wV/kw8JYshj2jlFuedFfj7kUNGn/+2LUmDjGqs7VtexL4L6HBlm+TAtJlcnXC2GaJtgEUq5vqEi7HbWvh9O/3ekL/GiZmPB+NcudDOVpBr3eh9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LXdrnr02; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784150260; c=relaxed/simple;
+	bh=VVePxeXkdKZk5HClfQ8GUU7FzfH1Oi5VU2e3L2YfQGc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=q81P5YVQQFDOnytSKGUIc6Klgv1sxaOXDjISpQvMhkiw2EG9bhi1SnP4kpObMIp6UR2ixWmCY1Qo8utw9VlIDfgVJNfFfW7RWQKgyhBDmgUCTvsotojJ+1fFM5CLxchjXeqetckn+Q72hMGyB+kGPKI57BonAXXWajY974J3m1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lw1aE0Rl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LXdrnr02"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A2D01F000E9;
-	Wed, 15 Jul 2026 20:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784146553;
-	bh=XX6zVRvN5cr1UgHJZecg0QYoYxQXieg+nMc9goMaqms=;
-	h=From:Date:Subject:To:Cc;
-	b=LXdrnr02yVI/sGAMt6uy2/AL1tRsNQ4qo2xIeVyDcuyhjZMYNFXvet4fHi8kbbzuJ
-	 vluoTaVq7r1iEPGiJ++u8lCaOtBgth/CuYmW3tGyzzQx6tR0/JOBs3I2AfI72SX/IF
-	 ahsx/fkXgdVPAb1X8L03fZAP0nB6490fCXS3u12XeBSHjGzb3rpccY7PPB6Sue+tnL
-	 gQVccfFwJ8p+OItfgAL7gUx9XJ6P+vbxRgtP3GUMp7sePOJRgEmwszN1ttP92RR1vF
-	 a+gdnTjnNl25uaYxuQyo/dt9XrjOZ5zOO13iQum2MDmM+WXptWlwxVXFi4T9KhTtGG
-	 fCIoiWqkN9NNg==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 15 Jul 2026 21:15:46 +0100
-Subject: [PATCH] kunit: configs: Enable gpiolib for all_tests.config
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lw1aE0Rl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56601F000E9;
+	Wed, 15 Jul 2026 21:17:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1784150259;
+	bh=UU+zPW9iRvCJbBM3XKZCH/KKzyu8mkExGEFSmL1gNYg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=lw1aE0RlWxmrVX1SBFRJgy1UyPRTg4K6nP+DEjnY9dlEAsFMk2L2RNTreb0d+vs/k
+	 1gYgzd2yzaN3XobC7uyRdh1AW0rjf0Olb3qRLd+W/Q1HYfJhedn8GiXr9Nt0CNftbb
+	 PL/NA8rFtyplykMr0XbJ7OZgExm1aHBfS+hm1Ecw=
+Date: Wed, 15 Jul 2026 14:17:37 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
+ dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+ haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org, kys@microsoft.com,
+ leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
+ longli@microsoft.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+ mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+ nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+ rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+ skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+ vbabka@kernel.org, wei.liu@kernel.org, dri-devel@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-mm@kvack.org,
+ linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v9 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Message-Id: <20260715141737.4097a5c7d74953ffd8ed66c9@linux-foundation.org>
+In-Reply-To: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
+References: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-kunit-gpiolib-v1-1-d2824313e1db@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAHHqV2oC/yXMTQqAIBBA4avErBNUsL+rRIusyabCQiuC8O5ZL
- b/Fezd4dIQequQGhyd5Wm2ESBPoxtYaZNRHg+Qy47lQbD4s7cxstC6kmealFO2gpCpKiM3mcKD
- r+9XNb3/oCbv9nUAID6lpfWhxAAAA
-X-Change-ID: 20260715-kunit-gpiolib-b0921af52589
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=793; i=broonie@kernel.org;
- h=from:subject:message-id; bh=b/0Zm9VOMfU0kjPubegMIN5PqGzcfldrc4gFyQgXX+E=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqV+p3XhrNJNvX7Hh8r1RQohN64lBAv7durhx9z
- DuvHuXCjLGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCalfqdwAKCRAk1otyXVSH
- 0DNBB/42Q4NZ9YiQbFdfIb3PSTuH+dChHP6cHTYc0bWSobvPa6iOSWJB30wHHt9Ea5qEkpjFcTW
- jqHCWTA7sNeOjvbfQJmgl4LK9+eJIHQnaHN30xr4tvS2WsVOCAsfeyCTQjYcBPkaEqGUe40eC2l
- RZ78Q4m0YM6O32lcIY/MZDpMU3UOKNOkUyyN6G5EanQq27o8J3/x42l6OFG7eSYLNgO0MI6BkbM
- c+KrsUA4RvtB/gtS+1LgAmU5lCOaEMwMZ8PwNdJs1vh22jXM821d980ZsWnXAiV8Q7q33HtGIxQ
- 5fUC8+DR8QFvA62wqPjAsF5bC3+tP/hp+W/r6PafahqQkfgD
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Some of the Cirrus driver tests require gpiolib, enable it in the all
-tests configuration.
+On Wed, 15 Jul 2026 11:15:50 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/kunit/configs/all_tests.config | 2 ++
- 1 file changed, 2 insertions(+)
+> This series extends the HMM framework to support userfaultfd-backed memory
+> by allowing the mmap read lock to be dropped during hmm_range_fault().
 
-diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing/kunit/configs/all_tests.config
-index bccc2c77196d..350171ed655d 100644
---- a/tools/testing/kunit/configs/all_tests.config
-+++ b/tools/testing/kunit/configs/all_tests.config
-@@ -59,3 +59,5 @@ CONFIG_SND=y
- CONFIG_SND_SOC=y
- CONFIG_SND_SOC_TOPOLOGY_BUILD=y
- CONFIG_SND_SOC_CS35L56_I2C=y
-+
-+CONFIG_GPIOLIB=y
+Thanks, updated.
 
----
-base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
-change-id: 20260715-kunit-gpiolib-b0921af52589
+> Changes in v9:
+> 
+>   - Folded the fixups into the full 8-patch series instead of sending a
+>     separate fixup series.
+>   - Clarified that the HMM timeout bounds repeated HMM/mmu-notifier retry
+>     attempts, with the helper refreshing range->notifier_seq internally.
+>   - Kept nouveau’s explicit outer deadline because its retry loop runs in a GPU
+>     fault worker and cannot rely on fatal signals from the faulting process.
+>   - Converted amdxdna, and GPU SVM callers to pass the shole timeout budget to
+>     hmm_range_fault_unlocked_timeout().
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+These are all in your fixups for v8, so the v9 series made no
+alteration to mm.git.
 
