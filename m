@@ -1,182 +1,120 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD7C23EAB2
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 00:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA65436E46F;
+	Wed, 15 Jul 2026 01:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784076839; cv=none; b=HaVy7454jAniEMGMorsZB+vyxUHGSZhK9FxqzXjtfHlKcBi2fYOrK5mYcGLvwfYO3jl40PucmEeggDkdNRTdZdz2cHOjQ8mejxqG/weByMmE3XLChB4xUb2KMtmPuPGowVOdFhoDJ0Tp5l1Fb0QSrFHM7qONd4U1wGa/PL/eOZs=
+	t=1784078708; cv=none; b=cjzzFdqZAtdnN3Ndq5XXxZjvPmA32eWlpoUyvFeuSf84FdRZXiKcvEWOkAgaY4YtzqNoqh6EOkG0YKVQCcs/f7/7v3TMiQXgaBeAiCARMzbeVSOd4VrpvUQf10yxz0EjehpnMQGTpAAq8/qJ7K9Dd8xPcviZkJflKPOvBEjuK84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784076839; c=relaxed/simple;
-	bh=dzR4chfAqelA0jb4wh+0QfOekInSKSeLvL31Fd25vA4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FxtAsrPIT02AAs/KHURvbDkW6yU3tubPDvxUWscu+iGXLOw7m/yJ3Wz+7w33WpJVYL1JxhBBevwzyXEukgfbWa+zTtbBmkVDr7trz2ca6fDJqZJuIRNyG2bqYRK+UnrWWAIZHQPLo+69ekOHQjfRSD5lSInDNzCkhTAQ1bVCfmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EuKIt3bQ; arc=none smtp.client-ip=95.215.58.177
+	s=arc-20240116; t=1784078708; c=relaxed/simple;
+	bh=fQc0UySND5bjKbOv5Ct/62qDQrvwkXh7jC5u/Df6Kcw=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=EGqpj3cVVFibJUBaIH6xhJi7Hd/xjYT/+LSJDf/4pYva+qHPulAQUtmJCUHve5MLTlzBEBxx+v0rbBKCD5hpadbpmpgoAfPi/QOo21TO41GAQlF5peSFWs2Y9aLoLDLdQY8Vdc28+YBLGL7IAo0d6a/7UVw2WgKre9uyy0fl4sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VBwH8qHL; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EuKIt3bQ"
-Message-ID: <5f38c9a5-a8a3-4bed-bb8c-b7260a1c1a11@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VBwH8qHL"
+Message-ID: <2e5102e4-0732-41c2-a5be-bbff2f386e58@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784076830;
+	t=1784078704;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=S8Xr4dGhJZKjGNNQ6pEqCn3LF/D8kyTDL/foZNruU/k=;
-	b=EuKIt3bQcp/69RLnkg8I8UrqG+DVbETJ5/MW5J7hZp0Z04CDFQhz9cvkCTvBpj8lh7YOdf
-	s5aZ40lBh1GDs5aLXsbrX51qOjeHTrlRY2VwDkorbJOrQP93xsZ9gaGI/hPd8JZ3TM4Nqo
-	b8X8LFYIOwe59C/DseApJESGNqckITk=
-Date: Tue, 14 Jul 2026 17:53:28 -0700
+	bh=vMfqtbwByVVJ0J11DXgOpPnnBY2/aNxzKbNLuBb0kU4=;
+	b=VBwH8qHLlu1u6MM+HFVp7tAn8Dai4mT2ZkZYbiiC8oEG1ciTvqeUyA7WBgcMRhfhGz77aD
+	0TXmcctL3Hgv9zrRms6NU2mqvWzeh2VH1kWH2fKfC8cqAhCtCZ5mIwB7Th43712LkUL0uf
+	8zCjM+B/KpYdNpCjotoFE35t46oOkwI=
+Date: Wed, 15 Jul 2026 09:24:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 04/10] bpf, x86: add helper to emit kasan
- checks in x86 JITed programs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+Cc: cui.tao@linux.dev, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
-Content-Language: en-US
+Subject: Re: [PATCH] selftests/cgroup: Fix intermittent test_cgfreezer_ptrace
+ test failures
+To: Tejun Heo <tj@kernel.org>, Waiman Long <longman@redhat.com>
+References: <20260714183125.521650-1-longman@redhat.com>
+ <4ae04b8055b7145e182380a46f92c26e@kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-4-1c64af8e4e1e@bootlin.com>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <4ae04b8055b7145e182380a46f92c26e@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Add the emit_kasan_check() function that emits KASAN shadow memory
-> checks before memory accesses in JIT-compiled BPF programs. The
-> implementation relies on the existing __asan_{load,store}X functions
-> from KASAN subsystem. The helper:
-> - ensures that the kasan instrumention is actually needed: if the
->   instruction being processed accesses the program stack, we skip the
->   instrumentation, as those accesses are already protected with page
->   guards
-> - saves registers. This includes caller-saved registers, but also
->   temporary registers, as those were possibly used by the
->   affected program. Theoretically, r10 and r11 should be saved as well,
->   but the number of called function and their scope being limited, they
->   are skipped for the sake of reducing the overhead
 
-My clanker got very excited about r10 and r11 not being saved, just
-like sashiko. So I looked at this a bit closer. TL;DR it's fine
 
-I built the kernel with gcc 11.5, gcc 15.2 and clang 22 and
-disassembled __asan_{load,store}{1,2,4,8}: none of them touch r10 or
-r11. gcc goes up to r8, clang uses nothing above rdi.
-
-However, kasan_check_range() does use r10/r11.  And looks like we are
-ok only because the fixed-size helpers inline the shadow check and
-never call kasan_check_range().
-
-If any of the fixed-size 1/2/4/8 helpers ever actually call
-kasan_check_range(), r10 may get clobbered.
-
-Maybe we should leave a comment on emit_kasan_check() about this?..
-
-> - computes the accessed address and stores it in %rdi
-> - calls the relevant function, depending on the instruction being a load
->   or a store, and the size of the access.
-> - restores registers
+在 2026/7/15 06:09, Tejun Heo 写道:
+> Hello, Waiman.
 > 
-> The special care needed when inserting this instrumentation comes at the
-> cost of a non negligeable increase in JITed code size. For example, a
-> bare
+>> +	usleep(1000);
+>>  	if (cg_check_frozen(cgroup, true))
+>>  		goto cleanup;
 > 
->   mov 	0x0(%si),rbx # Load in rbx content at address stored in rsi
+> A fixed 1ms sleep only hides the race. On a loaded machine or a slow arch
+> (you mention ppc64) the refreeze can take longer than 1ms, and the test
+> reads the unfrozen state and fails anyway.
 > 
-> becomes
+> The freezer test already has a way to wait for this properly.
+> cg_prepare_for_wait() sets up an inotify watch on cgroup.events and
+> cg_wait_for() blocks until it changes. cg_enter_and_wait_for_frozen() shows
+> the pattern: loop cg_wait_for() then cg_check_frozen(). The cgroup always
+> ends up frozen, so looping until cg_check_frozen() reports frozen is
+> reliable and doesn't depend on timing.
 > 
->   push    %rax
->   push    %rcx
->   push    %rdx
->   push    %rsi
->   push    %rdi
->   push    %r8
->   push    %r9
->   mov     %rsi,%rdi
->   call    0xffffffff81da0a60 <__asan_load8>
->   pop     %r9
->   pop     %r8
->   pop     %rdi
->   pop     %rsi
->   pop     %rdx
->   pop     %rcx
->   pop     %rax
->   mov     0x0(%rsi),rbx
+> Can you respin using that instead of usleep()?
 > 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Changes in v3:
-> - skip kasan instrumentation if there is no verifier env (cBPF)
-> - move helper up in the file
+> Also, temporaily -> temporarily, in both the changelog and the comment.
 > 
-> Changes in v2:
-> - move asan functions declaration directly into jit compiler, and guard
->   them with IS_ENABLED
-> - remove faulty stack alignment, no arg is passed to kasan funcs on the
->   stack anyway
-> - make sure to emit call depth accounting code
-> - do not save unneeded registers
-> - update helper signature to let caller configure some values (eg:
->   is_write)
-> ---
->  arch/x86/net/bpf_jit_comp.c | 95 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index de7515ea1bea..d35f58350d71 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -21,6 +21,17 @@
->  #include <asm/unwind.h>
->  #include <asm/cfi.h>
->  
-> +#if IS_ENABLED(CONFIG_BPF_JIT_KASAN)
-> +void __asan_load1(void *p);
-> +void __asan_store1(void *p);
-> +void __asan_load2(void *p);
-> +void __asan_store2(void *p);
-> +void __asan_load4(void *p);
-> +void __asan_store4(void *p);
-> +void __asan_load8(void *p);
-> +void __asan_store8(void *p);
-> +#endif
-> +
->  static bool all_callee_regs_used[4] = {true, true, true, true};
->  
->  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
-> @@ -1110,6 +1121,90 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, bool is64)
->  	*pprog = prog;
->  }
->  
-> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
-> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
-> +			    bool is_write, bool accesses_stack_only)
 
+Hi Tejun, Waiman,
 
-nit: IMO it's not nice to introduce functions with no caller as a
-separate patch: it triggers -Wunused-function on this commit, which
-may or may not be used in a build. I'd fold this in patch #6 where the
-function is actually called.
+I ran into a similar issue a while back and can add a data point on
+the reproducibility: when running the full cgroup selftest suite, a
+few cases -- test_cgfreezer_ptrace and test_cgfreezer_stopped -- fail
+intermittently (around 40-70% on VMs), yet each failing case passes
+reliably when run on its own. That points at state carried across
+tests rather than a per-test bug, which is also why a fixed sleep/retry
+is fragile.
 
-> [...]
+On the "unfrozen state" above, I traced where CGRP_FROZEN actually gets
+cleared. When the frozen tracee is woken by PTRACE_INTERRUPT,
+JOBCTL_TRAP_STOP takes priority over JOBCTL_TRAP_FREEZE in get_signal(),
+so the task enters ptrace_stop() instead of going back to
+do_freezer_trap(). With debug printk in cgroup_update_frozen_flag() and
+cgroup_leave_frozen(), the cg_test_ptrace trace shows:
+
+  0 -> 1  nr_frozen=1  task_count=1   /* initial freeze            */
+  1 -> 0  nr_frozen=0  task_count=1   /* dec, task still in cgroup */
+  0 -> 1  nr_frozen=0  task_count=0   /* task left cgroup          */
+
+The 1 -> 0 step (nr_frozen 1->0 while task_count is still 1) is
+cgroup_dec_frozen_cnt(), called from cgroup_leave_frozen(true) at the
+end of ptrace_stop() (signal.c:2479) when the tracee is woken by
+PTRACE_DETACH. That clears CGRP_FROZEN until the task loops back into
+do_freezer_trap() and re-enters the frozen state -- the transient
+unfrozen window the test hits.
+
+As a kernel-side attempt I changed cgroup_enter_frozen() so it no longer
+returns early when current->frozen is already true: css_set_lock is
+taken before the check and, if CGRP_FREEZE is still set,
+cgroup_update_frozen() is called to re-verify the cgroup frozen state
+when a frozen task is handed off to ptrace.
+
+Due to other work I've had to pause this investigation for now, so I'm
+sharing the above as a data point rather than a finished fix.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+
