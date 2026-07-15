@@ -1,168 +1,149 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84916424D41
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 12:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4914B4657F3
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 12:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784118547; cv=none; b=ZwuwS7fcaNXcdL2IThBJNPMS5hYZULvOmky5S3sxeXcN+08MjlW6elHkxbNsju9McopuLnLGoAO8iLIbdUhw84Mif7cpEkxwFeGPS48X9kN41LjYNaUZSidHAguMzwf/zeJdJ6b6a2RJSd/MXcj8/iemWXOGX55nw4PIayAR1i0=
+	t=1784119190; cv=none; b=LREUDGtaM/q2z4NCvBfZi2Y/V9XJTDBNogZY/lYUG8mRqFDkWYTHY7ojxH1NeF1Jt4iTnREMe3fI5EA8eRk7MzzMeIbyGoOB1So4BcQBZkVQ7eT4ejgaxqH/DDm6QmPQq7F5xyN12muB+jEs2F6LOrg6cXnmz54G/1C3uKQabr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784118547; c=relaxed/simple;
-	bh=OdruJZBa6oWspM/17dQouf+1Ety7FDflBlOYn7n3WbY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZF1bVJN2hcWgjlzdJKD/VdmHIefOZszd78He7Po/g4R22V8MiOhpD3jDcweJW5rL0QFGq4dJL1TDWmOxcjne2s5E32mm9+Ig2qjtE+6/KfMPqP9QClU2s6ZAC+GM37o50y6lUv7s/oMb3AG+UL/c+epMwNVizIRKvdKE4ucC2Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=S0GFZWFg; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1784119190; c=relaxed/simple;
+	bh=455wlYCUNnMcrIdVi41A5Y7HIm5ipb4kz3mpabm/Y0w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QzxTM9UcDP0UUVj9/epg9rMGkuAzquij/sAHt8iC60nausal4P5tmLJTMzdTpMq1Se1iPM86GT1kt1+kNjxq3vKVw2sGTsr/ve4QfEfibxSy+NhwTngAKk5/jngdser6hnjqVfKQpZajYcYQYg5y23B7ApXjXcrfeK58qqEmhqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Kgncm9lg; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="S0GFZWFg"
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9B0C53F5D9
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 12:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1784118542;
-	bh=Xwm+NMhrBU9VQqJsed9CGdyjA7mRZEQ6yrEUTZU5TnE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=S0GFZWFg+GLqFFN/+a5qTvjv35xqceiFvesf+m5wDQ2Pzi2vYDKONCai7BzYEnZBA
-	 dR/TwWyisBh/w3oKAmjR1jlStj4IfhySqN32hGPutsHNIkzfmIwTSx4ztTv1CrJdde
-	 PubicYGAgZUhvAk1CkQGFmHMQiuKB8NgW4cVCZ+y5asrh/Wx4AqFCnQo+Zi6MPIQlx
-	 jBoZCUK6HUpSK7tCnY0Xh7KwSKCOD+bnNzNZdjG2sWLWhbAhxi+uYRXdf7BAGAVq+d
-	 mSK2MG1DuamjbkJ4A9A/S+1oyrOS9iURtuRYmY73a7lLqIqJWfvWZuQpFXqAszTxnm
-	 FZ6PHGQrPukAFZbFAesA/ARyuFtODFPse5I67/pKsHcLdDoDyBZEcOeDbcTzqx8v57
-	 bBJGg4+EDXhlcsAMDkCAA0P1USfHBbCp4GPzkH+9SMPI0wySSXk2YxEghkTK7j9rKK
-	 l8Xv38S++TCvDXEbweS1ngmgZV+qCOhBiEkFSw8Nh9vZHkdWuIkn461YuR/MFK+21o
-	 +763s6YXPalXemUU0BrfA+LcoFm7m/e4N9O50b5My+oLinzfOMfMooU0hQP7ITfhDb
-	 6wcc89e6O6YYDSLC9KTTeG7FM90ucyEkt0wLElnZFgVYNiiHhpvE4QhGG5ISJfuOpN
-	 J9jqgzmwtMQtZbohj2QuTUcA=
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-49244130073so57423715e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 05:29:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kgncm9lg"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-493c19bad03so48191705e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 05:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1784119186; x=1784723986; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pqmS0wGyyzISZUi2iZDsoqebuB59CdpacRLQw8zIRIw=;
+        b=Kgncm9lgIzJm83nbLcjcEhzgHLFSmNh6ygNjhvozc40NOySKqDv5qn7pAzvri0uATH
+         IbW/OhHugTXmzO7HNKN5clCWay4yXnzcdUYvjna7Q717ytkcZLEtBPX0ZEvum+ta3PpO
+         Fm0uN+JaUr1gNI238ZSeVwmEUAg6e2QWILnnyFzRI+mh8U6OJY/9I8PXJTWtBMQSNE86
+         Yo3x+AOH8bqQxITN+xzks4nO3wjg+c0nBQ8xb4OEbAWAcPXZon8BjF6e9h9ae1HvUNdB
+         Z0/Hj27+ntGUDHg5cUB93Y7/q/1G7X4ar7k4Bay/jG97b9f8p6QsUwuBvUuncIwm1MwQ
+         7F7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784118542; x=1784723342;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Xwm+NMhrBU9VQqJsed9CGdyjA7mRZEQ6yrEUTZU5TnE=;
-        b=nbFKQy9rp0FDG1U6e98J9PtScLBePlPndMd2GH6OhLTnOQTmyVS3qWJ01Ee8tH3S4Z
-         MLaqRqe1c2LJNN4DYswVBlo2dmjb0kZGJCLQyQfI4klZBboJTn+JEhCuZqHqWD4S8bQi
-         e2IGMfuYRJvFY4ryc7HnkpjnRwtt7gOXEFyAvmtMeYu7NZq0DvVzOmau/u4mbMabaEf6
-         x2j4BFBjGVeDKD4ccCgYUORA+2EahzHMv1UjJKYPooN08AUl4q/6AgVH8eRmUtw4YwA4
-         XXva/7V3BTRAfuzAVyzqoOxJAgaQDrJmzXWjIifxCWaw2o8re2dVJ6HXUz0kbXnWa8ye
-         beWA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqb4zjJYNpns2JF95ZR+VBB7Xpbkb3IR17LfAJBYsJVKoD2uTs2hSPVcAoc/0tO/OoGFtznRc/qZFfdUywbtHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO1vfn+m7b20nRxuLKxFTifAUJ0AIu2FhStzRiJTgB5ik62nI8
-	dA7DN7rhCyo1ibsw2SNHoZf3vIk8NxWslydCJSTTpR/vxM8fjMXmshHheqlvSQ3LIOxEsRYgu/t
-	K/H+tJBBuLtlgqPDwLRQElDjJjsIOveeSGAfVLqMUdpphwrZjm37sCt0ZkLgHxQi0LiBpit0uPZ
-	ihQv6ozUIImQ==
-X-Gm-Gg: AfdE7ck8okFF48jjteavjverNWgTYq8brZo4r1gYl4w2VvDZr4yKuak+sZMgEbeXeLA
-	FNTmeDrslktVLFGxjf59AhNWjHGjyY7diFTNz2dWmqUTHA5anLKIMDiDWJ/qpskQ3QqcP8+UotD
-	QsoagZZUr+m+3Q3RoKliOycacuw436V/d15sIGecXdfAOoA2pji/WhJtkoMNZ4v9hYg5b+b+cSM
-	nAiqL0UIQxpYoa7N+L69lttkAMTxS+Q2f4gI/DeUpyHh1C7U02HP9zBUuAyydrNzI8sk3mNy6kx
-	p0jsaq5AMxckdR2ZYZO1g5IuWoqPQ0HU1SoFigq3yppqXC2YDvX1G/EJ2yje74ZATehmmAJEkqx
-	VSyymla/OViSwoU1T7g42V7dyCCzi2pwKFH5zOnlO56/yZyGuTfxfT0lJzrw5/l1WQSYxFOTNn3
-	KAYe48jQ==
-X-Received: by 2002:a05:600c:608d:b0:495:3e0d:ea3b with SMTP id 5b1f17b1804b1-4953e0ded3amr21982905e9.19.1784118542152;
-        Wed, 15 Jul 2026 05:29:02 -0700 (PDT)
-X-Received: by 2002:a05:600c:608d:b0:495:3e0d:ea3b with SMTP id 5b1f17b1804b1-4953e0ded3amr21982645e9.19.1784118541771;
-        Wed, 15 Jul 2026 05:29:01 -0700 (PDT)
-Received: from localhost (93-40-66-109.ip37.fastwebnet.it. [93.40.66.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c599049sm44206255e9.0.2026.07.15.05.29.00
+        d=1e100.net; s=20251104; t=1784119186; x=1784723986;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=pqmS0wGyyzISZUi2iZDsoqebuB59CdpacRLQw8zIRIw=;
+        b=iD5LtQPeCeUL4zTBz8tewcW0T7+OFSVNSQ54Rb4xkY3PmWy2cqNke52X+wPoUJ0E9Q
+         DJNQC0x/4BB0q8idTHaLNiifVCLyKhwPTkEe4sE0v6+xdSFSiRjzAg3xj4T2wIbH1fNe
+         bP1ejF1n7qALTkhIFe3wPqvveJVPqFVt6DF8/GuVp2IVfWxbY8ZHDD+qGQNAKNcKxYWF
+         IoHaJCK8EKRJsNDU/m7CEij1RZnRVlbmZMA8LvG6ol2dEfbpLGFwyZeoOTdfg4V1xfdp
+         xHwrekSyTNk2kHP+//usdifPugss54K1iz1YZcuNB+2FUcba2I+8e7Xlzki0ZXJO3dBs
+         +8kg==
+X-Forwarded-Encrypted: i=1; AHgh+RomkYi+IU4khJ06DRnxp4JgGhrWJoZTcDFLFy+Uh3xWgbkLsadtocrGd7Qns1ihtAmaCqWUvntuoajYq/wnJdo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd4v+BHDKPA+XuAcDXT93cw6HkyzXnLzPfk52duQif3xuffpvi
+	gKeL5dMyxAI2EbYEZOzGKlPV+3JDcTbTaHtBcsQ+qyZHznwHJ5xhazH+EcG1vdgUs0E94uDyB5b
+	t72R4
+X-Gm-Gg: AfdE7ckUyzxN8Fv6r0wiFHixa2UuMAeyLjgUyNDcPkjmg56SL+HVswi7LGpHvWuugo0
+	wHuDJl9dCvkZz+05ascZ4yJGlsgQZL9jxq78tMQkZYskXPz69Ewj4AXkVVVRaaLaKN7xIHkqr3E
+	W0h4dumFW84ElkyO8ypADbftgLuX9kiRLpo8pvk8xb8mtp0h3rJc8zVhMV/aEdQLB/Aij8BzrOL
+	3nnMQrqjdT4M0/diJQ/38HzOmNsS5J0eTyCgCxtc0WfKuBmup96h4tQmlLFi3JEUajlo/qevgt1
+	V3w4DHg1qOY60MOVPTr62S00HCjAgVgls5SY7EbQXa7FUdo08wus3H0JDNHzFbs4b9UV+g0kQKT
+	vhki6yFbdxUFXGZO4gTxAZ+V4eZB7P8KzGoD4gQdzsT6ZkyfS8SHK3B191rK8/PFNCyWvyFePmM
+	SRRKU/wZ6YS0reikix0iW99ptGWM+ta105
+X-Received: by 2002:a05:600c:6a0b:b0:493:d2b1:48c8 with SMTP id 5b1f17b1804b1-4953c28b6e7mr23273595e9.33.1784119186462;
+        Wed, 15 Jul 2026 05:39:46 -0700 (PDT)
+Received: from e133063.arm.com ([212.187.182.162])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c710facsm32360695e9.2.2026.07.15.05.39.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 05:29:01 -0700 (PDT)
-From: Alessio Faina <alessio.faina@canonical.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH net-next v3] selftests/net: Skip srv6_end_dt46_l3vpn_test if iproute2 too old
-Date: Wed, 15 Jul 2026 14:28:59 +0200
-Message-ID: <20260715122859.36177-1-alessio.faina@canonical.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 15 Jul 2026 05:39:46 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH v3 0/5] tools/build: Allow versioning of all LLVM tools
+Date: Wed, 15 Jul 2026 13:39:16 +0100
+Message-Id: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHR/V2oC/3XNQQ6CMBCF4auQrq3plILoynsYF2VaoAYomZpGQ
+ 7i7hcREFyz/Sd43MwuWnA3sks2MbHTB+TFFfsgYdnpsLXcmNZNClqIA4A892MAnSw3v+zjwaGn
+ dcJXrGrAuajwZltYT2ca9Nvl2T9258PT03h5FWK9fU+2aEbjgJWoEfdYKK3Pt3ajJHz21bEWj/
+ IWqfUgmqAGJqBqRg6n+oGVZPneZK28IAQAA
+X-Change-ID: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
+X-Mailer: b4 0.14.2
 
-In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
-the End.DT46 support is not available and the host_vpn_tests test contained
-in the srv6_end_dt46_l3vpn_test.sh file is failing in some kernel backports.
-This is the result of those tests:
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-################################################################################
-TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
-################################################################################
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-    TEST: IPv6 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
+[1]: Documentation/kbuild/llvm.rst
 
-    TEST: IPv4 Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)  [ FAIL ]
-
-    TEST: IPv6 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
-
-    TEST: IPv4 Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)  [ FAIL ]
-
-    TEST: IPv6 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
-
-    TEST: IPv4 Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)  [ FAIL ]
-
-    TEST: IPv6 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
-
-    TEST: IPv4 Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)  [ FAIL ]
-
-To amend this, check the current running iproute2 supports the required
-feature and, if not, just skip the entire test to avoid a failure.
-
-
-Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+Signed-off-by: James Clark <james.clark@linaro.org>
 ---
-v3:
- -  fix indentation in test_iproute2_supp_or_ksft_skip()
- -  fix subject to reflect full test suite skip
- -  https://lore.kernel.org/netdev/20260713095750.2671173-1-alessio.faina@canonical.com/
-v2: 
-	- skip entire test suite if iproute2 is too old
-v1: https://lore.kernel.org/netdev/20260708152745.2430714-1-alessio.faina@canonical.com/
+Changes in v3:
+- Add warning for empty $USE_LD
+- Use $HOSTREADELF in bpf Makefile
+- Rebase on v7.2-rc3
+- Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
 
- .../testing/selftests/net/srv6_end_dt46_l3vpn_test.sh  | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes in v2:
+- Fix selftests/bpf build. LLD needs to take the full path to be used
+  with -fuse-ld=
+- Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
 
-diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-index a5e959a080bb..50e37d3217ea 100755
---- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-@@ -536,6 +536,14 @@ host_vpn_isolation_tests()
- 	done
- }
- 
-+test_iproute2_supp_or_ksft_skip()
-+{
-+	if ! ip route add help 2>&1 | grep -qo "End.DT46"; then
-+		echo "SKIP: Missing SRv6 End.DT46 support in iproute2"
-+		exit "${ksft_skip}"
-+	fi
-+}
-+
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
- 	exit $ksft_skip
-@@ -546,6 +554,8 @@ if [ ! -x "$(command -v ip)" ]; then
- 	exit $ksft_skip
- fi
- 
-+test_iproute2_supp_or_ksft_skip
-+
- modprobe vrf &>/dev/null
- if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
-         echo "SKIP: vrf sysctl does not exist"
+---
+James Clark (5):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
+
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 79 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile | 13 +++---
+ 8 files changed, 56 insertions(+), 66 deletions(-)
+---
+base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+
+Best regards,
 -- 
-2.43.0
+James Clark <james.clark@linaro.org>
 
