@@ -1,136 +1,86 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4868439CCFB
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 05:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6481A9F87;
+	Wed, 15 Jul 2026 06:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784093740; cv=none; b=QxscC3++w0w4X2pSUH/czS3v09oQ3BvYhkobKqfAoorwJnAJVD81/ob2nDqZ2bgC6Ik1FO50NxCu4P2YY+KU91eQsuRMeL3l08Elc1408djUFLln8vMv0YljVwG3K4mgZhVzI3nVtLCiFzL1dZ0jaqrBQb/4nzbmgCi7eowkYjU=
+	t=1784096162; cv=none; b=gilDy0hrCJ3sodr/jSNm+UcwnNFGGeNRT+/BjFWdIWvWdoPyvHAYbDBu9EdgCXCjQiZZagLURfPaTQ5MAyQSwPrMz55jVYBGVnMKBPuBrG4LbCdB22fIFjO+O3fQHBRI45b769/aAJgor2Kns9aZ2g/DK8c7atmiXk5DK6XA/4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784093740; c=relaxed/simple;
-	bh=pJX/4lNrcag8H0C5X7KRzo+mZLWneQs3WuoJyZPrq/0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VCXkBHW7jCp3uNX2Z6KReMTF5RUT+Gdc5o4ZB2NdC4EESMdyp6WQrhU00M3bgtnkJC5IMwMgfomjxAJh8hjD/3FPA856iL5IynnvfvmKq65tQN+4b6JbKwkiDKiduSEfgHFkCYjBFcNelQSeXYQPNh08ELQx30k7uzxjCsef534=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=QiEaMwsi; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1784096162; c=relaxed/simple;
+	bh=6FWeW5F1hISirJAgOV+MHT5MJaCLdrWrxQpv2L0dPW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D1l5Tg150QPRPaKnXCAkCmKbuhJtqHCZ7iSw81oUlTrvAjKLl6RlwulEpMO5Sjh8KnRli0YeVzvi5tHlMRkNCyX7XLRDSqj6EzYGz+2D+aqkTRS46yEq77KoZI74MZb7qSw9EBr+UZH4+I9rmQrtiQyOyiWTTz74u3pynQNRkag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E/r6OHEb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="QiEaMwsi"
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D3C8F3F61A
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 05:35:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1784093735;
-	bh=o7X0Xr58oM7rQRCx2gdCy8KQKCUZWoTYtzajiDu6fH8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=QiEaMwsiKbLZmGjYTLv63+of2NuSLJYdmTdw327OnZmp0ZnZKDAVXlvF2XYnVHvez
-	 bL82zKGcre62LNJnyTrk5fgIDSPa0f8yO2FaPGXlWudXCY6ISj5TWELy1JxypgHcF/
-	 nkrsgfbv+ThVPMcOI1rtei9YHHQlueg0gz7zROwHdR6fz8Y95PuDHX/WP/xLS2vqO2
-	 LXw5vBnOIk2y0o9ame5Zu9uAdxhzdGHowqwAtRE6EBilenvBmG9MyMN5oTRxCBC1vu
-	 X80ErDrmPUjQ3Q2GQxfTaFwSM64BwkNxuYyOfC6g52gB04nFnuGkUzuVkJBQ4/Yxmg
-	 CujsrGOostOfmey8FebxCOEYXP/un0n12tnnSENv1KiGpR0kdJmuMGVY461PxXQpeb
-	 zx6GSRMY/I8sIBPaAaYK3Gu0jODnEXogKSGConcZCvBbmLWCaOJdq/BzonYEumyRZ8
-	 JynqM70ywFtNEp8KF8BfJplY44dE2Yc65rROZujTz+wuDM9WDs9sKtSaqv+fjXuE84
-	 6Y0L812TXR3FAZUOu+JXPZz4II1k5ouRTNj4ROcELJdnbIJvsdqrROziebjONlQ8+U
-	 dz2h1N3DRLQC4KPp9znGXc/I7vzFa6JhWhh/G9Iz36d/0OSyOPgkyTA7RBH22yhUDC
-	 FF1aIfVDiCxjSRPvbcgL6ZTA=
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2ccd1958e8fso24654425ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jul 2026 22:35:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784093734; x=1784698534;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=o7X0Xr58oM7rQRCx2gdCy8KQKCUZWoTYtzajiDu6fH8=;
-        b=SrF8NGZUnX7sstREBP0a3A9Wuq4kH4WOyQo2b5k+xr4HbMvrqfCIo3R+4AmQpC1UY1
-         BkVzJZvpTqE/qCazIzaVaUfVogrb0pW50eWykvUKdLB5urX0ChI9uvBIR+c8qLrRx30v
-         txjW+6z3lbhzgAlPFYc6340dQFTuLJ3sknqO4nkUq9WFS7VomoZ1rif1u1orS95suodo
-         8YREMYy/fp/Ko8/hjLDEhTGj0aFvMjUwMr/4clhwSC/VzJjil1viqABmgOV0p+NKHmFB
-         wPW3gCXAOlClx4xDmtUhdYYOotwy5UNHYhubCsEonrjHtK/7LGdg/TH8Fa/6CbwUff9l
-         IEtw==
-X-Gm-Message-State: AOJu0YxGyxh48TNZ7DSQNgTbCLu/u+2axRa7KfBCjavJbsYnCpZqsGfG
-	+xWbHVfqvK1CTm3LvQ7BDVfCM0tEkPpJOurQ0NprJ+PLbYa682AsEWkl68QGd8L9BTOPQuGR6//
-	NPsEBItL9gKT9RWKb3sjniBgCRsz6g3TcDOLdNd6O0vSUTd5sZClvqeUVF82fz96Ykvpto3NfIn
-	q/N+udcFnyDg==
-X-Gm-Gg: AfdE7ckpAGO5IafOCH8xLfv6cqEayqQdmVch88MxOifBtxMi5L7Gz8IOS4knqQgNaLG
-	aE6fCr3PTsPu+Sv7BXQNxn98FZCbHLKKnISpdziIGKylyl2BX/5huScMkyk0R+PwmrQUJkbx+DW
-	Ya+yFy5ju+YQNTV2DzNoRgTC3zOkoY4+ym/OtvywoyGtJeBt2zOWr1KnJSsJTMnVC3G/+27mMB1
-	J6XS/NK+aC9Nk77EGkrhbLTjkI6SBWG2FD/HhJYrt4IE3+yJY4xS2OhNreM0Q7yEraB6GU747Fr
-	SrO5lda27IOnZT9foTmC1DjMeGObOyniVLqzUO8y6Q2SEaWwhcoykHt7EOAGk1jON5EnNuvVEDn
-	/s366CkqOorx7175kLAQqZJ2gkECfhcrrc9DDNXGuEQup3kMsa1TQyHWo5FPtjVsCacVKRYkd5v
-	01
-X-Received: by 2002:a17:903:468f:b0:2ca:eea:eb5c with SMTP id d9443c01a7336-2ce9e9ad7c6mr169580565ad.18.1784093733869;
-        Tue, 14 Jul 2026 22:35:33 -0700 (PDT)
-X-Received: by 2002:a17:903:468f:b0:2ca:eea:eb5c with SMTP id d9443c01a7336-2ce9e9ad7c6mr169580385ad.18.1784093733497;
-        Tue, 14 Jul 2026 22:35:33 -0700 (PDT)
-Received: from kylee-ThinkPad-E16-Gen-1.. (118-163-61-247.hinet-ip.hinet.net. [118.163.61.247])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cebec91c92sm51358305ad.56.2026.07.14.22.35.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 22:35:32 -0700 (PDT)
-From: Kuan-Ying Lee <kuan-ying.lee@canonical.com>
-To: kuan-ying.lee@canonical.com,
-	Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: Fix pointer type mismatch build error
-Date: Wed, 15 Jul 2026 13:35:52 +0800
-Message-ID: <20260715053559.28535-1-kuan-ying.lee@canonical.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E/r6OHEb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE6C1F000E9;
+	Wed, 15 Jul 2026 06:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784096160;
+	bh=1GVatgkJkgt1f7n14CxE5fSjwzfbGzAqCHxfBSSq8xw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E/r6OHEbwq4pdqs8b1RF+NnQK3qU4esSIWQ6dr6wAgOVVon4f2sVQgIfZUvPYQm6g
+	 8hHZSzTJrHAb3a4B8bZvYjyh7yIXXvf/Pk6hZmjTiUWj1OaRmd5uf1mF5uDtg0FDTU
+	 dbjahm8oevNsb8i5z1FdGWStz54H+cZWCwbSPtpGIrGB+qpkwRnKFYXpGr/lD0iguD
+	 zIRkHTRey0NWbmqwqQP2lIzjF3l8oVpW/HyfI5qP8ju/P/hw/AdX2I1XPC5mozS65F
+	 8mY+o8a0MXFRKfaUXDiOWufLShLVCcwwV+bn7/bdnlTCwa28hb+XFQ1jSFQUioLQWX
+	 1/NY4J/80Tf/A==
+Date: Wed, 15 Jul 2026 09:15:53 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Vipin Sharma <vipinsh@google.com>
+Cc: pasha.tatashin@soleen.com, pratyush@kernel.org, tarunsahu@google.com,
+	skhawaja@google.com, shuah@kernel.org, dmatlack@google.com,
+	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Make liveupdate selftests library
+Message-ID: <alclmQIb8D1td-sw@kernel.org>
+References: <20260612214512.464146-1-vipinsh@google.com>
+ <ajLtfkuMP4DEGlqe@kernel.org>
+ <20260617190754.GC2704872.vipinsh@google.com>
+ <CAHVum0dL+p-j1EwQf69p87MU1s8Er9RsOaMMbprFnmNeEdS6-g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVum0dL+p-j1EwQf69p87MU1s8Er9RsOaMMbprFnmNeEdS6-g@mail.gmail.com>
 
-We hit the following build error while running the seccomp selftests in
-our testing.
+Hi Vipin,
 
-CC seccomp_bpf
-seccomp_bpf.c: In function ‘UPROBE_setup’:
-seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional expression [-Wincompatible-pointer-types]
-5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-| ^
-seccomp_bpf.c:5175:57: note: first expression has type ‘int (*)(void)’
-5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-| ^~~~~~~~~~~~~~~~
-seccomp_bpf.c:5175:76: note: second expression has type ‘int (__attribute__((nocf_check)) *)(void)’
-5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-| ^~~~~~~~~~~~~
+On Mon, Jul 13, 2026 at 09:49:51AM -0700, Vipin Sharma wrote:
+> On Wed, Jun 17, 2026 at 12:08 PM Vipin Sharma <vipinsh@google.com> wrote:
+> > > On Fri, Jun 12, 2026 at 02:45:10PM -0700, Vipin Sharma wrote:
+> > > > Hello,
+> > > >
+> > > > This is v3 series of refactoring liveupdate selftests as a library. It
+> > > > exposes common liveupdate ioctls as a library which can be used by other
+> > > > selftests like VFIO and IOMMU.
+> > >
+> > > Let's revisit this after -rc1 is out.
+> > > I don't think there would a need to change anything, it's just the matter
+> > > of applying the patches to the right base :)
+> >
+> > Sounds good, thank you!
+> > >
+> > > > Currently, there are no users of this change but it is being used in
+> > > > VFIO and iommu liveupdate series.
+> > >
+> 
+> Hi Mike,
+> 
+> Let me know if you are still planning to take it as is or if you would
+> like me to rebase on the latest liveupdate repo.
 
-get_uprobe_offset() takes a 'const void *' argument, so cast both
-operands to 'void *'.
-
-Fixes: 9ffc7a635c35 ("selftests/seccomp: validate uprobe syscall passes through seccomp")
-Signed-off-by: Kuan-Ying Lee <kuan-ying.lee@canonical.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 358b6c65e120..0622bc2acad4 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -5178,7 +5178,8 @@ FIXTURE_SETUP(UPROBE)
- 		ASSERT_GE(bit, 0);
- 	}
+Rebasing on the latest liveupdate repo would be great, thanks!
  
--	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-+	offset = get_uprobe_offset(variant->uretprobe ? (void *)probed_uretprobe
-+						      : (void *)probed_uprobe);
- 	ASSERT_GE(offset, 0);
- 
- 	if (variant->uretprobe)
+> Thanks
+> Vipin
+
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
