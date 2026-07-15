@@ -1,84 +1,59 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7178439A046
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9245B3815DF;
+	Wed, 15 Jul 2026 14:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784126574; cv=none; b=unUqvPbBKenum2XjKAoHP2nq5IsOSW0kg0m9t0yJfhfu/86VfwlrKjJuXoFux56YH31KoV6HlgAU4iwm8s+A0KJ5ij1HZLaJIlrIHuNcZ6ArsIB9B9a7xYGwiSpYR8G+3y1dvGoGyuA7MMZ83hIJjnlt2HjQTzBJq149i1Z82ng=
+	t=1784126616; cv=none; b=SJjS2M4eagjewBDUOES8qRJyJ2mZ6+JyXJFoz+5SFU6e/eh1/wcQg6Z0ShWJzh4CnsfudNPJ1Rinpvz3834KEIaqCwabdgFD1DKd5Pvlet5UB75/Faiz327PyfQKdofIP5bmHdNmo/UiYpQeIUGT0eqwLTiG72PnIn0hynDpMeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784126574; c=relaxed/simple;
-	bh=yasRtJyu7Ov53Xca8IMDdwCAT0wNHf1OQgxn2u0jL/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z0GAOGS0t97c4cpY1JSMSpERA5O47rdobFackljDFPZ430IS3xkhEgHS4lqUahTKnBWWThmxRbz/JCtPQMXyzDeEAQzwqSKeMCMe/lihDeP1/M14LNh/VZEbG2/qwbulpM9PXxf9wS717IVa+9tem3ASuSpaQwSNwYdfXfOXCp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z2+m/uyy; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784126616; c=relaxed/simple;
+	bh=cEKDHo/OZrzKx03VxEdPl4q31s7Fn2qq0x/9Vq/CJts=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=F68aKDequPDFm76NTS2nywx7F4WQR2GXCT+SWaQq8KWQ75L7bh/j7AFb5wDwVujotRkT0VOM9E6u7v2NV0Bh3tAeVnqs4ftvNmoT2/ddlAcdce5WU0EFp1h7q1sAQf3DmZDftfggFo1gSdc7/Qsnlsm7zqbU6bmkIB79DQYyuLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jybkMy+B; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2+m/uyy"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38759bcd877so4834954a91.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784126572; x=1784731372; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YFdvFy4JZmcJMIT1d11E7kO8Wgq6KQpSjvMclrKV/Fk=;
-        b=Z2+m/uyywK2oDuVHkcU90yKGSxi4PXe4S4gs03x26bD8X6BCvYPSoHsOWUVQ68zjJn
-         u6uXHrMw7ZOXrVq1VdS5td7IyQ8sA4W9utSQPJhP1guDgcl0ujJZcIpCa5VN8nU6vfqI
-         0SA4lI3rEt//wtQ4pl5ZPWM6gBnQ/ZbF2ZewA6cyBkndA493VtdpkfdXXUP30SNDAPBX
-         /swURmiOE/86c7y/VAeW2J+frU6dAPvJXLzAshMyHOUW04knMYbnlJu58naekN8vnH/K
-         8Zc/IntpugtEnt6H6gF/61oGVerRQGzJNkpteI4rGiGR7H+bWyTsX8bH9Ce+qMETEA66
-         HYdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784126572; x=1784731372;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=YFdvFy4JZmcJMIT1d11E7kO8Wgq6KQpSjvMclrKV/Fk=;
-        b=XXC23WHhNg/FqYS2GMRCSRHkWxchGBZ2GieZERXbwinHGHu20sCy5WR8uz1GJoOhRe
-         7HeWlHGs/bAxg8AElfPe+1v0yoRVly9ms2XZmVje5EukJMLSBzshWI/iHAZaq3pays1m
-         OoisYyAdzDxMo45memd46h4X5Esve2axy8PZNZygMCUoFTc5/WBUGFf8jrBp3qqF8Ava
-         3bK0jK9gNWOxIQFMmKFOqGLFJGLXa1EJNDpXxAsDoe+vsL5uFDHKzaMtPIG7HOEocOPP
-         Ue4+AwTmol7FKXV5ehT60V11spkD/Rg+pXxLU0hAw1Iq0BrMS5j59f2/BjWkg4sLZDHK
-         h6Rw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr2l0zVAnGMaMVXl+3EFkOrdF9aD5MuIEvBMyIjikde7KfRTbxmCewxr6kwMFO2AlFF0yrvJ6nqQoOIH0tgnM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDa0PvaGFy3s8c0+57LODqaYY6IOfrTgCe1oGqnEqiLDZmFN5a
-	KbNzip2yiiXW6MVuPq4jynr6pVIUtGS+cvuInBK6+hY4iY7Rs2ge+fYI
-X-Gm-Gg: AfdE7cksK8Lk6RKdjIILsPFy5uocalSWUaFCjlHaBWFXrvPG1H03JTk0NDEy2tcFrR2
-	BvEeJADnTm/2wCsMU6IbglRyWxIkVmKNBcYkC/gGLBBsh+ent+ggarGT9JdwNKnJniCtZ2N2cG1
-	D/LRng81iJUpmViIP8q+Jbgx4vd9CYzsFMHki0B4++AUm8sLevLgthdtmobOJ8StqGcTOvZxErR
-	Fvn/sArhBxJSRUw3syL3RjwhComAaFEclrDspT5f0nN2yvANf0My9Ej2RJ88JpUnLQIyjiV97cL
-	EAGnlKHEh2UE19mctzf8dPYTOqD7NIun/z/slBtH2D6sWpuUTIi8UCqWPh0VLqyYg74c4IpgbuS
-	IZuStPwqFDSZA9vZjpNYnTDswxcEoSrl7/eS33VtthLx0H9hFRrV/uHVvn6QdyB8U2liLEAjITr
-	LdRwKYfymbGelfhFsePEynl/ZNkvx6BRfnAEh7nQRYR9ca+CSFjeNNwVk=
-X-Received: by 2002:a17:90b:2890:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-38e29ff97b1mr2563808a91.9.1784126571549;
-        Wed, 15 Jul 2026 07:42:51 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172b6da2sm3320825a91.4.2026.07.15.07.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 07:42:51 -0700 (PDT)
-Date: Wed, 15 Jul 2026 07:42:48 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
-	corbet@lwn.net, dakr@kernel.org, jgg@ziepe.ca, kees@kernel.org,
-	leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com,
-	ljs@kernel.org, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
-	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
-	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
-	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
-	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
-	vbabka@kernel.org, dri-devel@lists.freedesktop.org,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] mm/hmm: Clarify notifier retry state and scope
- HMM timeouts
-Message-ID: <alecaJ1FUso39D9k@skinsburskii>
-References: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
- <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jybkMy+B"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 65C0AC2B9D6;
+	Wed, 15 Jul 2026 14:43:49 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 652516035C;
+	Wed, 15 Jul 2026 14:43:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EE8DB11BD15D9;
+	Wed, 15 Jul 2026 16:43:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1784126611; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=cEKDHo/OZrzKx03VxEdPl4q31s7Fn2qq0x/9Vq/CJts=;
+	b=jybkMy+ByVzzRCqbmx6z187kH33b00yiUqlfsKCt3c+WhaQpT4w48dlO7UlmdnESY8OsEh
+	1ZBICUJXfaZMnoMrKERp3tYzDuvhYs5vB3db+pAu5IsY9OjVKStKyrKhGc8CClxSGjsubm
+	7rg5oe8uOsXEm8hHeY3PHsDu19Ae1rs6uot2/Be9xkt+YQp8bDOZNNVfAJNv+Xu/xxgdRX
+	/rSWWT2GkWGNQtb9VziO7y38UW6+dQtwQzob25xHXj4nYrmqEJsRGkhOw4LMhMCR4o1TSJ
+	0ShD22aVrRAXJ1gyfzXexAQc+GPLvMwFb5hP9AFX4yVJB0hZRZxr968LT0Vo8Q==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
+ <sboyd@kernel.org>,  Brian Masney <bmasney@redhat.com>,  Rob Herring
+ <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
+ Dooley <conor+dt@kernel.org>,  Brendan Higgins
+ <brendan.higgins@linux.dev>,  David Gow <david@davidgow.net>,  Rae Moar
+ <raemoar63@gmail.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+  Pascal EBERHARD <pascal.eberhard@se.com>,  linux-clk@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com,  Herve
+ Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH v2 0/7] clk: Add support for clock nexus
+In-Reply-To: <aleSJafTTPe9Keas@shikoro> (Wolfram Sang's message of "Wed, 15
+	Jul 2026 15:59:01 +0200")
+References: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
+	<alNN5qxBJ4EsB3Li@shikoro> <87ik6ge7kd.fsf@bootlin.com>
+	<aleSJafTTPe9Keas@shikoro>
+User-Agent: mu4e 1.12.7; emacs 30.2
+Date: Wed, 15 Jul 2026 16:43:27 +0200
+Message-ID: <87a4rse2k0.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,69 +61,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Jul 15, 2026 at 02:41:43PM +0200, David Hildenbrand (Arm) wrote:
-> On 7/15/26 00:21, Stanislav Kinsburskii wrote:
-> > This small fixup series applies on top of:
-> > 
-> >   [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for userfaultfd-backed mappings
-> > 
-> > The first patch updates the HMM documentation example to make the
-> > mmu_interval_read_retry() state explicit: callers should use the notifier and
-> > notifier_seq stored in the same hmm_range that was passed to
-> > hmm_range_fault_unlocked_timeout().
-> > 
-> > The remaining patches adjust nouveau, amdxdna, and drm_gpusvm users so the
-> > timeout passed to hmm_range_fault_unlocked_timeout() is treated as a relative
-> > HMM retry budget. These callers no longer keep an absolute deadline around
-> > their outer driver retry loops or pass a computed remaining time into HMM.
-> > 
-> > This keeps the timeout scoped to HMM's internal mmu-notifier retry handling. If
-> > HMM succeeds and the driver later observes an invalidation through
-> > mmu_interval_read_retry(), the driver retries the operation with a fresh HMM
-> > retry budget.
-> > 
-> > Changes in v2:
-> >   - Kept the nouveau outer absolute timeout around the
-> >     mmu_interval_read_retry() loop. hmm_range_fault_unlocked_timeout() only
-> >     bounds HMM’s internal retries, while nouveau faults are handled from a GPU
-> >     fault worker, so userspace fatal signals cannot break an endless stream of
-> >     invalidations there.
-> >   - Updated nouveau to use time_after_eq() before calling HMM, so the remaining
-> >     timeout passed to hmm_range_fault_unlocked_timeout() is always positive and
-> >     never 0, which would mean retry indefinitely.
-> >   - Updated the nouveau fixup commit message to explain the worker-thread
-> >     timeout issue and the time_after_eq() boundary behavior.
-> >   - Fixed the amdxdna fixup commit message. It now describes
-> >     aie2_populate_range() correctly instead of carrying stale nouveau prose,
-> >     and notes that command submission still keeps its broader timeout while HMM
-> >     gets a fresh relative retry budget.
-> > 
-> > 
-> > ---
-> > 
-> > Stanislav Kinsburskii (4):
-> >       fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
-> >       fixup! drm/nouveau: use hmm_range_fault_unlocked_timeout() for SVM faults
-> >       fixup! accel/amdxdna: use hmm_range_fault_unlocked_timeout() for range population
-> >       fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout() for range faults
-> 
-> Why a fixup series instead of properly resending the full thing?
-> 
+On 15/07/2026 at 15:59:01 +02, Wolfram Sang <wsa+renesas@sang-engineering.c=
+om> wrote:
 
-The goal was to get a Sashiko review, and v8 has already been applied to
-both `mm-new` and `linux-next`.
+> Hi Miquel,
+>
+>> that all the drivers work on RZN1 hardware. When we send this out we
+>> will include a link in the cover letter with a branch to test,
+>> connecting the clock, irqchip an crypto changes together. Don't hesitate
+>> to remind us for that testing branch if we forget to include it!
+>
+> Will surely do. Sounds awesome, thank you! Bonus points if you could
+> also shorty summarize how you tested all the stuff then.
 
-You can find more details here:
+So far I just enabled all the crypto selftests (CONFIG_CRYPTO_SELFTESTS,
+CONFIG_CRYPTO_SELFTESTS_FULL). Given the amount of errors I got during
+my first iterations, it seemed pretty complete :-)
 
-  https://sashiko.dev/#/message/alaWmUEeIBeSkmO0%40skinsburskii
-
-Thanks, Stanislav
-
-> -- 
-> Cheers,
-> 
-> David
+Thanks,
+Miqu=C3=A8l
