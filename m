@@ -1,175 +1,113 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E7648C3E4
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 15:34:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF026472798
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 15:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784129649; cv=none; b=TjWyDY0zvQiGW1BHEGW1+3e66BKD90AlpXyud4NBrft/SUDoeh7HkrhHzl0AF2vEnmqFnFTwj7Y90I0K162OhLKHZWWYgD72i9AkDoYT56XtjQ6t/ensZub95yGpOz4Ipzl14us8tfXLsLCoRHQFOsTcOG3uoji1nQFsX/mw9jc=
+	t=1784130442; cv=none; b=PV3VVBwrGt6BwbcxcSMXeXhVQhM8t5lWJB5s3+HNX45yKvyPZdH8LIqA5PLOi6hSDMvNxR0y7EyVBBE1aE3M+d+g0VUQi0bQQFzwXC/mN7EzF2q/Tb+bRGA+/Wtd477xzo+vxGbmkoQoY0w7WHbg+M0jMb1AyXgiQCr2d+i1DFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784129649; c=relaxed/simple;
-	bh=me6OL90Ypr8Ilpx+65NnZrX1cBHotrcVrQNa58+nAzM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fRs7A6EJAbjNtHVmi2mxcJ3cQv8yvRN9QXPdJjPO+/MkTORMYGhGMmjVxja9JENq15vIYmY+VMfRcHIOM2st2CHjbeR3FbnOXc78peUSicN7OOWQtXI/wDD0MHWSFdVU22xzIZis0wPa6Kcz8F+aopfXBnG2P2xCZy0wVCfb9vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XFJ+dV5w; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784130442; c=relaxed/simple;
+	bh=uXKii3249bwX7TaBdPYgYiFbDVsswYSDgNZHix3FQtE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JF2wR3Aei8Qcqrs5s3ifZtyP92Vo2WymeapQZRBUV/EDSo+DnfKVEtx90hx8yY7mHcL7rMZzkBQpN/U86NRGQE46+ZXUupQ3xiXftaXgXxAuh9DKyoGTxgvDjUzdgeFoBGezgvuFeTY56dw3KgCn6VOQphrl/jGD0BLEuUJu4X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AtwRaQ63; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XFJ+dV5w"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784129644;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AtwRaQ63"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784130438;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GBQaFEoNYmmYAMbxysMsFS3t2NOHg74qWyOBvlWdFCc=;
-	b=XFJ+dV5wcvW+d29dorS2wOOOorNuj4F8l6vB767X67LgtqdTXdYkMKa2nOGDTjEeK8F754
-	N6hgNqXauiz/824ArhuyrMBnk+01F9Cl7MIRXZ8OlMch61MfLsIHpswbl7MD7VRDJFqK5H
-	NUlLqf8yG6thCBb3e8oj/MrhjdO+kJI=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v10 9/9] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Wed, 15 Jul 2026 23:32:53 +0800
-Message-ID: <20260715153254.92010-10-leon.hwang@linux.dev>
-In-Reply-To: <20260715153254.92010-1-leon.hwang@linux.dev>
-References: <20260715153254.92010-1-leon.hwang@linux.dev>
+	bh=53ToRPoItWXCe4fnxBfQI8EvVQIHrJzVrRIqwgxe0z4=;
+	b=AtwRaQ63DhKnCRRcEbGyVFFMvj3XFtSZU1giS9OqEcTzITJR6Y1da0Q/kt0NyyRHH8KCRE
+	YtPlq5muUmKVa5oygfCZxTXbKA7F53hFaImXq3LTzAzdc4G5OMegkDZPlotysBuauZTpsX
+	bjGADr9hcuzU6Iiyx3huQe90TXDzl5w=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-55-8l_y5NGxPuyK0asBHJIthA-1; Wed,
+ 15 Jul 2026 11:47:14 -0400
+X-MC-Unique: 8l_y5NGxPuyK0asBHJIthA-1
+X-Mimecast-MFC-AGG-ID: 8l_y5NGxPuyK0asBHJIthA_1784130433
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD8981955F2C;
+	Wed, 15 Jul 2026 15:47:12 +0000 (UTC)
+Received: from [10.22.89.72] (unknown [10.22.89.72])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A7E711800347;
+	Wed, 15 Jul 2026 15:47:11 +0000 (UTC)
+Message-ID: <47ae1970-b7a7-478d-b0d0-2110428c2ee3@redhat.com>
+Date: Wed, 15 Jul 2026 11:47:10 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/cgroup: Fix intermittent
+ test_cgfreezer_ptrace test failures
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260715035446.565625-1-longman@redhat.com>
+ <aldSsQAboD6g2Sso@localhost.localdomain>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <aldSsQAboD6g2Sso@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+On 7/15/26 5:36 AM, Michal Koutný wrote:
+> Hi.
+>
+> On Tue, Jul 14, 2026 at 11:54:46PM -0400, Waiman Long <longman@redhat.com> wrote:
+>> It is found that the test_cgfreezer_ptrace test of test_freezer can
+>> intermittently fail on some architectures like arm64 and ppc64.
+>>
+>> After further tracing of the mechanics of the test_cgfreezer_ptrace test,
+>> it is found that the ptrace(PTRACE_DETACH) call will spawn another process
+>> to perform the detach
+> I'm reading kernel/ptrace.c and cannot find a new task creation.
+> I'm curious what is this "another process"?
+I should be more clear about that. It is not exec'ing a new binary. It 
+is just spawning a child process/thread which still has the same name 
+but different pid as well as running on a different CPU which are what I 
+am tracking.
+>
+> (Or is it referring to the child_fn() process from
+> test_cgfreezer_ptrace()? Then I'm suspicous about the transitional
+> unfreezing of it after PTRACE_DETACH. Wasn't it rightful expectation of
+> the test that the cgroup remains contiguously frozen?)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 598b7dde6581..e5a40ea36ee7 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -283,6 +283,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -299,4 +349,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index b852a0b07508..8b1f625017d1 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -53,4 +53,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+As said in my reply to the v1 thread, the detaching process includes a 
+call to ptrace_stop() which will unfreeze the cgroup temporarily and 
+then go back to frozen afterward. It is this transitional 
+unfreeze/freeze that may cause the test to fail if it detects the 
+transitional non-frozen state. My patch is to make sure that it can see 
+the final the frozen state and avoid reporting failure.
+
+Cheers,
+Longman
+
+>
+>> by temporarily unfreezes the cgroup and then freezes
+>> it again afterward during the detaching process. The reading of the
+>> frozen flag from cgroup.events is done by the main test_freezer process
+>> running probably on a different CPU. As a result, racing is possible and
+>> the intermediate unfrozen state can be read leading to occasional test
+>> failures especially on architectures with a weak memory model like arm64.
+> What state would the task be in during this window?
+>
+> Thanks,
+> Michal
 
