@@ -1,188 +1,96 @@
-Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781413603DD
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 08:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08043603DD;
+	Wed, 15 Jul 2026 08:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784104346; cv=none; b=cwEzHrrYptNeuuEUWJ+i04tLsHXBysfuyhgSUap0uyqGaQaCVYTAE3LM73TZwFF6OGlTla+WwK05QNAJnCG6rkkYuq9UmtBUORb6Rf0PIqX2OBq0snLOk/pE8Zxhfu+J9W84qP0YNfacwXKvhkn9un5EQ609sAoPMPoJO4COxyY=
+	t=1784104452; cv=none; b=VpTOp64KjV67HluPwTf4HMbJ6QUdh1V4GM7n5DMPdhjjOnBhWap8MZHENWfTQdJEqqYGhjPgz48jQI4QVr30lYvxLiwFecJpxUG5YqpNY3hy52uMqbSHhg+66Fypst2Y0vY89DVq9lD5KOuMextbOfH8fqlTUiOG1Hmwx63ddbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784104346; c=relaxed/simple;
-	bh=f+aSwlQd0H4yMA4ovXfX93LCkoOi83P327MTt5nGdKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=keQ4LD4BtSTmCU+EzhEagMuBmvVBlQvZWRIeWmUrKeIu+VLjF3aymh+u0IMzGGV/FwqtazZev0hFEbIG6jWGM89La4KWkDrDXo3vMRp9/EaqYZw2qwbTB5NMqBpBeNF/z538ZM+rPNkrydreBm0kR5DaxLOVJN5+iUqiYwGjWuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQi3XJmN; arc=none smtp.client-ip=74.125.227.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784104452; c=relaxed/simple;
+	bh=OphNoAUqOLR8mOWf5JyXQkvYoInIlft9JipWcvawUig=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=uwEjmSiQPG19tajaAPH4GZ5hbEEgv0l4C8w8fQ/EbTF1T8QF0mNsqAa61qBAgkLNv3ZKySTdky34d6FJyKqmKOrEb7Zpp528RmU8Yw830tgr3uURiWV8y0KN3ERzXax5on3PYRNeslTQQoLOVk+7NE7XThZ4MYr+NyKN0XZ5WNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=UljCVJeU; arc=none smtp.client-ip=43.163.128.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQi3XJmN"
-Received: by mail-pj2-f0.google.com with SMTP id d9443c01a7336-2cc7a345f51so35344555ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 01:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784104345; x=1784709145; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AvK4rlZieqdDEX/C3RF2OhSiSp9tIt5loVtN+a7NID8=;
-        b=CQi3XJmNJVCpuMwkWQVonmAV1b35uWn30IQUN7O0kT79rSNY5GtPxCW4mhSuUEbx+/
-         pOZXE+X7vh4MQ3nBlnKUTBiBW3/AQXtQhD0i/oHj1mLoxlENbQ3+r/3XJYi2KmdMx93L
-         9UMaNXySRfctfxF1qw5urrEMTcO3YjXpQDyujYQ9eSaw3DAolYEJb+7NB1lIJGTQcVhS
-         lK1+D1RQ5zNq8K84sUo+dV4GWQgD2e3MC3mjx2BZinetJyucfuvqB9OtPzvOnLhRLPSF
-         QQ1LrDTjDLPjGB7hsiLazEd63POzx8c9d25wmltiqNDbQNyiyx8GOvKN3VyumK0aAP0U
-         FbPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784104345; x=1784709145;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AvK4rlZieqdDEX/C3RF2OhSiSp9tIt5loVtN+a7NID8=;
-        b=gKdPF67aHh5uuZGDWsgLtDFyJhf4XR5GCI0jb5m/WYJnLWNlExEsdp04hElWGpXgQU
-         Z8fgNLv70xkxQFG813GOt5j80vcNtKHVNfirSePWTVyAGuMXJYcy88wdhxp1ZKdyoIRO
-         wy7zW7kKa6PGH9wW7IMcr+Z5Lx8oTOwb7nMyKLWVq1697GT6K8DPkQjULg2mfZQ4SIuq
-         z4B0a37sZq84vC1uCV6qUNBpqLQ4umHNAOVNx3Xpy32exsbjsh/aS5ncQ0p7ZkH+IT2a
-         79YMopFl9d74nXA3zXGbsL6AZf/ooGsUZpm2CD6oe5x2gvhxeGjI+cFMdZCz3byonO0w
-         Zs1A==
-X-Forwarded-Encrypted: i=1; AHgh+Rrw1I3MigFL6KfWyK0PDYmpMVWD6fw2Rt0wbglwJqSHYPS891NK+bHw0BTh57Zj/SfAKqDMA5kB4jzMa5GQnjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr/rGfAB5cPd7O/IzH2DkTKERvi8fCRWpZ83VVgrLC9WRgeVd+
-	nhrxEYd/QrFAubJdXBz+JSVxXfsBhSszGuUrqZJYpIjY0tAKKrMuZTBe
-X-Gm-Gg: AfdE7cnU7l3wK9kp+bqGychnpk2J4XPw7DH+Kz7AHsidqkbpEEPBqrjIb+Ubx+Qn2ft
-	e0r+MpOIchuIofv2IJz5PZ0E5g/55bEeH7yra8Zhe6sA5H0QJzGvxRH301fc+WFB6ArizCVW24o
-	tpo1QsOcUlcfCTMA0DA9hz4xVktW/YhDOpYgonBHNPP/KrmYTCmyN8vTumRuAmHFdwpVtmc209+
-	kBJN6B0RrZOSfDxk3tlG7ZwjmCOLL8fAzw2drNwBfQ0HyxPHfwBHJSauiIDZUB1C06P6lx2zDdM
-	8W351qm3x5l/ie2xvk6CC61qYehmdwTUWwTjBJeOSTBi1ur8v23gAVyGc6CP/JPFc8h4EgVfAr7
-	vs1dTYJU2ayjCwSvK/VJg80YgSRH46ESiMq+OHr/f1SV9uHyg7SeE5P0arBQ1r3qI86pCI6MLKl
-	SRQd64
-X-Received: by 2002:a17:902:d4c7:b0:2cc:6817:d9b1 with SMTP id d9443c01a7336-2cf03df6a24mr15483195ad.41.1784104344760;
-        Wed, 15 Jul 2026 01:32:24 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:7::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb75fsm129307865ad.8.2026.07.15.01.32.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 01:32:24 -0700 (PDT)
-Date: Wed, 15 Jul 2026 01:32:16 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Vladimir Vdovin <deliran@verdict.gg>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aldE7W4T_ylUTLv5@devvm7509.cco0.facebook.com>
-References: <20260708203410.45121-1-deliran@verdict.gg>
- <20260708203410.45121-2-deliran@verdict.gg>
- <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
- <alZtI782RGKb8y4Y@lore-desk>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="UljCVJeU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1784104446; bh=q/2/b0RWB9lYa5vZxIvGUHajHikSAG/Gq7xDRhBFjcI=;
+	h=From:To:Cc:Subject:Date;
+	b=UljCVJeUxmZGYrKfML1YvYKRVDiiP4h/dHyKzGgQzrCm3K0k+Vsmh6ldilvOJflWk
+	 KZwSS+c06GMfkFVHpFc//tpA3TIwkE6vW+Fp6bY5uw8Aey1PR5b00u4QCoGlM20Be9
+	 /hkpxFD7AoGJ2qTXx7YjXTnJMYTAwqg5CjTSuVNc=
+Received: from localhost.localdomain ([116.128.244.169])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id 8D01C50; Wed, 15 Jul 2026 16:02:13 +0800
+X-QQ-mid: xmsmtpt1784102533taljlcvyk
+Message-ID: <tencent_CD80B5F746B6AABD68AF3F1097AD02C96F05@qq.com>
+X-QQ-XMAILINFO: MSHuecu5THA/xdRlrHvAw7rh0UCx9KsT+EAf6vNQr9ne3VQ9g7RjYlcviX6dP4
+	 D3J5s3it2DxDYIPfnzARG6SqLPPtmqTITE6T7Vm5CblnwkyYDM5zBLDQsg2GVW2C2SGKSdXxWknZ
+	 dti3ZGDLcgCsFgIWH4V+D0H9xQr0xjVxLKlkirk5XewgR1oxzbrgKAq7LBp+TSbPCVFROVTz3feY
+	 U/YNVt2vcZ44ktxwEPoQeRsKoT6gXkna+PidvtNChYO9mGy3h+VdCzefcWajcDCpJZksvK3lK3Kc
+	 d1X5v4kiCUbltHErR2VrWwonRXeaSXZwWt5RoQAYI07YtEaihywhiyuZVSIYyKXS4tT3dkZ79L30
+	 PYmJZN82ZDBUnuXCNL03TVuSTyZu3HHrrvAsb3iyft+gRBnG3bC7Atm3DoVYBUQN8+NlX55cXEfv
+	 gkw70vJHqWnI5hKeWELFB2J/92l/d4A7u7DeO+kEGOkla5Ih9YQivKJ1zGyKmeYtveV89Y73MyD4
+	 MoX02S9GHxGSYVucNsTnNul1hhUopq9TT+1iGiy+2Bd8OgBwBxfy9WasN2QAkcEoXoNYomsKcjyD
+	 xiIjU7/lnZ/3Yw53xux2P49FqSMQ1KAxzARiFBu1T2QHkQB1dngA/Qnr6FXXxG6736XZWo6w/cAh
+	 xqkLhjGzdDMZbozcYuU3RU307SQgtej0r4gMxh7gtmPy6SUUN+xbkXxKZvevDS/cw6x2tG1y1P99
+	 mgciCh/N5AvNZCUvHaK9c8n5msjmN8W/TkP8O9FqhSMo0KX+QFWxLIF6238lmgY5n/eMuTV3DO33
+	 0uNgTi8yPi9uuJPVJBSv+jgHR4dZazBgCp5L4nkktz1wx1QG1SJVFg06XX5QtSTmVb5i6JNB/t7R
+	 fD5ul0JolYsgJ+3ODPQMsabJiRVrsYUTsuUIVif/z9UwrMDWv/93eK9XC7QmRp7BLHMrKPamracR
+	 Wwg+iv02P48dHzmwPli71+xepDHhDUPCbxRPezRlvLZF+yVOX4Drn/jDScgpSNvcv1pdxKz7HotL
+	 fy0adluOQ4/ryDwGp0dgAtEhXd1+ja3HE+DiPcDXVq3pGtsawLHSc57RjpdtI2MbPj9Wt+7HKg9C
+	 qaCdW2E4mnaR9GBAIau1IhSujfMQ==
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-QQ-USESPAMBG: true
+From: Haofeng Li <920484857@qq.com>
+To: Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Haofeng Li <lihaofeng@kylinos.cn>
+Subject: [PATCH] selftests/lkdtm: rename STACKLEAK_ERASING to KSTACK_ERASE
+Date: Wed, 15 Jul 2026 16:02:10 +0800
+X-OQ-MSGID: <20260715080210.3855904-1-920484857@qq.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alZtI782RGKb8y4Y@lore-desk>
+Content-Transfer-Encoding: 8bit
 
-On 07/14, Lorenzo Bianconi wrote:
-> > On 07/08, Vladimir Vdovin wrote:
-> > > From: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > 
-> > > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
-> > > checksum will be use by devices capable of exposing receive checksum
-> > > result via bpf_xdp_metadata_rx_checksum().
-> > > Moreover, introduce xmo_rx_checksum netdev callback in order to allow
-> > > the eBPF program bound to the device to retrieve the RX checksum result
-> > > computed by the hw NIC and reported via DMA descriptors.
-> > > 
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
-> > > ---
-> > >  Documentation/netlink/specs/netdev.yaml |  5 ++++
-> > >  include/net/xdp.h                       | 18 ++++++++++++++
-> > >  include/uapi/linux/netdev.h             |  3 +++
-> > >  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
-> > >  tools/include/uapi/linux/netdev.h       |  3 +++
-> > >  5 files changed, 61 insertions(+)
-> > > 
-> > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-> > > index 5f143da7458c..6d0d90d3a614 100644
-> > > --- a/Documentation/netlink/specs/netdev.yaml
-> > > +++ b/Documentation/netlink/specs/netdev.yaml
-> > > @@ -61,6 +61,11 @@ definitions:
-> > >          doc: |
-> > >            Device is capable of exposing receive packet VLAN tag via
-> > >            bpf_xdp_metadata_rx_vlan_tag().
-> > > +      -
-> > > +        name: checksum
-> > > +        doc: |
-> > > +          Device is capable of exposing receive checksum result via
-> > > +          bpf_xdp_metadata_rx_checksum().
-> > >    -
-> > >      type: flags
-> > >      name: xsk-flags
-> > > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > > index aa742f413c35..e255ff786131 100644
-> > > --- a/include/net/xdp.h
-> > > +++ b/include/net/xdp.h
-> > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
-> > >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
-> > >  			   bpf_xdp_metadata_rx_vlan_tag, \
-> > >  			   xmo_rx_vlan_tag) \
-> > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
-> > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
-> > > +			   bpf_xdp_metadata_rx_checksum, \
-> > > +			   xmo_rx_checksum)
-> > >  
-> > >  enum xdp_rx_metadata {
-> > >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-> > > @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
-> > >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
-> > >  };
-> > 
-> > [..]
-> >  
-> > > +/* Please note the driver is required to invalidate the checksum if the NIC
-> > > + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF program
-> > > + * modifies the packet since it can change some fields validated by the
-> > > + * checksum.
-> > > + */
-> > 
-> > Sorry, a bit confused about this part. IIUC this is in response to this
-> > discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
-> > 
-> > Looking at a few drivers:
-> > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
-> > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
-> >   bpf prog attached
-> > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
-> > - gve (gve_rx) - can do COMPLETE even with xdp attached?
-> > 
-> > So none of the drivers invalidate anything (and nether the bpf machinery), some
-> > choose to (correctly?) not report COMPLETE when there is XDP. So was the
-> > discussion about documenting this and giving some guidance? This probably
-> > belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
-> 
-> Hi Stanislav,
-> 
-> re-reading the previous upstream discussion, I guess we should just document the
-> expected driver behaviour (invalidate the cksum for both COMPLETE and
-> UNNECESSARY cases when the XDP program running on the NIC returns XDP_PASS) and
-> add a given kselftest for it. Agree?
+From: Haofeng Li <lihaofeng@kylinos.cn>
 
-Yes, let's have something a bit more detailed about how it works right now
-vs the expectation.
+Commit 57fbad15c2ee ("stackleak: Rename STACKLEAK to KSTACK_ERASE")
+renamed the LKDTM crash type and selftest configuration but missed the
+entry in tests.txt.
 
-By my point is: the comment in this patch also seems wrong? We do not seem
-to invalidate the csum, we just disable COMPLETE when there is a xdp program
-attached (or I'm missing something).
+As a result, the selftest generates STACKLEAK_ERASING.sh, which run.sh
+skips because the LKDTM DIRECT trigger only exposes KSTACK_ERASE. Rename
+the test entry so the generated runner uses the registered crash type.
+
+Fixes: 57fbad15c2ee ("stackleak: Rename STACKLEAK to KSTACK_ERASE")
+Signed-off-by: Haofeng Li <lihaofeng@kylinos.cn>
+---
+ tools/testing/selftests/lkdtm/tests.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index d8180bbe31e8..bec57a02913a 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -78,7 +78,7 @@ USERCOPY_STACK_FRAME_TO
+ USERCOPY_STACK_FRAME_FROM
+ USERCOPY_STACK_BEYOND
+ USERCOPY_KERNEL
+-STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
++KSTACK_ERASE OK: the rest of the thread stack is properly erased
+ CFI_FORWARD_PROTO
+ CFI_BACKWARD call trace:|ok: control flow unchanged
+ FORTIFY_STRSCPY detected buffer overflow
+-- 
+2.25.1
+
