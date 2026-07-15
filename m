@@ -1,57 +1,77 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBB547B405
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE373845DA
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784124734; cv=none; b=INuC5cCVkb1Ry+EeCYT0snMO+VE8vv8ceI9beyOBXXlgcNCWPwDkkuPtGDH+SEgzhvmh+NnTPZyOyvfqZLajRQQuTE3Oz7UdralgQFriN0wzfda5fGI9bpA41nvLU0aoHOgrwGR7GHHenlnqvIddBn5GfvZQ9JgnGeucqOFtJ4Q=
+	t=1784126160; cv=none; b=qc31O89GYwH2CYh2PQJlX/QUWlYJZkVzfJv8cBHXnMUD6QSBuN6Awk4JhIATwYWXNwIKimqdS3pzVecDU6Tv5TwG5+DrCBEInJ/Ij4ZqNyrC5ALP0PZUeeOhjV9EjRjx6EaV/KsT8RSm5KAkYyKTzyPA2WADFz2AsktGT0tE0ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784124734; c=relaxed/simple;
-	bh=afs5fLgT8Qx3Rxr22x1O8wwdXCqlwGq87d0SiIZw1Vg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VYUU3Xf7Ua3o9+E8hSXY9w0IOj1qYOp91KlDI79oacSLb+vmHII/bPgawJg98NGT31Xq/nISv/2eZWm9INlcNwAkIj3+sVtYzxlBpLHobXaRbalbjhexCpLhQrSWR/7qETtQC1S7ZvTIJ+fPtexg7Sc79m/0xaV1XVt5iFafb1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vee2idHR; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784126160; c=relaxed/simple;
+	bh=hxmKRPMmqGMKGywEfTu9KROw+Ys4d3cc+jYzBoXbH1A=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=LkLTdsvZXVUQc2eU/UY3BHPiuJmUet8foFQBmM6heP6ggjKIumc7R0gkOMgEWNoVMpT/cg7YVHFswV2j6ED4QMusCjZ/sHJC26iJifMWvnL3XBwk6C8EuSE8t3VTtDtZFCpzHY2nFjE+ZojOD1who1iLGOFIYSR63tpc/W8WV6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jvT+oBVU; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vee2idHR"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784124730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iva0H+8uYUGc12Hzh0ksizDRG/UQtCa60DRk1jyvB3c=;
-	b=Vee2idHR5IyO4YqpuEuKl/3i0VeAy0U36lbJqVzMaHkjSHjN7lLAxZOCzYNi/RLq65V+3u
-	weIAgZvj74PZsJqvoGU6l4XhifcR/q8UrYR+HzzWzisXVm2LQnT6m6H8J/d3myOGHA9/vX
-	fQF7OUPbu6aKAAjw/Z6cPuyE//mwo3g=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jvT+oBVU"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso3533004a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784126158; x=1784730958; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=z3P+ay8dWFUyLvh92+wpcw02jxXPVk53CiD8LmKlD/k=;
+        b=jvT+oBVUxc+9uR00Ulxnxc9l1TVjSUAaJWNrjsnWQJd/DjIjZx5gnV1J3dIVUep/dX
+         jAPjoUOW5xX8hRqkxm++CIEigTCXnQ/1eIaB1WrJA8cR7DiNa5H4FuQO1eNTUbxyZhm7
+         iTwSl7Jj3bs9jX47Lowr956C2t5HEmSBVLYSKmqQ0lPPw8XeDwuRtyWivnwExxNyNHe7
+         890kQOUgNB72SJUSjLTB8wC1+kzpHyIYp01vLBVSw0PFJQ1TViJqgclP5nhvu4Cf+Jx/
+         PluddWa/+0GiOCuvAa3/bhyxtrXjmJF6tUHIFbGH5Pg4JcYtvFURBZWPSyzGWzzpRt02
+         2cdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784126158; x=1784730958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=z3P+ay8dWFUyLvh92+wpcw02jxXPVk53CiD8LmKlD/k=;
+        b=qGyMUF1cJutgZ1EH7/I8Kyd5wGcAEVKn727kvSzlsmhwJHIYWBjjrjce4xOTZ+HK7D
+         q+hFgB3R/szgBDU9spYu4qFQuiZ5jpkHiUHImwge+4oDsfE7NLhiNFzq6nNdacFiiMYp
+         sHytgfqAdBuJBnjRTinH/Y/G8Cumb7TwWKKRV+a3VCxN1Q487I+KKgKguboMr0JZ+x9u
+         Uv2nQUl8SMfdQ9jTKdYBVk/iTILVMaoxRIbcrpto7QGkYKf5R8x1WbWD6KByNIu3HjAj
+         i6+vIZPXsDxi3UZPYihYGXZzkGUhuobdwCJcLTQfWv0g3D5ANIjAKQzxnOJLtV1J8o7E
+         fYow==
+X-Forwarded-Encrypted: i=1; AHgh+Rp7Q+2H95J8f+guUaMPMXJNYd5Ke6QlhsZ0CNFd5B+NZyu084sPP//HuYlxKlTVvoL3c5SHPOVA2SFqygf1v9k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmW/bitpKY8tew/yqA5zEsVDbskys7BmmWWD1qED2qhPNmDzTn
+	mgHpaah/XprONk6sirA0/MG1xSVRATX5zQUd2BLSd0M1t3UsfNgg1enR
+X-Gm-Gg: AfdE7cljfUuOzH3N5hkW+xZpBE2X0wWjjHIXoZsQp0+477fV13oIQHrFNN+UuVkcqiU
+	6GXd4+b7SPCPbovQ9Pv1ycZLTK8ssa0bm4v6O5SdezkFJCgXkUZm0f00KzwYIOnQ/fdgOl71Jt1
+	sgj0/UYhFzAQy+RWPcVg+KMs3zWH43sj8esedl91c4eXlNwXZ79YZFoqWngeW8IPs8nInqujWyp
+	andRpregY0Xpnq1Rx7QN/rYPUzxTVr8+Dzx9ADveEpa37Mqwd/+rSuDQF5gI5blCZu69zVpW+nT
+	fael0BoLMh2VXq/9q7ddG6rFsPYqfB735ACJ1m7e0onp84yOVKiu79hrIai89/xeU+rdNpsWuQx
+	MNCMNrXAHC02V8neTCTdrXVpszO6VdYQDEzaONJrVYGcrKnmd9j/upqGRdCRpRU3+/Pt699IE95
+	M41kfmUnLmNP875CY+ldRXV8yXcCgdD9IbKSY9/A0aa1tW4t4gVBc=
+X-Received: by 2002:a05:6300:6d85:10b0:3c3:7a0a:18a6 with SMTP id adf61e73a8af0-3c37a199b18mr757383637.18.1784126157664;
+        Wed, 15 Jul 2026 07:35:57 -0700 (PDT)
+Received: from localhost.localdomain ([2406:7400:90:2db1:3066:c473:74d2:497d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3140e4fcd31sm2370744eec.4.2026.07.15.07.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 07:35:57 -0700 (PDT)
+Sender: Deepak Rao Gaikwad <deepaksraog@gmail.com>
+From: deepakraog <gaikwad.dcg@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v2 3/3] bpf: Disallow interpreter fallback for BPF_ADDR_PERCPU insn
-Date: Wed, 15 Jul 2026 22:11:22 +0800
-Message-ID: <20260715141122.15783-4-leon.hwang@linux.dev>
-In-Reply-To: <20260715141122.15783-1-leon.hwang@linux.dev>
-References: <20260715141122.15783-1-leon.hwang@linux.dev>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] net: selftests: fix typo in ip_defrag comment
+Date: Wed, 15 Jul 2026 20:05:48 +0530
+Message-ID: <20260715143549.14094-1-gaikwad.dcg@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,88 +79,28 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-The BPF_MOV64_PERCPU_REG insn requires JIT to emit native code to for
-'dst_reg = src_reg + <percpu_base_off>'.
+Correct "thourough" to "thorough" in a comment describing the
+non-overlap reassembly test loop.
 
-However, the interpreter ignores the 'off' at its ALU64_MOV_X label.
-The 'off' indicates the insn is BPF_MOV64_PERCPU_REG insn. Then, when
-the interpreter loads memory from the register, it will hit a page
-fault.
-
-[    2.545572] BUG: unable to handle page fault for address: ffffffffacaaf034
-[    2.546485] #PF: supervisor read access in kernel mode
-[    2.547167] #PF: error_code(0x0000) - not-present page
-[    2.547850] PGD 134e63067 P4D 134e63067 PUD 134e64063 PMD 10021c063 PTE 800ffffeca550062
-[    2.548912] Oops: Oops: 0000 [#1] SMP PTI
-
-Set jit_required as true in order to disallow interpreter fallback in
-core.c::__bpf_prog_select_runtime(), if any BPF_ADDR_PERCPU insn is
-patched to the prog.
-
-BTW, rename the helper bpf_map_supports_cpu_flags() to
-bpf_map_is_percpu_map().
-
-Fixes: 7bdbf7446305 ("bpf: add special internal-only MOV instruction to resolve per-CPU addrs")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: deepakraog <gaikwad.dcg@gmail.com>
 ---
- include/linux/bpf.h | 4 ++--
- kernel/bpf/fixups.c | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/ip_defrag.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 31181e0c2b80..d9542127dfdf 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -4163,7 +4163,7 @@ bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
- }
- #endif
- 
--static inline bool bpf_map_supports_cpu_flags(enum bpf_map_type map_type)
-+static inline bool bpf_map_is_percpu_map(enum bpf_map_type map_type)
- {
- 	switch (map_type) {
- 	case BPF_MAP_TYPE_PERCPU_ARRAY:
-@@ -4190,7 +4190,7 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
- 		return -EINVAL;
- 
- 	if (flags & (BPF_F_CPU | BPF_F_ALL_CPUS)) {
--		if (!bpf_map_supports_cpu_flags(map->map_type))
-+		if (!bpf_map_is_percpu_map(map->map_type))
- 			return -EINVAL;
- 		if ((flags & BPF_F_CPU) && (flags & BPF_F_ALL_CPUS))
- 			return -EINVAL;
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index d3be972714b2..a0bddada7964 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2008,6 +2008,9 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 					return -EFAULT;
- 				}
- 
-+				if (bpf_map_is_percpu_map(map_ptr->map_type))
-+					prog->jit_required = true;
-+
- 				new_prog = bpf_patch_insn_data(env, i + delta,
- 							       insn_buf, cnt);
- 				if (!new_prog)
-@@ -2112,6 +2115,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			 * way, it's fine to back out this inlining logic
+diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+index f9ed749fd..146f2a2a5 100644
+--- a/tools/testing/selftests/net/ip_defrag.c
++++ b/tools/testing/selftests/net/ip_defrag.c
+@@ -378,7 +378,7 @@ static void run_test(struct sockaddr *addr, socklen_t alen, bool ipv6)
+ 		} else {
+ 			/* Without overlaps, each packet reassembly (== one
+ 			 * send/receive pair below) takes very little time to
+-			 * run, so we can easily afford more thourough testing
++			 * run, so we can easily afford more thorough testing
+ 			 * with a nested loop: the full non-overlap test takes
+ 			 * less than one second).
  			 */
- #ifdef CONFIG_SMP
-+			prog->jit_required = true;
- 			insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, (u32)(unsigned long)&cpu_number);
- 			insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
- 			insn_buf[2] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0);
-@@ -2133,6 +2137,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 		/* Implement bpf_get_current_task() and bpf_get_current_task_btf() inline. */
- 		if ((insn->imm == BPF_FUNC_get_current_task || insn->imm == BPF_FUNC_get_current_task_btf) &&
- 		    bpf_verifier_inlines_helper_call(env, insn->imm)) {
-+			prog->jit_required = true;
- 			insn_buf[0] = BPF_MOV64_IMM(BPF_REG_0, (u32)(unsigned long)&current_task);
- 			insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
- 			insn_buf[2] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 0);
 -- 
-2.55.0
+Deepak Rao Gaikwad
 
