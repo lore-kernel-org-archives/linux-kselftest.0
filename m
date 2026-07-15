@@ -1,53 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB173B8BBB;
-	Wed, 15 Jul 2026 03:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8D43B27E8
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 03:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784086444; cv=none; b=Uv0eGasU3NiZ9EMuUBI/eVhmui9Du71bstJzIehuUVxM9hYVjuFwn7cAwLkUr8w13XM5goNk9hYfRyxuI1zwVXqti5OOcfkWh1voR7hayHcng18jelkIjyMpXjp/NtNOvtvtlsWKK0ImckOKJvOB2SvbzcrD99Hs2gWKLlVApwo=
+	t=1784087705; cv=none; b=tXwuvsPIQ8MD9BFqm3jW2TCrVU1TnqNKGN59EBPsmSMVLFKAFJOel+bQRvkSntkktuK/RLvJ1ZB0SA66C0NPTRh0kKJHCSt9IgOX2py5TjPJhVLX6Mjc5G02C5Gui53wQmv7oJ15YwJog1eYNhX3NZb2GvZql5XSzen0hASPaIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784086444; c=relaxed/simple;
-	bh=SAqGjEWltCWntTr9lFfdexQCFMJTv7uS02KBC6KA8EU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tmPv0dWFT3u237SGFIegxOvxLewseS9eSao4sRYMGOxbvOJKhPTbY/pDgXDMGfy5EjnD9a0pFtiZArPwK6Sm8VVXTNQN6VBjRHCda8iPW47hrxPc/e2ygCasOvHZDy5NIxn+ZPb2ReLna45roghVpfb+J84QcQN3MyVYgVXJ1tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeIXtBkE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784087705; c=relaxed/simple;
+	bh=ewdPb56xBjFmrnI7fXaoa7wPaFo1hdQQpES79KxD2+g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZjULLSnBzTTWNhKWvGob57mFFseZPKeCCmOq/eDoh56ZdclRLBPCwQ2CVnXrE/joqQYoKZFuP8UkeRtUHwCOwB/98wXu+kO4oEp3Y7WTVveldOt0ZI1XLdDe8+vVN0Lpla+HP/dY2OR2ke555rNglQrnvJ1Uuz5CdCh7RHYDY7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AxzwDXYW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeIXtBkE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4E4C1F000E9;
-	Wed, 15 Jul 2026 03:33:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784086409;
-	bh=EyyAlf2/bvw8+peozXRWIsuWIdLEd+I4yooKGgPuwrY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=oeIXtBkE3A5Lq2mlir6pP/PdAqoOEAqfMo/wK0x4C107XHmtPGKlJfJvbPlDeAVht
-	 uGvfAw2E8GxgcDo9kqBuuX9oYCaCXgRRImmxDlO8dFYQB86C0Uf9wYVS1NOgSowfF5
-	 m5nLi5oOg+2vAjRUz/8y4wsB0zRcoK0VPpcfjGidXzZHhgw8X48oCZRJ1NngtIJoJh
-	 tp7RvK5lLTtHDgueVMw0pcGve4dP1ZcaBW6wOUiBBSCWSuTDSpLVGQtqVP9M0Q1OhL
-	 h9A4K+yzPxth537CM9GHWQ32wlZpx/JlSrtTSkzYwjViyAjYssik1I3v2jzGaiRcNh
-	 1dcGOPXXqx9xg==
-From: SJ Park <sj@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	stable@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	Fernand Sieber <sieberf@amazon.com>,
-	Leonard Foerster <foersleo@amazon.de>,
-	Quanmin Yan <yanquanmin1@huawei.com>,
-	SeongJae Park <sjpark@amazon.de>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AxzwDXYW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784087702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GmK/PKs9sAs6/cDg4W7d1yX1cAFZHAmC6KiaUiX97ac=;
+	b=AxzwDXYWHVlyHi/TwRgCDPtsHMz6RoWWc/Vdxenl9FnCh+f1VDRpqsxfBS4hUb6eC43+7h
+	Os6yWbShCUK6Q6oAe9GVlPqdzqYozC9sKeNWsObJrwupeSBVmw/UJng9uzRV+WUS3uWmUo
+	TSJQWSOpOe7Jdg4ZYUEG4h0YiCdbn8c=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-Nqb5ZOT6P26dU6isF68nVQ-1; Tue,
+ 14 Jul 2026 23:54:59 -0400
+X-MC-Unique: Nqb5ZOT6P26dU6isF68nVQ-1
+X-Mimecast-MFC-AGG-ID: Nqb5ZOT6P26dU6isF68nVQ_1784087697
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 892741956089;
+	Wed, 15 Jul 2026 03:54:57 +0000 (UTC)
+Received: from llong-thinkpadp1gen5.rmtusnh.csb (unknown [10.22.89.63])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A402A30001A2;
+	Wed, 15 Jul 2026 03:54:55 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v1.1 0/6] mm/damon: unurgent fixes for infinite loop, NULL de-ref and races
-Date: Tue, 14 Jul 2026 20:33:25 -0700
-Message-ID: <20260715033325.109466-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260715031002.108504-1-sj@kernel.org>
-References: 
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] selftests/cgroup: Fix intermittent test_cgfreezer_ptrace test failures
+Date: Tue, 14 Jul 2026 23:54:46 -0400
+Message-ID: <20260715035446.565625-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,25 +59,112 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Tue, 14 Jul 2026 20:09:55 -0700 SJ Park <sj@kernel.org> wrote:
+It is found that the test_cgfreezer_ptrace test of test_freezer can
+intermittently fail on some architectures like arm64 and ppc64.
 
-> Sashiko found a few issues in DAMON that could cause infinite loop, NULL
-> dereference and monitoring results degradation.  The first two sounds
-> scary but the infinite loop happens only under unreasonable user setup.
-> The NULL dereference is only in a unit test.  Monitoring results
-> degradation is trivial since it is only best-effort, and those happens
-> from only unlikely races.  Still those are bugs that better to fix if
-> possible. Fix those.
+After further tracing of the mechanics of the test_cgfreezer_ptrace test,
+it is found that the ptrace(PTRACE_DETACH) call will spawn another process
+to perform the detach by temporarily unfreezes the cgroup and then freezes
+it again afterward during the detaching process. The reading of the
+frozen flag from cgroup.events is done by the main test_freezer process
+running probably on a different CPU. As a result, racing is possible and
+the intermediate unfrozen state can be read leading to occasional test
+failures especially on architectures with a weak memory model like arm64.
 
-Sashiko found no blocker for this series.  Sashiko sent findings to damon@
-mailing list [1], and I replied to all the comments.  Please read those for
-details.
+Fix that by using the cg_prepare_for_wait() and cg_wait_for() helpers to
+wait until frozen state is set or it times out. A suppress_debug_msg flag
+is added to suppress the printing of debug message when cg_check_frozen()
+is used during this waiting process.
 
-[1] https://lore.kernel.org/damon/
+By running test_freezer 100 times in a loop, there were 28
+test_cgfreezer_ptrace failures out of 100 on an arm64 test system before
+the patch. After applying the patch, there was no test failure at all
+in 100 runs of test_freezer.
 
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ tools/testing/selftests/cgroup/test_freezer.c | 41 +++++++++++++++++--
+ 1 file changed, 38 insertions(+), 3 deletions(-)
 
-Thanks,
-SJ
+diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+index 0569e93fa6b0..9edb2d34658c 100644
+--- a/tools/testing/selftests/cgroup/test_freezer.c
++++ b/tools/testing/selftests/cgroup/test_freezer.c
+@@ -14,9 +14,11 @@
+ #include "kselftest.h"
+ #include "cgroup_util.h"
+ 
++static bool suppress_debug_msg;
++
+ #define DEBUG
+ #ifdef DEBUG
+-#define debug(args...) fprintf(stderr, args)
++#define debug(args...) do { if (!suppress_debug_msg) fprintf(stderr, args); } while (0)
+ #else
+ #define debug(args...)
+ #endif
+@@ -585,7 +587,8 @@ static int test_cgfreezer_ptrace(const char *root)
+ 	int ret = KSFT_FAIL;
+ 	char *cgroup = NULL;
+ 	siginfo_t siginfo;
+-	int pid;
++	int fd = -1, pid, retries;
++	bool frozen;
+ 
+ 	cgroup = cg_name(root, "cg_test_ptrace");
+ 	if (!cgroup)
+@@ -622,15 +625,47 @@ static int test_cgfreezer_ptrace(const char *root)
+ 	if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &siginfo))
+ 		goto cleanup;
+ 
++	/*
++	 * The ptrace(PTRACE_DETACH) call spawns a different a process to
++	 * temporarily unfreeze the cgroup and then freeze it again in the
++	 * detaching process. The reading of the frozen flag from cgroup.events
++	 * is done by the main test process running probably on a different CPU.
++	 * As a result, racing is possible and the intermediate unfrozen state
++	 * can be read leading to occasional test failure especially on
++	 * architectures with a weak memory model like arm64.
++	 *
++	 * This intermittent test failure can be avoided by using the
++	 * cg_prepare_for_wait() and cg_wait_for() helpers to wait for change
++	 * in the frozen state if necessary.
++	 */
++	fd = cg_prepare_for_wait(cgroup);
++	if (fd < 0)
++		goto cleanup;
++
+ 	if (ptrace(PTRACE_DETACH, pid, NULL, NULL))
+ 		goto cleanup;
+ 
+-	if (cg_check_frozen(cgroup, true))
++	suppress_debug_msg = true;
++	frozen = !cg_check_frozen(cgroup, true);
++	if (!frozen) {
++		/* Attempt to wait until frozen */
++		for (retries = 0; retries < 3; retries++) {
++			if (cg_wait_for(fd))
++				break;
++			frozen = !cg_check_frozen(cgroup, true);
++			if (frozen)
++				break;
++		}
++	}
++	suppress_debug_msg = false;
++	if (!frozen)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
++	if (fd >= 0)
++		close(fd);
+ 	if (cgroup)
+ 		cg_destroy(cgroup);
+ 	free(cgroup);
+-- 
+2.55.0
 
-[...]
