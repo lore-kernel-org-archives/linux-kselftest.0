@@ -1,85 +1,110 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9245B3815DF;
-	Wed, 15 Jul 2026 14:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8947839184A;
+	Wed, 15 Jul 2026 14:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784126616; cv=none; b=SJjS2M4eagjewBDUOES8qRJyJ2mZ6+JyXJFoz+5SFU6e/eh1/wcQg6Z0ShWJzh4CnsfudNPJ1Rinpvz3834KEIaqCwabdgFD1DKd5Pvlet5UB75/Faiz327PyfQKdofIP5bmHdNmo/UiYpQeIUGT0eqwLTiG72PnIn0hynDpMeY=
+	t=1784126865; cv=none; b=TPFX+VW22OzCIr+GxWqikdpv5QeMYpRJbNXpC+O2x/vrPFiVnChdyRji4OwPMKvrkXJ02P3JkjAFE+HijaTtLmpIAJnYObLrYxHM03BaKpl21aW7P7daMnL55L8AkxxaMJkXkP08eYvJZprag2i0BaEp2lCTc0WXv6r+WfeEQ7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784126616; c=relaxed/simple;
-	bh=cEKDHo/OZrzKx03VxEdPl4q31s7Fn2qq0x/9Vq/CJts=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=F68aKDequPDFm76NTS2nywx7F4WQR2GXCT+SWaQq8KWQ75L7bh/j7AFb5wDwVujotRkT0VOM9E6u7v2NV0Bh3tAeVnqs4ftvNmoT2/ddlAcdce5WU0EFp1h7q1sAQf3DmZDftfggFo1gSdc7/Qsnlsm7zqbU6bmkIB79DQYyuLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jybkMy+B; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1784126865; c=relaxed/simple;
+	bh=sYF1YoI7FvLDGePfeZYsbqzSb7LSoADtIopg9Qb/5wI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pbNbP/Ohr4AIzxSBszDAQHFOfvs0IP6AitSWJpk8IUNnYy1mq24bsHWSSv9TCAwdoF7z1Eg3dgjVeLRbMUmWKqK0f9tngWc9waXbnMMbNum8fAvT4aZk0zo3IMAOciFPHEV5QrMw+QxNCKzv5ftGT8DuZwND5FzGBVnV/Egtq+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BTwhcdSj; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jybkMy+B"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 65C0AC2B9D6;
-	Wed, 15 Jul 2026 14:43:49 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 652516035C;
-	Wed, 15 Jul 2026 14:43:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EE8DB11BD15D9;
-	Wed, 15 Jul 2026 16:43:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784126611; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=cEKDHo/OZrzKx03VxEdPl4q31s7Fn2qq0x/9Vq/CJts=;
-	b=jybkMy+ByVzzRCqbmx6z187kH33b00yiUqlfsKCt3c+WhaQpT4w48dlO7UlmdnESY8OsEh
-	1ZBICUJXfaZMnoMrKERp3tYzDuvhYs5vB3db+pAu5IsY9OjVKStKyrKhGc8CClxSGjsubm
-	7rg5oe8uOsXEm8hHeY3PHsDu19Ae1rs6uot2/Be9xkt+YQp8bDOZNNVfAJNv+Xu/xxgdRX
-	/rSWWT2GkWGNQtb9VziO7y38UW6+dQtwQzob25xHXj4nYrmqEJsRGkhOw4LMhMCR4o1TSJ
-	0ShD22aVrRAXJ1gyfzXexAQc+GPLvMwFb5hP9AFX4yVJB0hZRZxr968LT0Vo8Q==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
- <sboyd@kernel.org>,  Brian Masney <bmasney@redhat.com>,  Rob Herring
- <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
- Dooley <conor+dt@kernel.org>,  Brendan Higgins
- <brendan.higgins@linux.dev>,  David Gow <david@davidgow.net>,  Rae Moar
- <raemoar63@gmail.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-  Pascal EBERHARD <pascal.eberhard@se.com>,  linux-clk@vger.kernel.org,
-  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com,  Herve
- Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH v2 0/7] clk: Add support for clock nexus
-In-Reply-To: <aleSJafTTPe9Keas@shikoro> (Wolfram Sang's message of "Wed, 15
-	Jul 2026 15:59:01 +0200")
-References: <20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com>
-	<alNN5qxBJ4EsB3Li@shikoro> <87ik6ge7kd.fsf@bootlin.com>
-	<aleSJafTTPe9Keas@shikoro>
-User-Agent: mu4e 1.12.7; emacs 30.2
-Date: Wed, 15 Jul 2026 16:43:27 +0200
-Message-ID: <87a4rse2k0.fsf@bootlin.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BTwhcdSj"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE13B1477;
+	Wed, 15 Jul 2026 07:47:38 -0700 (PDT)
+Received: from [10.164.148.50] (unknown [10.164.148.50])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFBB73F7B4;
+	Wed, 15 Jul 2026 07:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1784126862; bh=sYF1YoI7FvLDGePfeZYsbqzSb7LSoADtIopg9Qb/5wI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BTwhcdSjB65pW5SHOUKXDIn6CwPmGiqw566ssT4vahKzI8xJwbNb6xig6HiSW1+dQ
+	 o5wK8+bqg42aSRuk55pkj58qGiOn/7Vhi3VkPFYL3xSnNr5Pb2wetOnDmqAhE3ap6b
+	 STeNfDfGo2zO7GEMTbb/9t1u07xqpfowK4XoW35k=
+Message-ID: <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
+Date: Wed, 15 Jul 2026 20:17:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: khugepaged: skip swap tests when swap is
+ unavailable
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260715133418.170386-1-jaeyeon.lee.dev@gmail.com>
+ <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 15/07/2026 at 15:59:01 +02, Wolfram Sang <wsa+renesas@sang-engineering.c=
-om> wrote:
 
-> Hi Miquel,
->
->> that all the drivers work on RZN1 hardware. When we send this out we
->> will include a link in the cover letter with a branch to test,
->> connecting the clock, irqchip an crypto changes together. Don't hesitate
->> to remind us for that testing branch if we forget to include it!
->
-> Will surely do. Sounds awesome, thank you! Bonus points if you could
-> also shorty summarize how you tested all the stuff then.
 
-So far I just enabled all the crypto selftests (CONFIG_CRYPTO_SELFTESTS,
-CONFIG_CRYPTO_SELFTESTS_FULL). Given the amount of errors I got during
-my first iterations, it seemed pretty complete :-)
+On 15/07/26 7:39 pm, David Hildenbrand (Arm) wrote:
+> On 7/15/26 15:34, Jaeyeon Lee wrote:
+>> The collapse_swapin_single_pte and collapse_max_ptes_swap tests use
+>> MADV_PAGEOUT to swap out pages before verifying khugepaged collapse
+>> behavior. On systems without swap configured, MADV_PAGEOUT succeeds
+>> but the pages are not actually swapped out, so check_swap() returns
+>> false and the tests report a failure.
+>>
+>> These tests cannot run meaningfully without swap, so a missing swap
+>> area is an environment limitation rather than a test failure. Detect
+>> the absence of swap via /proc/swaps and skip the affected tests
+>> instead of failing them.
+>>
+>> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+>> ---
+>>  tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++++++++++++
+>>  1 file changed, 25 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+>> index 10e8dedcb087..f9b4ebe733ce 100644
+>> --- a/tools/testing/selftests/mm/khugepaged.c
+>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>> @@ -100,6 +100,22 @@ static void skip(const char *msg)
+>>  	exit_status = KSFT_SKIP;
+>>  }
+>>  
+>> +static bool swap_available(void)
+>> +{
+>> +	char buf[256];
+>> +	bool ret;
+>> +	FILE *fp = fopen("/proc/swaps", "r");
+>> +
+>> +	if (!fp)
+>> +		return false;
+>> +
+>> +	fgets(buf, sizeof(buf), fp);
+>> +	ret = !!fgets(buf, sizeof(buf), fp);
+>> +
+>> +	fclose(fp);
+>> +	return ret;
+>> +}
+>> +
+> 
+> That doesn't mean that swapout will succeed.
+> 
+> Take a look at cow.c where we use pagemap_is_swapped() after MADV_PAGEOUT.
 
-Thanks,
-Miqu=C3=A8l
+That suffers from the reverse problem - in case of a real swap bug, cow.c
+will skip the test and anyone running the test won't bother.
+
+I think this patch idea is reasonable, we need a way to say "swap definitely
+won't succeed because there is no swap device, so skip" vs "swap failed,
+need to dig in!" .
+
+> 
+
