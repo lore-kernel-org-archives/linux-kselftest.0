@@ -1,179 +1,132 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F6B385D76;
-	Wed, 15 Jul 2026 07:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013122931CE
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784099579; cv=none; b=pLiykpPXog4XNeTDhYOZr61eoMcX9XcwJXeXy6+Mu3zs3OwEmPdUSsLoCqCdwEGgl459RConxnQzp3eQUh69q8ICtSK33JuZlQsT1UA1xknFMkwZJPsUYGtWJYJYpxZdwtBi3vE9EIfchQ2Am4LJ4r91mX6KxgZoTUdRxcm89vY=
+	t=1784100768; cv=none; b=Zr9ffjz/xDKYY/KSWxQX4OkNKz5W2PuUPKJMSoxJIgeAnJrPbdijoyrsBQc5uoMkd1ysSFF4Xt+Q7Df7S/7gWFikyVK8++/21I4uf9XLDvkhM8INrHpAb5wF9njFjvGEeDzPHkQJfpPFy/poF0cZs9U5zeyqxN1YjkyQ5z+oT3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784099579; c=relaxed/simple;
-	bh=02SI7iE0lGhXuUmbRtzFC6rHTFqehR6cWMnWlQl1OOw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ndRhZqB9h/yA4JSWUctCGjNR3xImBNnfZKB8kWT/OFzpUAGugmJ3QWU4A1xXHzZ1nt/VXKm/cAaWowaBK0uPq6d1acZpBgjCggYEFCFHuqESrgC9UMVdjyu8o7I5f3qhMrKRQHd6Sl3dS5U2LgSvV9yt2t3ttw+TITIdbbD1/L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 916423e8801c11f1aa26b74ffac11d73-20260715
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:5515df0e-86b2-41a0-9efc-ac1cc5e2e52e,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:d523b6c8de346b41a4dd3fd13ff1fde6,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 916423e8801c11f1aa26b74ffac11d73-20260715
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1419687284; Wed, 15 Jul 2026 15:12:41 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Wed, 15 Jul 2026 07:12:25 +0000
-Subject: [PATCH v3 1/2] bpf, riscv: add support for timed may_goto
+	s=arc-20240116; t=1784100768; c=relaxed/simple;
+	bh=L9CPXAJheqWNoyOUAcILUbOdgB7KPZUbQIcXWoChaNg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LqVKj3p1eL9syYTkFs48dXNVhWxca6qMt2iPy+HfYP8PKG63BWiU80MFtINwfq4lyV9dMnNA45xfxGjLA7HSh42m+8TprOz9Uu/Nt9V+VtFKUS8b4nKg/ChT1kZxkv2cNLdE14KLKxUZlBzEgfXzE7sl09psRgQYh/vBNrHjxno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jbSnKBEI; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jbSnKBEI"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-47dec32798aso5223087f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 00:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784100761; x=1784705561; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=P+W/6w2BHQvTPXAgvWknwKhqQxgDvHbPVAhqRj7X3rE=;
+        b=jbSnKBEItn7XCZJmOc3OgjXbw0ifAQ45sX+VA0r4HWPCLolnVXlF7y75/KSgOQkIAe
+         8wF2XibpOb7fbtCt/lZkwN+EDQr073u4/TD3lAQvHP3wxHH+yvmQ6vAM87UH2QnFDnly
+         ZoT9B3p/l1R1ZKdJQ8TmDzapU3iifczdpsIjUkbI0ADMSSTLKHq7XsXuYNTf1RuCL6dy
+         eQhpiZKzAq81h2afzH0V67SAx4PduqFoEpdRb8+BC/JiVpHk2GO9tDrbG4lqxjONY16e
+         k4SXpueHLYEoCyTzSndOPzTsSA1BOIlmkXMKInGlleqF6o9+txjsfK6Hk2g6RKureBhg
+         zuYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784100761; x=1784705561;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=P+W/6w2BHQvTPXAgvWknwKhqQxgDvHbPVAhqRj7X3rE=;
+        b=k7NzntD4UYAiyDNCQEshTuiMjKymlWkIcqZt0cErG49Xbn3oxIrdkP1PHE5jfhrfu4
+         5csifAc3uElEv6MqnVjwrDmFMSxShuehlsrBEqleLgKIogBFNv3zPYgNIWeF2HVpXoWq
+         3u8qEx7LI77l5sJdKthFsaTbKVXHFoKbORDZ1dRhaKtyiEmdJ3BBuwvn0VgaxYEb4iWK
+         kJ3o50mY1tm9eq3+vbt6yP5f4/GXFWH7W53+zkqsW5vXlXTCMi6fXh90fJ5+s3y21aTk
+         q+qigxQ9pLCI+QOVLp471Sfm2ZkFjnEp3CfBpeDaLOd2w4/X610yRDqR9lpLRdR37qlX
+         4QYg==
+X-Forwarded-Encrypted: i=1; AHgh+RoHgAAEjgsLq3LGrKb8EegfwAxQHE/ZZWTfn7z3Yq+qOpgtEsFtyTvwGhwlybpLccudEgdvDA/8mc5jmo0sd4c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNDmaBP2/kyWerrvqHltSLMhkb49J58ALqHz5letP9ch38JOUp
+	87aTcY7cEMfxXcm2xnqqL/et1E5Yx9aEE339zjvQk54JMZ4L4PY+Q4ah
+X-Gm-Gg: AfdE7cmHPxjA9lx4E0PSwyioBFCmP192wD8Q8Ok39swsewaqfjrQIE/EhNFOxilQ9Ck
+	CQcxuGGG3bnyBVjCg4glMOC9zxYgCkk2Jy72yEsNbtjAFQ902vHiKiiTG2oxAV1b0rJQHEUHUU3
+	o3EqE6tIHY+ID3RAZuUKY0b5lavLAE56X1HvKNrCuZvaN4V23aCnBAV1LlU5F/bScqJ+dKWmTBC
+	ezX4wxlqIZN0iraFCo76fWVBig8Di9CsHx390/xmhMrQfq6oA7FSt0nayEEud5X23St4IRxOenI
+	rdOO/cPXwJdwbmHb5KCWjG7AXtqqCxgJsZdFJmEwTqdsBWFoIUZmsphN91sQs2vks1Zd0MtQn1z
+	ovuQb9SRWJVaQG2BVbHVvxc+Ma3bKhN1t7wH+I3ohJ9lyPjzMCiE3RyNyr3wNDg==
+X-Received: by 2002:adf:f012:0:b0:47f:4ba0:6950 with SMTP id ffacd0b85a97d-47f4ba0699fmr3452109f8f.2.1784100760954;
+        Wed, 15 Jul 2026 00:32:40 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::dd7e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f464b7e22sm13804386f8f.25.2026.07.15.00.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 00:32:40 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 15 Jul 2026 09:32:39 +0200
+To: Kuan-Ying Lee <kuan-ying.lee@canonical.com>
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: Fix pointer type mismatch build error
+Message-ID: <alc3lw0ubV96oaJK@krava>
+References: <20260715053559.28535-1-kuan-ying.lee@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-riscv-bpf-timed-may-goto-v3-1-cf2a9c3d843f@kylinos.cn>
-References: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
-In-Reply-To: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
- Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260715053559.28535-1-kuan-ying.lee@canonical.com>
 
-Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-across the call to the generic bpf_check_timed_may_goto().
+On Wed, Jul 15, 2026 at 01:35:52PM +0800, Kuan-Ying Lee wrote:
+> We hit the following build error while running the seccomp selftests in
+> our testing.
+> 
+> CC seccomp_bpf
+> seccomp_bpf.c: In function ‘UPROBE_setup’:
+> seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional expression [-Wincompatible-pointer-types]
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^
+> seccomp_bpf.c:5175:57: note: first expression has type ‘int (*)(void)’
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^~~~~~~~~~~~~~~~
+> seccomp_bpf.c:5175:76: note: second expression has type ‘int (__attribute__((nocf_check)) *)(void)’
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^~~~~~~~~~~~~
+> 
+> get_uprobe_offset() takes a 'const void *' argument, so cast both
+> operands to 'void *'.
+> 
+> Fixes: 9ffc7a635c35 ("selftests/seccomp: validate uprobe syscall passes through seccomp")
+> Signed-off-by: Kuan-Ying Lee <kuan-ying.lee@canonical.com>
 
-Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-expansion path.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/Makefile             |  2 +-
- arch/riscv/net/bpf_jit_comp64.c     | 13 +++++++++-
- arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+), 2 deletions(-)
+thanks,
+jirka
 
-diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-index 9a1e5f0a94e5..6458d4d51990 100644
---- a/arch/riscv/net/Makefile
-+++ b/arch/riscv/net/Makefile
-@@ -3,7 +3,7 @@
- obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
- 
- ifeq ($(CONFIG_ARCH_RV64I),y)
--	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-+	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
- else
- 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index c03c1de16b79..4f88a446278a 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1841,7 +1841,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (ret)
- 			return ret;
- 
--		if (insn->src_reg != BPF_PSEUDO_CALL)
-+		/*
-+		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-+		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-+		 * skip the normal "move return register into R0".
-+		 */
-+		if (insn->src_reg != BPF_PSEUDO_CALL &&
-+		    addr != (u64)arch_bpf_timed_may_goto)
- 			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
- 		break;
- 	}
-@@ -2157,3 +2163,8 @@ bool bpf_jit_supports_fsession(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_timed_may_goto(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-new file mode 100644
-index 000000000000..f4bf2cd10586
---- /dev/null
-+++ b/arch/riscv/net/bpf_timed_may_goto.S
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-+
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+
-+/*
-+ * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
-+ *	- input:  stack offset in BPF_REG_AX (t0)
-+ *	- output: updated count in BPF_REG_AX (t0)
-+ *
-+ * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-+ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
-+ * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-+ */
-+
-+SYM_FUNC_START(arch_bpf_timed_may_goto)
-+	addi	sp, sp, -64
-+	sd	ra, 56(sp)
-+	sd	s0, 48(sp)
-+	addi	s0, sp, 64
-+
-+	/* Save BPF registers R0-R5 (a5, a0-a4) */
-+	sd	a5, 40(sp)
-+	sd	a0, 32(sp)
-+	sd	a1, 24(sp)
-+	sd	a2, 16(sp)
-+	sd	a3, 8(sp)
-+	sd	a4, 0(sp)
-+
-+	add	a0, t0, s5
-+	call	bpf_check_timed_may_goto
-+	mv	t0, a0
-+
-+	/* Restore BPF registers R0-R5 */
-+	ld	a4, 0(sp)
-+	ld	a3, 8(sp)
-+	ld	a2, 16(sp)
-+	ld	a1, 24(sp)
-+	ld	a0, 32(sp)
-+	ld	a5, 40(sp)
-+
-+	ld	s0, 48(sp)
-+	ld	ra, 56(sp)
-+	addi	sp, sp, 64
-+	ret
-+SYM_FUNC_END(arch_bpf_timed_may_goto)
 
--- 
-2.53.0
-
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 358b6c65e120..0622bc2acad4 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -5178,7 +5178,8 @@ FIXTURE_SETUP(UPROBE)
+>  		ASSERT_GE(bit, 0);
+>  	}
+>  
+> -	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> +	offset = get_uprobe_offset(variant->uretprobe ? (void *)probed_uretprobe
+> +						      : (void *)probed_uprobe);
+>  	ASSERT_GE(offset, 0);
+>  
+>  	if (variant->uretprobe)
+> -- 
+> 2.43.0
+> 
