@@ -1,190 +1,114 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8064B47DFBD
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4644611C5
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 15:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784127273; cv=none; b=eBgFpgYJSPBYjqCPhKwbzGpkygILjPV6RJT0w74QYwJsfkbkFuKagTPhyAB8JoTCgxuHNB4f/zi5OdqI/7RjYhzDLPF8rAb5PU3vbx577LALkeppbPnlSdmvmaIAM5ywSg9s22ZglJBvYj4H6bHr0SYQYdKhsoZo0QBL5lRU5Cc=
+	t=1784127737; cv=none; b=VJylWHSJFLlpelMDHB5MXG/Xyj1WIkmeThO3PAMri2/sOh8+lbtab20Rg5OS1IfCm5pA6QKq9ps3vIkykX5ZI1+WodHksaiDtSBNa/3po0LBQyRmUYLjOItObaB4iCsQCmeClWzhpnssEtEQ7TwQ5057L9LylW6IiEMlAoqLGv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784127273; c=relaxed/simple;
-	bh=IxAkk/33tiz9H88smr/LKk6TLSYHCBaXGlpP5ahBnLU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RjTcRg2bqMTubCcot5yC31+OyXAYMUMASw9kvn6GvzSaK0Kal60lKzxehfgkfFYA4/wADdVyugCBhsPVI+RWD6GCYs3IKRCRyX3EexVgqZnZGtrqD2oCBwHrKFyxDvhvOOqXQPXVpozJ+1yB+EoRWjX71vx26u2s8brKtq2bBYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=op66BKic; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784127737; c=relaxed/simple;
+	bh=QBcmHHIDpPZ2zSYqCsJ07Zn7cTcc/wqKwrbcJo89maY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bOOc63TLQaAtL2+21NkxqCk2YhEJLft+v0LsBLQvd2ukF0QMuofq5TccBBxSszG8E7kUQBa7E/WtOibswGq8EoYRE4PvkGNkTSV3HOL/lt/ZpPbr8/51GnvBfookO/XBimPv+KAhPcSi2U0u7woecV1xc2JBbnv96pcGD4eSjHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=DE2WqHhT; arc=none smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="op66BKic"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784127267;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+EzxkN0ejXTQh2wUnfoxzGBh8Ymoz3E2lArEKEFtPUU=;
-	b=op66BKicsUEDzJU9EBMBIG9auGepduRlOXJENPcAc59EpmXyybvMIjdNDyRkn7EZKUdImP
-	DJhrCbG28bjahdW9pPXsvj59PPM19OYtIBk6x8U2t8dcSsndFKQRREcgu4X421il3aIF69
-	iXE+vKNgL1E5c7iYt+evt8eg7EKh8/Y=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
-	Yung Chih Su <yuuchihsu@gmail.com>,
-	Wyatt Feng <bronzed_45_vested@icloud.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH net-next v2 2/2] selftests/net: packetdrill: Add two tcp_purge_receive_queue tests
-Date: Wed, 15 Jul 2026 22:53:27 +0800
-Message-ID: <20260715145328.54597-3-leon.hwang@linux.dev>
-In-Reply-To: <20260715145328.54597-1-leon.hwang@linux.dev>
-References: <20260715145328.54597-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="DE2WqHhT"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-97622cc1f40so2193811241.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 08:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1784127733; x=1784732533; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=nGecurzBYdjUfiEExv0oL4FVVbYZSUEIMh9OhYH+0R0=;
+        b=DE2WqHhTKM3qWnPPNIomeJRudvuTvXFYZNsYdA++akthGHjRltuFiX2iUsmeHcvuah
+         11wmhmJHWQUCtSD/AlL6FzZabxDIkrvNpJ7dCRvviHJ3OETCfkXIPvrg8LFuppfR3I6U
+         vr0IqCCj8SBxmsK46CKoUnqdCVSSlD79b5FSkmkPIlxgKt4HWWbahu2hKBqCyq6cl208
+         Wrv5rBFFHPOrPGRvZLdAlFL4tltc0DxhseNJAD2LzDZEU+TRQA4zleDET+SFvuwktmxS
+         1G27sEZSxUCyjA+AA8cZPpVK4+T3CJKxupJJhoeFIBBBsBuURQ7sfJW0yzAiKGu5XeXy
+         vyoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784127733; x=1784732533;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nGecurzBYdjUfiEExv0oL4FVVbYZSUEIMh9OhYH+0R0=;
+        b=H5aOUlr/+T4Ifwiwpud8pv6+Ni0AXHq9C5OM2kkDIbURB9eC26XKIsvUovo9xhvf8p
+         bR65KVbUiygmuP+klyza+TeglogZZvKXLCZojHeZstcM5GSgrDXKeHH+yB43agvX0W8t
+         VJReS6AvK1kmyNMqcXvlQzSffiGQ+POLtfDJYTfmhFyiPm/lYng8O4QFYWT5Fj1IE4S1
+         if8s1/5a8edjQchzeKwIEjqkgm/CevXHNAJkGJTx+nG9UA8ULXnaMfHHkK6DE3eptE37
+         hvjBqlZGWOIdBBZGe1Dy1m4J4b8rDcO4VWreqfzeFMxVbY76zod94VcS3VpM8lakq8EX
+         Oi/A==
+X-Forwarded-Encrypted: i=1; AHgh+RqYQ7aV7slyEYiKh1li80EunChOZLAspPy/I3U0DEp18iZpAYMnCbO0ZF8vJXhKg4RDJ3i3BIZNiklhot1MALE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+yn0lqU1MtW9o1PSEiI4z+IGOI/i+CJql4occGsrCtozQj5Sa
+	ghM2yHgjbnUqNuuh93aTvbaEcySkRSG7gfwnks5AmgNBCVjYoMQHQNI7frBR8v3e7Qk=
+X-Gm-Gg: AfdE7cmSVPUh2ClsghP26zloWgNyryZUvGS+gP+LKhCOGxEqHslIVTPxzY5SaxlqIyR
+	xAjQJdURjshe1UzJDe6tVsrd55+zfkT6mtCXmc4YBKdZQ5ajT+c8iyfG4/PBknmqk+uno/Q9RKm
+	EdYmMNV7r5y+nhn3DTOdd+PL68nHu71yoJnIAeEF2a+XPRCQ1M6LE+KhT6j/sjvs0jOhtSlcIgY
+	JV9lIfV5TikbC8b7Z0OBH5CydtJcN0iEa8R+v6ZUf2Rr8zRahQQUUf0Z39APsGCj4EO/Kz++mMI
+	nkFM9uC3FgiBMmcM5GbSzoUcfiLokHxJzsxWppVC0TLrkktSEcY8kNI6DpFeGYH7393PJoZnAkw
+	wxIFCg/1FWTW9YQOfuXJEisgZapkSRv35L6t2c6zuWrSmR0COXhnconbwbSw9
+X-Received: by 2002:a05:6102:d87:b0:737:9edc:36f6 with SMTP id ada2fe7eead31-7458757b204mr4167130137.26.1784127732764;
+        Wed, 15 Jul 2026 08:02:12 -0700 (PDT)
+Received: from ziepe.ca ([159.2.72.92])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ffd50e0811sm196100666d6.3.2026.07.15.08.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 08:02:11 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wk17i-00000000TXQ-3Nvp;
+	Wed, 15 Jul 2026 12:02:10 -0300
+Date: Wed, 15 Jul 2026 12:02:10 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, airlied@gmail.com,
+	akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org, corbet@lwn.net,
+	dakr@kernel.org, kees@kernel.org, leon@kernel.org,
+	liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
+	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
+	vbabka@kernel.org, dri-devel@lists.freedesktop.org,
+	linux-mm@kvack.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] mm/hmm: Clarify notifier retry state and scope
+ HMM timeouts
+Message-ID: <20260715150210.GA3846105@ziepe.ca>
+References: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
+ <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+ <alecaJ1FUso39D9k@skinsburskii>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alecaJ1FUso39D9k@skinsburskii>
 
-Run the tests:
+On Wed, Jul 15, 2026 at 07:42:48AM -0700, Stanislav Kinsburskii wrote:
 
- # ./ksft_runner.sh ./tcp_purge_receive_queue_disabled.pkt
- TAP version 13
- 1..3
- ok 1 ipv4
- ok 2 ipv6
- ok 3 ipv4-mapped-ipv6
- # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > Stanislav Kinsburskii (4):
+> > >       fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
+> > >       fixup! drm/nouveau: use hmm_range_fault_unlocked_timeout() for SVM faults
+> > >       fixup! accel/amdxdna: use hmm_range_fault_unlocked_timeout() for range population
+> > >       fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout() for range faults
+> > 
+> > Why a fixup series instead of properly resending the full thing?
+> > 
+> 
+> The goal was to get a Sashiko review, and v8 has already been applied to
+> both `mm-new` and `linux-next`.
 
- # ./ksft_runner.sh ./tcp_purge_receive_queue_enabled.pkt
- TAP version 13
- 1..3
- ok 1 ipv4
- ok 2 ipv6
- ok 3 ipv4-mapped-ipv6
- # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+I think if you send the whole thing with a base-commit tag that
+specifies a real base commit in linux-next sashiko should work
 
-Assisted-by: Codex:gpt-5.5
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../tcp_purge_receive_queue_disabled.pkt      | 40 ++++++++++++++++++
- .../tcp_purge_receive_queue_enabled.pkt       | 42 +++++++++++++++++++
- 2 files changed, 82 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
-
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
-new file mode 100644
-index 000000000000..a46f93eaab1f
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test: with tcp_purge_receive_queue disabled (default), receiving RST
-+// in CLOSE_WAIT state does NOT purge the receive queue.
-+// The unread data in the receive queue is still accessible to the
-+// application.
-+
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_purge_receive_queue=0`
-+
-+// Establish a connection (server side).
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+ +.1 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+// Remote sends 4KiB data so that receive queue is populated.
-+ +.1 < . 1:4097(4096) ack 1 win 257
-+   +0 > . 1:1(0) ack 4097
-+
-+// Remote sends FIN -> socket enters CLOSE_WAIT.
-+ +.1 < F. 4097:4097(0) ack 1 win 257
-+   +0~+.04 > . 1:1(0) ack 4098
-+
-+// Inject RST directly while in CLOSE_WAIT.
-+ +.1 < R. 4098:4098(0) ack 1 win 257
-+
-+// With tcp_purge_receive_queue=0, the receive queue is NOT purged.
-+// Data is still in the receive queue; read returns data.
-+   +0 read(4, ..., 1) = 1
-+
-+   +0 close(4) = 0
-+
-+// Restore sysctls.
-+`/tmp/sysctl_restore_${PPID}.sh`
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
-new file mode 100644
-index 000000000000..b1d1dff28f50
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test: with tcp_purge_receive_queue enabled, receiving RST in
-+// CLOSE_WAIT state purges the receive queue immediately.
-+// The unread data is discarded, so read() observes EOF.
-+//
-+// RFC 9293 Section 3.10.7.4:
-+//   "all segment queues should be flushed"
-+
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_purge_receive_queue=1`
-+
-+// Establish a connection (server side).
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+ +.1 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+// Remote sends 4KiB data so that receive queue is populated.
-+ +.1 < . 1:4097(4096) ack 1 win 257
-+   +0 > . 1:1(0) ack 4097
-+
-+// Remote sends FIN -> socket enters CLOSE_WAIT.
-+ +.1 < F. 4097:4097(0) ack 1 win 257
-+   +0~+.04 > . 1:1(0) ack 4098
-+
-+// Inject RST directly while in CLOSE_WAIT.
-+ +.1 < R. 4098:4098(0) ack 1 win 257
-+
-+// With tcp_purge_receive_queue=1, the receive queue IS purged.
-+// Queue was purged by RST handler; read returns EOF.
-+   +0 read(4, ..., 1) = 0
-+
-+   +0 close(4) = 0
-+
-+// Restore sysctls.
-+`/tmp/sysctl_restore_${PPID}.sh`
--- 
-2.55.0
-
+Jason
