@@ -1,110 +1,116 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8947839184A;
-	Wed, 15 Jul 2026 14:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C49239A7F0
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784126865; cv=none; b=TPFX+VW22OzCIr+GxWqikdpv5QeMYpRJbNXpC+O2x/vrPFiVnChdyRji4OwPMKvrkXJ02P3JkjAFE+HijaTtLmpIAJnYObLrYxHM03BaKpl21aW7P7daMnL55L8AkxxaMJkXkP08eYvJZprag2i0BaEp2lCTc0WXv6r+WfeEQ7k=
+	t=1784127264; cv=none; b=qSMDyjppUbaYbq46E+LkgM7vcc94TPPpjFGSmXmRZF1HpdUs03AffXqHWxOgbd3rO+54xDb5JKJXjtC0GIRWnpvfQNpN6xbXD+oZ3g5GBDCz2edwmOfDLPnThZ4PpzEcGVPiItu0HAYM3iuBv748F+1xXUxDMGd3tMLtfCnFjB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784126865; c=relaxed/simple;
-	bh=sYF1YoI7FvLDGePfeZYsbqzSb7LSoADtIopg9Qb/5wI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pbNbP/Ohr4AIzxSBszDAQHFOfvs0IP6AitSWJpk8IUNnYy1mq24bsHWSSv9TCAwdoF7z1Eg3dgjVeLRbMUmWKqK0f9tngWc9waXbnMMbNum8fAvT4aZk0zo3IMAOciFPHEV5QrMw+QxNCKzv5ftGT8DuZwND5FzGBVnV/Egtq+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BTwhcdSj; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1784127264; c=relaxed/simple;
+	bh=R+l0BoEIULdGpPMTKiBinIBNKvPrlGhKO6LL/ImEs7A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qwDO1Y8Y/wMYjWnhu4V2lrq49tT+13ocApp1/U9pTDhfRVHUle8lQ9o5QgURR2ur5QmOpGAu/cbfknjes9PqbEbFAEEbqFGtjecyqhEv3FdSyvua6eW/hl3hoWmOo6jZA0d3M0KwAiK3D3+3x1Y/caYUdwCSzfxe8aJ2mtCPLjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VzVlT6Lu; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BTwhcdSj"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE13B1477;
-	Wed, 15 Jul 2026 07:47:38 -0700 (PDT)
-Received: from [10.164.148.50] (unknown [10.164.148.50])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFBB73F7B4;
-	Wed, 15 Jul 2026 07:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784126862; bh=sYF1YoI7FvLDGePfeZYsbqzSb7LSoADtIopg9Qb/5wI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BTwhcdSjB65pW5SHOUKXDIn6CwPmGiqw566ssT4vahKzI8xJwbNb6xig6HiSW1+dQ
-	 o5wK8+bqg42aSRuk55pkj58qGiOn/7Vhi3VkPFYL3xSnNr5Pb2wetOnDmqAhE3ap6b
-	 STeNfDfGo2zO7GEMTbb/9t1u07xqpfowK4XoW35k=
-Message-ID: <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
-Date: Wed, 15 Jul 2026 20:17:31 +0530
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VzVlT6Lu"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784127253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jOShTpG1lf1o8AyRmdTFIb3iL+dIT2emRuFOvlyVsDs=;
+	b=VzVlT6Lu2OjZRRsil4JjB9tukxpjUfkgyxgjqjyPj44/SFXsG+C/D4NZW6so6DBI1mf01u
+	yYFF6IhC5NJe9BUo8yO3xJnlKvGZ24WfpBHJcGbWk2XHS+H3GVeOtdGep8rDNyTqZagKaL
+	hbXDKUSTjocfTUK+pONAw5eCiyVVnmo=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
+	Yung Chih Su <yuuchihsu@gmail.com>,
+	Wyatt Feng <bronzed_45_vested@icloud.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net-next v2 0/2] tcp: Add net.ipv4.tcp_purge_receive_queue sysctl
+Date: Wed, 15 Jul 2026 22:53:25 +0800
+Message-ID: <20260715145328.54597-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: khugepaged: skip swap tests when swap is
- unavailable
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260715133418.170386-1-jaeyeon.lee.dev@gmail.com>
- <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+Introduce a new sysctl knob, net.ipv4.tcp_purge_receive_queue, to
+address an unreleased SKBs issue related to TCP sockets.
 
+Issue:
+When a TCP socket in the CLOSE_WAIT state receives a RST packet, the
+current implementation does not clear the socket's receive queue. This
+causes SKBs in the queue to remain allocated until the socket is
+explicitly closed by the application. As a consequence:
 
-On 15/07/26 7:39 pm, David Hildenbrand (Arm) wrote:
-> On 7/15/26 15:34, Jaeyeon Lee wrote:
->> The collapse_swapin_single_pte and collapse_max_ptes_swap tests use
->> MADV_PAGEOUT to swap out pages before verifying khugepaged collapse
->> behavior. On systems without swap configured, MADV_PAGEOUT succeeds
->> but the pages are not actually swapped out, so check_swap() returns
->> false and the tests report a failure.
->>
->> These tests cannot run meaningfully without swap, so a missing swap
->> area is an environment limitation rather than a test failure. Detect
->> the absence of swap via /proc/swaps and skip the affected tests
->> instead of failing them.
->>
->> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
->> ---
->>  tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++++++++++++
->>  1 file changed, 25 insertions(+)
->>
->> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->> index 10e8dedcb087..f9b4ebe733ce 100644
->> --- a/tools/testing/selftests/mm/khugepaged.c
->> +++ b/tools/testing/selftests/mm/khugepaged.c
->> @@ -100,6 +100,22 @@ static void skip(const char *msg)
->>  	exit_status = KSFT_SKIP;
->>  }
->>  
->> +static bool swap_available(void)
->> +{
->> +	char buf[256];
->> +	bool ret;
->> +	FILE *fp = fopen("/proc/swaps", "r");
->> +
->> +	if (!fp)
->> +		return false;
->> +
->> +	fgets(buf, sizeof(buf), fp);
->> +	ret = !!fgets(buf, sizeof(buf), fp);
->> +
->> +	fclose(fp);
->> +	return ret;
->> +}
->> +
-> 
-> That doesn't mean that swapout will succeed.
-> 
-> Take a look at cow.c where we use pagemap_is_swapped() after MADV_PAGEOUT.
+1. The page pool pages held by these SKBs are not released.
+2. The associated page pool cannot be freed.
 
-That suffers from the reverse problem - in case of a real swap bug, cow.c
-will skip the test and anyone running the test won't bother.
+RFC 9293 Section 3.10.7.4 specifies that when a RST is received in
+CLOSE_WAIT state, "all segment queues should be flushed." However, the
+current implementation does not flush the receive queue.
 
-I think this patch idea is reasonable, we need a way to say "swap definitely
-won't succeed because there is no swap device, so skip" vs "swap failed,
-need to dig in!" .
+Solution:
+Add a per-namespace sysctl (net.ipv4.tcp_purge_receive_queue) that,
+when enabled, causes the kernel to purge the receive queue when a RST
+packet is received in CLOSE_WAIT state. This allows immediate release
+of SKBs and their associated memory resources.
 
-> 
+The feature is disabled by default to maintain backward compatibility
+with existing behavior.
+
+Note: the user-space issue, the root cause of the unreleased SKBs, has
+been fixed by https://github.com/IBM/sarama/pull/3384.
+
+Changes:
+v1 -> v2:
+* Update 'tp->copied_seq', 'tp->urg_data', and 'sk->sk_peek_off' like
+  'tcp_disconnect()'.
+* Drop "memory leak" words in commit msg. (per Eric)
+* Add two packetdrill tests. (per Eric)
+* v1: https://lore.kernel.org/netdev/20260225074633.149590-1-leon.huangfu@shopee.com/
+
+Leon Hwang (2):
+  tcp: Add net.ipv4.tcp_purge_receive_queue sysctl
+  selftests/net: packetdrill: Add two tcp_purge_receive_queue tests
+
+ Documentation/networking/ip-sysctl.rst        | 18 ++++++++
+ .../net_cachelines/netns_ipv4_sysctl.rst      |  1 +
+ include/net/netns/ipv4.h                      |  1 +
+ net/ipv4/sysctl_net_ipv4.c                    |  9 ++++
+ net/ipv4/tcp_input.c                          | 22 ++++++++++
+ .../tcp_purge_receive_queue_disabled.pkt      | 40 ++++++++++++++++++
+ .../tcp_purge_receive_queue_enabled.pkt       | 42 +++++++++++++++++++
+ 7 files changed, 133 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
+
+-- 
+2.55.0
 
