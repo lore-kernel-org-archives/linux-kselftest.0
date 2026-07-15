@@ -1,213 +1,190 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 007A039EF2C
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8064B47DFBD
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784127267; cv=none; b=iuSUEZdKojkcnKq56EGfLGlA165KCtUjc/gYVy/Uyi/Kr7J0g/qRxM6JHGnYMmEBeeQ/w2oLZe8dgIHmSKF2147jqKhmmVpZ8A4h6GrfndrzOpdP/8XVB533JI9AF5MEgzaOHG7rs2kuB+IlWDIqAvktR77RkcrTIcezA4NPsXM=
+	t=1784127273; cv=none; b=eBgFpgYJSPBYjqCPhKwbzGpkygILjPV6RJT0w74QYwJsfkbkFuKagTPhyAB8JoTCgxuHNB4f/zi5OdqI/7RjYhzDLPF8rAb5PU3vbx577LALkeppbPnlSdmvmaIAM5ywSg9s22ZglJBvYj4H6bHr0SYQYdKhsoZo0QBL5lRU5Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784127267; c=relaxed/simple;
-	bh=YmoPzivoUVC4z+GD4C9dgp0VaLkJZwU+d/4+hGh3yNk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rCqR01JI7kCLKMrRYByCS+B5PCymmDAMPDSpaw451vSRXeAvdQwT/tQAK62Mct5th3jhFauNV+/Az76W7uedGNZfYdCg1EvjTBpOJJp7aMejx6mvxpanXgZ2C9UQf/CRPIT8Lb2JhwQsIRDsiTfPAH2mhbUt6WG+xnqJQjqYTaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=baUP3uS8; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1784127273; c=relaxed/simple;
+	bh=IxAkk/33tiz9H88smr/LKk6TLSYHCBaXGlpP5ahBnLU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RjTcRg2bqMTubCcot5yC31+OyXAYMUMASw9kvn6GvzSaK0Kal60lKzxehfgkfFYA4/wADdVyugCBhsPVI+RWD6GCYs3IKRCRyX3EexVgqZnZGtrqD2oCBwHrKFyxDvhvOOqXQPXVpozJ+1yB+EoRWjX71vx26u2s8brKtq2bBYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=op66BKic; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="baUP3uS8"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493ae59eca6so12359325e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784127263; x=1784732063; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3q/mBxAob+M0XblmpPoJEXspUdOZwJaSDjVW/DAN13M=;
-        b=baUP3uS8aGXTxlhxy4X5mPcBSDrzfiWlr/RIKQBnB5+TPXlkLUuuXKf/hdVUDVar32
-         G/vLMlRi+1PqkPBbwBgIEBLj6+0dlWasEcUEX66y48hSlx1JwuFfkUwi2OzhLlR0jDSN
-         By2BxrG8iaj6n20MDaH2MBEc3oRz/h4rBE6q4UtIswxJnq2kEDidlx1gz/4L1lCXRieO
-         BuLxcHQkiTbjXdDPyZfv9dCZbwGnhoFrK9HbgvoN+iOV2Ohx7R7jCARYr2gscQBt0Eyz
-         6jpT2egRbVSb8RnayvX9iO9VaZ6eFXkByZLuFS3UGhvMxpturw1q2mdDgGR1v/AYSd+s
-         YHTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784127263; x=1784732063;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3q/mBxAob+M0XblmpPoJEXspUdOZwJaSDjVW/DAN13M=;
-        b=hOoB/SI0Xbhn6NcN8K9vavQ/LLBNIFhpNw2Xfyia/T7K6DlM32lIw2tS+G2lJNlx3Y
-         XyhyJDVj0LPognkWSbn30VjR3DD+CdFNAhxnlSeAZXTbFI2tWvOmz71l4Gf636q9YJ2b
-         xOw2U0QYQIj6VzWKOvo62qmRb2v1cctcAh3CySd+ma3H6dT++W6QWjgzis0WXWeil7F8
-         MoltKJyNyxradUg8AFzeVzQQjSVQwxEHHx9OhoiNeag2IG+rQ59N49hzeqN1KLzmkFmO
-         +xpKDFgh/O35L79gd6U0f56MbUJSN9Ey8ZCzqSko1NBH/9ZDe+SuMrcNVj6FDdnxVMPD
-         KY8A==
-X-Forwarded-Encrypted: i=1; AHgh+Rr7g8oC/fVoZw/alZrLWT8/lQEyI/il7hBZvk+gPuZ8rw1CVDALYYcfKIF4Y1AroWVtPWDDwysvQIgClcoJM6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEtAL7SIH/XRA5OLrz8Q7qaoTm/3jY6ZO6HUe4hfTQJj3N6HAj
-	XYkTfo8DJTyB/9/jzjlRM/05r5Rk/6LEKEVXT1oZ7pZn9KG0iT1b+Woomjgv1xqX9QCmQZzD4JO
-	EtIya
-X-Gm-Gg: AfdE7cmWbqUHvQvo6ce9z4lzm4HBpBiWMWo2fM7aENNB4cjMVr4jrIWBfp67VeSsPxf
-	763NmNTT4KQQxbG0HXSWECYvU9hhTZIgqArIXp9Mu480tyjvSvjSsc/o42yiB97B2rRSVJkW/uQ
-	WfyKyd/1i8Lf4flcDmJBqxojy59T9KrUttj5H6XgchZt9WBwPPPL43wy99Idbihh8uIdcau78Ij
-	dNBzx6JKZXk6vXjPC7avZAX070w4OWN+6s8VtcT5nL0J2JUC5t2/Rg42m0y8SRgunD6+ywosWnz
-	f3GjrOPTfg/uRlB/RI/0Zxc2W9Zuea3rJ+j7dgZZvfMTaqeX81xlZ1MlgD9O7OOdySYTw+RJJW2
-	Myr+uvs64D9j9zRscRwt95zRUdyLsS201h+ORGql/eRivF7TD9yPeqOS3iO9TIJ6N8OfZkqp7Es
-	XLqiCLFmFcDvlGBAZUA/bbWQ==
-X-Received: by 2002:a05:600c:4f8a:b0:493:e947:b24a with SMTP id 5b1f17b1804b1-493f87e72a8mr183785635e9.14.1784127262701;
-        Wed, 15 Jul 2026 07:54:22 -0700 (PDT)
-Received: from e133063.arm.com ([212.187.182.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49510c8e220sm137649275e9.15.2026.07.15.07.54.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 07:54:22 -0700 (PDT)
-From: James Clark <james.clark@linaro.org>
-Date: Wed, 15 Jul 2026 15:53:51 +0100
-Subject: [PATCH v4 4/4] tools/build: selftests: Remove some duplicate
- toolchain definitions
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="op66BKic"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784127267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+EzxkN0ejXTQh2wUnfoxzGBh8Ymoz3E2lArEKEFtPUU=;
+	b=op66BKicsUEDzJU9EBMBIG9auGepduRlOXJENPcAc59EpmXyybvMIjdNDyRkn7EZKUdImP
+	DJhrCbG28bjahdW9pPXsvj59PPM19OYtIBk6x8U2t8dcSsndFKQRREcgu4X421il3aIF69
+	iXE+vKNgL1E5c7iYt+evt8eg7EKh8/Y=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
+	Yung Chih Su <yuuchihsu@gmail.com>,
+	Wyatt Feng <bronzed_45_vested@icloud.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net-next v2 2/2] selftests/net: packetdrill: Add two tcp_purge_receive_queue tests
+Date: Wed, 15 Jul 2026 22:53:27 +0800
+Message-ID: <20260715145328.54597-3-leon.hwang@linux.dev>
+In-Reply-To: <20260715145328.54597-1-leon.hwang@linux.dev>
+References: <20260715145328.54597-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Try to remove some, but not all duplicate toolchain definitions. In
-these instances, their makefiles already include
-tools/scripts/Makefile.include which defines these in a consistent way.
+Run the tests:
 
-STRIP is the only one that was set with an '=', but I don't think it
-was significant so that difference can be dropped.
+ # ./ksft_runner.sh ./tcp_purge_receive_queue_disabled.pkt
+ TAP version 13
+ 1..3
+ ok 1 ipv4
+ ok 2 ipv6
+ ok 3 ipv4-mapped-ipv6
+ # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-Signed-off-by: James Clark <james.clark@linaro.org>
+ # ./ksft_runner.sh ./tcp_purge_receive_queue_enabled.pkt
+ TAP version 13
+ 1..3
+ ok 1 ipv4
+ ok 2 ipv6
+ ok 3 ipv4-mapped-ipv6
+ # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Assisted-by: Codex:gpt-5.5
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/bpf/resolve_btfids/Makefile    | 3 ---
- tools/lib/api/Makefile               | 4 ----
- tools/lib/subcmd/Makefile            | 4 ----
- tools/lib/symbol/Makefile            | 4 ----
- tools/perf/Makefile.perf             | 6 ------
- tools/testing/selftests/bpf/Makefile | 1 -
- 6 files changed, 22 deletions(-)
+ .../tcp_purge_receive_queue_disabled.pkt      | 40 ++++++++++++++++++
+ .../tcp_purge_receive_queue_enabled.pkt       | 42 +++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 7672208f65e4bc245c03603634d3aa0093a91096..6fdb6302e0a28e9166175822f42cfbb4f4eb24e5 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -20,9 +20,6 @@ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)
- 		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
- 
- RM      ?= rm
--HOSTCC  ?= gcc
--HOSTLD  ?= ld
--HOSTAR  ?= ar
- HOSTPKG_CONFIG ?= pkg-config
- CROSS_COMPILE =
- 
-diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
-index 8665c799e0fa7155016e8bc6968ebe76a90e1d13..a228fdb5adba8d7f8282688964a9751a06cb0c79 100644
---- a/tools/lib/api/Makefile
-+++ b/tools/lib/api/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--AR ?= $(CROSS_COMPILE)ar
--LD ?= $(CROSS_COMPILE)ld
--
- MAKEFLAGS += --no-print-directory
- 
- INSTALL = install
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index 8703ab487b68c89406fed575217b57f58e71fb01..9f1ddcf0504d993249991e0af4589db1072465d1 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--LD ?= $(CROSS_COMPILE)ld
--AR ?= $(CROSS_COMPILE)ar
--
- RM = rm -f
- 
- MAKEFLAGS += --no-print-directory
-diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
-index 426b845edfaccf56f7c246c281a549c18d0f3919..d692abe8add6e243d7b024fe556cc0983eb4b443 100644
---- a/tools/lib/symbol/Makefile
-+++ b/tools/lib/symbol/Makefile
-@@ -9,10 +9,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- #$(info Determined 'srctree' to be $(srctree))
- endif
- 
--CC ?= $(CROSS_COMPILE)gcc
--AR ?= $(CROSS_COMPILE)ar
--LD ?= $(CROSS_COMPILE)ld
--
- MAKEFLAGS += --no-print-directory
- 
- INSTALL = install
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 4d0d7ae02e06b117487a17691c4e62a138428ac5..ca67d4b6fc38367c63123332360ccf27102fc086 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -174,11 +174,6 @@ endef
- 
- LD += $(EXTRA_LDFLAGS)
- 
--HOSTCC  ?= gcc
--HOSTLD  ?= ld
--HOSTAR  ?= ar
--CLANG   ?= clang
--
- # Some distros provide the command $(CROSS_COMPILE)pkg-config for
- # searching packges installed with Multiarch. Use it for cross
- # compilation if it is existed.
-@@ -213,7 +208,6 @@ FIND    = find
- INSTALL = install
- FLEX    ?= flex
- BISON   ?= bison
--STRIP   = strip
- AWK     = awk
- 
- # include Makefile.config by default and rule out
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b642ee489ea64046a9b19852780c3a6f009cbd82..a1a4ae76365955f8f7c1193a03e74bef0d344f9c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -3,7 +3,6 @@ include ../../../build/Build.include
- include ../../../scripts/Makefile.arch
- include ../../../scripts/Makefile.include
- 
--CXX ?= $(CROSS_COMPILE)g++
- OBJCOPY ?= $(CROSS_COMPILE)objcopy
- 
- CURDIR := $(abspath .)
-
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
+new file mode 100644
+index 000000000000..a46f93eaab1f
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_disabled.pkt
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test: with tcp_purge_receive_queue disabled (default), receiving RST
++// in CLOSE_WAIT state does NOT purge the receive queue.
++// The unread data in the receive queue is still accessible to the
++// application.
++
++`./defaults.sh
++./set_sysctls.py /proc/sys/net/ipv4/tcp_purge_receive_queue=0`
++
++// Establish a connection (server side).
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++ +.1 < . 1:1(0) ack 1 win 257
++
++   +0 accept(3, ..., ...) = 4
++
++// Remote sends 4KiB data so that receive queue is populated.
++ +.1 < . 1:4097(4096) ack 1 win 257
++   +0 > . 1:1(0) ack 4097
++
++// Remote sends FIN -> socket enters CLOSE_WAIT.
++ +.1 < F. 4097:4097(0) ack 1 win 257
++   +0~+.04 > . 1:1(0) ack 4098
++
++// Inject RST directly while in CLOSE_WAIT.
++ +.1 < R. 4098:4098(0) ack 1 win 257
++
++// With tcp_purge_receive_queue=0, the receive queue is NOT purged.
++// Data is still in the receive queue; read returns data.
++   +0 read(4, ..., 1) = 1
++
++   +0 close(4) = 0
++
++// Restore sysctls.
++`/tmp/sysctl_restore_${PPID}.sh`
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
+new file mode 100644
+index 000000000000..b1d1dff28f50
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_purge_receive_queue_enabled.pkt
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test: with tcp_purge_receive_queue enabled, receiving RST in
++// CLOSE_WAIT state purges the receive queue immediately.
++// The unread data is discarded, so read() observes EOF.
++//
++// RFC 9293 Section 3.10.7.4:
++//   "all segment queues should be flushed"
++
++`./defaults.sh
++./set_sysctls.py /proc/sys/net/ipv4/tcp_purge_receive_queue=1`
++
++// Establish a connection (server side).
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++ +.1 < . 1:1(0) ack 1 win 257
++
++   +0 accept(3, ..., ...) = 4
++
++// Remote sends 4KiB data so that receive queue is populated.
++ +.1 < . 1:4097(4096) ack 1 win 257
++   +0 > . 1:1(0) ack 4097
++
++// Remote sends FIN -> socket enters CLOSE_WAIT.
++ +.1 < F. 4097:4097(0) ack 1 win 257
++   +0~+.04 > . 1:1(0) ack 4098
++
++// Inject RST directly while in CLOSE_WAIT.
++ +.1 < R. 4098:4098(0) ack 1 win 257
++
++// With tcp_purge_receive_queue=1, the receive queue IS purged.
++// Queue was purged by RST handler; read returns EOF.
++   +0 read(4, ..., 1) = 0
++
++   +0 close(4) = 0
++
++// Restore sysctls.
++`/tmp/sysctl_restore_${PPID}.sh`
 -- 
-2.34.1
+2.55.0
 
