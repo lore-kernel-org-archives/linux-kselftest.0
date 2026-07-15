@@ -1,181 +1,249 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8926B3AD518
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 17:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784136275; cv=pass; b=brBBZGnmetqUIqosqV8hxQkoEJMsWAHLUyOmB/RxkqcvHwV7391/Hkr56YE4KpSIrqkXKzt32jFVARuAo3L0pzGVTCXxZNK5SnvhJf3w5ykQVisKRuy9txtwgdLeAfWg7uImkOMTzHrZOXqgDJ0LUuNz6wD0iN2Qj9mTItHa+DA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784136275; c=relaxed/simple;
-	bh=cNuKMIcek4rkNIhg1DjvTNY6u94NrZCdTQHA/3wIBW8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nQxB1E8dOognyrX8J+aAN/gJz9BVzJuRs01Httu7fl1ahvdWoOGndch83DxrgT6Cv0InIxH/Tbw6B7hfXJICZ0l35Vy+4cwASjaebNzuLC1KmilVIqklAwZNlUQnp63Rl8K5U47sSZ2z6q+iZt+aNcYtgYfd+nbWlOJb7WsMVGU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dNCYOZMT; arc=pass smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BA042FCB1
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 18:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784139357; cv=none; b=GHmxM6ffD/j4R4EEjHePMTk2xjBosgpxVAhNDpv5kCTViwflagAh6ZFE3EDB1OEzit8+pFidm/U7Mdr2QxAKbhYSk2pyAQyLXrfGHnm8MbNeuXIwYkjxm2ZmhhXCn+ZhdiYLiDnWzG4Za0Rvoggbw45i2eL2IMzUv+CMsHDI0VQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784139357; c=relaxed/simple;
+	bh=zkOtlkRnr6/zYfHYeMY5gJhs9XhgBCQr9DFspQ5RBzI=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=WJrqxyJdnN0m7FW7Nrj6hSIzXYGTbQbBc+3HDUXgB4+ZiC/8igIpMTsDZpnEImN3umALxs6qd6fokvZWCZkZCLBmZ5ZLS++SAY49NxkJn1CmJdrgjDCsGDH7npekRpY47zsJAq2ecN100AvC8giH1qF2BpGkG/JRVee6BddpD/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TaGO2/jq; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dNCYOZMT"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cab97c86bdso4865ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 10:24:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784136263; cv=none;
-        d=google.com; s=arc-20260327;
-        b=URj6ZmQKiwYb+Uhofi6vvtW30D4gv/vE2xPJ7aihp68Eh7PL8mozE/SDWIWcq+6YCf
-         84XccshLs9t2rIPZlIaeGlV+HPyEeiFm9VcQ6+b2r6XTfnCSwWwenIsDIoHB7I7ll+rZ
-         V+y5kYOhAPgd9rx3F/CPdZTu2oZwwc6ZevWV4bmETqrhYDyUCU81y10/wNTRy6KJf2fc
-         KWkG8jG/MCQbgKvGrN7oSGgIsO61+y439hKTXLD8/AHSKB/EYzyNw8x0CtGT1TLXnxrr
-         n0tpEzQ/9gaLOD+k3wY8dAT533T1GjqmRt5flek8JdO2XHlNWVC/FgR/fkIx/0PcCNzj
-         +PBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
-        fh=swvnsUO/+wXW4JQVPsxg4rFtBzDRIAaknDVSD0cEzkk=;
-        b=LvrOABOWRNDeGnHIxgh31QlebU3IOkrgV4sbwJ1ryl1xRfH+hD7s1hsEETQ0Jd0mSJ
-         Sa6tMPA8BNIqxSR3YibF5lpizkmgSsghGp2KQp0SL615r2JXv7TPQp378gP1rn10dEBt
-         OM4CZdpEG400IZMqgIOB3vs0/IWT2lUJqZE9rIybtXaLbW+bZPmERxqFaa+mSylyRanb
-         NvzLBaZjE1yR3eOFFjX/P9dR2yXce+kRSCo1X4rjgcDWMJnf1qmKsA1yUSYMG+LlDUZO
-         3phYdpe57qAHAeoLzOkfNH9orrSCWuo3YIu8EE5kPO3PoipmY5yZ2bekhxs91JCb/jAk
-         FGiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TaGO2/jq"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ce7d2adef4so34906155ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 11:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784136263; x=1784741063; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
-        b=dNCYOZMTjKvT0n9mozUVbvLRG1A14M16Z1TvZR3ewSOJ+92NuK981pCGbz0cJR8G/v
-         HZ9PCP8U3kNdzdLB1nQyZOJmoUURtDQjt5G4xiEnxaLmIB+YqZ+OmhOctzJMfTUzSCyl
-         8dIAR1FJOjGZN1ZxAcLnf+sedUEutez2ZDGxHHev48ljqHuf9Ac7o3Nh6ehLVcbCH9UY
-         1d2hJZCCJDaxcxpxH1DPiMp+AoH0JjEUkUWT/MkCA5BElQ5kA1voBaGJZhKWrG08qtIG
-         9feO3TtNOD5T7kkt8prcTYd2hJICs34SDy19QNYsZjM7y5d2BOIsiaScDe+/TN9LTuaB
-         OWrA==
+        d=gmail.com; s=20251104; t=1784139353; x=1784744153; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:user-agent
+         :message-id:date:cc:to:from:subject:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o8cXs1v6rCZCT506ix1H6vuS6eKjBp0nDmZrJvk5ap0=;
+        b=TaGO2/jquJv0DdvYr7QZjxt4QRj1L2FFQD/TDX9v4bAG7ISdZ3aqXSPrnvaW1eu8o1
+         g08VjTgqGTfL1oJFsXLqS3Ft0dc3zuMeXDWVdnKqCrSupaPIrxcKexOF4liNY9XGP+Cm
+         wpX8eiD8BnIsqT2+uhBZEmQvyeJ7+GJc1a+Qtz4kCveu8K+0AK1NmuTG3r2LufMt7JzQ
+         DVroLejkMqqkOiRZyeLUhKMgMSp42jdsNOnoc2G2PJ+i9cQ6nJ9MC33f06W/nJPGL4ka
+         PL68nIgV88q1CbLKyD38GpiWP8cTbaWWMESxXHgTmheJ8eZyzjND3YeFfoDP1crMUpQW
+         ecFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784136263; x=1784741063;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kZWZPrQd54BSDgxOyeSGv4OPeqvj2vn4bH0lrJGj4Ms=;
-        b=OW+s24uFGpgrZFAXXHkxvAjzKiBDcB0cpVd9wwmuiaYRWkhtfCBYcABv98OKqmxeIn
-         5XaTSAZcDTY7OB5QoZEfBgnt538kCb+5kgzTF2FeSwk/PAWf2P3bgkConKtlL0zMrb7T
-         ZnyLxscUJLp1kK3Xx6coKVuggDrOyK8U8d7z6FlFpJntQmax1Pj41Mx/i4OsJL3nuTz9
-         EaaeWJ5D5jeRl+EjMzZAuTGCbqNCV84z39Da4JEHqEz436HwnC0nN8DPcm+68IBZqW/E
-         77URjZgav8lIvuO3qymOdmj1bfnY5MQ2Odqjhcfd2PKtEWUWIZtnHgPoz3/Sj/ONCZWe
-         Q0gg==
-X-Forwarded-Encrypted: i=1; AHgh+RrrPaCQYebzaL2d4DRj/+A4gPvHCn2UjZbJKFh6M/s17xs/LZHB8f2fyo+MwunGn68wwGV9fHjOszwvnYKSE3Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz0zA4hKrrrjqncDK6ENYZMeqpXhcn/aRnq052zfgh+Vf8IHqD
-	Vrz/7rhgHstQN7y+u5Pd1R9w1nxyyisAYEQ0tfoIk39O6D05nLfSfR0LN7svcbPR2hJkOlTottt
-	jTjX6WMw2qh3ExkqvF8BvXEIfbjinTpWAdcjyeQ1q
-X-Gm-Gg: AfdE7cmlfiIywYoL7z4FZKEQXacNrQhhtPaX7ZwWsG5Olq9gLqfTKuLpoPWW72YwkE5
-	zw3W/6BtD8oKSGy6o25eBbzqmR3xx2puOjHcN4+50cdSVVUI/NlWiTxA6Z6+yaSlKNhovyY4+MP
-	kcwpRHZXM8jQ0DWmZ6F5eN/3R5JPDid101p8B1Y7imU9Wzr3UK4pN8+pGeMoi99S2qgM/BSLZgq
-	2MM/oPELq56ueb5Q8y4+ZeEs+YmcbPct4vXDAZSe2jGCeIRjhNGHSCSuYh2K7VQnXjgXT2G2EpC
-	dFiGrLyJZsycbNSM8JmHrx504FU=
-X-Received: by 2002:a17:903:3807:b0:2cb:14c8:1ab9 with SMTP id
- d9443c01a7336-2cf18cd4872mr182285ad.0.1784136262817; Wed, 15 Jul 2026
- 10:24:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784139353; x=1784744153;
+        h=content-transfer-encoding:content-type:mime-version:user-agent
+         :message-id:date:cc:to:from:subject:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=o8cXs1v6rCZCT506ix1H6vuS6eKjBp0nDmZrJvk5ap0=;
+        b=BCz0cJi5P/vR5LCG5mFjW1WV32P8fPC4C+Y8kFZaeKin6wBTUSx8NXlkgtyE8LwthQ
+         0XNzP9NgsH+sYeOw5pEgih8JzoIY5OElKBZ7F+rLF0vxYjoJn/CJvXkEwHc819Gq8f2x
+         bESN5fJhoPCWVigDrFYoaQPI5VVDqh1wHlY8+Q6bm1GVJDq+bRnCwktHSO2m/j8v+XQ7
+         3PYt3gZHAcEmcmsIjN0AD1ITjg9Mzp9txH4r5m0e9YC+bivDMaGmSyhk1Y6VTf1IS3h6
+         UXxNTd/DkUz2RPHG5LK/wWf6N02pMIWOGUfDFx+zpLTEEdbXGL/w8WrskLmZF6xx5Jcg
+         8DWA==
+X-Forwarded-Encrypted: i=1; AHgh+RoNtxDpRXUE/+cYCNCTvXlE9IuWZrw+LCpbTFImLpKkeEONFrqKHsyQGZrrrDHM7yrI0gHIKHNV6XKO5Kzag6o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW/aNzEW/Uy2mGbJG7/kFSzrwmNaY0Y0Lrv2XvsYFJnb92ra4c
+	ruW6NL8NqnXrne0yEQAcMes5XF/0NnITmvrBkpdHSdl8VTmf5ArLRGwc
+X-Gm-Gg: AfdE7clpOCShbmixpt6unqn6RpZwN1CkGa8f7bQIREGrU9nCX1P+O39As5+cfS58XWu
+	Z/P+nvOErTM+tfcJBb2qNZmfTXt5N2rtfZwnnHE+HRLSFfVROIY3QPf6IxnHQAL2+j9XhlKZmWs
+	q15ABKexJ7ZBbL8NrUr9MIivURnbimcBqwPCYFYmn14pnfqT8chtqrlWgOVIVWPxU5CNhJWOsZu
+	lyszM+JjWNuPU+dxL23HM0oBgOlEMPN6orOqjExCycv/TeRUOGw3jRBukBSHKCK1ii9XHMg8/th
+	TxnACLtNtqEna68DA1rM/U+CUYzUxdU4PltvX3fH8wqB0qoXBELKgnnZlVR+y9GBCQSILNCMAsh
+	ettY3b+7F9ww0eiF6mhs5Rpdn4/PsuGs+IZz0HLVhKaRhplPQFX2Tf7NLJR2r/KNLVf8Ffthdlf
+	OuRp8n8fvd0A0r1/I4GbsHbXIszc59ZahAL4NmiqwMTGVmxswRQeUYW3ZtSu/GSGqUGKkuCQ==
+X-Received: by 2002:a17:903:19c3:b0:2c9:97a9:2096 with SMTP id d9443c01a7336-2ce9f05981emr195144115ad.42.1784139352792;
+        Wed, 15 Jul 2026 11:15:52 -0700 (PDT)
+Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf1055cde6sm6969345ad.52.2026.07.15.11.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 11:15:51 -0700 (PDT)
+Subject: [PATCH v9 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
+ corbet@lwn.net, dakr@kernel.org, david@kernel.org, decui@microsoft.com,
+ haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org, kys@microsoft.com,
+ leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
+ longli@microsoft.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
+ mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
+ nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
+ rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
+ skhan@linuxfoundation.org, skinsburskii@gmail.com, surenb@google.com,
+ tzimmermann@suse.de, vbabka@kernel.org, wei.liu@kernel.org,
+ skinsburskii@gmail.com
+Cc: dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org
+Date: Wed, 15 Jul 2026 11:15:50 -0700
+Message-ID: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 15 Jul 2026 10:24:11 -0700
-X-Gm-Features: AUfX_mybqHGCI446L5L7h2Zp_6_VyrODdqkNsCPAiWVWAbvp3R1ALNx_UrcHOIY
-Message-ID: <CAP-5=fV=_CsZFJf9HhNrJ+=jXCTqqDGd=HvwjMWu2WEn9bXqbA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
-To: James Clark <james.clark@linaro.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 15, 2026 at 7:54=E2=80=AFAM James Clark <james.clark@linaro.org=
-> wrote:
->
-> I ran into the build issue mentioned in the first commit, because using
-> an option like LLVM=3D-15 is a documented way to build [1], but only
-> some of the LLVM tools defined in tools/ support this.
->
-> After fixing that, a lot of other tidyups fell out. I didn't go too far,
-> for example some selftests include tools/testing/selftests/lib.mk which
-> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
-> tools/scripts/Makefile.include and I stopped before touching the former.
-> Some other non build scripts hard code toolchains and I didn't touch
-> those either, this change is only focused on things that already
-> include Makefile.include.
->
-> [1]: Documentation/kbuild/llvm.rst
->
-> Signed-off-by: James Clark <james.clark@linaro.org>
+This series extends the HMM framework to support userfaultfd-backed memory
+by allowing the mmap read lock to be dropped during hmm_range_fault().
 
-For the series:
+Some page fault handlers — most notably userfaultfd — require the mmap lock
+to be released so that userspace can resolve the fault. The current HMM
+interface never sets FAULT_FLAG_ALLOW_RETRY, making it impossible to fault
+in pages from userfaultfd-registered regions.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+This series follows the established int *locked pattern from
+get_user_pages_remote() in mm/gup.c. A new helper function,
+hmm_range_fault_locked(), accepts an int *locked parameter. When the
+mmap lock is dropped during fault resolution (VM_FAULT_RETRY or
+VM_FAULT_COMPLETED), the function returns 0 with *locked = 0, signalling
+the caller to restart its walk. The existing hmm_range_fault() is
+refactored into a thin wrapper that passes NULL, preserving current
+behavior for all existing callers.
 
-Thanks,
-Ian
+Possible approaches to lift this limitation are documented in
+Documentation/mm/hmm.rst.
 
-> ---
-> Changes in v4:
-> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
->   already picks the correct sibling lld version. (Sashiko)
-> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-=
-v3-0-8854bfe5af7e@linaro.org
->
-> Changes in v3:
-> - Add warning for empty $USE_LD
-> - Use $HOSTREADELF in bpf Makefile
-> - Rebase on v7.2-rc3
-> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-=
-v2-0-f12cc4f031d8@linaro.org
->
-> Changes in v2:
-> - Fix selftests/bpf build. LLD needs to take the full path to be used
->   with -fuse-ld=3D
-> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-=
-v1-0-6cac1a9a4c8d@linaro.org
->
-> ---
-> James Clark (4):
->       tools/build: Allow versioning of all LLVM tools defined in Makefile=
-.include
->       tools/build: Indent if else blocks
->       tools/build: Allow versioning LLVM readelf
->       tools/build: selftests: Remove some duplicate toolchain definitions
->
->  tools/bpf/resolve_btfids/Makefile    |  3 --
->  tools/lib/api/Makefile               |  4 --
->  tools/lib/bpf/Makefile               |  8 ++--
->  tools/lib/subcmd/Makefile            |  4 --
->  tools/lib/symbol/Makefile            |  4 --
->  tools/perf/Makefile.perf             |  7 ----
->  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------=
-------
->  tools/testing/selftests/bpf/Makefile |  1 -
->  8 files changed, 46 insertions(+), 62 deletions(-)
-> ---
-> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
-> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
->
-> Best regards,
-> --
-> James Clark <james.clark@linaro.org>
->
+Changes in v9:
+
+  - Folded the fixups into the full 8-patch series instead of sending a
+    separate fixup series.
+  - Clarified that the HMM timeout bounds repeated HMM/mmu-notifier retry
+    attempts, with the helper refreshing range->notifier_seq internally.
+  - Kept nouveau’s explicit outer deadline because its retry loop runs in a GPU
+    fault worker and cannot rely on fatal signals from the faulting process.
+  - Converted amdxdna, and GPU SVM callers to pass the shole timeout budget to
+    hmm_range_fault_unlocked_timeout().
+
+Changes in v8:
+
+  - Make hmm_range_fault_unlocked_timeout() the primary documented HMM
+    range-fault API, and move hmm_range_fault() into the “use only if the
+    caller really must hold mmap_lock” category.
+  - Clarify that the timeout is a retry budget for repeated mmu-notifier
+    invalidation retries. HMM does not interrupt an in-progress page fault
+    when the timeout expires.
+  - Restart the retry timeout only when handle_mm_fault() dropped
+    mmap_lock, because that indicates a lock-dropping fault handler such as
+    userfaultfd made progress. Ordinary -EBUSY retries keep the existing
+    deadline.
+  - Remove the attempted timeout selftest. The remaining selftest covers the
+    intended userfaultfd path by resolving missing-page faults through
+    HMM_DMIRROR_READ_UNLOCKED and hmm_range_fault_unlocked_timeout(..., 0).
+
+Changes in v7:
+  - Replaced the unlocked HMM API with
+    hmm_range_fault_unlocked_timeout(). The helper now takes a timeout in
+    jiffies, with 0 meaning retry indefinitely.
+  - Moved -EBUSY retry handling into the HMM helper for the unlocked path.
+    The helper refreshes range->notifier_seq internally before each retry.
+  - Switched the unlocked path to mmap_read_lock_killable() and return
+    -EINTR if mmap lock acquisition is interrupted or a fatal signal is
+    pending during retry handling.
+  - Removed the redundant non-timeout hmm_range_fault_unlocked() interface.
+  - Updated Documentation/mm/hmm.rst and kernel-doc to describe the timeout API
+    and the intended caller pattern.
+  - Updated the HMM selftests to use hmm_range_fault_unlocked_timeout()
+    only, including coverage for the finite-timeout path.
+  - Added in-tree users of the new helper:
+      - mshv
+      - nouveau
+      - RDMA/umem
+      - amdxdna
+      - drm/gpusvm
+  - Preserved each converted driver’s existing timeout convention:
+      - unbounded retry where the old code retried indefinitely,
+      - HMM_RANGE_DEFAULT_TIMEOUT where the old code used that budget,
+      - existing driver-specific timeout return values such as -ETIME.
+  - Used max_t(long, timeout - jiffies, 1) when passing remaining time from
+    absolute jiffies deadlines to avoid unsigned underflow while keeping a
+    minimum one-jiffy retry window.
+  - Left callers on hmm_range_fault() when they already need to hold
+    mmap_lock across surrounding work, such as drm_gpusvm_check_pages().
+
+Changes in v6:
+  - Reworked the new API from the external int *locked pattern to
+    hmm_range_fault_unlocked(), which owns mmap_read_lock() internally.
+  - Changed the dropped-lock contract: hmm_range_fault_unlocked() now returns
+    -EBUSY when the mmap lock is dropped, and callers restart with a fresh
+    mmu_interval_read_begin() sequence.
+  - Kept hmm_range_fault() as the locked variant for existing users, preserving
+    its caller-held mmap lock contract.
+  - Added an in-tree user by converting the MSHV region fault path to
+    hmm_range_fault_unlocked().
+  - Updated Documentation/mm/hmm.rst and kernel-doc to describe the unlocked
+    helper and retry pattern.
+  - Updated commit messages to match the new API and return semantics.
+  - Kept the userfaultfd HMM selftest using the test_hmm unlocked read ioctl
+    path.
+
+Changes in v5:
+ - Rework hmm_range_fault_unlockable() retry handling to retry
+   VM_FAULT_RETRY internally with FAULT_FLAG_TRIED set, matching the
+   fixup_user_fault() pattern and avoiding repeated first-retry lock drops.
+ - Distinguish VM_FAULT_RETRY from VM_FAULT_COMPLETED: retry faults now
+   reacquire the mmap lock internally, while completed faults return to the
+   caller with *locked = 0 so the caller can restart with a fresh notifier
+   sequence.
+ - Document the two *locked return states, including the -EINTR case when a
+   fatal signal is pending after the mmap lock has already been dropped.
+ - Update comments around HMM_FAULT_UNLOCKED and the HMM fault loop to match
+   the current hmm_range_fault_unlockable() implementation.
+
+Changes in v4:
+ - Rebased on 7.2-rc1
+
+Changes in v3:
+ - Return -EFAULT from dmirror_fault_unlockable() when the mirrored mm can
+   no longer be pinned.
+ - Add an eventfd stop signal for the userfaultfd handler thread to avoid
+   waiting for the poll timeout on successful test completion.
+
+Changes in v2:
+
+ - Split into a preparatory refactor (new patch 1) that moves
+   handle_mm_fault() out of the walk callbacks, plus a smaller feature
+   patch on top.  Suggested by David Hildenbrand.
+ - Hugetlb regions are now supported on the unlockable path; the v1
+   -EFAULT short-circuit and the hugetlb_vma_lock_read drop/retake
+   dance are gone.
+ - Distinct internal sentinels for "needs fault" (HMM_FAULT_PENDING)
+   and "lock dropped" (HMM_FAULT_UNLOCKED).
+ - Outer loop now re-walks after a successful internal fault so the
+   faulted pfns end up in range->hmm_pfns.
+ - Kernel-doc on hmm_range_fault_unlockable() and the
+   Documentation/mm/hmm.rst example match the implementation.
+ - Dropped the mshv driver conversion (v1 patch 2); will post
+   separately.
+ - Selftest converted to drive the path through test_hmm with a
+   userfaultfd handler (new HMM_DMIRROR_READ_UNLOCKABLE ioctl).
+
+---
+
+Stanislav Kinsburskii (8):
+      mm/hmm: move page fault handling out of walk callbacks
+      mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
+      selftests/mm: add HMM test for mmap lock-dropping faults
+      mshv: Use hmm_range_fault_unlocked_timeout() for region faults
+      drm/nouveau: Use hmm_range_fault_unlocked_timeout() for SVM faults
+      RDMA/umem: Use hmm_range_fault_unlocked_timeout() for ODP faults
+      accel/amdxdna: Use hmm_range_fault_unlocked_timeout() for range population
+      drm/gpusvm: Use hmm_range_fault_unlocked_timeout() for range faults
+
+
+ Documentation/mm/hmm.rst               |   79 +++++++---
+ drivers/accel/amdxdna/aie2_ctx.c       |   23 ---
+ drivers/gpu/drm/drm_gpusvm.c           |   61 +-------
+ drivers/gpu/drm/nouveau/nouveau_svm.c  |   20 +-
+ drivers/hv/mshv_regions.c              |   54 +------
+ drivers/infiniband/core/umem_odp.c     |   18 +-
+ include/linux/hmm.h                    |    2 
+ lib/test_hmm.c                         |  107 +++++++++++++
+ lib/test_hmm_uapi.h                    |    1 
+ mm/hmm.c                               |  259 +++++++++++++++++++++++++-------
+ tools/testing/selftests/mm/hmm-tests.c |  150 +++++++++++++++++++
+ 11 files changed, 551 insertions(+), 223 deletions(-)
+
