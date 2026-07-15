@@ -1,113 +1,135 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A9341D643
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 09:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095F2435AA2
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 09:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784107002; cv=none; b=WpYyg3i5zTR4Mta2LVclrnW3ih9iHUH7cXWMLBdoVHsAmj4l8EyJSL+JDW4iEOukrjZf8VuMG3HvQuvKx7/llqdFXI3PDwCRX9wd269wL6TKmcQwYSCO+FwHQc992brl59zojOznpthj0NJNT2iRIICmxSRUcX42pmpN98n/isE=
+	t=1784108203; cv=none; b=LvPaf9EPjGSN92HG4fu4bOTD/hB6c5D+BZTpak/x4TfVXyGdzKChyIGMM0khMHIQOFcTiNRtxCOVYgsCp/+ZrSD0xHHLw8dduOiuU0RqIFVPeEUDjR1VW16JpC4quddqcy64sE1HSSxm5pmLGpO22ot3DZ9YlMXHnxASR2/uDJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784107002; c=relaxed/simple;
-	bh=j9GQJQzKvcMR+VCSiLR4VIzU/cQ+59f4K6xs5L/YzoM=;
+	s=arc-20240116; t=1784108203; c=relaxed/simple;
+	bh=RbNCtiPz5Mwa5Td8hXh/+B4DFH6mFTZx9EuRAfA3MKM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V+IyPC2j5sty1N+OjJZqN7flPVGvDOvsz6uK4STo4nw1Zy60fQrwM4747XK9DmH59/I77ge8TxUoUgnrh9k6JMwk1NEvvl+hocj8WCoe8Ho6oyVCWA6H8s0Sx3hQpojDcEl6/BnQgZ/V1O2DjZj9JgkZhct6Z0i8w6bkZGpW2mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eyJ0F88i; arc=none smtp.client-ip=209.85.218.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=UkiLffFdP7VenYl221EyvuJduOsbNcep1ivAFaKKdoJZYVP+HBmBpDpBpjTSwWvayrqllOPDsXe596WBqAdrEJC3namVgqDdJsPXSXl15d5GAdo2XOINliO2qGPhy+DZgY0hs5hxepz9RIAKBZ0ma1jZVqdgvzpox74mkRTx6Qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QK4w1n/z; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eyJ0F88i"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c15ea93028dso566584966b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 02:16:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QK4w1n/z"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-47f3e6cc44aso2748632f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 02:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784106994; x=1784711794; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A1ZmhCboRG80lxcYaF433cPODXSJBxTB3W4f2Wh3+4c=;
-        b=eyJ0F88ipHm7mrBSfZk5sbVGtLSJL61gfqM4lmBMfcwfbHgCK+2o0CQumTSsH7jCG2
-         MhIAXtEF1t6+E0MGfjVdNOBIoSjqjqBbr3p7ZngEHg6h01XrhWlXLlvtypxmKnOdJaDm
-         FUDgM08QDUiGzMuSgsg1Rh6vjTpFRmlfzmsyKSXA3mM9skH1ytlWXREnI5pX2KJ1xK2A
-         baSMJRgxUenAH1cqQF+ltlf1m25ideXr1y6U2GwDutvv/u5Z3aUvEPxBkXL1W8qr4zCd
-         yYNbqLuaFYOPLSd2r9hHyzp0c3NvIeiW8pZUpDN0saakUlW+FNHUC7QVVNGf/Xi0CoP2
-         OtGg==
+        d=suse.com; s=google; t=1784108197; x=1784712997; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RbNCtiPz5Mwa5Td8hXh/+B4DFH6mFTZx9EuRAfA3MKM=;
+        b=QK4w1n/z34eIYaU8kCpl4NfzDYIb7ErMJUXiTNqLdUF0pykqJBx1el++1WZHjhOYLO
+         mFoVAe0FNwAAQEVVPUNuLZkqKwCLVh1mSuF3HzNsB3ewm7XS2/HMgzno7ix6zPhFLxsP
+         DDd0DUg1Yw0BiblR66jOKQ6xEKvNV9A1PxaUXl8H2BFXRYnLRhre4WVU7XI0evIkQTJ9
+         +hzogwEX0nZYn4Ju1k4aD2JdqIxQgn05Zmo9SLv9sbM9fW/yM/fN9KYmBHDazIURCjZh
+         E+0+4Be+X24J9InYLe7undA+EU5mzf4y8W23P1ZlEA9Nshu6fk/OO0g/1goTrZ3TLPCS
+         LWIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784106994; x=1784711794;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=A1ZmhCboRG80lxcYaF433cPODXSJBxTB3W4f2Wh3+4c=;
-        b=DeuCvD+Vsaavf5GbeNVbCEpM+0Lvyb5T66Y5Phs8ZdIQbtAZUSwNJqcXZZhohwCYDK
-         DxZKHHvU9zzmq+iYcZqp4Je1At+966MW0OD+v18YpW2HW6O2Pt9cQoSzm6Oi9jDATFXV
-         5PgSp8sy1wBmk/S8gGC9Z7+QBzMnsZ8M7CplUgdS3p+aIy9eKJS+xUXT86k5PptXpuf9
-         TCzuPN76UlV98jHnAikEo5Z09R7G3Gxn5jHqkTR78q2UKLNYdX7rMj+0CHBqKVe7ggck
-         zcFpaC9OyUk/XFGOZ8mzZ0OToEkKFKDtOOhd6avyvRFy66SKyUjRFs1j5jrWCW2xQTEj
-         0oug==
-X-Forwarded-Encrypted: i=1; AHgh+Rouj+HcumLFRGwsAXphmaKQC7HKUWqeXLDmiFUOxlwtMWqiW8pS81ha2xDtyxPc/wkoxDOoGu/js8SFxCuzeMo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz56aEp0fZv0aMG0ET+7UKFCL5Faj1gcBhKFo+YEtgkjsOJwc+5
-	mOWPGvpt62qIjYzJJXZ2KRrO/zkkU+hIQrheuLoNsHxFOKyoog2Qe1Ww05NtAg8ro44=
-X-Gm-Gg: AfdE7clCku4i1XWHzn2HahYCI1ep2ecMFDGR4sCXdAPfQWCnXQ4vitlPxlCy58IWY1e
-	JwZpd7kdRpoMW+wcl6YqewPp5uPAIfNIOL+GXxPp6KiSLWIjubYZcMfIPrQEC/aeHJbtKrcR4hY
-	tJcegODQuObzn/Q06z9/7kNhzjg0MrOYRotcAb9Ffr2joPFFWEp9PzACqCFfqSyCMNAK1E6AnwA
-	rd7xakrYxyxV62xaslYS01/JMnsA36PYJMQlPGmlvDNj/t2erUmAexflnl0xG0rPzG3qiSxuasi
-	MXh5p5pHovPg2Z29/ZgKbCBbmgYcb+YRkSubvtzcNNTnSZBVuLTWhFJx7bgv3oeNsjAytYAPXlV
-	Y4rPDvYISXNTwnm66iqOOhBmawIRKMkOc+c+8JUKRgnBdp9Oh6gBFuxh3vE1AHwGsXinhfoQL64
-	FweSedDJT7Ltv5OGDOpjlurFyymqWXWq4h
-X-Received: by 2002:a17:906:9c8d:b0:c16:579f:f7e2 with SMTP id a640c23a62f3a-c1667c58e81mr324023266b.64.1784106994203;
-        Wed, 15 Jul 2026 02:16:34 -0700 (PDT)
-Received: from u94a (27-51-89-168.adsl.fetnet.net. [27.51.89.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d3c99fsm130888425ad.68.2026.07.15.02.16.21
+        d=1e100.net; s=20251104; t=1784108197; x=1784712997;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RbNCtiPz5Mwa5Td8hXh/+B4DFH6mFTZx9EuRAfA3MKM=;
+        b=N6VWQKKvR7DdqGcGYmwH7UxhtgW/zTsOtGJUeYCSRBPyFRBFEB4K57pyLiXxZQ3ZoU
+         ejzrs8cdTx8OFR40DX67w8Keec5szpYtenr7k0nrDlGZ77NgPqL5N15uymwTmBaBgi4Y
+         PaOaydx+k8ZcdwZK9ymbAssOtFzmPafixoQMwLiePjdxUK8HidcLtfvVArNpHq+/9qbD
+         iMfEOpTEY5fwNd6W9YAUV7ZbsHOTVe4I1EGgwcCulFk9guMloMGvS1IUmEp3oLghezOc
+         dnbZuTU6M+PL4vFfyBiNndx3IGOOsosQ+8C1oZblWs3U7CpmFP1LCcKalxf+YgEGJ4/i
+         1NaQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpZGDgKWsgZ7kXFeG42uj/B0sVSJlWFmHUBTkRGrFvmceTV8JJNhYZ+fl8/sSgcAhQk/v+oE0bP5raQ4BQxY98=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2q2VB2LkISL5fan7lSweL+0S2t+bSShulwl02klu6s9UwJ9aY
+	rJnIBN6Wke8PWVKZpAjlofec+oR18yHIFkRuTyygxN+1CiAxg1QGp+YaMYBwLm0qaHc=
+X-Gm-Gg: AfdE7cmwOG+UDQHQcAX7khru2QKsozdDrIC3KLkajtOOmKtvz5xozmjpto1Y61w1nEt
+	ZNm+TnlxwWNEHbUUdt6QMgTNAKpfbgCkvAz6oraoCuCGfyXVmdprnrG9wgNaXnbNmO/PSP1Ozb4
+	1LNFsLufJLzJ2kiWcPQVAAXhXZdl7Hnr7D6rhdhNpB7u75nd7fVRqca/X0buGufG7YgF8iytTIV
+	yIOGYjSd0+2YogozFh13dUWBK6ol5AHzGkQ/nF0nO2i/W+MZu6xug33zQY+ADQtZm7GG79J8Dcd
+	/ALVtrl7se5OapfNODvuVsIXLRn1HuLyi+JFv3glzdx9vmkfqScFf/T6Mszlpb4yGxeutvTulOg
+	JKzKHfO+djypTSaPOAwiL3yeg+VBNTZng+Nl4cnezS83XD9reBn0SI17z5QzhZDLKF/plTvEptF
+	3cHMcuCd+RtTDj0jSB5FyNahWqpv+JPRFs4I9IAA==
+X-Received: by 2002:a05:6000:461c:b0:473:506a:e47c with SMTP id ffacd0b85a97d-47f4886399amr7394061f8f.26.1784108197277;
+        Wed, 15 Jul 2026 02:36:37 -0700 (PDT)
+Received: from localhost.localdomain (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f464c30a9sm14495687f8f.31.2026.07.15.02.36.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 02:16:32 -0700 (PDT)
-Date: Wed, 15 Jul 2026 17:16:17 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: sun jian <sun.jian.kdev@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Matt Mullins <mmullins@mmlx.us>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: Cover negative buffer pointer
- offsets
-Message-ID: <aldPkgqkV9yq9OFf@u94a>
-References: <20260714093846.18159-1-sun.jian.kdev@gmail.com>
- <20260714093846.18159-3-sun.jian.kdev@gmail.com>
- <alcGgfNM94zgydlK@u94a>
- <alcKV2MXI_5dsaez@u94a>
- <CABFUUZFsJsF-C5Z2gb3FkZ7WD=vBavnGdZ7veScP_+dwZLsaMg@mail.gmail.com>
- <488c235db713648bb2f5c90e4389c96a97ebcdde.camel@gmail.com>
+        Wed, 15 Jul 2026 02:36:36 -0700 (PDT)
+Date: Wed, 15 Jul 2026 11:36:34 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/cgroup: Fix intermittent
+ test_cgfreezer_ptrace test failures
+Message-ID: <aldSsQAboD6g2Sso@localhost.localdomain>
+References: <20260715035446.565625-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5ueouq2lhiett7pq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <488c235db713648bb2f5c90e4389c96a97ebcdde.camel@gmail.com>
+In-Reply-To: <20260715035446.565625-1-longman@redhat.com>
 
-On Wed, Jul 15, 2026 at 01:54:37AM -0700, Eduard Zingerman wrote:
-> On Wed, 2026-07-15 at 13:26 +0800, sun jian wrote:
-> > > Anyway, still recommend adding a regression test that test access to one
-> > > byte before the start of writable context.
-> > 
-> > The new tracepoint_writable_reject_negative_const_offset verifier case
-> > already covers an access before the start of the writable context:
-> > 
-> >     r6 = *(u64 *)(r1 + 0);
-> >     r6 += -8;
-> >     r0 = *(u64 *)(r6 + 0);
-> > 
-> > Its effective access range is [-8, 0), so it is rejected at load time.
-> > This is the direct regression test for the negative-start case.
-> 
-> The existing test seem to be sufficient, why would it matter is at
-> offset -8 or -1 given that the read is appropriately sized?
 
-Right it doesn't. Let's just, pretend I haven't suggest that.
+--5ueouq2lhiett7pq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] selftests/cgroup: Fix intermittent
+ test_cgfreezer_ptrace test failures
+MIME-Version: 1.0
 
-[...]
+Hi.
+
+On Tue, Jul 14, 2026 at 11:54:46PM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> It is found that the test_cgfreezer_ptrace test of test_freezer can
+> intermittently fail on some architectures like arm64 and ppc64.
+>=20
+> After further tracing of the mechanics of the test_cgfreezer_ptrace test,
+> it is found that the ptrace(PTRACE_DETACH) call will spawn another process
+> to perform the detach=20
+
+I'm reading kernel/ptrace.c and cannot find a new task creation.
+I'm curious what is this "another process"?
+
+(Or is it referring to the child_fn() process from
+test_cgfreezer_ptrace()? Then I'm suspicous about the transitional
+unfreezing of it after PTRACE_DETACH. Wasn't it rightful expectation of
+the test that the cgroup remains contiguously frozen?)
+
+> by temporarily unfreezes the cgroup and then freezes
+> it again afterward during the detaching process. The reading of the
+> frozen flag from cgroup.events is done by the main test_freezer process
+> running probably on a different CPU. As a result, racing is possible and
+> the intermediate unfrozen state can be read leading to occasional test
+> failures especially on architectures with a weak memory model like arm64.
+
+What state would the task be in during this window?
+
+Thanks,
+Michal
+
+--5ueouq2lhiett7pq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaldUnRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AgBiAEAtibykYvZC+3Kxm/NzjT1
+GszMpvkJPqiA7qKlwDnJvMMA/09aHmm6drkw1dia2aCU7YAPAnNa8o0FUlrsoBBC
+gs8E
+=tW7/
+-----END PGP SIGNATURE-----
+
+--5ueouq2lhiett7pq--
