@@ -1,192 +1,216 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EB13195FD
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D1939EF19
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 14:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784127266; cv=none; b=LBl01RwZO3eNWWeM9P5xqUxrkH90skkLd+vVo/gHeeV3Qk48DJ+0SQuMrhBdH703m8JB0+Geq+jov9UD2tOEgOEHNC5WbYBcFQzb5h7lmEfnYWXip0KXaWLCuA/FtXTN/oZAhHCVtP7uJX2pvGBTUXPqYDyrFTFo7xs5hpziqfQ=
+	t=1784127267; cv=none; b=m+8gYQtbpA9SnP4bDVnKLhkk1CQXmHK5ExAksn7wMWSbWyN8W0VOyWjyZQqEZe1bxQV1PFcEywG+AkOVDYZ0m0qHGP85xUxrzrWHBLVrLaTYA/LV0S93pmeK7lK8cGykusx5SryZQiaS1KpYW3QB9m/qNp9n38NJlGcQsRIQ3eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784127266; c=relaxed/simple;
-	bh=ZkYJs35jQmspYZV+7P7rdW/XJsOQuNs1+0xfbRaBumg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MVglDCHPnQxyR4caBR3ZDh+++2Lj2prG1YB+om1PSyhrkPk7YzB/yK2PTvOZP1qnaohz5HHKwm6g8zEof7FtJEAc4Zumhr3/VIY8NqCKGHu/8RV9c2nSXKw9mB0R4JRAU2LaSEq8D1cLDoHPIUGUEaX9tsiqh5uxHORhVw0vkKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w9I+eCnr; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1784127267; c=relaxed/simple;
+	bh=YyPEuMuyqMojfkauQ1cJlUP1yepRyWdPdGctS43UDF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Y6b7gzyWiyWiVbR7q3tIXnJjOS2e3xpYxfGv3QjZ0mIXLBQrlN6cJb6N3K6Lpiy0GmMRJBijrf9D6Z3W5baO5Or+Y71M7cgP2zdsqYwifkq9GA8vJ1JcWSvPtFEQA/xlqzJq44ri5yXQbi0PGz/TcLeVEU6bWaQjbj8SZppPi/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=daUlspi8; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w9I+eCnr"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-493f60208a5so47161935e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784127261; x=1784732061; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IYLoZSOwmX0k8MESmwiGJgNO1yzq3b1PVclurYMHFiw=;
-        b=w9I+eCnr9TIpzu7GbUYL3zpPPIU6S0jloT5X6VGAEDiz/7On9oUBC23OrWcWvwJ3Fy
-         XXhPEmRuAu3TMYM8U2QxRjA4rolyrFrxVozlWwpikuqabKxeg0js85iTK/h7nEf5IRgd
-         LcnzjFcNHDDCslPC90GT19wToUdJDkJHj3s1rSsyofjcMLccC/pa3ga+ys+OPCU72DuS
-         Cja0PTk2CeXJg/G8pS/IvOLQ+dsngjm2wUO6UFSBKOJwN/KQA33pxuLDIF9+6vHZYueg
-         L5G9Rw4rpjuITSIDatvLu8wO4rwsQsGThqrdPO8P5WGw8DUDGMlz1+wruJOHQjDDvGgT
-         HbRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784127261; x=1784732061;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IYLoZSOwmX0k8MESmwiGJgNO1yzq3b1PVclurYMHFiw=;
-        b=UT74s6jUKjahoFUYSHPBjOfdEjTwJRVGgYmY7P+ojmr2x65fs6GSztXEJFpDWZkoOM
-         cVt2NNGinSds4hozaIEJfNPxngI+yR59wEycihU5niRGdMZZ4xAOQ1jZ0LXdBwYZ/RjT
-         041VxC03f6jngx9pYaEvlmIQqhDZD5cKFBBdoc/TGMufI3+OoWejw0lGuDSoKq4jCaYI
-         01ewwgTvKtM7EqKP++miEZkgruy5j2hby7KDMiiYsAEF+u+iURzlSXRIWMKf0Ei3bZnE
-         JoorByjqSZSdfV6bfDGv06otxWODCOaKSqUczYlEyleRzrWf4bDQhAKBnHcTRetTKN3B
-         4UZg==
-X-Forwarded-Encrypted: i=1; AHgh+RoimDNGfVzfyQOe2SAATse/SjBoFuPPesIil4wOq8M2cts8t9wuSE+IN+cHxmAD0mSOPD9HE07caBkXx/eJsnc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFGfvvUE2r6LLCGutEvySrQ44m16ELGxqfI7hozsIuM9HYoYsK
-	mxrLnsDWg0kImlXykT4XRBboHAnWxRTTkDs7WDxmp5lpaOgdrJwWJUNFjyz5hIGgsFcpQjwL53q
-	H27UG
-X-Gm-Gg: AfdE7clHVOKWcUsnPx+eH0jOhlrj0hy18a9/wyY+RTjnJ3CFs9pOfuqCfP8/mNQNlJX
-	sSfP3slNlNXhO9/rRpK+G/kYzomtQVRw4Oy9b6vFYeq02uzI/1fsYuf2yVICi8I6R+XRhk04gYQ
-	xCLyiaGKDF05x9U3gI8C5JQmAaCbUFKjhGNLT5RSRXXNqm58ONSwlGVquUh25DsWIgLupAQV2aD
-	5dRH/63s2qtCXqHDZVkjFMmJIy+Rv4o+xeJsCqDhaL80ZUd41Sv5BOYIRCQNdkFY36VoDgi1nRs
-	x1Q/rDbus2KZpPfggmp8RtFymB/FoRqlrSRBhA0Y3VK9YHpqtKUxc9C5OLtt+uCvhWZLzf+JAy3
-	VFsK4bsNBTmcc319cEXd+2/U4MmTUlR92PdAl8PG1ZLZn2S9dNU69+DM0/J/sS8pF5DWvtnmZEj
-	GXA7JlaS1Z2riCyN5bx4tdaw==
-X-Received: by 2002:a7b:c38e:0:b0:495:406c:81d5 with SMTP id 5b1f17b1804b1-495406c81ffmr2450405e9.28.1784127261341;
-        Wed, 15 Jul 2026 07:54:21 -0700 (PDT)
-Received: from e133063.arm.com ([212.187.182.162])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49510c8e220sm137649275e9.15.2026.07.15.07.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 07:54:20 -0700 (PDT)
-From: James Clark <james.clark@linaro.org>
-Date: Wed, 15 Jul 2026 15:53:50 +0100
-Subject: [PATCH v4 3/4] tools/build: Allow versioning LLVM readelf
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="daUlspi8"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784127260;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hwZLS8o3i4sMyxo+i8ArT9POnhAqjleO4BkvUvWUla0=;
+	b=daUlspi8tAUflgYybjOPKInf9VJHf2qWkYwQPKcpXc+ot9Tc5cLKt1VRH1Iz1S84q1AqkM
+	eutn+riCgtZNoVMOALPYaQixlwo85wW/RDUtqJP7EiuaWl891pbO3k/19zOTEHjO1hruPu
+	XgD29kthOoOccfZdEeZttqe/kFK1N6A=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ij@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
+	Yung Chih Su <yuuchihsu@gmail.com>,
+	Wyatt Feng <bronzed_45_vested@icloud.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH net-next v2 1/2] tcp: Add net.ipv4.tcp_purge_receive_queue sysctl
+Date: Wed, 15 Jul 2026 22:53:26 +0800
+Message-ID: <20260715145328.54597-2-leon.hwang@linux.dev>
+In-Reply-To: <20260715145328.54597-1-leon.hwang@linux.dev>
+References: <20260715145328.54597-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260715-james-perf-llvm-version-v4-3-6dfdf984b435@linaro.org>
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Documentation/kbuild/llvm.rst mentions that readelf is included in the
-LLVM toolchain, but it's not currently included in this block.
+Introduce a new sysctl knob, net.ipv4.tcp_purge_receive_queue, to
+address an unreleased SKBs issue related to TCP sockets.
 
-Add it so that LLVM=... options also apply to readelf. Users in tools/
-were Perf which was hardcoding it, and another was the BPF makefile.
-Both already include Makefile.include so convert them to use the new
-variables.
+Issue:
+When a TCP socket in the CLOSE_WAIT state receives a RST packet, the
+current implementation does not clear the socket's receive queue. This
+causes SKBs in the queue to remain allocated until the socket is
+explicitly closed by the application. As a consequence:
 
-Where readelf wasn't doing anything arch specific, use HOSTREADELF
-because it's more likely to be installed.
+1. The page pool pages held by these SKBs are not released.
+2. The associated page pool cannot be freed.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
-Signed-off-by: James Clark <james.clark@linaro.org>
+RFC 9293 Section 3.10.7.4 specifies that when a RST is received in
+CLOSE_WAIT state, "all segment queues should be flushed." However, the
+current implementation does not flush the receive queue.
+
+Solution:
+Add a per-namespace sysctl (net.ipv4.tcp_purge_receive_queue) that,
+when enabled, causes the kernel to purge the receive queue when a RST
+packet is received in CLOSE_WAIT state. This allows immediate release
+of SKBs and their associated memory resources.
+
+The feature is disabled by default to maintain backward compatibility
+with existing behavior.
+
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/Makefile         | 8 ++++----
- tools/perf/Makefile.perf       | 1 -
- tools/scripts/Makefile.include | 4 ++++
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ Documentation/networking/ip-sysctl.rst        | 18 +++++++++++++++
+ .../net_cachelines/netns_ipv4_sysctl.rst      |  1 +
+ include/net/netns/ipv4.h                      |  1 +
+ net/ipv4/sysctl_net_ipv4.c                    |  9 ++++++++
+ net/ipv4/tcp_input.c                          | 22 +++++++++++++++++++
+ 5 files changed, 51 insertions(+)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index eca584fb061e16013e76827e4203f6be0477a73e..269fe21fc8da73083367b3c122bdd2b718e12bc5 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -115,12 +115,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 208f46967ee5..abbee0326f15 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -1448,6 +1448,24 @@ tcp_rto_max_ms - INTEGER
  
- TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
+ 	Default: 120,000
  
--GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
-+GLOBAL_SYM_COUNT = $(shell $(HOSTREADELF) -s --wide $(BPF_IN_SHARED) | \
- 			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
- 			   sed 's/\[.*\]//' | \
- 			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
- 			   sort -u | wc -l)
--VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
-+VERSIONED_SYM_COUNT = $(shell $(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
- 			      sed 's/\[.*\]//' | \
- 			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
- 			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
-@@ -183,12 +183,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
- 		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
- 		     "Please make sure all LIBBPF_API symbols are"	 \
- 		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
--		readelf -s --wide $(BPF_IN_SHARED) |			 \
-+		$(HOSTREADELF) -s --wide $(BPF_IN_SHARED) |		 \
- 		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
- 		    sed 's/\[.*\]//' |					 \
- 		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
- 		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
--		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
-+		$(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so |	 \
- 		    sed 's/\[.*\]//' |					 \
- 		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
- 		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 476b8dcaef58cb1f3fa75f46a647c2cfe2352767..4d0d7ae02e06b117487a17691c4e62a138428ac5 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -215,7 +215,6 @@ FLEX    ?= flex
- BISON   ?= bison
- STRIP   = strip
- AWK     = awk
--READELF ?= readelf
++tcp_purge_receive_queue - BOOLEAN
++	When a socket in the TCP_CLOSE_WAIT state receives a RST packet, the
++	default behavior is to not clear its receive queue.  As a result,
++	any SKBs in the queue are not freed until the socket is closed.
++	Consequently, the pages held by these SKBs are not released, which
++	can also prevent the associated page pool from being freed.
++
++	If enabled, the receive queue is purged upon receiving the RST,
++	allowing the SKBs and their associated memory to be released
++	promptly.
++
++	Possible values:
++
++	- 0 (disabled)
++	- 1 (enabled)
++
++	Default: 0 (disabled)
++
+ UDP variables
+ =============
  
- # include Makefile.config by default and rule out
- # non-config cases
-diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-index e81e5b479c563321e458b2a7ad8fca2b4607a254..46a3872b87624a7bf475d9b42a3e471f36789dfd 100644
---- a/tools/scripts/Makefile.include
-+++ b/tools/scripts/Makefile.include
-@@ -73,6 +73,8 @@ ifneq ($(LLVM),)
-   $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
-   $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
-   $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
-+  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
-+  $(call allow-override,HOSTREADELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
- else
-   # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
-   $(call allow-override,CC,$(CROSS_COMPILE)gcc)
-@@ -80,11 +82,13 @@ else
-   $(call allow-override,LD,$(CROSS_COMPILE)ld)
-   $(call allow-override,CXX,$(CROSS_COMPILE)g++)
-   $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
-+  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
+diff --git a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
+index 3dc03bff739e..2945de40ad78 100644
+--- a/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
++++ b/Documentation/networking/net_cachelines/netns_ipv4_sysctl.rst
+@@ -126,6 +126,7 @@ unsigned_long                   sysctl_tcp_comp_sack_delay_ns
+ unsigned_long                   sysctl_tcp_comp_sack_slack_ns                                                        __tcp_ack_snd_check
+ int                             sysctl_max_syn_backlog
+ int                             sysctl_tcp_fastopen
++u8                              sysctl_tcp_purge_receive_queue
+ struct_tcp_congestion_ops       tcp_congestion_control                                                               init_cc
+ struct_tcp_fastopen_context     tcp_fastopen_ctx
+ unsigned_int                    sysctl_tcp_fastopen_blackhole_timeout
+diff --git a/include/net/netns/ipv4.h b/include/net/netns/ipv4.h
+index cb7f8bf15671..ab9b92807d9f 100644
+--- a/include/net/netns/ipv4.h
++++ b/include/net/netns/ipv4.h
+@@ -222,6 +222,7 @@ struct netns_ipv4 {
+ 	u8 sysctl_tcp_nometrics_save;
+ 	u8 sysctl_tcp_no_ssthresh_metrics_save;
+ 	u8 sysctl_tcp_workaround_signed_windows;
++	u8 sysctl_tcp_purge_receive_queue;
+ 	int sysctl_tcp_challenge_ack_limit;
+ 	u8 sysctl_tcp_min_tso_segs;
+ 	u8 sysctl_tcp_reflect_tos;
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index ca1180dba1de..82412fd98e0e 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -1652,6 +1652,15 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.extra1		= SYSCTL_ONE_THOUSAND,
+ 		.extra2		= &tcp_rto_max_max,
+ 	},
++	{
++		.procname       = "tcp_purge_receive_queue",
++		.data           = &init_net.ipv4.sysctl_tcp_purge_receive_queue,
++		.maxlen         = sizeof(u8),
++		.mode           = 0644,
++		.proc_handler   = proc_dou8vec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
+ };
  
-   # Host versions aren't prefixed
-   $(call allow-override,HOSTAR,ar)
-   $(call allow-override,HOSTCC,gcc)
-   $(call allow-override,HOSTLD,ld)
-+  $(call allow-override,HOSTREADELF,readelf)
+ static __net_init int ipv4_sysctl_init_net(struct net *net)
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 61045a8886e4..4f1027173e95 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -4853,6 +4853,7 @@ void tcp_done_with_error(struct sock *sk, int err)
+ /* When we get a reset we do this. */
+ void tcp_reset(struct sock *sk, struct sk_buff *skb)
+ {
++	const struct net *net = sock_net(sk);
+ 	int err;
  
-   # Some tools still require Clang, LLC and/or LLVM utils
-   $(call allow-override,CLANG,clang)
-
+ 	trace_tcp_receive_reset(sk);
+@@ -4869,6 +4870,27 @@ void tcp_reset(struct sock *sk, struct sk_buff *skb)
+ 		err = ECONNREFUSED;
+ 		break;
+ 	case TCP_CLOSE_WAIT:
++		/* RFC9293 3.10.7.4. Other States
++		 *   Second, check the RST bit:
++		 *     CLOSE-WAIT STATE
++		 *
++		 * If the RST bit is set, then any outstanding RECEIVEs and
++		 * SEND should receive "reset" responses.  All segment queues
++		 * should be flushed.  Users should also receive an unsolicited
++		 * general "connection reset" signal.  Enter the CLOSED state,
++		 * delete the TCB, and return.
++		 *
++		 * If net.ipv4.tcp_purge_receive_queue is enabled,
++		 * sk_receive_queue will be flushed too.
++		 */
++		if (unlikely(READ_ONCE(net->ipv4.sysctl_tcp_purge_receive_queue))) {
++			struct tcp_sock *tp = tcp_sk(sk);
++
++			skb_queue_purge(&sk->sk_receive_queue);
++			WRITE_ONCE(tp->copied_seq, tp->rcv_nxt);
++			WRITE_ONCE(tp->urg_data, 0);
++			sk_set_peek_off(sk, -1);
++		}
+ 		err = EPIPE;
+ 		break;
+ 	case TCP_CLOSE:
 -- 
-2.34.1
+2.55.0
 
