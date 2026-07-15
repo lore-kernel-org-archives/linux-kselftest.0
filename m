@@ -1,152 +1,132 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B89DDF76
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 22:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739173CF204;
+	Wed, 15 Jul 2026 23:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784156170; cv=none; b=q0DmgQdrAbhVlwjsjmRIQ1kj3OySXg9Kq/Ig+Qx3yyfuy3t4iIpnEvguDFHaS0r44nVYXqDr1whCd7DYB5u0iVQbjwkg2t3XQ+ARmO7MuGaVjRIuwrZ/8CrI14TnAjIH/fEPb5XI2Mk1kFzVV1ThXJxZFhMFLAZCxz9Of946Sug=
+	t=1784159177; cv=none; b=vBIlxWskg1S9U/rStYYfia6I0tBKT69Tj9gp3VsJjH5niYHD58118MKa3xghrgD/xNI1KamLifXBxvv67Ngq2UHaJVKd+6b+Bjr6zC3ei/hXeRr1QekGJfnaZ2hol0wmft92KAqcml8DNxoPrAepWD22uDPw+jLc10KCmJCjwdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784156170; c=relaxed/simple;
-	bh=UBlfDsYNOya0DmR/NQDysciqWWl95dJFw0BTTqX4MX8=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=GSxkSHQlRm88EIOf9xW91XBdH+HuDgh/6onXBSvnMBAkQAptgrkflj1zLAevWnPiYo+G7KEs7ASga7+JgDHQ5O/q7fOqOjTBFi9IFtk683zR/psM39IA0BCvphUF6+Mrhb7cMzvSywK12Z05VY7ZTC652tPvE6jfXCvLZBM8iMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EuNWa02c; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1784159177; c=relaxed/simple;
+	bh=dMoHufLvD7MkkNMJXcpSScmSapAuttAYNZQQtpNnMMM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SAn1VBGgpTmEC08NOiOIyGb3KSbTV6T4wvS3UjZqU4S2e7wcXr1DB3Y2Y+L5WUVNhoqVfdmzn5BSufW4MNdO8jei5hnm+Yc3eWY5IlJcCBOp1WuGUtk8V13Tv5lLeZ4XA9ISXldorFDVvZ3LDX/uH0Mg/00W02pAh+/QxpLLhoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hqFN18X4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EuNWa02c"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-44aeefa1c00so15424fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 15:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1784156166; x=1784760966; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:content-type:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BPLuMuxpWYcjfZkIUJAamd8dt+XaeF6Gjn4JNYYGsgI=;
-        b=EuNWa02cSTGSnXNPhFI1ffjXtxRXdR6G4Qem/qEWx/cd9FMImtG8sBiXAQeMBFK3/q
-         v9O5TCf1dAwG4iGzoahy3rgCpQkb6U4zV+2NwF1uscz17H97v/2CV8SO0OHCaLS2W0vs
-         jPzWPpBqh/U6iJN9TSI4J9z+KuK/VpG21i8K0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784156166; x=1784760966;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:content-type:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=BPLuMuxpWYcjfZkIUJAamd8dt+XaeF6Gjn4JNYYGsgI=;
-        b=cgshIQYANrkwUGxYfAw8g+/YAsuxjbszEZQpfLvooQOtNPDQFNnBBRJQQJbX0XU/Qk
-         E9Scj6FrimoCsNSnUZ8ims6LmB5tYF72ZBpp10Q2yKisWLggs5EZsDT8VhUh+vKRJBYA
-         3ZLL8X6Pzfcvz9bgtJ7YDPr14cfnUGJ+ksQA23/bp1/bV7eHVKLoe4pjzWdxNU22L/KM
-         ahQeGZxiR+fXlOTnAbVcPZ5xXScydOIlM220Aeg37AIbj2osxadei7N+UyxTaWqrok+q
-         n07VC5oyeCb4mbPaR4JAfUGQxpRvR6jw3P/YgUcCDC1NkFeAz7aC8/e9sM6d4Hp3lCvo
-         j8+g==
-X-Forwarded-Encrypted: i=1; AHgh+RoT6CA+7IR6uakmeqnetz4irRwYlfj+3oRicCC/qeMG0f4Nd7ktljQcXip4ine+Gd82YfdoZSyojP97qMQtp94=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxyOYJuZ5YybR63csiTsGZ2DuifNzUf91RpdXY8q7zK5UwpFHj
-	JuCgaJzUBksacYafF1vJoVe3hVjYw0jUv/WyKf3PgqrRiElLGzfPzE1UKct4jcdaxnk=
-X-Gm-Gg: AfdE7cmB4S6CEsVVGDefcpK/JO7sMNg2NPCp6jG8vUZUpF1u3HO588hzsu3g2nvDuyD
-	JQBkQIDasdVBtwgZqZyZtS5LhbIzAr+T4gVVZjv5O+k70RDw4QBcq2hWzXP+XzzpmNdEEra0yhD
-	GjZmbT1PtkTx/CfHu/IxgUafafur0zOVUZ4uLyqKWta1ot6Vc2nu9v7Y1Dx4Ac8zHp2Izxj4T3/
-	H4XpkaRdCk+g/bzdSOba3zWZnVrYe3BS/w57BLoom6nc8M6ADyf2PR9yXoq3oMQfuwYQqu37J2f
-	dwx39//cHRRzA2WzAQn9YcrRfZx674Fmoj03Js1yL4TJm16mp2tut+SvOJDvoWl9HWuOhAgQSYe
-	SHytN9lYwvSgzJgOtfJ6dC8aK+QreRnxKGF2EugVepeV1E/zfiWBE3MLKrFDA3VaiVlpEqzNmQN
-	G6oiQlbq89oHL1Yz8CiRVbkw==
-X-Received: by 2002:a05:6871:7501:b0:430:16b5:909 with SMTP id 586e51a60fabf-45660f8e6d5mr65375fac.15.1784156166125;
-        Wed, 15 Jul 2026 15:56:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-451916d5cebsm20934897fac.15.2026.07.15.15.56.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2026 15:56:05 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------UHFIRoAQ0VjesPfB4ET10Qrh"
-Message-ID: <362433e5-8281-4fcc-9d85-09f75a7d97a8@linuxfoundation.org>
-Date: Wed, 15 Jul 2026 16:56:04 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqFN18X4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E8F1F000E9;
+	Wed, 15 Jul 2026 23:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784159176;
+	bh=9M8j7I7VdmUl3g1TXrlGhuKxddx/mKZm9ejkTrkF5to=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hqFN18X4ZmdicG79qc7kKagp6mZYoLt9/bXSXKUt86xuENBjF1IE4rrrZqZYb+Beg
+	 izV9nOPHPoUoovny0IkOGpEnrFlvhMcrJotPZfxh7tysJX1gEgsGopimk3o15mNXae
+	 Y0qxLPw4ndrWM+i3UGahJ80d+cL4K4ST4S9e3bh2yiNOT9g3Afmf3tPPZoGsGoU6Mq
+	 IpVmnlmhZRVpJIFrCslfNoku8YEqM2YOCPLEvy+otidtPPdxAm9GKCdte6bzdMS0qj
+	 tdOyZJ7cgmYJCH9sjr1Nq0bNtX46ovrG7y4+pl1vpigKGizAEWbuBNpdoOrikbWgo9
+	 Be3aLVhUGZbSA==
+Date: Wed, 15 Jul 2026 16:46:13 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: James Clark <james.clark@linaro.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+Message-ID: <algbxQAAmurxms8X@google.com>
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
- David Gow <david@davidgow.net>, Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] kunit fixes update for Linux 7.2-rc4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
 
-This is a multi-part message in MIME format.
---------------UHFIRoAQ0VjesPfB4ET10Qrh
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hello BPF folks,
 
-Hi Linus,
+On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
+> I ran into the build issue mentioned in the first commit, because using
+> an option like LLVM=-15 is a documented way to build [1], but only
+> some of the LLVM tools defined in tools/ support this.
+> 
+> After fixing that, a lot of other tidyups fell out. I didn't go too far,
+> for example some selftests include tools/testing/selftests/lib.mk which
+> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+> tools/scripts/Makefile.include and I stopped before touching the former.
+> Some other non build scripts hard code toolchains and I didn't touch
+> those either, this change is only focused on things that already
+> include Makefile.include.
+> 
+> [1]: Documentation/kbuild/llvm.rst
+> 
+> Signed-off-by: James Clark <james.clark@linaro.org>
+> ---
+> Changes in v4:
+> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
+>   already picks the correct sibling lld version. (Sashiko)
+> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org
+> 
+> Changes in v3:
+> - Add warning for empty $USE_LD
+> - Use $HOSTREADELF in bpf Makefile
+> - Rebase on v7.2-rc3
+> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
+> 
+> Changes in v2:
+> - Fix selftests/bpf build. LLD needs to take the full path to be used
+>   with -fuse-ld=
+> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
+> 
+> ---
+> James Clark (4):
+>       tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+>       tools/build: Indent if else blocks
+>       tools/build: Allow versioning LLVM readelf
+>       tools/build: selftests: Remove some duplicate toolchain definitions
+> 
+>  tools/bpf/resolve_btfids/Makefile    |  3 --
+>  tools/lib/api/Makefile               |  4 --
+>  tools/lib/bpf/Makefile               |  8 ++--
+>  tools/lib/subcmd/Makefile            |  4 --
+>  tools/lib/symbol/Makefile            |  4 --
+>  tools/perf/Makefile.perf             |  7 ----
+>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+>  tools/testing/selftests/bpf/Makefile |  1 -
+>  8 files changed, 46 insertions(+), 62 deletions(-)
 
-Please pull the kunit fixes update for Linux 7.2-rc4.
+Are you ok with this change and going through perf tree?
 
-Fixes warning suppressions with kunit built as module:
+Thanks,
+Namhyung
 
-CONFIG_KUNIT is a tristate symbol but the warning suppression code in
-lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
-rendering warning suppressions broken for kunit build as loadable module.
-
-kunit_is_suppressed_warning() already has a stub for when kunit is
-disabled so drop that guard entirely.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
-
-   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.2-rc4
-
-for you to fetch changes up to 5142c56651578abc346d6c17f3fb919b9ffbb317:
-
-   bug: fix warning suppressions with kunit built as module (2026-07-10 10:26:58 -0600)
-
-----------------------------------------------------------------
-
-linux_kselftest-kunit-fixes-7.2-rc4
-
-Fixes warning suppressions with kunit built as module:
-
-CONFIG_KUNIT is a tristate symbol but the warning suppression code in
-lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
-rendering warning suppressions broken for kunit build as loadable module.
-
-kunit_is_suppressed_warning() already has a stub for when kunit is
-disabled so drop that guard entirely.
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-       bug: fix warning suppressions with kunit built as module
-
-  lib/bug.c | 2 --
-  1 file changed, 2 deletions(-)
-
-----------------------------------------------------------------
---------------UHFIRoAQ0VjesPfB4ET10Qrh
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-kunit-fixes-7.2-rc4.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-kunit-fixes-7.2-rc4.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2xpYi9idWcuYyBiL2xpYi9idWcuYwppbmRleCAyOTI0MjBmNDU4MTEu
-LjdjMWMyYzI3ZjU4ZSAxMDA2NDQKLS0tIGEvbGliL2J1Zy5jCisrKyBiL2xpYi9idWcuYwpA
-QCAtMjE5LDE0ICsyMTksMTIgQEAgc3RhdGljIGVudW0gYnVnX3RyYXBfdHlwZSBfX3JlcG9y
-dF9idWcoc3RydWN0IGJ1Z19lbnRyeSAqYnVnLCB1bnNpZ25lZCBsb25nIGJ1Z2EKIAlub19j
-dXQgICA9IGJ1Zy0+ZmxhZ3MgJiBCVUdGTEFHX05PX0NVVF9IRVJFOwogCWhhc19hcmdzID0g
-YnVnLT5mbGFncyAmIEJVR0ZMQUdfQVJHUzsKIAotI2lmZGVmIENPTkZJR19LVU5JVAogCS8q
-CiAJICogQmVmb3JlIHRoZSBvbmNlIGxvZ2ljIHNvIHN1cHByZXNzZWQgd2FybmluZ3MgZG8g
-bm90IGNvbnN1bWUKIAkgKiB0aGUgc2luZ2xlLWZpcmUgYnVkZ2V0IG9mIFdBUk5fT05fT05D
-RSgpLgogCSAqLwogCWlmICh3YXJuaW5nICYmIGt1bml0X2lzX3N1cHByZXNzZWRfd2Fybmlu
-Zyh0cnVlKSkKIAkJcmV0dXJuIEJVR19UUkFQX1RZUEVfV0FSTjsKLSNlbmRpZgogCiAJZGlz
-YWJsZV90cmFjZV9vbl93YXJuaW5nKCk7CiAK
-
---------------UHFIRoAQ0VjesPfB4ET10Qrh--
+> ---
+> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+> 
+> Best regards,
+> -- 
+> James Clark <james.clark@linaro.org>
+> 
