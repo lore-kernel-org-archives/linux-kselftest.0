@@ -1,50 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D1F2ED870;
-	Wed, 15 Jul 2026 16:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ECA3ACF02;
+	Wed, 15 Jul 2026 16:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784131392; cv=none; b=Zoet7HM1wIDIdMF6VsMAayoB6EA2LShLHxcueYLtx029rPacbBUtF/KFeTyRGCbgh+y2aeuibA0vsC6Qd2KHrRDZ4C0djxfl+chO6G9z3nA2zLEo5nB9X6wFnfIzjWd35dB0wqod0NLW5h7Ikv7j9yPx5WVuSaWD1Jc7pX62HAY=
+	t=1784131399; cv=none; b=BURRQS8jyX7peWOnogYrLIc4mnE1NXGM4J48j2iPq1UJGl/wqlkLBeoMpY44siDCROP9r0VpZvE75cRgCND8qPh69Sl69yrpoT7RVXej5XzANShOtk45j7NuY/Dk9DUXpjWBhRZ4ii0J+OitzMDUBEIsSvOkdF77qpCdgtDhalY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784131392; c=relaxed/simple;
-	bh=8b7qsmXxnW91dNcuGNzXlqxsWLCWfqu2R3Anp8PZC7s=;
+	s=arc-20240116; t=1784131399; c=relaxed/simple;
+	bh=j66ycXNqmfL9ElgeVy3WnEOOmbqq6eqLlP83Cj5txIc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XKQ2Sf4yUUR86OgNnC6tB6+zxtqTT1B38Vs8b0fawuWKVqN3VV2LGGNf2QqYKQz8apQTeDTIi7+Q2FQeyBTmozAwNRfMV68OoznHq8dDavaYrYjs2fhpGv4miGSF6HpKsz9TwJoOdbQjlMHAIcpN9fTfLoapGPXG4Pp8OOSUg1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLIBzgLE; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=D62+2ZNsRC5qYNLToHzxCNqg9X5i8BdvidEnqZ6Iwcb+8yRdtH2JwiEjqu9nDL+y708/H0JDTv3vNjMCNZbuSswHmOWBQNOVv8lmZUIz2lRFzm/TVuUGObkB4261tkS/z05qRqOepRrDdmWBkIcjBu9Mi7C9Eu+mUzVM6XcD2Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTe0PVEt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLIBzgLE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8931F000E9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTe0PVEt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45DD31F00AC4;
 	Wed, 15 Jul 2026 16:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784131391;
-	bh=ZHRySce1DX+MQ4tELLMpD5Y/ibRTeQsmyUSPCPd64Kg=;
+	s=k20260515; t=1784131398;
+	bh=f4C6n0w9mDrtHRCnStTGRTvpeLhmwUbbHGkqcxBvTik=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jLIBzgLElQfSK8tCiIynsgCXvR+lTL2RG9w11+UjXajcRddrvp2W14wF0z8O+8WbT
-	 JCwR1x11SN1JpWnhIWzQQ92Q608ClvEMjcS6o+2F5UEW1aKYL5HQ9fIhWKQGdOlK+U
-	 u6oJJiC4fRNtRnFcJquXI12tEnINkWBoxUgzvng1bt9DmuNm5NOUzqvL7NUg7TagJZ
-	 bM4uH727xKLbZheSQNKuW+Ij5/5xUwbK7TJXRFXZOvAvDeyOfNJROXknblc0h2CMkd
-	 FT0H2CvNvGbuq0i04N5IuzvAA1eNayA2t9O3dyNdWjCZ65aaUcRPdL3Me6dkzmHOuM
-	 tl5PWNTUP8E8w==
-Date: Wed, 15 Jul 2026 09:03:10 -0700
-From: Kees Cook <kees@kernel.org>
-To: David Matlack <dmatlack@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Aaron Lewis <aaronlewis@google.com>,
-	Alex Williamson <alex@shazbot.org>
-Subject: Re: [PATCH v3] selftests: harness: Mark test fixture objects
- __maybe_unused
-Message-ID: <202607150902.F17F8DE5@keescook>
-References: <20260706183154.2660394-1-dmatlack@google.com>
- <CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
+	b=BTe0PVEtIUgNNd0HJimWRQQVEEPMbL5+bzLWuypuzi9NIZDNIO6kUqirtSxlAWLFk
+	 PrBLqf5Yq1l3QU6VH4iviptT0e9bRWpUM/uEXAasgR77pKC9z+vQd3N/ZT12gq+TOA
+	 iSjdO6i4rRi3jSv2zcy+p4iHl9QURtzFzqcQgPTQEhJK2/xGqbUIZZT2Vi6+Rct4P3
+	 d+GhP1nj6V3srM5djsFI26cexSh0CwKsIKZqFVpU6Sr6h376esJkNnOtKiwg2jmpGj
+	 k+k3ZxxMJZcOYT4zJ80nQ91avqazBAS8yWXPX8UPGPMQCt3fqQNPTCHC8TVxaX0t6I
+	 khlJo9zamFdrw==
+Date: Wed, 15 Jul 2026 17:02:59 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, airlied@gmail.com, 
+	akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org, corbet@lwn.net, dakr@kernel.org, 
+	jgg@ziepe.ca, kees@kernel.org, leon@kernel.org, liam@infradead.org, 
+	lizhi.hou@amd.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com, 
+	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org, 
+	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com, rppt@kernel.org, 
+	shuah@kernel.org, simona@ffwll.ch, skhan@linuxfoundation.org, surenb@google.com, 
+	tzimmermann@suse.de, vbabka@kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] mm/hmm: Clarify notifier retry state and scope
+ HMM timeouts
+Message-ID: <alet21wLwM6P_Km2@lucifer>
+References: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
+ <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+ <alecaJ1FUso39D9k@skinsburskii>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,38 +54,80 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
+In-Reply-To: <alecaJ1FUso39D9k@skinsburskii>
 
-On Tue, Jul 14, 2026 at 09:24:36AM -0700, David Matlack wrote:
-> On Mon, Jul 6, 2026 at 11:32 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > Mark _##fixture_name##_##test_name##_object __maybe_unused since it may
-> > not ever be read. This pointer is only read in XFAIL_ADD(), which tests
-> > are not required to use.
-> >
-> > clang made a change to -Wunused-but-set-variable (split out into its own
-> > subwarning, -Wunused-but-set-global) that causes this warning to be
-> > emitted for various selftests and can be upgraded to an error in
-> > selftest that set -Werror.
-> >
-> > VFIO selftests have been broken since commit ff556bd98348 ("vfio:
-> > selftests: Add -Wall and -Werror to the Makefile"), and the net
-> > selftests builds have been noisy due to -Wall.
-> >
-> > Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked processes")
-> > Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > Reported-by: Aaron Lewis <aaronlewis@google.com>
-> > Reviewed-by: Alex Williamson <alex@shazbot.org>
-> > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> 
-> Kees and Shuah, is it ok if Alex takes this through the VFIO tree? [1]
-> This fixes a bug exposed by recent VFIO selftests commit ff556bd98348
-> ("vfio: selftests: Add -Wall and -Werror to the Makefile").
-> 
-> [1] https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.org/
+To avoid confusion: obviously please don't merge this series Andrew.
 
-Yeah, please do. This has ample review. :)
+On Wed, Jul 15, 2026 at 07:42:48AM -0700, Stanislav Kinsburskii wrote:
+> On Wed, Jul 15, 2026 at 02:41:43PM +0200, David Hildenbrand (Arm) wrote:
+> > On 7/15/26 00:21, Stanislav Kinsburskii wrote:
+> > > This small fixup series applies on top of:
+> > >
+> > >   [PATCH v8 0/8] mm/hmm: Add mmap lock-drop support for userfaultfd-backed mappings
+> > >
+> > > The first patch updates the HMM documentation example to make the
+> > > mmu_interval_read_retry() state explicit: callers should use the notifier and
+> > > notifier_seq stored in the same hmm_range that was passed to
+> > > hmm_range_fault_unlocked_timeout().
+> > >
+> > > The remaining patches adjust nouveau, amdxdna, and drm_gpusvm users so the
+> > > timeout passed to hmm_range_fault_unlocked_timeout() is treated as a relative
+> > > HMM retry budget. These callers no longer keep an absolute deadline around
+> > > their outer driver retry loops or pass a computed remaining time into HMM.
+> > >
+> > > This keeps the timeout scoped to HMM's internal mmu-notifier retry handling. If
+> > > HMM succeeds and the driver later observes an invalidation through
+> > > mmu_interval_read_retry(), the driver retries the operation with a fresh HMM
+> > > retry budget.
+> > >
+> > > Changes in v2:
+> > >   - Kept the nouveau outer absolute timeout around the
+> > >     mmu_interval_read_retry() loop. hmm_range_fault_unlocked_timeout() only
+> > >     bounds HMM’s internal retries, while nouveau faults are handled from a GPU
+> > >     fault worker, so userspace fatal signals cannot break an endless stream of
+> > >     invalidations there.
+> > >   - Updated nouveau to use time_after_eq() before calling HMM, so the remaining
+> > >     timeout passed to hmm_range_fault_unlocked_timeout() is always positive and
+> > >     never 0, which would mean retry indefinitely.
+> > >   - Updated the nouveau fixup commit message to explain the worker-thread
+> > >     timeout issue and the time_after_eq() boundary behavior.
+> > >   - Fixed the amdxdna fixup commit message. It now describes
+> > >     aie2_populate_range() correctly instead of carrying stale nouveau prose,
+> > >     and notes that command submission still keeps its broader timeout while HMM
+> > >     gets a fresh relative retry budget.
+> > >
+> > >
+> > > ---
+> > >
+> > > Stanislav Kinsburskii (4):
+> > >       fixup! mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
+> > >       fixup! drm/nouveau: use hmm_range_fault_unlocked_timeout() for SVM faults
+> > >       fixup! accel/amdxdna: use hmm_range_fault_unlocked_timeout() for range population
+> > >       fixup! drm/gpusvm: use hmm_range_fault_unlocked_timeout() for range faults
+> >
+> > Why a fixup series instead of properly resending the full thing?
+> >
+>
+> The goal was to get a Sashiko review, and v8 has already been applied to
+> both `mm-new` and `linux-next`.
 
--- 
-Kees Cook
+Please don't do this, this is completely impossible to track for review :)
+
+mm review is currently very difficult based on volumes, it'll become impossible
+to manage if people sound fragments of series.
+
+Please just resend the whole thing at this point.
+
+>
+> You can find more details here:
+>
+>   https://sashiko.dev/#/message/alaWmUEeIBeSkmO0%40skinsburskii
+>
+> Thanks, Stanislav
+>
+> > --
+> > Cheers,
+> >
+> > David
+
+Thanks, Lorenzo
