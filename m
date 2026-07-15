@@ -1,86 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6481A9F87;
-	Wed, 15 Jul 2026 06:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368DD3128D7;
+	Wed, 15 Jul 2026 06:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784096162; cv=none; b=gilDy0hrCJ3sodr/jSNm+UcwnNFGGeNRT+/BjFWdIWvWdoPyvHAYbDBu9EdgCXCjQiZZagLURfPaTQ5MAyQSwPrMz55jVYBGVnMKBPuBrG4LbCdB22fIFjO+O3fQHBRI45b769/aAJgor2Kns9aZ2g/DK8c7atmiXk5DK6XA/4A=
+	t=1784098070; cv=none; b=Igpo6EBranfc+o1EvjcqtTSeKAtIT4ElMlm0j4fsRlWo5RqZbsou4Nx6IMmFuHfn2IOnnSl7PU3mwgaLLzsnX7qBmTHZ93EHDBeXvx/MWE9wLC4TtaVHpOiGaYnyNaslHj+e1UkmFMgsoHPZvSq6wa9Dl8JvngIGZC6Sp6RK+Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784096162; c=relaxed/simple;
-	bh=6FWeW5F1hISirJAgOV+MHT5MJaCLdrWrxQpv2L0dPW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D1l5Tg150QPRPaKnXCAkCmKbuhJtqHCZ7iSw81oUlTrvAjKLl6RlwulEpMO5Sjh8KnRli0YeVzvi5tHlMRkNCyX7XLRDSqj6EzYGz+2D+aqkTRS46yEq77KoZI74MZb7qSw9EBr+UZH4+I9rmQrtiQyOyiWTTz74u3pynQNRkag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E/r6OHEb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784098070; c=relaxed/simple;
+	bh=Kspjd676zvs0DkYjbeRjHFL+eRleqOy5TmzjeLfcgxg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PSzx5UyQQgmi+8J/y2QtgSOaOy8KhmPJgWkiDlTRd4TvH3jxvjndaMhXKCshghO8HOOcOfxyNSX8YJzbD4sP26we+Bvhd6WS4GIE/jgnyve0FyUeFGX7WrSptMUtU1Gaj/LIulZyNMjPPxWBNL4vfuRsdaAfCu0p26jOhFI8Aa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rxe5BH0x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E/r6OHEb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE6C1F000E9;
-	Wed, 15 Jul 2026 06:15:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rxe5BH0x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B7291F000E9;
+	Wed, 15 Jul 2026 06:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784096160;
-	bh=1GVatgkJkgt1f7n14CxE5fSjwzfbGzAqCHxfBSSq8xw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=E/r6OHEbwq4pdqs8b1RF+NnQK3qU4esSIWQ6dr6wAgOVVon4f2sVQgIfZUvPYQm6g
-	 8hHZSzTJrHAb3a4B8bZvYjyh7yIXXvf/Pk6hZmjTiUWj1OaRmd5uf1mF5uDtg0FDTU
-	 dbjahm8oevNsb8i5z1FdGWStz54H+cZWCwbSPtpGIrGB+qpkwRnKFYXpGr/lD0iguD
-	 zIRkHTRey0NWbmqwqQP2lIzjF3l8oVpW/HyfI5qP8ju/P/hw/AdX2I1XPC5mozS65F
-	 8mY+o8a0MXFRKfaUXDiOWufLShLVCcwwV+bn7/bdnlTCwa28hb+XFQ1jSFQUioLQWX
-	 1/NY4J/80Tf/A==
-Date: Wed, 15 Jul 2026 09:15:53 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Vipin Sharma <vipinsh@google.com>
-Cc: pasha.tatashin@soleen.com, pratyush@kernel.org, tarunsahu@google.com,
-	skhawaja@google.com, shuah@kernel.org, dmatlack@google.com,
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Make liveupdate selftests library
-Message-ID: <alclmQIb8D1td-sw@kernel.org>
-References: <20260612214512.464146-1-vipinsh@google.com>
- <ajLtfkuMP4DEGlqe@kernel.org>
- <20260617190754.GC2704872.vipinsh@google.com>
- <CAHVum0dL+p-j1EwQf69p87MU1s8Er9RsOaMMbprFnmNeEdS6-g@mail.gmail.com>
+	s=k20260515; t=1784098068;
+	bh=Kspjd676zvs0DkYjbeRjHFL+eRleqOy5TmzjeLfcgxg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=Rxe5BH0xxS8Vh4oYbl/NJWNcYGvgJM17Umbc51sM7xu1SMeV4cV515HpEvcKV4FMP
+	 TGJ8PNvDRgCYG01V10/2gn5Q6f5ZuvzRtp9u8pLjXDAxuYDZUmjxg0UxhJR2UstyQm
+	 QQk0Exe4Ex7DMTCVrb5jDz0CQlyGwXtccd3Fv5EUvYKRyPrOtJ7wl03qR7SDDiSixz
+	 Vvx+lW4UtYvtbN14sNTyGLAY454TSkUZoEZ8NdAShabcq7GngGNDKCIne4gq9uY0XD
+	 W8mnw/OD5Qm36U8Ti0gXvCupfR0ODtgPQgMa4APmfNia4h6YM6yxGVLzQBjGW5yoyE
+	 ryb4o97GKAkIg==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alvin Sun <alvin.sun@linux.dev>, Miguel Ojeda <ojeda@kernel.org>, Boqun
+ Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6r?=
+ =?utf-8?Q?n?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Daniel Almeida <daniel.almeida@collabora.com>, Arnd
+ Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, Breno
+ Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, Dave Ertman
+ <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, Igor
+ Korotin <igor.korotin@linux.dev>, FUJITA Tomonori
+ <fujita.tomonori@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Arve
+ =?utf-8?B?SGrDuG5uZXbDpWc=?=
+ <arve@android.com>, Todd Kjos <tkjos@android.com>, Christian Brauner
+ <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
+Subject: Re: [PATCH v8 07/10] rust: configfs: use `LocalModule` for
+ `THIS_MODULE`
+In-Reply-To: <20260713-fix-fops-owner-v8-7-2495cfa82d47@linux.dev>
+References: <20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev>
+ <20260713-fix-fops-owner-v8-7-2495cfa82d47@linux.dev>
+Date: Wed, 15 Jul 2026 08:46:42 +0200
+Message-ID: <87ldbchhrh.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVum0dL+p-j1EwQf69p87MU1s8Er9RsOaMMbprFnmNeEdS6-g@mail.gmail.com>
+Content-Type: text/plain
 
-Hi Vipin,
+Alvin Sun <alvin.sun@linux.dev> writes:
 
-On Mon, Jul 13, 2026 at 09:49:51AM -0700, Vipin Sharma wrote:
-> On Wed, Jun 17, 2026 at 12:08 PM Vipin Sharma <vipinsh@google.com> wrote:
-> > > On Fri, Jun 12, 2026 at 02:45:10PM -0700, Vipin Sharma wrote:
-> > > > Hello,
-> > > >
-> > > > This is v3 series of refactoring liveupdate selftests as a library. It
-> > > > exposes common liveupdate ioctls as a library which can be used by other
-> > > > selftests like VFIO and IOMMU.
-> > >
-> > > Let's revisit this after -rc1 is out.
-> > > I don't think there would a need to change anything, it's just the matter
-> > > of applying the patches to the right base :)
-> >
-> > Sounds good, thank you!
-> > >
-> > > > Currently, there are no users of this change but it is being used in
-> > > > VFIO and iommu liveupdate series.
-> > >
-> 
-> Hi Mike,
-> 
-> Let me know if you are still planning to take it as is or if you would
-> like me to rebase on the latest liveupdate repo.
+> Replace the `THIS_MODULE` static reference in the `configfs_attrs!`
+> macro with `this_module::<LocalModule>()`, and update
+> rnull to import `LocalModule` instead of `THIS_MODULE`, consistent
+> with the move of `THIS_MODULE` into the `ModuleMetadata` trait.
+>
+> Assisted-by: opencode:glm-5.2
+> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 
-Rebasing on the latest liveupdate repo would be great, thanks!
- 
-> Thanks
-> Vipin
 
--- 
-Sincerely yours,
-Mike.
+Acked-by: Andreas Hindborg <a.hindborg@kernel.org>
+
+Best regards,
+Andreas Hindborg
+
+
