@@ -1,210 +1,152 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D146DF76;
-	Wed, 15 Jul 2026 22:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B89DDF76
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 22:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784154947; cv=none; b=XsKYkwMLqEqWvrYJ9PdoXsn/Bzpl/Wq3NnnSA2nta9NVTTIiCXOIENBsOlvdJfCoaaYnddw49VYt6SPvlQPyw0PEzDSThpVB7i+fEfNSg/G84cDnzEjyHaRwqIHwVE9/in6ZhBYBBdG6+l02nHKur0pDeqASkUlo4wqz2AKh0x0=
+	t=1784156170; cv=none; b=q0DmgQdrAbhVlwjsjmRIQ1kj3OySXg9Kq/Ig+Qx3yyfuy3t4iIpnEvguDFHaS0r44nVYXqDr1whCd7DYB5u0iVQbjwkg2t3XQ+ARmO7MuGaVjRIuwrZ/8CrI14TnAjIH/fEPb5XI2Mk1kFzVV1ThXJxZFhMFLAZCxz9Of946Sug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784154947; c=relaxed/simple;
-	bh=SDsZdw6OMSNqS29Bbj+Cm8FUJaBh4xusjt5qSIOht9g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P6DYoy0TKxjZ9i9h9VC+LFnubkMM9FFJ7fzZvm5uzFTHijWHD+tNzGfJxMuCwjVWCD11Bj4OtRKpLRV1ZfJ9GDCdW0l5EQNQ/oUm8oVddDFEo6T/vLVur/zRbf19Pv92N657gTJlraiTsP9gg4Q9jXO9PEl6vadrFTvROSv7Hsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iYmhV0Dl; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784156170; c=relaxed/simple;
+	bh=UBlfDsYNOya0DmR/NQDysciqWWl95dJFw0BTTqX4MX8=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=GSxkSHQlRm88EIOf9xW91XBdH+HuDgh/6onXBSvnMBAkQAptgrkflj1zLAevWnPiYo+G7KEs7ASga7+JgDHQ5O/q7fOqOjTBFi9IFtk683zR/psM39IA0BCvphUF6+Mrhb7cMzvSywK12Z05VY7ZTC652tPvE6jfXCvLZBM8iMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EuNWa02c; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iYmhV0Dl"
-Message-ID: <d326caf4-3d43-4880-8081-c21ef9748cdd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784154943;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAl/tZhe92Vx98Y5GuS5KBzuHkCzcmMeO9fblaVAisA=;
-	b=iYmhV0Dl38ZI1TQxO2ccbqLGdv9IIVDNaIBRxJWsgSaJLDzbETw2fGhu4acwOEANr4LlSy
-	Y5QBJta0f52rFnXwVAcmqXWFQcAzoEDa8cp3JuYICzPcJVW4rMJIkWTQlzyg/XnONsGujc
-	m2nc0LoJSGRgUYRorRw8Lmk8Dwsak6Y=
-Date: Wed, 15 Jul 2026 15:35:35 -0700
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EuNWa02c"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-44aeefa1c00so15424fac.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 15:56:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1784156166; x=1784760966; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:content-type:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BPLuMuxpWYcjfZkIUJAamd8dt+XaeF6Gjn4JNYYGsgI=;
+        b=EuNWa02cSTGSnXNPhFI1ffjXtxRXdR6G4Qem/qEWx/cd9FMImtG8sBiXAQeMBFK3/q
+         v9O5TCf1dAwG4iGzoahy3rgCpQkb6U4zV+2NwF1uscz17H97v/2CV8SO0OHCaLS2W0vs
+         jPzWPpBqh/U6iJN9TSI4J9z+KuK/VpG21i8K0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784156166; x=1784760966;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:content-type:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=BPLuMuxpWYcjfZkIUJAamd8dt+XaeF6Gjn4JNYYGsgI=;
+        b=cgshIQYANrkwUGxYfAw8g+/YAsuxjbszEZQpfLvooQOtNPDQFNnBBRJQQJbX0XU/Qk
+         E9Scj6FrimoCsNSnUZ8ims6LmB5tYF72ZBpp10Q2yKisWLggs5EZsDT8VhUh+vKRJBYA
+         3ZLL8X6Pzfcvz9bgtJ7YDPr14cfnUGJ+ksQA23/bp1/bV7eHVKLoe4pjzWdxNU22L/KM
+         ahQeGZxiR+fXlOTnAbVcPZ5xXScydOIlM220Aeg37AIbj2osxadei7N+UyxTaWqrok+q
+         n07VC5oyeCb4mbPaR4JAfUGQxpRvR6jw3P/YgUcCDC1NkFeAz7aC8/e9sM6d4Hp3lCvo
+         j8+g==
+X-Forwarded-Encrypted: i=1; AHgh+RoT6CA+7IR6uakmeqnetz4irRwYlfj+3oRicCC/qeMG0f4Nd7ktljQcXip4ine+Gd82YfdoZSyojP97qMQtp94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxyOYJuZ5YybR63csiTsGZ2DuifNzUf91RpdXY8q7zK5UwpFHj
+	JuCgaJzUBksacYafF1vJoVe3hVjYw0jUv/WyKf3PgqrRiElLGzfPzE1UKct4jcdaxnk=
+X-Gm-Gg: AfdE7cmB4S6CEsVVGDefcpK/JO7sMNg2NPCp6jG8vUZUpF1u3HO588hzsu3g2nvDuyD
+	JQBkQIDasdVBtwgZqZyZtS5LhbIzAr+T4gVVZjv5O+k70RDw4QBcq2hWzXP+XzzpmNdEEra0yhD
+	GjZmbT1PtkTx/CfHu/IxgUafafur0zOVUZ4uLyqKWta1ot6Vc2nu9v7Y1Dx4Ac8zHp2Izxj4T3/
+	H4XpkaRdCk+g/bzdSOba3zWZnVrYe3BS/w57BLoom6nc8M6ADyf2PR9yXoq3oMQfuwYQqu37J2f
+	dwx39//cHRRzA2WzAQn9YcrRfZx674Fmoj03Js1yL4TJm16mp2tut+SvOJDvoWl9HWuOhAgQSYe
+	SHytN9lYwvSgzJgOtfJ6dC8aK+QreRnxKGF2EugVepeV1E/zfiWBE3MLKrFDA3VaiVlpEqzNmQN
+	G6oiQlbq89oHL1Yz8CiRVbkw==
+X-Received: by 2002:a05:6871:7501:b0:430:16b5:909 with SMTP id 586e51a60fabf-45660f8e6d5mr65375fac.15.1784156166125;
+        Wed, 15 Jul 2026 15:56:06 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-451916d5cebsm20934897fac.15.2026.07.15.15.56.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jul 2026 15:56:05 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------UHFIRoAQ0VjesPfB4ET10Qrh"
+Message-ID: <362433e5-8281-4fcc-9d85-09f75a7d97a8@linuxfoundation.org>
+Date: Wed, 15 Jul 2026 16:56:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 10/10] selftests/bpf: add tests to validate
- KASAN on JIT programs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-10-1c64af8e4e1e@bootlin.com>
+User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260709-kasan-v5-10-1c64af8e4e1e@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+ David Gow <david@davidgow.net>, Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] kunit fixes update for Linux 7.2-rc4
 
-On 7/9/26 3:01 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Add a basic KASAN test runner that loads and test-run programs that can
-> trigger memory management bugs. The test captures kernel logs and ensure
-> that the expected KASAN splat is emitted by searching for the
-> corresponding first lines in the report, hence validated that the needed
-> instrumentation has been inserted by the JIT compiler before the
-> relevant memory accesses. To allow each test to trigger the expected
-> report, the kernel must run with the kasan_multi_shot configuration.
-> 
-> The runner covers different cases and settings: in the nominal case, it
-> validates kasan reports on basic instructions (on all supported accesses
-> sizes) but also when report _should not_ be emitted (eg: for accesses on
-> program stack). The runner also comes with a few specialized tests that
-> are then not executed for all sizes/locations:
-> - specific atomic ops
-> - test for instructions involving different verifier states, with some
->   states flagging memory as stack, and other states as non-stack memory
-> - tests that validate the stack marking shifting when a patch is emitted
->   by the verifier (zext/rnd_hi32, constant blindind)
-> 
-> A few of those tests depends on cpuv4 (load_acquire and store_release).
-> 
->   # ./test_progs -a kasan
->   #165/1   kasan/st_1_not_on_stack:OK
->   #165/2   kasan/st_1_on_stack:OK
->   #165/3   kasan/st_2_not_on_stack:OK
->   #165/4   kasan/st_2_on_stack:OK
->   #165/5   kasan/st_4_not_on_stack:OK
->   #165/6   kasan/st_4_on_stack:OK
->   #165/7   kasan/st_8_not_on_stack:OK
->   #165/8   kasan/st_8_on_stack:OK
->   #165/9   kasan/stx_1_not_on_stack:OK
->   #165/10  kasan/stx_1_on_stack:OK
->   #165/11  kasan/stx_2_not_on_stack:OK
->   #165/12  kasan/stx_2_on_stack:OK
->   #165/13  kasan/stx_4_not_on_stack:OK
->   #165/14  kasan/stx_4_on_stack:OK
->   #165/15  kasan/stx_8_not_on_stack:OK
->   #165/16  kasan/stx_8_on_stack:OK
->   #165/17  kasan/ldx_1_not_on_stack:OK
->   #165/18  kasan/ldx_1_on_stack:OK
->   #165/19  kasan/ldx_2_not_on_stack:OK
->   #165/20  kasan/ldx_2_on_stack:OK
->   #165/21  kasan/ldx_4_not_on_stack:OK
->   #165/22  kasan/ldx_4_on_stack:OK
->   #165/23  kasan/ldx_8_not_on_stack:OK
->   #165/24  kasan/ldx_8_on_stack:OK
->   #165/25  kasan/simple_atomic_4_not_on_stack:OK
->   #165/26  kasan/simple_atomic_4_on_stack:OK
->   #165/27  kasan/simple_atomic_8_not_on_stack:OK
->   #165/28  kasan/simple_atomic_8_on_stack:OK
->   #165/29  kasan/load_acquire_1_not_on_stack:SKIP
->   #165/30  kasan/load_acquire_1_on_stack:SKIP
->   #165/31  kasan/load_acquire_2_not_on_stack:SKIP
->   #165/32  kasan/load_acquire_2_on_stack:SKIP
->   #165/33  kasan/load_acquire_4_not_on_stack:SKIP
->   #165/34  kasan/load_acquire_4_on_stack:SKIP
->   #165/35  kasan/load_acquire_8_not_on_stack:SKIP
->   #165/36  kasan/load_acquire_8_on_stack:SKIP
->   #165/37  kasan/store_release_1_not_on_stack:SKIP
->   #165/38  kasan/store_release_1_on_stack:SKIP
->   #165/39  kasan/store_release_2_not_on_stack:SKIP
->   #165/40  kasan/store_release_2_on_stack:SKIP
->   #165/41  kasan/store_release_4_not_on_stack:SKIP
->   #165/42  kasan/store_release_4_on_stack:SKIP
->   #165/43  kasan/store_release_8_not_on_stack:SKIP
->   #165/44  kasan/store_release_8_on_stack:SKIP
->   #165/45  kasan/ldx_patched:OK
->   #165/46  kasan/ldx_patched_on_stack:OK
->   #165/47  kasan/verifier_paths_stack_and_non_stack:OK
->   #165/48  kasan/st_blinded:OK
->   #165     kasan:OK (SKIP: 16/48)
->   Summary: 1/32 PASSED, 16 SKIPPED, 0 FAILED
+This is a multi-part message in MIME format.
+--------------UHFIRoAQ0VjesPfB4ET10Qrh
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-That's quite comprehensive, good work!
+Hi Linus,
 
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> [...]
-> +
-> +#define MAX_LOG_SIZE		(8 * 1024)
-> +#define READ_CHUNK_SIZE		256
-> +
-> +#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free " \
-> +	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
-> +#define KASAN_PATTERN_REPORT "%s of size %d at addr"
+Please pull the kunit fixes update for Linux 7.2-rc4.
 
-I don't know how feasible that is, but I think it would be good to
-have a test or two for other KASAN errors, like OOB for example.
+Fixes warning suppressions with kunit built as module:
 
+CONFIG_KUNIT is a tristate symbol but the warning suppression code in
+lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
+rendering warning suppressions broken for kunit build as loadable module.
 
-> [...]
-> +
-> +SEC("tcx/ingress")
-> +int simple_atomic_on_stack(struct __sk_buff *skb)
-> +{
-> +	struct kasan_write_val val;
-> +
-> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_write_val));
-> +	switch (access_size) {
-> +	case 4:
-> +		__sync_fetch_and_add(&val.data_4, 4);
-> +		break;
-> +	case 8:
-> +		__sync_fetch_and_add(&val.data_8, 8);
+kunit_is_suppressed_warning() already has a stub for when kunit is
+disabled so drop that guard entirely.
 
-It looks like the BPF_FETCH wouldn't execute this way, because the
-result is discarded? And the whole if (is_atomic_fetch) branch in
-do_jit() is also not covered?
+diff is attached.
 
-Maybe it's worth adding a test with __sync_val_compare_and_swap() into
-a poisoned map value, or something of the sort?
+thanks,
+-- Shuah
 
-> +		break;
-> +	}
-> +	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_write_val));
-> +	return 0;
-> +}
-> +
-> +SEC("tcx/ingress")
-> +int simple_atomic_not_on_stack(struct __sk_buff *skb)
-> +{
-> +	struct kasan_write_val *val;
-> +	__u32 key = 0;
-> +
-> +	val = bpf_map_lookup_elem(&test_map, &key);
-> +	if (!val)
-> +		return 0;
-> +
-> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val));
-> +	switch (access_size) {
-> +	case 4:
-> +		__sync_fetch_and_add(&val->data_4, 4);
-> +		break;
-> +	case 8:
-> +		__sync_fetch_and_add(&val->data_8, 8);
-> +		break;
-> +	}
-> +	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_write_val));
-> +	return 0;
-> +}
-> +
-> [...]
-> 
+----------------------------------------------------------------
+The following changes since commit dc59e4fea9d83f03bad6bddf3fa2e52491777482:
 
+   Linux 7.2-rc1 (2026-06-28 12:01:31 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.2-rc4
+
+for you to fetch changes up to 5142c56651578abc346d6c17f3fb919b9ffbb317:
+
+   bug: fix warning suppressions with kunit built as module (2026-07-10 10:26:58 -0600)
+
+----------------------------------------------------------------
+
+linux_kselftest-kunit-fixes-7.2-rc4
+
+Fixes warning suppressions with kunit built as module:
+
+CONFIG_KUNIT is a tristate symbol but the warning suppression code in
+lib/bug.c is only built if it's built-in due to it using a plain #ifdef,
+rendering warning suppressions broken for kunit build as loadable module.
+
+kunit_is_suppressed_warning() already has a stub for when kunit is
+disabled so drop that guard entirely.
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+       bug: fix warning suppressions with kunit built as module
+
+  lib/bug.c | 2 --
+  1 file changed, 2 deletions(-)
+
+----------------------------------------------------------------
+--------------UHFIRoAQ0VjesPfB4ET10Qrh
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-kunit-fixes-7.2-rc4.diff"
+Content-Disposition: attachment;
+ filename="linux_kselftest-kunit-fixes-7.2-rc4.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2xpYi9idWcuYyBiL2xpYi9idWcuYwppbmRleCAyOTI0MjBmNDU4MTEu
+LjdjMWMyYzI3ZjU4ZSAxMDA2NDQKLS0tIGEvbGliL2J1Zy5jCisrKyBiL2xpYi9idWcuYwpA
+QCAtMjE5LDE0ICsyMTksMTIgQEAgc3RhdGljIGVudW0gYnVnX3RyYXBfdHlwZSBfX3JlcG9y
+dF9idWcoc3RydWN0IGJ1Z19lbnRyeSAqYnVnLCB1bnNpZ25lZCBsb25nIGJ1Z2EKIAlub19j
+dXQgICA9IGJ1Zy0+ZmxhZ3MgJiBCVUdGTEFHX05PX0NVVF9IRVJFOwogCWhhc19hcmdzID0g
+YnVnLT5mbGFncyAmIEJVR0ZMQUdfQVJHUzsKIAotI2lmZGVmIENPTkZJR19LVU5JVAogCS8q
+CiAJICogQmVmb3JlIHRoZSBvbmNlIGxvZ2ljIHNvIHN1cHByZXNzZWQgd2FybmluZ3MgZG8g
+bm90IGNvbnN1bWUKIAkgKiB0aGUgc2luZ2xlLWZpcmUgYnVkZ2V0IG9mIFdBUk5fT05fT05D
+RSgpLgogCSAqLwogCWlmICh3YXJuaW5nICYmIGt1bml0X2lzX3N1cHByZXNzZWRfd2Fybmlu
+Zyh0cnVlKSkKIAkJcmV0dXJuIEJVR19UUkFQX1RZUEVfV0FSTjsKLSNlbmRpZgogCiAJZGlz
+YWJsZV90cmFjZV9vbl93YXJuaW5nKCk7CiAK
+
+--------------UHFIRoAQ0VjesPfB4ET10Qrh--
