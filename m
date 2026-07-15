@@ -1,149 +1,188 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588F23C2BB4
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 07:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 781413603DD
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 08:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784101421; cv=none; b=GsdIihTOIdenz/2vIZdoHrhzdsIYOS9LvkE2d9ODVGjemVwYQd+BGU+0fkXkKNfugzT/+fwDg8z4DsZRk0UpgpCXHhxL/J2LDBnhTAGdHz62CVpPp2kdDGjA3LGcQ7LG0TU1nkalZT2k5wJmmbfiXI4jgvBXXcwBUCQYNmZdfwQ=
+	t=1784104346; cv=none; b=cwEzHrrYptNeuuEUWJ+i04tLsHXBysfuyhgSUap0uyqGaQaCVYTAE3LM73TZwFF6OGlTla+WwK05QNAJnCG6rkkYuq9UmtBUORb6Rf0PIqX2OBq0snLOk/pE8Zxhfu+J9W84qP0YNfacwXKvhkn9un5EQ609sAoPMPoJO4COxyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784101421; c=relaxed/simple;
-	bh=Dqabu4UeNovAvh+LzyIVlcZ/EhWLpGQw3HuptsIqWcE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J+/3lVn9KVE1M6gAv70gypcVh80hGNfy6YAzqSSmNSDUCNPo4fsqegNGBVL0qJzY+Bz8pl51TRUaV0Vp/FJrREgBBJzqvaO3ZtfY+Jf2MgMlZMggFHdbzjKvTTM/STZczoxZ/wkoc1OBtKFLfvwyEjsrdKaLwnGxI1j/GSkjMCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qkds8EwA; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1784104346; c=relaxed/simple;
+	bh=f+aSwlQd0H4yMA4ovXfX93LCkoOi83P327MTt5nGdKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=keQ4LD4BtSTmCU+EzhEagMuBmvVBlQvZWRIeWmUrKeIu+VLjF3aymh+u0IMzGGV/FwqtazZev0hFEbIG6jWGM89La4KWkDrDXo3vMRp9/EaqYZw2qwbTB5NMqBpBeNF/z538ZM+rPNkrydreBm0kR5DaxLOVJN5+iUqiYwGjWuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQi3XJmN; arc=none smtp.client-ip=74.125.227.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qkds8EwA"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-848643382fcso5787343b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 00:43:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQi3XJmN"
+Received: by mail-pj2-f0.google.com with SMTP id d9443c01a7336-2cc7a345f51so35344555ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jul 2026 01:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784101420; x=1784706220; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1784104345; x=1784709145; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=GC1e/5Hz543x6Xbvz3bOQl04AkOMjBv03xL6AoR9lwc=;
-        b=qkds8EwA3LRnpbK7vx86S0AAu6Fprq6DEz5sL6wGfwMozzSXXkMf45eVTiXmFLC3PF
-         6oWmFt/7QQQFef831SzFjdW/2ENlfBWdt73ibW3Ryr3+tvtt8CgxpSkFPJ5R54EXTJoF
-         Kfb7GIg/ZP4EqSBP3nWv0POFJVwTsaHgE4qpyI4yv4lT5EN4fnI2yDAFesRxBXbps06+
-         GiD2o4niv0JiLuoYaw7b0dDF6ggClaQtCQxPElGFxYTJu74JH3UoGzN6sNstwcA9Hb2A
-         SEaV/kgPHn18Y/Cn8N3I2TPgEL+c1CMHKHegEgja4EB+AUnHfr6LLzyxodK8bkN06Dek
-         51JA==
+        bh=AvK4rlZieqdDEX/C3RF2OhSiSp9tIt5loVtN+a7NID8=;
+        b=CQi3XJmNJVCpuMwkWQVonmAV1b35uWn30IQUN7O0kT79rSNY5GtPxCW4mhSuUEbx+/
+         pOZXE+X7vh4MQ3nBlnKUTBiBW3/AQXtQhD0i/oHj1mLoxlENbQ3+r/3XJYi2KmdMx93L
+         9UMaNXySRfctfxF1qw5urrEMTcO3YjXpQDyujYQ9eSaw3DAolYEJb+7NB1lIJGTQcVhS
+         lK1+D1RQ5zNq8K84sUo+dV4GWQgD2e3MC3mjx2BZinetJyucfuvqB9OtPzvOnLhRLPSF
+         QQ1LrDTjDLPjGB7hsiLazEd63POzx8c9d25wmltiqNDbQNyiyx8GOvKN3VyumK0aAP0U
+         FbPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784101420; x=1784706220;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1784104345; x=1784709145;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GC1e/5Hz543x6Xbvz3bOQl04AkOMjBv03xL6AoR9lwc=;
-        b=tGYf/5k67ia+evOlcOot6Fd41VKEVsuwloghunuyxydHCvpaZX/CQ1q0NS/Zko16Qv
-         Ta0VdA28KHQA/A96xIeg/hdupCwtPmrDy+IIJCgk4zbBcPpZASR+Ke/iXgZM5ksh/eJ0
-         h/BRTf6nd79oTJPKEyjnKZUPlvGa1VbzU7AKxvQgVzCfGz6VwqSkZ+WLEhj9A4UNNi4w
-         ZArKvArAYIa9bmGiJeV7N2uhpPyxwLBLgaPnE3oYjC8rNzVWc/9TDpAXsPeMzsCquCTP
-         0U+MlUzbNx7LysNrGJcnldZNMhxkX8W67APuNdnKx7cJ+u1NBMJJ0MCwyIxHyZOhR/KT
-         IWyg==
-X-Forwarded-Encrypted: i=1; AHgh+RoeJ1AM4AlUgadQKhrISiE7IcAS3Z1qp6cnvBj7LOAVfiCjFo5qbmzt/YEvpC9cEQmBQQVqhjratnUhd22DBKI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzkhw6fytu/CPd5ZrpjQT6ZlVvWRdRUwHY+ZGQMrD1FMV2RQAJ/
-	Qpavxt4/ooHPeCodoalQQeW2puujWF0a3TpiNJYTjNCS9JLwAiSdKFiP
-X-Gm-Gg: AfdE7clHUVtomhuH+JTr20PrjQ5x0029zzHeB8PUru6QDH1LUu8Wa8merZJ98PBLCjD
-	5JDhbQy7IlqEaerYyxeY2H2zULk/DJH+qljVpDZiP1lF2hM7K+lzAPqa6noxXX7y/8UX/DMvHm9
-	k8N0hgACvaOX9B9gAMSQXXAV/U0uF6QdLdaAtB3oM5dHPy0EL8H7gcJtz8F5wbuMjtYQtED4xMb
-	qlnYQKNCW2XIaZFNId746MktTzkLrwbyP3dBqcSotzKY6ZWWHj8LFV+nGqyLEom6PvSkdiT3UzQ
-	hNiZ7QrwGuJsSQxyIx4qwsjGZGNAfyLFVXD7MGajfe7PMy1qopBJKCo5uJHSChRcLXVuVvOLkfC
-	l8jBCSecS9NIdLshrzl+OqqkrzuSWhXIX8K35mS05iECw9173B8GpOPDHCQAJfDvRdDTZw9WHLv
-	LBJQBJfWyvrRRq1DfZF1c8ay+xxUMY1BaEShwqPgbjEdKbNQ==
-X-Received: by 2002:a05:6a00:855:b0:848:4ff5:5311 with SMTP id d2e1a72fcca58-84a51467aedmr6726397b3a.28.1784101419571;
-        Wed, 15 Jul 2026 00:43:39 -0700 (PDT)
-Received: from CPC-mjac-HKWGEZ.redmond.corp.microsoft.com ([70.37.26.36])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f7dade0sm2666238b3a.46.2026.07.15.00.43.38
+        bh=AvK4rlZieqdDEX/C3RF2OhSiSp9tIt5loVtN+a7NID8=;
+        b=gKdPF67aHh5uuZGDWsgLtDFyJhf4XR5GCI0jb5m/WYJnLWNlExEsdp04hElWGpXgQU
+         Z8fgNLv70xkxQFG813GOt5j80vcNtKHVNfirSePWTVyAGuMXJYcy88wdhxp1ZKdyoIRO
+         wy7zW7kKa6PGH9wW7IMcr+Z5Lx8oTOwb7nMyKLWVq1697GT6K8DPkQjULg2mfZQ4SIuq
+         z4B0a37sZq84vC1uCV6qUNBpqLQ4umHNAOVNx3Xpy32exsbjsh/aS5ncQ0p7ZkH+IT2a
+         79YMopFl9d74nXA3zXGbsL6AZf/ooGsUZpm2CD6oe5x2gvhxeGjI+cFMdZCz3byonO0w
+         Zs1A==
+X-Forwarded-Encrypted: i=1; AHgh+Rrw1I3MigFL6KfWyK0PDYmpMVWD6fw2Rt0wbglwJqSHYPS891NK+bHw0BTh57Zj/SfAKqDMA5kB4jzMa5GQnjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr/rGfAB5cPd7O/IzH2DkTKERvi8fCRWpZ83VVgrLC9WRgeVd+
+	nhrxEYd/QrFAubJdXBz+JSVxXfsBhSszGuUrqZJYpIjY0tAKKrMuZTBe
+X-Gm-Gg: AfdE7cnU7l3wK9kp+bqGychnpk2J4XPw7DH+Kz7AHsidqkbpEEPBqrjIb+Ubx+Qn2ft
+	e0r+MpOIchuIofv2IJz5PZ0E5g/55bEeH7yra8Zhe6sA5H0QJzGvxRH301fc+WFB6ArizCVW24o
+	tpo1QsOcUlcfCTMA0DA9hz4xVktW/YhDOpYgonBHNPP/KrmYTCmyN8vTumRuAmHFdwpVtmc209+
+	kBJN6B0RrZOSfDxk3tlG7ZwjmCOLL8fAzw2drNwBfQ0HyxPHfwBHJSauiIDZUB1C06P6lx2zDdM
+	8W351qm3x5l/ie2xvk6CC61qYehmdwTUWwTjBJeOSTBi1ur8v23gAVyGc6CP/JPFc8h4EgVfAr7
+	vs1dTYJU2ayjCwSvK/VJg80YgSRH46ESiMq+OHr/f1SV9uHyg7SeE5P0arBQ1r3qI86pCI6MLKl
+	SRQd64
+X-Received: by 2002:a17:902:d4c7:b0:2cc:6817:d9b1 with SMTP id d9443c01a7336-2cf03df6a24mr15483195ad.41.1784104344760;
+        Wed, 15 Jul 2026 01:32:24 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:7::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bdb75fsm129307865ad.8.2026.07.15.01.32.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2026 00:43:39 -0700 (PDT)
-From: Jack Ma <jack4it@gmail.com>
-To: Ido Schimmel <idosch@nvidia.com>,
-	netdev@vger.kernel.org
-Cc: David Ahern <dsahern@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jack Ma <jack4it@gmail.com>
-Subject: Re: [PATCH net-next 0/3] net: nexthop: per-nexthop UDP dst port for fdb (VXLAN) nexthops
-Date: Wed, 15 Jul 2026 07:43:17 +0000
-Message-ID: <20260715074317.2271-1-jack4it@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260714174201.GA1037700@shredder>
-References: <20260712191218.236-1-jack4it@gmail.com> <20260713122339.GA548566@shredder> <20260714034309.2226-1-jack4it@gmail.com> <20260714174201.GA1037700@shredder>
+        Wed, 15 Jul 2026 01:32:24 -0700 (PDT)
+Date: Wed, 15 Jul 2026 01:32:16 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Vladimir Vdovin <deliran@verdict.gg>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aldE7W4T_ylUTLv5@devvm7509.cco0.facebook.com>
+References: <20260708203410.45121-1-deliran@verdict.gg>
+ <20260708203410.45121-2-deliran@verdict.gg>
+ <alE8oBxkrak8n602@devvm7509.cco0.facebook.com>
+ <alZtI782RGKb8y4Y@lore-desk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alZtI782RGKb8y4Y@lore-desk>
 
-On Tue, Jul 14, 2026 at 08:42:01PM +0300, Ido Schimmel wrote:
-> It's unclear to me why you need the UDP port based demux. On a single
-> node, do you have multiple pods that belong to the same tenant and
-> therefore share the same VNI? From the above, my understanding is that
-> the answer is "no".
+On 07/14, Lorenzo Bianconi wrote:
+> > On 07/08, Vladimir Vdovin wrote:
+> > > From: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > 
+> > > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> > > checksum will be use by devices capable of exposing receive checksum
+> > > result via bpf_xdp_metadata_rx_checksum().
+> > > Moreover, introduce xmo_rx_checksum netdev callback in order to allow
+> > > the eBPF program bound to the device to retrieve the RX checksum result
+> > > computed by the hw NIC and reported via DMA descriptors.
+> > > 
+> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> > > ---
+> > >  Documentation/netlink/specs/netdev.yaml |  5 ++++
+> > >  include/net/xdp.h                       | 18 ++++++++++++++
+> > >  include/uapi/linux/netdev.h             |  3 +++
+> > >  net/core/xdp.c                          | 32 +++++++++++++++++++++++++
+> > >  tools/include/uapi/linux/netdev.h       |  3 +++
+> > >  5 files changed, 61 insertions(+)
+> > > 
+> > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> > > index 5f143da7458c..6d0d90d3a614 100644
+> > > --- a/Documentation/netlink/specs/netdev.yaml
+> > > +++ b/Documentation/netlink/specs/netdev.yaml
+> > > @@ -61,6 +61,11 @@ definitions:
+> > >          doc: |
+> > >            Device is capable of exposing receive packet VLAN tag via
+> > >            bpf_xdp_metadata_rx_vlan_tag().
+> > > +      -
+> > > +        name: checksum
+> > > +        doc: |
+> > > +          Device is capable of exposing receive checksum result via
+> > > +          bpf_xdp_metadata_rx_checksum().
+> > >    -
+> > >      type: flags
+> > >      name: xsk-flags
+> > > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > > index aa742f413c35..e255ff786131 100644
+> > > --- a/include/net/xdp.h
+> > > +++ b/include/net/xdp.h
+> > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+> > >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> > >  			   bpf_xdp_metadata_rx_vlan_tag, \
+> > >  			   xmo_rx_vlan_tag) \
+> > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > > +			   bpf_xdp_metadata_rx_checksum, \
+> > > +			   xmo_rx_checksum)
+> > >  
+> > >  enum xdp_rx_metadata {
+> > >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > > @@ -643,12 +647,26 @@ enum xdp_rss_hash_type {
+> > >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
+> > >  };
+> > 
+> > [..]
+> >  
+> > > +/* Please note the driver is required to invalidate the checksum if the NIC
+> > > + * reports CHECKSUM_UNNECESSARY or CHECKSUM_COMPLETE and the eBPF program
+> > > + * modifies the packet since it can change some fields validated by the
+> > > + * checksum.
+> > > + */
+> > 
+> > Sorry, a bit confused about this part. IIUC this is in response to this
+> > discussion https://lore.kernel.org/bpf/aaLYfWnuuf_ne72u@lore-desk/ ?
+> > 
+> > Looking at a few drivers:
+> > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+> > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
+> >   bpf prog attached
+> > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+> > - gve (gve_rx) - can do COMPLETE even with xdp attached?
+> > 
+> > So none of the drivers invalidate anything (and nether the bpf machinery), some
+> > choose to (correctly?) not report COMPLETE when there is XDP. So was the
+> > discussion about documenting this and giving some guidance? This probably
+> > belongs to that `DOC: skb checksums` section of include/linux/skbuff.h?
+> 
+> Hi Stanislav,
+> 
+> re-reading the previous upstream discussion, I guess we should just document the
+> expected driver behaviour (invalidate the cksum for both COMPLETE and
+> UNNECESSARY cases when the XDP program running on the NIC returns XDP_PASS) and
+> add a given kselftest for it. Agree?
 
-Good question, and I think my earlier framing sent you down the wrong
-path, sorry about that. The honest answer is actually "yes". By design
-a node can hold several VTEPs on the same VNI, as long as they belong
-to different HA sets. Anti-affinity only keeps the two replicas within
-one HA set off the same node. Two pods from different HA sets on the
-same VNI are free to co-locate, and that co-location is the case that
-needs a per-pod port.
+Yes, let's have something a bit more detailed about how it works right now
+vs the expectation.
 
-> Assuming the answer is "no", instead of having multiple VXLAN sockets
-> in the host netns (each bound to a different port), why not have a
-> single VXLAN socket bound to the standard port (4789) and let the
-> VXLAN driver perform the demux based on the VNI? [...] creating
-> multiple VXLAN devices in the host netns that only differ in their
-> VNI and then move each to the relevant pod netns.
-
-For different-VNI pods that is a clean fit, and I want to try it out
-regardless. The outer packet still carries the VNI, so a shared socket
-can steer by VNI without decapsulating, and the host never touches the
-tenant frame.
-
-Where it stops working for me is two same-VNI pods on one node. They
-share the underlay IP, the port (4789), and the VNI, so the outer
-header is the same for both:
-
-  outer: NodeIP:4789, VNI=X  ->  pod A (HA set 1)
-  outer: NodeIP:4789, VNI=X  ->  pod B (HA set 2)
-
-There is nothing left in the outer header to steer on, so the host
-would have to look past it and terminate the tunnel itself, which is
-the VTEP role I would rather keep inside the pod. A distinct port per
-pod puts the distinguishing bit back in the outer header, so the host
-can stay a stateless outer-UDP forwarder.
-
-> Given the anti-affinity constraint, you will only need to load balance
-> between pods on different nodes that use the standard port and that is
-> already supported by the FDB nexthop groups.
-
-Agreed that the across-node load balancing already works. What the
-VNI-demux version costs is packing density. With one shared underlay
-IP per node, VNI demux allows at most one VTEP per (VNI, node), so N
-same-VNI HA sets of two replicas need 2N nodes. With a per-pod port
-the same sets fit on two nodes (replica 1 on node A, replica 2 on node
-B, each pod on its own port), and anti-affinity still holds. For 5
-sets on one VNI that is 10 nodes versus 2.
-
-So the port is not strictly required, and your VNI-demux model is a
-real option I will prototype. The tradeoff I am weighing is density
-plus keeping the host out of the tenant datapath, against the uAPI
-cost, which is small: NHA_FDB_PORT is the nexthop analog of the
-per-entry NDA_PORT that already exists, it is control-plane only, and
-a leg with no port behaves exactly as today.
-
-Happy to keep digging if it is useful. Thanks again for thinking it
-through with me.
+By my point is: the comment in this patch also seems wrong? We do not seem
+to invalidate the csum, we just disable COMPLETE when there is a xdp program
+attached (or I'm missing something).
