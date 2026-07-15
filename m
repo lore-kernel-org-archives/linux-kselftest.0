@@ -1,78 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365F826738C;
-	Wed, 15 Jul 2026 21:17:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825E43CF1FE;
+	Wed, 15 Jul 2026 21:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784150260; cv=none; b=IGU2jiSxAS2S1SS/9WFcSdE8MdlJAnG8SvU+xoVKKwq6DQPPMRdLm+FWsolAuqAtmsvrOU5iCkd3MWxtUtXDl4ROSyfhEJqZAma8p6K4xFJVwy9z1tc/nsHrFmhrXOLkgyi9I4NNLL0MvxvYZ2xKyBPsfEaLXw7iD2anp4RIvAQ=
+	t=1784150925; cv=none; b=BnSrkJztLUnKtuP4q/Zqbga8HCrJh+EewuJ7ijCOJcI7KGBm4bNiAZHi2d/kZ+EFcMbNOMfnfjKF+Du4xhw6wMR9Z6Jfs/5x91rM+OM7VXLJO8TEMpvZdS/NwPTLliOY6quDH+BcIm5Plkm9xqrSsMSL4H86PI/0WFo0GkovqVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784150260; c=relaxed/simple;
-	bh=VVePxeXkdKZk5HClfQ8GUU7FzfH1Oi5VU2e3L2YfQGc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=q81P5YVQQFDOnytSKGUIc6Klgv1sxaOXDjISpQvMhkiw2EG9bhi1SnP4kpObMIp6UR2ixWmCY1Qo8utw9VlIDfgVJNfFfW7RWQKgyhBDmgUCTvsotojJ+1fFM5CLxchjXeqetckn+Q72hMGyB+kGPKI57BonAXXWajY974J3m1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lw1aE0Rl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784150925; c=relaxed/simple;
+	bh=s3Ge4+fSFCDwtgFoKa8ImetG2itv/ZDt3XeSWSuI/Mg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HN/is+n5KoZTdqsSUsfhWZKZpPY4Wf2okN/1Ey0zxoEey2SDSPsQwx9d+nfOVjO/otljs1Pf5LHA0vxhlzUc74lkPyUHAWeZ5xyyzyRDz8xe5U2aK+25g4I/7ep2IK/y+pM06mW5ih8nYa87uuxUmyNUWWsxWsxHy0IWAhrMQvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNzy/ypj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lw1aE0Rl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56601F000E9;
-	Wed, 15 Jul 2026 21:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1784150259;
-	bh=UU+zPW9iRvCJbBM3XKZCH/KKzyu8mkExGEFSmL1gNYg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=lw1aE0RlWxmrVX1SBFRJgy1UyPRTg4K6nP+DEjnY9dlEAsFMk2L2RNTreb0d+vs/k
-	 1gYgzd2yzaN3XobC7uyRdh1AW0rjf0Olb3qRLd+W/Q1HYfJhedn8GiXr9Nt0CNftbb
-	 PL/NA8rFtyplykMr0XbJ7OZgExm1aHBfS+hm1Ecw=
-Date: Wed, 15 Jul 2026 14:17:37 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, corbet@lwn.net,
- dakr@kernel.org, david@kernel.org, decui@microsoft.com,
- haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org, kys@microsoft.com,
- leon@kernel.org, liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
- longli@microsoft.com, lyude@redhat.com, maarten.lankhorst@linux.intel.com,
- mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
- nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
- rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
- skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
- vbabka@kernel.org, wei.liu@kernel.org, dri-devel@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v9 0/8] mm/hmm: Add mmap lock-drop support for
- userfaultfd-backed mappings
-Message-Id: <20260715141737.4097a5c7d74953ffd8ed66c9@linux-foundation.org>
-In-Reply-To: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
-References: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNzy/ypj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679C81F000E9;
+	Wed, 15 Jul 2026 21:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784150924;
+	bh=shaHQ4Lz/IBXQgGLMQHW0qqVCSHZvCrD9EU2rqp1+t4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=DNzy/ypjuooC/fSIYQfKn1PDOjjnJ7+Mqz3fnbqeHq0mJ0rkwr0tlv9t/4PX5Wj4s
+	 esWIt3wuzSuok/NXiSaDuqf9Qj+lsgJlWG46ykdzAD+a0M+Rt3faK9mYmupCnqDmWU
+	 dSx7WBK4kSL0VQ4S63XKMJR/sHTzdSifWeLJE+dbke9xd9sgp6/EbHmhiNN42pazNC
+	 Z84UE/u8fu2fY0IOYNbrrrdgVf7rDN3hxNg4jtLpQSHp9uwJ3y5n8A1soksA6zFqdw
+	 k9zXUAVyaxqCjCkftA7vOw4NQfQpzKKMSSVG4b11Iy82Di55SvL4bkjzxuf4KxDbGo
+	 0wEnJTivqqEng==
+From: Danilo Krummrich <dakr@kernel.org>
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Linus Walleij <linusw@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-acpi@vger.kernel.org,
+	driver-core@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: Re: (subset) [PATCH v4 0/5] software node: provide support for fw_devlink
+Date: Wed, 15 Jul 2026 23:28:30 +0200
+Message-ID: <20260715212830.3077100-1-dakr@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
+References: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
+X-Patch-Reply: applied
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Wed, 15 Jul 2026 11:15:50 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+On Mon, 13 Jul 2026 13:14:43 +0200, Bartosz Golaszewski wrote:
+> [PATCH v4 0/5] software node: provide support for fw_devlink
 
-> This series extends the HMM framework to support userfaultfd-backed memory
-> by allowing the mmap read lock to be dropped during hmm_range_fault().
+Applied, thanks!
 
-Thanks, updated.
+  Branch: topic/swnode
+  Tree:   git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
 
-> Changes in v9:
-> 
->   - Folded the fixups into the full 8-patch series instead of sending a
->     separate fixup series.
->   - Clarified that the HMM timeout bounds repeated HMM/mmu-notifier retry
->     attempts, with the helper refreshing range->notifier_seq internally.
->   - Kept nouveau’s explicit outer deadline because its retry loop runs in a GPU
->     fault worker and cannot rely on fatal signals from the faulting process.
->   - Converted amdxdna, and GPU SVM callers to pass the shole timeout budget to
->     hmm_range_fault_unlocked_timeout().
+[1/5] kunit: provide a set of fwnode-oriented helpers
+      commit: 9fdbdb528488
+[2/5] software node: add fw_devlink support
+      commit: 37e586675993
+[3/5] software node: add kunit tests for fw_devlink support
+      commit: eecba5978729
+[4/5] MAINTAINERS: add myself as reviewer of software node support
+      commit: 122630406245
 
-These are all in your fixups for v8, so the v9 series made no
-alteration to mm.git.
-
+The patches are in the topic/swnode topic branch and will be merged into the
+corresponding target branch soon.
