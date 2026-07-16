@@ -1,860 +1,196 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B430DDC5;
-	Thu, 16 Jul 2026 12:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784205217; cv=none; b=CEt6Rtw1j886uh6Yy3weRICC+dKHN4/gbuWOlFrppj75iTKEpwfiIp3+nxyZsHVqA9eJwRYV155a45caZKL2/XXS9MEj/MWUaVichLT7zT6En+aMQNBLd55o1sqfzNSm3O3ymp4mxLD2+8s+1LxHPtnz3G66PEQiLGP0JBLnuEQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784205217; c=relaxed/simple;
-	bh=ZNruc30giO4HvCBCFbu5TtIBl+Mz/3g0dev7XA1hM2k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WIX7XjgXKtJp71JLMkNErgl8R+ouUAuBpbNYXQ2+ruAFMgGoCOEePvHmFItVGPII1Zx8OBZbU4sNM5A93v5Lpt5gbZGESnkUraixt2LA51R8J/WA9uzWqxzIAqTipt8o/f2efVG8AhnTsOleBfvIAB70o6Fw+BcSpR1zBOh1pno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Xxb5lGmo; arc=none smtp.client-ip=217.140.110.172
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010035.outbound.protection.outlook.com [52.101.84.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB1941E6BB;
+	Thu, 16 Jul 2026 12:58:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.35
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784206725; cv=fail; b=EvALsTyYvamgPM/vq/9zuQ749enDEpZBOBiBy5v2nyeHWhczIo0Rf5uiqmnu0VICA73HfL1sJSPO+6er7oafhG8Fuc4Dfj4PkKZeuNiOd2J4Ps8gagmfC7DQXW6r/6kGPdHHf6VpdFe+fSfzgNOoe003RNeB2GGDA0aKsk6qBN8=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784206725; c=relaxed/simple;
+	bh=C52R2QMQkxQyVPCuvB+F1K19uFnufCgNfCQNfCOwPYI=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=FZXM/brhEp+K0RnMvAE5wtuZn+Yr18FTw98MQrqeaO9XXxvffaiH/dKWpdnqtC9PYTf/xLOP1ru8YN+fQccOzpUQUypuOFcQyJ/G9cAfI+sGHpBcdgHZVKkjDMtmRry0U4tUFeMIyEdsZR9ks+rOzyuD0P0W4ZSHY/1vauKx5MM=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=psHehe13; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=psHehe13; arc=fail smtp.client-ip=52.101.84.35
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Xxb5lGmo"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBE4116A3;
-	Thu, 16 Jul 2026 05:33:29 -0700 (PDT)
-Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A193D3F7B4;
-	Thu, 16 Jul 2026 05:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784205214; bh=ZNruc30giO4HvCBCFbu5TtIBl+Mz/3g0dev7XA1hM2k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xxb5lGmonmK2NyqMXbVPUOaKsMBH6qjXFqK7OFOPgoSu30J2JQqntqi0M+/uySpta
-	 0sX37ZjcFswxXOsG/dhmjxV7IoENr7UdcgtwpP26HyayQjZlHIdbphntj/qqD+YatV
-	 zx1SgQlIxuz8CO1Q59LtoBE+8FS+hmJ1V7MCuM7E=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mark Brown <broonie@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH v5 5/5] selftests/mm: rewrite gup_test as a standalone harness-based selftest
-Date: Thu, 16 Jul 2026 18:02:26 +0530
-Message-ID: <20260716123226.197736-6-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260716123226.197736-1-sarthak.sharma@arm.com>
-References: <20260716123226.197736-1-sarthak.sharma@arm.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="psHehe13";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="psHehe13"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=UFEyIma2yavEggHLvpwcaPg0draNF1IYJU84qV60fL792/fIfv8vNRbvH5XYxzyOMmO+/jJcZOCbZMddbSWmfOnDVM7NG3Vu80ApRPt7NynuXDTArJxBsNIBn3hR9Ej/9CYuSQVAO8zTsqdAak849HAm0vcqenGVaAlm+tTyRYxi9wOCcJqqrXtquH76k7ab2dzXDdieA6mKfYK5nEKe+iv0TLoTpkMo03NFCP8Mm3LBAOr+ci35W4h91KjvVVpYu1wkaFBEjeTzAjwxOeswQpnjWVk8WktVcWtdBYXUy4+S68Boplnn89YTlmpuF8IG04YeF11nBskYJGIWHuxiWQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
+ b=QJsIBPMOfV8imIo/AaaAKDl+Zs5abps7PJWN0FpbLj6M42raeuV+yHRnxxgJ6hqYG8/MdFVdU5lc38PF10l1vjfUMaixxSUFu47nFUAK3TQ5SuSKoFhSf8b+40rA5OOwcpjujT2FyGRr5DnKSeRR34GvcB63K4edbBWIavLlcCto9fd+3Tm2l2BbpLy1z3B2oARHRtNM4onxXCWdvJaOMY0swYtkv8a/42j5ZjJBxpC0Hwr42DM5wiRPFwee7V/vMOx3YBjHpwgOunI9gqKcu+zJMUnBnqgz8GhvwjEH4agKNeSD5geL6P1kZqkQSWHGXt6wFRmE9+qKUSw8hMmfGA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=shutemov.name smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
+ b=psHehe13yoGtPtGL7NQaKYv70nS9eUQ4DhJQwJtjae3tWwaiD3N1SV15+b7Xrg34BglrKyfX0jE63dSpo1EeQedCklHNSI3HiJkqj4eOWKRbVtzWY54uYkMZHUTLccQ0+O++NEXt2d+blRp3HOvAJm0+jJ72F0r2Av1cQ6T00g0=
+Received: from AM0PR02CA0161.eurprd02.prod.outlook.com (2603:10a6:20b:28d::28)
+ by GV1PR08MB8237.eurprd08.prod.outlook.com (2603:10a6:150:5d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.9; Thu, 16 Jul
+ 2026 12:58:35 +0000
+Received: from AMS0EPF0000019D.eurprd05.prod.outlook.com
+ (2603:10a6:20b:28d:cafe::90) by AM0PR02CA0161.outlook.office365.com
+ (2603:10a6:20b:28d::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.223.12 via Frontend Transport; Thu,
+ 16 Jul 2026 12:58:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS0EPF0000019D.mail.protection.outlook.com (10.167.16.249) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.5
+ via Frontend Transport; Thu, 16 Jul 2026 12:58:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cELjA9+GME57Gl9pttI1xyArZHB51/denr/a8e5ZIE06lTO5711vgNC5PeRBRxBxB6lH3N1vJzIjNZJLPPiAFgJO1vHBaD23OhN72590WmDTf/VjQ2c7xf/2oM2jhzrv3TpXr0NIsvYKQHraNc4OlvUsAQp/3yBkDN9ZB1NHwkgzq0tCILraROe3407+DlBC1qA84YGd32LNXHAXWIDiRuHaZhXc1WIqyM7+urWW8G2icm10A1WqrawjZrp9sb+pd6zAjbMZhABEgwPi8PQPuOVhh8pMxmdTwT1IU/k7XifPrTcJT2dKs4XRy8cvNS02AIc+kVJVRMshCbixlzbWIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
+ b=V4/wm0Pa2Mj9E/bVm+t55KGi3rt93dE8ecOH0TKm47Hod1GoJyECx0lKXDtYDr4eXbckX9XPRR/w5+1WMdYzPdaFQ2qPqDgL6yMxddYBLT8oK4QgculX1Rg1QGUPdxzIeTodXFtxzkHuVkwKnSVHvKDaYLyyveDFppCEHZKne3ivm+8qNGZ73i/G6enj4YsUJKdnhE719K1eqNIMRJv3DRM3Y1zFVdCIBTaXIxcoL1XTqosQIn/Do9i6TruQRYzO5WsfSOQz1d1ZSGkdm5W5bHEUPCEB9pRsltfIrZufMMMEXkQa6nXDk6gQDIUUpi6JubdV0+xXxFjSClSsAmrX6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
+ b=psHehe13yoGtPtGL7NQaKYv70nS9eUQ4DhJQwJtjae3tWwaiD3N1SV15+b7Xrg34BglrKyfX0jE63dSpo1EeQedCklHNSI3HiJkqj4eOWKRbVtzWY54uYkMZHUTLccQ0+O++NEXt2d+blRp3HOvAJm0+jJ72F0r2Av1cQ6T00g0=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by DB4PR08MB8176.eurprd08.prod.outlook.com (2603:10a6:10:380::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Thu, 16 Jul
+ 2026 12:57:29 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0202.018; Thu, 16 Jul 2026
+ 12:57:29 +0000
+Message-ID: <17fa8583-07c9-4a0d-b428-102bd169ee8f@arm.com>
+Date: Thu, 16 Jul 2026 13:57:27 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, peterx@redhat.com, liam@infradead.org,
+ ljs@kernel.org, vbabka@kernel.org, jannh@google.com, pfalcato@suse.de,
+ david@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ zenghui.yu@linux.dev, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 1/2] fs/proc/task_mmu: fix PAGEMAP_SCAN written state
+ for PMD holes
+To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org
+References: <20260715144234.442721-1-kirill@shutemov.name>
+ <20260715144234.442721-2-kirill@shutemov.name>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260715144234.442721-2-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0192.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:311::20) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|DB4PR08MB8176:EE_|AMS0EPF0000019D:EE_|GV1PR08MB8237:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49bea733-2a66-4a6f-08ff-08dee339f239
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|376014|23010399003|7416014|18002099003|22082099003|4143699003|10067099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info-Original:
+ uT5PBPnP1Pji13SRRMO4aP9kyel87bnxLLXIlhEgb2xgpZZBF5R+DhgRZ00B2ytb4J9b860tDxRjWKL4pFUJnRS+Uqr6FDuNr5AF8qB14UvpSsyM3zHW7ma8Th8J96P7m47pJX295NFTZigVNr7hXrYjImrN/wv5JvUfKTnFhdQIWSPoMU4hO5BSlZwC8vu4OreNRX/lfkHrXV/ZYaT06jWyYw8XGXD2vgmur5u25sOLec16cjLgNyRGha/gd5jl8qr/1c3Onz9kU7DF5dDDTuRO5ZcMANB1J+0Ss0r/ANIQ/0w2U7tvtYICZXQFTt2k3nd7pU1vIqxEa05saqtyQ4HTa7kUqtarcFPpZ7tjWnvJD/zwKgRG8BOpErOMJrZk3cXh9/blFtGLCfmgeFmeKg6aGdMz6x/4BWPBWyoBgHXif5T0H6N2SIu4LghdARjpanvWXWd9y5PLTgbUvpaF8Pa+MPO14XYTd8N0BhX1Gy5y63h3dtrMmhLMcaqjTVZ4Ji3gMn9S7U5ZKMfEhZ35Yeo6RBXRw1X4yn/98c59uhk3rTl8OL7rRKCOWIi9J25VtbK0L1qq7nITNY3fA/moDVuZpbiYeJrgCbehsSN+77E=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(23010399003)(7416014)(18002099003)(22082099003)(4143699003)(10067099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ Knk9YwCwW8xruUieRHegi2axBAFhSaSkiWjp613zwOhx+aMkw1nYth0cq8Ov02nwQLVlkLDehB2kywulxAa2Ir14n9G+DqmHMkueWrkvMLkuZvwRm60jrmQbGFfWCJ2U/Z36+Jbs2D8Hd6v+9C2s20Thg+lPpCIv3QrWcr3Jz+tpMTcWUh6RvX9g3WnvdL4F4v/FUUuBiuM/h8nMfATJLYjWLDTLITvYTlaOY0x/kneQp73bAQ7XAZR8NAOF9234kiJ/r8VJ+UCmGCctBzkmruYzAmA9wz+JJMkjq1lncSHEvaMkIQUnw8tiJxbQswkwA30MguHn5f3ibM6/fbM2Bg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB8176
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS0EPF0000019D.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	df632075-ef11-43af-590e-08dee339cac3
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|36860700016|82310400026|376014|14060799003|35042699022|7416014|1800799024|18002099003|22082099003|4143699003|56012099006|11063799006|10067099003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	M59ctEyB9psLEhk5QCq2nX4FoSNQffABx8TGHuMobG+C71b32lkFSY0b/XxBXQ7sVTLPmManjDeGzgZf+T2BBh3FEGJOiECEupJ1lM8pskC0DGL3BbSsWFgP/efG2K0/InnnwCsRJ6VopYeyh8MqbZ96kmVmBuLhygfrncnFS+d4b+RXOD+ueg5hjr6T2UMyZMdJNFzMvyXm3O689fOTicFf+w1+M5QCLTfIsFGVDZ6HFqFv+aS20UGZ/kCdIC9gXH3yrqxKcSDCzYXTFvqlD+3F/9TAxzHtKuv5QwJVXIB9zfSQwI+x5M5PCceF/EuIbbgVWPLrW7zKvPE6sC2tvkCdlgH31eU1Mx+ck7Z16FyXwCv4Ie/ReEpQOGuOejuC7ip+s5ogVFnAbyC3o4/sivI+ZMYVPtu+iKz6+aPYATUdiXa7Ln6LqfRh0TOJQwT64EcGGgqJeGOIo2JsUzYjgCjNrQaDm6FST2gKk1A/lkU9rGGDJB4PZ2rdfBbqphxdIs/oagK/ps5ZjehKvKGWUgXj7MmgLAI9xiXtDSVOfJr2blWxNmM/z5OLew9kn/1EmKKDC9xSS4rTsVoFzBvrjs9YzN+/cNG6TBWnEzTU4GPNA+Xv/cFwfEDZ1nKD4DCyfVnDKb148ESloHM2i2PGsA==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(82310400026)(376014)(14060799003)(35042699022)(7416014)(1800799024)(18002099003)(22082099003)(4143699003)(56012099006)(11063799006)(10067099003)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	bJtlGd/KqpzMlCP3bc0I1I4gKLas+iJjLdLFzzTHBj0XN0eDFXUau00W8vBitU+VoPeYhiKMJXuufSMdyTm6WUL/dzX5OywF3VbVEW88a3x2X/FIF8XuvpPgMNtGSfH3GO56R0mG1I1nE5an7o2QI4Fe+htEEn8YTfV0UMdsZdqJ3Zzc+3iXs4ESI1rb/uurydWY/kSvkrFgM8A/yoMgX9Kbak+BnkujUlScgpE+fuR0s++e0rXth5DBUYxOPF8FUJB4Z2OWezTUZxjYqHUU17vG7eFpu02YgHHV5bYAtMYBFuNQAUIuqqUuME1xbCZBhAI/+uuepJ/Eu5rGJg1YZCOksTCx5WHXIXqqwHUQOyxJjfRxWpTeZAP0c3GA55iMLWSlJFDx+fXxm/1+Rj1piCmvC2Rd6SBiHxLRCe8e98XhH0AuZHeIdyh0CKoleWVU
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2026 12:58:34.8648
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49bea733-2a66-4a6f-08ff-08dee339f239
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF0000019D.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8237
 
-Rewrite gup_test.c using kselftest_harness.h. The new test covers 12
-mapping configurations: THP on, THP off and hugetlb, each across
-private/shared and read/write variants. It runs seven test cases per
-variant: get_user_pages, get_user_pages_fast, pin_user_pages,
-pin_user_pages_fast, pin_user_pages_longterm, and DUMP_USER_PAGES_TEST
-via both get and pin.
-
-Each test case sweeps four nr_pages_per_call values: 1, 512, 123, and
-all pages. This preserves the old run_gup_matrix() sweep: 12 mapping
-combinations x 5 GUP/PUP operations x 4 batch sizes = 240 ioctl sweeps.
-It also expands DUMP_USER_PAGES_TEST coverage from one standalone
-invocation to 12 variants x 2 dump modes x 4 batch sizes = 96
-additional sweeps.
-
-Preserve the old sparse dump coverage from run_vmtests.sh with one
-standalone test that exercises DUMP_USER_PAGES_TEST with page indices
-0, 19 and 0x1000, fetching the full mapping in one ioctl call. This
-brings the total to 85 TAP-reported cases (12 x 7 + 1) and 337 ioctl
-sweeps (240 + 96 + 1).
-
-On a Radxa Orion O6 board, ./gup_test completes in 5.39s on average
-over 10 runs (range: 5.33s - 5.48s).
-
-Update run_vmtests.sh: remove run_gup_matrix() and the multiple flagged
-invocations of gup_test, replacing them with a single unconditional
-invocation. Benchmark functionality is handled by tools/mm/gup_bench
-introduced in the previous patch.
-
-Update Documentation/core-api/pin_user_pages.rst to reflect the new
-harness-based gup_test interface rather than command-line flag
-invocations.
-
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- Documentation/core-api/pin_user_pages.rst |  12 +-
- tools/testing/selftests/mm/gup_test.c     | 605 ++++++++++++++--------
- tools/testing/selftests/mm/run_vmtests.sh |  37 +-
- 3 files changed, 397 insertions(+), 257 deletions(-)
-
-diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
-index c16ca163b55e..ea722adf22cc 100644
---- a/Documentation/core-api/pin_user_pages.rst
-+++ b/Documentation/core-api/pin_user_pages.rst
-@@ -230,10 +230,16 @@ This file::
- 
-  tools/testing/selftests/mm/gup_test.c
- 
--has the following new calls to exercise the new pin*() wrapper functions:
-+contains the following test cases to exercise pin_user_pages*():
- 
--* PIN_FAST_BENCHMARK (./gup_test -a)
--* PIN_BASIC_TEST (./gup_test -b)
-+* pin_user_pages via PIN_BASIC_TEST
-+* pin_user_pages_fast via PIN_FAST_BENCHMARK
-+* pin_user_pages_longterm via PIN_LONGTERM_BENCHMARK
-+
-+Run with::
-+
-+  make -C tools/testing/selftests/mm
-+  ./tools/testing/selftests/mm/gup_test
- 
- You can monitor how many total dma-pinned pages have been acquired and released
- since the system was booted, via two new /proc/vmstat entries: ::
-diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
-index 5f44761dbec0..d9caa9fb8b78 100644
---- a/tools/testing/selftests/mm/gup_test.c
-+++ b/tools/testing/selftests/mm/gup_test.c
-@@ -1,274 +1,443 @@
- #define __SANE_USERSPACE_TYPES__ // Use ll64
- #include <fcntl.h>
- #include <errno.h>
-+#include <stdbool.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <string.h>
- #include <unistd.h>
- #include <dirent.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/stat.h>
- #include <sys/types.h>
--#include <pthread.h>
--#include <assert.h>
- #include <mm/gup_test.h>
- #include "kselftest.h"
- #include "vm_util.h"
-+#include "kselftest_harness.h"
- 
- #define MB (1UL << 20)
- 
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+#endif
-+
- /* Just the flags we need, copied from the kernel internals. */
- #define FOLL_WRITE	0x01	/* check pte is writable */
- 
-+/* Page counts exercising single, THP-batch, partial, and full-mapping GUP. */
-+static const int nr_pages_list[] = { 1, 512, 123, -1 };
-+
- #define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
- 
--static unsigned long cmd = GUP_FAST_BENCHMARK;
--static int gup_fd, repeats = 1;
--static unsigned long size = 128 * MB;
--/* Serialize prints */
--static pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
-+FIXTURE(gup_test)
-+{
-+	int gup_fd;
-+	char *addr;
-+	unsigned long size;
-+};
-+
-+FIXTURE_VARIANT(gup_test)
-+{
-+	bool thp;
-+	bool hugetlb;
-+	bool write;
-+	bool shared;
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
- 
--static char *cmd_to_str(unsigned long cmd)
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly_thp)
- {
--	switch (cmd) {
--	case GUP_FAST_BENCHMARK:
--		return "GUP_FAST_BENCHMARK";
--	case PIN_FAST_BENCHMARK:
--		return "PIN_FAST_BENCHMARK";
--	case PIN_LONGTERM_BENCHMARK:
--		return "PIN_LONGTERM_BENCHMARK";
--	case GUP_BASIC_TEST:
--		return "GUP_BASIC_TEST";
--	case PIN_BASIC_TEST:
--		return "PIN_BASIC_TEST";
--	case DUMP_USER_PAGES_TEST:
--		return "DUMP_USER_PAGES_TEST";
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_SETUP(gup_test)
-+{
-+	int mmap_flags = MAP_PRIVATE;
-+	int zero_fd;
-+	char *p;
-+
-+	/* zero_fd has to be >= 0. Already checked in main() */
-+	zero_fd = open("/dev/zero", O_RDWR);
-+	ASSERT_GE(zero_fd, 0);
-+
-+	/* gup_fd has to be >= 0. Already checked in main() */
-+	self->gup_fd = open(GUP_TEST_FILE, O_RDWR);
-+	ASSERT_GE(self->gup_fd, 0);
-+
-+	self->size = variant->hugetlb ? 256 * MB : 128 * MB;
-+
-+	/* Check for hugetlb */
-+	if (variant->hugetlb) {
-+		unsigned long hp_size = default_huge_page_size();
-+
-+		if (!hp_size) {
-+			close(zero_fd);
-+			close(self->gup_fd);
-+			SKIP(return, "HugeTLB not available\n");
-+		}
-+
-+		self->size = (self->size + hp_size - 1) & ~(hp_size - 1);
-+		if (!hugetlb_setup_default(self->size / hp_size)) {
-+			hugetlb_restore_settings();
-+			close(zero_fd);
-+			close(self->gup_fd);
-+			SKIP(return, "Not enough huge pages\n");
-+		}
-+
-+		mmap_flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
-+	}
-+
-+	if (variant->shared)
-+		mmap_flags = (mmap_flags & ~MAP_PRIVATE) | MAP_SHARED;
-+
-+	self->addr = mmap(NULL, self->size, PROT_READ | PROT_WRITE,
-+			  mmap_flags, zero_fd, 0);
-+
-+	close(zero_fd);
-+
-+	ASSERT_NE(self->addr, MAP_FAILED) {
-+		int err = errno;
-+
-+		close(self->gup_fd);
-+		if (variant->hugetlb)
-+			hugetlb_restore_settings();
-+		TH_LOG("mmap failed: %s", strerror(err));
- 	}
--	return "Unknown command";
-+
-+	if (variant->thp)
-+		madvise(self->addr, self->size, MADV_HUGEPAGE);
-+	else
-+		madvise(self->addr, self->size, MADV_NOHUGEPAGE);
-+
-+	for (p = self->addr; (unsigned long)p < (unsigned long)self->addr
-+			+ self->size; p += psize())
-+		p[0] = 0;
- }
- 
--void *gup_thread(void *data)
-+FIXTURE_TEARDOWN(gup_test)
- {
--	struct gup_test gup = *(struct gup_test *)data;
--	int i, status;
--
--	/* Only report timing information on the *_BENCHMARK commands: */
--	if ((cmd == PIN_FAST_BENCHMARK) || (cmd == GUP_FAST_BENCHMARK) ||
--	     (cmd == PIN_LONGTERM_BENCHMARK)) {
--		for (i = 0; i < repeats; i++) {
--			gup.size = size;
--			status = ioctl(gup_fd, cmd, &gup);
--			if (status)
--				break;
--
--			pthread_mutex_lock(&print_mutex);
--			ksft_print_msg("%s: Time: get:%lld put:%lld us",
--				       cmd_to_str(cmd), gup.get_delta_usec,
--				       gup.put_delta_usec);
--			if (gup.size != size)
--				ksft_print_msg(", truncated (size: %lld)", gup.size);
--			ksft_print_msg("\n");
--			pthread_mutex_unlock(&print_mutex);
--		}
--	} else {
--		gup.size = size;
--		status = ioctl(gup_fd, cmd, &gup);
--		if (status)
--			goto return_;
--
--		pthread_mutex_lock(&print_mutex);
--		ksft_print_msg("%s: done\n", cmd_to_str(cmd));
--		if (gup.size != size)
--			ksft_print_msg("Truncated (size: %lld)\n", gup.size);
--		pthread_mutex_unlock(&print_mutex);
-+	munmap(self->addr, self->size);
-+	close(self->gup_fd);
-+
-+	if (variant->hugetlb)
-+		hugetlb_restore_settings();
-+}
-+
-+TEST_F(gup_test, get_user_pages)
-+{
-+	/* Tests the get_user_pages path */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, GUP_BASIC_TEST, &gup), 0);
-+	}
-+}
-+
-+TEST_F(gup_test, pin_user_pages)
-+{
-+	/* Tests the pin_user_pages path */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_BASIC_TEST, &gup), 0);
- 	}
-+}
- 
--return_:
--	ksft_test_result(!status, "ioctl status %d\n", status);
--	return NULL;
-+TEST_F(gup_test, dump_user_pages_with_get)
-+{
-+	/* Tests DUMP_USER_PAGES_TEST using get_user_pages */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		gup.which_pages[0] = 1;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, DUMP_USER_PAGES_TEST, &gup), 0);
-+	}
- }
- 
--int main(int argc, char **argv)
-+TEST_F(gup_test, dump_user_pages_with_pin)
- {
--	struct gup_test gup = { 0 };
--	int filed, i, opt, nr_pages = 1, thp = -1, write = 1, nthreads = 1, ret;
--	int flags = MAP_PRIVATE;
--	char *file = "/dev/zero";
--	bool hugetlb = false;
--	pthread_t *tid;
--	char *p;
-+	/* Tests DUMP_USER_PAGES_TEST using pin_user_pages */
-+	int i;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abcj:tTLUuwWSHpz")) != -1) {
--		switch (opt) {
--		case 'a':
--			cmd = PIN_FAST_BENCHMARK;
--			break;
--		case 'b':
--			cmd = PIN_BASIC_TEST;
--			break;
--		case 'L':
--			cmd = PIN_LONGTERM_BENCHMARK;
--			break;
--		case 'c':
--			cmd = DUMP_USER_PAGES_TEST;
--			/*
--			 * Dump page 0 (index 1). May be overridden later, by
--			 * user's non-option arguments.
--			 *
--			 * .which_pages is zero-based, so that zero can mean "do
--			 * nothing".
--			 */
--			gup.which_pages[0] = 1;
--			break;
--		case 'p':
--			/* works only with DUMP_USER_PAGES_TEST */
--			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
--			break;
--		case 'F':
--			/* strtol, so you can pass flags in hex form */
--			gup.gup_flags = strtol(optarg, 0, 0);
--			break;
--		case 'j':
--			nthreads = atoi(optarg);
--			break;
--		case 'm':
--			size = atoi(optarg) * MB;
--			break;
--		case 'r':
--			repeats = atoi(optarg);
--			break;
--		case 'n':
--			nr_pages = atoi(optarg);
--			if (nr_pages < 0)
--				nr_pages = size / psize();
--			break;
--		case 't':
--			thp = 1;
--			break;
--		case 'T':
--			thp = 0;
--			break;
--		case 'U':
--			cmd = GUP_BASIC_TEST;
--			break;
--		case 'u':
--			cmd = GUP_FAST_BENCHMARK;
--			break;
--		case 'w':
--			write = 1;
--			break;
--		case 'W':
--			write = 0;
--			break;
--		case 'f':
--			file = optarg;
--			break;
--		case 'S':
--			flags &= ~MAP_PRIVATE;
--			flags |= MAP_SHARED;
--			break;
--		case 'H':
--			flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
--			hugetlb = true;
--			break;
--		default:
--			ksft_exit_fail_msg("Wrong argument\n");
--		}
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		gup.which_pages[0] = 1;
-+		gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, DUMP_USER_PAGES_TEST, &gup), 0);
- 	}
-+}
- 
--	if (optind < argc) {
--		int extra_arg_count = 0;
--		/*
--		 * For example:
--		 *
--		 *   ./gup_test -c 0 1 0x1001
--		 *
--		 * ...to dump pages 0, 1, and 4097
--		 */
--
--		while ((optind < argc) &&
--		       (extra_arg_count < GUP_TEST_MAX_PAGES_TO_DUMP)) {
--			/*
--			 * Do the 1-based indexing here, so that the user can
--			 * use normal 0-based indexing on the command line.
--			 */
--			long page_index = strtol(argv[optind], 0, 0) + 1;
--
--			gup.which_pages[extra_arg_count] = page_index;
--			extra_arg_count++;
--			optind++;
--		}
-+TEST_F(gup_test, get_user_pages_fast)
-+{
-+	/* Tests the lockless get_user_pages_fast() path */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, GUP_FAST_BENCHMARK, &gup), 0);
- 	}
-+}
-+
-+TEST_F(gup_test, pin_user_pages_fast)
-+{
-+	/* Tests the lockless pin_user_pages_fast() path */
-+	int i;
- 
--	ksft_print_header();
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
- 
--	if (hugetlb) {
--		unsigned long hp_size = default_huge_page_size();
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
- 
--		if (!hp_size)
--			ksft_exit_skip("HugeTLB is unavailable\n");
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
- 
--		size = (size + hp_size - 1) & ~(hp_size - 1);
--		if (!hugetlb_setup_default(size / hp_size))
--			ksft_exit_skip("Not enough huge pages\n");
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_FAST_BENCHMARK, &gup), 0);
- 	}
-+}
- 
--	ksft_set_plan(nthreads);
-+TEST_F(gup_test, pin_user_pages_longterm)
-+{
-+	/* Tests pin_user_pages() with FOLL_LONGTERM */
-+	int i;
- 
--	filed = open(file, O_RDWR|O_CREAT, 0664);
--	if (filed < 0)
--		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
- 
--	gup.nr_pages_per_call = nr_pages;
--	if (write)
--		gup.gup_flags |= FOLL_WRITE;
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
- 
--	gup_fd = open(GUP_TEST_FILE, O_RDWR);
--	if (gup_fd == -1) {
--		switch (errno) {
--		case EACCES:
--			if (getuid())
--				ksft_print_msg("Please run this test as root\n");
--			break;
--		case ENOENT:
--			if (opendir("/sys/kernel/debug") == NULL)
--				ksft_print_msg("mount debugfs at /sys/kernel/debug\n");
--			ksft_print_msg("check if CONFIG_GUP_TEST is enabled in kernel config\n");
--			break;
--		default:
--			ksft_print_msg("failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
--			break;
--		}
--		ksft_test_result_skip("Please run this test as root\n");
--		ksft_exit_pass();
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_LONGTERM_BENCHMARK, &gup), 0);
- 	}
-+}
-+
-+TEST(dump_user_pages_sparse_indices)
-+{
-+	/* Tests sparse multi-index which_pages[] inputs. */
-+	struct gup_test gup = { 0 };
-+	unsigned long size = 128 * MB;
-+	int zero_fd, gup_fd;
-+	char *addr, *p;
-+
-+	zero_fd = open("/dev/zero", O_RDWR);
-+	ASSERT_GE(zero_fd, 0);
- 
--	p = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
--	if (p == MAP_FAILED)
--		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
--	gup.addr = (unsigned long)p;
-+	gup_fd = open(GUP_TEST_FILE, O_RDWR);
-+	ASSERT_GE(gup_fd, 0);
-+
-+	addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, zero_fd, 0);
-+	close(zero_fd);
-+	ASSERT_NE(addr, MAP_FAILED);
- 
--	if (thp == 1)
--		madvise(p, size, MADV_HUGEPAGE);
--	else if (thp == 0)
--		madvise(p, size, MADV_NOHUGEPAGE);
-+	madvise(addr, size, MADV_HUGEPAGE);
- 
--	/* Fault them in here, from user space. */
--	for (; (unsigned long)p < gup.addr + size; p += psize())
-+	for (p = addr; (unsigned long)p < (unsigned long)addr + size;
-+	     p += psize())
- 		p[0] = 0;
- 
--	tid = malloc(sizeof(pthread_t) * nthreads);
--	assert(tid);
--	for (i = 0; i < nthreads; i++) {
--		ret = pthread_create(&tid[i], NULL, gup_thread, &gup);
--		assert(ret == 0);
--	}
--	for (i = 0; i < nthreads; i++) {
--		ret = pthread_join(tid[i], NULL);
--		assert(ret == 0);
-+	gup.addr = (unsigned long)addr;
-+	gup.size = size;
-+	gup.nr_pages_per_call = size / psize();
-+	gup.gup_flags = FOLL_WRITE;
-+	gup.which_pages[0] = 1;
-+	gup.which_pages[1] = 20;
-+	gup.which_pages[2] = 0x1001;
-+
-+	/*
-+	 * Preserve the old "./gup_test -ct -F 0x1 0 19 0x1000" sparse dump
-+	 * coverage after removing command-line parsing from this binary.
-+	 */
-+	ASSERT_EQ(ioctl(gup_fd, DUMP_USER_PAGES_TEST, &gup), 0);
-+
-+	munmap(addr, size);
-+	close(gup_fd);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int fd;
-+	char *file = "/dev/zero";
-+
-+	fd = open(file, O_RDWR);
-+	if (fd < 0) {
-+		ksft_print_header();
-+		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
- 	}
-+	close(fd);
- 
--	free(tid);
-+	fd = open(GUP_TEST_FILE, O_RDWR);
-+	if (fd == -1) {
-+		ksft_print_header();
-+		if (errno == EACCES)
-+			ksft_exit_skip("Please run this test as root\n");
-+		if (errno == ENOENT) {
-+			DIR *debugfs = opendir("/sys/kernel/debug");
-+
-+			if (!debugfs) {
-+				ksft_exit_skip("Mount debugfs at /sys/kernel/debug\n");
-+			} else {
-+				closedir(debugfs);
-+				ksft_exit_skip("Check CONFIG_GUP_TEST in kernel config\n");
-+			}
-+		}
-+		ksft_exit_skip("failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
-+	}
-+	close(fd);
- 
--	ksft_exit_pass();
-+	return test_harness_run(argc, argv);
- }
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 8c296dedf047..56df0dcc9640 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -130,30 +130,6 @@ test_selected() {
- 	fi
- }
- 
--run_gup_matrix() {
--    # -t: thp=on, -T: thp=off, -H: hugetlb=on
--    local hugetlb_mb=256
--
--    for huge in -t -T "-H -m $hugetlb_mb"; do
--        # -u: gup-fast, -U: gup-basic, -a: pin-fast, -b: pin-basic, -L: pin-longterm
--        for test_cmd in -u -U -a -b -L; do
--            # -w: write=1, -W: write=0
--            for write in -w -W; do
--                # -S: shared
--                for share in -S " "; do
--                    # -n: How many pages to fetch together?  512 is special
--                    # because it's default thp size (or 2M on x86), 123 to
--                    # just test partial gup when hit a huge in whatever form
--                    for num in "-n 1" "-n 512" "-n 123" "-n -1"; do
--                        CATEGORY="gup_test" run_test ./gup_test \
--                                $huge $test_cmd $write $share $num
--                    done
--                done
--            done
--        done
--    done
--}
--
- # filter 64bit architectures
- ARCH64STR="arm64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
-@@ -276,18 +252,7 @@ fi
- 
- CATEGORY="mmap" run_test ./map_fixed_noreplace
- 
--if $RUN_ALL; then
--    run_gup_matrix
--else
--    # get_user_pages_fast() benchmark
--    CATEGORY="gup_test" run_test ./gup_test -u -n 1
--    CATEGORY="gup_test" run_test ./gup_test -u -n -1
--    # pin_user_pages_fast() benchmark
--    CATEGORY="gup_test" run_test ./gup_test -a -n 1
--    CATEGORY="gup_test" run_test ./gup_test -a -n -1
--fi
--# Dump pages 0, 19, and 4096, using pin_user_pages:
--CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
-+CATEGORY="gup_test" run_test ./gup_test
- CATEGORY="gup_test" run_test ./gup_longterm
- 
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
--- 
-2.39.5
+On 15/07/2026 3:42 pm, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written, but
+> a range with no page table at all -- a PMD hole -- is skipped:
+> pagemap_scan_pte_hole() tests p->cur_vma_category, which never carries
+> PAGE_IS_WRITTEN, so the hole is neither reported nor (under
+> PM_SCAN_WP_MATCHING) armed.
+> 
+> In a uffd-wp VMA, WP_UNPOPULATED installs uffd-wp markers when protecting
+> a range, allocating page tables as needed, so an unpopulated slot is
+> treated as written -- see the pte_none() handling in
+> pagemap_page_category(). A missing marker therefore means the range was
+> zapped, e.g. via MADV_DONTNEED. This applies to anon and shmem VMAs.
+> 
+> An anonymous THP is write-protected in place as a huge PMD, so a
+> full-PMD MADV_DONTNEED clears it to pmd_none -- a hole with no page table
+> -- and pagemap_scan_pte_hole() misses it. For a MAP_PRIVATE|MAP_ANON
+> mapping MADV_DONTNEED has fill-with-zeros semantics, so a write-tracking
+> checkpoint/migration tool (e.g. CRIU) treats the range as unchanged and
+> keeps its previous contents; after restore or live migration the process
+> reads stale data instead of zeroes -- data corruption.
+> 
+> Report a hole in a non-hugetlb uffd-wp VMA as written, matching the
+> pte_none handling in pagemap_page_category(); the existing
+> PM_SCAN_WP_MATCHING path then arms it via uffd_wp_range().
+> 
+> hugetlb is excluded: pagemap_hugetlb_category() reports an empty hugetlb
+> entry (huge_pte_none) as not-written, unlike pagemap_page_category(),
+> which reports pte_none as written. pagemap_scan_pte_hole() fires for a
+> hugetlb slot only when it has no page table; keeping that not-written
+> matches how an allocated-but-empty hugetlb entry reads, so the hole and
+> the empty-entry cases agree within the VMA.
+> 
+> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260707151349.92143-1-kirill@shutemov.name
+> Fixes: 2bad466cc9d9 ("mm/uffd: UFFD_FEATURE_WP_UNPOPULATED")
+> Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-fable-5
+Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 
