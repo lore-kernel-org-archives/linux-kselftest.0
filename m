@@ -1,181 +1,120 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A73237A82E;
-	Thu, 16 Jul 2026 09:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003732C21D8
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 09:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784194553; cv=none; b=Iw46JM+R5gDzQisPoZ018YCaOCz3b3vRz2+Y30rUqcJKm3J43cn5giqO6AM1Up4G7gylyMV7BHniYgnwLIfRP6wrtnP8g9aQj2yuQIyLr5AOnPDN8GUGDxWpZ4UYfa1g52Of2lsSPAAaRntPDh3n+Xrg1nwmH002zB2xqiNTrao=
+	t=1784195180; cv=none; b=UPS1FcdHpEggeGE/kEyg5DkC5ONL3wLWu5D2yDC1o8Fvg96LOnq8sF6AAr3S9IiNrDjAJDjvhPy3f312DWDbSkLDOT6nj1V3b74GYB6iFOEcJTsAlfcnHG7+Q834RTmQdO3Tav9L5k5brUYK+d6xieENzCSMJMG6KrC7crpwDSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784194553; c=relaxed/simple;
-	bh=T3Re0X4PUtj9OrPVH16xP1VR4x6mVOJBeH8N4Lt0q3w=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=EVPHXXHj+nQYqFIMKRZdJrXieygqOwWkiGqqs9vQRotdk3q4x+3apuzn2RNls+QvtG8NXt8s5Jbn7Yo2ZhSi/efiVfnXAkts+9Izy9vB7sFdvO7WXxaz4MRdHJ23Ay4OtcelPJfd3hSGPoqqlY9tEEUOQLCvjh5HodzQAJFLzvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=h9R2Hekq; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784195180; c=relaxed/simple;
+	bh=xVT23QRkqhJ4KVE6Xjupxflg0Om9cDeSJhRc8LkXLOM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jiVP+lvkbddqvz/9Yag/OWS90tL02OE1seqMqzmv8iTu/MDa9uBNYCnZyXv9GkzOVepygNfbc/VYmaTFra8YV6heaK5+onR8UiO0KszRmVhbZQW/BaBUJvwvx9DZrfXpEJpE4OgqhZczS6lyqhSIfwABPLZLRFavbFql2TGifTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=L6cViECS; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="h9R2Hekq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784194546;
-	bh=PGEgglPcK7GG7eadaVjVRffpBLOT8zLPQv/ALm1hlB4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=h9R2HekqCep4KMBorbXdidnqBstSUYYopYhwrBZb4QrU46TUhJ4rqhkuJ6l3hghYe
-	 U+ICXSo9EvHcBl4Ebjzzebd9vX3WAgTqIiEk0SX76OsvpHOBWaJaFXFIJVq6tgEhaZ
-	 8WgZT3aIqj66KeNaig0srhp20kLnFOGOYOgAxFXU=
-Received: from NUC10 ([39.156.73.14])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 8CFB3470; Thu, 16 Jul 2026 17:35:15 +0800
-X-QQ-mid: xmsmtpt1784194527tw9oyy7vf
-Message-ID: <tencent_C7A5E27560540491DBE052682ACBE1F24405@qq.com>
-X-QQ-XMAILINFO: MRMtjO3A6C9XH7TUhcGZChNh6AEE2jJIdaIrT2jK/mpig/oO1iRkjPTfFr2XTQ
-	 SOG1uDmzjjdaRvWWwi7d1S6im2H/MfdqE2geuhJRFlVSE9/xs3o5s661p25EGnY57Ttarv13EJk+
-	 XEGxnIPSpcvipua9tiLSlfM8WF0MpX/wimdf0XGZsZAH8HGqcZ2xNC0bXmaRjYEbQt0hBUePWCiV
-	 DokdhsNIHu2TG1tDTSgYVasvOVyYeoZ05lS6D/85/Rb71BLK0DfiuSkIXebtnNR3n+TCAChpXU2t
-	 HOuZb7j4vpgsjSyPxr8PcjyABYV/fqb5FLhPmzvFuaUACN0shE36fIQcENKmBmcQdqs1jB3ktQu2
-	 rbXU3XxzZ1gzvWb05LphHyDb2fvtlHt6zi6tdQRh/6BaGTDO8L0dVo37wwz4rgbsdHImRPoNcwpQ
-	 nFXcD4apdRPPjWHrcdMYMNLtzRqKzmSmfs9UmU4vfdlleMf3aUWL06HH8h0hyNsKwHywk8NEDrw1
-	 sJSy2Si0V3K6cjn4S0Ldbt7RjEiisPmTFXOZ/JKIM4RXT5f4i04/OxLx7l4YqLx1vxKnAjzhOzM4
-	 Fosgw1O6Ezc4/ZqK6ONTNErKO6dvNf0qThHs/fNqRm2sKlayLDlopXc0TiNJevPXsC06CkLJWAEi
-	 h0pipm6NKGJ/qbutn0F50h4VsJmwUuGN5siCHRf99U/mkrvDQ1xECY18Y/4h7Rgbr0+T1KOjnT9H
-	 NVXU7mIUtTff1znPZEGq+qh5MrE9RCFFd4yNtWwM2LfeZszD2ueUtwe8C2k04caVOfh4OP8JF/7E
-	 SMeFyJIs4+uA4ZcLhc1JIVTK0dQL3FDol5zs9R/VPsm6rDOZXNWQyWUwA9t6eTrUuPVBcf5iY3DI
-	 r4P35ZGVtHA1WzS8CQRZLkgvQJiNa0I7G+e2DPrO1Tf/Se1gRfU6vt99OTkIMMlvSyI4JAUN1ygD
-	 M8Z4Hc0tNzHsmSEaSk6rpi1VhqjTx5Fq8xHre9CjbPijoB+fPQRza9wy/ze9yX5eDPpoH16caJkx
-	 hANCIlYNwKb95Hdx4UTsAg3NyilfuNPc5Mhx6ouF8JsBWA5vfG972uzSZ3iMQ=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-From: Rong Tao <rtoax@foxmail.com>
-To: vmalik@redhat.com,
-	andrii@kernel.org,
-	ast@kernel.org
-Cc: Rong Tao <rongtao@cestc.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
-Date: Thu, 16 Jul 2026 17:34:51 +0800
-X-OQ-MSGID: <048a85428cda194270080829056db872a6113233.1784194024.git.rtoax@foxmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1784194024.git.rtoax@foxmail.com>
-References: <cover.1784194024.git.rtoax@foxmail.com>
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="L6cViECS"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c16879184e7so12183466b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 02:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1784195177; x=1784799977; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=KTxkaZPHUXOJmJBzLSBM+27rd0POVSJE0Fpas4J7vAQ=;
+        b=L6cViECSmyGEaWsbZQNXFOQ3cErfZtQGeow/R/n5cKPpg6Ggp6dz9gkPKzLq9dZiU1
+         Lpw5YilP4ASXTUnZglymBmI6OLQkfYK6lRWxoug2TO4sLJFHyj8gyDJCGqdulFbK5EQa
+         M/T16pl7M2jyS5hr4doIMPuPam4Xmv2CiF3QHbOtIU5ZZuLs0/eMCXNHfLWdaVgP6+Qe
+         xFzHj7fubuy5wr6/+x4kWnAUBQnQYpW6eiNktifwTkMnIXyIxcUF7GHa1oiE76CtfOlg
+         9pVEFduOFocY81D3UidfVH8MlGuK7b+tmkbX+CAW5106k38ZXhGq8eY8aXUcVJnj9vtE
+         jgaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784195177; x=1784799977;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :content-language:from:references:cc:to:subject:reply-to:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=KTxkaZPHUXOJmJBzLSBM+27rd0POVSJE0Fpas4J7vAQ=;
+        b=jj7Pes2I8SeOnEbFoNX72/WNRXOnr4jZKMzxyZq47fVxx5iptmx3dGDZVaHgPGfgFu
+         2S2JEU0I6LqR4r8xReycbhISTo/AgeUz8NZd+BUcXxFeHTla7JPQXdVY8NC5ksmrWmk+
+         pciBmL58TYZc1FicHKcpp7/SpcIweb0CNvJg8ph/XveiN2tIc+hUab47YggjAd9XpgrO
+         zDuw150bubEvWIGUAp5RG9IVuAne8ibWkt+rNSqAmtru0jcn/OZXXLijq+hq7iMrG0zF
+         0l/IOQXhlo6NkmXwuLJrFibtzS07qV2VRbZHChd4skyu/apS+ZW8LAVIWeeC5b3GqKxD
+         025w==
+X-Forwarded-Encrypted: i=1; AHgh+RqYRj5vH4c+kYTgBj1gNiJgwKEFBCLKCQF/2PSFPWuiLWUiKKGS6DcKntGgHbtqv1siInEh3Gw0I0FGsJ1fqew=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCg76YiwouVdzpVplGfB1hPEdzjZTQJDV3dbhwS4RIr0Gc4FRH
+	AjoGSp8AFpPh8ucB/9rUlyGtkiWGA7z3Q7itnxH4FXzPz47bKbMh8rpyUKauxiK6fdw=
+X-Gm-Gg: AfdE7ckRcvxX/XRZ/sMI8UO4H/XlmMVGdP4YHRIz+QMqKCGreaaBiZuAC3CFhmv1bu1
+	McJRQxoJhK6SpiSzYv71NOl959cED9JH/fE2rN3O2/FmJRAV/KCEdLcgp00YibzPdLrLcls1Hev
+	gEJmQu/HpKPlG7xJwbXf8Bb3qSvpoEuGSkkcTBLcqH/ykULNdD4K6A7mrk8JavOqBJ/MMyw1vNu
+	2kuHS0Zqj4/E43xxBRA9ZtRYbYzd8Tul/sYS5ndvPNYoS+A08v8JR/j4H0/XtnfQ8rIKn0mlOCa
+	sxZMd1qbfYTKBqTdF6udWmNasLybyaVzWNRFasgRRteApftBl4keg9fMhHNjPv17JagGinDkQl/
+	t+mG+EnoNWHZ8miFm4d9B/uwagmUW64fVItPy8UjRbbI1jMeSctKfJ2TOuVwl0vd+UmjejxxyFL
+	bO3jkCY22KfVL5q9k/y7nhzD4IPrlqRiCvq1EHB69yJu6/wV6icUhHcr0=
+X-Received: by 2002:a17:907:3e21:b0:c16:1290:11a7 with SMTP id a640c23a62f3a-c161e923432mr637290166b.1.1784195177041;
+        Thu, 16 Jul 2026 02:46:17 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c16871262casm175544166b.6.2026.07.16.02.46.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jul 2026 02:46:16 -0700 (PDT)
+Message-ID: <b517ef0e-d499-47e2-aac6-1950c5946e55@6wind.com>
+Date: Thu, 16 Jul 2026 11:46:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next 2/2] selftests: seg6: add test for post-encap SID
+ route lookup
+To: Andrea Mayer <andrea.mayer@uniroma2.it>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Justin Iurman <justin.iurman@6wind.com>,
+ Anthony Doeraene <anthony.doeraene@uclouvain.be>,
+ Stefano Salsano <stefano.salsano@uniroma2.it>,
+ Ahmed Abdelsalam <ahabdels@cisco.com>,
+ Paolo Lungaroni <paolo.lungaroni@uniroma2.it>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260711162907.6521-1-andrea.mayer@uniroma2.it>
+ <20260711162907.6521-3-andrea.mayer@uniroma2.it>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20260711162907.6521-3-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
 
-Add tests for new kfuncs bpf_strcat() and bpf_strncat().
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- .../testing/selftests/bpf/prog_tests/string_kfuncs.c  |  2 ++
- .../selftests/bpf/progs/string_kfuncs_failure1.c      | 11 +++++++++++
- .../selftests/bpf/progs/string_kfuncs_failure2.c      |  2 ++
- .../selftests/bpf/progs/string_kfuncs_success.c       |  4 ++++
- 4 files changed, 19 insertions(+)
+Le 11/07/2026 à 18:29, Andrea Mayer a écrit :
+> Add a selftest for the SEG6_IPTUNNEL_TABLE attribute, which selects the FIB
+> table for the post-encap SID route lookup. This looks up the route for the
+> first SID, the outer destination of the encapsulated packet.
+> 
+> Two routers provide L3 VPN services over an IPv6 underlay. Each router uses
+> a separate VRF per tenant, with default blackhole routes (IPv4 and IPv6)
+> that drop unmatched traffic. Tenant traffic is encapsulated, then
+> decapsulated with an End.DT46.
+> The encap routes are installed in the tenant VRF, but the routes that match
+> the first SIDs live in a separate underlay table (500). The "lookup 500"
+> attribute points the lookup there rather than to the VRF.
+> 
+> The test covers both the input path, where forwarded host traffic triggers
+> encapsulation, and the output path, where a router originates traffic from
+> its own loopback inside a VRF.
+> With the "lookup" attribute, traffic reaches its destination on both paths.
+> Without it, on the input path the lookup stays in the VRF and hits the
+> blackhole, and on the output path it falls through to the main table, which
+> has no matching route.
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-index 300032a19445..460567ef622a 100644
---- a/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/string_kfuncs.c
-@@ -24,6 +24,8 @@ static const char * const test_cases[] = {
- 	"strcasestr",
- 	"strnstr",
- 	"strncasestr",
-+	"strcat",
-+	"strncat",
- };
- 
- void run_too_long_tests(void)
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-index bddc4e8579d2..973a6ba643d4 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure1.c
-@@ -8,6 +8,7 @@
- 
- char *user_ptr = (char *)1;
- char *invalid_kern_ptr = (char *)-1;
-+char kern_buf[32] = { "hello" };
- 
- /*
-  * When passing userspace pointers, the error code differs based on arch:
-@@ -53,6 +54,8 @@ SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null1(void *ctx) { return
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strnstr_null2(void *ctx) { return bpf_strnstr("hello", NULL, 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null1(void *ctx) { return bpf_strncasestr(NULL, "hello", 1); }
- SEC("syscall")  __retval(USER_PTR_ERR)int test_strncasestr_null2(void *ctx) { return bpf_strncasestr("hello", NULL, 1); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strcat_null1(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), NULL); }
-+SEC("syscall")  __retval(USER_PTR_ERR)int test_strncat_null1(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), NULL, 2); }
- 
- /* Passing userspace ptr to string kfuncs */
- SEC("syscall") __retval(USER_PTR_ERR) int test_strcmp_user_ptr1(void *ctx) { return bpf_strcmp(user_ptr, "hello"); }
-@@ -79,6 +82,10 @@ SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr1(void *ctx) { re
- SEC("syscall") __retval(USER_PTR_ERR) int test_strnstr_user_ptr2(void *ctx) { return bpf_strnstr("hello", user_ptr, 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr1(void *ctx) { return bpf_strncasestr(user_ptr, "hello", 1); }
- SEC("syscall") __retval(USER_PTR_ERR) int test_strncasestr_user_ptr2(void *ctx) { return bpf_strncasestr("hello", user_ptr, 1); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr1(void *ctx) { return bpf_strcat(user_ptr, 1, "hello"); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strcat_user_ptr2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), user_ptr); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr1(void *ctx) { return bpf_strncat(user_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(USER_PTR_ERR) int test_strncat_user_ptr2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), user_ptr, 1); }
- 
- #endif /* __TARGET_ARCH_s390 */
- 
-@@ -107,5 +114,9 @@ SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault1(void *ctx) { return
- SEC("syscall") __retval(-EFAULT) int test_strnstr_pagefault2(void *ctx) { return bpf_strnstr("hello", invalid_kern_ptr, 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault1(void *ctx) { return bpf_strncasestr(invalid_kern_ptr, "hello", 1); }
- SEC("syscall") __retval(-EFAULT) int test_strncasestr_pagefault2(void *ctx) { return bpf_strncasestr("hello", invalid_kern_ptr, 1); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault1(void *ctx) { return bpf_strcat(invalid_kern_ptr, 1, "hello"); }
-+SEC("syscall") __retval(-EFAULT) int test_strcat_pagefault2(void *ctx) { return bpf_strcat(kern_buf, sizeof(kern_buf), invalid_kern_ptr); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault1(void *ctx) { return bpf_strncat(invalid_kern_ptr, 1, "hello", 2); }
-+SEC("syscall") __retval(-EFAULT) int test_strncat_pagefault2(void *ctx) { return bpf_strncat(kern_buf, sizeof(kern_buf), invalid_kern_ptr, 2); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-index 412c53b87b18..38f0a5f326b5 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_failure2.c
-@@ -23,5 +23,7 @@ SEC("syscall") int test_strstr_too_long(void *ctx) { return bpf_strstr(long_str,
- SEC("syscall") int test_strcasestr_too_long(void *ctx) { return bpf_strcasestr(long_str, "hello"); }
- SEC("syscall") int test_strnstr_too_long(void *ctx) { return bpf_strnstr(long_str, "hello", sizeof(long_str)); }
- SEC("syscall") int test_strncasestr_too_long(void *ctx) { return bpf_strncasestr(long_str, "hello", sizeof(long_str)); }
-+SEC("syscall") int test_strcat_too_long(void *ctx) { return bpf_strcat(long_str, sizeof(long_str), "hello"); }
-+SEC("syscall") int test_strncat_too_long(void *ctx) { return bpf_strncat(long_str, sizeof(long_str), "hello", 3); }
- 
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-index f65b1226a81a..b24456ad3d43 100644
---- a/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-+++ b/tools/testing/selftests/bpf/progs/string_kfuncs_success.c
-@@ -6,6 +6,8 @@
- #include "errno.h"
- 
- char str[] = "hello world";
-+char buf1[32] = "hello";
-+char buf2[32] = "hello";
- 
- #define __test(retval) SEC("syscall") __success __retval(retval)
- 
-@@ -59,5 +61,7 @@ __test(-ENOENT) int test_strncasestr_notfound1(void *ctx) { return bpf_strncases
- __test(-ENOENT) int test_strncasestr_notfound2(void *ctx) { return bpf_strncasestr(str, "hello", 4); }
- __test(-ENOENT) int test_strncasestr_notfound3(void *ctx) { return bpf_strncasestr("", "a", 0); }
- __test(0) int test_strncasestr_empty(void *ctx) { return bpf_strncasestr(str, "", 1); }
-+__test(10) int test_strcat_success(void *ctx) { return bpf_strcat(buf1, sizeof(buf1), "world"); }
-+__test(8) int test_strncat_success(void *ctx) { return bpf_strncat(buf2, sizeof(buf2), "world", 3); }
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
-
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
