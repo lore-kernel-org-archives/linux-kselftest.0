@@ -1,185 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70858370D75;
-	Thu, 16 Jul 2026 16:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0B337CD53
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 16:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784218016; cv=none; b=Zxi8o8up7caprNQAGrh/p5o0tWvysmigqImNcbKg1a44KkveiiJNr4POM8Irmjo937GJRG3S8V6CF7hXz/RVGVcIO/qZG8fQkLoalvqWEiNRAmFdwJYAMeORKG38Fj5j3fPlHlAVdxcYASa2QGoI2eWpLp1BkUgnY854E2IG2WY=
+	t=1784219892; cv=none; b=BaGQ8P99NZyiheB4tSvBHghFNG9jplUiihVWzuZn1mS+d69wvfniBz1pqXAv4AbMw7dvLCoJeRFxWgSfWamJifQW82iRj04zeFaK952G9xo5loQty7mdVAEy9flNnVQ8YAFX5FdaNZOR5wUVEIi70mW/QPHXV8/m97VEw3Fx91I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784218016; c=relaxed/simple;
-	bh=ryw/8DdSuXt+Pr45lTPQafMiLHoAQsM8RkcArbORWXE=;
+	s=arc-20240116; t=1784219892; c=relaxed/simple;
+	bh=3abA9p5dw6hH5BGxr52Cs/3HjcxNfhxyZYCKG2SvU6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3SYPD0tkLdNEuJs0bJpHMbnwKxv6L/NSlGDpypJ6v2wE8sSWWlfiBwqEJzxqN5joPVvdK0TPXuEQojjxZbwVtme25Afy34Wv38eNDzDWI/QTLkSQVgzpwwL/3X/BMt/Rl/mTmMnfdIfPsd6lPmjcQQLiUMwMqnqvOdd/5IGfVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRzhBV2A; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=cSCk9Dd1r0RtRsm56JtET1H0MkcAZW5u3Cgv9nqkMCk5x7AW/aU7V/QVC5c1nuSxIdJwY5+ydZLPcCtUNEsqve5n0AGB0d10BMG0kfyVLxSw6cfZycevh5V+vOCGheAmRwjxuJTignePp+9GQaUu3BOJoybZ8YJrtioEUPRC2WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jf3c9USx; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRzhBV2A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714121F000E9;
-	Thu, 16 Jul 2026 16:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784218015;
-	bh=E5duo1e3ULLzb5pSR2o2z4e41yjvHq5ZLuI68o0BYTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dRzhBV2A1GSUiwA8eeJbb17ObnzMzPWP/5SADGAHk4mrPoGwiiMn9zH8sFewuchzP
-	 cPAy7Ncp6N/WKHqhrd8OSD8RAP6J0lkvz7GWuW63x/rb9EWUJhwXwD3WM4BiLbjE5K
-	 4Zuv051G76/f+nf+tBXlfr30QNjbfpTzCzcSx0xFAauJCkkAolpbB39kXXKyWOKaOz
-	 r0eVtr86EAvajF/UIKYtsZ50aWYv5ypGesD9+yVAiAtkmgZoSj/jmLmuqRR7MlraVr
-	 mFx6GTkoSxI3fmC2OiCYSkOSknX4gY53tqYOhTOrov4xpUBR608rUHOfmbBhInU8xn
-	 uBK0+MkLceWwA==
-Date: Thu, 16 Jul 2026 18:06:52 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Vladimir Vdovin <deliran@verdict.gg>,
-	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
- skb checksum invalidation
-Message-ID: <alkBnI3XcH0XGjEo@lore-desk>
-References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
- <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
- <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jf3c9USx"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c9e0b89e228so2211621a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 09:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784219879; x=1784824679; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=rgThJIHDvKsal8KFo6FMAaZQfGc1Wy8tJlIMPT0McxA=;
+        b=Jf3c9USxOSBum5mf7jjWFWh0SuuwxU3imgB2uoLinknC2kVBh8MeefDzJ/ppkLlYt+
+         9DXZ4T+yGFkas/rQx57QHcUCU0/bPE0a0emceUFSG97ugF4ZhmcnhcVf4JmxoFXTUQ6q
+         +ZqLpTdPMa+dfBU6bauTNybl+RKe604f0vM2VH0k76TiSgEx2mwWbtPSiPqu5jJv7iax
+         yuV3LtNHjBi6k9yxippBXw3Rp7uJ0zINh4DDaH/SNBWXT33AgOgdYW9LafqRi7CmDj3S
+         Keo1+BeJwyrDUT4Sq4IylkBVE7lPcbDnv4TsB7LGQcuZ8EkPRi4iu2FlZQlgDGawid+6
+         e2ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784219879; x=1784824679;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rgThJIHDvKsal8KFo6FMAaZQfGc1Wy8tJlIMPT0McxA=;
+        b=eB5KVFAeh2Y0saot/qdvwjc1s1Pg+sbzY/a9otaF/CBeAszjVrm90F6+Eowe6AzMm4
+         nqJwM9o2wEbEbM5pLVJ4jaGHUKbgDxSm/n/SvrFet2tFccbgFQCZ0nbam7TaXVfW8hmz
+         egJUFibHxn14INGWJag2uITnVDcWlZK1TQW3dstDuKqgKou9tE5NBU+ZRYn9Je72Ckx3
+         T5MX4R7g9ohUarIGoPOSilKDu5Evt8bVRB1K75ORXbBWtGiIHjghPp7vqjcdtHjXsgq3
+         s6J5hkscUsgVhQjJx+o7pHcA97cfboGUyZJXfNcjSvT1meTUmaUj3Q5GkOGs5XkO0PPX
+         xM/g==
+X-Forwarded-Encrypted: i=1; AHgh+Rqrw34c5tawyyBcLmjgaE4y/wVvPBYPRSbiTvDhrn/AIbvevOpwd8c8MHrWicqetRrIIXJCT8BhEfoG8yz9l9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/xS0Zu6Xj5/chUCGxRh0xDvevQUPSYJ0HWUR76ypDjkUuxVZU
+	s4UsexXQ8ILexqB5VDFLP0KeoZi3TkyXLNn44O1e5rU2YK9IqXUWkNzv
+X-Gm-Gg: AfdE7cnkgjFl9PpemLwlTCs5CnXpb0GM3huD36CD8pJ2ogm1SojLUB9iffADs79tuV3
+	F7hGcHIS3dQyLg1+mcVPx7pvvMXpb8YS/beM7qratdCFf10MVwu0FGi8hP8y0vA/A8WwAeZVUc8
+	27RcfprCXIeh5kXmfHDYhCO8XnQ4ZMiETO8aX8o8Q7q/zdUOCCRrnW3niOkYl+9mWRtQLkBWmdC
+	jw01753f8kJV72jyUUnm6QEJe6RKvUGIXfnOz+9nh1Ziinmy05yA4/sCwwnec8M/MzqC3xb3kha
+	X03tX3e+7TywT+lE5EyOpPjmdi8Z6XQutavIgw+yeaBJKq4Y5GZZskNU+QPsuGvgDiN2HaZ+Q0T
+	auTt/Ov7kamED/S22WKwY+NaIDRXwTseZ8ToFWNwPbewkuWKmUYuqXRUxLheeaEtlG4BMSHAkSe
+	aZJC7blwbLX8NuyaMDtmHf1Tti831okjjsfGo1ALyOxHB3
+X-Received: by 2002:a05:6a21:e081:b0:3c3:7f8f:88cc with SMTP id adf61e73a8af0-3c37f8f9302mr5411998637.46.1784219879218;
+        Thu, 16 Jul 2026 09:37:59 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cb258ff4402sm2078703a12.25.2026.07.16.09.37.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 09:37:58 -0700 (PDT)
+Date: Thu, 16 Jul 2026 09:37:56 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, airlied@gmail.com,
+	akhilesh@ee.iitb.ac.in, corbet@lwn.net, dakr@kernel.org,
+	jgg@ziepe.ca, kees@kernel.org, leon@kernel.org, liam@infradead.org,
+	lizhi.hou@amd.com, lyude@redhat.com,
+	maarten.lankhorst@linux.intel.com, mamin506@gmail.com,
+	mhocko@suse.com, mripard@kernel.org, nouveau@lists.freedesktop.org,
+	ogabbay@kernel.org, oleg@redhat.com, rppt@kernel.org,
+	shuah@kernel.org, simona@ffwll.ch, skhan@linuxfoundation.org,
+	surenb@google.com, tzimmermann@suse.de, vbabka@kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] mm/hmm: Clarify notifier retry state and scope
+ HMM timeouts
+Message-ID: <alkI5JLYPW211Ep7@skinsburskii>
+References: <178406760622.1106335.2379450382728057793.stgit@skinsburskii>
+ <4300f09b-8f93-4605-b072-7c09a82cb16e@kernel.org>
+ <alecaJ1FUso39D9k@skinsburskii>
+ <alet21wLwM6P_Km2@lucifer>
+ <ale3ydkx1xt6ruuP@skinsburskii>
+ <20260715101432.99957d2d33203fafe4af2e1c@linux-foundation.org>
+ <e9d0ade4-cf87-4e8d-90ec-50ddb5249b24@kernel.org>
+ <aligdOKNwoOtD4io@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ElzzijxzuPzOLRvz"
-Content-Disposition: inline
-In-Reply-To: <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
-
---ElzzijxzuPzOLRvz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <aligdOKNwoOtD4io@lucifer>
 
-On Jul 16, Stanislav Fomichev wrote:
-> On 07/15, Lorenzo Bianconi wrote:
-> > Add a test that verifies skb->ip_summed is set to CHECKSUM_NONE
-> > when a device running in XDP mode creates an skb from a xdp_buff
-> > if the attached ebpf program returns an XDP_PASS.
-> > The test attaches an XDP program returning XDP_PASS, and a TC
-> > ingress program that runs the bpf_skb_rx_checksum() kfunc to
-> > inspect the resulting skb. After XDP_PASS the driver must invalidate
-> > any previously computed hardware RX checksum since XDP may have
-> > modified the packet data.
-> > The BPF program counts packets per checksum type in a map, and the
-> > test runner verifies that after sending traffic the CHECKSUM_NONE
-> > counter is non-zero while CHECKSUM_UNNECESSARY and CHECKSUM_COMPLETE
-> > counters are zero.
-> >=20
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> >  Documentation/networking/xdp-rx-metadata.rst       |  5 ++
-> >  .../selftests/drivers/net/hw/xdp_metadata.py       | 55 ++++++++++++++=
-+-
-> >  .../selftests/net/lib/skb_metadata_csum.bpf.c      | 73 ++++++++++++++=
-++++++++
-> >  3 files changed, 132 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentati=
-on/networking/xdp-rx-metadata.rst
-> > index 93918b3769a3..7434ac98242a 100644
-> > --- a/Documentation/networking/xdp-rx-metadata.rst
-> > +++ b/Documentation/networking/xdp-rx-metadata.rst
-> > @@ -90,6 +90,11 @@ conversion, and the XDP metadata is not used by the =
-kernel when building
-> >  ``skbs``. However, TC-BPF programs can access the XDP metadata area us=
-ing
-> >  the ``data_meta`` pointer.
->=20
-> [..]
->=20
-> > +If a driver is running in XDP mode, any existing hardware RX checksum
-> > +(``CHECKSUM_UNNECESSARY`` or ``CHECKSUM_COMPLETE``) must be invalidated
-> > +by setting ``skb->ip_summed`` to ``CHECKSUM_NONE`` before passing the
-> > +skb to the kernel, since XDP may have modified the packet data.
-> > +
-> >  In the future, we'd like to support a case where an XDP program
-> >  can override some of the metadata used for building ``skbs``.
->=20
-> Sorry for keeping nitpicking on this, but I'm still not convinced that
-> it is what we currently do. From my previous reply:
+On Thu, Jul 16, 2026 at 10:12:56AM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Thu, Jul 16, 2026 at 10:59:56AM +0200, David Hildenbrand (Arm) wrote:
+> > On 7/15/26 19:14, Andrew Morton wrote:
+> > > On Wed, 15 Jul 2026 09:39:37 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+> > >
+> > >>>
+> > >>> Please don't do this, this is completely impossible to track for review :)
+> > >>>
+> > >>> mm review is currently very difficult based on volumes, it'll become impossible
+> > >>> to manage if people sound fragments of series.
+> > >>>
+> > >>> Please just resend the whole thing at this point.
+> > >>>
+> > >>
+> > >> Well, I followed the guidance provided by Andrew, and I believe he
+> > >> applied all of the changes, including these, to the `mm` tree.
+> > >>
+> > >> Do you still want me to send v9 under these circumstances?
+> > >
+> > > Sure, if that's what reviewers prefer.
+> > >
+> > > This is a bit unfriendly to people who have already reviewed the code.
+> > > Which is one of the reasons why I respond to a new version with a
+> > > single diff showing reviewers (and the author, and myself) what changed
+> > > since the previous version.
+> >
+> > As much as I dislike fixup patches, I tolerate them in reply to the existing series.
+> >
+> > But having some random fixup series is just crazy, really.
+> >
+> > --
+> > Cheers,
+> >
+> > David
+> 
+> Yes.
+> 
+> Stanislav - also see Jason's suggestion - if you give a base commit then sashiko
+> seems to work better. Maybe look at using b4 which does all of this for you
+> automatically?
+> 
 
-no worries :)
-My current take-away from the previous discussion is we just need to docume=
-nt
-what would be the driver expected behaviour adding a kselftest for it (with=
-out
-modifying any driver).
+Sure. Thank you all for the suggestions. I'll use b4 next time.
 
->=20
-> > > Looking at a few drivers:
-> > > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
-> > > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if the=
-re is
-> > >   bpf prog attached
-> > > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
-> > > - gve (gve_rx) - can do COMPLETE even with xdp attached?
->=20
-> (although for gve I might be wrong, there is also gve_rx_skb_csum that on=
-ly
-> does UNNECESSARY).
->=20
-> I'd wait for Jakub to chime in, but it feels like we should just document
-> what we currently do as a recommended approach: for the drivers
-> that support COMPLETE, do not report it when the bpf program is attached.
-> Both NONE and UNNECESSARY are ok.
+Thanks,
+Stanislav
 
-I am not completely sure the UNNECESSARY case is different from the COMPLETE
-one. What are we supposed to do if the driver reports UNNECESSARY and the e=
-bpf
-program modifies some fields covered by the rx-checksum?
-
->=20
-> Also, did you run this test on real HW? NIPA now has HW tests, maybe it
-> makes sense to route this series via net-next to get the real coverage?
-
-What about splitting this series and have two different series:
-- bpf-next: add xdp rx kfunc and related selftest
-- net-next: add kselftest for the driver expected behaviour.
-
-What do you think?
-
-Regards,
-Lorenzo
-
---ElzzijxzuPzOLRvz
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCalkBnAAKCRA6cBh0uS2t
-rPfeAP92miqJLHCgGcEjkwWMtzU1QP6SExcgCM79rSSWD5aqNQEAmxZYo0+AUDM1
-V3y0mAsCmwsVJd0ivV0BdldoECsJxwU=
-=muiS
------END PGP SIGNATURE-----
-
---ElzzijxzuPzOLRvz--
+> Thanks, Lorenzo
