@@ -1,556 +1,311 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F5341D63A;
-	Thu, 16 Jul 2026 13:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE16A422E0C;
+	Thu, 16 Jul 2026 13:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784206948; cv=none; b=GQy6IdgvG1oBSKAcW7omNX1/FXJOCKHDixXx1q7y4lc6g1M8s84M1J+GW6hHVwGpBaTQiDxgdVXDakGVoS11NImEH3nNkYCIbwrbMxSLtezhuUHiH8fEaUfubVQweGwHr8sY55ITrSM0fcslwaVWOsXFp65slmoYWxBYbw07Nek=
+	t=1784207029; cv=none; b=YungopaTklJuV1QQNfa9cuA8aFecpcO6GOAKI8iC0j8zRoRXYERlQK5eaDo2V2auqdsIBW6Dvsiy10L8URsHEISzQ3kJkw1z+d+I8LRICuuVskTZ943K0z11c6j02evv00AHUtu1oXob/kTYF5qNkQEpWaFiOrmCAfcLlz/zz4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784206948; c=relaxed/simple;
-	bh=3hdAT9EyFQMQiq38tK6EUbVUFaxBUaaYguf18gRo0Rc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kSNlLCExyRo4ukzeaVYfem5+yURTESdkBrfRTu/hRhhZttFf/GmPeHv955guvSNjYip/gbAzXCpTxc7CZW7tDaU3u1VNBPTzwbxyCgrzjVMPK6nOPtCRHf5160bPG2zN4qg/Oel63Oepbg7GdAVj8dPxmbM7/RMV4I7Zyh0Oe6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZeLhXRzh; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1784207029; c=relaxed/simple;
+	bh=/vTNrttTzHCT3PwUllbzwEdmFPZ2HL3FX2d/1DO4zhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMokQg/VcGUtJKsS2c8cbfI5r800rCrp5ksExWBRdb4CsWr8CI/Kv7TMdXp+84I/3gnnX+us9qGYx1SWq0gYIcPSR6LblJhbcwpFi1nkIK2H9zJhpm5OYVLsTJaMotNx1qXE1Bu+wIaRuh/Lwx8wQiKERFPvCTgwSBjCXOD7LRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=jTYnDFj5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ow5lc6kz; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZeLhXRzh"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=CwlOBsweskXoWiiCSdeL2Spah7OPud7ghVOdgEgoOqo=; b=ZeLhXRzhi235SjgS8M+dAMMA95
-	XA/QRSjE+j9YzDUF5PBMa6iXAQS7jDYwcQ4Cs/cGQi4oR6J1oLBM1sGXiiz5tfzjcg7C/+vP+ytL+
-	jxfatDBorCiYR44ISgWhfr6aIbVe5sIOYw4nt3A1ChcgVNZEEL4H802dXmrnA+6DmIRRZzSUG4PSl
-	9ZVl86n4XiwbQyrfVAng0pnXdXEsDDPB33jYQRqa2aKpJpUiLAmgQGGs9WGOAxXCFXHhKoWWGLdRM
-	xzcIaB5tyKvYbAKtbn2PfNHdkOvaBTaFVfyprUxYlVF8AMtPv2xEJEIBAVL1TWZ6oXgmWbYhXGNQk
-	X+e2XLlw==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wkLjI-003q8B-1G;
-	Thu, 16 Jul 2026 13:02:20 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Thu, 16 Jul 2026 06:00:05 -0700
-Subject: [PATCH net-next 7/7] selftests: net: getsockopt_iter: cover rawv6,
- ieee802154, phonet and tls
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="jTYnDFj5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ow5lc6kz"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfout.phl.internal (Postfix) with ESMTP id D2A31EC0067;
+	Thu, 16 Jul 2026 09:03:45 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Thu, 16 Jul 2026 09:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1784207025; x=
+	1784293425; bh=P4sPOn37OCBYFsXI0lvLOBbwI6X5nF8OaGmm6rn9AWM=; b=j
+	TYnDFj5l/0k7n7PZwMoqsOgQ4u4i/hW4zdZFItnbM629AIDubwH3b5BtNRe+OEIv
+	uamf9S0WOpPHFgwol0F9ue4funs2FQV6lL/3Wc9GvWlHJ5iOHRhVKKZV5e/qq5Ub
+	8eEiGAYqXffNj9spaH4mN9UuTuBhC1C9jqUqomGZt0mC1Admy+LXUnnhuUjJdcNJ
+	nqSiSbJjcvXdNZU0LK57u/q4lpbYxqYnl3nvTbU77pfI+yH8c5Z8UvwuCldjZamU
+	3eCaBz8ZvvX1rDCbi/o7BlxCi1Rz9hq085VFMEEJKDYTtndb1LvYblo/UvYmQw+e
+	sRSFkxQkG89y0F7iBgT4w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1784207025; x=1784293425; bh=P4sPOn37OCBYFsXI0lvLOBbwI6X5nF8OaGm
+	m6rn9AWM=; b=ow5lc6kz+SWys7geQb2rl9HIYyQN0kVKxnJTqtcbFQJlS+ZjY1W
+	KciOlDa2gjbiC94b671dEASbSWxtVmfzznTAuIAQpEMVz6paw4IfgnA+Jg7yVd+X
+	rBhbIeiIoxgTAgyGM42yUX5fU8/vsvCso55BH+HA/m7tJ4YnOCf18NUAdnQmWOHO
+	0CdDXgPx2pjFC01ZxsJ77a9YJZ9xOyuVM9ZS6XxSLqiZl1Nx6eFd9mstcF5pdAmV
+	8LPvptocKdPMipdTr6JjGuSV/q8To5799Z6W5FoyLHFOsDzGwycWPRi3ZAxQt2Cc
+	82F7eS3VfY8zFKsY9P+f6hryVjIQkuEnC1w==
+X-ME-Sender: <xms:sdZYaoZDwq_r20f9uYAxPBXBWJ5gN2Kf75SdKFI1VAAbRjM_aS-dfA>
+    <xme:sdZYapgHdM9dBoECMOaHVkHw6KLubVaSu6MlCNoj85ohsjVKPxJ_8_6nQRGa7igzb
+    x39VPS8U0S58-CKSiSI2Wsd9VFEwio6IWv79ziGDcFceK1eBPDaDsI>
+X-ME-Received: <xmr:sdZYapd9iy0fmgyetcUkYijNjtL7TjawVMyumobgbL3hj_c3N_D7QnoQ6BlpQA>
+X-ME-Proxy-Cause: dmFkZTGHiYKfxGpE1R0pHf/Rslp7BzHpXTJCYOqmlxtwcXGk43FrFfU5piPux8EZF8hSz3
+    LqiC4rKTBdoYR3TxWLCFn/tSr178V8YFCLbeAi0Ho7nRsg2ZdvOK7Wov5he7YY93S6h/SM
+    V1CWg/B8B6c5OEdsoFFSnuxXOVLag+/HcaMqGRmPCAtk7JIJSTnlfhkptC1paC1SolajWL
+    O0jTVTY6EjGDxU1XOtWb0aA6A95L+VnA7XjKwZUT3LFjbHOAhUkhnfdKhCHn8XNvHMHxvr
+    JOaPIggA4Ck3RaXTG1JhceF+fF1a/C7hplt7Rj4M/4mTINyTqla1LzzlN+NU92gNZKgCOW
+    hYUQ1HIwC9KYiKVAKgco/LdwrgVzH6sbDKmwrkdaX48l5IXWfvCkAq9i+pS/Gc3h+Hnuxi
+    TCTpfKfzq6nrgcO/ZNpXiOva60wN6S/bS5M8KBc5uweVI02nsxh6Oze7Efx1Tv9kkJ/vE5
+    j0uyTm2mvWd+zwYJE1zdMeVjXhY4QW8ny5OiYmix+4WZBVEpUyM/Igc+c4Paw4OiHvdEMJ
+    SerdkM4Y+7E8uamTtXZAFaSttr9BMd5LiF6GI42Pj7s2UFaOD1uyi58+upZrPxi3UwechH
+    CaVqsliLnNgu/PLagGAt9kN8KM6JZk20bHMHrsxzh3mtnvJa2EnIKgcA0nXA
+X-ME-Proxy: <xmx:sdZYasq4BkH5khn6G8vzsFc9UYh_6aIsyYGSik-njYkEjRzKCNASWg>
+    <xmx:sdZYanRJIRMXdWEmF_P1cr0jK-B3eqi3HXO-8BW0tczBxtMyeXo0FA>
+    <xmx:sdZYaj7njaC2Wa3IK3Y7OearxWnU2rsWz50BQc_EGs6qcPJHEIL6QA>
+    <xmx:sdZYajPQAl7LdMohp-DDxcjAI6e4e2LPB5ny0SPkjtOEgmen6uaY0A>
+    <xmx:sdZYahqRATdttG8IF8P7cMVCABOEBKZhhFPgl-TcL3JVvZ3_JmZSC6md>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Jul 2026 09:03:44 -0400 (EDT)
+Date: Thu, 16 Jul 2026 14:03:43 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, usama.anjum@arm.com, peterx@redhat.com, 
+	liam@infradead.org, ljs@kernel.org, vbabka@kernel.org, jannh@google.com, 
+	pfalcato@suse.de, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	zenghui.yu@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 2/2] selftests/mm: add PAGEMAP_SCAN test for THP PMD
+ holes
+Message-ID: <aljWYfPRCVc6IB2b@thinkstation>
+References: <20260715144234.442721-1-kirill@shutemov.name>
+ <20260715144234.442721-3-kirill@shutemov.name>
+ <714bdcbb-92cd-4dde-820c-e3761cbbaf07@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260716-getsockopt_phase4-v1-7-4f45cb12dce7@debian.org>
-References: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org>
-In-Reply-To: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org>
-To: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Remi Denis-Courmont <courmisch@gmail.com>, 
- =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11664; i=leitao@debian.org;
- h=from:subject:message-id; bh=3hdAT9EyFQMQiq38tK6EUbVUFaxBUaaYguf18gRo0Rc=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqWNY0ICSvwoE6LZLvgbjfuzYzBEO48A/xj2sz2
- JZIfEnAxguJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaljWNAAKCRA1o5Of/Hh3
- bfcGD/9KMcdwl3btkogCI3uu6SeX2sSegleHArjQbxHT8PdEUw2WVU/svQR0/A5eCCUeCDmqWR1
- 8VlZkoPT37ZGFPXSs4jgsLRRdLv0jMDkytm39jYT1PQ7eZr2FOiGyGCr7xDWU8j8NfJcXKQcorK
- qv3oULz3Qn1zZIzqkidogjrCmPOA10gMAws6YfXNk5FJ0GliCm5InMrJX6BIO2I1KRLFD8g9AtE
- 60TU7laaa3WiSa+jtzJ8EODXMmfg1bl5kjXIwDzVqXK8VxXDU2N5vVAjTExnXCO1bu4Paqa11A1
- 2b6uYvTWWg3iVQ7U9bW+TjQUCGCQswAo2HR31to7aJwLVKmk7i+B76FLBefQtKKMQSRzE+a+2/g
- 3ldIsFFCtQMGMm7dd4lDO6Fa3uy981wA1VJ9t9Oca7ziVdAnbcYAZp6NiFfiMHKI935LWf9eKWo
- FecL22r2xiFlFtsJyeQ5sPQ4KQjRZlqgEFFoSLpoKs5Zva2TJ7EwSDj4qmhIVb3gtjojWM9kFlP
- A8WFuSo+U2CLv1n4HTAxKuWdpWYCnt9QkmrVVmJND0Sd0mDPj6WlQvsc2aiF0qtsMx6TPwvp6KC
- PvcwTAaj/iFwKFpttgzxz2l8YY+OjnqqDCq59EvLw7eWLoOGbbMBOisF3QdERmEk4q/9DibALQP
- dWsRM/x2HolpktQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <714bdcbb-92cd-4dde-820c-e3761cbbaf07@kernel.org>
 
-Add fixtures for the newly converted getsockopt leaves:
+On Thu, Jul 16, 2026 at 01:25:22PM +0200, David Hildenbrand (Arm) wrote:
+> 
+> > +	/* Fast path: category_mask == return_mask == PAGE_IS_WRITTEN. */
+> > +	ret = pagemap_ioctl(mem, hpage_size, regions, ARRAY_SIZE(regions), 0, 0,
+> > +			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
+> > +	for (i = 0; ret > 0 && i < ret; i++)
+> > +		fast += LEN(regions[i]);
+> > +
+> > +	/* Generic path: same query expressed via category_anyof_mask. */
+> > +	ret = pagemap_ioctl(mem, hpage_size, regions, ARRAY_SIZE(regions), 0, 0,
+> > +			    0, PAGE_IS_WRITTEN, 0, PAGE_IS_WRITTEN);
+> > +	for (i = 0; ret > 0 && i < ret; i++)
+> > +		slow += LEN(regions[i]);
+> > +
+> > +	ksft_test_result(fast == npages && slow == npages,
+> > +			 "%s pmd-hole reported written by both paths (%ld, %ld of %d)\n",
+> > +			 __func__, fast, slow, npages);
+> > +out:
+> > +	wp_free(mem, hpage_size);
+> > +	munmap(area, 2 * hpage_size);
+> > +}
+> 
+> Sorry if I wasn't clear. I think unpopulated_thp_scan_test() can actually reuse
+> bits of unpopulated_scan_test().
 
-  - rawv6:      IPV6_HDRINCL / IPV6_CHECKSUM int paths + a SOL_RAW
-                unknown-optname case that reaches do_rawv6_getsockopt().
-  - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
-                rejection.
-  - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
-                rejection.
-  - tls:        TLS_TX_ZEROCOPY_RO, the TLS_TX crypto_info round-trip at
-                the base and full cipher sizes, the NULL-optval and short
-                buffer EINVAL paths, and an unknown optname. It skips when
-                the kernel lacks TLS or AES-GCM.
+Ah. Make sense.
 
-Each fixture pins the returned-length / errno semantics across exact,
-oversized and short buffers, an unknown optname and a bogus level. The
-semantics are unchanged by the sockopt_t conversion, so the tests pass
-both before and after the leaf conversions.
+Here's my take on this. Looks good?
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
+-- >8 --
+Date: Thu, 16 Jul 2026 13:24:29 +0100
+Subject: [PATCH v6 2/2] selftests/mm: add PAGEMAP_SCAN test for THP PMD holes
+
+Add coverage for the PMD-hole case fixed by "fs/proc/task_mmu: fix
+PAGEMAP_SCAN written state for PMD holes": a MAP_PRIVATE|MAP_ANON THP that
+is uffd-wp'd and then dropped with MADV_DONTNEED leaves a pmd_none hole
+with no page table, which PAGEMAP_SCAN must still report as written.
+
+Factor the populate/drop/scan-both-paths sequence out of
+unpopulated_scan_test() into a helper, and add unpopulated_thp_scan_test()
+that reuses it with a THP.
+
+Include <linux/mman.h> for MADV_COLLAPSE; <sys/mman.h> lacks it on older
+glibc (e.g. 2.34). Same approach as commit fd5295afae91 ("selftests/mm:
+hmm-tests: include linux/mman.h to access MADV_COLLAPSE").
+
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Zenghui Yu <zenghui.yu@linux.dev>
+Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+Assisted-by: Claude:claude-fable-5
 ---
- tools/testing/selftests/net/getsockopt_iter.c | 424 ++++++++++++++++++++++++++
- 1 file changed, 424 insertions(+)
+ tools/testing/selftests/mm/pagemap_ioctl.c | 118 +++++++++++++++------
+ 1 file changed, 83 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-index fe5a5268bc34e..974065a23fa82 100644
---- a/tools/testing/selftests/net/getsockopt_iter.c
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -28,7 +28,10 @@
- #include <linux/vm_sockets.h>
- #include <linux/icmp.h>
- #include <netinet/in.h>
-+#include <netinet/tcp.h>
-+#include <arpa/inet.h>
- #include <sys/socket.h>
-+#include <linux/tls.h>
- #include "kselftest_harness.h"
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index 550d1f2c059b..693030f1e631 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ #include <malloc.h>
+ #include <linux/types.h>
++#include <linux/mman.h>
+ #include <linux/memfd.h>
+ #include <linux/userfaultfd.h>
+ #include <linux/fs.h>
+@@ -1058,50 +1059,96 @@ static void test_simple(void)
+  * the generic path (reached e.g. via category_anyof_mask) must report every
+  * page written.
+  */
++/*
++ * Populate @mem (optionally collapsing it into a THP first), drop it with
++ * MADV_DONTNEED, then check PAGEMAP_SCAN reports the whole range written via
++ * both the fast and generic query paths. A dropped THP leaves a pmd_none hole
++ * with no page table, exercising pagemap_scan_pte_hole(); a base-page range
++ * leaves pte_none entries.
++ */
++static void unpopulated_written_test(const char *name, char *mem, long size,
++				     bool use_thp)
++{
++	long npages = size / page_size, fast = 0, slow = 0, ret;
++	struct page_region regions[16];
++	int i;
++
++	wp_init(mem, size);
++
++	/* Populate, optionally collapse to a THP, then drop it. */
++	memset(mem, 1, size);
++	if (use_thp &&
++	    (madvise(mem, size, MADV_COLLAPSE) ||
++	     !check_huge_anon(mem, size / hpage_size, hpage_size))) {
++		ksft_test_result_skip("%s could not form a THP\n", name);
++		goto out;
++	}
++	if (madvise(mem, size, MADV_DONTNEED)) {
++		ksft_test_result_fail("%s MADV_DONTNEED failed\n", name);
++		goto out;
++	}
++
++	/* Fast path: category_mask == return_mask == PAGE_IS_WRITTEN. */
++	ret = pagemap_ioctl(mem, size, regions, ARRAY_SIZE(regions), 0, 0,
++			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
++	for (i = 0; ret > 0 && i < ret; i++)
++		fast += LEN(regions[i]);
++
++	/* Generic path: same query expressed via category_anyof_mask. */
++	ret = pagemap_ioctl(mem, size, regions, ARRAY_SIZE(regions), 0, 0,
++			    0, PAGE_IS_WRITTEN, 0, PAGE_IS_WRITTEN);
++	for (i = 0; ret > 0 && i < ret; i++)
++		slow += LEN(regions[i]);
++
++	ksft_test_result(fast == npages && slow == npages,
++			 "%s unpopulated range reported written by both paths (%ld, %ld of %ld)\n",
++			 name, fast, slow, npages);
++out:
++	wp_free(mem, size);
++}
++
+ static void unpopulated_scan_test(void)
+ {
+-	int npages = 16, i;
+-	long mem_size = npages * page_size;
+-	struct page_region regions[16];
+-	long fast = 0, slow = 0, ret;
++	long mem_size = 16 * page_size;
+ 	char *mem;
  
- #ifndef AF_VSOCK
-@@ -40,6 +43,45 @@
- #ifndef ICMP_FILTER
- #define ICMP_FILTER 1
- #endif
-+#ifndef IPV6_HDRINCL
-+#define IPV6_HDRINCL 36
-+#endif
-+#ifndef IPV6_CHECKSUM
-+#define IPV6_CHECKSUM 7
-+#endif
-+#ifndef AF_IEEE802154
-+#define AF_IEEE802154 36
-+#endif
-+#ifndef SOL_IEEE802154
-+#define SOL_IEEE802154 0
-+#endif
-+#ifndef WPAN_WANTACK
-+#define WPAN_WANTACK 0
-+#endif
-+#ifndef AF_PHONET
-+#define AF_PHONET 35
-+#endif
-+#ifndef SOL_PNPIPE
-+#define SOL_PNPIPE 275
-+#endif
-+#ifndef PN_PROTO_PIPE
-+#define PN_PROTO_PIPE 2
-+#endif
-+#ifndef PNPIPE_ENCAP
-+#define PNPIPE_ENCAP 1
-+#endif
-+#ifndef PNPIPE_ENCAP_NONE
-+#define PNPIPE_ENCAP_NONE 0
-+#endif
-+#ifndef PNPIPE_ENCAP_IP
-+#define PNPIPE_ENCAP_IP 1
-+#endif
-+#ifndef SOL_TLS
-+#define SOL_TLS 282
-+#endif
-+#ifndef TCP_ULP
-+#define TCP_ULP 31
-+#endif
+ 	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE,
+ 		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+-	if (mem == MAP_FAILED)
+-		ksft_exit_fail_msg("%s mmap failed\n", __func__);
++	if (mem == MAP_FAILED) {
++		ksft_test_result_skip("%s mmap failed\n", __func__);
++		return;
++	}
  
- /* ---------- netlink ---------- */
- 
-@@ -394,4 +436,386 @@ TEST_F(raw, bad_optname)
- 	ASSERT_EQ(sizeof(val), optlen);
+-	wp_init(mem, mem_size);
+-
+-	/* Populate, then drop: the ptes become pte_none without a marker. */
+-	memset(mem, 1, mem_size);
+-	if (madvise(mem, mem_size, MADV_DONTNEED))
+-		ksft_exit_fail_msg("%s MADV_DONTNEED failed\n", __func__);
+-
+-	/* Fast path: category_mask == return_mask == PAGE_IS_WRITTEN. */
+-	ret = pagemap_ioctl(mem, mem_size, regions, npages, 0, 0,
+-			    PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
+-	if (ret < 0)
+-		ksft_exit_fail_msg("%s fast scan failed\n", __func__);
+-	for (i = 0; i < ret; i++)
+-		fast += LEN(regions[i]);
+-
+-	/* Generic path: same query expressed via category_anyof_mask. */
+-	ret = pagemap_ioctl(mem, mem_size, regions, npages, 0, 0,
+-			    0, PAGE_IS_WRITTEN, 0, PAGE_IS_WRITTEN);
+-	if (ret < 0)
+-		ksft_exit_fail_msg("%s generic scan failed\n", __func__);
+-	for (i = 0; i < ret; i++)
+-		slow += LEN(regions[i]);
+-
+-	ksft_test_result(fast == npages && slow == npages,
+-			 "%s unpopulated ptes reported written by both paths (%ld, %ld of %d)\n",
+-			 __func__, fast, slow, npages);
+-
+-	wp_free(mem, mem_size);
++	unpopulated_written_test(__func__, mem, mem_size, false);
+ 	munmap(mem, mem_size);
  }
  
-+/* ---------- raw (ipv6) ---------- */
-+
-+FIXTURE(rawv6)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(rawv6)
-+{
-+	self->fd = socket(AF_INET6, SOCK_RAW, IPPROTO_UDP);
-+	if (self->fd < 0)
-+		SKIP(return, "SOCK_RAW/IPv6 socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(rawv6)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(rawv6, hdrincl_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(rawv6, hdrincl_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* Raw int options clamp the reported length down to the user buffer
-+ * instead of returning EINVAL on a short buffer.
++/*
++ * Same as unpopulated_scan_test(), but the range is a THP: a full-PMD
++ * MADV_DONTNEED leaves a pmd_none hole with no page table.
 + */
-+TEST_F(rawv6, hdrincl_undersize_clamped)
++static void unpopulated_thp_scan_test(void)
 +{
-+	socklen_t optlen = 2;
-+	int val = 0;
++	char *area, *mem;
 +
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(rawv6, checksum_default)
-+{
-+	socklen_t optlen;
-+	int val = 0;
-+
-+	optlen = sizeof(val);
-+
-+	/* A non-ICMPv6 raw socket has the checksum disabled, reported as -1. */
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_CHECKSUM,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(-1, val);
-+}
-+
-+TEST_F(rawv6, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	/* SOL_RAW reaches do_rawv6_getsockopt() directly. */
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- ieee802154 (dgram) ---------- */
-+
-+FIXTURE(ieee802154)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ieee802154)
-+{
-+	self->fd = socket(AF_IEEE802154, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_IEEE802154 dgram socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ieee802154)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ieee802154, wantack_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(ieee802154, wantack_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+TEST_F(ieee802154, wantack_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(ieee802154, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IEEE802154, 0x7fff,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* dgram_getsockopt() rejects any level other than SOL_IEEE802154. */
-+TEST_F(ieee802154, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, WPAN_WANTACK,
-+				 &val, &optlen));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- phonet (pep) ---------- */
-+
-+FIXTURE(phonet)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(phonet)
-+{
-+	self->fd = socket(AF_PHONET, SOCK_SEQPACKET, PN_PROTO_PIPE);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_PHONET pipe socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(phonet)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(phonet, encap_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == PNPIPE_ENCAP_NONE || val == PNPIPE_ENCAP_IP);
-+}
-+
-+TEST_F(phonet, encap_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* pep clamps the reported length down to the user buffer. Use an
-+ * int-sized backing buffer with a short optlen so the baseline kernel,
-+ * which writes a full int via put_user(), does not scribble past it.
-+ */
-+TEST_F(phonet, encap_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(phonet, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_PNPIPE, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* pep_getsockopt() rejects any level other than SOL_PNPIPE. */
-+TEST_F(phonet, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, PNPIPE_ENCAP, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- tls ---------- */
-+
-+FIXTURE(tls)
-+{
-+	int fd;
-+	int sfd;
-+};
-+
-+FIXTURE_SETUP(tls)
-+{
-+	struct sockaddr_in a = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	socklen_t alen = sizeof(a);
-+	int lfd;
-+
-+	self->fd = -1;
-+	self->sfd = -1;
-+
-+	lfd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (lfd < 0)
-+		SKIP(return, "TCP socket: %s", strerror(errno));
-+	if (bind(lfd, (struct sockaddr *)&a, sizeof(a)) || listen(lfd, 1) ||
-+	    getsockname(lfd, (struct sockaddr *)&a, &alen)) {
-+		close(lfd);
-+		SKIP(return, "listener setup: %s", strerror(errno));
++	if (!hpage_size) {
++		ksft_test_result_skip("%s THP not supported\n", __func__);
++		return;
 +	}
-+	self->fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (connect(self->fd, (struct sockaddr *)&a, sizeof(a))) {
-+		close(lfd);
-+		SKIP(return, "connect: %s", strerror(errno));
++
++	/* Over-allocate so a PMD-aligned, THP-sized range fits inside. */
++	area = mmap(NULL, 2 * hpage_size, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (area == MAP_FAILED) {
++		ksft_test_result_skip("%s mmap failed\n", __func__);
++		return;
 +	}
-+	self->sfd = accept(lfd, NULL, NULL);
-+	close(lfd);
-+	if (setsockopt(self->fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls")))
-+		SKIP(return, "TCP_ULP=tls: %s (built without TLS?)",
-+		     strerror(errno));
++	mem = (char *)(((unsigned long)area + hpage_size - 1) & ~(hpage_size - 1));
++
++	unpopulated_written_test(__func__, mem, hpage_size, true);
++	munmap(area, 2 * hpage_size);
 +}
 +
-+FIXTURE_TEARDOWN(tls)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+	if (self->sfd >= 0)
-+		close(self->sfd);
-+}
-+
-+/* do_tls_getsockopt_tx_zc(): fixed-size int, exact length required. */
-+TEST_F(tls, tx_zerocopy_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = -1;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(tls, tx_zerocopy_wrong_len)
-+{
-+	socklen_t optlen = 2;
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				 &val, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* do_tls_getsockopt_conf(): NULL optval still yields EINVAL -- the
-+ * converted code tests opt->iter_out.ubuf in place of optval.
-+ */
-+TEST_F(tls, conf_null_optval)
-+{
-+	socklen_t optlen = 64;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, NULL, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(tls, conf_short)
-+{
-+	socklen_t optlen = 2;
-+	char buf[2];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, buf, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* TLS_TX before crypto is set reports not-ready. */
-+TEST_F(tls, conf_not_ready)
-+{
-+	struct tls_crypto_info info;
-+	socklen_t optlen = sizeof(info);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, &info, &optlen));
-+	ASSERT_EQ(EBUSY, errno);
-+}
-+
-+/* Set TX crypto, then read it back at the base and full sizes, exercising
-+ * both copy_to_iter() branches. SKIP if AES-GCM is unavailable.
-+ */
-+TEST_F(tls, conf_crypto_roundtrip)
-+{
-+	struct tls12_crypto_info_aes_gcm_128 tx = {
-+		.info.version = TLS_1_2_VERSION,
-+		.info.cipher_type = TLS_CIPHER_AES_GCM_128,
-+	};
-+	struct tls12_crypto_info_aes_gcm_128 full;
-+	struct tls_crypto_info base;
-+	socklen_t optlen;
-+
-+	if (setsockopt(self->fd, SOL_TLS, TLS_TX, &tx, sizeof(tx)))
-+		SKIP(return, "set TLS_TX aes_gcm_128: %s", strerror(errno));
-+
-+	optlen = sizeof(base);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &base, &optlen));
-+	ASSERT_EQ(sizeof(base), optlen);
-+	ASSERT_EQ(TLS_1_2_VERSION, base.version);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, base.cipher_type);
-+
-+	optlen = sizeof(full);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &full, &optlen));
-+	ASSERT_EQ(sizeof(full), optlen);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, full.info.cipher_type);
-+}
-+
-+TEST_F(tls, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
- TEST_HARNESS_MAIN
-
+ int sanity_tests(void)
+ {
+ 	unsigned long long mem_size, vec_size;
+@@ -1610,7 +1657,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 	if (!hugetlb_setup_default(4))
+ 		ksft_print_msg("HugeTLB test will be skipped\n");
+ 
+-	ksft_set_plan(118);
++	ksft_set_plan(119);
+ 
+ 	page_size = getpagesize();
+ 	hpage_size = read_pmd_pagesize();
+@@ -1790,6 +1837,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
+ 
+ 	/* 18. Unpopulated pte scan-path consistency */
+ 	unpopulated_scan_test();
++	unpopulated_thp_scan_test();
+ 
+ 	close(pagemap_fd);
+ 	ksft_finished();
 -- 
-2.53.0-Meta
-
+  Kiryl Shutsemau / Kirill A. Shutemov
