@@ -1,231 +1,240 @@
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0F3175A6E;
-	Thu, 16 Jul 2026 08:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5E732C94A;
+	Thu, 16 Jul 2026 08:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784189830; cv=none; b=bzI7hbQtjkSygOKOT68d0EEWi1ioode4OoSSCRrb36O4nCIyC3ltbxMEKqKBcpLA7jGLtskh2zPkMcQMjs5IxSQ3msObsuboTCxIzkXFlctQbalty9VU5t+hXRGkxvZ/QmSdONCzAKh/lXsHbw8X7MRwexg0R1l/bDgxEffB4s4=
+	t=1784192111; cv=none; b=PKfY5+4bE7WFBhlGLjytrLIIEpF3wbzl5o2W0fdMb9cgcrrt3FncxnTTiqdAEeBIfL/K4wOigBC30DFfV7L9S5XUXnu8pNe/S5+BHW0hYL87e4VdCpB1WLybleIKS0A04M0yf2AUmzLaK7p2E3JXBW/4TerVb2egFg2beyJmJV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784189830; c=relaxed/simple;
-	bh=7M1euXencXzIlDVpxTFxV6wP03qFaroaKLzx/mimEgA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RQCq8mlMSA+yvqztQdL2hXffcKe9eCDhCE3ZxwqCilE44UZJ2SB2hz4CnmLnFiOZ5rTmd+ZtwuNgZY2+3smxBV1rb2PWlVUnbAKR+YBPTgXKsHloureQKDKVt//Ckwv/m6DRZGdXbo34JWB/4Pw5zogCWAKEi4m4tih0P53f9AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ClJSA2Rk; arc=none smtp.client-ip=162.62.57.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1784192111; c=relaxed/simple;
+	bh=gVjaclPmaRJRv2LynWYIFlM3IrKif5u+0vsDflKkl2s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I8W6r9lSPbxRjpdVDBLBw1AfL+3RLoZOzRShA7fCesbuii3UH7TgOIzb/MsqHm99BYWGcEFdWVZS3O8fhVxniWMHfEahgW/0jqwTC6FPjWpoQhsnjBbl2OwjudM3kvQ9Ckcijw2WjQOiAJt5Xtdn+pdtuF5ASy5ZjFafPgpS81A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qK2zfUuH; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ClJSA2Rk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1784189815;
-	bh=Xa6BCkgk1/fC2Dtic/mhFxC5RTU1WybD9TKKB1/aG0s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ClJSA2Rk9otcFbgo3H2xbkEak6zQWA07IZM32ahtsDpoBrcO524BBOOp0hZFSFwZJ
-	 2csxRVHWgKXU0NU2j6UXaS/QLl3Lwu01PYswW+UatjXEWVa36bheueP8pnkHMEUn49
-	 9L/JPEM9Wvy6+h9+vsnrj22UbHanlMHDrMSFB3dw=
-Received: from [10.56.52.25] ([39.156.73.14])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id 433A521D; Thu, 16 Jul 2026 16:16:51 +0800
-X-QQ-mid: xmsmtpt1784189811t3ksvzp5h
-Message-ID: <tencent_0BA3FA88A206504220597897E32A65AF5B08@qq.com>
-X-QQ-XMAILINFO: NC4p7XQIBeahPzKyZrtfPErppj8koITcZq5B+TiD/0Z/apDEt6EYMD3n4Kapwh
-	 g6fdOwQ9ACtUMfZ8/O4sqMqnWRjDhqY5Fc/Zejz4lkvcO0JsUBy1PHua3r5c+1pV2l3IGvwVKlpx
-	 eG8qt8Cr3tHv3jP2Cq3lbClQtnzeCE7ER+YeWkRyCx3OIJ59AWuS3R5znxzwj7of+ehTzv/uiHAG
-	 ZbE9ss/j2ntE/H1oxXYevmyoCPLGtbVtvBuvLO3VkIDSkpOGp7ZcGoRffpaa6C0OUpFwUGrxm4yZ
-	 HWFt8cpObM+l6lk1NlikMJLgRiPjipIDJ/Hs3veMpZSwEodYwksOS7ZFiwgoWwLKwvWRLHQLAXTl
-	 2m6A+AXifOlkGe9kGHVZud1Tsr9SzW6dkrY7GccWgh7gCyEpkZw0DDNU3OlXNQ0lQohGnPM6yFjp
-	 COHYP0wFglWIdj5eJ+3latfg3wy0lK+ua22kGuY+iBWBACW6MzR596wzbYXH66uZaR+3PEpgBKZM
-	 r4mxhstJ3huu/PqXlrJkxKuTAPIPVPl1dJdZ+AscnB7gGLiVUoo6lD8UEAbLFmPzRsCe100nN97l
-	 apy2bz/eNEr9vZ5gqKHSd0iifi3DPUdMbT7AO3RqtqCMmzKebZij9sHxuvpDrP+wEGISBj265uMz
-	 0uBnK45s0Jioxh/3HHq+/OhH3j2UJqvUT6Giv8jRZ9x+djmVvh1knNZfijzEBWF7Y6tZxqM3pt4q
-	 NcwRAwoVWU3yQL339zxq5FevDIOtt9Jr3CxBi639SHhzCeqYm5aJbwX7yxOg72oVynyH1pS/n12K
-	 H9IOgeFRLRPutAbKc9D0w5DB9DS0CDykaA+MYedbr/55XirKEo9wTRaSdw96DC6q/g+IoNhaN2ma
-	 oGyqztNL/PLzGQbizdmVYC4au8EYihrBZjYqVOgTm1gUp6UJS5YYFbAAqWwB1z7PPtgAvVX7sVZd
-	 xSMYmk9wVdRdnEDtyAfAF1s7Nnj4Xu0jMn4c8AF944hgTfrPm24NMRSKsn4FSBst6tiDL4CA8qHs
-	 Kjoce47mteH4YA/Kx0w4Msq5df9mRcCZmb9InMRw==
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
-X-OQ-MSGID: <67c510f5-cb69-4b82-ba42-01a7c64bc000@foxmail.com>
-Date: Thu, 16 Jul 2026 16:16:51 +0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qK2zfUuH"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66G7CNKZ2452923;
+	Thu, 16 Jul 2026 08:55:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=sXZDNWPdoyPYb9fvxqm6JPjR5uFQ8FXQOsRdFIcpE
+	5o=; b=qK2zfUuHmBfIzIv6gSiVgrvXG5pUIr4hD81oUsafwD5xXhEt3zB+I8t7e
+	mNHCxfUj07p2YJz2bExuqoWQz8KddUcJaUecR7phJC6nNCqzgPwoMCb/cbHe/QSz
+	ULbqEfxpX4VWkbsDX0EbKTP1TA6OBNjP+69P2UuE9Hg6IqdVDXQqyF0eRkblcXXW
+	PiDJyncBkcsmDGCGTL5MSvxdp7pAJWrIxeBTWm+BO/pLMj8eFAf8cicG50MuV8T+
+	4KMW3KC2pWoEzCkhm07+oQPeKiO1Rr6zR5uLD3HNNi9aFOL/NY4z5OERP3oiObaO
+	RdeAZF41X60XdTrFX7Y4aM67NTNlg==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fbf2af7bh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Jul 2026 08:55:06 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66G8nmOr030242;
+	Thu, 16 Jul 2026 08:55:05 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fc2cgkyxv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Jul 2026 08:55:05 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66G8t3a139190924
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 16 Jul 2026 08:55:03 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 80A8020040;
+	Thu, 16 Jul 2026 08:55:03 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1E1D020043;
+	Thu, 16 Jul 2026 08:55:02 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.43.47.86])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 16 Jul 2026 08:55:01 +0000 (GMT)
+From: Sachin Sant <sachinp@linux.ibm.com>
+To: linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/zram: add configurable compression algorithm support
+Date: Thu, 16 Jul 2026 14:25:01 +0530
+Message-Id: <20260716085501.75522-1-sachinp@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
-To: Viktor Malik <vmalik@redhat.com>, andrii@kernel.org, ast@kernel.org
-Cc: Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1784078494.git.rtoax@foxmail.com>
- <tencent_9EC04DC824CBF5124305E73564341511C405@qq.com>
- <58e45629-e959-4995-afc8-900b5c5d691c@redhat.com>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <58e45629-e959-4995-afc8-900b5c5d691c@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE2MDA4OSBTYWx0ZWRfX1Dd7f5odCW9q
+ eZMrm1I9Xsg0ZpDU+Tk1RnUfYteUTDnYAbtqSsXTgYqhlqR0OTyZTOUQcL0r56Fx4uWaq97bucu
+ 5LxHrSiDGoMtcIc6/J3YB5qopl7Cw0g=
+X-Proofpoint-GUID: qJ-BKNP5kNI3LxJ_3znRFIXPsA16ncID
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE2MDA4OSBTYWx0ZWRfX745TgQgIznDU
+ PYXvXONV5mI7/GrF6D8WC8jUwU4rxcptAevfniwZGlKdWB6rNa9INMbYFnygnFmmAq6tE+DtHbQ
+ VA4BUIZp+MJBsHuJ17aNCEJEKRXV2vPXP5al5BsfWkCOn6XeZDAZpV0tzBHZ3Dqn62ouYTA9jLt
+ x7aFjDYMf6ok8A6Fy5ULTqDaIIEYTKqNTz/DKXkmlE9RNAnDXprGUMFQoUjbPJyGuZZQxQdJAXe
+ Y0DzaaukXPgTYRxlo84+ryXUmvnyq6fNNppc0Gxvcv5hwY4IQXyRdoTXVn21OUk/C9pT8g/PuTd
+ 3IpRgw95lKrSMYZK0LRL14dZnDi9+S+fD4zuV9ycv48iw1Ne6jrCdopUv50h2uASdGsQCmY3KNb
+ SVK83ytVIFufrZGvhvvZ+pPDPhG5Q1MOa1eWL2VP82TAO7gH9Ezy998uFNH9eBXS62d1W9+pBxT
+ e+Gu5y6qRpNIy6JxO+Q==
+X-Proofpoint-ORIG-GUID: qJ-BKNP5kNI3LxJ_3znRFIXPsA16ncID
+X-Authority-Analysis: v=2.4 cv=PvajqQM3 c=1 sm=1 tr=0 ts=6a589c6a cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=w33o_yTv940ESBUw3ZsA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-16_03,2026-07-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0 adultscore=0
+ clxscore=1011 lowpriorityscore=0 spamscore=0 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607160089
 
+Allow the compression algorithm used by zram01.sh to be specified at
+runtime rather than being hardcoded to 'lzo'.
 
-On 7/15/26 16:56, Viktor Malik wrote:
-> On 7/15/26 03:27, Rong Tao wrote:
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> Add string concatenation kfuncs, prototype:
->>
->>    int bpf_strcat(char *dst__ign, u32 dst__sz, const char *src__ign);
->>    int bpf_strncat(char *dst__ign, u32 dst__sz, const char *src__ign, u32 len);
->>
->> This differs from the glibc library functions strcat and strncat, which,
->> for safety reasons, require the size of the target string's memory space
->> as a parameter.
->>
->> Signed-off-by: Rong Tao <rongtao@cestc.cn>
->> ---
->>   kernel/bpf/helpers.c | 92 ++++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 92 insertions(+)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index c18f1e16edee..401f94efd687 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -4195,6 +4195,96 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
->>   	return __bpf_strnstr(s1__ign, s2__ign, len, true);
->>   }
->>   
->> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
->> +{
->> +	int dlen, slen, space, copied;
->> +	char cs = '?';
->> +
->> +	if (!copy_from_kernel_nofault_allowed(dst, 1) ||
->> +	    !copy_from_kernel_nofault_allowed(src, 1)) {
->> +		return -ERANGE;
->> +	}
->> +
->> +	dlen = bpf_strnlen(dst, dsz);
->> +	if (dlen < 0)
->> +		return dlen;
->> +	slen = bpf_strnlen(src, sz);
->> +	if (slen < 0)
->> +		return slen;
->> +
->> +	if (dlen >= dsz || sz == 0 || dsz == 0)
->> +		return -EINVAL;
->> +
->> +	space = dsz - dlen;
->> +	if (space <= 1 || space < min(slen, sz) + 1)
->> +		return -E2BIG;
->> +
->> +	guard(pagefault)();
->> +	for (copied = 0; copied < space - 1 && copied < slen; copied++) {
->> +		__get_kernel_nofault(&cs, src, char, err_out);
->> +		if (cs == '\0')
->> +			break;
->> +
->> +		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-> I don't think that we need __put_kernel_nofault() here. My understanding
-> is that since we don't use the `__ign` suffix for the destination
-> string, the verifier should make sure that `dst` points to a valid
-> memory with sufficient capacity (thanks to the `dst__sz` arg). We could
-> use `strncpy_from_kernel_nofault(dst + dlen, src, space)`, which makes
-> me wonder how would `bpf_strcat` be different from directly using
-> bpf_probe_read_kernel_str().
+- zram.sh: add -a <algorithm> option (default: lzo) and forward the
+  chosen algorithm to zram01.sh
+- zram01.sh: accept the algorithm as a positional argument, falling
+  back to lzo when not provided
+- zram_lib.sh: add zram_check_alg_support() helper that inspects
+  /sys/block/zramN/comp_algorithm and exits with ksft_skip when the
+  requested algorithm is not supported by the running kernel
 
-Indeed, bpf_probe_read_kernel_str() and bpf_strcat() seem to have no
+This makes it straightforward to test non-default compressors (e.g.
+zstd, 842) without modifying the test scripts.
 
-fundamental difference. Perhaps helpers are not as convenient to use
+Signed-off-by: Sachin Sant <sachinp@linux.ibm.com>
+---
+ tools/testing/selftests/zram/README      | 18 +++++++++++++++---
+ tools/testing/selftests/zram/zram.sh     | 21 ++++++++++++++++++++-
+ tools/testing/selftests/zram/zram01.sh   |  5 ++++-
+ tools/testing/selftests/zram/zram_lib.sh | 20 ++++++++++++++++++++
+ 4 files changed, 59 insertions(+), 5 deletions(-)
 
-as kfunc? For example, in bpftrace's stdlib, to avoid including certain
-
-header files that would make it inconvenient to use helpers, one would
-
-have to use a complex method like asm() + BPF_FUNC_ to call the helper.
-
-Using kfunc is much more convenient.
-
-Rong Tao
-
->
-> Viktor
->
->> +
->> +		src++;
->> +	}
->> +	cs = '\0';
->> +	__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
->> +
->> +	__get_kernel_nofault(&cs, src, char, err_out);
->> +	if (cs != '\0' && sz > copied)
->> +		return -E2BIG;
->> +
->> +	return dlen + copied;
->> +err_out:
->> +	return -EFAULT;
->> +}
->> +
->> +/**
->> + * bpf_strcat - Append non-null bytes from a source string, and null-terminate
->> + *              the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src__ign: Source string.
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src__ign)
->> +{
->> +	return __bpf_strncat(dst, dst__sz, src__ign, XATTR_SIZE_MAX);
->> +}
->> +
->> +/**
->> + * bpf_strncat - Append non-null bytes from a source string, and null-terminate
->> + *               the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src__ign: Source string.
->> + * @len: the maximum number of characters to concatenate
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src__ign,
->> +			    u32 len)
->> +{
->> +	return __bpf_strncat(dst, dst__sz, src__ign, len);
->> +}
->> +
->>   #ifdef CONFIG_KEYS
->>   /**
->>    * bpf_lookup_user_key - lookup a key by its serial
->> @@ -4958,6 +5048,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
->>   BTF_ID_FLAGS(func, bpf_strcasestr);
->>   BTF_ID_FLAGS(func, bpf_strnstr);
->>   BTF_ID_FLAGS(func, bpf_strncasestr);
->> +BTF_ID_FLAGS(func, bpf_strcat);
->> +BTF_ID_FLAGS(func, bpf_strncat);
->>   #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
->>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->>   #endif
+diff --git a/tools/testing/selftests/zram/README b/tools/testing/selftests/zram/README
+index 82921c75681c..e3a230afb8c7 100644
+--- a/tools/testing/selftests/zram/README
++++ b/tools/testing/selftests/zram/README
+@@ -18,11 +18,23 @@ CONFIG_ZSMALLOC=y
+ 
+ ZRAM Testcases
+ --------------
+-zram_lib.sh: create library with initialization/cleanup functions
+-zram.sh: For sanity check of CONFIG_ZRAM and to run zram01 and zram02
++zram_lib.sh: library with initialization/cleanup functions and helpers;
++             includes zram_check_alg_support() which verifies a requested
++             compression algorithm is available and exits with ksft_skip
++             when it is not.
++zram.sh: sanity check of CONFIG_ZRAM; runs zram01 and zram02.
++         Accepts an optional -a <algorithm> flag (default: lzo) to select
++         the compression algorithm forwarded to zram01.sh.
++         Usage: zram.sh [-a <algorithm>]
++           -a <algorithm>  compression algorithm to test (default: lzo)
++                           must be listed in /sys/block/zramN/comp_algorithm
++           -h              show help message
+ 
+ Two functional tests: zram01 and zram02:
+-zram01.sh: creates general purpose ram disks with ext4 filesystems
++zram01.sh: creates general purpose ram disks with ext4 filesystems.
++           Accepts the compression algorithm as an optional first positional
++           argument (default: lzo).  Verifies kernel support for the
++           requested algorithm before running.
+ zram02.sh: creates block device for swap
+ 
+ Commands required for testing:
+diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
+index b0b91d9b0dc2..a8a32a184adb 100755
+--- a/tools/testing/selftests/zram/zram.sh
++++ b/tools/testing/selftests/zram/zram.sh
+@@ -4,11 +4,30 @@ TCID="zram.sh"
+ 
+ . ./zram_lib.sh
+ 
++usage()
++{
++	echo "Usage: $0 [-a <algorithm>]"
++	echo "  -a <algorithm>  compression algorithm to test (default: lzo)"
++	echo "                  must be listed in /sys/block/zramN/comp_algorithm"
++	echo "  -h              show this help message"
++}
++
++ZRAM_ALG="lzo"
++
++while getopts "a:h" opt; do
++	case "$opt" in
++	a) ZRAM_ALG="$OPTARG" ;;
++	h) usage; exit 0 ;;
++	*) echo "Unknown option: $opt" >&2; usage; exit 1 ;;
++	esac
++done
++shift $((OPTIND - 1))
++
+ run_zram () {
+ echo "--------------------"
+ echo "running zram tests"
+ echo "--------------------"
+-./zram01.sh
++./zram01.sh "$ZRAM_ALG"
+ echo ""
+ ./zram02.sh
+ }
+diff --git a/tools/testing/selftests/zram/zram01.sh b/tools/testing/selftests/zram/zram01.sh
+index 8f4affe34f3e..070cc4162384 100755
+--- a/tools/testing/selftests/zram/zram01.sh
++++ b/tools/testing/selftests/zram/zram01.sh
+@@ -29,7 +29,9 @@ zram_max_streams="2"
+ zram_sizes="2097152" # 2MB
+ zram_mem_limits="2M"
+ zram_filesystems="ext4"
+-zram_algs="lzo"
++# Accept the compression algorithm as the first positional argument;
++# fall back to lzo when not provided.
++zram_algs="${1:-lzo}"
+ 
+ zram_fill_fs()
+ {
+@@ -58,6 +60,7 @@ zram_fill_fs()
+ 
+ check_prereqs
+ zram_load
++zram_check_alg_support "$zram_algs" "$dev_start"
+ zram_max_streams
+ zram_compress_alg
+ zram_set_disksizes
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index 21ec1966de76..d3762b497f91 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -30,6 +30,26 @@ check_prereqs()
+ 	fi
+ }
+ 
++# zram_check_alg_support <alg> <dev_idx>
++# Verify <alg> appears in comp_algorithm of zram device <dev_idx>.
++# Must be called after zram_load so the device already exists.
++# Exits with ksft_skip if the algorithm is not supported by this kernel build.
++zram_check_alg_support()
++{
++	local alg=$1
++	local idx=$2
++
++	[ -z "$alg" ] && { echo "skip: no compression algorithm specified" >&2; \
++		zram_cleanup; exit $ksft_skip; }
++
++	if ! tr -d '[]' < /sys/block/zram${idx}/comp_algorithm 2>/dev/null \
++			| grep -qw "${alg}"; then
++		echo "skip: compression algorithm '$alg' is not available" >&2
++		zram_cleanup
++		exit $ksft_skip
++	fi
++}
++
+ kernel_gte()
+ {
+ 	major=${1%.*}
+-- 
+2.39.1
 
