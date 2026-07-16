@@ -1,100 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2686400DE8;
-	Thu, 16 Jul 2026 15:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E5F27E049;
+	Thu, 16 Jul 2026 15:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784215691; cv=none; b=L1R+gQqKjDYFqgODq+RRwuQlTi//4ZTphQhfFblJi2gP0YmiQnSnhjkqEqsrZTgKruJV8VyD9klm8imDBSsITSrWEPVIvQoGTYSpZQD+dKHq2XAB1kPPizdZZLkhFty1vqBWpmkjAXm6UlPxndijLPYUdv1wU+EzFoQ+WkjrKwk=
+	t=1784215910; cv=none; b=QC8Egr+/Rb8tcJqKKxMdCVXFCyhn3XDRWZH1YQ3VRzpsLPFmS+s+j7SUEjjmD4E3dmr9/LP2lt+jL2Qvtgxru4SptJOjRzc35c7mg0XewKkvH11+QYu+SF6fE+mXa+ynwMlfePRI7IKH0siFhz89Q44ppQt9gUYPYMn6eLNSNt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784215691; c=relaxed/simple;
-	bh=hsDRfma56w206p8//l5E5r8hf0aTgPp91AYKBXlklaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tm4do6gZarqBx89tI8Jm2Giwks/4BFQ5SzFCuaztLyAh5KrEUy0T3acyI0XbU4sx/5USkhlCTlk/Ba8Eu5ZmZ0AzhZKVatAIZuMFmOYmcknpOW75+Vuy7d8oCS1ghwX9EPll1LTedS9vPvCsDVWS5VkYgIZX25AWe5GGb7rbQ5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSjOcuzd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784215910; c=relaxed/simple;
+	bh=J/52MpJjy6vMkAFdhMFZ2BWaMACch7uOs2H4IBpTYmU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lDgRY3IzYVALjC56OgHKAtwitXbkUfN13ycB55n7ndMyu5v69+5dqIjwti25cKfBIKvBcctg5MqEJBU2VdARcj75ykOsQAXwc1G6bX9FYIZw6y6IxscICafVQ7EzFzQ/9aXozM0Ui9ZzMAUgIy2A7g756/0w0gFPFvCbU6tMHqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IeTuVSpA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSjOcuzd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243E01F00A3A;
-	Thu, 16 Jul 2026 15:28:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IeTuVSpA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D02B1F000E9;
+	Thu, 16 Jul 2026 15:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784215689;
-	bh=oaIf2bJqWuKl6xlqqkPnkkfbrbDLiH3vk192GmIwHZk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=DSjOcuzd0iLGxdIes4vVV48dc4V0xwUGKeQz/5Xho6MHAQsIujpe+BdnwPw0wg0+U
-	 kWn78oND/Nsyb65Ui+FTYIxM21ZVE43nzaOmR/4/FweSh5R46+jozUFTMk/oL1ydAb
-	 CMvoOwXNblYtgrjwlIPoNL9RBSOsH8r4OUI+XhSIcjVLJ1PHC2YGWYSDMK+yufe6bB
-	 KJPe5uyJWBiwSGKikLPe/hBOjcKysvFYtcoYGIh3j7SQ2QuAGDX6axU1hn1qNqWWhk
-	 JA5jOhLn61lR6HAAU2byHYkiPbBtgcsbjOnAzsWuNBZkk7d+b99KGn275vXpLWebDq
-	 a1DHcX04mcdbA==
-Date: Thu, 16 Jul 2026 16:28:02 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	Jean-Philippe Brucker <jpb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v12 02/29] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <15a9ae14-395d-472a-a5be-9e46524fb493@sirena.org.uk>
-References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
- <20260709-kvm-arm64-sme-v12-2-d0301d79ef58@kernel.org>
- <ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
+	s=k20260515; t=1784215909;
+	bh=GhAm8PWFqD0O7r69dHyk33FBazCRm9jUO13MjONnboI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IeTuVSpA43pyfgba0pk71G1NJOhRfjPkX0e2vmTEMOi40HDDjFXKAL5uVOW759o00
+	 6QrSr7cy2cV/oOJeF89iD50Xa9J+FwxcPNCo8EvQURCo466Rnp19KIXhLk/PTHWVGE
+	 hl19L3g9kETnnvslkKO6cb6DnDqHAe7dvXErzvvZc8IL+CegBZjNlq90lfhEcqAEXx
+	 8uoslkVenxaD1jID1AFHRmVPto4JwVpyibTthVgAqez7vZIbDe5U9QrD4c9IBwVEfS
+	 YnOlJ83qFI/GNhbCc5bCaSpj687/CqdxYwoOE5gl+eaAo5rfwPbb1Oerxf2Ouo8Vei
+	 i1EgyTQ6klQpg==
+Content-Type: multipart/mixed; boundary="===============6715266482937690332=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xV6YaOAEqkneq9ee"
-Content-Disposition: inline
-In-Reply-To: <ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
-X-Cookie: The more the merrier.
+Message-Id: <0608056ce2c7044917090b1120dc7fd28ae2cb5f06bf3d3dd36aa0e268418415@mail.kernel.org>
+In-Reply-To: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+References: <20260716142746.8794-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add memory usage for arena
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org,memxor@gmail.com
+Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,random6.xyz@gmail.com,puranjay@kernel.org,skb99@linux.ibm.com,ihor.solodrai@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 16 Jul 2026 15:31:49 +0000 (UTC)
+
+--===============6715266482937690332==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+>     bpf: Add memory usage for arena
+>
+>     arena is the only map type whose map_mem_usage() still returns 0, so
+>     "bpftool map show" and fdinfo always showed 0 memlock for an arena no
+>     matter how many pages it had.
+>
+>     Count the pages that are actually mapped into the arena: bump a counter in
+>     apply_range_set_cb() when a page goes in and drop it in
+>     apply_range_clear_cb() when a page goes out, both under the arena spinlock.
+>     map_mem_usage() then just returns nr_pages << PAGE_SHIFT.
+>
+>     Only real data pages are counted, not the scratch page.
+>
+>     Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+This looks like a fix for a user-visible bug: arena's map_mem_usage()
+always returned 0, so bpftool map show and fdinfo reported 0 memlock
+regardless of how many pages the arena had.  The returns-0 stub was added
+together with kernel/bpf/arena.c.  Should this include:
+
+  Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 
 
---xV6YaOAEqkneq9ee
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On Thu, Jul 16, 2026 at 11:52:36AM +0100, Mark Rutland wrote:
-
-> >  		if (test_thread_flag(TIF_SME)) {
-> > -			unsigned long vq = sve_vq_from_vl(sme_vl);
-> > -			sysreg_clear_set_s(SYS_SMCR_EL1, SMCR_ELx_LEN, vq - 1);
-> > +			sysreg_cond_update_s(SYS_SMCR_EL1, task_smcr(current));
-> > +			isb();
-> >  		}
-
-> What's the ISB for? That mysteriously appeared in v11 without
-> explanation. It wasn't in the original code, prior versions of the
-> series, or my suggested rework with the task_smcr() helper.
-
-> I don't believe it's necessary to add an ISB here.
-
-I can't remember or figure it out, I'll delete.
-
---xV6YaOAEqkneq9ee
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpY+IEACgkQJNaLcl1U
-h9C7Iwf/YuGnlCXvhBlz9BWXCUqYqn9u51Mi2A5/kXGFOEGaMF0Uu9MGkvq2Jk8F
-EOseSkFIRcD7GiH3vDa2USAS+1NLt+TPjQy2gRSMD62MCXm8N7BJY5LioojxX7Rz
-Ta0iqU+mWhVRuJxJ82JAWagl6zKf47yda6x+5tFDegJFU+5bUTTPcagYyWtDvfgt
-sEVPNBjbQBZdC4QdbkH7/6gw23LCPuaMWqZlOP5UHuFn83ZwvAKy6/PxzpMs2y4p
-4+4qFfGT6oanft1qW1XJ9TfgyqAjrQ1Ug6KUpdVpktBfyigwcw2MFWxdUzLmSLKG
-LbYJk26LLkkGxmTPXVFVEAKBHv2b+Q==
-=/cAU
------END PGP SIGNATURE-----
-
---xV6YaOAEqkneq9ee--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29508297958
+--===============6715266482937690332==--
