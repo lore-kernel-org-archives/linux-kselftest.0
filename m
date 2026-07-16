@@ -1,44 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F6F30E828;
-	Thu, 16 Jul 2026 01:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEB363B9;
+	Thu, 16 Jul 2026 01:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784164139; cv=none; b=rChQH7Q4DdWs0J8c+MK3LBwysgPVcw9ZHwF32Vt3H0Ot3fMABhN9ipwOwTvPAWGFyqmtwXHpRjBjyO7Fe0VabEOoQTG8RS3thCiKaJRRy6OpU/yY1FiJAjLw2cFwlZFauUSjM94tN9gfur92Mv6gIQVM933dZmz74seTwTYvcwY=
+	t=1784164305; cv=none; b=In0J1EGB6/TYsMSz9biKP22XkZJsvhoMrIdhJSipMzbttRiJBQywX+gdkrBMJgQSnNlzQ0yc5r7rZ/B9PHvuBid/MZr/2mpmsvFQGaMRBrmZenYukV+EUOa+HvZQB2mqcBHjax7NyYjtEGo8njkxAj0W+YyHXxSHWCC/G5d9oP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784164139; c=relaxed/simple;
-	bh=is+AGMYh35Y4QGJoYKJ/RV9dXzWAVFSf1b417EmdWBM=;
+	s=arc-20240116; t=1784164305; c=relaxed/simple;
+	bh=HYL3qr1ErMj4T3xZbTN/PhA0hBrW4bNeW8p5F2LugtM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=thfR9Sd3Jaemue79VnM0RE6IQ9ioDXbuugj6m7EvDwBZ155WE+Z3JmtRMNTY9RWqhzCbNPgt3HU+bPhQX+xy+v7rMg+nf0h8SQRFsF4JsEm1OvBZ5G5YNt/rHzcLuRNOXKOtFwjFfwcrGSZawNVICD7TTYU46rzorlFnkz4kcdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LV2SrDoH; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=uGsgYd7T0yX6CT4leckwyRP8zWBaLKrzIBYQZuR6CjOliqLXeDnqHbKUzOmyQI6ngQio1J1OM6BHe1C1RwO/hWGv98Fh7uYiqF2ludB4jlJv+Pe93o+qYPkXObKF9JrMb6+RIW3hoqm/mKbTuxtk2E40PU4/CyMav2zMO3TJ3Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clyzT07b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LV2SrDoH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463271F000E9;
-	Thu, 16 Jul 2026 01:08:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clyzT07b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F4F1F000E9;
+	Thu, 16 Jul 2026 01:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784164138;
-	bh=8m2lWaB2tQvv6RcpNesHusG0CbEU4bCCEZvcdotg6TI=;
+	s=k20260515; t=1784164304;
+	bh=/JsAvehaTW7XgYDPnlHrGydiJWpXen5k+wZcuy2ARqU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=LV2SrDoHVaHuhnRPNgvwLXWQA0XmksntRG07jFGFaqeqscl9b4dXC7sIRLACZrg6G
-	 nKMSFhsomwy/VaArvWU/fz83/2cSsEDjulc/KHLElZoVCqjO1eKct64k9Io7EePJ6l
-	 WclL60Fz8V/WuFL4uMXqhlaq7tVoaMB2u+HMCAYdTA52DWtdO+EYirVsHOa+40lJeQ
-	 31hR067dhoWB3tGBKeE5xMpM4biC6Jcx5CNnBfqYY/5t1cRNqYd4yuMKHKpV3BRVRv
-	 R/Wg5WQbvG/xrnlD29xzxEkEDJb4lZ6qygoqOPFW1cxvryFoUPvBpk8HL1WvVSVQdX
-	 zXx4KugIOrZeA==
+	b=clyzT07bdvS+n/PX7T96wFYjzbwqxsEE7E9xBi7D92DreiMjs0MaOByX8LSxY98w6
+	 bjqURRF6BOuGlOeVWz9wVYz5+Zf8Y01zpwsCtob1u1jnHshkJ5xWCljtV0dteZaWlO
+	 t2C9KgpHDvjLvgGTUqLfcTETcuJ4DiICfJYUXc4N6b5BvlAScK7M8sG3fzRSkS1hjB
+	 z3U5jAULTtAdZbFPXmS69PS21fDZKpoqwdda6HPc/dbnuL02wkS0MLhDfurppiaK0n
+	 ratCng6CkoxOkKD50MpBRyJE5Ch7eP6mzB01Rc6+TyUHRDnv7AqYEulV7o6Pb7srmc
+	 u3UkmAn4ubSvA==
 From: Kees Cook <kees@kernel.org>
-To: Shuah Khan <shuah@kernel.org>,
+To: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Kuan-Ying Lee <kuan-ying.lee@canonical.com>
+Cc: Kees Cook <kees@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Haofeng Li <920484857@qq.com>
-Cc: Kees Cook <kees@kernel.org>,
-	Haofeng Li <lihaofeng@kylinos.cn>
-Subject: Re: [PATCH] selftests/lkdtm: rename STACKLEAK_ERASING to KSTACK_ERASE
-Date: Wed, 15 Jul 2026 18:08:43 -0700
-Message-Id: <178416412007.1787429.13509468247552081982.b4-ty@kernel.org>
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] selftests/seccomp: Fix pointer type mismatch build error
+Date: Wed, 15 Jul 2026 18:11:41 -0700
+Message-Id: <178416429755.1788203.2869107770233893151.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_CD80B5F746B6AABD68AF3F1097AD02C96F05@qq.com>
-References: <tencent_CD80B5F746B6AABD68AF3F1097AD02C96F05@qq.com>
+In-Reply-To: <20260715053559.28535-1-kuan-ying.lee@canonical.com>
+References: <20260715053559.28535-1-kuan-ying.lee@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,21 +52,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Wed, 15 Jul 2026 16:02:10 +0800, Haofeng Li wrote:
-> Commit 57fbad15c2ee ("stackleak: Rename STACKLEAK to KSTACK_ERASE")
-> renamed the LKDTM crash type and selftest configuration but missed the
-> entry in tests.txt.
+On Wed, 15 Jul 2026 13:35:52 +0800, Kuan-Ying Lee wrote:
+> We hit the following build error while running the seccomp selftests in
+> our testing.
 > 
-> As a result, the selftest generates STACKLEAK_ERASING.sh, which run.sh
-> skips because the LKDTM DIRECT trigger only exposes KSTACK_ERASE. Rename
-> the test entry so the generated runner uses the registered crash type.
+> CC seccomp_bpf
+> seccomp_bpf.c: In function ‘UPROBE_setup’:
+> seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional expression [-Wincompatible-pointer-types]
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^
+> seccomp_bpf.c:5175:57: note: first expression has type ‘int (*)(void)’
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^~~~~~~~~~~~~~~~
+> seccomp_bpf.c:5175:76: note: second expression has type ‘int (__attribute__((nocf_check)) *)(void)’
+> 5175 | offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+> | ^~~~~~~~~~~~~
 > 
 > [...]
 
 Applied to for-linus/hardening, thanks!
 
-[1/1] selftests/lkdtm: rename STACKLEAK_ERASING to KSTACK_ERASE
-      https://git.kernel.org/kees/c/b3a7aa9c0020
+[1/1] selftests/seccomp: Fix pointer type mismatch build error
+      https://git.kernel.org/kees/c/3421b9b056a6
 
 Take care,
 
