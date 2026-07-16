@@ -1,438 +1,143 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407083ACA73;
-	Thu, 16 Jul 2026 17:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784222163; cv=none; b=f4fFsYtkkB+24Z3GAgJJz9LWtXwGDenyxQ0kU71da/gBG5uOzwGXeRvHyihb9e/K3lWFsNj8ZebXySuGsygYTveGYp5hxnwl9sbf9Ic2KzYzncUqPQthaiQ2qMd/8Nt8Ruk34A1xMHZv+yvacgeJR63HNLuuwRycReh7IjFLceQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784222163; c=relaxed/simple;
-	bh=ix4LYlQlmSsAaZo8zZpUwqkOJk1BP+bpsTIHC/ThAVc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CsnhnWSK0XGcn9jQkX1nLGh8vE0lnEi9qgDkzZtKV83FU8QzU/H9C2ik/qSRLqoiY2wculGdg0EsJrGJYI8Mi+N6A1sh9+XnVQQcT5o/QTdW6xDtTTjqBCISqFC4yKp+Lo8vbIiVfkhhzB53ysZj46iEkD0+P4sMfJMeLTBdAq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=CFElnB9c; arc=none smtp.client-ip=192.19.144.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033CE3A6EE3
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 17:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784222409; cv=pass; b=jQM37faDjQzGAAkN1Zim4ubJstyBffSAiIgPPz6Re4lxr98WY/2ijQlLsWDsXDyffrCypr99l1bMi9pyQIbVRpeXlw7QhhvjAVNcEBjDZTh4UshszfhjZG+CG6TvnN+B63wPGarbgqOOPeGQ1jpOhG/l6svovizj4krZ4wxh8RU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784222409; c=relaxed/simple;
+	bh=WgNPTyzJP6h+/loXvXxBK9obj+cvdvHP8r+IDx+BJ1I=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q+DZ3NBVnh4ctuQa2TLWPDqqatMh52zoQDO2M8tNX/iTK/wVa7m8s8RkEN8+DFqSMB4iXhRsS+oiYbrlAIE9hI9ApeJQOxAqy3X372KPdvuqipEntgqQ1inNRC3U5XoIDDtr5cUwx421zoT+OXjtMQMvYh5x+GwQrrsUhPdUz6s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V5FFJtkQ; arc=pass smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="CFElnB9c"
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id D6A9CC0003CC;
-	Thu, 16 Jul 2026 10:06:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com D6A9CC0003CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1784221588;
-	bh=ix4LYlQlmSsAaZo8zZpUwqkOJk1BP+bpsTIHC/ThAVc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CFElnB9cPTGmSEH9NSFMd0CtdwcNrzhZDRCAFRgg29d9oL/OuIkrK+GTziXjASOBz
-	 u0l4YSBGiu53iqI6fxnuyi/rw4Z+3dgMhRvxIqCD5PS/kkOE/oSPdBCPhk7xHmtoQS
-	 Zh3DAP7cXe5FITQX0CiagSwsbi1q/3hPVKVOHwsY=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 7ED42AD1;
-	Thu, 16 Jul 2026 10:06:27 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Amir Goldstein <amir73il@gmail.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH stable 6.12] selftests/fs/statmount: build with tools include dir
-Date: Thu, 16 Jul 2026 10:06:22 -0700
-Message-Id: <20260716170626.1433958-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V5FFJtkQ"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c96c92c0980so2309498a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 10:20:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784222407; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Y91OwM/zp0DBpsXnVff2ZIEBJJPD73kV5dQpKrps/MDflAbOWasZP2KVgOJbQHKXzt
+         yUD6QqMsXcfnGhoDjlR3GKgK6SCIFi0dc+otE+7VkzPasF4bxeHqR0+U1g3WM/xrZRQN
+         PzjKTfm8fkgQqOjMBeGB9yQ3Tr1bEFs66ZJ4p8ds2bp9lc0yRnAa+5lz8WXLf+Akg1i2
+         CRNd8cnsR+9qrOcHwOpzyZZ5wlMAGJw5tAT1F06vP7muDQE31a86/kKEM9fYwmTTVEN5
+         t3lrSvLWG4TVWyvrrtkOZkgypFXxBKZaualTalDAQiNHTwVWGoxX5d09SzLemWsnzx8K
+         X6Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=hDpH4vLaInenlGkSSwc32ERdxUXfDeJnyW2zrivGsV0=;
+        fh=GNe9ZBkbTvh7Qhjw75jtxhI517BAfA+6DQCucjroFq4=;
+        b=a+s+5wsVVEznZjjIlJLVW1cDW7IfT8EMUknVvussGux56K4R1mhSyLRZeTsin3+K6p
+         292NIO21ZXTKZfS7dZMF6j0Yt1XtJRRrw1TLvTdWWq5JtblXX8z4b2XpvqdIOBWKWeYk
+         H30Qm4Yes49miNPvmhLyaczEO1jKsAE3rwSxexR3MK0TcfkgniOixlcIzTbA3CmDrjK+
+         3DCjSAOhuWtfg/oVACEXdl8J0sh2scdZZYMHNGCKgGj3QlwwdlnbvDsbQvlOyu4zH1cD
+         mqYgDK3JLDT+TR9C7Y1MelaIPnkpzPyI2d2Aq3JiJpVc608hJEkBC6ruZ5IEGFQ17kgB
+         a/Pg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784222407; x=1784827207; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hDpH4vLaInenlGkSSwc32ERdxUXfDeJnyW2zrivGsV0=;
+        b=V5FFJtkQtJ5Of38LJ1sNYFN6lEt2zSeQlQhqKa7Eztd4arzlzvQYtO5vQms52mDfqW
+         stQkSkmY79dewsm9D6RGU0g7NN2THOzuBAMSs0vUHPIpW/kDULG4x8kTaZLXeKjahtET
+         hSmaCIzO/vzFMdUWrz9M44vrBs0Fv0XSLP8aSVWYsW+kxT7FnW9bu1b3++B73yUKKlEc
+         IZWP4d8IXEcY8zl9qrszxW4PholUJthVAOkvtSrTXrwE/Am8Uxbsjau7q4gh199mfvg5
+         PyD+eYQT890r3GNeGACnTDNovfBDuQrxrAcBNcpGGdx/yeSkTWLApNwfql7QSPVYJYfB
+         7/cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784222407; x=1784827207;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hDpH4vLaInenlGkSSwc32ERdxUXfDeJnyW2zrivGsV0=;
+        b=mFLxI9mNxGEtgN1vAL9qt14lxTMyF66uT4p31IZC2kRue+NZ1Tjuph7Q5+eIxinyfx
+         KBAVQDjzhCy66r4LmBeYyh0JkCBrk3V82FD9Zq3qfHppRWNDDGzQxlzj5fKCFqul0oxC
+         l0Uy8y33MssvwAEMD+ah1KY6EUOig5BUIaYd+ukH535BCXVrAecUsdZ9/B2RILq8HgRs
+         CgqOVADUM6/RTAEyoysYHpChWTCitoqDnY+fGR13lY+31DNyxkKLMFSZvw615gqIrJyo
+         LPQNEoTNh2yLa6I393pxFuBa3cS4YAfmq6urtyA8d84HoGP/ZH6fCc7l0yR4f2QX8WGj
+         IWHA==
+X-Forwarded-Encrypted: i=1; AHgh+RqNVoZ1g1iu//cPZs8TLx4xxCeVK3EbwQiAWpRVtBv9JyraG4TwaqYkx6ZC4Z/cxfINFGpb/a2F5UzrVr3qi/0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxX26Uy1E32xK5G9WgxCG6ZFelgzvyEkqCgyWhTeE5uftz/++iz
+	i8crNwECvmaXrL1dsw6UxVJmoNDV3800BXmKmSs+zZd/H/uJ47cSNxf2hrymU61hSYUFZEXsc67
+	i5JzWVO+iJgwOg03TinZziNYwxe7X0OHoa2zq7EZG
+X-Gm-Gg: AfdE7cl1pXlTWkTuE46jQxbm3kTuw0S073/vIaKpZYZksxfBlL+ijxX1flzCvlUP/cI
+	saL/C15GmvU8Xyzn21pXsJr7eA6uO9YWCjPxT/P172q7L7dsQTuwz4FCRSEt30NNy/dwkHGV5d0
+	zF/urbajPRSeUL2aFtqwcNPdzzkN/+4BInsf+dPmSuJmaj0vY4cadFA3+mRMeGa7QRk1W43CXBP
+	pjjRLSluALb2gULg88n55WnsCv1gTjTvM2C+F1OxT17uP3cZmBJNW2HSPUR8B1Yt/kV9TGfjMm1
+	bYY2f49dsX5EmsuJvFkpzSK/fcAq1MD1Lrl07ne97eG/PJDI
+X-Received: by 2002:a05:6a21:7482:b0:3bf:6c08:2b2d with SMTP id
+ adf61e73a8af0-3c3a5e7a4fdmr21247637.53.1784222406715; Thu, 16 Jul 2026
+ 10:20:06 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 16 Jul 2026 10:20:05 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 16 Jul 2026 10:20:05 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <1b59fec2-a464-4429-8532-880394912af5@linux.intel.com>
+References: <20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com>
+ <20260618-gmem-inplace-conversion-v8-9-9d2959357853@google.com> <1b59fec2-a464-4429-8532-880394912af5@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 16 Jul 2026 10:20:05 -0700
+X-Gm-Features: AUfX_mxBIq-fm92f37AIysrX2Jjvm6RrlF5jRh7Q3ctlrGsM_3yjDZToekOalgI
+Message-ID: <CAEvNRgEjPA5pi1RqpQWgp_hH2HmSnGhWaNiXtVBJb_VVdKD7qg@mail.gmail.com>
+Subject: Re: [PATCH v8 09/46] KVM: guest_memfd: Introduce function to check
+ GFN private/shared status
+To: Binbin Wu <binbin.wu@linux.intel.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Amir Goldstein <amir73il@gmail.com>
+Binbin Wu <binbin.wu@linux.intel.com> writes:
 
-commit b13fb4ee46472d7f7fc3e2172c08c06ed8b3f31c upstream
+> On 6/19/2026 8:31 AM, Ackerley Tng via B4 Relay wrote:
+>> From: Ackerley Tng <ackerleytng@google.com>
+>>
+>> Introduce function for KVM to check the private/shared status of guest
+>            ^
+> Nit:       a
+>  > memory at a given GFN.
+>>
 
-Copy the required headers files (mount.h, nsfs.h) to the tools
-include dir and define the statmount/listmount syscall numbers
-to decouple dependency with headers_install for the common cases.
+For v9, I added the "a" in the commit messsage body but retained
+"Introduce function" in the header (save characters, and make it sound
+like a headline).
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Link: https://lore.kernel.org/20250509133240.529330-3-amir73il@gmail.com
-Reviewed-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Christian Brauner <brauner@kernel.org>
-[florian: resolved conflict in statmount/Makefile]
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
-This is a follow-on to commit 2b1c40d624175b32bc8ac02d0bf2b76f40140ede
-("perf trace beauty fcntl: Fix build with older kernel headers")
-
- tools/include/uapi/linux/mount.h              | 235 ++++++++++++++++++
- tools/include/uapi/linux/nsfs.h               |  45 ++++
- .../selftests/filesystems/statmount/Makefile  |   5 +-
- .../filesystems/statmount/statmount.h         |  36 +++
- 4 files changed, 319 insertions(+), 2 deletions(-)
- create mode 100644 tools/include/uapi/linux/mount.h
- create mode 100644 tools/include/uapi/linux/nsfs.h
-
-diff --git a/tools/include/uapi/linux/mount.h b/tools/include/uapi/linux/mount.h
-new file mode 100644
-index 000000000000..7fa67c2031a5
---- /dev/null
-+++ b/tools/include/uapi/linux/mount.h
-@@ -0,0 +1,235 @@
-+#ifndef _UAPI_LINUX_MOUNT_H
-+#define _UAPI_LINUX_MOUNT_H
-+
-+#include <linux/types.h>
-+
-+/*
-+ * These are the fs-independent mount-flags: up to 32 flags are supported
-+ *
-+ * Usage of these is restricted within the kernel to core mount(2) code and
-+ * callers of sys_mount() only.  Filesystems should be using the SB_*
-+ * equivalent instead.
-+ */
-+#define MS_RDONLY	 1	/* Mount read-only */
-+#define MS_NOSUID	 2	/* Ignore suid and sgid bits */
-+#define MS_NODEV	 4	/* Disallow access to device special files */
-+#define MS_NOEXEC	 8	/* Disallow program execution */
-+#define MS_SYNCHRONOUS	16	/* Writes are synced at once */
-+#define MS_REMOUNT	32	/* Alter flags of a mounted FS */
-+#define MS_MANDLOCK	64	/* Allow mandatory locks on an FS */
-+#define MS_DIRSYNC	128	/* Directory modifications are synchronous */
-+#define MS_NOSYMFOLLOW	256	/* Do not follow symlinks */
-+#define MS_NOATIME	1024	/* Do not update access times. */
-+#define MS_NODIRATIME	2048	/* Do not update directory access times */
-+#define MS_BIND		4096
-+#define MS_MOVE		8192
-+#define MS_REC		16384
-+#define MS_VERBOSE	32768	/* War is peace. Verbosity is silence.
-+				   MS_VERBOSE is deprecated. */
-+#define MS_SILENT	32768
-+#define MS_POSIXACL	(1<<16)	/* VFS does not apply the umask */
-+#define MS_UNBINDABLE	(1<<17)	/* change to unbindable */
-+#define MS_PRIVATE	(1<<18)	/* change to private */
-+#define MS_SLAVE	(1<<19)	/* change to slave */
-+#define MS_SHARED	(1<<20)	/* change to shared */
-+#define MS_RELATIME	(1<<21)	/* Update atime relative to mtime/ctime. */
-+#define MS_KERNMOUNT	(1<<22) /* this is a kern_mount call */
-+#define MS_I_VERSION	(1<<23) /* Update inode I_version field */
-+#define MS_STRICTATIME	(1<<24) /* Always perform atime updates */
-+#define MS_LAZYTIME	(1<<25) /* Update the on-disk [acm]times lazily */
-+
-+/* These sb flags are internal to the kernel */
-+#define MS_SUBMOUNT     (1<<26)
-+#define MS_NOREMOTELOCK	(1<<27)
-+#define MS_NOSEC	(1<<28)
-+#define MS_BORN		(1<<29)
-+#define MS_ACTIVE	(1<<30)
-+#define MS_NOUSER	(1<<31)
-+
-+/*
-+ * Superblock flags that can be altered by MS_REMOUNT
-+ */
-+#define MS_RMT_MASK	(MS_RDONLY|MS_SYNCHRONOUS|MS_MANDLOCK|MS_I_VERSION|\
-+			 MS_LAZYTIME)
-+
-+/*
-+ * Old magic mount flag and mask
-+ */
-+#define MS_MGC_VAL 0xC0ED0000
-+#define MS_MGC_MSK 0xffff0000
-+
-+/*
-+ * open_tree() flags.
-+ */
-+#define OPEN_TREE_CLONE		1		/* Clone the target tree and attach the clone */
-+#define OPEN_TREE_CLOEXEC	O_CLOEXEC	/* Close the file on execve() */
-+
-+/*
-+ * move_mount() flags.
-+ */
-+#define MOVE_MOUNT_F_SYMLINKS		0x00000001 /* Follow symlinks on from path */
-+#define MOVE_MOUNT_F_AUTOMOUNTS		0x00000002 /* Follow automounts on from path */
-+#define MOVE_MOUNT_F_EMPTY_PATH		0x00000004 /* Empty from path permitted */
-+#define MOVE_MOUNT_T_SYMLINKS		0x00000010 /* Follow symlinks on to path */
-+#define MOVE_MOUNT_T_AUTOMOUNTS		0x00000020 /* Follow automounts on to path */
-+#define MOVE_MOUNT_T_EMPTY_PATH		0x00000040 /* Empty to path permitted */
-+#define MOVE_MOUNT_SET_GROUP		0x00000100 /* Set sharing group instead */
-+#define MOVE_MOUNT_BENEATH		0x00000200 /* Mount beneath top mount */
-+#define MOVE_MOUNT__MASK		0x00000377
-+
-+/*
-+ * fsopen() flags.
-+ */
-+#define FSOPEN_CLOEXEC		0x00000001
-+
-+/*
-+ * fspick() flags.
-+ */
-+#define FSPICK_CLOEXEC		0x00000001
-+#define FSPICK_SYMLINK_NOFOLLOW	0x00000002
-+#define FSPICK_NO_AUTOMOUNT	0x00000004
-+#define FSPICK_EMPTY_PATH	0x00000008
-+
-+/*
-+ * The type of fsconfig() call made.
-+ */
-+enum fsconfig_command {
-+	FSCONFIG_SET_FLAG	= 0,	/* Set parameter, supplying no value */
-+	FSCONFIG_SET_STRING	= 1,	/* Set parameter, supplying a string value */
-+	FSCONFIG_SET_BINARY	= 2,	/* Set parameter, supplying a binary blob value */
-+	FSCONFIG_SET_PATH	= 3,	/* Set parameter, supplying an object by path */
-+	FSCONFIG_SET_PATH_EMPTY	= 4,	/* Set parameter, supplying an object by (empty) path */
-+	FSCONFIG_SET_FD		= 5,	/* Set parameter, supplying an object by fd */
-+	FSCONFIG_CMD_CREATE	= 6,	/* Create new or reuse existing superblock */
-+	FSCONFIG_CMD_RECONFIGURE = 7,	/* Invoke superblock reconfiguration */
-+	FSCONFIG_CMD_CREATE_EXCL = 8,	/* Create new superblock, fail if reusing existing superblock */
-+};
-+
-+/*
-+ * fsmount() flags.
-+ */
-+#define FSMOUNT_CLOEXEC		0x00000001
-+
-+/*
-+ * Mount attributes.
-+ */
-+#define MOUNT_ATTR_RDONLY	0x00000001 /* Mount read-only */
-+#define MOUNT_ATTR_NOSUID	0x00000002 /* Ignore suid and sgid bits */
-+#define MOUNT_ATTR_NODEV	0x00000004 /* Disallow access to device special files */
-+#define MOUNT_ATTR_NOEXEC	0x00000008 /* Disallow program execution */
-+#define MOUNT_ATTR__ATIME	0x00000070 /* Setting on how atime should be updated */
-+#define MOUNT_ATTR_RELATIME	0x00000000 /* - Update atime relative to mtime/ctime. */
-+#define MOUNT_ATTR_NOATIME	0x00000010 /* - Do not update access times. */
-+#define MOUNT_ATTR_STRICTATIME	0x00000020 /* - Always perform atime updates */
-+#define MOUNT_ATTR_NODIRATIME	0x00000080 /* Do not update directory access times */
-+#define MOUNT_ATTR_IDMAP	0x00100000 /* Idmap mount to @userns_fd in struct mount_attr. */
-+#define MOUNT_ATTR_NOSYMFOLLOW	0x00200000 /* Do not follow symlinks */
-+
-+/*
-+ * mount_setattr()
-+ */
-+struct mount_attr {
-+	__u64 attr_set;
-+	__u64 attr_clr;
-+	__u64 propagation;
-+	__u64 userns_fd;
-+};
-+
-+/* List of all mount_attr versions. */
-+#define MOUNT_ATTR_SIZE_VER0	32 /* sizeof first published struct */
-+
-+
-+/*
-+ * Structure for getting mount/superblock/filesystem info with statmount(2).
-+ *
-+ * The interface is similar to statx(2): individual fields or groups can be
-+ * selected with the @mask argument of statmount().  Kernel will set the @mask
-+ * field according to the supported fields.
-+ *
-+ * If string fields are selected, then the caller needs to pass a buffer that
-+ * has space after the fixed part of the structure.  Nul terminated strings are
-+ * copied there and offsets relative to @str are stored in the relevant fields.
-+ * If the buffer is too small, then EOVERFLOW is returned.  The actually used
-+ * size is returned in @size.
-+ */
-+struct statmount {
-+	__u32 size;		/* Total size, including strings */
-+	__u32 mnt_opts;		/* [str] Options (comma separated, escaped) */
-+	__u64 mask;		/* What results were written */
-+	__u32 sb_dev_major;	/* Device ID */
-+	__u32 sb_dev_minor;
-+	__u64 sb_magic;		/* ..._SUPER_MAGIC */
-+	__u32 sb_flags;		/* SB_{RDONLY,SYNCHRONOUS,DIRSYNC,LAZYTIME} */
-+	__u32 fs_type;		/* [str] Filesystem type */
-+	__u64 mnt_id;		/* Unique ID of mount */
-+	__u64 mnt_parent_id;	/* Unique ID of parent (for root == mnt_id) */
-+	__u32 mnt_id_old;	/* Reused IDs used in proc/.../mountinfo */
-+	__u32 mnt_parent_id_old;
-+	__u64 mnt_attr;		/* MOUNT_ATTR_... */
-+	__u64 mnt_propagation;	/* MS_{SHARED,SLAVE,PRIVATE,UNBINDABLE} */
-+	__u64 mnt_peer_group;	/* ID of shared peer group */
-+	__u64 mnt_master;	/* Mount receives propagation from this ID */
-+	__u64 propagate_from;	/* Propagation from in current namespace */
-+	__u32 mnt_root;		/* [str] Root of mount relative to root of fs */
-+	__u32 mnt_point;	/* [str] Mountpoint relative to current root */
-+	__u64 mnt_ns_id;	/* ID of the mount namespace */
-+	__u32 fs_subtype;	/* [str] Subtype of fs_type (if any) */
-+	__u32 sb_source;	/* [str] Source string of the mount */
-+	__u32 opt_num;		/* Number of fs options */
-+	__u32 opt_array;	/* [str] Array of nul terminated fs options */
-+	__u32 opt_sec_num;	/* Number of security options */
-+	__u32 opt_sec_array;	/* [str] Array of nul terminated security options */
-+	__u64 supported_mask;	/* Mask flags that this kernel supports */
-+	__u32 mnt_uidmap_num;	/* Number of uid mappings */
-+	__u32 mnt_uidmap;	/* [str] Array of uid mappings (as seen from callers namespace) */
-+	__u32 mnt_gidmap_num;	/* Number of gid mappings */
-+	__u32 mnt_gidmap;	/* [str] Array of gid mappings (as seen from callers namespace) */
-+	__u64 __spare2[43];
-+	char str[];		/* Variable size part containing strings */
-+};
-+
-+/*
-+ * Structure for passing mount ID and miscellaneous parameters to statmount(2)
-+ * and listmount(2).
-+ *
-+ * For statmount(2) @param represents the request mask.
-+ * For listmount(2) @param represents the last listed mount id (or zero).
-+ */
-+struct mnt_id_req {
-+	__u32 size;
-+	__u32 spare;
-+	__u64 mnt_id;
-+	__u64 param;
-+	__u64 mnt_ns_id;
-+};
-+
-+/* List of all mnt_id_req versions. */
-+#define MNT_ID_REQ_SIZE_VER0	24 /* sizeof first published struct */
-+#define MNT_ID_REQ_SIZE_VER1	32 /* sizeof second published struct */
-+
-+/*
-+ * @mask bits for statmount(2)
-+ */
-+#define STATMOUNT_SB_BASIC		0x00000001U     /* Want/got sb_... */
-+#define STATMOUNT_MNT_BASIC		0x00000002U	/* Want/got mnt_... */
-+#define STATMOUNT_PROPAGATE_FROM	0x00000004U	/* Want/got propagate_from */
-+#define STATMOUNT_MNT_ROOT		0x00000008U	/* Want/got mnt_root  */
-+#define STATMOUNT_MNT_POINT		0x00000010U	/* Want/got mnt_point */
-+#define STATMOUNT_FS_TYPE		0x00000020U	/* Want/got fs_type */
-+#define STATMOUNT_MNT_NS_ID		0x00000040U	/* Want/got mnt_ns_id */
-+#define STATMOUNT_MNT_OPTS		0x00000080U	/* Want/got mnt_opts */
-+#define STATMOUNT_FS_SUBTYPE		0x00000100U	/* Want/got fs_subtype */
-+#define STATMOUNT_SB_SOURCE		0x00000200U	/* Want/got sb_source */
-+#define STATMOUNT_OPT_ARRAY		0x00000400U	/* Want/got opt_... */
-+#define STATMOUNT_OPT_SEC_ARRAY		0x00000800U	/* Want/got opt_sec... */
-+#define STATMOUNT_SUPPORTED_MASK	0x00001000U	/* Want/got supported mask flags */
-+#define STATMOUNT_MNT_UIDMAP		0x00002000U	/* Want/got uidmap... */
-+#define STATMOUNT_MNT_GIDMAP		0x00004000U	/* Want/got gidmap... */
-+
-+/*
-+ * Special @mnt_id values that can be passed to listmount
-+ */
-+#define LSMT_ROOT		0xffffffffffffffff	/* root mount */
-+#define LISTMOUNT_REVERSE	(1 << 0) /* List later mounts first */
-+
-+#endif /* _UAPI_LINUX_MOUNT_H */
-diff --git a/tools/include/uapi/linux/nsfs.h b/tools/include/uapi/linux/nsfs.h
-new file mode 100644
-index 000000000000..34127653fd00
---- /dev/null
-+++ b/tools/include/uapi/linux/nsfs.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef __LINUX_NSFS_H
-+#define __LINUX_NSFS_H
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+#define NSIO	0xb7
-+
-+/* Returns a file descriptor that refers to an owning user namespace */
-+#define NS_GET_USERNS		_IO(NSIO, 0x1)
-+/* Returns a file descriptor that refers to a parent namespace */
-+#define NS_GET_PARENT		_IO(NSIO, 0x2)
-+/* Returns the type of namespace (CLONE_NEW* value) referred to by
-+   file descriptor */
-+#define NS_GET_NSTYPE		_IO(NSIO, 0x3)
-+/* Get owner UID (in the caller's user namespace) for a user namespace */
-+#define NS_GET_OWNER_UID	_IO(NSIO, 0x4)
-+/* Get the id for a mount namespace */
-+#define NS_GET_MNTNS_ID		_IOR(NSIO, 0x5, __u64)
-+/* Translate pid from target pid namespace into the caller's pid namespace. */
-+#define NS_GET_PID_FROM_PIDNS	_IOR(NSIO, 0x6, int)
-+/* Return thread-group leader id of pid in the callers pid namespace. */
-+#define NS_GET_TGID_FROM_PIDNS	_IOR(NSIO, 0x7, int)
-+/* Translate pid from caller's pid namespace into a target pid namespace. */
-+#define NS_GET_PID_IN_PIDNS	_IOR(NSIO, 0x8, int)
-+/* Return thread-group leader id of pid in the target pid namespace. */
-+#define NS_GET_TGID_IN_PIDNS	_IOR(NSIO, 0x9, int)
-+
-+struct mnt_ns_info {
-+	__u32 size;
-+	__u32 nr_mounts;
-+	__u64 mnt_ns_id;
-+};
-+
-+#define MNT_NS_INFO_SIZE_VER0 16 /* size of first published struct */
-+
-+/* Get information about namespace. */
-+#define NS_MNT_GET_INFO		_IOR(NSIO, 10, struct mnt_ns_info)
-+/* Get next namespace. */
-+#define NS_MNT_GET_NEXT		_IOR(NSIO, 11, struct mnt_ns_info)
-+/* Get previous namespace. */
-+#define NS_MNT_GET_PREV		_IOR(NSIO, 12, struct mnt_ns_info)
-+
-+#endif /* __LINUX_NSFS_H */
-diff --git a/tools/testing/selftests/filesystems/statmount/Makefile b/tools/testing/selftests/filesystems/statmount/Makefile
-index 3af3136e35a4..19adebfc2620 100644
---- a/tools/testing/selftests/filesystems/statmount/Makefile
-+++ b/tools/testing/selftests/filesystems/statmount/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- 
--CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
--TEST_GEN_PROGS := statmount_test statmount_test_ns
-+CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+
-+TEST_GEN_PROGS := statmount_test statmount_test_ns listmount_test
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount.h b/tools/testing/selftests/filesystems/statmount/statmount.h
-index f4294bab9d73..8a4084d94d70 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount.h
-+++ b/tools/testing/selftests/filesystems/statmount/statmount.h
-@@ -7,6 +7,42 @@
- #include <linux/mount.h>
- #include <asm/unistd.h>
- 
-+#ifndef __NR_statmount
-+	#if defined __alpha__
-+		#define __NR_statmount 567
-+	#elif defined _MIPS_SIM
-+		#if _MIPS_SIM == _MIPS_SIM_ABI32	/* o32 */
-+			#define __NR_statmount 4457
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_NABI32	/* n32 */
-+			#define __NR_statmount 6457
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-+			#define __NR_statmount 5457
-+		#endif
-+	#else
-+		#define __NR_statmount 457
-+	#endif
-+#endif
-+
-+#ifndef __NR_listmount
-+	#if defined __alpha__
-+		#define __NR_listmount 568
-+	#elif defined _MIPS_SIM
-+		#if _MIPS_SIM == _MIPS_SIM_ABI32	/* o32 */
-+			#define __NR_listmount 4458
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_NABI32	/* n32 */
-+			#define __NR_listmount 6458
-+		#endif
-+		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-+			#define __NR_listmount 5458
-+		#endif
-+	#else
-+		#define __NR_listmount 458
-+	#endif
-+#endif
-+
- static inline int statmount(uint64_t mnt_id, uint64_t mnt_ns_id, uint64_t mask,
- 			    struct statmount *buf, size_t bufsize,
- 			    unsigned int flags)
--- 
-2.34.1
-
+>>
+>> [...snip...]
+>>
