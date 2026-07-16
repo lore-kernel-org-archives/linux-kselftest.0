@@ -1,149 +1,185 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917F331A04D
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 15:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784217558; cv=pass; b=YWVRn9Hu7d2INcT3SgvBAxiwPVHykISpfrl3BJ8jDWrNkDWU6TrP/JJSeq1/zZQ/8cemxLhASZxygn0lS6Rgrxa55JcqvSAH9bf5aQfv4HNAd53pCQNl91KoEoSw3dpClDhVZEQLVLt6qNrJ9/sxMWEqzeV7n84Ig758S8PaMIg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784217558; c=relaxed/simple;
-	bh=itGbq07Nr/3aREyFCWeD5PlpGayUnNhMCz8RB3pMWi0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qZ9iN99+wQRAt90/Pc4dCJJ0BbZrdZDDigI8nvxpCDKTq9Z7bS9L0jHz/xKA4+XuO0T/AcIpySdHJAFCPpjBbcEK81iMfLCHJbwWOOHroE+ILnZQ5zVlqGNH+8Q0Wajv4Bg565tmZK+IuCpEoNHDmShWXo8TLuU1x9SOOMTu+ys=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AioxyDwH; arc=pass smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70858370D75;
+	Thu, 16 Jul 2026 16:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784218016; cv=none; b=Zxi8o8up7caprNQAGrh/p5o0tWvysmigqImNcbKg1a44KkveiiJNr4POM8Irmjo937GJRG3S8V6CF7hXz/RVGVcIO/qZG8fQkLoalvqWEiNRAmFdwJYAMeORKG38Fj5j3fPlHlAVdxcYASa2QGoI2eWpLp1BkUgnY854E2IG2WY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784218016; c=relaxed/simple;
+	bh=ryw/8DdSuXt+Pr45lTPQafMiLHoAQsM8RkcArbORWXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3SYPD0tkLdNEuJs0bJpHMbnwKxv6L/NSlGDpypJ6v2wE8sSWWlfiBwqEJzxqN5joPVvdK0TPXuEQojjxZbwVtme25Afy34Wv38eNDzDWI/QTLkSQVgzpwwL/3X/BMt/Rl/mTmMnfdIfPsd6lPmjcQQLiUMwMqnqvOdd/5IGfVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dRzhBV2A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AioxyDwH"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-80a123ef90aso14935137b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 08:59:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784217556; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r52D0/nDXXUuDzynnbvOouXRMktc4joYRZPD/2+sHgG8K0jiIv6Duk0zMc8DJqGKWY
-         6hQK5dABUGbAHE4yavWBo4jxVGIf2hRHEBybjg/NNabvByLgJD4csIHR76+x1yONjGjd
-         yEziKWNKynfNJP+U8n7BdLqFCcz6F3Qqia8Yx+4enDwjmvLk92g6Tb1eZJLwyfNMpjED
-         PMeng3DWnbcbyMhf5EMbcortF6azeS2OVQOX29sx9U2J0qBisRi0wokaevE9aKzW/vCB
-         UMYTwlICiWR1zPvzhJUb1nMpLWVRZyjyXRxaZE46frLxfsZFy4+93o7kcAbVOtRYAVPZ
-         zUzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=itGbq07Nr/3aREyFCWeD5PlpGayUnNhMCz8RB3pMWi0=;
-        fh=Xwp4X3Ouqn4PTJ5bAJQiK/zaVAvYW9ghgk5ZCHreXa0=;
-        b=iSP6uH82kSZ36W9cfZCezqaJ/nrRlv6povXk8Fd+cxTpS1r3cu+cgbnQtcuBeW/vHZ
-         jNgqb7klHHCdr57bbsyVSh+Ed54EHlQ5EdqorPuRIQPL6l2j7wa8kV5nnNUy4VNdsSKJ
-         +FCqQcjl1tV3UuY92yUw7+x9wmh1KUqbezOu/802Lnb0hfkO2CcEmhaN42GUwWnUmVMj
-         0rwiXhGDONXtIMsY3hZiG9Bx6TKAGuQeUqqI1ts3/jceJLBSjuvqTXsFLX5jxbqsH/Lo
-         vDX3fE9gXn3At5NgUCEtRBjZqYW3jIfc6eTviQyugL/FCgfj1o/LQ4Dpxu0ZQ+Zfg2uj
-         qBgw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784217556; x=1784822356; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=itGbq07Nr/3aREyFCWeD5PlpGayUnNhMCz8RB3pMWi0=;
-        b=AioxyDwHfE7s44E0tdidloFcwg8NLuGJ6fBJyG9FG3tLIaJVspk1L6gjrOLuRoakn/
-         XQlc/EEMpzxPSccnSIUizi4cgF9UP3rVe5Np4DGsp0jcF09zBOVc2vwU0YJU+oWM3f1l
-         8BaMeH5aO2Vl7/5jKkGn6Yu2jkjz0tpjdx8MbgFcIv8M4mEvATkhcJEnv3DyoXQQxc5L
-         f0I7h48qSTmKtFoIZDQ54EwXnBvmTbNLkdrV9+m89i/GKmuvVii3PoDnqK2qeq5gBg1c
-         DAjwXI2cdovqrDdrD72X6F1Rt/TFhSsc8kg9euK6ICItqjXdZB5j/KVecggGCr2zAaKN
-         hVXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784217556; x=1784822356;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=itGbq07Nr/3aREyFCWeD5PlpGayUnNhMCz8RB3pMWi0=;
-        b=C0aAAkdMTs3p8BdU4+deddsTYtAJbyPu/Ogjfzd3JTABioZ9zw388vBdYWajqISW8x
-         DTKtrwQG7zGFKzDCKd33XXYoUuvElmgLz227xlYdpPeXbtFkUqfrWGILxTs94caPZzX5
-         /PmTGEqRqhoJEG0Kd0ENSMD4sYuPNxk9TyB2OU85pUWBRrnZ3FQ5tfr6JeRz3rGv/C1g
-         tXP40rTY0F3UD0g3Qt8iDmkl7nLLJjzVI3ZCPbR9410fyRY2O2vMCXL7TbVLPfWojMKE
-         RPB6WalFZwlriZAA021QoWEU+U0a3UZpIYqdZ+yS+K9Cpy5pIaZ1c5MWqFvbjHWqjuuz
-         NYXQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrCxK491j02nxuWUYqcM8bc3drdYu17WBzYVge4J/ks6Lkw7y1wJtXu/PrNZfQwUM/p/4HNvSSEXQgdy4ofv9Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyW5uXww1n6PJmqyonD/a5qU5cD4YH6Z9n/+gmTQAEItGuz6bkv
-	K9ltSeDrkdXIsDlkQDlVf7PWUeAEYF16AeGRblp6XYKM+CUZnzqZ8BHwjYGfZqDTpKWEj7kcYZr
-	LMDtwe/43toSt27QOOVHCaFbRNtBsPxA=
-X-Gm-Gg: AfdE7clmAw3UY7VxY31AH7l3FzAEFB4lwg7ARLpnJU0VOa12K4++33/J7MIP0XNKcRm
-	uHMTIMYCxdNGpEpnIgjJP7E1uB/BaJKJrkMGdXZe6SalRBJksUnVQMz0J5LjruB6GQN3DvhzRP4
-	/nGWZJe9spcFkAftSHaMt/0ptlfMxkGSxTynMRN2RiCc4HTrRXHVhAtZR9Fb2Tu6jZtMyQG1yEv
-	vJbvGERmgBYk38wVhS8srKpvJKFD2fiEP4pQBM8Lzw/rDCtwPU3PMsNaGdDvY61Azvoc8f2PNdp
-	YJtDAzLgiY+YYpdscB+jXN6R13y7vkU=
-X-Received: by 2002:a05:690c:7283:b0:81e:bc7a:df50 with SMTP id
- 00721157ae682-81ee27da338mr22708687b3.3.1784217556404; Thu, 16 Jul 2026
- 08:59:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dRzhBV2A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 714121F000E9;
+	Thu, 16 Jul 2026 16:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784218015;
+	bh=E5duo1e3ULLzb5pSR2o2z4e41yjvHq5ZLuI68o0BYTM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dRzhBV2A1GSUiwA8eeJbb17ObnzMzPWP/5SADGAHk4mrPoGwiiMn9zH8sFewuchzP
+	 cPAy7Ncp6N/WKHqhrd8OSD8RAP6J0lkvz7GWuW63x/rb9EWUJhwXwD3WM4BiLbjE5K
+	 4Zuv051G76/f+nf+tBXlfr30QNjbfpTzCzcSx0xFAauJCkkAolpbB39kXXKyWOKaOz
+	 r0eVtr86EAvajF/UIKYtsZ50aWYv5ypGesD9+yVAiAtkmgZoSj/jmLmuqRR7MlraVr
+	 mFx6GTkoSxI3fmC2OiCYSkOSknX4gY53tqYOhTOrov4xpUBR608rUHOfmbBhInU8xn
+	 uBK0+MkLceWwA==
+Date: Thu, 16 Jul 2026 18:06:52 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Vladimir Vdovin <deliran@verdict.gg>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
+ skb checksum invalidation
+Message-ID: <alkBnI3XcH0XGjEo@lore-desk>
+References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
+ <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
+ <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714190356.190328-1-dmatlack@google.com> <2vxzy0fcicpi.fsf@kernel.org>
- <20260715172336.GC3775915@nvidia.com> <2vxzldbbhsb4.fsf@kernel.org>
-In-Reply-To: <2vxzldbbhsb4.fsf@kernel.org>
-From: Luca Boccassi <luca.boccassi@gmail.com>
-Date: Thu, 16 Jul 2026 16:59:04 +0100
-X-Gm-Features: AUfX_mzDCiilD7YNKNL42B1YJ1d5u9iOC0w12NRZaSOyWnithGXUwP5aTZQILLU
-Message-ID: <CAMw=ZnSCzUY=RWVqK6WxDx5F08ReOpnpyrksZiCLOYFXi0uxXA@mail.gmail.com>
-Subject: Re: [RFC PATCH] liveupdate: Allow multiple openers for /dev/liveupdate
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, David Matlack <dmatlack@google.com>, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Mike Rapoport <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ElzzijxzuPzOLRvz"
+Content-Disposition: inline
+In-Reply-To: <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
 
-On Thu, 16 Jul 2026 at 16:23, Pratyush Yadav <pratyush@kernel.org> wrote:
->
-> On Wed, Jul 15 2026, Jason Gunthorpe wrote:
->
-> > On Wed, Jul 15, 2026 at 03:50:33PM +0200, Pratyush Yadav wrote:
-> >> Hi David,
-> >>
-> >> On Tue, Jul 14 2026, David Matlack wrote:
-> >>
-> >> > Remove the single-opener restriction for /dev/liveupdate by removing the
-> >> > atomic in_use tracking and the exclusive open check in luo_open() that
-> >> > returned -EBUSY. Protect luo_session_deserialize() with a mutex guard so
-> >> > that concurrent open attempts by multiple processes safely executes
-> >> > deserialization only once. Update liveupdate selftest to verify that
-> >> > multiple concurrent openers succeed.
-> >> >
-> >> > LUO does not inherently require a single opener. There is some
-> >> > documentation about it simplifying state management, but the only thing
-> >> > it actually protects is the session deserialization during first open,
-> >> > which can be easily handled with a mutex.
-> >> >
-> >> > Relaxing the single-opener requirement avoids the kernel forcing a
-> >> > design pattern on userspace that it itself does not require, e.g.
-> >> > allowing multiple userspace processes to create and manage sessions.
-> >>
-> >> Agreed. When the kernel had a global state machine in the early versions
-> >> of LUO, this might have been more relevant. With sessions, even if we
-> >> later add a state machine, it likely will be per-session instead of
-> >> being global. So I think letting userspace open /dev/liveupdate multiple
-> >> times makes a lot of sense.
-> >>
-> >> Also, today's systemd only supports preserving individual files, and
-> >> does not hand out sessions. To get sessions, userspace must open
-> >> /dev/liveupdate and create a session. This opens up room for one bad
-> >> process to block every other process from creating sessions. It also
-> >> imposes a need for userspace to add a polling/retry logic for getting
-> >> sessions and serializes their execution around this point.
-> >
-> > Shouldn't systemd open and own /dev/liveupdate? That was at least what
-> > I originally expected here, you'd talk to it and get a session FD
-> > through dbus.
->
-> AFAIK I doesn't do so today. You can either create FDs and save them via
-> FDStore, and systemd will put them in its global session, or you grab a
-> session directly from /dev/liveupdate and save the session via FDStore.
-> Maybe in the future it will add the capability to vend out sessions
-> through dbus as well, but at least today it doesn't do so.
+--ElzzijxzuPzOLRvz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I've added it after Pasha asked for it, will be in the next release:
+On Jul 16, Stanislav Fomichev wrote:
+> On 07/15, Lorenzo Bianconi wrote:
+> > Add a test that verifies skb->ip_summed is set to CHECKSUM_NONE
+> > when a device running in XDP mode creates an skb from a xdp_buff
+> > if the attached ebpf program returns an XDP_PASS.
+> > The test attaches an XDP program returning XDP_PASS, and a TC
+> > ingress program that runs the bpf_skb_rx_checksum() kfunc to
+> > inspect the resulting skb. After XDP_PASS the driver must invalidate
+> > any previously computed hardware RX checksum since XDP may have
+> > modified the packet data.
+> > The BPF program counts packets per checksum type in a map, and the
+> > test runner verifies that after sending traffic the CHECKSUM_NONE
+> > counter is non-zero while CHECKSUM_UNNECESSARY and CHECKSUM_COMPLETE
+> > counters are zero.
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  Documentation/networking/xdp-rx-metadata.rst       |  5 ++
+> >  .../selftests/drivers/net/hw/xdp_metadata.py       | 55 ++++++++++++++=
++-
+> >  .../selftests/net/lib/skb_metadata_csum.bpf.c      | 73 ++++++++++++++=
+++++++++
+> >  3 files changed, 132 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentati=
+on/networking/xdp-rx-metadata.rst
+> > index 93918b3769a3..7434ac98242a 100644
+> > --- a/Documentation/networking/xdp-rx-metadata.rst
+> > +++ b/Documentation/networking/xdp-rx-metadata.rst
+> > @@ -90,6 +90,11 @@ conversion, and the XDP metadata is not used by the =
+kernel when building
+> >  ``skbs``. However, TC-BPF programs can access the XDP metadata area us=
+ing
+> >  the ``data_meta`` pointer.
+>=20
+> [..]
+>=20
+> > +If a driver is running in XDP mode, any existing hardware RX checksum
+> > +(``CHECKSUM_UNNECESSARY`` or ``CHECKSUM_COMPLETE``) must be invalidated
+> > +by setting ``skb->ip_summed`` to ``CHECKSUM_NONE`` before passing the
+> > +skb to the kernel, since XDP may have modified the packet data.
+> > +
+> >  In the future, we'd like to support a case where an XDP program
+> >  can override some of the metadata used for building ``skbs``.
+>=20
+> Sorry for keeping nitpicking on this, but I'm still not convinced that
+> it is what we currently do. From my previous reply:
 
-https://www.freedesktop.org/software/systemd/man/devel/systemd.service.html#LUOSession=
+no worries :)
+My current take-away from the previous discussion is we just need to docume=
+nt
+what would be the driver expected behaviour adding a kselftest for it (with=
+out
+modifying any driver).
+
+>=20
+> > > Looking at a few drivers:
+> > > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+> > > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if the=
+re is
+> > >   bpf prog attached
+> > > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+> > > - gve (gve_rx) - can do COMPLETE even with xdp attached?
+>=20
+> (although for gve I might be wrong, there is also gve_rx_skb_csum that on=
+ly
+> does UNNECESSARY).
+>=20
+> I'd wait for Jakub to chime in, but it feels like we should just document
+> what we currently do as a recommended approach: for the drivers
+> that support COMPLETE, do not report it when the bpf program is attached.
+> Both NONE and UNNECESSARY are ok.
+
+I am not completely sure the UNNECESSARY case is different from the COMPLETE
+one. What are we supposed to do if the driver reports UNNECESSARY and the e=
+bpf
+program modifies some fields covered by the rx-checksum?
+
+>=20
+> Also, did you run this test on real HW? NIPA now has HW tests, maybe it
+> makes sense to route this series via net-next to get the real coverage?
+
+What about splitting this series and have two different series:
+- bpf-next: add xdp rx kfunc and related selftest
+- net-next: add kselftest for the driver expected behaviour.
+
+What do you think?
+
+Regards,
+Lorenzo
+
+--ElzzijxzuPzOLRvz
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCalkBnAAKCRA6cBh0uS2t
+rPfeAP92miqJLHCgGcEjkwWMtzU1QP6SExcgCM79rSSWD5aqNQEAmxZYo0+AUDM1
+V3y0mAsCmwsVJd0ivV0BdldoECsJxwU=
+=muiS
+-----END PGP SIGNATURE-----
+
+--ElzzijxzuPzOLRvz--
