@@ -1,111 +1,95 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A3C3876DE;
-	Thu, 16 Jul 2026 05:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784179685; cv=pass; b=cgqvvJuuYVLsvyEIbpVt3v4viXy/I9o4fnbv0cpeR3kOQQse3XqUrM7HAk9Z/dHxhTPT9X7aFkLXz/Jqi43APRIuZJkAvCxmwV/XbWhWgTjIIfI1QfRtyHWttlA6XPGmMBvQxNW5FaTY1rohdqyt/KcFYikVAXonKHQmeaooUcE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784179685; c=relaxed/simple;
-	bh=e0+fR+NPwVaC4H/KOewx9kZPVM8BUDk8Cel6q81uq8Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NHzMIHxQphErwHmoGS5MtON0idHsZ9XSS0poyTtNh8Sjn3MBFpfIAnFm6j++sSF5Zu3HfnQkNb+JxB1mNj5j9AXQk5qTB9ySCHBZ3HANv7+XSf/IlJDJJJUlAjN01TGYIH6+sSCYpMWLMCKR9D3WexijsSNrm/Ewz/zI3f71514=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=sf2IorRC; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C7D32F757
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 05:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784179842; cv=none; b=rAEwmsoWUiCEb+R3skGBp6CNCxM3hixHM6XJJCx334nd60p1EKtVycPTL6gCq3lJPb/VJPJu1SroGV7CcBkdn9L00K+mlkCIqCMbZ4dPUaNG4zmsxdLdoNdfDatm5jg+KcwQXXF9j650QP9YIbMLqaQqc6pzj1ZrCa40bx+yNaI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784179842; c=relaxed/simple;
+	bh=LGebdd9z/fA9SDCA1B9Kz7W25ywxZbvoQgf78Hz2AMI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mlFKES4s1MNkTWZsmjlWa9Tftvg8bgfawIy+RndJ8S1K71jlQMB2+qKIWNgd8I2PI66OX5Of23vKkMgqcIcU7uReOcd45weAWyr9IZ9yZGWQLd051A8GZEHdOeW/fdNUWlMpxUTvL8aBzFJMrxEjRDxPTsEw9yrm5f+t0eB+zog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vrvNN0AP; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="sf2IorRC"
-ARC-Seal: i=1; a=rsa-sha256; t=1784179666; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=fbPqJFaJ+ft6BqVPaMq6wLPL+/GMvbVE4Z7qG+/zfzDZUy3hhxbdsAkW+nabXmWp3yhrHB9NQFdgf92lJQw1vaeJULXskSYKxF6t0XgCh1aLwR2E9N3w5DcuKm9TtFsPRmfaQoDqFp+ie0yT8MP6gc/6SzI/zpyr/sQk+7Heoyk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1784179666; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ppnREthApipiY+d6EwEoXxvC9z+jfkcK5oFpaQgQY1Y=; 
-	b=fodtc5etp5EfAW87q1tDHd6nFsKKnBWaaS/wOqpodbPFECUSEqszG28r4pCXnyyzVXBs1s7CgA8yh4YCaanESLL5lxoNRKydeCR9ROVDq8GxTp3fGLI/yRyI0jP21QiYqnVpCwGF7SPuXtbhZdyxHo57K16tNnJzJmh25EkWph8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=linux.beauty;
-	spf=pass  smtp.mailfrom=me@linux.beauty;
-	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784179665;
-	s=zmail; d=linux.beauty; i=me@linux.beauty;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=ppnREthApipiY+d6EwEoXxvC9z+jfkcK5oFpaQgQY1Y=;
-	b=sf2IorRC5fE85diQKpNQGDsbhx0SfN5IQ8loUuVRXMgaFeMZf4sco+StU2Gx3wvm
-	KErZjLWWcApM+dLKrzvege7SkIGI/jlMUX0no8/GCpqncTO2Niu6MwDJ/SNC2VLz/I4
-	JFc8u981R1zqI6V8pIY82Q7S5uh5IQ1n5cZsDOIw=
-Received: by mx.zohomail.com with SMTPS id 1784179662386997.6733672438661;
-	Wed, 15 Jul 2026 22:27:42 -0700 (PDT)
-From: Li Chen <me@linux.beauty>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Li Chen <me@linux.beauty>
-Subject: [PATCH] pidfs: preserve thread pidfds reopened by file handle
-Date: Thu, 16 Jul 2026 13:27:22 +0800
-Message-ID: <20260716052726.1032092-1-me@linux.beauty>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vrvNN0AP"
+Message-ID: <226a94de-ec58-4c5f-9330-5bfd34550959@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784179838;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qvYUTTdRGAGLWf4t33xI2t1i0xdlTooL2KIG3cZg5dQ=;
+	b=vrvNN0APRhDiXBQWsMc1spPSrU7wJxnOD1NhLKUJf7aOxzZ9lg1FFe9qgODPKCoe9Ih4Wz
+	QGlvwO55SxQlHjTuLwBOyN3OvMZb+qFk+QcqeWUwcEJsjEdjcQWQMbsO95/wbSH5Ez+ii9
+	FdlvyNnOfmm2IqQl5MHqxUqZrkcCzKo=
+Date: Thu, 16 Jul 2026 13:30:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Subject: Re: [PATCH bpf-next v10 6/9] selftests/bpf: Add tests to verify
+ global percpu data
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
+ qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260715153254.92010-7-leon.hwang@linux.dev>
+ <13cb81aa58ced1b75131c293972db0b78833c2e2ed4cf2427ac94afb39ee0112@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+Content-Language: en-US
+In-Reply-To: <13cb81aa58ced1b75131c293972db0b78833c2e2ed4cf2427ac94afb39ee0112@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-PIDFD_THREAD shares O_EXCL. do_dentry_open() clears O_EXCL after
-pidfs_export_open() validates the flags, so open_by_handle_at()
-silently turns a thread pidfd into a process pidfd.
+On 16/7/26 00:11, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Add tests to verify global percpu data
+>>
+>> If the arch, like s390x, does not support percpu insn, these cases won't
+>> test global percpu data by checking FEAT_PERCPU_DATA support.
+>>
+>> The following APIs have been tested for global percpu data:
+>>
+>> 1. bpf_map__set_initial_value()
+>> 2. bpf_map__initial_value()
+>> 3. generated percpu struct pointer pointing to internal map's mmaped data
+>> 4. bpf_map__lookup_elem() for global percpu data map
+>>
+>> At the same time, the case is also tested with 'bpftool gen skeleton -L'.
+>>
+>> Add a test to verify that the live vars of subskel won't include the vars
+>> for global percpu data.
+>>
+>> Assisted-by: Codex:gpt-5.5-xhigh
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> 
+> This isn't a bug, but item 4 lists bpf_map__lookup_elem(), while the added
+> test reads the map through the fd-based bpf_map_lookup_elem_flags():
+> 
+>     err = bpf_map_lookup_elem_flags(map_fd, &key, &data, flags);
+> 
+> Should the changelog name the API that is actually exercised?
 
-Restore PIDFD_THREAD on the opened file, matching pidfs_alloc_file(),
-and cover the restored flag with F_GETFL.
 
-Signed-off-by: Li Chen <me@linux.beauty>
----
- fs/pidfs.c                                             | 8 +++++++-
- tools/testing/selftests/pidfd/pidfd_file_handle_test.c | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+Good catch.
 
-diff --git a/fs/pidfs.c b/fs/pidfs.c
-index aaa609ddab044..c20ffd747ff51 100644
---- a/fs/pidfs.c
-+++ b/fs/pidfs.c
-@@ -939,12 +939,18 @@ static int pidfs_export_permission(struct handle_to_path_ctx *ctx,
- 
- static struct file *pidfs_export_open(const struct path *path, unsigned int oflags)
- {
-+	struct file *file;
-+
- 	/*
- 	 * Clear O_LARGEFILE as open_by_handle_at() forces it and raise
- 	 * O_RDWR as pidfds always are.
- 	 */
- 	oflags &= ~O_LARGEFILE;
--	return dentry_open(path, oflags | O_RDWR, current_cred());
-+	file = dentry_open(path, oflags | O_RDWR, current_cred());
-+	/* do_dentry_open() strips O_EXCL, which encodes PIDFD_THREAD. */
-+	if (!IS_ERR(file))
-+		file->f_flags |= oflags & PIDFD_THREAD;
-+	return file;
- }
- 
- static const struct export_operations pidfs_export_operations = {
-diff --git a/tools/testing/selftests/pidfd/pidfd_file_handle_test.c b/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-index 68918734dcf32..1e03ae9575fe6 100644
---- a/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-@@ -373,6 +373,7 @@ TEST_F(file_handle, open_by_handle_at_valid_flags)
- 				  O_CLOEXEC |
- 				  O_EXCL);
- 	ASSERT_GE(pidfd, 0);
-+	ASSERT_NE(fcntl(pidfd, F_GETFL) & PIDFD_THREAD, 0);
- 
- 	ASSERT_EQ(fstat(pidfd, &st2), 0);
- 	ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
--- 
-2.52.0
+Actually, there's no bpf_map__lookup_elem() callsite in this test.
 
+Will update the test to exercise both bpf_map__lookup_elem() and
+bpf_map_lookup_elem_flags(). And update the commit message meanwhile.
+
+Thanks,
+Leon
+
+> [...]
