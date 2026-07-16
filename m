@@ -1,129 +1,122 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A54841A564
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 11:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784201711; cv=pass; b=amJuwwQB3mUDlfRlAEZd7zjfq6GEz7wGMwAlLO6gJ+o+Tr/iMMXdJ2Pfeen8gCWgWOxsipUznVVjPg+az2URGtLnSDbZYpVqyI2Ig9EAiGiw3to3RzBnCrJ85TSxCjdmsi0iCvMdPvCuUUCDWwfVqQJhG3Oq4SiWOBSO69HfvJI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784201711; c=relaxed/simple;
-	bh=2g36lJG3U42LVhfO3LNLyoyHEf6Sd6nntXHxonOuu3g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7uTJ87ggHyw2Irv77/jeb+8ZZxsuFj2A/cC38n7H/whNvO0BfhciOMo4Rc5MtNNHZSMUny18arvU4rWTwj+69qGVGrKpSKgeFwT6asRMZxqCuMYBbeC7zUjzdUeuO0BErXNQTOAOiEJ4uUQVxjN4hraJQZNRNhmu3+NXH0/9KY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sH6DVVXq; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E67841D651
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 11:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784203072; cv=none; b=lH+zEKxjiQ/loO+Ebif9NHZHbRMN0TQWPdFYJ8rdntndKG+Mjx19UzSaGMnTHxfAJgaWgP/7utGk/azUuWyh3C4joINrd2zfUs9fp2QRpKMjfD+XnpKr6Rc123s59dMwzUjshIE8PTMPPMAOGjWjzHLDR5ykIFX9A9491ofF4JY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784203072; c=relaxed/simple;
+	bh=+GHwzsQ+4i43LI5Xh5tdHnXG/sDaoYxRx5Sy1qBv2Ds=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PDJqpUe68ofGlKrWy0XIVxR7XmoaXOIJW4VOzLRDVmWFwzN2+QWgEybALXz0yc/sUZhnPlVzKF+zxeFTzPJjsvAAEEySeq2hJekVUqCraejJA3RkBSI152zXff6QVu4Z3N9GXa1CmTfSgceLMmHY2oRtVw9aaEEXdsHgYNTXbz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQj9JGjL; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sH6DVVXq"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-69e08ad526cso2695263a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 04:35:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784201708; cv=none;
-        d=google.com; s=arc-20260327;
-        b=DzX9kqBtZggkahP4T5h58vsR9hnTyOiogUtVZpjvGolirfFp/M5K/9OxmdX/fI0+8o
-         eQY/wEd7FmLza0MjmBkMA4kGkJiPVvmKnW/pQbBjSuHsNXQbgJuDuqKwMvAR+P/KA7Gk
-         2PdkNhfvvIEdHmCE1dgN5/2SAQDH//ns5RUOacGOBR3tXARGQ1B21qJ2xw6cIPhRxnvd
-         +JVdyZjYg3wWDWRozitjzLruqxaw1Usbtk7vYWIe0P1F8v+2l2ZJP58GqXywxsdVR3mu
-         6nN6rscwqVwoh8VwbUgmqOS55TmGgZzYl6p+eSlZhQFFzr7tgJd7PCWfSXQBETMxrcFI
-         u4ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ysGs6NJRebtieFYvmOhVVH9xTxOC+fxmBEZ2c6/Mloo=;
-        fh=545aDpsmzWSBD+xDH6U2S5SG10qlK3K0eadpJaQ+dCM=;
-        b=ekl6r6oPi1ZkQTUCsEPCO/fT91tP9jH8PgiTX9CpW4emIX9chLLLymNAdRYqHFCJ98
-         +HR0rqepidewQTNsUnLsb+vIWJkx6u+5yNwhAWjd/UCv+28k6EV9FuYtMCL3OOljWe32
-         CRTsE1wY2tutOYPURzNx3P0wJQVHQbSni8EavetnNCF7rnGSXII21DvZS3wrU18vF6/9
-         B51WxqalhIZR4ACWmrPl41huycHLAm9GlWYbt5lmTICY39OaQP10t25TFIC/HdvEDJhG
-         NcHGsowI1S/Jzu//0BF/qdVm9Bf5Xy6/RCjc5CCDmLlnCqVJZohFWVau7vDVXKm+T5w/
-         GSNA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQj9JGjL"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca88130e09aso4302247a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 04:57:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784201708; x=1784806508; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ysGs6NJRebtieFYvmOhVVH9xTxOC+fxmBEZ2c6/Mloo=;
-        b=sH6DVVXq+0bg3bPner6VRTSqoa2TnmHudaeImn8Q9khwE6G+Wj/ZRDZQCNMvYMGE6c
-         U0Jc2n2nTwe28DA90oSUI/88WWw+vm0zezAwWXQDekmVbUEjKui8EcgZuDwgzDRFf3lI
-         NvwK1U6x1WNnf4xyZxH+Uoj3f7zDUvGJkDuo9xlWqxM6mbSbqVDf9B/FxDrInBek/6dg
-         2hXrFapKo31BWuZnufLfLc/xkepV4JWiLPxhgI/d2hNf7bT9pOpML7e1W2glo47PUl42
-         nCyhgutrfnWV71ebMaVGA8tcod4ZSL1Ng/FjndAN0owl8CRTmggDyjc7/VKtMIsjV13I
-         0+rg==
+        d=gmail.com; s=20251104; t=1784203069; x=1784807869; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=crvbQPwYA/dMgK99dNCCjn85E0qewMxmyRRTho2IQ6E=;
+        b=gQj9JGjLqnzBb6FyIV1q/UgbGAUZfFqMXsYeDi5J+1ibSTCjTg2Pj7Gr5Svv2ulIi0
+         OWXu8/MV/IB81Zboqy8vUM06xP9doWZc+nYJGy9ugfLKEwrRSoUp3/iwrbmhLWGqbfB0
+         uAOhxmOeQ9hXYhpRUGlVJga+I4jgD7jn53Z6i75/OtO4joG93PK1no7iZ5ZsdUF0Sy4C
+         WgGax7JOiZ6dbj3a5OWCXau97ziGD6w+UE3LdsIKv+20hOljX3vwYhkJN6/WkSFRcD0M
+         SrLxkm7nVNETeJjzTAnF0wo3SEyBZPJKvZwepivEDOp3X3/77LJ9xiXa3Y1cx0vUf8nc
+         DHPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784201708; x=1784806508;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ysGs6NJRebtieFYvmOhVVH9xTxOC+fxmBEZ2c6/Mloo=;
-        b=Dz7jNvjd2iYsRFN+tke6Pw81UltonvHfmG/k+uRZ1VfvdiUwLbYNrjXVbbSwRZhfBJ
-         oWTk71q1VC/4vx2OGvkMpDjk/6mm/fK0Uzm5t7JivpCTWTnQCrDv2RhZq/ONVUCcjwZz
-         PVqBmM4nWkEhn8WvlLmbE5VD+LL3l6dXqdirxl/R7jqgQEOP/l7/7QnZO8B0rawmMI4h
-         Jn452esUe96n6/ehlzkq0sD7SDMTCsUii/7ezZQYGjYjU2Yyq5UJm90fkb8n8+EAhitJ
-         0M12LwfvwbwAKPAlqDg6Eb3X3g0oKRvWuWdAnk2lIBVTD+bLmI8XGP39jUnDevn0omEf
-         B7mA==
-X-Forwarded-Encrypted: i=1; AHgh+RqBvzhsJZ+4DrDayVR/e56t/Y/Xx46HE82yVNDk3zkfA1xBKc6rHF0t7ed43KRRcmDKqXTAsAm/5w1sQ8cASZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN8LluINcW1Oso7WWpPb4SHOnnRUqFhN1hJezncwB8oyTOn52P
-	cxmiwGsyv4LJEqHI/WI71Usbq5SUZSlD7Ayq9iLy9Qg83bSiARRFGjOHPrhM2LpBlkh8wY8NJ8/
-	Hs2mQAnOiLHtl3R4pdvJSXsuX3ki99Y4=
-X-Gm-Gg: AfdE7ckC0SLfy8NvOpyrRono0UNaahhbNxlSl2mjdRMHjdgDVSf3I0ot67oZ7t+gLia
-	rYCNZzHSI7fno56LQtQtrejlfrdwXvArC7UcRaiXdm0Hn2d9QsvYwKh0n2WjxaTvhzCHi5Z60oC
-	WfS1LMfbctHCzudHTFS3NQX/cPV3WKS89YHj6/KEe0J7EzGuuftyWi+Jx/oGUw+oRf0PTstRS+c
-	JVpqYY+Lcf1fFhjIQlF5BGpCJdUSn9uvMhqyLcgpeo3zbD08B6bhi9gMwr/I6ecB3Qvr/NB5WLv
-	Z2BvEbFCOXMJw31Ks+LF
-X-Received: by 2002:a05:6402:320d:b0:698:50ea:2d97 with SMTP id
- 4fb4d7f45d1cf-69c5f1043ddmr11746132a12.20.1784201708206; Thu, 16 Jul 2026
- 04:35:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784203069; x=1784807869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:sender:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=crvbQPwYA/dMgK99dNCCjn85E0qewMxmyRRTho2IQ6E=;
+        b=s+T1qRzzMeFYq1DsjA1WDQQ3vjQ0W49KvNK9oBwjIEZRlTvEIVos65ek8zjsHxamHl
+         OpGsnizD8XWDoKU7SfDiNu98V9pW8mIBGD1hcUSNQ04wCcrDASWTXosscqIAhBPShp6v
+         Es2Nc/qvOT20eEBqDsNU5f9GRNDvnBJ24zsutxYyr7K3sX/HOrK+J4y3GeQSGGw0xwfs
+         QbovDsZ3Gd4i5X2hkgDbJC/WYec9ZKSRog37+8Os8dHrSWoLqVppIQsDFt2SjItc/pO+
+         bAw0XrjxPrVMDL5JS3uMztMd3c8uuf7u2YE6QIaVjFPcHde0wvp/UdxeWzzNSrse1I0o
+         tjiA==
+X-Forwarded-Encrypted: i=1; AHgh+RqunXtCpAP9K6G8kV9F8omuYTLax4aetWul+TOdPayrfL5HGjShq0RYpt/wByPEy0ZoPwTcQrnHgLwXqib237g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUAzuJVKEmc6WGpO25+ZwVQHIJ0zh+ZnlrUxEukBeFYCRp0gUR
+	ogC0lTiEQvTK0QVsl8Xra8pF2Y77sjGg01+J7CgpiO+j+w2yxbJMHikJ
+X-Gm-Gg: AfdE7cnuxfsPY1HcE5p19BoT+YLO4w/jQGjR31l5dhlCbGNCNchZBoBMKE0iqsJ05d1
+	0Iy6Q9DXupnFvEgyjkv9dESrM9kvXV2CssV3xiRGwAKFnt1RRZucO1jhWKJyHMHlTW0B1xULsA1
+	7V9heXSJWcMYaRZ9HscqyNO1JZ3IJ1NuWLeUyvxnWt49O75gI7Rj8Qas3t+QZZYJ6ecw5ZAmESa
+	hiyN1wq2bOqLECtpLLoT5muenrBi8RdM66ZfuyKfe4rhf4TogTYOcpbMYgdQ3bE+7CRB7skWe+Y
+	Po9KXIB1IdKrJQ4V/qbIxY/cHj14Vfng4+PDpbrNWZPj5L461mYh6cAmgvMiDs75I42Jtj276Yv
+	O/NF16NazP9aQicdKm71da4y6lD6CE6YgH5YMC1kJfikx45ZDsfht53x26YO7x1JU4H31ss8gBD
+	WeA8LpUwaaFpsoLx1kKdyWIe0AtmGfX7L8WITDCv8a
+X-Received: by 2002:a05:6a21:329b:b0:3b4:9171:2573 with SMTP id adf61e73a8af0-3c3571d0bf6mr12359951637.37.1784203068527;
+        Thu, 16 Jul 2026 04:57:48 -0700 (PDT)
+Received: from localhost.localdomain ([2406:7400:90:2db1:9c31:f107:8086:4204])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3140e6ebe98sm10920690eec.26.2026.07.16.04.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 04:57:47 -0700 (PDT)
+Sender: Deepak Rao Gaikwad <deepaksraog@gmail.com>
+From: deepakroag <gaikwad.dcg@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 2/3] test: expand proc smaps coverage and require TMPFS
+Date: Thu, 16 Jul 2026 17:27:31 +0530
+Message-ID: <20260716115734.80909-3-gaikwad.dcg@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260716115734.80909-1-gaikwad.dcg@gmail.com>
+References: <20260716115734.80909-1-gaikwad.dcg@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714020340.25014-1-akiyano@amazon.com> <20260714020340.25014-3-akiyano@amazon.com>
-In-Reply-To: <20260714020340.25014-3-akiyano@amazon.com>
-From: saeed bishara <saeed.bishara.os@gmail.com>
-Date: Thu, 16 Jul 2026 14:34:57 +0300
-X-Gm-Features: AUfX_mzK79CIL23jkyupbgkP8ZJeyWpMZHgLpxQaHMyTfs3qKuX1sAZ-6xeJP9M
-Message-ID: <CAHfVqdWNk0QmvZBXi21eUKcU34DpXXZBNyJVUep+Tx1n52ihAg@mail.gmail.com>
-Subject: Re: [PATCH v4 net-next 2/7] selftests/ptp: Extract
- print_system_timestamp helper in testptp
-To: Arthur Kiyanovski <akiyano@amazon.com>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	Richard Cochran <richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, 
-	Yonatan Sarna <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, 
-	Alexander Matushevsky <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>, 
-	Anthony Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>, 
-	Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, 
-	Benjamin Herrenschmidt <benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>, 
-	Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik <ofirt@amazon.com>, 
-	Amit Bernstein <amitbern@amazon.com>, linux-kselftest@vger.kernel.org, 
-	linux-doc@vger.kernel.org, shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, vadim.fedorenko@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
->
-> +static void print_system_timestamp(int sample_num, __kernel_clockid_t clockid,
-> +                                  long long sec, unsigned int nsec,
-> +                                  const char *when)
-> +{
-> +       switch (clockid) {
-> +       case CLOCK_REALTIME:
-> +               printf("sample #%2d: real time %s: %lld.%09u\n",
-> +                      sample_num, when, sec, nsec);
-> +               break;
-> +       case CLOCK_MONOTONIC:
-> +               printf("sample #%2d: monotonic time %s: %lld.%09u\n",
-> +                      sample_num, when, sec, nsec);
-> +               break;
-> +       case CLOCK_MONOTONIC_RAW:
-> +               printf("sample #%2d: monotonic-raw time %s: %lld.%09u\n",
-> +                      sample_num, when, sec, nsec);
-> +               break;
-These three printfs are also kind of duplicated, I think mapping the
-clockid to name first would save a few lines.
+Add CONFIG_TMPFS to the selftest config. Assert Private_Clean,
+Private_Dirty, Swap, and SwapPss fields in /proc/$PID/smaps output.
+
+Signed-off-by: deepakroag <gaikwad.dcg@gmail.com>
+---
+ tools/testing/selftests/proc/config        | 1 +
+ tools/testing/selftests/proc/proc-pid-vm.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/proc/config b/tools/testing/selftests/proc/config
+index 68fbd2b35..7dfc3d381 100644
+--- a/tools/testing/selftests/proc/config
++++ b/tools/testing/selftests/proc/config
+@@ -1 +1,2 @@
+ CONFIG_PROC_FS=y
++CONFIG_TMPFS=y
+diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+index 4e6a3e53f..59535bb3a 100644
+--- a/tools/testing/selftests/proc/proc-pid-vm.c
++++ b/tools/testing/selftests/proc/proc-pid-vm.c
+@@ -20,7 +20,6 @@
+  * Test /proc/$PID/smaps_rollup
+  * Test /proc/$PID/statm
+  *
+- * FIXME require CONFIG_TMPFS which can be disabled
+  * FIXME test other values from "smaps"
+  * FIXME support other archs
+  */
+@@ -409,6 +408,10 @@ int main(void)
+ 			"AnonHugePages:         0 kB\n",
+ 			"Shared_Hugetlb:        0 kB\n",
+ 			"Private_Hugetlb:       0 kB\n",
++			"Private_Clean:         4 kB\n",
++			"Private_Dirty:         0 kB\n",
++			"Swap:                  0 kB\n",
++			"SwapPss:               0 kB\n",
+ 			"Locked:                0 kB\n",
+ 		};
+ 		int i;
+-- 
+Deepak Rao Gaikwad
+
