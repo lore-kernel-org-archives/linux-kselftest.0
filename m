@@ -1,62 +1,46 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549C1303C97
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 15:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDFF2FFDE3;
+	Thu, 16 Jul 2026 15:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784216355; cv=none; b=b5dh2/E5Lc2k59+z9A+CWVvnRpQsnnpN/7EJLcU6pfFBggn7aDMARuFdEw32li6Yvjp+Pqmtd7rDj5b30046xDTwHDI8dOn6XedussTHVxPqdEfRfXOcbj6JBYEAQ79lZR/gHNAX8/ch46CqxltYQuQW+YPsBWJ2hZ/llykk+JI=
+	t=1784216512; cv=none; b=LD+Ub/Rtdpv23LOYHsD8fTWgO7VyhIjy9o7LJ91d39spaSNyhnb/Y/hzk2B9koOToXFuccS2G2JYhP0tkIyvhZ58Q+Kpsf4X9cLWYRyzDiYIveclr0q3DhrjymYXQukK4kfSgttUdD/2a4SngSMI/MxGFVUsGbTZpkPuZfZgA5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784216355; c=relaxed/simple;
-	bh=fJwqMShUqOlilhsR2xnTWpMdymtj2MusRkCVGdtttAc=;
+	s=arc-20240116; t=1784216512; c=relaxed/simple;
+	bh=vgiVTB0O9uiu4m+w5X7Rt9eecuVslI5sS1JwsqHm4so=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=egrTdiRysAaiP7eIJsmOy6op+VPw5ch4sXsFPkD9a4k/+zCJFBkp2NRNGLl41mep46CY4Dj2VmkV8A9PDLxTySntB/TkK2dX/TxFfBOJgzu0lmA9igF/mkM4IWMWGtfoPNCGVgr0OiB1rbcXBQlQ/a26sGRpW3v2TCbnhu/tFTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cP4npYsd; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 MIME-Version:Content-Type; b=JvDoM4YQTx3EDNfbHm7TM7QfeAfBPOIsvLfypvW2i4RY3ylpvsSr3oIFTVWRV5jY/mn2AZzItAc449oT3gTAfdovD0NyAyv6m/WmGYefyRv6zTdhAyDhdejQNImDffoYIlbF/Wg9o8wk0WhXe/z8xqh7GuVdpJFAGd+HAA4XFhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0kSG70R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cP4npYsd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784216351;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ywt/ANbLialridvKPDjU7bqRu8QoG+XV01JI2YkMq50=;
-	b=cP4npYsdqWgQEuaOLTqQ1e5iKf1QAdRFIQ88v/UgsbB2tcxk/ICdO0/4zLAPbDGqc2r2LG
-	eezXKFQNIPE6f/CZRidKN5L/k2rIusWkFAnaidM694qrabyLGNK+UKLbC+v0b8gf0wldKm
-	wdIMxvGCplTa52EO12wJdvJ0CIhwNyg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-643--E9sVNTZMmuic514vYpV-g-1; Thu,
- 16 Jul 2026 11:39:06 -0400
-X-MC-Unique: -E9sVNTZMmuic514vYpV-g-1
-X-Mimecast-MFC-AGG-ID: -E9sVNTZMmuic514vYpV-g_1784216344
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1735C1954239;
-	Thu, 16 Jul 2026 15:39:04 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.81.35])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D5FB21955D86;
-	Thu, 16 Jul 2026 15:39:00 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  netdev@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Eelco
- Chaudron <echaudro@redhat.com>,  Ilya Maximets <i.maximets@ovn.org>,
-  dev@openvswitch.org
-Subject: Re: [PATCH net 2/7] selftests: openvswitch: add config file
-In-Reply-To: <20260710-net-sft-fix-containers-v1-2-a2915c294ef5@kernel.org>
-	(Matthieu Baerts's message of "Fri, 10 Jul 2026 20:04:42 +0200")
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-	<20260710-net-sft-fix-containers-v1-2-a2915c294ef5@kernel.org>
-Date: Thu, 16 Jul 2026 11:38:54 -0400
-Message-ID: <f7t5x2frlkh.fsf@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0kSG70R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83E1F1F000E9;
+	Thu, 16 Jul 2026 15:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784216510;
+	bh=PdAQBjl6KIVuMXkLxfPCPz4km/w/VDTC9FDAj//7F9c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=C0kSG70RD57+n3a8nYGV2jjyNQofE32NmBi47BgzORKYiuPhMC6sNJnhij9QhYqRU
+	 F0LfVD4orlJ2chw7mmCmfzqFfze/cukcis4jBTg/U+x/sjKzEAC7kXWuhqTCh33XyT
+	 gHiSaVoj8bpNDKk7g0UQTdm7Y2sD1AGiMjLiYKVckefAXVkdz5CBBiQNQRi+YAHl3v
+	 SpKYp6aYTvCiTLStZBy3gRuFdDDZLDpx22bt4R5BF06BZGgTIOAOH+MxpejaeALpc0
+	 /Fc0pkZbprcYZKcQuJ+sb6q97KBW3AUIlwLu8Csy6jC8eJlC06BLD4sgrKe7CMCpR5
+	 TABO1PLlbxjyw==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>,  Pratyush Yadav <pratyush@kernel.org>,
+  David Matlack <dmatlack@google.com>,  kexec@lists.infradead.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Mike
+ Rapoport <rppt@kernel.org>,  Samiullah Khawaja <skhawaja@google.com>,
+  Shuah Khan <shuah@kernel.org>,  luca.boccassi@gmail.com
+Subject: Re: [RFC PATCH] liveupdate: Allow multiple openers for /dev/liveupdate
+In-Reply-To: <aljtXsr6xvI6FAmA@google.com> (Pasha Tatashin's message of "Thu,
+	16 Jul 2026 10:40:30 -0400")
+References: <20260714190356.190328-1-dmatlack@google.com>
+	<2vxzy0fcicpi.fsf@kernel.org> <20260715172336.GC3775915@nvidia.com>
+	<aljtXsr6xvI6FAmA@google.com>
+Date: Thu, 16 Jul 2026 17:41:47 +0200
+Message-ID: <2vxzh5lzhrgk.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,79 +49,95 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi Matthieu,
+On Thu, Jul 16 2026, Pasha Tatashin wrote:
 
-"Matthieu Baerts (NGI0)" <matttbe@kernel.org> writes:
-
-> The kselftests doc mentions that a config file should be present "if a
-> test needs specific kernel config options enabled". This selftest
-> requires some kernel config, but no config file was provided.
+> On 07-15 14:23, Jason Gunthorpe wrote:
+>> On Wed, Jul 15, 2026 at 03:50:33PM +0200, Pratyush Yadav wrote:
+>> > Hi David,
+>> > 
+>> > On Tue, Jul 14 2026, David Matlack wrote:
+>> > 
+>> > > Remove the single-opener restriction for /dev/liveupdate by removing the
+>> > > atomic in_use tracking and the exclusive open check in luo_open() that
+>> > > returned -EBUSY. Protect luo_session_deserialize() with a mutex guard so
+>> > > that concurrent open attempts by multiple processes safely executes
+>> > > deserialization only once. Update liveupdate selftest to verify that
+>> > > multiple concurrent openers succeed.
+>> > >
+>> > > LUO does not inherently require a single opener. There is some
+>> > > documentation about it simplifying state management, but the only thing
+>> > > it actually protects is the session deserialization during first open,
+>> > > which can be easily handled with a mutex.
+>> > >
+>> > > Relaxing the single-opener requirement avoids the kernel forcing a
+>> > > design pattern on userspace that it itself does not require, e.g.
+>> > > allowing multiple userspace processes to create and manage sessions.
+>> > 
+>> > Agreed. When the kernel had a global state machine in the early versions
+>> > of LUO, this might have been more relevant. With sessions, even if we
+>> > later add a state machine, it likely will be per-session instead of
+>> > being global. So I think letting userspace open /dev/liveupdate multiple
+>> > times makes a lot of sense.
+>> > 
+>> > Also, today's systemd only supports preserving individual files, and
+>> > does not hand out sessions. To get sessions, userspace must open
 >
-> We could say that a sub-target could use the parent's config file, but
-> the kselftests doc doesn't mention anything about that. Plus the
-> net/openvswitch target is the only net target without a config file.
-
-We've been operating on that assumption from the openvswitch side, but
-it's true that isn't explicitly documented anywhere, and I guess it
-isn't officially supported in the kselftest framework.  I guess we'll
-need to keep updating this config as we add tests for things like SCTP,
-and others, and maybe that's a good thing like we can add a comment
-describing which tests take which configs.
-
-The downside is for most of the OVS testing we use the NIPA scripts
-and those 'inherit' the parent config, so it would be a change on our
-side from the development standpoint (but probably something we should
-have been doing from the beginning).
-
-That said, would it be worth also exploring the 'cascading
-configuration' support?  It seems like a useful feature, but maybe it
-should be a separate discussion.  I ask because of how OVS interacts
-with the networking stack as an 'alternative bridge' so-to-speak, I do
-worry about having to duplicate lots of configurations between the two
-as we expand the test coverage on OVS side.
-
-> Here is a new config file, which is a trimmed version of the net one,
-> with hopefully the minimal required kconfig on top of 'make defconfig'.
-
-Should this also remove the OVS configs from the upper level since there
-shouldn't be OVS tests executing there (ie: CONFIG_OPENVSWITCH*)?
-
-> The Fixes tag points to the introduction of the net/openvswitch target,
-> just to help validating this target on stable kernels.
+> It should in the future, because of permissions issue, see below.
 >
-> Fixes: 25f16c873fb1 ("selftests: add openvswitch selftest suite")
-> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> ---
-> To: Aaron Conole <aconole@redhat.com>
-> To: Eelco Chaudron <echaudro@redhat.com>
-> To: Ilya Maximets <i.maximets@ovn.org>
-> Cc: dev@openvswitch.org
-> ---
->  tools/testing/selftests/net/openvswitch/config | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>> > /dev/liveupdate and create a session. This opens up room for one bad
+>> > process to block every other process from creating sessions. It also
+>> > imposes a need for userspace to add a polling/retry logic for getting
+>> > sessions and serializes their execution around this point.
+>> 
+>> Shouldn't systemd open and own /dev/liveupdate? That was at least what
+>> I originally expected here, you'd talk to it and get a session FD
+>> through dbus.
+>> 
+>> Moving to multi-opening /dev/liveupdate and removing visibility of
+>> what sessions are open from systemd is a different model
+>> 
+>> Not saying this patch is wrong or anything, but that I don't really
+>> understand what kind of model you are going for now.
 >
-> diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
-> new file mode 100644
-> index 000000000000..c659749cd086
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/openvswitch/config
-> @@ -0,0 +1,16 @@
-> +CONFIG_GENEVE=m
-> +CONFIG_INET_DIAG=y
-> +CONFIG_IPV6=y
-> +CONFIG_NETFILTER=y
-> +CONFIG_NET_IPGRE=m
-> +CONFIG_NET_IPGRE_DEMUX=m
-> +CONFIG_NF_CONNTRACK=m
-> +CONFIG_NF_CONNTRACK_OVS=y
-> +CONFIG_OPENVSWITCH=m
-> +CONFIG_OPENVSWITCH_GENEVE=m
-> +CONFIG_OPENVSWITCH_GRE=m
-> +CONFIG_OPENVSWITCH_VXLAN=m
-> +CONFIG_PSAMPLE=m
-> +CONFIG_VETH=y
-> +CONFIG_VLAN_8021Q=y
-> +CONFIG_VXLAN=m
+> CC Luca for systemd's take.
+>
+> /dev/liveupdate should only be accessed by a privileged process, and 
+> sessions should be accessed by whoever originally created them. While 
+> this patch does not change the permissions, it paves the road for us to 
+> move in the wrong direction: instead of having a privileged userspace 
+> manager that distributes the sessions to their rightful owners, it 
+> encourages userspace to work around the permissions so that VMMs access 
+> /dev/liveupdate to retrieve or store their sessions directly. This would 
+> also allow them to access sessions belonging to any other participant of 
+> the live update.
 
+But you can still do all this. In fact, systemd's release notes suggest
+doing so [0]:
+
+    Units can also create their own LUO Sessions by talking to the
+    kernel directly, and store them in their FD Stores, and those will
+    also be preserved and passed down to the unit after kexec
+
+Having a single opener does not in practice prevent userspace from
+creating sessions directly. All it does is to force them to turn the
+open into a polling loop. So I don't think single open achieves the goal
+you think it should. Userspace already works around this restriction.
+
+So as long as we keep access to /dev/liveupdate restricted to privileged
+processes, I don't see why single open is any better.
+
+[0] https://github.com/systemd/systemd/releases#release-v261
+
+>
+> Instead, sessions should be created and retrieved by a privileged 
+> process that knows to send them back to their rightful owner after 
+> retrieval.
+>
+> Also, as a minor concern, each userspace LUO manager needs its own 
+> session to maintain state. This means that by allowing multiple 
+> managers, they may run into naming conflicts for those state sessions.
+
+-- 
+Regards,
+Pratyush Yadav
