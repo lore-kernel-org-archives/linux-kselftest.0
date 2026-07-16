@@ -1,42 +1,41 @@
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4C03F8EB7
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 10:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7751040A951;
+	Thu, 16 Jul 2026 10:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784198701; cv=none; b=rR5dJD32/G4Fg2cM9kqshCU7QWKmXiZw8dN+MAzupYdC+bqSdhrCOhiKtE01PIlww/+qtme0dkxYp3I1Edj51XCMxGXGavfuPVRZI0ksxgipRZTNHSbn9ZRfGe9CzaD+RxA1xCoy0HY+iBDJpd72YDbCJa9P/zz6AM1LuhCUlDM=
+	t=1784198702; cv=none; b=b60hiAVIZiesn7fjaZEncm3WLbGCewLb2HiQKLtwFM5xNe4AcGfsU+yX9lEUf5EXEfX6dHnoCWhLF0boAcFo7CJeUDeswgdIloJlZIRTXd+Qsg/zD5qs4/sgtSbiIrTP+7eN1tTkeGQPEkZtqbK4OBYV5kuWGWcNb4wEpGovguY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784198701; c=relaxed/simple;
-	bh=WDtVLHn1TfK0EyDDUA+3N6yMy6JzwOzeEo8zYmSOCqE=;
+	s=arc-20240116; t=1784198702; c=relaxed/simple;
+	bh=MKXF36B/N58wgTDVUubwpPnEsfYr+reCs2pY25QG5rc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KiaDL8b4ZBFXp/uc7rulKye3RRQR7oYSEwzAgW75mrCC7HWJlnRpb6wHrL7nyBtRVU96w3CH1EfCo3kUI89xCykXyYfHbDihSU5AJ+7bYHVNa0UU3Pi6qxvX7IDMhAWy4G4r2MH7OBjZcIaRTbncYQtfoyvKvUiFs0ZBtf9nmb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gviMGxMb; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=jjOb3g6mKOGUjifd1JQ2bFtLzk+JBIlt+UCP4hIOm476zw5my5pi2ZkbtRKAKB4D5J+sHodAwgwziRIyvLMPbr/SplsX1wTMu3X02JfEz6FgiTGKUjygu6iQCHmENN4/r1lmx+Qaa9guYBegD4qtF/pErt9lllOjljgSRNvJ/Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BoP6fua5; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gviMGxMb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BoP6fua5"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id AD84BC2B9E8;
-	Thu, 16 Jul 2026 10:45:09 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 837BFC2B9E9;
+	Thu, 16 Jul 2026 10:45:11 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 62EE8602B8;
-	Thu, 16 Jul 2026 10:44:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C045111BD3CD7;
-	Thu, 16 Jul 2026 12:44:49 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 34272602B8;
+	Thu, 16 Jul 2026 10:44:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 844BE11BD3CDC;
+	Thu, 16 Jul 2026 12:44:51 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784198691; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1784198693; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=mhYSjNdEm8uNctigqOpdn31Q0IRlbVuoAOk9I7KUjjE=;
-	b=gviMGxMbpEWePHu3YtGA1HFO2xeh6thVzGoMOEPm/1FkColgfeVdf4mWwBWTb4wa2jh2mj
-	AOegIDmiolFtvkTDsth5YSP3vgmzmfzGY1Kxf3udAd3erVLAuyW7pBsqx2a67WwFz8aUBX
-	2lIY7LJswVsY0VfRBNflpRkwV2wBni+Ux3V9q2zJaGtGoyBzWkazJYMER96aRwCX+Tg+qk
-	6pUXv4o0No9US2yyqHZGkMWMflwIPqVGwlEG4or8Qh+VHAIZnC4T62SuHFIZEogfUgf0CG
-	wbv2YVjGgjl5EdeJG0rKbxjUtn9KBvnMX/vy4MRTp7OFCV+jK/kYaSRnb1bEzw==
+	bh=nTJU2NJ54O6LZ0hZrhPZm1F5PCgRji3kSdkWz/GfYyE=;
+	b=BoP6fua52gszpewJHc1ZBvQp5kZJqEkSw0klTke8gd1nWAV4bA2Juvrjm/G5p4Zpm/kimo
+	q+wrfnjqMM7HXxI9cFaW3I2T5quklx/CtWU8eBv4ioFHyQ2aYJydIvUNKrSIFvNJXRZabc
+	rLqCyLAgnaF4zEBzPtUuXqBUlZrmI8TT+tXLBXfEZx63itxTohww5rjjtL5zfApC4j83yu
+	/+X0sLstu/mtmNxnxfDvMYwOArBtRZ47/gvQ8nNT3PLOYXGuVHCsOgyBFK6NSpH+zsMu+t
+	derWgXC3moCeji0+O30IWRx6p7PQjG5TJgzAqLWAs9g8UujZoa2bFk3RjuCycQ==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Thu, 16 Jul 2026 12:44:36 +0200
-Subject: [PATCH v3 3/7] clk: tests: Add Kunit testing for
- of_clk_get_parent_name()
+Date: Thu, 16 Jul 2026 12:44:37 +0200
+Subject: [PATCH v3 4/7] clk: Improve a couple of comments
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-3-98454e83845c@bootlin.com>
+Message-Id: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-4-98454e83845c@bootlin.com>
 References: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com>
 In-Reply-To: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -63,42 +62,39 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Make sure this helper is never broken, especially since we will soon
-make some changes in it.
+Avoid mentioning the function names directly in the comments, it makes
+them easily out of sync with the rest of the code. Use a more generic
+wording.
 
+Suggested-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/clk_test.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/clk/clk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index f47f81b7d72a..4084559e157d 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -3637,9 +3637,23 @@ static void clk_parse_clkspec_with_incorrect_index_and_name(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, IS_ERR(hw));
- }
- 
-+/*
-+ * Verify that of_clk_get_parent_name() returns the correct clock name when
-+ * looking up by index through the consumer's clocks property.
-+ */
-+static void of_clk_get_parent_name_gets_parent_name(struct kunit *test)
-+{
-+	struct clk_parse_clkspec_ctx *ctx = test->priv;
-+	const char *expected_name = "clk_parse_clkspec_1";
-+
-+	KUNIT_EXPECT_STREQ(test, expected_name,
-+			   of_clk_get_parent_name(ctx->cons_np, 0));
-+}
-+
- static struct kunit_case clk_parse_clkspec_test_cases[] = {
- 	KUNIT_CASE(clk_parse_clkspec_with_correct_index_and_name),
- 	KUNIT_CASE(clk_parse_clkspec_with_incorrect_index_and_name),
-+	KUNIT_CASE(of_clk_get_parent_name_gets_parent_name),
- 	{}
- };
- 
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 08874cf9b561..7d63d81ebc09 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -5202,7 +5202,7 @@ static int of_parse_clkspec(const struct device_node *np, int index,
+ 		/*
+ 		 * For named clocks, first look up the name in the
+ 		 * "clock-names" property.  If it cannot be found, then index
+-		 * will be an error code and of_parse_phandle_with_args() will
++		 * will be an error code and the OF phandle parser will
+ 		 * return -EINVAL.
+ 		 */
+ 		if (name)
+@@ -5275,7 +5275,7 @@ of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec)
+  *
+  * This function looks up a struct clk from the registered list of clock
+  * providers, an input is a clock specifier data structure as returned
+- * from the of_parse_phandle_with_args() function call.
++ * from the OF phandle parser.
+  */
+ struct clk *of_clk_get_from_provider(struct of_phandle_args *clkspec)
+ {
 
 -- 
 2.54.0
