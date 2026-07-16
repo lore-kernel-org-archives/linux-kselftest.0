@@ -1,40 +1,41 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34645346E66;
-	Thu, 16 Jul 2026 10:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8996C3AFCEE
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 10:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784198693; cv=none; b=XDPi5+6uwzosX7/ZER8l5JTp6xlW9Aad5PvJ7t4wOF9JJVneD933u/yo/+0R9SddZm1amhZi4jc0SL5QG5S2kQswXsP+XBggmj/VUEVwyJUlPR6fDAXyEkBaUNX+dk+NlgC9HXfmVHH6O9vySJrolt+D/L6m+zjyKcwdoKF/fQc=
+	t=1784198697; cv=none; b=GU/qHgy/7DYtOWuwWfzsVMT4AkoTSrFKYG3113psS6E12BXXoccl1MRz2F5uMg4dNAkMawCCWHRge8q1XGIi5VguyFSMWUsTAHU1cGPmYJt+KqljIuJwGoluBjieEL/6lzKC9UdisoJyTk3xIMppif5pxOky+AKnv0lcDIBQ0Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784198693; c=relaxed/simple;
-	bh=wCqvu0eEjpkCD2dNyierTczaNh4mMrpI3+kkEsPbvP8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q3SB88FyXl/Ny3KkO24iycZwhVD4O4TPTiW27ejJQuzkgsLVREoT14Y/JGYpkqb3Y39ZB9Koftih16K3m8kWracqrOUw9KKug9sYdIMizNZsUlTVIiwGnWWeWs2a3ngu8Qer1GLTT+gRlztLuZ3yTfaYn09lmg2w2BzTJafl0n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GScI2hz6; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1784198697; c=relaxed/simple;
+	bh=fvKp3muxqLO3ZXsRvobuXHT61jNJWSsEw3PxHdgAIVI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Lg5q8GU5g3bZViy0tcyoRd7oey1793D+dwnoO22HYcB8ViduynrAgKT16cbb+kSvJUB4xXxVIBUZYef6FZlZdVq74V4bZcjGaq1Vc0SlJjxHhUh1QZoGsAMVWHctbe7N+85YQRvu5F6mBUhWXraxdJwlTwekXgP4SA0B2SE1nns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=sBi1BlTc; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GScI2hz6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="sBi1BlTc"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 608071A101F;
-	Thu, 16 Jul 2026 10:44:47 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 32C4DC2B9E4;
+	Thu, 16 Jul 2026 10:45:06 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 25BB8602B8;
-	Thu, 16 Jul 2026 10:44:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 14A0C11BD1507;
-	Thu, 16 Jul 2026 12:44:40 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id DCF2D602B8;
+	Thu, 16 Jul 2026 10:44:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 34D8E11BD3CB4;
+	Thu, 16 Jul 2026 12:44:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784198685; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=4URr7AZF/FscWuft5dRhuRrhUjrmDsc/9ds2q70NhoU=;
-	b=GScI2hz6xR0yylirznT9RN3WK7oIRXU4+S7cUQaVGdapuNskLHN7d7B/HqeyWjhnmO/fJQ
-	lT6ZnGq7+y7+8IBdp6ziq33gPTBWmerO0ui6K9HMVx3pOTboued2XjPTefompChHl+bdAg
-	RXcI+Y0F09z+FklOOym7mDIGMdt4MOR+Ytapv6vCSSOA3QM1DPcg75DwKuq9JMIrZpg3ny
-	VNEvr2zocWrfXb2RtupENe0qsQ3iVp1ROZJuVOqukE803H4OQHoS54vYI1sxKqz0iaGtly
-	quOAhcxckRlv0JWO5DI4744+rSmi5rg5EN3z462vxWNzvHb3/+vU0m83frSbig==
+	t=1784198687; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=R5Jti0bTgzxOr6073sChkcLCtqN2FPsmeK2o9HwQWUI=;
+	b=sBi1BlTckZlcZe8NXu/hw+uNVeUztLRVMXusZEo8UPF+70We/Cf1dXYXnE3yv8vpjA/y4g
+	E+P3uiElxckc7NnWxo0TOOa4oR3cM6giFUtEyBOrmS/CkDQWLF3fjw1zBhJw3BNvJ6mLRc
+	z0aZ/knRwmhb/RgSkMADoV+bQ7dmuhGwR0saTaX385HG+SAHiXlZqQGz2g1Mq2+QeGFdE7
+	HXT/ycR1DWOvkulFrKcAm2D5j7POnO79UfQDaOiA8B5HSHn3/Sd4otFU5KSHADXSg15whd
+	YiAMdXmfz0BJt961rpO5I/Rh/stTcLL9yE20jayrne0MQS1vaxkl+SDsh7M//g==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Subject: [PATCH v3 0/7] clk: Add support for clock nexus
-Date: Thu, 16 Jul 2026 12:44:33 +0200
-Message-Id: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com>
+Date: Thu, 16 Jul 2026 12:44:34 +0200
+Subject: [PATCH v3 1/7] dt-bindings: clock: Introduce nexus nodes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,12 +43,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/5WNQQ6CMBAAv0J6ds2yIEVP/sNwKGWVTaQlLTYaw
- t+t/MDjzGFmVZGDcFSXYlWBk0TxLkN1KJQdjXswyJBZEVKDukSIdnQsAwdIGgiCLYFlJizhNcc
- lsJnA1Br5xKY/06ByaA58l/c+uXWZR4mLD5/9mehn/8onAoS+blrUra605mvv/fIUd7R+Ut22b
- V/Lh9UA1gAAAA==
-X-Change-ID: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-1-98454e83845c@bootlin.com>
+References: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com>
+In-Reply-To: <20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -59,64 +58,61 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-clk@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
- Herve Codina <herve.codina@bootlin.com>
+ "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Adding support for clock nexus had some prerequisites requested by
-Stephen, such as adding new selftests, the initial discussions come
-from:
+Hardware containers can just decouple external resources like clock
+without any more control. Nexus nodes already exist for PWM and GPIOs,
+add a binding to allow them for clocks as well.
 
-Link: https://lore.kernel.org/linux-clk/20260129201003.288605-1-miquel.raynal@bootlin.com/
-
-Changes in v3:
-- Prevent out-of-bounds clock-ranges fallback in of_parse_clkspec()
-- tests: Check of_clk_add_hw_provider_kunit() return value and fix node
-  ref leaks
-- Link to v2: https://lore.kernel.org/r/20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com
-
-Changes in v2:
-- Collected tags.
-- Rebased on top of v7.2-rc1
-- Exported (test) clock symbols using the _IF_KUNIT() variant, and
-  imported the NS in the test file.
-- Fixed a leaking node reported by Brian in the tests. Also used
-  existing helpers to simplify the test implementation as he wisely
-  suggested.
-- Reworded the nexus node binding description as suggested by Stephen.
-- Dropped redundant and non restraining properties from the Nexus
-  node as suggested by Rob.
-- Assigned clock/clock-rate properties now traverse Nexus nodes.
-- Rename helpers following Stephen proposals.
-- Rework tests following Stephen hints.
-- Link to v1: https://lore.kernel.org/r/20260327-schneider-v7-0-rc1-crypto-v1-0-5e6ff7853994@bootlin.com
+No examples are given, the file is litteraly a copy-paste from Hervé
+Codina's work on PWM Nexus nodes, hence we just point to the examples
+there which already illustrate very clearly the concept of the various
+properties.
 
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 ---
-Miquel Raynal (Schneider Electric) (7):
-      dt-bindings: clock: Introduce nexus nodes
-      clk: tests: Add clk_parse_clkspec() Kunit testing
-      clk: tests: Add Kunit testing for of_clk_get_parent_name()
-      clk: Improve a couple of comments
-      clk: Use the generic OF phandle parsing in only one place
-      clk: Add support for clock nexus dt bindings
-      clk: tests: Add Kunit testing for nexus nodes
+ .../bindings/clock/clock-nexus-node.yaml           | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
- .../bindings/clock/clock-nexus-node.yaml           |  30 +++++
- drivers/clk/Makefile                               |   1 +
- drivers/clk/clk-conf.c                             |  12 +-
- drivers/clk/clk.c                                  |  15 ++-
- drivers/clk/clk_kunit_helpers.c                    |  31 +++++
- drivers/clk/clk_test.c                             | 139 +++++++++++++++++++++
- drivers/clk/kunit_clk_parse_clkspec.dtso           |  31 +++++
- include/kunit/clk.h                                |   2 +
- 8 files changed, 249 insertions(+), 12 deletions(-)
----
-base-commit: 7f26e010764df304602f33912a0550dcf46e72c2
-change-id: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+diff --git a/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml b/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml
+new file mode 100644
+index 000000000000..ff3283bd5fb1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml
+@@ -0,0 +1,30 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/clock-nexus-node.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Clock Nexus
++
++description: >
++  A nexus node allows to remap a clock specifier list in a consumer node
++  through a container or a connector node in a generic way. With this
++  remapping, the consumer node needs to know only about the nexus
++  node. Resources behind the nexus node are decoupled by the nexus node
++  itself.
++
++maintainers:
++  - Miquel Raynal <miquel.raynal@bootlin.com>
++
++select: true
++
++properties:
++  clock-map:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++
++dependentRequired:
++  clock-map: ['#clock-cells']
++
++additionalProperties: true
++
++# See the original pwm-nexus-node.yaml description for examples
 
-Best regards,
 -- 
-Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+2.54.0
 
