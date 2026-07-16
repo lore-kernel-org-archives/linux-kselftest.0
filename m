@@ -1,78 +1,83 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D455F42BE90
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 15:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED5814ABE;
+	Thu, 16 Jul 2026 15:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784214734; cv=none; b=unMeF5DMAhAffiS1H7FJdFDyAUMEM0Cqh6KV1zbEr8DNUFvf/stixomWgstfiHx0i3puUA4R1LXwFoSZeq1jgg0zQD+d5PbDr3LDmTyg/fqylLbKckVx6Z8i80KRjJFTZTlghw7wlpsjod3zsSEc1MgWC+n7mpG4+YX65qmK/Yk=
+	t=1784215034; cv=none; b=mQshv7XW24+9T2zuPXsgpIKAXOXJIYl3DHP0dpmNPDFfi4M06SnVPyAOUtP6zBzWuPcJw5Zo/1N8SQMEr0VI/Kh+qwEfFkG9g7/W8wZvRlNl9EDJjlgzqYL74iXpD1UZ0BvRz2Wy37K3SiasjBGwwcCI38qWR2zNo5BT43CxOgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784214734; c=relaxed/simple;
-	bh=GLp+juEsDrHE2elzXTCgtE3pWsJmhXsNM8FsKwMAwIg=;
+	s=arc-20240116; t=1784215034; c=relaxed/simple;
+	bh=1j6qktNxJNvvQOXlRbjiHTlJ2AZTm5in0SjIZpIrZYw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kWHW62N+IfWUqAYrGiVUs6jS7PpTGisqYbObKSg3UqxRZNveE7em0wAmfQpwekfErzgeTTEyiH9KSxeIHqGQ14KusuwzivV84MkvBF3Zy0EUmBaamrRCzpkvlZrnwhxQsTIU8rF/nCX6rFa1wYULyqzwVVsMJvEERaFRGhxmckM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHpSh/pZ; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version; b=hIhr/BEy4Pi0Uxq5wYtYt6W3fVBbVnOyMZ+WpGBI7gTI5+rWegNqiBt9DpG9QpoZG6aCOPKZ0F7cIHk6uyRfDDSO5ng7f36AYCyxnrTryoGXbVQhvSM+0YDuaXfnZAhI+9KIZye9EkEfxdnjggNo6GcAVB2pya9d03nTm759Rvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=S2CfLZpb; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHpSh/pZ"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c160420289bso941390566b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 08:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784214731; x=1784819531; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gG+g7cvO60t9OK2852iCKFbaTdC0A88G603w2VBtTG4=;
-        b=dHpSh/pZNB8atMItYiZo+fDpuf1ZirdSMwAg403dTdmvn+AnqNlPZ8H/w4ekneM8xY
-         c/sTs4xyR9BgvXdhyLcPk0h4GlnEK5AOkmIhI52684XFeHTZsjRag8LhvL9/LGsueKPg
-         ntKjoPaaIZ3kpUfBu3xNLHmp7GD82m+DixW59YRqDdnQlW9FkWyY/yxvcZEU3wH0Aeiq
-         q4c55i+IpS6EL1kEz7XoksEn2WYfsJRnri0xhAipJpfDXKpcrdsFtBu5iHxER0t0ahHV
-         QZgfcwGoH/KK8FXUH8d2HWTguZqqQkJXeYwvEO7/UgllCjb5Fd0Yucjtc/jh1D0EBTTC
-         a2dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784214731; x=1784819531;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gG+g7cvO60t9OK2852iCKFbaTdC0A88G603w2VBtTG4=;
-        b=N5+bQmYX4jlpu7cIxZmJZWlMJMJ7XAfEEjAJMCqvo5P4+UFv+bNQK26qzHKt9Jkl+w
-         nnWcmPHobF09YNN6kg0dXI4FYc7Biey/1upLO+EVBfln8IcpeatEqMeHbvUAapMxuJcl
-         IO0/qQeXJtyDvulwfaaP6brEOm32F9a8uuBCJOnNjYw3QQ9kiSj/IqVcBh9bhkx3rhBu
-         TjgZTbDnKmfz6pBpZ78r96t82bM3b/hug8rJ5WSsX8g6BL3I25Fnbu4djI56dLg6STTU
-         vouRuC+HS1fQ3TqkXlDW/nr4KO/8uKnSBvnXHFhUEcXCoy+jlXm4x6iEJ4/7wYRVR8OM
-         y0dA==
-X-Forwarded-Encrypted: i=1; AHgh+RoW09ObOicV/ROR0CYtTTBBjcT18u1yYIOvX3B2TFvCphZ33YWW4pLILPZAdeeGp0m5i3/5wwECp3l7tHtEuR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5QX/Sj1cR0rw6T/LFXebZzylWR18bjNe7diJ31oAYHXBo6NFP
-	4U1KynTug2r0AC6RCgjuAZOlTLBSFd8gQsKVXFUwQWIL1Xzz2+CXtRzwV5e9dMvuFTQ=
-X-Gm-Gg: AfdE7cmI/AG6hQqPhbG6LbwgnDOaT7MJmtN60fddONXoo1MEcGEXx1vT1g9luf2owt3
-	F5XN5oNmmILRYAPZZK/hH6GJ1Lxwu6+aS9GtC50hAgsq6oqV/j7q05CGf2dYEMIBTxsLKMgp2fe
-	H91WioKjq9jMlA7APR1+pektOLtbc9h0FSLcSnfceV5tNVcN1k0YmPExPP2HlP8TkgAMnVZxCxi
-	gWbkCSIbjHq2oBQGtwUPt1lYleeme4vbmpo/a3bAzOplLkbOqcGnFAthI7DjPGwK6IE5qCmPbVu
-	MOAhbqa+h1yhcfhV7jZuxiPH9SNj9NJnepnG6KshDCNkYbvg+vwE5EM7BwV7HqpGNNDss6eW/0T
-	AjUUFUUyUJy+AEGUS0BM+MGzEA6ZkEPBFk/yRT/KJn8bvunHhWm+2ZckYNiV4ar/hp5E4iFH4rL
-	BMtcbrv8w30mNpEOK4Nu0PqgV7xjXY9pbsl25Toqtv3GZK8ByKaJTgj9ov8m6cT7siMF29Dn7mz
-	ZkEGQ==
-X-Received: by 2002:a17:907:3f12:b0:c16:13c3:b1ef with SMTP id a640c23a62f3a-c1667a0cd22mr638712366b.24.1784214730734;
-        Thu, 16 Jul 2026 08:12:10 -0700 (PDT)
-Received: from arch-piotr.tailb7ebba.ts.net (226.55.classcom.pl. [195.150.55.226])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c16871262casm236607466b.6.2026.07.16.08.12.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 08:12:10 -0700 (PDT)
-From: Piotr Zarycki <piotr.zarycki@gmail.com>
-To: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: seanjc@google.com,
-	vkuznets@redhat.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Piotr Zarycki <piotr.zarycki@gmail.com>
-Subject: [PATCH v4] selftests: add swap() macro to kselftest.h
-Date: Thu, 16 Jul 2026 17:11:51 +0200
-Message-ID: <20260716151151.697403-1-piotr.zarycki@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260528154003.3594107-1-piotr.zarycki@gmail.com>
-References: <20260528154003.3594107-1-piotr.zarycki@gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="S2CfLZpb"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=SAZ8/BhCMnGmySiPyEgDtcYdmMNZhlXkPyz2Lr2GfpU=; b=S2CfLZpbUOxQcVH235CtAPFqKy
+	+/KX3Ho76hCmOE45SOVu0AuEYQDT10HVStFLpeUPbGCNJUdYl5V9eBN2Lnpw8OEZrQlUmXz3XVI/l
+	xRHhrZ7UFrAiw38lCpD6Hj7HJWLWwHsgm9mG3/teoDKAj0LlnddfvjJ2dcP28i5myDOarinnZYO9P
+	INlGCXdTg6GfJOW8ncN3Dvyd0+M7Icz1Ld5Bteiz+y4jqR/b0leVgrbPTn3fNzOVHJ5laEvZsgE9G
+	kMjdMVQbpKEn6lYvG+3XDmufWJoSkSXlQxrtaeNsT04AzDsVHtSmDtaZ4phTRm9/sAP7LVWOI1bqC
+	Xks20TLg==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wkNpj-00000002l0J-2rOR;
+	Thu, 16 Jul 2026 15:17:08 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wkNpj-000000012tA-1k9i;
+	Thu, 16 Jul 2026 16:17:07 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	x86@kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Tycho Andersen <tycho@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Ashish Kalra <ashish.kalra@amd.com>,
+	Connor Williamson <connordw@amazon.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Zhou Yuhang <zhouyuhang@kylinos.cn>,
+	Zi Li <zi.li@linux.dev>,
+	Dan Williams <djbw@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	connordw@amazon.co.uk,
+	graf@amazon.de,
+	fgriffo@amazon.co.uk,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [RFC PATCH 06/11] iommufd: Plumb dma-buf memory-type (RAM vs MMIO) through the phys map
+Date: Thu, 16 Jul 2026 10:31:26 +0100
+Message-ID: <a716d496ec095e1f71bb5fc8be3e2559bbe914cc.1784194290.git.dwmw@amazon.co.uk>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <f09647f427565c1789a6979470045aab78661563.1784194290.git.dwmw@amazon.co.uk>
+References: <f09647f427565c1789a6979470045aab78661563.1784194290.git.dwmw@amazon.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,83 +85,157 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Add swap() to tools/testing/selftests/kselftest.h with an #ifndef guard.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Remove the local swap() definition from mm/uffd-stress.c; kselftest.h is
-already included via uffd-common.h, so the local definition is redundant.
+iommufd's dma-buf import path programmed the IOMMU unconditionally with
+BATCH_MMIO (IOMMU_MMIO set, IOMMU_CACHE cleared).  This is correct for
+the VFIO PCI dma-buf exporter -- its phys is PCI BAR (MMIO) memory --
+but it is the wrong prot for a dma-buf whose phys is RAM: on AMD-Vi the
+device DMA silently misroutes (Identify Controller against a
+gmem-provider-backed target completes with status=0 but the target
+region is not written).
 
-Use swap() in hyperv_tlb_flush.c to replace the open-coded PTE swap and
-remove the TODO comment.
+Carry the exporter's memory type through to the fill routine:
 
-Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+  - Add is_cpu_ram to iopt_pages_dmabuf and pfn_reader_dmabuf.
+  - Make sym_vfio_pci_dma_buf_iommufd_map() also fill *is_cpu_ram.
+    VFIO PCI's exporter is MMIO (false); the sample gmem provider's
+    exporter is CPU RAM (true).
+  - pfn_reader_fill_dmabuf() picks BATCH_CPU_MEMORY vs BATCH_MMIO based
+    on the captured kind.
+
+The eventual formal negotiated exporter op should return phys and
+memory type together in one call, replacing both symbol_get() lookups.
+
+Signed-off-by: David Woodhouse (Kiro) <dwmw@amazon.co.uk>
 ---
-Changes in v4:
-- Drop uffd-stress.c's local swap() entirely instead of guarding it;
-  kselftest.h is already included via uffd-common.h.
+ drivers/iommu/iommufd/io_pagetable.h |  7 ++++++
+ drivers/iommu/iommufd/pages.c        | 33 +++++++++++++++++++++++-----
+ 2 files changed, 34 insertions(+), 6 deletions(-)
 
-Changes in v3:
-- Add #ifndef guard to mm/uffd-stress.c to fix a redefinition warning;
-  uffd-stress.c defines its own swap() without a guard, which conflicts
-  when kselftest.h is included first via uffd-common.h.
-
-Changes in v2:
-- Move swap() from tools/include/linux/kernel.h to kselftest.h; kernel.h
-  breaks perf (swap is used there as a function pointer call).
-
- tools/testing/selftests/kselftest.h                | 4 ++++
- tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c | 6 +-----
- tools/testing/selftests/mm/uffd-stress.c           | 2 --
- 3 files changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 60838b61a2da..7f53751523d8 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -64,6 +64,10 @@
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
- #endif
- 
-+#ifndef swap
-+#define swap(a, b)  do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
-+#endif
-+
- #if defined(__i386__) || defined(__x86_64__) /* arch */
- /*
-  * gcc cpuid.h provides __cpuid_count() since v4.4.
-diff --git a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-index 15ee8b7bfc11..514d41f00714 100644
---- a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-+++ b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-@@ -131,14 +131,10 @@ static void set_expected_val(void *addr, u64 val, int vcpu_id)
+diff --git a/drivers/iommu/iommufd/io_pagetable.h b/drivers/iommu/iommufd/io_pagetable.h
+index 27e3e311d395..887ed94474c7 100644
+--- a/drivers/iommu/iommufd/io_pagetable.h
++++ b/drivers/iommu/iommufd/io_pagetable.h
+@@ -206,6 +206,13 @@ struct iopt_pages_dmabuf {
+ 	/* Always PAGE_SIZE aligned */
+ 	unsigned long start;
+ 	struct list_head tracker;
++	/*
++	 * true if the exporter's phys is CPU RAM (map with IOMMU_CACHE, no
++	 * IOMMU_MMIO); false for MMIO/BAR memory (map with IOMMU_MMIO).  Set
++	 * by the exporter dispatch at map time; consulted by
++	 * pfn_reader_fill_dmabuf() to pick BATCH_CPU_MEMORY vs BATCH_MMIO.
++	 */
++	bool is_cpu_ram;
+ };
  
  /*
-  * Update PTEs swapping two test pages.
-- * TODO: use swap()/xchg() when these are provided.
-  */
- static void swap_two_test_pages(gpa_t pte_gva1, gpa_t pte_gva2)
- {
--	u64 tmp = *(u64 *)pte_gva1;
--
--	*(u64 *)pte_gva1 = *(u64 *)pte_gva2;
--	*(u64 *)pte_gva2 = tmp;
-+	swap(*(u64 *)pte_gva1, *(u64 *)pte_gva2);
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index 2d4ea41460fd..f9b2ae6d7e96 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -1080,6 +1080,7 @@ static int pfn_reader_user_update_pinned(struct pfn_reader_user *user,
+ struct pfn_reader_dmabuf {
+ 	struct phys_vec phys;
+ 	unsigned long start_offset;
++	bool is_cpu_ram;
+ };
+ 
+ static int pfn_reader_dmabuf_init(struct pfn_reader_dmabuf *dmabuf,
+@@ -1091,6 +1092,7 @@ static int pfn_reader_dmabuf_init(struct pfn_reader_dmabuf *dmabuf,
+ 
+ 	dmabuf->phys = pages->dmabuf.phys;
+ 	dmabuf->start_offset = pages->dmabuf.start;
++	dmabuf->is_cpu_ram = pages->dmabuf.is_cpu_ram;
+ 	return 0;
  }
  
- /*
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index 700fbaa18d44..3a85a29203f4 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -56,8 +56,6 @@ static uffd_global_test_opts_t *gopts;
- static char *zeropage;
- pthread_attr_t attr;
+@@ -1106,9 +1108,15 @@ static int pfn_reader_fill_dmabuf(struct pfn_reader_dmabuf *dmabuf,
+ 	 * always filled using page size aligned PFNs just like the other types.
+ 	 * If the dmabuf has been sliced on a sub page offset then the common
+ 	 * batch to domain code will adjust it before mapping to the domain.
++	 *
++	 * The exporter's memory type (CPU RAM vs MMIO/BAR) selects the batch
++	 * kind so downstream iommu_map sets IOMMU_CACHE for cache-coherent RAM
++	 * or IOMMU_MMIO for BAR memory.  The kind was captured at map time by
++	 * the exporter dispatch.
+ 	 */
+ 	batch_add_pfn_num(batch, PHYS_PFN(dmabuf->phys.paddr + start),
+-			  last_index - start_index + 1, BATCH_MMIO);
++			  last_index - start_index + 1,
++			  dmabuf->is_cpu_ram ? BATCH_CPU_MEMORY : BATCH_MMIO);
+ 	return 0;
+ }
  
--#define swap(a, b) \
--	do { __auto_type __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+@@ -1459,22 +1467,31 @@ static const struct dma_buf_attach_ops iopt_dmabuf_attach_revoke_ops = {
+  * iommufd and vfio have a circular dependency. Future work for a phys
+  * based private interconnect will remove this.
+  */
++/*
++ * Look up the exporter's phys accessor for iommufd's private-interconnect
++ * path.  Also fills *is_cpu_ram: true if the exporter's memory is normal
++ * cache-coherent RAM (needs BATCH_CPU_MEMORY / IOMMU_CACHE), false for MMIO
++ * (needs BATCH_MMIO / IOMMU_MMIO).  This will be replaced by a formal
++ * exporter op that returns phys + memory type together.
++ */
+ static int
+ sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
+-				 struct phys_vec *phys)
++				 struct phys_vec *phys, bool *is_cpu_ram)
+ {
+ 	typeof(&vfio_pci_dma_buf_iommufd_map) fn;
+ 	int rc;
  
- const char *examples =
- 	"# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
+ 	rc = iommufd_test_dma_buf_iommufd_map(attachment, phys);
+-	if (rc != -EOPNOTSUPP)
++	if (rc != -EOPNOTSUPP) {
++		*is_cpu_ram = false;	/* test hook mimics VFIO MMIO */
+ 		return rc;
++	}
+ 
+ 	/*
+ 	 * Prototype: try the sample gmem provider's dma-buf exporter.  This
+ 	 * mirrors the vfio-pci private-interconnect hook, and (like it) is
+ 	 * meant to be replaced by a formal negotiated exporter op returning
+-	 * phys for iommufd.
++	 * phys + memory type.  The provider serves RAM, so mark it CPU_RAM.
+ 	 */
+ 	{
+ 		extern int gmem_provider_dma_buf_iommufd_map(
+@@ -1485,8 +1502,10 @@ sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
+ 		if (gfn) {
+ 			rc = gfn(attachment, phys);
+ 			symbol_put(gmem_provider_dma_buf_iommufd_map);
+-			if (rc != -EOPNOTSUPP)
++			if (rc != -EOPNOTSUPP) {
++				*is_cpu_ram = true;
+ 				return rc;
++			}
+ 		}
+ 	}
+ 
+@@ -1498,6 +1517,7 @@ sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
+ 		return -EOPNOTSUPP;
+ 	rc = fn(attachment, phys);
+ 	symbol_put(vfio_pci_dma_buf_iommufd_map);
++	*is_cpu_ram = false;	/* VFIO PCI dma-buf carries BAR (MMIO) memory */
+ 	return rc;
+ }
+ 
+@@ -1526,7 +1546,8 @@ static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
+ 	if (rc)
+ 		goto err_detach;
+ 
+-	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
++	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys,
++					      &pages->dmabuf.is_cpu_ram);
+ 	if (rc)
+ 		goto err_unpin;
+ 
 -- 
-2.55.0
+2.54.0
 
