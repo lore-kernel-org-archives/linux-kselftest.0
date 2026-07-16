@@ -1,115 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E0E33688C;
-	Thu, 16 Jul 2026 15:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2686400DE8;
+	Thu, 16 Jul 2026 15:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784215411; cv=none; b=QomFUbfmoYH7ZqviwKmXVGDQ75z8uN2eKn5ZUzWvfL4A08MsEkkGWrHRF1sjXOF3apUhkiG36MrrwaQP1od6MF91u6tFcAlRI5Av2xkq8FHgBDjBc4omrxROzhk1EQxP7I4v5r6KP1RWlLag9kfz48TqC90qLaF9Pfm4q8rWPOA=
+	t=1784215691; cv=none; b=L1R+gQqKjDYFqgODq+RRwuQlTi//4ZTphQhfFblJi2gP0YmiQnSnhjkqEqsrZTgKruJV8VyD9klm8imDBSsITSrWEPVIvQoGTYSpZQD+dKHq2XAB1kPPizdZZLkhFty1vqBWpmkjAXm6UlPxndijLPYUdv1wU+EzFoQ+WkjrKwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784215411; c=relaxed/simple;
-	bh=9Lj8QWeAW/f6BYocnF2H5xXmLW87xIGlGBWuLDNxgso=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kIEPv68BXPSBIE8E0u/JTGhRpX56VbTX/p82tQrNFvuGuhhCR2xglFO6kNA+wct93cxRHRO7sDiq11LyHCFUWf9/oAstKLpmvNk98Yr/pwqcUrtvInM4fTk5T1PCE6wOuif8IjVaIOE57Np/4obrtjbKdY9fo8NJDqy092Wq5so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRwM5aEl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784215691; c=relaxed/simple;
+	bh=hsDRfma56w206p8//l5E5r8hf0aTgPp91AYKBXlklaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tm4do6gZarqBx89tI8Jm2Giwks/4BFQ5SzFCuaztLyAh5KrEUy0T3acyI0XbU4sx/5USkhlCTlk/Ba8Eu5ZmZ0AzhZKVatAIZuMFmOYmcknpOW75+Vuy7d8oCS1ghwX9EPll1LTedS9vPvCsDVWS5VkYgIZX25AWe5GGb7rbQ5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSjOcuzd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRwM5aEl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79DBB1F000E9;
-	Thu, 16 Jul 2026 15:23:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSjOcuzd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243E01F00A3A;
+	Thu, 16 Jul 2026 15:28:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784215410;
-	bh=8yxtYzVJC/YQcgDQF17z4a4o6jbAXtuLmTRsrhHqBRs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=lRwM5aElMnpptEKmPpsPm1KyQJGAq302EL1cLrYDGvERvDwNmNdD4AOS9blZMuHoJ
-	 XKOKwaSv6K17LiZNgA6Mnnn8pgW8WBW1BusLynbaFhZzXO8ws1nnyhsW79Yc+b4h5Y
-	 EkQOGPkf+OMichonv2QhGwUXKBlrW19C4bSyf5ex+YqAKv/KB8yaJvS9u5dOw6IIZn
-	 cdPI/zytfWIsbiPwjJtH3hIhcjoWjtoUVMRID5JlpOiYV7O76H8CZCce0VrMMwvYUv
-	 45StT8TROgpnXAVCVOQDmNI8+Bn5TYDR1CSz++77v9W7opfAYbjD5yR0f/WMOWB2tj
-	 rY/6dUR7wUWDg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>,
-	David Matlack <dmatlack@google.com>,  kexec@lists.infradead.org,
-	linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-	Mike Rapoport <rppt@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Shuah Khan <shuah@kernel.org>, Luca Boccassi <luca.boccassi@gmail.com>
-Subject: Re: [RFC PATCH] liveupdate: Allow multiple openers for /dev/liveupdate
-In-Reply-To: <20260715172336.GC3775915@nvidia.com> (Jason Gunthorpe's message
-	of "Wed, 15 Jul 2026 14:23:36 -0300")
-References: <20260714190356.190328-1-dmatlack@google.com>
-	<2vxzy0fcicpi.fsf@kernel.org> <20260715172336.GC3775915@nvidia.com>
-Date: Thu, 16 Jul 2026 17:23:27 +0200
-Message-ID: <2vxzldbbhsb4.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1784215689;
+	bh=oaIf2bJqWuKl6xlqqkPnkkfbrbDLiH3vk192GmIwHZk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=DSjOcuzd0iLGxdIes4vVV48dc4V0xwUGKeQz/5Xho6MHAQsIujpe+BdnwPw0wg0+U
+	 kWn78oND/Nsyb65Ui+FTYIxM21ZVE43nzaOmR/4/FweSh5R46+jozUFTMk/oL1ydAb
+	 CMvoOwXNblYtgrjwlIPoNL9RBSOsH8r4OUI+XhSIcjVLJ1PHC2YGWYSDMK+yufe6bB
+	 KJPe5uyJWBiwSGKikLPe/hBOjcKysvFYtcoYGIh3j7SQ2QuAGDX6axU1hn1qNqWWhk
+	 JA5jOhLn61lR6HAAU2byHYkiPbBtgcsbjOnAzsWuNBZkk7d+b99KGn275vXpLWebDq
+	 a1DHcX04mcdbA==
+Date: Thu, 16 Jul 2026 16:28:02 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
+	Jean-Philippe Brucker <jpb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v12 02/29] arm64/fpsimd: Update FA64 and ZT0 enables when
+ loading SME state
+Message-ID: <15a9ae14-395d-472a-a5be-9e46524fb493@sirena.org.uk>
+References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
+ <20260709-kvm-arm64-sme-v12-2-d0301d79ef58@kernel.org>
+ <ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xV6YaOAEqkneq9ee"
+Content-Disposition: inline
+In-Reply-To: <ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
+X-Cookie: The more the merrier.
 
-On Wed, Jul 15 2026, Jason Gunthorpe wrote:
 
-> On Wed, Jul 15, 2026 at 03:50:33PM +0200, Pratyush Yadav wrote:
->> Hi David,
->> 
->> On Tue, Jul 14 2026, David Matlack wrote:
->> 
->> > Remove the single-opener restriction for /dev/liveupdate by removing the
->> > atomic in_use tracking and the exclusive open check in luo_open() that
->> > returned -EBUSY. Protect luo_session_deserialize() with a mutex guard so
->> > that concurrent open attempts by multiple processes safely executes
->> > deserialization only once. Update liveupdate selftest to verify that
->> > multiple concurrent openers succeed.
->> >
->> > LUO does not inherently require a single opener. There is some
->> > documentation about it simplifying state management, but the only thing
->> > it actually protects is the session deserialization during first open,
->> > which can be easily handled with a mutex.
->> >
->> > Relaxing the single-opener requirement avoids the kernel forcing a
->> > design pattern on userspace that it itself does not require, e.g.
->> > allowing multiple userspace processes to create and manage sessions.
->> 
->> Agreed. When the kernel had a global state machine in the early versions
->> of LUO, this might have been more relevant. With sessions, even if we
->> later add a state machine, it likely will be per-session instead of
->> being global. So I think letting userspace open /dev/liveupdate multiple
->> times makes a lot of sense.
->> 
->> Also, today's systemd only supports preserving individual files, and
->> does not hand out sessions. To get sessions, userspace must open
->> /dev/liveupdate and create a session. This opens up room for one bad
->> process to block every other process from creating sessions. It also
->> imposes a need for userspace to add a polling/retry logic for getting
->> sessions and serializes their execution around this point.
->
-> Shouldn't systemd open and own /dev/liveupdate? That was at least what
-> I originally expected here, you'd talk to it and get a session FD
-> through dbus.
+--xV6YaOAEqkneq9ee
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-AFAIK I doesn't do so today. You can either create FDs and save them via
-FDStore, and systemd will put them in its global session, or you grab a
-session directly from /dev/liveupdate and save the session via FDStore.
-Maybe in the future it will add the capability to vend out sessions
-through dbus as well, but at least today it doesn't do so.
+On Thu, Jul 16, 2026 at 11:52:36AM +0100, Mark Rutland wrote:
 
->
-> Moving to multi-opening /dev/liveupdate and removing visibility of
-> what sessions are open from systemd is a different model
->
-> Not saying this patch is wrong or anything, but that I don't really
-> understand what kind of model you are going for now.
+> >  		if (test_thread_flag(TIF_SME)) {
+> > -			unsigned long vq = sve_vq_from_vl(sme_vl);
+> > -			sysreg_clear_set_s(SYS_SMCR_EL1, SMCR_ELx_LEN, vq - 1);
+> > +			sysreg_cond_update_s(SYS_SMCR_EL1, task_smcr(current));
+> > +			isb();
+> >  		}
 
-My main idea is that I don't think it is the kernel's business to
-enforce either of those models. There are no technical or architectural
-reasons for doing so. If systemd wants to be the sole owner of
-/dev/liveupdate and vend out sessions, it is free to not expose it to
-its daemons by setting the right permissions on the file.
+> What's the ISB for? That mysteriously appeared in v11 without
+> explanation. It wasn't in the original code, prior versions of the
+> series, or my suggested rework with the task_smcr() helper.
 
--- 
-Regards,
-Pratyush Yadav
+> I don't believe it's necessary to add an ISB here.
+
+I can't remember or figure it out, I'll delete.
+
+--xV6YaOAEqkneq9ee
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpY+IEACgkQJNaLcl1U
+h9C7Iwf/YuGnlCXvhBlz9BWXCUqYqn9u51Mi2A5/kXGFOEGaMF0Uu9MGkvq2Jk8F
+EOseSkFIRcD7GiH3vDa2USAS+1NLt+TPjQy2gRSMD62MCXm8N7BJY5LioojxX7Rz
+Ta0iqU+mWhVRuJxJ82JAWagl6zKf47yda6x+5tFDegJFU+5bUTTPcagYyWtDvfgt
+sEVPNBjbQBZdC4QdbkH7/6gw23LCPuaMWqZlOP5UHuFn83ZwvAKy6/PxzpMs2y4p
+4+4qFfGT6oanft1qW1XJ9TfgyqAjrQ1Ug6KUpdVpktBfyigwcw2MFWxdUzLmSLKG
+LbYJk26LLkkGxmTPXVFVEAKBHv2b+Q==
+=/cAU
+-----END PGP SIGNATURE-----
+
+--xV6YaOAEqkneq9ee--
