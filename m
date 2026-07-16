@@ -1,122 +1,256 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E67841D651
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 11:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2770E408604
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 12:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784203072; cv=none; b=lH+zEKxjiQ/loO+Ebif9NHZHbRMN0TQWPdFYJ8rdntndKG+Mjx19UzSaGMnTHxfAJgaWgP/7utGk/azUuWyh3C4joINrd2zfUs9fp2QRpKMjfD+XnpKr6Rc123s59dMwzUjshIE8PTMPPMAOGjWjzHLDR5ykIFX9A9491ofF4JY=
+	t=1784203250; cv=none; b=RQFrBE2kizLq6zBTNEaBOi7I0zJHdFHyTq/dpst/aaTJrVRNT6cI0kUPPkEMD22zSxtNIFYuMaUdR2fIjd6n4sc9fcHk8RX9tex5x3B8Bp6jtZN7StI9SEqwGa9kqonYqqQ2xv2luy3YP2QLtq5b6kdhRYDmH5OHiPGGxpMn6lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784203072; c=relaxed/simple;
-	bh=+GHwzsQ+4i43LI5Xh5tdHnXG/sDaoYxRx5Sy1qBv2Ds=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PDJqpUe68ofGlKrWy0XIVxR7XmoaXOIJW4VOzLRDVmWFwzN2+QWgEybALXz0yc/sUZhnPlVzKF+zxeFTzPJjsvAAEEySeq2hJekVUqCraejJA3RkBSI152zXff6QVu4Z3N9GXa1CmTfSgceLMmHY2oRtVw9aaEEXdsHgYNTXbz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQj9JGjL; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784203250; c=relaxed/simple;
+	bh=YcUzI342MNdvLV1HMzeqi6BKbIShNHSUNw3360dxBKY=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=fYcA7ocfxQpQYzjneqMg/bmAkDJJUuEuMm+vnZTeIvvyU7NhMy4nb/sVVJp+/gOAC/mOlb9/5Gnv72/Cmly4XMMC1YwLfMw6xL9QIovi2OdyiFsAStjlJLB2ZFhUBZYsj/LAftntEIo/A1H4GV4VaNV62XBVKo5XqP19SoeW28A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=g0dUSpUO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cQ8o4FPZ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xZY5xK+6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dh8fVF3t; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQj9JGjL"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca88130e09aso4302247a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 04:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784203069; x=1784807869; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=crvbQPwYA/dMgK99dNCCjn85E0qewMxmyRRTho2IQ6E=;
-        b=gQj9JGjLqnzBb6FyIV1q/UgbGAUZfFqMXsYeDi5J+1ibSTCjTg2Pj7Gr5Svv2ulIi0
-         OWXu8/MV/IB81Zboqy8vUM06xP9doWZc+nYJGy9ugfLKEwrRSoUp3/iwrbmhLWGqbfB0
-         uAOhxmOeQ9hXYhpRUGlVJga+I4jgD7jn53Z6i75/OtO4joG93PK1no7iZ5ZsdUF0Sy4C
-         WgGax7JOiZ6dbj3a5OWCXau97ziGD6w+UE3LdsIKv+20hOljX3vwYhkJN6/WkSFRcD0M
-         SrLxkm7nVNETeJjzTAnF0wo3SEyBZPJKvZwepivEDOp3X3/77LJ9xiXa3Y1cx0vUf8nc
-         DHPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784203069; x=1784807869;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:sender:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=crvbQPwYA/dMgK99dNCCjn85E0qewMxmyRRTho2IQ6E=;
-        b=s+T1qRzzMeFYq1DsjA1WDQQ3vjQ0W49KvNK9oBwjIEZRlTvEIVos65ek8zjsHxamHl
-         OpGsnizD8XWDoKU7SfDiNu98V9pW8mIBGD1hcUSNQ04wCcrDASWTXosscqIAhBPShp6v
-         Es2Nc/qvOT20eEBqDsNU5f9GRNDvnBJ24zsutxYyr7K3sX/HOrK+J4y3GeQSGGw0xwfs
-         QbovDsZ3Gd4i5X2hkgDbJC/WYec9ZKSRog37+8Os8dHrSWoLqVppIQsDFt2SjItc/pO+
-         bAw0XrjxPrVMDL5JS3uMztMd3c8uuf7u2YE6QIaVjFPcHde0wvp/UdxeWzzNSrse1I0o
-         tjiA==
-X-Forwarded-Encrypted: i=1; AHgh+RqunXtCpAP9K6G8kV9F8omuYTLax4aetWul+TOdPayrfL5HGjShq0RYpt/wByPEy0ZoPwTcQrnHgLwXqib237g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUAzuJVKEmc6WGpO25+ZwVQHIJ0zh+ZnlrUxEukBeFYCRp0gUR
-	ogC0lTiEQvTK0QVsl8Xra8pF2Y77sjGg01+J7CgpiO+j+w2yxbJMHikJ
-X-Gm-Gg: AfdE7cnuxfsPY1HcE5p19BoT+YLO4w/jQGjR31l5dhlCbGNCNchZBoBMKE0iqsJ05d1
-	0Iy6Q9DXupnFvEgyjkv9dESrM9kvXV2CssV3xiRGwAKFnt1RRZucO1jhWKJyHMHlTW0B1xULsA1
-	7V9heXSJWcMYaRZ9HscqyNO1JZ3IJ1NuWLeUyvxnWt49O75gI7Rj8Qas3t+QZZYJ6ecw5ZAmESa
-	hiyN1wq2bOqLECtpLLoT5muenrBi8RdM66ZfuyKfe4rhf4TogTYOcpbMYgdQ3bE+7CRB7skWe+Y
-	Po9KXIB1IdKrJQ4V/qbIxY/cHj14Vfng4+PDpbrNWZPj5L461mYh6cAmgvMiDs75I42Jtj276Yv
-	O/NF16NazP9aQicdKm71da4y6lD6CE6YgH5YMC1kJfikx45ZDsfht53x26YO7x1JU4H31ss8gBD
-	WeA8LpUwaaFpsoLx1kKdyWIe0AtmGfX7L8WITDCv8a
-X-Received: by 2002:a05:6a21:329b:b0:3b4:9171:2573 with SMTP id adf61e73a8af0-3c3571d0bf6mr12359951637.37.1784203068527;
-        Thu, 16 Jul 2026 04:57:48 -0700 (PDT)
-Received: from localhost.localdomain ([2406:7400:90:2db1:9c31:f107:8086:4204])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3140e6ebe98sm10920690eec.26.2026.07.16.04.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 04:57:47 -0700 (PDT)
-Sender: Deepak Rao Gaikwad <deepaksraog@gmail.com>
-From: deepakroag <gaikwad.dcg@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/3] test: expand proc smaps coverage and require TMPFS
-Date: Thu, 16 Jul 2026 17:27:31 +0530
-Message-ID: <20260716115734.80909-3-gaikwad.dcg@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260716115734.80909-1-gaikwad.dcg@gmail.com>
-References: <20260716115734.80909-1-gaikwad.dcg@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="g0dUSpUO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cQ8o4FPZ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xZY5xK+6";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dh8fVF3t"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3E07378944;
+	Thu, 16 Jul 2026 12:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784203247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hGLkGm1dnLCW+gt0t3t5cZcuw1uKrPacYY6vJuOeUVI=;
+	b=g0dUSpUOuyWg+IELnMw6/Vua1YS65WU5L96+zlgNf0MppB5N8sB4Ft0jfSrEnkVsdTf8Rk
+	CCGCTM73Mv2i/NgCHyE2dpI1jJlSCXcD/jiZ0hLvNMC+WBMCUIDJXO2WJ0zVxwhse1YW8g
+	dr12RzkqZxD9mIjnMLRXGtS8t5zqvU8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784203247;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hGLkGm1dnLCW+gt0t3t5cZcuw1uKrPacYY6vJuOeUVI=;
+	b=cQ8o4FPZFXTklJ/DKkiTePGV6pKdelYKNJsKm6tKp5fIBn4F3r+ybfVgU0XNwMJbzQ4pKp
+	zRymzUMzw9d3VKAw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784203242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hGLkGm1dnLCW+gt0t3t5cZcuw1uKrPacYY6vJuOeUVI=;
+	b=xZY5xK+6I9lGkBp9SC+PknFDujMfWSRqXZhWfQ2Ibuo8LbJ4YoP7kfvFB9lkhz+V81Lbhk
+	G3GgQZJ4lLo51D982yjwzet6VMyhrYq2GTNNrgdwyuzPktlU3DFenvQkA+45xlEEihok00
+	HdGGxcZUnsARA8b4/gPZ7KY6nOashpU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784203242;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hGLkGm1dnLCW+gt0t3t5cZcuw1uKrPacYY6vJuOeUVI=;
+	b=dh8fVF3tcvWkcVDpGNw/z5Vx+8wX+eaPzFECPCUCojjOWntrHw8KxeI+0QUtAOf69zFcSY
+	EzsDBh03QK4NpDCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 743C1779AE;
+	Thu, 16 Jul 2026 12:00:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id mHtuGenHWGpwLgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Thu, 16 Jul 2026 12:00:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH net-next v2 1/4] net: hsr: add PRP interlink (RedBox)
+ datapath and duplicate discard
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: Xin Xie <xiexinet@gmail.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Felix Maurer <fmaurer@redhat.com>, Luka Gejak <luka.gejak@linux.dev>, 
+ Fernando Fernandez Mancera <fmancera@suse.de>, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260706134131.61659-2-xiexinet@gmail.com>
+References: <20260704234704.4297-1-xiexinet@gmail.com>
+ <20260706134131.61659-1-xiexinet@gmail.com>
+ <20260706134131.61659-2-xiexinet@gmail.com>
+Date: Thu, 16 Jul 2026 14:00:30 +0200
+Message-Id: <178420323080.16062.7813915035618214520.b4-review@b4>
+X-Mailer: b4 0.16-dev
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
 
-Add CONFIG_TMPFS to the selftest config. Assert Private_Clean,
-Private_Dirty, Swap, and SwapPss fields in /proc/$PID/smaps output.
+On Mon, 06 Jul 2026 13:41:28 +0000, Xin Xie <xiexinet@gmail.com> wrote:
+> A PRP RedBox proxies SANs that sit behind an interlink port: their frames
+> must reach the PRP network with the SAN source MAC preserved, and PRP
+> unicast must be steered between the LAN and the SAN segment correctly.
+> 
+> Add the PRP interlink forwarding rules to prp_drop_frame() and give RedBox
+> nodes a second duplicate-discard slot so the two LAN copies of a frame
+> destined to a SAN collapse to a single delivery out the interlink.
+> 
+> The destination classification (is the unicast DA a PRP-network node or a
+> proxied SAN) is resolved once per frame in fill_frame_info(), gated to PRP
+> RedBox devices, and cached in struct hsr_frame_info, so prp_drop_frame()
+> stays O(1) and does not walk the node tables for every candidate egress
+> port in the softIRQ path. HSR RedBox frame classification is untouched.
+> 
+> Factor the LAN A/B duplicate test into prp_is_lan_dup() so the new PRP
+> interlink rules do not change hsr_drop_frame() behaviour, including the
+> NETIF_F_HW_HSR_FWD path which keeps using the LAN-duplicate test only.
+> 
+> Publish the RedBox state before the first hsr_add_port(): the slave and
+> interlink rx handlers are live from hsr_add_port() on and rtnl does not
+> stop softirq processing, so a frame could otherwise be handled while
+> hsr->redbox is still false. hsr_add_node() sizes each node's per-port
+> sequence state from hsr->redbox; a node learned in that window would get
+> a single-port sequence block, breaking the interlink duplicate discard
+> (WARN_ON_ONCE plus duplicate delivery to the SAN) and letting the
+> supervision sequence-block merge read beyond the source node's allocated
+> sequence bitmap. Publishing the flag before any port exists makes the
+> per-node sizing uniform by construction. This is safe: the proxy
+> announce timer is only armed from hsr_check_announce() once the master
+> is running, the packet-path readers of hsr->redbox tolerate an empty
+> proxy node database and an absent interlink port, and the
+> prune_proxy_timer is still armed only after the interlink port has been
+> attached successfully.
+> 
+> Additionally bound the supervision sequence-block merge by the smaller
+> of the two nodes' seq_port_cnt as defense in depth against mismatched
+> node sizes.
+> 
+> Signed-off-by: Xin Xie <xiexinet@gmail.com>
+>
+> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+> index 5555b71ab19b..5af491ed2b72 100644
+> --- a/net/hsr/hsr_device.c
+> +++ b/net/hsr/hsr_device.c
+> @@ -768,6 +768,15 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+>  	/* Make sure the 1st call to netif_carrier_on() gets through */
+>  	netif_carrier_off(hsr_dev);
+>  
+> +	/* Publish the RedBox state before any port is attached: the rx
+> +	 * handlers are live from hsr_add_port() on, and hsr_add_node()
+> +	 * sizes each node's per-port sequence state from hsr->redbox.
+> +	 */
+> +	if (interlink) {
+> +		hsr->redbox = true;
+> +		ether_addr_copy(hsr->macaddress_redbox, interlink->dev_addr);
+> +	}
+> +
+>  	res = hsr_add_port(hsr, hsr_dev, HSR_PT_MASTER, extack);
+>  	if (res)
+>  		goto err_add_master;
+> @@ -805,8 +814,6 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+>  		if (res)
+>  			goto err_unregister;
+>  
+> -		hsr->redbox = true;
+> -		ether_addr_copy(hsr->macaddress_redbox, interlink->dev_addr);
+>  		mod_timer(&hsr->prune_proxy_timer,
+>  			  jiffies + msecs_to_jiffies(PRUNE_PROXY_PERIOD));
+>  	}
+> diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
+> index 0774981a65c1..efcd0acef38c 100644
+> --- a/net/hsr/hsr_forward.c
+> +++ b/net/hsr/hsr_forward.c
+> @@ -440,12 +440,37 @@ static int hsr_xmit(struct sk_buff *skb, struct hsr_port *port,
+>  	return dev_queue_xmit(skb);
+>  }
+>  
+> +static bool prp_is_lan_dup(struct hsr_frame_info *frame,
+> +			   struct hsr_port *port)
+> +{
+> +	enum hsr_port_type rx = frame->port_rcv->type;
+> +
+> +	return (rx == HSR_PT_SLAVE_A && port->type == HSR_PT_SLAVE_B) ||
+> +	       (rx == HSR_PT_SLAVE_B && port->type == HSR_PT_SLAVE_A);
+> +}
+> +
+>  bool prp_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+>  {
+> -	return ((frame->port_rcv->type == HSR_PT_SLAVE_A &&
+> -		 port->type == HSR_PT_SLAVE_B) ||
+> -		(frame->port_rcv->type == HSR_PT_SLAVE_B &&
+> -		 port->type == HSR_PT_SLAVE_A));
+> +	enum hsr_port_type rx = frame->port_rcv->type;
+> +
+> +	/* Supervision frames are not delivered to a SAN on the interlink. */
+> +	if (frame->is_supervision && port->type == HSR_PT_INTERLINK)
+> +		return true;
+> +
+> +	if (prp_is_lan_dup(frame, port))
+> +		return true;
 
-Signed-off-by: deepakroag <gaikwad.dcg@gmail.com>
----
- tools/testing/selftests/proc/config        | 1 +
- tools/testing/selftests/proc/proc-pid-vm.c | 5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+Since we already have rx (enum hsr_port_type) here, can we pass this
+directly to prp_is_lan_dup() function instead of passing frame?
 
-diff --git a/tools/testing/selftests/proc/config b/tools/testing/selftests/proc/config
-index 68fbd2b35..7dfc3d381 100644
---- a/tools/testing/selftests/proc/config
-+++ b/tools/testing/selftests/proc/config
-@@ -1 +1,2 @@
- CONFIG_PROC_FS=y
-+CONFIG_TMPFS=y
-diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-index 4e6a3e53f..59535bb3a 100644
---- a/tools/testing/selftests/proc/proc-pid-vm.c
-+++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -20,7 +20,6 @@
-  * Test /proc/$PID/smaps_rollup
-  * Test /proc/$PID/statm
-  *
-- * FIXME require CONFIG_TMPFS which can be disabled
-  * FIXME test other values from "smaps"
-  * FIXME support other archs
-  */
-@@ -409,6 +408,10 @@ int main(void)
- 			"AnonHugePages:         0 kB\n",
- 			"Shared_Hugetlb:        0 kB\n",
- 			"Private_Hugetlb:       0 kB\n",
-+			"Private_Clean:         4 kB\n",
-+			"Private_Dirty:         0 kB\n",
-+			"Swap:                  0 kB\n",
-+			"SwapPss:               0 kB\n",
- 			"Locked:                0 kB\n",
- 		};
- 		int i;
--- 
-Deepak Rao Gaikwad
+> +
+> +	/* LAN to interlink: keep PRP-network unicast off the SAN segment. */
+> +	if ((rx == HSR_PT_SLAVE_A || rx == HSR_PT_SLAVE_B) &&
+> +	    port->type == HSR_PT_INTERLINK)
+> +		return frame->dst_in_node_db;
+> +
+> +	/* Interlink to LAN: keep SAN-to-SAN unicast local. */
+> +	if ((port->type == HSR_PT_SLAVE_A || port->type == HSR_PT_SLAVE_B) &&
+> +	    rx == HSR_PT_INTERLINK)
+> +		return frame->dst_in_proxy_node_db;
+> +
+> +	return false;
+>  }
+>  
+>  bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+> @@ -453,7 +478,7 @@ bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+>  	struct sk_buff *skb;
+>  
+>  	if (port->dev->features & NETIF_F_HW_HSR_FWD)
+> -		return prp_drop_frame(frame, port);
+> +		return prp_is_lan_dup(frame, port);
+>  
 
+Of course these calls will need to pass rx too.
