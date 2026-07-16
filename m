@@ -1,48 +1,48 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B40381AF
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 06:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9361F942;
+	Thu, 16 Jul 2026 06:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784182691; cv=none; b=PwiZGvzwBzQgOGH8UY+0sWHd3Y68tVz4DeGNAXdV7o982Lnsw/51kE3+CgjfnxTwcvzAOq3vN9soXHEvzIJgrxSzqlKir7drVYYe+FDipys8ojfRkkUx1sGcDK55bANap/lfE9tOZHFqNClEkJNITXUFpiPS+FYpGeZBwUWrCnQ=
+	t=1784183519; cv=none; b=IcfY6LqSITG0d0uLA40KF5soUVr0/5NiUMoALvminw9O4bz5OP8PYvKx6HG9Zje9F5gJmkJMuqJ8x5SWG35wnygc0hNFQoMVKpQNNq1mQq2KuSCTFjVlv0LJq0J0IZ+4bF6oPrM/TXObtfeEeJwDmMttfD1XbCQW4OuQAIFEGFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784182691; c=relaxed/simple;
-	bh=ePdGJB6kbu+Hy9JiGKnY6zl5s2WLNxMt9uE1yitqa9A=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:Mime-Version:
-	 References:In-Reply-To; b=H3AXrroV8p0NKtuYf/PI1Gk3x30oR4z25xUufktTLko6EuniY2BwH0z0x8BbB43HtHxAYXZRqQPY5shc+mkoKPMf8k1wzFTM4CHyCBXSaURTcEUkC1WfefitDsZS8p2XpuH1IaoeqAqq9hMBAe/71zZZ5E7I50Blb2U3/NHbh5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OyLjLsIn; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1784183519; c=relaxed/simple;
+	bh=RtOsdWf1cb2JncZI/usyV1HuZcUJQ4q3HYmnTGQ0P/0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=l5BZ6NrF47Q0d9yLg0niR5oJg8hU0fW0Yc2Fkv2fJOo61ZhKqsyTOgPQ0fidJ6qIVeTylrnFnjWFle+p+39Fq5dUSD/IyRgDaF2igkgJF9dD3GcRq/KOOWj61IsAbeIsLKJvS3y0f9py1v1wDg56pWRI0ayWbfnCFWlMhyCEfBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zkA/zLKo; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OyLjLsIn"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zkA/zLKo"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 9F0DB4E40DFB;
-	Thu, 16 Jul 2026 06:18:06 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 28F79C2B9DC;
+	Thu, 16 Jul 2026 06:32:12 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 615316035F;
-	Thu, 16 Jul 2026 06:18:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C2B6D11BD3C9C;
-	Thu, 16 Jul 2026 08:17:56 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B06B9602B8;
+	Thu, 16 Jul 2026 06:31:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8FBDD11BD3CAA;
+	Thu, 16 Jul 2026 08:31:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784182685; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1784183513; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=QTv98aiWmLb8Il/n2EQE66t9E9VKwKWB+oc06j7+jAA=;
-	b=OyLjLsInu8+p/ce/sioxWdpRR4suLqVy0FGnPgYmdRbQXQ1uWhHpmppy7m0jzBi7qikxU1
-	xorZFxvJSPQfUZzw936knZhqIL3MePCadmoM1ZsHKrJx5NYcaPr30snZeSbgEt6xoLIccl
-	oA2Husq2COVB8vPMmb3ItcYZn0qp7k63rN5pW15RnRApBqJmP3/vBGhRwiTiHhrb2dOFui
-	Yk29v3hwhNhCj0sHTYoGrdwE8IUUGssfiwlSpQ+yy2G54QAM45JfcPksyvKSzAsIFBvkLn
-	cxSI4gg2L3fvCMqPlWTB6OBdXmDFM4QQAEjO7bhhP/pT1/MVaFP1YuIUACiWuw==
+	bh=FS5FzyWy0VfO62NFm0sIZD2nYvKIYSFnvkX5egZONHQ=;
+	b=zkA/zLKopz0XxJCLV0krxz4dDOWJsu64e5gke2RviB5rXWgXIozXwRxb35FzibCh/MjooZ
+	AwXK/gjTZ0auUkr49rhnSWwZkOBZ9nL+kQatDDwg0jPKwbW//wlkjtn+oEK22ZueRH0qtZ
+	exytOOxOCJNncuFnhCxRG4dLU3/Gy0xCy5oQkmNkB1wFzB8D9Dos6neoYdLdkN4IpNuTOX
+	FF6w4kNecvPxBuTfK024gdPFTn7BuamNtJfwsc9yY8qF8/o8OuhDbkr/7ujkwd7eR3HY4C
+	a9mcVaiA09htSeube8Y5QSRsq95iIVQw56DVW8oUCe0+u7cz6e7qp/MpRd6Xpg==
+Precedence: bulk
+X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Jul 2026 08:17:55 +0200
-Message-Id: <DJZRZ1WQ82BG.3UJGK4IH5703@bootlin.com>
-Subject: Re: [PATCH bpf-next v5 01/10] bpf: propagate original instruction
- offset when patching program
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Date: Thu, 16 Jul 2026 08:31:44 +0200
+Message-Id: <DJZS9MSX56HR.1X3HX6LHHDIB9@bootlin.com>
 To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
  =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
  <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
@@ -55,86 +55,72 @@ To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
  "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter
  Anvin" <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
  <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Precedence: bulk
-X-Mailing-List: linux-kselftest@vger.kernel.org
-List-Id: <linux-kselftest.vger.kernel.org>
-List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+Subject: Re: [PATCH bpf-next v5 06/10] bpf, x86: emit KASAN checks into x86
+ JITed programs
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com>
- <20260709-kasan-v5-1-1c64af8e4e1e@bootlin.com>
- <bbbcbae7-a819-4f86-b116-6d5e31973a0e@linux.dev>
-In-Reply-To: <bbbcbae7-a819-4f86-b116-6d5e31973a0e@linux.dev>
+ <20260709-kasan-v5-6-1c64af8e4e1e@bootlin.com>
+ <293c6a91-d7d7-4870-8f41-b20f6737d7af@linux.dev>
+In-Reply-To: <293c6a91-d7d7-4870-8f41-b20f6737d7af@linux.dev>
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Ihor,
-thanks for the thorough review !
-
-On Wed Jul 15, 2026 at 2:47 AM CEST, Ihor Solodrai wrote:
+On Thu Jul 16, 2026 at 12:28 AM CEST, Ihor Solodrai wrote:
 > On 7/9/26 3:01 AM, Alexis Lothor=C3=83=C2=A9 (eBPF Foundation) wrote:
->> When the verifier patches an ebpf program with bpf_patch_insn_data, it
->> then calls adjust_insn_aux_data to make sure that insn_aux_data takes
->> into account the newly inserted patch. Some of the data offset is pretty
->> straightforward to deduce, it is for example the case for
->> indirect_target, as any patch affecting indirect calls will
->> systematically move the original instruction to the end of the new
->> patch.
->
-> I think an additional KASAN-specific argument to adjust_insn_aux_data()
-> is not a good idea. It's threaded through ~30 call sites, and it's
-> been error-prone too: you had to fix the offsets a few times already.
 
-Agree. I've indeed already made a few back and forth on it, it looks
-like there are still more to do, and not in the good direction (I mean,
-just passing -1 to ignore original insn offset), so that sounds more and
-more like a hassle for no significant gain. This ends up being pretty
-intrusive for a debug feature, and as you state below, the only downside
-of not tracking too finely those stack accesses is about getting a few
-unecessary KASAN checks.
+[...]
 
-> indirect_target needs no help from the callers, so it's not really the
-> same pattern. Similar for the other aux fields: seen is broadcast and
-> zext_dst is re-derived.
+>> @@ -1984,6 +2000,10 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+>>  			EMIT_ENDBR();
+>> =20
+>>  		ip =3D image + addrs[i - 1] + (prog - temp);
+>> +		insn_idx =3D i - 1 + bpf_prog->aux->subprog_start;
+>> +		accesses_stack_only =3D
+>> +			env ? !env->insn_aux_data[insn_idx].non_stack_access :
+>> +			      false;
 >
->>=20
->> In order to introduce KASAN support for eBPF JIT, we need to mark any
->> load/store instruction that accesses non-stack memory, but updating this
->> new marking after a patch is not as straightforward as for indirect
->> calls: the original BPF_ST/BPF_STX/BPF_LDX can be at the beginning, at
->> the end or somewhere in the middle of the new patch: we then need some
->> additional info to properly update this marking.
+> I don't like how accesses_stack_only is a boolean argument to
+> emit_kasan_check(), that is only used for early return.
+> I can see not wanting to do
 >
-> I don't think we need to track the exact offset here.
+>     if (!accesses_stack_only)
+>         err =3D emit_kasan_check(...);
 >
-> It looks like .non_stack_access is set to is_mem_insn(insn + off) in
-> every single case *except* for when a stack access happens to be in
-> the middle of a patch.
->
-> Given that the cost of getting the flag "wrong" is an unnecessary
-> kasan check only for that case, I think it'll be cleaner to just
-> unconditionally do:
->
->     data[off].non_stack_access =3D is_mem_insn(insn + off);
->
-> in adjust_insn_aux_data()
->
-> And then the code change can be folded in patch #2
->
-> The only problem with this I can think of is that in reality *most*
-> stack accesses go trough that special case, which would defeat the
-> purpose of the .non_stack_access flag. This can be checked empirically
-> however.
+> on every call site, but a bool arg is even worse IMO.
 
-> Anything else I'm missing here?
+Yes, that was indeed the intent, but ok, I can get back to set the
+stack access check out of the function.
 
-Sounds good to me. I'll try to get a rough idea about how often the
-flag, in this scenario, correctly triggers or not.
+[...]
 
-Thanks,
+>> @@ -2626,7 +2662,17 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+>>  				if (dst_reg =3D=3D BPF_REG_0)
+>>  					real_dst_reg =3D BPF_REG_AX;
+>> =20
+>> +				ip +=3D 3;
+>
+> nit
+>
+> IIUC the 3 comes from emit_mov_reg() above it (:2659), right?  I was
+> thinking to suggest a comment, but well I figured it out from the
+> code, so others should too...
+
+Yes, that's indeed where it comes from (and this cost me quite some
+debugging time to spot that I was missing this offset !)
+>
+> Maybe instead of hardcoding 3 we could calculcate the diff
+> before/after the mov is emitted?
+
+ACK, I'll remove the hardcoded scalar and set it to (prog - *pprog)
 
 Alexis
+
 
 
 --=20
