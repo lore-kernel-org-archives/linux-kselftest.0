@@ -1,182 +1,169 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82AC414A0A
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 11:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5C4DF76;
+	Thu, 16 Jul 2026 11:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784200277; cv=none; b=QTKmJuVOha5AuaPgId78J1RGHOCiqcyfJnNsBH+ckYRX25NLFmFe5fIwDqvi9BeyXcve30Owex0qoR5b/U0/ZTV0flKjuC+yzafUeFP1iZQVzFb1IwN6JK1K/wNaySf4trpqv2IWv7ZRJATGJQhpEKicLDpNuhYXeM5S/O9Bz24=
+	t=1784200849; cv=none; b=N9nGxquIhKQfHQmAiWaxXWAn1Qb0tn4lxj/1KPLK2Z1OdDJD8ra1ZdItV5Mz9UmGgjPCXtEtIpyK04pUE8VkwOhPr2+p0351uAXlReSRpxOR0aK+THHrS9Jz2yWAByDc1vsoaaeNZI5+6+BCA4zygOLjTpTja/RYKdBO5DoXpGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784200277; c=relaxed/simple;
-	bh=6M7jXIHCGtzdPhw2qsM41Hv0mXHg4c1P7aB1DUkRz6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eab7UJsJpn0AJd8GMOVv37svC5fllyx+qTgM9qwekeFmtWxtxcfTMhVrHi4Y66WAL88lNdfAbs0vswTsnZBwM+oak0Ruy2C8Px0Ltnr8Pas+8y4xcmfepML3Fj5E4eNzk3IzMJH0t5fVZwRqyTYopehEiEVHEEoTfouFSXt9Rt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ih1f2Ok6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AIBfgMTz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=T8WmyiE6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=bQdI4cqu; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1784200849; c=relaxed/simple;
+	bh=QK7N3/wsTvX1kN/spYWC/FGRFpFg0+xkagkwjKwI3yo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aM+/1IoMEA6Y2909aD2eGNTqwn3IMnJo9OATtcQjyjNcoX1hQfZEzP5cmUeC29avMw+ttIYCCWy3lE/QXKhzxJO0U0Cz+vBCpBmZdjv35zbNgaVn5TtLiA/Np7rz3olAEaScXJR946/6wNcBnvcSkFm57/65VHIP9OylPGGSltI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULJ8jTJL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ih1f2Ok6";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AIBfgMTz";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="T8WmyiE6";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="bQdI4cqu"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D73D63E51;
-	Thu, 16 Jul 2026 11:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1784200272; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WpGIdc4n+6jDVSDAog/+Geb9BSEYh8TQula+4k7yDoE=;
-	b=Ih1f2Ok6ogo1dzz9PxFjlueQDu6Ll0dAKtXfkAtK7S2AQKaPpaAY+1HpbJnbpJmhAMmjRf
-	m3wm2f1vV0SglCPOVMUt13GScHr5tXSg7sy9INic4YYnV+zRB6YQrhba0WT4+Is4Xr3Djg
-	/4gS/dtRx61BZxThmDSnqaNaeMFmTdQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1784200272;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WpGIdc4n+6jDVSDAog/+Geb9BSEYh8TQula+4k7yDoE=;
-	b=AIBfgMTzhQAX8b/HsR4sYQ5Ca+mLxVwzTr+tevRYxZMCqVcvDF41ErHDtXPrBmnvgUUTnC
-	i5YmUl6BOOnHjZBw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1784200271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WpGIdc4n+6jDVSDAog/+Geb9BSEYh8TQula+4k7yDoE=;
-	b=T8WmyiE6Na45Lr3iR9sQlIZGFV0Sw+ZC579s7yjdqjaNdFj5KQGUVi4AYVnWwBWcOUBJMT
-	gZQ9yz6wZVkysjuJubgjr39Ob7QSIh01S3QSpVLuxj/iLdf5cWQO4l2FP4Ec+1LhSXrgff
-	appz+EaacbZ0TcuxWoV+JXQBUclMVEc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1784200271;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WpGIdc4n+6jDVSDAog/+Geb9BSEYh8TQula+4k7yDoE=;
-	b=bQdI4cqu6xeVabY9RR7ENFt6iKbHHHOFJvFrGnLTOWtwCRdGncBVQQVc9nxTL1kG8km6VF
-	WibRWLLojqIFerCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CE5BF779AD;
-	Thu, 16 Jul 2026 11:11:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IqNcMk+8WGpxfAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 16 Jul 2026 11:11:11 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 8084FA0855; Thu, 16 Jul 2026 13:11:03 +0200 (CEST)
-Date: Thu, 16 Jul 2026 13:11:03 +0200
-From: Jan Kara <jack@suse.cz>
-To: Li Chen <me@linux.beauty>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] pidfs: preserve thread pidfds reopened by file handle
-Message-ID: <ks7xfhn7pzzm267bcfo725xwqa6famsv5yulmzgqt7hjdmepep@zm2dw2djd7yb>
-References: <20260716052726.1032092-1-me@linux.beauty>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULJ8jTJL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22731F00A3A;
+	Thu, 16 Jul 2026 11:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784200848;
+	bh=iohMITS/mr9qDiRkI+rGRUr759u+rXGlGlDEwpj+fhU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=ULJ8jTJL674cLd5oJIqYzCX17btEY5HF91TfblR8ew2LU3w2GS1H8qpYVf+Ss+vYa
+	 A4kPjTsJPQcIq0ZhsQvwyxrUv1aoJE2X/5vZv4WNyPyDYs7quFjED/Aaw8NFKpB2TT
+	 7MWIIwG0eLp2UyYHic9Ix8F3s2XnZlUGX1584c/xpCOlkdUEeooD4LRHnoOQU6DLxR
+	 9pp7/6d6UvA8aaNkL8MqGEA9g+Tncqanp9i97hDdqwCABUrTWW/23hhjFLIW5uUbxT
+	 lAFu++ONA29JTBj6BAUInoCpeJa5B+uqqSiGLXUbRmmvbU62WXI6+bIAyzWPP59ka8
+	 J/5pwZXkY5Ofg==
+Message-ID: <0c278b69-3ecd-4ec3-b418-dea84e043732@kernel.org>
+Date: Thu, 16 Jul 2026 13:20:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260716052726.1032092-1-me@linux.beauty>
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.beauty:email,suse.com:email,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Score: -3.80
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: khugepaged: skip swap tests when swap is
+ unavailable
+To: Dev Jain <dev.jain@arm.com>, Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260715133418.170386-1-jaeyeon.lee.dev@gmail.com>
+ <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
+ <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu 16-07-26 13:27:22, Li Chen wrote:
-> PIDFD_THREAD shares O_EXCL. do_dentry_open() clears O_EXCL after
-> pidfs_export_open() validates the flags, so open_by_handle_at()
-> silently turns a thread pidfd into a process pidfd.
+On 7/15/26 16:47, Dev Jain wrote:
 > 
-> Restore PIDFD_THREAD on the opened file, matching pidfs_alloc_file(),
-> and cover the restored flag with F_GETFL.
 > 
-> Signed-off-by: Li Chen <me@linux.beauty>
-
-Makes sense. Just looking at this code, what about PIDFD_AUTOKILL (aka
-O_TRUNC?)? Reading the commit introducing it 07c3ef58223e it appears it was
-never meant to be directly requested by userspace so probably
-pidfs_export_open() needs to reject it. But that's unrelated issue to your
-patch so feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/pidfs.c                                             | 8 +++++++-
->  tools/testing/selftests/pidfd/pidfd_file_handle_test.c | 1 +
->  2 files changed, 8 insertions(+), 1 deletion(-)
+> On 15/07/26 7:39 pm, David Hildenbrand (Arm) wrote:
+>> On 7/15/26 15:34, Jaeyeon Lee wrote:
+>>> The collapse_swapin_single_pte and collapse_max_ptes_swap tests use
+>>> MADV_PAGEOUT to swap out pages before verifying khugepaged collapse
+>>> behavior. On systems without swap configured, MADV_PAGEOUT succeeds
+>>> but the pages are not actually swapped out, so check_swap() returns
+>>> false and the tests report a failure.
+>>>
+>>> These tests cannot run meaningfully without swap, so a missing swap
+>>> area is an environment limitation rather than a test failure. Detect
+>>> the absence of swap via /proc/swaps and skip the affected tests
+>>> instead of failing them.
+>>>
+>>> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
+>>> ---
+>>>  tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++++++++++++
+>>>  1 file changed, 25 insertions(+)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+>>> index 10e8dedcb087..f9b4ebe733ce 100644
+>>> --- a/tools/testing/selftests/mm/khugepaged.c
+>>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>>> @@ -100,6 +100,22 @@ static void skip(const char *msg)
+>>>  	exit_status = KSFT_SKIP;
+>>>  }
+>>>  
+>>> +static bool swap_available(void)
+>>> +{
+>>> +	char buf[256];
+>>> +	bool ret;
+>>> +	FILE *fp = fopen("/proc/swaps", "r");
+>>> +
+>>> +	if (!fp)
+>>> +		return false;
+>>> +
+>>> +	fgets(buf, sizeof(buf), fp);
+>>> +	ret = !!fgets(buf, sizeof(buf), fp);
+>>> +
+>>> +	fclose(fp);
+>>> +	return ret;
+>>> +}
+>>> +
+>>
+>> That doesn't mean that swapout will succeed.
+>>
+>> Take a look at cow.c where we use pagemap_is_swapped() after MADV_PAGEOUT.
 > 
-> diff --git a/fs/pidfs.c b/fs/pidfs.c
-> index aaa609ddab044..c20ffd747ff51 100644
-> --- a/fs/pidfs.c
-> +++ b/fs/pidfs.c
-> @@ -939,12 +939,18 @@ static int pidfs_export_permission(struct handle_to_path_ctx *ctx,
->  
->  static struct file *pidfs_export_open(const struct path *path, unsigned int oflags)
->  {
-> +	struct file *file;
-> +
->  	/*
->  	 * Clear O_LARGEFILE as open_by_handle_at() forces it and raise
->  	 * O_RDWR as pidfds always are.
->  	 */
->  	oflags &= ~O_LARGEFILE;
-> -	return dentry_open(path, oflags | O_RDWR, current_cred());
-> +	file = dentry_open(path, oflags | O_RDWR, current_cred());
-> +	/* do_dentry_open() strips O_EXCL, which encodes PIDFD_THREAD. */
-> +	if (!IS_ERR(file))
-> +		file->f_flags |= oflags & PIDFD_THREAD;
-> +	return file;
->  }
->  
->  static const struct export_operations pidfs_export_operations = {
-> diff --git a/tools/testing/selftests/pidfd/pidfd_file_handle_test.c b/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-> index 68918734dcf32..1e03ae9575fe6 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_file_handle_test.c
-> @@ -373,6 +373,7 @@ TEST_F(file_handle, open_by_handle_at_valid_flags)
->  				  O_CLOEXEC |
->  				  O_EXCL);
->  	ASSERT_GE(pidfd, 0);
-> +	ASSERT_NE(fcntl(pidfd, F_GETFL) & PIDFD_THREAD, 0);
->  
->  	ASSERT_EQ(fstat(pidfd, &st2), 0);
->  	ASSERT_TRUE(st1.st_dev == st2.st_dev && st1.st_ino == st2.st_ino);
-> -- 
-> 2.52.0
+> That suffers from the reverse problem - in case of a real swap bug, cow.c
+> will skip the test and anyone running the test won't bother.
+
+Yes, because there could be other reasons why MADV_PAGEOUT would not be
+successful (speculative page references, out of swap space).
+
 > 
+> I think this patch idea is reasonable, we need a way to say "swap definitely
+> won't succeed because there is no swap device, so skip" vs "swap failed,
+> need to dig in!" .
+
+I would not pack a "let's test if swapping in the system even works" into a
+khugeapged test.
+
+I think we can reasonably assume here "swap subsystem is not completely broken".
+
+And if we want to check for that, have a separate test that stresses swapping,
+if available.
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Cheers,
+
+David
