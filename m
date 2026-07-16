@@ -1,196 +1,230 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010035.outbound.protection.outlook.com [52.101.84.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB1941E6BB;
-	Thu, 16 Jul 2026 12:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.35
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784206725; cv=fail; b=EvALsTyYvamgPM/vq/9zuQ749enDEpZBOBiBy5v2nyeHWhczIo0Rf5uiqmnu0VICA73HfL1sJSPO+6er7oafhG8Fuc4Dfj4PkKZeuNiOd2J4Ps8gagmfC7DQXW6r/6kGPdHHf6VpdFe+fSfzgNOoe003RNeB2GGDA0aKsk6qBN8=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784206725; c=relaxed/simple;
-	bh=C52R2QMQkxQyVPCuvB+F1K19uFnufCgNfCQNfCOwPYI=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FZXM/brhEp+K0RnMvAE5wtuZn+Yr18FTw98MQrqeaO9XXxvffaiH/dKWpdnqtC9PYTf/xLOP1ru8YN+fQccOzpUQUypuOFcQyJ/G9cAfI+sGHpBcdgHZVKkjDMtmRry0U4tUFeMIyEdsZR9ks+rOzyuD0P0W4ZSHY/1vauKx5MM=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=psHehe13; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=psHehe13; arc=fail smtp.client-ip=52.101.84.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B261420893
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 13:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784206866; cv=pass; b=G2xKu0wkWk5gb85nRU/4OifDDl9oZIdr//KDeWvi0gNbry0JDw8PtcwFqOn/u9i/4qLL0ppYN/my8JDKi25LPPwOpkngH48adohpGz7KVG5UQOk43eX32iBKZX6pVXF/89950WqTD4rzuHGmQO5tgjLc+68hE0QYBd2BuD+zoMw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784206866; c=relaxed/simple;
+	bh=VKUo370fMISPlFqMzsuyMVMvgTexx95wIxlxD2hspW0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MSXkJw10zu1Ipa7sEk5FBZRoMDCW27hYSpIPTErbw3lxrWYwd7Sn3ZbUjkb8I9FkHPTiH1VdE6HCBKXTsq50LUyblK70b3eE28xCVKoPwr2n36at64Ymjg0JLTeik+wl9NLNV7fg345tx+f888UTbq18PjNxbTUalhlDivGKm+4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dqMddGu/; arc=pass smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="psHehe13";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="psHehe13"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=UFEyIma2yavEggHLvpwcaPg0draNF1IYJU84qV60fL792/fIfv8vNRbvH5XYxzyOMmO+/jJcZOCbZMddbSWmfOnDVM7NG3Vu80ApRPt7NynuXDTArJxBsNIBn3hR9Ej/9CYuSQVAO8zTsqdAak849HAm0vcqenGVaAlm+tTyRYxi9wOCcJqqrXtquH76k7ab2dzXDdieA6mKfYK5nEKe+iv0TLoTpkMo03NFCP8Mm3LBAOr+ci35W4h91KjvVVpYu1wkaFBEjeTzAjwxOeswQpnjWVk8WktVcWtdBYXUy4+S68Boplnn89YTlmpuF8IG04YeF11nBskYJGIWHuxiWQ==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
- b=QJsIBPMOfV8imIo/AaaAKDl+Zs5abps7PJWN0FpbLj6M42raeuV+yHRnxxgJ6hqYG8/MdFVdU5lc38PF10l1vjfUMaixxSUFu47nFUAK3TQ5SuSKoFhSf8b+40rA5OOwcpjujT2FyGRr5DnKSeRR34GvcB63K4edbBWIavLlcCto9fd+3Tm2l2BbpLy1z3B2oARHRtNM4onxXCWdvJaOMY0swYtkv8a/42j5ZjJBxpC0Hwr42DM5wiRPFwee7V/vMOx3YBjHpwgOunI9gqKcu+zJMUnBnqgz8GhvwjEH4agKNeSD5geL6P1kZqkQSWHGXt6wFRmE9+qKUSw8hMmfGA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=shutemov.name smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
- b=psHehe13yoGtPtGL7NQaKYv70nS9eUQ4DhJQwJtjae3tWwaiD3N1SV15+b7Xrg34BglrKyfX0jE63dSpo1EeQedCklHNSI3HiJkqj4eOWKRbVtzWY54uYkMZHUTLccQ0+O++NEXt2d+blRp3HOvAJm0+jJ72F0r2Av1cQ6T00g0=
-Received: from AM0PR02CA0161.eurprd02.prod.outlook.com (2603:10a6:20b:28d::28)
- by GV1PR08MB8237.eurprd08.prod.outlook.com (2603:10a6:150:5d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.9; Thu, 16 Jul
- 2026 12:58:35 +0000
-Received: from AMS0EPF0000019D.eurprd05.prod.outlook.com
- (2603:10a6:20b:28d:cafe::90) by AM0PR02CA0161.outlook.office365.com
- (2603:10a6:20b:28d::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.223.12 via Frontend Transport; Thu,
- 16 Jul 2026 12:58:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS0EPF0000019D.mail.protection.outlook.com (10.167.16.249) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.5
- via Frontend Transport; Thu, 16 Jul 2026 12:58:34 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cELjA9+GME57Gl9pttI1xyArZHB51/denr/a8e5ZIE06lTO5711vgNC5PeRBRxBxB6lH3N1vJzIjNZJLPPiAFgJO1vHBaD23OhN72590WmDTf/VjQ2c7xf/2oM2jhzrv3TpXr0NIsvYKQHraNc4OlvUsAQp/3yBkDN9ZB1NHwkgzq0tCILraROe3407+DlBC1qA84YGd32LNXHAXWIDiRuHaZhXc1WIqyM7+urWW8G2icm10A1WqrawjZrp9sb+pd6zAjbMZhABEgwPi8PQPuOVhh8pMxmdTwT1IU/k7XifPrTcJT2dKs4XRy8cvNS02AIc+kVJVRMshCbixlzbWIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
- b=V4/wm0Pa2Mj9E/bVm+t55KGi3rt93dE8ecOH0TKm47Hod1GoJyECx0lKXDtYDr4eXbckX9XPRR/w5+1WMdYzPdaFQ2qPqDgL6yMxddYBLT8oK4QgculX1Rg1QGUPdxzIeTodXFtxzkHuVkwKnSVHvKDaYLyyveDFppCEHZKne3ivm+8qNGZ73i/G6enj4YsUJKdnhE719K1eqNIMRJv3DRM3Y1zFVdCIBTaXIxcoL1XTqosQIn/Do9i6TruQRYzO5WsfSOQz1d1ZSGkdm5W5bHEUPCEB9pRsltfIrZufMMMEXkQa6nXDk6gQDIUUpi6JubdV0+xXxFjSClSsAmrX6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oZV/TlEPUcCZjtQEfzTsrUOXphHuDJRHG0HWd09xWIg=;
- b=psHehe13yoGtPtGL7NQaKYv70nS9eUQ4DhJQwJtjae3tWwaiD3N1SV15+b7Xrg34BglrKyfX0jE63dSpo1EeQedCklHNSI3HiJkqj4eOWKRbVtzWY54uYkMZHUTLccQ0+O++NEXt2d+blRp3HOvAJm0+jJ72F0r2Av1cQ6T00g0=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by DB4PR08MB8176.eurprd08.prod.outlook.com (2603:10a6:10:380::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.19; Thu, 16 Jul
- 2026 12:57:29 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0202.018; Thu, 16 Jul 2026
- 12:57:29 +0000
-Message-ID: <17fa8583-07c9-4a0d-b428-102bd169ee8f@arm.com>
-Date: Thu, 16 Jul 2026 13:57:27 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, peterx@redhat.com, liam@infradead.org,
- ljs@kernel.org, vbabka@kernel.org, jannh@google.com, pfalcato@suse.de,
- david@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- zenghui.yu@linux.dev, shuah@kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v5 1/2] fs/proc/task_mmu: fix PAGEMAP_SCAN written state
- for PMD holes
-To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org
-References: <20260715144234.442721-1-kirill@shutemov.name>
- <20260715144234.442721-2-kirill@shutemov.name>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260715144234.442721-2-kirill@shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0192.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:311::20) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqMddGu/"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69c5eb6dfd3so8988652a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 06:01:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784206861; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GjjvwOrZG25OXiHD+Cbtc6RoQjqcpIB8Q8dx+3jIgI9WsYZso8hPiwm0BRKpllEMzT
+         GWxr7r9abYGIuXt8oncU9d3IgchgA4HVAprEXXZyj5APfwnzvsbc++A0atuh2KbY5+Br
+         yVU5QiY0ELiSfCo8TsneufciBS248eKltzKDcbS8LpjuaMcP5/mNERg8dtaPz4IbHF9W
+         9jKJGhXbsXA6v1ptplXwWIM723fNwb/lbzLsa0F7fCJWv93VBvj3dg7+1wT7PQnghulD
+         ceZdcvvPH1mb+7Yo7ipi1a7icItRlLdDksNnvImqvDUmNvogrDvVxoNU9R+cR6zD2Da5
+         QoQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=zXERITO2eXf24evX2s/DpViJVD6miQTBJvHhyq+Sh2Q=;
+        fh=ZWXMibTH6nN4NzBklE7z8Dtkk9zrZaU/KUY+Qwt04io=;
+        b=fcElF4zUl2Sz2MViH0rmy8hcuFEm/SAJT9nnt7GtChGy12da3sMwCrZNRCTIMP95e1
+         TFnbvll+38oTLTKwRQnSTOVhjaGCG5TpbwTCYKPQhslnDMXrnVGQxUhQjgdERJMFCbp8
+         O9uCyN6wOJSrTXE/6dNyAfudLgo/B4Tfss5BO/yTP0aMSc5D2P3R+WiClNXh5MYWSsEc
+         TuQELpZ5HAyWsAwOk3QdCRZHWzQXYZxOtZUosgSztgN3B2fU0/CFlmz4AqRGXNP+ZH21
+         ygJ6dt9zsEhaUftxgdKyqRwgkcsTowprgFpKk2a/cIWycY9l+xw5HTdeCgHA19y2e+Mn
+         fTYQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784206861; x=1784811661; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zXERITO2eXf24evX2s/DpViJVD6miQTBJvHhyq+Sh2Q=;
+        b=dqMddGu/wql9KvR/BK1o0dtNhHc90x5+vrsOlUfyz4XCywQVgCKZ19JX70Nnpk9uWN
+         cYP+H9M7nDGhdfHCsdUNpiGp3793KBrlHFjofzta7dvJsE8duItRsa7SPgxH6CjyvxDM
+         zUdpckDGagmB9DSBJOHjPsOCyW3QNTM69PFyt42FN86COGpcS38GCZVtMN2LqzccYHUy
+         BD7GZ43kk7ZjjyErvglj/46oQzhwxJifkOyoOCPsnTYOh7dO9muSZ6PLmSNBJTIX4x/s
+         5L7MBHpssn5ahiD8sTBj3O3WzSMJU4sfxJdHsHkAz/wdxZZWlNVN3buVePIdhj2C1TzR
+         B+rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784206861; x=1784811661;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=zXERITO2eXf24evX2s/DpViJVD6miQTBJvHhyq+Sh2Q=;
+        b=UqL+/1hOlQNj7v4hpN6wn6joPDvAryB050RyHh/meq3DAn3z0c+/CNmSvsA1rMGagg
+         AT60q+R6W827CjQh6ag/51C6if6uwnsQ0Ciindtl6C/DN5tJPqHmCjmp9bhJf2NpM6OG
+         lYN5XNPZPhE9GLffhD9Au22B3uAw/aqTeXOgqNBUlCzmwqxYWr7T0dTYTYpAHuBI3jbh
+         QSg9RmMkQIHGG46OTV1jq8TOXDwLe0mabgpO1Pu62qRbAhUAsQ80JeL6U4REMVCmiKnG
+         cAzAhDXJOm5Lu6/ABZSxxBYJfQkEA+ufuCkUqGzj3tr+iAG/htggCk+t216Hb9qO0JLQ
+         /Vuw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro8vETJ/KZ9T8KcEqV00L6enXRFP2xBHqsr1WbskFyaXPvqD7Wi8WoI8B83CK34o3l0/P7TNa8Nx7SW67vXYyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrT7P+utQdSV4rN60yNg95SYiyHfk4Nyh9sblht18upIiJ4wje
+	3244yA40K82J4OEDlpvcVgCpgxL/P+TAh5K50+uKNyh+0Kg7l/ZBPPjlZC/5RrJ2xYLVMJ3J+HJ
+	HHWuvp8FwWi46Lc1PuP9oYjSnKbdory4=
+X-Gm-Gg: AfdE7clGgEspi9jgPTr6fScp/D8csRxXOCT3RyqE8V009dhv78h2jdp0880RgmXiNEP
+	DGyuMry6kWeEniqSymwgpPYhf7TMvnh0otIX7aECQ4TIVUAU6dwPcGv8KzwReLygBZAiRjFAfsF
+	t/ez4Hw6wucs5xKZQrR8XVppeYMIwXKr2ULsMbrmiKk1fVgFlzSEyh8GXwtLfmu/9pjcKDnsqjr
+	z1WT7m0SVL4Cp+VysmGHW43KFI1xHV07a5KUYfOxJLjt/DqwFE5YQA8n9rzJJHOhb6ShBErZw1y
+	tn/R6NCAsHwmY0bVW5rkU9ot6a7MoIY=
+X-Received: by 2002:a05:6402:5193:b0:698:3469:faa3 with SMTP id
+ 4fb4d7f45d1cf-69cd6c711c8mr5713796a12.10.1784206860545; Thu, 16 Jul 2026
+ 06:01:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|DB4PR08MB8176:EE_|AMS0EPF0000019D:EE_|GV1PR08MB8237:EE_
-X-MS-Office365-Filtering-Correlation-Id: 49bea733-2a66-4a6f-08ff-08dee339f239
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|366016|376014|23010399003|7416014|18002099003|22082099003|4143699003|10067099003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info-Original:
- uT5PBPnP1Pji13SRRMO4aP9kyel87bnxLLXIlhEgb2xgpZZBF5R+DhgRZ00B2ytb4J9b860tDxRjWKL4pFUJnRS+Uqr6FDuNr5AF8qB14UvpSsyM3zHW7ma8Th8J96P7m47pJX295NFTZigVNr7hXrYjImrN/wv5JvUfKTnFhdQIWSPoMU4hO5BSlZwC8vu4OreNRX/lfkHrXV/ZYaT06jWyYw8XGXD2vgmur5u25sOLec16cjLgNyRGha/gd5jl8qr/1c3Onz9kU7DF5dDDTuRO5ZcMANB1J+0Ss0r/ANIQ/0w2U7tvtYICZXQFTt2k3nd7pU1vIqxEa05saqtyQ4HTa7kUqtarcFPpZ7tjWnvJD/zwKgRG8BOpErOMJrZk3cXh9/blFtGLCfmgeFmeKg6aGdMz6x/4BWPBWyoBgHXif5T0H6N2SIu4LghdARjpanvWXWd9y5PLTgbUvpaF8Pa+MPO14XYTd8N0BhX1Gy5y63h3dtrMmhLMcaqjTVZ4Ji3gMn9S7U5ZKMfEhZ35Yeo6RBXRw1X4yn/98c59uhk3rTl8OL7rRKCOWIi9J25VtbK0L1qq7nITNY3fA/moDVuZpbiYeJrgCbehsSN+77E=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(23010399003)(7416014)(18002099003)(22082099003)(4143699003)(10067099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- Knk9YwCwW8xruUieRHegi2axBAFhSaSkiWjp613zwOhx+aMkw1nYth0cq8Ov02nwQLVlkLDehB2kywulxAa2Ir14n9G+DqmHMkueWrkvMLkuZvwRm60jrmQbGFfWCJ2U/Z36+Jbs2D8Hd6v+9C2s20Thg+lPpCIv3QrWcr3Jz+tpMTcWUh6RvX9g3WnvdL4F4v/FUUuBiuM/h8nMfATJLYjWLDTLITvYTlaOY0x/kneQp73bAQ7XAZR8NAOF9234kiJ/r8VJ+UCmGCctBzkmruYzAmA9wz+JJMkjq1lncSHEvaMkIQUnw8tiJxbQswkwA30MguHn5f3ibM6/fbM2Bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB8176
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS0EPF0000019D.eurprd05.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	df632075-ef11-43af-590e-08dee339cac3
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|36860700016|82310400026|376014|14060799003|35042699022|7416014|1800799024|18002099003|22082099003|4143699003|56012099006|11063799006|10067099003|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	M59ctEyB9psLEhk5QCq2nX4FoSNQffABx8TGHuMobG+C71b32lkFSY0b/XxBXQ7sVTLPmManjDeGzgZf+T2BBh3FEGJOiECEupJ1lM8pskC0DGL3BbSsWFgP/efG2K0/InnnwCsRJ6VopYeyh8MqbZ96kmVmBuLhygfrncnFS+d4b+RXOD+ueg5hjr6T2UMyZMdJNFzMvyXm3O689fOTicFf+w1+M5QCLTfIsFGVDZ6HFqFv+aS20UGZ/kCdIC9gXH3yrqxKcSDCzYXTFvqlD+3F/9TAxzHtKuv5QwJVXIB9zfSQwI+x5M5PCceF/EuIbbgVWPLrW7zKvPE6sC2tvkCdlgH31eU1Mx+ck7Z16FyXwCv4Ie/ReEpQOGuOejuC7ip+s5ogVFnAbyC3o4/sivI+ZMYVPtu+iKz6+aPYATUdiXa7Ln6LqfRh0TOJQwT64EcGGgqJeGOIo2JsUzYjgCjNrQaDm6FST2gKk1A/lkU9rGGDJB4PZ2rdfBbqphxdIs/oagK/ps5ZjehKvKGWUgXj7MmgLAI9xiXtDSVOfJr2blWxNmM/z5OLew9kn/1EmKKDC9xSS4rTsVoFzBvrjs9YzN+/cNG6TBWnEzTU4GPNA+Xv/cFwfEDZ1nKD4DCyfVnDKb148ESloHM2i2PGsA==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(36860700016)(82310400026)(376014)(14060799003)(35042699022)(7416014)(1800799024)(18002099003)(22082099003)(4143699003)(56012099006)(11063799006)(10067099003)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	bJtlGd/KqpzMlCP3bc0I1I4gKLas+iJjLdLFzzTHBj0XN0eDFXUau00W8vBitU+VoPeYhiKMJXuufSMdyTm6WUL/dzX5OywF3VbVEW88a3x2X/FIF8XuvpPgMNtGSfH3GO56R0mG1I1nE5an7o2QI4Fe+htEEn8YTfV0UMdsZdqJ3Zzc+3iXs4ESI1rb/uurydWY/kSvkrFgM8A/yoMgX9Kbak+BnkujUlScgpE+fuR0s++e0rXth5DBUYxOPF8FUJB4Z2OWezTUZxjYqHUU17vG7eFpu02YgHHV5bYAtMYBFuNQAUIuqqUuME1xbCZBhAI/+uuepJ/Eu5rGJg1YZCOksTCx5WHXIXqqwHUQOyxJjfRxWpTeZAP0c3GA55iMLWSlJFDx+fXxm/1+Rj1piCmvC2Rd6SBiHxLRCe8e98XhH0AuZHeIdyh0CKoleWVU
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2026 12:58:34.8648
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49bea733-2a66-4a6f-08ff-08dee339f239
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF0000019D.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8237
+References: <20260714020340.25014-1-akiyano@amazon.com> <20260714020340.25014-4-akiyano@amazon.com>
+In-Reply-To: <20260714020340.25014-4-akiyano@amazon.com>
+From: saeed bishara <saeed.bishara.os@gmail.com>
+Date: Thu, 16 Jul 2026 16:00:49 +0300
+X-Gm-Features: AUfX_myAoOWH5t5VUI4MOkcCF7lHw7hjBIHVeiT5yTh7jkx8162zheVbAhpxz_Y
+Message-ID: <CAHfVqdWDaLEKYMw-ZfkYvKLoSJ-_HOm3X9hUUhEf7ReBbOi__w@mail.gmail.com>
+Subject: Re: [PATCH v4 net-next 3/7] selftests/ptp: Add testptp support for
+ attributes ioctls
+To: Arthur Kiyanovski <akiyano@amazon.com>
+Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
+	Richard Cochran <richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, 
+	Yonatan Sarna <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, 
+	Alexander Matushevsky <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>, 
+	Anthony Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>, 
+	Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, 
+	Benjamin Herrenschmidt <benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>, 
+	Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik <ofirt@amazon.com>, 
+	Amit Bernstein <amitbern@amazon.com>, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, vadim.fedorenko@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 15/07/2026 3:42 pm, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> 
-> PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written, but
-> a range with no page table at all -- a PMD hole -- is skipped:
-> pagemap_scan_pte_hole() tests p->cur_vma_category, which never carries
-> PAGE_IS_WRITTEN, so the hole is neither reported nor (under
-> PM_SCAN_WP_MATCHING) armed.
-> 
-> In a uffd-wp VMA, WP_UNPOPULATED installs uffd-wp markers when protecting
-> a range, allocating page tables as needed, so an unpopulated slot is
-> treated as written -- see the pte_none() handling in
-> pagemap_page_category(). A missing marker therefore means the range was
-> zapped, e.g. via MADV_DONTNEED. This applies to anon and shmem VMAs.
-> 
-> An anonymous THP is write-protected in place as a huge PMD, so a
-> full-PMD MADV_DONTNEED clears it to pmd_none -- a hole with no page table
-> -- and pagemap_scan_pte_hole() misses it. For a MAP_PRIVATE|MAP_ANON
-> mapping MADV_DONTNEED has fill-with-zeros semantics, so a write-tracking
-> checkpoint/migration tool (e.g. CRIU) treats the range as unchanged and
-> keeps its previous contents; after restore or live migration the process
-> reads stale data instead of zeroes -- data corruption.
-> 
-> Report a hole in a non-hugetlb uffd-wp VMA as written, matching the
-> pte_none handling in pagemap_page_category(); the existing
-> PM_SCAN_WP_MATCHING path then arms it via uffd_wp_range().
-> 
-> hugetlb is excluded: pagemap_hugetlb_category() reports an empty hugetlb
-> entry (huge_pte_none) as not-written, unlike pagemap_page_category(),
-> which reports pte_none as written. pagemap_scan_pte_hole() fires for a
-> hugetlb slot only when it has no page table; keeping that not-written
-> matches how an allocated-but-empty hugetlb entry reads, so the hole and
-> the empty-entry cases agree within the VMA.
-> 
-> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
-> Closes: https://sashiko.dev/#/patchset/20260707151349.92143-1-kirill@shutemov.name
-> Fixes: 2bad466cc9d9 ("mm/uffd: UFFD_FEATURE_WP_UNPOPULATED")
-> Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> Assisted-by: Claude:claude-fable-5
-Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>                 " -t val     shift the ptp clock time by 'val' seconds\n"
+>                 " -T val     set the ptp clock time to 'val' seconds\n"
+>                 " -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
+> +               " -a val     get extended timestamps with attributes (error_bound,\n"
+timestamps -> ptp clock to be consistent
+also, have you considered making the "-a" additional flag to -x and -A
+instead of an exclusive option?
 
+
+> +               printf("sample #%2d: unknown clock %d %s: %lld.%09u\n",
+> +                      sample_num, clockid, when, sec, nsec);
+In the case of an unknown clock, will the additional parameters
+(when/sec/..) be useful?
+
+>                 break;
+>         }
+>  }
+> @@ -188,6 +193,7 @@ int main(int argc, char *argv[])
+>         struct ptp_sys_offset *sysoff;
+>         struct ptp_sys_offset_extended *soe;
+>         struct ptp_sys_offset_precise *xts;
+> +       struct ptp_sys_offset_attrs *attrs_data;
+>
+>         char *progname;
+>         unsigned int i;
+> @@ -208,7 +214,9 @@ int main(int argc, char *argv[])
+>         int list_pins = 0;
+>         int pct_offset = 0;
+>         int getextended = 0;
+> +       int getextendedattrs = 0;
+>         int getcross = 0;
+> +       int getcrossattrs = 0;
+>         int n_samples = 0;
+>         int pin_index = -1, pin_func;
+>         int pps = -1;
+> @@ -226,7 +234,8 @@ int main(int argc, char *argv[])
+>
+>         progname = strrchr(argv[0], '/');
+>         progname = progname ? 1+progname : argv[0];
+> -       while (EOF != (c = getopt(argc, argv, "cd:e:E:f:F:ghH:i:k:lL:n:o:p:P:rsSt:T:w:x:Xy:z"))) {
+> +       while (EOF != (c = getopt(argc, argv,
+> +                                 "a:Acd:e:E:f:F:ghH:i:k:lL:n:o:p:P:rsSt:T:w:x:Xy:z"))) {
+>                 switch (c) {
+>                 case 'c':
+>                         capabilities = 1;
+> @@ -311,9 +320,22 @@ int main(int argc, char *argv[])
+>                                 return -1;
+>                         }
+>                         break;
+> +               case 'a':
+> +                       getextendedattrs = atoi(optarg);
+> +                       if (getextendedattrs < 1 ||
+> +                           getextendedattrs > PTP_MAX_SAMPLES) {
+> +                               fprintf(stderr,
+> +                                       "number of extended attrs timestamp samples must be between 1 and %d; was asked for %d\n",
+> +                                       PTP_MAX_SAMPLES, getextendedattrs);
+> +                               return -1;
+> +                       }
+> +                       break;
+>                 case 'X':
+>                         getcross = 1;
+>                         break;
+> +               case 'A':
+> +                       getcrossattrs = 1;
+> +                       break;
+>                 case 'y':
+>                         if (!strcasecmp(optarg, "realtime"))
+>                                 ext_clockid = CLOCK_REALTIME;
+> @@ -367,6 +389,8 @@ int main(int argc, char *argv[])
+>                                "  %d programmable pins\n"
+>                                "  %d cross timestamping\n"
+>                                "  %d adjust_phase\n"
+> +                              "  %d extended_attrs\n"
+> +                              "  %d precise_attrs\n"
+>                                "  %d maximum phase adjustment (ns)\n",
+>                                caps.max_adj,
+>                                caps.n_alarm,
+> @@ -376,6 +400,8 @@ int main(int argc, char *argv[])
+>                                caps.n_pins,
+>                                caps.cross_timestamping,
+>                                caps.adjust_phase,
+> +                              caps.extended_attrs,
+> +                              caps.precise_attrs,
+>                                caps.max_phase_adj);
+>                 }
+>         }
+> @@ -648,6 +674,49 @@ int main(int argc, char *argv[])
+>                 free(soe);
+>         }
+>
+> +       if (getextendedattrs) {
+> +               attrs_data = calloc(1, sizeof(*attrs_data) +
+> +                                   getextendedattrs * sizeof(struct ptp_timestamp));
+> +               if (!attrs_data) {
+> +                       perror("calloc");
+> +                       return -1;
+> +               }
+> +
+> +               attrs_data->request.num_samples = getextendedattrs;
+> +               attrs_data->request.clock_id = ext_clockid;
+> +
+> +               if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED_ATTRS, attrs_data)) {
+> +                       perror("PTP_SYS_OFFSET_EXTENDED_ATTRS");
+> +               } else {
+> +                       printf("extended attrs timestamp request returned %d samples\n",
+> +                              getextendedattrs);
+> +
+> +                       for (i = 0; i < getextendedattrs; i++) {
+> +                               struct ptp_timestamp *ts = &attrs_data->timestamps[i];
+> +
+> +                               printf("  sample #%u:\n", i);
+> +                               printf("    sys before: %lld ns\n",
+> +                                      (long long)ts->pre_systime.sys_time);
+> +                               printf("    phc time:   %lld.%09u\n",
+> +                                      ts->devtime.device_time.sec,
+> +                                      ts->devtime.device_time.nsec);
+> +                               if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_ERROR_BOUND)
+> +                                       printf("    error_bound: %u ns\n",
+> +                                              ts->devtime.attrs.error_bound);
+in case device doesn't report error bound, I think it's better to
+print explicit message
