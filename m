@@ -1,95 +1,191 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869D342F6FE
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 14:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784212744; cv=none; b=M3Nq0Yr3DP+WtsTqSPz1ogzjB9UCBuY4/6rExUpKRSWm94RqUvV5yGdDnfGc2FKU4bgwrhX87xVF2vUaILw1H/rTVlw+q1TXbUqNAkzCWZ0FQg1mQAQv1UURB8o8HJeIz8I6yamZduXrDdmjeo3YXVipGOPb1jQYWkjWJupjzAA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784212744; c=relaxed/simple;
-	bh=qsT0+91EEk7IFRz1wumgRWzow/otcNxlxulqB9I2Yv0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rgwN89mc4VpHko7rDLuiPgumxpADnlx9jC74unPvc4ANfUFqCkWPa1PQYOiU+dsl9ZeovP0oWA7C1VGIBbiAQN8m/T2dIuFhcSovZ5DyMEaSTN97QL+r2OFQWrPDYnOIu7SYy4x+TxuKt1Gtt7hIgAdp7F7q1bsC5MhxGHh+TRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEE7fBUE; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC8231E85C;
+	Thu, 16 Jul 2026 14:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784212777; cv=pass; b=PHWU/csU5pC5x6QmC2u46epy9V5sU95LzIoLCTjinioiRKoCDHGfEaQlR7WJnDMLFa7leXEN6J3mCQB61lzXoAo+heUFF5uvrC3/YTIM90zMsdCd6+dDwc6DHxHN3Fkb43OTyTjCzM7ZCFI/oGO+98Z0iucy5ul3YaQLunwCQT4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784212777; c=relaxed/simple;
+	bh=E4eKLcP96sqKy8Dezsq799rz0kqd1K5kNdFvFhpEcrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=llhtgzZNeNGfRUHlBg8/B73wBTbVio3JDsflTZzcfjWqGA3QyXbrKbAKszn2G3YYP5Il05fVu6XemOgPMmdMoYvew3v6FFDKf7YbWgoP9OiKJ0toXSKpHL8VbkIwcMs+3lwF7TMsHXjAEKNmMR6YlCgg2x52zDYJ1a9hSkvl5o4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=XNl61S6r; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEE7fBUE"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-49544f26c43so392455e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 07:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784212739; x=1784817539; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qsT0+91EEk7IFRz1wumgRWzow/otcNxlxulqB9I2Yv0=;
-        b=pEE7fBUETwTp5JCdmbuXhVGK0pJvBncvCe8G4F2dn4nq2IzpHiWGOrxFHmTj98oZUt
-         Yjf8lxO/E60mafmG9VJeo15a7klW0oE1ui7mkbcCL9tPbc0wiPJhKkZb3i0OPWNRtoI1
-         H+2NW1hIJDDOV7l1Zc5HekFUh70hf8ejougIZQeJgIwE3fLRw0V6Vhshf1JIIvOBfTx3
-         teuqP6lYgktuzh4J83aIyO3XeFG0AZBlFSL5LlwMqDh47aXiHpMjTn3SvuRWKarg+2Z4
-         hID/r9hD8TAP1tcy82Pw19rmIRAOBeBhqjeGzLcqEEdEUJVoPihyQl3kIXhFAUFiTTE+
-         tQyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784212739; x=1784817539;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qsT0+91EEk7IFRz1wumgRWzow/otcNxlxulqB9I2Yv0=;
-        b=FwtBgfdBnXroAGst/GSf61mirbH2rUDrqlB11tRaZnVlXgOoWD+K7tbjisdSWenQ5w
-         kgOJhFVKCGJt+qWriKmJNpiQn0sK4yxjUiBE/Sisii0he6WDbPBWNmya3G+3yePsl0qB
-         PiXBnziLrMihfGK3yyIZKtDnJptdjJRT58dOu6olb87yYs5N3fBL3uh4yMq1EANIYqZl
-         0qOWS8See8xJgjcVzjto4+wzpHfzGUtcENBgykvAYkl5Ow4WX5hryLmcBNrqbeZqM3e4
-         /gu4mqZsaGgxhUvqGTxPYPb1m+ejJBXjJhkbde/AH5uWRh6/5crnbs8XhXaOTjrdG3ji
-         Wp1w==
-X-Forwarded-Encrypted: i=1; AHgh+RqMYrCbem0CYR9kz551tc+GtIfACtsCx/3dgC1N8mqr+dk7B0nr7De5pDe3XTR2S1sjd/RS/2I9B1uzY7GrHss=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywTO75dJKQsMyAOKmQggA4w102lDlE91TGrfnaWnfzraHVyvKI
-	pp+TqlHbw+/cfHN+pa0Rn91fs1Vv7BxQbrmLDPs3HBjx1+svEh1HfV//
-X-Gm-Gg: AfdE7cnPQeuYTUQeFgOzLu7sARY3j+rQDJKbfBs1S9mWHv5W+WtOCw7CLMURi2YzvXg
-	8PxKCUrG6kLNsJneF4ncKi43hVcbBD+RTiyY+5xS/lySN21LIqmpHvugvslc5AfXUw+9j7gmiad
-	zFTHthsEqUtpnJSPlA5btE2UatudnO28JbRIgnuxYqY3e2F9pPBVavelK66li6G2b58XJ5kC9/+
-	iVRLl/jeHKC6mjAJe+LNJ+f3WutBako28aJT1cyLACPtKMSVT3oE0rTMJUw+xcr7iMh6YSueJPo
-	sm7pzrQOqUTaN1Vk71bUfhcziHuN7YQItt8OvE24V2pVe8oLAkQp63bwMhwwhcla2Wxjf3RsYMF
-	OIoAYSR65YZYJ8DY0NBhoMAjPfzZxzHTXQlv1eb9HtsNDj8dRHRIqIEzNZ0gmECQoewTq4xJ/d+
-	q/Cat5aQrFLFzwzXvxRRxuzKF2o6mElZf639na6WF917egPaVc6LVTRL5JnBOG0RQz1BAOn2s3T
-	KiPA/zT0Rko9nRow5lWvaRuk79KcQWO1gLDn1SVGwthU0JgY01MEPLgSI57
-X-Received: by 2002:a05:600c:34cd:b0:495:4044:11fc with SMTP id 5b1f17b1804b1-49540441311mr33025625e9.7.1784212739282;
-        Thu, 16 Jul 2026 07:38:59 -0700 (PDT)
-Received: from L-022584.energy.envision.com (dynamic-077-187-169-051.77.187.pool.telefonica.de. [77.187.169.51])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49541e9425asm100233605e9.11.2026.07.16.07.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 07:38:58 -0700 (PDT)
-From: Xin Xie <xiexinet@gmail.com>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, David S. Miller <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Felix Maurer <fmaurer@redhat.com>, Luka Gejak <luka.gejak@linux.dev>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/4] net: hsr: emit RedBox-MAC TLV in PRP
- RedBox supervision frames
-In-Reply-To: <178420323080.16062.11665494757602926366.b4-review@b4>
-References: <20260706134131.61659-3-xiexinet@gmail.com>
- <178420323080.16062.11665494757602926366.b4-review@b4>
-Date: Thu, 16 Jul 2026 14:38:57 +0000
-Message-ID: <178421273771.87.2937123145126003737@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="XNl61S6r"
+ARC-Seal: i=1; a=rsa-sha256; t=1784212452; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=hy5rDNBZast0eykBaCv6ufiedcfgKRjR6aygvTFCz9TLz+7Ex+FiiuXoE/pX23/5DZINbhepeFFqaDX0bTciMNF6kgyMzXJ2rxo79QmKi6mZoAeFbwyWPEKUiesziMmE9V4zMMQoHdimz8mGwPppX7sfJ/I+RUZauyKckPdC3vI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1784212452; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Cw1rlTuFfFp7SknXN1+aFGRpA9XFW1cANtJlt4dCukU=; 
+	b=n3i/Q8R4YmNAYHsFnpboyZz1ATCWLh+wgymzuF0CEIN6OSt258N/S8SssncUoaMCKr4iwDtCYIzxpLAJi4rjawMfUxN+AUw6OilC1CAS2erp62FSZiWLuxNmlhp8PH3MEe7nbW7kQ/G1+AQHDkvMjXaFVlTdMn0+8JXsAdx3I/0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=linux.beauty;
+	spf=pass  smtp.mailfrom=me@linux.beauty;
+	dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784212452;
+	s=zmail; d=linux.beauty; i=me@linux.beauty;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=Cw1rlTuFfFp7SknXN1+aFGRpA9XFW1cANtJlt4dCukU=;
+	b=XNl61S6rk5rPBadEXOlRistorXRQ0OvlSyV1M08qb4pTY/UKcLfDPAu54kD5xlB0
+	QXZxQZIQvg8WNBdNoNvXg4Ti4Nd92jFkLHa3EKrfowi1Fth/KzX8rRDKIPaq6r8Dvpk
+	0meql2eoflsNpcBn/2EqTkKAUWhgQocgDFQ0Vr2U=
+Received: by mx.zohomail.com with SMTPS id 1784212448529805.8984322688145;
+	Thu, 16 Jul 2026 07:34:08 -0700 (PDT)
+From: Li Chen <me@linux.beauty>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Gabriel Krisman Bertazi <krisman@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	John Ericson <mail@johnericson.me>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	Li Chen <me@linux.beauty>
+Subject: [RFC PATCH 12/24] fork: let kernel callers create embryonic tasks
+Date: Thu, 16 Jul 2026 22:31:38 +0800
+Message-ID: <538e494dd8fcc677da24ec985c6e90dde554e7f3.1784204592.git.me@linux.beauty>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <cover.1784204592.git.me@linux.beauty>
+References: <cover.1784204592.git.me@linux.beauty>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Thu, 16 Jul 2026 13:59:54 +0200, Fernando Fernandez Mancera wrote:
-> The indentation is wrong here, could you keep at the same level it was
-> before?
+A kernel-created task can become visible before it has installed a new
+executable image or a valid userspace register frame. Exposing such a task
+through ptrace can disclose kernel setup state.
 
-Sure, will restore the original indentation in v4.
+Add a task-local embryonic flag and an internal clone argument for callers
+that need this lifecycle. Reject ptrace access until the creator clears the
+flag. Clear it with release ordering and observe it with acquire ordering.
+This orders visibility of the completed exec state with the transition.
 
-Thanks,
-Xin
+Existing fork, vfork, clone, and kernel-thread callers leave the argument
+unset and retain their current behavior.
+
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Li Chen <me@linux.beauty>
+---
+ include/linux/sched.h      | 21 +++++++++++++++++++++
+ include/linux/sched/task.h |  1 +
+ kernel/fork.c              |  1 +
+ kernel/ptrace.c            |  4 ++++
+ 4 files changed, 27 insertions(+)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 908aff695ef86..031ae92884c3c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1863,6 +1863,7 @@ static __always_inline bool is_user_task(struct task_struct *task)
+ #define PFA_SPEC_IB_DISABLE		5	/* Indirect branch speculation restricted */
+ #define PFA_SPEC_IB_FORCE_DISABLE	6	/* Indirect branch speculation permanently restricted */
+ #define PFA_SPEC_SSB_NOEXEC		7	/* Speculative Store Bypass clear on execve() */
++#define PFA_EMBRYONIC_EXEC		8	/* No valid user register frame */
+ 
+ #define TASK_PFA_TEST(name, func)					\
+ 	static inline bool task_##func(struct task_struct *p)		\
+@@ -1905,6 +1906,26 @@ TASK_PFA_CLEAR(SPEC_IB_DISABLE, spec_ib_disable)
+ TASK_PFA_TEST(SPEC_IB_FORCE_DISABLE, spec_ib_force_disable)
+ TASK_PFA_SET(SPEC_IB_FORCE_DISABLE, spec_ib_force_disable)
+ 
++/* Clearing this bit publishes the register and security state from exec. */
++static inline bool task_is_embryonic_exec(struct task_struct *p)
++{
++	return test_bit_acquire(PFA_EMBRYONIC_EXEC, &p->atomic_flags);
++}
++
++/* The task is private during copy_process(), so no publication barrier. */
++static inline void task_init_embryonic_exec(struct task_struct *p, bool set)
++{
++	if (set)
++		__set_bit(PFA_EMBRYONIC_EXEC, &p->atomic_flags);
++	else
++		__clear_bit(PFA_EMBRYONIC_EXEC, &p->atomic_flags);
++}
++
++static inline void task_clear_embryonic_exec(struct task_struct *p)
++{
++	clear_bit_unlock(PFA_EMBRYONIC_EXEC, &p->atomic_flags);
++}
++
+ static inline void
+ current_restore_flags(unsigned long orig_flags, unsigned long flags)
+ {
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index 92b4e3bc31e66..5b7facf12b33b 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -45,6 +45,7 @@ struct kernel_clone_args {
+ 	void *fn_arg;
+ 	struct cgroup *cgrp;
+ 	struct css_set *cset;
++	bool embryonic_exec;
+ 	unsigned int kill_seq;
+ };
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d16405c037c2f..e3ade83b2d4e2 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2138,6 +2138,7 @@ __latent_entropy struct task_struct *copy_process(
+ 	retval = copy_exec_state(clone_flags, p);
+ 	if (retval)
+ 		goto bad_fork_free;
++	task_init_embryonic_exec(p, args->embryonic_exec);
+ 	p->flags &= ~PF_KTHREAD;
+ 	if (args->kthread)
+ 		p->flags |= PF_KTHREAD;
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index d041645d9d17d..36eb9b154a397 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -56,6 +56,8 @@ bool ptracer_access_allowed(struct task_struct *tsk)
+ 	guard(rcu)();
+ 	if (ptrace_parent(tsk) != current)
+ 		return false;
++	if (task_is_embryonic_exec(tsk))
++		return false;
+ 	es = task_exec_state_rcu(tsk);
+ 	return READ_ONCE(es->dumpable) == TASK_DUMPABLE_OWNER ||
+ 	       ptracer_capable(tsk, es->user_ns);
+@@ -312,6 +314,8 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ 		WARN(1, "denying ptrace access check without PTRACE_MODE_*CREDS\n");
+ 		return -EPERM;
+ 	}
++	if (task_is_embryonic_exec(task))
++		return -EPERM;
+ 
+ 	/* May we inspect the given task?
+ 	 * This check is used both for attaching with ptrace
+-- 
+2.52.0
+
