@@ -1,163 +1,154 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pz2-f0.google.com (mail-pz2-f0.google.com [74.125.228.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412993F166A
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 12:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8771E31E849
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 12:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.0
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784203486; cv=none; b=s9DA88D5uV676j2SLMNPSFQYnmMenUhQJfwZux9DT12YE8hUrCeGWzEiZAtflQyR9spPSifXLaRS+S73kIds1OefIUmrwfACVuQDdoAC8M5inq622pxhwQ46CKEnHs6idZSE6MMwKkIAw+H6z7Hz596fsyO7z4hGP22b05IRyXg=
+	t=1784205039; cv=none; b=cXEZ70uQ0+YOrtiSbFpVu8opOIctHh/Daw8t5tt2RMKF4qjUr+QaVvBU2HYSfri8SCDb4by+5eKa2n5JsFAX1uYsnVa9DDTgdJqQz9gHZXlRHiSotS4dRloQ8RthgL8K5wAI+U+LIVgwFUnOWd+hKT1GfMMZ7AS2BDaG6VpP/nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784203486; c=relaxed/simple;
-	bh=rqYsK8i8YERiWKORPSsayS8qb4bjiatXBWXqEVOBFKM=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=WEPh3sdLhF79unn5jhn5X9NUnEWIGl2jvzsP3x/COgD7GZOMqrLrj6LHbOy7nXIC2MDNPdcTGT6r2MihDMIDynS7xJUEegaPko4ozPSP+fa8Xd1ych0QGKkOvHCQnYd3xAf81a/jFUhORc29JCwC7QeES4a/kIRc7uzvXUXEEvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 83A8E3DF3;
-	Thu, 16 Jul 2026 12:04:43 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B566B779AD;
-	Thu, 16 Jul 2026 12:04:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BQnXKNrIWGqAMwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Thu, 16 Jul 2026 12:04:42 +0000
+	s=arc-20240116; t=1784205039; c=relaxed/simple;
+	bh=vZKofYItbREt71IXPoiMeqt/ZYeLu/MfFEggLh4DNBA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uLyiRhvz3jHsT3WCpP00Ptx+m/JuclFr96rFb2Kj0gRpcTrsC0GaIDku6ka+24fsVtFAEPboQmUOLtkoPWHMzSgu2QABbhZ7w8jGL+71HDHHBQLnk8eJwilYV2fuTDmWE4VQrNgt5ur3JJi/F1g5upha344OpKg51MQ9niLPeyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jk6soxv5; arc=none smtp.client-ip=74.125.228.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jk6soxv5"
+Received: by mail-pz2-f0.google.com with SMTP id 41be03b00d2f7-cb01d87597cso190915a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 05:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784205038; x=1784809838; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mmvRkk+7hLp/TwLQ/myCqZjT/o4rdVb5i1bmgc1547s=;
+        b=jk6soxv5B4EXeFcI5C9JgA0PkLtCl++FRUNHkdWNSG/fOy9AF2IzBzqf9wWQL9qPel
+         vlV7jb7LX1mlRvRr1hGx3CzI/Qbb+XEkWviko66gXCYKv+RgJLW3/s25oF9Pocz4PKFM
+         V2oGTc6eRLmlP4s1idqkN1GWklCd4hRMXhp/7O5I22NlkkCSoGvlEUWtsrzMv82BDHwh
+         WAYQ2SVsQ/zqSq28ubQ3f8d/FcUFt2WpbESrVwn7QAUDJEQLIOtvsfrZ8ILrTIbjZ95/
+         xMEM6WqBoty7I6hm3qW+UnxpyVO0pbCBmg2CilaSsiVuXYxFawJ/RDFeI+hns8neTkPD
+         zzxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784205038; x=1784809838;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mmvRkk+7hLp/TwLQ/myCqZjT/o4rdVb5i1bmgc1547s=;
+        b=AgSZU0mDMizD6EyhP8nNDJ+/vcJy2wUEkFEc0Y329i/knymWDDd496oYNJDGLYER4F
+         PWT2Xwp7+IMvPhso0n+4IY88Q/6gM9MfX+DVN0PmDdbtYkRlsS+wGaSVY3RIhzvPC4si
+         8eBMP3n1O2bxU2OChhTd+AL5BX28NYhk0Qz3067OhnzVbtpaVjhVFE8QSH9BMPHJ7L/d
+         Nuh9OL3KFylBeFnICx/4tD0Ua6wbjsMTiXsptJKLNALRfHl0+ALq8pk8oV9zTUyJ1c4U
+         X9QbknnkCkSAuFcKC1S+/rimF0B7OUN6xWhpRPPM61kSs/IYYbUa7nKjmgVkiyQ3D2o8
+         ctwA==
+X-Forwarded-Encrypted: i=1; AHgh+RoJN52L9hOG3hY0zpBY1E2mviV5VAFdKAWl8KQ11xFHlxnNylD29aCFHgDsgVAAcIlKlzsOkXkqJr6RrZ1Y/+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmQOlLqz86WQTWdUbfcEsGsjMRQLjcb0xxA8oR2HKlUxC+8862
+	0CxE4iOvx9RtOq1Edn1oS/wZoe4YQu5CP7/QQl/JuWjNZ3sBFZIWhAAi
+X-Gm-Gg: AfdE7cm1/DgqeqvlCyr+UeVoE1vr6Y3XM4H1C85sdiRfo30EPiKcgBt3WlX3aR1aoYG
+	uDQtNcawFPPb9ubFbPxEAFJ7buDaQsP2yGI/kqHXO2/WxHFyT/3gJcHiTZ7vPgUyNPsj7AS0ILb
+	Nssqy7+fWUvF3X0xSkJPgMS1f2JcwsjB20pU8ZL0oAsODpQqY5rvAatwnsp/yh27i0DJzfx2s4E
+	FhOopYFWL1xzGshR1JrZfamG92DazB607HoBKvEE+EvbHvaM7jQrtpCeiS8vEmhYDrsVa8S1bO7
+	ux0QvG4qz5aXyms0uhDtXaLV5nNhKXtmzL3+oPulQa0RUO0M1qJ5NudOd21xTewUbORAq4gIcO7
+	KrX5eilaIlLeF071L2sliUhrKSQF8j711W+7jKCLJSyfjeY1mSwgLACApI7ZKAQI0WBLfVFLp2T
+	TWBgMYSQ==
+X-Received: by 2002:a05:6a00:a0a:b0:829:b08f:7353 with SMTP id d2e1a72fcca58-84beb0767c5mr2200864b3a.7.1784205037593;
+        Thu, 16 Jul 2026 05:30:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:49::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f81a5absm4902337b3a.54.2026.07.16.05.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2026 05:30:37 -0700 (PDT)
+Date: Thu, 16 Jul 2026 05:30:31 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Vladimir Vdovin <deliran@verdict.gg>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
+ skb checksum invalidation
+Message-ID: <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
+References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
+ <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH net-next v2 0/4] net: hsr: PRP RedBox (PRP-SAN) support
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: Xin Xie <xiexinet@gmail.com>, netdev@vger.kernel.org, 
- "David S . Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Felix Maurer <fmaurer@redhat.com>, Luka Gejak <luka.gejak@linux.dev>, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <178420323080.16062.15477610308661322679.b4-review@b4>
-References: <20260704234704.4297-1-xiexinet@gmail.com>
- <20260706134131.61659-1-xiexinet@gmail.com>
- <178420323080.16062.15477610308661322679.b4-review@b4>
-Date: Thu, 16 Jul 2026 14:04:31 +0200
-Message-Id: <178420347157.16062.10991723462605746308.b4-reply@b4>
-X-Mailer: b4 0.16-dev
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Queue-Id: 83A8E3DF3
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[]
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
 
-On 2026-07-16 14:00 +0200, Fernando Fernandez Mancera wrote:
-> On Mon, 06 Jul 2026 13:41:27 +0000, Xin Xie <xiexinet@gmail.com> wrote:
-> > This series adds PRP RedBox support to the hsr driver: a PRP node that
-> > proxies one or more SANs sitting behind an interlink port (IEC 62439-3,
-> > PRP-SAN). HSR-SAN has been supported since commit 5055cccfc2d1 ("net: hsr:
-> > Provide RedBox support (HSR-SAN)"); this extends the equivalent capability
-> > to PRP, reusing the existing protocol-neutral proxy machinery
-> > (proxy_node_db, hsr_proxy_announce(), hsr_prune_proxy_nodes()).
-> > 
-> > A SAN behind the interlink does bidirectional unicast with peers on the PRP
-> > network, its source MAC is preserved on the wire, the PRP RCT is correct,
-> > and the RedBox announces each proxied SAN with the RedBox-MAC TLV (Type 30)
-> > in its supervision frames.
-> > 
-> > The series is bisect-safe: the datapath, duplicate discard and supervision
-> > support are added first; the rtnetlink rejection of "type hsr ... interlink
-> > <dev> proto 1" is removed only in patch 3, once the feature is complete.
-> > 
-> > Design notes:
-> > 
-> >  - prp_drop_frame() does not walk the node tables. The destination
-> >    classification (PRP-network node vs proxied SAN) is resolved once per
-> >    frame in fill_frame_info() and cached in struct hsr_frame_info, so the
-> >    per egress-port drop decision is O(1) in the softIRQ path. The
-> >    classification is gated on PRP RedBox devices (prot_version == PRP_V1 &&
-> >    hsr->redbox), so HSR RedBox traffic is not affected.
-> > 
-> >  - The LAN A/B duplicate test is factored into prp_is_lan_dup() so the new
-> >    PRP interlink rules in prp_drop_frame() do not change hsr_drop_frame()
-> >    behaviour, including the NETIF_F_HW_HSR_FWD path. This is software PRP
-> >    RedBox only; it adds no new hardware-offload contract.
-> > 
-> >  - The supervision emitter uses pre-reserved tailroom (hsr_init_skb() +
-> >    skb_put()) on the existing GFP_ATOMIC path; no skb_linearize() or
-> >    pskb_expand_head(). The RedBox-MAC TLV is followed by an explicit EOT
-> >    (Type 0, Length 0); padding via skb_put_padto(ETH_ZLEN) and the 6-byte
-> >    PRP RCT remain at the absolute tail of the egress frame.
-> > 
-> >  - The hsr_get_node() hsr_ethhdr length guard is relaxed only for PRP
-> >    supervision frames (prot_version == PRP_V1 && ETH_P_PRP && is_sup), which
-> >    are untagged with mac_len == ETH_HLEN. HSR (ETH_P_HSR) supervision is
-> >    front-tagged and keeps the original length requirement, so HSR
-> >    malformed-frame filtering is unchanged.
-> > 
-> > Testing (on a net-next v7.2-rc1 kernel built from this base, x86-64):
-> >  - checkpatch.pl --strict: patches 1-3 clean; patch 4 reports only the
-> >    expected "added file(s), does MAINTAINERS need updating?" note, which is
-> >    ignorable here -- MAINTAINERS already lists
-> >    tools/testing/selftests/net/hsr/ under HSR NETWORK PROTOCOL.
-> >  - git diff --check clean; the series git-am's onto the base commit.
-> >  - tools/testing/selftests/net/hsr/hsr_prp_redbox.sh: PASS on the patched
-> >    kernel (bidirectional unicast, SAN MAC preservation, RedBox-MAC TLV +
-> >    EOT in the proxy-announce).
-> >  - HSR regression on the same kernel: hsr_redbox.sh (HSR-SAN/RedBox),
-> >    hsr_ping.sh and prp_ping.sh all PASS, confirming the PRP changes do not
-> >    regress the existing HSR/PRP paths.
-> >  - netns checks: peer<->SAN 0% loss with no duplicates and a valid PRP RCT
-> >    on the wire; a silent SAN is pruned from the announce; zero driver
-> >    WARN/BUG/Oops/RCU-stall during the run.
-> > 
-> > Beyond the in-tree selftest, this exact series (applied to this base and
-> > running as the net-next kernel on x86-64 hardware) was also validated with an
-> > out-of-tree IEC 62439-3 conformance harness (supervision TLV chain, duplicate
-> > discard, cross-LAN rejection, seqnr rollover, VLAN/multicast/GOOSE frame types
-> > with the RCT verified at the absolute frame tail), and interoperability-tested
-> > against a commercial PRP RedBox (Siemens SCALANCE X204RNA) over 100 Mbit/s
-> > Fast Ethernet with NIC hardware (PTP) timestamping: a mid-stream single-LAN
-> > outage of ~2 s at 10 kpps was bridged with zero lost and zero duplicate frames
-> > (seamless PRP failover), and the duplicate-discard window held zero lost /
-> > zero duplicates under netem asymmetric delay up to 100 ms (~1000 sequence
-> > numbers in flight), 25% reorder, and 5% single-LAN loss. The failover and
-> > impairment matrix was additionally repeated on a KASAN + lockdep + kmemleak
-> > instrumented build of this kernel, including a 72-carrier-event link
-> > flap-storm with deliberate double-LAN cuts: zero KASAN, lockdep, or kmemleak
-> > findings. This out-of-tree testing is supplementary and not required to
-> > evaluate the series.
-> > 
+On 07/15, Lorenzo Bianconi wrote:
+> Add a test that verifies skb->ip_summed is set to CHECKSUM_NONE
+> when a device running in XDP mode creates an skb from a xdp_buff
+> if the attached ebpf program returns an XDP_PASS.
+> The test attaches an XDP program returning XDP_PASS, and a TC
+> ingress program that runs the bpf_skb_rx_checksum() kfunc to
+> inspect the resulting skb. After XDP_PASS the driver must invalidate
+> any previously computed hardware RX checksum since XDP may have
+> modified the packet data.
+> The BPF program counts packets per checksum type in a map, and the
+> test runner verifies that after sending traffic the CHECKSUM_NONE
+> counter is non-zero while CHECKSUM_UNNECESSARY and CHECKSUM_COMPLETE
+> counters are zero.
 > 
-> The series looks good to me, I just found a couple of nits.
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  Documentation/networking/xdp-rx-metadata.rst       |  5 ++
+>  .../selftests/drivers/net/hw/xdp_metadata.py       | 55 +++++++++++++++-
+>  .../selftests/net/lib/skb_metadata_csum.bpf.c      | 73 ++++++++++++++++++++++
+>  3 files changed, 132 insertions(+), 1 deletion(-)
 > 
-> Thank you!
+> diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+> index 93918b3769a3..7434ac98242a 100644
+> --- a/Documentation/networking/xdp-rx-metadata.rst
+> +++ b/Documentation/networking/xdp-rx-metadata.rst
+> @@ -90,6 +90,11 @@ conversion, and the XDP metadata is not used by the kernel when building
+>  ``skbs``. However, TC-BPF programs can access the XDP metadata area using
+>  the ``data_meta`` pointer.
 
-Oh I just realized you posted a v3 - anyway, as there were no changes my
-comments also apply there.
+[..]
 
-Thanks,
-Fernando.
+> +If a driver is running in XDP mode, any existing hardware RX checksum
+> +(``CHECKSUM_UNNECESSARY`` or ``CHECKSUM_COMPLETE``) must be invalidated
+> +by setting ``skb->ip_summed`` to ``CHECKSUM_NONE`` before passing the
+> +skb to the kernel, since XDP may have modified the packet data.
+> +
+>  In the future, we'd like to support a case where an XDP program
+>  can override some of the metadata used for building ``skbs``.
 
+Sorry for keeping nitpicking on this, but I'm still not convinced that
+it is what we currently do. From my previous reply:
+
+> > Looking at a few drivers:
+> > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
+> > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
+> >   bpf prog attached
+> > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
+> > - gve (gve_rx) - can do COMPLETE even with xdp attached?
+
+(although for gve I might be wrong, there is also gve_rx_skb_csum that only
+does UNNECESSARY).
+
+I'd wait for Jakub to chime in, but it feels like we should just document
+what we currently do as a recommended approach: for the drivers
+that support COMPLETE, do not report it when the bpf program is attached.
+Both NONE and UNNECESSARY are ok.
+
+Also, did you run this test on real HW? NIPA now has HW tests, maybe it
+makes sense to route this series via net-next to get the real coverage?
