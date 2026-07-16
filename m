@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5C4DF76;
-	Thu, 16 Jul 2026 11:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03AD4DF76;
+	Thu, 16 Jul 2026 11:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784200849; cv=none; b=N9nGxquIhKQfHQmAiWaxXWAn1Qb0tn4lxj/1KPLK2Z1OdDJD8ra1ZdItV5Mz9UmGgjPCXtEtIpyK04pUE8VkwOhPr2+p0351uAXlReSRpxOR0aK+THHrS9Jz2yWAByDc1vsoaaeNZI5+6+BCA4zygOLjTpTja/RYKdBO5DoXpGI=
+	t=1784200907; cv=none; b=KWi+c9HCfkI1qPz4/Oi19SB8dMR7OeCvEAtafJJm1EOreI0Yo+d46ATPwELuiN3Ne6GMcZyu4EjrEJKkK1Jbi3bX2ZETStob7P0qERA6hswckSU+XyvssCH8tVg/Luihaj8KXnnf7o5+KaAGP7sju89ciUFeYLx7hUlfQ2iJNNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784200849; c=relaxed/simple;
-	bh=QK7N3/wsTvX1kN/spYWC/FGRFpFg0+xkagkwjKwI3yo=;
+	s=arc-20240116; t=1784200907; c=relaxed/simple;
+	bh=/YV0dj6oO2oVV4z/F0weOf68/yRoo3gdfn+JanUkNeo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aM+/1IoMEA6Y2909aD2eGNTqwn3IMnJo9OATtcQjyjNcoX1hQfZEzP5cmUeC29avMw+ttIYCCWy3lE/QXKhzxJO0U0Cz+vBCpBmZdjv35zbNgaVn5TtLiA/Np7rz3olAEaScXJR946/6wNcBnvcSkFm57/65VHIP9OylPGGSltI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULJ8jTJL; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=WakApRkkyvpNk24auUivST/ZEzrgepnSFNZb3tJ8Sqd9hBlS8r5RRNTKGqRofB8fyLPaTAHIVX3WdFeyQtLDBVtjPteTE2HhqbFhKmJJB66K5X8kuLxIvo6c/Ta2k1GaDGzSKZGRZm1Y9XIBimHQLtIa126WIfGkw1NBZpHr2Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=htqNAfT2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULJ8jTJL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22731F00A3A;
-	Thu, 16 Jul 2026 11:20:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="htqNAfT2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC891F000E9;
+	Thu, 16 Jul 2026 11:21:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784200848;
-	bh=iohMITS/mr9qDiRkI+rGRUr759u+rXGlGlDEwpj+fhU=;
+	s=k20260515; t=1784200905;
+	bh=jW9Bml3oYmUGAOmKPLAJ2CnP/L0HuV5RHmyp2e90SIc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ULJ8jTJL674cLd5oJIqYzCX17btEY5HF91TfblR8ew2LU3w2GS1H8qpYVf+Ss+vYa
-	 A4kPjTsJPQcIq0ZhsQvwyxrUv1aoJE2X/5vZv4WNyPyDYs7quFjED/Aaw8NFKpB2TT
-	 7MWIIwG0eLp2UyYHic9Ix8F3s2XnZlUGX1584c/xpCOlkdUEeooD4LRHnoOQU6DLxR
-	 9pp7/6d6UvA8aaNkL8MqGEA9g+Tncqanp9i97hDdqwCABUrTWW/23hhjFLIW5uUbxT
-	 lAFu++ONA29JTBj6BAUInoCpeJa5B+uqqSiGLXUbRmmvbU62WXI6+bIAyzWPP59ka8
-	 J/5pwZXkY5Ofg==
-Message-ID: <0c278b69-3ecd-4ec3-b418-dea84e043732@kernel.org>
-Date: Thu, 16 Jul 2026 13:20:45 +0200
+	b=htqNAfT2yuc/+HqsQQgqkOeo3B5rAr9UM8Ovms/+FzWEnHs1gXx60lGZ5KC9gpnlK
+	 L+/KxPrqScYi6x81ENHVw9cNphhIEtcljCFw7EVh4iMPP1SotWfLCPN2x9ZEVtEqXO
+	 IdI+XGELqaL7cQi9Vx2HBT7cDSBgFG3FtFNpQmjIKMFfibqvfkaQxj7q1QaB9zprkb
+	 DSYyJZinKVHCOjjDPAMaG4HgW/XaHJkyMW9tMklhv5IbEr/AtslVVoZCi30NCdAs/x
+	 EZcK0B5LpQBC4SESt8DUUbjeBCsw9onw8x6EAYSEgHQOIYaOpZsPJayKJUcO9qG4Dl
+	 xEpoIyuE/NGiw==
+Message-ID: <ee67ea61-a9ab-4d7d-a090-0297c4382a26@kernel.org>
+Date: Thu, 16 Jul 2026 13:21:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,17 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: khugepaged: skip swap tests when swap is
- unavailable
-To: Dev Jain <dev.jain@arm.com>, Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260715133418.170386-1-jaeyeon.lee.dev@gmail.com>
- <4b6904b5-81f9-4e27-8ac5-5bd7e7174c5d@kernel.org>
- <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
+Subject: Re: [PATCH v5 1/2] fs/proc/task_mmu: fix PAGEMAP_SCAN written state
+ for PMD holes
+To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org
+Cc: usama.anjum@arm.com, peterx@redhat.com, liam@infradead.org,
+ ljs@kernel.org, vbabka@kernel.org, jannh@google.com, pfalcato@suse.de,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com, zenghui.yu@linux.dev,
+ shuah@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org, kernel-team@meta.com
+References: <20260715144234.442721-1-kirill@shutemov.name>
+ <20260715144234.442721-2-kirill@shutemov.name>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,78 +92,57 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <6c474ce7-8f1d-4e85-8587-8a60983cec03@arm.com>
+In-Reply-To: <20260715144234.442721-2-kirill@shutemov.name>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/15/26 16:47, Dev Jain wrote:
+On 7/15/26 16:42, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 > 
+> PAGEMAP_SCAN reports an unpopulated PTE in a uffd-wp VMA as written, but
+> a range with no page table at all -- a PMD hole -- is skipped:
+> pagemap_scan_pte_hole() tests p->cur_vma_category, which never carries
+> PAGE_IS_WRITTEN, so the hole is neither reported nor (under
+> PM_SCAN_WP_MATCHING) armed.
 > 
-> On 15/07/26 7:39 pm, David Hildenbrand (Arm) wrote:
->> On 7/15/26 15:34, Jaeyeon Lee wrote:
->>> The collapse_swapin_single_pte and collapse_max_ptes_swap tests use
->>> MADV_PAGEOUT to swap out pages before verifying khugepaged collapse
->>> behavior. On systems without swap configured, MADV_PAGEOUT succeeds
->>> but the pages are not actually swapped out, so check_swap() returns
->>> false and the tests report a failure.
->>>
->>> These tests cannot run meaningfully without swap, so a missing swap
->>> area is an environment limitation rather than a test failure. Detect
->>> the absence of swap via /proc/swaps and skip the affected tests
->>> instead of failing them.
->>>
->>> Signed-off-by: Jaeyeon Lee <jaeyeon.lee.dev@gmail.com>
->>> ---
->>>  tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++++++++++++
->>>  1 file changed, 25 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->>> index 10e8dedcb087..f9b4ebe733ce 100644
->>> --- a/tools/testing/selftests/mm/khugepaged.c
->>> +++ b/tools/testing/selftests/mm/khugepaged.c
->>> @@ -100,6 +100,22 @@ static void skip(const char *msg)
->>>  	exit_status = KSFT_SKIP;
->>>  }
->>>  
->>> +static bool swap_available(void)
->>> +{
->>> +	char buf[256];
->>> +	bool ret;
->>> +	FILE *fp = fopen("/proc/swaps", "r");
->>> +
->>> +	if (!fp)
->>> +		return false;
->>> +
->>> +	fgets(buf, sizeof(buf), fp);
->>> +	ret = !!fgets(buf, sizeof(buf), fp);
->>> +
->>> +	fclose(fp);
->>> +	return ret;
->>> +}
->>> +
->>
->> That doesn't mean that swapout will succeed.
->>
->> Take a look at cow.c where we use pagemap_is_swapped() after MADV_PAGEOUT.
+> In a uffd-wp VMA, WP_UNPOPULATED installs uffd-wp markers when protecting
+> a range, allocating page tables as needed, so an unpopulated slot is
+> treated as written -- see the pte_none() handling in
+> pagemap_page_category(). A missing marker therefore means the range was
+> zapped, e.g. via MADV_DONTNEED. This applies to anon and shmem VMAs.
 > 
-> That suffers from the reverse problem - in case of a real swap bug, cow.c
-> will skip the test and anyone running the test won't bother.
-
-Yes, because there could be other reasons why MADV_PAGEOUT would not be
-successful (speculative page references, out of swap space).
-
+> An anonymous THP is write-protected in place as a huge PMD, so a
+> full-PMD MADV_DONTNEED clears it to pmd_none -- a hole with no page table
+> -- and pagemap_scan_pte_hole() misses it. For a MAP_PRIVATE|MAP_ANON
+> mapping MADV_DONTNEED has fill-with-zeros semantics, so a write-tracking
+> checkpoint/migration tool (e.g. CRIU) treats the range as unchanged and
+> keeps its previous contents; after restore or live migration the process
+> reads stale data instead of zeroes -- data corruption.
 > 
-> I think this patch idea is reasonable, we need a way to say "swap definitely
-> won't succeed because there is no swap device, so skip" vs "swap failed,
-> need to dig in!" .
+> Report a hole in a non-hugetlb uffd-wp VMA as written, matching the
+> pte_none handling in pagemap_page_category(); the existing
+> PM_SCAN_WP_MATCHING path then arms it via uffd_wp_range().
+> 
+> hugetlb is excluded: pagemap_hugetlb_category() reports an empty hugetlb
+> entry (huge_pte_none) as not-written, unlike pagemap_page_category(),
+> which reports pte_none as written. pagemap_scan_pte_hole() fires for a
+> hugetlb slot only when it has no page table; keeping that not-written
+> matches how an allocated-but-empty hugetlb entry reads, so the hole and
+> the empty-entry cases agree within the VMA.
+> 
+> Reported-by: Sashiko AI review <sashiko-bot@kernel.org>
+> Closes: https://sashiko.dev/#/patchset/20260707151349.92143-1-kirill@shutemov.name
+> Fixes: 2bad466cc9d9 ("mm/uffd: UFFD_FEATURE_WP_UNPOPULATED")
+> Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-fable-5
+> ---
 
-I would not pack a "let's test if swapping in the system even works" into a
-khugeapged test.
+Thanks!
 
-I think we can reasonably assume here "swap subsystem is not completely broken".
-
-And if we want to check for that, have a separate test that stresses swapping,
-if available.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
