@@ -1,142 +1,131 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E264D14F112;
-	Thu, 16 Jul 2026 04:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702A53128CA
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 04:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784177205; cv=none; b=dgANW+YUcnPC3txsegwnCiupZM7evVl8xN20hS4oMQtGQkAeZrS/CyvhFcTCmBSYUTl6DZ3DNCklNF7hS3cL1dWm886tTQ6UKXMetzlF3dIsyZNyOMFoAsdk2aGTh3Ej0r3DZ9++H+Pjk+7lIpZ8wa83xMBM6P0EiVD4GymdMfM=
+	t=1784177266; cv=none; b=J3fUbDnWRJWQ/HcOKRc9G7qoQWfnt4QM30/hMNBdbhgPSQkk5311L81cOAeTcltbBrjZfDaaK2K22das3MFKmhZaXNqN/Jyt3w3dKZMySD+d0gy+ujptYCUCC1qrP46kfK26D3wUQGX4S/I6t0W+kTthk3269EgK3/Im12QpIow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784177205; c=relaxed/simple;
-	bh=PLge3ahmGHSUSYjY+q3DA+gXzkxSblEk5wH0z+3EJKg=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FIzeReBDAV1NkqbxBJFQu6li39GmT+NuOnfTnBxiccrD9M6Rh9I3LpyW8uZcEqIReIwTs+SZsxjtwu7YKk2xpwL/tuRyroGSoLAuIfR4DykS4SsNYMoC0vJjueJfO2NcKBAqY9a5iikJey2mx4izcgq/At+JZAaZbhr0V0vheuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fWxUDD7x; arc=none smtp.client-ip=91.218.175.188
+	s=arc-20240116; t=1784177266; c=relaxed/simple;
+	bh=rf+xcw6W9dqatxhX5/ZemDEUvNG5YoPppX5ka6EgHMY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kF3L0tfVSN2gEJZ140TjijbfoiSECQ0qFiUQZxm79WCm7gXm1YWIRcP5M2hRxhYjCK4YOhs1XM80vqQYGXmYdSDJhZeoVki6SZylazKMlkSYrySvsUUPpL60lzfxvRpwyi5sikOOChJJGofcG3iYI/p3/kzRT3KV2PvoBpQVSEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RyA/1hcS; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fWxUDD7x"
-Message-ID: <6ea8e8dd-b65f-4ada-8376-54f207d95b3d@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RyA/1hcS"
+Message-ID: <4e6bf7cd-a133-443b-864f-a3d60d5c08f1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784177190;
+	t=1784177251;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FclzmYUSWhBMXSxmeiWZ93Np1Bc9uMRxbrMcQ2zEB6g=;
-	b=fWxUDD7x8GQoJX8drEA5IXW6P3YuKpTetzFbx5p+Z/WyvJVI3BkLW25UlQgfGhxuedvU2d
-	s/kPXUFpVMV7WYjzbiDmSSC29dTgVuU52MeHsRDBAOwT/0BIFsgrzor9WqD6NAMrO6y9ou
-	XmDvwYXTXkpLpRA/KFyhJOOT3Y7nNTs=
-Date: Thu, 16 Jul 2026 12:46:23 +0800
+	bh=s8nB70rsozdYbQSCJ2LId9j4sXaQKQBhDOLTpWWsJlA=;
+	b=RyA/1hcSHAB1TDFHb0aB9DhfEhIHdgkvTQqgs8pQcTxnPsSNxX+mR7WuVI3ZmmDolozDm1
+	xoY6SQxaHodBhQpHFpNpRLN04LRUF+8S0g+xR1S0eZDqVZK7s7ryZa2xnpvqVi0JuqcM0R
+	WwXXfIQjrBJm6xCsQDs+1IbT3Rklx/E=
+Date: Thu, 16 Jul 2026 12:47:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: cui.tao@linux.dev, WANG Xuerui <kernel@xen0n.name>, kvm@vger.kernel.org,
- loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+Subject: Re: [RFC PATCH net-next v2 1/2] tcp: Add
+ net.ipv4.tcp_purge_receive_queue sysctl
+To: Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Neal Cardwell
+ <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Ido Schimmel <idosch@nvidia.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+ <ij@kernel.org>, Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>,
+ Yung Chih Su <yuuchihsu@gmail.com>, Wyatt Feng
+ <bronzed_45_vested@icloud.com>, Jason Xing <kerneljasonxing@gmail.com>,
+ Lance Yang <lance.yang@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: KVM: Allow to set pv_feature until vCPU run
-To: Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
-References: <20260716013823.3259816-1-maobibo@loongson.cn>
+References: <20260715145328.54597-1-leon.hwang@linux.dev>
+ <20260715145328.54597-2-leon.hwang@linux.dev>
+ <CANn89iLyeAPNV2VHTM3w0-zpzjZNFy3aJDsVUERYyniLN4ub7A@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20260716013823.3259816-1-maobibo@loongson.cn>
+From: Leon Hwang <leon.hwang@linux.dev>
+Content-Language: en-US
+In-Reply-To: <CANn89iLyeAPNV2VHTM3w0-zpzjZNFy3aJDsVUERYyniLN4ub7A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
+On 15/7/26 23:15, Eric Dumazet wrote:
+> On Wed, Jul 15, 2026 at 4:54 PM Leon Hwang <leon.hwang@linux.dev> wrote:
 
+[...]
 
-在 2026/7/16 09:38, Bibo Mao 写道:
-> Now pv_feature can be set only once, there is problem with VM migration.
-> Where it is set when vCPU is created and after migration, here it is
-> allow to set for many times, until vCPU starts to run.
 > 
-Hi Bibo,
+> My thoughts are:
+> 
+> out_of_order_queue has been forgotten. skbs could be there and still
+> 'block devmem'
 
-The Sashiko AI review raised two concerns on this patch that I think
-are valid:
 
-1. Since ran_atleast_once is per-vCPU but pv_features is VM-wide,
-   userspace could run vCPU 0 and then use vCPU 1 (whose
-   ran_atleast_once is still false) to change pv_features while
-   vCPU 0 is executing.
+Yes. The tp->out_of_order_queue should also be purged here so that
+out-of-order SKBs cannot continue holding devmem.
 
-2. Without the old LOONGARCH_PV_FEAT_UPDATED latch, setting different
-   PV features on different un-run vCPUs silently overwrites
-   pv_features instead of returning -EINVAL.
+> 
+> WRITE_ONCE(tp->copied_seq, tp->rcv_nxt) is certainly wrong, because
+> read() will return 0, instead of -1 (errno = EPIPE or ECONNRESET)
+> So the application will not know a RST was received :/
 
-Both stem from using a per-vCPU flag to protect VM-wide state.
-Would a VM-level bool in kvm_arch (e.g. pv_features_configured),
-set on first SET_ATTR or first RUN of any vCPU, work?  It would
-not be migrated since it is not exposed via any ioctl.
+
+Thanks for pointing this out. When sysctl_tcp_purge_receive_queue is
+enabled, read() must report the reset error.
+
+The reason read() returns 0 is that SOCK_DONE, which was set when the
+FIN was processed, is checked before sk_err in tcp_recvmsg_locked(). I
+think clearing SOCK_DONE after purging the queues could let read()
+observes the error installed by tcp_done_with_error().
+
+Will also update the packetdrill test to expect -1/EPIPE.
+
+> 
+> I think that BSD and linux implementations have historically retained
+> acknowledged,
+> buffered receive data upon RST to allow applications to drain data
+> already ACKed prior to the reset.
+
+
+Agreed. The new sysctl is disabled by default specifically to preserve
+this existing behavior.
+
+Enabling it is an explicit opt-in to discard buffered receive data,
+release the associated resources promptly, and report the reset error
+immediately.
+
+Will update the change in ip-sysctl.rst documentation with this
+application-visible tradeoff.
+
+> 
+> Adding a narrow sysctl specifically for CLOSE_WAIT creates
+> inconsistent behavior across TCP states.
+
+
+My bad. After reading the RFC 9293 section 3.10.7.4. [1] again, "All
+segment queues should be flushed." should apply to these states:
+
+      -  ESTABLISHED STATE
+      -  FIN-WAIT-1 STATE
+      -  FIN-WAIT-2 STATE
+      -  CLOSE-WAIT STATE
+
+So, the sysctl-controlled purge should be consistently applied to these
+four states.
+
+[1] https://www.rfc-editor.org/rfc/rfc9293.html#section-3.10.7.4
 
 Thanks,
-Tao
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->  arch/loongarch/include/asm/kvm_host.h |  4 +++-
->  arch/loongarch/kvm/vcpu.c             | 15 +++++++++++----
->  2 files changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/include/asm/kvm_host.h
-> index 23cfbecebbd7..af376fc44c44 100644
-> --- a/arch/loongarch/include/asm/kvm_host.h
-> +++ b/arch/loongarch/include/asm/kvm_host.h
-> @@ -163,7 +163,6 @@ enum emulation_result {
->  #define KVM_LARCH_SWCSR_LATEST	(0x1 << 3)
->  #define KVM_LARCH_HWCSR_USABLE	(0x1 << 4)
->  
-> -#define LOONGARCH_PV_FEAT_UPDATED	BIT_ULL(63)
->  #define LOONGARCH_PV_FEAT_MASK		(BIT(KVM_FEATURE_IPI) |		\
->  					 BIT(KVM_FEATURE_PREEMPT) |	\
->  					 BIT(KVM_FEATURE_STEAL_TIME) |	\
-> @@ -250,6 +249,9 @@ struct kvm_vcpu_arch {
->  	/* cpucfg */
->  	u32 cpucfg[KVM_MAX_CPUCFG_REGS];
->  
-> +	/* VCPU ran at least once */
-> +	bool ran_atleast_once;
-> +
->  	/* paravirt steal time */
->  	struct {
->  		u64 guest_addr;
-> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-> index 20c207d80e31..ce6a1b06d50d 100644
-> --- a/arch/loongarch/kvm/vcpu.c
-> +++ b/arch/loongarch/kvm/vcpu.c
-> @@ -1164,11 +1164,14 @@ static int kvm_loongarch_cpucfg_set_attr(struct kvm_vcpu *vcpu,
->  		if (val & ~valid)
->  			return -EINVAL;
->  
-> -		/* All vCPUs need set the same PV features */
-> -		if ((kvm->arch.pv_features & LOONGARCH_PV_FEAT_UPDATED)
-> -				&& ((kvm->arch.pv_features & valid) != val))
-> +		if ((kvm->arch.pv_features & valid) == val)
-> +			return 0;
-> +
-> +		if (vcpu->arch.ran_atleast_once)
->  			return -EINVAL;
-> -		kvm->arch.pv_features = val | LOONGARCH_PV_FEAT_UPDATED;
-> +
-> +		/* All vCPUs need set the same PV features */
-> +		kvm->arch.pv_features = val;
->  		return 0;
->  	default:
->  		return -ENXIO;
-> @@ -1851,6 +1854,10 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
->  	int r = -EINTR;
->  	struct kvm_run *run = vcpu->run;
->  
-> +	/* Mark this VCPU ran at least once */
-> +	if (!vcpu->arch.ran_atleast_once)
-> +		vcpu->arch.ran_atleast_once = true;
-> +
->  	if (vcpu->mmio_needed) {
->  		if (!vcpu->mmio_is_write)
->  			kvm_complete_mmio_read(vcpu, run);
-> 
-> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+Leon
 
