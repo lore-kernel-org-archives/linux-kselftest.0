@@ -1,41 +1,40 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE2B3AEF53
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 21:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B433C0A08
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 21:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784236245; cv=none; b=khjHjIeD9PI06iRUlUpVMoMUIRZeP0HPWaFbiktGesaypzLk8f2UbYufsqKoJwMUkIubvp5BnFFwdXqcsu3rRD4X/c6C+ghyj0CXKEVTUbbduN+WA5KMcd+QTjryNxAIFDEPi3tfMm+THh+nK4CArdYSDElzEex+titaYTN6w40=
+	t=1784236322; cv=none; b=FvhTxlNVPae2m0exZnLI4rGDCirW7gLjEUZn3rbUJVuBhH5Zvhcu4LlqftnCRshy+126C5W3gydwPFTx0V5df8PhhNV+gDe+dCnd9BT4vf5pKuaTxVD2FD8NZkkId0m+hT6G+gSQFMWm3jxXFZBNJjljW3qr4zsrTxeLQvjZb6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784236245; c=relaxed/simple;
-	bh=oSe6esEAfgDCeUoz8BT1HUs0LHdcWpWM7oTl5W/a328=;
+	s=arc-20240116; t=1784236322; c=relaxed/simple;
+	bh=nCdlB/eVVRL6A0PB3beHYoCfynsp3ENW/4elEUSOz8U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o8RoqZT2pRC/n7SyHhIeSytU2VE0x8b5olsNpYHnlGTjfZom67UsbzAMMTmmnh52kUEoQcPhgUDnE/TDnWHNs/+CMQLvdsfbzjkobUO8Wb/aSdmzxngfBOUc6ELRlmhEnFxTt+bq1B/9r3hPMZ1ZjisB6dmpDUh+IxurhJF3vK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tqFVGgkV; arc=none smtp.client-ip=91.218.175.171
+	 In-Reply-To:Content-Type; b=Pdmdjf2ggVc38zmYwTUeX9GcnTLBRyI5cF4dJMpxSeiQyBtiBFwaqP0+TEfr+wwL5O7lgaIYakgvh/zzySXoS4ZnhVnO1djFZFYkJ6PxtssOHy5/esN/hgetSk9LXiY/17JeZtM6ddGRWqlkRRaV9S4XWjD2l0fscHSHEZWTakE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m+LiJmlA; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tqFVGgkV"
-Message-ID: <cebe82a7-203c-4b7e-a57f-0616850c58e3@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m+LiJmlA"
+Message-ID: <2088b8ed-c26c-4120-a3d6-8e6dfbf89f58@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784236239;
+	t=1784236317;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qA8gusKTtpZqCfi4JGOZNGnEDiI7yt/qdildjgXKcMY=;
-	b=tqFVGgkV45qJYnsNuyCpwFfQvR7l9Y6KHQHEuja29Ihd8mWWzAkVO7gIya2WmHz3/VEtap
-	liEN3eh+JgtKT88mglxocJqZLtyeeo2dYG8Lj/KjrVWA4xtwyqnO1b7z3QxayaFGDMolyX
-	YVSPcFW7MOYvJGMsfh/hDIEf2h1WQFs=
-Date: Thu, 16 Jul 2026 14:10:33 -0700
+	bh=trws+fg1iLjXQ6hRYgo7PQNpwTAMKP6KkF9pJjvNvM8=;
+	b=m+LiJmlAIkOksJZ7fPAAHvUvCZwIo7x2nq8QguHO3rfiAmul8BdBdNo/eAkYXuDkkiJqGM
+	ADhO63tyEwMthfMTbev1M3sRXSgpaTRSIZHCEr/c4YRnH3Q+C33XeudGja+1Gs/fUM1kaS
+	OotbYZHGWqOrpoX5M0weB/1qS/U4MiM=
+Date: Thu, 16 Jul 2026 14:11:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/4] selftests/bpf: Install resolve_btfids.test.o.BTF
- where the test expects it
+Subject: Re: [PATCH 3/4] selftests/bpf: Fix lsm_bdev dev_t encoding mismatch
 To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
  Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
@@ -48,67 +47,64 @@ To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
- <20260710-selftests-bpf_fixes-v1-2-aa24dfd6f4f9@suse.com>
+ <20260710-selftests-bpf_fixes-v1-3-aa24dfd6f4f9@suse.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260710-selftests-bpf_fixes-v1-2-aa24dfd6f4f9@suse.com>
+In-Reply-To: <20260710-selftests-bpf_fixes-v1-3-aa24dfd6f4f9@suse.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/10/26 3:09 PM, Ricardo B. Marlière wrote:
-> prog_tests/resolve_btfids.c looks for "resolve_btfids.test.o.BTF" relative
-> to the running test_progs binary. resolve_btfids always writes
-> <obj.path>.BTF next to the object it processes, so building
-> resolve_btfids.test.o also produces resolve_btfids.test.o.BTF in the build
-> output directory as a side effect.
+> progs/lsm_bdev.c keys its verity_devices hashmap with the raw kernel dev_t
+> read straight off bdev->bd_dev, i.e. MKDEV(major, minor) = (major << 20) |
+> minor. prog_tests/lsm_bdev.c instead builds its lookup key with dev_key =
+> (__u32)st.st_rdev from stat(2), but the stat(2) syscall fills st_rdev via
+> the kernel's new_encode_dev(), a different bit layout: (minor & 0xff) |
+> (major << 8) | ((minor & ~0xff) << 12).
 > 
-> INSTALL_RULE never carries it over: it is not part of TEST_FILES,
-> TEST_GEN_FILES or TRUNNER_EXTRA_FILES, and it is not copied by the *.bpf.o
-> rsync used for TEST_INST_SUBDIRS. After "make install", every flavor of
-> test_progs, including the default one, fails with "Failed to load BTF from
-> resolve_btfids.test.o.BTF", even though the file built fine and BTF ID
-> resolution itself works correctly.
+> For any device with a non-trivial major these two values differ, so the
+> lookup can never find what the BPF program stored, and test_lsm_bdev()
+> always fails with:
 > 
-> Install it next to the rest of the per-flavor build output, using an
-> explicit rsync in INSTALL_RULE like the one already used for bpftool.
+>   test_lsm_bdev:FAIL:map lookup unexpected error: -2 (errno 2)
 > 
-> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
+> Reconstruct the raw kernel dev_t from the decoded major/minor instead of
+> casting st_rdev directly, restoring the layout the BPF program actually
+> reads.
+> 
+> Fixes: 96f4c251a087 ("selftests/bpf: add block device management selftests")
 > Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 > ---
->  tools/testing/selftests/bpf/Makefile | 3 ++-
+>  tools/testing/selftests/bpf/prog_tests/lsm_bdev.c | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 47911c9b4977..7260d672acf7 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -1057,10 +1057,11 @@ override define INSTALL_RULE
->  	$(DEFAULT_INSTALL_RULE)
->  	@mkdir -p $(INSTALL_PATH)/tools/sbin
->  	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(TRUNNER_BPFTOOL) $(INSTALL_PATH)/tools/sbin/
-> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(OUTPUT)/resolve_btfids.test.o.BTF $(INSTALL_PATH)/
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c b/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c
+> index a970798e1173..28bc4b117f41 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_bdev.c
+> @@ -17,6 +17,7 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <sys/stat.h>
+> +#include <sys/sysmacros.h>
+>  #include <sys/types.h>
+>  #include <unistd.h>
+>  #include "lsm_bdev.skel.h"
+> @@ -172,7 +173,7 @@ void test_lsm_bdev(void)
+>  	if (!ASSERT_OK(stat(DM_DEV_PATH, &st), "stat dm dev"))
+>  		goto remove_dm;
+>  
+> -	dev_key = (__u32)st.st_rdev;
+> +	dev_key = (major(st.st_rdev) << 20) | minor(st.st_rdev);
 
-I think you can squash patches #1 and #2 into a single "Fix make
-install target" patch.
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-pw-bot: cr
+nit: I wonder if there are other tests with this bug. Have you checked?
 
-nit: This hardcodes the filename, and even though we only have one
-test that needs .BTF currently, you could add *.BTF to the loop:
-
-	$(OUTPUT)/$$DIR/*.bpf.o $(OUTPUT)/$$DIR/*.BTF
-
-Then any future test that consumes a raw .BTF gets installed for free.
-
->  	@for DIR in $(TEST_INST_SUBDIRS); do				  \
->  		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
->  		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-> -			$(OUTPUT)/$$DIR/*.bpf.o				  \
-> +			$(OUTPUT)/$$DIR/*.bpf.o $(OUTPUT)/$$DIR/resolve_btfids.test.o.BTF \
->  			$(INSTALL_PATH)/$$DIR;				  \
->  	done
->  endef
+>  
+>  	/* Look up the device in the BPF map and verify. */
+>  	err = bpf_map__lookup_elem(skel->maps.verity_devices,
 > 
 
