@@ -1,239 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB519389DF3;
-	Thu, 16 Jul 2026 06:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE89389115;
+	Thu, 16 Jul 2026 06:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784182021; cv=none; b=Z0GhgFdG1ZYxQ6I+z1qC+zY0z+vGRDiNjSF9I/JKLui2UW1A/DKmoAI1an9mNY2AiSeefH8Rl82JXkzyfd7hMKBeBfG55gVFFB6098sj1AKBOGjtdEaTU8SFpAxbExFCmQcySd6n72bWVR8oDL4f2ZOpWqZMvekN48mo/OWPwhw=
+	t=1784182149; cv=none; b=F6tbG2y9ECkTb0NKcg/WyC3LsjkdQzU9NpP58C3gC/KD0rndmWCdqLrWzuVX9is2rbKmcf840VL6pZDyXllP/Q8Wuknms8xzkS8fRzhqTqYCYf3CrTBZG++b9RAWFRF+FaN7UYlz2jSAlBCGjBV1ybAU1WlYEapctOzidWaPDnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784182021; c=relaxed/simple;
-	bh=jg0hHfpGnwyHv03Z1hCwmgAUCXVb388LYJneIvskxlY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fx3sqlF9dl9XZmDKcVM0FiOriFFzhdpNFVcQKrup68tvBn7xUsf3WaRrp7BSi0iSbVX5iTuPh0BTLqR0RL6cBfrWZt6XT3o6Ax8ARuaDc6Rdmof11u+CR2KVobs/r71rSzqZd2Gog1z5kkz3TPxW0AIDerm4RG4nJnRFDGM6MeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxW4gExI; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxW4gExI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47E11F000E9;
-	Thu, 16 Jul 2026 06:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784182019;
-	bh=L27aDEOtIhuxLNy7MyEok9eUqvvl9O0jW79d0mjRuwc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RxW4gExIw0hkM+y9+43pUo0apzAdH9+Qb/9FoLL5GHGZ05RliT4wgU1WTWs6Uxivi
-	 WqHTzFM1UoFcMcerlgoF318CQ+/kz7I6n63yQ+dHxEGpZFRVvuNmqcXpE91sI3xAvJ
-	 3U4AnR6HCUeBkd+w1r3vRcmECoOq6I5+twvEdZuk3jxYgherC6TUXn7UL6tJAPhSCj
-	 BXcuYon06k5QjBjWRqedNuCPlbaJRJkfEj3Y2QaQPG3+byDEQCExgGx4NR8hMOp+Ox
-	 IoChYAsdQ4ZAeWx/D6Irzkq3zhxDqvXChQo7b2nQmPnROsn1lcrzdjSE6ASgMx/GT8
-	 DrAbW8UTlbfxA==
-Date: Thu, 16 Jul 2026 09:06:53 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: David Matlack <dmatlack@google.com>,
-	Luca Boccassi <luca.boccassi@gmail.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [RFC PATCH] liveupdate: Allow multiple openers for
- /dev/liveupdate
-Message-ID: <alh0_aCbZITvSaox@kernel.org>
-References: <20260714190356.190328-1-dmatlack@google.com>
+	s=arc-20240116; t=1784182149; c=relaxed/simple;
+	bh=8Dc13cT8C0WD7lesMjkVxHLB2QK+UUaqpnJ0Z36bBoQ=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ETUp+1pY2QJbmeuHgFR0ZA5yuR2pwPhszFlkFW2ovnAPKHqmR4eI0/yyQFW+RS9GrZzTiXdkLy4/afKwly+3667hAOLrK4N53neILrSBQE9uePApiZMvKRiXpLF0/EHALNSEDIS7JuZx1El+f2bWqYveoSPcPHlbUywHsZZel24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8Axx+p6dVhqvxYEAA--.16451S3;
+	Thu, 16 Jul 2026 14:08:58 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowJCxq8R5dVhq3qsOAA--.19013S2;
+	Thu, 16 Jul 2026 14:08:57 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: KVM: Allow to set pv_feature until vCPU run
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, Tao Cui <cui.tao@linux.dev>,
+ kvm@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260716013823.3259816-1-maobibo@loongson.cn>
+ <CAAhV-H4RUWDWHRZ5FJ388e0ZcMD5VS=rPThY3kYNR+WY917i5w@mail.gmail.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <66e63cac-7768-b33c-132e-fa0a76336e1d@loongson.cn>
+Date: Thu, 16 Jul 2026 14:08:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260714190356.190328-1-dmatlack@google.com>
+In-Reply-To: <CAAhV-H4RUWDWHRZ5FJ388e0ZcMD5VS=rPThY3kYNR+WY917i5w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxq8R5dVhq3qsOAA--.19013S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCF4kCw1rWr1fuFWkZFykCrX_yoW5Xw4kpF
+	92kF4DWrWrKr12k3ZFqwn09r90vr4kKr12ga4jqayFyFn09r98Wr4kKrWDZFn8JwsY93WI
+	gF1rtw15uFn0yacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_Ma
+	UUUUU
 
-(adding Luca for systemd POV)
 
-On Tue, Jul 14, 2026 at 07:03:56PM +0000, David Matlack wrote:
-> Remove the single-opener restriction for /dev/liveupdate by removing the
-> atomic in_use tracking and the exclusive open check in luo_open() that
-> returned -EBUSY. Protect luo_session_deserialize() with a mutex guard so
-> that concurrent open attempts by multiple processes safely executes
-> deserialization only once. Update liveupdate selftest to verify that
-> multiple concurrent openers succeed.
-> 
-> LUO does not inherently require a single opener. There is some
-> documentation about it simplifying state management, but the only thing
-> it actually protects is the session deserialization during first open,
-> which can be easily handled with a mutex.
-> 
-> Relaxing the single-opener requirement avoids the kernel forcing a
-> design pattern on userspace that it itself does not require, e.g.
-> allowing multiple userspace processes to create and manage sessions.
-> 
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: Samiullah Khawaja <skhawaja@google.com>
-> 
->  kernel/liveupdate/luo_core.c                  | 46 +++----------------
->  kernel/liveupdate/luo_session.c               |  8 +++-
->  .../testing/selftests/liveupdate/liveupdate.c | 14 +++---
->  3 files changed, 18 insertions(+), 50 deletions(-)
-> 
-> diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
-> index 1b2bda22902d..931bb79da276 100644
-> --- a/kernel/liveupdate/luo_core.c
-> +++ b/kernel/liveupdate/luo_core.c
-> @@ -254,19 +254,8 @@ bool liveupdate_enabled(void)
->   * which allows a userspace agent to manage the LUO state machine and its
->   * associated resources, such as preservable file descriptors.
->   *
-> - * To ensure that the state machine is controlled by a single entity, access
-> - * to this device is exclusive: only one process is permitted to have
-> - * ``/dev/liveupdate`` open at any given time. Subsequent open attempts will
-> - * fail with -EBUSY until the first process closes its file descriptor.
-> - * This singleton model simplifies state management by preventing conflicting
-> - * commands from multiple userspace agents.
->   */
->  
-> -struct luo_device_state {
-> -	struct miscdevice miscdev;
-> -	atomic_t in_use;
-> -};
-> -
->  static int luo_ioctl_create_session(struct luo_ucmd *ucmd)
->  {
->  	struct liveupdate_ioctl_create_session *argp = ucmd->cmd;
-> @@ -329,28 +318,9 @@ static int luo_ioctl_retrieve_session(struct luo_ucmd *ucmd)
->  
->  static int luo_open(struct inode *inodep, struct file *filep)
->  {
-> -	struct luo_device_state *ldev = container_of(filep->private_data,
-> -						     struct luo_device_state,
-> -						     miscdev);
-> -
-> -	if (atomic_cmpxchg(&ldev->in_use, 0, 1))
-> -		return -EBUSY;
-> -
->  	/* Always return -EIO to user if deserialization fail */
-> -	if (luo_session_deserialize()) {
-> -		atomic_set(&ldev->in_use, 0);
-> +	if (luo_session_deserialize())
->  		return -EIO;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static int luo_release(struct inode *inodep, struct file *filep)
-> -{
-> -	struct luo_device_state *ldev = container_of(filep->private_data,
-> -						     struct luo_device_state,
-> -						     miscdev);
-> -	atomic_set(&ldev->in_use, 0);
->  
->  	return 0;
->  }
-> @@ -419,17 +389,13 @@ static long luo_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->  static const struct file_operations luo_fops = {
->  	.owner		= THIS_MODULE,
->  	.open		= luo_open,
-> -	.release	= luo_release,
->  	.unlocked_ioctl	= luo_ioctl,
->  };
->  
-> -static struct luo_device_state luo_dev = {
-> -	.miscdev = {
-> -		.minor = MISC_DYNAMIC_MINOR,
-> -		.name  = "liveupdate",
-> -		.fops  = &luo_fops,
-> -	},
-> -	.in_use = ATOMIC_INIT(0),
-> +static struct miscdevice luo_dev = {
-> +	.minor = MISC_DYNAMIC_MINOR,
-> +	.name  = "liveupdate",
-> +	.fops  = &luo_fops,
->  };
->  
->  static int __init liveupdate_ioctl_init(void)
-> @@ -437,6 +403,6 @@ static int __init liveupdate_ioctl_init(void)
->  	if (!liveupdate_enabled())
->  		return 0;
->  
-> -	return misc_register(&luo_dev.miscdev);
-> +	return misc_register(&luo_dev);
->  }
->  late_initcall(liveupdate_ioctl_init);
-> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
-> index b79b2a488974..ca4d0639d39a 100644
-> --- a/kernel/liveupdate/luo_session.c
-> +++ b/kernel/liveupdate/luo_session.c
-> @@ -584,13 +584,17 @@ static int luo_session_deserialize_one(struct luo_session_header *sh,
->  
->  int luo_session_deserialize(void)
->  {
-> -	struct luo_session_header *sh = &luo_session_global.incoming;
-> +	static DEFINE_MUTEX(luo_session_deserialize_lock);
->  	static bool is_deserialized;
-> +	static int saved_err;
-> +
-> +	struct luo_session_header *sh = &luo_session_global.incoming;
->  	struct luo_session_ser *ser;
->  	struct kho_block_set_it it;
-> -	static int saved_err;
->  	int err;
->  
-> +	guard(mutex)(&luo_session_deserialize_lock);
-> +
->  	/* If has been deserialized, always return the same error code */
->  	if (is_deserialized)
->  		return saved_err;
-> diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-> index 502fb3567e38..a8e1a8911849 100644
-> --- a/tools/testing/selftests/liveupdate/liveupdate.c
-> +++ b/tools/testing/selftests/liveupdate/liveupdate.c
-> @@ -11,7 +11,7 @@
->   * /dev/liveupdate character device and its session management capabilities.
->   *
->   * Tests include:
-> - * - Device access: basic open/close, and enforcement of exclusive access.
-> + * - Device access: basic open/close, and support for multiple openers.
->   * - Session management: creation of unique sessions, and duplicate name detection.
->   * - Resource preservation: successfully preserving individual and multiple memfds,
->   *   verifying contents remain accessible.
-> @@ -70,13 +70,12 @@ TEST_F(liveupdate_device, basic_open_close)
->  }
->  
->  /*
-> - * Test Case: Exclusive Open Enforcement
-> + * Test Case: Multiple Open Support
->   *
-> - * Verifies that the /dev/liveupdate device can only be opened by one process
-> - * at a time. It checks that a second attempt to open the device fails with
-> - * the EBUSY error code.
-> + * Verifies that the /dev/liveupdate device can be opened by multiple openers
-> + * concurrently without errors.
->   */
-> -TEST_F(liveupdate_device, exclusive_open)
-> +TEST_F(liveupdate_device, multiple_open)
->  {
->  	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
->  
-> @@ -85,8 +84,7 @@ TEST_F(liveupdate_device, exclusive_open)
->  
->  	ASSERT_GE(self->fd1, 0);
->  	self->fd2 = open(LIVEUPDATE_DEV, O_RDWR);
-> -	EXPECT_LT(self->fd2, 0);
-> -	EXPECT_EQ(errno, EBUSY);
-> +	ASSERT_GE(self->fd2, 0);
->  }
->  
->  /* Helper function to create a LUO session via ioctl. */
-> 
-> base-commit: 10fd52dc7bbd6013e949ff1833be0821b7553fb0
-> -- 
-> 2.55.0.141.g00534a21ce-goog
-> 
 
--- 
-Sincerely yours,
-Mike.
+On 2026/7/16 下午12:27, Huacai Chen wrote:
+> Hi, Bibo,
+> 
+> On Thu, Jul 16, 2026 at 9:45 AM Bibo Mao <maobibo@loongson.cn> wrote:
+>>
+>> Now pv_feature can be set only once, there is problem with VM migration.
+>> Where it is set when vCPU is created and after migration, here it is
+>> allow to set for many times, until vCPU starts to run.
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/kvm_host.h |  4 +++-
+>>   arch/loongarch/kvm/vcpu.c             | 15 +++++++++++----
+>>   2 files changed, 14 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/include/asm/kvm_host.h
+>> index 23cfbecebbd7..af376fc44c44 100644
+>> --- a/arch/loongarch/include/asm/kvm_host.h
+>> +++ b/arch/loongarch/include/asm/kvm_host.h
+>> @@ -163,7 +163,6 @@ enum emulation_result {
+>>   #define KVM_LARCH_SWCSR_LATEST (0x1 << 3)
+>>   #define KVM_LARCH_HWCSR_USABLE (0x1 << 4)
+>>
+>> -#define LOONGARCH_PV_FEAT_UPDATED      BIT_ULL(63)
+>>   #define LOONGARCH_PV_FEAT_MASK         (BIT(KVM_FEATURE_IPI) |         \
+>>                                           BIT(KVM_FEATURE_PREEMPT) |     \
+>>                                           BIT(KVM_FEATURE_STEAL_TIME) |  \
+>> @@ -250,6 +249,9 @@ struct kvm_vcpu_arch {
+>>          /* cpucfg */
+>>          u32 cpucfg[KVM_MAX_CPUCFG_REGS];
+>>
+>> +       /* VCPU ran at least once */
+>> +       bool ran_atleast_once;
+> So long a name? Maybe has_run is enough?
+well, will use has_run for short.
+
+Regards
+Bibo Mao
+> 
+> Huacai
+>> +
+>>          /* paravirt steal time */
+>>          struct {
+>>                  u64 guest_addr;
+>> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+>> index 20c207d80e31..ce6a1b06d50d 100644
+>> --- a/arch/loongarch/kvm/vcpu.c
+>> +++ b/arch/loongarch/kvm/vcpu.c
+>> @@ -1164,11 +1164,14 @@ static int kvm_loongarch_cpucfg_set_attr(struct kvm_vcpu *vcpu,
+>>                  if (val & ~valid)
+>>                          return -EINVAL;
+>>
+>> -               /* All vCPUs need set the same PV features */
+>> -               if ((kvm->arch.pv_features & LOONGARCH_PV_FEAT_UPDATED)
+>> -                               && ((kvm->arch.pv_features & valid) != val))
+>> +               if ((kvm->arch.pv_features & valid) == val)
+>> +                       return 0;
+>> +
+>> +               if (vcpu->arch.ran_atleast_once)
+>>                          return -EINVAL;
+>> -               kvm->arch.pv_features = val | LOONGARCH_PV_FEAT_UPDATED;
+>> +
+>> +               /* All vCPUs need set the same PV features */
+>> +               kvm->arch.pv_features = val;
+>>                  return 0;
+>>          default:
+>>                  return -ENXIO;
+>> @@ -1851,6 +1854,10 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>>          int r = -EINTR;
+>>          struct kvm_run *run = vcpu->run;
+>>
+>> +       /* Mark this VCPU ran at least once */
+>> +       if (!vcpu->arch.ran_atleast_once)
+>> +               vcpu->arch.ran_atleast_once = true;
+>> +
+>>          if (vcpu->mmio_needed) {
+>>                  if (!vcpu->mmio_is_write)
+>>                          kvm_complete_mmio_read(vcpu, run);
+>>
+>> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+>> --
+>> 2.39.3
+>>
+
