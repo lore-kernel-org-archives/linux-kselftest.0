@@ -1,86 +1,86 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642872571C7;
-	Thu, 16 Jul 2026 18:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F4F3A3E95;
+	Thu, 16 Jul 2026 18:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784225242; cv=fail; b=fAZ4WuroqgiSfRG+IY8nXSmhDJrLt3njubH1Hg/BYB2ftHVwbAudoN1arTS5a3oi+INh9rFjijS3Shuu6qSGmCbC9bH1xLpXesy7F2TTuapfZ6Dfawqd5Yy72bGDwbbkoxOpi7OEVxJ96skpHcxKskfZHNIwZjNMLsKGRwxIkLA=
+	t=1784225707; cv=fail; b=P4qyKxnqfwVs6V11Urg+Rs4WJa9jWs865QK9KV5TOF2unrYiKHiL7AwEWepR27Ci+uP8dWphhurbVwYa0cnPBAbqYqXB61khRiowMXTTgApXUlNNC09Evsxaa2+n/CEapaLceeVDctt+kt1l9O2AfRzFFSNiSQzBAPHFOJLWjuQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784225242; c=relaxed/simple;
-	bh=znWS1rXk0cbvgGPOR3Tr8ACGTxJzAnLRdm0P60aszCo=;
+	s=arc-20240116; t=1784225707; c=relaxed/simple;
+	bh=1DSOsWGS8rBZzNadzq0cxZg02C1zkRyJ1r1cUOS6PR8=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=qSDsESycd4wv3kK2EIGecHKgrT4X1FcR4vpu5hsThRmvuKJASjeAVTQ+kOgciznFvS9HlZoAcgVDg496yx3Ql078xGV4/dUXHwf4qOTrHpHe3VVlzavUgvF7oGkYwx4ZHVVHMKSWVEFtE8uw53FWFI+AT7/3KvvZJu/JlYHnFdE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gXdP+GwR; arc=fail smtp.client-ip=198.175.65.15
+	 Content-Type:MIME-Version; b=nl39SZxrgXXH7Gy3nD8Q6q8RyT13ssUjpwlCbPEIbRdT6aTTmeLd24VsmoGQmRi8RYZ1clexxWOx6DVX4Pq2fr2YbvTlTJgom05r0PIPciMGUAJxQmktFc7vFxxAUDU+nay/5RugbwptP4ihUQCdCuLMlbHBdOOcHgmPa+OSOlc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=av2qHM95; arc=fail smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gXdP+GwR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="av2qHM95"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784225242; x=1815761242;
+  t=1784225703; x=1815761703;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=znWS1rXk0cbvgGPOR3Tr8ACGTxJzAnLRdm0P60aszCo=;
-  b=gXdP+GwRFj3cs5rJcg4932zPTDJZDGsVbbzyX0Kg29sMFeHjCFwERt+Y
-   H6d1htfYKNR+wgfMuE62fyu24ax5zrVgPaP3/6/xJShzmP4Q6uSBOM14O
-   XTVnFSHQT8krX1PLdOVZyCfDq2BQK1MISmewlwf9t485wjSwndJmGXlee
-   1eKe7DOttKMSXU9mX/NmooaNYo8PT2l3Hjf1Rjvl6AIcAh4N0WM7pYq4p
-   aiTTMjGMaV0wcyPu4EvgmN6a3gz4eP63GmAqdcQYCj91UgBJdiZ3AqZAT
-   UNgdpcSWKKeSJiVRMgLzXOqpaSKg3Hyz+AuxtOwHlyeTjhOwJUCyhPNRj
-   A==;
-X-CSE-ConnectionGUID: rcXUpuWIShGRp0wCRVM69A==
-X-CSE-MsgGUID: Qnsl82oZTOOSkDRQIrXSKg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11848"; a="88570929"
+  bh=1DSOsWGS8rBZzNadzq0cxZg02C1zkRyJ1r1cUOS6PR8=;
+  b=av2qHM95/lDrLRtYn35pgUqYzo6F0Q0Z/D3G97vyDNzS1ln806yLNAs9
+   uicXlxjW4pG+DUcDRXkoJc48mHbL5PYan5/K5aRHd0/X9Wnm2yJTxcutT
+   xDQejWU/+8uV4Afv74OSnSAiDmeFsUFdAv9Z/IZX9Tr7/7ajOLG7UFTCh
+   eL/Qs0r8oxUb0xlvyv9Ok0sn3mkJA06xPX0jVCeTAovWje31iNBTwAVEg
+   OWuVbE0K1J3ShBRYfpArIhwZSYgRu/plIm2dOcERc9FtjUtf3SVJpn2m1
+   Jey/iilM3StwiscuXviISPxBFnC2IMqlpHN7cnUXMf1DFesJpsIyOm4TW
+   g==;
+X-CSE-ConnectionGUID: j6VKUQxMSyKlgNO2B18f3A==
+X-CSE-MsgGUID: H/cmCqHdQxGOsWR6fmWGsg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11848"; a="88571667"
 X-IronPort-AV: E=Sophos;i="6.25,167,1779174000"; 
-   d="scan'208";a="88570929"
+   d="scan'208";a="88571667"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2026 11:07:21 -0700
-X-CSE-ConnectionGUID: 9pO8n9yOR02QWqDBoiKzJw==
-X-CSE-MsgGUID: tMI4MnyGTA28mtFHYSJcRg==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2026 11:14:58 -0700
+X-CSE-ConnectionGUID: bMui81PsT22MM9/feAo9Hg==
+X-CSE-MsgGUID: yvn9v7OxTPexVb9vKSf0bQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,167,1779174000"; 
-   d="scan'208";a="260857207"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2026 11:07:20 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+   d="scan'208";a="260858511"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2026 11:14:58 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Thu, 16 Jul 2026 11:07:20 -0700
+ 15.2.2562.43; Thu, 16 Jul 2026 11:14:58 -0700
 Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43 via Frontend Transport; Thu, 16 Jul 2026 11:07:20 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.16) by
+ 15.2.2562.43 via Frontend Transport; Thu, 16 Jul 2026 11:14:58 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.16) by
  edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Thu, 16 Jul 2026 11:07:19 -0700
+ 15.2.2562.43; Thu, 16 Jul 2026 11:14:56 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=emfKDKPWYQ17dDu6Q7eg7smDIlTT6b7TQJ/INEoTTcSjnq2NA1V9tG0INT891M5cZY9MkE77l5QJ7gLD6Mj96OzhhbhDDIcr7AhTOMXx/nDzaCky9vc8BzVQv43plYDi1B+Jcp5u/tzqhvN/Fhe1XAHUbyNpXHDhMI5C/5tRqH8/JSJO5NeRAT3JyPpan7w81DAaEgrdsh/hc6ojklbvUam0H+6HyZobJiDiRMDcJOGX2FkiLgWn04S23kdjNIFkmvZ8kifFXEXV8e5CoACtwB4qnKfGIqDvu9wfxCeiPLjRWIETEOy7OlgISwy9aX3wlXVyl63XgFruueTI7cSMlg==
+ b=gCMi6Hqk2+1k8V2KNkLgux6Yak8338Kp3Fm3EG6+XycuEyk+WoC8eXnVFXpkJE+mXdmmySW2z560U2SReMgAr/pM4uyZL3EtVi39Ll46VkrqGMVIlGXSVeDsExs+dhtqIjKl0+0Bsy+md9hBfjbh5fABL6h2hBaVqjRwmhKyrOjd5CaBO69kyKcD9I0ll3DGShsRIdZcZyMTnGnPI0G7eGUcDvlVfQb+PYgvXNQWpY9NXchvbOkY0dw+nhJIIcarAYCRmAdAftItwhkBzg+8UYlawsLfWCN/8Ijceu7C08Kj7FB2NU/HDjR5B6ZLT7zWgC/kszPJa4BlTOzm+4s8uQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wh3nMmHa31piB/bI65UhfyP3/DD1U8dravdotFD8fXw=;
- b=c1b4NsrxtPMpQXH3TJxAtuj4d2TPA5t2dGWfRGioS1QJ8EWMjEHg/sgLsQdUM2NimRkr1TmX8AVfXS+vWV+Cv+3xMHGwggIE4W4IPwWXNuBlh/9HBoSInkR3x47H7dHIrHg5Toq7YExmakEMNfBnCS1D1ixOZSCm5+3lLnH+5dZI0gjQ8FybpY8kYchs3L7tJ5ygmZt4dm0awnDK38mtoKyWWChsPWxgwrTCJcM++/8UH0lxfA+UDKV590UeUrTLMKRcRDW6wAEGtQRGrfhqX56T6HWCJTceKN4N4SOd11vhyixsolaWNc/EAdckEEfb3N7oF3E4By+eCKtkIrVX7Q==
+ bh=XC8El7mrLw9MtCTsZujbRUDlXhe5I2yKzGVlL8UsMEU=;
+ b=mPR3D2UhESHlkk9+92fu7xMpArowFvb9Z9k5Oo7kTt0ZyNQY5Vu0aM7GUIVruSa6qjBO6u1xgBZsIWwLhO+MZuWjlvfmpSAlZoNwqSuJVz27eILbwdqIrSsTPfeWVC5K9tPM1anoZctpkH+/CwCl3RTSMroiA0nXrC0ntCJcHRx7DYgk3Dut8j5CkrGR+UyyueKG9Uoy4AdWcKMXAG7L+yvN+4HB6W5wkh13SV/9BkuaTi0gDzJqQIA56vpmCRv9QoqSVdMV9OFWpcqtkPHRV4wuLLyowPyd7jpMiIiAz9iGuIvpY2LNpkDCMZlKvI77EZDWdr1bXlWNtn76v3KvbA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from DS0PR11MB7381.namprd11.prod.outlook.com (2603:10b6:8:134::14)
- by DS4PPF2D9C959A2.namprd11.prod.outlook.com (2603:10b6:f:fc02::18) with
+ by PH0PR11MB5157.namprd11.prod.outlook.com (2603:10b6:510:3d::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.12; Thu, 16 Jul
- 2026 18:07:17 +0000
+ 2026 18:14:54 +0000
 Received: from DS0PR11MB7381.namprd11.prod.outlook.com
  ([fe80::4c39:dfe6:d6dc:6f58]) by DS0PR11MB7381.namprd11.prod.outlook.com
  ([fe80::4c39:dfe6:d6dc:6f58%6]) with mapi id 15.21.0223.011; Thu, 16 Jul 2026
- 18:07:17 +0000
-Message-ID: <1867c1c2-9a78-4519-9446-c675c418a57e@intel.com>
-Date: Thu, 16 Jul 2026 11:07:12 -0700
+ 18:14:54 +0000
+Message-ID: <79bbb277-e396-461e-8104-a9d62d47c299@intel.com>
+Date: Thu, 16 Jul 2026 11:14:49 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 net-next 7/7] net: ena: Implement gettimexattrs64
- callback for PTP attributes
+Subject: Re: [PATCH v4 net-next 1/7] ptp: Add ioctls for PHC timestamps with
+ quality attributes
 To: Arthur Kiyanovski <akiyano@amazon.com>
 CC: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
 	<netdev@vger.kernel.org>, Richard Cochran <richardcochran@gmail.com>, "Eric
@@ -101,16 +101,16 @@ CC: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
 	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
 	<horms@kernel.org>, <vadim.fedorenko@linux.dev>
 References: <20260714020340.25014-1-akiyano@amazon.com>
- <20260714020340.25014-8-akiyano@amazon.com>
- <f8974bb1-e27d-480c-8f88-6aea3ef41ad8@intel.com>
- <178418947570.25423.8298339939975321346.b4-reply@b4>
+ <20260714020340.25014-2-akiyano@amazon.com>
+ <e58af0ae-ad06-4f77-8ebd-f3678d6dde66@intel.com>
+ <178418934680.25423.291292029139415698.b4-reply@b4>
 From: Jacob Keller <jacob.e.keller@intel.com>
 Content-Language: en-US
-In-Reply-To: <178418947570.25423.8298339939975321346.b4-reply@b4>
+In-Reply-To: <178418934680.25423.291292029139415698.b4-reply@b4>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4P220CA0012.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:303:115::17) To DS0PR11MB7381.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4P220CA0019.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:303:115::24) To DS0PR11MB7381.namprd11.prod.outlook.com
  (2603:10b6:8:134::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -119,95 +119,163 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7381:EE_|DS4PPF2D9C959A2:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0e34b3a-993b-4f5b-4e54-08dee365126e
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7381:EE_|PH0PR11MB5157:EE_
+X-MS-Office365-Filtering-Correlation-Id: b063bfe2-1de5-4d86-f0e1-08dee36622e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|23010399003|1800799024|11063799006|3023799007|10067099003|18002099003|22082099003|4143699003|56012099006;
-X-Microsoft-Antispam-Message-Info: SPoZ+v03JlV54hp43Gq/xvngtdoESODRKz1CxPb+MSyJQAqYNO/pF+NVcpL5vjHxIYhR8yoGLYEpO31Xe+qlZYUNXLXGY0m6RQEEWWIwefmAU2Upt74Tv1BVKAnxahpZeIT2eCwjsPncJWJG65SgJSmCNuAAUxqCDVatpKoEETyyUnC4+75gYY2wMs+h4obzbi9KZnZlzEJj+K47wAugBJKm5NFyCebfyDkhnb0iT2zaeam+I8OFQwpm+isyN/8roQFQYSViGe3kJD15lvkd18TWqMf4sLVv9DmwXG3mWB9VQZiABwyJZy4FJOrW5YEdkrnlb7qatecJEPsRay8asNulen4LlIGxdOfSoHp0ZrPUpsI0OIVMbnJ8ijv0dTH4nscAt/DV2ml4isXqG4roM7Zjs/atCIqszEKXoEHmSXnlRF/zrpIl6cCmCkHEuI/iW7sJW2O73kCTIWEl+motYY59Wvf+CCiH0sT/EquuDlzYMF6BPVY4rMGY6QY1ONACM9+Oix0Tp6jQ++0kYpe9Xzx/QUC9F8TIPczaGF2l9bEDR0dqt0+T3HrRkHFq7SEaP1hdHsDzkG7T8KLZ+XWU/+JfR/geivxUadaQAXxzI4P1BsMxeN7rClIrIuP+ra6nhsNeNQ/XXlADHYL4qfX+8hGJel1X9lbIopcw7KDpQt4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7381.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(23010399003)(1800799024)(11063799006)(3023799007)(10067099003)(18002099003)(22082099003)(4143699003)(56012099006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|18002099003|22082099003|10067099003|5023799004|4143699003|56012099006|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info: 5MKZxSuCPHtlcFdmthZ5O+k0yW4SS6n03sQcdNUEtm1Ds8uyUC95KfU4zXDEvDGSg87sUp2XbWgKyXobr5QDcxtCJDD2m4xKSRCRDuehZRYjUm4+561/8vU7oP0qWKHB4u6GlISTTesKW/jREstYLER9HHEpYLYR9q59lvlwWD/HY7XKrSXaN/7APqYbY6HjZXQHnhq/o3QRjB0THxeA31HF8smI7qnSCdn9JqH28Ptb3arDwPXictIFCYdKGShi2GaUy7RPD5wakR94JV9LT5tRx6x4hInXnhYZmUN3CdHybtWCXiPBtpzGZjrDi5Dq6K2dLFvZYCtNOoukK757NsAl8ub7xG6hSTtiS4N0mjG1ThwQJ9Ya1EW8C8rTqfv0IZtD9mhoxziMGa0gGx6+3dWEccWfaojhyXtRNommo/yvxKWHHsL+RQcE0wuQmyVbhyP5lfz6Z/GNuWrbVIenoW6yA2XaCFVCtlSb45vt67jNxlRgsJZIekMtHWGRLtwlVGKRvyKO1wRsgnu/S2gWrpv3rLHRZSX9gMpLnVrWep3BuNBc1YW67DjMVfrU+ryayqJJgI1L4a+LnWw/JV0lmUxkG911CT997keKqQY1d2TV0LNB5RceS7qFVzFArHnruMmQZS17NIKHNUApIUl/jb5/PIRaKUF4YTWO9n93gfU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7381.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(18002099003)(22082099003)(10067099003)(5023799004)(4143699003)(56012099006)(11063799006)(6133799003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NC9YcENXZ0dZbXNkWk9ROXFza1M4TEpEeGMzRm5hNy9SZTZuYzhPbjVEZmJt?=
- =?utf-8?B?VWdlRWVWTXFwb0RZb3kzRVE3NFF5SFBZVnl1NmFoMTdIWEt4dGxxcHdTUkpY?=
- =?utf-8?B?R0dJQTJMU3dQYW1qOFAwUXlnYXFpd1FCenhuZG5BaVQ3WVM3aTRYalF2eVFC?=
- =?utf-8?B?NVdtcHZSVUpJSTY0SFF3YVBsQzFlSm9yL3R5dDA3R090L1dkMFVZbVU0WEdL?=
- =?utf-8?B?eTJEOG14eVNEQWNJeDdCYi9kR2p3SjZjeUlLOWRlSmpvcERUSHdIMjViaU9M?=
- =?utf-8?B?dFBIN1F3bldiU2dmWnFlK1VoVVN0VFZKSTZXaWFVUW5lUHBmREZDdlNaeVJH?=
- =?utf-8?B?SUtYa0pxRENIa0k4b1ZDSEZuL1NEMnJ4bkF3NkUvYkxad3U5S0ZDUVErc2Fu?=
- =?utf-8?B?dk9rTzNNNytsZXdtdnNXQjJiWE1mNldCQitieVNlcGJEbDRLRUhNRHM2OUh3?=
- =?utf-8?B?WGtTbXNjcEtCKzZISG1ZaWpOSjVKVEZRenFWOWhqRVNhR2duZ1lqelBZaVAz?=
- =?utf-8?B?MEdaQjhBWUs3bVI2MDdvcXljNzJEcEJtT040eXhjMk9QR1d0emIyVFRleWcr?=
- =?utf-8?B?ODNqdUZMVWZOTFA2V2NUVU5sL2RQaHpVNUxkdnNPTjNJWGdkVmRKWGNiQ3Q2?=
- =?utf-8?B?WWFaSkZ4U2NMSFJNNUhoUWZwN0g5UGlLRjJRVkdaSW50eTc4MXFyR1FpNGtx?=
- =?utf-8?B?Wi9vK1RVRWpITHFqaTFZMWhiRmhwZ2pwQ3hOcFdaOXhzVVZxcVRGeW9XYkxm?=
- =?utf-8?B?emZOeHNIQldLVFdlTHQvOUc1VGRGYWl0eTNkaDdlYVgyVmJ4aXEwamc4Umhr?=
- =?utf-8?B?cU14SUkxS2dudytOV2c5eTllK21COWFEVllzRFJTbGxacHlzWUhweWRXVHdn?=
- =?utf-8?B?cUFtYnNmYzk3bzVmRDNRMisrLzFKc2o3MEp2TFV6MVhCWFhJaXRjVW01SFZL?=
- =?utf-8?B?UTgvdDZzemwxV1hOWVEwcDNXZHN5cWpHODVzU3NZTW40VWtNc2JXVmFwdk1u?=
- =?utf-8?B?cDZHekF6WHgySHdPSGlxWEVlZHljSFZMOVFiUXpuYmhTUC9URzJmbm5Teld0?=
- =?utf-8?B?cjZoampxK2VXZXFRN212NXdoNjJjQzhzTDVJeHNxRUd4aVp5VmcyWUQ2cjc0?=
- =?utf-8?B?dmRkY3hpOTZGWHB6dExjSlVkY012Q0Q0SlN6ZFlTTnJrQmpRbDBRSnFiUm40?=
- =?utf-8?B?M29za2d3dENRaGx6VVhOaUN5NlNnSnZXWmJhRlpjUkdjbDlONGRSSkRKWi8r?=
- =?utf-8?B?NGZ4ZVlka3JNeUlZVW9LWlJndm9EU0NpZ29EdzdrcDVUd3Btc1FDaXk0ZGNE?=
- =?utf-8?B?QjhMM2xnUmNnY3pnQ2tmdUJVM1kvZlNVRCtYUUtQYWwwc0FQRzRYdnlOSGtt?=
- =?utf-8?B?R2ZSdjNCUE1PVG1HUTltMEV1bndUOG5yZ3Awa1YwV2JnajFCMmFkc3NIemVs?=
- =?utf-8?B?VXVvY0JmK2N5eTJpa3lqL0RBYlpJMGg3ZklkZW00OE9hTjJSL3E3ZUx5ZDdo?=
- =?utf-8?B?QWJxejFBMm40ZnE2YUovQ1g1K1JlaGpxaEMwYzE0UzlLdW90WU5RaThhMG1w?=
- =?utf-8?B?U0diaUhVM1M4V3VYNHY5TGl0QjNMU1U4bEpsT3cxR2VzbWdlODAxb05KamNZ?=
- =?utf-8?B?a3o3SktiTkR2K2pzUnBqS2FmYjcwY2RncUh6amV1NkNFT3c4cGNERnc0UDRj?=
- =?utf-8?B?Yk91cGdUOE9wcEdVbW5kMk5tUXFoZmZuRlVicXpCVVgxOWlyZHVCZ0ZhUlVu?=
- =?utf-8?B?WVdsdFFRbnRtMWI3Z1k5VElkRGlFQVlqY2k0M1dEUjZCaHk3L29odnFyVWw0?=
- =?utf-8?B?SDJ5dU9EWXZWS29EWmhiSlJpQUtxVUVJc0ZVZm43SkltRlRhbkU5czUxZncw?=
- =?utf-8?B?R2kvblQxSGVLV3J2aGJ5SUtETHpvZ0tvMzJTZlV0VVdkeHhpa0RqSTZ4alRy?=
- =?utf-8?B?aTJkQjR6alBQYVpaUkw4UjNEMkV0bDFFZlRUT2ppbnVTTjlJZ2cxTXJUaEZG?=
- =?utf-8?B?djdVb1lmWGdHM05iTTZzRE54ektlVzdld0VRc2xnMEdMS0NpTXpTRDc1TGlE?=
- =?utf-8?B?WnUxZ25UUzE2NnYvaGQ1UXZiV2FXeXllN2dhNXpMckNMQjdHUDdzb2tyT2x0?=
- =?utf-8?B?bXltL0N5TUFjQW50ZHNkWkpLUldMSEZobHEvbmZ6c3l6eXVkQ0ltQ0JYckZn?=
- =?utf-8?B?bzV2SjFrSVlRS241T2JGMStDOWpxaXNsU1ZwWUlPOEdxcVMvb3czc1lMV0sv?=
- =?utf-8?B?UnFjT3IwVFZxRmJscnRudXUzbVptdXJpYUw2NFUvT1BwamptMDRlL2NBYVI4?=
- =?utf-8?B?RStYbEtraml0Q1JYb0ZjSXdIUUFNSCszUlpvL1dHVU5EUGJBZ3J1Y1RKc3FM?=
- =?utf-8?Q?WWYLNamziUui3WP8=3D?=
-X-Exchange-RoutingPolicyChecked: fQYVAKRnhL59rW0VWHeiAXqGJpI0HVyfAsaUrDEGpdDn9e4PrrZzaJRxQ5lxV+Ca22v/LDAIoejAlSCTNNhGvYo2tMbNgVTolWGB3amcIQe0bcpnT1dDPbXvFwv2CQ5rUkk6oI+UJTz5mrYNJttPlU+IqVKJBEfLTokNGjTxgFCzxIfuiaWfOotnA0Rzhqt1lKbBNRYX6JSua6qfRazroCJW3NyydIUfuTYSJZ54fPyq3SKTQIdA8haqj4EpI0JoJbApUYDiSbGlRh7bPXP+AUarESbvpfRb/y/o1XlJCQp12MApDKDxm4QmRjz9gHBSAbctb59KiduH0+tganQuZQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0e34b3a-993b-4f5b-4e54-08dee365126e
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWYvOEs3WVBuZnhQd3Bnd0I5MHgrWXJrZUJ3UkZOVytWVm5HREFMeHg5YmtJ?=
+ =?utf-8?B?KzE5aEhWK05nb1pKaUVqTmNadWd5aFVXZk1Vd2lkMnRVamNwcDc4NXZCMEVy?=
+ =?utf-8?B?eDBuNU12ZGtBZGVadDlYc0gvNDZ1WmNVYkNGN2ZwNXhKL1ZqblArR1JBT0VF?=
+ =?utf-8?B?Yk1BRkJHWnFNaW1vdUhFdmUzbG82SjVNKzI4blFJRTN6eXRjTFFkWG5SaUlh?=
+ =?utf-8?B?VWZ6czZnZlNIb296dTExeVRNVlExZkJyRHRCdzk2K1loK2h3R083ajFkRGxP?=
+ =?utf-8?B?U25QMm1DbWtDZlA4YkhCb1Zsa1lkd2J1T1kxbWhyeUhwT1E2bzlQRHcvVU1Q?=
+ =?utf-8?B?eWVKVW1CaUZmakRGYlJHU2M0eWhIbGhDdUpMOEVEUGl2QWhnWU9INkIyMzM4?=
+ =?utf-8?B?OVJaeWVhaloxbk5oSkZsbTFHLyt2S1UzdmRmWjh6encxSjBNb1RFaEtrZVYr?=
+ =?utf-8?B?OHVqR2VtRkZ5MlpabS9jcUlsVk80Mi9KUi9HNEg4SGk0TG5hUHlldGx5dHM2?=
+ =?utf-8?B?cTVkTW1OeXVqd0R2UDA0TS90NE0yRyt6bXd5TVBPdEI1cmxsc3liUHVjbG9P?=
+ =?utf-8?B?OEE1eU9JazNCWFpmaGhxcEZsKzRKUWhuREM4WlZ5VDloajhGb1ZkYUJMRmFE?=
+ =?utf-8?B?R2g1TGxxY0Zhek1WV0IyUUwwZXBvS3NYaCt6MHZ3eGY5a05yZ0Uzb3hHdExp?=
+ =?utf-8?B?SEV0dkJYd0wxSUZzRU9nck1ScW1EOFdVaEpMZFBPcEF0anpFKzN5bnNBcGpK?=
+ =?utf-8?B?K3J4SXFKbTIyMXU5dkZ1RnZobUg0dmp3eDU3ckY4ajBBZllVdkFaSkxrdzVH?=
+ =?utf-8?B?cG50NU51US9objZYOGNsZ1BZVmRzeFVMSFAwNDdZQXpvemprVHlWNkxYRDZ0?=
+ =?utf-8?B?WnMyQjl2OVFlanBrY1o5cHFJa3I5RndFcC9vZFRRdFF6UDhuR3pKZVF1YUUx?=
+ =?utf-8?B?ajVsWkFZdzd5NVB4N1RNdTF5NDRud3N0OWVXdUNNamFPQVBQdWdSVmp3YVdq?=
+ =?utf-8?B?eWYzTk5lT3RSZC9EazdyNVZjLzNUeGFZMVhXaGxxYVd0TGtOV3hRWWN6MXdv?=
+ =?utf-8?B?NFU3NERTcTF1bGlpT1gwWkVmaXRPSVF0cEtmYUh2ZTR2Z2xscHZtNkJLa1Vu?=
+ =?utf-8?B?Uk50V052dWdnY0ZVdFNtd09SUU9GQ3RSNUphZ2VvUnRpWU9way91V09RWlp4?=
+ =?utf-8?B?TWdhWUFkdU1WQWl0T3lFUlJTeVYzUURjaFNGbmh4TU42ZlpuL05xWnFTcWRR?=
+ =?utf-8?B?NENSV3dqSGJUblNHSTJLTHh2WHZrUmRSR0JqNDZNNERpQlZwRi9raWpCam1t?=
+ =?utf-8?B?djB4eVNRdWZTdmRxVTF1dDVvdEh0REhRL0lsR09Wa2tUT2VKVTdPRFU3WFJD?=
+ =?utf-8?B?ZXZvZDJJZWNLaDhYcS9vQVpBNzdJdi85dzdUclM1MDY0RVF2ZkYyb0RJMTB1?=
+ =?utf-8?B?SklGQ2lvK2c4M0RmRDl3a2oreFlzeWFrdW9Ba2dZMFk0T0Q3UlFKMW9nVG5y?=
+ =?utf-8?B?VXFkdmp1cXc0NTY0MnlFM0pKTE1oZEFCNGlLVElhWXNDRU5KdXlRTDBWTW93?=
+ =?utf-8?B?eXgvQW9Id3RGU3g4SnhwNGtORktTZDQycWN2cWFaUkN3TU02dE95YVRndXQv?=
+ =?utf-8?B?Umh4NTBVR0I2dFMwVGtLaWE1NWpZaWp1OHAza0JBanRhRHF0UnQwcFc5NUF2?=
+ =?utf-8?B?UlR1QWlUU0ZjdzIyNTFTby9QakVwL3F1eDRtMzNGM0xUekNxclBvTmFnbVdy?=
+ =?utf-8?B?c1JvNkJXYStyNVVMb3NWd0d2RUE0eGc2eVNJazVjRnNTaGhDaXM5RzdQdEU3?=
+ =?utf-8?B?dUVBWjdweHhFc21wUXBIbFg0SXZEbEMvbU13Ym02WEt3ckMxc0FvV3h5a1oz?=
+ =?utf-8?B?OHIrRGZpZEJ2N3RJZ3BPNGlYWHlGZko4cC9rQlhGd0lUSTdxRE5taDlsZktI?=
+ =?utf-8?B?S2JWRG85QTJwMjF1VmdRZWYwVUFRd09YdE5kTkthY3A5VjZ5bFAvdnNxbWJh?=
+ =?utf-8?B?THErOC8wZXpKQUl0OURFNUpOQW4xdUNJenM1b3lJcFk4VkVuS1hmQi9YOVcy?=
+ =?utf-8?B?OURsNkdScWloTTY1eHZoS3EyOXBpV2k4bmhXUnV4REhlN0JCMHFYVjlQU0gx?=
+ =?utf-8?B?QmlSNHhUUHNQaEVVS29mNzRMNWc3SDV6QUtPN0lQN2liNUI1ZWJqSlA4UTJk?=
+ =?utf-8?B?L2p0L241SlI1cFdyL1czRENoSFNNdEZLM1R5OEVxc0l4Tk5TM2RqMGdwTHJ1?=
+ =?utf-8?B?Vnc0MzFtUHVWa3FvVWROUVhLYk1IZDN2cU13MWN2N1lCdzZma293UkNYeGgr?=
+ =?utf-8?B?WkFyU05BQ1BuMUhyY1NCRCtNWlpKQ09JMHIwUXVmc1VLT2FwQ3ZLZzJiajdH?=
+ =?utf-8?Q?VaeT8eyy6QbOCFeQ=3D?=
+X-Exchange-RoutingPolicyChecked: dj8Qek7tq3uy7I+h/EldGwwEFT0/UivGZXtGY/xdCIS9/UW+TlmIR02V20wVV3PVwjfbdRta06YFXNSTV08QfSdgSiky72NlD3E70ZER9/PCOqN4bCWfZ3yYKkFMCS86gRvA9KsblG/ET4MIzv39qRPfWLufxHEiv9kJBbjqWTzmVjwr5goitCK8g0QtLDTb3g8Z6UBguicrNx8WadD3iadNGLGpNUnLF3xAuCBfyg3Tlggb6AHKbuoSHDk0uwzSfLKc9ETbKA+RBrrsoAmEFRJ7XA9jZeTy4kTk4bxhliA7y443IkIPKVK6fpPz0XzaM9q2m465DllmXzrDZOb0dg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: b063bfe2-1de5-4d86-f0e1-08dee36622e2
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7381.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2026 18:07:17.5504
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2026 18:14:54.6248
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h8Ot8jFZTf/iwneeAXt9qVQBHUGaHGjRPy6NAtSixlXF5pjU9Zxdw7kM4wsOpaWRvBb4s1tGrLr9lNcmaI5Pl+hbnBamdX1JiWCfPLFELKI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPF2D9C959A2
+X-MS-Exchange-CrossTenant-UserPrincipalName: O+d9rd0TKK7Mf+hblBrCijVZS/HzoBvRjTfrO5Arvqb9+cbyKWT0yCNlinNyjkmCtKAlrPtXpGvQbLdZQpvjHYdJbQbrVIQX6SjCgLEw6eQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5157
 X-OriginatorOrg: intel.com
 
-On 7/16/2026 1:11 AM, Arthur Kiyanovski wrote:
-> On 2026-07-14 17:47:35-07:00, Jacob Keller wrote:
+On 7/16/2026 1:09 AM, Arthur Kiyanovski wrote:
+> On 2026-07-14 17:45:34-07:00, Jacob Keller wrote:
 >> On 7/13/2026 7:03 PM, Arthur Kiyanovski wrote:
+>> I'm also wondering if this can expose device-known error bounds on
+>> timestamps even for devices which are operated as synchronized by ptp4l..
 >>
->>> Implement the gettimexattrs64 callback in the ENA driver to support
->>> the PTP_SYS_OFFSET_EXTENDED_ATTRS ioctl.
->>>
->>> This enables applications to retrieve PHC timestamps with quality
->>> attributes through the standard PTP ioctl interface.
->>>
->>> The ENA device currently reports only error_bound (valid bit set).
->>> Other attributes are not reported (valid bits unset).
->>
->> Typically it would be a policy not to introduce new attributes which are
->> not yet used, and add the other attributes once a user appears. However,
->> I think it makes sense to have the full set of desired attributes
->> especially given the ioctl interface limitations which would otherwise
->> require a lot of reserved space or new ioctl numbers. Especially given
->> the uAPI here has been discussed and changed heavily from previous patch
->> iterations.
 > 
-> Thanks — that matches the reasoning. We defined the full
-> attribute set up front because of the ioctl interface
-> constraints you describe. The valid bitmask ensures that
-> userspace only consumes attributes that a driver explicitly
-> reports, while still allowing additional attributes to
-> become available in future drivers without further UAPI
-> changes.
+> The intent is for these attributes to represent device-
+> known clock quality information. The mechanism is
+> deliberately synchronization-agnostic: drivers may report
+> any attributes they can meaningfully vouch for, regardless
+> of how the clock is being disciplined. Thus a device that
+> genuinely knows a hardware error bound could report it even
+> if the PHC is being adjusted by ptp4l.
+> 
+> In practice, however, when a PHC is disciplined entirely
+> from userspace the driver often has little or no visibility
+> into synchronization quality. The valid bitmask is designed
+> for exactly this case: a driver advertises only the
+> attributes it can populate, so anything it cannot determine
+> is simply reported as unavailable.
 > 
 
-Yea, I think that makes a lot of sense.
+Right.
+
+>>> Timescale definitions use a Continuity/Discipline framework to describe
+>>> timeline properties and steering behavior consistently across all
+>>> entries.
+>>>
+>>> This implementation is based on the original RFC and the UAPI design
+>>> discussion linked below.
+>>
+>> Not a dig against this patch set, nor a request that you work to
+>> implement anything else, but I am beginning to wonder if/when it would
+>> make sense to transition from ioctl-based implementation to genetlink or
+>> something. We did something similar for ethtool ioctls a few years ago.
+>> I know the maintainer for PTP has some distaste for netlink and prefers
+>> the simplicity of the ioctls.. but I think we're moving past where the
+>> ioctls are "simple". Now that we have ynl tools, it has gotten easier to
+>> implement properly. It makes extending the API much easier for the
+>> future vs the array of ioctls we now carry for legacy implementations.
+>>
+> 
+> That's an interesting direction for future PTP UAPI
+> evolution, and ynl does make that path easier than it used
+> to be. For this series I've kept to the existing PTP
+> userspace API model and extended the current timestamping
+> interfaces in a backwards-compatible way; a move to a
+> netlink family would be a broader subsystem effort and feels
+> separate from this work.
+
+Absolutely. I don't think that should change this patch series. Its just
+a thought that we might want to tackle this at some point as the ioctl
+interface is clearly reaching its limits.
+
+>>
+>> Do you have any thought on how ptp4l synchronizing the clock should
+>> impact the clock status here? Is this intended purely for device/drivers
+>> which have their own synchronization and not for ones which expose a
+>> clock that is synchronized by userspace? Would it make sense to have a
+>> mode that is something like "this clock has been modified by userspace"
+>> after any call to the .adjtime or .adjfreq is made?
+>>
+> 
+> Regarding a "modified by userspace" mode, I wasn't
+> planning to add one. Whether adjtime() or adjfreq() was
+> invoked does not by itself describe the current
+> synchronization state or quality of the clock. A clock
+> disciplined from userspace may still be highly accurate. I'd
+> prefer to keep clock_status focused on clock quality
+> information that the driver can directly determine rather
+> than on how the clock is being controlled.
+
+Makes sense. Leave it up to userspace to coordinate and combine relevant
+data from the device/driver and the daemons together. Ok.
+
+>>> @@ -106,7 +350,11 @@ struct ptp_clock_caps {
+>>>  	/* Whether the clock supports adjust phase */
+>>>  	int adjust_phase;
+>>>  	int max_phase_adj; /* Maximum phase adjustment in nanoseconds. */
+>>> -	int rsv[11];       /* Reserved for future use. */
+>>> +	/* Whether the clock supports extended timestamps with attributes */
+>>> +	int extended_attrs;
+>>> +	/* Whether the clock supports precise cross-timestamps with attributes */
+>>> +	int precise_attrs;
+>>> +	int rsv[9];       /* Reserved for future use. */
+>>
+>> I do kind of wish we had opted for bit flags here given the number of
+>> ints being used as booleans.. :( A lot of wasted reserved space.
+> 
+> Agreed — a flags field would likely have scaled better. I
+> followed the existing ptp_clock_caps convention (one int per
+> capability) to stay consistent with the current UAPI
+> structure rather than mix two styles within the same struct.
+> 
+> 
+
+Yep, I agree that it is best to stick to the same pattern.
+
