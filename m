@@ -1,98 +1,192 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6D842FCA4
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 14:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784212742; cv=none; b=IUAw3qyCutgUtxyJd5x8IpjMnbIbqdI5yfVJBWTuQPy406zYkPgHDUNgET+wdl1Gs1HzsB0iLlXp4Av47gsfoN9Gs8icVe63msrVw37Y3Aotxs7C/fEO9PuJKMvfkQEKRVtdpqUN4yXJuNi9PfmaeECnyPRnRW9QMo5bi+EWHVY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784212742; c=relaxed/simple;
-	bh=+DWWycF2Ya8d3r+BKSyQrkBt7+k+gkI6OHJ9lujz8L4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=OCNYkj840FrhEE0KAM21VGqebjB/IMm0GGO/CQ4tPr+mneSPkDeKG5yejhOIwt1e5MQl0wU+hNPw/RJERXGNxhplIQSz62EA4gffDhb1caQjdsvlqHA0b5kc23b1VSf+XjQt6YYhFshI2mSkLSHyUDviDIhMUf//wrcl3OppX4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5B1YV1R; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2543442D76E;
+	Thu, 16 Jul 2026 14:39:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784212743; cv=pass; b=gG0rwYWOGucbBAC7z6sYeZSL2ukze/cHcuYRkL1/P7OvsNqmPuxrioootf3mlXVPhrQllwDV8XbljResT0D13pSheq8D+sb5d5YNOhN9c6GqGd7x4jXJq9vy854K7RbdR8q4yrVcdJvGcYY0fkOs9xcvTQPEld1eJNhaY8065GI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784212743; c=relaxed/simple;
+	bh=j1mYg0q8Co8Q3jEbGmyPo+OfltvFsrL8Js0To/6cJ0A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZcP/w5f8lOc2sYAem0kr65mB2CLFzPdawo/AFastdBh4cj7SHT6erbUJ0kMsxxc4aYlb3SfNqCUKcyddAFret7QO9TRbXvKhMtOZD3zD5bT8DdLVVDvl7jAKAR4T5u7LfxHqMQth6KrFntj9azl8HFvM4bsJVVPC2taJsmSrf7Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=lGJLlnnk; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5B1YV1R"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4925a778491so2565525e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 07:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784212738; x=1784817538; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+DWWycF2Ya8d3r+BKSyQrkBt7+k+gkI6OHJ9lujz8L4=;
-        b=j5B1YV1RgH9ixe1VssNaQ1dEY7aVhqb+Rf5HrO53MtXa66YQD23Qflo4AQ6/BYwmTR
-         qI6AN8DbnfmE/70PiGCpot8iLqk/oqMR5h2+nMH6+tA5zY5Z8OQoIKDaZuOS3cW898uh
-         FauUM8CFCncUBZcYZX4rm/J42Hpp0UFmAAwHSZHf92DqEyCfVDI7Nf5+fJKe7gO09qzv
-         O9XDBrwlr3DS455dqK4fgVNS7PIPbnOlYhT5umVE99ey1venB/MpgLtqycNt2ZKIW2X4
-         JPp03JZEbkaEd79izonNpkY8SALKJfvOYVa76UPy845/Jj9c41NcQVwWYenUHV3CKeFb
-         xjVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784212738; x=1784817538;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+DWWycF2Ya8d3r+BKSyQrkBt7+k+gkI6OHJ9lujz8L4=;
-        b=SFjZSFdAiaGBLtoqeifVjVv1x3SAcR7L/25O1elWQQzVLnKnlet6B7AJSAo4Qt8kMk
-         9DCurdZRJRXwH3DdrVfy3BVY/j2jS/8xhofKHjqK4XeFCnIou+Hqf2L1OKkBb1/sfmQv
-         BplZZjXTB/HBZ83PbUyvLToM/AGG0ZOpxwmkdn7nHkwZLwvyuBYaFOqZkXMDPMw9zEAR
-         mAQbEOnDQmLic37gZ4y45ny4RlfFoh5fTCTSbB2LBL5nJ43BE9ZM9Im2h+HpvZoNCnaE
-         u+Q53IjJN2zD35NQnmDu8tRDXn/Jpok1kNnBjov8DYCXaYad/BdyjmGMFzXTzLr2LqXs
-         S1Yg==
-X-Forwarded-Encrypted: i=1; AHgh+RrWAU8D4dDaAB0omp+qs9h7+W7egM6XzqT0buAzhp8R/G4gdp+ZP4I+PHFCZD61Y02y6eVNO1KUfAD9HUskDWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaLf6ywgHVojVlloDr12aObtZviI+XjbR5k/aYAWKZWvPetHlU
-	qZHCJ1fOu7cjEgEi7cPZXKgpg5/ACg1sxX72sAZ0UUjK+PesJbmmG0ZS
-X-Gm-Gg: AfdE7ckWbz9R37TckVQ7LIN1jqBgasWK2S/ih/JOcSs1CTMnjoE9/Glwgsc2sQ3MKj+
-	N7oAZMSZoJ3UpqeYO7vS3ohyxYWq/6eivSIPM2LabzsY+UMp1o//Li99JjTgOM5cA5GAzTQFrcn
-	OsRS6T05d2RCZfANgLt96bvEkQmUhIQFx3KkFr0Vx8QQK5noeLqQ1pzXjY+ktnAkWc0iIywSlXg
-	fTb3iEqKdi6bvsLhNCDqOfJFnBBzQXu5Dc0eJuKuJwf7fb3Dd2L63xYcTyyUupAP2oH1lOMbTJC
-	2gJqPQmqGzUPJsn0gjEJJEfmRne5q7CNMdxmwg2XJs3AiIiKV4Fi8v/4Vx4m0HUx47pIbUDj1Ep
-	J11WW+aQjbDwfrk5jUpzBEsn6b1XfQ0Vv6JdAwemcLMojf5DHHCBe/fQndldznpwjb+LVBy88WE
-	Mp8j2a9zGXRON+Gg8j6XbiNGfQCAJN5rottuie+ceB+RlhecWyRuFIjz3AA4UYsTuG4z5C7DUuY
-	DM0v8bld3ndgOw922psiD1QKlFwn5f7+hr4gDc=
-X-Received: by 2002:a05:600c:a214:b0:495:3ca5:7069 with SMTP id 5b1f17b1804b1-4953ca572d6mr36272755e9.6.1784212737534;
-        Thu, 16 Jul 2026 07:38:57 -0700 (PDT)
-Received: from L-022584.energy.envision.com (dynamic-077-187-169-051.77.187.pool.telefonica.de. [77.187.169.51])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c599049sm102981625e9.0.2026.07.16.07.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2026 07:38:56 -0700 (PDT)
-From: Xin Xie <xiexinet@gmail.com>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, David S. Miller <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Felix Maurer <fmaurer@redhat.com>, Luka Gejak <luka.gejak@linux.dev>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/4] net: hsr: add PRP interlink (RedBox)
- datapath and duplicate discard
-In-Reply-To: <178420323080.16062.7813915035618214520.b4-review@b4>
-References: <20260706134131.61659-2-xiexinet@gmail.com>
- <178420323080.16062.7813915035618214520.b4-review@b4>
-Date: Thu, 16 Jul 2026 14:38:55 +0000
-Message-ID: <178421273548.70.9896722161695038010@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="lGJLlnnk"
+ARC-Seal: i=1; a=rsa-sha256; t=1784212442; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=PcmXxNM116ujYktl2B8PgN5Fb2vWu5zbR65PNCo1Gh6e8D8pnRZrZp537ovK4kpVsSf0//E6UrJFBKhLNpewOAFmpRm1RIyMeXxCGpN1PTKlEhHwWQRfSL8McbjWzLbctXfmL6UMtn17Sqmd4roAONLPAxI3hw6hEm4FLg7LWW4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1784212442; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Ya4G86ANygOaWUOVa7w62N+5O+59ZsUYvR63syVDoH0=; 
+	b=CXEujvq1A7pk+uPqgahtMdBLptpfgKaCrfdsnkslZr7dwacljmH+h14u/3urOldxAaMa+T4GweHy1IJM933Tx1ynElD0vsbCElctMURPoPeZB9fCApmtNFhdfYYr7z49XYgPUCFziO4qH0M7H7Lh7OFv6GdpkBzTx4SzqatPIjs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=linux.beauty;
+	spf=pass  smtp.mailfrom=me@linux.beauty;
+	dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784212442;
+	s=zmail; d=linux.beauty; i=me@linux.beauty;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=Ya4G86ANygOaWUOVa7w62N+5O+59ZsUYvR63syVDoH0=;
+	b=lGJLlnnk1l68wegebseYTGhaS7a/4IJ25ceMPX+dWJlVkOqso7Y1M+m3r2v6nFt8
+	7ozdGp3BAhINZmmHSuU/JjDrUEmoaNaSmqIWSKLBEUmFnmuyCeZXv4ULG03WxubL4uT
+	wLphikbx40W26kFF/RoLofgQutFQUD45REflaRCA=
+Received: by mx.zohomail.com with SMTPS id 1784212439389523.0177283934667;
+	Thu, 16 Jul 2026 07:33:59 -0700 (PDT)
+From: Li Chen <me@linux.beauty>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Gabriel Krisman Bertazi <krisman@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	John Ericson <mail@johnericson.me>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	audit@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	Li Chen <me@linux.beauty>
+Subject: [RFC PATCH 11/24] pidfd: add spawn builder state tracking
+Date: Thu, 16 Jul 2026 22:31:37 +0800
+Message-ID: <9f04647b62927055673942e0d4e1ef93fd4c41f3.1784204592.git.me@linux.beauty>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <cover.1784204592.git.me@linux.beauty>
+References: <cover.1784204592.git.me@linux.beauty>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Thu, 16 Jul 2026 14:00:30 +0200, Fernando Fernandez Mancera wrote:
-> Since we already have rx (enum hsr_port_type) here, can we pass this
-> directly to prp_is_lan_dup() function instead of passing frame?
->
-> Of course these calls will need to pass rx too.
+Add explicit configuring, starting, setup, started, and cancelled
+states. Serialize configuration and launch transitions with the builder
+mutex so configuration cannot change after task creation starts.
 
-Yes, that is cleaner. Will change it in v4.
+Publish the eventual pid with release and acquire ordering. This state
+machine also provides the boundary for later one-shot claim and
+cancellation semantics.
 
-Thanks for the review!
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Li Chen <me@linux.beauty>
+---
+ fs/pidfd_spawn.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 1 deletion(-)
 
-Xin
+diff --git a/fs/pidfd_spawn.c b/fs/pidfd_spawn.c
+index 46207c8e8139f..99e3ef56ecfa3 100644
+--- a/fs/pidfd_spawn.c
++++ b/fs/pidfd_spawn.c
+@@ -22,6 +22,14 @@
+ 
+ #define PIDFD_SPAWN_MAX_CONFIG_KEY_SIZE	256
+ 
++enum pidfd_spawn_status {
++	PIDFD_SPAWN_CONFIGURING,
++	PIDFD_SPAWN_STARTING,
++	PIDFD_SPAWN_SETUP_DONE,
++	PIDFD_SPAWN_STARTED,
++	PIDFD_SPAWN_CANCELLED,
++};
++
+ struct pidfd_spawn_state {
+ 	/* Serializes configuration and payload teardown. */
+ 	struct mutex lock;
+@@ -31,10 +39,45 @@ struct pidfd_spawn_state {
+ 	const struct cred *creator_cred;
+ 	struct pid_namespace *creator_pid_ns;
+ 	char *staged_path;
++	enum pidfd_spawn_status status;
+ };
+ 
++static struct pid *
++pidfd_spawn_load_pid(const struct pidfd_spawn_state *state)
++{
++	/* Pair with the release publication in pidfd_spawn_publish_pid(). */
++	return smp_load_acquire(&state->pid);
++}
++
++static enum pidfd_spawn_status
++pidfd_spawn_get_status(const struct pidfd_spawn_state *state)
++{
++	return READ_ONCE(state->status);
++}
++
++static void pidfd_spawn_set_status(struct pidfd_spawn_state *state,
++				   enum pidfd_spawn_status status)
++{
++	WRITE_ONCE(state->status, status);
++}
++
+ static void pidfd_spawn_state_put(struct pidfd_spawn_state *state);
+ 
++static int
++pidfd_spawn_configuring_error(const struct pidfd_spawn_state *state)
++{
++	switch (pidfd_spawn_get_status(state)) {
++	case PIDFD_SPAWN_CONFIGURING:
++		return 0;
++	case PIDFD_SPAWN_CANCELLED:
++		if (!pidfd_spawn_load_pid(state))
++			return -ECANCELED;
++		fallthrough;
++	default:
++		return -EBUSY;
++	}
++}
++
+ static void pidfd_spawn_free_state(struct pidfd_spawn_state *state)
+ {
+ 	kfree(state->staged_path);
+@@ -73,7 +116,7 @@ static struct pid *pidfd_spawn_file_pid(void *data)
+ 	struct pidfd_spawn_state *state = data;
+ 	struct pid *pid;
+ 
+-	pid = READ_ONCE(state->pid);
++	pid = pidfd_spawn_load_pid(state);
+ 	return pid ? pid : ERR_PTR(-ESRCH);
+ }
+ 
+@@ -136,6 +179,10 @@ static int pidfd_spawn_state_set_path(struct pidfd_spawn_state *state,
+ 		return PTR_ERR(path);
+ 
+ 	scoped_cond_guard(mutex_intr, return -EINTR, &state->lock) {
++		int ret = pidfd_spawn_configuring_error(state);
++
++		if (ret)
++			return ret;
+ 		if (!pidfd_spawn_same_creator(state))
+ 			return -EPERM;
+ 
+@@ -216,6 +263,7 @@ int pidfd_empty_open(unsigned int flags)
+ 	state->creator_cred = get_current_cred();
+ 	state->creator_pid_ns =
+ 		get_pid_ns(current->nsproxy->pid_ns_for_children);
++	pidfd_spawn_set_status(state, PIDFD_SPAWN_CONFIGURING);
+ 
+ 	pidfile = pidfs_alloc_future_file("[pidfd_spawn]", state,
+ 					  &pidfd_spawn_future_ops,
+-- 
+2.52.0
+
