@@ -1,117 +1,107 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC1321CA02;
-	Fri, 17 Jul 2026 02:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784256745; cv=none; b=TYeM97bUJS20kprr3Mr1Mz8de++p1cr0NRRug5ICjigdjJcw72MuULm1yIEPifnFKY7BIP9/UwH/8FcQJIhs7149Q7BJT2Oz9cTcvGsq78FT1QbLG9yyKa53CO+bowdaa4jtHS0eUIiVcXZA3zhjEZ2drBUZcGgmUvaonf/pgBI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784256745; c=relaxed/simple;
-	bh=2jLBWbKLhsAY0hP+CnhGsLZWu+gO8Ds4tpJxCw1hKuU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SC3jV9Sx/cQ5Ry72tdO2gghNR/Q3mMjdvsbV4yF0OZpRAxkQbf3PAQAAyloESYOw40s5pRdTJlv0b4K64DMV+VfHl1ObLigTDj6HeHuAvEJtWK/Lf9T9gIZZU7MLMabJT6tYw+szbwifXRvWYRSGl/C2NZeQENpDZ5SG8zd1RcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 848757c0818a11f1aa26b74ffac11d73-20260717
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:6a28a301-fe4a-4a87-9769-c44122893332,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:10e6812197b47bb712ec1f1c4f19dbf6,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|136|865|898,TC:nil,Conte
-	nt:0|15|50,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL
-	:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 848757c0818a11f1aa26b74ffac11d73-20260717
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1511717193; Fri, 17 Jul 2026 10:52:15 +0800
-Message-ID: <0676b1c8-b4e5-4118-9211-58fd57aa0439@kylinos.cn>
-Date: Fri, 17 Jul 2026 10:52:12 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06ED346AC2
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 03:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784257479; cv=pass; b=Rz3FXHJuakmmcBeaGd0kWBRFIYJKSjtxIqGH5gllRMIeUQ5c/eJHzz2MbW2P62In3XQCZIKdAWkQHhlp2RbZnpMdSJRmC5uVz3GKKu1sVufOK+Mx/2JtuKGagVOMTsO6iYF9gB8CXxR5JYF+KhSP1MrvaHVdRC3aqxPymKPsO78=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784257479; c=relaxed/simple;
+	bh=mqr1eGjgaNl5lAckcXfTGIgqynq/owkMRJ4M/3PH4Vs=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Jt3VC09kpA2VzQRfNrxEvZ6VnCNla8/sN+bey+SRkBqjScM9tVvuJdR1r8yB8sBNC32aVm+avCHphmZl/xJOiAVc5iL66F9g4qpudX9MbIdB5SLXoI5NrZaHtwkZHSYnxUKTr6FKdAzNbhpvCqQeMmKGHAUkcMqfje87lkp8Eoo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=miraclelinux.com; spf=pass smtp.mailfrom=miraclelinux.com; dkim=pass (2048-bit key) header.d=miraclelinux-com.20251104.gappssmtp.com header.i=@miraclelinux-com.20251104.gappssmtp.com header.b=pbv+ZN/z; arc=pass smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=miraclelinux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=miraclelinux.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=miraclelinux-com.20251104.gappssmtp.com header.i=@miraclelinux-com.20251104.gappssmtp.com header.b="pbv+ZN/z"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8487b7b3fc8so7168431b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 20:04:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784257477; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ViGpJQulYwEUGNhL4Xv0r4fjfZ95ZV4SChFFdrZ3r48m2bK2lrZD2iayn+mhL4X+hG
+         W+h+Mt8KMtSV9ur9Qx584rJVsvs/Py3UOewTn5hcNOAiin2oRB0ZUKtTam87cXPTGJxh
+         cdnqPTi7DNM4uju2INSkob7nMskfhDCgWBZk+KVHmMHoMgIjr8btrzYczMlGx+rf5CBx
+         361tuIR0zjsXQK+ByF2fE4qT3U+YDU7NrAC3JApGnXYCAxMSU8yHrldIIWwVZ2vAfDMi
+         Uso0eT178luuuBgTBaIBfA2nEFOfARhCI9yyzd6qHK75LkNRLCvvSXvWS4FB0LYPInWw
+         dxXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=mqr1eGjgaNl5lAckcXfTGIgqynq/owkMRJ4M/3PH4Vs=;
+        fh=oxPvV09XT76l13QaTO58cD4CgV/vDj1v1/nIwzm8kQE=;
+        b=GljZujeuUfKz8fjWEpEe80OfIKImgcCnDqF1GfeHMyB9UdSaFijnh3z9HQv28JvphN
+         p9Tq6mSUTrcOQzv8RN1SkBFPjui2si7fVywfEtSLhzBKK6u8lt781XzSXeToYnPAOmus
+         1QhIFc7oz57ESh3cjiNLuvzRvVN4GtN/tOhsyxIZuUMnf3RO1vIgPpme5vxdtDLhCnB+
+         9vO3MRIxY0E8eeT7QkaUI8WGsOUE4NKNHoGuGOt5xBvVgkBbe/WPIPzRV1xckv7cPVHr
+         1ngznHzbD2zywqywqg8/Sg3mSwUX6kcA8TJIUBDZz3Uq1JfMatqCuBdhTC9TXqXdgDzG
+         oiSQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=miraclelinux-com.20251104.gappssmtp.com; s=20251104; t=1784257477; x=1784862277; darn=vger.kernel.org;
+        h=content-type:to:subject:message-id:date:from:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=mqr1eGjgaNl5lAckcXfTGIgqynq/owkMRJ4M/3PH4Vs=;
+        b=pbv+ZN/zWYNNNHOUglfkdf5frtLtJb0B8EpBJ4v/hNLBcvIuA/RarYu1U/RTSQgc+x
+         xBNNu14mwqorsj4uqPayhDGxWuOsV9DOZzbBQg9Zpb9RdxRvo2C37JZofFh+XZGr9RVH
+         5FdBd1oXdGm6JKc5T1aT9RRGl5fDO8TT0yrBgmYnOrojVzXVBXD0/4itrzMpXbH+Yk60
+         /O2YEyRh9kWGHRXzcH9B1kaSokkgcPjISfsBvIDXH44HiZxUAQ1NNFCc/jcUGrCEoFQU
+         auN0D/+0pnpll++tX5O4GlIRFUO+0/Lpk18Dq6m1pHhAya+EAhHDhy84TuLJZbRxf93x
+         oJ3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784257477; x=1784862277;
+        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mqr1eGjgaNl5lAckcXfTGIgqynq/owkMRJ4M/3PH4Vs=;
+        b=HuYj6My/NMcwFi6NbyvSqAQ2s6yDxnWllDkomTISTQeMYUISCqgQ+2sBD6QwHi9/yA
+         YgdK5Dm4L0a3txJ3NRwTTpxTOQaxUnHZtmmKJl+JpLS3uqoBy78AbndRyzH3kW0/XyFk
+         ImWwPNvmmuusf8K4i0GYoc/70Ela0l81jUKGS0xiL3eYpFAkOApxvznH/WjBUcaUK8fD
+         j/JVOat0Cs1iT9iixsFX0rjx0IGkjn2rL+XipIirL10lT8USt9gyw28057a+PhytnJnH
+         ek633choH8Efu+aKBIC/wLGaBsf9aeBpXdvDXkZ2I0at3lrKvn7GYk9D8aAWGCI/BGVK
+         MU4w==
+X-Gm-Message-State: AOJu0YymKAjwsqggC9EDF8ScxDttWYKSWcylrvQOr6bQiz32rD2j9Zrv
+	G/KgFkEXD5K62/xumqjh0qR45VycIUoGc0ALYQ0UgRSpLkQWthha7s7ujIzwXvgnKKS5GNDTWnH
+	9BY6mrumIGYefklZnH1fqK/fl9Y56ig2E1QEIReZ++EcbE2yTWaydoF4h
+X-Gm-Gg: AfdE7ckd0FQvYkqtFFmefix5vHCihNZIAwoOgCwjF0rAR458uEDsrBGfT5RQ5eNpVg+
+	UVDATYtpMdvAB6lOv8AQ4I7KsyI3Nn2lTxozEJYWiZ3dhlooOLAfunVsdSfINVyvzkymPgcIFvR
+	bq++J562GNOBGnZlTTopQrZuEfJfCAfIwPhM9k830+JweHBppniLnA9E5bGDKR4UxgNUEqxGuRN
+	XHLm8JiTkOklTVygg2gwvHLf6ODISEUP8cFHPoUgT/IBiXmRUVk+pI77k3ZCg==
+X-Received: by 2002:a05:6a00:2302:b0:848:89ee:9de6 with SMTP id
+ d2e1a72fcca58-84c29501a3amr638961b3a.58.1784257477201; Thu, 16 Jul 2026
+ 20:04:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] bpf, riscv: add support for timed may_goto
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>,
- Xi Wang <xi.wang@gmail.com>, Pu Lehui <pulehui@huawei.com>,
- Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260715-riscv-bpf-timed-may-goto-v3-0-cf2a9c3d843f@kylinos.cn>
- <20260715-riscv-bpf-timed-may-goto-v3-1-cf2a9c3d843f@kylinos.cn>
- <8733xjwe5a.fsf@all.your.base.are.belong.to.us>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <8733xjwe5a.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Arisu Tachibana <arisu.tachibana@miraclelinux.com>
+Date: Fri, 17 Jul 2026 12:04:00 +0900
+X-Gm-Features: AUfX_mwxk1uxGEfezceKWzAJsj6gE6-YUKbhLsKern7QuPulS8RkTY_CSUcc-cY
+Message-ID: <CANgtXuMMvU7TQq8hv-T5NQbA6yfzcAMsFq5sdxXq-VzF+oHYxA@mail.gmail.com>
+Subject: [ANNOUNCE/CFP] Kernel Testing & Dependability Micro-conference at LPC
+ 2026 CFP
+To: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	shuah@kernel.org, gtucker@gtucker.io, sashal@kernel.org, 
+	kernelci@lists.linux.dev, automated-testing@lists.yoctoproject.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026/7/16 16:08, Björn Töpel wrote:
-> Feng Jiang <jiangfeng@kylinos.cn> writes:
-> 
->> Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
->> return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
->> across the call to the generic bpf_check_timed_may_goto().
->>
->> Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
->> expansion path.
-> 
-> Thanks for working on this!
-> 
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index c03c1de16b79..4f88a446278a 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -1841,7 +1841,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->>  		if (ret)
->>  			return ret;
->>  
->> -		if (insn->src_reg != BPF_PSEUDO_CALL)
->> +		/*
->> +		 * arch_bpf_timed_may_goto() is emitted by the verifier and
->> +		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
->> +		 * skip the normal "move return register into R0".
->> +		 */
->> +		if (insn->src_reg != BPF_PSEUDO_CALL &&
->> +		    addr != (u64)arch_bpf_timed_may_goto)
-> 
-> Nit: In the future, please use full 100 chars lines, instead of breaking
-> the line.
-> 
-> Would it be possible to add a test for this custom ABI? The fact that it
-> was missed in v1 hints that it would be good.
-> 
-> I asked an LLM to suggest a test [1]. Feel free to be inspired by it.
-> ;-)
-> 
-> 
-> Björn
-> 
-> [1] https://paste.debian.net/hidden/9dd769d6
+Hello everyone,
 
-Thanks Björn! I'll fix the line wrap and add a test for the custom ABI.
-Will send a v4 later.
+We are pleased to announce that the Kernel Testing & Dependability
+Micro-Conference has been accepted for Linux Plumbers 2026!
+You can read more about our track here:
+https://lpc.events/event/20/contributions/2328/
 
--- 
-With Best Regards,
-Feng Jiang
+Our Call for Proposals (CFP) is currently open.
+This is a quick reminder to please get your submissions in by 11:59 PM
+UTC on Saturday, August 7, 2026.
 
+We highly encourage you to send your submissions as soon as possible
+to ensure you have a chance to get into preregistration!
+
+You can submit your proposals here: https://lpc.events/event/20/abstracts/
+
+Thanks,
+Arisu, Guillaume, Shuah, and Sasha
