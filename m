@@ -1,143 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C87369D5E
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 15:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E468234CFC7;
+	Fri, 17 Jul 2026 15:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303365; cv=none; b=p+1VbX0DdFvTVX8RBFzqLObR9yy/PS7VnZykql+K3KTnhM0g00pbhftzPlhw1vx/Q76o/O6JGC1G3KYDbPQJSw/HotfUUfvypenZ2ALzE+Cp9oO/bGcZ/kFr30ARibhAhQ7Iic1mKb5YWgnbLlbdM2POpqWsFnAA5XdWjakAJCU=
+	t=1784303974; cv=none; b=fteILsNp/0uZCJ0uR6a2jj+iOMmq1GHmsK+FiZvXOFaJsjsinbGvJP0jLNpBP/6WijCrCgbO0mOtpMjDXblvtoY2VBjtEySQkrphORB/Dxc8jz4zCwUpKNH20nQe7fBGvRbb6W2gQ2VXCQJL+AJQzJyK7Gt/MOSyxAmoSoQPHD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303365; c=relaxed/simple;
-	bh=5mZjwLR92JiFfHeXEC0KRUFmzTs/lN+oUYBXLWRqzGU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oCp24pceotGtw9y8Mn7loYNfP+FDx6Yh4/qPtDxl4E4L8nBasPzitIzMkBnzNgOvdxjlKG/v+L/O7EbzFWnMryN9jUtjHDjxo1x+nhIj5D/HL7VJ7xVAwKul1PPTz3XZlRT4re1YXYueNG1rlk4X8YnfcqUXJsxZ8M2HY8bn7sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h/2wBqZs; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784303974; c=relaxed/simple;
+	bh=2ySKVJHEYJ9b4Hu2QmS50I5VYM80H72Yb3ncuiYzURs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QhzpGNj83Ruinz+b0F6qlRssub9bs06BfaTzLTldyapqrFma0qnlbTijJ1ccEDvaoZNiGvHYZWwtOzBQWN1UkRgrfrUZP0AkAb29QE/sPodofrbEIzG+Dj/nvMZhRFlVa3f0o6R6MsGbSo0mkSYc8i/2uXi93o/UQHkOHwsf/tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pMLBP5oE; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h/2wBqZs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784303362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ffO9XxsfjYQtotnpHJWX40bTrTSixy4ttiScoP34Oa0=;
-	b=h/2wBqZs3M4ISsYLflc/zaOt0DwCRtTz1vgSFj5LUoCwOkuRTAxSaiE5ZcuAdod7mSge/X
-	9/U4qw6Ii7hEEa/Dp5xYpI1BvcBktJQo7V6tfiI7jPTjZD18jvIPxVIH54zslGGf8A2NXf
-	nwOvLO8CQ1IaRS4wIHhRvF4wjZDkFGE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-Jv2lIa1zO6CJpLA_0Lrqsg-1; Fri,
- 17 Jul 2026 11:48:33 -0400
-X-MC-Unique: Jv2lIa1zO6CJpLA_0Lrqsg-1
-X-Mimecast-MFC-AGG-ID: Jv2lIa1zO6CJpLA_0Lrqsg_1784303311
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C87281955E75;
-	Fri, 17 Jul 2026 15:48:31 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.local (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 80FF53004181;
-	Fri, 17 Jul 2026 15:48:28 +0000 (UTC)
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Cc: Wen Yang <wen.yang@linux.dev>,
-	Nam Cao <namcao@linutronix.de>,
-	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
-	Tomas Glozar <tglozar@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Subject: [PATCH v4 16/17] selftests/verification: Rearrange the wwnr_printk test
-Date: Fri, 17 Jul 2026 17:46:37 +0200
-Message-ID: <20260717154638.220789-17-gmonaco@redhat.com>
-In-Reply-To: <20260717154638.220789-1-gmonaco@redhat.com>
-References: <20260717154638.220789-1-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pMLBP5oE"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 2D7FB4E40E1F;
+	Fri, 17 Jul 2026 15:59:30 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E536260361;
+	Fri, 17 Jul 2026 15:59:29 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7BA3011BD04D0;
+	Fri, 17 Jul 2026 17:59:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1784303968; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=F2BGsKr7N3XWJmJ4aqE/UETUyr928syJPbAkO96C3Oo=;
+	b=pMLBP5oE3LIQRMhrOIaGFaasEL7lkqgWJM5FOruJ6Vjomp/0qsU6VF2xeytSfmy/AtmxW8
+	Z0yvGfA7HSiTUuyum/LnGA7DeO1RBAIdoftN68dEyV+nJrH/uXFB1AzPYRK8Tf1wgW2bF+
+	/w3ma2yGyM8zO++WCpAjVrfwLo6T4gzbXSFVDnDOfD4WrRZOJYL/G+rPKoevaDBgY3gybT
+	rHwtiT4NbUFuZIpflHNTyT2S6BESImOkrxyhzK7IlP67PtrLfdlEOrK49fFVKbTers96T7
+	N5N4TABAU6FLYyNtT8WgHZ5xTFyzQnBsXiZ8fVI/kHjeMNVAB3kcUZM55HHtiA==
+From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Subject: [PATCH v4 0/7] clk: Add support for clock nexus
+Date: Fri, 17 Jul 2026 17:59:16 +0200
+Message-Id: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/5XNsQ6CMBDG8VcxnT1T2kKLk+9hHEo55RKhpMVGQ
+ 3h3C5NuOl3+N/y+mUUMhJEddzMLmCiSH3Ko/Y65zg43BGpzM8FFxXXBIbpuQGoxQNIgILgCkEb
+ BC3iMcQpoe7BKcyzRNrVoWYbGgFd6biPnS+6O4uTDa9tMYv3+xScBHBpVGa6NllrjqfF+utNwc
+ L5n60CSn2j1EyozWhtVKjQyH/eNLsvyBmH5HHMrAQAA
+X-Change-ID: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Pascal EBERHARD <pascal.eberhard@se.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
+ Herve Codina <herve.codina@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-The wwnr_printk test expects no reactions in some situations, after
-fixing the bash assertion, the test is failing because expecting no
-reaction after a previous step had reactions is flaky without making
-sure all buffers are flushed.
+Adding support for clock nexus had some prerequisites requested by
+Stephen, such as adding new selftests, the initial discussions come
+from:
 
-Wait for reactions to be over when expected by polling dmesg for an
-interval without any rv message.
-Also simplify the load function to stop loads as soon as a reaction
-occurs, this limits the number of lines to flush and makes tests overall
-faster and more stable.
+Link: https://lore.kernel.org/linux-clk/20260129201003.288605-1-miquel.raynal@bootlin.com/
 
-Reviewed-by: Wen Yang <wen.yang@linux.dev>
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+Changes in v4:
+- Fixed the kernel doc of of_find_node_by_name_kunit() which was lacking
+  the fact that it could return NULL upon lookup failure. Also improved
+  the commit message by mentioning the addition of that helper.
+- All other Sashiko reports have either been disregarded because they
+  were way too unrelated or just not relevant enough in my opinion.
+- Link to v3: https://lore.kernel.org/r/20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com
+
+Changes in v3:
+- Prevent out-of-bounds clock-ranges fallback in of_parse_clkspec()
+- tests: Check of_clk_add_hw_provider_kunit() return value and fix node
+  ref leaks
+- Link to v2: https://lore.kernel.org/r/20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com
+
+Changes in v2:
+- Collected tags.
+- Rebased on top of v7.2-rc1
+- Exported (test) clock symbols using the _IF_KUNIT() variant, and
+  imported the NS in the test file.
+- Fixed a leaking node reported by Brian in the tests. Also used
+  existing helpers to simplify the test implementation as he wisely
+  suggested.
+- Reworded the nexus node binding description as suggested by Stephen.
+- Dropped redundant and non restraining properties from the Nexus
+  node as suggested by Rob.
+- Assigned clock/clock-rate properties now traverse Nexus nodes.
+- Rename helpers following Stephen proposals.
+- Rework tests following Stephen hints.
+- Link to v1: https://lore.kernel.org/r/20260327-schneider-v7-0-rc1-crypto-v1-0-5e6ff7853994@bootlin.com
+
+Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 ---
+Miquel Raynal (Schneider Electric) (7):
+      dt-bindings: clock: Introduce nexus nodes
+      clk: tests: Add clk_parse_clkspec() Kunit testing
+      clk: tests: Add Kunit testing for of_clk_get_parent_name()
+      clk: Improve a couple of comments
+      clk: Use the generic OF phandle parsing in only one place
+      clk: Add support for clock nexus dt bindings
+      clk: tests: Add Kunit testing for nexus nodes
 
-Notes:
-    V4:
-    * Wait for dmesg to flush all messages after reactions
+ .../bindings/clock/clock-nexus-node.yaml           |  30 +++++
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-conf.c                             |  12 +-
+ drivers/clk/clk.c                                  |  15 ++-
+ drivers/clk/clk_kunit_helpers.c                    |  31 +++++
+ drivers/clk/clk_test.c                             | 139 +++++++++++++++++++++
+ drivers/clk/kunit_clk_parse_clkspec.dtso           |  31 +++++
+ include/kunit/clk.h                                |   2 +
+ 8 files changed, 249 insertions(+), 12 deletions(-)
+---
+base-commit: 7f26e010764df304602f33912a0550dcf46e72c2
+change-id: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
 
- .../verification/test.d/rv_wwnr_printk.tc     | 23 ++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-index 96de95edb530..37d96e1ae93b 100644
---- a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-+++ b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-@@ -4,23 +4,40 @@
- # requires: available_reactors wwnr:monitor printk:reactor stress-ng:program
- 
- load() { # returns true if there was a reaction
--	local lines_before num
-+	local lines_before num load_pid ret
- 	num=$((($(nproc) + 1) / 2))
- 	lines_before=$(dmesg | wc -l)
--	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q
--	dmesg | tail -n $((lines_before + 1)) | grep -q "rv: monitor wwnr does not allow event"
-+	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q &
-+	load_pid=$!
-+	timeout 5 dmesg -w | tail -n +$((lines_before + 1)) | grep -m 1 -q "rv: monitor wwnr does not allow event"
-+	ret=$?
-+	kill "$load_pid" || true
-+	wait "$load_pid" || true
-+	return $ret
-+}
-+
-+# loads may flood the ringbuffer, wait for all pending printks
-+wait_dmesg_flush() {
-+	local last_before last_after=$(dmesg | grep "rv:" | tail -n 1 || true)
-+	while [ "$last_before" != "$last_after" ]; do
-+		last_before=$last_after
-+		sleep .3
-+		last_after=$(dmesg | grep "rv:" | tail -n 1 || true)
-+	done
- }
- 
- echo 1 > monitors/wwnr/enable
- echo printk > monitors/wwnr/reactors
- 
- load
-+wait_dmesg_flush
- 
- echo 0 > monitoring_on
- ! load || false
- echo 1 > monitoring_on
- 
- load
-+wait_dmesg_flush
- 
- echo 0 > reacting_on
- ! load || false
+Best regards,
 -- 
-2.55.0
+Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 
