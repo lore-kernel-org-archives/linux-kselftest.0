@@ -1,257 +1,284 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F3937CD59
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 18:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784311678; cv=pass; b=KiJfLaPE1NgLgeMqmRbgH3F/9hALVlYdkT+J5+3hA5uNGulj3xv/PzHcNKE92nNBXKo9iiEpP9ioXNgO4ty+edqrnHok7MWjQQR0RZ45/r7zDuRkyMBFU5OtAYvw73zFb7+4nk1oIWG4RkL6WVTJPb6OI8FkAKBcDQo/9NOAYMM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784311678; c=relaxed/simple;
-	bh=XNN0JpTZt4JS4XA+k0s5ZjKLsam3WypcC0ebaleTyjU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GmJtJP/NnEh0fEAQKd27DtO4fAR60Es3iAX5Yf61NuO8ymvswmcdvSD0DLPEHMGAMduTf4KTIA+7JgS/Jp7JtBRat7M2+bAlkgIHEL+/Acz4IBhwYrVG4S6bqIyn3m8Y8oeH2sQKcXT6i7+zyWQMz78pQ1Kmbv42BlPXT6LLwHM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G/S+npVt; arc=pass smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BC637CD59;
+	Fri, 17 Jul 2026 18:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784312534; cv=none; b=oIlRtwz/6iAkmSHWX1uv9v0tWAbBtqs2LG8mXrdhgh/ecM94RkC3/60/gwA0oyslgS5WQH9YjSwPzJHi3nuaLgapIWBLHTEdM6HGpq+eCRJaYTvsuTHMP0T+q6Yt8uCIDlcKLSjcDC2TGey0z6qY8qnJvisXFymHqBgJA+qpPrI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784312534; c=relaxed/simple;
+	bh=d2McZ8qqupq73DW6vLZJ4SJt35wa8LS/2RNB+wGC1SY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lwns2Wbh72HimQrR3LCn729SV+308nBdWWNCeyh5W1imAlV5VWJpJm3Vt0whdglRlglBeVrqI1GV1xCc2U4Aiueq2+pg+vlrdlt8cTpDj+tncsMcVZ6xo8vET1Rv4ZafzxSnIoX9lQp+g3ra2G7aEWjDgzpq55nhLbkIpkyZhhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Domzoas1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G/S+npVt"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38759bcd877so7099613a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 11:07:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784311675; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hzdE70srkLzII6TN38mEPma5rly84hWYIcsqoFnGPC8xQ/iMAbI11JGgiubXc1/5E8
-         O1r2qzOxcT/VIL3vDTPiIFmZKK0Su1lNXYCSIhQnR17MrOcBsDvTsRVMvUZVgUEgPQB7
-         2qedB/V7GTLrW1CGXIn4xk9C4ijWkJJmBDyKwtlHM+tR8SQWOyrdbF8MZ/UfIeixEz+Z
-         cxuVY/taGc3Z3Ke0ibsnx2ej7FKGR5y8qdecvzELFjpUE0iSSEYoFYUkiUXSfIqgPkis
-         9R3ogijZPMCA2KvT4q9ktxBf9PurEDwrV7wacLJJSKDkvhzbFBkNba/9XQUsQs5Lt8vI
-         A/AQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oHggWXBEHwEkm7E6ec3wMUq0bi8f7fhVcVQVAKiXHao=;
-        fh=knGMsHxwatnV9sHDoEssna0TVdDE9hwpGeLWUrOthHQ=;
-        b=WUUmX0qRt/gW0b3s5XJDVSJFLtYtJJylD6KQR5EaPWXBJm9gu4WjDTPP9bYiOhdqKF
-         7+4PxRF8toY6UOIGHOcdBSFypufbcViGXkZlrukniCZPdhxU9MDcE46134owsemVqs0m
-         T2jEFIYHs+3ej+/jENiVD4+pese+MBvcY4RSMFGrol43V2pRfGJHQm7NW//wKjEzthxb
-         SXIxD08qHD+pMmyP3CSmSIyX/PJrqCpw2o7Vkd/Fcgx72JMSSW6gW9UWJ/9nj43I0UmF
-         jB8+Djtp7OHfFVj5By9JTpYTE5gnWlAFmCfgYVHMXX+OAf7tHMy7ezdjhPMvyc7rmXbT
-         Dxdg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784311675; x=1784916475; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oHggWXBEHwEkm7E6ec3wMUq0bi8f7fhVcVQVAKiXHao=;
-        b=G/S+npVtkG1DqE3Qrv12SDfeqj2k048H+KVSZa3Mrej9tPxqjEe3bmQgP3uOYiJHJo
-         qNy2hCDAi4Qye5q/rUZQgwgLi2ALqB/U2AB/CEiwPZq1Dymslx2c9D9b8UHE5ZqwRj3o
-         JpNRXbMCsSfU/b54jcdGitA0NXWo1tNexaxpKV2NCZnT26oUDYywj338uoeIJjDcYwTd
-         63XHz+i4lLbJpUwDYtCGFvBaK3L5vsOWjpIxOfKXtx+dgl/fkBVniG54mU6vWnEDViIK
-         U4DPWqduuvzi+b8bRT7Tpu1M/vkqFxlfBNc7nCl7mLSOWTdRvZYWn4klXwoUuMkMrKZl
-         SXiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784311675; x=1784916475;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oHggWXBEHwEkm7E6ec3wMUq0bi8f7fhVcVQVAKiXHao=;
-        b=TL1BWNkWHsEzXtw9yuqmD3vOVUx7ZFgB+JNMrHvhS//mmSTra7ju/ZgSFbq64tY7DC
-         dGGXUQvR3jnt1WBHceCR3aJb6VWjdkfNWcuO9/9288VCMYFthJV0r7WlkG/WQe5SIaPG
-         7ukzq5liPkulsjnXFjO9+pP094rniI1TqPNsU/g4eqaJ1T5sBImmhkO8uFmySJ+jUXdC
-         H0lmNF/GaLbKsyTEVm5g/G3lfmuP0+9DFB4BXRo5VbJue/QtLWjDTZ6llrtrPeEqTWbx
-         FefCWkXNs70Z2P8ChWnI3UAqJXQ6rznZz8hbw3Bf819pbEc2wRCXdizSiVWA6e3IQJIm
-         rdtg==
-X-Forwarded-Encrypted: i=1; AHgh+RozyeM46DKFgV0GUQ2SaxHfo0c5cVJiNzP5iTsWYwuUClvdRyoPUGU0/qAmZErjmixrPOx9dyhlV+O243sYHHs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuiZRvnBzphJDtbOKKj811S/bo4Ttet/IcThKFvI9NPYsAnSfz
-	zvUdh3eHyrO154iUo9uoLKo+uejJJEc9SEnrWnoO4/zZPEjuSCIwceFkAhqXp37e9M5oDBlWPCM
-	ciiZSnjzFCe3PEJoXblLs3x4y0uoUHOoPwpOusGQe
-X-Gm-Gg: AfdE7cm70vWZpO7BnoR3qhe6G1fOTGSkhPlORQLaa87GViIch79cPKyN5iZKapqp4dR
-	mRUMDVa8lvCP+4rfTOXv/BTh07H8veumU5FsRtNtWKF+6Hy4HKIUEC0TLd99UGIwigOZak7Apqu
-	oOiET4qpyoDQeTe5k5/y6t9t5HvgcUN7biATKcaEP1+0uHOt14SZaHK7pALbiHrmNc4LNchRqdR
-	KnWucVp875ENFM95VPBe52+OGUSD7gVzJIh+Mu7oini7ZTlYqRqsxFFXKQ5hQ==
-X-Received: by 2002:a17:90b:1e44:b0:38e:584f:2515 with SMTP id
- 98e67ed59e1d1-38e584f25c6mr761804a91.37.1784311674411; Fri, 17 Jul 2026
- 11:07:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Domzoas1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC331F000E9;
+	Fri, 17 Jul 2026 18:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784312530;
+	bh=Cpq4AIRba6og6vu0k3GilMWxNVdoNwEkt2Y5ktgRSJg=;
+	h=From:Subject:Date:To:Cc;
+	b=Domzoas1anATfXMmlFE3I4FOGUlnT/lelCUuwI2mT7InXj0iWg/lRLHwVDk7BlBe9
+	 mV6hrFIyOx6hrU7Jk9K2LnLcB6jVPytZqi+xXNHqePKTK3oIGdFib2yhCyQ88XyL+c
+	 seXT63zMRX1Lg1ljPPsvhLUHeF1zEUAofSCEYY2hI7Nc5qN5d5pLzSJUNngtqeoeTt
+	 hhIUE9LjmfKET9TkP3zDkeHLnVP3Tqyb/1w4j5FapRljPLMhIJ9Xe2kqW16gfgDWUP
+	 1W8je9uOo//SEENV3hNYt8+CtJzNdfoZYycFNphwPK+uBVx9MenrKdH7AMZ9WFyphB
+	 +CIBSQiLT5tZg==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: [PATCH 00/15] mm/rmap: index MAP_PRIVATE file-backed folios by
+ virt pgoff
+Date: Fri, 17 Jul 2026 19:19:38 +0100
+Message-Id: <20260717-b4-scalable-cow-virt-pgoff-v1-0-cf24910ef094@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714190356.190328-1-dmatlack@google.com> <2vxzy0fcicpi.fsf@kernel.org>
- <20260715172336.GC3775915@nvidia.com> <aljtXsr6xvI6FAmA@google.com>
- <2vxzh5lzhrgk.fsf@kernel.org> <alphOhGU2c90l_3m@google.com>
-In-Reply-To: <alphOhGU2c90l_3m@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Fri, 17 Jul 2026 11:07:27 -0700
-X-Gm-Features: AUfX_mzfx9OYJHTdyoObAAgLGZ66H2glYXt1USO9ylzsx0cIDR5QQ0HWu7nHJrA
-Message-ID: <CALzav=eKcJiCoR+w0krwtFOFeBXXYPK7YsDEhk+v3ZqzAgp=WQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] liveupdate: Allow multiple openers for /dev/liveupdate
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Mike Rapoport <rppt@kernel.org>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
-	uca.boccassi@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADpyWmoC/yWNSw7CIBQAr9KwFgK1H+PKe5guAF/pq6Q0D0RN0
+ 7vb1uUkk5mFRSCEyK7FwggyRgzTBupUMDvoyQHHx8aslGUjW6W4qXi02mvjgdvw5hkp8dmFvud
+ aWivBqMrYhm2BmaDHzxG/d3+OLzOCTXtxNwaMKdD3uGe1e8yGDCRUeynbqlb1WThMwo/x9gSaw
+ ItAjnXruv4AWFMSBroAAAA=
+X-Change-ID: 20260711-b4-scalable-cow-virt-pgoff-a0cc0eb14bc6
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+ Pedro Falcato <pfalcato@suse.de>, 
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+ Miaohe Lin <linmiaohe@huawei.com>, 
+ Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, 
+ Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>, 
+ Matthew Brost <matthew.brost@intel.com>, 
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+ Ying Huang <ying.huang@linux.alibaba.com>, 
+ Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+ Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9320; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=d2McZ8qqupq73DW6vLZJ4SJt35wa8LS/2RNB+wGC1SY=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKiivauK5+spXLCd83m6f5Bepe8Xad8q9/o/bzK7x/DF
+ 84wz1udHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZjIznKGv2JB3T9KPkXutXUz
+ WFOvw/snQ/7axPLYY1+WXtznFC3tocrwP1zs1XnbCZ1XOf5McRG8KV2vF6+9el3zPbGpus9rvio
+ d5gMA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Fri, Jul 17, 2026 at 10:07=E2=80=AFAM Pasha Tatashin
-<pasha.tatashin@soleen.com> wrote:
->
-> On 07-16 17:41, Pratyush Yadav wrote:
-> > On Thu, Jul 16 2026, Pasha Tatashin wrote:
-> >
-> > > On 07-15 14:23, Jason Gunthorpe wrote:
-> > >> On Wed, Jul 15, 2026 at 03:50:33PM +0200, Pratyush Yadav wrote:
-> > >> > Hi David,
-> > >> >
-> > >> > On Tue, Jul 14 2026, David Matlack wrote:
-> > >> >
-> > >> > > Remove the single-opener restriction for /dev/liveupdate by remo=
-ving the
-> > >> > > atomic in_use tracking and the exclusive open check in luo_open(=
-) that
-> > >> > > returned -EBUSY. Protect luo_session_deserialize() with a mutex =
-guard so
-> > >> > > that concurrent open attempts by multiple processes safely execu=
-tes
-> > >> > > deserialization only once. Update liveupdate selftest to verify =
-that
-> > >> > > multiple concurrent openers succeed.
-> > >> > >
-> > >> > > LUO does not inherently require a single opener. There is some
-> > >> > > documentation about it simplifying state management, but the onl=
-y thing
-> > >> > > it actually protects is the session deserialization during first=
- open,
-> > >> > > which can be easily handled with a mutex.
-> > >> > >
-> > >> > > Relaxing the single-opener requirement avoids the kernel forcing=
- a
-> > >> > > design pattern on userspace that it itself does not require, e.g=
-.
-> > >> > > allowing multiple userspace processes to create and manage sessi=
-ons.
-> > >> >
-> > >> > Agreed. When the kernel had a global state machine in the early ve=
-rsions
-> > >> > of LUO, this might have been more relevant. With sessions, even if=
- we
-> > >> > later add a state machine, it likely will be per-session instead o=
-f
-> > >> > being global. So I think letting userspace open /dev/liveupdate mu=
-ltiple
-> > >> > times makes a lot of sense.
-> > >> >
-> > >> > Also, today's systemd only supports preserving individual files, a=
-nd
-> > >> > does not hand out sessions. To get sessions, userspace must open
-> > >
-> > > It should in the future, because of permissions issue, see below.
-> > >
-> > >> > /dev/liveupdate and create a session. This opens up room for one b=
-ad
-> > >> > process to block every other process from creating sessions. It al=
-so
-> > >> > imposes a need for userspace to add a polling/retry logic for gett=
-ing
-> > >> > sessions and serializes their execution around this point.
-> > >>
-> > >> Shouldn't systemd open and own /dev/liveupdate? That was at least wh=
-at
-> > >> I originally expected here, you'd talk to it and get a session FD
-> > >> through dbus.
-> > >>
-> > >> Moving to multi-opening /dev/liveupdate and removing visibility of
-> > >> what sessions are open from systemd is a different model
-> > >>
-> > >> Not saying this patch is wrong or anything, but that I don't really
-> > >> understand what kind of model you are going for now.
-> > >
-> > > CC ca for systemd's take.
-> > >
-> > > /dev/liveupdate should only be accessed by a privileged process, and
-> > > sessions should be accessed by whoever originally created them. While
-> > > this patch does not change the permissions, it paves the road for us =
-to
-> > > move in the wrong direction: instead of having a privileged userspace
-> > > manager that distributes the sessions to their rightful owners, it
-> > > encourages userspace to work around the permissions so that VMMs acce=
-ss
-> > > /dev/liveupdate to retrieve or store their sessions directly. This wo=
-uld
-> > > also allow them to access sessions belonging to any other participant=
- of
-> > > the live update.
-> >
-> > But you can still do all this. In fact, systemd's release notes suggest
-> > doing so [0]:
-> >
-> >     Units can also create their own LUO Sessions by talking to the
-> >     kernel directly, and store them in their FD Stores, and those will
-> >     also be preserved and passed down to the unit after kexec
->
-> They should not. Ideally, systemd should be the sole entity
-> communicating directly with /dev/liveupdate.
->
-> >
-> > Having a single opener does not in practice prevent userspace from
-> > creating sessions directly. All it does is to force them to turn the
-> > open into a polling loop. So I don't think single open achieves the goa=
-l
->
-> That is a fragile design, and they should avoid it. To be clear, I do
-> not see any functional bugs in this patch, but I still do not understand
-> the underlying use case.
->
-> LUO should rely on a single manager agent that interacts with clients to
-> create, preserve across reboots, and restore session IDs on their behalf.
->
-> In fact, systemd is the only userspace process that AFAIK survives
-> across the reboot() boundary; all other processes are terminated before
-> reboot() is invoked. Relying on multiple independent LUO managers is
-> therefore architecturally, wrong as they will close sessionfds.
->
-> While the kernel can technically allow multiple openers for
-> /dev/liveupdate, I do not see what problem this actually solves.
-> Instead, it seems to encourage bad architectural decisions in userspace.
+In memory management we've managed to manufacture a great deal of confusion
+around the concept of anonymous memory. We have:
 
-> > you think it should. Userspace already works around this restriction.
-> >
-> > So as long as we keep access to /dev/liveupdate restricted to privilege=
-d
-> > processes, I don't see why single open is any better.
->
-> What is the concrete use case for this patch, once we live in the world
-> where systemd is fully capable of creating, storing, and retrieving
-> sessions?
+1. 'Pure anon' memory - anonymous VMAs whose folios are anonymous and
+   swap-backed (thus for reclaim purposes, treated as anonymous). These are
+   simple enough.
 
-I guess I would flip the question around: What problem does the kernel
-requiring a single opener of /dev/liveupdate solve?
+2. shmem - file-backed VMAs, file-backed folios (from rmap perspective) so
+   present in the page cache and mapped by an address_space object, but
+   whose folios are also swap-backed (thus treated as anonymous for reclaim
+   purposes).
 
-If systemd wants to have a single opener model it can certainly
-enforce that itself without the kernel's help.
+3. MAP_PRIVATE-mapped /dev/zero - a strange beast whose VMAs have
+   vma->vm_file set, but whose mmap_prepare callback clears vma->vm_ops to
+   satisfy vma_is_anonymous(), which results in VMAs that were mmap()'d
+   referencing a file and whose VMAs reference a file, but are in every other
+   sense anonymous, including the folios.
 
-I'm not sure why the kernel needs to impose a restriction on userspace
-that it doesn't require itself.
+4. Other MAP_PRIVATE-file backed mappings - These possess file-backed VMAs
+   and have file-backed folios until CoW'd, at which point those CoW'd
+   folios are anonymous.
 
->
-> >
-> > [0] https://github.com/systemd/systemd/releases#release-v261
-> >
-> > >
-> > > Instead, sessions should be created and retrieved by a privileged
-> > > process that knows to send them back to their rightful owner after
-> > > retrieval.
-> > >
-> > > Also, as a minor concern, each userspace LUO manager needs its own
-> > > session to maintain state. This means that by allowing multiple
-> > > managers, they may run into naming conflicts for those state sessions=
-.
-> >
-> > --
-> > Regards,
-> > Pratyush Yadav
+This series focuses upon issue 4.
+
+In order for us to traverse VMAs using the reverse mapping, we require two
+fields - folio->mapping and folio->index. The first tells the rmap code
+where to look for VMAs, and the second tells it at which offset the folio
+starts within the referenced object.
+
+For anonymous folios, folio->mapping points at an anon_vma object. For
+file-backed folios, it points at an address_space. And:
+
+* For file-backed folios folio->index is simply the page offset of the start
+  of the folio within the file.
+
+* For anonymous folios belonging to pure anon mappings, folio->index is
+  equal to the virtual page offset of the folio.
+
+* For anonymous folios belonging to file-backed mappings (i.e. CoW'd folios
+  of a MAP_PRIVATE file-backed mapping), folio->index is equal to the file
+  page offset.
+
+This series establishes a new virtual page offset property of VMAs to
+allow us to map anonymous folios at their virtual page offset, consistent
+with pure anon.
+
+The purpose of doing so is to lay the foundations for the scalable CoW
+work. This is necessary because firstly the approach first looks in the
+maple tree for the VMA located at folio->index << PAGE_SHIFT, before
+falling back to looking up tracked remaps if necessary.
+
+The MAP_PRIVATE file-backed case means that folio indices will very often
+conflict with one another and this remap tracking becomes substantially
+more contended, and of course the fast path can never be used.
+
+This also makes it possible, in future, to unshare anonymously mapped
+folios with deep fork hierarchies on remap, eliminating the need for remap
+tracking in the vast majority of cases.
+
+Similar to page offset of pure anonymous VMAs, we update the virtual page
+offset of unfaulted file-backed VMAs on remap, but do not once
+CoW'd:(i.e. vma->anon_vma is non-NULL).
+
+Overall, there is little impact on mergeability - for shared file-backed
+mappings, we treat the anonymous page offset as equal to the file-backed
+one (via vma_start_anon_pgoff()), so merge behaviour remains the same
+there.
+
+The only impact is on MAP_PRIVATE-mapped file-backed mappings, which must
+now match on virtual page offset as well as file page offset to be merged.
+
+To fail to merge like this would require CoW'ing the mapping, then finding
+another VMA with identical file and compatible page offset to remap next
+to. This is therefore very much an edge case that should have very little
+impact (and which scalable CoW may very well address in any case).
+
+We also address the outlier case of MAP_PRIVATE-/dev/zero mappings which
+have file page offset but satisfy vma_is_anonymous() by making them truly
+anonymous.
+
+This is low-risk as for anything meaningful these mappings behave
+anonymously, but it is very beneficial to do so as we eliminate an odd
+corner case, and those are notorious for attracting subtle bugs.
+
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+v1:
+- Rebased onto mm-new.
+- Dependent series heavily reviewed and looks highly likely to land, so
+  un-RFC.
+- Added explicit check for /dev/zero and removed ability for arbitrary
+  mmap/mmap_prepare hooks to make themselves anonymous.
+- Made MAP_PRIVATE-/dev/zero mappings truly anonymous.
+- Added MAP_PRIVATE file-backed mapping merge test to selftests.
+- Added a MAP_PRIVATE-/dev/zero VMA userland test to assert that the VMA
+  really is made anonymous.
+- Added MAP_PRIVATE-/dev/zero merge tests to selftests.
+- Fixed missed virtual page index site in try_to_merge_with_ksm_page().
+- Updated folio_within_range() to use virtual page offset for anon
+  folio. This had no impact as it is only called for large folios at the
+  moment (and MAP_PRIVATE-file backed mappings can't currently be backed by
+  a large folio) but making the change now protects us for the future.
+- Fixed typos etc.
+
+RFC:
+https://patch.msgid.link/cover.1782745153.git.ljs@kernel.org
+
+To: Andrew Morton <akpm@linux-foundation.org>
+To: David Hildenbrand <david@kernel.org>
+To: "Liam R. Howlett" <liam@infradead.org>
+To: Vlastimil Babka <vbabka@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+To: Michal Hocko <mhocko@suse.com>
+To: Jann Horn <jannh@google.com>
+To: Pedro Falcato <pfalcato@suse.de>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To: Jan Kara <jack@suse.cz>
+To: Miaohe Lin <linmiaohe@huawei.com>
+To: Naoya Horiguchi <nao.horiguchi@gmail.com>
+To: Rik van Riel <riel@surriel.com>
+To: Harry Yoo <harry@kernel.org>
+To: Lance Yang <lance.yang@linux.dev>
+To: Kees Cook <kees@kernel.org>
+To: Zi Yan <ziy@nvidia.com>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+To: Nico Pache <npache@redhat.com>
+To: Ryan Roberts <ryan.roberts@arm.com>
+To: Dev Jain <dev.jain@arm.com>
+To: Barry Song <baohua@kernel.org>
+To: Usama Arif <usama.arif@linux.dev>
+To: Matthew Brost <matthew.brost@intel.com>
+To: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: Rakie Kim <rakie.kim@sk.com>
+To: Byungchul Park <byungchul@sk.com>
+To: Gregory Price <gourry@gourry.net>
+To: Ying Huang <ying.huang@linux.alibaba.com>
+To: Alistair Popple <apopple@nvidia.com>
+To: Peter Xu <peterx@redhat.com>
+To: Xu Xin <xu.xin16@zte.com.cn>
+To: Chengming Zhou <chengming.zhou@linux.dev>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: ljs@kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Lorenzo Stoakes (ARM) (15):
+      mm/vma: introduce VMA virtual page offset field and add helpers
+      mm: introduce linear_virt_page_index()
+      mm: abstract vma_address() and introduce vma_anon_address()
+      mm: update print_bad_page_map() to show virtual page index
+      mm: introduce and use vma_filebacked_address()
+      mm: propagate VMA virtual page offset on map, remap, split + merge
+      mm/rmap: track whether the page VMA mapped walk is anonymous
+      mm: introduce and use linear_folio_page_index()
+      mm/rmap: use virt pgoff for MAP_PRIVATE file-backed anon folios
+      tools/testing/vma: expand VMA merge tests to assert virt pgoff
+      tools/testing/selftests/mm: test virtual page offset merge behaviour
+      mm/vma: only permit MAP_PRIVATE /dev/zero to be mapped anonymous
+      mm/vma: make MAP_PRIVATE-mapped /dev/zero mappings truly anonymous
+      tools/testing/vma: add test to assert MAP_PRIVATE-/dev/zero is anon
+      tools/testing/selftests/mm: add MAP_PRIVATE-/dev/zero merge tests
+
+ drivers/char/mem.c                 |   8 +-
+ include/linux/mm.h                 |  74 ++++++++++++++---
+ include/linux/mm_types.h           |   4 +
+ include/linux/pagemap.h            |  66 +++++++++++++++
+ include/linux/rmap.h               |   2 +
+ mm/huge_memory.c                   |   3 +-
+ mm/internal.h                      |  76 ++++++++++++-----
+ mm/interval_tree.c                 |   4 +-
+ mm/ksm.c                           |   7 +-
+ mm/memory-failure.c                |   4 +-
+ mm/memory.c                        |   8 +-
+ mm/migrate.c                       |   6 +-
+ mm/mremap.c                        |   6 +-
+ mm/page_vma_mapped.c               |   6 +-
+ mm/rmap.c                          |  23 +++---
+ mm/userfaultfd.c                   |   6 +-
+ mm/vma.c                           | 116 ++++++++++++++++++++------
+ mm/vma.h                           | 144 +++++++++++++++++++++++++--------
+ mm/vma_exec.c                      |   2 +-
+ mm/vma_init.c                      |   1 +
+ mm/vma_internal.h                  |   1 +
+ tools/testing/selftests/mm/merge.c | 161 +++++++++++++++++++++++++++++++++++++
+ tools/testing/vma/include/dup.h    |  77 ++++++++++++++++++
+ tools/testing/vma/shared.c         |   3 +-
+ tools/testing/vma/tests/merge.c    |  22 ++++-
+ tools/testing/vma/tests/mmap.c     |  49 +++++++++++
+ tools/testing/vma/tests/vma.c      |   4 +-
+ tools/testing/vma/vma_internal.h   |   1 +
+ 28 files changed, 764 insertions(+), 120 deletions(-)
+---
+base-commit: 5093dba1014c1d7f7e247fd118f0fa8f22136046
+change-id: 20260711-b4-scalable-cow-virt-pgoff-a0cc0eb14bc6
+
+Cheers,
+-- 
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
