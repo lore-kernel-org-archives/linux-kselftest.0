@@ -1,63 +1,64 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C0C28C869
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 21:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2763AB47B
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 21:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784325140; cv=none; b=nIQUMpuwrAeUjbuUAkzkve/2jdFTmMmHQpPknkiEIqiNFYuHQlp9T7ahyaNSlBAelCPH81L/TdRoEwASobFwHgM72JAb491iC1nwvAqdTB80JNqrg58ZX7XHxFmGlpGuUbww4m3opcpYM/wV2fIfvst35dSGW6qEKmV1G5Cz2Tk=
+	t=1784325170; cv=none; b=KUH8Ve9fRa1QYZBIXeRShpmChKQp3dHHowP5ZTnoOqqb9VyJ4Whdwv1TCPfZaP3XBP3BADkq+fjHuy2HuDb+RjB1+V8QxXM5x3j9Fw36GeRcjnG6ZbIu4IJc4j+720cMklIAaQIA1FDLsGpwTfJIkd7e/vtcWTEZ6ty26Y41VbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784325140; c=relaxed/simple;
-	bh=55EzlMufrn+hckL4EKFgbR5tUr6d3Envr0gIRu0iIkY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=nMxp7x8QaGr0VyUqOzqWC/EaNfJGWh4NtUzxFhvTZhttJpDeff89m+wKOWjQV0SWdnlZD6gxBwRossbwkyVO97IMHJqaoixmKGBOAAoy3e4MSQgvZsG2XdBg//qVYzDltwiCCag3K4hOWf6GjJyO7jyrkQdX9N3SSPGPCa9ja8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=e5cCPdyh; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1784325170; c=relaxed/simple;
+	bh=zc7D/9EwQRgTjJcnICDGen34BP8M4e+uP9KTBbq2Gmg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=gl2YOo89mIvhY4vGQT7MozldJIYSEHQk6/rHVWWrRcYhGicSgrnSPnXxWTQMfDYoh7sBpWjhK13ZgDBbrUWVj//uDX4ull2lFx+HHKjcSJotuHNcQYxDwbseJEauWSo/m5CUejCoBPcywPFbky8f4nIWV5Wyv6ER7QcqbfwCUxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=WFJfe5tv; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="e5cCPdyh"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cc891373e0so101663995ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 14:52:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="WFJfe5tv"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-384c94c9414so4232782a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 14:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784325138; x=1784929938; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784325158; x=1784929958; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=8xICSg/3uLQX5g2+LM6seI/bgJKFaOXV9vjEkcMgNPU=;
-        b=e5cCPdyhQv13naxSZRKizKQe0oEO6Qqdgs/XUhtIhiKSlQUKN7HmfF0etVzoPQwaxi
-         L7jCaDOLNntvkFZJzubi4KjJvueIKbJCEpXNNqy1GEeom6pOe4tCuAorVPZqStXn2zjM
-         tP4w5DxsVqEJsJgMkZJ7lFnGu1gg3Dntg2YrbzjHMUFd/CHF8c4N04YbfyjcCRyIChPV
-         F57458IO05z05o3yaTdTIUKhFuB9+2rLUIdvxIWvZOQXbusmjAEHMDyA401tNmIgIbPg
-         utA9dlJw8deH9QP2tmbYg/Gqv/cpJsPrwoUKxIW7Ow7qN42H4VGYagkr+4o97WyV718H
-         Vo4w==
+        bh=ZRpkQ2cyJn8DEz8vKvVjafNoUUwgLSz9vl4mrpr70F0=;
+        b=WFJfe5tv5GXpTFQB+Nl+/juMQ9Rm6EB/gSsoE0uimt30/V+dV5cWOcr0Rl4EjvnNgl
+         8KS1Y1DvFb9Jh6GV0Tu2wQdI/U/TI4EdAqRmX7HorCoout3o70Vfl1uT08Mw7fnCn+rb
+         aF5FGJF/TpYSSuoON8bpvH475u/ozdQrCByJ3WHy8kCwCcuHv767jbaPxwN1rZU+/syH
+         JdUoMOUKXR7G+e38oMZ+nSNom22ayZMbOUm4rEYvXWP0oWQT7R1dwHnw6B2AHhX4/JSd
+         i4cgIuCfeMp+RsX3XpegPdEIJfEGfXIk6GCwEn4csBPOZUCdjMgK3Brz+0x02SwITUw4
+         M33g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784325138; x=1784929938;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1784325158; x=1784929958;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8xICSg/3uLQX5g2+LM6seI/bgJKFaOXV9vjEkcMgNPU=;
-        b=hOW2iZc4MAHG+6+wI3EtDDsBsB1OIzedOSTi0x5lQC3j6hU+638rga2uCmTl+zg4ok
-         MNmR/wYuAbQV/9gnelo5w8y7sANFTdTMM72ZMQfxTHpQVvj03+h5wPbXEGD4COa+xgfR
-         BUdVsp73u/sZmKgkc7RwpM9O8BOJXiZQ/4QKNv5xcJ3TkXJY3GLZjDkbkVPtYQUmxjEW
-         c7fZhWzYbFIfDxdes+X+qYVYDCVOH4P6oWImeDqEEV2QyVlWsplJwJObbi/pFU4cMbya
-         yGruHXKzd+qLGUIxILPykZwNy97LaEU0YXkXetH/cyI7obv8YwKsWmv6D20VFQ9ZmlHV
-         tecg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp7VGuZvv8+rliSrRWUE03jjKg3o7eLhwb0dUMgtk2VnlXA3DGlyD8IE66vM/BXFYpmAZiJzqwklCxOn+C0U9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIG9boSAWwDil5wxVWU5IrWwhJjiO2/P/CpLLwGqm8x78lT7mM
-	vcjYgoG/OPlI8mx45M3FrG776Kd2EB8gHfuBmrgfaIkOaZzQ/K9htEUJr/0w7PVu+Mo=
-X-Gm-Gg: AfdE7ckQPkH3bVeZez2aFB62ebjaBQS3+y6Oqe72DuAbomA6Ru103U+00EgowdWJtLK
-	Jd68R4yF6IuTj/2Ofp2ILEO8mN1rgQS7uJW0RRyVVjQHZJ1dkoYZJifjus3xLwFEWTdzBFTIAnv
-	kmoaTkMY4NCFeyfep3Gt6kG/AooKdycUr3pqwjiichJ8qQQxXaSiRrP8mNyV012f/5PoigVBuUF
-	sjm7wl2Rl0XdrliNq9/lD0rCY/C8e6Iw3ha/eYP/1Zni74D+STCmQnrTJkrqK+BWyk7hKdRg/5+
-	SIpW97vYpTgfGd/0LIemwx6YQCxYRMFdXne5Iw/LOvvzrsR1291j1x4fLr4OTapRIPpetlj5Cde
-	wqSXVMf/p68ZSX0JeeXR8OB0ctIT9iOwDNm4Nw3bTMWXSxLgBzg2tpObUKIQ=
-X-Received: by 2002:a05:6a20:9630:b0:3bf:8de9:c647 with SMTP id adf61e73a8af0-3c3ad355d6dmr5251707637.0.1784325138039;
-        Fri, 17 Jul 2026 14:52:18 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::f5f9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1ddeb6sm12396518eec.20.2026.07.17.14.52.16
+        bh=ZRpkQ2cyJn8DEz8vKvVjafNoUUwgLSz9vl4mrpr70F0=;
+        b=bVaiE1knmODFz9zoPC9ic+MsYNM4Yd/fFwEDV4L10XbMTIS2+JM8l0vqif/uqNa3y+
+         20cisliD8NTjZr4w/Qf9AQm6NpirRzZQOSTZrA23aB87mvsl4gzirxtlNnAFYCc10akO
+         gJ37UqhvXdZlBY7q1gT1fVSP0I6GamCbYgLCbS7k8ZrIu99sEUvlCb7rPOqTjzQMtrkJ
+         +AcLm48kMuvy0X+uJXU+i+SsV/w6Z0qpjsSs8jLaFpXNC7pfN39t1e3sEKM081m2d6pJ
+         hcnQZjtJHyFvyFmzInq+ml1hrR8c6GUkuTWBJ38o199N/Mk3nRqm6Ws7aS641jI37gJl
+         jgfg==
+X-Forwarded-Encrypted: i=1; AHgh+RrGd5ELuw52FD5lqG5DgOvN1n+ZoCxL/jdPj+dQdyzhKUZCoyeG53ubk3FJnGCJnfcAghvHTxNJcLmeJiRfPK4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8KyITIm9Ei40FKqmmxO69GXy1cCQcrtmEFruC5RKSMpJ5/ye2
+	49enWB1kc0mGWbawhPoeNJAklK7eHsqXUrfZDrqcAnbqkiMbOdDyf1GhBU4RzMmnyQ0=
+X-Gm-Gg: AfdE7cmpS1nj7JWIdKhjme3ogG3viNrjUQGF6npzXY2S1VPSuSbbsJgq9yZWCRPXTO3
+	JKwsh9ozytXN1Dfm7oOM2NLSflGQ0vAvAcNUknG8Ajouvke0WTtWbJZTuI6zqqFq2qJmKZsgp69
+	QSVXtHmQ8wZdXeOwUPQSOlNSUxgdGaGTE2z+qdjybvFseTvlUnnL5Bl971/mjZ4NjXso9aidEzR
+	cACN3Uq4S6+zWY5vkyJZB7fdctIu25c+t8jmhRlhX2ZoZAWjfjm1MDtV7dqhZqRo6h4sXejifrw
+	cmchFMLpwfAOWNZM24SlMkcIWKs7oKRgRVix8hcL0EpBnXeNiKVwT+/FwCjIkcgQVfHs+iFhAfZ
+	kO8W1FOizjhxswSGcwt1r3u/iF7hrzYXGRg9PmUOjv7G6Q9w3eyI70ah0fNjy+Vs9My+SBCejrT
+	UnTw==
+X-Received: by 2002:a17:90a:e7c1:b0:37f:9ce1:735f with SMTP id 98e67ed59e1d1-38e4b537cf4mr3919621a91.32.1784325157799;
+        Fri, 17 Jul 2026 14:52:37 -0700 (PDT)
+Received: from localhost ([163.114.132.129])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1bb8a4sm11278963eec.14.2026.07.17.14.52.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2026 14:52:17 -0700 (PDT)
+        Fri, 17 Jul 2026 14:52:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,8 +67,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Jul 2026 17:52:15 -0400
-Message-Id: <DK16GZ1CVRYZ.1ZKXOISH3846Z@etsalapatis.com>
+Date: Fri, 17 Jul 2026 17:52:34 -0400
+Message-Id: <DK16H7ZKMSYD.2K0J4O6YBMWF1@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
 Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
  <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
  KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
@@ -77,353 +80,100 @@ Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
  <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
  <kernel-patches-bot@fb.com>
-Subject: Re: [PATCH bpf-next v10 5/9] bpftool: Generate skeleton for global
- percpu data
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v10 3/9] libbpf: Probe percpu data feature
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260715153254.92010-1-leon.hwang@linux.dev>
- <20260715153254.92010-6-leon.hwang@linux.dev>
-In-Reply-To: <20260715153254.92010-6-leon.hwang@linux.dev>
+ <20260715153254.92010-4-leon.hwang@linux.dev>
+In-Reply-To: <20260715153254.92010-4-leon.hwang@linux.dev>
 
 On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
-> Enhance bpftool to generate skeletons that properly handle global percpu
-> variables. The generated skeleton now includes a dedicated structure for
-> percpu data, allowing users to initialize and access percpu variables mor=
-e
-> efficiently.
+> libbpf needs a reliable way to distinguish kernels that can support
+> global percpu data from those that cannot.
 >
-> For global percpu variables, the skeleton now includes a nested
-> structure, e.g.:
+> Add a dedicated feature probe, so libbpf can make capability decisions
+> early and fail predictably when global percpu data is unavailable.
 >
-> struct test_global_percpu_data {
-> 	struct bpf_object_skeleton *skeleton;
-> 	struct bpf_object *obj;
-> 	struct {
-> 		struct bpf_map *percpu;
-> 	} maps;
-> 	// ...
-> 	struct test_global_percpu_data__percpu {
-> 		int data;
-> 		char run;
-> 		struct {
-> 			char set;
-> 			int i;
-> 			int nums[7];
-> 		} struct_data;
-> 		int nums[7];
-> 	} *percpu;
->
-> 	// ...
-> };
->
->   * The "struct test_global_percpu_data__percpu *percpu" points to
->     initialized data, which is actually "maps.percpu->mmaped".
->   * Before loading the skeleton, updating the
->     "struct test_global_percpu_data__percpu *percpu" modifies the initial
->     value of the corresponding global percpu variables.
->   * After loading the skeleton, "maps.percpu->mmaped" has been marked as
->     read-only in libbpf. If users want to update the global percpu
->     variables, they have to update the "maps.percpu" map instead.
->   * For lightweight skeleton, "lskel->percpu" will be protected by
->     "mprotect(p, sz, PROT_READ)".
->   * For subskeleton, those variables of global percpu data will be
->     skipped.
->
-> Acked-by: Quentin Monnet <qmo@kernel.org>
-> Assisted-by: Codex:gpt-5.5-xhigh
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
 > ---
->  tools/bpf/bpftool/gen.c       | 76 +++++++++++++++++++++++++++--------
->  tools/lib/bpf/skel_internal.h | 24 ++++++++++-
->  2 files changed, 81 insertions(+), 19 deletions(-)
+>  tools/lib/bpf/features.c        | 35 +++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf_internal.h |  2 ++
+>  2 files changed, 37 insertions(+)
 >
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index a01d06d22d1a..b60db1108149 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -101,6 +101,12 @@ static bool get_map_ident(const struct bpf_map *map,=
- char *buf, size_t buf_sz)
->  		return true;
->  	}
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b7e388f99d0b..ef9581c11303 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -620,6 +620,38 @@ static int probe_bpf_syscall_common_attrs(int token_=
+fd)
+>  	return probe_sys_bpf_ext();
+>  }
 > =20
-> +	if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
-> +		snprintf(buf, buf_sz, "%s", name + 1);
-> +		sanitize_identifier(buf);
-> +		return true;
+> +static int probe_kern_percpu_data(int token_fd)
+> +{
+> +	struct bpf_insn insns[] =3D {
+> +		BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
+> +		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
+> +		BPF_EXIT_INSN(),
+> +	};
+> +	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+> +		.token_fd =3D token_fd,
+> +		.map_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+> +	);
+> +	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
+> +		.token_fd =3D token_fd,
+> +		.prog_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+> +	);
+> +	int ret, map, insn_cnt =3D ARRAY_SIZE(insns);
+> +
+> +	map =3D bpf_map_create(BPF_MAP_TYPE_PERCPU_ARRAY, "libbpf_percpu", size=
+of(int), 8, 1,
+> +			     &map_opts);
+> +	if (map < 0) {
+> +		pr_warn("Error in %s(): %s. Couldn't create simple percpu_array map.\n=
+",
+> +			__func__, errstr(map));
+> +		return map;
 > +	}
 > +
->  	for  (i =3D 0, n =3D ARRAY_SIZE(sfxs); i < n; i++) {
->  		const char *sfx =3D sfxs[i], *p;
-> =20
-> @@ -117,7 +123,7 @@ static bool get_map_ident(const struct bpf_map *map, =
-char *buf, size_t buf_sz)
-> =20
->  static bool get_datasec_ident(const char *sec_name, char *buf, size_t bu=
-f_sz)
->  {
-> -	static const char *pfxs[] =3D { ".data", ".rodata", ".bss", ".kconfig" =
-};
-> +	static const char *pfxs[] =3D { ".data", ".rodata", ".bss", ".percpu", =
-".kconfig" };
->  	int i, n;
-> =20
->  	/* recognize hard coded LLVM section name */
-> @@ -254,7 +260,7 @@ static const struct btf_type *find_type_for_map(struc=
-t btf *btf, const char *map
->  	return NULL;
->  }
-> =20
-> -static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t=
- sz)
-> +static bool is_skel_data(const struct bpf_map *map, char *buf, size_t sz=
-)
-
-Here we change the function to take PERCPU_ARRAY into account, but then=20
-immediately turn around and add checks of the form is_skel_data && type
-!=3D BPF_MAP_TYPE_PERCPU_ARRAY. If we keep both the existing mmapable_map
-and add a separate is_skel_data map (possibly using is_mappable_map),
-we can remove those additional checks.
-
->  {
->  	size_t tmp_sz;
-> =20
-> @@ -263,13 +269,19 @@ static bool is_mmapable_map(const struct bpf_map *m=
-ap, char *buf, size_t sz)
->  		return true;
->  	}
-> =20
-> -	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMA=
-PABLE))
-> +	if (!bpf_map__is_internal(map))
->  		return false;
-> =20
->  	if (!get_map_ident(map, buf, sz))
->  		return false;
-> =20
-> -	return true;
-> +	if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-> +		return true;
+> +	insns[0].imm =3D map;
 > +
-> +	if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> +		return true;
-> +
-> +	return false;
->  }
-> =20
->  static int codegen_datasecs(struct bpf_object *obj, const char *obj_name=
-)
-> @@ -286,8 +298,11 @@ static int codegen_datasecs(struct bpf_object *obj, =
-const char *obj_name)
->  		return -errno;
-> =20
->  	bpf_object__for_each_map(map, obj) {
-> -		/* only generate definitions for memory-mapped internal maps */
-> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-> +		/*
-> +		 * Only generate definitions for internal maps that have
-> +		 * mmapped data.
-> +		 */
-> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
->  			continue;
-> =20
->  		sec =3D find_type_for_map(btf, map_ident);
-> @@ -339,8 +354,14 @@ static int codegen_subskel_datasecs(struct bpf_objec=
-t *obj, const char *obj_name
->  		return -errno;
-> =20
->  	bpf_object__for_each_map(map, obj) {
-> -		/* only generate definitions for memory-mapped internal maps */
-> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-> +		/*
-> +		 * Only generate definitions for internal maps that have
-> +		 * mmapped data.
-> +		 */
-> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
-> +			continue;
-> +
-> +		if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
->  			continue;
-
-Case in point, the old is_mmapable_map would work fine here.
-
-> =20
->  		sec =3D find_type_for_map(btf, map_ident);
-> @@ -493,7 +514,10 @@ static size_t bpf_map_mmap_sz(const struct bpf_map *=
-map)
->  	return map_sz;
->  }
-> =20
-> -/* Emit type size asserts for all top-level fields in memory-mapped inte=
-rnal maps. */
-> +/*
-> + * Emit type size asserts for all top-level fields in internal maps that
-> + * have mmaped data.
-
-I do not think the new comment makes it any clearer, the difference is
-"memory-mapped internal maps" and "maps that are memory-mapped initially
-but actually inaccessible after loading because there's no way to=20
-represent them as a mapping of the skeleton" AFAICT which is not easy
-to infer currently.
-
-> + */
->  static void codegen_asserts(struct bpf_object *obj, const char *obj_name=
-)
->  {
->  	struct btf *btf =3D bpf_object__btf(obj);
-> @@ -517,7 +541,7 @@ static void codegen_asserts(struct bpf_object *obj, c=
-onst char *obj_name)
->  		", obj_name);
-> =20
->  	bpf_object__for_each_map(map, obj) {
-> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
->  			continue;
-> =20
->  		sec =3D find_type_for_map(btf, map_ident);
-> @@ -669,7 +693,8 @@ static void codegen_destroy(struct bpf_object *obj, c=
-onst char *obj_name)
->  		if (!get_map_ident(map, ident, sizeof(ident)))
->  			continue;
->  		if (bpf_map__is_internal(map) &&
-> -		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> +		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) ||
-> +		     bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY))
-
-I think this gives us a hint on how we could structure is_skel_data
-above, we now have a special calss that is "mappable maps + PERCPU_ARRAY
-whose initial representation in userspace is mappable, but the loaded
-map isn't".
-
->  			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_valu=
-e, %2$zu);\n",
->  			       ident, bpf_map_mmap_sz(map));
->  		codegen("\
-> @@ -741,7 +766,7 @@ static int gen_trace(struct bpf_object *obj, const ch=
-ar *obj_name, const char *h
->  		const void *mmap_data =3D NULL;
->  		size_t mmap_size =3D 0;
-> =20
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_skel_data(map, ident, sizeof(ident)))
->  			continue;
-> =20
->  		codegen("\
-> @@ -849,8 +874,22 @@ static int gen_trace(struct bpf_object *obj, const c=
-har *obj_name, const char *h
->  	bpf_object__for_each_map(map, obj) {
->  		const char *mmap_flags;
-> =20
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_skel_data(map, ident, sizeof(ident)))
-> +			continue;
-> +
-> +		if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
-> +			codegen("\
-> +		\n\
-> +			err =3D skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_va=
-lue, %2$zd);\n\
-> +			if (err)					    \n\
-> +				return err;				    \n\
-> +		#ifdef __KERNEL__					    \n\
-> +			skel->%1$s =3D NULL;				    \n\
-> +		#endif							    \n\
-> +			",
-> +			ident, bpf_map_mmap_sz(map));
->  			continue;
-> +		}
-> =20
->  		if (bpf_map__map_flags(map) & BPF_F_RDONLY_PROG)
->  			mmap_flags =3D "PROT_READ";
-> @@ -955,8 +994,7 @@ codegen_maps_skeleton(struct bpf_object *obj, size_t =
-map_cnt, bool mmaped, bool
->  				map->map =3D &obj->maps.%s;	    \n\
->  			",
->  			i, bpf_map__name(map), ident);
-> -		/* memory-mapped internal maps */
-> -		if (mmaped && is_mmapable_map(map, ident, sizeof(ident))) {
-> +		if (mmaped && is_skel_data(map, ident, sizeof(ident))) {
->  			printf("\tmap->mmaped =3D (void **)&obj->%s;\n", ident);
->  		}
-> =20
-> @@ -1740,7 +1778,9 @@ static int do_subskeleton(int argc, char **argv)
->  		/* Also count all maps that have a name */
->  		map_cnt++;
-> =20
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_skel_data(map, ident, sizeof(ident)))
-> +			continue;
-> +		if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
->  			continue;
-
-Another instance of what I was talking about.
-
-> =20
->  		map_type_id =3D bpf_map__btf_value_type_id(map);
-> @@ -1863,7 +1903,9 @@ static int do_subskeleton(int argc, char **argv)
-> =20
->  	/* walk through each symbol and emit the runtime representation */
->  	bpf_object__for_each_map(map, obj) {
-> -		if (!is_mmapable_map(map, ident, sizeof(ident)))
-> +		if (!is_skel_data(map, ident, sizeof(ident)))
-> +			continue;
-> +		if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
->  			continue;
-> =20
->  		map_type_id =3D bpf_map__btf_value_type_id(map);
-> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.=
-h
-> index 53fee53d36d5..1f3f332dffbe 100644
-> --- a/tools/lib/bpf/skel_internal.h
-> +++ b/tools/lib/bpf/skel_internal.h
-> @@ -131,8 +131,10 @@ static inline void skel_free_map_data(void *p, __u64=
- addr, size_t sz)
->  {
->  	if (addr !=3D ~0ULL)
->  		kvfree(p);
-> -	/* When addr =3D=3D ~0ULL the 'p' points to
-> -	 * ((struct bpf_array *)map)->value. See skel_finalize_map_data.
-> +	/*
-> +	 * When addr =3D=3D ~0ULL the init buffer has already been released.
-> +	 * For skel_finalize_map_data(), 'p' points to
-> +	 * ((struct bpf_array *)map)->value.
->  	 */
->  }
-> =20
-> @@ -170,6 +172,15 @@ static inline void *skel_finalize_map_data(__u64 *in=
-it_val, size_t mmap_sz, int
->  	return addr;
->  }
-> =20
-> +static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t=
- sz)
-> +{
-> +	(void)sz;
-> +
-> +	kvfree(p);
-> +	*init_val =3D ~0ULL;
-> +	return 0;
+> +	ret =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, =
+insn_cnt, &prog_opts);
+> +	close(map);
+> +	return probe_fd(ret);
 > +}
 > +
->  #else
+>  typedef int (*feature_probe_fn)(int /* token_fd */);
 > =20
->  static inline void *skel_alloc(size_t size)
-> @@ -208,6 +219,15 @@ static inline void *skel_finalize_map_data(__u64 *in=
-it_val, size_t mmap_sz, int
->  		return NULL;
->  	return addr;
->  }
-> +
-> +static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t=
- sz)
-> +{
-> +	(void)init_val;
-> +
-> +	if (mprotect(p, sz, PROT_READ))
-> +		return -errno;
-> +	return 0;
-> +}
->  #endif
+>  static struct kern_feature_cache feature_cache;
+> @@ -707,6 +739,9 @@ static struct kern_feature_desc {
+>  	[FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
+>  		"BPF syscall common attributes support", probe_bpf_syscall_common_attr=
+s,
+>  	},
+> +	[FEAT_PERCPU_DATA] =3D {
+> +		"kernel supports percpu data", probe_kern_percpu_data,
+> +	},
+>  };
 > =20
->  static inline int skel_closenz(int fd)
+>  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
+id feat_id)
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index d5b7db703b3f..b786f1a35567 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -401,6 +401,8 @@ enum kern_feature_id {
+>  	FEAT_BTF_LAYOUT,
+>  	/* Kernel supports BPF syscall common attributes */
+>  	FEAT_BPF_SYSCALL_COMMON_ATTRS,
+> +	/* Kernel supports percpu data */
+> +	FEAT_PERCPU_DATA,
+>  	__FEAT_CNT,
+>  };
+> =20
 
