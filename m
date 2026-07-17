@@ -1,79 +1,227 @@
-Received: from ursule.remlab.net (vps-a2bccee9.vps.ovh.net [51.75.19.47])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD21399019;
-	Fri, 17 Jul 2026 06:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.75.19.47
+Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A663D952E;
+	Fri, 17 Jul 2026 06:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.13.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784271208; cv=none; b=MpOXD4FFAg5ezwirp/BrkLVVyy8PadUwx8m9JTUnie3kHpfu8YER1xni8ZFt/08o4MnU62KbE1+riRvNwWOIqZkSwlDiQE09XYhWy1AR4+6n+GePzusVbmKh9pQ9+er3oyRfLBFg1l4KQRQX7xGYTU4r4K8EjhGjCj2rGpBVFk8=
+	t=1784271585; cv=none; b=ub3hvgdRnwgykpU/1KCc1aW/ZztSnMbz6zPWM/DBbdyXqOKgH4wCMOk8dCUdomiYgYFOyClReaXR90WS9csdGsHY3QLkw+/uQuf0lFcTBJRHVpeDUyL7gUWw2InaShIGanvJMRRzDm3NFN5grwjMRKB/mDUD6zsSQr6FOkBwWXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784271208; c=relaxed/simple;
-	bh=rjZhK+rzux3E0Ho5AGauH7f2G2ySVu1fUzLTWtKffFE=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=kiD5Rw9VPIqzTW294iEfuc3vSDayYnUk1nMnIt/8d/WQ3fFZKVQZJ6MaqeFmFKVc3gqE/Z6yGUMaFQaA68loSBzf9nSu2GbAofzGsaEI6Nug0eAsC5pfYXmfUKWjJfcrqvwqDgBgX9vyS9ZMPb/YEHETYVgiZyetBMu7XuK/WjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=remlab.net; spf=pass smtp.mailfrom=remlab.net; arc=none smtp.client-ip=51.75.19.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=remlab.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=remlab.net
-Received: from ursule.remlab.net (localhost [IPv6:::1])
-	by ursule.remlab.net (Postfix) with ESMTP id AEC40C1725;
-	Fri, 17 Jul 2026 09:53:24 +0300 (EEST)
-Received: from ehlo.thunderbird.net ([2001:14bb:cc:4294::62a:201])
-	by ursule.remlab.net with ESMTPSA
-	id lS4YIWTRWWoQhQYAwZXkwQ
-	(envelope-from <remi@remlab.net>); Fri, 17 Jul 2026 09:53:24 +0300
-Date: Fri, 17 Jul 2026 09:53:22 +0300
-From: =?ISO-8859-1?Q?R=E9mi_Denis-Courmont?= <remi@remlab.net>
-To: Breno Leitao <leitao@debian.org>, sdf@fomichev.me,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexander Aring <alex.aring@gmail.com>,
- Stefan Schmidt <stefan@datenfreihafen.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Remi Denis-Courmont <courmisch@gmail.com>,
- =?ISO-8859-1?Q?R=E9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
-CC: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net-next_7/7=5D_selftests=3A_net=3A_getsock?=
- =?US-ASCII?Q?opt=5Fiter=3A_cover_rawv6=2C_ieee802154=2C_phonet_and_tls?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260716-getsockopt_phase4-v1-7-4f45cb12dce7@debian.org>
-References: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org> <20260716-getsockopt_phase4-v1-7-4f45cb12dce7@debian.org>
-Message-ID: <9B622591-E778-4DEC-8031-890F4039E9E4@remlab.net>
+	s=arc-20240116; t=1784271585; c=relaxed/simple;
+	bh=/Eb4pGZIUiO1BtW8WvwAJ4WS2WCw3AW7JzyVDb94x5I=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PtVraI8BunkZHTIEG4Cl+cCLO8igQ5fsFYNbtzSajLMA3TP2M8pRUrZiqOR+dyKtM3HBKcCyFGv03h2tCBPZy/+GP8Ay/k5KCjB2MTWjMQkvkUGUnqHunzsGvQKMWRdFJGTvrqqUyQKJAMi9UyMVgmKKXNyVa2+ZF7pbG2k7McI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=tdw7Uuie; arc=none smtp.client-ip=52.13.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="tdw7Uuie"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1784271584; x=1815807584;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KzZoZyH66Gr1YaLwfbHY8NCjXtnD+WSpcnpvxY5Pf9g=;
+  b=tdw7UuieE8NLXdAULoTgX0XMMS717ZHv3ZmpUZc2Waf2epkDH4R89zyc
+   pW0E68lzmU8Z53djKHmWL32yEdsUAPSm+0QRnOZ43L9Mox6KARDsW616e
+   ZHbyyuBna5t2y1yUmmojlc0DiKG5WsGkPCu2maAchioLpY9nPJCyH7Bxa
+   1/cmjZUqK5HfusH9PAtw8yk5+XsDrIpWqnOunZ7hOR3Bn6XMICcgc+29A
+   qy+/kfflr8D68zO3Cx436kULA+E7Ln3Y1zzyzq3sZXeNX1BaeGYX8dTLg
+   udVPNbUIwWcDa0ffwEpLgVLCtPoFpPxGgAo24YoYfGR3dzbvQGtYZOpFU
+   Q==;
+X-CSE-ConnectionGUID: 0m/tP6S7SJyT3lcwjyrtuA==
+X-CSE-MsgGUID: iZdeqcfLRKOADf1hQ0tayA==
+X-IronPort-AV: E=Sophos;i="6.25,168,1779148800"; 
+   d="scan'208";a="23825494"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 06:59:41 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:17743]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.48.250:2525] with esmtp (Farcaster)
+ id 3f68c504-f813-46fe-b5e4-1fa6b881a54b; Fri, 17 Jul 2026 06:59:41 +0000 (UTC)
+X-Farcaster-Flow-ID: 3f68c504-f813-46fe-b5e4-1fa6b881a54b
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Fri, 17 Jul 2026 06:59:40 +0000
+Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
+ Fri, 17 Jul 2026 06:59:34 +0000
+From: Arthur Kiyanovski <akiyano@amazon.com>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	<netdev@vger.kernel.org>
+CC: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
+	<richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+	<pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner
+	<tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, "Yonatan
+ Sarna" <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, "Alexander
+ Matushevsky" <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
+ Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>, Nafea Bshara
+	<nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal
+	<netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt
+	<benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon
+	<darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik
+	<ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, Bjorn Helgaas
+	<bhelgaas@google.com>, <vadim.fedorenko@linux.dev>
+Subject: [PATCH v5 net-next 0/7] ptp: Add PHC timestamp quality attributes
+Date: Fri, 17 Jul 2026 06:59:11 +0000
+Message-ID: <20260717065924.2556-1-akiyano@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+
+This series adds quality attributes to PTP Hardware Clock (PHC)
+timestamps, allowing userspace to obtain error bound, clock status,
+timescale, and system counter values alongside timestamps in a single
+call.
+
+Motivation
+----------
+The existing PTP APIs return timestamps without any indication of
+their quality. Applications that need clock accuracy and
+synchronization status commonly rely on external tools such as
+ptp4l, which implement synchronization logic and can export their
+measurement of clock accuracy. For managed PHC devices — such as
+the ENA network adapter, whose clock is synchronized by the device
+without userspace involvement — these tools are not available, and
+the existing APIs lack a way to report quality metrics to consumers
+of time.
+
+This was previously proposed as an RFC [1] with a single ioctl.
+Based on community feedback, the design was reworked to cover both
+the extended (multi-sample) and precise (cross-timestamp) paths.
+
+Design
+------
+The UAPI was redesigned based on Thomas Gleixner's proposal [2]:
+
+- A unified data structure (struct ptp_sys_offset_attrs) is used
+  for both extended and precise ioctls.
+
+- A u32 valid bitmask in struct ptp_clock_attrs indicates which
+  attributes are populated, replacing sentinel values. Drivers
+  set only the bits for attributes they provide.
+
+- System counter values (cycles + counter_id) are carried in
+  struct ptp_sys_time alongside each system timestamp. These are
+  populated by the timekeeping core cross-timestamp infrastructure,
+  which is now merged in net-next [3] — drivers do not fill them.
+  This series therefore applies directly to net-next with no
+  out-of-tree dependency.
+
+- Graceful degradation: the attrs ioctls work even on devices
+  without attrs callbacks, falling back to gettimex64 /
+  getcrosststamp and returning attrs.valid = 0.
+
+A capability flag is added to ptp_clock_caps so userspace can
+discover attributes support.
+
+Patches 2-3 add testptp support for the new ioctls.
+
+Patch 4 implements the attributes for ptp_vmclock, reporting
+error bound, clock status, and timescale.
+
+Patches 5-7 implement the attributes for the ENA driver,
+reporting error bound from the device's PHC layer.
+
+v5:
+- ptp: simplify ptp_sys_offset_{extended,precise}_attrs() to copy
+  the request header onto the stack and allocate the result buffer
+  once, instead of memdup_user() + kfree() + kzalloc(). (Saeed
+  Bshara)
+- ptp: deduplicate the kernel-doc for gettimexattrs64 /
+  getcrosststampattrs by referencing the base gettimex64 /
+  getcrosststamp callbacks. (Saeed Bshara)
+- ptp: add missing kernel-doc member descriptions for struct
+  ptp_timestamp and struct ptp_sys_offset_attrs.
+- selftests/ptp: map the clockid to a name and print once instead
+  of three duplicated printfs. (Saeed Bshara)
+- selftests/ptp: make -a a modifier on -x/-X instead of an
+  exclusive option; drop -A (use -X -a); trim the unknown-clock
+  output; print "not reported" for attributes the device does not
+  report. (Saeed Bshara)
+- ptp_vmclock: scope the local 'st' inside the SUPPORT_KVMCLOCK
+  block to fix an unused-variable warning on !CONFIG_KVM_GUEST.
+  (kernel test robot)
+- No UAPI changes; the ioctl structures are unchanged from v4.
+
+v4:
+- Complete UAPI redesign per Thomas Gleixner's proposal [2]:
+  unified data structure with u32 valid bitmask, system counter
+  in ptp_sys_time (populated by core, not drivers), graceful
+  degradation for devices without attrs callbacks. (Thomas Gleixner,
+  David Woodhouse)
+- Counter values moved from driver attrs callback to timekeeping
+  core infrastructure — drivers no longer set counter_id or
+  counter_value.
+- Flexible array member for timestamps[] (kernel bounds the copy,
+  userspace allocates for num_samples requested).
+- Drop separate ptp_clock_attributes kernel struct — driver
+  callbacks fill the UAPI ptp_clock_attrs directly.
+
+v3:
+- Remove patch 5/8 from v2 (return-code bugfix) — sent separately
+  as [PATCH net] to the net tree.
+- Zero-initialize struct ptp_clock_attributes in PTP core ioctl
+  handlers to prevent stack leak of unset fields. (Simon Horman,
+  sashiko)
+- ptp_vmclock: validate counter_period_shift < 128 to prevent
+  undefined behavior on untrusted hypervisor input. (sashiko)
+- ptp_vmclock: add overflow check on err_hi * NSEC_PER_SEC to
+  prevent silent wraparound producing erroneously small error
+  bound. (sashiko)
+- ptp_vmclock: report PTP_TIMESCALE_TAI after tai_adjust() to
+  avoid timescale mismatch. (sashiko)
+- ENA: set counter_id = 0, counter_value = 0 in gettimexattrs64
+  for defense-in-depth. (sashiko)
+
+v2:
+- Fix build bisectability: move ena_com.c consumer updates into
+  patch 6/8 and ena_phc.c caller update into patch 7/8 so each
+  patch compiles independently.
+- Add missing Cc for Amit Bernstein (co-author of ENA patches).
+
+[1] https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
+[2] https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
+[3] https://lore.kernel.org/all/20260526165826.392227559@kernel.org/
+
+Arthur Kiyanovski (7):
+  ptp: Add ioctls for PHC timestamps with quality attributes
+  selftests/ptp: Extract print_system_timestamp helper in testptp
+  selftests/ptp: Add testptp support for attributes ioctls
+  ptp: ptp_vmclock: Implement attributes ioctls
+  net: ena: Update PHC admin interface for error bound support
+  net: ena: Add error bound to PHC communication layer
+  net: ena: Implement gettimexattrs64 callback for PTP attributes
+
+ .../device_drivers/ethernet/amazon/ena.rst    |   2 +
+ .../net/ethernet/amazon/ena/ena_admin_defs.h  |  17 +-
+ drivers/net/ethernet/amazon/ena/ena_com.c     |  51 ++--
+ drivers/net/ethernet/amazon/ena/ena_com.h     |   5 +-
+ drivers/net/ethernet/amazon/ena/ena_debugfs.c |   3 +
+ drivers/net/ethernet/amazon/ena/ena_phc.c     |  61 +++-
+ drivers/ptp/ptp_chardev.c                     | 165 ++++++++++-
+ drivers/ptp/ptp_clock.c                       |   4 +-
+ drivers/ptp/ptp_vmclock.c                     | 197 +++++++++++--
+ include/linux/ptp_clock_kernel.h              |  19 ++
+ include/uapi/linux/ptp_clock.h                | 265 +++++++++++++++++-
+ tools/testing/selftests/ptp/testptp.c         | 189 ++++++++++---
+ 12 files changed, 868 insertions(+), 110 deletions(-)
 
 
+base-commit: f6f3b36c15ed44de1fbb44e645e4fae8c4a4453e
+-- 
+2.47.3
 
-Le 16 juillet 2026 16:00:05 GMT+03:00, Breno Leitao <leitao@debian=2Eorg> =
-a =C3=A9crit :
->Add fixtures for the newly converted getsockopt leaves:
->
->  - rawv6:      IPV6_HDRINCL / IPV6_CHECKSUM int paths + a SOL_RAW
->                unknown-optname case that reaches do_rawv6_getsockopt()=
-=2E
->  - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
->                rejection=2E
->  - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
->                rejection=2E
->  - tls:        TLS_TX_ZEROCOPY_RO, the TLS_TX crypto_info round-trip at
->                the base and full cipher sizes, the NULL-optval and short
->                buffer EINVAL paths, and an unknown optname=2E It skips w=
-hen
->                the kernel lacks TLS or AES-GCM=2E
->
->Each fixture pins the returned-length / errno semantics across exact,
->oversized and short buffers, an unknown optname and a bogus level=2E The
->semantics are unchanged by the sockopt_t conversion, so the tests pass
->both before and after the leaf conversions=2E
->
->Signed-off-by: Breno Leitao <leitao@debian=2Eorg>
-
-Acked-by: R=C3=A9mi Denis-Courmont <remi@remlab=2Enet>
