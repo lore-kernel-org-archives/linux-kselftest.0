@@ -1,35 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BA13E9287;
-	Fri, 17 Jul 2026 11:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F263A7F60
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 11:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784287237; cv=none; b=lqphoKZOvx7FZv/6bA6hFdOWm7LFGj0iWeo5Sp+/0ILARr3kWTmquVuBvVDEwp30Uk/HWlVvwYmWFitS5gobeHeoNrzSuXl/DS3U+4uM5jDZ/oZ5FgJV1TNCDaByVVloMEmAs/6P6k1WMFykwD1fMD+VLd0CCai1sK4z1k9rYoo=
+	t=1784288514; cv=none; b=jiKVnjd0U9HuYN82Bfe98F1V0THdw0PFV4fz40B6+KDmH2pVS8MfN4eWalxF0d4khjx9lzVMSa/WwuaENVtBXNE2GYNcGud3tYWObHkLlNppkigqCP3HjYNsIQLBNyhdMdkeT3Iq+VUudJAyxRY3PI8OxAkAaSlfelZOk6fAVC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784287237; c=relaxed/simple;
-	bh=dYX1Bfyk+gHyr/KTh2673NrOpuGbzAxe63C5Y1YFfgE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=owzWrAk8iHfE441ZmrLl/kZfB2jXSKe3DOvB00lXKgozdxFmhl4VxUiR7aTzMS8JG6PFhiQahNrW8jQG8MO8L1Ugdg6q2kvoughHPWqyZ4NZAqWjsgooXgW2ox7IHsOUCMHfE3pKaKQZMmgB2tn6E1JPdwNlWblu9eGpk/BtCwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UCoZ8dM8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784288514; c=relaxed/simple;
+	bh=pQLbU4q5XcLB32POztZFQQSFu5aZV8sMgUF21wS775g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j3sllKIeFEd7X4mKSu0JxguaB4ZuOYD3lXlBYrGO2vJ4Z5deQkWeLqPPCwKhqkHm0jh0R53STwR4Bd9GW/ZeMpp2grGy/tyXC78UqL3DYCIKCG5hPGB49X2zloUjYkNL/oo8IYYqDKouKcENpcmxaKmPDZnke6yNIDvWOeWTYHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a4Lk8ai3; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UCoZ8dM8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF2C1F000E9;
-	Fri, 17 Jul 2026 11:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784287236;
-	bh=Lwblyc6e8IcRziwZjm0LcWvApZnkJLAU2d+UtIpgZYk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UCoZ8dM88NjwLttG7W0g35DdYCcn0z16aJG0I9QvJ3Hsx1Sy5YA+H6EUk1nLhXIEY
-	 x0mG9+Bbni1V2+IlOj8+B4/Uf/zNRQaFC3aB5c1SYyePAgvcWIARViNt6y42GFdEM/
-	 5xmcwOYbMf65Q+yyY6hHe840ziRgNj9PRKLJeIJbd+OC/dyH5BqYyIgnCgYXnl61E9
-	 uYh45t1eArx1jbWjpGr7FEzvFr9bcjtFhSjvlFB+jinJnGQhvgQ9eWxDOWRkvPBu0X
-	 pKuRF5ROT6Ig9roVM1QVOG+x/qq/f7Rs0ewux92T++/DttJrUgtMTY0NAXn4BVSXYm
-	 aibrZKu3/hgmQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A91380CED4;
-	Fri, 17 Jul 2026 11:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a4Lk8ai3"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784288499;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CPf2mKJIcbXbO5Gzhm7rPQ8E1wgv0pM+yn6CIjtnrfo=;
+	b=a4Lk8ai35t5gFiLT6G2CInPLXAH13/b6myFA/QAhmOV6V6alspTEs0P6UlbCbndUj6D23L
+	iKRUQYpOj1DigNy0yuYO3ibFN5Ohj37ax6WPkk7IRyeWn3lcnjGybay2SyjoNC9xHlfdVT
+	B7Kd2aLx1nYUkgR2nG36/6g6H4CBfe8=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Woojin Ji <random6.xyz@gmail.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/4] bpf: Add memory usage for arena and selftest
+Date: Fri, 17 Jul 2026 19:37:00 +0800
+Message-ID: <20260717114117.350851-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,42 +55,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: netconsole: only restore MAC when it
- changed on resume
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178428720839.1673922.13110048586333988018.git-patchwork-notify@kernel.org>
-Date: Fri, 17 Jul 2026 11:20:08 +0000
-References: <20260710-netcons-mac-reload-v1-1-3fb1bcc70b4a@gmail.com>
-In-Reply-To: <20260710-netcons-mac-reload-v1-1-3fb1bcc70b4a@gmail.com>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: leitao@debian.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, matttbe@kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+arena is the only map type whose map_mem_usage() still returns 0, so
+bpftool and fdinfo always show 0 memlock for it no matter how many pages
+it holds. This series adds the accounting, runs the arena selftests
+serially so they don't OOM a small CI VM, and adds a test for it.
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+v1 -> v2:
+- split the scratch_page -> arena refactor into a prep patch (no
+  functional change)
+- use WRITE_ONCE() for nr_pages to pair with the lockless reader
+- reword the "run serially" commit message
+- selftest: alloc prog returns 0 so the failure check is reached
 
-On Fri, 10 Jul 2026 23:19:17 +0100 you wrote:
-> The "mac" bind mode reactivation downs the interface, restores the saved
-> MAC and renames it to trigger a target resume. This assumes the recreated
-> interface comes back with a different MAC, which is true under
-> MACAddressPolicy=none (as on the Netdev CI) but not when MACs are
-> persistent. In the persistent case netconsole resumes the target on its
-> own, and the down/restore/rename flow instead drops it and fails the test.
-> 
-> [...]
+v1: https://lore.kernel.org/bpf/20260716142746.8794-1-jiayuan.chen@linux.dev/
 
-Here is the summary with links:
-  - [net] selftests: netconsole: only restore MAC when it changed on resume
-    https://git.kernel.org/netdev/net/c/04aeddf2dadd
+Jiayuan Chen (4):
+  bpf: Pass arena instead of scratch_page to the pte callbacks
+  bpf: Add memory usage for arena
+  selftests/bpf: Run arena tests serially
+  selftests/bpf: Add tests for memory usage for arena
 
-You are awesome, thank you!
+ kernel/bpf/arena.c                            |  27 ++--
+ .../selftests/bpf/prog_tests/arena_atomics.c  |   2 +-
+ .../bpf/prog_tests/arena_direct_value.c       |   2 +-
+ .../selftests/bpf/prog_tests/arena_htab.c     |   2 +-
+ .../selftests/bpf/prog_tests/arena_list.c     |   2 +-
+ .../bpf/prog_tests/arena_mem_usage.c          | 122 ++++++++++++++++++
+ .../bpf/prog_tests/arena_spin_lock.c          |   2 +-
+ .../bpf/prog_tests/arena_strsearch.c          |   2 +-
+ .../selftests/bpf/prog_tests/libarena.c       |   2 +-
+ .../selftests/bpf/prog_tests/libarena_asan.c  |   2 +-
+ .../selftests/bpf/progs/arena_mem_usage.c     |  40 ++++++
+ 11 files changed, 186 insertions(+), 19 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_mem_usage.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
