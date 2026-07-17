@@ -1,465 +1,226 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC5D15A86D;
-	Fri, 17 Jul 2026 04:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B03635950
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 05:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784262185; cv=none; b=t8ekjjm8L66Awb2c05GeITBPDOgxJtghSK7CMjrEFK0tWTAvr1B3L1ePXTBB7Ax2GHEPqILFkmiFEHKzvHv/iGtrdwFIDKQeB6/jiwsddKLds3ZVvBsLxKvSZm8eM70ZdIuGLPUZe50Gtw2Hjx96UsUDjK2s+JS64Bit2ZFrM2c=
+	t=1784264934; cv=none; b=jiKTWXgEQubMZpwbqoxs/buyI2Dc6eVSiIWOZf2DpEX5RYyXP0ZDUicGjhjugpBVmWQ8LXnGk3qkZcUJq4u6/GC5UBjEtYxmBlCulyffwplzM80tATPI98cmJmiqYagVObULSmB8hUgzRCyyWfvymwJGDFvQ+wDI23wStkRwHb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784262185; c=relaxed/simple;
-	bh=5IfC82RjBl4mddCZTUgkUM+Qqp7TpAMPmq8dqa7ThlY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=II500/DBpU1XR43itHUDc2YWew8jeq0se98mcp9yWH/OIfXOLxPyRX4iHuL6+vENRasDNDO4IInOsdLB4raSglZMJHzxJRxElsdwPb2124anmhCRBQRvIJ374ndqeoRUwISoppGz63oyFwPn+mZxAeZRdudqpMa13fC265LL7Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hn6e2Bb6; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784264934; c=relaxed/simple;
+	bh=y8ra6iNrqOySRVd8TSKzMCECDm6NutDHBWQ2nV8+r/A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hllb2Gb+MU39iZhD5SFLdq4khqTlOCMZx/OH5+PM8HYg1tBFr9JJ55j+/yJINFf800oTfrUDpAuJV513BgKDy0yzFgPf5azGPo9JAmL2GaOXfovmt0LtkjQpN9SetUcMGvmgslqlefdu4fS5AoERO+RuO4N4EeFX0cWSAnY01tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=h2/JWY6w; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hn6e2Bb6"
-Message-ID: <72f75fac-e39d-4fa4-903d-eb734307c3c5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784262179;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uODrgicXLvj4e5C9B4P96p+sA4xdua+uWYhQeryRdrQ=;
-	b=hn6e2Bb6V07LGEIYwde3hgV/sqpMOk3i96DcYVx4Yl8mcr+prO7d4IKiM+/DguSWN/9+6T
-	Mb4X+kB5PNW5d6/T9SNkbnek+c6a7rk5f1Yy/pIS4vPbdhvntEJWnY+NBv2w31UcDrtojc
-	+hcBp+P5huR2BjQ7IuwGL+Q+un5cDMI=
-Date: Thu, 16 Jul 2026 21:22:51 -0700
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="h2/JWY6w"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8485ef63b68so6874006b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 22:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784264931; x=1784869731; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3Kk0LSnTy6u9JE2Hs6bboN5a228uN9ZkdsFyoBfZC18=;
+        b=h2/JWY6wyhsu0t1/kEfIGs3hanmDpW9uxt+roIer0HQTD4/nWDRWrEBL06STnPqjuL
+         lIntOnvO3RmVYG/UKWYvxhzSd7KwaZYST6oz34n/2E/HX/e63KV3nU/1o31XloxuH1hR
+         HtMOf4PDWglmXR5ZwrzEOGcRisKFO71YtBI9/CKR8b9d1GTjTf1oZARCYMdPaC+t64DF
+         fgiWIEaWX3ht9s5vO3t8DmpKfwsetkFluEoZEI8SkvCh7hZt5TcuE5DWXM+oeePuFSGV
+         nD6Yp5mnfvkYcq+1S9t2zuMcIkmumuP0ZMURe+XDgm5iQC6QxuFpZrn6mnydEDQqtuqI
+         GOSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784264931; x=1784869731;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3Kk0LSnTy6u9JE2Hs6bboN5a228uN9ZkdsFyoBfZC18=;
+        b=WZE0IIOK33ZtHHv5O46p8SqRau0P/e4qJXj6DKGYPkuzpWhr8TnyfFGkOXhqg6x699
+         qmzp8Pk4VHsXXhk6eqjREM+8WTRMIZo/LwjqKlDaS3MqQwzpej6HdeRvqdrqdrLk5Koi
+         vAxkjrJQ0F5aIK3Ginebx+5Hk5U67O70+bUjTropfvTgpGhkHl7ShwcuL2jPRgy7Sp8F
+         70h11dDBKaVPqI7p7qh7U7nN1DEOw9X+Hjl436E6Goies4SZnyrqePd49qR9FuO77/Ft
+         /h8/TXr16qk+nPLWi5sG6JrULHt7tl4Kg/a6RHNhadS36HnvfNhsQu8TVPTX6tjOYiM6
+         skRA==
+X-Forwarded-Encrypted: i=1; AHgh+RpeQ2Se1eX4wTh4F+lmMHURPGfUuP19Qq3hq0tlMaEil5T9uCm7oFva84+0WNIVQIS2+ml983931WZLkjTKeMI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxO4VW6HBrv42OkF+WHdQpF4BzS26q8TzAaeQQmHpTWRK776Dd
+	VlfX/pnjTKTCm6Sir8PWcsxg51ipZum7E6adY+/ImdHC3VBpMVRhXoGJU7qR+p+exDuouIkOoR7
+	gHHpX6Zk=
+X-Gm-Gg: AfdE7cknXBYt6BQz2SQweuxrdz+FLdp2IwgPIKTiucl3WqoHY6ZAQWFekBWXjVj6rsm
+	kchHqEGU8iQ5682L4sGENfibQfU4iksmhoCs4oJAiCXn2waBTSI9yBwbdHx7DVX9D0TvDF8Lj0A
+	JLFtoLCQVgAHXaHtfJhNk4SxseLzfV8mRObWJq0LuU0MQxdcT6R1uudXHOKHJ0jVVcmdkemHrH+
+	ot5/1wYhemYHs4yLxs3MpKzIi9BBqqYbWh5nq5HKaavOwCzRFNqYvSeNBd07kuxXRvlfwWXu2Ua
+	HF5lPwdYFVQOoze9b4rJZyUfqVcha2ChEcTxOZTqS0uCQjT2wNVw8Xu2MkSvzJq9mFcz6K51Y1j
+	8pPk89wz2n0HFNaUWgQY0U0SqLbOH41G8j+ItKepGZeMF1fOzgTq4L0r9Kl9+Ei+8b1jzxhHiPf
+	5UcfYGwv0PfVGE99eqcg0uM1W5aPvwTkdworqN7ypoew==
+X-Received: by 2002:a05:6a00:400b:b0:845:bda6:574b with SMTP id d2e1a72fcca58-84c292a0f41mr1060179b3a.5.1784264931283;
+        Thu, 16 Jul 2026 22:08:51 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2af6e48csm248690b3a.45.2026.07.16.22.08.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jul 2026 22:08:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH rdma-next v3 14/14] RDMA/selftests: Add rxe_netns_names
- test
-To: Jiri Pirko <jiri@resnulli.us>, linux-rdma@vger.kernel.org,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: cgroups@vger.kernel.org, netdev@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, jgg@ziepe.ca,
- leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, cmeiohas@nvidia.com,
- roman.gushchin@linux.dev, bvanassche@acm.org, zyjzyj2000@gmail.com,
- shuah@kernel.org, tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org,
- alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com,
- wenjia@linux.ibm.com, cui.tao@linux.dev
-References: <20260716132316.1495242-1-jiri@resnulli.us>
- <20260716132316.1495242-15-jiri@resnulli.us>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260716132316.1495242-15-jiri@resnulli.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 17 Jul 2026 01:08:49 -0400
+Message-Id: <DK0L4ONMR16L.29VHFM0R991ZH@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Quentin Monnet"
+ <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>
+Subject: Re: [PATCH bpf-next v10 1/9] bpf: Drop duplicate blank lines in
+ verifier
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
+ <20260715153254.92010-2-leon.hwang@linux.dev>
+In-Reply-To: <20260715153254.92010-2-leon.hwang@linux.dev>
+
+On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
+> There are many adjacent blank lines in the verifier that have accumulated
+> over time.
+>
+> Drop them for cleanup.
+>
+> No functional changes intended.
 
 
-在 2026/7/16 6:23, Jiri Pirko 写道:
-> From: Jiri Pirko <jiri@nvidia.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+What about the files we factored out of the verifier? E.g., backtrack.c
+also has the same issue.
+
 >
-> Add a kselftest script that exercises per-netns RDMA device naming
-> with RXE. Cover duplicate names across namespaces, move conflict
-> handling, move-with-rename, and same-namespace rename requests.
->
-> Signed-off-by: Jiri Pirko <jiri@nvidia.com>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
-> v2->v3:
-> - added wait for rdma devices are removed
-> - added retry for old rdma netns mode restore
-> v1->v2:
-> - fixed ktap_set_plan
-> - s/RXE_A/RXE_SAME/ in dup rename
-> ---
->   tools/testing/selftests/rdma/Makefile         |   3 +-
->   tools/testing/selftests/rdma/config           |   2 +
->   .../testing/selftests/rdma/rxe_netns_names.sh | 334 ++++++++++++++++++
->   3 files changed, 338 insertions(+), 1 deletion(-)
->   create mode 100755 tools/testing/selftests/rdma/rxe_netns_names.sh
+>  kernel/bpf/verifier.c | 14 --------------
+>  1 file changed, 14 deletions(-)
 >
-> diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
-> index 07af7f15c1bf..a91c14c45006 100644
-> --- a/tools/testing/selftests/rdma/Makefile
-> +++ b/tools/testing/selftests/rdma/Makefile
-> @@ -3,6 +3,7 @@ TEST_PROGS := rxe_rping_between_netns.sh \
->   		rxe_ipv6.sh \
->   		rxe_socket_with_netns.sh \
->   		rxe_test_NETDEV_UNREGISTER.sh \
-> -		rxe_sent_rcvd_bytes.sh
-> +		rxe_sent_rcvd_bytes.sh \
-> +		rxe_netns_names.sh
->   
->   include ../lib.mk
-> diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
-> index 4ffb814e253b..e1ff54ec0f57 100644
-> --- a/tools/testing/selftests/rdma/config
-> +++ b/tools/testing/selftests/rdma/config
-> @@ -1,3 +1,5 @@
->   CONFIG_TUN
->   CONFIG_VETH
-> +CONFIG_DUMMY
-> +CONFIG_NET_NS
->   CONFIG_RDMA_RXE
-> diff --git a/tools/testing/selftests/rdma/rxe_netns_names.sh b/tools/testing/selftests/rdma/rxe_netns_names.sh
-> new file mode 100755
-> index 000000000000..f40118407f4c
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rxe_netns_names.sh
-> @@ -0,0 +1,334 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Exercise RDMA device name handling across network namespaces.
-> +
-> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
-> +
-> +NAME_PREFIX="rxe_netns_names_$$"
-> +NETDEV_PREFIX="rxn$$"
-> +NS1="${NAME_PREFIX}ns1"
-> +NS2="${NAME_PREFIX}ns2"
-> +RXE_A="${NAME_PREFIX}rxe_a"
-> +RXE_B="${NAME_PREFIX}rxe_b"
-> +RXE_SAME="${NAME_PREFIX}rxe_same"
-> +RXE_NEW="${NAME_PREFIX}rxe_new"
-> +DUMMY_A="${NETDEV_PREFIX}a"
-> +DUMMY_B="${NETDEV_PREFIX}b"
-> +OLD_MODE=""
-> +MODE_CHANGED=0
-> +MODS=("dummy" "rdma_rxe")
-> +TEST_SAME_NAMES="same RDMA device name can exist in two net namespaces"
-> +TEST_MOVE_CONFLICT="move without rename fails on destination name conflict"
-> +TEST_MOVE_RENAME="move then rename succeeds"
-> +TEST_COMBINED_MOVE_RENAME="move with requested destination name succeeds"
-> +TEST_SAME_NETNS_DUP_RENAME="same-netns rename rejects duplicate name"
-> +TEST_TEARDOWN_RETURN="netns delete returns device to init_net and renames on conflict"
-> +
-> +ksft_skip()
-> +{
-> +	ktap_skip_all "$*"
-> +	exit "$KSFT_SKIP"
-> +}
-> +
-> +fail()
-> +{
-> +	ktap_exit_fail_msg "$*"
-> +}
-> +
-> +need_cmd()
-> +{
-> +	command -v "$1" >/dev/null 2>&1 || ksft_skip "missing command: $1"
-> +}
-> +
-> +rdma_ns()
-> +{
-> +	local ns=$1
-> +
-> +	shift
-> +	ip netns exec "$ns" rdma "$@"
-> +}
-> +
-> +rdma_dev_exists()
-> +{
-> +	local ns=$1
-> +	local dev=$2
-> +
-> +	if [ -n "$ns" ]; then
-> +		rdma_ns "$ns" dev show "$dev" >/dev/null 2>&1
-> +	else
-> +		rdma dev show "$dev" >/dev/null 2>&1
-> +	fi
-> +}
-> +
-> +add_dummy()
-> +{
-> +	local netdev=$1
-> +
-> +	ip link add "$netdev" type dummy || return 1
-> +	ip link set "$netdev" up || return 1
-> +}
-> +
-> +add_rxe()
-> +{
-> +	local dev=$1
-> +	local netdev=$2
-> +
-> +	rdma link add "$dev" type rxe netdev "$netdev"
-> +}
-> +
-> +rdma_dev_on_netdev()
-> +{
-> +	local netdev=$1
-> +
-> +	rdma link show 2>/dev/null | awk -v want="$netdev" '
-> +		{
-> +			for (i = 1; i < NF; i++)
-> +				if ($i == "netdev" && $(i + 1) == want) {
-> +					dev = $2
-> +					sub(/\/.*/, "", dev)
-> +					print dev
-> +					exit
-> +				}
-> +		}'
-> +}
-> +
-> +wait_rdma_dev_on_netdev()
-> +{
-> +	local netdev=$1
-> +	local dev
-> +	local i
-> +
-> +	for i in $(seq 1 50); do
-> +		dev=$(rdma_dev_on_netdev "$netdev")
-> +		if [ -n "$dev" ]; then
-> +			echo "$dev"
-> +			return 0
-> +		fi
-> +		sleep 0.1
-> +	done
-> +
-> +	return 1
-> +}
-> +
-> +# ip link del returns after NETDEV_UNREGISTER, but rxe tears the RDMA device
-> +# down asynchronously via ib_unregister_device_queued(). Wait until our names
-> +# are gone.
-> +wait_rdma_devs_gone()
-> +{
-> +	local i name ns
-> +	local names=("$RXE_A" "$RXE_B" "$RXE_SAME" "$RXE_NEW")
-> +
-> +	for i in $(seq 1 50); do
-> +		local found=0
-> +
-> +		for name in "${names[@]}"; do
-> +			if rdma_dev_exists "" "$name"; then
-> +				found=1
-> +				break
-> +			fi
-> +			for ns in "$NS1" "$NS2"; do
-> +				ip netns exec "$ns" true 2>/dev/null || continue
-> +				if rdma_dev_exists "$ns" "$name"; then
-> +					found=1
-> +					break 2
-> +				fi
-> +			done
-> +		done
-> +
-> +		[ "$found" -eq 0 ] && return 0
-> +		sleep 0.1
-> +	done
-> +
-> +	return 1
-> +}
-> +
-> +setup_devs()
-> +{
-> +	cleanup_devs || return 1
-> +
-> +	add_dummy "$DUMMY_A" || return 1
-> +	add_dummy "$DUMMY_B" || return 1
-> +
-> +	add_rxe "$RXE_A" "$DUMMY_A" || return 1
-> +	add_rxe "$RXE_B" "$DUMMY_B" || return 1
-> +}
-> +
-> +cleanup_devs()
-> +{
-> +	ip link del "$DUMMY_A" 2>/dev/null
-> +	ip link del "$DUMMY_B" 2>/dev/null
-> +	wait_rdma_devs_gone
-> +}
-> +
-> +setup()
-> +{
-> +	OLD_MODE=$(rdma system show 2>/dev/null |
-> +		   sed -n 's/.*netns \([^ ]*\).*/\1/p')
-> +	[ -n "$OLD_MODE" ] || ksft_skip "failed to read RDMA netns mode"
-> +
-> +	rdma system set netns exclusive >/dev/null 2>&1 ||
-> +		ksft_skip "rdma netns exclusive mode is not supported"
-> +	MODE_CHANGED=1
-> +
-> +	ip netns add "$NS1" || return 1
-> +	ip netns add "$NS2" || return 1
-> +}
-> +
-> +# ip netns del returns before rdma_dev_exit_net() removes the net from
-> +# rdma_nets. rdma_compatdev_set() returns -EBUSY until that completes, so
-> +# retry the mode restore instead of leaving the system in exclusive mode.
-> +restore_netns_mode()
-> +{
-> +	local i
-> +
-> +	[ "$MODE_CHANGED" -eq 1 ] || return 0
-> +
-> +	for i in $(seq 1 50); do
-> +		if rdma system set netns "$OLD_MODE" >/dev/null 2>&1; then
-> +			MODE_CHANGED=0
-> +			return 0
-> +		fi
-> +		sleep 0.1
-> +	done
-> +
-> +	echo "warning: failed to restore RDMA netns mode to $OLD_MODE" >&2
-> +	return 1
-> +}
-> +
-> +cleanup()
-> +{
-> +	cleanup_devs
-> +
-> +	ip netns del "$NS1" 2>/dev/null
-> +	ip netns del "$NS2" 2>/dev/null
-> +
-> +	restore_netns_mode
-> +
-> +	for m in "${MODS[@]}"; do
-> +		modprobe -r "$m" 2>/dev/null
-> +	done
-> +}
-> +
-> +rdma_supports_combined_move_rename()
-> +{
-> +	rdma dev help 2>&1 | grep -Eq 'netns .*name|name .*netns'
-> +}
-> +
-> +[ "$(id -u)" -eq 0 ] || ksft_skip "must be run as root"
-> +need_cmd ip
-> +need_cmd rdma
-> +need_cmd modprobe
-> +
-> +trap cleanup EXIT
-> +
-> +for m in "${MODS[@]}"; do
-> +	modinfo "$m" >/dev/null 2>&1 || ksft_skip "module $m not found"
-> +	modprobe "$m" || fail "failed to load $m"
-> +done
-> +
-> +setup || fail "failed to create net namespaces"
-> +
-> +ktap_print_header
-> +ktap_set_plan 6
-
-Hi, Jiri
-
-Thanks a lot.
-
-With the first version of this patch series, I already ran the selftests 
-with RXE, and everything worked as expected.
-
-Only test case 4 was skipped because it depends on a recent commit.
-
-Once that commit is merged, I'll rerun the tests.
-
-As for the numbering, I'm fine with changing it from 7 to 6.
-
-Thanks a lot.
-
-Zhu Yanjun
-
-> +
-> +if setup_devs &&
-> +   rdma dev set "$RXE_A" netns "$NS1" &&
-> +   rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" &&
-> +   rdma dev set "$RXE_B" netns "$NS2" &&
-> +   rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" &&
-> +   rdma_dev_exists "$NS1" "$RXE_SAME" &&
-> +   rdma_dev_exists "$NS2" "$RXE_SAME"; then
-> +	ktap_test_pass "$TEST_SAME_NAMES"
-> +else
-> +	ktap_test_fail "$TEST_SAME_NAMES"
-> +fi
-> +cleanup_devs
-> +
-> +if ! setup_devs ||
-> +   ! rdma dev set "$RXE_A" netns "$NS1" ||
-> +   ! rdma_ns "$NS1" dev set "$RXE_A" name "$RXE_SAME" ||
-> +   ! rdma dev set "$RXE_B" netns "$NS2" ||
-> +   ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME"; then
-> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
-> +elif rdma_ns "$NS1" dev set "$RXE_SAME" netns "$NS2" >/dev/null 2>&1; then
-> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
-> +elif rdma_dev_exists "$NS1" "$RXE_SAME" &&
-> +     rdma_dev_exists "$NS2" "$RXE_SAME"; then
-> +	ktap_test_pass "$TEST_MOVE_CONFLICT"
-> +else
-> +	ktap_test_fail "$TEST_MOVE_CONFLICT"
-> +fi
-> +cleanup_devs
-> +
-> +if ! setup_devs; then
-> +	ktap_test_fail "$TEST_MOVE_RENAME"
-> +elif rdma dev set "$RXE_A" netns "$NS2" &&
-> +     rdma_ns "$NS2" dev set "$RXE_A" name "$RXE_NEW"; then
-> +	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
-> +	   ! rdma_dev_exists "" "$RXE_A"; then
-> +		ktap_test_pass "$TEST_MOVE_RENAME"
-> +	else
-> +		ktap_test_fail "$TEST_MOVE_RENAME"
-> +	fi
-> +else
-> +	ktap_test_fail "$TEST_MOVE_RENAME"
-> +fi
-> +cleanup_devs
-> +
-> +if ! rdma_supports_combined_move_rename; then
-> +	ktap_test_skip "$TEST_COMBINED_MOVE_RENAME"
-> +elif ! setup_devs; then
-> +	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
-> +elif rdma dev set "$RXE_A" netns "$NS2" name "$RXE_NEW"; then
-> +	if rdma_dev_exists "$NS2" "$RXE_NEW" &&
-> +	   ! rdma_dev_exists "" "$RXE_A"; then
-> +		ktap_test_pass "$TEST_COMBINED_MOVE_RENAME"
-> +	else
-> +		ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
-> +	fi
-> +else
-> +	ktap_test_fail "$TEST_COMBINED_MOVE_RENAME"
-> +fi
-> +cleanup_devs
-> +
-> +if ! setup_devs; then
-> +	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
-> +elif rdma dev set "$RXE_A" name "$RXE_SAME" &&
-> +     rdma dev set "$RXE_B" name "$RXE_NEW"; then
-> +	if rdma dev set "$RXE_SAME" name "$RXE_NEW" >/dev/null 2>&1; then
-> +		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
-> +	elif rdma_dev_exists "" "$RXE_SAME" &&
-> +	     rdma_dev_exists "" "$RXE_NEW"; then
-> +		ktap_test_pass "$TEST_SAME_NETNS_DUP_RENAME"
-> +	else
-> +		ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
-> +	fi
-> +else
-> +	ktap_test_fail "$TEST_SAME_NETNS_DUP_RENAME"
-> +fi
-> +cleanup_devs
-> +
-> +if ! setup_devs; then
-> +	ktap_test_fail "$TEST_TEARDOWN_RETURN"
-> +elif ! rdma dev set "$RXE_A" name "$RXE_SAME" ||
-> +     ! rdma dev set "$RXE_B" netns "$NS2" ||
-> +     ! rdma_ns "$NS2" dev set "$RXE_B" name "$RXE_SAME" ||
-> +     ! rdma_dev_exists "$NS2" "$RXE_SAME"; then
-> +	ktap_test_fail "$TEST_TEARDOWN_RETURN"
-> +else
-> +	ip netns del "$NS2"
-> +	returned=$(wait_rdma_dev_on_netdev "$DUMMY_B")
-> +	ktap_print_msg "device returned to init_net as '${returned:-<missing>}'"
-> +	if rdma_dev_exists "" "$RXE_SAME" &&
-> +	   [ -n "$returned" ] &&
-> +	   [ "$returned" != "$RXE_SAME" ] &&
-> +	   [ "${returned#ibdev}" != "$returned" ]; then
-> +		ktap_test_pass "$TEST_TEARDOWN_RETURN"
-> +	else
-> +		ktap_test_fail "$TEST_TEARDOWN_RETURN"
-> +	fi
-> +fi
-> +cleanup_devs
-> +
-> +ktap_finished
-
--- 
-Best Regards,
-Yanjun.Zhu
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index de816063ae63..e1244a721194 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -634,7 +634,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *r=
+eg,
+>  			      enum bpf_dynptr_type type,
+>  			      bool first_slot, int id, int parent_id);
+> =20
+> -
+>  static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
+>  				   struct bpf_reg_state *sreg1,
+>  				   struct bpf_reg_state *sreg2,
+> @@ -1671,7 +1670,6 @@ static bool same_callsites(struct bpf_verifier_stat=
+e *a, struct bpf_verifier_sta
+>  	return true;
+>  }
+> =20
+> -
+>  void bpf_free_backedges(struct bpf_scc_visit *visit)
+>  {
+>  	struct bpf_scc_backedge *backedge, *next;
+> @@ -2291,7 +2289,6 @@ static struct bpf_verifier_state *push_async_cb(str=
+uct bpf_verifier_env *env,
+>  	return &elem->st;
+>  }
+> =20
+> -
+>  static int cmp_subprogs(const void *a, const void *b)
+>  {
+>  	return ((struct bpf_subprog_info *)a)->start -
+> @@ -4044,7 +4041,6 @@ static int check_stack_read(struct bpf_verifier_env=
+ *env,
+>  	return err;
+>  }
+> =20
+> -
+>  /* check_stack_write dispatches to check_stack_write_fixed_off or
+>   * check_stack_write_var_off.
+>   *
+> @@ -4840,7 +4836,6 @@ static int check_sock_access(struct bpf_verifier_en=
+v *env, int insn_idx,
+>  		valid =3D false;
+>  	}
+> =20
+> -
+>  	if (valid) {
+>  		env->insn_aux_data[insn_idx].ctx_field_size =3D
+>  			info.ctx_field_size;
+> @@ -6683,7 +6678,6 @@ static int check_stack_range_initialized(
+>  	if (err)
+>  		return err;
+> =20
+> -
+>  	if (tnum_is_const(reg->var_off)) {
+>  		min_off =3D max_off =3D reg->var_off.value + off;
+>  	} else {
+> @@ -7404,7 +7398,6 @@ static bool is_iter_new_kfunc(struct bpf_call_arg_m=
+eta *meta)
+>  	return meta->kfunc_flags & KF_ITER_NEW;
+>  }
+> =20
+> -
+>  static bool is_iter_destroy_kfunc(struct bpf_call_arg_meta *meta)
+>  {
+>  	return meta->kfunc_flags & KF_ITER_DESTROY;
+> @@ -11539,7 +11532,6 @@ static int process_irq_flag(struct bpf_verifier_e=
+nv *env, struct bpf_reg_state *
+>  	return 0;
+>  }
+> =20
+> -
+>  static int ref_set_non_owning(struct bpf_verifier_env *env, struct bpf_r=
+eg_state *reg)
+>  {
+>  	struct btf_record *rec =3D reg_btf_record(reg);
+> @@ -16421,7 +16413,6 @@ static int check_ld_abs(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+>  	return 0;
+>  }
+> =20
+> -
+>  static bool return_retval_range(struct bpf_verifier_env *env, struct bpf=
+_retval_range *range)
+>  {
+>  	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+> @@ -18363,8 +18354,6 @@ static void release_insn_arrays(struct bpf_verifi=
+er_env *env)
+>  		bpf_insn_array_release(env->insn_array_maps[i]);
+>  }
+> =20
+> -
+> -
+>  /* The verifier does more data flow analysis than llvm and will not
+>   * explore branches that are dead at run time. Malicious programs can
+>   * have dead code too. Therefore replace all dead at-run-time code
+> @@ -18392,8 +18381,6 @@ static void sanitize_dead_code(struct bpf_verifie=
+r_env *env)
+>  	}
+>  }
+> =20
+> -
+> -
+>  static void free_states(struct bpf_verifier_env *env)
+>  {
+>  	struct bpf_verifier_state_list *sl;
+> @@ -18675,7 +18662,6 @@ static int do_check_main(struct bpf_verifier_env =
+*env)
+>  	return ret;
+>  }
+> =20
+> -
+>  static void print_verification_stats(struct bpf_verifier_env *env)
+>  {
+>  	/* Skip over hidden subprogs which are not verified. */
 
