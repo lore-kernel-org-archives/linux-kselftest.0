@@ -1,95 +1,102 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55CEB3B813A
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 12:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E6B3E1CEF;
+	Fri, 17 Jul 2026 12:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784292752; cv=none; b=tDGDd8R4pNc3rXbLloQOySESzwOcxRj6NchTyXicFQH3fSKOuvVV+57wq77HCQzfzNx8cUZOuDHyJ4jHikuEuTjjdaLaj7WU/7KkQOjRsUPa63v6HvRShmO4P6lNRl4tqxDAX/EvVAVDODFnz+KWCi5ttdR8ng7yJJUaMhu0j0A=
+	t=1784292857; cv=none; b=ADb9bFnXL7wi/dQ66igHtLDnoYh6B8Q3VneT+sv+FZOpgM7YWMip50i5J7GYyzCPCRBZ2h2hCvzLz22CRfiPp4k4T0FyPN7YdF27h3W49Ok6yGobyIHzrCX9bIJWuYsuJaBQMCiFqE1Txxl4j10dUaF1ETgoEU+37dXERflO9E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784292752; c=relaxed/simple;
-	bh=qcXKtC3ZrTU+xH5ESm7ZNlha3v9nqIfUEKtHifH8/90=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VdVKM6xYSnoaHBwKAG70Q39uSsM3honzIXW0EobeQT9BOiCZY/cwPq7HxVv5fIfGYK6vXU+84L/6kQ/l60OTzYY1NHsZcmGRM2lZkB5xiZAC6aON7/ET6gIn7hj4PrHTX5RdGkKqIdshf2PBpMYls3Xd2t6uS48z8h1zJ1EtGOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ARmo0lja; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784292857; c=relaxed/simple;
+	bh=GsNjtOzEtpfYQr754hqRJlqmpZDW1+0T3geCNbKwdZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W3qfqP1rvbMynRy3KEipOR7FWy4vnhaEFX3gEqB1Arx1PA0DHdDsdYOeo90HR4FQbMhxXiOM44Iw3Zaz/zMDHs6NXmbjqW9xY84qdIXaza3+YaitWYAgWgH0NVUR3gIMtAiZvyPm9Ym+4343/IwlHMX6NN4FMXIjbnF9l+fIlJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=ZbE592zy; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ARmo0lja"
-Message-ID: <274129a4-88cd-49d4-9148-5112a8ac59e3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784292739;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hn9QwYS5Hnn8xy3tAU+w/YBUSwnNVbbezxTsE7lXOo8=;
-	b=ARmo0ljaLNgAdnffwIhyynWY0D3wjDVVQrVkrVju5/PNwYBhU9d5C0uKaMH0ev5dHFPbOT
-	in5qrxINczp8ItAtbgUcCpRpjWL+WJ1/qwVpZuAYfjfZoHMnkhnfrbHr7gzcxG/BfgRgN0
-	vjbOny6VFB7rwW3irmRaGlMwuQsXgKA=
-Date: Fri, 17 Jul 2026 20:51:58 +0800
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="ZbE592zy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
+	Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=KvBE6
+	w7iPBhyaQ2qmkua2gCM+8n6qaD69gXol9+z+zk=; b=ZbE592zyM0SoYrL9EKqWD
+	qrLmE7Mo9gG5vtTha/DeegruBuvr1MB0505JzJiJdMeEVHtpvbKEmVJkxZbq4BRb
+	gFIEY+ZxIM/Los7aIRZbu+zXiYUCaj4fTF3eP59wr7Yh0FRxBDZnj2UslHDwLhB5
+	AekqXMx93QrCf5iQOIg5mw=
+Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
+	by web3 (Coremail) with SMTP id ygQGZQDntRTdJVpqswkQAA--.23244S2;
+	Fri, 17 Jul 2026 20:53:59 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/2] bpf: Reject arena frees below the arena base
+Date: Fri, 17 Jul 2026 12:53:46 +0000
+Message-Id: <20260717-c10-031-public-bpf-next-v2-b4-v2-0-54b555443a7c@mails.tsinghua.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: cui.tao@linux.dev, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/cgroup: Remove redundant cg_enter_current()
- call in test_core
-To: guojian <guojian@kylinos.cn>, tj@kernel.org, hannes@cmpxchg.org,
- mkoutny@suse.com, shuah@kernel.org
-References: <20260717110606.298368-1-guojian@kylinos.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20260717110606.298368-1-guojian@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID:ygQGZQDntRTdJVpqswkQAA--.23244S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw43XFyrZr47XF1xZFWUArb_yoWkGrb_Wr
+	48Ka4DGr4DWFnI9a4Ykr1fZrW8CrWUKry3Ar40gFW7Xry5ZF17GFs3ArnIvryxGa1Ygr95
+	JF1akFn7ArZ3ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb6AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+	1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+	4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r
+	yUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+	0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
+	JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
+	AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbqXdUUUUUU=
+	=
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
+bpf_arena_free_pages() can be called with a scalar arena address. The
+runtime reconstructs a full user address from the arena base and the low
+32 bits before returning the range to the arena free tree. A scalar one
+page below the arena base can otherwise produce an out-of-domain free-tree
+offset and make a later allocation return an address below the arena
+mapping.
 
+Patch 1 rejects frees whose reconstructed full user address is below
+user_vm_start. Patch 2 adds verifier_arena coverage for the
+scalar-below-base case.
 
-在 2026/7/17 19:06, guojian 写道:
-> From: Jian Guo <guojian@kylinos.cn>
-> 
-> The test_cgcore_no_internal_process_constraint_on_threads test has two
-> back-to-back cg_enter_current(root) calls in its cleanup path.
-> 
-> A single cg_enter_current() call atomically migrates the entire thread
-> group to the target cgroup even for multi-threaded processes, and this
-> test creates no extra threads or child processes that would require a
-> second migration attempt. The second call is a harmless no-op once the
-> process is already in the root cgroup, but it is redundant and
-> inconsistent with the cleanup logic used in all other cgroup core
-> selftest cases.
-> 
-> Remove the duplicate call to clean up the code. No functional change is
-> intended.
-> 
-> Signed-off-by: Jian Guo <guojian@kylinos.cn>
-> ---
->  tools/testing/selftests/cgroup/test_core.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-> index 88ca832d4fc1..8e3f9b391e44 100644
-> --- a/tools/testing/selftests/cgroup/test_core.c
-> +++ b/tools/testing/selftests/cgroup/test_core.c
-> @@ -426,7 +426,6 @@ static int test_cgcore_no_internal_process_constraint_on_threads(const char *roo
->  	ret = KSFT_PASS;
->  
->  cleanup:
-> -	cg_enter_current(root);
->  	cg_enter_current(root);
->  	if (child)
->  		cg_destroy(child);
+Changes in v2:
+- Add Reviewed-by tags from Emil Tsalapatis.
+- Remove the empty inline asm from the selftest.
 
-Ran test_core on x86_64 (cgroup v2, all controllers available),
-12/12 pass, 0 fail, 0 skip — output byte-identical before and
-after the patch. Confirms the removed call is a no-op.
+v1: https://lore.kernel.org/bpf/cover.1782813442.git.chenyy23@mails.tsinghua.edu.cn/
 
-Acked-by: Tao Cui <cuitao@kylinos.cn>
+Yiyang Chen (2):
+  bpf: Reject arena frees below the arena base
+  selftests/bpf: Cover scalar arena frees below the base
 
-Thanks,
-Tao
+ kernel/bpf/arena.c                                 |  2 ++
+ tools/testing/selftests/bpf/progs/verifier_arena.c | 40 +++++++++++++++++++---
+ 2 files changed, 37 insertions(+), 5 deletions(-)
+
+base-commit: 1d91ea01185656ac3ee63c5f9f6f8bde3c746b3d
+-- 
+2.34.1
+
