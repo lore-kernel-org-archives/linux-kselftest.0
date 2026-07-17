@@ -1,84 +1,86 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FFE2C11C4;
-	Fri, 17 Jul 2026 15:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D7D33BBCB;
+	Fri, 17 Jul 2026 15:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303037; cv=none; b=BweW1SPzmPfq4s+5+VCYptwmBq3y67/NIFQWTu1cX+nh0gfw5YW60Zbm7dup/groiE5EKUGqMrrv6FFDpkpUwk+ShOHqvi8fXl+DfrmD897zaZ60D5wdU7qc0dC4GOWeh/4rVi/nGPp2LbB9+K5OTppw9uYjAOJsq+muITuus1M=
+	t=1784303048; cv=none; b=P1sFboTg8mQ8CPuB02mK8ZJjjw1xtEUIGSDLiDBOOdMAlHhkzVmJcdG76+/yKWOMx1gcwB+FszchPsJzIkgZRCOY7zhgMk2Hgm5WGH3b98JoGzV13lSfZly+38mMbzvW7ynzPoPL0qC/XvbTT+xpKTIOp7mBvsEtO3gU3cnGmYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303037; c=relaxed/simple;
-	bh=VpjJe2JfDCSec3LSyM2oNupD6f5ORXd35g/fIttj7mU=;
+	s=arc-20240116; t=1784303048; c=relaxed/simple;
+	bh=asADGNchxVu0HONbbV+pf/qMEXxQgodIOPxZSeOXvi8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eBiX/v2DdQ4F3m/czsHwgo6Mdo5ADD6/+WePNZOCKLsRmN+mNZeT9RNcHiBNKAhGsqHsqpEtF0HCfSEsChzE61OKV7c9sOvIVwkONA8xHYywtlbTWdYW2QZw3n/q5IyKmF0o7WRhOs5Q8iI33QqJd2hEQDDGY6rclnZwJgBVFcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=GkEboOpv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jNT1YDxq; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version:Content-Type; b=X8m8unZJN0BHa0cNHZXWv4kMnOg2pNg0ITacZEDWyAO5+iNGIxFmcQvBwolE34QUpyD9K6EYOHE7eAUoq/QIZqHCmMOmu/wwMyJbaNkri32gShZ+/s3BRo0H9KH0EgrKbyA513dtKh9nUYJ2dMo4BXVuDuXFvZKkN6uqvYCcsvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=O9ggdr9U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qAsNhoFk; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="GkEboOpv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jNT1YDxq"
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="O9ggdr9U";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qAsNhoFk"
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E5174140011F;
-	Fri, 17 Jul 2026 11:43:53 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Fri, 17 Jul 2026 11:43:53 -0400
+	by mailfout.phl.internal (Postfix) with ESMTP id 2D142EC01CE;
+	Fri, 17 Jul 2026 11:44:06 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Fri, 17 Jul 2026 11:44:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1784303033;
-	 x=1784389433; bh=BGBh5ijHRJh+02AFHFZvYLL90NolghTRj6Q1F0snpwE=; b=
-	GkEboOpvwxQ9Kp30Rml1KxvEdZoGXKD9u0cfkDiFWZsNGieGTlAzJMW+zAztvjnG
-	Fo93jdoOFcOYYUS1DSLOKi1QVHS4L0KR2g1lU8hMHBW2PJ9Q4hCXBVNpp9eiPEsi
-	ZBiEF/SN7Uoh4DZhXqbo86vpGeO9HTt/Icx6lb39wEsL+LLZbotECSjhwnnLuhxY
-	kCa4/Tg8UtUJnDUHBnmv7eEO9jJOjx5sxd1fuzZDhOqNstFxi/GU4KZcIFSHV8uh
-	xxQ76RkHoa/BDwrzEUV424HRMHs8v78L/GQvUjwF/fbkibyxfxEbXiDg4g4mXVti
-	uTc6qYzyGbbXiwLe0nRUmg==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1784303046;
+	 x=1784389446; bh=Cx3wM1kOoxCwe0QweWs20VV3ZbFkdoj/04lxX9YItvE=; b=
+	O9ggdr9UYKgJ2zDiVFCYmrnsO3Chnp5gxz/VWjW+q/ggC6OU3oyvaazwT8Uf0eEN
+	ipbcqUHkGcXslAFw+vN68QDcTEGgNseYqE7sGzVtjzFZI5gEEeeMMe4A8eYl71iV
+	c+Z2dsVtwpv6VWOFS9+L8dOHTJmXnWh76URFCxd/QINFzVPjO4bIey2+s8wj366t
+	kTyEYatj3TSpAG5T+IQPDKDr/HHDdtEeUAE/y2MTRiTZQgbxQE7x3vjIqxO1M9E5
+	XVuqi9Bl+nH8YHrgKH0mvxjx5t/3wURLbaFphv4fjoErZH+VEbKpIvtqfLzHxvMH
+	ssj1I6BqaE8y48X8Ol/oag==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784303033; x=
-	1784389433; bh=BGBh5ijHRJh+02AFHFZvYLL90NolghTRj6Q1F0snpwE=; b=j
-	NT1YDxqgFKo5H7NxZjfPJvhG8NKhoMPuOWMaxzCT9rI6bhc0AvB212/DDsaVYO7S
-	mnP6w7SnzGYMCqd3aNfBuXDQrlUExcLxzm+9PZJCl8Az0MvAyJMzXyTsb9eEgdfM
-	ykJEvrZvOb9H4SIJYR+pLViI4LDM78SStWnTDE85TJqpIp+GY6FuMvQiPlEVu5ic
-	UEN7Hgi2QqgFca1jp9osysVL9lyqqoNYqSOMexpGD1fcCuJxf82I7QfIoybUR3dl
-	P5mjUmS7yQhpm/7YgfNV37cwuN8pz8dsJx3LMqRBI3VHXHWAKy64gifQuPsCHWrO
-	3G8ps5ob8J8rvRIBbliGw==
-X-ME-Sender: <xms:uU1aahSmtMqVoW_lt6pLkRKllD0mq2f22W20ooz1WnO5UF-H5nK3ew>
-    <xme:uU1aaiYKa4JWsnLPh8RJfgMKc7S8Gmp3H7XOXHM1hbyonvu_13Rng1cHfGfBBQGdU
-    ovLMKjWkgqahkPjd2zNZMMxfEI9DzZVikQjurCCKCVWLnSGHsW6QA>
-X-ME-Received: <xmr:uU1aakdxIpChOycg6Vyh3JBn3CEjfb7OIAHtZZR4gjWsFH2wPkYk7--syPE>
-X-ME-Proxy-Cause: dmFkZTEy2zXuER1XoNziIjJVIVvASb/84FYkJYNW70SRcx1M3RLiBAgvmGliwMHBjBQit5
-    +wTFsfvGUWIW0lQDJq3TCFmrnSx9hh1eF+8ZIyHYplayqqo8q062CwIhOvW7Yhgm0zA6gg
-    Alo/KuFijTpJ0UY5xqJcBS6jKLZBdO6CXQrU1Dt5QlzpJeVNL58WCcglOgabKVP7LKJJiS
-    BvlqJiEZMzVWlZ3Nn8002anKqzbuOUZp4kO8qpRm5nAcu9yeEiv9hJzv6MXTx5wTCI4c8q
-    fr/ve8GN6ABxB8ra86i2SzSeHI+JdzR3bfHc5XWhLZmX3shgf+iUxMKWU9O5fHmeYievdY
-    pX4ZQxqQ4Oc/PorBl6auMdNfwAEvGLxvm2863uu7pOpkY3cXY2nnwCdSPW6VdSAi2F+4ZV
-    QwPfehyt1bZRd4pXFG2UWTQtbqbE7iXY5kadMfURGOLe68f2uT3HPNnlydq17xnyzV1iss
-    kirpOZPNy3jOp/WG0WD3scKRafi94XWxksh26NAsuf67hw86Y8ATd+dn3bh29pgMhWBi/C
-    8q4igpam1wE0wo5eTJXVX21HFFOf9W+e8H116y5vagy7Ly2dKiGzHjmEHYXq5nLuG3cHJo
-    PNq2mC7T8IyS4NV5HWabPnCGNmHJ7MQSF+ySyMOS/Tl6JcDY+7PkjoDWq4HQ
-X-ME-Proxy: <xmx:uU1aajLDcOO_rpjeR_0wgnBua7KwX0GExC_7Ott291srFLsBM9-Zsg>
-    <xmx:uU1aahImY-lcbqU7S6Q7l8VN6U8WOMHEj6DP9BcIMdBiaa4-l5QUDQ>
-    <xmx:uU1aaiXwQVD60JVlsW6MLGM2LYZkU7eGYyED4GRU6XAytqwjkw6fVQ>
-    <xmx:uU1aaql7qMIRhR3fz0EHpHMFND8Y6AoBMYU32mWvAfGUMCFue2gDvQ>
-    <xmx:uU1aasLlEBJCidToeK6OUT1yqLmRIQV8AjD4s7pJ9Ke1YqIUz7o9rrUv>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784303046; x=
+	1784389446; bh=Cx3wM1kOoxCwe0QweWs20VV3ZbFkdoj/04lxX9YItvE=; b=q
+	AsNhoFkueLvzbK/wz+EsgH9VD6q7m8Gxb/o2oe1zjtGXPkjV9gOhYqigZmxbwYse
+	uj1PzjXGDCbCGNL8E+n8xqPuxFgNvOkuELdUVWK76hOQ2bdQQXjFROP/o1boUsQ4
+	XcJsY1mHFRor7kbFqqEiEhmqPmFxypGT6h1aRUeH60u6etVFHvkIDXXvtlwf0tvP
+	pLG48LQT7wJd55GAXaWD7medujeW3kV5C7EwD4+ANVSk/qFre7z6Yr3jo5AmowGl
+	IkCVWU7fFOEJE2Y6uk1fJ46xB2zTE2V/9WdGVd7nmbG/by89wMGgshHCl/GuUiEx
+	0H0UXzeNnyWVhJx0V4KAg==
+X-ME-Sender: <xms:xU1aamgJDnMAAKg0bp4gK9-lKGdNKPMpW6qWySDivSB5Ue1UJZXKKw>
+    <xme:xU1aatDoT05Vh5e-F-xUky3pwcRZ6406BELTtOzGH0BETzAj577SrOWN0n3Q1Zgzy
+    sD_0eUju1X_hMfOxCfBCCcGK8iY4L4aXV_5DY7wdU65M6uW3MXGng>
+X-ME-Received: <xmr:xU1aao5psbbFCRvVHVUIV5zjVA6ynWn3jejla7rd2m-4cuH-j4iqdrX1Sb4>
+X-ME-Proxy-Cause: dmFkZTGtimudHPAbfThGNZ+h80ULP4BKReBQeYGrgBsyON1ztJiWLSAAIZDnG8fToEG3XU
+    fB0cHbYtowPGntdAcFDq4GKEfwsNpWYO+isPzGhlQzNrheThNlwPGdswI2Lrk8PTaL2Jp0
+    hoQfsEk1tnVAcbMSxs3aqEIk2LYLvvr2aB5CAGNMfHAZIDB9m8rtehdEVDjKrVmWwB9WLB
+    5IN6/bSY+39/QkTRPRGEI73E8PLSp1VRWpZZnRHKG/riYrW+X+A+H/H73XzFhKdE4ymJIF
+    2G8vDJSZGjHwWxx3kh3VQc+5xaIftx/QAtimz1soPXvtE1hFGBnBDZuf91W4JSWj5iOwcG
+    XMosao8AHIjMys3mlDUJL0hrKTekUT08a1vWPl5NLn9LibmJE2JEdH8oVtg387WMXe+J8w
+    HquD54Q5CYWUMD9ENKQt1q26SQa0hX9MtmeGmnTwF5PEkvqpQsQbJvE44t9yZWw2ABPX2n
+    Q7P8UyVyWVkPWVOAzFiCY2HumHY8Nxdi57IBn1n8W8x//MghhSqCBntNeSiKijrJTWpqwl
+    JHHsQh0EcZjNg8FaELS1CQn3aPzuyHLyxjv/ep2dTUSjfR49yNDnRLIkSoNRuCu6qjDaeO
+    lf+g77j5d+GVMLFUWKGP1a+tSSvA5iPK9UNf1r+ILjNlPw56zlRU3EjKvamg
+X-ME-Proxy: <xmx:xU1aaiGWuWPi8XxvEKWunRIMYnZQzJy4C91g-gIGGWaUTPHyzYDHUA>
+    <xmx:xU1aajBUzcDgDH0lTr7tI-DwgMV8LmULreJk_IfMJDBLRxCdfe7DOg>
+    <xmx:xU1aanx-yC86MjeFtU49z8SkVcq4mBq3IJ7dfEKToAAEIQj8I5uYwA>
+    <xmx:xU1aan6Gn5Oktjg-V4tu3SEUT0pKNdMBGjZDyOGBbqjS_jr-P8uQ6Q>
+    <xmx:xk1aao0FtafbVc0FCr4S584gHzsPI-stdjv_Acr-sIAbFQ6rqvpo2gnN>
 Feedback-ID: i03f14258:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Jul 2026 11:43:52 -0400 (EDT)
-Date: Fri, 17 Jul 2026 09:43:50 -0600
+ 17 Jul 2026 11:44:04 -0400 (EDT)
+Date: Fri, 17 Jul 2026 09:43:52 -0600
 From: Alex Williamson <alex@shazbot.org>
-To: Rubin Du <rubind@nvidia.com>
+To: Alex Mastro <amastro@fb.com>
 Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, alex@shazbot.org
-Subject: Re: [PATCH v14 0/4] vfio: selftest: Add NVIDIA GPU Falcon DMA test
- driver
-Message-ID: <20260717094350.1a7970e6@shazbot.org>
-In-Reply-To: <20260609232855.3808971-1-rubind@nvidia.com>
-References: <20260609232855.3808971-1-rubind@nvidia.com>
+ Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma
+ <vipinsh@google.com>, <kvm@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Shuah
+ Khan <skhan@linuxfoundation.org>, alex@shazbot.org
+Subject: Re: [PATCH v4 0/2] vfio: selftests: Add allocation assert helpers
+ and avoid VLAs
+Message-ID: <20260717094352.6bb38603@shazbot.org>
+In-Reply-To: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
+References: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
 X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -89,83 +91,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue,  9 Jun 2026 16:28:51 -0700
-Rubin Du <rubind@nvidia.com> wrote:
+On Wed, 17 Jun 2026 11:57:59 -0700
+Alex Mastro <amastro@fb.com> wrote:
 
-> Patch 1:
+> Add VFIO selftest {malloc,calloc}_assert() helpers, then use
+> them in places that open-code malloc() or calloc() followed by
+> VFIO_ASSERT_NOT_NULL().
 > 
-> Add a chunking loop to vfio_pci_driver_memcpy() so that it handles
-> arbitrarily sized memcpy requests by breaking them into
-> max_memcpy_size-sized chunks. This allows tests to request any memcpy
-> size. Update the test to use a size of 4x max_memcpy_size to exercise
-> the chunking logic.
+> Use the helpers to replace VLAs with heap allocations. This avoids GCC
+> rejecting initialized VLAs and avoids treating a u8 buffer as a possibly
+> under-aligned VFIO request struct.
 > 
-> Patch 2:
+> Changes in v4:
+> - Add malloc_assert().
+> - Link to v3: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com
 > 
-> Add vfio_pci_cmd_set()/vfio_pci_cmd_clear() macros for PCI_COMMAND
-> operations.
+> Changes in v3:
+> - Add the calloc_assert() helper as a precursor patch.
+> - Convert existing VFIO selftest calloc() assertion sites.
+> - Update the VLA fix to use calloc_assert().
+> - Link to v2: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com
 > 
-> Patch 3:
+> Changes in v2:
+> - Reverse xmas tree variable ordering
+> - Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
 > 
-> Allow drivers that cannot trigger MSI interrupts to leave the
-> send_msi callback NULL. Tests check ops->send_msi directly and
-> gracefully skip MSI-related operations when it is absent.
+> Signed-off-by: Alex Mastro <amastro@fb.com>
+> ---
+> Alex Mastro (2):
+>       vfio: selftests: Add allocation assert helpers
+>       vfio: selftests: Avoid VLAs
 > 
-> Patch 4:
+>  .../selftests/vfio/lib/include/libvfio/assert.h    | 18 ++++++++++++
+>  tools/testing/selftests/vfio/lib/iommu.c           | 12 +++-----
+>  tools/testing/selftests/vfio/lib/iova_allocator.c  |  4 +--
+>  tools/testing/selftests/vfio/lib/sysfs.c           |  3 +-
+>  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 32 ++++++++++++----------
+>  .../vfio/vfio_pci_device_init_perf_test.c          |  4 +--
+>  6 files changed, 43 insertions(+), 30 deletions(-)
+> ---
+> base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
+> change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
 > 
-> Introduce the nv_falcon plugin driver, which extracts and adapts
-> relevant functionality from NVIDIA's gpu-admin-tools project [1] and
-> integrates it into the VFIO selftest framework. As a result, any
-> system equipped with a PCIe slot and a supported NVIDIA GPU can now
-> run VFIO DMA selftests using commonly available hardware.
+> Best regards,
+> --  
+> Alex Mastro <amastro@fb.com>
 > 
-> Falcons are general-purpose microcontrollers present on NVIDIA GPUs
-> that can perform DMA operations between system memory and device
-> memory.
-> 
-> [1] https://github.com/NVIDIA/gpu-admin-tools
-> 
-> Changes for v14:
->  - Re-tested with vfio_pci_driver_test on K2200, M60, P100, P4000, V100,
->    T4, RTX 3090, RTX 4000 Ada and H100.
->  - Alex prepared this respin addressing David's review of v13.
->  - Patch 1 & 3: No change.
->  - Patch 2: R-b collected.
->  - Patch 4: address David's review -
->    - Include <linux/types.h>
->    - Factor out get_elapsed_ms()
->    - Rename NV_*_BOOT_COMPLETE_MASK to _SUCCESS
->    - Drop the redundant falcon_enable() and move the no_outside_reset
->      check to the top of falcon_enable() so falcon_reset() is
->      unconditional
->    - Fold dev_err() and size_to_dma_encoding() into nv_falcon_dma()
->    - Drop gpu->memcpy_count and the redundant GPU_ARCH_UNKNOWN assert
->    - Alignment fixes
-> 
-> Note on version numbering: v1 through v9 were internal review iterations
-> that were mistakenly carried over to the upstream submission. Apologies
-> for the confusion, the internal changelog has been dropped.
-> 
-> Rubin Du (4):
->   vfio: selftests: Add memcpy chunking to vfio_pci_driver_memcpy()
->   vfio: selftests: Add generic PCI command register helpers
->   vfio: selftests: Allow drivers without send_msi() support
->   vfio: selftests: Add NVIDIA Falcon driver for DMA testing
-> 
->  .../selftests/vfio/lib/drivers/nv_falcon/hw.h | 352 ++++++++
->  .../vfio/lib/drivers/nv_falcon/nv_falcon.c    | 783 ++++++++++++++++++
->  .../lib/include/libvfio/vfio_pci_device.h     |  14 +
->  tools/testing/selftests/vfio/lib/libvfio.mk   |   2 +
->  .../selftests/vfio/lib/vfio_pci_driver.c      |  21 +-
->  .../selftests/vfio/vfio_pci_driver_test.c     |  57 +-
->  6 files changed, 1206 insertions(+), 23 deletions(-)
->  create mode 100644 tools/testing/selftests/vfio/lib/drivers/nv_falcon/hw.h
->  create mode 100644 tools/testing/selftests/vfio/lib/drivers/nv_falcon/nv_falcon.c
-> 
-> 
-> base-commit: d0c3bcd5b8976159d835a897254048e078f447e6
-> --
-> 2.43.0
 
 Applied to vfio next branch for v7.3.  Thanks,
 
