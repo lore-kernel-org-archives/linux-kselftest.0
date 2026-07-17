@@ -1,188 +1,71 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D380C33C188
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 08:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F97F3C9ED8;
+	Fri, 17 Jul 2026 08:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784276585; cv=none; b=g/m0gk77CmUYGSJfUc+fe75TIEJMSYSiHQhZNJIMrF2o9wXZNot2Q2GO/H/+pxyMT2VzWSQU0ra30tncyk6WPgVzhEguSTTRGeCMtl0JP4SOIcfrIkNFYlS61WdCAWcR70iRv4+NGCEDXp5uu0uSytL99crYKPv1wBhz4/rPDUM=
+	t=1784276987; cv=none; b=DQoJAHi2/tGCVMtwxScJh60YCD+YRSH6MfNnXCreNAhRz6H3qeCxujaQunep1bBVoNilvEAgfRVpRBGtIGaPECg+USFYEeFiYACAf5kIEwo5EMamvsjQ3S4dI1iOE6e27lh4W7eoNrIaIPzoDMsGjRIbLe8Q8vxbo7+O2YrW0c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784276585; c=relaxed/simple;
-	bh=OgfKQGcUft8+pubZB1n8Cb5kpcRbRtLkKcWVdrtca3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uTvD23qXj2z8vlmtxJ5EbiRPqKTjh6zKWP8csJ9lZZLPUeL25i8kG+uKcKdY1S1rWDaysBlSDb0E23m2jtSbDfD7puhMnvQ3tGOft/JVEcfWPHO3dJwxW7MLiCfPwlYM5z5329QXL8FqCnBVwmtze5f5xgK/jcDzDNl+ffTx9y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oMLWAPlG; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784276987; c=relaxed/simple;
+	bh=NeYcvDDFS3gI2oTB3Qxfeisj1GVZwzIGWMPBmCGgmzk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pkCErjHgrckbQ545x8P0F6jI0OqcnhQNNIkTq7N09dGD6t07ohwI63hfkGY6ayQL1bZ7nuaeziiDC34wJuYaUhdE83Fnoff556x2Lfp4ZaosQstU1/nkRUsJ/wXUUeKaQUZL/kkYKXkFydLoaKwFRGSsSGrhCUb4MuBGfKo15Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JHeKGqGS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oMLWAPlG"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so1242035e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 01:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784276581; x=1784881381; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NLZAfRK2x9zkSee/fqTuHPNp25jE6qaj7rL/KrN+u8g=;
-        b=oMLWAPlGU2OR3WEZegsvP74B/Gd742nWs6VsZ04tDu3gwme40AUEOplGxxP514/B4n
-         XVLVHEyH6jcE+qV83iuLm1mbEORVJxF0hbr21NsxedYt+EQsTVlnXIQl9CtXj47EyEdY
-         u4bGBS7A3kixYCjL4IzEPB0TUIj/FcHdxeG7betOJ1RLOEamIWsmSVG3l0KKkl7ZvVe4
-         ieIhEZPnRA3aRIZJd++afq0BUibUthoQzCqufhurnvvpp+DZR9Ex/XOkQ+FpiF5VEmIB
-         YP+w8RVIS8FZ3wPHfJB6QLOuZYJOotcOutklD8iglo9hYqZzFuo4K7ThUv90SiaDoWVX
-         wQVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784276581; x=1784881381;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NLZAfRK2x9zkSee/fqTuHPNp25jE6qaj7rL/KrN+u8g=;
-        b=aNE4GNmMq3m1qulfZPbwdbhoc2/+hwH07c9Vk1UZ4KBfWg+Jc+vYO7LID/gXSUDkwE
-         5Ge9H7IWBOxeiCHQU1tsgusk1haCMFMVfNhhbiEZiUyLFR39cAa5r5CZM19pfP9upXII
-         0MKrZGTql+P8KUBm2oDnEAjiCHI+FfWaVaDrSmGxEhW1NWUGjwvMja7rTUyq60YsLKgP
-         kV0VgsxafykhY7ajWqbQp6QRY0X/iZNmbdkBF6nD567J3b0++GHyhv5x8Co7EKtFqC++
-         mbK7NLlqwMLDqj2CXhTDVtfTABiEofDSVz0NREALYwGH6ydaANkmzCChP3r53DGBLSmD
-         AHiA==
-X-Forwarded-Encrypted: i=1; AHgh+RoSuO84c8XWrdH8nyu1WVoQSyjAlRxO3KSMcyoZ2MH9JwNkZD7PQj5ro6DHFgWo4lN/2zPJbCR3jAk2KHFjwEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMGX9IWexmo2fnFexuWkP5YQPu8QBCBp0t5/TMx3LZGDtsWeMf
-	dVAtZ3Ocl5bwM2UWTAzL/GT9lsK890/Y1FdkkY0vTAMSWU4HM/LfkN3m
-X-Gm-Gg: AfdE7cl9fWn+CcGlpe10AzloNAg/hShnTL3ROkQZsYDUJezQPNFRIjAs9XM+WD3j9Pp
-	PNp5hXdEVEn9rxMIyvU3mQyXyL3Ytmbya3kKNjbD0cu0GhGYqyap8M0iLd21JpVnfyzSS408vJQ
-	lfxYW6B80vUXfHSKNqE9Jg+OnCGCa78+eS4IE/Xc5h2LsSAJ8AgR0FP91sjpirrWuX0gFoWKbko
-	odmElQJ6y7TyQJd7CmMJYJuOmIPuKnKK6iM5+LZkEkacFsR+wDmnqQd57JnBpcsJNngzG39t9LH
-	yqaluDzQ24r90CnPTO8UJvn16o5Za1UfbHZQ41FC2Bc5H/ho0zrUsx0DzZAa0/G+itmSfcM4RC3
-	lSDp+xKfuTMh8lMoOfMISuV0QJVAWlSeeaW942AoKbQqyLdLLA8uWQe4pE1ODgdcywDozUAwF3B
-	ercVO8TRvjeHO8iR+powfu1Pl0jBL/CigcSkSkrqo=
-X-Received: by 2002:a05:600c:3113:b0:493:f478:4c71 with SMTP id 5b1f17b1804b1-4954a323b14mr16486755e9.7.1784276580733;
-        Fri, 17 Jul 2026 01:23:00 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954a2eddb8sm59577575e9.14.2026.07.17.01.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 01:23:00 -0700 (PDT)
-Date: Fri, 17 Jul 2026 09:22:58 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexander Aring
- <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, Miquel
- Raynal <miquel.raynal@bootlin.com>, Remi Denis-Courmont
- <courmisch@gmail.com>, =?UTF-8?B?UsOpbWk=?= Denis-Courmont
- <remi.denis-courmont@nokia.com>, John Fastabend <john.fastabend@gmail.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH net-next 5/7] phonet: pep: convert getsockopt to
- sockopt_t
-Message-ID: <20260717092258.776e63db@pumpkin>
-In-Reply-To: <20260716-getsockopt_phase4-v1-5-4f45cb12dce7@debian.org>
-References: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org>
-	<20260716-getsockopt_phase4-v1-5-4f45cb12dce7@debian.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JHeKGqGS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28B31F000E9;
+	Fri, 17 Jul 2026 08:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784276986;
+	bh=KVNxC63LOWRqbOTpimt93dPKGHQeblwVBPWQ17ePLPo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=JHeKGqGS5Cr9ESevlw2q6nXzM7w/M9EGlruDKp0PxOkSUiwWoahLstWewNugBJMQj
+	 TfVfT9GJC49kAsnp+l28txoi40pA0DtB+mRQgDtlW27bPoOZZASWcwqglfKR9kXH4W
+	 +95+9l1wAj4X39ik85j4+ol7NF2RwwGyR/K4xlJiBaaFTd84uTI1MGptv44Cq5Ecvu
+	 kwyIJcSduQEAfh5uRv/jGo+yEpc8mu2NE8TBvCvQByVhQRg25nJRA9szwvk6m9YhDl
+	 0SbCcFhTky26MhuPqfRyUEkBUIiuXnUFIFDMdcWqL/+jy0MeoEXAOBTTcZWo0GqMcF
+	 f1OGVDwxGpqCQ==
+Content-Type: multipart/mixed; boundary="===============3010414839372478109=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <6c21d7ae537ee667858193d330b8b0bac579355f44a650e66de881db958e3810@mail.kernel.org>
+In-Reply-To: <20260717073237.1048-1-yanlonglong@kylinos.cn>
+References: <20260717073237.1048-1-yanlonglong@kylinos.cn>
+Subject: Re: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
+From: bot+bpf-ci@kernel.org
+To: yanlonglong@kylinos.cn,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: yanlonglong@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 17 Jul 2026 08:29:45 +0000 (UTC)
+
+--===============3010414839372478109==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu, 16 Jul 2026 06:00:03 -0700
-Breno Leitao <leitao@debian.org> wrote:
+>     libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
+>
+>     The ARRAY_SIZE macro is more compact and more formal in linux source.
+>
+>     Fixes: 6c3e8a4d4765 ("selftests/bpf: libarena: Add rbtree data structure")
+>     Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
 
-> Continue converting the proto-layer getsockopt callbacks to the
-> sockopt_t interface, splitting pep_getsockopt() into a
-> do_pep_getsockopt() helper that takes a sockopt_t.
-> 
-> The thin pep_getsockopt() wrapper keeps its __user signature for now:
-> it builds a user-backed sockopt_t with sockopt_init_user(), calls the
-> helper, and writes the returned length back to optlen. The helper uses
-> copy_to_iter() instead of copy_to_user(). No functional change.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  net/phonet/pep.c | 36 ++++++++++++++++++++++++++----------
->  1 file changed, 26 insertions(+), 10 deletions(-)
-> 
-> diff --git a/net/phonet/pep.c b/net/phonet/pep.c
-> index 60d1a5375725b..c7f4ce894af56 100644
-> --- a/net/phonet/pep.c
-> +++ b/net/phonet/pep.c
-> @@ -1078,17 +1078,11 @@ static int pep_setsockopt(struct sock *sk, int level, int optname,
->  	return err;
->  }
->  
-> -static int pep_getsockopt(struct sock *sk, int level, int optname,
-> -				char __user *optval, int __user *optlen)
-> +static int do_pep_getsockopt(struct sock *sk, int optname, sockopt_t *opt)
->  {
->  	struct pep_sock *pn = pep_sk(sk);
->  	int len, val;
->  
-> -	if (level != SOL_PNPIPE)
-> -		return -ENOPROTOOPT;
-> -	if (get_user(len, optlen))
-> -		return -EFAULT;
-> -
->  	switch (optname) {
->  	case PNPIPE_ENCAP:
->  		val = pn->ifindex ? PNPIPE_ENCAP_IP : PNPIPE_ENCAP_NONE;
-> @@ -1112,11 +1106,33 @@ static int pep_getsockopt(struct sock *sk, int level, int optname,
->  		return -ENOPROTOOPT;
->  	}
->  
-> -	len = min_t(unsigned int, sizeof(int), len);
-> -	if (put_user(len, optlen))
-> +	len = min_t(unsigned int, sizeof(int), opt->optlen);
+Should this commit include a Fixes: tag? The original code in commit
+6c3e8a4d4765 was functionally correct - 'sizeof(keys) / sizeof(keys[0])'
+produces the same result as 'ARRAY_SIZE(keys)'. This change improves code
+style and readability but doesn't fix a bug.
 
-I'm pretty sure that can be min().
-More generally I'm not at all sure about negative lengths.
-Historically the user type would have been 'int', but it got replaced
-by socklen_t which is probably unsigned.
-(IIRC one of the 64bit Unix had started using a 64bit type but I think
-it was sun objected to making that change so socklen_t was born.)
+Fixes: tags are typically reserved for commits that correct incorrect
+behavior or address actual defects.
 
-Also truncating below 4 bytes makes no sense here on BE systems.
-Some code will try to write the significant bytes out, but that
-would be better done in the wrapper.
 
-> +	opt->optlen = len;
-> +	if (copy_to_iter(&val, len, &opt->iter_out) != len)
->  		return -EFAULT;
-> -	if (copy_to_user(optval, &val, len))
-> +	return 0;
-> +}
-> +
-> +static int pep_getsockopt(struct sock *sk, int level, int optname,
-> +			  char __user *optval, int __user *optlen)
-> +{
-> +	sockopt_t opt;
-> +	int err;
-> +
-> +	if (level != SOL_PNPIPE)
-> +		return -ENOPROTOOPT;
-> +
-> +	err = sockopt_init_user(&opt, optval, optlen);
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Have I not looked at these before?
-Why is this here, not in the outer code?
-
-	David
-
-> +	if (err)
-> +		return err;
-> +
-> +	err = do_pep_getsockopt(sk, optname, &opt);
-> +	if (err)
-> +		return err;
-> +
-> +	if (put_user(opt.optlen, optlen))
->  		return -EFAULT;
-> +
->  	return 0;
->  }
->  
-> 
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29564321134
+--===============3010414839372478109==--
