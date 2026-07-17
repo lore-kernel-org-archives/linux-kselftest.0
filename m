@@ -1,118 +1,71 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7144E3AEB2B;
-	Fri, 17 Jul 2026 06:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from ursule.remlab.net (vps-a2bccee9.vps.ovh.net [51.75.19.47])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221D4391832;
+	Fri, 17 Jul 2026 06:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.75.19.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784270867; cv=none; b=hDIncYXjjKJiQlcUoOyw5TKik2jYytl67a5S0KsdtGqIvaKljtsX/vlwXerlXJXiinaxXVMIFPsrw3Q/8opjNes0fqfaKXRgLIjj5Nw0hzjBXEbPg35RM8CC9qJwv30GbhFFF2gFT0M214it9jhCLgqEWBl58GbHc+TESMRJEh0=
+	t=1784271060; cv=none; b=sj1jfzh7+DHbzcXJs3JXXnnV7fV2NzF7FdvZ/i/Z444l0CF49TeRmfkVrHDX12JhhOCkoiVirgx6u7YM2IPioV7fq2uT+LJrtOASsiK85G1e3cucbftgRCy2aioN+YPgUYa+LHoOklVASx387LMzsKuU9OMqDwH2yKYjKZQ2YhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784270867; c=relaxed/simple;
-	bh=fOFQhIeYpSGz1gdjOadiq9kqiR9t1kkS9wVHQJoeIn8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aanCoFzIis1R95jmg5/kY/4IWVWDho1lTgIAiJA5jNV4SJ8KL+NUfKLF1u3jcRnreH28dbFFhQ51nllI5btSAJ1ipAK56b/ssm9a/7af+08BDPIYaROgUw/xl6CShc0HP1eigeAcxIYbm7SLATPsbhm+YyIg+2bd7tv8lN/vvLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6462ab3681ab11f1aa26b74ffac11d73-20260717
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:71484f9b-9529-477f-82e7-f8def91eaa32,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-25
-X-CID-META: VersionHash:e7bac3a,CLOUDID:58a5985be35c12dda518903384f02405,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
-	DM:1,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
-	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 6462ab3681ab11f1aa26b74ffac11d73-20260717
-X-User: yanlonglong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yanlonglong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1220787653; Fri, 17 Jul 2026 14:47:34 +0800
-From: longlong yan <yanlonglong@kylinos.cn>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: longlong yan <yanlonglong@kylinos.cn>
-Subject: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
-Date: Fri, 17 Jul 2026 14:47:19 +0800
-Message-ID: <20260717064719.1032-1-yanlonglong@kylinos.cn>
-X-Mailer: git-send-email 2.47.1.windows.2
+	s=arc-20240116; t=1784271060; c=relaxed/simple;
+	bh=tQ1b/9sAWVAQtrk+yZ0y7YQfgWnk/FgabBYf0B1jYJ8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=qMrPtQjLO8yWmv8/tPB2uFqshk+/PMdu+z0mM1Tn7k2vgT0nDcYj26KU1L6RaKqR3yrLusSADS0i2Tz0o4xOq4cFTAY1sbfjiy+b7I+a5frcr6dg4U21Ev64U8+2sIXaVk1oNeO+qG4WUYmpGdp4A0qvwt0mCRxTte5qxa93jo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=remlab.net; spf=pass smtp.mailfrom=remlab.net; arc=none smtp.client-ip=51.75.19.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=remlab.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=remlab.net
+Received: from ursule.remlab.net (localhost [IPv6:::1])
+	by ursule.remlab.net (Postfix) with ESMTP id D4CB0C0267;
+	Fri, 17 Jul 2026 09:50:49 +0300 (EEST)
+Received: from ehlo.thunderbird.net ([2001:14bb:cc:4294::62a:201])
+	by ursule.remlab.net with ESMTPSA
+	id YJXhI8nQWWocgQYAwZXkwQ
+	(envelope-from <remi@remlab.net>); Fri, 17 Jul 2026 09:50:49 +0300
+Date: Fri, 17 Jul 2026 09:50:47 +0300
+From: =?ISO-8859-1?Q?R=E9mi_Denis-Courmont?= <remi@remlab.net>
+To: Breno Leitao <leitao@debian.org>, sdf@fomichev.me,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexander Aring <alex.aring@gmail.com>,
+ Stefan Schmidt <stefan@datenfreihafen.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Remi Denis-Courmont <courmisch@gmail.com>,
+ =?ISO-8859-1?Q?R=E9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
+CC: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net-next_4/7=5D_phonet=3A_pep=3A_d?=
+ =?US-ASCII?Q?o_not_write_beyond_optlen_in_getsockopt?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20260716-getsockopt_phase4-v1-4-4f45cb12dce7@debian.org>
+References: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org> <20260716-getsockopt_phase4-v1-4-4f45cb12dce7@debian.org>
+Message-ID: <3B919578-1330-4337-9FA8-2571A64DD9CD@remlab.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The ARRAY_SIZE macro is more compact and more formal in linux source.
 
-Fixes: 6c3e8a4d4765 ("selftests/bpf: libarena: Add rbtree data structure")
-Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
----
- .../selftests/bpf/libarena/selftests/test_rbtree.bpf.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
-index 856c484a009a..f6e15f77cdf5 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
-@@ -275,7 +275,7 @@ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
- 
- int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
- {
--	const size_t numkeys = sizeof(keys) / sizeof(keys[0]);
-+	const size_t numkeys = ARRAY_SIZE(keys);
- 	node_ctx nodec;
- 	u64 key, value;
- 	int ret;
-@@ -373,7 +373,7 @@ __weak int test_rbtree_remove_one(void)
- 
- static __always_inline int remove_many_verify_all_present(struct rbtree __arena *rbtree)
- {
--	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	const size_t numkeys = ARRAY_SIZE(morekeys);
- 	u64 value;
- 	int ret;
- 	int i;
-@@ -394,7 +394,7 @@ static __always_inline int remove_many_verify_all_present(struct rbtree __arena
- 
- static __always_inline int remove_many_verify_remaining(struct rbtree __arena *rbtree)
- {
--	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	const size_t numkeys = ARRAY_SIZE(morekeys);
- 	u64 value;
- 	int ret;
- 	int i;
-@@ -434,7 +434,7 @@ static __always_inline int remove_many_verify_remaining(struct rbtree __arena *r
- 
- static __noinline int remove_many_alloc(struct rbtree __arena *rbtree)
- {
--	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	const size_t numkeys = ARRAY_SIZE(morekeys);
- 	u64 value;
- 	int ret;
- 	int i;
-@@ -482,7 +482,7 @@ static __noinline int remove_many_alloc(struct rbtree __arena *rbtree)
- 
- static __noinline int remove_many_noalloc(struct rbtree __arena *rbtree)
- {
--	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	const size_t numkeys = ARRAY_SIZE(morekeys);
- 	node_ctx first = NULL, last = NULL;
- 	u64 value;
- 	int ret;
--- 
-2.43.0
+Le 16 juillet 2026 16:00:02 GMT+03:00, Breno Leitao <leitao@debian=2Eorg> =
+a =C3=A9crit :
+>pep_getsockopt() clamps the reported length to the caller's buffer with
+>min_t(), but then stores the value with put_user(val, (int __user *)
+>optval), which always writes sizeof(int) bytes=2E A getsockopt() call wit=
+h
+>an optlen smaller than sizeof(int) thus reports the clamped length yet
+>writes a full int, one to three bytes past the user buffer=2E
+>
+>Write the value with copy_to_user() bounded by len, so at most optlen
+>bytes are copied, matching the length reported back to userspace=2E
+>
+>Fixes: 02a47617cdce ("Phonet: implement GPRS virtual interface over PEP s=
+ocket")
+>Signed-off-by: Breno Leitao <leitao@debian=2Eorg>
 
+Acked-by: R=C3=A9mi Denis-Courmont <remi@remlab=2Enet>
