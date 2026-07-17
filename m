@@ -1,162 +1,188 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11563E00B6;
-	Fri, 17 Jul 2026 08:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D380C33C188
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 08:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784276127; cv=none; b=fas+I1gaqT3Kn+Zr+hO8YZl5bqlsEcAQm0QQAJm1+58SzAQ07n12+F0yRXhebOyZ4K/atFIAFYuHQXz6oEBgCvkCmIhFg68SNAWydWiB8Ry/16f6KyRmWP6T3W023KH+Ji8oL4OvQwqqgy/wJconqO/wvIp7SIXZH/wmywxM7Q8=
+	t=1784276585; cv=none; b=g/m0gk77CmUYGSJfUc+fe75TIEJMSYSiHQhZNJIMrF2o9wXZNot2Q2GO/H/+pxyMT2VzWSQU0ra30tncyk6WPgVzhEguSTTRGeCMtl0JP4SOIcfrIkNFYlS61WdCAWcR70iRv4+NGCEDXp5uu0uSytL99crYKPv1wBhz4/rPDUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784276127; c=relaxed/simple;
-	bh=2hE9mWSFuW1q+zRvnj1YXir2C/yT0R7DjU16wBOGF6o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fXwcqyWPmSCLAUanL8OCeMNQR39jaxu8q8Coviu4oPiHzFiR21cFkEFlWvLBg2LsgZVcu1v3Xm/7u3NOh32Xg72vH0VZ5UE1MtxbcABUX1D0acds2EcfyTJRuL8T/NUYsF3OmjWnFR32nG/RwExPjOv+jCt/Si4SmbvZouSp2ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=fBuMExxz; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1784276585; c=relaxed/simple;
+	bh=OgfKQGcUft8+pubZB1n8Cb5kpcRbRtLkKcWVdrtca3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uTvD23qXj2z8vlmtxJ5EbiRPqKTjh6zKWP8csJ9lZZLPUeL25i8kG+uKcKdY1S1rWDaysBlSDb0E23m2jtSbDfD7puhMnvQ3tGOft/JVEcfWPHO3dJwxW7MLiCfPwlYM5z5329QXL8FqCnBVwmtze5f5xgK/jcDzDNl+ffTx9y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oMLWAPlG; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="fBuMExxz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oMLWAPlG"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so1242035e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 01:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=VrCJPAA5D8+z3s53wYAH4G5t6NO5Tup7gX
-	pN+nPBCu4=; b=fBuMExxzeaU4G/RP5vaFr6Vz4ZDerUkXh95ps9ifrVA9Z6zWay
-	d5U21v0um7QjF3zktLwGeul9Zp90OuMCzRgMyJb2QqB2nTwK3QgF2TlYnt41vVMO
-	8TlzdqAE5iQx314tdoJNxCK7HJkUzVeW4P6zX1XvbrwAj9Bq8w1H8NNTw=
-Received: from node118.platform-default.svc.cluster.local (unknown [36.102.215.18])
-	by web1 (Coremail) with SMTP id yAQGZQBnCMh45FlqWWMXAA--.33958S4;
-	Fri, 17 Jul 2026 16:15:09 +0800 (CST)
-From: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
-To: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>,
-	Yizhou Zhao <zhaoyz24@mails.tsinghua.edu.cn>,
-	Ao Wang <wangao@seu.edu.cn>,
-	Xuewei Feng <fengxw06@126.com>,
-	Qi Li <qli01@tsinghua.edu.cn>,
-	Ke Xu <xuke@tsinghua.edu.cn>,
-	yyxroy22@gmail.com
-Subject: [PATCH net 2/2] selftests/net: packetdrill: cover RST validation in SYN-RECEIVED
-Date: Fri, 17 Jul 2026 08:14:43 +0000
-Message-Id: <20260717081443.809393-3-yangyx22@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260717081443.809393-1-yangyx22@mails.tsinghua.edu.cn>
-References: <20260717081443.809393-1-yangyx22@mails.tsinghua.edu.cn>
+        d=gmail.com; s=20251104; t=1784276581; x=1784881381; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NLZAfRK2x9zkSee/fqTuHPNp25jE6qaj7rL/KrN+u8g=;
+        b=oMLWAPlGU2OR3WEZegsvP74B/Gd742nWs6VsZ04tDu3gwme40AUEOplGxxP514/B4n
+         XVLVHEyH6jcE+qV83iuLm1mbEORVJxF0hbr21NsxedYt+EQsTVlnXIQl9CtXj47EyEdY
+         u4bGBS7A3kixYCjL4IzEPB0TUIj/FcHdxeG7betOJ1RLOEamIWsmSVG3l0KKkl7ZvVe4
+         ieIhEZPnRA3aRIZJd++afq0BUibUthoQzCqufhurnvvpp+DZR9Ex/XOkQ+FpiF5VEmIB
+         YP+w8RVIS8FZ3wPHfJB6QLOuZYJOotcOutklD8iglo9hYqZzFuo4K7ThUv90SiaDoWVX
+         wQVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784276581; x=1784881381;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NLZAfRK2x9zkSee/fqTuHPNp25jE6qaj7rL/KrN+u8g=;
+        b=aNE4GNmMq3m1qulfZPbwdbhoc2/+hwH07c9Vk1UZ4KBfWg+Jc+vYO7LID/gXSUDkwE
+         5Ge9H7IWBOxeiCHQU1tsgusk1haCMFMVfNhhbiEZiUyLFR39cAa5r5CZM19pfP9upXII
+         0MKrZGTql+P8KUBm2oDnEAjiCHI+FfWaVaDrSmGxEhW1NWUGjwvMja7rTUyq60YsLKgP
+         kV0VgsxafykhY7ajWqbQp6QRY0X/iZNmbdkBF6nD567J3b0++GHyhv5x8Co7EKtFqC++
+         mbK7NLlqwMLDqj2CXhTDVtfTABiEofDSVz0NREALYwGH6ydaANkmzCChP3r53DGBLSmD
+         AHiA==
+X-Forwarded-Encrypted: i=1; AHgh+RoSuO84c8XWrdH8nyu1WVoQSyjAlRxO3KSMcyoZ2MH9JwNkZD7PQj5ro6DHFgWo4lN/2zPJbCR3jAk2KHFjwEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMGX9IWexmo2fnFexuWkP5YQPu8QBCBp0t5/TMx3LZGDtsWeMf
+	dVAtZ3Ocl5bwM2UWTAzL/GT9lsK890/Y1FdkkY0vTAMSWU4HM/LfkN3m
+X-Gm-Gg: AfdE7cl9fWn+CcGlpe10AzloNAg/hShnTL3ROkQZsYDUJezQPNFRIjAs9XM+WD3j9Pp
+	PNp5hXdEVEn9rxMIyvU3mQyXyL3Ytmbya3kKNjbD0cu0GhGYqyap8M0iLd21JpVnfyzSS408vJQ
+	lfxYW6B80vUXfHSKNqE9Jg+OnCGCa78+eS4IE/Xc5h2LsSAJ8AgR0FP91sjpirrWuX0gFoWKbko
+	odmElQJ6y7TyQJd7CmMJYJuOmIPuKnKK6iM5+LZkEkacFsR+wDmnqQd57JnBpcsJNngzG39t9LH
+	yqaluDzQ24r90CnPTO8UJvn16o5Za1UfbHZQ41FC2Bc5H/ho0zrUsx0DzZAa0/G+itmSfcM4RC3
+	lSDp+xKfuTMh8lMoOfMISuV0QJVAWlSeeaW942AoKbQqyLdLLA8uWQe4pE1ODgdcywDozUAwF3B
+	ercVO8TRvjeHO8iR+powfu1Pl0jBL/CigcSkSkrqo=
+X-Received: by 2002:a05:600c:3113:b0:493:f478:4c71 with SMTP id 5b1f17b1804b1-4954a323b14mr16486755e9.7.1784276580733;
+        Fri, 17 Jul 2026 01:23:00 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4954a2eddb8sm59577575e9.14.2026.07.17.01.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 01:23:00 -0700 (PDT)
+Date: Fri, 17 Jul 2026 09:22:58 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexander Aring
+ <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, Miquel
+ Raynal <miquel.raynal@bootlin.com>, Remi Denis-Courmont
+ <courmisch@gmail.com>, =?UTF-8?B?UsOpbWk=?= Denis-Courmont
+ <remi.denis-courmont@nokia.com>, John Fastabend <john.fastabend@gmail.com>,
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH net-next 5/7] phonet: pep: convert getsockopt to
+ sockopt_t
+Message-ID: <20260717092258.776e63db@pumpkin>
+In-Reply-To: <20260716-getsockopt_phase4-v1-5-4f45cb12dce7@debian.org>
+References: <20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org>
+	<20260716-getsockopt_phase4-v1-5-4f45cb12dce7@debian.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yAQGZQBnCMh45FlqWWMXAA--.33958S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFWDuFWDuF4kGw1kuF1fXrb_yoW5CFyxpF
-	45CasxKr1jvry8G3Wxtw4UKa4rXF4kJrW3Gr93JrWDZrs0yrn3ArWFkrWDK3sFgas5tFWF
-	qa4jgry2v3s8A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
-	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_GFyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sR_GYLPUUUUU==
-X-CM-SenderInfo: 51dqw5r0ssqzpdlo2hxwvl0wxkxdhvlgxou0/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add packetdrill coverage for the RFC 9293 reset checks on request
-sockets in SYN-RECEIVED.  Verify that an exact RST removes the request,
-a non-exact in-window RST sends a challenge ACK without removing it,
-and an out-of-window RST is silently discarded.
+On Thu, 16 Jul 2026 06:00:03 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-Also cover an RST|ACK with an unacceptable ACK number to ensure RST
-sequence validation runs before ACK-field validation.
+> Continue converting the proto-layer getsockopt callbacks to the
+> sockopt_t interface, splitting pep_getsockopt() into a
+> do_pep_getsockopt() helper that takes a sockopt_t.
+> 
+> The thin pep_getsockopt() wrapper keeps its __user signature for now:
+> it builds a user-backed sockopt_t with sockopt_init_user(), calls the
+> helper, and writes the returned length back to optlen. The helper uses
+> copy_to_iter() instead of copy_to_user(). No functional change.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  net/phonet/pep.c | 36 ++++++++++++++++++++++++++----------
+>  1 file changed, 26 insertions(+), 10 deletions(-)
+> 
+> diff --git a/net/phonet/pep.c b/net/phonet/pep.c
+> index 60d1a5375725b..c7f4ce894af56 100644
+> --- a/net/phonet/pep.c
+> +++ b/net/phonet/pep.c
+> @@ -1078,17 +1078,11 @@ static int pep_setsockopt(struct sock *sk, int level, int optname,
+>  	return err;
+>  }
+>  
+> -static int pep_getsockopt(struct sock *sk, int level, int optname,
+> -				char __user *optval, int __user *optlen)
+> +static int do_pep_getsockopt(struct sock *sk, int optname, sockopt_t *opt)
+>  {
+>  	struct pep_sock *pn = pep_sk(sk);
+>  	int len, val;
+>  
+> -	if (level != SOL_PNPIPE)
+> -		return -ENOPROTOOPT;
+> -	if (get_user(len, optlen))
+> -		return -EFAULT;
+> -
+>  	switch (optname) {
+>  	case PNPIPE_ENCAP:
+>  		val = pn->ifindex ? PNPIPE_ENCAP_IP : PNPIPE_ENCAP_NONE;
+> @@ -1112,11 +1106,33 @@ static int pep_getsockopt(struct sock *sk, int level, int optname,
+>  		return -ENOPROTOOPT;
+>  	}
+>  
+> -	len = min_t(unsigned int, sizeof(int), len);
+> -	if (put_user(len, optlen))
+> +	len = min_t(unsigned int, sizeof(int), opt->optlen);
 
-Signed-off-by: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
----
- .../packetdrill/tcp_rfc5961_rst-syn-recv.pkt  | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
+I'm pretty sure that can be min().
+More generally I'm not at all sure about negative lengths.
+Historically the user type would have been 'int', but it got replaced
+by socklen_t which is probably unsigned.
+(IIRC one of the 64bit Unix had started using a 64bit type but I think
+it was sun objected to making that change so socklen_t was born.)
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
-new file mode 100644
-index 000000000..3fc2de036
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// RFC 9293 Section 3.10.7.4: in SYN-RECEIVED, an exact RST resets
-+// the connection.  A non-exact in-window RST elicits a challenge ACK,
-+// while an out-of-window RST is silently discarded.
-+
-+`./defaults.sh`
-+
-+// An exact RST removes the request socket.
-+   0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
-+  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+  +0 bind(3, ..., ...) = 0
-+  +0 listen(3, 1) = 0
-+  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
-+  +0 > S. 0:0(0) ack 1 <...>
-+  +0 < R 1:1(0) win 1000
-+ +.1 < . 1:1(0) ack 1 win 1000
-+  +0 > R 1:1(0)
-+  +0 close(3) = 0
-+
-+// A non-exact in-window RST gets a challenge ACK and the request survives.
-+  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
-+  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+  +0 bind(3, ..., ...) = 0
-+  +0 listen(3, 1) = 0
-+  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
-+  +0 > S. 0:0(0) ack 1 <...>
-+  +0 < R 2:2(0) win 1000
-+  +0 > . 1:1(0) ack 1
-+  +0 < . 1:1(0) ack 1 win 1000
-+  +0 accept(3, ..., ...) = 4
-+  +0 close(4) = 0
-+  +0 close(3) = 0
-+
-+// RST sequence validation precedes ACK validation.  Even an RST|ACK
-+// with an unacceptable ACK value gets a challenge ACK.
-+  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
-+  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+  +0 bind(3, ..., ...) = 0
-+  +0 listen(3, 1) = 0
-+  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
-+  +0 > S. 0:0(0) ack 1 <...>
-+  +0 < R. 2:2(0) ack 100 win 1000
-+  +0 > . 1:1(0) ack 1
-+  +0 < . 1:1(0) ack 1 win 1000
-+  +0 accept(3, ..., ...) = 4
-+  +0 close(4) = 0
-+  +0 close(3) = 0
-+
-+// An out-of-window RST is silent and does not remove the request.
-+  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
-+  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+  +0 bind(3, ..., ...) = 0
-+  +0 listen(3, 1) = 0
-+  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
-+  +0 > S. 0:0(0) ack 1 <...>
-+  +0 < R 100001:100001(0) win 1000
-+ +.1 < . 1:1(0) ack 1 win 1000
-+  +0 accept(3, ..., ...) = 4
-+  +0 close(4) = 0
-+  +0 close(3) = 0
--- 
-2.34.1
+Also truncating below 4 bytes makes no sense here on BE systems.
+Some code will try to write the significant bytes out, but that
+would be better done in the wrapper.
+
+> +	opt->optlen = len;
+> +	if (copy_to_iter(&val, len, &opt->iter_out) != len)
+>  		return -EFAULT;
+> -	if (copy_to_user(optval, &val, len))
+> +	return 0;
+> +}
+> +
+> +static int pep_getsockopt(struct sock *sk, int level, int optname,
+> +			  char __user *optval, int __user *optlen)
+> +{
+> +	sockopt_t opt;
+> +	int err;
+> +
+> +	if (level != SOL_PNPIPE)
+> +		return -ENOPROTOOPT;
+> +
+> +	err = sockopt_init_user(&opt, optval, optlen);
+
+Have I not looked at these before?
+Why is this here, not in the outer code?
+
+	David
+
+> +	if (err)
+> +		return err;
+> +
+> +	err = do_pep_getsockopt(sk, optname, &opt);
+> +	if (err)
+> +		return err;
+> +
+> +	if (put_user(opt.optlen, optlen))
+>  		return -EFAULT;
+> +
+>  	return 0;
+>  }
+>  
+> 
 
