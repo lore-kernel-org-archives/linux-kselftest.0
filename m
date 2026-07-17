@@ -1,51 +1,52 @@
-Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
+Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A663D952E;
-	Fri, 17 Jul 2026 06:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.13.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57CA3AB5DC;
+	Fri, 17 Jul 2026 06:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.218.115.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784271585; cv=none; b=ub3hvgdRnwgykpU/1KCc1aW/ZztSnMbz6zPWM/DBbdyXqOKgH4wCMOk8dCUdomiYgYFOyClReaXR90WS9csdGsHY3QLkw+/uQuf0lFcTBJRHVpeDUyL7gUWw2InaShIGanvJMRRzDm3NFN5grwjMRKB/mDUD6zsSQr6FOkBwWXA=
+	t=1784271591; cv=none; b=fwAcyiGup0MJ4GVOs7ha/9wO58LAINPNqDdPPka3qfnr4cCSaVKEPagnQ7o+vA2zIPqZVEqgCPnb+CPmGYpjs30E9Hxh+XbCY9HQmg2a2t+Ct0DaofHq00UzDYMFKDIlyjvxIKWx9zTK9IUGaIUHB/VeqOCM8RgyYtsmPTDTaYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784271585; c=relaxed/simple;
-	bh=/Eb4pGZIUiO1BtW8WvwAJ4WS2WCw3AW7JzyVDb94x5I=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PtVraI8BunkZHTIEG4Cl+cCLO8igQ5fsFYNbtzSajLMA3TP2M8pRUrZiqOR+dyKtM3HBKcCyFGv03h2tCBPZy/+GP8Ay/k5KCjB2MTWjMQkvkUGUnqHunzsGvQKMWRdFJGTvrqqUyQKJAMi9UyMVgmKKXNyVa2+ZF7pbG2k7McI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=tdw7Uuie; arc=none smtp.client-ip=52.13.214.179
+	s=arc-20240116; t=1784271591; c=relaxed/simple;
+	bh=UPJrBePVlICCOSwYLRvYVUST0qSfCM39N8rFjUAZOf4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HRvK10XAT8d1qhU3fUUkPIEvjdyuqKb6fsoXn93aHs2RDediNiT19O1hhgHTz4u5CXC9mtftdf03l9+/QhYzObe14vF591j3cSK2z0RYabJnuC8EOiKXoRqYuv6gu/0e0SUX7bdQvWrw+jfsHGQOZwmoilk2SgwkpvFtXkh6XKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=qruFnuRP; arc=none smtp.client-ip=34.218.115.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="tdw7Uuie"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="qruFnuRP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1784271584; x=1815807584;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KzZoZyH66Gr1YaLwfbHY8NCjXtnD+WSpcnpvxY5Pf9g=;
-  b=tdw7UuieE8NLXdAULoTgX0XMMS717ZHv3ZmpUZc2Waf2epkDH4R89zyc
-   pW0E68lzmU8Z53djKHmWL32yEdsUAPSm+0QRnOZ43L9Mox6KARDsW616e
-   ZHbyyuBna5t2y1yUmmojlc0DiKG5WsGkPCu2maAchioLpY9nPJCyH7Bxa
-   1/cmjZUqK5HfusH9PAtw8yk5+XsDrIpWqnOunZ7hOR3Bn6XMICcgc+29A
-   qy+/kfflr8D68zO3Cx436kULA+E7Ln3Y1zzyzq3sZXeNX1BaeGYX8dTLg
-   udVPNbUIwWcDa0ffwEpLgVLCtPoFpPxGgAo24YoYfGR3dzbvQGtYZOpFU
-   Q==;
-X-CSE-ConnectionGUID: 0m/tP6S7SJyT3lcwjyrtuA==
-X-CSE-MsgGUID: iZdeqcfLRKOADf1hQ0tayA==
+  t=1784271589; x=1815807589;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wlk40fas1eNDv9mOWMtuuMM3ZQ2BPt5aSHVtYknijVM=;
+  b=qruFnuRPu5mJJSGerxTSEjf94nsIWq+XLaxkyGwkWK0m6ZKTqldPkTki
+   vB8NycyZex508Uv1G5uYcvEKu8FQNlNHeR0IoD1Vcm3uTQ4IwrVdX4vRq
+   yjzQOUTa3pN9gq2JjsHRLVztHJ9Cr56qedtAug9ghoKdTVlrFw5AE/GUt
+   yJRQKU8jwy1/cRY3sCTtjIyZ4WVq2XIBDoTTia9orMImmdOZSePl9cA0y
+   BfCEm4MqscVU9eYxB19gqh+lzwN/YpN6kEO0ah/uN++VsTLUrAd5luDOx
+   HNdBh5Zkj5LAyirk0sZj4u0uCIiSPOlHivqTEerZhOob1iJKFFel79tY0
+   g==;
+X-CSE-ConnectionGUID: zXcM1Hd/QTyyGX94Qk5tww==
+X-CSE-MsgGUID: 7ybdG6y2SpeDeIgQTkA/9Q==
 X-IronPort-AV: E=Sophos;i="6.25,168,1779148800"; 
-   d="scan'208";a="23825494"
+   d="scan'208";a="23641431"
 Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 06:59:41 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:17743]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.48.250:2525] with esmtp (Farcaster)
- id 3f68c504-f813-46fe-b5e4-1fa6b881a54b; Fri, 17 Jul 2026 06:59:41 +0000 (UTC)
-X-Farcaster-Flow-ID: 3f68c504-f813-46fe-b5e4-1fa6b881a54b
+  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 06:59:47 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:5518]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.11.151:2525] with esmtp (Farcaster)
+ id 94068dd9-789e-41fd-aa93-24da1e53ca58; Fri, 17 Jul 2026 06:59:46 +0000 (UTC)
+X-Farcaster-Flow-ID: 94068dd9-789e-41fd-aa93-24da1e53ca58
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Fri, 17 Jul 2026 06:59:40 +0000
+ Fri, 17 Jul 2026 06:59:46 +0000
 Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Fri, 17 Jul 2026 06:59:34 +0000
+ Fri, 17 Jul 2026 06:59:40 +0000
 From: Arthur Kiyanovski <akiyano@amazon.com>
 To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
 	<netdev@vger.kernel.org>
@@ -67,161 +68,645 @@ CC: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
 	<shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
 	<skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, Bjorn Helgaas
 	<bhelgaas@google.com>, <vadim.fedorenko@linux.dev>
-Subject: [PATCH v5 net-next 0/7] ptp: Add PHC timestamp quality attributes
-Date: Fri, 17 Jul 2026 06:59:11 +0000
-Message-ID: <20260717065924.2556-1-akiyano@amazon.com>
+Subject: [PATCH v5 net-next 1/7] ptp: Add ioctls for PHC timestamps with quality attributes
+Date: Fri, 17 Jul 2026 06:59:12 +0000
+Message-ID: <20260717065924.2556-2-akiyano@amazon.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260717065924.2556-1-akiyano@amazon.com>
+References: <20260717065924.2556-1-akiyano@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-This series adds quality attributes to PTP Hardware Clock (PHC)
-timestamps, allowing userspace to obtain error bound, clock status,
-timescale, and system counter values alongside timestamps in a single
-call.
+Introduce two new ioctls that extend existing PTP timestamp interfaces
+with clock quality information:
 
-Motivation
-----------
-The existing PTP APIs return timestamps without any indication of
-their quality. Applications that need clock accuracy and
-synchronization status commonly rely on external tools such as
-ptp4l, which implement synchronization logic and can export their
-measurement of clock accuracy. For managed PHC devices — such as
-the ENA network adapter, whose clock is synchronized by the device
-without userspace involvement — these tools are not available, and
-the existing APIs lack a way to report quality metrics to consumers
-of time.
+- PTP_SYS_OFFSET_EXTENDED_ATTRS: Extends PTP_SYS_OFFSET_EXTENDED
+- PTP_SYS_OFFSET_PRECISE_ATTRS: Extends PTP_SYS_OFFSET_PRECISE
 
-This was previously proposed as an RFC [1] with a single ioctl.
-Based on community feedback, the design was reworked to cover both
-the extended (multi-sample) and precise (cross-timestamp) paths.
+These ioctls provide quality attributes alongside timestamps:
 
-Design
-------
-The UAPI was redesigned based on Thomas Gleixner's proposal [2]:
+1. error_bound: Maximum deviation from true time (nanoseconds), based
+   on device's internal clock state
+2. clock_status: Synchronization state (unknown, initializing,
+   synchronized, free-running, unreliable)
+3. timescale: Time reference (TAI, UTC, etc.)
+4. counter_value: Raw system counter (e.g. TSC ticks) captured by the
+   timekeeping core alongside each system timestamp
+5. counter_id: Identifies the counter source (e.g. TSC, ARM arch counter)
 
-- A unified data structure (struct ptp_sys_offset_attrs) is used
-  for both extended and precise ioctls.
+This supports three use cases:
 
-- A u32 valid bitmask in struct ptp_clock_attrs indicates which
-  attributes are populated, replacing sentinel values. Drivers
-  set only the bits for attributes they provide.
+1. Managed PHC devices (e.g., ENA, vmclock) that maintain their own
+   synchronization and can report quality metrics directly to userspace
+   without requiring ptp4l
 
-- System counter values (cycles + counter_id) are carried in
-  struct ptp_sys_time alongside each system timestamp. These are
-  populated by the timekeeping core cross-timestamp infrastructure,
-  which is now merged in net-next [3] — drivers do not fill them.
-  This series therefore applies directly to net-next with no
-  out-of-tree dependency.
+2. Applications that need complete time quality information in a single
+   call, regardless of how the PHC is synchronized
 
-- Graceful degradation: the attrs ioctls work even on devices
-  without attrs callbacks, falling back to gettimex64 /
-  getcrosststamp and returning attrs.valid = 0.
+3. VMMs that need raw system counter values paired
+   with PTP timestamps for feed-forward clock calibration, avoiding the
+   feedback loop inherent in NTP-style synchronization
 
-A capability flag is added to ptp_clock_caps so userspace can
-discover attributes support.
+Timescale definitions use a Continuity/Discipline framework to describe
+timeline properties and steering behavior consistently across all
+entries.
 
-Patches 2-3 add testptp support for the new ioctls.
+This implementation is based on the original RFC and the UAPI design
+discussion linked below.
 
-Patch 4 implements the attributes for ptp_vmclock, reporting
-error bound, clock status, and timescale.
+Link: https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
+Link: https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
+Signed-off-by: Amit Bernstein <amitbern@amazon.com>
+Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+---
+ drivers/ptp/ptp_chardev.c        | 165 +++++++++++++++++--
+ drivers/ptp/ptp_clock.c          |   4 +-
+ include/linux/ptp_clock_kernel.h |  19 +++
+ include/uapi/linux/ptp_clock.h   | 265 ++++++++++++++++++++++++++++++-
+ 4 files changed, 438 insertions(+), 15 deletions(-)
 
-Patches 5-7 implement the attributes for the ENA driver,
-reporting error bound from the device's PHC layer.
-
-v5:
-- ptp: simplify ptp_sys_offset_{extended,precise}_attrs() to copy
-  the request header onto the stack and allocate the result buffer
-  once, instead of memdup_user() + kfree() + kzalloc(). (Saeed
-  Bshara)
-- ptp: deduplicate the kernel-doc for gettimexattrs64 /
-  getcrosststampattrs by referencing the base gettimex64 /
-  getcrosststamp callbacks. (Saeed Bshara)
-- ptp: add missing kernel-doc member descriptions for struct
-  ptp_timestamp and struct ptp_sys_offset_attrs.
-- selftests/ptp: map the clockid to a name and print once instead
-  of three duplicated printfs. (Saeed Bshara)
-- selftests/ptp: make -a a modifier on -x/-X instead of an
-  exclusive option; drop -A (use -X -a); trim the unknown-clock
-  output; print "not reported" for attributes the device does not
-  report. (Saeed Bshara)
-- ptp_vmclock: scope the local 'st' inside the SUPPORT_KVMCLOCK
-  block to fix an unused-variable warning on !CONFIG_KVM_GUEST.
-  (kernel test robot)
-- No UAPI changes; the ioctl structures are unchanged from v4.
-
-v4:
-- Complete UAPI redesign per Thomas Gleixner's proposal [2]:
-  unified data structure with u32 valid bitmask, system counter
-  in ptp_sys_time (populated by core, not drivers), graceful
-  degradation for devices without attrs callbacks. (Thomas Gleixner,
-  David Woodhouse)
-- Counter values moved from driver attrs callback to timekeeping
-  core infrastructure — drivers no longer set counter_id or
-  counter_value.
-- Flexible array member for timestamps[] (kernel bounds the copy,
-  userspace allocates for num_samples requested).
-- Drop separate ptp_clock_attributes kernel struct — driver
-  callbacks fill the UAPI ptp_clock_attrs directly.
-
-v3:
-- Remove patch 5/8 from v2 (return-code bugfix) — sent separately
-  as [PATCH net] to the net tree.
-- Zero-initialize struct ptp_clock_attributes in PTP core ioctl
-  handlers to prevent stack leak of unset fields. (Simon Horman,
-  sashiko)
-- ptp_vmclock: validate counter_period_shift < 128 to prevent
-  undefined behavior on untrusted hypervisor input. (sashiko)
-- ptp_vmclock: add overflow check on err_hi * NSEC_PER_SEC to
-  prevent silent wraparound producing erroneously small error
-  bound. (sashiko)
-- ptp_vmclock: report PTP_TIMESCALE_TAI after tai_adjust() to
-  avoid timescale mismatch. (sashiko)
-- ENA: set counter_id = 0, counter_value = 0 in gettimexattrs64
-  for defense-in-depth. (sashiko)
-
-v2:
-- Fix build bisectability: move ena_com.c consumer updates into
-  patch 6/8 and ena_phc.c caller update into patch 7/8 so each
-  patch compiles independently.
-- Add missing Cc for Amit Bernstein (co-author of ENA patches).
-
-[1] https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
-[2] https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
-[3] https://lore.kernel.org/all/20260526165826.392227559@kernel.org/
-
-Arthur Kiyanovski (7):
-  ptp: Add ioctls for PHC timestamps with quality attributes
-  selftests/ptp: Extract print_system_timestamp helper in testptp
-  selftests/ptp: Add testptp support for attributes ioctls
-  ptp: ptp_vmclock: Implement attributes ioctls
-  net: ena: Update PHC admin interface for error bound support
-  net: ena: Add error bound to PHC communication layer
-  net: ena: Implement gettimexattrs64 callback for PTP attributes
-
- .../device_drivers/ethernet/amazon/ena.rst    |   2 +
- .../net/ethernet/amazon/ena/ena_admin_defs.h  |  17 +-
- drivers/net/ethernet/amazon/ena/ena_com.c     |  51 ++--
- drivers/net/ethernet/amazon/ena/ena_com.h     |   5 +-
- drivers/net/ethernet/amazon/ena/ena_debugfs.c |   3 +
- drivers/net/ethernet/amazon/ena/ena_phc.c     |  61 +++-
- drivers/ptp/ptp_chardev.c                     | 165 ++++++++++-
- drivers/ptp/ptp_clock.c                       |   4 +-
- drivers/ptp/ptp_vmclock.c                     | 197 +++++++++++--
- include/linux/ptp_clock_kernel.h              |  19 ++
- include/uapi/linux/ptp_clock.h                | 265 +++++++++++++++++-
- tools/testing/selftests/ptp/testptp.c         | 189 ++++++++++---
- 12 files changed, 868 insertions(+), 110 deletions(-)
-
-
-base-commit: f6f3b36c15ed44de1fbb44e645e4fae8c4a4453e
+diff --git a/drivers/ptp/ptp_chardev.c b/drivers/ptp/ptp_chardev.c
+index dc23cd708cfe..d30ee4f51fbb 100644
+--- a/drivers/ptp/ptp_chardev.c
++++ b/drivers/ptp/ptp_chardev.c
+@@ -190,6 +190,8 @@ static long ptp_clock_getcaps(struct ptp_clock *ptp, void __user *arg)
+ 		.cross_timestamping	= ptp->info->getcrosststamp != NULL,
+ 		.adjust_phase		= ptp->info->adjphase != NULL &&
+ 					  ptp->info->getmaxphase != NULL,
++		.extended_attrs		= ptp->info->gettimexattrs64 != NULL,
++		.precise_attrs		= ptp->info->getcrosststampattrs != NULL,
+ 	};
+ 
+ 	if (caps.adjust_phase)
+@@ -347,11 +349,28 @@ typedef int (*ptp_gettimex_fn)(struct ptp_clock_info *,
+ 			       struct timespec64 *,
+ 			       struct ptp_system_timestamp *);
+ 
++static int ptp_validate_sys_offset_clockid(__kernel_clockid_t clockid)
++{
++	switch (clockid) {
++	case CLOCK_REALTIME:
++	case CLOCK_MONOTONIC:
++	case CLOCK_MONOTONIC_RAW:
++		return 0;
++	case CLOCK_AUX ... CLOCK_AUX_LAST:
++		if (IS_ENABLED(CONFIG_POSIX_AUX_CLOCKS))
++			return 0;
++		fallthrough;
++	default:
++		return -EINVAL;
++	}
++}
++
+ static long ptp_sys_offset_extended(struct ptp_clock *ptp, void __user *arg,
+ 				    ptp_gettimex_fn gettimex_fn)
+ {
+ 	struct ptp_sys_offset_extended *extoff __free(kfree) = NULL;
+ 	struct ptp_system_timestamp sts;
++	int err;
+ 
+ 	if (!gettimex_fn)
+ 		return -EOPNOTSUPP;
+@@ -363,23 +382,13 @@ static long ptp_sys_offset_extended(struct ptp_clock *ptp, void __user *arg,
+ 	if (extoff->n_samples > PTP_MAX_SAMPLES || extoff->rsv[0] || extoff->rsv[1])
+ 		return -EINVAL;
+ 
+-	switch (extoff->clockid) {
+-	case CLOCK_REALTIME:
+-	case CLOCK_MONOTONIC:
+-	case CLOCK_MONOTONIC_RAW:
+-		break;
+-	case CLOCK_AUX ... CLOCK_AUX_LAST:
+-		if (IS_ENABLED(CONFIG_POSIX_AUX_CLOCKS))
+-			break;
+-		fallthrough;
+-	default:
+-		return -EINVAL;
+-	}
++	err = ptp_validate_sys_offset_clockid(extoff->clockid);
++	if (err)
++		return err;
+ 
+ 	sts.clockid = extoff->clockid;
+ 	for (unsigned int i = 0; i < extoff->n_samples; i++) {
+ 		struct timespec64 ts;
+-		int err;
+ 
+ 		err = gettimex_fn(ptp->info, &ts, &sts);
+ 		if (err)
+@@ -404,6 +413,130 @@ static long ptp_sys_offset_extended(struct ptp_clock *ptp, void __user *arg,
+ 	return copy_to_user(arg, extoff, sizeof(*extoff)) ? -EFAULT : 0;
+ }
+ 
++static long ptp_sys_offset_extended_attrs(struct ptp_clock *ptp, void __user *arg)
++{
++	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
++	struct ptp_attrs_request request;
++	struct ptp_system_timestamp sts;
++	unsigned int n_samples;
++	int err;
++
++	if (copy_from_user(&request, arg, sizeof(request)))
++		return -EFAULT;
++
++	if (request.valid ||
++	    request.num_samples > PTP_MAX_SAMPLES ||
++	    request.num_samples == 0)
++		return -EINVAL;
++
++	err = ptp_validate_sys_offset_clockid(request.clock_id);
++	if (err)
++		return err;
++
++	n_samples = request.num_samples;
++	sts.clockid = request.clock_id;
++
++	data = kzalloc(struct_size(data, timestamps, n_samples), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->request.num_samples = n_samples;
++
++	for (unsigned int i = 0; i < n_samples; i++) {
++		struct ptp_clock_attrs att = {};
++		struct timespec64 ts;
++
++		if (ptp->info->gettimexattrs64)
++			err = ptp->info->gettimexattrs64(ptp->info, &ts,
++							 &sts, &att);
++		else if (ptp->info->gettimex64)
++			err = ptp->info->gettimex64(ptp->info, &ts, &sts);
++		else
++			return -EOPNOTSUPP;
++
++		if (err)
++			return err;
++
++		/* Filter out disabled or unavailable clocks */
++		if (!sts.pre_sts.valid || !sts.post_sts.valid)
++			return -EINVAL;
++
++		data->timestamps[i].pre_systime.sys_time =
++			ktime_to_ns(sts.pre_sts.systime);
++		data->timestamps[i].pre_systime.sys_rawtime =
++			ktime_to_ns(sts.pre_sts.monoraw);
++		data->timestamps[i].pre_systime.sys_counter =
++			sts.pre_sts.cycles;
++		data->timestamps[i].pre_systime.sys_counter_id =
++			sts.pre_sts.cs_id;
++		data->timestamps[i].devtime.device_time.sec = ts.tv_sec;
++		data->timestamps[i].devtime.device_time.nsec = ts.tv_nsec;
++		data->timestamps[i].devtime.attrs = att;
++		data->timestamps[i].post_systime.sys_time =
++			ktime_to_ns(sts.post_sts.systime);
++		data->timestamps[i].post_systime.sys_rawtime =
++			ktime_to_ns(sts.post_sts.monoraw);
++		data->timestamps[i].post_systime.sys_counter =
++			sts.post_sts.cycles;
++		data->timestamps[i].post_systime.sys_counter_id =
++			sts.post_sts.cs_id;
++	}
++
++	return copy_to_user(arg, data,
++			    struct_size(data, timestamps, n_samples)) ? -EFAULT : 0;
++}
++
++static long ptp_sys_offset_precise_attrs(struct ptp_clock *ptp, void __user *arg)
++{
++	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
++	struct system_device_crosststamp xtstamp;
++	struct ptp_attrs_request request;
++	struct ptp_clock_attrs att = {};
++	struct timespec64 ts;
++	int err;
++
++	if (copy_from_user(&request, arg, sizeof(request)))
++		return -EFAULT;
++
++	if (request.valid ||
++	    request.num_samples != 1)
++		return -EINVAL;
++
++	err = ptp_validate_sys_offset_clockid(request.clock_id);
++	if (err)
++		return err;
++
++	data = kzalloc(struct_size(data, timestamps, 1), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	if (ptp->info->getcrosststampattrs)
++		err = ptp->info->getcrosststampattrs(ptp->info, &xtstamp, &att);
++	else if (ptp->info->getcrosststamp)
++		err = ptp->info->getcrosststamp(ptp->info, &xtstamp);
++	else
++		return -EOPNOTSUPP;
++
++	if (err)
++		return err;
++
++	ts = ktime_to_timespec64(xtstamp.device);
++	data->timestamps[0].systime.sys_time =
++		ktime_to_ns(xtstamp.sys_systime);
++	data->timestamps[0].systime.sys_rawtime =
++		ktime_to_ns(xtstamp.sys_monoraw);
++	data->timestamps[0].systime.sys_counter =
++		xtstamp.sys_counter.cycles;
++	data->timestamps[0].systime.sys_counter_id =
++		xtstamp.sys_counter.cs_id;
++	data->timestamps[0].devtime.device_time.sec = ts.tv_sec;
++	data->timestamps[0].devtime.device_time.nsec = ts.tv_nsec;
++	data->timestamps[0].devtime.attrs = att;
++
++	return copy_to_user(arg, data,
++			    struct_size(data, timestamps, 1)) ? -EFAULT : 0;
++}
++
+ static long ptp_sys_offset(struct ptp_clock *ptp, void __user *arg)
+ {
+ 	struct ptp_sys_offset *sysoff __free(kfree) = NULL;
+@@ -539,11 +672,17 @@ long ptp_ioctl(struct posix_clock_context *pccontext, unsigned int cmd,
+ 		return ptp_sys_offset_precise(ptp, argptr,
+ 					      ptp->info->getcrosststamp);
+ 
++	case PTP_SYS_OFFSET_PRECISE_ATTRS:
++		return ptp_sys_offset_precise_attrs(ptp, argptr);
++
+ 	case PTP_SYS_OFFSET_EXTENDED:
+ 	case PTP_SYS_OFFSET_EXTENDED2:
+ 		return ptp_sys_offset_extended(ptp, argptr,
+ 					       ptp->info->gettimex64);
+ 
++	case PTP_SYS_OFFSET_EXTENDED_ATTRS:
++		return ptp_sys_offset_extended_attrs(ptp, argptr);
++
+ 	case PTP_SYS_OFFSET:
+ 	case PTP_SYS_OFFSET2:
+ 		return ptp_sys_offset(ptp, argptr);
+diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+index d6f54ccaf93b..849aef8191c5 100644
+--- a/drivers/ptp/ptp_clock.c
++++ b/drivers/ptp/ptp_clock.c
+@@ -112,7 +112,9 @@ static int ptp_clock_gettime(struct posix_clock *pc, struct timespec64 *tp)
+ 	struct ptp_clock *ptp = container_of(pc, struct ptp_clock, clock);
+ 	int err;
+ 
+-	if (ptp->info->gettimex64)
++	if (ptp->info->gettimexattrs64)
++		err = ptp->info->gettimexattrs64(ptp->info, tp, NULL, NULL);
++	else if (ptp->info->gettimex64)
+ 		err = ptp->info->gettimex64(ptp->info, tp, NULL);
+ 	else
+ 		err = ptp->info->gettime64(ptp->info, tp);
+diff --git a/include/linux/ptp_clock_kernel.h b/include/linux/ptp_clock_kernel.h
+index 36a27a910595..f1a3d38da1de 100644
+--- a/include/linux/ptp_clock_kernel.h
++++ b/include/linux/ptp_clock_kernel.h
+@@ -123,11 +123,23 @@ struct ptp_system_timestamp {
+  *               reading the lowest bits of the PHC timestamp and the second
+  *               reading immediately follows that.
+  *
++ * @gettimexattrs64:  Same as @gettimex64, but also fills @att (if not NULL)
++ *                    with the maximum error bound for the returned PHC
++ *                    timestamp in nanoseconds, the timescale for the returned
++ *                    PHC timestamp and the clock's qualitative synchronization
++ *                    status.
++ *
+  * @getcrosststamp:  Reads the current time from the hardware clock and
+  *                   system clock simultaneously.
+  *                   parameter cts: Contains timestamp (device,system) pair,
+  *                   where system time is realtime and monotonic.
+  *
++ * @getcrosststampattrs:  Same as @getcrosststamp, but also fills @att (if not
++ *                        NULL) with the maximum error bound for the returned
++ *                        PHC timestamp in nanoseconds, the timescale for the
++ *                        returned PHC timestamp and the clock's qualitative
++ *                        synchronization status.
++ *
+  * @settime64:  Set the current time on the hardware clock.
+  *              parameter ts: Time value to set.
+  *
+@@ -209,8 +221,15 @@ struct ptp_clock_info {
+ 	int (*gettime64)(struct ptp_clock_info *ptp, struct timespec64 *ts);
+ 	int (*gettimex64)(struct ptp_clock_info *ptp, struct timespec64 *ts,
+ 			  struct ptp_system_timestamp *sts);
++	int (*gettimexattrs64)(struct ptp_clock_info *ptp,
++			       struct timespec64 *ts,
++			       struct ptp_system_timestamp *sts,
++			       struct ptp_clock_attrs *att);
+ 	int (*getcrosststamp)(struct ptp_clock_info *ptp,
+ 			      struct system_device_crosststamp *cts);
++	int (*getcrosststampattrs)(struct ptp_clock_info *ptp,
++				   struct system_device_crosststamp *cts,
++				   struct ptp_clock_attrs *att);
+ 	int (*settime64)(struct ptp_clock_info *p, const struct timespec64 *ts);
+ 	int (*getcycles64)(struct ptp_clock_info *ptp, struct timespec64 *ts);
+ 	int (*getcyclesx64)(struct ptp_clock_info *ptp, struct timespec64 *ts,
+diff --git a/include/uapi/linux/ptp_clock.h b/include/uapi/linux/ptp_clock.h
+index 46d45f902486..3862d79e1910 100644
+--- a/include/uapi/linux/ptp_clock.h
++++ b/include/uapi/linux/ptp_clock.h
+@@ -79,6 +79,137 @@
+  */
+ #define PTP_PEROUT_V1_VALID_FLAGS	(0)
+ 
++/*
++ * Clock status values for struct ptp_clock_attrs.status
++ */
++enum ptp_clock_status {
++	/* Clock synchronization status cannot be reliably determined */
++	PTP_CLOCK_STATUS_UNKNOWN      = 0,
++
++	/* Clock is acquiring synchronization */
++	PTP_CLOCK_STATUS_INITIALIZING = 1,
++
++	/* Clock is synchronized and maintained accurately by the device */
++	PTP_CLOCK_STATUS_SYNCED       = 2,
++
++	/* Clock is drifting but remains within acceptable error bounds */
++	PTP_CLOCK_STATUS_HOLDOVER     = 3,
++
++	/* Clock is drifting without adjustments or synchronization */
++	PTP_CLOCK_STATUS_FREE_RUNNING = 4,
++
++	/* Clock is unreliable, the error_bound value cannot be trusted */
++	PTP_CLOCK_STATUS_UNRELIABLE   = 5
++};
++
++/*
++ * Clock timescale values for struct ptp_clock_attrs.timescale.
++ *
++ * These definitions describe the mathematical properties and reference
++ * epochs of the timescale provided by the PHC.
++ *
++ * Discipline: Describes the frequency/phase steering behavior.
++ * Continuity: Describes whether the timeline is uninterrupted.
++ */
++enum ptp_clock_timescale {
++	/* Unknown or unspecified timescale */
++	PTP_TIMESCALE_UNKNOWN = 0,
++
++	/********************* Absolute Atomic Timescales *********************
++	 * These timescales are continuous, monotonic standards based on atomic
++	 * physics. They do not experience phase jumps.
++	 **********************************************************************/
++
++	/**
++	 * International Atomic Time (TAI)
++	 * Epoch: 1958-01-01 00:00:00.
++	 * Continuity: Strictly monotonic and continuous; no leap seconds.
++	 * Discipline: Primary atomic reference; no phase jumps.
++	 */
++	PTP_TIMESCALE_TAI = 1,
++
++	/**
++	 * Terrestrial Time (TT)
++	 * Epoch: 1958-01-01 00:00:00.
++	 * Continuity: Strictly monotonic and continuous; no leap seconds.
++	 * Discipline: Defined as TAI + 32.184s constant offset.
++	 */
++	PTP_TIMESCALE_TT = 2,
++
++	/**
++	 * Global Positioning System (GPS) Time
++	 * Epoch: 1980-01-06 00:00:00.
++	 * Continuity: Strictly monotonic and continuous; no leap seconds.
++	 * Discipline: Defined by the GPS constellation; fixed offset from TAI.
++	 */
++	PTP_TIMESCALE_GPS = 3,
++
++	/****************** UTC-Based Timescales (Civil Time) *****************
++	 * These timescales are derived from TAI but adjusted to align with
++	 * the Earth's rotation, primarily through leap seconds.
++	 **********************************************************************/
++
++	/**
++	 * Coordinated Universal Time (UTC) - Wall-clock (CLOCK_REALTIME)
++	 * Epoch: 1970-01-01 00:00:00 (Unix epoch).
++	 * Continuity: Discontinuous; subject to 1-second leap second
++	 *             phase jumps.
++	 * Discipline: Frequency steered; incorporates leap second corrections.
++	 *
++	 * Note: Leap-smeared UTC MUST NOT be advertised as PTP_TIMESCALE_UTC.
++	 * Smear algorithms are not standardized and the resulting timescale
++	 * is ambiguous. Implementations using smeared UTC MUST advertise
++	 * PTP_TIMESCALE_UNKNOWN or PTP_TIMESCALE_PROPRIETARY instead.
++	 */
++	PTP_TIMESCALE_UTC = 4,
++
++	/**
++	 * POSIX Time (Unix Time)
++	 * Epoch: 1970-01-01 00:00:00.
++	 * Continuity: Discontinuous; leap seconds handled by
++	 *             repeating/skipping values.
++	 * Discipline: Follows UTC frequency steering and phase jumps.
++	 */
++	PTP_TIMESCALE_POSIX = 5,
++
++	/****************** System-Relative Monotonic Clocks ******************
++	 * These timescales are relative to a system event (like boot)
++	 * and are not synchronized to an external atomic standard.
++	 **********************************************************************/
++
++	/**
++	 * Monotonic System Clock (CLOCK_MONOTONIC)
++	 * Epoch: Arbitrary (System boot time).
++	 * Continuity: Strictly monotonic; no leap seconds.
++	 * Discipline: Frequency steered to match system reference;
++	 *             does not advance during suspend.
++	 */
++	PTP_TIMESCALE_MONOTONIC = 6,
++
++	/**
++	 * Raw Monotonic System Clock (CLOCK_MONOTONIC_RAW)
++	 * Epoch: Arbitrary (System boot time).
++	 * Continuity: Strictly monotonic; no leap seconds.
++	 * Discipline: Raw hardware oscillator; no frequency steering
++	 *             or discipline.
++	 */
++	PTP_TIMESCALE_MONOTONIC_RAW = 7,
++
++	/**
++	 * Boot Time System Clock (CLOCK_BOOTTIME)
++	 * Epoch: Arbitrary (System boot time).
++	 * Continuity: Strictly monotonic and continuous; no leap seconds.
++	 * Discipline: Frequency steered to match system reference;
++	 *             advances during suspend.
++	 */
++	PTP_TIMESCALE_BOOTTIME = 8,
++
++	/********************** Vendor-Specific Timescale *********************/
++
++	/* A proprietary or vendor-specific timescale with custom rules. */
++	PTP_TIMESCALE_PROPRIETARY = 9,
++};
++
+ /*
+  * struct ptp_clock_time - represents a time value
+  *
+@@ -94,6 +225,130 @@ struct ptp_clock_time {
+ 	__u32 reserved;
+ };
+ 
++/*
++ * Hardware counter identifiers for struct ptp_sys_time.sys_counter_id
++ */
++enum ptp_counter_id {
++	/* Counter value not available or type not specified */
++	PTP_COUNTER_UNKNOWN = 0,
++
++	/* x86 Time Stamp Counter (TSC) */
++	PTP_COUNTER_X86_TSC = 1,
++
++	/* ARM Generic Timer virtual counter */
++	PTP_COUNTER_ARM_ARCH = 2,
++};
++
++/* Valid flags for struct ptp_clock_attrs.valid */
++#define PTP_ATTRS_VALID_ERROR_BOUND	(1 << 0)
++#define PTP_ATTRS_VALID_TIMESCALE	(1 << 1)
++#define PTP_ATTRS_VALID_STATUS		(1 << 2)
++
++/**
++ * struct ptp_clock_attrs - quality attributes for a PHC timestamp
++ *
++ * @valid:       Bitmask of PTP_ATTRS_VALID_* indicating which fields
++ *               are populated. Zero means no attributes available.
++ * @error_bound: Maximum error in nanoseconds. Valid only when
++ *               PTP_ATTRS_VALID_ERROR_BOUND is set.
++ * @timescale:   Clock timescale (enum ptp_clock_timescale). Valid only
++ *               when PTP_ATTRS_VALID_TIMESCALE is set.
++ * @status:      Synchronization status (enum ptp_clock_status). Valid
++ *               only when PTP_ATTRS_VALID_STATUS is set.
++ * @rsv:         Reserved for future use, must be zero.
++ */
++struct ptp_clock_attrs {
++	__u32 valid;
++	__u32 error_bound;
++	__u32 timescale;
++	__u32 status;
++	__u32 rsv[4];
++};
++
++/**
++ * struct ptp_sys_time - system time snapshot with counter value
++ *
++ * @sys_time:       System time in nanoseconds (clock selected by request).
++ * @sys_rawtime:    CLOCK_MONOTONIC_RAW time in nanoseconds.
++ * @sys_counter:    Raw clocksource counter value (0 = unavailable).
++ * @sys_counter_id: Identifies the counter (enum ptp_counter_id).
++ * @rsv:            Reserved for future use, must be zero.
++ */
++struct ptp_sys_time {
++	__s64 sys_time;
++	__s64 sys_rawtime;
++	__u64 sys_counter;
++	__u32 sys_counter_id;
++	__u32 rsv;
++};
++
++/**
++ * struct ptp_dev_time - device timestamp with quality attributes
++ *
++ * @device_time: PHC timestamp value.
++ * @attrs:       Quality attributes for this timestamp.
++ */
++struct ptp_dev_time {
++	struct ptp_clock_time device_time;
++	struct ptp_clock_attrs attrs;
++};
++
++/**
++ * struct ptp_timestamp - a complete timestamp sample
++ *
++ * @systime:      System time snapshot; shares storage with @pre_systime,
++ *                used by PTP_SYS_OFFSET_PRECISE_ATTRS.
++ * @pre_systime:  System time read right before the device read, used by
++ *                PTP_SYS_OFFSET_EXTENDED_ATTRS.
++ * @devtime:      Device timestamp with its quality attributes.
++ * @post_systime: System time read right after the device read, used by
++ *                PTP_SYS_OFFSET_EXTENDED_ATTRS.
++ *
++ * For PTP_SYS_OFFSET_EXTENDED_ATTRS: pre_systime and post_systime bracket
++ * the device read (ABA sandwich).
++ * For PTP_SYS_OFFSET_PRECISE_ATTRS: only systime (union with pre_systime)
++ * is meaningful; post_systime is zeroed.
++ */
++struct ptp_timestamp {
++	union {
++		struct ptp_sys_time systime;
++		struct ptp_sys_time pre_systime;
++	};
++	struct ptp_dev_time devtime;
++	struct ptp_sys_time post_systime;
++};
++
++/**
++ * struct ptp_attrs_request - request parameters for attrs ioctls
++ *
++ * @valid:       Bitmask for future request extensions. Must be zero for now.
++ * @clock_id:    Clock base for system timestamps (CLOCK_REALTIME, etc).
++ * @num_samples: Number of timestamp samples requested.
++ *               For PTP_SYS_OFFSET_PRECISE_ATTRS must be 1.
++ * @rsv:         Reserved for future use, must be zero.
++ */
++struct ptp_attrs_request {
++	__u32 valid;
++	__kernel_clockid_t clock_id;
++	__u32 num_samples;
++	__u32 rsv[3];
++};
++
++/**
++ * struct ptp_sys_offset_attrs - unified data structure for attrs ioctls
++ *
++ * @request:    Request parameters (see struct ptp_attrs_request).
++ * @timestamps: Array of returned samples; holds request.num_samples entries.
++ *
++ * Used by both PTP_SYS_OFFSET_EXTENDED_ATTRS and
++ * PTP_SYS_OFFSET_PRECISE_ATTRS. Userspace allocates space for
++ * request.num_samples entries in the timestamps array.
++ */
++struct ptp_sys_offset_attrs {
++	struct ptp_attrs_request request;
++	struct ptp_timestamp timestamps[];
++};
++
+ struct ptp_clock_caps {
+ 	int max_adj;   /* Maximum frequency adjustment in parts per billon. */
+ 	int n_alarm;   /* Number of programmable alarms. */
+@@ -106,7 +361,11 @@ struct ptp_clock_caps {
+ 	/* Whether the clock supports adjust phase */
+ 	int adjust_phase;
+ 	int max_phase_adj; /* Maximum phase adjustment in nanoseconds. */
+-	int rsv[11];       /* Reserved for future use. */
++	/* Whether the clock supports extended timestamps with attributes */
++	int extended_attrs;
++	/* Whether the clock supports precise cross-timestamps with attributes */
++	int precise_attrs;
++	int rsv[9];       /* Reserved for future use. */
+ };
+ 
+ struct ptp_extts_request {
+@@ -252,6 +511,10 @@ struct ptp_pin_desc {
+ 	_IOWR(PTP_CLK_MAGIC, 21, struct ptp_sys_offset_precise)
+ #define PTP_SYS_OFFSET_EXTENDED_CYCLES \
+ 	_IOWR(PTP_CLK_MAGIC, 22, struct ptp_sys_offset_extended)
++#define PTP_SYS_OFFSET_PRECISE_ATTRS \
++	_IOWR(PTP_CLK_MAGIC, 23, struct ptp_sys_offset_attrs)
++#define PTP_SYS_OFFSET_EXTENDED_ATTRS \
++	_IOWR(PTP_CLK_MAGIC, 24, struct ptp_sys_offset_attrs)
+ 
+ struct ptp_extts_event {
+ 	struct ptp_clock_time t; /* Time event occurred. */
 -- 
 2.47.3
 
