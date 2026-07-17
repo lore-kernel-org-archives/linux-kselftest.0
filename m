@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1B5348C4E
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 15:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1379136DA14
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 15:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303316; cv=none; b=B+WImr9TB/8rFeCktK+uoDMjmgtNITmHUhr4K/9ELnWDgcnmoDXQoJQxVEYYO477m+rdD0OqF1ay10m7CxC0iL7iPxh6nHsYv6y10uK5OzJd5FMiy+PayZ3f90HwDTDKTuI6vG5rp1q21dMyNj6ZM1Ob+vGCdXYuOXtkRGgFTuk=
+	t=1784303322; cv=none; b=JbRGrRMNBfZuk7h7YApwSzEbQQywAPn0nFPjthNpLtlgUv9Zya+YOccGpVxXMfv3OagZLgTLu1Xjll2YE3R698OFziwgQ9gWnv0ONVh8Y+H7NjQ+MmPKLtFN4xMlp/bamygRSy+YsXDOudyYZLqKUoy7ce92xgL/H7cDUqOriBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303316; c=relaxed/simple;
-	bh=oHrzS7c2fdMxPD+EoUgQkE+zbdNYCbx8okcllqp9KYs=;
+	s=arc-20240116; t=1784303322; c=relaxed/simple;
+	bh=5rKxQ1zpC6RNHSnEZCSocKyHSrRa62pnNI/y7I042Ao=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a3EHtO1LR4V5ZXPlcEEevCBm+N5songrdIFMvqa8XJj9VmWcRgykrkaqV4unlznTBayTeJOcSx1NESlVVHr2MWgIiyp7qVg04EBdOlbfHpHDRerS7yYSN2skEbMr3eCayOo3byQUwA+Av0PrRKTg8NGiCUGVIr+dszZfAfDNBQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U2Wrhv3z; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=UClWvTjjkG4biIHP6QlucuOd4yDcuTGARbk5WEE8HI4ZkqpezchkDusrQ94LMQdTUSUDLQq2cVU6DItcNkwmnSxbJ5+qJXm3p3SjTL1NI6znzddC3ov09jgzBoli5hrM1y4n9gNzK+HAhxslz1h+w+y2AG2OIZ0XUEO/hFeOQcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DyfZoqcg; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U2Wrhv3z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DyfZoqcg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784303313;
+	s=mimecast20190719; t=1784303320;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rU+JQSn24qoe+8/7ChMxhPzRjJgh1VjUQ1PsYPpKZ7A=;
-	b=U2Wrhv3zVX4mTn2f8XEN22/CziH8aS99mMyk6K+znUFeHaoHTypcmacbmOeufyLCAxEvq+
-	CLG9Ume3rAeuVPOsmGhk2l5XU7zgoaTQE8ky5RjQQcmmUHpq4iI2AUsgsCwf4szx8SfEW+
-	lD5u3WTO/+YVno+osr8nNUaLAKGgz7o=
+	bh=tgnjwSI/hPUOWvDV3KsGpmfEM2qzvu1QMDBHUn9SIJ0=;
+	b=DyfZoqcgH9Zk+U+E13lEAnUq7wUGxYYg9FuG/Y3g4OS+GCgF7PhzeLzNg+6LCxyod1rndt
+	DL2gVLq0SSYX5sgxShOZ4FnP9tzEDmk/ujuJawXecOdcJz7usVtC8z0N97kuqsuQJyEG9M
+	Zk88gFkXEJSkk9iiaHD8NzqE64A2ARQ=
 Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-668-FmT66Q4YP2WIdLtpdIi7Sw-1; Fri,
- 17 Jul 2026 11:48:29 -0400
-X-MC-Unique: FmT66Q4YP2WIdLtpdIi7Sw-1
-X-Mimecast-MFC-AGG-ID: FmT66Q4YP2WIdLtpdIi7Sw_1784303307
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-462-50J7uDgQNqmo3CPdKv6Jug-1; Fri,
+ 17 Jul 2026 11:48:39 -0400
+X-MC-Unique: 50J7uDgQNqmo3CPdKv6Jug-1
+X-Mimecast-MFC-AGG-ID: 50J7uDgQNqmo3CPdKv6Jug_1784303317
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9D6B1195D009;
-	Fri, 17 Jul 2026 15:48:27 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8BBE9195D026;
+	Fri, 17 Jul 2026 15:48:37 +0000 (UTC)
 Received: from gmonaco-thinkpadt14gen3.local (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 628EC30040BF;
-	Fri, 17 Jul 2026 15:48:24 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 001EA30040BF;
+	Fri, 17 Jul 2026 15:48:32 +0000 (UTC)
 From: Gabriele Monaco <gmonaco@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -49,14 +49,14 @@ To: linux-kernel@vger.kernel.org,
 	Gabriele Monaco <gmonaco@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Cc: Wen Yang <wen.yang@linux.dev>,
-	Nam Cao <namcao@linutronix.de>,
+Cc: Nam Cao <namcao@linutronix.de>,
 	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
 	Tomas Glozar <tglozar@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Subject: [PATCH v4 15/17] selftests/verification: Fix wrong errexit assumption
-Date: Fri, 17 Jul 2026 17:46:36 +0200
-Message-ID: <20260717154638.220789-16-gmonaco@redhat.com>
+	John Kacur <jkacur@redhat.com>,
+	Wen Yang <wen.yang@linux.dev>
+Subject: [PATCH v4 17/17] selftests/verification: Add selftests for deadline and stall monitors
+Date: Fri, 17 Jul 2026 17:46:38 +0200
+Message-ID: <20260717154638.220789-18-gmonaco@redhat.com>
 In-Reply-To: <20260717154638.220789-1-gmonaco@redhat.com>
 References: <20260717154638.220789-1-gmonaco@redhat.com>
 Precedence: bulk
@@ -68,99 +68,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-RV selftest rely on bash errexit (set -e) to terminate with error, when
-a step is expected to return false, the following syntax is used:
+Add selftests to verify deadline monitors don't fail under expected
+conditions and the stall monitor report violations only when expected.
 
-  ! cmd
-
-This however prevents the test from exiting when cmd is false (desired)
-but doesn't exit if cmd is true, since commands prefixed with ! are
-explicitly excluded from errexit.
-
-Use the syntax
-
-  ! cmd || false
-
-Which ends up checking the exit value of ! cmd and supplies a false
-command for errexit to evaluate.
-
-Reviewed-by: Wen Yang <wen.yang@linux.dev>
-Acked-by: Nam Cao <namcao@linutronix.de>
 Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 ---
- .../verification/test.d/rv_monitor_enable_disable.tc   | 10 +++++-----
- .../verification/test.d/rv_monitor_reactor.tc          |  4 ++--
- .../selftests/verification/test.d/rv_wwnr_printk.tc    |  4 ++--
- 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
-index f29236defb5a..61e2c8b54d9a 100644
---- a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
-+++ b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
-@@ -10,7 +10,7 @@ test_simple_monitor() {
-     grep -q "$monitor$" enabled_monitors
- 
-     echo 0 > "monitors/$prefix$monitor/enable"
--    ! grep -q "$monitor$" enabled_monitors
-+    ! grep -q "$monitor$" enabled_monitors || false
- 
-     echo "$monitor" >> enabled_monitors
-     grep -q 1 "monitors/$prefix$monitor/enable"
-@@ -34,12 +34,12 @@ test_container_monitor() {
- 	test -n "$nested"
- 
-     echo 0 > "monitors/$monitor/enable"
--    ! grep -q "^$monitor$" enabled_monitors
-+    ! grep -q "^$monitor$" enabled_monitors || false
- 
-     for nested_dir in "monitors/$monitor"/*; do
-         [ -d "$nested_dir" ] || continue
-         nested=$(basename "$nested_dir")
--        ! grep -q "^$monitor:$nested$" enabled_monitors
-+        ! grep -q "^$monitor:$nested$" enabled_monitors || false
-     done
- 
-     echo "$monitor" >> enabled_monitors
-@@ -71,5 +71,5 @@ for monitor_dir in monitors/*; do
-     fi
- done
- 
--! echo non_existent_monitor > enabled_monitors
--! grep -q "^non_existent_monitor$" enabled_monitors
-+! echo non_existent_monitor > enabled_monitors || false
-+! grep -q "^non_existent_monitor$" enabled_monitors || false
-diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
-index 2958bf849338..516a20971390 100644
---- a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
-+++ b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
-@@ -64,5 +64,5 @@ done
- 
- monitor=$(ls /sys/kernel/tracing/rv/monitors -1 | head -n 1)
- test -f "monitors/$monitor/reactors"
--! echo non_existent_reactor > "monitors/$monitor/reactors"
--! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors"
-+! echo non_existent_reactor > "monitors/$monitor/reactors" || false
-+! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors" || false
-diff --git a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-index 5a59432b1d93..96de95edb530 100644
---- a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-+++ b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-@@ -17,13 +17,13 @@ echo printk > monitors/wwnr/reactors
- load
- 
- echo 0 > monitoring_on
--! load
+Notes:
+    V4:
+    * Restore original stall threshold after selftest
+
+ .../verification/test.d/rv_deadline.tc        | 21 ++++++++++++
+ .../selftests/verification/test.d/rv_stall.tc | 33 +++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_deadline.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_stall.tc
+
+diff --git a/tools/testing/selftests/verification/test.d/rv_deadline.tc b/tools/testing/selftests/verification/test.d/rv_deadline.tc
+new file mode 100644
+index 000000000000..b583096beda6
+--- /dev/null
++++ b/tools/testing/selftests/verification/test.d/rv_deadline.tc
+@@ -0,0 +1,21 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# description: Test deadline monitors trigger no reaction
++# requires: available_reactors deadline:monitor printk:reactor stress-ng:program
++
++load() { # returns true if there was a reaction
++	local lines_before
++	lines_before=$(dmesg | wc -l)
++	stress-ng --cpu 2 --sched deadline --sched-period 100000000 --sched-deadline 100000000 --sched-runtime 20000000 -t 5 &
++	stress-ng --cpu 2 --sched rr --sched-prio 50 --cyclic 1 --cyclic-policy rr --cyclic-prio 50 -t 5 &
++	wait
++	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor [a-z]\+ does not allow event"
++}
++
++echo 1 > monitors/deadline/enable
++echo printk > monitors/deadline/reactors
++
 +! load || false
- echo 1 > monitoring_on
- 
- load
- 
- echo 0 > reacting_on
--! load
++
++echo nop > monitors/deadline/reactors
++echo 0 > monitors/deadline/enable
+diff --git a/tools/testing/selftests/verification/test.d/rv_stall.tc b/tools/testing/selftests/verification/test.d/rv_stall.tc
+new file mode 100644
+index 000000000000..515a10263ca1
+--- /dev/null
++++ b/tools/testing/selftests/verification/test.d/rv_stall.tc
+@@ -0,0 +1,33 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# description: Test stall monitor
++# requires: available_reactors stall:monitor printk:reactor stress-ng:program
++
++THRESHOLD=/sys/module/stall/parameters/threshold_jiffies
++ORIG_THRESHOLD=$(cat $THRESHOLD)
++trap 'echo $ORIG_THRESHOLD > $THRESHOLD' EXIT
++
++load() { # returns true if there was a reaction
++	local lines_before cpu
++	cpu=$(($(nproc) - 1))
++	lines_before=$(dmesg | wc -l)
++	stress-ng --cpu 1 --taskset "$cpu" --sched rr --sched-prio 1 -t 3 &
++	stress-ng --cpu 5 --taskset "$cpu" -t 3 &
++	wait
++	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor stall does not allow event"
++}
++
++echo 5000 > $THRESHOLD
++echo 1 > monitors/stall/enable
++echo printk > monitors/stall/reactors
++
 +! load || false
- echo 1 > reacting_on
- 
- echo nop > monitors/wwnr/reactors
++
++echo 0 > monitors/stall/enable
++echo 70 > $THRESHOLD
++echo 1 > monitors/stall/enable
++
++load
++
++echo nop > monitors/stall/reactors
++echo 0 > monitors/stall/enable
 -- 
 2.55.0
 
