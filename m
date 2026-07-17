@@ -1,185 +1,162 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3872F6591;
-	Fri, 17 Jul 2026 15:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579CC34887E
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 16:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303988; cv=none; b=SKnQFSorXQ+amlVp7ad+B7n0vsxy0RUoJ8sDVubl5jWaa450+oKaEKVWizqX5TUb6ukM+npZ0pahnRDJyMFTmfCfOkOigecDyP5PSd9H69CHSmY4WUw5ACcJMZriOgYtGdRshbo4ygf835z5q93jM/cTNEuG5XE2GQDKu1f8gO4=
+	t=1784305754; cv=none; b=hakVfFf+4uORAwX2c8AS4BQOH/945SVPnuOJfvL8rsJVrFsQ55El9sXLcmAf73tYtseogUJVBRktFMXYB9ESGG083CczXJ3p1DtMxQ1qtOSWrL69QAfFLf9H7XeCO/270D9DC4A9PplyxFG3k/cnJyqU2/jgehln/T0n3f/IoQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303988; c=relaxed/simple;
-	bh=hm5zNnEPwqUONrgyk4Vb0mT5qLt2h29Hef++RAqWOzs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NO0L/bBzauRoBfUrGcWa9pT5GhAuDeWZ9UJBhFD/sOs44EUTkrDtYhuXe0OSZeTWbZejBo6aueM0trzPU7Fd4Za85wF5kVNf1SEuuxWMiQ9P0dEk930NODkUX8A1JVJgnY/b09ya2nw0WxHx8hrDLBPiosLSCN4jPbXeqXjHlok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MGnhFktf; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1784305754; c=relaxed/simple;
+	bh=9MYW3bBbi2i/MCwaF0cxTgYpEofrRgFEczZ5M3urHG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MAOqY1zFOL0P1svhrw266vA0+o4iTzGurRsANrLDIDSp06IE9kv1o7RKI7d6NSA+JBN8aUjr3ISa71zx3gGxz5ha57EwuopcCIeD1NAtnXgcac4nxJXTEzzE9d9gnwmgrZMEx01xUm0s3w/O+1Q8VEWNK/L+NY9Y/j98LuNbUS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nzIkSGtG; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MGnhFktf"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6CB891A1063;
-	Fri, 17 Jul 2026 15:59:45 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3FEB760361;
-	Fri, 17 Jul 2026 15:59:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B0BBB11BD2635;
-	Fri, 17 Jul 2026 17:59:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784303984; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=6dmtcyA4tztmbUkoOE4VBkGPmZReS7qFIfSkMOL+N4U=;
-	b=MGnhFktfZKyovY4JpuAXpg7FBR54ypoh67L/HHl+m5ZXh6Tlrm0zvrQv4zjMs8U5XcrRB9
-	L3w0AvIBe94Q6hVSCJA/DsEsJc9pRlP/PzTdsFMjMHJMw5y0cv5vA9/rF6zXvVE/8aeLpx
-	R2l7PR6KYUtp84nJ5ILmLwUg0pZaDRUp+FFikpilnOAxMo19+kdHbLFA0rclYk+IMCpSc/
-	TVyyAxPQEu9LrcLWDNZx5D7J4ceYUGncIGxzikTUJFd7TnErZK5q74po3HSdHZxCYCXAND
-	0BSn3WoU3LewNSmEphAUq94viKF6V8gqbDStoBzEVbMKnSniE/xvlgbwu847Ww==
-From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 17 Jul 2026 17:59:23 +0200
-Subject: [PATCH v4 7/7] clk: tests: Add Kunit testing for nexus nodes
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nzIkSGtG"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c9eefcf9175so4170857a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 09:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784305753; x=1784910553; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DEr5HrFCxcvmv99sNHbFWPBTdDmCHwXF9XTon2pDmFY=;
+        b=nzIkSGtG/KFJn88dui1Hnm71LUJ8E3QjETs3TYCttY2qmnsKbyNnEmEQBzbmJPymuu
+         aeGJTAdnl07nmvUkewvyjf5o4accKHfnSJ50VhgbWoMaLqYQ38DubIYC7ct+cyyqanQq
+         K3OOeyC93ZqC6jlYQzlFew/MiqtppqdnVN6TxfDxNX5vlpvPm1KWW5Q4BqnNUlwkZV2Z
+         vSWSnTgvYeovhCUKx6I9sBYZXn9E2fgk16gkCNuxP2a7g8aOZN2eTEFUe0xuBtfIDmtF
+         xyzp9LQAS192M0kN2I8RkGTLyMxzmLpclT3BedfE8I68LSP2JWNpBDHj7YOS4Zlg0VhC
+         SWOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784305753; x=1784910553;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DEr5HrFCxcvmv99sNHbFWPBTdDmCHwXF9XTon2pDmFY=;
+        b=lypZE4D0nOsl9U7SYrOkvOUEk6OgiCQbTnqA7BVsbvNS/LYxAA/i6GwW2Z7U3a17zG
+         iMbdVWrtW/zaRGdnC3VLyNn2maZoOeiXbFk2Lq2ZcfoiLEN0W8p7bnzyMnev5n83Aos3
+         wagqn9rps6A5SdGVtpyJqk4v7yBuFzZsGtTWbHLtoTR+30b6q2eUMXaK1OaX2QkhrEjE
+         Ar+5azaRouX/rHSYdci+shMJwBCtEQYaHYgdLuUN28LdPGwJY1t/NE9RbKrsCDUiI8xJ
+         2ua/zhU8QQt6wjajJxcHrAd5ZhNaqlbTClm1Bf+m1siBB0AFMvddWCeAhzDxgcISC5wG
+         XIHg==
+X-Forwarded-Encrypted: i=1; AHgh+RrZCnnIyZC20vlonm2PS4600Zmki3XR8gJDT4Sg0XZ6MtDCNbTsl6czhbeHsqvvulbKUmND06Yl9/fEIVIMfKs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyf8seIbhzM+NHrvJWMR6Uoa/e5DO4gMT7n/dqM/ixlmTDmi3sZ
+	BgC6YCCw7+D53wUPpaKeXSx1KJiPL1lxw4Uus2iHyhnLrbVAt1sxdmkE
+X-Gm-Gg: AfdE7ckb93xi79OaBDVFza4w/xSOTpZL738KL5vKSVTyQOgRK8fqBUpsYWJJ9v20AsN
+	+TG4si7sygxznVXJQF4+CT6mTZvfs3CUD5vtIOs19S4NhRRpXV8A14DUn5Oa+BCac18AR8IY6r2
+	pODijR7tykvePXA3Jyb2ZMpIe1P3rF+lAPswYhhX8DCQcXEOb0peigDPapFazxUSyFkOgJwtRIg
+	kQva9T7J3/g99jEUEPDy+txp2oFlfnNqQdDx9CvattljghdHaY+XNtL3oZk43Bu7dBizo7/aQ2q
+	gdaFtky55oaQjAHSyEFPx8eI6g7emwIxDrBcwvvyE/SAH2upnuGRZ8tWAX1drJGSELwHkHaossE
+	gEvAYk/loOCh7F3aUGaHeVqtA52fZ75oD20nB1Z9H/FhQlBY3fxnqOCE20AP0PkEjjRRKJljVMX
+	Wt4tjBZFektus5wEhc/3HkFNn71bwBFOxxSNGfAv4=
+X-Received: by 2002:a05:6a21:6b16:b0:3c3:88a5:83e4 with SMTP id adf61e73a8af0-3c3ad5f55ccmr3830156637.10.1784305752399;
+        Fri, 17 Jul 2026 09:29:12 -0700 (PDT)
+Received: from fedora ([2a09:bac5:3aec:1a96::2a6:33])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2cbb6e8sm6363056c88.9.2026.07.17.09.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 09:29:12 -0700 (PDT)
+From: Shivank Sharma <shivanksharma2376543@gmail.com>
+To: pbonzini@redhat.com,
+	seanjc@google.com,
+	anup@brainfault.org
+Cc: kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	Shivank Sharma <shivanksharma2376543@gmail.com>
+Subject: [PATCH] KVM: selftests: Fix typos in x86 and riscv tests
+Date: Fri, 17 Jul 2026 21:58:38 +0530
+Message-ID: <20260717162838.1562808-1-shivanksharma2376543@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-7-751547e160e5@bootlin.com>
-References: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
-In-Reply-To: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Pascal EBERHARD <pascal.eberhard@se.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-Add a nexus node with a child requesting a mapped clock in the fake DT
-overlay to verify that the parsing is also correctly working.
+Fix spelling typos found by an automated checker in the KVM
+selftests for x86 and RISC-V.
 
-Create an of_find_node_by_name() like kunit helper to garbage collect the
-node automatically in case of failed assertion.
-
-Suggested-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+Signed-off-by: Shivank Sharma <shivanksharma2376543@gmail.com>
 ---
- drivers/clk/clk_kunit_helpers.c          | 31 +++++++++++++++++++++++++++++++
- drivers/clk/clk_test.c                   | 15 +++++++++++++++
- drivers/clk/kunit_clk_parse_clkspec.dtso | 10 ++++++++++
- include/kunit/clk.h                      |  2 ++
- 4 files changed, 58 insertions(+)
+ tools/testing/selftests/kvm/riscv/sbi_pmu_test.c              | 4 ++--
+ tools/testing/selftests/kvm/x86/hyperv_clock.c                | 4 ++--
+ tools/testing/selftests/kvm/x86/hyperv_evmcs.c                | 2 +-
+ .../selftests/kvm/x86/vmx_invalid_nested_guest_state.c        | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_helpers.c
-index 68a28e70bb61..daaf1cf1546c 100644
---- a/drivers/clk/clk_kunit_helpers.c
-+++ b/drivers/clk/clk_kunit_helpers.c
-@@ -233,5 +233,36 @@ int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
- }
- EXPORT_SYMBOL_GPL(of_clk_add_hw_provider_kunit);
+diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+index e56a3dd6a..20388f0b9 100644
+--- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
++++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
+@@ -492,7 +492,7 @@ static void test_pmu_events_snaphost(void)
+ 	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
+ 	int i;
  
-+KUNIT_DEFINE_ACTION_WRAPPER(of_node_put_wrapper, of_node_put, struct device_node *);
-+
-+/**
-+ * of_find_node_by_name_kunit() - Test managed of_find_node_by_name()
-+ * @test: The test context
-+ * @from: Parent device node to start searching from, or NULL to search from root
-+ * @name: The name string to match against
-+ *
-+ * Just like of_find_node_by_name(), except the device_noded is managed by
-+ * the test case and is automatically put after the test case concludes.
-+ *
-+ * Return: the device_node on success, NULL if not found, or a negative errno value on failure.
-+ */
-+struct device_node *of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
-+					       const char *name)
-+{
-+	struct device_node *np;
-+	int ret;
-+
-+	np = of_find_node_by_name(from, name);
-+	if (!np)
-+		return NULL;
-+
-+	ret = kunit_add_action_or_reset(test, of_node_put_wrapper, np);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return np;
-+}
-+EXPORT_SYMBOL_GPL(of_find_node_by_name_kunit);
-+
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("KUnit helpers for clk providers and consumers");
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 4084559e157d..0c2f1efdaa8e 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -3650,10 +3650,25 @@ static void of_clk_get_parent_name_gets_parent_name(struct kunit *test)
- 			   of_clk_get_parent_name(ctx->cons_np, 0));
- }
+-	/* Verify presence of SBI PMU and minimum requrired SBI version */
++	/* Verify presence of SBI PMU and minimum required SBI version */
+ 	verify_sbi_requirement_assert();
  
-+static void of_clk_get_hw_maps_thru_nexus(struct kunit *test)
-+{
-+	struct clk_parse_clkspec_ctx *ctx = test->priv;
-+	struct clk_hw *expected;
-+	struct device_node *np;
-+
-+	np = of_find_node_by_name_kunit(test, NULL, "kunit-clock-nexus-child");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
-+	expected = of_clk_get_hw(ctx->cons_np, 1, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, expected, of_clk_get_hw(np, 0, NULL));
-+}
-+
- static struct kunit_case clk_parse_clkspec_test_cases[] = {
- 	KUNIT_CASE(clk_parse_clkspec_with_correct_index_and_name),
- 	KUNIT_CASE(clk_parse_clkspec_with_incorrect_index_and_name),
- 	KUNIT_CASE(of_clk_get_parent_name_gets_parent_name),
-+	KUNIT_CASE(of_clk_get_hw_maps_thru_nexus),
- 	{}
- };
+ 	snapshot_set_shmem(snapshot_gpa, 0);
+@@ -518,7 +518,7 @@ static void test_pmu_events_overflow(void)
+ {
+ 	int num_counters = 0, i = 0;
  
-diff --git a/drivers/clk/kunit_clk_parse_clkspec.dtso b/drivers/clk/kunit_clk_parse_clkspec.dtso
-index c93feb93e101..a4115216d2aa 100644
---- a/drivers/clk/kunit_clk_parse_clkspec.dtso
-+++ b/drivers/clk/kunit_clk_parse_clkspec.dtso
-@@ -18,4 +18,14 @@ kunit-clock-consumer {
- 		clocks = <&kunit_clock_provider1 0>, <&kunit_clock_provider2 0>;
- 		clock-names = "first_clock", "second_clock";
- 	};
-+
-+	kunit_clock_nexus: kunit-clock-nexus {
-+		clocks = <&kunit_clock_provider2 0>;
-+		clock-map = <&kunit_clock_provider2 0>;
-+		#clock-cells = <0>;
-+
-+		kunit-clock-nexus-child {
-+			clocks = <&kunit_clock_nexus>;
-+		};
-+	};
- };
-diff --git a/include/kunit/clk.h b/include/kunit/clk.h
-index f226044cc78d..ab24f7747516 100644
---- a/include/kunit/clk.h
-+++ b/include/kunit/clk.h
-@@ -29,5 +29,7 @@ int of_clk_hw_register_kunit(struct kunit *test, struct device_node *node,
- int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
- 				 struct clk_hw *(*get)(struct of_phandle_args *clkspec, void *data),
- 				 void *data);
-+struct device_node *of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
-+					       const char *name);
+-	/* Verify presence of SBI PMU and minimum requrired SBI version */
++	/* Verify presence of SBI PMU and minimum required SBI version */
+ 	verify_sbi_requirement_assert();
  
- #endif
-
+ 	snapshot_set_shmem(snapshot_gpa, 0);
+diff --git a/tools/testing/selftests/kvm/x86/hyperv_clock.c b/tools/testing/selftests/kvm/x86/hyperv_clock.c
+index c083cea54..d5d779623 100644
+--- a/tools/testing/selftests/kvm/x86/hyperv_clock.c
++++ b/tools/testing/selftests/kvm/x86/hyperv_clock.c
+@@ -56,7 +56,7 @@ static inline void check_tsc_msr_rdtsc(void)
+ 	tsc_freq = rdmsr(HV_X64_MSR_TSC_FREQUENCY);
+ 	GUEST_ASSERT(tsc_freq > 0);
+ 
+-	/* For increased accuracy, take mean rdtsc() before and afrer rdmsr() */
++	/* For increased accuracy, take mean rdtsc() before and after rdmsr() */
+ 	r1 = rdtsc();
+ 	t1 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
+ 	r1 = (r1 + rdtsc()) / 2;
+@@ -181,7 +181,7 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vcpu *vcpu)
+ 	tsc_freq = vcpu_get_msr(vcpu, HV_X64_MSR_TSC_FREQUENCY);
+ 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
+ 
+-	/* For increased accuracy, take mean rdtsc() before and afrer ioctl */
++	/* For increased accuracy, take mean rdtsc() before and after ioctl */
+ 	r1 = rdtsc();
+ 	t1 = vcpu_get_msr(vcpu, HV_X64_MSR_TIME_REF_COUNT);
+ 	r1 = (r1 + rdtsc()) / 2;
+diff --git a/tools/testing/selftests/kvm/x86/hyperv_evmcs.c b/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
+index c7fa114ae..5cc71658f 100644
+--- a/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
++++ b/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
+@@ -129,7 +129,7 @@ void guest_code(struct vmx_pages *vmx_pages, struct hyperv_test_pages *hv_pages,
+ 	/*
+ 	 * NMI forces L2->L1 exit, resuming L2 and hope that EVMCS is
+ 	 * up-to-date (RIP points where it should and not at the beginning
+-	 * of l2_guest_code(). GUEST_SYNC(9) checkes that.
++	 * of l2_guest_code(). GUEST_SYNC(9) checks that.
+ 	 */
+ 	GUEST_ASSERT(!vmresume());
+ 
+diff --git a/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c b/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
+index a2eaceed9..a07968c16 100644
+--- a/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
++++ b/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
+@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
+ 		    ARBITRARY_IO_PORT, run->io.port);
+ 
+ 	/*
+-	 * Stuff invalid guest state for L2 by making TR unusuable.  The next
++	 * Stuff invalid guest state for L2 by making TR unusable.  The next
+ 	 * KVM_RUN should induce a TRIPLE_FAULT in L2 as KVM doesn't support
+ 	 * emulating invalid guest state for L2.
+ 	 */
 -- 
-2.54.0
+2.55.0
 
