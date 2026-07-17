@@ -1,82 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA473FADF7;
-	Fri, 17 Jul 2026 13:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F7830D41D;
+	Fri, 17 Jul 2026 13:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784295594; cv=none; b=C/i3XaYMNHeSaf1GUnpukUR7xnsM8kJlMleGUjDTkVMZQDl0UX6illxYb4sOMpOKDgsnDAs0KYz64Dkg6HHdk1tWFl0XsyBoWWEcrvKXGFOPmjWsE468ttbbEPmkGwIx6KJUHfPCyfb0uNr1/nlFB5BogI5amU6MHp+DgFs2tU0=
+	t=1784296202; cv=none; b=ld9Eoj3QXzzS1VBDNCQUeGJY2BVySs8Dtf6emnOTvSMo4lDdUqmtwhA/Tajo86W8aQDcS/DGPuJE4Lw1ydZpTr49DgEkxDLzRzQMz3VoFxtJhNTdlA/Drf4xjDUWkQx+c+j26RZ9GS49BSNhywGi3mQ6XHKyxyDstoj6ep/V0gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784295594; c=relaxed/simple;
-	bh=r6IotnTKVygiKU6UYYfwUo/IEGkYtQtM7Ccok2kFVNA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=A3JqGrTBvLXU1MYC1fkpBwluLx0cJCMFWGKYgEtjezBsBzJhVGIQysI8eNYIjiqRGT4jIbXfcYiKW6FBW5kICs+NaWQLrj1l5njc/RC90rj8L0aLJwkRb9b9ZY6yXhyp1L/1iAZ19/U0FRUIYlVQLJ4vXOtqlvhYQI5L9v72oto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLTNWQ/b; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784296202; c=relaxed/simple;
+	bh=kmDfF3yV5c+bsoLJV/of/MuvV5iPRqd3YMoF4otU7nw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=VHdywwAPuZo6VQ8OvutIi+SmEWvbu3xQs1/+2U4a+3S1L1REYbaK5My6dFl59zLcleGQNcAHjoKYzzttZzD3OmvQw5mW21GGqOn0GeGK++D/aQslU6okiRQIZiSVNTv9txEsAduK4PBXF/yAWwRty8cPlQSw9kprfvRDOTl+aC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BfZ3lCw5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLTNWQ/b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722081F00A3A;
-	Fri, 17 Jul 2026 13:39:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BfZ3lCw5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263A81F000E9;
+	Fri, 17 Jul 2026 13:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784295589;
-	bh=8dKjV9J7mSDwpPNf/dtsVoaiOrUJ4UDn310tC5VmjjU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NLTNWQ/bMLw58ivZQrEqQWx8Mxs9brxlUPo+Tdin3h9pdxLCeHEa0rZo+m4gFz4pg
-	 Iyt+OQ1wSKURIblMZHp6wXwERZOA+u+a+8P1yxE6CPOEV7A4iqnQHBABuRQUIS9tnn
-	 M2rQb8oHatJb/dLd1Jjbw3WuEL7px8BrkNum1mHImjRXzja6hzyrNv983I92JfrvfB
-	 rW/ESDOn7WqEiIF/vDVIVW3WRFb9HMJLMEt1hm947zqBZP+SRXQJQBU2xLtJg2ZBfi
-	 XlLC8M+FyLUuG8hkOYiHbbdXfUWuCyKY3Rs3U7X7XxqnWKgiuAlx4pL6yf4RC76qiV
-	 SwtMmkTLyaUUw==
-Content-Type: multipart/mixed; boundary="===============6957346281921798468=="
+	s=k20260515; t=1784296200;
+	bh=P8RGWqk/z7JG1c6TNKuPoPbGcG6s/ejxJ/FFxp5MzYo=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To;
+	b=BfZ3lCw5ruLutg6KfGd+nm23HG2177Bq80ZdVrnjOM3trOrI7mKdzj3Zx18fmEO0H
+	 bQzbrNesDyjK8EO9Hh+IOS89vjUMG5bV9z2FQtIRNqAOpfjrwpWv3kSiF1mQY6194A
+	 y0FkPlMGqn0XaHgo3psjDm3qf8ja7cLMbGYbQfyaFaV7WvewiNso/uOGAo9E/9z+Wa
+	 jJ5CLrgci/Dgx8NIacXsFSSSxMKSUeNz/FPF2RE8mXujiv0X+ykdy+bR7mIoT4agCf
+	 Pm0zB/ousu2YQOhQ3Fw17cx4791T9PkUL6yPHNYImnVVdvO05zYRx6ebatcCR7O9lj
+	 irvm16DPyWt6g==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <8c2d83f4a75b2084a2db6a3b0895ae6781284385e7768a3e72d65db71c410a9f@mail.kernel.org>
-In-Reply-To: <20260717-c10-031-public-bpf-next-v2-b4-v2-2-54b555443a7c@mails.tsinghua.edu.cn>
-References: <20260717-c10-031-public-bpf-next-v2-b4-v2-2-54b555443a7c@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover scalar arena frees below the base
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: chenyy23@mails.tsinghua.edu.cn,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,emil@etsalapatis.com,puranjay@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 17 Jul 2026 13:39:49 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 17 Jul 2026 15:49:55 +0200
+Message-Id: <DK0W7O5C7LYK.3BJOBTN337Q52@kernel.org>
+To: "Bartosz Golaszewski" <bartosz.golaszewski@oss.qualcomm.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: (subset) [PATCH v4 0/5] software node: provide support for
+ fw_devlink
+Cc: "Brendan Higgins" <brendan.higgins@linux.dev>, "David Gow"
+ <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Daniel Scally" <djrscally@gmail.com>,
+ "Heikki Krogerus" <heikki.krogerus@linux.intel.com>, "Sakari Ailus"
+ <sakari.ailus@linux.intel.com>, "Bartosz Golaszewski" <brgl@kernel.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Linus Walleij" <linusw@kernel.org>, "Dmitry Torokhov"
+ <dmitry.torokhov@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <linux-acpi@vger.kernel.org>, <driver-core@lists.linux.dev>,
+ <linux-gpio@vger.kernel.org>
+References: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
+ <20260715212830.3077100-1-dakr@kernel.org>
+ <DJZGR6NV2WK5.2ZRW7VZIRO3LD@kernel.org>
+In-Reply-To: <DJZGR6NV2WK5.2ZRW7VZIRO3LD@kernel.org>
 
---===============6957346281921798468==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
->     selftests/bpf: Cover scalar arena frees below the base
+On Wed Jul 15, 2026 at 11:30 PM CEST, Danilo Krummrich wrote:
+> On Wed Jul 15, 2026 at 11:28 PM CEST, Danilo Krummrich wrote:
+>> On Mon, 13 Jul 2026 13:14:43 +0200, Bartosz Golaszewski wrote:
+>>> [PATCH v4 0/5] software node: provide support for fw_devlink
+>>
+>> Applied, thanks!
+>>
+>>   Branch: topic/swnode
+>>   Tree:   git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driv=
+er-core.git
+>>
+>> [1/5] kunit: provide a set of fwnode-oriented helpers
+>>       commit: 9fdbdb528488
+>> [2/5] software node: add fw_devlink support
+>>       commit: 37e586675993
+>> [3/5] software node: add kunit tests for fw_devlink support
+>>       commit: eecba5978729
+>> [4/5] MAINTAINERS: add myself as reviewer of software node support
+>>       commit: 122630406245
+>>
+>> The patches are in the topic/swnode topic branch and will be merged into=
+ the
+>> corresponding target branch soon.
 >
->     Add a verifier_arena case that fills a two-page arena, calls
->     bpf_arena_free_pages() with a scalar address one page below the arena
->     base, and then verifies that another allocation is still rejected.
->
->     Before the runtime guard, the invalid free can repopulate the free
->     tree with an out-of-domain offset and the final allocation succeeds.
->
->     Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
->     Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> I will provide a signed tag once I have the 0-day result.
 
-This test covers a memory-safety issue where bpf_arena_free_pages()
-accepts a scalar address below the arena base and repopulates the free
-tree with an out-of-domain offset, so a later allocation can return an
-address below the arena mapping.
+https://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git=
+/tag/?h=3Dswnode-7.3-rc1
 
-The clipping logic in arena_free_pages() that only bounded the upper end
-(uaddr_end = min(...)) without checking full_uaddr >= arena->user_vm_start
-was introduced in commit 317460317a02a.  The paired kernel fix
-a6ceda1f4a47 also carries that tag.
-
-Should this include:
-
-  Fixes: 317460317a02a ("bpf: Introduce bpf_arena.")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29583169394
---===============6957346281921798468==--
+The changes are also in driver-core-next now, thanks!
