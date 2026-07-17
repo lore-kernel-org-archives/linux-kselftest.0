@@ -1,68 +1,68 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2993BBFA9
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 06:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3FD339863
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 06:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784270746; cv=none; b=lKrSsXOmIIJnfqp+tbDldKxuGH5TvYFXuFb0tQ1vBi48z7ezR+d6xsbpUJ+mCTTutuL/pNtCWnFZCLy/dOSHHvr4tWJGyWXCTSYBBcSMHIEawglZx0+e5xaKde8u/L3id9aq9clSC5BNZAibXqMENnNE50Dxmk4XV0LN+7ngJz8=
+	t=1784270747; cv=none; b=SUYFVhxdbTKea++UsLYozNvH+w2GfUZvY8i33uUDNW7RM1quep5bl5cNGEOnvRS2yboX4440K7nACH7nQIoHV9sxi1eAI7gea1y6EfVFg4VA/IBNHXg6wu5rPXfGLlvBjukkhf1yN2ETky3zpe9a/TXVw7tqnSxCxNdXmjJmvKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784270746; c=relaxed/simple;
-	bh=HdvJD6U6AZT6Gc6eIdmqO8NWS6WyZ9Y0FP6mOZhzD9U=;
+	s=arc-20240116; t=1784270747; c=relaxed/simple;
+	bh=xEM4PWSdufJQRFlVx8hDi0jZLJQtFRoDWHIzLk+sx3Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FGu+4HmHrqRmq4TI2wKBo6ZT/ZZ01hGoDv4FPtPnwUBBTUTVoQOP//AyG1JZgBAmaKQD6DbQ1UxRp8Wg/G7ISDRutPUAEs4PnRkmqdHiesvKcc3COzQ77eXctTco/Cbt1sx17/RKYSbLa8CeeGQksDTrjjN8Q22xYihEBCMRVng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f71XFf2t; arc=none smtp.client-ip=209.85.210.181
+	 In-Reply-To:To:Cc; b=htecaS0pmhUXWVxP34c91wC8BKr7QnQVixfXYbJ3BT0KLEauIPjIMFBtt0MUxxSShJ2pd/caIUKV7ZVew75A2DMCErpjoawsGfN3IVhtLX8w+bhCRaUvY7DBNC9vnIvhndfw3tswsnMmWH3BCLazr3kI+XoqDV5lsLuQ5gNJTiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2gmXDsM; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f71XFf2t"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so3571172b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 23:45:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2gmXDsM"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-848643382fcso8498834b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jul 2026 23:45:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784270727; x=1784875527; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784270726; x=1784875526; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HGbSiO1fqjnyGYh3XrxntYuCZ2sL4D2PCmE496WiS64=;
-        b=f71XFf2t7nqW8Z2MfoaHPt6xScs4fXalTUfbqzfs0pUR/GslY8CO7Do3+vj3CECnUp
-         yyy0PNwdbMUEnblkj0ldatz0q/ECfBIwUF/kDHzRQETrzHem2Yht9donVdRg+is5K+fv
-         yZPvctV/CE94ceGzA/XF19gkITVdZKd5VcZUvvqrunD4rBo9qHJtnLDk+WCVGmHUBMkT
-         3S7GrE/7u6FB3FbR6ZxTdROQL2er01gaqjJJFMOHQpbCMBNp1cO3OJpvHg0Bxev6QiPZ
-         7EFO6/tnmpKsTmy0kSVE/+z+pqqoRz+1Zf1EU296xPmUI2rTNU539gGBHciG/EQk3dlV
-         pYtQ==
+        bh=pGWzAqMnXIx+QjNO6QbhWdHJZEGF73MjjXZSZbQ8KHE=;
+        b=O2gmXDsMmWZEygqF3pPjKqCS0emvhEZL82wd0/W2DY8LuQjRJiSAxmsGXzlP6ebnGL
+         DkqGCcx54sWYJjw7JKeb74htcfhoeVpGUnmDPHnDq0vvPTelUdadeCt5DlHr2Hde/4me
+         Qffp3nONpOpiOhPn+qca6zTfV5PQI+EMGwgWS7TB9qdWdqU7bJcpJ1C7FGil4ozxTFUK
+         MHeyBslnVAzXK06JVKrx17tdDE8dn6B3u4gUrEjYOxPUEvLsp89j0ZkJ0+wMPahwH7yh
+         lWaLhFZQJ3AEIMBopWgt9Vohq4F5SwH8QtcGaHRdntPxTONllvRlVTYtE5tYCteF+TpB
+         zPNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784270727; x=1784875527;
+        d=1e100.net; s=20251104; t=1784270726; x=1784875526;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HGbSiO1fqjnyGYh3XrxntYuCZ2sL4D2PCmE496WiS64=;
-        b=CUODf/SIrEvyKRAu5N3IJf9nJXsmnXhovsreKucmz63dUvi7L2GuGOv6Sbfrtdb57+
-         g8srUAjl3V13lZ/FUhzX9I9zTEKuUjSwF4TfKB+rRUoiVOIJ94B8FeB4uO69hBRUxmP0
-         8pW7Oj74hHw+mt36BlIhH6JyZEaQyCNrVDsms9GAyaD1wepXLa3dTSYMawZrLPHz+0RJ
-         +Aet4ycNwgYqodbPJezXiwPkdt297ccT4kuDpzfvCeH60PiGZzujHYN1jSJsapvEVxBP
-         F46DtlKQo2FoiW4QUJaGz/Zdgrbfb2YnKlo64xiDvjosuoggZKx7y+Gnbz1wTLykHJ6m
-         mi8A==
-X-Forwarded-Encrypted: i=1; AHgh+RojKB9FfKYhrwHlXfCzheUbVxY9rIneY3grZLuGOTtmIXEG2tnD6Q+kWptfTSsPiT3eFwjO5/2gXK8CCQIam9s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE1euWMTFgolr8X9gUl3R8xEMLg9P5bpo/6fjxHzbgY1TLUuCG
-	DcpayCDd5aNEPzHXiEB8c1z7+/PYwOtwrX+Jtcdas4kgRVTrLmne/2Tv
-X-Gm-Gg: AfdE7cmagmhs8EMF5XzqR+u29MiXebjmZ8eq/v47qV6HcppuMM9y4TDtNknQWeOXEg/
-	5HTKKlxPcxT7O6h0AhhT/HzoSnKoyGSefzuPJ2S1gznt82RZAB6xacp2xmCIpkobKJ+TTHBd/x5
-	F8LM7iQgcfeu/VKMyKTUtM2fX/gptZvsgA6rlCo94GXsgNGJIVI9P5b7yiPEyRW8hTYpiSSI16h
-	iaIjaEFvzpgmU6eqgsDuHDh4Gdvu1dI2kNyXPJbcIseMqKY1EkNh7hNhcjcT4VP7Q8haebi9tlE
-	IDoaxD2xsZi0d5Qkd2Zca0NWffZdi2bRgbfdVyEXKGyYZPRsSZypBtV3CVvDGeLmR2WSrPV59Eo
-	tloB6J9uGyblLucYafZ8bqTruH6IkNqzMdZO0CBY7QdcItbCnEUnE7Az56LJjEXjglktxfj76r7
-	N+1cWD28nz6Pswd64=
-X-Received: by 2002:a05:6a00:288d:b0:848:2f74:1d60 with SMTP id d2e1a72fcca58-84c295777f6mr1268231b3a.70.1784270727152;
-        Thu, 16 Jul 2026 23:45:27 -0700 (PDT)
+        bh=pGWzAqMnXIx+QjNO6QbhWdHJZEGF73MjjXZSZbQ8KHE=;
+        b=ou509S5qVReaV0iqCh0e1rlViPwjrBXAK/Yo9RQ4Ce0YhoHrRgTWipXPdhrcv0Rxok
+         wRGOdsEQnDjQYoD3bDUB+6zJJZcLmq+tfqvLPvC73vAucQdp+JaeedwylLc5U2dPVvHx
+         cIfi1oBJH1RXSkU30QVGWhhdUxxyL7LIOsv2M0wSDdfk5pxNtQIC/c9muIbD9d3/BgOV
+         pdH1nnUvzmmL+iTvuGCcI+620eENYOa/aysBWqzDyDIP0bW0qPq+iFEXQR79ts2K7q25
+         3tX+b8thDEyjFG4t3PZTEnnFxlCTS0ddG5zrS9d/yM8p5vMXZY7SEWPT62pXfVSdEMy+
+         BBxw==
+X-Forwarded-Encrypted: i=1; AHgh+RqmliHqNwZ/xbw/T1QRRxzO7cX653nbq5fHGTEeGMdjhQafMzgOylDdw53pYfE/UqaU8HNzKvb4sEhCk0nz08c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7//qp2ipacssf9QJsu8VfABV4Fxjn/Fcxt0xJhiJkNdmNvZv2
+	s9frcyptTicnqhNezPCrSEtLhRd0rCfe8BaONXwaCZ1gFeG3pa8OkmNbaSoEorSl
+X-Gm-Gg: AfdE7cmSCTMMpngmUDb9gw5Auai6Pe90lrnKq4zM+8xHM1gerKofIPwGDR1erJzltHk
+	t/YAi1VzTGLLNNU0jP/hnl8NTG51qWPN5zR0JbHMTTVgKR7plWeEmg+WyvFuR6rrGC4F5TlEk/g
+	8pDT+mMD3fVSFT36GJSsaNagRVrhsowXg4B7lg9U+eIp1ZGnmGsl1WQ+mWraLiZELR1tg+B9n1S
+	dRqEP98trP10ra/kXLP0t5JlmoU9+GC7IgaCebto/El3CeBYhjeuOnQ6+ABj/xacwjF2lmy6TXE
+	t0BP/t3Hfb7inJDmmanimCxx3CmqyQKiPTMmrTKcZry4i3a3zsxe9QVAPl9W+UxlejryZXDZy4M
+	7rLYkL1ecE1YQ500NL2fT6mK3p61HQ+nqoGoDVRLxddBVQxSQSkrXzlUfMhuBCmqTb0fadGAQKo
+	gDxQo0XiK/pfZbQi+FFYZ82tdsGg==
+X-Received: by 2002:a05:6a00:1492:b0:848:2f73:8ffb with SMTP id d2e1a72fcca58-84c29528564mr1412058b3a.68.1784270726474;
+        Thu, 16 Jul 2026 23:45:26 -0700 (PDT)
 Received: from CPC-mjac-HKWGEZ.localdomain ([70.37.26.34])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2ad8855fsm430531b3a.12.2026.07.16.23.45.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2ad8855fsm430531b3a.12.2026.07.16.23.45.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 16 Jul 2026 23:45:26 -0700 (PDT)
 From: Jack Ma <jack4it@gmail.com>
-Date: Fri, 17 Jul 2026 06:45:18 +0000
-Subject: [PATCH net-next v2 3/3] selftests: net: add coverage for fdb
- nexthop dst port
+Date: Fri, 17 Jul 2026 06:45:17 +0000
+Subject: [PATCH net-next v2 2/3] vxlan: honor per-nexthop fdb destination
+ port
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260717-b4-vxlan-fdb-port-v2-3-f4862e8fe867@gmail.com>
+Message-Id: <20260717-b4-vxlan-fdb-port-v2-2-f4862e8fe867@gmail.com>
 References: <20260717-b4-vxlan-fdb-port-v2-0-f4862e8fe867@gmail.com>
 In-Reply-To: <20260717-b4-vxlan-fdb-port-v2-0-f4862e8fe867@gmail.com>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -81,123 +81,80 @@ To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Jack Ma <jack4it@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784270724; l=3980;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784270724; l=2196;
  i=jack4it@gmail.com; s=20260712; h=from:subject:message-id;
- bh=HdvJD6U6AZT6Gc6eIdmqO8NWS6WyZ9Y0FP6mOZhzD9U=;
- b=zTZ/Uv5pit4FneIuseQM7CSf9cLsOW0uZli7xlhMP+qPfwOTzIq14VeQVsZJ05ocdBWmd1msK
- qpX3YjJCLG/C6HsF4sSmqvFm8jgfBNo/sFhQ+gsPFimTtTWYPYov/yA
+ bh=xEM4PWSdufJQRFlVx8hDi0jZLJQtFRoDWHIzLk+sx3Y=;
+ b=YhfQRticdo6ewbVHM1o14OsXcOGRoOkDyWL1lmyZ6SYsB5zZVIHJLM9i5b5iwgu0Rz/Nvgv9D
+ EiG7Vf5UwMjA+3l2IAKLgjaslE7mE51uTANXD1z14w+fmFc/Lb5y3iL
 X-Developer-Key: i=jack4it@gmail.com; a=ed25519;
  pk=x8xh2Md9yNDil0xBOA9WA/oqC3O4Eg4rdlIul4YUktU=
 
-Add fib_nexthops_fdb_port.sh, which exercises the NHA_FDB_PORT rules:
-accept a port on an fdb nexthop that has a gateway and echo it back on
-dump, reject it on non-fdb or gateway-less nexthops, allow a group whose
-legs differ only in UDP port, and confirm a portless fdb nexthop omits
-the attribute.  The test SKIPs cleanly on kernels or iproute2 without
-NHA_FDB_PORT support.
+When an fdb entry points at a nexthop group, vxlan_fdb_nh_path_select()
+resolves the selected leg's remote IP but leaves the UDP destination port
+at the device default (vxlan->cfg.dst_port).
+
+Extend nexthop_path_fdb_result() to also return the selected nexthop's
+NHA_FDB_PORT (0 when unset) and have vxlan_fdb_nh_path_select() store it
+in rdst->remote_port.  vxlan_xmit_one() already prefers rdst->remote_port
+when non-zero and falls back to the device port otherwise, so nexthops
+without a port are unaffected.
+
+This lets one fdb nexthop group load-balance a flow across legs that
+share an underlay IP but differ in UDP destination port.
 
 Signed-off-by: Jack Ma <jack4it@gmail.com>
 ---
- tools/testing/selftests/net/Makefile               |  1 +
- .../testing/selftests/net/fib_nexthops_fdb_port.sh | 78 ++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
+ include/net/nexthop.h | 5 ++++-
+ include/net/vxlan.h   | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 708d960ae..c06eb4927 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -36,6 +36,7 @@ TEST_PROGS := \
- 	fib_nexthop_multiprefix.sh \
- 	fib_nexthop_nongw.sh \
- 	fib_nexthops.sh \
-+	fib_nexthops_fdb_port.sh \
- 	fib_rule_tests.sh \
- 	fib_tests.sh \
- 	fin_ack_lat.sh \
-diff --git a/tools/testing/selftests/net/fib_nexthops_fdb_port.sh b/tools/testing/selftests/net/fib_nexthops_fdb_port.sh
-new file mode 100755
-index 000000000..8b401c6d2
---- /dev/null
-+++ b/tools/testing/selftests/net/fib_nexthops_fdb_port.sh
-@@ -0,0 +1,78 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Control-plane selftest for per-nexthop VXLAN fdb destination port
-+# (NHA_FDB_PORT).  Verifies the accept/reject rules and the dump roundtrip.
-+# No datapath traffic here -- see tests/integ/vxlan-fdb-port-integ.sh for the
-+# real forwarding test.
-+#
-+# Requires: patched kernel (NHA_FDB_PORT) and patched iproute2 (the "port"
-+# keyword on "ip nexthop ... fdb").  SKIPs cleanly otherwise.
+diff --git a/include/net/nexthop.h b/include/net/nexthop.h
+index 9c8227996..7fb612a73 100644
+--- a/include/net/nexthop.h
++++ b/include/net/nexthop.h
+@@ -576,7 +576,8 @@ struct fib_nh_common *nexthop_fdb_nhc(struct nexthop *nh)
+ }
+ 
+ static inline struct fib_nh_common *nexthop_path_fdb_result(struct nexthop *nh,
+-							    int hash)
++						    int hash,
++						    __be16 *fdb_port)
+ {
+ 	struct nh_info *nhi;
+ 	struct nexthop *nhp;
+@@ -585,6 +586,8 @@ static inline struct fib_nh_common *nexthop_path_fdb_result(struct nexthop *nh,
+ 	if (unlikely(!nhp))
+ 		return NULL;
+ 	nhi = rcu_dereference(nhp->nh_info);
++	if (fdb_port)
++		*fdb_port = nhi->fdb_port;
+ 	return &nhi->fib_nhc;
+ }
+ #endif
+diff --git a/include/net/vxlan.h b/include/net/vxlan.h
+index dfba89695..de41b3746 100644
+--- a/include/net/vxlan.h
++++ b/include/net/vxlan.h
+@@ -567,8 +567,9 @@ static inline bool vxlan_fdb_nh_path_select(struct nexthop *nh,
+ 					    struct vxlan_rdst *rdst)
+ {
+ 	struct fib_nh_common *nhc;
++	__be16 fdb_port = 0;
+ 
+-	nhc = nexthop_path_fdb_result(nh, hash >> 1);
++	nhc = nexthop_path_fdb_result(nh, hash >> 1, &fdb_port);
+ 	if (unlikely(!nhc))
+ 		return false;
+ 
+@@ -583,6 +584,8 @@ static inline bool vxlan_fdb_nh_path_select(struct nexthop *nh,
+ 		break;
+ 	}
+ 
++	rdst->remote_port = fdb_port;
 +
-+set -u
-+
-+ksft_skip=4
-+NS="nhfdbport-$$"
-+IP="ip -netns $NS"
-+ret=0
-+
-+log_test() {	# $1 actual_rc  $2 expected_rc  $3 name
-+	if [ "$1" = "$2" ]; then
-+		printf "TEST: %-58s [ OK ]\n" "$3"
-+	else
-+		printf "TEST: %-58s [FAIL] (rc=$1 want=$2)\n" "$3"
-+		ret=1
-+	fi
-+}
-+
-+# passes (returns 0) iff the command FAILS
-+expect_fail() {
-+	if "$@" >/dev/null 2>&1; then return 1; else return 0; fi
-+}
-+
-+cleanup() { ip netns del "$NS" 2>/dev/null; }
-+
-+command -v ip >/dev/null 2>&1 || { echo "SKIP: iproute2 not found"; exit $ksft_skip; }
-+ip nexthop help 2>&1 | grep -q fdb || { echo "SKIP: no fdb nexthop support"; exit $ksft_skip; }
-+
-+trap cleanup EXIT
-+cleanup
-+ip netns add "$NS" || { echo "SKIP: cannot create netns"; exit $ksft_skip; }
-+$IP link set lo up
-+
-+# Probe for "port" keyword + kernel NHA_FDB_PORT support; SKIP if missing.
-+if ! $IP nexthop add id 1 via 10.0.0.1 fdb port 4790 2>/dev/null; then
-+	echo "SKIP: 'ip nexthop ... fdb port' unsupported (needs patched kernel + iproute2)"
-+	exit $ksft_skip
-+fi
-+log_test 0 0 "add fdb nexthop with port"
-+
-+# Dump roundtrip must echo the port back.
-+$IP nexthop show id 1 | grep -qw "port 4790"
-+log_test $? 0 "dump shows fdb port 4790"
-+
-+# Reject: port on a routed (non-fdb) nexthop.
-+expect_fail $IP nexthop add id 2 via 10.0.0.1 dev lo port 4790
-+log_test $? 0 "reject port on non-fdb nexthop"
-+
-+# Reject: fdb port without a gateway.
-+expect_fail $IP nexthop add id 3 fdb port 4790
-+log_test $? 0 "reject fdb port without gateway"
-+
-+# The HA case: a group whose legs share the gateway but differ in port.
-+$IP nexthop add id 10 via 10.0.0.1 fdb port 4789 && \
-+$IP nexthop add id 11 via 10.0.0.1 fdb port 5789 && \
-+$IP nexthop add id 100 group 10/11 fdb
-+log_test $? 0 "add fdb nexthop group with differing ports"
-+
-+# A fdb nexthop without a port must NOT emit one (backward compat).
-+$IP nexthop add id 20 via 10.0.0.1 fdb
-+$IP nexthop show id 20 | grep -qw "port"
-+log_test $? 1 "fdb nexthop without port omits NHA_FDB_PORT"
-+
-+if [ $ret -eq 0 ]; then
-+	echo "PASS: all NHA_FDB_PORT control-plane checks"
-+else
-+	echo "FAIL: one or more NHA_FDB_PORT checks failed"
-+fi
-+exit $ret
+ 	return true;
+ }
+ 
 
 -- 
 2.43.0
