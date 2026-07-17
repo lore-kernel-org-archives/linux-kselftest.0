@@ -1,380 +1,136 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D873AB288;
-	Fri, 17 Jul 2026 08:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2963CEBAA;
+	Fri, 17 Jul 2026 08:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784278619; cv=none; b=ueK78wf/dpi2vPkLjhLuHmLGwZn7ymLqrcCUabtGE+xujQSVuvWYmnjdAW8kW8vMpamAFZaLjtrHyTFD8XUVD3X5t6QxGeK1VGEwcdd9egUuoM2fQW7QNN4SOfXvTOd4ur12wQ5PmCcQYTsSJIqTVcu4Ci41Z/ugW3ta7Tr9wPM=
+	t=1784278800; cv=none; b=X1k3XGZxlz61AyRlQEycWJ1S2IiwzYYfemPo87QwCyrK4OipW5/xonk/L5Upv3DXLu0lZ5DHmIxa7s8Nd7M9wcNKskwTR+SFBBpJVeKoigYGTkrcBv4R2sIpZt/enIAdxNranYJGOF8D99f1AIxED55OdXxGAkVnbJOz/CWkUEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784278619; c=relaxed/simple;
-	bh=T6FIl2qBNzHVux9fRPl8zy0+exJR/zlmu3RzkHklYpo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K2bTxZVu0zv+XG7hzhTp8QyNg/Kwfs4K6pdLm9AnPxCsiWnpS7v7sL98Xpxstr+qjmeEh/5xNy1Bf1hEJYbcHDpwlwdYiGOoZkPhcFrn15ECVEe+KRvvrAtLa6mFeaZHCX/onTpwQ0B1tz+jfy8HtBCdKwVOnszHqQLxwrczxao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=EOHAj8GJ; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1784278800; c=relaxed/simple;
+	bh=TklJYsdtfWfsmdClR+8L/ye90c/zZZiZ+iIXQ/P3TsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IUtEoF9PJuVmKW0YjZsF2YN9iUQjADnaIQwetPA/XfBPyyc0iu3h11sq+GRzfB2P715DQVBN/MEapEl8wqK2bRDgRBA+EbJXmEqRyA+ZkQfY5yXY7g5TAw3wt6fOyjBlvjAkY9cST3UUhKKId1UAOvxx8diWsu0nvBhZEEybhNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2sQRCXH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="EOHAj8GJ"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=1pe6oNWRgyqsCINQc9IE5lBArQDCM88lWlgPXH66SvQ=;
-	b=EOHAj8GJtMLgv+LgoapPh8rztrXJQFsDep6/qc9p1559QU3zdRaojdXPsgc3kvSq/8eknbrjJ
-	g02kLTYLv1zrDrxBajvUgBbUZ4OojxMYwO3UCnBa7knnmfXImNhPd+UH33pRQsS4NUo7VxXM5FC
-	gmZ2tIIidIScGRLXuX3fXz0=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4h1k7N75mDz1prmX;
-	Fri, 17 Jul 2026 16:47:28 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 991304057D;
-	Fri, 17 Jul 2026 16:56:50 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 17 Jul
- 2026 16:56:50 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH 2/2] kselftest/arm64: Add SECCOMP_RET_TRACE x0 bypass test
-Date: Fri, 17 Jul 2026 16:56:57 +0800
-Message-ID: <20260717085657.3600248-3-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260717085657.3600248-1-ruanjinjie@huawei.com>
-References: <20260717085657.3600248-1-ruanjinjie@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2sQRCXH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C0C1F000E9;
+	Fri, 17 Jul 2026 08:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784278799;
+	bh=3+ZAV6N2Ai2NoGRefm+sHCQAGgc/wuny1uORZwSSCNc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=A2sQRCXHs3bF2MA/HIcwbUKjwmoU9Py4wdiLn79ekCfK0X4UxawTvH+warpMkqQ03
+	 5h4uNjTomVRGF+/AtmOtgvI+TbZAt7be1WZ7GDpg4T/3jKJjfWR2Ft+GX8o08BFdMe
+	 at6zrf3W4i5kCpFqJiO1RP6FfrdZIsAMo3/G30vzgcku0uItCFNzg8Fn1Jj4HfLvQy
+	 CC/er3P3NMsgcSFFv1a2MYfAv79vvJIikyFNmO788uaFehDTvzOtkUI22759qyN4j0
+	 DABJ/eKucOstPSSJZgJTup2LRyx3IAtwa7zh5oQCAeHdZDGnGKTONlXAS9N3iNSZJd
+	 ANsfY4BxDL8oA==
+Message-ID: <6aa00b1b-7acd-4080-b202-0bc87f1454d2@kernel.org>
+Date: Fri, 17 Jul 2026 10:59:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Fix BUG_ON checking wrong variable in
+ mremap_dontunmap
+To: Hongfu Li <hongfu.li@linux.dev>, akpm@linux-foundation.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
+References: <20260717070251.73212-1-hongfu.li@linux.dev>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260717070251.73212-1-hongfu.li@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add a selftest that verifies the kernel re-synchronises orig_x0 after
-a SECCOMP_RET_TRACE ptrace event, so that tracepoints (and audit) see
-the modified argument rather than the original value.
+On 7/17/26 09:02, Hongfu Li wrote:
+> From: Hongfu Li <lihongfu@kylinos.cn>
+> 
+> In mremap_dontunmap_partial_mapping_overwrite(), mremap() stores its
+> returned remapped address into remapped_mapping, while the BUG_ON
+> incorrectly checks dest_mapping instead.
+> 
+> If mremap() fails, dest_mapping still holds a valid pointer obtained from
+> the prior mmap() call, making this BUG_ON never trigger at all. Correct
+> the check to validate the actual mremap() return value stored in
+> remapped_mapping.
+> 
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
+>  tools/testing/selftests/mm/mremap_dontunmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
+> index a4f75d836733..96ba537facf7 100644
+> --- a/tools/testing/selftests/mm/mremap_dontunmap.c
+> +++ b/tools/testing/selftests/mm/mremap_dontunmap.c
+> @@ -313,7 +313,7 @@ static void mremap_dontunmap_partial_mapping_overwrite(void)
+>  	    mremap(source_mapping, 5 * page_size,
+>  		   5 * page_size,
+>  		   MREMAP_DONTUNMAP | MREMAP_MAYMOVE | MREMAP_FIXED, dest_mapping);
+> -	BUG_ON(dest_mapping == MAP_FAILED, "mremap");
+> +	BUG_ON(remapped_mapping == MAP_FAILED, "mremap");
+>  	BUG_ON(dest_mapping != remapped_mapping, "expected to remap to dest_mapping");
 
-The child installs a seccomp filter returning SECCOMP_RET_TRACE for
-write().  The tracer changes the first argument (fd) from 2 to 1 at the
-SECCOMP event, then the test checks that the sys_enter_write tracepoint
-records fd=1.
+Given that we know from a previous
 
-The test requires root and tracefs (at /sys/kernel/debug/tracing);
-it is skipped gracefully when these are unavailable.
+	BUG_ON(dest_mapping == MAP_FAILED, "mmap");
 
-Before the fix:
-	# ./seccomp_ret_trace_x0_bypass
-	TAP version 13
-	1..1
-	not ok 1 seccomp_ret_trace_x0_tracepoint
-	# Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+We can just drop this line completely and rely on the
 
-After the fix:
-	# ./seccomp_ret_trace_x0_bypass
-	TAP version 13
-	1..1
-	ok 1 seccomp_ret_trace_x0_tracepoint
-	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+	BUG_ON(dest_mapping != remapped_mapping, "expected to remap to dest_mapping");
 
-Cc: Kees Cook <kees@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/all/20260716120640.6590-1-will@kernel.org/
-Link: https://lore.kernel.org/all/202607152004.DEA95D63@keescook/
-Suggested-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- tools/testing/selftests/arm64/abi/.gitignore  |   1 +
- tools/testing/selftests/arm64/abi/Makefile    |   2 +-
- .../arm64/abi/seccomp_ret_trace_x0_bypass.c   | 249 ++++++++++++++++++
- 3 files changed, 251 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
-
-diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
-index 39129a9907c7..491a80db9dff 100644
---- a/tools/testing/selftests/arm64/abi/.gitignore
-+++ b/tools/testing/selftests/arm64/abi/.gitignore
-@@ -1,5 +1,6 @@
- hwcap
- ptrace
- seccomp_ptrace_x0_bypass
-+seccomp_ret_trace_x0_bypass
- syscall-abi
- tpidr2
-diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
-index 5a16db379bd4..a01d3806eba8 100644
---- a/tools/testing/selftests/arm64/abi/Makefile
-+++ b/tools/testing/selftests/arm64/abi/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2021 ARM Limited
- 
--TEST_GEN_PROGS := hwcap ptrace syscall-abi tpidr2 seccomp_ptrace_x0_bypass
-+TEST_GEN_PROGS := hwcap ptrace syscall-abi tpidr2 seccomp_ptrace_x0_bypass seccomp_ret_trace_x0_bypass
- 
- include ../../lib.mk
- 
-diff --git a/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c b/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
-new file mode 100644
-index 000000000000..a4e56a382fe2
---- /dev/null
-+++ b/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
-@@ -0,0 +1,249 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Verify that after a SECCOMP_RET_TRACE stop, changes to x0 are visible
-+ * to the syscall tracepoint (orig_x0 re-sync).
-+ *
-+ * The child installs a seccomp filter that returns SECCOMP_RET_TRACE for
-+ * write().  The parent waits for PTRACE_EVENT_SECCOMP, changes the first
-+ * argument (fd) from 2 to 1, then resumes the child.  By monitoring the
-+ * sys_enter_write tracepoint, we check whether the kernel recorded fd=1
-+ * (test passes) or fd=2 (test fails).
-+ *
-+ * Requires root and tracefs at /sys/kernel/debug/tracing.  If unavailable,
-+ * the test is skipped.
-+ */
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/wait.h>
-+#include <linux/elf.h>
-+#include <linux/filter.h>
-+#include <linux/seccomp.h>
-+#include <linux/ptrace.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef __NR_write
-+#define __NR_write 64
-+#endif
-+
-+#define PTRACE_EVENT_MASK(status) ((status) >> 16)
-+
-+#define TRACEFS_PATH "/sys/kernel/debug/tracing"
-+#define TRACE_EVENT  "syscalls/sys_enter_write"   /* note '/' not ':' */
-+#define TRACE_PIPE   TRACEFS_PATH "/trace_pipe"
-+#define TRACE_ON     TRACEFS_PATH "/events/" TRACE_EVENT "/enable"
-+#define TRACE_CLR    TRACEFS_PATH "/trace"
-+
-+static int do_child(void)
-+{
-+	int null_fd = open("/dev/null", O_WRONLY);
-+
-+	if (null_fd >= 0) {
-+		dup2(null_fd, STDOUT_FILENO);
-+		close(null_fd);
-+	}
-+
-+	if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+		_exit(1);
-+	raise(SIGSTOP);	/* let parent configure ptrace options */
-+
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_LD | BPF_W | BPF_ABS, 0),			/* syscall nr */
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_write, 0, 1),
-+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRACE),		/* write -> trace */
-+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
-+		_exit(2);
-+
-+	if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog))
-+		_exit(3);
-+
-+	/* write(2, "", 0) – parent will change fd to 1 at SECCOMP stop */
-+	syscall(__NR_write, 2, "", 0);
-+	_exit(0);
-+}
-+
-+static int trace_pipe_expect(const char *expect, int timeout_secs)
-+{
-+	FILE *fp = fopen(TRACE_PIPE, "r");
-+	char buf[4096];
-+	int found = 0;
-+	time_t deadline = time(NULL) + timeout_secs;
-+
-+	if (!fp)
-+		return 0;
-+
-+	fcntl(fileno(fp), F_SETFL, O_NONBLOCK);
-+	while (time(NULL) < deadline) {
-+		ssize_t n = fread(buf, 1, sizeof(buf) - 1, fp);
-+
-+		if (n <= 0) {
-+			usleep(10000);
-+			continue;
-+		}
-+		buf[n] = '\0';
-+		if (strstr(buf, expect)) {
-+			found = 1;
-+			break;
-+		}
-+	}
-+	fclose(fp);
-+	return found;
-+}
-+
-+static void enable_trace(bool on)
-+{
-+	int fd = open(TRACE_ON, O_WRONLY);
-+	char c = on ? '1' : '0';
-+
-+	if (fd >= 0) {
-+		write(fd, &c, 1);
-+		close(fd);
-+	}
-+}
-+
-+static void clear_trace(void)
-+{
-+	int fd = open(TRACE_CLR, O_WRONLY);
-+
-+	if (fd >= 0) {
-+		write(fd, "0", 1);
-+		close(fd);
-+	}
-+}
-+
-+int main(void)
-+{
-+	/* Wait for SECCOMP event or child exit */
-+	bool seccomp_event = false;
-+	bool ok = false;
-+	pid_t child;
-+	int status;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	if (geteuid() != 0) {
-+		ksft_test_result_skip("not root\n");
-+		goto out;
-+	}
-+	if (access(TRACE_ON, W_OK) != 0) {
-+		ksft_test_result_skip("tracefs unavailable\n");
-+		goto out;
-+	}
-+
-+	child = fork();
-+	if (!child)
-+		return do_child();
-+
-+	/* Wait for initial SIGSTOP */
-+	if (waitpid(child, &status, 0) != child)
-+		ksft_exit_fail_msg("waitpid initial");
-+	if (!WIFSTOPPED(status) || WSTOPSIG(status) != SIGSTOP)
-+		ksft_exit_fail_msg("unexpected initial stop");
-+
-+	if (ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESECCOMP)) {
-+		ksft_test_result_fail("setoptions\n");
-+		goto out;
-+	}
-+
-+	if (ptrace(PTRACE_CONT, child, 0, 0)) {
-+		ksft_test_result_fail("PTRACE_CONT\n");
-+		goto out;
-+	}
-+
-+	while (1) {
-+		if (waitpid(child, &status, 0) != child)
-+			ksft_exit_fail_msg("waitpid lost");
-+
-+		if (WIFEXITED(status)) {
-+			int code = WEXITSTATUS(status);
-+
-+			ksft_test_result(code == 2 || code == 3,
-+					 "seccomp filter not installed\n");
-+			goto out;
-+		}
-+		if (WIFSIGNALED(status)) {
-+			ksft_test_result_fail("killed\n");
-+			goto out;
-+		}
-+		if (WIFSTOPPED(status)) {
-+			if (WSTOPSIG(status) == SIGTRAP &&
-+			    PTRACE_EVENT_MASK(status) == PTRACE_EVENT_SECCOMP) {
-+				seccomp_event = true;
-+				break;
-+			}
-+			ptrace(PTRACE_CONT, child, 0, WSTOPSIG(status));
-+		}
-+	}
-+
-+	if (!seccomp_event)
-+		goto out;
-+
-+	/* At SECCOMP stop: modify x0 (fd) from 2 to 1 */
-+	{
-+		unsigned long long syscall_nr, x0;
-+		struct user_pt_regs regs;
-+		struct iovec iov = { .iov_base = &regs, .iov_len = sizeof(regs) };
-+
-+		if (ptrace(PTRACE_GETREGSET, child, NT_PRSTATUS, &iov))
-+			ksft_exit_fail_perror("GETREGSET");
-+
-+		syscall_nr = regs.regs[8];
-+		x0 = regs.regs[0];
-+		if (syscall_nr != __NR_write || x0 != 2) {
-+			ksft_test_result_fail("bad regs\n");
-+			goto out;
-+		}
-+
-+		regs.regs[0] = 1;
-+		if (ptrace(PTRACE_SETREGSET, child, NT_PRSTATUS, &iov)) {
-+			ksft_test_result_fail("SETREGSET\n");
-+			goto out;
-+		}
-+	}
-+
-+	/* Enable tracepoint and clear buffer */
-+	clear_trace();
-+	enable_trace(true);
-+
-+	/* Continue child; it will execute write(1, ...) and hit tracepoint */
-+	if (ptrace(PTRACE_CONT, child, 0, 0))
-+		ksft_exit_fail_perror("PTRACE_CONT after SECCOMP");
-+
-+	/* Reap the child */
-+	while (1) {
-+		if (waitpid(child, &status, 0) != child)
-+			break;
-+		if (WIFEXITED(status) || WIFSIGNALED(status))
-+			break;
-+		ptrace(PTRACE_CONT, child, 0, WSTOPSIG(status));
-+	}
-+	enable_trace(false);
-+
-+	/* Check trace for the modified fd */
-+	ok = trace_pipe_expect("fd: 1", 5);
-+	ksft_test_result(ok, "seccomp_ret_trace_x0_tracepoint\n");
-+
-+out:
-+	if (child > 0) {
-+		kill(child, SIGKILL);
-+		waitpid(child, NULL, 0);
-+	}
-+	ksft_print_cnts();
-+	return ok ? EXIT_SUCCESS : EXIT_FAILURE;
-+}
 -- 
-2.34.1
+Cheers,
 
+David
