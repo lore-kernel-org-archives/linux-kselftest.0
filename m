@@ -1,29 +1,29 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10943E0226;
-	Fri, 17 Jul 2026 08:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11563E00B6;
+	Fri, 17 Jul 2026 08:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784276126; cv=none; b=DIYm7Fyw0MvLzT6N73/guSiyf/QoiMQ3jyjb+nhDGCD8Ge8PbyCf0eBzTn0yOejup79DTRYwHSFWQeAfnOS96miCGXFN3haOSdjliMcPWEGw5ZkMjZb7bhJ6sSjVzk3XIqImFbMqNmBWItn7GcuEcWv4aeDVqRAYy9uT+vY0i84=
+	t=1784276127; cv=none; b=fas+I1gaqT3Kn+Zr+hO8YZl5bqlsEcAQm0QQAJm1+58SzAQ07n12+F0yRXhebOyZ4K/atFIAFYuHQXz6oEBgCvkCmIhFg68SNAWydWiB8Ry/16f6KyRmWP6T3W023KH+Ji8oL4OvQwqqgy/wJconqO/wvIp7SIXZH/wmywxM7Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784276126; c=relaxed/simple;
-	bh=CypDGazUdzhzDylLJH0I9K4emm8xsSLi+DX8MCGlinQ=;
+	s=arc-20240116; t=1784276127; c=relaxed/simple;
+	bh=2hE9mWSFuW1q+zRvnj1YXir2C/yT0R7DjU16wBOGF6o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ue0Inebg9Zd582DUN2TVKGgJQpQeuGwp/xBk29G5ytBs9fZUJ4pij8ROZ+JU98DLf1HfTXH02ylcKExqWzVAHmh018pXVKvPro3tmBhXRM+7AdgWDCblIe4CUDgmDPpH0pPCKyU5nTRywOcHYArfI7BPtNY3Ky8CBLGfjY/PksA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=SjEXlQVx; arc=none smtp.client-ip=162.243.164.118
+	 MIME-Version; b=fXwcqyWPmSCLAUanL8OCeMNQR39jaxu8q8Coviu4oPiHzFiR21cFkEFlWvLBg2LsgZVcu1v3Xm/7u3NOh32Xg72vH0VZ5UE1MtxbcABUX1D0acds2EcfyTJRuL8T/NUYsF3OmjWnFR32nG/RwExPjOv+jCt/Si4SmbvZouSp2ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=fBuMExxz; arc=none smtp.client-ip=13.75.44.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="SjEXlQVx"
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="fBuMExxz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
 	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=OVD/l1O1steeViKQdCQV2xNlE/y/HpeiSx
-	bzhVMr2Kg=; b=SjEXlQVxGG1eWiTJvT72vwvhbEU45Jo4E3PF42bfFwc+MAbmO4
-	vB18csN0xZS84Of0O5GffAgUui8BRx2ORKVz6BzX4ggOyGcEpi2cF90yoNndLxNa
-	Z51qRYw7WCvyQ7WQU/E1HduuPLMFFsqv0BrfyXPKQHtZn6mZvbLNoOuqk=
+	Content-Transfer-Encoding; bh=VrCJPAA5D8+z3s53wYAH4G5t6NO5Tup7gX
+	pN+nPBCu4=; b=fBuMExxzeaU4G/RP5vaFr6Vz4ZDerUkXh95ps9ifrVA9Z6zWay
+	d5U21v0um7QjF3zktLwGeul9Zp90OuMCzRgMyJb2QqB2nTwK3QgF2TlYnt41vVMO
+	8TlzdqAE5iQx314tdoJNxCK7HJkUzVeW4P6zX1XvbrwAj9Bq8w1H8NNTw=
 Received: from node118.platform-default.svc.cluster.local (unknown [36.102.215.18])
-	by web1 (Coremail) with SMTP id yAQGZQBnCMh45FlqWWMXAA--.33958S3;
-	Fri, 17 Jul 2026 16:15:05 +0800 (CST)
+	by web1 (Coremail) with SMTP id yAQGZQBnCMh45FlqWWMXAA--.33958S4;
+	Fri, 17 Jul 2026 16:15:09 +0800 (CST)
 From: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
 To: netdev@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,11 +42,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Xuewei Feng <fengxw06@126.com>,
 	Qi Li <qli01@tsinghua.edu.cn>,
 	Ke Xu <xuke@tsinghua.edu.cn>,
-	stable@vger.kernel.org,
 	yyxroy22@gmail.com
-Subject: [PATCH net 1/2] tcp: challenge ACK for non-exact RST in SYN-RECEIVED
-Date: Fri, 17 Jul 2026 08:14:42 +0000
-Message-Id: <20260717081443.809393-2-yangyx22@mails.tsinghua.edu.cn>
+Subject: [PATCH net 2/2] selftests/net: packetdrill: cover RST validation in SYN-RECEIVED
+Date: Fri, 17 Jul 2026 08:14:43 +0000
+Message-Id: <20260717081443.809393-3-yangyx22@mails.tsinghua.edu.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260717081443.809393-1-yangyx22@mails.tsinghua.edu.cn>
 References: <20260717081443.809393-1-yangyx22@mails.tsinghua.edu.cn>
@@ -57,185 +56,107 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yAQGZQBnCMh45FlqWWMXAA--.33958S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jr15Jr1fGry5uw47Zr4Dtwb_yoW7uw43pF
-	WxCrWakr4DZayxuFn3A34DCwnxKws5Z34a934xX3yrAwn8Gr17CFWktr42vr1UCr4fuw4a
-	qas0gr42kF1DA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUdjb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-	8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
-	CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE
-	c7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2
-	xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2
-	jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5V
-	A0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_
-	Wrylc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-	8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-	xVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-	8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
-	aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-	ZEXa7xRpc_SDUUUUU==
+X-CM-TRANSID:yAQGZQBnCMh45FlqWWMXAA--.33958S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFWDuFWDuF4kGw1kuF1fXrb_yoW5CFyxpF
+	45CasxKr1jvry8G3Wxtw4UKa4rXF4kJrW3Gr93JrWDZrs0yrn3ArWFkrWDK3sFgas5tFWF
+	qa4jgry2v3s8A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAa
+	c4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
+	Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
+	6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
+	ACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_GFyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sR_GYLPUUUUU==
 X-CM-SenderInfo: 51dqw5r0ssqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-The SYN-RECEIVED request-socket path in tcp_check_req() accepts an
-in-window RST without requiring SEG.SEQ to exactly match RCV.NXT.  A
-non-exact RST therefore removes the request instead of eliciting a
-challenge ACK.
+Add packetdrill coverage for the RFC 9293 reset checks on request
+sockets in SYN-RECEIVED.  Verify that an exact RST removes the request,
+a non-exact in-window RST sends a challenge ACK without removing it,
+and an out-of-window RST is silently discarded.
 
-RFC 9293 section 3.10.7.4 applies the RFC 5961 reset check in
-SYN-RECEIVED: an exact RST resets the connection, while a non-exact
-in-window RST must trigger a challenge ACK and be dropped.
+Also cover an RST|ACK with an unacceptable ACK number to ensure RST
+sequence validation runs before ACK-field validation.
 
-Apply that check before the ACK-field validation, following the RFC
-sequence-number, RST, then ACK processing order.  Factor the per-netns
-challenge ACK quota out of tcp_send_challenge_ack() so request sockets
-can share it.  Use the request socket's send_ack() callback and its own
-out-of-window ACK timestamp to send and rate-limit the response.
-
-Reported-by: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
-Reported-by: Yizhou Zhao <zhaoyz24@mails.tsinghua.edu.cn>
-Reported-by: Ao Wang <wangao@seu.edu.cn>
-Reported-by: Xuewei Feng <fengxw06@126.com>
-Reported-by: Qi Li <qli01@tsinghua.edu.cn>
-Reported-by: Ke Xu <xuke@tsinghua.edu.cn>
-Fixes: 282f23c6ee34 ("tcp: implement RFC 5961 3.2")
-Cc: stable@vger.kernel.org
 Signed-off-by: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
 ---
- include/net/tcp.h        |  2 ++
- net/ipv4/tcp_input.c     | 56 ++++++++++++++++++++++++++++++----------
- net/ipv4/tcp_minisocks.c | 12 ++++++++-
- 3 files changed, 56 insertions(+), 14 deletions(-)
+ .../packetdrill/tcp_rfc5961_rst-syn-recv.pkt  | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 6d376ea4d..2c5b88953 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1974,6 +1974,8 @@ static inline void tcp_fast_path_check(struct sock *sk)
- 
- bool tcp_oow_rate_limited(struct net *net, const struct sk_buff *skb,
- 			  int mib_idx, u32 *last_oow_ack_time);
-+void tcp_reqsk_send_challenge_ack(struct sock *sk, struct sk_buff *skb,
-+				  struct request_sock *req);
- 
- static inline void tcp_mib_init(struct net *net)
- {
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 61045a888..daff93d51 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -4038,24 +4038,17 @@ static void tcp_send_ack_reflect_ect(struct sock *sk, bool accecn_reflector)
- 	__tcp_send_ack(sk, tp->rcv_nxt, flags);
- }
- 
--/* RFC 5961 7 [ACK Throttling] */
--static void tcp_send_challenge_ack(struct sock *sk, bool accecn_reflector)
-+/* Consume one slot from the per-netns RFC 5961 challenge ACK quota.
-+ * Returns true if a challenge ACK may be sent.
-+ */
-+static bool tcp_challenge_ack_allowed(struct net *net)
- {
--	struct tcp_sock *tp = tcp_sk(sk);
--	struct net *net = sock_net(sk);
- 	u32 count, now, ack_limit;
- 
--	/* First check our per-socket dupack rate limit. */
--	if (__tcp_oow_rate_limited(net,
--				   LINUX_MIB_TCPACKSKIPPEDCHALLENGE,
--				   &tp->last_oow_ack_time))
--		return;
--
- 	ack_limit = READ_ONCE(net->ipv4.sysctl_tcp_challenge_ack_limit);
- 	if (ack_limit == INT_MAX)
--		goto send_ack;
-+		return true;
- 
--	/* Then check host-wide RFC 5961 rate limit. */
- 	now = jiffies / HZ;
- 	if (now != READ_ONCE(net->ipv4.tcp_challenge_timestamp)) {
- 		u32 half = (ack_limit + 1) >> 1;
-@@ -4067,12 +4060,49 @@ static void tcp_send_challenge_ack(struct sock *sk, bool accecn_reflector)
- 	count = READ_ONCE(net->ipv4.tcp_challenge_count);
- 	if (count > 0) {
- 		WRITE_ONCE(net->ipv4.tcp_challenge_count, count - 1);
--send_ack:
-+		return true;
-+	}
-+	return false;
-+}
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
+new file mode 100644
+index 000000000..3fc2de036
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_rst-syn-recv.pkt
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// RFC 9293 Section 3.10.7.4: in SYN-RECEIVED, an exact RST resets
++// the connection.  A non-exact in-window RST elicits a challenge ACK,
++// while an out-of-window RST is silently discarded.
 +
-+/* RFC 5961 7 [ACK Throttling] */
-+static void tcp_send_challenge_ack(struct sock *sk, bool accecn_reflector)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+	struct net *net = sock_net(sk);
++`./defaults.sh`
 +
-+	/* First check our per-socket dupack rate limit. */
-+	if (__tcp_oow_rate_limited(net,
-+				   LINUX_MIB_TCPACKSKIPPEDCHALLENGE,
-+				   &tp->last_oow_ack_time))
-+		return;
++// An exact RST removes the request socket.
++   0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
++  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++  +0 bind(3, ..., ...) = 0
++  +0 listen(3, 1) = 0
++  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
++  +0 > S. 0:0(0) ack 1 <...>
++  +0 < R 1:1(0) win 1000
++ +.1 < . 1:1(0) ack 1 win 1000
++  +0 > R 1:1(0)
++  +0 close(3) = 0
 +
-+	/* Then check the per-netns RFC 5961 rate limit. */
-+	if (tcp_challenge_ack_allowed(net)) {
- 		NET_INC_STATS(net, LINUX_MIB_TCPCHALLENGEACK);
- 		tcp_send_ack_reflect_ect(sk, accecn_reflector);
- 	}
- }
- 
-+/* Send a challenge ACK from a SYN-RECEIVED request socket. Uses
-+ * __tcp_oow_rate_limited() directly so that an RST carrying payload
-+ * cannot bypass the per-request rate limit.
-+ */
-+void tcp_reqsk_send_challenge_ack(struct sock *sk, struct sk_buff *skb,
-+				  struct request_sock *req)
-+{
-+	struct net *net = sock_net(sk);
++// A non-exact in-window RST gets a challenge ACK and the request survives.
++  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
++  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++  +0 bind(3, ..., ...) = 0
++  +0 listen(3, 1) = 0
++  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
++  +0 > S. 0:0(0) ack 1 <...>
++  +0 < R 2:2(0) win 1000
++  +0 > . 1:1(0) ack 1
++  +0 < . 1:1(0) ack 1 win 1000
++  +0 accept(3, ..., ...) = 4
++  +0 close(4) = 0
++  +0 close(3) = 0
 +
-+	if (__tcp_oow_rate_limited(net, LINUX_MIB_TCPACKSKIPPEDCHALLENGE,
-+				   &tcp_rsk(req)->last_oow_ack_time))
-+		return;
++// RST sequence validation precedes ACK validation.  Even an RST|ACK
++// with an unacceptable ACK value gets a challenge ACK.
++  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
++  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++  +0 bind(3, ..., ...) = 0
++  +0 listen(3, 1) = 0
++  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
++  +0 > S. 0:0(0) ack 1 <...>
++  +0 < R. 2:2(0) ack 100 win 1000
++  +0 > . 1:1(0) ack 1
++  +0 < . 1:1(0) ack 1 win 1000
++  +0 accept(3, ..., ...) = 4
++  +0 close(4) = 0
++  +0 close(3) = 0
 +
-+	if (tcp_challenge_ack_allowed(net)) {
-+		NET_INC_STATS(net, LINUX_MIB_TCPCHALLENGEACK);
-+		req->rsk_ops->send_ack(sk, skb, req);
-+	}
-+}
-+
- static void tcp_store_ts_recent(struct tcp_sock *tp)
- {
- 	tp->rx_opt.ts_recent = tp->rx_opt.rcv_tsval;
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index ddc4b17a8..6ab3e3a0b 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -833,7 +833,7 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
- 	 * elsewhere and is checked directly against the child socket rather
- 	 * than req because user data may have been sent out.
- 	 */
--	if ((flg & TCP_FLAG_ACK) && !fastopen &&
-+	if ((flg & TCP_FLAG_ACK) && !(flg & TCP_FLAG_RST) && !fastopen &&
- 	    (TCP_SKB_CB(skb)->ack_seq !=
- 	     tcp_rsk(req)->snt_isn + 1))
- 		return sk;
-@@ -872,6 +872,16 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
- 		flg &= ~TCP_FLAG_SYN;
- 	}
- 
-+	/* RFC 5961 section 3.2, as clarified by RFC 9293 section
-+	 * 3.10.7.4, requires a challenge ACK for a non-exact
-+	 * in-window RST in SYN-RECEIVED.
-+	 */
-+	if ((flg & TCP_FLAG_RST) &&
-+	    TCP_SKB_CB(skb)->seq != tcp_rsk(req)->rcv_nxt) {
-+		tcp_reqsk_send_challenge_ack(sk, skb, req);
-+		return NULL;
-+	}
-+
- 	/* RFC793: "second check the RST bit" and
- 	 *	   "fourth, check the SYN bit"
- 	 */
++// An out-of-window RST is silent and does not remove the request.
++  +0 socket(..., SOCK_STREAM|SOCK_NONBLOCK, IPPROTO_TCP) = 3
++  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++  +0 bind(3, ..., ...) = 0
++  +0 listen(3, 1) = 0
++  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
++  +0 > S. 0:0(0) ack 1 <...>
++  +0 < R 100001:100001(0) win 1000
++ +.1 < . 1:1(0) ack 1 win 1000
++  +0 accept(3, ..., ...) = 4
++  +0 close(4) = 0
++  +0 close(3) = 0
 -- 
 2.34.1
 
