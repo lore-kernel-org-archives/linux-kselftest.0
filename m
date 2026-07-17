@@ -1,143 +1,166 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D7D33BBCB;
-	Fri, 17 Jul 2026 15:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1B5348C4E
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 15:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303048; cv=none; b=P1sFboTg8mQ8CPuB02mK8ZJjjw1xtEUIGSDLiDBOOdMAlHhkzVmJcdG76+/yKWOMx1gcwB+FszchPsJzIkgZRCOY7zhgMk2Hgm5WGH3b98JoGzV13lSfZly+38mMbzvW7ynzPoPL0qC/XvbTT+xpKTIOp7mBvsEtO3gU3cnGmYs=
+	t=1784303316; cv=none; b=B+WImr9TB/8rFeCktK+uoDMjmgtNITmHUhr4K/9ELnWDgcnmoDXQoJQxVEYYO477m+rdD0OqF1ay10m7CxC0iL7iPxh6nHsYv6y10uK5OzJd5FMiy+PayZ3f90HwDTDKTuI6vG5rp1q21dMyNj6ZM1Ob+vGCdXYuOXtkRGgFTuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303048; c=relaxed/simple;
-	bh=asADGNchxVu0HONbbV+pf/qMEXxQgodIOPxZSeOXvi8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X8m8unZJN0BHa0cNHZXWv4kMnOg2pNg0ITacZEDWyAO5+iNGIxFmcQvBwolE34QUpyD9K6EYOHE7eAUoq/QIZqHCmMOmu/wwMyJbaNkri32gShZ+/s3BRo0H9KH0EgrKbyA513dtKh9nUYJ2dMo4BXVuDuXFvZKkN6uqvYCcsvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=O9ggdr9U; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qAsNhoFk; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1784303316; c=relaxed/simple;
+	bh=oHrzS7c2fdMxPD+EoUgQkE+zbdNYCbx8okcllqp9KYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=a3EHtO1LR4V5ZXPlcEEevCBm+N5songrdIFMvqa8XJj9VmWcRgykrkaqV4unlznTBayTeJOcSx1NESlVVHr2MWgIiyp7qVg04EBdOlbfHpHDRerS7yYSN2skEbMr3eCayOo3byQUwA+Av0PrRKTg8NGiCUGVIr+dszZfAfDNBQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U2Wrhv3z; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="O9ggdr9U";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qAsNhoFk"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 2D142EC01CE;
-	Fri, 17 Jul 2026 11:44:06 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Fri, 17 Jul 2026 11:44:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1784303046;
-	 x=1784389446; bh=Cx3wM1kOoxCwe0QweWs20VV3ZbFkdoj/04lxX9YItvE=; b=
-	O9ggdr9UYKgJ2zDiVFCYmrnsO3Chnp5gxz/VWjW+q/ggC6OU3oyvaazwT8Uf0eEN
-	ipbcqUHkGcXslAFw+vN68QDcTEGgNseYqE7sGzVtjzFZI5gEEeeMMe4A8eYl71iV
-	c+Z2dsVtwpv6VWOFS9+L8dOHTJmXnWh76URFCxd/QINFzVPjO4bIey2+s8wj366t
-	kTyEYatj3TSpAG5T+IQPDKDr/HHDdtEeUAE/y2MTRiTZQgbxQE7x3vjIqxO1M9E5
-	XVuqi9Bl+nH8YHrgKH0mvxjx5t/3wURLbaFphv4fjoErZH+VEbKpIvtqfLzHxvMH
-	ssj1I6BqaE8y48X8Ol/oag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784303046; x=
-	1784389446; bh=Cx3wM1kOoxCwe0QweWs20VV3ZbFkdoj/04lxX9YItvE=; b=q
-	AsNhoFkueLvzbK/wz+EsgH9VD6q7m8Gxb/o2oe1zjtGXPkjV9gOhYqigZmxbwYse
-	uj1PzjXGDCbCGNL8E+n8xqPuxFgNvOkuELdUVWK76hOQ2bdQQXjFROP/o1boUsQ4
-	XcJsY1mHFRor7kbFqqEiEhmqPmFxypGT6h1aRUeH60u6etVFHvkIDXXvtlwf0tvP
-	pLG48LQT7wJd55GAXaWD7medujeW3kV5C7EwD4+ANVSk/qFre7z6Yr3jo5AmowGl
-	IkCVWU7fFOEJE2Y6uk1fJ46xB2zTE2V/9WdGVd7nmbG/by89wMGgshHCl/GuUiEx
-	0H0UXzeNnyWVhJx0V4KAg==
-X-ME-Sender: <xms:xU1aamgJDnMAAKg0bp4gK9-lKGdNKPMpW6qWySDivSB5Ue1UJZXKKw>
-    <xme:xU1aatDoT05Vh5e-F-xUky3pwcRZ6406BELTtOzGH0BETzAj577SrOWN0n3Q1Zgzy
-    sD_0eUju1X_hMfOxCfBCCcGK8iY4L4aXV_5DY7wdU65M6uW3MXGng>
-X-ME-Received: <xmr:xU1aao5psbbFCRvVHVUIV5zjVA6ynWn3jejla7rd2m-4cuH-j4iqdrX1Sb4>
-X-ME-Proxy-Cause: dmFkZTGtimudHPAbfThGNZ+h80ULP4BKReBQeYGrgBsyON1ztJiWLSAAIZDnG8fToEG3XU
-    fB0cHbYtowPGntdAcFDq4GKEfwsNpWYO+isPzGhlQzNrheThNlwPGdswI2Lrk8PTaL2Jp0
-    hoQfsEk1tnVAcbMSxs3aqEIk2LYLvvr2aB5CAGNMfHAZIDB9m8rtehdEVDjKrVmWwB9WLB
-    5IN6/bSY+39/QkTRPRGEI73E8PLSp1VRWpZZnRHKG/riYrW+X+A+H/H73XzFhKdE4ymJIF
-    2G8vDJSZGjHwWxx3kh3VQc+5xaIftx/QAtimz1soPXvtE1hFGBnBDZuf91W4JSWj5iOwcG
-    XMosao8AHIjMys3mlDUJL0hrKTekUT08a1vWPl5NLn9LibmJE2JEdH8oVtg387WMXe+J8w
-    HquD54Q5CYWUMD9ENKQt1q26SQa0hX9MtmeGmnTwF5PEkvqpQsQbJvE44t9yZWw2ABPX2n
-    Q7P8UyVyWVkPWVOAzFiCY2HumHY8Nxdi57IBn1n8W8x//MghhSqCBntNeSiKijrJTWpqwl
-    JHHsQh0EcZjNg8FaELS1CQn3aPzuyHLyxjv/ep2dTUSjfR49yNDnRLIkSoNRuCu6qjDaeO
-    lf+g77j5d+GVMLFUWKGP1a+tSSvA5iPK9UNf1r+ILjNlPw56zlRU3EjKvamg
-X-ME-Proxy: <xmx:xU1aaiGWuWPi8XxvEKWunRIMYnZQzJy4C91g-gIGGWaUTPHyzYDHUA>
-    <xmx:xU1aajBUzcDgDH0lTr7tI-DwgMV8LmULreJk_IfMJDBLRxCdfe7DOg>
-    <xmx:xU1aanx-yC86MjeFtU49z8SkVcq4mBq3IJ7dfEKToAAEIQj8I5uYwA>
-    <xmx:xU1aan6Gn5Oktjg-V4tu3SEUT0pKNdMBGjZDyOGBbqjS_jr-P8uQ6Q>
-    <xmx:xk1aao0FtafbVc0FCr4S584gHzsPI-stdjv_Acr-sIAbFQ6rqvpo2gnN>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Jul 2026 11:44:04 -0400 (EDT)
-Date: Fri, 17 Jul 2026 09:43:52 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: Alex Mastro <amastro@fb.com>
-Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
- Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma
- <vipinsh@google.com>, <kvm@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Shuah
- Khan <skhan@linuxfoundation.org>, alex@shazbot.org
-Subject: Re: [PATCH v4 0/2] vfio: selftests: Add allocation assert helpers
- and avoid VLAs
-Message-ID: <20260717094352.6bb38603@shazbot.org>
-In-Reply-To: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
-References: <20260617-scratch-amastro-vfio-selftests-avoid-vlas-v4-0-b9f52f1e2c5a@fb.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U2Wrhv3z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784303313;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rU+JQSn24qoe+8/7ChMxhPzRjJgh1VjUQ1PsYPpKZ7A=;
+	b=U2Wrhv3zVX4mTn2f8XEN22/CziH8aS99mMyk6K+znUFeHaoHTypcmacbmOeufyLCAxEvq+
+	CLG9Ume3rAeuVPOsmGhk2l5XU7zgoaTQE8ky5RjQQcmmUHpq4iI2AUsgsCwf4szx8SfEW+
+	lD5u3WTO/+YVno+osr8nNUaLAKGgz7o=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-668-FmT66Q4YP2WIdLtpdIi7Sw-1; Fri,
+ 17 Jul 2026 11:48:29 -0400
+X-MC-Unique: FmT66Q4YP2WIdLtpdIi7Sw-1
+X-Mimecast-MFC-AGG-ID: FmT66Q4YP2WIdLtpdIi7Sw_1784303307
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9D6B1195D009;
+	Fri, 17 Jul 2026 15:48:27 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.local (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 628EC30040BF;
+	Fri, 17 Jul 2026 15:48:24 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Wen Yang <wen.yang@linux.dev>,
+	Nam Cao <namcao@linutronix.de>,
+	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
+	Tomas Glozar <tglozar@redhat.com>,
+	John Kacur <jkacur@redhat.com>
+Subject: [PATCH v4 15/17] selftests/verification: Fix wrong errexit assumption
+Date: Fri, 17 Jul 2026 17:46:36 +0200
+Message-ID: <20260717154638.220789-16-gmonaco@redhat.com>
+In-Reply-To: <20260717154638.220789-1-gmonaco@redhat.com>
+References: <20260717154638.220789-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, 17 Jun 2026 11:57:59 -0700
-Alex Mastro <amastro@fb.com> wrote:
+RV selftest rely on bash errexit (set -e) to terminate with error, when
+a step is expected to return false, the following syntax is used:
 
-> Add VFIO selftest {malloc,calloc}_assert() helpers, then use
-> them in places that open-code malloc() or calloc() followed by
-> VFIO_ASSERT_NOT_NULL().
-> 
-> Use the helpers to replace VLAs with heap allocations. This avoids GCC
-> rejecting initialized VLAs and avoids treating a u8 buffer as a possibly
-> under-aligned VFIO request struct.
-> 
-> Changes in v4:
-> - Add malloc_assert().
-> - Link to v3: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v3-0-b3798415c72a@fb.com
-> 
-> Changes in v3:
-> - Add the calloc_assert() helper as a precursor patch.
-> - Convert existing VFIO selftest calloc() assertion sites.
-> - Update the VLA fix to use calloc_assert().
-> - Link to v2: https://patch.msgid.link/20260615-scratch-amastro-vfio-selftests-avoid-vlas-v2-1-4e4df462908a@fb.com
-> 
-> Changes in v2:
-> - Reverse xmas tree variable ordering
-> - Link to v1: https://patch.msgid.link/20260612-scratch-amastro-vfio-selftests-avoid-vlas-v1-1-ba3acb635f0a@fb.com
-> 
-> Signed-off-by: Alex Mastro <amastro@fb.com>
-> ---
-> Alex Mastro (2):
->       vfio: selftests: Add allocation assert helpers
->       vfio: selftests: Avoid VLAs
-> 
->  .../selftests/vfio/lib/include/libvfio/assert.h    | 18 ++++++++++++
->  tools/testing/selftests/vfio/lib/iommu.c           | 12 +++-----
->  tools/testing/selftests/vfio/lib/iova_allocator.c  |  4 +--
->  tools/testing/selftests/vfio/lib/sysfs.c           |  3 +-
->  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 32 ++++++++++++----------
->  .../vfio/vfio_pci_device_init_perf_test.c          |  4 +--
->  6 files changed, 43 insertions(+), 30 deletions(-)
-> ---
-> base-commit: a26b499b757cfc8bbff1088bb1b844639e250893
-> change-id: 20260612-scratch-amastro-vfio-selftests-avoid-vlas-395eb3dcb3ab
-> 
-> Best regards,
-> --  
-> Alex Mastro <amastro@fb.com>
-> 
+  ! cmd
 
-Applied to vfio next branch for v7.3.  Thanks,
+This however prevents the test from exiting when cmd is false (desired)
+but doesn't exit if cmd is true, since commands prefixed with ! are
+explicitly excluded from errexit.
 
-Alex
+Use the syntax
+
+  ! cmd || false
+
+Which ends up checking the exit value of ! cmd and supplies a false
+command for errexit to evaluate.
+
+Reviewed-by: Wen Yang <wen.yang@linux.dev>
+Acked-by: Nam Cao <namcao@linutronix.de>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ .../verification/test.d/rv_monitor_enable_disable.tc   | 10 +++++-----
+ .../verification/test.d/rv_monitor_reactor.tc          |  4 ++--
+ .../selftests/verification/test.d/rv_wwnr_printk.tc    |  4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+index f29236defb5a..61e2c8b54d9a 100644
+--- a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
++++ b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+@@ -10,7 +10,7 @@ test_simple_monitor() {
+     grep -q "$monitor$" enabled_monitors
+ 
+     echo 0 > "monitors/$prefix$monitor/enable"
+-    ! grep -q "$monitor$" enabled_monitors
++    ! grep -q "$monitor$" enabled_monitors || false
+ 
+     echo "$monitor" >> enabled_monitors
+     grep -q 1 "monitors/$prefix$monitor/enable"
+@@ -34,12 +34,12 @@ test_container_monitor() {
+ 	test -n "$nested"
+ 
+     echo 0 > "monitors/$monitor/enable"
+-    ! grep -q "^$monitor$" enabled_monitors
++    ! grep -q "^$monitor$" enabled_monitors || false
+ 
+     for nested_dir in "monitors/$monitor"/*; do
+         [ -d "$nested_dir" ] || continue
+         nested=$(basename "$nested_dir")
+-        ! grep -q "^$monitor:$nested$" enabled_monitors
++        ! grep -q "^$monitor:$nested$" enabled_monitors || false
+     done
+ 
+     echo "$monitor" >> enabled_monitors
+@@ -71,5 +71,5 @@ for monitor_dir in monitors/*; do
+     fi
+ done
+ 
+-! echo non_existent_monitor > enabled_monitors
+-! grep -q "^non_existent_monitor$" enabled_monitors
++! echo non_existent_monitor > enabled_monitors || false
++! grep -q "^non_existent_monitor$" enabled_monitors || false
+diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+index 2958bf849338..516a20971390 100644
+--- a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
++++ b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+@@ -64,5 +64,5 @@ done
+ 
+ monitor=$(ls /sys/kernel/tracing/rv/monitors -1 | head -n 1)
+ test -f "monitors/$monitor/reactors"
+-! echo non_existent_reactor > "monitors/$monitor/reactors"
+-! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors"
++! echo non_existent_reactor > "monitors/$monitor/reactors" || false
++! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors" || false
+diff --git a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+index 5a59432b1d93..96de95edb530 100644
+--- a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
++++ b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+@@ -17,13 +17,13 @@ echo printk > monitors/wwnr/reactors
+ load
+ 
+ echo 0 > monitoring_on
+-! load
++! load || false
+ echo 1 > monitoring_on
+ 
+ load
+ 
+ echo 0 > reacting_on
+-! load
++! load || false
+ echo 1 > reacting_on
+ 
+ echo nop > monitors/wwnr/reactors
+-- 
+2.55.0
+
