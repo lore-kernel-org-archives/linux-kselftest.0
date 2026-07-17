@@ -1,230 +1,163 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8D439B484
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 20:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F023A6B6F
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 21:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784319315; cv=none; b=LMYVl6qKQVJCMfViQPQNAndjPqdoyOCAtzhI8NRFnBSReDPZ+i6xOf41z66w/fbnO8/YiLiOB2EgpjhIw4IFJyPEUO2b4FCrICXjuKwcRD2aj9vKJje6bwC+zwlFuQHk87orQPtWEfEzAgR/oZ+MTX3cO5Ym3ygcZlpAHchEVdk=
+	t=1784323792; cv=none; b=HUk5AaEz7BATyQjFCqWQp65fe1szt1QZF6arxKHmoeW43UCmfScmgEsnX87HElwVzF+mohqrzGL4Y6PMRjXgA4jWCX9qiqfh0iFcy3ULRlZmU5g4Pqykt8hcNAK7XUpK0giVt3vRpR3e2+u+j6ndaBvOugRLtsf1v498xQNo47o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784319315; c=relaxed/simple;
-	bh=diUIIKStfenJCEasoEwrp+wCmRi3qtN6/sa0FZ2l7bg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TN+PdyISHJFmn0nNFWRT0iL6uiMKqvExcChygWZ/67Q8E5Ayx/zAO6xywi7lTQMORfTjXO/r0f4c6P2ubt1L72gsk+ikN7K4rKHANwm96W/piV4bypHG0w67MwPKJMAqeKSW1h2K03Ohm/Bg37YApeaq5Pi+mruIzzdvDmQQW/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8hK3rbW; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784323792; c=relaxed/simple;
+	bh=RRLtR05HNO2eA17V+2WFivh4U+/1LOnvCIY75vZfKTw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:
+	 References:In-Reply-To; b=dH5YWYVXwcQxfqGT/dlVlqKQCXL6Sgmg6pNex5IKiSx3EZZKRs/JSNxytHk7xmzp/2nZCAoloKL6QwoCWhV0JvF5gTj0KGZbJ7CNyJ0k9wMuJsqXG8h4adN+o1mJnFQgMTVZyEi72M2P7tCF/G6Bda6G6uLiI0/yYfIjPjUXd7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ZckQouxQ; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8hK3rbW"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-47f307dd9d5so280242f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 13:15:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ZckQouxQ"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38e58e0e2d2so328637a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 14:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784319308; x=1784924108; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784323785; x=1784928585; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:to:from:message-id:date:content-type
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4Pv4NrN4dYt4KyUEdjIMuVrZU8kjGasmAaF2k9w2Y9c=;
-        b=m8hK3rbWJ9dCXRpYUMS8e5kU6ayjyoBM4AfwAuGK+XRLsdXJCcgqRxWGTYYYjC5bIL
-         lwZ3rAcHJ1ELt8LLKUuViHJcNrhGhAxn1HUMzO1jNOB5E4+LcTilBy6ArFs/nrPSf0HE
-         vqSsCccU5f8sxpGqR9Zzbst4KRwdQnG2UNfVjOv3uVaAF9RrjqMIOd7ylJLg+TkZ4/rc
-         It3iUdpLnsm/VcuK1ff/CKLeIJJTAOyt6hWYvtqAMPfXzdSPCPisl6mNLMpVQbzV8Rwe
-         zwVEgsTrPMTpSaDPT72+dPIzkk8/Z/9mH2WDYoxorwingznSCvnOR79Ky/msqvImTTJw
-         gZ5Q==
+        bh=oQDBUUIw0bVYgL4afo7WU2+Ju65SJHJpkDkSaUZ9qZY=;
+        b=ZckQouxQCFJMAhrHhX1SI8d2PnWUtgtR5zCiNzubnwKQg427u++0fUmpQO3uAIM5su
+         26NIBwaawn0tHhRz8WF1Wkcbi4bWqrEft6UJtTUDUayPOxP3ug1purxOGL5b4E7bZTk3
+         LjYjvJ2qU9fsf0HazDoPeScmssRKkA2V4w8p9f3VhIuwRSlReBRVKAAZCDxDbv1Q9MHR
+         13RT82vyctWfjsm6HN+QaHFCN3huK3juu7jUQ4C8a2Stzy2qw1CabP+Y5eoOFcJR5UVT
+         wdb/mtjyaAU7TGIbP9y01P6UBTHqzWdw9Zlt3dQiP7DrXp3NyQHyvRJjhXfwGf+hVl6i
+         8eHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784319308; x=1784924108;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4Pv4NrN4dYt4KyUEdjIMuVrZU8kjGasmAaF2k9w2Y9c=;
-        b=EOcWV/5KgtyE35NRm9jLgsajfcJB8adZbDoO5HFw2a12oPt3+6XCwclcdae3KATgt9
-         4eqyl0TUxymNYYkH5QST8wmUYJGKBeo90HBhsE7JQBp47RvlVhmTzhSSlElpdaHiyWT+
-         e9nzPNbW+5biKK0BR29xPkC4BBFvXMAp6STz8yXfw6bIYYUHyu5L7+GhxZY+YQ4vqwxC
-         etQZxPANKvlKL0vPEWbs3P4Ba94xCUkr++vLeDesnO47AlgQWKnftPo6Oxj/1b5EQvUl
-         l+9/CQGh+s0+j/eTktP80N7VhPnI98eTPscIoqfFE8pgp37feMN01J18EhKH1dNUq4pY
-         D8Ig==
-X-Forwarded-Encrypted: i=1; AHgh+RosfickdCQU3hbgGQ9uK4uFwy6Nqvwoee7eQYVrbcntUs7CMC2WgRt2vjyEHLrZnL5v4YuRn0KzFjEeAfYOeGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYS/RKgRi2pJ4X6AHegS1L9OwqRtqHAhumck38qoQwx5eYOO+3
-	TzUEfZGkAwu+kWHiS1etkmR45TTXVfqoNUPQZj+W8GgJF19Iwd11cmVT
-X-Gm-Gg: AfdE7cn+BRDYF0PERtgJFfhxVlqiOVsWs707aByFCnuR7rhokj85tckEDLLaJUpK2k3
-	1J+aHtpC47DLZsGwrx72LOsFOVBrZK+GEL+5whkaRa8s+8QNkdixB8JKWiMHznanXQq0DfQb+21
-	uLV6FNYjIP2WALpiqC94v+3WQxvVkGqq8et3aylu8UrkXMCnzneYchNACHFP24Pnhx7fhq+x6gE
-	1Syt+FziNHnTXUE5S9JImo4qh3eCF/GhSyzNuCjYo7w4IXPY7OPkbVtA8nLs9/GLvO8T0pc44V6
-	6hsORncQxeFuQBWWyuINSJNGLB3z3tm64MqtIWnExiF7SQqDBdfXMu3wjHOrXZbmmmYZ/2UBdoQ
-	XY0zPMc4nVML3i5gx1kOSBb/U1KQXoqGoB7IXeFZmV+hESGGUw0tGRWp/rzJEuUcRBD97jKp6E2
-	Ks5TC7puJgwYdexqHRJosCkdsGC+ch4X3QN6rQdnkngkR88cF5dc+DnoS7ZTwtn8dqLJ4SFkuh6
-	Wr4ZslzovL+bAjgZUz2C0VUuYGAjJlaWcXBRZk=
-X-Received: by 2002:a05:600c:46c7:b0:493:efdf:7c80 with SMTP id 5b1f17b1804b1-4954a40ebf0mr29386095e9.5.1784319307839;
-        Fri, 17 Jul 2026 13:15:07 -0700 (PDT)
-Received: from L-022584.energy.envision.com (dynamic-077-179-077-126.77.179.pool.telefonica.de. [77.179.77.126])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-495499a5847sm53179335e9.2.2026.07.17.13.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 13:15:06 -0700 (PDT)
-From: Xin Xie <xiexinet@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	wsa+renesas@sang-engineering.com,
-	jie.luo@oss.qualcomm.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	fmancera@suse.de,
-	bigeasy@linutronix.de,
-	fmaurer@redhat.com,
-	luka.gejak@linux.dev,
-	Xin Xie <xiexinet@gmail.com>
-Subject: [PATCH net-next v4 4/4] selftests: net: hsr: add PRP RedBox test
-Date: Fri, 17 Jul 2026 22:14:57 +0200
-Message-ID: <20260717201457.54-5-xiexinet@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260717201457.54-1-xiexinet@gmail.com>
-References: <20260717201457.54-1-xiexinet@gmail.com>
+        d=1e100.net; s=20251104; t=1784323785; x=1784928585;
+        h=in-reply-to:references:subject:to:from:message-id:date:content-type
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oQDBUUIw0bVYgL4afo7WU2+Ju65SJHJpkDkSaUZ9qZY=;
+        b=iV3T1e2kkU6ZNTmmcp3uxrD+qoBXRmBV6i9MEeBSkeGzkf20KXhGE9EpV2p8TfhExw
+         oJNkJKoUcuBSnDeMdQEEhUbfXV3y4SDdEPJ+/90Qh5/DySji3k11dhn4+wfpQMFJMsAc
+         OG2BKC9YXfkB4Izp4TcRFk+INXtFPkH9KljDl/mSbjyj5AgxurjFVUqarsAWI8iUzmT0
+         FoB+UrC7CisnmqoybK21pfL2KLkgKVNdUGD7Z9Gd0z2UAsfhqOkebNeC5II1bkAIs8QV
+         4dOi5ERYG1uKyG9lfnf7DEWxHR3cQRa0W4aW/xQG9s3g6Xv/RM8FBwlpouILiWlAQDnS
+         kC3g==
+X-Forwarded-Encrypted: i=1; AHgh+RofmqhQYpA1eAP4xvW4EXSj6ZED57h2JVPhpI1suI/b0DZGhLtWhKWE0BU9aZ3GHLeUtl7MUdHCCA09A8VVnB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxun97icwUw/qr/fB9LdbMkyg3UMSpmcKn6G829+E5dbdRENbDS
+	iLcV8ShyodG0+00X5ITXqVTKeN4K66TRLp4ZA9I9J1PbQJTGidt8nOzcT+8La7o92+DmcLis4lF
+	ujL1q3fplVg==
+X-Gm-Gg: AfdE7cm+ieDvQaIhBV+I4kxAHQRYA9FXPflVs4uWu5CYXsZeOJaKJN79tzHPh7/PIBU
+	6zYiZcRxvUPBuJ9QqrZt7m3xMO/WLDgdDIwamDYBGXUxo5IG0lwfi1JGvnzTRlJ/9zmEgbe88MG
+	azf58yZuL4sMrHDtnh2uNDE6UkNeBEknzeoqi/cwYg3tdV2/XL2dhbQR59HHB9pxN8KPaif004k
+	SR9oP2/A75L6yg6EhYLeb4KFJ1C0x7edVVr8ee35SK5sKYzFdwC34VHvY9chst8IZsB9kY2vZqs
+	lkL0PuEVtkSxJgW+0vax+dpAHHJWbeHbmZR4bisFShlAQhz//w5zN6PX7RhTYkBbskdLr/ldXsa
+	NWqe82/1z77Js3e8Rz/YRIDQBLIQmVWUgi19rVnTb4O4B7aoTzvAIrDWekJFK1PU6BgjJHw==
+X-Received: by 2002:a17:90b:2f85:b0:37f:b0a9:1a68 with SMTP id 98e67ed59e1d1-38e4b3e0fdfmr4516542a91.7.1784323785486;
+        Fri, 17 Jul 2026 14:29:45 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::f5f9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1bbab9sm12249333eec.15.2026.07.17.14.29.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jul 2026 14:29:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 17 Jul 2026 17:29:42 -0400
+Message-Id: <DK15ZPPHBWGS.12AEC4957Q8NL@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "longlong yan" <yanlonglong@kylinos.cn>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] libarena: use ARRAY_SIZE macro in test_rbtree.bpf.c
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260717073237.1048-1-yanlonglong@kylinos.cn>
+In-Reply-To: <20260717073237.1048-1-yanlonglong@kylinos.cn>
 
-Add a kselftest that builds a PRP RedBox (interlink) with a SAN behind the
-interlink and a peer DANP, and checks bidirectional unicast across the
-interlink, preservation of the SAN source MAC on the PRP network, and that
-the proxy-announce supervision frame carries the RedBox-MAC TLV (Type 30)
-terminated by an EOT marker. It reuses the hsr_common.sh / lib.sh helpers
-and skips cleanly on a kernel or iproute2 without PRP interlink support.
+On Fri Jul 17, 2026 at 3:32 AM EDT, longlong yan wrote:
+> The ARRAY_SIZE macro is more compact and more formal in linux source.
+>
+> Fixes: 6c3e8a4d4765 ("selftests/bpf: libarena: Add rbtree data structure"=
+)
+> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
 
-The background ping is killed by its exact PID: ip netns exec does not
-isolate the PID namespace, so a pattern-based pkill could hit unrelated
-processes on the host.
+NACK, please see the exact same comment I made on the other thread
+that made the same change for the ASAN buddy selftests.
 
-Signed-off-by: Xin Xie <xiexinet@gmail.com>
----
- tools/testing/selftests/net/hsr/Makefile      |  1 +
- .../selftests/net/hsr/hsr_prp_redbox.sh       | 99 +++++++++++++++++++
- 2 files changed, 100 insertions(+)
- create mode 100755 tools/testing/selftests/net/hsr/hsr_prp_redbox.sh
+pw-bot: cr
 
-diff --git a/tools/testing/selftests/net/hsr/Makefile b/tools/testing/selftests/net/hsr/Makefile
-index 31fb9326cf5..2150e487ac7 100644
---- a/tools/testing/selftests/net/hsr/Makefile
-+++ b/tools/testing/selftests/net/hsr/Makefile
-@@ -4,6 +4,7 @@ top_srcdir = ../../../../..
- 
- TEST_PROGS := \
- 	hsr_ping.sh \
-+	hsr_prp_redbox.sh \
- 	hsr_redbox.sh \
- 	link_faults.sh \
- 	prp_ping.sh \
-diff --git a/tools/testing/selftests/net/hsr/hsr_prp_redbox.sh b/tools/testing/selftests/net/hsr/hsr_prp_redbox.sh
-new file mode 100755
-index 00000000000..479c892225b
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_prp_redbox.sh
-@@ -0,0 +1,99 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test a PRP RedBox (PRP-SAN): a SAN that sits behind the interlink port must
-+# reach, and be reached by, a peer DANP on the PRP network with its own MAC
-+# preserved on the wire, and the RedBox must announce the SAN with a RedBox-MAC
-+# TLV (terminated by an EOT marker) in its PRP supervision frames.
-+#
-+#   RB    PRP RedBox: prp0 over rb_a/rb_b (LAN A/B) + interlink rb_il
-+#   PEER  peer DANP : prp0 over pe_a/pe_b, 100.64.0.2
-+#   SAN   SAN       : san_il, own MAC, 100.64.0.51 (behind the interlink)
-+
-+ipv6=false
-+
-+source ./hsr_common.sh
-+
-+check_prerequisites
-+
-+if ! command -v tcpdump >/dev/null 2>&1; then
-+	echo "SKIP: This test requires tcpdump"
-+	exit $ksft_skip
-+fi
-+
-+if ! ip link help hsr 2>&1 | grep -q interlink; then
-+	echo "SKIP: iproute2 too old (no hsr interlink support)"
-+	exit $ksft_skip
-+fi
-+
-+setup_ns RB PEER SAN
-+trap 'cleanup_ns "$RB" "$PEER" "$SAN"' EXIT
-+
-+ip link add rb_a netns "$RB" type veth peer name pe_a netns "$PEER"
-+ip link add rb_b netns "$RB" type veth peer name pe_b netns "$PEER"
-+ip link add rb_il netns "$RB" type veth peer name san_il netns "$SAN"
-+
-+ip -n "$RB"   link set rb_a up
-+ip -n "$RB"   link set rb_b up
-+ip -n "$RB"   link set rb_il up
-+ip -n "$PEER" link set pe_a up
-+ip -n "$PEER" link set pe_b up
-+ip -n "$SAN"  link set san_il up
-+ip -n "$SAN"  addr add 100.64.0.51/24 dev san_il
-+
-+# Feature gate: PRP interlink (RedBox) creation. A kernel without PRP RedBox
-+# support rejects this with -EINVAL, so SKIP rather than FAIL.
-+if ! ip -n "$RB" link add name prp0 type hsr slave1 rb_a slave2 rb_b \
-+     interlink rb_il proto 1 2>/dev/null; then
-+	echo "SKIP: kernel without PRP RedBox (interlink) support"
-+	exit $ksft_skip
-+fi
-+ip -n "$RB"   link set prp0 up
-+ip -n "$PEER" link add name prp0 type hsr slave1 pe_a slave2 pe_b proto 1
-+ip -n "$PEER" link set prp0 up
-+ip -n "$PEER" addr add 100.64.0.2/24 dev prp0
-+sleep 1
-+
-+san_mac=$(ip -n "$SAN" -br link show san_il | awk '{print $3}')
-+rb_mac=$(ip -n "$RB" -br link show rb_il | awk '{print $3}')
-+
-+# Bidirectional unicast across the interlink.
-+do_ping "$PEER" 100.64.0.51
-+do_ping "$SAN"  100.64.0.2
-+stop_if_error "PRP RedBox bidirectional unicast failed"
-+
-+# The SAN source MAC must be preserved on the PRP network, not laundered to the
-+# RedBox MAC: the peer resolves the SAN IP to the SAN's own MAC.
-+neigh=$(ip -n "$PEER" neigh show 100.64.0.51 | awk '{print $5}')
-+if [ "$neigh" != "$san_mac" ]; then
-+	echo "SAN MAC preservation [ FAIL ]: peer resolved 100.64.0.51 to" \
-+	     "'$neigh', expected $san_mac" 1>&2
-+	ret=1
-+fi
-+stop_if_error "SAN MAC not preserved on the PRP network"
-+
-+# The proxy-announce supervision frame must carry, in order, the life-check TLV
-+# (type 0x14, len 6) + MacAddressA == SAN MAC + the RedBox-MAC TLV (type 0x1e,
-+# len 6) + MacAddressRedBox == RedBox MAC + the EOT marker (0x0000).
-+ip netns exec "$SAN" ping -i 0.2 -q 100.64.0.2 >/dev/null 2>&1 &
-+ping_pid=$!
-+cap=$(ip netns exec "$PEER" timeout 5 tcpdump -i pe_a -nn -x \
-+	"ether proto 0x88fb and ether src $rb_mac" 2>/dev/null || true)
-+kill "$ping_pid" 2>/dev/null || true
-+wait "$ping_pid" 2>/dev/null || true
-+
-+san_hex=$(echo "$san_mac" | tr -d ':')
-+rb_hex=$(echo "$rb_mac" | tr -d ':')
-+# Reassemble contiguous frame hex: drop the "0x0010:" offset labels and spaces.
-+frame_hex=$(echo "$cap" | awk '/^[[:space:]]*0x[0-9a-f]+:/ {
-+	sub(/^[[:space:]]*0x[0-9a-f]+:[[:space:]]*/, "");
-+	gsub(/ /, ""); printf "%s", $0 }')
-+if ! echo "$frame_hex" | grep -q "1406${san_hex}1e06${rb_hex}0000"; then
-+	echo "supervision RedBox-MAC TLV [ FAIL ]: missing SAN MAC, Type-30" \
-+	     "payload, or EOT" 1>&2
-+	ret=1
-+fi
-+stop_if_error "PRP RedBox supervision RedBox-MAC TLV/EOT check failed"
-+
-+echo "INFO: PRP RedBox (PRP-SAN) conformance checks passed"
-+exit $ret
--- 
-2.53.0
+> ---
+>  .../bpf/libarena/selftests/test_rbtree.bpf.c        | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.b=
+pf.c b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> index 856c484a009a..2b4f519d6c4b 100644
+> --- a/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/selftests/test_rbtree.bpf.c
+> @@ -4,6 +4,9 @@
+> =20
+>  #include <libarena/asan.h>
+>  #include <libarena/rbtree.h>
+> +#ifndef ARRAY_SIZE
+> +#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+> +#endif
+> =20
+>  typedef struct node_ctx __arena *node_ctx;
+> =20
+> @@ -275,7 +278,7 @@ clean_up_noalloc_tree(struct rbtree __arena *rbtree)
+> =20
+>  int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
+>  {
+> -	const size_t numkeys =3D sizeof(keys) / sizeof(keys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(keys);
+>  	node_ctx nodec;
+>  	u64 key, value;
+>  	int ret;
+> @@ -373,7 +376,7 @@ __weak int test_rbtree_remove_one(void)
+> =20
+>  static __always_inline int remove_many_verify_all_present(struct rbtree =
+__arena *rbtree)
+>  {
+> -	const size_t numkeys =3D sizeof(morekeys) / sizeof(morekeys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(morekeys);
+>  	u64 value;
+>  	int ret;
+>  	int i;
+> @@ -394,7 +397,7 @@ static __always_inline int remove_many_verify_all_pre=
+sent(struct rbtree __arena
+> =20
+>  static __always_inline int remove_many_verify_remaining(struct rbtree __=
+arena *rbtree)
+>  {
+> -	const size_t numkeys =3D sizeof(morekeys) / sizeof(morekeys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(morekeys);
+>  	u64 value;
+>  	int ret;
+>  	int i;
+> @@ -434,7 +437,7 @@ static __always_inline int remove_many_verify_remaini=
+ng(struct rbtree __arena *r
+> =20
+>  static __noinline int remove_many_alloc(struct rbtree __arena *rbtree)
+>  {
+> -	const size_t numkeys =3D sizeof(morekeys) / sizeof(morekeys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(morekeys);
+>  	u64 value;
+>  	int ret;
+>  	int i;
+> @@ -482,7 +485,7 @@ static __noinline int remove_many_alloc(struct rbtree=
+ __arena *rbtree)
+> =20
+>  static __noinline int remove_many_noalloc(struct rbtree __arena *rbtree)
+>  {
+> -	const size_t numkeys =3D sizeof(morekeys) / sizeof(morekeys[0]);
+> +	const size_t numkeys =3D ARRAY_SIZE(morekeys);
+>  	node_ctx first =3D NULL, last =3D NULL;
+>  	u64 value;
+>  	int ret;
 
