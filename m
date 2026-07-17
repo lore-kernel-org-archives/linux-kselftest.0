@@ -1,77 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A842922ACEB;
-	Fri, 17 Jul 2026 14:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA4E42B736;
+	Fri, 17 Jul 2026 15:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784299794; cv=none; b=Ld2tMxsclexb+cbmrG2S9Ih7J0lev0TmYL0EoA670NpfEyOLH22rg+dXBtNm0kKSMWnbJGsYlVohRDopNtRKRTBevikhqGOz1Qz/UK47ZWqLRGw5WZnrAMD2ETBYJoE9d3VEDC2Ep8ZDN7JrW8XmxDktbQVivjQ+XASj2yKdg8I=
+	t=1784300540; cv=none; b=sKEOFncHVIV1W//QFLJ97ZUUJrG2cqJtLxgRVdnWXEmo8G1F3YGRuTEg5eqrpfBlqOxqbetysH7WI5RaoRqNNTr033DdtGoewOuWd+ZAn2NzlAz0xW8HovH5v0KoBXj/XMHwnRnSgD7vEo0Nw7iYFq8Seo4VS+aCxhwGDHTecBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784299794; c=relaxed/simple;
-	bh=aXb/D7Oz5BbiMrYtYN+9dFPjqeDRgdYXF/JAQI+QVso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+tzvLcuDNV/iKLXhfu0/bIhnDZxjTle2g9mcFSmPBGoFfGBftfXKkB670fc7bT3W/+I009dGfx9TOfbzkoZaSgugSgkp0KVTz0VYP0WiflvGC8UgI+1kSBHLABmXtyx/PXftyjleA1Dh1LjCv/fJG6GlfZG1x3SgvfBA6cGFIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c69pwHaC; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c69pwHaC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C23C1F000E9;
-	Fri, 17 Jul 2026 14:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784299793;
-	bh=thCSV6qo+j8PApZXMoK0ulbEnJBDDj8FSxAYD8Wmou0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=c69pwHaCH+KUpfIHVK2nGragkFsgUaS6y5rsrz6ComUqN8do4j2ciASg5xj//ZtMF
-	 A6IANyNNMpt/YyBeRGh2Qjahm8jDkGL2jvWVRGJosWjXTvL7gbf2eA9aKoCZMBZzco
-	 FGCL+jlrp9raYaEn8VVRE+iGEMXlriVaZ2E9ul8oE1gpCNGOl9MAkXEXQA4Qyv3dmN
-	 VOBKqvVsLEOYZuLbleIrE3iii/rQiEfRC4dLCu7bu2hcj1bordPwfbQ2Py+d8rf4Wz
-	 +sxhhOzjBHfHTYk+X9wHe15mvJwUqdOlb29WeXkOVBXb8pxYBt5ffySOnm2+DNsfAL
-	 60QPXLm5lC5AA==
-Date: Fri, 17 Jul 2026 08:49:48 -0600
-From: Tycho Andersen <tycho@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
-	Tom Lendacky <thomas.lendacky@amd.com>, Kees Cook <kees@kernel.org>, Ashish Kalra <ashish.kalra@amd.com>, 
-	Connor Williamson <connordw@amazon.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Zhou Yuhang <zhouyuhang@kylinos.cn>, Zi Li <zi.li@linux.dev>, Dan Williams <djbw@kernel.org>, 
-	Eric Biggers <ebiggers@kernel.org>, Colin Ian King <colin.i.king@gmail.com>, connordw@amazon.co.uk, 
-	graf@amazon.de, fgriffo@amazon.co.uk, David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [RFC PATCH 02/11] KVM: selftests: sev_init2_tests: Derive SEV
- availability from KVM
-Message-ID: <alpBAQiqVObDf2R_@tycho.pizza>
-References: <f09647f427565c1789a6979470045aab78661563.1784194290.git.dwmw@amazon.co.uk>
- <4710ad35dcfd1a85a24d15fb56dbf233ac05ad49.1784194290.git.dwmw@amazon.co.uk>
+	s=arc-20240116; t=1784300540; c=relaxed/simple;
+	bh=6nFAVA3D3J6ZoztLJM7SWjFVX081sR7eZPJ17zehnBw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MciwvgISkDahaI9UwDHTK2GviagfyM0WoF63VOzR+rXmgFST7z5xQ+t2YhUyN88tZonZUooq4553ygQc0o12otH+7SNP07Lj4L5heXgzKKPxPcNzNU/9CuLddyzzM/KF8t4atB/ZaKMrc6g/HDs3ZO+9nUrQmaDxYbTtGgAhq2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 7975a95281f011f1aa26b74ffac11d73-20260717
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
+	DN_TRUSTED, SRC_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR, SN_UNTRUSTED
+	SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD_SPF
+	CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:0f086ed1-37ff-4f49-a60c-2185133f39bf,IP:10,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:35
+X-CID-INFO: VERSION:1.3.12,REQID:0f086ed1-37ff-4f49-a60c-2185133f39bf,IP:10,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:35
+X-CID-META: VersionHash:e7bac3a,CLOUDID:8dbf1e7266bc33d03e96b539114e43b9,BulkI
+	D:2607172302087Y1J1LDM,BulkQuantity:0,Recheck:0,SF:10|66|78|102|127|865|89
+	8,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil
+	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 7975a95281f011f1aa26b74ffac11d73-20260717
+X-User: yijiangshan@kylinos.cn
+Received: from lazy-pc.www.tendawifi.com [(118.251.51.53)] by mailgw.kylinos.cn
+	(envelope-from <yijiangshan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1298199652; Fri, 17 Jul 2026 23:02:05 +0800
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
+To: shuah@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	paul.chaignon@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	13667453960@163.com,
+	Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH v2] selftests: stop leaking OUTPUT into gen_mods_dir kernel builds
+Date: Fri, 17 Jul 2026 23:01:50 +0800
+Message-Id: <20260717150150.180824-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4710ad35dcfd1a85a24d15fb56dbf233ac05ad49.1784194290.git.dwmw@amazon.co.uk>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 16, 2026 at 10:31:22AM +0100, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> The test asserted that the X86_FEATURE_SEV CPUID bit exactly matches
-> whether KVM offers KVM_X86_SEV_VM.  That is not an invariant: when all
-> SEV ASIDs are assigned to SEV-SNP, KVM does not offer the SEV VM type
-> even though CPUID reports SEV, so the test aborts on an SNP-only host.
-> 
-> Derive SEV availability from KVM_CAP_VM_TYPES (as already done for SEV-ES
-> and SNP), assert only the one-way implication that a type offered by KVM
-> is also reported in CPUID, and TEST_REQUIRE() the SEV VM type so the test
-> skips cleanly when it is unavailable.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+selftests/Makefile builds each test with OUTPUT on the make command line:
 
-Reviewed-by: Tycho Andersen (AMD) <tycho@kernel.org>
+  $(MAKE) OUTPUT=$$BUILD/$$TARGET -C $$TARGET
+
+That OUTPUT is authoritative (command-line origin) and travels through
+MAKEFLAGS into every sub-make.  For tests that set TEST_GEN_MODS_DIR
+(currently mm/page_frag and livepatch/test_modules) the gen_mods_dir rule
+recurses into a kernel module build:
+
+  $(MAKE) -C $(TEST_GEN_MODS_DIR)
+  # -> make -C $(KDIR) M=... modules
+
+which may in turn (re)build tools/bpf/resolve_btfids as a kernel "prepare"
+dependency (CONFIG_DEBUG_INFO_BTF).  resolve_btfids derives its OUTPUT from
+O= via tools/scripts/Makefile.include:
+
+  OUTPUT := $(ABSOLUTE_O)/$(if $(subdir),$(subdir)/)
+
+but a command-line OUTPUT inherited from kselftest overrides that
+assignment, so resolve_btfids builds into the kselftest test directory.
+Because that directory lacks a trailing '/', the tools/build pattern rules
+$(OUTPUT)%.o are corrupted as well: ".../mmmain.o" instead of
+".../mm/main.o", ending in:
+
+  ld: cannot find .../resolve_btfids-in.o: No such file or directory
+
+Fix this at the source of the leak: strip OUTPUT from the command-line
+overrides handed to the gen_mods_dir/clean_mods_dir sub-make only.  OUTPUT,
+if still present, then reaches the kernel build merely as an overridable
+environment default, which the tools build overrides with its O=-derived
+value (which always carries a trailing '/').  The assignment is
+target-specific, so other selftest sub-makes -- and the test programs that
+rely on OUTPUT -- are unaffected; selftests that build resolve_btfids
+themselves with an explicit OUTPUT= (bpf, hid) do not use gen_mods_dir and
+are untouched.
+
+This supersedes the earlier attempt to normalise OUTPUT with an override in
+tools/bpf/resolve_btfids/Makefile.  That override lives in the outer
+resolve_btfids make and is invisible to the nested
+"$(MAKE) $(build)=resolve_btfids" sub-make in which the pattern rules
+actually run, so it did not fix the corruption; it also risked the
+explicit-OUTPUT builds used by bpf/hid.
+
+Reproduce the leak (before this fix), e.g. with a kernel configured for
+CONFIG_DEBUG_INFO_BTF and a TEST_GEN_MODS_DIR test such as mm/page_frag:
+
+  $ make kselftest-all
+  ...
+  HOSTLD  .../mmresolve_btfids-in.o
+  gcc: error: .../mm/resolve_btfids-in.o: No such file or directory
+
+Tested:
+  * With a real lib.mk gen_mods_dir descent, OUTPUT no longer reaches a
+    resolve_btfids-style sub-make as command-line (origin becomes
+    environment); the O=-derived "OUTPUT := " assignment then wins.
+  * make -C tools/bpf/resolve_btfids
+    make -C tools/bpf/resolve_btfids OUTPUT=/tmp/o/resolve_btfids/
+    both still build.
+  * make OUTPUT=/tmp/build/kcmp -C tools/testing/selftests/kcmp still
+    honours OUTPUT for its own programs.
+
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+
+---
+v2:
+ - Reworked the fix: instead of overriding OUTPUT in
+   tools/bpf/resolve_btfids/Makefile (v1), which is invisible to the
+   nested "$(MAKE) $(build)=resolve_btfids" sub-make where the pattern
+   rules actually run and also clobbers the explicit OUTPUT= used by
+   bpf/hid, strip OUTPUT from the command-line overrides of the
+   gen_mods_dir/clean_mods_dir sub-make in tools/testing/selftests/lib.mk
+   so the leak is fixed at its source.
+v1:
+ - initial submission
+
+ tools/testing/selftests/lib.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index f02cc8a2e4ae..5345be76223a 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -142,9 +142,26 @@ else
+ 	@$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
+ endif
+ 
++# The build of TEST_GEN_MODS_DIR recurses into the kernel build (it builds
++# out-of-tree modules via "make -C \$(KDIR) M=..."), which may in turn build
++# tools/bpf/resolve_btfids as a kernel "prepare" dependency.  That tools build
++# derives its own OUTPUT from O=, but a command-line OUTPUT inherited from here
++# (e.g. the per-test output directory that selftests/Makefile passes on its
++# command line) is authoritative and overrides that derivation, corrupting the
++# paths produced by the tools/build pattern rules (e.g. ".../mmmain.o" instead
++# of ".../mm/main.o", and a missing resolve_btfids-in.o).
++#
++# Strip OUTPUT from the command-line overrides handed to this sub-make only, so
++# it can no longer override the O=-derived value downstream.  The variable, if
++# still present, then reaches the kernel build merely as an overridable
++# environment default, which the tools build ignores in favour of its O=-derived
++# OUTPUT.  This is target-specific so that other sub-makes, which may legitimately
++# rely on the inherited OUTPUT, are unaffected.
++gen_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
+ gen_mods_dir:
+ 	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
+ 
++clean_mods_dir: MAKEOVERRIDES := $(filter-out OUTPUT=%,$(MAKEOVERRIDES))
+ clean_mods_dir:
+ 	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
+ 
+-- 
+2.25.1
+
