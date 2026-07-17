@@ -1,162 +1,165 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579CC34887E
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 16:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784305754; cv=none; b=hakVfFf+4uORAwX2c8AS4BQOH/945SVPnuOJfvL8rsJVrFsQ55El9sXLcmAf73tYtseogUJVBRktFMXYB9ESGG083CczXJ3p1DtMxQ1qtOSWrL69QAfFLf9H7XeCO/270D9DC4A9PplyxFG3k/cnJyqU2/jgehln/T0n3f/IoQg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784305754; c=relaxed/simple;
-	bh=9MYW3bBbi2i/MCwaF0cxTgYpEofrRgFEczZ5M3urHG0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MAOqY1zFOL0P1svhrw266vA0+o4iTzGurRsANrLDIDSp06IE9kv1o7RKI7d6NSA+JBN8aUjr3ISa71zx3gGxz5ha57EwuopcCIeD1NAtnXgcac4nxJXTEzzE9d9gnwmgrZMEx01xUm0s3w/O+1Q8VEWNK/L+NY9Y/j98LuNbUS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nzIkSGtG; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A4842A158
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 16:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784305795; cv=pass; b=Jmg2Oh+JAXNovZL3dE3kzRyErY6iHNhmgK4NDGcKaYfRCRz7E5T3w7K9l7tk8LQp0tY+D2v4gIteMnKG0FhrgekJWTmP+0gJuY5ZKf01WtomF2tYhNwqTgPvtGPjRYnxg0M9kT9SaxlXR+/6hMU8P5mjjE93Q0GRzEOKZZRfexY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784305795; c=relaxed/simple;
+	bh=KEIvrRuiVrT7+dBXuaA0uQ4mV0n5hVwt+9ry5LaCeWc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YWhuWdBlss0WAnzugK0fjqQHexTLl1w83CZqi6blD/9CAwHDUpbkqOW5lpVq/Y7J0eUM/RQ3lydMt7R7lr5iIAAh3OGL81fll1u7fbgIOQbQKZAeGfZ6pBLd4/OLfasn9RDG1m7kBBRWk0UPVVV+6wWiTWCRpgx+K3fUsCNLeeE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S8MJnQKN; arc=pass smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nzIkSGtG"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c9eefcf9175so4170857a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 09:29:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S8MJnQKN"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b8d99342so69855e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 09:29:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784305792; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lfr2Vk6fhUlIHEb8/lJ4JzvNpZFwod25aupoSWt0EQeGIOZ/NIcE0dQFl+uSAEfKg+
+         x3Vgh042MmMANKTS0MMKlRZgn3C+N4TMZqC3mcATZSRb4Wxr+5VNmjgi64gYHataebmz
+         N193vVUgk65ijWSGeSKfBoXlgu6oj16oy6R/hbXkRCVesKSh9tE9MJYDEYfnbzCeZ5wg
+         OyXf5p9tGm/FR6ND7R0KovqX437Kcr1VqcFDULcQuzj1nlGgukGGyWiEqt/OqSJmpgNq
+         OvkatMK4JNLL/wMwkPfXP0MErvozXPzP2v6eWyiZ7m277FIhMKjz0DUER6yuOiHGDgxm
+         HZRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        fh=ffb4VIMuTPnTAI8m5olGOBAyJ5OTgPCaDFiqhbEtdfY=;
+        b=C4hx7Au48QRtcadgDeZtLk7ROwNcTZfkgUjF80lX2jAIAx2vrXtoD1cl2xddLD6HqK
+         ni5hIevGLHlFwapcJuB1Ctoi68EV/WOleQh6Bn+1O7Osld2atQqE98KGLEfwb2hZEMn6
+         6+wEryd5No73UMSZl46SV3YEDN9z5D8L1ygMx4geP+eFfUvN6vOqk66z0IuzMWJJ8scd
+         +QJIm+Lb3CXCZdQ4kU4JJUCvggzYLCh+AHWdK9ksNMBAlRWWvz86b6OxYLZ5tjiuPPIC
+         LUfY1IGctrjgOe3ly0XrMLRKbGgItoRZzA325TzCRLdqzmNxUJ1UYjTTEuMsZXUjwh5P
+         jvbQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784305753; x=1784910553; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DEr5HrFCxcvmv99sNHbFWPBTdDmCHwXF9XTon2pDmFY=;
-        b=nzIkSGtG/KFJn88dui1Hnm71LUJ8E3QjETs3TYCttY2qmnsKbyNnEmEQBzbmJPymuu
-         aeGJTAdnl07nmvUkewvyjf5o4accKHfnSJ50VhgbWoMaLqYQ38DubIYC7ct+cyyqanQq
-         K3OOeyC93ZqC6jlYQzlFew/MiqtppqdnVN6TxfDxNX5vlpvPm1KWW5Q4BqnNUlwkZV2Z
-         vSWSnTgvYeovhCUKx6I9sBYZXn9E2fgk16gkCNuxP2a7g8aOZN2eTEFUe0xuBtfIDmtF
-         xyzp9LQAS192M0kN2I8RkGTLyMxzmLpclT3BedfE8I68LSP2JWNpBDHj7YOS4Zlg0VhC
-         SWOg==
+        d=google.com; s=20251104; t=1784305792; x=1784910592; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        b=S8MJnQKNYccXw4Y5Od/y+J2pCzhZWqz9sVLvf9yEL0ufe56syjqkrFUKdAXq7WlSiZ
+         gukEMrb9o58yk60AdcKxVpT/dXWyWCWZU/uH0TQbQNiAmWBeFOyErWjaisWEhNyDjSFm
+         mPmr2BsCGS5HVCAINBA9fyVBXgDlC5aPBJaMVxqT0QID5rjScWiyvCOQliIT61nugJR2
+         jLQmmK7ytITgts+XDdTH9EgtUvUEhVkg4LSouOc5ki+0Hxl7Ub5btdpXEOWH3EhqInQ/
+         Gj4IB4vQOEK2V57FIS8Y/DNMDXGazxDGkhWCfq96xiAwBPHmOhVPe8vAGaR9wI+HVu5K
+         HRMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784305753; x=1784910553;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=DEr5HrFCxcvmv99sNHbFWPBTdDmCHwXF9XTon2pDmFY=;
-        b=lypZE4D0nOsl9U7SYrOkvOUEk6OgiCQbTnqA7BVsbvNS/LYxAA/i6GwW2Z7U3a17zG
-         iMbdVWrtW/zaRGdnC3VLyNn2maZoOeiXbFk2Lq2ZcfoiLEN0W8p7bnzyMnev5n83Aos3
-         wagqn9rps6A5SdGVtpyJqk4v7yBuFzZsGtTWbHLtoTR+30b6q2eUMXaK1OaX2QkhrEjE
-         Ar+5azaRouX/rHSYdci+shMJwBCtEQYaHYgdLuUN28LdPGwJY1t/NE9RbKrsCDUiI8xJ
-         2ua/zhU8QQt6wjajJxcHrAd5ZhNaqlbTClm1Bf+m1siBB0AFMvddWCeAhzDxgcISC5wG
-         XIHg==
-X-Forwarded-Encrypted: i=1; AHgh+RrZCnnIyZC20vlonm2PS4600Zmki3XR8gJDT4Sg0XZ6MtDCNbTsl6czhbeHsqvvulbKUmND06Yl9/fEIVIMfKs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf8seIbhzM+NHrvJWMR6Uoa/e5DO4gMT7n/dqM/ixlmTDmi3sZ
-	BgC6YCCw7+D53wUPpaKeXSx1KJiPL1lxw4Uus2iHyhnLrbVAt1sxdmkE
-X-Gm-Gg: AfdE7ckb93xi79OaBDVFza4w/xSOTpZL738KL5vKSVTyQOgRK8fqBUpsYWJJ9v20AsN
-	+TG4si7sygxznVXJQF4+CT6mTZvfs3CUD5vtIOs19S4NhRRpXV8A14DUn5Oa+BCac18AR8IY6r2
-	pODijR7tykvePXA3Jyb2ZMpIe1P3rF+lAPswYhhX8DCQcXEOb0peigDPapFazxUSyFkOgJwtRIg
-	kQva9T7J3/g99jEUEPDy+txp2oFlfnNqQdDx9CvattljghdHaY+XNtL3oZk43Bu7dBizo7/aQ2q
-	gdaFtky55oaQjAHSyEFPx8eI6g7emwIxDrBcwvvyE/SAH2upnuGRZ8tWAX1drJGSELwHkHaossE
-	gEvAYk/loOCh7F3aUGaHeVqtA52fZ75oD20nB1Z9H/FhQlBY3fxnqOCE20AP0PkEjjRRKJljVMX
-	Wt4tjBZFektus5wEhc/3HkFNn71bwBFOxxSNGfAv4=
-X-Received: by 2002:a05:6a21:6b16:b0:3c3:88a5:83e4 with SMTP id adf61e73a8af0-3c3ad5f55ccmr3830156637.10.1784305752399;
-        Fri, 17 Jul 2026 09:29:12 -0700 (PDT)
-Received: from fedora ([2a09:bac5:3aec:1a96::2a6:33])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2cbb6e8sm6363056c88.9.2026.07.17.09.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 09:29:12 -0700 (PDT)
-From: Shivank Sharma <shivanksharma2376543@gmail.com>
-To: pbonzini@redhat.com,
-	seanjc@google.com,
-	anup@brainfault.org
-Cc: kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Shivank Sharma <shivanksharma2376543@gmail.com>
-Subject: [PATCH] KVM: selftests: Fix typos in x86 and riscv tests
-Date: Fri, 17 Jul 2026 21:58:38 +0530
-Message-ID: <20260717162838.1562808-1-shivanksharma2376543@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20251104; t=1784305792; x=1784910592;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=J1fiEC3LJWgMWiE+exeLjiuwsjKxQMa3Wx9AO5yvpjU=;
+        b=q7O3YCnVk1c/XZqm/hDofRd2Q0Gla5L1S8vlJt7Aiz1sRx4ZuTY0lahg0NVi1uJtcG
+         5qLm0s90qf8Hncbd8Mb0qQHt4e85unH+AnJwvtM17X3NbcMbOS+HlFbXn+ol3rBQXuKx
+         M9sJGRiWlb3HK3WaKNaUWq1WHZsezT4AggFQqik6HChLLH5BYbsvexQ2NjGq3Q6TvMUc
+         VKegGy0nzXHbSIgtFWup6N5PDtQ2uPyAN7Ihdx7Yp4Nr/BLX/vKoWxrB7ButjZxTjATw
+         Cq/adwgpypyfCuex5Sjo/2avouW6nl+h3ksZbQsImIxFDO1q0fAS4CD9ldXqOm7CJveA
+         GjMw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr7AhpFKA3Yu0liF602iqvZxqYTI2Cs3sjPaIyB7C1uT6bppBYE2ryjSIbDi/B5awSoKaauKHRu2vhKDo532PM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEzy3sLTTj0OakpNkrZ6LQzva8DybiVCLiNv3z5LAPXz6l3nNq
+	s+bg4dHisyvCBmHh/K83mh6oWJ7H7t8ylD8zQ7OSPosEOWvTe/yahERRJ8DYSLRWYu6jQ8tz3aZ
+	C3vlXpWZ0z3rM5ioDO+g/0VYKT/bF39zkRm82RDJ1
+X-Gm-Gg: AfdE7cnqWFPw/u0Axor5FbQTUclqHA50CSDYvsTs4DvuY/e44fP8F/NzlGXS3vy6VGB
+	RXLUbYEBUjrABjr1zuo38dwPLA91f7smlYZ2jdWipkL4s/9GQUjn95oNQk2L27BZVm6QSf1jO0b
+	n9FPMKr228nHtHvuH7B/HPMx0CL3HfXjh5ilkN9KIH5EixkJdpuUFuWF0eisQMBElpHLbo/AqJN
+	+3uixO9Bs+gcoiTuW1SnE8GYHjLlMeWZqolWub2/hs/O1KG6HjGWkO7TcF8/5Y4foPO4Gn1ZcHl
+	kMJkrkdoUFL5IvtwH0FbfSKvP8Q=
+X-Received: by 2002:a05:600c:41c5:b0:493:aed4:8d03 with SMTP id
+ 5b1f17b1804b1-4954f623a21mr164335e9.9.1784305792127; Fri, 17 Jul 2026
+ 09:29:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260701192210.2997769-1-tjmercier@google.com> <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+In-Reply-To: <akbPrI67h5btdI44@devvm29614.prn0.facebook.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 17 Jul 2026 09:29:40 -0700
+X-Gm-Features: AUfX_mwkE9srLqf9jV3ClopD-np-tcerODpRpCcyM1eqJKlhjubKKS2HeTkHP3I
+Message-ID: <CABdmKX0-tubji_pBiaZbePrxVLA9qkw5ez61wyzjDz8-pko9SQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: Open /dev/udmabuf O_RDONLY
+To: Shuah Khan <shuah@kernel.org>
+Cc: kraxel@redhat.com, vivek.kasireddy@intel.com, kuba@kernel.org, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Bobby Eshleman <bobbyeshleman@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix spelling typos found by an automated checker in the KVM
-selftests for x86 and RISC-V.
+On Thu, Jul 2, 2026 at 1:53=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
+com> wrote:
+>
+> On Wed, Jul 01, 2026 at 12:22:08PM -0700, T.J. Mercier wrote:
+> > Write permissions on the /dev/udmabuf device file are not required to
+> > issue ioctls and allocate udmabufs. Applications should be opening this
+> > file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
+> >
+> > Users are pointing to these selftests as examples of how use udmabuf,
+> > and encountering permission errors on systems where write permissions
+> > are not available on /dev/udmabuf. Apply the principle of least
+> > privilege to selftests which use udmabuf by removing the write access
+> > mode from drivers/dma-buf/udmabuf.c and drivers/net/hw/ncdevmem.c.
+> >
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=3Dv7.1#n49
+> >
+> > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > ---
+> >  tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
+> >  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/=
+testing/selftests/drivers/dma-buf/udmabuf.c
+> > index d78aec662586..ced0b95c876c 100644
+> > --- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > +++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
+> > @@ -140,7 +140,7 @@ int main(int argc, char *argv[])
+> >       ksft_print_header();
+> >       ksft_set_plan(7);
+> >
+> > -     devfd =3D open("/dev/udmabuf", O_RDWR);
+> > +     devfd =3D open("/dev/udmabuf", O_RDONLY);
+> >       if (devfd < 0) {
+> >               ksft_print_msg(
+> >                       "%s: [skip,no-udmabuf: Unable to access DMA buffe=
+r device file]\n",
+> > diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/=
+testing/selftests/drivers/net/hw/ncdevmem.c
+> > index e098d6534c3c..8114a29692fd 100644
+> > --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> > +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> > @@ -149,7 +149,7 @@ static struct memory_buffer *udmabuf_alloc(size_t s=
+ize)
+> >
+> >       ctx->size =3D size;
+> >
+> > -     ctx->devfd =3D open("/dev/udmabuf", O_RDWR);
+> > +     ctx->devfd =3D open("/dev/udmabuf", O_RDONLY);
+> >       if (ctx->devfd < 0) {
+> >               pr_err("[skip,no-udmabuf: Unable to access DMA buffer dev=
+ice file]");
+> >               goto err_free_ctx;
+> >
+> > base-commit: fbb7ad31ab376c5101b2ac7205fad0344fd2de60
+> > --
+> > 2.55.0.rc0.799.gd6f94ed593-goog
+> >
+>
+> Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Signed-off-by: Shivank Sharma <shivanksharma2376543@gmail.com>
----
- tools/testing/selftests/kvm/riscv/sbi_pmu_test.c              | 4 ++--
- tools/testing/selftests/kvm/x86/hyperv_clock.c                | 4 ++--
- tools/testing/selftests/kvm/x86/hyperv_evmcs.c                | 2 +-
- .../selftests/kvm/x86/vmx_invalid_nested_guest_state.c        | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+Thanks Bobby.
 
-diff --git a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-index e56a3dd6a..20388f0b9 100644
---- a/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-+++ b/tools/testing/selftests/kvm/riscv/sbi_pmu_test.c
-@@ -492,7 +492,7 @@ static void test_pmu_events_snaphost(void)
- 	struct riscv_pmu_snapshot_data *snapshot_data = snapshot_gva;
- 	int i;
- 
--	/* Verify presence of SBI PMU and minimum requrired SBI version */
-+	/* Verify presence of SBI PMU and minimum required SBI version */
- 	verify_sbi_requirement_assert();
- 
- 	snapshot_set_shmem(snapshot_gpa, 0);
-@@ -518,7 +518,7 @@ static void test_pmu_events_overflow(void)
- {
- 	int num_counters = 0, i = 0;
- 
--	/* Verify presence of SBI PMU and minimum requrired SBI version */
-+	/* Verify presence of SBI PMU and minimum required SBI version */
- 	verify_sbi_requirement_assert();
- 
- 	snapshot_set_shmem(snapshot_gpa, 0);
-diff --git a/tools/testing/selftests/kvm/x86/hyperv_clock.c b/tools/testing/selftests/kvm/x86/hyperv_clock.c
-index c083cea54..d5d779623 100644
---- a/tools/testing/selftests/kvm/x86/hyperv_clock.c
-+++ b/tools/testing/selftests/kvm/x86/hyperv_clock.c
-@@ -56,7 +56,7 @@ static inline void check_tsc_msr_rdtsc(void)
- 	tsc_freq = rdmsr(HV_X64_MSR_TSC_FREQUENCY);
- 	GUEST_ASSERT(tsc_freq > 0);
- 
--	/* For increased accuracy, take mean rdtsc() before and afrer rdmsr() */
-+	/* For increased accuracy, take mean rdtsc() before and after rdmsr() */
- 	r1 = rdtsc();
- 	t1 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
- 	r1 = (r1 + rdtsc()) / 2;
-@@ -181,7 +181,7 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vcpu *vcpu)
- 	tsc_freq = vcpu_get_msr(vcpu, HV_X64_MSR_TSC_FREQUENCY);
- 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
- 
--	/* For increased accuracy, take mean rdtsc() before and afrer ioctl */
-+	/* For increased accuracy, take mean rdtsc() before and after ioctl */
- 	r1 = rdtsc();
- 	t1 = vcpu_get_msr(vcpu, HV_X64_MSR_TIME_REF_COUNT);
- 	r1 = (r1 + rdtsc()) / 2;
-diff --git a/tools/testing/selftests/kvm/x86/hyperv_evmcs.c b/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
-index c7fa114ae..5cc71658f 100644
---- a/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
-+++ b/tools/testing/selftests/kvm/x86/hyperv_evmcs.c
-@@ -129,7 +129,7 @@ void guest_code(struct vmx_pages *vmx_pages, struct hyperv_test_pages *hv_pages,
- 	/*
- 	 * NMI forces L2->L1 exit, resuming L2 and hope that EVMCS is
- 	 * up-to-date (RIP points where it should and not at the beginning
--	 * of l2_guest_code(). GUEST_SYNC(9) checkes that.
-+	 * of l2_guest_code(). GUEST_SYNC(9) checks that.
- 	 */
- 	GUEST_ASSERT(!vmresume());
- 
-diff --git a/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c b/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
-index a2eaceed9..a07968c16 100644
---- a/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
-+++ b/tools/testing/selftests/kvm/x86/vmx_invalid_nested_guest_state.c
-@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
- 		    ARBITRARY_IO_PORT, run->io.port);
- 
- 	/*
--	 * Stuff invalid guest state for L2 by making TR unusuable.  The next
-+	 * Stuff invalid guest state for L2 by making TR unusable.  The next
- 	 * KVM_RUN should induce a TRIPLE_FAULT in L2 as KVM doesn't support
- 	 * emulating invalid guest state for L2.
- 	 */
--- 
-2.55.0
-
+Shuah, would you mind picking this up?
