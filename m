@@ -1,300 +1,83 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF583EB111
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 23:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33A3175A8B;
+	Sat, 18 Jul 2026 00:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784331403; cv=none; b=CWL/NE3S+QCo50HWl+iWp++PBEirxvTRwCFWkeHbuskvg5lvDf7sDRObjtbY72Fg6fl3/v+wrcA/90gy+pbi4n2PcwiXn4czWeQCRRMZj315twrDgfxCH+0s2O/iJrDx9it+BBOjH2ccwwdQH+bGiCbk/7a2Hl0PsZrmJD0k0Hc=
+	t=1784332815; cv=none; b=brdFbDPu6QMGx/i2/sdzrWumFxYQHqw0TB7cdeUKuIGhTvg1G4352Do5i3wsepg5m8eGkAjaUDJk6mTlVvZM03QAnJhqkiuaT4KgZLS4ufMRXAgzUB462t4xLfyHBEuIH0IZmzuMmgzf2EQzGqQbJQlOTbLgOvOaIVAANcelfxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784331403; c=relaxed/simple;
-	bh=ncMj9L40lXzcjGh0MxGhNsLxc+/SuDoonZNw5sMS7TE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=nkrBxC+Mabxp4W1V5MijE1z/1jNUwJ5SpiW1Dz7EOBKunEQB83ovqcJhU+++MxYGU0IGJ3LW259qCG8mk0L64o9PO8S42nWG1PNBU/uSjpJ8JL6WYZ+NbVncuBxA8miAhO8yGxkkdzOFYTAPaflp4/tObgax9ervlxeQPc7589o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ozZ4oEGV; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1784332815; c=relaxed/simple;
+	bh=S4MjSJH8kKZ5cbatkGmWZOhsb/FhATKRz9HOMUbArYU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lsFFkxOahuO7/wsORbXhdXxeilpOF75joFbV7C3gr+l1TvmRSzlXvui2Tr4OnoqYjigEdiiQw7mXg+XWxfUR77zb2jcaLUO4EggdvPcsseXTM1vqEsWuvvR7ZU+7JnDmU+HXIxBLbxWFsc+jelYQGpm2tJZQ9OKWk+EtvJMTEIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiHGZQni; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ozZ4oEGV"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e58e0e2d2so373620a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jul 2026 16:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784331388; x=1784936188; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+KZS1oc+gl1cOm6iebRo3jlVRcyWqmkc0GoGAV0BGhI=;
-        b=ozZ4oEGVRGSwtpoWJXHtIawpt1C6XmEGrkCSUFWfZzpJBGIlWPM4lTa1BR28VcXJll
-         Lc6+py7qRbUD90ruEy0Brf+cQEjE8NQ+dOyaxmILO1BMWJCPnqTKGzW1fmNzM3NHCubH
-         lQMNk6dsvVt0QOyg3263kiUZxm/0wXmg0FzXW9LGJhTv841ZAT58lnLj24C1zlWTWKAF
-         bHmRdPqpxpjzehDYORor2QZoin28ZWe9brxbudFdeseRJW59sIvkX7btPEWO5yV8VqM6
-         I7sMj+hQRhviJbTgPmFDcO+Exrv6e7hgLs75rCrzvE5UANMAsnd5qZsz/+JPBJKf8POz
-         ipaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784331388; x=1784936188;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+KZS1oc+gl1cOm6iebRo3jlVRcyWqmkc0GoGAV0BGhI=;
-        b=ZpiE0Kn9yU7RGqsGavKfJ+npETe9zKQFfiQQi0GTkaztf+APRfaxVcJSYl+xBwAx5b
-         40bvMfmhUG4r0UoD6ZN6J3VCLopi1HAT+OgDAZ9X8Ju/cwAaHf996Q/wBPQTJfLJrh0s
-         IVVwsbxcIZGtAzEfk+3K+dlr35ERYk00NOy7kT+Qr4Rdn6Nb0p8oHid72ZrGNeiaBSdq
-         A3vR5QMizZgO5gazWDMmlVz/zYSgx5uAjFGboX8assZOIPYL7HEfk5NaLnnqTLq2mWT6
-         sM7uXA23pYSZAPp0Mj22gz5i+xdqueCjGxpLnKMgnroahrr8WQysScGegnviYEY6q3Xf
-         p8pA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro9BDJ23Vn5Ba93IAnvp0j3+6O/whyMvZd7bknsqnIZiMZHb8n8mDRtFxqEnaSgl4Dc839TMrT6SIC8xQxIBhs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAQrMdXz7manE+24pvnJZrGdoFxdkwkHFtHXCUCzFx5QjCeRqy
-	FMrnqWertaXpMi76r4H5QEXnvKMEwB7RQNqe7yYdInw2hAOO4MgqdjeddRukamwgqBs=
-X-Gm-Gg: AfdE7cmqe9GQn+AaTjFa2CNKzvfBW4HLP4O6j1cOrHWuuGHq6GIjS7qMK+xtSLY0h2Z
-	7DMRw1ZW7sVDxPL2K8tBFID0t5ylb7iLzV59hhoCOJAFuuPE6ZaqMRRPOVxqtnwXina2xxXcmxg
-	Lb2eS3c/JO6fyn0MwytmTeir3hb5xkdhTrQjIF/MauRBzO4QQrioxLs+WD4/l3c7Pr+oLDLD+5G
-	tUsh3VCbtpOXsV0Hx5K1ucOWK9Vs2QrqzviYTdxn4Nbq7sf4PyphrK1NtMjJsVz6d6gDn0jP4OI
-	d8a3Gkhw9+XqLb3H3kKUdPT/7LKT9kqHe9h/fI6sVYKmJiALwONukJ16mcAtH8KYozg33ElRbR9
-	/ewSfiXGrJB61pvaoz+v3d5/hC0bxev3vUGEtHL+iKQuWyU3VwDCzK0K21s4=
-X-Received: by 2002:a17:90b:3b48:b0:37f:9cdf:f03d with SMTP id 98e67ed59e1d1-38e4b540a90mr4834931a91.32.1784331388284;
-        Fri, 17 Jul 2026 16:36:28 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::f5f9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2cbb6e8sm8278622c88.9.2026.07.17.16.36.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2026 16:36:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiHGZQni"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117AD1F000E9;
+	Sat, 18 Jul 2026 00:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784332813;
+	bh=vx/1W3ASfCVSI1+TnaFoLicuyre8k2pmNf54ghLrbFg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=CiHGZQnihy/9CHtgE2dzXcNtjhnY8ODCogd+7UndlAkGpnJ2bb1JAElCFAbo0FHMK
+	 4VVFWkymezZgoYcdFBFTTJqFXRhPVI4b/M21qR6aAvCKVQsT0Gcav3gRLQtSPylB+j
+	 PMDwY2bEvzNmCcbdwL9aF7a8jVy/NNd9RbSNxVdFA5iY1Qy4+eOQ3GPvIaDl8yd6Ae
+	 x5GN3PygEIWU6v6lbSrCxbng3EbgUwISSxq+nbcrQ64K6RhGGJjDXpk+qWtIikFzCs
+	 537GY8yikzEGB6YZlso3AWqySHeeVj1RsXrRZVBGv36KC3Bg8slcyRkovweMfunv48
+	 Vr9cwPpywSmJA==
+From: SJ Park <sj@kernel.org>
+To: Hongfu Li <hongfu.li@linux.dev>
+Cc: SJ Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: Re: [PATCH] selftests/mm: Fix BUG_ON checking wrong variable in mremap_dontunmap
+Date: Fri, 17 Jul 2026 17:00:09 -0700
+Message-ID: <20260718000010.85576-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260717070251.73212-1-hongfu.li@linux.dev>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Jul 2026 19:36:25 -0400
-Message-Id: <DK18OQD8NUIY.DCLKET294PNM@etsalapatis.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "Woojin Ji" <random6.xyz@gmail.com>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Saket Kumar Bhaskar" <skb99@linux.ibm.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Add tests for memory
- usage for arena
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260717114117.350851-1-jiayuan.chen@linux.dev>
- <20260717114117.350851-5-jiayuan.chen@linux.dev>
-In-Reply-To: <20260717114117.350851-5-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Jul 17, 2026 at 7:37 AM EDT, Jiayuan Chen wrote:
-> Allocate and free arena pages, both from BPF and via user-space fault-in,
-> and check that the map's memlock in fdinfo tracks the number of pages tha=
-t
-> are actually populated.
->
-> Like the other arena tests it runs serially.
->
-> test:
->   ./test_progs -a arena_mem_usage
->   #5       arena_mem_usage:OK
->   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On Fri, 17 Jul 2026 15:02:51 +0800 Hongfu Li <hongfu.li@linux.dev> wrote:
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> From: Hongfu Li <lihongfu@kylinos.cn>
+> 
+> In mremap_dontunmap_partial_mapping_overwrite(), mremap() stores its
+> returned remapped address into remapped_mapping, while the BUG_ON
+> incorrectly checks dest_mapping instead.
+> 
+> If mremap() fails, dest_mapping still holds a valid pointer obtained from
+> the prior mmap() call, making this BUG_ON never trigger at all. Correct
+> the check to validate the actual mremap() return value stored in
+> remapped_mapping.
 
-The Sashiko nit is worth addressing, but overall looks fine.
+Nice catch.
 
-> ---
->  .../bpf/prog_tests/arena_mem_usage.c          | 122 ++++++++++++++++++
->  .../selftests/bpf/progs/arena_mem_usage.c     |  40 ++++++
->  2 files changed, 162 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_mem_usag=
-e.c
->  create mode 100644 tools/testing/selftests/bpf/progs/arena_mem_usage.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c b/t=
-ools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
-> new file mode 100644
-> index 000000000000..14c2d1a1d673
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_mem_usage.c
-> @@ -0,0 +1,122 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include <sys/user.h>
-> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-> +#include <unistd.h>
-> +#define PAGE_SIZE getpagesize()
-> +#endif
-> +
-> +#include "arena_mem_usage.skel.h"
-> +
-> +/*
-> + * arena_map_mem_usage() is surfaced to user space through the map's
-> + * /proc/<pid>/fdinfo/<fd> "memlock:" line (the same value bpftool map s=
-how
-> + * prints). Read it directly so the test has no external dependency.
-> + */
-> +static long map_memlock(int map_fd)
-> +{
-> +	char path[64], line[128];
-> +	long memlock =3D -1;
-> +	FILE *f;
-> +
-> +	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", map_fd);
-> +	f =3D fopen(path, "r");
-> +	if (!ASSERT_OK_PTR(f, "open_fdinfo"))
-> +		return -1;
-> +	while (fgets(line, sizeof(line), f)) {
-> +		if (sscanf(line, "memlock:\t%ld", &memlock) =3D=3D 1)
-> +			break;
-> +	}
-> +	fclose(f);
-> +	ASSERT_NEQ(memlock, -1, "parse_memlock");
-> +	return memlock;
-> +}
-> +
-> +static int run(struct bpf_program *prog, const char *name)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +	int err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-> +
-> +	if (!ASSERT_OK(err, name))
-> +		return -1;
-> +	if (!ASSERT_OK(opts.retval, name))
-> +		return -1;
-> +	return 0;
-> +}
-> +
-> +void serial_test_arena_mem_usage(void)
-> +{
-> +	struct arena_mem_usage *skel;
-> +	const long ps =3D PAGE_SIZE;
-> +	char *base;
-> +	size_t sz;
-> +	int fd, i;
-> +
-> +	skel =3D arena_mem_usage__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_load"))
-> +		return;
-> +	fd =3D bpf_map__fd(skel->maps.arena);
-> +
-> +	/* Fresh arena: no data pages, and the scratch page is not counted. */
-> +	ASSERT_EQ(map_memlock(fd), 0, "initial");
-> +
-> +	/* BPF-side allocation of 17 pages. */
-> +	skel->bss->alloc_cnt =3D 17;
-> +	if (run(skel->progs.alloc, "alloc"))
-> +		goto out;
-> +	/*
-> +	 * A NULL ptr means bpf_arena_alloc_pages() itself failed (e.g. the hos=
-t
-> +	 * is under memory pressure), not a miscount -- flag it distinctly so a
-> +	 * red CI run is not mistaken for a counting bug.
-> +	 */
-> +	if (!ASSERT_OK_PTR(skel->bss->ptr, "arena_alloc_pages"))
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 17 * ps, "after_alloc");
-> +
-> +	/* Free a single page (arena_free_pages page_cnt=3D=3D1 path). */
-> +	skel->bss->free_byte_off =3D 0;
-> +	skel->bss->free_cnt =3D 1;
-> +	if (run(skel->progs.free_pages, "free_one"))
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 16 * ps, "after_free_one");
-> +
-> +	/* Free ten pages in one call (bulk path); only the freed pages count. =
-*/
-> +	skel->bss->free_byte_off =3D 1 * ps;
-> +	skel->bss->free_cnt =3D 10;
-> +	if (run(skel->progs.free_pages, "free_bulk"))
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 6 * ps, "after_free_bulk");
-> +
-> +	/* Free the remaining six -> arena empty again. */
-> +	skel->bss->free_byte_off =3D 11 * ps;
-> +	skel->bss->free_cnt =3D 6;
-> +	if (run(skel->progs.free_pages, "free_rest"))
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 0, "after_free_rest");
-> +
-> +	/*
-> +	 * User-space fault-in: touching unallocated arena pages allocates them
-> +	 * through arena_vm_fault(). libbpf mmap()s the arena at map_extra duri=
-ng
-> +	 * load, so bpf_map__initial_value() hands back that base.
-> +	 */
-> +	base =3D bpf_map__initial_value(skel->maps.arena, &sz);
-> +	if (!ASSERT_OK_PTR(base, "arena_base"))
-> +		goto out;
-> +	for (i =3D 0; i < 8; i++)
-> +		base[i * ps] =3D 1;
-> +	ASSERT_EQ(map_memlock(fd), 8 * ps, "after_faultin");
-> +
-> +	/*
-> +	 * Free the faulted-in pages from BPF. They are mapped into the user vm=
-a
-> +	 * (elevated refcount), so this also exercises the zap path.
-> +	 */
-> +	skel->bss->ptr =3D base;
-> +	skel->bss->free_byte_off =3D 0;
-> +	skel->bss->free_cnt =3D 8;
-> +	if (run(skel->progs.free_pages, "free_faulted"))
-> +		goto out;
-> +	ASSERT_EQ(map_memlock(fd), 0, "after_free_faulted");
-> +out:
-> +	arena_mem_usage__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/arena_mem_usage.c b/tools/=
-testing/selftests/bpf/progs/arena_mem_usage.c
-> new file mode 100644
-> index 000000000000..455ecd669a5a
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_mem_usage.c
-> @@ -0,0 +1,40 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +	__uint(max_entries, 1000); /* number of pages */
-> +#ifdef __TARGET_ARCH_arm64
-> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-> +#else
-> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-> +#endif
-> +} arena SEC(".maps");
-> +
-> +void __arena *ptr;
-> +int alloc_cnt;		/* in:  pages to allocate */
-> +long free_byte_off;	/* in:  byte offset within ptr to start freeing */
-> +int free_cnt;		/* in:  pages to free */
-> +
-> +SEC("syscall")
-> +int alloc(void *ctx)
-> +{
-> +	ptr =3D bpf_arena_alloc_pages(&arena, NULL, alloc_cnt, NUMA_NO_NODE, 0)=
-;
-> +	/* Success/failure is checked from user space via skel->bss->ptr. */
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int free_pages(void *ctx)
-> +{
-> +	if (!ptr)
-> +		return 1;
-> +	bpf_arena_free_pages(&arena, (char __arena *)ptr + free_byte_off, free_=
-cnt);
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
+> 
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 
+Reviewed-by: SJ Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+[...]
