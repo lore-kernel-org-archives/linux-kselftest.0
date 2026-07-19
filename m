@@ -1,160 +1,140 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011037.outbound.protection.outlook.com [52.101.52.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9785364053;
-	Sun, 19 Jul 2026 08:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784449360; cv=fail; b=X2ANoi0mdh/ghDu5+RzQv3EtMa58o3dP/VRboB5wVxHrL7njvbHGOyVqyfBMm+WIQRALsE1I4apDflo+j/lcGh4jf/iDr5m41VKZlxTCLxjAZ7W/bS/oldg7bFoSQkd83Q0CHfPcnO2mJCcLBmdHAeLpLOstDoWV7d3W473P7WA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784449360; c=relaxed/simple;
-	bh=ZJo0J9NcUG+Btg1+taD2MLUVNetxIOc7rTLe/jjKLKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=DFQcAzzsA0F2dCPA1aipEvdYpHhqrXfaEHZysEiqM1TlBlqHA0k89uGFooU2rvjlDh21LtOiUfmCufJt173xlU0IY+pOwIr7t1egr0Em+aUwh9KsHyVAZVYKR3CmND+ADXbl2lvkDGLudxJt5PGWZ8k/T18N99MjkiRdN+f0nPs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Maf06Nvx; arc=fail smtp.client-ip=52.101.52.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E554E1A0728;
+	Sun, 19 Jul 2026 08:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784450115; cv=none; b=ASFgAAV0yix672OQP1uw6OXghvUrMrFby0b2LPQ/W7Rg7FzUliqygIMoSWqOwDMlRNd3UJXk09LpLM+6mKiTcamAlkEp8k0jFyDCV8GeD4blJ7iGGCsVAVPSrJwvI8G1MxFjMB3eJQN5uOGstQLSDrvNgtkbBSZD3eKgD7vtsyM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784450115; c=relaxed/simple;
+	bh=++1xcTGHzRamMm9gYq8TFuxHfhI5SXEO7GUQIeZIbks=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MWeF1C9iRYy7NRgWYmcuAIhqK4iIljBjm5qIvYP0RyKnQuA9rJXW8We8NKvUZaoXvVNTfwUmg7wmK+g0M+Xdyb9OuckSr5QVJDLQW5CZ+glDeqPZ7mbBd0rd4drQ0+8G9nfRsoLhGF4KtU2dy9p0gGLf6+8MbEb0HRa8dfq/W1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEk2T7Hr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Maf06Nvx"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vKAjjTPPEW6HTTp2h9Pl7b0mdS3d2appFdPgUy31naypC1+XMpoPpLh8RHtSJW1wzhpaVM4lHEmnap3VMqYsV/dNKtyBd89BSjRxaA2HXzI7NppG5HaiTpwL0zq8avGjnYwYcogdZC/NL3ra+6BURM7bUj4xG0fPfD2j3K4aX4HBd46DvtDHQxcILiq7oyAqOTpPZNG1xO36kdS5601BlYUolkPsUCJJ6kcRsTdRBBsRtWzdV7CEF9vXcYnz6cx87LPqN01gOBjTaxIe9eAnkOJd7G63ZCmlabx2MXBLI/VYwGLY2RbrO/qsPwwuuiinHTgT748cHjwuMVafUnb4/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k8V+4Ck8oM3tZkVpNInQJ6NsbFGyc+mcm9U15pS7afQ=;
- b=oNXamb+MRylMtHcYEcYGUMCIOEw2rZKdSaOnWlmY/XR/Iuzq9cGm0wIc8ekJHwvKU32wUhpQwCM0BN2wwC7hJEu3FZhNe3DCkoBOuJzxgQ6C13I85JkLAaQ2H4l2JOISYSSfdPremgeYRXVRM58nqlv6CShcKRdrF30/u+YMhAi61GKVxIoe4g2Mnya1SXX2E/lFLAXAy/26nuM0Vpz+9FJNEKT2280AuCPPVD1uU7JSi+a/qPgdsBcwsSdqSXrh3r8krfPdjVNxZsYVSf6wu11cWBVqQPXNG4R0T6e7DfaQjgWzzrIXCL+ElQKmBpIOUIiMeWBajjlAYC7m7bEqrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k8V+4Ck8oM3tZkVpNInQJ6NsbFGyc+mcm9U15pS7afQ=;
- b=Maf06NvxRGg29js0K96LYf+RYRVytxi8ygjeD9IbpgrivgRNWw0mMpYHz5N0+9E5rioJC5PpFopNp3WjNHoblN7pOkjPuKyDo4TSrMUw/iQ53cB0nUfOoui+iKyFvf0W5JeRAxoy6UdrzX0dxECJf/O+8KqFAa80lEyf9T7/BpFq+BBuNn1RtNwjYu6DAH0H7G5l298Zcs7p/Vkoe98zN4yT6nwCcGCrqGvi4BfLUrecv8eKBSwlIR7GNu7zq584driVRetq47S2YOl9zk/f0Fz6D1sPUECumW4ULWJfziV5CwPkcvhwKT3RtZGDmvCgl8X4ARCbfBndyJGZ9caiBA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by CY5PR12MB6347.namprd12.prod.outlook.com (2603:10b6:930:20::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.16; Sun, 19 Jul
- 2026 08:22:32 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0223.013; Sun, 19 Jul 2026
- 08:22:32 +0000
-Date: Sun, 19 Jul 2026 11:22:23 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Ujjal Roy <royujjal@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg KH <gregkh@linuxfoundation.org>,
-	Linux Stable <stable@vger.kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>,
-	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>,
-	bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: Please backport bridge multicast exponential field encoding fix
- series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
-Message-ID: <20260719082223.GA1899043@shredder>
-References: <2026070925-delay-gauntlet-bc7c@gregkh>
- <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
- <2026070954-activist-left-8303@gregkh>
- <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
- <2026070948-lively-exchange-a458@gregkh>
- <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
- <14350a31-ffc7-41fd-84d3-6cfb2cb96841@lunn.ch>
- <CAE2MWknt86W6yCtuS_RupiuwiDqXT8wZqENM2DjiW1R=eY8qdg@mail.gmail.com>
- <797773e2-b155-451b-ae97-e8a005fd2d86@lunn.ch>
- <CAE2MWkmbdDrCw1HUKm17QG7dyihuxg_1VGTUNeBq9v8NVwJV3Q@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE2MWkmbdDrCw1HUKm17QG7dyihuxg_1VGTUNeBq9v8NVwJV3Q@mail.gmail.com>
-X-ClientProxiedBy: FR4P281CA0412.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:d0::20) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEk2T7Hr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 707151F000E9;
+	Sun, 19 Jul 2026 08:35:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784450114;
+	bh=GBwZMiX5oIYlk5aa74UGNPjR193c08SmkpdkMUXCqZE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=iEk2T7HrKtirZzLD1t5B57msFHz2BeJ4KF7iZm499Q0mfLE8rt1qNvnJmcCIMwZlb
+	 50yOtsMS6D88gCk3nGLHUTaMhDiOVxjcAzTc//053cqsd97/S4jL9EqoL52IXcblfc
+	 4MKUydIB6lzbWeL9sruw8ikrBfwaGGmapqaz863u4WJDDBY5JFzgCxuVwBOvw9kJAF
+	 qB5yW042IiY+1mW8Cgybiku7uwBWqY0VpWB+GxvW/CWcpFFuCx6djveFX+onPTsYHJ
+	 W2zqynbLTkQiT/SV3OttAf+cbfVAdTJEAQsiFwnl4t4uf6noPk2XaVrk4yvjrN69Ps
+	 mXHdN47EPCcIw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wlMzQ-00000006Slk-1UO2;
+	Sun, 19 Jul 2026 08:35:12 +0000
+Date: Sun, 19 Jul 2026 09:35:53 +0100
+Message-ID: <87a4rnqsuu.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Fuad Tabba <fuad.tabba@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	Jean-Philippe Brucker <jpb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v12 02/29] arm64/fpsimd: Update FA64 and ZT0 enables when loading SME state
+In-Reply-To: <43f21c65-c5ba-44a3-9741-548390df369b@sirena.org.uk>
+References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
+	<20260709-kvm-arm64-sme-v12-2-d0301d79ef58@kernel.org>
+	<ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
+	<15a9ae14-395d-472a-a5be-9e46524fb493@sirena.org.uk>
+	<3c76650f-ddda-47ae-a676-86016d8e39a6@sirena.org.uk>
+	<CA+EHjTw9rGvQyev-4i7zkO5bPPZKGYn858485dCs8iHmCi0t3w@mail.gmail.com>
+	<43f21c65-c5ba-44a3-9741-548390df369b@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|CY5PR12MB6347:EE_
-X-MS-Office365-Filtering-Correlation-Id: 623cec07-355f-4cda-7367-08dee56ee16d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|23010399003|18002099003|22082099003|10067099003|4143699003|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	DJp8B4WOpHEgapqliGmBw8PTO2MV/qMUgnXWMLv4S8aQRyGbH8CGtOtz9o1WKqLmMJMbquJAq+od6mLSitkqXMH/mfIhpumfXZgksZ20ZF7GG5Zx/o4rh8FJYpQKzsHqybuEtcufK+/avQdNWucR7JHtl0r6UmAO6QurYyiA+p7UK5EDMYQXdkgvoim2rTb80o/uLxWFlI8Z7+9IP8y0BAPT3ms1o6BU4KIZTDzSth2NYIjuYqrSZYHA7Tzry8gfCOB1l2UVRI3iNVkwEu2BmKNDIQVuMAm5TUdMBoLoGosqTYIdCwiJg8BCbx+mUTHyaxz/AdMdLB0ov5jLj12EAyXY8RgSChQMxEhXXvE7mKQGu5h2g85Z0Covqx2UoQ8+B2PrTi47iMgC0Siz5CVGAEWRbYmzUqZo4cCZjKJ/UbPwrTeHKynckjh/OYmiidJGDLJricHjvjQOaK/c94R2PndOffIfRs2uZpw/Y2mkWXeUALbjOFVnwseJxztFoS1iNgMo9kC5eRYABoFZUCGVX6mdJ/2oU8uTiQAyKwfLRQAy7UMzA0DG56qVXNQ7AqHvUPm1ct7irqe4Vgirlp9Uhj3ooCn3jBiNrMb5h62V/eIY4yWqnC0kEMbZt6ycwZ+iMF42RGWxQrOqUwubKcySTcJ/Y7psPOlg/PzO55uwWAY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(23010399003)(18002099003)(22082099003)(10067099003)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?C+xqHWqWTzLehW3+Wmuoj8/9Rf6aV1wqQTuWYfzsuXTMyMn+QFvxfzsuKP3C?=
- =?us-ascii?Q?jzEHLShqNEczxkxf3BJ609EeVXsBJc+j0xj6oNy/memJPbTS7gwVT884eAQr?=
- =?us-ascii?Q?WglT+Cr90qbBEtHkTIbWI7LoUZMeeSF4CFxqwl2Yo8aTgFBhuIf4bhT6pijD?=
- =?us-ascii?Q?QhrdC/BkUfgl+wke7QOl8fRcN9jkaWNFvZLALrdlwj9RJfLKm8BKzdSCR9xD?=
- =?us-ascii?Q?EkOml8Futms9KVJJCEjoDZnJTvfhPUZfp6Sy56Fi68imXFeH1IUR8lheoM/j?=
- =?us-ascii?Q?x3t8PYf+PiJb2fceRZQ8mLl9IoA1gfLNJ5GTzVzpVdMjXGeE5Lc4nIphzu1H?=
- =?us-ascii?Q?ak6yOokS6FgjjihRXd+Is8FSpbmwEVAS+ZgNfi3i23F9pMGFJ57ePq77NkCB?=
- =?us-ascii?Q?AT3xV81iUY/FksoVQ03Ifgp6N0t7hDRFyYhd9OqbvUDRAitpK93Ks55Vb/kc?=
- =?us-ascii?Q?1jI5H87LpiWIFrVhphU+ndy9OdVVMyPJ3Qd4KCyxtX6lnn501OFAIxa+7uff?=
- =?us-ascii?Q?8FrIDl+mUvp1iPYk/ZizkGr/1m4+QSmy9G+g5OCFbsfehM4p3kw7dp9Dp851?=
- =?us-ascii?Q?j/LK5ATATPYe/4nZB3DGjm69EmWtYQQjhwnRHSc8SCQppCZ6pOhfnY7K2Eyk?=
- =?us-ascii?Q?bCIXSujEARyDIQQjelHMsIZdu0ga3fgv8QBZHfygLkBxjIEt3AVDBcjGysSb?=
- =?us-ascii?Q?PeJ+4jWbZorYa9dU/z5azCaEdLuuL/jM7G66fnljiFM4/agYywcvYr/xE4+l?=
- =?us-ascii?Q?lGl0FaI08hAJH3yqlHZMlzuwODTWB2iGSBaW43r3F2Lv/qcSUrwbuxzqbLrd?=
- =?us-ascii?Q?lW4F2jAbZz+cZAKsK/0NglMVfpgRXYohSSoW/eM3IIMVutu1sz3fX2ezmfVg?=
- =?us-ascii?Q?UAyK04c9LVDP0hjCFNnnwNS1+cZgAJhYOYy2NnVvcLSBZV+beNvORS2h1P9i?=
- =?us-ascii?Q?G2YOHITbhpUTiilpZyxhqyoF6CZcX+uU2KzhKRJauKSRwWrUtduhuDmGfgX3?=
- =?us-ascii?Q?4ta4ImgIeXJdVpPhv5M2jjE2s7CUOvoOhoZKovl/GfbV69E2RtCB1UGP9MHW?=
- =?us-ascii?Q?b0oCI49fStVkFZm2TEHcc6c1FNZRweEbSjiD0wPkyzbQVYAhzQT9QMjVUdp1?=
- =?us-ascii?Q?PZxayCa7/hyKbLsCJ62PYTNr4ojurexMfkOFsB9/FoI65W6ke9Ubb6B2chGL?=
- =?us-ascii?Q?eftdYKSLVxsMCzyj9KR9K+9L7+zgKu0MGbDTRqhSgF3XA0uGxTCSuh6rtSTe?=
- =?us-ascii?Q?Ga1F/lFDvaULtf8gyA76x1SXAdN3Dhvn/3h6Z86LD5p2RRfCp0EPHnus5Ui2?=
- =?us-ascii?Q?uxs4vHkcDfmokmSC0dtrYXC17YyVH7Xk+Z5Oxy11WCqIBo/kmbhdq2P3UXXB?=
- =?us-ascii?Q?l0/gcGDJynMs2drwU6xUGzADXLrGVDWfM5BebcqbTmvs8Br9hCPm1XkIslkQ?=
- =?us-ascii?Q?TMsRZBT98GGL4ehrO9Fodx+vYUoeuiOBsewb808jfJpnalN4sOIkAg2iLiAQ?=
- =?us-ascii?Q?f9Aom49SbYfnHjsSz0X44J53NMEEEqM0hm18f8Vs3Szf6lPL8CQGoDSe9bXC?=
- =?us-ascii?Q?AKF5TUm7HB6ThaXGfUzKMXgpj6bxpggDSr1sqjVr7lnn3BbzCIlBdu+mmJ0T?=
- =?us-ascii?Q?8CWThRYT3OlSQ+zNCbjbEXM/S18zffSGbjeIoarZjMHrEmON5VmEwK/Pdspb?=
- =?us-ascii?Q?8xLncN1YTTl5ktXiF5DKPEfi+uzHFr8GA7JLDqRLOYrdBr/C?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 623cec07-355f-4cda-7367-08dee56ee16d
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2026 08:22:32.6221
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eDvU+ldpk91L/cdllvEhg63X1s1zVBfFYERgVF8tTp2gTzSrRULagSfHpjAcT2wD69XahQaw16WFAXM53UvHgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6347
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, fuad.tabba@linux.dev, mark.rutland@arm.com, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, oupton@kernel.org, Dave.Martin@arm.com, ben.horgan@arm.com, jpb@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peter.maydell@linaro.org, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Jul 17, 2026 at 04:12:09PM +0530, Ujjal Roy wrote:
-> > It does not force the users to use a value < 128. You would need to
-> > return EINVAL for that, which i'm not proposing. Returning an error
-> > could break user space.
-> >
+On Sat, 18 Jul 2026 15:24:20 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> While I understand that clamping avoids breaking user space, silently
-> modifying the value might lead to unexpected behavior that is
-> difficult for users to debug.
-> Because of these side effects, I am hesitant to proceed without the
-> Multicast maintainer's input. We should raise an open issue on this
-> topic to get their official decision, otherwise my preference is to
-> ignore patching this for the stable kernel versions entirely.
+> [1  <text/plain; us-ascii (7bit)>]
+> On Sat, Jul 18, 2026 at 02:30:04PM +0100, Fuad Tabba wrote:
+> > On Sat, 18 Jul 2026 at 01:35, Mark Brown <broonie@kernel.org> wrote:
+> 
+> > > Actually I remembered: while SCMR_EL1.LEN is self synchronising the
+> > > "without the need for explict synchronization" wording is not present
+> > > for SMCR_EL1.{FA64,EZT0} and this is no longer explicitly just an update
+> > > of LEN.  It's possible I'm being overly paranoid here, I'll leave the
+> > > isb() and add a comment for the next version.
+> 
+> > I went through the ARM ARM (DDI 0487 M.c) on this and I don't think
+> > you're being overly paranoid, I believe the isb() is needed here.
+> 
+> Thanks for double checking so thoroughly.
+> 
+> > And task_fpsimd_load() does make indirect reads of both fields before
+> > the next context synchronization event: sme_load_state() executes LDR
+> > ZT0, whose execution at EL1 is trapped when SMCR_EL1.EZT0 is 0, and
+> > when PSTATE.SM is set sve_load_state() executes WRFFR, which is
+> > "illegal when executed in Streaming SVE mode, unless FEAT_SME_FA64 is
+> > implemented and enabled" (from the WRFFR description). The MSR SVCR in
+> > between doesn't provide the synchronization, since SVCR's
+> > self-synchronisation wording covers reads of its own SM and ZA fields
+> > only.
+> 
+> Yeah.  We should be able to optimise this:
+> 
+>  - If there is no change we don't need the isb().
+>  - If only EZT0 changes and we load state where ZA is disabled then we
+>    won't try to access ZT0.
+>  - If only FA64 changes and we load state where streaming mode is
+>    disabled then we won't try to access streaming mode FFR.
+> 
+> I've gone and implemented the first which will suppress the isb() for
+> current host kernel SME usage, the second two are starting to get more
+> fiddly than seems sensible to do right now.
 
-We asked to target these patches at net-next because they don't fix a
-regression (the encoding never worked correctly), so they are not
-relevant for stable. Users that require this functionality should
-upgrade to a new kernel that contains the patches.
+I really wish you didn't optimise anything at all at this stage.
 
-Regarding the stable-specific patch, in my experience, stable
-maintainers don't accept such patches and prefer to backport patches
-from upstream, even if it results in more changes.
+"Optimisation" is exactly what got us into so much trouble over the
+past two years, and I really don't want SME in KVM to follow the same
+trajectory.
+
+So leave this is a straight ISB, no optimisation. Once you come back
+with actual data showing that this is a terrible bottleneck affecting
+real workloads on real HW, we'll look at it. But until then, please
+keep it as stupid as possible.
+
+Thanks,
+
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
