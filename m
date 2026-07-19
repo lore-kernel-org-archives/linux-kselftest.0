@@ -1,148 +1,143 @@
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.35])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010007.outbound.protection.outlook.com [52.101.61.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2041862;
-	Sun, 19 Jul 2026 03:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.35
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784433352; cv=none; b=bs29E9+M5eEVSvmBHjw6LZ8RHJvwPCVs4JoWdnrJRvW9eRt4BifK9KHP/6/7FD+dLXnjZz12AHyM6Ncu3x5DbjIIcXN9dEx86CV6k5Ofrx9DUoo4nyv5RxCTcdSn3/pUGs+hZQ43CMVv5ij1aZM/VPZZkk6Ti7qNh2uwOkoaLNg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784433352; c=relaxed/simple;
-	bh=MIpBUs8FuIBlkYklbhlJScGg5JWiDjM2uf9MCZBJmUo=;
-	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
-	 Subject:Content-Type; b=B/jmCfVAsbwdddlKtQkty6cSTG1dBUW5hWwLpK2CskxRfAFBB2xGZfKgF2EiPG1eGvboiJAZJF7bHvWJsQ4iJJcLfhsIs4P6N+nG/H6/HfOl9pv7apQoxyC6CTYkarN9SlMswvJsBdu3hfxgEVww55G4wtx6f+2i5knus/bp9iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4h2qYw2TQjz8XrrJ;
-	Sun, 19 Jul 2026 11:55:48 +0800 (CST)
-Received: from xaxapp05.zte.com.cn ([10.99.98.109])
-	by mse-fl1.zte.com.cn with SMTP id 66J3tf7v034198;
-	Sun, 19 Jul 2026 11:55:41 +0800 (+08)
-	(envelope-from xu.xin16@zte.com.cn)
-Received: from mapi (xaxapp05[null])
-	by mapi (Zmail) with MAPI id mid32;
-	Sun, 19 Jul 2026 11:55:42 +0800 (CST)
-X-Zmail-TransId: 2afc6a5c4abe5f7-4ef27
-X-Mailer: Zmail v1.0
-Message-ID: <202607191155425057lNrNOYTi44E_jmidmtkn@zte.com.cn>
-In-Reply-To: <20260717-b4-scalable-cow-virt-pgoff-v1-1-cf24910ef094@kernel.org>
-References: 20260717-b4-scalable-cow-virt-pgoff-v1-0-cf24910ef094@kernel.org,20260717-b4-scalable-cow-virt-pgoff-v1-1-cf24910ef094@kernel.org
-Date: Sun, 19 Jul 2026 11:55:42 +0800 (CST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E778378826;
+	Sun, 19 Jul 2026 06:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784444005; cv=fail; b=KXIu4WGsRVmEaOhaOoSU0EXmCybHXmhUyECbBeJNIeX7YPGothzB76mMfQRkv0fJ1xiIMPa++tqi5mw7slmB1d58L2pWHtRaHsfg6D093rWA/nB7CDClFvs2ytjMgpffOE+2ho72tsvkjRlyfvHeK+1UwJBsSicHORPiAZDNrHQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784444005; c=relaxed/simple;
+	bh=B62gAUeGMLHwFtYWso6PnvzG4FAjy9Xb4aQz25plFI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ShS+PTi/PPS2zuZQCBviQ9hJ81J1sldLS5yuLzL/MBKR0lTgWXpqeEQWWqoFEK5FeiRBIcxTbi4oeXSYCwt1Qg514wp5x3fEO+WM4ivvp6MhI7cony2KmjNUKLh+cLSxM40dMKWb+JfOVG0k5p7nBS6qjjL0jtqwKZ2drL6YmGE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qnjMD1Tw; arc=fail smtp.client-ip=52.101.61.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qnjMD1Tw"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=soB7OD1FyxIEYJYKMYOdtdla1zEULEpo+AKy3pEmm52JocDEIrl6Fz0L09CHKBPmXdZdrY4149/L4bsbASPMjgFGzRw2OgHwDdVMYGcZE+FaARb3OpJMbK3gR9e6OE3cCBjEybJSoNpeyCvpplPEYCOEc1Vg+AFCQjrLkq8waXZ+GkSB0mFVlaLSoGQ6/FafymPr1Wgf9ykdA5OdnoAiQt3iughnS5n2mBikf84VCIkQZ/5UvsflBM5iYfxyHydsRJlPj3/p1QVU2CPfLrr3kfDafrH8y1Jsq3c33sBzDsg37UcplWabcymN9zGZzsA+hbvtm/a+L+plMsUX6dn0Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B62gAUeGMLHwFtYWso6PnvzG4FAjy9Xb4aQz25plFI0=;
+ b=gJTbJH7jQ0UNquezyF1gwoJVqHdaoiZzIsf8ZlEPe1aS0qy7OaBvUY0HtBX9wum+GlZ8yjCtoRXXJvZATPFze8fqy6P6j0S1ON4DPEfNPT+hH3of9RPBp4CddvixRWPwSIUV3cyRAXqSkV3igjDTvX+1Ue8Fk+BUfD+tCkn4msks7oyvjrvP90fhlgMZx1BimqI+uZHzdF9rXfVBhff2Zh4TIKyhYALGLtGmXGRlOLiMy5Yz974el/YWWS74D+DKNqYjCnyGNGh5aFJ9pMN7fEUUF4qspVQUSYl657hw/fF7VxfYQraDns46kIeqUBTcZjSWprtcz8NB+AcaGgUXww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B62gAUeGMLHwFtYWso6PnvzG4FAjy9Xb4aQz25plFI0=;
+ b=qnjMD1TwGjkXx6JmN07I8bIgas0zeaGeBlXjR+1N8Ck92UcfpRuOg/5lInqyLjLNSgyJg+zXI71886LQXRXIy6Ixj5yZR78stZEYFRwQUcYNShJ54SrLwTpoytFw+OU54U+7AAmWLxZn/+wBRWRRz2i9p+13s4YXs0XEIwUcpqKIwPrGEOdz3pDgr9t/ece9503c2UWFe/BSI7kgFOUKtY+vOrWR46nBYTw2/PVmaj+1SLYUfU/GEqdfBqQixA0vG/ud4+ZHpoTt2jDwsYNtSTdP3oerZ7/l057YQuikEX8z/0LZcnGVPYdzQyQPM/PoJByc+YTd5srvg9BtkP6qTA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by IA1PR12MB7757.namprd12.prod.outlook.com (2603:10b6:208:422::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.15; Sun, 19 Jul
+ 2026 06:53:20 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0223.013; Sun, 19 Jul 2026
+ 06:53:19 +0000
+Date: Sun, 19 Jul 2026 09:53:10 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Yuyang Huang <sigefriedhyy@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Bobby Eshleman <bobbyeshleman@meta.com>,
+	Chris J Arges <carges@cloudflare.com>,
+	Daniel Zahka <daniel.zahka@gmail.com>,
+	David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
+	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Eric Dumazet <edumazet@google.com>, Gal Pressman <gal@nvidia.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] ipv6: report why a route was deleted in
+ RTM_DELROUTE
+Message-ID: <20260719065310.GB1841238@shredder>
+References: <20260717222327.7398-1-sigefriedhyy@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260717222327.7398-1-sigefriedhyy@gmail.com>
+X-ClientProxiedBy: FR4P281CA0025.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c9::20) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-From: <xu.xin16@zte.com.cn>
-To: <ljs@kernel.org>, <akpm@linux-foundation.org>, <david@kernel.org>
-Cc: <david@kernel.org>, <liam@infradead.org>, <vbabka@kernel.org>,
-        <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-        <jannh@google.com>, <pfalcato@suse.de>, <willy@infradead.org>,
-        <jack@suse.cz>, <linmiaohe@huawei.com>, <nao.horiguchi@gmail.com>,
-        <riel@surriel.com>, <harry@kernel.org>, <lance.yang@linux.dev>,
-        <kees@kernel.org>, <ziy@nvidia.com>, <baolin.wang@linux.alibaba.com>,
-        <npache@redhat.com>, <ryan.roberts@arm.com>, <dev.jain@arm.com>,
-        <baohua@kernel.org>, <usama.arif@linux.dev>, <matthew.brost@intel.com>,
-        <joshua.hahnjy@gmail.com>, <rakie.kim@sk.com>, <byungchul@sk.com>,
-        <gourry@gourry.net>, <ying.huang@linux.alibaba.com>,
-        <apopple@nvidia.com>, <peterx@redhat.com>, <chengming.zhou@linux.dev>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>, <ljs@kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCAwMS8xNV0gbW0vdm1hOiBpbnRyb2R1Y2UgVk1BIHZpcnR1YWwgcGFnZSBvZmZzZXQgZmllbGQgYW5kIGFkZCBoZWxwZXJz?=
-Content-Type: text/plain;
-	charset="UTF-8"
-X-MAIL:mse-fl1.zte.com.cn 66J3tf7v034198
-X-TLS: YES
-X-ENVELOPE-SENDER: xu.xin16@zte.com.cn
-X-SOURCE-IP: 10.5.228.132 unknown Sun, 19 Jul 2026 11:55:48 +0800
-X-CLEAN: YES
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6A5C4AC4.001/4h2qYw2TQjz8XrrJ
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|IA1PR12MB7757:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90cb03ff-c21f-4caf-6fad-08dee5626ace
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|23010399003|366016|1800799024|10067099003|11063799006|56012099006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	dSwASwOtgKiue++nKbvFBoMtC035NJPUFsFEQnPy3MVT9XNUiKvGzapInMJuzOVwJDzuAaUZZbh8YrAVCKSnt8Jwt76nt/vz5Em0EJQ382kvuaVaSBTSsicMQeau3qKep22js3N4ndzw3nZVI6W3i3S5Udy13S0NSvLypEkd4XhZ1PqxQ6z3ZrA5c4bpxjPioqDLm7FNRKojr0Lnvk9zdBVpr35S7tkIyy3w9SHLZdcK7HKpXv69xOqPBUuPRox9VVa2wFyb/RBhappbtoIpecQrMVW9h+Hfef5t222zX09a3K7F1ALz+GiaCmUNNKzZVyfvvLzgalh/n4KjnzmQep+FwOuGwJS8qG946rC0qAoY6c7R+N9YCnV3pQvyk/kbdAEjgiE14tFcJGpyvAoI0hCnBOSlcRJSyMGnvi3Ecab+pk0/mS1B45FRGj3WW/it2WMNQNZJ3EfGoPPeMwdLKXhJ5bprPDjw1d56KdE7srhgvAF/kQronRVvlgBJqGdlDcM180A+h+bateZVsqtVWXXZSETkSzNxZx24Vj26NlsgBTG+dfEz8EcjFwnj6lok70IfQwm4zB56YvgemAks9w5EUGb9/D3+795usqhajeq6zXrZSCR1HrEaqDCy/zbpHVTrtquC3hjvkKUnG90RIGfGU6pJEU0cmy/jbvzHXTw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(366016)(1800799024)(10067099003)(11063799006)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1N7Gmgpnqb+LA5ivBb/kQfJN4APGxJgKxv5UlbA1sUwcQxlyw1YrBVlZm4jj?=
+ =?us-ascii?Q?8WGSf1vUGKIq/VFPMxPd6xi9o7zrK0mUztxG8Wu3+y0YvTMmZD1Vm7QwkF54?=
+ =?us-ascii?Q?aa7ABBTFGl/U4O1kq4WVKCi46MAz/egpyaqN2He5Ssa1BCPgdvkXvscM4Ymf?=
+ =?us-ascii?Q?m7fh4tugW9Pdj8Qw2j5/OjYUj8R4QkrTMlPEhKp+DKLPL3J8ayKU3PHewalC?=
+ =?us-ascii?Q?wTJ1qZfjn1ukRzVSoQRAuuHf8vL8kVH8yH9B4PkQnvKO8IIl+myjJ0S7Lcu6?=
+ =?us-ascii?Q?+4cWlShR1HsNx6NRWfj+nvcTJCaFzifhQDBId5yPq/U7h3Cut+Hgp34dgpga?=
+ =?us-ascii?Q?QK+JRyDJQvy9YqDZha1xZYurjrhp0RZr5YL7e4JaUL9FTVRM6igbvRA4t3Pz?=
+ =?us-ascii?Q?7hhRMtr89wFq8WqUZUHpEnqmbrLQ3aUN/3wZ6F+Sb7qnlf6VUflOzRpTiwED?=
+ =?us-ascii?Q?bjq/YrBQ18jJkYFgJLREyL95MfN9dKoLHUKimhIcIBGWDOMMA+c4O696aP76?=
+ =?us-ascii?Q?4LzI7QX16nXVDvvZ61U7XqNRYOL+K03gzv8pL2Mqcl/cqI4CmbEJAK4+UnRk?=
+ =?us-ascii?Q?e8kwnJKgDfvY0LFXGH/1aAWTCZ9yOkZM1E0XZK2zO3SXDOX/w29aerdDoQC4?=
+ =?us-ascii?Q?JQOUg1SEAvyYI7+hPOMgUxFaK/7NCapUQf0MQ/0wm3KlNhlUW31HcSJBsJUd?=
+ =?us-ascii?Q?fQ54Vjw1+6GtrzXw3P+OYhg6G7RwHauAWpBnvt3QO7RhW71bFVkX/s+LTZln?=
+ =?us-ascii?Q?apXlP1eFelX7t+2gGy8gDM36msV0BurE1R0u738ErnuwzceQL/1ilh66B7XH?=
+ =?us-ascii?Q?8lVkB832bhdW/htQ7YEsOX+mkNExTs6Cd+FEJqSzIfm3Bv3zdj3KT6A8yu6Y?=
+ =?us-ascii?Q?bd1oK0Vf2GxkrCvhmdx280N1XHXj36mRB9xK5goYJLbAP637tAsKJDCVnmSF?=
+ =?us-ascii?Q?CUB6r0Cc1+jEzzMB+HaHxuliLzpISTRhEJjFuNpPF2pKa0YmNarE66TVILU9?=
+ =?us-ascii?Q?5qxAwONEVLMVGqwcwE8v0VH76R/fgIAZIwKZNmpsMYd0RcztiOYhd+lmLCYg?=
+ =?us-ascii?Q?7XDMDWDodNRq0bMOVlvi3R1cySJAQfP88FxT2KOYQ5W6gNSlF6fPjT8iPG40?=
+ =?us-ascii?Q?3+9r02gKxF+9nc0Q7kudTroSI8TOBdwizHHRK3H78aVGQ2oGNAsW+AP7R955?=
+ =?us-ascii?Q?ED2nu0kYKMgx3qYGeMEFghVyEDPsuRRsbCl2n+7Kcpg3YpsNsTatrijT1X3u?=
+ =?us-ascii?Q?rX+0n0mETtDFrWZIDClKsgGqF3/LQDG2gQJu9HUd+HCtY0DFPoe6kqYvivF5?=
+ =?us-ascii?Q?+li830K7EA+Zbc77vH3qWtuythvUnLC8pRX4XZirrphnpuPPBK1dXYEKARLa?=
+ =?us-ascii?Q?iErNTSCn+AUhHSbtYA8yvN1RY8V2If57klQJNUN0TZJg7ZqhxkQqLAfN/uA1?=
+ =?us-ascii?Q?R9CV0KA5PyxshTEBd1vQ8fcykPKS9P6RWdphHjtEgjyZi+6TRqV3gVJh3I9A?=
+ =?us-ascii?Q?HOiIB+gU6IAWkZMQ/6y9r2BmrJ0MRUbKM3TA1zCDcp6cvsOA9/yxylFnOhhy?=
+ =?us-ascii?Q?3S7LVNvCA1csiqoEcnTgcPiF9uBJ2ArnsdReM1ncBrrjpowHlPU8AG1pMLyC?=
+ =?us-ascii?Q?IEr04LIcneoJoSButLzpOObnGha8D2ZqQ8Sy/GzmHEBZy4/rt36IPYZ4aqMO?=
+ =?us-ascii?Q?683lGgNksADP2EstiZygG2X9bqpZvTRAd01wJVBjASipPTcJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90cb03ff-c21f-4caf-6fad-08dee5626ace
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2026 06:53:19.6264
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NbsRjjEfMrYtv53RM4FSK5iC1Km+efO4q0cd287NiraaVaJBBgodeRVi3DOK3U8aXKB4R1DN/pqeTMTW3oBmEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7757
 
-> This patch establishes fields within the vm_area_struct type to store the
-> virtual page offset of VMAs.
-> 
-> The virtual page offset of a VMA is equal to vma->vm_start >> PAGE_SHIFT if
-> they are unfaulted or were not remapped, otherwise it is equal to this
-> value at the point of first fault.
-> 
-> Currently, anonymous folios belonging to CoW'd MAP_PRIVATE-mapped
-> file-backed VMAs are tracked by their file offset. By adding virtual offset
-> as a property of VMAs, we can now track them by their virtual page offset
-> instead.
-> 
-> By tracking this, we provide the means by which to eliminate this
-> inconsistency, and more importantly lay the foundations for future work for
-> the scalable CoW anonymous rmap rework.
-> 
-> This patch simply adds the fields and some simple helpers. Subsequent
-> patches will update mm code to make use of these fields correctly.
-> 
-> The fields chosen are packed in the VMA such that, for 64-bit kernel
-> builds, no additional space is taken up.
+On Sat, Jul 18, 2026 at 07:23:25AM +0900, Yuyang Huang wrote:
+> When the kernel deletes an IPv6 route on its own, the RTM_DELROUTE
+> notification does not say why. User space cannot tell a route that
+> expired from one the router explicitly withdrew, yet the two call for
+> different reactions: an expired RA route means the router failed to
+> refresh it in time, which points at a misconfigured or unreliable
+> router and may warrant action such as disabling IPv6 on that network,
+> while a zero-lifetime withdrawal is normal, RFC-compliant operation.
 
-It is not necessarily true that no additional memory will be consumed, as it
-depends on whether the baseline kernel has CONFIG_PER_VMA_LOCK enabled.
-Moreover, in the future evolution of mm, maintaining this benefit would
-require that the layout of struct vm_area_struct before __vm_virt_pgoff_lo
-remains unchanged, which seems impractical.
+Please expand more on the motivation: Which user space application is
+going to consume this information and what is it going to do with it?
 
-My personal suggestion is: maybe we could simply add an unsigned long field,
-say vm_virt_pgoff, without worrying about the increased memory footprint for
-now. Additionally, it would be helpful to add some comments clarifying the
-difference between this new field and the existing vm_pgoff, to aid understanding.
-
-Thanks,
-Xu Xin
-
-> 
-> The first field is present on cacheline 0 containing key VMA fields, and
-> the second on cacheline 3, which contains file-backed reverse mapping
-> fields.
-> 
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  include/linux/mm.h              | 59 +++++++++++++++++++++++++++++++++++++++++
->  include/linux/mm_types.h        |  4 +++
->  mm/vma.h                        | 14 ++++++++++
->  mm/vma_init.c                   |  1 +
->  tools/testing/vma/include/dup.h | 26 ++++++++++++++++++
->  5 files changed, 104 insertions(+)
-> 
-> +static inline pgoff_t vma_last_virt_pgoff(const struct vm_area_struct *vma)
-> +{
-> +	return vma_end_virt_pgoff(vma) - 1;
-> +}
-> +
->  static inline unsigned long vma_desc_size(const struct vm_area_desc *desc)
->  {
->  	return desc->end - desc->start;
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 939b5ea8c9e0..2710628059b1 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -967,6 +967,7 @@ struct vm_area_struct {
->  	 */
->  	unsigned int vm_lock_seq;
->  #endif
-> +	unsigned int __vm_virt_pgoff_lo; /* Low 32-bits of virtual pgoff. */
->  	/*
->  	 * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_vma
->  	 * list, after a COW of one of the file pages.	A MAP_SHARED vma
-> @@ -1041,6 +1042,9 @@ struct vm_area_struct {
->  #ifdef CONFIG_DEBUG_LOCK_ALLOC
->  	struct lockdep_map vmlock_dep_map;
->  #endif
-> +#endif
-> +#ifdef CONFIG_64BIT
-> +	unsigned int __vm_virt_pgoff_hi;  /* High 32-bits of virtual pgoff. */
->  #endif
->
+Also, Sashiko has some valid comments. Please take a look.
