@@ -1,123 +1,197 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D843C3BF7;
-	Mon, 20 Jul 2026 20:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784580814; cv=none; b=dZUTLgUeDP+NzCccW9AQXvl/lMfmVixvKulEBmzy9dByDC299CJ3RyXk9wOHzZ4mH7Io6PrlscZwXm6MzV3YRzfLXAISLmvEU+OgxkgzuAImQ3KBQRE5YMhm3TK7ehZO+JwrWcjpokN/9t9CbngsfElxVmdhyfNs506n3sWA0wU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784580814; c=relaxed/simple;
-	bh=xNGHfZFJOSvi5ZB/bgCt2e5/PoA8SaVrwdd2Hji1bo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GMV/Ue9J+6gQtftCUkL/FNh4tck1py1J4d2JQL/x/KhpNXmtt83+QP+UDnrjUPtBElJAODFa3DzKgwxJhcB09/nWFihsnz2BlagmNLpLZzjTnRgYygdaxXKobUO0NYP2dTyD4xy5Ldsbagod66CYdsurEoqJLC8K37jb3vO8V1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kWRD/WwS; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F883B2D0D
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 21:15:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784582161; cv=pass; b=kPACxTu1VF1tuh+qIhT560bonj0NWR/AvrorpWTH4HRMiW0AMs2dZRe+fDLJ5/jw0X9x2OnbbdpZ6zCTaQnUtReVg32+lvls52kSnjJxG/3m4O3WZU4AHilRJryGXrNeKvtSATnKJEdapuYF8qTfrnHTPi2H9+vSYtbKZjJO7X4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784582161; c=relaxed/simple;
+	bh=GYmozcAMwSemNlmhz+B3xhx2TrSFNt5xSE7k56r5ovg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uel4hPiFAyme8apF2dKx4wMkvH5za3d4VdnUh6hkSBaFAozO8PyV9CY3L+Dk3X/nekUaqo6g0qPrY6wqSp5iffAbJU94Agg2JqYCf+Gvy1TvolaQGsw3JQwWFJe9VCEQdDyCoPioovjMtGdBcuOhevWFkNG3pCW+L5Yeou/zrKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F5hO0hcB; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kWRD/WwS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=rLkNesRCYNFOq+ZuVFxEEhkM0txhhysUwpvEFeMD4Fw=; b=kWRD/WwSdH3oQGCu/bb2MqxLFt
-	GxxMAXajZYFA8mU3N1Pm9DTmh8P/j0xPt/6IE5Pei2n1jaMYNVOfrjUkv5qnofA/1mh5DxHW6vw6w
-	G6xJB9AiVVAZK+u8aHNV/3Pt2rqgYDi1iqaQ5Jt98DQbpEtpuFBvr45lX/W5wsB0Shy0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wluz9-00DK2K-VG; Mon, 20 Jul 2026 22:53:11 +0200
-Date: Mon, 20 Jul 2026 22:53:11 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Natalie Vock <nat@pixelcluster.dev>
-Cc: Taehee Yoo <ap420073@gmail.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Alexei Starovoitov <ast@kernel.org>, amd-gfx@lists.freedesktop.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Airlie <airlied@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Felix Kuehling <Felix.Kuehling@amd.com>,
-	Hoyeon Lee <hoyeon.rhee@gmail.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Leon Romanovsky <leon@kernel.org>, linaro-mm-sig@lists.linaro.org,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Mark Bloch <mbloch@nvidia.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>,
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [RFC PATCH net-next 08/13] drm/amdkfd: add GPU instruction
- emitter and disassembler
-Message-ID: <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
-References: <20260719175857.4071636-1-ap420073@gmail.com>
- <20260719175857.4071636-9-ap420073@gmail.com>
- <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F5hO0hcB"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cab97c86bdso454135ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 14:15:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784582158; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gDwas5oXo90vk9uvbBhZh406Y8Sd5I3EAKSGU2K8r1pOEOh1JILPqBfDB1vKe5l/+s
+         pr5jVlTmn56xEYcBCttZYXeX7kWZf1nJvSwbKarWvJwG0ymD0oL4I7yVxOuOWnJDK6Z9
+         RYFhyYumg/b4ltEy1JsSqO4QOIBsND5QQKCWbW7Wt+vZTrk8q4Pf0jIgPT4ry8IV4nYc
+         qLO+ozMe2497/Lj8om6eWtiS11SyU6X8yVRAZLp0atmtJt6z3niWTQb1dj1M2yFhu5bJ
+         oSnWjlTqffzkjC/KQggNwAED/tHKjhi5Ivyl8vdarKWmrL3sHnvmTlia452SD78sgIwF
+         n5Gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
+        fh=1N4mCYee748IsD89iI48uxAFcoM4lNc5lNUNP9G/YDA=;
+        b=p8XSUlLonDReaeGvNiAoYQJ1KjXZ+j0ayTsjbO8KfT4F8lBrP8cJXFVq+5cjgnqPow
+         oRroxOMamDYg5SlxvmmkoqroxGo3adDy/PgFeZmthzEtrhBDHg+IR6y8hM/iTXqV347v
+         xSqYg5Ci/UDsJqHRW9389lWH8RI2O0XY/QY1RySLB9r/mqw81WwkOkw3duP9Q0YZt19Z
+         5po5FC2+sbFQjH8ZE/K8a7gMF8i2tAACBhAeJobgWBDZfUeEMh60bhBMwsFijFWlDZ1k
+         tUMd/I/SadhYjTwpiXQIqYSIj3G8U2Sw65AzEWMPZeKy8H+qR3dliTUWBF68yp7wKpia
+         axRA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784582158; x=1785186958; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
+        b=F5hO0hcBNHdKGk9M59qXB0EfAf1ZQL0kiD2GIokeaFPVUU7JE0sBVMIOaHAJJlbqf1
+         hT0EOsaGQxdzfkSQxV5SGVl+QdL5b6YSb2ZjQcZcLVNAPL1/8wIsNcH96dHr/vpiGqUG
+         I/27/r9cfrp5Ztsp3RVhurZRlE2qZSv42m69MWpB8o09v5sRx2Rp61wKfeDuQt8qOgV/
+         5Npk2kIQYLRLDeexi5vPRbcgEYHVubzyoIEQIKsfg75YWhiyH8NwE+Gc22p4+NDE9kWL
+         Kq02Bv1RfaF6OK4XicyN5ZimBBBuQoKC7Cd85xPJt3ndaYNSfPVYjdP+YdCYZm6nh5OX
+         79lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784582158; x=1785186958;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
+        b=XVuxDqW3Qv9Dy9RApfI9tM+2bggLRlItbldU6XL4+mttEn5/LWBfLZHWZ84r0eknqV
+         E4hql/IG4ffNfArfzlTjM9hYyaBsYGVgR/sf5aYNF5inGuY8McvlFqW0Kw2LmlmRqc4v
+         z3zq76nINPqtm82QqL37HWHlSX+mlMP/SwBNGVqdmilkYVSwWGzT3rifORQwCk6oS7NT
+         aJuaKo4hIZUCeJ4QLBh387oBoU6vtEkVkffOcGZ1iu6jMTXFn71HIWsqZpPyVffxRuoS
+         +MIUf0rQDw0kKrs02fo3DamMlxTRFDToYCFfX94k0KipgN4lWdFBKnz8OGDnADhvYeaX
+         bXNA==
+X-Forwarded-Encrypted: i=1; AHgh+RqoRu8J8NOp0Ld+dPrE8GSqkuK/BGYOWP1/GgBod7qL5ICUBmFTmRF/10V4cWG8HupsJWinUXBs8hAV6qlUzW8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnxnI7T69/whIbAzVDQ157gGUpykljPhG2tadOc6sU3mNEIVXb
+	6KHnv4kkBsxYePRKqfrcq9pKzaStZtUr+Tt0SMUIgeB57Q0vz+3vGmPxtrDB2NiQuSsie5gVo/7
+	2dHEQIohCqk/FFD0c5Ytv263KmrPDM7yfXwHZvcxk
+X-Gm-Gg: AR+sD12HyYgn2yhHYxu5LQ9MO/WKBmduBMl3ZJIcuHzIZzWLrbBxndyDM+ZSbbLKryx
+	uSCyY70ZXqbXbnCaZd89VYALwlXxtiEo7bT4i7cZr3sBaJRUU15onC715KQ82/Uzzk97l5pGW6Q
+	L4jW0B6zkp4IYfasVLjyQ+aDJxOKUUD+HwpbgcA8G75CNJfuDPjIxPswM0ZfyxLl4Sp8tMAQN0q
+	Lxvgx1ldBM04bQF0A66eJUo63HaCRx5ja//jDvbX2RZEbX6TNAnQsUs+FoZuN7RGrk0uFhUw5H7
+	SA5n+QWRXc7pcfxcNdBFuhF0DbM=
+X-Received: by 2002:a17:902:f54c:b0:2ce:7ae6:2a23 with SMTP id
+ d9443c01a7336-2cf7b702c3dmr2558895ad.27.1784582156890; Mon, 20 Jul 2026
+ 14:15:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
+References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com> <20260708-tcpdm-large-niovs-v5-2-34bf6fac941b@meta.com>
+In-Reply-To: <20260708-tcpdm-large-niovs-v5-2-34bf6fac941b@meta.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 20 Jul 2026 14:15:42 -0700
+X-Gm-Features: AUfX_mxUXqtSIB0dpGSWPZIOzVEGjkP0LeV9jHf6fDBCDwwRrEGRR9CjBBihAPw
+Message-ID: <CAHS8izMz_S8K80EXn3oFXiDNkGuPUMzjecaJjAvaZVky-7O40Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 2/3] selftests/net: ncdevmem: add -b option to
+ set rx-buf-size on bind
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
+	sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net, 
+	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk, 
+	Joe Damato <joe@dama.to>, Bobby Eshleman <bobbyeshleman@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 20, 2026 at 10:05:33PM +0200, Natalie Vock wrote:
-> On 7/19/26 19:58, Taehee Yoo wrote:
-> > Add the AMD GCN (gfx9/gfx10) instruction encoder used to build the GPU
-> > shaders that knod dispatches, plus a matching disassembler used for
-> > debugging the generated code.
-> 
-> Is it really necessary to have a full-on compiler and disassembler in the
-> kernel driver? This patch is massive and I'm wondering how much benefit it
-> really provides. Is there really no way to move GPU compilation out of the
-> kernel, one way or another? Could you get acceptable perf with a static
-> shader that interprets BPF programs at runtime? Such a shader can be
-> compiled beforehand and just embedded into the kernel - there's prior art
-> there with the CWSR trap handler in amdkfd.
-> 
-> In case you really, really need to compile the BPF to native ISA, could you
-> still have userspace take care of that in one way or another?
+On Wed, Jul 8, 2026 at 3:55=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
+com> wrote:
+>
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+> Add -b <bytes> to request a non-default niov size via
+> NETDEV_A_DMABUF_RX_BUF_SIZE. When the value exceeds PAGE_SIZE,
+> udmabuf_alloc() switches to an MFD_HUGETLB-backed memfd so each 2 MB
+> hugepage produces one naturally-aligned sg entry.
+>
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
-There was a long and painful discussion about P4, and offloading it to
-hardware. The proponents of that wanted to do the compilation stage in
-user space to produce a binary blob, but it was hard to prove that the
-P4 passed to the kernel for software processing, and the binary blob
-passed to the hardware actually where the same. It opened up the path
-for closed source P4 where the kernel never got to see the actual P4
-code. So it was not really offload, but kernel bypass.
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 
-So having a compiler in the kernel is probably the correct way to go,
-if you want to be friendly to open source.
 
-The other option is to get the GPU to do the compilation itself, so
-you pass BPF byte codes to the GPU and it generates its own native
-code. I've no idea if that is possible, but clang can target OpenMP,
-so maybe it is possible to move this compiler into the GPU?
+> ---
+>  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 36 +++++++++++++++++=
+++++--
+>  1 file changed, 33 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/te=
+sting/selftests/drivers/net/hw/ncdevmem.c
+> index d96e8a3b5a65..a16e55af51ee 100644
+> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+> @@ -40,6 +40,7 @@
+>
+>  #include <linux/uio.h>
+>  #include <stdarg.h>
+> +#include <stdint.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <unistd.h>
+> @@ -61,6 +62,7 @@
+>  #include <sys/time.h>
+>
+>  #include <linux/memfd.h>
+> +#include <sys/param.h>
+>  #include <linux/dma-buf.h>
+>  #include <linux/errqueue.h>
+>  #include <linux/udmabuf.h>
+> @@ -79,6 +81,7 @@
+>  #define PAGE_SHIFT 12
+>  #define TEST_PREFIX "ncdevmem"
+>  #define NUM_PAGES 16000
+> +#define MB(x) ((x) << 20)
+>
+>  #ifndef MSG_SOCK_DEVMEM
+>  #define MSG_SOCK_DEVMEM 0x2000000
+> @@ -100,6 +103,7 @@ static unsigned int dmabuf_id;
+>  static uint32_t tx_dmabuf_id;
+>  static int waittime_ms =3D 500;
+>  static bool fail_on_linear;
+> +static uint32_t rx_buf_size;
+>
+>  /* System state loaded by current_config_load() */
+>  #define MAX_FLOWS      8
+> @@ -142,6 +146,7 @@ static struct memory_buffer *udmabuf_alloc(size_t siz=
+e)
+>  {
+>         struct udmabuf_create create;
+>         struct memory_buffer *ctx;
+> +       unsigned int memfd_flags;
+>         int ret;
+>
+>         ctx =3D malloc(sizeof(*ctx));
+> @@ -156,9 +161,14 @@ static struct memory_buffer *udmabuf_alloc(size_t si=
+ze)
+>                 goto err_free_ctx;
+>         }
+>
+> -       ctx->memfd =3D memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
+> +       memfd_flags =3D MFD_ALLOW_SEALING;
+> +       if (rx_buf_size > getpagesize())
+> +               memfd_flags |=3D MFD_HUGETLB | MFD_HUGE_2MB;
+> +
 
-      Andrew
+The fact that you are using HUGETLM and 2MB mappings here made me
+realize there is a pathological edge case in the code where the netmem
+size you're requesting is greater than the mapping size, so you
+actually get no netmems. So like if you ask for a 64KB netmem size but
+actually you did a normal udambuf mapping and all the maps (sg len
+entries) are 4K or something. IDK if the code already handles this
+well with an error or what not. Worth checking.
+
+--
+Thanks,
+Mina
