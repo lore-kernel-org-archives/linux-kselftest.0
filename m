@@ -1,213 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD1642DA4A;
-	Mon, 20 Jul 2026 14:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932F4431A45
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 14:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784558478; cv=none; b=oVPQ4+mI8HbHautf99NYLxWC17c/vu7WjmSdPOjCWBvcpiV80MxHHiKtNoyd1yi+Ms3J02XIJZJaYNZ4bN4L7z8E21m60AEQ6Y8Ud5Xb8sF/P61Mhu0fytEDScyeBc6lk/+VxFtpbigYSXgXUVYuBDWiHD/MzzKoK8hn6o4jlH8=
+	t=1784558649; cv=none; b=APWTRgUy4UEYm+ECAJ3HdZ1/WRapTmW8CSriPjftYG8fIFzCIzMluGOt4XO30ltpIl/kzpgWQ/gzsc2dJNwnasfQT1ULiG/Ffv84g+xbLVOzbzOElmUxZzn+tuaTMy0HyjKxuKXxT5TbGcxY0618s7sarRxwSiT2vVcaLAIpZas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784558478; c=relaxed/simple;
-	bh=yk0gma+yTZdel+ljE629bRHp848gvZkgeJregd069ZY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JSjDKdwGPTh+NU4kuikxlDIvYwDWaCKWS9RA0WzrMgbAjO2FJdwXyM9iklr6rHabmnfn7ehMksYwAzWnWR4A+F2BjvVXE+JIfZ2Oxf4/gTntawTCuL1CQES3NyCGzkMlcpbzhpMbjmIHr7OF77S0M8J6sXNSEUpplyIXeX1DEZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xk2CwfJ8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784558649; c=relaxed/simple;
+	bh=cF1YCM++gtCxzT7sQ99GVB9BZDa1LA1mlq8M3t5Rik8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=l2VTYf7Qury/VAzdafC7cZyU/sJVyLmIpwwu4G/RCwM6SluAlxUgbKPv4LZU08U5yRD35mq0wyP6GJsOwQqBejrQ6lwmk6ifonYHKps2KEtEUQVA48/bH8wIJ3t895PnaC1LfLOZp+95IAKt11kqAD+CEEQLpOU5ousngOUALtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=arf3aqpy; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xk2CwfJ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D2F51F000E9;
-	Mon, 20 Jul 2026 14:41:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784558476;
-	bh=Q+hgooHeYYaYv/oiqa66MnVBmMzHrm3fz5OuZIxN9Pg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Xk2CwfJ8HL60DsiwzkTy2dmx4IPJaGvy3clwtXHfOLctb/PRF8MP0UeVkjMrXLpqc
-	 X4WS2W9ztgR4zmOxglKsN2/48CgCJRBHJz+cSbkn4tO4QjGaKM+hOEcqKQw0wDRnWT
-	 1YUs3hTGnP3EmFHMzbNR4oBE0n2xLUnb6tj8NCpjKgFm16oYCurumYshQqUxynh/4d
-	 mbxBldGkcKwB30spX3j5PmyTcJ8UQBYh19Cm1HJ2sVAMTNVNTdn44Lw9deeuDJZv0/
-	 +t5EMQKy+EU8TaYggE9ITM6hRmzQNfyNSb6wj0ah73drSYYTUrn74+PvqOFUFb0kSt
-	 yOrY8tOVutBqA==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Mon, 20 Jul 2026 15:38:41 +0100
-Subject: [PATCH v2 15/15] tools/testing/selftests/mm: add
- MAP_PRIVATE-/dev/zero merge tests
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="arf3aqpy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784558646;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=awL865fyO28VMGXok9evyOX+G7wyqLle0dPFb8IBJyg=;
+	b=arf3aqpyiuDN/jrnDN+RxCVudtLUvLTeH7/Z6H060bNZLZYcfO397vTVkim7Nd8UjwyTdD
+	3J1lZ8Q9cRyQ3giTH3c1KJnQPb1FlUTYppwodWO0wqXJ3o8sZJdMfJygYUkHAHE2jpDCy/
+	4mLC5WcSdXt7IBrYjJK6aFJ/L4pcNig=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-30-CgV9iuZePQ6xgJpA3p9D5w-1; Mon,
+ 20 Jul 2026 10:44:03 -0400
+X-MC-Unique: CgV9iuZePQ6xgJpA3p9D5w-1
+X-Mimecast-MFC-AGG-ID: CgV9iuZePQ6xgJpA3p9D5w_1784558641
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D599180288D;
+	Mon, 20 Jul 2026 14:44:01 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.81.35])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2DA941592;
+	Mon, 20 Jul 2026 14:43:59 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  netdev@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Eelco
+ Chaudron <echaudro@redhat.com>,  Ilya Maximets <i.maximets@ovn.org>,
+  dev@openvswitch.org
+Subject: Re: [PATCH net 2/7] selftests: openvswitch: add config file
+In-Reply-To: <a2032420-b4d4-4eba-9eb4-65eeeea2b63b@kernel.org> (Matthieu
+	Baerts's message of "Fri, 17 Jul 2026 11:39:34 +0200")
+References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
+	<20260710-net-sft-fix-containers-v1-2-a2915c294ef5@kernel.org>
+	<f7t5x2frlkh.fsf@redhat.com> <f7tldbar9gp.fsf@redhat.com>
+	<a2032420-b4d4-4eba-9eb4-65eeeea2b63b@kernel.org>
+Date: Mon, 20 Jul 2026 10:43:57 -0400
+Message-ID: <f7t7bmppvpu.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-b4-scalable-cow-virt-pgoff-v2-15-2d549757a76f@kernel.org>
-References: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
-In-Reply-To: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
- Pedro Falcato <pfalcato@suse.de>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
- Miaohe Lin <linmiaohe@huawei.com>, 
- Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, 
- Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
- Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
- Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>, 
- Matthew Brost <matthew.brost@intel.com>, 
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
- Ying Huang <ying.huang@linux.alibaba.com>, 
- Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, 
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>, 
- Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4278; i=ljs@kernel.org;
- h=from:subject:message-id; bh=yk0gma+yTZdel+ljE629bRHp848gvZkgeJregd069ZY=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLLijN7e2KP42mx2UHD46n83TbO3N4hM99A7xOvx7uKNe
- Wn5+TtndZSyMIhxMciKKbI8/yK+P0gkbF7nBX83mDmsTCBDGLg4BWAiD00ZGVr436T+lTnYI/ak
- hVX305pn4i8W28Q1+z2XUYlY3hn3bC/D/wxL/51db5VPmGhsm7yu7Furo/iUVL5MyQXzWlTV0tf
- u4AcA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Assert that MAP_PRIVATE-mapped /dev/zero mappings behave like they are
-anonymous.
+Matthieu Baerts <matttbe@kernel.org> writes:
 
-We test both unfaulted and faulted/unfaulted merges - each with the regions
-having page offset of 0, which would not merge if the mappings were treated
-as if they were file-backed.
+> Hi Aaron,
+>
+> Thank you for the review!
+>
+> On 16/07/2026 22:00, Aaron Conole wrote:
+>> Aaron Conole <aconole@redhat.com> writes:
+>>> "Matthieu Baerts (NGI0)" <matttbe@kernel.org> writes:
+>>>
+>>>> The kselftests doc mentions that a config file should be present "if a
+>>>> test needs specific kernel config options enabled". This selftest
+>>>> requires some kernel config, but no config file was provided.
+>>>>
+>>>> We could say that a sub-target could use the parent's config file, but
+>>>> the kselftests doc doesn't mention anything about that. Plus the
+>>>> net/openvswitch target is the only net target without a config file.
+>>>
+>>> We've been operating on that assumption from the openvswitch side, but
+>>> it's true that isn't explicitly documented anywhere, and I guess it
+>>> isn't officially supported in the kselftest framework.  I guess we'll
+>>> need to keep updating this config as we add tests for things like SCTP,
+>>> and others, and maybe that's a good thing like we can add a comment
+>>> describing which tests take which configs.
+>>>
+>>> The downside is for most of the OVS testing we use the NIPA scripts
+>>> and those 'inherit' the parent config, so it would be a change on our
+>>> side from the development standpoint (but probably something we should
+>>> have been doing from the beginning).
+>>>
+>>> That said, would it be worth also exploring the 'cascading
+>>> configuration' support?  It seems like a useful feature, but maybe it
+>>> should be a separate discussion.  I ask because of how OVS interacts
+>>> with the networking stack as an 'alternative bridge' so-to-speak, I do
+>>> worry about having to duplicate lots of configurations between the two
+>>> as we expand the test coverage on OVS side.
+>
+> It is not clear to me what you are using on your side, but I guess it
+> should be doable to modify some scripts to merge this new config file
+> and the net one in your case.
 
-With the recent change that makes them behave as pure anonymous mappings,
-the merges should succeed as their page offsets are equal to their virtual
-page offsets.
+This doesn't seem to break the NIPA case (at least I can see the
+'contest test' output is not SKIP, but PASS for the openvswitch.sh).
+I'm not sure about the suggestion to change the script in
+tools/testing/selftests/net/openvswitch/openvswitch.sh to do a config
+merge.  It isn't out-of-tree or anything, and seems like that would
+create confusing git state (and not desirable from my end) - the
+upstream test would leave a modified, tracked file.  Was that your
+suggestion?  Or do you mean NIPA itself (but I think it already just
+uses the top-level config).
 
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- tools/testing/selftests/mm/merge.c | 104 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+The config change itself looks fine to me.
 
-diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
-index c093e27d0aea..edfbd39ae58e 100644
---- a/tools/testing/selftests/mm/merge.c
-+++ b/tools/testing/selftests/mm/merge.c
-@@ -1362,6 +1362,110 @@ TEST_F(merge, virt_and_page_offset_mismatch_memfd)
- 	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 5 * page_size);
- }
- 
-+TEST_F(merge, merge_map_private_dev_zero_unfaulted)
-+{
-+	struct procmap_fd *procmap = &self->procmap;
-+	unsigned int page_size = self->page_size;
-+	char *carveout = self->carveout;
-+	char *ptr, *ptr2;
-+	int fd_zero;
-+
-+	if (access("/dev/zero", F_OK))
-+		SKIP(return, "No /dev/zero.");
-+	fd_zero = open("/dev/zero", O_RDWR);
-+	ASSERT_NE(fd_zero, -1);
-+
-+	/*
-+	 * Map two MAP_PRIVATE-/dev/zero VMAs next to one another with offset 0
-+	 * each.
-+	 *
-+	 * With these being made truly anonymous upon mapping, they will
-+	 * merge. If they were file-backed VMAs the page offsets would prevent
-+	 * merge:
-+	 *
-+	 * |-----||------|    |-------------|
-+	 * | ptr || ptr2 | -> |     ptr     |
-+	 * |-----||------|    |-------------|
-+	 */
-+	ptr = mmap(carveout, 5 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	if (ptr == MAP_FAILED) {
-+		close(fd_zero);
-+		ASSERT_TRUE(false);
-+	}
-+	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
-+		   PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	if (ptr2 == MAP_FAILED) {
-+		close(fd_zero);
-+		ASSERT_TRUE(false);
-+	}
-+	close(fd_zero);
-+
-+	/* Assert that they merged. */
-+	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
-+	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
-+	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 10 * page_size);
-+}
-+
-+TEST_F(merge, merge_map_private_dev_zero_faulted_unfaulted)
-+{
-+	struct procmap_fd *procmap = &self->procmap;
-+	unsigned int page_size = self->page_size;
-+	char *carveout = self->carveout;
-+	char *ptr, *ptr2;
-+	int fd_zero;
-+
-+	if (access("/dev/zero", F_OK))
-+		SKIP(return, "No /dev/zero.");
-+	fd_zero = open("/dev/zero", O_RDWR);
-+	ASSERT_NE(fd_zero, -1);
-+
-+	/*
-+	 * Map a MAP_PRIVATE mapping of /dev/zero with page offset 0, then fault
-+	 * it in:
-+	 *
-+	 * |-------------------------------|
-+	 * |           faulted             |
-+	 * |-------------------------------|
-+	 */
-+	ptr = mmap(carveout, 15 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_FIXED | MAP_PRIVATE, fd_zero, 0);
-+	if (ptr == MAP_FAILED) {
-+		close(fd_zero);
-+		ASSERT_TRUE(false);
-+	}
-+	memset(ptr, 'x', 15 * page_size);
-+
-+	/*
-+	 * Unmap the middle:
-+	 *
-+	 * |---------|           |---------|
-+	 * | faulted |           | faulted |
-+	 * |---------|           |---------|
-+	 */
-+	ASSERT_EQ(munmap(&ptr[5 * page_size], 5 * page_size), 0);
-+
-+	/*
-+	 * Map in a new unfaulted mapping in the middle with page offset 0 -
-+	 * this should merge and would not if it were treated as a file rather
-+	 * than pure anon:
-+	 *
-+	 * |---------|-----------|---------|
-+	 * | faulted | unfaulted | faulted |
-+	 * |---------|-----------|---------|
-+	 */
-+	ptr2 = mmap(&carveout[5 * page_size], 5 * page_size,
-+		    PROT_READ | PROT_WRITE, MAP_FIXED | MAP_PRIVATE,
-+		    fd_zero, 0);
-+	close(fd_zero);
-+	ASSERT_NE(ptr2, MAP_FAILED);
-+
-+	/* Assert that they merged. */
-+	ASSERT_TRUE(find_vma_procmap(procmap, ptr));
-+	ASSERT_EQ(procmap->query.vma_start, (unsigned long)ptr);
-+	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 15 * page_size);
-+}
-+
- TEST_F(merge_with_fork, mremap_faulted_to_unfaulted_prev)
- {
- 	struct procmap_fd *procmap = &self->procmap;
+>>>> Here is a new config file, which is a trimmed version of the net one,
+>>>> with hopefully the minimal required kconfig on top of 'make defconfig'.
+>>>
+>>> Should this also remove the OVS configs from the upper level since there
+>>> shouldn't be OVS tests executing there (ie: CONFIG_OPENVSWITCH*)?
+>> 
+>> Actually, forget this part.  The P-MTU tests in pmtu.sh use ovs to
+>> create a datapath through OVS.  So these configurations need to stay at
+>> the top level as well.
+>
+> Indeed. I don't know these tests well, but maybe this P-MTU selftest
+> should move to the net/openvswitch target?
 
--- 
-2.55.0
+Well, it is testing path MTU across multiple topologies, so it isn't
+really an openvswitch specific test.  Just one that happens to use
+openvswitch in one of the test cases.
+
+> Cheers,
+> Matt
 
