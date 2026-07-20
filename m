@@ -1,137 +1,144 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22398400E0F
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 11:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27EF33F584;
+	Mon, 20 Jul 2026 11:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784546006; cv=none; b=cwRWUh591RZhWULdsOdPnUASBEpagTOLns5sqXTMILDVEZ6TZDQuod4u1L/r9G6DOoqsufux1E5UP8R8mEOlmcEILo5pbOTuIZxN1Ws4GoiFDJyXi2SlgJ/rN5h3K77fn24ps+WCv5YM9Iw8PCNGNKqKD56IJuJ+Z2as/L84Dn4=
+	t=1784546938; cv=none; b=p066qF7+xQJ6N6zFCK9kOHUYDrjugmnoOnQA6OG7W4/bqgaEliq10XIF8cSwUGUKlzytm4XkM6dxJJn8SKBFhKZ7UuoHndPxWCAGSuRn0PmRIMd2N3qSvlMSp+1lByPYTjWOpGICk10KWCtYUScl7/gDDbsW/x2+K49qQ9Uiyw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784546006; c=relaxed/simple;
-	bh=XLOtvvCv66YQSGuoLu3eRvzMzjzimYKdjqYj+ocM9dc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MlabXvVBtsF0ePYF3x16dnURtZ4l+HgVUZ6ma1hmv14Bt+0GgF2XroioQLcsrJsFZfRSHI3F/24hc/aaFNN4Skvbe2bC9YX2a0b0AHzn8my02OvzwlggUC6nN5NWWoY4p4Z4rNsWzYqxMSCMfuviuG6V5zNgrSEAi2JivSHFu50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ge6OkG3T; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784546938; c=relaxed/simple;
+	bh=lRwjyeC78WwIQHFKJlu5Fxy5cobWN2TgGxczpSf/QMU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RMoh7fzS0dP6FwvaMKm2S/N4ca324Tsl+NUU/1KaaPWhTagfCAR8VxAkSzV6mF1/ii7ldxQXAKBp0Zj2YEgtoldKITdDpmsH4CiYK+eJy4oG7U5moG9GKvoqg6LqsqeQ2bPdy4y1ILHPMqM/9A8aH2U+11tjkRneivN4bzRMv7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSpNhcXb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ge6OkG3T"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49553515a8bso18873595e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 04:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784546003; x=1785150803; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QN6Sa3FnT7k2MKcUIt4Usx9BRVJXnBuQBTO+EcPn68M=;
-        b=Ge6OkG3TP92/iXi07TiwUwlyIaiHvPexNobUh2rFQy7SYb/p+Ik6hIPUy2kwyxhnjN
-         TAH3nzkTV0oIXFfJV1LO03NsyP6pRrHkdyxvo6BhA4UuYpJR9IS0Ocek3dHF5fOQbe2M
-         E+kmsRbYFRMZAvUpUhr0AWmnwO3vUFg2EIl0Ldury4DhMMp5YbrMDdwu28PHJKibxUo5
-         +bGDnh55LrP3clGIESdgHhqCh7he/NfTDR3dwjcSegYyI5aSpSLLKEFbC+RoLe9YTy8L
-         ax6lzqQwMWEWACTsIRNqnkG1otsY6sE9K+jgtJgWAyXeNII/nFdq2haVSLqZIjDkdNh4
-         eaHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784546003; x=1785150803;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QN6Sa3FnT7k2MKcUIt4Usx9BRVJXnBuQBTO+EcPn68M=;
-        b=dGkw0DfYtm7JAFrvpHS+Enq+LLRSlHHduSYUkiSeGFf2WefOGaCBLGO3E90Edum57O
-         mpjTzhOBGIos0ZkGz+DUdxBKpTpaPTUI7wI8ZtDz2zzp/h7vUVDN8pqwtDF0LEmz1Ey3
-         XfpNGadgABSffeRg3v2jepQHDMrBjMQYG5DP2pifOddZF0ttamYapxVPClgxXOUjj5ae
-         l6OundBSRwrXl7Baz6X5rc8f2liaLUge7yukxPUOu/qrozR2CZkopFBA67/97AfmocWr
-         jOxO6x5KCKd7znz4lEEfqw+wDbdFzp56xetuMPTU4rK6SoCNgIOg04AIlSbil9v15nHe
-         81MA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqjh20DX3LLS4+uKsfHDb0zXNvmjPJAk2uGcw6FhEIofawT7hbRf/db+0xA+pGG5igm3d+6ZdDTUdd6Kw5KlBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPTGg2WXJjRLspftaaPT21D1xcNohBHcgUmh7Yal2l/IrEtq2u
-	kmapghyBhsqAkqdEOTUQN3o/ZpAS9q+bU3u1II9ZH+BWCngLOnvcfwsVxOWehpMB1tw=
-X-Gm-Gg: AfdE7cmY4RqfhlkcbiEEGUDAe6fBmwmGYCDNH6s8swQk+4CXDNAmIubTywuoyHoMgk8
-	K1Mog+R0L1ncamcnNxFFCdB0I1BQ55arhXp4RW9BnypZL7UbOG/06thTQgtuXgGzuyEe3pwfQeW
-	jZQ1GnHNT0CVVHTn5FBmt32CdtLMLYWLW6F2S141WFr7Vd+I/Eniu2S/RCGObgJa59lIjU41IEv
-	j5yGtyUeIrnEAUubfI7aLaHFnCXKKVkeZ3Xmqjhc0CISa01ug4iixDhZVqaoVd0Ng0uTIVeAxaQ
-	AXOYKPX0Xw8FYRPWtqHPhfW5NlFw2ktewT9gF0QX83p/VdW0HBLIchO5KFKgqYvPARp2o+R7++L
-	Rt9GQ+bTUIssyXfzVCPL8qeXOUhTu739z8GR1TVA5hUhrcQ9jGynzHL/C3OZvqypgGugA+ywEf4
-	+m
-X-Received: by 2002:a05:600c:3112:b0:495:472c:208d with SMTP id 5b1f17b1804b1-4954a41307cmr135152415e9.38.1784546003305;
-        Mon, 20 Jul 2026 04:13:23 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:c3e:cc5f:6c4b:db0a:5d2a])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c1eecc8e5bsm9088749e0c.4.2026.07.20.04.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 04:13:22 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Mon, 20 Jul 2026 08:13:09 -0300
-Subject: [PATCH v2 3/3] libbpf: Search /lib64 and /lib in
- resolve_full_path()
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSpNhcXb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690E01F000E9;
+	Mon, 20 Jul 2026 11:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784546937;
+	bh=FWJJ/4THIjTyif9tXUvhqrEnOYPI3yjA1+xq1KQYUG0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=LSpNhcXb+zuPy9rvHaEnnMSDSIKzdqb6lsFZep7Z62+WP9hUM4JLMJ72yRPnDYa7f
+	 LMCalCe6XMG0YnDYPL2Od+iBhCsNPNynjyqHoV2gZZa3VpFcPSy8mb/JspzHJEcduG
+	 fzcoCkm0+X2CAu2VOmdeAHQx+omXiZsB3HoAVmoEy/jRIf+L0eYiZCBUD1mCiDa8I0
+	 vzBm1pcu0fWLFec7odpCJZvJ1h8I2Q4clm0amP5VHSPz9D/+Nh/wBuLL44t2bpmxEL
+	 053sqDIIdcF6D2FrUPqvplaRSbGKftoj4MIegpVHJ+rezdVskoqj418Oss0P3BgR3n
+	 CMy0nJr1qjv1w==
+From: Simon Horman <horms@kernel.org>
+To: deepshah146@gmail.com
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	richardcochran@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	linux-kernel@vger.kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 2/2] selftests: ptp: add a regression test for the frequency adjustment overflow
+Date: Mon, 20 Jul 2026 12:28:42 +0100
+Message-ID: <20260720112842.106914-1-horms@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260712040922.6403-3-deepshah146@gmail.com>
+References: <20260712040922.6403-3-deepshah146@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260720-selftests-bpf_fixes-v2-3-b450eda93dfe@suse.com>
-References: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
-In-Reply-To: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1784545988; l=1421;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=XLOtvvCv66YQSGuoLu3eRvzMzjzimYKdjqYj+ocM9dc=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QAtQoVs8IKXZ/WoGcNMf6XZxbYamJT38nyl50KUKsxxjuXmVJKzag8UU4v/8YhQKRvRJE4sCI9/
- G/ieYJUQyrQo=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-attach_probe/uprobe-lib and uprobe_autoattach selftests fail with "failed
-to resolve full path for libc.so.6" on older non-usrmerged distros, where
-libc.so.6 lives under a top-level /lib64 or /lib rather than /usr/lib64 or
-/usr/lib. Add /lib64:/lib to the search paths, alongside the existing
-/usr/lib64:/usr/lib and Debian multiarch entries.
-
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Fixes: 1ce3a60e3c28 ("libbpf: auto-resolve programs/libraries when necessary for uprobes")
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+https://sashiko.dev/#/patchset/20260712040922.6403-3-deepshah146@gmail.com?part=2
 ---
- tools/lib/bpf/libbpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--- Patch [2]: [PATCH net 2/2] selftests: ptp: add a regression test for the frequency adjustment overflow ---
+commit be5629a2612f961645c213deea88db61fa06f083
+Author: Deep Shah <deepshah146@gmail.com>
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1368752aa13c..1ab939dfb7f0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -12973,13 +12973,14 @@ static const char *arch_specific_lib_paths(void)
- /* Get full path to program/shared library. */
- static int resolve_full_path(const char *file, char *result, size_t result_sz)
- {
--	const char *search_paths[3] = {};
-+	const char *search_paths[4] = {};
- 	int i, perm;
- 
- 	if (str_has_sfx(file, ".so") || strstr(file, ".so.")) {
- 		search_paths[0] = getenv("LD_LIBRARY_PATH");
- 		search_paths[1] = "/usr/lib64:/usr/lib";
- 		search_paths[2] = arch_specific_lib_paths();
-+		search_paths[3] = "/lib64:/lib";
- 		perm = R_OK;
- 	} else {
- 		search_paths[0] = getenv("PATH");
+selftests: ptp: add a regression test for the frequency adjustment overflow
+    
+This commit adds a regression test that crafts a struct timex.freq directly
+to verify if an overflowing frequency adjustment is correctly rejected by
+ptp_clock_adjtime() with -ERANGE.
 
--- 
-2.55.0
+> diff --git a/tools/testing/selftests/ptp/ptp_freq_overflow.c b/tools/testing/selftests/ptp/ptp_freq_overflow.c
+> new file mode 100644
+> index 0000000000000..342b22689f679
+> --- /dev/null
+> +++ b/tools/testing/selftests/ptp/ptp_freq_overflow.c
+[ ... ]
+> +
+> +#define FD_TO_CLOCKID(fd)	((~(clockid_t)(fd) << 3) | 3)
 
+[Severity: Medium]
+Does this macro left-shift a negative signed integer?
+
+Casting fd (a positive integer) to clockid_t (a signed 32-bit int), applying
+bitwise NOT, and left-shifting it by 3 yields a negative integer. Left-shifting
+a negative signed integer invokes undefined behavior in ISO C, which will
+trigger a runtime error if tests are run with Undefined Behavior Sanitizer
+(UBSan) enabled.
+
+Could the inverted value be cast to an unsigned integer prior to the shift,
+similar to how it is handled in testptp.c?
+
+[ ... ]
+> +	/*
+> +	 * (1 + 147573952589676412) * 125 == 2^64 + 9, which overflows s64 in
+> +	 * scaled_ppm_to_ppb() and wraps the result to a ppb of 0.  A kernel
+> +	 * that does not detect the overflow lets this absurd frequency past
+> +	 * the max_adj check; a fixed kernel rejects it with -ERANGE.
+> +	 */
+> +	tx.modes = ADJ_FREQUENCY;
+> +	tx.freq = 147573952589676412LL;
+
+[Severity: Low]
+Will this assignment cause a -Woverflow compiler warning on 32-bit
+architectures?
+
+On 32-bit platforms where tx.freq is a 32-bit long (without _TIME_BITS=64),
+assigning this 64-bit literal exceeds the maximum value of the signed integer
+type. Although a runtime check prevents execution, the compiler still parses
+the assignment and emits a -Woverflow warning during the build.
+
+> +
+> +	ret = clock_adjtime(clkid, &tx);
+
+[Severity: Medium]
+Does this test permanently disrupt the hardware clock frequency on vulnerable
+kernels without restoring it?
+
+If the kernel does not have the overflow fix, clock_adjtime() will bypass
+the max_adj check and push the corrupted frequency downstream to the driver
+via ops->adjfine(). Because the test exits immediately after verifying the
+error code, the original frequency is never restored, leaving time
+synchronization corrupted until a reboot or manual reset.
+
+Should the test read the initial dialed_frequency and restore it at the
+end of the test?
+
+> +	ksft_test_result(ret < 0 && errno == ERANGE,
+> +			 "overflowing frequency adjustment is rejected (ret=%d errno=%d)\n",
+> +			 ret, ret < 0 ? errno : 0);
+
+[Severity: Medium]
+Will this test incorrectly fail if the PTP clock is in free-running mode?
+
+If virtual clocks are active on the selected PTP device, ptp_clock_freerun()
+returns true and the kernel explicitly returns -EBUSY before evaluating the
+frequency overflow logic. Since the test expects -ERANGE, receiving -EBUSY
+will cause the KSFT assertion to fail.
+
+Should -EBUSY be accounted for as a valid condition to gracefully skip
+the test?
+
+> +
+> +	close(fd);
+> +	ksft_finished();
+> +}
