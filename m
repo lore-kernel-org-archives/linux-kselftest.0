@@ -1,168 +1,152 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A817B3F58CE
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 11:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBAC3F58DB;
+	Mon, 20 Jul 2026 11:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784545995; cv=none; b=dKqWInPYdYmBDgf2WDQiOkiLSZmd6S3LZb946nFeQooBZHIzzfV54kevMyv1AL9IB9RFXkzwkoz+v8y06Qgi7ACTVVEx8Fc+jFvkSAXfViS/3mtmmlHsJ6v8KQYYeLCHaGOK1wYwriqCgWpLe6VKLJV6LTjghgck+DY/6TGLQms=
+	t=1784545997; cv=none; b=Rhby7UA4ZgKXJTniuEvTzbtw13jRN4JQZ+7PIueBqaziGxcVWA/L9PVqxExdt9ckO2kHnEPS47p/j7xxpIlJGA3mlHROYV5UmOz3UTOuNL9V2MaqZg31QtGxxUoir4n12QxrIxdnAN/K761tNYqgcLcpoK4FWiHvQzljSGzqwhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784545995; c=relaxed/simple;
-	bh=yDTgRVrqf1Tr6C+iS9j67wLsZFvzJj7bbcbksxkkSqY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lQu+MP3xS+AXqQWpjUoMFckZtI3yvEv/0cxeg+5W1c9YKX9axZ0EBVuZSVDAzVoGQDParoj26EyZ4bwrLnPzKiCzMl5WkiXKigsUe/AUV+ZG87Epoh3ESdRyr2pzq8ogXR4QSjY3lgxIFdxFoIZIW2zqFGZkHB1zXY3KpOt32eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=d2avIMeP; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784545997; c=relaxed/simple;
+	bh=5JcZvwOypGp/0IlLNv3/mE/zR6RrZto97/hHdvzYgVg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cjALqBX89eRt+b5mEbRlMVAA9MfOFQSLrA91Pjml+DKGA9F80Tf8M8ZaMPrf8ClI14t4f4AvIN24UacEWXzhZlOm2trsQku8Y6cxExRxoKeuV+DR7Jp+lBxnnrk6LU5zCmySpKzzfwvX1dJsn7BzIXmDwtXBPVYfdLJu8mOLeLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mez9P78f; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="d2avIMeP"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4954df200ddso14652855e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 04:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784545992; x=1785150792; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=fPnERnEjMoji588/XXFZAA9xQr49KY92MrtyF+kfB94=;
-        b=d2avIMePt2QJYn1Ddt8ZZkvF4CBfmZcqfXLMAWB8BoGTPK5F7EXt8M32hK8Swbd+Mi
-         Ne+BvU3O5eTCSjYXGdCKpwI7fjQSYSd1lkYZB9Oh5sZTh58XDKWcWb8zpYhqTlN3KCno
-         9rIdXqxq6L9+wkwoyR7xzLPRWsPxm2zHPu47CzI/Cm78WtiUGRRxrhXbw3v6xwQgJA17
-         6Ie5TjLIDH7ERRGvFdqenF2sdWYytIL8IUKzL7SSEybd82HQ5OZR6XvSZ1EuKAmNxFPr
-         xWH6Pt0sD/3i/0KtGow39EH9Ck5r2kLaCVSDmi5oYJn9zlJY5NSblIjDbVmMwbhlR3wH
-         pfGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784545992; x=1785150792;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fPnERnEjMoji588/XXFZAA9xQr49KY92MrtyF+kfB94=;
-        b=JxRrNmajGJwtLXtIoIQMfeKVPqXlykiFn3Y4FEUbvnWBP/KDPaoQpwx0h8IWRtjcVN
-         c/noJVXnLlN70u7/XNCLOtnFtd7vRyv2h7dFUkqzyc2/rzb/UVd4wH30ju/3xvU0c5Pv
-         HO3VPa1iBl+8MLai38vpB2iVKl/iBUAnL6+JhpqLYx19xwwJi9TV1ETuMISqZAfqyH84
-         a+87XYP2hixTgmRybvwIf+ZSp0oZdio/35QMjTGr1rIvyh79B/FxZwFb8EKfsYT33/yZ
-         S9HKH54PMemFQf3hPe2GlczlQgyaEkhCPalagxBtNpmoVPINPJjh4kfexPFvb72j6y7F
-         TvrQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqJM5lBtqeGhws4miCerzqPxInmwEeQz1B71gzcuiuFSfZ0+dVrLPrp2Z37eTWJOALEWo8a23vOMrPaso78SoM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4sS0MM29JTBnqC9SDC7hy7oOJwj1L7PBRBnjJ6OIZeprriaOi
-	d5uia+g9m2pYkMfVx/Kkbjvu9uSFc7RHHjX3R5hhNURcQT/WElF4MtJJ69wwpo57dlo=
-X-Gm-Gg: AfdE7cm5xleBwOu3k2lg12EWmWTQNIdyV4+1JnwxKlKTrq5dLbJUT0XdKQExMssTIUq
-	6dwInKFzu8G6fp9Z6B374YY2hQjmhxTl0+G0SN9jo74tbhrdTYUJtObOazj5dKDUK2TYkOX/X9S
-	0pig4V93beLydf56/pdvB05s8o8DfCtlHjbG7GkYdC7vRsTrsuR/f1Yg9ZlXSEl9PGdtwDsEwQE
-	2DfcQB6IaF3ytHVC98IGjxTVomomHj93D4h87SGnsz/2AObPOO7TPEs/T7Vccv4NX1M+znIe7cm
-	FjNnAzweGQtSa682F/j4NlEInf1CEI4MFc+hB4do4uijR9oK3H4qlOScR37TWzhp7QatXy3/UxZ
-	ATtOzfKfa+p3LaFYem7a0p635OCYnd65c31acq0HboZWAE5EWdFWayOvJ39dvgKHxnA==
-X-Received: by 2002:a05:600c:820f:b0:495:52fc:e235 with SMTP id 5b1f17b1804b1-495532489eamr102047185e9.15.1784545991892;
-        Mon, 20 Jul 2026 04:13:11 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:c3e:cc5f:6c4b:db0a:5d2a])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c1eee43c99sm8798235e0c.7.2026.07.20.04.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 04:13:11 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Subject: [PATCH v2 0/3] selftests/bpf: A few edge case fixes
-Date: Mon, 20 Jul 2026 08:13:06 -0300
-Message-Id: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mez9P78f"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=ZOaLy9dP/eYoVT4B6PL+RqZgjBdq9CAfhmKyXFEg5zc=; b=mez9P78fZYrpwVUol/69yv484m
+	2pg5CxnmDtZF0EqND+ysU95jxar8yZ4ecSxF9DK5EnsaDb3R19iL1YNfJ6iR3nPTHxRJnGR9/Yyde
+	6DdvQMU1uuPKDF48nJWy0w8KOfO9115MTy41tgxL4KwiZ68JUcpy2OQGWRjWh31CxTbwwmaMls3s8
+	dHi8rYR3n5cAxyKIGkbxZgNnnalhSeVLkA13CRKl9/Wr6osbqU2D9QNkK8oaTq12VGUWQ3gXj2tIu
+	DzwZj45Z9clD+xCwf66Xrrzcezyr80YC9y5pt3cdE0Z9pyF+jglMAku7ZD+RA1UUDZu9HuNekLgaZ
+	NrWHEbZA==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1wllvj-0000000GWeE-0wWJ;
+	Mon, 20 Jul 2026 11:13:03 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.99.4 #2 (Red Hat Linux))
+	id 1wllvg-00000000W0f-3bUz;
+	Mon, 20 Jul 2026 12:13:00 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	x86@kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Tycho Andersen <tycho@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Ashish Kalra <ashish.kalra@amd.com>,
+	Connor Williamson <connordw@amazon.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Zhou Yuhang <zhouyuhang@kylinos.cn>,
+	Zi Li <zi.li@linux.dev>,
+	Dan Williams <djbw@kernel.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	connordw@amazon.co.uk,
+	graf@amazon.de,
+	fgriffo@amazon.co.uk,
+	David Woodhouse <dwmw@amazon.co.uk>
+Subject: [RFC PATCH v2 05/11] iommufd: Look up private-interconnect phys via exporter symbols
+Date: Mon, 20 Jul 2026 12:03:06 +0100
+Message-ID: <87d6d9ab8ba635668a72c8fa448927460855daee.1784545391.git.dwmw@amazon.co.uk>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <2b5e7a83d277134294199a455469bb436196b902.1784545391.git.dwmw@amazon.co.uk>
+References: <2b5e7a83d277134294199a455469bb436196b902.1784545391.git.dwmw@amazon.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAMICXmoC/32OTQ6CMBCFr2K6tloqgeDKexhi2jKFMdKSTiEaw
- t1tce/ye395KyMICMSuh5UFWJDQuwTyeGBmUK4Hjl1iJoWsRF0ITvCyESgS15N9WHwDcVFBoyT
- oi6lqlppTgN1IxXv7Y5r1E0zMUzmhFQHXQTkzZMkH7NGdR0URQvYHpOjDZ7+1FHnn/4Ol4IIrJ
- cvOdpUtbXOjmeBk/Mjabdu+XHmACucAAAA=
-X-Change-ID: 20260710-selftests-bpf_fixes-06e9a2eb3c67
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1784545988; l=2760;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=yDTgRVrqf1Tr6C+iS9j67wLsZFvzJj7bbcbksxkkSqY=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QAojgNCZZr+9KtZtO/ASmZtKEEjCx9Hz6MqIcqvxyGTgZZsls+G9tJCuU3ILNAEoODIsZzHXVXg
- lvFJH54sE8wI=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi,
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Please consider merging the following fixes, found by means of targeting
-BPF selftests through openQA [1].
+The dma-buf phys-map dispatch used by iommufd's IOMMU_IOAS_MAP_FILE path
+currently knows only about the VFIO PCI exporter (looked up via
+symbol_get(vfio_pci_dma_buf_iommufd_map)).  Widen the dispatch so
+additional exporters can advertise the same well-known symbol name
+convention and have their dma-bufs mapped without an explicit iommufd
+dependency in each exporter's module.
 
-[1]: e.g. https://openqa.opensuse.org/tests/6087703
+For now the dispatch tries the sample guest_memfd provider's exporter
+first, then falls back to VFIO PCI, both via symbol_get.  This mirrors
+the pattern the in-tree comment already flags:
 
-1/4 ("libbpf: Search /lib64 and /lib in resolve_full_path()")
-- Hit by testing an older SLES root filesystem.
+	"iommufd and vfio have a circular dependency.  Future work for a
+	 phys based private interconnect will remove this."
 
-2/4 ("selftests/bpf: Fix lsm_bdev dev_t encoding mismatch")
-- https://openqa.opensuse.org/tests/6087703/logfile?filename=test_progs.tap.txt#line-2706
+The eventual formal negotiated dma_buf_ops op that returns phys plus a
+memory-type descriptor will subsume both of these lookups.  The next
+patch plumbs the memory type through iommufd; a follow-up will convert
+the symbol lookups to the negotiated op.
 
-3/4 ("selftests/bpf: Install resolve_btfids.test.o.BTF where the test expects it")
-- https://openqa.opensuse.org/tests/6087703/logfile?filename=test_progs.tap.txt#line-3332
+Based on a proof-of-concept by Connor Williamson <connordw@amazon.com>
 
-4/4 ("selftests/bpf: Install bpftool where test_progs expects to find it")
-- https://openqa.opensuse.org/tests/6087703/logfile?filename=test_progs.tap.txt#line-806
-- https://openqa.opensuse.org/tests/6087703#step/test_bpftool_build_sh/1
-- https://openqa.opensuse.org/tests/6087703#step/test_doc_build_sh/1
-
-The build process is done at runtime with BPF_STRICT_BUILD=0:
-https://openqa.opensuse.org/tests/6087703/logfile?filename=serial_terminal.txt#line-1937
-
-Assisted-by: Claude Sonnet 5
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+Signed-off-by: David Woodhouse (Kiro) <dwmw@amazon.co.uk>
 ---
-Changes in v2:
-- Squashed first 2 commits
-- Removed redundant copy of bpftool due to TEST_GEN_PROGS_EXTENDED
-- Installed *.BTF instead of only resolve_btfids.test.o.BTF
-- Link to v1: https://patch.msgid.link/20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com
+ drivers/iommu/iommufd/pages.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Shuah Khan <shuah@kernel.org>
-To: "Alexis Lothoré (eBPF Foundation)" <alexis.lothore@bootlin.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
----
-Ricardo B. Marlière (3):
-      selftests/bpf: Fix make install target
-      selftests/bpf: Fix lsm_bdev dev_t encoding mismatch
-      libbpf: Search /lib64 and /lib in resolve_full_path()
-
- tools/lib/bpf/libbpf.c                            | 3 ++-
- tools/testing/selftests/bpf/Makefile              | 7 ++++---
- tools/testing/selftests/bpf/prog_tests/lsm_bdev.c | 3 ++-
- 3 files changed, 8 insertions(+), 5 deletions(-)
----
-base-commit: 1590cf0329716306e948a8fc29f1d3ee87d3989f
-change-id: 20260710-selftests-bpf_fixes-06e9a2eb3c67
-
-Best regards,
---  
-Ricardo B. Marlière <rbm@suse.com>
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index 03c8379bbc34..2d4ea41460fd 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -1470,6 +1470,26 @@ sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
+ 	if (rc != -EOPNOTSUPP)
+ 		return rc;
+ 
++	/*
++	 * Prototype: try the sample gmem provider's dma-buf exporter.  This
++	 * mirrors the vfio-pci private-interconnect hook, and (like it) is
++	 * meant to be replaced by a formal negotiated exporter op returning
++	 * phys for iommufd.
++	 */
++	{
++		extern int gmem_provider_dma_buf_iommufd_map(
++			struct dma_buf_attachment *, struct phys_vec *);
++		typeof(&gmem_provider_dma_buf_iommufd_map) gfn;
++
++		gfn = symbol_get(gmem_provider_dma_buf_iommufd_map);
++		if (gfn) {
++			rc = gfn(attachment, phys);
++			symbol_put(gmem_provider_dma_buf_iommufd_map);
++			if (rc != -EOPNOTSUPP)
++				return rc;
++		}
++	}
++
+ 	if (!IS_ENABLED(CONFIG_VFIO_PCI_DMABUF))
+ 		return -EOPNOTSUPP;
+ 
+-- 
+2.55.0
 
