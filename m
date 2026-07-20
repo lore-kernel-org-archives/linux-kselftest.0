@@ -1,63 +1,63 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3AE48035C
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BC4480DD8
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784576123; cv=none; b=YlsX0QwMord1wWIM+lY7KbxmgQq0LebHQi+Vuq6nA6nLL9M4xbKmuT7tP7QiZcQiQMPlabadGUjjNpytMp4lvwwl8koyNCjZu258XTvIpwypA5geBWAxN+bZsj+KHcLNNttbVjJ2qEymQWWNeVxQ0xQjTA3reeVLm15uoJ6iWoU=
+	t=1784576126; cv=none; b=MAzvpyVQEA2yEhAk6fNgiHw+EewUSdW6Yj9I496Ef0EcVrRMlEFoIBP3lxxJ5S7yUm5Gnxwy/OPWPiSYzvt+mp0z9F1T+aV+EvdpLOm2U+FKFDCSCoqY7khd9VRyuBnHdtXOTvuDuR8IQIFbAXi5tMN1IWspFlKkDBsCMbo8T3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784576123; c=relaxed/simple;
-	bh=wTYQxiwnnNn1fQlaf49KQEuG8RjOnNBI3U36p9hX2rg=;
+	s=arc-20240116; t=1784576126; c=relaxed/simple;
+	bh=rTGbsGvKQACnJtisxUC5ZLec44efZiXOSNd4OQNTaLE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qddpJe/ppTHyEBI+LqFiPLl3JatvTS8hLCTV8t6tY9N1L3WJFE/Mo+J5//INbdEnpTZhTkYcjIQbZC/UEti/JBOAfin6UR0hyQow1VpVI30BFCinbKfZILTWsfAIEtpQbzZuspgM4kkTE0bf6UrMPvchZE1M/CByA2L7lw6fJXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=vLMs9sBk; arc=none smtp.client-ip=209.85.222.177
+	 MIME-Version; b=iMVPR1AqagbPyFjrKVA9rKqIMfbeIYVNJp/QRLOje8TxasmE3T24kQ0r8VwU/gbOdn3vGe0E6Ah7cPBIJvItqAl+ja5v24Bx1KwUNovLp5bKucxfypJw1wvmRAFPT3w+MLzh9raCh4t92dO12BS4b9yBv4nA2RXLGG/NIbXzJSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=KNaHn0u5; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="vLMs9sBk"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-92e6c4a867cso465776085a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:35:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="KNaHn0u5"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8ee43b3e5abso101992906d6.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784576118; x=1785180918; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784576120; x=1785180920; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HgkUnnQve0Rn/Pvs0Z/0q3yFfFJ0c7Ckz6K5pdtr6eU=;
-        b=vLMs9sBkiBOQ7nWM2/JvINrnxvZuXiHaXQoiMxPSr9eLnxFZ+Jzubfq8+Y765V6jXH
-         Qn8sZ2I2RIRe0s69fsIAccrMwJQGCsw8WCY05tISAT99hWL7opQyW484byM6FeBWNaka
-         m8yYTUY6rBYH1WE5qrmHC8lRhBH3osqitPluMLWB2m5jHl/iIAHL4mhmjmPkqlZ6M4n3
-         6kxnHP7O1qeE8JGHbnySHwQdHdAcGUIsO8lJmjhLJSppROXwONURxUzeicmaHtBoahjW
-         kfzSqFvXdhsznzyA2nTDknEFEDy98eJefQV3l5V0+vjf0VGjoLjx3uEklcDvL4B5rIL0
-         HlWQ==
+        bh=t6FOiK4vob/RxKMxAQwNd3dgf0KAGjN7gNG/YIVjxjc=;
+        b=KNaHn0u5ops1R/lZeXIDAUO/x4K11AG1ePxAFRbUhd7TfbL1t9LgN4aTaaNKEmTtjs
+         nzppEVg1Q9PX8Y/szIAZHRhmAsCyhFpgETvciNAsYAr7YVRUqsFYcRkrJ1cA0BJYzfV0
+         5h3TZYJehbb6t4kBKpCI8ZB2jJZyseGHBoqYgwIuBjPkOZcyiIRzf/kcFdewtJpLa1/O
+         2fFQ4cCSeO51sw1iCLcCFiOoCVvSqtOi4L7NkYOIn9TUVDV6s0gfypiwDr5EKWb01FiR
+         oFb3+M5V2dmD9yoV/rPUoLqy4kniWwtmd/ATQkFdRXosc90P3z/b9WVijvCzfsZAgfXg
+         89tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784576118; x=1785180918;
+        d=1e100.net; s=20251104; t=1784576120; x=1785180920;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HgkUnnQve0Rn/Pvs0Z/0q3yFfFJ0c7Ckz6K5pdtr6eU=;
-        b=T5sBXjpjtWNudJirBQPGv2fV95yMxryunFu4bKkDEF2XPIpRds5TWkCv0cPUjPdRYG
-         w71/63WwM09ZPQg5P9x1AuljkneMI2W6Z1ZpdkpHpV+JKNThVlznkldFvkOHPReKaDAH
-         ljOUXdGEgVaeC530+YDT4/ei/NGI+cCcMqb9a8zHC6q/jegFCI1iHH6kBGZf0RjVEM5+
-         HSlBX6ga5hhKA5BmUdn+iGOYtwruUFxpMmxRNKqQXeUqN54+h3l/FyebL50qceH+bwMo
-         RcjauCFLh0TQStv+Qik1JW1lrfZ8Z8mRd7At6le9irm4CSmexZkiJZvCR+4NhsN8PeDF
-         mmoQ==
-X-Forwarded-Encrypted: i=1; AHgh+RozBRPMmtwICbwztQgT7pMavKMkJ7J0RWALX96tV4D77yDkemXS5jc5LGtGyVH53GAQnvzgtD5V7cDRzKySm7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Ou4Fu9qc4/QMQJmvUyUyHgXtc5psIrU/54qRvlwtodWSs4pX
-	Yh0GJQ321kk4jhMs7bteLXIFBOAmK3LMNdRCeeFl1327RMx3bTBL4O16o/ZJ0iKhjkc=
-X-Gm-Gg: AfdE7clAVTPVZGNZ8WeHz7RCjquqyV2tHTVCHsjQyyzOXWZiJ8Rr2IsF/Q0E3g+6iHO
-	5gISCNw+/YM0RKWESUCoJAdKhviKn6Q7ykgSCEteUSMW22ruYgLTrnubjQQOrgPQuQi4LJGSz/p
-	11zSIiptzQ/5TJIM6y22yNP9MvM+ck4Rlrm72gmdQKUrg3cMhzK3tHTtTQrZwBMcXAcECq0HY7a
-	8u9IXNbeK6UGmkDvwyMy0YpR0/Etuq9ujEuBpA/WImGs8ASkT3dJ26pHG8ONwOv/TYQPzvFikEL
-	Oc9e/dIqAOl3A95l2xMYWMQkheyyYmgKh80ZJZETVOnOA98XayLMybtaZJCW1ynkN/SLH2PDRco
-	O1COlsBzC/El206K65IzJ017Ir7viOHMz2N3gt/yC1+Sn5mMTvuZOPpSzWSHNyTaB9DRKBdNL7X
-	cuaEtgUFG2euiSTXcUMzQTJ1PEAFiz0iY+BknlBuAmNIYXgiUBabRXp0g4wCxQLbg=
-X-Received: by 2002:a05:620a:4007:b0:92e:c116:bef9 with SMTP id af79cd13be357-930b4315599mr1572701485a.86.1784576117793;
-        Mon, 20 Jul 2026 12:35:17 -0700 (PDT)
+        bh=t6FOiK4vob/RxKMxAQwNd3dgf0KAGjN7gNG/YIVjxjc=;
+        b=jRbw0OYovejRdWSARRgLbWnucDB7qsFRuRKB60wyr4mOdozJCHDsTDCUrsFj68U3hb
+         66YJYYZ4CzLMZb3Zf1Ii40izzGcAeMQhwYcLb/bur7/mSjJh5Hem4aAHYIz1lWePkc8G
+         tZm1fP8NQQ/HS6HsFtK0upR36E8MFHtcmciDmbEWb8Q28O+cVxziKiEinM7ckCsGnz6t
+         tMvb/PYFPOmD5RBuCzjY7HachJA03IB0EjeFNmXQq4vWwJP6+cJLOok0Ub2VBfUoW3ZE
+         LvVsDSKhBXVyU2u3iVVcm7ksrrA/hAAdnatMVZ/6Q6BeKgFhTWPnofzNsJEhgxQiV028
+         AYjw==
+X-Forwarded-Encrypted: i=1; AHgh+RoYvfUlC//Amb+2Cep1Z/6ZLWH4obT5FnNDLa9Qb2w2dcXD3OXISkA1y6jQVwOFCTIqStLBdCrhwYiw885qKzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwP7JUG0U3aZ68Qju/DKl1ImzykezySzdK+hiRqR4PqNDavkBtm
+	gfQcDHitVwc00jrWMA18epjp+Yi/4QMxL/P6hKOtpdu4Hzx44IoavKPFYA0ds1seos0=
+X-Gm-Gg: AfdE7ckINBo8j7mwkmECi7ITa3BG3ya5F363mSlkSrK+m4HO7jNSxyZqKsp4YuhbqQK
+	G4VCA58QxzLM6yfd0dd1md55sGhPxmqvKx0nQIyFNf2h+jHsivgk1Zwu/7QLQ0huElF9TnsUqIh
+	1SOeNkoOe+MHDBqmCY8FKL0Ir/VrBKcjdvFU3P3OnzFwdQDf6vJ42NnIGsAcaCi8ZqbhcOrL1wa
+	fFojkUUgpFMpq4Au9KSRkr7XGvjsdBVcNc9WgRySb/kSbS1s/tQ7gxFO9xN8riMQIkjYHNNgUah
+	YD/O9hSut61uJD0gVGRNvA3hlfMW/EB7mPJ+QCBt9MaabeD1sJHMm8wS7kqwDQXVCZ3ZsjJBjVf
+	I0Oz1ySp6tirii0M7paYU3hbYKxx/NMGhtgMxIb0xhi2TWz7jHxPJC5iXPsvHDXvKrOSaPliPXU
+	FDjufLGoWuXAHitVnXG2d2X8kMas63exhEwrPc2yxwsWXqMEclwNS/Uj5CLnop0xw=
+X-Received: by 2002:a05:620a:290a:b0:92e:7745:9a3a with SMTP id af79cd13be357-930b3e4e1f3mr1582641285a.18.1784576120209;
+        Mon, 20 Jul 2026 12:35:20 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.35.16
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 12:35:17 -0700 (PDT)
+        Mon, 20 Jul 2026 12:35:19 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org
 Cc: Zhigang.Luo@amd.com,
@@ -137,9 +137,9 @@ Cc: Zhigang.Luo@amd.com,
 	damon@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v5 15/36] mm/ksm: skip KSM for managed-memory folios
-Date: Mon, 20 Jul 2026 15:34:09 -0400
-Message-ID: <20260720193431.3841992-16-gourry@gourry.net>
+Subject: [PATCH v5 16/36] mm/khugepaged: skip private node folios when trying to collapse.
+Date: Mon, 20 Jul 2026 15:34:10 -0400
+Message-ID: <20260720193431.3841992-17-gourry@gourry.net>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260720193431.3841992-1-gourry@gourry.net>
 References: <20260720193431.3841992-1-gourry@gourry.net>
@@ -151,50 +151,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since private memory is intended for explicit placement, allowing
-KSM to operate on it by default would completely defeat the purpose.
+A collapse operation causes new THP allocation to occur, and may
+migrate memory from one node to another.
 
-Skip KSM merge and scan operations for private node folios using
-the same filter location as zone_device folios.
+Handle this the same as zone_device for now (disallow collapse).
 
 Signed-off-by: Gregory Price <gourry@gourry.net>
 ---
- mm/ksm.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ mm/khugepaged.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 47006f494fcb1..dcc5c46a29eac 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -827,7 +827,7 @@ static struct page *get_mergeable_page(struct ksm_rmap_item *rmap_item)
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 89ce6bcbc376b..fb4378cc17b10 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -700,7 +700,7 @@ static enum scan_result __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 			goto out;
+ 		}
+ 		page = vm_normal_page(vma, addr, pteval);
+-		if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
++		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
+ 			result = SCAN_PAGE_NULL;
+ 			goto out;
+ 		}
+@@ -1687,7 +1687,7 @@ static enum scan_result collapse_scan_pmd(struct mm_struct *mm,
+ 		}
  
- 	folio = folio_walk_start(&fw, vma, addr, 0);
- 	if (folio) {
--		if (!folio_is_zone_device(folio) &&
-+		if (!folio_is_private_managed(folio) &&
- 		    folio_test_anon(folio)) {
- 			folio_get(folio);
- 			page = fw.page;
-@@ -2558,7 +2558,8 @@ static int ksm_next_page_pmd_entry(pmd_t *pmdp, unsigned long addr, unsigned lon
- 				goto not_found_unlock;
- 			folio = page_folio(page);
+ 		page = vm_normal_page(vma, addr, pteval);
+-		if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
++		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
+ 			result = SCAN_PAGE_NULL;
+ 			goto out_unmap;
+ 		}
+@@ -1944,7 +1944,7 @@ static enum scan_result try_collapse_pte_mapped_thp(struct mm_struct *mm, unsign
+ 		}
  
--			if (folio_is_zone_device(folio) || !folio_test_anon(folio))
-+			if (unlikely(folio_is_private_managed(folio)) ||
-+			    !folio_test_anon(folio))
- 				goto not_found_unlock;
- 
- 			page += ((addr & (PMD_SIZE - 1)) >> PAGE_SHIFT);
-@@ -2582,7 +2583,8 @@ static int ksm_next_page_pmd_entry(pmd_t *pmdp, unsigned long addr, unsigned lon
- 			continue;
- 		folio = page_folio(page);
- 
--		if (folio_is_zone_device(folio) || !folio_test_anon(folio))
-+		if (unlikely(folio_is_private_managed(folio)) ||
-+		    !folio_test_anon(folio))
- 			continue;
- 		goto found_unlock;
- 	}
+ 		page = vm_normal_page(vma, addr, ptent);
+-		if (WARN_ON_ONCE(page && is_zone_device_page(page)))
++		if (WARN_ON_ONCE(page && page_is_private_managed(page)))
+ 			page = NULL;
+ 		/*
+ 		 * Note that uprobe, debugger, or MAP_PRIVATE may change the
 -- 
 2.53.0-Meta
 
