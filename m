@@ -1,76 +1,81 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AE741613C
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1DF416D00
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784550442; cv=none; b=okUBvtE5g/OjlTu9NjEMIQn0O6g6vNlh9zehrw+tc+WKA1TF/TsHVUDKEYUrAnjRiEn86cBzbSaoaY1un7rHGjSmS1BydYAGlrXwpejRvg5llaA9sHoPHWrr/oaSTbma3fmtXdxePwEHk3TRYuxjCgsBZTDqXic9ABAMveFQJJE=
+	t=1784550446; cv=none; b=FcuerGkNsyDZBtXsHOtGGS0D4nRye9yvHdtqI9ZPfnHqTobE5kqR060i0XmXTix7cS1vEQPBd1CUfbxkR+9ABWIB9fZk5KGQLLU78znQNVIDJYo3w4aGZITWpv4fatAyPYYNr/Baa7uaXRJRb0mhqiV3FS8bI2fBR7F4Ndqzerg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784550442; c=relaxed/simple;
-	bh=v3tJvKkJthwak2BkhKDVB81AH3BOOglPt9PAUrPRntc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qa4nLUnZwvwu4wgw7Yqi+UOcEQcIUr+dwz72lUs7uMBxDLQAimtorr+DnqRFVk2Iar41wO+Ui7povw7XKjFle0VYZFOQOL6MOTZ8bhFj0LRFHAowqK1QHK81ZczJtQG9C5FIoBk9+t0mnKqDPrXEO+N/ehycU7KWDAuSgjqvI6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=eDCNbu58; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1784550446; c=relaxed/simple;
+	bh=cc1siyX8k7fZfWcVovsf/Z5WhR/7MEZNbf8tANrRVdY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mnXMym30F+3Efrfb2hMDAHUMBReiFJ4sT+4TQEhUhmilFZFW1X9lJMtHshSMIdKA+glrc6sFZqlkRtBNJCxc4hl8HkhMpLiLwYDHK17MDE6D1MTrMhTSf3BOJUCRK2tEefJUJ/nPDPsxCKj23MhZiO319m6NGSd00sCLylv6/jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=eOIHMmWA; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="eDCNbu58"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so5227247b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:27:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="eOIHMmWA"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84830c774a0so4887954b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:27:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784550441; x=1785155241; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3J4hG7VnONQhJVuSgvWFS6/62B2ydGt3SfUgT2oulUw=;
-        b=eDCNbu5859MKskl5UV157UxdNZ7VsB91rxnc+vnha7oS4/j3gCnKi8LiNia7exN0VY
-         2YnuIs+WfOX0p4rDpLX0v1/oeyT5ZxMAhnPEBz/iaXnhuA8qb5X4wjTDg12rcI/W/a07
-         ELxitmzEZmwaYxV0QDgpNvknbiYGoZiSBI4Rig43fY/zbuOJblV6cHBMvscHzUbpsnag
-         TCyiKfhFcsJ2Jl4kzK8b8NGTwiWTSpmMg6vAdYbgF1yq2IJt91W2Hy1NUY+VPWg/AYuf
-         HWq8nOTqsnxJzR50AUq0RgBQY7ExkG13Y5HgDlLP/RAM0C+ccNy7qqpElkyQUP8WIw1N
-         nvpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784550441; x=1785155241;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784550443; x=1785155243; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3J4hG7VnONQhJVuSgvWFS6/62B2ydGt3SfUgT2oulUw=;
-        b=Ha7hWZ+KcUbuDYIJ4TcVJJt4zgVQBNAZNn3ZYdBZITbk8P7yzuDdTItRAkcgypX61l
-         7wGJiv1HP8DS3rz+bi/IQsWuReV9NBqvRf2WM5wNXjHgu8R/EYCQ4c2hXDTY3eW5W9Wj
-         EzohiyLwNbsg5Y04mTFvKaDxpbPq4Pv4YzJcsRcAV4cgkmTIg503u42AfpadZuBacKVr
-         wqtSdJfyJXIx0e5O1f3EVSBWITYjSZL4Isoo+VZ1XpRlxIKPZpXp/IKCYtYgNkgyGKBH
-         dOE2hcj5EQkQxgOI/Oa3LGWqDI/XJy5XqUMRqIuF4c/xusV1Pp46TM6sdrWOnY0XGWD2
-         p2rg==
-X-Forwarded-Encrypted: i=1; AHgh+RrO2bBoQwwSkfRxjHlcSKb0qsOURQmBUb+AtKXR4xPWG88ZrwYCqbdR96BvRgvXNbJfvpkhz5YixDmVjtKSLfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywb7UM8IsGydpTkxlSlgZLydOKu7VLg1oh7FeL9U5Qd3tJEX+AT
-	pbi00YQG5K6qj0Fth2bA8okowuM8ISLMzbMCixspzle9nnTytK1PvBBKPdaqEIo+mvw=
-X-Gm-Gg: AfdE7cl2+vYwObrQ8PdNqtm3M5hMZ9dG3p6iZNun0Xq9nQjvjpuiyTESsnB/uLnpNyZ
-	erl3k4OMP7/jfz8Ex0duAmYydu+M/xcFcHM6fyc1MfPellxb691MXHpd0eYNdMzADQ8Y8UR0E0a
-	5v9WpDEaQi4jKaptoBsG2fPUdhSr73rt1vDNanNWED7BogaSPPVRKytNc3rLRwvTbWKEcHnJ1LA
-	5XzpU3/F4fH087OYZT/8cwMSttb2+MLFIsajVOSz/KppS606Q5G6tFFd6V39HNzFjgW7LSdLgA5
-	eGt5SiNYipE5f6FCmw7evejItzv9Pki0LHAEv0ei7ReU+6AX4D5LmAZXyhGvJHhvcOAShS7uMwL
-	HSaB8MMnWkh+G8bmIOkQ0GrjDOPaWmEREyo2l3PIxmmuLLzS+PWW6uGqdx+c=
-X-Received: by 2002:a05:6a00:2383:b0:842:6004:3fd5 with SMTP id d2e1a72fcca58-84c292a8e7emr13349601b3a.25.1784550440736;
-        Mon, 20 Jul 2026 05:27:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:44::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2afae3afsm5562632b3a.60.2026.07.20.05.27.19
+        bh=ra9Nxq6jMS2h3bjjMXgmORxdOVCRbNrcCvu/et+3t0E=;
+        b=eOIHMmWA8vJXy2vrGLScKuby8uOP9linyahKoSA9WBwQg/rrAgGxb+svj+Rjtlk5+J
+         qv7q2Zb7mZIEMCMvTeF3BAamooIiaCI517eRkQfO21Gty8keKS7cIHBVDyDz32tMgwMk
+         8iWdob3aAaO66fekMAuMWmX5RTxNO9gpWfr9jW/vcNYbcUtrsTWWMrkBuIFQqdUAsTNX
+         zPktUNSPQ1GFdkrEfBiKCM1fTCOchLdxbgCE9iLWdeYGxIH3wCFRouRR/gobBOv4fj6n
+         0Zm1Jvz1jgbzq8TpCH0vd8WhBPunVD0dwzy14a5GNW7LdxV6TVPdRt1VgMNiS10sVIsH
+         S7rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784550443; x=1785155243;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ra9Nxq6jMS2h3bjjMXgmORxdOVCRbNrcCvu/et+3t0E=;
+        b=RRbs2ar9K/lsxI1zYL7P1J9cHdAv8zryg5iI37HsFAQsthcFMzNoTKw0wgohJcVo2o
+         TruI6GvwilXD8Xw1+zx7tkadfzBvkAXYZUqCGCUTOI6cFGIah7pZVZSYHF4Ymewf5Sbe
+         GVER/6EYCjpZFvdxrxms3IAVh5uUtsdmrhKV9Qxy3i6aw0sTMIlkZgeNZx9FHXSDlT+U
+         ATuUysKDzdvriHb2M7Mun1JdxZ2L4r36Z8Mo3mjw0Qn7InvZ80KfupO4XhXBu3o5qEKD
+         ZoEC/9mpQbmsOSGSet1zM4+sZ1S1egkTFIcQoRx/WhXo4euWKcJNR66MJjcm5zjqE0lG
+         Rs7w==
+X-Forwarded-Encrypted: i=1; AHgh+RoJMaULRL0JJhl087NPAGUkrSH9yjbJNjNuPEpEWnd/pI4Dm7aZ93rP2d3cVESMizS5+fIA9GdECdLFeBM4Mqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+FPQBAfp2ZcxjTuMyciFFqPQfbtfQEDK5HBwVmCW3K4KlKjTT
+	z6FSu8MUNH4sR2sEq/BNeLK68R5IWj/Ul9K9S89KnbHPSJglidf62gJh7t7PtBuk/P0=
+X-Gm-Gg: AfdE7ckw6lxLdMdbPDWHsl565JiwY8u/E4175Gtmi/9ov9gP2PxCJmh66nuhXrLW+/G
+	VoU53+UhzsWOcwkfpBsUdg88VwkltQfp5Heqc/ta7PU0q62ikj7eEDjsn53RTk7Q0az0Gk5AGUv
+	Mz7eNsp4tb4UE9h8zLDsw6t01ve0yalUyQ0h/wu1SRqBsFUcn3CSyMp7ZTmHZKl8mPcg1Mas/Xd
+	zRpS/FTEKMRl9b5yaC6aG7DSgyPEoAkBXoaOTVSlWz3YqZnmKfjry1cItzeu5CwjS2F+4WnXUPx
+	StWdcwtdZMvD3V9RSaulQoBCdee/ZZ/gQfo3VazyKSbeP8w1Sp+Vu3eKEfmZCMppn05t9LDq+pi
+	51hfbD9g4AKSTR3q2OYhvxHeTk6sJwFBXfMm4BGPfRSHvDOSmH6HnJTWU7kY=
+X-Received: by 2002:a05:6a00:1748:b0:848:6a95:a9d3 with SMTP id d2e1a72fcca58-84c2945a8aemr12310834b3a.40.1784550442721;
+        Mon, 20 Jul 2026 05:27:22 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:51::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cb5159b11a5sm4516766a12.0.2026.07.20.05.27.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 05:27:20 -0700 (PDT)
+        Mon, 20 Jul 2026 05:27:22 -0700 (PDT)
 From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org
+To: netdev@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
 Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
 	willemb@google.com,
 	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	Joe Damato <joe@dama.to>
-Subject: [PATCH net-next v3 0/3] Extend packet socket selftests
-Date: Mon, 20 Jul 2026 05:27:09 -0700
-Message-ID: <20260720122714.759175-1-joe@dama.to>
+	Joe Damato <joe@dama.to>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 1/3] selftests/net: Test PACKET_STATISTICS
+Date: Mon, 20 Jul 2026 05:27:10 -0700
+Message-ID: <20260720122714.759175-2-joe@dama.to>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260720122714.759175-1-joe@dama.to>
+References: <20260720122714.759175-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,41 +84,66 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Greetings:
+Update the existing packet socket test to include a test for the sockopt
+PACKET_STATISTICS.
 
-I was looking around the packet socket code and noticed there were a few
-features that could be tested by extending the existing packet socket
-tests.
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ tools/testing/selftests/net/psock_snd.c | 32 ++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-I extended the test to test stats, drops, and auxdata and re-ran the tests.
-The existing and new tests passed.
-
-Thanks,
-Joe
-
-v3:
-  - Patch 3 updated to prevent combining test_auxdata and test_drops.
-  - Patch 3 updated to include an aligned(8) for the cmsg to ensure (1) buffer
-    alignment for cmsg struct fields and (2) aligned payload access.
-
-v2: https://lore.kernel.org/netdev/20260403233240.178948-1-joe@dama.to/
-  - patch 2: remove argument from do_tx and use global instead
-  - patch 3: add argument to do_rx to specify if the socket is a packet
-    socket. factored out the aux data check into its own function for
-    readability.
-
-
-Joe Damato (3):
-  selftests/net: Test PACKET_STATISTICS
-  selftests/net: Test PACKET_STATISTICS drops
-  selftests/net: Test PACKET_AUXDATA
-
- tools/testing/selftests/net/psock_snd.c  | 140 +++++++++++++++++++++--
- tools/testing/selftests/net/psock_snd.sh |  10 ++
- 2 files changed, 142 insertions(+), 8 deletions(-)
-
-
-base-commit: 298bb2b8903323f6ef2eab4819a2e477765f0ff1
+diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
+index edf1e6f80d41..5be481a3d2bd 100644
+--- a/tools/testing/selftests/net/psock_snd.c
++++ b/tools/testing/selftests/net/psock_snd.c
+@@ -359,6 +359,34 @@ static void parse_opts(int argc, char **argv)
+ 		error(1, 0, "option gso (-g) requires csum offload (-c)");
+ }
+ 
++static void check_packet_stats(int fd)
++{
++	struct tpacket_stats st = {};
++	socklen_t len = sizeof(st);
++
++	if (getsockopt(fd, SOL_PACKET, PACKET_STATISTICS, &st, &len))
++		error(1, errno, "getsockopt packet statistics");
++
++	if (st.tp_packets != 1)
++		error(1, 0, "stats: tp_packets %u != 1", st.tp_packets);
++
++	if (st.tp_drops != 0)
++		error(1, 0, "stats: tp_drops %u != 0", st.tp_drops);
++
++	/* verify clear on read */
++	memset(&st, 0xff, sizeof(st));
++	len = sizeof(st);
++
++	if (getsockopt(fd, SOL_PACKET, PACKET_STATISTICS, &st, &len))
++		error(1, errno, "getsockopt packet statistics");
++
++	if (st.tp_packets != 0)
++		error(1, 0, "stats: tp_packets %u != 0 after clear", st.tp_packets);
++
++	if (st.tp_drops != 0)
++		error(1, 0, "stats: tp_drops %u != 0 after clear", st.tp_drops);
++}
++
+ static void run_test(void)
+ {
+ 	int fdr, fds, total_len;
+@@ -369,9 +397,11 @@ static void run_test(void)
+ 	total_len = do_tx();
+ 
+ 	/* BPF filter accepts only this length, vlan changes MAC */
+-	if (cfg_payload_len == DATA_LEN && !cfg_use_vlan)
++	if (cfg_payload_len == DATA_LEN && !cfg_use_vlan) {
+ 		do_rx(fds, total_len - sizeof(struct virtio_net_hdr),
+ 		      tbuf + sizeof(struct virtio_net_hdr));
++		check_packet_stats(fds);
++	}
+ 
+ 	do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len);
+ 
 -- 
 2.53.0-Meta
 
