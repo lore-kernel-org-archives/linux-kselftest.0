@@ -1,149 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C113B71B9;
-	Mon, 20 Jul 2026 07:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2DB3B71B8
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 07:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784531675; cv=none; b=JUCClBqaSai7+qKVeb2KsvyQddJGrQFZBDqrfdYZe7L204xWdDfV1SOAFGTvbUryPLgSYD+qYwRObOIneY+/CSTADmEqVx3/JHZ7m6M6s0CNU3SF5q0T6+ypduUNj13uhE3iwVcOjr6CRtt2T3y/Z5qwzGXWN/lp3uYbP/iRZ4k=
+	t=1784531715; cv=none; b=T8IRLB/ekeAeAngE8OxnQxQafAFslSYXX+zs69OnRELKrBNTlIGtvz4Ce25USktTNkU8Cb/FAqvrOgz2rXjjqaVLewElTQYtNrMaeuEJKhiIku67CwTWAvEZDXMPzb3v+xLpqotDEbz8xJYcceL8lvXpkDotrQ7GEIajsa2diog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784531675; c=relaxed/simple;
-	bh=HR5MaFBcIWRPfZXz+UMzDN4+c9DOvTEFHnoiRpsQf+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dqpO2hGPLrQh3Otegl265WoHWyKf6xFLJOK0qkZNqTofDpEH3YGpdyu/DnnYv2UtD844Pd2SlXT6z0NkQFNUrIpq+7BxUvZQgSPc6EPZv3lk4NVkihJXpHe/B35mnRreADdgjIsx809bEvi/w9Cfj/mze/s8nxCIoPpXevuTNqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qc2SHIfq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784531715; c=relaxed/simple;
+	bh=Qxe1wlOLxloaHegMhvAeO0dFL1jjuOsAo2Z3X8y6mtA=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=czhCh8R/jmQJF9F86qLGWCRHDFdUpXYNg0c4/efRuxJPIp4p7R5M4Wi2cnDXEAtNVPqHUsMFIyFPA980XIjPs4PZHGoO/uvg5xXpz+QCH7szeh6GQ9BsE4RPQmfHQ4ralV1TjGkQLA+LyPcINjSTe43RUTfj0bFAbdAzLtcn7GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bCXaXPTe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qc2SHIfq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0064A1F000E9;
-	Mon, 20 Jul 2026 07:14:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bCXaXPTe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA22A1F01563
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 07:15:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784531671;
-	bh=8c1NwXrdIUkx3pvI3J59TnigPzn4Ew9yA8/E48gML0w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Qc2SHIfqPkpRmaLfQdPjU+4iOnjqK8iSvAn5ApPARqUjV/vl/u+KoBHUB85YlZ/FD
-	 lg4Y1hWW1b7PWD0l3LwYX25F7pbuztAnDVpabiqbnovQK3zXE7TWbOZq5IXimi411r
-	 5+xtIgrHltyPrAHhl0eMpHV2DcWX86lNtU0v4CUpZHM1lGJVGTqsst3Z9pKO0S+DRM
-	 wAPZB1+Atkh1xsyHhVr+0sCLrtDId47LU6FkiKcsWFrXgrUebnYPtefQZYGlYksngy
-	 pglpmj3RC+lXTq3HysYz+HdkRpMXS9sSKVaGsNum0/pC3WMyIBMR4wBBzWmC0xpfR1
-	 iX9TdZfJMaM/g==
-Date: Mon, 20 Jul 2026 08:14:08 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: xu.xin16@zte.com.cn
-Cc: akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, 
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	jannh@google.com, pfalcato@suse.de, willy@infradead.org, jack@suse.cz, 
-	linmiaohe@huawei.com, nao.horiguchi@gmail.com, riel@surriel.com, harry@kernel.org, 
-	lance.yang@linux.dev, kees@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com, 
-	npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, 
-	usama.arif@linux.dev, matthew.brost@intel.com, joshua.hahnjy@gmail.com, 
-	rakie.kim@sk.com, byungchul@sk.com, gourry@gourry.net, 
-	ying.huang@linux.alibaba.com, apopple@nvidia.com, peterx@redhat.com, chengming.zhou@linux.dev, 
-	arnd@arndb.de, gregkh@linuxfoundation.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 01/15] mm/vma: introduce VMA virtual page offset field
- and add helpers
-Message-ID: <al3KlYMbmeR6iDX8@lucifer>
-References: <20260717-b4-scalable-cow-virt-pgoff-v1-1-cf24910ef094@kernel.org>
- <202607191155425057lNrNOYTi44E_jmidmtkn@zte.com.cn>
+	s=k20260515; t=1784531713;
+	bh=o5mECv2KTe8SiKRGXZ+hZW/XufJFB3KGTqUxWEwdBTs=;
+	h=From:In-Reply-To:References:Date:Subject:To:Cc;
+	b=bCXaXPTepqkG8rEMFTGJwSWdm9al/MppPpUZDPfJucn3GGjvgHfGWslxcjpOCGsyg
+	 ws7mhMLy6cbzlMq+7LNX6+TIoWEAq+uFMuVhh0rltY9FCgTEQRDsB7cXbqtnFbPksB
+	 6AjYfDcqapi+S4aNBMtgfmWOjL0aXMOHvPA1bOQuTKs/JK87Sf4S4c1SaBss9/yO+T
+	 rtK05IFQgHSTEfozS3x152yr/kSYh499cJe9hoNZcnKfzCt4u2o3X6hlJOko0N7mUT
+	 xsRrGz4amQLOH8U92WhZ7uZ01onvK0J8ShnnZ7MAiNfj5p/VZ4lvqFMaO52ZoQVpY1
+	 F8sX5UzvrwggA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5b0117d49dcso9090518e87.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 00:15:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrVdf/Sf2B620Be4mlhw4R7Za8TWONO3MBCTGmmyl3G1H37S56cHuTGB2sKmkatyovwL2aMvNWZkAu9BI2CTtc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyek8FIpANeGWC1/CmluMPF6HVDbABKcci6zwmwjOQRoi9dKjQn
+	qVL1ziqqV8yvDf61OCdDlUkqeh0e3qcEpDvtT2z+6NqWI+TAbhySiqvgkCEZxdvxCid8TpQvODu
+	SE8QpRznyi+brTIqyhrJSm0GQNVliKx9XslHHareGow==
+X-Received: by 2002:a05:6512:1503:20b0:5b0:13b4:6079 with SMTP id
+ 2adb3069b0e04-5b28f9ae65dmr1582849e87.53.1784531711252; Mon, 20 Jul 2026
+ 00:15:11 -0700 (PDT)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 20 Jul 2026 00:15:09 -0700
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 20 Jul 2026 00:15:09 -0700
+From: Bartosz Golaszewski <brgl@kernel.org>
+In-Reply-To: <DK0W7O5C7LYK.3BJOBTN337Q52@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202607191155425057lNrNOYTi44E_jmidmtkn@zte.com.cn>
+References: <20260713-swnode-fw-devlink-v4-0-d4f2dee27ad9@oss.qualcomm.com>
+ <20260715212830.3077100-1-dakr@kernel.org> <DJZGR6NV2WK5.2ZRW7VZIRO3LD@kernel.org>
+ <DK0W7O5C7LYK.3BJOBTN337Q52@kernel.org>
+Date: Mon, 20 Jul 2026 00:15:09 -0700
+X-Gmail-Original-Message-ID: <CAMRc=Mdvhf69-vJx22+MuaWVJfn4ipFbQ0wc2U96F599uqrdVA@mail.gmail.com>
+X-Gm-Features: AUfX_mzhVw0yY4ElBsp3RJ24-o-6M3TylIG-umxlyM5jDc9PiJ1qxEAwGhY8ScU
+Message-ID: <CAMRc=Mdvhf69-vJx22+MuaWVJfn4ipFbQ0wc2U96F599uqrdVA@mail.gmail.com>
+Subject: Re: (subset) [PATCH v4 0/5] software node: provide support for fw_devlink
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Rae Moar <raemoar63@gmail.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Bartosz Golaszewski <brgl@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Linus Walleij <linusw@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Jul 19, 2026 at 11:55:42AM +0800, xu.xin16@zte.com.cn wrote:
-> > This patch establishes fields within the vm_area_struct type to store the
-> > virtual page offset of VMAs.
-> >
-> > The virtual page offset of a VMA is equal to vma->vm_start >> PAGE_SHIFT if
-> > they are unfaulted or were not remapped, otherwise it is equal to this
-> > value at the point of first fault.
-> >
-> > Currently, anonymous folios belonging to CoW'd MAP_PRIVATE-mapped
-> > file-backed VMAs are tracked by their file offset. By adding virtual offset
-> > as a property of VMAs, we can now track them by their virtual page offset
-> > instead.
-> >
-> > By tracking this, we provide the means by which to eliminate this
-> > inconsistency, and more importantly lay the foundations for future work for
-> > the scalable CoW anonymous rmap rework.
-> >
-> > This patch simply adds the fields and some simple helpers. Subsequent
-> > patches will update mm code to make use of these fields correctly.
-> >
-> > The fields chosen are packed in the VMA such that, for 64-bit kernel
-> > builds, no additional space is taken up.
+On Fri, 17 Jul 2026 15:49:55 +0200, Danilo Krummrich <dakr@kernel.org> said:
+> On Wed Jul 15, 2026 at 11:30 PM CEST, Danilo Krummrich wrote:
+>> On Wed Jul 15, 2026 at 11:28 PM CEST, Danilo Krummrich wrote:
+>>> On Mon, 13 Jul 2026 13:14:43 +0200, Bartosz Golaszewski wrote:
+>>>> [PATCH v4 0/5] software node: provide support for fw_devlink
+>>>
+>>> Applied, thanks!
+>>>
+>>>   Branch: topic/swnode
+>>>   Tree:   git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
+>>>
+>>> [1/5] kunit: provide a set of fwnode-oriented helpers
+>>>       commit: 9fdbdb528488
+>>> [2/5] software node: add fw_devlink support
+>>>       commit: 37e586675993
+>>> [3/5] software node: add kunit tests for fw_devlink support
+>>>       commit: eecba5978729
+>>> [4/5] MAINTAINERS: add myself as reviewer of software node support
+>>>       commit: 122630406245
+>>>
+>>> The patches are in the topic/swnode topic branch and will be merged into the
+>>> corresponding target branch soon.
+>>
+>> I will provide a signed tag once I have the 0-day result.
 >
-> It is not necessarily true that no additional memory will be consumed, as it
-> depends on whether the baseline kernel has CONFIG_PER_VMA_LOCK enabled.
-
-We are moving to this being permanently enabled.
-
-> Moreover, in the future evolution of mm, maintaining this benefit would
-> require that the layout of struct vm_area_struct before __vm_virt_pgoff_lo
-> remains unchanged, which seems impractical.
-
-It isn't, we are very careful with this struct.
-
+> https://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git/tag/?h=swnode-7.3-rc1
 >
-> My personal suggestion is: maybe we could simply add an unsigned long field,
-> say vm_virt_pgoff, without worrying about the increased memory footprint for
-> now. Additionally, it would be helpful to add some comments clarifying the
-> difference between this new field and the existing vm_pgoff, to aid understanding.
-
-Nope that'd add 64 bytes per VMA for a typical usage which can add up to a lot.
-
+> The changes are also in driver-core-next now, thanks!
 >
-> Thanks,
-> Xu Xin
->
-> >
-> > The first field is present on cacheline 0 containing key VMA fields, and
-> > the second on cacheline 3, which contains file-backed reverse mapping
-> > fields.
-> >
-> >
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  include/linux/mm.h              | 59 +++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/mm_types.h        |  4 +++
-> >  mm/vma.h                        | 14 ++++++++++
-> >  mm/vma_init.c                   |  1 +
-> >  tools/testing/vma/include/dup.h | 26 ++++++++++++++++++
-> >  5 files changed, 104 insertions(+)
-> >
-> > +static inline pgoff_t vma_last_virt_pgoff(const struct vm_area_struct *vma)
-> > +{
-> > +	return vma_end_virt_pgoff(vma) - 1;
-> > +}
-> > +
-> >  static inline unsigned long vma_desc_size(const struct vm_area_desc *desc)
-> >  {
-> >  	return desc->end - desc->start;
-> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> > index 939b5ea8c9e0..2710628059b1 100644
-> > --- a/include/linux/mm_types.h
-> > +++ b/include/linux/mm_types.h
-> > @@ -967,6 +967,7 @@ struct vm_area_struct {
-> >  	 */
-> >  	unsigned int vm_lock_seq;
-> >  #endif
-> > +	unsigned int __vm_virt_pgoff_lo; /* Low 32-bits of virtual pgoff. */
-> >  	/*
-> >  	 * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_vma
-> >  	 * list, after a COW of one of the file pages.	A MAP_SHARED vma
-> > @@ -1041,6 +1042,9 @@ struct vm_area_struct {
-> >  #ifdef CONFIG_DEBUG_LOCK_ALLOC
-> >  	struct lockdep_map vmlock_dep_map;
-> >  #endif
-> > +#endif
-> > +#ifdef CONFIG_64BIT
-> > +	unsigned int __vm_virt_pgoff_hi;  /* High 32-bits of virtual pgoff. */
-> >  #endif
-> >
 
-Cheers, Lorenzo
+Pulled, thanks!
+
+Bartosz
