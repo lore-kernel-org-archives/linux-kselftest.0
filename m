@@ -1,63 +1,63 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74AC4D8D9D
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EA04D98F1
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784576167; cv=none; b=jZGH6CVcGKS0p3he8i1OzFed4ABh59dP31odO1TXXIiVUXKBA+412vBZh0vuPRst3aMct7YpG5fEpAqG0mYbQbf+9I6WVZyllz60h2TcNyy4hnmbDyZySoTmq3wA+jR0eq7wzNkf8LBgXd4Ik/bEl1rvy7z124C/z32uR3sgew8=
+	t=1784576171; cv=none; b=YCqshftSCZ0rokS08zleVJ7QxTtG5Z39BMt9RXofXUs2+h3snEQH31FkzyvpaPMfLHNIl6D5jsM1KTO6P+wR6jZ1cTqKpV8GM/+G00c3bDVXMPKNMZ29KaZBdm/o473pBtwhRUtGkZ9ljaxhdD0UzzqMFoOfxFND27sj5A3hDrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784576167; c=relaxed/simple;
-	bh=VIh2CZmLMZ/97T44ZUvXoEPJ4nbdEMs3NtJzTr5SgDU=;
+	s=arc-20240116; t=1784576171; c=relaxed/simple;
+	bh=17uSNxWNbNfWeu2defMnk2WRNed4MZXXsNWHp0EQmes=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dFBIalKL56dQ+uHhUZ3enC5qmiTO3plgG3OoNmMb1JM64+1YJaiVXZ7w5PhLYXmlhNlxrH1Qtbjk+xNEqGD/0F8A+5/eXaFhkdsXpO5Hteg0vmvxxnN0NwM69z05M7bZESuAiU9ikzjcc58b9qS6REN5K/AvDAxur74ZmvHeEcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=JRF0aQVi; arc=none smtp.client-ip=209.85.222.171
+	 MIME-Version; b=ENN2AAfXR7VSpPFhxXpq7EmrQIjnbJNHi0E0uzwU/5ho141rud+uHvQCEYJ4CvPHMggM+QZN16W4GMhEOychsM67Xwe/qP0xUW/MDKbvjl4ZNNNSbGyy93Rseo22qjHdpSFZNGtYY42Q24wenhnBwoUI7gVBKnkgXWrv7YNyNTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gyG5iNuS; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="JRF0aQVi"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-92e533aacf2so395311185a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:36:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gyG5iNuS"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-92e602d2c0fso380181285a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:36:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784576163; x=1785180963; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784576166; x=1785180966; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cmMfaNN8FH7IwFGvNgQFqVAtbOqtT0oL84O+5IPA/hE=;
-        b=JRF0aQViSVTmZOO8r9abVlam1VW7oEF1TCAP12arFXsWSk1qoVPq77Yf0CWFHKWMSe
-         q5/wnL54LYqc8nUAERRdE79fRvVVCKPvzab9i6XWuXy+aPGlre/rwpO+4m6sgBIYkivj
-         VjzTYXeVt/M0N4wWTAb/sCFYbahP1AoQgpIuktVi/l76b8skyRpq5JC5klpN+DVpHO2Z
-         ryrMIyFPgv+NsrRNkPeuVx5pl5FwOwggsTM6OFM84TRi87QU/9dYAWjM1rmsStSteV/m
-         hjmuaxGEWGdIsofVXvMhomuvXPhAHc1wGCEcD0gxvSPuKV8lz0FF83dOg5jO/t8H03/Z
-         3Wvg==
+        bh=DV5Z1tJXaWxvckL3peka95N+5/TymDiplHxo+CY2ByI=;
+        b=gyG5iNuSRpUpNeoHOEe2cC0+VGaK4vcuw6B6u+zHFEOQ+XXJPsurLkz3WSlKsBHxHL
+         n04qReqwTShdXg9tHAGgMk0GrWDqCQTPsLk0huQFsLFMu8Gs4eKuBR6NJqZ51IGrjJ5g
+         e5OzhE8xe3+INxF0UGvolPJOyBIG4MD3rqNgoE3UE9bJTlv9fHG4609DiiwoHMNKMS0K
+         WcAdY7fDktxKMyzvigpUx7GWuLQcPYUjaSDhZMx2h45Rt6leWZmHTjAmZUgDB2yQVC0L
+         Xrn77+ChnmzDUs1g7YsC2mGcmTs7JMni6INFnOvFNgUwkoqh3gHz8pzAZwGUZjd5W71t
+         rxQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784576163; x=1785180963;
+        d=1e100.net; s=20251104; t=1784576166; x=1785180966;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cmMfaNN8FH7IwFGvNgQFqVAtbOqtT0oL84O+5IPA/hE=;
-        b=nIlIx8bEz6eSZ9I1kCXXhKMmyNakBDS9BNQ6ozyDj8qZ5KQeBEt0UKAb0SkZ2aMezU
-         cPkgUuiTjAvlSR9O1kTUopE51prqv7ZQ/BeZqh/tH3HmlRV9DgFx/nKXvv1BB0Trehl+
-         GzeLae8BjIG1Qs6jAJkMKKK1bbW3j6vAy0uovwcVfrhEmApVR/iClgpke56QJbvbYugx
-         Fw/XoNiCRJ5rpKSuCPrH0/TBs5nAtwwgT7LZdQa/2Mjo+UlX8ta1OnUc51uVbd7eByj9
-         BBv9WvWU258J0tiyPssVZyfB2xDdRJBs74p6v4Jy38+arsPZQoxOw9r2SnEzunnvIQ6S
-         p6wA==
-X-Forwarded-Encrypted: i=1; AHgh+RorNbFHqcNfV0dxtt7Bt9VPRWWyL55k5pTgz3r8IPBi+O7nO3j2yOuCWuz8QnMKVbo8fYwKUClc5kLWmJlmy4A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0Y5WHkS8nJFTOvcDAwtYx4WfqSZ4cBCYXkr+FY5uIWUqbBO/1
-	btrJk8q2h5OAOBAPZEHcTbTmNWZGTw/nn01uaTl+qPcwOvQJhD52qRkgij6yDviE8iM=
-X-Gm-Gg: AfdE7clGgbkwnrn8Iif7mM4GAW54qkca/nxMU+akEeb6vDBt6qJ76f4S2E/6+QII/Lu
-	EpOp3cz7lLZYSvoG5HeZjmXKW6LsWcrgkLC6F7gmXerCcnmG1feh8j0jUSQCRihERoQtfNlMZJQ
-	WshVrGDIXF9D35MH8CiSY7Fkgy9AHSJtvtwy5p42+xuYG+sYb41AZ7+4DD38CMnsDtlS3IDQlRA
-	1cECIDM5ZNZSbQrLQ+wOQMEABi3Pnzizm59pF1CUptd34w4phv+yu0KNE/8usR2p+3VpNmiUCIm
-	U+rbK1IZxDiJnqAjNZtpgVhGI9K9r8huu7jKlgSm+vFU4jJfz503PeG2m4tjBwvyVba65MWcla4
-	g7/kcYWbtakVcW9IOfZb2tb63nHJGWNhjCunfeiOA8hqDZ5WA8P7uU6Wqle+jK4nYjTnKRajX8J
-	2d7nf57MQIoZ7vn3IZVS9q0BEmZ0N5zxlspA4DxHtupr+Z9J03O91E9OYgX8W8oqc=
-X-Received: by 2002:a05:620a:4620:b0:92f:279:5953 with SMTP id af79cd13be357-930b3ea8f3emr1530889385a.27.1784576162881;
-        Mon, 20 Jul 2026 12:36:02 -0700 (PDT)
+        bh=DV5Z1tJXaWxvckL3peka95N+5/TymDiplHxo+CY2ByI=;
+        b=LEjy5AFZWoqQ4zqpp3kb2VWRypM4T5svX12gXPJ0y/nH81VP6E3hBiOxucjp3UbhMF
+         pciqT+DhZxvSU80N+SLwd2PUuLETiBCmXWfjDWudVx2Zaw3fKiGOq+xs8mJTa9DSRgVk
+         2UCC5qRuzdiSJespuwrjHamhG9wAY/eB7cBY6KDioXoIEl+8T3LVm1D5pyhTp8guPpO6
+         jRIHM5LdCy9RqEblUMKSktmrSaWs3+uVfj5IFdW8Emh74RVDQL5gY5ZeCXHz6xbN02/J
+         jcx3GQ4iYj7wr+N5doc0JExDjmDI34sQA4wY/sgmX4Osds1zUUrYK/l6dSMIYAlFp+ya
+         +d8A==
+X-Forwarded-Encrypted: i=1; AHgh+Rr66a/k25uiIz8gaHcMAzg4NcZ5oBXDWnp6lBKBzcf3S0P1tP3UhcQL1JHdK7reHi1n0eSs8inZYQytKCm/4uM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaoJmNIa/kFKs3l514SHbEVuBJLAuIgxSqE7DHNjkf3LANr1XS
+	T+jd8RBjw/F7GfecNoM2o1nq34Q/JmeclcmPCMmokqC8K0416bxChFVV5xKIDgttAk4=
+X-Gm-Gg: AfdE7ckg278KjzauEG6OwQCwfxmLk5j8AXRoMgPbdpmh4hUdvqYkO/ctggcKZGeDBPc
+	7JRgBBbSFUwrpCBXwjtEehsjFm14cq0TAlrydfkJbLRcTzZRumZkIfRfOZzzdUks5tx374XWNxJ
+	xRYFcLcsuHu73yrlYzyWEQP0LRaV7epw8rlwO4JX1hDBsTRX0xQDKPQpH7awKkGT+p1jMfFUqw8
+	qichbQh+1HWlUcOSeoaFO5o+rFjkK1eqyHuv51yxDZzFgWe7bLtSHG6urNaegHqTXebB1k7R5RX
+	lF/lD1vd29UTdpRpkoYqepHN/CjmtkqqYdrJe3a3WLBEre0Lzb9K6p8db95OnFr57PbCYKPYahu
+	q8sn9oj2pUKNn9X/SGwG7UFWrnnLljMog7vgWwytpkewOxBu28m3kdcTaNnCJeHsqWqLTqSzPPc
+	s1UApiNaGCb/3OEbZk/qS/V5aaQe6tcALra3ueKzueZ1IZ1c9yPn9hkfHF//wS1m0=
+X-Received: by 2002:a05:620a:171f:b0:930:5a34:3882 with SMTP id af79cd13be357-930b482d3d6mr1498824485a.2.1784576165506;
+        Mon, 20 Jul 2026 12:36:05 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.36.01
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 12:36:02 -0700 (PDT)
+        Mon, 20 Jul 2026 12:36:05 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org
 Cc: Zhigang.Luo@amd.com,
@@ -137,9 +137,9 @@ Cc: Zhigang.Luo@amd.com,
 	damon@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v5 32/36] mm/khugepaged: base private node collapse eligiblity on actor/cap bits
-Date: Mon, 20 Jul 2026 15:34:26 -0400
-Message-ID: <20260720193431.3841992-33-gourry@gourry.net>
+Subject: [PATCH v5 33/36] Documentation/mm: describe private (N_MEMORY_PRIVATE) memory nodes
+Date: Mon, 20 Jul 2026 15:34:27 -0400
+Message-ID: <20260720193431.3841992-34-gourry@gourry.net>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260720193431.3841992-1-gourry@gourry.net>
 References: <20260720193431.3841992-1-gourry@gourry.net>
@@ -151,105 +151,198 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Collapse can move base pages across nodes.  The khugepaged daemon does
-this transparently, while MADV_COLLAPSE is a userland construct.
-
-Isolate private nodes from khugepaged exactly like ZONE_DEVICE.
-Never collapse private node folios silently (the owner may not
-support migration).
-
-MADV_COLLAPSE is user-initiated, so it is allowed on a private node
-opted into CAP_USER_NUMA, consistent with other userspace interfaces.
-
-folio_allows_collapse() encodes this: false for khugepaged on a private
-node, CAP_USER_NUMA for MADV_COLLAPSE.
+Add a design overview of private memory nodes:
+  - the isolation model (structural zonelist exclusion)
+  - ZONELIST_PRIVATE
+  - driver provisioning API
+  - capability opt-in model and its dependency rules
+  - observability surfaces
 
 Signed-off-by: Gregory Price <gourry@gourry.net>
 ---
- mm/internal.h   | 26 ++++++++++++++++++++++++++
- mm/khugepaged.c | 16 +++++++++++++---
- 2 files changed, 39 insertions(+), 3 deletions(-)
+ Documentation/mm/index.rst              |   1 +
+ Documentation/mm/numa_private_nodes.rst | 160 ++++++++++++++++++++++++
+ 2 files changed, 161 insertions(+)
+ create mode 100644 Documentation/mm/numa_private_nodes.rst
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 9621eb127c28c..9dbc5752cd3fe 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -136,6 +136,32 @@ static inline bool folio_allows_numa_balance(struct folio *folio)
- 	       node_allows_numa_balancing(folio_nid(folio));
- }
- 
-+/*
-+ * folio_allows_collapse() - may collapse fold this folio into a THP?
-+ * @is_khugepaged: true for the khugepaged, false for MADV_COLLAPSE.
-+ *
-+ * Collapse is a residency operation gated by the actor calling it:
-+ *   - khugepaged never operates on private-node folios (like ZONE_DEVICE)
-+ *   - MADV_COLLAPSE is gated by CAP_USER_NUMA
-+ *
-+ * Never true for ZONE_DEVICE.
-+ */
-+static inline bool folio_allows_collapse(struct folio *folio, bool is_khugepaged)
-+{
-+	int nid = folio_nid(folio);
+diff --git a/Documentation/mm/index.rst b/Documentation/mm/index.rst
+index 13a79f5d092c0..f60704df6104c 100644
+--- a/Documentation/mm/index.rst
++++ b/Documentation/mm/index.rst
+@@ -65,6 +65,7 @@ documentation, or deleted if it has served its purpose.
+    mmu_notifier
+    multigen_lru
+    numa
++   numa_private_nodes
+    overcommit-accounting
+    page_migration
+    page_frags
+diff --git a/Documentation/mm/numa_private_nodes.rst b/Documentation/mm/numa_private_nodes.rst
+new file mode 100644
+index 0000000000000..3b27a2e24b086
+--- /dev/null
++++ b/Documentation/mm/numa_private_nodes.rst
+@@ -0,0 +1,160 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+	if (folio_is_zone_device(folio))
-+		return false;
-+	if (is_khugepaged)
-+		return !node_is_private(nid);
-+	return node_allows_user_numa(nid);
-+}
++====================
++Private memory nodes
++====================
 +
-+static inline bool page_allows_collapse(struct page *page, bool is_khugepaged)
-+{
-+	return folio_allows_collapse(page_folio(page), is_khugepaged);
-+}
++A *private memory node* is a NUMA node whose memory is hotplugged by a driver
++and deliberately hidden from the kernel's normal memory management.  Such a
++node is marked ``N_MEMORY_PRIVATE`` instead of ``N_MEMORY``; the two states
++are mutually exclusive, so a private node is never considered by the page
++allocator's normal or fallback paths.
 +
- /*
-  * folio_allows_longterm_pin() - may this folio be long-term GUP-pinned?
-  *
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index fb4378cc17b10..5f20839857738 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -700,7 +700,8 @@ static enum scan_result __collapse_huge_page_isolate(struct vm_area_struct *vma,
- 			goto out;
- 		}
- 		page = vm_normal_page(vma, addr, pteval);
--		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
-+		if (unlikely(!page) ||
-+		    unlikely(!page_allows_collapse(page, cc->is_khugepaged))) {
- 			result = SCAN_PAGE_NULL;
- 			goto out;
- 		}
-@@ -1241,9 +1242,17 @@ static enum scan_result alloc_charge_folio(struct folio **foliop, struct mm_stru
- 	gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
- 		     GFP_TRANSHUGE);
- 	int node = collapse_find_target_node(cc);
-+	unsigned int aflags;
- 	struct folio *folio;
-+	bool allow;
- 
--	folio = __folio_alloc(gfp, order, node, &cc->alloc_nmask, ALLOC_DEFAULT);
-+	/* Private node access: khugepaged never, madvise with CAP_USER_NUMA */
-+	allow = cc->is_khugepaged ? !node_is_private(node)
-+				  : node_allows_user_numa(node);
-+	aflags = (allow && node_is_private(node)) ?
-+		ALLOC_ZONELIST_PRIVATE : ALLOC_DEFAULT;
++The intent is to give a driver a block of NUMA-addressable memory that the rest
++of the kernel will not allocate from on its own, while still letting that memory
++be mapped into processes as ordinary, struct-page, LRU-managed folios -- and to
++let the driver re-enable individual mm services it is capable of allowing.
 +
-+	folio = __folio_alloc(gfp, order, node, &cc->alloc_nmask, aflags);
- 	if (!folio) {
- 		*foliop = NULL;
- 		if (is_pmd_order(order))
-@@ -1687,7 +1696,8 @@ static enum scan_result collapse_scan_pmd(struct mm_struct *mm,
- 		}
- 
- 		page = vm_normal_page(vma, addr, pteval);
--		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
-+		if (unlikely(!page) ||
-+		    unlikely(!page_allows_collapse(page, cc->is_khugepaged))) {
- 			result = SCAN_PAGE_NULL;
- 			goto out_unmap;
- 		}
++Preconditions
++=============
++
++``N_MEMORY_PRIVATE`` and ``N_MEMORY`` are mutually exclusive, so the backing
++memory must come up on a node that has no DRAM of its own (otherwise the node
++would already be ``N_MEMORY``).
++
++In practice the memory is provided by a device driver or a DAX device whose
++target node has no other memory, and usually no CPUs.
++
++Isolation model
++===============
++
++Isolation is *opt-in by exclusion* and is **structural**: by default nothing in
++the kernel can place memory on a private node because the node is absent from the
++zonelists an ordinary allocation walks.
++
++Zonelist exclusion
++    The kernel page allocator depends on the ``FALLBACK`` and ``NOFALLBACK``
++    zonelists to allocate memory.  A normal ``N_MEMORY`` node's zones (except
++    ``ZONE_DEVICE``) appear in these lists and allow allocations to fall-back
++    to less preferable locations if the preferred location is pressured.
++
++    ``__GFP_THISNODE`` is used during normal operation to switch between
++    ``FALLBACK`` and ``NOFALLBACK``, where ``NOFALLBACK`` only contains the
++    zonelists of the preferred node.
++
++    ``N_MEMORY_PRIVATE`` nodes are **excluded** from both ``FALLBACK`` and
++    ``NOFALLBACK`` zonelists.  Instead they are added to ``ZONELIST_PRIVATE``,
++    which includes both ``N_MEMORY`` and ``N_MEMORY_PRIVATE`` nodes.  This is
++    the only zonelist that contains private-node zones, and so the only way
++    to acquire private node allocations is to explicitly request that zonelist.
++
++    Even an allocation carrying ``__GFP_THISNODE`` cannot access the node's
++    memory without also explicitly passing the private zonelist.  This prevents
++    incidental allocation of private memory by users of possible/online
++    nodelists.
++
++    When ``CONFIG_NUMA`` is disabled ``ZONELIST_PRIVATE`` aliases
++    ``ZONELIST_FALLBACK`` and is never selected.
++
++The user_numa path
++
++    ``MPOL_F_PRIVATE`` is an internal user_numa flag (never accepted from
++    userspace) marking that a mempolicy has a private node in its nodemask.
++
++    When ``CAP_USER_NUMA`` for a private node is set, user-sourced mempolicy
++    (``set_mempolicy(2)``) and migration (``move_pages(2)``) operations are
++    allowed to include that node in nodemasks and targets respectively.
++
++    ``mbind(MPOL_MF_MOVE)`` is both a mempolicy and a migration operation,
++    so placement and migration share the same capability.
++
++    The mempolicy component uses ``MPOL_F_PRIVATE`` at fault-time to select
++    ``ZONELIST_PRIVATE`` and makes the node's memory available for allocation.
++    It is otherwise an ordinary, relaxable mempolicy: an unsatisfiable request
++    (an unmovable allocation on a movable-only private node) simply falls back.
++
++
++cpuset interaction
++==================
++
++cpuset.mems does **not** partition private nodes.  cpuset neither grants nor
++denies access, and rebinding cpuset.mems nodemasks do not affect a private node's
++residency in any nodemask.
++
++Likewise, a private node's inclusion in a nodemask does not affect cpuset.mems'
++filtering of any ``N_MEMORY`` - they remain partitioned according to cpuset.
++
++
++Provisioning
++============
++
++A driver brings memory up as private with::
++
++  add_private_memory_driver_managed(nid, start, size, resource_name,
++                                    mhp_flags, online_type, np)
++
++which onlines the range and registers the driver-owned ``struct node_private``
++(``np``) describing the node, including its capability bitmap (see below).
++
++Only one driver/service may register a ``struct node_private``, which
++heavily implies a "one-node-per-device" design of the system.
++
++The node leaves ``N_MEMORY_PRIVATE`` only when the last range is offlined.
++
++.. kernel-doc:: mm/memory_hotplug.c
++   :identifiers: __add_memory_driver_managed
++
++.. kernel-doc:: drivers/base/node.c
++   :identifiers: node_private_register node_private_unregister
++
++Capabilities (per-service opt-ins)
++==================================
++
++Because the default is "no mm service touches the node", each service a driver
++wants back is requested explicitly through a capability bit in
++``np->caps``.  The mm side checks the matching ``node_allows_*()`` /
++``folio_allows_*()`` predicate before acting:
++
++.. list-table::
++   :header-rows: 1
++   :widths: 35 65
++
++   * - Capability
++     - Re-enables
++   * - ``NODE_PRIVATE_CAP_RECLAIM``
++     - reclaim of the node's folios, by the mm and by userspace
++       ``MADV_COLD`` / ``PAGEOUT`` / ``FREE`` (userland-driven reclaim)
++   * - ``NODE_PRIVATE_CAP_USER_NUMA``
++     - all userspace-directed placement and migration: ``mbind()`` /
++       ``set_mempolicy()`` / home node, and ``move_pages()`` /
++       ``migrate_pages()`` to/from the node
++   * - ``NODE_PRIVATE_CAP_HOTUNPLUG``
++     - hot-unplug via migration
++   * - ``NODE_PRIVATE_CAP_DEMOTION``
++     - reclaim-driven tiering demotion onto the node (the node joins the
++       demotion hierarchy)
++   * - ``NODE_PRIVATE_CAP_NUMA_BALANCING``
++     - access-based NUMA balancing scan/migration of the node's folios
++   * - ``NODE_PRIVATE_CAP_LTPIN``
++     - ``FOLL_LONGTERM`` GUP pins
++
++khugepaged never operates on private-node folios (like ZONE_DEVICE), and DAMON
++does not act on them; ``MADV_COLLAPSE`` is covered by ``CAP_USER_NUMA``.
++
++Dependencies between capabilities are enforced **once**, by
++``node_private_register()`` at hotplug, rather than by whatever sets the bits:
++
++* ``DEMOTION`` requires ``RECLAIM`` (a demotion target accumulates demoted
++  pages, so without reclaim as a safety valve it would just fill up).
++
++Capability flags are expected to be stable at runtime.
++
++Observability
++=============
++
++A private node is reported through:
++
++* ``/sys/devices/system/node/has_private_memory``
++* ``/proc/<pid>/numa_maps`` -- per-node residency includes private nodes
++* ``/proc/kcore`` -- private-node RAM appears in the kcore RAM map
++* memcg per-node statistics account private-node memory.
 -- 
 2.53.0-Meta
 
