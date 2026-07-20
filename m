@@ -1,179 +1,632 @@
-Received: from mail-pz2-f1.google.com (mail-pz2-f1.google.com [74.125.228.1])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8F439CD16
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6F338F254
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784575982; cv=none; b=C4oClOCk2+CE5buQ/9S3MWBvyNZSksPK0vWMzd1r5nCadgmy40IdLWqOBE1uDdvTi0MeBTP0zR8ZexBsF2jgz5t4oo8unZFQkwzhdr/ULS7wnDPWHN6wKyzSYjpsX2A6ZrlKfEs0uF9Tm17P60bg29We66TydvSjSybc+Td+TRc=
+	t=1784576082; cv=none; b=G7xGNU5MQ9u91KPOy49znL3obMTqu5Bt5656PnMmFs9b2wxkwbRXTsDHc/6Xa/5yElH7kdJcV72VsnvTtVHgX7nFCOmhKfkPYMMZdJdfsMdy/ZTA2ziB/RJEn0AiIGnm8ijgDywuhyBDWuRR9kvbkLyR4n5j0omFE2S7TTlIBco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784575982; c=relaxed/simple;
-	bh=wR02Cf1ZX0VxOSrwhtcrXjbKc2v02WfoOYRrstsXQbI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iNuJ19NizZMaL8Lap0mIkoMcbkQPQlk4lp+6rPClFdzlXcX0LrdbFeHhnPpa9uWJHmX5apWqEQUeEtxJoAbJAEWJgSICk4cGkinQnSAA1s0Hniis5yt6kNMgNbf3a/c5CktoVEB6rmbCM5WvO1RRCCJiaExeuWueNxZ/wGdIwGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pwCOCy8H; arc=none smtp.client-ip=74.125.228.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784576082; c=relaxed/simple;
+	bh=Cs37rQ8OwzchP4fgdY8MkNkb+Cs0KiTvx56cOgTW4IM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ERjj2qOAuzq8wnhLC5LDwxnWSv4+VwqMkjmKEBtbcfq92zg2dpJB3yRtcI9LlwuPosczsqM4Y/h7/qNEyMXMUlWluwxUMhYZJpRfWhHNIMj1fpj7uNKhrr1pld5WzVAZrUY999cOio5LScnZyi2x4gUsyuj/djuLjiWk1JZb7ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=iNmxeElv; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pwCOCy8H"
-Received: by mail-pz2-f1.google.com with SMTP id 41be03b00d2f7-ca00ea47337so2890552a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:33:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="iNmxeElv"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8ee88fce572so82093456d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784575980; x=1785180780; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mipM1cLecOb4t56l8llNyfwcJ8p4RmBXYxGw64Z8Tfc=;
-        b=pwCOCy8HH2MWDXCkvEJnVfs9I69br6aV6ga2GiAmc9/cQq8zCSacCwb9BbZZdKjxJ4
-         UXgfKdY3KHbnODG3M9OSuXqj05saJmp15cM2EBU0DaqSA0DAx3BSEgElUvnPNuvOrWUS
-         hNSjggdNBP0l+9yPIKeD3C/t1GcJ7yOY2xSObSPDK2orsBmC0Fku68NBPc/IFozXBtLV
-         SSt5Y6bUhLmWuXDTkfl6ja/AYca9O9CmdFwkqLeD+G5LUWo44xrjYgS7kIRzTfwYywyI
-         eVyxbi7paW1qBET+TK6mju0vM+EI4CyRqhMCydzL/rBehVtISM7K6HQM14PDl998CnOE
-         fvoQ==
+        d=gourry.net; s=google; t=1784576078; x=1785180878; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YIRi/tNVurt0/aUbQiHfYuBt9pAAT54Lkn/ZbIwjgmA=;
+        b=iNmxeElvrHO2trZ1TTt6Tr6ZyJnihUaaBdd7NuEtI7JwReGsaYNJ4fgcf/01qniT3D
+         4U1Ily9pYbGl2s/2IokmNf/6ZoiwxWA5Vy19C3chSOYTzrCfV9sbiWorFIcpJiLYUKSw
+         rgbi+hEe2SQNQ8XyZQVNMOK2pLG9rPeyOcmmu/B9T7/e6/X9sGQgUi6bcW0zUDJWEiP3
+         /bYpnW2cIoR0NZKfikGGj892ZH4dnfm/Dv0SHpFpALyRR+OPB+2eD0gDPUR4SrVBpmKq
+         zAiXa/B1v121z9v3BTPmxDXvTnkVAt6vJzoVAQLJwwMCUsRPqYSBnBSNARoMHA38FK6a
+         5vQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784575980; x=1785180780;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mipM1cLecOb4t56l8llNyfwcJ8p4RmBXYxGw64Z8Tfc=;
-        b=rGIVfKKNkKsHZVkzCCJnfV7FIT9DJjdGeYFZ6oredsS34vc8DpfUHzhnVoEjEIu2sD
-         wgm05Qx1NGcIWBKeY5M8WIqihhmNIp3LPWuOc56LpCgezIX7i/ujugeFpONHWhyclMC/
-         91ygBcXwC7wju7f80MLnMrRrqkk7ITl5dzPIaVFx+AVSDSoRxTvNB5X8jEIDzz4jJZq7
-         iK/Z+IwrlF/LeRUt2XJ8HzAAXi4lbKN31YRtYr+RjyEwLD2PTIVPhSyw1J7kKKAMQOBT
-         kioowo1PiW9JihPwx3Pzp/zA4jAHBq+3odRpzRicC8LaB74+vO9EKnXDq8eQbeCeO+I6
-         QjTA==
-X-Forwarded-Encrypted: i=1; AHgh+RpX2fkdex7B+HP3stpoejRAPu0w7L9mD8AWDxtRf3ZX6xFApFvublVow2CY6FBNmt8AuDEQqQG1YT80U+eVW34=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEi3nmcbkdcIUXG9IPfII5cAQEU4Mt+bSD2KWp+im04RthroLT
-	wW281VkHsCQVt2exUQ1N5523L0H4fK3KqCUyQ/rLDAZB0SAimS0znX6d
-X-Gm-Gg: AfdE7cm0+CAwBrJllaSwQNaazyws6bLhGB3Mbzs4YdcjAVXNWA0ApRBLWC0/EgomEGz
-	J9h+WlqxHC6qR24JAzk81gyg04sCBZiB20akU4FXNeXWVVaTgVq47BXxybpRT2cwFQ4HfJ6P0Qt
-	GuH2VudOHRxJztapAoGU6PVJ+/2dUbMoh+Emm//qS2EKqU+TFONbwYIL+e+yjwaYrlATBFL7KnK
-	ueUgwPW52XBfDfcGHvd/indf5pz3y2Ykj9RMBcXLbEH105UwCYVlA+ysF1XVgh6QWcTSKTt+qiN
-	M7L4fj3tHB3NOA+Qj5r16SHGUTc4H31K9dqs7rIiB3i8yNXPss3OT5sTzu5pnvgrGu+yykh0hQf
-	r1JJJTXTk9FPqTFjhibpwHO8dVLw+j3hBynxwkTYWLv+UjNWN99QH0WDR5cQcL6jFPkGIdA==
-X-Received: by 2002:a05:6a00:80a:b0:847:97a4:d6b3 with SMTP id d2e1a72fcca58-84c2922630cmr15623327b3a.16.1784575980551;
-        Mon, 20 Jul 2026 12:33:00 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:1::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2f1601d6sm5999817b3a.50.2026.07.20.12.32.59
+        d=1e100.net; s=20251104; t=1784576078; x=1785180878;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YIRi/tNVurt0/aUbQiHfYuBt9pAAT54Lkn/ZbIwjgmA=;
+        b=YKUasmVQ7VXxGiK+/Gd0bUexAJ+eNbYfCnERtMFhycFLMwrXbXoehiu0BtUooq6DGH
+         kQnVChqPNssblMANvNX+BlSRpGL341AW4kIU4JixzzpCeZxBvoKUWcHEDXIGkxz/Q3ru
+         eqWUTf7G7Y8WMHHFBD3RPm+DMPB2muF598T3cRiVM3vnxnB0rkonykhLXQtJhWeRU/06
+         R1zIMMBolFOuLfQX8acs8Y4a3Tb/bJgBtm04maVZVmZFTqiYVsd8GaCHemzzJPMWkSjw
+         f5d82gNKem5afwk6zm8puTde/p0KnLoqctvmoh5QXRbJp47cszGx589XAN9gF+cxJgtg
+         RHRA==
+X-Forwarded-Encrypted: i=1; AHgh+RreVNrRmVPqZPVqWwpHHmb0PC42ytVT3/nYt3qbBfHFBDTvsUX3gt9GLXgCdC37ha+bzDcc1pBPMwAMisAnCu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHaVZWeninEdtETcl/FQ1RslsQaJmBW2BmfnX8aQvF1+cdk+S4
+	Ajq6Rp2eg+lnYDsWVyKuVlArufla0G4zrPKKmyHPFxzhEqqLiLauewqkG3WzJ6Qjf38=
+X-Gm-Gg: AfdE7ckPfrOiRu2aeIOHuzKJRHQWmCNQLJGZqmNAf0+tKFc4v9wHYerUoz57iJOgRkN
+	7EHwnvQvCiNkpR5jA5Pc1IyQzF90tY3UYURwez0yjfVHkbZhF/cHcvGW/q2yUSr0krlJSBJcjJ0
+	dv6IwzstyN8Nw/F8xUTJ3cvsUbdU+81YpVA9gcvtbJOqEMcm+QQnOHzObw0MeoIo8XUNQ5rAvNr
+	h0OB/yl7povuOeH/VexYyaJ8l/HtDpYOsi4+6zBDSdk8bhnPg8EZYKkaaFktSOb7TYuKMCLWZfv
+	ZZEndsjsP84N4vt/jsgsrchuW1zqIUv1ld4H4+tG06A0+I1j5n+RHHN1RSKsTmFKwqTiOMk7sDS
+	Di57VLAQjMQTW1imHABctHow6xQyDWD8GBMwnSgnKJmiNIXbKufVKFdVVL5GSdJ7ZM3Mv3tMIIH
+	UBhYvQW/tbsGlujM+G9t3ykK/uhltBPRM7s0KUsT/pIVoWwLzunCJT7lj3AZas9BqLHmReKdb67
+	g==
+X-Received: by 2002:a05:620a:4109:b0:92e:fe10:3ef6 with SMTP id af79cd13be357-930b419ed82mr1474129285a.43.1784576078000;
+        Mon, 20 Jul 2026 12:34:38 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 12:33:00 -0700 (PDT)
-Date: Mon, 20 Jul 2026 12:32:55 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Vladimir Vdovin <deliran@verdict.gg>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
- skb checksum invalidation
-Message-ID: <al53WS9FMTnu7tBI@devvm7509.cco0.facebook.com>
-References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
- <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
- <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
- <alkBnI3XcH0XGjEo@lore-desk>
+        Mon, 20 Jul 2026 12:34:37 -0700 (PDT)
+From: Gregory Price <gourry@gourry.net>
+To: linux-mm@kvack.org
+Cc: Zhigang.Luo@amd.com,
+	arun.george@samsung.com,
+	balbirs@nvidia.com,
+	brendan.jackman@linux.dev,
+	yuzenghui@huawei.com,
+	apopple@nvidia.com,
+	alucerop@amd.com,
+	matthew.brost@intel.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	dakr@kernel.org,
+	djbw@kernel.org,
+	vishal.l.verma@intel.com,
+	dave.jiang@intel.com,
+	alison.schofield@intel.com,
+	osandov@osandov.com,
+	jannh@google.com,
+	pfalcato@suse.de,
+	jackmanb@google.com,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	pbonzini@redhat.com,
+	osalvador@suse.de,
+	joshua.hahnjy@gmail.com,
+	rakie.kim@sk.com,
+	byungchul@sk.com,
+	gourry@gourry.net,
+	ying.huang@linux.alibaba.com,
+	kasong@tencent.com,
+	qi.zheng@linux.dev,
+	shakeel.butt@linux.dev,
+	baohua@kernel.org,
+	axelrasmussen@google.com,
+	yuanchu@google.com,
+	weixugc@google.com,
+	yury.norov@gmail.com,
+	linux@rasmusvillemoes.dk,
+	longman@redhat.com,
+	ridong.chen@linux.dev,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	sj@kernel.org,
+	jgg@ziepe.ca,
+	jhubbard@nvidia.com,
+	peterx@redhat.com,
+	baolin.wang@linux.alibaba.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	lance.yang@linux.dev,
+	usama.arif@linux.dev,
+	xu.xin16@zte.com.cn,
+	chengming.zhou@linux.dev,
+	roman.gushchin@linux.dev,
+	muchun.song@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	driver-core@lists.linux.dev,
+	nvdimm@lists.linux.dev,
+	linux-cxl@vger.kernel.org,
+	linux-debuggers@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	damon@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH v5 00/36] Private Memory NUMA Nodes
+Date: Mon, 20 Jul 2026 15:33:54 -0400
+Message-ID: <20260720193431.3841992-1-gourry@gourry.net>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alkBnI3XcH0XGjEo@lore-desk>
+Content-Transfer-Encoding: 8bit
 
-On 07/16, Lorenzo Bianconi wrote:
-> On Jul 16, Stanislav Fomichev wrote:
-> > On 07/15, Lorenzo Bianconi wrote:
-> > > Add a test that verifies skb->ip_summed is set to CHECKSUM_NONE
-> > > when a device running in XDP mode creates an skb from a xdp_buff
-> > > if the attached ebpf program returns an XDP_PASS.
-> > > The test attaches an XDP program returning XDP_PASS, and a TC
-> > > ingress program that runs the bpf_skb_rx_checksum() kfunc to
-> > > inspect the resulting skb. After XDP_PASS the driver must invalidate
-> > > any previously computed hardware RX checksum since XDP may have
-> > > modified the packet data.
-> > > The BPF program counts packets per checksum type in a map, and the
-> > > test runner verifies that after sending traffic the CHECKSUM_NONE
-> > > counter is non-zero while CHECKSUM_UNNECESSARY and CHECKSUM_COMPLETE
-> > > counters are zero.
-> > > 
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > ---
-> > >  Documentation/networking/xdp-rx-metadata.rst       |  5 ++
-> > >  .../selftests/drivers/net/hw/xdp_metadata.py       | 55 +++++++++++++++-
-> > >  .../selftests/net/lib/skb_metadata_csum.bpf.c      | 73 ++++++++++++++++++++++
-> > >  3 files changed, 132 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-> > > index 93918b3769a3..7434ac98242a 100644
-> > > --- a/Documentation/networking/xdp-rx-metadata.rst
-> > > +++ b/Documentation/networking/xdp-rx-metadata.rst
-> > > @@ -90,6 +90,11 @@ conversion, and the XDP metadata is not used by the kernel when building
-> > >  ``skbs``. However, TC-BPF programs can access the XDP metadata area using
-> > >  the ``data_meta`` pointer.
-> > 
-> > [..]
-> > 
-> > > +If a driver is running in XDP mode, any existing hardware RX checksum
-> > > +(``CHECKSUM_UNNECESSARY`` or ``CHECKSUM_COMPLETE``) must be invalidated
-> > > +by setting ``skb->ip_summed`` to ``CHECKSUM_NONE`` before passing the
-> > > +skb to the kernel, since XDP may have modified the packet data.
-> > > +
-> > >  In the future, we'd like to support a case where an XDP program
-> > >  can override some of the metadata used for building ``skbs``.
-> > 
-> > Sorry for keeping nitpicking on this, but I'm still not convinced that
-> > it is what we currently do. From my previous reply:
-> 
-> no worries :)
-> My current take-away from the previous discussion is we just need to document
-> what would be the driver expected behaviour adding a kselftest for it (without
-> modifying any driver).
-> 
-> > 
-> > > > Looking at a few drivers:
-> > > > - bnxt (bnxt_rx_pkt) does UNNECESSARY - ok
-> > > > - mlx5 (mlx5e_handle_csum) does UNNECESSARY and skips COMPLETE if there is
-> > > >   bpf prog attached
-> > > > - fbnic (fbnic_rx_csum) - can do COMPLETE even with xdp attached?
-> > > > - gve (gve_rx) - can do COMPLETE even with xdp attached?
-> > 
-> > (although for gve I might be wrong, there is also gve_rx_skb_csum that only
-> > does UNNECESSARY).
-> > 
-> > I'd wait for Jakub to chime in, but it feels like we should just document
-> > what we currently do as a recommended approach: for the drivers
-> > that support COMPLETE, do not report it when the bpf program is attached.
-> > Both NONE and UNNECESSARY are ok.
-> 
-> I am not completely sure the UNNECESSARY case is different from the COMPLETE
-> one. What are we supposed to do if the driver reports UNNECESSARY and the ebpf
-> program modifies some fields covered by the rx-checksum?
+This series introduces the concept of "Private Memory Nodes", which
+are opted into two basic functionalities by default:
+  - page allocation (mm/page_alloc.c)
+  - OOM killing
 
-For unnecessary, I think the safe expectation is that the bpf program
-will update the value of the checksum in the packet if it touches the data?
+All other features of mm/ are opted out of managing these NUMA
+nodes and its memory.  Then we add capability bits to allow node
+owners to opt back into those services (if supported).
 
-> > Also, did you run this test on real HW? NIPA now has HW tests, maybe it
-> > makes sense to route this series via net-next to get the real coverage?
-> 
-> What about splitting this series and have two different series:
-> - bpf-next: add xdp rx kfunc and related selftest
-> - net-next: add kselftest for the driver expected behaviour.
-> 
-> What do you think?
+NUMA-hosted memory is presently a most-privilege system (any memory on
+any node, except ZONE_DEVICE, is 100% fungible and accessible). We
+then slap restrictions on top of it (cpuset, mempolicy, ZONE type,
+page/folio flags, etc).
 
-I'd post everything to net-next to get the HW coverage. Once you get all
-the acks we can ask the maintainers' guidance.
+The goal here is to flip that dynamic, isolate by default and then
+opt-in to specific services that the device says is safe.
+
+Isolation at the NUMA/Zonelist layer provides a powerful mechanism for
+memory hosted on accelerators - re-use of the kernel mm/ code.
+
+ - Accelerators (GPUs) can use demotion, numactl, and reclaim.
+ - Special memory devices (Compressed RAM) with special access controls
+   (promote-on-write) can have generic services written for them.
+ - Network devices with large memory regions intended for ring buffers
+   can use the buddy and standard networking stack.
+ - Slow, disaggregated memory pools which aren't suitable as general
+   purpose memory get cleaner interfaces (no need to re-write the buddy
+   in userland, can use migration interface, etc).
+ - Per-workload dedicated memory nodes (disaggregated VM memory)
+
+And more use cases I have collected over the past few years.
+
+Not included here is a dax-extension [1] that exposes all the internal
+bits as userland controls for testing - along with a pile of selftests
+that prove correctness.
+
+Changes Since V4
+================
+ - Massive reduction in complexity.
+     - no ops struct
+     - no callback functions
+     - no __GFP_PRIVATE
+     - no __GFP_THISNODE requirement
+     - no task flags (no PF_MEMALLOC_* in the alloc path)
+ - isolation via a dedicated zonelist:
+     - private nodes are omitted from FALLBACK/NOFALLBACK
+     - added ZONELIST_PRIVATE(_NOFALLBACK)
+ - ALLOC_ZONELIST_PRIVATE alloc_flag
+     - on top of Brendan Jackman's recent mm/page_alloc.h work [3]
+     - Zonelist selection rides the allocator's alloc_flags
+ - rename OPS -> CAPS (capabilities)
+ - split base functionality (isolation) from opt-ins (CAPS)
+     - first half of series can be merged without CAPS
+ - dropped compressed ram example from series
+     - will submit separately if this moves forward
+ - Added KVM as first primary in-tree user (mempolicy / CAP_USER_NUMA)
+ - fully functional dax-kmem extension and huge suite of selftests
+   located at my github, to be discussed separately [1]
+
+Patch Layout
+============
+The series is broken into two sections:
+
+1) N_MEMORY_PRIVATE Introduction.
+   Introduce the node state.
+   Opt those nodes out of mm/ services.
+
+2) NODE_PRIVATE_CAP_* features
+   A set of mm/ service opt-in flags that augment private
+   nodes to make them more useful (i.e. reclaim = overcommit).
+
+   NODE_PRIVATE_CAP_LTPIN for private node folio pinning
+   NODE_PRIVATE_CAP_NUMA_BALANCING for private-node NUMA balancing
+   NODE_PRIVATE_CAP_DEMOTION for private-node tiering demotion
+   NODE_PRIVATE_CAP_HOTUNPLUG for opted-in private nodes
+   NODE_PRIVATE_CAP_USER_NUMA for userland numa controls
+   NODE_PRIVATE_CAP_RECLAIM for opted-in private node reclaim
+
+My hope is to merge at least #1 pulled ahead while #2 is debated.
+
+Allocation Isolation
+====================
+page_alloc presently controls whether a node's memory can be allocated
+on a given call by 4 things (in order of authority)
+
+  1) ZONELIST membership
+     If a node is not in the walked zonelist, it's unreachable.
+
+  2) __GFP_THISNODE
+     If this flag is set and the only node in the ZONELIST is the
+     singular preferred node (or the local node, for -1)
+
+  3) cpuset.mems membership
+     cpuset trims any node in its allowed list
+
+  4) mempolicy nodemask
+     the allocator will skip any node not in the nodemask.
+
+Except for #1 (Zonelist membership) there are all kinds of weird corner
+conditions in which 2-4 can be completely ignored (interrupt context,
+empty set because cpuset doesn't intersect mempolicy, shared vma, ...)
+
+But ZONELIST membership is *absolute*.  If a zone is not in the
+zonelist being walked, IT CANNOT BE ALLOCATED FROM. PERIOD.
+
+The existing zonelists are constructed like so:
+  ZONELIST_FALLBACK    : All N_MEMORY nodes
+  ZONELIST_NOFALLBACK  : A singleton N_MEMORY node
+
+Private node isolation is implemented via ZONELIST isolation:
+  ZONELIST_PRIVATE            : The private node + N_MEMORY
+  ZONELIST_PRIVATE_NOFALLBACK : The private node alone.
+
+(mirrors exactly the fallback/nofallback for __GFP_THISNODE)
+
+Private nodes:
+  1) Never appear in any ZONELIST_FALLBACK
+  2) Have an empty ZONELIST_NOFALLBACK
+  3) Only appear in their own ZONELIST_PRIVATE(_NOFALLBACK)
+
+1 & 2 mean all existing in-tree callers to page_alloc can NEVER
+accidentally allocate from a private node.
+
+An allocation must explicitly ask via a zonelist and a nodemask.
+
+  alloc_flags |= ALLOC_ZONELIST_PRIVATE; /* use ZONELIST_PRIVATE */
+  __alloc_pages(..., nodemask);     /* with the private node set */
+
+The page allocator keeps all its original interfaces which only
+ever touch the default zonelists - avoiding churn.
+
+Making it accessible via Mempolicy: MPOL_F_PRIVATE and page_alloc
+=================================================================
+The vast majority of the kernel will never need to know about
+ZONELIST_PRIVATE, because we add MPOL_F_PRIVATE to mempolicy.
+
+When a mempolicy has MPOL_F_PRIVATE, the alloc_mpol() interfaces
+do the zonelist selection for the source of the allocation.
+
+That really is the whole explanation of the mechanism:
+
+  alloc_flags = mpol_alloc_flags(pol);
+  page = __alloc_frozen_pages_noprof(..., alloc_flags);
+
+On mm-new this rides the allocator's existing alloc_flags plumbing:
+ALLOC_ZONELIST_PRIVATE is just another alloc_flag, so no new
+parameter, enum, or alloc_context change is required.
+
+For modules that want to implement their own special handling, they
+get the _private variants for the page allocator.  This lets modules
+re-use the buddy instead of rewriting it.
+
+   - alloc_pages_node_private_noprof()
+   - folio_alloc_node_private_noprof()
+
+This keeps ALLOC_ flags mm/ internal (these functions add the flags).
+
+Isolating private node folios from kernel services
+==================================================
+We implement filter points in mm/ to prevent operations on
+private node memory.  Where possible, we even re-use existing
+filter points from ZONE_DEVICE.
+
+Most filter points are one or two lines of code:
+
+Combining ZONE_DEVICE and N_MEMORY_PRIVATE opt-out spots:
+  -     if (folio_is_zone_device(folio))
+  +     if (unlikely(folio_is_private_managed(folio)))
+
+Disabling a service:
+  +  if (!node_is_private(nid)) {
+  +      kswapd_run(nid);
+  +      kcompactd_run(nid);
+  +  }
+
+Disallowing a uapi interaction:
+  +  if (node_state(nid, N_MEMORY_PRIVATE))
+  +      return -EINVAL;
+
+In the second half of the series, we replace blanket N_MEMORY_PRIVATE
+filters with NODE_PRIVATE_CAP_* filters to opt those nodes into that
+interaction if CAP is set.
+
+We abstract this with a nice clean interface to make it really clear
+what is happening (nodes have features!)
+
+  -  if (node_state(pgdat->node_id, N_MEMORY_PRIVATE))
+  +  if (!node_allows_reclaim(pgdat->node_id))
+
+NODE_PRIVATE_CAP_* features
+===========================
+This series of commits opts private nodes into various mm/ services.
+
+Capabilities:
+  NODE_PRIVATE_CAP_RECLAIM       - direct and kswapd reclaim
+  NODE_PRIVATE_CAP_USER_NUMA     - userland numa controls
+  NODE_PRIVATE_CAP_DEMOTION      - node is a demotion target
+  NODE_PRIVATE_CAP_HOTUNPLUG     - hotunplug may migrate
+  NODE_PRIVATE_CAP_NUMA_BALANCING - NUMAB may target node folios
+  NODE_PRIVATE_CAP_LTPIN         - Longterm pin operates normally
+
+Some opt-in support is more intensive than others, so these features
+are broken out in a way that we can defer them as future work streams.
+
+NODE_PRIVATE_CAP_RECLAIM:
+  Enabling reclaim for these nodes is actually surprisingly trivial.
+
+  Without CAP_RECLAIM, when an allocation failure occurs, the system
+  will not attempt to swap the memory - and instead will OOM (typically
+  whatever task is using the most memory on *that* private node).
+
+  This capability consists of:
+    1) enabling kswapd and kcompactd for that node at hotplug time.
+    2) formalizing opt-out hooks to node_allows_reclaim() opt-in hooks.
+    3) Sets normal watermarks for these nodes.
+    4) Allow madvise operations on that node (PAGEOUT).
+    5) A small tweak to how LRU decides which zones to visit.
+
+NODE_PRIVATE_CAP_USER_NUMA
+  Enables the following userland interfaces to accept the node:
+    mbind()
+    set_mempolicy()
+    set_mempolicy_home_node()
+    move_pages()
+    migrate_pages()
+
+  example:
+     buf = mmap(..., MAP_ANON);
+     mbind(buf, ..., {private_node});
+     buf[0] = 0xDEADBEEF; /* Page faults onto the private node */
+
+  Later - the KVM example shows how in-kernel mempolicies can
+  also be bound by CAP_USER_NUMA.
+
+  Otherwise, that's it - it's just a mempolicy with MPOL_F_PRIVATE.
+
+NODE_PRIVATE_CAP_HOTUNPLUG
+  This is simple: allow hotunplug to migrate this nodes folios.
+
+  Some devices may not be able to tolerate unexpected migrations,
+  so we prevent hotunplug from engaging in migration by default.
+
+  Some devices may have an mmu_notifier in their driver that can
+  manage the migration and subsequent refault.
+
+  CAP_HOTUNPLUG allows memory_hotplug.c to migrate normally.
+
+NODE_PRIVATE_CAP_DEMOTION
+  This adds the private node as a valid demotion target, and allows
+  reclaim to demote memory from a private node to a demotion target.
+
+  Requires:  NODE_PRIVATE_CAP_RECLAIM
+
+NODE_PRIVATE_CAP_NUMA_BALANCING
+  This enables numa balancing to inject prot_none on private node
+  folio mappings and promote them when faults are taken.
+
+NODE_PRIVATE_CAP_LTPIN
+  This allows GUP Longterm Pinning to operate normally.
+
+  Normally, longterm pinning determines folio eligibility based
+  on its ZONE_* membership (among other things).
+
+  ZONE_NORMAL is eligible, while ZONE_MOVABLE folios require
+  migration to ZONE_NORMAL before pinning.
+
+  Neither operation is preferable by default on a private node,
+  so the base behavior of FOLL_LONGTERM is to FAIL.
+
+  This capability allows longterm pinning to operate normally
+  based on the ZONE membership.  Private node memory may be
+  hotplugged as either ZONE_NORMAL or ZONE_MOVABLE.
+
+In-tree User: KVM
+=================
+Dave Jiang proposed [2] dax-backed guest_memfd() memory as a way of
+enabling disaggregated memory pools to host dedicated KVM memory.
+
+With private nodes, this is trivial (with a bit of basic plumbing):
+
+static int kvm_gmem_bind_node(struct inode *inode, int node)
+{
+...
+  /* Bind to a private node - gated on CAP_USER_NUMA */
+  pol = mpol_bind_node(node);
+  if (IS_ERR(pol))
+    return PTR_ERR(pol);
+
+  /* Set the shared policy */
+  err = mpol_set_shared_policy_range(&GMEM_I(inode)->policy, ..., pol);
+...
+}
+
+KVM doesn't even need to know about private nodes at all, all it
+does is ask mempolicy whether the requested node is a valid bind.
+
+mm/ component testing with dax driver
+=====================================
+The dax driver extensions[1] implements a simple interface to create
+a private node from a dax device created by any source.
+
+I left the dax driver extensions out of this feature set because
+it locks in the CAP_ bits before anyone has input.  It's there
+primarily for testing at this point.
+
+The simplest way to get a dax device is with the memmap= boot arg.
+   e.g.: "memmap=0x40000000!0x140000000"
+
+The dax driver extension has the following sysfs entries:
+  dax0.0/private         - set the node to private
+  dax0.0/dax_file        - make /dev/dax0.0 mmap'able in kmem mode
+  dax0.0/adistance       - dictate memory_tierN membership
+  dax0.0/reclaim         - CAP_RECLAIM
+  dax0.0/demotion        - CAP_DEMOTION
+  dax0.0/user_numa       - CAP_USER_NUMA
+  dax0.0/hotunplug       - CAP_HOTUNPLUG
+  dax0.0/numa_balancing  - CAP_NUMA_BALANCING
+  dax0.0/ltpin           - CAP_LTPIN
+
+Now consider the following...
+
+Single node reclaim + mbind support:
+  echo 1 > dax0.0/private
+  echo 1 > dax0.0/reclaim
+  echo 1 > dax0.0/user_numa
+  echo online_movable > dax0.0/state
+
+Test program:
+   /* node1: 1GB Private Memory Node, 4GB swap */
+   buf = mmap(NULL, TWO_GB, PROT_READ | PROT_WRITE,
+              MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+   sys_mbind(p, len, MPOL_BIND, mask, MAXNODE, MPOL_MF_STRICT);
+   memset(buf, 0xff, TWO_GB);
+
+We can *guarantee* the ONLY reclaiming tasks are exactly:
+  - kswapdN (in theory we can even make this optional!)
+  - the memset task faulting pages in
+
+This also means these are the only tasks capable of becoming
+locked up and OOMing (as long as it is not under pressure).
+
+The rest of the system remains entirely functional for debugging.
+
+It now becomes possible to micro-benchmark and A/B test reclaim
+changes with different scenarios (number of tasks, amount of
+memory, watermark targets, etc), because we have hard controls
+over exactly which tasks can access that node memory and how.
+
+If we broke CAP_RECLAIM into subflags:
+  - CAP_RECLAIM_KSWAPD
+  - CAP_RECLAIM_DIRECT
+  - CAP_COMPACTION_KCOMPACTD
+  - CAP_COMPACTION_DIRECT
+
+We can actually test the efficacy of each of these mechanisms in
+isolation to each other - something that is strictly impossible today.
+
+Bonus Configuration: HBM device memory tiering
+==============================================
+echo 1 > dax0.0/private       # make the node private
+echo 0 > dax0.0/adistance     # highest tier
+echo 1 > dax0.0/reclaim       # reclaim active
+echo 1 > dax0.0/demotion      # may demote from the node
+echo 1 > dax0.0/user_numa     # mbind()
+echo online_movable > dax0.0/state
+echo 1 > numa/demotion_enabled
+
+This is an HBM device which is treated as the top-tier in the
+system but for which memory can only enter via explicit mbind().
+
+It can be overcommitted because it can be reclaimed (demotions
+go to CPU DRAM, and reclaim can swap from it).
+
+If the HBM is managed by an accelerator (GPU), the mmu_notifier
+allows it to know when reclaim is moving memory out to do
+device-mmu invalidation prior to migration.
+
+Prereqs, base commit, references
+================================
+akpm/mm-new - for Brendan Jackman's mm/page_alloc.h work[3]
+
+Prereqs (all already in akpm/mm-new; listed for out-of-tree application):
+
+page_alloc.h split + alloc_flags plumbing this series rides on:
+commit e81fae43cd69 ("mm: split out internal page_alloc.h")
+commit b4ff3b6d0a1d ("mm: replace __GFP_NO_CODETAG with ALLOC_NO_CODETAG")
+
+dax atomic whole-device hotplug (used by the dax extension [1]):
+commit d7aa81b9a919 ("mm/memory: add memory_block_aligned_range() helper")
+commit 3b2f402a1754 ("dax/kmem: add sysfs interface for atomic whole-device hotplug")
+
+[1] https://github.com/gourryinverse/linux/tree/scratch/gourry/managed_nodes/dax_private-mm-new
+[2] https://lore.kernel.org/all/20260423170219.281618-1-dave.jiang@intel.com/
+[3] https://lore.kernel.org/all/20260702-alloc-trylock-v4-0-0af8ff387e80@google.com/
+
+base-commit: c872b70f5d6c742ad34b8e838c92af81c8920b3e
+
+Gregory Price (36):
+  mm: refactor find_next_best_node to find_next_best_node_in
+  mm/page_alloc: refactor build_node_zonelist() out of build_zonelists()
+  mm/page_alloc: let the bulk and folio allocators carry alloc_flags
+  numa: introduce N_MEMORY_PRIVATE
+  mm: add ZONELIST_PRIVATE(_NOFALLBACK) for N_MEMORY_PRIVATE nodes.
+  cpuset: exclude private nodes from cpuset.mems (default-open)
+  mm/memory_hotplug: disallow migration-driven private node hotunplug
+  mm/mempolicy: skip private node folios when queueing for migration
+  mm/migrate: disallow userland driven migration for private nodes
+  mm/madvise: disallow madvise operations on private node folios
+  mm/compaction: disallow compaction on private nodes
+  mm/page_alloc: clear private node watermarks and system reserves
+  mm/mempolicy: disallow NUMA Balancing prot_none on private nodes
+  mm/damon: skip private node memory in DAMON migration and pageout
+  mm/ksm: skip KSM for managed-memory folios
+  mm/khugepaged: skip private node folios when trying to collapse.
+  mm/vmscan: disallow reclaim of private node memory
+  mm/gup: disallow longterm pin of private node folios
+  proc: include N_MEMORY_PRIVATE nodes in numa_maps output
+  mm/memcontrol: account private-node memory in per-node stats
+  proc/kcore: include private-node RAM in the kcore RAM map
+  mm/mempolicy: add MPOL_F_PRIVATE and zonelist selection
+  mm/mempolicy: apply policy at the kernel zone for private-node binds
+  mm/mempolicy: add in-kernel MPOL_BIND interfaces for drivers/services
+  mm/memory_hotplug: support N_MEMORY_PRIVATE node hotplug
+  mm: add NODE_PRIVATE_CAP_RECLAIM for opted-in private node reclaim
+  mm: add NODE_PRIVATE_CAP_USER_NUMA for userland numa controls
+  mm: add NODE_PRIVATE_CAP_HOTUNPLUG for opted-in private nodes
+  mm: add NODE_PRIVATE_CAP_DEMOTION for private-node tiering demotion
+  mm: add NODE_PRIVATE_CAP_NUMA_BALANCING for private-node NUMA
+    balancing
+  mm: add NODE_PRIVATE_CAP_LTPIN for private node folio pinning
+  mm/khugepaged: base private node collapse eligiblity on actor/cap bits
+  Documentation/mm: describe private (N_MEMORY_PRIVATE) memory nodes
+  mm/mempolicy: add mpol_set_shared_policy_range()
+  KVM: guest_memfd: bind backing memory to a NUMA node at creation
+  KVM: selftests: add a guest_memfd FLAG_BIND_NODE test
+
+ Documentation/ABI/stable/sysfs-devices-node   |  10 +
+ Documentation/mm/index.rst                    |   1 +
+ Documentation/mm/numa_private_nodes.rst       | 160 ++++++++++
+ drivers/base/node.c                           | 118 +++++++
+ drivers/dax/kmem.c                            |   2 +-
+ fs/proc/kcore.c                               |   5 +-
+ fs/proc/task_mmu.c                            |  10 +-
+ include/linux/gfp.h                           |  22 +-
+ include/linux/kvm_host.h                      |   3 +
+ include/linux/memory_hotplug.h                |   5 +-
+ include/linux/mempolicy.h                     |  16 +
+ include/linux/mmzone.h                        |  26 +-
+ include/linux/node_private.h                  | 262 ++++++++++++++++
+ include/linux/nodemask.h                      |   7 +-
+ include/uapi/linux/kvm.h                      |   5 +-
+ include/uapi/linux/mempolicy.h                |   1 +
+ kernel/cgroup/cpuset.c                        |  26 +-
+ mm/compaction.c                               |  13 +
+ mm/damon/paddr.c                              |   9 +
+ mm/gup.c                                      |  28 +-
+ mm/huge_memory.c                              |   5 +
+ mm/internal.h                                 |  97 +++++-
+ mm/khugepaged.c                               |  18 +-
+ mm/ksm.c                                      |   8 +-
+ mm/madvise.c                                  |   8 +-
+ mm/memcontrol-v1.c                            |   8 +-
+ mm/memcontrol.c                               |  13 +-
+ mm/memory-tiers.c                             |  40 ++-
+ mm/memory_hotplug.c                           | 119 +++++++-
+ mm/mempolicy.c                                | 288 +++++++++++++++---
+ mm/migrate.c                                  |  19 +-
+ mm/mm_init.c                                  |   2 +-
+ mm/page_alloc.c                               | 189 +++++++++---
+ mm/page_alloc.h                               |  34 +++
+ mm/vmscan.c                                   |  57 +++-
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../kvm/guest_memfd_bind_node_test.c          | 213 +++++++++++++
+ virt/kvm/guest_memfd.c                        |  39 ++-
+ 38 files changed, 1728 insertions(+), 160 deletions(-)
+ create mode 100644 Documentation/mm/numa_private_nodes.rst
+ create mode 100644 include/linux/node_private.h
+ create mode 100644 tools/testing/selftests/kvm/guest_memfd_bind_node_test.c
+
+-- 
+2.53.0-Meta
+
