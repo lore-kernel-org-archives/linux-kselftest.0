@@ -1,144 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932F4431A45
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 14:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158BA3BB137
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784558649; cv=none; b=APWTRgUy4UEYm+ECAJ3HdZ1/WRapTmW8CSriPjftYG8fIFzCIzMluGOt4XO30ltpIl/kzpgWQ/gzsc2dJNwnasfQT1ULiG/Ffv84g+xbLVOzbzOElmUxZzn+tuaTMy0HyjKxuKXxT5TbGcxY0618s7sarRxwSiT2vVcaLAIpZas=
+	t=1784559693; cv=none; b=C6aRtp2Pejdiej0GjDaeBKuNAC+ZpfyqU8RTrnu6Rc4Sveh/zizMohgLdhG1FgCCtovbzX5qiOxKpDPvw7IfAG70H8/bimHpu19H657SbSXE6xqpZa7OdmNanXDlzYuY1iPUZsvEvW2pckMxqi4tKrhIVQ+/EUXpI7P9EwLOcaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784558649; c=relaxed/simple;
-	bh=cF1YCM++gtCxzT7sQ99GVB9BZDa1LA1mlq8M3t5Rik8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=l2VTYf7Qury/VAzdafC7cZyU/sJVyLmIpwwu4G/RCwM6SluAlxUgbKPv4LZU08U5yRD35mq0wyP6GJsOwQqBejrQ6lwmk6ifonYHKps2KEtEUQVA48/bH8wIJ3t895PnaC1LfLOZp+95IAKt11kqAD+CEEQLpOU5ousngOUALtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=arf3aqpy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784559693; c=relaxed/simple;
+	bh=/adrxk88ue9QZdaMDnxlrYJjorXsMzjdAQoGR492+Qg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gvp7j4tV093YGqE/rGOP8I020p0rNE/XPPDnNKEzgmvVl5U8lFsWzNIIXlmb+yZOIe1h1EsmE9KA/oq/D3DDlxN0chFfnbVeHVDA9kSqVK8mZJEWJxbTIusjPSP7N7HQkFmed2vqF/9fDSRLwrI8m6+Nf8SKQs0/SlOi8QyDYdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A79W5mDv; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="arf3aqpy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784558646;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=awL865fyO28VMGXok9evyOX+G7wyqLle0dPFb8IBJyg=;
-	b=arf3aqpyiuDN/jrnDN+RxCVudtLUvLTeH7/Z6H060bNZLZYcfO397vTVkim7Nd8UjwyTdD
-	3J1lZ8Q9cRyQ3giTH3c1KJnQPb1FlUTYppwodWO0wqXJ3o8sZJdMfJygYUkHAHE2jpDCy/
-	4mLC5WcSdXt7IBrYjJK6aFJ/L4pcNig=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-30-CgV9iuZePQ6xgJpA3p9D5w-1; Mon,
- 20 Jul 2026 10:44:03 -0400
-X-MC-Unique: CgV9iuZePQ6xgJpA3p9D5w-1
-X-Mimecast-MFC-AGG-ID: CgV9iuZePQ6xgJpA3p9D5w_1784558641
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D599180288D;
-	Mon, 20 Jul 2026 14:44:01 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.81.35])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2DA941592;
-	Mon, 20 Jul 2026 14:43:59 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  netdev@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Eelco
- Chaudron <echaudro@redhat.com>,  Ilya Maximets <i.maximets@ovn.org>,
-  dev@openvswitch.org
-Subject: Re: [PATCH net 2/7] selftests: openvswitch: add config file
-In-Reply-To: <a2032420-b4d4-4eba-9eb4-65eeeea2b63b@kernel.org> (Matthieu
-	Baerts's message of "Fri, 17 Jul 2026 11:39:34 +0200")
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-	<20260710-net-sft-fix-containers-v1-2-a2915c294ef5@kernel.org>
-	<f7t5x2frlkh.fsf@redhat.com> <f7tldbar9gp.fsf@redhat.com>
-	<a2032420-b4d4-4eba-9eb4-65eeeea2b63b@kernel.org>
-Date: Mon, 20 Jul 2026 10:43:57 -0400
-Message-ID: <f7t7bmppvpu.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A79W5mDv"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-495635a85d2so4950705e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 08:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1784559690; x=1785164490; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=u1b8/cFFL6YY9kDs1t0qAstCmVExZsKMqgR0pyeRNAI=;
+        b=A79W5mDvUyz61Ff5WOX0SElycdgDhMMQVrhDSxIvRl15CG3G821T62wKBjDezO+0kB
+         Lqa3dFkH9zpOHhJT63kFTagtW2VEnC3yOQ86JhGAfudUkWUGBdM5HtQNY2xQ6AAvzNWh
+         msaXNJPPP9dUu9xf22t1yQHidTbRpK+pXB6eYeNTK0KFOCUU3JXVVvzbheAw+9n22LRg
+         Y/pB0IAJ5EDoCG0eh6Bx5cGbmGQP3Hl9B9BaFZ6lA/s5lmm00Q4eX+2b4TFs618W8OPO
+         xvoS86vojafEaVhreBpoisLXTyoahI0NDWKL3hyQ1MCNDvA1cvUBkyxGuwvjd5qo7ViC
+         bhng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784559690; x=1785164490;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=u1b8/cFFL6YY9kDs1t0qAstCmVExZsKMqgR0pyeRNAI=;
+        b=Y4zGcJoL1ZvA0zMNthFZPvBaSyeriqcmgOaZk8Z/HkP4xt6og7feI7F1UmxBbC/O0P
+         VwgpQGYyO2Y7H71+8YIyO6J6nsFRy+QMD+Vaev72aYKjqvB5OqfmcwvwKtxpT6WXkh8g
+         Yw3DgnWhOYPEGVRmuqMxm5LIwceTUGuhfLMzNtJ5zADwvyYVCNIVdwaE669XkZy+AR2l
+         uM0uJsJbeIUpeZ8puQxfGLc9J/oNxLGMGgD7HyT3h5L/udS1rmRhoCjrHxhZj1/x5a8M
+         S0KuLpx+mlIQxiZTQ9HJqImVB97/G3U2mpId+5g5FNjOJW3qu95/MEIlv1BENChk7qCK
+         akqw==
+X-Forwarded-Encrypted: i=1; AHgh+RouM/drCLeViFwA+5h40uw26QMCQcT/ef/9zR/bmrzpzO7zET+q2wls8YVG+e76aT1bE0/Z84FhrI+eXS0Xpag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZGFDXLGdXpzqKz6ZtBv58c8ufIRa2DOr76/chp3/6rJ9sdxAY
+	t0Ch27s0ekCl4Bfy6vFdHz1xKu9wnvNNtibretCy8USB4CCOZ7GiJP00//nUsk6E0n8=
+X-Gm-Gg: AfdE7cnAJv6TU13mUKQ3BzKUQqV71773UOA05LAWYsFjFCZCAZwvd69OgNxaCIEUjh8
+	pBwV+9NUMTcqWDBPP7DykjZlgTC3LKkSTSwrkV8I+LJyK1/43Um92OhoxGpee+LBUo/n0KaRi3F
+	yIa2zE+1m4flFDb91WO+6I6E2TDvGOJnAqcTjJJCSbRZIQ6XZTlZv10VFDKqHCMtq/EzMrBn65v
+	P1jz09IXmw/TXcm6A6LDLyP8cASKtMikM0YEGVZeukYyW/b69zNUcl6svJpUIJSgaALBFLhYO7A
+	zjn2rd2TyhEPq7HWkNN6euYTCPZAL1iya7jENooppuJTRBMw0m+F+Lts6uF4kvhYBfUreLxVFU/
+	F+Q59qLSwOyHk1ic522I6edlbiJIQ/53vdRg3DOCfGvC9hPLPkh21Mmekeu1XEwQNgeDY1ZW+gF
+	CYiBRtQg==
+X-Received: by 2002:a05:600c:e547:10b0:495:5420:bf9a with SMTP id 5b1f17b1804b1-4955420c7b9mr71637045e9.30.1784559689657;
+        Mon, 20 Jul 2026 08:01:29 -0700 (PDT)
+Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4955dfa81b2sm59596425e9.4.2026.07.20.08.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 08:01:28 -0700 (PDT)
+Date: Mon, 20 Jul 2026 17:01:26 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH-cgroup/for-7.3] selftests/cgroup: Fix minor defects in
+ test_cpuset
+Message-ID: <al4tyJ2lRMj32Wpn@localhost.localdomain>
+References: <20260717191814.989215-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fv4t7rj5joy2f4tw"
+Content-Disposition: inline
+In-Reply-To: <20260717191814.989215-1-longman@redhat.com>
 
-Matthieu Baerts <matttbe@kernel.org> writes:
 
-> Hi Aaron,
->
-> Thank you for the review!
->
-> On 16/07/2026 22:00, Aaron Conole wrote:
->> Aaron Conole <aconole@redhat.com> writes:
->>> "Matthieu Baerts (NGI0)" <matttbe@kernel.org> writes:
->>>
->>>> The kselftests doc mentions that a config file should be present "if a
->>>> test needs specific kernel config options enabled". This selftest
->>>> requires some kernel config, but no config file was provided.
->>>>
->>>> We could say that a sub-target could use the parent's config file, but
->>>> the kselftests doc doesn't mention anything about that. Plus the
->>>> net/openvswitch target is the only net target without a config file.
->>>
->>> We've been operating on that assumption from the openvswitch side, but
->>> it's true that isn't explicitly documented anywhere, and I guess it
->>> isn't officially supported in the kselftest framework.  I guess we'll
->>> need to keep updating this config as we add tests for things like SCTP,
->>> and others, and maybe that's a good thing like we can add a comment
->>> describing which tests take which configs.
->>>
->>> The downside is for most of the OVS testing we use the NIPA scripts
->>> and those 'inherit' the parent config, so it would be a change on our
->>> side from the development standpoint (but probably something we should
->>> have been doing from the beginning).
->>>
->>> That said, would it be worth also exploring the 'cascading
->>> configuration' support?  It seems like a useful feature, but maybe it
->>> should be a separate discussion.  I ask because of how OVS interacts
->>> with the networking stack as an 'alternative bridge' so-to-speak, I do
->>> worry about having to duplicate lots of configurations between the two
->>> as we expand the test coverage on OVS side.
->
-> It is not clear to me what you are using on your side, but I guess it
-> should be doable to modify some scripts to merge this new config file
-> and the net one in your case.
+--fv4t7rj5joy2f4tw
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH-cgroup/for-7.3] selftests/cgroup: Fix minor defects in
+ test_cpuset
+MIME-Version: 1.0
 
-This doesn't seem to break the NIPA case (at least I can see the
-'contest test' output is not SKIP, but PASS for the openvswitch.sh).
-I'm not sure about the suggestion to change the script in
-tools/testing/selftests/net/openvswitch/openvswitch.sh to do a config
-merge.  It isn't out-of-tree or anything, and seems like that would
-create confusing git state (and not desirable from my end) - the
-upstream test would leave a modified, tracked file.  Was that your
-suggestion?  Or do you mean NIPA itself (but I think it already just
-uses the top-level config).
+On Fri, Jul 17, 2026 at 03:18:14PM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> With commit 98149f542530 ("selftests/cgroup: Add test for cpuset affinity
+> on controller disable"), sashiko [1] had report 3 different issues with
+> the new test_cpuset_affinity_on_controller_disable() test.
+>=20
+>  1) `cpu_set_equal` iterates over mask bytes instead of bits, ignoring
+>     CPUs >=3D 8.
 
-The config change itself looks fine to me.
+Inline comment
 
->>>> Here is a new config file, which is a trimmed version of the net one,
->>>> with hopefully the minimal required kconfig on top of 'make defconfig'.
->>>
->>> Should this also remove the OVS configs from the upper level since there
->>> shouldn't be OVS tests executing there (ie: CONFIG_OPENVSWITCH*)?
->> 
->> Actually, forget this part.  The P-MTU tests in pmtu.sh use ovs to
->> create a datapath through OVS.  So these configurations need to stay at
->> the top level as well.
->
-> Indeed. I don't know these tests well, but maybe this P-MTU selftest
-> should move to the net/openvswitch target?
+>  2) Thread synchronization logic allows the main thread to read
+>     uninitialized stack memory, causing test flakiness.
 
-Well, it is testing path MTU across multiple topologies, so it isn't
-really an openvswitch specific test.  Just one that happens to use
-openvswitch in one of the test cases.
+Hm, I cannot see it (alhtough I don't see it through), what was the
+stack memory?
+(test_phase is static, then re-initalized)
 
-> Cheers,
-> Matt
+>  3) Test fails instead of skipping gracefully on uniprocessor systems
+>     or when CPU 1 is unavailable.
 
+Interesting catch.
+
+>=20
+> Fix the reported issues by:
+>  1) Iterates over the bit size of the mask.
+>  2) Test the new ready flag for each thread to end the wait
+>     on the condoitional variable and eliminate the now unneeded
+>     AFFINITY_THREAD_A_READY and AFFINITY_THREADS_READY test phases.
+
+But the symmetric synchronization with counter is easier to reason
+about.
+
+>  3) Return KSFT_SKIP on "cpuset.cpus" setting failure.
+
+It'd be better to have same style with test_cpuset_prs.sh, i.e. a guard
+at the beginning requesting a minimal number of CPUs. Next time...
+
+> @@ -251,7 +251,7 @@ static int cpu_set_equal(cpu_set_t *dst, unsigned lon=
+g mask)
+>  	CPU_ZERO(&expected);
+>  	assert(sizeof(mask) < CPU_SETSIZE);
+> =20
+> -	for (int cpu =3D 0; cpu < sizeof(mask); ++cpu)
+> +	for (int cpu =3D 0; cpu < sizeof(mask) * 8; ++cpu)
+>  		if ((1UL << cpu) & mask)
+>  			CPU_SET(cpu, &expected);
+
+Oh, that was my braino in how masks are stored.
+Thanks for correcting me!
+
+It should also extend the assert accordingly:
+  	assert(sizeof(mask) * 8 < CPU_SETSIZE);
+
+
+
+Michal
+
+--fv4t7rj5joy2f4tw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCal44QBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AgYUQD/RwFDPT5dojDmOi5yECGJ
+IprD9iM22xQmyH+OoCnBNI8BAMIwfQVAJ5zs9gOhHp1zjsXnYdcyT9zILSDImEhL
+3EoH
+=xCZx
+-----END PGP SIGNATURE-----
+
+--fv4t7rj5joy2f4tw--
