@@ -1,132 +1,120 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [160.30.148.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818093B7B71;
-	Mon, 20 Jul 2026 07:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44514396B9D;
+	Mon, 20 Jul 2026 07:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.30.148.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784532274; cv=none; b=WIS96Pz5zqaDFRLzGB/CpvnMfzxhGgxhXqzhaMFpZVyx1Mf2HoyZzra8KltZJ4Gmi6xbFZeO92iTFV1SVysYUbc0BXj/ZjuMz6ojFiP8RzTvYzEHy7zCekAz/yf7SEq+eVqCvnv9MzouC78PegBMqJExxoamujIvY6EI19B1Y7s=
+	t=1784533113; cv=none; b=MhyJEEOh3AtKNkyC6QKkG4U5PL/U/etptABRmw7ZGg+gTCmqnh9MIaZkjAq4QUag1Gaaez3kwvVCx385rUu2mLSGVbNgTWzdXwBp0wLbhm9Nd8TaurIkOCOCKEQQKQzLksNJkIr6QPp857GD7jZKj0sRN/oAbNAvobmK4Se5dws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784532274; c=relaxed/simple;
-	bh=xG3jBF/2XG87NZanEpdB0L/KCwiHNiowQsA+VJruadU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=YNfJa5ZafWvI61wqea7JtAXrvad+gtztv/UyGG+i7w2dBR66kRZI49uTriT7blLEIyOw8RdS8CXCSN7CuYsfY0HNdsiLxSuZ0ZweoI5pVW0hV6l7qsQTTao50RgCbf4iv8mMMKHc6YMtCOyFtHloV5E9GZOfdisLX2YTRVN3bIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FTRj/rwF; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FTRj/rwF"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 0AECE1A1103;
-	Mon, 20 Jul 2026 07:24:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D07EB60360;
-	Mon, 20 Jul 2026 07:24:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8DE1D11BD14B3;
-	Mon, 20 Jul 2026 09:24:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784532265; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=xG3jBF/2XG87NZanEpdB0L/KCwiHNiowQsA+VJruadU=;
-	b=FTRj/rwFDWRp/v43DbHWV+kYGt9bgyjq073poKKsZjISXKp/Xk9T1LUdoC8UPmsyMNi6N9
-	dl7vcVDUIeqWyy8lSsSdDyyXhwtNI0SzGVW8xkmP6wG5k+3ZqrLYU4bokstESQgvZGqNv0
-	84O06UKHTDoxMhn9W/S6+/8cQfVxhdlov81hHQ67DKZO0DSbIr+9ZZC6cFYCCD6LjXfR2S
-	EssdsSwwIm3oX4n5pFFbiNNkXMsObgrvKVG6HgBphhgkYzBi7NvYRtKi8N0gQfHe595jpA
-	eUcKct1viLg+8VaWZ0PSTN45fS7vuHmbzGKbECqX3+fX1Ck2H84nIgSEdWMP8g==
+	s=arc-20240116; t=1784533113; c=relaxed/simple;
+	bh=KiEwYI2Bg9KRdu6bTZTIWcPQ6z8ZUjBZQ92YKjygue4=;
+	h=Message-ID:In-Reply-To:References:Date:Mime-Version:From:To:Cc:
+	 Subject:Content-Type; b=b4JRHmjESbOuS5fwhMPDKWB1lHwT7RmLQijrkskMMdx9C8BvXvshAxJSGGrzaDhLedt0emQ6JsBsdi18DFP0vR83q2rlQ6EvQFn72+Nh67tM9F8c/DBn3wlYsaTnmcxQmcWpBgDKq+jj9LhlXOrxK0Lk5+gLRjYdMU04xxX0pR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn; spf=pass smtp.mailfrom=zte.com.cn; arc=none smtp.client-ip=160.30.148.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zte.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zte.com.cn
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mxhk.zte.com.cn (FangMail) with ESMTPS id 4h3XSG5Xwwz7VD94;
+	Mon, 20 Jul 2026 15:38:22 +0800 (CST)
+Received: from xaxapp04.zte.com.cn ([10.99.98.157])
+	by mse-fl2.zte.com.cn with SMTP id 66K7cEmj047214;
+	Mon, 20 Jul 2026 15:38:14 +0800 (+08)
+	(envelope-from xu.xin16@zte.com.cn)
+Received: from mapi (xaxapp04[null])
+	by mapi (Zmail) with MAPI id mid32;
+	Mon, 20 Jul 2026 15:38:16 +0800 (CST)
+X-Zmail-TransId: 2afb6a5dd0685f6-f3887
+X-Mailer: Zmail v1.0
+Message-ID: <20260720153816171RRd991pToocX8jt6806EG@zte.com.cn>
+In-Reply-To: <al3KlYMbmeR6iDX8@lucifer>
+References: 20260717-b4-scalable-cow-virt-pgoff-v1-1-cf24910ef094@kernel.org,202607191155425057lNrNOYTi44E_jmidmtkn@zte.com.cn,al3KlYMbmeR6iDX8@lucifer
+Date: Mon, 20 Jul 2026 15:38:16 +0800 (CST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 09:24:21 +0200
-Message-Id: <DK37W3ML3YOU.6MWJW8H8S2GI@bootlin.com>
-Subject: Re: [PATCH 1/4] selftests/bpf: Install bpftool where test_progs
- expects to find it
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260710-selftests-bpf_fixes-v1-0-aa24dfd6f4f9@suse.com>
- <20260710-selftests-bpf_fixes-v1-1-aa24dfd6f4f9@suse.com>
- <DJXJWE3X286K.16LM4LUS201ZP@bootlin.com>
- <f3a5c7dc-6731-4a3e-b8bd-909c0fff4520@linux.dev>
-In-Reply-To: <f3a5c7dc-6731-4a3e-b8bd-909c0fff4520@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+From: <xu.xin16@zte.com.cn>
+To: <ljs@kernel.org>
+Cc: <akpm@linux-foundation.org>, <david@kernel.org>, <liam@infradead.org>,
+        <vbabka@kernel.org>, <rppt@kernel.org>, <surenb@google.com>,
+        <mhocko@suse.com>, <jannh@google.com>, <pfalcato@suse.de>,
+        <willy@infradead.org>, <jack@suse.cz>, <linmiaohe@huawei.com>,
+        <nao.horiguchi@gmail.com>, <riel@surriel.com>, <harry@kernel.org>,
+        <lance.yang@linux.dev>, <kees@kernel.org>, <ziy@nvidia.com>,
+        <baolin.wang@linux.alibaba.com>, <npache@redhat.com>,
+        <ryan.roberts@arm.com>, <dev.jain@arm.com>, <baohua@kernel.org>,
+        <usama.arif@linux.dev>, <matthew.brost@intel.com>,
+        <joshua.hahnjy@gmail.com>, <rakie.kim@sk.com>, <byungchul@sk.com>,
+        <gourry@gourry.net>, <ying.huang@linux.alibaba.com>,
+        <apopple@nvidia.com>, <peterx@redhat.com>, <chengming.zhou@linux.dev>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: =?UTF-8?B?UmU6IFtQQVRDSCAwMS8xNV0gbW0vdm1hOiBpbnRyb2R1Y2UgVk1BIHZpcnR1YWwgcGFnZSBvZmZzZXQgZmllbGQgYW5kIGFkZCBoZWxwZXJz?=
+Content-Type: text/plain;
+	charset="UTF-8"
+X-MAIL:mse-fl2.zte.com.cn 66K7cEmj047214
+X-TLS: YES
+X-ENVELOPE-SENDER: xu.xin16@zte.com.cn
+X-SOURCE-IP: 10.5.228.133 unknown Mon, 20 Jul 2026 15:38:22 +0800
+X-CLEAN: YES
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6A5DD06E.001/4h3XSG5Xwwz7VD94
 
-On Thu Jul 16, 2026 at 11:09 PM CEST, Ihor Solodrai wrote:
-> On 7/13/26 8:32 AM, Alexis Lothor=C3=A9 wrote:
->> Hi,
->>=20
->> On Sat Jul 11, 2026 at 12:09 AM CEST, Ricardo B. Marli=C3=A8re wrote:
->>> bpftool_helpers.c looks for bpftool at "tools/sbin/bpftool" or
->>> "../tools/sbin/bpftool" relative to the running test_progs binary, matc=
-hing
->>> the build directory layout where bpftool sits at
->>> $(OUTPUT)/tools/sbin/bpftool.
->>>
->>> INSTALL_RULE installs bpftool through the generic TEST_GEN_PROGS_EXTEND=
-ED
->>> mechanism, which flattens it straight into $(INSTALL_PATH) and loses th=
-e
->>> tools/sbin/ prefix. After "make install", every flavor of test_progs,
->>> including the default one, fails to locate bpftool, and bpftool_maps_ac=
-cess
->>> and bpftool_metadata error out with "Failed to detect bpftool path", ev=
-en
->>> though bpftool itself built and installed fine.
->>>
->>> Explicitly install bpftool under tools/sbin/ in the installed tree
->>> so its relative location matches what detect_bpftool_path() already
->>> expects, restoring the pre-install layout instead of introducing a
->>> new one.
->>>
->>> Fixes: f21fae577446 ("selftests/bpf: Add a few helpers for bpftool test=
-ing")
->>> Signed-off-by: Ricardo B. Marli=C3=A8re <rbm@suse.com>
->>=20
->> I did not face the issue because I am running the selftests in-tree, and
->> the CI seems to do the same, but for users using selftests after running
->> `make install`, I guess the change makes sense.
->>=20
->> That's not the first fix aiming to improve bpftool
->> detection/installation (eg the BPFTOOL env variable, see [1]), so it
->> makes me wonder if we shouldn't just make bpftool part of
->> TRUNNER_EXTRA_FILES for all flavours of test_progs, similarly to other
->> binaries needed during tests (eg: urandom_read), instead of just adding
->> some bpftool-specific details in this generic install rule, and just
->> make the test runners assume that the needed binary is in the same
->> directory.
->
-> Alexis, using TRUNNER_EXTRA_FILES is a bit worse because that would
-> copy bpftool into every flavor subdir. I think just doing a single
-> rsync on install is fine.
+> > > This patch establishes fields within the vm_area_struct type to store the
+> > > virtual page offset of VMAs.
+> > >
+> > > The virtual page offset of a VMA is equal to vma->vm_start >> PAGE_SHIFT if
+> > > they are unfaulted or were not remapped, otherwise it is equal to this
+> > > value at the point of first fault.
+> > >
+> > > Currently, anonymous folios belonging to CoW'd MAP_PRIVATE-mapped
+> > > file-backed VMAs are tracked by their file offset. By adding virtual offset
+> > > as a property of VMAs, we can now track them by their virtual page offset
+> > > instead.
+> > >
+> > > By tracking this, we provide the means by which to eliminate this
+> > > inconsistency, and more importantly lay the foundations for future work for
+> > > the scalable CoW anonymous rmap rework.
+> > >
+> > > This patch simply adds the fields and some simple helpers. Subsequent
+> > > patches will update mm code to make use of these fields correctly.
+> > >
+> > > The fields chosen are packed in the VMA such that, for 64-bit kernel
+> > > builds, no additional space is taken up.
+> >
+> > It is not necessarily true that no additional memory will be consumed, as it
+> > depends on whether the baseline kernel has CONFIG_PER_VMA_LOCK enabled.
+> 
+> We are moving to this being permanently enabled.
+> 
+> > Moreover, in the future evolution of mm, maintaining this benefit would
+> > require that the layout of struct vm_area_struct before __vm_virt_pgoff_lo
+> > remains unchanged, which seems impractical.
+> 
+> It isn't, we are very careful with this struct.
 
-Indeed, ok then :)
+Ok, That will be nice.
 
-Thanks,
+> 
+> >
+> > My personal suggestion is: maybe we could simply add an unsigned long field,
+> > say vm_virt_pgoff, without worrying about the increased memory footprint for
+> > now. Additionally, it would be helpful to add some comments clarifying the
+> > difference between this new field and the existing vm_pgoff, to aid understanding.
+> 
+> Nope that'd add 64 bytes per VMA for a typical usage which can add up to a lot.
 
-Alexis
+Okay, but I hope at least we could be a bit more verbose in the comments, because
+__vm_virt_pgoff_lo and __vm_virt_pgoff_hi are located somewhat far apart from each
+other, which might cause considerable confusion for others seeing these two
+variables for the first time, and clarify difference between this new field and the
+existing vm_pgoff, to aid understanding.
 
->>=20
->> Alexis
->>=20
->> [1] https://lore.kernel.org/all/20260223191118.655185-2-ihor.solodrai@li=
-nux.dev/
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Thanks.
