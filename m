@@ -1,127 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95073C98BF;
-	Mon, 20 Jul 2026 21:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8667C3D411B
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 21:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784584095; cv=none; b=KyiKw8UfiwvkzO6mjAKSqcIdW7JgwF1YOsCiF+W2obFLkQ3LLAbFNnXssCruf/HJTz0t3E7QSgG1rwd3vvtj00HcSzL+n4fvm1KhdORTBDb92817cu9Nl15LEDjyb9Z4kOS8WW5G03a4D7JGxUfDxubYUi0JedVgL5tsJpFUZf8=
+	t=1784584328; cv=none; b=BaQ23jZbA5CmvwELUOV5O2dVWdLXgCbsvXEH3gQfi56K6bSEUCq+NVuB2F1/wUss+LPwdg0tudPV/WJtnmOrj8tg5CbIB2AxQoPwEqYY7mq3jwvpUMyPsE30B1MhvjcwRKsH8F+AZHCbWii9W7HsGFno8HiM+J4aT6/wZMLU7Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784584095; c=relaxed/simple;
-	bh=2IlGTqZQpEd0dOfNli5TZqPpwK0gx01YgJUnZ3l8VII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t677lqxhKhyIw6fJHAoZGvyH34R6uNlancebNPIwH9H7CuhgFtZ8iBLhq0Psr1UV0betIpkhwS7Niw/vwHD62xy7RrQASQBt7qDNoE5XhdDMQSR9XoQ+4KAK1t9GVprkIy2teurK7ayoyd81bf1sx3lolMEpl4EfhXVmy++QZ2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B6aixEgX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784584328; c=relaxed/simple;
+	bh=+XUKKqJWK2Ht2sPwcjD8swLKukA4/t2PPxAUFqudnGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G0owNuOQdLggK2n0UCztgTfbruto8eL6FRgOj/v3IlgwGYkcQfjpRSxLACTV2aPKGyPUe6fARMAsvDGXL4JNN/eEiasnonwHArVKU3KhquFoxYsAhPzZR03uERtX29KNetNviQhqg8G5QWeHlYAurd0zanhyVCJjM0hvgquUu6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cRBCQ1+2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5cqE/ioW; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=SkoXP3qA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qKyUpzW7; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B6aixEgX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63011F000E9;
-	Mon, 20 Jul 2026 21:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784584090;
-	bh=J4eoFhH6gmEKwRw2WseDnQQMVN8sL8rgy37P+Poa568=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=B6aixEgXkTy7qgiMoEY6afuTFN9EhfWYVdz6MtIax04oR9Aj1IooCmm8XKinZgpIg
-	 sP3SYMDS/mEATNCFsKqlQSxca8GCh3hsWf6mwBPt0V7iTRWHZVknY8p7XCZCMAgkhO
-	 rCO68PAq43n9yIf616oO5SOCAsPt5F6KhB/opAxIcTmZ4wk0p/7HxZTG3jejloS/Ng
-	 DTovSVWQio0gC+DnevRi23nTnqP3+IiQtoYvQaUqcmdK6THX4L0riDSrgSSBKKkgcY
-	 hrGBqpUdGPJ78gMCTgOEcMB7xzzt7/Rrl0wpCaJq0jAJAE5JsSjDHo/EI34cbHtJVj
-	 RNUV8Lg/lZO2Q==
-Received: by venus (Postfix, from userid 1000)
-	id 44BC7180A25; Mon, 20 Jul 2026 23:48:09 +0200 (CEST)
-Date: Mon, 20 Jul 2026 23:48:09 +0200
-From: Sebastian Reichel <sre@kernel.org>
-To: Boris Shtrasman <borissh1983@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] selftests: test possible usb type values from
- documentation
-Message-ID: <al6WlrksIVUkhSHG@venus>
-References: <20260625160556.54830-1-borissh1983@gmail.com>
- <20260625160556.54830-3-borissh1983@gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cRBCQ1+2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5cqE/ioW";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="SkoXP3qA";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qKyUpzW7"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7F5E03E93;
+	Mon, 20 Jul 2026 21:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1784584324; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iv4FeW/gTiIemCSXopumjCnScVNElpvB2EzzpeUThLw=;
+	b=cRBCQ1+2nLFo4zfAEWOc7By3JxsWPS8UYqS6Lz4/Rrg8tuqYFXjevyBQw/LADIjq2Y2UYA
+	j7QPYzaiNJ6yGtdMbjvSaIk7NIbrrMyJUcbL8GcQv1C5TtV/h7Ae28r6wjggdeE13P+EUX
+	3wFglpX18G0rq+F03RUsljgGpdxqRmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1784584324;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iv4FeW/gTiIemCSXopumjCnScVNElpvB2EzzpeUThLw=;
+	b=5cqE/ioWr3OR+GmdaE1XGAqigUrRgtAAvKRzPOlL06XT/cedhJfRUuRtyDG0ErQskv6sI2
+	KGyJwgqOSNstBoCg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=SkoXP3qA;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qKyUpzW7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1784584323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iv4FeW/gTiIemCSXopumjCnScVNElpvB2EzzpeUThLw=;
+	b=SkoXP3qAemTm6tKMQVC8xEUnu0+5HemyHVAF6wOPVhYNsSBsgAPvj6lC5f1CVhnqjpB8OB
+	cuMOYpR2BsEmRqoLfSsf7tmuuwd6QGp/9OaJ9g8apkUcDL7of3tg4rnBVhX0RA2lylmPfm
+	BNkEWRhPQGiAq8clpNBNxQyk02LbjX4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1784584323;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iv4FeW/gTiIemCSXopumjCnScVNElpvB2EzzpeUThLw=;
+	b=qKyUpzW7W+7Dol8gCTup06ThtdBeWdf1rVLnPRGYOcEyMWCnXKVRv1sPes5t8suZuOVUU6
+	k46CHiHlJOcCgdAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 02EAA779AA;
+	Mon, 20 Jul 2026 21:52:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 3QS+N4KYXmpJewAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Mon, 20 Jul 2026 21:52:02 +0000
+From: Petr Vorel <pvorel@suse.cz>
+To: netdev@vger.kernel.org
+Cc: Petr Vorel <petr.vorel@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	linux-kselftest@vger.kernel.org,
+	Petr Vorel <pvorel@suse.cz>
+Subject: [PATCH v2 1/2] selftests: drv-net: Fix csum path in doc
+Date: Mon, 20 Jul 2026 23:51:48 +0200
+Message-ID: <20260720215149.631145-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qw4ef3bnkxf6j4sb"
-Content-Disposition: inline
-In-Reply-To: <20260625160556.54830-3-borissh1983@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Rspamd-Action: no action
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,google.com,vger.kernel.org,suse.cz];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	TAGGED_RCPT(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 7F5E03E93
+X-Spam-Score: -1.51
 
+From: Petr Vorel <petr.vorel@gmail.com>
 
---qw4ef3bnkxf6j4sb
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 2/2] selftests: test possible usb type values from
- documentation
-MIME-Version: 1.0
+C source was moved in 1d0dc857b5d87.
 
-Hi,
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+Changes v1->v2 (both asked by Jakub):
+* Sent to netdev
+* Remove Fixes tag
 
-On Thu, Jun 25, 2026 at 07:05:55PM +0300, Boris Shtrasman wrote:
-> modify kselftest to check for usb_types values from
-> Documentation/ABI/testing/sysfs-class-power instead of only checking for
-> property.
->=20
-> Added the
-> "Unknown", "SDP", "DCP", "CDP", "ACA", "C", "PD",
-> "PD_DRP", "PD_PPS", "BrickID", "PD_SPR_AVS",
-> "PD_PPS_SPR_AVS" values from the
->  /sys/class/power_supply/<supply_name>/usb_type section.
->=20
-> Signed-off-by: Boris Shtrasman <borissh1983@gmail.com>
-> ---
->  .../selftests/power_supply/test_power_supply_properties.sh   | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/power_supply/test_power_supply_prope=
-rties.sh b/tools/testing/selftests/power_supply/test_power_supply_propertie=
-s.sh
-> index a66b1313ed88..7bf76af4cfd5 100755
-> --- a/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-> +++ b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
-> @@ -58,7 +58,10 @@ for DEVNAME in $supplies; do
->  	# This fails on kernels < 5.8 (needs 2ad3d74e3c69f)
->  	test_uevent_prop TYPE "$SUPPLY_TYPE"
-> =20
-> -	test_sysfs_prop_optional usb_type
-> +	test_sysfs_prop_optional_list \
-> +		usb_type "Unknown","SDP","DCP","CDP","ACA","C","PD"\
-> +			,"PD_DRP","PD_PPS","BrickID", "PD_SPR_AVS" \
-> +			,"PD_PPS_SPR_AVS"
+Link to v1:
+https://lore.kernel.org/linux-kselftest/20260702212248.358977-1-pvorel@suse.cz/
 
-I've picked up the other patch, but skipped this one, because it
-does not work. The usb_type property reports back differently from
-what the test_sysfs_prop_optional_list function expects:
+ tools/testing/selftests/drivers/net/hw/csum.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-sre@venus ~ % cat /sys/class/power_supply/ucsi-source-psy-pmic_glink.ucsi.0=
-1/usb_type
-[C] PD PD_PPS
+diff --git a/tools/testing/selftests/drivers/net/hw/csum.py b/tools/testing/selftests/drivers/net/hw/csum.py
+index 3e3a89a34afe..0e99198f8d39 100755
+--- a/tools/testing/selftests/drivers/net/hw/csum.py
++++ b/tools/testing/selftests/drivers/net/hw/csum.py
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-"""Run the tools/testing/selftests/net/csum testsuite."""
++"""Run the tools/testing/selftests/net/lib/csum testsuite."""
+ 
+ from os import path
+ 
+-- 
+2.55.0
 
-Greetings,
-
--- Sebastian
-
---qw4ef3bnkxf6j4sb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmpel5QACgkQ2O7X88g7
-+pon0RAAlgetSydT4Qwps4msPFSNF23S76lxFXe6XY3A6mo/GZYeAVqqxDXCL3qc
-VRLQxLM/cbIlGfq2vPnbNcebGqggF52Ce4yxKWEMBSIvw8sZVoJe74bNkWw8CFid
-OrTJVYWjfD6y3blN7UTQwglETvUhpYfJUW/PvS2SM/mkyHmK9dlv4ieBLcXWlIWa
-BgZedSxDwsl7ZzwLac3cxLcKn2hyA/5kLqAtXFUNiX3zDr0y95XlSlRoLuoF2dj3
-KrlQ9oZ3UyoSSSbP3+mELrYw05Ts+xTb3zE8juAKCZ95Y/t91/Oxmg2xGzmgKs3o
-Jn5dyHNPTtkTXK+UBb2Vi/sHPDb1pefxy7T/sqAKF/zb7V96RLSshBHmBtQojZ+o
-71z0Gec1fydayyDMXnPSJwnAgWGABFDUOklFsWZqQofaN3eW8n6RBMAgOJPBSLs5
-tAmilcYS1/TVTgXXaPluHfkuAY1E8ht9NiRCNXSMhBcZEhADRtNEkP9QQEBL/lBb
-FctsOz8fa20uIHA5DWxB/ZFnPQhvuh4V5XkwOCHgyTk5pmBSqwkQ7OA4Xzj2S/DV
-uey+ixVAjaLuNq2b8Q6441Kuyr3gUhYtYrG3/5GqzpqdvVKWe4snOb9kR87ELqYM
-lceMYlo8bTg/WtwMIJ55UFEv07No4Kgf9tNJ4EogDpWzPNx3Xfw=
-=q0ET
------END PGP SIGNATURE-----
-
---qw4ef3bnkxf6j4sb--
