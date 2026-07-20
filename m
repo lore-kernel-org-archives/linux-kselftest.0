@@ -1,63 +1,63 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2B03939C1
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A50647DD40
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784576111; cv=none; b=IVgPSnfgzKPRV4eltbufofm1bs0lq4v3aWdRADMDkjDoQH0smYUT5bbA+qcWNkWn5YN/M4b0iGok7lH4wDmjrdbQS44P9vvNeS8UZT+Wf5qliOwRKmDZ0LP6bkJ5d5cL5K9oVSzUIXto4C+5Qw2Jk/ZobuADp3RjpwJRKkpcM8U=
+	t=1784576114; cv=none; b=r3psa19Cjk8vcgVd31lGoCy6y18+gyz5b+6Hz4IpkCXPB5nYqAcg8vP10RJJ6aM82gINLZI9lx4owocZ1cGCDeJ1EmUURt7RNG4Bf/MyYMTWoAX9/2DcX6xsy2gzYbl3O3EjcMCIhgp5BSkCo/eULEuSFefUmB3XVhA5f7Q8SnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784576111; c=relaxed/simple;
-	bh=w0eKiY4I5uQufyW64Owv7K7jj+Cw2kBSZ0H/fUn8aTc=;
+	s=arc-20240116; t=1784576114; c=relaxed/simple;
+	bh=cwT1qxzu5mcEtwbfCjbjp1x2zlkj7iTH/wP2YBbJ88A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aIYj93elbueAJrM0fZb+qJzMh6yirFqgHFEsJ5xIP3D7vluvZhnvk4nsoctZnVqHSbYwxuVO1SV2BvYJL152YZs6NNx/Ge2LFwMN1j/iK7M2HbytB9vnefhnAPzi0YL8ddqYb4FU8LomdI08oQS/GMCTk/8mgSvxjNduxTUlR+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=cweaukzy; arc=none smtp.client-ip=209.85.222.169
+	 MIME-Version; b=gSa06y1bHTHkYv2w09M7zcU/U9E7f8cdVDEONNhkeIl9RaKetMkVIa0p3uOqHQ/SmYpjSElQlcKJQ5v7+p+B2wegZHInBOoW7kj6/8RKhzzoQDPKi3YxWrBDJi9unC6UzTzf/rgkag7Z5oGKyWhTa/d0B/8hIFYayeT1Qfn8kho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=eyxoedwA; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="cweaukzy"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-9305a2121a1so722930885a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:35:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="eyxoedwA"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e5d50b0dbso540112885a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784576107; x=1785180907; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784576110; x=1785180910; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=AbvY/gXh+2/u61eyWpGKI13cVvWaG4WQkB8wV0sMVYg=;
-        b=cweaukzy0xSkEdWhxhls4M00xcE3RdBAkeV+RCtuuVZxeneDh3Lj5w8ubJO/Zrwmrl
-         Nln1/CsNKB3whOnU0gxZ+UN+TowVz1+VyoBzRmPx71CReyduVjO8hRWd+ix+3AG25bCd
-         Jo4l2RfJyskjI16bDjfDvujp/h3XGJmZwJUCOc4ssvpFAg6+yqWRNpIz54cZxcAEk1Ss
-         tqiTLiQttYsOCn1T6APRUcDBYv8WeBG8oj+dTrbYpE4Hcqo98s9Wx0IRMYUFPfOVfa4X
-         +r58eMj9l4k5hmuOCFsUm+kzKS2qaNwm/AGbvQC/IXrDAJlkiVxlWATNJk7i9QyP3kDL
-         x6jQ==
+        bh=zRBuTTcFDLFkxWr76FAXg5UPkm9NjmBW+wSCIxxIlUw=;
+        b=eyxoedwAgKPwlER6cisueYVhnwGikgeb6n92xljUQIvdVPafD6U5vCCdqvQmpHWntT
+         CmQA/p9doNwRA9EfJnbBmapZcEIwVradgPhUl/Ny1o0Ghnk+E3P+ZWbWHxOaPf4kmWiW
+         KPxTvjO7j+k9X4G0cXhViItoWgy888RpaocJo+HrBB30ZYWxIAiRGHNdjhGiq88btefv
+         rywIAwhmVtE7AAK10m3inPwKhWivK6Yv4PGNR5kYiv1CGm/IroMqBHDRtgcaTQRgjX+9
+         YlRdKqvQhOgvstox5F1CdKoHsoVtvyMPOdHB0+xhXdOL37S3ZlNV/ckZJkmvxGZ9U68c
+         vVWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784576107; x=1785180907;
+        d=1e100.net; s=20251104; t=1784576110; x=1785180910;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AbvY/gXh+2/u61eyWpGKI13cVvWaG4WQkB8wV0sMVYg=;
-        b=AP3A7GwRgN104+FPzws9sEv4a9a5XN9Ip96LqmobKKFtWP0zxMP6riFc/+jh1lKnXm
-         jyOZOUxW4Z5SJlvE3c2rqA2xw55FQ+KHMOXdTdeD3kB9QKE8ohWdmVQLNKnpUDNbyb9h
-         V8Khv5sTscKKv9YCjDA1ZdA/Zbhvs6lg303PogJDMDe6bfrd9Ndd/5BFsJO2ddDS13ZV
-         0mglrOMLjGf03Vp9HHD2xPl28tpiM4wM6qVaSQfHaF1Tfcl7b32C+8za63Cm89rTSQgp
-         jAg+/LuTiml+Hj6oUlRbJJRvuJV71C4s3wdOhvZRvR6FsBXyEmd4APXEo8bfDgrFNHn1
-         LJTw==
-X-Forwarded-Encrypted: i=1; AHgh+RoeUiL4+IYPnQqDYXEGoqZLxNkf0GvlTOI+sashmETt7WIUAAQvqKskVNY9AneHf0h45g+f97OOg0rGGndnouk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv8k98VpwOcm6lp8GHbXP1hyEV00rkze37MgW+PRp5l39EPP2d
-	mIdj7h0pJzxg44V05iw4ECGUCGGt7l0LUBIrvOCs1CvtN1yJepYlrawYhhbsY3jmV9A=
-X-Gm-Gg: AfdE7ckJwN0lPNLycJP05w0d5QXWc8TX0ME2nWmkRkzFrKj1C2ZosB93VtpU5rxqADg
-	AOCf6GHYfXt4+lkSeYgLlzEdWZpWleXaYAd6rB4p2tlxPYeqZeQcdYRd7Tj/HqwCvxXrRebgE1J
-	kuWKs/+WQO2wKJIY+Iuk8NgSgHTbI/bNYzWyalFLWbQcgt4z/u5VBNg0aAlqTJLJdHTMLh15Jki
-	Jc5ES6wQU2GM/CqhVJssSmU8IapJ+CSbz1IFmoLjiKJsL4wZAYQs0k2Y2aIGt4V/UsTW90ex2F7
-	g8L/JbkfaG32WS7z3jaXuC+PopoKo/S7Z6fIZrMrj4W/m07mijD43x5M4WQmGvm1IVu6OJiG8H1
-	GS54v0yfnR4vP2VlWvtUeYvC2XWZE9slTTbiGQnsgAZT1hhgcso0i3/qDK2rAGWgk/KUQDZbxiS
-	FlNn0Gug5YSUdXGjutnua2qAqUS3de+85wPQMIt87nSuYmOobE0jw19bt5nL0if7o=
-X-Received: by 2002:a05:620a:44c2:b0:92e:6b95:237a with SMTP id af79cd13be357-930b3f45487mr1592960485a.32.1784576106925;
-        Mon, 20 Jul 2026 12:35:06 -0700 (PDT)
+        bh=zRBuTTcFDLFkxWr76FAXg5UPkm9NjmBW+wSCIxxIlUw=;
+        b=OYXTniU9Wc4xTnISztuIrot1qIn6GueeEsuy7e9W/JxFjb+Q+7YvXna9hWWtLPeRAV
+         flM22KGtcFccKIan435gC9a1ZyV4lkHyyMUQpnlV61CwIxPqSUEIS7eisUnoD2vMuHwl
+         1OyCY65oK9o/2TStetoohqAJmtJvBL+gclJ7QJdzfcie7DJP5U+64dwHulpiqKJA7XTE
+         LZuYGj2E9M/fAgkRGBhTOIJwCtNXihz2qua5NjeONecFCLnklaVpDuWIZNQNebGwpMvW
+         4s5PrlZ1r6JIjIcEOUh3RBhQ6hqlUEYYYvlEhGlpUEQCL92gDINeMfoy3/v+8REp8yd2
+         C4Zw==
+X-Forwarded-Encrypted: i=1; AHgh+RoX7D2Eo0VIIg2FrD78fxAhdatGpRSzPwsOTsxtD51DbvMvz/2U0pUXgxTo+o2nuul33HIoFM249kY2kT/brmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCTAAK4SFr9jlxFB86fn6OtK1phNREdo0DBNmL+Gk14NgtBzhf
+	x0rX53heTc4msSqrrorLZ6gVwe4xudXReCNq5/biEXnDF5IWgqyNpNqDzp69w6KS7QQ=
+X-Gm-Gg: AfdE7cnWZjd0aUSXLI/9BmSizerO0+xxIczYzm+3ohH2JRCA+L+zvCC1nOyYYokIRCj
+	jKrVFx+PB2wqA8Nb465jzRE2pszLzNtPU1ZV6TURuX7eWP70piEsm/XYTVJr5L0icA/qVhzJMT5
+	BTKFqa7Xq5/5fhHTIZau1DP0KFNNJKszVlQcxRb4hSRRbKOJW+MEKQWN/AZc0YLw6lUbwYFPVKj
+	Mikxi7is4WfD2wx3UTv2+glqWIrxeuOKYfMVvcbpj3nPPfgscaS1aj7t5+VmCNov1YqCkQpp+Vz
+	FI6lFx1OiLRp7FfiZDl9oKycaCZsZMcrBf6bjiTXFDeWCbqfIuuRLnIGzPpW1r11UhHaqqn2l0u
+	SC9jnX2L1Q5SGONi6Xd0so6CZ9EkZVx1n3MeF+peGMY4IgHdMYVXO7V9GsgIINOAftnoYBl6J0t
+	u4CJIF7Xo4m0gyzhZSNO2K3nFAchr85KbRu0Bry9pE6Yl5SLA+raJZ5ji/MLp+1rs=
+X-Received: by 2002:a05:620a:3706:b0:92e:f212:98df with SMTP id af79cd13be357-930b3ec8d4emr1550494985a.34.1784576110290;
+        Mon, 20 Jul 2026 12:35:10 -0700 (PDT)
 Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.35.05
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b545e47bsm957792285a.35.2026.07.20.12.35.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 12:35:06 -0700 (PDT)
+        Mon, 20 Jul 2026 12:35:09 -0700 (PDT)
 From: Gregory Price <gourry@gourry.net>
 To: linux-mm@kvack.org
 Cc: Zhigang.Luo@amd.com,
@@ -137,9 +137,9 @@ Cc: Zhigang.Luo@amd.com,
 	damon@lists.linux.dev,
 	linux-kselftest@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v5 11/36] mm/compaction: disallow compaction on private nodes
-Date: Mon, 20 Jul 2026 15:34:05 -0400
-Message-ID: <20260720193431.3841992-12-gourry@gourry.net>
+Subject: [PATCH v5 12/36] mm/page_alloc: clear private node watermarks and system reserves
+Date: Mon, 20 Jul 2026 15:34:06 -0400
+Message-ID: <20260720193431.3841992-13-gourry@gourry.net>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260720193431.3841992-1-gourry@gourry.net>
 References: <20260720193431.3841992-1-gourry@gourry.net>
@@ -151,58 +151,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Skip compaction on private nodes. Compaction requires the ability to
-migrate pages, which is not yet supported on private nodes.
+Set private node watermarks to 0 (reclaim isn't supported yet, so they
+are pointless), and do not include private nodes in system reserves.
+
+The oom killer can't actually resolve general system pressure by
+releasing private node capacity, so including them in system reserve
+calculations dilutes DRAM watermarks and causes poor OOM kill behavior.
 
 Signed-off-by: Gregory Price <gourry@gourry.net>
 ---
- mm/compaction.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ mm/page_alloc.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 9f81055a358ed..8c1351cce7bcc 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -2462,6 +2462,9 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
- 		    !__cpuset_zone_allowed(zone, gfp_mask))
- 			continue;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 78755a55b1540..2b08bea2379a9 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6555,6 +6555,10 @@ static void calculate_totalreserve_pages(void)
  
-+		if (node_is_private(zone_to_nid(zone)))
+ 		pgdat->totalreserve_pages = 0;
+ 
++		/* private nodes have zero watermarks */
++		if (node_is_private(pgdat->node_id))
 +			continue;
 +
- 		/*
- 		 * Do not consider all the reclaimable memory because we do not
- 		 * want to trash just for a single high order allocation which
-@@ -2853,6 +2856,9 @@ enum compact_result try_to_compact_pages(gfp_t gfp_mask, unsigned int order,
- 			!__cpuset_zone_allowed(zone, gfp_mask))
- 				continue;
+ 		for (i = 0; i < MAX_NR_ZONES; i++) {
+ 			struct zone *zone = pgdat->node_zones + i;
+ 			long max = 0;
+@@ -6647,9 +6651,15 @@ static void __setup_per_zone_wmarks(void)
+ 	struct zone *zone;
+ 	unsigned long flags;
  
-+		if (node_is_private(zone_to_nid(zone)))
+-	/* Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages */
++	/*
++	 * Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages
++	 *
++	 * Private nodes are excluded because they are not in the regular
++	 * allocation fallback path - including them dilutes DRAM watermarks.
++	 */
+ 	for_each_zone(zone) {
+-		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
++		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE &&
++		    !node_is_private(zone_to_nid(zone)))
+ 			lowmem_pages += zone_managed_pages(zone);
+ 	}
+ 
+@@ -6657,6 +6667,16 @@ static void __setup_per_zone_wmarks(void)
+ 		u64 tmp;
+ 
+ 		spin_lock_irqsave(&zone->lock, flags);
++		if (node_is_private(zone_to_nid(zone))) {
++			zone->_watermark[WMARK_MIN] = 0;
++			zone->_watermark[WMARK_LOW] = 0;
++			zone->_watermark[WMARK_HIGH] = 0;
++			zone->_watermark[WMARK_PROMO] = 0;
++			zone->watermark_boost = 0;
++			spin_unlock_irqrestore(&zone->lock, flags);
 +			continue;
++		}
 +
- 		if (prio > MIN_COMPACT_PRIORITY
- 					&& compaction_deferred(zone, order)) {
- 			rc = max_t(enum compact_result, COMPACT_DEFERRED, rc);
-@@ -2922,6 +2928,9 @@ static int compact_node(pg_data_t *pgdat, bool proactive)
- 		.proactive_compaction = proactive,
- 	};
- 
-+	if (node_is_private(pgdat->node_id))
-+		return 0;
-+
- 	for (zoneid = 0; zoneid < MAX_NR_ZONES; zoneid++) {
- 		zone = &pgdat->node_zones[zoneid];
- 		if (!populated_zone(zone))
-@@ -3017,6 +3026,9 @@ static ssize_t compact_store(struct device *dev,
- {
- 	int nid = dev->id;
- 
-+	if (node_is_private(nid))
-+		return -EINVAL;
-+
- 	if (nid >= 0 && nid < nr_node_ids && node_online(nid)) {
- 		/* Flush pending updates to the LRU lists */
- 		lru_add_drain_all();
+ 		tmp = (u64)pages_min * zone_managed_pages(zone);
+ 		tmp = div64_ul(tmp, lowmem_pages);
+ 		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
 -- 
 2.53.0-Meta
 
