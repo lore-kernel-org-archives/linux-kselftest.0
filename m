@@ -1,174 +1,87 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011022.outbound.protection.outlook.com [40.93.194.22])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72B93AA9E8;
-	Mon, 20 Jul 2026 08:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784536666; cv=fail; b=EoZeJpdliZ7NKp8G4IDU+WiWuJQqLASwTLxYv+weZjnnh2tF28RaOkNMolzM5lKE4XSHUhEk8AuxNNkeRsppQJx8coIyKDJnW1GG6LsBmU7JXn2OPK35dKDxAgYrgg04LkBLNZdUIPYEJhUwRioqAlYcSDyF/yDRPFWCqb261a4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784536666; c=relaxed/simple;
-	bh=bZqg8FMqhr40XRppDNgYCWfOv8BobMXeCHu1Shlg6Do=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:References:
-	 In-Reply-To:MIME-Version; b=CbpGWdN2io/QSqGR9St4lD1o5vwaEFyBd5s+oVO+styF0bWeSZaOv0lkfbxlzNgtFbneyPTigwxttFvSwvgk7UuP4NlDPvrkepOOO9DDDekI5Ee8NDdAiDO8hCTCYR0ykBNUlyb3/5kCeBOoLjNcIsu0OkYEZuLqd1XxyGzKvOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cLAJmWFT; arc=fail smtp.client-ip=40.93.194.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3D7149C7B;
+	Mon, 20 Jul 2026 08:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784537498; cv=none; b=OI+mIGYgeLE8o8DDM9junV5i+1h4g5P2vasaB3vdcF2Vhn1P4uYddBSJ3/5RtONgZp/UQf4fJzR/bBsLNZ2k17u3PUh0LSfA7AanK03meNo4B0+ZfwSJ+7nsBNc4hGwhZQgC81uwhS2goasIshSdrmYAtgaLeDOctRFk9xvxpaw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784537498; c=relaxed/simple;
+	bh=5W+uMnKvEBO8ltrhoxU60smIP8nmXqhDyPHGLK+dZKA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q+069VVm+llI0+lBB+fCYDyhD7QvEtWgQ1FgPlW9O37so5Jd/brgjL2UAja4c5g9EbHA4L+dynwhsE8uroASyxeHhH8d1Ssg2pBTrat3hVZXgB45gA/XCAFawFLArVwpUEA8ljy4ZDUirjjXR1/4eS7K+RvozMLcmiT1/4Cbgpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=y59Qo9EL; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cLAJmWFT"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UQsrrFD7/w3ypd8ssuTDdkPQd+PrBO+W17zA6kCmM0e/pgYkQZhBgZbVCFgOQSOhce85vpC2mBgc2by8K7QkihYLevT45LKPhmfdDpaiMuglbFMoK4NfI8RduAsula4a/0g5L0DRhqCLo3PihnIP5h2vpJexrj/+V2AH98+cTes1HyPeVuropF5Ishrry//Sr07xuahD9Dv6EPi1LxNuoXK7Iix/nFNDeufNqpdohgHJVKm4eZTIM9mXTig83jzuZjGbbEpn9oCEAa86SFLl8UOSEUvBGxvDe19/yLRvrE4SRMF5CT8zshjGbRa0Z/f0icLkCmB/FXqyJkIQiQ5AdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U46pCZ8UOVLWuLs55DaVuewZ+TqoYFClV83E3H/6Bd4=;
- b=RSMhPFVxOuDtIiZROZRwsNjVcF9p3XVo/h4Y/P4TZFhuu7Oro2iBVNCYYFs17f9gy+D7qNWXl3shocaOjr9GiAjl6wt6gHek7kxIjWQf8cpYDSI2PdBg5iQrQeIVivu2M1VxhmFx21J4mi9cLbAJNtwYxjCoxFkgsU3h+QwRv/HZYMOe33W7XGlTjA3Xt2geG68mJyUrx1VGggKDugOc4XW6f+U6eABN4+FK0+hmlylbONFx9BAmapn2KKSwwu8Or/AcvD2h32ywLZeCAhhVG80NptzaFIMt6UybwidTbrY5DU9NCmXQRJv75GSIOZbHs7if1mRUkEd9MFAE7zjQaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U46pCZ8UOVLWuLs55DaVuewZ+TqoYFClV83E3H/6Bd4=;
- b=cLAJmWFTGxmp38Dw6uLFPqaOKpn8Kquvlq4/lCucD4t/S0lpo75eIhcFnHx9w8hdZfVIpvzUqLFxzRK7tPOd+P8AhSFkcpxS4ckXAYZ64LakAwH+MiYtaPDv5rLLkm1pRnKuSYtjLdzdaKD+lg1W+mUIqtqhADH28LLFyPtktpZSBOOo2lokY8SkKuJRo/p83HCkEYN3wd2dKGA6tsjNLkp8kPR7j4aMXSLbpDpI2R1S0DKnoGX/+ogFvpshdJsKw0jl/qSiZxgby4blYp09d1/86veesqDdBGoPUSMsMTVdxqjSdWGLzwdiqcS2XaLltbapmiFfGGEX1/nw+A1+kQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB6733.namprd12.prod.outlook.com (2603:10b6:a03:477::9)
- by LV1PR12MB999281.namprd12.prod.outlook.com (2603:10b6:408:3bd::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.16; Mon, 20 Jul
- 2026 08:37:42 +0000
-Received: from SJ0PR12MB6733.namprd12.prod.outlook.com
- ([fe80::f00d:2f6b:6f9b:8f97]) by SJ0PR12MB6733.namprd12.prod.outlook.com
- ([fe80::f00d:2f6b:6f9b:8f97%6]) with mapi id 15.21.0223.017; Mon, 20 Jul 2026
- 08:37:42 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 16:37:37 +0800
-Message-Id: <DK39G70DVR3S.UUEE4333DB9W@nvidia.com>
-Subject: Re: [PATCH v2 0/4] ACPI: APEI: GHES: Add NVIDIA Vera CPER decoder
- and tests
-Cc: <julianbraha@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-acpi@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-hardening@vger.kernel.org>, <csoto@nvidia.com>, <mochs@nvidia.com>,
- "Kai-Heng Feng" <kaihengf@nvidia.com>
-From: "Kai-Heng Feng" <kaihengf@nvidia.com>
-To: <rafael@kernel.org>, <shuah@kernel.org>, <kees@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260616034410.70675-1-kaihengf@nvidia.com>
-In-Reply-To: <20260616034410.70675-1-kaihengf@nvidia.com>
-X-ClientProxiedBy: TP0P295CA0060.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:3::15) To SJ0PR12MB6733.namprd12.prod.outlook.com
- (2603:10b6:a03:477::9)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="y59Qo9EL"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=uJ79qPzp8tIhAiU3rMgJbhgxhoX8UnanAQA0Qwctxmg=;
+	b=y59Qo9ELPLHaCjmtQS81az0HA0Er+BT/T4LY5yq7gfu0/V6q5t80pOUq50pJRwrwdDkhuhiSZ
+	IhSNIoT3cI8tyF/yxZGEgzag9JgRhU8M6AcQLnKOhXZQ63rm9g6pVSCRjEdYhHLv3W/oDb5w6ZO
+	rp2/03W+Wa30WZLPRhgP4zk=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4h3Ysv4HTbzRhWS;
+	Mon, 20 Jul 2026 16:42:11 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id CB1844056E;
+	Mon, 20 Jul 2026 16:51:31 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 20 Jul
+ 2026 16:51:28 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v2 0/2]  kselftest/arm64: Add two arm64 kselftests for orig_x0 issue
+Date: Mon, 20 Jul 2026 16:51:43 +0800
+Message-ID: <20260720085145.247690-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB6733:EE_|LV1PR12MB999281:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8cb835a5-116d-42a8-0a6d-08dee63a29f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|22082099003|18002099003|11063799006|56012099006|10067099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	gPaUmaVC6rb+Lxo1i6N4nOgy41EEFvNx6Q/NCcM4f8EnlXjekhzLAc/7EnORXyEZnGzVUwMLwetkFiFFZzrHyB67arHE0yAFWSudVot2nxN2asYvk/uNRF5pSvr26bQ0lmw7TSlRpEp9xAq8N3oQUZ8d6wtUJr1drvyOjCOkEeOaxNx3ghkW1vk8QyJsVtzLPCsuOJKCdJjdMjbQjH5L6fn55RRTYGm4bT3cJNPBZUWi17zOh6elweEYjO29N4RhRghsjwSoCZJQSkR1/LdtnOwbD44MfY/ZZt5Yal3NOjvfjVOkKXgzf3flDAcEf2GJ2hj+hT3CMIuoYYZKdP+mvRqZYIrWm0cVCihJKhl6gXXUt0M0XKzRzOIDMkMefkqoTUBQkfQJnNLjKt2CdVIxwF8BR7Gr6pVgwPHN1WNk9ue7nCd6A3N6WGcCDPQ+UQeZ4zSieFDd6bLInlRccPBdYkYswVMXOVzQzzwBCrgr+uqXjypwiIfS+IghbL3JeyLPKVLyte/y6HIlqZnUgiybJFn0YXRCzIRr9ckmxavf0rXsJfRq0cIOTTgLW7CQSjYUcMcWAFgZeVLvbt1c4vnvUGbXUxV3+qWtfvi838mUT9GMkix0WqecuB315we9U/72VxyW2bjHQGMttkOwGHvg2KlP2QnlR9bRaOavMB5ALwc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB6733.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(22082099003)(18002099003)(11063799006)(56012099006)(10067099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TlppYzg5b205bG9GZWxqSm5rTEtuNFRoOGRhWHVRUnpTUXNHMk9DZnJid1Yy?=
- =?utf-8?B?N2NRQVo4R1A4a2JnZ0FDWlJyUGFCYW95STJwMk1wZUQ4c2ZzOVdLYnE5N01p?=
- =?utf-8?B?ZUczcWo1SGFwblkxcVJuT3lJcG8wZFlYN1JrcHEwN092TmlRTW9Zd2RrUlNE?=
- =?utf-8?B?N3BJNEpqS1NaN29kV095YnM2Q25MdU9wNjlKNkZTSzVsU3pXVk84WWYyTkR2?=
- =?utf-8?B?TCtFU2VTKzdNTjNheDUvM3Ivc2VNUVJhb3dxcSt4SFlndm5adk5BeDRuOXJo?=
- =?utf-8?B?eFpzWk5ORkdheXFRbm00MnV1Q1JvUlp5N0c1Z210RS83U3NuVWs2bnZqeXdU?=
- =?utf-8?B?K3A1MGRQdUZVOHpWOFB6UWVDYUdKY1Y0Z2lGdGpMYk9pNlZLZVVPWld2VFNo?=
- =?utf-8?B?czIyR2d5eWJkb2NlTDFxd2xwMHdBOVJ0cHQwcE1XZGM1ZFhpR3QzaHVvd0hC?=
- =?utf-8?B?Z3pBVmJqRzljQXRPTU9pQndabE9kOWFSQlJndnlMQmpIUkJ0dThhcW5uVTZk?=
- =?utf-8?B?OElXRXlFNzNEeUROQUFIWEZiQUwyYXRrZEtmNCtSdEZyQVlKTC9SeDBNY3BK?=
- =?utf-8?B?SFczYWp2WnFPc1didEt0TWkvWFVxbkpHQUNNNWtxcEl5alF6cjVraXlQTnNk?=
- =?utf-8?B?eUcwZjJOYWdGVUpJUVlYaExLUXRKUlJZNC92Ync5WnlaYkZNMEluWGpSTVlx?=
- =?utf-8?B?R3NMaWRzcnVEbHFCeTZaWDJsRFNRRVUyb3RJWURSUjdRVnk3YnpWbStYWFBH?=
- =?utf-8?B?eGZPVThwZW4xK2ZmMGw0SXk1bkJ4cDhwQVlVbk1ab0pTTzg5dGQwMkd3Y1l3?=
- =?utf-8?B?dVBLMEgvNlpMUUxlRjBXdE94ZFFkdndSK1Y2REt6UnU1bTRLL1oybWtTU1dv?=
- =?utf-8?B?Y1RDOHRDR1dvUnZ6WTRaWE1YWTZvRWhQY0phay9PWnVNeHJBTDBwNVlUV2N2?=
- =?utf-8?B?WlRVNE53bHB4V0dJUU5RQi9wM1RFd3loRTIrVE1FMzJaSXZncnRuTGs3WGRs?=
- =?utf-8?B?OERmdHpXU0t0alZPSFliZUhtSGFqVzg4UzQ5UmZNeGNlTnczQ0hiaUtTc1dB?=
- =?utf-8?B?YUFBd1pocHRmSyszNlVSeithTmg5NytseFQ0eWwwdnBMQ3lpMFNsVWlCUkk3?=
- =?utf-8?B?amIycTJXdWhlcTd4YWRqenZYRFdta3NPUkZVdmFQWnNkdWRBVGRhMWdXSGRr?=
- =?utf-8?B?RjZCSmt5ODh1d0dwdWRRUVc2QlI5SHlCWXlTeWdFVzJvdEJ2cllPMVFqS2ZD?=
- =?utf-8?B?NU9hVGpSOFJhU3BZdEZnOVdscDZ4ZjEyRnFOalJacW4vYWh3aTA4RUlCdmxj?=
- =?utf-8?B?OHB1S3AwMFBxOUVNYWV5d1AydE5HNWxmdFZvV1VVaU9yUnFFZTZ2UzNnYXNl?=
- =?utf-8?B?aEtNV3hNcFFnaE9LL0ZZaWoxZW1zdlFaYy80ZjRKTVJwanAwOXdvSk5oMVdK?=
- =?utf-8?B?TGFENHdCOS9yWmVMRzJpVllNMEhXb21RS0NxWVRsVERNbzBXcEVRRjJrRXQ5?=
- =?utf-8?B?SUdYbDRSRmdHSG9VaVFiUUtUMFQ1aGJFZTFFRUY1bFlBYUU4MjlkYUYzZkhD?=
- =?utf-8?B?bkFLT094aHVYaXgxeFVuK0FqclVzUk1xNlVhc1hIcnliRU5RZVJzY1lLWnNs?=
- =?utf-8?B?WVNJMXdFQ05ZOHhjeHZSbEd3U3QzRUNrTXFLUXNXaldTb21URTZPd1ZOUnRC?=
- =?utf-8?B?MHBWR2JhMXhTWTRleksybnFqZDN1QzFwcnNBd0hqUldPaUIrclJJL3lzYUJz?=
- =?utf-8?B?eWRzSFI1U25RdFNNVFVMTEo0MU1pUHVneXFhV1BXeEttYm1FQlU5ZVVObTJQ?=
- =?utf-8?B?WS9ZMTNmZFJGNVUvbDIyc3ZNcEJtL3BtSTRWdnBLditINUdPWEVVMndhbXZJ?=
- =?utf-8?B?L0JwRVlpYnVYMXNSRm5wY0JZNC93NENRelgyQkx2RnJlTVd3dFY1dzBrMzRU?=
- =?utf-8?B?ZWZpa3VHS0FjNFFzZHc4a2JOcFB5NnNGNzk4cnFJd1FsTVA1VFhVMnMrL0Vq?=
- =?utf-8?B?cHZqNlhQaHp4Ny9NY0dBUExSMmJicnVDKzhUOWNzTkYzUk9pOWpCMmNaS2Vs?=
- =?utf-8?B?bDJ5Q1ZRQ1FQTENncWFiRUVFTTBnOVkxZUtMWXdWelFTQzJnUVcxNG10b0Yw?=
- =?utf-8?B?eCsxck5kQUlLOG12a3Qya0p3ZVVzSFpWWXVUWWZzQVpOL1N5cGJtS1hKL2M4?=
- =?utf-8?B?YVVFQlZQU01UWWRpWTJCZHlUNVArYmNZc0tsUnpVVzB3Nks4amRzYllzdis2?=
- =?utf-8?B?MzM3VEt1WklhQVBISjFYenBEalVXcXpMdEQ1NGwzY3lMSnZDQ0t1dXI0NTVI?=
- =?utf-8?B?Y2dDQ1RwT05sZ0xQTWpnUUkzSkFXSzZSSmRLZnZHU0NoVUpaa05nQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb835a5-116d-42a8-0a6d-08dee63a29f4
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB6733.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2026 08:37:42.0995
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JIkNZmNAeUT2bVoMuh/eQL//F8RxwqIu4d1lb0T87sCyIoEofn4D/MaPWFGvCwsbil9321JSKtevYAAR3YedqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV1PR12MB999281
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-On Tue Jun 16, 2026 at 11:44 AM CST, Kai-Heng Feng wrote:
+Recently, a security issue related to orig_x0 was discovered and fixed
+in arm64, but there are still no test cases covering it. Seccomp,
+tracepoints, and audit can observe a stale value for x0 after a ptracer
+or SECCOMP_RET_TRACE modifies x0.
 
-A gentle ping...
+As Kees suggested, this series adds two kselftests for arm64 that validate
+the orig_x0 re-synchronisation fix in ptrace, the first one is for ptrace
+update, the second one is for SECCOMP_RET_TRACE update.
 
-> Vera is NVIDIA's next-generation server SoC. It reports hardware
-> errors via ACPI GHES using a CPER section format distinct from the
-> existing Grace section. Without this series, firmware-reported errors
-> on Vera platforms are received but not decoded.
->
-> Patch 1 refactors the Grace decoder to separate parsing from logging,
-> preparing it for testability and for sharing types with the new Vera
-> decoder.
->
-> Patches 2-4 add the Vera decoder, KUnit coverage for both decoders,
-> and an EINJ-based kselftest for end-to-end validation on real hardware.
->
-> Kai-Heng Feng (4):
->   ACPI: APEI: GHES: Refactor Grace decoder helpers
->   ACPI: APEI: GHES: Add NVIDIA Vera decoder
->   ACPI: APEI: GHES: Add Grace and Vera KUnit coverage
->   selftests: firmware: Add NVIDIA GHES EINJ selftest
->
->  drivers/acpi/apei/Kconfig                     |  17 +-
->  drivers/acpi/apei/Makefile                    |   1 +
->  drivers/acpi/apei/ghes-nvidia-test-fixtures.h | 233 ++++++
->  drivers/acpi/apei/ghes-nvidia-test.c          | 704 ++++++++++++++++++
->  drivers/acpi/apei/ghes-nvidia.c               | 480 ++++++++++--
->  drivers/acpi/apei/ghes-nvidia.h               |  63 ++
->  tools/testing/selftests/firmware/Makefile     |   4 +-
->  tools/testing/selftests/firmware/config       |   5 +
->  tools/testing/selftests/firmware/einj_lib.sh  | 189 +++++
->  .../selftests/firmware/ghes_nvidia_einj.sh    | 144 ++++
->  .../firmware/ghes_nvidia_einj_profiles.sh     |  46 ++
->  11 files changed, 1838 insertions(+), 48 deletions(-)
->  create mode 100644 drivers/acpi/apei/ghes-nvidia-test-fixtures.h
->  create mode 100644 drivers/acpi/apei/ghes-nvidia-test.c
->  create mode 100644 drivers/acpi/apei/ghes-nvidia.h
->  create mode 100644 tools/testing/selftests/firmware/einj_lib.sh
->  create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj.sh
->  create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj_pro=
-files.sh
+Link: https://lore.kernel.org/all/20260717182758.17111-1-will@kernel.org/
+Link: https://lore.kernel.org/all/20260716120640.6590-1-will@kernel.org/
+Link: https://lore.kernel.org/all/202607152004.DEA95D63@keescook/
+
+Changes in v2:
+- Update the 2st testcase to cover the corner case pointed out by Sashiko[1].
+
+[1]: https://sashiko.dev/#/patchset/20260716120640.6590-1-will@kernel.org
+
+Jinjie Ruan (2):
+  kselftest/arm64: Add seccomp ptrace x0 bypass test
+  kselftest/arm64: Add testcase for SECCOMP_RET_TRACE orig_x0 bypass
+
+ tools/testing/selftests/arm64/abi/.gitignore  |   2 +
+ tools/testing/selftests/arm64/abi/Makefile    |   2 +-
+ .../arm64/abi/seccomp_ptrace_x0_bypass.c      | 181 ++++++++++++++++
+ .../arm64/abi/seccomp_ret_trace_x0_bypass.c   | 196 ++++++++++++++++++
+ 4 files changed, 380 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/seccomp_ptrace_x0_bypass.c
+ create mode 100644 tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
+
+-- 
+2.34.1
 
