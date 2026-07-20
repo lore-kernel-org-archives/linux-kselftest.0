@@ -1,63 +1,63 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EEE43F4B1
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 17:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC7544BC90
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 17:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784570068; cv=none; b=ub0PBb9zRIUNUtYEEl6EmjJ8rf2TANBjs25annvziG+AjMRTcjRW5/eU9GKjid4dCJfdQNhnQ9s2WgLVIHIsK04qL0dZ++rciRqXmS7ilLte0Qz0M8fP9Jtq8TivsFhk4n8dS7oC8IxEiE5VvWp+MDrpsswRlX8X4nBmv+RVKW8=
+	t=1784570071; cv=none; b=g+hm0eTsheuyHSPFtjoGpaBv3P/Oo47+U38ydDuWJQZcC0icWvKYb0gMS+mK5ZxKRR2WoB7rgf4Ml4gBrQVCQyav/WDYul5xmtmwhleFz8SM83KyG/eUmdwUFgMQOYZwMXLxUy4KjaafQdBsrHLhsDtpbLc896XIJcS5O9gAgn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784570068; c=relaxed/simple;
-	bh=8PnWAwaPwirmO4GgL7LEGlIqHi6SyKLQQ7uw3JXA7yQ=;
+	s=arc-20240116; t=1784570071; c=relaxed/simple;
+	bh=YPrW1TXrbX+u0gKgK8sf9Rj21grSgx0mklEsAxueIjU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z4/3khwte8p+N+iOgbLBMpfvRaJb86A1PPAvFw4yYz5G/CI50PmQK2hBoAU7Te5Oxcet0op48/FoSRGJC4LEfhgsA81NbSSyFKjBRnFCL4aNFg65JLMRGz5+wshmgebLQFtZChOTk0kR054eKWPoDWyFMoZKzpkihGcwI9vLJyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HyIqqgSr; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version:Content-Type; b=ORy2RpzarbuNSbU395JpFerCYN2ILbYgVBUzF3wgQyNwouX/Ko4p3isTIh/QO2Z+8pfUsSnMTXzEdOyfgv5vP3YseIuvk9FmwIC7xPo9iqNkiIdAl6nM241z6wsfhhppILTGZTR5Nls9SCa96K9p9wYSG1xXXJoPVbxmd1xUHYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksr75Z6L; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HyIqqgSr"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-382ef647e20so9888722a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 10:54:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksr75Z6L"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-382ef647e20so9888759a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 10:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784570059; x=1785174859; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784570062; x=1785174862; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NzAJq7vlEZOu57+6zY6rNgf3B6FzEOANzSndOpxDhqo=;
-        b=HyIqqgSrmaPkAM/HeyiCHpeJsgqnMgCvDzj/c26lbx8Bf4EF2ADU1pa7Brv2lHItTN
-         TvOjdPH/UMtVIv2J5N+WpUztdToTAxAtb0amKdMbL4mP4rnWYBLbhSFxlyNMC1eOmYnU
-         RwUqYRWg1x3/yDdX+mLGdpAqag+ZIOwwBXiP/YBaJyordQfUaKXgwGn5+RIacZVT1t9k
-         u1gIG6NP0dz597//asX4gYY6kyYp672ifYPasSL5Tq/r0jiOKH4fjStVM31atIcHGPKN
-         Ug40fU4GzuZ73s8S2fwOjThelElhstrfb8T9611EO2yP12rxUP3QUbge5l7c9rBNNaAy
-         Fo/Q==
+        bh=iyEs7k1vrNWNt95uYWZYqppv3Skiym40EV0k7tALo6w=;
+        b=ksr75Z6L6BMa/cCk38UpzCJ2R1JQx+pg5cP3BRL2GjDk+pcginU3hwhuIznpTKpp7u
+         Tf7jA0PHkaUy9J6kg9uD9/KMOybSJBUsnSZC9+w9XH77azve59Zdo0pVALDdfWP0rQzO
+         IX9U6KMuogQYJ2r07VUdDE0KEq+fn5Ag1jlBYIJHij0jH8hLoxEpvKX3vxMHG3zg+THq
+         15CNRHVF6A9hMUQXeOz0N1cyyI7tFm7CYKBxcsxnAUh6+VC02GabY+6kFmEU7VrMS7wM
+         6kaQMpPWYOwSyoLqH6QSQHlWlVrHe7epcWPk+iA7qpuwS1LBrJdBn0KlcLskc2PKs1hm
+         zUDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784570059; x=1785174859;
+        d=1e100.net; s=20251104; t=1784570062; x=1785174862;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NzAJq7vlEZOu57+6zY6rNgf3B6FzEOANzSndOpxDhqo=;
-        b=o/pSHVXAaovH7lBv0Cvesz5l7kvYi7Ci5RTnk6e+Wi4bGW8ol8DV3OAst6VuO1G3XC
-         y64DtdcHtsF12cM3fO4lz5w47SdsNtOwWAtHBJaFYaVZ310RgWEQC+JzgKAG6XKoU4Xq
-         G6NXLTtIgulS6psNj1Mw0is3H0BYUjQDRGSaAqW3ctL3GpsBMTGpVTRYI/JbfftgKRTB
-         9YJYoqiyRfxDDnC/SlNSrcMqo5rWCcuroa2sZwFdpb8NOB6B5ItGZn9owDLH8pyfZXWc
-         TN9EPPMC0cDWO1OK0485MTUrN0XAcZQH9CL3cI9+VG6l5t3GEDnwS73tUqG9qAwFbz0W
-         Yolw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8aeHU3haL1d+oFq0LidDc4woCmgs71SyUZav2SDiqsd8i0WrHYPYr2vb+IW1oYBNWfbB58LDyB6Nt7gJtFos=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKBITw3x27YB0WJUlaiCg12WMRoIeTJR/hnFXoJgE4apv+r4mv
-	Ar2C9QZANtjm/NfrPc7ErtYhyElbxv6RTLKLxqFAIk8dPTmDDBsjwifk
-X-Gm-Gg: AR+sD12ogXPOearsAU04XOPyiK8pZdOAeuZMnuvXiJaCGZjUdUAezcIpxiYF3bMsJDK
-	GtfaiuD7EB/9L43U23hr7WtRtorC1y7j6xylumh1sEmqAJcG7giLs2PoPITU5WzaIvsrR1YSCOq
-	N/jo5RNjRPoTyoqq2t5Q35mar9SzrMxffYdmnvFugn0g1lY66RXDE8jyXfQhWdIpze/uh9844ua
-	YCNp8rJQ1SwfYstMnPU/VjrVFi3BPEvmO5SUyEcPHbeWO+7nYdgWvq66XaCPqAEyttTJknQCFzQ
-	DgWZe/I4cSqHwLCHfnTVUKpSiGiUjyNVTxp0ZzoGmvwyYee228VW1VFfQRFiEA3zZe7fRYrRUCG
-	TnFC6iB3lPkIAxx5626ElaCArUPwS2Q2Qk7RUUvJ+xSK8QyL61BNPR/bDZhNc9sMxvWc+J6t6
-X-Received: by 2002:a17:90b:5588:b0:38d:a150:ee04 with SMTP id 98e67ed59e1d1-38e4b55aabfmr15311812a91.30.1784570058844;
-        Mon, 20 Jul 2026 10:54:18 -0700 (PDT)
+        bh=iyEs7k1vrNWNt95uYWZYqppv3Skiym40EV0k7tALo6w=;
+        b=IK81xqJW4Kohy5bSpsFqXZNzZP3vr4/oLdFaDhVmEHSigaNr1tBMgeu9AvhSrN/eEl
+         7wxpNn2JmfoWpfjpcJnz/zzZ27rTT2iKIzhwwlEo3t0s8iP7L3dtCFvCbLSjGIPV/Yic
+         MurRL6pBod5Gl6Hivvdb+CKPVK1GyoBxfUeRL6W7ONKnGKBRbWbVmPNhYOXH6D+z85ld
+         H7TRvHZT/qlAmnZyWlcnM0gamlXhWGiZRqOeOCHrkjW5T16KjvV054wX/97AcZyyBOu8
+         PcCFDjX0BiBe7VuF0PNXeN1x5GlxTRKs9EP8eoH5NyxPYSpMCz+mBCWVQy7MMNMZj41b
+         FsIQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrZYBChs+mf3R5nuO7/tLclr7jbQ2WB2y02LJLfMUXznT+OqtLK3IG9nr0siNE1/Syf/Xnxdr+ZBJtg+gZ0bts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgNt83v+qya5tVnOg6b1GfXbTdiNC/bPAynCY9USDFJhQgv089
+	a0vDgUMlot5FO27UFGFJcl6Xksvc2/t4XsNTODk6q7na885xS16r6/Vd
+X-Gm-Gg: AR+sD11zXnczKide/MnqO4YXit0Rs8DO9DuFJ+5PrG4J8Q64nZULfxjewRxT8u4YBxp
+	KF5/9tDywFpx7+pUNdc0R4K70NO/1krzhyJ9CWt/5VcQ8XKtioiv+2GSpDmEukDtn57SGQp6j36
+	jnextXbk+OTvbHSnpkEnV1ZHoxjPV1a7QBTqrBLnGOXg/qJk4x68kh5bmetoJ5YUeefwrS9UePT
+	wX+rwzUvL5OQ/WxA92iByE6toYCkAE8cHqcajcfSW8rCBEZ7cvbQuNXm7V4547jGdUZ6fTdKzb0
+	5wMfpO2tocl8R1z5ueHZfLGeWsn2v6gOUYXqUIo90NIrdNgXC19JG0DZZ53dIzM/jueLqZN+XhD
+	b7jH0xsb/nh/Vjokb69SV/YOj/W5dB+7Z9STQJF/LmF2BJLtn63kwTiZe0jNUpH7Y5isXPoNv
+X-Received: by 2002:a17:90b:1b43:b0:38d:eb10:6f01 with SMTP id 98e67ed59e1d1-38e4b422875mr15703816a91.4.1784570061412;
+        Mon, 20 Jul 2026 10:54:21 -0700 (PDT)
 Received: from unix.. ([181.229.23.179])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2de31a7sm33370583c88.15.2026.07.20.10.54.16
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2de31a7sm33370583c88.15.2026.07.20.10.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 10:54:18 -0700 (PDT)
+        Mon, 20 Jul 2026 10:54:20 -0700 (PDT)
 From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
 To: Elizabeth Figura <zfigura@codeweavers.com>
 Cc: Jonathan Corbet <corbet@lwn.net>,
@@ -65,10 +65,11 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-Subject: [PATCH 1/2] docs: ntsync: align ioctl names and struct layouts with uapi
-Date: Mon, 20 Jul 2026 14:54:01 -0300
-Message-ID: <20260720175402.44338-2-ivanrwcm25@gmail.com>
+	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>,
+	Maoyi Xie <maoyixie.tju@gmail.com>
+Subject: [PATCH 2/2] selftests: ntsync: test absolute MONOTONIC waits under time namespaces
+Date: Mon, 20 Jul 2026 14:54:02 -0300
+Message-ID: <20260720175402.44338-3-ivanrwcm25@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260720175402.44338-1-ivanrwcm25@gmail.com>
 References: <20260720175402.44338-1-ivanrwcm25@gmail.com>
@@ -81,129 +82,125 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The uAPI documentation used outdated or conceptual ioctl macro names
-and listed ntsync_event_args / ntsync_wait_args fields in the wrong
-order. Match include/uapi/linux/ntsync.h and note that absolute
-MONOTONIC timeouts are interpreted in the caller's time namespace.
+Cover the timens conversion in ntsync_schedule(): with a negative
+CLOCK_MONOTONIC offset, a 100 ms absolute wait must not return
+immediately against the host clock.
 
+Suggested-by: Maoyi Xie <maoyixie.tju@gmail.com>
 Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
 ---
- Documentation/userspace-api/ntsync.rst | 33 +++++++++++++-------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+ .../testing/selftests/drivers/ntsync/ntsync.c | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/Documentation/userspace-api/ntsync.rst b/Documentation/userspace-api/ntsync.rst
-index 25e7c4aef968..a778016feb87 100644
---- a/Documentation/userspace-api/ntsync.rst
-+++ b/Documentation/userspace-api/ntsync.rst
-@@ -83,18 +83,18 @@ structures used in ioctl calls::
-    };
+diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+index e6a37214aa46..ce000ff41535 100644
+--- a/tools/testing/selftests/drivers/ntsync/ntsync.c
++++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+@@ -8,12 +8,18 @@
+ #define _GNU_SOURCE
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
++#include <sys/wait.h>
+ #include <fcntl.h>
++#include <sched.h>
+ #include <time.h>
+ #include <pthread.h>
+ #include <linux/ntsync.h>
+ #include "kselftest_harness.h"
  
-    struct ntsync_event_args {
--   	__u32 signaled;
-    	__u32 manual;
-+   	__u32 signaled;
-    };
++#ifndef CLONE_NEWTIME
++#define CLONE_NEWTIME 0x00000080
++#endif
++
+ static int read_sem_state(int sem, __u32 *count, __u32 *max)
+ {
+ 	struct ntsync_sem_args args;
+@@ -1340,4 +1346,85 @@ TEST(stress_wait)
+ 	close(stress_device);
+ }
  
-    struct ntsync_wait_args {
-    	__u64 timeout;
-    	__u64 objs;
-    	__u32 count;
--   	__u32 owner;
-    	__u32 index;
--   	__u32 alert;
-    	__u32 flags;
-+   	__u32 owner;
-+   	__u32 alert;
-    	__u32 pad;
-    };
- 
-@@ -152,7 +152,7 @@ The ioctls on the device file are as follows:
- 
- The ioctls on the individual objects are as follows:
- 
--.. c:macro:: NTSYNC_IOC_SEM_POST
-+.. c:macro:: NTSYNC_IOC_SEM_RELEASE
- 
-   Post to a semaphore object. Takes a pointer to a 32-bit integer,
-   which on input holds the count to be added to the semaphore, and on
-@@ -186,7 +186,7 @@ The ioctls on the individual objects are as follows:
-   unowned and signaled, and eligible threads waiting on it will be
-   woken as appropriate.
- 
--.. c:macro:: NTSYNC_IOC_SET_EVENT
-+.. c:macro:: NTSYNC_IOC_EVENT_SET
- 
-   Signal an event object. Takes a pointer to a 32-bit integer, which on
-   output contains the previous state of the event.
-@@ -194,12 +194,12 @@ The ioctls on the individual objects are as follows:
-   Eligible threads will be woken, and auto-reset events will be
-   designaled appropriately.
- 
--.. c:macro:: NTSYNC_IOC_RESET_EVENT
-+.. c:macro:: NTSYNC_IOC_EVENT_RESET
- 
-   Designal an event object. Takes a pointer to a 32-bit integer, which
-   on output contains the previous state of the event.
- 
--.. c:macro:: NTSYNC_IOC_PULSE_EVENT
-+.. c:macro:: NTSYNC_IOC_EVENT_PULSE
- 
-   Wake threads waiting on an event object while leaving it in an
-   unsignaled state. Takes a pointer to a 32-bit integer, which on
-@@ -213,7 +213,7 @@ The ioctls on the individual objects are as follows:
-   afterwards, and a simultaneous read operation will always report the
-   event as unsignaled.
- 
--.. c:macro:: NTSYNC_IOC_READ_SEM
-+.. c:macro:: NTSYNC_IOC_SEM_READ
- 
-   Read the current state of a semaphore object. Takes a pointer to
-   struct :c:type:`ntsync_sem_args`, which is used as follows:
-@@ -225,7 +225,7 @@ The ioctls on the individual objects are as follows:
-      * - ``max``
-        - On output, contains the maximum count of the semaphore.
- 
--.. c:macro:: NTSYNC_IOC_READ_MUTEX
-+.. c:macro:: NTSYNC_IOC_MUTEX_READ
- 
-   Read the current state of a mutex object. Takes a pointer to struct
-   :c:type:`ntsync_mutex_args`, which is used as follows:
-@@ -242,7 +242,7 @@ The ioctls on the individual objects are as follows:
-   ``EOWNERDEAD``. In this case, ``count`` and ``owner`` are set to
-   zero.
- 
--.. c:macro:: NTSYNC_IOC_READ_EVENT
-+.. c:macro:: NTSYNC_IOC_EVENT_READ
- 
-   Read the current state of an event object. Takes a pointer to struct
-   :c:type:`ntsync_event_args`, which is used as follows:
-@@ -255,7 +255,7 @@ The ioctls on the individual objects are as follows:
-        - On output, contains 1 if the event is a manual-reset event,
-          and 0 otherwise.
- 
--.. c:macro:: NTSYNC_IOC_KILL_OWNER
-+.. c:macro:: NTSYNC_IOC_MUTEX_KILL
- 
-   Mark a mutex as unowned and abandoned if it is owned by the given
-   owner. Takes an input-only pointer to a 32-bit integer denoting the
-@@ -276,11 +276,12 @@ The ioctls on the individual objects are as follows:
-      * - ``timeout``
-        - Absolute timeout in nanoseconds. If ``NTSYNC_WAIT_REALTIME``
-          is set, the timeout is measured against the REALTIME clock;
--         otherwise it is measured against the MONOTONIC clock. If the
--         timeout is equal to or earlier than the current time, the
--         function returns immediately without sleeping. If ``timeout``
--         is U64_MAX, the function will sleep until an object is
--         signaled, and will not fail with ``ETIMEDOUT``.
-+         otherwise it is measured against the MONOTONIC clock in the
-+         caller's time namespace. If the timeout is equal to or earlier
-+         than the current time, the function returns immediately
-+         without sleeping. If ``timeout`` is U64_MAX, the function will
-+         sleep until an object is signaled, and will not fail with
-+         ``ETIMEDOUT``.
-      * - ``objs``
-        - Pointer to an array of ``count`` file descriptors
-          (specified as an integer so that the structure has the same
++/*
++ * Absolute MONOTONIC timeouts must honour the caller's time namespace.
++ * With a negative monotonic offset, a 100 ms wait must still take ~100 ms
++ * of namespace time (not return immediately against the host clock).
++ */
++TEST(wait_any_monotonic_timens)
++{
++	struct ntsync_sem_args sem_args = {0};
++	struct ntsync_wait_args wait_args = {0};
++	struct timespec start, end;
++	char buf[64];
++	__u64 elapsed_ns;
++	int fd, offset_fd, sem, ret, status, len;
++	pid_t pid;
++
++	if (access("/proc/self/ns/time", F_OK))
++		SKIP(return, "Time namespaces are not supported");
++
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	if (fd < 0)
++		SKIP(return, "/dev/ntsync is not available");
++
++	ret = unshare(CLONE_NEWTIME);
++	if (ret) {
++		close(fd);
++		if (errno == EPERM)
++			SKIP(return, "need CAP_SYS_ADMIN for CLONE_NEWTIME");
++		ASSERT_EQ(0, ret);
++	}
++
++	len = snprintf(buf, sizeof(buf), "%d %d 0", CLOCK_MONOTONIC, -10);
++	offset_fd = open("/proc/self/timens_offsets", O_WRONLY);
++	ASSERT_LE(0, offset_fd);
++	ASSERT_EQ(len, write(offset_fd, buf, len));
++	close(offset_fd);
++
++	pid = fork();
++	ASSERT_LE(0, pid);
++	if (!pid) {
++		int obj;
++
++		sem_args.count = 0;
++		sem_args.max = 1;
++		sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++		if (sem < 0)
++			_exit(1);
++
++		obj = sem;
++		wait_args.timeout = get_abs_timeout(100);
++		wait_args.objs = (uintptr_t)&obj;
++		wait_args.count = 1;
++		wait_args.owner = 123;
++		wait_args.index = 0xdeadbeef;
++
++		if (clock_gettime(CLOCK_MONOTONIC, &start))
++			_exit(2);
++		ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
++		if (clock_gettime(CLOCK_MONOTONIC, &end))
++			_exit(2);
++
++		if (ret != -1 || errno != ETIMEDOUT)
++			_exit(3);
++
++		elapsed_ns = (end.tv_sec - start.tv_sec) * 1000000000ULL +
++			     (end.tv_nsec - start.tv_nsec);
++		/* Without timens conversion this returns in ~0 ms. */
++		if (elapsed_ns < 50 * 1000000ULL)
++			_exit(4);
++		if (elapsed_ns > 1000 * 1000000ULL)
++			_exit(5);
++
++		_exit(0);
++	}
++
++	ASSERT_EQ(pid, waitpid(pid, &status, 0));
++	EXPECT_TRUE(WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status));
++
++	close(fd);
++}
++
+ TEST_HARNESS_MAIN
 -- 
 2.43.0
 
