@@ -1,222 +1,257 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011057.outbound.protection.outlook.com [40.107.208.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F5D392822;
-	Mon, 20 Jul 2026 19:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B220139EB59
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 19:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784574778; cv=fail; b=RpcCpVHYo3Tl66+iMXPPNgLBJFKksuPP+XOPXv0PIKhiLFj3YOw0n8VZggGsRmnTl66LMww0qAk5szkLvYEk3jpwAkX1lcL+G2JEeM/UIRXuiEwXMDLf1Ac3Osoi3aUbDgXhCcLi9js0/RGI0AvxCm+8z/7/zbMJt70bWFw1kKM=
+	t=1784575121; cv=pass; b=d7i0K8hVmw9FbzOOAFAnuO/A2aR0ZeoXJxE+ssyiubFgK7I6F9Ef4738rhds8SxnOd8G710G4ugpsgPF8zYmsuyEcD2ypm298tVOitav8GkXNvr4wd+62q3acugMacmtr8cq03/NTLRVtJTnmt4fghHhPIPze7v0UDxn4km0Q2c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784574778; c=relaxed/simple;
-	bh=kVReo1wxsKBLDu1OlThAekTw7KcI2ER5dM9aO6SrPa4=;
-	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
-	 In-Reply-To:MIME-Version; b=MOuHmd9SQhDfjo1wX/rDhoH8KDBOx/t60WSW+eqldUXxaKEaZD1UVnipQFzUUFOInCrEAzKM/XH9Cvtqgg23MjQrWwnRWgb+MIO4QbcqUjpV5uzF3AUsECuiruI3elhcFcgX+23oJp8vPijk/KYEraIYyHHwYg8z1Bg62accd7A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GjJldHT6; arc=fail smtp.client-ip=40.107.208.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1784575121; c=relaxed/simple;
+	bh=CzOzvw9sY6kxmGwhIsCJLwfImNmbkBT0gx9KZ9/KDKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YbtJRdMi1s+1y2WwmFKcoFOJNWVXHzvYqJufakCnvE5eLX2RLbsPC6eRloaAZ2sJ1wi8silZplv6JjtS3gQLlmTHA9uTHZ+OtSM/PjYPPt9aE71MPr8XShCPGP60TFtpYtAAr1zfIq/alo6u5xj36q/239hazoljH75cwuOJCK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZvsJU3Fs; arc=pass smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GjJldHT6"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=N8IxTKxKhoY4aYEeefo2ildqncoWJKR3cFvjyNx0W77zb4/Hyu83Z49xkLwjbbu0nWqUzOa4tnIH3GYGdPpxLCRxIM1impjgKNZ6B0Dgp9TZUP1Z5f9MhSnF+X+khxjPPxzaYI7vu0v+WtaCISMLmtdKIClG+AJ+Omlje4QZg0BCr4DBUEhjLVXZKIqvBa8KU/e5lHhruunfYx7n6DPlsLKOrj2pxlt03duOeeQHXg1ecUwlQLMo1uHv3/c4Q6MX2TsA8a7dmBSP3KZGWtOZfkvMV/rRY/kGV34JJt1H1ya7evcH/Mseh8P9L2ErMrL5gGL8D3b7YZppLF0BaQVocA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GtDhRePc/d/7+vpcQuPWsUKy02vWVLss2qe86idKv9Q=;
- b=GKQgJJRngEbpqmWsoBk2+gE7WcI7UlKjoAfYWxgQSxQT2zrWPlFlSXp/1BzSPcAFMBky0SyP9oBIwWDUPwJ6bPMcR46htWvZ3Gx1xDBLowBOdUTKPBQWARvZqLoQw+5tNgBRLHe0cAwQ3ahMpKJm4jSZr18PXHvGQdkU5edFOGdh7kKaZbuUlWbHQdYBOgY5BuRrK091RAWKbn4BwpEeenjgbneXfFX1mjGA/n7Jae8UlHBIWG+eBbCFlVI0oj9aSkMXki6aaWWT3SaaZ5tANLvSokjvT8vZhLaxJMMWp3YW4Cq27hBGDjL6GmNwJTD2njiawYjahtOFbuJzW0zSDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GtDhRePc/d/7+vpcQuPWsUKy02vWVLss2qe86idKv9Q=;
- b=GjJldHT6/om6SSY7e22P0CFfglVCWidi7jkHIGPS+FgGakQY8Sp0eZe715bnjsM+7tj3YInrvYve0i4cEy/NmIuQpJmyy+VkGVnJzAR9fwO1W1uBLOKBGvQVFjqWXtrQezoCdcZKKICL1CgmE8Cc6Cy+W5SCXIbspATg9zjozlSrNsbKn36+TnGnaW8Bh8LJKtNxSrLi18fqRZwNBP5Jp6DrWrxntDzUSmhfObyXp+XmY1xOGoOtYg/QKgWDPSX4xwBnJvBUPkn0V4FVfAk9vgk0hLZ8LR93jDNP5RgqsZV2d+0tSEjhY7hNXw72kPOQvjTV7D5TMYawIPjqpx/lkg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by SJ2PR12MB8980.namprd12.prod.outlook.com (2603:10b6:a03:542::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Mon, 20 Jul
- 2026 19:12:51 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0223.017; Mon, 20 Jul 2026
- 19:12:51 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Jul 2026 15:12:50 -0400
-Message-Id: <DK3MYJN8KSZ5.1U0STUJGETSJH@nvidia.com>
-Cc: <damon@lists.linux.dev>, <linux-mm@kvack.org>, <sj@kernel.org>,
- <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
- <ljs@kernel.org>, <liam@infradead.org>, <vbabka@kernel.org>,
- <rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
- <npache@redhat.com>, <baolin.wang@linux.alibaba.com>,
- <ryan.roberts@arm.com>, <daichaobing@sangfor.com.cn>,
- <wangkefeng.wang@huawei.com>, <gutierrez.asier@huawei-partners.com>,
- <zengheng4@huawei.com>, <kasong@tencent.com>, <corbet@lwn.net>,
- <skhan@linuxfoundation.org>, <linux-doc@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <lianux.wang@processmission.com>,
- <kunwu.chan@linux.dev>
-To: "Lian Wang" <lianux.mm@gmail.com>, <david@kernel.org>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [RFC PATCH v3 0/3] mm/damon: introduce DAMOS_SPLIT action
-X-Mailer: aerc 0.21.0
-References: <59292ba2-e0cc-4e50-bb26-be9c15843a41@kernel.org>
- <20260720095633.32281-1-lianux.mm@gmail.com>
-In-Reply-To: <20260720095633.32281-1-lianux.mm@gmail.com>
-X-ClientProxiedBy: MN0PR03CA0026.namprd03.prod.outlook.com
- (2603:10b6:208:52f::23) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZvsJU3Fs"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cacef7d299so405435ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 12:18:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784575119; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QEboG13W1Q2E3uuKv0vmuH5WJLDnXBpwUiNd7EdryhiGXAvR6j0MW+VAYYAsp/seBy
+         A9nHNCrlGqxOmLh4qS0wsBbrcPc8qVU3WYtoWJxUaafC7xKQe/NfGyuAussC7gu8GNJN
+         DYCAZOiK0JrekXqsG+kO7FXzxxFVvj+nMYq8VNxEbg1YTgx9f/l13VWB2bwTHMjQ/n7S
+         y4rrb8bIQaZn7mP9+Xq0XplkuB8do0hqCavCPxIHN4Uf0fSseDEZNarcHYeJeQT5jqDB
+         Y4MLKbA9dC9VyOnPHfLVR9/Ngyn8v05Dd7mVVw8BaQsT+dcvVld7hwKatM6146aeGNvv
+         aouQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xZApkQlP3tUF+0sIVFilGXDzjCPNwegylhqk3EBxphQ=;
+        fh=sncES/JzQIv46badditwf1UjC2W/FXzCM4cpwbh2DbQ=;
+        b=Scig9suQkv54NwHTVQDJ8TSkimP3n7VdKcir977BtUlu+kGCOLrWsjqya1SE5+mYtJ
+         PO2sjNrG3yJm8RDzMSm5yEq3PBYXxi7CQfO2Ztf938SdEWNK6vvaMl01WhclZkB3TPhQ
+         31Sa7qGm56SMJ2TGOGbkWH+ChZGXyf51YbkdU6o0Wpz/r2NgVMnxmV8fsrynv7AUwvPf
+         ZFwD519rcI72mZ4gUSLv3OzTh6z+Y+spoDj/sODRYPXnKifFMy6GDQt0XzzL7ZCFv83i
+         5UCbOeUvMHpvVxjRt7OFPHR+YjK8zU9pc6UPFDFX3pJXybT2g07UTjXTzB9EmaXGbu2y
+         lnTg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784575119; x=1785179919; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xZApkQlP3tUF+0sIVFilGXDzjCPNwegylhqk3EBxphQ=;
+        b=ZvsJU3FsAPRSa4YHucj5v6EVOfLO5qk8JIQqF6wzKspt3y7T6VluPADGOzTklxY3Cs
+         3G3EEI+2pbjzDvIXH7llyDZXNzLnshzqIZijJh4ShctRoAo11eM8WbbfcJ9WNh4IBKvb
+         YU7zPyZHZKR/ckEIsG+YNjvgDW94UHoz2gdDG+yKbdqm/piFRX8kuyHdeBR3LXhqMWgD
+         7bgzfqZaovA6fvsvkddJEiCtDaewht/dNHPAENm+6Wzd5QVf7DbsUdrNdh9dg4/Ruvw6
+         y+yGnNm3NGps1vkfQZp3iKzwhIIL1coXmi94baPalTDp/Y/sbGXKRtpHIMhe62aYMDvs
+         2q3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784575119; x=1785179919;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xZApkQlP3tUF+0sIVFilGXDzjCPNwegylhqk3EBxphQ=;
+        b=NJsVnzaSigKC13XQB2x4+/bo/x31/RJMQy7261qd7ArEw3iMIGpUk0MkIY2UQUY2Ir
+         UyQdVauiIuxta4cAf9/vxbF60QV549Eqxhjokk7SlspJJfvmzgVT7V4vXx5+i+RLNoGT
+         uwOI3wxOHTL/oGQv1R/+0ZTI9iVklQpEu0WWRKw95ZOUfJPOxhrtPQwlhJQqdBjZiduG
+         4y0W6Xtur9i/lKOhEBbSXCth8OvGB1W/f4BkmlgoNhGVINvTrOtdwqsIcv7jX+0xHwoY
+         LAQUYkBcwIYgBH2rBzBXCOlEwY9tUyyVnWdYic59WMcxOIVpfUMQod9+wqC8dHMOVSke
+         /VyA==
+X-Forwarded-Encrypted: i=1; AHgh+RoDOIIuVamk5c0mIbmuxq1UtB8/czphsNL1QC4cPNkJbBMaktYYhjyddpxilAlstte2BiO6jDUsgyS/Lmqn4v4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn9GFY0zGgg1+xxhlack3A2ze1pWvt3Sr2+DGt6RUkf7Pk+eHz
+	VcLHJmaPMVQqt9ofaskb3/mqsLRrwROYJRLMz2R/Nc9V4opjPc4B/QKpl4EBZgVwUA648UBlIR+
+	57jg87Php4J5ir176jrBWGVsTScY9+EN4xKSfExLS
+X-Gm-Gg: AR+sD10JwKzqzhuMZum8BWyxImwuCGO3g2SAuqTAWjkocupblnjNCvoLkFYp06zBWoV
+	Q2e/qmA4qMOis7qzVBej17khPhzf0eGiEUAGrSx+RRt1/Hcf6Ifxt8Aldgny4adKuE9CpvFI7jx
+	uskjblgPHNcQRWP0A7ppPB9wlzFlGkzpZxDFTSaNPBsawZyliRtObeN8vxMutcLy1izJlOOzgjO
+	Qizo6SQrrYCgk9VghKzTr/nDc0GYjq3P0cGQx2e85sl+c9j7FGy95G1SQ21qymdkzbrqjdGKNS5
+	hSY7GP1D0aScanAFfGTYqWaPH74=
+X-Received: by 2002:a17:902:ec92:b0:2ce:f9e2:4646 with SMTP id
+ d9443c01a7336-2cf7b71d50emr2078035ad.27.1784575118135; Mon, 20 Jul 2026
+ 12:18:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|SJ2PR12MB8980:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b500aee-05e3-42b1-cf9a-08dee692e4c1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|376014|1800799024|366016|10063799003|56012099006|11063799006|10067099003|4143699003|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	rgvhRRLa9ZolsUp5r0voHcWRpkQSXLBNM4WIygbUtvEUfWBrGkWqnrsQYZWqUrxM/ECeoNJDeOgpHWCANUozIoAHapIViHF2FJziyRUXaEcAS/ZlXruTRjGAApSXDhHm4hUK04mvdHxRSuBKmSld3wGBMW6UftgipruGQ5rleVbd5UeIwmfv9Tx2W2nILi7aU/myJ7vHwHxL5HzRkWlZY/QDdUO2wpNUmwhypKBS6kNghYKNb9DARK6Bd72f9VnknFV0Qzb+lTzTme99n3d0SStQ16gXqI9j1CQoKfbfmZwj68ws6JWe+Gsjn3uslAe1vF6iRFPqAMQ8AAeWDK27q9yFNbXeW5kjegLSaWgbQMWdeN7d3+DaEIXl1yYK1xuWSP2ORB/DIE3wG0SMfjFKwFGvpFondyZS/FfrZfhT+63KeNuWYK55kkAEXkB4uPY8rCWnWzihV83L4Ry2f8kUGMiXfLiVc4O77PxFynlUBzmQRCBFeJOnPmqyrJSjYybF4UZfB0VE3CAIOVyRXeSIhRfhLg5sfeFp4REBvXeNYBsnJ4JLm7xDCoPR3JPFZM2rARD9tFwys0gIhSWKlWEtnIdYMVVmQi67gvqQYIfpmt765M8hGqMTre0fxe68Yvg/INRr87Df3VZt3aMH7mbokop86Gv6FyAuEYUYuUwXwn4=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(1800799024)(366016)(10063799003)(56012099006)(11063799006)(10067099003)(4143699003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WS9JTGFQYXR5SG5qK2JNTTNZeEZEK1ZFb2RtalR2UldHZ0NWUkhkOVdSREJh?=
- =?utf-8?B?Sm04Rk9oYU95dWVlWEVCZFVzRGN0RGUwQXlObjNPcCtkeTNGanBNVTMrdWww?=
- =?utf-8?B?czNrSE9UTnJkV24yNk5ZenZFdnR4Qzg1U3JWa0RsVTZ0ZHpHYXBHRk11NzZE?=
- =?utf-8?B?U0ZTUDhrVlJzLzM2cGhDYXpEQkZSdS9YTHpib1grVk5pSk03b1YvckhGekJD?=
- =?utf-8?B?QnBhZUtGY1NiR25QaENrTERkcVR3b3p4RjZlQXdqblZqMWVEYjVZQlB6eWxM?=
- =?utf-8?B?c29ka2wxODJWQzhsQ2RPdTdlOHNGYXBnTlZEZWJWNGxuVmV0cnhtOHBlMXdp?=
- =?utf-8?B?VVZNa1R1TU1qRFdRTUdROXJ6NmxzZkdEU3Vkdi9jMnBxQk1Za0RiWStxWmxB?=
- =?utf-8?B?MjVPbVBEbzU1MU1naDFyYU5NT2FCVXNZNUVwYmtKR0JKcUhZZDB1MUR6ckh4?=
- =?utf-8?B?WWNHNXpDeUVKSkxWVUhPS2lSa2NwVURGSXEwQXYzclJUaVdHQkRDTHZVdVdU?=
- =?utf-8?B?QTkwV2tPTFBUY2ZNQ21saXJ1YThyYlh1YjdqdnFtU0dsQk1sQWJmU1hZQUIv?=
- =?utf-8?B?ZGM5ZFM3cXlqeFl6Vy9xdFVwS3RrbWI3TlZGT0NBT1NWeUc3NEd3MmluRHJP?=
- =?utf-8?B?djUxUWI2TkJ5NlI4VXRteHpKQlVBbTJ1QktYY1NiSUoyd3BPWWNiRDZrMDVp?=
- =?utf-8?B?WmZyUElMaHF3eVJTTTZOT1J0V2taZU9tSDhYNWJJVHREdzJpUlFMMnh3Z3Jp?=
- =?utf-8?B?ODZET29oYlpxS04xZzdjVCs2N05xWU80V0tiN1ovU1JWQ2hUMm9ja1BPQkM3?=
- =?utf-8?B?RTFLU1FEeUxYUEN4bVM5RnBLZGczZ2hlcmlqNzlXQmNqZ1dPRnJoR1l0UmdT?=
- =?utf-8?B?NHpLYUM4b250SVR4SFZITFg5TDMxLzZ1RUtSWGxFTjJwN0RGRWh1a29TUTlX?=
- =?utf-8?B?bmVXS3BMZDBLVzdBMXQrWCtyWXBoN2xxaWMwaVNMVU5yODByNi9lay9XOWVK?=
- =?utf-8?B?eFV0bGNqMm91dFMydjMzK0ZwMXVoN3FiajY2cWdBbENab2FObThqVnAwamRV?=
- =?utf-8?B?Mjh0bTArYVBKZzZ0T2ltSmpWMXRDWXBoMWg5ZVFOVXZSNUxBbDdnNEt0L1dS?=
- =?utf-8?B?VnJWQTVnNGtoMnpNb1FsNnhFb253UTRlYytoVWQwb2RLdUpqd3duRnhrcVEr?=
- =?utf-8?B?Q2J3dUdJemx4eUdMb0s2aC9SQXJ6WXR4SUVONy9OckpvbnAwVFFkdkJLK0NO?=
- =?utf-8?B?LzBaSjhtRWZCeStnSVBWVFpwME82TEpMaUd4VGpyMkQ5Tmd2ejFKaExhUy9Z?=
- =?utf-8?B?MGZBU3JjRjAwQWgrcWhrQzBoamdIVDdJd3pSWHBhYnZ0YWEyUXVBUUxHYmxu?=
- =?utf-8?B?VVlYbW9Xak40Mms2SStmZFo0UzhxcUhxWlFZNm51RUxucmtnczFQWVAvNC92?=
- =?utf-8?B?YUZscjdqYkt1N3hWL0ZaRURzbzgwMGswNmN4NkNKS3lubzV0aXM3dzdUNnRn?=
- =?utf-8?B?ZDZEY2tESjBvbitNSUxuUzF1VlFzS0tFWUJzR0VmQkcwT3dpanE1THVCWHNL?=
- =?utf-8?B?QUl6YWExdklxSFZVRnhPc2lhYWlrTVZIZDBpb1BiK3pWZHhBWWhGc0x0ZGJD?=
- =?utf-8?B?aFY5aVBVQURxbFVjanQ1RUtTZmVmWXBnTDJ4eUtpWWdnV2J2R3A5dUhWbUR3?=
- =?utf-8?B?MUJqL2JPQXVXZk9na1ZwSjd4VlBMWURQemk0R3ViQitCZ0hGeTA5eXplTzZK?=
- =?utf-8?B?OVRqRTNHeld3NldsMmVOUVNDMHB0ME0wdWY5T25Ob2JVRjlURFdQTkpreUhi?=
- =?utf-8?B?RTczWkw5UlluczBoY0x1RWNhcGhVVDEwQ1ZMUzFoY2lPN1pyVTlyblcvT3hT?=
- =?utf-8?B?MmdFVUlhZXpsTTJ4TzJPVXpRc3VQdVh2SzltNE9OWmh1V3UxYkVQa2lQWGlL?=
- =?utf-8?B?V0Y1a0lnSDA3N2o0RkpWbXZrK0R6M3hjdlFqN0ZBZ05veDRpclhYdit4RWxB?=
- =?utf-8?B?Q202bUxDTEY3b3VNeUtjb1MxRGJzSDExZ3pGU1VOdWZrK1RnN1lPWEU1ZW5S?=
- =?utf-8?B?aGhpTXZlNEo3SUdaVVU3M3E5andvZHM1Y3VtbGRxWEFtbXpVeDZubmUwd1pJ?=
- =?utf-8?B?YW82cnIxbHNrOVRTenlkUC9IZXV6a3FqVU0vV3VqUno2Qm1DUVBFZDUwWlJv?=
- =?utf-8?B?SG45OFJ0Qno5M0hmMUYwa1AxbWw1WVk1YmVLSVhsd25YNUNDb2FCV2hyMUMz?=
- =?utf-8?B?V3V6L2c2NVRPcGplNTB0VUJWVDZNM21DcTRmNVhkc1NqbWNsL2Q3TWtEYkh3?=
- =?utf-8?Q?tEsp/VB8u2yhGb25HO?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b500aee-05e3-42b1-cf9a-08dee692e4c1
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2026 19:12:51.1813
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xVf4l0tWD/JojKbbsQlQZAFygabG9hlQIKUxQtA2golQKVCDQgSpR3wer/2+RkpF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8980
+References: <20260719175857.4071636-1-ap420073@gmail.com>
+In-Reply-To: <20260719175857.4071636-1-ap420073@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 20 Jul 2026 12:18:25 -0700
+X-Gm-Features: AUfX_mytWgNwpYQoEAQtZaZUmAoldCJ_ZYmUTMTxrjD32WIPJUFR9GJy7g5tI1U
+Message-ID: <CAHS8izMocev_0TtAsUr9BqCm6sH2DBh-bPK4DfZYNEAb_d2G6w@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next 00/13] net: knod: in-kernel network offload device
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
+	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
+	Felix Kuehling <Felix.Kuehling@amd.com>, Hoyeon Lee <hoyeon.rhee@gmail.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
+	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
+	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon Jul 20, 2026 at 5:56 AM EDT, Lian Wang wrote:
-> Hi David,
+On Sun, Jul 19, 2026 at 11:01=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wr=
+ote:
 >
-> On 7/20/2026 10:44 AM, David Hildenbrand (Arm) wrote:
->> you give no real motivation and evaluation why this is required or
->> why this gives the user any benefit.
->> A SPLIT with an explicit order is not really want we want and it
->> does not fit the existing primitives.
+> knod (in-kernel network offload device) drives a GPU directly from the
+> Linux kernel - with no userspace GPU runtime such as CUDA or ROCm, and
+> no userspace component in the data path - to accelerate packet
+> processing.
 >
-> Thank you for the direct feedback.  Let me explain where this came
-> from -- the cover letter should have included this context.
+> The kernel itself allocates the GPU's queues, JIT-compiles the
+> per-packet program to GPU machine code, and dispatches it; the NIC DMAs
+> received packets straight into GPU memory and the GPU returns a verdict.
+> The GPU is programmed like any other in-kernel offload, not through a
+> userspace framework, so existing XDP programs and IPsec SAs can be
+> offloaded to it transparently.
 >
-> This started from a real problem at Sangfor.  The scenario is:
+> The design and motivation were presented at Linux Plumbers Conference
+> 2025:
 >
->   KVM-QEMU virtualization on Kunpeng 920, with KVM guest memory
->   backed by tmpfs shared mappings (THP=3Dalways on the host).  An
->   Oracle database runs inside the VM.  DAMON monitors the KVM
->   process on the host to measure the hot-memory ratio.
+>   https://lpc.events/event/19/contributions/2267/
 >
->   The KVM process allocates and uses a large amount of memory.
->   Under the same workload, DAMON reports a significantly higher
->   hot-memory ratio with THP enabled versus THP disabled.  Direct
->   tmpfs write tests inside the VM -- touching at 4K and 2M
->   strides -- show a clear gap between the two cases.
+> Motivation
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 >
->   DAMON parameters used:
+> Line-rate packet processing that does non-trivial per-packet work - an
+> XDP program doing L4 load balancing, or IPsec crypto - is bound by the
+> host CPU: each core handles one packet at a time, so scaling means
+> spending more cores. A GPU is the opposite shape - thousands of lanes
+> running the same small program over many packets at once (SIMT) - which
+> happens to match the per-packet-program model of XDP.
 >
->     operations=3Dvaddr
->     monitoring_attrs/nr_regions/min=3D500
->     monitoring_attrs/nr_regions/max=3D2000
->     monitoring_attrs/intervals/sample_us=3D500000
->     monitoring_attrs/intervals/aggr_us=3D20000000
->     monitoring_attrs/intervals/update_us=3D60000000
->     schemes/0/action=3Dstat
->     schemes/0/access_pattern/nr_accesses/min=3D1
->     schemes/0/access_pattern/nr_accesses/max=3Dmax
+> knod moves that per-packet compute off the host CPU and onto a GPU. The
+> NIC DMAs received packets directly into GPU memory, the GPU runs the
+> program across a batch of packets in parallel, and only the result
+> comes back: a verdict for every packet, plus the packet itself for the
+> ones destined to the host. The CPU no longer pays the per-packet
+> program cost, and throughput scales with GPU occupancy rather than core
+> count.
 >
-> The underlying issue is that under PMD-mapped THP, DAMON's monitoring
-> granularity is coarser than the actual working set -- a single
-> Accessed bit covers 512 base pages.  Before SJ's probe infrastructure
-> arrives, there is a gap: DAMON cannot distinguish hot sub-pages from
-> cold ones within a single THP.
+> Crucially this happens entirely inside the kernel. GPU packet processing
+> today generally launches work from a userspace GPU runtime (CUDA and
+> friends) and keeps that runtime in the data path; knod instead builds
+> the GPU queues, compiles the program, and dispatches it from the kernel,
+> so it plugs into existing offload paths (XDP, xfrm) with nothing to
+> install or keep running in userspace.
 >
-> Split is one possible mechanism to bridge that gap -- by dismantling
-> the PMD mapping, each base page gets its own PTE Accessed bit and
-> DAMON recovers fine-grain monitoring.  It is not intended to be a
-> permanent API, and certainly not "the opposite of collapse".
 
-If you just want PTE level access bit information, why not split PMD
-mapping instead of the THP itself?
+TBH I found this motivation weak, especially since IIUC you're asking
+for almost ~50K lines of code to be merged to the kernel. My thinking
+is that (a) it's true that Native XDP takes up CPU cores, but
+HW-offload XDP already exists and takes up no CPU. (b) with AI, GPUs
+are very expensive and the work they're doing is critical, so you're
+unlikely to buy a GPU and use it for knod-offloaded XDP; you'd
+probably buy a cheaper smart-NIC? And in the cases where you do have a
+GPU, it's likely your system's money-maker, and you probably want to
+offload work from the GPU, not to your GPU.
 
-In addition, the issue is about access monitoring granularity in DAMON,
-why should user care and know about THP split operations? I would expect
-DAMON detects the inability of getting fine grain access information and
-split the PMD mapping itself instead of a user initiated DAMON_SPLIT. If
-that is not possible with DAMON, an alternative is to provide something
-more generic like DAMON_SAMPLE, which does the split under the hood,
-instead of exposing MM internal operations.
+But as far as I can tell there should be much more interesting
+applications for what you're doing rather than offloading XDP. Like
+wouldn't you with this feature be able to implement ML collectively
+like all-to-all/all-reduce/all-gather as purely XDP programs offloaded
+to the GPU? If you have that implemented and can positively compare
+performance to RoCE or RDMA that would be a much more interesting use
+case IMO.
 
+> Model
+> =3D=3D=3D=3D=3D
 >
-> I did not write this scenario into the cover letter because our test
-> results do not yet show a clear quantitative benefit worth claiming,
-> and I did not want to oversell.  Without the context, I understand it
-> looks like I randomly proposed a new primitive -- that was not the
-> intention.
+> knod binds two endpoints through a third object:
 >
-> SJ acknowledged [1] that the monitoring problem under THP is real.
-> My RFC is a concrete proposal to start the discussion.  If split with
-> an explicit order is not the right primitive, I would appreciate your
-> thoughts on what the correct DAMOS abstraction for this should be.
+>   - a NIC-side netdev, registered by the NIC driver;
+>   - an accelerator (the GPU), registered by a provider built into the
+>     GPU driver;
+>   - an offload device, created on attach, that connects them and owns
+>     the per-queue data-path state.
 >
-> [1] https://lore.kernel.org/20260620203915.82947-1-sj@kernel.org/
+> The accelerator ops are feature-agnostic, so different per-packet
+> programs plug in behind one interface. This series ships two features
+> to show the framework is not tied to a single use case (the accel-type
+> uAPI also reserves "dpu" for future non-GPU backends):
 >
-> Thanks,
-> Lian Wang
+>   - BPF:   an XDP program attached in offload mode is JIT-compiled from
+>            eBPF to an AMD GCN shader and executed on the GPU.
+>   - IPsec: RX ESP full-packet decrypt on the GPU (proof of concept,
+>            see below).
+>
+> Data path
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> For a NIC RX queue bound to an accelerator, a received packet flows as
+> follows:
+>
+>   1. Attach reconfigures the NIC's page_pool so its pages come from GPU
+>      memory, exported as a dma-buf and plugged in through the devmem
+>      memory provider. The NIC therefore DMAs the packet straight into
+>      GPU memory - there is no host-side copy on RX.
+>
+>   2. Instead of building an skb and entering the stack, the NIC's NAPI
+>      pushes a small descriptor (memory ref + offset + length) onto a
+>      per-queue lock-free SPSC ring shared with the GPU.
+>
+>   3. A persistent GPU worker drains descriptors and runs the active
+>      feature's shader over a batch of packets in parallel - one
+>      workgroup per packet - then writes a per-packet verdict back onto
+>      the ring: PASS, DROP or TX.
+>
+>   4. Back on the NIC NAPI, each verdict is applied:
+>        - DROP: the GPU page is recycled to the pool;
+>        - TX:   the packet is sent back out the NIC directly from GPU
+>                memory (XDP_TX), with no host round-trip;
+>        - PASS: the packet is copied out of GPU memory into a host
+>                delivery page by the GPU's DMA engine (async SDMA),
+>                wrapped as an skb, and handed to the normal stack.
+>
+> So only PASS packets ever touch host memory, and even then the copy is
+> done by the GPU, not the CPU.
+>
+> The control plane is a generic netlink family ("knod") for
+> attach/detach, accelerator/NIC inventory, and per-accelerator feature
+> selection, with notifications on bind/unbind.
+>
+> Code layout
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> knod separates into a subsystem-neutral core and a GPU-specific
+> provider; nothing in the core knows about GPUs. Roughly:
+>
+>   - core + control plane + NIC drivers   net/, kernel/bpf/       (~4.4k)
+>   - GPU provider (queues, JIT, shaders)  drivers/gpu/drm/amd/    (~39k)
+>
 
-
-
+Since the changes are so large, I would break this work into many
+series, the first which only supports a very minimal set of work
+(which I would guess would be XDP_DROP and XDP_TX), and then follow up
+with another series which adds XDP_PASS support, and then IPSec, etc.
 
 --=20
-Best Regards,
-Yan, Zi
-
+Thanks,
+Mina
