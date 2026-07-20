@@ -1,140 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261983F5BF8
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE720436BC5
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784562011; cv=none; b=rFiAdjJgPLzDbHDHERmveXGwutnrkPrXZJfdhq0HRZz2Bf/diG/hPDVBoPFIcBe5eOJSroQn3BxT2WTb6QjUKrnCdtdM3Tag9Uesk0t3AQW9AETskJugSwBl+1FklqhBFLyYHrnJqIgp+vIRNyS6/ZM+7W62XOWDZ3Ilp/eimbU=
+	t=1784562548; cv=none; b=LvHJZkhVgzdLVcmN+FJ4wMmjFAnHq6mDFEhxnp+4WHKv/vkorgYXuLpEa0mLUAdG5rcT/3mKwKM1QppD8521O1VNtH3nGYz16ujDD2y5qlfzK5bE5UkZvXd/BIQbvKSZO+BmCkBypcuz7XTomPBd0swWgv95tp+0dBq2borQqWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784562011; c=relaxed/simple;
-	bh=WTJZCYdLdl8FvunXaL2ze6xuXe7D5qLnu1F81BOoh9E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DdbPjDVXMVroF/Fh7KcjPxJk5+3h0jvPdh+OyJqe2ZRhptZYENj0cN9npEMyV03WRfji3YjdM8h9Z1XdlJfjZfwNqO8Ixk5ftonjCKtCjdWVKY5wWvOXGd5hb0dv+t9zpnl536frWwnhig/b5QqGl19V9H4v05ZWejZ7MmGJOqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hEWlrGBj; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784562548; c=relaxed/simple;
+	bh=iagDN9MQzUvFfugJi8ZOtR1qNU9GWfiOIuQ/KX35R/o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kViGVpO/+S6fG3y9PwGrZOq4TgT5Gbrh5HHsSADhz6oiTLhlpf86LZA3bTVFrPplQz4ubtvxtgVk1Zox7SWn/fs3/Qo2r3TuUpHEHI8Ix7rbBKWz8KIK0V07QGIz5vyaTvmIhRdAAcJJgowfrZ+wK3Lrv/fx4yJj93PZUoAIIUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Oz6w8IK5; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hEWlrGBj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784562008;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jt02QDsLMxarH6FUTUASUvUrNta1BkEjDt9XXRaS8dM=;
-	b=hEWlrGBjULxEhM33sEHzkDAcv3rweukXmMtkYuMJxsz2LMHhfFqp40syDvPzyzUJ67Yqde
-	gKexOA8h0+XqM2ScXAt8/24UIRsXaQZHsETjT7X77XM1GrRRtpSwBlte+eQ8e7QI+jbiHC
-	UtJ8BcGXr1+NoOMxJPhdCk4/3upeUcM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-479-v9baXIgfP_K6cqlTDX-iPg-1; Mon,
- 20 Jul 2026 11:40:04 -0400
-X-MC-Unique: v9baXIgfP_K6cqlTDX-iPg-1
-X-Mimecast-MFC-AGG-ID: v9baXIgfP_K6cqlTDX-iPg_1784562003
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA1F81955F1F;
-	Mon, 20 Jul 2026 15:40:02 +0000 (UTC)
-Received: from [10.22.89.125] (unknown [10.22.89.125])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 465CB195422E;
-	Mon, 20 Jul 2026 15:40:01 +0000 (UTC)
-Message-ID: <1d064ce3-8c3e-42a4-bec6-24f3bdab0111@redhat.com>
-Date: Mon, 20 Jul 2026 11:40:00 -0400
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="Oz6w8IK5"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-930c0f9c1b1so231316485a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 08:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1784562545; x=1785167345; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=89meaKDhwFe10Z71hE7i2nRHODsJTbsiRnn58cHYtjw=;
+        b=Oz6w8IK5ZAwjM2E9DgdoVBHJKXQkwDwrOnCBPa/wPDQNh683mkFqvwchbawBzpersU
+         lj++PO8JAi1kix3SYjAsQlUsF08NCuwdBpR1vVso7HCgyZixchhFEWLB4Y12JC/HIi0R
+         tcJzqSdLBUSfu7I9EY6SvqyxvEsxpeF0wWpMep7tX2zzHUCp4xWwAm0G2qEvDLN+gwbd
+         9oe8mVqSlIPpWaIBQKBN5N8Zf4w90sYfSsEL+bFgyK3tUcz/X2fCWdnGFSe4WzIZHCBZ
+         019Em8Ep7PoOFEKMjVWIR46FF2YzLSNUe53t1BUzoOkE0Tq4/lSQ0Hd3O/tqZDu0nh/N
+         rFlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784562545; x=1785167345;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=89meaKDhwFe10Z71hE7i2nRHODsJTbsiRnn58cHYtjw=;
+        b=hdLQoWEdflOyLpZHGMiYda0igpf9CTnVYXTjPbtMRHTpp9sEajCDtbX9HibMvm3gjB
+         ASQlHpDmHM9fX0BqUtmP8rMQVD3IxW/HPyVkQip14hpmoa7UffC//GHNeTPHvNIhyCMb
+         pvbjIs7rFbgBpeDJz+S1NnDtD8IeDCks/BJNp0hENA+QQzq890SGHAMveZydj3+6YHAV
+         LsoPZC/PXZfwkioohSluPnDnVrbPxjJR3axnvcLT3p3sr+FlR2xQD9mCAQGDHQTP4Etl
+         wsO1RH9ygAdm6Y4Sr+aM5tcq5rjx/6MHiUVsgXjX6cqdTZ/fNa2b0dWLqbtrtQ8rWHEE
+         A88w==
+X-Forwarded-Encrypted: i=1; AHgh+Rpu+HI3Ch0dHNNtw3CCIGKEtn+sP/HDyoLKIFfAq941AlINTzQeJQ/PQVbJl6JHPUvA0rgZHzMKTPrWCmH0MYY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAR3cGTHdh/1RANPb4CtJxCi/XrrxTlcvEKNQR/VNFezQfk1DX
+	AjEzAXYGq1C786yBGPkY6HnYfFR66DgtlQeJHszynQFvFBRJYsYPm59iPrSLtYrFocU=
+X-Gm-Gg: AfdE7ckBNRiQgbAPDMaAPW0/IONnurrvm98Fb5SQAnjks2Vtqc3R757J2usPUAs3miq
+	whtFYiDnjA/uJgkBGaeEi9wLXyQo9iQb5mv4RAyrBKVecXeuXR7yAx51ORwTFiaRxo7X+KLnZZI
+	+m/oscmxu7IjjtrhVTsKxwyRcdyQS6hssZ4zoulUvzllH8dC7/16eLxLir/YkZ+v3ZQM7GIc1dQ
+	hYyVCILcav9A3FtFGQ1jkbmGQpFy5e/wxbbEsbdAAa7kUZB1iG9Tdjm+LpFsAjK4VLUTv8Zlb9u
+	GlsQGYEjMoy1uLLWUj4iXpPjuVRgt++8WEw//FxK+dag32qeQkBLUVTNUZl8LU/VkfGe6IWeOew
+	FoVpIQajd4ani5M71IDaDoI/VKHeuM2ZFDfyQSQOoQmL/sJnUQE87U7vs1RKm/6NEFi3m8YY80h
+	S8pKv1rJQXUB8NOUhVSN99AY6JdQPIcN3WXAds4AKxqJtpWvnAuMqSrfd3EA==
+X-Received: by 2002:a05:620a:25d4:b0:930:ab28:9459 with SMTP id af79cd13be357-930b41e29bamr1533354985a.56.1784562545561;
+        Mon, 20 Jul 2026 08:49:05 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b54773fbsm894382285a.39.2026.07.20.08.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 08:49:05 -0700 (PDT)
+Date: Mon, 20 Jul 2026 11:49:00 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 01/15] mm/vma: introduce VMA virtual page offset field
+ and add helpers
+Message-ID: <al5CPpc7XpRX7Vbt@gourry-fedora-PF4VCD3F>
+References: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
+ <20260720-b4-scalable-cow-virt-pgoff-v2-1-2d549757a76f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH-cgroup/for-7.3] selftests/cgroup: Fix minor defects in
- test_cpuset
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260717191814.989215-1-longman@redhat.com>
- <al4tyJ2lRMj32Wpn@localhost.localdomain>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <al4tyJ2lRMj32Wpn@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260720-b4-scalable-cow-virt-pgoff-v2-1-2d549757a76f@kernel.org>
 
+On Mon, Jul 20, 2026 at 03:38:27PM +0100, Lorenzo Stoakes (ARM) wrote:
+> 
+> The virtual page offset of a VMA is equal to vma->vm_start >> PAGE_SHIFT if
+> they are unfaulted or were not remapped, otherwise it is equal to this
+> value at the point of first fault.
+> 
 
-On 7/20/26 11:01 AM, Michal Koutný wrote:
-> On Fri, Jul 17, 2026 at 03:18:14PM -0400, Waiman Long <longman@redhat.com> wrote:
->> With commit 98149f542530 ("selftests/cgroup: Add test for cpuset affinity
->> on controller disable"), sashiko [1] had report 3 different issues with
->> the new test_cpuset_affinity_on_controller_disable() test.
->>
->>   1) `cpu_set_equal` iterates over mask bytes instead of bits, ignoring
->>      CPUs >= 8.
-> Inline comment
->
->>   2) Thread synchronization logic allows the main thread to read
->>      uninitialized stack memory, causing test flakiness.
-> Hm, I cannot see it (alhtough I don't see it through), what was the
-> stack memory?
-> (test_phase is static, then re-initalized)
-I believe it means the followings:
-         cpu_set_t affinity_a_before, affinity_a_after;
-         cpu_set_t affinity_b_before, affinity_b_after;
+The latter half of this description is a bit confusing.
 
-These variables are supposed to be set by child_a and child_b, but it is 
-possible that child_b runs first, set ready_phase to 
-AFFINITY_THREADS_READY before child_a run and set affinity_a_before 
-which can be any value depending on its previous state of the stack. So 
-the subsequent cpu_set_equal(&affinity_a_before, 0x3) call can pass or 
-fail. That is what I believe the problem is.
+Why would the value differ from (vma->vm_start >> PAGE_SHIFT)?
+(because it's file backed?)
 
->
->>   3) Test fails instead of skipping gracefully on uniprocessor systems
->>      or when CPU 1 is unavailable.
-> Interesting catch.
->
->> Fix the reported issues by:
->>   1) Iterates over the bit size of the mask.
->>   2) Test the new ready flag for each thread to end the wait
->>      on the condoitional variable and eliminate the now unneeded
->>      AFFINITY_THREAD_A_READY and AFFINITY_THREADS_READY test phases.
-> But the symmetric synchronization with counter is easier to reason
-> about.
->
->>   3) Return KSFT_SKIP on "cpuset.cpus" setting failure.
-> It'd be better to have same style with test_cpuset_prs.sh, i.e. a guard
-> at the beginning requesting a minimal number of CPUs. Next time...
-Yes, that can be another alternative. It is just that the current fix is 
-easier.
->
->> @@ -251,7 +251,7 @@ static int cpu_set_equal(cpu_set_t *dst, unsigned long mask)
->>   	CPU_ZERO(&expected);
->>   	assert(sizeof(mask) < CPU_SETSIZE);
->>   
->> -	for (int cpu = 0; cpu < sizeof(mask); ++cpu)
->> +	for (int cpu = 0; cpu < sizeof(mask) * 8; ++cpu)
->>   		if ((1UL << cpu) & mask)
->>   			CPU_SET(cpu, &expected);
-> Oh, that was my braino in how masks are stored.
-> Thanks for correcting me!
->
-> It should also extend the assert accordingly:
->    	assert(sizeof(mask) * 8 < CPU_SETSIZE);
->
-I don't think we need an assertion like that as CPU_SETSIZE will always 
-be a multiple of a long bit size . Perhaps we could have something like
+It sounds like this value can change in response to an event, which
+makes me thing a reader could see two values across two calls?
 
-     int max = min(sizeof(mask) * 8, CPU_SETSIZE);
-     for (...; cpu < max; ...)
+Apologies if i'm fundamentally misunderstanding something.
 
-Maybe next time when we need to update test_cpuset.c.
-
-Cheers,
-Longman
-
+~Gregory
