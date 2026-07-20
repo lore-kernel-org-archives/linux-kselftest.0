@@ -1,40 +1,41 @@
 Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FCD3A544C
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7937404E
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784525910; cv=none; b=f77SHkr4DVMhwnWlNUga/hBPaYnL5+Rty59FbEIupKqNcmN50SI61RWAWYZSqiuNRNSlOxyKj4UaayG83TiJk4Q5ThZvTlrCgxvb38DPv3J+VNlip/2NMVIko5TLBZg1JpFUURzjPIM9vfVf5Puf9vZwmEEc/fH5v5QjeAH1qWw=
+	t=1784525910; cv=none; b=O9O8D8TFe8rQbiVzW7/9RJciYdfNs4pD2fm7L71fUZ2dMVM9mJOh89jGjHugXwgeSZHEkEBs9LjIuxNUPRtFS16MOuurFUsf8A3u/6X0ShniUCVUEqpVSpz9/UwFMK1D0fVc/+B/BnmqwbnMPwxzSM8RFcj/Q2lbQcG7pAz210A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784525910; c=relaxed/simple;
-	bh=N/y16fl48YztPTKgFTuZ9+7HYNROEUxLYFOVWXFM1KA=;
+	bh=B/aTTBwSppIIw7reVtSzRCsQnZmIJ/JGamCuAzhFrHE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lkmutXua/Dv17BF64Yu0SSv+KK4BX+irQqFvh9uPvr4YXO7rL6rhIhJEOsaV7/v1BHcMO/yS22KkYWNv74KwJ8lrimuvZKKIgu5JlI/AfZh0DDw/z3a8xoOzCYfYWDPs/+BXboE0dqph/SEmgxUX7UJAwfFyNGSbLizk2E95iJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=sKrvylHv reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+	 In-Reply-To:To:Cc; b=rE8txH949gnEN7pDcbmaf1WIDqYMIsISvLNUkub2SWehfHnGb5RkRMd0OLUNc3Xf3tejVtvvLZFPQx/OMyDo2pcMaKHCwZ7y1KYPYwoO9QJqcIqHS/dXvoGEqq1REVbuuhkB/Vn152AwO4lIqERs7IC5rO5yqdL+v0yU/S5g36w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=FjP2Zp/g reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="sKrvylHv"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="FjP2Zp/g"
 Received: from h183.csg.ci.i.u-tokyo.ac.jp (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
 	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66K5c7op075973
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66K5c7oj075973
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 20 Jul 2026 14:38:27 +0900 (JST)
+	Mon, 20 Jul 2026 14:38:25 +0900 (JST)
 	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=ditAkCCrXh+YkXADVfso0W9S/4JCyLrDicaPFc0dzLo=;
+DKIM-Signature: a=rsa-sha256; bh=W4lqbbuFRL8zkHdtyIDwRkuJmQS4zljitCYbt4eFEpU=;
         c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
         h=From:Message-Id:To:Subject:Date;
-        s=rs20250326; t=1784525907; v=1;
-        b=sKrvylHvOFrgFgsKcvVyGlVdk09KMkw2VoCaXwweA310Gkwg6SDz0I+BSvv7csa1
-         aFmYwRJ/DELX5kni8QcgyNDgx3vhgbQUgWfKCwT4DRxfIW7wAWYl5hs/8bqlka24
-         3M6b89oyqlKw+ed4fRP9z7tlENma4BO6c2x9y5KbBAwYi+XINfUwHy59xyYPxEWb
-         Icx6+7UkMxMPrWsirsMPDi5GhRSebEumzfHNukXNGV7ih/A6XmQycXtPagI71FXi
-         tSgpMufa/27qnQtj8rHgcUOZW+FDFKbZH38ufixIaqO+ZGlSBGrKtrwcsUI5KcWw
-         jbuASudKIvN21KjbOt4lHg==
+        s=rs20250326; t=1784525905; v=1;
+        b=FjP2Zp/gShL+KSdp17onx0WTPALVsK0YZkJSLbAHoGXn67MFLivI0gGT/lbQEZWk
+         1OTRjgJVtX/Cr4u0gJvYsYiQGfsDGm56wjMOC/FkJ0zVTZMp6FBghXTfn0go2lxU
+         yn//GSzCNfOjb2owuSH25gD2PZ1dKi7AdhlAt16SLmWm9sCSMsKj0IKQp3jOSUK6
+         m4alfzGyQJg5oxh86XVKklL//pjBcdEGy0xMtq6uRFXrH0VNcrhUoGbT0zY3c1NN
+         O4zStZHqi4B9zl177zBuF81j2NaT8zR5MGLDIczZgVQU/IVnr36xedlhA68Sbo22
+         S8e5EOp61Ph97PjdbQgWPg==
 From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 20 Jul 2026 14:38:01 +0900
-Subject: [PATCH v9 07/16] tools headers: Use u* types for bitfield helpers
+Date: Mon, 20 Jul 2026 14:37:55 +0900
+Subject: [PATCH v9 01/16] KVM: arm64: Serialize repeated vCPU
+ initialization
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260720-hybrid-v9-7-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+Message-Id: <20260720-hybrid-v9-1-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
 References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
 In-Reply-To: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
@@ -64,82 +65,80 @@ Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         linux-kselftest@vger.kernel.org,
         Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 X-Mailer: b4 0.16-dev-925f5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2957;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2147;
  i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
- bh=N/y16fl48YztPTKgFTuZ9+7HYNROEUxLYFOVWXFM1KA=;
- b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ1bsFnfRCQ82B4gwHfVaf47LffbMy1bMIt93yv4+e9Osn
- 2Na5NuqjlIWBjEuBlkxRZaUot3cGtG1nwoT4ltg5rAygQxh4OIUgInkmjD84fp1vzpN7O/LY7dP
- HG1+/Cap1KRykVpGQOevAuG1pe03bBgZ5ijOjGteWHfAdo4295xfndOerrzrn6MXzbBqx2H3b8y
- rWQA=
+ bh=B/aTTBwSppIIw7reVtSzRCsQnZmIJ/JGamCuAzhFrHE=;
+ b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ1bsFqeYJVcEshYYc1SJLGk5GHSwSutY5GzVvw19XP/yt
+ 5y7sNS6o5SFQYyLQVZMkSWlaDe3RnTtp8KE+BaYOaxMIEMYuDgFYCIP9Bj+ym2ouDvLa29bkRGX
+ +KmyeGa2p0/jLG72XejufW2vZjxRhZHh0jTR06ZXvzTefuA1Mavej/PskiSuGbyu87e1Tv2Y8lC
+ WGwA=
 X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
  fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
 
-Commit 9486aa387716 ("perf tools: Fix 64 bit integer format strings")
-defined the tools-local u64 as uint64_t so that PRI*64 format macros
-match its underlying C type. On architectures where uint64_t and __u64
-are distinct types, however, ____MAKE_OP() still gives the u64_*
-helpers an __u64 interface.
+The initial KVM_ARM_VCPU_INIT path holds config_lock while resetting the
+vCPU, but repeated initialization of an existing vCPU does not. As a
+result, reset_mdcr() can race with VM-wide PMU configuration and
+overwrite MDCR_EL2 with a stale counter count.
 
-Teach ____MAKE_OP() to accept the helper name and storage type
-separately. Keep endian helpers on __le* and __be*, and generate the
-native helpers using the tools-local u* types.
+Take config_lock around the repeated-init checks and reset. The vCPU
+ioctl already holds vcpu->mutex, matching the established lock ordering.
 
+Fixes: c8823e51b534 ("KVM: arm64: Fix MDCR_EL2.HPMN reset value")
+Closes: https://sashiko.dev/#/patchset/20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp?part=1
 Assisted-by: Codex:gpt-5.6-sol
 Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 ---
- tools/include/linux/bitfield.h | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ arch/arm64/kvm/arm.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/tools/include/linux/bitfield.h b/tools/include/linux/bitfield.h
-index ddf81f24956b..1c633343d576 100644
---- a/tools/include/linux/bitfield.h
-+++ b/tools/include/linux/bitfield.h
-@@ -142,32 +142,32 @@ static __always_inline u64 field_mask(u64 field)
- 	return field / field_multiplier(field);
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 50adfff75be8..a06ea39f57b1 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1652,29 +1652,26 @@ static int __kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
+ {
+ 	unsigned long features = init->features[0];
+ 	struct kvm *kvm = vcpu->kvm;
+-	int ret = -EINVAL;
++	int ret;
+ 
+-	mutex_lock(&kvm->arch.config_lock);
++	lockdep_assert_held(&kvm->arch.config_lock);
+ 
+ 	if (test_bit(KVM_ARCH_FLAG_VCPU_FEATURES_CONFIGURED, &kvm->arch.flags) &&
+ 	    kvm_vcpu_init_changed(vcpu, init))
+-		goto out_unlock;
++		return -EINVAL;
+ 
+ 	bitmap_copy(kvm->arch.vcpu_features, &features, KVM_VCPU_MAX_FEATURES);
+ 
+ 	ret = kvm_setup_vcpu(vcpu);
+ 	if (ret)
+-		goto out_unlock;
++		return ret;
+ 
+ 	/* Now we know what it is, we can reset it. */
+ 	kvm_reset_vcpu(vcpu);
+ 
+ 	set_bit(KVM_ARCH_FLAG_VCPU_FEATURES_CONFIGURED, &kvm->arch.flags);
+ 	vcpu_set_flag(vcpu, VCPU_INITIALIZED);
+-	ret = 0;
+-out_unlock:
+-	mutex_unlock(&kvm->arch.config_lock);
+-	return ret;
++	return 0;
  }
- #define field_max(field)	((typeof(field))field_mask(field))
--#define ____MAKE_OP(type,base,to,from)					\
--static __always_inline __##type type##_encode_bits(base v, base field)	\
-+#define ____MAKE_OP(name,type,base,to,from)				\
-+static __always_inline type name##_encode_bits(base v, base field)	\
- {									\
- 	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
- 		__field_overflow();					\
- 	return to((v & field_mask(field)) * field_multiplier(field));	\
- }									\
--static __always_inline __##type type##_replace_bits(__##type old,	\
--					base val, base field)		\
-+static __always_inline type name##_replace_bits(type old,		\
-+						base val, base field)	\
- {									\
--	return (old & ~to(field)) | type##_encode_bits(val, field);	\
-+	return (old & ~to(field)) | name##_encode_bits(val, field);	\
- }									\
--static __always_inline void type##p_replace_bits(__##type *p,		\
-+static __always_inline void name##p_replace_bits(type *p,		\
- 					base val, base field)		\
- {									\
--	*p = (*p & ~to(field)) | type##_encode_bits(val, field);	\
-+	*p = (*p & ~to(field)) | name##_encode_bits(val, field);	\
- }									\
--static __always_inline base type##_get_bits(__##type v, base field)	\
-+static __always_inline base name##_get_bits(type v, base field)	\
- {									\
- 	return (from(v) & field)/field_multiplier(field);		\
- }
--#define __MAKE_OP(size)							\
--	____MAKE_OP(le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
--	____MAKE_OP(be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
--	____MAKE_OP(u##size,u##size,,)
--____MAKE_OP(u8,u8,,)
-+#define __MAKE_OP(size)									\
-+	____MAKE_OP(le##size,__le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
-+	____MAKE_OP(be##size,__be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
-+	____MAKE_OP(u##size,u##size,u##size,,)
-+____MAKE_OP(u8,u8,u8,,)
- __MAKE_OP(16)
- __MAKE_OP(32)
- __MAKE_OP(64)
+ 
+ static int kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
+@@ -1690,6 +1687,8 @@ static int kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
+ 	if (ret)
+ 		return ret;
+ 
++	guard(mutex)(&vcpu->kvm->arch.config_lock);
++
+ 	if (!kvm_vcpu_initialized(vcpu))
+ 		return __kvm_vcpu_set_target(vcpu, init);
+ 
 
 -- 
 2.55.0
