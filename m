@@ -1,558 +1,207 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055CA443E22;
-	Mon, 20 Jul 2026 16:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0FF384258;
+	Mon, 20 Jul 2026 16:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784564643; cv=none; b=j98l4vbggOq9qrmIQY4kZuotra70cRppWXxaKQ6AjTcSo08rU4nb/lVZsWfCbD73ATYR6kBIpo1HcdoKr822ZxD06OBmIjboZ7rl/5KfE2huC5oYTUbPmFE+xAo7TnTICW5RPFJbAtnmMjWKqbobYTvcq72nLURqYn7qaH3YYRI=
+	t=1784565565; cv=none; b=bkIbUMt1rSZ/hohNPyy3gHbIHIVjwqItiRovWCRirdamL9RtLXNMbBy/HoZAczp9Oit+PGf0kLY/QavgLJXDG6xCKkXujEKCr5T1OMSEVGOaofz+4Uy3og6beZZWrb4mlBDrgrWZpi3KPtv66mtfLxl8RiSuk2erRsRx6mUZoxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784564643; c=relaxed/simple;
-	bh=PMCPXgFEYbTkP2heRPfRFC4zHv3iq/7aK0sPh/Eow5Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=c7xJ8317ljYMxBRyF7ypWqpGKaakS1LqsAtfGMmf7fLk2imHhtxaCwfJcnioqk8TuDPhEy5KdxH8SfTXaoUGiXKvGwtc/P5HD8hP/qwxkyso6lTk13L7buFcCSSB8g+3FfLQslb+izHn0mCHs4K6XvwlMkHxU3B6c4bxAzhjNns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=f1fBvYmz; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1784565565; c=relaxed/simple;
+	bh=143/vcYqLTzDfVfiEfVM3YRv/lOHQoh7baq0zEDp7gg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RdMK152kyS1NKc5992+Jlz+y2agWKylrP/vMqQtUPDUIXLyeUM3/Sg3fX17osCWtFPUzlIr6NRCUe9B6zBEkrsd9uy0DX9M92r2Tr6+sUomIa8sBw6/HbWylWDUm46QGvfIo+a5xj9H7uxksnKoxyCoix8cN6AyCVIN4lYP4QBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cTqi27G5; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="f1fBvYmz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=aZT+CHPRv7AhWaUuscpXi1sFp2eHK3TTwaYhXoNLaig=; b=f1fBvYmzGLB/odcsIyRpXlxUZa
-	ZEVLZ5K9H9aoZoCCuEhrKvXHpXPdQbdA/I053oofDXjGRnx1ao5wensGOfwIOsdP9+pYhONsvJZTO
-	Ft84eenETa6UZpG9UTMOufcIu7OMWDghW5l9cMD4tZ3+QrF2JhXksfD8zEFKL5sWCNGJ09/V2oX0T
-	5AxdGOswzVjIOGnOrLhXsP1luPsU5yUm9UeyNULGZbYjGg8ppIorL5XSjIXDE2t3DX9R+0isIBaA7
-	/hLFvnW1sySCz9y/fzHpyfOZPeQp/jnPR87Z/jkWBxhaHAa69rMeR0ogy6u/2cIvKJjcsd2sqtiM7
-	rCDOcDfg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wlqmY-001Z43-25;
-	Mon, 20 Jul 2026 16:23:54 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 20 Jul 2026 09:17:48 -0700
-Subject: [PATCH net-next v2 7/7] selftests: net: getsockopt_iter: cover
- rawv6, ieee802154, phonet and tls
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cTqi27G5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=143/vcYqLTzDfVfiEfVM3YRv/lOHQoh7baq0zEDp7gg=; b=cTqi27G5XG+nPtOCSHqchNR2OX
+	OItRD3gwlnk92EzqyKpaLolTX6yiqKdehn/eJp8mAEehyIsB+itIvepseBnSpasLfkTXrVLJYpgO8
+	oQPsaB/zwHDMS72sUQNYBTeeCecF+HgR7WHj9D6jZWHkKoPQgKl1hqd/2iErIK1QPL/mY+ekAGCdS
+	uebEEWfRWdbtDkNCCNJswoQTeg+knAEk79JtnAtFx9A2IrVmQJN80rUBhsT+3LxuFZty6fyKUefh8
+	PILzMp7mn9Awvyn+hRHirmORCBpVlCAY0TvzM3EOUPOIybmo56khM3mCyyvvIY7gWshuJbf3idT9e
+	yz0zQdDQ==;
+Received: from [2001:8b0:10b:5:20bb:46f3:73c2:f4b2] (helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wlr1I-0000000BJzA-3eHy;
+	Mon, 20 Jul 2026 16:39:09 +0000
+Message-ID: <afa4365ed61da0cb4fd33046bf1aae03c819177e.camel@infradead.org>
+Subject: Re: [RFC PATCH v2 00/11] KVM: Allow alternative providers of
+ guest_memfd backed by PFNMAP memory
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, 	kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, Thomas
+ Gleixner	 <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>, "H .
+ Peter Anvin" <hpa@zytor.com>, x86@kernel.org, Jason Gunthorpe
+ <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, Joerg Roedel
+ <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy
+ <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,  Sumit Semwal
+ <sumit.semwal@linaro.org>, Christian =?ISO-8859-1?Q?K=F6nig?=
+ <christian.koenig@amd.com>,  Tom Lendacky <thomas.lendacky@amd.com>, Tycho
+ Andersen <tycho@kernel.org>, Kees Cook <kees@kernel.org>,  Ashish Kalra
+ <ashish.kalra@amd.com>, Connor Williamson <connordw@amazon.com>, Andrew
+ Morton	 <akpm@linux-foundation.org>, Zhou Yuhang <zhouyuhang@kylinos.cn>,
+ Zi Li	 <zi.li@linux.dev>, Dan Williams <djbw@kernel.org>, Eric Biggers	
+ <ebiggers@kernel.org>, Colin Ian King <colin.i.king@gmail.com>, 
+	connordw@amazon.co.uk, graf@amazon.de, fgriffo@amazon.co.uk
+Date: Mon, 20 Jul 2026 17:39:07 +0100
+In-Reply-To: <142d0538-83e4-4d63-a2f1-ed22110d73d2@redhat.com>
+References: <20260720111259.122911-1-dwmw2@infradead.org>
+	 <142d0538-83e4-4d63-a2f1-ed22110d73d2@redhat.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-+H8eyBgqBiRjC98iYO8J"
+User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260720-getsockopt_phase4-v2-7-8a08fcfa0d72@debian.org>
-References: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
-In-Reply-To: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
-To: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Remi Denis-Courmont <courmisch@gmail.com>, 
- =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com, 
- =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi@remlab.net>
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11714; i=leitao@debian.org;
- h=from:subject:message-id; bh=PMCPXgFEYbTkP2heRPfRFC4zHv3iq/7aK0sPh/Eow5Q=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqXktyALetQ3n8SDUmQDQHD40on4f1SjR0kEfs5
- 7291nEoA26JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCal5LcgAKCRA1o5Of/Hh3
- bSpGD/0UJL622KuWhIyVCfjm2nzKrOBJsyULnqa0cac6TYWDA9SQ8cpA+XAXAfAdi7y88dF8dF/
- RKUjyNTa5q2MTR5voEHamqWMxacO0Y+QGp5YsKYXg56tzdlktkYrPdnM6sv8xG0dQG6bdtN67Gy
- fMpX7jn8fTvULbRw5B9tan7yRVzEsNUrl4rJXr7KNpBonfQjrhRY/Bvi5f4DXsxjnmwiKWLQl/B
- Gw6IgfZaUYX674ebiqJb7se+01tN40lsB+6J7zvL8TO5xHAloY8r7LWAiRUpQa/tTgDKUB4aV8M
- pl97nsXm98JA7KaAnkTTjMTulpsUfH8HA0ODnPFpPuNg6tyD3vad5PjyiYI4GqAVhOCYSEM2/mr
- o+1nlNNKcjEZhlyyQaztePuApqN24Dg8T/Vld6wPC9mnRhJwPZPlAZESYgCg/LSd50Vz+LhUYbf
- qRbXg1ra+N8PimVESKiQ7ZMTTcXDNeWTiLsoZA+C1PdE0Qz9U3t97etp0T8fxS1Cci5WASjiohW
- h8a+jEm2ttqSWd6Db/N7cU1Xhh39COmhq4upe+ynevDtyIBqyAMLGJUO04XGOJpwKXag/b0jq2N
- dcz4wSGgIH+u97ZvKSXmIoH394l5WvLjBmGOqKXdLAFyykjtOAkwWeO+UuctY48wvzEGeNAWecT
- PQz0XAcoARL6uvg==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-Add fixtures for the newly converted getsockopt leaves:
 
-  - rawv6:      IPV6_HDRINCL / IPV6_CHECKSUM int paths + a SOL_RAW
-                unknown-optname case that reaches do_rawv6_getsockopt().
-  - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
-                rejection.
-  - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
-                rejection.
-  - tls:        TLS_TX_ZEROCOPY_RO, the TLS_TX crypto_info round-trip at
-                the base and full cipher sizes, the NULL-optval and short
-                buffer EINVAL paths, and an unknown optname. It skips when
-                the kernel lacks TLS or AES-GCM.
+--=-+H8eyBgqBiRjC98iYO8J
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Each fixture pins the returned-length / errno semantics across exact,
-oversized and short buffers, an unknown optname and a bogus level. The
-semantics are unchanged by the sockopt_t conversion, so the tests pass
-both before and after the leaf conversions.
+On Mon, 2026-07-20 at 17:11 +0200, Paolo Bonzini wrote:
+> On 7/20/26 13:03, David Woodhouse wrote:
+> > I'll continue to bikeshed it myself, but this is at least functional
+> > enough to show the direction and solicit further opinions...
+> >=20
+> > https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dshortlog;h=3Dg=
+mem-provider-v2
+>=20
+> In the meanwhile, I have very ignorantly applied patches 1 and 2 as=20
+> testsuite fixes. :)
+>=20
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Acked-by: Rémi Denis-Courmont <remi@remlab.net>
----
- tools/testing/selftests/net/getsockopt_iter.c | 424 ++++++++++++++++++++++++++
- 1 file changed, 424 insertions(+)
+Thanks. I think #3 can go in on its own too; will try to drum up some
+review for that...=20
 
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-index fe5a5268bc34e..974065a23fa82 100644
---- a/tools/testing/selftests/net/getsockopt_iter.c
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -28,7 +28,10 @@
- #include <linux/vm_sockets.h>
- #include <linux/icmp.h>
- #include <netinet/in.h>
-+#include <netinet/tcp.h>
-+#include <arpa/inet.h>
- #include <sys/socket.h>
-+#include <linux/tls.h>
- #include "kselftest_harness.h"
- 
- #ifndef AF_VSOCK
-@@ -40,6 +43,45 @@
- #ifndef ICMP_FILTER
- #define ICMP_FILTER 1
- #endif
-+#ifndef IPV6_HDRINCL
-+#define IPV6_HDRINCL 36
-+#endif
-+#ifndef IPV6_CHECKSUM
-+#define IPV6_CHECKSUM 7
-+#endif
-+#ifndef AF_IEEE802154
-+#define AF_IEEE802154 36
-+#endif
-+#ifndef SOL_IEEE802154
-+#define SOL_IEEE802154 0
-+#endif
-+#ifndef WPAN_WANTACK
-+#define WPAN_WANTACK 0
-+#endif
-+#ifndef AF_PHONET
-+#define AF_PHONET 35
-+#endif
-+#ifndef SOL_PNPIPE
-+#define SOL_PNPIPE 275
-+#endif
-+#ifndef PN_PROTO_PIPE
-+#define PN_PROTO_PIPE 2
-+#endif
-+#ifndef PNPIPE_ENCAP
-+#define PNPIPE_ENCAP 1
-+#endif
-+#ifndef PNPIPE_ENCAP_NONE
-+#define PNPIPE_ENCAP_NONE 0
-+#endif
-+#ifndef PNPIPE_ENCAP_IP
-+#define PNPIPE_ENCAP_IP 1
-+#endif
-+#ifndef SOL_TLS
-+#define SOL_TLS 282
-+#endif
-+#ifndef TCP_ULP
-+#define TCP_ULP 31
-+#endif
- 
- /* ---------- netlink ---------- */
- 
-@@ -394,4 +436,386 @@ TEST_F(raw, bad_optname)
- 	ASSERT_EQ(sizeof(val), optlen);
- }
- 
-+/* ---------- raw (ipv6) ---------- */
-+
-+FIXTURE(rawv6)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(rawv6)
-+{
-+	self->fd = socket(AF_INET6, SOCK_RAW, IPPROTO_UDP);
-+	if (self->fd < 0)
-+		SKIP(return, "SOCK_RAW/IPv6 socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(rawv6)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(rawv6, hdrincl_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(rawv6, hdrincl_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* Raw int options clamp the reported length down to the user buffer
-+ * instead of returning EINVAL on a short buffer.
-+ */
-+TEST_F(rawv6, hdrincl_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(rawv6, checksum_default)
-+{
-+	socklen_t optlen;
-+	int val = 0;
-+
-+	optlen = sizeof(val);
-+
-+	/* A non-ICMPv6 raw socket has the checksum disabled, reported as -1. */
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_CHECKSUM,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(-1, val);
-+}
-+
-+TEST_F(rawv6, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	/* SOL_RAW reaches do_rawv6_getsockopt() directly. */
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- ieee802154 (dgram) ---------- */
-+
-+FIXTURE(ieee802154)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ieee802154)
-+{
-+	self->fd = socket(AF_IEEE802154, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_IEEE802154 dgram socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ieee802154)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ieee802154, wantack_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(ieee802154, wantack_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+TEST_F(ieee802154, wantack_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(ieee802154, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IEEE802154, 0x7fff,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* dgram_getsockopt() rejects any level other than SOL_IEEE802154. */
-+TEST_F(ieee802154, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, WPAN_WANTACK,
-+				 &val, &optlen));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- phonet (pep) ---------- */
-+
-+FIXTURE(phonet)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(phonet)
-+{
-+	self->fd = socket(AF_PHONET, SOCK_SEQPACKET, PN_PROTO_PIPE);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_PHONET pipe socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(phonet)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(phonet, encap_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == PNPIPE_ENCAP_NONE || val == PNPIPE_ENCAP_IP);
-+}
-+
-+TEST_F(phonet, encap_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* pep clamps the reported length down to the user buffer. Use an
-+ * int-sized backing buffer with a short optlen so the baseline kernel,
-+ * which writes a full int via put_user(), does not scribble past it.
-+ */
-+TEST_F(phonet, encap_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(phonet, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_PNPIPE, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* pep_getsockopt() rejects any level other than SOL_PNPIPE. */
-+TEST_F(phonet, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, PNPIPE_ENCAP, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- tls ---------- */
-+
-+FIXTURE(tls)
-+{
-+	int fd;
-+	int sfd;
-+};
-+
-+FIXTURE_SETUP(tls)
-+{
-+	struct sockaddr_in a = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	socklen_t alen = sizeof(a);
-+	int lfd;
-+
-+	self->fd = -1;
-+	self->sfd = -1;
-+
-+	lfd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (lfd < 0)
-+		SKIP(return, "TCP socket: %s", strerror(errno));
-+	if (bind(lfd, (struct sockaddr *)&a, sizeof(a)) || listen(lfd, 1) ||
-+	    getsockname(lfd, (struct sockaddr *)&a, &alen)) {
-+		close(lfd);
-+		SKIP(return, "listener setup: %s", strerror(errno));
-+	}
-+	self->fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (connect(self->fd, (struct sockaddr *)&a, sizeof(a))) {
-+		close(lfd);
-+		SKIP(return, "connect: %s", strerror(errno));
-+	}
-+	self->sfd = accept(lfd, NULL, NULL);
-+	close(lfd);
-+	if (setsockopt(self->fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls")))
-+		SKIP(return, "TCP_ULP=tls: %s (built without TLS?)",
-+		     strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(tls)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+	if (self->sfd >= 0)
-+		close(self->sfd);
-+}
-+
-+/* do_tls_getsockopt_tx_zc(): fixed-size int, exact length required. */
-+TEST_F(tls, tx_zerocopy_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = -1;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(tls, tx_zerocopy_wrong_len)
-+{
-+	socklen_t optlen = 2;
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				 &val, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* do_tls_getsockopt_conf(): NULL optval still yields EINVAL -- the
-+ * converted code tests opt->iter_out.ubuf in place of optval.
-+ */
-+TEST_F(tls, conf_null_optval)
-+{
-+	socklen_t optlen = 64;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, NULL, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(tls, conf_short)
-+{
-+	socklen_t optlen = 2;
-+	char buf[2];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, buf, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* TLS_TX before crypto is set reports not-ready. */
-+TEST_F(tls, conf_not_ready)
-+{
-+	struct tls_crypto_info info;
-+	socklen_t optlen = sizeof(info);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, &info, &optlen));
-+	ASSERT_EQ(EBUSY, errno);
-+}
-+
-+/* Set TX crypto, then read it back at the base and full sizes, exercising
-+ * both copy_to_iter() branches. SKIP if AES-GCM is unavailable.
-+ */
-+TEST_F(tls, conf_crypto_roundtrip)
-+{
-+	struct tls12_crypto_info_aes_gcm_128 tx = {
-+		.info.version = TLS_1_2_VERSION,
-+		.info.cipher_type = TLS_CIPHER_AES_GCM_128,
-+	};
-+	struct tls12_crypto_info_aes_gcm_128 full;
-+	struct tls_crypto_info base;
-+	socklen_t optlen;
-+
-+	if (setsockopt(self->fd, SOL_TLS, TLS_TX, &tx, sizeof(tx)))
-+		SKIP(return, "set TLS_TX aes_gcm_128: %s", strerror(errno));
-+
-+	optlen = sizeof(base);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &base, &optlen));
-+	ASSERT_EQ(sizeof(base), optlen);
-+	ASSERT_EQ(TLS_1_2_VERSION, base.version);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, base.cipher_type);
-+
-+	optlen = sizeof(full);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &full, &optlen));
-+	ASSERT_EQ(sizeof(full), optlen);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, full.info.cipher_type);
-+}
-+
-+TEST_F(tls, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
- TEST_HARNESS_MAIN
+--=-+H8eyBgqBiRjC98iYO8J
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
--- 
-2.53.0-Meta
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCE8Ew
+ggWvMIIEl6ADAgECAhANkOKMSmGXhF5eMl0rsRhvMA0GCSqGSIb3DQEBDAUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjAeFw0yNDAzMTMwMDAwMDBaFw0zNDAz
+MTIyMzU5NTlaMGIxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UE
+AxMxRGlnaUNlcnQgQXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTCCAiIw
+DQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOfSIeC0vv1xPQ+dgSxbIIrkaru6skAWJYaGFzmv
+q4Kq+2wU2jxhcWlJg/JeP5jEkq/LM3pn5aaLao79j+XRmS7J1ZpJKUODJVoM4s9MQJhTMvo4qS5Z
+S64g6QR7Obkz3I1Lr3aWeSBmDDEyzue+NKtuWZ1Cxy3RdXo/w5HgRc3l2AercOM3Gt1XonTzEtTb
+Z/Hwc0Sn9Gz8RmGRK6Ka4hVDl8q/2l110KaV233Kh5etP0csXS8MIMdVRfRu3sc5hp13DG7lCKzK
+72a2GEpI8Wpl26G6I1/LMzz/98T+FqjTqxsdquk7Cj7m2vKGLW1BorpQH7WFGPdJQXJe1hfbfiZA
+CcVdCtl4nAacFacmsiArZBfX7AQGL7isvHUwwYFEtcApyGW4p2Lt+t8nvU0CANA6BHOpOz1xOP8W
+mAESbUriIjyuTUf3fJ9oDNCurVqhASMJCDaWI3lYX/QAoiAzt6akqbbZxo2ujW7mGGqc0KxqE2cs
+h2T79v7pC8aUtHBfwNrTR19GnZVxE0eQ7ViIQhR6mpSaUQFA9sG+cmD2G8TnCgYsLa0q8De6F61a
+CBevQGHNzrbZ3JAMneveYg/Jy1XxQHDRcvrMfWKe0jjcWbdKYlaGVPm5V1ILwYz7Yv5ewo3NUrxI
+GJiywe9qPhuJSDZs7VehTuI0FxGIsgKzVjgbAgMBAAGjggFcMIIBWDASBgNVHRMBAf8ECDAGAQH/
+AgEAMB0GA1UdDgQWBBT3m6JO05fF9DQPQw6Bhc6RkzKv+TAfBgNVHSMEGDAWgBTOw0q5mVXyuNtg
+v6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MHkGCCsGAQUFBwEBBG0wazAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEMG
+CCsGAQUFBzAChjdodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURS
+b290RzIuY3J0MEUGA1UdHwQ+MDwwOqA4oDaGNGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdp
+Q2VydEFzc3VyZWRJRFJvb3RHMi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUA
+A4IBAQA+b8Uw53sDspdZgukU+qzLyyHkcjlxGGhHlP+zrmDLKm1wEFvCRS2pili3Hy67i8N4N5NU
+vw5Rg6kv3lxb9S9Rktxk43k+tvm68pl7OxQE55ZjVY87P0lUPGwEqOOwLLyH02ZQcsfq5p5LrOH9
+0JvmvZ1yy73HS+VpDAqOlytE0NSvTIRqFFkKQGQwfjvtql9YflujuNNvJztjBaHKYZsnNSg+J38o
+jYq4TP3pSg3UdVH0PncVjPQyqxC9xef5Xae92Kbkzol3x7Nel3A1bwAkalrDMspvTHvey6LfiBks
+FIqviTnoy7fgjaRAJgHS+RXx/cmuRd3rUAclSVVrYu8RMIIHAzCCBOugAwIBAgIQAzUotrsybJHx
+HTjKOIVdIDANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQs
+IEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQg
+MjAyNCBDQTEwHhcNMjYwNzE4MDAwMDAwWhcNMjgwMTA0MjM1OTU5WjAeMRwwGgYDVQQDDBNkd213
+MkBpbmZyYWRlYWQub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2pYux73kdbYX
+sWF8f1u6DJP91qcqaZetsyfPkZk0B+MmXmAEv0kVes5n15V2mbDThOnpoPFly0UugQO9JYqLfrtD
+tKD5yL58fgrDB9Dw+LQikgrHafl6YSCds5AvUu/8hw2J6noKrcOLJpKlKn9Fl/4IB9Q3JIdLx5aa
+EtTqMalIPqHFOlgrJ7s+aua8xbB8YQ9ahqYBXWRJNv3P/2b1DYtdrz1oqZPE3CcB8Pc6Gf2a1Tcm
+6TAgtEx7Cf1BFcrsrMz7TWHmGQITieNb2r9UYWSc2Gp+GtYFNJCgT0JJXKUBIauPMKBLteYrL8Fo
+ff/uY44dC/mDWjdCP/5x0qelPQjlBvWdHL5zvBTOj06rJ0m3HNI/hnIcDh0Qu2j9reb9rLVcdym6
+bWmBM4uDEB8Zv9Ph0KTBFSy1IosyakuD1j1Os30EzjGfbi0EUXIvnOcYbTBAbM5UAzrxEHMhBvoX
+Pvnx+OyvjJmc9tWxTX6AcSz+m40esbT17URBeZS18afgieiikm5TynlUYP1LciR3hSgGVzvGXnKO
+02VDFR5itGWdRKZ2W5wIShNfWfhSa0D0K5UdIDt5Qc7sjzwK1Yb1sY5Tu0uA5mhIS82q1ov83uxB
+sFkriNnhGv/M1NCDVLBiOMsHu73qUM+yKmgKLwF9Hfn9WI25glbAMI4S5r3hYzcCAwEAAaOCAfcw
+ggHzMB8GA1UdIwQYMBaAFPebok7Tl8X0NA9DDoGFzpGTMq/5MB0GA1UdDgQWBBRcYhqbcGzn1jrT
+JOZaB8O7qllDpzAwBgNVHREEKTAngRNkd213MkBpbmZyYWRlYWQub3JngRBkYXZpZEB3b29kaG91
+LnNlMBQGA1UdIAQNMAswCQYHZ4EMAQUBAjAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEMIGpBgNVHR8EgaEwgZ4wTaBLoEmGR2h0dHA6Ly9jcmwzLmRpZ2ljZXJ0
+LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsME2gS6BJ
+hkdodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZT
+SEEzODQyMDI0Q0ExLmNybDCBjQYIKwYBBQUHAQEEgYAwfjAkBggrBgEFBQcwAYYYaHR0cDovL29j
+c3AuZGlnaWNlcnQuY29tMFYGCCsGAQUFBzAChkpodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v
+RGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZTSEEzODQyMDI0Q0ExLmNydDANBgkqhkiG9w0B
+AQsFAAOCAgEAocabrh1cPd5s3vY5rnlBVQSTc7zs2ZWs67dAIltR+05WELrYClVzzUhMs/LOJPlr
+EUo45UDDomXq38DxFepaPd9+iNLjXfn33EX/IG44j04lU/oF/Rg9VeQILkYLbCZ/x9wOjNHZc4SN
+ydY7Dhvf/sT5aBz88u7D5+azZJ7Qf1U57wYseCH1Mt0nDrtr5y19IJ8D9xJJ33RFL6vfpHZBBAQ8
++3RqkKNxLoV2aFvQhxdhjNLDqTv3LjUIdicwPraN7JkxEu7CV2Lka7eRqJgkWL7SK0YmBjGpRafs
++icP/ON5RCCKTTb6VlX8eTG2sJJfsFhvJNCCt6xexbWzWtIrfP7NvPBvwBB737AyEGBZkS5aNizT
+McURJGTv9UKvBh1LF/+tNhYtLvPCN7oecGzhCHht9jcwSkygTo3Y6YlK3QgOu+ncmiBbfeuwlLZ1
+LxbYvG6hgNqXv7u6YyADbYajAQJXJ2OQen39pm3Q/AQSyLYG+B8lDglWsM8tYXPlEdrYJcksGK6F
+nqIX6Bumn43rBooLJdiZp4WmfWdL2pxe+LxRDjprmqu1WprixDxULSTOKJZoqTlugs6y3Bc+if+s
+gHnBBtz9WQ6MtPHkh7zONDAFIKcBmv8OqPQCx0F3Wv3OEybwMpXx0OsKgK8wLldaX1pXcMuyDgTL
+Sqs0AV0OHUgwggcDMIIE66ADAgECAhADNSi2uzJskfEdOMo4hV0gMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UEAxMxRGlnaUNlcnQg
+QXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTAeFw0yNjA3MTgwMDAwMDBa
+Fw0yODAxMDQyMzU5NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqG
+SIb3DQEBAQUAA4ICDwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZe
+YAS/SRV6zmfXlXaZsNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2z
+kC9S7/yHDYnqegqtw4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qG
+pgFdZEk2/c//ZvUNi12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41va
+v1RhZJzYan4a1gU0kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0c
+vnO8FM6PTqsnSbcc0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PW
+PU6zfQTOMZ9uLQRRci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXt
+REF5lLXxp+CJ6KKSblPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQr
+lR0gO3lBzuyPPArVhvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7Iq
+aAovAX0d+f1YjbmCVsAwjhLmveFjNwIDAQABo4IB9zCCAfMwHwYDVR0jBBgwFoAU95uiTtOXxfQ0
+D0MOgYXOkZMyr/kwHQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3
+bXcyQGluZnJhZGVhZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEC
+MA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgakGA1UdHwSB
+oTCBnjBNoEugSYZHaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZEcyU01J
+TUVSU0E0MDk2U0hBMzg0MjAyNENBMS5jcmwwTaBLoEmGR2h0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv
+bS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsMIGNBggrBgEF
+BQcBAQSBgDB+MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wVgYIKwYBBQUH
+MAKGSmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNB
+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
+KznCIG56R6X8w1YbjBcfHvQAAAAAAAA=
 
+
+--=-+H8eyBgqBiRjC98iYO8J--
