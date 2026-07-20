@@ -1,193 +1,243 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3BCF3C3C06
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 22:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784587679; cv=pass; b=EaaktQP8TXgujiCf4uWRCH+sJ8ZVFI8UMD5XNwUqyQYS1HPzPrQx4N1vqOHlh4974Vthhmmc0Lr2NQxqQGisrDhGeO2Zf8zV4ItycIb1JVT/WTdKg3AluCc7O+dd2MhZT5+pBaeWRLEGTULr/9ypvOMuYt+PQ83cBhwQ1SVm30Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784587679; c=relaxed/simple;
-	bh=j218zC175OIjPULuI/NKHO7aTKDJQ2ZX3WjZYu5fHhQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IlJt2QMINI/aBxH6/i+PKQY73F6TOZUVw4kYYxiRr4db3M1XxbRYdOvdP5dRNT88oi2N7Gm2xl1qhNItwR7Yb8JRVVtYwCkhG7ruhHd2rqtRStvcyNWtv6a/PyzeTDmsrWYpoYbCF8NChgcZHSsT3ONet2UO6QmaZsa2pOysZ60=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YnExVDM/; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283F14307BC
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 22:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784588112; cv=none; b=B5GjP3nvZGNhTCy3LIW3tfHkWrFamCdNMuNXPQw99tEFGQyqjFqh24yJGH8jqTZTVi/bVQPrcU0hRzZRaXbOfpvkrcqdfXKMTqufnkQh2u7P/VEvb8kwbEA260s5npM7dguTpitmTERLJyPjyS+4fQbrh+e2VaL+bOtmZr9LXyk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784588112; c=relaxed/simple;
+	bh=DuwoLoocC5KEX4fom5jop9xjwLbH6dmrbqe3Lwe8Igc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HXzVc106j582OBn6isxlvzb0z7D7bYBMxH4jcrj7e3WSxE+vXkM2kP8ZaypKMHDwMVXKadsxMZNLR9jLIrPDMLWBvgUBIgFfChIKTemMQl/oKI1b+smBW6WAgIlBbr4nkF5Qs5p64eezOV7QxAqAP280yuQBkG4AR3tLy3AnQoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MeYCBhn3; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YnExVDM/"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc97653887so116175025ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:47:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784587677; cv=none;
-        d=google.com; s=arc-20260327;
-        b=HB9Bfwgr+nNS0coa8b60pLnl5MStbW/r4LFZXkxOUn6mBwWgtWfvfckyUK91th/pQD
-         dl25e3FlMk+n8udRJDyIhtH/bKRYOiumgNFEBulJeWC1UMKNULjM4QbLomocXz7sA3TA
-         nEWBg8m5KvcF3E6gifDJsY9xldB3P55bZ5WZP90p9fFk/FAXGxJ9adZG1RntmAj4T48F
-         XxM03hbJqlvQOOSVEvKcxmX5OGeVFJjBiJ5dB8JxbEThM3L2B//NT67Da9c6d0Glv8gy
-         qDGkBtqXIXEA3tmmqrhWWzMvp77v1kl2VxTEOj9UfuAVcT2PlVKUs4Vmo6hUdm8PUiLP
-         606A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        fh=PBzmTfhRKrcPcS9js5P6TFAkVqzR9lxcdb2jIowBdRs=;
-        b=LtNYtGKR158hYf1sHQ6aWx8Mc8mP6fN/ddwBnkHJNa948+or4YdDLpMOEkWG6BVAyR
-         FPewh51/wAb6mgt5vD2s/jKkH/muYeohITFxSOKTBaHVKs5FGqfOUskSy/Ll7SgQU/N1
-         9qbCk8aJKXvPXFKxCBqxpevLeQohdP8BToRIiGcUEptPxWesn3kinIVVxCRNKstaQ87s
-         Ybfz/83RMXviCzpMc/DljZLIUZbn0NUxyURRSi8ro32ymcqw2nub2jLvIKy4g51MZYEm
-         x/oy2PlUdR/ulr/9MKDMFHCpSXSrA5co+qImWyzD4sotRzS9gw+00ejHIVYATcHkBwWY
-         DfcQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MeYCBhn3"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cacb8416a1so72317025ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1784587677; x=1785192477; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        b=YnExVDM/uQ21So2D/O2JFPZsYtJk6EyXiuoaMh3FGKl7eZTm4eRapKhI00hRmUqjUd
-         xsdhU+t8BznC/UG8ct79OBVA5eXMZPPXQwu2Mi1st4891ApwoXn8zvpO1FCXwgOYfhMa
-         q4yB6fjg0KM6w3NcmXkaj6AX5/qZr+v1QHvcPHWAKbeG5DcM2WWVx7L79/duSWExk44j
-         kt3uoGtnmC1mZiixh1X4K1211xFoLPM8stfZjmFjpOF+FYf1HZyjYQWM/7z6dMRMZryv
-         B5eHv2D3InPcnQSxZRctubJx6HgAGl0hA2paZfI1EiZV3eLpatcUleQwGe2Oe2/qsDIg
-         io6w==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784588110; x=1785192910; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=uiDaTietAlrtPBtFFJF3jlwUkPb84yeQywUkW/obk08=;
+        b=MeYCBhn3z8r2zZnNNpMtFN8jwxMJgZoK2q03bdM2zm+xtw+GRmXM+dtN6+FHnsEw1h
+         2Phon3J65IeWL4/o3KIdMkepuhKj7IbmtVaJiv5LGpBMiBP0isdkNQ6AkzWBwYzIetzp
+         YWgxjfdfqQ3+1zj0vanaO8GcChOVg6QMoNlURy9ukNa8n3L77onKMvQsES82sy+nUrEI
+         ++TJDRdScuEs9rhFHLIUaW6JWYAAgzPd6Lo9KTJ59UqdTqoF3z+7TU6s1hjiqCHazYVp
+         8WT8tbnGKify/CB6Dc6q/rjh3l3ToJibkhTCfWzGDqnSKGoA8x5P7WVuC+WxNrcihuh9
+         D3iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784587677; x=1785192477;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784588110; x=1785192910;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jBcBCCBCmHLnCiyc438pf1e9jEwlaZNqcasfh2fW7yI=;
-        b=kPCYlleHtDDi3p/PaOxWNk5vfRxmj4EGpxHCuB9vlrrmDBy90/D0KYwj0+78cK4rIj
-         zYG1Zg3Ygnj6Lpe0AB18letfhmBub4suGrXUGITgsAhunyWWfcnnTK4K8thW/80yXjo0
-         J+gZNymp04OSSRxuwCnVdNpZbsMj6fCm+OtQHGcxj6i+zizhpF/hE+kwZYDo81RZYPmA
-         jfkXpx9Ynwn3Y7JSAGywHjCzxC3ZMvu8zsnxV/YYmgqTyOdYx7HuHncZZYe8dNdSmS5+
-         g6xcy2TWgRpA7QLjjCZ08MtGIBKY5WG5cDEFWEHg6f0rW27CYjZymhhuOhhwlNRX7H8W
-         0zHA==
-X-Forwarded-Encrypted: i=1; AHgh+RpjjAVW7ndWMzXoARJer1IOde18DXsGCfhHPK1y2Lrb4p0Fcx0r9MwLfR6GBDXMGoDAM+ZdQzm1p7rGJN/M9qg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3aoMGJhS7sDBpVmil0D2POB0jO+4LSzDslc906+12rm4PnzGT
-	TAU2Kd3/RVN/JVB5k89s7C5ZeyWFhpVIBB+5wMwL/LedUt/xRv455GXX341x+F42UrReDXrUl32
-	RkorQJN/dWmEu5WNTv/dKPn34LXNLy+dFJpZSkUEc
-X-Gm-Gg: AfdE7cnxCBrEGkHy9ir82QA0qrGO6Co2f8PQK+V7ZALSgv81+Zg3J3QO8ns1kCSFKB2
-	j8vgRWurBL5F6QqPo3mgXxOcGPZ4ixCoJnj+0ga7mEEfxNfSFhSSd0FZJguOZJTLEAXe4XMGgoe
-	BSTaClKbxxwaLKcwrui9JfMFkeMobw8J1iPN69dJxjiJEOmMWHSjZi9dq/GzfSnwgWCAMUiz3iT
-	3UZUL4uEaDKLplwAnHoflJjgPEds21J4JQ2cFVNQD/qBy1ygdmVrxcMFKrivQ==
-X-Received: by 2002:a05:6a20:c70b:b0:3bf:7c02:c46f with SMTP id
- adf61e73a8af0-3c3ad5ffb90mr16486972637.14.1784587677211; Mon, 20 Jul 2026
- 15:47:57 -0700 (PDT)
+        bh=uiDaTietAlrtPBtFFJF3jlwUkPb84yeQywUkW/obk08=;
+        b=f7uxcO0zwXDW7L3w0fCgPw7kFVyNytU62UlrqUYoFsOXXuZ+nISd49u20v3psHo4ma
+         hXe7gYEDGpg1o7jjgLORmnS12vNl5+VaS9YLVbCy8T38nwxlKUE3T/D9XR2Emc7yodtv
+         pFt9Sc8WGce0mrIAg8CvBlIjxd6MEep0JHpLenERyVIk4Sr8u4Yax/7fAwFECMlEmPjW
+         8XUAYaXO5xK9R20tjFpfdWTERwrCP3H/INz1FbRSpDX72EWmWPXFaQE6PYYPQ6xSbIRz
+         IY0sW18KLvDjtUwgflIfl/iOBWzVfUobkxMAz69/6vizoESidqdo0KiZVoBb0nPfjLQQ
+         2cKg==
+X-Forwarded-Encrypted: i=1; AHgh+RrJe+T8eKC2C+WVAEEMAykpl6+xysfjT5WikExjTUJoqdcHo1bdt0HTVrCy4DWk+1gO1RK0JxNUTD/4Fti7Fk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxozhELWmnedvHeQvlhaFdVWeHAHkZD/gFoqU4GMb2uxzDc6qfA
+	QClmDHSZVWtaS/TZMEu8XlYssRna+NtlGHJhtL7TGvCcMidSIEnTC9JVjpy/eIivsyc=
+X-Gm-Gg: AR+sD10OJE+9Dkh9EzwPitOxGYVBpHvB6hEAvhyen3opQW7LKNEqaO675nd4jTwyj39
+	XQB7KD6JmLnIdLTtJGkJia5l1g45+elzM1WH9QIWvsC0wwNNPXrJa5O3bTrKdQbvu7R94OzKg3i
+	jUf43mZGgopCbJ6mrNrkWv89NKTiiHqxQOCWi+zpa1x7Yz7as8JOdie2wVGxRU5z+giITyCj/TN
+	STpeEAQfTp0Ll9BxhuMTKJYLcRB+1uVm3YZEmoDvWBBc80NBrtVlb76Jm3a91wo/m3fhmpODHqE
+	qkrhWcb/wPjj9g1avq0I4n77/FhXcXCOeip87lVsnz6IEpvOuUdRFvQtfqjK3rYKW7v9q9FE8A7
+	11wtWNSVmEpP1lH1oDVJcHE98OfKYaw8E0cRSfHV+Mi5ZVZeqtNjFq5vkRPi5qvWshyc2RogFYT
+	ob3Pwt0tcihINb5hcM9K3qZ4TluylNihTk9e4qbYXVyw==
+X-Received: by 2002:a17:903:3c46:b0:2ca:b48f:3395 with SMTP id d9443c01a7336-2cf349b8496mr167528205ad.34.1784588110210;
+        Mon, 20 Jul 2026 15:55:10 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf3479463bsm62613395ad.80.2026.07.20.15.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2026 15:55:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260708000956.46138-3-dwindsor@gmail.com> <a3a376bce713ac38ce6746508239c1af@paul-moore.com>
- <CAEXv5_gt7BPWvdR4D1_3XJ0_XpBXWN52jeAOf1K2QJ7LL6CtPQ@mail.gmail.com>
- <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com> <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
- <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
-In-Reply-To: <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 20 Jul 2026 18:47:44 -0400
-X-Gm-Features: AUfX_myc5k3-eepFI8wiBLb8aQXZE1oN-cQyoKyDkS4G7UoPqGpzL4qDyO8o5wU
-Message-ID: <CAHC9VhSLMf4vzWduSfA67DDqB+s2wrAZ5AMr=0A08uybQpuRxg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Jul 2026 18:55:08 -0400
+Message-Id: <DK3ROR4KKIIT.1RCEKYHY63CPT@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Quentin Monnet"
+ <qmo@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>
+Subject: Re: [PATCH bpf-next v10 2/9] bpf: Introduce global percpu data
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260715153254.92010-1-leon.hwang@linux.dev>
+ <20260715153254.92010-3-leon.hwang@linux.dev>
+ <DK0MRMWIAE1T.20UJQKK2YN3VY@etsalapatis.com>
+ <9615cf9b-4a77-4d7a-aec4-8990ea6ff638@linux.dev>
+In-Reply-To: <9615cf9b-4a77-4d7a-aec4-8990ea6ff638@linux.dev>
 
-On Mon, Jul 20, 2026 at 5:24=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
-> On Mon Jul 20, 2026 at 10:15 PM CEST, Paul Moore wrote:
-> > On Mon, Jul 20, 2026 at 2:27=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> >> On Mon Jul 20, 2026 at 8:12 PM CEST, David Windsor wrote:
-> >> > On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.=
-com> wrote:
-> >> >>
-> >> >>
-> >> >> I'm sorry David, now that I'm seeing this function again, especiall=
-y
-> >> >> with the LSM specific bits extracted into a LSM function, this abso=
-lutely
-> >> >> belongs somewhere under security/.  It's only callable from within =
-a
-> >> >> BPF LSM callback and all it does outside of some BPF pointer boiler=
-plate
-> >> >> is call right back into a LSM helper function.
-> >> >>
-> >> >> If the BPF maintainers aren't willing to accept that, then we will =
-all
-> >> >> need to find another way.
-> >> >
-> >> > Where this code lands doesn't matter to me, so I'll stay out of the
-> >> > decision of where it lives.
-> >
-> > Yes, you're caught up in some territorial wrangling that goes a fair
-> > bit beyond what you're looking to accomplish.  My apologies for my
-> > half of that, it is an unfortunate part of upstream kernel
-> > development.
-> >
-> >> > If this kfunc goes to security/, would we also want to move eg
-> >> > bpf_set_dentry_xattr similarly?
-> >> >
-> >> > I'll roll v6 of this series meanwhile and we'll see what the BPF
-> >> > maintainers say.
-> >
-> > Thanks.  Fortunately, it should be easy enough to move the kfunc
-> > around, that's likely one of the smaller changes needed in v6.
-> >
-> >> I don't think there was any preference expressed from the BPF side.
-> >
-> > Look at the second patch in the v4 patchset, you'll see a preference.
-> >
-> >> Logically,
-> >> one cannot be faulted for adding a kfunc to set the xattr for inode in=
- the same
-> >> file where similar kfuncs to set xattr on other FS objects / entities =
-exist.
-> >
-> > First off, I can't say that the existing BPF kfuncs intended for use
-> > within a BPF LSM program are in a good location.  Unlike every other
-> > LSM which locates its code under security, the BPF LSM devs have
-> > chosen to locate their associated code all over the place.  Some of
-> > that happened before I was responsible for the LSM framework, and some
-> > of that which has happened afterwards has likely intentionally avoided
-> > traditional LSM review.  Unfortunately, this has muddied things with
-> > respect to what is possible generally in BPF versus what is possible
-> > only when the BPF LSM is enabled; we just recently saw where this was
-> > arguably the root cause of an exploitable vulnerability.
-> >
-> >> The question about bpf_set_dentry_xattr is thus valid.
-> >
-> > It's a very valid question.  It is my opinion that kfuncs which are
-> > only intended to be called from within BPF LSMs should be located
-> > under security/, just like every other LSM.  If there is a kfunc that
-> > is generally useful from other contexts, that is a different story,
-> > but in the bpf_set_dentry_xattr() case, it is explicitly only useful
-> > for setting 'security.bpf.*' xattrs.
+On Mon Jul 20, 2026 at 12:59 AM EDT, Leon Hwang wrote:
+> On 17/7/26 14:25, Emil Tsalapatis wrote:
+>> On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
 >
-> I don't think we should do that in v6 though.
+> [...]
+>
+>>> =20
+>>> +static int percpu_array_map_direct_value_addr(const struct bpf_map *ma=
+p, u64 *imm, u32 off)
+>>> +{
+>>> +	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+>>> +
+>>> +	if (map->max_entries !=3D 1)
+>>> +		return -EOPNOTSUPP;
+>>> +	if (off >=3D map->value_size)
+>>> +		return -EINVAL;
+>>> +	if (!bpf_jit_supports_percpu_insn())
+>>> +		return -EOPNOTSUPP;
+>>=20
+>> Nit: This should be first, if the JIT doesn't support the instruction
+>> all else is moot. Same below.
+>
+> Ack.
+>
+>>=20
+>>> +
+>>> +	*imm =3D (u64)(__force unsigned long) array->pptrs[0];
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int percpu_array_map_direct_value_meta(const struct bpf_map *ma=
+p, u64 imm, u32 *off)
+>>> +{
+>>> +	struct bpf_array *array =3D container_of(map, struct bpf_array, map);
+>>> +	u64 base =3D (u64)(__force unsigned long) array->pptrs[0];
+>>> +
+>>> +	if (map->max_entries !=3D 1)
+>>> +		return -EOPNOTSUPP;
+>>> +	if (imm < base || imm >=3D base + array->elem_size)
+>>> +		return -ENOENT;
+>>> +	if (!bpf_jit_supports_percpu_insn())
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	*off =3D imm - base;
+>>> +	return 0;
+>>> +}
+>>> +
+>
+> [...]
+>
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index e1244a721194..ae442ea217c4 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -5615,6 +5615,8 @@ int bpf_map_direct_read(struct bpf_map *map, int =
+off, int size, u64 *val,
+>>>  	u64 addr;
+>>>  	int err;
+>>> =20
+>>> +	if (map->map_type =3D=3D BPF_MAP_TYPE_INSN_ARRAY || map->map_type =3D=
+=3D BPF_MAP_TYPE_PERCPU_ARRAY)
+>>> +		return -EINVAL;
+>>>  	err =3D map->ops->map_direct_value_addr(map, &addr, off);
+>>>  	if (err)
+>>>  		return err;
+>>> @@ -6174,6 +6176,7 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, struct b
+>>>  			if (tnum_is_const(reg->var_off) &&
+>>>  			    bpf_map_is_rdonly(map) &&
+>>>  			    map->ops->map_direct_value_addr &&
+>>> +			    map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY &&
+>>>  			    map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY) {
+>>=20
+>> An issue I have with the patch is that it takes the special-casing we
+>> already have for INSN_ARRAY and makes it worse. The instruction arrays
+>> implement direct_value_addr, but it's not actually valid to call
+>> direct_value_addr from a bunch of places where it's called, so we have
+>> to special case check the map type to prevent it. Case in point the
+>> special casing in check_arg_const_str in the thunk below.
+>>=20
+>> Imo we should consider making a different map method different from
+>> direct_value_addr that INSN_ARRAY and PERCPU_ARRAY implement. That way
+>> we remove most of the map type checks in those paths. I'm not exactly
+>> sure how that would look like, but I could take a look at it tomorrow.
+>
+>
+> Seems reasonable to me. I don't have good candidates for the new map
+> method name.
+>
+> Instead of making a new map method, how about factoring out a helper for
+> the 'if (t =3D=3D BPF_READ && value_regno >=3D 0) {}' block? It will simp=
+lify
+> these map_type checks in the helper.
+>
 
-Yes, that would be a separate effort and it's one of the reasons I
-didn't bring it up in my review comments, I was simply responding to
-those who raised it as a question.
+[...]
 
---=20
-paul-moore.com
+>>=20
+>>>  				int map_off =3D off + reg->var_off.value;
+>>>  				u64 val =3D 0;
+>>> @@ -8176,6 +8179,12 @@ static int check_arg_const_str(struct bpf_verifi=
+er_env *env,
+>>>  		return -EACCES;
+>>>  	}
+>>> =20
+>>> +	if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) {
+>>> +		verbose(env, "%s points to percpu_array map which cannot be used as =
+const string\n",
+>>> +			reg_arg_name(env, argno));
+>>> +		return -EACCES;
+>>> +	}
+>>> +
+>>>  	if (!bpf_map_is_rdonly(map)) {
+>>>  		verbose(env, "%s does not point to a readonly map'\n", reg_arg_name(=
+env, argno));
+>>>  		return -EACCES;
+>>> @@ -18279,6 +18288,12 @@ static int check_and_resolve_insns(struct bpf_=
+verifier_env *env)
+>>>  					return -EINVAL;
+>>>  				}
+>>> =20
+>>> +				if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY &&
+>>> +				    !env->prog->jit_requested) {
+>>> +					verbose(env, "JIT is required to use global percpu data\n");
+>>> +					return -EOPNOTSUPP;
+>>> +				}
+>>> +
+>>=20
+>> Another place where we add map-specific checks where there are none.
+>
+>
+> I think this check is unnecessary, because 'prog->jit_required =3D true'
+> has been set for global percpu data.
+>
+> Will drop this if.
+
+I think you're right, in which case we can drop it. In turn this means
+wrapping the check above in a helper adds enough structure to the logic.
+Adding the new method would still work valid but it'd be more borderline
+in terms of simplifying the code because we''ll have abstracted most of
+the type checks away.
+
+>
+> Thanks,
+> Leon
+>
+>>=20
+>>>  				err =3D map->ops->map_direct_value_addr(map, &addr, off);
+>>>  				if (err) {
+>>>  					verbose(env, "invalid access to map value pointer, value_size=3D%=
+u off=3D%u\n",
+>>=20
+
