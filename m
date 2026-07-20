@@ -1,197 +1,184 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F883B2D0D
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 21:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784582161; cv=pass; b=kPACxTu1VF1tuh+qIhT560bonj0NWR/AvrorpWTH4HRMiW0AMs2dZRe+fDLJ5/jw0X9x2OnbbdpZ6zCTaQnUtReVg32+lvls52kSnjJxG/3m4O3WZU4AHilRJryGXrNeKvtSATnKJEdapuYF8qTfrnHTPi2H9+vSYtbKZjJO7X4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784582161; c=relaxed/simple;
-	bh=GYmozcAMwSemNlmhz+B3xhx2TrSFNt5xSE7k56r5ovg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uel4hPiFAyme8apF2dKx4wMkvH5za3d4VdnUh6hkSBaFAozO8PyV9CY3L+Dk3X/nekUaqo6g0qPrY6wqSp5iffAbJU94Agg2JqYCf+Gvy1TvolaQGsw3JQwWFJe9VCEQdDyCoPioovjMtGdBcuOhevWFkNG3pCW+L5Yeou/zrKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F5hO0hcB; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF5D417BD3
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 21:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784582694; cv=none; b=bniMT1IHtwQeohBO6TFoR8K74xWF3NYG7Gx0+TZbVrAIsKnOyZLam47DtdEaR1oQT/P+XdPf0PdS5RE/y7BTF1EKOHMMxMXyTQGKb9n05OLmkZW0CMAfqtw7aazQ7a+n2M3dGukhW9yA9z8uxrWtvl9+0MWD+ACgEpXaCpyxE0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784582694; c=relaxed/simple;
+	bh=RcxGzEEwefX7zAbWTLQPNtYc6E9SwfZuoICNfQ9Im5U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=QaoLbQC/BoSUDwH+KscdyaoR3b69PZq/XyYoB6TypVvEiDBI/pdSQmb4JAEYMUYgfxfug+TF32+UmyLhjuKjA6/+yfk/ik7Gt+CN1kPgqlm9bd3jV/9ggcXZpxWk83jHCjf6VdXGJXcIcgfAiVEGA8mtkm/qhZ+FvtJnL8ILO3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLAdZdR5; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F5hO0hcB"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cab97c86bdso454135ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 14:15:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784582158; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gDwas5oXo90vk9uvbBhZh406Y8Sd5I3EAKSGU2K8r1pOEOh1JILPqBfDB1vKe5l/+s
-         pr5jVlTmn56xEYcBCttZYXeX7kWZf1nJvSwbKarWvJwG0ymD0oL4I7yVxOuOWnJDK6Z9
-         RYFhyYumg/b4ltEy1JsSqO4QOIBsND5QQKCWbW7Wt+vZTrk8q4Pf0jIgPT4ry8IV4nYc
-         qLO+ozMe2497/Lj8om6eWtiS11SyU6X8yVRAZLp0atmtJt6z3niWTQb1dj1M2yFhu5bJ
-         oSnWjlTqffzkjC/KQggNwAED/tHKjhi5Ivyl8vdarKWmrL3sHnvmTlia452SD78sgIwF
-         n5Gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
-        fh=1N4mCYee748IsD89iI48uxAFcoM4lNc5lNUNP9G/YDA=;
-        b=p8XSUlLonDReaeGvNiAoYQJ1KjXZ+j0ayTsjbO8KfT4F8lBrP8cJXFVq+5cjgnqPow
-         oRroxOMamDYg5SlxvmmkoqroxGo3adDy/PgFeZmthzEtrhBDHg+IR6y8hM/iTXqV347v
-         xSqYg5Ci/UDsJqHRW9389lWH8RI2O0XY/QY1RySLB9r/mqw81WwkOkw3duP9Q0YZt19Z
-         5po5FC2+sbFQjH8ZE/K8a7gMF8i2tAACBhAeJobgWBDZfUeEMh60bhBMwsFijFWlDZ1k
-         tUMd/I/SadhYjTwpiXQIqYSIj3G8U2Sw65AzEWMPZeKy8H+qR3dliTUWBF68yp7wKpia
-         axRA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLAdZdR5"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553b57612so4830585e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 14:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784582158; x=1785186958; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
-        b=F5hO0hcBNHdKGk9M59qXB0EfAf1ZQL0kiD2GIokeaFPVUU7JE0sBVMIOaHAJJlbqf1
-         hT0EOsaGQxdzfkSQxV5SGVl+QdL5b6YSb2ZjQcZcLVNAPL1/8wIsNcH96dHr/vpiGqUG
-         I/27/r9cfrp5Ztsp3RVhurZRlE2qZSv42m69MWpB8o09v5sRx2Rp61wKfeDuQt8qOgV/
-         5Npk2kIQYLRLDeexi5vPRbcgEYHVubzyoIEQIKsfg75YWhiyH8NwE+Gc22p4+NDE9kWL
-         Kq02Bv1RfaF6OK4XicyN5ZimBBBuQoKC7Cd85xPJt3ndaYNSfPVYjdP+YdCYZm6nh5OX
-         79lg==
+        d=gmail.com; s=20251104; t=1784582691; x=1785187491; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GodhWzpy/c4vsdA8Jyp/tHYkO7IhbQZ6imvsrnVIekE=;
+        b=aLAdZdR5xPOkHVS3ZZO7tRXs2KoCcxRTyzJw7bqbbmG2FCksMr4SWNeHNOCraKJgJ2
+         JQItI9AznZ2nyXmDvj771w2dmcTtCkVKpNC7g3rr/twj8xAz6lYCyxD+AbLEVcyPngMh
+         NUbQ3jVl4SrRUTkN2cxLs0tldzjYZy1dkaaGY8gEBE17ikCIK7J22uz56vw6HsfpyPMp
+         GsWq1UnfN9MEtxJn1JhkskV3hUUNSsY3KYztwelvpUgAXvRF9lbI6Kku/n8zVWvatNbH
+         Q+WUZDZFmuqr+b1YEHcCG2M0QbqaLP9/UB8fTd2avdFTO6a0Xc9gdFnE21JfbvJrZQYb
+         H23w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784582158; x=1785186958;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1784582691; x=1785187491;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AUz90BaUvuUhSt2RwJPSmjEfCptOlPXUUGIO067pPsI=;
-        b=XVuxDqW3Qv9Dy9RApfI9tM+2bggLRlItbldU6XL4+mttEn5/LWBfLZHWZ84r0eknqV
-         E4hql/IG4ffNfArfzlTjM9hYyaBsYGVgR/sf5aYNF5inGuY8McvlFqW0Kw2LmlmRqc4v
-         z3zq76nINPqtm82QqL37HWHlSX+mlMP/SwBNGVqdmilkYVSwWGzT3rifORQwCk6oS7NT
-         aJuaKo4hIZUCeJ4QLBh387oBoU6vtEkVkffOcGZ1iu6jMTXFn71HIWsqZpPyVffxRuoS
-         +MIUf0rQDw0kKrs02fo3DamMlxTRFDToYCFfX94k0KipgN4lWdFBKnz8OGDnADhvYeaX
-         bXNA==
-X-Forwarded-Encrypted: i=1; AHgh+RqoRu8J8NOp0Ld+dPrE8GSqkuK/BGYOWP1/GgBod7qL5ICUBmFTmRF/10V4cWG8HupsJWinUXBs8hAV6qlUzW8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnxnI7T69/whIbAzVDQ157gGUpykljPhG2tadOc6sU3mNEIVXb
-	6KHnv4kkBsxYePRKqfrcq9pKzaStZtUr+Tt0SMUIgeB57Q0vz+3vGmPxtrDB2NiQuSsie5gVo/7
-	2dHEQIohCqk/FFD0c5Ytv263KmrPDM7yfXwHZvcxk
-X-Gm-Gg: AR+sD12HyYgn2yhHYxu5LQ9MO/WKBmduBMl3ZJIcuHzIZzWLrbBxndyDM+ZSbbLKryx
-	uSCyY70ZXqbXbnCaZd89VYALwlXxtiEo7bT4i7cZr3sBaJRUU15onC715KQ82/Uzzk97l5pGW6Q
-	L4jW0B6zkp4IYfasVLjyQ+aDJxOKUUD+HwpbgcA8G75CNJfuDPjIxPswM0ZfyxLl4Sp8tMAQN0q
-	Lxvgx1ldBM04bQF0A66eJUo63HaCRx5ja//jDvbX2RZEbX6TNAnQsUs+FoZuN7RGrk0uFhUw5H7
-	SA5n+QWRXc7pcfxcNdBFuhF0DbM=
-X-Received: by 2002:a17:902:f54c:b0:2ce:7ae6:2a23 with SMTP id
- d9443c01a7336-2cf7b702c3dmr2558895ad.27.1784582156890; Mon, 20 Jul 2026
- 14:15:56 -0700 (PDT)
+        bh=GodhWzpy/c4vsdA8Jyp/tHYkO7IhbQZ6imvsrnVIekE=;
+        b=SPK9sYN5ylYX3CZLjDjDv5W1liGIlD2qgnLiJJlwqIEAgRDYp6WnzgUUFeYtPcQXUV
+         OQYMjNSrUUWTQQc6Ko3lNDXdWXAx+siPiSL6GGYwzVC8jkJRAbeddqUdCH4jMNu31L9U
+         wrPCseTGxV4x+NJUqQ3KOb4MFX4X72WHDrC7KwrPcGn+0eHIQSBVOXQJtnJgLjX6gV3n
+         uPVu26Bbz48M84vgGUh0AwH04rUl6BOnF2ouP3Y8wY4Q4tPtJgwnuIWLizSx4kJ68Phq
+         lVDnWPAKdSoetcqSFuPJ6x57npXPdfPczil3o0i3qR3Jx44Kf18b82zNB7sasIcuIOem
+         8/Pg==
+X-Forwarded-Encrypted: i=1; AHgh+RpP63pnqpJavDzQTcvnSYzJ5QWFJci9RHx84cUjjrrtxsrSeWDtTaT4tG0+CQSWWn57npqwrwreEBGDtEvJ350=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDnw1bS08c9+ioueGgnsTY5X6iKLzKni6WbYbaKvY+r2FZSZwF
+	gEmfzjBuYF+zu12Jl3d+MN5Pu6oXOMMB3Us/kxE7+zeE6HEheGL/NKfh
+X-Gm-Gg: AfdE7ck3xnWgDDtlGby1NpozsbtEd3sHgSMrD44EKP3t+Tn/jAw+uqKR6Ns05eXmvoo
+	XvK4XbWKrL0Psb1fRMo9BmSoaMsM1krNiMZEOX1XkiGYf+PhyjiQioJbf2D41WGZXTa6RHk8ki5
+	4Xy/SnRnTjiwCS5wbZ9Gyxlt9IOZXD0+oWXKskLORrWmjQaVArnh11YCtzOJY7QwXceP3nz/x7Y
+	mND2NEmTlszqWKzONZ6TKPwvhdmTq2YJ/hFTIjHnGoGZxOaaHOXJGe6RnofmRWDXrupAdzO61Qp
+	orlYuaeocLKrmq1YP2r8xnC+m2slYcg/RXlg2sTRZpwe91vDAzWRya0rdURm1a/MyeBN1iW7OX8
+	ESEji5pWdPN17tGSYj969Qj6y8kKWZ5eKD6cFXKjFNxjZSS9uiovXhlFy0zvK3XGx6OO9SQDRan
+	XBUVmaGYUpGKdidxhHls+FikBlsG/MeJx5oOXbC29Y8r5YDxmIYDJ7tdH6dy5yevFiU850JKsMx
+	bugYJS+HBX5XSs8vFzIltL/pkANkZLYb4oRkeWZTFab
+X-Received: by 2002:a05:600c:4fce:b0:493:fa66:4861 with SMTP id 5b1f17b1804b1-4954a404bc2mr195886525e9.25.1784582690803;
+        Mon, 20 Jul 2026 14:24:50 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-495653bffefsm17137255e9.9.2026.07.20.14.24.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2026 14:24:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com> <20260708-tcpdm-large-niovs-v5-2-34bf6fac941b@meta.com>
-In-Reply-To: <20260708-tcpdm-large-niovs-v5-2-34bf6fac941b@meta.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 20 Jul 2026 14:15:42 -0700
-X-Gm-Features: AUfX_mxUXqtSIB0dpGSWPZIOzVEGjkP0LeV9jHf6fDBCDwwRrEGRR9CjBBihAPw
-Message-ID: <CAHS8izMz_S8K80EXn3oFXiDNkGuPUMzjecaJjAvaZVky-7O40Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 2/3] selftests/net: ncdevmem: add -b option to
- set rx-buf-size on bind
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, 
-	sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net, 
-	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk, 
-	Joe Damato <joe@dama.to>, Bobby Eshleman <bobbyeshleman@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Jul 2026 23:24:49 +0200
+Message-Id: <DK3PRLXZFGKN.GES64J05HY6B@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>, "David Windsor"
+ <dwindsor@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "John Fastabend" <john.fastabend@gmail.com>, "KP Singh"
+ <kpsingh@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Matt Bobrowski" <mattbobrowski@google.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, "Casey
+ Schaufler" <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260708000956.46138-3-dwindsor@gmail.com>
+ <a3a376bce713ac38ce6746508239c1af@paul-moore.com>
+ <CAEXv5_gt7BPWvdR4D1_3XJ0_XpBXWN52jeAOf1K2QJ7LL6CtPQ@mail.gmail.com>
+ <DK3LZOFOVG5L.3F34IKOCO1I04@gmail.com>
+ <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
+In-Reply-To: <CAHC9VhR8n_TBPGLGq-Pray+mHrUCdcmqGXi9wTXyeGa2Dc4m4g@mail.gmail.com>
 
-On Wed, Jul 8, 2026 at 3:55=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
-com> wrote:
+On Mon Jul 20, 2026 at 10:15 PM CEST, Paul Moore wrote:
+> On Mon, Jul 20, 2026 at 2:27=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Mon Jul 20, 2026 at 8:12 PM CEST, David Windsor wrote:
+>> > On Thu, Jul 16, 2026 at 5:55=E2=80=AFPM Paul Moore <paul@paul-moore.co=
+m> wrote:
+>> >>
+>> >>
+>> >> I'm sorry David, now that I'm seeing this function again, especially
+>> >> with the LSM specific bits extracted into a LSM function, this absolu=
+tely
+>> >> belongs somewhere under security/.  It's only callable from within a
+>> >> BPF LSM callback and all it does outside of some BPF pointer boilerpl=
+ate
+>> >> is call right back into a LSM helper function.
+>> >>
+>> >> If the BPF maintainers aren't willing to accept that, then we will al=
+l
+>> >> need to find another way.
+>> >
+>> > Where this code lands doesn't matter to me, so I'll stay out of the
+>> > decision of where it lives.
 >
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> Yes, you're caught up in some territorial wrangling that goes a fair
+> bit beyond what you're looking to accomplish.  My apologies for my
+> half of that, it is an unfortunate part of upstream kernel
+> development.
 >
-> Add -b <bytes> to request a non-default niov size via
-> NETDEV_A_DMABUF_RX_BUF_SIZE. When the value exceeds PAGE_SIZE,
-> udmabuf_alloc() switches to an MFD_HUGETLB-backed memfd so each 2 MB
-> hugepage produces one naturally-aligned sg entry.
+>> > If this kfunc goes to security/, would we also want to move eg
+>> > bpf_set_dentry_xattr similarly?
+>> >
+>> > I'll roll v6 of this series meanwhile and we'll see what the BPF
+>> > maintainers say.
 >
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Thanks.  Fortunately, it should be easy enough to move the kfunc
+> around, that's likely one of the smaller changes needed in v6.
+>
+>> I don't think there was any preference expressed from the BPF side.
+>
+> Look at the second patch in the v4 patchset, you'll see a preference.
+>
+>> Logically,
+>> one cannot be faulted for adding a kfunc to set the xattr for inode in t=
+he same
+>> file where similar kfuncs to set xattr on other FS objects / entities ex=
+ist.
+>
+> First off, I can't say that the existing BPF kfuncs intended for use
+> within a BPF LSM program are in a good location.  Unlike every other
+> LSM which locates its code under security, the BPF LSM devs have
+> chosen to locate their associated code all over the place.  Some of
+> that happened before I was responsible for the LSM framework, and some
+> of that which has happened afterwards has likely intentionally avoided
+> traditional LSM review.  Unfortunately, this has muddied things with
+> respect to what is possible generally in BPF versus what is possible
+> only when the BPF LSM is enabled; we just recently saw where this was
+> arguably the root cause of an exploitable vulnerability.
+>
+>> The question about bpf_set_dentry_xattr is thus valid.
+>
+> It's a very valid question.  It is my opinion that kfuncs which are
+> only intended to be called from within BPF LSMs should be located
+> under security/, just like every other LSM.  If there is a kfunc that
+> is generally useful from other contexts, that is a different story,
+> but in the bpf_set_dentry_xattr() case, it is explicitly only useful
+> for setting 'security.bpf.*' xattrs.
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+I don't think we should do that in v6 though. What you're describing affect=
+s all
+other xattr kfuncs. That's a broader discussion we should have separately w=
+hen
+folks are back from vacation, and more importantly involve FS folks where t=
+he
+code currently lives. As you say yourself, the lines are blurry, xattrs are=
+ as
+much a filesystem concept.
 
-
-> ---
->  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 36 +++++++++++++++++=
-++++--
->  1 file changed, 33 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/te=
-sting/selftests/drivers/net/hw/ncdevmem.c
-> index d96e8a3b5a65..a16e55af51ee 100644
-> --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> @@ -40,6 +40,7 @@
->
->  #include <linux/uio.h>
->  #include <stdarg.h>
-> +#include <stdint.h>
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <unistd.h>
-> @@ -61,6 +62,7 @@
->  #include <sys/time.h>
->
->  #include <linux/memfd.h>
-> +#include <sys/param.h>
->  #include <linux/dma-buf.h>
->  #include <linux/errqueue.h>
->  #include <linux/udmabuf.h>
-> @@ -79,6 +81,7 @@
->  #define PAGE_SHIFT 12
->  #define TEST_PREFIX "ncdevmem"
->  #define NUM_PAGES 16000
-> +#define MB(x) ((x) << 20)
->
->  #ifndef MSG_SOCK_DEVMEM
->  #define MSG_SOCK_DEVMEM 0x2000000
-> @@ -100,6 +103,7 @@ static unsigned int dmabuf_id;
->  static uint32_t tx_dmabuf_id;
->  static int waittime_ms =3D 500;
->  static bool fail_on_linear;
-> +static uint32_t rx_buf_size;
->
->  /* System state loaded by current_config_load() */
->  #define MAX_FLOWS      8
-> @@ -142,6 +146,7 @@ static struct memory_buffer *udmabuf_alloc(size_t siz=
-e)
->  {
->         struct udmabuf_create create;
->         struct memory_buffer *ctx;
-> +       unsigned int memfd_flags;
->         int ret;
->
->         ctx =3D malloc(sizeof(*ctx));
-> @@ -156,9 +161,14 @@ static struct memory_buffer *udmabuf_alloc(size_t si=
-ze)
->                 goto err_free_ctx;
->         }
->
-> -       ctx->memfd =3D memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-> +       memfd_flags =3D MFD_ALLOW_SEALING;
-> +       if (rx_buf_size > getpagesize())
-> +               memfd_flags |=3D MFD_HUGETLB | MFD_HUGE_2MB;
-> +
-
-The fact that you are using HUGETLM and 2MB mappings here made me
-realize there is a pathological edge case in the code where the netmem
-size you're requesting is greater than the mapping size, so you
-actually get no netmems. So like if you ask for a 64KB netmem size but
-actually you did a normal udambuf mapping and all the maps (sg len
-entries) are 4K or something. IDK if the code already handles this
-well with an error or what not. Worth checking.
-
---
-Thanks,
-Mina
+So I wouldn't burden David with it right now. David, just respin addressing=
+ all
+other comments and the CI issue.
