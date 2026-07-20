@@ -1,335 +1,165 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A483D524F;
-	Mon, 20 Jul 2026 09:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24C03D9027
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 09:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784540851; cv=none; b=mRxeAIgaNcxGsRERES28xTCKT8cRdGzjqT7LMEIJZu0+YUDSyRDfzrzAccArq57E/zQTfHbUl5aCbNUTY4Mu9+UumUZLYVd2xtgOjaDHzy8+jAWsTpgtyB2+Ug42qNWE6QJRC2Yz9Dw51g7v8+leNa2n/t5LulB6WmpSRW9Fw34=
+	t=1784541411; cv=none; b=TmkmUhboPQoJxXRaY1iMxfFzoa0xLsH9qFrBxLt+rvus0k7TDbyjG2KSxhyagfKy+ot1C8GXso9i4Dp1WIQz4A0d78R19It2jSwZqXpUlgwWBZfuNmJtBynwWAq22Cu0JRAra5GvV2exU7a26kbweSEX7J0eVwLAzoW7jbiOMw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784540851; c=relaxed/simple;
-	bh=IO2IpjRrwq36GZmHNlW4xGDi3np1LLgn+WNb7ci2Ax8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hu8vIq3JEjJco/YXBgpek/2qm3ungMcf/meBN4aowLb156W2iLqWtrDqmBa2Ir2S/hyf61mHr2JerZfJUnyAO8QGjnZHPujrjjxB598SnNv8NS1LTeSga0jhtgqeRkPk9Mt52f0g1pYfnoLtWjh5a6HJBgqHKNW2RKy+CjXRx+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; dkim=pass (1024-bit key) header.d=huawei-partners.com header.i=@huawei-partners.com header.b=TfAwzd9h; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+	s=arc-20240116; t=1784541411; c=relaxed/simple;
+	bh=RPHm/I6WqLfqccNlVusRSjc2hzPQak1wVwmSFNX0Rvo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ul3GkCW98thjxb/RlirxfHRvFCzYbx6n/5CNvoVENzBTxEu8s4X4lv/yyBTryZXL3yFCRMw4OqlA+e1hTDygc1gDYpVuu9znAOR4QsXEyl6FW5j2QhJoSgRt6Ki7E8gZejugcFYYAAXJwy6ldD1hFukS2szuUWSstw0Ekj9hvvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ekB40t31; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei-partners.com header.i=@huawei-partners.com header.b="TfAwzd9h"
-dkim-signature: v=1; a=rsa-sha256; d=huawei-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=nYPufc9vJgZQgfGaq7EwQsT9y5mRrKBC2QSET+yH5J4=;
-	b=TfAwzd9hM1GQaYzd0y32K6hbhXaqJCx2Hkc6LVK3wz1/UQYG38I66oi18XdZ0DFubo8jO8d9g
-	1U2QeVWzNuxu7WfCq8p2ph1UWke7QsZFuNIRZ8eTT5nonUoM7rrPljJIq3UJFo+0yHLDB4nfmXr
-	9S6FBCBvgKqz+5LMel4dgpw=
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4h3bJp4fvQzJ4673;
-	Mon, 20 Jul 2026 17:47:06 +0800 (CST)
-Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
-	by mail.maildlp.com (Postfix) with ESMTPS id F130940569;
-	Mon, 20 Jul 2026 17:47:24 +0800 (CST)
-Received: from [10.123.123.154] (10.123.123.154) by
- mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 20 Jul 2026 12:47:24 +0300
-Message-ID: <e01fa50e-b9a7-4c0b-ba70-6088b8d6ddfd@huawei-partners.com>
-Date: Mon, 20 Jul 2026 12:47:23 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ekB40t31"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ccdb73f0e1so58011295ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 02:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784541403; x=1785146203; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=T4P1uAuS96oO2CYd5dZWKgEcG7rXEBr6r3ZYGLFiIQg=;
+        b=ekB40t31ZE1m2m9qI3MPoUonqHnrHblDkf9uNWCBYmBlHRuDC8BRGxzSeXYLzZqi6C
+         xA6c1qvRv23MUuW01JITfnsdfJy45rgq52rxAAu+dctL2GVMYvKEolhgKebAw3O84vOx
+         h8W9CsMC14ZGJDOgr5HLbkOHWXvltd206L89hM1yjQXmocfD3m24nS9sD2ar4XBXilz3
+         dxeMlI8IAH/eosdzJxQU7qRDsdmX8rDmaCsbUfBr9xO7MYiQFfx772ZCzpb0SK4tM63a
+         fHDf4+ZTEXU64hLRWRrFziJXQcScTLxrnUzpOxsfUlUn+ll3bnUT6NrajSKMyUmngFb9
+         BUcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784541403; x=1785146203;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=T4P1uAuS96oO2CYd5dZWKgEcG7rXEBr6r3ZYGLFiIQg=;
+        b=Q/htdrsxaYBWFl/QpKAk8LM8vtSx1fCN+aVq+juCyeuSzXylQHmJjeA78EGie1zSJh
+         +P/tIBNd0LZvoSyiPOc6zsJTlGd9Th+APnRkCDCaoehvnIyeLMqjnwOXeZFoSysvSsvo
+         WCUhgv3xcxvgbuPGd/7rKe0PQnIwWkhhOfGBHv0Do6PvMPfFbqqpNC2JaG9TEiAfSq9a
+         UcaiQJADGFpfSfy8Mvk5gEk+ygFLG6y22rPQVY5a+55U6VxFqE4WipT1igz5kYwxzuXD
+         cjFli5UZVkW25vf3ILfAa5Jdim06OKH80OZe1TiRaPMBAB024jpxFsmoIL/egzKLdWu9
+         jkyA==
+X-Forwarded-Encrypted: i=1; AHgh+RpJr8A103plv1pBbDxvV2o/lWWHIFliZ0vZaFG7IB6J7BzloBBNLBSSCpprMcn1YoDkzjidV9vOJFWfJF4Nl1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaZvB1dDX3dqeLp6ljW+Bz/KPvmieFNs24CtQY1Zl2ZqQYlc/K
+	PYKPjZavc00pLcuXS7Hd4o0hNBtV3x2Tz+MR7yhN5yy//LdkYM5n8oyD
+X-Gm-Gg: AfdE7cn4dz4wVBEMze37B8T83wGULLqSRh5U6Unom3xL1Pc0V5b9xQRnIk2I0povlgN
+	aSFl8s+lR+ffLSoVwvgMvgQdNM759FimeA2n7g+wCyvYhl68b2loel/c8LGJBGwEX3MXbvJT/ot
+	9wfHrkYFtzySyXuGVOoaQuW1KOnPhwEGIzlFb2cBiQHIVeyJTsCGEyeCMKGWxC+J+eMJtw4PJ7n
+	XRM9zS1yxWQ1acJARXsoc8yfGLWcPvVgFzGYCCQnw0jcDe9KqLLxuMvDRnbOH80C/3i1MmXaSQf
+	d7ccP3E+PmEhdUs7UYQw0es5EZnR6oGyE9gBvVC2Du6ggya/8IyaAU5i4Oy/5cS0OjvDqbh3DdR
+	T6cjHe13k36FXC/N4DKRpUsOwGTCbdq01y8E1nDF5WZfYM1igNzfQ0WtzeWYWz+Y5KsMCXxQGMe
+	3ZwlSFfuR8eTB7DDv+RNo2RD5vGME=
+X-Received: by 2002:a17:903:440c:b0:2ca:1594:451e with SMTP id d9443c01a7336-2cf3496b583mr155402025ad.31.1784541403123;
+        Mon, 20 Jul 2026 02:56:43 -0700 (PDT)
+Received: from localhost.localdomain ([112.65.87.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344bd3aesm53940335ad.26.2026.07.20.02.56.36
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 20 Jul 2026 02:56:42 -0700 (PDT)
+From: Lian Wang <lianux.mm@gmail.com>
+To: david@kernel.org
+Cc: damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	sj@kernel.org,
+	akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	npache@redhat.com,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com,
+	ryan.roberts@arm.com,
+	daichaobing@sangfor.com.cn,
+	wangkefeng.wang@huawei.com,
+	gutierrez.asier@huawei-partners.com,
+	zengheng4@huawei.com,
+	kasong@tencent.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	lianux.mm@gmail.com,
+	lianux.wang@processmission.com,
+	kunwu.chan@linux.dev
+Subject: Re: [RFC PATCH v3 0/3] mm/damon: introduce DAMOS_SPLIT action
+Date: Mon, 20 Jul 2026 17:56:33 +0800
+Message-ID: <20260720095633.32281-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <59292ba2-e0cc-4e50-bb26-be9c15843a41@kernel.org>
+References: <59292ba2-e0cc-4e50-bb26-be9c15843a41@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 1/3] mm/damon: introduce DAMOS_SPLIT action
-To: Lian Wang <lianux.mm@gmail.com>, <damon@lists.linux.dev>,
-	<linux-mm@kvack.org>
-CC: <sj@kernel.org>, <akpm@linux-foundation.org>,
-	<linux-kernel@vger.kernel.org>, <david@kernel.org>, <ljs@kernel.org>,
-	<liam@infradead.org>, <vbabka@kernel.org>, <rppt@kernel.org>,
-	<surenb@google.com>, <mhocko@suse.com>, <npache@redhat.com>,
-	<ziy@nvidia.com>, <baolin.wang@linux.alibaba.com>, <ryan.roberts@arm.com>,
-	<daichaobing@sangfor.com.cn>, <wangkefeng.wang@huawei.com>,
-	<zengheng4@huawei.com>, <kasong@tencent.com>, <corbet@lwn.net>,
-	<skhan@linuxfoundation.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <lianux.wang@processmission.com>,
-	<kunwu.chan@linux.dev>
-References: <20260720030327.80153-1-lianux.mm@gmail.com>
- <20260720030327.80153-2-lianux.mm@gmail.com>
-Content-Language: en-US
-From: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
-In-Reply-To: <20260720030327.80153-2-lianux.mm@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
- mscpeml500003.china.huawei.com (7.188.49.51)
+Content-Transfer-Encoding: 8bit
 
+Hi David,
 
+On 7/20/2026 10:44 AM, David Hildenbrand (Arm) wrote:
+> you give no real motivation and evaluation why this is required or
+> why this gives the user any benefit.
+> A SPLIT with an explicit order is not really want we want and it
+> does not fit the existing primitives.
 
-On 7/20/2026 6:03 AM, Lian Wang wrote:
-> Add a new DAMOS action, DAMOS_SPLIT, that splits large folios in the
-> target region down to a smaller order.  A new per-scheme field and sysfs
-> file, target_order, selects the split target: 0 for order-0 base pages,
-> or 2..HPAGE_PMD_ORDER-1 for a smaller mTHP order (order-1 is rejected at
-> store time since anonymous THPs cannot be split to order-1).
-> 
-> Unlike DAMOS_COLLAPSE which builds large folios, splitting only dismantles
-> them; it allocates nothing, copies nothing, and no THP admission policy
-> applies.  khugepaged deliberately refuses to collapse a folio to a
-> smaller order, leaving the shrink direction to callers like this one.
-> 
-> This patch adds the DAMOS_SPLIT action, the ``order`` field (placed in
-> the existing union alongside target_nid and migrate_dests), its sysfs
-> interface, and documentation.  The vaddr operations set handler is added
-> in the next patch.
-> 
-> Link: https://lore.kernel.org/20260605161422.213817-9-npache@redhat.com/
->  ("mm/khugepaged: skip collapsing mTHP to smaller orders")
-> 
-> 
-> 
-> Co-developed-by: Kunwu Chan <kunwu.chan@linux.dev>
-> Signed-off-by: Kunwu Chan <kunwu.chan@linux.dev>
-> Signed-off-by: Lian Wang (Processmission) <lianux.mm@gmail.com>
-> ---
->  .../ABI/testing/sysfs-kernel-mm-damon         |  7 +++
->  Documentation/mm/damon/design.rst             |  5 ++
->  include/linux/damon.h                         | 15 ++++--
->  mm/damon/core.c                               |  2 +
->  mm/damon/sysfs-schemes.c                      | 48 +++++++++++++++++++
->  tools/testing/selftests/damon/sysfs.py        | 11 +++--
->  6 files changed, 79 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-damon b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-> index 907a504fb64c..ee8e260a631c 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-mm-damon
-> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-damon
-> @@ -265,6 +265,13 @@ Contact:	SJ Park <sj@kernel.org>
->  Description:	Action's target NUMA node id.  Supported by only relevant
->  		actions.
->  
-> +What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/target_order
-> +Date:		Jul 2026
-> +Contact:	SJ Park <sj@kernel.org>
-Shouldn't this point to your email address?
-> +Description:	Target folio order for the ``split`` action.  Large folios in
-> +		the target region are split down to this order.  Valid values
-> +		are 0 (order-0 base pages) and 2..HPAGE_PMD_ORDER-1.
-> +
->  What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/apply_interval_us
->  Date:		Sep 2023
->  Contact:	SJ Park <sj@kernel.org>
-> diff --git a/Documentation/mm/damon/design.rst b/Documentation/mm/damon/design.rst
-> index aed6cb1cf483..87a801954b1b 100644
-> --- a/Documentation/mm/damon/design.rst
-> +++ b/Documentation/mm/damon/design.rst
-> @@ -549,6 +549,11 @@ that supports each action are as below.
->     Supported by ``vaddr`` and ``fvaddr`` operations set. When
->     TRANSPARENT_HUGEPAGE is disabled, the application of the action will just
->     fail.
-> + - ``split``: Split each large folio in the region down to the order specified
-> +   by the scheme's ``target_order`` (``0`` for order-0 base pages, or
-> +   ``2..HPAGE_PMD_ORDER-1``).  Supported by ``vaddr`` and ``fvaddr`` operations
-> +   set. When TRANSPARENT_HUGEPAGE is disabled, the application of the action
-> +   will just fail.
->   - ``lru_prio``: Prioritize the region on its LRU lists.
->     Supported by ``paddr`` operations set.
->   - ``lru_deprio``: Deprioritize the region on its LRU lists.
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index f69442a9d431..88b61b900a36 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -110,6 +110,7 @@ struct damon_target {
->   * @DAMOS_HUGEPAGE:	Call ``madvise()`` for the region with MADV_HUGEPAGE.
->   * @DAMOS_NOHUGEPAGE:	Call ``madvise()`` for the region with MADV_NOHUGEPAGE.
->   * @DAMOS_COLLAPSE:	Call ``madvise()`` for the region with MADV_COLLAPSE.
-> + * @DAMOS_SPLIT:	Split each large folio in the region to a smaller order.
->   * @DAMOS_LRU_PRIO:	Prioritize the region on its LRU lists.
->   * @DAMOS_LRU_DEPRIO:	Deprioritize the region on its LRU lists.
->   * @DAMOS_MIGRATE_HOT:  Migrate the regions prioritizing warmer regions.
-> @@ -130,6 +131,7 @@ enum damos_action {
->  	DAMOS_HUGEPAGE,
->  	DAMOS_NOHUGEPAGE,
->  	DAMOS_COLLAPSE,
-> +	DAMOS_SPLIT,
->  	DAMOS_LRU_PRIO,
->  	DAMOS_LRU_DEPRIO,
->  	DAMOS_MIGRATE_HOT,
-> @@ -582,10 +584,15 @@ struct damos {
->  	struct damos_quota quota;
->  	struct damos_watermarks wmarks;
->  	union {
-> -		struct {
-> -			int target_nid;
-> -			struct damos_migrate_dests migrate_dests;
-> -		};
-> +		int target_nid;
-> +		struct damos_migrate_dests migrate_dests;
-Shouldn't we keep target_nid and migrate_dests together using a
-struct, as in the initial code?
-> +		/*
-> +		 * @order: target folio order for DAMOS_SPLIT.
-> +		 * Split large folios down to this order.  0 for
-> +		 * order-0 base pages, 2..HPAGE_PMD_ORDER-1 for
-> +		 * smaller mTHP.  Order-1 is rejected.
-> +		 */
-> +		unsigned int order;
->  	};
->  	struct list_head core_filters;
->  	struct list_head ops_filters;
-> diff --git a/mm/damon/core.c b/mm/damon/core.c
-> index 806a67d02a6e..394c62455ad5 100644
-> --- a/mm/damon/core.c
-> +++ b/mm/damon/core.c
-> @@ -693,6 +693,7 @@ struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
->  		return NULL;
->  	scheme->pattern = *pattern;
->  	scheme->action = action;
-> +	scheme->order = 0;
->  	scheme->apply_interval_us = apply_interval_us;
->  	/*
->  	 * next_apply_sis will be set when kdamond starts.  While kdamond is
-> @@ -1446,6 +1447,7 @@ static int damos_commit(struct damos *dst, struct damos *src)
->  
->  	dst->pattern = src->pattern;
->  	dst->action = src->action;
-> +	dst->order = src->order;
->  	dst->apply_interval_us = src->apply_interval_us;
->  
->  	err = damos_commit_quota(&dst->quota, &src->quota);
-> diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-> index 32f495a96b17..725ed81ccf6c 100644
-> --- a/mm/damon/sysfs-schemes.c
-> +++ b/mm/damon/sysfs-schemes.c
-> @@ -4,7 +4,9 @@
->   */
->  
->  #include <linux/slab.h>
-> +#include <linux/mm.h>
->  #include <linux/numa.h>
-> +#include <linux/huge_mm.h>
->  
->  #include "sysfs-common.h"
->  
-> @@ -2260,6 +2262,7 @@ struct damon_sysfs_scheme {
->  	struct damon_sysfs_stats *stats;
->  	struct damon_sysfs_scheme_regions *tried_regions;
->  	int target_nid;
-> +	unsigned int target_order;
->  	struct damos_sysfs_dests *dests;
->  };
->  
-> @@ -2293,6 +2296,10 @@ static struct damos_sysfs_action_name damos_sysfs_action_names[] = {
->  		.action = DAMOS_COLLAPSE,
->  		.name = "collapse",
->  	},
-> +	{
-> +		.action = DAMOS_SPLIT,
-> +		.name = "split",
-> +	},
->  	{
->  		.action = DAMOS_LRU_PRIO,
->  		.name = "lru_prio",
-> @@ -2326,6 +2333,7 @@ static struct damon_sysfs_scheme *damon_sysfs_scheme_alloc(
->  	scheme->action = action;
->  	scheme->apply_interval_us = apply_interval_us;
->  	scheme->target_nid = NUMA_NO_NODE;
-> +	scheme->target_order = 0;
->  	return scheme;
->  }
->  
-> @@ -2645,6 +2653,40 @@ static ssize_t target_nid_store(struct kobject *kobj,
->  	return err ? err : count;
->  }
->  
-> +static ssize_t target_order_show(struct kobject *kobj,
-> +		struct kobj_attribute *attr, char *buf)
-> +{
-> +	struct damon_sysfs_scheme *scheme = container_of(kobj,
-> +			struct damon_sysfs_scheme, kobj);
-> +
-> +	return sysfs_emit(buf, "%u\n", scheme->target_order);
-> +}
-> +
-> +static ssize_t target_order_store(struct kobject *kobj,
-> +		struct kobj_attribute *attr, const char *buf, size_t count)
-> +{
-> +	struct damon_sysfs_scheme *scheme = container_of(kobj,
-> +			struct damon_sysfs_scheme, kobj);
-> +	unsigned int val;
-> +	int err;
-Move the variable declaration to the top of the function.
-> +
-> +	err = kstrtouint(buf, 0, &val);
-> +	if (err)
-> +		return err;
-> +
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +	/* Valid split targets: 0 (order-0 base pages) or 2..HPAGE_PMD_ORDER-1. */
-> +	if (val != 0 && (val < 2 || val >= HPAGE_PMD_ORDER))
-> +		return -EINVAL;
-> +#else
-> +	if (val != 0)
-> +		return -EINVAL;
-> +#endif
-> +
-> +	scheme->target_order = val;
-> +	return count;
-> +}
-> +
->  static void damon_sysfs_scheme_release(struct kobject *kobj)
->  {
->  	kfree(container_of(kobj, struct damon_sysfs_scheme, kobj));
-> @@ -2659,10 +2701,14 @@ static struct kobj_attribute damon_sysfs_scheme_apply_interval_us_attr =
->  static struct kobj_attribute damon_sysfs_scheme_target_nid_attr =
->  		__ATTR_RW_MODE(target_nid, 0600);
->  
-> +static struct kobj_attribute damon_sysfs_scheme_target_order_attr =
-> +		__ATTR_RW_MODE(target_order, 0600);
-> +
->  static struct attribute *damon_sysfs_scheme_attrs[] = {
->  	&damon_sysfs_scheme_action_attr.attr,
->  	&damon_sysfs_scheme_apply_interval_us_attr.attr,
->  	&damon_sysfs_scheme_target_nid_attr.attr,
-> +	&damon_sysfs_scheme_target_order_attr.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(damon_sysfs_scheme);
-> @@ -3011,6 +3057,8 @@ static struct damos *damon_sysfs_mk_scheme(
->  	if (!scheme)
->  		return NULL;
->  
-> +	scheme->order = sysfs_scheme->target_order;
-> +
->  	err = damos_sysfs_add_quota_score(sysfs_quotas->goals, &scheme->quota);
->  	if (err) {
->  		damon_destroy_scheme(scheme);
-> diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-> index 3ffa054b6386..49d3c319dfd8 100755
-> --- a/tools/testing/selftests/damon/sysfs.py
-> +++ b/tools/testing/selftests/damon/sysfs.py
-> @@ -131,11 +131,12 @@ def assert_scheme_committed(scheme, dump):
->              'hugepage': 3,
->              'nohugepage': 4,
->              'collapse': 5,
-> -            'lru_prio': 6,
-> -            'lru_deprio': 7,
-> -            'migrate_hot': 8,
-> -            'migrate_cold': 9,
-> -            'stat': 10,
-> +            'split': 6,
-> +            'lru_prio': 7,
-> +            'lru_deprio': 8,
-> +            'migrate_hot': 9,
-> +            'migrate_cold': 10,
-> +            'stat': 11,
->              }
->      assert_true(dump['action'] == action_val[scheme.action], 'action', dump)
->      assert_true(dump['apply_interval_us'] == scheme. apply_interval_us,
-> 
+Thank you for the direct feedback.  Let me explain where this came
+from -- the cover letter should have included this context.
 
--- 
-Asier Gutierrez
-Huawei
+This started from a real problem at Sangfor.  The scenario is:
 
+  KVM-QEMU virtualization on Kunpeng 920, with KVM guest memory
+  backed by tmpfs shared mappings (THP=always on the host).  An
+  Oracle database runs inside the VM.  DAMON monitors the KVM
+  process on the host to measure the hot-memory ratio.
+
+  The KVM process allocates and uses a large amount of memory.
+  Under the same workload, DAMON reports a significantly higher
+  hot-memory ratio with THP enabled versus THP disabled.  Direct
+  tmpfs write tests inside the VM -- touching at 4K and 2M
+  strides -- show a clear gap between the two cases.
+
+  DAMON parameters used:
+
+    operations=vaddr
+    monitoring_attrs/nr_regions/min=500
+    monitoring_attrs/nr_regions/max=2000
+    monitoring_attrs/intervals/sample_us=500000
+    monitoring_attrs/intervals/aggr_us=20000000
+    monitoring_attrs/intervals/update_us=60000000
+    schemes/0/action=stat
+    schemes/0/access_pattern/nr_accesses/min=1
+    schemes/0/access_pattern/nr_accesses/max=max
+
+The underlying issue is that under PMD-mapped THP, DAMON's monitoring
+granularity is coarser than the actual working set -- a single
+Accessed bit covers 512 base pages.  Before SJ's probe infrastructure
+arrives, there is a gap: DAMON cannot distinguish hot sub-pages from
+cold ones within a single THP.
+
+Split is one possible mechanism to bridge that gap -- by dismantling
+the PMD mapping, each base page gets its own PTE Accessed bit and
+DAMON recovers fine-grain monitoring.  It is not intended to be a
+permanent API, and certainly not "the opposite of collapse".
+
+I did not write this scenario into the cover letter because our test
+results do not yet show a clear quantitative benefit worth claiming,
+and I did not want to oversell.  Without the context, I understand it
+looks like I randomly proposed a new primitive -- that was not the
+intention.
+
+SJ acknowledged [1] that the monitoring problem under THP is real.
+My RFC is a concrete proposal to start the discussion.  If split with
+an explicit order is not the right primitive, I would appreciate your
+thoughts on what the correct DAMOS abstraction for this should be.
+
+[1] https://lore.kernel.org/20260620203915.82947-1-sj@kernel.org/
+
+Thanks,
+Lian Wang
