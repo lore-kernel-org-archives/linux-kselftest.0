@@ -1,134 +1,111 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7304A2D97BB
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9503A4F30
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 05:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784523827; cv=none; b=gaAzUHqWkTTJsViIzlzAmqe0i6YmvD4DSLnKw+BtLODd/NnxDGEZOlh7pQJlF/ZciJdBNJV3I3h5hIsWwxRqvOvwtBQvfGZAI+5Pb6XylGnE0H51R4t/Gz0NIUXX0AUnSoX7RWj14ocp1+muQyAu8YLsjUltYYbTWJiEK5MFrEQ=
+	t=1784525909; cv=none; b=GbFS6JYRp3bbxaBtNaggu566bH+rT4r5/0Vom8VtLd6W64t6OY0I1y7iZBGey/ILncyWWfL2OtusFTNMULpUDe+8zPd1Kyrflz3HYQoQ3uhzoSpz4FbG64DJMEmuMCkfr/gFMvHs3K+1d+XFxhsh6oZpWHibxjVKELTio76c4zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784523827; c=relaxed/simple;
-	bh=MSBFHKvS9tM6Lf1Df8oa4cTiHFgC1qAHEkXpNZzjmrA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UkJi1+2jpPykqf1ROjvvjIvzVdwpe9pL8KTb9acLyzfgDRUZLkTl89hu12/OsqXHYelbKnpXxBJyRULEvQymiK35rjLLddkLo5u5gHz4ykUoWYogzhTHiPSK9YLytyZ6HW56encnKlRB0bdLCZ8L3/t05l000g87So6RKJ9loPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wqgv0lh3; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784525909; c=relaxed/simple;
+	bh=8DcNWD473O5mxKX4hIYKD0DwQc9QDM6rn/VJdtyi9jg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=PXCkIRwulVe7nRTREvS/z9hWlEGo9SlSoj+FaNl68hiTW2kzM/I0ZDkO9s3UxoRV6CYxsSJB0GVWZOh+XGsRx864nuNhG6/OLBov7SLMZzkDuqp73oEQUDXx8dIeaeHmFU51IqsDD8+IknF/ZqzorP+mUDYQyRBQcXvSN+APVAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=KR9J/1Ls reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wqgv0lh3"
-Message-ID: <6abd493f-e1d1-42f6-87b5-c4d3b176ad1c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784523823;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bxpaj06sQP7Yn98cdWkiMSJp35l3kYbHVrCGsGvb6w4=;
-	b=wqgv0lh3K5iPPPvqtWt/lJqoA2bTabo7ffBx/u1gdtqPCJ8biZzLS9xf8qOJmuyYlCrYcw
-	mIb4SGddeHyVrhxpB8Z5Lp1daMa9hJ3KgkSuRqMtTjEKv5EEsJqtCPndN6P+v5RSXWsOBZ
-	BOUpVTsYYYMTNHNELKTCifs8LyuS/gg=
-Date: Mon, 20 Jul 2026 13:03:35 +0800
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="KR9J/1Ls"
+Received: from h183.csg.ci.i.u-tokyo.ac.jp (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66K5c7ol075973
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 20 Jul 2026 14:38:25 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=0hksgsoHb+5DPEqDI69vVoWioOdWpzFWo2XEINBkKEY=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-Id:To:Subject:Date;
+        s=rs20250326; t=1784525906; v=1;
+        b=KR9J/1LsfcCUHiMKtSXTbiglekYsTdFxmUTKfBN55AS3aEINv6Zv7uLbXeoND/tQ
+         l6KYch1zNeOAzBqeI6GLTxYhk2ipCxNMldf9dSHxe2QBEa3KDNLTq8ggkCM6LGC8
+         jvllIlTKUkZ4GajUWKNaX9xxYcEC3e6cWc/8JYo6vLDHbfVba32+o/MGxLwA5Ic0
+         x8KCZu4IWmDazK5jEb7xM055vqqzghw2I+ey/rMrk/7IMpIKNcvT8lUSLaxboOAC
+         DcmrbrJphLS3jNQNMS3Ev9h7VJsSS39Ldps22jVT18l/zL9/8p5gbzyqv4F9AdsB
+         vojYUpqc+eLoLvjkgmZszg==
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Date: Mon, 20 Jul 2026 14:37:57 +0900
+Subject: [PATCH v9 03/16] KVM: arm64: PMU: Freeze counter count after first
+ run
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 7/9] selftests/bpf: Test direct
- reading/writing read-only percpu_array map
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260715153254.92010-1-leon.hwang@linux.dev>
- <20260715153254.92010-8-leon.hwang@linux.dev>
- <DK17OV4181RP.1LRGDA6VBB364@etsalapatis.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <DK17OV4181RP.1LRGDA6VBB364@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <20260720-hybrid-v9-3-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steffen Eiden <seiden@linux.ibm.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+X-Mailer: b4 0.16-dev-925f5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1114;
+ i=odaki@rsg.ci.i.u-tokyo.ac.jp; h=from:subject:message-id;
+ bh=8DcNWD473O5mxKX4hIYKD0DwQc9QDM6rn/VJdtyi9jg=;
+ b=owGbwMvMwCWmMbc20y1CyJDxtFoSQ1bsFpdWCZXNC13nb33sknhDYZrRs2Sm3+/el3NfSjvy3
+ zRLJWZyRykLgxgXg6yYIktK0W5ujejaT4UJ8S0wc1iZQIYwcHEKwETaWRgZ5u/ee9gnmnfj3v6J
+ b7mDJJRMom8/c/N4wBYteE73ZW3zcoY/POq3P779e25nZtBbjySrZw5aOhuLKjJOumSvPmAU+eA
+ bGwA=
+X-Developer-Key: i=odaki@rsg.ci.i.u-tokyo.ac.jp; a=openpgp;
+ fpr=AEDC03C9AF734F2EC26A7BFFA4BAEAA73536753C
 
-On 18/7/26 06:49, Emil Tsalapatis wrote:
-> On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
->> Verify these two cases:
->>
->> 1. Direct reading the data of read-only percpu data's percpu_array map
->>    is allowed.
->> 2. Direct writing the data of read-only percpu data's percpu_array map
->>    is disallowed.
->>
->> Assisted-by: Codex:gpt-5.5-xhigh
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  .../bpf/prog_tests/global_data_init.c         | 83 +++++++++++++++++++
->>  1 file changed, 83 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> index f7a56e3fdbce..d4405646847a 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> @@ -199,6 +199,85 @@ static void test_global_percpu_data_lskel(void)
->>  	test_global_percpu_data_lskel__destroy(lskel);
->>  }
->>  
->> +static int create_rdonly_percpu_array(void)
->> +{
->> +	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
->> +		    .map_flags = BPF_F_RDONLY_PROG,
->> +	);
->> +	int key = 0, map_fd, err;
->> +	__u64 value = 0;
->> +
->> +	map_fd = bpf_map_create(BPF_MAP_TYPE_PERCPU_ARRAY, "percpu_ro_map", sizeof(int),
->> +				sizeof(__u64), 1, &map_opts);
->> +	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
->> +		return -1;
->> +
->> +	err = bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS);
->> +	if (!ASSERT_OK(err, "bpf_map_update_elem"))
->> +		goto out;
->> +
->> +	err = bpf_map_freeze(map_fd);
->> +	if (!ASSERT_OK(err, "bpf_map_freeze"))
->> +		goto out;
->> +
->> +	return map_fd;
->> +
->> +out:
->> +	close(map_fd);
->> +	return -1;
->> +}
->> +
->> +static void test_global_percpu_data_rdonly_direct_read(void)
->> +{
->> +	struct bpf_insn insns[] = {
->> +		BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0),
->> +		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
->> +		BPF_EXIT_INSN(),
->> +	};
-> 
-> Why hardcode this as inline assembly? Can we do a syscall example in the
-> progs/? That way there will also be a concrete example of how we're
-> using the feature in practice.
+PMU configuration is VM-scoped, but SET_NR_COUNTERS can be issued
+through any vCPU. Checking only whether that vCPU's PMU has been
+initialized allows userspace to change the counter count through an idle
+sibling after another vCPU has run.
 
+Reject the attribute once any vCPU has run. This keeps the VM-wide
+implemented counter mask and the PMCR_EL0.N value stable after guest
+execution begins.
 
-We are unable to implement it with a syscall example, because libbpf
-does not support creating a rdonly internal map for global percpu data.
-We have no '.ropercpu' section support in libbpf.
+Fixes: b7628c797376 ("KVM: arm64: Allow userspace to limit the number of PMU counters for EL2 VMs")
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+---
+ arch/arm64/kvm/pmu-emul.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Will add comment to explain the reason of hardcoded insns.
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index b5df6843dbcd..b4b877f31097 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -1087,6 +1087,9 @@ static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+ {
+ 	struct kvm *kvm = vcpu->kvm;
+ 
++	if (kvm_vm_has_ran_once(kvm))
++		return -EBUSY;
++
+ 	if (!kvm->arch.arm_pmu)
+ 		return -EINVAL;
+ 
 
-Thanks,
-Leon
-
-> [...]
+-- 
+2.55.0
 
