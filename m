@@ -1,61 +1,63 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F55385D72
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 03:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF7A23BCEE
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 03:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784516621; cv=none; b=mwXzZZsqFUsqQlc2bES5biOPUwUPRPXyiORaUULW+ySrZpmeyKocwjoqloMZJ15fyxbteffMBQ7HTxljxvgOgbvF9eHDv0aUE8ZO6p59dGF5KFgq0xwnhL0R00U+tWoxVV7/p2LjBdE4IDioTBbfMvIO/HP8H/SnHiUqUNpZB4s=
+	t=1784516628; cv=none; b=VGOaSMWGQ+40WpwlVJJFnnYinBWV2LM1uiWbDq5UuVs9hyWtXYfPDHODD/f0xWMRLgCgTLduqADad9oMqa9KBlRdguW+Qa1MELOttrnTs+bKCbJL5zX5V5WVNZGgBbRL56HGPz5mLPIA4cfsRcF00+LhtFYFhNlaaKYH5c9QkLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784516621; c=relaxed/simple;
-	bh=Bqh/sq4KPhx3AnFg+RiqqCU8cfWV/1rPo0hZzmm7aOw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G20gaXxnhI6BoOJByEFOgzgRYYK28KjZSpvFCNVk7qV+x+hCJgqnjC2WM2CeiR1YxTcybj4clCW3kJP5pic2TV6igIPaLNNPFzc0Ps1U8Gr1vVN/1fVkSWC4OlFiDiIgxp/csd3budGDjlsUZ9pAHpVICoXVl8KlJKGfS2BYsn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mLF+SAFS; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1784516628; c=relaxed/simple;
+	bh=DUin7ncN2wE53OSsMptOjCA0tzO+DsIg+Rek0OLve6A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HeFrdi3Jj9eL22Pw833Bos7c6RU6+YTEbOMXPaSUZ1KfxQfpuwM2LsWCgWChcejMu4cvBcny3Lwi+HGD60cTFxuh8r7RyKbcUsHzElD+faMATZLYpWoKVXDbHG2D+nl7eTRjD1acgi7WaqAOh6p1oyJsH//Kyj/FCTGnovCuSa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rggULqmo; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mLF+SAFS"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2caced6038eso45197745ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Jul 2026 20:03:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rggULqmo"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cedda2ce6fso55598185ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 19 Jul 2026 20:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784516619; x=1785121419; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Enmu8Zl/5+J0ooluJh3kcPVk/sYivrIeh8Ayq7SQkGw=;
-        b=mLF+SAFSOHAw2lEyc10sdt/JxitNIIPu/7ygIiOqDxaqQiEFVkUkgdCDge8cEtAuCj
-         dDBR7uHTv8LpiTi7e8m0bs3xhN73O//qwNG2bQQadP1UEB6SKxCYM25x+qP7pi719V5r
-         cAqu8EnSXK7CeFsrX37Pdjh2cwyhrL518xwWxOopczjffEkVeGDahw7jkorN9Gy+CcRN
-         7kZsnCtUHUU8jGU6pONLjVwBUEKdIIzwsZz+5s0jvl2HNT8mS+1Otg4vcV9SCKyWPRzc
-         omUDlkVu23z63pIeN78UJwCPpZccrfVM4F/q4oWdcXq6/fj5hPV9ZUuZfZvSHn/+ogsk
-         feZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784516619; x=1785121419;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784516626; x=1785121426; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Enmu8Zl/5+J0ooluJh3kcPVk/sYivrIeh8Ayq7SQkGw=;
-        b=YCcO1QXDYfh2Z07saT5Zr6DSjrMolPX76J9gjVrdAANH+LlvuOMuUIlMdC0BprQXiD
-         EV/RjAIJ3uQHiw7ta81Nh9rLBRZ3QpoIwThz4KHOz5TDYJSZdtwAotul+CksjIAV9VP/
-         aAAcs1fy35yhUcHyS4179Y1hk0HJOF2OGrq30TUJwMAVRfsWI8YTgYgQ1xpAcOGfAkD9
-         uQWSRLC9ufl4UJWBS64Lh/G79PPs14n0Gp4BHfepQvbGqNUWKmWIebBM/lWV7k2QpAY9
-         oiYkRDJRBcL7zLJZT3OKIHj2FhtpTBo+vOxqm0El1HqkC9HOYGIPQdgaIYtD1ndLcJPG
-         itmg==
-X-Forwarded-Encrypted: i=1; AHgh+Rrc0hFYc0xAff4UOlrl6ySZNOlOSPXR+EC17o6kpyCG+St2Veiac8+O7fWFK3UcHx69fZbdlSruOoaXAwTxmLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp0zWeOEFOe0hXTXBK6dYLLCoQ2jxQfdbdWBF/XYk2OshciYfq
-	Q5mE6FUvM0lx3h3aJ/QFSWAKQNKgdtyAxKcN7fi4WBGAQ42GKBZUOuKB
-X-Gm-Gg: AfdE7cmfuMw5IBtvB48XLLtSrjPCJPfvsQ2Ror1/3LWjSmdLLcT7IKzrc544N3N0ucE
-	09+V0aUzCT3DhwhSFCdz62UU4M8fVXv2sBuNOu1XDlo75hJnjBs8EvRgfI/uysdn17A+9+Ep1Yv
-	PS30RUL7UazBWCaD3IpYdxsxft8799lsRefiU8bbRSrtykcyqJGi+9zajRhMqmjpWgGVD5J4uvb
-	adz240lCGxC6lkwvgZFh5Jnny/vfvy4ZI0obI5m2DmL2gOAcSGGWvPGWhb/7eNT7w/erQhp/uHT
-	GIVviuPsBu+UMuAHsqTjhW1rg3Kp3ik94HKRb1woUfWV2mVsVrJ/Ig8Sk/0inuc3SI7Rq4Zjod7
-	LGyFObLpqX1R/qM5IXx9Hjw0FzNO7f7X9EN0bXBNRYPndLAgtOt3M7AT7qgHcI87lyvRx7VTWEY
-	ncPv+eAUUt2y9QYNElhngsrpLe8Vc=
-X-Received: by 2002:a17:902:b107:b0:2cc:86d6:24cc with SMTP id d9443c01a7336-2cf3484449fmr82277405ad.4.1784516618806;
-        Sun, 19 Jul 2026 20:03:38 -0700 (PDT)
+        bh=69Ct5gp9rT21SAwaHS4XMcVk/1fLHoPDTQLb0SWSnDU=;
+        b=rggULqmo8lZ6oZ+g+/g7IDVc8XZl0nXDN/swvyBUVj55XO1kM1AvpMzAqrYHciqfdN
+         Nbjl8AxUDWCJD4FgFGPG57O5n59xAsWx+xU7HSCf7mZ8PCKQx0u2U+Mg6mt0IqxIbVqz
+         kiFyXwxac4vTWpKts3ewEybUu+wun4q3zoDKCwG+RmAXzTOCkT2tHh0RATPyXwDyViYI
+         QTYik1K6LY3goa42dIWwz8gCdnohkGPlFHAyP1S0A4YiEgv6dgahDMFJM8D/mo6yR0Hl
+         aEnsyfnLhKLGAs0uR2VEnddUAvSXDGgKi9JL3Rii7WSruuF8w07yL5+rBDP6VHQBGyCi
+         WMuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784516626; x=1785121426;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=69Ct5gp9rT21SAwaHS4XMcVk/1fLHoPDTQLb0SWSnDU=;
+        b=KNp1fM3s/H5Ad6nxGO7VA4lzVtA7vc1aCeZ1TUEL5oAGQ92/sMAs03PrAtbjQIZ8SE
+         5VdxmIa05CnUqelQDxMYSMJzv2oTWZnL+f0j1Jw+fbTZxzwYJmtH/HDZqRhSBNVkUmaR
+         tKYkAk8TtQLbFdJTUA2sHvyl/ZbRTwJYHHsVIpRGdqlk/AKDBcPXRArYEZaOomkfnta/
+         q80rneJg86szwerUpdbV92lCjZy24Kdck4uU2MaBZz4CEzC71k8aSV6uBcCyNdDhKpEw
+         2z+0++uWh0Kb59hyKnXIqASzFMkEpeWIg07qhqb8qtBTt6oAsoTKNsavkebc3ViqSqkm
+         3Zow==
+X-Forwarded-Encrypted: i=1; AHgh+Rp76l/Ai8gCHC4H6LEvN9Daxgimb7qOHt4HqQ0J95BFNORnxk7JyOLRCLhLYyzOfa068Q7hjbaF1dYgAEtJ8PY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFKlO54h381uEt1A/ZdqrsfTW9Q8bPeQidd1uPvyzmfm3CudoM
+	OtAEFlJZFRb/wIpR/W2Hvndk3Qpq370sDcjRmiAiQBqH4Dzlg239hqNQ
+X-Gm-Gg: AfdE7cmwSM1KzgWpGC83XjrwX/zt0pLTmbuNcrcGRl83prJCwK8D4RsK1c54HtISodK
+	5RcxbdOgPmlm511WJlw54Sc0xd3QYHthZgoS7XUJ0U0ZzQXdMDWb1R0l2h0vEoBXlR8E1BSQshi
+	25vTym38fYUkP6OCYibrIJZqCBpbTMmFCsYPp/qJ5rj5RTokoXGBh8h6b7wsYxVPl/PgNrNzB9M
+	Y803i0E6Nowk215qociqxGS3L3YdmTmn/RR+Dy8gYJiI7BOD+cKJa8kS1vz2TtC5C2hhLYa31DW
+	Qiw+PjHqBW5e90NrvacqXT+i9MiAKo3DzEB1V9Q5XHlQlgTfBPhsaTsCTLRh8CV0q86S1DKMIAf
+	JtQR8Zky1XryEGfKVtUbzL00cdHPkLq2jd3UksT8H3bmDxJDO0J8j90dLdUneYPRzY5ySisNBTN
+	5imRARhU4aZrSpC+B8JCb+V3pyIXM=
+X-Received: by 2002:a17:902:fc85:b0:2c9:bd37:ae76 with SMTP id d9443c01a7336-2cf34a3ef59mr139624465ad.47.1784516626163;
+        Sun, 19 Jul 2026 20:03:46 -0700 (PDT)
 Received: from localhost.localdomain ([112.65.87.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344d80e6sm47783065ad.29.2026.07.19.20.03.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344d80e6sm47783065ad.29.2026.07.19.20.03.39
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 19 Jul 2026 20:03:38 -0700 (PDT)
+        Sun, 19 Jul 2026 20:03:45 -0700 (PDT)
 From: Lian Wang <lianux.mm@gmail.com>
 To: damon@lists.linux.dev,
 	linux-mm@kvack.org
@@ -85,10 +87,12 @@ Cc: sj@kernel.org,
 	lianux.mm@gmail.com,
 	lianux.wang@processmission.com,
 	kunwu.chan@linux.dev
-Subject: [RFC PATCH v3 0/3] mm/damon: introduce DAMOS_SPLIT action
-Date: Mon, 20 Jul 2026 11:03:24 +0800
-Message-ID: <20260720030327.80153-1-lianux.mm@gmail.com>
+Subject: [RFC PATCH v3 1/3] mm/damon: introduce DAMOS_SPLIT action
+Date: Mon, 20 Jul 2026 11:03:25 +0800
+Message-ID: <20260720030327.80153-2-lianux.mm@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260720030327.80153-1-lianux.mm@gmail.com>
+References: <20260720030327.80153-1-lianux.mm@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,95 +101,258 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DAMOS_SPLIT splits large folios in a target region down to a
-configured target order, using the existing split_folio_to_order().
-No new core-mm code or exported symbols are introduced.
+Add a new DAMOS action, DAMOS_SPLIT, that splits large folios in the
+target region down to a smaller order.  A new per-scheme field and sysfs
+file, target_order, selects the split target: 0 for order-0 base pages,
+or 2..HPAGE_PMD_ORDER-1 for a smaller mTHP order (order-1 is rejected at
+store time since anonymous THPs cannot be split to order-1).
 
-Based on mm-unstable at 61cccb8363fc ("mm/swap, PM: hibernate:
-atomically replace hibernation pin").
+Unlike DAMOS_COLLAPSE which builds large folios, splitting only dismantles
+them; it allocates nothing, copies nothing, and no THP admission policy
+applies.  khugepaged deliberately refuses to collapse a folio to a
+smaller order, leaving the shrink direction to callers like this one.
 
-Different addresses within a PMD-mapped folio resolve to the same
-PMD Accessed bit.  Accesses to a small part of the folio can
-therefore coarsen DAMON's observed hot set relative to the actual
-working set.
+This patch adds the DAMOS_SPLIT action, the ``order`` field (placed in
+the existing union alongside target_nid and migrate_dests), its sysfs
+interface, and documentation.  The vaddr operations set handler is added
+in the next patch.
 
-DAMOS already provides promotion actions (HUGEPAGE, COLLAPSE) but
-has no corresponding demotion action.  DAMOS_SPLIT fills this gap.
-It is a mechanism, not a policy -- it does not decide which folios
-to split.  Selection is left to DAMON's existing access patterns,
-filters, and future probe/PMU signals.
+Link: https://lore.kernel.org/20260605161422.213817-9-npache@redhat.com/
+ ("mm/khugepaged: skip collapsing mTHP to smaller orders")
 
-target_order selects the split target: 0 for order-0 base pages,
-or a supported smaller mTHP order.  Both anonymous and file-backed
-folios are supported.  The locking follows split_huge_pages_in_pid()
-in mm/huge_memory.c.
 
-Tests
-=====
 
-damos_split.py (VM + Kunpeng 920):
-  anon THP -> order-0 split: PASS
-
-sangfor_exp.py (Kunpeng 920, tmpfs, 4096 MiB):
-
-  - Created a 4 GiB PMD-mapped tmpfs workload.
-  - Applied DAMOS_SPLIT with target_order=0.
-  - ShmemPmdMapped dropped from 4194304 KiB to 0 in every round.
-  - Repeated for five rounds without functional failures.
-
-The functional selftest (damos_split.py) is included in this series.
-Additional experiment scripts and raw results are available on
-request.  Performance characterization using masim [1] and KMB [2]
-is in progress.
-
-[1] https://github.com/sjp38/masim
-[2] https://gitee.com/OpenCloudOS/kernel-multi-bench
-
-Open questions
-==============
-
-- Selection policy: this series keeps folio selection outside the
-  action and relies on DAMOS access patterns, filters, and quotas.
-  Is this the appropriate layering for future probe-based signals?
-
-- Hysteresis: khugepaged may re-collapse a just-split folio.
-  Should cooldown live in DAMON policy or khugepaged?
-
-- File-backed folios: adjust target_order upward to filesystem
-  minimum, or keep current "fail and skip"?
-
-Beyond the action API itself, feedback on real workloads that need
-proactive large-folio demotion is particularly welcome.  Follow-up
-work will evaluate candidate selection signals, including DAMON
-probes and hardware-assisted sampling, as well as target-order
-selection and split/collapse hysteresis.  Those policies are
-intentionally kept outside this series.
-
-Changes since v2 [3]
-====================
-
-- Split-only series (collapse deferred).
-- Dropped SPE feedback (mechanism/policy separation).
-- DAMOS_MTHP_SPLIT -> DAMOS_SPLIT.
-- order field in existing union (no struct size increase).
-- Added functional selftest (damos_split.py).
-- checkpatch: 0 errors, 0 warnings.
-
-[3] https://lore.kernel.org/20260701123000.00000-1-lianux.mm@gmail.com/
-
-Lian Wang (Processmission) (3):
-  mm/damon: introduce DAMOS_SPLIT action
-  mm/damon/vaddr: implement DAMOS_SPLIT handler
-  selftests/damon: add functional test for DAMOS_SPLIT
-
- .../ABI/testing/sysfs-kernel-mm-damon         |  7 ++
- Documentation/mm/damon/design.rst             |  5 +
- include/linux/damon.h                         | 15 ++-
+Co-developed-by: Kunwu Chan <kunwu.chan@linux.dev>
+Signed-off-by: Kunwu Chan <kunwu.chan@linux.dev>
+Signed-off-by: Lian Wang (Processmission) <lianux.mm@gmail.com>
+---
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 +++
+ Documentation/mm/damon/design.rst             |  5 ++
+ include/linux/damon.h                         | 15 ++++--
  mm/damon/core.c                               |  2 +
- mm/damon/sysfs-schemes.c                      | 48 +++++++
- mm/damon/vaddr.c                              | 90 +++++++++++++
- tools/testing/selftests/damon/Makefile        |  1 +
- tools/testing/selftests/damon/_damon_sysfs.py |  9 +-
- tools/testing/selftests/damon/damos_split.py  | 99 +++++++++++++++
- tools/testing/selftests/damon/sysfs.py        | 11 +-
- 10 files changed, 279 insertions(+), 8 deletions(-)
+ mm/damon/sysfs-schemes.c                      | 48 +++++++++++++++++++
+ tools/testing/selftests/damon/sysfs.py        | 11 +++--
+ 6 files changed, 79 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-damon b/Documentation/ABI/testing/sysfs-kernel-mm-damon
+index 907a504fb64c..ee8e260a631c 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-mm-damon
++++ b/Documentation/ABI/testing/sysfs-kernel-mm-damon
+@@ -265,6 +265,13 @@ Contact:	SJ Park <sj@kernel.org>
+ Description:	Action's target NUMA node id.  Supported by only relevant
+ 		actions.
+ 
++What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/target_order
++Date:		Jul 2026
++Contact:	SJ Park <sj@kernel.org>
++Description:	Target folio order for the ``split`` action.  Large folios in
++		the target region are split down to this order.  Valid values
++		are 0 (order-0 base pages) and 2..HPAGE_PMD_ORDER-1.
++
+ What:		/sys/kernel/mm/damon/admin/kdamonds/<K>/contexts/<C>/schemes/<S>/apply_interval_us
+ Date:		Sep 2023
+ Contact:	SJ Park <sj@kernel.org>
+diff --git a/Documentation/mm/damon/design.rst b/Documentation/mm/damon/design.rst
+index aed6cb1cf483..87a801954b1b 100644
+--- a/Documentation/mm/damon/design.rst
++++ b/Documentation/mm/damon/design.rst
+@@ -549,6 +549,11 @@ that supports each action are as below.
+    Supported by ``vaddr`` and ``fvaddr`` operations set. When
+    TRANSPARENT_HUGEPAGE is disabled, the application of the action will just
+    fail.
++ - ``split``: Split each large folio in the region down to the order specified
++   by the scheme's ``target_order`` (``0`` for order-0 base pages, or
++   ``2..HPAGE_PMD_ORDER-1``).  Supported by ``vaddr`` and ``fvaddr`` operations
++   set. When TRANSPARENT_HUGEPAGE is disabled, the application of the action
++   will just fail.
+  - ``lru_prio``: Prioritize the region on its LRU lists.
+    Supported by ``paddr`` operations set.
+  - ``lru_deprio``: Deprioritize the region on its LRU lists.
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index f69442a9d431..88b61b900a36 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -110,6 +110,7 @@ struct damon_target {
+  * @DAMOS_HUGEPAGE:	Call ``madvise()`` for the region with MADV_HUGEPAGE.
+  * @DAMOS_NOHUGEPAGE:	Call ``madvise()`` for the region with MADV_NOHUGEPAGE.
+  * @DAMOS_COLLAPSE:	Call ``madvise()`` for the region with MADV_COLLAPSE.
++ * @DAMOS_SPLIT:	Split each large folio in the region to a smaller order.
+  * @DAMOS_LRU_PRIO:	Prioritize the region on its LRU lists.
+  * @DAMOS_LRU_DEPRIO:	Deprioritize the region on its LRU lists.
+  * @DAMOS_MIGRATE_HOT:  Migrate the regions prioritizing warmer regions.
+@@ -130,6 +131,7 @@ enum damos_action {
+ 	DAMOS_HUGEPAGE,
+ 	DAMOS_NOHUGEPAGE,
+ 	DAMOS_COLLAPSE,
++	DAMOS_SPLIT,
+ 	DAMOS_LRU_PRIO,
+ 	DAMOS_LRU_DEPRIO,
+ 	DAMOS_MIGRATE_HOT,
+@@ -582,10 +584,15 @@ struct damos {
+ 	struct damos_quota quota;
+ 	struct damos_watermarks wmarks;
+ 	union {
+-		struct {
+-			int target_nid;
+-			struct damos_migrate_dests migrate_dests;
+-		};
++		int target_nid;
++		struct damos_migrate_dests migrate_dests;
++		/*
++		 * @order: target folio order for DAMOS_SPLIT.
++		 * Split large folios down to this order.  0 for
++		 * order-0 base pages, 2..HPAGE_PMD_ORDER-1 for
++		 * smaller mTHP.  Order-1 is rejected.
++		 */
++		unsigned int order;
+ 	};
+ 	struct list_head core_filters;
+ 	struct list_head ops_filters;
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 806a67d02a6e..394c62455ad5 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -693,6 +693,7 @@ struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
+ 		return NULL;
+ 	scheme->pattern = *pattern;
+ 	scheme->action = action;
++	scheme->order = 0;
+ 	scheme->apply_interval_us = apply_interval_us;
+ 	/*
+ 	 * next_apply_sis will be set when kdamond starts.  While kdamond is
+@@ -1446,6 +1447,7 @@ static int damos_commit(struct damos *dst, struct damos *src)
+ 
+ 	dst->pattern = src->pattern;
+ 	dst->action = src->action;
++	dst->order = src->order;
+ 	dst->apply_interval_us = src->apply_interval_us;
+ 
+ 	err = damos_commit_quota(&dst->quota, &src->quota);
+diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
+index 32f495a96b17..725ed81ccf6c 100644
+--- a/mm/damon/sysfs-schemes.c
++++ b/mm/damon/sysfs-schemes.c
+@@ -4,7 +4,9 @@
+  */
+ 
+ #include <linux/slab.h>
++#include <linux/mm.h>
+ #include <linux/numa.h>
++#include <linux/huge_mm.h>
+ 
+ #include "sysfs-common.h"
+ 
+@@ -2260,6 +2262,7 @@ struct damon_sysfs_scheme {
+ 	struct damon_sysfs_stats *stats;
+ 	struct damon_sysfs_scheme_regions *tried_regions;
+ 	int target_nid;
++	unsigned int target_order;
+ 	struct damos_sysfs_dests *dests;
+ };
+ 
+@@ -2293,6 +2296,10 @@ static struct damos_sysfs_action_name damos_sysfs_action_names[] = {
+ 		.action = DAMOS_COLLAPSE,
+ 		.name = "collapse",
+ 	},
++	{
++		.action = DAMOS_SPLIT,
++		.name = "split",
++	},
+ 	{
+ 		.action = DAMOS_LRU_PRIO,
+ 		.name = "lru_prio",
+@@ -2326,6 +2333,7 @@ static struct damon_sysfs_scheme *damon_sysfs_scheme_alloc(
+ 	scheme->action = action;
+ 	scheme->apply_interval_us = apply_interval_us;
+ 	scheme->target_nid = NUMA_NO_NODE;
++	scheme->target_order = 0;
+ 	return scheme;
+ }
+ 
+@@ -2645,6 +2653,40 @@ static ssize_t target_nid_store(struct kobject *kobj,
+ 	return err ? err : count;
+ }
+ 
++static ssize_t target_order_show(struct kobject *kobj,
++		struct kobj_attribute *attr, char *buf)
++{
++	struct damon_sysfs_scheme *scheme = container_of(kobj,
++			struct damon_sysfs_scheme, kobj);
++
++	return sysfs_emit(buf, "%u\n", scheme->target_order);
++}
++
++static ssize_t target_order_store(struct kobject *kobj,
++		struct kobj_attribute *attr, const char *buf, size_t count)
++{
++	struct damon_sysfs_scheme *scheme = container_of(kobj,
++			struct damon_sysfs_scheme, kobj);
++	unsigned int val;
++	int err;
++
++	err = kstrtouint(buf, 0, &val);
++	if (err)
++		return err;
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++	/* Valid split targets: 0 (order-0 base pages) or 2..HPAGE_PMD_ORDER-1. */
++	if (val != 0 && (val < 2 || val >= HPAGE_PMD_ORDER))
++		return -EINVAL;
++#else
++	if (val != 0)
++		return -EINVAL;
++#endif
++
++	scheme->target_order = val;
++	return count;
++}
++
+ static void damon_sysfs_scheme_release(struct kobject *kobj)
+ {
+ 	kfree(container_of(kobj, struct damon_sysfs_scheme, kobj));
+@@ -2659,10 +2701,14 @@ static struct kobj_attribute damon_sysfs_scheme_apply_interval_us_attr =
+ static struct kobj_attribute damon_sysfs_scheme_target_nid_attr =
+ 		__ATTR_RW_MODE(target_nid, 0600);
+ 
++static struct kobj_attribute damon_sysfs_scheme_target_order_attr =
++		__ATTR_RW_MODE(target_order, 0600);
++
+ static struct attribute *damon_sysfs_scheme_attrs[] = {
+ 	&damon_sysfs_scheme_action_attr.attr,
+ 	&damon_sysfs_scheme_apply_interval_us_attr.attr,
+ 	&damon_sysfs_scheme_target_nid_attr.attr,
++	&damon_sysfs_scheme_target_order_attr.attr,
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(damon_sysfs_scheme);
+@@ -3011,6 +3057,8 @@ static struct damos *damon_sysfs_mk_scheme(
+ 	if (!scheme)
+ 		return NULL;
+ 
++	scheme->order = sysfs_scheme->target_order;
++
+ 	err = damos_sysfs_add_quota_score(sysfs_quotas->goals, &scheme->quota);
+ 	if (err) {
+ 		damon_destroy_scheme(scheme);
+diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
+index 3ffa054b6386..49d3c319dfd8 100755
+--- a/tools/testing/selftests/damon/sysfs.py
++++ b/tools/testing/selftests/damon/sysfs.py
+@@ -131,11 +131,12 @@ def assert_scheme_committed(scheme, dump):
+             'hugepage': 3,
+             'nohugepage': 4,
+             'collapse': 5,
+-            'lru_prio': 6,
+-            'lru_deprio': 7,
+-            'migrate_hot': 8,
+-            'migrate_cold': 9,
+-            'stat': 10,
++            'split': 6,
++            'lru_prio': 7,
++            'lru_deprio': 8,
++            'migrate_hot': 9,
++            'migrate_cold': 10,
++            'stat': 11,
+             }
+     assert_true(dump['action'] == action_val[scheme.action], 'action', dump)
+     assert_true(dump['apply_interval_us'] == scheme. apply_interval_us,
