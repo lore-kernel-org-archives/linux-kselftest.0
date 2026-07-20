@@ -1,162 +1,130 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158BA3BB137
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE03436BCE
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 15:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784559693; cv=none; b=C6aRtp2Pejdiej0GjDaeBKuNAC+ZpfyqU8RTrnu6Rc4Sveh/zizMohgLdhG1FgCCtovbzX5qiOxKpDPvw7IfAG70H8/bimHpu19H657SbSXE6xqpZa7OdmNanXDlzYuY1iPUZsvEvW2pckMxqi4tKrhIVQ+/EUXpI7P9EwLOcaE=
+	t=1784560343; cv=none; b=CqdNFuUstNMCsh9WWNVN5f45JIT8AINNPposrAR6WyoCsr13gUmgv06KueRB6ahu2aVjXgtISRrwP9Hl4esd6uQ+/pigfVzz1h3XosDGnDOdWhejRMgsCeklEG0Qvk0+PrwSqGFsBIkQMQCltoizEveBvk0z0NPi2eyFOaRg6MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784559693; c=relaxed/simple;
-	bh=/adrxk88ue9QZdaMDnxlrYJjorXsMzjdAQoGR492+Qg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gvp7j4tV093YGqE/rGOP8I020p0rNE/XPPDnNKEzgmvVl5U8lFsWzNIIXlmb+yZOIe1h1EsmE9KA/oq/D3DDlxN0chFfnbVeHVDA9kSqVK8mZJEWJxbTIusjPSP7N7HQkFmed2vqF/9fDSRLwrI8m6+Nf8SKQs0/SlOi8QyDYdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A79W5mDv; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1784560343; c=relaxed/simple;
+	bh=k3h74G4NxiFjK9p2u2yaPPmUVEdETUoZeDAGJwaID7U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lSgDqpafTngg2AbOjbwo1Xk1fNK1y5aCJ76NbBcq3oDuZQGrgrs29RJ2A1iZ9OKyyp962qOqCtmbiYT50KuPhJ8U1j7sarIY5gFWzNp+VZSgKyh3fEvgDePdhjaXUwxsxuR2SVZP5vd0CG7ErtvpmghmbyMIkUoxyZW3P/cUeeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wn4THGxw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A79W5mDv"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-495635a85d2so4950705e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 08:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784559690; x=1785164490; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=u1b8/cFFL6YY9kDs1t0qAstCmVExZsKMqgR0pyeRNAI=;
-        b=A79W5mDvUyz61Ff5WOX0SElycdgDhMMQVrhDSxIvRl15CG3G821T62wKBjDezO+0kB
-         Lqa3dFkH9zpOHhJT63kFTagtW2VEnC3yOQ86JhGAfudUkWUGBdM5HtQNY2xQ6AAvzNWh
-         msaXNJPPP9dUu9xf22t1yQHidTbRpK+pXB6eYeNTK0KFOCUU3JXVVvzbheAw+9n22LRg
-         Y/pB0IAJ5EDoCG0eh6Bx5cGbmGQP3Hl9B9BaFZ6lA/s5lmm00Q4eX+2b4TFs618W8OPO
-         xvoS86vojafEaVhreBpoisLXTyoahI0NDWKL3hyQ1MCNDvA1cvUBkyxGuwvjd5qo7ViC
-         bhng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784559690; x=1785164490;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=u1b8/cFFL6YY9kDs1t0qAstCmVExZsKMqgR0pyeRNAI=;
-        b=Y4zGcJoL1ZvA0zMNthFZPvBaSyeriqcmgOaZk8Z/HkP4xt6og7feI7F1UmxBbC/O0P
-         VwgpQGYyO2Y7H71+8YIyO6J6nsFRy+QMD+Vaev72aYKjqvB5OqfmcwvwKtxpT6WXkh8g
-         Yw3DgnWhOYPEGVRmuqMxm5LIwceTUGuhfLMzNtJ5zADwvyYVCNIVdwaE669XkZy+AR2l
-         uM0uJsJbeIUpeZ8puQxfGLc9J/oNxLGMGgD7HyT3h5L/udS1rmRhoCjrHxhZj1/x5a8M
-         S0KuLpx+mlIQxiZTQ9HJqImVB97/G3U2mpId+5g5FNjOJW3qu95/MEIlv1BENChk7qCK
-         akqw==
-X-Forwarded-Encrypted: i=1; AHgh+RouM/drCLeViFwA+5h40uw26QMCQcT/ef/9zR/bmrzpzO7zET+q2wls8YVG+e76aT1bE0/Z84FhrI+eXS0Xpag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZGFDXLGdXpzqKz6ZtBv58c8ufIRa2DOr76/chp3/6rJ9sdxAY
-	t0Ch27s0ekCl4Bfy6vFdHz1xKu9wnvNNtibretCy8USB4CCOZ7GiJP00//nUsk6E0n8=
-X-Gm-Gg: AfdE7cnAJv6TU13mUKQ3BzKUQqV71773UOA05LAWYsFjFCZCAZwvd69OgNxaCIEUjh8
-	pBwV+9NUMTcqWDBPP7DykjZlgTC3LKkSTSwrkV8I+LJyK1/43Um92OhoxGpee+LBUo/n0KaRi3F
-	yIa2zE+1m4flFDb91WO+6I6E2TDvGOJnAqcTjJJCSbRZIQ6XZTlZv10VFDKqHCMtq/EzMrBn65v
-	P1jz09IXmw/TXcm6A6LDLyP8cASKtMikM0YEGVZeukYyW/b69zNUcl6svJpUIJSgaALBFLhYO7A
-	zjn2rd2TyhEPq7HWkNN6euYTCPZAL1iya7jENooppuJTRBMw0m+F+Lts6uF4kvhYBfUreLxVFU/
-	F+Q59qLSwOyHk1ic522I6edlbiJIQ/53vdRg3DOCfGvC9hPLPkh21Mmekeu1XEwQNgeDY1ZW+gF
-	CYiBRtQg==
-X-Received: by 2002:a05:600c:e547:10b0:495:5420:bf9a with SMTP id 5b1f17b1804b1-4955420c7b9mr71637045e9.30.1784559689657;
-        Mon, 20 Jul 2026 08:01:29 -0700 (PDT)
-Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4955dfa81b2sm59596425e9.4.2026.07.20.08.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 08:01:28 -0700 (PDT)
-Date: Mon, 20 Jul 2026 17:01:26 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH-cgroup/for-7.3] selftests/cgroup: Fix minor defects in
- test_cpuset
-Message-ID: <al4tyJ2lRMj32Wpn@localhost.localdomain>
-References: <20260717191814.989215-1-longman@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wn4THGxw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784560341;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=xxjJY7kKZ8EKJOSC/o4iGEhT/zvaFpsJ7k5a5XOVqJA=;
+	b=Wn4THGxwHXjW0+f6ZnGZNL6+Tzp08AxamaV7kx04fQWX3sCJ4s/rR32viIXiEtFwvdOwwI
+	6wcPzQHLLjYyl6zCdhq/QPiGg5pUixVEd6FeTmBt3u9VmO358FlNSoFC5e0GM0KW4ZJ/uf
+	skVDj1AYBltlRjpU13h7D+vm5ksIN+8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-126-Vz58Qow3NaG9WGqcJGAtIw-1; Mon,
+ 20 Jul 2026 11:12:14 -0400
+X-MC-Unique: Vz58Qow3NaG9WGqcJGAtIw-1
+X-Mimecast-MFC-AGG-ID: Vz58Qow3NaG9WGqcJGAtIw_1784560329
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C7B251955F03;
+	Mon, 20 Jul 2026 15:12:06 +0000 (UTC)
+Received: from [10.44.48.28] (unknown [10.44.48.28])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 83BB1300418F;
+	Mon, 20 Jul 2026 15:11:54 +0000 (UTC)
+Message-ID: <142d0538-83e4-4d63-a2f1-ed22110d73d2@redhat.com>
+Date: Mon, 20 Jul 2026 17:11:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fv4t7rj5joy2f4tw"
-Content-Disposition: inline
-In-Reply-To: <20260717191814.989215-1-longman@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 00/11] KVM: Allow alternative providers of
+ guest_memfd backed by PFNMAP memory
+To: David Woodhouse <dwmw2@infradead.org>,
+ Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+ Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Tom Lendacky <thomas.lendacky@amd.com>, Tycho Andersen <tycho@kernel.org>,
+ Kees Cook <kees@kernel.org>, Ashish Kalra <ashish.kalra@amd.com>,
+ Connor Williamson <connordw@amazon.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Zhou Yuhang <zhouyuhang@kylinos.cn>, Zi Li <zi.li@linux.dev>,
+ Dan Williams <djbw@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
+ Colin Ian King <colin.i.king@gmail.com>, connordw@amazon.co.uk,
+ graf@amazon.de, fgriffo@amazon.co.uk
+References: <20260720111259.122911-1-dwmw2@infradead.org>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <20260720111259.122911-1-dwmw2@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+On 7/20/26 13:03, David Woodhouse wrote:
+> I'll continue to bikeshed it myself, but this is at least functional
+> enough to show the direction and solicit further opinions...
+> 
+> https://git.infradead.org/?p=users/dwmw2/linux.git;a=shortlog;h=gmem-provider-v2
 
---fv4t7rj5joy2f4tw
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH-cgroup/for-7.3] selftests/cgroup: Fix minor defects in
- test_cpuset
-MIME-Version: 1.0
+In the meanwhile, I have very ignorantly applied patches 1 and 2 as 
+testsuite fixes. :)
 
-On Fri, Jul 17, 2026 at 03:18:14PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> With commit 98149f542530 ("selftests/cgroup: Add test for cpuset affinity
-> on controller disable"), sashiko [1] had report 3 different issues with
-> the new test_cpuset_affinity_on_controller_disable() test.
->=20
->  1) `cpu_set_equal` iterates over mask bytes instead of bits, ignoring
->     CPUs >=3D 8.
+Paolo
 
-Inline comment
-
->  2) Thread synchronization logic allows the main thread to read
->     uninitialized stack memory, causing test flakiness.
-
-Hm, I cannot see it (alhtough I don't see it through), what was the
-stack memory?
-(test_phase is static, then re-initalized)
-
->  3) Test fails instead of skipping gracefully on uniprocessor systems
->     or when CPU 1 is unavailable.
-
-Interesting catch.
-
->=20
-> Fix the reported issues by:
->  1) Iterates over the bit size of the mask.
->  2) Test the new ready flag for each thread to end the wait
->     on the condoitional variable and eliminate the now unneeded
->     AFFINITY_THREAD_A_READY and AFFINITY_THREADS_READY test phases.
-
-But the symmetric synchronization with counter is easier to reason
-about.
-
->  3) Return KSFT_SKIP on "cpuset.cpus" setting failure.
-
-It'd be better to have same style with test_cpuset_prs.sh, i.e. a guard
-at the beginning requesting a minimal number of CPUs. Next time...
-
-> @@ -251,7 +251,7 @@ static int cpu_set_equal(cpu_set_t *dst, unsigned lon=
-g mask)
->  	CPU_ZERO(&expected);
->  	assert(sizeof(mask) < CPU_SETSIZE);
-> =20
-> -	for (int cpu =3D 0; cpu < sizeof(mask); ++cpu)
-> +	for (int cpu =3D 0; cpu < sizeof(mask) * 8; ++cpu)
->  		if ((1UL << cpu) & mask)
->  			CPU_SET(cpu, &expected);
-
-Oh, that was my braino in how masks are stored.
-Thanks for correcting me!
-
-It should also extend the assert accordingly:
-  	assert(sizeof(mask) * 8 < CPU_SETSIZE);
-
-
-
-Michal
-
---fv4t7rj5joy2f4tw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCal44QBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AgYUQD/RwFDPT5dojDmOi5yECGJ
-IprD9iM22xQmyH+OoCnBNI8BAMIwfQVAJ5zs9gOhHp1zjsXnYdcyT9zILSDImEhL
-3EoH
-=xCZx
------END PGP SIGNATURE-----
-
---fv4t7rj5joy2f4tw--
