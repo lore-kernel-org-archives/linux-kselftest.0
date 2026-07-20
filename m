@@ -1,204 +1,120 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7F0308F03
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 16:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784566009; cv=none; b=AnZRDPLxXRq/qeIv5buiE5kIE4wZkdelNTFWeX8jqWhXhQIqKJLaPHCDd5fK4byuhtUC4wzjHuSISHbEFXhAr1uVx4LH10R2dI9CZVX9JSx7sdL/Ivj/9NkeBJ4I/fH5Jw0cMhoYKWqElYc26eIZmowHT/trR9nJAHM4n+Lgh30=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784566009; c=relaxed/simple;
-	bh=XIao6mIlaKS8X9ZP1wVKDebqhjcSXIh5nEXgFPo3CXA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=FwvPvkF9WEJU/MQM/EKMKzUaKfZ5WECcD8wXOVtMvy40sKlihR6NMJeoKTRIk5+lD3nKlU75yAswpdJSjbrHTElmVEyZbTwZZhVdJnrBEHs6Nep5MEPyQav9qvQjyYDwMpeRReFdi6qvbsVSO++wBr0GxcRu231DL8nyUcDf+kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zz3aiimX; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C0938238A
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 16:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784566095; cv=pass; b=sCm3YtJDdE8dFuD5rdOL71WVfUM3Wgk4lLD86OrRlTF0e0mkxMWiLsy7198OMeQfIe3hW0AyjA7R8lxAeteFBREwqJQgPWPkc9dSQXZJ/8hpSCvhL+m+7UjOB37vK/Cuy23jlqVMx7U4E9BNWvJAa/jHYjfO/VX0ShgX4R9gET4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784566095; c=relaxed/simple;
+	bh=OJWbazha46ug8hN55IrSBbZwd/jVhUCm0IDIJgtN/m0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f/YUrTdnSqE1BEdR3HSkssLoCwQ2thkZ30PfYcfeCn4zQvMQEM4zeNVycXALAetC0thXyeeaskLnS/2tfFQcmwC2HCOp6LCo6DZjxmbKGXDbEJX/A9nIdNu79obl+A7Ykw9XQGbOJKYaOgHMCQN03WuLB8Pbeav15TNYLcs58As=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LFewOWxn; arc=pass smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zz3aiimX"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47f7854678bso363802f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 09:46:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LFewOWxn"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-92eafc94c9cso810807385a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 09:48:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784566093; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UfKKeKLn3LfOrptGjQm/ySTFDc3O39hhGTiODrhPslBp/+ijQLi8Ann+kyWLxH7bZM
+         1lLcyZpfTuH28bg0z3NC3IJyfeRAi7q/kfOo70k8X8K6LB0Jc0pkEkns737FI1riEXSj
+         TThgHlqH6F382Cd+9B4vwOt+YIs3t6Ph5RJWNPyzg+HU93o/qVu5uMOVVvd6097UsIFO
+         Lr5decVer1rmAJ876ZdniG8eKvcIlm16LzI0A7HtCigIFPC9pYC2ekKhxsdKN6d9+yvF
+         039xLXzt6tbP2Axy/ty9LFI2QG3VwiOTLKUGZkkZ3P1snTbV+u9M5WNBWoolFhJoxkV0
+         kcZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=E990VIapzj8tuzMD1s5tgC9LyH+wMa65Oul4PHbwGUM=;
+        fh=D4FrKz33NtQ66LWUYwrtFKA37QEY8LLWkg++6t6/Bf4=;
+        b=ZN+bJlDBr0za1p4a+aMlz8S6fL1WDRKjuB6/eVkBRkVGTt9X1kRSRxUMpzNz1nd2oR
+         H4aoCqU+2q3KvPSQfMazqCJ0gDYONnh1h6uuSirNMp3sov4ZB8t5pGI9mHwGdIq59uXt
+         gUPDQOQCdUf9uBDMMgqm0td+QzRMY8e1xzpTGpwNcENuqi7AnM4kEYbB4TQmv54G+/ms
+         NiA0XVLb4p+/nuNoB7pHuhpFZKmsPQu9uvo2iVZV9g9G6IPUrnH7Z7FZr08ntSfr+5a9
+         lvFiAx0AheSbJ01iW6ET3fSnJWZIj62BFX9Ut+B0qstfrB1TXhEBCJDv9u9cGQRMPQ62
+         8DNA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784566000; x=1785170800; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UMSpywKxqagrBACgJFmPd3iIfkAUv2kJob+ZiosLjg0=;
-        b=Zz3aiimXdOmo2nDQFnSZTGpYrpkvLYaCOqhV8wBwqSbYlBYFggbZ1ZqM/3rinXhiud
-         oOdVOZgohGfIHZVpmJBPKNgAbsF/5m9YxnIe7G8JAYK3hp05THXNzJnFAxf8ikjMVNp/
-         R/lr4GDBfof8gy/ln3GmzgrIrRMJk4Es8qa26MpZxcE0xp/nMULTWmPP6kZHDJndYdlm
-         aST8OtabW4KpWo9s1BEVbeWCSMOfYugdPAO8NvzPfIM16auApnUZvWxBgik+QCPVu6F7
-         HsDi9sEWgTQQ/P7VmWcQCiwjMmpo1EJFUtErnPU7uafL+GOa5vIfPQGTHDD/UVtBJigv
-         Z66Q==
+        d=google.com; s=20251104; t=1784566093; x=1785170893; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=E990VIapzj8tuzMD1s5tgC9LyH+wMa65Oul4PHbwGUM=;
+        b=LFewOWxntZVlAMSmgUrbU4ROKlDQLZqTy7QKBdrPdkKJTQSAEX/ZJU/Ad9Rfk+KQxp
+         mBSmmHksjAAnKgRnONcHhma0TigfhAtICSuzDGqP1EUTKFO90LKdqyCbZk7qb7dk6OrH
+         a1o1OFRDBT18mX7AvxRhQ7725kDV0f+tbYQ1j77D0rv4DkVjtlwHwdgzVovKQPMudeOQ
+         IvyuyED4EZn9ejLjLKJcDXaRuOsrsC2WcMpaWazjHRA/nuYbxmocPl0aHJ2jFqTlZL4i
+         jWwXd0OY9XxcgUXp/Yhd80X5yyNuTJ+gYzhqwsUyZCpvRFD6If1ri8b+O3qvKqPVgka/
+         TXnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784566000; x=1785170800;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UMSpywKxqagrBACgJFmPd3iIfkAUv2kJob+ZiosLjg0=;
-        b=D6YQKEENvL2KrNrMWd0H92tHWyub0L0yXVXhq0Wmw0Xqq4rYOnjmAgpiFc1e9h27t2
-         6sdLe/EmM175NnbR6lfSjD4aHpTXRQwxHVp+Yhx0mGE/YDv7zBFiMnTuFS4WjM1jhFr1
-         5ieiu635aF4jrL9kaD+IJkh2Z+fjJEHIE+creYYtmMkpzC08oCPzUn/6ikvHZCfJWW2F
-         5t62WbHwFqOPt3E0Csk1TjH7cs+n1tjUVoqWj97oHSvNM3jWhRQJ/yji7sRQoTONpI1W
-         ZMNzEtYnKKPd4emZ3u8r/gUoYBYQf8wY/pe5Au3IoFIarTmMKgJstx9rMZk8Zrb+3O7U
-         R/UQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp83pxxasvyXZs2osfBwMwNWNVRgSMdMu1v2mpPdbHhIVr1yBlUQ3gBWwL7+qURAnv3W7x/5T2MfvFKJhcH09w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw07KRF2mqt62YRXzZJsazmjd96+RTM1sLRuu2yt5C/NjCYq3po
-	V+oBKSwRijk9EWJgdhsgKiZrqtKSInxV210WF08Wc9gN8b7UaNZPbxL9K32gYwl7jkA=
-X-Gm-Gg: AR+sD10rnV1lopphAa2HUqsYn6y3YM2nBNWH+s88SwMLCv+XWm4iScfDOY1oyExFD5C
-	veu/D/WSAy68v7MCk8YluU5IEuGHgj86T6521hAZ17y1Xvs4qsC31yTAGcWfoCGsWQFOSAVBTTX
-	cmCbpqOJcEYIQkT9ABIXMa9q6B1yP7vIDfSK0aBNDnPFb3tfeCthrExaNqQEkQbFJIGUrZ9SSNk
-	nnXctoiXSZZh1Zo73LozO2q8eXnLPaR/Tw/9OySoTFBp4k6TNKzpC6fztzU7W6uamFo5j8cIqbR
-	hW7MR9SHiLrXMcT63ommyB4iTxqTwDS1S6PHO/pFUN9A40W+L0iCBFLXJUDodTDxFAwlxMtn9xR
-	mm+J6PSXc3yFoGrFLcdk2NoYKqgX8KAKbQvpgIq6KG2mLBjvc3+OggpqOUUVUn6sa0+cn73F9Ab
-	g4ySyHuVM=
-X-Received: by 2002:a05:6000:4310:b0:47d:ecaa:3f97 with SMTP id ffacd0b85a97d-47f6233db68mr17307845f8f.45.1784566000150;
-        Mon, 20 Jul 2026 09:46:40 -0700 (PDT)
-Received: from [192.168.1.3] ([37.18.141.193])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63e496afsm32530307f8f.1.2026.07.20.09.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jul 2026 09:46:39 -0700 (PDT)
-Message-ID: <3fc867c3-67a0-4fdd-b871-f2ba4d642f1f@linaro.org>
-Date: Mon, 20 Jul 2026 17:46:37 +0100
+        d=1e100.net; s=20251104; t=1784566093; x=1785170893;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=E990VIapzj8tuzMD1s5tgC9LyH+wMa65Oul4PHbwGUM=;
+        b=YAKgismeEhOjgE2ec14flKh4gDkzPiXFy4TWGgouhshwfVfzlNirQhN0CvUycRiypC
+         ipl7jE3+0sIGwj2KGgBGVOHlhmSw4N2r+nte46KsqQnmc605/K7ERl2FB/50OtudYhQz
+         c1EossIzMiF6WhL+raR7bl4pluJ/x4HQdtyLAPNCVOKwNFpL+iZ5XhqH/HYQp8Cavk/c
+         SpcXz9LQPrAVsJ2LevlWAscwyGsldK3Nuy5aMiWFIaXQCtZOji9nwW6FncvmDKq7luCa
+         mwUFbd34zQxxLaZjc4G+mElgdko74r3XyxBFM8/C9dAWgPRaI0/5I+Knkag9Lzqcj5vv
+         TYLg==
+X-Forwarded-Encrypted: i=1; AHgh+RqxNOnW0QbthCw5uckNA61M+E1GZ/rcgzk0U1J8JU1D9l/iVu+xzxULWs2kUBHISL6CvGHgvkECv8bYR8ltBcM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy56uJgoKIkB6YZco1XYOaguAp6Qzp6wxRR8MUmhhKpPlquhi29
+	3blk4nuii5RK9+mGb1KVxeUZYWacxOf1v0kuMUfJ2szal4cu/7AaUlvY59QJFMF4lz6PR0m8qro
+	BeIgXD2OaGlk1jJL7yuS5Ry1Rbdqv4BHo3xdOrH4A
+X-Gm-Gg: AfdE7ckMcZVCYT7NqfRTuykK0Wmkx/FDdbysjtZnI+JKLsr0N7CIG7HjB+aPa0+LfD6
+	cOSooiKV7yxDcLtMHLnu/7r+lcRuLvsHtA4swZzha9OP/6yplEYBwyszX3+y4yHD1L90yg1LU9N
+	UVQbXzVu9RjcYFuPUYAMJqGtR41OcQYTHRIRv1ZZB/QurpkmPfilDoBMfBdoqFK3Q57Lp6bN3C5
+	4JLV+JqmoOPX7FRKQpHcjcUNte1gZWxqSNrvl90ow0Oatts2g0cGanC7hdZ0hAgZFlaVUqsuR0D
+	f1aoNHUFEyWsaoYG+lVl6aQZ/idbGfluhHpDZ6CxbjIsCbL92wYtLi/LhbhlT+pk8Zfp4gV++w=
+	=
+X-Received: by 2002:a05:620a:454d:b0:92e:f0a5:ac3e with SMTP id
+ af79cd13be357-930b3eb093fmr1435090885a.28.1784566092473; Mon, 20 Jul 2026
+ 09:48:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: James Clark <james.clark@linaro.org>
-Subject: Re: [PATCH 11/21] KVM: arm64: Context swap Partitioned PMU guest
- registers
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: Alexandru Elisei <alexandru.elisei@arm.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260612192909.1153907-1-coltonlewis@google.com>
- <20260612192909.1153907-12-coltonlewis@google.com>
-Content-Language: en-US
-In-Reply-To: <20260612192909.1153907-12-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260717081443.809393-1-yangyx22@mails.tsinghua.edu.cn> <20260717081443.809393-3-yangyx22@mails.tsinghua.edu.cn>
+In-Reply-To: <20260717081443.809393-3-yangyx22@mails.tsinghua.edu.cn>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 20 Jul 2026 18:48:01 +0200
+X-Gm-Features: AUfX_mxP8PIp4yxhDb4hA3zkZgwpfcpK1so7ZTbdUqmesM2nikxx9tDMVtlcTyc
+Message-ID: <CANn89iLQLQNgNRxaRn9_PLPsBb-4nguM6qw=jFv0xjU41WUUgw@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests/net: packetdrill: cover RST validation
+ in SYN-RECEIVED
+To: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Yizhou Zhao <zhaoyz24@mails.tsinghua.edu.cn>, 
+	Ao Wang <wangao@seu.edu.cn>, Xuewei Feng <fengxw06@126.com>, Qi Li <qli01@tsinghua.edu.cn>, 
+	Ke Xu <xuke@tsinghua.edu.cn>, yyxroy22@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jul 17, 2026 at 10:15=E2=80=AFAM Yuxiang Yang
+<yangyx22@mails.tsinghua.edu.cn> wrote:
+>
+> Add packetdrill coverage for the RFC 9293 reset checks on request
+> sockets in SYN-RECEIVED.  Verify that an exact RST removes the request,
+> a non-exact in-window RST sends a challenge ACK without removing it,
+> and an out-of-window RST is silently discarded.
+>
+> Also cover an RST|ACK with an unacceptable ACK number to ensure RST
+> sequence validation runs before ACK-field validation.
+>
+> Signed-off-by: Yuxiang Yang <yangyx22@mails.tsinghua.edu.cn>
 
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-On 12/06/2026 20:28, Colton Lewis wrote:
-> Save and restore newly untrapped registers that can be directly
-> accessed by the guest when the PMU is partitioned.
-> 
-> * PMEVCNTRn_EL0
-> * PMCCNTR_EL0
-> * PMSELR_EL0
-> * PMCR_EL0
-> * PMCNTEN_EL0
-> * PMINTEN_EL1
-> 
-> If we know we are not partitioned (that is, using the emulated vPMU),
-> then return immediately. A later patch will make this lazy so the
-> context swaps don't happen unless the guest has accessed the PMU.
-> 
-> PMEVTYPER is handled in a following patch since we must apply the KVM
-> event filter before writing values to hardware.
-> 
-> PMOVS guest counters are cleared to avoid the possibility of
-> generating spurious interrupts when PMINTEN is written. This is fine
-> because the virtual register for PMOVS is always the canonical value.
-> 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
-> ---
->   arch/arm/include/asm/arm_pmuv3.h |   4 +
->   arch/arm64/kvm/arm.c             |   2 +
->   arch/arm64/kvm/pmu-direct.c      | 183 +++++++++++++++++++++++++++++++
->   include/kvm/arm_pmu.h            |  16 +++
->   4 files changed, 205 insertions(+)
-> 
-
-[...]
-
-> +
-> +/**
-> + * kvm_pmu_put() - Put untrapped PMU registers
-> + * @vcpu: Pointer to struct kvm_vcpu
-> + *
-> + * Put all untrapped PMU registers from the VCPU into the PCPU. Mask
-> + * to only bits belonging to guest-reserved counters and leave
-> + * host-reserved counters alone in bitmask registers.
-> + */
-> +void kvm_pmu_put(struct kvm_vcpu *vcpu)
-> +{
-> +	struct arm_pmu *pmu;
-> +	unsigned long guest_counters;
-> +	unsigned long flags;
-> +	u64 mask;
-> +	u8 i;
-> +	u64 val;
-> +
-> +	/*
-> +	 * If we aren't guest-owned then we know the guest is not
-> +	 * accessing the PMU anyway, so no need to bother with the
-> +	 * swap.
-> +	 */
-> +	if (!kvm_pmu_is_partitioned(vcpu->kvm))
-> +		return;
-> +
-> +	preempt_disable();
-> +
-> +	pmu = vcpu->kvm->arch.arm_pmu;
-> +	guest_counters = kvm_pmu_guest_counter_mask(pmu);
-> +
-> +	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
-> +		if (i == ARMV8_PMU_CYCLE_IDX)
-> +			val = read_pmccntr();
-> +		else
-> +			val = read_pmevcntrn(i);
-> +
-> +		__vcpu_assign_sys_reg(vcpu, PMEVCNTR0_EL0 + i, val);
-> +	}
-> +
-> +	val = read_sysreg(pmselr_el0);
-> +	__vcpu_assign_sys_reg(vcpu, PMSELR_EL0, val);
-> +
-> +	val = read_sysreg(pmcr_el0);
-> +	__vcpu_assign_sys_reg(vcpu, PMCR_EL0, val);
-> +
-> +	/* Mask these to only save the guest relevant bits. */
-> +	mask = kvm_pmu_guest_counter_mask(pmu);
-> +
-> +	val = read_sysreg(pmcntenset_el0);
-> +	__vcpu_assign_sys_reg(vcpu, PMCNTENSET_EL0, val & mask);
-> +
-> +	val = read_sysreg(pmintenset_el1);
-> +	__vcpu_assign_sys_reg(vcpu, PMINTENSET_EL1, val & mask);
-> +
-> +	/* Save pending guest hardware overflows. */
-> +	local_irq_save(flags);
-> +	val = read_sysreg(pmovsset_el0);
-> +	__vcpu_rmw_sys_reg(vcpu, PMOVSSET_EL0, |=, val & mask);
-> +	write_sysreg(val & mask, pmovsclr_el0);
-> +	local_irq_restore(flags);
-> +
-> +	/* Stop guest counters and disable interrupts in hardware. */
-> +	write_sysreg(mask, pmcntenclr_el0);
-> +	write_sysreg(mask, pmintenclr_el1);
-> +
-> +	kvm_pmu_set_guest_counters(pmu, 0);
-
-Hi Colton,
-
-This function doesn't get added until "KVM: arm64: Apply dynamic guest 
-counter reservations" a few commits later.
-
-kvm_pmu_guest_counter_mask() is also used in a commit before it's added.
-
+Thanks!
