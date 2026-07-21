@@ -1,86 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7717C46EC8B;
-	Tue, 21 Jul 2026 19:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C331470443
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 19:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784660865; cv=none; b=EC2FRygejJ2fthwwJwuRYhXohPLs38AOyR82QA1B1qKG4JiLt7HE3UorYJJJfgQsGE3goPO9ya38/CPuAuKk05LCEa0spnFzPOTZMKu6iV79exYnCwbqjOnwyqLcvATgSqDTI5t0ciwqtBvK06YDuIuDqZgEHcHFOPugirgciOY=
+	t=1784663497; cv=none; b=GFXdBCOoHpIwB2MCxsCjTVrys0aSmNrHoSZSMLwBjBf7j5IRQDaVezrfuVCPG9tNvEU+uHeBmq8REBBZTIOoMoER4jLCYwTJpZE72tSzAkPHTMrszIjMKDZypoGNOE+WGXlQDzWmac6ez6hbCs66lt5krCcSTqBd+0QV5+B5ARI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784660865; c=relaxed/simple;
-	bh=g3UESF0jmKsVW/YZYPXlBH+vU3LS5vvNH2SAXn2BWWo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=enttkSXGBrNhlGk2hiUbESNJE7eduDrcMg4ZPXNvrzhUdv37FGgbYBUe8hO/kZ0/Y5vH66pyFNAvk8RID16DiYScvPcH8GDf6FMP1I/TACh95pr96WDShDs3jv18Rvy69C41uzqs698ObCSD1cMav0GGAuLGMkRVqGO9t8LxOb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AoW4YXVJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784663497; c=relaxed/simple;
+	bh=pxmVjLPG3nH0hKHLAF46OKERZeBhdHYcYAXSEaXX/60=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=jRwmYnHJxtJqyyWdPEkTy56m+5J8AoOdYCqtPjD7bpwoQTjdN1U7P7XjQo9nikFD3K9114HVpe05dLCQ6suRneEEny8fv+F9a+NG2CjcRbbA6Ey4bO4zLcNx/H7SJ5CRb53e4VlN+FH2x6vl10xO+ItIFiWdVUfqiFeNrEMk2rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNOkofWs; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AoW4YXVJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF631F00A3D;
-	Tue, 21 Jul 2026 19:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784660864;
-	bh=jO0/2cUFSfJfUInWRqnTQm+AnMMMe2mlsvbtLOiV2H8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=AoW4YXVJ02vy+5ip6lVnZK+SxEM4rmbC7U/LNlCfV/Ru4FqkriBu4ADmsVeftBIFQ
-	 7HYaBpI60RG6mVsCls8XTlQTyI/PVHT/j6+oStbYKm53tB6W7EPWJthJ+1HYyu0Rzj
-	 FAppWci30c3pA7p76RpgrmzGmzG7FNvxwwfC8AcFl+8BjZsN0scUDjK3uz6NEI8NwE
-	 j9E2Jdntv89xqNrkoKWeTF0iM/RHRbl+Bn6K0wPbKJlqLxCNW3hfN63yKnZi4gdvn5
-	 hGy2KFwugwKn4hUX8x/8tDuB3uIC/LFos5y7gbLVGX51Pc5hromZyTxxPD9rSRVo5Q
-	 4JAqmlg2noq2Q==
-Content-Type: multipart/mixed; boundary="===============6575185754722284764=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNOkofWs"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-81eaf3709b4so97302087b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 12:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784663494; x=1785268294; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=/8I7ufhgviSfj8h8UvuBu4QX2xTPKTDNTn4U/E8FrSI=;
+        b=LNOkofWsMEukwgjweGlIaW2OaN33ffpv6wP4GcsyfR1ps3dbqdns1eolzrStdLmbkZ
+         am7xEj8aLoYEm5L3+MYIGwZ7cFiJR4K8ug6fA1HbP/Hhnt1KpRzTPc0cmrXpDb5peDdV
+         qv/iz8uHgLz6E2i1zjwz5oxU75Ay1Z48CjfHU4OI83Dn6kcQo/wNOAaL1PRTo95vtC1F
+         7x2l6Cl18RnTfp4FuPofG0twkF3PfaqJGlbWPbvXMxLW6UYrj8bvIzYoiWxuu00ZeWk+
+         MAKRMqynijGrRtgJsOBaFePjRDZhCcZke0daEvucKvfNBOXR+Pu9tZtqIcPAGKv5WXPZ
+         iqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784663494; x=1785268294;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/8I7ufhgviSfj8h8UvuBu4QX2xTPKTDNTn4U/E8FrSI=;
+        b=p7oJK+aNnuUqLJNs7sfcDa2X2mHBn17TbhpaTsFCcJjK8SskuKD9f5GG8lXal4yjdh
+         VaOh6gbbFwVITkjD6oQZrCwpuccPgVaShiip3KoUL7XN+yWomPu20eVhXYfiIJ+jwefJ
+         1vE4aYsEtuE6xa6ARpEIIzhuPywlcjC0uP9e2FiwiUU7L4O0HVcPi/KpdMH2d/Ld1RNk
+         9p9IGX+DLmKPpIwwkuANRR5PFuc8oOKbGlGmdU662HeaqmjG6Vs9LOSJtijP84xLSbGz
+         Dpm6Ol4BqZAERlUFOcBUol+0/hz4g8F7YZNTWbRx9QWUV/iEb3R/BcVxl1YIdk5/G0oL
+         upLg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq5cjiyQcuTpJOSv5p1q3g/P2vrVPTLws4maOWRQVx7gtrgBl8byCop6M2M8dbswWVnZySX1LD4zlEAXF6+GJ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUCzsaVct4uno3uPX5P50lVqKrQvnjxGkzFNENBv0u5Uz0Y8sn
+	ZHQtZLjlSsAyZUfYLFAoKnqJ1qVSIgSfe8xdl1UKjupBqsDd+BF+4K5J
+X-Gm-Gg: AR+sD11UdRgJtOsy5DLY2PoSPhnNsQtsal8g07hJIQoO+MJjnx6WKwjpg+HoCZJ/eqA
+	AlVdT1l18JUSNmNCCSIO2L+TxMUB5vqoO7eMtzyd2Ec0rkmexE39fBrHD7oW8gP63xFovcWlcO7
+	aVXgIc0nvMXz7461bnq6ydgR9puaWpiY1PjXTjx7NVgwHSUycSGVtGUFhkzGykt5gAOc6u+Iq03
+	pIWDmlj6s4ADKBQ73RB2eO920WZvp+Q+NnExh3TOx6geUUgDV9mxynbFhvuI0KCAsXt6NY9GCIT
+	na2qoBYo0EABmnqlLQBX+AFp2+G4lkctEMBg21KhbSjJMAUkTFI276B65tyVtxjuaq6ez/1hrBh
+	WUP0VOEL1BVn051LjSMU4/+AOdeBpe9Xx7VNIScWsa1lD6cdzpi5PbKPKP6QWiarVu7SXA1/6s2
+	aFChZcuKZJAybqkXM5b1SOtbid3kguivmupYGeOT63fcAEMWakhSWuY1k=
+X-Received: by 2002:a05:690c:3505:b0:81e:6d9b:154d with SMTP id 00721157ae682-81ef283e79emr63529217b3.55.1784663494168;
+        Tue, 21 Jul 2026 12:51:34 -0700 (PDT)
+Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f33ddda95sm2715587b3.35.2026.07.21.12.51.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 12:51:33 -0700 (PDT)
+Date: Tue, 21 Jul 2026 15:51:32 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Joe Damato <joe@dama.to>, 
+ netdev@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: andrew+netdev@lunn.ch, 
+ willemb@google.com, 
+ linux-kselftest@vger.kernel.org, 
+ Joe Damato <joe@dama.to>, 
+ linux-kernel@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.22a199c03e97f@gmail.com>
+In-Reply-To: <20260720122714.759175-2-joe@dama.to>
+References: <20260720122714.759175-1-joe@dama.to>
+ <20260720122714.759175-2-joe@dama.to>
+Subject: Re: [PATCH net-next v3 1/3] selftests/net: Test PACKET_STATISTICS
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <1873dbb2968fcd362a2704fbd8ddda4c2240c8f6ab061cb6f1d352b7e657b74a@mail.kernel.org>
-In-Reply-To: <20260715-riscv-bpf-timed-may-goto-v3-1-cf2a9c3d843f@kylinos.cn>
-References: <20260715-riscv-bpf-timed-may-goto-v3-1-cf2a9c3d843f@kylinos.cn>
-Subject: Re: [PATCH v3 1/2] bpf, riscv: add support for timed may_goto
-From: bot+bpf-ci@kernel.org
-To: jiangfeng@kylinos.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jiangfeng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 21 Jul 2026 19:07:43 +0000 (UTC)
-
---===============6575185754722284764==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-> index 9a1e5f0a94e5..6458d4d51990 100644
-> --- a/arch/riscv/net/Makefile
-> +++ b/arch/riscv/net/Makefile
+Joe Damato wrote:
+> Update the existing packet socket test to include a test for the sockopt
+> PACKET_STATISTICS.
+> 
+> Signed-off-by: Joe Damato <joe@dama.to>
 
-[ ... ]
-
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 2f1109dbf105..ca9d0e811aea 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -1834,7 +1834,13 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  		if (ret)
->  			return ret;
->
-> -		if (insn->src_reg != BPF_PSEUDO_CALL)
-> +		/*
-> +		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-> +		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-> +		 * skip the normal "move return register into R0".
-> +		 */
-> +		if (insn->src_reg != BPF_PSEUDO_CALL &&
-> +		    addr != (u64)arch_bpf_timed_may_goto)
-                    ^^^^
-
-This isn't a bug, but could this fit on one line? The 100-character line
-limit would allow the full condition without the break.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29858413299
---===============6575185754722284764==--
+Reviewed-by: Willem de Bruijn <willemb@google.com>
