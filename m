@@ -1,68 +1,69 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6978F44604C
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA9446D0B5
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784667455; cv=none; b=jN2FDCVSZmyVXmIauNQSGpYR/O0mizbQE5dG9H7zGmSXltk8mFis/lAquE708/7UsofapSYOE5RIwVKk6APHMFm/cPvtzoLxIPYzbuuAHF/5Ez+96KnGzTou529yhp3z/zqKzUOqlZa5tf9qXH9ikD40ABf2H9ZbGdO99f7cGWM=
+	t=1784667455; cv=none; b=oT/+vBiDbTj3kVNranykT+4srd0hKNVkc8kk9ZN1d9+bG6h0pU7oNG5kaBJhsXVrvuNcMhdo1q60vB6LiFXnuTT7IDgA/xhXYsOyIxpQTT6lSRNyh+BHg7QBgFbCzcyoBnSd9wL34zJ4EHTC8FPIr+9PuWuKM/Pgc5vga9vk9Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784667455; c=relaxed/simple;
-	bh=xMZm/oO0FtfekjkxZIUS9OIoDKqTmliEkK4gwpH/mIw=;
+	bh=6i3xu7TGf/l+LjxFU5g9BihOmy63xII6Mxtw0wZfUyA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ktNloesIFi0dIODU89EphmQen0o/qcqxV6y2fXxGvKuOC5jxP5FIfsXdsQEtqKnSWdwX64SPiUu9y4PMMfvcFve9ave/A+SQw5RXD3yUzKrq7sdU7aO/tSx1H1ouFoSSxmR1MSBbKdZQh5HWLPGS5lWiZDeN/9xKxc9SARGHVyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YoGCrNfW; arc=none smtp.client-ip=209.85.210.48
+	 In-Reply-To:To:Cc; b=m2fl/NgNBFEx4+y8Pf2rF0XvH1KavmPxSNuQUpTxJKRO121oNwk0wrukJfG+SkB/9fMgvEFzcfDr9e7o1jW5uZ9NOT9XhvyGzLXCxuLitNe3+ixgXJgacQ4jnNqpaRM56FXU3fQL+uB6RFCpCPtLD8QDnY5qW8zI8sa3swyWp1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnB3xR/i; arc=none smtp.client-ip=209.85.210.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YoGCrNfW"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e9f5637634so5328099a34.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnB3xR/i"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7e9eaf04bfaso4048498a34.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784667450; x=1785272250; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784667451; x=1785272251; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=N2eu41/ydt/uEYD6twBRH38ATPyPlKojYjlAenMFyI8=;
-        b=YoGCrNfWrqDAmmlaGYv7F01W+OJuf9b9QtC3hh3VJ54KpR9/h4CFp6FN0OicFc0Q8D
-         LtTodknSbF7U9x5xzVhOeU6oct3P7L1h+VtJ2rzH9LlATlOZ9XCX9Cgee/1iHngH8l3F
-         1xcGAll4H4XcyJT8RnfJufF3zVX8EctjJTPP+cSMaLza80yrLmyb8Ul8M6Ve6FwOIivd
-         Do2v2xDQb6s51cqeEd0865Noz9yj8g7bxo6QRwpS5USqSNpa+GB1T8C5NubibRLqK/+1
-         aESAc79Ws/QOCx5PQxLRMzvADeIoRZs/8PQ6XiE6mOZM80IzRFtjHslo3ivszsqfhLiu
-         HLkA==
+        bh=Ms7C+eWti+wagZhNEkRwI8Uzix1GmNY3wP1QgPskNJg=;
+        b=GnB3xR/i4PVP+e62skV0PG3g5SzDze57Mj37d4bqV7vCMJFOgkCaHKwtTgVkTWOPP1
+         ArbUlQPRxsl07/Ar/iSAMg3HtcBI35M7/8kFky0zSHPK80Lz8QGRvPepDiCLFNBPhsxy
+         KBsNbzQy+A9roXZ6snd6tzf2dITYnTw7orGhaTzjJ3PGWnqj8kQP5weg40q2KmDSTcah
+         Ab/04+7XYG19ec8nBf0vj4uDNKv9zItu1HkONd4wfjDibNDZpdyzYNBW6w1jk19Ly+JJ
+         Vvjy7BeA33jgm6a8I31lEdi0PJMAK9W7q/Ew9+9Nrl5RYscQtdPYqepCeTFugO31MfWG
+         ZLJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784667450; x=1785272250;
+        d=1e100.net; s=20251104; t=1784667451; x=1785272251;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=N2eu41/ydt/uEYD6twBRH38ATPyPlKojYjlAenMFyI8=;
-        b=CAXMxYPx+obemgBEWJXTAkA2oH5VpVgj8q1pnM4PCL7DSSiXBi8eL20PEgjWV0AWTn
-         tFEWx9nPAaP4iGgSoqsMvw7iW3Us0UC9u7gzDhzQFTMbE0xxM6jcjFkzpjgO+IMzfhYz
-         sGt9D/omx9tk77CQ9biRQL+O35SyC5txMD8W4hmaGkb5Rw2fudwPv3T5eW2X5cyU/hF7
-         OUG0yl5cat5lTjPPgCNKXDexMpBBgraHKxrfWQZF0kMZ269TIj86rCNMEW+vDM9uxuL2
-         mmks+5XABQ7YXfOW7BVpbApToZ3zdVHUlUybSIk2fkzrMfwgidaTB8TTvD68A3IcAvP7
-         3/QQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrAXpr8d0sN1YRNtst/CWRpHgXgfxt9nzzDA/DkIK6qsGPAJE71vAttp4EDFWQkCsdhpekw9Aw5j7FzHa9UGd0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5fgo2kYB2ztLiJ2npOyEfvUd7oadlkq39ZJEI75Pi+oAaDC9e
-	mtM5hXfNlxjtFXUoYqMijz8seL4BdZLZS66JNYTtvIzbgqrV6wxOzs9tGJPiAA==
-X-Gm-Gg: AfdE7clTVU5EJHc3kwAZpn7znWpt8V2d6jTUOa6k8pzOl+fZnZp7SUV25qyLneEf4ad
-	9TA0UcLF6ibDD9iW2lPwgbRDcoyGYYODEgcC+0xcv3kvEnewFHvG1bVHe1iSYzbVf7scaVj4nFQ
-	SPrvy+QiNzL6UuPkQ9CErwga7cPUPipWdK5UJ3ycrCNeXHOkby0YvCNc4ToBxgY3Q551V1FucD5
-	qw4/AX8wZR2yl7ik+llVrEhhB8rB13xO+Ne8VSU4t4FGqU+BfqkdlfILdI8OaI+938yZ6PpM4C3
-	EF41YwhLdcKsfZvvPJnoo4lHi+g6m4e3+FcWkvkWDgJxB6WJ4uob3Hv3u9anj3D18o3DAWNV6or
-	bHf9EQhFWIeL84ei3cqcf1L0PNAzSOqKm0sofFMaGjmFmIzdb+cUuiHsUvZmgM6NViggtCQaDY6
-	SKIBDBQph8/8XCc3OqoIPjXGEJA7YkOWLoc0hUh83PCjkc9JPj1422g82/YE6N2r2IdIUBkFjlT
-	4/1AseAT00JsKJyGZMrTKzkj+YgO4MzNI6P
-X-Received: by 2002:a05:6830:349e:b0:7e6:fe3a:b777 with SMTP id 46e09a7af769-7ed9aa23f9bmr12810053a34.13.1784667449716;
-        Tue, 21 Jul 2026 13:57:29 -0700 (PDT)
+        bh=Ms7C+eWti+wagZhNEkRwI8Uzix1GmNY3wP1QgPskNJg=;
+        b=Eph6SfAnF8lbb8kzGBTJhaS3/FGfURYAVPEcWEMwq12UahQz22EAdcMui6xFxG4SWv
+         Q4cDGpo0MerLZg49x8hYBzIPmiB2BCNz1DIVfNzBbtKNn0caxplTAMXEOku1Tc25VBwb
+         oYw8O6a2lWBJd9BlS5PvapB3jKvrHWQ6/1K+B90urmjZYs6XN5zvtVArtEyRTjId4+vd
+         FTd71TSSuH7HseauGL9TcZv+GMlABYmEz4t4yq2q0cXVKETcOF33xUbeQLZ4+Jih+ZTu
+         vx/ZlBUaPHuHkJwblZXNjH2qBcAcr+JoSs25s+4S2vVxPQuTHmq8+kqnFWuknv1/cy/z
+         OvYw==
+X-Forwarded-Encrypted: i=1; AHgh+RqWs2Qcnf9w+UDp/c4KRSIOSvYJ0iPFYbaRbnzWoGfphVA8suzhMynfUVD+gLPmb40w8dlIa2iC1yhUS9ad/4c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF+Xvz3sN95d4b3HJBMdNVRkGrMrLqZ6jdyGnrVHF9qCu6G9Xd
+	j6/CyH2OXHOxxcqF53bmCnu5mVc+qrp17R28klvVvG+6/rVTh18wFRZI
+X-Gm-Gg: AfdE7cmbjqhUfaeCQFrCNAlJJzvwC7JA/lGcMiYr/FlJRFfj4vlnPzUVwsbTYoV87zE
+	mDxPzcRJ+LqWY8FEDzNzsonJf32aQdFGLCkKg5t0vKeg2heW/6UZnBq/+7I24XgCPpPJVXSU442
+	Odo4S/InUvZSYfkobRTRQnnBR6brxZLqsIziKd5HrD+hBVaytafFtCMsnXuocvEihUiWbCAnuD4
+	NVp2tZcIpq5LXsPlGVHwPIoqr8+gNqVcKaxFFiCuIve8lXXRtx16t4YX9Lugbm/Gn+u/LjTWA+2
+	sGW606zJCTVECLF4BAPyGN9BEurTWnzChsSNnXeYb6SUzd8C6DINCrlSLincVNfGtqajDJN85Ib
+	uSQDqEMU3IE4pn5DKo62fL1DQmhW4QAChc84o08DvRiR9rY8JZoqECgrpWPzdKh90uk/DYSNZHl
+	WNfw4lv0aPYS6YanOI95vQNM3it56pZA2od0M/vdxNLbfN87+yRN7p6c/GhjG/SeTk+pJfs3HU1
+	4P24q1eWTZgPNUja30qDVQCmg==
+X-Received: by 2002:a05:6830:43a8:b0:7dc:d587:af3 with SMTP id 46e09a7af769-7eda158f774mr9794437a34.23.1784667450860;
+        Tue, 21 Jul 2026 13:57:30 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.28
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 13:57:29 -0700 (PDT)
+        Tue, 21 Jul 2026 13:57:30 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 21 Jul 2026 14:57:04 -0600
-Subject: [PATCH v7 15/29] dyndbg: drop NUM_TYPE_ARGS
+Date: Tue, 21 Jul 2026 14:57:05 -0600
+Subject: [PATCH v7 16/29] dyndbg: bump num-tokens in a query-cmd from 9 to
+ 15
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +72,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-dd-maint-2-v7-15-010fbe73b311@gmail.com>
+Message-Id: <20260721-dd-maint-2-v7-16-010fbe73b311@gmail.com>
 References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 In-Reply-To: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -82,59 +83,86 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=1542;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=3864;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=xMZm/oO0FtfekjkxZIUS9OIoDKqTmliEkK4gwpH/mIw=;
- b=N77P9AtjJFwy7FzRMr8In7kiy43wJO+O2C4iqOk47TEdDfFmP812nSRahvaUv1gzRqFViN7n8
- qgDCrRgljrVB76lmYlUQv1NGsjwiR6T6qctOUDgUkjgZ+pHvjsdGWoP
+ bh=6i3xu7TGf/l+LjxFU5g9BihOmy63xII6Mxtw0wZfUyA=;
+ b=rrY68kaycmSv/O2ivnyGlkD3uJGH6AZVeLYuyELeeYJdg2EmI+foqlpHKttQkWD3HU0wNrpYG
+ KW4shc8BnIYCnCqo4ySQXCoaLJen0G2zNNIIQs6TJqElv+ivJlUYTrR
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-ARRAY_SIZE almost works here, since array decl is complete.
-But define it locally, named __DDEBUG_ARRAY_SIZE, to avoid
-include conflicts with  boot/<something> on some arch.
-
-no functional change
+Current MAXWORDS in ddebug_exec_query() is too small to accept a legal
+query-command using all 6 keywords.  We *need* 13, but this adds a few
+extra to allow certain errors to fail on subsequent, more meaningful
+grammar checks.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v7: actually use macro
-v5: drop include, it causes redefined probs in /boot/* for some arch.
-v2: include linux/array_size.h, correct commit subject, review after sob
----
- include/linux/dynamic_debug.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ lib/dynamic_debug.c                                      |  2 +-
+ tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh | 14 ++++++--------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 9607121c3072..baf5c0853f45 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -8,6 +8,8 @@
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 9bd6b87f5609..2fa034177268 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -554,7 +554,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ {
+ 	struct flag_settings modifiers = {};
+ 	struct ddebug_query query = {};
+-#define MAXWORDS 9
++#define MAXWORDS 15
+ 	int nwords, nfound;
+ 	char *words[MAXWORDS];
  
- #include <linux/build_bug.h>
- 
-+#define __DDEBUG_ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+
- /*
-  * An instance of this structure is created in a special
-  * ELF section at every dynamic debug callsite.  At runtime,
-@@ -122,11 +124,9 @@ struct ddebug_class_param {
- 		.mod_name = KBUILD_MODNAME,				\
- 		.base = _base,						\
- 		.map_type = _maptype,					\
--		.length = NUM_TYPE_ARGS(char*, __VA_ARGS__),		\
- 		.class_names = _var##_classnames,			\
-+		.length = __DDEBUG_ARRAY_SIZE(_var##_classnames),	\
- 	}
--#define NUM_TYPE_ARGS(eltype, ...)				\
--	(sizeof((eltype[]) {__VA_ARGS__}) / sizeof(eltype))
- 
- extern __printf(2, 3)
- void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...);
+diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+index 1dafeaabc976..446455683df4 100755
+--- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
++++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+@@ -649,8 +649,8 @@ function GOLDEN_RECORDS {
+ #K= 9c405e06fcea50284df82d1ae9692403 FT_grammar_errs.2        dmesg
+ #K= 0b0d9b0e6f4c45c7d75d699fd3b6aa93 FT_grammar_errs.3        dmesg
+ #K= e008644e159c2a9d99a8d0806c06e71e FT_grammar_errs.4        dmesg
+-#K= 11833e6cf8fe8b03869aa4f669b63398 FT_grammar_errs.5        dmesg
+-#K= e85a4b665f5ef141e3f4d4505dec1da1 FT_grammar_errs.6        dmesg
++#K= 5750ed178633f9a68623f928c093d16e FT_grammar_errs.5        dmesg
++#K= 2cd51e5e3c3e2501544524bed0fab620 FT_grammar_errs.6        dmesg
+ #K= 3e1eba65bd936e1276c7e1d76b399595 FT_grammar_errs.7        dmesg
+ #K= e3ac86676e309d4e72ff3da287736c29 FT_grammar_errs.8        dmesg
+ #K= 466d325c23519119f754fa7860bae7c6 FT_grammar_errs.9        dmesg
+@@ -663,8 +663,8 @@ function GOLDEN_RECORDS {
+ #K= bd8d9cf661c9aca54dac93c74cfc1501 FT_grammar_errs.16       dmesg
+ #K= e991391048f2fdffaaed99ba36b787ed FT_grammar_errs.17       dmesg
+ #K= 82d99278f471ebfbf47eeb19898525cf FT_grammar_errs.18       dmesg
+-#K= 3c8d268c94b0bf97e64999654cd840c4 FT_grammar_errs.19       dmesg
+-#K= 1a448ff3f1df9155cc3acf1e124f24f5 FT_grammar_errs.20       dmesg
++#K= f3f088fa7d276981bf2898c048087f76 FT_grammar_errs.19       dmesg
++#K= 984ecc198e0fa9fc91bc31caf7da2a5d FT_grammar_errs.20       dmesg
+ #K= 76c8a33c585d414fcc3f1c8b5ea5b4b3 FT_grammar_errs.21       dmesg
+ #K= 90cfc66e9d61f5c448353b97baa99145 FT_grammar_errs.22       dmesg
+ #K= 37a51dfd6e84cb64b69d3a0e23e68ceb FT_grammar_errs.23       dmesg
+@@ -677,8 +677,8 @@ function GOLDEN_RECORDS {
+ #K= 2e37642dc8aee3d04b8a54a76b3b891c FT_grammar_errs.30       dmesg
+ #K= 593c8b4c41932e3bde564a0008627ced FT_grammar_errs.31       dmesg
+ #K= 85a2a0bee8d0cd10f883aa5477d62efb FT_grammar_errs.32       dmesg
+-#K= 3c8d268c94b0bf97e64999654cd840c4 FT_grammar_errs.33       dmesg
+-#K= 1a448ff3f1df9155cc3acf1e124f24f5 FT_grammar_errs.34       dmesg
++#K= f3f088fa7d276981bf2898c048087f76 FT_grammar_errs.33       dmesg
++#K= 629f6a7e379e02f38c543cdb48e3b84f FT_grammar_errs.34       dmesg
+ #K= d9f0cffb0898c54690735a71b0d4f3bf FT_grammar_errs.35       dmesg
+ #K= 4cf728b6a32043ea5336a14d0c435312 FT_grammar_errs.36       dmesg
+ #K= a11ae3f86f4e5f539fd6168d318f74b4 FT_grammar_errs.37       dmesg
+@@ -693,8 +693,6 @@ function GOLDEN_RECORDS {
+ #K= 551f9801b6008553661453021ae6dfd3 FT_basic_queries.4       "kernel/params.c"
+ #K= 33f7162ac85020894fab9752ef07b89c FT_basic_queries.5       "kernel/params.c"
+ #K= 544d955c3bb9d3c78704f780d91396e0 FT_basic_queries.6       "kernel/params.c"
+-
+-
+ EOF
+         # Read the K-recs and skip those for tests that can't run
+         while read -r line; do
 
 -- 
 2.55.0
