@@ -1,113 +1,126 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B7436A03F
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 01:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0193EF658
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 01:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784596764; cv=none; b=mhlFSNPDqVYrQu8GDFJMF+0P36OxP0boanIFJhCUa5AYdugONr7oXZZNKPSkh2L1i/ovU48k/K3lY7aXxy1vDLKm/8gCB/gSh2W1kzsQxSCP07iwiMeGgoz0yWtHf7R+9qmmg9muIBS8wZSNh2kwjMI8QpL0zKL/JOvTb5RH9VI=
+	t=1784597681; cv=none; b=ZOabiWr0wN0lNAJh9HGtmKEdJF/gdx8AyrK6rTYJG8Qiq33qdTR7Wzfh/nSPsLBBdD9+DY0glgX2I6uHIyIFmBuvt12OVLSjASi/VnKagGaTgjkqy4rVLyzkeApiU85uNMrbZVaZdRQtc+O1wy2ESCegbJkyXDnRvBPe2WSObHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784596764; c=relaxed/simple;
-	bh=ej2Pmo6JrJv1jAdH1F16tD7Xqf2CTr2idSMnSEyP/sA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e/uAu9AYlHVxhpYjCq/OTe9B6MheEQ7tiTH6/dGNp5p4IpNiRP4GO5XjOgU8pA38Lbb0WnG/fsIwn0chjtCX3r/Ecr5HmY7baEp0Vv9+XrYjm5fBeMsR3HD7Q6DXDocoEbr2xUc9h3aiatMajkK2PuifWCFvlV53Icets/23dgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RzDkedaM; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784597681; c=relaxed/simple;
+	bh=mJLkB0+y/24FxCNgyMJp03dtT/BJdht1U42+/E+iqig=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Hpe3kT7Y7gTnFyMheO73/aw5sPtnw/j3VYEdPpiQeTa4Vn5iyUGjh8h3usxZl7spUoP45hUd+3KZn52cGbVWcT+kDJWMroepy+6EZ59hE64NiInY+rX5C8Zf2fN+nlthMVN+3df48m2zyVXdcsg8tJV9bwG35GMIcBk1PFu8k9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VT/tBh2L; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RzDkedaM"
-Message-ID: <f35b0f91-68d3-4f83-9888-7e5c43e4a946@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784596750;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m+f24Sc7UNgN1pE60/Pk0xM4WOjhh3VZu7lRqfXItFs=;
-	b=RzDkedaMTu04BjmWltRlZgNaEfDKY9yaMFggpJXhnyP2Z4LfGD4/tZ3w2iQI8TF4UKDxBM
-	1do6uGU+QKsQEbjBOo0OVzMR3/+wFHDBOY8IJX8MKD9qXkMgknwcHjGnr8gUDezhpfr69K
-	oYduT56J6gGDZ0NCoNqNGU2wb/yA6W0=
-Date: Mon, 20 Jul 2026 18:19:01 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VT/tBh2L"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2caf228a910so84795635ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 18:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784597680; x=1785202480; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=C/tCUmc6Af/w9eCR04YBcQ5lmA7aoPQojmTNJw54oAM=;
+        b=VT/tBh2LY1SZGWTd4AR/GFkm/zcDflV/A0+82fg8aap6XKNuZ5lajAl6uLr4ezBRAj
+         OIo4nVA8NI/4Yvn5Bk1iXLP+n1siVifvJeRj7v89M7WxQsr428RIbCfzs/MHognwdCpq
+         rwrX+H/vTaeloGAaBg/L+9l/9wvFkp7DNyWMAAqTpRY6gFPJiP8hExJNcJV0pIaFtn5+
+         H1rfvyqJETqrWMQGTM07hWxHXJVTPWDPCHj/NxCnFCQo6kLoTl1uhUDExHGhLvuAVqo6
+         Z+mJ+8zeA2YOp0IwIXreOko63ZWAlu2fZBLLI0MekRL5BvWvoz9wbOrdK6tXIVEsGRTL
+         olZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784597680; x=1785202480;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=C/tCUmc6Af/w9eCR04YBcQ5lmA7aoPQojmTNJw54oAM=;
+        b=RJSLzLMnGAg5FW1OrNUfVctA3ECZc5EEm2SuY/6Y5jPuaOzGQGMbS6uIkxP77bqr4j
+         TcomV2XF9hE2gTCPkGo5pRmKn2OeHKvZRBUyM4n/oJB5fgY0Vc/S0ci1fsnzfZoTy1tB
+         +L6FqjWBfNRfFx6joJnlGGAdX+Sl8ZwY1MvlG1Ej0VP8LRHfUrlE1Mouwt2llCnOT+yS
+         aEI4Hnj0759k2UkNCQzzxLBfRx05uJ+sROcKafkg9DEzEonQbgSLNqvB4247L8qoM1AI
+         gdR5qZlVfKAGpRx7pVS3KNdC3DvgtV3vG8y77LBOCnvBFLF1/Xmm8QTMs5Fq7mUrcnCL
+         nETA==
+X-Forwarded-Encrypted: i=1; AHgh+RpUlNEF6gP1Y81yd9NhGURU4vv0rnp5H9RrHwAd4zgO8F/jxJ1z7eQf0rF9wVJGiWHNXVB0kSncK8mZdJkmIh4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu0fCIWBTzuRpRZc7iqIiBQ0BqMn1cWXE/Qyqs3JfvvXWV9Qt4
+	st3BSB8G9EB4MIM59Rn6etMPH8Sf9AJIVKqaUwEuIpzg3cQoTwOV34hR
+X-Gm-Gg: AR+sD11eCtqgUyM6iTIsRIaD+DTZINm5J/C2M09tZIdbSxiOgoGQ9un07jvo6ac2PEX
+	/D9ndHcEAOWRFfadkdYvF+EsPUt6rNPQ3Nz6LBu5g5hq3T+w1S/ozBDma81Z/vTQMLlizlB4UKk
+	NGLoKOhnzTXoUj4l+IehsHkIAnUMLnDgSQ2PGH347pQAHtbv2wB5QU7nIv5bVbXAqmF2Et5G2px
+	LKAz/pkpMfsepwi8RWh7iRMBsri0HypsIJg5tXN84EBF5lEiaopzZLwkpnfBGb34rk7oAjrocJM
+	YFOs+DzHvc2nxhkmf0dDB+0b2TWAjhQqaDB4idH0h1xFmGLsOpbAT8t0/inRqH1PsSI+ZzjKGbG
+	Dh4Y7onampszsOcJugtXvYnO6KmG0uNNtwQ+WX2JUbNScMnrSeOVnRmAikLSZylNG0jB93yRio4
+	IRt68GaUNOymCj64s4xoBPPpTa8WY=
+X-Received: by 2002:a17:902:da85:b0:2ce:93a3:c16c with SMTP id d9443c01a7336-2cf348665f8mr180911895ad.12.1784597679975;
+        Mon, 20 Jul 2026 18:34:39 -0700 (PDT)
+Received: from localhost.localdomain ([112.65.87.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf3448f91bsm65631895ad.8.2026.07.20.18.34.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 20 Jul 2026 18:34:39 -0700 (PDT)
+From: Lian Wang <lianux.mm@gmail.com>
+To: sj@kernel.org,
+	david@kernel.org,
+	ziy@nvidia.com
+Cc: damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	npache@redhat.com,
+	baolin.wang@linux.alibaba.com,
+	ryan.roberts@arm.com,
+	daichaobing@sangfor.com.cn,
+	wangkefeng.wang@huawei.com,
+	gutierrez.asier@huawei-partners.com,
+	zengheng4@huawei.com,
+	kasong@tencent.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	lianux.mm@gmail.com,
+	lianux.wang@processmission.com,
+	kunwu.chan@linux.dev
+Subject: Re: [RFC PATCH v3 0/3] mm/damon: introduce DAMOS_SPLIT action
+Date: Tue, 21 Jul 2026 09:34:30 +0800
+Message-ID: <20260721013430.40303-1-lianux.mm@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260721004755.93824-1-sj@kernel.org>
+References: <20260721004755.93824-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/3] selftests/bpf: Fix make install target
-To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260720-selftests-bpf_fixes-v2-0-b450eda93dfe@suse.com>
- <20260720-selftests-bpf_fixes-v2-1-b450eda93dfe@suse.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260720-selftests-bpf_fixes-v2-1-b450eda93dfe@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026-07-20 4:13 a.m., Ricardo B. Marlière wrote:
-> After "make install", test_progs fails because two files end up in the
-> wrong place:
-> 
-> - bpftool: TEST_GEN_PROGS_EXTENDED flattens it into $(INSTALL_PATH), losing
->    the tools/sbin/ prefix that detect_bpftool_path() expects. Remove it from
->    TEST_GEN_PROGS_EXTENDED and install it explicitly under tools/sbin/
->    instead.
-> 
-> - *.BTF: resolve_btfids writes resolve_btfids.test.o.BTF as a side-effect
->    of the build but INSTALL_RULE never copies it over. Install all *.BTF
->    files alongside the rest of the per-flavor output.
-> 
-> Fixes: f21fae577446 ("selftests/bpf: Add a few helpers for bpftool testing")
-> Fixes: 522397d05e7d ("resolve_btfids: Change in-place update with raw binary output")
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+Hi SJ,
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+On 7/20/2026 5:47 PM, SJ Park wrote:
+> To me, it's still unclear what is the real user impact, though.
+> ...
+> Only after understanding what is the problem and how bad it is, we
+> will be able to think of different approaches and assess those.
 
-Thanks!
+You are right.  I will work with Sangfor to quantify the real impact
+in their production scenario -- what DAMOS action is driven by the
+inflated hot-memory readings, and how badly the monitoring error
+affects the actual outcome.
 
-> ---
->   tools/testing/selftests/bpf/Makefile | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b642ee489ea6..55d394438705 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -324,8 +324,6 @@ TRUNNER_BPFTOOL := $(DEFAULT_BPFTOOL)
->   USE_BOOTSTRAP := "bootstrap/"
->   endif
->   
-> -TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
-> -
->   $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
->   
->   TESTING_HELPERS	:= $(OUTPUT)/testing_helpers.o
-> @@ -1055,10 +1053,13 @@ endif
->   DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
->   override define INSTALL_RULE
->   	$(DEFAULT_INSTALL_RULE)
-> +	@mkdir -p $(INSTALL_PATH)/tools/sbin
-> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(TRUNNER_BPFTOOL) $(INSTALL_PATH)/tools/sbin/
-> +	@rsync -a $(if $(PERMISSIVE),--ignore-missing-args) $(OUTPUT)/*.BTF $(INSTALL_PATH)/
->   	@for DIR in $(TEST_INST_SUBDIRS); do				  \
->   		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
->   		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-> -			$(OUTPUT)/$$DIR/*.bpf.o				  \
-> +			$(OUTPUT)/$$DIR/*.bpf.o $(OUTPUT)/$$DIR/*.BTF \
->   			$(INSTALL_PATH)/$$DIR;				  \
->   	done
->   endef
-> 
+Thank you, David, and Zi Yan for the honest and constructive feedback.
+It made me realize I should have led with the problem, not the
+mechanism.
 
+Let me take a step back, gather concrete data on the problem severity,
+and come back with a clearer picture.  I will follow up in this thread
+once I have something solid to share.
+
+Thanks,
+Lian Wang
