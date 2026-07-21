@@ -1,105 +1,193 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C47C369D74;
-	Tue, 21 Jul 2026 13:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639BE372EC2;
+	Tue, 21 Jul 2026 13:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784641859; cv=none; b=kg1Nk5601/MtXxDCpXjOVwGrKeKZstTD3ArXOkQuZXA2ijqhx6MLioep52cFwQEdmsSoFjWXodTwgRlsK0yFCz3UVIBFFSSIjF19gDi7gelF8WtgwdbK8Ej+8l7O+UC7XkCahLZSZ9ncFnq0snKcU0x6/S33N1qRVy8V99BiGfQ=
+	t=1784641943; cv=none; b=Fvf81snTTONeMq9R+pDlMhyWM8y7ecLcK8AgfDI+elK7UjJL7ytMiTlfxgqfYVhooWD2JgyQFwZmZcXzFtrA41Gj+Kb1feEw5cziISQkIgaYmUz+PyWllX6aktY2ni5f6TA4dl9O1PNmRguRsZU/CfouXZezJZzn7fDKuTDO7rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784641859; c=relaxed/simple;
-	bh=J8G6Y7sMAm2Bfx3daJI65rV5YxrFj8fuSBsz6vRjiRg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uq6oAqSqjnGOtoxxQqZvLFc89ZhXacoETJr5nUgY0u68R/Pl0tMlyYhrwZ9ylx/7v0MLrmvfkne60jkOWOgzXRH0zuOTvesF9n2Sc4aFcrB/NGpUWKd5ycGPxgEW6nw152W8BeNI5jKHZB1DZyjsW51ViqoEV0PRfIyWkIl4Gq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CiJhwPvN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784641943; c=relaxed/simple;
+	bh=2P4lZGxUGYtLyIwWk6vFiHRKo/t+Hk1t+hVzWNCWm+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a56XN9bThKyr+VkZ7ilxe7n6eSxwk3ROp8AaZc+oeem9/g+4Sx2zIiBzsE6YTXH1flq+X3vdhzdcHkTi7ab1ocZNmprh01Q4gOMdYjmY8Ugw6dzo82MdVRWQ7lAUX3lwCrYkYFNm4TR917jn/jdQwjHtvFlzvmH+w6+NtOhlYGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/72xT/o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CiJhwPvN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39A61F000E9;
-	Tue, 21 Jul 2026 13:50:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/72xT/o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8189F1F000E9;
+	Tue, 21 Jul 2026 13:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784641857;
-	bh=XMsV2RHX+b+350X4sElblljKrpETk4dW9a+/EmEks1k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=CiJhwPvNcLKVAyHFeFR++fBeVuA/OwQSeE2WQB3vPBdRRRKAXL24MXSfeuS7u41Uq
-	 lbnrv1BomMo4DCSMI9JLraDwQz954vGMZapj8Tgt+d2F+M+ibA1YWZ7eEhjCewtmPo
-	 7BGjo16PGLyL97ARLnm6HLU2RkhmZNZiRD/UMCHulhkGWTqyeBfaFmPVzo11qfabfu
-	 RAxgAt5iey+pA8dWsETrJKtBWlJYrSC7ZSXEQrjksSsQsr9GSpckD8GEaFX1/TO3V9
-	 xEqs0BYeNpwma2OKepKOcJv/HmzpklZtXIbtw/5Yguj4ApN+mZpDP7bKK7fEcvokFK
-	 BG3tqIm8FPxyQ==
-From: Simon Horman <horms@kernel.org>
-To: equinox@diac24.net
-Cc: Simon Horman <horms@kernel.org>,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	idosch@nvidia.com,
-	dsahern@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	fmancera@suse.de,
-	lorenzo@google.com,
-	maze@google.com,
-	prohr@google.com,
-	netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	furry13@gmail.com
-Subject: Re: [PATCH net-next 8/9] selftests: net: RFC6724 rule 5.5 tests
-Date: Tue, 21 Jul 2026 14:50:51 +0100
-Message-ID: <20260721135051.388459-1-horms@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260714094030.136317-9-equinox@diac24.net>
-References: <20260714094030.136317-9-equinox@diac24.net>
+	s=k20260515; t=1784641942;
+	bh=RaZK4/uxB2KhVDJNW2ZeJFh2hP5pmFvK0FffjAu88PI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=d/72xT/oXv/TB6QjoTEzJixPbZfa8WBCinpxoRj4KHF56so2jsmgMi8UlSszLchc0
+	 VmskP0UPL1HE86D25Kh+6Lua1r3cjU0OtNgLwH1H9W3vDBmUJ3S7UVpKCVEqvpxu7r
+	 Y4YbBGRXNN/QTS7O4KBaRJqJzhLYpxYQ8w8Xfx/zypYYHx5755R9ue2ACdp4ZqUJer
+	 s0cRbIdimcIzS9AYa9sEtnKdf2M3O91OOzbFHdn0ZI2CXYp1fAXOaFLGYZ5Y4Jh6HH
+	 eBfjBl3m7rKa+a8pMQkz63klyqx2kDKQCkSmOyIXJaMbQXWiP11Cc0F6P+Qpx+6Sw7
+	 BM+ElcTn9HISA==
+Message-ID: <4665dd2d-99c8-492c-a4cf-b72028317d0b@kernel.org>
+Date: Tue, 21 Jul 2026 15:52:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] tools/mm: add a standalone GUP microbenchmark
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+ Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Jonathan Corbet <corbet@lwn.net>, Mark Brown <broonie@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260716123226.197736-1-sarthak.sharma@arm.com>
+ <20260716123226.197736-5-sarthak.sharma@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260716123226.197736-5-sarthak.sharma@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-https://sashiko.dev/#/patchset/20260714094030.136317-2-equinox@diac24.net?part=8
----
---- Patch [8]: [PATCH net-next 8/9] selftests: net: RFC6724 rule 5.5 tests ---
-commit ae975bc04160e9173acb7759f9db7580aa0ca14e
-Author: David 'equinox' Lamparter <equinox@diac24.net>
+On 7/16/26 14:32, Sarthak Sharma wrote:
+> Add a command-line tool for benchmarking get_user_pages fast-path
+> (GUP_FAST), pin_user_pages fast-path (PIN_FAST), and pin_user_pages
+> longterm (PIN_LONGTERM) via the CONFIG_GUP_TEST debugfs interface.
+> 
+> When invoked without arguments, gup_bench runs the benchmark subset
+> of configurations covered by run_gup_matrix() in run_vmtests.sh: all
 
-selftests: net: RFC6724 rule 5.5 tests
+To we really need the matrix in there? The matrix was good for selftests, but
+not when using it as a benchmarking tool, no?
 
-This commit introduces a new Python-based test script to verify IPv6 source
-address selection logic, focusing on RFC6724 rule 5.5. It also enables
-CONFIG_IPV6_SUBTREES in the net selftests config and wires up the script in
-the Makefile.
+> three GUP commands across read/write, private/shared mappings, and a
+> range of page counts, with THP on/off for regular mappings and hugetlb
+> for huge page mappings. Restore HugeTLB settings after each hugetlb
+> benchmark run. Validate numeric command-line arguments instead of
+> relying on atoi().
+> 
+> This tool is a mix of reused and new logic. The mapping/setup path comes
+> from selftests/mm/gup_test.c, while the default benchmark matrix matches
+> the benchmark subset of run_gup_matrix() in run_vmtests.sh. The standalone
+> CLI and tools/mm integration are added here and the HugeTLB setup code is
+> shared via tools/lib/mm.
+> 
+> Add gup_bench to BUILD_TARGETS and INSTALL_TARGETS in tools/mm/Makefile,
+> link it against the shared tools/lib/mm hugepage helpers, and ignore the
+> resulting binary in tools/mm/.gitignore. While here, also add the
+> missing thp_swap_allocator_test entry to .gitignore.
+> 
+> Add tools/mm/gup_bench.c to the GUP entry in MAINTAINERS.
+> 
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> ---
+>  MAINTAINERS          |   1 +
+>  tools/mm/.gitignore  |   2 +
+>  tools/mm/Makefile    |  10 +-
+>  tools/mm/gup_bench.c | 482 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 492 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/mm/gup_bench.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 26b06d80ab45..7d121dee9f0f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17024,6 +17024,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	mm/gup.c
+>  F:	mm/gup_test.c
+>  F:	mm/gup_test.h
+> +F:	tools/mm/gup_bench.c
+>  F:	tools/testing/selftests/mm/gup_longterm.c
+>  F:	tools/testing/selftests/mm/gup_test.c
+>  
+> diff --git a/tools/mm/.gitignore b/tools/mm/.gitignore
+> index 922879f93fc8..154d740be02e 100644
+> --- a/tools/mm/.gitignore
+> +++ b/tools/mm/.gitignore
+> @@ -2,3 +2,5 @@
+>  slabinfo
+>  page-types
+>  page_owner_sort
+> +thp_swap_allocator_test
 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 708d960ae07d5..c07d2aebad695 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -53,6 +53,7 @@ TEST_PROGS := \
->  	ipv6_flowlabel.sh \
->  	ipv6_force_forwarding.sh \
->  	ipv6_route_update_soft_lockup.sh \
-> +	ipv6_saddr_rfc6724rule5p5.py \
->  	ipvtap_test.sh \
+^ Does that belong into this patch?
 
-[ ... ]
+> +gup_bench
 
-> diff --git a/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py b/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py
-> new file mode 100644
+I wonder if it makes sense to "git mv" the existing tool (only slightly fixing
+header inclusion to make it compile), essentially removing the old benchmark.
 
-[Severity: Medium]
-Since ipv6_saddr_rfc6724rule5p5.py is added to TEST_PROGS in the Makefile,
-the kselftest framework expects it to be directly executable. However, it is
-being created with mode 100644 instead of 100755. 
+So it would be
 
-Will this cause the test runner to skip the script or fail to execute it
-during automated testing?
+1) Move tools, fixing up includes and removing the gup testing logic+matrix to
+   make it compile
 
-> index 0000000000000..682b39ba991da
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py
-> @@ -0,0 +1,231 @@
-> +#!/usr/bin/env python3
+2) Extend tool by XYZ
+
+3) Add completely new selftest
+
+Because looking at patch #5, there is not really any code reuse there, but I
+suspect there should be some in this patch here when moving instead of copying.
+
+That would make this a lot easier to review.
+
+-- 
+Cheers,
+
+David
