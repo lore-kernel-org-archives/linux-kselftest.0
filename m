@@ -1,454 +1,140 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1560B46D081
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFF346D0A3
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784650537; cv=pass; b=m8K2u0oOcXdc28AiJvlHO5TB79bAtoBYatoE/++uiykhoAQnsCwev22SPdRIf3shSeVTasLEAUz0TK0PgFGbd0zyrrMbpiypi1HWRqm9JZjjnuE+SvYmUZPabDFeS6ZdmxaWPWa9FPQOYTzldMW8+eClrWWLk16NHR1sOE1tJjQ=
+	t=1784651052; cv=pass; b=fOUt/pzLH5xhhnqdx/LVCndG4/BxsXnSVQbMjBUfh+XNuXdMHmRyFrsZgDQZ8latDInenuLFcwkOTY9jw6a5OVAPrWFlu0zF9+U+lC7SHwRtPFcVu0180zPTei/VDbMvuKlYUkllg91EyOwuVFwL/8A9razlLNPe6LkjOumvaos=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784650537; c=relaxed/simple;
-	bh=lTgHdKMh+BlzjJFXdBt8hCdAGNDjBwZXNyyCB+G0i5E=;
+	s=arc-20240116; t=1784651052; c=relaxed/simple;
+	bh=w7TqouPLSZWjqpS6SB6Qduh6O2/m5T9gRHXf3A1juLA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hfCIru3iXNRerpsrc530r9ANzMXqyFjPHiC4CdCoI2g6sXMlsZKlKiPyaFEFmLCPNwWxFftcXkFmOLKFfMXbor7UHMmybOPIcBFq8iTqOiEwNhQcwkNUSxd6ThKyagZc0DhAvm4XIH4JB2uN615aXyc5ZsBjtYQD5vd5GKE+8aA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2PnQFOz; arc=pass smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=SeKHe3N1lQ69JTSy3QGfQ6EU6cyd31MLISibp/7jXP8hoqhNKmR56x0YvEIfKk+TeVlO5KNXDFU6qJH1HUEnIZO9yCwrjxTZ3MYLbs0bJGXjYKuuEwhXuhfsUTAy8NFQM0mYR6Bj3Xg6wNa5bG9b2S4+Vn/5L2IPYiTWQU6LtfU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b1SXohPs; arc=pass smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2PnQFOz"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-49ff971e903so2767531b6e.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 09:15:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784650534; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b1SXohPs"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b2a73da7e1so5610e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 09:24:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784651049; cv=none;
         d=google.com; s=arc-20260327;
-        b=F2eu3f2R1TNC/QT+wxGIoQ+bLW6EsxS4CTY0RLG57qm6ecElxpg2J/2qy+mGD/xCUd
-         5Cxw1upT0oQb7tovWoERA2d5g76/+NLgtXhvnm5AGzowFo55dx9UgbRuLY+P7GvoN6B2
-         JglOjin7khdpXWMvHH6T7tOKBWaCzSmwaO0N0WE88QOJa2XZc8hWLecsUYZYp8AbgyFd
-         wYBXXrmJ5TgUq8SEuHEK37uSQAvNj8uXBMOnrYlA2eKR3xl3qSBbJq3MYTYN/fjiVAQP
-         mBQbxeYFUCsKVDAambS8CI0kyYBzAgASe/dZJqhp3EN5gOIjfecW87Ll2YBkPCL6L8uw
-         jR6A==
+        b=X52qhdPmcryQ2b+hSlYrcz4iimMkd+q3BB1a39Z39h7aCfB6dlacnbd4YBvz9MEe0/
+         qHBNr7YrXNr/yM2llS6/8h6UUX+aGl40cg2XoU5OTZJAT/RdGiEr8F52PrmCLUeqX7LF
+         zhGcHhIxmJEzaQQBp9IuY6AOjIFYFz3k4wBWzdanSZZVzxdgT6+LLPQ4RucM2uMG6YDr
+         d2Cvo/imebESWXGig6FrKu96rmbkOXp1Sn+CuY5YYoreTgPIMDgYjKJGwpVXPoUiAGjg
+         fOQoi8PWz3NwhTY2PCCjxc/WITPOHEnnyoygwyA1uJuZ6AWRfYQWMy+y57O2mNzzzaOk
+         s4xQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=061OgT0DczhRmlwQ4HiKPIppyoeB89N03B5P6SpVAYA=;
-        fh=EVPH5IRVNIDfQU2didIMLKg8PsFF+LV5zhV3wzbSdtg=;
-        b=SdRTe8utN3s61Q21d7nmmOf1OgG3rTFuiV94YAPFrtLSEFCZp+9pFSIBspo0Vij3ZW
-         2Or4qU1HE6m4/z57jHmJYtltDse91Bs5RRP2bslMLAc+vFC+v4WM3Bnp+aE49PvCHeYE
-         GpWjLMsHFR2g/F0BOtEXhpFd40ex0ZBzVsJjky1cIxH4cxUeq6x4+RVBtER2iVF37YQZ
-         eCCYl2rSUjqkT6W7q9Xr0lFrniV7PQhkFnLsary8kxovWFQ2eL7rEIrgyycv5j46sB7/
-         DU8d3k8dC2r2f7vVJk/gTW5BLHhIEdv+APhWRW7WlSnFTfsFPYBRM3qz6qWvtvVzgZ2R
-         7FXQ==;
+        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
+        fh=/4671N+qQe56FatT9WhOePUaHOD3B0P05QPATXF+zUY=;
+        b=HVvJpZoqaW3RXyGDK5oI9+it5l+2LC35gKUkILjr/JN86SQcUQroLeIxaXlzPid0Js
+         W0Z9bI0OedsKgpXcMxKE5YACBagCE0M9T8vIgYEQW4a2LGQTuRhXKyWa/bzl5MdrnGW0
+         /mp7yPtzV/xxDy/zOWsQp793pclmrfQsmWTRiyX5hmO6Rz7NS0MmNVXLQQiOtsHiz1uY
+         oXXv4QI8W0siOo73uqq3w2YzVHB3MT/EdD2DuHL8ZFEdIknY1O1CFRnuF7kr9WY/iV7w
+         IwtdmSYfDh7f+qH2nxXhPKAZmL81fTDkysllYgv/f7WZihW9smAzCMMuPhiWkFbWAoEX
+         2MkA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784650534; x=1785255334; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784651049; x=1785255849; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=061OgT0DczhRmlwQ4HiKPIppyoeB89N03B5P6SpVAYA=;
-        b=H2PnQFOzVNYRzmFYOfoStd9nFwGKD2kofFWsM3xBYo92RQA+9UjLuQyS5sw63py8MJ
-         ooLw2RxaBhUOZ+geKaX4vp4wZLkFsYtATEB1lddY4Sv37TvcyTPCuX1UkOvEIi2jRSWv
-         eXgGUBpb2O+Bkiv1RhGvk6QfvMIzSMsc/zZ6qg0AZB3uaL3MCHG26dfpdwlZDMix4sII
-         90wHL5fU9YaWxK0c3KXYApXrzV2M0SdKZVbaOQFJnSkTumUrEDWnhgqO95cNMx7juoX+
-         Okde3pWqG/yAANLrkFgJLr+u+TftYeh0zyU+vv71ln0jU0D6qtki1YLQzF3Kpivgkd7l
-         9Fcg==
+        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
+        b=b1SXohPsmBhAjNS7tX+7wCgZ4XVGVYt0n+ahCjH1IBuK0f6JnYp+h8QLJBwO6cYclx
+         eWd+Ym4NbONLzFtQX5WleFaDHg2jh8hyrei3JJVBGkUvPV/qGNW2+1HRcazQvnRpgZUj
+         ZBZMckX+v0xZKf6z60vUBYxYaYJhXW1e0IJXGnvcObLnhtloIYt70Z5hi6yzdQ+5UHO/
+         ylpHPCYl1UQUp7lhcnmN8FXKOy7m3RNH18cBvhonDwa+42Q6OLz3jEHZP3GlMLwWpVt3
+         awURqbHbZoYrrkSRcxlq3wAwYb5NDD8L5aeUFq8Aw8vssjqpuj60QQMCvUdWUr3oDndm
+         JEeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784650534; x=1785255334;
+        d=1e100.net; s=20251104; t=1784651049; x=1785255849;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=061OgT0DczhRmlwQ4HiKPIppyoeB89N03B5P6SpVAYA=;
-        b=MIsjgrhaIzrtJdg4O01FaguV/AaYHGorT8y//WxBcJC3xP+TB+n3GAasZoZST7AG6A
-         BHwMVFt+zz5XqoiVbljmppDbJ1Xx4mTWXoHmeeD/4E9qoNHvUzXFysRzSd3owk2vqS3Y
-         FfbLAhF2cIFqpQRvwjCqx3+8nEYR1D+sU5/aCtWUPsOaZ511IfmnYYarFh7v+3FIgf7E
-         ndqD7yPCZLDUGs4ISgEbPnQLFy6XzfyBkxlzZOEQ6Afqeg5n5hBNJqTr9miB+ObmI+y+
-         ewAq7KsgGXTUuqRRqmRTY4RKr2hwhOtzb/gaR5d9XGjXpSMdQfgsZfStwBwqeTW0RU3o
-         bSeQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoGY85WtGHuLsL3m04brIGicDvCyVUMJdo5UwzAZFhJch6KwE90DhKyGUrVmiC29l5FW/p4V0/kHDHFrEPJ0uU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT2BwXf6GbyrxjINeawpcVPgw+BkvZVd9y798RfMqJB7ZBxNDy
-	MK4Rl/0onlazSwRvUNMBYV+4QkQ6m0DKGMpx1G0C0KuCcNJ4BE34Q058LenoNjWITt841jgmoCk
-	Zx/KvuvcuGPJk7AA8mT9h7+bXj5AoFJ8=
-X-Gm-Gg: AfdE7clvPTPdqKDj0YOK5sgcN6OvkR+n8EVZKZOzy3oab0MqXV2PEiPWmKb5hF6CFyz
-	G9NNEjSBgxWCmMUSUAz96JWCBCg+wKP4pMkclIfZs+s2caoVqpLnL7zFfKbyWPwQhGx4+kMWgYg
-	QrvmUfOaipp8G62Zy2JZ88uRwcELzJKtFc4johXONdvDgWZ61LO6HdHQ5wCk0ELn22uHgDJOrn6
-	ubjYVnuYrj3excqQHEJ7GIh+s9XlRJKpZA7sRRnIyqw+S4ZCNU9Ei6gjVmv/og=
-X-Received: by 2002:a05:6808:1719:b0:495:ca1b:7865 with SMTP id
- 5614622812f47-4aaaa45f35fmr115856b6e.11.1784650533635; Tue, 21 Jul 2026
- 09:15:33 -0700 (PDT)
+        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
+        b=OdG6wt82zLyWLsfRSa0i92xcIbG9eJ15h2vR7ZPBNcEt9wFIi90TKEJFm1FE+FciWo
+         k5M8fIA3QvvGZ9jRnLvG4P+wFmOWB54TFajWTSZzPWIeLNLdz0diX38CHycwcfEPguh9
+         Y0UPrtMl8PT8vNmBeeOXuPsqINzlh99V/YFEFmcBr8xK4amGFg+kaDlsbcotRGcEbpgb
+         OGR46z9RFzRQkjCC4jjFbvXqm6liWNumX1Tp79iVCvhVCl2ISmsn4uUUX5LhCZINb1YE
+         /15LqutHEL4AeI7rM+mvO/Fwf1CxyGI/tKeVdZSPTL7Cpb6CMUBlICoQz4gr3x7ZrMyP
+         YzUQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrbo+RRPNmNXYnoWAUIskJx6v7vfYs7z19ohbxoEi0+5OosQxISRvjJp+cS8ePS+XXdtVMq2lnBaepJQkGomIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxphNqYg4N42uwlVeCkRIbO69Wt/0v0aiyITZ7lVVKwAVAMfENC
+	d09MD0za270KRD7AvbAP2X+dDaaxlkbQfwK+LAk3S+Wkasr6Y46O9KZCsawQ39yVT0c5Ww9QDM2
+	/iMcRnmsPO6y6sUcgKDHRR8vY2yiXApEqgr3k3fk=
+X-Gm-Gg: AR+sD10gqv2vNddMWgMaBrFRE/GHiPQ4f5AqOlxUDIe7QTsP74dYKX99drnypYNiF/E
+	EvdOUbXkiWDq7DcMNr3EPeZFgX2LvIuSiaRLDE3yiFFIVarUXxt4H2AO+U/5UVxQo5pNoK5pjTz
+	EucCNqt/PgymwyWRPZQmserzeksbOV8qaJOV3rWG1whn+8TnLeENE35hmXVArdQyaAktE1dMHac
+	59+3QDOg0vu/xBA/bSBR2ocLyQHlWqMZkyMZfrPHp3COz8NsSu+gh90HQ==
+X-Received: by 2002:a05:6512:ba1:b0:5b1:5141:9156 with SMTP id
+ 2adb3069b0e04-5b2a31c4862mr327591e87.9.1784651048492; Tue, 21 Jul 2026
+ 09:24:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260719175857.4071636-1-ap420073@gmail.com> <20260719175857.4071636-3-ap420073@gmail.com>
- <CAHS8izMU4gQCH2v0dcOFkjP6Sxj7RUvC8=Baet=+pFXG24qh7A@mail.gmail.com>
-In-Reply-To: <CAHS8izMU4gQCH2v0dcOFkjP6Sxj7RUvC8=Baet=+pFXG24qh7A@mail.gmail.com>
-From: Taehee Yoo <ap420073@gmail.com>
-Date: Wed, 22 Jul 2026 01:15:21 +0900
-X-Gm-Features: AUfX_myzxRudA1U0N4kTpj_-EeksspXQRshMpn_Oino0jucUwXolnXuNEcZWdbw
-Message-ID: <CAMArcTXba+A+MR2rpODbpdWbHOE3XLi6RfkCsK9fjgWzzTxSow@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 02/13] net: devmem: extend memory provider
- for knod
-To: Mina Almasry <almasrymina@google.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
-	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
-	Felix Kuehling <Felix.Kuehling@amd.com>, Hoyeon Lee <hoyeon.rhee@gmail.com>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
-	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
-	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
-	Yonghong Song <yonghong.song@linux.dev>
+References: <20260714151505.3466855-1-vipinsh@google.com> <20260714151505.3466855-11-vipinsh@google.com>
+In-Reply-To: <20260714151505.3466855-11-vipinsh@google.com>
+From: Josh Hilke <jrhilke@google.com>
+Date: Tue, 21 Jul 2026 09:23:57 -0700
+X-Gm-Features: AUfX_my4kAQgnpjbhryasf2kLrfrl2S4l9xVYW8Rn_Ur_MRpX7wHXzL-Nzt7PMM
+Message-ID: <CAAdrzjsEG2DQoQbNe4aeq8gNF4Td+N6_gTifU6=EzAEuySu7PQ@mail.gmail.com>
+Subject: Re: [PATCH v5 10/20] vfio/pci: Retrieve preserved device files after
+ Live Update
+To: Vipin Sharma <vipinsh@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org, 
+	amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com, 
+	chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net, 
+	dmatlack@google.com, graf@amazon.com, jacob.pan@linux.microsoft.com, 
+	jgg@nvidia.com, jgg@ziepe.ca, julianr@linux.ibm.com, kees@kernel.org, 
+	kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, 
+	mattev@meta.com, michal.winiarski@intel.com, parav@nvidia.com, 
+	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org, 
+	rananta@google.com, rientjes@google.com, rodrigo.vivi@intel.com, 
+	rppt@kernel.org, saeedm@nvidia.com, schnelle@linux.ibm.com, 
+	skhan@linuxfoundation.org, skhawaja@google.com, vivek.kasireddy@intel.com, 
+	witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 21, 2026 at 4:44=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
+On Tue, Jul 14, 2026 at 8:15=E2=80=AFAM Vipin Sharma <vipinsh@google.com> w=
+rote:
+>  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *=
+args)
+>  {
+> -       return -EOPNOTSUPP;
+> +       struct vfio_pci_core_device_ser *ser;
+> +       struct vfio_device *device;
+> +       struct file *file;
+> +       int ret =3D 0;
+> +
+> +       ser =3D phys_to_virt(args->serialized_data);
+> +
+> +       device =3D vfio_find_device(ser, match_device);
+> +       if (!device)
+> +               return -ENODEV;
+> +
+> +       file =3D vfio_device_liveupdate_cdev_open(device);
+> +       if (IS_ERR(file)) {
+> +               ret =3D PTR_ERR(file);
+> +               goto out;
+> +       }
+> +
+> +       args->file =3D file;
+> +out:
+> +       /* Drop the reference from vfio_find_device() */
+> +       vfio_device_put_registration(device);
+> +       return ret;
+> +
 
-Hi Mina,
-Thanks a lot for your review!
-
-> On Sun, Jul 19, 2026 at 11:03=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> =
-wrote:
-> >
-> > Extend the devmem memory-provider path so a knod accelerator can back a
-> > NIC page_pool with accelerator-exported memory (dma-buf), letting the
-> > NIC DMA received packets directly into accelerator memory.
-> >
-> > Signed-off-by: Taehee Yoo <ap420073@gmail.com>
->
-> Changes look fine in general but I do not understand in the design how
-> the page_pool not bound to rx queue would be used. Maybe elaborate on
-> the design in the commit message or cover letter in the next
-> iteration.
->
-
-Sorry, this is not clear from the commit message or cover letter.
-
-We added a custom provider type for page_pool that allocates GTT memory
-- host memory that is also mapped to a GPU VA, which lets us copy between
-VRAM and host without a separate staging buffer. So when the XDP verdict
-is XDP_PASS, or on the IPsec path, this page_pool is used for the
-allocation. To configure the page_pool with our KNOD backend, we
-define mp_ops/priv in knod_core.c and set them directly as the
-page_pool's mp_ops/priv, rather than going through netdev_rx_queue.
-
-As a result, each combined channel has two page_pools: a NETMEM
-page_pool created by the device driver to refill the RX ring through
-the normal netdev_rx_queue path, and one CUSTOM_PROVIDER page_pool
-created and managed by knod core for the XDP_PASS / IPsec allocations.
-The latter is created per channel by knod core, so it is not bound
-through netdev_rx_queue.
-
-We will describe this distinction in the next revision.
-
-> > (cherry picked from commit d511a8cb3e229f8f5cf060985880d45bd384db87)
->
-> I guess remove unintended cherry-pick tag.
->
-
-Yes, we will remove it.
-
-> > ---
-> >  include/net/devmem.h                    |  58 +++++++++++++
-> >  include/net/netmem.h                    |   9 +++
-> >  include/net/page_pool/memory_provider.h |   4 +
-> >  include/net/page_pool/types.h           |  23 +++++-
-> >  net/core/devmem.c                       | 103 +++++++++++++++++++-----
-> >  net/core/devmem.h                       |   7 +-
-> >  net/core/page_pool.c                    |  22 ++++-
-> >  7 files changed, 198 insertions(+), 28 deletions(-)
-> >  create mode 100644 include/net/devmem.h
-> >
-> > diff --git a/include/net/devmem.h b/include/net/devmem.h
-> > new file mode 100644
-> > index 000000000000..f1c3895d7833
-> > --- /dev/null
-> > +++ b/include/net/devmem.h
->
-> Try to keep only include/net/netmem.h and net/core/devmem.h rather
-> than add an include/net/devmem.h
->
-
-Thanks. We will keep the declarations in include/net/netmem.h and
-
-> > @@ -0,0 +1,58 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> > +/*
-> > + * Device memory TCP support
-> > + *
-> > + * Authors:    Mina Almasry <almasrymina@google.com>
-> > + *             Willem de Bruijn <willemb@google.com>
-> > + *             Kaiyuan Zhang <kaiyuanz@google.com>
-> > + *
-> > + */
-> > +#ifndef _NET_DEVMEM_H
-> > +#define _NET_DEVMEM_H
-> > +
-> > +#include <linux/dma-direction.h>
-> > +#include <linux/err.h>
-> > +#include <linux/types.h>
-> > +
-> > +struct device;
-> > +struct dma_buf;
-> > +struct dma_buf_attach_ops;
-> > +struct net_device;
-> > +struct net_devmem_dmabuf_binding;
-> > +struct netlink_ext_ack;
-> > +
-> > +#if defined(CONFIG_NET_DEVMEM)
-> > +struct net_devmem_dmabuf_binding *
-> > +__net_devmem_binding_create(struct net_device *dev, struct device *dma=
-_dev,
-> > +                           struct dma_buf *dmabuf,
-> > +                           enum dma_data_direction direction,
-> > +                           const struct dma_buf_attach_ops *importer_o=
-ps,
-> > +                           struct netlink_ext_ack *extack);
-> > +int net_devmem_bind_dmabuf_to_queue_direct(struct net_device *dev, u32=
- rxq_idx,
-> > +                                          struct net_devmem_dmabuf_bin=
-ding *binding);
-> > +void net_devmem_unbind_dmabuf_direct(struct net_devmem_dmabuf_binding =
-*binding);
-> > +#else
-> > +static inline struct net_devmem_dmabuf_binding *
-> > +__net_devmem_binding_create(struct net_device *dev, struct device *dma=
-_dev,
-> > +                           struct dma_buf *dmabuf,
-> > +                           enum dma_data_direction direction,
-> > +                           const struct dma_buf_attach_ops *importer_o=
-ps,
-> > +                           struct netlink_ext_ack *extack)
-> > +{
-> > +       return ERR_PTR(-EOPNOTSUPP);
-> > +}
-> > +
-> > +static inline int
-> > +net_devmem_bind_dmabuf_to_queue_direct(struct net_device *dev, u32 rxq=
-_idx,
-> > +                                      struct net_devmem_dmabuf_binding=
- *binding)
-> > +{
-> > +       return -EOPNOTSUPP;
-> > +}
-> > +
-> > +static inline void
-> > +net_devmem_unbind_dmabuf_direct(struct net_devmem_dmabuf_binding *bind=
-ing)
-> > +{
-> > +}
-> > +#endif
-> > +
-> > +#endif /* _NET_DEVMEM_H */
-> > diff --git a/include/net/netmem.h b/include/net/netmem.h
-> > index bccacd21b6c3..3ddfbd37500f 100644
-> > --- a/include/net/netmem.h
-> > +++ b/include/net/netmem.h
-> > @@ -127,6 +127,15 @@ static inline void net_iov_init(struct net_iov *ni=
-ov,
-> >         niov->type =3D type;
-> >  }
-> >
-> > +/* Global page index within the dma-buf, accounting for multi-chunk
-> > + * scatter-gather layouts where each chunk owner's niovs start at 0.
-> > + */
-> > +static inline unsigned int net_iov_binding_idx(const struct net_iov *n=
-iov)
-> > +{
-> > +       return (net_iov_owner(niov)->base_virtual >> PAGE_SHIFT) +
-> > +              net_iov_idx(niov);
-> > +}
-> > +
-> >  /* netmem */
-> >
-> >  /**
-> > diff --git a/include/net/page_pool/memory_provider.h b/include/net/page=
-_pool/memory_provider.h
-> > index 255ce4cfd975..4b58a9702fb7 100644
-> > --- a/include/net/page_pool/memory_provider.h
-> > +++ b/include/net/page_pool/memory_provider.h
-> > @@ -23,6 +23,10 @@ bool net_mp_niov_set_dma_addr(struct net_iov *niov, =
-dma_addr_t addr);
-> >  void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov =
-*niov);
-> >  void net_mp_niov_clear_page_pool(struct net_iov *niov);
-> >
-> > +void page_pool_provider_set_netmem(struct page_pool *pool, netmem_ref =
-netmem,
-> > +                                  dma_addr_t addr);
-> > +void page_pool_clear_pp_info(netmem_ref netmem);
-> > +
-> >  int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
-> >                       const struct pp_memory_provider_params *p,
-> >                       struct netlink_ext_ack *extack);
-> > diff --git a/include/net/page_pool/types.h b/include/net/page_pool/type=
-s.h
-> > index 03da138722f5..3e866f249768 100644
-> > --- a/include/net/page_pool/types.h
-> > +++ b/include/net/page_pool/types.h
-> > @@ -31,8 +31,16 @@
-> >   */
-> >  #define PP_FLAG_ALLOW_UNREADABLE_NETMEM BIT(3)
-> >
-> > +/* Driver-managed pool with a directly-supplied memory provider, not b=
-ound to a
-> > + * netdev rx queue. Setting this flag requires page_pool_params.mp_ops=
- and
-> > + * .mp_priv to both be set.
-> > + */
-> > +#define PP_FLAG_CUSTOM_MEMORY_PROVIDER BIT(4)
-> > +
-> >  #define PP_FLAG_ALL            (PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV=
- | \
-> > -                                PP_FLAG_SYSTEM_POOL | PP_FLAG_ALLOW_UN=
-READABLE_NETMEM)
-> > +                                PP_FLAG_SYSTEM_POOL | \
-> > +                                PP_FLAG_ALLOW_UNREADABLE_NETMEM | \
-> > +                                PP_FLAG_CUSTOM_MEMORY_PROVIDER)
-> >
-> >  /* Index limit to stay within PP_DMA_INDEX_BITS for DMA indices */
-> >  #define PP_DMA_INDEX_LIMIT XA_LIMIT(1, BIT(PP_DMA_INDEX_BITS) - 1)
-> > @@ -54,11 +62,11 @@
-> >   * would have to take a slower code path.
-> >   */
-> >  #if PAGE_SIZE >=3D SZ_64K
-> > -#define PP_ALLOC_CACHE_REFILL  4
-> > +#define PP_ALLOC_CACHE_REFILL  256
-> >  #elif PAGE_SIZE >=3D SZ_16K
-> > -#define PP_ALLOC_CACHE_REFILL  16
-> > +#define PP_ALLOC_CACHE_REFILL  1024
-> >  #else
-> > -#define PP_ALLOC_CACHE_REFILL  64
-> > +#define PP_ALLOC_CACHE_REFILL  4096
-> >  #endif
-> >
->
-> I'm guessing this is just a workaround/optimization. You need a proper
-> change for this, maybe make it configurable arguments when creating a
-> pp or something.
->
-
-Agreed. We will rework this as a per-pool setting instead of changing
-the global page_pool cache size.
-
-> >  #define PP_ALLOC_CACHE_SIZE    (PP_ALLOC_CACHE_REFILL * 2)
-> > @@ -67,6 +75,8 @@ struct pp_alloc_cache {
-> >         netmem_ref cache[PP_ALLOC_CACHE_SIZE];
-> >  };
-> >
-> > +struct memory_provider_ops;
-> > +
-> >  /**
-> >   * struct page_pool_params - page pool parameters
-> >   * @fast:      params accessed frequently on hotpath
-> > @@ -83,6 +93,9 @@ struct pp_alloc_cache {
-> >   * @queue_idx: queue idx this page_pool is being created for.
-> >   * @flags:     PP_FLAG_DMA_MAP, PP_FLAG_DMA_SYNC_DEV, PP_FLAG_SYSTEM_P=
-OOL,
-> >   *             PP_FLAG_ALLOW_UNREADABLE_NETMEM.
-> > + * @mp_ops:    driver-supplied memory provider for a pool not bound to=
- a
-> > + *             netdev rx queue (NULL to use rxq->mp_params instead)
-> > + * @mp_priv:   context passed to @mp_ops
-> >   */
-> >  struct page_pool_params {
-> >         struct_group_tagged(page_pool_params_fast, fast,
-> > @@ -99,6 +112,8 @@ struct page_pool_params {
-> >                 struct net_device *netdev;
-> >                 unsigned int queue_idx;
-> >                 unsigned int    flags;
-> > +               const struct memory_provider_ops *mp_ops;
-> > +               void *mp_priv;
-> >  /* private: used by test code only */
-> >                 void (*init_callback)(netmem_ref netmem, void *arg);
-> >                 void *init_arg;
-> > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > index 957d6b96216b..9e21cffc9643 100644
-> > --- a/net/core/devmem.c
-> > +++ b/net/core/devmem.c
-> > @@ -121,12 +121,9 @@ void net_devmem_free_dmabuf(struct net_iov *niov)
-> >         gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
-> >  }
-> >
-> > -void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *bindin=
-g)
-> > +static void
-> > +net_devmem_binding_unpublish(struct net_devmem_dmabuf_binding *binding=
-)
-> >  {
-> > -       struct netdev_rx_queue *rxq;
-> > -       unsigned long xa_idx;
-> > -       unsigned int rxq_idx;
-> > -
-> >         xa_erase(&net_devmem_dmabuf_bindings, binding->id);
-> >
-> >         /* Ensure no tx net_devmem_lookup_dmabuf() are in flight after =
-the
-> > @@ -136,6 +133,15 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dm=
-abuf_binding *binding)
-> >
-> >         if (binding->list.next)
-> >                 list_del(&binding->list);
-> > +}
-> > +
-> > +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *bindin=
-g)
-> > +{
-> > +       struct netdev_rx_queue *rxq;
-> > +       unsigned long xa_idx;
-> > +       unsigned int rxq_idx;
-> > +
-> > +       net_devmem_binding_unpublish(binding);
-> >
-> >         xa_for_each(&binding->bound_rxqs, xa_idx, rxq) {
-> >                 const struct pp_memory_provider_params mp_params =3D {
-> > @@ -151,6 +157,47 @@ void net_devmem_unbind_dmabuf(struct net_devmem_dm=
-abuf_binding *binding)
-> >         percpu_ref_kill(&binding->ref);
-> >  }
-> >
-> > +/* Bind/unbind variants for in-kernel offload importers that drive the=
- rx
-> > + * queue lifecycle themselves. The mp_params are poked directly, witho=
-ut the
-> > + * tcp-data-split/XDP guards or the queue reconfigure that the netlink=
- control
-> > + * plane applies through netif_mp_open_rxq()/netif_mp_close_rxq().
-> > + */
-> > +int net_devmem_bind_dmabuf_to_queue_direct(struct net_device *dev, u32=
- rxq_idx,
-> > +                                          struct net_devmem_dmabuf_bin=
-ding *binding)
-> > +{
->
-> The LLM says in this function you need to check if the queue is
-> already bound to a devmem tcp memory provider.
->
-
-Right. We will reject the bind if the RX queue already has a memory
-provider.
-
-Thanks a lot!
-Taehee Yoo
-
-> --
-> Thanks,
-> Mina
+Remove extra newline after "return ret"
