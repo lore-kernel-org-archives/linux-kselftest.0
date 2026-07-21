@@ -1,52 +1,35 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C151432E81;
-	Tue, 21 Jul 2026 07:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098583CDBDD;
+	Tue, 21 Jul 2026 09:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784620311; cv=none; b=HLESpKeCWYgzkPX9d74AAWIgGwjc8MbpBUeqaf4vTMoEom16ZAx+a7GNuI63+IGK3erMZI0Uo5jgk6EjGykj0SVV3wlI9F0wzRrGZijSiQcEnal6e0mydeJbsBIOx7v/9Lwntjnsjnih3vecbC4qS2ty2qXaa2Q3OyQUZ77Mkzk=
+	t=1784625644; cv=none; b=OomrObydaEFhQZnZNI19FD07LFoggjvZEERqrqD8K5wIU3Qd16GTlTFiPTu7vRnhmZ0+pq0WMewmK/3lMoPkLwAaZirJJYDk4bhLM9N/y9Cq8iA9P7X2Aer8KkniTdcbuMJZUxZqjCtmZy4+0vmLfj3QaGfRCVvAVBDbneHXGfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784620311; c=relaxed/simple;
-	bh=Wb2fFTi8+Zj91Iz38Ywph0bejrolCdCFBaMmt+Ihn6Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BLae/R6099Q5rgOJ6d9O/ZpLP6ns/sjh5FV3dXkWXs12v6GmaWQOYsW+Qan097uAh1Zi+Ww/xPaaS0m74z5wJDtSYM5t7U1qLeHo9kjkX95q8nAr6oaZpjNsKjJ7xfhrBZ1Z5EsBTi04MEGxPKX2tZvpqiZByQcN6gR1nME90Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Zn6TboQf; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1784625644; c=relaxed/simple;
+	bh=p3zKmaZFPywJoIWwYfLagtwe/rExwCK1TmtNvg7iyRk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ATygKN8tzXt/Vt1Ig7q8z4wT9aJW9bY2MRZSdvZE+L5jxtffKRftuBHZ6dxJPHbWoLM1PFeGdNrTXc3LJX1rbhi6CfzKN2N9LUwFwslYNY+wCnGrrV8RvrgqkYbEjtWjTL2nLGGQr1bAOXRUz+QK11vrXLCo1R5MqtqR9wBsUxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCQHbLk+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Zn6TboQf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:
-	Date:Message-Id:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=Wb2fFTi8+Zj91Iz38Ywph0bejrolCdCFBa
-	Mmt+Ihn6Q=; b=Zn6TboQfDzpGE0FRl1lN/z3n0BTMqyaaAl69sda7N3I+Sdryaa
-	oeWjNN5ILBSv4N32oomlLUMEnrUlRjYvTqeTI3gf2V0HbljwA+S1LAWao4TbTDpW
-	37GI/HY3HO5bZ+AUr6qIyq8ie540bd+1uJmSq5zBWYAkzzAv7nLcC4/UQ=
-Received: from c9a6c405b3f2.. (unknown [202.112.238.121])
-	by web3 (Coremail) with SMTP id ygQGZQD3xRT0JF9qlKwfAA--.46135S2;
-	Tue, 21 Jul 2026 15:51:25 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	chenyy23@mails.tsinghua.edu.cn,
-	daniel@iogearbox.net,
-	emil@etsalapatis.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	shuah@kernel.org,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next 1/2] bpf: Preserve stack frame number for commuted arithmetic
-Date: Tue, 21 Jul 2026 07:51:08 +0000
-Message-Id: <20260721075108.2889436-1-chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <a469d5344126d38b5151b9bd044ce83320875517.camel@gmail.com>
-References: <a469d5344126d38b5151b9bd044ce83320875517.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCQHbLk+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6D71F00A3D;
+	Tue, 21 Jul 2026 09:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784625642;
+	bh=ZAW1qs5D9yO0/G/RYt97dc6BMFl9XdJHCu78sCCSM4U=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=PCQHbLk+ujsPN5h+C/T0vqzllW73ar5YvK7HrFXlQo9nW1i99NRnd2Rl1Fvm0V6vN
+	 65CAnVXC+vUaGlm9dEZVy5fdYltUYF+zAAe7/AjomMnqfVZ7If9lpwG1LOmnSlaTeo
+	 Cdnrn/d+bUaI0jSMf7sSAewdnrko5/ibFRLbElYnZsPtUZRETa6vzqNlNwv+PccOTW
+	 fYcJhOKzikiWrj3i3LMAP+wmsrClcaT9A12PyIw64mAnAMvdHk5MEnMqIhFF4H22Px
+	 PvPptKtQ4MG1awWgjfLMLgbsEr/Xj8LSrc1GaUAClcSsqt0FDY8yVFR+2zJsHHG2Z9
+	 AXqmi2LVNZzQw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A263924A46;
+	Tue, 21 Jul 2026 09:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,39 +37,43 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:ygQGZQD3xRT0JF9qlKwfAA--.46135S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrXFyxGrWUGryxtw1ftrWDurg_yoWxXFX_Xa
-	95K398G34kuF4qvF13AF47XrWkGrySgr1fA34jqr42k397Xr45WrnYvryUWw1xG34FqrWD
-	Cr1fKF4rWr129jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbD8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-	Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-	YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwV
-	W8CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUvQ6LUUUUU
-	=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Subject: Re: [PATCH net-next v6 0/2] udp: fix FOU/GUE over multicast
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178462561238.179594.6393458735106930656.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Jul 2026 09:20:12 +0000
+References: <cover.1783372173.git.littlesmilingcloud@gmail.com>
+In-Reply-To: <cover.1783372173.git.littlesmilingcloud@gmail.com>
+To: Anton Danilov <littlesmilingcloud@gmail.com>
+Cc: netdev@vger.kernel.org, willemb@google.com, davem@davemloft.net,
+ dsahern@kernel.org, edumazet@google.com, kuniyu@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
 
-Hi Eduard,
+Hello:
 
-Totally agree.
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-I'll respin v2 to preserve the full pointer state instead of copying only selected fields, and use a temporary scalar offset register for the commuted `scalar += pointer` case as you suggested.
+On Wed,  8 Jul 2026 03:35:02 +0300 you wrote:
+> UDP encapsulation (FOU, GUE) has never worked correctly with multicast
+> destination addresses. When a FOU-encapsulated packet arrives at a
+> multicast address, it enters __udp4_lib_mcast_deliver() /
+> __udp6_lib_mcast_deliver() which call consume_skb() on packets that
+> need resubmission to the inner protocol handler, silently dropping
+> them instead.
+> 
+> [...]
 
-I also re-checked the history before adding the `Fixes:` tag. The tightest candidate I found is:
+Here is the summary with links:
+  - [net-next,v6,1/2] udp: fix encapsulation packet resubmit in multicast deliver
+    https://git.kernel.org/netdev/net-next/c/3cb8d4b9bfeb
+  - [net-next,v6,2/2] selftests: net: add FOU multicast encapsulation resubmit test
+    https://git.kernel.org/netdev/net-next/c/e5382133c51c
 
-`Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")`
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-That commit introduced the unified `scalar += pointer` handling and the pointer-state inheritance path. `f4d7e40a5b15` added the multi-frame stack model later, so it is related but less precise as a `Fixes:` target.
-
-Will send v2 soon.
-
-Thanks!
 
