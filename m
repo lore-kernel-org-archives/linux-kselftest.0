@@ -1,348 +1,189 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DD33BADA5
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4751C48165D
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784630377; cv=pass; b=KhWSxds/bt22zgQZhNb3wstEgwnzf9+ZKA8TIBHlgUhnuGb8fz4oZTz1sYQex72jdlC0ulJxzuRmi7x08oLD6lRYuX2tdp+I2wTOMDckDK6YMj9eWVAm2buNKkG4O/8B11aGYitrzxiBnnH7OGF5FojZn51j8eftqSctOvXb4jo=
+	t=1784630379; cv=pass; b=RYunPSUrxGXFNMeCBUAZE6USuYNuodk76Yjl9R7Gdbc4UCjJQep97jY/w4xRj8kpGZexTDOFHF5MtEB/7Q9E8AjDE2oWMB5Tmju7+uJuH46fTxYuWcdyl5bUjBYjua3GZkWNmPnWFwcUH5aPpxR6JN7jDt2oJBEeoSBUBkyFKz4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784630377; c=relaxed/simple;
-	bh=XZGHCmg6TBJYjgMIect/KToxzi5RrtqxOX1ZKL7mmsQ=;
+	s=arc-20240116; t=1784630379; c=relaxed/simple;
+	bh=q2S9wAy3pcTDclyoRWq2ZXiivaO0b40nJXuVk3VpHtA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d/s+EhBAKC8nTwGR5R2TSHFlQo1Ak9yhA88wOyf88JeCY+tuCO/5hwgN4ZisxHlauCtbcJyXjwqxF+X6joYlet4mVuMVMJGKu+5WLXiq5rTUJDc+ZCL6Ig4Gx0nCW+mzMiEpwsgijDHa13VbK9yFiCz0r7FA0Smk1sb9ioGxH5k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfN3/aEE; arc=pass smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=ttqQLNOLc6oDvWTvgQuOH9rVR/jIYJqtghbFZSGHaPefkNmb05CvHySnIxbuzrpnpFEf8Z3YqMyRMmVAcJVMXt48FDm8EhO54scBfH9IcJFZ8yk8uUfnfMpR9PcAbwdob4LHoihJ7Cv3fYUv8MCzEwne5d/J3aXvb7n/QseB4x4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UPXieIy3; arc=pass smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfN3/aEE"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-698acd36d67so20434286a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 03:39:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784630374; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UPXieIy3"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-667b0ced2d3so12397573d50.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 03:39:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784630376; cv=none;
         d=google.com; s=arc-20260327;
-        b=c42kPvZhAtTNyeqruJfZhWjXvw5DNjLWsxSZYJhBSJTDNWw/FdNogs7evHSKaKFuj2
-         vubbqNC0aISUXlJkB4M3Elb+y2jMWap9/2XaFOIi63BPpc5AJw7bhWhtHwpsuBIY7LIT
-         swlKtVGg7bneoW9cYAa/c02Rarm1K93fZOV9zyaJlDDJ4JbuC7eYaG3f539ZO0iLDJaJ
-         jQIr3GvfDfuQ8PlJ5IA7x83pj95xXnzYQDvvgSPfroNlo5VKVT2oqCnTHfOwUzyQ5Rak
-         arfE3vP6y+ghTGRrwl6z7nTb8g7m3KHm+Q8bmCQ8C0JKpVIRqtknsn5CUgtextCgxpdH
-         eeCg==
+        b=QU11+fxekZ60lwAZ7nDZ6soPi72I+KxFBrVTFcCjVaiV/Kh+/o0mQ6LCn7/2nru7Q0
+         HrWaBx5JIffvAW035MDsnMuN690a4kRgIjLYeAFyBrWrEVpIHszd6LWZwPg0zQGlN9e0
+         S018i6z2SsUTew6d5vpMWMYfCjXKf6wCuA9daZDJs/W67FGFbKGrbe0gZfY4wecFv38T
+         lc9UZ53zshCydDetmYnZm8c/8kXxwpc09QwLEoa+SFfP/JSGq7oqEkUYCRQ2okyNs/H2
+         KVwzb0QEkb83OKNCrHe4SvkN5Cyvdej4yFMzvjeUloFlFv7zWDp9UkDobEAJnc2a/gI9
+         VMLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+juJHzVoFamh7S+C2xEheDkvInVCn4UAMogNf2TTBRY=;
-        fh=HsZ0vEHr3VwgW10DxuF8goLvkRuz39ZpuEtEWEXS1zk=;
-        b=a4qEv0/G+FLkrX9VJTKo1w5LO7iRSaGIsJ9PE2oOkxQp0meP9z1F97/viNGyTA7s3G
-         q3dMQUZVFRj1SCEZ29yg/4XbpUd8H1BEWVlrhFzLoTKZ6wNvxG7cn3LzJ9NjBMqAmnMQ
-         xtreWhcOfgbQlA1aWZjJz3nWp2mE+iFSQd5P3jlWw794C0jo0ovnS4RH52cki1RQWHgw
-         8qkW+2QI+bzaK7cl0/Ww4Cs5WeL0RbG8qrqRG2ksND4dQHNW/U7Qe+notk8205H+0797
-         iIdGLR+ViKUoOhlCXpYy7O0ErUzbgfSQsUy0n+lv/iKtd3Lb8hACftkuA3sbccGw6GG8
-         638w==;
+        bh=0HeOpmB3W7tkmJB+bdsI5V2c8gp/aeBd8FA8ZZtHKXU=;
+        fh=I+LHasfwvNj9exyDhtWcI5QgMjKl4Ymc5krOZyAQ/AY=;
+        b=BoAlfK6LvVwYOMLySbg2smz1H7PsQj2y11XYTGw6HWC/7q7g/D+Se3Kz5OCYSyA6Tz
+         nL2GOVWNyIWUqL2BCwBysxMW0YeVZKE2xD4kbrRz0x1rNcSBFMUykpE62HVQz32zY1L5
+         betM7a1Y7hjBn1wVUqEoNXCgO1kP6nZ5Zc3l4Olqm85P6YimtJM37iaK+Ug6bNsOmtdB
+         OoY2SyyscunjeWykniOz80XNnUx27kzIi8yIkKhUPbRH5f3VDslugMFRLy+C0rFwL0Dt
+         Wfs3NrCln+wF3k3c5WsQAME2mgF+XUUeqZEJ4+DehvgXL17owWtkQ7xXQ3xsvXXMWJVx
+         QPBQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784630374; x=1785235174; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784630376; x=1785235176; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=+juJHzVoFamh7S+C2xEheDkvInVCn4UAMogNf2TTBRY=;
-        b=AfN3/aEEPr/tG1mf0KqI1xXHnbIt04tmQNtj5ZYcW3mgihynhHv54tR3f+5D1mguEF
-         vX5jeCi+vLZvUhZUX/K415uWkMS4VsUMZnririoRX/vR9AsDhSvfBB+xCx39//ov/DjW
-         CubxFsi1TeJTTUOCWhLH6xo0wqj6L6QSUT1eVDk6jcBqH5mc0wy6Ox6qDECpLxsPDL6I
-         AnYgDDWZ2HzuI8YxzqMn+e/5i4OIU5KMXXOrGOkkKNact94W04WcKvX75lxZUdtpAMU5
-         t9ISdcY9R1ICFNk6wx2okqmuvg3TZ7MLReM+I+BG0iffPocZHw0RZfLVh1SG9VbVerBS
-         G/pQ==
+        bh=0HeOpmB3W7tkmJB+bdsI5V2c8gp/aeBd8FA8ZZtHKXU=;
+        b=UPXieIy3/y90TyfHyXbtdiDA8IoiS7DCzdFqUHDG9NtEJ5SR1BNj6cMCh9sorCzlkO
+         bmGdkhkGSYIfNmFH5ajpXVN6tk4zE5S8R0J4QrigqLRBuQFciWFlECPQ/63MDh0ZPXDN
+         OdEaRiZNKriwgTKqkeX9xB7B/MA6vZBoZ7usBhszL1jTFdAQF1aYdV/VnSbXfAz/ud1T
+         QNsaGl3WDUKbqrjwch15OabKzi7z5uxkFNP/NWV2lrxdy+tHfn06XahDZAHKMm6TESQy
+         n/jgDqwTOM8Zpu7Fse5W3Imy3mQAfc5WJOYvRdhqKKdU6V+9ZtFjLRVpIzMYon5++U7h
+         cQcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784630374; x=1785235174;
+        d=1e100.net; s=20251104; t=1784630376; x=1785235176;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+juJHzVoFamh7S+C2xEheDkvInVCn4UAMogNf2TTBRY=;
-        b=PvQghAPeq/JHwpW+up7qvEccuvBq/tNxqT/AXqxc6/NGHY4363YJi80lIekiYtpWI/
-         d2yOA7qiHCTYr4njNmsfNKtw3XhoIl1IOHwq65jqsUb8J988RkMmH9ZF16B8omMgr47/
-         uuNx5jWmko1ZW/MJky8oyxehlidp+Gq4HXGAQinrWBmKEThBxlFHxOt5qwKg9Ob3ngl+
-         ngeBvz4E+shNyBkDH7lK8Htwa7c2r/0SSfthWuagLiuvddLAnQpHMhIkc4S/4ouX9s1t
-         g2HOzXhTkGHyW5DA54RwI78y5HttpClt0c0XdKspqBZ/S1tviEml0Vmge92VOaWe511q
-         2NTw==
-X-Forwarded-Encrypted: i=1; AHgh+RrjXRCBrpMdDXmdotrkIbZRpVgjlpxmHPsFZ8Z80M3L41Y8PKdbUyKV/bRilyEzXS9w71rU8XFQDRcpS7Lk+CI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoziARSFGCiiZyWbfOtdmj8vO7KPy2BuIWGrmLYcGhli4PU6Qw
-	jxBto9L4jMIignXqxvZtEiG3VVim/rZbQtqX1kcTWBWmRkxbJ6GvMpB1umbn7ZpdsUkAi2aFZSq
-	lxEIiaRCxLl4uXG0hwZOaxJ8+wptTsXs=
-X-Gm-Gg: AR+sD12maE1SUrhjao6ilQLjbTBB9R98b6AnMZT9l0drXVx6FDFgiXO2CwTTfk+KZy6
-	Ll0weKu/2+v6Yqki/ObZzQclsP7CIvac2cFeNhpjB9nNcNW1AvdXmvBRb54+uLTSScz0/aYVw4d
-	ga2cM0V0LNmdD2Ys7oc6gfxPFOXPPxH9PzF9Hi6wCl6++F6hPCTo37NaGp0bCQU6ZjsEr5v9x3r
-	/iiqrUUgXymyeS+9TiPYZH8SR9XQutVt/B8JuvvI8wLMxEtVAz39KGKyARSBqg=
-X-Received: by 2002:a05:6402:2547:b0:698:ad4b:abe1 with SMTP id
- 4fb4d7f45d1cf-69e652b057emr6842578a12.27.1784630373641; Tue, 21 Jul 2026
- 03:39:33 -0700 (PDT)
+        bh=0HeOpmB3W7tkmJB+bdsI5V2c8gp/aeBd8FA8ZZtHKXU=;
+        b=avCwbBz84kHCe6vCH9L/TM6gBwxhUBc9ogytPF0SNLyJDtnGd+JfmWROU0Aye5nrWS
+         E8xSNa8ukPlcFgOcJUg4CvuOsgwluizskkfFzO7BwpqNM6uIcWL8nERcBB9DQiUCxFxm
+         13dha4VxkXmFxcjxxFG3pkiigM5xQugHCF4wMdKgjgLSg/8ZoGBwWyovDIYM8YGxBNCU
+         jkQenRXC6m5g0j7tIp2U8zmsOOduiB5NJhRY2ho/8ffPs3LRF59wprflZIcO3kmNcBcf
+         OgVDFOtfcjZ9zQ4gJTC8E9kEHBvBpXRTcT0549ADB1H5wVAcMBcAGMT5PEX0/Xk0yyN5
+         jUtg==
+X-Forwarded-Encrypted: i=1; AHgh+RrXWz0rkU1sXdMuO9eLzH+RimTLXeuSVVIiDZlGW66i4pRKV6vsdZD9RGc67WxQcYtHPB1mwdzibK73++GEv3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQzuQF/few/VzRscfU1U3iF42tsjxDmXsnU0mQx9Z1vs1AvI+x
+	ucAgT90f0sLcNOImQXWZWjzsMzbRn2qQBqtUzFwD1xEKkZ/o90f5fsivCcoiCUyssd59//Up35I
+	LuDgeti4W0Hw8X+zQDl1JbqrjJNGb9nO2V0uTgrb3
+X-Gm-Gg: AR+sD13788o61Jthr4NnLn5nKpPhCzQIiYAi/BSwUhr5V72qHkeqN6O4vnuZ6T5zh0w
+	i1sYU57z4Maa+62zSJgsjexbghYW1K4COC47o/aDo+zLJjeJ3LerVY8grto69zys5D8djnCTIcY
+	3oBpGVMy6jKbJBpfevXeHtNKGS1bJcFOTZP2cmbLcWCIwigTEYg5Shkk6b2m3My1mgRzoP2eCgX
+	Hdv8YGrk+uf4OUgtBJt03fdYAMO9+NFpKCtfOmJlWO5HAJ4g6mxYQqiQqnC0meB+5QOqfHIbtft
+	uoCOe5vF+uf5R//9jGVnnQPhEw==
+X-Received: by 2002:a05:690e:1347:b0:668:19df:5597 with SMTP id
+ 956f58d0204a3-6683bd63571mr4938225d50.106.1784630375558; Tue, 21 Jul 2026
+ 03:39:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708131122.2917-1-luis@igalia.com> <20260708131122.2917-5-luis@igalia.com>
-In-Reply-To: <20260708131122.2917-5-luis@igalia.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 21 Jul 2026 12:39:22 +0200
-X-Gm-Features: AUfX_mw-as6l6Zy89-e3FLAF03oa9ZdPjmY0IaC2DMkG4PcsftqTr3WAv-bdzMM
-Message-ID: <CAOQ4uxiOqkXfySiFcYhWUR_c1_UeAA62vK2Py-ML=TpQyrUbCw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 4/5] selftests/filesystems: add fuse symlink
- caching test
-To: Luis Henriques <luis@igalia.com>
-Cc: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Matt Harvey <mharvey@jumptrading.com>, kernel-dev@igalia.com
+References: <20260708121544.583552-1-wakel@google.com> <87fr1dn3xf.ffs@fw13>
+In-Reply-To: <87fr1dn3xf.ffs@fw13>
+From: Wake Liu <wakel@google.com>
+Date: Tue, 21 Jul 2026 18:38:59 +0800
+X-Gm-Features: AUfX_mzkqSKa9q20uoG2hhbGEJT_meFtwZW07FthwaUuzv5tbFIe-P76QN2zXPw
+Message-ID: <CAOcRiAEz5BjvX2kf+4Uv8_QAxwdo+HrHqCa3jqT=aG+46Rf46g@mail.gmail.com>
+Subject: Re: [PATCH] selftests: timers: Use CPU time for CPU timers in
+ posix_timers test
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 8, 2026 at 3:11=E2=80=AFPM Luis Henriques <luis@igalia.com> wro=
-te:
+Hi Thomas,
+
+Thanks for the review. I've addressed all the style issues and sent
+out PATCH v2.
+
+On Mon, Jul 20, 2026 at 10:14=E2=80=AFPM Thomas Gleixner <tglx@kernel.org> =
+wrote:
 >
-> This patch adds a simple test that allows to verify that, when resolving =
-a
-> symlink, user-space is called only the first time when caching is enabled
-> or, if caching is disabled, every time the symlink resolution is requeste=
-d.
+> On Wed, Jul 08 2026 at 12:15, Wake Liu wrote:
+> > The posix_timers test compares the elapsed real time (GTOD) with the
+> > expected timer delay to verify if the timer expired. This works fine fo=
+r
+> > real-time timers (ITIMER_REAL), but is flaky for CPU-time timers
+> > (ITIMER_PROF, ITIMER_VIRTUAL, and CLOCK_*_CPUTIME_ID) on loaded systems
+> > (like shared test runners) because the test process might be scheduled
+> > out, resulting in elapsed real time being larger than the consumed CPU
+> > time.
+> >
+> > Fix this by using the appropriate measurement method for each timer:
+> > - Use CPU process/thread time (via clock_gettime or getrusage) for CPU
+> >   timers.
+> > - Keep using monotonic clock (real time) for real-time timers.
+> >
+> > This makes the test robust against scheduling delays.
 >
-> Signed-off-by: Luis Henriques <luis@igalia.com>
-> ---
->  .../selftests/filesystems/fuse/.gitignore     |   1 +
->  .../selftests/filesystems/fuse/Makefile       |   6 +-
->  .../selftests/filesystems/fuse/symlink_fs.c   | 115 ++++++++++++++++++
->  .../filesystems/fuse/symlink_test.sh          |  52 ++++++++
->  4 files changed, 173 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/filesystems/fuse/symlink_fs.c
->  create mode 100755 tools/testing/selftests/filesystems/fuse/symlink_test=
-.sh
+> Lacks Signed-off-by ....
 >
-> diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/=
-testing/selftests/filesystems/fuse/.gitignore
-> index 3e72e742d08e..cfdc5ca3ded4 100644
-> --- a/tools/testing/selftests/filesystems/fuse/.gitignore
-> +++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  fuse_mnt
->  fusectl_test
-> +symlink_fs
-> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/te=
-sting/selftests/filesystems/fuse/Makefile
-> index 422cd1b1688d..342da0878006 100644
-> --- a/tools/testing/selftests/filesystems/fuse/Makefile
-> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
-> @@ -3,7 +3,8 @@
->  CFLAGS +=3D -Wall -O2 -g $(KHDR_INCLUDES)
+> > +#include <sys/resource.h>
+> > +
+> > +static long long get_clock_time_us(clockid_t clock_id)
+> > +{
+> > +     struct timespec ts;
 >
->  TEST_GEN_PROGS :=3D fusectl_test
-> -TEST_GEN_FILES :=3D fuse_mnt
-> +TEST_PROGS :=3D symlink_test.sh
-> +TEST_GEN_FILES :=3D fuse_mnt symlink_fs
+> Newline between declaration and code.
 >
->  include ../../lib.mk
+> > +     if (clock_gettime(clock_id, &ts) < 0)
+> > +             return -1;
+> > +     return (long long)ts.tv_sec * USECS_PER_SEC + ts.tv_nsec / 1000;
+> > +}
+> > +
+> > +static long long get_itimer_time_us(int which)
+> > +{
+> > +     struct rusage usage;
+> > +
+> > +     switch (which) {
+> > +     case ITIMER_REAL:
+> > +             return get_clock_time_us(CLOCK_MONOTONIC);
+> > +     case ITIMER_PROF:
+> > +             return get_clock_time_us(CLOCK_PROCESS_CPUTIME_ID);
+> > +     case ITIMER_VIRTUAL:
+> > +             if (getrusage(RUSAGE_SELF, &usage) < 0)
+> > +                     return -1;
+> > +             return (long long)usage.ru_utime.tv_sec * USECS_PER_SEC +=
+ usage.ru_utime.tv_usec;
+> > +     default:
+> > +             return -1;
+> > +     }
+> > +}
+> > +
+> > +static int check_diff_us(long long start, long long end)
+> >  {
+> >       long long diff;
+> >
+> > -     diff =3D end.tv_usec - start.tv_usec;
+> > -     diff +=3D (end.tv_sec - start.tv_sec) * USECS_PER_SEC;
+> > +     diff =3D end - start;
 >
-> @@ -19,3 +20,6 @@ endif
+> Move that to the declaration line.
 >
->  $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
->  $(OUTPUT)/fuse_mnt: LDLIBS +=3D $(VAR_LDLIBS)
-> +
-> +$(OUTPUT)/symlink_fs: CFLAGS +=3D $(VAR_CFLAGS)
-> +$(OUTPUT)/symlink_fs: LDLIBS +=3D $(VAR_LDLIBS)
-> diff --git a/tools/testing/selftests/filesystems/fuse/symlink_fs.c b/tool=
-s/testing/selftests/filesystems/fuse/symlink_fs.c
-> new file mode 100644
-> index 000000000000..1aee26c91b3f
-> --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/fuse/symlink_fs.c
-> @@ -0,0 +1,115 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Simple filesystem to test FUSE symlink cache
-> + *
-> + * This is a simple FUSE filesystem that contains two objects: a file na=
-med
-> + * 'file' and a symlink to that file named 'link'.  Whenever the ->readl=
-ink() is
-> + * executed to resolve 'link' a counter will be incremented.  A ->read()=
- to any
-> + * filesystem object will return the value in this counter.
-> + *
-> + * A '--cache' argument will allow to enable symlink caching (disabled b=
-y
-> + * default).  This means that, if caching is enabled, resolving a symlin=
-k will
-> + * only call into user-space the first time.
-> + */
-> +
-> +#define FUSE_USE_VERSION 31
-> +
-> +#include <fuse.h>
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <stddef.h>
-> +#include <assert.h>
-> +
-> +#define FILE   "file"
-> +#define LINK   "link"
-> +
-> +static struct options {
-> +       int cache_symlinks;
-> +} options;
-> +
-> +static const struct fuse_opt option_spec[] =3D {
-> +       { "--cache", offsetof(struct options, cache_symlinks), 1 },
-> +       FUSE_OPT_END
-> +};
-> +
-> +static int readlink_counter =3D 0;
-> +
-> +static void *symlink_init(struct fuse_conn_info *conn, struct fuse_confi=
-g *cfg)
-> +{
-> +       if (options.cache_symlinks)
-> +               fuse_set_feature_flag(conn, FUSE_CAP_CACHE_SYMLINKS);
-> +
-> +       return NULL;
-> +}
-> +
-> +static int symlink_getattr(const char *path, struct stat *stbuf,
-> +                          struct fuse_file_info *fi)
-> +{
-> +       int res =3D 0;
-> +
-> +       memset(stbuf, 0, sizeof(struct stat));
-> +       if (strcmp(path, "/") =3D=3D 0) {
-> +               stbuf->st_mode =3D S_IFDIR | 0755;
-> +               stbuf->st_nlink =3D 2;
-> +       } else if (strcmp(path + 1, FILE) =3D=3D 0) {
-> +               char data[64];
-> +
-> +               stbuf->st_mode =3D S_IFREG | 0444;
-> +               stbuf->st_nlink =3D 1;
-> +               stbuf->st_size =3D sprintf(data, "%d\n", readlink_counter=
-);
-> +       } else if (strcmp(path + 1, LINK) =3D=3D 0) {
-> +               stbuf->st_mode =3D S_IFLNK | 0444;
-> +               stbuf->st_nlink =3D 1;
-> +               stbuf->st_size =3D strlen(FILE);
-> +       } else
-> +               res =3D -ENOENT;
-> +
-> +       return res;
-> +}
-> +
-> +static int symlink_readlink(const char *path, char *buf, size_t size)
-> +{
-> +       if (strcmp(path + 1, LINK) !=3D 0)
-> +               return -ENOENT;
-> +
-> +       memcpy(buf, FILE, strlen(FILE));
-> +       readlink_counter++;
-> +
-> +       return 0;
-> +}
-> +
-> +static int symlink_read(const char *path, char *buf, size_t sz, off_t of=
-f,
-> +                       struct fuse_file_info *fi)
-> +{
-> +       char data[64];
-> +       int len;
-> +
-> +       len =3D sprintf(data, "%d\n", readlink_counter);
-> +       memcpy(buf, data, len);
-> +
-> +       return len;
-> +}
-> +
-> +static const struct fuse_operations symlink_oper =3D {
-> +       .init           =3D symlink_init,
-> +       .getattr        =3D symlink_getattr,
-> +       .readlink       =3D symlink_readlink,
-> +       .read           =3D symlink_read,
-> +};
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +       int ret;
-> +       struct fuse_args args =3D FUSE_ARGS_INIT(argc, argv);
-> +
-> +       options.cache_symlinks =3D 0;
-> +       if (fuse_opt_parse(&args, &options, option_spec, NULL) =3D=3D -1)
-> +               return 1;
-> +
-> +       ret =3D fuse_main(args.argc, args.argv, &symlink_oper, NULL);
-> +       fuse_opt_free_args(&args);
-> +
-> +       return ret;
-> +}
-> diff --git a/tools/testing/selftests/filesystems/fuse/symlink_test.sh b/t=
-ools/testing/selftests/filesystems/fuse/symlink_test.sh
-> new file mode 100755
-> index 000000000000..546541c1920e
-> --- /dev/null
-> +++ b/tools/testing/selftests/filesystems/fuse/symlink_test.sh
-> @@ -0,0 +1,52 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +exit_cleanup()
-> +{
-> +       fusermount -u ./mnt
-> +       rmdir ./mnt
-> +}
-> +
-> +assert_value ()
-> +{
-> +       if [ $1 -ne $2 ]; then
-> +               echo "FAILED"
-> +               echo $3
-> +               exit 1
-> +       fi
-> +}
-> +
-> +set -e
-> +
-> +trap exit_cleanup EXIT
-> +
-> +mkdir -p mnt
-> +
-> +./symlink_fs ./mnt
-> +
-> +echo -n "Testing symlink without cached: "
-> +
-> +# When symlink caching is disabled every access to a symlink is expected=
- to
-> +# result in a call to user-space
-> +for i in $(seq 1 10); do
-> +       readlink ./mnt/link > /dev/null
-> +done
-> +
-> +res=3D$(cat ./mnt/file)
-> +assert_value $res $i "Got $res, expected $i"
-> +echo "PASSED"
-> +
-> +fusermount -u ./mnt
-> +
-> +./symlink_fs --cache ./mnt
-> +
-> +echo -n "Testing symlink with cache: "
-> +
-> +# With caching enabled, there will only be a single call into user-space
-> +for i in $(seq 0 10); do
-> +       readlink ./mnt/link > /dev/null
-> +done
-> +
-> +res=3D$(cat ./mnt/file)
-> +assert_value 1 $res "Got $ res, expected 1"
-> +echo "PASSED"
+> >       if (llabs(diff - DELAY * USECS_PER_SEC) > USECS_PER_SEC / 2) {
+> >               printf("Diff too high: %lld..", diff);
+> > @@ -100,7 +123,7 @@ static int check_diff(struct timeval start, struct =
+timeval end)
+> >
+> > -     if (gettimeofday(&end, NULL) < 0)
+> > -             fatal_error(name, "gettimeofday()");
+> > +     end =3D get_clock_time_us(which);
+> > +     if (end < 0)
+> > +             fatal_error(name, "get_clock_time_us()");
+> >
+> > -     ksft_test_result(check_diff(start, end) =3D=3D 0,
+> > +     ksft_test_result(check_diff_us(start, end) =3D=3D 0,
+> >                        "timer_create() per %s\n", name);
+>
+> Please get rid of the line break.
 >
 
-As we discussed, consider doing this as a single c test program,
-but not a must as you wish.
 
-Thanks,
-Amir.
+--=20
+Best Regards,
+Wake Liu
