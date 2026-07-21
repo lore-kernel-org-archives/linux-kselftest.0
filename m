@@ -1,193 +1,192 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820353EB11C
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 00:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA3E3368BD;
+	Tue, 21 Jul 2026 00:47:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784593736; cv=none; b=L4c7E6zGcsyCX/GoqT6fWGXXSxRFMfegSMUimbzcaBEwXekLzz0p5AiJRfWXim6taCJBM0LPS6pDQpy2BWPoR0j9UCJtwWUUEr86ejQkx3bCEwS5ssF/dixJXfTg8c0IjD4rTpDPKdrxny5PI40MhwFIHGOQQi+5qtxmhQssev0=
+	t=1784594881; cv=none; b=bBSr4fak6+472+VHPfJZNfWf0GADK2WuYahd0qdF+Fx4+Ltc7tjAZVT0oh5j2PAeOaEz5dgbY+bwFaf5ex+hpGUsDoJKxHB5h29E7RazSSIzQr5BwSbFY3fdWXUT075/Y2fiXovfpxAai34PIK5KbkdwGhqgr51OVCUNvjuPXFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784593736; c=relaxed/simple;
-	bh=EjTjANCGyphgofXlmlCMolP5CWXfaH5V4+PEZGRC9Sc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nlI/XceuanRhbOgjKjphiOqWic+MH96NRFfI7gln9uE8mSHy3EWbOAk6wPXSTEhfnFo4Ud00Am0FgEKa9P3gov/nDQhkToqugM+d6Actawj2FsGFSFYNe6dxTuZqQSJ9w35e1MqkR2euwh8KUPWxpDNO/TmbOd8mAvW4IlUiGvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jeD63SfL; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784594881; c=relaxed/simple;
+	bh=eXw8eShQ92zJgJxTG6i52RVei5ncVISs0dertqkyzW4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=i7YAGbUcaSIQ7T9uw+fFuB0TxPylzHBKrdf9fIa/gmda4hkm/2yNNr6ut6wyMDWcS+ZVDQUDEDEtsW4El5yHMEONMNXt+aae2FlvGzhnn8aD2iTtMF7zM6IA6S9rBjhDm2rRrdyjIb6zlAngzTsbeldSvZOPgCajyCniT4DHRnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZ+JOotz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jeD63SfL"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8486672f03cso10689358b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jul 2026 17:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784593735; x=1785198535; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YnhrM7uIvjKhsDFp/QtkP00zu99wnVGEBhtiKwVmfTw=;
-        b=jeD63SfLmEJ2UKn3qvV+71ngEhvOVhIgoov4xJHlXYjkQb6S6dPonG0WkNJIJUZhpP
-         YPOHkQx6LHo7vR/EfGKwwsxYZYFE5MSn3efriR4wiZm4I5wJEe1RSicXRypN/rhJ49E5
-         669fdUfxoYmkct9zaQuWaYJcsM4HhS5t2m15DjyuIOBMqjHVPdgjI+z9ZkfOftq7bLKB
-         d2t7XdeGLR0MZ0kT0PDmfFMCsGIBcOJ+n/WhBFflY7vW2ZjdwxDkYHdTyLybaTlUD3Yl
-         /he3Guo4fJwwYz8BbWqbLntLDzO1Z3iwU47OzMY77PgWLWmrAIUg0sW1OsroQCbmBix/
-         lvpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784593735; x=1785198535;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=YnhrM7uIvjKhsDFp/QtkP00zu99wnVGEBhtiKwVmfTw=;
-        b=mvrZ5Y5FtTGcoj9fgbP5jUWFWHW7+w/oe5xfjy0ULt67uBREVx/RuTvvbLDA6j1J1e
-         IH5avFJYVGKABh2zpJL5DbF5YgYGdbqbVvp88wBWicQkm7X3U82ysIT8ryJ3MgHroW3k
-         hZwTZjRYSxQPtgCk1nNbnJwLHRci/XNrLplO+29Bd7ul1YKBczoM6zanMWH207z+/Alr
-         slzuRIAAAGtKDAXWOvzFPqBHBtTcTAlzvVNVLGDFziDn9CCKA9rNxaBsvUpeTUwFp11P
-         X6rtwTF2attIqHYY/rNQb7N3bKyZVGmBZ9iu4Xsp62MrpwlJk7VSfFeQv3TsAabBOQTp
-         Qvig==
-X-Forwarded-Encrypted: i=1; AHgh+RpGEdeui8VxGhmaGDo7naGl0Ybs8irocnkIMpSRUS7Tph5npOE/Nblwt+bmqMR10+eXICt088+vMwuy0JowwcY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGUcVFF9dO+7xD+zXTljETfQ2KFB9UCiMcBNBaINijqS7t8XCv
-	/tQ+80XY2ZH8+k8h7H4eivltc+TJ+0Hc2lUM/luN3nchaoQxSl88Nvsy
-X-Gm-Gg: AR+sD12YzQRIVRBaPrpI1G+KVi0mB/5wTIcQ0Y33YdsWQ1pbAOp0sQAY0dRMWwXhRe4
-	+gGPpjeGsIY3nrwYZ4BG49ntqMONmA09llR/gG6W/VN86eRCch8BOQ5H9FZrvNCi31TUiq97D2+
-	bc4FqkWFbsA3r251Gy69seqym/QuYjCF7uJvF46JeyEZewObx7DTAM48fIatkbTt/7McFyfPTXN
-	9D7uNmiiz0arXErZJpYiOjlzJe1JOS//qa4Sv+J7pyfc5cuc7da/Di2IncG2TxvAmCSg/LM7M5F
-	sudCyIu6Aw5qYgsa++wgay388uvK+FMprJxkY1CMk4T7j+IxFPFIHxreae1qsDZ6uLztjBORK/F
-	1ZrN+nHX9JSOjfhy5IrQbke2pcAZ5NfB3/gHoJfsHIHdeJFkLVatQP7F187ZgPtEGoVvgbwnOnz
-	Ppo5aiNL1LbgTIn2wW1uO+IWWEUcaXVHwvHg==
-X-Received: by 2002:a05:6a00:2f97:b0:847:8704:1c48 with SMTP id d2e1a72fcca58-84c292ac4d3mr10870603b3a.20.1784593734662;
-        Mon, 20 Jul 2026 17:28:54 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:46::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84c2af9f00bsm6429812b3a.56.2026.07.20.17.28.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 17:28:54 -0700 (PDT)
-Date: Mon, 20 Jul 2026 17:28:47 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
-	razor@blackwall.org, daniel@iogearbox.net, matttbe@kernel.org,
-	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 2/3] selftests/net: ncdevmem: add -b option
- to set rx-buf-size on bind
-Message-ID: <al69Pw6/5M8jCM7y@devvm29614.prn0.facebook.com>
-References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
- <20260708-tcpdm-large-niovs-v5-2-34bf6fac941b@meta.com>
- <CAHS8izMz_S8K80EXn3oFXiDNkGuPUMzjecaJjAvaZVky-7O40Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZ+JOotz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FB21F000E9;
+	Tue, 21 Jul 2026 00:47:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784594879;
+	bh=0BYYLROr1KG9jlLLfTtwXV9u2OCUpqCq1wscUtJCU88=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=HZ+JOotzLCADPj5ZcLz4qpPhReX0z96lHAj/QsuIidRGnjPTkxvw7/2YObTqfndrF
+	 SeqoFMMVq3fuDvXE2HYlDnC5EkoXzW/yN5Bwr7zgcDl27z8dN7kKcwA2SfihqsgKuN
+	 JrNxYXkH73ogcRbEbUPbeVsOhrcGF4axGQF9+vjZ6/dMmzcP0qHDwRwi8e6yhg8q2Z
+	 wKNXSHIUrmqb4YJ4/KipcPYAQpxyprzaJCwyQjbDQhqdJX0a8KUcsK69hNpZMogpOW
+	 wM1aGiVY61F3NvJ4tZeCW4lJ313MMc9tMgBZ4K0K7/ZgY6GfiBzzBNlyjqd6kZxR95
+	 sJw4M2TziIBNg==
+From: SJ Park <sj@kernel.org>
+To: "Zi Yan" <ziy@nvidia.com>
+Cc: SJ Park <sj@kernel.org>,
+	"Lian Wang" <lianux.mm@gmail.com>,
+	david@kernel.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	npache@redhat.com,
+	baolin.wang@linux.alibaba.com,
+	ryan.roberts@arm.com,
+	daichaobing@sangfor.com.cn,
+	wangkefeng.wang@huawei.com,
+	gutierrez.asier@huawei-partners.com,
+	zengheng4@huawei.com,
+	kasong@tencent.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	lianux.wang@processmission.com,
+	kunwu.chan@linux.dev
+Subject: Re: [RFC PATCH v3 0/3] mm/damon: introduce DAMOS_SPLIT action
+Date: Mon, 20 Jul 2026 17:47:55 -0700
+Message-ID: <20260721004755.93824-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <DK3MYJN8KSZ5.1U0STUJGETSJH@nvidia.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHS8izMz_S8K80EXn3oFXiDNkGuPUMzjecaJjAvaZVky-7O40Q@mail.gmail.com>
 
-On Mon, Jul 20, 2026 at 02:15:42PM -0700, Mina Almasry wrote:
-> On Wed, Jul 8, 2026 at 3:55 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
-> >
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> >
-> > Add -b <bytes> to request a non-default niov size via
-> > NETDEV_A_DMABUF_RX_BUF_SIZE. When the value exceeds PAGE_SIZE,
-> > udmabuf_alloc() switches to an MFD_HUGETLB-backed memfd so each 2 MB
-> > hugepage produces one naturally-aligned sg entry.
-> >
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-> 
-> Reviewed-by: Mina Almasry <almasrymina@google.com>
-> 
-> 
-> > ---
-> >  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 36 +++++++++++++++++++++--
-> >  1 file changed, 33 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> > index d96e8a3b5a65..a16e55af51ee 100644
-> > --- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> > +++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-> > @@ -40,6 +40,7 @@
-> >
-> >  #include <linux/uio.h>
-> >  #include <stdarg.h>
-> > +#include <stdint.h>
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-> >  #include <unistd.h>
-> > @@ -61,6 +62,7 @@
-> >  #include <sys/time.h>
-> >
-> >  #include <linux/memfd.h>
-> > +#include <sys/param.h>
-> >  #include <linux/dma-buf.h>
-> >  #include <linux/errqueue.h>
-> >  #include <linux/udmabuf.h>
-> > @@ -79,6 +81,7 @@
-> >  #define PAGE_SHIFT 12
-> >  #define TEST_PREFIX "ncdevmem"
-> >  #define NUM_PAGES 16000
-> > +#define MB(x) ((x) << 20)
-> >
-> >  #ifndef MSG_SOCK_DEVMEM
-> >  #define MSG_SOCK_DEVMEM 0x2000000
-> > @@ -100,6 +103,7 @@ static unsigned int dmabuf_id;
-> >  static uint32_t tx_dmabuf_id;
-> >  static int waittime_ms = 500;
-> >  static bool fail_on_linear;
-> > +static uint32_t rx_buf_size;
-> >
-> >  /* System state loaded by current_config_load() */
-> >  #define MAX_FLOWS      8
-> > @@ -142,6 +146,7 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
-> >  {
-> >         struct udmabuf_create create;
-> >         struct memory_buffer *ctx;
-> > +       unsigned int memfd_flags;
-> >         int ret;
-> >
-> >         ctx = malloc(sizeof(*ctx));
-> > @@ -156,9 +161,14 @@ static struct memory_buffer *udmabuf_alloc(size_t size)
-> >                 goto err_free_ctx;
-> >         }
-> >
-> > -       ctx->memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-> > +       memfd_flags = MFD_ALLOW_SEALING;
-> > +       if (rx_buf_size > getpagesize())
-> > +               memfd_flags |= MFD_HUGETLB | MFD_HUGE_2MB;
-> > +
-> 
-> The fact that you are using HUGETLM and 2MB mappings here made me
-> realize there is a pathological edge case in the code where the netmem
-> size you're requesting is greater than the mapping size, so you
-> actually get no netmems. So like if you ask for a 64KB netmem size but
-> actually you did a normal udambuf mapping and all the maps (sg len
-> entries) are 4K or something. IDK if the code already handles this
-> well with an error or what not. Worth checking.
+Hello,
 
-If I follow you correctly, in the case of sg len == 4K, and requested
-size of 64K, it will fail the !IS_ALIGNED(len=4k, niov_size=64K) check
-and return -EINVAL.
+On Mon, 20 Jul 2026 15:12:50 -0400 "Zi Yan" <ziy@nvidia.com> wrote:
+
+> On Mon Jul 20, 2026 at 5:56 AM EDT, Lian Wang wrote:
+> > Hi David,
+> >
+> > On 7/20/2026 10:44 AM, David Hildenbrand (Arm) wrote:
+> >> you give no real motivation and evaluation why this is required or
+> >> why this gives the user any benefit.
+> >> A SPLIT with an explicit order is not really want we want and it
+> >> does not fit the existing primitives.
+> >
+> > Thank you for the direct feedback.  Let me explain where this came
+> > from -- the cover letter should have included this context.
+> >
+> > This started from a real problem at Sangfor.  The scenario is:
+> >
+> >   KVM-QEMU virtualization on Kunpeng 920, with KVM guest memory
+> >   backed by tmpfs shared mappings (THP=always on the host).  An
+> >   Oracle database runs inside the VM.  DAMON monitors the KVM
+> >   process on the host to measure the hot-memory ratio.
+> >
+> >   The KVM process allocates and uses a large amount of memory.
+> >   Under the same workload, DAMON reports a significantly higher
+> >   hot-memory ratio with THP enabled versus THP disabled.  Direct
+> >   tmpfs write tests inside the VM -- touching at 4K and 2M
+> >   strides -- show a clear gap between the two cases.
+> >
+> >   DAMON parameters used:
+> >
+> >     operations=vaddr
+> >     monitoring_attrs/nr_regions/min=500
+> >     monitoring_attrs/nr_regions/max=2000
+> >     monitoring_attrs/intervals/sample_us=500000
+> >     monitoring_attrs/intervals/aggr_us=20000000
+> >     monitoring_attrs/intervals/update_us=60000000
+
+Thank you for sharing your detailed setup.  It is helpful.  Btw, have you
+considered using intervals auto-tuning [1]?
+
+> >     schemes/0/action=stat
+> >     schemes/0/access_pattern/nr_accesses/min=1
+> >     schemes/0/access_pattern/nr_accesses/max=max
+> >
+> > The underlying issue is that under PMD-mapped THP, DAMON's monitoring
+> > granularity is coarser than the actual working set -- a single
+> > Accessed bit covers 512 base pages.  Before SJ's probe infrastructure
+> > arrives, there is a gap: DAMON cannot distinguish hot sub-pages from
+> > cold ones within a single THP.
+> >
+> > Split is one possible mechanism to bridge that gap -- by dismantling
+> > the PMD mapping, each base page gets its own PTE Accessed bit and
+> > DAMON recovers fine-grain monitoring.
+
+Thank you for clarifying the motivation of this series.
+
+To me, it's still unclear what is the real user impact, though.  I mean, I can
+understand DAMON suddenly reporting more hot memory can surprise some people.
+But, why that matters in what extent for your use case?  You may not run DAMON
+on your system only to read the information.  You may run it to do something
+beneficial using the information.  What is that, and how badly degraded DAMON's
+monitoring results affect it?
+
+Overall, unless the real impact is serious, splitting huge pages only for
+better DAMON monitoring sounds like not a good tradeoff.  You will increase
+DAMON overhead and lose THP benefits in some extent.
+
+> > It is not intended to be a
+> > permanent API, and certainly not "the opposite of collapse".
+
+Once it is added to the kernel, we have to support it for long term.  Let's not
+introduce something for only temporal use.
 
 > 
-> --
-> Thanks,
-> Mina
+> If you just want PTE level access bit information, why not split PMD
+> mapping instead of the THP itself?
+> 
+> In addition, the issue is about access monitoring granularity in DAMON,
+> why should user care and know about THP split operations? I would expect
+> DAMON detects the inability of getting fine grain access information and
+> split the PMD mapping itself instead of a user initiated DAMON_SPLIT. If
+> that is not possible with DAMON, an alternative is to provide something
+> more generic like DAMON_SAMPLE, which does the split under the hood,
+> instead of exposing MM internal operations.
 
-Thanks for the review Mina!
+Thank you for good opinion, Zi.  I agree all the points.  That said, I still
+want to understand the problem first.
 
-Best,
-Bobby
+> 
+> >
+> > I did not write this scenario into the cover letter because our test
+> > results do not yet show a clear quantitative benefit worth claiming,
+> > and I did not want to oversell.  Without the context, I understand it
+> > looks like I randomly proposed a new primitive -- that was not the
+> > intention.
+> >
+> > SJ acknowledged [1] that the monitoring problem under THP is real.
+
+Yes, the behavior is real and I agree your theory of how it happens.  I don't
+clearly understand if it is really bad in what situations, though.
+
+> > My RFC is a concrete proposal to start the discussion.  If split with
+> > an explicit order is not the right primitive, I would appreciate your
+> > thoughts on what the correct DAMOS abstraction for this should be.
+
+Only after understanding what is the problem and how bad it is, we will be able
+to think of different approaches and assess those.  To me, it is still unclear
+what is the real problem and how bad it is.  I will wait for your further
+clarifications of those.
+
+> >
+> > [1] https://lore.kernel.org/20260620203915.82947-1-sj@kernel.org/
+
+[1] https://origin.kernel.org/doc/html/latest/mm/damon/design.html#monitoring-intervals-auto-tuning
+
+
+Thanks,
+SJ
+
+[...]
