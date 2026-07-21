@@ -1,93 +1,93 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0A548097E
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE9B4657DD
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784630161; cv=pass; b=MCu9qFXUDtk/pq3F9F+ue3wTNQDmSW4PEyLcGCZAg+iV98phgX+9jHx8q8OO+iDmBoZ+G34RE4PBG8cuQbw0WNu7RDsyaK5gVt+VXY0cD336AtPFyl0mCMtucQJ/rhBaVHoKt0o2EXehPEX8sMERIFMoOzHPyMLbAQHdzCy9Pw0=
+	t=1784630234; cv=pass; b=m0tjR1RzxFFkg0CSftPWdPmEL/K6CKNpXfaR6mxQ6pJSTFG0VAFzRJFJTZ43VEOPQBKpEXXeaT3Dbj5zqIPbzUMmCZty2+Kh9yA35xt2D3ZRIX50T2FmQrsn0qZ7hfc3GUlcZqewSkU2RDzpZVQL8qJ5OcM8xV+8GTUY2mUUaog=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784630161; c=relaxed/simple;
-	bh=rYViphB4DxfaPGMMntEonSPLt1Abt8g/0zJq2r3L3xE=;
+	s=arc-20240116; t=1784630234; c=relaxed/simple;
+	bh=oyXeb7Pl/hzEZu/+TWbwy7LD9xPS1dj+pHjiaZVYzs4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WkqkGSgrQosp0H2rW/VR95wY8txqICyJjZU/hBN/QoxSF1fGlnlz3vYYKbB4jUuWPxKaZmu4COrLiPbLlYHze1pj+cu2ubUcGW4MOoOaXKP/LgWGyVLUEKgYxdZouQvUaLWcsUyyizSY0oUg+9k5wWh5N/VHwgCkaIo71+X1Szc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tHo0+dCB; arc=pass smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=HJ1GFzqQckH5yqQWCuKSPTm9cBE1LGKFwvYS/ThUDjR/zNu/8BCMb52H8VqFO9EbBEQqLkkf0708DOkwCiVj7gNrFVxhSTUzHCEJ8GNsYHJad14jI7nNMI8pAsTRrx/JmMYEAtsUukKhWe0MptpP0RKCLouQyu4O1xp3DSk8i4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mtqd17EI; arc=pass smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tHo0+dCB"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-69c1220bd51so13021287a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 03:35:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784630158; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mtqd17EI"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c15cd3fd760so1249606366b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 03:37:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784630226; cv=none;
         d=google.com; s=arc-20260327;
-        b=AClXVjTk+yV3EGWBkQ+mRomK9I9ckNXhJvFhvaboUVKMDxC1guQ0SlCo9sI0dukAT/
-         9S3N1g0/AVbFqMN8q+xUcyWuSW9WGi/2u5smGZ0RIes6e1ZqjpMTcZ9jLzFK+x/YYvJm
-         +Po8MYFlaJKkfyVbhVijxyoUcyvjKh580gMQxqPp3ZoqZgAjFDtEpjHqTzrWXoMtTlJX
-         VnSBNPeI+Ax5oiLIyfnYtGW9MHAcI0EczHl1USkJiJ6THpAkqXW8cFQVB0KWbS3U4aIC
-         gnb+qB2GIkrADrk+VVHQAnaGAzVS2RY3TpczSmLVwtLyHUHBBIixbSKrjP8Ua0iGfhp6
-         D/Qw==
+        b=XkuDFnicZ6qYu9YWoS/vXW+3sSntlsmR/yXT2Id42wWWxBGdFBnPuYoByFcwGnMc9s
+         XtoHgF5V3EAdmF6Y7M2G7c33dL7gQ4U31jb47CAKM/5LTfXKTR6QQP2JuFdPRBg67qRW
+         ox63ALX6EIWccP7MF9VkMfhqI91X3frktkOvLmFxnhAIJL4ZRkCBwZvFEOq8qatXfCtj
+         fIAsPtSaUBDOU9+km24iMz/pU/rDRtoBFR8QVBATfug/MvXdodMgRMjZFydnF/h+PUaJ
+         4rWEDpuZIIuS9rPizjTzB1H2U6fF6GrsW4kD07ZiIJbZJb8aMz+OYg9G7X2Pd2/KJPqC
+         2Ckw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=R6gkln8TC+X7dROBQSudVEuyKf8Opd2LeVjHp6RExug=;
-        fh=t24egY8WFX+Iz4TrF+nhtm/WEhfeB6H3ScTiXvebSzw=;
-        b=adzCtITH5mvSRpttB0la5NUHdIeVejPoXxvXlLNi7IfuWHChvgsl3o2aecQH2/+hWj
-         Hyg50EENmojy3rP7QDYQghNbYV+t8IhDV1DlkeOuBkwQApPEwaYNRFebCcQ5Fq5bZo/+
-         tE6VeoV1oKt98DDSF05QouJgHrMe4zGQOYz6P1yuIVa0fWHdI1lHbdNftUzK+EAxFSQ7
-         wcj3LLTLD5+sUpz+BgHE0GM9WK98/H66XtVLVdqf++tlRyT/uU2JswVuP3vZN+Jx6KOl
-         2CsBBkJMYnUkvbXo8mRN8gtsFUX3rZ6psbe+6pzaZKo5T5fmRNtqyeIxGxU8Vp/uIUOG
-         /M+g==;
+        bh=z/e3cVrC8aYr3ehhgb7J6RmkXpl7ImRf/nGNK62se0M=;
+        fh=Ya8yHtnjbCN4yMFYv3kV6pT13Drabwo/RyZn7VWpZow=;
+        b=GiinBhZ4GUM/wcgvhgo2QPRcInCcR1hrCXuRkfcFrHWyw+D/rntBtdiB5LPYYH2hvE
+         H60ZlRbt43slRhHF3bp2/lh/X5N+k5JxlV7Vm/3v7TNcunF738mskJjHbysB7+X6hBvy
+         F/zrUMejUXxrMYTMOXGszIpVpGyZOyCJLWaoxejkbWYplSSrHD+oYWQmV2Nx9hGxsa7F
+         QwBxVmsdw0Ylq4l96IjVIIZ0s0GKk3XhdYMsvl3bj66urXR8O4LzexIzOkOmaJ8T799Y
+         Y/MYW2RFnqoK8mF++Rq+n6zJQwQ1m8+7pAPEMwiZ2BRJc6y/o1TSN5iD5WE/GK3JfUWl
+         c8/g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784630158; x=1785234958; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784630226; x=1785235026; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=R6gkln8TC+X7dROBQSudVEuyKf8Opd2LeVjHp6RExug=;
-        b=tHo0+dCByLKApITsoQ/t3nYWSOfBkxxfJDlLiW4hg5PVwMLM5lwODeFvY2QC0kC9zy
-         a4pM94Zq1GDkqdFIKPc4HF7UIWkMCNQQOQP6xZJy8daZn7D97feKK9Ns1JjFi8EbOhPd
-         InjTmXmCFyio5Ia5zHM+7iIts0XSpBu5Wv9qvJdYfaV7xKSToLhSA0AHbuSdDo7Dek4E
-         0DVL/mqUiVCA2JqmBNi2l7OWFtDL2vx6rMuP6j8F1Pp3nGNXhZI2mqCV6GrcA4mrW3J+
-         zN5bRRawax1eIHd2TetARGs/knvo1GpADNEbfoudHK13yzeqgvujD5fFQBxaJc5hcrKu
-         OekA==
+        bh=z/e3cVrC8aYr3ehhgb7J6RmkXpl7ImRf/nGNK62se0M=;
+        b=Mtqd17EIcM+q2sJNJ+r6dB87dYl34b+C+bdlhG8n7UuueiuHErbRH8Tb0NssYxKLLL
+         DlI5wJg1b3eWDs0MlFaKzAaIJFtyltxQo0cntsGi3hy7LM+XWVcdpuMXoUZe9kuC0vKq
+         wn9ntsoiCNecAEK+5D8XMlT9+He8ANosb5mih3GLBKRlb1KLq/HJjmCHbPyvXTkBrwul
+         tF9DGUluG71Jy+DnPhxebF5iD5pjSGKAVGcJtAdvcj96h+vcVE1Cu6DQbTvfiNXx7oFk
+         0BpS2isrivU5BhOmFhXkICsQJZm1LOl6VmRinYK/HTCJ4CkJGDoDAS8m4utAloicqUwH
+         YTig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784630158; x=1785234958;
+        d=1e100.net; s=20251104; t=1784630226; x=1785235026;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=R6gkln8TC+X7dROBQSudVEuyKf8Opd2LeVjHp6RExug=;
-        b=X9l5F5CFlJpX14pCfKfLntDzOLdPrmTArsbqIPPht6Frwpnkzz67eLPpmnprhsjs2E
-         HEo4v1YnU2w2xnYVgbkbMAw9qMFS8FVfB7dqc/b9tHg2HrZ0ssqz2VOvdFBy+8AuupAU
-         n+88tB0keUu5MRJanwYSPtey298xlEoZ5GfrOON/m605AwwU/Ej5VlRynvOCu14uLDQd
-         /X9vy8ItmIFifbZsoEblXR/RUGQoY+hrtfK1h/sZQTU/59Ftlp7EH+cc3oDFxlk09wsS
-         IiYcNvOUzi/UanC72zh1yOFiTuUPWwVBQQ7rUObzU4sNRlX5XacAgYj9RJiXs5UVUsvd
-         DoQQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq4OEsaVZwONVzwaCvwp7dd5erovGwDrHaQXeieTNQHSpycMFovsPTCDHqhvQQidXjMNGiBy3K11uBzEgGFRrw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTc27yk239wAt9lPqzH75ieRFY24xr/pMo2+usCVXiSqZVnxyH
-	8OgkXOwUesMldGJOnQE3/RigKNiZbObwwQVm7H4n5PKECFcJ4HffPRQH4UszJ37FunxmMmtzlNN
-	0hx+fGH+ENzfPQh7Z+CMJo1wIt7iMc+s=
-X-Gm-Gg: AR+sD13n820/QQwmc5X24nkzEO6RCVOdJK7qXwAQnFlLYrf3Ew8dl80atx0mg93qNhH
-	tKgs5YNlA4vZmDAtTKv0TvHvxqXM/tWZrKX013VlTfGq+WKjEExmmEaOsDNhDOAix9dKmv8fzoj
-	lIz4g1W22AXslPlxm3nkphxKdlsyp0B3EQiJK2erafV3QAytyIq9bQ0DF00ZDkF9tMZhmu+LS5I
-	mePBwACwH2tjk6CJRI6GRvsLZtyzH9cBj1NLkGjNDaYUQYm9ELI9H6qm3ZasuvXGRpAvBBZRg==
-X-Received: by 2002:a05:6402:50c8:b0:698:bdeb:a9ce with SMTP id
- 4fb4d7f45d1cf-69e652726ffmr6135346a12.13.1784630158075; Tue, 21 Jul 2026
- 03:35:58 -0700 (PDT)
+        bh=z/e3cVrC8aYr3ehhgb7J6RmkXpl7ImRf/nGNK62se0M=;
+        b=A6clWE3BEDDQP6fNWWxMfsiZ9k9QLHtQ8yo78m4I6ouCctLd4ZZytpMSgUeH5p0uvX
+         QN8zVFB1Ucn3VYjQQSX3Rs013hLjO2oTceHy3Yy6CtWehFGMJZWinj8g5ZnLmzH2fPaG
+         Q7qLrRCqJB6z+Y/jby7dB0uWcI7OcA8NccFoPjxyxaa5tJ3uzosUZ7ljxhqmCbllLCF/
+         EyeMyEQSbnDc9ZDAMHp6SjcJY+ItZlz2sWdYHWBMHJtvz99jvCkRens8zKp6bBtZagMc
+         TJRwONu7MPDEt9qzMTunLBA+62Z8xRAKg0rlRXFcpFIdG4/LGLXUZx1cHQYkqAs7VJJe
+         DLaA==
+X-Forwarded-Encrypted: i=1; AHgh+RoG7JiHDUG4d40q3HKocHyI22LcOAPrmP9/Wqgwp3wvq9j/Idmtsr15yqJn6gHS9WvJd5XqHZ2yTRDgrkkCWXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeT3UP/Q0EpNFlXvSfmlPlaHgIM7mIsg42stvdiNln2gOd9dmr
+	vO+RDlTiOlGmX40COctT3dX7IHhfsXZmPfKJvWFCdxNGi4/6yyLtdNA3OOqalPcyaqVwXsZ0+gd
+	piNA5ieefKByCwkPNsEjvk+xtJEcndpw=
+X-Gm-Gg: AfdE7clzBYH31nUURLZj6i2wDmvw6i8+4YZvm8aLjqIHKZJC7O2W4bUhH0XHI7Cfoqd
+	V5kTL5e6PhvsxmcL4PUJgXZcRmszn/Xuctkf5AOGILUbbTMHX/+9xit6Xr4RoN17noE5hGW+/eG
+	vdr8kfnvbQzunKsMhzh+I+JclRHNZr1+y+tyAYdm3OJ7oglcIgze60tQQQPJbJIgOG+osoivPtB
+	MyfJIgXTLcao3jGaQYdbpNEDTp7mZ6/H7UKrH8fQsi3PpMdB0UUz1YmVVk/c7k=
+X-Received: by 2002:a17:907:e8e:b0:c12:6632:e7f0 with SMTP id
+ a640c23a62f3a-c16b46e7a56mr798763666b.24.1784630225874; Tue, 21 Jul 2026
+ 03:37:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708131122.2917-1-luis@igalia.com> <20260708131122.2917-3-luis@igalia.com>
-In-Reply-To: <20260708131122.2917-3-luis@igalia.com>
+References: <20260708131122.2917-1-luis@igalia.com> <20260708131122.2917-4-luis@igalia.com>
+In-Reply-To: <20260708131122.2917-4-luis@igalia.com>
 From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 21 Jul 2026 12:35:46 +0200
-X-Gm-Features: AUfX_myDrhpG_I_jw7T0ARJbDXZ0WGU31MEHieyc08zEfODDtXT-duqal-shoGs
-Message-ID: <CAOQ4uxiy3X7ZZ_E_jC8Gqa6S==jb-m4CZh8kwmAznUWxeSQB=w@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 2/5] selftests/filesystems: convert fusectl test to fuse3
+Date: Tue, 21 Jul 2026 12:36:54 +0200
+X-Gm-Features: AUfX_mycIVQeVufkTTWG7ndAZWjUPZ8q3Hx_6jdYuD_j9Bu2y9II3KGMFsILqJM
+Message-ID: <CAOQ4uxg6Z3rKYXvjKZ8=rCTM9vXQXiw5M8b3G2zXZ1r7hB7qNA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 3/5] selftests/filesystems: check that fusectlfs is mounted
 To: Luis Henriques <luis@igalia.com>
 Cc: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>, 
 	Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
@@ -99,102 +99,42 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Jul 8, 2026 at 3:11=E2=80=AFPM Luis Henriques <luis@igalia.com> wro=
 te:
 >
-> Since it is probably not worth adding new fuse kselftests based on fuse2,
-> it is a good idea to convert the single existing test to fuse3.  The
-> conversion is trivial, as it only requires some changes to function
-> signatures (the gettattr and truncate fuse operations), and to the filler=
-()
-> helper.
+> The control filesystem for FUSE needs to be mounted for the fusectl_test =
+to
+> be successfully run.  Skip the test is that is not the case.
 >
 > Signed-off-by: Luis Henriques <luis@igalia.com>
-
 Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
 > ---
->  .../testing/selftests/filesystems/fuse/Makefile |  8 ++++----
->  .../selftests/filesystems/fuse/fuse_mnt.c       | 17 ++++++++++-------
->  2 files changed, 14 insertions(+), 11 deletions(-)
+>  tools/testing/selftests/filesystems/fuse/fusectl_test.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/te=
-sting/selftests/filesystems/fuse/Makefile
-> index 612aad69a93a..422cd1b1688d 100644
-> --- a/tools/testing/selftests/filesystems/fuse/Makefile
-> +++ b/tools/testing/selftests/filesystems/fuse/Makefile
-> @@ -7,14 +7,14 @@ TEST_GEN_FILES :=3D fuse_mnt
+> diff --git a/tools/testing/selftests/filesystems/fuse/fusectl_test.c b/to=
+ols/testing/selftests/filesystems/fuse/fusectl_test.c
+> index 0d1d012c35ed..2dcfd3ebe0d5 100644
+> --- a/tools/testing/selftests/filesystems/fuse/fusectl_test.c
+> +++ b/tools/testing/selftests/filesystems/fuse/fusectl_test.c
+> @@ -48,6 +48,7 @@ FIXTURE_SETUP(fusectl)
+>         uid_t uid =3D getuid();
+>         gid_t gid =3D getgid();
+>         char buf[32];
+> +       char path_buf[PATH_MAX];
 >
->  include ../../lib.mk
+>         /* Setup userns */
+>         ASSERT_EQ(unshare(CLONE_NEWNS|CLONE_NEWUSER), 0);
+> @@ -93,6 +94,12 @@ FIXTURE_SETUP(fusectl)
+>                      strerror(errno));
 >
-> -VAR_CFLAGS :=3D $(shell pkg-config fuse --cflags 2>/dev/null)
-> +VAR_CFLAGS :=3D $(shell pkg-config fuse3 --cflags 2>/dev/null)
->  ifeq ($(VAR_CFLAGS),)
-> -VAR_CFLAGS :=3D -D_FILE_OFFSET_BITS=3D64 -I/usr/include/fuse
-> +VAR_CFLAGS :=3D -D_FILE_OFFSET_BITS=3D64 -I/usr/include/fuse3
->  endif
->
-> -VAR_LDLIBS :=3D $(shell pkg-config fuse --libs 2>/dev/null)
-> +VAR_LDLIBS :=3D $(shell pkg-config fuse3 --libs 2>/dev/null)
->  ifeq ($(VAR_LDLIBS),)
-> -VAR_LDLIBS :=3D -lfuse -pthread
-> +VAR_LDLIBS :=3D -lfuse3 -pthread
->  endif
->
->  $(OUTPUT)/fuse_mnt: CFLAGS +=3D $(VAR_CFLAGS)
-> diff --git a/tools/testing/selftests/filesystems/fuse/fuse_mnt.c b/tools/=
-testing/selftests/filesystems/fuse/fuse_mnt.c
-> index d12b17f30fad..5d335fa5cf05 100644
-> --- a/tools/testing/selftests/filesystems/fuse/fuse_mnt.c
-> +++ b/tools/testing/selftests/filesystems/fuse/fuse_mnt.c
-> @@ -4,7 +4,7 @@
->   * Creates a simple FUSE filesystem with a single read-write file (/test=
-)
->   */
->
-> -#define FUSE_USE_VERSION 26
-> +#define FUSE_USE_VERSION 31
->
->  #include <fuse.h>
->  #include <stdio.h>
-> @@ -20,7 +20,8 @@ static char *content;
->  static size_t content_size =3D 0;
->  static const char test_path[] =3D "/test";
->
-> -static int test_getattr(const char *path, struct stat *st)
-> +static int test_getattr(const char *path, struct stat *st,
-> +                       struct fuse_file_info *fi)
->  {
->         memset(st, 0, sizeof(*st));
->
-> @@ -41,14 +42,15 @@ static int test_getattr(const char *path, struct stat=
- *st)
+>         self->connection =3D statbuf.st_dev;
+> +
+> +       sprintf(path_buf, "/sys/fs/fuse/connections/%d", self->connection=
+);
+> +       if (access(path_buf, F_OK) !=3D 0)
+> +               SKIP(return,
+> +                    "fusectl doesn't seem to be mounted: %s\n",
+> +                    strerror(errno));
 >  }
 >
->  static int test_readdir(const char *path, void *buf, fuse_fill_dir_t fil=
-ler,
-> -                       off_t offset, struct fuse_file_info *fi)
-> +                       off_t offset, struct fuse_file_info *fi,
-> +                       enum fuse_readdir_flags flags)
->  {
->         if (strcmp(path, "/"))
->                 return -ENOENT;
->
-> -       filler(buf, ".", NULL, 0);
-> -       filler(buf, "..", NULL, 0);
-> -       filler(buf, test_path + 1, NULL, 0);
-> +       filler(buf, ".", NULL, 0, FUSE_FILL_DIR_DEFAULTS);
-> +       filler(buf, "..", NULL, 0, FUSE_FILL_DIR_DEFAULTS);
-> +       filler(buf, test_path + 1, NULL, 0, FUSE_FILL_DIR_DEFAULTS);
->
->         return 0;
->  }
-> @@ -107,7 +109,8 @@ static int test_write(const char *path, const char *b=
-uf, size_t size,
->         return size;
->  }
->
-> -static int test_truncate(const char *path, off_t size)
-> +static int test_truncate(const char *path, off_t size,
-> +                        struct fuse_file_info *fi)
->  {
->         if (strcmp(path, test_path) !=3D 0)
->                 return -ENOENT;
+>  FIXTURE_TEARDOWN(fusectl)
 >
