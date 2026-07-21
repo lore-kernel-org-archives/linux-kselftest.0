@@ -1,249 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE4364E85;
-	Tue, 21 Jul 2026 13:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9A5F1F12E0
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784640502; cv=none; b=RKwfWh/+zA+4h0lpyj/dtjKCM5gGpkhhbSKeqAXCU4P83O/Tac4QIRPXjWV1eAnnCUcjujdqc/WoOBrI25J2dgdZxF91nC4EAxQu7CjvlyfI6c8PqYd09nqFe6Rewst41ZvPNSKnk7/sJmvtSk8RYLr+sgIKnm44N0D/h/swy8M=
+	t=1784640702; cv=none; b=MPBn+B5+yC+c7+bhAtRT0Z4auzezjkMN3Z4d+CVuV5HspvsFVQM9mCcubtkK36cmPKU7Z7kwoJMF9XwSk0bbjYCdEe1b0FdDGAc3p/0i8I3BTWIaWhhKtYI0BChzKynwa17cm2sx+fqG4hmvphKWEIH+a6rwVDhWeg9lU9Gt9Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784640502; c=relaxed/simple;
-	bh=1DrzkwYG4DVcLfvK8rN78l2Ib189Ef5Dxe6x+/C7Rsc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=diJFV4Y2fkMHE/QQF33Gy0PoHw7kYW43rtDJneQCFi/vKPIM47pk7bwdFkaBDaL4+7cpgmuQtKuj2CsIABiFnhSKCie4C6Wp0tn5xwNmgntqdMvqVzCFVbzzRC4xCeswG9r2QpBRN8FurOIJjDSCQgM8qJe4WKO/e2bBR8TUzhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpJnpT20; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784640702; c=relaxed/simple;
+	bh=1Y4uCMaWFJ2YnJaUqugry8zOJdoCsJRnngLRIjXh9HQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gNUgTMhufQGNcsfX88UXQTmJlpOTdN6UogwsU94Duut+nNQgC24SoO6EgEAKEavDlbpSPpElWaPfpXBuqpAYao/JLVubsGx2nmRCTiZAkeuM6feOTEr3S5Z25DNS44/GOVxjsmrP3aovXIsk03OmIMiSKGqrWWXlZXhKncx5yug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sbkg0ZT9; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpJnpT20"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E401F000E9;
-	Tue, 21 Jul 2026 13:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784640501;
-	bh=R6fUyFk8ujRTzbRaJmanF803n/mbAv7CSse41ycTcNk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KpJnpT20QOyKkepzpMkW5nqZGuzmqwLn2yQU67By8k48KdR4iYMJ9bDWPKEIvprRu
-	 4pG9Cq7F6C3mWPzYkptISPkm86QJKYgFYKzgv58AAz1ErdZ/1DMZvRVW4SGLLKf1ST
-	 Ba9s+/Fr+nkzmkjWbix78M1cwSc3gDxyLEbNxA7UGNq0gM6MppB5b4F4Qn4CzeBqyu
-	 ae499b2FDGEnds5RLdqjNx2YyEQ4KhznYDDJpGlidoqy360ewoHiapGR4X6k5wO7me
-	 SSDYddgvEiOIZmBwWeFGSaYjb/5OW6IQkL5y0c0UvgtlHD+NkBUB0MuvDbtZ18PKG0
-	 4wPEzcZglcvnQ==
-Message-ID: <94ace42d-8d60-4475-953e-74fb3dc23774@kernel.org>
-Date: Tue, 21 Jul 2026 15:28:13 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sbkg0ZT9"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784640695;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UwoXfTfmep5EjRgLUdZq4lvJY8DxeJwoomAY6JwLMhg=;
+	b=Sbkg0ZT9yL05MUIRhsvWH1vTL5S+7q8qMZNiD5MNMRJsASOsrB/ZtOu0fZP3p63PnCq1zW
+	XWlCkLFpJFIJp14QlEBFus0/LQT3cGMqF9ud4+hbvHsSDnl2aV4/P7agtXzPptf4STxizO
+	d2N2t42eiUtitsP78jctk+bth/4RRG8=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Jingguo Tan <tanjingguo@huawei.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Lin Ma <malin89@huawei.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next 0/2] bpf: Fix WARNING in bpf_tracing_link_release
+Date: Tue, 21 Jul 2026 21:30:33 +0800
+Message-ID: <20260721133036.49265-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: transhuge-stress: check duration inside
- page loop
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R . Howlett" <liam@infradead.org>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Aishwarya TCV <aishwarya.tcv@arm.com>
-References: <20260720103105.169955-1-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260720103105.169955-1-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/20/26 12:31, Sarthak Sharma wrote:
-> transhuge-stress.c currently scans memory equal to RAM by default,
-> in jumps of hugepage size, trying to allocate and split a THP at
-> each step. After the entire range is covered, it checks whether
-> elapsed time is greater than the duration. But it is possible
-> that the THP work it does takes time more than the duration itself,
-> causing the test to exceed the CI timeout.
-> 
-> Check the elapsed time after each THP operation. If the duration
-> has elapsed, break and end the test. Adjust the statistics
-> calculations to accommodate partially completed passes. Also,
-> reject sizes which are smaller than a huge page.
-> 
-> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-> Suggested-by: Dev Jain <dev.jain@arm.com>
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> ---
-> Tested with -d 5 on a machine with about 250 GiB RAM.
+The trampoline could be corrupted by the blindly
+'tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX' in verifier.
 
-That is certainly an improvement for running the test, but see below on the
-overall test: within 5 seconds on that machine, the test is probably completely
-useless to run.
+1. A fexit attached to a tail_call_reachable prog.
+2. Another fexit loaded with the same tail_call_reachable prog target.
+3. Close the first fexit link.
 
-IOW, 5 wasted seconds :)
+[    3.410719] WARNING: kernel/bpf/syscall.c:3551 at bpf_tracing_link_release+0x53/0x60, CPU#1: test_progs/98
+...
+[    3.428793]  bpf_link_free+0x58/0x130
+[    3.429293]  bpf_link_release+0x23/0x30
 
-> 
-> Time taken before the patch = 4m26.793s
-> Time taken after the patch = 0m5.198s
-> ---
->  tools/testing/selftests/mm/transhuge-stress.c | 30 ++++++++++++++-----
->  1 file changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
-> index 8eb0c5630e7e..a0f9fc900360 100644
-> --- a/tools/testing/selftests/mm/transhuge-stress.c
-> +++ b/tools/testing/selftests/mm/transhuge-stress.c
-> @@ -35,6 +35,7 @@ int main(int argc, char **argv)
->  	size_t map_len;
->  	int pagemap_fd;
->  	int duration = 0;
-> +	double elapsed = 0;
->  
->  	ksft_print_header();
->  
-> @@ -60,8 +61,6 @@ int main(int argc, char **argv)
->  			len = atoll(argv[i]) << 20;
->  	}
->  
-> -	ksft_set_plan(1);
-> -
->  	if (name) {
->  		backing_fd = open(name, O_RDWR);
->  		if (backing_fd == -1)
-> @@ -78,6 +77,10 @@ int main(int argc, char **argv)
->  		ksft_exit_fail_msg("open pagemap\n");
->  
->  	len -= len % HPAGE_SIZE;
-> +	if (len == 0)
-> +		ksft_exit_fail_msg("len must be at least %d MiB\n",
-> +			HPAGE_SIZE >> 20);
-> +
->  	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_RW, mmap_flags, backing_fd, 0);
->  	if (ptr == MAP_FAILED)
->  		ksft_exit_fail_msg("initial mmap");
-> @@ -91,6 +94,7 @@ int main(int argc, char **argv)
->  	if (!map)
->  		ksft_exit_fail_msg("map malloc\n");
->  
-> +	ksft_set_plan(1);
->  	clock_gettime(CLOCK_MONOTONIC, &start);
->  
->  	while (1) {
-> @@ -125,16 +129,28 @@ int main(int argc, char **argv)
->  			/* split transhuge page, keep last page */
->  			if (madvise(p, HPAGE_SIZE - psize(), MADV_DONTNEED))
->  				ksft_exit_fail_msg("MADV_DONTNEED");
-> +
-> +			if (duration > 0) {
-> +				clock_gettime(CLOCK_MONOTONIC, &b);
-> +				elapsed = b.tv_sec - start.tv_sec +
-> +					(b.tv_nsec - start.tv_nsec) / 1000000000.;
-> +				if (elapsed >= duration)
-> +					break;
-> +			}
->  		}
->  		clock_gettime(CLOCK_MONOTONIC, &b);
->  		s = b.tv_sec - a.tv_sec + (b.tv_nsec - a.tv_nsec) / 1000000000.;
->  
->  		ksft_print_msg("%.3f s/loop, %.3f ms/page, %10.3f MiB/s\t"
-> -			       "%4d succeed, %4d failed, %4d different pages\n",
-> -			       s, s * 1000 / (len >> HPAGE_SHIFT), len / s / (1 << 20),
-> -			       nr_succeed, nr_failed, nr_pages);
-> -
-> -		if (duration > 0 && b.tv_sec - start.tv_sec >= duration) {
-> +				"%4d succeed, %4d failed, %4d different pages\n",
-> +				s, s * 1000 / (nr_failed + nr_succeed),
-> +				s > 0 ?
-> +					(double)(nr_failed + nr_succeed) *
-> +					(HPAGE_SIZE >> 20) / s :
-> +					0.0,
-> +				nr_succeed, nr_failed, nr_pages);
-> +
-> +		if (duration > 0 && elapsed >= duration) {
->  			ksft_test_result_pass("Completed\n");
->  			ksft_finished();
->  		}
+Fix the warning by updating 'tr->flags' with '|=' and lock.
 
-Looking into this test here, this is actually the type of test we don't want as
-a selftests.
+Leon Hwang (2):
+  bpf: Fix WARNING in bpf_tracing_link_release
+  selftests/bpf: Verify no warning when close fexit link
 
-a) It never fails on actual THP allocation issues, so the test can never fail
-   (only trigger splats etc).
+ include/linux/bpf.h                           |  2 +
+ kernel/bpf/trampoline.c                       |  7 +++
+ kernel/bpf/verifier.c                         |  2 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      | 51 +++++++++++++++++++
+ 4 files changed, 61 insertions(+), 1 deletion(-)
 
-b) It relies on magic input parameters nobody ever sets. Setting the value too
-   small (e.g., to 5), will not test anything on a bigger machine, really. Even
-   the default of "20" from run_vmtests.sh is likely insufficient.
-
-   There an option to set a file when really, nobody does that. We don't want
-   random testing tools to be part of our automated selftests.
-
-c) It measures and prints things nobody ever checks
-
-
-I think we should rethink this test as a whole: what could it look like as a
-proper selftests, whose sole purpose is to be a selftest that passes or fails,
-reliably.
-
-For example, we could
-
-a) Allocate as many THPs until it fails
-
-b) Split all THPs, keeping only a single page
-
-c) Retry allocating THPs and make sure that we succeed in allocating the
-   majority. If not, fail.
-
-While making sure that the system is configured properly.
-
-To avoid long runtimes, we could consider skipping the tests on larger machines
-(e.g., > 10s) where allocation would just take too long.
-
-That would be more deterministic than what we have here.
-
--- 
-Cheers,
-
-David
+--
+2.55.0
