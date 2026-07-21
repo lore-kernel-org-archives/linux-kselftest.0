@@ -1,68 +1,30 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAEB4582ED
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDE93B9930;
+	Tue, 21 Jul 2026 22:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784667481; cv=none; b=iawHH9IRGQkHACbHaFGQIF9b6QIlEdR5rCwy0Fn8Ebh8otI4hpiPKDXFuL9rbxjSjMb7DG1Mj2IGp+1ZUwBjTDd1SCPIV48eTSd9wtspjqr+ksoBuc8ds8eBJ9rTG/zUTrLEYqpaZC3bgVl3lvwczOYexkbbrbpPC90MtwKRtUc=
+	t=1784671631; cv=none; b=VYuYqZ3QZC0j9/DxcGkKfS/3iw4sbRcP9Swcgmef4Ss3XQB2fbo0EGQIwre3fDNXf9VicLg3C3cb0uFcUAD2jcysdsL6mCg6MQwXU069aH3w/RqDWrcRtsEsz7v8XE3BrA6+GMzLLNIzmF0rfer6vXNpSrU4Msh1IU0aWQy5Mf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784667481; c=relaxed/simple;
-	bh=BS/7+W/ScY9FbtrVvZHz2z8utPUssrUnirw4URXpk04=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FIIOBGhp5y0AmL2kcQqZJfiaKXOvZ6vx7yNDBFhU6FliGTcIOAD0Q+yYKA/qraEeeRHQfx9HHpNgool5LRrf1wiN7G+Yks+wMVkBZ9SRt0iWaXD1BZ5Wwqw++f+9J04uthZq3zwMU3lo4T/6A6oZ3o8IAZL5vbAGhWmUGFNvkDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wqde2kkR; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784671631; c=relaxed/simple;
+	bh=TTp1xDbkUb96djWCbF2mmA33y9oUbQERvW25a3o74WA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NzVqEnyUf0004qNm5XnF5TF8q3dXa9z4tjmNNJ4Irp644WsSkAVXMHMzQ31uaUzdxoRQVGuuqdCLehP9VD2np8esesYX3nzdAP2QrgAu4sCsAqzf2BO9gTBtccLvv0RFdJX1VoIFyBTRGBXtp/ThbC1254CWfDguqhZhady/7vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=MW4eYlAe; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wqde2kkR"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7eb5bdb50fcso4247578a34.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784667466; x=1785272266; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UQj3W9vj1yiuzq11rsTFSn1TB9FMKBNwQCCPvbRtzuE=;
-        b=Wqde2kkRCaYWSmD8LvdDgqmVolCYwpMiJyzhWUBLin/CQEipz6UgWDkqhwEcAklxQm
-         RcJ+QwSSF96y4OCII9EEjR8IRm3YhXkJ6+132ieSbuRFmO4M3EVZdnhYuJs6i7OzXFIs
-         CJmasEtin3d3g6vTycwqQ/HPA/Mo8BNEBdckY/eaHC2KsE56w8iACVqRoT1U/+pEOaLo
-         lxFBEdbLF6/dWqdfoHaL29KbRDLvM9ogWhyU3BuiqKArM6311wMC9/ktB7AduMHSO+f9
-         Bg05K02puJS//qS1OIM4R8GhK47tfLrNZU3WXNARVktoxgK4N8mdPFxmHaqYNi4ZXNzV
-         4trQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784667466; x=1785272266;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UQj3W9vj1yiuzq11rsTFSn1TB9FMKBNwQCCPvbRtzuE=;
-        b=dRMYWmIkfWBS+T5tCqSRfL3xLnXRB/MiS96ThEfK6fIGliDrep8Yp4Lj7d77kd73WW
-         MQA2XLm1LIAi/KepzuuXyQcOm/uCZU14nB6ExteyAINuTb2dEnLPpulYwShF7Ki4gWtV
-         NObiQxqhTT4VrocGZHXVKjae2RBWSIqziXTGxU1pRcdkZSLyX4whWRRdiJN97nTNE25P
-         TmNXuUVd6z6rlohU/su7oQNV+GSIdUYCAnfBgjJ1jhZY7sM3PeL/yi3tTfIEE729VMQr
-         PUseO/iFbwe2UWeYe9dhQ7Nm4JRX21DxytHk9+EncSFd5XXQ36VfEh9Zz3yO+zoCmrN9
-         LJRA==
-X-Forwarded-Encrypted: i=1; AHgh+RpqGCeb6iU97fLd+D2omvYk9u2FePVYRcI/AJ53da/Tp8iGCijK27TQxF4pnGKm5wQMDHT4IN8v7ORlPSY5PrM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBL9MCyxQDa5MvT065Z+pAGmVad4YSCKm7B7f+B5Hxh89xpqJQ
-	2mr8wq7SJreYFTvtpQD0vr1rYCSb2ec5DZNAo8INTqzIHc261AgT6fZY
-X-Gm-Gg: AfdE7clF0AzPAZhRa+mJOl4QKtgyaFR14T3LGTuu9rcQpnH8kbB6sNKZQ93eL8HtqGJ
-	WbcWm9tajUIOr39ntgXbyTHkLo4swcpxy6Y7U7VaGrESDCA0H18cLKUtNYGtllGHiqUXst4duiU
-	3nf7OCa2bvNHigJFZ39k7becNiwnTuHl+Ef6Cte/S916l0BSHXET70zm2p3UjsTfnF1KHugisT7
-	niVPCTX7LslgNAHW0liyfqNb/eYchZDIWKBoJUV7HI7CDt3Cs+X0zlKZGPF5sEQPXp4+tsnBzFs
-	syG8Z2tNzch12yU/G0K4YT4+mCA1PgOuCRie4k/DpU13gUspNY3taBsnbS3c7niIM0qR7eas8MA
-	T4PWMHsIm6Uu4GNlELOfmqyvlCxkiX7sgPRZNRKT45UuiGyV26DpkLiPxNGVqexvC0ZDJyWpldH
-	dueaCpBgfJoZzeCY+/FTwpF2WG82/t57LUSpDkTommPhxVi3xPFiucdH9tta0r9fHeEC8ahvziX
-	y9IS6XWor13rcXLi4mPipO4iA==
-X-Received: by 2002:a05:6830:6af5:b0:7d7:ed69:81b2 with SMTP id 46e09a7af769-7ed9a7d30d9mr10408585a34.5.1784667465829;
-        Tue, 21 Jul 2026 13:57:45 -0700 (PDT)
-Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 13:57:45 -0700 (PDT)
-From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 21 Jul 2026 14:57:18 -0600
-Subject: [PATCH v7 29/29] selftests/dyndbg: enable FT_classmap_inheritance
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MW4eYlAe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1784671627;
+	bh=TTp1xDbkUb96djWCbF2mmA33y9oUbQERvW25a3o74WA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=MW4eYlAeZkYVy95ZqN4MXHWsKw4Z7oUPrZWNRhngPlEZtF/Br7mr+0rwokLWgDyEB
+	 qhPiMvbYKNwipxQfBVe3rbudQyzNISaqurQa0Gy2Ugwx1efxLaF+rJeYP+9eauADth
+	 f7RRUcmQJZ/AXgRJS285cgwUaXnjAuHEiw8vHFqQ=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 22 Jul 2026 00:07:05 +0200
+Subject: [PATCH v2] tools/nolibc: add support for Alpha
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,215 +32,320 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-dd-maint-2-v7-29-010fbe73b311@gmail.com>
-References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
-In-Reply-To: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Jason Baron <jbaron@akamai.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Shuah Khan <skhan@linuxfoundation.org>, Simona Vetter <simona@ffwll.ch>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=9923;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=BS/7+W/ScY9FbtrVvZHz2z8utPUssrUnirw4URXpk04=;
- b=Oii8tGHzWXATuGVbwd8S07r/I1BaZggOREITgQJyD5+MbEKQajuZi6tv+gpG0LQztd7WXeq8c
- tChhMbNpntqAHKsSr4wuWUN2zgLWs2mISw4Mflt2h67kkBSrc4h7ruJ
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260722-nolibc-alpha-v2-1-4970e48eb7bf@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1XMwQ6CMAzG8VcxPTuzrQPEk+9hOOCorgkZZEXUE
+ N7diSfT07/J91tAKDEJnHYLJJpZeIg57H4HPrTxToq73GC1LXSpaxWHnq9etf0YWoVIVV06Vzj
+ nIU/GRDd+bdylyR1YpiG9N3023+8Pqgz+Q7NR+bQ1JSJ2qI/nJ7GI+PAIh0gTNOu6fgAeOsy0r
+ QAAAA==
+X-Change-ID: 20250609-nolibc-alpha-33e79644544c
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
+ Richard Henderson <richard.henderson@linaro.org>, 
+ Matt Turner <mattst88@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-alpha@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784671626; l=14964;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=TTp1xDbkUb96djWCbF2mmA33y9oUbQERvW25a3o74WA=;
+ b=n6RyVcj3912gMDEhNVm20W2RIjEuVdj6Eu1AwF1F0HgLOKYznEX7/4kYjgvqWGMDOSC+xgGSw
+ yNItns4IjSEBzvQ4xM3l4+NZ8uiSHxV2l5wHAPQnmdNH1iEwTRkx/TB
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-re-enable FT_classmap_inheritance, and comment out writes to missing
-test-mod params. tbd where they are.
+A straightforward new architecture.
 
-fix-some-tests-sysl test-tweaks
-selftests/dyndbg: sync all results checksums
-happened on gandalf, at end of progress_from master+5 in this tree.
-
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- .../selftests/dynamic_debug/dyndbg_selftest.sh     | 88 +++++++++++++++++-----
- 1 file changed, 71 insertions(+), 17 deletions(-)
+Only tested on QEMU so far.
+Testing on real hardware would be very welcome.
 
-diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-index 947f23dcb4ce..49c2a79929c6 100755
---- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-+++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
-@@ -181,7 +181,7 @@ function slice_and_hash_ddctrl {
- }
+Test instructions:
+$ cd tools/testings/selftests/nolibc/
+$ make -f Makefile.nolibc ARCH=alpha CROSS_COMPILE=alpha-linux- nolibc-test
+$ file nolibc-test
+nolibc-test: ELF 64-bit LSB executable, Alpha (unofficial), version 1 (SYSV), statically linked, not stripped
+$ ./nolibc-test
+Running test 'startup'
+0 argc = 1                                                        [OK]
+...
+Total number of errors: 0
+Exiting with status 0
+---
+Changes in v2:
+- Add clobbers to system call arguments
+- Adapt to new system call wrapper names
+- Avoid multiple register variables with same register
+- Expand comment about special brk handling
+- Rebase on latest nolibc/for-next
+- Link to v1: https://lore.kernel.org/r/20250713-nolibc-alpha-v1-1-10216333d308@weissschuh.net
+---
+ tools/include/nolibc/Makefile                  |   2 +-
+ tools/include/nolibc/arch-alpha.h              | 162 +++++++++++++++++++++++++
+ tools/include/nolibc/arch.h                    |   2 +
+ tools/testing/selftests/nolibc/Makefile.nolibc |   2 +
+ tools/testing/selftests/nolibc/nolibc-test.c   |   4 +
+ tools/testing/selftests/nolibc/run-tests.sh    |   3 +-
+ 6 files changed, 173 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index 00fd2e566d75..6d213d372bf8 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -17,7 +17,7 @@ endif
+ # it defaults to this nolibc directory.
+ OUTPUT ?= $(CURDIR)/
  
- function verify_modprobe_param_logging {
--    # $1 - parameter name (e.g. do_classes)
-+    # $1 - parameter name (e.g. do_prints)
-     # $2 - parameter value (e.g. 1)
-     # $3 - short descriptive tag (e.g. classes)
-     local param="$1"
-@@ -199,12 +199,12 @@ function verify_modprobe_param_logging {
-     log_start
-     modprobe test_dynamic_debug "${param}=${val}"
- 
--    # If it is a state-controlling parameter, trigger the print-workload 'do_classes=1'
-+    # If it is a state-controlling parameter, trigger the print-workload 'do_prints=1'
-     # inside the same syslog dmesg capture bookends to verify their actual pr_debug logging!
-     if [ "$param" = "p_disjoint_bits" ] || [ "$param" = "p_level_num" ]; then
-         LOCAL_DDCMDS="${LOCAL_DDCMDS}; echo 1 > "
--        LOCAL_DDCMDS="${LOCAL_DDCMDS}/sys/module/test_dynamic_debug/parameters/do_classes"
--        echo 1 > /sys/module/test_dynamic_debug/parameters/do_classes
-+        LOCAL_DDCMDS="${LOCAL_DDCMDS}/sys/module/test_dynamic_debug/parameters/do_prints"
-+        echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
-     fi
- 
-     log_stop
-@@ -217,8 +217,10 @@ function verify_modprobe_param_logging {
- 
-         # Verify that the resulting control-file state is completely cleared
-         local hash_unset=$(slice_and_hash_ddctrl '\[test_dynamic_debug\]')
--        local default_hash="fd89900c8614f23c3a6e8a8d45aa3280"
+-architectures := arm arm64 loongarch m68k mips openrisc parisc powerpc riscv s390 sh sparc x86
++architectures := alpha arm arm64 loongarch m68k mips openrisc parisc powerpc riscv s390 sh sparc x86
+ arch_files := arch.h $(addsuffix .h, $(addprefix arch-, $(architectures)))
+ all_files := \
+ 		alloca.h \
+diff --git a/tools/include/nolibc/arch-alpha.h b/tools/include/nolibc/arch-alpha.h
+new file mode 100644
+index 000000000000..f6c0b905f594
+--- /dev/null
++++ b/tools/include/nolibc/arch-alpha.h
+@@ -0,0 +1,162 @@
++/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
++/*
++ * Alpha specific definitions for NOLIBC
++ * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
++ */
 +
- 	# Pristine fully-disabled slice hash
-+	local default_hash="fd89900c8614f23c3a6e8a8d45aa3280"
-+	default_hash="d8d188e03eb33d970453c06b8f3f25a4"
++#ifndef _NOLIBC_ARCH_ALPHA_H
++#define _NOLIBC_ARCH_ALPHA_H
++
++#include "compiler.h"
++#include "crt.h"
++
++/*
++ * Syscalls for Alpha:
++ *   - registers are 64-bit
++ *   - syscall number is passed in $0/v0
++ *   - the system call is performed by calling callsys
++ *   - syscall return comes in $0/v0, error flag in $19/a4
++ *   - arguments are passed in $16/a0 to $21/a5
++ *   - GCC does not support symbol register names
++ */
++
++#define _NOLIBC_SYSCALL_CLOBBERLIST \
++	"$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", \
++	"$22", "$23", "$24", "$25", "$27", "$28", "memory", "cc"
++
++#define __nolibc_syscall0(num)                                                \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		:                                                             \
++		: _NOLIBC_SYSCALL_CLOBBERLIST,                                \
++		  "$16", "$17", "$18", "$20", "$21"                           \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall1(num, arg1)                                          \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1)                                                  \
++		: _NOLIBC_SYSCALL_CLOBBERLIST, "$17", "$18", "$20", "$21"     \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall2(num, arg1, arg2)                                    \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++	register long _arg2 __asm__ ("$17") = (long)(arg2);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1), "r"(_arg2)                                      \
++		: _NOLIBC_SYSCALL_CLOBBERLIST, "$18", "$20", "$21"            \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall3(num, arg1, arg2, arg3)                              \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++	register long _arg2 __asm__ ("$17") = (long)(arg2);                   \
++	register long _arg3 __asm__ ("$18") = (long)(arg3);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3)                          \
++		: _NOLIBC_SYSCALL_CLOBBERLIST, "$20", "$21"                   \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall4(num, arg1, arg2, arg3, arg4)                        \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++	register long _arg2 __asm__ ("$17") = (long)(arg2);                   \
++	register long _arg3 __asm__ ("$18") = (long)(arg3);                   \
++	register long _arg4 __asm__ ("$19") = (long)(arg4);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4)              \
++		: _NOLIBC_SYSCALL_CLOBBERLIST, "$20", "$21"                   \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall5(num, arg1, arg2, arg3, arg4, arg5)                  \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++	register long _arg2 __asm__ ("$17") = (long)(arg2);                   \
++	register long _arg3 __asm__ ("$18") = (long)(arg3);                   \
++	register long _arg4 __asm__ ("$19") = (long)(arg4);                   \
++	register long _arg5 __asm__ ("$20") = (long)(arg5);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5)  \
++		: _NOLIBC_SYSCALL_CLOBBERLIST, "$21"                          \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++#define __nolibc_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)            \
++({                                                                            \
++	register long _num __asm__ ("$0") = (num);                            \
++	register long _err __asm__ ("$19");                                   \
++	register long _arg1 __asm__ ("$16") = (long)(arg1);                   \
++	register long _arg2 __asm__ ("$17") = (long)(arg2);                   \
++	register long _arg3 __asm__ ("$18") = (long)(arg3);                   \
++	register long _arg4 __asm__ ("$19") = (long)(arg4);                   \
++	register long _arg5 __asm__ ("$20") = (long)(arg5);                   \
++	register long _arg6 __asm__ ("$21") = (long)(arg6);                   \
++                                                                              \
++	__asm__ volatile (                                                    \
++		"callsys"                                                     \
++		: "+r"(_num), "=r"(_err)                                      \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
++		  "r"(_arg6)                                                  \
++		: _NOLIBC_SYSCALL_CLOBBERLIST                                 \
++	);                                                                    \
++	_err ? -_num : _num;                                                  \
++})
++
++/* startup code */
++void __attribute__((weak, noreturn)) __nolibc_entrypoint __nolibc_no_stack_protector
++_start(void)
++{
++	__asm__ volatile (
++		"br $gp, 0f\n"               /* setup $gp, so that 'lda' works                */
++		"0: ldgp $gp, 0($gp)\n"
++		"lda $27, _start_c\n"        /* setup current function address for _start_c   */
++		"mov $sp, $16\n"             /* save argc pointer to $16, as arg1 of _start_c */
++		"br  _start_c\n"             /* transfer to c runtime                         */
++	);
++	__nolibc_entrypoint_epilogue();
++}
++
++#endif /* _NOLIBC_ARCH_ALPHA_H */
+diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
+index b69d9c5ec5c6..06cc2dbe7a33 100644
+--- a/tools/include/nolibc/arch.h
++++ b/tools/include/nolibc/arch.h
+@@ -32,6 +32,8 @@
+ #include "arch-openrisc.h"
+ #elif defined(__hppa__)
+ #include "arch-parisc.h"
++#elif defined(__alpha__)
++#include "arch-alpha.h"
+ #else
+ #error Unsupported Architecture
+ #endif
+diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
+index 06f881e2e90c..f70c8dfca018 100644
+--- a/tools/testing/selftests/nolibc/Makefile.nolibc
++++ b/tools/testing/selftests/nolibc/Makefile.nolibc
+@@ -112,6 +112,7 @@ EXTRACONFIG_armthumb  = -e CONFIG_NAMESPACES
+ EXTRACONFIG_sparc32   = -e CONFIG_TMPFS
+ EXTRACONFIG_m68k      = -e CONFIG_BLK_DEV_INITRD
+ EXTRACONFIG_sh4       = -e CONFIG_BLK_DEV_INITRD -e CONFIG_CMDLINE_FROM_BOOTLOADER
++EXTRACONFIG_alpha     = -e CONFIG_BLK_DEV_INITRD
+ EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
  
-         if [ "$hash_unset" != "$default_hash" ]; then
-             echo -e "${RED}: Runtime unsetting failed for ${param}! " \
-@@ -249,7 +251,7 @@ function FT_grammar_ok {
+ # optional tests to run (default = all)
+@@ -174,6 +175,7 @@ QEMU_ARGS_m68k       = -M virt -append "console=ttyGF0,115200 panic=-1 $(TEST:%=
+ QEMU_ARGS_sh4        = -M r2d -serial file:/dev/stdout -append "console=ttySC1,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_openrisc   = -M virt -m 512M -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_parisc32   = -M B160L -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_alpha      = -M clipper -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS            = -m 1G $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
  
-     # use 4 keywords (max 9 words inc flags)
-     ddcmd "module foo file bar.c func buz class D2_CORE +_"	# 4 keywords
--    #ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
-+    ddcmd "module foo file bar.c func buz class D2 line 100 +_" # 5 keywords
- 
-     # 3. Dedicated lineno range grammar assertions (side-effect-free proofs)
-     ddcmd "line 42 +_"		# test exact line syntax
-@@ -493,9 +495,9 @@ function FT_test_classes {
-     verify_file_slice '\[test_dynamic_debug\]'
- 
-     # 2. Verify state transition and live-printing end-to-end via ddcmd_load!
--    ddcmd_load "class,D2_CORE,+pmf@class,D2_KMS,+pls@class,D2_ATOMIC,+pml" \
-+    ddcmd_load "class,D2_CORE,+pmf;class,D2_KMS,+pls;class,D2_ATOMIC,+pml" \
-         '\[test_dynamic_debug\]' \
--        "/sys/module/test_dynamic_debug/parameters/do_classes" "1"
-+        "/sys/module/test_dynamic_debug/parameters/do_prints" "1"
- 
-     ifrmmod test_dynamic_debug
- }
-@@ -508,8 +510,8 @@ function FT_classmap_inheritance {
-     ddcmd =_
- 
-     # modprobe with class enablements
--    modprobe test_dynamic_debug \
--	dyndbg=class,D2_CORE,+pf@class,D2_KMS,+pt@class,D2_ATOMIC,+pm
-+    #modprobe test_dynamic_debug \
-+	#dyndbg=class,D2_CORE,+pf@class,D2_KMS,+pt@class,D2_ATOMIC,+pm
- 
-     verify_file_slice '\[test_dynamic_debug\]'
- 
-@@ -517,8 +519,8 @@ function FT_classmap_inheritance {
-     verify_file_slice '\[test_dynamic_debug_submod\]'
- 
-     # Verify 3 class changes
--    ddcmd "class,D2_CORE,+pmf @ class,D2_KMS,+plt @ class,D2_ATOMIC,+pml" \
--	  'test_dynamic_debug' "# add some prefixes"
-+    #ddcmd "class,D2_CORE,+pmf @ class,D2_KMS,+plt @ class,D2_ATOMIC,+pml" \
-+	#'test_dynamic_debug' "# add some prefixes"
- 
-     # now work the classmap-params
-     # fresh start, to clear all above flags (test-fn limits)
-@@ -572,8 +574,8 @@ function FT_classmap_inheritance {
- 
-     # --- Live Content Fingerprinting Phase ---
-     log_start
--    echo 1 > /sys/module/test_dynamic_debug/parameters/do_classes
--    echo 1 > /sys/module/test_dynamic_debug_submod/parameters/do_classes
-+    echo 1 > /sys/module/test_dynamic_debug/parameters/do_prints
-+    echo 1 > /sys/module/test_dynamic_debug_submod/parameters/do_prints
-     log_stop
- 
-     ifrmmod test_dynamic_debug_submod
-@@ -622,8 +624,8 @@ builtin_tests=(
- # Modular Feature Tests (Require CONFIG_MODULES=y and test_dynamic_debug*.ko available)
- modular_tests=(
-     #FT_test_classes
--    #FT_classmap_inheritance
--    #FT_modprobe_w_param
-+    FT_classmap_inheritance
-+    FT_modprobe_w_param
+ # OUTPUT is only set when run from the main makefile, otherwise
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 996e8d13508e..66accf99f560 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -756,6 +756,10 @@ int run_startup(int min, int max)
+ 	/* checking NULL for argv/argv0, environ and _auxv is not enough, let's compare with sbrk(0) or &end */
+ 	extern char end;
+ 	char *brk = sbrk(0) != (void *)-1 ? sbrk(0) : &end;
++#if defined(__alpha__)
++	/* the ordering above does not work on an alpha kernel due to STACK_TOP != TASK_SIZEi */
++	brk = NULL;
++#endif
+ 	/* differ from nolibc, both glibc and musl have no global _auxv */
+ 	const unsigned long *test_auxv = (void *)-1;
+ #ifdef NOLIBC
+diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
+index 6460e25001de..dc0b1649c641 100755
+--- a/tools/testing/selftests/nolibc/run-tests.sh
++++ b/tools/testing/selftests/nolibc/run-tests.sh
+@@ -30,6 +30,7 @@ all_archs=(
+ 	m68k
+ 	sh4
+ 	parisc32
++	alpha
  )
+ archs="${all_archs[@]}"
  
- # ==============================================================================
-@@ -640,7 +642,6 @@ modular_tests=(
- # ==============================================================================
- function GOLDEN_RECORDS {
-     cat << 'EOF' | {
--# --- Unregistered Baselines ---
- #K= f3dbd5afb9aa1750f93275b634499e22 FT_grammar_errs.1        dmesg
- #K= 200c01632c52a63f6d186da1c6460740 FT_grammar_errs.2        dmesg
- #K= 7d7141900ce6e32f15c99202309c63a4 FT_grammar_errs.3        dmesg
-@@ -689,6 +690,59 @@ function GOLDEN_RECORDS {
- #K= da6bd1c6a299290150668186f8263b82 FT_basic_queries.4       "kernel/params.c"
- #K= 82572e8d20c4b567afac783006d1a935 FT_basic_queries.5       "kernel/params.c"
- #K= baea1247680e8151c121539f4b90a6d8 FT_basic_queries.6       "kernel/params.c"
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_classmap_inheritance.1 "\[test_dynamic_debug\]"
-+#K= 7f9bbb8e3cbaeb819c9db4ad314fe91f FT_classmap_inheritance.2 "\[test_dynamic_debug_submod\]"
-+#K= e595e746a30eac106ad0041b78b9bb04 FT_classmap_inheritance.3 "test_dynamic_debug"
-+#K= 781cd443ba8e9655318c53e32bf7650c FT_classmap_inheritance.4 "test_dynamic_debug"
-+#K= 710b9cc6ba3a9db08025fd8f0cd01058 FT_classmap_inheritance.5 "test_dynamic_debug"
-+#K= 6e78ea40996f4bb355764a023822c89d FT_classmap_inheritance.6 "\[test_dynamic_debug\]"
-+#K= 8efc97ee6ad63ae1b34c3898550fbdeb FT_classmap_inheritance.7 "test_dynamic_debug"
-+#K= 5d93156ac2b46d188c3cab04a0287b68 FT_classmap_inheritance.8 dmesg
-+#K= ec88354e5d563adfb7816b09588ce22a FT_modprobe_w_param.1    dmesg
-+#K= c05be478400d61b0ec7dd3659e1063bb FT_modprobe_w_param.2    dmesg
-+#K= 681053af96e96530f309a755a86bb86e FT_modprobe_w_param.3    dmesg
-+#K= 0567348e035ea0be726ea88e41cbc7f9 FT_modprobe_w_param.4    dmesg
-+#K= e682773b51040743f1881b85ed375ddb FT_modprobe_w_param.5    dmesg
-+#K= 05d1e9c5f416dfaeab7842945e4af7e1 FT_modprobe_w_param.6    dmesg
-+#K= de9880bb8fa627f4f5599d13ad382105 FT_modprobe_w_param.7    dmesg
-+#K= 57fb0642f3d9c33fc1d58ca728481ffb FT_modprobe_w_param.8    dmesg
-+#K= 7be7034fec3a8e0f757720d00b026669 FT_modprobe_w_param.9    dmesg
-+#K= 925d4de5a038cac3356176036717d572 FT_modprobe_w_param.10   dmesg
-+#K= f81c7e22d1dd97608a8ceaca5a0ac677 FT_modprobe_w_param.11   dmesg
-+#K= f573825da4a1128466530d869ce6def1 FT_modprobe_w_param.12   dmesg
-+#K= 9a9d67addbc1732aa9e4e7747261208c FT_modprobe_w_param.13   dmesg
-+#K= 7fba79ed343651fc81f302aec98b0f5a FT_modprobe_w_param.14   dmesg
-+#K= b3f7deb9df2a80205ec2f475aad44c3d FT_modprobe_w_param.15   dmesg
-+#K= 7c1d3772035558d575ca866d4d972e87 FT_modprobe_w_param.16   dmesg
-+#K= 48fe52f49c4927cdf79e937762f50e4f FT_modprobe_w_param.17   dmesg
-+#K= be389ee9ddfe5308e4350090ddd2d16a FT_modprobe_w_param.18   dmesg
-+#K= 1524a2631d44a1abc2eca683908c9e94 FT_modprobe_w_param.19   dmesg
-+#K= e7c39d0b9b293d0147a2f6fcd0f164b3 FT_modprobe_w_param.20   dmesg
-+#K= bdae90265d318a2cb148060130257cbf FT_modprobe_w_param.21   dmesg
-+#K= 4759b6d7cb14acaf0cc33811728f77cf FT_modprobe_w_param.22   dmesg
-+#K= 22659835c1f7a94f82cd8ec7e1796d7f FT_modprobe_w_param.23   dmesg
-+#K= 81bf838321eb584b5adc7edb321560d3 FT_modprobe_w_param.24   dmesg
-+#K= 9353df3b283410f886a638b6996118e5 FT_modprobe_w_param.25   dmesg
-+#K= 28125d16b047544025754071f00d5465 FT_modprobe_w_param.26   dmesg
-+#K= 2ad304b6e6ce3a63e1a24644c4c21f8c FT_modprobe_w_param.27   dmesg
-+#K= 1524a2631d44a1abc2eca683908c9e94 FT_modprobe_w_param.28   dmesg
-+#K= 9e3a99d008531d5a02344730398be088 FT_modprobe_w_param.29   dmesg
-+#K= 4c13f861a474d1931587d893e6038c95 FT_modprobe_w_param.30   dmesg
-+#K= dadffb7601c368815dcf756fb65fdabf FT_modprobe_w_param.31   dmesg
-+#K= 22659835c1f7a94f82cd8ec7e1796d7f FT_modprobe_w_param.32   dmesg
-+#K= 4d9c8b506f9b21306cc3f26bb0754c70 FT_modprobe_w_param.33   dmesg
-+#K= 2c0dd2e7e1b515d612c2060252e76834 FT_modprobe_w_param.34   dmesg
-+#K= 9d0780573256ca9257239a386d4dc6bb FT_modprobe_w_param.35   dmesg
-+#K= 2ad304b6e6ce3a63e1a24644c4c21f8c FT_modprobe_w_param.36   dmesg
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_modprobe_w_param.37   dmesg
-+#K= 06585a61fecd49f826b624a493f8186a FT_modprobe_w_param.38   dmesg
-+#K= 9a4d3232a7d9263158dbf59b4685b32c FT_modprobe_w_param.39   dmesg
-+#K= 6abbd7b226a87b21aebab6f037ece451 FT_modprobe_w_param.40   dmesg
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_modprobe_w_param.41   dmesg
-+#K= 14cf091423c69a188ba45cc39414c1b9 FT_modprobe_w_param.42   dmesg
-+#K= 713b6e5c4af67d59a1896c8181a7e1b5 FT_modprobe_w_param.43   dmesg
-+#K= 67fa99b23bfafccc66b023970b71cbd8 FT_modprobe_w_param.44   dmesg
-+#K= 68b329da9893e34099c7d8ad5cb9c940 FT_modprobe_w_param.45   dmesg
- EOF
-         # Read the K-recs and skip those for tests that can't run
-         while read -r line; do
+@@ -193,7 +194,7 @@ test_arch() {
+ 			exit 1
+ 	esac
+ 	printf '%-15s' "$arch:"
+-	if [ "$arch" = "m68k" -o "$arch" = "sh4" -o "$arch" = "openrisc" -o "$arch" = "parisc32" ] && [ "$llvm" = "1" ]; then
++	if [ "$arch" = "m68k" -o "$arch" = "sh4" -o "$arch" = "openrisc" -o "$arch" = "parisc32" -o "$arch" = "alpha" ] && [ "$llvm" = "1" ]; then
+ 		echo "Unsupported configuration"
+ 		return
+ 	fi
 
--- 
-2.55.0
+---
+base-commit: 070cf03f5ec454eec9c42827ee9f3c0b3fad09f1
+change-id: 20250609-nolibc-alpha-33e79644544c
+
+Best regards,
+--  
+Thomas Weißschuh <linux@weissschuh.net>
 
