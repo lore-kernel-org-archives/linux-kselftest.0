@@ -1,140 +1,187 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFF346D0A3
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853A53264D7
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.138
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784651052; cv=pass; b=fOUt/pzLH5xhhnqdx/LVCndG4/BxsXnSVQbMjBUfh+XNuXdMHmRyFrsZgDQZ8latDInenuLFcwkOTY9jw6a5OVAPrWFlu0zF9+U+lC7SHwRtPFcVu0180zPTei/VDbMvuKlYUkllg91EyOwuVFwL/8A9razlLNPe6LkjOumvaos=
+	t=1784651797; cv=pass; b=BNRLCnJJUk3R60TkGvT8/b9QgdEbypSdpV3z7jt4744G5k4e89r11E04BuuHUBmBydLafkFEQ2WPrGLWrjQhGc1pDGCLWEmqrsdOQ+PxlwCsS6+5os9yJp8+jW92stmOjgn/ksoVplb9vOBm/G/+sYibT7mhALPuTiDnFU7E2Ks=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784651052; c=relaxed/simple;
-	bh=w7TqouPLSZWjqpS6SB6Qduh6O2/m5T9gRHXf3A1juLA=;
+	s=arc-20240116; t=1784651797; c=relaxed/simple;
+	bh=CNPPoWv60vr6t7jcqE+3A/Q+NYsoUCXVG+74URQb7f8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SeKHe3N1lQ69JTSy3QGfQ6EU6cyd31MLISibp/7jXP8hoqhNKmR56x0YvEIfKk+TeVlO5KNXDFU6qJH1HUEnIZO9yCwrjxTZ3MYLbs0bJGXjYKuuEwhXuhfsUTAy8NFQM0mYR6Bj3Xg6wNa5bG9b2S4+Vn/5L2IPYiTWQU6LtfU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b1SXohPs; arc=pass smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=qs3z2N1TLqaqcU4/amPqChnMpq8s92JNtBOLsp6ydsf6qXDivwgmsmfyzlBn7TmrUhPnjlzQ1Qa8UROfDFmp4tXBTi8Uw36QHYEAV3hv32egql07Cz3b9x6LHExiI9Cve0s2fZIT3BqUYy60KnQ48U2khn37A36aWk/zLEQIOpU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MeCBDNao; arc=pass smtp.client-ip=74.125.227.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b1SXohPs"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b2a73da7e1so5610e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 09:24:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784651049; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MeCBDNao"
+Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2cf41b07aceso16177345ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 09:36:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784651795; cv=none;
         d=google.com; s=arc-20260327;
-        b=X52qhdPmcryQ2b+hSlYrcz4iimMkd+q3BB1a39Z39h7aCfB6dlacnbd4YBvz9MEe0/
-         qHBNr7YrXNr/yM2llS6/8h6UUX+aGl40cg2XoU5OTZJAT/RdGiEr8F52PrmCLUeqX7LF
-         zhGcHhIxmJEzaQQBp9IuY6AOjIFYFz3k4wBWzdanSZZVzxdgT6+LLPQ4RucM2uMG6YDr
-         d2Cvo/imebESWXGig6FrKu96rmbkOXp1Sn+CuY5YYoreTgPIMDgYjKJGwpVXPoUiAGjg
-         fOQoi8PWz3NwhTY2PCCjxc/WITPOHEnnyoygwyA1uJuZ6AWRfYQWMy+y57O2mNzzzaOk
-         s4xQ==
+        b=gZj/qKWVRy7hLHWyquwWOlQxr8zlC2b9yoh9NpiPOyOEufaqN37dzE2wZSozDWC3dc
+         qVFS5BxEy/GvpBGJo8RcEG8E2yo0OzcUF6pQIM7wD8ab/e5u38ShWr5S7xX7lgmN2HLK
+         i4WXMNlLKZC4uYUlaJU1PuiL6HKX1H+UpDsW3X3TrnuMDSVJzM/sFwhCsLxnVuBLvQ/X
+         pp7oPxwB9ZfBSPxxfrUGAlan87qgTN7xB/HomCydWrLcEqhiajrhG6SJjJOJrH2NBQ1i
+         NjfqzfNL1LWtAxoDHm4T5UKHCWGCI6vmcq2XpK+E9QC1RYGXow/5+uTwLP9KZe855gwv
+         bsaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
-        fh=/4671N+qQe56FatT9WhOePUaHOD3B0P05QPATXF+zUY=;
-        b=HVvJpZoqaW3RXyGDK5oI9+it5l+2LC35gKUkILjr/JN86SQcUQroLeIxaXlzPid0Js
-         W0Z9bI0OedsKgpXcMxKE5YACBagCE0M9T8vIgYEQW4a2LGQTuRhXKyWa/bzl5MdrnGW0
-         /mp7yPtzV/xxDy/zOWsQp793pclmrfQsmWTRiyX5hmO6Rz7NS0MmNVXLQQiOtsHiz1uY
-         oXXv4QI8W0siOo73uqq3w2YzVHB3MT/EdD2DuHL8ZFEdIknY1O1CFRnuF7kr9WY/iV7w
-         IwtdmSYfDh7f+qH2nxXhPKAZmL81fTDkysllYgv/f7WZihW9smAzCMMuPhiWkFbWAoEX
-         2MkA==;
+        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
+        fh=lu3OeuouSwgsSK7tTuOmH/xAMix4mwnDjvDfxeRTuRo=;
+        b=RcFQ3uhnczWoWZ9YqlFSfuUaPM23DgwWxlnLbUHTj30fBo5jrm3knOXJOTsO/0s2OO
+         pmTwKQgWYz1xQPZ1l63Hiohjt7/oNVwcai8yNUcYr6Mwnpn07bUyr/7v3OW5n69hNQ4m
+         ByMlGKt24s5PIjj6kGtYxYgraWH5v/4snXu6A06LtxS9Bj5c4QvcQLx7q2CHYNnQwa7t
+         rw0W2XCEuxanDxMVfLqtqhbArhNApBgaeRm1YVJb23AE6EJHoMj41dhBXhblkvgDePeA
+         uA2+ozUokxYY0xQoI83QZkfaf9gIPnCF5iMj0WfTmenxrzlRo4x+Tqiez6eFSsWaEdgG
+         Tcjg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784651049; x=1785255849; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784651795; x=1785256595; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
-        b=b1SXohPsmBhAjNS7tX+7wCgZ4XVGVYt0n+ahCjH1IBuK0f6JnYp+h8QLJBwO6cYclx
-         eWd+Ym4NbONLzFtQX5WleFaDHg2jh8hyrei3JJVBGkUvPV/qGNW2+1HRcazQvnRpgZUj
-         ZBZMckX+v0xZKf6z60vUBYxYaYJhXW1e0IJXGnvcObLnhtloIYt70Z5hi6yzdQ+5UHO/
-         ylpHPCYl1UQUp7lhcnmN8FXKOy7m3RNH18cBvhonDwa+42Q6OLz3jEHZP3GlMLwWpVt3
-         awURqbHbZoYrrkSRcxlq3wAwYb5NDD8L5aeUFq8Aw8vssjqpuj60QQMCvUdWUr3oDndm
-         JEeA==
+        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
+        b=MeCBDNaoXaMR7/E6WTm29zajfwJvUzkQeShRomoG4sLt2lJBOlk11L8+JjaszypRPZ
+         sUveZShJmNGDOmpWe6x5wsVd4TPqc6tqC/jLcJOrlE8IjpYCQlpb7U/3cHz5o09JybYi
+         tXKP2lHk2QUkG0l2vd8wcurdOv4bA7klhEDRFl1vWLcifOqwVNCwJdfMCDi4mv2/MX9i
+         XBUH9Ffd5XS6ocmqt8Xbpf8ziHBkaJ9Pz624lzbEQ+xwtnWFymANB3pxbxfiR/IfmAkU
+         MfYuRGIrON6DXyIhBoQ/iU+ZYkOPyXRbQyWYTZ5HbTNOpYb5F/+ZxT48y57axU2IMIPP
+         56Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784651049; x=1785255849;
+        d=1e100.net; s=20251104; t=1784651795; x=1785256595;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6IIRL+XPWpelEfDBhGxVOXyFyatQ6xSvU7ZF4RnBpbA=;
-        b=OdG6wt82zLyWLsfRSa0i92xcIbG9eJ15h2vR7ZPBNcEt9wFIi90TKEJFm1FE+FciWo
-         k5M8fIA3QvvGZ9jRnLvG4P+wFmOWB54TFajWTSZzPWIeLNLdz0diX38CHycwcfEPguh9
-         Y0UPrtMl8PT8vNmBeeOXuPsqINzlh99V/YFEFmcBr8xK4amGFg+kaDlsbcotRGcEbpgb
-         OGR46z9RFzRQkjCC4jjFbvXqm6liWNumX1Tp79iVCvhVCl2ISmsn4uUUX5LhCZINb1YE
-         /15LqutHEL4AeI7rM+mvO/Fwf1CxyGI/tKeVdZSPTL7Cpb6CMUBlICoQz4gr3x7ZrMyP
-         YzUQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrbo+RRPNmNXYnoWAUIskJx6v7vfYs7z19ohbxoEi0+5OosQxISRvjJp+cS8ePS+XXdtVMq2lnBaepJQkGomIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxphNqYg4N42uwlVeCkRIbO69Wt/0v0aiyITZ7lVVKwAVAMfENC
-	d09MD0za270KRD7AvbAP2X+dDaaxlkbQfwK+LAk3S+Wkasr6Y46O9KZCsawQ39yVT0c5Ww9QDM2
-	/iMcRnmsPO6y6sUcgKDHRR8vY2yiXApEqgr3k3fk=
-X-Gm-Gg: AR+sD10gqv2vNddMWgMaBrFRE/GHiPQ4f5AqOlxUDIe7QTsP74dYKX99drnypYNiF/E
-	EvdOUbXkiWDq7DcMNr3EPeZFgX2LvIuSiaRLDE3yiFFIVarUXxt4H2AO+U/5UVxQo5pNoK5pjTz
-	EucCNqt/PgymwyWRPZQmserzeksbOV8qaJOV3rWG1whn+8TnLeENE35hmXVArdQyaAktE1dMHac
-	59+3QDOg0vu/xBA/bSBR2ocLyQHlWqMZkyMZfrPHp3COz8NsSu+gh90HQ==
-X-Received: by 2002:a05:6512:ba1:b0:5b1:5141:9156 with SMTP id
- 2adb3069b0e04-5b2a31c4862mr327591e87.9.1784651048492; Tue, 21 Jul 2026
- 09:24:08 -0700 (PDT)
+        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
+        b=hRvV1okH5BkeMZFtXopNzrivE3PLCDlU6/Td/PwSrEWxxhtebTG3nMeq7g/LuhKSqh
+         5KSDw6S1Itp1uI5U6ncMBR51+p3IoBTZ8FjDXmFRW5TPIBlapGpf0vOM2eURyK9NqmmC
+         hc3uxWjfrdPaDPCIYRGlvWYQwau/XbiWhJakgJumHQwyAPEGPm9tTgHgM/M42lOPE8Jr
+         0zFT4VtJ/D1/Cr3Y7B7WNcMj7ZgS3bd+KB8lqJXTy8Oq/baI+cVVdACMTgs8n+ZaMD0A
+         ws+WIZuquWpwNvR/dUVXbb/esMM9EMgpgHjlQkKpWNGzSlG5tBWVGaLijvcoOSL9HQMM
+         LFRA==
+X-Forwarded-Encrypted: i=1; AHgh+RqLRQXhijCp/nRLqPUnCXg7NLDkbPZLFbn4+rUIWjDec4Dt/n+5E/uL5yqNY0qwO+coOheDdGSWkKpjLKzzcVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysB+GU6puBup4UmP3YVoGSZuHiARnAVppy2Wydfx5a8BAj/RmI
+	0lkiWLTB/HGiLtwtByb6HoZ0NwPOyM2VSmsMWcleaQcLtH5lUmc54hIaPqfHlSPX1lAa6qxdHMJ
+	RIIsG0/swC1UNXYGx92rcbp0ck6uHxQ==
+X-Gm-Gg: AR+sD11TqpszpSmTfv4RqyMN3DQc5B8q+rPwwb+UZPGYDfLg3XT4vG6fVU/o9+nMcna
+	LKILLFtJP6cJxYXrcxt9YdkKw4q2jna92N8T8Req19tqbrrba9kfF/+wYiLvPQnaJKGAZf0HGIi
+	bDP2hxiQH87GcH6aXIOD2fbS9WoONn9h3UkbBbLv30OlzMPwO4ezT10z33xmKFwSHgVXZ+iW072
+	vfu0+ZYoRwKDG6ikmGEaM3j5SXqMQMb16UQ/I8wkiQuZ5giT0FLXQ1mdcwiSUz+DgXFicgItdg7
+	5oUFVmWnNAL6WYH48b0=
+X-Received: by 2002:a17:903:3bcf:b0:2ca:ed41:d33d with SMTP id
+ d9443c01a7336-2cf34a80342mr224602735ad.45.1784651794678; Tue, 21 Jul 2026
+ 09:36:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260714151505.3466855-1-vipinsh@google.com> <20260714151505.3466855-11-vipinsh@google.com>
-In-Reply-To: <20260714151505.3466855-11-vipinsh@google.com>
-From: Josh Hilke <jrhilke@google.com>
-Date: Tue, 21 Jul 2026 09:23:57 -0700
-X-Gm-Features: AUfX_my4kAQgnpjbhryasf2kLrfrl2S4l9xVYW8Rn_Ur_MRpX7wHXzL-Nzt7PMM
-Message-ID: <CAAdrzjsEG2DQoQbNe4aeq8gNF4Td+N6_gTifU6=EzAEuySu7PQ@mail.gmail.com>
-Subject: Re: [PATCH v5 10/20] vfio/pci: Retrieve preserved device files after
- Live Update
-To: Vipin Sharma <vipinsh@google.com>
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org, 
-	amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com, 
-	chrisl@kernel.org, christian.koenig@amd.com, corbet@lwn.net, 
-	dmatlack@google.com, graf@amazon.com, jacob.pan@linux.microsoft.com, 
-	jgg@nvidia.com, jgg@ziepe.ca, julianr@linux.ibm.com, kees@kernel.org, 
-	kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, 
-	mattev@meta.com, michal.winiarski@intel.com, parav@nvidia.com, 
-	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org, 
-	rananta@google.com, rientjes@google.com, rodrigo.vivi@intel.com, 
-	rppt@kernel.org, saeedm@nvidia.com, schnelle@linux.ibm.com, 
-	skhan@linuxfoundation.org, skhawaja@google.com, vivek.kasireddy@intel.com, 
-	witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
+References: <20260719175857.4071636-1-ap420073@gmail.com> <20260719175857.4071636-9-ap420073@gmail.com>
+ <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev> <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
+In-Reply-To: <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
+From: Hoyeon Lee <hoyeon.rhee@gmail.com>
+Date: Wed, 22 Jul 2026 01:36:22 +0900
+X-Gm-Features: AUfX_myNLtLISc21KdgKa-JpkJ-v8hHK4oD3B4RXKoOMKPs4a14geDJhHunEcxY
+Message-ID: <CAJ=ss6_iUvP3Be735V6_dD0JTF96=NZWe5_G_p0nubdRvCZ==Q@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next 08/13] drm/amdkfd: add GPU instruction
+ emitter and disassembler
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Natalie Vock <nat@pixelcluster.dev>, Taehee Yoo <ap420073@gmail.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
+	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
+	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
+	Felix Kuehling <Felix.Kuehling@amd.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
+	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
+	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Yonghong Song <yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 14, 2026 at 8:15=E2=80=AFAM Vipin Sharma <vipinsh@google.com> w=
-rote:
->  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *=
-args)
->  {
-> -       return -EOPNOTSUPP;
-> +       struct vfio_pci_core_device_ser *ser;
-> +       struct vfio_device *device;
-> +       struct file *file;
-> +       int ret =3D 0;
-> +
-> +       ser =3D phys_to_virt(args->serialized_data);
-> +
-> +       device =3D vfio_find_device(ser, match_device);
-> +       if (!device)
-> +               return -ENODEV;
-> +
-> +       file =3D vfio_device_liveupdate_cdev_open(device);
-> +       if (IS_ERR(file)) {
-> +               ret =3D PTR_ERR(file);
-> +               goto out;
-> +       }
-> +
-> +       args->file =3D file;
-> +out:
-> +       /* Drop the reference from vfio_find_device() */
-> +       vfio_device_put_registration(device);
-> +       return ret;
-> +
+On Tue, Jul 21, 2026 at 5:53=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Mon, Jul 20, 2026 at 10:05:33PM +0200, Natalie Vock wrote:
+> > On 7/19/26 19:58, Taehee Yoo wrote:
+> > > Add the AMD GCN (gfx9/gfx10) instruction encoder used to build the GP=
+U
+> > > shaders that knod dispatches, plus a matching disassembler used for
+> > > debugging the generated code.
+> >
+> > Is it really necessary to have a full-on compiler and disassembler in t=
+he
+> > kernel driver? This patch is massive and I'm wondering how much benefit=
+ it
+> > really provides. Is there really no way to move GPU compilation out of =
+the
+> > kernel, one way or another? Could you get acceptable perf with a static
+> > shader that interprets BPF programs at runtime? Such a shader can be
+> > compiled beforehand and just embedded into the kernel - there's prior a=
+rt
+> > there with the CWSR trap handler in amdkfd.
+> >
+> > In case you really, really need to compile the BPF to native ISA, could=
+ you
+> > still have userspace take care of that in one way or another?
+>
+> There was a long and painful discussion about P4, and offloading it to
+> hardware. The proponents of that wanted to do the compilation stage in
+> user space to produce a binary blob, but it was hard to prove that the
+> P4 passed to the kernel for software processing, and the binary blob
+> passed to the hardware actually where the same. It opened up the path
+> for closed source P4 where the kernel never got to see the actual P4
+> code. So it was not really offload, but kernel bypass.
+>
+> So having a compiler in the kernel is probably the correct way to go,
+> if you want to be friendly to open source.
+>
+> The other option is to get the GPU to do the compilation itself, so
+> you pass BPF byte codes to the GPU and it generates its own native
+> code. I've no idea if that is possible, but clang can target OpenMP,
+> so maybe it is possible to move this compiler into the GPU?
+>
 
-Remove extra newline after "return ret"
+Hi Natalie and Andrew,
+Thank you both for the review and suggestions.
+
+We tried running a BPF interpreter on the GPU using OpenCL in an early
+prototype. The interpreter overhead dominated because each BPF
+instruction required many native GPU instructions, so the performance
+was not practical. Since this was only an early feasibility prototype,
+we do not have benchmark data suitable for a meaningful comparison.
+
+Based on that result, we chose to compile BPF directly into native GPU
+instructions. Moving compilation to userspace would also raise the
+problem Andrew described: the kernel could no longer easily establish
+that the verified BPF program and the submitted GPU binary are
+equivalent. We have not tried compiling on the GPU itself, but that may
+be worth investigating separately.
+
+The disassembler is only used for debugging the generated GPU
+instructions and is not required for execution. We can leave it out of
+the initial series and submit it separately if needed.
+
+Regards,
+Hoyeon Lee
+
+>       Andrew
