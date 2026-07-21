@@ -1,185 +1,310 @@
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4FB43E08B
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 23:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA74A45DF64
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 23:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784675109; cv=none; b=iObXYwJuXJyE7m82P/y2xOzhR9/OoxPqIeUGBP9AwGe5hANaDljUSz7LBq2gA3EYOLnL+JV3KJJLxrDrcY+vuq1c9XtfjcVgjZFG+kP3UG5Mihhwgmm/TwATcScQw3g/8STSXW0Y4XLOZaT1XGO2LCfUwlyhKV7292kjxrh7jAI=
+	t=1784675795; cv=none; b=TzIrk6M33Rh2zNoi7hBv6DA6yF35SczVXhe5A2WNKzE6zjlyzp5tRqBn7g8h1+HwJXrAcZ4dBojkKjxysAPXyFW4Epe77bT0nsjkGD5Uupc88mbt7qEMwc707bQ35USxfuQ44cZ4698Ipgh7qiF+nbtGoGTdwaGZPxIgGdAiIYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784675109; c=relaxed/simple;
-	bh=/d5+Ct9ll6b1HxibJ3keb46nwT+WlmFOnNHUX+rzbEg=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=NDxBJcUCN40fDeaSS2QaqMCpGZrPH8hDmbC75F8EHGr8cDQNYiqYdETfh5OvW3RYxsxDUqlaCjl4b9+GGOjLdWVRsz7fxv7aayhnKkYM+jrKet7uDldEneykZJszgRqQau7RBsBBzEW1h1DD2nB5F17NvfgcH1e5MPF0xar7104=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i5IQ0mI5; arc=none smtp.client-ip=209.85.167.197
+	s=arc-20240116; t=1784675795; c=relaxed/simple;
+	bh=Rq70YB5wvuBY11YYUxc575/F50J3oUaqfmOQ2MXUECA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IQOZPvroF/z3Hr0fzjQMKJT70JMq0VcLPWq8KF9R78Se6NBqr/ayMf+h2VIZ1nOA8Cvi6bIZSlsmEZAz4Gbelpd6FNKtJwUgxI+uRfw0bnVPENSFBnT1gEz0ReUyshr9WrCwrLvyCuVZzmoni5lKrICy4aDnLS4o3NowxwfLYPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HeJlgKuH; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i5IQ0mI5"
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4a45997664aso13970483b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:05:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HeJlgKuH"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ccdf36f63dso605595ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:16:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784675107; x=1785279907; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QYXaYDgqkJqtd2+svQngfiSlGiL9bXTJTobnSbO9Md4=;
-        b=i5IQ0mI5ow3rt/MdeDTWnA4Jx4dvXGk7jJGPB76OJ7HSEZW4Mfe0B/Df9RWAp/S07y
-         fz1hcFzcFyP/dupBfHHr0y0VYp9eUjZamCzE31wgD5UNMOiHrQNP+o9ocmD9sK1u6pJB
-         vC2mYinL1x5TIVDtctyIOOvozhJ2omAhZrnRZUEtw4sOhlFfOJ95JgU8hKJappQ7hvR8
-         9Cod5hXVLHmcaaU87et6NjC2nzd936rvkkcFZe9uIF+mkoLl82rxVyVIAvX5wsjxU5TZ
-         cVvzS5umgy9cEvNoAboaNDXfaUYkOxfUSTBlKi2GZiXxLT4RCp5zZ9WpHG2HY8j18NE4
-         RiAQ==
+        d=google.com; s=20251104; t=1784675793; x=1785280593; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YTeUMJ8fGG4D2+fB7l4SqWT2YEzPSI0An+cEWlkWt3c=;
+        b=HeJlgKuHcAZRwGttOzB0CDT9rDRw424J7ABVnmfYt4Q0rFulopD+Mpeq1jiZeR1OUP
+         sPiXuh6cebk4DcutePgBgGQFYJna2/7gxvEtYD0dOOGsj8YEjq8Y+aoKpGUtelInph1W
+         k6Ptn/tucxKfGDehcOrrjNnEP0JRNwWo5g4MLSQVZ9DiLzDGKZKWKFsWBP5MyemdNz37
+         PYzSnx7F075p6PgWhszOhgpN3x2m60iD/Uc6L07FdlaSLuHKOS6+QKguDgrABpxdHldm
+         HUUDQtuQyl13juvLgnVOIzwuW3yzoVMh7H2HtQTvzA6+N4XalCBb9FinHzYjRF1ZqOxU
+         +XuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784675107; x=1785279907;
-        h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=1e100.net; s=20251104; t=1784675793; x=1785280593;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QYXaYDgqkJqtd2+svQngfiSlGiL9bXTJTobnSbO9Md4=;
-        b=gKbfWD/zSoSMR8mR8KLxPaiILvjUxzBQ1TDaqUnvl01bECX+aATl4I0/TgJVHcESmS
-         37YD6o6eI3meHYjqO6Y+q5Hsd10gVA0W3ucxwzPU4h5SO/JO3KZCssLroeCi54HxjFtc
-         V9/ZmUqgvFHzUm6qsdrQZ52bbk47HKY/64YTr4f0nMDAhGuR0wEXWz1gHUJlfouavL4b
-         4MHGIhyF8QctWnboxjoG9b9rIiYfwFgbF1pih8M/AOkEyv9eNdtazHsdkbwjTVaMOukx
-         fXpgWVqHvuXE1JlUimMz33tnd95d5gnAbrfRtkAVAj3z5WHm0rjMvPp0lAWWmfRHx2t3
-         Ga5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrWQrpmBtwsksTYkW9egcEMLDqUP1Yl2KtK7wYLh2PMyBhnlRPbwidY3JUK98b2ic8y93ED6U0/D2e/UxxYNTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmVj9xsqoudkLkwsTxsYRfBO4kKFCO2OTaaEnGsk0ZIQugO7Gs
-	gjDEZ8HTeIXcVBnMvdgysliMVUYDZ0z/UWQrf7DVbkMTx63CRlaZV7ee93zCNLy8MT0bWlzJGB3
-	S5D6UbtgForQ5WmVfmJnrphtGMA==
-X-Received: from iowx7.prod.google.com ([2002:a05:6602:1607:b0:9a8:4cf8:3078])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1719:b0:495:f230:a340 with SMTP id 5614622812f47-4a4d049ce3emr10719954b6e.28.1784675106606;
- Tue, 21 Jul 2026 16:05:06 -0700 (PDT)
-Date: Tue, 21 Jul 2026 23:05:06 +0000
-In-Reply-To: <3fc867c3-67a0-4fdd-b871-f2ba4d642f1f@linaro.org> (message from
- James Clark on Mon, 20 Jul 2026 17:46:37 +0100)
+        bh=YTeUMJ8fGG4D2+fB7l4SqWT2YEzPSI0An+cEWlkWt3c=;
+        b=R7Eqmr+zRgP5siL+A5UWJw8COof37HiNADYZQlKYdH0ksb0oS/htLIefWnDV0xOGft
+         chpSc8IA/nmfFRv/DmweKYingfKhsj+0NrKiXsElZYYEhesScCkMzAYw2Hm+WxPKy2z+
+         V5mrCl0kBgRp32r9iGF+VEd30svr/UK7YRKsWqSp7L2Qldm5GXJb7cwQtP7iJCY1sHjl
+         lfNDfzfZNXNYJfJFNlLzHT/ObacoxSZbxSN36SyIPCyaSKiusgo0k6Fyk0GmPIlCKxk3
+         TvbdF2l3ZZrNYm1CRUcMD99KvGQ9h2zDhqRSdr1uzfEt6/adUOwRVZ/alpKDme7+MBCQ
+         jlXg==
+X-Forwarded-Encrypted: i=1; AHgh+RoKbwIi4x3JYWXU3uMUtYhmg1DxTOg1F5pD5ZZKp9oBgt4BndXWF9V6wAewGfMqjCWpesmCP5v12I0ptqg13yE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlDNP6XmW+aJaveQg5uMARAqO+GfdQB/1d8FxSOh+0MNlxY6xk
+	XYubX/FpCU5ExNSM69oOFx4qTmy2iwBP1gMxIcdiGDDvjyT4XvJZ+nb28soyj2HM
+X-Gm-Gg: AR+sD10TMvOPLNUriMMjJKV+YVDJcnH8Ads3JkF7hei6VvECHoTYxC2ASoZ10Ec87XZ
+	wrwaA//27/kdIQDEpBFrAeAjMbXuV33adM4wzri0h5DgFAcZVXTZRqsAcve26/HiehU/jfW3LDC
+	y9SGNZKkeX+YvPKYbiS/bTlIlisIhr4YR3uEjXKg79dCSiO9lx2Pp9plceDysUCqqo3wxqqWfz7
+	G3hGmuJY4/nXGIztmyThuImMlsax/D2HQZ8ugVVull0ezF8w3PeaMgAUDU5MjT2xVu9DdyiCd/g
+	Dh0rmaLnNOCW1T8DisKutjXedye6dcGwIKLzlg+7RVWgoDtEmdPFiSiSM5s9wVYgXNr+CYBdrMQ
+	9XfNuTqA2L4IlJ9+wRCEOaJt8TzbHBo1uEfKvHLIlv4XfbOMTfxi1MDnH1bSx5qdZkrL/UUsjji
+	KxGKdFHjCUHK7WRe8wb5+NkWVt7JiDyRqy
+X-Received: by 2002:a17:903:166e:b0:2ca:be81:b469 with SMTP id d9443c01a7336-2cf8f0f6fc8mr1987375ad.0.1784675792455;
+        Tue, 21 Jul 2026 16:16:32 -0700 (PDT)
+Received: from google.com (66.68.82.34.bc.googleusercontent.com. [34.82.68.66])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8efae5aesm4141155ad.15.2026.07.21.16.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 16:16:30 -0700 (PDT)
+Date: Tue, 21 Jul 2026 23:16:25 +0000
+From: Josh Hilke <jrhilke@google.com>
+To: Vipin Sharma <vipinsh@google.com>
+Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com, 
+	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com, chrisl@kernel.org, 
+	christian.koenig@amd.com, corbet@lwn.net, dmatlack@google.com, graf@amazon.com, 
+	jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, julianr@linux.ibm.com, 
+	kees@kernel.org, kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, 
+	lukas@wunner.de, mattev@meta.com, michal.winiarski@intel.com, parav@nvidia.com, 
+	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org, rananta@google.com, 
+	rientjes@google.com, rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, 
+	schnelle@linux.ibm.com, skhan@linuxfoundation.org, skhawaja@google.com, 
+	vivek.kasireddy@intel.com, witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
+Subject: Re: [PATCH v5 06/20] vfio/pci: Preserve vfio-pci device files across
+ Live Update
+Message-ID: <al_8v_I9Z2Dc_qjc@google.com>
+References: <20260714151505.3466855-1-vipinsh@google.com>
+ <20260714151505.3466855-7-vipinsh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsnt8q7454gt.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH 11/21] KVM: arm64: Context swap Partitioned PMU guest registers
-From: Colton Lewis <coltonlewis@google.com>
-To: James Clark <james.clark@linaro.org>
-Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714151505.3466855-7-vipinsh@google.com>
 
-James Clark <james.clark@linaro.org> writes:
+On Tue, Jul 14, 2026 at 08:14:51AM -0700, Vipin Sharma wrote:
+> +static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
+> +{
+> +	struct vfio_device *device = vfio_device_from_file(args->file);
+> +	struct vfio_pci_core_device *vdev;
+> +	struct pci_dev *pdev;
+> +
+> +	vdev = container_of(device, struct vfio_pci_core_device, vdev);
+> +	pdev = vdev->pdev;
+> +
+> +	guard(mutex)(&device->dev_set->lock);
+> +	guard(mutex)(&vdev->igate);
+> +	guard(rwsem_write)(&vdev->memory_lock);
+> +
+> +	/*
+> +	 * Userspace must disable interrupts on the device prior to freeze so
+> +	 * that the device does not send any interrupts until new interrupt
+> +	 * handlers have been established by the next kernel.
+> +	 */
+> +	if (vdev->irq_type != VFIO_PCI_NUM_IRQS) {
+> +		pci_err(pdev, "Freeze failed! Interrupts are still enabled.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (pdev->current_state != PCI_D0) {
+> +		pci_err(pdev, "Freeze failed! Device not in D0 state.\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Reset is a temporary measure to provide kernel after kexec a clean
+> +	 * device while VFIO live update work is under development and not
+> +	 * fully supported. It will go away once continuous DMA support is
+> +	 * added to device preservation.
+> +	 */
+> +	vfio_pci_zap_bars(vdev);
+> +	vfio_pci_dma_buf_move(vdev, true);
+> +	vfio_pci_core_try_reset(vdev);
+> +	pci_write_config_word(pdev, PCI_COMMAND, PCI_COMMAND_INTX_DISABLE);
+> +	/*
+> +	 * Userspace cannot use the FD correctly now irrespective of liveupdate
+> +	 * freeze failing or succeeding. They will have to reinitialize the VFIO
+> +	 * device to continue using it as reset might have loaded default PCI
+> +	 * state. Disable ioctl, read, write and mmap access to the device.
+> +	 */
+> +	smp_store_release(&vdev->liveupdate_frozen, true);
+> +	return 0;
+>  }
 
-> On 12/06/2026 20:28, Colton Lewis wrote:
->> Save and restore newly untrapped registers that can be directly
->> accessed by the guest when the PMU is partitioned.
+I'm seeing the same lockdep splat the David found in v4.
+https://lore.kernel.org/all/ag-aFA1BJxdJMywr@google.com/#t
 
->> * PMEVCNTRn_EL0
->> * PMCCNTR_EL0
->> * PMSELR_EL0
->> * PMCR_EL0
->> * PMCNTEN_EL0
->> * PMINTEN_EL1
+======================================================
+WARNING: possible circular locking dependency detected
+7.2.0-dbg-DEV #3 Tainted: G S
+------------------------------------------------------
+kexec/13355 is trying to acquire lock:
+ff3f086c95315d08 (&group->mutex){+.+.}-{4:4}, at: pci_dev_reset_iommu_prepare+0x6e/0x200
 
->> If we know we are not partitioned (that is, using the emulated vPMU),
->> then return immediately. A later patch will make this lazy so the
->> context swaps don't happen unless the guest has accessed the PMU.
+but task is already holding lock:
+ff3f082de7f399a8 (&vdev->memory_lock){++++}-{4:4}, at: vfio_pci_liveupdate_freeze+0x58/0x100
 
->> PMEVTYPER is handled in a following patch since we must apply the KVM
->> event filter before writing values to hardware.
-
->> PMOVS guest counters are cleared to avoid the possibility of
->> generating spurious interrupts when PMINTEN is written. This is fine
->> because the virtual register for PMOVS is always the canonical value.
-
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>    arch/arm/include/asm/arm_pmuv3.h |   4 +
->>    arch/arm64/kvm/arm.c             |   2 +
->>    arch/arm64/kvm/pmu-direct.c      | 183 +++++++++++++++++++++++++++++++
->>    include/kvm/arm_pmu.h            |  16 +++
->>    4 files changed, 205 insertions(+)
+which lock already depends on the new lock.
 
 
-> [...]
+the existing dependency chain (in reverse order) is:
 
->> +
->> +/**
->> + * kvm_pmu_put() - Put untrapped PMU registers
->> + * @vcpu: Pointer to struct kvm_vcpu
->> + *
->> + * Put all untrapped PMU registers from the VCPU into the PCPU. Mask
->> + * to only bits belonging to guest-reserved counters and leave
->> + * host-reserved counters alone in bitmask registers.
->> + */
->> +void kvm_pmu_put(struct kvm_vcpu *vcpu)
->> +{
->> +	struct arm_pmu *pmu;
->> +	unsigned long guest_counters;
->> +	unsigned long flags;
->> +	u64 mask;
->> +	u8 i;
->> +	u64 val;
->> +
->> +	/*
->> +	 * If we aren't guest-owned then we know the guest is not
->> +	 * accessing the PMU anyway, so no need to bother with the
->> +	 * swap.
->> +	 */
->> +	if (!kvm_pmu_is_partitioned(vcpu->kvm))
->> +		return;
->> +
->> +	preempt_disable();
->> +
->> +	pmu = vcpu->kvm->arch.arm_pmu;
->> +	guest_counters = kvm_pmu_guest_counter_mask(pmu);
->> +
->> +	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
->> +		if (i == ARMV8_PMU_CYCLE_IDX)
->> +			val = read_pmccntr();
->> +		else
->> +			val = read_pmevcntrn(i);
->> +
->> +		__vcpu_assign_sys_reg(vcpu, PMEVCNTR0_EL0 + i, val);
->> +	}
->> +
->> +	val = read_sysreg(pmselr_el0);
->> +	__vcpu_assign_sys_reg(vcpu, PMSELR_EL0, val);
->> +
->> +	val = read_sysreg(pmcr_el0);
->> +	__vcpu_assign_sys_reg(vcpu, PMCR_EL0, val);
->> +
->> +	/* Mask these to only save the guest relevant bits. */
->> +	mask = kvm_pmu_guest_counter_mask(pmu);
->> +
->> +	val = read_sysreg(pmcntenset_el0);
->> +	__vcpu_assign_sys_reg(vcpu, PMCNTENSET_EL0, val & mask);
->> +
->> +	val = read_sysreg(pmintenset_el1);
->> +	__vcpu_assign_sys_reg(vcpu, PMINTENSET_EL1, val & mask);
->> +
->> +	/* Save pending guest hardware overflows. */
->> +	local_irq_save(flags);
->> +	val = read_sysreg(pmovsset_el0);
->> +	__vcpu_rmw_sys_reg(vcpu, PMOVSSET_EL0, |=, val & mask);
->> +	write_sysreg(val & mask, pmovsclr_el0);
->> +	local_irq_restore(flags);
->> +
->> +	/* Stop guest counters and disable interrupts in hardware. */
->> +	write_sysreg(mask, pmcntenclr_el0);
->> +	write_sysreg(mask, pmintenclr_el1);
->> +
->> +	kvm_pmu_set_guest_counters(pmu, 0);
+-> #5 (&vdev->memory_lock){++++}-{4:4}:
+       down_read+0x3d/0x160
+       vfio_pci_mmap_huge_fault+0xb9/0x150
+       __do_fault+0x46/0x150
+       do_pte_missing+0x21a/0x1000
+       handle_mm_fault+0x7f8/0xb60
+       do_user_addr_fault+0x476/0x6c0
+       exc_page_fault+0x68/0xa0
+       asm_exc_page_fault+0x26/0x30
 
-> Hi Colton,
+-> #4 (&mm->mmap_lock){++++}-{4:4}:
+       __might_fault+0x5e/0x80
+       _copy_to_user+0x23/0x60
+       perf_read+0x114/0x310
+       vfs_read+0xe7/0x360
+       ksys_read+0x73/0x100
+       do_syscall_64+0x15f/0x4e0
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-> This function doesn't get added until "KVM: arm64: Apply dynamic guest
-> counter reservations" a few commits later.
+-> #3 (&cpuctx_mutex){+.+.}-{4:4}:
+       __mutex_lock+0x8c/0xd80
+       perf_event_ctx_lock_nested+0x15a/0x210
+       perf_event_enable+0x18/0xa0
+       lockup_detector_online_cpu+0x22/0x30
+       cpuhp_invoke_callback+0xfb/0x2c0
+       cpuhp_thread_fun+0x164/0x1e0
+       smpboot_thread_fn+0x17e/0x280
+       kthread+0x10c/0x140
+       ret_from_fork+0x16b/0x310
+       ret_from_fork_asm+0x1a/0x30
 
-> kvm_pmu_guest_counter_mask() is also used in a commit before it's added.
+-> #2 (cpuhp_state-up){+.+.}-{0:0}:
+       cpuhp_thread_fun+0x95/0x1e0
+       smpboot_thread_fn+0x17e/0x280
+       kthread+0x10c/0x140
+       ret_from_fork+0x16b/0x310
+       ret_from_fork_asm+0x1a/0x30
 
-My bad. I'll correct that.
+-> #1 (cpu_hotplug_lock){++++}-{0:0}:
+       cpus_read_lock+0x3b/0xd0
+       __cpuhp_state_add_instance+0x19/0x40
+       iova_domain_init_rcaches+0x1ef/0x230
+       iommu_setup_dma_ops+0x18a/0x560
+       iommu_device_register+0x188/0x220
+       intel_iommu_init+0x35a/0x440
+       pci_iommu_init+0x16/0x40
+       do_one_initcall+0xf5/0x400
+       do_initcall_level+0x82/0xa0
+       do_initcalls+0x59/0xa0
+       kernel_init_freeable+0x152/0x1d0
+       kernel_init+0x1a/0x130
+       ret_from_fork+0x16b/0x310
+       ret_from_fork_asm+0x1a/0x30
+
+-> #0 (&group->mutex){+.+.}-{4:4}:
+       __lock_acquire+0x14c8/0x2750
+       lock_acquire+0xd3/0x2c0
+       __mutex_lock+0x8c/0xd80
+       pci_dev_reset_iommu_prepare+0x6e/0x200
+       pcie_flr+0x32/0xc0
+       __pci_reset_function_locked+0x84/0x120
+       vfio_pci_core_try_reset+0xa4/0x110
+       vfio_pci_liveupdate_freeze+0x8a/0x100
+       luo_file_freeze+0xd1/0x290
+       luo_session_serialize+0xa6/0x240
+       liveupdate_reboot+0x19/0x30
+       kernel_kexec+0x39/0xb0
+       __se_sys_reboot+0xfd/0x210
+       do_syscall_64+0x15f/0x4e0
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+Chain exists of:
+  &group->mutex --> &mm->mmap_lock --> &vdev->memory_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&vdev->memory_lock);
+                               lock(&mm->mmap_lock);
+                               lock(&vdev->memory_lock);
+  lock(&group->mutex);
+
+ *** DEADLOCK ***
+
+9 locks held by kexec/13355:
+ #0: ffffffff85a81270 (system_transition_mutex){+.+.}-{4:4}, at: __se_sys_reboot+0xe4/0x210
+ #1: ffffffff85e1cfa8 (luo_session_serialize_rwsem){++++}-{4:4}, at: luo_session_serialize+0x30/0x240
+ #2: ffffffff85e1d140 (luo_session_global.outgoing.rwsem){+.+.}-{4:4}, at: luo_session_serialize+0x43/0x240
+ #3: ff3f082dee702108 (&session->mutex){+.+.}-{4:4}, at: luo_session_serialize+0x99/0x240
+ #4: ff3f082db51c2588 (&luo_file->mutex){+.+.}-{4:4}, at: luo_file_freeze+0x81/0x290
+ #5: ff3f082d8af761a8 (&new_dev_set->lock){+.+.}-{4:4}, at: vfio_pci_liveupdate_freeze+0x38/0x100
+ #6: ff3f082de7f39780 (&vdev->igate){+.+.}-{4:4}, at: vfio_pci_liveupdate_freeze+0x49/0x100
+ #7: ff3f082de7f399a8 (&vdev->memory_lock){++++}-{4:4}, at: vfio_pci_liveupdate_freeze+0x58/0x100
+ #8: ff3f086c908911f8 (&dev->mutex){....}-{4:4}, at: pci_dev_trylock+0x25/0x60
+
+stack backtrace:
+CPU: 132 UID: 0 PID: 13355 Comm: kexec Tainted: G S                  7.2.0-dbg-DEV #3 PREEMPTLAZY
+Tainted: [S]=CPU_OUT_OF_SPEC
+Hardware name: Google Izumi/izumi, BIOS 0.20260327.0-0 03/27/2026
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x54/0x70
+ print_circular_bug+0x2e1/0x300
+ check_noncircular+0xf9/0x120
+ ? __bfs+0x129/0x200
+ __lock_acquire+0x14c8/0x2750
+ ? __lock_acquire+0x1223/0x2750
+ ? check_noncircular+0xa5/0x120
+ ? pci_dev_reset_iommu_prepare+0x6e/0x200
+ lock_acquire+0xd3/0x2c0
+ ? pci_dev_reset_iommu_prepare+0x6e/0x200
+ ? lock_is_held_type+0x76/0x100
+ ? pci_dev_reset_iommu_prepare+0x6e/0x200
+ __mutex_lock+0x8c/0xd80
+ ? pci_dev_reset_iommu_prepare+0x6e/0x200
+ ? lockdep_hardirqs_on_prepare+0x152/0x220
+ ? _raw_spin_unlock_irqrestore+0x35/0x50
+ pci_dev_reset_iommu_prepare+0x6e/0x200
+ pcie_flr+0x32/0xc0
+ __pci_reset_function_locked+0x84/0x120
+ vfio_pci_core_try_reset+0xa4/0x110
+ vfio_pci_liveupdate_freeze+0x8a/0x100
+ luo_file_freeze+0xd1/0x290
+ luo_session_serialize+0xa6/0x240
+ liveupdate_reboot+0x19/0x30
+ kernel_kexec+0x39/0xb0
+ __se_sys_reboot+0xfd/0x210
+ ? check_object+0x1e8/0x390
+ ? init_object+0x34/0x110
+ ? lock_release+0xf0/0x330
+ ? kmem_cache_free+0x1b5/0x520
+ ? kmem_cache_free+0x1c9/0x520
+ ? _raw_spin_unlock_irqrestore+0x35/0x50
+ ? kmem_cache_free+0x1b5/0x520
+ ? __x64_sys_close+0x3d/0x80
+ ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+ ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+ do_syscall_64+0x15f/0x4e0
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f04e7233313
+Code: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc 89 fa b8 a9 00 00 00 bf ad de e1 fe be 69 19 12 28 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 f7 d8 48 8b 0d eb fb 06 00 64 89 01 48
+RSP: 002b:00007ffe7c91b688 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f04e7233313
+RDX: 0000000045584543 RSI: 0000000028121969 RDI: 00000000fee1dead
+RBP: 00007ffe7c91b9b0 R08: 000000000000000a R09: 00007f04e72a4ff0
+R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000001
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000002
+ </TASK>
+
