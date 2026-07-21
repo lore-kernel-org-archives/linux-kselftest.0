@@ -1,299 +1,256 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012054.outbound.protection.outlook.com [40.93.195.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C33A4DA54F
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 15:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641D64DB553;
+	Tue, 21 Jul 2026 15:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784647071; cv=pass; b=hZegeY3pIxj7BSsgZHJACgIS+7rSxK2I7MF0uTVS+OnUW8IYc+FHv33ExEOFbBvDCJbvroEoJxzwW29ow4liXj/s9jDHjIhQfJuwZs/WNo2MUdsuGpXcNuaqRMog+KMnxJOufOA7+milY4ayPyZgYxl8/uaDmcUvTzJrlP2RVHE=
+	t=1784647078; cv=fail; b=jYdTuxqcj1xlyNW/HeaiUvRjwZPRPIhxOmibOrYnv6CZsM10vCLCPqAyanB3cI4DPbdfOmgkrJs7IzNc78AI+C+cQi+fa/wEgJYCZamlRuNhO2A9fRmLm5vbwpTshVNMiECmmbkUhsaxKN3kFfjH/SumZjZ2CLvCbON0ObXE/Vw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784647071; c=relaxed/simple;
-	bh=7Bl6iGExNSfEFuA2llVeNlo332mnIke0DZlReiI3nQE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bh8+dAQEI/P5DVKUEW6lB/0p+866HFEhn2p1vOjFAL4Di6QyeRTnpVzEfNM0Ulw4hO0WPNz9+YtJk1yEqLTKE+tN/h2xZMieLf++ylfxCCxemVuC6MYBHuQ1NbjE9RoS/x9K9SPa9v4gLAeakCAOyW7fuOJtCG75QI0Lg/NkeeM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ld/UM5IQ; arc=pass smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784647078; c=relaxed/simple;
+	bh=cmN+McrRiDpOiySvP2MU8nay92Of6Uy+qXp9jtT0Avc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=nzyd+XDAycoduFXbrrZRsoluOw0up7h026BL6JFVDnPw3ukNfs+9yWlwBKGPhmalebknOR4hiJXPGQDF9PVl6H+b/zYrUC6Ip6pZ+fl2dCWtF25IWb7kuhXwKI/7pRWD79xVI/WN/JU2992F28TDfjOR+cAQRRYeo5/414squoY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lZK5NM6s; arc=fail smtp.client-ip=40.93.195.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ld/UM5IQ"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7e9f5637634so5099754a34.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 08:17:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784647068; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pIVPDafm0RaR1Xr/5+04Fe0soi3SnsVceaE1l3Ylz9VdEAonrclomA1+DOTd+ST5Kt
-         aG60MPjsS3DobCCc9jJrL972T6C0+VAQwNSk8RAX1fg/72YafScKI27kVam7fVD9xAsd
-         4suxwQ7oJh4DWEdGbaOtWh2SKY2Uds7/2lbEYSLVoYnehU0EJ7tXUrKoucU3OIPESsLo
-         4HPi31STO0d2CvkyNFTpBlo4k3lOcUPkrS9zfwXKrnq9fI4wUh9kbLOz69DOpHTWrNoX
-         aRYig9VoRl+N4NBCiqGP5lDv927WG05Hv/AHzIKLxBCYge4+Wcwsda1EBn/hhJGyTl7V
-         KN6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
-        fh=NTxlcRD3PgIsIPJ7ZZsRwMyrwcF6ozw4WWhKMywadaw=;
-        b=PUeTJUN4Zt6E0orEWjVjUhN2t1VB+vsyBXBiSyIeU5rUsDec7fIUtvk8zJapdM/rE8
-         U4ip/8D4X0b7Dv8hL3yrg8XkK8ds5wEwTOwk8V1t2Ij85VCHy2VW+4axRVqljizk6VfF
-         6jPujd1Bs5USYmkY+io9ruuiDwhrqC3vSSNq9z+Fmv+9REOCMMAsdG/iRoZJxkRENEcB
-         vaqs9/sE1f41LKJb8TBcF+/sWVl62fL0OB9Vi29JdK28ddXo+bKELT8UBJ0yzWPX9Qhl
-         09De5RiW+gi8A1tuZHX1K1pNdQqCuhqgVrwMT1tob6czc5pj82upmMlmq/fqZih/oqbI
-         yFfg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784647068; x=1785251868; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
-        b=Ld/UM5IQvTgZjpUtzDkmTWl44ExbXjjpL6w1syejoBgDTANTcjmg5nh7sv6RAM9sFT
-         nySa1BkQKZSeUg5gmCFyXwhEjc0koVEWFjCAuGm08hHSmz21rXpkLQ332W0CN1b0rFHt
-         XXbR8LWErDLFzIiuLwzy5kpbGV+krueaUyS52MeyzD0XEe8QQq9kqPoFHz6vX7wOL+YV
-         1ggpWH5XJPe+AzlgzJ9a13RjX/GjtGhY097e8vt34fPu8f43SU6h6V0AiexEAS6CrBJZ
-         eqOuiSRPTIR6ao15Th3pLl/ANrf2wPKPPCik/cBfz22sMzoDDUp7gJagU6Hk3TLuB6de
-         uWLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784647068; x=1785251868;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PMoHz0UZ2YFtSigDv9V4lPoZ67yQ64GXiacPhsl7yN8=;
-        b=XXGX6vNFW3OR5BGMrV4qxnmXF+j9FKNMnETrRbvwYOmDuHbcVhbfxcKQhzjyUcZL6k
-         DFgxh7VfxZUwtSTtyqhrq0nZkGM24Wv2UjDGpUDZ1Jxvw3Llr1sZCyRs0SvbLTdYihmR
-         1sPtAzl7vc4rGQ4C2SdPRrOSx61WVwTWVNDWiOVSCu2ancuxUiK7sWTdvt8PqqYM7sIM
-         Tzz3QYspX308y5AeA5FrpvygfXtQ/xHq0Idnrg0yW2BsIB1xxNpRhTI3CpXRDsgH9v5i
-         gS39P8YvTEwKF7FG15+L4Xh/iY9n+rsDiSuKep9tVLVktPeBFGsL3DFm257MV4oMdH3C
-         ShaQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrMiR3fN4jTu1o2ybtPueBGT4Qi6NJJdthlIQPiR8hVtAjTBmGZOv7AyWXFx+vdtbYaxAlhhk2R6HXiI5ZnbMU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyg/bes9CLIsxrMXg/ze6fFeky7TbH6rVK8vbD4WlW/kqyqgGb9
-	gmwzAhsXrYySnLHGUGz+9omST0w3YRn3mMB337Rmh58E/q0f7OMIF/Jg28UnCLvXJLgGUbLIbB2
-	81drLjbg2ufpBf2gIRmXZbP9QECQftq3xqgVG
-X-Gm-Gg: AfdE7cnGkBkzuRjiiI3PbnqpOhRR5E/JSFv9kDSFEQj2QAM8MC16aBRk6gWJ5yIDKwl
-	ar2BfgxvkGq/OZ1keiTO5jzJIiEwXCZJit6MyupLAHTMkj+XJNesX+6t7zktXL8oIOwy8c7lUCc
-	LlnYMa/iA6RrcRfJ15GuHXBf1PXcTRWFb+nvO01zQbOO0/tlLkhA1xiEQ1PHPwHDxTxS6oraPG8
-	2Q4cZLefMXpEqadj/evcufA10S+v3QQfrGc5dudWevOffPgOwGwvJfeLKC/KYU=
-X-Received: by 2002:a05:6808:f8f:b0:495:f519:70f1 with SMTP id
- 5614622812f47-4a4d05655bamr11557394b6e.31.1784647067874; Tue, 21 Jul 2026
- 08:17:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lZK5NM6s"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FELx79X291At2LL1a53pK2EEzNWekuLKCTxauQ5MFiM016EGbZQbF54GgJNkIfjjQX68S7G/oLXnnaFSlOZ/ugPd4JSmxOc7DPMXnJuY2e0BuDEODEP10SxOfe8Vz0DjY2T4ygKDrds4xckx+S7zoIpzK7eS1+40wErgU7qggadS90WIJBRKnmATVO2lSf6l3H6tkmilkCgbCITGU0DcUaiYd0Zz6rXcFSYJufJK3Qvf1XfoExtAhhiuqXbJgk6vEy5OsXXXFtzQ8S3x6djwu+CUcT9oiVW1p3Khaj1CLh+0VXVI0sJ+YW0UrA86nXxrFwIkbMJCrmf9DK36Z0pgxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GcHjWuUXXs/sIhHKnwyPKafA6ASYNsldinX00ydIIX0=;
+ b=OhqUrZGwEAYTvshPcqexxbtFKlvgdkNz1COZ/0VYG5fJd7hjz2bGTWGrBYeXIeTiuQkWpK/uR11wntEwaX5dnjh1DkGHKt2rs6B93BsDfwnRjSeUITY8fFPVy+dBxUIjDqIi6WKsYyUjC/vWWuXMulDsOzTb2Z7pv5wd3jbbCYu4YqmW3WqmNR3fD6U61/7pOGGSoCCBPPCWQSSKH9c2x2mUYtOHjgIp0sOKzaOVfpN1OD9kcEA7r/L9n4IveqE2Psq6nRI2B45/Y3Dkr2hmbA7pexnOUvlRyUWhMEKDEBL0bbRyBW7LNH8YNVwieLzRlsW00QJgVdYzfDgkywly1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GcHjWuUXXs/sIhHKnwyPKafA6ASYNsldinX00ydIIX0=;
+ b=lZK5NM6st7Nnpfnzi1e59Uem2RIyEY+YSU3SEUNe8JxzsOpexWynZRi/52LIHJDSWOrHE9CHwQSdR7vZTX41TGGke2GfEe54As6S772/NGtRcqgdQjCtYTyL9x89/OgU+4nAwg6G2B/lGSv1Uy33EHRzrJNCC5Bo4cc7iFf2rR4pKRjIbkZU6hql/j5VeD2UobT9Q9wxyULq1VbcPHyHtw/edlRhClFXTVq2deEwms9wv4a9OKrQEDVVTjlIhXysOPSnBGolfYviAcHTa7wu+50pH6fMRCMhIqXiAdjKv5O1gjReMsKy0zjyidClzuc8IeBhcXl0LQFX48dEz4xcRA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
+ by SA0PR12MB4447.namprd12.prod.outlook.com (2603:10b6:806:9b::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.12; Tue, 21 Jul
+ 2026 15:17:52 +0000
+Received: from DS0PR12MB7900.namprd12.prod.outlook.com
+ ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
+ ([fe80::3033:67fc:3646:c62f%4]) with mapi id 15.21.0245.009; Tue, 21 Jul 2026
+ 15:17:51 +0000
+Date: Tue, 21 Jul 2026 18:17:41 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Jack Ma <jack4it@gmail.com>
+Cc: David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/3] net: nexthop: add NHA_FDB_PORT for fdb
+ nexthops
+Message-ID: <20260721151741.GA2667735@shredder>
+References: <20260717-b4-vxlan-fdb-port-v2-0-f4862e8fe867@gmail.com>
+ <20260717-b4-vxlan-fdb-port-v2-1-f4862e8fe867@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260717-b4-vxlan-fdb-port-v2-1-f4862e8fe867@gmail.com>
+X-ClientProxiedBy: FR2P281CA0055.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:93::14) To DS0PR12MB7900.namprd12.prod.outlook.com
+ (2603:10b6:8:14e::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260719175857.4071636-1-ap420073@gmail.com> <CAHS8izMocev_0TtAsUr9BqCm6sH2DBh-bPK4DfZYNEAb_d2G6w@mail.gmail.com>
-In-Reply-To: <CAHS8izMocev_0TtAsUr9BqCm6sH2DBh-bPK4DfZYNEAb_d2G6w@mail.gmail.com>
-From: Taehee Yoo <ap420073@gmail.com>
-Date: Wed, 22 Jul 2026 00:17:36 +0900
-X-Gm-Features: AUfX_mz2BhMqLPLPvuogKcIXppoGgoP6WsP21eb7KRTuGc6qaIlknUYcLS2hihA
-Message-ID: <CAMArcTXoUyPm1j1HW7xHRbRCLryvmJQVhJGBpGJ2c65mbxs5QQ@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 00/13] net: knod: in-kernel network offload device
-To: Mina Almasry <almasrymina@google.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
-	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
-	Felix Kuehling <Felix.Kuehling@amd.com>, Hoyeon Lee <hoyeon.rhee@gmail.com>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
-	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
-	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|SA0PR12MB4447:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c99d0e3-bdf3-410f-c08e-08dee73b3afe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|366016|1800799024|10067099003|22082099003|18002099003|6133799003|56012099006|11063799006|3023799007|4143699003;
+X-Microsoft-Antispam-Message-Info:
+	detrj9LP6wkLIGQQ+xcSm87iqOOKh9yNVmWlzEcYwHv47fwTMB3azO/X1mpwKYHMC+ZzYGtPdAmsgZ70cCvvGtQ/Y1o314DfNCOcXIUZox12URjQBw82jA/yOEfDfeAvd0reSVOSUoRXeFYsIK+Xc48gV9dtRw47/uE5fKTnKvmyWG8UIYKgQDumDz5X++Mr9fhpAJdGuoTiS1bO4DlqjVHZbGRnP73u/KChUUToOKYVKeCOfS/mIHvZpxMZIYZDdnYVtEC9b9GH42nVD3DQ4kb72boX5whPgHL7OgF99qlNBL8x2OKiS06D+FOzzqhyjFLeTjFz2kav9NlzJ/Vm9Vxhl0s5jlJSbAdwPsXvuqLchNUXG3VVG0KN+vMtl2ZdsTX+WvOFNt/EOq8KA+vREPmDPMHTLTLKmjHlf4/MUoh8FsvM3yfaK4oaOQO8Ov1wCb6mUYtr/6QKTX9L69Q13zBrq+1HEwH+4TaKHakn4HOWKnRt1ZiAkEQekLnm8+IFmz6MNX/ZrWLsuyoa/u3WFBgVHlMZmfE/hVD4qXYOVBEuOf7P9ZqKFV8iqkcGDp5+nJx8ymNH0bac6XGJRq0tJAULUXAE34hZvusuW2zUjkRouG868hAC4dr186rmyAKtItQ8ax9Q0+QZ1lZpPiRlU77MXK6d9izUkdLkIm5D7t4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(366016)(1800799024)(10067099003)(22082099003)(18002099003)(6133799003)(56012099006)(11063799006)(3023799007)(4143699003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?N160Eg202ZtWNoXVDpr6iOIoj0svCYszaRQ0Dh2/eNHCYuEIbCDYxAha9fhR?=
+ =?us-ascii?Q?YLmiilumYElXm/rbTqqxs+zD2dew+Zc6SLndISWzk0u3EfT0M2U6ceL9xhBr?=
+ =?us-ascii?Q?ifdSmN6HBv8pFWN1P3pfQ31qNXQ8W3IGTvTza0dnkPrzv/84bdGQC0eZlM63?=
+ =?us-ascii?Q?1KPkP3c2fV+q8M+kYxgPWTaGMCjM7UWg+AZ81Vg1Y1As6bFsku9t57AF4bWE?=
+ =?us-ascii?Q?fBhdSkE7qptfdb4A3OzYxTGUmoxZ1QGIf5/YeJV8bFZOdr2rTffsAWja54rt?=
+ =?us-ascii?Q?CqpO7Dtk+UOuNVzvOvgTN2vGZChiWVgOyuEMSv7hwlFdDpjksfCtH5382mdA?=
+ =?us-ascii?Q?FB08wL876rqd9cZKGDZ6DyxY9dfnMr5pyY+hyFETWl5RmKMdh5S1p4H8rRra?=
+ =?us-ascii?Q?ai3vAKgA3iXzBL9Ph5/o/L6X1WbCvlQRBvIR2BXoo/d2ZeVptuDPRWb6DUpP?=
+ =?us-ascii?Q?MhLqi4O5cr5/wI5dgiXNmr42ADEG2JRiPkvL7jLW8gG1YNxrWVJMyCF5mhOM?=
+ =?us-ascii?Q?FzVmN11TX5cREwSdH1plsqoahM3EaTk0PrMKWPE1cSEedYRCfzyFLQedx3mt?=
+ =?us-ascii?Q?KCMcW4sitdTnwS/E+7eKbnQi9+/cQ1r7NrXJBi3gfgzKIsSJce3TtOymFlt1?=
+ =?us-ascii?Q?mSrkJOF5WD1BXzA2xOzOIuEn96oiCbtFjdOhGtS8Lng6hpAdsBRZNX/8LxAi?=
+ =?us-ascii?Q?0146dqR4fIouP7Mb8DWt/jaO+ilISPl9wP9+IOeCxaZrUxrv3nkgd78u825Y?=
+ =?us-ascii?Q?ZeSjh5FhMpe+6ln5WYZVkJ8Ysm0+6pVWGtk9qTCi+LHPNxayFh5uMyDNx7lk?=
+ =?us-ascii?Q?+H8/O7ciDjPEf3rFP9lp1N8+6DI3x8Vj0rTNafUVjK5CYZUaYhabkJyAwYD1?=
+ =?us-ascii?Q?F/sb2ArIsEgqsTD1285BCPBkt4ACLt+aaXzJSUj6CsXtEEN6VJfciyfugnW0?=
+ =?us-ascii?Q?OePuafiIRhkEVSC23ev8r4MdHl2bIRWRJ8ORBr78LHA9NfmqycRQ4OIGzUPr?=
+ =?us-ascii?Q?yUNrSWFM0koh3mRolKPQdVRlsdK/AZYFnIQmPsxudAMgjP3HydxW3JMea5ZR?=
+ =?us-ascii?Q?IsaIee9x45m15+lqrw5ZP2LiKAP4m9937fRkWhvWyAO/HjeqkN3t0/QBQS0B?=
+ =?us-ascii?Q?fHtTUZQpNW2SqID2v/QshKJRkTlZrrUCpCBoWUeg80K6prAUCvI9n35+m+S5?=
+ =?us-ascii?Q?6QbDcLxqVprocrxtUMGxdfr8wVt0r+zSbziaGXueBNXk+4azrsqScj3AT9gt?=
+ =?us-ascii?Q?n7S1LZwtLlteGO899V6y8Gbrf5s0TVnFuK5+Frl3LfJ+7Z4uN2HPbRscFbsT?=
+ =?us-ascii?Q?TF81tlKdksghQc6CwMAONo5cJnvi7krEPtuN0T3bAz2nRiRWzv+7BQl+ol3Q?=
+ =?us-ascii?Q?Hy7r5fIdVm5BtJl2Uqw+mVFVJjw2cKCfKZovAFTZ9AOc0RP8me/MXozTSPJI?=
+ =?us-ascii?Q?oQTd6uNk+dJxS3agRsxpRrDjdEvPLhEJ+xv+pIwESFGal9ycyGiZ0L1erKD2?=
+ =?us-ascii?Q?27mo/laAAv/G5+G/j450WCUdqsVbihBaoFUe/Y/gZxDalRXucNi0xvup7VDG?=
+ =?us-ascii?Q?6vmhw3EWWNs55cRTcecIfYmBwHQFv1uP831sEfHiTpiY0EY++Woq9Pkk/qwJ?=
+ =?us-ascii?Q?5P9HPVJumeE/xIUx/D1dqvJxs9tOZ5oKxFtBpbqNUPiikMpy9Kaj9tpyq+l9?=
+ =?us-ascii?Q?dmS5EA/nVbiOHLsyI5IGWL+L6xyBkbLWwG5LSW2B8WDnXTxDxWUgO34jgXSF?=
+ =?us-ascii?Q?zWSjEd3krw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c99d0e3-bdf3-410f-c08e-08dee73b3afe
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2026 15:17:51.5290
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F2neIjbfBAmyzjqaIJj5ycMcEkr1ivjReGcmQ49qBxscMuRAxBLKoORTj9GZtiHykCuSqGc2Gqwh46i50875+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4447
 
-On Tue, Jul 21, 2026 at 4:18=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
+On Fri, Jul 17, 2026 at 06:45:16AM +0000, Jack Ma wrote:
+> Commit 1274e1cc4226 ("vxlan: ecmp support for mac fdb entries") lets a
+> single inner MAC be reached through a group of remote VTEPs, with the
+> kernel flow-hashing across the group members.  Each member carries its
+> own remote IP, but the UDP destination port is always taken from the
+> VXLAN device (vxlan->cfg.dst_port) and cannot be set per member.
+> 
+> Some deployments pack several receivers behind one underlay IP and tell
+> them apart by UDP port, so they need a per-nexthop destination port to
+> spread flows across (IP, port) tuples rather than IP alone.
+> 
+> Add a netlink attribute NHA_FDB_PORT (__be16, mirroring NDA_PORT) that
+> carries an optional UDP destination port on an fdb nexthop.  It is only
+> accepted together with NHA_FDB and NHA_GATEWAY; it is stored in struct
+> nh_info and echoed back on dump.  This patch is control-plane plumbing
+> only; the VXLAN datapath is wired up in a follow-up patch, so behaviour
+> is unchanged for now.
+> 
+> Signed-off-by: Jack Ma <jack4it@gmail.com>
+> ---
+>  include/net/nexthop.h        |  2 ++
+>  include/uapi/linux/nexthop.h |  3 +++
+>  net/ipv4/nexthop.c           | 20 +++++++++++++++++++-
+>  3 files changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/nexthop.h b/include/net/nexthop.h
+> index 572e69cda..9c8227996 100644
+> --- a/include/net/nexthop.h
+> +++ b/include/net/nexthop.h
+> @@ -28,6 +28,7 @@ struct nh_config {
+>  	u8		nh_protocol;
+>  	u8		nh_blackhole;
+>  	u8		nh_fdb;
+> +	__be16		nh_fdb_port;
+>  	u32		nh_flags;
+>  
+>  	int		nh_ifindex;
+> @@ -63,6 +64,7 @@ struct nh_info {
+>  	u8			family;
+>  	bool			reject_nh;
+>  	bool			fdb_nh;
+> +	__be16			fdb_port;
+>  
+>  	union {
+>  		struct fib_nh_common	fib_nhc;
+> diff --git a/include/uapi/linux/nexthop.h b/include/uapi/linux/nexthop.h
+> index bc49baf4a..e587bbf3b 100644
+> --- a/include/uapi/linux/nexthop.h
+> +++ b/include/uapi/linux/nexthop.h
+> @@ -83,6 +83,9 @@ enum {
+>  	/* u32; read-only; whether any driver collects HW stats */
+>  	NHA_HW_STATS_USED,
+>  
+> +	/* be16; UDP destination port for an fdb nexthop (e.g. VXLAN) */
+> +	NHA_FDB_PORT,
+> +
+>  	__NHA_MAX,
+>  };
+>  
+> diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
+> index 6205bd57a..5b27cc9a9 100644
+> --- a/net/ipv4/nexthop.c
+> +++ b/net/ipv4/nexthop.c
+> @@ -39,6 +39,7 @@ static const struct nla_policy rtm_nh_policy_new[] = {
+>  	[NHA_ENCAP_TYPE]	= { .type = NLA_U16 },
+>  	[NHA_ENCAP]		= { .type = NLA_NESTED },
+>  	[NHA_FDB]		= { .type = NLA_FLAG },
+> +	[NHA_FDB_PORT]		= { .type = NLA_U16 },
 
-Hi Mina,
-Thanks a lot for your review!
+Maybe NLA_POLICY_MIN(NLA_BE16, 1) given that it's BE16 and that we don't
+dump / use a destination port of 0?
 
-> On Sun, Jul 19, 2026 at 11:01=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> =
-wrote:
-> >
-> > knod (in-kernel network offload device) drives a GPU directly from the
-> > Linux kernel - with no userspace GPU runtime such as CUDA or ROCm, and
-> > no userspace component in the data path - to accelerate packet
-> > processing.
-> >
-> > The kernel itself allocates the GPU's queues, JIT-compiles the
-> > per-packet program to GPU machine code, and dispatches it; the NIC DMAs
-> > received packets straight into GPU memory and the GPU returns a verdict=
-.
-> > The GPU is programmed like any other in-kernel offload, not through a
-> > userspace framework, so existing XDP programs and IPsec SAs can be
-> > offloaded to it transparently.
-> >
-> > The design and motivation were presented at Linux Plumbers Conference
-> > 2025:
-> >
-> >   https://lpc.events/event/19/contributions/2267/
-> >
-> > Motivation
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > Line-rate packet processing that does non-trivial per-packet work - an
-> > XDP program doing L4 load balancing, or IPsec crypto - is bound by the
-> > host CPU: each core handles one packet at a time, so scaling means
-> > spending more cores. A GPU is the opposite shape - thousands of lanes
-> > running the same small program over many packets at once (SIMT) - which
-> > happens to match the per-packet-program model of XDP.
-> >
-> > knod moves that per-packet compute off the host CPU and onto a GPU. The
-> > NIC DMAs received packets directly into GPU memory, the GPU runs the
-> > program across a batch of packets in parallel, and only the result
-> > comes back: a verdict for every packet, plus the packet itself for the
-> > ones destined to the host. The CPU no longer pays the per-packet
-> > program cost, and throughput scales with GPU occupancy rather than core
-> > count.
-> >
-> > Crucially this happens entirely inside the kernel. GPU packet processin=
-g
-> > today generally launches work from a userspace GPU runtime (CUDA and
-> > friends) and keeps that runtime in the data path; knod instead builds
-> > the GPU queues, compiles the program, and dispatches it from the kernel=
-,
-> > so it plugs into existing offload paths (XDP, xfrm) with nothing to
-> > install or keep running in userspace.
-> >
->
-> TBH I found this motivation weak, especially since IIUC you're asking
-> for almost ~50K lines of code to be merged to the kernel. My thinking
-> is that (a) it's true that Native XDP takes up CPU cores, but
-> HW-offload XDP already exists and takes up no CPU. (b) with AI, GPUs
-> are very expensive and the work they're doing is critical, so you're
-> unlikely to buy a GPU and use it for knod-offloaded XDP; you'd
-> probably buy a cheaper smart-NIC? And in the cases where you do have a
-> GPU, it's likely your system's money-maker, and you probably want to
-> offload work from the GPU, not to your GPU.
->
+>  	[NHA_RES_GROUP]		= { .type = NLA_NESTED },
+>  	[NHA_HW_STATS_ENABLE]	= NLA_POLICY_MAX(NLA_U32, true),
+>  };
+> @@ -956,6 +957,9 @@ static int nh_fill_node(struct sk_buff *skb, struct nexthop *nh,
+>  	} else if (nhi->fdb_nh) {
+>  		if (nla_put_flag(skb, NHA_FDB))
+>  			goto nla_put_failure;
+> +		if (nhi->fdb_port &&
+> +		    nla_put_be16(skb, NHA_FDB_PORT, nhi->fdb_port))
+> +			goto nla_put_failure;
+>  	} else {
+>  		const struct net_device *dev;
+>  
+> @@ -1055,6 +1059,9 @@ static size_t nh_nlmsg_size_single(struct nexthop *nh)
+>  		break;
+>  	}
+>  
+> +	if (nhi->fdb_nh)
 
-Thanks, these are fair concerns.
+Why not nhi->fdb_port ?
 
-For a system where the GPU is already fully utilized, a SmartNIC may
-indeed be the better target for XDP offload. We are not arguing that
-GPU offload is always cheaper or more efficient.
-
-The goal of KNOD is to provide an upstream path for using programmable
-accelerators already available in the system for kernel networking.
-Hardware XDP offload exists, but the available functionality is tied to
-the NIC, its firmware, and the features maintained by the vendor.
-KNOD instead aims to provide an execution layer that can be extended
-in the kernel community. XDP is the first workload used to validate
-this layer, rather than the intended limit of KNOD.
-
-> But as far as I can tell there should be much more interesting
-> applications for what you're doing rather than offloading XDP. Like
-> wouldn't you with this feature be able to implement ML collectively
-> like all-to-all/all-reduce/all-gather as purely XDP programs offloaded
-> to the GPU? If you have that implemented and can positively compare
-> performance to RoCE or RDMA that would be a much more interesting use
-> case IMO.
->
-
-I agree that this is a promising direction, and collective communication
-could be a good fit for this model. At least for all-reduce, however,
-BPF/XDP does not currently support the required floating-point
-operations. If that support is discussed and added by the BPF community,
-this would be an interesting use case to explore with KNOD and evaluate
-against RoCE or RDMA.
-
-> > Model
-> > =3D=3D=3D=3D=3D
-> >
-> > knod binds two endpoints through a third object:
-> >
-> >   - a NIC-side netdev, registered by the NIC driver;
-> >   - an accelerator (the GPU), registered by a provider built into the
-> >     GPU driver;
-> >   - an offload device, created on attach, that connects them and owns
-> >     the per-queue data-path state.
-> >
-> > The accelerator ops are feature-agnostic, so different per-packet
-> > programs plug in behind one interface. This series ships two features
-> > to show the framework is not tied to a single use case (the accel-type
-> > uAPI also reserves "dpu" for future non-GPU backends):
-> >
-> >   - BPF:   an XDP program attached in offload mode is JIT-compiled from
-> >            eBPF to an AMD GCN shader and executed on the GPU.
-> >   - IPsec: RX ESP full-packet decrypt on the GPU (proof of concept,
-> >            see below).
-> >
-> > Data path
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > For a NIC RX queue bound to an accelerator, a received packet flows as
-> > follows:
-> >
-> >   1. Attach reconfigures the NIC's page_pool so its pages come from GPU
-> >      memory, exported as a dma-buf and plugged in through the devmem
-> >      memory provider. The NIC therefore DMAs the packet straight into
-> >      GPU memory - there is no host-side copy on RX.
-> >
-> >   2. Instead of building an skb and entering the stack, the NIC's NAPI
-> >      pushes a small descriptor (memory ref + offset + length) onto a
-> >      per-queue lock-free SPSC ring shared with the GPU.
-> >
-> >   3. A persistent GPU worker drains descriptors and runs the active
-> >      feature's shader over a batch of packets in parallel - one
-> >      workgroup per packet - then writes a per-packet verdict back onto
-> >      the ring: PASS, DROP or TX.
-> >
-> >   4. Back on the NIC NAPI, each verdict is applied:
-> >        - DROP: the GPU page is recycled to the pool;
-> >        - TX:   the packet is sent back out the NIC directly from GPU
-> >                memory (XDP_TX), with no host round-trip;
-> >        - PASS: the packet is copied out of GPU memory into a host
-> >                delivery page by the GPU's DMA engine (async SDMA),
-> >                wrapped as an skb, and handed to the normal stack.
-> >
-> > So only PASS packets ever touch host memory, and even then the copy is
-> > done by the GPU, not the CPU.
-> >
-> > The control plane is a generic netlink family ("knod") for
-> > attach/detach, accelerator/NIC inventory, and per-accelerator feature
-> > selection, with notifications on bind/unbind.
-> >
-> > Code layout
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > knod separates into a subsystem-neutral core and a GPU-specific
-> > provider; nothing in the core knows about GPUs. Roughly:
-> >
-> >   - core + control plane + NIC drivers   net/, kernel/bpf/       (~4.4k=
-)
-> >   - GPU provider (queues, JIT, shaders)  drivers/gpu/drm/amd/    (~39k)
-> >
->
-> Since the changes are so large, I would break this work into many
-> series, the first which only supports a very minimal set of work
-> (which I would guess would be XDP_DROP and XDP_TX), and then follow up
-> with another series which adds XDP_PASS support, and then IPSec, etc.
->
-
-That makes sense. We will split the work and start with the minimum
-functionality needed to demonstrate the architecture, likely XDP_DROP
-and XDP_TX. XDP_PASS, IPsec, and the remaining functionality can follow
-in separate series.
-
-Thanks a lot!
-Taehee Yoo
-
-> --
-> Thanks,
-> Mina
+> +		sz += nla_total_size(2);	/* NHA_FDB_PORT */
+> +
+>  	if (nhi->fib_nhc.nhc_lwtstate) {
+>  		sz += lwtunnel_get_encap_size(nhi->fib_nhc.nhc_lwtstate);
+>  		sz += nla_total_size(2);  /* NHA_ENCAP_TYPE */
+> @@ -2956,8 +2963,10 @@ static struct nexthop *nexthop_create(struct net *net, struct nh_config *cfg,
+>  	nhi->family = cfg->nh_family;
+>  	nhi->fib_nhc.nhc_scope = RT_SCOPE_LINK;
+>  
+> -	if (cfg->nh_fdb)
+> +	if (cfg->nh_fdb) {
+>  		nhi->fdb_nh = 1;
+> +		nhi->fdb_port = cfg->nh_fdb_port;
+> +	}
+>  
+>  	if (cfg->nh_blackhole) {
+>  		nhi->reject_nh = 1;
+> @@ -3147,6 +3156,15 @@ static int rtm_to_nh_config(struct net *net, struct sk_buff *skb,
+>  		cfg->nh_fdb = nla_get_flag(tb[NHA_FDB]);
+>  	}
+>  
+> +	if (tb[NHA_FDB_PORT]) {
+> +		if (!tb[NHA_FDB] || !tb[NHA_GATEWAY]) {
+> +			NL_SET_ERR_MSG(extack,
+> +				       "FDB port can only be set on fdb nexthops that have a gateway");
+> +			goto out;
+> +		}
+> +		cfg->nh_fdb_port = nla_get_be16(tb[NHA_FDB_PORT]);
+> +	}
+> +
+>  	if (tb[NHA_GROUP]) {
+>  		if (nhm->nh_family != AF_UNSPEC) {
+>  			NL_SET_ERR_MSG(extack, "Invalid family for group");
+> 
+> -- 
+> 2.43.0
+> 
