@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60ED2417DE;
-	Tue, 21 Jul 2026 13:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D73367F3A
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784640709; cv=none; b=iXVuyYMxgN9tyPwp1/zdzhwleWry37xBvMviFybvjOPsedhIMX9HItGhZaujOHcumkIapifb8NhmqQy6PchO/1w2I1XaoSTahEzdC7NwkQ989dxnI2o3eflY/JaX4mdi2tkR0YJyKfK1xpfKh0pE1PvLwZ31ZCiJLpisGff96jw=
+	t=1784640715; cv=none; b=lPTH3a0xKAq2DsuaMcNGFzo5HoPw/9uqZaClkiRmpo1MFsKiRf1GJayWW8gS2KLRp6vR7Pbjxo2Yv/GwGc4AMCWKT44C7087TFnRvJqSkD8pgTLL7mdIcG15o2tqJXxz68Tkmvd2t0BLq3rrj9hZ0VXVCkvZSV/titKJsc5jZ/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784640709; c=relaxed/simple;
-	bh=HmIgL9AgosyIsh6nVBViCL9eOIDR6q92CvDjnaAZ6fU=;
+	s=arc-20240116; t=1784640715; c=relaxed/simple;
+	bh=8zq9RR/L9N/DtyBxN3VwOEe3/P5o+ueIffJv6AIqeLc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DWb3fBSq+14VzxFjUd9Ks6HmAqNnAJ2yNxhw3IWl1vMlaRZJUrSgiGlnK6PoSYioyo2uGc8f0gsrJoTvgDnjMVhYQn0+rKsXrEvdQy7bjXk4SthbN7eEDnCoSsPBPrkhZFmV3A2reTc0F9IlOYSpoTzBnb7u0eNzZvgQaV/SE0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P0emkjGT; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=tLzg4SeN8LpG4ZL/lPafdwnWhfkIMhPErPSguoemjsWWEGbB2M+xtlL8eGpobIyIJmx8U/rlINYYy1NSgRyQ61JSvOZ3U2KDBsioHpm/CgLQXixjlzU43wKbwm9ez4lAkD0FWuRsldbHo057E9oC0WgTGQariqio9F582LXc4SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R4urqZ8d; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P0emkjGT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R4urqZ8d"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784640703;
+	t=1784640710;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1L1QxRLeeYcsjArysBca5dBZPpFGjkWhx0OTqToqxYw=;
-	b=P0emkjGTlvkOdSR/vbqrXpb/DvfEMKodqGsCuKoO1vFri0y+l0iZntC89JXATC8TRg8l/0
-	JXxYIZXKI/7KhanAGLfzWbDLEN7JiwNHjzPzqDJbMBy6me1TjTs06F6x4LXFVw6k5the6N
-	juVamVy6H0XBYodGKieRul/tcvfIDQM=
+	bh=j+91BArilhHgdCExxzbWRgT7PWFmNY8Og811iVEp6lc=;
+	b=R4urqZ8dj0KqrzPJ11IW6izBP2LifhaCo6kPwD/CWO0V6vJM1ADABZa8I7KLU3zaJZPOu6
+	iYku5ZCNfEUj14jMR9cmwaN2DB6oBCygOqNSsV9cq2WzbZq3/6/BMvFbSLxdKG58cjgX9N
+	15YqRT6z8LLKTs1eCLWA58SLffHoCaw=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 1/2] bpf: Fix WARNING in bpf_tracing_link_release
-Date: Tue, 21 Jul 2026 21:30:34 +0800
-Message-ID: <20260721133036.49265-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Verify no warning when close fexit link
+Date: Tue, 21 Jul 2026 21:30:35 +0800
+Message-ID: <20260721133036.49265-3-leon.hwang@linux.dev>
 In-Reply-To: <20260721133036.49265-1-leon.hwang@linux.dev>
 References: <20260721133036.49265-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -63,79 +63,90 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The trampoline could be corrupted by the blindly
-'tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX' in verifier.
+Add a test to verify that there's no WARNING when detaching fexit link by
+following the repro steps of previous commit.
 
-1. A fexit attached to a tail_call_reachable prog.
-2. Another fexit loaded with the same tail_call_reachable prog target.
-3. Close the first fexit link.
+Without the fix, the WARNING could be triggered by this test.
 
-[    3.410719] WARNING: kernel/bpf/syscall.c:3551 at bpf_tracing_link_release+0x53/0x60, CPU#1: test_progs/98
-...
-[    3.428793]  bpf_link_free+0x58/0x130
-[    3.429293]  bpf_link_release+0x23/0x30
-
-Fix the warning by updating 'tr->flags' with '|=' and lock.
-
-Fixes: 2b5dcb31a19a ("bpf, x64: Fix tailcall infinite loop")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/linux/bpf.h     | 2 ++
- kernel/bpf/trampoline.c | 7 +++++++
- kernel/bpf/verifier.c   | 2 +-
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/tailcalls.c      | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d9542127dfdf..fc84f39967ae 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1523,6 +1523,7 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
- 				struct bpf_tracing_multi_link *link);
- int bpf_trampoline_multi_detach(struct bpf_prog *prog,
- 				struct bpf_tracing_multi_link *link);
-+void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index c66037162da5..86d87d5817cf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -13,6 +13,8 @@
+ #include "tailcall_cgrp_storage.skel.h"
+ #include "tailcall_sleepable.skel.h"
+ #include "tailcall_callback.skel.h"
++#include "tailcall_bpf2bpf2.skel.h"
++#include "tailcall_bpf2bpf_fexit.skel.h"
  
- /*
-  * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
-@@ -1646,6 +1647,7 @@ static inline int bpf_trampoline_multi_detach(struct bpf_prog *prog,
- {
- 	return -ENOTSUPP;
- }
-+static inline void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags) {}
- #endif
- 
- struct bpf_func_info_aux {
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 6eadf64f7ec9..129d07db117e 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -670,6 +670,13 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
- 	return ERR_PTR(err);
+ /* test_tailcall_1 checks basic functionality by patching multiple locations
+  * in a single program for a single tail call slot with nop->jmp, jmp->nop
+@@ -1907,6 +1909,53 @@ static void test_tailcall_callback(void)
+ 	RUN_TESTS(tailcall_callback);
  }
  
-+void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags)
++static void test_tailcall_bpf2bpf_fexit_links(void)
 +{
-+	trampoline_lock(tr);
-+	tr->flags |= flags;
-+	trampoline_unlock(tr);
++	struct tailcall_bpf2bpf_fexit *skel1 = NULL, *skel2 = NULL;
++	struct tailcall_bpf2bpf2 *skel_tc;
++	struct bpf_link *link;
++	int err, prog_fd;
++
++	skel_tc = tailcall_bpf2bpf2__open_and_load();
++	if (!ASSERT_OK_PTR(skel_tc, "tailcall_bpf2bpf2__open_and_load"))
++		return;
++
++	skel1 = tailcall_bpf2bpf_fexit__open();
++	if (!ASSERT_OK_PTR(skel1, "tailcall_bpf2bpf_fexit__open"))
++		goto out;
++
++	prog_fd = bpf_program__fd(skel_tc->progs.classifier_0);
++	err = bpf_program__set_attach_target(skel1->progs.fexit, prog_fd, "subprog_tail");
++	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
++		goto out;
++
++	err = tailcall_bpf2bpf_fexit__load(skel1);
++	if (!ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load"))
++		goto out;
++
++	link = bpf_program__attach_trace(skel1->progs.fexit);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_trace"))
++		goto out;
++	skel1->links.fexit = link;
++
++	skel2 = tailcall_bpf2bpf_fexit__open();
++	if (!ASSERT_OK_PTR(skel2, "tailcall_bpf2bpf_fexit__open"))
++		goto out;
++
++	err = bpf_program__set_attach_target(skel2->progs.fexit, prog_fd, "subprog_tail");
++	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
++		goto out;
++
++	err = tailcall_bpf2bpf_fexit__load(skel2);
++	if (!ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load"))
++		goto out;
++
++out:
++	tailcall_bpf2bpf_fexit__destroy(skel1);
++	tailcall_bpf2bpf_fexit__destroy(skel2);
++	tailcall_bpf2bpf2__destroy(skel_tc);
 +}
 +
- static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex,
- 				 const struct bpf_trampoline_ops *ops, void *data)
+ void test_tailcalls(void)
  {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 52be0a118cce..66d8d9eaec05 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19523,7 +19523,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return -ENOMEM;
- 
- 	if (tgt_prog && tgt_prog->aux->tail_call_reachable)
--		tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX;
-+		bpf_trampoline_set_flags(tr, BPF_TRAMP_F_TAIL_CALL_CTX);
- 
- 	prog->aux->dst_trampoline = tr;
- 	return 0;
+ 	if (test__start_subtest("tailcall_1"))
+@@ -1974,4 +2023,6 @@ void test_tailcalls(void)
+ 	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
+ 		test_tailcall_cgrp_storage_no_storage_bridge();
+ 	test_tailcall_callback();
++	if (test__start_subtest("tailcall_bpf2bpf_fexit_links"))
++		test_tailcall_bpf2bpf_fexit_links();
+ }
 -- 
 2.55.0
 
