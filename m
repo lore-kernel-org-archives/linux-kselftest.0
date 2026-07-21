@@ -1,153 +1,80 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD99471250
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 18:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9449C2DBF75;
+	Tue, 21 Jul 2026 18:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784657790; cv=none; b=VRDMLqqCZTm4b/ej1S5ie5TdZ1mpjBnEQ0/I1oq2Egry7OdngX2iRY9pJnu3xPCTvmt6WM2tmIlOfiXeY0lvzDiVbOl/MzX2L/EBOoZ+zrsJYVY69PYZi+Hcp3Uj5TvYMoAZKCrYyuoRD+EqNzG2GizHV7b/QJEU3R8x3Nxa6h4=
+	t=1784660021; cv=none; b=Q0x5KMsBMMidndwdggL8OHP09uB3vDipsrfr1bWE4OBaRnxvnLybkA2IaVBDtUJw8KDwDZZh4Cbcnb1Hufuc4waiNWAVa5ngExbN0yhbycUgEcyKRxSg2225PlDy+5ggzEdJ/AtDjDHflt1LAl7XgOXDzwEH5OYw1eT91EnsBps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784657790; c=relaxed/simple;
-	bh=oFlvw3giOtGQsSkXQn6VVdx6osu4tro2T3RPW7SBhU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YQCtezcZ/SOWCOq3rg05b7r80aRDbuJoTY/k4CY2PFHherfWHbvo/nDbEbzQi8zRjnFlT3Hgi5oFhj114l48bmBpNy9Z8RZEnLG7KrQoVO2HWMeyMmdpEftvwv/d7GeDYoi2GvFc98Mi6kHVT8cD6wJSnNn2ZScGmh7tZI8ssmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=lWiMqNe1; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1784660021; c=relaxed/simple;
+	bh=GoBQdLhcvzXYRcBc5t0EDxCmJ/gOKn2hnuSn5lZ1HSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZRQzmcrtgkB84NpH/C8ej4ms0a5RquqbZpnAX2C6aSzhysMXuDdXwwlw76cSR7GzJaSrJXJDUEQA2fctF8jRGWdiF/w6FHIWknR+p3E+lsLvtlSs8cSiHrSYSwRkLdovSaavuuPngz/PS6fudM23eGDfdqqRmLWJfslVwhNDtXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8Ech+r9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="lWiMqNe1"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-51c2a818fc4so99165641cf.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 11:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784657788; x=1785262588; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=tK6CpaworNApxpcs4ZRJbHY7w08bgOkmP8ipHWd1tq8=;
-        b=lWiMqNe1aGdlndmF0DEIX11ekT+kppi6ZCsdKP+nARwmUcbPRB2RiqFp9CcVZlrCMe
-         a7iQJIUlHGgwrTlgeBPrEB9RYw65vbDnpQS/W6FXlBeixFMzdS/zMQMhcf9prwyKh9Tg
-         zZM1P1+WyYLol3M86HhbDS8lLf0qvp8NnbVepemntzhrmA+vdbVuvJTjusRGwuudCrDN
-         IJnhW0U1qCJ9qu+q+c/HoRATkAolbkeQ7YmmUklTRfiHMdfAYBd7KPK3bsHOQiTqkD7y
-         nQk7+E507U93KpaB3JodhTTR0dnlAPaEgPrkM70sUwYbhPsJOnuOLMGTZLlANx5BWdjy
-         4gWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784657788; x=1785262588;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tK6CpaworNApxpcs4ZRJbHY7w08bgOkmP8ipHWd1tq8=;
-        b=iSR4Jr9o5pCT9S/rICdsNYahghTkP/cPC7/Uxpt6BZJI6oM6+Fif1GLmqk7S1yOoRc
-         Ep76efZOXRTc6t3gEV+dxWi6crZgbtlVbw2PuTShvZ16JX1syE352TEcYEocE2BoqbIu
-         0v/vXR+Jji6gGaX0UNraH0dEVhuk+mFnNXOPQatQ5HK1hJ416YbvEKrJ144QogfBdsF2
-         1EZlWaNq9LXDm1OvRYvCoTLIpA00c5HCLbBENqXwvp4vka8HOlMesu/php5PalU2J5ZJ
-         sB/y3TS8n4Pfe/C4feDhSAjfuWsspx08amBp2y20oBIO98KbXZOXPdvMD0sSKOjXem1d
-         n4gQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp7agyU+PGAjD4NcM/eRjTgBI70tkwrotvWbHqn7hyLeeicXE0x0dT6UPKRO1WyN1VkL31nQ2KWsUvVII8I9JA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzU1Zdsur6HxB+b3viXbek2204hparbPiqvmtcuFahlmRCoCdv7
-	uhp71y5wU13alwfffzFdqMHo+EtEsyrduKPd9hvFPQ2b6w08tk+4WUqkv4UqFgynyG8=
-X-Gm-Gg: AfdE7cn34tUWplEwD+cjE0djC3JFbzoTqPyz/coEtd8xkbecYINdZ6mgMZyosDdN/JP
-	wuRREJS7BNbbEGlDsiKJGKDJhEJ8X9CLXP4Wvh6TUd8ea2B2fNzT/TcBZb18o0/IeYzf7AeDwGr
-	cUL41k87qFH1Asuo9do7+BZ82TrmMVirZilVTg6nMfyzqdsNG6vC491OUXr3slwUBTJrfGC4ZMk
-	S+LJEU+yUrvF/8jMTCoir0ngxzKPl22+r8dNpagobNUNckIs01Wrw6ftQjLhqibnNgpJ/Yhd8Bz
-	Wj+09TpIL+7isuvDpm6JReuVntzDp06moXJO1FenO7BRuibSOxy621cbTk2ACwsHlHtE/dv/8bW
-	lFbSyJqZZ+FLhMvz4A/cDXr6bFM1rQ2lvgJE1qYSzrFPoeFhZhyLEFGPGo3xQ37BJAArVOSAO1a
-	gRXQ64RVt4SFKAL27jbmBP34n/0Bm2fqtQp/gJlrDoHXuC7YDtNR83Jsv7gEIsWCxZfYmk
-X-Received: by 2002:ac8:5845:0:b0:51c:7b12:600a with SMTP id d75a77b69052e-5213e881e44mr171868611cf.86.1784657787636;
-        Tue, 21 Jul 2026 11:16:27 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-527d066fa6asm463921cf.6.2026.07.21.11.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 11:16:27 -0700 (PDT)
-Date: Tue, 21 Jul 2026 14:16:21 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Balbir Singh <balbirs@nvidia.com>
-Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
-	brendan.jackman@linux.dev, yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, 
-	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
-	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
-	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
-	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
-	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
-	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
-	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
-	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
-	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
-	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
-	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
-Message-ID: <al-2D_7NcwMxqmsM@gourry-fedora-PF4VCD3F>
-References: <20260720193431.3841992-1-gourry@gourry.net>
- <6a7aaac3-e70d-4063-9c84-e643db1488e0@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8Ech+r9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15EB1F00A3E;
+	Tue, 21 Jul 2026 18:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784660020;
+	bh=gte7GzV85JHaJhjN0FetqQSkNf/MaghddVNXQ+n/6k8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=S8Ech+r9WybBN35QPIhcuUCsjAWnlIGCgnd5gDh7Ks2OxZ1xZrhugGcitbJbkbDT4
+	 gjbYaq2qv2JNAJ/wii7eLNHtOzngJd8DPyTgNSBo+OYRXu/x03y/rtFqadeIICA7fl
+	 kVn41/xwiVpPFLxknnCmV//lotvgkiBNKlHq8893w7sDv1AYsSia7+NTqBtOtKNKPY
+	 oPKgBGm0v4mt37c6/PD18fIIY0IPLFxD86w2PVqkf8fHdG0+RuG6ZRHiKysSr3rRzQ
+	 aCNQEoCEg4bLMrbkEMz/K0vyk2KgfQW0bjpwFgZ0KnyNTEYaCqAG8CnFzRZB3Mlbdt
+	 GgT8lZA8NGuzg==
+Date: Tue, 21 Jul 2026 11:53:39 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Thaison Phan <thaisonphan@google.com>
+Cc: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Fengyuan Gong <gfengyuan@google.com>, Stan Iliev
+ <stani@google.com>, Simon Horman <horms@kernel.org>, Willem de Bruijn
+ <willemb@google.com>, Petr Machata <petrm@nvidia.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: update wait mechanism for
+ relocating netdevsim to a new ns
+Message-ID: <20260721115339.09a3ea0e@kernel.org>
+In-Reply-To: <20260709160807.23650-1-thaisonphan@google.com>
+References: <20260709160807.23650-1-thaisonphan@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a7aaac3-e70d-4063-9c84-e643db1488e0@nvidia.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jul 21, 2026 at 01:46:01PM +1000, Balbir Singh wrote:
-> On 7/21/26 5:33 AM, Gregory Price wrote:
-> > 
-> > Patch Layout
-> > ============
-> > The series is broken into two sections:
-> > 
-> > 1) N_MEMORY_PRIVATE Introduction.
-> >    Introduce the node state.
-> >    Opt those nodes out of mm/ services.
-> > 
-> > 2) NODE_PRIVATE_CAP_* features
-> >    A set of mm/ service opt-in flags that augment private
-> >    nodes to make them more useful (i.e. reclaim = overcommit).
-> > 
-> >    NODE_PRIVATE_CAP_LTPIN for private node folio pinning
-> >    NODE_PRIVATE_CAP_NUMA_BALANCING for private-node NUMA balancing
-> >    NODE_PRIVATE_CAP_DEMOTION for private-node tiering demotion
-> >    NODE_PRIVATE_CAP_HOTUNPLUG for opted-in private nodes
-> >    NODE_PRIVATE_CAP_USER_NUMA for userland numa controls
-> >    NODE_PRIVATE_CAP_RECLAIM for opted-in private node reclaim
-> > 
+On Thu,  9 Jul 2026 16:08:07 +0000 Thaison Phan wrote:
+> When netdevsim devices are reloaded into a non-default network namespace
+> via 'devlink dev reload', the host's udev daemon does not receive the
+> subsequent device creation events since it is generally associated to the
+> default network namespace, so the host udevd queue never officially clears.
+> As a result, running 'udevadm settle' blocks indefinitely and eventually
+> times out.
 > 
-> Looks reasonable, I wonder why USER_NUMA/HOTUNPUG is an opt-in?
-> 
+> Fixed this by bypassing 'udevadm settle' when a namespace ('ns') is
+> provided by utilizing the namespace-aware 'self.wait_for_netdevs()'
+> helper to poll the namespace's sysfs until the interfaces are visible.
+> For host-only configurations (where 'ns' is None), preserve the original
+> 'udevadm settle' behavior to ensure udev renaming rules are completed.
 
-Ideologically: Private nodes default to fully isolated, why should any
-given feature be special?
+I don't get it. I never saw it hang. And if the event is scoped udevadm
+settle should return immediately, rather than hang. We generally run
+on latest systemd udev in Fedora and CentOS. Please explain your problem
+better.
 
-Concretely: 
+> Also fixed minor bug in wait_for_devs() where wrong exception was caught
+> from if get_ifnames() failed. Now the if get_ifnames() results in a
+> command failure exception, wait_for_devs() will catch the exception and
+> set an empty list for the interface names rather than the exception
+> propogating upward.
 
-User-numa
-
-   Some devices don't want the user to have control over placement.
-   I have been working on compressed memory, for example, which only
-   ever wants to be used as a reclaim-demotion target.
-   
-   (The reasoning for this is another thread, i plan on publishing
-    my research on this this year)
-
-Hot-unplug:
-
-   Some devices can't necessarily handle unexpected migration, and
-   hot-unplug is fundamentally a migration.  So the HOTUNPLUG cap
-   actually means "hot-unplug can execute migrations".
-
-   If the entire device has pre-drained the memory (all memory is free)
-   then unplug works - it's just not very hot (no migrations) :]
-
-   Maybe a naming issue?
-
-~Gregory
-
+Should be a separate patch
+-- 
+pw-bot: cr
