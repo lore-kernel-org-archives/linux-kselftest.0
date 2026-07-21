@@ -1,95 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BA7418A58;
-	Tue, 21 Jul 2026 22:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607403B6BE5;
+	Tue, 21 Jul 2026 22:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784671855; cv=none; b=KafHI7mExJfD3typQ12hTr/IllxrT5X+iUIIO8cs52btXCniLCzPs/zj6MAgtPjNBi3HdE56MI4ZbSKCKVXq2bJk2SXGJWe01roY7TLJJp5rrp7fNgr5L0CNeVYKzGIQZ0fg66npVgbvNiURXelcQABT5FR+BvSH33MODPRPGHo=
+	t=1784672107; cv=none; b=buYnsgPLG8VPM3qCCx2optjSWcMZWJRAEF6/hoNHCuXQZgYH+kp2B6k5MtpKCVCIMCQ7/fkFjMkmu+iaDZ07lTPXUJCYnvRIa5BtscHIiUTgX2cS3cpMmwuuhHkXHK9NRN/tVAQjni4GyxjI05TbA05FopkjOkK/d5Fz7MYnB7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784671855; c=relaxed/simple;
-	bh=VzSFI/A/mU1RFixF+N00ArXIvSfEOMKn/Kgg/596AU4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TyQqd4eDgteuLT4VRJs1ORWhQFg19p+mnSLbPwZQVLlO2MHqq12fO56upkuK2aIY34HFZv2KYl/JoEnXhNq5uOFAI3lf0A0GTmU1fzYws4iZJ4xg9MGH+QcwyZGWshbwR3homeEmbajZfhxcVQ1MBBEc2EE0WIxFfyZVPT3JLvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2BkNgBC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784672107; c=relaxed/simple;
+	bh=1b2Y/gzcf6sosMCli43waBWN3mbmIYO/rHB7iPILqys=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LNS/HK25UEVma8SjavLYh7gBWfFGkgmJpN4yiXOX1VtHspRqBZ6cdUlsGY8Ecik2XZoVMuYVCu6RXxqInLhdbYux8+uZS+84CFzpwHWIRzg1UpI7gamU6YMN5ZMWt9gWB8nN1yuwkP4U55I0Vk72YReKd2rnqiOqJfFbEVnxNPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdSiMhIE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2BkNgBC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19651F00A3A;
-	Tue, 21 Jul 2026 22:10:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdSiMhIE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FD01F00A3D;
+	Tue, 21 Jul 2026 22:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784671854;
-	bh=6ghj0bAXJ7QM0jI0Z0cbalfZJOu7EbXC3apo2wHHgRc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=j2BkNgBCqE2rjYT68nNQ1r2DFARqy3UTnRM85Z6Vb6IMwcGo6+7JoJ+ctYwgtNFXm
-	 FBk2ZY2+MAbKSN/WEqMIiAbTVDvdZBJAnh7ld3EcvMK78SUz9bcSNgsP8wcw4IRIDG
-	 lLV2QIeJyiCylGkME6OBx1/qS897VWdSiqbFeWWis2+5oLQjMv1cgWSvZ6SGNC37NW
-	 Pg9KlGg7Hs7IGUyg3e/Bd4TNrmqomrS8DZX0gijZQBGAZr5f72kyBkck1I41+KXDrY
-	 sJkKiI2cfwT/HkeiyOxqjUQLByFuH763miOFJ5eZ5iXLOPCmlsmxxsgFHLKRu9z67a
-	 JvC+QDdmPI6CA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B86380820D;
-	Tue, 21 Jul 2026 22:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1784672106;
+	bh=msJ/ZTiNT8bHZHrX5GeIl08hHqY6G9pClI7pFaDtIH8=;
+	h=From:Subject:Date:To:Cc;
+	b=TdSiMhIEF05AcYi0/RQsr5hbrVQRuH42tUo224p3MZkt+YRvMwtMEX2Sz4Qs3e7wq
+	 F2pwcQhZmQQhnQJhy/chbh6sdTJL2H3ndhGhRuENdKgPSFd4FiHxF4m0RpMd7XnmnQ
+	 +EEqbNW4WZWVgQ116X7ocRrrPP2V0kaZoYyPTna5CALa/2ZJcJU/neZcXHtmAxLkCH
+	 6ZIX9DfWLLKGjw4OjeOd99kW6wC13d0Qpwiym5FsNKf2evAxLeGx7v5GHimvJ3HGhz
+	 7Jv/OOytMlITrclrpuSO6CGoHtv95KGDZ0LTwA+25ftp5QGfAQMAonhSV1ZpEjXSod
+	 mS6ucukcmSzUA==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/5] mptcp: misc fixes for v7.2-rc5
+Date: Wed, 22 Jul 2026 00:14:37 +0200
+Message-Id: <20260722-net-mptcp-misc-fixes-7-2-rc5-v1-0-6fb595bc86ef@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/7] selftests: net: add missing kconfig and settings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178467182339.1107545.10049647609744373439.git-patchwork-notify@kernel.org>
-Date: Tue, 21 Jul 2026 22:10:23 +0000
-References: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-In-Reply-To: <20260710-net-sft-fix-containers-v1-0-a2915c294ef5@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kuniyu@google.com, aconole@redhat.com,
- echaudro@redhat.com, i.maximets@ovn.org, dev@openvswitch.org,
- antonio@openvpn.net, sd@queasysnail.net, andrew+netdev@lunn.ch,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, mohsin.bashr@gmail.com,
- dw@davidwei.uk, weibunny@fb.com, bpf@vger.kernel.org, leitao@debian.org,
- asantostc@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0Q6CMAxFf4X02SZsKgv+ivEBSoWaMJd1GhLCv
+ 1vk8dzcc1ZQzsIKt2qFzF9ReUcDd6qApi6OjDIYg699UwfvMHLBORVKOIsSPmVhxYAeM12xac/
+ u0nLnwkBgiZT5f7DCHcyExzHqp38xlT0M2/YDHHqh84UAAAA=
+X-Change-ID: 20260721-net-mptcp-misc-fixes-7-2-rc5-693149ea17dc
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Chenguang Zhao <zhaochenguang@kylinos.cn>, stable@vger.kernel.org, 
+ Xuanqiang Luo <luoxuanqiang@kylinos.cn>, 
+ Kalpan Jani <kalpan.jani@mpiricsoftware.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Frank Ranner <frank.ranner@intel.com>, 
+ kernel test robot <lkp@intel.com>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1483; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=1b2Y/gzcf6sosMCli43waBWN3mbmIYO/rHB7iPILqys=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLLi3ydF7H8rOqc2nHNi5IK54rHHZpyzulgkvfhnsGCqs
+ dr6iwrhHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABO58ZWRYbIn7++Ot/K8S89a
+ KtxQWbf5ga8Xl9XVF0yNxn51r6eFr2D4w3nqYHaNP0/Yms91nw7r/jVd0KN2KvXeyYXL24L2zj5
+ 9lgsA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Hello:
+Here are various unrelated fixes:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+- Patch 1: decrement extra subflows counter in case of errors with
+  passive MP_JOIN. A fix for v5.7.
 
-On Fri, 10 Jul 2026 20:04:40 +0200 you wrote:
-> When trying to execute the same selftests targets as the ones executed
-> on NIPA, but using containers with minimal tools, I got some issues
-> with a few tests.
-> 
-> Most of these issues are due to missing kernel config, but also too
-> short timeout:
-> 
-> [...]
+- Patch 2: fix use-after-free in userspace_pm_get_local_id. A fix for
+  v5.19.
 
-Here is the summary with links:
-  - [net,1/7] selftests: af_unix: add USER_NS config
-    https://git.kernel.org/netdev/net/c/f8b1abed7361
-  - [net,2/7] selftests: openvswitch: add config file
-    https://git.kernel.org/netdev/net/c/441a820ccef9
-  - [net,3/7] selftests: ovpn: add IPV6 and VETH configs
-    https://git.kernel.org/netdev/net/c/90c792681a37
-  - [net,4/7] selftests: ovpn: increase timeout
-    https://git.kernel.org/netdev/net/c/61ac7049aaa8
-  - [net,5/7] selftests: drv-net: increase timeout
-    https://git.kernel.org/netdev/net/c/3529d75d6741
-  - [net,6/7] selftests: drv-net: add missing kconfig for psp.py
-    https://git.kernel.org/netdev/net/c/c25dd7439f84
-  - [net,7/7] selftests: netconsole: ignore busywait errors
-    https://git.kernel.org/netdev/net/c/e6ad44a5b1d5
+- Patch 3: fix stale skb->sk reference on subflow close, in case of
+  concurrent read operation. A fix for v6.19.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+- Patch 4: wait on the correct port in the userspace_pm.sh selftest. A
+  fix for v6.19.
 
+- Patch 5: fix a BUILD_BUG_ON on legacy ARM config. A fix for v7.1.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Chenguang Zhao (1):
+      mptcp: decrement subflows counter on failed passive join
+
+Geliang Tang (2):
+      mptcp: pm: userspace: fix use-after-free in get_local_id
+      selftests: mptcp: userspace_pm: fix undefined variable port
+
+Kalpan Jani (1):
+      mptcp: fix stale skb->sk reference on subflow close
+
+Matthieu Baerts (NGI0) (1):
+      mptcp: fix BUILD_BUG_ON on legacy ARM config
+
+ net/mptcp/options.c                               |  5 +---
+ net/mptcp/pm_userspace.c                          |  7 +++--
+ net/mptcp/protocol.c                              | 34 +++++++++++++----------
+ tools/testing/selftests/net/mptcp/userspace_pm.sh |  2 +-
+ 4 files changed, 27 insertions(+), 21 deletions(-)
+---
+base-commit: eaa39f9f8ac8c1d032cd26b9cd572804e9d7683f
+change-id: 20260721-net-mptcp-misc-fixes-7-2-rc5-693149ea17dc
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
