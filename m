@@ -1,69 +1,69 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C293C8716
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917163B7B64
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784667435; cv=none; b=SGBPk6Ox4LC4WTvlxAw6GHi0oFGQP7i+tQ6dnx+jLmtKGTUaJ3Owh3MZIcgC0goyFnfJkd5hXPHN/7KcccFAz+vHXJnJ4Hpk2i43zSt2SOzb+9AWN10+P29O1IX6rQxuJZROIGoRlmnbfyZqyhn/mcCJso6pLhLVgtk4sJZZ8Zc=
+	t=1784667438; cv=none; b=mbPMNpwn03gX3pudtPrSDVnpMhAq5ns6rs3S0IPfrY7ykh00EqTIF9zJXKkxDzl6veU36DdxUxArnROGJq2NYymnOkXdfBQ7FsLzpkOWt/pSlPG98SPvfmSGLcerl0IZAJYm1LRK+y1sF3yqxMyINA/qXhvS/o8a2Qb4u0xqs2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784667435; c=relaxed/simple;
-	bh=NjeO3E3aXTlf0Rmaw0bPO/yZw26XHF8e4PdgxVbvO5s=;
+	s=arc-20240116; t=1784667438; c=relaxed/simple;
+	bh=es+00dI5lNkwt/sa4qLfcgHP71hLrTUzt4kFdW0j2uE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LV1o4d6AOok0YAdQI10osmXJNCuNarm2YWyo0pRghhgLi/dObgpqWKGA97cu/2C1NURKEMxyUh3qRQOKpZDS28yQs8oG95qe5TRuwbrAp18pQpgT34nn2iH99YmyiB3k0NXBo0KA9jOBhb8j46SDjk32ZOP+yNa11OUx8Nb5884=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nUykYl3Q; arc=none smtp.client-ip=209.85.210.51
+	 In-Reply-To:To:Cc; b=DC7WL+d7wJCo3isp+w4JThy66krQ5BjzKx0LJdVMU2Jvp5JYIMGUPV79ihrnVMHUZ4MLPJGtZ5Xyb0vUueykfv6PhTzdl7gMxTXNnbCgv0bpHUL7VrlklUPamJsdTIIp5ezzCJUYMTUcrmUWPr9F+sVkIs1D68P2eADrT8651QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sjjRIREA; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nUykYl3Q"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7e6b554044fso9243373a34.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sjjRIREA"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7ec3b429a3aso822031a34.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784667432; x=1785272232; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784667435; x=1785272235; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pgVpgKXUNJtrWSKTwQbIOxGGmQfqameHK1lD3QBhDhA=;
-        b=nUykYl3QoiDu5jbOvn3qCaiKUlwmTqW4BoVrYO9Yhf07IFuXVp3JRaHf2BG+pLQoVN
-         bqw4M0HwbYKz1cnjGgYXNvfdoCiryT27iJA/qA6gYpsEDwB7C03tQ1Rz+gLxFYTR8Bs2
-         jh6qkca6JXZj0sOY2s28+UAT2A6z2tTf2PxB1+wvuPl/bdLhCU/OC4occQR+UhrGtMiY
-         KzB021Dr2nOQeLt/D6v1VFw6L/AR7J6lo9LQv9c9Erv0y71mPNCAbSi8W/NLjyABJizk
-         E513I/oTUWt+b9G097P0lGjx9tC5xMtWNmCt90m9hZeAQCFlmJeFODnd5gdgSiGYkOvU
-         yOhQ==
+        bh=kAocSYnxkpWO75UswebGg35q6tA7nY7bmvBjycg9mYY=;
+        b=sjjRIREABcpUpXY0URoY5OWAPcBZMF6zJfEzrchH8s6xVHLVopqz3hP/OPMFk6Unyl
+         81s51gEq09E2Oxk3Uct480L+O/ez9kgpq6XPHCLOYlI8bsX1Z6ynUrEdfIeS7cNYqrTh
+         HDz8AbveBw+s2SLBZ67Dk4w0QXUe0xdlgtnJJFVDTaEu1Y4iQRYfQNCwnmaYAemfXHeA
+         kEqdDFikLJELWgm+k/0QyJEjNBcfgdNdmPcjBl9Lx2egEfIxo6wxI037J9amB0A9plzC
+         pEBHtegEMn/Z5f4ETaH5PQuollT0f10zVERQN1S3y3b4ko2YzPeHdHfisguCyXc82/gE
+         eDZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784667432; x=1785272232;
+        d=1e100.net; s=20251104; t=1784667435; x=1785272235;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pgVpgKXUNJtrWSKTwQbIOxGGmQfqameHK1lD3QBhDhA=;
-        b=f1qpZTz+jKJ23aZLZdum+PJfD1O8AOJk8GidYp9m9DTeOHLJ4tMqP/Jzz0aUvd1y7s
-         xRujDrocwBUawTdWF7LJ9gPw0Q0CAR1IcaoBPJKTkp3Lvwxfh2hxTZp6xFBkLe8ir2e8
-         r1v4TSkok4da36SYMXry7z/6gKAKRunN8ewh4Haigwjnzw/32vdne87jI+fNy+m1KuEm
-         wCqqC58pSamZAelCH8JzGin5ZDndmj8ZQedoC5s/QcuVTwurhhRpvB55HKoHzkhuZj1M
-         rabsJ8MAlH0qmb2vOJWo+1gloHhy4BWGj49dbkP4JiAPAXfFZ6wMVBXS+zGYj6wmz56q
-         bOCg==
-X-Forwarded-Encrypted: i=1; AHgh+RrYrghfjh6P5d279J+1ZBYaF+Vk/Ydv6VgJ9CPocbsEMR70I6x5dJ35KezYG7234ncgu0Za+yMcLfelXtAD2As=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzZJbgfjojVKmoXHHpPf10mOwzu2Oi9bmipVq9v5Arvh0V2fGk
-	VgxAsbGA+wN2RFZ8bYDBHL9VA6oFuwBVSSvlpsMzS0ZZZ72231jGCXIk
-X-Gm-Gg: AfdE7cmx49V4nSYqchq7Oy0exhMjfZRlJWkpcAUDK4aiNtdjlHr4h2M1rXvRnAgBUCp
-	kZoAtgDhuIALE6opx5Rmca8G8b6vQX2PhX3VubFQzLQFvczAR4G8I0xMhmPUNTW5vnlgLxbFpNH
-	cH90lUWE0x+D6dESl4xhY9po26PBEYmcMJdGiHk77/uvxZBJHB+mOtaeIcNZZZ/WpnyhIRgupjz
-	MeFFg17Rgg/Nbds1Y77p0HYLlJxRjOKUewI2X0MzZYv4xzk+2PTK3KPnS7v5HTFprN7PiOh4VrG
-	Dd8ey3mBRbfZAnlH2ixLJ9gQKMQL2nFRxfxThf7NFtPMQJSRDUIuX4kCD7ekjrEa93bbEuRSzY4
-	Ajhh30spwEw7qGLEBCBHQIh2gKEf3Z+cZ8xsN/Ldt1TTrkoOhzyuJbgJDDl4qoJ3WGnmpm517tF
-	ZuhCgXQWXU1e7QChd3uFdRB8C6Dy7Z0wjeAmdBhoon/5mcO5fLSWAYPiXs4poTi5HYtjJ8xzWVC
-	DtICro9H2KdSTu953TnWtFXFg==
-X-Received: by 2002:a05:6830:6518:b0:7eb:21d:70b9 with SMTP id 46e09a7af769-7eda0e701bamr9566145a34.22.1784667432329;
-        Tue, 21 Jul 2026 13:57:12 -0700 (PDT)
+        bh=kAocSYnxkpWO75UswebGg35q6tA7nY7bmvBjycg9mYY=;
+        b=ZYh6w/Ywe8HILX7k47JBkLrFTO4vdquqaNXdteYcczuqccFCb2Ia4N+COqskWpaAdk
+         bijUZv0b5omgfHnyNJpiKOgDU42Kl258Y1OjroDQh5DqZB1aPt/sZxFDBMyywz8orwgw
+         tm8YUE+oBFt0QThAvJ988Uu6W0jBSAl1PmWLIef1VAr1i5lldOeQ/7E5yoZx/na8Dedy
+         abK/gWHP0ddbcV6qrrPaSm3RHngd8oDKYsa4GMTJufUoZFAlr5f8SuJ7Ya4puR9XNWNI
+         IgYqRST/2MZK5DPjOFvdLavR8IFu6g61FF9qF5e2ET0nNBn4KnhJJwudaazoJPubex+v
+         K6Hw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr9TZamzK9328ICuRdUpcvGgsJngC9uOEowHTCOMbiki7EB7nqn/+ASC3Fv+GU4v341zuaKW4Q5C6KyVlhNvLA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNmwZ7JVl7ksHu/waxKLyCI4lCstwwwaQiIM5dh/AtY8NEaGpp
+	ex+cBPzFGFk/XZ7yFi6Ua1b9RaS7aSjbcB6G5iBzQBVrfZEJcxo7NUuu
+X-Gm-Gg: AfdE7cnyJXLXT/SOIEUiHhYHER8n4h380ZzVoMkWGpsFBbjwlva94QSu/ZUcwbPxCty
+	omA9KxL5VUh/jGkXfAXbncGPaja1PFRSSlqNiyzUhgHaBD7nuZE1OCxMRSBLXNszognZ4OlAuSz
+	FKOzQwrjwqm/beObq/JlywRYHA6IXZr41UER52IipzFe3dWFRNHOL0GrstM8Zdi//5AUYUdHv2x
+	jLMUCNZlZInoBfih/jTZl3C8P9F1jQ+LFRzADBSI0FRkoBqy3WsZ4GFEGXsfW5HI+Z6HY98kY43
+	7CXkT2kq2buR+xJ1TDX+TrmRsD0l0rMOLoTHzPbWyETIuX/K1SoBnMyHhxptPccAgcfDdj0yaZ3
+	M3fMnTustoGcyJchQr1MHzdQQ6irdiuQ1nbD7CRN2QSCXx/gunODrIDdH/UsAtjnzBkpgyVcf7m
+	Cgfeb+RqsM0JFKAeGeEFUuN+oCzK+civ42FI9Q7X9laMmlhiXqF3RU5ayZIjz3wvtPHqzcLE+eb
+	BG3NJKY2/qJ1Wfm8MeVoSeFqA==
+X-Received: by 2002:a05:6830:dc2:b0:7e9:b537:1032 with SMTP id 46e09a7af769-7eda4e4a0d1mr10236409a34.31.1784667435133;
+        Tue, 21 Jul 2026 13:57:15 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.11
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 13:57:11 -0700 (PDT)
+        Tue, 21 Jul 2026 13:57:14 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 21 Jul 2026 14:56:50 -0600
-Subject: [PATCH v7 01/29] params: fix a pr_debug(" %p ") use - already in
- MM-*
+Date: Tue, 21 Jul 2026 14:56:52 -0600
+Subject: [PATCH v7 03/29] drm: Fix incorrect ccflags-y spelling inside
+ Makefile
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-dd-maint-2-v7-1-010fbe73b311@gmail.com>
+Message-Id: <20260721-dd-maint-2-v7-3-010fbe73b311@gmail.com>
 References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 In-Reply-To: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -83,45 +83,40 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org, 
  linux-modules@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Jim Cromie <jim.cromie@gmail.com>, stable@vger.kernel.org
+ Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=1125;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=1097;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=NjeO3E3aXTlf0Rmaw0bPO/yZw26XHF8e4PdgxVbvO5s=;
- b=JnG4Hd6pByV6cBcRHCdIJRICgp5wUjzEQUOylmvD27efVdhP0Cn/ay5LhcR7goGzLrNO9vFYm
- yTpsgAAsjCpAWnQCPpIRZXIEjFbutFhwOQKtI2azaOPhH5Ccc68vKuf
+ bh=es+00dI5lNkwt/sa4qLfcgHP71hLrTUzt4kFdW0j2uE=;
+ b=OISPXRmljhHYEheJg69+sy9dq795LswJjyP2tozw2g6htoU6Pia5NBf9EwQ+pEa9lAVL6Pfb0
+ IHWJ4VHNv3oBIjyfxg/R8nN7AW2ofYOryMj8dbmU4ZDrQcwAKV1DvJL
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-NB: this is already in mm, but I need it in this patchset because
-kernel/params is subjected to testing by the selftest script, and the
-test depends upon its stability.
+Fix a longstanding spelling error in the DRM Makefile by changing
+'CFLAGS-y' to 'ccflags-y'. This fixes CONFIG_DRM_USE_DYNAMIC_DEBUG
+dependent addition of -DDYNAMIC_DEBUG_MODULE, which is needed to enable
+dyndbg-does-drm-debug when only DYNAMIC_DEBUG_CORE is enabled.
 
-kernel/params.c has a pr_debug() which prints the address of a
-parameter setter function, this is not legitimately useful.  Since the
-value is known and useful to the user, print that instead.
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- kernel/params.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/params.c b/kernel/params.c
-index a668863a4bb6..5c8a05921e28 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -136,8 +136,8 @@ static int parse_one(char *param,
- 			if (!val &&
- 			    !(params[i].ops->flags & KERNEL_PARAM_OPS_FL_NOARG))
- 				return -EINVAL;
--			pr_debug("handling %s with %p\n", param,
--				params[i].ops->set);
-+			pr_debug("handling %s with value '%s'\n", param,
-+				val ? val : "no-arg");
- 			kernel_param_lock(params[i].mod);
- 			if (param_check_unsafe(&params[i]))
- 				err = params[i].ops->set(val, &params[i]);
+diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+index e97faabcd783..b0d0a85cbd4f 100644
+--- a/drivers/gpu/drm/Makefile
++++ b/drivers/gpu/drm/Makefile
+@@ -3,7 +3,8 @@
+ # Makefile for the drm device driver.  This driver provides support for the
+ # Direct Rendering Infrastructure (DRI) in XFree86 4.1.0 and higher.
+ 
+-CFLAGS-$(CONFIG_DRM_USE_DYNAMIC_DEBUG)	+= -DDYNAMIC_DEBUG_MODULE
++ccflags-$(CONFIG_DRM_USE_DYNAMIC_DEBUG)		+= -DDYNAMIC_DEBUG_MODULE
++subdir-ccflags-$(CONFIG_DRM_USE_DYNAMIC_DEBUG)	+= -DDYNAMIC_DEBUG_MODULE
+ 
+ # Unconditionally enable W=1 warnings locally
+ # --- begin copy-paste W=1 warnings from scripts/Makefile.warn
 
 -- 
 2.55.0
