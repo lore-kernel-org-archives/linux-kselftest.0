@@ -1,27 +1,27 @@
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C186D3451DA;
-	Tue, 21 Jul 2026 11:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF96E21256C;
+	Tue, 21 Jul 2026 12:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784634977; cv=none; b=nN5DlTd3H6sv48ghAmMsf7MjuMO6/YbodPSOLoqrBFVPyiR8WjvzedagLK3ypcc6cDjJbVaPn332gAibhUXpaIq06MqEG0wqFez7Rg/xNG2vDx6g1e1iJcPkiziLnXh71VWE68n83bgl5cjnrAxpzcQI8agsFp5/Y6+fjd0yHn4=
+	t=1784636725; cv=none; b=D/YPq+CvWNArjjhGGnk95sX6VoVVhlAGBcG9ezGa1Y/fWW0yTkTmy6ANVEcRsy5hISsA1YPBDZh3QS81hGzSmfGxxfUWyZ7XDQMEI7F9XrZBXbJXuxTRwDqXlAXTqChnrFOf8yDRlMlOphiUa6HDGTQugrkGXU80byl5RiWqgBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784634977; c=relaxed/simple;
-	bh=OiKYjHgs8yfl3D/5jJm7sEOb7graCNa31cNxuR7adJM=;
+	s=arc-20240116; t=1784636725; c=relaxed/simple;
+	bh=J8G9Mf86/QNhcAp4MycTpvpehF5An+6SgrQwU/YBlVg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i2lEaGdpCd8VfCztZjnWzgoeA9tvr7M37boNPw9dw6mqzYwQu254Bzp+bOVoOpQmTYdMXAURlZwIuQJf18d/51/artyCXTDtOmwl3rq4zz26aqQ9GZJCwlLynL6Vdugu21Ji5YmkX88RU3iZwLVNnL4TW7sLb7p1/+IuZy9oINI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=54.254.200.128
+	 MIME-Version; b=atrOQVF92Yljw1pT5dUNjSm6G7UVxWtoO79i2DnujyPfOqGAeyPvwKzELzZykz30smpG90PNxh5wdYtIgGCyiux5NLYny3XiCSCpJtL/bSRT9RjfHsUsbCgtDCBdmYAgeo0x9cxxqzXMwYwCUZ7Sd/iJfsWxFfhQ846DmOgKP94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=54.207.22.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=haiwei.tech
-X-QQ-mid: zesmtpsz6t1784634963t6e8a6e90
-X-QQ-Originating-IP: 7UTGWJP3KrvUOqnlyru4WDx7yxHshRvG5L4FHHW3S5o=
+X-QQ-mid: zesmtpgz5t1784636697t1ab0bdb5
+X-QQ-Originating-IP: E4jMg68m2VMQeBL41dE2uKWfCFRZ8sl2sAgZLc0GIa0=
 Received: from rsl ( [183.242.33.186])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 21 Jul 2026 19:56:00 +0800 (CST)
+	id ; Tue, 21 Jul 2026 20:24:54 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18011628127360508405
+X-BIZMAIL-ID: 8024588964083147569
 EX-QQ-RecipientCnt: 14
 From: JinRui <jinrui@haiwei.tech>
 To: Anup Patel <anup@brainfault.org>,
@@ -38,12 +38,12 @@ Cc: Atish Patra <atish.patra@linux.dev>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	jinrui <jinrui@haiwei.tech>
-Subject: [PATCH v4] KVM: selftests: riscv: Add lazy V extension enablement for guests
-Date: Tue, 21 Jul 2026 11:55:58 +0000
-Message-ID: <759A31C23819178D+20260721115558.341592-1-jinrui@haiwei.tech>
+Subject: [PATCH v5] KVM: selftests: riscv: Add lazy V extension enablement for guests
+Date: Tue, 21 Jul 2026 12:24:42 +0000
+Message-ID: <2D686C2069E3C0F9+20260721122442.351865-1-jinrui@haiwei.tech>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260721112454.330498-1-jinrui@haiwei.tech>
-References: <20260721112454.330498-1-jinrui@haiwei.tech>
+In-Reply-To: <20260721115558.341592-1-jinrui@haiwei.tech>
+References: <20260721115558.341592-1-jinrui@haiwei.tech>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,25 +52,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:haiwei.tech:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: NU1WQlQcW6dRJYxTTHGKZf+WGTLga1Es9GITG2SkkbjAr/a9F3XSzSGY
-	BlIoILboLIoBK1ndhh3Ea1Y5xfQXUcNsuQy6XQvWdBceZl6pRRRz020jYsDyepFEak3vHdu
-	K3ne9iRMRtdYEDi2zvRFuFmyIePydK+zPuOZ+D8V/MdlGnT0CcGVbtyw8yRUVacDJLdcN3x
-	7xadjVRKOMjd+PX5+Fx+0orK9PFSvScFH1GDAPwfUXBe75N/CGJxsTIDQp20fX+IeI8MkSQ
-	gQZsFf3BOWO+z5KdxnqxhW7H2Bg2TQREnx1QkVrt5k8LdurpwVxPdofC4SdnDLudkdzgPcy
-	j+XB3+PmR5X19BXloxDck4swc1f9J7l3vJQpR0MnEXDK22YEqivfzjB5xMwWkExwTezxk1N
-	9IViXG8kYEyibsg1wzJ/vz1cFstEOQPL1TMhRtvNa9M3c7OkhkPygeUlIceHAegwy5P/vFy
-	arI8RsmSXXsCT1BSWjfNVbX6l+uAPnwMOimKE4wy2/oE7HZZSBO4VJjv27njVYHVMcUowrw
-	6YltTD/WcACtCaLfgID2hPk+1oMvJM5Z3ZKShYGPVdXtmXS061QYJHkYKxmatgpC+q8Grjh
-	b6OjQemARTN8C4HCx7t7Ox/LlTWm0hcSQCDjDU3ni9xGZjbL0ZSNhpNfaMJGy84C1R30w9Z
-	bz9XTeu2yaJ7lDlVL6finqZNjuG1cLew4Lavr6otdk5wxId7S4RkG0SxmS86AiOcRTvQX7g
-	2UrXD7fqtNoTBomuUhr/u/9Rc+fZPas7Qk//KVjOKmQxY4zcHbLjsA9MGFTlAtlNc6ewN8K
-	S1uxuMGnW+ZJSqp0HiGGiGzgplBs5GfB2dFtrZjIQ8kOq7zI9v+MMcdPdDll/SFkUS6pqu4
-	Wb39DvBDdgolknX2sd7r5B5wvwCmi9L1k81IMPhkx2O/d05pTSUqi2uktL6KEiJwIFpBAw6
-	qMGUCBTxbDTfXQJ9LYHeRVOC8vHxKzflJNfCREq7EszxUALrnrmufXXh3sImJVJP9b4gkSp
-	s8H6GLHn12RAE0Ks5mNMpgvKFT2KWvm2vU23745SQpo4Y4cU8O6UiloUg4tHX9C4HL0r5S4
-	pPcn9RFw6J+dQRCGwSxgV8=
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+Feedback-ID: zesmtpgz:haiwei.tech:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: N29iqeDVD2V0/dqiPRy3XEqjf8/rkLt2trwYkppv3p47JPx+oLguZY9F
+	hU+OQFhJRz3GSH9YZz3xzw+5PYqRM7Pw3SDPplTIUKoReWAuhZu7tSmoDZ2tzEvz1q5HqVx
+	9EYPLKkqwtwKhVQ21joqI7RCgILzyR67j/GnoA1q0J1AZm9CYNo3JPVeAty1m85p1AE0t6w
+	CMU9OWQvTD6/lOtjTyA8IizgwT2wn2CmrG7a2Hu1l77Jd2UA4IVZvlc0hb/YX0pWY58NN5f
+	0KqfmsUBsw0yTZOmFwzXHw0xZ7MecFAs6s8OteyG6BO2UJaByBbB8Mln+xRaEpncnntssvX
+	ydz2pO4hyOqrjRsuNpCHY7ah5vidmLZ6ETxMvzm4PIDew+vowj9041343ZsKnso9i+bPB1M
+	G+ZKbUwCy06wtw6AgYh5kPk7JG9dUWE9Uil5XPwMTgpQQ/8yG9DldIQqXec3rxjWEEnw5Fo
+	gG+nreafrr19P//8GOvMC5+TuiIfUdeZwOWq9uk1dV1R9Ro5iWHaRW1FRf/AvMcjRiL7ZEE
+	ATj6yMw9QGx72POpUHEKRg0XlrsCBIUviqPs+9u8wRyFW8izjD+jHX8dlMQcCG9wD1TFIKA
+	MsjA9RtaU49NRvjdwVhGO0YPo+B8ZZAnr3isNCyXX5eMUvXjOJ5L+uSGDQg9KQJAEf9s8aV
+	V4wnGvnfXONCC46XcPR7n/Vl6PIq1blLXi95DJO+tXlecuUZt+IYEh7f+PhqYDxWcFWRfDW
+	7Th8w+PT8UNRK0YKOvjDd9HkzdoEJgVyCNaglUs5DsKJ81iS2xWfUs3DGyzrLUXoM7AMJHI
+	KxbtnLN3RPd1/tSPF+fbDRFzVFsvV44Ifg6lehWGCGmvoiayGMtaG2mf9gLSMZfKIhCbO/p
+	tmGYTdnLL/p86S0+1eWX2J6D6I4mvIdvEmhOoJbx1QHLdsdDsu8f4Shue24B9zv8IbwK8Ek
+	tXEZO08FKoGQlbmlwXXZTXP8Zk9nYsPIlcxTy4lA8H4+8NnsXlERIe/OMeDxlx0VZQb11dS
+	Elsr/MUSDKUukFgaOF0OZ16wY1cbKBDQ0F6TYqqJwFO4p1KgeepKErFnaSnDiaLVKrXfzHh
+	bh4Hze21Hh7ZErtEndMyp02DVsByJnKLQ==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
 X-QQ-RECHKSPAM: 0
 
 From: jinrui <jinrui@haiwei.tech>
@@ -115,23 +115,27 @@ binaries pass.
 
 Signed-off-by: jinrui <jinrui@haiwei.tech>
 ---
+Changes in v5:
+- Replace the one-shot v_available flag with per-vcpu (epc, vcpu_id)
+  tracking to correctly handle multi-vCPU tests and the case where V
+  is disabled after vCPU creation without causing false-positive
+  bailouts on other vCPUs.
 Changes in v4:
-- Add vcpu_dump() call in assert_on_unhandled_exception() to restore
-  the register dump that was lost when guest_unexp_trap() was removed.
+- Add vcpu_dump() in assert_on_unhandled_exception() to restore the
+  register dump lost when guest_unexp_trap() was removed.
 Changes in v3:
 - Move v_available from a host-side static variable into struct
-  handlers (Guest memory), fixing synchronization issue between
-  host (writer) and Guest (reader).
+  handlers (Guest memory), fixing host-to-Guest synchronization.
 Changes in v2:
 - Add a v_available flag to prevent infinite exception loops on
   hosts without the V extension.
 - Use regs->status instead of reading the live sstatus CSR.
 
- .../selftests/kvm/lib/riscv/processor.c       | 69 ++++++++++++++++---
- 1 file changed, 59 insertions(+), 10 deletions(-)
+ .../selftests/kvm/lib/riscv/processor.c       | 85 ++++++++++++++++---
+ 1 file changed, 75 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index ded5429f3448..bf0675cc86d6 100644
+index ded5429f3448..03a3223a0466 100644
 --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
 +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
 @@ -297,14 +297,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, u8 indent)
@@ -149,7 +153,7 @@ index ded5429f3448..bf0675cc86d6 100644
  void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
  {
  	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_code);
-@@ -348,8 +340,33 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+@@ -348,8 +340,34 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
  	/* Setup sscratch for guest_get_vcpuid() */
  	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(sscratch), vcpu_id);
  
@@ -181,11 +185,12 @@ index ded5429f3448..bf0675cc86d6 100644
 +		struct handlers *h = addr_gva2hva(vm, vm->handlers);
 +
 +		h->v_available = __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA_EXT_V);
++		h->v_vcpu = -1;
 +	}
  
  	return vcpu;
  }
-@@ -408,6 +425,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+@@ -408,6 +426,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
  	struct ucall uc;
  
  	if (get_ucall(vcpu, &uc) == UCALL_UNHANDLED) {
@@ -193,15 +198,17 @@ index ded5429f3448..bf0675cc86d6 100644
  		TEST_FAIL("Unexpected exception (vector:0x%lx, ec:0x%lx)",
  			uc.args[0], uc.args[1]);
  	}
-@@ -415,6 +433,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+@@ -415,6 +434,9 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
  
  struct handlers {
  	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
 +	bool v_available;
++	unsigned long v_epc;
++	int v_vcpu;
  };
  
  void route_exception(struct pt_regs *regs)
-@@ -432,6 +451,33 @@ void route_exception(struct pt_regs *regs)
+@@ -432,6 +454,46 @@ void route_exception(struct pt_regs *regs)
  		ec = 0;
  	}
  
@@ -221,21 +228,34 @@ index ded5429f3448..bf0675cc86d6 100644
 +		/*
 +		 * If KVM supports the V extension for this Guest and VS
 +		 * (Vector Status) is Off in the saved sstatus, set it to
-+		 * Initial and sret to re-execute the faulting instruction.
++		 * Initial and re-execute the faulting instruction.
++		 *
 +		 * Use regs->status (saved at exception entry) rather than
-+		 * reading the live CSR to avoid a TOCTOU race with nested
-+		 * exceptions.
++		 * reading the live CSR to avoid a TOCTOU race.
++		 *
++		 * Compare (epc, vcpu_id) against the last attempted
++		 * enablement to avoid an infinite loop when V is available
++		 * but the test later disabled it or the hardware rejects
++		 * the VS change.
 +		 */
 +		if (handlers && handlers->v_available && !(regs->status & SR_VS)) {
-+			regs->status |= SR_VS_INITIAL;
-+			return;
++			int vcpu_id = 0;
++
++			asm volatile("csrr %0, sscratch" : "=r" (vcpu_id));
++			if (handlers->v_epc != regs->epc ||
++			    handlers->v_vcpu != vcpu_id) {
++				handlers->v_epc = regs->epc;
++				handlers->v_vcpu = vcpu_id;
++				regs->status |= SR_VS_INITIAL;
++				return;
++			}
 +		}
 +	}
 +
  	if (handlers && handlers->exception_handlers[vector][ec])
  		return handlers->exception_handlers[vector][ec](regs);
  
-@@ -448,6 +494,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
+@@ -448,6 +510,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
  
  void vm_init_vector_tables(struct kvm_vm *vm)
  {
