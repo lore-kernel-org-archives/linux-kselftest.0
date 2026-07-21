@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30C936680E;
-	Tue, 21 Jul 2026 14:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4342D5436;
+	Tue, 21 Jul 2026 14:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784645703; cv=none; b=ps2/5Q65xGfEGBjhURayhmGRkiLpJKYTs0Oo2LRc4DhuoqyX6iVGuszKtmLwJJ5fGoAURyxrU+FiliZt0NveK+/f/0ktTBa51dOEZkHz3pWvO+pr70Tw8ULfQjvY61u0cCuMik2gNYtCrocRRkgxydahAogilmy4qPUpp2aPAko=
+	t=1784645724; cv=none; b=qbxHBKb2UUxZVOGtCW020V+W0UkTrw4qamvtTFHtDn1/6GEh+T0AxTRqk1ghxzO8eBapxeipf02CmF1mjrQQM7NQis5shX6tK/CUnOpBr6IH0ngSjRcttv6Id80Ti7n6sZGKQ8IUsxAYL9xLZBGZQBKzM7ERPNitr1c6IzdAQvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784645703; c=relaxed/simple;
-	bh=hNUb+KfDfwntsKI5r7TjXhKEmYmJ0uxteCKV0SphkXw=;
+	s=arc-20240116; t=1784645724; c=relaxed/simple;
+	bh=eVaFqj7Kr+842nz6y3VHZfm8hMWJJbZoaaw6rAgu0Ho=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c8lRrPlM7wpyGTD5jXp3cze6bexwa4y5Pe3KUE+ONSERjYxeZ7SAaqwToA3cjufj+zkPhaSGxjL5UTFwT1+bSu8D7TXWB2Lhan4+FrRcQEOsf6wKLipXTX6okWMKjkD09WB1VcFLy0/PT4yJ+rrW8C95zsE7cPQdLcbNstsmrFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjfmhz7N; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=h4dbDlCyjEhKPNAjBojvGTFYdkIGqPKDNlgVwizfHkMxQk//wJ3f7xVrsfpHKD0vTl4GD0BgNrsN2zJ1OHmvLNJkS3IOUmXglKSF4Bvr+PNt8rnUEGxPSK+La5S7V/Yzwtvtudk5QLiVv1IGm6HjZh9gGInbQkgOwxafXb++pNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nU3VfTMz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjfmhz7N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F4C1F000E9;
-	Tue, 21 Jul 2026 14:54:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nU3VfTMz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E792C1F000E9;
+	Tue, 21 Jul 2026 14:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784645702;
-	bh=tXvMkjXAn7y2m4HY7s7QUvSgtEyYKfTxuKxsFjU19Mk=;
+	s=k20260515; t=1784645722;
+	bh=JqgP6/1vZQA9GBdH0LWRXjquTgO0fEILyJc7crNbr3Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mjfmhz7NR5yJZTJdX1z31PRts2NK/a4cqCWaMBfl4jwVaRpkq/t+dQUoJihlx7yBF
-	 jnTH4ge8oxxPrj7ph8sEb5t7R9IZdX1eHl5QOF4AsAjdWpwJIN4n2bU9bEs2dcw3u6
-	 sUXCgZGcFh4JF/IyKXsqUyg1HHH0SSUX9jH97narrkWcXpPEvWKogCVIpC1BDgFCpt
-	 k1xFsKvE1UdeT0dE5hLHq8CVUt+fmKnZflpvll8CfsXsrZN37ZMGck6ezOcw5dsmPS
-	 F3VWeemCIdg/Lds/BCV5wW4iEHYIXaPRHpa+663/5H+x2o9PL4b+g+FFm6+psLYydC
-	 NMTnpGthyVzjA==
-Message-ID: <cefe62b7-0167-46c1-9fe3-fe7efee90a7e@kernel.org>
-Date: Tue, 21 Jul 2026 16:54:54 +0200
+	b=nU3VfTMzLIQcVaYqBxNGhgYRoq3QlIqshzL3yW/teYN46bR5pNHJPuvsoDCITMvgi
+	 TmS1x+BttZyJrMOPNX5uZ0EnRZZQu0/eS8lma8g5dsFqB6htaA5sXYcwDtfW3NlZQW
+	 tFyC8oG4YR1vSDgRrYlEFkkQ/6aS2oWjtxv1TdxR3CcU6baNYfgL1sKGk9RE3p+tX9
+	 ush6g7c4SxoTyCGkMfTZ4uTa+/vr0TcjGaXsdg/RbX977gONO6tm7r5qVlYHdf9jNe
+	 NRr+pFzb2cY/hW8x/Z6iK1a/l4+e+7L+ZxS5YNZT9/L8SPf01CpKAxpp7o/bVZLhfE
+	 8YMCFPu5ISkbA==
+Message-ID: <2ea6ee0f-ae22-4961-ba8e-7c4794a692fc@kernel.org>
+Date: Tue, 21 Jul 2026 16:55:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,27 +35,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/5] selftests/mm: make file helpers return errors
-To: Mark Brown <broonie@kernel.org>
-Cc: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260716123226.197736-1-sarthak.sharma@arm.com>
- <20260716123226.197736-2-sarthak.sharma@arm.com>
- <b66c233a-7956-461a-a3d8-3421c76c937a@kernel.org>
- <004e11f5-ab21-479d-80a3-64ab89465b85@sirena.org.uk>
+Subject: Re: [PATCH] selftests/mm/pagemap_ioctl: Fix missing NULL checks after
+ calloc()
+To: longlong yan <yanlonglong@kylinos.cn>, akpm@linux-foundation.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org, shuah@kernel.org
+References: <20260721063611.342-1-yanlonglong@kylinos.cn>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -102,33 +87,71 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <004e11f5-ab21-479d-80a3-64ab89465b85@sirena.org.uk>
+In-Reply-To: <20260721063611.342-1-yanlonglong@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/21/26 15:48, Mark Brown wrote:
-> On Tue, Jul 21, 2026 at 03:39:09PM +0200, David Hildenbrand (Arm) wrote:
->> On 7/16/26 14:32, Sarthak Sharma wrote:
+On 7/21/26 08:36, longlong yan wrote:
+> The pagemap_ioctl selftest allocates memory via calloc() in several
+> places but does not check the return values. If calloc() fails, the
+> subsequent code will dereference a NULL pointer and crash.
 > 
->>>  	fd = open(path, O_RDONLY);
->>> -	if (fd == -1)
->>> -		return 0;
->>> +	if (fd == -1) {
->>> +		int err = errno;
->>> +
->>> +		printf("# %s: %s (%d)\n", path, strerror(err), err);
+> Additionally, in sanity_tests(), the calloc() failure check incorrectly
+> uses MAP_FAILED (the mmap() error constant) instead of NULL. Since
+> calloc() returns NULL on failure, the check never triggers and a
+> failed allocation goes undetected.
 > 
->> Shouldn't we be using
+> Add NULL checks after each calloc() call, and fix the wrong error
+> constant in sanity_tests(). Use ksft_exit_fail_msg() consistent with
+> the existing error handling pattern in the file.
 > 
->> ksft_print_msg()
+> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+> ---
+>  tools/testing/selftests/mm/pagemap_ioctl.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
->> That does the magic "# " for us.
-> 
-> Or ksft_perror().
+> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+> index f9bcff8e78fa..f6629f44a13d 100644
+> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+> @@ -212,6 +212,8 @@ int userfaultfd_tests(void)
+>  
+>  	vec_size = mem_size/page_size;
+>  	vec = calloc(vec_size, sizeof(struct page_region));
+> +	if (!vec)
+> +		ksft_exit_fail_msg("error nomem\n");
+>  
+>  	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+>  				vec_size - 2, PAGE_IS_WRITTEN, 0, 0, PAGE_IS_WRITTEN);
+> @@ -699,6 +701,8 @@ int base_tests(char *prefix, char *mem, unsigned long long mem_size, int skip)
+>  	vec_size = mem_size/page_size;
+>  	vec = calloc(vec_size, sizeof(struct page_region));
+>  	vec2 = calloc(vec_size, sizeof(struct page_region));
+> +	if (!vec || !vec2)
+> +		ksft_exit_fail_msg("error nomem\n");
+>  
+>  	/* 1. all new pages must be not be written (dirty) */
+>  	written = pagemap_ioctl(mem, mem_size, vec, 1, PM_SCAN_WP_MATCHING | PM_SCAN_CHECK_WPASYNC,
+> @@ -1000,6 +1004,8 @@ int unmapped_region_tests(void)
+>  	int written, len = 0x00040000;
+>  	long vec_size = len / page_size;
+>  	struct page_region *vec = calloc(vec_size, sizeof(struct page_region));
+> +	if (!vec)
+> +		ksft_exit_fail_msg("error nomem\n");
+>  
+>  	/* 1. Get written pages */
+>  	written = pagemap_ioctl(start, len, vec, vec_size, 0, 0,
+> @@ -1116,7 +1122,7 @@ int sanity_tests(void)
+>  
+>  	vec = calloc(vec_size, sizeof(struct page_region));
+>  	mem = mmap(NULL, mem_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+> -	if (mem == MAP_FAILED || vec == MAP_FAILED)
+> +	if (mem == MAP_FAILED || !vec)
+>  		ksft_exit_fail_msg("error nomem\n");
+>  
+>  	wp_init(mem, mem_size);
 
-
-Right, and if we want to move this to tools/lib/mm later, maybe we can just not
-print anything and instead only return expressive errnos.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
