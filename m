@@ -1,88 +1,93 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629A633065C
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 16:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5027640096A
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 17:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784652576; cv=none; b=pLEoS1Z8c4dInPnjRs08scwoLILFuTX7UTGN14+WQ2uTCiAKdNCslT4WqGp2pB+5CWDyM88d0OqXpTdOPukA+AViatMaFFJYaw7ZTlawSuvwd9A8Y+KYel1sY8U3YNvRMlrtAQyB2txPe+zzHr61uLH66DxmYwE9s6jaN4IrSNE=
+	t=1784654307; cv=none; b=D1tTdSrvvt419CpsTVYzlX01JKlXZat6284LAw8O2BrXgthdakNAOBI6+6ttVR8ox9cA87ySTlqCY0j6yoorPKPqN1R0zwF1yCk+oIvDInoV4NnqDzFCB7tOvkvWnD0g8sP+9fEbDXqUCVs4W9zYcfzxZUQVARqEPZIxHcVrUUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784652576; c=relaxed/simple;
-	bh=1Eewe62A+0W0Tj8OlkqWwebX8DuY99PcvPtXyaE4KnQ=;
+	s=arc-20240116; t=1784654307; c=relaxed/simple;
+	bh=SjqvhxrsnJlMovW4pU2RS91mvs9nZ/kSb5bsQ/v8cRk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dcyLMMKIlQhINbbTZ0urAqJa0655LhFBUL49XM9YtHTCWSoKMByPwDOFOFLpxs1WjPHzk5B261Knn2wvw0r/eHtXqfBiLZsAA2bSzPicmEqwQamD8PCtmG46ZDQOFRz7yUSIErdKAk49+FzkTkv9I8cxGOwJGwLQHJx6A4YrZ3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3dVJ2T0; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ART2ZqK4fB2tzODk3/DHt83b+dY5Zp86SqgtEKAReGkBS12gDWJTnSOCeiFXwqy1g+23/6g0UB/Bs0OiE917k1P8LD+U9j/QV0quw6iyQJaprx7iYSZuhGgdnllnF2xzOXdMUa9hdscjSrBchMq/OTsbF8MKzoTPZg3X8XR+bcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=TGksaEoW; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3dVJ2T0"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84874b52eabso10900712b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 09:49:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="TGksaEoW"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-51c0006ea8eso89837611cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:18:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784652574; x=1785257374; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784654304; x=1785259104; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=jz3tCmNLomhxeSHRRM/RsgqxQHXL6/1WUZFNVLX32Kw=;
-        b=X3dVJ2T03PUCWc2hQlcjesoleW222Gl/XDcL9L/y2HmrUNhA4ZQR6uAiyQqwNTSuDM
-         Og79l0p0EGCO1tfaTNwp5Nx+J3Kpb3Wmb5ttiaVoU90tTfsSxicuXAG8cETB7LwMSwoH
-         KTFvd1BJI8i0GuI7rCa1J3suSYPLcncxpd8VsjlmMDKwzEJ8Kpqw4XiNcSECCCm1+iDe
-         GVrHOJMTU6DOUEh2e+8jTbuSCCtQF4fDZx6RVjKIjNv6xE0bt/rspSeZqUtbBPZ3CZ6k
-         gmkrg2dLDUXicwewJrKyX9WJB/BEG3rHqjr9lzjZrFEO4TvMy1jhK7c8MCBEJTKnakl6
-         cclg==
+        bh=SiPzgqRnSOFoo7wTJovboHrNHjQGCGe0NFhohlpad+8=;
+        b=TGksaEoWZzWhcXSxUzzrG4O3GyIxT7k8EPWGQ8V5WdJW8N137HjooMDxcagL7sMvCd
+         ROI1BixAhOHJtEP6+SJUI1iLX7eqHWL2FwHXHWluvCGSd/0NbycIqrVR6XBG8rELDXpF
+         T+hXmywTOFphBPvsWt4faKozZ11xiILglhx7xc/6SEp0bKx8WTis8a1D/98goGgbfUL8
+         /13HsJW82C5tuvAVGLOGzo0dWCUcBKFNRp0NEICm+hD5txPie/nmDsm69MLoCb+L46a1
+         3d+jxwMiFKsEnaRxqiPdso/k1/qdTOFnSRACAcElJBdl4Mhb6sv1zyLVRvIFeriP9Gyq
+         LpTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784652574; x=1785257374;
+        d=1e100.net; s=20251104; t=1784654304; x=1785259104;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jz3tCmNLomhxeSHRRM/RsgqxQHXL6/1WUZFNVLX32Kw=;
-        b=kwvRXxM/YID/mNQcTvYomRAC5lRsorBq60bWEgQuQlKHSHqB43r59Ftf1bjL+UzUZy
-         0dbb2N68Oejs9gXlJv5l/E2enA8P1BtgclA45nBF5cGFlBoiEudaNc0aBWmLwWg59pcc
-         vRhPHlmmToBwaGNo/bvs6xXd75txfFIcQtL7v5/I+iFKQrqi17dEzZd11onY1DbFBv+n
-         rxJ5l+b6EnGAdK6GIFuNl+KT+dbaiWuI/BO2QfoTmMG4T3nuq5oVITf1ZAZkn5q/xVi6
-         CgiiBrr614xlg4Vnu1Fvzo42P9+j1Zxf5HYBB3QpTygeXQBbQUv9WeyUR0/zreQ1h6Ym
-         Anwg==
-X-Forwarded-Encrypted: i=1; AHgh+Rpeu6CZi/dFyoR+9I1lXhhFZcfKnF7wu6HZxdRrmrnL9yXcg7Xz8I5EataByIPOQXuuVQcuu96bPjkoEpXVmWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNvv9Q2O/OxQZ4qtGE+R+QtE+muceBLY0Fazu2Ac3LA22duXhh
-	VlsV/403tqIlsz0zilYlN+BsaCCQrpDMury9flzkaiE5VmSNz6QNqj06
-X-Gm-Gg: AR+sD10XJzKwFDiE3R8LgPnWIpjtfSsJK5waQgTUQ7vnbpP6aZ3AnZ/Hx1a0WOnBlkq
-	4veWD8hFCasEKEfKRhibxzeX561gxjoOuNxD6gC14DGwLPilNpShoB9jMgGjdBpync2knUWB1c1
-	T+KLn4ooVUzRy/9IgcQQWEiY7aEx3LE+xgz0b2p75U9BAjaVbuJaknEvDNg//jNZkBSGFluaGvi
-	wljONO2WGZTxwEI2uvfJh2JiYZ898HXK1Px1MR4LrfegsyckHhX3JhoSxTSbcUpImoJobN8yzXH
-	9s1FsvfY56KwnJKk6xAMueF2jmkuOb0sqpyeolByBIR4Nb6LZwNdnoWBDxGqBObyoKspbniisXh
-	mG6OULCM+mUfdNXgQiarUIrzn/o5KApCTRiCjhZH5wxDHOJYGtQ5lN1BTJ/YRQFnpIxBnsygWPP
-	b3u/cIhPJgbZFRIGYpx3eWBACJ1KY46D8rLapLb8K0Ddw8
-X-Received: by 2002:a05:6a00:cc7:b0:848:6f5c:a327 with SMTP id d2e1a72fcca58-84c29270ea2mr18663190b3a.15.1784652574553;
-        Tue, 21 Jul 2026 09:49:34 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e175aad1asm5186b3a.44.2026.07.21.09.49.32
+        bh=SiPzgqRnSOFoo7wTJovboHrNHjQGCGe0NFhohlpad+8=;
+        b=lErRGHZk3BiA0RGXta2l1QdDKyu6HypbnU/hMKAGqBqKEyQOQYlSR6285IKhFPSNlF
+         qaX0KjZqq+6gAibb6R7qrAPkrzkQjI364mxrs//4kzA+tOoqmH1o6BaAfOV39FPxpoVo
+         J60CRPesYuv/ttsXoq05IyxB7JndhD+c+Cfi4K1XZsrtHpntz1JOLzXLvc8LaDV5nWbN
+         hfF12Z//Kw5YHC0hLcsk3+RiSdxraPTrq9hFxEt0j6DBhMl4p1Ap7I/Ocee2xM+0Th/Q
+         mMe8dHFGjFAaioYdEdPyU75bmxxuMziJHPf1C6xac6jPGtDDPjsgW1fzFQYPyZ57+yQb
+         gzZw==
+X-Forwarded-Encrypted: i=1; AHgh+RpujCKhFKuQl5Zk4AlUJ9Swfp89IkFpwFJZYM5+oTGCw/f0fP/NfHFDF5HmAeJgSNE1UQbYP+uX2KsLja25gM4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcScNAhQNL7roY3cnnzDHuCw+TWNO/QYUHbgc+CZ7hQmQlBPzm
+	KmBF28MdBVyYd4+jz98jKHJ5wY4990V0hA/S7suqHXODlbVIxkHayi0MjojZi7V5gU4=
+X-Gm-Gg: AfdE7cn7OF9WkLCgQZ/i0FRnE6I0InQ4MurzuFuhHe0mmG1LMxTnPq+J6DXU6WqtOvk
+	2Ptffbgk7SBKCBQitT4WrnBnznOK/kNAd0Rc8yxKyV+RcMp+5U+GPP15wmlOcaDBrqQ+yIRrHDZ
+	+SVCJ9WwGyqZ3JSeftkToryfBnWdwm/r5EFIf5xhjL68bmo5ygleaFydZFBoCqWDw3oosi9dhWD
+	uxkEkE6qWR71KdxWdAC+9F207dsA5jn9Olg0IUAzS7OcD8ptOfeinYVaf39s85MO95yg4owQaLF
+	9UQswRBXzpiS6ifOfkhAweSceIjnxC1UI4Zree8EIzpoJGTt20tEj3yoNAmBEfViODhBVBIfsXb
+	orR6pMAIJBF3MWNALfd92bSJrGIyBg0DF94FJsdh1Z5NaGFJ8lMr9uo04OyXcWxxbfDtAh+OMD+
+	QpxVGNj/z7D6zwjWyPqhwwKjafj12+E3KJc+dgZze9eblZ814cKLM+A5HLsQ==
+X-Received: by 2002:a05:622a:5789:b0:527:7521:3f8 with SMTP id d75a77b69052e-52775210a4dmr13363251cf.44.1784654304162;
+        Tue, 21 Jul 2026 10:18:24 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5214f504892sm98076131cf.20.2026.07.21.10.18.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 09:49:34 -0700 (PDT)
-Date: Tue, 21 Jul 2026 09:49:31 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
-	corbet@lwn.net, dakr@kernel.org, decui@microsoft.com,
-	haiyangz@microsoft.com, jgg@ziepe.ca, kees@kernel.org,
-	kys@microsoft.com, leon@kernel.org, liam@infradead.org,
-	lizhi.hou@amd.com, ljs@kernel.org, longli@microsoft.com,
-	lyude@redhat.com, maarten.lankhorst@linux.intel.com,
-	mamin506@gmail.com, mhocko@suse.com, mripard@kernel.org,
-	nouveau@lists.freedesktop.org, ogabbay@kernel.org, oleg@redhat.com,
-	rppt@kernel.org, shuah@kernel.org, simona@ffwll.ch,
-	skhan@linuxfoundation.org, surenb@google.com, tzimmermann@suse.de,
-	vbabka@kernel.org, wei.liu@kernel.org,
-	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-	linux-mm@kvack.org, linux-doc@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v9 2/8] mm/hmm: add hmm_range_fault_unlocked_timeout()
- for mmap lock-drop support
-Message-ID: <al-jG2fROgMWUq_T@skinsburskii>
-References: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
- <178413936536.1155966.8918127042760531802.stgit@skinsburskii>
- <3ed2043b-88e7-4a86-9efb-fe788191e8e8@kernel.org>
+        Tue, 21 Jul 2026 10:18:23 -0700 (PDT)
+Date: Tue, 21 Jul 2026 13:18:17 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Zenghui Yu <yuzenghui@huawei.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
+	balbirs@nvidia.com, brendan.jackman@linux.dev, apopple@nvidia.com, alucerop@amd.com, 
+	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
+	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
+	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
+	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
+	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
+	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
+Message-ID: <al-pkvmgIxGu3LzM@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <a9c52bb6-5e04-1d41-913a-685a7be3fad4@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,52 +96,21 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3ed2043b-88e7-4a86-9efb-fe788191e8e8@kernel.org>
+In-Reply-To: <a9c52bb6-5e04-1d41-913a-685a7be3fad4@huawei.com>
 
-On Tue, Jul 21, 2026 at 05:42:53PM +0200, David Hildenbrand (Arm) wrote:
-> On 7/15/26 20:16, Stanislav Kinsburskii wrote:
-> > hmm_range_fault() requires the caller to hold the mmap read lock for the
-> > duration of the call. This is incompatible with mappings whose fault
-> > handler may release the mmap lock, notably userfaultfd-managed regions,
-> > where handle_mm_fault() can return VM_FAULT_RETRY or VM_FAULT_COMPLETED
-> > after dropping the lock. Drivers that need to populate device page tables
-> > for such mappings have no way to do so today.
-> > 
-> > Add hmm_range_fault_unlocked_timeout() for callers that do not need to hold
-> > mmap_lock across any work outside the HMM fault itself. The helper takes
-> > mmap_read_lock_killable() internally, calls the common HMM fault
-> > implementation, and releases the lock before returning if it is still held.
-> > The timeout is specified in jiffies; passing 0 retries indefinitely, while
-> > a non-zero timeout makes the helper return -EBUSY when the retry budget
-> > expires.
+On Tue, Jul 21, 2026 at 09:26:09PM +0800, Zenghui Yu wrote:
+> On 2026/7/21 3:33, Gregory Price wrote:
+> >   KVM: guest_memfd: bind backing memory to a NUMA node at creation
+> >   KVM: selftests: add a guest_memfd FLAG_BIND_NODE test
 > 
-> The timeout does not / cannot affect how long we might be stuck without the mmap
-> lock in e.g., the userfaultfd handler. And also not how long it would take to
-> actually grab the mmap lock.
+> I can't find the last patch in my inbox or on the lore. Not sure what went
+> wrong.
 > 
-> That's expected with the timeout, right?
-> 
-> [...]
-> 
+> Thanks,
+> Zenghui
 
-You are right. Ideally, the timeout should account for the time needed
-to acquire the lock.
+Apologies, my email account got rate-limited to the number of recipients.
 
-However, this timeout is not strict, especially with userfaultfd. It is
-more of a sentinel to make sure the kernel does not get stuck for too
-long and that progress is being made.
+It should be in everyone's box shortly.
 
-The default value used by most callers is 1000 ms, so accounting for the
-time needed to acquire the mmap_lock does not really make much sense to
-me yet, given the sentinel goal.
-
-Thanks,
-Stanislav
-
-> 
-> Nothing else jumped at me.
-> 
-> -- 
-> Cheers,
-> 
-> David
+~Gregory
