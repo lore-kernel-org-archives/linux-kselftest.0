@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607403B6BE5;
-	Tue, 21 Jul 2026 22:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A628443AAF;
+	Tue, 21 Jul 2026 22:15:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784672107; cv=none; b=buYnsgPLG8VPM3qCCx2optjSWcMZWJRAEF6/hoNHCuXQZgYH+kp2B6k5MtpKCVCIMCQ7/fkFjMkmu+iaDZ07lTPXUJCYnvRIa5BtscHIiUTgX2cS3cpMmwuuhHkXHK9NRN/tVAQjni4GyxjI05TbA05FopkjOkK/d5Fz7MYnB7M=
+	t=1784672118; cv=none; b=Pu57AQdIdvQ/X8ml8g87f+/ash+r2yPPn2rHmbbafVkWqKqjMlJcvGFGQjiZpX+rMRa/G80r/9bLg+ZnxUYhFw9Q8Ig9c6PBTV2Apx+uhChvVOwRulYJhVT9q05kI2gA+Uw1EdRndozD8MEv7ZC82FD29HLe23LeEberedu3VaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784672107; c=relaxed/simple;
-	bh=1b2Y/gzcf6sosMCli43waBWN3mbmIYO/rHB7iPILqys=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LNS/HK25UEVma8SjavLYh7gBWfFGkgmJpN4yiXOX1VtHspRqBZ6cdUlsGY8Ecik2XZoVMuYVCu6RXxqInLhdbYux8+uZS+84CFzpwHWIRzg1UpI7gamU6YMN5ZMWt9gWB8nN1yuwkP4U55I0Vk72YReKd2rnqiOqJfFbEVnxNPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdSiMhIE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784672118; c=relaxed/simple;
+	bh=cQebUUc3b4trxwzXFkPnBUl35n/3pGClyHHp+w9wnHE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l5i4HJkDyXaCptSRGaOVxE08ybjpXUZWy/4+T4mo/AixiJftEchQo3BHgzHBmpV/xVBZHUC42aQ2kK629Y3EqRKDQsxbsMZSDBZ1GjvaTjqJ4QGAbE1c3zP2X2AeonvWeRGZWATzU3V7UiG71rd5EwS7h7/5teblyBryd22101E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9QOAxV8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdSiMhIE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FD01F00A3D;
-	Tue, 21 Jul 2026 22:15:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9QOAxV8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D431F00A3A;
+	Tue, 21 Jul 2026 22:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784672106;
-	bh=msJ/ZTiNT8bHZHrX5GeIl08hHqY6G9pClI7pFaDtIH8=;
-	h=From:Subject:Date:To:Cc;
-	b=TdSiMhIEF05AcYi0/RQsr5hbrVQRuH42tUo224p3MZkt+YRvMwtMEX2Sz4Qs3e7wq
-	 F2pwcQhZmQQhnQJhy/chbh6sdTJL2H3ndhGhRuENdKgPSFd4FiHxF4m0RpMd7XnmnQ
-	 +EEqbNW4WZWVgQ116X7ocRrrPP2V0kaZoYyPTna5CALa/2ZJcJU/neZcXHtmAxLkCH
-	 6ZIX9DfWLLKGjw4OjeOd99kW6wC13d0Qpwiym5FsNKf2evAxLeGx7v5GHimvJ3HGhz
-	 7Jv/OOytMlITrclrpuSO6CGoHtv95KGDZ0LTwA+25ftp5QGfAQMAonhSV1ZpEjXSod
-	 mS6ucukcmSzUA==
+	s=k20260515; t=1784672116;
+	bh=LA1GN88xFwR/n7V23hRxm12Z3KevDKUurEIo5L4Unic=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=E9QOAxV8AEuVIl2eI/NS9SD6Fa83K9SYKz3OOc+eOd1cnZucKEG/N1hcTv2gZkIzV
+	 7AypNaLHOYJykI6Kn9qK5hMImnmcZSCsParRJLhCdWQ2pOj38Fl9KUcPhIZRfV2dGp
+	 12/i5GGDrjA6cQYouT6PWQJppzVVbHlLO3GLbD8DfgM6OHHilOnz/1VXUVOICIJlOk
+	 pCHg7Yug997qB4ayD2kMqUNmzGS/ccER7z05AlkSAaz313OB8YxqdptOIa0UoeGZWC
+	 TuJYfpGMCPMUtHOswAAXNQ4HlPXHfA4YxomUbAHccs8HFzFPveMNXJ8Fmx2jePNv8v
+	 gXwhhooPdQ60g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 0/5] mptcp: misc fixes for v7.2-rc5
-Date: Wed, 22 Jul 2026 00:14:37 +0200
-Message-Id: <20260722-net-mptcp-misc-fixes-7-2-rc5-v1-0-6fb595bc86ef@kernel.org>
+Date: Wed, 22 Jul 2026 00:14:41 +0200
+Subject: [PATCH net 4/5] selftests: mptcp: userspace_pm: fix undefined
+ variable port
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,72 +38,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0Q6CMAxFf4X02SZsKgv+ivEBSoWaMJd1GhLCv
- 1vk8dzcc1ZQzsIKt2qFzF9ReUcDd6qApi6OjDIYg699UwfvMHLBORVKOIsSPmVhxYAeM12xac/
- u0nLnwkBgiZT5f7DCHcyExzHqp38xlT0M2/YDHHqh84UAAAA=
-X-Change-ID: 20260721-net-mptcp-misc-fixes-7-2-rc5-693149ea17dc
+Message-Id: <20260722-net-mptcp-misc-fixes-7-2-rc5-v1-4-6fb595bc86ef@kernel.org>
+References: <20260722-net-mptcp-misc-fixes-7-2-rc5-v1-0-6fb595bc86ef@kernel.org>
+In-Reply-To: <20260722-net-mptcp-misc-fixes-7-2-rc5-v1-0-6fb595bc86ef@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
  Simon Horman <horms@kernel.org>
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Chenguang Zhao <zhaochenguang@kylinos.cn>, stable@vger.kernel.org, 
- Xuanqiang Luo <luoxuanqiang@kylinos.cn>, 
- Kalpan Jani <kalpan.jani@mpiricsoftware.com>, Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org, Frank Ranner <frank.ranner@intel.com>, 
- kernel test robot <lkp@intel.com>, Geliang Tang <geliang@kernel.org>
+ stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1483; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=1b2Y/gzcf6sosMCli43waBWN3mbmIYO/rHB7iPILqys=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLLi3ydF7H8rOqc2nHNi5IK54rHHZpyzulgkvfhnsGCqs
- dr6iwrhHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABO58ZWRYbIn7++Ot/K8S89a
- KtxQWbf5ga8Xl9XVF0yNxn51r6eFr2D4w3nqYHaNP0/Yms91nw7r/jVd0KN2KvXeyYXL24L2zj5
- 9lgsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1857; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=AAR5vqT0rqrRZnOlgAxMfAI48G7bJDKuLQu6poOze3I=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLLi36eeWXXTOoxDVJLpzLO5DyxWetyzc153WcX9l/iDV
+ 6dkHUNdO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACZiNoPhn8KUKUu/mvTz6Ie+
+ zdsQnSXTfP4dg+ey7jQpQY639k+CXzD8T/6f2psfrl/3oeLRgnBupia2teJPJS+/cbkY3qhwnse
+ VAwA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are various unrelated fixes:
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-- Patch 1: decrement extra subflows counter in case of errors with
-  passive MP_JOIN. A fix for v5.7.
+In make_connection(), the variable "port" is used but never defined.
+This leads to an empty argument being passed to wait_local_port_listen(),
+causing "printf: : invalid number" errors:
 
-- Patch 2: fix use-after-free in userspace_pm_get_local_id. A fix for
-  v5.19.
+ # INFO: Init
+ # 01 Created network namespaces ns1, ns2                          [ OK ]
+ # INFO: Make connections
+ # ./../lib.sh: line 651: printf: : invalid number
+ # 02 Established IPv4 MPTCP Connection ns2 => ns1                 [ OK ]
+ # INFO: Connection info: 10.0.1.2:59516 -> 10.0.1.1:50002
+ # ./../lib.sh: line 651: printf: : invalid number
+ # 03 Established IPv6 MPTCP Connection ns2 => ns1                 [ OK ]
 
-- Patch 3: fix stale skb->sk reference on subflow close, in case of
-  concurrent read operation. A fix for v6.19.
+Fix it by using the correctly defined variable "app_port", which holds the
+appropriate port number for the connection.
 
-- Patch 4: wait on the correct port in the userspace_pm.sh selftest. A
-  fix for v6.19.
-
-- Patch 5: fix a BUILD_BUG_ON on legacy ARM config. A fix for v7.1.
-
+Fixes: 39348f5f2f13 ("selftests: mptcp: wait for port instead of sleep")
+Cc: stable@vger.kernel.org
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Chenguang Zhao (1):
-      mptcp: decrement subflows counter on failed passive join
-
-Geliang Tang (2):
-      mptcp: pm: userspace: fix use-after-free in get_local_id
-      selftests: mptcp: userspace_pm: fix undefined variable port
-
-Kalpan Jani (1):
-      mptcp: fix stale skb->sk reference on subflow close
-
-Matthieu Baerts (NGI0) (1):
-      mptcp: fix BUILD_BUG_ON on legacy ARM config
-
- net/mptcp/options.c                               |  5 +---
- net/mptcp/pm_userspace.c                          |  7 +++--
- net/mptcp/protocol.c                              | 34 +++++++++++++----------
- tools/testing/selftests/net/mptcp/userspace_pm.sh |  2 +-
- 4 files changed, 27 insertions(+), 21 deletions(-)
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 ---
-base-commit: eaa39f9f8ac8c1d032cd26b9cd572804e9d7683f
-change-id: 20260721-net-mptcp-misc-fixes-7-2-rc5-693149ea17dc
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index e9ae1806ab07..30a809752d1b 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -212,7 +212,7 @@ make_connection()
+ 	   ./mptcp_connect -s MPTCP -w 300 -p $app_port -l $listen_addr > /dev/null 2>&1 &
+ 	local server_pid=$!
+ 
+-	mptcp_lib_wait_local_port_listen "${ns1}" "${port}"
++	mptcp_lib_wait_local_port_listen "${ns1}" "${app_port}"
+ 
+ 	# Run the client, transfer $file and stay connected to the server
+ 	# to conduct tests
+
+-- 
+2.53.0
 
