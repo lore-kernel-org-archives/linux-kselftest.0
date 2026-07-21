@@ -1,249 +1,171 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E976F442100
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 22:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B60B43E07B
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 22:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784673005; cv=none; b=cCdf2CinZch2nND4SHEV/uIlwxRD6KF2PVFBqSKgrEwBPjAI7sSlMaC133oLEAtcwJyjRDMo3mkSyShj4b8ApD7uEAaEuBLAPQb+MKvKkvKPe71oJbq6WeaZxbSiTkJEu31avY1VQWDW4uFsTMF2h586Vnr0x7+dcMylbOIgiuE=
+	t=1784673167; cv=none; b=Gp2y413mHY9YmPcdh6CeaS/qoxEQSDexqGEvbvIPomSaJ69fPip77YNGRCBPrDzFvCb7+W1lvzAUq0OI2jRSmE+wDaoubdbnvTBvtNQ0Yu+fk1Qv65CXUb85LeW3znY85rGb3CXNY1JyH/a1MNEi8UoXguyhEWndLWPpmRlsTd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784673005; c=relaxed/simple;
-	bh=uZRZ2VN44Q5XzL/F2XgrEb/jhTB2g8aztDio6kTbBac=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YnHDkLbjXmy9P/FKAQeVYleitHpU43vjtG4adLXzepmPkzcZ+8IrEtoVd2S3beeZ7fwZOdI1tqe1WYwtAK5+icCn0RitroowBk+Wx6TwlCgMILyaJS8BkExG46wmuOp1n+ksD8mZIMCvIvEewfB8K8a4Ac2qpGNnuMwQ8l+LFkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqcWIT40; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784673167; c=relaxed/simple;
+	bh=9sE08mWiHIkvCopY63Ytv07qGv7Tqnqj9oiKu6FrlP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIoVP0KrsgdgYix3YLgi3SbnQd1I4DBI7oDQZhYZMNdAeUXoXVHa0L2Gvc8cl2gZW34J1sDfT+KdmJ2slmdpXubHxL8oX+iHu8UCiDx3X1SdlEO9dS6qLBMFHbuDbaljGwBo5SFhP+5I4KDcda2H4Id3HVSMiUw1PWiDYirSGuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iDBcE1AS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IBvlF5il; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqcWIT40"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ceaf8a1265so118929345ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 15:30:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iDBcE1AS";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IBvlF5il"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784673165;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F7BKONF8ODMOL+gKzoyhMNcxsmzd3EOR2CMZZShEkWI=;
+	b=iDBcE1AS/y3eF9lQDrv7jmIzQdU9uQNNqpn++sJFYJ1YOo2wPDbZp9DYYLhjn6tAGkUaVs
+	r/+h5b1UXavldKhVbkehTmttJYcEI2IB3TCMn2fscLrQHtgh8IDNK+ErlvAhgeYYVdUuIP
+	7PreX8UHLCisAXpCrqnbROZwG3u9u5I=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-471-0CRmruZMNx-H8J48oFYLtQ-1; Tue, 21 Jul 2026 18:32:44 -0400
+X-MC-Unique: 0CRmruZMNx-H8J48oFYLtQ-1
+X-Mimecast-MFC-AGG-ID: 0CRmruZMNx-H8J48oFYLtQ_1784673163
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-92e8004d60eso1879130385a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 15:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784673003; x=1785277803; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SACM/ZkSy0Q+E/W2IAydC2E/hnHraYOT4Rhvc9t0KKg=;
-        b=OqcWIT40tDSudduOZs8F03lSCMn6UZ//ZYcJrqY9XoHSTtGJb//4Up/A2FTboQfQKV
-         nXmFjhfSVdKN9ToWdqiLo/qQ7piYtpdCdvCdJI/Ryc44j86vpIB/7LLwrB1QR9/vmhrF
-         gJs69+4A0wiBqq6giCoobd4PeYgm/DbCwBANs/GlQA/BEfbGGonRQmD2i0bdljlE3rtq
-         thDhy2N8sufPrwaAIWsGhFDCT0+d1zYJtjaMDTYytZLrWPc2XEhpJcbPillmjoRSL83+
-         Ya3lsxnLa9OUXp+oiftesrAaXRJElF6TfrO7Dx7RWT1xMgPReBIY8DYjBv0lqLutOMx5
-         V4vw==
+        d=redhat.com; s=google; t=1784673163; x=1785277963; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=F7BKONF8ODMOL+gKzoyhMNcxsmzd3EOR2CMZZShEkWI=;
+        b=IBvlF5ilEtDEcCM7MLKOA1y+PiSfAwY1abxOOFCZ1Hu9xawOjaoXsdL0lo/G+mmukX
+         DvkUnuM0UFStDISehVBmTHNYNRGUXyEd3YSXe1B0oqkdVFpzT+SmINIUeYFUH5F4Hmnn
+         bHsDKUG3GOGO4/nefZssVwPuAy7cX9fcH3WOI7APVA2qTb74BXwiuS13a9Gtz78kcdbA
+         ghXnTSuj54WFoUrruW8/gv+pNRaGsUBq6Xjiw5y2zuf+KHqb9/A1J+7PVJr135fsqzi/
+         asbXWamcPQEHhsEkFy06ystTJ8R931EN8j5bxOx41mnbieqSMPYn+wiPX3DXhUf/X3fN
+         1BNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784673003; x=1785277803;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1784673163; x=1785277963;
+        h=user-agent:in-reply-to:content-disposition:content-type
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=SACM/ZkSy0Q+E/W2IAydC2E/hnHraYOT4Rhvc9t0KKg=;
-        b=ic2tE0hRBEq5exQjftPdK+wa2f5jcqYoUEG/Z5gTKwE3OVJg6m0y6+QVpMHfpZ96K/
-         eeHxYTlsQf0Nj1ctjRmbBOg1ontjHyKpzQur1FiUzZ3xjmGZZqfxmdMa0mpkS90y2t10
-         /pMoUAMNuOFUZUA9RS4d7xrhADnTEfyl3Zp7LBYqEcUARhRaCf2DY32K9vwRTQDGSOMt
-         f7sV1/6lcpO23E4DaC5pVc9fefBVYLYeHsDF9O2DHHV2N6iJK9qi6QHZeB3KDDiBYiVV
-         p37lbd6p4X2471s0GP1D5t/q7+g04ZoazDq1+GjVkqo7l7wnoKUuUNdQ96AYDcjZls4t
-         hHqw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro/4xBS646SPg+++oRnOWCvnNPPIl/tGgYR0Jt1+3zk69Gi83Y8jFe5mOh8OaWXoJb2ZBlvawGqwkbuK1VCe/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyO6jVE+fkSpwgVJJRINeIHoSp2O/FAgGq6IKnXpobeewDnLRg
-	lDQ9doUEZ2f5RVuelC/EjaIcA6Hcc4Dohlaa2IVtXsyp43fSPSYdTKPc
-X-Gm-Gg: AR+sD107RwdknXerS3yR0VVU+YNWA++dqc6V95I6Zy3BYaYGVCBygx5AgjTqVu4CThI
-	m9X8SG9GYM4D5vs0LVZWmTCmjpsxWSdjeW7Kpk5EqsununYKE3NsOQLcCl/y/kPEJk2wTeOChjy
-	13QhQQS9BJUJ4d/P9vJxgv1j1X778NKbp7oUvcE6XrSxuIdSZ7IhqEz6R/5gn9WfX67X5bnh4QF
-	ELx8FLSIMmqqreZ9aCZCNgBtA5i2Joa/JwE3DL3CHb0tF8P8tPAOjrgyHbV9QtAi/euL1XMl5SI
-	yO3jEGQ84AEbQflmEG7KgXpQtOfOInxuayazWVBHTK/5jdRMW0GELdtcZHDNsv4J0XOzwqpqzKs
-	OTD3b9R15Tsf7PmJ8juKNsmyTbe6RVgimWSV8xxk0EXUIGAjt5/IYOpYeUU+vKCbP/eojbLyC7u
-	nEwjL0HVZdE5/7f9s=
-X-Received: by 2002:a17:903:298c:b0:2ca:4b7a:4a02 with SMTP id d9443c01a7336-2cf34a7bfe4mr218688335ad.43.1784673003421;
-        Tue, 21 Jul 2026 15:30:03 -0700 (PDT)
-Received: from CPC-mjac-HKWGEZ.localdomain ([70.37.26.40])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8efde5cfsm3787685ad.31.2026.07.21.15.30.02
+        bh=F7BKONF8ODMOL+gKzoyhMNcxsmzd3EOR2CMZZShEkWI=;
+        b=jksYOuSfpjpwhP5rnb2RxGfOlHQTow8YCtcWyuhRtS9EEHyML8tCb3eAsb2+mUv1ni
+         DT5vT+VWmgwU2or6GbE0qDpI3YuvukJuDO8XxCi9N3JdP5/S40U609jWxlHtkY442plW
+         mqCAsp6r5BDN5HdETVT7dtzQ1dXXr5MX3IXnOLUO4itfKvYRLYlApcY3K4ZsdPMLjpnD
+         4FgJch+iSU6X0nWfHQWU/9oz3zVLppT5Z0lghJ2ogVZXHqgZK0vYdXEqqwHNYjkts+y/
+         P2hz09TPCCik8OIRL+oPcB48R6afv/7uHTCuoL8uXLCcFIBcNlTq3l3W+bqIAdVG1kCk
+         wFew==
+X-Forwarded-Encrypted: i=1; AHgh+RpkpXnF4EPIENI+STYyxODG+XrkxMGLTOmg9s+l5s0bDvZVKCEh06A8vOHxMHE24HyCYt62WhWD5O0u5VvG4ZA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs9DWeg3y8TKoBMlafH+e9R9ADy0VNQ2QlilcGSYBrJDgqX/4Q
+	C/gqA8/xdIenhFBoxv0PVUXK04oY+/5zR5TQmDWUhNMSEIsJbfODx7NFOJ6WtTwWAaJtc5qqAn7
+	GVA4IE84op1DSPKVmSFAwFj+CGpTdBcLH6CLObqtOBMTyewDWMIMmAXevZ+/LhB5G+PtHdQ==
+X-Gm-Gg: AR+sD11gmtMzPUzwh77ZOnmhuazdX4il7JxOw19lYmdOnDeL5JlCNvHB59y086qi3df
+	ukPbqAG94snqo0zGWcNFi+9BKX+D7j5g8tEZbarhk6DiQGuAdqVxSp5JXH+71Ye2A1SZ/HbRpFL
+	yrxOKIVnVUmicVxtXXi5BLhUGvYXTPL94kwtVEYW6vr948HUVzGHEWVnyOD9T1bpvIjTozHCm3w
+	/7pEJLMe58QT37pJQoQBr/ddczPvRduCx06YAxsKlwE5xJcDPceGaFHXL3FFrN5MJlzxbBNd3JB
+	ij8Tlx8oO1wPfJx6N5C7HjJG2gYTLaUEkul1c5pcwwDSx4rOdVfXu/N9pIFuU8MJ8R00ny90rhe
+	I+C6EA6ELjWcLgJ8SEIlItAaVD91G53cJpxU=
+X-Received: by 2002:a05:620a:2703:b0:92e:9ceb:24af with SMTP id af79cd13be357-930b3ef555amr1901753885a.41.1784673163423;
+        Tue, 21 Jul 2026 15:32:43 -0700 (PDT)
+X-Received: by 2002:a05:620a:2703:b0:92e:9ceb:24af with SMTP id af79cd13be357-930b3ef555amr1901752285a.41.1784673163086;
+        Tue, 21 Jul 2026 15:32:43 -0700 (PDT)
+Received: from redhat.com (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930f6a03834sm5454785a.30.2026.07.21.15.32.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 15:30:03 -0700 (PDT)
-From: Jack Ma <jack4it@gmail.com>
-Date: Tue, 21 Jul 2026 22:29:52 +0000
-Subject: [PATCH net-next v3 3/3] selftests: net: add coverage for fdb
- nexthop dst port
+        Tue, 21 Jul 2026 15:32:42 -0700 (PDT)
+Date: Tue, 21 Jul 2026 18:32:39 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Pascal EBERHARD <pascal.eberhard@se.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v4 7/7] clk: tests: Add Kunit testing for nexus nodes
+Message-ID: <al_zh1cOInMXEU8x@redhat.com>
+References: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
+ <20260717-schneider-v7-2-rc1-eip201-upstream-v4-7-751547e160e5@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-b4-vxlan-fdb-port-v3-3-9aa0a543a78a@gmail.com>
-References: <20260721-b4-vxlan-fdb-port-v3-0-9aa0a543a78a@gmail.com>
-In-Reply-To: <20260721-b4-vxlan-fdb-port-v3-0-9aa0a543a78a@gmail.com>
-To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jack Ma <jack4it@gmail.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784672999; l=6796;
- i=jack4it@gmail.com; s=20260712; h=from:subject:message-id;
- bh=uZRZ2VN44Q5XzL/F2XgrEb/jhTB2g8aztDio6kTbBac=;
- b=T+jPlHObpnglpfTY7pQTXNgn13M0Do7klKkxPmWXYTvfkPm/6VhFmmazfpfpWHkmg6H/Xpfx/
- 8CXZ7ADb1ziCllIrvcE3ycKiuFPJqv6nhGFMcr62tLZPIIZlMcbjVzo
-X-Developer-Key: i=jack4it@gmail.com; a=ed25519;
- pk=x8xh2Md9yNDil0xBOA9WA/oqC3O4Eg4rdlIul4YUktU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-7-751547e160e5@bootlin.com>
+User-Agent: Mutt/2.4.0 (2026-06-19)
 
-Extend the existing fdb nexthop group tests with cases for the new
-per-nexthop VXLAN destination port (NHA_FDB_PORT).
+On Fri, Jul 17, 2026 at 05:59:23PM +0200, Miquel Raynal (Schneider Electric) wrote:
+> Add a nexus node with a child requesting a mapped clock in the fake DT
+> overlay to verify that the parsing is also correctly working.
+> 
+> Create an of_find_node_by_name() like kunit helper to garbage collect the
+> node automatically in case of failed assertion.
+> 
+> Suggested-by: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+> ---
+>  drivers/clk/clk_kunit_helpers.c          | 31 +++++++++++++++++++++++++++++++
+>  drivers/clk/clk_test.c                   | 15 +++++++++++++++
+>  drivers/clk/kunit_clk_parse_clkspec.dtso | 10 ++++++++++
+>  include/kunit/clk.h                      |  2 ++
+>  4 files changed, 58 insertions(+)
+> 
+> diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_helpers.c
+> index 68a28e70bb61..daaf1cf1546c 100644
+> --- a/drivers/clk/clk_kunit_helpers.c
+> +++ b/drivers/clk/clk_kunit_helpers.c
+> @@ -233,5 +233,36 @@ int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
+>  }
+>  EXPORT_SYMBOL_GPL(of_clk_add_hw_provider_kunit);
+>  
+> +KUNIT_DEFINE_ACTION_WRAPPER(of_node_put_wrapper, of_node_put, struct device_node *);
+> +
+> +/**
+> + * of_find_node_by_name_kunit() - Test managed of_find_node_by_name()
+> + * @test: The test context
+> + * @from: Parent device node to start searching from, or NULL to search from root
+> + * @name: The name string to match against
+> + *
+> + * Just like of_find_node_by_name(), except the device_noded is managed by
+> + * the test case and is automatically put after the test case concludes.
+> + *
+> + * Return: the device_node on success, NULL if not found, or a negative errno value on failure.
+> + */
+> +struct device_node *of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
+> +					       const char *name)
+> +{
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	np = of_find_node_by_name(from, name);
+> +	if (!np)
+> +		return NULL;
+> +
+> +	ret = kunit_add_action_or_reset(test, of_node_put_wrapper, np);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return np;
+> +}
+> +EXPORT_SYMBOL_GPL(of_find_node_by_name_kunit);
 
-In fib_nexthops.sh, ipv4_fdb_grp_fcnal() and ipv6_fdb_grp_fcnal() now
-check that a port is accepted on an fdb nexthop that has a gateway and
-echoed back on dump, that it is rejected without a gateway and rejected
-when zero, that a group may hold legs that differ only in UDP port, and
-that a portless fdb nexthop omits the attribute.  The cases SKIP when
-iproute2 lacks the "port" keyword.
+Should this be prefixed with clk_ since this is in clk_kunit_helpers.c?
 
-In test_vxlan_nh.sh, basic_tx_common() gains a second fdb nexthop group
-whose nexthop carries a destination port that differs from the VXLAN
-device default, plus a flower filter keyed on that port, to confirm the
-per-nexthop port is used on the wire.
+Other than this, the whole series looks reasonable to me. I'm curious
+though to get Stephen's feedback about this series.
 
-Signed-off-by: Jack Ma <jack4it@gmail.com>
----
- tools/testing/selftests/net/fib_nexthops.sh  | 59 ++++++++++++++++++++++++++++
- tools/testing/selftests/net/test_vxlan_nh.sh | 31 +++++++++++++++
- 2 files changed, 90 insertions(+)
-
-diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
-index ac868a731694..1ce4f45fa651 100755
---- a/tools/testing/selftests/net/fib_nexthops.sh
-+++ b/tools/testing/selftests/net/fib_nexthops.sh
-@@ -432,6 +432,15 @@ check_nexthop_fdb_support()
- 	fi
- }
- 
-+check_nexthop_fdb_port_support()
-+{
-+	$IP nexthop help 2>&1 | grep -q "fdb \[ port"
-+	if [ $? -ne 0 ]; then
-+		echo "SKIP: iproute2 too old, missing fdb nexthop port support"
-+		return $ksft_skip
-+	fi
-+}
-+
- check_nexthop_res_support()
- {
- 	$IP nexthop help 2>&1 | grep -q resilient
-@@ -514,6 +523,31 @@ ipv6_fdb_grp_fcnal()
- 	run_cmd "$IP nexthop replace id 72 via 2001:db8:91::2 fdb"
- 	log_test $? 2 "Replace non-FDB nexthop to FDB nexthop while in a group"
- 
-+	# NHA_FDB_PORT: optional per-nexthop VXLAN destination UDP port,
-+	# letting an fdb nexthop group balance a flow across legs that share
-+	# an underlay IP but listen on different UDP ports.
-+	if check_nexthop_fdb_port_support; then
-+		run_cmd "$IP nexthop add id 80 via 2001:db8:91::2 fdb port 4790"
-+		check_nexthop "id 80" "id 80 via 2001:db8:91::2 scope link fdb port 4790"
-+		log_test $? 0 "Fdb nexthop with port"
-+
-+		run_cmd "$IP nexthop add id 81 fdb port 4790"
-+		log_test $? 2 "Fdb nexthop with port but no gateway"
-+
-+		run_cmd "$IP nexthop add id 81 via 2001:db8:91::2 fdb port 0"
-+		log_test $? 2 "Fdb nexthop with port 0"
-+
-+		run_cmd "$IP nexthop add id 82 via 2001:db8:91::2 fdb port 4789"
-+		run_cmd "$IP nexthop add id 83 via 2001:db8:91::3 fdb port 5789"
-+		run_cmd "$IP nexthop add id 106 group 82/83 fdb"
-+		check_nexthop "id 106" "id 106 group 82/83 fdb"
-+		log_test $? 0 "Fdb nexthop group with legs differing in port"
-+
-+		run_cmd "$IP nexthop add id 84 via 2001:db8:91::2 fdb"
-+		check_nexthop "id 84" "id 84 via 2001:db8:91::2 scope link fdb"
-+		log_test $? 0 "Fdb nexthop without port omits port"
-+	fi
-+
- 	run_cmd "$IP link add name vx10 type vxlan id 1010 local 2001:db8:91::9 remote 2001:db8:91::10 dstport 4789 nolearning noudpcsum tos inherit ttl 100"
- 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:13 dev vx10 nhid 102 self"
- 	log_test $? 0 "Fdb mac add with nexthop group"
-@@ -614,6 +648,31 @@ ipv4_fdb_grp_fcnal()
- 	run_cmd "$IP nexthop replace id 20 via 172.16.1.2 fdb"
- 	log_test $? 2 "Replace non-FDB nexthop to FDB nexthop while in a group"
- 
-+	# NHA_FDB_PORT: optional per-nexthop VXLAN destination UDP port,
-+	# letting an fdb nexthop group balance a flow across legs that share
-+	# an underlay IP but listen on different UDP ports.
-+	if check_nexthop_fdb_port_support; then
-+		run_cmd "$IP nexthop add id 30 via 172.16.1.2 fdb port 4790"
-+		check_nexthop "id 30" "id 30 via 172.16.1.2 scope link fdb port 4790"
-+		log_test $? 0 "Fdb nexthop with port"
-+
-+		run_cmd "$IP nexthop add id 31 fdb port 4790"
-+		log_test $? 2 "Fdb nexthop with port but no gateway"
-+
-+		run_cmd "$IP nexthop add id 31 via 172.16.1.2 fdb port 0"
-+		log_test $? 2 "Fdb nexthop with port 0"
-+
-+		run_cmd "$IP nexthop add id 32 via 172.16.1.2 fdb port 4789"
-+		run_cmd "$IP nexthop add id 33 via 172.16.1.3 fdb port 5789"
-+		run_cmd "$IP nexthop add id 105 group 32/33 fdb"
-+		check_nexthop "id 105" "id 105 group 32/33 fdb"
-+		log_test $? 0 "Fdb nexthop group with legs differing in port"
-+
-+		run_cmd "$IP nexthop add id 34 via 172.16.1.2 fdb"
-+		check_nexthop "id 34" "id 34 via 172.16.1.2 scope link fdb"
-+		log_test $? 0 "Fdb nexthop without port omits port"
-+	fi
-+
- 	run_cmd "$IP link add name vx10 type vxlan id 1010 local 10.0.0.1 remote 10.0.0.2 dstport 4789 nolearning noudpcsum tos inherit ttl 100"
- 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:13 dev vx10 nhid 102 self"
- 	log_test $? 0 "Fdb mac add with nexthop group"
-diff --git a/tools/testing/selftests/net/test_vxlan_nh.sh b/tools/testing/selftests/net/test_vxlan_nh.sh
-index 20f3369f776b..34a24a4f95bf 100755
---- a/tools/testing/selftests/net/test_vxlan_nh.sh
-+++ b/tools/testing/selftests/net/test_vxlan_nh.sh
-@@ -56,6 +56,16 @@ tc_stats_get()
- 	tc_rule_handle_stats_get "dev dummy1 egress" 101 ".packets" "-n $ns1"
- }
- 
-+nh_stats_get_port()
-+{
-+	ip -n "$ns1" -s -j nexthop show id 20 | jq ".[][\"group_stats\"][][\"packets\"]"
-+}
-+
-+tc_stats_get_port()
-+{
-+	tc_rule_handle_stats_get "dev dummy1 egress" 102 ".packets" "-n $ns1"
-+}
-+
- basic_tx_common()
- {
- 	local af_str=$1; shift
-@@ -90,6 +100,27 @@ basic_tx_common()
- 	busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== 1" tc_stats_get > /dev/null
- 	check_err $? "tc filter stats did not increase"
- 
-+	# Add a second FDB nexthop group whose nexthop carries a per-nexthop
-+	# destination port (NHA_FDB_PORT) that differs from the VXLAN device
-+	# default. Matching outer traffic must egress with that port, so a
-+	# separate flower filter keyed on the new port catches it.
-+	if ip nexthop help 2>&1 | grep -q "fdb \[ port"; then
-+		run_cmd "tc -n $ns1 filter add dev dummy1 egress proto $proto pref 1 handle 102 flower ip_proto udp dst_ip $remote_addr dst_port 4790 action pass"
-+
-+		run_cmd "ip -n $ns1 nexthop add id 2 via $remote_addr fdb port 4790"
-+		run_cmd "ip -n $ns1 nexthop add id 20 group 2 fdb"
-+
-+		run_cmd "bridge -n $ns1 fdb add 00:11:22:33:44:66 dev vx0 self static nhid 20"
-+
-+		run_cmd "ip netns exec $ns1 mausezahn vx0 -a own -b 00:11:22:33:44:66 -c 1 -q"
-+
-+		busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== 1" nh_stats_get_port > /dev/null
-+		check_err $? "FDB nexthop group stats did not increase (with port)"
-+
-+		busywait "$BUSYWAIT_TIMEOUT" until_counter_is "== 1" tc_stats_get_port > /dev/null
-+		check_err $? "tc filter stats did not increase (with port)"
-+	fi
-+
- 	log_test "VXLAN FDB nexthop: $af_str basic Tx"
- }
- 
-
--- 
-2.43.0
+Brian
 
