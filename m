@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058DF415F0A;
-	Tue, 21 Jul 2026 18:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1035F3C6A57;
+	Tue, 21 Jul 2026 18:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784657237; cv=none; b=Kt/4NaEH+Z6eeHGPG24hxfr+W9YST1/jyxt1ntBFEvkKQlAblaA8srl/YOv6jP9QSQ0hdNTjtP2rYNgqdtwOU+fiCe/xxdqeYkdip3DkZP/68dH9sWoh6RlSxC0N5CmsXOKLIlTcrdZxep6lFGgp81LX9fyReaj5oBpQXPELR6E=
+	t=1784657346; cv=none; b=QtIWFmOoENKzh5P6pRjUgsSEB6cdTRKchhhBkd7waFEuErlVKJlTkfotBNWoZs+SiVdmxcUJJn+AvuzbLOCqAfdGdGUR1kRnA/FCr/YdaOj75WCDn/KmEv19wf6ZUJfqxPFOKg6JlTRiKnqJiw5wlMdfVJ7dhHK9ibgl/XEXVFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784657237; c=relaxed/simple;
-	bh=WgxtnRTwJp1h60BWd4QOULmHHIyqZ0VFpP6dCKrQ7/M=;
+	s=arc-20240116; t=1784657346; c=relaxed/simple;
+	bh=WVdWU0fS1mUDSXxvLeOLSoCcooohMfXvQC8sSvZrlKE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XxmGrJht74sqsFATmp5LLenTIGHXKc871akAhAi0+vs+a26GI4nkUTgcJGoj4g74BnXtOoTYfoY75x+J92k7pcMwHd1hPhwNj88gW2YQsV/ozHj4Gxr9eH/C8xf881P3Hw0y4hWB833n9oJzDJ2fgZxW6lWJGLfmkcujLa61TqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNvEhFP9; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=X81yRXrIwylH6Ec2Vevff6VLqgRLcNw6KWphNKtjoP1/tXvX2ep1T/mJ+ocZETYRSRoHxZzg9Gf2MTiDNegM7W6+jLbPAqg8axYjnT8MXvJldSK6s0UQv6K5cfZOUAfKRnVd+YG6uZPIDUr15hFtWNBarSyHYATYgEQBpJaKPbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cnqsc/RL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNvEhFP9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000011F00A3A;
-	Tue, 21 Jul 2026 18:07:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cnqsc/RL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3101F00A3A;
+	Tue, 21 Jul 2026 18:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784657235;
-	bh=RHcGoloNYmYwH+aPEyfH+QAtWnrh9cY7GdbPjNJEb2I=;
+	s=k20260515; t=1784657344;
+	bh=rsWQ4FGYd+ZuS4/k42e+/CB05xWi4uLVW1aD7Qpja3Y=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PNvEhFP9645lghGJsCG8GgCfsizcixDocQTZP/Jk6GkO1SWpREEYImH6pjG10Gl0i
-	 qj/FMGwx4brGfBsMKCXRYjtv5+vDX55HWlMdfuL15LlTQgzc0BEsba3ImS0cHxT0Us
-	 lYqa1cl1tfW/f5herNlKVyqbQ/VV8Dj1qN/CFOPELPW2TmxWjl8apxqdgFMhO/vi0z
-	 +3GXyZBMFYqUQD8HpTQJqzeJIP66baWdBGSAe3lwxkBv/IaAAclBbW2jBPmiguqhy3
-	 8fiffwJdgqX1Giiidq+xUoXUjrIjedRr6SnaLTrApnjuYdkZ80JCIctPla2k754m2n
-	 +xQyCICMamqMw==
-Date: Tue, 21 Jul 2026 11:07:13 -0700
+	b=Cnqsc/RL4F4q2QzFf/7UI1vzYfWvbh90lrJ0Q5GXMq0+sQbCijqnYSvIgVh1ufGcs
+	 0wabztTWFNX8cJLND1p5N5ICENFTx7qpW1rbTKAAxo9jw3sBRPB2+bWl395+1iWwxy
+	 7nYeS1MKd53rnz8d7KoOEVDTr4j/28dQ+f0m/mEb8qJMin1vN+qrwsHhNnBo9GeWph
+	 P/jc7ierl68Bar5rE7vFQa67loxPVIkmrDtSDsHDdM8/f33pklsJf3KIszh2Yny/7g
+	 f0iUIoLsi6LV6PhGX1Jz8z/gsHTJw65u3ZLkmPfR9IWYXSM2M5obl4NGMga/By7qx3
+	 5saKo15l8MgKA==
+Date: Tue, 21 Jul 2026 11:09:03 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
@@ -42,12 +42,12 @@ Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
  almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
  dw@davidwei.uk, Joe Damato <joe@dama.to>, Bobby Eshleman
  <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 1/3] net: devmem: allow rx-buf-size >
- PAGE_SIZE per dmabuf binding
-Message-ID: <20260721110713.325d36ba@kernel.org>
-In-Reply-To: <20260708-tcpdm-large-niovs-v5-1-34bf6fac941b@meta.com>
+Subject: Re: [PATCH net-next v5 3/3] selftests/net: devmem.py: add
+ check_rx_large_niov
+Message-ID: <20260721110903.34840531@kernel.org>
+In-Reply-To: <20260708-tcpdm-large-niovs-v5-3-34bf6fac941b@meta.com>
 References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
-	<20260708-tcpdm-large-niovs-v5-1-34bf6fac941b@meta.com>
+	<20260708-tcpdm-large-niovs-v5-3-34bf6fac941b@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,33 +57,12 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 08 Jul 2026 15:55:04 -0700 Bobby Eshleman wrote:
-> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-> index 5f143da7458c..70b902008bd3 100644
-> --- a/Documentation/netlink/specs/netdev.yaml
-> +++ b/Documentation/netlink/specs/netdev.yaml
-> @@ -598,6 +598,13 @@ attribute-sets:
->          type: u32
->          checks:
->            min: 1
-> +      -
-> +        name: rx-buf-size
+On Wed, 08 Jul 2026 15:55:06 -0700 Bobby Eshleman wrote:
+> +@ksft_disruptive
+> +def check_rx_large_niov(cfg) -> None:
+> +    """Run the devmem RX test with rx-buf-size = 16 KiB."""
+> +    run_rx_large_niov(cfg)
 
-rx-page-size, we're modeling device pages.
-rx-buf-len exists in ethtool and is something else.
-
-> +	if (info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]) {
-> +		u32 rx_buf_size = nla_get_u32(info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]);
-> +
-> +		if (!rx_buf_size || !is_power_of_2(rx_buf_size) ||
-> +		    rx_buf_size < PAGE_SIZE) {
-
-we should add a check: min: page-size in the Netlink policy?
-
-> +			NL_SET_ERR_MSG_FMT(info->extack,
-> +					   "rx_buf_size %u must be a power of 2 >= page size (%lu)",
-> +					   rx_buf_size, PAGE_SIZE);
-
-This must point at _ATTR, the _FMT is unnecessary.
--- 
-pw-bot: cr
+Any idea why the devmem tests sprinkle disruptive everywhere?
+Disruptive means we take the link down, I don't think this test 
+does that.
