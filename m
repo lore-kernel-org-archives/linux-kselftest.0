@@ -1,27 +1,27 @@
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F364B36A009;
-	Tue, 21 Jul 2026 10:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CCC403E9C;
+	Tue, 21 Jul 2026 11:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784631494; cv=none; b=ABDqNLfqiXArE0NKDW2gA7HQa4dIItO7rjXWpb1fBBiWdjngKZdwWp44bbT2MB/gTxXEQanq0agLKaYlEv3Y+gO77yUFabwQEiBh+YAB4LVgsCo/bncPNwrurjcE0hG4sNWZMh4gWpWBkuZJxWAodR3jwYJcAnak8pZfx924h5c=
+	t=1784633124; cv=none; b=DDbCtSDtbgyKYrLMAsbuKUSwuzTpuaW12ICFF+FCpU/+k7NCPUezEvceQ9U31BCpigcq7Ppud4H+7kxJbSFxlpKHWDv7V4OZXEdhHHlRogy1nP3y5VbN5F9u5RqMmdmxp0XqfMpuAgHXMFtMyRcyOor6qI+zxWTNvPR+VH26Ssk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784631494; c=relaxed/simple;
-	bh=C9i7oJgmwyDacT2oC9e5xhsXG1haAhuSRFvL3DR9R1c=;
+	s=arc-20240116; t=1784633124; c=relaxed/simple;
+	bh=Af4CVCjtShcmgw0IydJXrc6l42LR3VATdP8D/SA9vDk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RZTg1t8xK8cFAoPXBDAfOnk94D/Qg3GB7ZGBSW9TNkxB5VDfzx6+qu7B3NBOlEezo1CSEysqX7MRSEXRb0kduViwIpmobSBt+3ipTRLaFt1GI0ReZsJ4fuRPYEAMw40WWKRNpxYtwP4y68Bmmn/+dqfz84Gy/WtZ01xLzwpSXIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=18.194.254.142
+	 MIME-Version; b=QCj4eclB3dh7Q/QviRQ+kMGp80xr4g1v2N3J8AX5X4tbJ70pO9sjYw0jhoiu3w2JTiPBmwyUMAoyVBtxrGEqxmIULqYbt2Kz77v4Gggry49Zrwp9cU8LU90RcgBV7yTvaJSzJYINWtIQOIzs9ypJUrNGZ13kYJzllpSx/r3/S7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=54.254.200.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=haiwei.tech
-X-QQ-mid: esmtpsz19t1784631473t8bd3dbd8
-X-QQ-Originating-IP: zVGL0MIEiXwbehjZG6FBDiiLZOrsJoGfOatAdd6SQLw=
+X-QQ-mid: esmtpsz11t1784633099t86bbe47d
+X-QQ-Originating-IP: N+tMx1w72ZK4uOz590DgffrsiOgt9acwJYrcgyAIQlg=
 Received: from rsl ( [183.242.33.186])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 21 Jul 2026 18:57:50 +0800 (CST)
+	id ; Tue, 21 Jul 2026 19:24:56 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4376131265427308852
+X-BIZMAIL-ID: 10782298649588333164
 EX-QQ-RecipientCnt: 14
 From: JinRui <jinrui@haiwei.tech>
 To: Anup Patel <anup@brainfault.org>,
@@ -38,12 +38,12 @@ Cc: Atish Patra <atish.patra@linux.dev>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	jinrui <jinrui@haiwei.tech>
-Subject: [PATCH v2] KVM: selftests: riscv: Add lazy V extension enablement for guests
-Date: Tue, 21 Jul 2026 10:57:36 +0000
-Message-ID: <C286E18DD19A86E7+20260721105736.320687-1-jinrui@haiwei.tech>
+Subject: [PATCH v3] KVM: selftests: riscv: Add lazy V extension enablement for guests
+Date: Tue, 21 Jul 2026 11:24:54 +0000
+Message-ID: <574AACF6F4298057+20260721112454.330498-1-jinrui@haiwei.tech>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <4FAAF34C966898C0+20260721101406.305108-1-jinrui@haiwei.tech>
-References: <4FAAF34C966898C0+20260721101406.305108-1-jinrui@haiwei.tech>
+In-Reply-To: <C286E18DD19A86E7+20260721105736.320687-1-jinrui@haiwei.tech>
+References: <C286E18DD19A86E7+20260721105736.320687-1-jinrui@haiwei.tech>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,24 +53,24 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:haiwei.tech:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OVFdYp27KdlJss+1XMr0N52sC8l2KueFkzEG6WBwSB7fCP/GB+LowRW6
-	DumEkAbz0Se+C4zqpMV3MXWFw8upIG8b0va503Fe0gKWoQhP00/4WBCwgjZogXfUxTHU0p4
-	0lrhHIN6oxfMDvZzBCMlNn2/QS7LbazPhs+3j7Hyyd7CIaZLczQYj5hdpQO69wBrswGiTkJ
-	TSWWy3gJ0zlTeniLkbIgo0v/aJN2u7PeXU0+J0eC8Ut9a7F1IgmV90WRWNCkQTNZsKmQVP1
-	AmBJj38LVBiNzZAo7pfnCNsoc5mYxFQLwOH/O9VA6+Z4UPlwYf8llQHSDxQtZiSrvvvayGE
-	0s7ztW4OL+EecJrAee5RN+8ObvgTEXeporTgXLilsptUSIbR3jPrLQh7QPpzCSamv0vbKYO
-	Yaa6Beb9zG0dr6S83T7wHC2uB4polxYKiDzaYnD05AudbhQhx+gMplRVXOrAky8aGlOVWMR
-	xIAjAvrbkOMxjdqGvuZn5PKNktvi7/a4sC0HgPT3N4TQ6ZQi1vS4Yy2bKoMHYHkijesf+qA
-	y6KDaEI8pM+9ZTIT++BEq0kQnnMGSUu81YqxA2f/yCMKiHm90f1RCt/0MRBEDfOXMSatkAf
-	KGTzoXea7yxiGKd0Lt0sbG213QrwVnv84EUnyjpH/AtvHlbcZ+277NSerUmdD3wpX2cCTJU
-	6p1aieKiONZymgZYt1X/g8kLDgV7U2nVqjW+lATHdywlDQVVxj3Bz5JRp6HsoIGAKnHU/E6
-	yESakmhME3pNhSqm1RGYe7Z8CNo//ICPHdMoh7F09uKA/53dVWyMWRJaC/UrirUoqh4P9YB
-	t/9am1TNqg2qKKkRPBtTpx6zCnHSDgEg+uc8O9jXy8xc2p27J5eC4dUQN2LfhI7y6IjY8q2
-	gGyVfEBds1M4yCrOn0pNiYcMvUwPfgVRbeh6+pPzUPdrx6K446FvVLyjqnwBjTli8rrjMwz
-	hQjyVyej6/fRjoHfg69r6d8xtjfb0gBoxmnIvzKC6r6egJOlwqXlBQz7rqugTd9lZtCBOYH
-	h2a05PTW1hTvRRuCDsRVET+ysPIFFJVO811U2aw3uqNB1mPEcvHMYwewWQy5SGm/B9IIFyM
-	ezm4p39NrqQ
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-XMAILINFO: NYG9n5uPxz1Wk29WLAKSIS8+yDMQ0XsxkF+/B/ZlNrctudD+rKtJ1Pvg
+	SZf+7mCSAXPygAl9PzYtM0c/fB0gkgvhDX1RPhLihaK4oQAPg6VdugR9pzwbksgzz+voNYC
+	NIwktM2z2xIpqgG+5P3h60DYgnYbhkq0RYQFwLyRFxeA8HKJnrFI10TIqo5hj3mpjSqyPHE
+	Pqn6j90YX5akXbNnmAJ2iSGYW6y/dnxUwF0z5Zcd3jUbcgFnMjgJ7/FJiSDj8oBa6UJ85je
+	nAEfwVn1YqQ21YlQQWfeix1Hfn5om1iSEdoSDDgYUmQEAdWVp23ATBj7DM7Kd5Z8d6YaoTJ
+	+zGPFcXtv5k3FciJjmtd3F/otrA2n6x1oGrctY/7jYo9rTrjOl+7a3ax8adzmq0J4yvUrQP
+	5X4PGyPPgTs6+4Wek/oVmkqSkfJrmlACjFkgHonSJ9MZWL3/P8+L39905luadQPH4G2ojlG
+	3A+K4LvvLrW4r2G+g/vNi3wq7Gf9PoSdpQ5Q8Sv12Dvc4XVXnjgazEpIlgvLkWs5y2LWy3a
+	MyQNdehZ2dSr/FOX0PYYoTYnWpCvcHVFDcUvUvQjetrk6gaU8rqgL2tWrL1Nbu8GtX2ltne
+	MVdRmylWwl2IISdlEor5Kzc8GUXUV4wlZXBuqdGeu5H6eKsLU9z0xlr8MXBBshhYWM1FwnG
+	8g55qH+Of1UWlOysDmQaunOS/9Ykw14yPVbeZQbJGqxgmtifv0k8HAfy7NfUFsPTTWiYzpX
+	fHhoAog0kh2+K0+h+GPcvTKbS6mDFVYXuiGHr2iUwklfcmFz63mBHSnri6kQNmGFvhTQ931
+	irK5zCt6zOtoQJ/Qb+LsQqGrGwex8M59ZBKeefc10sd1UHdtK7tAEuzet4zTv8HLtNslDpH
+	ttKV6oaUygqx3KXCZoqTXA/e/8LVrPkYlpSXSgNbhsOzBjD8rhkqQlQBNN6WIH90CBboNmh
+	89taFxfl6ViVg2AE96EvM7OIEGITTDsVVsGgyuZ5m4PgydZ0JCde05OZys0NrJ4UdpS8vRd
+	xarivc5usDIqTcu80WqAbyeZNWXhRwSds38ugL2G2H1syTEujvvglgkD3UOWVQfs5LRaSn+
+	2xaEwIDMSgh
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
 X-QQ-RECHKSPAM: 0
 
 From: jinrui <jinrui@haiwei.tech>
@@ -115,32 +115,23 @@ binaries pass.
 
 Signed-off-by: jinrui <jinrui@haiwei.tech>
 ---
+Changes in v3:
+- Move v_available from a host-side static variable into struct
+  handlers (Guest memory), fixing synchronization issue between
+  host (writer) and Guest (reader).
 Changes in v2:
-- Add a v_available flag to guard lazy V enablement on hosts that do
-  not support the V extension, preventing an infinite exception loop
-  when an illegal instruction is executed.
-- Use regs->status (preserved at exception entry by save_context)
-  instead of reading the live sstatus CSR, avoiding a TOCTOU race with
-  nested exceptions.
+- Add a v_available flag to prevent infinite exception loops on
+  hosts without the V extension.
+- Use regs->status instead of reading the live sstatus CSR.
 
- .../selftests/kvm/lib/riscv/processor.c       | 60 +++++++++++++++----
- 1 file changed, 50 insertions(+), 10 deletions(-)
+ .../selftests/kvm/lib/riscv/processor.c       | 68 ++++++++++++++++---
+ 1 file changed, 58 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index ded5429f3448..62efd07e5639 100644
+index ded5429f3448..841474acfabd 100644
 --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
 +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-@@ -17,6 +17,9 @@
- 
- static gva_t exception_handlers;
- 
-+/* True if KVM allows the Guest to use the V (vector) extension */
-+static bool v_available;
-+
- bool __vcpu_has_ext(struct kvm_vcpu *vcpu, u64 ext)
- {
- 	unsigned long value = 0;
-@@ -297,14 +300,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, u8 indent)
+@@ -297,14 +297,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, u8 indent)
  		" T3: 0x%016lx   T4: 0x%016lx T5: 0x%016lx T6: 0x%016lx\n",
  		core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
  }
@@ -155,7 +146,7 @@ index ded5429f3448..62efd07e5639 100644
  void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
  {
  	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_code);
-@@ -348,8 +343,23 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+@@ -348,8 +340,33 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
  	/* Setup sscratch for guest_get_vcpuid() */
  	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(sscratch), vcpu_id);
  
@@ -168,7 +159,6 @@ index ded5429f3448..62efd07e5639 100644
 +	 * without V.
 +	 */
 +	__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(KVM_RISCV_ISA_EXT_V), 1);
-+	v_available = __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA_EXT_V);
 +
 +	/*
 +	 * Use the full exception vector table (which provides lazy V
@@ -178,10 +168,29 @@ index ded5429f3448..62efd07e5639 100644
 +	 */
 +	vm_init_vector_tables(vm);
 +	vcpu_init_vector_tables(vcpu);
++
++	/*
++	 * Record V extension availability in the handlers struct so that
++	 * route_exception() (called from Guest context) can check it
++	 * without relying on a host-side global variable.
++	 */
++	{
++		struct handlers *h = addr_gva2hva(vm, vm->handlers);
++
++		h->v_available = __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA_EXT_V);
++	}
  
  	return vcpu;
  }
-@@ -432,6 +442,33 @@ void route_exception(struct pt_regs *regs)
+@@ -415,6 +432,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+ 
+ struct handlers {
+ 	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
++	bool v_available;
+ };
+ 
+ void route_exception(struct pt_regs *regs)
+@@ -432,6 +450,33 @@ void route_exception(struct pt_regs *regs)
  		ec = 0;
  	}
  
@@ -206,7 +215,7 @@ index ded5429f3448..62efd07e5639 100644
 +		 * reading the live CSR to avoid a TOCTOU race with nested
 +		 * exceptions.
 +		 */
-+		if (v_available && !(regs->status & SR_VS)) {
++		if (handlers && handlers->v_available && !(regs->status & SR_VS)) {
 +			regs->status |= SR_VS_INITIAL;
 +			return;
 +		}
@@ -215,7 +224,7 @@ index ded5429f3448..62efd07e5639 100644
  	if (handlers && handlers->exception_handlers[vector][ec])
  		return handlers->exception_handlers[vector][ec](regs);
  
-@@ -448,6 +485,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
+@@ -448,6 +493,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
  
  void vm_init_vector_tables(struct kvm_vm *vm)
  {
