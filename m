@@ -1,69 +1,68 @@
 Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF643F4B1
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5435470432
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 20:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784667459; cv=none; b=ZRZn7qLZoSAjCulAHpxjcsxskC1UbXi4tmv64N7EmSjrJJs3BZRiiJyzj8UJFW8q88XI7QIE8CQcoqba65wGkgif/3BgRsw4VARHkzFYShFIVTGbRBS5q+4o9yn0CKUi25Dy8zXK652dcyQbadNYDjyzRa+b8FVlBr2r6DBWIMw=
+	t=1784667460; cv=none; b=uaUB4tiMLnWy/qjOpk83+ZdfprsRei8Z/y4H4zXuTDp2jhtX622zIg4NezbLwERaguy6DDjecKl0waBIAAIMEGF9DGs99w3+c2NwIozSdocGKlWN7FeXBTBn7bM+MFENDfrtF/dBGOTLfLaV12XqmXHKKwIbHECc8sM+301X4VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784667459; c=relaxed/simple;
-	bh=eCloqlJ2v/+XMSZlI14hGW9da+1SGwpyJZa2FWOM75E=;
+	s=arc-20240116; t=1784667460; c=relaxed/simple;
+	bh=cLKnBGLyc0C1e6gZoIwI3WoXGqvA0tV/LNVEeqhi3uo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RJWRDz0ga3vdQBdeilMmiNmBKp2cKLf3x/lGnf/7SfHoT2L0FLrI+Ki4s/GQKhGktrebcODu4G/tA9NKCN3hoqiJvCnfWp53JcFDpDHSd8LyrcKoPMPMyZfA2/b8OrYYQFNxtQYUchootFlvCRvSnpxUjLvnQAlPBEW8AEeeJCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LrdeoGDG; arc=none smtp.client-ip=209.85.210.48
+	 In-Reply-To:To:Cc; b=aa5MBoYjODpmapRimEiGWlpAqdeI3YPUlMau0IaklRsujc2amkAZN7ZnT1HeeWtQDyL/c0BFbd+sfw0R025eGYEbj+AoA/YeQt5ZDwgceQQsSh1uKbYu6cRKJ250YmosxSOOlhshylfE9F4T/y9KzeXVVigguW7h8C7/8UoIUcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VaplYQ3F; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrdeoGDG"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e9f69ee6f4so6475594a34.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VaplYQ3F"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7ee125ec926so743248a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 13:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784667455; x=1785272255; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784667452; x=1785272252; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cVowhHu7yo8cpo601RS2GxxXakYLg9JiM3lfJ+Lnq8M=;
-        b=LrdeoGDGQq1DWqZ7PwMPc9BkdE9IRg2S6knazNkxA2NoEXL03BWyrdR6ZjgSONOuTa
-         iddFDauop/3Md36UGnqE7InI88mftpTB8goCWU0qK1093dbMLEIvGiFSF6814nwME2ke
-         y/KuuW9w3KIbwlgUGuUP9GhJVXsE/OsFBRgSeegAIo89kAMByR2aphlCX8vLueHudbaZ
-         IjUDpSTTYzV8BANB4uYoUiaGn2XS9kyxMDUCCFN6YlB9zXIdortoY3Tra/ZcOOriN244
-         iJe0k5+QwrIBd6MVwFMTfOyRJxSXxA2zztPjpeW6JYIvQQ8+4U3ToxhEU56E3lqEtIWR
-         uHiw==
+        bh=LzQw7dDR1Ksv5n4PA2VrgYGS9XTOJwt3lOBXVgxnNqw=;
+        b=VaplYQ3FoUgVrLFsB3hmH80UxXKxjTQFjayIcYbzqNMc65T/IKbntX+slsxdIdg4Ea
+         /afSv5CMCIXrD8Xi7eHoUB83CxL4BbMms8yi5sHmnlWmS/S2/N1sFQREWE0kFd5/P5Rb
+         u7PPGrxUWZ1+ueSzEtZyZTliO/gvBlOkY6QVHySzolhYLSFlIzK8s5E2MQWOYABD1IZ0
+         KullGfsHPVCTyVS0c4oB9U6MoEEH+yS45h7NixvvhIxnbGGwlu+4eSIqDnt12FE6m8dd
+         u8Y7nSFCWMZndrLyBexrkxmDAyzXUfnLV5sAUCGlcSg0qOGjqyZyLTrGATjUrBiYcNjt
+         wXdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784667455; x=1785272255;
+        d=1e100.net; s=20251104; t=1784667452; x=1785272252;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cVowhHu7yo8cpo601RS2GxxXakYLg9JiM3lfJ+Lnq8M=;
-        b=VVWfTRWROehoHnxeuC3V3s+Dhkt8tCKVy4+T1o1equCeaTgv0EpvWFQgXaJpnyLWxA
-         2Mr/DmQf7lsEAHtF/5GqnN6yDtqiM/DaU6fdNHhC7CZ9EM0untbMIiihAgZ3APPs89kk
-         t4ywSXEcAiT6S3ty6FtuXTHadGZcmb1Vr0UGWs98ErmaF7GJbH5/0JbS8aL9MDymdiMQ
-         SJWjkCHZ9PQHLJoJjdoQCBlVbechfz9CJSLKHdvW3Qt0FAKrJL71T+WXBKIwudlzAbRz
-         wEA8axcabGd5D0/VJkaY2cXZWJB3NKPJCMhcOQlqtbi7t7RwYLidQPxY0IcRiTQ1XJm0
-         Qbvg==
-X-Forwarded-Encrypted: i=1; AHgh+RpQ0GAvf+HFJcmEQmaAaC/2/JTH83xKdtGB7RyPSmqM7BayqZY45MD3cpoAhHxWTEQBCLZfMzTQDdR9vNsyQ2Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/eLQjSx4OJZ+uNSPwdYFVrbT0haY3FuwtA5rsfTsHzpVi4+/T
-	te/8nFYt/VSa37B2VK3AmF1Ha+ISfOdiDoPSKrrTGUyHKipBc0wIg/zVwv7tsg==
-X-Gm-Gg: AfdE7cmzyO6s/v2C5e24CvjGjM33FdRBqldLLEQ59DqB6xz23IcKFOBEqVN5zhljgN7
-	wLE2PjgNQ7xA3a2QethcL6OSzCuP/pxkFvWwc8EonQGM2uyVuvJd9AYGuBaCSPg4Lwosr/sw6UP
-	Zrr8PtcSR3aeqML+ysd4QuBOmH8EoStdGk+oQDUol4DKhZlFYnCqNjV8pmbHUp2gOyRuhugNSIK
-	rFiAG2aIpILbyGI1j+z11Id6x3HnLJKHB68OQ+mtFjfiHtiyKA2Tx1uNJ0QtgpbWgwTFfysgTQF
-	vZDd92FAF12Cn3RnuOQqbwNAJTFwf//9WRRGQrmPkqY8ebnRy+0pwzmzIJEciEGnmrpc8bK1Wjf
-	AYVqgcFTdWrve1AjAb8wmmQGRTLLxoxyv/xRdoSnp/N2UlMrLNw7MEOUatHKazDP4850Rroc7pD
-	6UXZDJHjTOMkwxTge9RX7bCVE2H7TJHE+E8TPV6iXtJTdK7NYhfzCmT8nQ9ysIE1j9HnX2taFin
-	MrY4x8+Zvt/6W9A4ayvuTuziQ==
-X-Received: by 2002:a05:6830:3c89:b0:7dd:9b19:a87b with SMTP id 46e09a7af769-7ed9a7d30famr10804335a34.4.1784667455635;
-        Tue, 21 Jul 2026 13:57:35 -0700 (PDT)
+        bh=LzQw7dDR1Ksv5n4PA2VrgYGS9XTOJwt3lOBXVgxnNqw=;
+        b=g9vtn50KwX+D0uGS4vkZNjlSvqXxggmZ5dUMhIhZQDbfg4gixjrxiprNadA0fNbFi0
+         0PREVgJ7STlqju8Zpubp3sP6kMXV4AIx8NK5RWOjQk9exGeqNs3fFiCSJGVjm9yYqFIT
+         RmvINHBbnTKiNc+XkQCo6T650NhCQi2015fNV4bEG5IKmV/F/7KLEJM+01f+dkIOZeEZ
+         1okehFkROozqTbtFMcEkX6/rilWr19zwapmGYQYnOQ5eGHR+Ez5p8mxfEXJBH5KRtpB4
+         pnykiNTL7JpFo6I9FnjqwD1qnrwaAqbTsb3XaOpCK0t7HjW9P6iS6SnxHxw63mQNc+FT
+         Bj6Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqyRMDxvqYQ8cgcuLRgAJAxTzx7Vp58JqPFDra0i17iZ6nnIYpfypIS4aEyDAQ5Qpt/UEX/BeMAsFVl3mMzTaA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9I2YDDMzkcLU7ysu37pwHS5RoXDORYTe3LRvuQshwPab2wrxM
+	tqMJHmsud8Fi7Opk1jJyzNKmz/dCOURQlptxtO/TVCQUeU/+uDS0+yML
+X-Gm-Gg: AfdE7cnTmmwQ7iW1p1gwyIGvtkbyODzstXZJkTN59Jue7mZxl/3eNToIZ2dmPJdTMr+
+	WOqt/uQlX0/MZbppFiT9t3/aIoQkuMy1ilclm9sMzuVaumep/t9Q+4F5ug1mi0xAt2bB7QIWeAL
+	lhbsTkSvzEmx+OXIHohC+vCE/LDoijRCDu3kGfKTNRwHpyEaNQXqwmjLuQ3X+GodIG7ooJOXr+O
+	VOgKeC/2d7ELx/8FTiZuUd7I8JZsRwbBYm0tR3s3kOUL2ZKTkllbKi3+f4Jqr8Ro3ZWSQCcPXW8
+	bKDXJZtG7H3XKpMnIg4uxIaeluuLa6NhW8etDhdZHcjBy/EpcSo5kFmfMyWDvYYOAs2tN86RfXH
+	utO5Tz4A6X1m5/Dgz1v2jZLxptf78IuatjQawsvB/Q/Cs/7pokSwhdUoksEG1Lt/BsmiEyVuDZN
+	Y8+zmIJGZrsY2lNX65LAlLUnQFFS4uvhtECQrW3vAAQRQhcaU35cAyd785EgjbjUILRCq2RmwjM
+	hihHoWmZWRoA1WrLg3w67BNs/ORccicP0bA
+X-Received: by 2002:a05:6830:6690:b0:7d7:58b0:7685 with SMTP id 46e09a7af769-7eda093c2a8mr11498594a34.13.1784667452025;
+        Tue, 21 Jul 2026 13:57:32 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.34
+        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-7edaf94a494sm11134501a34.13.2026.07.21.13.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 13:57:35 -0700 (PDT)
+        Tue, 21 Jul 2026 13:57:31 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Tue, 21 Jul 2026 14:57:09 -0600
-Subject: [PATCH v7 20/29] dyndbg: refactor param_set_dyndbg_classes and
- below
+Date: Tue, 21 Jul 2026 14:57:06 -0600
+Subject: [PATCH v7 17/29] dyndbg: reduce verbose/debug clutter
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260721-dd-maint-2-v7-20-010fbe73b311@gmail.com>
+Message-Id: <20260721-dd-maint-2-v7-17-010fbe73b311@gmail.com>
 References: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 In-Reply-To: <20260721-dd-maint-2-v7-0-010fbe73b311@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -86,159 +85,268 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  Jim Cromie <jim.cromie@gmail.com>, 
  Louis Chauvet <louis.chauvet@bootlin.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=6125;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784667429; l=12365;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=eCloqlJ2v/+XMSZlI14hGW9da+1SGwpyJZa2FWOM75E=;
- b=oHGyId4pOK0AQyfB5EtTY1sBf1PEHx3IQj5ek/QCUSKOnylp5jzcTcLyUk7CzUyws32r458v+
- nQAuaTfBM2oA8jq8pegokMNkBYsKo1zbnsl9r1J4l5UBBEtwgdv2HBE
+ bh=cLKnBGLyc0C1e6gZoIwI3WoXGqvA0tV/LNVEeqhi3uo=;
+ b=GxcRaAsglHYL35H54YZTOctz4nny15qVsDRugiho3tc5nqoOL2XOj9cQ7vj++q5W2kvN354JK
+ kdxRdaRquS6DmZtSPDn0QBpPdjYpOCfLxmgqdfV30smN5mbLGziHwII
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Refactor the callchain below param_set_dyndbg_classes(1) to allow
-mod-name specific settings.  Split (1) into upper/lower fns, adding
-modname param to lower, and passing NULL in from upper.  Below that,
-add the same param to ddebug_apply_class_bitmap(), and pass it thru to
-_ddebug_queries(), replacing NULL with the param.
+currently, for verbose=3, these are logged (blank lines for clarity):
 
-This allows the callchain to update the classmap in just one module,
-vs just all as currently done.  While the sysfs param is unlikely to
-ever update just one module, the callchain will be used for modprobe
-handling, which should update only that just-probed module.
+ dyndbg: query 0: "class DRM_UT_CORE +p" mod:*
+ dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
 
-In ddebug_apply_class_bitmap(), also check for actual changes to the
-bits before announcing them, to declutter logs.
+ dyndbg: op='+'
+ dyndbg: flags=0x1
+ dyndbg: *flagsp=0x1 *maskp=0xffffffff
+
+ dyndbg: parsed: func="" file="" module="" format="" lineno=0-0 class=...
+ dyndbg: no matches for query
+ dyndbg: no-match: func="" file="" module="" format="" lineno=0-0 class=...
+ dyndbg: processed 1 queries, with 0 matches, 0 errs
+
+That is excessive, so this patch:
+ - shrinks 3 lines of 2nd stanza to single line
+ - drops 1st 2 lines of 3rd stanza
+   3rd line is like 1st, with result, not procedure.
+   2nd line is just status, retold in 4th, with more info.
+
+New output:
+
+ dyndbg: query 0: "class DRM_UT_CORE +p"
+ dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
+ dyndbg: op='+' flags=0x1 maskp=0xffffffff
+ dyndbg: processed 1 queries, with 0 matches, 0 errs
+
+Also drop several verbose=3 messages in ddebug_add_module.  When
+modprobing a module, dyndbg currently logs/says "add-module", and then
+"skipping" if the module has no prdbgs.  Instead just check 1st and
+return quietly.
+
+Unmatched query diagnostics are intentionally restricted to verbose
+level 3 (v3pr_info_dq) to reduce dmesg output clutter on standard
+verbose levels (verbose=1 and verbose=2), aligning with the overall
+de-cluttering of dynamic debug logging.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
-v2: move RvB after SoB
+v7: update fingerprints of grammar-errs changed here
+v4: rename vpr_dq_info to v3pr_dq_info to tell its active logging level
+    adjust some vX levels per doc'd intentions
+v2: RvB after SoB
+
+trivial change to verbose-debug output line to output the actual
+"module" keyword rather than "mod:", and do so only when the module is
+constrained by the callchain (ie as part of a modprobe).
+
+ was:   query X: "(keyword value)* [+-=]flags" mod:*
+ now:   query X: "(keyword value)* [+-=]flags"
+   or   query X: module FOO "keyword value)* [+-=]flags"
+
+IOW, adjust output to reflect the input grammar more closely.
 ---
- lib/dynamic_debug.c | 51 +++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 39 insertions(+), 12 deletions(-)
+ lib/dynamic_debug.c                                | 24 +++---
+ .../selftests/dynamic_debug/dyndbg_selftest.sh     | 86 +++++++++++-----------
+ 2 files changed, 54 insertions(+), 56 deletions(-)
 
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index f66e5373e61e..a619cefd801f 100644
+index 2fa034177268..251df88cb04e 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -615,9 +615,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
+@@ -128,7 +128,7 @@ do {								\
+ #define v3pr_info(fmt, ...)	vnpr_info(3, fmt, ##__VA_ARGS__)
+ #define v4pr_info(fmt, ...)	vnpr_info(4, fmt, ##__VA_ARGS__)
+ 
+-static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
++static void v3pr_info_dq(const struct ddebug_query *query, const char *msg)
+ {
+ 	/* trim any trailing newlines */
+ 	int fmtlen = 0;
+@@ -280,9 +280,6 @@ static int ddebug_change(const struct ddebug_query *query,
+ 	}
+ 	mutex_unlock(&ddebug_lock);
+ 
+-	if (!nfound && verbose)
+-		pr_info("no matches for query\n");
+-
  	return nfound;
  }
  
--/* apply a new bitmap to the sys-knob's current bit-state */
-+/* apply a new class-param setting */
- static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
--				     unsigned long *new_bits, unsigned long *old_bits)
-+				     unsigned long *new_bits, unsigned long *old_bits,
-+				     const char *query_modname)
- {
- #define QUERY_SIZE 128
- 	char query[QUERY_SIZE];
-@@ -625,7 +626,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- 	int matches = 0;
- 	int bi, ct;
+@@ -491,7 +488,6 @@ static int ddebug_parse_query(char *words[], int nwords,
+ 		 */
+ 		query->module = modname;
  
--	v2pr_info("apply: 0x%lx to: 0x%lx\n", *new_bits, *old_bits);
-+	if (*new_bits != *old_bits)
-+		v2pr_info("apply bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
-+			  *old_bits, query_modname ?: "'*'");
- 
- 	for (bi = 0; bi < map->length; bi++) {
- 		if (test_bit(bi, new_bits) == test_bit(bi, old_bits))
-@@ -634,12 +637,16 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- 		snprintf(query, QUERY_SIZE, "class %s %c%s", map->class_names[bi],
- 			 test_bit(bi, new_bits) ? '+' : '-', dcp->flags);
- 
--		ct = ddebug_exec_queries(query, NULL);
-+		ct = ddebug_exec_queries(query, query_modname);
- 		matches += ct;
- 
- 		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
- 			  ct, map->class_names[bi], *new_bits);
- 	}
-+	if (*new_bits != *old_bits)
-+		v2pr_info("applied bitmap: 0x%lx to: 0x%lx for %s\n", *new_bits,
-+			  *old_bits, query_modname ?: "'*'");
-+
- 	return matches;
- }
- 
-@@ -652,6 +659,7 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
-  * param_set_dyndbg_classes - class FOO >control
-  * @instr: string echo>d to sysfs, input depends on map_type
-  * @kp:    kp->arg has state: bits/lvl, map, map_type
-+ * @mod_name: module name or null for all modules with the classes
-  *
-  * Enable/disable prdbgs by their class, as given in the arguments to
-  * DECLARE_DYNDBG_CLASSMAP.  For LEVEL map-types, enforce relative
-@@ -659,7 +667,9 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
-  *
-  * Returns: 0 or <0 if error.
-  */
--int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
-+static int param_set_dyndbg_module_classes(const char *instr,
-+					   const struct kernel_param *kp,
-+					   const char *mod_name)
- {
- 	const struct ddebug_class_param *dcp = kp->arg;
- 	const struct ddebug_class_map *map = dcp->map;
-@@ -683,8 +693,8 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
- 				KP_NAME(kp), inrep, CLASSMAP_BITMASK(map->length));
- 			inrep &= CLASSMAP_BITMASK(map->length);
- 		}
--		v2pr_info("bits:%lx > %s\n", inrep, KP_NAME(kp));
--		totct += ddebug_apply_class_bitmap(dcp, &inrep, dcp->bits);
-+		v2pr_info("bits:0x%lx > %s.%s\n", inrep, mod_name ?: "*", KP_NAME(kp));
-+		totct += ddebug_apply_class_bitmap(dcp, &inrep, dcp->bits, mod_name);
- 		*dcp->bits = inrep;
- 		break;
- 	case DD_CLASS_TYPE_LEVEL_NUM:
-@@ -697,7 +707,7 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
- 		old_bits = CLASSMAP_BITMASK(*dcp->lvl);
- 		new_bits = CLASSMAP_BITMASK(inrep);
- 		v2pr_info("lvl:%ld bits:0x%lx > %s\n", inrep, new_bits, KP_NAME(kp));
--		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits);
-+		totct += ddebug_apply_class_bitmap(dcp, &new_bits, &old_bits, mod_name);
- 		*dcp->lvl = inrep;
- 		break;
- 	default:
-@@ -707,16 +717,33 @@ int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
- 	vpr_info("%s: total matches: %d\n", KP_NAME(kp), totct);
+-	vpr_info_dq(query, "parsed");
  	return 0;
  }
-+
-+/**
-+ * param_set_dyndbg_classes - classmap kparam setter
-+ * @instr: string echo>d to sysfs, input depends on map_type
-+ * @kp:    kp->arg has state: bits/lvl, map, map_type
-+ *
-+ * enable/disable all class'd pr_debugs in the classmap. For LEVEL
-+ * map-types, enforce * relative levels by bitpos.
-+ *
-+ * Returns: 0 or <0 if error.
-+ */
-+int param_set_dyndbg_classes(const char *instr, const struct kernel_param *kp)
-+{
-+	return param_set_dyndbg_module_classes(instr, kp, NULL);
-+}
- EXPORT_SYMBOL(param_set_dyndbg_classes);
  
- /**
-- * param_get_dyndbg_classes - classes reader
-+ * param_get_dyndbg_classes - classmap kparam getter
-  * @buffer: string description of controlled bits -> classes
-  * @kp:     kp->arg has state: bits, map
-  *
-- * Reads last written state, underlying prdbg state may have been
-- * altered by direct >control.  Displays 0x for DISJOINT, 0-N for
-- * LEVEL Returns: #chars written or <0 on error
-+ * Reads last written state, underlying pr_debug states may have been
-+ * altered by direct >control.  Displays 0x for DISJOINT classmap
-+ * types, 0-N for LEVEL types.
-+ *
-+ * Returns: ct of chars written or <0 on error
-  */
- int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
+@@ -515,7 +511,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		pr_err("bad flag-op %c, at start of %s\n", *str, str);
+ 		return -EINVAL;
+ 	}
+-	v3pr_info("op='%c'\n", op);
+ 
+ 	for (; *str ; ++str) {
+ 		for (i = ARRAY_SIZE(opt_array) - 1; i >= 0; i--) {
+@@ -529,7 +524,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 			return -EINVAL;
+ 		}
+ 	}
+-	v3pr_info("flags=0x%x\n", modifiers->flags);
+ 
+ 	/* calculate final flags, mask based upon op */
+ 	switch (op) {
+@@ -545,7 +539,7 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		modifiers->flags = 0;
+ 		break;
+ 	}
+-	v3pr_info("*flagsp=0x%x *maskp=0x%x\n", modifiers->flags, modifiers->mask);
++	v3pr_info("op='%c' flags=0x%x maskp=0x%x\n", op, modifiers->flags, modifiers->mask);
+ 
+ 	return 0;
+ }
+@@ -574,7 +568,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ 	}
+ 	/* actually go and implement the change */
+ 	nfound = ddebug_change(&query, &modifiers);
+-	vpr_info_dq(&query, nfound ? "applied" : "no-match");
++	v3pr_info_dq(&query, nfound ? "applied" : "no-match");
+ 
+ 	return nfound;
+ }
+@@ -597,7 +591,10 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ 		if (!query || !*query || *query == '#')
+ 			continue;
+ 
+-		vpr_info("query %d: \"%s\" mod:%s\n", i, query, modname ?: "*");
++		if (modname)
++			v2pr_info("query %d: module %s \"%s\"\n", i, modname, query);
++		else
++			v2pr_info("query %d: \"%s\"\n", i, query);
+ 
+ 		rc = ddebug_exec_query(query, modname);
+ 		if (rc < 0) {
+@@ -1164,11 +1161,10 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
  {
+ 	struct ddebug_table *dt;
+ 
+-	v3pr_info("add-module: %s.%d sites\n", modname, di->num_descs);
+-	if (!di->num_descs) {
+-		v3pr_info(" skip %s\n", modname);
++	if (!di->num_descs)
+ 		return 0;
+-	}
++
++	v3pr_info("add-module: %s %d sites\n", modname, di->num_descs);
+ 
+ 	dt = kzalloc_obj(*dt);
+ 	if (dt == NULL) {
+diff --git a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+index 446455683df4..6e977486ea90 100755
+--- a/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
++++ b/tools/testing/selftests/dynamic_debug/dyndbg_selftest.sh
+@@ -645,54 +645,56 @@ modular_tests=(
+ # ==============================================================================
+ function GOLDEN_RECORDS {
+     cat << 'EOF' | {
+-#K= bb85d28739876b0fdf1eb426baae8ef7 FT_grammar_errs.1        dmesg
+-#K= 9c405e06fcea50284df82d1ae9692403 FT_grammar_errs.2        dmesg
+-#K= 0b0d9b0e6f4c45c7d75d699fd3b6aa93 FT_grammar_errs.3        dmesg
+-#K= e008644e159c2a9d99a8d0806c06e71e FT_grammar_errs.4        dmesg
+-#K= 5750ed178633f9a68623f928c093d16e FT_grammar_errs.5        dmesg
+-#K= 2cd51e5e3c3e2501544524bed0fab620 FT_grammar_errs.6        dmesg
+-#K= 3e1eba65bd936e1276c7e1d76b399595 FT_grammar_errs.7        dmesg
+-#K= e3ac86676e309d4e72ff3da287736c29 FT_grammar_errs.8        dmesg
+-#K= 466d325c23519119f754fa7860bae7c6 FT_grammar_errs.9        dmesg
+-#K= 51c489366cd86c16280858b95adf34ac FT_grammar_errs.10       dmesg
+-#K= dfc632c6c0cd6206b6141dbc5fb989db FT_grammar_errs.11       dmesg
+-#K= 69650fc26e97a78082bd851eb4a5c83b FT_grammar_errs.12       dmesg
+-#K= 5cfe5665962a482f416836793067f2a2 FT_grammar_errs.13       dmesg
+-#K= 661cc9a2d8d3c381bfeae41392432575 FT_grammar_errs.14       dmesg
+-#K= 5dd0accf9be37ce2f4bf697e9bdebe30 FT_grammar_errs.15       dmesg
+-#K= bd8d9cf661c9aca54dac93c74cfc1501 FT_grammar_errs.16       dmesg
+-#K= e991391048f2fdffaaed99ba36b787ed FT_grammar_errs.17       dmesg
+-#K= 82d99278f471ebfbf47eeb19898525cf FT_grammar_errs.18       dmesg
+-#K= f3f088fa7d276981bf2898c048087f76 FT_grammar_errs.19       dmesg
+-#K= 984ecc198e0fa9fc91bc31caf7da2a5d FT_grammar_errs.20       dmesg
+-#K= 76c8a33c585d414fcc3f1c8b5ea5b4b3 FT_grammar_errs.21       dmesg
+-#K= 90cfc66e9d61f5c448353b97baa99145 FT_grammar_errs.22       dmesg
+-#K= 37a51dfd6e84cb64b69d3a0e23e68ceb FT_grammar_errs.23       dmesg
+-#K= 3aefa325b63742710b45e4531152c9d8 FT_grammar_errs.24       dmesg
+-#K= bc8d2c23282cd6834879bc1f1b303d05 FT_grammar_errs.25       dmesg
+-#K= 092ec5530d875be1dc96ad4202fc7dc3 FT_grammar_errs.26       dmesg
+-#K= 98caa2677e9070953a852b27ab57861e FT_grammar_errs.27       dmesg
+-#K= 8d755baa707c7b3b67491bf84708ef08 FT_grammar_errs.28       dmesg
+-#K= 5dd0accf9be37ce2f4bf697e9bdebe30 FT_grammar_errs.29       dmesg
+-#K= 2e37642dc8aee3d04b8a54a76b3b891c FT_grammar_errs.30       dmesg
+-#K= 593c8b4c41932e3bde564a0008627ced FT_grammar_errs.31       dmesg
+-#K= 85a2a0bee8d0cd10f883aa5477d62efb FT_grammar_errs.32       dmesg
+-#K= f3f088fa7d276981bf2898c048087f76 FT_grammar_errs.33       dmesg
+-#K= 629f6a7e379e02f38c543cdb48e3b84f FT_grammar_errs.34       dmesg
+-#K= d9f0cffb0898c54690735a71b0d4f3bf FT_grammar_errs.35       dmesg
+-#K= 4cf728b6a32043ea5336a14d0c435312 FT_grammar_errs.36       dmesg
+-#K= a11ae3f86f4e5f539fd6168d318f74b4 FT_grammar_errs.37       dmesg
+-#K= c7d3830b0391f6a773205066b64e15f9 FT_grammar_errs.38       dmesg
+-#K= 5c506ea2bfd050439b580b91543e9be7 FT_grammar_errs.39       dmesg
+-#K= a257660007408f7bb0cb43c99b1c7bb8 FT_grammar_errs.40       dmesg
+-#K= 0082939f100300a7b327b143cf40cb43 FT_grammar_errs.41       dmesg
+-#K= 657ac4360f978687ad25a705b2bb89f1 FT_grammar_errs.42       dmesg
++# --- Unregistered Baselines ---
++#K= f3dbd5afb9aa1750f93275b634499e22 FT_grammar_errs.1        dmesg
++#K= 200c01632c52a63f6d186da1c6460740 FT_grammar_errs.2        dmesg
++#K= 7d7141900ce6e32f15c99202309c63a4 FT_grammar_errs.3        dmesg
++#K= 1bb798a5831d0119789d424ef6cb55c4 FT_grammar_errs.4        dmesg
++#K= 5edd66e308b2792d5694df86c07a3eaf FT_grammar_errs.5        dmesg
++#K= 6f87d92ffe0812550f43287127c6f2b9 FT_grammar_errs.6        dmesg
++#K= c0eb05b58a008c722e091e1ae74440ec FT_grammar_errs.7        dmesg
++#K= 911929ec0e2ffc1f13822b479dec6805 FT_grammar_errs.8        dmesg
++#K= c1407512376369d2e591a4b25a4b607a FT_grammar_errs.9        dmesg
++#K= 2046abda72725ea06fe339d5f364f1c9 FT_grammar_errs.10       dmesg
++#K= b72f7fccf76f8a5bee47a05d7bb545fb FT_grammar_errs.11       dmesg
++#K= 98e2bd3e4f3da58536496a38ec3e6238 FT_grammar_errs.12       dmesg
++#K= b371c6ba52503d037dbc43da788af8be FT_grammar_errs.13       dmesg
++#K= cb8288d607b0c5282125852f3ab05107 FT_grammar_errs.14       dmesg
++#K= 9346a310c4ad57cc3746afbace702c3e FT_grammar_errs.15       dmesg
++#K= 533d27af85eed3c0fd2eaec961982a36 FT_grammar_errs.16       dmesg
++#K= 114e0632585e205a3347c82bac7d79f2 FT_grammar_errs.17       dmesg
++#K= 73f5c173bafdfb9674b5ecce77db3354 FT_grammar_errs.18       dmesg
++#K= 0fc110d078f60eacdd389e5975ba18d9 FT_grammar_errs.19       dmesg
++#K= 815a1c52f365510c644450bb80c07e72 FT_grammar_errs.20       dmesg
++#K= 621e3cd81b553973cb40a935bb9298f1 FT_grammar_errs.21       dmesg
++#K= 581222901232344ade18bbda58302c48 FT_grammar_errs.22       dmesg
++#K= ea0aae3e01b3bb22eb8ad7acd327b371 FT_grammar_errs.23       dmesg
++#K= 8f28189bff62a3d5ed16f537d41a725a FT_grammar_errs.24       dmesg
++#K= 19c425e5d3a645b5dc5e23758ba0f4a1 FT_grammar_errs.25       dmesg
++#K= 75415542333f2250f0e060a54dae50f8 FT_grammar_errs.26       dmesg
++#K= 0955815c0e595ab2206e25aa31fe1ef2 FT_grammar_errs.27       dmesg
++#K= 3ff4c0b60db33e44c3cd6f0e14f81e3e FT_grammar_errs.28       dmesg
++#K= 9346a310c4ad57cc3746afbace702c3e FT_grammar_errs.29       dmesg
++#K= 7aaf0a16c287e66b62e11298ee160b34 FT_grammar_errs.30       dmesg
++#K= 06350c62105b537cdd0c67736b29727d FT_grammar_errs.31       dmesg
++#K= 6ef0ec01805c8719d828553098f95377 FT_grammar_errs.32       dmesg
++#K= 0fc110d078f60eacdd389e5975ba18d9 FT_grammar_errs.33       dmesg
++#K= 72203b2d88d0617cd5c659d3b80e26f9 FT_grammar_errs.34       dmesg
++#K= 6ecb03736d5cddb7ab2aaff49d561be9 FT_grammar_errs.35       dmesg
++#K= eaa989336cb7c96c13ef4a3964fc6898 FT_grammar_errs.36       dmesg
++#K= 5b624d9c133d7bb4f5370c3ce06929ed FT_grammar_errs.37       dmesg
++#K= 127275739b1fe04c84eedad28ec154f6 FT_grammar_errs.38       dmesg
++#K= 3e2fd15a7e8c0583bc5066524bc50508 FT_grammar_errs.39       dmesg
++#K= 781995971d28f732a792522f3c56cdd3 FT_grammar_errs.40       dmesg
++#K= 6614a677d9f9ac09d9825b4e989d2c42 FT_grammar_errs.41       dmesg
++#K= 70de9afed457a6be9f9c3c81cbd6d4d5 FT_grammar_errs.42       dmesg
+ #K= 9a7aaed40738f1c5203af2e421a20bc2 FT_basic_queries.1       "kernel/params.c"
+ #K= 2a57a9e283a3912de3fa5e006fb330cc FT_basic_queries.2       "kernel/params.c"
+ #K= fed3186684428b2f05bcf5df960c639c FT_basic_queries.3       "kernel/params.c"
+ #K= 551f9801b6008553661453021ae6dfd3 FT_basic_queries.4       "kernel/params.c"
+ #K= 33f7162ac85020894fab9752ef07b89c FT_basic_queries.5       "kernel/params.c"
+ #K= 544d955c3bb9d3c78704f780d91396e0 FT_basic_queries.6       "kernel/params.c"
++# ------------------------------
+ EOF
+         # Read the K-recs and skip those for tests that can't run
+         while read -r line; do
 
 -- 
 2.55.0
