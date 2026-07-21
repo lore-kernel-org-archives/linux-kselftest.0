@@ -1,163 +1,248 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97A748B367;
-	Tue, 21 Jul 2026 10:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784629797; cv=none; b=EMQkvv0Gw6VKLjI3t+1KbzuhVwoNQjQ2Q/gahWdRLs0Gc0euzfzJA1aAVcQCZ6eg7CjfwrhrMWpklfxzzg14/LMFqqEb2DtjHwyHV4hmE8WqGvdXOYH3BQj4CsSlCF0i8bUNx3RWiqZR39iuROSMq3E9BatG5oNg+Bnu6DmvTIA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784629797; c=relaxed/simple;
-	bh=E46Ku0g4KTeoRVUSAwpNNvPb2XNcslaIGLvUtUrvW2g=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IxoFy0LDdxjlaTs5lROarckUEGrhWXl3cycflx9s2nkrGza7XGWzoZm9a1gfWR5GjjfXMThwo86pzx045/T1MKrF2Rg2dYn62EmEc8rkC19XXR8NqrfBt2R1P5cWOB5QaV5DoLOghoGbuzuih5B2VdEzdU1btvWCEP89TiZtShU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcIjo3dP; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7615333121F
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 10:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784630105; cv=pass; b=Ut+1K26L3lua9b99Psplvt9tNxHPQGNgDl/s14BG/GZlKE86IKsSMqMUT9hEL3CxH+umIXDuAAOQEHdaWiQrlV1QB9vgzsonjduhypdfkMohxIEduWWUQkZQoMijXbC9Qtt5q3NaE4ukuclka22sf/pToW2WDEN4PmTJE6CcAR4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784630105; c=relaxed/simple;
+	bh=TqvASy5oHqcQJpgaY1PeP/SN6AO8XQJyq3SUDNCBQCY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E9uqFiZMW35w3nqwcsJHBMrZBP1d+SQD+wGxRF3yRU8sgOHsP815rvoNj+Pef8vNBnejgg/GqSTPGPPc6eMCH4exmno0cOkayCq7+cLg6+ZqQ1u7JpJbJa0YNoH5arHjNJ8mk9C7mxh1+5YlLH6O4RbgylJMGjtZqKXDHLAykh4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fe4jbqcv; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcIjo3dP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7852D1F000E9;
-	Tue, 21 Jul 2026 10:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784629793;
-	bh=FS23wLGx+01cMEX4sQjWjcEceJ7qZtcq+/udc4j26UQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fcIjo3dPcqqKqBOzQ9PqXpI9VYIy3QjaFsUMHxENACqLPipIOhHtjORHdboo3l+dn
-	 SciYNIS9c9akZzr7fbYP1ELCvJEn6GgC/brMPQb+G1bw4YSyv4CGNJNGO6ZfD7HLvK
-	 I2LLQSk1iGqneNDNXRlZqDrujkKLVh6U0nccufYzOPt5pn7PY5PCUcraJ3+prRdvp6
-	 jNgfdtHrSwtu8zWgvA5aWzH5/iWiA/olfSRlLiSujpL52dZfDD9O3MXn65I1u7sMR9
-	 3jJvk74l0eCIPGhluu9L+/jQs5eWlD9I6h7NHvBsDphVfgRZuKvZiWdJ5YhAtwDb29
-	 adU5orI2NSilw==
-Content-Type: multipart/mixed; boundary="===============3154772494840640172=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fe4jbqcv"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c15b33f7b23so1630471866b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 03:35:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784630102; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QvU3zsZgSxJIwvG7iSVJ8bENlhxDrovRVOiw4ZjY7+scW93hUFRMvoXmI6UQaTincp
+         2w7HsiFCyhWmbo9RBAP31MoPCuSAloiWm20g7dDDkRVm1xFVGt4lyEuPjlUV0TQXEVvs
+         Tv7eiI3UVuZGc/JOrsHml+SrsRwsFnJc1IBNnfz5wB/JzjfbLwwnakvw0v8Am5NqqNVQ
+         RAaqNdtrEq5rqHbCNoA4HCVhnhhh2/UKM6DjEA9IINYJkGB7aVIM/0t9ryaxMHtqS9bG
+         jSaUiWhYsSRDeSl051Hrqk67tpOfMSHnlWdkqwaex16Yx6KwagHrfgpIvfvApPmod6ER
+         zhVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=k5FWMC9LbDIMIa0XTYNmKVwsDtOhMaV0TuIONGukZMI=;
+        fh=ctGm0TLKHnfFImYU2VCPe1uYL1+NNUEvLt31IK8mW54=;
+        b=JX3OBk3rvYn7auaujl2CIBKnKOs0y8ABlrFq5DB9k/Waf8GziUeDFqy3T+VlnrtZ6o
+         15EJbCl4Sxgy4E7pTJnAi/887ZCRSeyPIsn8avJxvf2q16az/qPdnMG+sYMOqj5ZDBKC
+         i6jfGAg1ucqmdZZWEgM/rzWaDmV2YdXwhphdSm6C3qhdi465rb/WrFoCMx2FR4RstPfn
+         sihjUI9ydZlRLy5MQcxgFjJ+lZNLTS9Jw2eVRNPcSQaA9P76P1GXm34HwvBsOGx6igLZ
+         cMy4ECQ+SPFyKyYJ3XgWU2Knz0ssdlc7BMie1QvbJunVKau/UMUN5O8YGTKZ/zx9sXfz
+         920w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784630102; x=1785234902; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=k5FWMC9LbDIMIa0XTYNmKVwsDtOhMaV0TuIONGukZMI=;
+        b=fe4jbqcvIpmMIHIZ65RygJD8EAZuZ4c6fUR8bXJuciOeiYyTn754fBAq+te0dB/0aj
+         QbwwqahtD4gOpPN6Z3DaJW0iAKwiZvZSET3t76YFPFL5NGSKv0VyJkRRZLOO7Tar80OT
+         YHbxcZjX93fKd7hbHTuaC0Bsd+o/CH3Q9Y/WTHH4y3u285UOLUjEjG65VHH/Ns0NV+Ab
+         Gde/kbum9PncsJfUW8MTYIjzid9OB4iht9GeKFUypdB2CqC4Km1mT4SuufAMH0cuv4eK
+         grA11SuVfqcECCyqBg+QKXqtgVl2RtCh0er6bCl+IxQUsBPvgwdPO2jRmydYZdzT+z3x
+         dohg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784630102; x=1785234902;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k5FWMC9LbDIMIa0XTYNmKVwsDtOhMaV0TuIONGukZMI=;
+        b=cH9sZskGVk7Dzwe5DQzfXYxij6I+X1RpPpEmO8SViUb2Uax9/8cAaxsE+oHd5YQ6cZ
+         xtpMeMqsz6KvdWIN7r4n/35cZDnhw+thc5lEPlOC5ywQFhx76wuDkTXVSu+8YRcNFR94
+         wzRwDAkrHKci0mtLaAvES2odqc1ITBNzTLJYzt/Zn3AwY5P8c48frBk2WYcMPUJQ73+D
+         692fRvXpS0eWynFPnZVWq1FRS2CtTImia/G5TG6Fr0k+yyD7vXs+9B6CqES1JRVCRZFM
+         FB/mhIPNd5FZQd65zJA7ARRGJDKBM2ibU4fYbjnrVGocn+jB6xYHzuKJh+6vzCXY7aAK
+         iFlw==
+X-Forwarded-Encrypted: i=1; AHgh+RrOHMbGNo+2IHNO3g4yc/Xd2tS4uJdUGnG4Mk1KmF12lBYhgYGnxc4PYYrq0mbvpsQUOl2eCf3fhcCi25486d0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKA8XoZCCYpc02n+cCmwnKX093a6CTlCWrI6W/aEO001S7BAxr
+	ivRG+aO+PvYGbgO472GJfOEViCuBGH8Q35FthnqvVKoY31mcu8waFDGF64oMN6lpEtgSqNoLKsJ
+	kYEo0SWT3o6bor/Bhy0+2jsF4ym2fxOE=
+X-Gm-Gg: AfdE7cnfnd5K5Fc6AEp8ut8dPeiPYU2EVeFDI8YcZOwPIMflqF6061/hryeFjHiCdfF
+	YeMqNp6HxVr99riKsuIMijkAOnFcowCsqpKQn55qaln88JL7Q0QaCTKaSsJ2VFMZKSLXx9k5yNO
+	4z+FU7L5sgF9Tix1X0rdrWgGKZScHPEVz/LpOh7OD2/cQ+KKpA6qlTTlrruMsd/fE/lNkysu8F8
+	nOUjmZ7m9gEr6U6DcnlcTD2BhJ1lL3FON5kUGgjWUQ0EBl4hAaaPSXddrwo25M=
+X-Received: by 2002:a17:907:3ea0:b0:c15:f647:205b with SMTP id
+ a640c23a62f3a-c16b47d83e8mr812528466b.46.1784630101365; Tue, 21 Jul 2026
+ 03:35:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b076593c985497a5f903439b864d1e8f1cd107f1561d04a22b77c6fafb3b4c13@mail.kernel.org>
-In-Reply-To: <81c5f138e510622fcf908b99bfc7000b872e0966.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-References: <81c5f138e510622fcf908b99bfc7000b872e0966.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH 2/2] selftests/bpf: Cover stack frame number after scalar plus fp
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,emil@etsalapatis.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 21 Jul 2026 10:29:53 +0000 (UTC)
+References: <20260708131122.2917-1-luis@igalia.com> <20260708131122.2917-2-luis@igalia.com>
+In-Reply-To: <20260708131122.2917-2-luis@igalia.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 21 Jul 2026 12:34:49 +0200
+X-Gm-Features: AUfX_mwe-kr8_QLhqZNCl123Jf4668wp7ph2V3Nb7km4AvovQpW14T1tnnO5W8I
+Message-ID: <CAOQ4uxi=mcRf7wZdbXjCH9+doh1f1rxpZ4sxjg0MDLz_dirrYw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/5] Documentation: fuse: add document on caches
+ being used by FUSE
+To: Luis Henriques <luis@igalia.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Matt Harvey <mharvey@jumptrading.com>, kernel-dev@igalia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3154772494840640172==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index be97f6887f0e..0483ae340726 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> @@ -11,7 +11,6 @@
->  #include "verifier_arena_globals2.skel.h"
->  #include "verifier_array_access.skel.h"
->  #include "verifier_async_cb_context.skel.h"
-> -#include "verifier_basic_stack.skel.h"
->  #include "verifier_bitfield_write.skel.h"
->  #include "verifier_bounds.skel.h"
->  #include "verifier_bounds_deduction.skel.h"
-> @@ -165,7 +164,6 @@ void test_verifier_arena(void)                { RUN(verifier_arena); }
->  void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
->  void test_verifier_arena_globals1(void)       { RUN(verifier_arena_globals1); }
->  void test_verifier_arena_globals2(void)       { RUN(verifier_arena_globals2); }
-> -void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack); }
->  void test_verifier_bitfield_write(void)       { RUN(verifier_bitfield_write); }
->  void test_verifier_bounds(void)               { RUN(verifier_bounds); }
->  void test_verifier_bounds_deduction(void)     { RUN(verifier_bounds_deduction); }
-
-The verifier_basic_stack skeleton was already dispatched here through
-RUN(verifier_basic_stack).  Adding the new subtest to
-progs/verifier_basic_stack.c on its own would have exercised it under the
-existing harness with no change to prog_tests.
-
-This isn't a bug, but is the move to a standalone harness needed?  The new
-subtest could be added to progs/verifier_basic_stack.c while leaving this
-RUN(verifier_basic_stack) line in place.
-
-There is also a behavioral difference worth noting.  run_tests_aux() in
-verifier.c drops CAP_SYS_ADMIN for the whole run:
-
-    /* test_verifier tests are executed w/o CAP_SYS_ADMIN, do the same here */
-    err = cap_disable_effective(1ULL << CAP_SYS_ADMIN, &old_caps);
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c b/tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c
-> new file mode 100644
-> index 000000000000..ff9382b47920
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier_basic_stack.c
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <test_progs.h>
-> +
-> +#include "verifier_basic_stack.skel.h"
-> +
-> +void test_verifier_basic_stack(void)
-> +{
-> +	struct test_loader tester = {};
-> +
-> +	test_loader__run_subtests(&tester, "verifier_basic_stack",
-> +				  verifier_basic_stack__elf_bytes);
-> +	test_loader_fini(&tester);
-> +}
-
-The new harness does no capability manipulation, so the six pre-existing
-basic_stack subtests now run their privileged pass with CAP_SYS_ADMIN
-retained, where before they ran without it.
-
-The verifier verdicts should be unchanged, since env->bpf_capable keys on
-CAP_BPF and allow_ptr_leaks / allow_uninit_stack / bypass_spec key on
-CAP_PERFMON, all of which the old harness kept and CAP_SYS_ADMIN implies.
-
-Was the different privileged environment for the existing subtests
-intentional, and is it worth a note in the changelog?
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-> index fb62e09f2114..634183fc8688 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-> @@ -97,4 +97,45 @@ __naked void misaligned_read_from_stack(void)
->  "	::: __clobber_all);
->  }
+On Wed, Jul 8, 2026 at 3:11=E2=80=AFPM Luis Henriques <luis@igalia.com> wro=
+te:
 >
-> +SEC("socket")
-> +__description("stack pointer arithmetic preserves frame number")
-> +__failure __msg("R7 invalid mem access 'scalar'")
-> +__naked void stack_ptr_arith_preserves_frameno(void)
-> +{
-> +	asm volatile ("					\
-> +	r3 = 0;						\
-> +	*(u64 *)(r10 - 8) = r3;			\
-> +	r1 = %[map_hash_8b] ll;			\
-> +	r2 = r10;					\
-> +	r2 += -8;					\
-> +	call %[bpf_map_lookup_elem];			\
-> +	if r0 != 0 goto +2;				\
-> +	r0 = 0;						\
-> +	exit;						\
-> +	r1 = r0;					\
-> +	r2 = 0;						\
-> +	r3 = 0;						\
-> +	call stack_ptr_arith_preserves_frameno_subprog;	\
-> +	r0 = 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm(bpf_map_lookup_elem),
-> +	  __imm_addr(map_hash_8b)
-> +	: __clobber_all);
-> +}
+> This new file aims at documenting the caches that are used by FUSE.  At
+> the moment only the symlink and the ACLs caches are described.
+>
+> Signed-off-by: Luis Henriques <luis@igalia.com>
+> ---
+>  .../filesystems/fuse/fuse-caches.rst          | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+>
+> diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentati=
+on/filesystems/fuse/fuse-caches.rst
+> new file mode 100644
+> index 000000000000..52b2558b5a68
+> --- /dev/null
+> +++ b/Documentation/filesystems/fuse/fuse-caches.rst
+> @@ -0,0 +1,86 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +FUSE Caches
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Introduction
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +This document summarises the different types of caches that are used in =
+FUSE.
+> +For each cache type, it attempts to document the rules that are followed=
+ to
+> +insert, validate and invalidate data into the cache.
 
-The BPF program and expected message ("R7 invalid mem access 'scalar'")
-match the reject path in do_check for a scalar-typed pointer dereference, so
-the test itself looks correct.
+It looks a bit misleading as if the list is complete.
+Maybe list all the caches: attribute, dentry, data, readdir, symlink, ACL
+(anything else?) and then say that documenting them is TBD.
 
+However, I must say that mentioning attribute cache in the context of ACL
+cache without a minimal description of attribute cache is a bit confusing.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Thanks,
+Amir.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29820318369
---===============3154772494840640172==--
+> +
+> +symlink caching
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Whenever there's a link resolution request, the VFS will call into
+> +``fuse_get_link()`` which will then send a ``FUSE_READLINK`` request to =
+the
+> +user-space FUSE server. However, the server can ask the kernel to cache =
+all
+> +links resolutions by setting the ``FUSE_CACHE_SYMLINKS`` flag during the
+> +``FUSE_INIT`` negotiation.
+> +
+> +If this flag is set, FUSE will immediately call into the VFS
+> +``__page_get_link()`` from the ``->get_link()`` inode operation. The fir=
+st time
+> +this is done for a specific link, it will end-up sending the ``FUSE_READ=
+LINK``
+> +to user-space but the link contents will then be added into page-cache. =
+The next
+> +time the link needs to be resolved, it will use the link content that is=
+ already
+> +cached, and will only fallback into sending the request to use-space if =
+the
+> +folio isn't up-to-date.
+> +
+> +ACL caching
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +FUSE has allowed the usage of POSIX ACLs for a long time as they could b=
+e set
+> +and accessed simply as extended attributes. However, it was only with th=
+e
+> +addition of the ``FUSE_POSIX_ACL`` flag that ACLs started to be fully su=
+pported.
+> +Without this flag, ACLs can still be set, but the VFS won't use them for
+> +performing permission checks - that would be the user-space server's
+> +responsibility.
+> +
+> +Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by the=
+ kernel.
+> +In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be =
+set to
+> +``ACL_DONT_CACHE``.
+> +
+> +On the other hand, if ``FUSE_POSIX_ACL`` is set during ``FUSE_INIT``, wh=
+en an
+> +ACL is accessed the VFS layer will first check if it's already cached. I=
+f it is
+> +not, FUSE ``->get_acl`` operation is called, which will eventually send =
+a
+> +user-space request. Future accesses to this inode ACL will then use the =
+cached
+> +data.
+> +
+> +Setting an ACL in an inode, however, won't cache it immediately. It will=
+ send
+> +user-space a request with the new ACL, and the FUSE server may perform s=
+ome
+> +modifications before storing it.
+> +
+> +On the other hand, ACLs will be removed for the cache in the following
+> +situations:
+> +
+> +-  When setting an ACL in an inode and the user-space server has set the
+> +   ``FUSE_POSIX_ACL`` flag, all previously cached ACLs for this inode wi=
+ll be
+> +   invalidated.
+> +-  When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` op=
+eration.
+> +-  When ``->d_revalidate()`` is called for a dentry that requires a look=
+up (e.g.
+> +   it has expired) and that lookup operation is successful.
+> +-  When the VFS needs to check access rights for an inode (by calling
+> +   ``->permission()``), attributes may need to be refreshed. If that hap=
+pens,
+> +   any cached ACLs for that inode will be invalidated.
+> +-  After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is =
+sent to
+> +   user-space), the user-space server may have also updated the ACLs, so=
+ any
+> +   cached ACLs for this inode are also invalidated.
+> +-  While processing ``FUSE_READDIRPLUS`` and a new dentry is added (unle=
+ss this
+> +   dentry is already being looked up (``DCACHE_PAR_LOOKUP``))
+> +-  In general, when there is the need to sent a ``FUSE_STATX`` or
+> +   ``FUSE_GETATTR`` to user-space (e.g. because the attributes have expi=
+red).
+> +   This may happen in the following cases:
+> +
+> +   -  When doing an ``->llseek()`` on a file with ``SEEK_END``, ``SEEK_H=
+OLE`` or
+> +      ``SEEK_DATA``.
+> +   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time (to
+> +      automatically invalidate cached pages), and a buffered read
+> +      (``->read_iter()``) past EOF is done on a non-passthrough file.
+> +   -  When the ``FUSE_WRITEBACK_CACHE`` flag is set at ``INIT`` time, an=
+d a
+> +      buffered write (``->write_iter()``) past EOF is done on a non-pass=
+through
+> +      file.
+> +   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time and=
+ the VFS
+> +      needs to read a directory contents (``->iterate_shared()``) for a
+> +      directory that is allowed to be cached.
+>
