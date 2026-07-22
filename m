@@ -1,103 +1,278 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A3C43E9FD
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 21:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A40043CECF
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 21:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784754644; cv=none; b=ocSPNkq0KvPGghdkN92sSoThz0+KQFhXtgUsV+fn/cE537Q5NRmUQW4LvFC09fNOsbL2cl4fDY6pqaqDMm5EKZzl+UXGleag1xqfs7fUFUxcQyN+Jl3ACSwdH+RwLgS5chrSQAt3kJkHtZ+7AwsPjxu4SoaPm9BO961GyAkXnM0=
+	t=1784756688; cv=none; b=jPWadFgNxMhpCybUVHceQ/OS+r8bxPtFsSJ7UqaNe7HTwJTLSnn2slBnPs2Yoa6ruSR2XqLh55Oic/Y3oNSql0m3ylHzKBAO0QgrEERl7MnohZSVBih3u7hERgc8Kt7L0IodHW0imboLFBVUbFeS2ysxPniC+JcRS3YrTbezj7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784754644; c=relaxed/simple;
-	bh=mW1kuA1EBweMGGAL7F7Bl9RcI8jlBsmE+i4of+8Lp+Y=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=q7NGiIG1kAuaWwepoP/7QH/fVB5RTkijwCKbOocbDxoN5LkX74xVWCCbAq4eCH/K8x726tRVs41r0wNc2PHvAKLabypgoQwFUpH8qKl/yG2IgU6BT81IMYwWz+mx+Jp4o5iuAwx3zNxw2QCz7YKV7a7gnUx7jY1JxIk2M/TTZMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HDEway+S; arc=none smtp.client-ip=209.85.215.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1784756688; c=relaxed/simple;
+	bh=GYHNo/XGeE9xtQ1NfZoCvPIFOUdd9M9aSo+hbXMqC0E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ObFhFyAZ0dxAUwU4WE2UIVqUpxooHhyHPmo9za6DERx0RoO+z2QhoNJKsTvtQ5atbP42/v2tg/4mW3wvvG8JtUkJSlEyeoNKKX5Zws0FUhiC1V5+wb1yBqVYHX0XnPO/i/VX8mA5rb3zGGc4ER6cMfUQd46xTenpH77knPnPjaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nvzd8mA/; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HDEway+S"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cab3e9cd922so7256814a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:10:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nvzd8mA/"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84e04df8c46so2362945b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784754642; x=1785359442; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zGCjZgrYR7q/NtwUSDt7c4X9W2mt8hvcEDv9J7cv/8U=;
-        b=HDEway+SbT3VsK4+TrmAl7EuOgT8pD44vmBTwmz7qec06OecA5tisqtlOSXB40FoeT
-         ApTOO4zUvf4IW+DqWogwu40CtuWZrfsQSojuBtz5MQwFUAXLTKe1W0NjXgZgBqedkDte
-         2i2ExZA8QA6IYn4FmouwTmygsbYi62+PUQEvian/A3mUJjyVEKGWMG6hR+9XL+CcUzaZ
-         4s/5v82tVbufHVFwnfAUC8HbZ+jGb9x8Rej5GJJH2jrx4s3axoaXE0IRzupsdZCnwFSn
-         XC/fGFm1Inry+Gwi8OGRDEUwVhyVLlYNtM81uPZO13l1J80KzsGowdgBeG3DoYEk65Ik
-         XI+w==
+        d=gmail.com; s=20251104; t=1784756686; x=1785361486; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=aLLCLDIkaVkTiiSr3am1nl8JfcuH2IYbuxdGPPNwyW8=;
+        b=nvzd8mA/IXgz9G8pPXE/yDzTk9nZ7UxL55utJZFRXdJdjEQeNeiXTqohe5my+nLw0T
+         gnTa0TkzidfSiRG2iUt0WrkHfY8VUkCMwBLef+1g8gkZf65jlu1dBWLRIXx1cdOVTvrW
+         OfTgABPz0HfhzYTmu+vwYhSkXyaNYt5/8ay0H2nPx9cu473xmuUUvznlvnlqRKbdr5jR
+         z7yUDqcdmIUpto712ibh2KN919eckmzUMgKSad3lSTAzXBf5gLNDSYTyLS1Fq/RQh8Lr
+         vAaeiONUdUa1G8Fk9I+lPuB+vOFevtdvSlAz/cmIokLvfaoKC5hPJY8vCRdVZ3S4/u65
+         Hyhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784754642; x=1785359442;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zGCjZgrYR7q/NtwUSDt7c4X9W2mt8hvcEDv9J7cv/8U=;
-        b=ITDloEaufCZQjNgwjHyDz0otQeFSNagqk8f9qzqAAq6JDsANJRVpnEIRa335A6BUwk
-         kAzME0ddMk7MCAtwnWSnLTxn6BYHQboZJqgVGKw0l2Yu9n9hkpe71yCnKfI3+oC9SMBL
-         IipjWs2HlbFEhtZGctzsEIowr+FpXtRlyBZq9OxqijaO6wATBrU3zVCZqxFgVeWznFNN
-         aaTGceWCex+E4R2jSUkbSZaoqUBul+wl20jby927gYmSndoGzhAZgfh249Dws0GDMFg6
-         N6iQbQnK2/hRkSHdoPACIRxeW5gQeRp+rddn+JxZukgFzRVyEaPD8LKYMU/lrLIcG9Nx
-         c36w==
-X-Gm-Message-State: AOJu0YxlKnvxER5PkoW5uApF9zxndK+YDl/KI9b/exHDhLZ/DaNWQ/Ld
-	2uwpTrtR4tj/CWLFcUPe4UnjwgKcXoVekaHdFqFG+gZ8cf2gkGF0KVVYmlHBNDzjOy+L5Mrjv8o
-	0kJQ9XN6RdszlSiFvBQ==
-X-Received: from pfbdf3.prod.google.com ([2002:a05:6a00:4703:b0:848:81e8:f2d9])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:94e7:b0:84e:936:4673 with SMTP id d2e1a72fcca58-84e2bc28e55mr541942b3a.70.1784754642173;
- Wed, 22 Jul 2026 14:10:42 -0700 (PDT)
-Date: Wed, 22 Jul 2026 14:10:37 -0700
+        d=1e100.net; s=20251104; t=1784756686; x=1785361486;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=aLLCLDIkaVkTiiSr3am1nl8JfcuH2IYbuxdGPPNwyW8=;
+        b=ckinPFflbZnyuCtfindJQKvpXjvxRPO2XCUsgI/wfR5j0kJ/HRrntCZPbFZsftNFjG
+         53837feeUMlsNLPsWq6qJ6Y70QXlREKPLIhBp8EApsAkBqnQCFUdGEemwBWLPYZwqU0q
+         zHrTBLizb3F5fso6jFfRLZM5oKw9kM0sj8vej+dZ/8BsK1q5tLc1Cw/uPp+Ul1+H07J9
+         e6xE3Gu/qk69wztYHylsyV/qefIMGTvOBfSXKikkKiyiKUDaLtV24Xk/nTTbxBepg7Y6
+         ARsDcRG+oWyG1RDhrLtgCTyQYbx+lbAZHtv0VT+ORYQjR2Wx93hwxtHve9v4abxRBmxv
+         fcJg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro8BlCsixxAgTFvmiEezNVc34U0r8HN/I5o5ntYUYEInQoBgOUKdxk29G3clCakvS3fcgeU2t48bgu3oJ7Erf8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaUz4kiJpgTJUIVbNjrWVX8APIvkxUUgQf5tHYu2Z4IoeqyFpd
+	Rg1iOcXtA3ooVqbhRyqOCglYfQwiSQHDRG1kLoo3oREF+V0WSedL01wt
+X-Gm-Gg: AR+sD11ryHKlAvHQGGq2Ppotte2QV+1GFFDBwvL6PgWhmgQgSlTcozrEsL/7SbA+Jjc
+	z9BSlbXWw48HR6wnh7G0Cuf4W2w9+OWczNEr2dEZVwHLl641sCcq/uBBPT3Iiz6z1Vp5WHxSf//
+	vBfUe/7hgwwcPKOUTZ0HhUB71AO40K0xwGtWtmWneF4edOusbSdPWel5s3eAc+JtANPAuU3AEhl
+	Qkkg575/yP6WHnh5OdGWU2wuhsCyzMOI55H5siRguweXgS0xf4nd7xYSLyjwWJXMv9ER2YvOCfs
+	e/51zjVBr9ii6knfoU2gzk7YrM8j5Ne9xLTJCcGxvpzNUcUJo0wS8G75PBET6vG14gjCbhOoNQt
+	1arBVo2kGaUVElyK7wLK03J2s6EgXUN4wNRyWmQTURxTyFmCHKkN7Qf9wT/sJGwO714Xc0mF/m9
+	hvkuXh1ruUlc+zMaEO57qFzRKPBhXG20V/NGKQ3kIJHj3c4txJ
+X-Received: by 2002:a05:6a00:b82:b0:848:4424:2b8e with SMTP id d2e1a72fcca58-84e2bbecf09mr656348b3a.3.1784756685757;
+        Wed, 22 Jul 2026 14:44:45 -0700 (PDT)
+Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c3fsm1946297b3a.9.2026.07.22.14.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 14:44:45 -0700 (PDT)
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Subject: [PATCH v10 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Date: Wed, 22 Jul 2026 14:44:22 -0700
+Message-Id: <20260722-hmm-v10-v1-0-606464dd601a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
-Message-ID: <20260722211037.1925308-1-tjmercier@google.com>
-Subject: [PATCH v3] selftests/udmabuf: Open /dev/udmabuf O_RDONLY
-From: "T.J. Mercier" <tjmercier@google.com>
-To: kraxel@redhat.com, vivek.kasireddy@intel.com, shuah@kernel.org, 
-	skhan@linuxfoundation.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bobbyeshleman@meta.com, kuba@kernel.org, 
-	"T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALY5YWoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDcyMj3YzcXN0yQwNdcyPzlCSjpCTLFGMTJaDqgqLUtMwKsEnRSkAFSrG
+ 1tQBIaEitXgAAAA==
+To: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+ "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Min Ma <mamin506@gmail.com>, Lizhi Hou <lizhi.hou@amd.com>, 
+ Oded Gabbay <ogabbay@kernel.org>, skinsburskii@gmail.com
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
+ Jason Gunthorpe <jgg@ziepe.ca>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784756683; l=8816;
+ i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
+ bh=GYHNo/XGeE9xtQ1NfZoCvPIFOUdd9M9aSo+hbXMqC0E=;
+ b=+/kQG1iX/yRHeUfcwg6WZMiVcO3TSQDq9pOkpGr0vDEFgbY5Bydw04mNJ9njGp2oykHM0oS2i
+ VmnQAUaI/jpCI1GH6nJe6/niHsBdn0yt1UpO4W6lecLt6cy2N4FM3XS
+X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
+ pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
 
-Write permissions on the /dev/udmabuf device file are not required to
-issue ioctls and allocate udmabufs. Applications should be opening this
-file as O_RDONLY. The BPF dmabuf_iter selftest already does this. [1]
+This series extends the HMM framework to support userfaultfd-backed memory
+by allowing the mmap read lock to be dropped during hmm_range_fault().
 
-Users are pointing to these selftests as examples of how use udmabuf,
-and encountering permission errors on systems where write permissions
-are not available on /dev/udmabuf. Apply the principle of least
-privilege to selftests which use udmabuf by removing the write access
-mode from drivers/dma-buf/udmabuf.c and drivers/net/hw/ncdevmem.c.
+Some page fault handlers — most notably userfaultfd — require the mmap lock
+to be released so that userspace can resolve the fault. The current HMM
+interface never sets FAULT_FLAG_ALLOW_RETRY, making it impossible to fault
+in pages from userfaultfd-registered regions.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=v7.1#n49
+This series follows the established int *locked pattern from
+get_user_pages_remote() in mm/gup.c. A new helper function,
+hmm_range_fault_locked(), accepts an int *locked parameter. When the
+mmap lock is dropped during fault resolution (VM_FAULT_RETRY or
+VM_FAULT_COMPLETED), the function returns 0 with *locked = 0, signalling
+the caller to restart its walk. The existing hmm_range_fault() is
+refactored into a thin wrapper that passes NULL, preserving current
+behavior for all existing callers.
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
-Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Possible approaches to lift this limitation are documented in
+Documentation/mm/hmm.rst.
 
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index d78aec662586..ced0b95c876c 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
- 	ksft_print_header();
- 	ksft_set_plan(7);
+Changes in v10:
+  - Included contended mmap_lock acquisition in the
+    hmm_range_fault_unlocked_timeout() retry budget.
+  - Dropped the redundant top-level fatal_signal_pending() check in the HMM
+    unlocked retry loop; mmap_read_lock_killable() now covers that path.
+  - Restored the absolute outer timeout in drm_gpusvm_get_pages(), since it can
+    run from GPU page-fault workers and must not rely on the worker task’s fatal
+    signal state to stop invalidation retries.
  
--	devfd = open("/dev/udmabuf", O_RDWR);
-+	devfd = open("/dev/udmabuf", O_RDONLY);
- 	if (devfd < 0) {
- 		ksft_print_msg(
- 			"%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
+Changes in v9:
 
-base-commit: 20f01a5565ce79923b75a2ac8e8ef2a1d7adf517
+  - Folded the fixups into the full 8-patch series instead of sending a
+    separate fixup series.
+  - Clarified that the HMM timeout bounds repeated HMM/mmu-notifier retry
+    attempts, with the helper refreshing range->notifier_seq internally.
+  - Kept nouveau’s explicit outer deadline because its retry loop runs in a GPU
+    fault worker and cannot rely on fatal signals from the faulting process.
+  - Converted amdxdna, and GPU SVM callers to pass the shole timeout budget to
+    hmm_range_fault_unlocked_timeout().
+
+Changes in v8:
+
+  - Make hmm_range_fault_unlocked_timeout() the primary documented HMM
+    range-fault API, and move hmm_range_fault() into the “use only if the
+    caller really must hold mmap_lock” category.
+  - Clarify that the timeout is a retry budget for repeated mmu-notifier
+    invalidation retries. HMM does not interrupt an in-progress page fault
+    when the timeout expires.
+  - Restart the retry timeout only when handle_mm_fault() dropped
+    mmap_lock, because that indicates a lock-dropping fault handler such as
+    userfaultfd made progress. Ordinary -EBUSY retries keep the existing
+    deadline.
+  - Remove the attempted timeout selftest. The remaining selftest covers the
+    intended userfaultfd path by resolving missing-page faults through
+    HMM_DMIRROR_READ_UNLOCKED and hmm_range_fault_unlocked_timeout(..., 0).
+
+Changes in v7:
+  - Replaced the unlocked HMM API with
+    hmm_range_fault_unlocked_timeout(). The helper now takes a timeout in
+    jiffies, with 0 meaning retry indefinitely.
+  - Moved -EBUSY retry handling into the HMM helper for the unlocked path.
+    The helper refreshes range->notifier_seq internally before each retry.
+  - Switched the unlocked path to mmap_read_lock_killable() and return
+    -EINTR if mmap lock acquisition is interrupted or a fatal signal is
+    pending during retry handling.
+  - Removed the redundant non-timeout hmm_range_fault_unlocked() interface.
+  - Updated Documentation/mm/hmm.rst and kernel-doc to describe the timeout API
+    and the intended caller pattern.
+  - Updated the HMM selftests to use hmm_range_fault_unlocked_timeout()
+    only, including coverage for the finite-timeout path.
+  - Added in-tree users of the new helper:
+      - mshv
+      - nouveau
+      - RDMA/umem
+      - amdxdna
+      - drm/gpusvm
+  - Preserved each converted driver’s existing timeout convention:
+      - unbounded retry where the old code retried indefinitely,
+      - HMM_RANGE_DEFAULT_TIMEOUT where the old code used that budget,
+      - existing driver-specific timeout return values such as -ETIME.
+  - Used max_t(long, timeout - jiffies, 1) when passing remaining time from
+    absolute jiffies deadlines to avoid unsigned underflow while keeping a
+    minimum one-jiffy retry window.
+  - Left callers on hmm_range_fault() when they already need to hold
+    mmap_lock across surrounding work, such as drm_gpusvm_check_pages().
+
+Changes in v6:
+  - Reworked the new API from the external int *locked pattern to
+    hmm_range_fault_unlocked(), which owns mmap_read_lock() internally.
+  - Changed the dropped-lock contract: hmm_range_fault_unlocked() now returns
+    -EBUSY when the mmap lock is dropped, and callers restart with a fresh
+    mmu_interval_read_begin() sequence.
+  - Kept hmm_range_fault() as the locked variant for existing users, preserving
+    its caller-held mmap lock contract.
+  - Added an in-tree user by converting the MSHV region fault path to
+    hmm_range_fault_unlocked().
+  - Updated Documentation/mm/hmm.rst and kernel-doc to describe the unlocked
+    helper and retry pattern.
+  - Updated commit messages to match the new API and return semantics.
+  - Kept the userfaultfd HMM selftest using the test_hmm unlocked read ioctl
+    path.
+
+Changes in v5:
+ - Rework hmm_range_fault_unlockable() retry handling to retry
+   VM_FAULT_RETRY internally with FAULT_FLAG_TRIED set, matching the
+   fixup_user_fault() pattern and avoiding repeated first-retry lock drops.
+ - Distinguish VM_FAULT_RETRY from VM_FAULT_COMPLETED: retry faults now
+   reacquire the mmap lock internally, while completed faults return to the
+   caller with *locked = 0 so the caller can restart with a fresh notifier
+   sequence.
+ - Document the two *locked return states, including the -EINTR case when a
+   fatal signal is pending after the mmap lock has already been dropped.
+ - Update comments around HMM_FAULT_UNLOCKED and the HMM fault loop to match
+   the current hmm_range_fault_unlockable() implementation.
+
+Changes in v4:
+ - Rebased on 7.2-rc1
+Changes in v3:
+ - Return -EFAULT from dmirror_fault_unlockable() when the mirrored mm can
+   no longer be pinned.
+ - Add an eventfd stop signal for the userfaultfd handler thread to avoid
+   waiting for the poll timeout on successful test completion.
+
+Changes in v2:
+
+- Split into a preparatory refactor (new patch 1) that moves
+   handle_mm_fault() out of the walk callbacks, plus a smaller feature
+   patch on top.  Suggested by David Hildenbrand.
+ - Hugetlb regions are now supported on the unlockable path; the v1
+   -EFAULT short-circuit and the hugetlb_vma_lock_read drop/retake
+   dance are gone.
+ - Distinct internal sentinels for "needs fault" (HMM_FAULT_PENDING)
+   and "lock dropped" (HMM_FAULT_UNLOCKED).
+ - Outer loop now re-walks after a successful internal fault so the
+   faulted pfns end up in range->hmm_pfns.
+ - Kernel-doc on hmm_range_fault_unlockable() and the
+   Documentation/mm/hmm.rst example match the implementation.
+ - Dropped the mshv driver conversion (v1 patch 2); will post
+   separately.
+ - Selftest converted to drive the path through test_hmm with a
+   userfaultfd handler (new HMM_DMIRROR_READ_UNLOCKABLE ioctl).
+
+---
+Stanislav Kinsburskii (8):
+      mm/hmm: move page fault handling out of walk callbacks
+      mm/hmm: add hmm_range_fault_unlocked_timeout() for mmap lock-drop support
+      selftests/mm: add HMM test for mmap lock-dropping faults
+      mshv: Use hmm_range_fault_unlocked_timeout() for region faults
+      drm/nouveau: Use hmm_range_fault_unlocked_timeout() for SVM faults
+      RDMA/umem: Use hmm_range_fault_unlocked_timeout() for ODP faults
+      accel/amdxdna: Use hmm_range_fault_unlocked_timeout() for range population
+      drm/gpusvm: Use hmm_range_fault_unlocked_timeout() for range faults
+
+ Documentation/mm/hmm.rst               |  79 +++++++---
+ drivers/accel/amdxdna/aie2_ctx.c       |  23 +--
+ drivers/gpu/drm/drm_gpusvm.c           |  60 ++------
+ drivers/gpu/drm/nouveau/nouveau_svm.c  |  20 +--
+ drivers/hv/mshv_regions.c              |  54 ++-----
+ drivers/infiniband/core/umem_odp.c     |  18 +--
+ include/linux/hmm.h                    |   2 +
+ lib/test_hmm.c                         | 107 +++++++++++++-
+ lib/test_hmm_uapi.h                    |   1 +
+ mm/hmm.c                               | 256 +++++++++++++++++++++++++--------
+ tools/testing/selftests/mm/hmm-tests.c | 150 +++++++++++++++++++
+ 11 files changed, 551 insertions(+), 219 deletions(-)
+---
+base-commit: a4271215228d2bd2a50eea03ab0a948b36036948
+change-id: 20260722-hmm-v10-727db2bb9d34
+
+Best regards,
 -- 
-2.55.0.229.g6434b31f56-goog
+Stanislav Kinsburskii <skinsburskii@gmail.com>
 
