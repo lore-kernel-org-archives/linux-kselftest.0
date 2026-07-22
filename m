@@ -1,50 +1,77 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA997470137;
-	Wed, 22 Jul 2026 07:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538C7470123;
+	Wed, 22 Jul 2026 07:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784706514; cv=none; b=Yq4x9DU75IMZ7Hsf4+uESaI8myp9m1ldt4kBLbWpqc0BeORWYRmylc+UCgNjXZKGW5pr+eefOfsdjqLylCPD2pS8hCJIKTLnXWhw/m6rELYo2P0sr6XYlWLoy6wyLCOjGMA08GAWnxwZKtK/z53cab5NdPSd7SbdoixKzpSiGEk=
+	t=1784706526; cv=none; b=CGqpjlpObPwrW6PqEXtmtLCj+aid8HccyGZAKnJxAuEE8naTLbNeI0/VeADV7c3pX7f8XMU/MZ75hCfolDaJIgug3BpFqUpHqwBDywbf3HmOROpmzm7HfJ9gmfJMGnmryLYR47ApY016HuQdMTSR4sm/7FugSVKzNOkAtzhMTSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784706514; c=relaxed/simple;
-	bh=tgM9o/DpEvL50YP7AXAiYHsExbCXemZgNAnHESGJKTE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VKeYkKcwwCj2PLO2nYpCvZkIbvcGqa3/nMVDjYsF8DDzXhnLaSTUpIXzMiYJM+W/KRH+Z9xEatg0ths8oYo7f+7JlbEPFj2oYAv4DNiQsidMNo1X4DRbH1t6KE1iKoVoDXWgyR2Ku8g4fPW47cLqUlRDj7d4jG5NFp74H/v9tU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ceVoDmNf; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1784706526; c=relaxed/simple;
+	bh=agRYJEOF3XLrhyJ9SwnBD10ymd7y84L+yeeFfGlFgng=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D7bNWTYz/fMfLiZs4v4+MEOyEX/+haUWZVkf50lkHLbdUed4iKy4hDqBYJYTVwux1sTzlWGj6Ba/tQeqWqPY6WtED21YXyoCtPHAhL+MtCOqhH2uekR0Jp6kilEF/aZuCKSndAT707YA0H+/Gs6pBipUxdNxsA6a/G9QWtszBho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=H2llrjcQ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ceVoDmNf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aj
-	4zqliLEwXTaW1eZQaP/YZLdrTirAHsc39CRSxXaEM=; b=ceVoDmNfDYaKzTBIO0
-	fu7/PnNy5nh5ISp4biGXcIodlGe2awPU0jTAyzLPc9zhCjnp7X4XHwn9KWeNkJ9Q
-	Mr2422DSX4Ggn+Rx0HVYPsAki6Ra9uTZe5331lhqcUan8LDKftuZkwJtxdDmUKCH
-	Do4JgwRsPvYSR3ekLR1sONNjw=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgDnrw+kdWBq8DkpJA--.55057S3;
-	Wed, 22 Jul 2026 15:47:51 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 bpf-next 1/5] selftests/bpf: Fix double free of subtest_state->name
-Date: Wed, 22 Jul 2026 15:47:44 +0800
-Message-Id: <20260722074748.674080-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260722074748.674080-1-yangfeng59949@163.com>
-References: <20260722074748.674080-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="H2llrjcQ"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66M5C0EU1271586;
+	Wed, 22 Jul 2026 07:48:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=q+SVszRD0Hy0NMbJM
+	z4R0jwnOEB3Hazg4a4qbEeUlZs=; b=H2llrjcQ45kPBAFp85fxROUXG6XGXv5zd
+	ZPL75X/IN+wmf5hHCPry9st57wVl9cxlOrVSlqPYnhSyOx0/VmlXLT38JG8fgPOI
+	sj8TS04wUT8grgFnbw/vQozo86YMzl1uOykTimNlfBgSJk1KVPnwKd3rXbU5qC7c
+	NByovbpjSoriGceuqWTzRjxU3PRUsDxfc840VM2Kx5tVVeY2Fi+JS+1HwuCbmr9W
+	H9jqR4zw8vxhieNuvPAuCzwE49NymbOUUam0EN1IB6KluHhMg1Zq07UYPYveWSYS
+	fdxGcvl7j9QZzrhRcPMIOs51f/LcfS5WiX7VjV/lODcjnqp06OItQ==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fg77agvxx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Jul 2026 07:48:23 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66M7YdHs025677;
+	Wed, 22 Jul 2026 07:48:22 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fgpgye031-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Jul 2026 07:48:22 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66M7mKir42598754
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Jul 2026 07:48:20 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 721A5200CB;
+	Wed, 22 Jul 2026 07:48:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D6E5F200C7;
+	Wed, 22 Jul 2026 07:48:16 +0000 (GMT)
+Received: from aboo.bl1-in.ibm.com (unknown [9.123.14.187])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 22 Jul 2026 07:48:16 +0000 (GMT)
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>
+Cc: Michal Hocko <mhocko@suse.com>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>
+Subject: [RFC PATCH 1/2] mm/memory_hotplug: bound offline retry loops with a configurable limit
+Date: Wed, 22 Jul 2026 13:18:10 +0530
+Message-ID: <20260722074811.378283-2-aboorvad@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260722074811.378283-1-aboorvad@linux.ibm.com>
+References: <20260722074811.378283-1-aboorvad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,36 +79,201 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgDnrw+kdWBq8DkpJA--.55057S3
-X-Coremail-Antispam: 1Uf129KBjvdXoWruF4ftryfXFyrCr17Zr43KFg_yoWfCFXE9w
-	4UXrs7GF10yay5A3WUGr1FkrWkZw4Uur4kXrnIqF13Jay5Xa1DXF4kur1qyas8W39xJa9I
-	van3G3s3Kr1rujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU89Z27UUUUU==
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzwc5sWpgdadMWAAA3M
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: pkhTd_16EluoY8tLFUPZrTKOJvkWpufK
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfXxHt0Z688QQyZ
+ 9GuK0Sc6vh/v+M+N2lIGjUJfqNJWV7jwZfLtVPq5RrJSwobld1o9mJOjD+JGRvSzubiKXtR5tWO
+ H8WzJeUySMhYFFuOrpDNtNd0hCuWzDk=
+X-Proofpoint-GUID: bxHTMwvfEkE9Dn5DcR6t9yZI0KCsbuFt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfX2790NWheW0MH
+ pPM4vRXlTels4V+flZvFKgtK8WwSePrsAzT8cFJhgz9d017YD4GtfuZdSa53MUECXftZVH2UanR
+ 2FGfzljB6spCD1BuNnpBaWgm5EdvcM5xZBgaDKSqMdjuc+Bl66i9LJmjSYXX3/gwPfEEsFv3rYp
+ qXGHMx4dpni2tE01cI8oleg5NLOf7ox4d43VksCrzvPP8mKUC4H77y6CM1c5+fDb2TPUuFgC4vQ
+ wRqwFBT1kDQ/rWnpZhve5jV1ceV7T/qGdAPfQurI+95A0/aE2j6OZDtPUhZXuJQN6c4SNo2evwf
+ pfUADq5HjfScvDUGTFaKChZqkw0D+OTbzXrRdgMcXwNgityjgolMBKwexmE60yQ1IaRRCeViJyA
+ 81dct9X7mKisBbifQVpn7w3YK+MNZpvj3UjSkc4ae4GR3ZJySdwT1EksjhU+ZAoR3/PCNlwYaq5
+ 2U5eQ0vhOkWZFYD4cfA==
+X-Authority-Analysis: v=2.4 cv=K7AS2SWI c=1 sm=1 tr=0 ts=6a6075c7 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8 a=_mUAl5CdPfijK7iri6sA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-22_02,2026-07-21_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607220070
 
-From: Feng Yang <yangfeng@kylinos.cn>
+offline_pages() migrates and isolates pages in two nested loops with no
+upper bound.  A page that can never be migrated or freed (a long-term
+pin, or a slab page that raced into the range) keeps the loop spinning
+and the offline never returns.  This is a known issue, noted in the code
+("TODO: fatal migration failures should bail out") and in the admin
+guide ("memory offlining might retry for a long time (or even forever),
+until aborted by the user").
 
-The name has already been freed in the free_subtest_state function
-and does not need to be freed again.
+The only escape is signal_pending(current), which works when userspace
+drives the offline but not for in-kernel callers.  ACPI DIMM hot-unplug
+(kacpi_hotplug_wq) and similar in-kernel hotplug paths run offline_pages()
+on ordered workqueues where signal_pending() can never become true, so a
+stuck offline wedges the workqueue and blocks all later hotplug events
+with no way to abort it.
 
-Fixes: 0925225956bb ("bpf/selftests: Add granular subtest output for prog_test")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+Add an opt-in backstop: a counter at the top of the inner migration loop
+bounds the number of passes over the range.  The check sits in the inner
+loop because that is where a stuck page spins; since every outer pass
+runs the inner loop at least once, this bounds both loops.  On the limit
+offline_pages() fails with -EBUSY and dump_page()s the stuck page.
+
+The parameter (memory_hotplug.offline_migrate_max_passes) defaults to 0
+(unlimited, today's behaviour) and is re-read every pass, so an offline
+that is already stuck can be rescued at runtime by writing a non-zero
+value.  Such callers already handle -EBUSY, so no caller changes are
+needed.
+
+Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../admin-guide/kernel-parameters.txt         | 14 +++++++
+ .../admin-guide/mm/memory-hotplug.rst         | 26 ++++++++++++-
+ mm/memory_hotplug.c                           | 38 +++++++++++++++++++
+ 3 files changed, 77 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 7ba82974ee78..1d3caf996971 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1886,7 +1886,6 @@ static int worker_main_send_subtests(int sock, struct test_state *state)
- 			worker_main_send_log(sock, subtest_state->log_buf, subtest_state->log_cnt);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 53f08950a630..90b67c457c2a 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3980,6 +3980,20 @@ Kernel parameters
+ 			Note that even when enabled, there are a few cases where
+ 			the feature is not effective.
  
- 		free_subtest_state(subtest_state);
--		free(subtest_state->name);
- 	}
++	memory_hotplug.offline_migrate_max_passes=
++			[KNL] Maximum number of migration passes
++			for memory offlining.
++			Format: <integer>
++			default: 0 (no limit, historical behaviour)
++			When non-zero, memory offlining gives up with
++			-EBUSY after this many migration passes over
++			the range, instead of retrying forever on a
++			stuck page.  Each pass scans the range and
++			migrates what it can.
++			The parameter is re-read on every pass, so an
++			offline request that is already stuck can be
++			rescued at runtime by writing the parameter.
++
+ 	memtest=	[KNL,X86,ARM,M68K,PPC,RISCV,EARLY] Enable memtest
+ 			Format: <integer>
+ 			default : 0 <disable>
+diff --git a/Documentation/admin-guide/mm/memory-hotplug.rst b/Documentation/admin-guide/mm/memory-hotplug.rst
+index 0207f8725142..79b45109c408 100644
+--- a/Documentation/admin-guide/mm/memory-hotplug.rst
++++ b/Documentation/admin-guide/mm/memory-hotplug.rst
+@@ -224,7 +224,10 @@ increases memory offlining reliability; still, memory offlining can fail in
+ some corner cases.
  
- out:
+ Further, memory offlining might retry for a long time (or even forever), until
+-aborted by the user.
++aborted by the user.  The ``memory_hotplug.offline_migrate_max_passes``
++parameter can be used to bound the number of retry passes, making an offline
++request that cannot make progress fail with ``-EBUSY`` instead of retrying
++indefinitely (see `Module Parameters`_).
+ 
+ Offlining of a memory block can be triggered via::
+ 
+@@ -547,6 +550,27 @@ The following module parameters are currently defined:
+ 				 possible.
+ 
+ 				 Parameter availability depends on CONFIG_NUMA.
++``offline_migrate_max_passes``	 read-write: Maximum number of migration
++				 passes for a single memory offline
++				 request.  Memory offlining retries to
++				 migrate and isolate pages until it succeeds;
++				 a page that can never be migrated or freed
++				 makes it retry forever.  When this parameter
++				 is non-zero, an offline request gives up
++				 with ``-EBUSY`` after the configured number
++				 of migration passes and the memory block
++				 stays online.
++
++				 The parameter is re-read on every pass, so
++				 an offline request that is already stuck
++				 retrying can be rescued at runtime by
++				 writing a non-zero value, without a reboot.
++
++				 The default is "0", meaning no limit (the
++				 historical behaviour).
++
++				 Parameter availability depends on
++				 CONFIG_MEMORY_HOTREMOVE.
+ ================================ ===============================================
+ 
+ ZONE_MOVABLE
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 226ab9cb078a..9067829349a0 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -1785,6 +1785,12 @@ bool mhp_range_allowed(u64 start, u64 size, bool need_mapping)
+ }
+ 
+ #ifdef CONFIG_MEMORY_HOTREMOVE
++/* Max offline_pages() migration passes before -EBUSY; 0 = retry forever. */
++static unsigned int offline_migrate_max_passes __read_mostly;
++module_param(offline_migrate_max_passes, uint, 0644);
++MODULE_PARM_DESC(offline_migrate_max_passes,
++	"Max migration passes before memory offline gives up (0 = no limit)");
++
+ /*
+  * Scan pfn range [start,end) to find movable/migratable pages (LRU and
+  * hugetlb folio, movable_ops pages). Will skip over most unmovable
+@@ -1966,6 +1972,8 @@ int offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+ 	struct node_notify node_arg = {
+ 		.nid = NUMA_NO_NODE,
+ 	};
++	unsigned int max_passes;
++	unsigned int pass = 0;
+ 	unsigned long flags;
+ 	char *reason;
+ 	int ret;
+@@ -2062,6 +2070,36 @@ int offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+ 				goto failed_removal_isolated;
+ 			}
+ 
++			/*
++			 * A page that can never be migrated (e.g. a
++			 * long-term pin) makes this loop retry forever.
++			 * Give up after the configured number of passes.
++			 * The limit is re-read on every pass so that an
++			 * offline request that is already stuck here can
++			 * be aborted at runtime by writing the parameter,
++			 * which matters for in-kernel callers (e.g. ACPI
++			 * DIMM hot-unplug) that run on kworkers and can
++			 * never be aborted by a signal.
++			 */
++			max_passes = READ_ONCE(offline_migrate_max_passes);
++			if (max_passes && pass++ >= max_passes) {
++				pr_warn("memory offlining [mem %#010llx-%#010llx]: giving up after %u passes\n",
++					(unsigned long long)start_pfn << PAGE_SHIFT,
++					((unsigned long long)end_pfn << PAGE_SHIFT) - 1,
++					pass - 1);
++				/*
++				 * Dump the page we last stopped at as a
++				 * diagnostic hint: usually the stuck page,
++				 * but just the range start after a restart.
++				 */
++				if (pfn >= start_pfn && pfn < end_pfn)
++					dump_page(pfn_to_page(pfn),
++						  "memory offline retry limit");
++				ret = -EBUSY;
++				reason = "retry limit exceeded";
++				goto failed_removal_isolated;
++			}
++
+ 			cond_resched();
+ 
+ 			ret = scan_movable_pages(pfn, end_pfn, &pfn);
 -- 
-2.43.0
+2.54.0
 
