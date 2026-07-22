@@ -1,615 +1,220 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9456F48BD4E
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 09:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784713441; cv=none; b=DbmSxGZe67PqWxF83dgEIZUlPCU1vUlFnPz3yDc4iYNDK/HuVOihmY01wTRDVAcaNqtx33jeLEWp3qBdRa5fHiCiKEiKXttD8BXg9NqN33gebAxJtB2FkjerNHROO0IzbCDvfz1rCBOhq2WJmugjb+BUQXsVZ5ToEBqdPiH9ukc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784713441; c=relaxed/simple;
-	bh=5zT1F/18SKmDcDLHECwvG+epTfeUkMU2/51GLqV8MvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cL9y0R8LL6XyBP5YXT9uKsgFICb8+Bnu+J33y9UbSYp9EFSz603hWz+fBAayxAQ9FAOoPupjdQFb9SabEmamFYzUIA8cs6qQA9ccJR9oxqKYCb1pSwoZ4gTjXmeTfWD6xUgrbGjGi+tvE0mkWRJJMp/X9ASCRpmmB2ktgAbkXhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Lz3epi88; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E50647141A;
+	Wed, 22 Jul 2026 09:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784713521; cv=fail; b=tiEW0pjQOMz5zWU4uGIBwI4LFz7fTpJizsoW3lqbgoifN2UIKhbkC+8XdgLnnKKyukwfdYitpSHv+1eaqkuJRtCc8G8C6ujQ89CADfNx4iz8tlgijmwPeATzcyu0DwollRNY450OIAizMXYu7KXxZv2UB60Z7P1pXO7yA8JZpaM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784713521; c=relaxed/simple;
+	bh=JipqE+jfkPp/VkTsyuKaDsLCPlIcSEx67Vx3/++HJOU=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=mTXdZAn2FMiG//Iwd6mpoQz3gNRJZ9dzNuxRUxQCSZ3TlZYebRvuKE7xinrVTiZCW3/qie8a9Ngk8j3VuFDizsvYHiD2O28lMLTT1ATpULWrPBiNHMfHqGzVjpPSv36VMaV3MqcwpBSTIznaw6ysRY95nglyboP7q3q6GRi8o1I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T2nbNOyT; arc=fail smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Lz3epi88"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47f703a9e5dso1369838f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 02:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1784713432; x=1785318232; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fsxdo4WU+Ra3Ii3+AJeiKBXkT5u+K5Jpj+4piFHrP8Q=;
-        b=Lz3epi88SvQIgTK0fS/2y4VEeef124KIlbi0y5hreOG7Q+qodwNSghZdOuebBxgNZZ
-         0Dce5Y5FsIsL7tj/GRthR8TvoHWjD+6eZwe2rXAddv5U/vlGhb2vXJA+YC/fju8jx1wB
-         +OI6xMuVYQT6/rt4cXE1nQpO/4KYJJlAupHhUyqem15f2xiCVQ4XMJmRQgJp5ql8bcsz
-         zdDHCnUkLg96X42HNev6NCRq8i2CbZX7Ys7/omg/AW2Sextr8dMwodnpy0oZBeUfLNlA
-         NF8CZPQ1GN+E3xArl8/QNHjeSLp3ihSTa5l3bvZCBteFz0rxbGxuSNhDNmFxcR2iR4PQ
-         q56g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784713432; x=1785318232;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fsxdo4WU+Ra3Ii3+AJeiKBXkT5u+K5Jpj+4piFHrP8Q=;
-        b=C53hGItlW1L9xAEsIVV5FrWRODoogCs+XgCW0VDgNZ3Vr6AfoiJS2sY1Jzc9IR9yY9
-         1U9WQk+eLmkE5jK+mBhx8lzZa/jRFQDVkxfucJZhGT1mybFpFBy/+HlnZHh4khtsTTJG
-         eV8vAbNq6RHD5tIctNeScanr2BkJ3MvBvnzZDHnbkE5vxZ/lqxUxKynRIt37FZEMy5DA
-         iiNzrQHtxxEoCFNlv05WRyz2poZmp+q2ihbkjHGab0gYjdMNbmDDc7du6RBxG8pkK4Wm
-         uquBiuywDemmxlhSDfzm7wGD08AtqJRAOf4sRYmvHgyrk36NaghQAjGNkfh5uAlMemNC
-         EUsw==
-X-Forwarded-Encrypted: i=1; AHgh+RpjUVYRUj7yNV+su+XTfVNvMkYnoeEm98u5vXCHqgZcRtAZ/n+wP8cBPAbldJtT7FEkivwKl29GJUIXavFs1Ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIFGCf6pn34BbqpJUntcPHetPV8eYunfXUDdCQ6DBHZGVlTRTg
-	VkxMMV1f4+S18CytDHcBzltVQ7+iWB74V+u5GZJTfZ+RHyHTvp+Vd5wtN37jd9W0fokLp/ws3kk
-	IPu38bouGtQ==
-X-Gm-Gg: AR+sD11uVg++tKuOQp9tFuzza6eSw8obh/OTvv9pDeSln0AJLY04Zfm7cRI7bFQQGSs
-	d6BoutYmXBsOCIjGhkSHCA9VtptDHy5iZnHgIfqki2Vdd7UPQLnRqYNxr/1A8wWXpAbn+tSmHru
-	6bHO5EUUDIKXQ0sDsC0hDUqK0od4WSiQy40cRl+LIWrMRGJZBReJOEQsONxXaXmLMxuGO0Nd3K/
-	uFf+ZlZ0hx73DiPOExOgrppJClzlDu9aSRwDpzzn7qTLX67OQxjZ91dO9hHS56KSfCCfNoPCGV9
-	mw3cG/NlOqsh9SnLYUkF1z3GZqdEWFaFzeo2cFm63BT0+V4jsqVkAG8a71SR8PRgux2m0meKcSZ
-	rHeSfbQGtwffnVeqayCvghQuyuGqpfTBVpzd7a+2lDaadsG0JZQofQzZrYkIlDCgbQj+7NZC2Ra
-	4lOGg1eg==
-X-Received: by 2002:a05:6000:1acc:b0:47f:8309:8bac with SMTP id ffacd0b85a97d-47f83098c0amr6502172f8f.3.1784713432186;
-        Wed, 22 Jul 2026 02:43:52 -0700 (PDT)
-Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85bdac28sm4439266f8f.16.2026.07.22.02.43.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 02:43:51 -0700 (PDT)
-Date: Wed, 22 Jul 2026 11:43:49 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Ziyang Men <ziyang.meme@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, David Vernet <void@manifault.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	JP Kobryn <inwardvessel@gmail.com>, Mykola Lysenko <mykolal@meta.com>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev, linux-mm@kvack.org, 
-	kernel-team@meta.com, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
- correctness test for flush
-Message-ID: <amCBeD8sGVdi1Nm4@localhost.localdomain>
-References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
- <20260721174833.1232771-3-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T2nbNOyT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784713520; x=1816249520;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JipqE+jfkPp/VkTsyuKaDsLCPlIcSEx67Vx3/++HJOU=;
+  b=T2nbNOyTYx8TBmuT96rqia/IR5+p4qGKBF0n9EdpYmY/Id5IF/PNiIb/
+   Ximt2klSDcFGW8nxgTlBz+QDwYqDX2TjPI/kYRlHuwea+G7yfZrKK3iH/
+   OPoscDSEigzd6Vpgn0VY9PWSPULWNqqoRJKPVINbDE2nZWbTdEuxbju0U
+   QoqAfISTIyNmVMmQKk/uEE2FSBOSCNqZQpkJ5Ri5pF/wiLOrRbuDNmlK4
+   CUeMjes+C1RMUs1SdKBeStuJJzTKB6pQy1NEpI75UoaH6Y+8AMDBgaw42
+   pPJ+tSgvL96YGyye44GWNhQK/pJZovnp9gXJ4NvZ9kpYTmCLlYECHwTuX
+   A==;
+X-CSE-ConnectionGUID: g1INllNnQgCyIDiW21UR9Q==
+X-CSE-MsgGUID: 04kFKirGRnCd6P30Em/4uQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11853"; a="87879892"
+X-IronPort-AV: E=Sophos;i="6.25,178,1779174000"; 
+   d="scan'208";a="87879892"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 02:45:18 -0700
+X-CSE-ConnectionGUID: 6NFil9/6THSdI0+9DSEs5g==
+X-CSE-MsgGUID: 2macCuL9RPacnbzUg9PWGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,178,1779174000"; 
+   d="scan'208";a="253684291"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 02:45:17 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Wed, 22 Jul 2026 02:45:14 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Wed, 22 Jul 2026 02:45:14 -0700
+Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.22) by
+ edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Wed, 22 Jul 2026 02:45:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=x7RjrEDtCkugmIjZ7vEjL1v2880SfF1MHeial1YluJEAtaIA+Cs4nqQ9vlSw05DYxwQQBwpV/qgb3aXcg86QUkIK1zIxJxWK2qIOYj8XMa24X/ltCMqBB1rnU03Dh0o6BLAz9eUaF/FszYZEpxxnGtvBeN4ZhvVMBfJ+wu2GWsUYVpH+yQMI020DGTs5Y3xPQb4dQDxGQsdJDjsNfiyhNPyfrsEyvVn1clmqRa4l2K02RGN0oBY/BPwS8jtuW0hbvlzVqJj03c1GyFDrqZq3/FFquIPBixreHE8xpOIIaIuQtWJGDpzCWrzYGwvg0K+KrEE+pjP50pwi4R/fD3o1wQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L99ra2N52L2ws31+ScPquPdjVMHvkxb06NaPWM0AERU=;
+ b=yjbhJjEJSk96CxSgSHEvFQ0rDh77vDvbAbShdG6e3ed7Fo4/Gl0unAQeFtutDt0VomIAED6OPzGeljd25jXO5xSWl5YeMZvwNLfi/cukMr1TX7sauNr1ALJy5mJX2sg9Cehnd2UGXdAoGSUmNs64rZj6dJVLNzkquRtSCpMkThGY6n2vS7WdntHdL/nGpFdM7CZfmJCfQi6Gt/MgyktuNhT1g7QbPT24DeZHLARvjscgWbLEnc22y35Uryi3aJNVlEsI0id2Epzrs5cuZDJVC1/M+BDchb/SJsCRg7LCQbuYto/mG5DxgOT3wkzUVThOfgkxVdYOP7Wkw/l85yWBTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6020.namprd11.prod.outlook.com (2603:10b6:8:61::19) by
+ IA0PR11MB7790.namprd11.prod.outlook.com (2603:10b6:208:403::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Wed, 22 Jul
+ 2026 09:45:06 +0000
+Received: from DM4PR11MB6020.namprd11.prod.outlook.com
+ ([fe80::3058:1480:e4ac:5765]) by DM4PR11MB6020.namprd11.prod.outlook.com
+ ([fe80::3058:1480:e4ac:5765%4]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
+ 09:45:05 +0000
+Message-ID: <719cd113-11a8-463a-a145-59f2b7460a84@intel.com>
+Date: Wed, 22 Jul 2026 17:44:57 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] sched/cache: Add PR_SCHED_CACHE prctl for per-mm
+ control
+To: Yangyu Chen <cyy@cyyself.name>
+CC: Tim Chen <tim.c.chen@linux.intel.com>, K Prateek Nayak
+	<kprateek.nayak@amd.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Valentin Schneider <vschneid@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, Yangyu Chen <yangyu.chen@intel.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, "Ingo
+ Molnar" <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, "Vincent
+ Guittot" <vincent.guittot@linaro.org>
+References: <tencent_93116D14C771DC8C988C10E3C634BE0CC107@qq.com>
+ <tencent_4F460FBE0B41016D2247455CEE988A90D707@qq.com>
+Content-Language: en-US
+From: "Chen, Yu C" <yu.c.chen@intel.com>
+In-Reply-To: <tencent_4F460FBE0B41016D2247455CEE988A90D707@qq.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TP0P295CA0035.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:4::17) To DM4PR11MB6020.namprd11.prod.outlook.com
+ (2603:10b6:8:61::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ag6sewjdvm6sdw3b"
-Content-Disposition: inline
-In-Reply-To: <20260721174833.1232771-3-ziyang.meme@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6020:EE_|IA0PR11MB7790:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b8dd5a3-fcd8-4948-196a-08dee7d5e902
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014|23010399003|11063799006|4143699003|56012099006|10067099003|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info: TADB1/jkQW/SiRMicfSk++PvdI6lxzykYPdGjik6ORHV8cY2GbiNhZ1oFKTFcSEtEgJEMUPtsmbudk5zJiHHuOCU20PaYL7MSxLogchxNQv3hIba8Qs5gDrigm6Bj+kHbDRDuZxg4k3ubqpPX+lY7cf9bS0Ka5pCa2DKrQdnf7xpEGTz6bIbd4c4OQl8fS2O/OMAVrpHFdurpVazeWqy7W3/tnDl74D4LfT418SsQjEHLYcXdhq2aQsJvYGoF9MzxyM34JoJe5UJV9sVdGNu+w/spYLLXOg2zxTH8JjD98Y1lOT5QqaCKhuFkbqQ/dD5oSb5dHQh7tlUzuBkU/4jeqJ6ax3kxHr4QweNWHSgsZLjVKqWbuJB6D4tZE4cIX/zcaa2Dh0qpQ+KgwgyAygneg44547U893C0yc6u32v4to2S2ZZdkIb3UoywkjjzPtzdX8u0UHGocPiTRteoPnzQyuxYTcRbR+GO8qddizYoO7FD/mK7a/l4yApkh2dwJHAoSbDbfJVHSO6ygQKvS9LJ3NONa7kQYVjNHhsKaRqPwSNgKe2Wr7yyAWn4YQECHYA1HltYArzEYLl3RAux7SqetfGZtZqYQtHntB4QYrHjTEQKydjCEs8QORJNscs/ZTDGp3OEoN9qDKtkflipHkSecEsWEzzKGQY5i+cWH7YjZ0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6020.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(23010399003)(11063799006)(4143699003)(56012099006)(10067099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEZ5d2JhVFRtM21nWWQ4dHYzKytHU1dpR0JsMENLT3hsekx0M0c5VFB3NE0z?=
+ =?utf-8?B?ZXh3RGFkY3ZvRGNXQ29NdFFkVzRvcnRPeC8rdGwzTHpnK08xUnlVRWhaMERH?=
+ =?utf-8?B?aDRDSEFGZEdVUDcxV1ZOdy85VCtLdUZtUFRqNkdDKzNodDlMcHFWR0Q3N1lK?=
+ =?utf-8?B?N1ZFaDYwSTlGWmNodmtIUXJibW9kZlZqL1MyT2Zia1lEendYSDhmcEMxbVJ5?=
+ =?utf-8?B?RFNJU2RBaVdzc0RRY3RRN2JoN0ZiWG9BZHNvemdPOE1aU1NTOWFOUzA2VFpJ?=
+ =?utf-8?B?NXBEZFRoSzJVbTA1WGtGaDdTTDEwbVFsL09YYXNIbDdKT1RFbDlRZzlRbCs2?=
+ =?utf-8?B?cFJPS0M5MzZWQ2tjQVdvV0ZzTW1UeDQzVWRtL3hwTm1zSmplcWxmZnNUczk5?=
+ =?utf-8?B?WWtkUHl4VWNsbUMrd3ZkTHhXcytSZWc4aks2UHFhQlB1Qmd2eUFZSG01VGQ1?=
+ =?utf-8?B?MHlTVk9YWVQyQTlzS24vSkNFYVhqNFlsWGM0UGtEdENVaDhoTTM2TXFib0F0?=
+ =?utf-8?B?QkxZbTNZKytOd1kveTJiUFlXSFM4dXlFYkZadk1hMSt6cTBTVGh0UGtCajNY?=
+ =?utf-8?B?ZVNMWkhKVnM5cEVWWklJd05QZzBPK0F4aGR1blZGaE9SaFpPSzZCNGhOWHpT?=
+ =?utf-8?B?cm1XMWJWM3ZvUlZ2NkNTRmpsRnVzRnRoc0JVZ2o1MFZ5RHlqSlNuT2h1Q2lh?=
+ =?utf-8?B?dXZXakJJQVBXVnhMdlJ1R2RUbi9HbHI2UjVHTUE4b2wxbUJPOVZPbFQxTllR?=
+ =?utf-8?B?djBrOEhreGRWQjZIdnNpb0Y2TWZEZGp5RXdHMU9xcitURTh0TVdTRW1oTG00?=
+ =?utf-8?B?TnRlUEVnRm9oZkVyNVZCZERTUy9pN1FxNnRyWVFXTUVGOG1Zenh0ZjZYb1Jq?=
+ =?utf-8?B?dDZwVnErbUxBQlRVMSt6cUZXTklkVm1SNnRwQUppQkJTZ0ptaXRudzg0d1RJ?=
+ =?utf-8?B?aG95bEZOVmNUQkE4eU02RzRUcHVFMTZ6L1cvYkZGNG1wbElyR2VhTEIzazQv?=
+ =?utf-8?B?MVlzWEhDTXhFdjE5WkYvbFg4d3BQVk9EQlV3eVE1cXQ4RnVNNzNZMkJaNEdP?=
+ =?utf-8?B?SDNZb21XNEwyNm1uWThLVlJFa3hiemxMc01YRnYxaXVIYjVXZXNTKzQ4UzE0?=
+ =?utf-8?B?YXZnUUQ1UXltTDA3ZGk3QS9IcFhYalRiaHBvY0JyMFhNOFhibDBCZStIMm1P?=
+ =?utf-8?B?dm11T3VRSE0yRmlkeEMwR3JPazlaOFFNbFd1N050VnYwRjRyZWc0eDY0T0VX?=
+ =?utf-8?B?WTlJb1UyTUVBLzROYmdDM0FpSjhDWnZjQ0J5K0JqRWJoM2RoZy9TczhYWXl0?=
+ =?utf-8?B?NGVjK0ovQXpIZWhodGxoS1h6QWRhN29DcnRIOS80citRQ3dqQi93UjVtdmtT?=
+ =?utf-8?B?ZUFwSGYwelhuMHFUT3llTTN6c0FKSWd1dythSE1heDhpWlQ3WGUydTRQd29B?=
+ =?utf-8?B?QnNXVWMxWmMvV0FBSXU5UnFoMnhqWVJYbytVVTQ4ZlNha24zaUZ6bERyWE9B?=
+ =?utf-8?B?cFpEZHlFZm9FVTNveUQ1Wm5MTjN4ejhtbGlOdGdqNXhaTWZ5ODVSRWU1S3p1?=
+ =?utf-8?B?R0YwOThqK1c5Rkh1b1R3SGxnS2VSUnJiRUgwTTFmU3BQSm41Y0E0bXB1bUxl?=
+ =?utf-8?B?UEExc3d2SlVydHBuRE96RlJlVFU2d1lFaWVyazk0elh1cW95MmFXaExUYmhs?=
+ =?utf-8?B?TWdZK29CcmRnb2xPbzZnVHdVeGJheDdzaHNvT05CM0FKc25lUVozdEZYa2Rk?=
+ =?utf-8?B?cTRzSU42ZXhyb0lLTit2dVhXNXd6MjRUcExSanI5UXV4QTlkdjhOWXk1bWRs?=
+ =?utf-8?B?bFcxdElWM25EMDFJejkxRmN3Y1NnVkF5RzQwaWdDT29sNG9lanYxdTNtSHhP?=
+ =?utf-8?B?VWE5c25INDlmbG10d045YmppRGtJLzNjVzhuREpKTGVyUVRtRVlxL0M2QlNR?=
+ =?utf-8?B?UHNDVzBHSWorcElOaUVSekVHYVVwS0R3QWo1VlBtbDY1cExXVkE0ekhXd1Mr?=
+ =?utf-8?B?OVJvR3FLSElraWhlZUFxN1J3K1NDdHBhU1pIUHhCSG0wMUV5Vm5lOW1hcTc1?=
+ =?utf-8?B?WFgvSVFsU1pESHlkZEx3Mkkvc29qc29BWHpvY3M1UGs2cXVYYUJxSVpzaG85?=
+ =?utf-8?B?VDh3Q1ZmWDNEM2dTVk9pK0pSaWszeU40UElHSkRqbTJiUTduY2x0OHNCaFYx?=
+ =?utf-8?B?c3AxamhYSFVubEF1eW5UZW8zSFJwK2I5SzI4Zkp3anJwUkpic0RrTEJUWElp?=
+ =?utf-8?B?RW5GWDlscktWLytTZHhidzV0Um1vTVFidWU0dXprN2FrdWM1azJFL2k2VWVy?=
+ =?utf-8?B?clhLTFkveEFOckhwMitGbWowSzNuVkhXQWhpV21lODZyUktDYk9UUT09?=
+X-Exchange-RoutingPolicyChecked: SMirWqbyqkO9QkUA0NiCR7B82L3sVB4KztV7o8hoxqP8tOQNhJHpFOk5i8skZk0Gv8VrP5El0q5dJmWVf+QmRHTPzyLFbqYknk5vcwPCWkksQofjHEXRHiGYKtUBBfogT17o/crXk6FFnHyvKSSQWJA0alUO43njxKmBqV2nFi1J9jPC1gxZ4a/cRD6e77277k4bNrzx5ergGYIMB4lU6Wi+gz976ZsLIgjc+ow4/FbGfWb1buZIyB2NoTmxpuMlG2qe5d7F/uYXtICwEmHuSa0cLN5gmgwl+WahVkvgwqLr5RIL9xCgC9mtvkENj3/vwf3XuzeesF3LM3sN25g1Jw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b8dd5a3-fcd8-4948-196a-08dee7d5e902
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6020.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 09:45:05.9065
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0ig3tJxwcbQyZzjLa9WqXzZ4laoaWA5lPoB4VrJ4Z523DYvyNmFyifXVuAQWMF6x5ZI6w8jeh7U85b6VvqerJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7790
+X-OriginatorOrg: intel.com
 
+Hi Yangyu,
 
---ag6sewjdvm6sdw3b
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
- correctness test for flush
-MIME-Version: 1.0
+thanks very much for enhancing cache-aware scheduling,
 
-Hello Ziyang.
+On 7/22/2026 5:10 PM, Yangyu Chen wrote:
+> Cache aware scheduling is currently controlled only through global
+> debugfs knobs, but the right aggressiveness is workload and platform
+> specific. A multi-threaded Verilator run is one example: its RSS is
+> large while only a small part of it is hot, so an RSS-based footprint
+> estimate should not decide whether it is aggregated; and packing its
+> threads onto the SMT siblings of one LLC beats spreading them across
+> LLCs on some platforms (e.g. AMD EPYC Turin) but not on others (e.g.
+> EPYC Milan). Such choices cannot be made globally for the whole
+> machine. Add a prctl interface to override the knobs per process
+> (per mm_struct):
+> 
+>    prctl(PR_SCHED_CACHE, PR_SCHED_CACHE_SET, attr, value, 0);
+>    prctl(PR_SCHED_CACHE, PR_SCHED_CACHE_GET, attr, &value, 0);
+> 
+> A single prctl command implements both directions, like
+> PR_RSEQ_SLICE_EXTENSION. The attributes are a per-process enable
+> (effective only while the feature is globally active), the two
+> aggregation tolerances, the overaggr percentage (applied where a
+> task's own migration is admitted; group level statistics span many
+> processes and keep using the global value), and an inherit mask
+> selecting which attributes an mm created by execve() keeps. fork()
+> always inherits everything, and the mask itself lives on the
+> task_struct so it survives both, which lets a numactl-like launcher
+> configure a workload and exec it.
+> 
+> The overrides live in mm->sc_stat with -1 meaning "follow the global
+> default"; GET stores the raw value through an int pointer so this
+> sentinel round-trips without being mistaken for an errno.
+> mm_init_sched() gains the creating task to tell fork (p != current)
+> from exec (p == current) apart. A disabled mm has its preferred LLC
+> invalidated at the existing invalidation points, so all group-level
+> statistics self-neutralize.
+> 
 
-On Tue, Jul 21, 2026 at 10:48:31AM -0700, Ziyang Men <ziyang.meme@gmail.com=
-> wrote:
-> Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
-> return values that agree with what userspace reads from cgroupfs, across
-> a whole cgroup subtree that has been charged on many CPUs.
->=20
-> It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
-> calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
-> only asserts each value is greater than zero, so it never checks that a
-> value is actually correct.  This test compares the kfunc values against
-> what userspace reads from memory.stat, and checks every node in the
-> cgroup tree.
->=20
-> Moreover, cgroup_iter_memcg does not exercise the rstat flush
-> (mem_cgroup_flush_stats()).  This test does: it launches a process on
-> each leaf that charges and holds memory across multiple CPUs (so the
-> leaf's rstat is dirty on K per-cpu trees), then confirms the flush works
-> for both the BPF and the file path by checking two properties:
->=20
->   1. after the flush, each leaf's anon is at least what the process
->      charged there;
->=20
->   2. after the flush, the sum of the leaves' charged memory equals the
->      amount at the root.
->=20
-> The BPF reader and the file reader run in two separate rounds.  Each
-> round builds the same cgroup tree from scratch and charges the same
-> amount of memory, so both rounds start from the same state and the
-> numbers are comparable.  In detail:
->=20
->   - round 1 (BPF) builds the subtree, forks one child per leaf that
->     charges the leaf across K CPUs and then blocks holding the charge,
->     walks the tree with a SEC("iter.s/cgroup") program that flushes the
->     subtree at the root and reads each cgroup via the memcg kfuncs
->     (bpf_get_mem_cgroup, bpf_mem_cgroup_flush_stats,
->     bpf_mem_cgroup_page_state, bpf_mem_cgroup_vm_events,
->     bpf_put_mem_cgroup) into a hash map;
->=20
->   - round 2 (cgroupfs) builds and charges an identical tree the same way,
->     then reads every cgroup's memory.stat / memory.current from
->     userspace.
->=20
-> The subtests differ in how many CPUs each leaf is charged on (a single
-> CPU or across K CPUs), and run on two cgroup tree sizes.  The charging
-> children pin CPUs and there is one per leaf, so the test is registered
-> serial.
->=20
-> The traditional path reads memory.stat / memory.current through a new
-> read_cgroup_file() helper added to cgroup_helpers (the read counterpart
-> of write_cgroup_file).  When the memcg kfuncs are unavailable
-> (CONFIG_MEMCG=3Dn) the test skips cleanly; the base selftest config now
-> selects CONFIG_MEMCG=3Dy.
->=20
-> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
-> Assisted-by: Claude:claude-opus-4-8
-> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
+We are working on a version that uses prctl to turn on/off/share
+among tasks, which performs similar operations to core-scheduling
+based on cookies[1]. That version decouples the mm from
+cache-aware scheduling so that processes, tasks, or cgroups can
+tag tasks with different "cookies". We are also exploring how to
+leverage schedqos (from Qais) to take advantage of these
+interfaces.
 
-On one hand, this migth be useful to ensure somewhat stable behavior of
-the reported stats, OTOH, it's exposing quite some implementation
-details (flushing, per-cpu charging).
-I'd say that flushing for BPF progs should work (which is what
-cgroup_iter_memcg() should test IIUC) and yield some precision effect,
-however, the comparison with memory.stat may be source of false
-positives due to noise.
-Also, this is supposed to measure convergence in some "static" situation
-but in reality the things are moving (memcg charges/uncharges) in
-various pace so some differences would still occur (IMO such deviations
-are OK, perhaps the test should spell out its preconditions and limitations=
-).
+Your enhancement for tuning the parameters could be applied on top
+of that, I suppose.
 
-As for the implementation in general -- it'd need some tighter
-connection with existing cgroup selftests (e.g. use integer types like
-cgroup selftest, utilization/adaptation of existing helpers to reduce
-copies of same/similar code).
-
-
-> --- a/tools/testing/selftests/cgroup/Makefile
-> +++ b/tools/testing/selftests/cgroup/Makefile
-> @@ -14,14 +14,29 @@ TEST_GEN_PROGS +=3D test_freezer
->  TEST_GEN_PROGS +=3D test_hugetlb_memcg
->  TEST_GEN_PROGS +=3D test_kill
->  TEST_GEN_PROGS +=3D test_kmem
-> +TEST_GEN_PROGS +=3D test_memcg_stat_cross_cpu
->  TEST_GEN_PROGS +=3D test_memcontrol
-
-Yeah, this is perhaps so much different from test_memcontrol that it
-deserves a separate prog, OTOH it'd be good to share some common
-cg/memcg functions across the two (some notes below).
-
-
-> +unsigned long long cg_get_id(const char *cgroup)
-
-This duplicates get_cgroup_id_from_path() from
-tools/testing/selftests/bpf/cgroup_helpers.c
-
-> +/* ---- allowed CPU set ------------------------------------------------=
---- */
-> +
-> +static int *cpu_list; /* ids of the CPUs this process may run on */
-
-I think it'd be simpler to just use cpu_set_t and the standard helper
-macros/functions for this.
-
-> +/* Recursively create children of @path. @path must already exist and be=
- recorded. */
-> +static int build_children(const char *path, int fanout, int depth)
-> +{
-> +	char child[PATH_MAX];
-> +	int i;
-> +
-> +	if (depth =3D=3D 0)
-> +		return 0;
-> +
-> +	/* Enable memory on this interior node so its children get a memcg. */
-> +	if (cg_write(path, "cgroup.subtree_control", "+memory"))
-> +		return -1;
-> +
-> +	for (i =3D 0; i < fanout; i++) {
-> +		snprintf(child, sizeof(child), "%s/c%d", path, i);
-> +		if (add_node(child, depth =3D=3D 1, NULL))
-> +			return -1;
-
-is_leaf :=3D depth =3D=3D 1
-doesn't look correct (I see below the test builds hierarchies with
-depth=A0>=A01)
-Ah, it's non-conventional meaning of "leaf", I'd suggest a subtree or
-partition or similar (IIUC the purpose).
-
-
-> +		if (build_children(child, fanout, depth - 1))
-> +			return -1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static size_t tree_capacity(int fanout, int depth)
-> +{
-> +	size_t total =3D 1, level =3D 1;
-> +	int d;
-> +
-> +	for (d =3D 0; d < depth; d++) {
-> +		level *=3D fanout;
-> +		total +=3D level;
-> +	}
-> +	return total;
-> +}
-> +
-> +/* The tree is arranged in the DFS order within an array */
-> +static int build_tree(int fanout, int depth, int *root_fd)
-> +{
-> +	n_nodes =3D 0;
-> +	n_leaves =3D 0;
-> +	nodes =3D calloc(tree_capacity(fanout, depth), sizeof(*nodes));
-> +	if (!nodes)
-> +		return -1;
-> +
-> +	if (add_node(subtree_root, depth =3D=3D 0, root_fd))
-> +		return -1;
-> +	return build_children(subtree_root, fanout, depth);
-> +}
-> +
-> +/* ---- cross-CPU charge (one pinning child per leaf) ------------------=
---- */
-> +
-> +static pid_t *charger_pids;
-> +static int n_chargers;
-> +/* parent pid, for the children's PR_SET_PDEATHSIG race check */
-> +static pid_t test_pid;
-> +static int charge_ready[2] =3D { -1, -1 };	/* child -> parent "ready" ba=
-rrier */
-> +static int charge_ctrl[2] =3D { -1, -1 };	/* parent -> child "exit" (clo=
-se to signal) */
-> +
-> +/*
-> + * One charging child, dedicated to a single leaf and spread over K CPUs=
-=2E  It
-> + * joins its leaf, maps a resident anon region, then faults the region i=
-n K
-> + * slices, each on a different CPU, so this leaf's rstat ends up dirty o=
-n K
-> + * per-cpu trees.  The region stays mapped, so the charge persists while=
- the
-> + * parent reads.  After signalling readiness the child blocks (holding t=
-he
-> + * charge) until the parent closes the control pipe.  Never returns.
-> + *
-> + * @base is this child's starting index into cpu_list; its K CPUs are
-> + * (base + 0..K-1) mod n_cpu.
-> + */
-> +static void charger_child(const struct cg_node *leaf, int base, int k,
-> +			  size_t resident_bytes)
-> +{
-
-It'd be nicer if this shared alloc_* functions from test_memcontrol.c
-(module adjustoment to cater both users).
-
-> +static int file_read_node(const char *path, struct file_snap *o)
-> +{
-> +	char buf[8192];
-> +
-> +	memset(o, 0, sizeof(*o));
-> +
-> +	if (cg_read(path, "memory.stat", buf, sizeof(buf)))
-> +		return -1;
-> +	parse_stat(buf, o);
-
-We have cg_read_key_long() for such extractions.
-
-> +
-> +/* ---- correctness comparison -----------------------------------------=
---- */
-> +
-> +static bool close_enough(__u64 a, __u64 b, __u64 tol)
-> +{
-> +	return (a > b ? a - b : b - a) <=3D tol;
-> +}
-
-See
-tools/testing/selftests/cgroup/lib/include/cgroup_util.h:values_close()
-
-
-> +
-> +/* Dump one node's bpf-vs-file stats; called when a mismatch is detected=
-=2E */
-> +static void dump_node(int i, const struct memcg_stat_snapshot *b,
-> +		      const struct file_snap *f)
-> +{
-> +	ksft_print_msg("node %d bpf : anon=3D%llu file=3D%llu shmem=3D%llu fmap=
-ped=3D%llu pgfault=3D%llu\n",
-> +		       i, b->anon, b->file, b->shmem, b->file_mapped, b->pgfault);
-> +	ksft_print_msg("node %d file: anon=3D%llu file=3D%llu shmem=3D%llu fmap=
-ped=3D%llu pgfault=3D%llu\n",
-> +		       i, f->anon, f->file, f->shmem, f->file_mapped, f->pgfault);
-> +}
-> +
-> +/*
-> + * Compare the BPF kfunc snapshots (round 1) against the memory.stat val=
-ues
-> + * (round 2), node by node.  The two rounds are independent, equivalently
-> + * charged trees, so the flushed stats are compared within a small toler=
-ance
-> + * that absorbs per-round overhead (i.e., a charging child's own stack p=
-ages).
-> + * A wrong unit, enum or field in the kfunc path would miss by far more.
-> + *
-> + * Two per-round checks verify the flush itself: each leaf was charged
-> + * resident_bytes of anon spread over K CPUs, so its flushed anon must b=
-e at
-> + * least that; and the root's recursive anon must equal the sum of the l=
-eaves'
-> + * anon (rstat propagated the charge up the tree).
-> + *
-> + * Returns 0 if every check passes, -1 otherwise.
-> + */
-> +static int check_correctness(const struct memcg_stat_snapshot *bpf,
-> +			     const struct file_snap *file, const bool *is_leaf,
-> +			     int n, size_t resident_bytes)
-> +{
-> +	__u64 stat_tol =3D 64 * page_size;
-> +	__u64 pgf_tol =3D 1024;
-
-These are central values of the test.  It's necessary to explain the
-choice of them.
-
-
-> +	__u64 broot =3D 0, bsum =3D 0, froot =3D 0, fsum =3D 0;
-> +	int i, mism =3D 0, flush_bad =3D 0;
-> +
-> +	for (i =3D 0; i < n; i++) {
-> +		const struct memcg_stat_snapshot *b =3D &bpf[i];
-> +		const struct file_snap *f =3D &file[i];
-> +		__u64 bcur =3D b->usage_pages * page_size;
-> +
-> +		/* kfunc path (round 1) compared with memory.stat path (round 2) */
-> +		if (!close_enough(b->anon, f->anon, stat_tol) ||
-> +		    !close_enough(b->file, f->file, stat_tol) ||
-> +		    !close_enough(b->shmem, f->shmem, stat_tol) ||
-> +		    !close_enough(b->file_mapped, f->file_mapped, stat_tol) ||
-> +		    !close_enough(b->pgfault, f->pgfault, pgf_tol)) {
-> +			mism++;
-> +			dump_node(i, b, f);
-> +		}
-> +
-> +		/* memory.current is live (no flush) and must bound the flushed anon */
-> +		if (b->anon =3D=3D 0 || b->anon > bcur) {
-> +			flush_bad++;
-> +			ksft_print_msg("node %d: anon=3D%llu exceeds current=3D%llu\n",
-> +				       i, b->anon, bcur);
-> +		}
-> +
-> +		/* each leaf's flush must have gathered the full cross-CPU charge */
-> +		if (is_leaf[i]) {
-> +			if (b->anon < resident_bytes || f->anon < resident_bytes) {
-> +				flush_bad++;
-> +				ksft_print_msg("node %d: short flush bpf=3D%llu file=3D%llu\n",
-> +					       i, b->anon, f->anon);
-> +			}
-> +			bsum +=3D b->anon;
-> +			fsum +=3D f->anon;
-> +		}
-> +		if (i =3D=3D 0) { /* nodes[0] =3D=3D subtree_root */
-> +			broot =3D b->anon;
-> +			froot =3D f->anon;
-> +		}
-> +	}
-> +
-> +	if (mism) {
-> +		ksft_print_msg("bpf (round 1) disagrees with memory.stat (round 2)\n");
-> +		return -1;
-> +	}
-> +	if (flush_bad) {
-> +		ksft_print_msg("flush did not aggregate the cross-cpu charge\n");
-> +		return -1;
-> +	}
-> +	if (broot !=3D bsum || froot !=3D fsum) {
-> +		ksft_print_msg("root anon !=3D sum of leaf anon: bpf %llu/%llu file %l=
-lu/%llu\n",
-> +			       broot, bsum, froot, fsum);
-> +		return -1;
-> +	}
-> +	if (bsum =3D=3D 0) {
-> +		ksft_print_msg("tree carries no anon\n");
-> +		return -1;
-> +	}
-> +	return 0;
-> +}
-> +
-> +/* ---- one case -------------------------------------------------------=
---- */
-> +
-> +struct testcase {
-> +	const char *name;
-> +	int fanout;
-> +	int depth;
-> +	int cpus_per_leaf; /* K: CPUs each leaf is charged on; 0 =3D all CPUs */
-> +	size_t resident_bytes; /* anon charged per leaf */
-> +};
-> +
-> +/*
-> + * Remove the subtree in reverse creation order.  Nodes are recorded in =
-DFS
-> + * order (a parent precedes all its descendants), so iterating backwards
-> + * removes every child before its parent.
-> + */
-> +static void destroy_tree(void)
-> +{
-> +	int i;
-> +
-> +	if (!nodes)
-> +		return;
-> +	for (i =3D n_nodes - 1; i >=3D 0; i--)
-> +		cg_destroy(nodes[i].path);
-> +	free(nodes);
-> +	nodes =3D NULL;
-> +}
-> +
-> +/*
-> + * Round 1: build and charge a fresh tree, walk it with the BPF iterator=
- (which
-> + * flushes and reads each cgroup via the memcg kfuncs), and capture one =
-snapshot
-> + * per node into @snap.  @is_leaf records the tree shape so the later co=
-mparison
-> + * can run after the tree is gone.  Returns the node count, or -1 on fai=
-lure.
-> + * The tree is always torn down before returning.
-> + */
-> +static int capture_bpf_round(const struct testcase *tc,
-> +			     struct memcg_stat_snapshot *snap, bool *is_leaf)
-> +{
-> +	struct memcg_stat_cross_cpu *skel =3D NULL;
-> +	struct bpf_link *link =3D NULL;
-> +	int root_fd =3D -1, ret =3D -1, i, mfd;
-> +
-> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
-> +		ksft_print_msg("build tree (bpf) failed\n");
-> +		goto out;
-> +	}
-> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
-> +		goto out;
-> +
-> +	skel =3D memcg_stat_cross_cpu__open();
-> +	if (!skel) {
-> +		ksft_print_msg("skel open failed\n");
-> +		goto out;
-> +	}
-> +	if (bpf_map__set_max_entries(skel->maps.results, n_nodes + 8)) {
-> +		ksft_print_msg("set max_entries failed\n");
-> +		goto out;
-> +	}
-> +	if (memcg_stat_cross_cpu__load(skel)) {
-> +		ksft_print_msg("skel load failed\n");
-> +		goto out;
-> +	}
-> +
-> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-> +	union bpf_iter_link_info linfo =3D {};
-> +
-> +	linfo.cgroup.cgroup_fd =3D root_fd;
-> +	linfo.cgroup.order =3D BPF_CGROUP_ITER_DESCENDANTS_PRE;
-> +	opts.link_info =3D &linfo;
-> +	opts.link_info_len =3D sizeof(linfo);
-> +
-> +	link =3D bpf_program__attach_iter(skel->progs.cgroup_memcg_stat_cross_c=
-pu,
-> +					&opts);
-> +	if (!link) {
-> +		ksft_print_msg("attach iter failed\n");
-> +		goto out;
-> +	}
-> +
-> +	/* bpf walk through the cgroup tree and fetch result */
-> +	if (bpf_walk_once(link)) {
-> +		ksft_print_msg("bpf walk failed\n");
-> +		goto out;
-> +	}
-> +
-> +	mfd =3D bpf_map__fd(skel->maps.results);
-> +	for (i =3D 0; i < n_nodes; i++) {
-> +		/* Save the position for the leaf, used for later correctness check */
-> +		is_leaf[i] =3D nodes[i].is_leaf;
-> +		if (bpf_map_lookup_elem(mfd, &nodes[i].id, &snap[i])) {
-> +			ksft_print_msg("map lookup failed for node %d\n", i);
-> +			goto out;
-> +		}
-> +	}
-> +	ret =3D n_nodes;
-> +out:
-> +	bpf_link__destroy(link);
-> +	memcg_stat_cross_cpu__destroy(skel);
-> +	if (root_fd >=3D 0)
-> +		close(root_fd);
-> +	stop_chargers();
-> +	destroy_tree();
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Round 2: build and charge an identical fresh tree, then read every cg=
-roup via
-> + * memory.stat / memory.current.  The tree is reset after bpf read, so e=
-ach
-> + * read does a real rstat flush.  Returns the node count, or -1 on failu=
-re.
-> + * The tree is always clear before returning.
-> + */
-> +static int capture_file_round(const struct testcase *tc, struct file_sna=
-p *snap)
-> +{
-> +	int root_fd =3D -1, ret =3D -1, i;
-> +
-> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
-> +		ksft_print_msg("build tree (file) failed\n");
-> +		goto out;
-> +	}
-> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
-> +		goto out;
-> +
-> +	for (i =3D 0; i < n_nodes; i++)
-> +		if (file_read_node(nodes[i].path, &snap[i])) {
-> +			ksft_print_msg("file read failed for node %d\n", i);
-> +			goto out;
-> +		}
-> +	ret =3D n_nodes;
-> +out:
-> +	if (root_fd >=3D 0)
-> +		close(root_fd);
-> +	stop_chargers();
-> +	destroy_tree();
-> +	return ret;
-> +}
-> +
-> +static int run_case(const struct testcase *tc)
-> +{
-> +	struct memcg_stat_snapshot *bpf =3D NULL;
-> +	struct file_snap *file =3D NULL;
-> +	bool *is_leaf =3D NULL;
-> +	size_t cap =3D tree_capacity(tc->fanout, tc->depth);
-> +	int nb, nf, ret =3D KSFT_FAIL;
-> +
-> +	bpf =3D calloc(cap, sizeof(*bpf));
-> +	file =3D calloc(cap, sizeof(*file));
-> +	is_leaf =3D calloc(cap, sizeof(*is_leaf));
-
-(This caught my eye, it looks like those could be better members of
-struct cg_node. But I'm not 100% leaned to it.)
-
-> +	/* round 2: file reader flushes and reads a fresh, equivalent tree */
-
-Hm, I think that's quite a strong assumption that the 2nd tree would be
-equivalent (wrt memcg state). Could you back it up with some arguments
-if you want to rely on it?
-
-
-
-Thanks for an interesting comparer,
-Michal
-
---ag6sewjdvm6sdw3b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCamCQxRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AiNbQD8C4AH4jaYi6gD1GbnB0sM
-NW9dxXz9+pvykaHfFRW+jh8BALbvddo6X3fXt4ct0hLvUV5MM/vXj9SRlLnqY08+
-fa8N
-=FVmc
------END PGP SIGNATURE-----
-
---ag6sewjdvm6sdw3b--
+[1] https://github.com/chen-yu-surf/linux/commits/cache_aware_prctl_v1.4/
