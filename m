@@ -1,185 +1,106 @@
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6E93195FC
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 00:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F28D31619B;
+	Wed, 22 Jul 2026 00:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784679355; cv=none; b=E46JTFuH0ao9uRJRSrVLiAdadJLAJ74adpcB2XRxDB2EGsrUiIN9N6NezWPWo0GNzGjtOevtFS7E/bCllDj+fDU2A4r6hlA0tnIuC2+rzHZMmXTxW6bxyiV13FifjKE73awMMD96y2xjtsorhCcor87eTgYCOq34pNA0RlywCSA=
+	t=1784679506; cv=none; b=DyL7KRZqfE5vIjI+EFdTBYI8xQTAUXBsJ435bdtVwBf8cR3Ml83d1c1sWJ7pihUAVqAYqIPIxPmOWmCABrZiTEfws+SL8qZt4EcgpKBDoydb9ZwHpewIZLpVDYH+LtlBqtIFEZDVnke1mNLizCsnuwTEYybEU7FyqNSNOjKXGKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784679355; c=relaxed/simple;
-	bh=+u92+edGzJUogIivEKHvjJM5J721kuk7QGsl9GsyiVA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AlFV1tP72Oh/h0fhJDPxLcREazfgMLX9a6v7D9yoNbqhAHCt2C3HVXvQ5Fh3+CnWnTXNz1pSwPNF6L/CEzocVLQarvD7TN5xaEKPqrzy8wFUKr59AtRWCTaoBubLq91qZSSDx+5hkuewNnZP1mU8jynl8bfTNqrlkRAUnYasZyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Hb+af4dw; arc=none smtp.client-ip=209.85.214.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
+	s=arc-20240116; t=1784679506; c=relaxed/simple;
+	bh=YTmkcmJ8gx8RuKHiebYC3gqo1UAMozEiLXFDXGlSWE8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j+VaeYijiJf21i5Hn706IbD7Y18cWMZUTxZTZnRKcgcSNuuFrBBkSxaEktsCNcW07e26Ndpq2Z71RXPSK8kuVeXdxPlHidJSclmx9Nu3wZdnDntVwPqxYQWbII50jy3Im+c39ZZl2AeB0GoHA/B9Ux0uxejH8934Xv38GMM4Hak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HQklOV3t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Hb+af4dw"
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc6dd43737so224664675ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 17:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784679346; x=1785284146; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RPmtr/TNEphr6iJROeMyjAAqcZVr5NPU0l3kEo6G8jw=;
-        b=Hb+af4dwxJ2MONl287btlm2st8bDJahde+XGVcdNKEcPwq/Agm8Jw/B5huCKMO0E08
-         ioCwwEnNjk4Fa0F70TiGHbuHKfpVV1nRrzWYU1uOW+sr4BgGxJQkZVuX65q6UwqqJ37t
-         HVsMaQY4rWRzvDvRY2Sos+8fnFvYYSmsl6b1bb4cN0H389Tisw4WUrw9WeGruNCM2/xM
-         Sm+kMyDTLZ/+fe+0jwsQiH6/xBpjUrRC/DdPbcHCOrBOe9BA8/VbritSkM+lAotwMT/G
-         Fuc84+97ZiNmA7boq0XalNv/WeJpiVYZWDqWZTwMDmZW71r3JzA4OJtksEcdOgXL935V
-         zJDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784679346; x=1785284146;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RPmtr/TNEphr6iJROeMyjAAqcZVr5NPU0l3kEo6G8jw=;
-        b=P4aoKDVDSA9WL31DeCK4Zqi4dNPEbfBU7thJnvzAWnwdtXz4gmlohGOlK8fnDo2KvV
-         oC61njz73GH/QOfD2Xkkvt2XtMVKBvIWuAHc6RWYpRt2lpBkVuJrRV722jFMvP633Fjg
-         PmRPa1SDeMUWNs0YYNxEfnMnOvcyXty/ip6Akt3b2j3G/E6JerwsIygq6ZIsKlkeEJwD
-         ZLJqTJwzpNwQtTXAyWUnEwoXX+uOoIu0zhgPxBJvGS7FTSfFmOswSqXvSIhEW+g2gEuO
-         IlqmErhpbL1l8qqwLb/0Lt1kdNjq3TohqLtYAWt9gAddjECNjS/YpAGi0q2IC4KHLDfk
-         Zg2g==
-X-Forwarded-Encrypted: i=1; AHgh+RowK08HalnyR2ZLXOewB0ZLWuFGS6iOgCAAKGlfZiW3fhL/g8++lAO5PpS906pnqLKk+TUWUD9ez4Vxp1Drz7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDUdGawocVybJdjTDWd10u2ez9IgsNedPFu7pelEPrSa+ZU38v
-	yk2jO24nEJYRfudqDHmdjUjeMAZF9k/d3zu1t/bAoVzI404ph8BKzxXNKymrekXwti4wAOiR0b2
-	w8lFnEaaX
-X-Received: from pgcp18.prod.google.com ([2002:a63:7412:0:b0:c9a:4ffc:3456])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a103:b0:3c0:9c1a:8941
- with SMTP id adf61e73a8af0-3c3ada59cd5mr21741694637.73.1784679345554; Tue, 21
- Jul 2026 17:15:45 -0700 (PDT)
-Date: Wed, 22 Jul 2026 00:15:39 +0000
-In-Reply-To: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HQklOV3t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA041F000E9;
+	Wed, 22 Jul 2026 00:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784679490;
+	bh=NZE8OVcCqPgnZz+/5Kme28lwwlaGh+3LsOtdYSryteU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=HQklOV3tmYgsc8UrejYclNrWh/eCAMQrh79IZrgN0+gHQk4JssCNNslTRNhnYyWkX
+	 FyKeg3rWX8mUJnpmSgf+lsRZV5A99IIVJ68sU4maNDFnhBE8vha3SnLsjClH/fl0G3
+	 Anxbm4RcITokwXA85WLGQqRyUh3ahEIoN97Tfa0CB+ZDz75rOG7cBhXZYXc7aFPZCA
+	 xBhlZxxthyvWaJ3wGH2xRHqcWXT1KM2anIcUXTY2aG6QUVHm5f9io8QARfC4i/JiIg
+	 ziVrar6D8Pk1jj+IDiMyd2mh1f+nd66nN2S2aeQ3h/d3I2oeS07tQjN0VhcSsHnCNl
+	 ogBmadR06ltiA==
+From: SJ Park <sj@kernel.org>
+To: longlong yan <yanlonglong@kylinos.cn>
+Cc: SJ Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests/mm/pagemap_ioctl: Fix missing NULL checks after calloc()
+Date: Tue, 21 Jul 2026 17:18:00 -0700
+Message-ID: <20260722001801.150265-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260721063611.342-1-yanlonglong@kylinos.cn>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
-X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784679337; l=4049;
- i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=3HaO+LlIH5EQwYBLepHXt1276V0e3otp2TZx5sNJQxA=; b=4EgBrBNIcrg+NHGZ5nkD3MnsDofc8PMsdapr/842JIP2bDaGYrH15xDznsSmgyiLoO8X7z9El
- aD1bo0i0JvQDXiyvjPK8mzZfohuPAiyLS8MVb3xgODFbOwmrpYZPAP1
-X-Mailer: b4 0.14.3
-Message-ID: <20260722-igb_v3_b4-v6-4-0be1d29918d4@google.com>
-Subject: [PATCH v6 4/6] vfio: selftests: igb: Factor hardware programming into igb_hw_init()
-From: Josh Hilke <jrhilke@google.com>
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
-	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-From: Alex Williamson <alex.williamson@nvidia.com>
+Hello longlong,
 
-Split the device register programming out of igb_init() into a new
-igb_hw_init() helper so that the same sequence can be re-run after a
-VFIO_DEVICE_RESET to restore the registers that CTRL.RST clears.  No
-functional change for the initial path.
 
-igb_init() now performs the one-shot setup: region size assertion, BAR
-mapping, CTRL.RST + IMC mask-all to put the device into a known state,
-and vfio_pci_msix_enable() to set up the kernel-side IRQ trigger.
-igb_hw_init() does the rest: ring pointer setup and IOVA calc,
-CTRL_EXT, PCI bus master, GCR, PHY loopback, descriptor rings, RCTL,
-TCTL, GPIE/EIAC/EIAM/EIMS/IVAR, and driver-state initialization.
+I found get_maitnainer.pl is suggesting to Cc below recipients.
 
-vfio_pci_msix_enable() moves from after RCTL/TCTL to before all
-device-side programming.  Its only side effects are the VFIO kernel
-IRQ trigger setup and the PCI MSI-X capability bits in config space;
-neither has any ordering dependency on the 82576 device register
-writes performed in igb_hw_init().  Performing it once in igb_init()
-keeps igb_hw_init() reusable from the reset recovery path (which uses
-vfio_pci_irq_reenable() to re-arm the existing trigger).
+- Lorenzo Stoakes <ljs@kernel.org>
+- "Liam R. Howlett" <liam@infradead.org>
+- Vlastimil Babka <vbabka@kernel.org>
+- Mike Rapoport <rppt@kernel.org>
+- Suren Baghdasaryan <surenb@google.com>
+- Michal Hocko <mhocko@suse.com>
 
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
----
- tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 41 ++++++++++++++++------
- 1 file changed, 31 insertions(+), 10 deletions(-)
+On Tue, 21 Jul 2026 14:36:11 +0800 longlong yan <yanlonglong@kylinos.cn> wrote:
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-index 2b444be4bdfe..8eaf120330dc 100644
---- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-@@ -202,7 +202,13 @@ static void igb_reset(struct igb *igb)
- 	igb_write32(igb, E1000_IMC, 0xFFFFFFFF);
- }
- 
--static void igb_init(struct vfio_pci_device *device)
-+/*
-+ * Program the device into a usable state.  Split out of igb_init() so it
-+ * can be reused after a device reset to re-program the registers that
-+ * CTRL.RST clears.  Expects bar0 to be mapped and MSI-X already enabled
-+ * via VFIO.
-+ */
-+static void igb_hw_init(struct vfio_pci_device *device)
- {
- 	struct igb *igb = to_igb_state(device);
- 	u64 iova_tx, iova_rx;
-@@ -210,15 +216,10 @@ static void igb_init(struct vfio_pci_device *device)
- 	u16 cmd_reg;
- 	int retries;
- 
--	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
--
--	/* Set up rings and calculate IOVAs */
--	igb->bar0 = device->bars[0].vaddr;
--
- 	iova_tx = to_iova(device, igb->tx_ring);
- 	iova_rx = to_iova(device, igb->rx_ring);
- 
--	igb_reset(igb);
-+
- 
- 	/* Signal that the driver is loaded */
- 	ctrl = igb_read32(igb, E1000_CTRL_EXT);
-@@ -312,9 +313,6 @@ static void igb_init(struct vfio_pci_device *device)
- 	igb_write32(igb, E1000_RCTL, rctl);
- 	igb_write32(igb, E1000_TCTL, E1000_TCTL_EN);
- 
--	/* Enable MSI-X with 1 vector for the test */
--	vfio_pci_msix_enable(device, MSIX_VECTOR, 1);
--
- 	/*
- 	 * Program MSI-X interrupt routing per 82576 datasheet:
- 	 *
-@@ -354,6 +352,29 @@ static void igb_init(struct vfio_pci_device *device)
- 	device->driver.msi = MSIX_VECTOR;
- }
- 
-+static void igb_init(struct vfio_pci_device *device)
-+{
-+	struct igb *igb = to_igb_state(device);
-+
-+	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
-+
-+	igb->bar0 = device->bars[0].vaddr;
-+
-+	igb_reset(igb);
-+
-+	/*
-+	 * Enable MSI-X via VFIO before device-side register programming.
-+	 * vfio_pci_msix_enable() only touches the VFIO IRQ machinery and the
-+	 * PCI MSI-X capability via config space; it has no ordering
-+	 * dependency on the device-side writes performed by igb_hw_init().
-+	 * Placing it here keeps igb_hw_init() reusable from the reset
-+	 * recovery path (which calls vfio_pci_irq_reenable() instead).
-+	 */
-+	vfio_pci_msix_enable(device, MSIX_VECTOR, 1);
-+
-+	igb_hw_init(device);
-+}
-+
- static void igb_remove(struct vfio_pci_device *device)
- {
- 	struct igb *igb = to_igb_state(device);
+> The pagemap_ioctl selftest allocates memory via calloc() in several
+> places but does not check the return values. If calloc() fails, the
+> subsequent code will dereference a NULL pointer and crash.
+> 
+> Additionally, in sanity_tests(), the calloc() failure check incorrectly
+> uses MAP_FAILED (the mmap() error constant) instead of NULL. Since
+> calloc() returns NULL on failure, the check never triggers and a
+> failed allocation goes undetected.
+> 
+> Add NULL checks after each calloc() call, and fix the wrong error
+> constant in sanity_tests(). Use ksft_exit_fail_msg() consistent with
+> the existing error handling pattern in the file.
 
--- 
-2.55.0.229.g6434b31f56-goog
+Makes sense to me.
 
+> 
+> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+
+I have a trivial comment below.  Regardless of that,
+
+Reviewed-by: SJ Park <sj@kernel.org>
+
+> ---
+>  tools/testing/selftests/mm/pagemap_ioctl.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+[...]
+> @@ -1000,6 +1004,8 @@ int unmapped_region_tests(void)
+>  	int written, len = 0x00040000;
+>  	long vec_size = len / page_size;
+>  	struct page_region *vec = calloc(vec_size, sizeof(struct page_region));
+> +	if (!vec)
+> +		ksft_exit_fail_msg("error nomem\n");
+
+I'd suggest to separate the definitions and statements by putting an empty line
+in the middle.
+
+
+Thanks,
+SJ
+
+[...]
