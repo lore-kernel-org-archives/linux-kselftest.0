@@ -1,79 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EEE3AD52D
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BC2126C03
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784749994; cv=none; b=T3SbPrkk/fjGKhlwC02m+znFmU1gOGYkaBfzgow9SwAKc+NmftMPwy+IZcSx1IzUrjF4OiwsrJ2Ny6A2uOQc9dot2iOvVWJ/L0ibj4gmFtbrZI8Anixue3ko3H61AtJTmC+CqsL9tEPephlEuhcGX1cOa1L2tu0rNhIc+xNR+oM=
+	t=1784750311; cv=none; b=iq/v42oRvTJc6JazJjfGf+fYO3H4dxMXLq76ntiwtRfDbbV9vHhQku89of48ERtXNohMG/9M1jkDOwSWHCOFnHfRQLG2PWsESLFciXptzb6N9NfOlfnPq/U36Namd6L9UP1fHqJDoobbjGpukz3txFvskPqQmwxJfWSZJ1ZXZVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784749994; c=relaxed/simple;
-	bh=ZOzjNe33N6WOv/F+Vqi9XJcIXpySIpqWA7L9PackUP8=;
+	s=arc-20240116; t=1784750311; c=relaxed/simple;
+	bh=A7AitE/XDd3LqWQmorPTs2ptcRNDrTYGhZT8AjRw8EQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pwo8TxvHDiFiFe8KvcocK1PpiGzgjAfP5vSHo8z+noqTbhC2NKx39sGptMsh8NNhq2/3Ds9kbuQeIdjSf3KyAKrx0pl5drcpO8/QLxIy10ImwX0oTSdKsnMCPIs7gIMyyn+zvkNLGZtKjxwGh7pyEftb8pzX0+INAQ75/Zqkxsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W03tfNtE; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=arK22KlkSWyTEedUbTohtVtBQC7FAusH8G4XVAmPvAiijO9mfqZCcqT/ed+tNgCQt2GAnpnmawlXPihkVmvZXX46SEJCs1tTPi/uG1o+MJn8BKCeAT5oaSr44AZlAhHpVgad1A4XESvDChRE3e4RAV1AGNAH+RylEq0P5ieaCck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebyQcg/T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W03tfNtE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD73B1F00ACA
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:53:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebyQcg/T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DFA1F00A3A
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784749991;
-	bh=jX3keiGfASMpUfc6WbdXTYn8yg/AOKhNn+GCulK3FjY=;
+	s=k20260515; t=1784750310;
+	bh=nR4O5DANIva3goaebxkg4Sh/ghkWjyLukyGQAqgAAvs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=W03tfNtERQIKHqZKLT4oU2vmZvmUD36xDPWTIhyrXDd8U4L+o23awH6lNsGpfeAgR
-	 CT5nBn1wK/oRYw062O/lJrmxAWQhZrX/7nArBKiAMNuusG29pUPCyckDtjjkUC6a6k
-	 1hDo3v7mTkiZrPmMs+vhv1BiRbUnWcieCaUuCWa6frKhBR8rK9NxATH8wTIVRhL/fQ
-	 p9N3ukyjoAE5I88Elw/ppSE3zPLfeC95p5H08nayZFEpQunbBgcAViftrBtzvxCWP5
-	 fJmAa/K8dh4m8DtFS6bjWGeC3wdpLgFNlReRpJPdVKhqocUtSg6VpmxynwYh75kBB3
-	 H61qr6nk8n39w==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39c8e65e3f5so110065161fa.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 12:53:11 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqoDotihwV/kut27+l/ZTPLLFCnSgxwWDb9jtm+FgBcv0z89ScuPOOq+ZKJScD0WZIYaPg6HHEENQJ8EUw48tg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIw/EHvYRVQmVpUf52jxERJuk5kE2r/Oh7IN2f5x7mrTxpbmFP
-	EhHs+MkausbZw9UhMTevU2adesd7i9fPLiCO5Xfx5PtH9x6ZaoW4AN3DME31QEDKAmcuFUy/s08
-	M5Hx1UJwox8CjySIpK0EadVhn8xqNBDo=
-X-Received: by 2002:a05:651c:43c8:10b0:39d:b717:622 with SMTP id
- 38308e7fff4ca-39f07c806eamr193201fa.12.1784749990308; Wed, 22 Jul 2026
- 12:53:10 -0700 (PDT)
+	b=ebyQcg/T7sRabO/k8ourFCDiSdv5/HNN9pAaufxQej+k8+avaxcJCChUrElEVEvLg
+	 USobHRHReRO8Cy3qYgYaw4MtHK8m1viaLunmOuMbfcQknx8tTCvtIs6eAY4ODzCzVd
+	 J18lP1c0BuX/EyAL6ZCwsKbi756l+emh4m2APL/FRHwxpX3mU0/Whz0AEKvC91Nqk/
+	 bspvL765PfG/srxKHaBxP+uzpNUqREX08IEwe1dQrVXV0n/CfyvypMT4pKEtqF8n9T
+	 FnWprs3L5mAX15mdfDrmTr3sgA1lOlulunn7ypjtqkJF6sB4x/qtsPVDSg1n5aC1w9
+	 dp9Zp9VfDjF0w==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5b2a8e4c77eso1848783e87.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 12:58:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RoEPALulmp2j540rzVn4Xoa7FMZtdzdCAbVykkVr11n7X39AASVbJji+wbFs9MJofxVTA/apWFoWL3B7hkH5rU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6TGsH0Dswmh0ZAKCOfFNdkFsnGc8okEGXmJ51epog07wqXBZM
+	dhbvcI/Vid2/rrhNGaOPhlDFpVI4AToSVEFVJEnZecWfXf0v0vvVBkKGFhckzoaGj83IFbl9Rsq
+	DC9+IBOpjc04qWsmtdGuLaReIl7t46do=
+X-Received: by 2002:a05:6512:2388:b0:5b2:95b3:b90d with SMTP id
+ 2adb3069b0e04-5b295b3ba31mr4050255e87.43.1784750308651; Wed, 22 Jul 2026
+ 12:58:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260706143857.3306-1-always.starving0@gmail.com> <oz7lhcfan7rpy5ixlqlaea7rqjhagepqqzpssueai4qcwe357y@ilky5ez6eyd4>
-In-Reply-To: <oz7lhcfan7rpy5ixlqlaea7rqjhagepqqzpssueai4qcwe357y@ilky5ez6eyd4>
+References: <20260707163647.6646-1-s921975628@gmail.com> <wh5m5ymcadonlywszmepriuxagc3jf4mictlvf3id6hezdpj7l@y25j7iqdg6qd>
+In-Reply-To: <wh5m5ymcadonlywszmepriuxagc3jf4mictlvf3id6hezdpj7l@y25j7iqdg6qd>
 From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Wed, 22 Jul 2026 21:52:56 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0iVzb_w46mPfSZ9rXC2rVSXJ6K4cxM5w7aWGH4i+CP1RA@mail.gmail.com>
-X-Gm-Features: AUfX_my4pB0trjcAkBTns0MfbQQLw9BYF62nfqgc8l1ImV90LQEvqv_HA_yIhps
-Message-ID: <CAJZ5v0iVzb_w46mPfSZ9rXC2rVSXJ6K4cxM5w7aWGH4i+CP1RA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests/cpufreq: Remove unused local variables from switch_show_governor()
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Jinseok Kim <always.starving0@gmail.com>, rafael@kernel.org, shuah@kernel.org, 
-	linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 22 Jul 2026 21:58:15 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0haO-CwdtSCX15NSiUwRWzpgWtgN3APHhJbJB7gB7LL2A@mail.gmail.com>
+X-Gm-Features: AUfX_mzVjbo9JANfzPLm2bqDe7CTq6XvSe0qSAr1Gyyq5OqdzjpBLf9s6TzwpKE
+Message-ID: <CAJZ5v0haO-CwdtSCX15NSiUwRWzpgWtgN3APHhJbJB7gB7LL2A@mail.gmail.com>
+Subject: Re: [PATCH v2] kselftest: cpufreq: Backup and restore governor for sptests
+To: Viresh Kumar <viresh.kumar@linaro.org>, Yiwei Lin <s921975628@gmail.com>
+Cc: shuah@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 7, 2026 at 7:10=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+On Wed, Jul 8, 2026 at 5:44=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
 g> wrote:
 >
-> On 06-07-26, 23:38, Jinseok Kim wrote:
-> > switch_show_governor() assigns the current governor and frequency
-> > to local variables before switching governors.
+> On 08-07-26, 00:36, Yiwei Lin wrote:
+> > After executing cpufreq sptest, the system governor
+> > will be overwritten with the governor switched
+> > during the test. Restore this setting to maintain
+> > consistency before and after the test.
 > >
-> > However, these variables are never referenced afterwards. The function
-> > does not restore the previous governor or use the saved frequency, as
-> > backup_governor() and restore_governor() already handle state preservat=
-ion
-> > elsewhere.
+> > Signed-off-by: Yiwei Lin <s921975628@gmail.com>
 > >
-> > Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
 > > ---
-> >  tools/testing/selftests/cpufreq/governor.sh | 5 -----
-> >  1 file changed, 5 deletions(-)
+> > Change-Logs in V2:
+> > - Wait for all background processes to finish before restoring governor=
+s
+> >   in sptest4
+> >
+> > ---
+> >  tools/testing/selftests/cpufreq/governor.sh   | 21 +++++++++++++++++++
+> >  .../selftests/cpufreq/special-tests.sh        | 14 +++++++++++++
+> >  2 files changed, 35 insertions(+)
 >
 > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 7.3 material along with the [2/2], thanks!
+Applied as 7.3 material, thanks!
