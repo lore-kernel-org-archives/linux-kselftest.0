@@ -1,170 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48146215075;
-	Wed, 22 Jul 2026 22:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0534445AC4
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 23:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784760500; cv=none; b=InVAIXU26Syjp7HEWeY6ukNjS+oduHEfYxfmYz9eNEOQcDxEAu4pxFmwIxP1+Dc8i8KiBcIpgSFkuPJDMRAR6B85kceTovDxpm40VYe5TkPo3c5EH7xQFd78ddWwPnE2AXPGzB8TxR4Iz+5rph+KGmqivKC1i8yPTRr6MrLvlio=
+	t=1784762058; cv=none; b=AUc/1cd7o9Ydnap22RmDSwyzNbucmQmtKi7+jgMqPRlSzi7uinm/W3rRNo5PXfPSLbHyY3lYumv6PoqBv/F5DatqcXj4QbbtuXnSNUrbYUGAuZob/vNiCCdd9ECTgcvUIllMh8IOJXVXWAGU2r9N81DibwIuAdsGElbbW6H7Z2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784760500; c=relaxed/simple;
-	bh=3KozxUktFFuphNeoA5oY3DRrjqfB3qtuLGq2VnUnylE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=osnb2+DYBjkqhXxXYCCws/ueKN3W1BxFCw5ghEsgO3Y7uMjk92HeFt4a3RS5DBwfudn7V+9ZK5/FdOM5pmKovI6GTW3OyAemq/6i1ENTPxOlIiaKaDIESiBWCP08Q6WE2lIuKGVhWDxQ/fDa88YC2kIIWzRMZWZNRX5m3F1sfFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ey11rnFQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784762058; c=relaxed/simple;
+	bh=7HIV+3fHpl4kdc8gFiSJABRx56th9p7yjpshKj2Wa5I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bnBjW8714BJKvWx5xLtfrOi1IX5L9QSr3wPd3KJVRSRxeCNq+T8d+aZEgsS+z29mw1eTcSr5MJ2NUqRKHGw0XUFdqlLtvcbfAHA/ju+G4JQNJjDJHkw0U77qRNlk+2NjdqH5wICTQ1jPcomzh+EZ4NXXAIiyVSCsBOgaBSmO8Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ax3udoOn; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ey11rnFQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A931F000E9;
-	Wed, 22 Jul 2026 22:48:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ax3udoOn"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-84a3514f912so19212b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 16:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1784760498;
-	bh=PNgL8SYp9VI1NhjQT8Ovt6BfZV4gAJBoTR6QXW/SnYQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ey11rnFQSaKacaNArWVfr0eeKP+Coih9IwasoSNFGEWkgFxEAp6Gj30weTETOSTMu
-	 Kb3glBybuhz+H4qunDZQxS9olJTmLRVgjyXlAi+i+JjF52ZA7V5vh6IJduz1xNJhqy
-	 6T2KvTOpUyORKJL9JJtXt564uLU4rprlu8gbdCNE=
-Date: Wed, 22 Jul 2026 15:48:17 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, David
- Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
- <shuah@kernel.org>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang
- <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
- <decui@microsoft.com>, Long Li <longli@microsoft.com>, Lyude Paul
- <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Min Ma <mamin506@gmail.com>, Lizhi Hou
- <lizhi.hou@amd.com>, Oded Gabbay <ogabbay@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-hyperv@vger.kernel.org,
- dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
- linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v10 0/8] mm/hmm: Add mmap lock-drop support for
- userfaultfd-backed mappings
-Message-Id: <20260722154817.8c036f2d007edccbd7ab84c7@linux-foundation.org>
-In-Reply-To: <20260722-hmm-v10-v1-0-606464dd601a@gmail.com>
-References: <20260722-hmm-v10-v1-0-606464dd601a@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=google.com; s=20251104; t=1784762056; x=1785366856; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=P+klJPR9+I3NtXYh+vSCCr8HtTVr+DNz+MjtC0fTmdQ=;
+        b=ax3udoOnWx2hj1N3csrlzft9QojStfOtwaoICaxQh6k12hKUh632vjGEtAxVYzNXXP
+         B8CgoDmK5UyziNiFX8ZS/zDl82Z2j8B/WwEnaXGEAB3N5/D4G5KqBtWXPvupEoxSHKGD
+         GsKH/Jat2MREgqy0P8Gvt7mopG3rzQ4aVyCwM69GWEArtMrdioHaNTDVGENoBu30ZVlL
+         1I4ssdFyjOn4g/oOSNSxFsE5ABkgUeYAlADIQO+t9IjeNBBKIjYtzp+aPoXXPEc8bWrV
+         V0Vj1BCWm25k12Ok4PRVTQSmIDOHvuBBvh2LTO1i+Rd0/JbQKbhYhOk/ubmmMWvGxZDt
+         BPNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784762056; x=1785366856;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=P+klJPR9+I3NtXYh+vSCCr8HtTVr+DNz+MjtC0fTmdQ=;
+        b=CCodC01exvJi/ZI8gcbrdUKd4T4ZAGfMB7zGjqbdahY36B3YJwgrHdEZQGY00gODPh
+         BKyIxx8+9+AfnW0w2amaHYdrvxTUsQFZJuql9NlmdNbBAQalqCRfiR5ENP0QXfajROXF
+         33AXrSb56DcRo0Y8153ZbqYyxkEGgJQfup7cxYpiLDF61Lx22+lCEzqDRL3G492OLA1E
+         ijJKVrSyArxzj2fnijkId8XWHwlTU6fwq3rTtJROW4ikhZuFrgG+Xl4vUiH+MnjODWER
+         eE/4akVgxPG9YdK6/3m3lievqSfF/hdtyN0+LQCaEox0AA+P/KbcBaEcsJ5aBG4WJIAe
+         +yVw==
+X-Forwarded-Encrypted: i=1; AHgh+RoOvXriGpah87Fm/KFLgWDBFxM3EnvGikfpMUGQaeZetyFOzkQsON7OU32Y739xVVqa71jFsn1Tz9cXBE/RdY0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk6p6a80BlGQQ3XY4IKGLm0G9MEkVIAIPGMu6rJWq4dUc0/OEj
+	G1YoKu1pl+kLVBlxzzCK27bp5gQQ7w0o2cPnJ3WOozS3/5sudEQwhklTGoCmjKfgEf54mk2yJ5I
+	40TU/XA==
+X-Received: from pfblw5.prod.google.com ([2002:a05:6a00:7505:b0:848:2e05:6161])
+ (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a20f:b0:84e:1a9d:d879
+ with SMTP id d2e1a72fcca58-84e2bc69cdbmr1016549b3a.28.1784762055790; Wed, 22
+ Jul 2026 16:14:15 -0700 (PDT)
+Date: Wed, 22 Jul 2026 23:13:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIFOYWoC/x2MQQqAIBAAvyJ7TjDJjL4SHULXWogKV0IQ/550n
+ IGZAoyRkGEWBSK+xHRfDfqhE+CO7dpRkm8CtNKjslrL5LNkPENCTix7vxkzWRfUYKE1T8RA+R8 ua60f+SA8MmAAAAA=
+X-Change-Id: 20260722-tdx-selftests-1da5587cf047
+X-Developer-Key: i=wyihan@google.com; a=ed25519; pk=cRi0fKzS5BMxlHyHY2pJv3w/1zcgfYKr6EYGYppdMYc=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784762054; l=5919;
+ i=wyihan@google.com; s=20260319; h=from:subject:message-id;
+ bh=7HIV+3fHpl4kdc8gFiSJABRx56th9p7yjpshKj2Wa5I=; b=35hxqDyVYOoWigPq3JCWHxzcg53ekafGh2UPBfDigXOEa8G8ueSkYnrNgu6/uRL5/uL8OrADC
+ jtQU6j8TvtaB4KWXXw5Yg4lLwHvSTfIkwsTjccw3uO+Oe8ajkAJnI6V
+X-Mailer: b4 0.14.3
+Message-ID: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+Subject: [PATCH v14 00/22] TDX KVM selftests
+From: Lisa Wang <wyihan@google.com>
+To: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>, 
+	Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, Lisa Wang <wyihan@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, 22 Jul 2026 14:44:22 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+This patch series focuses on setting up a TDX VM and adding all code
+necessary to run a basic lifecycle test.
 
-> This series extends the HMM framework to support userfaultfd-backed memory
-> by allowing the mmap read lock to be dropped during hmm_range_fault().
+Unlike standard KVM selftests can set up the VM through guest registers,
+TDX module protects TDs' register state from the host. This feature of
+TDX causes problems on VM boot state initialization and the ucall
+implementation.
 
-Thanks, I've updated mm.git's mm-unstable branch to this version.
+In standard KVM selftests, the host directly initializes the guest state
+by manipulating Special Registers (SREGs) and General Purpose Registers
+(GPRs) via IOCTLs (KVM_SET_SREGS, etc.) before the first KVM_RUN.
 
-Sashiko pointed at a few things, some pre-existing.  The jiffies race
-in [8/8] looks legit.
+To bypass direct register initialization by the host, we utilize the
+standard x86 reset vector as the default entry point.
 
-	https://sashiko.dev/#/patchset/20260722-hmm-v10-v1-0-606464dd601a@gmail.com
+The mechanism works as follows:
+1. The host places register values into a specific memory region and
+   inserts boot code at the VM's default starting point.
+2. When the VM starts, it executes this boot code to "pull" values from
+   memory and manually set up its own SREGs and GPRs.
+3. Once the environment is ready, the boot code jumps to the guest code.
 
-> Changes in v10:
->   - Included contended mmap_lock acquisition in the
->     hmm_range_fault_unlocked_timeout() retry budget.
->   - Dropped the redundant top-level fatal_signal_pending() check in the HMM
->     unlocked retry loop; mmap_read_lock_killable() now covers that path.
->   - Restored the absolute outer timeout in drm_gpusvm_get_pages(), since it can
->     run from GPU page-fault workers and must not rely on the worker task’s fatal
->     signal state to stop invalidation retries.
+The standard x86 ucall() implementation uses PIO, but it does not
+actually transmit data through the 4-byte PIO data. Instead, it relies
+on the host reading the ucall address directly from the guest's RDI
+register.
 
-Here's how v10 altered mm.git:
+TDX selftests cannot utilize the standard x86 ucall implementation,
+because the host is unable to access the guest's RDI register. Based on
+this restriction, we used TDCALL with an 8-byte MMIO data to implement
+ucall. This method is the cleanest and efficient implementation for the
+overall ucall architecture.
 
+v14 revision for TDX KVM selftests based on kvm/next and guest_memfd:
+In-place conversion support[1]. This series needs some changes from
+in-place conversion v9. For ease of testing, an extra hack commit has
+been added. The complete code is available at:
+https://github.com/googleprodkernel/linux-cc/commits/tdx-selftests-v14
 
- drivers/gpu/drm/drm_gpusvm.c |   11 +++++++++--
- mm/hmm.c                     |   29 +++++++++++++----------------
- 2 files changed, 22 insertions(+), 18 deletions(-)
+Changes from v13[2]:
+1. Fixed some bugs, including typo and commit messages.
+2. Outlined TDCALL from tdx.c to tdx.S.
+3. Used HPET(0xfed00000) for ucall GPA address.
+4. Supported guest_memfd w/wo in-place conversion support.
 
---- a/drivers/gpu/drm/drm_gpusvm.c~b
-+++ a/drivers/gpu/drm/drm_gpusvm.c
-@@ -1405,7 +1405,9 @@ int drm_gpusvm_get_pages(struct drm_gpus
- 		.dev_private_owner = ctx->device_private_page_owner,
- 	};
- 	void *zdd;
--	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout =
-+		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long remaining;
- 	unsigned long i, j;
- 	unsigned long npages = npages_in_range(pages_start, pages_end);
- 	unsigned long num_dma_mapped;
-@@ -1420,6 +1422,11 @@ int drm_gpusvm_get_pages(struct drm_gpus
- 	struct dma_iova_state *state = &svm_pages->state;
- 
- retry:
-+	if (time_after_eq(jiffies, timeout))
-+		return -EBUSY;
-+
-+	remaining = timeout - jiffies;
-+
- 	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
- 	if (drm_gpusvm_pages_valid_unlocked(gpusvm, svm_pages))
- 		goto set_seqno;
-@@ -1434,7 +1441,7 @@ retry:
- 	}
- 
- 	hmm_range.hmm_pfns = pfns;
--	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, remaining);
- 	mmput(mm);
- 	if (err)
- 		goto err_free;
---- a/mm/hmm.c~b
-+++ a/mm/hmm.c
-@@ -790,22 +790,14 @@ int hmm_range_fault_unlocked_timeout(str
- 	int ret;
- 
- 	do {
--		if (fatal_signal_pending(current))
--			return -EINTR;
--
--		if (timeout) {
--			/*
--			 * If the previous fault dropped mmap_lock, then the fault
--			 * handler made progress. Restart the retry timeout in that
--			 * case, but keep the existing deadline for ordinary -EBUSY
--			 * retries.
--			 */
--			if (!locked)
--				deadline = jiffies + timeout;
--
--			if (time_after(jiffies, deadline))
--				return -EBUSY;
--		}
-+		/*
-+		 * If the previous fault dropped mmap_lock, then the fault
-+		 * handler made progress. Restart the retry timeout in that
-+		 * case, but keep the existing deadline for ordinary -EBUSY
-+		 * retries.
-+		 */
-+		if (timeout && !locked)
-+			deadline = jiffies + timeout;
- 
- 		range->notifier_seq =
- 			mmu_interval_read_begin(range->notifier);
-@@ -814,6 +806,11 @@ int hmm_range_fault_unlocked_timeout(str
- 		if (ret)
- 			return ret;
- 
-+		if (timeout && time_after(jiffies, deadline)) {
-+			mmap_read_unlock(mm);
-+			return -EBUSY;
-+		}
-+
- 		locked = true;
- 		ret = hmm_range_fault_locked(range, &locked);
- 		if (locked)
-_
+Thanks review from Ackerley, Binbin, Chenyi, Sean and Xiaoyao!
+
+Series is organized by:
+1. Patches 1 - 4: Initialize the TDX VM
+2. Patches 5 - 8: Add the TDX boot code
+3. Patches 9 - 13: Set up the boot region
+4. Patches 14 - 17: Set up the vCPU
+5. Patches 18 - 19: Finalize the TDX VM
+6. Patches 20 - 22: Implement the ucall and run the TDX test
+
+[1]: https://lore.kernel.org/all/20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com/T/
+[2]: https://lore.kernel.org/all/20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com/
+
+Signed-off-by: Lisa Wang <wyihan@google.com>
+---
+Ackerley Tng (2):
+      KVM: selftests: Add helpers to init TDX memory and finalize VM
+      KVM: selftests: Add ucall support for TDX
+
+Erdem Aktas (2):
+      KVM: selftests: Add TDX boot code
+      KVM: selftests: Implement MMIO WRITE for the TDX VM
+
+Isaku Yamahata (2):
+      KVM: selftests: Update kvm_init_vm_address_properties() for TDX
+      KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES to validate TDs' attribute configuration
+
+Lisa Wang (2):
+      KVM: selftests: Require guest_memfd for TDX VMs
+      KVM: selftests: Support guest_memfd in-place conversion
+
+Sagi Shahar (13):
+      KVM: selftests: Initialize the TDX VM
+      KVM: selftests: Expose segment definitions to assembly files
+      tools: include: Add kbuild.h for assembly structure offsets
+      KVM: selftests: Introduce structures for TDX guest boot parameters
+      KVM: selftests: Expose functions to get default sregs values
+      KVM: selftests: Set up TDX boot code region
+      KVM: selftests: Set up TDX boot parameters region
+      KVM: selftests: Expose function to allocate vCPU stack
+      KVM: selftests: Call KVM_TDX_INIT_VCPU when creating a new TDX vcpu
+      KVM: selftests: Load per-vCPU guest stack in TDX boot parameters
+      KVM: selftests: Set entry point for TDX guest code
+      KVM: selftests: Finalize TD memory as part of kvm_arch_vm_finalize_vcpus
+      KVM: selftests: Add TDX lifecycle test
+
+Sean Christopherson (1):
+      KVM: selftests: Add macros to simplify creating VM shapes for non-default types
+
+ tools/include/linux/kbuild.h                       |  11 +
+ tools/testing/selftests/kvm/.gitignore             |   3 +-
+ tools/testing/selftests/kvm/Makefile.kvm           |  33 ++-
+ tools/testing/selftests/kvm/include/kvm_util.h     |  27 +-
+ .../testing/selftests/kvm/include/x86/processor.h  |  44 +++
+ .../selftests/kvm/include/x86/processor_asm.h      |  12 +
+ tools/testing/selftests/kvm/include/x86/sev.h      |   2 -
+ .../selftests/kvm/include/x86/tdx/td_boot.h        |  82 ++++++
+ tools/testing/selftests/kvm/include/x86/tdx/tdx.h  |  17 ++
+ .../selftests/kvm/include/x86/tdx/tdx_util.h       |  82 ++++++
+ tools/testing/selftests/kvm/include/x86/ucall.h    |   6 -
+ tools/testing/selftests/kvm/lib/kvm_util.c         |  22 +-
+ tools/testing/selftests/kvm/lib/ucall_common.c     |   8 +
+ tools/testing/selftests/kvm/lib/x86/processor.c    | 125 +++++---
+ tools/testing/selftests/kvm/lib/x86/sev.c          |  16 --
+ tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S  |  61 ++++
+ .../selftests/kvm/lib/x86/tdx/td_boot_offsets.c    |  21 ++
+ tools/testing/selftests/kvm/lib/x86/tdx/tdx.S      |  37 +++
+ tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 316 +++++++++++++++++++++
+ tools/testing/selftests/kvm/lib/x86/ucall.c        |  33 +++
+ tools/testing/selftests/kvm/x86/sev_smoke_test.c   |  40 +--
+ tools/testing/selftests/kvm/x86/tdx_vm_test.c      |  33 +++
+ 22 files changed, 927 insertions(+), 104 deletions(-)
+---
+base-commit: 2145a419fb2a4cdc8eefc8497425d2827f46e660
+change-id: 20260722-tdx-selftests-1da5587cf047
+
+Best regards,
+-- 
+Lisa Wang <wyihan@google.com>
 
