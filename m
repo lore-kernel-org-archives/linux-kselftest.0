@@ -1,82 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BC2126C03
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E52D427A1F;
+	Wed, 22 Jul 2026 20:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784750311; cv=none; b=iq/v42oRvTJc6JazJjfGf+fYO3H4dxMXLq76ntiwtRfDbbV9vHhQku89of48ERtXNohMG/9M1jkDOwSWHCOFnHfRQLG2PWsESLFciXptzb6N9NfOlfnPq/U36Namd6L9UP1fHqJDoobbjGpukz3txFvskPqQmwxJfWSZJ1ZXZVY=
+	t=1784751081; cv=none; b=OmSOrHAqWY/KLzaRPf1rbtrBl6h82/cH0Hi+LJ+ZYakyKqLYcFBOFcfbMxIiW9YcoOV8EBQ1ksESdPijWV3JvIFLkUB0VdLCB0cNi5jOcLiLhyNFd1UR96dYVDZJzjG2Iq4LQrDdWvpf8FTP+YgUhG2zYAOnbqsa7qdBg1bg484=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784750311; c=relaxed/simple;
-	bh=A7AitE/XDd3LqWQmorPTs2ptcRNDrTYGhZT8AjRw8EQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=arK22KlkSWyTEedUbTohtVtBQC7FAusH8G4XVAmPvAiijO9mfqZCcqT/ed+tNgCQt2GAnpnmawlXPihkVmvZXX46SEJCs1tTPi/uG1o+MJn8BKCeAT5oaSr44AZlAhHpVgad1A4XESvDChRE3e4RAV1AGNAH+RylEq0P5ieaCck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebyQcg/T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784751081; c=relaxed/simple;
+	bh=igHTnZ0X47tsQVg5YT0D4+yw0q+wLmdWERn/yaxvcuE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=J/fKa9I7yR1F4a//DQuLKL7Px7XToOToMyn/MWOgbIoItm3LqhwQ+bHqQfm1SZtbF7z4irSszIhq0Gx5TxxLz0ghHdCn6q/1M/EUeRWclFKw8GwxQLCnNEVmBuLwGblIQpbez946a7OJwgztXo0WrwGqfX53Sap6Go7dsbAV6P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LFRrB7Sm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebyQcg/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DFA1F00A3A
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 19:58:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LFRrB7Sm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A601F000E9;
+	Wed, 22 Jul 2026 20:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784750310;
-	bh=nR4O5DANIva3goaebxkg4Sh/ghkWjyLukyGQAqgAAvs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=ebyQcg/T7sRabO/k8ourFCDiSdv5/HNN9pAaufxQej+k8+avaxcJCChUrElEVEvLg
-	 USobHRHReRO8Cy3qYgYaw4MtHK8m1viaLunmOuMbfcQknx8tTCvtIs6eAY4ODzCzVd
-	 J18lP1c0BuX/EyAL6ZCwsKbi756l+emh4m2APL/FRHwxpX3mU0/Whz0AEKvC91Nqk/
-	 bspvL765PfG/srxKHaBxP+uzpNUqREX08IEwe1dQrVXV0n/CfyvypMT4pKEtqF8n9T
-	 FnWprs3L5mAX15mdfDrmTr3sgA1lOlulunn7ypjtqkJF6sB4x/qtsPVDSg1n5aC1w9
-	 dp9Zp9VfDjF0w==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5b2a8e4c77eso1848783e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 12:58:30 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RoEPALulmp2j540rzVn4Xoa7FMZtdzdCAbVykkVr11n7X39AASVbJji+wbFs9MJofxVTA/apWFoWL3B7hkH5rU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6TGsH0Dswmh0ZAKCOfFNdkFsnGc8okEGXmJ51epog07wqXBZM
-	dhbvcI/Vid2/rrhNGaOPhlDFpVI4AToSVEFVJEnZecWfXf0v0vvVBkKGFhckzoaGj83IFbl9Rsq
-	DC9+IBOpjc04qWsmtdGuLaReIl7t46do=
-X-Received: by 2002:a05:6512:2388:b0:5b2:95b3:b90d with SMTP id
- 2adb3069b0e04-5b295b3ba31mr4050255e87.43.1784750308651; Wed, 22 Jul 2026
- 12:58:28 -0700 (PDT)
+	s=k20260515; t=1784751079;
+	bh=uG8B/sO9RISppE7Q6ehHHlhwBn/Q+YrhymoxgV/Rvcs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=LFRrB7SmZww54+iS0u04z6Ki5YUVW9pF78QrE0fOr1mxYZ14ZUzVFbTssSzqBd5WK
+	 frjFuZDe6nVAI9qS93t66StFP1sPqw7qNFhvFiQD2v0yg4Kgn/lFvbaAe8OAn7oqpH
+	 ciu+SFxdkFrV7OI8H/mpi34+IJqIZHIXUO6Ve3yYRvcWRUXtakYhTm0CdaIYLM7Zva
+	 YL0nLBJWe5wy7jTOeKIM7LpDdrnP5fgcwGXpz/5XyIJvGeWgDgZCniW4kkS/eEIwxm
+	 e5//DuCj36pfFF0cw8OkJpUhTGIYj91EtCr384y449lkBPL/7tR/zhUIsvCteHJbzi
+	 baW3eBPhn2NDw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 97918380CECF;
+	Wed, 22 Jul 2026 20:10:49 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260707163647.6646-1-s921975628@gmail.com> <wh5m5ymcadonlywszmepriuxagc3jf4mictlvf3id6hezdpj7l@y25j7iqdg6qd>
-In-Reply-To: <wh5m5ymcadonlywszmepriuxagc3jf4mictlvf3id6hezdpj7l@y25j7iqdg6qd>
-From: "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Date: Wed, 22 Jul 2026 21:58:15 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0haO-CwdtSCX15NSiUwRWzpgWtgN3APHhJbJB7gB7LL2A@mail.gmail.com>
-X-Gm-Features: AUfX_mzVjbo9JANfzPLm2bqDe7CTq6XvSe0qSAr1Gyyq5OqdzjpBLf9s6TzwpKE
-Message-ID: <CAJZ5v0haO-CwdtSCX15NSiUwRWzpgWtgN3APHhJbJB7gB7LL2A@mail.gmail.com>
-Subject: Re: [PATCH v2] kselftest: cpufreq: Backup and restore governor for sptests
-To: Viresh Kumar <viresh.kumar@linaro.org>, Yiwei Lin <s921975628@gmail.com>
-Cc: shuah@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/3] Extend packet socket selftests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178475104838.2005094.9584058651934921504.git-patchwork-notify@kernel.org>
+Date: Wed, 22 Jul 2026 20:10:48 +0000
+References: <20260720122714.759175-1-joe@dama.to>
+In-Reply-To: <20260720122714.759175-1-joe@dama.to>
+To: Joe Damato <joe@dama.to>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ willemb@google.com, linux-kselftest@vger.kernel.org, shuah@kernel.org
 
-On Wed, Jul 8, 2026 at 5:44=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 08-07-26, 00:36, Yiwei Lin wrote:
-> > After executing cpufreq sptest, the system governor
-> > will be overwritten with the governor switched
-> > during the test. Restore this setting to maintain
-> > consistency before and after the test.
-> >
-> > Signed-off-by: Yiwei Lin <s921975628@gmail.com>
-> >
-> > ---
-> > Change-Logs in V2:
-> > - Wait for all background processes to finish before restoring governor=
-s
-> >   in sptest4
-> >
-> > ---
-> >  tools/testing/selftests/cpufreq/governor.sh   | 21 +++++++++++++++++++
-> >  .../selftests/cpufreq/special-tests.sh        | 14 +++++++++++++
-> >  2 files changed, 35 insertions(+)
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hello:
 
-Applied as 7.3 material, thanks!
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 20 Jul 2026 05:27:09 -0700 you wrote:
+> Greetings:
+> 
+> I was looking around the packet socket code and noticed there were a few
+> features that could be tested by extending the existing packet socket
+> tests.
+> 
+> I extended the test to test stats, drops, and auxdata and re-ran the tests.
+> The existing and new tests passed.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v3,1/3] selftests/net: Test PACKET_STATISTICS
+    https://git.kernel.org/netdev/net-next/c/d6587d0c0f3d
+  - [net-next,v3,2/3] selftests/net: Test PACKET_STATISTICS drops
+    https://git.kernel.org/netdev/net-next/c/1451e5302941
+  - [net-next,v3,3/3] selftests/net: Test PACKET_AUXDATA
+    https://git.kernel.org/netdev/net-next/c/707f5c2de046
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
