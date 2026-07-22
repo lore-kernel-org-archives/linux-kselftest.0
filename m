@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DE43E3DBE;
-	Wed, 22 Jul 2026 09:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738FE4949EC;
+	Wed, 22 Jul 2026 09:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784711553; cv=none; b=pZNjFUQh5wDUAKOpppgWTrky1sT5PH/C/njKiTzQv2/IlAciXm+EcByJoWsHYI7RkYS5E1vDw3j87ciITTxWVoqnbi7qOVnXOb5kArOuqIH1cFuQjgj3bMXD0PSbZKFaQsx15UafBfv/xLEOCqchfU/qSOrwZwETjRBYsFSrnTw=
+	t=1784711556; cv=none; b=UAH2qJ2phLynv67A/PmEBHZ1PKky3N2DZHlOTehVRk/KpCQzb9ppYbuQPZOlHLZmhPkxjVC916yus8YTYgbEC+mc5zns3T6UWGY+dHXba2v7Tgt0WBx20HD27vj1Q4wqDuveKL9XQahZfO+72meTYpnW1/wipKqEV7OG0ZYlFDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784711553; c=relaxed/simple;
-	bh=UkCBixZE4BaIDZgj4iTqd571WFG+D+00A3uwsD0HWlU=;
+	s=arc-20240116; t=1784711556; c=relaxed/simple;
+	bh=czI4JpkN5r6Pglkijn4J8uwR+W7cYaCz20UvFW25E0A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dTQyF1de9QV8PpDrEsiD6xCG7aCAN10Jik3C2Ns/RTUesUBiMNcvP9e+0jPOFC3yRp/3Kz0m6PVWAUX1Og+yocwyysYgyo7jOooTic6cEPE3p9ttA8JFxq6RsaLqsFmUmboQYGdYc2slvVrFp/S9rh1IV7PO++gjfVkG0MaeSS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=T1kpQAfc; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=i79oKm3Ymnw8YubzgVCvyC2dosh5j+43c4scey4uiJRymA5ZTaTzT92mVAul2AOQFEORoiuuYMEr/h45zOhLSyWk5cLutN4yJyqxl7hVy9p8OXdCfh/Bqx+4Gto4oDqLaA/frq32XVjnJ7PzDdN/mZp9EUrPWSN2T5kuHBuxO9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=EmAJ1LXn; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="T1kpQAfc"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="EmAJ1LXn"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A27D168F;
-	Wed, 22 Jul 2026 02:12:26 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82E901595;
+	Wed, 22 Jul 2026 02:12:29 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 227653F86F;
-	Wed, 22 Jul 2026 02:12:27 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8FFA03F86F;
+	Wed, 22 Jul 2026 02:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784711550; bh=UkCBixZE4BaIDZgj4iTqd571WFG+D+00A3uwsD0HWlU=;
+	t=1784711553; bh=czI4JpkN5r6Pglkijn4J8uwR+W7cYaCz20UvFW25E0A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T1kpQAfcd1h63oG/X29DlrT88eBxwgQGQCmu88mokQ5ya8rJ4hg9ZAOrdZBp/Kd4T
-	 zBcqkQYi93Zejo75X4d3zx+HAO0JoSr6pm/Iw/qqXemVOGO6fuVp24q8y+VRaOLsQE
-	 KSovYlksTVclqD9AuVzmhvnFkXVIIxEfDFVDKn8I=
+	b=EmAJ1LXnbyStBWZbM+XZg5iX3laoJLf10NFRGKMkjGikFAFWrOYZsGWQfQA7P06+l
+	 MWHlx+JH85ZMa8pFF2rSs2oP7f0pfganXr7pKQvt60cxXDGGO/l2vD0BKxmIV9ARmZ
+	 e7vXe48ntKqdSUc4bXVJMnjCIV2L9+NEpIhsSzxY=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -50,9 +50,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH RESEND v1 1/5] selftests/mm: skip COW tmpfile cases when fallocate() is unsupported
-Date: Wed, 22 Jul 2026 10:11:35 +0100
-Message-ID: <20260722091219.61504-2-usama.anjum@arm.com>
+Subject: [PATCH RESEND v1 2/5] selftests/mm: skip guard hole-punch test if MADV_REMOVE is unsupported
+Date: Wed, 22 Jul 2026 10:11:36 +0100
+Message-ID: <20260722091219.61504-3-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260722091219.61504-1-usama.anjum@arm.com>
 References: <20260722091219.61504-1-usama.anjum@arm.com>
@@ -64,44 +64,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The tmpfile-backed COW cases allocate a one-page file with fallocate()
-before exercising private and shared mappings.  When the filesystem
-backing tmpfile() does not implement fallocate(), setup fails with
-EOPNOTSUPP and no COW behavior is exercised.
+The hole_punch case verifies that guard regions survive MADV_REMOVE and
+that the backing range is punched out.  MADV_REMOVE delegates the hole
+punch to the backing filesystem, which may reject the operation with
+EOPNOTSUPP.
 
-This occurs when the temporary directory resides on a filesystem with
-limited allocation support, such as NFSv3.  Reporting a failure adds
-noise because the test prerequisite is absent rather than the COW
-implementation being broken.
+That result means the test cannot establish the state whose guard
+semantics it intends to validate.  Treating the missing filesystem
+capability as a guard-region failure creates a false regression.
 
-Report EOPNOTSUPP as a skip.  Continue treating every other fallocate()
-error as a failure so unexpected setup regressions remain visible.
+Unmap the range and skip only when MADV_REMOVE fails with EOPNOTSUPP.
+Preserve the assertion for all other errors so failures on supported
+configurations remain visible.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- tools/testing/selftests/mm/cow.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/guard-regions.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index 0c627ea89ff7b..c1b8920e29342 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -1718,8 +1718,13 @@ static void run_with_tmpfile(non_anon_test_fn fn, const char *desc)
+diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+index b21df3040b1c7..5c8ec3ca75d7d 100644
+--- a/tools/testing/selftests/mm/guard-regions.c
++++ b/tools/testing/selftests/mm/guard-regions.c
+@@ -1912,7 +1912,7 @@ TEST_F(guard_regions, hole_punch)
+ {
+ 	const unsigned long page_size = self->page_size;
+ 	char *ptr;
+-	int i;
++	int i, ret;
  
- 	/* File consists of a single page filled with zeroes. */
- 	if (fallocate(fd, 0, 0, pagesize)) {
--		ksft_perror("fallocate() failed");
--		log_test_result(KSFT_FAIL);
-+		if (errno == EOPNOTSUPP) {
-+			ksft_print_msg("fallocate() not supported by filesystem\n");
-+			log_test_result(KSFT_SKIP);
-+		} else {
-+			ksft_perror("fallocate() failed");
-+			log_test_result(KSFT_FAIL);
-+		}
- 		goto close;
+ 	if (variant->backing == ANON_BACKED)
+ 		SKIP(return, "Truncation test specific to file-backed");
+@@ -1944,8 +1944,12 @@ TEST_F(guard_regions, hole_punch)
  	}
  
+ 	/* Now hole punch the guarded region. */
+-	ASSERT_EQ(madvise(&ptr[3 * page_size], 4 * page_size,
+-			  MADV_REMOVE), 0);
++	ret = madvise(&ptr[3 * page_size], 4 * page_size, MADV_REMOVE);
++	if (ret == -1 && errno == EOPNOTSUPP) {
++		ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
++		SKIP(return, "MADV_REMOVE not supported by filesystem");
++	}
++	ASSERT_EQ(ret, 0);
+ 
+ 	/* Ensure guard regions remain. */
+ 	for (i = 0; i < 10; i++) {
 -- 
 2.47.3
 
