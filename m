@@ -1,150 +1,101 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1375437DE99
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 15:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65A0367B99;
+	Wed, 22 Jul 2026 15:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784733609; cv=none; b=cIc3RLidyJfPibDiet+VoHWLycb590beAA3PIYFG+ZHifsBN3mkVwz6mLN2CGNnOQInvRQw7u+s+GfLX6KBQwhFFamXBboRsHkIj70kb/rfnHMZAFW/cGwZ/2X6eGwnQuHZfGqTFIAJdOy+MfCCK5TONv35FFA/La7UxqYM87as=
+	t=1784733656; cv=none; b=KmOL+Uth8CttduXbWPTxvDuif6w3qH3b1VMEfklZszD99aBWpYqpN+E6Klgcndk+t9ko3T11tUkQWM5TqeE56uIP7Mfj5x9JfpKkC7Gd0EiOA7ntWv/Nn1xkK1EXF4i9G1BI9RpUiAntd7WJO7EtwDIdvcejC7z3ofVlvUF+RSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784733609; c=relaxed/simple;
-	bh=AUK1CkpWB3YJ6nNShoGFre6CvyeNBldHZzibhJ/Kzeg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ilwVxCU3D0Q0DnWePWXArOlEyG17JarKFzElYlBPr2elmXR4yHwzGEO67D69bNQSGAjGtLfac7UOZi//i5LWP1YRJedVlSgA+KkSPNMYkqIZUfFxku/VfWr99EcbEwIydArV+X3a3sIr8DAgyab0Kbc5mPqgPN+f00Wh2iVlFHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I4iVSPb+; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784733656; c=relaxed/simple;
+	bh=GKK2KYqIOdbzMEb8X0acR8iuFokRUiuGf4jjFCbprEc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nbsJfDsYBa7sIyDD02RT1mToLnkXccWtOzmJAMcb6qyZB0egGVXcD85Npm/q2nodykNVKHEHiwjrjPhiipYI2K8qeN3p4YmGICRuCiJZIym/cFuH51KpkGE8yj+LBdFvmEI63FPjUbScjCzxoKFiyyWRCu00xUtShF7RGwwJkRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AridpmG5; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I4iVSPb+"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784733600;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bFhLnlSq59bbqBUiEsR5Lhpwh+Img+fmsgmvB5qeBwE=;
-	b=I4iVSPb+soza6UkOzJZmzaLTqG5jkBczDdixfC/oNqLiS7N2yZfnRpTEOMxtjRfkgMePAU
-	3k0G5dyoDgbZw9mb1bGlVuoodtecHvBFXovPq3qTmI6AHSAzt03Jhex6jnzLKMmknBAM7p
-	Y3EHFDpQAKEuTy+rCjv9EMYYQjpRZNI=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jingguo Tan <tanjingguo@huawei.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Lin Ma <malin89@huawei.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Verify no warning when close fexit link
-Date: Wed, 22 Jul 2026 23:19:09 +0800
-Message-ID: <20260722151909.69142-3-leon.hwang@linux.dev>
-In-Reply-To: <20260722151909.69142-1-leon.hwang@linux.dev>
-References: <20260722151909.69142-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AridpmG5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
+	MIME-Version:Date:Message-ID:From:Reply-To;
+	bh=XrF1wHwWKNSlqS1s1h1T1Tz5CmDSLUpYdgk8B0kZhrQ=; b=AridpmG5U2N+0mRjvAWqW4UT8V
+	qc8+OS5AjtH13ImoBoc/fnoH0tSiK/B/fIyKTmAgC4gnnBjF+BgsWUMbNKUabZ0f8z2jpGIosakIC
+	ApdqCL9PJd+P8eRkWAuaAlPDaAQ8huQqQkOWExxp5QZfkxDnHzyPkKv2qzh11yNX+jCJlbype8ARE
+	YUZeVGfBYevmcyjKuusnIEk7Q11FJBKisvQu3ZrxBeRszeEnezUhfgqz4eFChOMO0HR1ZemwCvldN
+	P5/MLFwXFusHpK/0zwEhqIIRIzmEjiF8jGnhfcWbPFzWAyo0y2dfzWtJwp/dsimwJ2C5zG9kIVy2o
+	2I9N7KVQ==;
+Received: from [179.118.191.219] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1wmYkV-0033Ia-1P; Wed, 22 Jul 2026 17:20:43 +0200
+Message-ID: <dca6abef-0f6c-414d-b7b5-02e5b2a355e3@igalia.com>
+Date: Wed, 22 Jul 2026 12:20:37 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: futex: Restore support checks for futex2 and
+ priv_hash
+To: Wake Liu <wakel@google.com>
+Cc: cmllamas@google.com, tglx@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, peterz@infradead.org, dvhart@infradead.org,
+ dave@stgolabs.net, shuah@kernel.org, mingo@redhat.com
+References: <20260722070801.2057634-1-wakel@google.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20260722070801.2057634-1-wakel@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a test to verify that there's no WARNING when detaching fexit link by
-following the repro steps of previous commit.
+Hi Wake,
 
-Without the fix, the WARNING could be triggered by this test.
+Em 22/07/2026 04:08, Wake Liu escreveu:
+> Older kernels may not support FUTEX2 syscalls or PR_FUTEX_HASH.
+> Removing these checks causes false failures when running the tests on
+> such kernels. Restore the checks so the tests can be gracefully
+> skipped when the features are not supported.
+> 
+> Signed-off-by: Wake Liu <wakel@google.com>
+> ---
+>   tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
+>   tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 ++
+>   2 files changed, 4 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> index 78c0f7a59e17..d215acf88120 100644
+> --- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> +++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> @@ -103,6 +103,8 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
+>   			break;
+>   		}
+>   		if (ret < 0) {
+> +			if (errno == ENOSYS || (errno == EINVAL && (futex_flags & FUTEX2_NUMA)))
+> +				ksft_exit_skip("futex2 or FUTEX2_NUMA not supported by kernel\n");
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/tailcalls.c      | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Why aren't you using SKIP() instead of ksft_exit_skip() like how you 
+have done at
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index c66037162da5..c5c9d6c359bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -13,6 +13,8 @@
- #include "tailcall_cgrp_storage.skel.h"
- #include "tailcall_sleepable.skel.h"
- #include "tailcall_callback.skel.h"
-+#include "tailcall_bpf2bpf2.skel.h"
-+#include "tailcall_bpf2bpf_fexit.skel.h"
- 
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-  * in a single program for a single tail call slot with nop->jmp, jmp->nop
-@@ -1907,6 +1909,50 @@ static void test_tailcall_callback(void)
- 	RUN_TESTS(tailcall_callback);
- }
- 
-+static void test_tailcall_bpf2bpf_fexit_links(void)
-+{
-+	struct tailcall_bpf2bpf_fexit *skel1 = NULL, *skel2 = NULL;
-+	struct tailcall_bpf2bpf2 *skel_tc;
-+	int err, prog_fd;
-+
-+	skel_tc = tailcall_bpf2bpf2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_tc, "tailcall_bpf2bpf2__open_and_load"))
-+		return;
-+
-+	skel1 = tailcall_bpf2bpf_fexit__open();
-+	if (!ASSERT_OK_PTR(skel1, "tailcall_bpf2bpf_fexit__open"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel_tc->progs.classifier_0);
-+	err = bpf_program__set_attach_target(skel1->progs.fexit, prog_fd, "subprog_tail");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = tailcall_bpf2bpf_fexit__load(skel1);
-+	if (!ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load"))
-+		goto out;
-+
-+	skel1->links.fexit = bpf_program__attach_trace(skel1->progs.fexit);
-+	if (!ASSERT_OK_PTR(skel1->links.fexit, "bpf_program__attach_trace"))
-+		goto out;
-+
-+	skel2 = tailcall_bpf2bpf_fexit__open();
-+	if (!ASSERT_OK_PTR(skel2, "tailcall_bpf2bpf_fexit__open"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(skel2->progs.fexit, prog_fd, "subprog_tail");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = tailcall_bpf2bpf_fexit__load(skel2);
-+	ASSERT_OK(err, "tailcall_bpf2bpf_fexit__load");
-+
-+out:
-+	tailcall_bpf2bpf_fexit__destroy(skel1);
-+	tailcall_bpf2bpf_fexit__destroy(skel2);
-+	tailcall_bpf2bpf2__destroy(skel_tc);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -1974,4 +2020,6 @@ void test_tailcalls(void)
- 	if (test__start_subtest("tailcall_cgrp_storage_no_storage_bridge"))
- 		test_tailcall_cgrp_storage_no_storage_bridge();
- 	test_tailcall_callback();
-+	if (test__start_subtest("tailcall_bpf2bpf_fexit_links"))
-+		test_tailcall_bpf2bpf_fexit_links();
- }
--- 
-2.55.0
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=50c121e5a57abe446e46825fb9c69ac419765d5c
+
+
+>   			ksft_exit_fail_msg("Failed futex2_wake(%d, 0x%x): %m\n",
+>   					   to_wake, futex_flags);
+>   		}
+> diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+> index e8079d7c65e8..27c3ea5ff3ed 100644
+> --- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
+> +++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
+> @@ -145,6 +145,8 @@ TEST(priv_hash)
+>   	}
+>   	/* First thread, expect to be 0, not yet initialized */
+>   	ret = futex_hash_slots_get();
+> +	if (ret < 0 && errno == EINVAL)
+> +		ksft_exit_skip("PR_FUTEX_HASH not supported by kernel\n");
+>   	if (ret != 0)
+>   		ksft_exit_fail_msg("futex_hash_slots_get() failed: %d, %m\n", ret);
+>   
 
