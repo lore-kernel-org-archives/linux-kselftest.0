@@ -1,101 +1,167 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012009.outbound.protection.outlook.com [52.101.48.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65A0367B99;
-	Wed, 22 Jul 2026 15:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784733656; cv=none; b=KmOL+Uth8CttduXbWPTxvDuif6w3qH3b1VMEfklZszD99aBWpYqpN+E6Klgcndk+t9ko3T11tUkQWM5TqeE56uIP7Mfj5x9JfpKkC7Gd0EiOA7ntWv/Nn1xkK1EXF4i9G1BI9RpUiAntd7WJO7EtwDIdvcejC7z3ofVlvUF+RSY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784733656; c=relaxed/simple;
-	bh=GKK2KYqIOdbzMEb8X0acR8iuFokRUiuGf4jjFCbprEc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nbsJfDsYBa7sIyDD02RT1mToLnkXccWtOzmJAMcb6qyZB0egGVXcD85Npm/q2nodykNVKHEHiwjrjPhiipYI2K8qeN3p4YmGICRuCiJZIym/cFuH51KpkGE8yj+LBdFvmEI63FPjUbScjCzxoKFiyyWRCu00xUtShF7RGwwJkRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=AridpmG5; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A3E37F8BC;
+	Wed, 22 Jul 2026 15:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784733850; cv=fail; b=lxVaxuI9jfKfC3UsHdqft47Fe6xlr2Mg2s/QpYrcFaw2SykJiPw0si5e05QsUg1ydnBlOs4t2JC1UJYVEs5uOHfxZmUynAPQI3D+EGhWtLCRFLn0cEhtvzZLl28mNB7EB0oBcUj4/CynemDvsJYaQGqhb0ce9k+K0GCcvvFzqbI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784733850; c=relaxed/simple;
+	bh=14fZJQuvOMcc2aM1CfSWnxJ22rfr++GEnW6WUPBkHGY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=IXzZLM7xHb/9KH0iINV+7FKFcQ1c8c7Gif54p5YXETLXMdOE+jhHv2jYagb2+orkeLVPeQNFtaSvTw/MclEsLKg3UHEngeFG7YtMn8zM1KjmtrAzXhDiS5IXU3yNlUAKS2Y2G1Xf0UaSRpaxosdtdbRAxSSnBgQn3XCyCeU9Sik=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HIOy53RD; arc=fail smtp.client-ip=52.101.48.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="AridpmG5"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
-	MIME-Version:Date:Message-ID:From:Reply-To;
-	bh=XrF1wHwWKNSlqS1s1h1T1Tz5CmDSLUpYdgk8B0kZhrQ=; b=AridpmG5U2N+0mRjvAWqW4UT8V
-	qc8+OS5AjtH13ImoBoc/fnoH0tSiK/B/fIyKTmAgC4gnnBjF+BgsWUMbNKUabZ0f8z2jpGIosakIC
-	ApdqCL9PJd+P8eRkWAuaAlPDaAQ8huQqQkOWExxp5QZfkxDnHzyPkKv2qzh11yNX+jCJlbype8ARE
-	YUZeVGfBYevmcyjKuusnIEk7Q11FJBKisvQu3ZrxBeRszeEnezUhfgqz4eFChOMO0HR1ZemwCvldN
-	P5/MLFwXFusHpK/0zwEhqIIRIzmEjiF8jGnhfcWbPFzWAyo0y2dfzWtJwp/dsimwJ2C5zG9kIVy2o
-	2I9N7KVQ==;
-Received: from [179.118.191.219] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1wmYkV-0033Ia-1P; Wed, 22 Jul 2026 17:20:43 +0200
-Message-ID: <dca6abef-0f6c-414d-b7b5-02e5b2a355e3@igalia.com>
-Date: Wed, 22 Jul 2026 12:20:37 -0300
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HIOy53RD"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uin7rR/N7dEvd8MQe6v3aTcDglpQ05TaoOW+0l6sA/rrq6riTApce1KfpoV2OFoJky5H5T+l6hazd+L5V9B5Xnnv+b9vlveTEhzZJGMMrxdU6sty/68Lh1EHfsY6+NMVoM8JRyLFMkRnyboEjhD6eWNODFEKehVBnmlv6Y35Lq5EOIaNd9x2ta8xg7bkq7VeXZuAL3jCdj+PgtqAB4Y1nfsyS/BQl3r9QkHMJ2D5LnycxbtW3sk3aGtS6hDrVxtGlyjopFv6KZ+BXg4WZ6I2aXucO8Jyg+zqvwmru71SvgzKfZuQhSFvliv36/Ww7UKEq39xmkJfFq1nQzDszmStuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2qsW8Tv08O1l7aCiLKsEIcSUSbslSRSJolZQC8HfR/8=;
+ b=qC9KJYYW/pjp0312gSVeaUDTVUvmdXelDPLxOI4Ml9aYc40PLjUnyrdwKiL2HCLA+23D0X7lG+ryHlKoLaIphhl9Y6R4LhNq2WmuhBxDAKtA6cIetjM8FW/NRRuGLkImCVVU3ZI/Hm+mQc9zlP88nSjHuxtFuZIzbaLrLw9SBqVH51oO/079A9kAr7dLwGEHN6lfd+2kllDH27NdMegHU22MeerxMEogjCwLhpj2OyMN2a2OCMHZ+4YNLkepTWi9QOJeBoIH1S2R8ElRjWB7nZazdFAzPM0rQX/mXJOeNeFIc3v+EEI90lF3dtuqNuJa57YZWwsNYsI22i+8yffaIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2qsW8Tv08O1l7aCiLKsEIcSUSbslSRSJolZQC8HfR/8=;
+ b=HIOy53RDvl6Db7TJ+V4VbQSvAdABYabv9edRYtpycqaRTumscwXL4CGeUPaz6Dg820i6y9r8oFWqbC7n7FsRb0ETQ8k7b6s9AY66EqfhHQgMSc4HzWZ0QRNUUPDWLsZ9AdBG8QIgqjjCqAPynCc8QQOoTRtHSVhQiBy4PNfe0nU6QBBVH1mFp2daujUYvh4lNzDL2JUd6BiIUN95oQAOWQq1yuvvMoFa0Gs31mOiXR9WK+37w0xgigBYmvsll1/hTj3Setkcs+EMsyKUkfgrVMDtSoffkVLy7U/HfeEBN9HZt2kgappsPv4F2i0Z7Wup+n2l12LLmjYNBquo2okMyA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by SA1PR12MB8842.namprd12.prod.outlook.com (2603:10b6:806:378::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Wed, 22 Jul
+ 2026 15:23:56 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
+ 15:23:55 +0000
+Date: Wed, 22 Jul 2026 18:23:46 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: David Ahern <dsahern@kernel.org>
+Cc: Jack Ma <jack4it@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/3] net: nexthop: add NHA_FDB_PORT for fdb
+ nexthops
+Message-ID: <20260722152346.GB3022830@shredder>
+References: <20260721-b4-vxlan-fdb-port-v3-0-9aa0a543a78a@gmail.com>
+ <20260721-b4-vxlan-fdb-port-v3-1-9aa0a543a78a@gmail.com>
+ <20260722114621.GA2928696@shredder>
+ <e48c03d5-8056-4b65-a651-5f57c1a4da9e@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e48c03d5-8056-4b65-a651-5f57c1a4da9e@kernel.org>
+X-ClientProxiedBy: FR2P281CA0116.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9d::9) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: futex: Restore support checks for futex2 and
- priv_hash
-To: Wake Liu <wakel@google.com>
-Cc: cmllamas@google.com, tglx@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, peterz@infradead.org, dvhart@infradead.org,
- dave@stgolabs.net, shuah@kernel.org, mingo@redhat.com
-References: <20260722070801.2057634-1-wakel@google.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20260722070801.2057634-1-wakel@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|SA1PR12MB8842:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c0341e1-633b-4d5f-1751-08dee8053ebc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|22082099003|18002099003|10067099003|56012099006|11063799006|4143699003|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	h3cr7pxStiyvZb03ekI4qbG2Se3p5gAa68NZRuy1mGYt8uMOCvqKkIB91o8CM9o6TC0jvhhYREw8XRpEAPCEhH9zaxloR0tmzGON9V1JTbwTKSPMwiVPbSZCursEs7YTs4ES/BgZWZ5INAfIVzWDq1o066/Aj6I+nnCA/49fhhNitHHEhm6KQUCfVq29fgaMTaj2I5pIFoSsWBd0zcsnb5Z6cNUIsofXiglfluJScPoAqOFcbjgexlBJTHnx4HMQ7U6cKo0CFK6bPufRDRJKlcKIABc3A1NCGHTgXfrcOYXd9YBlZKNtS6pfF1obuMssJTZl1sp/B/8jiU27RyvMNYutvuH6tH2lxo4FMLaRfdI+eZVF7nNCpCl9Ge2EQcMtT9z+01EKltKI/sBYE8U6MCpMsrBmkxV2JvhhrMOahMxW23ttcBVByCHS0obFxrkuMBvz5FzDmIlVKi9GlZ4RARyPYO98NXQi+ID+QkSnYG2uXfpV2Onwhk7Id8EStY8AEXKKzvGq1P3h6T/OKEzpb0j0YLmUqA0TBWhIizVxCteImHVSFAqqCaj2EglPFvUvLdZuJmv9vNg8NkWW97jgLL6NFnH5rUMCplWC53nwhiHsF8zDv8C2/1i2bRxlHfSihIZRL5leeKgC3ARyb7QHNaYqEhQgyFK1+CrpvngQBAA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(22082099003)(18002099003)(10067099003)(56012099006)(11063799006)(4143699003)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?N89fWtQj6TmPwRA06EzNJbPMNzB1jOasj/ipZlB8BTuXyHmEQcNECHPJL8Wf?=
+ =?us-ascii?Q?S52hRikmRGaRrRndzQ6URIIWUXAPdXItDdk2UJCNY7ATcm1O5RozP2SdFAkx?=
+ =?us-ascii?Q?1DtvGbzCsfCxQlaWi6V6aLhDzou1pi6dcpSsdaHtvmIW8ycuM9xNmwdKZa0f?=
+ =?us-ascii?Q?dETbXNiZTfAWDBwL8cnlyHwHxngyrqVasaivp0+Wsj0HlSUeDwaNf8P4Bjhs?=
+ =?us-ascii?Q?EDm/xRYEqr1GWsFOaCulpTlweKGwZls4LF8XLxLgSXpCkZXpKp/4MHc7r3QQ?=
+ =?us-ascii?Q?DtBYjPZmDaXNdwBHevUuchAHEkeTyqKZmrPq7BixQfvzHRhrYmgRv33ecgST?=
+ =?us-ascii?Q?7BN66UHAarbDzymudn6NhoqKhA0nS5sgL83DWp5V1CEXwJGwyvsMzTG655qC?=
+ =?us-ascii?Q?ra2XjH5L/Q3KYjmHCuwK0DeJefPHL+4FaE2IgWv3IkC8rYeb+g5/gGySYXhp?=
+ =?us-ascii?Q?3XArsk2Ogz/tcvIeXstKSBw5Bzs7YTTH8kYnRtwyJPBBWccoVXLoA1MaV/RM?=
+ =?us-ascii?Q?Q4TOW/fBfX6ubzfkvroNFbTPZjZX02zHp5IVTAxNUyoUiccSvkU4qmfAJTVG?=
+ =?us-ascii?Q?3wBYbGOR8z52lK43eweUwXHi0ekdL+IG273NQPhdVqCv6DkbWkwryAN8c5Qk?=
+ =?us-ascii?Q?6ACZbCvw0xLDJSRFQsIy5kcGl+l3XPDx/OreJ5/08WkDhv1i9AlCoSLjErR1?=
+ =?us-ascii?Q?H9mU0n7xofjUiyc5mu1varGSHSQ/pCtQlBxtzM7DG9niGBJ2PsdvjjBc8zih?=
+ =?us-ascii?Q?d55uVWO8vmLehig6iMz5OiStTrug58OmfRfhgMdYaS1SklK7HSjg3TNJXGlG?=
+ =?us-ascii?Q?7T2pYfUR7X7s++8Ok5LChqh7bQdPVjD343z3gs5w6nIYN97MGFxDjStND6k1?=
+ =?us-ascii?Q?azPRdU3hkj4lkrlUXiNQJldBKzi0DVp3vcYSRnABleklNng1ithY2SL9ASLD?=
+ =?us-ascii?Q?wcif9qIB0zfBjTkq0JOGxe5TNV95aLOS5YDqg/aSGQPBR2LeHFTG1lqscl2n?=
+ =?us-ascii?Q?fMQX7l9sNdB8APtBja5ZJW9StK4iZ1c9kE59PE0KEJ1Q6GQbvfv5DoMA/EfU?=
+ =?us-ascii?Q?pPLZzk41xdjDDT7XX9nCXgdaKrPW10dS+fpIRh0VnFwpjLU5HVWGAZAUnou9?=
+ =?us-ascii?Q?urgv78CcdvM4TXmEXVDr6NbUs4j2XhriR9VhoDdGaGZIkz0gvYvgeq/57zXM?=
+ =?us-ascii?Q?zkpotIRv+wL5/Jd3ZxAQPlJZFL8t170jX18z6kXc1L9cUITWkTzt+aTo5cqn?=
+ =?us-ascii?Q?wW/IoXbAH9OKtdI3Eu+VD/3HelYxLuNccINLPp9Q1mUCCOiI39k8YpdlOzEA?=
+ =?us-ascii?Q?1hN21VGxxQNApMcHMJLgU55We86ey4nrKzv7kPuvGxb9Wl2DeFtpKhSGBsCP?=
+ =?us-ascii?Q?fP7IPLcPgivFvsLGhfn9glLDKsMkKviGnjnw85SxJRSFKZsH5G9cwVn9GrGh?=
+ =?us-ascii?Q?UrLaUBWMtSErXNpFsHMaPV33lk8MLwzcsGdsj/3B8nKc2rW6vCRFM6zuaN33?=
+ =?us-ascii?Q?hX7axo+USfOtwPqAM6I4ZlFv7bp8oLp3oe1RvAspFBQFIM9gkBtmuG//EnsI?=
+ =?us-ascii?Q?IgAUkNDIHGxX82g63/OaHqgqKkR80dgiVZEadwp1z4XknIhNDpY4S3BxHzlC?=
+ =?us-ascii?Q?T9tku5PkonqOwQ+LZb78P4GuOL/RFyhQH63CI4g4EMgW2TBYlyYyl+OSuRPM?=
+ =?us-ascii?Q?0nogI3r0QNFD87W445eAWcSy5V7ITxXLcd60KVVDpPbqoSPx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c0341e1-633b-4d5f-1751-08dee8053ebc
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 15:23:55.8960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +rIVJrqqUN8oLCaeIvcAg5D81HJyjy0R0eXHwQ+k56uf65EqKqo4WM0U24+zngBitULSkusc7kQLgo4bI6xTvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8842
 
-Hi Wake,
-
-Em 22/07/2026 04:08, Wake Liu escreveu:
-> Older kernels may not support FUTEX2 syscalls or PR_FUTEX_HASH.
-> Removing these checks causes false failures when running the tests on
-> such kernels. Restore the checks so the tests can be gracefully
-> skipped when the features are not supported.
+On Wed, Jul 22, 2026 at 08:43:38AM -0600, David Ahern wrote:
+> On 7/22/26 5:46 AM, Ido Schimmel wrote:
+> > On Tue, Jul 21, 2026 at 10:29:50PM +0000, Jack Ma wrote:
+> >> Commit 1274e1cc4226 ("vxlan: ecmp support for mac fdb entries") lets a
+> >> single inner MAC be reached through a group of remote VTEPs, with the
+> >> kernel flow-hashing across the group members.  Each member carries its
+> >> own remote IP, but the UDP destination port is always taken from the
+> >> VXLAN device (vxlan->cfg.dst_port) and cannot be set per member.
+> >>
+> >> Some deployments pack several receivers behind one underlay IP and tell
+> >> them apart by UDP port, so they need a per-nexthop destination port to
+> >> spread flows across (IP, port) tuples rather than IP alone.
+> >>
+> >> Add a netlink attribute NHA_FDB_PORT (__be16, mirroring NDA_PORT) that
+> >> carries an optional UDP destination port on an fdb nexthop.  It is only
+> >> accepted together with NHA_FDB and NHA_GATEWAY; it is stored in struct
+> >> nh_info and echoed back on dump.  This patch is control-plane plumbing
+> >> only; the VXLAN datapath is wired up in a follow-up patch, so behaviour
+> >> is unchanged for now.
+> > 
+> > I looked more closely at the test and the iproute2 patch and wanted to
+> > comment that "port" seems too generic given that the attribute is
+> > specific to FDB nexthops and called NHA_FDB_PORT. It made me think that
+> > maybe we should use a more generic attribute name (e.g., NHA_DST_PORT)
+> > and a corresponding "dst_port" keyword in iproute2. We can still limit
+> > this to FDB nexthops during validation, but in the unlikely case that we
+> > will need a destination port for other nexthops, we could just reuse
+> > this attribute. It's not like we have NHA_FDB_GATEWAY.
+> > 
+> > David, WDYT?
 > 
-> Signed-off-by: Wake Liu <wakel@google.com>
-> ---
->   tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
->   tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 ++
->   2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> index 78c0f7a59e17..d215acf88120 100644
-> --- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> +++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> @@ -103,6 +103,8 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
->   			break;
->   		}
->   		if (ret < 0) {
-> +			if (errno == ENOSYS || (errno == EINVAL && (futex_flags & FUTEX2_NUMA)))
-> +				ksft_exit_skip("futex2 or FUTEX2_NUMA not supported by kernel\n");
+> I was thinking along the same lines -- FDB_PORT can be confused with
+> bridge port.
 
-Why aren't you using SKIP() instead of ksft_exit_skip() like how you 
-have done at
+I agree.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=50c121e5a57abe446e46825fb9c69ac419765d5c
+> No preference on dst_port / DST_PORT versus other options
+> (NHA_FDB_UDP_PORT for example)
 
-
->   			ksft_exit_fail_msg("Failed futex2_wake(%d, 0x%x): %m\n",
->   					   to_wake, futex_flags);
->   		}
-> diff --git a/tools/testing/selftests/futex/functional/futex_priv_hash.c b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-> index e8079d7c65e8..27c3ea5ff3ed 100644
-> --- a/tools/testing/selftests/futex/functional/futex_priv_hash.c
-> +++ b/tools/testing/selftests/futex/functional/futex_priv_hash.c
-> @@ -145,6 +145,8 @@ TEST(priv_hash)
->   	}
->   	/* First thread, expect to be 0, not yet initialized */
->   	ret = futex_hash_slots_get();
-> +	if (ret < 0 && errno == EINVAL)
-> +		ksft_exit_skip("PR_FUTEX_HASH not supported by kernel\n");
->   	if (ret != 0)
->   		ksft_exit_fail_msg("futex_hash_slots_get() failed: %d, %m\n", ret);
->   
-
+I don't see a reason to make the attribute overly specific (to UDP and
+FDB), which is why I prefer DST_PORT.
