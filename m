@@ -1,186 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D153827F017;
-	Wed, 22 Jul 2026 20:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807B538D400
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 20:56:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784753797; cv=none; b=JIWmu7KDIQFgUFgiZoym8HRyLBLlXZHTvIKGHxKhmWvhx0AkAspen2ftqjXiujoXLMTqhlx12/HbatNENDyTcnzoqNVnYBIF6+3rhbzKcwsP3BiRdyOwSeQU7wD7ClVo6cpCfXd7L+oQEffkLhvxogfcreL4WwT6gaNU+/RFR5M=
+	t=1784753814; cv=none; b=TYN417le2RXaKF5ZCHDJ2i6NRo9aMV0Q9dw5YC24p0g6gsDDLFbSHf2BmdZuTKrexT+tT5xmTF/4B+8nufKrBM7T63gxnDx/REtNEQt2iyPMz60HKh4biOE4UaEdMSfNO/sC7gS/5N9GkGCAk6LPnFWuYl8p2kCRvGNou8HE63o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784753797; c=relaxed/simple;
-	bh=81ERXAgJQPPgxyd+PNIn1msxHORx+PJjC1LlTmLEhio=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YV3DG7/na43akdYFO9gU+L1IcccB/moc5s01TatNEOPEgh1rr/IGRxZ+E23/G3V9sOdnycxkIp8JF2I7U6agwbC2sdT/ET0ZsTX3SgTxJWa9Pu6OIkG9motC5OP/J3dM8qv7DuEUYSW3ZJJPbFnghtPIFIUrCinr9yQT30Siags=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LHROoRW1; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1784753814; c=relaxed/simple;
+	bh=s8/wCDafUQ7pmN88abnD2Ydl0D4cpNmsjgZZBVN4G00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I3G5a3i5D5MjoadszVbJdbS3p/xM/vf6rAeNGaUrYpvqiJK66SLPOSsceDEDHiV/FZrnpDOi659yvxr1+ngsxBMguz6YweI9UjTddvtTVLOoAPGtZ8HpSqeUIgQUSqUrHGuwvC/o1JW8CIBF402w+h81x6b064QQuOj34Fz8Xjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=BmbxhrHw; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LHROoRW1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784753795; x=1816289795;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=81ERXAgJQPPgxyd+PNIn1msxHORx+PJjC1LlTmLEhio=;
-  b=LHROoRW1E8W5R3MshcrnhYm5pdLVRuUt2DuNlxi9UO0iKjDG8HzYkc/F
-   uC2y/KFwbfhCz/RwJYh2n6cI0mCnGby3fVoCoyMomUpJcrn0PbQ2VVZti
-   7jK3KwllZ0AWvnba7ONH/c/1ZsGbj7OKaZ7bzAMfI5p7Sm965+vjvlDeF
-   0U7YOED2vQrCyGYMfLzfcOLXsuspqkbtWfsictvdTaeYmaR1mEGpdWV7d
-   TyMPO9B3sMXpB7prUuAymdiKxLa85MRQrMYnA8PHDhSOxIk19jdA6rMAy
-   /h047S6QcYJ6rtLJHF6XngFLUJJ4LFWW5XU4zDmbGkvOKxS/NTX4DOOQJ
-   A==;
-X-CSE-ConnectionGUID: aUSb8k6WQuabEjqAAXO1/A==
-X-CSE-MsgGUID: baV5aJDCTWeu2r9iOTAc/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11854"; a="96538866"
-X-IronPort-AV: E=Sophos;i="6.25,179,1779174000"; 
-   d="scan'208";a="96538866"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 13:56:34 -0700
-X-CSE-ConnectionGUID: 2fUtfGdETeqwMmvgdBpACg==
-X-CSE-MsgGUID: PM+UyXtDTLmgVhm0murq6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,179,1779174000"; 
-   d="scan'208";a="262529652"
-Received: from unknown (HELO [10.241.243.185]) ([10.241.243.185])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 13:56:34 -0700
-Message-ID: <62b07c595433ae1d65f2af888c6ffafebd9c2cbf.camel@linux.intel.com>
-Subject: Re: [PATCH 2/4] sched/cache: Add PR_SCHED_CACHE prctl for per-mm
- control
-From: Tim Chen <tim.c.chen@linux.intel.com>
-To: "Chen, Yu C" <yu.c.chen@intel.com>, Yangyu Chen <cyy@cyyself.name>
-Cc: K Prateek Nayak <kprateek.nayak@amd.com>, Dietmar Eggemann
-	 <dietmar.eggemann@arm.com>, Valentin Schneider <vschneid@redhat.com>, 
- Jonathan Corbet
-	 <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Yangyu Chen
-	 <yangyu.chen@intel.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, Peter Zijlstra
-	 <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Juri Lelli
-	 <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
- "chen.yu@linux.dev"
-	 <chen.yu@linux.dev>
-Date: Wed, 22 Jul 2026 13:56:33 -0700
-In-Reply-To: <656bbcec-fc0a-4c60-b4ec-c060f800c1cc@intel.com>
-References: <tencent_93116D14C771DC8C988C10E3C634BE0CC107@qq.com>
-	 <tencent_4F460FBE0B41016D2247455CEE988A90D707@qq.com>
-	 <656bbcec-fc0a-4c60-b4ec-c060f800c1cc@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="BmbxhrHw"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-51c2cce930cso91919091cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1784753811; x=1785358611; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DrWtospFmR1X6Ml2Vs8JTWDG5C2VdzRczI8oq8UdJr8=;
+        b=BmbxhrHwS6SGD+DstaxN9aum0F+qVmFaCCLRCAesmHXK1x1tbM8o4VXAY3bTRgTam9
+         XN/lXuukJ8njiId9TQhkCaRPDHdLvVG/UbqfgTdVJ7GSf/bhXuLy1McqVIhavwwBnm+u
+         eH9ysztsnbb3Y0hPkS5OJzKx0qvgsrYFdGfqtYdAbumPyibsoupEOFlrVRXIIl2k70T3
+         EAOge8mNby2tH4tbCTbQnpGhXvpzaKnk8AB4lrEjLDfvD+NmiYvFPPRjv4XfQeD4YzrJ
+         ldCwOWXJsoNHETHoVs0VPJZNiN+TJ5HMUYIlSh7Q19XCK5ykMuHxhknCy8215sucxrl2
+         8/jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784753811; x=1785358611;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DrWtospFmR1X6Ml2Vs8JTWDG5C2VdzRczI8oq8UdJr8=;
+        b=jeI6+zOGJoyq52L79gkJnQrg5P48+wmGwLqfXwZ9kO9JzwY5p7fjd6w8e21p0Jb2Tw
+         ztunqjEzw9UqCGWnA1gqj+6W0ft/0imAY/1hSjet35+3jfZEPwLXJUUVuGfD9MJYqG+m
+         7ZqiWANDS5nZT2qo12HVtoQAxBf2eCnwIoIWzGwdC/A8NGQXQSHUgkXFXI5W1qPBmvqy
+         XfM6LaK2RLu5cSK8060hiBY6gYSRyEoES9yZwXbODF9otyWlAS3T+gxD2kMoyVf8QuXV
+         KkLjYjSDGFSR/Qp446hQMbOcp2aR+UbPEdXrq9rjSKPrcQ1YhHABDIw71k1GZiJymc0j
+         DIYA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr6sGTKZueQ8b/erGmIJZ5RSI1fphy2n+t+YxSwX6ImFaH0sYC4XXCR3tcrQLIIiE5ux56lSKSRDg/4VX7uflc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk8D1jltcrG65mQdVVUZikZxMVuxoRUoshUp6/C0vQkAxV4+4h
+	njC1QXmw9Z+j+SaIazZyXyxIz9++YWFs3bEyakZANHuAflugRSi+KXATGxAN0Z002/Y=
+X-Gm-Gg: AR+sD10G06St/cO5DvkQJzifn/6wBrmUQNHVvZ+pu905CrmrgAYbXf2lIS1sZ/6jkEB
+	Pq+F2kOnwvtQKY2VPTvBuaRcXJlKG7WJu/y310vyoHnVRgipnzhpBpLD2tvn4FzWM2+uwRAZjzL
+	DZk+k0rZXHuRApTGu87koOcOA7Ixd5WWkDyAIvPuRT5fY9ahae2dMdIXPYpOcIEq+y7egrXqhiV
+	PE+l3J7k6TDkadPZoXXquoRIkSUO2PP+74pQ6ByiwRtNt7vBlOOjl84FDgFBUx1toiaQlqUVlHH
+	6oN3WzlvIoYDfqt2bVqDjGi4WrMp1rOHeOrMbhp5qG5OleTzm7+LhGfBeR7gRT4HY6ZZ7jQ6zAm
+	I3JeoJ7+0YODMw15LcNImPe/wW8YJlxOsHF68e4TuzlJZUjcTL0a/6lERCBWdHmcsxUcGZUdkXa
+	WFssGXXRgqHW/W2UZsNUanXE0s4CA2iW73dHv+V87HsPYQhNPeI6ngvbGu21iviy9ECJ2X
+X-Received: by 2002:a05:622a:997:b0:519:5680:1b5 with SMTP id d75a77b69052e-5283de4650emr1484841cf.21.1784753811471;
+        Wed, 22 Jul 2026 13:56:51 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907ba672806sm29772246d6.0.2026.07.22.13.56.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 13:56:51 -0700 (PDT)
+Date: Wed, 22 Jul 2026 16:56:45 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
+	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
+	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
+	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
+	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
+Message-ID: <amEpR83RtiqstjNs@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <amDL80BSEP6u9XfE@MWDK4CY14F>
+ <amDVQopyvolxfX8K@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amDVQopyvolxfX8K@gourry-fedora-PF4VCD3F>
 
-On Wed, 2026-07-22 at 18:13 +0800, Chen, Yu C wrote:
-> Hi Yangyu,
->=20
-> On 7/22/2026 5:10 PM, Yangyu Chen wrote:
-> > Cache aware scheduling is currently controlled only through global
-> > debugfs knobs, but the right aggressiveness is workload and platform
-> > specific. A multi-threaded Verilator run is one example: its RSS is
-> > large while only a small part of it is hot, so an RSS-based footprint
-> > estimate should not decide whether it is aggregated; and packing its
-> > threads onto the SMT siblings of one LLC beats spreading them across
-> > LLCs on some platforms (e.g. AMD EPYC Turin) but not on others (e.g.
-> > EPYC Milan). Such choices cannot be made globally for the whole
-> > machine. Add a prctl interface to override the knobs per process
-> > (per mm_struct):
-> >=20
-> >    prctl(PR_SCHED_CACHE, PR_SCHED_CACHE_SET, attr, value, 0);
-> >    prctl(PR_SCHED_CACHE, PR_SCHED_CACHE_GET, attr, &value, 0);
-> >=20
-> > A single prctl command implements both directions, like
-> > PR_RSEQ_SLICE_EXTENSION. The attributes are a per-process enable
-> > (effective only while the feature is globally active), the two
-> > aggregation tolerances, the overaggr percentage (applied where a
-> > task's own migration is admitted; group level statistics span many
-> > processes and keep using the global value), and an inherit mask
-> > selecting which attributes an mm created by execve() keeps. fork()
-> > always inherits everything, and the mask itself lives on the
-> > task_struct so it survives both, which lets a numactl-like launcher
-> > configure a workload and exec it.
-> >=20
-> > The overrides live in mm->sc_stat with -1 meaning "follow the global
-> > default"; GET stores the raw value through an int pointer so this
-> > sentinel round-trips without being mistaken for an errno.
-> > mm_init_sched() gains the creating task to tell fork (p !=3D current)
-> > from exec (p =3D=3D current) apart. A disabled mm has its preferred LLC
-> > invalidated at the existing invalidation points, so all group-level
-> > statistics self-neutralize.
-> >=20
-> > Also sync the tools/perf/trace/beauty copy of prctl.h.
-> >=20
-> > Assisted-by: Claude:claude-fable-5
-> > Signed-off-by: Yangyu Chen <cyy@cyyself.name>
->=20
-> [ ... ]
->=20
-> > +static int sched_cache_set_attr(unsigned long attr, unsigned long val)
-> > +{
-> > +	struct mm_struct *mm =3D current->mm;
->=20
-> As preparation work, should we first decouple sc_stat from
-> mm_struct and tie this stat to per-task task_struct? In this
-> way, we could have per-task cache preference control and extend
-> it to tasks/threads/process/cgroup if needed, which looks more
-> flexible IMO. We have a proposal here:
-> https://github.com/chen-yu-surf/linux/commit/bd43a0b6dd189d5091fb88630208=
-cb7bf67b3165.patch
->=20
-> which introduces a pointer in task_struct:
-> struct sched_cache_group __rcu=E2=80=83=E2=80=83*sched_cache_grp;
->=20
-> > +	bool def =3D sched_cache_val_default(val);
-> > +	int ival =3D def ? -1 : (int)val;
-> > +
-> > +	switch (attr) {
-> > +	case PR_SCHED_CACHE_ENABLE:
-> > +		if (!def && val > 1)
-> > +			return -EINVAL;
-> > +		WRITE_ONCE(mm->sc_stat.user_enabled, ival);
-> > +		/*
-> > +		 * Drop the preferred LLC hint on any change: a process
-> > +		 * that became disabled must stop being honored right
-> > +		 * away, and one that became enabled re-establishes the
-> > +		 * hint within an epoch anyway. This is best effort: an
-> > +		 * in-flight task_cache_work() scan re-checks the enable
-> > +		 * before publishing a new preference, and a lost race
-> > +		 * is corrected at the next tick.
-> > +		 */
-> > +		WRITE_ONCE(mm->sc_stat.cpu, -1);
-> > +		break;
->=20
-> After we switching from per mm_struct to per task control, we could provi=
-de
-> fine-gain control at task/process/process group granularity(similar to=
-=20
-> core-scheduling)
+On Wed, Jul 22, 2026 at 11:40:06AM -0400, Gregory Price wrote:
+> On Wed, Jul 22, 2026 at 10:20:00PM +0800, Richard Cheng wrote:
+> > 
+> > I saw the reply in patch 5, so in fact there's not only one
+> > dedicate zonelist, but numerous ?
+> > I raise the question because zonelist was supposed to be a
+> > global, unbypasssable thing in MM design, but now what you
+> > are trying to do is to seperate the whole global list into several
+> > parts ?
+> > 
+> > Can you explain why in current design you don't consider to support
+> > something like ZONELIST_PRIVATE[n]={0, .. ,n-1} ? that's my imagination
+> > of what a global zonelist should look like, no matter private or non.
+> > 
+> 
+> First let me say that there's nothing that prevents us from doing this,
+> and we *could* make this the default case - but this decision was
+> intentional by me.
+> 
 
-We are planning to introduce the concept of a sched_group.  And tasks in a =
-sched
-group can be grouped by mm, or using prctl to explicitly group them togethe=
-r.
+You caught me on something here - I am wrong about my own code.
 
-We could enhance prctl to introduce per sched_group parameters like aggr_to=
-lerance*
-if it makes sense.
+I described to you how I originally implemented zonelist isolation,
+which I walked back when I was testing mempolicy and demotion.
 
-Tim
+The current code and the comments in the code are correct, we get
+the following zonelists.
 
->=20
-> int prctl(PR_SCHED_CACHE, unsigned long subop, pid_t pid,
->            unsigned long cookie, unsigned long type);
-> pid argument: the PID of the target task. 0 means "the calling task."
-> pid_type : PIDTYPE_PID targets the single thread,
->             PIDTYPE_TGID the whole thread group and PIDTYPE_PGID the proc=
-ess
->             group of the target task.
->=20
-> And the proposal is here:
-> https://github.com/chen-yu-surf/linux/commit/17718b7cef1d03948e9fd3bcd0b5=
-a49aba7aae2d.patch
->=20
-> thanks,
-> Chenyu
+N_MEMORY : 0,1
+N_MEMORY_PRIVATE: 2,3
+
+ZONELIST_PRIVATE[0]     = {0,1,2,3}
+ZONELIST_PRIVATE[1]     = {1,0,2,3}
+ZONELIST_PRIVATE[2]     = {2,0,1,3}
+ZONELIST_PRIVATE[3]     = {3,0,1,2}
+
+Meaning everything except for MPOL_F_RELATIVE_NODES works (because
+of cpuset isolation, but more on this in a moment).
+
+
+So what I shipped here is what you are describing.
+
+Looking back at my notes - I realized a few things that lead me to
+walk back that isolation:
+
+1) mempolicy makes more sense this way.
+2) reclaim/demotion is easier to implement without isolation.
+3) The individual service checks and nodelists handle the rest.
+4) It overally just makes more sense.  If something breaks isolation
+   it's because there's a bug, not because of a structural issue.
+
+For example in demotion we do this:
+
+demote_folio_list():
+    /* Get demotion targets, find the best one, and demote */
+    node_get_allowed_targets(pgdat, &allowed_mask);
+    target_nid = next_demotion_node(pgdat->node_id, &allowed_mask);
+    migrate_pages(demote_folios, alloc_demote_folio, ...);
+
+Where the first step already filters on CAP_DEMOTION.
+The result is still clean - no special iterators needed.
+
+What I realized from your questions here is that since i walked back the
+zonelist isolation, I think i can actually include any CAP_USER_NUMA
+node in cpuset.mems and allow parititioning fairly trivially.
+
+I think this might be the last majority complexity falling out.
+
+Thank you for the questions - this has helped.
+
+~Gregory
