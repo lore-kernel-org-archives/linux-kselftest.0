@@ -1,63 +1,63 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7041D33F385
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B9A34A794
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784728865; cv=none; b=mMjLnId78jBUwDVkJ6PPaTEmI0tfMg8C2QMvSstbtzW2Unr7FgD1FGASvhJ2gv5qtZ9JbSsnWCWZBW3ZjxBmk5vt3+3iW6sNcSSraCVdJa125SRL5QMERCc54IlUKisz9UDmk3deevfYbhgJqvcKGv7pEN90/pKFIOWRzIChWjM=
+	t=1784728876; cv=none; b=Osd7S+Jatfi0bXFHQkHClsBxHiC1CVPkIW9EGlHSgG/0JrYqIS41hY7MZ1NjaHq1dUfkgrvcTF4Ps1CqrDoI0WXOix04gh6Xm3q6R2ONrQrD/8uOPvfXEKP4PclIj968CIFfLMUu+x3vxBe3Kpv0ZrzVESy9aYeJmPXqvBLV0ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784728865; c=relaxed/simple;
-	bh=jYtcECzVlp/tojihwJioNEtjJqVbrNTq7HCP/tKg8Dk=;
+	s=arc-20240116; t=1784728876; c=relaxed/simple;
+	bh=XvVl5mjflIv3UtJ8KZ2CpGKOS7tfRL7wakHrEfbOmYA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ksep6t+zJXq3+kfX6NWER/rmNNd0l+23iS8Qkx0y30HEbwi/xBwc4KgFXdfncpmevsdgT9qXiGetMvd9ui6KtijlOFkdZHzP6bsxqN2cKLVHXYkgzxr6HSUquo3UJ2vqHpIiTX9xoPs4g2zfNUhxSDpnNLZCUApTNIyasT4R4Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UwB1rFm2; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=Z2tXl00DINvOlBmTtfU0KfGsAwdq3m5Lfevah6wGgEoNyDT/YRqq+9EoVd8Wu7M0X7d80DRIbcYCKOVkXiGj/oVMXmatT3RJiI1ZoyMQT40jOJtpue2vDN0BtGDZxpXhTRCPHayabbh72G8q5mQ9e2SHlV9S/eBtF5bDPmRi98I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NEarH/fk; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UwB1rFm2"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84a4d8fd6ecso8707606b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 07:01:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NEarH/fk"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-845c92bc464so8021108b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 07:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784728864; x=1785333664; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784728874; x=1785333674; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kmw/vOOFxAmrHxAo+1GzxM/5GGe32N4p7+qg3hLMUYs=;
-        b=UwB1rFm2qlD7eYioGfknMRvH3MN+ZbOLwLiqQHZM9IrVi268w9orvOuTXUZ3rmgh8a
-         Yz9+jhI2HvYJri5HySw+8o+zcoUmra6hkXWq04uaepC7sry4EL+a4tK18xKYbxgXhxju
-         hQI8mK5XAsRaxJko1yu4zOOWP6XrEza7iKgQWSQkZtXj1UFTlLn5UxYyENZ/+rgBF/CW
-         Mc1TVYufqdYGGypfqIYr/K873ulMiO45NURaXe1WnsGFOn8BkRPu5RFhHBIVN2745+n7
-         ppnyqWJ9EtnRWsmU0u8TyyOrigaV51VVs6y3TIPzMmlKYpOmzPOUNZdpBecIYeIAgz3Z
-         sCBA==
+        bh=ZEjjn0vc5h6Klfz50Xi3OPenrjoSwnSYbs/Qn95SwQM=;
+        b=NEarH/fk0a/bhzHN/l+ixz/cCRwCV6iqTMYLltQPeoDh8C0E20EN0EUdeTzxmGP+uy
+         /WvZ+9HZsAjVV61hkwMVqntKqEKVzqMkSMMWfqoP7lCUMmskEVwBvDzrDIqkF8+Yrb8Z
+         AdrqAEKmqZO5z1L3ln3CmO+WdgFfYeusGYe55pqnuushnn2zcZIY8/O/auD/9ZF2VQoL
+         1euhfHYmPW+xcw2Kx+hvs2/Izy7/LKMOO3gfTCSkuMPveQyXsWmbRT/LpbMsHpBV+iIz
+         zyCxEt//W66H4KedZqEZPTnmtjfz1PyR6WUILY+Lih1pIeXlSYvr6yFQcUvFB0J2EYON
+         RvGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784728864; x=1785333664;
+        d=1e100.net; s=20251104; t=1784728874; x=1785333674;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kmw/vOOFxAmrHxAo+1GzxM/5GGe32N4p7+qg3hLMUYs=;
-        b=SIIzZUOKSJNeXiWg2immyiTuBEZIB7c1Hgvp2fZWgGo510p238h6M9YY19oE7qnWQ/
-         sIRU3SOG8M5Uh/KBLifrJ9Ue9Y9a33vq6fy72RFDV5qIyouNdLQ9nYKDZSS6pR0XSErK
-         xi97rhQjyiDYK/FbyfF4b/dKQYR0Mm6edO5J3Me3v1nVwdRXGFYI0UO51a7TTBzwN9U7
-         120SkwyCFZwbg2dV2j+yoNoXtmjqxzlKZ1tvmzyvQWMewbn5Py3h0REdwkuOQGGEK7ml
-         qheG1pr0ihWUPoqFsLQ3TFhmKOW95S5u6jWaffssFvBRoMFTIst1Q/fEfYwQETGmEf/V
-         FIWA==
-X-Forwarded-Encrypted: i=1; AHgh+RoeQeAGpj9tW3r0Fi1SUsJv8iIpIyLeVpxl7agj+aW94l9U+aGydZ76lHzz5VsMyMdLjxyDPiR6+qIZSXzTDn8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6Lw4UpLnguDsw00Xt8unM8zURaqV5JTz6JmEnUGrrTMsmTzNo
-	1KWfJlJ70ZGzQ19rjyCMhsoLBvAq2UAjm6+cVDF08gHW+yEwo0hhlcBw
-X-Gm-Gg: AR+sD105IZFFF07kWcAq1jM6A6mvK+2VFeXX34zTT2pv4cX581UEFeJN8vc57pR57p9
-	/KCyblC36Jg4jcUHw3H1v6Tr6R1VuRMIut61IwQpM5CcLovPRjbCSglii+aF4Fq6X4yQkdTuX4H
-	iilmYOSMtO+beI3GvmCGVHjGB7w5LIPKQgKDv4Ll5G2vTad/jHqLKOHFS72qMP58cgrcqGmnKii
-	UUDd+4cOrxYtiejTWKPbU+OLMUIlbrpzOinVcHP4fLbvn9wx29GdFjwH4bUf2skU61REuDTCOr4
-	aFeA6o3wkONMIN3MFt160tsBOkHaXZ1qHDDoGYT6CNmp6PPYo/L3Nw36uLL+rt7wIKYbB9ZWpIW
-	HMcuwKu8u0/VOze9SjkEdI5xdsMtQUKjWZST9oiMkl/N+s3NUnWzzjASdH8H0KMqCKeWrWdM45b
-	TvKSHA7GsPhQUUBgTU4nOKefAYnTlIhfocCN8bgUF9Zjx4u/I=
-X-Received: by 2002:a05:6a00:1f09:b0:845:c662:2be with SMTP id d2e1a72fcca58-84c2946f795mr22779930b3a.42.1784728856923;
-        Wed, 22 Jul 2026 07:00:56 -0700 (PDT)
+        bh=ZEjjn0vc5h6Klfz50Xi3OPenrjoSwnSYbs/Qn95SwQM=;
+        b=qoh503vYNpjCNM4tBIf1HiuW8HaWF93DO6zp5ukCZdjlkO8KptdvvPh8wpgqfE7Uwp
+         useMBkUimoSoLP9y26TgkG4x5nkFKKJCCscN+4rvx/VLMwmLBD3ew3vvJoRgA+OjmulB
+         X36PmAysezqYnwISxDchDeV5c2L6R7YnPrLEezZkOHtZ4vCq5NoaE0dtMyWz6wrnbvr3
+         Z70Vzd79R2Z9hh8kSplPn7zh5oT4X+TuRu8JoJsO4ffQwjwhk8spq8nQUgn+e2MBQaBr
+         9QTEKga/cXtn6NuJGjB2t3JgUDSQgoMfh9Nf4IZvIfZ3Djx1h3c4IEanG682+ECvWEud
+         hwfA==
+X-Forwarded-Encrypted: i=1; AHgh+RrV8gALO9wC7kCQvQ2sOdIDVQq3amOZoBzbk9YxEypRQWpJFdjJapx+WNor6UvLIE4p2IRykCQTh+XCRfmxvIY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlSLgNdvkDH6RuL4tOUQGTwU0RVAfoOgawXjzeGhqmnkn3wbG/
+	Ll7QNIXRaV6vSkEr4yFioUANWiNMI/9i7hEYTKA9903CIY86/+1Uz76jnKBR76zaGu4=
+X-Gm-Gg: AR+sD13KxWSWEdc9RsGob0o4NVwEi85EA7b9GQTVi5rJ6Dz3iij7Sp1oF2AZ9U6lTjS
+	JHgub0Guw/uWiUpRXy/anIJG3OPGekUf8/R4gd4EiCOHYpNzAyQYfAvaFAcacH8Y9fhC7dlCZbR
+	fOjDBeD0ELhYvnHfnFejwspjCm6N7c8Hm6F6kTXGn/9E8jOPzOGbZE9Rc3gR+H8V/Twd7HoIaib
+	ogJoPwmD22uCkhVub5GG/QGMR9dHA2TQHq/q3UZTUgzcSXXJgW7ztBWJ08SAUGupTQSarT0o689
+	RphBEA4AwN5ykaIPdKps4X6cw+9Bxny5C6EEbLMmJawaeMyahNk5yEgCMuPnu+Uf7SKfXLlzF4n
+	dhL4EoDgbFEf2DqPZPZI0Q1TGHSaJovnjHJsvLseSV6dnL6DcJZfnGgtnMIK+kr1t9o8i/QcppP
+	v/A9bWRer7HVOV0jF6axb54A+9BXFEaz6oWAmeNaT8E4CKWpk=
+X-Received: by 2002:a05:6a20:3ca3:b0:3c3:7ecd:72df with SMTP id adf61e73a8af0-3c3ad86ab89mr26184446637.30.1784728873939;
+        Wed, 22 Jul 2026 07:01:13 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:277d::3ef:c9])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.00.47
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f1a8a1fsm1242281a12.26.2026.07.22.07.01.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 07:00:56 -0700 (PDT)
+        Wed, 22 Jul 2026 07:01:13 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -81,9 +81,9 @@ Cc: alex@ghiti.fr,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v3 2/6] riscv, stacktrace: Pass sp and fp to the walk_stackframe() callback
-Date: Wed, 22 Jul 2026 19:30:09 +0530
-Message-ID: <20260722140015.1982158-3-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next v3 3/6] riscv, stacktrace: Implement arch_bpf_stack_walk() for BPF
+Date: Wed, 22 Jul 2026 19:30:10 +0530
+Message-ID: <20260722140015.1982158-4-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260722140015.1982158-1-varunrmallya@gmail.com>
 References: <20260722140015.1982158-1-varunrmallya@gmail.com>
@@ -95,150 +95,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend the walk_stackframe() consume callback so it receives the stack
-pointer and frame pointer of each frame, in addition to the pc. The
-extra state is needed by the BPF exceptions machinery.
-bpf_throw() unwinds the kernel stack looking for the BPF program that
-acts as the exception boundary and needs (pc, stack and frame pointers)
-of that frame to invoke the exception callback in its stack context.
-
-This mirrors what arm64 does, where kunwind_stack_walk() hands the full
-unwind state to its consume functions and arch_stack_walk() adapts the
-generic stack_trace_consume_fn via a small wrapper
-(kunwind_consume_entry_data), so that a single unwinder serves the
-generic stacktrace API and BPF alike.
-
-The pc-only callbacks print_trace_address() and save_wchan() simply
-gain ignored arguments, and arch_stack_walk() now adapts the generic
-stack_trace_consume_fn with a wrapper struct. In the
-!CONFIG_FRAME_POINTER variant there is no frame pointer to report, so
-pass the scan position as sp and 0 as fp.
+This will be used by bpf_throw() to unwind till the program marked as
+exception boundary and run the exception callback with the stack of the
+main program.
+This is a wrapper around walk_stackframe(), which now passes (pc, sp and
+fp) to it's consume callback.
 
 Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 ---
- arch/riscv/include/asm/stacktrace.h |  5 +++-
- arch/riscv/kernel/stacktrace.c      | 39 +++++++++++++++++++++++------
- 2 files changed, 35 insertions(+), 9 deletions(-)
+ arch/riscv/kernel/stacktrace.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
-index b1495a7e06ce..fd1ff04a040e 100644
---- a/arch/riscv/include/asm/stacktrace.h
-+++ b/arch/riscv/include/asm/stacktrace.h
-@@ -11,8 +11,11 @@ struct stackframe {
- 	unsigned long ra;
- };
- 
-+typedef bool (*walk_stackframe_fn)(void *arg, unsigned long pc,
-+				   unsigned long sp, unsigned long fp);
-+
- extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
--				    bool (*fn)(void *, unsigned long), void *arg);
-+				    walk_stackframe_fn fn, void *arg);
- extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
- 			   const char *loglvl);
- 
 diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index c7555447149b..30b369dd2815 100644
+index 30b369dd2815..c0f2393e5163 100644
 --- a/arch/riscv/kernel/stacktrace.c
 +++ b/arch/riscv/kernel/stacktrace.c
-@@ -46,7 +46,7 @@ static inline int fp_is_valid(unsigned long fp, unsigned long sp)
- }
+@@ -5,6 +5,7 @@
+  */
  
- void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
--			     bool (*fn)(void *, unsigned long), void *arg)
-+			     walk_stackframe_fn fn, void *arg)
- {
- 	unsigned long fp, sp, pc;
- 	int graph_idx = 0;
-@@ -71,7 +71,9 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 	for (;;) {
- 		struct stackframe *frame;
- 
--		if (unlikely(!__kernel_text_address(pc) || (level++ >= 0 && !fn(arg, pc))))
-+		/* pc belongs to the function whose frame pointer is fp */
-+		if (unlikely(!__kernel_text_address(pc) ||
-+			     (level++ >= 0 && !fn(arg, pc, sp, fp))))
- 			break;
- 
- 		if (unlikely(!fp_is_valid(fp, sp)))
-@@ -91,7 +93,7 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 						   &frame->ra);
- 			if (pc >= (unsigned long)handle_exception &&
- 			    pc < (unsigned long)&ret_from_exception_end) {
--				if (unlikely(!fn(arg, pc)))
-+				if (unlikely(!fn(arg, pc, sp, fp)))
- 					break;
- 
- 				pc = ((struct pt_regs *)sp)->epc;
-@@ -105,7 +107,7 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- #else /* !CONFIG_FRAME_POINTER */
- 
- void notrace walk_stackframe(struct task_struct *task,
--	struct pt_regs *regs, bool (*fn)(void *, unsigned long), void *arg)
-+	struct pt_regs *regs, walk_stackframe_fn fn, void *arg)
- {
- 	unsigned long sp, pc;
- 	unsigned long *ksp;
-@@ -127,7 +129,8 @@ void notrace walk_stackframe(struct task_struct *task,
- 
- 	ksp = (unsigned long *)sp;
- 	while (!kstack_end(ksp)) {
--		if (__kernel_text_address(pc) && unlikely(!fn(arg, pc)))
-+		if (__kernel_text_address(pc) &&
-+		    unlikely(!fn(arg, pc, (unsigned long)ksp, 0)))
- 			break;
- 		pc = READ_ONCE_NOCHECK(*ksp++);
+ #include <linux/export.h>
++#include <linux/filter.h>
+ #include <linux/kallsyms.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
+@@ -104,6 +105,30 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
  	}
-@@ -135,7 +138,8 @@ void notrace walk_stackframe(struct task_struct *task,
- 
- #endif /* CONFIG_FRAME_POINTER */
- 
--static bool print_trace_address(void *arg, unsigned long pc)
-+static bool print_trace_address(void *arg, unsigned long pc,
-+				unsigned long sp, unsigned long fp)
- {
- 	const char *loglvl = arg;
- 
-@@ -155,7 +159,8 @@ void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
- 	dump_backtrace(NULL, task, loglvl);
  }
  
--static bool save_wchan(void *arg, unsigned long pc)
-+static bool save_wchan(void *arg, unsigned long pc,
-+		       unsigned long sp, unsigned long fp)
- {
- 	if (!in_sched_functions(pc)) {
- 		unsigned long *p = arg;
-@@ -176,10 +181,28 @@ unsigned long __get_wchan(struct task_struct *task)
- 	return pc;
- }
- 
-+struct walk_stackframe_consume_entry_data {
-+	stack_trace_consume_fn consume_entry;
++struct bpf_unwind_consume_entry_data {
++	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp);
 +	void *cookie;
 +};
 +
-+static bool walk_stackframe_consume_entry(void *arg, unsigned long pc,
-+					  unsigned long sp, unsigned long fp)
++static bool bpf_unwind_consume_entry(void *arg, unsigned long pc,
++				     unsigned long sp, unsigned long fp)
 +{
-+	struct walk_stackframe_consume_entry_data *data = arg;
++	struct bpf_unwind_consume_entry_data *data = arg;
 +
-+	return data->consume_entry(data->cookie, pc);
++	return data->consume_entry(data->cookie, pc, sp, fp);
 +}
 +
- noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
- 		     struct task_struct *task, struct pt_regs *regs)
- {
--	walk_stackframe(task, regs, consume_entry, cookie);
-+	struct walk_stackframe_consume_entry_data data = {
-+		.consume_entry = consume_entry,
++void notrace arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp),
++				 void *cookie)
++{
++	struct bpf_unwind_consume_entry_data data = {
++		.consume_entry = consume_fn,
 +		.cookie = cookie,
 +	};
 +
-+	walk_stackframe(task, regs, walk_stackframe_consume_entry, &data);
- }
++	walk_stackframe(current, NULL, bpf_unwind_consume_entry, &data);
++}
++
+ #else /* !CONFIG_FRAME_POINTER */
  
- /*
+ void notrace walk_stackframe(struct task_struct *task,
 -- 
 2.55.0
 
