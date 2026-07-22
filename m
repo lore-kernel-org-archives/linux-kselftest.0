@@ -1,79 +1,96 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8991F28C854
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB890349CEF
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784726129; cv=none; b=ZspkxA1oGr30QZ9YSGtC5gifwDmBe0xzqANv2DxvRfcGFD1xxmXVptngMDg/8tTzhuqkJ6z6QHvWX447un4FWLvuGnd//QNGZanXjTglSEI2HU54sw67Os4mODz+MSB3BPHg+n4i+9AeSlt68mY4ZH/ZLySpKww4T9Pyg2a5Eas=
+	t=1784726375; cv=none; b=hJxwWQehZtRvRHlimXc4yXcoUeiRLgXSOHjd9kChrr9m+rQaxhv1BAy8QEreO5P/23eFAIjDRpyreLJhxUbcIgn3AGs86iH22r0F6zFzPyxkHuFQQDtyJ+T9dVviNLN6dF5TmGHs7IeOSJ12MWseFReFaceWO8ATnaOBSs661SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784726129; c=relaxed/simple;
-	bh=/byUoJ/WMc6UHqgCYQepUc84g2a8J34F7f8DVdRPKCU=;
+	s=arc-20240116; t=1784726375; c=relaxed/simple;
+	bh=epK4LVDwm2+auSTveDZ6GGKifGGGfqh7hgaFGF+EvAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GuPNsHZDwc7/AiWJqDq3xbw6iBwU2X+LNAvYejs0HlInxbVGCYxdM03YsjNQolECzUpXVJ83fCi1usyEhdzzu8cjn9GLioghaqvAmqoTOs2i0vwVKyS8pbxycs2WXKdKV1DWndOEmWqGajB3pNYcEQuoT1BWjBA9JYBASUKTIgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=R0uGdrtc; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	 Content-Type:Content-Disposition:In-Reply-To; b=IdAdde21BeG8Y7bV3zuRO3IDub2nk0325dCVrwMefKseslxJGgMlY4pmRZlUqRMTqWg3Y2dth9wIl326NFLUJCkg+S9WeVAywZIHlww2oF/CfL4U3rvmGSzhnt/JA2nYhy4M764KH8X+reeYAIo3gaQwZsacqcpI0L/DtH74o9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=hnFAnD8B; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="R0uGdrtc"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84864086bfeso4867b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:15:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="hnFAnD8B"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-930f618435cso79732485a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784726124; x=1785330924; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784726369; x=1785331169; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iD1PTipWdU3DcXEKR2UtQxdCuq75xUopzE+YD6AEWUQ=;
-        b=R0uGdrtc33TPlbNHKEqRhN6iNt4LRedE6PP3/Bv4cV+PX4o4w11ID1ci4liis1fVje
-         B8eLSDLzdBRMTKOujFdZF54NQl8vqnCnDKIgPC+y/KuCBDW1j7/B3MLX0WSxdKJM+zic
-         DUMQZM7+j5iNFhQDhP3ugrTZmOxvsakcQ/Pa6Ct6MDWEveRverGv4J3/AWW7WOi/pIQO
-         FJN32z3AJNpLQ4Uq91Hi6rLlDujnye471NBEQKJ6AfGEx6btQT5DfcghLk+IUWA2K1Md
-         wNQiPwj2ozLk1Gr2ugwgxQfpcET0Y5pNvY2xoTp3GoFsgveYaPOeTP/wu27HqI+7WG4b
-         /gRw==
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uPPBH/hmuBagyTMjawpVpFd8RmJZZP/xfXgbpwvebxM=;
+        b=hnFAnD8B6yb746lM1dDg1iy3zz4nVeGNoA0PUX2SqMQ0ccOjs4l68Z5mAmqD/V2fey
+         2m3DMIiZdnE5jVP6n5bDRNS4xg2G64CdgAZX3IjXkqcm/WdANu7ich8foaJHOlAsixzy
+         TlD3GKsCrfIa3N077RdxGvBvK+73UWGGSbzo/z7y8gA1ZHwVGGpcCbQi9ThD8wkUXb2v
+         6l4BvYxtquoMM33zGBqpotOPa26jM86mPxxyA8dYjnSvPvc4FmxA4Ru8mls6N1mqvMEa
+         oSUGkJS7S5VPYG51sn6svBcXZCP4kBHFPj2Z1U2cNZnLN9+JGqZ8DwoO6D396ccjDJ1D
+         PDZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784726124; x=1785330924;
+        d=1e100.net; s=20251104; t=1784726369; x=1785331169;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=iD1PTipWdU3DcXEKR2UtQxdCuq75xUopzE+YD6AEWUQ=;
-        b=B80fiAvHjm9Pv4jRhoY8wuyvpodHonXSjFkuEZPlBdEnSlJUXlLvYuOJBuqs5+FCjr
-         FvjUbNkRqjwwwIphRJzn48dPpgx2ykC/FB4LeIbExsD67G23TXTixPmGx/grNRwenNX3
-         r6CaTZFW22qHKZ2GGmwCM+/+A7c5ez38t+uIuaRa7tFaoj+YURu3vdRWTlzl2dzZY1am
-         rHI6sQWwaujHgjOjMnmpKfPhmAAqlH8EfMHb9caoXkIobfqP6i01YKdd2XV9BHBpPl/1
-         gxFHf4cFwUvqWI/406IcC2dWj2+uSt5ExfyoXcJHg4RVYuRtPYp1SzykKkvSDuxnJjMv
-         aLCA==
-X-Forwarded-Encrypted: i=1; AHgh+RqM75+W0uRDlcidxAavpKcPMGLTHzx7f+6Kme1XgGBGzOQg88Jj/U+ZwN4v5VVs3ZAXBz8jZ1ChHtWpVZQRvQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9s6CXXGdE6dgY+XMIogjrlxwgso3AgIAuzEenpanqSwpJqRI6
-	/MUVKKQMAUwgyFfgoP0gWev84UGA3nUTNIyjLuUeThJtObYS2taSfczSvTuYff8KQAU=
-X-Gm-Gg: AR+sD107V6AAf1gUD1M8G793HPf09wUUsdTYZZkLyeXvEkPRMyMlDDs6jUV9FdUlAHL
-	FglyPMYxsKwDF5I6LXb/eic422VGfzC7G6vQiESpIf58y+KfZ9CR9lwWNOQcVJVIbKrYb6ymqh0
-	v+Xj4c9GltNu+H52QxkQfQZjoiLNtXUTKMwEEdSkf9yJhL97/HfMV99FFU/BxkXPcJu3szJ/QoY
-	ieJ6jqNf7ZJjxnU4dmmJ7epdcbOrGQ72wgX9lukDmAQFHah7SOm2UrU07RKgg6as7WQ7MWukxz6
-	Nb2L9NqO/7OLExwTbOeTT86otETTY9+LsiS6Con4iu+5KJzXZbCbviR4CSoWLjmx0Kcu+/YAZDf
-	EhuNEqWqmYYELZG/zfxFkmJbEHl40OjWFwAl7aJfD3AbsOMln2Jm/Fu0z5Hg=
-X-Received: by 2002:a05:6a00:3a21:b0:847:8d2d:712f with SMTP id d2e1a72fcca58-84c29239a02mr23869158b3a.10.1784726123466;
-        Wed, 22 Jul 2026 06:15:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:49::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c3fsm1368442b3a.9.2026.07.22.06.15.20
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uPPBH/hmuBagyTMjawpVpFd8RmJZZP/xfXgbpwvebxM=;
+        b=SqRqrhWrBYndzV6z6bfoZZDlOgcX6x7UHwc0NLdisVB7AQF2Cr85MMdTiILz45DADt
+         pD7bqiCERnleyEBiCLNFOFBL6NP08NSNDVNjcf77m47CjKCI5PCr+koWB6NI76/oB1Od
+         umoMSratYGM6pL7j0QG6BjOW19iMABDKp9i3YoZQw6hkHyrYC+tap2jnrfHL8YHKyBCn
+         O5PQUlex7tmYsf4PXZ2nh2d3dS4SDC0UT4O/nAzP9UKJZ1zj+TrhUraqt57utOiVqFvB
+         TDoecrCK7T9siZXxZEQya2t2VdIdi+SR0oSDtc6Me73JY5KXzGha7EjpriACxmnLotKR
+         /rzA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3Uk934X/AFoJjmO2QTEmzdhCmgVgqrxa6E7pZxNGFZLgtLPOqTl3f5a0+2by5IguI2TUEdytFDBIjIiA+no4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg/HM2Iidx0Fnt1zxFotZ0S3yppnHJWVodQGOoyQecr3sRd73X
+	Xl8wpYsYir+QAZtPiy6HYBkOGrjC3WZ3Dp80PT3fT3iXhT/WYScOxEkhQXtnOj17q1I=
+X-Gm-Gg: AR+sD11zTKbyItFHpernwKjg/E9YlclwVhO9mW/daocqe8pjwDIAbYC+75NlOCAGwBQ
+	zWgjSnGUo4p29pxSsuluqLO1q+9RkaTq0Dc4ROOKciaHQIHBpr7JnJowoZD8KIReq/Wl6WZB3Hh
+	Y2257oTUC0wuAjeOKzaklCYEO/vS3zjvsQ+zHL2OeznjOapH13wQ4SLLqJ1x2qerQlPFQoaVeqj
+	grFj0gEQr2zkHH9Q02xfoPx608wjxQ3fnPpe84yPGSgEzFGPB8fM9P141MWB/Kf/reLQ9VRbSVo
+	Ld/Wqs5GbBbZm5Z1nSAsZWTvm9ZdirpqDeNGA9pc+zSaE+qrkoRIVhLShoYGUsYURVB4yczjvga
+	uVlGTZ/OO/2vc7livhRCoanVknLWIm7/nRWPcD6DZElXlysdinOvZDoAh6JaeFxJ88vQwlUXM9X
+	x8IRKLntYfweewKxyCigiT37FYKvPUJUGwTYxxuG4yanf1XEXsWoD9dtm2pw==
+X-Received: by 2002:a05:620a:460f:b0:92e:8734:b721 with SMTP id af79cd13be357-930b3ee6fa3mr2273972385a.29.1784726369355;
+        Wed, 22 Jul 2026 06:19:29 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930f6a6c1efsm160195685a.38.2026.07.22.06.19.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:15:22 -0700 (PDT)
-Date: Wed, 22 Jul 2026 06:15:19 -0700
-From: Joe Damato <joe@dama.to>
-To: longlong yan <yanlonglong@kylinos.cn>
-Cc: pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
-	edumazet@google.com, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	shuah@kernel.org, horms@kernel.org
-Subject: Re: [PATCH] selftests/net: use MAP_FAILED instead of (void *)-1 in
- tcp_mmap
-Message-ID: <amDCZ5t8wDtqNAIe@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	longlong yan <yanlonglong@kylinos.cn>, pabeni@redhat.com,
-	kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, shuah@kernel.org, horms@kernel.org
-References: <20260722015129.916-1-yanlonglong@kylinos.cn>
+        Wed, 22 Jul 2026 06:19:28 -0700 (PDT)
+Date: Wed, 22 Jul 2026 09:19:23 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
+	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
+	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
+	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
+	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 05/36] mm: add ZONELIST_PRIVATE(_NOFALLBACK) for
+ N_MEMORY_PRIVATE nodes.
+Message-ID: <amDAjb7PpWDnIQcF@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <20260720193431.3841992-6-gourry@gourry.net>
+ <amC-b5SIkxUCKQ7H@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,24 +99,92 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260722015129.916-1-yanlonglong@kylinos.cn>
+In-Reply-To: <amC-b5SIkxUCKQ7H@MWDK4CY14F>
 
-On Wed, Jul 22, 2026 at 09:51:29AM +0800, longlong yan wrote:
-> mmap() is documented to return MAP_FAILED on error, but tcp_mmap.c
-> compares the return value against (void *)-1 and (unsigned char *)-1.
+On Wed, Jul 22, 2026 at 09:00:51PM +0800, Richard Cheng wrote:
+> On Mon, Jul 20, 2026 at 03:33:59PM +0800, Gregory Price wrote:
+> >  static void build_zonelists(pg_data_t *pgdat)
+> >  {
+> >  	static int node_order[MAX_NUMNODES];
+> > +	nodemask_t tier_nodes;
+> >  	int local_node = pgdat->node_id;
+> >  	int node, nr_nodes = 0;
+> >  
+> >  	memset(node_order, 0, sizeof(node_order));
+> >  
+> > +	/*
+> > +	 * Zonelists: FALLBACK, NOFALLBACK, PRIVATE
+> > +	 *
+> > +	 * FALLBACK:   Allocation order for all nodes.  Private nodes have lists
+> > +	 *             but never appear as an entry in any list. Allocations
+> > +	 *             targeting a private node w/ FALLBACK land on N_MEMORY.
+> > +	 *
+> > +	 * NOFALLBACK: A list for each node containing only itself.
+> > +	 *             Allocations targeting a private node w/ NOFALLBACK
+> > +	 *             will always fail (their NOFALLBACK is empty)
+> > +	 *
+> > +	 * PRIVATE:    (N_MEMORY | N_MEMORY_PRIVATE) - allows access to
+> > +	 *             private nodes, and falls back to normal memory unless
+> > +	 *             __GFP_THISNODE otherwise constrains it.
+> > +	 */
+> > +
+> >  	build_node_zonelist(pgdat, &node_states[N_MEMORY], ZONELIST_FALLBACK,
+> >  			    true, node_order, &nr_nodes);
+> >  	build_thisnode_zonelists(pgdat);
+> > @@ -5912,6 +5957,10 @@ static void build_zonelists(pg_data_t *pgdat)
+> >  	for (node = 0; node < nr_nodes; node++)
+> >  		pr_cont("%d ", node_order[node]);
+> >  	pr_cont("\n");
+> > +
+> > +	nodes_or(tier_nodes, node_states[N_MEMORY], node_states[N_MEMORY_PRIVATE]);
 > 
-> Replace these with the standard MAP_FAILED macro for better readability
-> and type safety.
+> Hi Gregory,
 > 
-> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
-> ---
->  tools/testing/selftests/net/tcp_mmap.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
+> A question about this part, if my understanding is right,
+> ZONELIST_PRIVATE contains all private nodes, should we use some explicit target
+> nodemask here to make sure only the targeting owner's private node can be touched?
+> 
+> Otherwise it might fall back into a different owner's private node.
+> 
+> --Richard
+> 
 
-Looks right to me. Not sure if it needs to be set with "net-next" in the
-subject line to make which tree this targets more explicit?
+Zonelists and the constructors here is a bit difficult to understand,
+and I see I actually did a poor job of explaining what's going on in
+the comments here.  I will fix that up in v6.
 
-Either way:
+Lets say we have the following nodes:
+   N_MEMORY :  0 1
+   N_MEMORY_PRIVATE : 2 3
 
-Reviewed-by: Joe Damato <joe@dama.to>
+The following zonelists would exist:
+
+ZONELIST_FALLBACK[0]   = {0,1}
+ZONELIST_FALLBACK[1]   = {1,0}
+ZONELIST_FALLBACK[2]   = {0,1}
+ZONELIST_FALLBACK[3]   = {0,1}
+ZONELIST_NOFALLBACK[0] = {0}
+ZONELIST_NOFALLBACK[1] = {1}
+ZONELIST_NOFALLBACK[2] = {}
+ZONELIST_NOFALLBACK[3] = {}
+ZONELIST_PRIVATE[0]    = {0,1}
+ZONELIST_PRIVATE[1]    = {1,0}
+ZONELIST_PRIVATE[2]    = {2,0,1}  <- no fallback to 3
+ZONELIST_PRIVATE[3]    = {3,0,1}  <- no fallback to 2
+ZONELIST_PRIVATE_NOFALLBACK[0] = {0}
+ZONELIST_PRIVATE_NOFALLBACK[1] = {1}
+ZONELIST_PRIVATE_NOFALLBACK[2] = {2} <- __GFP_THISNODE
+ZONELIST_PRIVATE_NOFALLBACK[3] = {3} <- __GFP_THISNODE
+
+In the current design, we actually can never fallback to another private
+node, and instead if you wanted to - for example - interleave across
+said nodes you'd have to do so manually.
+
+I think it's reasonable to later extend zonelist construction to support
+such a think like:
+
+ZONELIST_PRIVATE[2] = {2,0,1,3}
+
+Later if such a need arises, but I would say wait for the use case.
+
+~Gregory
