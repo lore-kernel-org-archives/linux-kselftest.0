@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D643E3167;
-	Wed, 22 Jul 2026 09:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF07495538;
+	Wed, 22 Jul 2026 09:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784711563; cv=none; b=m7Q8mHeaHSAGRCisRRsSIz6oQI7eK42EGGh0iMhOF1HI+flAvHkLURMDqL3Lybp0vXMjckaCkVhxHbwh8D5Q2xwJcIIfXkBljkibjaec1W1sI8RtjLTE2KYK942euXq2l2OBVYHCkQop2lXOIQmNT5IOzM4crgxH5P29cWP+ELI=
+	t=1784711566; cv=none; b=C91qZEhgqVbct4oW49IcDiRHpg7BG2TmqA5yldYifBqSy20rjP+yvvlC7OZSq6lO+YvID4int5abgNMNA5LEWl1OdkrB6RT+rwEVf86jNQOePzvyK9+gf/+hQPFPo3Fo8vPn2Zw7YUUCFmVda3DS1qcja6PZu8mE3F499ojnAmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784711563; c=relaxed/simple;
-	bh=MAOIk6RQMMHP9g8q0wW7WPE1XWmO8u6cAL0GlkkzBe4=;
+	s=arc-20240116; t=1784711566; c=relaxed/simple;
+	bh=zU+WJI13tWsgGSx87Of2o6NV7wNVwyx6o1/X2ur3XDE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O4VYfKrJJ1hoa/HpVeHlskdWtBMe6bGsIO11jfJRfZOC9YfANRFG+W8diYwojQVQjs88GypFLhYEztXozveK00nUax8eMA7xa3XjyKwvfPFuCU/7T7x0a0S7exZa8zsLVj4xax7mC+LoqGWE39sBPNGku/EbVbXf09k6V+ebfQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=rEfmwAtQ; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=rbBWohjrWH6y/1mbvo+s2N6gEh0uQngtXrcJ1J2tKnCD7Yj3gD23iCUTwkFiGyXB9LlK5hrya414pJg8K93PKyCd/tbM7PnzG7qkW6G3NqwkecKMwXKCK7sXu4W9fo1QP9LFlkxAwHQoAZQeG9G5aFmGIRXPU7zWxNjG1YQ+CcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oS8ZvJdS; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="rEfmwAtQ"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oS8ZvJdS"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FED11691;
-	Wed, 22 Jul 2026 02:12:36 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB9021595;
+	Wed, 22 Jul 2026 02:12:39 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 77C063F86F;
-	Wed, 22 Jul 2026 02:12:37 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E7C253FC81;
+	Wed, 22 Jul 2026 02:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784711560; bh=MAOIk6RQMMHP9g8q0wW7WPE1XWmO8u6cAL0GlkkzBe4=;
+	t=1784711564; bh=zU+WJI13tWsgGSx87Of2o6NV7wNVwyx6o1/X2ur3XDE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rEfmwAtQp5FzBpgznxbXzbVFSASRpkEAKRKrsxYS6t7OaDOvBhG7lXHIMH9aMs83S
-	 5q0Ogl46PYCxE4UsX2On99Aa72x+SQlwXDYDlbWwiki1/+Rwonheoe9fNeCyXF0MUA
-	 znm6WmOEtVQtpUpIP2CKY8gH9TW6Njp6WSrckMmY=
+	b=oS8ZvJdSVqcqJG5JmEhwWraFolHd2/OKcrNFCnyihoZTNbCtCApPpi1EvWQ4GlDhG
+	 0qYmVOSWCIfBmRBoC7xmkVKG8a7g7aXjdDZMRRUnWgvvZv56kTX9h2dmvr4Rjp6Fci
+	 kGZiqF89fwv6XKoDKMXa4dAkdq7vQaqlqsCtxHj0=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -50,9 +50,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH RESEND v1 4/5] selftests/mm: skip page-cache hwpoison tests on NFS
-Date: Wed, 22 Jul 2026 10:11:38 +0100
-Message-ID: <20260722091219.61504-5-usama.anjum@arm.com>
+Subject: [PATCH RESEND v1 5/5] selftests/mm: retry migration failures for the full runtime
+Date: Wed, 22 Jul 2026 10:11:39 +0100
+Message-ID: <20260722091219.61504-6-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260722091219.61504-1-usama.anjum@arm.com>
 References: <20260722091219.61504-1-usama.anjum@arm.com>
@@ -64,64 +64,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The clean_pagecache and dirty_pagecache cases use shared file-backed
-mappings to exercise page-cache memory-failure recovery.  These checks
-assume local filesystem writeback and error-reporting semantics.
+move_pages() migration is best effort and may temporarily leave a page
+unmigrated when another task faults on the folio during unmapping.  The
+migration test currently tolerates 100 consecutive partial failures,
+but a busy machine can exhaust those retries in a fraction of a second
+and fail long before the intended 20-second runtime expires.
 
-On NFS, the hard dirty-page case can complete hwpoison injection and
-recovery, then report a delayed writeback error when the file is closed.
-That failure reflects NFS writeback behavior rather than the page-cache
-recovery path targeted by the test.
+This is especially visible in the shared-anon cases, where every worker
+process continuously accesses the same mapping.  The retry count then
+measures syscall rate rather than whether the test can exercise a
+successful migration entry.
 
-Extend the existing filesystem prerequisite check to reject NFS and
-close the descriptor before skipping.  Other filesystem types retain the
-existing injection and recovery checks.
+Retry positive move_pages() results for the full runtime and record the
+per-page status.  Pass if at least one migration succeeds, and report the
+last status before failing if no migration makes progress.  Continue to
+fail immediately for syscall-level errors.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- tools/testing/selftests/mm/memory-failure.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/migration.c | 34 +++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-index 032ed952057c6..2e77f58406868 100644
---- a/tools/testing/selftests/mm/memory-failure.c
-+++ b/tools/testing/selftests/mm/memory-failure.c
-@@ -272,6 +272,11 @@ static int get_fs_type(int fd)
- 	return ret ? 0 : (int)fs.f_type;
- }
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 29f7492453d43..19b4cef65f345 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -7,7 +7,7 @@
+ #include "kselftest_harness.h"
+ #include "hugepage_settings.h"
  
-+static bool file_backed_test_supported(int fs_type)
-+{
-+	return fs_type && fs_type != TMPFS_MAGIC && fs_type != NFS_SUPER_MAGIC;
-+}
+-#include <strings.h>
++#include <string.h>
+ #include <pthread.h>
+ #include <numa.h>
+ #include <numaif.h>
+@@ -20,7 +20,6 @@
+ 
+ #define TWOMEG		(2<<20)
+ #define RUNTIME		(20)
+-#define MAX_RETRIES	100
+ #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
+ 
+ HUGETLB_SETUP_DEFAULT_PAGES(1)
+@@ -110,7 +109,8 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 	int ret, tmp;
+ 	int status = 0;
+ 	struct timespec ts1, ts2;
+-	int failures = 0;
++	int last_status = 0;
++	unsigned long successes = 0;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
+ 		return -1;
+@@ -119,23 +119,33 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 		if (clock_gettime(CLOCK_MONOTONIC, &ts2))
+ 			return -1;
+ 
+-		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME)
+-			return 0;
++		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME) {
++			if (successes)
++				return 0;
+ 
++			if (last_status < 0)
++				printf("No page migration succeeded: %s (%d)\n",
++				       strerror(-last_status), last_status);
++			else
++				printf("No page migration succeeded: status %d\n",
++				       last_status);
++			return -2;
++		}
 +
- TEST_F(memory_failure, clean_pagecache)
- {
- 	int fd;
-@@ -283,8 +288,10 @@ TEST_F(memory_failure, clean_pagecache)
- 	if (fd < 0)
- 		SKIP(return, "failed to open test file.\n");
- 	fs_type = get_fs_type(fd);
--	if (!fs_type || fs_type == TMPFS_MAGIC)
-+	if (!file_backed_test_supported(fs_type)) {
-+		close(fd);
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-+	}
- 
- 	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
- 		    MAP_SHARED, fd, 0);
-@@ -325,8 +332,10 @@ TEST_F(memory_failure, dirty_pagecache)
- 	if (fd < 0)
- 		SKIP(return, "failed to open test file.\n");
- 	fs_type = get_fs_type(fd);
--	if (!fs_type || fs_type == TMPFS_MAGIC)
-+	if (!file_backed_test_supported(fs_type)) {
-+		close(fd);
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-+	}
- 
- 	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
- 		    MAP_SHARED, fd, 0);
++		status = 0;
+ 		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
+ 				MPOL_MF_MOVE_ALL);
+ 		if (ret) {
+ 			if (ret > 0) {
+-				/* Migration is best effort; try again */
+-				if (++failures < MAX_RETRIES)
+-					continue;
+-				printf("Didn't migrate %d pages\n", ret);
+-			}
+-			else
++				/* Migration is best effort; try again. */
++				last_status = status;
++				continue;
++			} else {
+ 				perror("Couldn't migrate pages");
++			}
+ 			return -2;
+ 		}
+-		failures = 0;
++		successes++;
+ 		tmp = n2;
+ 		n2 = n1;
+ 		n1 = tmp;
 -- 
 2.47.3
 
