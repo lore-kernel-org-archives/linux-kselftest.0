@@ -1,102 +1,96 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856CC35AC1E
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2713537CD
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727765; cv=none; b=TrOJxi/PUe8GnOJBU33/awZng3mmr3QKv3+lDFCNTat72r0NOtRt3FC5UtQwD+VxiD7pJeYcg3uulmNuGlqFC6aNghjeoYzsJEGVq+ujIQBw3Nprw3tm0DIxREZ7TJnTX+FM+VJpSZKcYligpVenzo/x2QrN8TPUhrGWC1Cm7Mo=
+	t=1784727810; cv=none; b=LFTdWP3JLU6Y6d640VB7JsyUuWMKo3EmP0Iy5UjxyW+Wm3sUAQdoeDVVMx1S/QvglHLH+gORuROp95KV9knxDdePhb7oLwUT/2mM0Qwin38H3aJeCxa/zR7i5EsrRV2o5EPYAYNGO1Pw31M+PUlDOVPqQfQNmUEKVcZYUhaShZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784727765; c=relaxed/simple;
-	bh=4Ed3FEjfLXijc1yxxqYpI07on3pOxk69h5KyHejFQJw=;
+	s=arc-20240116; t=1784727810; c=relaxed/simple;
+	bh=PYGMpBdbfrddSWhi8wSkhjZKYMi0cam4nIYPZarnXJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qRaKEvXmAV+2n4XeJy/3ZkWhuSp/yC9qQaPR4Sy0Av2v4szbHlIWR8r6HqLaMIaUpOmMgWaC4PDDHmLiu//N1I+lKALIqPKy7pLxsu+sVLZWTTJLY9Yg7gqvmn4oZ/aKqTXmuujTF7zwdyTXBaldoC3i/qokxKKSc6ZBYWZkJic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=fAuQ0Sjg; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	 Content-Type:Content-Disposition:In-Reply-To; b=i/mt91xJ6RKKcn2jcHSbzD8D4uszSWI7/4jDFK5V/mvpSJKbIYXd/fimCJbgPq1yXRdxcaLy7gRPzurmldBjQS+PyyiMT9JBlqjma2DkOW+bsrcLaH5L86nq8O1eLZTLH/KMtvB1oSaPHKg0uszu2GC6dXakF+sSp57RRLQ/W7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=QG1gO5uC; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="fAuQ0Sjg"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ced3386430so88385645ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:42:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="QG1gO5uC"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51c21495722so88744241cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784727762; x=1785332562; darn=vger.kernel.org;
+        d=gourry.net; s=google; t=1784727807; x=1785332607; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=crZ98YrnqpB8dh6d/2NV8XT+VsDzcgb/h4PFQm4GzmE=;
-        b=fAuQ0SjgGEzflEvVmT31aZ57Z0IZ4xVjKso+L+ulcIWts2Al/6Hu5A28ThiCeYYx3M
-         mDOsGRilucUNjW6OGWImDwKYS6lG/Rj5tOKHra04WdoiHH9l4Pzuei/msEWzbuv48ID1
-         RJNEj9cw12isIyZ2jmXOeKl0OPSWAlExI8D5G5jCRnAm8+vGnVyW0M9XnjMRzPBHVK0L
-         WdF33SIdor1wgNkS2E1ev+LEKe10nMnbQeoiU6qtsQIznPGwXLKqudU3cR89hWHttz6A
-         g4k5ogWr/EbkkQ4sjHFdoZFJIi2lWH+4uvbpFWe0fHQ3aS9QpERRyAh3b28IpXA3ec+m
-         SMmg==
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=wqGzltcyJPxwfdEhPSjMSETzXly+gOy2t1lReGVE8tY=;
+        b=QG1gO5uCmzfckS/4hrc8GaGFjBboFkrunoc3JyezIFVZDpSfgRfasKH01+RjgBtnW7
+         oNviLvafLrI+ny8eRATwbyYk8NPOzuWTnrVKeCqOjPgPr5ijUDKHTORpByWhRIJooYlL
+         Xwp3Cla/WAYyuwmkhBcwzLaRLmP8eTSeUEDEgRHqcn8hSeJ/2/aXsmMnakunQbWq8sgM
+         5WgEbzekaktHb9KZqu4HrgyPmbSPconuKte38ex1GDbA+5zx/Gl4DKgVwM61MEJcZzXi
+         SnaijE/jQgrTohKRpeo7PkHDeeCIREbeou4mPGxOwj5JtWYd1bKRCfwW96yEkcEEsHHF
+         w/TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727762; x=1785332562;
+        d=1e100.net; s=20251104; t=1784727807; x=1785332607;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=crZ98YrnqpB8dh6d/2NV8XT+VsDzcgb/h4PFQm4GzmE=;
-        b=HMcSnA9tVemit32jIP4jLSsOtHbRwzJGcafP6k2mUfltfrg/9EhYLpHwGLLCtLT2+h
-         Vw8UOyoDKeIIGzORfPO1DTJjJUFjnBKEUfevrkEholuUzcBFYE5TO70M1o6+IhmceDB6
-         kwTz86i7O6QTXiJ8yyci722bfr4Z9xzab7JoQTa+4aRFgqWmbykX06xVSP1rINVYmj/r
-         Gwp9aYkiHsuhLskZviSCbC5OjUpPSuozVN92yBhyTDZERMhl/g5wA3RmNcRrEK1x22pn
-         u92XJVzJb1q/b+1dGO6RsPtcC6uevh/l2K8wJOCYdPhCESW7HM9+tJndSdVWMvzJM7QC
-         ROzg==
-X-Forwarded-Encrypted: i=1; AHgh+RrAE4fI+ebcatUHKkN+VdnLHvXdv2yCGgHAwOe9N5+C0JWMOnZJ61VUoPIO7WUC8LGDtM+2OQCn7zUo2kwxjas=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5lKcA+XLqJKaA3fvhqjcfCM6zKXAGzxQST2sSF7a+T3X1Kygc
-	NcD3G/VNQk5TQd0hGiQbw0PetjiG1SdO5GGmRrz2jjCWQ29k7vlMyh6LHo6A0/h9bh4=
-X-Gm-Gg: AR+sD120tXW8SPywdA5xHszzmmnvYjk7FzFdO5OMmGIDmRnq2dHNbIHkrG2WO6GIY1P
-	AldxXrDp0NbQan7LbJNmITNZm9XpYxdRROgIa5tyk5wNRkvTjIalQmXJrKGBYUCYg6YkUSROMtA
-	rD91o/QtbZBmRTWHWEM5TDyO1p6XhbzbcvEFKvh25nSHU3BJTTWiXG4Fvz733MBc+wKJaPxfLea
-	gTCHrx6bvWcx6dnexHMO853nglMeg/+/CrkQURXpfbxxxPw4xom8IwTYWicEKWvP1UjNSc74ULD
-	3NgN4k+g0+6+goMxwQv8CLv491ATXIpy9xSU+hl1/JYZ0jLfYIlWZC3sh8TqFTgcxvUIAO7Ve83
-	fCINw4CWhTaTmlahnJSlvsb9zMsImgu17mIdU2m4TYPfEckLI2xLznfGialzLGXyFlBwzrA==
-X-Received: by 2002:a05:6a21:510:b0:3c4:1916:9d40 with SMTP id adf61e73a8af0-3c419169f4fmr7786967637.12.1784727762450;
-        Wed, 22 Jul 2026 06:42:42 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:44::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f0d872bsm1233076a12.7.2026.07.22.06.42.41
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wqGzltcyJPxwfdEhPSjMSETzXly+gOy2t1lReGVE8tY=;
+        b=mtqoNgtxQ8mWl8+6mqqG1haNT7JFMwhtfTDKUM6s/bIw/9iT1NbTY3Xs/f8MYVupzG
+         T8z3RhAZTusPqY6Z4iNURhbHkrBfR0nOClzrmwMSIvDg/JhgIkAERcm76kyPJmTBTwvZ
+         vMroouSciU/Uujhwuqderhr5uyEJxSnBMs1InvinqbqurqMBMxiFnA0stlTY6nHXdY6I
+         n3TWqxi0UPrRob/9GiEFxD+SyLHSLmB1TGyPb2ExD/l2k8TE4vokocJaR/XTzNajwYTq
+         y7SvE9Ztt4z9kkZJvyMzh99DIPVOQ+vh701dTuLCIaPL2nGuF9/WBsyEfPuuSHBCiqBC
+         ujNA==
+X-Forwarded-Encrypted: i=1; AHgh+RpYUX/XHCdtJnaUtRFEUzaxsdolTomYLz2XTkvm/rGw7e/7oEyosQczpYIuA4P+1ZnDGCctlxN9lzBpHmF0gEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAAwxWaDhcUgEv0PuJ4KgjdLPobaZY1Vd+0RCg85axpjwI+vQt
+	oSf8LNAPVjUAlSQ9GFW7BS3/22if4QJG7PZ8svLyC8kQQ8phB0qnVIjnuHaZKdSQj5Q=
+X-Gm-Gg: AR+sD13S9Au4yhaonkkYkQ+Abq7wnrdWZSwSYkmE6MC+B+A/ADNtEj7P9oGBMZODLlT
+	UJ3YzVIYRuZBo+QuIg3ZNPnSLbwuEtTN26Y86p+jbqp2WhllGDLfB5Bmi+Xsk91lrPY8N9BNd61
+	hNkwentzD6ND4YMO8FdK45UMsm91MrknKVzJU/wMfg5Q03ifivcVe/HUneBbMLM7NMiy54RZgNy
+	MNBlt/IUujvERnMFN7OF34/dupjVaqLrkGooJOHPyXJPEH68WbffP8DcAeeQLAdRXPGrwNivtZ2
+	9KViDmYo57i5QblrcyvnABi5/RaDYxp/mtnGsrQFsHhQ2Y8KGyCazbxrymstP6M6JYL8GPCN91r
+	3/YQeoxF26GKs0sQ+kcDu5dI+e87N8vt1ijE7scW60m3imZNmLPbk5NE6HzBlpm8/ANmjGPAfRU
+	IlNTl5ymcn3/nzgkrD3MN/r/LcYFohEp+oEqv/hmJ60xNEW2IqVI32pGjUH4MCPgDvMtJy
+X-Received: by 2002:a05:622a:1f91:b0:516:e152:7a59 with SMTP id d75a77b69052e-5213e08256bmr218014961cf.42.1784727806950;
+        Wed, 22 Jul 2026 06:43:26 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-527d3b3f66dsm15332181cf.27.2026.07.22.06.43.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:42:41 -0700 (PDT)
-Date: Wed, 22 Jul 2026 06:42:41 -0700
-From: Joe Damato <joe@dama.to>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Stefan Schmidt <stefan@datenfreihafen.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi.denis-courmont@nokia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com,
-	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
-Subject: Re: [PATCH net-next v2 0/7] net: convert rawv6, ieee802154, phonet
- and tls getsockopt to sockopt_t
-Message-ID: <amDI0T9mfHakF+7I@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Breno Leitao <leitao@debian.org>, sdf@fomichev.me,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Stefan Schmidt <stefan@datenfreihafen.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi.denis-courmont@nokia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com,
-	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
-References: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
+        Wed, 22 Jul 2026 06:43:26 -0700 (PDT)
+Date: Wed, 22 Jul 2026 09:43:21 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
+	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
+	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
+	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
+	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 32/36] mm/khugepaged: base private node collapse
+ eligiblity on actor/cap bits
+Message-ID: <amDIuZSsOPjRkywY@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <20260720193431.3841992-33-gourry@gourry.net>
+ <amDEEnTv0QumcDJn@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,39 +99,20 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
+In-Reply-To: <amDEEnTv0QumcDJn@MWDK4CY14F>
 
-On Mon, Jul 20, 2026 at 09:17:41AM -0700, Breno Leitao wrote:
-> Now that sockopt_init_user() was already merged, builds a user-backed
-> sockopt_t from the __user pair. A getsockopt leaf can then take
-> a sockopt_t behind a thin __user wrapper: the wrapper builds it, calls
-> the leaf, and writes the length back to optlen. The leaf copies with
-> copy_to_iter() instead of copy_to_user().
+On Wed, Jul 22, 2026 at 09:24:37PM +0800, Richard Cheng wrote:
+> On Mon, Jul 20, 2026 at 03:34:26PM +0800, Gregory Price wrote:
+> >  
+> >  		page = vm_normal_page(vma, addr, pteval);
+> > -		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
+> > +		if (unlikely(!page) ||
+> > +		    unlikely(!page_allows_collapse(page, cc->is_khugepaged))) {
 > 
-> Convert four more leaves the way udp and raw already were: ipv6 raw
-> (do_rawv6_getsockopt), ieee802154 dgram, phonet pep, and tls
-> (do_tls_getsockopt and its per-option helpers). 
+> I think collapse_scan_file() need something like folio_allows_collapse() check as well.
 > 
-> Converting phonet surfaced a pre-existing bug: pep_getsockopt() clamps the
-> length it reports but writes a full int with put_user(), overrunning an
-> optval buffer shorter than sizeof(int). It is fixed in its own patch, with
-> a Fixes: tag, before the phonet conversion, so it can be backported alone.
-> 
-> The last patch adds getsockopt_iter selftest fixtures for rawv6,
-> ieee802154, phonet and tls, checking the returned length and errno across
-> exact, oversized and short buffers, an unknown optname and a bad level.
-> 
-> For full motivation about these changes, please check the initial thread
-> at link
-> https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/#t
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changes in v2:
-> - Replace min_t() by umin() (David)
-> - Link to v1: https://patch.msgid.link/20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org
 
-Other than the nit I mentioned about min vs min_t on the one patch, it looks
-good overall to me, so for the series:
+I believe you are correct, sashiko up some stuff here too.
 
-Reviewed-by: Joe Damato <joe@dama.to>
+Thanks!
+~Gregory
