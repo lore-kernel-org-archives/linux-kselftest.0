@@ -1,66 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D3D353A83;
-	Wed, 22 Jul 2026 00:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF8635FF5B;
+	Wed, 22 Jul 2026 00:59:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784680255; cv=none; b=EBupUzq4CbER+WBlH4mj9/6Tr4DhC1s07SrC6Rel0B+gaGFZV7uu7ou/bDbnlP4c8DYHfNYptyhkT7Xfp8rGhzIcgXBAuyeoqfX09UaWByr6FW9aJ/JczuTTQ/ZADQOPxx4Yj5SVHZk0DVoQUNE8FtzJgWAs4DbEo8vd4QGfHtk=
+	t=1784681946; cv=none; b=G/z32k12hMV5LrlYviSMIrmoVOyvXOdg5VxRw3NgpfMIJVzjQznQ8TJ1urwAuWyaSbLlqNSPFT5RdNrMZXzZDeYE+waTLFZHi6g/hourc5JYacorlA3PnfzLyaIxrnXe/g2FW+0kXYNMPZ2kOvIPLe5VC5XmTq08c+xDfXGkesk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784680255; c=relaxed/simple;
-	bh=WfcGv2cG8OpZnOEtZDT7rv+r9kA6dCX95jH5OIloFqc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CUou3k2ahE86EbipuJ4GjbzhfC7TAXp1yTHGKwM2EYkNHXjAkrKGEqkDT5cLf1f8Cj4gdeqRFduqjB72P6LlKD47gRsvWGAEL30tY/vmD2+5seVePSg9oLPZUuXzR7cR6xXpHLS03jDe9QCeXXnvBp8yobmL98hoU2xuOOidWRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D94B1F000E9;
-	Wed, 22 Jul 2026 00:30:52 +0000 (UTC)
-Received: by venus (Postfix, from userid 1000)
-	id 206A3180767; Wed, 22 Jul 2026 02:30:51 +0200 (CEST)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Waqar Hameed <waqar.hameed@axis.com>
-Cc: kernel@axis.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-In-Reply-To: <cover.1782746851.git.waqar.hameed@axis.com>
-References: <cover.1782746851.git.waqar.hameed@axis.com>
-Subject: Re: (subset) [PATCH 00/10] Add sysfs entry for system load control
-Message-Id: <178468025110.524960.11847050585350482153.b4-ty@collabora.com>
-Date: Wed, 22 Jul 2026 02:30:51 +0200
+	s=arc-20240116; t=1784681946; c=relaxed/simple;
+	bh=ZigNtDrXzye4JpU5Iq4j9ZWamjIz3WD4vsvEDFP3Tnw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Al/KiOC48s5RmP5Ecp8BhXfno4fTSu7np4qVwhKm/gVr4Gv8F0KT37zavwRP9EJyXBqGTutzv6CMylxvk9KdiK9uT0hHXo+SaUPBEUREdPnYpN5DhssN86oneOGJikT0hvv17ziMNYPWMFXXmQdlly4YTEvSLDF9OiPY4yREAx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EG3V8+81; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EG3V8+81"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1D91F000E9;
+	Wed, 22 Jul 2026 00:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784681945;
+	bh=iBUnoAw5bJihaUFvRmHcSSiIlWI6OnF9sp3DV2X6rnY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=EG3V8+81yxV38Yo9pMDh2kT8xazYaWD3JZOTNdYd8feMTh2O09v6EQIcSI/7rJevd
+	 jtd8+6dnkku7THfiiOGmZIRSH/3C0Y3OzTykX5ToWneSKXcmfWRtI2HH3QzLkVIYrG
+	 Mtok7CGzUaYcAr21ZUHwAoRoBAynMDuzXoFp22IdPI8LSMGR86o+2hmR2tshwllT/N
+	 ngUCY4UUv1kmxBADpN7N1F3f6xZ7LCMPPTxBnvEYrPqArk/N30buO/HkzYdyUt09gI
+	 16cr3/VgnuHmhminp2TvvHeAXTLyVhmBRwMGx0Wbi8k9PqEs9XZuA9izAc/OWIIzLO
+	 SyPN7eJES4SdA==
+Date: Tue, 21 Jul 2026 17:59:04 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: deepakraog <gaikwad.dcg@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: selftests: fix typo in ip_defrag comment
+Message-ID: <20260721175904.1e1a4967@kernel.org>
+In-Reply-To: <20260715143549.14094-1-gaikwad.dcg@gmail.com>
+References: <20260715143549.14094-1-gaikwad.dcg@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
 
+On Wed, 15 Jul 2026 20:05:48 +0530 deepakraog wrote:
+> Signed-off-by: deepakraog <gaikwad.dcg@gmail.com>
 
-On Mon, 29 Jun 2026 17:44:56 +0200, Waqar Hameed wrote:
-> During discussions of the development of a new driver [1], it was
-> concluded that a new `sysfs` ABI for controlling the connection from
-> power to system load is wanted (often called BATFET). This patchset
-> introduces such one.
-> 
-> There are already several drivers that are controlling this, but with
-> their own custom `sysfs` entries. The drivers in this patchset were find
-> with a simple `grep` for `bat\s?fet` (there might be more?), and then
-> converted to use this new `sysfs` ABI. The old custom ABIs are left
-> untouched of course, for backward compatibility.
-> 
-> [...]
-
-Applied, thanks!
-
-[04/10] power: supply: rt9471: Remove superfluous unpacking of propval
-        commit: 45413165bef33bb7d5544a3331f39492cdde9418
-[08/10] power: supply: bq24190: Remove unused watchdog struct field
-        commit: 0e2a6f7c0fa69293fa6f53dcf3406a9d7a1b1816
-[09/10] power: supply: bq24190: Disable watchdog with bq24190_write_mask()
-        commit: 50ffe6eedbd8d1ff8fbc2b451bbade8ca3063487
-
-Best regards,
+Spell our name in a more official way if you want to be taken seriously
 -- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
-
+pw-bot: cr
