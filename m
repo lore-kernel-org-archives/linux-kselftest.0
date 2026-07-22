@@ -1,92 +1,106 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE80633F5B8;
-	Wed, 22 Jul 2026 06:17:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CC341AD6;
+	Wed, 22 Jul 2026 06:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784701058; cv=none; b=OJ3Oqj+LFMVOsXee74X6Ueeaj40z1+AhNCLx5cu1Kr2KHMv4q5jRgRPSTn+DF+QiuwWkTuvQanDISyYFgp6LnZJqSxNNsUF/+2nwdkum2GExj4w6myqMFw9XQp0JEamKIR/iWRp0+TAVGgEI3DY4ju12Vy769HP3YEzaKjFR5qg=
+	t=1784701181; cv=none; b=E2xwCJjerUlnbOShXD6DVJl8bOBnUzbS99uOj8s/I3tElLqSDULhVAggVmkMTiDm74tjGOcVeE944cT1XOcQu13tn3/nj0fSjhG3nqzJ+xKMo04k7Yia7JCT56ndj4IxeTRXpsEp51lZMQDx1auc58rT3ADZIzg/FusgqAlCKwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784701058; c=relaxed/simple;
-	bh=fiyN0rlej2klNABisMT88rzFmobcQRhtJk4oO2kN6yc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YGshxZIgBB1rPZzomERmW/8eSBzH/IVJ1GchYG/DKfcz8AUC4tSlpVTYzO1s8BtWQAycmynBvyRBARQgSVv89CCV2AyBDTcLi/8zpSg7NOaC22bUGmwtXmYV8jSpner4YSflv3Ew64TDvQ6kSFV/VIP124XyJ/Krr3xtl8KyHm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 044b22b2859511f1aa26b74ffac11d73-20260722
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:ecdad7f1-9146-4cd4-b471-ccd7cf387132,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:3dd24d8d6561eeb933e135cf2820da91,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
-	50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 044b22b2859511f1aa26b74ffac11d73-20260722
-X-User: yanlonglong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yanlonglong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2048049471; Wed, 22 Jul 2026 14:17:29 +0800
-From: longlong yan <yanlonglong@kylinos.cn>
-To: maddy@linux.ibm.com,
-	mpe@ellerman.id.au
-Cc: npiggin@gmail.com,
-	chleroy@kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	longlong yan <yanlonglong@kylinos.cn>
-Subject: [PATCH] selftests/powerpc: fix typos in tm-signal-stack comment
-Date: Wed, 22 Jul 2026 14:17:11 +0800
-Message-ID: <20260722061712.948-1-yanlonglong@kylinos.cn>
-X-Mailer: git-send-email 2.47.1.windows.2
+	s=arc-20240116; t=1784701181; c=relaxed/simple;
+	bh=sTovb3jlHmMmpacyIEycqdjDJrdtEJ4opsDA6DZw6oI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uu4xmddgv5/X/3fCCtdWgl8NrNTbgdIW17ejC7BoEj7gmFNr3I+cpp0mhmOnSTbWwOGNtjCLEq03y9XxfNLqBWuHDDhzKMkWs4qTl7Zc6wnc5u48Rx7zzSViTEeL6rhVaKlorzbIYAe5Ia/6hXuJu3IzaYY2yxfxinH1IdCRGCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4XAbMye; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4XAbMye"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7A31F000E9;
+	Wed, 22 Jul 2026 06:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784701177;
+	bh=AEh4CLLahb9Ms3Mqn7fXlHzTRN7mIHaMYarLA5wmEL4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K4XAbMye85KnDNriuWSmnUtbR/InR4ASMSlBmx0eGGM0HqHnvCR27UMsE1rLZeoQE
+	 aJ+jBXVAeEFQ+LEmYAjjNkhs1+4IcK9zAymwoVZGHMk2W8NklQYquUx2gnwt1Pf7wW
+	 CAuJfhRYCntrawYilZgfoPiGPxrvr7wQqPaa303FhQoQ4WEsUl8WVYadtrL7WUaX8V
+	 kFxbft/LStA0RaivqDYDWH7yvjyjCteo9kGgC8Gq4LeOdVCaDSX2mcBW6PeKsMutNm
+	 p39YLSWYBc6RqvoXdg6YiDxX/gBvedZ+dn1277ZS05C86fCCAGxrLf2S0vDZizIrSG
+	 s8gu1xf1cnjFA==
+Content-Type: multipart/mixed; boundary="===============7886987547029329891=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <455026ad71596cb0ff71074ef232644d1cd4d623cccbd0f695fa275aaf5ed972@mail.kernel.org>
+In-Reply-To: <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+References: <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+From: bot+bpf-ci@kernel.org
+To: rtoax@foxmail.com,vmalik@redhat.com,andrii@kernel.org,ast@kernel.org
+Cc: rtoax@foxmail.com,rongtao@cestc.cn,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ishiyama@hpc.is.uec.ac.jp,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 22 Jul 2026 06:19:36 +0000 (UTC)
 
-Fix three spelling errors in the file header comment:
-  - "delievery" -> "delivery"
-  - "trelaim" -> "treclaim"
-  - "hance" -> "hence"
+--===============7886987547029329891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index c18f1e16edee..85afff60365c 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
+>  	return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>  }
+>
+> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+> +{
+> +	int dlen = 0, slen, space, copied;
+> +
+> +	if (sz == 0 || dsz == 0)
+> +		return -EINVAL;
+> +
+> +	while (dlen < dsz && dst[dlen] != '\0')
+> +		dlen++;
+> +
+> +	if (dlen >= dsz)
+> +		return -E2BIG;
+> +
+> +	space = dsz - dlen;
+> +
+> +	slen = bpf_strnlen(src, sz);
+
+This came up in the earlier review of the series: the length of src does not
+need to be computed here, since strncpy_from_kernel_nofault() already bounds
+the copy by sz.
+
+  https://lore.kernel.org/bpf/3e73aeb2-afce-4ae9-9163-51e4dc1ded01@redhat.com/
+
+That bpf_strnlen(src, sz) call was dropped in an earlier revision and has
+returned in this one.  Is the separate src length scan still needed here, or
+can strncpy_from_kernel_nofault() handle the bound on its own?
+
+> +	if (space <= slen)
+> +		return -E2BIG;
+> +
+> +	copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
+> +	if (copied < 0)
+> +		return copied;
+> +	else if (copied == 0 || copied == 1)
+> +		return dlen;
+> +
+> +	/* The copied character count includes '\0'. */
+> +	return dlen + copied - 1;
+> +}
+
+[ ... ]
+
+
 ---
- tools/testing/selftests/powerpc/tm/tm-signal-stack.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm-signal-stack.c b/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-index 68807aac8dd3..3bc3a2e1526d 100644
---- a/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-signal-stack.c
-@@ -2,15 +2,15 @@
- /*
-  * Copyright 2015, Michael Neuling, IBM Corp.
-  *
-- * Test the kernel's signal delievery code to ensure that we don't
-- * trelaim twice in the kernel signal delivery code.  This can happen
-+ * Test the kernel's signal delivery code to ensure that we don't
-+ * treclaim twice in the kernel signal delivery code.  This can happen
-  * if we trigger a signal when in a transaction and the stack pointer
-  * is bogus.
-  *
-  * This test case registers a SEGV handler, sets the stack pointer
-  * (r1) to NULL, starts a transaction and then generates a SEGV.  The
-  * SEGV should be handled but we exit here as the stack pointer is
-- * invalid and hance we can't sigreturn.  We only need to check that
-+ * invalid and hence we can't sigreturn.  We only need to check that
-  * this flow doesn't crash the kernel.
-  */
- 
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29894636510
+--===============7886987547029329891==--
