@@ -1,56 +1,56 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380AC3168EB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DE531A555
 	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 00:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784679353; cv=none; b=nDvvykOHfX/YrLIeBaTxI8Whb+2nfbXypvU03bIrtHl947EMPfXnzun3vXfAiFCD9Qed+BE9jaRwhlX1mQXBHKUukbh+k5lmJnaNBQKVfMN7VZ7GYwWwbSYwQfy6t5FSlTjJL0anrlS3oosTJxIvo5ri/Q38qEZkXQ5pp3TP1Yo=
+	t=1784679353; cv=none; b=oDdFRT2afHR65mDb4a6XGISwYWm4nO8AMo4gX6XJhcWRgAa9J0IqvvYNjrVo2i6bhtgMjrbXojWtvqLbww5GoE3/SOgOzs4iuxnOenuTCOAqbwht5JvCl7D/fJWsPC8Yrn63emKqfQMQ/bQcEiRflDa9PUA+0z10ZO/OIBYJ/rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784679353; c=relaxed/simple;
-	bh=lfTItr5Vg+lZepk1YTtimNxtQxX2xxsuhXX8/E8FyOA=;
+	bh=CyqVWFJKhdjZZeW6oCD79hj9ow+t23S9RMWtKThbXt4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UdcIIbw2pEIC7uPNlpY3AcCCKX7Z+7VI0eUKr+SeT4WTCOBIQqcVcY8Gz4MS3e5HekkKO+04WLlOr1YSFeu6V2Q0nOJAfIwnUUDrLiLIbmppWSj3dKqNQhlhCSIrP49rITeNr7OH7znMBIXh53FLP+LGcK4YOuwgWlFL6uwSBhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmBqsgrU; arc=none smtp.client-ip=209.85.214.199
+	 To:Cc:Content-Type; b=hHK87oWpfzABWizKYSmSCDpxK51VFbLOseVPuLbLjjy1yZwQ8Q7eS/48KAT9jzaCjDORNbCQTpmF+/+Ty8jVPwD/SLdFBmKf2hWSotrecFPlp0rhUu/KSYzpLjkhwLUrKvJO2bVcMerXopMnwoKgzSeKAVxwSLBzTDTPl/OrHjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KNZqhKa3; arc=none smtp.client-ip=209.85.215.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmBqsgrU"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2caf4173b1cso172860715ad.3
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KNZqhKa3"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cab048cdb3eso13385303a12.0
         for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 17:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784679347; x=1785284147; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784679348; x=1785284148; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eZ+JYUl+bJF8E+CsVPDDHP5xTQJTCrW/WMk4UkvfNvM=;
-        b=hmBqsgrUjnFUFOOyBjzxhfhOcRgrE6pvFKFhgW8D+E9YTV53QBstvn4DbBFWvU3vu3
-         ItNu32xBTfX3eD1qShImmIfeeZ25yI5eZYW9Yyqu5jnolrNKUKRBbcXJ0CHRp6oQvBUM
-         l+u8WYf9GFHaCCZ1rWrpzrDKaSLCkyYwly1XebBvFserPsUFCBlMb8MYYMNdTUFH0y6s
-         nIXS6ma1hDMsmxP24B4g64KhQMzk4BEAYzOhipqYE6xArr4tYuoU1fI42lQ6uap3Y7lF
-         n2FIthZjsLqfcCvIfMwDaJQgCy3s6iShBth83WwJBeWsFpiUdyM4vHyz7cHtypMwBFrq
-         eGIA==
+        bh=OcSVBvE6dCwYoJRa7BsGgfHeCjoSQwGXcD7G6E4aFuA=;
+        b=KNZqhKa3LKcxsZRzKBlboFenzwzkaP/i+p+KY0O0rKfTWMeJsIWPP0ECYk/om74HEl
+         ZVFFquBowQ8x6Uv56IgVdD1ptQmgGclYg0rOhFXJPGR/j5te8LVWsTwfqcCguMetI7sQ
+         fhCX63oXeUpxLyoGbb+7X0TuQ0wViWaNRmryo+lXYLRCqRdqd4y2jXbxJnuD9Wa1hTeP
+         qp77b2HuNvxnMJIAscwTOwPzvy61aBdcxHgB9LBnC1x1mCfAI1b/QhM+JhxgwXAwT7Pu
+         4Ua9DLphZGgw+EjPf3GftZrzTQRZ/zoX4qic5pAKO/E0WOObXSbYvbe+PcP1xKxTQYM7
+         XWxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784679347; x=1785284147;
+        d=1e100.net; s=20251104; t=1784679348; x=1785284148;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=eZ+JYUl+bJF8E+CsVPDDHP5xTQJTCrW/WMk4UkvfNvM=;
-        b=g7V4ZB3sQ2iVTm9y4Z3EPw5bOC9DEazBV8tzcJuoU25zS3wKFRPuo6zaUPDr2FKtjc
-         0YTKLG1q4PuBdFqict4ti4G/XQeqhB+LGeGGoJji3BaaGRxEUnVtPDMRy4yQGFT3TM14
-         a1kwF7fJmpSWe01j0Tx+6okP3oO9GBDo5FHUmrszRX/O4wJ0Mzee8GmJMOg5eytW3GL5
-         +4Emq2pewJEBJYih5GAlCHf69xYVRjr+Y/09KaihN55OtWug8I1wg4OgwOxH0jzxrlb8
-         QaANgtAIuV+gTmzIIEnGlnrX5MHcktI/VL2Pa3noOwc5ySzbGdjsxpYHWAd3bG+y7h1X
-         fczQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqV6pyAtZIVfjoYj0vMFHc4TlLNQAlRdn+8Wf14pkIAQOEocjwsUDh5wKTHTd59wO5u6SwI9YXCmnhWB/CIqtU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZsYWAcqKlXO5pdeSvvOrp6+VhS6I0zF+KI1rrb9SHO5xnku54
-	IamAkbdN3NXYSbS9g/fRYCcxY9o4Tpmw4DpI3Qep2XLSHdEHVlIsWtB2XWCtbi8WQbwB86fr/j8
-	19FD3/lO3
-X-Received: from pgww13-n1.prod.google.com ([2002:a05:6a02:2c8d:10b0:c8a:c79:47e7])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:c70b:b0:3c3:7427:5ed8
- with SMTP id adf61e73a8af0-3c3ad5fc1cdmr23350917637.8.1784679346553; Tue, 21
- Jul 2026 17:15:46 -0700 (PDT)
-Date: Wed, 22 Jul 2026 00:15:40 +0000
+        bh=OcSVBvE6dCwYoJRa7BsGgfHeCjoSQwGXcD7G6E4aFuA=;
+        b=pRJ1DAiL9aavliMAsffzrl9aDBPweiUcE1/B3eVfX6+JwlGtnzBQT9mAqcrdz3eLpT
+         rum8DLKBjjSvTHR6mN7YkOJkIM5qsR/OrXFlT5JQ3M2Vam3V2JEsYKunww4PwOmLrp+s
+         x4zerT/Undq8jG0Tiof2reRgZFwbVvfe2RiXsL8+AgUN4QckJbb+DnvP7v2El374hHft
+         UXmca33p8daf06dSL5KF3+2crJ4ujsxQCHF8SO+S5tjy6c01u4wruSuZAXJyE8Ww755z
+         84W/eON8tMCiHJ35uWite7GMuJe562gYYO+h3u0cpL/8QslnTnGXHuJeJkTYIYDHutxC
+         kFAg==
+X-Forwarded-Encrypted: i=1; AHgh+RrEYZA7Ib4de3Yg7HqvJexol4B3vUUw4DQ2NGUlZwdvoYgYqdVTGUeGL0zDPxD2AzfMUeRJIvqnD75J/rZmDjc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkQKZfkqfcU7mUj1eKNzz6YpaRhI6EEl6WoNT2kX1sQ3SEblVs
+	/gwL4ZlYi31SYHlbW1zLSOc6iMT17Lag70WCjgE9EXoe5d+ypwkDNN5sDsHExGw7tR36KuBZO8y
+	vB6VBCnQQ
+X-Received: from pgcv13.prod.google.com ([2002:a05:6a02:530d:b0:c89:7f9:d93a])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9397:b0:3c3:83e8:c211
+ with SMTP id adf61e73a8af0-3c3ada1fe89mr22261006637.63.1784679347472; Tue, 21
+ Jul 2026 17:15:47 -0700 (PDT)
+Date: Wed, 22 Jul 2026 00:15:41 +0000
 In-Reply-To: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,80 +60,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
 X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784679337; l=2385;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784679337; l=4509;
  i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=lfTItr5Vg+lZepk1YTtimNxtQxX2xxsuhXX8/E8FyOA=; b=FwaSkyLKFRNCDrxuhKdnvvYY8lP/k/mmM0g9bHg2OIqLQqw3ScD4PobkBcMqhKdOSAoROja30
- F/ZYfWzQN6UA1YEKPiTvjn4KNqM8wBlII40LcWweQbDp5vIgwzQYMmB
+ bh=VGmU399xNoo4pH5/NvUhjWUHFyMHFl2ICfhg1+qYqo8=; b=OAQZ/jJfOS302Re6gqYzhquV0gOAZ495QGOKzVfxJFtjVKDAOXcYRRwC3335kbzrNkPCd9Bp2
+ aS+xlYxYnBWAvEy5fPypR6USp6uGOreGqxUDLOUbBLmCD2yVY0Sp9iD
 X-Mailer: b4 0.14.3
-Message-ID: <20260722-igb_v3_b4-v6-5-0be1d29918d4@google.com>
-Subject: [PATCH v6 5/6] vfio: selftests: Retry on EAGAIN during device reset
+Message-ID: <20260722-igb_v3_b4-v6-6-0be1d29918d4@google.com>
+Subject: [PATCH v6 6/6] vfio: selftests: igb: Recover after DMA-read faults
 From: Josh Hilke <jrhilke@google.com>
 To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
-	Josh Hilke <jrhilke@google.com>
+	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
 Content-Type: text/plain; charset="utf-8"
 
-Add retry logic to vfio_pci_device_reset() to handle the case where PCI
-resets fail due to lock contention, in which case
-pci_try_reset_function() returns -EAGAIN.
+From: Alex Williamson <alex.williamson@nvidia.com>
 
-Suggested-by: Sashiko
-Suggested-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Josh Hilke <jrhilke@google.com>
+The mix_and_match test intentionally submits a TX descriptor with an
+unmapped source IOVA so that the DMA read fails.  On real 82576
+hardware the resulting fault leaves the descriptor engine unable to
+service subsequent valid descriptors, so the next memcpy in the same
+test iteration times out.
+
+The 82576 datasheet (section 4.2.1.6.1) describes CTRL.RST as the
+software mechanism to recover from a hung device.  Empirically
+CTRL.RST alone is not sufficient in this state: the visible queue
+registers are reinitialized, but the next valid memcpy still posts
+descriptors without any TDH/TDT progress in the same process.  A
+fresh device open after the failure works, which points to a reset
+scope broader than CTRL.RST being required.  The 82576 advertises
+PCIe FLR; VFIO_DEVICE_RESET drives FLR and supplies that scope while
+preserving the selftest process and its DMA mappings.
+
+Add igb_error_reset_and_reinit() implementing the recovery sequence:
+issue VFIO_DEVICE_RESET, re-arm the kernel-side MSI-X trigger against
+the still-valid eventfd via vfio_pci_irq_reenable() (this does not
+touch the eventfd, which test fixtures may have cached), and
+re-program the device via igb_hw_init().  FLR clears EICR and leaves
+EIMS=0, so no explicit interrupt mask or cause writes are needed.
+igb_hw_init() resets tx_tail/rx_tail to 0 and igb_memcpy_start() zeros
+each descriptor before submission, so no ring memset is needed either.
+
+Call this from igb_memcpy_wait() on completion timeout, preceded by a
+10 ms delay so that PCIe/IOMMU/AER error handling triggered by the
+just-observed DMA fault can release the device lock VFIO_DEVICE_RESET
+contends for.  The delay is heuristic and tied to the fault path, so
+it lives at the call site rather than inside the reset helper.  The
+failed memcpy still returns -ETIMEDOUT; reset recovery only ensures
+the next operation starts from a usable device state.
+
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
+Reviewed-by: David Matlack <dmatlack@google.com>
 ---
- .../vfio/lib/include/libvfio/vfio_pci_device.h          |  1 +
- tools/testing/selftests/vfio/lib/vfio_pci_device.c      | 17 ++++++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 38 +++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-index 2e67afc0d580..27bdf561925f 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-@@ -41,6 +41,7 @@ struct vfio_pci_device {
- struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu);
- void vfio_pci_device_cleanup(struct vfio_pci_device *device);
- 
-+int __vfio_pci_device_reset(struct vfio_pci_device *device);
- void vfio_pci_device_reset(struct vfio_pci_device *device);
- 
- void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 7b8394d0ac50..1b29cef96b04 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <dirent.h>
-+#include <errno.h>
- #include <fcntl.h>
- #include <libgen.h>
- #include <stdint.h>
-@@ -221,9 +222,23 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
- 		       write ? "write to" : "read from", config);
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+index 8eaf120330dc..25cac663de1d 100644
+--- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+@@ -458,6 +458,28 @@ static void igb_memcpy_start(struct vfio_pci_device *device, iova_t src,
+ 	igb_write32(igb, E1000_TDT(0), igb->tx_tail);
  }
  
-+int __vfio_pci_device_reset(struct vfio_pci_device *device)
++/*
++ * Reset the device via VFIO_DEVICE_RESET (PCIe FLR on the 82576) and
++ * re-program it.  VFIO_DEVICE_RESET tears down the kernel-side MSI-X
++ * trigger but leaves user-side eventfds intact, so re-arm the trigger
++ * via vfio_pci_irq_reenable() before reprogramming so any caller-cached
++ * eventfd remains valid.
++ *
++ * FLR clears device-side state to power-on reset values (datasheet
++ * 4.2.1.5.1: a PF FLR is "equivalent to a D0->D3->D0 transition"), so
++ * EIMS and EICR come back as 0 from their register-defined initial
++ * values, and igb_hw_init() resets tx_tail/rx_tail to 0.  The next
++ * igb_memcpy_start() will memset each descriptor it touches before
++ * submission, so no explicit IMC/EICR writes or ring memsets are
++ * needed here.
++ */
++static void igb_error_reset_and_reinit(struct vfio_pci_device *device)
 +{
-+	if (ioctl(device->fd, VFIO_DEVICE_RESET, NULL))
-+		return -errno;
-+
-+	return 0;
++	vfio_pci_device_reset(device);
++	vfio_pci_msix_reenable(device, MSIX_VECTOR, 1);
++	igb_hw_init(device);
 +}
 +
- void vfio_pci_device_reset(struct vfio_pci_device *device)
+ static int igb_memcpy_wait(struct vfio_pci_device *device)
  {
--	ioctl_assert(device->fd, VFIO_DEVICE_RESET, NULL);
-+	int r;
+ 	struct igb *igb = to_igb_state(device);
+@@ -500,7 +522,21 @@ static int igb_memcpy_wait(struct vfio_pci_device *device)
+ 
+ 	igb_irq_enable(igb);
+ 
+-	return (status & 1) ? 0 : -ETIMEDOUT;
++	if (status & 1)
++		return 0;
 +
-+	do {
-+		r = __vfio_pci_device_reset(device);
-+	} while (r == -EAGAIN);
++	/*
++	 * The descriptor never completed.  On real 82576 hardware this
++	 * typically follows a DMA-read fault from one of the intentional
++	 * unmapped-IOVA tests; the fault leaves the descriptor engine
++	 * unable to service subsequent valid descriptors.  CTRL.RST alone
++	 * reinitializes the queue registers but leaves the engine wedged
++	 * for the current process, so a broader VFIO_DEVICE_RESET (FLR)
++	 * is required.
++	 */
++	igb_error_reset_and_reinit(device);
 +
-+	VFIO_ASSERT_EQ(r, 0, "ioctl(device->fd, VFIO_DEVICE_RESET) failed\n");
++	return -ETIMEDOUT;
  }
  
- static unsigned int vfio_pci_get_group_from_dev(const char *bdf)
+ static void igb_send_msi(struct vfio_pci_device *device)
 
 -- 
 2.55.0.229.g6434b31f56-goog
