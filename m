@@ -1,118 +1,123 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2713537CD
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727810; cv=none; b=LFTdWP3JLU6Y6d640VB7JsyUuWMKo3EmP0Iy5UjxyW+Wm3sUAQdoeDVVMx1S/QvglHLH+gORuROp95KV9knxDdePhb7oLwUT/2mM0Qwin38H3aJeCxa/zR7i5EsrRV2o5EPYAYNGO1Pw31M+PUlDOVPqQfQNmUEKVcZYUhaShZI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784727810; c=relaxed/simple;
-	bh=PYGMpBdbfrddSWhi8wSkhjZKYMi0cam4nIYPZarnXJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/mt91xJ6RKKcn2jcHSbzD8D4uszSWI7/4jDFK5V/mvpSJKbIYXd/fimCJbgPq1yXRdxcaLy7gRPzurmldBjQS+PyyiMT9JBlqjma2DkOW+bsrcLaH5L86nq8O1eLZTLH/KMtvB1oSaPHKg0uszu2GC6dXakF+sSp57RRLQ/W7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=QG1gO5uC; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C84133937B
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784728022; cv=pass; b=uRkIHjO16wph3MJh4Win4AAXYx7xUM6pudqEX3q3w++okbX/fX7oSSVsfJHSX8ZAjZ6hgscot7qclVZIQUyO372gx+u2XYEYsw2QuCRhYN2SDimdvlekwYMNpYLiT2glZS4C2LHW0j2smWkRQBIdv2/Da89cIX+4v10BxcYiT5w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784728022; c=relaxed/simple;
+	bh=jOYQuVEhe8w3B26Nj6IksKG2qHxsWwmeUaHRx7s3Y6c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=upoQTlHYGiXhmmKxOprIPeWzI4d2NM99tAilPOGBfNsehKF3mIb4Tec/mAn5GkOrmr6Am434wl9SqPnAVxl/cAMd0HhbXPPYr7xt0hMp74PMFt759SIvTd5EUtcQw0kazAf92YCCeYpg+JDyeHcvb3nyCPZQlhhqxPNXmNYQ4Yc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BIQu1nw/; arc=pass smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="QG1gO5uC"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-51c21495722so88744241cf.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:43:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BIQu1nw/"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-51c05dcdf49so19941201cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:47:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784728020; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jV1Ou+Uzyd7BiQDuuTg/CjBZHd3dosIJSqtHhOKHyO9uW/JUr50loTJbN11nQij9zn
+         tUAZjgmhPgHFsmMPQbAvmphZZrSy8ZeInfJhDvr7LYeX9zg2juwA2XMQfXD+QEBIjXe2
+         bJbpC+xVtcws8Ge81q9AUpK4Bj+a/G4bcy4sJeaPpaK2d6ws9NxUz3G8/mAnxbNmsHpA
+         IRaI64Ztnr/KPR874dEbNhbMlmzgzHwSoEQbHPmtRwOZJQnUmWRods77Tfr2NPCyVI3L
+         bWlttOfjPCyze9UAN+2x9cCtXch++QTuKYyTBFu+ddbAu5fpU9qM6C3lnpaSn1mB7HQ7
+         snGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ygWq6V23prC5KqbjFljnH4YQ+kPoaR54/QVzcXpLx4o=;
+        fh=9lz+cijiXRYRTS9Nbx8yByhutpZwCwoFLCZJ/Ssal/g=;
+        b=CzwA/OVQrrszXJNHYz6DzJ+fVd2bcfGYiJALjy+CIgi5Hp3LstnHIp8cx4tIkDoPRp
+         tycvg7qTU273lwEwxCybzPvejU5zyEgVZNtBiegtKfZ5T7iG+RJnHclEcyzwOOT2Lmdb
+         N9hT8PAwXU7g2aRveASLujXE/f+7i8gH5lrtw8S1WmRE4D/R9+9ipqfrFXdCXfXduJAl
+         +Mhe8OhLaGOMPRFDAXD+KkVaUkU7UedPdGfdrYfFkCl9M7rYKiadFwfuRear5PhL91ec
+         SAHHKOCgH69hleC6jlOEuEJFUs9nMS8Yf1e++VMk5jwDG3CYQBWFAcf4zHg4ArizxBfP
+         riyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784727807; x=1785332607; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wqGzltcyJPxwfdEhPSjMSETzXly+gOy2t1lReGVE8tY=;
-        b=QG1gO5uCmzfckS/4hrc8GaGFjBboFkrunoc3JyezIFVZDpSfgRfasKH01+RjgBtnW7
-         oNviLvafLrI+ny8eRATwbyYk8NPOzuWTnrVKeCqOjPgPr5ijUDKHTORpByWhRIJooYlL
-         Xwp3Cla/WAYyuwmkhBcwzLaRLmP8eTSeUEDEgRHqcn8hSeJ/2/aXsmMnakunQbWq8sgM
-         5WgEbzekaktHb9KZqu4HrgyPmbSPconuKte38ex1GDbA+5zx/Gl4DKgVwM61MEJcZzXi
-         SnaijE/jQgrTohKRpeo7PkHDeeCIREbeou4mPGxOwj5JtWYd1bKRCfwW96yEkcEEsHHF
-         w/TQ==
+        d=google.com; s=20251104; t=1784728020; x=1785332820; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:to:subject:message-id:date
+         :from:in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ygWq6V23prC5KqbjFljnH4YQ+kPoaR54/QVzcXpLx4o=;
+        b=BIQu1nw/RVgOa1yWKPc7bfXYD1ssuK7LX4Z1gZWPOjcplXt+95BWqi0v4YreHgZYQa
+         owuefwZatwbnmWSBVgvwVLaR7jbvZ8P1/FoLeB9rp19IYSck94/5vpqNk9hhM7gEQd1M
+         g9T2/JUNZ3ixNxX+wVAa67DdSC3+DLk7tyxddnzJm6jcvx/sGJ36dRObjr3IYBdXfIHk
+         8AdBaiPdR6Q6diy+QdZ5voWJKmOW8WUBB64+4FDJ+i+/s6Wf3X9n/r06V7m00S8edV/s
+         3jCpxlimAJCqt4nkxYTRQ8Nv5whGTquaWS9Q7VUJNzcnnBw8ha+lt2zE5Yp7T5ZficwK
+         rOug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727807; x=1785332607;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wqGzltcyJPxwfdEhPSjMSETzXly+gOy2t1lReGVE8tY=;
-        b=mtqoNgtxQ8mWl8+6mqqG1haNT7JFMwhtfTDKUM6s/bIw/9iT1NbTY3Xs/f8MYVupzG
-         T8z3RhAZTusPqY6Z4iNURhbHkrBfR0nOClzrmwMSIvDg/JhgIkAERcm76kyPJmTBTwvZ
-         vMroouSciU/Uujhwuqderhr5uyEJxSnBMs1InvinqbqurqMBMxiFnA0stlTY6nHXdY6I
-         n3TWqxi0UPrRob/9GiEFxD+SyLHSLmB1TGyPb2ExD/l2k8TE4vokocJaR/XTzNajwYTq
-         y7SvE9Ztt4z9kkZJvyMzh99DIPVOQ+vh701dTuLCIaPL2nGuF9/WBsyEfPuuSHBCiqBC
-         ujNA==
-X-Forwarded-Encrypted: i=1; AHgh+RpYUX/XHCdtJnaUtRFEUzaxsdolTomYLz2XTkvm/rGw7e/7oEyosQczpYIuA4P+1ZnDGCctlxN9lzBpHmF0gEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAAwxWaDhcUgEv0PuJ4KgjdLPobaZY1Vd+0RCg85axpjwI+vQt
-	oSf8LNAPVjUAlSQ9GFW7BS3/22if4QJG7PZ8svLyC8kQQ8phB0qnVIjnuHaZKdSQj5Q=
-X-Gm-Gg: AR+sD13S9Au4yhaonkkYkQ+Abq7wnrdWZSwSYkmE6MC+B+A/ADNtEj7P9oGBMZODLlT
-	UJ3YzVIYRuZBo+QuIg3ZNPnSLbwuEtTN26Y86p+jbqp2WhllGDLfB5Bmi+Xsk91lrPY8N9BNd61
-	hNkwentzD6ND4YMO8FdK45UMsm91MrknKVzJU/wMfg5Q03ifivcVe/HUneBbMLM7NMiy54RZgNy
-	MNBlt/IUujvERnMFN7OF34/dupjVaqLrkGooJOHPyXJPEH68WbffP8DcAeeQLAdRXPGrwNivtZ2
-	9KViDmYo57i5QblrcyvnABi5/RaDYxp/mtnGsrQFsHhQ2Y8KGyCazbxrymstP6M6JYL8GPCN91r
-	3/YQeoxF26GKs0sQ+kcDu5dI+e87N8vt1ijE7scW60m3imZNmLPbk5NE6HzBlpm8/ANmjGPAfRU
-	IlNTl5ymcn3/nzgkrD3MN/r/LcYFohEp+oEqv/hmJ60xNEW2IqVI32pGjUH4MCPgDvMtJy
-X-Received: by 2002:a05:622a:1f91:b0:516:e152:7a59 with SMTP id d75a77b69052e-5213e08256bmr218014961cf.42.1784727806950;
-        Wed, 22 Jul 2026 06:43:26 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-527d3b3f66dsm15332181cf.27.2026.07.22.06.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:43:26 -0700 (PDT)
-Date: Wed, 22 Jul 2026 09:43:21 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Richard Cheng <icheng@nvidia.com>
-Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
-	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
-	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
-	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
-	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
-	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
-	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
-	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
-	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
-	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
-	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
-	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
-	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
-	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
-	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
-	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
-	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 32/36] mm/khugepaged: base private node collapse
- eligiblity on actor/cap bits
-Message-ID: <amDIuZSsOPjRkywY@gourry-fedora-PF4VCD3F>
-References: <20260720193431.3841992-1-gourry@gourry.net>
- <20260720193431.3841992-33-gourry@gourry.net>
- <amDEEnTv0QumcDJn@MWDK4CY14F>
+        d=1e100.net; s=20251104; t=1784728020; x=1785332820;
+        h=content-transfer-encoding:content-type:to:subject:message-id:date
+         :from:in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ygWq6V23prC5KqbjFljnH4YQ+kPoaR54/QVzcXpLx4o=;
+        b=bhbpHWWE0mIUa0F2tcwpHZAlhxFvbDlO14v4nYLnWFLiWq/mtfpnX33+UZlz2g0UQH
+         /dn0oB7PyUXWcYTjJ+OM+oGGYk4fVNUpOT56WE4hL9IhAVMni1ii5GF9EFQBTjNJy3L+
+         LMUlR5vHj2pWT+oxJvkCu5PSYoH+lHYkR6UBUssyBusLq1EONhZmT/IRrf2I9pjxtd5c
+         5ufBtEdLa+V6urb8KKdZ0mvUUzH+OOCUCN8J9M4P/Noy20eJEGRAMfsKKW/ZuMWfdx0t
+         OmT0+4fbFdEhimk4I4XvRFgt8ctMACjw0bJbyb9Xl7vgCOA09fP45pft5FFi/dfnVbmM
+         XQoA==
+X-Forwarded-Encrypted: i=1; AHgh+RoSieg/4Co10EbQsOrH4I0SxnkZawgIolNbrqcK05TzMen+c5VHw3VsBPpIxhAI7mrlTdrUgOGSyt+kmzlitHM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMzAi/fWC1pFP4/jDaywbOokJjJN1HPofv04iGbzoNrPcr5Dum
+	JAzMGqxANHKKqUofxko1NxaDaM2wVdxFxSOfQ4SYYjdKXe9gaAmnXVM198gU9FRKyKawOT6DKmn
+	S5XuQNtBbc+1J+lKxeiS21hLF/vHJ9bbixcjVr8u9
+X-Gm-Gg: AR+sD10QJNzfX4xqgCS2fZJbF1LDztbaDeoBoQEa3actRAC2E6Quo9m/fD+FsAS3toi
+	A05+9rPVmnUDs9rRqtUDQURn4peS6OdNaTvUSeLWWAw0EjuefQL6rrA1sTENsKak+0hfNMmgfYw
+	xmgxqAu2PdzoKV7ziMaL+iqIHbWZjpgZAlVE4QqEbW5ytOjxdtGf8MYDAZSnj/LITiOMdgk8FU3
+	kcByHNYcYWBWs9UWC+tAUgsvzm8BxehBRSFUXCL81lRApetyJPF+FyIZQhgGYHSF3skV66e0Ngu
+	Cs1M6G0sU1cRnYRx4D1OC8fpeIlnobY2NtM9fsYDJR3DvH2gflA75N9jmZFOOzwU/eJKwBgM
+X-Received: by 2002:a05:622a:48a:b0:51c:9ab2:dfd2 with SMTP id
+ d75a77b69052e-5213ae555ffmr223765481cf.33.1784728019641; Wed, 22 Jul 2026
+ 06:46:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amDEEnTv0QumcDJn@MWDK4CY14F>
+References: <20260722015129.916-1-yanlonglong@kylinos.cn> <amDCZ5t8wDtqNAIe@devvm20253.cco0.facebook.com>
+In-Reply-To: <amDCZ5t8wDtqNAIe@devvm20253.cco0.facebook.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 22 Jul 2026 15:46:48 +0200
+X-Gm-Features: AUfX_mxcHk7xgSRJVZJlkUyJITANWQAilS7A1ELIqqoIUPEbdk7UP24_6QDPH18
+Message-ID: <CANn89i+P5pZr_QFKgd1uX7r=r5M1nVRbuynytzcEXbp_HHPr4Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests/net: use MAP_FAILED instead of (void *)-1 in tcp_mmap
+To: Joe Damato <joe@dama.to>, longlong yan <yanlonglong@kylinos.cn>, pabeni@redhat.com, 
+	kuba@kernel.org, davem@davemloft.net, edumazet@google.com, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, shuah@kernel.org, horms@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 22, 2026 at 09:24:37PM +0800, Richard Cheng wrote:
-> On Mon, Jul 20, 2026 at 03:34:26PM +0800, Gregory Price wrote:
-> >  
-> >  		page = vm_normal_page(vma, addr, pteval);
-> > -		if (unlikely(!page) || unlikely(page_is_private_managed(page))) {
-> > +		if (unlikely(!page) ||
-> > +		    unlikely(!page_allows_collapse(page, cc->is_khugepaged))) {
-> 
-> I think collapse_scan_file() need something like folio_allows_collapse() check as well.
-> 
+On Wed, Jul 22, 2026 at 3:15=E2=80=AFPM Joe Damato <joe@dama.to> wrote:
+>
+> On Wed, Jul 22, 2026 at 09:51:29AM +0800, longlong yan wrote:
+> > mmap() is documented to return MAP_FAILED on error, but tcp_mmap.c
+> > compares the return value against (void *)-1 and (unsigned char *)-1.
+> >
+> > Replace these with the standard MAP_FAILED macro for better readability
+> > and type safety.
+> >
+> > Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+> > ---
+> >  tools/testing/selftests/net/tcp_mmap.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+>
+> Looks right to me. Not sure if it needs to be set with "net-next" in the
+> subject line to make which tree this targets more explicit?
+>
+> Either way:
+>
+> Reviewed-by: Joe Damato <joe@dama.to>
 
-I believe you are correct, sashiko up some stuff here too.
+Yeah, I doubt linux will ever use a different value than (void *)-1
+for MAP_FAILED.
 
-Thanks!
-~Gregory
+Reviewed-by: Eric Dumazet <edumazet@google.com>
