@@ -1,159 +1,201 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43842241695
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 00:12:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E38305667
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 00:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784679139; cv=none; b=kuktTUVSehBU8yG5bIjxJ+HSVtcbRzLY+/o5D7kv15QfG9wdCJGZ5/tiWH80v8Qf5bqKAcs/4L4BIod4JrWoy1H7VI2VY1joRSXajfJkP5GcFtlLcrPIjN7bZYR0aRVvatEbQ+2OWfzWdiVZMGX/XXLGminMYAO7pEKLigRmh6c=
+	t=1784679343; cv=none; b=UqEtXx+uVXtIydND3FAbQDyG8x7kYclZ2jb4a+1bgwP13BYNBUJVmpQO2ohg6GpO5vObic2yYwCy/pXL3zwVAE1pHQVRSdEwOIfzMiyF9nAD2Tz5aO9FCa2JElrc32Mx/2gsLcckmD4WZaCvgitdsQoGzmBcFOPPc4wEBTT0sGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784679139; c=relaxed/simple;
-	bh=INJwYTrSQ3WAovcuijCA3YELaIRjXjzM8P0z1g5h5Ag=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g5IuWkuOUNcEmDAsY81y02iR6kQwvnBXWGbCY58GNsJe4exOTYQp1RKqMbdv+0CNijwZ4dFw4q5QXYdbTW0wari1yu2JQ6cIQE2vzGuhB7QV5jqK099fuwoEDKhn/qmSeH+m6xwUXB8b0ChyESXJVUrUPC1Yfzafo9KU5Xzq4Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToV//2k3; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784679343; c=relaxed/simple;
+	bh=590cShiY0eSgAQmFSO/tqEVwDhYL1KsClsQrQs164MA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=teqOrESfaRxsXT9vvHqUem7Dyxw6FcMb6EFFJVX1YYi9GX367yTPjWsW8YZbCgfk4gmyJPLURh98UYwvRuRg7uFUCDzjsn1EO/sZNiNJsxczWr+/sFynULHPYuXG8vass7otDF08n4H21eKFwUBqdKkTxgzOAg/buiSmvwH5PWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IDfeIRd8; arc=none smtp.client-ip=209.85.210.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToV//2k3"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c9e30214d8fso8529782a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 17:12:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IDfeIRd8"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-84e086f8e0dso1727953b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jul 2026 17:15:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784679137; x=1785283937; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=cWKpfdDZ5rwahGdKmtliUWjX0cNTR5TraqAEREqnMtI=;
-        b=ToV//2k3xpy9GDnRpv5mpAzagZ8Y9EAsbyNTwifQW1bDq2xHUmURlHh/ebdqo1AVQE
-         N/KDBsEYSiuCFOqVfwhuQO529qBgnZgPsB4hKovZg0ZPkrfe8iJYXddQSnCTsPYFtqA2
-         WJGrKHH8CDrUYV3vnVEqyaFtFA+FEoPX7y3jWC5NddglaiNwNrxNPX6DqTZnb//HeI9Y
-         CJahrxx/o6A97hKnUC6q3rEMkc221q2BuswM5HzVaYu9nXMlhe1B2eTztJFy7wiI4x5y
-         FFBkflxifoty2gZLQot5UGdIC9K9tvUpkWvcqbji3yCr23NKGCF6q7+jj+4G3ZPIkIlG
-         ByTA==
+        d=google.com; s=20251104; t=1784679338; x=1785284138; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=V9/6GtGXg/YU+vJli6gEWc5fTaadTXT3wwRlPESHFLM=;
+        b=IDfeIRd87+iTgjTpiwzn1XXNDVCpJOQHbgyfHWlEfw4sPEZqELeOJjE4Q9MN/VlOd9
+         keeqyEBRszhQfG1gPCcrPu7HjwQML50TwsmknqPzuBViGZaQWtNgFonwyKn6BSquiPdI
+         qBwsLDWdGA+1aS1Jdfhag+64AddAY9QE3IIuCXEKDjxnR7LqasrfcgfHRArPQxhEv1wL
+         3O6hrjI0SiXdy/gzpPbawzwOm2h8x2sbyChFhHbkqeOqodyKdEGskqxJTML0SA1trAwL
+         bOO0A/q+jkRpNOOwE5g/w1EhNVr7bYMgDu8v+oH1ABftbByIMV7U+pOakiMvc5GrIxfp
+         freA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784679137; x=1785283937;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1784679338; x=1785284138;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cWKpfdDZ5rwahGdKmtliUWjX0cNTR5TraqAEREqnMtI=;
-        b=T57eOicDRiqavlyKycLjRyROJEKRVNF2JHO73FaqP2z4LXmBC7k2hXsqJFhADWMOe0
-         tR8lgwDlG/SIyzJFIt53YhCUYAaznvfaw2k9oDnDpIF8ShACHeH9bETk878fAAOpJanD
-         qZErk08LzFfrQVigQRn6I3Q5vPGAU+a7UV/KH8kGLYDFbKqzpCaoJoK7YndFS3kf5W3l
-         clWMqS+v52KvXqXeN3cJF0jmNv90hqa82/iudmF12LZm7mXDT1eKBQn1DvMNeJmaxN1l
-         5bVy6SwQw78k9tU6j76AYqizbzoX+85LfabX2qdP2aaLBh07y+4AZF+9PUgHO/FBKGhN
-         qblg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro1kfiZLFRR7hzTU1RIDKjaLW6bYOZ57G5p395U1YbIrrSrUNZQuqDxC2ISrBu5fuXJQ56o297xN9aAhhwnTQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/5OW2qIH61Yt5e5lZkvO4PDL55SF0ZO6Xhy01YMuvZE5apuh/
-	UajXXjy+xKaWWuzKYrXvQw6nsdUhJa/1N1S13Rh/K22ANHRNvoUOFnaT
-X-Gm-Gg: AR+sD10G4YUKaKqT2tKafU4g2UfynUjbcFRKmPK5tE2IvQG18Basppg7uIffIr9Vout
-	oNkYfirUMF71gQ9axpywBDRZr9zBieo44wvGh+ajeGR7coOxrG/d2VG3LJxk1O4CISIwg31fvxS
-	rcKPE4JoaQGghyrVI6CnUb3JQJ2awHuCSYpjsYdN+MJtX1H4Bwq/9eBhmKJiEsXfaa0shQJS8i1
-	Iz6uKc61Ae+JgPrGdDgNhiYZRyQQbefw5l4b3Zhe6HHsvc3fJ/vQxnyzQkLaw3Ue0QcpqdgPIcA
-	Pj4zwTPaWOAxurAHVZuEI2qnXjGsSMdDCJBd0StwN2O/kw/lGYzM9AtSQIJxE283/hlEcGZN60d
-	2u4TEWblrqaGdp5hKlcZg4kCiKpaclx06WnmNEyBl+cnAeZjQx9yCF9Ec63NE2o7RhjSjWlMncU
-	HNizMy1uGr5/UE9/yqqUmsF9NN9fYSWjrgzWb14BuyZz3GKGhl8VL5eIr5
-X-Received: by 2002:a05:6a20:734d:b0:3c3:69d0:c573 with SMTP id adf61e73a8af0-3c3adaae79amr21522093637.68.1784679137427;
-        Tue, 21 Jul 2026 17:12:17 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:cda2:e912:7f2e:f787? ([2620:10d:c090:500::7827])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3147df06864sm2786421eec.15.2026.07.21.17.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 17:12:16 -0700 (PDT)
-Message-ID: <976ae2fbf6f2ead76622e39813bfda6a6981d382.camel@gmail.com>
-Subject: Re: [PATCH 1/2] bpf: Preserve stack frame number for commuted
- arithmetic
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
- <shuah@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
- bpf@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Tue, 21 Jul 2026 17:12:14 -0700
-In-Reply-To: <a092a059781aad37b8d8ce3bb927052de5f73431.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-	 <a092a059781aad37b8d8ce3bb927052de5f73431.1784563950.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+        bh=V9/6GtGXg/YU+vJli6gEWc5fTaadTXT3wwRlPESHFLM=;
+        b=IeGGr6NS47tTMMTrQOEeU9/x/og/tA4E84+NQ1Bv5aJa1XqhiWyIzKIiV2foYffSq4
+         fsP3mPJfvAbzpTbyJqcH7Te3cQ777lMASkz1aUCUTBEvonL4jLRDhtYOEStMEdRZV78/
+         IppaX/X8dbeu4DH2qQaKijn+r0sm45I/8rxTJfwycp8eg2rMZlwsGLfTxQdw2bLQr75b
+         I8t+rIP2vMw9WgEIzRqrYZnEFPtdjLk4txFBBYn4xkHRey+nmzAyVMsyKr9BphMTYkE7
+         +hXWpslMc81tkRhyGqgKo1T2tlgdR48uKXIF3wEGVK6OWMWe6KiwQ/vzDGRGhkOfBrJX
+         pauw==
+X-Forwarded-Encrypted: i=1; AHgh+RrTq6RiRoJkWVN32l2h9DO0GnKUuRY+9LA/j7uth4ku6sXsLymyBYDzaXX1WUCMcmsLziO4JYwfK7wUXlDa08Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrE/pmkWs0ax+4quRS97KKtoWqAdL3uwD5ipjuyIuCQhU3uHny
+	bOnHn5G20TpGOB6I5MC1mHy7CnHh33tMvFn1I4pUfx+gTxQzYHGT/uPo1V9bpXERspqBRjvALgI
+	2+NnSjUYO
+X-Received: from pfei9-n2.prod.google.com ([2002:a05:6a00:c049:20b0:84b:57b7:60c5])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:928f:b0:842:3a98:b34d
+ with SMTP id d2e1a72fcca58-84c2931087emr21320132b3a.31.1784679337712; Tue, 21
+ Jul 2026 17:15:37 -0700 (PDT)
+Date: Wed, 22 Jul 2026 00:15:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAKcLYGoC/1WMQQ7CIBQFr9KwFgPlA+LKexjTCP1SEi0GDNE0v
+ bu0cVGX8/JmJpIxBczk2EwkYQk5xLGC2jXEDdfRIw19ZdKyVjHNNA3edkV0FigYbsBxEFo4Uv/
+ PhLfwXlvnS+Uh5FdMnzVdYFl/Fc42lQKUUalQYyu1co6ffIz+jnsXH2TJFLlVYavKqhoumcC+t +Zg/9R5nr97QI6w3gAAAA==
+X-Change-Id: 20260707-igb_v3_b4-49194c14373c
+X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784679337; l=5864;
+ i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
+ bh=590cShiY0eSgAQmFSO/tqEVwDhYL1KsClsQrQs164MA=; b=y8ySHczxf0D7PXSrvWiXWOOkW4qkbKXDenuoBNQ8uqIvwVItesJiIs+N3ikFUwKp/FusFkPGq
+ ClwymxH4o73B61u2ifHTZJJzGQ41NJ6p8K2+tAMhDzHD813d7iIAO0w
+X-Mailer: b4 0.14.3
+Message-ID: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
+Subject: [PATCH v6 0/6] vfio: selftests: Add driver for Intel Ethernet Gigabit
+ Controller (IGB)
+From: Josh Hilke <jrhilke@google.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
+	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, 2026-07-21 at 09:39 +0000, Yiyang Chen wrote:
-> When scalar +=3D pointer is handled in adjust_ptr_min_max_vals(), the
-> destination register has to inherit the pointer register state from the
-> source pointer. Copying only selected fields is fragile because pointer
-> provenance is tracked by several bpf_reg_state fields.
->=20
-> For the commuted form, pass a temporary scalar offset register to the
-> common pointer arithmetic helper and copy the full pointer state before
-> applying pointer arithmetic. This preserves the frame number for
-> PTR_TO_STACK registers and keeps parent identity fields consistent.
->=20
-> Fixes: f1174f77b50c ("bpf/verifier: rework value tracking")
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 52be0a118cce0..3c0af83db4672 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -13796,11 +13796,12 @@ static int adjust_ptr_min_max_vals(struct bpf_v=
-erifier_env *env,
->  		return -EACCES;
->  	}
-> =20
-> -	/* In case of 'scalar +=3D pointer', dst_reg inherits pointer type and =
-id.
-> -	 * The id may be overwritten later if we create a new variable offset.
-> +	/* For 'scalar +=3D pointer', dst_reg inherits the complete pointer
-> +	 * register state. Individual fields may be adjusted later by pointer
-> +	 * arithmetic.
->  	 */
-> -	dst_reg->type =3D ptr_reg->type;
-> -	dst_reg->id =3D ptr_reg->id;
-> +	if (ptr_reg !=3D dst_reg)
-> +		*dst_reg =3D *ptr_reg;
+This v6 of a series which adds a VFIO selftest driver for the Intel
+Gigabit Ethernet controller (IGB), specifically targeting the 82576
+device. IGB is fully virtualized in QEMU, making it suitable for running
+VFIO selftests without specialized hardware.
 
+v5: https://lore.kernel.org/kvm/20260714-igb_v3_b4-v5-0-91503eddb98b@google.com/
 
-Lot's of tests are failing on the CI, please investigate.
+The only change in this version is adding a patch which adds retry logic
+to the VFIO PCI reset library function in response to Sashiko's feedback
+in v5 about the 10ms being too short of a timeout if there's lock
+contention during PCI reset. I was gonna make it the last patch, but
+decided to put it before "vfio: selftests: igb: Recover after DMA-read
+faults", which is the patch where Sashiko raised the issue, so that
+Sashiko doesn't complain anymore.
 
-> =20
->  	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
->  	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
-> @@ -14854,15 +14855,18 @@ static int adjust_reg_min_max_vals(struct bpf_v=
-erifier_env *env,
->  					bpf_alu_string[opcode >> 4]);
->  				return -EACCES;
->  			} else {
-> +				struct bpf_reg_state off_reg;
-> +
+Testing
+=======
+- VFIO selftests builds clean at every commit
+- vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
+  command to run the tests:
 
-We store such temporaries in the bpf_verifier_env to avoid excessive
-stack consumption.
+  vng \
+  --run arch/x86/boot/bzImage \
+  --user root \
+  --disable-microvm \
+  --memory 32G \
+  --cpus 8 \
+  --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+  --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
+  --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
+  --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
+  --exec "modprobe vfio-pci && \
+          ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
+          ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
+--------
+Changelog:
 
->  				/* scalar +=3D pointer
->  				 * This is legal, but we have to reverse our
->  				 * src/dest handling in computing the range
->  				 */
-> +				off_reg =3D *dst_reg;
->  				err =3D mark_chain_precision(env, insn->dst_reg);
->  				if (err)
->  					return err;
->  				return adjust_ptr_min_max_vals(env, insn,
-> -							       src_reg, dst_reg);
-> +							       src_reg, &off_reg);
->  			}
->  		} else if (ptr_reg) {
->  			/* pointer +=3D scalar */
->=20
-> base-commit: 0bcca2a42cc50b7d64a95c08dffc6b93661a7ea2
+v5 -> v6:
+- Retry on EAGAIN during device reset to handle transient lock contention (Sashiko).
+
+v4 -> v5:
+- Reordered igb_remove() to reset the device before disabling MSI-X (Sashiko)
+- Refactored hardware reset logic into igb_reset() helper.
+- Simplified reset completion check to usleep + assertion instead of retry loop (Sashiko).
+- Allow arbitrary test data by enabling Multicast Promiscuous (MPE)
+  and Broadcast Accept (BAM) modes (Sashiko).
+- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number (Sashiko).
+
+v3 -> v4
+- Enable MSI-X mode in GPIE (Sashiko)
+- Fix hardware initilization order to avoid race conditions (Alex/Sashiko)
+- Add memory barrier to prevent speculative reads (Alex/Sashiko)
+- Clean up stale references in commit messages and comments (Alex/Sashiko)
+- Add a comment to address software/firmware semaphore (Alex/Sashiko)
+
+v2 -> v3
+- Poll reset bit and document the required wait time (David/Sashiko)
+- Fix the logic for enabling PCI_COMMAND_MEMORY (David/Sashiko)
+- Fail the test if autonegotation fails (David/Sashiko)
+- Handle endianness conversions (David/Sashiko)
+- Use real IGB headers at the start of the series (David)
+- Add E1000_TXD_CMD_IFCS to the TX descriptor command word (Sashiko)
+
+v1 -> v2
+- Removed the chunking loop in igb_memcpy_start() (David)
+- Removed redundant writes to status_error and hdr_addr (David)
+- Include official IGB header files (David)
+
+Signed-off-by: Josh Hilke <jrhilke@google.com>
+---
+Changes in v6:
+- Retry on EAGAIN during VFIO_DEVICE_RESET (FLR) to prevent test flakiness under
+  load when the device lock is temporarily held by kernel error handlers (Sashiko).
+- Remove the 10ms heuristic delay before reset in the recovery path since lock
+  contention is now handled by retrying (David).
+- Reorder the series to introduce the library reset helper before the driver
+  recovery patch.
+- Link to v5: https://lore.kernel.org/r/20260714-igb_v3_b4-v5-0-91503eddb98b@google.com
+
+Changes in v5:
+- Restructured the series from 9 to 5 code patches by folding advanced descriptor
+  support, MSI-X routing configuration, extended memcpy completion timeout, and
+  PCIe completion timeout retry disable directly into the initial driver patch.
+  This ensures a clean, fully-functional baseline driver from PATCH 01 and avoids
+  intermediate legacy descriptor, timeout, and bus-spamming bugs.
+- Reordered igb_remove() to reset the device before disabling MSI-X.
+- Switched igb_irq_clear() to write-to-clear as required by the datasheet when
+  EIAC is programmed.
+- Refactored hardware reset logic into igb_reset() helper with proper sleep
+  (1ms mandated by datasheet section 4.2.1.6.1) and poll-assertion.
+- Simplified reset completion check to usleep + assertion instead of retry loop.
+- Allowed arbitrary loopback test data by enabling Multicast Promiscuous (MPE)
+  and Broadcast Accept (BAM) modes.
+- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number.
+- Link to v4: https://lore.kernel.org/r/20260710-igb_v3_b4-v4-0-56e7e2576cc1@google.com
+
+---
+Alex Williamson (4):
+      vfio: selftests: igb: Use PHY internal loopback on 82576
+      vfio: selftests: Add helpers to re-enable interrupts
+      vfio: selftests: igb: Factor hardware programming into igb_hw_init()
+      vfio: selftests: igb: Recover after DMA-read faults
+
+Josh Hilke (2):
+      vfio: selftests: igb: Add driver for Intel 82576 device
+      vfio: selftests: Retry on EAGAIN during device reset
+
+ .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 557 +++++++++++++++++++++
+ .../vfio/lib/include/libvfio/vfio_pci_device.h     |  15 +
+ tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c |  39 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   2 +
+ 8 files changed, 616 insertions(+), 1 deletion(-)
+---
+base-commit: de61419bb27f985cb878b19942a55b026c9c865a
+change-id: 20260707-igb_v3_b4-49194c14373c
+
+Best regards,
+-- 
+Josh Hilke <jrhilke@google.com>
+
