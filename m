@@ -1,47 +1,47 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010034.outbound.protection.outlook.com [52.101.61.34])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013006.outbound.protection.outlook.com [40.93.196.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F6B388E68;
-	Wed, 22 Jul 2026 02:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77BD9388E68;
+	Wed, 22 Jul 2026 02:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.6
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784686413; cv=fail; b=f6nbNab/ipxQjaU/ANHF1t9GvFT33+q/3efDL6rIfXdnFeTrPDVhFZNfezqKoL6FNb3SpIrGBNRzycsGvZBbez+DvH+5O0uw7juRsDsxEGuzdEhdxfLzgaq7uWPBu+Q+S71uTZ/WSaIYdK+JrGjH8rcyfcH961H0NHt+36R29u4=
+	t=1784686422; cv=fail; b=bQyScu61UbFNAqLevmGMxOXc1OE/Bm36Iuop/Z6naG1QOyxkwzStePpGVA64vU6mwEAbP2nXqdR91yGvVX0UC1kU5bWWaHTAp0rVdm6bV/2+VPX782Hx6TLxQCH9nzN6d8UhwR+UWzwp3xbuAAkmxNSQks7jJc/6yTuHabcj55I=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784686413; c=relaxed/simple;
-	bh=vTw8hO2jk/SU76/esJAx1ml9G6kUKteWpP+M1WRjPtE=;
+	s=arc-20240116; t=1784686422; c=relaxed/simple;
+	bh=PVPJGqbAeH60CiLxG/vegQpow0sXbcGFg4yJbq/dXBs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u6w8iDt2oL7X0LRjxZ3f4S2Wece8EZqR3OTXtAJFCjHhmZE9XHCBNqOEho1zvmx0m6mtM+ht75oO2zmzuHkagTM9OWzP+y1jwVkvxOmzKHmfLLfOsa5pWkUjSR8NjIACzGzQrKocw5Do6Y0zyF1NlO3Mys2HRdNp0AiVhNSv5zE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Vpu+DXLf; arc=fail smtp.client-ip=52.101.61.34
+	 Content-Type:MIME-Version; b=qFUCGJh2zhi2gxmA4v7S1E8ohyRb36ihNHBJjJhdWz3RV2UPX0O9H3Ardj45MpOGgrvzmsBMdASR+6Kwo5r0ufgIC2zSJfBFWeCOGyohY3DLHsiT428m9SYe2IvkD1n6lHJuLp6XDOa0Tz6M6kWtotg0M0yZ/bkUseHrsYEn9mM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UlKYz/lj; arc=fail smtp.client-ip=40.93.196.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Vpu+DXLf"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UlKYz/lj"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nzQT/HvrMlqqKGz+U++yTVUpDRyX/IXy9T8FFWbf/sbS1Pz00D0/r2VjLKgGIOMID7nZGKu1oMWi0NpE3fwMIbnezqyOJfmi/BXcQIfCMbJjNyVcrlUeqL8LJKXIVjLYQVEY+PqpJm5V4kDt9O96o8cQOC5Nx+PD2V1HRF3CQb2ExqYA9sRY58NFos/h8Be0L5dA/Tf+Kbw3e+Eo2W8+G4zQYvKocOyUru5WY6vTIBnFTpPSLEfJbrbfIWdWLCf+76epJBtZUZaZXDi/XnKRWtF+eGgFUc1V0WonMF+YHFL+TmTcRbX7JLdC8jGhSTBH4sRP33XvDhRcxBSdTO+uEw==
+ b=Dxr4bZFbcLRmsx6yFWhUMmUS0PDJ9UN1W1nxbemxRVMMh+fkDoFLnV55FrMZHHI7X2QQFk36PVEEnAmcFm4Fqb8wdjbxIGHtVKexSEQ2Y5alp6vPkJeHsH2szDzPFv0KAIRc+JSrRl60W73HrYevLujuHmReaHealCuaFGe+WXydnW/aSLPX+ny7f+UoUdXcRX0MyRwIp15JW5pEal/nzLFzHVWkQ9ousr4EsLRtppFVVLtSYVdG3vb3OlWrr/LwSjULqqYohavc26vapgwtINvEzOz5mBnbJqP5CZdI2899nbPphki8FTwq+7LBGN/fGEO5XLAI7ghb/Tc581dg0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8GjrW5SBJciLJDjKXrnxUISAjSv14y9IexFVu22a+0Q=;
- b=dmNnIs44rz0efvmCfmtW1Hzz3cqJY73aT8JMJs35SNoio8CtYrupBqLtTOZfPGFBITVGy6zU8UUtR/Ba85w9dprjdNJTelMWqb+dqjwdwGEOSyIB1HSwWCnqX34SalV1vpnnDT2R1wdoQKZr3fNUGUHEkzPidYKzOz3CU0yLx+4pHoPC1aYhMEAzsuYdZXGieK1LnxtbZR2UWBSRxcyg+hROUH1yvzHHaqJoiq59KL/mXiCH1yAC3LFgDgHH5waDTGxrFS5OiRiNOmb/3Uo9Ewr0ugmv+7n0qgvzYpClqaUKDoAd2BAJAlPIGFedYXqBSYHS8Gp2YXPiY9XClUUuvQ==
+ bh=oJZLGHcDNEvLcg0fyvZny0rcCFqacEclqhQuhC+wFJk=;
+ b=yf+oLNN6xQDE+PawSoAsKC+gI/n8bKQGjThLP0ta9Idnu6blMar88Y0v+ARsACu75hRPS+ZYM0Ekj3F6CmX7XFBdWYHs6rOinLsVznUCRTTFyk1taGsJuLzcFrUPVCgFz/Ymh1ZHVDTvZGln1VR0QsBbIXHaF2fSMwhQNOC4JqXzlpq5w1EH78yC5oqmTalRkccJtOt74sj5/afmIGzZsd+oijteFe2SgEqYwLaNCFUdzKu6FTlz0pNV3RBxhkqIn7IzpLvae/TCqezI8C6ct3EVDfz1GrmdI8+6ycn9z4mA1KzEELKttrwwXY0DtBdyuHnklXRxqe6cyoGVjOnyDg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8GjrW5SBJciLJDjKXrnxUISAjSv14y9IexFVu22a+0Q=;
- b=Vpu+DXLfaZHzMVoihnomRPiC9NLUCJlgVrC2K2ZzPmgv37FpmiNSsZBIfpdPYLJzmTKwOOEanpNpiu1wLcbqTAUxYkfFRXBvW0H12IJciBwFpNAeZ9H4VhxCCr+D2f6TqZk2yvseK42aop4lR69EJyi6JxHmyId3wZ8ForhJiUKTlU6iNPNzXJsbqH/Fia8o2D8wm199bIdkipwXa32mv38N1xwOxOMrk0SNWl9RuPxs6WuoVPBkZ93tFRt6vnQgHiHLyGrXVlP5PLrOoLDHpDYgD20b55Qx/s8jlJ2Aqaue7qUOBN8X7Tu1ZLHucZ/MecQUaQ0RwD5FafvYhTT/pg==
+ bh=oJZLGHcDNEvLcg0fyvZny0rcCFqacEclqhQuhC+wFJk=;
+ b=UlKYz/ljMpMmaz3LKrR5qAM1jwKn0a9l46NkLFpCIZE33i6VtC2/eRktlwWuahhOUow8YUKh5e4zeuJUn81/F/moWTHL4EzmnlfHojDtvZmgAZQ0wWXN7vDxfdDzZ6CVxn06HPhkXNPrdb+x1zYqHwKJZ/mEJqSVByJLCJyFneldkDY24/RINvjCwQw47EKc08VnMxG4fbmiCpr75jT3YldMORQ6SE+H8+JbGpZay6Rfga0dUQxDEUlG0vbe6ZD20IXChQPOwr0428wWsZiOZC3gaFEjfo18s+R+DMIiQ3lMNKA2YH9BXTMUtGLwHhh3VEW6X8cpacugILYIgTxDPQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
  by SA0PR12MB7002.namprd12.prod.outlook.com (2603:10b6:806:2c0::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Wed, 22 Jul
- 2026 02:13:28 +0000
+ 2026 02:13:34 +0000
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 02:13:28 +0000
+ 02:13:34 +0000
 From: Richard Cheng <icheng@nvidia.com>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -59,16 +59,17 @@ Cc: Dave.Martin@arm.com,
 	fenghuay@nvidia.com,
 	ltrager@nvidia.com,
 	Richard Cheng <icheng@nvidia.com>
-Subject: [PATCH 2/5] selftests/resctrl: Abstract reference bandwidth counters behind a backend
-Date: Wed, 22 Jul 2026 10:13:00 +0800
-Message-ID: <20260722021303.9471-3-icheng@nvidia.com>
+Subject: [PATCH 3/5] selftests/resctrl: Support the MPAM memory bandwidth monitoring layout
+Date: Wed, 22 Jul 2026 10:13:01 +0800
+Message-ID: <20260722021303.9471-4-icheng@nvidia.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260722021303.9471-1-icheng@nvidia.com>
 References: <20260722021303.9471-1-icheng@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TP0P295CA0044.TWNP295.PROD.OUTLOOK.COM (2603:1096:910:4::6)
- To BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
+X-ClientProxiedBy: TP0P295CA0036.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:4::15) To BL0PR12MB2370.namprd12.prod.outlook.com
+ (2603:10b6:207:47::27)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,346 +78,286 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SA0PR12MB7002:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1b33001-a644-4d88-d34c-08dee796d15e
+X-MS-Office365-Filtering-Correlation-Id: e8c092c1-e5b4-4b6c-208b-08dee796d4f0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|6133799003|56012099006|11063799006|10067099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|6133799003|5023799004|56012099006|11063799006|10067099003|3023799007|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	d0favaZgAss2O8tBHvHF7/ICH6O346IbIGcQTlPVM2VecDkvFAoVwbpfz+iFFBnhO/if4gc7uhO9oNAQMmals0dtH0Jh5lJXv37jW33jN4bc6riorQpuDmbK/PIe7ebYXDaNK44FOvzOj+QOiLkG4NC5NNm6j4TCA0FDuuDhfzeNVlO2jjsETyyRhseQkURlDWWwLmoPkMr+KSLT/jmgZud0zjSNZt/zp7GxUIbVtC/NKqVdKjZ2csphfd4L8jfvuwSSRgLPRNwXfOI6yvOXKnyCWfLrrTxQs+AuBbl5DSh9HtCE/guDpQn6QOV/3I1nlxmskp4o2VXvQv74fa8fB1RC2Sf9tk+NY7jWzp4N7OQwfZF1q6OVS+B7Cf/p9egu3IIxMh/2XZDC7tE+L4w20Ds3Z5gzfiDIvcQslUEo21I6r5tECCKq2vW0n4iuYrV+x+lCfj+XIa8GoEpccfLTGhgB6naYEYJC8JRg9mNXTStA+/3Cj+AlzE6pVyLFcy7+7orB5cJj3Uj0asfdhLCl7QUC5iCZW/4eGcDGwnYOwDC48UNvzpioMyrJrejxyQfOzZEkuZ5+psEz8QDm1opafqaiq6DGZtJ+r1Pf1uT28VB9NIseKhUL6M4h+tRCzdi4pgjhrvB4OtFIvaLoVhO/Z0mWP3aMkht72gqLKW0a8xc=
+	/HshBzvXTqkFDEe+Fln5z9aJrWrOZ75cGT/54Ys9MpZyyuqcj67gNfxCLSDWFWGy2+JXlYke67lXKs7fGP+hkNZUEirnABkBrsbSQHOi+l2eTZMsGv0o63ltBAm0wXlXQfevFy63T23a02vUUfCJioCYjDvBiyjZohgiM+va4skkAyFLZqaDpozD0FizGKLaKwNTIPWcucp9ywvlOcbUCYlUdSTzekalWferBPUXlmqWsqIjMTpXwi+1INem5ls7FznJYYNsVvLRbjSVYHb+y1R1wBV5YYc368wBDJ13F25o5WiQNi9AyQL864bVaJJn61eIGmPp8lAIsS1QtpaT6Rh4Fp+AHKPa9bPxNaVbcFk4VQutsCqpQ8HsYSV+YM0vuQlsCFXMpS6bZXyYujrCc96gvYkX0QuUjTSUpqDefGRJc6GhUsjfT+M5hDt0ICdjN0BlWGDv4f/C/aQExxLcgkgXTt7z1j2tO7nrtROUQ/khjbqJi1b9E1uLME4i+CiZBOR32W6LZ0oPx2+n49/Wtjl87soFKITdsmH826Lgqt/eCJoYD2Vm9mzQPNMfNn1BRdThbzq9J5lV99xVL3sACrWS7JDYZNUxYSUBFdQHjS2mjHNZTr6IOYWC0ZuoCw2EELOBHkS3CvjTAFPaP9fgswhmodDxNDgs9Gx0HajuAEI=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(6133799003)(56012099006)(11063799006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(6133799003)(5023799004)(56012099006)(11063799006)(10067099003)(3023799007)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?MCjCriLjvbW2KYwIfB4NGFeFCKFYP+IAglMknqiF4HW///vHUGs1pYDJ20PM?=
- =?us-ascii?Q?RePIR/nDSfGxj1rwY1Dkn5T0Bt4qEqkBXZlFIQXMP1QleYEyaOcZNC9hYrA5?=
- =?us-ascii?Q?ZkbsKNzNNbK0OgXcQg+Eq20LEkl1nUpowqsHnvhHoSbR6nBrYAjxx3KzRe31?=
- =?us-ascii?Q?4siW/vb8IOiOv9X/lFDlZzw9plAeOILjbXW/iYx9OFoqjWO+fEH/CGV6bhNv?=
- =?us-ascii?Q?mfafNVYvgPohdacaxBJnYVY3+hv18wPbIVVXY7K2jicYQqIcyNO7mcMz+JRJ?=
- =?us-ascii?Q?2u+y6JTcGe9JCHGPhjv9sAUvfoP2Eg7T3wujOj4PkjGq25OKKMvgzen8vRim?=
- =?us-ascii?Q?Gz5KszXG5/bSMmYLLO8bBC9oBj7rH5Nki+W89Me+vPhIrnVESzuFXRs/qfv/?=
- =?us-ascii?Q?GZ5Rk+TAfL8T9Bg0E4YcxuLjhH0OUD0hBZpzIfaVlITGgDo1Exa7ul4i/2h3?=
- =?us-ascii?Q?tuQlYvz3oTdWzVQC/rfLeXXyxFcZ1iEyI23K4qFBj4vlD4vzAG/uedPjNZDD?=
- =?us-ascii?Q?U1rvEvLEZydWkTn8eYgvONkXy615F+7UNjgY/T7cymAhQYEaWMxy3HJSOAyd?=
- =?us-ascii?Q?WBM2tfvQ81xtXaw8f8tERTah5goqyTboODLkp1fB4zHIEJK0zr2ma1pgHkzl?=
- =?us-ascii?Q?K+FVq8busLjHcrMuHWDgHRYW5S71oHhbMbiD1huu/p4nxga+gTP5Vc3g+C7U?=
- =?us-ascii?Q?YyERapd6suCVXsxbYezz6xh0n7tj9vd08+McmdVNdVe68d4Yuo9b/zu1410m?=
- =?us-ascii?Q?iSylWWGhKGgGuf8VNUP8aF34/xCcg1CVNDDU3w/y5CRps+HzqUNqDjgGvt1S?=
- =?us-ascii?Q?VHPPW9kM1MNFpOuq5e9m6felu848X/mWSY+wMMVyFHpeXYpq1ngdOsE4n20T?=
- =?us-ascii?Q?Pthoiyn4ZEcmAEYpJTjedlRWu+0PdD7ryWjss7JvgOmX1exiWe8S0xHFCkbb?=
- =?us-ascii?Q?VMj+RUQ3VT9Hzii1Z3EadcmAkKRoFH2eX4ZUzNjzJrfA6zyNWvhJYRvCVYA2?=
- =?us-ascii?Q?eXLjh4NlA/h0J1sUyMGAT/iBp+JkV3Ol2CxJYV59YD72hthWrL5jUeHsdPxe?=
- =?us-ascii?Q?VRRAue+uYHI1BUDqEYqpEPCjCtjJ2E/ftW75kUfo/pH6TqJBgFG1iIGEE4KF?=
- =?us-ascii?Q?0g8QqmnRI9QotGQNAtA2AdkAQ2OzYC7Zact7GBDVyDNBcyWmZFW3sfxNzL9v?=
- =?us-ascii?Q?CphBwCnunAiFoPZoxaNoVfBMEuw/mikrg80YcDTU2lJScm09gQwCWtnYiNNu?=
- =?us-ascii?Q?u90RGAQhqpwPWAwhBbvyhnpMPVPKuEMZ3L+h2lWvsgKDKlUa2kvpaAIux+W9?=
- =?us-ascii?Q?ZLFoK8NF5fZsOG/p40DJRwHXNSx0I7TbdeObTFWvDyqNI2Yu4mwX2LrO73Dr?=
- =?us-ascii?Q?wINckiOiSdGVCWwHeMUQZrLYQHfu+b84LZO0qOaE66an9iER6kwIqOLTCc3v?=
- =?us-ascii?Q?RmQhR/lNAr/XgPOPUD95QYuErP82+FmsGHqJUEiT6iMutnUtrmPrMdbKzHOi?=
- =?us-ascii?Q?3iJvR3S/QgbtM3e75cDRoFDMk+yWvbKx6rbPNcVOmgPvtVGx7aIc6n30UlyM?=
- =?us-ascii?Q?0pnB8lolKQzJWG2ulXrnx31d/mo/tD89DzNBbA/cYmFXDMOj7+WMFRn2LMLc?=
- =?us-ascii?Q?Tt5yV/noz1yHHrnHtIrVr8/p0RUJqlrJbDiuAWFn8MpT14/rXt3AQSj5IPI/?=
- =?us-ascii?Q?DVFTFH+Hgxq7R0EvtDCZq9fdwsUJ2xYLn4rb0dsFLqLn2Khhcfe2002wYdRK?=
- =?us-ascii?Q?rGp82PzOlA=3D=3D?=
+	=?us-ascii?Q?Y1AqHgiBOuvgyFNg/7rrMPIPw5WKhAqja8wYqOwHw4CKUCwhTYhWofZNUzpx?=
+ =?us-ascii?Q?kpZBDKMMWO1BLV1VxhXoujCrf8QarhJ1dQWCXfotYLWTWF/8VCKCtuwtmF7J?=
+ =?us-ascii?Q?NJNpC4eB90VPu6LYTMeWJOGAVFj5zkK/dKhzPIT0jCnwVRH0Zdsn4CZOXX0e?=
+ =?us-ascii?Q?zNSmOuA23Njw3pzjnNl3clxaHTugeBoUdNR2Nb1lm8Ispf+F7zTTvClDwk/C?=
+ =?us-ascii?Q?HxOogmeYP9YEd6LlsxaFjCww86o0d95oxKs79Bao5PPpzEfBMkU8RunInJWr?=
+ =?us-ascii?Q?C/1WOBhCOqFmZiLPNt532/w3cWbbkSPpunSD2ZehiiYVW1X651P5XNCnhZGW?=
+ =?us-ascii?Q?aEpLoKNWJfYpakZGCw8FESVnGn9D4Rb1lJR0sZftdYoz59xhuRX4nK29Xxev?=
+ =?us-ascii?Q?SbMHtWKTsJu/OrcuY39oDv1WoOYB3q3nDkZDxI6V0DGW7xJvfcGXFBBIqS33?=
+ =?us-ascii?Q?JM+lPDUj4my5I2o8QJ3D5eUsjW+JNITX0HjibDaVDsUfbrfYT2mdghDuOLUs?=
+ =?us-ascii?Q?CFo/GsSLgiylWJ7G/CwrMagHIulo6y3CcMjhoX09VOMri+7nB6fM/1BCK6tq?=
+ =?us-ascii?Q?63jOLCOL6soH77tSAIfDzuvvs0J0161y5JOjZeTw0N5G2wBBCfJZ9Ywf5CRC?=
+ =?us-ascii?Q?zKaoqqN2Yu+XIFRq6QQz56EHyDdy9+xFCBT4q8Ny3c7uMztYQE+Pjt4Tpw7n?=
+ =?us-ascii?Q?5+clsDIQeYtyxMjpApCKNYxUAKZ9GniYud7XU2kl0kX5dxZMsQFO5nAWqsjN?=
+ =?us-ascii?Q?1+jLoV64lkwOESyfIOYWoJyqXWvlLnQvfgrKJ4xoBwlkBBp/hW32Wv58g5cs?=
+ =?us-ascii?Q?HUzIDcqiwccTsDOGHJx75okk4noW5IoQ104prRO0C30iYb2fLvB0VD1C/k38?=
+ =?us-ascii?Q?vqgWdAM1FsF+hDRwrV9vt44yNXb42NlXrCfBBoki92kDAK7tG49grDXBpI+F?=
+ =?us-ascii?Q?tXAzY956Vx08QnnbkZiznzqKgjhLyKsqRLsmEw1acUUSw3fU3XkeJEQHjP8E?=
+ =?us-ascii?Q?qyhx/K2OVIq3s2vW46Yb5LrBmp5v8pkQJAw1IrIUC3+lzr1F7wBEYXxSNQV3?=
+ =?us-ascii?Q?y45SM++p1NcSV562jbwj8OZkgiCtNRp5Lcxyx0hbWzwkIYEL9xYoBheN8e8i?=
+ =?us-ascii?Q?gDd951qx7Bm7ZX9NLN7VA1zqMaZ5hy2ACvn4+XUtTP/ZpBTC72Tm/GjZM1Fe?=
+ =?us-ascii?Q?sw3p3BPId/t8bgEG541RPYefkqAUkv5xzDWtqTgIE1bAcwypDnsofJuia6/W?=
+ =?us-ascii?Q?UhRNFvX59IfQxz89m1yTwovzzzg5TwyyjgMH6itZ5a39AzB8GPgXYkumBCaV?=
+ =?us-ascii?Q?W9Jc0hin9E6CXQAR+h0YBpiGap8RWUvRX4LbqypAB5OuBrtj97uhChOYu0li?=
+ =?us-ascii?Q?yXspoxnicoQ2ZyOHsNLFDfkWeZF19Hzw660MrHvzcJo+pNqc3WCmdMlu1GiO?=
+ =?us-ascii?Q?9pomwz6STCB8mqrf1yvDjM3R8ZvmUJQ/AdKRgAZJnL8LEZ15W79mHfrBrJIL?=
+ =?us-ascii?Q?JEmN42G1LZOpSR1OP2Thu/rrbDR7JQEdUTjZQgd8AEUTkJByDNIURw4jb7aQ?=
+ =?us-ascii?Q?sKHNeT+zRIZGJ8l6J7zlkTGftAnf9E99KEj7DjlNILKp3C/pTcZsSZJuyus3?=
+ =?us-ascii?Q?u7vglUZ8dv4srbIvQPqHRM//z4lQcmlvg1BIsOyRpltJcRIcnurEcsI5WO/h?=
+ =?us-ascii?Q?NAMq0a/Mdf7xvhmP2JwnMGCHWYl8k83soi/kPxcZhvvEQt4RU7HHlVjZSgr4?=
+ =?us-ascii?Q?UibTF+dvkg=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1b33001-a644-4d88-d34c-08dee796d15e
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8c092c1-e5b4-4b6c-208b-08dee796d4f0
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 02:13:28.1517
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 02:13:34.2721
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DSCojKSmeITNOAHtFOfTqbA1mvCiIC3iydzH0bZDryymrjOH/BZIuBnK1uXPr8CCmgR96rw40U58wmeshRtNKQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: dzSB3ulAiCDqXQawpR55nMGwZKQQ4KhooEsSbExnTS1Bi+ricu3wlNdJOkEb182Ab40QDcndw4y9vr+0ksw/JQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7002
 
-The reference bandwidth measurement is hard-wired to the Intel iMC:
-discovery, event configuration and perf open all assume the iMC PMU
-sysfs layout. Other architectures expose equivalent uncore PMUs that
-could serve as the same kind of independent reference.
+Arm MPAM systems running resctrl expose memory bandwidth differently
+from x86:
 
-Introduce struct mem_bw_backend with two operations, detect() (is this
-backend's PMU present?) and setup_counters() (populate bw_counters[]
-for measuring the benchmark CPU), plus a backend table currently
-containing only the iMC. Shared code selects a backend at init time
-and no longer contains any PMU-specific knowledge.
+ - MB control/monitor domains are keyed by NUMA node id, which need
+   not match the L3 cache id (on a Grace/Vera system L3 ids are {1,2}
+   while MB domains are {0,1,2,10,...}).
+ - Monitoring lives in a separate MB_MON resource that provides only
+   mbm_total_bytes; there is no local/total split and no L3_MON
+   bandwidth event.
+ - In "mbm_event" (ABMC) assignment mode a hardware counter must be
+   explicitly assigned to a group+domain+event before the bandwidth
+   file returns a value (it reads "Unassigned" otherwise), and
+   removing a group does not release its counter, so it must be
+   unassigned explicitly or it leaks.
 
-Counter configuration moves from test init time to perf open time via
-setup_counters(), because a backend may need the benchmark CPU to pick
-per-socket PMU instances. Each counter now carries the CPU to open it
-on. The added per-measurement discovery cost is a handful of sysfs
-reads, negligible against the one second measurement window.
+Teach the test framework this layout:
 
-Add mem_bw_ref_available() so feature checks can verify that a
-reference PMU exists: the MBA test is now skipped instead of failing
-at init on machines without iMC counters (e.g. virtual machines).
-Add mem_bw_ref_cleanup() to reset the backend selection between tests.
+ - get_domain_id() resolves MB domains via the CPU's NUMA node when
+   the MB_MON resource exists. x86 (no MB_MON) is unaffected.
+ - initialize_mem_bw_resctrl() falls back to
+   mon_MB_<domain>/mbm_total_bytes when mbm_local_bytes is absent,
+   and assigns an ABMC counter when the group's mbm_MB_assignments
+   file is present. Note the assignment parser requires a trailing
+   newline; without it the write fails with EINVAL.
+ - mem_bw_ref_cleanup() unassigns the counter again.
+ - The MBA feature check accepts MB_MON's mbm_total_bytes as the
+   monitoring source.
+
+Comparing a reference PMU total (read+write) with mbm_total_bytes is
+a like-for-like comparison; the iMC path keeps comparing read
+bandwidth with mbm_local_bytes as before.
+
+No effect yet on any vendor: the MBA test is still gated to Intel.
 
 Signed-off-by: Richard Cheng <icheng@nvidia.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c    |   4 +-
- tools/testing/selftests/resctrl/mbm_test.c    |   1 +
- tools/testing/selftests/resctrl/resctrl.h     |   2 +
- tools/testing/selftests/resctrl/resctrl_val.c | 145 ++++++++++++++++--
- 4 files changed, 141 insertions(+), 11 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c    |  3 +-
+ tools/testing/selftests/resctrl/resctrl_val.c | 69 +++++++++++++++++--
+ tools/testing/selftests/resctrl/resctrlfs.c   | 45 +++++++++++-
+ 3 files changed, 111 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 468ba8accc18..8b891d3e6650 100644
+index 8b891d3e6650..6c85107c32ee 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -164,6 +164,7 @@ static int check_results(void)
- 
- static void mba_test_cleanup(void)
- {
-+	mem_bw_ref_cleanup();
- 	remove(RESULT_FILE_NAME);
- }
- 
-@@ -210,7 +211,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+@@ -211,7 +211,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
  static bool mba_feature_check(const struct resctrl_test *test)
  {
  	return test_resource_feature_check(test) &&
--	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
-+	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes") &&
-+	       mem_bw_ref_available();
+-	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes") &&
++	       (resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes") ||
++		resctrl_mon_feature_exists("MB_MON", "mbm_total_bytes")) &&
+ 	       mem_bw_ref_available();
  }
  
- struct resctrl_test mba_test = {
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 001a87608835..873acf6aa648 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -123,6 +123,7 @@ static int mbm_measure(const struct user_params *uparams,
- 
- static void mbm_test_cleanup(void)
- {
-+	mem_bw_ref_cleanup();
- 	remove(RESULT_FILE_NAME);
- }
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 0de72327a085..2bd19c22a344 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -188,6 +188,8 @@ void mem_flush(unsigned char *buf, size_t buf_size);
- void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
- ssize_t get_fill_buf_size(int cpu_no, const char *cache_type);
- int initialize_mem_bw_ref(void);
-+bool mem_bw_ref_available(void);
-+void mem_bw_ref_cleanup(void);
- int measure_read_mem_bw(const struct user_params *uparams,
- 			struct resctrl_val_param *param, pid_t bm_pid);
- void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index ee44fbae2cbf..a2b919bd4839 100644
+index a2b919bd4839..0c3079d31340 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -34,12 +34,29 @@ struct mem_bw_counter {
- 	struct perf_event_attr pe;
- 	struct membw_read_format return_value;
- 	int fd;
-+	int cpu;
-+};
+@@ -20,6 +20,21 @@
+ #define CON_MBM_LOCAL_BYTES_PATH		\
+ 	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+ 
++/*
++ * MPAM exposes only total (read+write) bandwidth, under MB_MON, and per the
++ * NUMA-node-keyed MB domain rather than the L3 cache id.
++ */
++#define CON_MBM_TOTAL_BYTES_PATH		\
++	"%s/%s/mon_data/mon_MB_%02d/mbm_total_bytes"
 +
 +/*
-+ * mem_bw_backend - Source of the independent reference bandwidth that
-+ *		    validates resctrl MBM
-+ * @name:		Human-readable PMU name
-+ * @detect:		True if this backend's PMU is present on the system
-+ * @setup_counters:	Populate bw_counters[] / nr_bw_counters with the perf
-+ *			events measuring memory bandwidth generated from
-+ *			@bench_cpu. Returns 0 on success, < 0 on failure.
++ * In MPAM "mbm_event" (ABMC) counter-assignment mode a hardware counter must
++ * be explicitly assigned to a group+domain+event before the bandwidth file
++ * reads a value; otherwise it returns "Unassigned".
 + */
-+struct mem_bw_backend {
-+	const char *name;
-+	bool (*detect)(void);
-+	int (*setup_counters)(int bench_cpu);
- };
- 
- static char mbm_total_path[1024];
- static int nr_bw_counters;
- static struct mem_bw_counter bw_counters[MAX_BW_COUNTERS];
++#define MBM_MB_ASSIGN_PATH			\
++	"%s/%s/mbm_MB_assignments"
++
+ struct membw_read_format {
+ 	__u64 value;         /* The value of the event */
+ 	__u64 time_enabled;  /* if PERF_FORMAT_TOTAL_TIME_ENABLED */
+@@ -58,6 +73,10 @@ static struct mem_bw_counter bw_counters[MAX_BW_COUNTERS];
  static const struct resctrl_test *current_test;
-+static const struct mem_bw_backend *mem_bw_backend;
+ static const struct mem_bw_backend *mem_bw_backend;
  
++/* MPAM ABMC counter assignment state, see initialize_mem_bw_resctrl(). */
++static char mbm_assign_path[1024];
++static int mbm_assign_domain = -1;
++
  static void read_mem_bw_initialize_perf_event_attr(int i)
  {
-@@ -94,10 +111,11 @@ static void get_read_event_and_umask(char *cas_count_cfg, int count)
- 	}
+ 	memset(&bw_counters[i].pe, 0,
+@@ -452,21 +471,63 @@ static int get_mem_bw_ref(float *bw_ref)
+  * initialize_mem_bw_resctrl:	Appropriately populate "mbm_total_path"
+  * @param:	Parameters passed to resctrl_val()
+  * @domain_id:	Domain ID (cache ID; for MB, L3 cache ID)
++ *
++ * x86 resctrl reports per-RMID local bandwidth under L3_MON. MPAM exposes only
++ * total (read+write) bandwidth under MB_MON, indexed by the NUMA-node-keyed MB
++ * domain, and in "mbm_event" (ABMC) mode a hardware counter must be assigned to
++ * the group+domain before the file reads a value.
+  */
+ void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
+ 			       int domain_id)
+ {
+-	sprintf(mbm_total_path, CON_MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
+-		param->ctrlgrp, domain_id);
++	const char *grp = param->ctrlgrp ? param->ctrlgrp : "";
++
++	if (resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes")) {
++		sprintf(mbm_total_path, CON_MBM_LOCAL_BYTES_PATH, RESCTRL_PATH,
++			grp, domain_id);
++		return;
++	}
++
++	/* MPAM: total bandwidth under MB_MON. */
++	sprintf(mbm_total_path, CON_MBM_TOTAL_BYTES_PATH, RESCTRL_PATH,
++		grp, domain_id);
++
++	/* Assign an ABMC counter for this group+domain if in mbm_event mode. */
++	snprintf(mbm_assign_path, sizeof(mbm_assign_path), MBM_MB_ASSIGN_PATH,
++		 RESCTRL_PATH, grp);
++	if (access(mbm_assign_path, W_OK) == 0) {
++		FILE *fp = fopen(mbm_assign_path, "w");
++
++		if (fp) {
++			/* The assignment parser requires a trailing newline. */
++			fprintf(fp, "mbm_total_bytes:%d=e\n", domain_id);
++			fclose(fp);
++			mbm_assign_domain = domain_id;
++		}
++	} else {
++		/* Not in counter-assignment mode (or no MB_MON); nothing to do. */
++		mbm_assign_path[0] = '\0';
++	}
  }
  
--static int open_perf_read_event(int i, int cpu_no)
-+static int open_perf_read_event(int i)
+ /*
+- * mem_bw_ref_cleanup - Reset the selected reference-bandwidth backend
++ * mem_bw_ref_cleanup - Release an assigned ABMC counter and reset backend state
+  *
+- * Safe to call when no backend was selected.
++ * Group removal does not reclaim assigned MPAM counters, so the test must
++ * unassign explicitly. Safe to call when nothing was assigned.
+  */
+ void mem_bw_ref_cleanup(void)
  {
- 	bw_counters[i].fd =
--		perf_event_open(&bw_counters[i].pe, -1, cpu_no, -1,
-+		perf_event_open(&bw_counters[i].pe, -1,
-+				bw_counters[i].cpu, -1,
- 				PERF_FLAG_FD_CLOEXEC);
- 
- 	if (bw_counters[i].fd == -1) {
-@@ -221,21 +239,108 @@ static int num_of_imcs(void)
- 	return count;
++	if (mbm_assign_domain >= 0 && mbm_assign_path[0]) {
++		FILE *fp = fopen(mbm_assign_path, "w");
++
++		if (fp) {
++			fprintf(fp, "mbm_total_bytes:%d=_\n", mbm_assign_domain);
++			fclose(fp);
++		}
++	}
++	mbm_assign_domain = -1;
++	mbm_assign_path[0] = '\0';
+ 	mem_bw_backend = NULL;
  }
  
--int initialize_mem_bw_ref(void)
-+/* True if any x86 uncore iMC PMU ("uncore_imc_<n>") is present. */
-+static bool intel_imc_present(void)
- {
--	int i;
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index b9c1bfb6cc02..893f6748c68c 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -121,11 +121,40 @@ static int get_resource_cache_level(const char *resource)
+ 	return get_cache_level(resource);
+ }
+ 
++/*
++ * cpu_to_numa_node - NUMA node a logical CPU belongs to
++ * @cpu_no:	CPU number
++ *
++ * Reads the "node<N>" symlink in the CPU's sysfs directory.
++ *
++ * Return: NUMA node id (>= 0) on success, < 0 on failure.
++ */
++static int cpu_to_numa_node(int cpu_no)
++{
++	char cpu_dir[1024];
 +	struct dirent *ep;
-+	bool found = false;
-+	char *temp;
++	int node = -1;
 +	DIR *dp;
- 
--	nr_bw_counters = num_of_imcs();
--	if (nr_bw_counters <= 0)
--		return nr_bw_counters;
-+	dp = opendir(DYN_PMU_PATH);
++
++	snprintf(cpu_dir, sizeof(cpu_dir), "%s%d", PHYS_ID_PATH, cpu_no);
++	dp = opendir(cpu_dir);
 +	if (!dp)
-+		return false;
++		return -1;
 +	while ((ep = readdir(dp))) {
-+		temp = strstr(ep->d_name, UNCORE_IMC);
-+		if (!temp)
-+			continue;
-+		temp += sizeof(UNCORE_IMC);
-+		if (temp[0] >= '0' && temp[0] <= '9') {
-+			found = true;
++		if (!strncmp(ep->d_name, "node", 4) && isdigit(ep->d_name[4])) {
++			node = atoi(ep->d_name + 4);
 +			break;
 +		}
 +	}
 +	closedir(dp);
-+	return found;
-+}
- 
--	/* Initialize perf_event_attr structures for all iMC's */
--	for (i = 0; i < nr_bw_counters; i++)
-+/*
-+ * imc_setup_counters - Configure iMC CAS-count-read counters
-+ * @bench_cpu: CPU the benchmark is bound to
-+ *
-+ * Discovers all iMC PMUs and configures one read-bandwidth counter per iMC,
-+ * opened on the benchmark CPU (each iMC counts socket-wide regardless).
-+ *
-+ * Return: 0 on success, < 0 on failure.
-+ */
-+static int imc_setup_counters(int bench_cpu)
-+{
-+	int i, count;
-+
-+	count = num_of_imcs();
-+	if (count <= 0)
-+		return -1;
-+
-+	nr_bw_counters = count;
-+	for (i = 0; i < nr_bw_counters; i++) {
- 		read_mem_bw_initialize_perf_event_attr(i);
-+		bw_counters[i].cpu = bench_cpu;
-+	}
- 
- 	return 0;
- }
- 
-+static const struct mem_bw_backend mem_bw_backends[] = {
-+	{
-+		.name = "Intel iMC",
-+		.detect = intel_imc_present,
-+		.setup_counters = imc_setup_counters,
-+	},
-+};
-+
-+/*
-+ * mem_bw_ref_available - Is an independent reference-bandwidth PMU present?
-+ *
-+ * Used by the MBA/MBM feature checks so the test is SKIPped (not failed) on
-+ * hardware lacking a usable memory-bandwidth PMU.
-+ */
-+bool mem_bw_ref_available(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mem_bw_backends); i++) {
-+		if (mem_bw_backends[i].detect())
-+			return true;
-+	}
-+
-+	return false;
++	return node;
 +}
 +
-+/*
-+ * initialize_mem_bw_ref - Select the reference-bandwidth backend for this system
-+ *
-+ * Counter discovery happens at perf-open time through the backend's
-+ * setup_counters() since it can depend on the benchmark CPU.
-+ *
-+ * Return: 0 on success, < 0 if no reference PMU is available.
-+ */
-+int initialize_mem_bw_ref(void)
-+{
-+	int i;
+ /*
+  * get_domain_id - Get resctrl domain ID for a specified CPU
+  * @resource:	resource name
+  * @cpu_no:	CPU number
+- * @domain_id:	domain ID (cache ID; for MB, L3 cache ID)
++ * @domain_id:	domain ID (cache ID; for MB, L3 cache ID, or NUMA node on MPAM)
+  *
+  * Return: >= 0 on success, < 0 on failure.
+  */
+@@ -135,6 +164,20 @@ int get_domain_id(const char *resource, int cpu_no, int *domain_id)
+ 	int cache_num;
+ 	FILE *fp;
+ 
++	/*
++	 * On MPAM the MB monitoring/allocation domains are keyed by NUMA node
++	 * (surfaced via a separate MB_MON group) and need not match the L3 cache
++	 * id used on x86, so resolve the MB domain from the CPU's NUMA node.
++	 */
++	if (!strcmp(resource, "MB") && resctrl_resource_exists("MB_MON")) {
++		int node = cpu_to_numa_node(cpu_no);
 +
-+	for (i = 0; i < ARRAY_SIZE(mem_bw_backends); i++) {
-+		if (mem_bw_backends[i].detect()) {
-+			mem_bw_backend = &mem_bw_backends[i];
-+			ksft_print_msg("Using %s as memory bandwidth reference\n",
-+				       mem_bw_backend->name);
++		if (node >= 0) {
++			*domain_id = node;
 +			return 0;
 +		}
 +	}
 +
-+	ksft_print_msg("No memory bandwidth reference PMU found\n");
-+	return -1;
-+}
-+
- static void perf_close_mem_bw_counters(void)
- {
- 	int i;
-@@ -250,17 +355,27 @@ static void perf_close_mem_bw_counters(void)
-  * perf_open_mem_bw_counters - Open perf fds for the reference-bandwidth counters
-  * @cpu_no: CPU number that the benchmark PID is bound to
-  *
-+ * Counters are (re)configured by the selected backend first since their
-+ * discovery can depend on the benchmark CPU (e.g. per-socket PMU instances).
-+ *
-  * Return: = 0 on success. < 0 on failure.
-  */
- static int perf_open_mem_bw_counters(int cpu_no)
- {
- 	int i, ret;
- 
-+	if (!mem_bw_backend)
-+		return -1;
-+
-+	ret = mem_bw_backend->setup_counters(cpu_no);
-+	if (ret < 0)
-+		return ret;
-+
- 	for (i = 0; i < nr_bw_counters; i++)
- 		bw_counters[i].fd = -1;
- 
- 	for (i = 0; i < nr_bw_counters; i++) {
--		ret = open_perf_read_event(i, cpu_no);
-+		ret = open_perf_read_event(i);
- 		if (ret)
- 			goto close_fds;
- 	}
-@@ -345,6 +460,16 @@ void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
- 		param->ctrlgrp, domain_id);
- }
- 
-+/*
-+ * mem_bw_ref_cleanup - Reset the selected reference-bandwidth backend
-+ *
-+ * Safe to call when no backend was selected.
-+ */
-+void mem_bw_ref_cleanup(void)
-+{
-+	mem_bw_backend = NULL;
-+}
-+
- /*
-  * Open file to read MBM local bytes from resctrl FS
-  */
+ 	cache_num = get_resource_cache_level(resource);
+ 	if (cache_num < 0)
+ 		return cache_num;
 -- 
 2.43.0
 
