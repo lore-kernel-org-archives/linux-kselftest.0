@@ -1,394 +1,173 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013033.outbound.protection.outlook.com [40.93.196.33])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F26D368957;
-	Wed, 22 Jul 2026 02:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB17384CCD;
+	Wed, 22 Jul 2026 02:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784686434; cv=fail; b=LDmvIIXyOUx0+1OrtOHevWpErFVLx5R2Zpxomol9m27ueNdeEwepZ2GD4ADxxDPY3Qx0EkO00hdsIJqsVCd2cDVwBRspA5cAvNw5rKFg3zObXsoGIi95l5fCvx9ehCt0ipt/+pYWcgMrDVROklNdOhj3pTlJ1kJYG6fkudT/+sA=
+	t=1784686690; cv=fail; b=feyEmZDAqH76H5fDjcG6PXdOTdLryHZNrKwcUARYPEs+JX+5yphVcw+0UQBD1AWL4JQSKzaXj7VN0dPMwpIgN4nlOHiy6zvhf0YdVLqWbZIdkw57Lydu5dDxm0loeKBlpwfpDkXjQAKMif/o0UTIVTiS2f+Pli8pHXCgK/ybhRQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784686434; c=relaxed/simple;
-	bh=SjD1RVHa/EAeeMWIYrMaZ8oN2bZu+BWC8QCRC6J69XQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Dtds25DT2mT75Okqyv7dpjN6o1pQBjRjHPU54wIzVbzhj24ooWNhQH+55ow3tis/w4oNp/EsVDCvCrAtJH0kH87PZx/LxqSGgOUFbjn3MHlu5lzy2eAZpQJtVUE/SF6qY4LChdNpBxgawmkPW5L8WnjWSoWDeGrQGQmF9UTdzts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KKoQwVS4; arc=fail smtp.client-ip=40.93.196.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1784686690; c=relaxed/simple;
+	bh=kf52U5ubeJNcrg6OSsQv8MkBHjYDAjQh6C13GnoZFR0=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=a3GbCSg57kJ1KtMJNQQfX4ja/HbxpLcVucFhLeO5CHe4kz+89FI03aSdvxZr8mfwBNCE8yhm3D+WkgP9baFGGzmLxRVzonkWJ8PaDrhKGKZ3TIxFnGOamD3TnSzkFjavglvGufBQFcTlPciatOI/4rEZXuvyZs1+kpsg2DcET+Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VfK8ERLI; arc=fail smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KKoQwVS4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VfK8ERLI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784686688; x=1816222688;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=kf52U5ubeJNcrg6OSsQv8MkBHjYDAjQh6C13GnoZFR0=;
+  b=VfK8ERLI3Fi0jFz/Pm8XcVExd2+oSfyya1sgcy+ulajYioFm13rsRpra
+   xvMj3Qa3SKTS2R+YgcAQTNVhnGj97XHHxU7d3+ci8H7IZb+2ODSvVsfpl
+   UBdGus5ilOtdxUCOZqaUzt6KBR3fCPjBA2CEHtW3SD5WZB7TJSf89fvRc
+   Meh98Lt3Ii8YI2gedM/bJU2hcq/pHprRq7pRuTpfqhKX+Kn5AI+koYSSR
+   xCGdNgdZA8WzD8rp+u5jot9HJ/dKc4jlXbKAG0QQo6pJBqCyUHzejlzMW
+   CgL6hz7pe9QvvwapG9hv8X77tcZImUDq4xeuEMcOdC3hVbE7IQGC7OyiV
+   g==;
+X-CSE-ConnectionGUID: QpKoAnG9SU2sOyp9qA3RFw==
+X-CSE-MsgGUID: s2BSKW4nQuaxoDubF1bM5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11853"; a="96825241"
+X-IronPort-AV: E=Sophos;i="6.25,177,1779174000"; 
+   d="scan'208";a="96825241"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 19:18:07 -0700
+X-CSE-ConnectionGUID: ABtOho6mQ3C0OE98OQ9qkw==
+X-CSE-MsgGUID: Bi0BxOjWR4G7ZjSWzEUUNQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,177,1779174000"; 
+   d="scan'208";a="261507944"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 19:18:07 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 19:18:06 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Tue, 21 Jul 2026 19:18:06 -0700
+Received: from CH5PR02CU005.outbound.protection.outlook.com (40.107.200.68) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 19:18:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e1UiXSGCXuX8W6kM3P/qMTYSnQAwS5WRpAS0NHz6Zc8mNafSFRI6lyleO05SEbCQPVpT9I3OFT5YOZLCK/AEO2r6J5mswE6Mjh04ItdA1PtonlxPDwci1KXNU2gTSbNnjYHibWQNW1SgyutZ50W0mIEHOkyRy+eVVZZs7rrYG8Que8PYGg3ZDhiuMfTrNyt1veLnsLou8FiFC+Tjsgkyc25gt7X9BZtkmVWbOZgZtSNS9ABvRZ2o9cPaOSjdqCtad6Ut3a2aktcVSi9zHRA4X1r+3DNR4qUZi12X3sAOUMbQJqQCHKorqqAAvzB+bzQ8u5MYFewgQlSQyKavLPhVjQ==
+ b=CWJ2RUdehaf3t/8X5Q4GmJCf3l1jnzVQke/Ldnnb0p/6TXGnBfnenM3gGcvpv7QijUMVyW/Der8Zl8fWOyNdj0QqPmgGpC7dJNlbVIDmNOnH26/7k60voBLroB0OlKK5deCqjACXFRT6GC4pCRwjjUJe7yB57g8tMt7LJ0F9yl4MqiAhX2RbtPpvugWBrlZYhLyuS3P/AA89CEt5d/dQ23wX3c7XCr2UXPKUF3PF5ZXwl9kZHe2uatyX84+TydAy/aeNF6CqnGFcsNqX6oawfR6yKc74gUCAlcML5s2ljng7ye9V8HeU1ceNdEDWA0PDK4vVqOUq4+EpZEmCN7fM7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B6iqZfgPN+yczwKqNuF43oyP16bdtdJ7DkbPQt37Kxg=;
- b=LcrGFVfHIOG7mBE3gQxyyO5toBCVT5JytlEsrzG5kJi0/616OS0BTlI0ub6PuUTtqPOY7tG43UzjXDTXh3Wq4kgcB9UqR9QxvkN4F+QT3mnnLaFYpUJBnPovh9//yB84GwygqVNTMelpS0/5Y6tBjrePPiTB9jMuBriEJ8GKKawO+dXgiYH5AS1/EHAQtCO/3++W2LaDVQZd/dAOGihH8cJs55BoFOZj8kWYKME3buUqrwb6F6t+dVf0/EB/acK9E27B2TqJcbZ01ucC76+k03JHPb7fqQ7VVTq+nY3J6EwUzL3cMrM+PpvuJ0qBMD0pvTkWC87xr3hbAuv2PoKK1g==
+ bh=kf52U5ubeJNcrg6OSsQv8MkBHjYDAjQh6C13GnoZFR0=;
+ b=dxgdu7U5n7vJ0fN3mySAOpspmYv/vVKbpVEa+WA6/ItbSPM4zifIua8l9lBBKkx54gpbOAhC/eLRZwjW2lDpy2t6N0x50F95JW0L2pPEHcjKfFpUWud7r1fgpvSGqB8EmcS/96i/RBOwX20JJV4ZYCN5Bp8M2Wv4JFudlhUkoGw0FKRX2uCcrh+n4hmYkTInIihEfCHnNks9Hsp5t6JmQuQkgHD3rwempfvF28NW12SKzSNJnGUBxDghTnJefhvz+zkQVfu2TLJ6fiWAOm5dot5QOdQBezxiYngQ9LwQ3Wik0ALwkGwMdHDF1vxIeSEYSBu9KHUJQ6sxsXLb2hZYcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B6iqZfgPN+yczwKqNuF43oyP16bdtdJ7DkbPQt37Kxg=;
- b=KKoQwVS4jK8/aE5XJb90zpQFD6JN5YMrOGPN5pvsNncOmQm4CN5waZTTZ9CE+Yze+7lYxkK1D9j3SruIe2TSQ0mq5XHJZdRJyB1nEKzcnScQD3fti/9xvENNvc9XcTyyK8hCmgerJ036lQf+2lOGN2XQecEfoLzYV4mIPOf9HFFTuMfpEOFGP2zBAqcl+b6ja+PfhDhBMGwFbyhls7kuu8FLDrbiJF6CHXGp8ogWAxYzyMVjtiPbXhTWivl6j8RA6ds3VfGgEps7e3a5PaHH7I2bhx+3T3Lu95jYyIBhS/u4X8yZUx5AxqGNENiasUnOlVE+ntBEPEqmCZQsJ6zbqQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
- by SA0PR12MB7002.namprd12.prod.outlook.com (2603:10b6:806:2c0::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Wed, 22 Jul
- 2026 02:13:48 +0000
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 02:13:48 +0000
-From: Richard Cheng <icheng@nvidia.com>
-To: tony.luck@intel.com,
-	reinette.chatre@intel.com,
-	x86@kernel.org
-Cc: Dave.Martin@arm.com,
-	james.morse@arm.com,
-	babu.moger@amd.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	newtonl@nvidia.com,
-	kristinc@nvidia.com,
-	kobak@nvidia.com,
-	kaihengf@nvidia.com,
-	fenghuay@nvidia.com,
-	ltrager@nvidia.com,
-	Richard Cheng <icheng@nvidia.com>
-Subject: [PATCH 5/5] selftests/resctrl: Add NVIDIA SCF reference bandwidth backend
-Date: Wed, 22 Jul 2026 10:13:03 +0800
-Message-ID: <20260722021303.9471-6-icheng@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260722021303.9471-1-icheng@nvidia.com>
-References: <20260722021303.9471-1-icheng@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TPYP295CA0048.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:8::14) To BL0PR12MB2370.namprd12.prod.outlook.com
- (2603:10b6:207:47::27)
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM8PR11MB5702.namprd11.prod.outlook.com (2603:10b6:8:21::10) by
+ CY5PR11MB6209.namprd11.prod.outlook.com (2603:10b6:930:27::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.245.10; Wed, 22 Jul 2026 02:17:55 +0000
+Received: from DM8PR11MB5702.namprd11.prod.outlook.com
+ ([fe80::a973:3a5a:91e8:49b9]) by DM8PR11MB5702.namprd11.prod.outlook.com
+ ([fe80::a973:3a5a:91e8:49b9%7]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
+ 02:17:55 +0000
+From: "Huang, Kai" <kai.huang@intel.com>
+To: "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>, "jarkko@kernel.org"
+	<jarkko@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "yanlonglong@kylinos.cn"
+	<yanlonglong@kylinos.cn>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/sgx: use MAP_FAILED for mmap error check
+Thread-Topic: [PATCH] selftests/sgx: use MAP_FAILED for mmap error check
+Thread-Index: AQHdF/NrZ2NB8xzEu0q42R6yvwQfpLZ40LOA
+Date: Wed, 22 Jul 2026 02:17:55 +0000
+Message-ID: <4b9e4d1195c03e7db7660c2c7a94969ed50ef674.camel@intel.com>
+References: <20260720025443.506-1-yanlonglong@kylinos.cn>
+In-Reply-To: <20260720025443.506-1-yanlonglong@kylinos.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR11MB5702:EE_|CY5PR11MB6209:EE_
+x-ms-office365-filtering-correlation-id: e0fc2145-d3da-4cbd-f7ff-08dee797711d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|11063799006|10067099003|56012099006|18002099003|22082099003|38070700021;
+x-microsoft-antispam-message-info: 6jj4qzkh+jk2rwPJF50RPFNvZ1RCGiXLl2fshz/kse0XhRhzEZR3B+QrkTu2oiHEKEKYHnBBkAfaiIfWxUQgcPZXCQ/KH1vlA+NtbRakJYDNYQDCpEHcbQ23pAXmx0juqLWRJDaP7z33VKOnt9mkF04GWgvVKbsEYtZrfDWqi3sVg9pPmgm2AEVpdSVrLekKC38Lkeoj3HZDZaCQAT0AKXuBgz2Bl14IiIBP7AcYmp8o0gFHMOHuiFsyJON5PT/dHNArug+7geFwSSv8/UO1igLwep8EU9APxMpOyL/XKYIVwl8W/++hV2XIeQWh69Gc5VHOv+PC0++vV3fpEPJxpZhRv2dkRgMYAiOdikKWuDxTF32iP/fTLug8CbjIjXeDDjWspqP0BjGDKw9BOVXE1lgeQyXZv24sjdQ2qqDIFKt9KJXyXerFbTDWrDITc/gqiy240NyIaaVwJlqJ0MMXFwF6eY05e5cnQuBXoHsRqh7/sqNF/IBdNPo5IYSW3NXbOvJ3WaQqAGeRlAZas5BLKs63+en6l0abmLHysy/9zL19COczdXIVGz0UwgJP8N43S6wu3whH32/ZniVthsRun1Ch2mo5yowBGQ6QuUQ82tyJuMFNLzttGyjyjP63XObarO//fclSH/5TzBMI/Thlt8uPjnQn4hncW6/MhGjwkLMGpeyGCOGJXRXFn1OrQVHSStYUyLu9PgbocS6pnPazuQH232dJuFFNzcSz2fubxC8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5702.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(11063799006)(10067099003)(56012099006)(18002099003)(22082099003)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QklsRU1PMkhWdnhzZjVaMUFzZWFLV1ZGdTRnRzlYeGNJVzlVME15OTBLTUJJ?=
+ =?utf-8?B?V0VDci9kQ0tPallkdTQ1dnNkQUlPb3pDbE5oS2N0R2xZTkc2aXRVOGN2OVhC?=
+ =?utf-8?B?Wks5ajBXaGNRSm5FbUM3bm90SjB5QWJjdythQi9IN0tBVTlicGVNQ3cyUmhP?=
+ =?utf-8?B?eklCU2NMRmZremp0SVkzMEVGN1Rlc0ZqMkNSZjI0RWpHTUVFeGZnSW5NRVRq?=
+ =?utf-8?B?R3dMSmJxbWUxSjNQcG9IMHBiRG9mWlBuaWVycVpVblB1dkNpbVpKRTN0OENN?=
+ =?utf-8?B?dXNad0JUcDBZS25JV0laSjlxL1RrRGtOa3BoOHZudkN4U2t4bEpMWFVqMHJD?=
+ =?utf-8?B?a0lBNTliTU91RG5uSlJQVjkxcTl3QVhUdjNtSGVUWTdKT0VWcy9UcEM5c3Bp?=
+ =?utf-8?B?ZkZ3ajRLY2hxc2djdWZFMzFvYlJMV0VmcDdaTElEcDNHUjZjNFZYZzlyVVhv?=
+ =?utf-8?B?ZExWckxqSk1JL2pKd0RsdjB0TnVmQlJ1NmNOVk5DMDFoUnlqdUV4UkdnL1F3?=
+ =?utf-8?B?Unc3VDJpS1MrVTY1bDlHNlA5Vm9jeE82Rk1Cd0h6ek5Hb0hHblZNbUVsSi8w?=
+ =?utf-8?B?ZXdFeDZaM1JzWFo4T0hDclRxTFJ1ZThJN051WVdHNjJ4TXdDbWRyL3JuanpW?=
+ =?utf-8?B?cGdNZmYyOWk1dTJVQVlTUUZjenEzbW05cTh3dis4TUxyZllzUzNETXRZUXlE?=
+ =?utf-8?B?b0g3Rno0SElOckFGVzdFZEFVY1RGZzV0TmMxbEVxN3VDRGdQUWVSWFREb1ha?=
+ =?utf-8?B?M3FvdkhuM3pPazZVcGVNVmNOdCs3ZzEvU1dMVk14bDc3Tk1rdTBMN0VabzNB?=
+ =?utf-8?B?YlBwQzYvZWR0bUZyM3hqVTJlMnA5Z3JKeUgxeFBlZlpaSldFS2I1R3VqZUVG?=
+ =?utf-8?B?dUFoVlNwdTZqcWZYMjdVMkN6REppa1JFMkc1N3JWUGwrdUZHcGl2UElDOVVi?=
+ =?utf-8?B?K3lQOUhhZmRGRkEwN3d0S1dpZmhhdlhMVnppOUtUVDNoWUpnM0xNNWkzQU9w?=
+ =?utf-8?B?RXo3TnJXTkRjMFN6di9VS1lpRGw4QXVYY29mOTlVUTZHbjRiUHpPMlFBUE9B?=
+ =?utf-8?B?UHBCKzFzbzhydmJEazg0Vldjbzk1bWExY2YrTDBsaEMvdzAxWnJBN1R4bTFm?=
+ =?utf-8?B?b2FhY3o4RkFpZE5qbmlzUjAwVldNZXJkdWxGVnJvaFF3SFo1YnAxeTFKWGpW?=
+ =?utf-8?B?aXRneUpxYVJyU3ZIN2NpTlEzR3ZaMHMvUlQvOVptSDdidXNkYlVZU2xyLzBv?=
+ =?utf-8?B?RVp5TENlczJIZjlsNS9aNGFLRFA3ektFWHBkWTh6WnhOc3YrcXp6MlAxWTNv?=
+ =?utf-8?B?eUh0aVJGTE5vUzhvd3kxN0I2L042aC92NzBGSzBqUW1taDFQazNZc2EzOFNa?=
+ =?utf-8?B?cHJuT2pkSmpDRWY3ZGxTNjZVREw5ZlJnWXk5cXdJaERUS1pIYnZNbEtiNWVM?=
+ =?utf-8?B?Skg5dGNOV0RtSmd1U1hsWjlTM3F1OFc0TWZCVG5vdVpHbDRiQUtHRFpoTi85?=
+ =?utf-8?B?Wlpxdm5XRnBxeXZlS1ZPNk9rTEJtcjd2VHRIeWJpaVJsUHFxYUNONVVYaHNk?=
+ =?utf-8?B?a212ZVNHSUNISjJMclZHOTF1dG8zNHQwNUVQWklhY0JMR3BFd2c5bUswcGdH?=
+ =?utf-8?B?RW9BY3VqSkVqaldITnF0U2MxWDNPT1AxdGFGOUhGdmIraGRCVXdQOXI1ZWp4?=
+ =?utf-8?B?L1BLMzgwZDN2RW5va0dnMitYRU5zZzR1RjNRTW1qZ29GK2xhWVl3azd1NmRk?=
+ =?utf-8?B?MmJxOE5IV1hrRzdjK0tlWTFyNCtSWGVTYjgzV2F0V0k0aEhkYVd6TWdYVmZy?=
+ =?utf-8?B?cmh3cVZPczQ1bXIxQTZvU3pYTXVJb1dhOVFEOE9wNUFxbkJBOUlwYk1WOW1D?=
+ =?utf-8?B?dmRlbEhCaW9Zcm9SV0M5SkpEZFJxSVFwdVlGbnIrTmI4T0w3NkNQUWx1WjVP?=
+ =?utf-8?B?dmt4ZlFneFd1bE5qem0vZzNtSmNuMCtER211Z3BvZFVHcWlKZGo2YkViTXkr?=
+ =?utf-8?B?dGgzT3VLN0l6cEdZOGRpTlcvNXV4SWQvZGYxYVhxaVhJRmJRbEozOWZBSUlZ?=
+ =?utf-8?B?VWZ4c0VzSUpkVU5vQUdDOUhoTDJpWEVQRmhPY3lHM0ErUit3Z200MlJDVnl5?=
+ =?utf-8?B?MFc0YzhTMmZpaGJNZjA3Qm9DOHhrSkRJUXIrT0FoQjRrSkRsUmlOLzRMQmUx?=
+ =?utf-8?B?OVJLd1dTYXRZYXdnYjYvUFR3S2lodWxKNGpIZWxuUnZ6emJqdXZWY3czWTVJ?=
+ =?utf-8?B?K2s1Y2tWSm1vS2wwN0FkN1dpZVVBRlFXR3E1Y0pxL3NhVW5sWHMzcU5ac0xN?=
+ =?utf-8?B?VXJyU0ZVd1Fob2xyNWJwNENDT1dtQzNxSGxWSlZkYXJHV1BuRjE0dz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B5BD180DA822344F9E1BA50E795A7EDC@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SA0PR12MB7002:EE_
-X-MS-Office365-Filtering-Correlation-Id: abc50e96-c23f-45a8-31f5-08dee796ddac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|6133799003|56012099006|11063799006|10067099003|3023799007|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	qQx2NmsvHTcoJ4aC7Gu84ZqGy3KRkfcwq4GR+xijdO1n7z0HgM9e0I0/9QbUOU+oWyPCz/IwijjYPsOl+V1owqcz24+zZK+xyFw//RLi9KPCH22bb+L5GtazgXOpjlwC4/1K/1a7RiWz/0BhKGERFG5lvZwxCTm89n391TfZlV28Q8qJ2VTajLZ2WU9hdv+IhKVf4HOR7WWUc44ktHMHRgZIWu/Wnec1pAzlKwsgIMPlR9AO6ng6ledHqx0v5G0J6DdGu2Up8iLul3875HZ/NWtR+nyfB7QJzgARxHSRgTecC+QUBRS3loTdnREbxEDHlvE2GvYXFL4/Kv5grCzGLRAM93+r3Cp+5PAon462Jq6Hi1Ozn+w+zgc4N9qxh9iLrxAjRm/SNMTDLRg3LZU2GOeNsEAPUT7JE+je1F1XTR4reROeSisWfVgvH6vsgDaKOI8YYoULzNR0DFyvssj9JcQSTQqe7yHXHZKfT2DdwbchUIxQfR516jDWTZ3sqbzPnLLAJ32pPRa279uy83nW22QiYbs2bizTVy8MA8QmCeOAHSkruVAUq4Et8DtQi3YoIXELUIH5+EbSfpyr0szbY2++A01b9T08Z89Y1SWdjaa59+Yad+kholxln9a+EUCd5V4QXj/Qpg5r1ZsEEOizzotZouAp6mfGJMTrBkXfFzM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(6133799003)(56012099006)(11063799006)(10067099003)(3023799007)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gLv4qOMzWtZDKld9qBi3skrwl1RGKuNupeEHpZ+Wunbhmg6rxsvPHzC38VfJ?=
- =?us-ascii?Q?GO5rDz0vbyuecBr8hiPy2svabN6KdfubembiCYGR/z+35FWtzFKUbWFlSREI?=
- =?us-ascii?Q?5x9EfheheYLBMRIE63ecyRE5S7iyOjaUOWEQon8CedoFgVtNLsfpwyXSmlGr?=
- =?us-ascii?Q?gDPHJJ7t68yhJkYLAyO0H/Y8PIgyIds05MDgaxrRYYe1Wt8j4xT+e8Qo6If/?=
- =?us-ascii?Q?LaqAx7n7ePBHdzztesbyNRq1cJu+SzQ5AnC/J1p2p454+eNHsb3oRQpj6Kws?=
- =?us-ascii?Q?A8y5X9x6I/sndrBxh/3YCf+HQcptCsUcduvs3dTFAFQaRnKkpqqhFX8FNdFf?=
- =?us-ascii?Q?0OW6iCrhLmINtVjikVXRdzCL6W83NXJQlqOuPoQO5l8Yov1PI9qcugLoDf21?=
- =?us-ascii?Q?S7Nzj3K48F8lE6k61zHL9ax5g/3X+D9HJcO8bgNcr3B8sTKdzcUwjzcksOxd?=
- =?us-ascii?Q?jZ8cunI57/cUMmQ3au7oDWXXs5NzdPzA4yJQW7Oxh2ewpgiNdq7A5P2QI+ai?=
- =?us-ascii?Q?KFdbuXKcBkBcBya0his2YfPM5e/OZs29Ps9AuS2ehDC4K3bVNQM8cHHNqOId?=
- =?us-ascii?Q?bvfFvAAgp6BhztO5k0KgakHhAzN6y5D5KPFnkOew3VScFG23THC6yVzMgnNl?=
- =?us-ascii?Q?HY3oaszHOihc+pkJD5srwqXNJtycFgwde0+D1KueWFmNBGsDedt7JKglrSX+?=
- =?us-ascii?Q?qn4SFVxD3jWt3Z0Zn/bSSLjriPAb+v50I+2+f/3UEoxgsQU7+ClX0bDIuwVW?=
- =?us-ascii?Q?eY1Au3mMag9l/AVZURuGevtePj4U5hzDGSYnUApTqfxPvgKBXc6wZuBw8INe?=
- =?us-ascii?Q?mzDi8k5OcRsFJt3G3/iAO4a8+dsqyJtQP661lvZdOpx66SAhAOs/TT9TWelS?=
- =?us-ascii?Q?1ZMQsM2agBzpS/Wr76nZs4K6Md5hBhyXFA+V60bH0xSUkdvurxOHOPFVhO30?=
- =?us-ascii?Q?3sXx5et3vIeP9mw6G9kV9xbBWriHyE96LnvQaSgsbyvcwKSO6fMz+UcR7o0F?=
- =?us-ascii?Q?Mm0RWiFyVqWJ8qK6febsf9UwIXDI0vdgWILgQzI5bZbPc96KKH8owuZhCktH?=
- =?us-ascii?Q?zxYlSDYd+RiIsjoL3FuRg0+c9EfdAV7gCerAyNEgGxqcIjXIiVYrvUtCrXkQ?=
- =?us-ascii?Q?VkbxRP23mb0GGPWo4eU3qDeHtDS3v7U097izgvjc29Zb/jgHCw2jRK8/Nfb8?=
- =?us-ascii?Q?iZxJAKyg2UumYN7TAG3cyoA5iUW9HrAAuiBSypDvMHBAF9SXmgjVkjk1tNWl?=
- =?us-ascii?Q?UxVDFgjPhpXrXme9Tw1m0FrVauV11kRnKEXwEm8IWeoE6GxODhMJ6f59cFDD?=
- =?us-ascii?Q?Z4o03pv7mvAwtgu9WjBxxlMXij6TeS0BnXtyfjXikBO0QFkFeY7tJ4IIfUQ9?=
- =?us-ascii?Q?8twEAfiq1QCW24era9CXfKHC9ebYB6r7AC01hQrqfjEGYHsDt6frJfJgR2TO?=
- =?us-ascii?Q?/WUBQfNWEeCvumOVrT94HL60/0UqyD8USgch+mg9O5zy3J0ztu24l/zIFGps?=
- =?us-ascii?Q?6tB6offKrgNWM24t/z6XusDtxa9IGirGjy54RGJnCEs8j2rXUgxLTEZDiqHf?=
- =?us-ascii?Q?/tbCHdQ3aFrt0XNxEef2x3sXKDx1EgjQjtk7QdVgq/7Lrd5q3zxNjuurNPdi?=
- =?us-ascii?Q?bSAz42PrgtnLk3BpFJ49gl8uk0kw0MLhBW2TrRgNfc4NXYYxu9Ryy7XhhMpA?=
- =?us-ascii?Q?6QDoXDcJmMh+h/m24jktMh5Ppg10cN44AKz3irvudU1OSeviNtLtpTF2/tuF?=
- =?us-ascii?Q?qo43/RjcZw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abc50e96-c23f-45a8-31f5-08dee796ddac
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
+X-Exchange-RoutingPolicyChecked: Dfxw/lfJkCJTpw6T28dQhToGo9JAUgxMqA7YUIXFiDUZe9scEJMuCvT3vVh3vYKHY2Da0V7dOgsCGq6M5BpLuIeE6x8oOxH51ZcP1h/cs98eg8CPzOsLsayZKDHsG5y8XtYjp6EwnL5iXRdu9p0T9iWFR+Zygi5yfVs0t1soNV5FguRyBgzV+/lw955O9/IEksm6iT9wcxnTsP1uheiaj85sUgs+VDjNxlm3hK+OrKiXj/c0oRf1U3azXcBnYBV55eMD6nA66JCVLX9QOG4Lk8izj9weixqZJ6zn7PhIhL9G90A7JBjrJNAXlDyIQqdQ5SmQ5NiFTW63yqNbK09QVw==
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 02:13:48.6069
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5702.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0fc2145-d3da-4cbd-f7ff-08dee797711d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2026 02:17:55.6448
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mItfpbXn/4eMBY0kSTci1tlECP9z55rDu8JhyIGC6K4826lG46tCS6b2HRSn0/gb3sg6ocLnb7opcOymzQbrYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7002
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RCVv5pH78xGHNSbeOKTcAjbCKmHiustxhzTya008dUfkOfXf9573DXnRK94kDoXaaQpZ9ogOqI27ykmrcZJNHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6209
+X-OriginatorOrg: intel.com
 
-NVIDIA Grace/Vera systems expose the SoC coherency fabric (SCF)
-uncore PMU, which counts per-socket DRAM traffic and can serve as the
-independent reference for the MBA test, in the same role the iMC
-plays on x86. Together with the MPAM MB/MB_MON support this makes the
-MBA test runnable on arm64.
-
-Implementation notes, all verified on a two-socket Vera system:
-
- - The arm_cspmu driver registers these PMUs under the generic
-   nvidia_uncore_pmu_<n> name, so instances are identified by the
-   PMIIDR value in the sysfs "identifier" file (product id 0x2cf =
-   SCF) rather than by device name. This also keeps working should a
-   future kernel register the PMU under a dedicated name.
- - The driver registers no named events on current silicon, and the
-   documented byte counters (cmem_rd_data, gmem_*) read zero under
-   load, so the backend programs raw events: 0xF1 (LLC refill, i.e.
-   reads) and 0xF3 (LLC writeback, i.e. writes). Each event counts
-   64-byte cache lines, the same scale as iMC CAS counts, and
-   refill+writeback matches the read+write semantics of MPAM's
-   mbm_total_bytes.
- - The SCF PMU is per-socket; the backend selects the instance(s)
-   whose cpumask belongs to the benchmark CPU's package.
- - The events are opened system-wide (pid == -1), where inherit must
-   be 0 or perf_event_open() fails on this PMU.
-
-Validated against the MPAM MB resource: SCF and mbm_total_bytes agree
-within 3-4% across all MBA schemata levels (10%..100%), against the
-8% test threshold.
-
-Signed-off-by: Richard Cheng <icheng@nvidia.com>
----
- tools/testing/selftests/resctrl/mba_test.c    |   2 +-
- tools/testing/selftests/resctrl/resctrl_val.c | 164 +++++++++++++++++-
- 2 files changed, 162 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 22a887a1b4f8..40352df5303c 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -211,7 +211,7 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- /*
-  * The MBA test runs wherever resctrl exposes an MB resource, a memory-bandwidth
-  * monitor (x86 local bytes under L3_MON or MPAM total bytes under MB_MON), and
-- * an independent reference-bandwidth PMU exists to
-+ * an independent reference-bandwidth PMU (Intel iMC or NVIDIA SCF) exists to
-  * validate against. It is not gated on CPU vendor.
-  */
- static bool mba_feature_check(const struct resctrl_test *test)
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 0c3079d31340..e7b6eb255e3b 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -17,6 +17,23 @@
- #define MAX_BW_COUNTERS		20
- #define MAX_TOKENS		5
- 
-+/*
-+ * NVIDIA SoC uncore/SCF (System Coherency Fabric) PMU: the ARM64 analog of the
-+ * Intel iMC reference counters used to cross-check resctrl MBM. On Grace/Vera
-+ * the fabric PMU registers generically as "nvidia_uncore_pmu_<n>"; the SCF
-+ * instances (one per socket) are identified by the PMIIDR product-id field
-+ * (0x2cf), independent of the device name. The driver does not register named
-+ * events on this silicon, so the read (LLC refill) and write (LLC writeback)
-+ * bandwidth events are encoded raw. Each event counts 64-byte cacheline
-+ * transfers, i.e. the same SCALE as Intel CAS counts. Summing read+write
-+ * matches resctrl's MBM total bytes (which includes reads and writes).
-+ */
-+#define UNCORE_NV_SCF		"nvidia_uncore_pmu"
-+#define NV_SCF_PRODID		0x2cf
-+#define NV_SCF_EVENT_READ	0xF1	/* scf_cache_refill */
-+#define NV_SCF_EVENT_WRITE	0xF3	/* scf_cache_wb */
-+#define CPU_PKG_ID_PATH		"/sys/devices/system/cpu/cpu%d/topology/physical_package_id"
-+
- #define CON_MBM_LOCAL_BYTES_PATH		\
- 	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
- 
-@@ -258,6 +275,55 @@ static int num_of_imcs(void)
- 	return count;
- }
- 
-+/* Read an unsigned value from a PMU device sysfs attribute. */
-+static int read_pmu_value(const char *pmu, const char *attr, int base,
-+			  unsigned long *val)
-+{
-+	char path[600], buf[64];
-+	FILE *fp;
-+
-+	snprintf(path, sizeof(path), "%s/%s/%s", DYN_PMU_PATH, pmu, attr);
-+	fp = fopen(path, "r");
-+	if (!fp)
-+		return -1;
-+	if (!fgets(buf, sizeof(buf), fp)) {
-+		fclose(fp);
-+		return -1;
-+	}
-+	fclose(fp);
-+	*val = strtoul(buf, NULL, base);
-+	return 0;
-+}
-+
-+/* physical_package_id (socket) of a logical CPU, < 0 on failure. */
-+static int cpu_package_id(int cpu)
-+{
-+	char path[128];
-+	int pkg = -1;
-+	FILE *fp;
-+
-+	snprintf(path, sizeof(path), CPU_PKG_ID_PATH, cpu);
-+	fp = fopen(path, "r");
-+	if (!fp)
-+		return -1;
-+	if (fscanf(fp, "%d", &pkg) != 1)
-+		pkg = -1;
-+	fclose(fp);
-+	return pkg;
-+}
-+
-+/* True if @pmu is an NVIDIA SCF instance (PMIIDR product id == NV_SCF_PRODID). */
-+static bool is_nvidia_scf_pmu(const char *pmu)
-+{
-+	unsigned long id;
-+
-+	if (strncmp(pmu, UNCORE_NV_SCF, sizeof(UNCORE_NV_SCF) - 1))
-+		return false;
-+	if (read_pmu_value(pmu, "identifier", 16, &id))
-+		return false;
-+	return ((id >> 20) & 0xfff) == NV_SCF_PRODID;
-+}
-+
- /* True if any x86 uncore iMC PMU ("uncore_imc_<n>") is present. */
- static bool intel_imc_present(void)
- {
-@@ -283,6 +349,93 @@ static bool intel_imc_present(void)
- 	return found;
- }
- 
-+/* True if any NVIDIA SCF PMU instance is present. */
-+static bool nvidia_scf_present(void)
-+{
-+	struct dirent *ep;
-+	bool found = false;
-+	DIR *dp;
-+
-+	dp = opendir(DYN_PMU_PATH);
-+	if (!dp)
-+		return false;
-+	while ((ep = readdir(dp))) {
-+		if (is_nvidia_scf_pmu(ep->d_name)) {
-+			found = true;
-+			break;
-+		}
-+	}
-+	closedir(dp);
-+	return found;
-+}
-+
-+/*
-+ * nvidia_scf_setup_counters - Configure SCF read+write bandwidth counters
-+ * @bench_cpu: CPU the benchmark is bound to
-+ *
-+ * The SCF PMU is per-socket; pick the instance(s) on the benchmark's socket and
-+ * configure two raw counters each (LLC refill = reads, LLC writeback = writes).
-+ * Per-socket so traffic from the throttled MB domain is attributed correctly.
-+ *
-+ * Return: 0 on success, < 0 on failure.
-+ */
-+static int nvidia_scf_setup_counters(int bench_cpu)
-+{
-+	static const __u64 events[] = { NV_SCF_EVENT_READ, NV_SCF_EVENT_WRITE };
-+	int bench_pkg = cpu_package_id(bench_cpu);
-+	struct dirent *ep;
-+	int n = 0;
-+	DIR *dp;
-+
-+	if (bench_pkg < 0) {
-+		ksft_print_msg("Could not determine socket of CPU %d\n", bench_cpu);
-+		return -1;
-+	}
-+
-+	dp = opendir(DYN_PMU_PATH);
-+	if (!dp) {
-+		ksft_perror("Unable to open PMU directory");
-+		return -1;
-+	}
-+
-+	while ((ep = readdir(dp))) {
-+		unsigned long type, pmu_cpu;
-+		size_t e;
-+
-+		if (!is_nvidia_scf_pmu(ep->d_name))
-+			continue;
-+		/* cpumask holds the representative CPU of this PMU instance. */
-+		if (read_pmu_value(ep->d_name, "cpumask", 10, &pmu_cpu))
-+			continue;
-+		if (cpu_package_id((int)pmu_cpu) != bench_pkg)
-+			continue;
-+		if (read_pmu_value(ep->d_name, "type", 10, &type))
-+			continue;
-+
-+		for (e = 0; e < ARRAY_SIZE(events) && n < MAX_BW_COUNTERS; e++) {
-+			memset(&bw_counters[n], 0,
-+			       sizeof(bw_counters[n]));
-+			bw_counters[n].type = (__u32)type;
-+			bw_counters[n].event = events[e];
-+			bw_counters[n].umask = 0;
-+			bw_counters[n].cpu = (int)pmu_cpu;
-+			read_mem_bw_initialize_perf_event_attr(n);
-+			/* System-wide (pid == -1) CPU event: inherit is invalid. */
-+			bw_counters[n].pe.inherit = 0;
-+			n++;
-+		}
-+	}
-+	closedir(dp);
-+
-+	if (n == 0) {
-+		ksft_print_msg("No NVIDIA SCF PMU found for socket %d\n", bench_pkg);
-+		return -1;
-+	}
-+
-+	nr_bw_counters = n;
-+	return 0;
-+}
-+
- /*
-  * imc_setup_counters - Configure iMC CAS-count-read counters
-  * @bench_cpu: CPU the benchmark is bound to
-@@ -315,6 +468,11 @@ static const struct mem_bw_backend mem_bw_backends[] = {
- 		.detect = intel_imc_present,
- 		.setup_counters = imc_setup_counters,
- 	},
-+	{
-+		.name = "NVIDIA SCF",
-+		.detect = nvidia_scf_present,
-+		.setup_counters = nvidia_scf_setup_counters,
-+	},
- };
- 
- /*
-@@ -430,7 +588,7 @@ static void do_mem_bw_test(void)
-  * get_mem_bw_ref - Memory bandwidth as reported by the reference PMU counters
-  *
-  * Sum all configured reference counters, scaled to MiB: read CAS counts on
-- * the x86 iMC.
-+ * the x86 iMC, LLC refill + writeback counts on the NVIDIA SCF.
-  *
-  * Return: = 0 on success. < 0 on failure.
-  */
-@@ -661,8 +819,8 @@ static int print_results_bw(char *filename, pid_t bm_pid, float bw_ref,
-  * @bm_pid:		PID that runs the benchmark
-  *
-  * Measure memory bandwidth from resctrl and from the independent reference
-- * PMU. Compare the two values to validate resctrl value. It takes 1 sec to
-- * measure the data.
-+ * PMU (iMC on x86, SCF on NVIDIA ARM64). Compare the two values to validate
-+ * resctrl value. It takes 1 sec to measure the data.
-  * resctrl does not distinguish between read and write operations so
-  * its data includes all memory operations.
-  */
--- 
-2.43.0
-
+T24gTW9uLCAyMDI2LTA3LTIwIGF0IDEwOjU0ICswODAwLCBsb25nbG9uZyB5YW4gd3JvdGU6DQo+
+IFJlcGxhY2UgdGhlIGRpcmVjdCBjb21wYXJpc29uIHdpdGggKHZvaWQgKiktMSB3aXRoIHRoZSBz
+dGFuZGFyZA0KPiBNQVBfRkFJTEVEIG1hY3JvIHdoZW4gY2hlY2tpbmcgbW1hcCgpDQoNClRoaXMg
+c2VudGVuY2UgbWlzc2VzIHRoZSBlbmRpbmcgcGVyaW9kLg0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
+OiBsb25nbG9uZyB5YW4gPHlhbmxvbmdsb25nQGt5bGlub3MuY24+DQoNCkFja2VkLWJ5OiBLYWkg
+SHVhbmcgPGthaS5odWFuZ0BpbnRlbC5jb20+DQo=
