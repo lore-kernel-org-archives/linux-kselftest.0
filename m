@@ -1,173 +1,105 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11020124.outbound.protection.outlook.com [52.101.84.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6BF315785;
-	Wed, 22 Jul 2026 13:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784725383; cv=fail; b=DkkXtcuuKB8DbQwXQLMtSkNxUIp2g5uCRRU2RCnOxK1V4QP3EE3pP7+Dn+bPIDogqftiXm9nPzZX2w4iVrLf9Drc/IlOjU9BXaVtSB0c1zqWxEL+xI6dmvmH7EMKr9bm857xw6IxV/DT4TvfNRVc0JDTQVFErhnzZsX0dHMEiQc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784725383; c=relaxed/simple;
-	bh=YGhqM8kq89F5BeCGIrNC6WE/Xy9ZVMzxJhMwbECrM84=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BSMcx0Mw03eoObAl0A7PYXggcRBAkTjLdEwEo7lSKvX8izCZT/RGZBhfItyxNKNG85dc74EcZduQcY/Zv09fpRgvx3kPXYtoFpL/HV/PXt4npY8wtbE3dB9IFWDj0wlVmcy9nf8LJ5l9sXq+Xr8SMTf28QQGzMr2whu2PAMtdKE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com; spf=pass smtp.mailfrom=codasip.com; dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b=MjHwugKg; arc=fail smtp.client-ip=52.101.84.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codasip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8991F28C854
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784726129; cv=none; b=ZspkxA1oGr30QZ9YSGtC5gifwDmBe0xzqANv2DxvRfcGFD1xxmXVptngMDg/8tTzhuqkJ6z6QHvWX447un4FWLvuGnd//QNGZanXjTglSEI2HU54sw67Os4mODz+MSB3BPHg+n4i+9AeSlt68mY4ZH/ZLySpKww4T9Pyg2a5Eas=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784726129; c=relaxed/simple;
+	bh=/byUoJ/WMc6UHqgCYQepUc84g2a8J34F7f8DVdRPKCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GuPNsHZDwc7/AiWJqDq3xbw6iBwU2X+LNAvYejs0HlInxbVGCYxdM03YsjNQolECzUpXVJ83fCi1usyEhdzzu8cjn9GLioghaqvAmqoTOs2i0vwVKyS8pbxycs2WXKdKV1DWndOEmWqGajB3pNYcEQuoT1BWjBA9JYBASUKTIgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=R0uGdrtc; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b="MjHwugKg"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VGXK1S2dPr65OsoCZYy/Vt+5LlmnAacNjdCsPGtaEpQiFHK9kzeG/ujlWag48AxXGrhxKlFMtXbNVD20swEjM0Skv+laEZfiyHTlU3JukkqB+vVKi+e4lcaZ6WvEp/IUq5FIExx/7wMZ9h0pt1d/psgaRrfwTU1FT7fEpyLFA7m/elhr5q0dVtQdqzBlJPMSd/i9k9m7itwNqhSqzLby+kF0QIS7FHFsQoKc9eOqLEXM/WNJ6mzoaRuokF3pohwIw+H4X+3+g2OyKs7Od9b9aUZorkN1cseFxo/nucIOXPM9dIde8LexmdbK/LnbxHpc+1KJ11gsOAQ/U+cnuaC2rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o4v9/IgDERqVqKcJXgAO44ONXqJsRcHAFHlsh97PBeQ=;
- b=FCmsjOnoWosg7E5vowGBl2y0C10eAfGxReMUw6zTVm7SLZNvT5hbQN5Iyw7Y47m+YO0Qlk18I/9c5ndjLS6J5C4wvMj6smgIfbGFbhSCHhAdHv88P4rsgz5Kurr5AvMGsO3ksryrX5p4d+xtobE7kZHh/b2vlpg8rtDcfAMlOb/8qBvUgV3yN5SyFn3+zZmomh604g5EmKQq8UoLzJlu5wcIIAiSetROdx8NyKjKtevUmFarxsM75AOaEDCzdfAIrCxMzTk6U37E/r+yfPy85/FVuLjKxjEXHCmqABgJSbPD59asDs8IZ5jxpM+po6+7pC0Y1g4yhkOAP/fxyK8JZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=codasip.com; dmarc=pass action=none header.from=codasip.com;
- dkim=pass header.d=codasip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codasip.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o4v9/IgDERqVqKcJXgAO44ONXqJsRcHAFHlsh97PBeQ=;
- b=MjHwugKgM9kirAyUqKlPfQJxqM3xHxKDEKPyvu+6Zjhni8cNelgokG5V29zG49yLv3kjEiC6fVZPMx7u4bVi5qxi0om7bGKloC8tC67H76T1BZdnfP20AVe9IffbwORWzrNR9J9RV1Nm28S6WkBcnOVYY8Yhp9F8mV0/wHcFtf5Hg9ZkkfBGwghqDpzCvfCTZCvGCLyvHW6I23zd4K0ONfdr7eJNtkAAwoGBCjhTShm3WL0oNJRugU1MJp6E0OnYJKa4FzYciZERHUskIaQMDKnjim9AgCu4PjteVvNjrWr3U8TjWMMK+kPslCuKCXul+oLq67fhWB192n1YfCXDWQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=codasip.com;
-Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:17c::14)
- by GV1P192MB1739.EURP192.PROD.OUTLOOK.COM (2603:10a6:150:53::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Wed, 22 Jul
- 2026 13:02:56 +0000
-Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
- ([fe80::c1d1:f20d:9fb5:72d3]) by AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
- ([fe80::c1d1:f20d:9fb5:72d3%7]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 13:02:56 +0000
-From: Chris Gellermann <christian.gellermann@codasip.com>
-To: christian.gellermann@codasip.com
-Cc: akpm@linux-foundation.org,
-	brauner@kernel.org,
-	david@kernel.org,
-	liam@infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/mm: Fix potential wild pointer access of getline due to missing init
-Date: Wed, 22 Jul 2026 15:02:46 +0200
-Message-ID: <20260722130246.2135563-3-christian.gellermann@codasip.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260722130246.2135563-1-christian.gellermann@codasip.com>
-References: <20260526113848.530105-1-christian.gellermann@codasip.com>
- <20260722130246.2135563-1-christian.gellermann@codasip.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR09CA0162.eurprd09.prod.outlook.com
- (2603:10a6:800:120::16) To AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:17c::14)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="R0uGdrtc"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84864086bfeso4867b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784726124; x=1785330924; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=iD1PTipWdU3DcXEKR2UtQxdCuq75xUopzE+YD6AEWUQ=;
+        b=R0uGdrtc33TPlbNHKEqRhN6iNt4LRedE6PP3/Bv4cV+PX4o4w11ID1ci4liis1fVje
+         B8eLSDLzdBRMTKOujFdZF54NQl8vqnCnDKIgPC+y/KuCBDW1j7/B3MLX0WSxdKJM+zic
+         DUMQZM7+j5iNFhQDhP3ugrTZmOxvsakcQ/Pa6Ct6MDWEveRverGv4J3/AWW7WOi/pIQO
+         FJN32z3AJNpLQ4Uq91Hi6rLlDujnye471NBEQKJ6AfGEx6btQT5DfcghLk+IUWA2K1Md
+         wNQiPwj2ozLk1Gr2ugwgxQfpcET0Y5pNvY2xoTp3GoFsgveYaPOeTP/wu27HqI+7WG4b
+         /gRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784726124; x=1785330924;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=iD1PTipWdU3DcXEKR2UtQxdCuq75xUopzE+YD6AEWUQ=;
+        b=B80fiAvHjm9Pv4jRhoY8wuyvpodHonXSjFkuEZPlBdEnSlJUXlLvYuOJBuqs5+FCjr
+         FvjUbNkRqjwwwIphRJzn48dPpgx2ykC/FB4LeIbExsD67G23TXTixPmGx/grNRwenNX3
+         r6CaTZFW22qHKZ2GGmwCM+/+A7c5ez38t+uIuaRa7tFaoj+YURu3vdRWTlzl2dzZY1am
+         rHI6sQWwaujHgjOjMnmpKfPhmAAqlH8EfMHb9caoXkIobfqP6i01YKdd2XV9BHBpPl/1
+         gxFHf4cFwUvqWI/406IcC2dWj2+uSt5ExfyoXcJHg4RVYuRtPYp1SzykKkvSDuxnJjMv
+         aLCA==
+X-Forwarded-Encrypted: i=1; AHgh+RqM75+W0uRDlcidxAavpKcPMGLTHzx7f+6Kme1XgGBGzOQg88Jj/U+ZwN4v5VVs3ZAXBz8jZ1ChHtWpVZQRvQw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9s6CXXGdE6dgY+XMIogjrlxwgso3AgIAuzEenpanqSwpJqRI6
+	/MUVKKQMAUwgyFfgoP0gWev84UGA3nUTNIyjLuUeThJtObYS2taSfczSvTuYff8KQAU=
+X-Gm-Gg: AR+sD107V6AAf1gUD1M8G793HPf09wUUsdTYZZkLyeXvEkPRMyMlDDs6jUV9FdUlAHL
+	FglyPMYxsKwDF5I6LXb/eic422VGfzC7G6vQiESpIf58y+KfZ9CR9lwWNOQcVJVIbKrYb6ymqh0
+	v+Xj4c9GltNu+H52QxkQfQZjoiLNtXUTKMwEEdSkf9yJhL97/HfMV99FFU/BxkXPcJu3szJ/QoY
+	ieJ6jqNf7ZJjxnU4dmmJ7epdcbOrGQ72wgX9lukDmAQFHah7SOm2UrU07RKgg6as7WQ7MWukxz6
+	Nb2L9NqO/7OLExwTbOeTT86otETTY9+LsiS6Con4iu+5KJzXZbCbviR4CSoWLjmx0Kcu+/YAZDf
+	EhuNEqWqmYYELZG/zfxFkmJbEHl40OjWFwAl7aJfD3AbsOMln2Jm/Fu0z5Hg=
+X-Received: by 2002:a05:6a00:3a21:b0:847:8d2d:712f with SMTP id d2e1a72fcca58-84c29239a02mr23869158b3a.10.1784726123466;
+        Wed, 22 Jul 2026 06:15:23 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:49::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c3fsm1368442b3a.9.2026.07.22.06.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 06:15:22 -0700 (PDT)
+Date: Wed, 22 Jul 2026 06:15:19 -0700
+From: Joe Damato <joe@dama.to>
+To: longlong yan <yanlonglong@kylinos.cn>
+Cc: pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
+	edumazet@google.com, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	shuah@kernel.org, horms@kernel.org
+Subject: Re: [PATCH] selftests/net: use MAP_FAILED instead of (void *)-1 in
+ tcp_mmap
+Message-ID: <amDCZ5t8wDtqNAIe@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	longlong yan <yanlonglong@kylinos.cn>, pabeni@redhat.com,
+	kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, shuah@kernel.org, horms@kernel.org
+References: <20260722015129.916-1-yanlonglong@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7P192MB0787:EE_|GV1P192MB1739:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b01d4b8-7faa-4d09-fcf4-08dee7f18c70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|23010399003|10070799003|6133799003|22082099003|18002099003|4143699003|56012099006|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	NOZmYjcU7azAu41rpI0QBGPkCu15pHM4Zr40Jtujr+znHNsYkjVu+gf0oVI/GqOjX/NJBLIRxMLf+Lbn4SS4mCrRXSCu6f54bhegB5TuKVpeVohoVXWguivdRhPQj3iOFxGnRiofTpo+ORFE8+UwqaCex2PNtYFwhHwEd6fHQBCWeyc3xRGPw/C+ZqtB/oo9QHe79b6lIyykorS4DFImUb7ZDTskdRcOV/iNZyzVxaVaiLoHX+1uYTTbvfdVxQJBfVKvRZireQmiVVsDWNmu4Ren3I+7nm3VFz7/ZSUh76jqqHqrthL1Rb3+Wm/7f5mPHmF+U326zfcAk9eibI1U7ZpQNpzNnisMhOsqqNtOxbiMbe0I+XoDaTdU7htXQkRaWrJ6GUstX8mZNQPByzdunWiGtA6IDBvaHkjEvYq5MgziH4+AnqshwXPgt+2U+UcUuDdk1mTNXGHOB9EXhkquBs6xPS/7zFStFVQLCJlOVRj5x4yPvSkcPtVPMzQvlPxySRzRLCFDyKG67NQN+ZOC2JlcEltLLcYN/wau5MYscO3xv+G6IhoIz6q+/RoG1vlWMiWgkKP1lKGTVmxr436wbL0/6NppAwJcnF/xQcY7+9PQnnyTaGGTzpo8Yed2PsdcgijMMmcpRAAA3MjnRhsvb7+NHWY7yRRZdAZABjvGc6g=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P192MB0787.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(23010399003)(10070799003)(6133799003)(22082099003)(18002099003)(4143699003)(56012099006)(10067099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?GYe63CZ2KDhS6WZnWV+w2sAYiz/FRVc1UGvOQ/CBzYQWpCGSuWBarBSHej9o?=
- =?us-ascii?Q?3xWqUDl/TN5GlSMEsywhe2HtRRZFMbKjFndMoPfKiTQDQGy0t4u8ZSI8R8mO?=
- =?us-ascii?Q?n/JTC/XNnS3hcTzY09Paj5Qfc757ijz9kmQ113mMSDeaVPBY4knb97Mbul4v?=
- =?us-ascii?Q?WykCURnhKXaR6o8ATw5OZ3+gCqf/LYze+iPKp8R5T81VNLEt7PKdI7v+t7vo?=
- =?us-ascii?Q?oS/9Pojgq+Wx05mek4XrfG2HuZvm0/QAS7lUzSUhIn6DYgmNfngLg6T86HHD?=
- =?us-ascii?Q?5c7kVJuNh4XR6RwHQiK7fxXNuou9/nUkdeZuoiHqPr0YA88N83p5gBwQWjVi?=
- =?us-ascii?Q?90YhXA1/XZOvn5C9rVcmhYnR4Vl9CBNpzWcPpvdKqB0ev3V7FdpQanT1mu7T?=
- =?us-ascii?Q?2SjUZrb5zOsHrEiwy9FqWPTkaQlLjwOt13GNDQswGoTPHueiskbnLVdJzmIP?=
- =?us-ascii?Q?I27asAifwDovG+UCKBxwZv4Rp4cypVr37SZwulR9O0k5E+fZcfw1LeugNAjZ?=
- =?us-ascii?Q?5XuJmaYTjhVTm83tcJXs3z8JWHpH/Bfp3yQyTUcDS3eaIr+GYFW3G6IpLSr2?=
- =?us-ascii?Q?KJp5/iPMpyLCemCoZUZ7aJBqqwQgnBdRTUo8xchRv7w4uaPWy7rnlLtM2mB9?=
- =?us-ascii?Q?wvaOG4KO1I3CeRUGdwDuS1cG5U85Jp5Z2jwaT/1VTcHCJN6sF98Wi4oA2Lij?=
- =?us-ascii?Q?FAKl5z1l9OWvHGjImW+ab7aTZWxHwZDKrGTO0Nc7agyLO2mgES/+SoCKHEu/?=
- =?us-ascii?Q?VevypoLdlGkGGPQjqhDClXelZ2ZFcM+PDHkqjtTp5UfLnI6RKsodK4jCV818?=
- =?us-ascii?Q?V0h65P5MuqQuEAnW63pWgswnP5Ndbd+roUYbmmp0iU7rI6XK7DjvIy9hG3om?=
- =?us-ascii?Q?U+uoWkNUt18vN1ypW/kbk+zwDDYdO1+fkmwMY7hxKDv+XT2viGv4eAndXXCU?=
- =?us-ascii?Q?4z4UDtlbl1XEYNqPPUk4dpMRtq4E3bSaapCFu/HSAisjfxURFerhPpmVZWD0?=
- =?us-ascii?Q?u0yyHjiEPGbco8ZfP73a61R9IlZRh2Ogd445flT9LTgC1T9+yI+I/Lfknge2?=
- =?us-ascii?Q?K4nQm5S8kunvcvPXBrEGJEVnNCTn+LpGFImug7sc25jtV51uVnHxn+7p+nRD?=
- =?us-ascii?Q?GvT8cwmV87Al/djEjiJ80jMxW597HEiWLRsuGa3gjML3ASbMOv3yOexDThgJ?=
- =?us-ascii?Q?Vp2R0aLTJHdEQ7tgqm5ELkKf5RIc6qNTDZ0lEK+BwdkYUG7rml55JiVeSA2T?=
- =?us-ascii?Q?hEEferW7H04BI7SYkxrQtQN1gU/j+O1Lj1qQ/1mx3hOC9YiKUb76JEcRegk2?=
- =?us-ascii?Q?A/lFsyjEnSWyOeVVR7GX19j9uRtzkQd1J38SAtgR2j3zuzHW+v9tPPJVivnD?=
- =?us-ascii?Q?EOguhewAGHRkiPZmNSBq52nxPL3GJ0kVpUoNDSQWZ6Ziq2DfPxO6afkpUQxj?=
- =?us-ascii?Q?G1L+527dmZ1z8UCg70/OTBe23bnabzLHmKk/P1JXKiH1PFR4MNJDaDI2uDoU?=
- =?us-ascii?Q?bySGPpGEBw8SFEfFMLMmNppkNoUpajxE5WWWFdDETyNyTtwwt9XSL2sTAqlM?=
- =?us-ascii?Q?StekVvKQpF58z15rwDERJB9cV3qmP4VJffLCA9hpOZxUUqVV7eCoFdNO1glr?=
- =?us-ascii?Q?cmU3ZZGNuwyHzzQ//ZeS98kxTmc0whvuxf1QbxFRwnsnq0QF2bB0Dfkpqvz3?=
- =?us-ascii?Q?DNRn5LzKQs3ORkj5FNDIdrxDt+5OjCzIRuYXcY2hyR4RVEGDL4cmwdJmfDY7?=
- =?us-ascii?Q?ndlzH9A8Qs7LvaBnCDEQssdGz7diTNaqIiEswD47nZm73ivmhzquX9FcR+Up?=
-X-MS-Exchange-AntiSpam-MessageData-1: kRm01DhlNjmATTtqvWveCrqn7kwNijVAIEI=
-X-OriginatorOrg: codasip.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b01d4b8-7faa-4d09-fcf4-08dee7f18c70
-X-MS-Exchange-CrossTenant-AuthSource: AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 13:02:56.3634
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0d91ffef-bb81-4cbd-b9b8-552583685f20
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x3i2JvjXOdVeBoil/ntHkx8YqO2Wv2feBwz5XR+y81PW9HQXxSKXA3T4tqSj+xmJESTltCVFmLWXwiIigK6VgSf4YfyBAoeRiTKyQRZcdZ/wHSErzndW33tTaihFPFdC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1P192MB1739
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260722015129.916-1-yanlonglong@kylinos.cn>
 
-This is another occurrence of using getline where the code assumes that
-getline allocates memory to store the line, but the pointer passed to
-it is uninitialized and potentially a non-null pointer. This
-violates the Open Group Spec[1] and caused a segfault in a similar
-situation in selftest/clone3/clone3_set_tid. Fix it by initializing the
-line pointer to NULL.
+On Wed, Jul 22, 2026 at 09:51:29AM +0800, longlong yan wrote:
+> mmap() is documented to return MAP_FAILED on error, but tcp_mmap.c
+> compares the return value against (void *)-1 and (unsigned char *)-1.
+> 
+> Replace these with the standard MAP_FAILED macro for better readability
+> and type safety.
+> 
+> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
+> ---
+>  tools/testing/selftests/net/tcp_mmap.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
 
-The issue has been found by simply grepping through the selftest code
-after running into the issue in clone3_set_tid. Whether it segfaults in
-its current state is unknown to me. But it's good to be addressed due to
-defensive reasons.
+Looks right to me. Not sure if it needs to be set with "net-next" in the
+subject line to make which tree this targets more explicit?
 
-[1] https://pubs.opengroup.org/onlinepubs/9799919799/functions/getline.html
+Either way:
 
-Fixes: 26b4224d9961 ("selftests: expanding more mlock selftest")
-Cc: stable@vger.kernel.org
-Acked-by: David Hildenbrand (arm) <david@kernel.org>
-Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
-Signed-off-by: Chris Gellermann <christian.gellermann@codasip.com>
----
- tools/testing/selftests/mm/mlock-random-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
-index 9d349c151360..16294bc7dae6 100644
---- a/tools/testing/selftests/mm/mlock-random-test.c
-+++ b/tools/testing/selftests/mm/mlock-random-test.c
-@@ -84,7 +84,7 @@ int get_proc_locked_vm_size(void)
- int get_proc_page_size(unsigned long addr)
- {
- 	FILE *smaps;
--	char *line;
-+	char *line = NULL;
- 	unsigned long mmupage_size = 0;
- 	size_t size;
- 
--- 
-2.47.3
-
+Reviewed-by: Joe Damato <joe@dama.to>
