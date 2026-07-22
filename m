@@ -1,237 +1,178 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011052.outbound.protection.outlook.com [52.101.57.52])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400B339021F;
-	Wed, 22 Jul 2026 04:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784692810; cv=fail; b=PdETrI2EBWAqI7iCkIuG2UZstV+72//Y3RgZVGRGSSCORJh4vwV0EqaJEdigWgdrZBg4auhSnhe6t+gYN+rljFn9wM2gWK1d1rr9ZSwPIcd8FwSZmup0xbED4cR5DFmWJz21DOVma9C3WaGGyBhbSILalbpZSDhirN2thE650zg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784692810; c=relaxed/simple;
-	bh=UZa3xXJ1qqCo/E1v9UIttuqB6yfx5tnvLPYubbIOTS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=r/2S7vF+7dWeSjyqVnCttlRgv/5A3fq1VMRL+fF4xdKj8YF97tLquZZiSndpJabuX8ORfKEmmgy0m5pKhoFQLqrqy3ztcydXKHNdenXXTFuNcJXfb5JZ/eSyyht5YLrKWNJrU35Ij9B9D8uzznNKscBqEjG6zmKIrtZCAcU8uYs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eJyfvsZW; arc=fail smtp.client-ip=52.101.57.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eJyfvsZW"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SLXdXNlJv2t8lZancAykKS5uPrXFlipKoCYiX60Ztgl+xyBkdWVjb4a8ObuEURc+izirzBGjVjUsDVCJklJZbL47UANY7dZ95kQ8vH/7xXaHVHqBXmDnkBeM5aWOGerxAF2Be+axIgl9qWpJWZBaE3bA9mV1kiOYv3lXv0SKmQfevIhAt1TlK3S1GDUJ93UC6eFrJlLgwjlY0AbJg9uBXTb67Orvel8ZHMsc6CbSO298hIK9FgVrmepkXxdgvoger3k8ectvOpNfh9RIErNCJEHPWrKvKP+AMjQT6dIRsCwE4g9jlPnIFdxX6h46Ef48+v54+ipnzuNMFN6qz9CAhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wduKXc9xWYR1OtBrh/G+YaeqcqBphYF3CILX1i+VEV0=;
- b=ZpCRFRR6+Z34RiE2yiBE5YpzlDqU7zDwW24935JYv9pe4m8M55SWDy3WdYxnNGZI0WwZ8A/OFbDFwhf+938XgQKCPAgSiRbgtvT9khQVzazDMkyt8hJngJCMtagUUjq+/tHr5xKNgnJNyGNcaMoNlWtZyJiCBccWqFDUbpwfJsXcdNTaWg9Y+btbHGGuQoUxAjL3DhWgO5vymxtkpRSCmnMBzFwj6sQXftVTtLj11PHBUwiDMNpGSixYKDPzMYt5qL+goEbx/rdGoyJetcDzjCJ7FhZHCf0Xtx7gp0zheq6kiObXweixULi0hyO3gOhLd/dFyQecYrlIFZvnVxV9Yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wduKXc9xWYR1OtBrh/G+YaeqcqBphYF3CILX1i+VEV0=;
- b=eJyfvsZWM4XvtzUnozh5sK5GFejblEK+x5clIFFwpGWk2TG45NW8xgNcgpJ3+PG2JHZa+es8B3Lyzki67EnUcKa8Mqubxp1zS58343pxGVj3PEksR9fRDlztZfuJnd3W2ytPmrvDJMzWLSacCACNRKcsxvQv5moT5YuLjf1fIK6NQ16+6An4RpVK5fy6lgDuteVY7vB1KAm1A+BoiURfS9+YWMtMooMe3XQiTPCZUe4vhSHzujGG/Nf6Ys5hBx75UYZnGf0ueFJkZVxVkAo8IDJhQo0ib1Qwk1SdjE8AhweUdBYCMRzGGTOoDm6UENiyXCF6wkR1i9DKDKCQyWYC8Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
- by SA1PR12MB8093.namprd12.prod.outlook.com (2603:10b6:806:335::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.223.18; Wed, 22 Jul
- 2026 04:00:05 +0000
-Received: from BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
- ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 04:00:05 +0000
-From: Richard Cheng <icheng@nvidia.com>
-To: tony.luck@intel.com,
-	reinette.chatre@intel.com,
-	x86@kernel.org
-Cc: Dave.Martin@arm.com,
-	james.morse@arm.com,
-	babu.moger@amd.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	newtonl@nvidia.com,
-	kristinc@nvidia.com,
-	kobak@nvidia.com,
-	kaihengf@nvidia.com,
-	fenghuay@nvidia.com,
-	ltrager@nvidia.com,
-	Richard Cheng <icheng@nvidia.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 3/3] selftests/resctrl: Recognise aarch64 as a vendor for L3_NONCONT_CAT
-Date: Wed, 22 Jul 2026 11:59:43 +0800
-Message-ID: <20260722035943.32337-4-icheng@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260722035943.32337-1-icheng@nvidia.com>
-References: <20260722035943.32337-1-icheng@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TPYP295CA0045.TWNP295.PROD.OUTLOOK.COM (2603:1096:7d0:7::6)
- To BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBA33F4835;
+	Wed, 22 Jul 2026 04:22:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784694152; cv=none; b=FRnwRSqcW4KYnpe6T/tWW1yC4REgyjE7BmBfjkbUHkEsnVAuIP5DOql7sp7BVz0L2KnLMz2J8ZOSQhPbBeFMEewVPDPCPM84WNBDGZsOFwiJzZiFPqCBTAA1VLO7PHnz0Di3/QT2KfOgTf5wN4CCbDjMEytY/lf0tTCSpIY7jHE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784694152; c=relaxed/simple;
+	bh=JqXzocaaGkF3N10RX6FQY3lrIXzAVNfJPOKIDgIITCk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Day5aJMBvlXFUXuGeaJ6bKmSAcYbXsxe3GoH/TvlLvJNSDQgisvWokb8D3cLxSLVMG+3lj7QcAhwYy/bVgHLuGMoynZ/3GQDJc2sRajITL4ZJZFXTXOuy1lkExUSKB1bEjixmWGQ6nI2NIOKkTlQVcPvJvHfc0wKfnbJD8LoPow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ed854e0a858411f1aa26b74ffac11d73-20260722
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:c69b1278-8d44-4dc6-9e7e-1265e4e14337,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:9a3cfa686445791d6e234b324b41ec1a,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
+	:0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: ed854e0a858411f1aa26b74ffac11d73-20260722
+X-User: jiangfeng@kylinos.cn
+Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 801892114; Wed, 22 Jul 2026 12:22:19 +0800
+From: Feng Jiang <jiangfeng@kylinos.cn>
+Date: Wed, 22 Jul 2026 04:21:25 +0000
+Subject: [PATCH bpf-next v4 1/3] bpf, riscv: add support for timed may_goto
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SA1PR12MB8093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f48ae2c-5f97-481d-a2ec-08dee7a5b689
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|23010399003|366016|6133799003|22082099003|18002099003|56012099006|5023799004|11063799006|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	VkpsYsIK/NWbkNEJJgS3VGP37tOyqGedPPbjgn/NwWdbinCdLuchBkHc15VKwsqV79SWGw/R3qPpCa3TJKTznjSXrPWtjhiUqXBYKbbX1VB3Fe30J1lTbQRbS6h3JQ0ie+GQ7ruksfyBejdbLiym3xO1YD5j9v8UYKaflAQXi6EVwECV3SGTo1nPMZZZuM5JgFFyz6HxO2YJUoBmw0XU0nQq8icKB+y6YUursdepTE7lTy7GaJhjY7GHkGKZFZEcWOBT4omsZ7lW+N0WgIixdkwr70rzvn7MT+cBvscHLDICLcVZMkYpDtLfmoAv9BH1HxYecsMsN8qnzbC9UBvjrs2BH5AdAe+NOyf/FfUuaLEvGB4qUVJm96E48Bc/lwhO5WbnbCXS2Bo4AneftujYDISvFueyP4yZiP7rEc+8FTaOATYW9DmNzwtwE4KRNEW8TYg5F+l7YBxJMN/YIDHfSpHu3ysVL6u0GngN0sdUJ3rXsYyF+25H4BUCbUpzm96JvCZZJUFf29oLto6nBX5lg/Q2X95bdLsTxj0mlSAzpcEqBe8KLGgtw8IBwRfjbtN91gKQxAeya+PDTXalixJ5c5BQKAuGIZD/T6E1hVkH8Cja91lsQMlKhaJphPJ4ihPBukSAWtHge2UqMa1hVgHYiMpCsNXBHwBtewFB0Mrf3X8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(23010399003)(366016)(6133799003)(22082099003)(18002099003)(56012099006)(5023799004)(11063799006)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RmFaWVlqdkRRTUxVYU5oMWhvTm4va01QR215TXhTMzhia3RxVkVZdjZZN1o5?=
- =?utf-8?B?cEEzODI4ajd2YXhRMEtjOEN4dXFBdEtTNVp2dWR4b2N4OG9OclVpd21pK3BW?=
- =?utf-8?B?N3h1aDJESXFvQ2FxVTdTTXFzK2p4ckJGQVhkbmVCeVhJUmN3Y01kK0UyL0Ez?=
- =?utf-8?B?T2kveDNKQnk1S0dBazlpbEFxdTdCVC8ybGVVVWt5TlpVdUhnUXNmVm5ZcWR5?=
- =?utf-8?B?aElZTmZBd09FVUZTOUhObDhiTllDZlBVZXZEQjUxZkVjbkVDelZmbFFudlh3?=
- =?utf-8?B?K1lRODViZlpNQmNZWElqRXozRHpFQUJaa2JNaDdXY3ZpV1RnbWlGekhOTGNX?=
- =?utf-8?B?c3dvWHZGMis0MytabWIzZ0RvZUYwd1dFallhTitvOFZqUmxkRVdrd09GMjZh?=
- =?utf-8?B?V1RNZnNNQTlHYWxFZXBtN1NZZHp0cTc0akhlOUJvTUMvMXNVaXdMUWMzZnFw?=
- =?utf-8?B?TWtPck43Vm5GTGZNdjArY0R0Z1ArUlFXb1EyY2FxV05LTG1VVkh4Q0VOdkox?=
- =?utf-8?B?K21jSVVpbWhQNHFjcFhvNWtJRVoyckE1My82MEtyT2ljTVo4Rm9TNjd2WlRZ?=
- =?utf-8?B?S1luWGJybzRHWlNSOWdqVmRmeTFiRWxBMEVrUFhqUHZZS3V3cnFySWpOQm8v?=
- =?utf-8?B?LzlCTWw3cTh2SW1MbFBhOWt3SEZFM1NKeTVDYmg3ZnVXODNJTE42QzdUODgr?=
- =?utf-8?B?aHlZSERsRW12NzRudkIzRDF2RmZVU2tHSjlQM2tWR2J6d2VPVEpSMnVzYVNn?=
- =?utf-8?B?NGpuWlNaS0NmTGlPR3J0SjhUdkFGMnZhSVBtamtuQUdMQ2dPb1hvS1ZHOFZl?=
- =?utf-8?B?Q01pMjhXc3VNbDVRSlVaS0FxZUpueVI1SmZSemxJdUNBWVlrZkpiUmJFRlI4?=
- =?utf-8?B?em1qaHNFbDd5N2NEVEFLcW5TVjcwRGx2dEdocFpEYzFLSWdhR1kwVkZvL1Jj?=
- =?utf-8?B?MmlCVkdMYlZTUk5jZnYycFlTU21nZ1dQdWFaSm1qUXRxRjBmTk1qRElibDRR?=
- =?utf-8?B?T0twdG5MdG9TVll6d1FxK3R5MS8rZVFzVEcvU0Zwamlob2luZkgvYzFkN0x3?=
- =?utf-8?B?NEErYTdxWmYyMi80cGVyVVZ3NXFWeWtLK2xmcnord2VaQjVOTDRBam9iRU5L?=
- =?utf-8?B?Y2NrZ0hnSGFwa2Q1MHZQYjU0ZDJjbGFjV2ZTTjNHNGNucjE1S240S2NBOWIr?=
- =?utf-8?B?a2VRdkc5SldYR1RQMHUwamIxbXRYSitaclo1clpkd1kvZGxjTlkwV2o5Skpt?=
- =?utf-8?B?V2RGTEZtVHhYZnlaM3RMdUhzTmdzVEpDbjFWcndEcEhkMUd1WnVuNFNYQ0I1?=
- =?utf-8?B?bXVZTGpxOUhRek5UK1QwdDNvUytrU1lrNTA1WXdrOVpUVWhYQWhuWlBoaHp0?=
- =?utf-8?B?MENOUUluOFFlcHoyQ2t5YWFTWXZ2cGVJSUY1aU1VcHZxYTVrUTZPM2VPdi9M?=
- =?utf-8?B?NndHdWQzcGZhb2cveEJYSmRCSXRnazRPbkN2TGowenZsTHlUZ1M3L3lEY0Y1?=
- =?utf-8?B?Y2JJR1VKRTNMenFTNmNPd3YxWXBYZC9memdLMWl3TzZsaVQrUTFJUlVZYzZZ?=
- =?utf-8?B?d0laVjZHZnU4Zm9hUjVUUHNwYnJuTjNTM0J6enZBVUdIMkxvTXZwU1lIR0Zu?=
- =?utf-8?B?NVkxREppU0JpbS9KWDlGNHI0cUNKWjZQNHlleGwva0llVXhLWnJXRUMwdjh0?=
- =?utf-8?B?MkNmbGhpN3liQzUzclQ4aHhJb1ZyQ29uZ2RQTzVaOEZkNHJ3Q2prcWVjWkdv?=
- =?utf-8?B?bXhJQ2JLQVRSdmllMW5pZ1JJK05ZN1E3MFlsenZCaWxPZnRNZE9oVzFjVkdR?=
- =?utf-8?B?YzR5N3V1RmVsZHU1eEpMall1MWhWSWtQeGVPa2xmMEYwZjZjQXlNOC9VSlZ0?=
- =?utf-8?B?TzYrZ0NlUkdoangwd0JVYnB5UkFvekJFUGhKNWYxT21sSndnZ2VwRmJFWVdC?=
- =?utf-8?B?Y01BY0V1Qm1nUStzdlE5bm1VejBwQytUcHFGVnp2VGI1MmU4bWdCVkFLa1lu?=
- =?utf-8?B?NHNFSGRRVWdwSVFpR1plNWViWWk3ZEJLb3F5aWt5QVAzcXhHcVdaZmFXNjZx?=
- =?utf-8?B?YTc5S2hqdEpRVXZCY1NubTg0NytsREJ0QlhhcXR6d3NiZzRuMjlpR2tqVDF3?=
- =?utf-8?B?TEVSZG5QYW9NaUdFZGhEWFBQUnoweHBWOUJtWGRaVGxRd0RjODgwUkVwRHJP?=
- =?utf-8?B?azcrYkRQZW85eE1lYTYwaVJod2tINDhnaHlrVW0vQmRrUnVCMGxITHRkcXdr?=
- =?utf-8?B?K0dLWGZLYytaeSt5S04zNUpBTTBjOXQwOXhmaVpNUlIwWk5RSmxsWk1qZDZX?=
- =?utf-8?B?Z2xjRjFvSnpQVjNUYVNDTm94SlZiSHkrWTlZdGRVTWRyZVRDdW5Kdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f48ae2c-5f97-481d-a2ec-08dee7a5b689
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 04:00:05.4361
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SzdrL8qlZGsZCY16NjC/X8Se5WVUNTvWIpbMeNyhQPKwekH84ba9PI4SmTiyJKns03jM+W3MWsnEW6phvnh0zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8093
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260722-riscv-bpf-timed-may-goto-v4-1-e117e6337bc7@kylinos.cn>
+References: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
+In-Reply-To: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
+ Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Feng Jiang <jiangfeng@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-aarch64 has no vendor_id in /proc/cpuinfo, so detect_vendor() returns 0
-and arch_supports_noncont_cat() falls through to "return false".
-L3_NONCONT_CAT therefore spuriously fails on every ARM MPAM platform.
+Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
+return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
+across the call to the generic bpf_check_timed_may_goto().
 
-Define ARCH_ARM, short-circuit detect_vendor() to it on aarch64, and
-add it to the AMD/Hygon always-supports early-out in
-arch_supports_noncont_cat().
+Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
+expansion path.
 
-aarch64 has many implementers (ARM 0x41, NVIDIA 0x43, etc.), but MPAM
-mandates non-contiguous CPBM uniformly, so per-implementer handling is
-not needed here.
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Richard Cheng <icheng@nvidia.com>
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
 ---
- tools/testing/selftests/resctrl/cat_test.c    |  9 ++++++--
- tools/testing/selftests/resctrl/resctrl.h     |  1 +
- .../testing/selftests/resctrl/resctrl_tests.c | 21 +++++++++++++++++++
- 3 files changed, 29 insertions(+), 2 deletions(-)
+ arch/riscv/net/Makefile             |  2 +-
+ arch/riscv/net/bpf_jit_comp64.c     | 12 +++++++++-
+ arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 692860c7ce59..55aca0af02c4 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -271,8 +271,13 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
- {
- 	unsigned int vendor_id = get_vendor();
+diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
+index 9a1e5f0a94e5..6458d4d51990 100644
+--- a/arch/riscv/net/Makefile
++++ b/arch/riscv/net/Makefile
+@@ -3,7 +3,7 @@
+ obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
  
--	/* AMD and Hygon always support non-contiguous CBM. */
--	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON)
-+	/*
-+	 * AMD and Hygon always support non-contiguous CBM. ARM/MPAM defines
-+	 * MPAMCFG_CPBM as a bitmap with no contiguity constraint per ARM
-+	 * DDI 0598.
-+	 */
-+	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON ||
-+	    vendor_id == ARCH_ARM)
- 		return true;
+ ifeq ($(CONFIG_ARCH_RV64I),y)
+-	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
++	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
+ else
+ 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+ endif
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index ad089a9a4ea9..8fe8969fb8a0 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1841,7 +1841,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 		if (aux->tail_call_reachable && insn->src_reg == BPF_PSEUDO_CALL)
+ 			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
  
- #if defined(__i386__) || defined(__x86_64__) /* arch */
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index ad1c17c0b0bf..5c752fc5d470 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -40,6 +40,7 @@
- #define ARCH_INTEL	BIT(0)
- #define ARCH_AMD	BIT(1)
- #define ARCH_HYGON	BIT(2)
-+#define ARCH_ARM	BIT(3)
- 
- #define END_OF_TESTS	1
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 593f0ca5251b..57f9f9c0992b 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -24,6 +24,15 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&l2_noncont_cat_test,
- };
- 
-+static bool detect_aarch64(void)
-+{
-+#if defined(__aarch64__)
-+	return true;
-+#else
-+	return false;
-+#endif
-+}
-+
- static unsigned int detect_vendor(void)
- {
- 	static unsigned int vendor_id;
-@@ -35,6 +44,18 @@ static unsigned int detect_vendor(void)
- 	if (initialized)
- 		return vendor_id;
- 
-+	if (detect_aarch64()) {
+-		if (insn->src_reg != BPF_PSEUDO_CALL)
 +		/*
-+		 * aarch64 has no userspace vendor_id in /proc/cpuinfo.
-+		 * MPAM-capable ARM implementations follow ARM DDI 0598;
-+		 * treat all aarch64 builds as a single vendor for the
-+		 * purposes of resctrl selftests.
++		 * arch_bpf_timed_may_goto() is emitted by the verifier and
++		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
++		 * skip the normal "move return register into R0".
 +		 */
-+		vendor_id = ARCH_ARM;
-+		initialized = true;
-+		return vendor_id;
-+	}
++		if (insn->src_reg != BPF_PSEUDO_CALL && addr != (u64)arch_bpf_timed_may_goto)
+ 			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
+ 		break;
+ 	}
+@@ -2161,3 +2166,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
+ {
+ 	return true;
+ }
 +
- 	inf = fopen("/proc/cpuinfo", "r");
- 	if (!inf) {
- 		vendor_id = 0;
++bool bpf_jit_supports_timed_may_goto(void)
++{
++	return true;
++}
+diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
+new file mode 100644
+index 000000000000..f4bf2cd10586
+--- /dev/null
++++ b/arch/riscv/net/bpf_timed_may_goto.S
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
++
++#include <linux/linkage.h>
++#include <asm/asm.h>
++
++/*
++ * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
++ *	- input:  stack offset in BPF_REG_AX (t0)
++ *	- output: updated count in BPF_REG_AX (t0)
++ *
++ * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
++ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
++ * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
++ */
++
++SYM_FUNC_START(arch_bpf_timed_may_goto)
++	addi	sp, sp, -64
++	sd	ra, 56(sp)
++	sd	s0, 48(sp)
++	addi	s0, sp, 64
++
++	/* Save BPF registers R0-R5 (a5, a0-a4) */
++	sd	a5, 40(sp)
++	sd	a0, 32(sp)
++	sd	a1, 24(sp)
++	sd	a2, 16(sp)
++	sd	a3, 8(sp)
++	sd	a4, 0(sp)
++
++	add	a0, t0, s5
++	call	bpf_check_timed_may_goto
++	mv	t0, a0
++
++	/* Restore BPF registers R0-R5 */
++	ld	a4, 0(sp)
++	ld	a3, 8(sp)
++	ld	a2, 16(sp)
++	ld	a1, 24(sp)
++	ld	a0, 32(sp)
++	ld	a5, 40(sp)
++
++	ld	s0, 48(sp)
++	ld	ra, 56(sp)
++	addi	sp, sp, 64
++	ret
++SYM_FUNC_END(arch_bpf_timed_may_goto)
+
 -- 
-2.43.0
+2.53.0
 
