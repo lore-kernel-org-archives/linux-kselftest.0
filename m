@@ -1,71 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C34D353A6E;
-	Wed, 22 Jul 2026 13:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327693469FC
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784728097; cv=none; b=C6TXx7RLJUW4BEgPoa5AvAaSqyCdr8dz/oDv/syw9hA9ZuHxXX6WjynRp+/aJmrzgFJP8/jft1bDS+E0KSQOgq/pslFooGde4/FcYHkP18dW7489cKKVGUHPp/zhOqv4s1NvK6eY/zj0JjvkAGOmB1koc3leGtmLNXkTv2asp58=
+	t=1784728139; cv=none; b=n3abOgtj+VxFPyTwGU4CuBRIGwZfKucH4l+dmq5DxGGkq92miF4TjSWtovBHi3E3LYAG8q2Tw8Pj5v+1WsyGCixxZHnD266pS7Cj50vCYVvSX7KbxAQ7DpMmBKoQu/IuTGGuJ38ePsFD19QTHBOEHsNof6mT5c3cjVye2vAcgPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784728097; c=relaxed/simple;
-	bh=va6jY1AWHfeG8Ua4zvyOd7tvNlFcjrrw+odERJn9+h4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mGSD4z17jiW1x23rv0jJXI5CHrLuiLw/uTk2nRoJp1I4L0udQKb9iQ9U6jIb0BII0OMgsieZxcOpdawSGvk97TjloeRIw8KJYE5Er7SB790V7oCWG/M06Qec3bVbnv0dQhKXCfnvY+7ulMllM3xtnxixt+z0HO67ufupfK8mmmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihF369TR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784728139; c=relaxed/simple;
+	bh=JAIqzpQM3gUx7M+gDSziic1KcB43W58VAXiVvJF0/Hk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gqVhgSwIExyLCiTjCF32KcYb52Abm6+pjuur7KvXjnSH/LdLPbh0SJTKQpqCGsXll0zKy2JHaWglK5NGBpVIIz4ohY+0iujwvi0P7JIRAOj/Ky/HjzLvayg9uPVZqwNDP0+TRta3i4rtYI0Ltrb+tcchltwVlVmP/KPb9O8Mx3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=GfLa6fHj; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihF369TR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728161F00A3A;
-	Wed, 22 Jul 2026 13:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784728095;
-	bh=hqr52O01QL+8rXNjOIialVzyWEy2PL3xs2YZI1bEPWM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ihF369TR/bVoyo4aQ4voUjIhvMp+kJdM2NbFjPI1N2Y1M1Py8Z3uq/lL7/c3XjN44
-	 q1bCRhwgo4SIm6wtaFjlgc51+qHs0UWfCggqAvGi9PZkLfaF7uod/UJR+tWB+o/TSf
-	 1gjg9Nlmc7eYMx6bPli/E4tGYSECBXUcG+M0bhJL5omH/aEhvTLFOXzNaV1j2UM71i
-	 so/EwXeZiMaYJbaECrfRSiJaFl0VRWAqjyZLhrcBhazpROxKZ5J8eG85o+xhKDYvay
-	 VJELNGidvBpI4Bx926JGTDoE0WStjicUuyIGffziGn45uTUanJbppeSEXQBbWkYlcA
-	 DpW1ItKv1m4qQ==
-From: SJ Park <sj@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Hari Mishal <harimishal1@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/damon/sysfs.py: clean up sh processes used for obsolete_target test
-Date: Wed, 22 Jul 2026 06:48:12 -0700
-Message-ID: <20260722134812.88133-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260722033844.65932-1-sj@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="GfLa6fHj"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-51c01089e8aso66365481cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1784728136; x=1785332936; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LI4otu0+1hHJyrtu/tBxz3iTtloCysub9k9iNgYv1gk=;
+        b=GfLa6fHjBw5k5Cgmz1whJ5nETVeelFxMT26tNktv/o76lhNb8g352TR5NSgzxj0xK/
+         l99ZU3otNIqIWf5NPRZOUByX/rsuPiQ11f/76fJZU6VdndYf/hECk1QXXGmtm6zxg/D+
+         Jp3L7vWik0zmayA89l50HzOSWyCZrphTG1lt1EZnBbJQbWY5rLr8WS00j1qAY7moV6C6
+         lTJ7XSZYNDD8dlO/MPxVy2EEZD8SCjSLPMCaZCsQD7e37hasV8TP4a+NhorAAbZ0Ohhs
+         6nlqtYbIICyZZQkN6OqTZwVx6r17L7v2FbkjPkZ0Eqhsumnot7b9+N7Dj0SpPbVDkztD
+         g8YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784728136; x=1785332936;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LI4otu0+1hHJyrtu/tBxz3iTtloCysub9k9iNgYv1gk=;
+        b=Lv6Y/jqWrui1YawBcH9ZC7LH8bjWOil9UEwnnlX/bY+dzERgwREbKSJNPDcnZCipN6
+         RFbRHD64FWse+1tHdn4MXfgGKd8PGBYBhxNSemvRUgHXfx2AgvFz/zfPmNdepUZELGw3
+         Hb9qNvVfYOqyXBKJ/5R19FNH1V40d277zh58LJ+upUCjFAg8ulKMGFUIXZ7EbAupSK+C
+         JiesEvnQTk1MNJKIgfd4GWtXEjLzDnJUaPBQNguUp0l/nCU4hyJk+4ZJql9iPNVWyJb4
+         QNRbzTiVoWgw5n5vvWLcTL45Spk+D2ohyI5y/5gXTWurtq4KSajsOEAjtaSqXHdEpud5
+         ELTw==
+X-Forwarded-Encrypted: i=1; AHgh+RrmPv5q+PV4SA7zVJWORQISFQnpO98LTqUlBD6ZO92C0AgozJRK/SsGh8nj5UkORO0ZtyP/VB0BVS8ZdzwiiCI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL5OBLN0Ly2rq/rwx67oU6mrxqft4253tBpaZe0QYycbc53XvU
+	f2wHIqemmSr1Z++yTn1E8T131BqwvU+OLQRoALVhMa7We3zK6dieL610tS8OUbZuZRI=
+X-Gm-Gg: AR+sD12aflMho8OxZCQsxORJagMtbS7xkOFUz/DezMRalVhDv98kXrbheojZeiuTX7W
+	SFanH6WfmA8dRFKvI5jVaDSAz2KsPtZhPEuN08e7PJc9Z/yw798GnZLEmAdmxDOsslNIfrLDJaE
+	m8FDchJ0YNOpKYvBuY4QCx5iIKb+tUPVpWUiqRjm+3GE51dEduiZ68cqWY/E8G6bQm2Q1vHz5U9
+	HC80sLsBDKqgZbbr0wW9PvhK4wnkGUoussyXIVMzZUZnfMTjniAeTVTUrTArrG9no+Yw8V+joe+
+	egrQXIuGhSCFdihwZhKEZJi5PO9gcHMlTNb1+xj3xuHnH99Is4/VX5qpjZOx+IoH2ZZMo7sGupv
+	qFPxTeWswT55MblpOSiZlyzzawzx3kotq5BPNtnskhXnIkaFyWfLYW1rlvYVWNvbePYGCUTn4OY
+	qCdEN+vbf7tCOsE2KsVKe5u0mjyKOMRBIsGs2L8vQbvOosbsRW/GKfZ07tZA==
+X-Received: by 2002:a05:622a:350:b0:51c:555:7dea with SMTP id d75a77b69052e-5213cbd667cmr215415981cf.30.1784728136109;
+        Wed, 22 Jul 2026 06:48:56 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907ba8e2581sm21393266d6.19.2026.07.22.06.48.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 06:48:55 -0700 (PDT)
+Date: Wed, 22 Jul 2026 09:48:50 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Richard Cheng <icheng@nvidia.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com, 
+	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com, 
+	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
+	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
+	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
+	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
+	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
+	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
+	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v5 26/36] mm: add NODE_PRIVATE_CAP_RECLAIM for opted-in
+ private node reclaim
+Message-ID: <amDJEbu3aQO8J8f4@gourry-fedora-PF4VCD3F>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <20260720193431.3841992-27-gourry@gourry.net>
+ <amDGXU94trqlXUgR@MWDK4CY14F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amDGXU94trqlXUgR@MWDK4CY14F>
 
-On Tue, 21 Jul 2026 20:38:43 -0700 SJ Park <sj@kernel.org> wrote:
-[...]
-> This patch is applied to damon/next [2] tree.  If this patch is not added to
-> mm.git in short term (~1 week?), I will ask mm.git maintainer (Andrew Morton)
-> to pick this.  So, no action from your side is needed for now.  If it seems I
-> also forgot doing that or you cannot wait for my action, please feel free to
-> directly ask that to Andrew.
+On Wed, Jul 22, 2026 at 09:36:14PM +0800, Richard Cheng wrote:
+> On Mon, Jul 20, 2026 at 03:34:20PM +0800, Gregory Price wrote:
+> > +static struct zonelist *memcg_reclaim_zonelist(int nid, gfp_t gfp_mask)
+> > +{
+> > +	unsigned int aflags = ALLOC_DEFAULT;
+> > +
+> > +	if (unlikely(!nodes_empty(node_states[N_MEMORY_PRIVATE])))
+> > +		aflags = ALLOC_ZONELIST_PRIVATE;
+> > +
+> > +	return select_zonelist(nid, gfp_mask, aflags);
+> > +}
+> 
+> 
+> I applied this code change and notice in mem_cgroup_shrink_node(), it calls
+> shrink_lruvec() directly and never passes through shrink_node().
+> 
+> This patch makes private nodes reachable through memcg reclaim zonelist, but
+> what prevents the direct per-node memcg path from reclaiming a private node
+> that has not set NODE_PRIVATE_CAP_RECLAIM ?
+> 
 
+I legitimately missed this.
 
-We (mm community) now want to focus on making mm.git more stabilized and
-therefore ready for the next merge window, rather than adding more changes that
-are not really urgent.  I agree and want to help [1] that.  For the reason,
-unless Andre pick this first, I will request adding this to mm.git only after
-next -rc1 release.  Let me know if you think this is really urgent.
+Sashiko also picked it up on the filter patch:
+https://sashiko.dev/#/message/20260721183528.B4B9C1F00A3A%40smtp.kernel.org
 
-[1] https://lore.kernel.org/20260722133829.87607-1-sj@kernel.org
+If nothing else - implementing this feature has taught me some
+sub-components of mm/ have very well centralized logic, and others (like
+vmscan.c) have 3 or 4 different paths in with a lot of strange quirks
+carved out.
 
+I think some of the vmscan paths can be improved to simplify this
+interaction, but i will fix this particular miss in v6 and come back
+around to see whether we can clean up these different paths as a general
+improvement.
 
-Thanks,
-SJ
+~Gregory
