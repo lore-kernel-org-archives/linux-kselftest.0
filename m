@@ -1,77 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E1E3F9FB;
-	Wed, 22 Jul 2026 19:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C4D470E81;
+	Wed, 22 Jul 2026 19:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784748869; cv=none; b=ZXv/TxMbika9cgDWkPiCso9eq0iIW1YYHeK1VI6oW9tC9shvSfGi+L6kJACbODoQn8PY1LsAaA/FPWpZTllPlkFBNZzaTRfJFHJ9E0dVydlMSlGpMsyyct6pUYOsgrUFlLEKj2pxYvnYBd+jvK4YS14k1wKsAWBPxeWhVs0gwy0=
+	t=1784748997; cv=none; b=NShILm5KMpaFc5PTZ6EKNMxgogIhgPIQxOv1IK7RWf1iMlTZypuTbHkYsV9BAzb/fzzN8LjlGNP9U/Txv7UdIYs9Nbs1QSUo0vndRSIWN7CZyEHRR7HtK7+jXwWu0PPXBlwDEkHnSrwxxsgzH2t2gh8Hpf8rzgtztycXxGSS8DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784748869; c=relaxed/simple;
-	bh=0K/pYqUnKFuOeDxf9/ic35vUuU6oh1QGd2fHyoWdOwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j0CWn3BfkL8AGmCSzYPCBdf/6I62my50jmuLAlJLRrHzDhtcJlAT5JuNZXxanaSKWT8NZfX9/Y33/78IWP4PjVLB19sI7WM3x0GqtmmPHaCt5so18PK4/bJUqxWcim7Yr218NdwaC+Hat87uwws+Lb23hv+4IiifOQknJT6wzbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEOoenwe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784748997; c=relaxed/simple;
+	bh=jlF+vCBoAlCmeGlgFSc6OkjYL/7WgdlsNs5KgKBqT8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z58tVWYuS+mI3L3lZEw2Bcrw6jwELrtDBul7QftQ3K+YKQeMNE7PZJpe1shYEPQ0wZjRsWGvzPU+sX5ahg1sQC2K26JFZ9RvEs22iFZwuIR5mip88V/R6xTQcYgnQgBddgwoERuTxoWSJjqhc+dVSyZnp2JITvb5eHUTMZ/R8fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gufLkL/7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEOoenwe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B3D1F000E9;
-	Wed, 22 Jul 2026 19:34:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gufLkL/7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195C01F000E9;
+	Wed, 22 Jul 2026 19:36:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784748857;
-	bh=uP2dCK26+PgyvE2RhXRoVPEhJe/1Dl+rLykzvE/LRyA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EEOoenwe8XOorjHFKQL4kDq/n+JhOASyHDvaZkq3p90Hlbi4V9t+vxcmR9la31BYW
-	 UjMmzbyuD8WyVcA20O0LPwhgjAMS5xk21s7MqEz0+cJ4SPGnlHeWT/MeTqn+1pEXmY
-	 KpIN7gGAlZmJPprS6phn2reX67rcCoKgV5FE0wffG6tHT1e6PQW9ZgtaqowrYhej0Z
-	 Oa8dyjGt5lx9xCFuDyqQ2wyX0HGAnVh87/KDCM+2aM1qmW6RY7Dj16lTa8bJN+Ywkx
-	 OOh2/uMe6/c+A0oSeHd2+wOjXGqaNcdx0p8ESF21GxhG3W5KviHXdEZWr6PEnkyNAf
-	 4bsY9oSRR48MQ==
-Date: Wed, 22 Jul 2026 14:34:16 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Cc: Brian Masney <bmasney@redhat.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	David Gow <david@davidgow.net>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	kunit-dev@googlegroups.com, Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org, Pascal EBERHARD <pascal.eberhard@se.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v4 1/7] dt-bindings: clock: Introduce nexus nodes
-Message-ID: <178474885623.1540487.275130426002937669.robh@kernel.org>
-References: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
- <20260717-schneider-v7-2-rc1-eip201-upstream-v4-1-751547e160e5@bootlin.com>
+	s=k20260515; t=1784748995;
+	bh=kIZGWeSUbmnp52+auLFMSKFWUog47SeIfvsOQwlBJbA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=gufLkL/7bu55mTAVunJt8Bvo/k1kv5RXR02oEiWlZEZ2spzoKe7kVJ+ielNiEmxIX
+	 sYoIT8a8ZSDFdNCiLEzjY/mrhe3rF53jAK5VBFbDBnuqUD6hlpaVVR6/jOIHfmj5EP
+	 nDFrPnEbP6gO74ccYX+8DKiacQupE3m5QQbORpNIr9/A2/mwB+npKNq/WGwhXUItAv
+	 LSquOZ+ANPK0/+jP7aWRs7HbdyI8avobC2kWfCeRHWG38cifRldTnsqgQRMnRjuxT4
+	 DINW+Xd2u6/X1Sdln6CbIvEHOqL1JkRG9vo8Q3Y0enznAGrS6/XImZVpfO+JqEnu3Y
+	 H3kkA9a62NlHw==
+Date: Wed, 22 Jul 2026 12:36:34 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: longlong yan <yanlonglong@kylinos.cn>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/net: use ARRAY_SIZE macro in skf_net_off.c
+Message-ID: <20260722123634.65ef3704@kernel.org>
+In-Reply-To: <20260717062502.1016-1-yanlonglong@kylinos.cn>
+References: <20260717062502.1016-1-yanlonglong@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-1-751547e160e5@bootlin.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-
-On Fri, 17 Jul 2026 17:59:17 +0200, Miquel Raynal (Schneider Electric) wrote:
-> Hardware containers can just decouple external resources like clock
-> without any more control. Nexus nodes already exist for PWM and GPIOs,
-> add a binding to allow them for clocks as well.
+On Fri, 17 Jul 2026 14:25:02 +0800 longlong yan wrote:
+> The ARRAY_SIZE macro is more compact and more formal in linux source.
 > 
-> No examples are given, the file is litteraly a copy-paste from Hervé
-> Codina's work on PWM Nexus nodes, hence we just point to the examples
-> there which already illustrate very clearly the concept of the various
-> properties.
-> 
-> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-> ---
->  .../bindings/clock/clock-nexus-node.yaml           | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
+> Fixes: fcd7132cb1f9 ("selftests/net: test sk_filter support for SKF_NET_OFF on frags")
+> Signed-off-by: longlong yan <yanlonglong@kylinos.cn>
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+Waste of time. Please don't send any more networking patches in this
+release.
