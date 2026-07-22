@@ -1,47 +1,47 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010025.outbound.protection.outlook.com [52.101.61.25])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010034.outbound.protection.outlook.com [52.101.61.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAAC3290D9;
-	Wed, 22 Jul 2026 02:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F6B388E68;
+	Wed, 22 Jul 2026 02:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.34
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784686408; cv=fail; b=MqxVKFZ+EMzE5L/dgh4XJ0a+cXrbHyxUrwNiEhwoRt6eIsTDXMCFJ3F+OOOnX62EnzBjJn6Uqjktvzw0jf4aI0zwcyE2RmgNpIx9ptFQMnPONDjmwjX0YJYDam7FWo4AcN45ZMQDw9wHcpHLd0JKyi59CSE//2iu875AxTu5iGo=
+	t=1784686413; cv=fail; b=f6nbNab/ipxQjaU/ANHF1t9GvFT33+q/3efDL6rIfXdnFeTrPDVhFZNfezqKoL6FNb3SpIrGBNRzycsGvZBbez+DvH+5O0uw7juRsDsxEGuzdEhdxfLzgaq7uWPBu+Q+S71uTZ/WSaIYdK+JrGjH8rcyfcH961H0NHt+36R29u4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784686408; c=relaxed/simple;
-	bh=6CSbNCRh3YDm72pI6OEgqfuKeQNHzSqmmEDQ7mKq38k=;
+	s=arc-20240116; t=1784686413; c=relaxed/simple;
+	bh=vTw8hO2jk/SU76/esJAx1ml9G6kUKteWpP+M1WRjPtE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DRYCmkzhEkm4tEAJKdso4IdCo7MZMlGs/lq0sEA/KTjfNYrvaca/YUEjHrU6IX0D4iBPWrqidcslA0rRr9tAqJydOuaRzsFb1dD123nDmIZ2yMnfVWr9RXJnD4YRl+9nBOVJpl/VXAVuUx1d70C6AUJrhENpyfe8jgC7l4bIGCk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=csEluHRA; arc=fail smtp.client-ip=52.101.61.25
+	 Content-Type:MIME-Version; b=u6w8iDt2oL7X0LRjxZ3f4S2Wece8EZqR3OTXtAJFCjHhmZE9XHCBNqOEho1zvmx0m6mtM+ht75oO2zmzuHkagTM9OWzP+y1jwVkvxOmzKHmfLLfOsa5pWkUjSR8NjIACzGzQrKocw5Do6Y0zyF1NlO3Mys2HRdNp0AiVhNSv5zE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Vpu+DXLf; arc=fail smtp.client-ip=52.101.61.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="csEluHRA"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Vpu+DXLf"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lz1WbZp1J1jQmTkLZUYv9MzzE9tRBWgirkz/RQhzFOE8WxU7AZwoINRt5cz5JaiJDKihuetIE3/tZuF/2drjFnQ5BwnA8hSwmNIm4AyOEGPEL/4pnZHipt8InO0xUdSv5BMoPfJ7xenZQwSgE+38KCap3fJnVKk8UdP69//XpKJ8E+StwQPCDSIuQzhB7FkYSEiguE0+n1Ck5elBV1BbxYL4phea6OaSVuEts6eAwT4tb97CuKQQ1Gx7hyfrQz5BHbxbyo7TB44Cx3ZJEE6oEQ/+1PWKnGMh0JnUdmaIhxGJAsZYRg+mGMSNoBMpDkaLL+mAC+GcmwJRTtXG+ZvH/w==
+ b=nzQT/HvrMlqqKGz+U++yTVUpDRyX/IXy9T8FFWbf/sbS1Pz00D0/r2VjLKgGIOMID7nZGKu1oMWi0NpE3fwMIbnezqyOJfmi/BXcQIfCMbJjNyVcrlUeqL8LJKXIVjLYQVEY+PqpJm5V4kDt9O96o8cQOC5Nx+PD2V1HRF3CQb2ExqYA9sRY58NFos/h8Be0L5dA/Tf+Kbw3e+Eo2W8+G4zQYvKocOyUru5WY6vTIBnFTpPSLEfJbrbfIWdWLCf+76epJBtZUZaZXDi/XnKRWtF+eGgFUc1V0WonMF+YHFL+TmTcRbX7JLdC8jGhSTBH4sRP33XvDhRcxBSdTO+uEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=++CKLm2v85L/K6DtqpbZ7tzklr9oVdC+KaxGpZnsyTc=;
- b=QDx2WpY7XpAn7VyM3bWqnRlToKHx9mHPMxoaMlMoZphwSLW/S96jHDngozYN0SRklUb6YtC2KQra7RC+E7XRxwpNttk0pok2yy/mpK0dJfEX0muaU0MfliOiO0KBq1+lpurEj2uLibR8Ck5e7DbB+mRfR/erTOgYPZGC9kmvaCDgLu/BJwQkbQFB0Qq8BA1Go+FKWx8lFnha4jyHWq+3Eu5QZoPvXfpLnimmBuspA4xzKdyq1M240QR/ILCNFA267s8OPWJ/HdiZZ+rxHoBPAWbGT0JI80cwUg7pI+uo3+EvQfbKrfxSDd+GgFLfBhpAzDpZ1Oyvs/JumfW+/Fz+Hw==
+ bh=8GjrW5SBJciLJDjKXrnxUISAjSv14y9IexFVu22a+0Q=;
+ b=dmNnIs44rz0efvmCfmtW1Hzz3cqJY73aT8JMJs35SNoio8CtYrupBqLtTOZfPGFBITVGy6zU8UUtR/Ba85w9dprjdNJTelMWqb+dqjwdwGEOSyIB1HSwWCnqX34SalV1vpnnDT2R1wdoQKZr3fNUGUHEkzPidYKzOz3CU0yLx+4pHoPC1aYhMEAzsuYdZXGieK1LnxtbZR2UWBSRxcyg+hROUH1yvzHHaqJoiq59KL/mXiCH1yAC3LFgDgHH5waDTGxrFS5OiRiNOmb/3Uo9Ewr0ugmv+7n0qgvzYpClqaUKDoAd2BAJAlPIGFedYXqBSYHS8Gp2YXPiY9XClUUuvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=++CKLm2v85L/K6DtqpbZ7tzklr9oVdC+KaxGpZnsyTc=;
- b=csEluHRA6WrSq53h8+zWZ9ZxiAXRuoAo8tvw3hvr2TlFdA8J869hYvcUxXGvO3o+ItE6Vk0Ht5dyJXcTX8fC4+kc9W9RIHA8xOR4J+zvXpp7YUHD3CLYww1iBzdKjPm0OUh01qAA9xoOpQWIRnHJLHaGMfTwvNsMdHmwIhVMfOmhafChbJdFABitN32PrS5Q7OBxW/JZU/mQg7PIJ4dzRFzaqjIhDmT+Km2I8zZI0pFlZ0xmxt77P7ZgG1DAX4d9DwiVMYRlY/ba9n2ieRbJycD+lXgrw6/kLaRkRwwCN4u/kPUixf5oyqy73ZbK3TMeXJ3P2j+3hGkz5jB/heutRw==
+ bh=8GjrW5SBJciLJDjKXrnxUISAjSv14y9IexFVu22a+0Q=;
+ b=Vpu+DXLfaZHzMVoihnomRPiC9NLUCJlgVrC2K2ZzPmgv37FpmiNSsZBIfpdPYLJzmTKwOOEanpNpiu1wLcbqTAUxYkfFRXBvW0H12IJciBwFpNAeZ9H4VhxCCr+D2f6TqZk2yvseK42aop4lR69EJyi6JxHmyId3wZ8ForhJiUKTlU6iNPNzXJsbqH/Fia8o2D8wm199bIdkipwXa32mv38N1xwOxOMrk0SNWl9RuPxs6WuoVPBkZ93tFRt6vnQgHiHLyGrXVlP5PLrOoLDHpDYgD20b55Qx/s8jlJ2Aqaue7qUOBN8X7Tu1ZLHucZ/MecQUaQ0RwD5FafvYhTT/pg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
  by SA0PR12MB7002.namprd12.prod.outlook.com (2603:10b6:806:2c0::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Wed, 22 Jul
- 2026 02:13:20 +0000
+ 2026 02:13:28 +0000
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
- 02:13:20 +0000
+ 02:13:28 +0000
 From: Richard Cheng <icheng@nvidia.com>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -59,17 +59,16 @@ Cc: Dave.Martin@arm.com,
 	fenghuay@nvidia.com,
 	ltrager@nvidia.com,
 	Richard Cheng <icheng@nvidia.com>
-Subject: [PATCH 1/5] selftests/resctrl: Make memory bandwidth measurement vendor-neutral
-Date: Wed, 22 Jul 2026 10:12:59 +0800
-Message-ID: <20260722021303.9471-2-icheng@nvidia.com>
+Subject: [PATCH 2/5] selftests/resctrl: Abstract reference bandwidth counters behind a backend
+Date: Wed, 22 Jul 2026 10:13:00 +0800
+Message-ID: <20260722021303.9471-3-icheng@nvidia.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260722021303.9471-1-icheng@nvidia.com>
 References: <20260722021303.9471-1-icheng@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0021.apcprd02.prod.outlook.com
- (2603:1096:4:195::10) To BL0PR12MB2370.namprd12.prod.outlook.com
- (2603:10b6:207:47::27)
+X-ClientProxiedBy: TP0P295CA0044.TWNP295.PROD.OUTLOOK.COM (2603:1096:910:4::6)
+ To BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,665 +77,346 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|SA0PR12MB7002:EE_
-X-MS-Office365-Filtering-Correlation-Id: 298a6254-7ddd-45da-0b1a-08dee796cce5
+X-MS-Office365-Filtering-Correlation-Id: c1b33001-a644-4d88-d34c-08dee796d15e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|6133799003|56012099006|11063799006|10067099003|3023799007|22082099003|18002099003;
+	BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|6133799003|56012099006|11063799006|10067099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	cxhYlGfs7tuJCr1caVVA8CTpvF5/W6zh6ITLqLWje31rCZWLGHZR3np2KZZPP4FZbIC+qL66u48v85UeQciAsTGQFSfM0Mu4pO83hBpcNJ82jYAFG4r+p5kKrPdEj+/esBH82BTwrYDJ3kE8xNQTzfM2IfAFuAkOCVPuB/V5pYaNOix5Y3VjmQ+e/UExUSjuumNuoZ0s6b2v8M14zsyJQibI+3uJ4YuIKcx/C1m3LBNKJ5c+md6QwwpMZH5i3kZci1h3BsneeKNoEG8dXFa9L1YLnFaSq9/jxFxnG4dmNtp6bHmcW4jzKL81jEsTM7AqI6Km0xsRHcuYJli81LQBEktSoXGKp7RSsQtlQItv5CFHKIvljxbgTSisaOs7Wuss+XYu6GYIZeHuyGKdPqbVO/meDdj5YfGTpjtYEs2Bm7NEoFmtWe9hXb0IpK+iTWKxUfFmRdW1a+mBHPFNdtb0iI0ASfiIomira6PJkAxZrPwFVgvdKhtJnznfgwT9tWVjcECHUurSmdCf1qgDhuZaNbWgmWcSa9lpptheS5CZDNAeUNvY2N+uYfZ2T2kD2MeCJAZWRgrkd49Qn7vgsLLTEH2PlTBCoKEOd5TrWBZQmy9kZ/ehqdgcyNFaVcUeb6WGnPzD6mCA4aP08D/i4AnimLYIcW9RuRVFX0MZZxM58eA=
+	d0favaZgAss2O8tBHvHF7/ICH6O346IbIGcQTlPVM2VecDkvFAoVwbpfz+iFFBnhO/if4gc7uhO9oNAQMmals0dtH0Jh5lJXv37jW33jN4bc6riorQpuDmbK/PIe7ebYXDaNK44FOvzOj+QOiLkG4NC5NNm6j4TCA0FDuuDhfzeNVlO2jjsETyyRhseQkURlDWWwLmoPkMr+KSLT/jmgZud0zjSNZt/zp7GxUIbVtC/NKqVdKjZ2csphfd4L8jfvuwSSRgLPRNwXfOI6yvOXKnyCWfLrrTxQs+AuBbl5DSh9HtCE/guDpQn6QOV/3I1nlxmskp4o2VXvQv74fa8fB1RC2Sf9tk+NY7jWzp4N7OQwfZF1q6OVS+B7Cf/p9egu3IIxMh/2XZDC7tE+L4w20Ds3Z5gzfiDIvcQslUEo21I6r5tECCKq2vW0n4iuYrV+x+lCfj+XIa8GoEpccfLTGhgB6naYEYJC8JRg9mNXTStA+/3Cj+AlzE6pVyLFcy7+7orB5cJj3Uj0asfdhLCl7QUC5iCZW/4eGcDGwnYOwDC48UNvzpioMyrJrejxyQfOzZEkuZ5+psEz8QDm1opafqaiq6DGZtJ+r1Pf1uT28VB9NIseKhUL6M4h+tRCzdi4pgjhrvB4OtFIvaLoVhO/Z0mWP3aMkht72gqLKW0a8xc=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(6133799003)(56012099006)(11063799006)(10067099003)(3023799007)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(6133799003)(56012099006)(11063799006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?R8LSVmVvTo2IGph3SWHmH36xUcBrUSUtNFPqbTlee8XmxG+mfxPzxBLhnDQ2?=
- =?us-ascii?Q?Oeg88sgCscSN63O/3lLLM4ivbP59xU8MTPdzLqEO2L4H3B7KX1jlruf3pwmQ?=
- =?us-ascii?Q?e4d0qfDR6EMOCJelYQuJTalfXKc5i/fzk8y783F2B+xSw5D8KRWzg5RSaW3b?=
- =?us-ascii?Q?A0IZRPuCYWt7HBSAlyDt++HcdkuW9UcmgQKC8rTMKRSAipgf8nV9KOaiWNbv?=
- =?us-ascii?Q?dp83gi+9hg33PhvF8v5vtoSepjfEmr4l9CGyv4SIBUM/9l4T1SIrImrSU7zx?=
- =?us-ascii?Q?9pj5GK89s2AlGkmbz6q84UfkxKThy6Qv1Go77FvrAI+FN1j4y1I6TuGBfIdt?=
- =?us-ascii?Q?EkHByKjF4iWWiv9RqdP/OiulCz7tafHw2HNPNv+E9D8FlP2/pj82Q0VwIDB/?=
- =?us-ascii?Q?lW1U7kjI+xgli1rjwZAj7C2Fjak1lVPphuAnwM0TVXlKduzDD4e2qFTDkzhS?=
- =?us-ascii?Q?7OIcC9zpW2MfrpHVAW2z+UkGLIrUp1ksiRhz2vo4qQB5/Y3ibXLBv5IrnUgk?=
- =?us-ascii?Q?ePwAWNVlmoKtOJbI/b8N4bgZ05iim1+BMv2vwodr8vN0LUPUWC8DAFzye+2W?=
- =?us-ascii?Q?hxEFzFRBsaqqCIy61hoPKxJNcXbhX8yig6P4LR20arPG/d/fp9P/mXNPg3cD?=
- =?us-ascii?Q?6v/Qf5GCgLWpc3nrOs6havq2YipoH/F/y/pM8uvJxGfFR1w5soaVu13X9FZ+?=
- =?us-ascii?Q?lyKxiEMCkqEIBxScOqvzXsFxx1bXsYyODj29h8DPx35SdSY9/F9ORxv3Ob55?=
- =?us-ascii?Q?sKIdfSl69TkGQe2UpmiOOd2r0sXmSfksImWobbkmhp8AhOPQLpnYFsLCCyk8?=
- =?us-ascii?Q?vMZTU0WPpiFUF2VkASSittZC5hH0lfc5c8LOGZChVbE4/o3sM6u2UJCfH4Vz?=
- =?us-ascii?Q?Lsi6YRYOqQZsmoosw62bwxHFEFzT0JzEeeMTf4kbsRXEsEfSRArXEuxZW+OP?=
- =?us-ascii?Q?pxNauFI2FpJi4WdouqGk65P5vqJocajYZLbZhHBq2T7poZVzF+1hXsoXFiTK?=
- =?us-ascii?Q?uMirnd8F3OKd88bTFafF5EmDQI1RKxaKnWm8TEte3Vp8GxFhpXok5NW80pQO?=
- =?us-ascii?Q?4gljvtKHlPHGfUI6Sh7EbgrpgNpyTCtK5UeouHzNHufoC+OHbgcLrLHvkyLL?=
- =?us-ascii?Q?NYvONHHB2JELydJCqg2bHm+eqQU+IS1r/zVIXIvom9Psix8FKX9+VI2fYwbF?=
- =?us-ascii?Q?13lN+da7UyrtiEcojaSRwxbzuyfTYo4DDvcvM43iG7MBXGRklJIklWBu4tae?=
- =?us-ascii?Q?J7YQaiKjSqLuKM0wT0g29QJwKN3Horb+e0xPxP9bB9xzphOFrzubBqtsSEFM?=
- =?us-ascii?Q?qGRQYP/qioFxSqjsCuxofiNVXUCczvG1qGB7detHxTLb2BNaEyv+l2Y3o7qS?=
- =?us-ascii?Q?2hRyBIM1V9BO7gt4rl/FI1uNNtwNJ5/GmxA8/Ub2ulwuuw73k2Twb/cbLGIZ?=
- =?us-ascii?Q?3hRgsT/mRUDJrGRte8jq4YvA5p5of+r7UWdrR+VPcyrB8Xr9WVZexX8Iy/jc?=
- =?us-ascii?Q?KdrdxJPifnV8NUSEJkOsz15wcvfH9hZoR8N4lBDOLU7i5OIuuAzJlA5TruC2?=
- =?us-ascii?Q?1S5slEKpjXyki1KxGDj7Kbt3VpMTTxHg5KJkDwQGdxWD4CjJ5ki3oKywpjzw?=
- =?us-ascii?Q?G7/Ub1kC0pgR82zFd4GUAUYGOCk1XYFxc6uYzMb7FPvOuEFh0C0ep/rr8252?=
- =?us-ascii?Q?iTnw6+Zt4RXnGpCHy8h+T2UnrlnNXBIf0PIXWRUL81kbbtqq6ENbp/zcLxbm?=
- =?us-ascii?Q?8B6C0Ug2JQ=3D=3D?=
+	=?us-ascii?Q?MCjCriLjvbW2KYwIfB4NGFeFCKFYP+IAglMknqiF4HW///vHUGs1pYDJ20PM?=
+ =?us-ascii?Q?RePIR/nDSfGxj1rwY1Dkn5T0Bt4qEqkBXZlFIQXMP1QleYEyaOcZNC9hYrA5?=
+ =?us-ascii?Q?ZkbsKNzNNbK0OgXcQg+Eq20LEkl1nUpowqsHnvhHoSbR6nBrYAjxx3KzRe31?=
+ =?us-ascii?Q?4siW/vb8IOiOv9X/lFDlZzw9plAeOILjbXW/iYx9OFoqjWO+fEH/CGV6bhNv?=
+ =?us-ascii?Q?mfafNVYvgPohdacaxBJnYVY3+hv18wPbIVVXY7K2jicYQqIcyNO7mcMz+JRJ?=
+ =?us-ascii?Q?2u+y6JTcGe9JCHGPhjv9sAUvfoP2Eg7T3wujOj4PkjGq25OKKMvgzen8vRim?=
+ =?us-ascii?Q?Gz5KszXG5/bSMmYLLO8bBC9oBj7rH5Nki+W89Me+vPhIrnVESzuFXRs/qfv/?=
+ =?us-ascii?Q?GZ5Rk+TAfL8T9Bg0E4YcxuLjhH0OUD0hBZpzIfaVlITGgDo1Exa7ul4i/2h3?=
+ =?us-ascii?Q?tuQlYvz3oTdWzVQC/rfLeXXyxFcZ1iEyI23K4qFBj4vlD4vzAG/uedPjNZDD?=
+ =?us-ascii?Q?U1rvEvLEZydWkTn8eYgvONkXy615F+7UNjgY/T7cymAhQYEaWMxy3HJSOAyd?=
+ =?us-ascii?Q?WBM2tfvQ81xtXaw8f8tERTah5goqyTboODLkp1fB4zHIEJK0zr2ma1pgHkzl?=
+ =?us-ascii?Q?K+FVq8busLjHcrMuHWDgHRYW5S71oHhbMbiD1huu/p4nxga+gTP5Vc3g+C7U?=
+ =?us-ascii?Q?YyERapd6suCVXsxbYezz6xh0n7tj9vd08+McmdVNdVe68d4Yuo9b/zu1410m?=
+ =?us-ascii?Q?iSylWWGhKGgGuf8VNUP8aF34/xCcg1CVNDDU3w/y5CRps+HzqUNqDjgGvt1S?=
+ =?us-ascii?Q?VHPPW9kM1MNFpOuq5e9m6felu848X/mWSY+wMMVyFHpeXYpq1ngdOsE4n20T?=
+ =?us-ascii?Q?Pthoiyn4ZEcmAEYpJTjedlRWu+0PdD7ryWjss7JvgOmX1exiWe8S0xHFCkbb?=
+ =?us-ascii?Q?VMj+RUQ3VT9Hzii1Z3EadcmAkKRoFH2eX4ZUzNjzJrfA6zyNWvhJYRvCVYA2?=
+ =?us-ascii?Q?eXLjh4NlA/h0J1sUyMGAT/iBp+JkV3Ol2CxJYV59YD72hthWrL5jUeHsdPxe?=
+ =?us-ascii?Q?VRRAue+uYHI1BUDqEYqpEPCjCtjJ2E/ftW75kUfo/pH6TqJBgFG1iIGEE4KF?=
+ =?us-ascii?Q?0g8QqmnRI9QotGQNAtA2AdkAQ2OzYC7Zact7GBDVyDNBcyWmZFW3sfxNzL9v?=
+ =?us-ascii?Q?CphBwCnunAiFoPZoxaNoVfBMEuw/mikrg80YcDTU2lJScm09gQwCWtnYiNNu?=
+ =?us-ascii?Q?u90RGAQhqpwPWAwhBbvyhnpMPVPKuEMZ3L+h2lWvsgKDKlUa2kvpaAIux+W9?=
+ =?us-ascii?Q?ZLFoK8NF5fZsOG/p40DJRwHXNSx0I7TbdeObTFWvDyqNI2Yu4mwX2LrO73Dr?=
+ =?us-ascii?Q?wINckiOiSdGVCWwHeMUQZrLYQHfu+b84LZO0qOaE66an9iER6kwIqOLTCc3v?=
+ =?us-ascii?Q?RmQhR/lNAr/XgPOPUD95QYuErP82+FmsGHqJUEiT6iMutnUtrmPrMdbKzHOi?=
+ =?us-ascii?Q?3iJvR3S/QgbtM3e75cDRoFDMk+yWvbKx6rbPNcVOmgPvtVGx7aIc6n30UlyM?=
+ =?us-ascii?Q?0pnB8lolKQzJWG2ulXrnx31d/mo/tD89DzNBbA/cYmFXDMOj7+WMFRn2LMLc?=
+ =?us-ascii?Q?Tt5yV/noz1yHHrnHtIrVr8/p0RUJqlrJbDiuAWFn8MpT14/rXt3AQSj5IPI/?=
+ =?us-ascii?Q?DVFTFH+Hgxq7R0EvtDCZq9fdwsUJ2xYLn4rb0dsFLqLn2Khhcfe2002wYdRK?=
+ =?us-ascii?Q?rGp82PzOlA=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 298a6254-7ddd-45da-0b1a-08dee796cce5
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1b33001-a644-4d88-d34c-08dee796d15e
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 02:13:20.8022
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 02:13:28.1517
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JIpz0KOFcCwJyfpjWp7zJO2DCMXfrNI3Ahrmw3y7y+8JtdI4oLv/9wjLxBbu8FDZGKXC1/8132zvaYcmLEz/1Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: DSCojKSmeITNOAHtFOfTqbA1mvCiIC3iydzH0bZDryymrjOH/BZIuBnK1uXPr8CCmgR96rw40U58wmeshRtNKQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7002
 
-The MBA and MBM tests validate resctrl's bandwidth accounting against
-an independent reference: the Intel iMC uncore PMU read through perf.
-Most of the machinery involved (counter bookkeeping, the one second
-measurement window, multiplexing correction, result logging and the
-comparison with the resctrl value) is not iMC-specific, yet it is all
-named after the iMC.
+The reference bandwidth measurement is hard-wired to the Intel iMC:
+discovery, event configuration and perf open all assume the iMC PMU
+sysfs layout. Other architectures expose equivalent uncore PMUs that
+could serve as the same kind of independent reference.
 
-Rename the shared machinery and the result labels to vendor-neutral
-names in preparation for supporting reference memory bandwidth PMUs
-on other architectures:
+Introduce struct mem_bw_backend with two operations, detect() (is this
+backend's PMU present?) and setup_counters() (populate bw_counters[]
+for measuring the benchmark CPU), plus a backend table currently
+containing only the iMC. Shared code selects a backend at init time
+and no longer contains any PMU-specific knowledge.
 
-  - struct imc_counter_config         -> struct mem_bw_counter
-  - imc_counters_config[], imcs       -> bw_counters[], nr_bw_counters
-  - MAX_IMCS                          -> MAX_BW_COUNTERS
-  - initialize_read_mem_bw_imc()      -> initialize_mem_bw_ref()
-  - perf_open/close_imc_read_mem_bw() -> perf_open/close_mem_bw_counters()
-  - do_imc_read_mem_bw_test()         -> do_mem_bw_test()
-  - get_read_mem_bw_imc()             -> get_mem_bw_ref()
-  - "Mem_BW_iMC" result file label    -> "Mem_BW_ref"
-  - bw_imc / avg_bw_imc               -> bw_ref / avg_bw_ref
+Counter configuration moves from test init time to perf open time via
+setup_counters(), because a backend may need the benchmark CPU to pick
+per-socket PMU instances. Each counter now carries the CPU to open it
+on. The added per-measurement discovery cost is a handful of sysfs
+reads, negligible against the one second measurement window.
 
-check_results() parses result lines by field position, not by label,
-so the label change has no effect on parsing.
-
-While touching it, reflow the result-file fprintf() so the previously
-overlong line (101 columns since before this change) fits within the
-100 column limit, keeping the format string unsplit.
-
-Functions whose logic is genuinely iMC-specific (num_of_imcs(),
-read_from_imc_dir()) keep their names.
-
-No functional change intended.
+Add mem_bw_ref_available() so feature checks can verify that a
+reference PMU exists: the MBA test is now skipped instead of failing
+at init on machines without iMC counters (e.g. virtual machines).
+Add mem_bw_ref_cleanup() to reset the backend selection between tests.
 
 Signed-off-by: Richard Cheng <icheng@nvidia.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c    |  26 +--
- tools/testing/selftests/resctrl/mbm_test.c    |  22 +--
- tools/testing/selftests/resctrl/resctrl.h     |   4 +-
- tools/testing/selftests/resctrl/resctrl_val.c | 178 +++++++++---------
- 4 files changed, 114 insertions(+), 116 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c    |   4 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |   1 +
+ tools/testing/selftests/resctrl/resctrl.h     |   2 +
+ tools/testing/selftests/resctrl/resctrl_val.c | 145 ++++++++++++++++--
+ 4 files changed, 141 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index c7e9adc0368f..468ba8accc18 100644
+index 468ba8accc18..8b891d3e6650 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -21,7 +21,7 @@ static int mba_init(const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
--	ret = initialize_read_mem_bw_imc();
-+	ret = initialize_mem_bw_ref();
- 	if (ret)
- 		return ret;
- 
-@@ -71,7 +71,7 @@ static int mba_measure(const struct user_params *uparams,
- 	return measure_read_mem_bw(uparams, param, bm_pid);
- }
- 
--static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
-+static bool show_mba_info(unsigned long *bw_ref, unsigned long *bw_resc)
- {
- 	unsigned int allocation;
- 	bool ret = false;
-@@ -81,27 +81,27 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 	/* Memory bandwidth from 100% down to 10% */
- 	for (allocation = 0; allocation < ALLOCATION_MAX / ALLOCATION_STEP;
- 	     allocation++) {
--		unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
--		long avg_bw_imc, avg_bw_resc;
-+		unsigned long sum_bw_ref = 0, sum_bw_resc = 0;
-+		long avg_bw_ref, avg_bw_resc;
- 		int avg_diff_per;
- 		float avg_diff;
- 
- 		for (runs = NUM_OF_RUNS * allocation;
- 		     runs < NUM_OF_RUNS * allocation + NUM_OF_RUNS ; runs++) {
--			sum_bw_imc += bw_imc[runs];
-+			sum_bw_ref += bw_ref[runs];
- 			sum_bw_resc += bw_resc[runs];
- 		}
- 
--		avg_bw_imc = sum_bw_imc / NUM_OF_RUNS;
-+		avg_bw_ref = sum_bw_ref / NUM_OF_RUNS;
- 		avg_bw_resc = sum_bw_resc / NUM_OF_RUNS;
--		if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
-+		if (avg_bw_ref < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
- 			ksft_print_msg("Bandwidth below threshold (%d MiB). Dropping results from MBA schemata %u.\n",
- 				       THROTTLE_THRESHOLD,
- 				       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
- 			continue;
- 		}
- 
--		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-+		avg_diff = (float)labs(avg_bw_resc - avg_bw_ref) / avg_bw_ref;
- 		avg_diff_per = (int)(avg_diff * 100);
- 
- 		ksft_print_msg("%s Check MBA diff within %d%% for schemata %u\n",
-@@ -111,7 +111,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 			       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
- 
- 		ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
--		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
-+		ksft_print_msg("avg_bw_ref: %lu\n", avg_bw_ref);
- 		ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 		if (avg_diff_per > MAX_DIFF_PERCENT)
- 			ret = true;
-@@ -128,7 +128,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- static int check_results(void)
- {
- 	unsigned long bw_resc[NUM_OF_RUNS * ALLOCATION_MAX / ALLOCATION_STEP];
--	unsigned long bw_imc[NUM_OF_RUNS * ALLOCATION_MAX / ALLOCATION_STEP];
-+	unsigned long bw_ref[NUM_OF_RUNS * ALLOCATION_MAX / ALLOCATION_STEP];
- 	char *token_array[8], output[] = RESULT_FILE_NAME, temp[512];
- 	int runs;
- 	FILE *fp;
-@@ -150,8 +150,8 @@ static int check_results(void)
- 			token = strtok(NULL, ":\t");
- 		}
- 
--		/* Field 3 is perf imc value */
--		bw_imc[runs] = strtoul(token_array[3], NULL, 0);
-+		/* Field 3 is the reference PMU value */
-+		bw_ref[runs] = strtoul(token_array[3], NULL, 0);
- 		/* Field 5 is resctrl value */
- 		bw_resc[runs] = strtoul(token_array[5], NULL, 0);
- 		runs++;
-@@ -159,7 +159,7 @@ static int check_results(void)
- 
- 	fclose(fp);
- 
--	return show_mba_info(bw_imc, bw_resc);
-+	return show_mba_info(bw_ref, bw_resc);
- }
+@@ -164,6 +164,7 @@ static int check_results(void)
  
  static void mba_test_cleanup(void)
+ {
++	mem_bw_ref_cleanup();
+ 	remove(RESULT_FILE_NAME);
+ }
+ 
+@@ -210,7 +211,8 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+ static bool mba_feature_check(const struct resctrl_test *test)
+ {
+ 	return test_resource_feature_check(test) &&
+-	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
++	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes") &&
++	       mem_bw_ref_available();
+ }
+ 
+ struct resctrl_test mba_test = {
 diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 84d8bc250539..001a87608835 100644
+index 001a87608835..873acf6aa648 100644
 --- a/tools/testing/selftests/resctrl/mbm_test.c
 +++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -15,21 +15,21 @@
- #define NUM_OF_RUNS		5
+@@ -123,6 +123,7 @@ static int mbm_measure(const struct user_params *uparams,
  
- static int
--show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
-+show_bw_info(unsigned long *bw_ref, unsigned long *bw_resc, size_t span)
+ static void mbm_test_cleanup(void)
  {
--	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
--	long avg_bw_imc = 0, avg_bw_resc = 0;
-+	unsigned long sum_bw_ref = 0, sum_bw_resc = 0;
-+	long avg_bw_ref = 0, avg_bw_resc = 0;
- 	int runs, ret, avg_diff_per;
- 	float avg_diff = 0;
- 
- 	for (runs = 0; runs < NUM_OF_RUNS; runs++) {
--		sum_bw_imc += bw_imc[runs];
-+		sum_bw_ref += bw_ref[runs];
- 		sum_bw_resc += bw_resc[runs];
- 	}
- 
--	avg_bw_imc = sum_bw_imc / NUM_OF_RUNS;
-+	avg_bw_ref = sum_bw_ref / NUM_OF_RUNS;
- 	avg_bw_resc = sum_bw_resc / NUM_OF_RUNS;
--	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
-+	avg_diff = (float)labs(avg_bw_resc - avg_bw_ref) / avg_bw_ref;
- 	avg_diff_per = (int)(avg_diff * 100);
- 
- 	ret = avg_diff_per > MAX_DIFF_PERCENT;
-@@ -38,7 +38,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
- 	if (span)
- 		ksft_print_msg("Span (MB): %zu\n", span / MB);
--	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
-+	ksft_print_msg("avg_bw_ref: %lu\n", avg_bw_ref);
- 	ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 
- 	return ret;
-@@ -46,7 +46,7 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- 
- static int check_results(size_t span)
- {
--	unsigned long bw_imc[NUM_OF_RUNS], bw_resc[NUM_OF_RUNS];
-+	unsigned long bw_ref[NUM_OF_RUNS], bw_resc[NUM_OF_RUNS];
- 	char temp[1024], *token_array[8];
- 	char output[] = RESULT_FILE_NAME;
- 	int runs, ret;
-@@ -72,11 +72,11 @@ static int check_results(size_t span)
- 		}
- 
- 		bw_resc[runs] = strtoul(token_array[5], NULL, 0);
--		bw_imc[runs] = strtoul(token_array[3], NULL, 0);
-+		bw_ref[runs] = strtoul(token_array[3], NULL, 0);
- 		runs++;
- 	}
- 
--	ret = show_bw_info(bw_imc, bw_resc, span);
-+	ret = show_bw_info(bw_ref, bw_resc, span);
- 
- 	fclose(fp);
- 
-@@ -87,7 +87,7 @@ static int mbm_init(const struct resctrl_val_param *param, int domain_id)
- {
- 	int ret;
- 
--	ret = initialize_read_mem_bw_imc();
-+	ret = initialize_mem_bw_ref();
- 	if (ret)
- 		return ret;
++	mem_bw_ref_cleanup();
+ 	remove(RESULT_FILE_NAME);
+ }
  
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index afe635b6e48d..0de72327a085 100644
+index 0de72327a085..2bd19c22a344 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -49,7 +49,7 @@
- 
- /*
-  * Memory bandwidth (in MiB) below which the bandwidth comparisons
-- * between iMC and resctrl are considered unreliable. For example RAS
-+ * between the reference PMU and resctrl are considered unreliable. For example RAS
-  * features or memory performance features that generate memory traffic
-  * may drive accesses that are counted differently by performance counters
-  * and MBM respectively, for instance generating "overhead" traffic which
-@@ -187,7 +187,7 @@ unsigned char *alloc_buffer(size_t buf_size, bool memflush);
- void mem_flush(unsigned char *buf, size_t buf_size);
+@@ -188,6 +188,8 @@ void mem_flush(unsigned char *buf, size_t buf_size);
  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
  ssize_t get_fill_buf_size(int cpu_no, const char *cache_type);
--int initialize_read_mem_bw_imc(void);
-+int initialize_mem_bw_ref(void);
+ int initialize_mem_bw_ref(void);
++bool mem_bw_ref_available(void);
++void mem_bw_ref_cleanup(void);
  int measure_read_mem_bw(const struct user_params *uparams,
  			struct resctrl_val_param *param, pid_t bm_pid);
  void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 7c08e936572d..ee44fbae2cbf 100644
+index ee44fbae2cbf..a2b919bd4839 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -14,7 +14,7 @@
- #define READ_FILE_NAME		"events/cas_count_read"
- #define DYN_PMU_PATH		"/sys/bus/event_source/devices"
- #define SCALE			0.00006103515625
--#define MAX_IMCS		20
-+#define MAX_BW_COUNTERS		20
- #define MAX_TOKENS		5
- 
- #define CON_MBM_LOCAL_BYTES_PATH		\
-@@ -27,7 +27,7 @@ struct membw_read_format {
- 	__u64 id;            /* if PERF_FORMAT_ID */
- };
- 
--struct imc_counter_config {
-+struct mem_bw_counter {
- 	__u32 type;
- 	__u64 event;
- 	__u64 umask;
-@@ -37,36 +37,36 @@ struct imc_counter_config {
+@@ -34,12 +34,29 @@ struct mem_bw_counter {
+ 	struct perf_event_attr pe;
+ 	struct membw_read_format return_value;
+ 	int fd;
++	int cpu;
++};
++
++/*
++ * mem_bw_backend - Source of the independent reference bandwidth that
++ *		    validates resctrl MBM
++ * @name:		Human-readable PMU name
++ * @detect:		True if this backend's PMU is present on the system
++ * @setup_counters:	Populate bw_counters[] / nr_bw_counters with the perf
++ *			events measuring memory bandwidth generated from
++ *			@bench_cpu. Returns 0 on success, < 0 on failure.
++ */
++struct mem_bw_backend {
++	const char *name;
++	bool (*detect)(void);
++	int (*setup_counters)(int bench_cpu);
  };
  
  static char mbm_total_path[1024];
--static int imcs;
--static struct imc_counter_config imc_counters_config[MAX_IMCS];
-+static int nr_bw_counters;
-+static struct mem_bw_counter bw_counters[MAX_BW_COUNTERS];
+ static int nr_bw_counters;
+ static struct mem_bw_counter bw_counters[MAX_BW_COUNTERS];
  static const struct resctrl_test *current_test;
++static const struct mem_bw_backend *mem_bw_backend;
  
  static void read_mem_bw_initialize_perf_event_attr(int i)
  {
--	memset(&imc_counters_config[i].pe, 0,
-+	memset(&bw_counters[i].pe, 0,
- 	       sizeof(struct perf_event_attr));
--	imc_counters_config[i].pe.type = imc_counters_config[i].type;
--	imc_counters_config[i].pe.size = sizeof(struct perf_event_attr);
--	imc_counters_config[i].pe.disabled = 1;
--	imc_counters_config[i].pe.inherit = 1;
--	imc_counters_config[i].pe.exclude_guest = 0;
--	imc_counters_config[i].pe.config =
--		imc_counters_config[i].umask << 8 |
--		imc_counters_config[i].event;
--	imc_counters_config[i].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
--	imc_counters_config[i].pe.read_format =
-+	bw_counters[i].pe.type = bw_counters[i].type;
-+	bw_counters[i].pe.size = sizeof(struct perf_event_attr);
-+	bw_counters[i].pe.disabled = 1;
-+	bw_counters[i].pe.inherit = 1;
-+	bw_counters[i].pe.exclude_guest = 0;
-+	bw_counters[i].pe.config =
-+		bw_counters[i].umask << 8 |
-+		bw_counters[i].event;
-+	bw_counters[i].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
-+	bw_counters[i].pe.read_format =
- 		PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
- }
- 
- static void read_mem_bw_ioctl_perf_event_ioc_reset_enable(int i)
- {
--	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_RESET, 0);
--	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_ENABLE, 0);
-+	ioctl(bw_counters[i].fd, PERF_EVENT_IOC_RESET, 0);
-+	ioctl(bw_counters[i].fd, PERF_EVENT_IOC_ENABLE, 0);
- }
- 
- static void read_mem_bw_ioctl_perf_event_ioc_disable(int i)
- {
--	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_DISABLE, 0);
-+	ioctl(bw_counters[i].fd, PERF_EVENT_IOC_DISABLE, 0);
- }
- 
- /*
-@@ -88,21 +88,21 @@ static void get_read_event_and_umask(char *cas_count_cfg, int count)
- 		if (!token[i])
- 			break;
- 		if (strcmp(token[i], "event") == 0)
--			imc_counters_config[count].event = strtol(token[i + 1], NULL, 16);
-+			bw_counters[count].event = strtol(token[i + 1], NULL, 16);
- 		if (strcmp(token[i], "umask") == 0)
--			imc_counters_config[count].umask = strtol(token[i + 1], NULL, 16);
-+			bw_counters[count].umask = strtol(token[i + 1], NULL, 16);
+@@ -94,10 +111,11 @@ static void get_read_event_and_umask(char *cas_count_cfg, int count)
  	}
  }
  
- static int open_perf_read_event(int i, int cpu_no)
+-static int open_perf_read_event(int i, int cpu_no)
++static int open_perf_read_event(int i)
  {
--	imc_counters_config[i].fd =
--		perf_event_open(&imc_counters_config[i].pe, -1, cpu_no, -1,
-+	bw_counters[i].fd =
-+		perf_event_open(&bw_counters[i].pe, -1, cpu_no, -1,
+ 	bw_counters[i].fd =
+-		perf_event_open(&bw_counters[i].pe, -1, cpu_no, -1,
++		perf_event_open(&bw_counters[i].pe, -1,
++				bw_counters[i].cpu, -1,
  				PERF_FLAG_FD_CLOEXEC);
  
--	if (imc_counters_config[i].fd == -1) {
-+	if (bw_counters[i].fd == -1) {
- 		fprintf(stderr, "Error opening leader %llx\n",
--			imc_counters_config[i].pe.config);
-+			bw_counters[i].pe.config);
- 
- 		return -1;
- 	}
-@@ -124,7 +124,7 @@ static int read_from_imc_dir(char *imc_dir, int count)
- 
- 		return -1;
- 	}
--	if (fscanf(fp, "%u", &imc_counters_config[count].type) <= 0) {
-+	if (fscanf(fp, "%u", &bw_counters[count].type) <= 0) {
- 		ksft_perror("Could not get iMC type");
- 		fclose(fp);
- 
-@@ -221,46 +221,46 @@ static int num_of_imcs(void)
+ 	if (bw_counters[i].fd == -1) {
+@@ -221,21 +239,108 @@ static int num_of_imcs(void)
  	return count;
  }
  
--int initialize_read_mem_bw_imc(void)
-+int initialize_mem_bw_ref(void)
+-int initialize_mem_bw_ref(void)
++/* True if any x86 uncore iMC PMU ("uncore_imc_<n>") is present. */
++static bool intel_imc_present(void)
  {
--	int imc;
-+	int i;
+-	int i;
++	struct dirent *ep;
++	bool found = false;
++	char *temp;
++	DIR *dp;
  
--	imcs = num_of_imcs();
--	if (imcs <= 0)
--		return imcs;
-+	nr_bw_counters = num_of_imcs();
-+	if (nr_bw_counters <= 0)
-+		return nr_bw_counters;
+-	nr_bw_counters = num_of_imcs();
+-	if (nr_bw_counters <= 0)
+-		return nr_bw_counters;
++	dp = opendir(DYN_PMU_PATH);
++	if (!dp)
++		return false;
++	while ((ep = readdir(dp))) {
++		temp = strstr(ep->d_name, UNCORE_IMC);
++		if (!temp)
++			continue;
++		temp += sizeof(UNCORE_IMC);
++		if (temp[0] >= '0' && temp[0] <= '9') {
++			found = true;
++			break;
++		}
++	}
++	closedir(dp);
++	return found;
++}
  
- 	/* Initialize perf_event_attr structures for all iMC's */
--	for (imc = 0; imc < imcs; imc++)
--		read_mem_bw_initialize_perf_event_attr(imc);
-+	for (i = 0; i < nr_bw_counters; i++)
-+		read_mem_bw_initialize_perf_event_attr(i);
+-	/* Initialize perf_event_attr structures for all iMC's */
+-	for (i = 0; i < nr_bw_counters; i++)
++/*
++ * imc_setup_counters - Configure iMC CAS-count-read counters
++ * @bench_cpu: CPU the benchmark is bound to
++ *
++ * Discovers all iMC PMUs and configures one read-bandwidth counter per iMC,
++ * opened on the benchmark CPU (each iMC counts socket-wide regardless).
++ *
++ * Return: 0 on success, < 0 on failure.
++ */
++static int imc_setup_counters(int bench_cpu)
++{
++	int i, count;
++
++	count = num_of_imcs();
++	if (count <= 0)
++		return -1;
++
++	nr_bw_counters = count;
++	for (i = 0; i < nr_bw_counters; i++) {
+ 		read_mem_bw_initialize_perf_event_attr(i);
++		bw_counters[i].cpu = bench_cpu;
++	}
  
  	return 0;
  }
  
--static void perf_close_imc_read_mem_bw(void)
-+static void perf_close_mem_bw_counters(void)
- {
--	int mc;
++static const struct mem_bw_backend mem_bw_backends[] = {
++	{
++		.name = "Intel iMC",
++		.detect = intel_imc_present,
++		.setup_counters = imc_setup_counters,
++	},
++};
++
++/*
++ * mem_bw_ref_available - Is an independent reference-bandwidth PMU present?
++ *
++ * Used by the MBA/MBM feature checks so the test is SKIPped (not failed) on
++ * hardware lacking a usable memory-bandwidth PMU.
++ */
++bool mem_bw_ref_available(void)
++{
 +	int i;
- 
--	for (mc = 0; mc < imcs; mc++) {
--		if (imc_counters_config[mc].fd != -1)
--			close(imc_counters_config[mc].fd);
-+	for (i = 0; i < nr_bw_counters; i++) {
-+		if (bw_counters[i].fd != -1)
-+			close(bw_counters[i].fd);
- 	}
- }
- 
- /*
-- * perf_open_imc_read_mem_bw - Open perf fds for IMCs
-+ * perf_open_mem_bw_counters - Open perf fds for the reference-bandwidth counters
++
++	for (i = 0; i < ARRAY_SIZE(mem_bw_backends); i++) {
++		if (mem_bw_backends[i].detect())
++			return true;
++	}
++
++	return false;
++}
++
++/*
++ * initialize_mem_bw_ref - Select the reference-bandwidth backend for this system
++ *
++ * Counter discovery happens at perf-open time through the backend's
++ * setup_counters() since it can depend on the benchmark CPU.
++ *
++ * Return: 0 on success, < 0 if no reference PMU is available.
++ */
++int initialize_mem_bw_ref(void)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(mem_bw_backends); i++) {
++		if (mem_bw_backends[i].detect()) {
++			mem_bw_backend = &mem_bw_backends[i];
++			ksft_print_msg("Using %s as memory bandwidth reference\n",
++				       mem_bw_backend->name);
++			return 0;
++		}
++	}
++
++	ksft_print_msg("No memory bandwidth reference PMU found\n");
++	return -1;
++}
++
+ static void perf_close_mem_bw_counters(void)
+ {
+ 	int i;
+@@ -250,17 +355,27 @@ static void perf_close_mem_bw_counters(void)
+  * perf_open_mem_bw_counters - Open perf fds for the reference-bandwidth counters
   * @cpu_no: CPU number that the benchmark PID is bound to
   *
++ * Counters are (re)configured by the selected backend first since their
++ * discovery can depend on the benchmark CPU (e.g. per-socket PMU instances).
++ *
   * Return: = 0 on success. < 0 on failure.
   */
--static int perf_open_imc_read_mem_bw(int cpu_no)
-+static int perf_open_mem_bw_counters(int cpu_no)
+ static int perf_open_mem_bw_counters(int cpu_no)
  {
--	int imc, ret;
-+	int i, ret;
+ 	int i, ret;
  
--	for (imc = 0; imc < imcs; imc++)
--		imc_counters_config[imc].fd = -1;
-+	for (i = 0; i < nr_bw_counters; i++)
-+		bw_counters[i].fd = -1;
++	if (!mem_bw_backend)
++		return -1;
++
++	ret = mem_bw_backend->setup_counters(cpu_no);
++	if (ret < 0)
++		return ret;
++
+ 	for (i = 0; i < nr_bw_counters; i++)
+ 		bw_counters[i].fd = -1;
  
--	for (imc = 0; imc < imcs; imc++) {
--		ret = open_perf_read_event(imc, cpu_no);
-+	for (i = 0; i < nr_bw_counters; i++) {
-+		ret = open_perf_read_event(i, cpu_no);
+ 	for (i = 0; i < nr_bw_counters; i++) {
+-		ret = open_perf_read_event(i, cpu_no);
++		ret = open_perf_read_event(i);
  		if (ret)
  			goto close_fds;
  	}
-@@ -268,56 +268,54 @@ static int perf_open_imc_read_mem_bw(int cpu_no)
- 	return 0;
- 
- close_fds:
--	perf_close_imc_read_mem_bw();
-+	perf_close_mem_bw_counters();
- 	return -1;
+@@ -345,6 +460,16 @@ void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
+ 		param->ctrlgrp, domain_id);
  }
  
++/*
++ * mem_bw_ref_cleanup - Reset the selected reference-bandwidth backend
++ *
++ * Safe to call when no backend was selected.
++ */
++void mem_bw_ref_cleanup(void)
++{
++	mem_bw_backend = NULL;
++}
++
  /*
-- * do_imc_read_mem_bw_test - Perform memory bandwidth test
-+ * do_mem_bw_test - Perform memory bandwidth test
-  *
-  * Runs memory bandwidth test over one second period. Also, handles starting
-- * and stopping of the IMC perf counters around the test.
-+ * and stopping of the reference perf counters around the test.
+  * Open file to read MBM local bytes from resctrl FS
   */
--static void do_imc_read_mem_bw_test(void)
-+static void do_mem_bw_test(void)
- {
--	int imc;
-+	int i;
- 
--	for (imc = 0; imc < imcs; imc++)
--		read_mem_bw_ioctl_perf_event_ioc_reset_enable(imc);
-+	for (i = 0; i < nr_bw_counters; i++)
-+		read_mem_bw_ioctl_perf_event_ioc_reset_enable(i);
- 
- 	sleep(1);
- 
- 	/* Stop counters after a second to get results. */
--	for (imc = 0; imc < imcs; imc++)
--		read_mem_bw_ioctl_perf_event_ioc_disable(imc);
-+	for (i = 0; i < nr_bw_counters; i++)
-+		read_mem_bw_ioctl_perf_event_ioc_disable(i);
- }
- 
- /*
-- * get_read_mem_bw_imc - Memory read bandwidth as reported by iMC counters
-+ * get_mem_bw_ref - Memory bandwidth as reported by the reference PMU counters
-  *
-- * Memory read bandwidth utilized by a process on a socket can be calculated
-- * using iMC counters' read events. Perf events are used to read these
-- * counters.
-+ * Sum all configured reference counters, scaled to MiB: read CAS counts on
-+ * the x86 iMC.
-  *
-  * Return: = 0 on success. < 0 on failure.
-  */
--static int get_read_mem_bw_imc(float *bw_imc)
-+static int get_mem_bw_ref(float *bw_ref)
- {
--	float reads = 0, of_mul_read = 1;
--	int imc;
-+	float bw = 0, of_mul = 1;
-+	int i;
- 
- 	/*
--	 * Log read event values from all iMC counters into
--	 * struct imc_counter_config.
-+	 * Log event values from all reference counters into
-+	 * struct mem_bw_counter.
- 	 * Take overflow into consideration before calculating total bandwidth.
- 	 */
--	for (imc = 0; imc < imcs; imc++) {
--		struct imc_counter_config *r =
--			&imc_counters_config[imc];
-+	for (i = 0; i < nr_bw_counters; i++) {
-+		struct mem_bw_counter *r = &bw_counters[i];
- 
- 		if (read(r->fd, &r->return_value,
- 			 sizeof(struct membw_read_format)) == -1) {
--			ksft_perror("Couldn't get read bandwidth through iMC");
-+			ksft_perror("Couldn't read reference bandwidth counter");
- 			return -1;
- 		}
- 
-@@ -325,13 +323,13 @@ static int get_read_mem_bw_imc(float *bw_imc)
- 		__u64 r_time_running = r->return_value.time_running;
- 
- 		if (r_time_enabled != r_time_running)
--			of_mul_read = (float)r_time_enabled /
-+			of_mul = (float)r_time_enabled /
- 					(float)r_time_running;
- 
--		reads += r->return_value.value * of_mul_read * SCALE;
-+		bw += r->return_value.value * of_mul * SCALE;
- 	}
- 
--	*bw_imc = reads;
-+	*bw_ref = bw;
- 	return 0;
- }
- 
-@@ -435,19 +433,19 @@ void signal_handler_unregister(void)
-  * print_results_bw:	the memory bandwidth results are stored in a file
-  * @filename:		file that stores the results
-  * @bm_pid:		child pid that runs benchmark
-- * @bw_imc:		perf imc counter value
-+ * @bw_ref:		reference PMU counter value
-  * @bw_resc:		memory bandwidth value
-  *
-  * Return:		0 on success, < 0 on error.
-  */
--static int print_results_bw(char *filename, pid_t bm_pid, float bw_imc,
-+static int print_results_bw(char *filename, pid_t bm_pid, float bw_ref,
- 			    unsigned long bw_resc)
- {
--	unsigned long diff = fabs(bw_imc - bw_resc);
-+	unsigned long diff = fabs(bw_ref - bw_resc);
- 	FILE *fp;
- 
- 	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
--		printf("Pid: %d \t Mem_BW_iMC: %f \t ", (int)bm_pid, bw_imc);
-+		printf("Pid: %d \t Mem_BW_ref: %f \t ", (int)bm_pid, bw_ref);
- 		printf("Mem_BW_resc: %lu \t Difference: %lu\n", bw_resc, diff);
- 	} else {
- 		fp = fopen(filename, "a");
-@@ -456,8 +454,9 @@ static int print_results_bw(char *filename, pid_t bm_pid, float bw_imc,
- 
- 			return -1;
- 		}
--		if (fprintf(fp, "Pid: %d \t Mem_BW_iMC: %f \t Mem_BW_resc: %lu \t Difference: %lu\n",
--			    (int)bm_pid, bw_imc, bw_resc, diff) <= 0) {
-+		if (fprintf(fp,
-+			    "Pid: %d \t Mem_BW_ref: %f \t Mem_BW_resc: %lu \t Difference: %lu\n",
-+			    (int)bm_pid, bw_ref, bw_resc, diff) <= 0) {
- 			ksft_print_msg("Could not log results\n");
- 			fclose(fp);
- 
-@@ -475,10 +474,9 @@ static int print_results_bw(char *filename, pid_t bm_pid, float bw_imc,
-  * @param:		Parameters passed to resctrl_val()
-  * @bm_pid:		PID that runs the benchmark
-  *
-- * Measure memory bandwidth from resctrl and from another source which is
-- * perf imc value or could be something else if perf imc event is not
-- * available. Compare the two values to validate resctrl value. It takes
-- * 1 sec to measure the data.
-+ * Measure memory bandwidth from resctrl and from the independent reference
-+ * PMU. Compare the two values to validate resctrl value. It takes 1 sec to
-+ * measure the data.
-  * resctrl does not distinguish between read and write operations so
-  * its data includes all memory operations.
-  */
-@@ -487,42 +485,42 @@ int measure_read_mem_bw(const struct user_params *uparams,
- {
- 	unsigned long bw_resc, bw_resc_start, bw_resc_end;
- 	FILE *mem_bw_fp;
--	float bw_imc;
-+	float bw_ref;
- 	int ret;
- 
- 	mem_bw_fp = open_mem_bw_resctrl(mbm_total_path);
- 	if (!mem_bw_fp)
- 		return -1;
- 
--	ret = perf_open_imc_read_mem_bw(uparams->cpu);
-+	ret = perf_open_mem_bw_counters(uparams->cpu);
- 	if (ret < 0)
- 		goto close_fp;
- 
- 	ret = get_mem_bw_resctrl(mem_bw_fp, &bw_resc_start);
- 	if (ret < 0)
--		goto close_imc;
-+		goto close_counters;
- 
- 	rewind(mem_bw_fp);
- 
--	do_imc_read_mem_bw_test();
-+	do_mem_bw_test();
- 
- 	ret = get_mem_bw_resctrl(mem_bw_fp, &bw_resc_end);
- 	if (ret < 0)
--		goto close_imc;
-+		goto close_counters;
- 
--	ret = get_read_mem_bw_imc(&bw_imc);
-+	ret = get_mem_bw_ref(&bw_ref);
- 	if (ret < 0)
--		goto close_imc;
-+		goto close_counters;
- 
--	perf_close_imc_read_mem_bw();
-+	perf_close_mem_bw_counters();
- 	fclose(mem_bw_fp);
- 
- 	bw_resc = (bw_resc_end - bw_resc_start) / MB;
- 
--	return print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
-+	return print_results_bw(param->filename, bm_pid, bw_ref, bw_resc);
- 
--close_imc:
--	perf_close_imc_read_mem_bw();
-+close_counters:
-+	perf_close_mem_bw_counters();
- close_fp:
- 	fclose(mem_bw_fp);
- 	return ret;
 -- 
 2.43.0
 
