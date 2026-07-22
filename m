@@ -1,56 +1,57 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CADF473C89;
-	Wed, 22 Jul 2026 07:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F240A46E008;
+	Wed, 22 Jul 2026 07:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784706526; cv=none; b=Dt0jeFi6lUZkXNgGM0AE/7awohhpGyjUmms3pNBGX6SZj+kIk0cDHC6G7bJozC+1Zg+FVXrxKvrpVMzSxBHf5qv2ykkhM3xCvOUObKVMxzCefrmGMjNqLBWaEpNcq6AWc2HGGCzhOGilTYpIWKgBflva3B6PRDX2EIPhynrZTy4=
+	t=1784706526; cv=none; b=AY0tM2+AFJaN7/NRJ8n1AKEqi6vfW3sQANrKbmxmvkHgewpo6DWyRQvx9oWgqnUoOF98VGYcGKUbMAaVA/bbDOjS1/uODANolId6RxweyQzJrT4jgVkujRPgUUs+50W/700JgX53jFHTK66j+3Qyfs+pkatY5FY5/7++5YYo06E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784706526; c=relaxed/simple;
-	bh=6b0Wn2mVa1+lSzGuP1nzx2BVHdu130PT0E3UIsqjpqY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s6z74x/+mpCneQaXse5//XNFFXGyXSshhyC2TdN0341QfNv6DVPyIakB9hOcmpcceNceR0encSgtI/0xpFofoNNFu/XGGo08X9ZjTcbPA2Ve0Bi5q7WZ+DCs0FsLTsJHxxv3NK1j9hV9jG5NxVZmShsBO9A+9pwa31dWLQ65c5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=X+uJzJHX; arc=none smtp.client-ip=148.163.158.5
+	bh=X6y2qwLsLrihPDwY2YKofrxkjpaNAWyeTbksXjpFs0o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AhtFEQb6WEPnzU2GojeOn/dGhbxALn2Npwl0mtJ18XzcMEcHmHU335JJrrnUP+txhtsRjGf9+c2g8co097h3tJ+CLRQxtDAU/u3wV3mQOF1eB4Jma9qgGmzlcbSblbtGafQvYqMXhuX1wxJCAiLs6xs4Tn/8GVjgasks0F82XQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mmOLZrZw; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="X+uJzJHX"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66M5Bn1S3152888;
-	Wed, 22 Jul 2026 07:48:20 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mmOLZrZw"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66M5BvaI3048306;
+	Wed, 22 Jul 2026 07:48:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=oQsvWeF08xm/cz62QQ7JV6m3YH3pHdn8PCl60XvFB
-	bI=; b=X+uJzJHXFTJRkUmO1eSuxnJTqF5cMBVbPSdZZNMyFp7PuRLPOetdVfQy6
-	DS7l8Pu0vRoEx0g0ZO6h04/wri8Hb5zldtKQ7J/GLfJUH007LJXUev7SbBD3fT82
-	y0Vl0G/RBsrIc4L+ddCMEYKZbOJ3tgxVciTpkmiHtvTr8Lvb/PhYku5y/GKbsYeQ
-	nNa1JNd/AXMiqYo5enkG70uqQ4N8ksiiJBzgOu501ZmHAHq73ZITd/SdYfXRQ+E2
-	RaUc2KMd8QFwB3oLShFqFORuX0xZ6N4wCqGTbOBAmiLStgKzgdNAl+sop+LspQ2h
-	H2G+Huqie8x56fzDjl+Cv726iO6Mg==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=cTZZiiE5kktj/wuzF
+	u+mWHvdEQ2lr2pxn7eLIBud1O0=; b=mmOLZrZwJlipqPcgY15ufGOmz5p8WZXer
+	V8mlbnZCxaBPdaviI4F2TCzBR0RaRh8wMqYuGq3cv/ZXYqAVy7sA2NBKsc+9AGee
+	UdTxGZxehtP/5xRr6yYoAr1hSQFohRkAiSoTS5oppfhO0BVm4xIKIAw3T5P6Mxjo
+	hB6veMcbEBL9qXBsVv6tcE07plP0uEdyQ+Qk0+PyhIny+QY/iNL6E3f/fp+NQzbX
+	KaAahyWB0rX0365A47kYkcQ9nPRQ5jBvA+6qZORSLAlwc5FDBpU82hmeg8Rd+u5A
+	P2ljD83pFHqom7PWQN1OmPs4G59HhmVHuEO5KjwQyMqnkdJy7bwig==
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fg7ah8ftk-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fg78g8exc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jul 2026 07:48:19 +0000 (GMT)
+	Wed, 22 Jul 2026 07:48:27 +0000 (GMT)
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66M7Ydav006030;
-	Wed, 22 Jul 2026 07:48:18 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fgp1ge2d3-1
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66M7Yauw006002;
+	Wed, 22 Jul 2026 07:48:26 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fgp1ge2dh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jul 2026 07:48:18 +0000 (GMT)
+	Wed, 22 Jul 2026 07:48:26 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66M7mGu320906642
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66M7mOSW34079040
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Jul 2026 07:48:16 GMT
+	Wed, 22 Jul 2026 07:48:24 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7CBD4200C8;
-	Wed, 22 Jul 2026 07:48:16 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 67013200C9;
+	Wed, 22 Jul 2026 07:48:24 +0000 (GMT)
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ACD86200C7;
-	Wed, 22 Jul 2026 07:48:12 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D5547200C7;
+	Wed, 22 Jul 2026 07:48:20 +0000 (GMT)
 Received: from aboo.bl1-in.ibm.com (unknown [9.123.14.187])
 	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 22 Jul 2026 07:48:12 +0000 (GMT)
+	Wed, 22 Jul 2026 07:48:20 +0000 (GMT)
 From: Aboorva Devarajan <aboorvad@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@kernel.org>,
@@ -65,10 +66,12 @@ Cc: Michal Hocko <mhocko@suse.com>, Lorenzo Stoakes <ljs@kernel.org>,
         linux-kselftest@vger.kernel.org,
         "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
         Aboorva Devarajan <aboorvad@linux.ibm.com>
-Subject: [RFC PATCH 0/2] mm/memory_hotplug: bound offline retry loops with a configurable limit
-Date: Wed, 22 Jul 2026 13:18:09 +0530
-Message-ID: <20260722074811.378283-1-aboorvad@linux.ibm.com>
+Subject: [RFC PATCH 2/2] selftests/mm: add pc-dimm ACPI eject selftest for offline_migrate_max_passes
+Date: Wed, 22 Jul 2026 13:18:11 +0530
+Message-ID: <20260722074811.378283-3-aboorvad@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260722074811.378283-1-aboorvad@linux.ibm.com>
+References: <20260722074811.378283-1-aboorvad@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,275 +81,499 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: uH3J0IC4BLQRRc7TsamBY_18RwlwdEy0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfX2fR/wqvrPdZ9
- gcSBOJS21TlRH5KV8QeQRc/tONQ/R98JJTaplH1zsrzDA0PvDFQUGPczxZxO336O4VS58CFzA74
- 6cc5Vw5pZ9NuDq/cFo0LQi9RdHw6VftINfZIBgbYWPVKdlrOz6QKGMt2v+xFU4b7VoPzIuMf4Ja
- v/4erICiC7p2z8dal5lRoRSX9aSuj+9jVCIm0o6x4S/660+VAelh0mNTTW7J8Ks6WIgz36cyP3X
- khV0VMDleakdKr9QXQgbzzRlijMNJyRFiGQMz2MKTuHLOoeIGM45L8vJTiDPpMaWimJSSpevfVV
- fQex825+9dgZiXovXRtRzC6N4N799wkkY+6X1h4EAWEX294sNVs66TotNwKxTPvB9rE/vHSvaBD
- nN0DcUePNFeeVVzvNvzFv884n+18MkwoqKN+R02E/8eTxXeAfr5nUjVt9sKDyHJqHtjkDnPp0V3
- lp4tfOQRyMNqpT0pu8Q==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfX+KoMIT1OvV3v
- XdxoGeL2On0HYyU3/5+9UnAMwlCpYltb9UOvhLdXdnP5DWGXziDAgTdZMoTsMkpv5AkUUHhs7qN
- cAQIX7AyBbbytZwx08LpUbAE2ZRQeAY=
-X-Proofpoint-GUID: 5_BFTVUCTNJ7UATzgwzC30MdyJE3QD6G
-X-Authority-Analysis: v=2.4 cv=SM5ykuvH c=1 sm=1 tr=0 ts=6a6075c3 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfX/0DAlQdyBnYO
+ AvJzqV8dwi3LjsaK5FxiIFbt6lpeHzbKBTcye+qjwb43s9L0h9IbFkBr3RTnjSbcgr5mcER5q/r
+ jl6g9gr99bDAqEZr5CYlQ99XBmd4zove6AiEs+jlCOVBZNfv72g0Ck6utzdpgUtMlBe590m1Nkc
+ 5QJ/DKH13GzblZ+A8qXb/fXT6r+5xtbsL9yeM1uxOAkCbHviRs/1yrEFErufjGVmjx8MnivBFVL
+ jk1VBllgU1RZG419FTt93ua60Kr8vLmuhZfFBgIsgu/ivGfrKfkkoOp6VSASItLVnSpYnN9h/fL
+ w3nsvUYWO+LHubM6+EiCr/KZ10VDsNxEWT6Rmic8j+9oI1y3I9ffFgqKaKU3DvyR/k/JzEs+NJ8
+ lnuZpQ2THm7gC+p1bJw9pPx1C3Ws0SEm5U4mXvP350almIfNu5FAoVeu0vRs+brQIwy/oUikFg9
+ C1qJDRY/LS2F9dHcsIw==
+X-Proofpoint-GUID: rknPGrjsA6ydhCp5WqrH1HIG3arFpz7L
+X-Authority-Analysis: v=2.4 cv=MelcfZ/f c=1 sm=1 tr=0 ts=6a6075cb cx=c_pps
  a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8 a=zej21AwQAAAA:8 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=giDV6BoF7Npqmo5PyuYA:9 a=ztjCmhadxVTV2ceFFhsz:22
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=ygpDcHnE5uXTT0XjHt0A:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzIyMDA3MCBTYWx0ZWRfXy4n56Ytf/Mw0
+ Z+/IEJPjDdoZIldzin7WiMNvwOLenTmXJZ0ww6lfaAiH2CbPlULzNXnrqRKqCIqyE8PWmNHjvf/
+ IZ2/0eDvE/8VtIWLotJe1affXvdnYsE=
+X-Proofpoint-ORIG-GUID: m7iHy-OKdyRKAQ3plhBSBylSpYIYuNwj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-22_02,2026-07-21_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0
- spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0 impostorscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607220070
 
-Memory offlining can loop forever when a memory block holds a page that
-can never be migrated or freed.  This series adds an opt-in retry limit
-that lets offline_pages() bail out with -EBUSY instead of retrying
-forever.  The default (0) preserves today's behaviour exactly.
+Add a self-contained VM-based selftest that reproduces the ACPI memory
+hot-unplug hang in kworker context and verifies that
+memory_hotplug.offline_migrate_max_passes recovers from it.
 
-Patch 1 is the fix; patch 2 is an in-tree selftest that reproduces the
-hang from an unsignalable kworker and verifies the limit recovers it.
+The test needs a real ACPI eject because the offline that hangs runs on
+the kacpi_hotplug_wq kworker (acpi_bus_offline -> device_offline ->
+offline_pages) and cannot be aborted by a signal.
 
-1. The problem
-==============
+It boots the just-built kernel under virtme-ng with a cold-plugged
+pc-dimm and runs everything inside the guest:
 
-offline_pages() repeats two nested steps until the whole range is
-isolated:
+  1. online the DIMM memory blocks as ZONE_MOVABLE;
+  2. long-term pin one page of the DIMM via vmsplice (a small pin
+     helper is embedded in the script and built at run time);
+  3. eject the DIMM via /sys/bus/acpi/devices/PNP0C80:*/eject, which
+     runs the offline on the kacpi_hotplug_wq kworker, the same path
+     as a hypervisor-initiated device_del;
+  4. observe the real hang: with the limit disabled (default), the
+     block sits in "going-offline" while the kworker spins in
+     offline_pages();
+  5. rescue it at runtime: write offline_migrate_max_passes and verify
+     the kworker gives up with -EBUSY and the block returns to
+     "online".
 
-  1. Inner loop: find and migrate movable pages out of the range
-     (scan_movable_pages() + do_migrate_range()).
-  2. Outer loop: re-check isolation (test_pages_isolated()); if not
-     fully isolated, go back to step 1.
+Sample output:
 
-Neither loop has a termination condition.  When a page can never be
-migrated, scan_movable_pages() keeps returning the same pfn,
-do_migrate_range() keeps failing on it, and control never even reaches
-the outer isolation re-check - the inner loop spins forever.  The admin
-guide acknowledges this:
+  TAP version 13
+  1..3
+  # DIMM memory blocks: 32 33
+  # pinned one page in block memory33
+  # ejecting /sys/bus/acpi/devices/PNP0C80:00
+  # block memory33 going-offline, holding 10s
+  # do_migrate_range+0x1eb/0x260
+  # offline_pages+0x361/0x520
+  # memory_subsys_offline+0xdb/0x180
+  # device_offline+0xd0/0x130
+  # acpi_bus_offline+0x11f/0x190
+  # acpi_device_hotplug+0x1e8/0x3e0
+  # acpi_hotplug_work_fn+0x1e/0x30
+  # process_one_work+0x16a/0x310
+  # armed offline_migrate_max_passes=50
+  # memory offlining [mem 0x108000000-0x10fffffff]: giving up after 50 passes
+  ok 1 ACPI eject kworker hangs unbounded in offline_pages()
+  ok 2 stuck offline rescued by writing offline_migrate_max_passes
+  ok 3 memory block online and usable after the bailout
+  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-  "Further, memory offlining might retry for a long time (or even
-   forever), until aborted by the user."
+The wrapper is added as TEST_PROGS_EXTENDED (like hwpoison-panic.sh):
+installed and kept executable, but not run from a default kselftest
+invocation, because it spawns a VM itself.  The config fragment gains
+the options the guest kernel needs (MEMORY_HOTPLUG, MEMORY_HOTREMOVE,
+ACPI_HOTPLUG_MEMORY).  When vng, qemu, cc or the kernel knob are
+missing it skips cleanly (KSFT_SKIP), so it is safe to run anywhere.
 
-The single escape in the loop is signal_pending(current):
+The vmsplice-based pin in this test is a targeted technique to reliably
+reproduce the hang path for testing purposes; production scenarios
+typically involve slab pages or busy block-device page-cache racing
+into the offline range.
 
-    offline_pages(pfn, end_pfn):
-        do {                                    /* outer: isolation */
-            do {                                /* inner: migration  */
-                if (signal_pending(current))    /* <-- ONLY escape   */
-                        goto failed_removal;
-                pfn = scan_movable_pages(pfn, end_pfn);
-                do_migrate_range(pfn, end_pfn); /* may never succeed */
-            } while (pfn < end_pfn);
-        } while (test_pages_isolated(...));
-
-
-2. Why the kernel itself should be able to bail
-===============================================
-
-We keep hitting this during memory hot-remove operations: a single
-stuck page can block the whole operation.  This was also reported in
-[4] earlier; one example, where offlining kept failing to migrate a
-busy block-device page-cache page (aops:def_blk_aops) in a normal zone:
-
-  [10880.889199] page dumped because: migration failure
-  [10880.889232] migrating pfn 2a87b failed ret:1
-  [10880.889235] page: refcount:3 mapcount:0 mapping:00000000718ec5a6 index:0x857 pfn:0x2a87b
-  [10880.889241] aops:def_blk_aops ino:800003 dentry name(?):""
-  [10880.889245] flags: 0x33ffffe00004104(referenced|active|private|node=3|zone=0|lastcpupid=0x1fffff)
-  ...
-  [10880.889291] migrating pfn 2a87b failed ret:1
-
-A userspace-driven abort (timeout + signal) covers the common case
-where the offline is requested from process context, e.g. a tool
-writing to sysfs or an "echo offline > .../state".  There may
-still be scenarios where handling this in the kernel itself is helpful
-- for instance, hotplug requests that are processed entirely from
-kernel thread context.  An ACPI DIMM eject (kacpi_hotplug_wq) runs
-offline_pages() on an ordered workqueue, where there is no task to
-receive the signal, so the loop's one escape (signal_pending()) can
-never fire and a stuck page also blocks every hotplug event queued
-behind it.  For example, an ACPI DIMM eject stuck in the offline loop
-looks like:
-
-  task: kworker/u16:3   Workqueue: kacpi_hotplug acpi_hotplug_work_fn
-  Call Trace:
-   offline_pages+0x...
-   memory_subsys_offline+0x...
-   device_offline+0x...
-   acpi_bus_offline+0x...
-   acpi_scan_hot_remove+0x...
-   acpi_device_hotplug+0x...
-   acpi_hotplug_work_fn+0x...
-   process_one_work+0x...
-   worker_thread+0x...
-   kthread+0x...
-
-
-3. Prior reports and proposals
-==============================
-
-Variants of this have surfaced repeatedly:
-
-[1] 2020: zswap/z3fold pages made offlining loop forever;
-    isolate_movable_page() permanently failed and the same pfn was
-    retried indefinitely (same "isolation failed" signature as [5]):
-    https://lore.kernel.org/all/D90B73BA-22EC-407E-838F-2BA646C60DE0@lca.pw/
-
-[2] 2023: a proposal to bail after 3 consecutive migration failures on
-    the same pfn.  Nacked: any hard-coded retry limit leads to premature
-    failures; pointer to userspace-driven termination:
-    https://lore.kernel.org/all/20230428100846.95535-1-yajun.deng@linux.dev/
-
-[3] 2024: a proposal for a hard-coded limit of 5 migration retries
-    (fuse temp-page series v4 4/6); dropped in v5 after review:
-    https://lore.kernel.org/linux-mm/20241107235614.3637221-5-joannelkoong@gmail.com/
-
-[4] 2025: ppc64 hot-unplug hang on aops:def_blk_aops migration failures:
-    https://lore.kernel.org/all/7ed99822-9d63-4c6c-a492-d4820abebe18@linux.vnet.ibm.com/
-
-[5] 2025: ppc64 hot-unplug hang 20+ hours on a single slab page failing
-    isolation, also blocking pcp_batch_high_lock users:
-    https://lore.kernel.org/all/d35eca2bbdf8675c43d528571bb61c7520e669cb.camel@linux.ibm.com/
-
-The common failure mode is the same: when migration cannot succeed,
-offline_pages() has no way to give up on its own.
-
-
-4. Why a configurable limit, not a hard-coded one
-=================================================
-
-The kernel used to have exactly this bound with a hard-coded limit of 5
-migration retries plus a 120s timeout removed by commit 72b39cfc4d75
-("mm, memory_hotplug: do not fail offlining too early") because
-hard-coded policy caused premature failures on large machines.
-That commit explicitly left the door open:
-
-  "If we need some upper bound - e.g. timeout based - then we should
-   have a proper and user defined policy for that.  In any case there
-   should be a clear use case when introducing it."
-
-In general, it would be good to have this handled in the kernel as
-well, by providing a configuration option: a user-defined policy, off
-by default, that lets the kernel bound the retries on its own.  This
-helps the kworker paths above, which have no userspace to time out or
-signal them, but it is not limited to them: it also gives ordinary
-process-context offlines a way out when the userspace driver does not
-implement its own timeout/abort, so a single stuck page need not wedge
-the operation indefinitely.
-
-
-5. The fix (patch 1)
-====================
-
-A single counter at the top of the inner migration loop bounds the
-number of migration passes:
-
-    max_passes = READ_ONCE(offline_migrate_max_passes);
-    if (max_passes && pass++ >= max_passes) {
-            dump_page(stuck page);
-            ret = -EBUSY;
-            goto failed_removal_isolated;
-    }
-
-Both unbounded cases pass through this point: a stuck page spins in the
-inner loop without ever reaching the outer test_pages_isolated()
-re-check (so an outer-loop counter would never fire), and every
-outer-loop restart re-enters the inner loop.  Either way the counter
-only grows, so the limit eventually trips.
-
-Because the value is re-read every pass, writing the parameter aborts an
-offline that is already stuck - an admin can rescue a hung kworker
-without rebooting.  On bailout the existing failure path (shared with
-signal backoff and unmovable pages) un-isolates the range, sends
-MEM_CANCEL_OFFLINE and returns -EBUSY; the block stays online and
-usable, and dump_page() dumps the offending page.
-
-It is a module parameter, default 0 (unlimited = today's behaviour); at
-0 the check short-circuits and there is no functional change:
-    boot:    memory_hotplug.offline_migrate_max_passes=
-    runtime: /sys/module/memory_hotplug/parameters/offline_migrate_max_passes
-
-Alternative implementation: stall timeout
------------------------------------------
-
-Instead of counting passes, the bound could be a stall timeout: give
-up only after some time has elapsed with no forward progress.  Any
-successfully migrated page resets the clock, so it fires only on an
-offline that is genuinely stuck, not one that is merely slow:
-
-    /* give up only after X ms with ZERO forward progress */
-    if (migrated_a_page)
-            last_progress = jiffies;        /* any progress resets */
-    if (stall_ms && time_after(jiffies,
-            last_progress + msecs_to_jiffies(stall_ms)))
-            goto failed_removal_isolated;   /* -EBUSY */
-
-We are happy to send v2 in this shape if that or another approach is
-preferred.
-
-
-6. Testing
-==========
-
-Patch 2 adds tools/testing/selftests/mm/vmtest_memory_hotplug.sh, a
-self-contained VM test (virtme-ng + qemu, boots the just-built kernel,
-no rootfs/QMP).  It cold-plugs a pc-dimm, onlines it ZONE_MOVABLE,
-vmsplice-pins one page, and ejects it from inside the guest so the
-offline runs on the kacpi_hotplug_wq kworker; this reproduces the hang
-and then rescues it live.  The vmsplice pin is a deliberate, targeted
-reproducer used only to make the hang path reproducible in a test VM.
-
-Actual run (kernel log timestamps trimmed):
-
-    TAP version 13
-    1..3
-    # DIMM memory blocks: 32 33
-    # pinned one page in block memory33
-    # ejecting /sys/bus/acpi/devices/PNP0C80:00
-    # block memory33 going-offline, holding 10s
-    # do_migrate_range+0x1eb/0x260
-    # offline_pages+0x361/0x520
-    # memory_subsys_offline+0xdb/0x180
-    # device_offline+0xd0/0x130
-    # acpi_bus_offline+0x11f/0x190
-    # acpi_device_hotplug+0x1e8/0x3e0
-    # acpi_hotplug_work_fn+0x1e/0x30
-    # process_one_work+0x16a/0x310
-    # armed offline_migrate_max_passes=50
-    # memory offlining [mem 0x108000000-0x10fffffff]: giving up after 50 passes
-    ok 1 ACPI eject kworker hangs unbounded in offline_pages()
-    ok 2 stuck offline rescued by writing offline_migrate_max_passes
-    ok 3 memory block online and usable after the bailout
-    # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-The test SKIPs (never FAILs) without virtme-ng/qemu or on non-ACPI
-arches.
-
-This RFC is to discuss the approach and find the best way to address
-the infinite retry loop in offline_pages().  Please let me know if you
-have any comments. 
-
-Thanks,
-Aboorva
-
-Aboorva Devarajan (2):
-  mm/memory_hotplug: bound offline retry loops with a configurable limit
-  selftests/mm: add pc-dimm ACPI eject selftest for offline_migrate_max_passes
-
- .../admin-guide/kernel-parameters.txt         |  14 +
- .../admin-guide/mm/memory-hotplug.rst         |  26 +-
- mm/memory_hotplug.c                           |  38 ++
+Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+---
  tools/testing/selftests/mm/Makefile           |   3 +
  tools/testing/selftests/mm/config             |   3 +
  .../selftests/mm/vmtest_memory_hotplug.sh     | 369 ++++++++++++++++++
- 6 files changed, 452 insertions(+), 1 deletion(-)
+ 3 files changed, 375 insertions(+)
  create mode 100755 tools/testing/selftests/mm/vmtest_memory_hotplug.sh
 
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index eae504bd94c8..e113f3ff4655 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -177,6 +177,9 @@ TEST_PROGS += ksft_vmalloc.sh
+ # Destructive: every successful run panics the kernel.  Installed and
+ # kept executable, but not run from a default kselftest invocation.
+ TEST_PROGS_EXTENDED += hwpoison-panic.sh
++# Spawns its own VM (virtme-ng); not run from a default kselftest
++# invocation.
++TEST_PROGS_EXTENDED += vmtest_memory_hotplug.sh
+ 
+ TEST_FILES := test_vmalloc.sh
+ TEST_FILES += test_hmm.sh
+diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
+index 06f78bd232e2..d22f63eb9c2c 100644
+--- a/tools/testing/selftests/mm/config
++++ b/tools/testing/selftests/mm/config
+@@ -14,3 +14,6 @@ CONFIG_UPROBES=y
+ CONFIG_MEMORY_FAILURE=y
+ CONFIG_HWPOISON_INJECT=m
+ CONFIG_PROC_MEM_ALWAYS_FORCE=y
++CONFIG_MEMORY_HOTPLUG=y
++CONFIG_MEMORY_HOTREMOVE=y
++CONFIG_ACPI_HOTPLUG_MEMORY=y
+diff --git a/tools/testing/selftests/mm/vmtest_memory_hotplug.sh b/tools/testing/selftests/mm/vmtest_memory_hotplug.sh
+new file mode 100755
+index 000000000000..c211a0e7caa2
+--- /dev/null
++++ b/tools/testing/selftests/mm/vmtest_memory_hotplug.sh
+@@ -0,0 +1,369 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Test memory_hotplug.offline_migrate_max_passes by reproducing the ACPI
++# memory hot-unplug hang in kworker context and verifying that the retry
++# limit recovers from it.
++#
++# offline_pages() retries page migration in an unbounded loop.  A page
++# that can never be migrated (long-term pin, slab, busy metadata) makes
++# the loop spin forever.  Userspace-driven offlines can be interrupted by
++# a signal, but an ACPI DIMM eject runs on the kacpi_hotplug_wq kworker
++# where signal_pending() never fires, so the kworker hangs until reboot.
++#
++# Flow:
++#   1. Boot the just-built kernel (virtme-ng) with a cold-plugged pc-dimm.
++#   2. Online the DIMM's blocks as ZONE_MOVABLE.
++#   3. Pin one page of the DIMM (vmsplice long-term pin).
++#   4. Eject the DIMM via sysfs; offline runs on kacpi_hotplug_wq.
++#   5. Observe the hang (going-offline persists).
++#   6. Rescue: write offline_migrate_max_passes at runtime, verify bailout.
++#
++# TAP subtests:
++#   1  ACPI eject kworker hangs unbounded in offline_pages()
++#   2  stuck offline rescued by writing offline_migrate_max_passes
++#   3  memory block online and usable after the bailout
++#
++# Dependencies: virtme-ng (vng), qemu-system-<arch>, cc.
++# SKIPs (never FAILs) when tooling or kernel support is missing.
++
++readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
++readonly KERNEL_CHECKOUT="$(realpath "${SCRIPT_DIR}"/../../../../)"
++
++# shellcheck source=../kselftest/ktap_helpers.sh
++source "${SCRIPT_DIR}"/../kselftest/ktap_helpers.sh
++
++readonly DIMM_SIZE="${DIMM_SIZE:-256M}"
++readonly MAX_PASSES="${MAX_PASSES:-50}"
++readonly HANG_HOLD="${HANG_HOLD:-10}"
++readonly RESCUE_TIMEOUT="${RESCUE_TIMEOUT:-30}"
++readonly BOOT_TIMEOUT="${BOOT_TIMEOUT:-240}"
++
++readonly LOG="$(mktemp /tmp/vmtest_mhp_XXXXXX.log)"
++readonly GUEST_SCRIPT="$(mktemp /tmp/vmtest_mhp_guest_XXXXXX.sh)"
++readonly PIN_SRC="$(mktemp /tmp/vmtest_mhp_pin_XXXXXX.c)"
++# Must live in the kernel tree so the guest sees it through the 9p rootfs.
++readonly PIN_BIN="${SCRIPT_DIR}/.vmtest_pin_park.$$"
++
++VNG_PID=""
++
++cleanup() {
++	[ -n "${VNG_PID}" ] && kill "${VNG_PID}" 2>/dev/null
++	rm -f "${LOG}" "${GUEST_SCRIPT}" "${PIN_SRC}" "${PIN_BIN}"
++}
++
++guest_result() {
++	grep -o "^${1}=[A-Za-z0-9_-]*" "${LOG}" | tail -1 | cut -d= -f2
++}
++
++dump_log_tail() {
++	tail -25 "${LOG}" | while IFS= read -r line; do
++		ktap_print_msg "${line}"
++	done
++}
++
++skip_all_tests() {
++	local i
++
++	for i in 1 2 3; do
++		ktap_test_skip "$1"
++	done
++	ktap_finished
++}
++
++# -- pre-flight checks -------------------------------------------------------
++
++ktap_print_header
++ktap_set_plan 3
++trap cleanup EXIT
++
++arch="$(uname -m)"
++case "${arch}" in
++x86_64|aarch64) ;;
++*)	skip_all_tests "pc-dimm ACPI hotplug not available on ${arch}" ;;
++esac
++
++for dep in vng "qemu-system-${arch}" cc; do
++	if ! command -v "${dep}" >/dev/null 2>&1; then
++		skip_all_tests "${dep} not installed"
++	fi
++done
++
++# -- pin helper (compiled on the host, visible to the guest via 9p) -----------
++#
++# Allocate one block's worth of pages (ZONE_MOVABLE serves them from the
++# DIMM), find one that landed in a target block, vmsplice-pin it into a
++# pipe, print PIN_BLK=<N>, and sleep forever.
++
++cat > "${PIN_SRC}" <<'PINEOF'
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/mman.h>
++#include <sys/uio.h>
++
++static unsigned long memory_block_size(void)
++{
++	char buf[64];
++	ssize_t n;
++	int fd;
++
++	fd = open("/sys/devices/system/memory/block_size_bytes", O_RDONLY);
++	if (fd < 0)
++		return 0;
++	n = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
++	if (n <= 0)
++		return 0;
++	buf[n] = '\0';
++	return strtoul(buf, NULL, 16);
++}
++
++static unsigned long vaddr_to_block(int pagemap_fd, char *vaddr,
++				    long page_size, unsigned long blk_size)
++{
++	unsigned long vpn = (unsigned long)vaddr / page_size;
++	uint64_t ent;
++
++	if (pread(pagemap_fd, &ent, sizeof(ent), vpn * 8) != sizeof(ent))
++		return -1UL;
++	if (!(ent & (1ULL << 63)))
++		return -1UL;
++	return (ent & ((1ULL << 55) - 1)) * page_size / blk_size;
++}
++
++int main(int argc, char **argv)
++{
++	long page_size = sysconf(_SC_PAGESIZE);
++	unsigned long blk_size = memory_block_size();
++	unsigned long off, blk = 0;
++	char *area, *page = NULL;
++	int pagemap_fd, pipefd[2], i;
++
++	if (argc < 2 || !blk_size) {
++		fprintf(stderr, "usage: pin_park <memory block>...\n");
++		return 1;
++	}
++
++	area = mmap(NULL, blk_size, PROT_READ | PROT_WRITE,
++		    MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE, -1, 0);
++	if (area == MAP_FAILED) {
++		perror("mmap");
++		return 1;
++	}
++	memset(area, 0x42, blk_size);
++
++	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
++	if (pagemap_fd < 0) {
++		perror("pagemap");
++		return 1;
++	}
++
++	for (off = 0; off < blk_size && !page; off += page_size) {
++		blk = vaddr_to_block(pagemap_fd, area + off, page_size,
++				     blk_size);
++		for (i = 1; i < argc; i++) {
++			if (blk == strtoul(argv[i], NULL, 10)) {
++				page = area + off;
++				break;
++			}
++		}
++	}
++	close(pagemap_fd);
++
++	if (!page) {
++		printf("PIN_NONE\n");
++		fflush(stdout);
++		return 2;
++	}
++
++	if (pipe(pipefd)) {
++		perror("pipe");
++		return 1;
++	}
++
++	struct iovec iov = { .iov_base = page, .iov_len = page_size };
++
++	if (vmsplice(pipefd[1], &iov, 1, 0) != page_size) {
++		perror("vmsplice");
++		return 1;
++	}
++
++	printf("PIN_BLK=%lu\n", blk);
++	fflush(stdout);
++	pause();
++	return 0;
++}
++PINEOF
++
++if ! cc -O2 -o "${PIN_BIN}" "${PIN_SRC}" 2>>"${LOG}"; then
++	skip_all_tests "cannot build the pin helper"
++fi
++
++# -- guest script (runs as init inside the VM) --------------------------------
++
++cat > "${GUEST_SCRIPT}" <<PROLOGUE
++#!/bin/bash
++readonly MAX_PASSES=${MAX_PASSES}
++readonly HANG_HOLD=${HANG_HOLD}
++readonly RESCUE_TIMEOUT=${RESCUE_TIMEOUT}
++readonly PIN_PARK="${PIN_BIN}"
++PROLOGUE
++
++cat >> "${GUEST_SCRIPT}" <<'GUESTEOF'
++set -u
++
++readonly PARAM=/sys/module/memory_hotplug/parameters/offline_migrate_max_passes
++readonly MEM=/sys/devices/system/memory
++
++skip() { echo "VMTEST_SKIP: $*"; echo "VMTEST_DONE"; exit 0; }
++
++block_state() {
++	cat "${MEM}/memory${pinned_blk}/state" 2>/dev/null || echo GONE
++}
++
++[ -f "${PARAM}" ] || skip "kernel lacks offline_migrate_max_passes"
++
++# 1. Online the DIMM's blocks as ZONE_MOVABLE.
++dimm_blocks=""
++for s in "${MEM}"/memory*/state; do
++	[ "$(cat "${s}" 2>/dev/null)" = offline ] || continue
++	if echo online_movable > "${s}" 2>/dev/null; then
++		b=${s%/state}
++		dimm_blocks="${dimm_blocks} ${b##*memory}"
++	fi
++done
++echo "# DIMM memory blocks:${dimm_blocks:- none}"
++[ -n "${dimm_blocks}" ] || skip "no offline memory blocks (pc-dimm missing?)"
++
++# 2. Pin one page inside the DIMM.
++"${PIN_PARK}" ${dimm_blocks} > /tmp/pin.out 2>&1 &
++pin_pid=$!
++for _ in $(seq 1 10); do
++	grep -q "PIN_" /tmp/pin.out 2>/dev/null && break
++	sleep 1
++done
++pinned_blk=$(sed -n 's/^PIN_BLK=//p' /tmp/pin.out)
++[ -n "${pinned_blk}" ] || skip "pin failed: $(cat /tmp/pin.out 2>/dev/null)"
++echo "# pinned one page in block memory${pinned_blk}"
++
++# 3. Eject the DIMM with the retry limit disabled (default = unbounded).
++echo 0 > "${PARAM}"
++dmesg -c > /dev/null 2>&1 || true
++
++ejdev=""
++for dev in /sys/bus/acpi/devices/PNP0C80:*; do
++	[ -e "${dev}/eject" ] && { ejdev="${dev}"; break; }
++done
++[ -n "${ejdev}" ] || skip "no ejectable ACPI memory device (PNP0C80)"
++echo "# ejecting ${ejdev}"
++echo 1 > "${ejdev}/eject" &
++
++# 4. Observe the hang: the block must stay in "going-offline".
++sleep 3
++stuck=0
++if [ "$(block_state)" = going-offline ]; then
++	echo "# block memory${pinned_blk} going-offline, holding ${HANG_HOLD}s"
++	sleep "${HANG_HOLD}"
++	if [ "$(block_state)" = going-offline ]; then
++		stuck=1
++		echo 1 > /proc/sys/kernel/sysrq 2>/dev/null || true
++		echo l > /proc/sysrq-trigger 2>/dev/null || true
++		sleep 1
++		dmesg | grep -B2 -A12 "offline_pages" | tail -20 \
++			| sed 's/^/#  /'
++	fi
++fi
++echo "VMTEST_STUCK=${stuck}"
++
++# 5. Rescue: arm the retry limit at runtime and wait for bailout.
++echo "${MAX_PASSES}" > "${PARAM}"
++echo "# armed offline_migrate_max_passes=$(cat "${PARAM}")"
++
++rescued=0
++for _ in $(seq 1 "${RESCUE_TIMEOUT}"); do
++	if dmesg | grep -q "giving up after"; then
++		rescued=1
++		break
++	fi
++	sleep 1
++done
++dmesg | grep "giving up after" | tail -2 | sed 's/^/# /'
++echo "VMTEST_RESCUED=${rescued}"
++
++sleep 2
++echo "VMTEST_BLOCK_STATE=$(block_state)"
++
++kill "${pin_pid}" 2>/dev/null
++echo "VMTEST_DONE"
++GUESTEOF
++
++# -- launch VM ----------------------------------------------------------------
++
++( cd "${KERNEL_CHECKOUT}" && exec vng --force-9p --no-virtme-ng-init \
++	--qemu-opt=-m --qemu-opt="2G,slots=4,maxmem=8G" \
++	--qemu-opt=-object \
++	--qemu-opt="memory-backend-ram,id=mem0,size=${DIMM_SIZE}" \
++	--qemu-opt=-device --qemu-opt="pc-dimm,id=dimm0,memdev=mem0" \
++	bash "${GUEST_SCRIPT}" ) > "${LOG}" 2>&1 &
++VNG_PID=$!
++
++for _ in $(seq 1 "${BOOT_TIMEOUT}"); do
++	grep -q "VMTEST_DONE" "${LOG}" 2>/dev/null && break
++	kill -0 "${VNG_PID}" 2>/dev/null || break
++	sleep 1
++done
++
++if ! grep -q "VMTEST_DONE" "${LOG}" 2>/dev/null; then
++	dump_log_tail
++	skip_all_tests "VM did not finish within ${BOOT_TIMEOUT}s"
++fi
++
++kill "${VNG_PID}" 2>/dev/null
++wait "${VNG_PID}" 2>/dev/null
++VNG_PID=""
++
++# -- report results -----------------------------------------------------------
++
++skip_reason="$(grep "^VMTEST_SKIP: " "${LOG}" | tail -1 | tr -d '\r')"
++if [ -n "${skip_reason}" ]; then
++	skip_all_tests "${skip_reason#VMTEST_SKIP: }"
++fi
++
++grep "^#" "${LOG}" | tr -d '\r' | while IFS= read -r line; do
++	ktap_print_msg "${line#\# }"
++done
++
++stuck="$(guest_result VMTEST_STUCK)"
++rescued="$(guest_result VMTEST_RESCUED)"
++blk_state="$(guest_result VMTEST_BLOCK_STATE)"
++
++if [ "${blk_state:-GONE}" = "GONE" ]; then
++	skip_all_tests "DIMM was ejected despite the pin (pin did not hold)"
++fi
++
++if [ "${stuck:-0}" = 1 ]; then
++	ktap_test_pass "ACPI eject kworker hangs unbounded in offline_pages()"
++else
++	dump_log_tail
++	ktap_test_fail "ACPI eject kworker hangs unbounded in offline_pages()"
++fi
++
++if [ "${rescued:-0}" = 1 ]; then
++	ktap_test_pass "stuck offline rescued by writing offline_migrate_max_passes"
++else
++	dump_log_tail
++	ktap_test_fail "stuck offline rescued by writing offline_migrate_max_passes"
++fi
++
++if [ "${blk_state}" = "online" ]; then
++	ktap_test_pass "memory block online and usable after the bailout"
++else
++	ktap_test_fail "memory block online and usable after the bailout (state=${blk_state})"
++fi
++
++ktap_finished
 -- 
 2.54.0
+
