@@ -1,263 +1,208 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011004.outbound.protection.outlook.com [40.107.208.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E18A34D398
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 18:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784746365; cv=none; b=WJ2U77vOGLkpS10QgWtgJz7R1lNGTyZ0mT4I5sxybpkg7r5i3LoFAADQIPA+XfA+w7mCJjpmgsS/E+1zrWqRZNQZQBWq5HBQ3k2jHUehkNlGYM6R52bmrbDog0dE9enlu3Q3QFY3veMKHdSwo6xHkCN+p0Wds6Kq5vDfQf2kOXQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784746365; c=relaxed/simple;
-	bh=0l6MVvOJRh+S8vgqEY5AG8STSmRz2uSsmD/X3ffNyHU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EvskMUaAQF1Tt2wUEDhayv7g3+/olUOp/vWrHfGi/QkOoMhrRsaH7ky4LjMPOGonouZUPFo8r4lrFBrPSryOzW6H9j9wJAnyekq7TuLWgWme+BRje1cL6Pd829eNO3gi/NPNyQqcz4/ZVth/qT8jwnB5lN890fp43LidgsEOito=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cGrm4QFp; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F392435C6B9;
+	Wed, 22 Jul 2026 18:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.4
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784746681; cv=fail; b=lPmW/zn1H+cwXORyN+c8vPxAQbqUn1Qsz0OgPtLhjx88vwljgtCMzKczFT2ja9uS9XGbNXHUvS8I/FhYBRU6wG7a1OE5RJZJVFqLPguetipbm5ZcJsrWsq8TXVZOzUTxwz0Gcwrz2MC1tdZJfKcHS68NBT7UXmVQCAQSaCItXaU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784746681; c=relaxed/simple;
+	bh=DrM9YJozpDWQ9QnVGeXoupCZer0nM5Nw8jdb2cWSymY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=b8zW2gaM6+dwrqTJQ/3eWLlM81mG1CJPlGYTYMclkw958JuYRFcU0ALR1JOQwLq46owsWa2QxPoFDpew8k1xYUl4VDj/M8TfNio1vOvvGoT2B0JZ11pqayk1XSrTPSjK3Uvy1IuFYKTZPj3wGpbr+g4LYEL83R7xaMs1lG0iM0g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=J/Dbd0/h; arc=fail smtp.client-ip=40.107.208.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cGrm4QFp"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2caea3f742bso154510415ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 11:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784746362; x=1785351162; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Uym772qkEh9LOk/iL6aKk1xWDH0j1Tlr0rPbsmQanS4=;
-        b=cGrm4QFpmYKxTJ7Ok+BjVqPMTUxCP0tuPiPrt9pSWNhLEToaIN0LaxMf4dzmTgMH67
-         yTgNSlDlMUGxR1UpzLZhno2yXQxAdpWfRphUmXCYRgKLcKFXKG1gdg/50Pm1e2Hzmdy2
-         do9T2lC7VItQZ4QqtzY2rAcx+NavZNkeggd4aHXTBo8xKb4DOTNu4gmIu8ky+l390KjS
-         MTo4qo8R1zUUimkLGcH/lR3Z1ISusZy+bA9BW1h+05E6gfHW+EXqElptkAdwcY0S5GbD
-         ecimiIQb720CpincUStXDdsdfgNgyjaXVCXQaplL7RlZNhNIYZjjth/7izuo0x3OA3/y
-         9GJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784746362; x=1785351162;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Uym772qkEh9LOk/iL6aKk1xWDH0j1Tlr0rPbsmQanS4=;
-        b=kpvRCKCXagE/UJpe3x9ZP0y8rc8vYOD/eYOY1Prpsq7Jr561q9PQoD5dlbj1fXjvXF
-         9BYa5ttqZ1RcYbgtZ2ozq/ed6u44fiOrJDU6+AzJJAxuLU13UoKYVNkbBMMrXTev98tC
-         0PNGHZ51My2RwAYb05BB6Sp7yHJ/CRy3nA/4fLBhiCJc2Y09WdSqBiTDXhxCDDegassK
-         qEOj16XVoSmd9DrOnNj9tjzrnUiXxpYzHcLSLkbuzDBNUcyuQx+N2PEfJ7YnxQuWG81u
-         7kJU2BQAea1lveua25oHgtsYOkNyRRuyAjBrALD7wVsFkDPNzlS/qQCRxcnIzbY9U4OL
-         VPLg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr32eBRK6MB+w4qimJMTNTZDnO3w6b4Clo+jhFjz5BAGvpdGFF3rtZi1NzqwOXX6TOudx49AA72s+0nsIbms1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9v5tCLlKet+jykkK7egUxrS63YtxjH6MHhs01ti098t2MSWWF
-	rYZ8Pew5g6WDp9BuBeupQoQrtnv2YfqfQwg6rxevatutlAfCDftOpz/i
-X-Gm-Gg: AR+sD10V0Rl3DREXW++3v9Bc3NxJXVt2z58C14RqrwY110uIRKJn/iJmLoN4HvtMAub
-	JEwuHzrdhro/tnjErVN90HL/Stw2nlB/PQSZYfGhuw4jC0P3NEr8J54czTYYsYUgoCkfGw7pswQ
-	MYfR8tYHjXQpp/YhsQyPQD6n0wzHuDImMzEq02iosUbnLahG4Hm2D+hcLuniYZjmuLiaQKW8tP5
-	m+uRfB6IwPkFH9aIvkcM8E4fU51TUeWyjrA0Ij5HCy4NYYP41tiW91/2svkQx9Xdl8eOKnBTiD9
-	hBa2x+Mss9kkWQwlDUjOB2Fa7ZlUpbxGMnxhdiR932rpShIAtRnlo8s3oFt5EwQSNvERQyZQq8q
-	Po7bqGndQkFRShGrqAXh2BiHeFuTpoPjDrUd9501aGTCpxvfJ67KMDk+la5wZpAyu6Ub8ej5rD1
-	8yr2ewzjHC2zGSRAbPFjzeMJ39tPGvEP4ltsdYvZfYeoPOeYMpJ97EUPQ=
-X-Received: by 2002:a17:902:da8b:b0:2cc:7e4a:bcc5 with SMTP id d9443c01a7336-2cfa71aa7demr1018275ad.32.1784746361700;
-        Wed, 22 Jul 2026 11:52:41 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8efde5cfsm19378335ad.31.2026.07.22.11.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 11:52:41 -0700 (PDT)
-Date: Wed, 22 Jul 2026 11:52:38 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Matthew Brost <matthew.brost@intel.com>
-Cc: airlied@gmail.com, akhilesh@ee.iitb.ac.in, akpm@linux-foundation.org,
-	corbet@lwn.net, dakr@kernel.org, david@kernel.org,
-	decui@microsoft.com, haiyangz@microsoft.com, jgg@ziepe.ca,
-	kees@kernel.org, kys@microsoft.com, leon@kernel.org,
-	liam@infradead.org, lizhi.hou@amd.com, ljs@kernel.org,
-	longli@microsoft.com, lyude@redhat.com,
-	maarten.lankhorst@linux.intel.com, mamin506@gmail.com,
-	mhocko@suse.com, mripard@kernel.org, nouveau@lists.freedesktop.org,
-	ogabbay@kernel.org, oleg@redhat.com, rppt@kernel.org,
-	shuah@kernel.org, simona@ffwll.ch, skhan@linuxfoundation.org,
-	surenb@google.com, tzimmermann@suse.de, vbabka@kernel.org,
-	wei.liu@kernel.org, dri-devel@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v9 8/8] drm/gpusvm: Use
- hmm_range_fault_unlocked_timeout() for range faults
-Message-ID: <amERdq2X5l5vHfJo@skinsburskii>
-References: <178413903133.1155966.3904063656020521607.stgit@skinsburskii>
- <178413941236.1155966.14485211391150425997.stgit@skinsburskii>
- <al7CGPdJGM+asOFK@gsse-cloud1.jf.intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="J/Dbd0/h"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yqwqAOAuwDNMYKqGPv73/DfhCNPwX3DdfYsm6hHxezrtMBGBUngt0iLLK3GOlEdJyWoWeE5J9/BhJRwjWCp3hOGTVUNoiNedwxxHssgD61gZ/V5BoecemClwGqOGfxh+jX/wuNetmtLxq+lzNeeRB26INy5mxuzIKeT0DuNPwAVgcHpsn4uc8JO9gD5eSv/SIhmforV6uIkQ8hoT27ddlDCECYgipTxAjHdNO8fG/E+jwSCP0xPu8knkXz7VExRRz3Dfdyu0iWnpbD0UirQ4HlYmebVZCBX6pOy0wRY6QU8cor4cmvCtrjaIwntBOwylGeI6dbtK+X9F1vJTieah/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CX8i7FbDHjoLET5/UZuYmEvLMLYGtL9pMrNjlWbLnaE=;
+ b=wcvxsGXK1+bchALbubLluz6xSmA8O7qFVmk/ohgWbURK8+BH27e9b/O/bJ7dGL66TLRee3DceFSp5kciDzbhoVZL/feJFZg9rfUxZ4PGyscRaIrJ54PtE7wUccvklqXAKJR4mDPv3GqADGb/13wzF2zAkr6I3AOKKm62GDD5oEY3FQz+liuitncuRW3h7JjqAN8f2Ql6uQADJNk5nty/3SfXyKyRoYxZnDSGyLo+7/xrqy5ai+d1K2lxLD/pVS7fpQOjM3rl0AQ7+Du4+ieB+YMJMsZjaSqIVIYeWgPu8NJhcLVwgpgWEoQrzyNK++PtHJYucUBI1pvSvY5m//oBPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CX8i7FbDHjoLET5/UZuYmEvLMLYGtL9pMrNjlWbLnaE=;
+ b=J/Dbd0/hOnH42kJ3jRsgsJYlT5u1mq1Xb4dAOyufkDOOncW4kGyLiT9U3tjMS36qGwhj1l9eg31/Z9if5/omeFqpY9XOVDdldGB+oRVlOU6Z284sg0vh71MCJDO2l8hMuQ21ihVzUw8034V80XbbDrX8bhQK4CANT9fdUPnYHddpmK+i1iqeeqiF4dHltZZrT95bH5r2XgkgDFJXXL6akMQKj+JOSR4I6ZnXxrutnNKJo016ZH2VnBc8Ly+Uo3pfpJJWbIw6E/iKXWZss94ZCMbMFlfEEnGDW14szBL4JCn2yt2FqcvOuDVN7JoRvXchCT7yEgsNoK7kAaZR+0MOsw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM3PR12MB9416.namprd12.prod.outlook.com (2603:10b6:0:4b::8) by
+ BN3PR12MB9572.namprd12.prod.outlook.com (2603:10b6:408:2ca::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Wed, 22 Jul
+ 2026 18:57:43 +0000
+Received: from DM3PR12MB9416.namprd12.prod.outlook.com
+ ([fe80::8cdd:504c:7d2a:59c8]) by DM3PR12MB9416.namprd12.prod.outlook.com
+ ([fe80::8cdd:504c:7d2a:59c8%4]) with mapi id 15.21.0245.009; Wed, 22 Jul 2026
+ 18:57:43 +0000
+Message-ID: <4ad4c2f0-aa6b-435d-b649-a8320a418730@nvidia.com>
+Date: Wed, 22 Jul 2026 11:57:40 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/5] selftests/mm: make file helpers return errors
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ "David Hildenbrand (Arm)" <david@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
+ Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260716123226.197736-1-sarthak.sharma@arm.com>
+ <20260716123226.197736-2-sarthak.sharma@arm.com>
+ <b66c233a-7956-461a-a3d8-3421c76c937a@kernel.org>
+ <004e11f5-ab21-479d-80a3-64ab89465b85@sirena.org.uk>
+ <cefe62b7-0167-46c1-9fe3-fe7efee90a7e@kernel.org>
+ <cd539861-5f98-4906-8e36-f2a5a70687a5@arm.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <cd539861-5f98-4906-8e36-f2a5a70687a5@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR21CA0022.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::32) To DM3PR12MB9416.namprd12.prod.outlook.com
+ (2603:10b6:0:4b::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <al7CGPdJGM+asOFK@gsse-cloud1.jf.intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM3PR12MB9416:EE_|BN3PR12MB9572:EE_
+X-MS-Office365-Filtering-Correlation-Id: fb19e792-206e-4a4d-daca-08dee8231c37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|22082099003|18002099003|6133799003|4143699003|10067099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	Utsb440LDfw+IEfIrNFoy3e5ai14fIKtcQBNfmUKx+7F80zv48fCOpiZ0MNXnbAvtMrKMoABC7cvZnkxLHqMzVckFuavlNSCuShyN+Pc6TJEunaouCEZ1iX67UQEo5Qh8A0pqApi3jKQl29K5C7rtjDzxM249QiBteVg7W1rdcmBjNS3pO4Bcs1OTFz6HsPUGG5vBKtuI8Q/2qHStHsD238A3SwP0unOExtlJKPMkLCQyIslMhs+8rV0sB3Ld59fkY9JIMLe1SFWDvwdQ/CMW++lm2Hv+cHfSWwxs4wHqIvzBJvUoLzBSoGdLVBa4uUdxFDN79sKFDIAQl1jn8217PXg3i1afPrgwQOHGJueyW4Tw7fCUiwF8G9TDi/ZwPdJB1H08XHBwElc9w2txX1ea7BVfDo6Oya5cB0Xu2UZtgiSrBQnbuyIbq/q6UjIOqq/WdB+inqzcMm5t2ezC0IGDuo8UW9Olq/EkO6bxQajGAFZ8qPHEPfOX75TXGD62CndvC8zAEtASfJ90npSYMeVK5zym0KW7c9qFKn86sTqIAbkKmWGxVLeca4H0wxSpVsCO8xhl0lc99GBRT/Kr4SY7lBdc5WrQ2RxlchHDAG53RltfCTaIFByV7TGjzXrhLX318NRykije77A/YM10GHw1IuLaRPXqiL7x9MnOnTY8bI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PR12MB9416.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(22082099003)(18002099003)(6133799003)(4143699003)(10067099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bUlkdHV5eU10L0NDZStxNmRxZmNIbkg1bW5GMmh5ME8rdkZLelBFOEdyb05P?=
+ =?utf-8?B?Mmw4SUtqTjk4cjZ4MFo4S0dQRVNZdGVKUTZhTmZLSklOQmZ6S2txOEJQdEht?=
+ =?utf-8?B?MzBzV3Jad2U1R3l2aXM2R3NXVFRCYVNxN2VpY2dGanVFeFRhNXU3S2NGTWVz?=
+ =?utf-8?B?Q2M5dlByZkZZcEplZ3BDenExakx0RmZOTjRZNjNzd0orZEpzNCtVVU5yV1ZE?=
+ =?utf-8?B?WHRyMU5HOS9qMEdnczF4b0pLYVFvM3hOR1c1SS9oNnFwNHpDWEVtRHFiUHlN?=
+ =?utf-8?B?aHdLNXVtLzdpL0F1WGJiL29NeXd4WW9YVVJmdUI2UXV2MTJMZW9rMmR3Y0hI?=
+ =?utf-8?B?YXQ5Zml3Q2tiNjRNeHRZZ1VsVzZPYTlVZDhPZUtrTzhEMWRBWi8rM1RRbEdl?=
+ =?utf-8?B?Vk51MFhLTjMxa2pPOWtkUXBwR0UwQVVrRHBoUmNWQnJRQ3V6VTV0TlVseS9E?=
+ =?utf-8?B?TXY4SXFSdmRIWFdiN2N4REFxTEo4L2VKK0hEVnEzM3lISXdxRFpFdzZpTi9p?=
+ =?utf-8?B?c1lIVjBYZDlSb0wxYVlJTk94ZGJ5cStaeGlkUjlsRGYyZnZQS25RZjBMZitC?=
+ =?utf-8?B?c1BxOS9YWm5VSDQ2cHBWbGZJTjhEeWJ1SFAzejQ2NC81WmFUcTBROXdBbmcy?=
+ =?utf-8?B?WnA4MzhJcUc2eWRiRXpaQUREb3BGS1dWbjd3dityRWFsZEo4anhUcXV0S1By?=
+ =?utf-8?B?MlRsa1ZFeHB0R3lQSURDTnN5bnYwTmtXUlVXNlJRRFQ2VmFBQ0F6NVQ5dk8z?=
+ =?utf-8?B?dDNCNmszV1hSc01TYTZMa24yRVg1VlU0d2F4TEw2WjRsY083TFVxRDV3YzdT?=
+ =?utf-8?B?SERKc0FaZSt3T2xNSXRnQm03dDE2MFhYakhMZmRXQW90WWE2eXdBeUFzYkRl?=
+ =?utf-8?B?S3FOdlBNN1FLSk4vZloyV1JRaXRxOENyenFEaXg0MHU2Z0pPUmhVd1FEQnRn?=
+ =?utf-8?B?NTJaeWt5U083NGhFaW9zQmV3b2hMVlRKMFord21EZVFCMVllSjhhSlFIVUhO?=
+ =?utf-8?B?VU1rc0Y5TDVuRmpidzh2Q0ZpZ2NzaGFLbWV3U056TEY1WW80T2k2NGtFUUZW?=
+ =?utf-8?B?WHlHOGFSTVoxc0xNWHF1QjFmNVJTcVJhYnBXUWp5SjQzeVZWdC93NVBrQ2VC?=
+ =?utf-8?B?U21rMXhhUnJjN2Uwd2Zib2ZyQTJ0ajQzLzYwTHhMeGU5M3dxKzdwbVp0RUFs?=
+ =?utf-8?B?Z0xRbjFlTHNCK1BtNDNSbVpPTTFHMElWTzRhd2U1VDRCVmlBaHErSEZUZVNa?=
+ =?utf-8?B?MU9kalZnV2xaSzRnclZiNjIyVUhONU9aSUd5aU5kVHNvT1doK1E1K2xiZ0dx?=
+ =?utf-8?B?WEdDSUptcWN4b29BeDVueDJtUVIvS3RYdFd2akhiZmJDK0tVRitaQ2FHbEM1?=
+ =?utf-8?B?TXpFSFQ1TnN1ZnpJYXhjN0NhdThSakFteUxlSHJIaFgzdFFJbENKTkducnFC?=
+ =?utf-8?B?dHZrSjFPTDNZc1ArQ0h1Q1F6VlJWWjBUclBiTDZHRlNrTHRTeS8xa3ZiaDlT?=
+ =?utf-8?B?NGtRa0szN0pXYy8rWFY1azFSS1BvY2JJeWx1OThRTG83YUhaWUdWRExKRys1?=
+ =?utf-8?B?ZGVvV0RrZHZnU2h3M2c5V3lOQkxpeGl0YXRhUHhZVVdZMkRBWFNnNzVKa3pX?=
+ =?utf-8?B?K0RoT0FGcFFZT0xPNU9uWTRBUzhEUTYzcncxekI1S1BYVGZiVlFQd0g0ZDVv?=
+ =?utf-8?B?amlYeTVMdjBCQmJQK3BiNGNJdzJVQWN3cEFKTnlOeS85cDZGZng3T1Y1YzE0?=
+ =?utf-8?B?UkVKL3owSHlXUnQzYW82VTV0d0pmSm1NMTkyRWJzQXhzM0ZHenNteUlaeEpT?=
+ =?utf-8?B?a1Z0bndxZUFCNktmaXJUdklEK1hsdmNmTWRTWXR0aUxza3FsYjdVTjBxbXJH?=
+ =?utf-8?B?bzNJL0Z6OVlSR1dxc202c1YxRWNnMEZML25hL2Vqc0tyN3hvTGJ3S213OTZx?=
+ =?utf-8?B?clJkY2JkTGo1VEgydk5xOFZ2WlFvZklpWUpxWFRod2FWSWZSam52S09oM3VO?=
+ =?utf-8?B?Rlo0Z0N3eklIUHJyOHZyNytuY3dKQTZzTENiM1huUXozZVdNaktXMjVKbFB4?=
+ =?utf-8?B?emE5M2ZtMm16Q2I3ZCtxaStxYkxWU2d2WEpCWmE5MGE1YWErSTg5Skc4NzZG?=
+ =?utf-8?B?UVFoNXI2VENHSjFWWmVhQWNlN2F0VkFpYTNPbzIvanZGOWtaM0htbUlIcml2?=
+ =?utf-8?B?MGg2VnVENUNXdncrT1JGSC91THFmTi8vY2MzNTdrNW1tclZhcUt1ek9kWG1n?=
+ =?utf-8?B?NHdQZmhHZUttRTRWQkZWbFFiU1NRVlV4ZW05dXV4MTU3TWErTDd5RnBWZ3Fh?=
+ =?utf-8?B?MXB1ZUlaK3JlRld1cTArUnorMFV4YzVJWVBLaUNRcUZuc2hCNmppUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb19e792-206e-4a4d-daca-08dee8231c37
+X-MS-Exchange-CrossTenant-AuthSource: DM3PR12MB9416.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2026 18:57:42.9968
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nG0ndGTVo/S1aoj1CmXSebvr6iYlWSvvDaVdpBgVF6lDPKIUlSLJnRj7EcXRxjzIDFbchFoXpjBdxNZ6jgeJGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR12MB9572
 
-On Mon, Jul 20, 2026 at 05:49:28PM -0700, Matthew Brost wrote:
-> On Wed, Jul 15, 2026 at 11:16:52AM -0700, Stanislav Kinsburskii wrote:
-> > Several GPU SVM paths take mmap_read_lock() only to call hmm_range_fault()
-> > and open-code mmu interval sequence setup before each HMM walk. They also
-> > retry -EBUSY until HMM_RANGE_DEFAULT_TIMEOUT expires.
-> > 
-> > Use hmm_range_fault_unlocked_timeout() for those faults. The HMM helper now
-> > owns mmap_lock acquisition and refreshes range->notifier_seq for its
-> > internal retries, while GPU SVM keeps its existing driver-lock validation
-> > with mmu_interval_read_retry() after a successful fault.
-> > 
-> > Pass HMM_RANGE_DEFAULT_TIMEOUT as the helper retry budget for each HMM
-> > fault attempt. This scopes the timeout to repeated HMM notifier retries
-> > while preserving the outer retry loops that restart when the interval is
-> > invalidated before GPU SVM updates or consumes the mapping state.
-> > 
+On 7/21/26 10:24 PM, Sarthak Sharma wrote:
+> Hi David and Mark!
 > 
-> This part doesn't seem right for get_pages(), see below.
+> On 7/21/26 8:24 PM, David Hildenbrand (Arm) wrote:
+>> On 7/21/26 15:48, Mark Brown wrote:
+>>> On Tue, Jul 21, 2026 at 03:39:09PM +0200, David Hildenbrand (Arm) wrote:
+>>>> On 7/16/26 14:32, Sarthak Sharma wrote:
+>>>
+>>>>>  	fd = open(path, O_RDONLY);
+>>>>> -	if (fd == -1)
+>>>>> -		return 0;
+>>>>> +	if (fd == -1) {
+>>>>> +		int err = errno;
+>>>>> +
+>>>>> +		printf("# %s: %s (%d)\n", path, strerror(err), err);
+>>>
+>>>> Shouldn't we be using
+>>>
+>>>> ksft_print_msg()
+>>>
+>>>> That does the magic "# " for us.
+>>>
+>>> Or ksft_perror().
+>>
+>>
+>> Right, and if we want to move this to tools/lib/mm later, maybe we can just not
+>> print anything and instead only return expressive errnos.
+>>
 > 
-> > Leave drm_gpusvm_check_pages() on hmm_range_fault() because that path is
-> > called with the mmap lock already held by its caller.
-> > 
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> > Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
-> > ---
-> >  drivers/gpu/drm/drm_gpusvm.c |   61 +++++-------------------------------------
-> >  1 file changed, 7 insertions(+), 54 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/drm_gpusvm.c b/drivers/gpu/drm/drm_gpusvm.c
-> > index 958cb605aedd..de5bbfe58ee9 100644
-> > --- a/drivers/gpu/drm/drm_gpusvm.c
-> > +++ b/drivers/gpu/drm/drm_gpusvm.c
-> > @@ -773,8 +773,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
-> >  		.end = end,
-> >  		.dev_private_owner = dev_private_owner,
-> >  	};
-> > -	unsigned long timeout =
-> > -		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> > +	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> >  	enum drm_gpusvm_scan_result state = DRM_GPUSVM_SCAN_UNPOPULATED, new_state;
-> >  	unsigned long *pfns;
-> >  	unsigned long npages = npages_in_range(start, end);
-> > @@ -788,22 +787,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
-> >  	hmm_range.hmm_pfns = pfns;
-> >  
-> >  retry:
-> > -	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
-> > -	mmap_read_lock(range->gpusvm->mm);
-> > -
-> > -	while (true) {
-> > -		err = hmm_range_fault(&hmm_range);
-> > -		if (err == -EBUSY) {
-> > -			if (time_after(jiffies, timeout))
-> > -				break;
-> > -
-> > -			hmm_range.notifier_seq =
-> > -				mmu_interval_read_begin(notifier);
-> > -			continue;
-> > -		}
-> > -		break;
-> > -	}
-> > -	mmap_read_unlock(range->gpusvm->mm);
-> > +	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
-> >  	if (err)
-> >  		goto err_free;
-> >  
-> > @@ -1406,8 +1390,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
-> >  		.dev_private_owner = ctx->device_private_page_owner,
-> >  	};
-> >  	void *zdd;
-> > -	unsigned long timeout =
-> > -		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> > +	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> >  	unsigned long i, j;
-> >  	unsigned long npages = npages_in_range(pages_start, pages_end);
-> >  	unsigned long num_dma_mapped;
-> > @@ -1422,9 +1405,6 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
-> >  	struct dma_iova_state *state = &svm_pages->state;
-> >  
-> >  retry:
-> > -	if (time_after(jiffies, timeout))
-> > -		return -EBUSY;
-> > -
+> Yes, we are not using ksft_* prints here because these functions move to
+> tools/lib/mm later in the series.
 > 
-> I think that by deleting the code above, you have changed this function's
-> semantics by removing the hard cap of HMM_RANGE_DEFAULT_TIMEOUT. This
-> code was added because, on some non-production platforms, the timing in
-> this function could cause it to livelock.
-> 
-> Is there any reason this was remove aside from timeout variable not
-> being a deadline now? You likely should add the deadline back in.
-> 
+> Printing errors from the helpers was suggested by Mike [1]. I also think
+> this is useful since the diagnostic handling stays at one place, instead
+> of duplicating it in every caller.
 
-Indeed, this one can be called from a kernel thread context as well.
-I'll revert the change in the next revision.
+This is a common pitfall. In fact, the lower ("leaf") routines, *especially*
+library-like functions that are called by disparate callers, should be
+usually be silent. 
 
-Thanks,
-Stanislav
+That's because printing is a policy choice, and libraries must refrain
+from imposing that policy onto their callers.
 
-
-> Matt
+Higher up the call stack, the code has more context, and is able to
+make more informed choices about whether or not to print something.
+And when or if they do print, they may include some of that extra
+context, and so you can now see that the printing code is potentially
+different at each call site, and now you haven't actually saved any
+duplication after all by trying to centralize it.> 
+> If we want helpers to be silent, I can change them to return errors and
+> let the callers handle the diagnostics. Please let me know how I should
+> proceed here.
 > 
-> >  	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
-> >  	if (drm_gpusvm_pages_valid_unlocked(gpusvm, svm_pages))
-> >  		goto set_seqno;
-> > @@ -1439,21 +1419,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
-> >  	}
-> >  
-> >  	hmm_range.hmm_pfns = pfns;
-> > -	while (true) {
-> > -		mmap_read_lock(mm);
-> > -		err = hmm_range_fault(&hmm_range);
-> > -		mmap_read_unlock(mm);
-> > -
-> > -		if (err == -EBUSY) {
-> > -			if (time_after(jiffies, timeout))
-> > -				break;
-> > -
-> > -			hmm_range.notifier_seq =
-> > -				mmu_interval_read_begin(notifier);
-> > -			continue;
-> > -		}
-> > -		break;
-> > -	}
-> > +	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
-> >  	mmput(mm);
-> >  	if (err)
-> >  		goto err_free;
-> > @@ -1720,8 +1686,7 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
-> >  		.end = drm_gpusvm_range_end(range),
-> >  		.dev_private_owner = NULL,
-> >  	};
-> > -	unsigned long timeout =
-> > -		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> > +	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-> >  	unsigned long *pfns;
-> >  	unsigned long npages = npages_in_range(drm_gpusvm_range_start(range),
-> >  					       drm_gpusvm_range_end(range));
-> > @@ -1736,24 +1701,12 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
-> >  		return -ENOMEM;
-> >  
-> >  	hmm_range.hmm_pfns = pfns;
-> > -	while (!time_after(jiffies, timeout)) {
-> > -		hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
-> > -		if (time_after(jiffies, timeout)) {
-> > -			err = -ETIME;
-> > -			break;
-> > -		}
-> > -
-> > -		mmap_read_lock(mm);
-> > -		err = hmm_range_fault(&hmm_range);
-> > -		mmap_read_unlock(mm);
-> > -		if (err != -EBUSY)
-> > -			break;
-> > -	}
-> > +	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
-> >  
-> >  	kvfree(pfns);
-> >  	mmput(mm);
-> >  
-> > -	return err;
-> > +	return err == -EBUSY ? -ETIME : err;
-> >  }
-> >  EXPORT_SYMBOL_GPL(drm_gpusvm_range_evict);
-> >  
-> > 
-> > 
+> [1]
+> https://lore.kernel.org/all/178048086818.472368.16811711474077698399.b4-review@b4/
+
+thanks,
+-- 
+John Hubbard
+
