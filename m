@@ -1,64 +1,64 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4314749EC
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 17:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17454F799D
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 17:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784740724; cv=none; b=AQ3K4MsGH1NnD9tJQ8ZA/waPOrKxMOHP4KXx6X49b+4OVm/Mjxe/uQc16vJomZx/Gpgw5RimlUIBKBGWX6ayA6sdTidMyfhKoMUdQCGjxaimqXEU9S4+dbZiXlgkB+XitVBo++c7lEKi5p4ZLCauIPfe5On+MUB5tesZ8Y7My8c=
+	t=1784740726; cv=none; b=S9HapH8HIFbGHBzQxvAcaHMCV3KjTd60WnDlCKg+w9EIaO41X6CVBzuxFMDxO6kxw9ROnTsLWHp+OHf3PjIaM5jYgQnAhQUTbjzEGG/XeBoGLVRqDl5NT0TzlUmnQ81wtPulP6GmDcuRDGgecAs38vrd6S3/m5O7Qt6An3u21+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784740724; c=relaxed/simple;
-	bh=cdxRSieBisfFr5FX5xnyrYTHsugWro9SEov6ZIA36qM=;
+	s=arc-20240116; t=1784740726; c=relaxed/simple;
+	bh=o/Bu15sDhEOsKHR4CQblrys7TkwgkSC18uEGHD2BjAI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lXyr1mgxvpLs5bMkqTyl/+4e4tp/kA3r4VJrCyrUns/rv/K+hM16hLRlGIU6s2W88Ju0NSY84U7tHTYM7sELai+A06YeJoB3YDibbNIMZ3rVAR9NRQzg+yACmBjtOupK0gpyAkWtIZdAxL1nOcSWqF6biKOBM/J5z28IZQo1umI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzgPcwgv; arc=none smtp.client-ip=209.85.221.49
+	 MIME-Version; b=kieljL/XZrmpVjFgXSSZQasCXn0yXoXLBHN73rl9yRqCar8OgNEZJvt7SlPrQYRvFuB/JuvZofpr0C4LslwICoSlirewff5r8p57WehWSfL0t8CJFdZFhXKeNDhPcrCj9s9uDx+DgeXwXWmOvayE9hdcepdBKqV3KZUZ026sAeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dMDqjuAx; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzgPcwgv"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47f25e3fe44so770777f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 10:18:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dMDqjuAx"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4954b3c5cbeso108875e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 10:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784740721; x=1785345521; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784740723; x=1785345523; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BqxPzTHo4F6RITjff4xFH6QwEdtq0VyFnyAnj9pOhVQ=;
-        b=KzgPcwgvZaup9SertoK4l/MgqNA1KVtYVQUW7bICsWpo5cFbFXSWdYydHsc3J+W88P
-         qUaD4aqygZFKyu3z/vfRVxRIZd9mmx0Tp9jQcV4B7ibLrhQhp5ZurU4fx13UtdOTsAA0
-         XidGAIxnSkdI0FoejWwgqHvMOLx6gEHs2hKa8mzCPrIpqxnx9wQ8wqgcw3Jxq5QDhakf
-         Akb69G5Ul69SYbr1Eh8fn2jqTpzD5C5jycaucSHQzgarivDqyvItAIMSt3dIkQ4H7wPl
-         qqJPP6NX/r2RSnaEShb/nLRwwLpVKAjwy1xDzumOFvdf6YQi1KvVTdQi3tkbSV8Vdf/4
-         cflQ==
+        bh=Bgp1uL2zdCSwtHxWPjmVsr5a9ctDEumlGTtccTCWom4=;
+        b=dMDqjuAxJvWvIZ7JSGFL7ZOA621OxDc/HgzQm5UVxJl3/TTnfzzdC6CXniY45fMsyE
+         8l1X3cYnB2ydjPu8gk3Ixlpd5+N8XM+1g2jD+bvKoETcwI6fCvNhohe3x5q7bnK6rrgM
+         xpEwqAysgz2ZEhviGR2a+vZosOXCXKPszaqHru8xn/YH9F4yXPeU3G3ZyprIpdO3Rdzx
+         dmRJGirqQkR/5xGFRV0MbsIGveS3RC8KacGRfdcEDlC5LtEQJccGbwp5LFKR18o/8p+x
+         7sypXEHo9xuSmxrdCpp2p7etbCf+RrMRQIPLH68Og2KvDVZtapILo/7Hlu192Lh4E/jU
+         pYAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784740721; x=1785345521;
+        d=1e100.net; s=20251104; t=1784740723; x=1785345523;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BqxPzTHo4F6RITjff4xFH6QwEdtq0VyFnyAnj9pOhVQ=;
-        b=elYqWqpHoo+u0DAddYjmEFXqxfl6uYRSo67nyhDoBMbyp2+ZJVzkiZzcIVfuxEZFyw
-         EMvoKZfsocyW7SbyXCJ53vEm7YZtjmStve1tnSZQLzVNuhy2PdDFOOssOvcrDhBWXU1W
-         p0eMjcWjy4AONPzlvbIxChKMlO/DV9RdtqxMek9zXhcDbnd/S3G9IzcAjYyEXKYxdxnc
-         ZLz9Zled90ef4uR40lpyykAN0tigusqdgPSVC4iwi7ybhc6Y7NcS1aNF9mRePWdQHxjO
-         LKW7DQ+vDS+OrDy28RFyKC0QiqMouOy/uDce6ogVe3HcDFgRbqPD4ymz2KDxh5zxt7hW
-         jc6w==
-X-Forwarded-Encrypted: i=1; AHgh+RqDk22/RwCtAInm4/xKZ+U1LLuwOpo06UcyhuLR6pQY2ZeIVEd7X8gnTXeZ5Q8it2q+P5irieadi9H+pMv3POg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0IdP1Z7xIDoWHPJP0bFYA9OB1r1pzKqckDd1vPgWxD+nvW0Ri
-	QKnzKEqZRdyOK4VJF1RTnO1Xr/NWAz8rymeP4O15b+nnUfj9LtB2jbT+
-X-Gm-Gg: AR+sD12L4vEXFWYTy8qpYJgimHNiUtgEgZ3TfQ2vk8W/Fx5a+p9NmPrER8B2L5PAfr5
-	7Ss+wttNWjfv7JaO5PLgCRFnMibpsdCor8wGOPlF6L240FG+QEB3S71g2DUaDiBmB0NLOmdqgwd
-	U8BO2ksCOzMVlDgTeaJncIu/BFhfTNs3kNReZymL/4GTd9T2sUCvlBkezBEyjJsnMV8uJnVvuRY
-	DV7WCUdT/OyysyRZjnQ49mR2q0enrdInh2ORvVNbWyYozSVNinLaW77NbNtQrVg/4jsdoLHGhze
-	JDKac5FzqsVKxNmxF6csISeUJnuSgJn9d1apM8gwRDjnQ+cEuGTUDyTe14ovjwFJRCqV21I7YjQ
-	JklPusRjJbgvNGI+m5h+LXpvMLQyQBPmozjzupi6HXeMDinkyaMRcUS0BdrGJDPoQC4o0URMAwv
-	w6xIwibLXgbz141KUlywDiflTTgn9FS5oCwm96vU8w9e20o8HjMuvaX+fBpvG/Ml2y/eCmbgraz
-	YsqPLD5dqlWj0M9FXx8iYASh+j7KyYJwzW9Kg==
-X-Received: by 2002:a05:600c:1d1a:b0:493:e536:7bcf with SMTP id 5b1f17b1804b1-4956b012531mr29669095e9.7.1784740720971;
-        Wed, 22 Jul 2026 10:18:40 -0700 (PDT)
+        bh=Bgp1uL2zdCSwtHxWPjmVsr5a9ctDEumlGTtccTCWom4=;
+        b=qF2A1+Am6HbxHuJ98MLlMS3eGnQ0ZcjQT4tJMu35xA+VLwLuqRdPycd0qFJGcUAK1+
+         2AkXlonXcRvIAOWBpcwDTbt9d2iH5PpqwN30G4vWd5qmVQyF4tMLB3YzsK6LbpCzdWPG
+         tP2lJRRBAduUOZZbyK0D3Tsbf3QNMfZkK3guLG8p7s11G/tbiG0DZqT+sG32eHaCSzTA
+         uRuudreLLNG6lJ63NTUYM4vMc2uCn1DBzJrCgCQF1j2lE0KLdR+FwsTFinD3v/0Rzt+C
+         2hVVKk8lWBVbzpOrJqm2cwJBSETda0sJ/9zr8XvS46l+F4M011BzGRCtqZFNP3YkAFAV
+         Z97g==
+X-Forwarded-Encrypted: i=1; AHgh+RrIfXx/rD0rORo+Wrtd+p8BKftuXB3RBWgD4ZgVTze/kZ8RPDzmbbPkVdZyswE9/8eW9gRCvErSpLM/bBjg6Qs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmJjKp1LbUvm0GuuUPeg7UTJcENGA8iueSvAgwDWpBDCgWmRxG
+	ZweIomyl4+3e75elTix20Cyetz3EatJwKEM6YByX5LTApBQHe/R8UPTb
+X-Gm-Gg: AR+sD130gdAEGSgCLO1j2Cn/73w5iUMw0qklVpIXUV6M8AY126H8hytLOYV/xpz1I/F
+	vlFVcIOMBTan+GIPGtcQBiLJsWehBrGozOM9R90gdwN2aFTMrh7qFgqI7nRtL1j799Vk2nnJ52G
+	chybv4TUqwsXdXDYHARYaoP3RgK5ZKrGnW6z+FDEbPPAco0J2TB1GDkFraiJItfwGRFCmg/SuNy
+	Gm6NmlUSbL2X5zahmVr2kCeiijL9CjIGd1MdqYmHUxi2qcJy1XmOznUT5BnNoh6qyOxGSZGME7B
+	YIZsb5YevgNcrMlC3EORuHVAzjOxjCFcQOvbc3V+Se5NgyUf+ljyEjLEoksj7dFeWI8/KseWuAD
+	rlkUwSNmw7MufPOekl2SlfGi6Z2EHXHnqzyfqTwOecZ6ubvF1BJp3RIi9BJ7oL5BLsNtrHRBGSW
+	k1olLeqin0rzGcsqQEL9KAG6EU5O7FKHSXqpM9h/BV8CFE67yRSUyX5jIozXwzqUBX551xoDv2r
+	+bi2enIIrTsQ0l9oz29ypA8q+rU8696gdidHBDkR0x7CaDX
+X-Received: by 2002:a05:600c:4584:b0:495:6713:9ae2 with SMTP id 5b1f17b1804b1-4956713a250mr56348975e9.1.1784740722310;
+        Wed, 22 Jul 2026 10:18:42 -0700 (PDT)
 Received: from L-022584.energy.envision.com (dynamic-078-051-150-230.78.51.pool.telefonica.de. [78.51.150.230])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a634cf9sm92427615e9.9.2026.07.22.10.18.39
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a634cf9sm92427615e9.9.2026.07.22.10.18.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 10:18:40 -0700 (PDT)
+        Wed, 22 Jul 2026 10:18:41 -0700 (PDT)
 From: Xin Xie <xiexinet@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -73,9 +73,9 @@ Cc: davem@davemloft.net,
 	linux-kernel@vger.kernel.org,
 	Xin Xie <xiexinet@gmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH net 2/4] net: hsr: shrink seqnr_lock to sequence counter updates
-Date: Wed, 22 Jul 2026 19:18:34 +0200
-Message-ID: <20260722171836.196-3-xiexinet@gmail.com>
+Subject: [PATCH net 3/4] net: hsr: unfold GSO super-packets at the forward entry
+Date: Wed, 22 Jul 2026 19:18:35 +0200
+Message-ID: <20260722171836.196-4-xiexinet@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260722171836.196-1-xiexinet@gmail.com>
 References: <20260722171836.196-1-xiexinet@gmail.com>
@@ -87,144 +87,129 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hsr->seqnr_lock is currently held across entire hsr_forward_skb()
-calls: master TX (hsr_dev_xmit()), interlink RX (hsr_handle_frame()),
-and both supervision frame builders hold it while frames are built,
-classified, duplicated and forwarded on every port. The only state
-that actually needs the lock is the sequence counters themselves
-(hsr->sequence_nr / hsr->sup_sequence_nr).
+HSR/PRP forward frames one by one: each wire frame gets its own tag
+and sequence number, and duplicate discard is per frame. A GSO
+super-packet reaching hsr_forward_skb() breaks that per-frame
+semantics: it would be tagged and forwarded as a single frame.
 
-Shrink the locking to the individual counter updates:
-handle_std_frame() now takes the lock around its sequence number
-allocation (replacing the lockdep assertion), the master TX and
-interlink RX paths drop their outer lock, and the supervision
-builders release the lock right after updating their counter instead
-of holding it across frame construction and forwarding.
+Unfold such super-packets at the forward entry with the top-level GSO
+dispatch: __skb_gso_segment() initializes SKB_GSO_CB() and performs
+the L2->L3->L4 protocol dispatch (calling the low-level skb_segment()
+helper directly is not allowed here -- it reads SKB_GSO_CB(skb) state
+that only __skb_gso_segment() sets up). features = 0 requests full
+software segmentation; tx_path is selected by ingress port (master =
+locally generated TX, interlink = RX) to get the right checksum
+semantics. Each segment then runs through the existing per-frame
+path, which is split out as hsr_forward_skb_one() so that no GSO skb
+can reach it.
 
-Sequence numbers remain unique and monotonically allocated per
-counter; concurrent inputs may now interleave allocations, which is
-fine as the output paths were already concurrent.
+Segmentation is only offered for the ingress roles whose frames are
+known to be plain Ethernet: the master (locally generated) and the
+interlink (SAN side, untagged). A super-packet received from a LAN
+slave may carry per-frame HSR tags or PRP RCT trailers that software
+segmentation cannot recover, and an already-tagged HSR/PRP
+super-packet violates per-frame wire semantics; both are rejected by
+ingress-port policy. (ETH_P_PRP identifies supervision traffic only;
+a PRP data frame keeps its payload EtherType, so RCT carriage cannot
+be tested by protocol.)
 
-This is a prerequisite for unfolding GSO super-packets at the forward
-entry: segmentation with its dozens of GFP_ATOMIC allocations must
-not run with BH disabled under the global sequence lock.
+Also drop NETIF_F_GSO_MASK from the HSR master's hw_features so
+locally generated traffic is segmented before reaching the forward
+path whenever possible.
 
-The locking being narrowed here was introduced by 06afd2c31d33
-("hsr: Synchronize sending frames to have always incremented outgoing
-seq nr."), briefly removed by b3c9e65eb227 ("net: hsr: remove
-seqnr_lock") and reinstated for the interlink RX path by 430d67bdcb04
-("net: hsr: Use the seqnr lock for frames received via interlink
-port.") after a syzbot lockdep report. All sequence counter updates
-remain protected; only the forwarding work moves out of the critical
-section.
-
+Fixes: f421436a591d ("net/hsr: Add support for the High-availability Seamless Redundancy protocol (HSRv0)")
 Cc: stable@vger.kernel.org
 Signed-off-by: Xin Xie <xiexinet@gmail.com>
 ---
- net/hsr/hsr_device.c  | 15 ++++-----------
- net/hsr/hsr_forward.c |  3 ++-
- net/hsr/hsr_slave.c   | 11 +----------
- 3 files changed, 7 insertions(+), 22 deletions(-)
+ net/hsr/hsr_device.c  |  2 +-
+ net/hsr/hsr_forward.c | 50 ++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 50 insertions(+), 2 deletions(-)
 
 diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
-index 5555b71ab..3fd1762d8 100644
+index 3fd1762d8..248cbb142 100644
 --- a/net/hsr/hsr_device.c
 +++ b/net/hsr/hsr_device.c
-@@ -232,9 +232,7 @@ static netdev_tx_t hsr_dev_xmit(struct sk_buff *skb, struct net_device *dev)
- 		skb->dev = master->dev;
- 		skb_reset_mac_header(skb);
- 		skb_reset_mac_len(skb);
--		spin_lock_bh(&hsr->seqnr_lock);
- 		hsr_forward_skb(skb, master);
--		spin_unlock_bh(&hsr->seqnr_lock);
- 	} else {
- 		dev_core_stats_tx_dropped_inc(dev);
- 		dev_kfree_skb_any(skb);
-@@ -335,6 +333,7 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
- 		hsr_stag->sequence_nr = htons(hsr->sequence_nr);
- 		hsr->sequence_nr++;
- 	}
-+	spin_unlock_bh(&hsr->seqnr_lock);
+@@ -652,7 +652,7 @@ void hsr_dev_setup(struct net_device *dev)
+ 	dev->needs_free_netdev = true;
  
- 	hsr_stag->tlv.HSR_TLV_type = type;
- 	/* HSRv0 has 6 unused bytes after the MAC */
-@@ -356,14 +355,10 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
- 		ether_addr_copy(hsr_sp->macaddress_A, hsr->macaddress_redbox);
- 	}
+ 	dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HIGHDMA |
+-			   NETIF_F_GSO_MASK | NETIF_F_HW_CSUM |
++			   NETIF_F_HW_CSUM |
+ 			   NETIF_F_HW_VLAN_CTAG_TX |
+ 			   NETIF_F_HW_VLAN_CTAG_FILTER;
  
--	if (skb_put_padto(skb, ETH_ZLEN)) {
--		spin_unlock_bh(&hsr->seqnr_lock);
-+	if (skb_put_padto(skb, ETH_ZLEN))
- 		return;
--	}
- 
- 	hsr_forward_skb(skb, port);
--	spin_unlock_bh(&hsr->seqnr_lock);
--	return;
- }
- 
- static void send_prp_supervision_frame(struct hsr_port *master,
-@@ -390,6 +385,7 @@ static void send_prp_supervision_frame(struct hsr_port *master,
- 	spin_lock_bh(&hsr->seqnr_lock);
- 	hsr_stag->sequence_nr = htons(hsr->sup_sequence_nr);
- 	hsr->sup_sequence_nr++;
-+	spin_unlock_bh(&hsr->seqnr_lock);
- 	hsr_stag->tlv.HSR_TLV_type = PRP_TLV_LIFE_CHECK_DD;
- 	hsr_stag->tlv.HSR_TLV_length = sizeof(struct hsr_sup_payload);
- 
-@@ -397,13 +393,10 @@ static void send_prp_supervision_frame(struct hsr_port *master,
- 	hsr_sp = skb_put(skb, sizeof(struct hsr_sup_payload));
- 	ether_addr_copy(hsr_sp->macaddress_A, master->dev->dev_addr);
- 
--	if (skb_put_padto(skb, ETH_ZLEN)) {
--		spin_unlock_bh(&hsr->seqnr_lock);
-+	if (skb_put_padto(skb, ETH_ZLEN))
- 		return;
--	}
- 
- 	hsr_forward_skb(skb, master);
--	spin_unlock_bh(&hsr->seqnr_lock);
- }
- 
- /* Announce (supervision frame) timer function
 diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
-index 0774981a6..8e4158a9b 100644
+index 8e4158a9b..3fcdbac49 100644
 --- a/net/hsr/hsr_forward.c
 +++ b/net/hsr/hsr_forward.c
-@@ -621,9 +621,10 @@ static void handle_std_frame(struct sk_buff *skb,
- 	if (port->type == HSR_PT_MASTER ||
- 	    port->type == HSR_PT_INTERLINK) {
- 		/* Sequence nr for the master/interlink node */
--		lockdep_assert_held(&hsr->seqnr_lock);
-+		spin_lock_bh(&hsr->seqnr_lock);
- 		frame->sequence_nr = hsr->sequence_nr;
- 		hsr->sequence_nr++;
-+		spin_unlock_bh(&hsr->seqnr_lock);
- 	}
+@@ -12,6 +12,7 @@
+ #include <linux/skbuff.h>
+ #include <linux/etherdevice.h>
+ #include <linux/if_vlan.h>
++#include <net/gso.h>
+ #include "hsr_main.h"
+ #include "hsr_framereg.h"
+ 
+@@ -732,7 +733,7 @@ static int fill_frame_info(struct hsr_frame_info *frame,
  }
  
-diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
-index cefbbfbd5..c7fd021f0 100644
---- a/net/hsr/hsr_slave.c
-+++ b/net/hsr/hsr_slave.c
-@@ -73,16 +73,7 @@ static rx_handler_result_t hsr_handle_frame(struct sk_buff **pskb)
- 	}
- 	skb_reset_mac_len(skb);
+ /* Must be called holding rcu read lock (because of the port parameter) */
+-void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
++static void hsr_forward_skb_one(struct sk_buff *skb, struct hsr_port *port)
+ {
+ 	struct hsr_frame_info frame;
  
--	/* Only the frames received over the interlink port will assign a
--	 * sequence number and require synchronisation vs other sender.
--	 */
--	if (port->type == HSR_PT_INTERLINK) {
--		spin_lock_bh(&hsr->seqnr_lock);
--		hsr_forward_skb(skb, port);
--		spin_unlock_bh(&hsr->seqnr_lock);
--	} else {
--		hsr_forward_skb(skb, port);
--	}
-+	hsr_forward_skb(skb, port);
- 
- finish_consume:
- 	return RX_HANDLER_CONSUMED;
+@@ -761,3 +762,50 @@ void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
+ 	port->dev->stats.tx_dropped++;
+ 	kfree_skb(skb);
+ }
++
++/* GSO fan-out funnel: unfold super-packets before per-frame processing so
++ * each wire frame gets its own HSR/PRP tag and sequence number.
++ */
++void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
++{
++	struct sk_buff *segs, *next;
++
++	if (likely(!skb_is_gso(skb))) {
++		hsr_forward_skb_one(skb, port);
++		return;
++	}
++
++	/* Unfold only plain-Ethernet GSO super-packets: locally generated
++	 * on the master, or arriving untagged from the SAN side on the
++	 * interlink. A super-packet from a LAN slave may carry per-frame
++	 * HSR tags / PRP RCT trailers that software segmentation cannot
++	 * recover; an already-tagged HSR/PRP super-packet violates
++	 * per-frame wire semantics. Drop both.
++	 */
++	if (port->type != HSR_PT_MASTER && port->type != HSR_PT_INTERLINK)
++		goto drop_gso;
++	if (skb->protocol == htons(ETH_P_HSR) ||
++	    skb->protocol == htons(ETH_P_PRP))
++		goto drop_gso;
++
++	/* features = 0: request full software segmentation. tx_path is true
++	 * only for locally generated traffic on the master; ingress from
++	 * the interlink follows RX checksum semantics.
++	 */
++	segs = __skb_gso_segment(skb, 0, port->type == HSR_PT_MASTER);
++	if (IS_ERR(segs) || unlikely(!segs))
++		goto drop_gso;
++
++	consume_skb(skb);
++	while (segs) {
++		next = segs->next;
++		segs->next = NULL;
++		hsr_forward_skb_one(segs, port);
++		segs = next;
++	}
++	return;
++
++drop_gso:
++	port->dev->stats.tx_dropped++;
++	kfree_skb(skb);
++}
 -- 
 2.43.0
 
