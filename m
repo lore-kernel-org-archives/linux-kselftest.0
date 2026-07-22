@@ -1,88 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CFA3242B2;
-	Wed, 22 Jul 2026 14:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F415E34BA5A
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784731421; cv=none; b=QEeWrZT3lOK6aeJk0Z/HXwGvMxHMSyDAQrZ5BB5XLXd1zPXDaZNNz/i7Ocdg2ifsk2MlN7lm5n/DnNMUc35DtKhceAd3svEVkZuMF8jm939wNshwPy33g9ZfvSGA94ieCJ0UPK2TxmjcNKwXob1QDHJr331XLgTdMq1IV5cDauc=
+	t=1784731532; cv=none; b=shq7MrSRnjLqXSChyKeMblNHJDku8l4TYANS05hupqgxOh5NOTbVxlWpkwdDYbFdojjw3pPV7X+clB8LlEc9ryXqW1oSr5S25Z227aoSXMkBMRk9TVzQXcgpAtdKQhgyu7b1Paj7rQ94nnwX4KOADsk0PuNIytsa5AfHaB0lzM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784731421; c=relaxed/simple;
-	bh=GFdrFD4PStNyo8uAu2Wj4B/nbzfW1ZIci9R53SmzFJ8=;
+	s=arc-20240116; t=1784731532; c=relaxed/simple;
+	bh=MuCHnkT/76HR5kI6MTpVC4n5sjzqmsaLA1djUnKU818=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jgc3JmeBxmLX/NJIA+OERFjIr43FpM+hIPHEKE4c1Hdx+qzxcxvJuliTIx9T4buKKCaB46SP2veIIFra6lJk/AvRtDDV1Ge3MiASph5LMBn90wvnXrc91YLAXNJXvJF+UsQQDkKSD1d4eQHAV8BbR/5R3VqbvsJPprgg3nW1MvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuWPqmTQ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=tUHChEtMq0axIxOY/4zYSuhO1y3tQUfWXVFgo/GFZPQBA6RrOg1zqcgeHe971XSTDg9rdFw+Q9zhFnfV9btl9nBKKjE/BkSskMYjibjaFvFskRu3+ZkQPdXymIB2NIHUfwAySe9FitrzkV/KHERJ2plJlwaD5bm7Gvma2nsz7dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cV6P4HNk; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuWPqmTQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3211F000E9;
-	Wed, 22 Jul 2026 14:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784731419;
-	bh=engNj+jm1QpjkZvlpVGE+xstepiLeZSDmIAMzwxBlLU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KuWPqmTQg5clB52adLRdE3DoINVhLOBPeEhSKJU5MP2o0hKUMLrt/mQ0WzOVcRtsE
-	 HJqPacviYPU5idKt6MsbDB/TGbU5uyTooAEPlBbOw40WVK7TRK8ii94qpuI4eGCgEf
-	 HQsiWX5N7igbo9fHMoYtYT1eWHElkI3uSF50/JZ0mElGUKIgiV7CtirAQ98+qsgq6F
-	 aje1Xknh4iGEqPFALurWcd1VETBVZtN7jcUipyE+pmTo5ecmZrmLQtPNX+nQX8ZAOY
-	 Eid3ZhZ916/5rU1JJ8v4/yC4MF7mKQBFfIGGz8+p+/FK+wthjWS5AAOzpZa4SCetVQ
-	 phgLzh3+nid6Q==
-Message-ID: <e48c03d5-8056-4b65-a651-5f57c1a4da9e@kernel.org>
-Date: Wed, 22 Jul 2026 08:43:38 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cV6P4HNk"
+Message-ID: <84d3de0a-5d81-47eb-9e41-7107c0c15d70@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784731527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jZQHj//W3wrPBt+vPqcY/ihQCddTbbdsI2etWjc+kNg=;
+	b=cV6P4HNkvZR98ac85VaYtspeCrcWfQs2OYMvq7a9IHNMkTQRttTuGevMvEcY2dI9trWjcE
+	clav6NcRDCL6dIVYALzzmt8JMMMHbG6aAOyyIZLLJK/d4WMxbmyFMQOfgrmSI14j914ugP
+	/67WK75JCAt3SfZzLjg2v/HazEgtTiw=
+Date: Wed, 22 Jul 2026 22:44:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 1/3] net: nexthop: add NHA_FDB_PORT for fdb
- nexthops
+Subject: Re: [PATCH bpf-next 1/2] bpf: Fix WARNING in bpf_tracing_link_release
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Jingguo Tan <tanjingguo@huawei.com>, Pu Lehui <pulehui@huawei.com>,
+ Lin Ma <malin89@huawei.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+References: <20260721133036.49265-1-leon.hwang@linux.dev>
+ <20260721133036.49265-2-leon.hwang@linux.dev> <amCnUg9xTo4kStW8@krava>
 Content-Language: en-US
-To: Ido Schimmel <idosch@nvidia.com>, Jack Ma <jack4it@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260721-b4-vxlan-fdb-port-v3-0-9aa0a543a78a@gmail.com>
- <20260721-b4-vxlan-fdb-port-v3-1-9aa0a543a78a@gmail.com>
- <20260722114621.GA2928696@shredder>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260722114621.GA2928696@shredder>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <amCnUg9xTo4kStW8@krava>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/22/26 5:46 AM, Ido Schimmel wrote:
-> On Tue, Jul 21, 2026 at 10:29:50PM +0000, Jack Ma wrote:
->> Commit 1274e1cc4226 ("vxlan: ecmp support for mac fdb entries") lets a
->> single inner MAC be reached through a group of remote VTEPs, with the
->> kernel flow-hashing across the group members.  Each member carries its
->> own remote IP, but the UDP destination port is always taken from the
->> VXLAN device (vxlan->cfg.dst_port) and cannot be set per member.
+On 2026/7/22 19:19, Jiri Olsa wrote:
+> On Tue, Jul 21, 2026 at 09:30:34PM +0800, Leon Hwang wrote:
+>> The trampoline could be corrupted by the blindly
+>> 'tr->flags = BPF_TRAMP_F_TAIL_CALL_CTX' in verifier.
 >>
->> Some deployments pack several receivers behind one underlay IP and tell
->> them apart by UDP port, so they need a per-nexthop destination port to
->> spread flows across (IP, port) tuples rather than IP alone.
->>
->> Add a netlink attribute NHA_FDB_PORT (__be16, mirroring NDA_PORT) that
->> carries an optional UDP destination port on an fdb nexthop.  It is only
->> accepted together with NHA_FDB and NHA_GATEWAY; it is stored in struct
->> nh_info and echoed back on dump.  This patch is control-plane plumbing
->> only; the VXLAN datapath is wired up in a follow-up patch, so behaviour
->> is unchanged for now.
+>> 1. A fexit attached to a tail_call_reachable prog.
+>> 2. Another fexit loaded with the same tail_call_reachable prog target.
+>> 3. Close the first fexit link.
 > 
-> I looked more closely at the test and the iproute2 patch and wanted to
-> comment that "port" seems too generic given that the attribute is
-> specific to FDB nexthops and called NHA_FDB_PORT. It made me think that
-> maybe we should use a more generic attribute name (e.g., NHA_DST_PORT)
-> and a corresponding "dst_port" keyword in iproute2. We can still limit
-> this to FDB nexthops during validation, but in the unlikely case that we
-> will need a destination port for other nexthops, we could just reuse
-> this attribute. It's not like we have NHA_FDB_GATEWAY.
+> had to ask ai for more details on how the warning was trigered ;-)
+> would be nice to have that info in the changelog
+
+
+Ack.
+
+Will add the change of tr->flags. So, the detach failure would be
+obvious due to the incorrect tr->flags.
+
 > 
-> David, WDYT?
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-I was thinking along the same lines -- FDB_PORT can be confused with
-bridge port. No preference on dst_port / DST_PORT versus other options
-(NHA_FDB_UDP_PORT for example)
 
+Thanks for your review.
+
+Leon
+
+> [...]
