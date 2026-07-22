@@ -1,68 +1,68 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F91943D508
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 21:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B97443A81
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 21:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784756696; cv=none; b=V/DNwFY94uVK+6/im8t4a3FF9t8uDLsTnfqpaK7N8W1KPgyGRNcmq2nzy6nK0Fm6p+bJo9ueKgcQQjKNStcUPz6zOJj7JJLWjGdhJybmZjeKqccJHSIpX+n/qUYMHLaC9+D/ohaLfS4hWcnMgG9Vb4akuMEXCCjQAd7C++AWR6s=
+	t=1784756697; cv=none; b=uQXFiKRBxeLnOxScj5AvAwfrZjKQ2JNuER1dU75ex0j7O2/Zw9hOOHdroCYyL6uv8blvBRP6VXr61dAsONS8/2KBm7r56MvXyAFm8XEs3p/aelV3cZI1rXCqIv5s9uBr78E8bmTVD0RUAaoxmltuT8wBVRrLiangMrt7q1k89Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784756696; c=relaxed/simple;
-	bh=ZyAhBAfWZePcXjSsL7QqvsrSYU5bhX/lu/bgMYHTJjg=;
+	s=arc-20240116; t=1784756697; c=relaxed/simple;
+	bh=KaVy0LDD2WZ56zIlG4jDVljfxrz2j27JL0AnOSACkpk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZWl3V7bcAEnPgGt4vEzyyPmMHHC/7w7Qv8K34FUDKIsa4FLCYoaTGfOnZiBSExh/qd8SDwooIB3oQuixeo/OUkNCblVeK6QF1tPyrr9M8sqV9/iCjO/y+ufbR0JsBUYNNKi1QpsXI78lWRs/nQJikOIyloaOyLpcTcnr8pnY1iQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r2b1GNxZ; arc=none smtp.client-ip=209.85.210.179
+	 In-Reply-To:To:Cc; b=XVL4MYHK6yrKayfELfgkQ+iwDzk2Qjp5FxVugqngt8I6Kr+5jNafGjPCOXRSvBGp/7Fsgo9rz6h7x3xRqgMUsP8uVHd0bg7IOg7xfgN5Ao1UEFQcvsH+K4AZOqq4FoBaDkalnmqLZOn3WQOs4wqgfsle5qyldThrM6DOUNB+r7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MjXGis/0; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r2b1GNxZ"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8485ef63b68so12772285b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:44:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MjXGis/0"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8487214ad2bso12675936b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 14:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784756693; x=1785361493; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784756695; x=1785361495; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3slUHnl834IP76VoxdiRinKrcbFYlUZTVsrXFJZ4JdY=;
-        b=r2b1GNxZG0pMLdmLeYUJ66eog3ws7mntKym23Cgz76GD4C0nsBH3f9m19Hrcw373vY
-         MPWtKIY6/nnSTSrV4hxZ2Qi5iWYBvD8PtV/YL/RdqRvyZntwz2M1BXvYgNcrmp4ugxDS
-         ZBcwsrYtDo7vcMTi9eLs9+q9nXv5LZlEP2NphZlze0yRmKypPyBeSJOVE61JJMgq4sek
-         nE5PMZeAiq/qBmTTWpjLnLhZoLnBoie8tXP2TL5aqjFgygETjzB5LNn28ue2CagrPNK+
-         367OCC0BdQLtNLgYOMZksa/UfMZTzrtKUVcYO/YSqHKXz8yJnzhvh4sf7VVa1QEqxfss
-         auaA==
+        bh=WVIK4CTS2ebWqFuX16f+6TzH9lK4l3CZHr+WHLsMqrs=;
+        b=MjXGis/08C6P1DbvTDS6XJJiOLeKA3eQfTgRH93dbv1sJJCfHSRkL3aF/mNyyMkS+M
+         2/bzui3U5K4koDZ1W+02OsJlccKvZw20haIwOpjsQL6hK4muM/KJT0lqRDPbyLUU18VR
+         pm1Mgq7UGLlKE0DYF+SgPGFSWxgOKUnaQ85PNqqo5naqIWdQKyv4vHEXcrv87MBWVXKn
+         zra+0ehpmUoykyEljanDVPzp3AfQRYC/c5nVsAoTFdRDqc+tF2ByiA7xh7hs5Dj0b0x1
+         OEtwLJzVmH1UNoPWyOsX/CF+qI+idQQHhRLt2Svm9kDITmGxLhByKG6WSxAoISesyuHF
+         es8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784756693; x=1785361493;
+        d=1e100.net; s=20251104; t=1784756695; x=1785361495;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3slUHnl834IP76VoxdiRinKrcbFYlUZTVsrXFJZ4JdY=;
-        b=H4ZB+ttZLjoadclC0jDlDqLBnkPPiflfOhv4TuA+iyNw4YxiSRhBrYqVYEhtd45w6j
-         R+9clQ8/tC2IFs+FH0V6La+H2WhGx1me0i8o3EMW/gDeXlZ8HPQnjajj1JcHD6mnKb1W
-         ykY7XzvKurr0KFaHwLCylRg4n0vSHX2Cc5FScPnu+Wq4OmuAFokiWMUAcgm5RFuEGac4
-         0p+VCNuiz8SAkoRpT1Lg+NaXyarhQg6x79LYmeOCr/Sbc7W9Tb/6BEztSmeb47lhjWbe
-         rj740SeQveoTC5n1SxNJy+AfftMvPqr0xgdLgpMW0E4rvUuzkoyIf6wUhPjJAlMgUUHL
-         4fqg==
-X-Forwarded-Encrypted: i=1; AHgh+RpI1JkRr7+3bK18G+nLYJe64WqV67NSaNLNvFBkQhlZVj/58791RARz76h7XJLHhd3BV6uzvg+jCgXE6z7GdrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhSzu7KaKfdLbohbkcjqCouhdNMDeQ7KaBFbjq5zVpwfwKqGq3
-	BgPV5+0wVWCer2CJ6SpULM1t6PzfwziRu++9alH9QkNiqzfB8TTx8dyw
-X-Gm-Gg: AR+sD11kR6gLhAlJKfUge+RclZzVVN4qHeFa2ZWt0i55PqLvkWfGLGavDLg9LVlLNzW
-	DVqdlGjr52EtUnhU2I0EA3LsYcOR332BwrWjMERUHdrqk/5a23+0X4JiuNY3Yq6zsTualpqsXEt
-	Vd0CenZtAanat26oCt+8dnpqdeFmyfm9YxQH6U/5gTJfEp83BQy8X1YunSRPwPTBXqf2Gdi1T+6
-	XR7KQ+lSaAJl0jSpoVErj3Tg3OW+lKm0ZqeO3brRw6NKAjIxPgNm3G/m7COfP4X9ufAemn3OL+f
-	aWF36fsMIGxbZUxbWf29o4cTZNDSFWqWRBOy5I4W8FGLgiFni5a4Bgqj4b+VVupZ6ovbGvTvIeJ
-	GfnDTyBjXUbtIX2XJ1ON0iG65h3Xyk+VAeJ8soG6pQ0FEaIGlOAF++CI84TogXRLfnWWgrvA5Vq
-	0TmtrX9CMSHpoTuDITeEC7JaTmWKWEUyMR41+NNj3FtFLtNzHN
-X-Received: by 2002:a05:6a00:4fd3:b0:848:3fe2:c88b with SMTP id d2e1a72fcca58-84e2b7f59camr674000b3a.6.1784756693352;
-        Wed, 22 Jul 2026 14:44:53 -0700 (PDT)
+        bh=WVIK4CTS2ebWqFuX16f+6TzH9lK4l3CZHr+WHLsMqrs=;
+        b=WuwzBD39CJQRfHfGr/Oydvr3qAEq5pcFldyHnb0alMQoqPMKkgczYGJqkKMia9iKWZ
+         IDfli9ykCkt5KwVsGRrE7abM/EOf/yS4KZ1xewaRKazNEX4WS+rzo0vWW8cub+v+GSok
+         Yob3YbvEqC14yv+kq/AidmNoHx08yN9pnOAbkOkO8HMNJv1rzhGp/WAa8trbu1qNSVen
+         UlSjEihEbj8zp1LuOi5jWQCb9zYMNkz7xnqyOn3TUPFyrB3zZ24rBQPXyW8TvReSKAN2
+         x9bpHF1PMaVGA/mZzp0+bAY+E3ia9joH1c9HrZhUe0yEVMZElOQueWDpshzBYoU48RpP
+         C4bg==
+X-Forwarded-Encrypted: i=1; AHgh+RqfgGgsaWf42wf/pnMyGCwbo+keVDvJWGw7vk+O5ElgbLDfLwKSqESFd5nI7HN+twcoC7k3vJ+IaVekb1aVWoA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKjHig1gtnZ6xxBceTES9a+TI3LLxykdRyzoXgWiBJdD1eOJ6d
+	MxzMNRV8Jw4clNzUAYbUn11JYcHwP5ri0L+M2d+mX35ai2Y+8kSG0NIo
+X-Gm-Gg: AR+sD12mLUMN6EZ1lgeqceInZgHmkXK8kEU+MhPxDeYXgUq87K8f3AVd9MIYQal9R3e
+	GW02wdW5huMo/5V5KPNBUMIuyDWWfCGTIMLsAihC22xDyIvfa9dDBMY0/jLYnNUmBpsYVjGwyKH
+	W5NFrKSPVTwDXVyySJTecdflKCfBu6Fyb1HvuNUbM6Y1ksSILFxRMe8bkK/HXgH18d3J6MU5/EA
+	X/avtT9RMsZ2UTuArKWoEviXlmtLLJ4cP7oGb8EmoozTZCQx1BVEev9sj9037tC5qWxwW4Ho9Ju
+	Ovh13IItZYwB//qMll/dCFcpiOlPcmqyVo4Z20BNDhXNInmPGFdjVlIZ79vwPCCthfLO4C3f+0d
+	Y8AR4TUDBDccIx0lqJeDJJmPXHEyHgdSN1uhbQv0fOu+XnfgLRPt1ljIapz6OeExBnQOWYPrHlP
+	+e/vi8QScUQ4GBwS6YkZyZM9z+cI9PwS1V+DEP8BKF4C2m1ZS6
+X-Received: by 2002:a05:6a00:852:b0:848:46ea:bbe7 with SMTP id d2e1a72fcca58-84e2bc6b5d6mr673956b3a.19.1784756695183;
+        Wed, 22 Jul 2026 14:44:55 -0700 (PDT)
 Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c3fsm1946297b3a.9.2026.07.22.14.44.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17237c3fsm1946297b3a.9.2026.07.22.14.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 14:44:52 -0700 (PDT)
+        Wed, 22 Jul 2026 14:44:54 -0700 (PDT)
 From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Date: Wed, 22 Jul 2026 14:44:26 -0700
-Subject: [PATCH v10 4/8] mshv: Use hmm_range_fault_unlocked_timeout() for
- region faults
+Date: Wed, 22 Jul 2026 14:44:27 -0700
+Subject: [PATCH v10 5/8] drm/nouveau: Use
+ hmm_range_fault_unlocked_timeout() for SVM faults
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260722-hmm-v10-v1-4-606464dd601a@gmail.com>
+Message-Id: <20260722-hmm-v10-v1-5-606464dd601a@gmail.com>
 References: <20260722-hmm-v10-v1-0-606464dd601a@gmail.com>
 In-Reply-To: <20260722-hmm-v10-v1-0-606464dd601a@gmail.com>
 To: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
@@ -96,111 +96,70 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
  Jason Gunthorpe <jgg@ziepe.ca>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784756683; l=3646;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784756683; l=2163;
  i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
- bh=ZyAhBAfWZePcXjSsL7QqvsrSYU5bhX/lu/bgMYHTJjg=;
- b=tdDpNRsCNvmVGCNOZZ9HC3yxGmAH4ax4m27NmzACrsQovmkbRz97eJ93jI+rhX+xJ0J5zVBrq
- FSNwxKzSGzhDXRe3C8R+8iVP4estzVdVfYmBtDp3huLkA3AiN268Vyv
+ bh=KaVy0LDD2WZ56zIlG4jDVljfxrz2j27JL0AnOSACkpk=;
+ b=uKgRFxKY7gMhEFoK0hHnwQl6N8UsouNcazo70jIAxend3BGPO0koGFjjGoE03g3KTWZd66DI6
+ 5tAsc5/qbDAAjPQ/pjqrtB3km5I7U9rctkdARaqcdzu58Lj+SzHd5bT
 X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
  pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
 
-MSHV currently faults movable memory regions by taking mmap_read_lock()
-around hmm_range_fault(). That prevents the fault path from handling VMAs
-whose fault handlers need to drop mmap_lock, such as userfaultfd-backed
-mappings.
+nouveau_range_fault() takes mmap_read_lock() only to call
+hmm_range_fault(). It also keeps a single HMM_RANGE_DEFAULT_TIMEOUT
+deadline across both HMM -EBUSY retries and post-fault
+mmu_interval_read_retry() retries.
 
-Use hmm_range_fault_unlocked_timeout() instead. Passing a timeout of 0
-preserves MSHV's existing unbounded retry behavior while letting the HMM
-helper own mmap_lock acquisition and refresh range->notifier_seq internally
-before walking the range. After the fault succeeds, MSHV still takes
-mreg_mutex and checks mmu_interval_read_retry() before installing the pages
-into the region, so the existing invalidation synchronization is preserved.
+Use hmm_range_fault_unlocked_timeout() instead. The HMM helper now owns
+the mmap lock and refreshes range->notifier_seq for its internal retries.
+Nouveau keeps its existing absolute deadline in the outer loop and passes
+the remaining jiffies to the helper for each fault attempt, so retries
+caused by mmu_interval_read_retry() do not reset the overall retry budget.
 
-Fold the small fault-and-lock helper into mshv_region_range_fault(), since
-the remaining retry path is just the standard "fault, take the driver lock,
-check the interval notifier sequence" pattern.
+Nouveau still validates the interval notifier sequence while holding
+svmm->mutex before programming the GPU mapping.
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
 ---
- drivers/hv/mshv_regions.c | 54 +++++++++--------------------------------------
- 1 file changed, 10 insertions(+), 44 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_svm.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hv/mshv_regions.c b/drivers/hv/mshv_regions.c
-index 6d65e5b42152..dddaade31b5d 100644
---- a/drivers/hv/mshv_regions.c
-+++ b/drivers/hv/mshv_regions.c
-@@ -381,46 +381,6 @@ int mshv_region_get(struct mshv_mem_region *region)
- 	return kref_get_unless_zero(&region->mreg_refcount);
- }
+diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouveau/nouveau_svm.c
+index dcc92131488e..58735446d783 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_svm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
+@@ -678,20 +678,22 @@ static int nouveau_range_fault(struct nouveau_svmm *svmm,
+ 	range.end = notifier->notifier.interval_tree.last + 1;
  
--/**
-- * mshv_region_hmm_fault_and_lock - Handle HMM faults and lock the memory region
-- * @region: Pointer to the memory region structure
-- * @range: Pointer to the HMM range structure
-- *
-- * This function performs the following steps:
-- * 1. Reads the notifier sequence for the HMM range.
-- * 2. Acquires a read lock on the memory map.
-- * 3. Handles HMM faults for the specified range.
-- * 4. Releases the read lock on the memory map.
-- * 5. If successful, locks the memory region mutex.
-- * 6. Verifies if the notifier sequence has changed during the operation.
-- *    If it has, releases the mutex and returns -EBUSY to match with
-- *    hmm_range_fault() return code for repeating.
-- *
-- * Return: 0 on success, a negative error code otherwise.
-- */
--static int mshv_region_hmm_fault_and_lock(struct mshv_mem_region *region,
--					  struct hmm_range *range)
--{
--	int ret;
--
--	range->notifier_seq = mmu_interval_read_begin(range->notifier);
--	mmap_read_lock(region->mreg_mni.mm);
--	ret = hmm_range_fault(range);
--	mmap_read_unlock(region->mreg_mni.mm);
--	if (ret)
--		return ret;
--
--	mutex_lock(&region->mreg_mutex);
--
--	if (mmu_interval_read_retry(range->notifier, range->notifier_seq)) {
--		mutex_unlock(&region->mreg_mutex);
--		cond_resched();
--		return -EBUSY;
--	}
--
--	return 0;
--}
--
- /**
-  * mshv_region_range_fault - Handle memory range faults for a given region.
-  * @region: Pointer to the memory region structure.
-@@ -452,13 +412,19 @@ static int mshv_region_range_fault(struct mshv_mem_region *region,
- 	range.start = region->start_uaddr + page_offset * HV_HYP_PAGE_SIZE;
- 	range.end = range.start + page_count * HV_HYP_PAGE_SIZE;
- 
--	do {
--		ret = mshv_region_hmm_fault_and_lock(region, &range);
--	} while (ret == -EBUSY);
--
-+again:
-+	ret = hmm_range_fault_unlocked_timeout(&range, 0);
- 	if (ret)
- 		goto out;
- 
-+	mutex_lock(&region->mreg_mutex);
+ 	while (true) {
+-		if (time_after(jiffies, timeout)) {
++		long remaining = timeout - jiffies;
 +
-+	if (mmu_interval_read_retry(range.notifier, range.notifier_seq)) {
-+		mutex_unlock(&region->mreg_mutex);
-+		cond_resched();
-+		goto again;
-+	}
-+
- 	for (i = 0; i < page_count; i++)
- 		region->mreg_pages[page_offset + i] = hmm_pfn_to_page(pfns[i]);
++		/*
++		 * The HMM timeout only bounds retries while HMM is walking and
++		 * faulting the range. This fault is handled by a kernel worker,
++		 * so fatal signals from the faulting process cannot stop an
++		 * endless stream of invalidations here.
++		 */
++		if (time_after_eq(jiffies, timeout)) {
+ 			ret = -EBUSY;
+ 			goto out;
+ 		}
  
+-		range.notifier_seq = mmu_interval_read_begin(range.notifier);
+-		mmap_read_lock(mm);
+-		ret = hmm_range_fault(&range);
+-		mmap_read_unlock(mm);
+-		if (ret) {
+-			if (ret == -EBUSY)
+-				continue;
++		ret = hmm_range_fault_unlocked_timeout(&range, remaining);
++		if (ret)
+ 			goto out;
+-		}
+ 
+ 		mutex_lock(&svmm->mutex);
+ 		if (mmu_interval_read_retry(range.notifier,
 
 -- 
 2.43.0
