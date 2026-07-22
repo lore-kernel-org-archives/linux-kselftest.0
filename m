@@ -1,179 +1,125 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087B0466B18
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 16:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C2A3EAC80
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 16:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784738497; cv=none; b=kvcONDqoFXl2YF6tuO1j8sY8X4YGodowSuXh/aXAYr6kn+SGg0UkBN4wqn7ygZyTfhCBcDjKSiSD0y/wFkclJ42u9WAJe/Wga8mBiA2wEJeSNlnOr9PZuvIgr/0Ua3HV8fiLHnm/A5DUy5LO2oQaAuFfrFPhWOGg6QpAhNLKWBU=
+	t=1784739129; cv=none; b=HY1JP8tkzdR3u/LOWBtrRWnACtIQoWBQUJAZNWM8vQ7TIgZtKVXjuIkzctJEAe92e5Pr8tXum37lwOIVHgGRMHdj65yw/eG5Q8B5sa5xPZqtkbvipWruhrEKBKR2khrJlEYNyOFxbUmJeZL7+NeBYCy9IvxkD58nluTjJhcGrlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784738497; c=relaxed/simple;
-	bh=RXqcfcZSbNb3rB21Ph12lQCkkQdPMp95EfoTarPxUao=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mbuFsqCpxhryZHAUHQ3Xtd9ACSnw2/+JdLOZ/hMqDP6RVwGUn4s4X2vT4CPyLRf6HT1YPNjimYNI36toALmaNHoBvFJDExqTlZbcltgDVS5RALM4ElC1ENoasc6zybxfRK2iXJr0tpWuQICukXM+/J2dqp/DE/jEJ+zJ9XaKTM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=WzLFxW5f; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1784739129; c=relaxed/simple;
+	bh=FCpfcM+nT4aR46CkZhE83zlD19BADWSaL+1+/WtmNO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TZe8oAPMaCbnTFDgMQ+LNr5oLklGRlOnidhU9d/iLb1xXtNrcYFfNc8AxhCMX3rJyqFnMN5WDIX29ffuPbJO/4j4yikmds7j9nv4Ryh6+nbdEd6Ic+WVhC0zG/1D9Er7CO4RJK7QcRM2sX2qBbiAcK9VCfFP4VrdWyVOGVqbsIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UFzqwuai; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="WzLFxW5f"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e7109321dso2657508a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 09:41:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UFzqwuai"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cede6375caso10705ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 09:52:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784738485; x=1785343285; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Rk7HaColAzxmgyqV5k+/tQbJI9Q9Gz2mbZ9N8yXhieA=;
-        b=WzLFxW5fNRJwW96xE+FfglPtzF6bBN4ZJsUodDhGy8X72MW4CnLlUdSipf/kxMVs0N
-         dITUpOLCbUMKYBnXq6tsl7WPysUcmMbhpvaFl56Ij/+K+SeiJy38emz0GIgje+JPHMl2
-         DfgmWb+k210ye+riXiichKWQCkWO/qTkdxaHxu4PTECAN1EIKiRgD8auGMn+0foiokQj
-         THOGuifVYE//CIXjhuizT6J9B19r1hhCCpD1K1DYU6bJHM2sjrFq5QiiZHm//eLJoLQz
-         io9xuWXdFEYAVKhazENQemdHXIUYFCkO3NzKiicQvpiIVN7TN5MwF+9otsClbsHJVUr0
-         bI3g==
+        d=google.com; s=20251104; t=1784739123; x=1785343923; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pRkas0M1ny2EvNaHC3azwt0fIUYZNjvZg2vzKttAMCM=;
+        b=UFzqwuaiknAa/UoJEXHZyzyfI8PsGY3cBnc7/d7P4c+Rn5hho4XYwZBdSUBz4WRY8s
+         WQOg/uLM02MvVWMKL7lmBXCPYsHMHvM+pJ6gbxYU8x1oEQqgma88jw0VNmEYe002+/NG
+         GgQZGfEBLbqmoqvnj0IwLZCjalqJSE7zoei/7HP5quOzkaRblW22zuIjCfCjFAleJcty
+         9SHrPaBoIZ84MJtXLDTuGCinORC2fFAqyZzvcWtnRU4s5Abi93+2jVXfyuxR2j1LsZez
+         RVQdE9FHLdAXhXxFL+GW+QyeGLpCQlSC9ybyv8CjOQKsASOJMJd/To+3jDmegpagKol4
+         cWfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784738485; x=1785343285;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Rk7HaColAzxmgyqV5k+/tQbJI9Q9Gz2mbZ9N8yXhieA=;
-        b=ohlFjUrhmRvvkoeWaUMUdBYurWfUeItl3qDWfxmFG6RYSjnUuqCQU+Rxr7F/jcsgYn
-         3O2Kl4wXGUnn1YLY3UBgKf4fg9pBoeRRoBJfukSxcidq98ljBS9Q2ILW8arLvJ85QvlB
-         kKh/L+jSI0x9SE9dNOc3sisihz3t4dolzmvf22gsA8SVdDtWO6+c9KsXD+Rx39TZxxmY
-         vxYwFfc0Mb9h5S1uIL0j6QAQRjOPTYIB3XGMDXyRW0H5tiJCoAqZqzBs3IA3vZmgs9Ki
-         FWhdGWlspUEyhXAXeCoqiMM3H9YV2pQX+n3h4DPQQ0cdTDrld1laMCVlDZ/+1o7nN3Y6
-         7DQw==
-X-Forwarded-Encrypted: i=1; AHgh+RoNkgzdLiHc6zz2OxygDp8widv3uI4DZH9f7FwbIg1zik4MfsKr+IfqVC1HnNBWq+UazyYitzbqpinQ4iJ0L6Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOch7rPwpSyKgx+qgH2djzOOQUXl77u4QijZwFhKlGOWpu20jU
-	IpjWeOvXGUz7/dCZR460z3SG2Du4x6PEuw2lIF8XWdSZWb15eUu5K/Qs5Sp9/F22cbc=
-X-Gm-Gg: AR+sD11JFI48OoXEE53qYcl9gAQKGL+RpxnGaLHj/ut3mi7NiU+W5WfKzW9GuheQjQw
-	S+DVvZdoIiQr/VYOheV/gJC2uzrWf5eFjMdiJ4ZSWOSLHXcK5oJwMoakhwzppZJzqJ3vEjkAAcQ
-	zwU3pTUlQ06LCtdwunZD62myl7uAIi0dmMvGPCtiMMnZpYiuMA/32SdMQIhoxsu2wUPGDPK5gVi
-	JenQj6ac8jW2jb70YRAijfHODPo3NJlR9QgmyZKYua8flxygArzeU2j8fdU7IvaGf/Df57mGWYb
-	8EQ7vuW3HEZE1vi2CtjHox2lILgWH/bLkYXntrY8FPl7uepoS1M0nOm6JFF1md0e0JmRgW2cK7G
-	AogdL2oFdvlj9zlb12IaphrUgySzzp7xr5A8i7k+nwU65zmRRpf/c6WUVYZfMMFssinJQIuEPEV
-	8T53q55tIW7f806TUBEfmTiawFav7kFAE=
-X-Received: by 2002:a17:90b:2f4b:b0:37f:9cdf:f03e with SMTP id 98e67ed59e1d1-38e4b540acbmr23711630a91.33.1784738485186;
-        Wed, 22 Jul 2026 09:41:25 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e92091875sm3559948a91.7.2026.07.22.09.41.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2026 09:41:24 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784739123; x=1785343923;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pRkas0M1ny2EvNaHC3azwt0fIUYZNjvZg2vzKttAMCM=;
+        b=lguc+hdKd0R27ZiBBY9J3+QmnlcYIM2EOYZv5vuceoiVmNTuKszRU+J1pZ3RCjWDEI
+         xGGsfkLVQpJm61aRowMf38SlrgCJfj1AvReifHLiEc5XZ9sfoF3anWD9q+TrVdTT2DA0
+         WBgmj5rSXYDeUvpNruw6vYXRfsdXdqO3EpiSgwrRELCG2CbaTSjOQlzO/rJj6twk/JGQ
+         fkdm4+bMBnjP4p78iXI0YCfs8xGlaPDh3oeMqjsJylBEsPwRVIpykAs4HltQgBkjkIa2
+         yWB8Y60UAFED9UjIP7VKumt2EFaWQXCEHXj/Jfy81Ehxc2vFNM3Dj01Jj98hdmbjbZgQ
+         nvvA==
+X-Forwarded-Encrypted: i=1; AHgh+RpaUy3/Tchoyxxmuhobj60GsiiZciuUq+/bpQssWEyuealHi7jkG2gxRrtV5RJtvp9jbkcxax+9zq7A2NP0XSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTU4FxWOdTeIpJOk5iGzoNDDCx/X4789KV0SGisfX7q5h/iPW1
+	4aBmnVDzdPsmouBzKoE5OcCaa3xz5BWzdwcCUhQUHqlm3RTpzdBC6WSLn1iBuAj+uw==
+X-Gm-Gg: AR+sD115q7gltMZTz8Y71ObHCdkwxZGnmFFceniwTmjnCBy6an16aaR/+911lYIXuhi
+	bdP47gR5pvYnn47RfhQxQIr4Z8rJKGKOSFRKB8eYhv8/9D1O3p/rBfI00c2GW9CpTgPF8594qV7
+	52hMrQL/9YF75kSUl6rOwZ7eCTEwqI7jzw0F1PDIXxFgKURlekRNPDXf9Fox8CLQt3T3AcBGtl3
+	eY3ech+fecRvaTkcvBZ77XC0Il7dr6G29bVvrpe8rfmtvvfjOXWQoNjwewNK8fa76tpAae80nmH
+	oyRT0rvkyDSNV5d5wfv1gWkfI5p2BdubqfXWqxGqR9Ts7d51UHi/evQOfNmCTggaaJ/+A7uQMLO
+	ugnzucfPluUVI5mgY6+9CIgPgT3a4oUI5Yd+Vpqr1M+LYjQogx3UdbKkFw9uRVfBRU5s8BBDRij
+	0/p3F9D2NqvSbXFSn9gkJ40QulTLc+IJtlkNkLIf+93/eTEuXEo5zam13NVx2x7QqvIVpYl9g+O
+	hmeFczeX923oOnIkL8TXQScsiemvRMLUno=
+X-Received: by 2002:a17:903:3202:b0:2c6:a078:bfb7 with SMTP id d9443c01a7336-2cfa2995d66mr462105ad.7.1784739122233;
+        Wed, 22 Jul 2026 09:52:02 -0700 (PDT)
+Received: from google.com (112.174.16.34.bc.googleusercontent.com. [34.16.174.112])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf96ac33eesm11535215ad.72.2026.07.22.09.52.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 09:52:01 -0700 (PDT)
+Date: Wed, 22 Jul 2026 16:51:56 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Cc: Wake Liu <wakel@google.com>, tglx@kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net,
+	shuah@kernel.org, mingo@redhat.com
+Subject: Re: [PATCH] selftests: futex: Restore support checks for futex2 and
+ priv_hash
+Message-ID: <amD1LPWCvNNrYdQs@google.com>
+References: <20260722070801.2057634-1-wakel@google.com>
+ <dca6abef-0f6c-414d-b7b5-02e5b2a355e3@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 22 Jul 2026 12:41:23 -0400
-Message-Id: <DK58ZON5P6RO.2LTH6C3PKW2VJ@etsalapatis.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
- <shuah@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Report the real error from
- libarena parallel workers
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260722064713.357277-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260722064713.357277-1-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dca6abef-0f6c-414d-b7b5-02e5b2a355e3@igalia.com>
 
-On Wed Jul 22, 2026 at 2:47 AM EDT, Jiayuan Chen wrote:
-> Several CI runs failed in the libarena parallel tests with -4 (-EINTR) [1=
-],
-> which says nothing about what actually went wrong.
->
-> Two workers can fail like this:
->
->   worker 1: gives up, e.g. the rendezvous times out, sets test_abort and
->             returns its own error (-ETIMEDOUT)
->   worker 2: sees test_abort and returns -EINTR
->
-> -EINTR only means "someone else already gave up", so it carries no
-> information. Which of the two gets reported depends on the order
-> pthread_join() collects them, because
->
-> 	err =3D err ?: (long)thread_ret;
->
-> keeps the first non-zero value and drops the rest. When the -EINTR worker
-> comes first, the error describing the actual failure is lost.
->
-> Let any other error win over -EINTR, and log each worker that returned an
-> error.
->
-> It is still unclear whether the timeouts come from CI load or from a
-> problem in the test itself. Report the error accurately first, so the nex=
-t
-> failure can be diagnosed.
->
-> [1]:
-> https://github.com/kernel-patches/bpf/actions/runs/29867905253/job/887644=
-63566
-> https://github.com/kernel-patches/bpf/actions/runs/29878191901/job/887948=
-45824
+On Wed, Jul 22, 2026 at 12:20:37PM -0300, André Almeida wrote:
+> Hi Wake,
+> 
+> Em 22/07/2026 04:08, Wake Liu escreveu:
+> > Older kernels may not support FUTEX2 syscalls or PR_FUTEX_HASH.
+> > Removing these checks causes false failures when running the tests on
+> > such kernels. Restore the checks so the tests can be gracefully
+> > skipped when the features are not supported.
+> > 
+> > Signed-off-by: Wake Liu <wakel@google.com>
+> > ---
+> >   tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
+> >   tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 ++
+> >   2 files changed, 4 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> > index 78c0f7a59e17..d215acf88120 100644
+> > --- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> > +++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
+> > @@ -103,6 +103,8 @@ static void __test_futex(void *futex_ptr, int err_value, unsigned int futex_flag
+> >   			break;
+> >   		}
+> >   		if (ret < 0) {
+> > +			if (errno == ENOSYS || (errno == EINVAL && (futex_flags & FUTEX2_NUMA)))
+> > +				ksft_exit_skip("futex2 or FUTEX2_NUMA not supported by kernel\n");
+> 
+> Why aren't you using SKIP() instead of ksft_exit_skip() like how you have
+> done at
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=50c121e5a57abe446e46825fb9c69ac419765d5c
 
-Overall change makes sense, a couple things.
+It's actually the same patch. See:
+https://lore.kernel.org/all/20260624070223.1533167-1-wakel@google.com/
+Thomas, just refactored it to use the harness API.
 
-I'll also look into the error itself.
+I'm not sure why Wake sent the same fix twice but it was likely by
+mistake. That's all, nothing to see here.
 
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  .../testing/selftests/bpf/prog_tests/libarena.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/te=
-sting/selftests/bpf/prog_tests/libarena.c
-> index df7e4b8dc394..65743920ff69 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/libarena.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-> @@ -112,13 +112,28 @@ static int run_libarena_parallel_test_workers(struc=
-t libarena *skel,
-> =20
-> =20
->  	for (i =3D 0; i < nthreads; i++) {
-> +		int worker_err;
-> +
-
-Let's hoist this definition up to the top of the function.
-
->  		ret =3D pthread_join(threads[i], &thread_ret);
->  		if (!ASSERT_OK(ret, "pthread_join")) {
->  			err =3D err ?: ret;
->  			continue;
->  		}
-> =20
-> -		err =3D err ?: (long)thread_ret;
-> +		worker_err =3D (long)thread_ret;
-> +		if (!worker_err)
-> +			continue;
-> +
-If we are ignoring -EINTR errors from workers then let's skip the
-printing for them altogether, otherwise below we keep printing the
-"main" error for every interrupted thread.
-
-> +		/*
-> +		 * A worker that bails out because another one already gave up
-> +		 * reports -EINTR. That is collateral damage, so let any other
-> +		 * error win: it tells us what actually went wrong.
-
-Capitalize "it"
-
-> +		 */
-> +		if (!err || err =3D=3D -EINTR)
-> +			err =3D worker_err;
-> +
-> +		fprintf(stdout, "%.*s__%d returned %d\n", (int)prefixlen, name,
-> +			i, worker_err);
-
->  	}
-> =20
->  	free(threads);
-
+--
+Carlos Llamas
