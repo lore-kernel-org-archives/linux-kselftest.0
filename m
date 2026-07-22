@@ -1,64 +1,64 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBF73469F6
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856CC35AC1E
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727638; cv=none; b=MksZ+Ce0IFg9KyjP9hNHzf8AARVfckdQepWdpRwDXhYlo7xfjzrdW/lZhp8aUlxRqaIzjocHliPq1U49fWSBTW0ZkvmH08DAIwWv0FXHLvTL0FX/bj+1fttCV+tFtt2aw+/grbI6nsjU/EttXlwjRB5tB1ZB6jPXquLnkwvZ7sM=
+	t=1784727765; cv=none; b=TrOJxi/PUe8GnOJBU33/awZng3mmr3QKv3+lDFCNTat72r0NOtRt3FC5UtQwD+VxiD7pJeYcg3uulmNuGlqFC6aNghjeoYzsJEGVq+ujIQBw3Nprw3tm0DIxREZ7TJnTX+FM+VJpSZKcYligpVenzo/x2QrN8TPUhrGWC1Cm7Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784727638; c=relaxed/simple;
-	bh=gui0VHTSLLwEHTPJ7tc1ugqJNcqEWciy6Fvv6kb8FpI=;
+	s=arc-20240116; t=1784727765; c=relaxed/simple;
+	bh=4Ed3FEjfLXijc1yxxqYpI07on3pOxk69h5KyHejFQJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dhnRLEKey/UFxE6qCZ6RnEvPt2BLdTJK0CzfJyrmvYqhUJA9Qzfe8dvKKCmqBjoBrQgI0gpLpZvgyZ8IiqB/bJRGoYS4tY0+JxLlo2VDvgVFB5NAJf9upaEFEYLXfkZIQbPnHyz/MXWEGwxbhDtoNgeVNYj9WraegppfiSfci/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=ftS+fLD0; arc=none smtp.client-ip=209.85.216.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=qRaKEvXmAV+2n4XeJy/3ZkWhuSp/yC9qQaPR4Sy0Av2v4szbHlIWR8r6HqLaMIaUpOmMgWaC4PDDHmLiu//N1I+lKALIqPKy7pLxsu+sVLZWTTJLY9Yg7gqvmn4oZ/aKqTXmuujTF7zwdyTXBaldoC3i/qokxKKSc6ZBYWZkJic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=fAuQ0Sjg; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="ftS+fLD0"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38dcbade417so10844718a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:40:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="fAuQ0Sjg"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ced3386430so88385645ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 06:42:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784727636; x=1785332436; darn=vger.kernel.org;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1784727762; x=1785332562; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:mail-followup-to:message-id:subject:cc:to:from:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9feiKeFcTEnJsnOt+AVgxkROZ++OwVZ0S00dQJw9vl8=;
-        b=ftS+fLD0qv/usuDVM+ESN4XKOBsoTKL2Df1skMTcrKJpPs/FYnGILEECIUyN4Y0dmJ
-         hSAdny02ZivrrvoI1DRt+zq4G7RKhWYAC+zQsHGBJI5RJ7cCeKv+djO/MItHWvbRloR4
-         T7y8A8oxGiY4z7xW/njiWXG+OekQH2kFNYnUWVNcZOrJvCiP0ik4dUPJVl+7l/ReGaLh
-         cJ6axA5npjVn5KXrA7GtBVQsRiol13yVhAWEMoQb/hyTN52XgiHHre96VwRBSBU7IMwB
-         oVul2VZqDOWUDGAEG96NPQseqNkl5C/+LNvt4iCPVmJ5vwVAJE9IxyPoPJ3W4wXpNxBx
-         oG3g==
+        bh=crZ98YrnqpB8dh6d/2NV8XT+VsDzcgb/h4PFQm4GzmE=;
+        b=fAuQ0SjgGEzflEvVmT31aZ57Z0IZ4xVjKso+L+ulcIWts2Al/6Hu5A28ThiCeYYx3M
+         mDOsGRilucUNjW6OGWImDwKYS6lG/Rj5tOKHra04WdoiHH9l4Pzuei/msEWzbuv48ID1
+         RJNEj9cw12isIyZ2jmXOeKl0OPSWAlExI8D5G5jCRnAm8+vGnVyW0M9XnjMRzPBHVK0L
+         WdF33SIdor1wgNkS2E1ev+LEKe10nMnbQeoiU6qtsQIznPGwXLKqudU3cR89hWHttz6A
+         g4k5ogWr/EbkkQ4sjHFdoZFJIi2lWH+4uvbpFWe0fHQ3aS9QpERRyAh3b28IpXA3ec+m
+         SMmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727636; x=1785332436;
+        d=1e100.net; s=20251104; t=1784727762; x=1785332562;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=9feiKeFcTEnJsnOt+AVgxkROZ++OwVZ0S00dQJw9vl8=;
-        b=aVqy8UJR1Xr/lDQMc8nc/Sesi8D5dASzCyH75Z6F79Gz+8Gqf4/gCzkKm3UxTvGi5w
-         TBdH60Xxn3qaXP7jFrgOvZsD60EoDji3zjMvG3n0yDfTY4yPmHZnFyTIhktJ1DiYlDmm
-         nw7yiOWh2Hnvr4pV+7Tell1gXlYoasSyx8TMMRFdpY9XZJq2ZpaSYiQ6gQmV6RBGzMJH
-         umCcvKgx12/jv/FyxrdJG+oJgqu5N6x/K0LuNAW98+V0ertDvGM82f+LRr6TEUzk671Y
-         LRZLIQ8GycL7p1/ZhX42ER4mjFa6lEHPi/Mn/LUn67Bh0UEMSLwuKzHx46aXnOGJIVKo
-         kvKA==
-X-Forwarded-Encrypted: i=1; AHgh+RrzZqlhGxBZDI1G7SXLiYcZKMhffE3046gTN2TIx5QgZb66WJNmOl2Zl46pHe5oaSfPbnhwDx7GqFWsbsBjwE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwalNncNkCXRVDoQmS4sQ2sv3PtnaZH9y8FNVjpqI7tQmP3sB3H
-	qYHs7s/GBSnVUEqTIHJO2biR7ZJTFOTeWbKyaDgY7vc4sqKeIGCSzGN1p2W6yqHgkkI=
-X-Gm-Gg: AR+sD11ADjv9fFe5s29Y4f4cuBUDOQiFnJNhQdt3e9UE4gHnSIxvBJsFlolhIPxR1h2
-	XWfNnza87Vwbv1AxM8hbtRDA1v0iCEFUbZ28t9Kvly5DPyWIJhdKh7ZUWqaS1taOjX7p7BeVbu0
-	FpI4EZRp/lpOWv/E2QL4459jvALJWhJkt60Q9F6i5dYM4TLsvMossNTUm1LR7egCaAPVCJUqH85
-	CKS7sy7g+LDuwQFeZDXpzZmZVcBKEJhKd08e98kbCJUOzeLb0qHAqa8+1ajEU87oYqBBCKXg+dL
-	VZPyxTX5zSUlTz8NETnpf4B8agnPN9N9Cw6NuE+12UWyyUIwf29wvoY/EK6yITuPB7gB+krUh+y
-	vszx6cXgPjvRzsAyl6QLHy4EwRzIiqLQt7+oaNFJL6TyPKjKaXcMT+NGsjbssDFFDlVm4ow==
-X-Received: by 2002:a17:90b:3dce:b0:38e:7f1b:f01 with SMTP id 98e67ed59e1d1-38e7f1b144cmr11954633a91.36.1784727635713;
-        Wed, 22 Jul 2026 06:40:35 -0700 (PDT)
+        bh=crZ98YrnqpB8dh6d/2NV8XT+VsDzcgb/h4PFQm4GzmE=;
+        b=HMcSnA9tVemit32jIP4jLSsOtHbRwzJGcafP6k2mUfltfrg/9EhYLpHwGLLCtLT2+h
+         Vw8UOyoDKeIIGzORfPO1DTJjJUFjnBKEUfevrkEholuUzcBFYE5TO70M1o6+IhmceDB6
+         kwTz86i7O6QTXiJ8yyci722bfr4Z9xzab7JoQTa+4aRFgqWmbykX06xVSP1rINVYmj/r
+         Gwp9aYkiHsuhLskZviSCbC5OjUpPSuozVN92yBhyTDZERMhl/g5wA3RmNcRrEK1x22pn
+         u92XJVzJb1q/b+1dGO6RsPtcC6uevh/l2K8wJOCYdPhCESW7HM9+tJndSdVWMvzJM7QC
+         ROzg==
+X-Forwarded-Encrypted: i=1; AHgh+RrAE4fI+ebcatUHKkN+VdnLHvXdv2yCGgHAwOe9N5+C0JWMOnZJ61VUoPIO7WUC8LGDtM+2OQCn7zUo2kwxjas=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5lKcA+XLqJKaA3fvhqjcfCM6zKXAGzxQST2sSF7a+T3X1Kygc
+	NcD3G/VNQk5TQd0hGiQbw0PetjiG1SdO5GGmRrz2jjCWQ29k7vlMyh6LHo6A0/h9bh4=
+X-Gm-Gg: AR+sD120tXW8SPywdA5xHszzmmnvYjk7FzFdO5OMmGIDmRnq2dHNbIHkrG2WO6GIY1P
+	AldxXrDp0NbQan7LbJNmITNZm9XpYxdRROgIa5tyk5wNRkvTjIalQmXJrKGBYUCYg6YkUSROMtA
+	rD91o/QtbZBmRTWHWEM5TDyO1p6XhbzbcvEFKvh25nSHU3BJTTWiXG4Fvz733MBc+wKJaPxfLea
+	gTCHrx6bvWcx6dnexHMO853nglMeg/+/CrkQURXpfbxxxPw4xom8IwTYWicEKWvP1UjNSc74ULD
+	3NgN4k+g0+6+goMxwQv8CLv491ATXIpy9xSU+hl1/JYZ0jLfYIlWZC3sh8TqFTgcxvUIAO7Ve83
+	fCINw4CWhTaTmlahnJSlvsb9zMsImgu17mIdU2m4TYPfEckLI2xLznfGialzLGXyFlBwzrA==
+X-Received: by 2002:a05:6a21:510:b0:3c4:1916:9d40 with SMTP id adf61e73a8af0-3c419169f4fmr7786967637.12.1784727762450;
+        Wed, 22 Jul 2026 06:42:42 -0700 (PDT)
 Received: from localhost ([2a03:2880:2ff:44::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38ea7aa8c97sm1110409a91.9.2026.07.22.06.40.34
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb8f0d872bsm1233076a12.7.2026.07.22.06.42.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:40:35 -0700 (PDT)
-Date: Wed, 22 Jul 2026 06:40:34 -0700
+        Wed, 22 Jul 2026 06:42:41 -0700 (PDT)
+Date: Wed, 22 Jul 2026 06:42:41 -0700
 From: Joe Damato <joe@dama.to>
 To: Breno Leitao <leitao@debian.org>
 Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>,
@@ -74,10 +74,11 @@ Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>,
 	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 3/7] ieee802154: convert dgram getsockopt to
- sockopt_t
-Message-ID: <amDIUv4Sa/i7MfEq@devvm20253.cco0.facebook.com>
+	kernel-team@meta.com,
+	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
+Subject: Re: [PATCH net-next v2 0/7] net: convert rawv6, ieee802154, phonet
+ and tls getsockopt to sockopt_t
+Message-ID: <amDI0T9mfHakF+7I@devvm20253.cco0.facebook.com>
 Mail-Followup-To: Joe Damato <joe@dama.to>,
 	Breno Leitao <leitao@debian.org>, sdf@fomichev.me,
 	"David S. Miller" <davem@davemloft.net>,
@@ -93,9 +94,9 @@ Mail-Followup-To: Joe Damato <joe@dama.to>,
 	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
+	kernel-team@meta.com,
+	=?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
 References: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
- <20260720-getsockopt_phase4-v2-3-8a08fcfa0d72@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,44 +105,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260720-getsockopt_phase4-v2-3-8a08fcfa0d72@debian.org>
+In-Reply-To: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
 
-On Mon, Jul 20, 2026 at 09:17:44AM -0700, Breno Leitao wrote:
-> Continue converting the proto-layer getsockopt callbacks to the sockopt_t
-> interface, splitting dgram_getsockopt() into a do_dgram_getsockopt() helper
-> that takes a sockopt_t.
+On Mon, Jul 20, 2026 at 09:17:41AM -0700, Breno Leitao wrote:
+> Now that sockopt_init_user() was already merged, builds a user-backed
+> sockopt_t from the __user pair. A getsockopt leaf can then take
+> a sockopt_t behind a thin __user wrapper: the wrapper builds it, calls
+> the leaf, and writes the length back to optlen. The leaf copies with
+> copy_to_iter() instead of copy_to_user().
 > 
-> No functional change.
+> Convert four more leaves the way udp and raw already were: ipv6 raw
+> (do_rawv6_getsockopt), ieee802154 dgram, phonet pep, and tls
+> (do_tls_getsockopt and its per-option helpers). 
+> 
+> Converting phonet surfaced a pre-existing bug: pep_getsockopt() clamps the
+> length it reports but writes a full int with put_user(), overrunning an
+> optval buffer shorter than sizeof(int). It is fixed in its own patch, with
+> a Fixes: tag, before the phonet conversion, so it can be backported alone.
+> 
+> The last patch adds getsockopt_iter selftest fixtures for rawv6,
+> ieee802154, phonet and tls, checking the returned length and errno across
+> exact, oversized and short buffers, an unknown optname and a bad level.
+> 
+> For full motivation about these changes, please check the initial thread
+> at link
+> https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/#t
 > 
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
->  net/ieee802154/socket.c | 38 ++++++++++++++++++++++++++------------
->  1 file changed, 26 insertions(+), 12 deletions(-)
-> 
-> diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-> index 85dce296d7513..763f63e48afe4 100644
-> --- a/net/ieee802154/socket.c
-> +++ b/net/ieee802154/socket.c
-> @@ -831,20 +831,12 @@ static int ieee802154_dgram_deliver(struct net_device *dev, struct sk_buff *skb)
->  	return ret;
->  }
->  
-> -static int dgram_getsockopt(struct sock *sk, int level, int optname,
-> -			    char __user *optval, int __user *optlen)
-> +static int do_dgram_getsockopt(struct sock *sk, int optname, sockopt_t *opt)
->  {
->  	struct dgram_sock *ro = dgram_sk(sk);
-> -
->  	int val, len;
->  
-> -	if (level != SOL_IEEE802154)
-> -		return -EOPNOTSUPP;
-> -
-> -	if (get_user(len, optlen))
-> -		return -EFAULT;
-> -
-> -	len = min_t(unsigned int, len, sizeof(int));
-> +	len = min_t(unsigned int, opt->optlen, sizeof(int));
+> Changes in v2:
+> - Replace min_t() by umin() (David)
+> - Link to v1: https://patch.msgid.link/20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org
 
-Does the same min() feedback David gave on the last revision apply here as
-well?
+Other than the nit I mentioned about min vs min_t on the one patch, it looks
+good overall to me, so for the series:
+
+Reviewed-by: Joe Damato <joe@dama.to>
