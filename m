@@ -1,298 +1,137 @@
-Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DBB4399DC;
-	Wed, 22 Jul 2026 20:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.218.115.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CD742E8DE
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 20:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784752046; cv=none; b=Wcaq7yDG91DDLcmgfFFmrHewLBt2RVDJEoREf6Wa/4AE4rI0g2rPStyOJZ2huqMcVvJ6zrATh2nZAvaNnRiSazGwZ4EanXVN6AGd/O4xPlUa+aRnyNkhK8lJ67/f0sCe2iXSSmTpoFjg3GLizV0i/wJRHCLTAEFCVxIx4ajdutU=
+	t=1784752887; cv=none; b=W0JQ4Pb0R+IJYagNdpKA1CCp6kdvBrBhrkOFyAGwQcWB4OncYfn8I1pvTy1N5RbdUmkcGoF5rYtMvAC0oUC+KDeI2UIlaql2m3ndB7C4ZtjNjBtpZjQIUQx5FmLB+O7bQENtBX9KU5U4dyOmWgf/1mqP7/nFrjp9flm/2pQy9KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784752046; c=relaxed/simple;
-	bh=ozJ5nbD6JmX0X2r7D2OYntNCJ/DVQ1BmXd0reC3GanQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q4qmV/H8JESnYd/J6W+Ej/52lnTMBQ/OEowihMJ24cQOjOvxdORkIIYLtJeDTCysn/fKRN4Oc9g84ra4u58ttExp/s6Jd9q+5K+m7fNE9egpbP4ojO1INM8psMxTxuNFl/0tCUdB7/tuSc524j7F3bQQkzi0iC6WiHhq7GybMWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=lDrkM2XK; arc=none smtp.client-ip=34.218.115.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1784752887; c=relaxed/simple;
+	bh=Yf15RLlhXlooxQ5ojngrKI3NfRjWBJYoBlpiscAPU24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C9ZYP5zzyE4nLpu3tiCRvN/Jf3AYBIEROSP+IzhbtZHvBnArdMFoNP7xOUMDRfmRk3dkpg0xNTXvqSxSx+tI/TmBTBE+tpyw7YyGkccEOlvIHYzFjQJE8oHv++Z49DZ8rL8HBixe3N6YhR0lZiYqyg+ZsE4ZzRmcYRvgBGlvugQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvkoZmOM; arc=none smtp.client-ip=74.125.227.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="lDrkM2XK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvkoZmOM"
+Received: by mail-pj2-f4.google.com with SMTP id 98e67ed59e1d1-3896ccc93b5so3912520a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 13:41:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1784752044; x=1816288044;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BQ1HJB58rpvqPffKJf0TmIBeL9E2JVg2QLg3N5xQr7M=;
-  b=lDrkM2XKvxKT+yKRZ/O63ivH/LcawB8jK92uQEnKP0qF3IVGjA7Bu8f1
-   b076lAdkCA2DrcJiGXYW87eSaFLSS6PQDUGi1sCNElrw4pA5M36o/aD25
-   ecDw8OTTU0mp53+SDq9EwWJS+lAbyq3AgJCLYB2yUUWRpfh1FWZW2cNhr
-   x9gWfM35pVH256l6CqBKFxC/Vy9JanmVrP9mkIu2b/zvwSupyw/rMhd11
-   AQOdrbQrUOR1S7sC/gB39GRfqjHAmSspgETWJRfjYWnkxdSueIu/hswfO
-   8NeRflJdLLdX6dHN1j2u0DG6xUCnaxjqCc415Tkkz48QpyJvkbsF953Db
-   Q==;
-X-CSE-ConnectionGUID: RupK4AxCSsSgAC6r6HOo2g==
-X-CSE-MsgGUID: 8nmXpRQdQ2mSZoTN+vQODQ==
-X-IronPort-AV: E=Sophos;i="6.25,179,1779148800"; 
-   d="scan'208";a="23983739"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2026 20:27:24 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:17210]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.25.115:2525] with esmtp (Farcaster)
- id 528b30be-bf0c-4169-96b8-b8ddca4aacce; Wed, 22 Jul 2026 20:27:23 +0000 (UTC)
-X-Farcaster-Flow-ID: 528b30be-bf0c-4169-96b8-b8ddca4aacce
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43;
- Wed, 22 Jul 2026 20:27:23 +0000
-Received: from dev-dsk-congkai-2a-df9e8fab.us-west-2.amazon.com
- (172.23.251.204) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.43; Wed, 22 Jul 2026
- 20:27:23 +0000
-From: Congkai Tan <congkai@amazon.com>
-To: Oliver Upton <oupton@kernel.org>, <kvmarm@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>
-CC: Congkai Tan <congkai@amazon.com>, Marc Zyngier <maz@kernel.org>, "Joey
- Gouly" <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, "Jonathan
- Corbet" <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, "Haris
- Okanovic" <harisokn@amazon.com>, Geoff Blake <blakgeof@amazon.com>,
-	"Stanislav Spassov" <stanspas@amazon.de>, <kvm@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 4/4] KVM: arm64: Add KVM_ARM_VCPU_PMU_V3_STRICT vCPU feature
-Date: Wed, 22 Jul 2026 20:27:02 +0000
-Message-ID: <20260722202702.4165917-5-congkai@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260722202702.4165917-1-congkai@amazon.com>
-References: <20260722202702.4165917-1-congkai@amazon.com>
+        d=gmail.com; s=20251104; t=1784752886; x=1785357686; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lwCODOyVSYFhI5c3HdXAxVNdit7/+b6pODVCWxPDLeg=;
+        b=OvkoZmOMoZHgmw+uthSEVZwNaDuIVjFK8r4wZ5vcwzk1Qmle2wf/d9bnQi7DIwBuGy
+         h7y13hdrNMox/fnxHCtGBAHc7KTIjEXL94fET8o/Mrx55Aog950ugI93RdQcrchmOP9I
+         TVDYhfYydNaVHIspnhmuEy55MXIzI3gaJ+FCdzbibdeazu4m5uGj3FRb9vxqq3CnikDX
+         lLXogicjPaQDGxkDxwzRh4hs6v86kKKXZf5NwvReJJ3C4hrI/8HVHgeDIISm3BiwA5OX
+         nrmhFK+GobX+1TWgBrj+Zgx23kb8PGPUX3GLX5JdoD48npqknWp3WhPfLS3IuC2DkuUk
+         fNfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784752886; x=1785357686;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lwCODOyVSYFhI5c3HdXAxVNdit7/+b6pODVCWxPDLeg=;
+        b=p2aM+8mq3Y4kesA29k5cAd/Hz5AC10FE2Vr5egImse+gq6Zh17xawB/vXIlP4ABPFQ
+         urWxP9O/mw3j17cl2sghgF2T6mOY7j6y5jxzNZ55MUkkPj5W4CZsnb2nheonkzV/qVXB
+         m8rLKMInAAXNh+1mCyYHn6C2KQx5dmOlFHgOY0Zh6Ci8mWb97wDG1W4k7k08tPJYjDPb
+         fTZvpzVFpmRpO3a/23YMyqhMLyLidKKbDlcL9Z6v8eaThl6e/DhwrA+Q9eDTAOoUDtWa
+         XaS1yW+fw92YlPaQBBIlH/DGY8S5vKleoKj0mt54SuihaoA0mGCDRcsp9dl6VpewD4He
+         mb7A==
+X-Forwarded-Encrypted: i=1; AHgh+Rqg+yfncD2/y/rNcBtbr57vo+CvHotvfMPyVyVrFN1A4Ooe8RXsQBAXdBwkDDfHxePSYMPoUEECZAdJciLdZF8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXv0+Biglr7h8IelJdSzbM6MM1aDuSTP7E7vfl54pGxgsAAWZS
+	dJ8h9KyrwEoJfi1OeTIYIA3rK5wmK2fp/QOjomM5YLy0h88psnc/Ws48
+X-Gm-Gg: AR+sD10a4uZbuJzyO/ElxBJoc9KDa/usjbUhLMtVKIMLeMTP7RVmpAH9kX4RtHM+z2S
+	V74xs32lyoLkQ+WgXjAOvq1RC4TvBwQKpzDTAYHmB5EMGw7w7IrWec/2YUAj/uTGldFaJ1ZIB34
+	z4KfrIrIGZ5Ifd1qTasLjowvnyliiwHDY0ShtMWuGnnCdd1axE4AZg9MutgeaW7w/73CbpmsSCp
+	aYxKTdCAhYtKB010S5d+XFBTzdnoAdZ+AOO9CCKz7nFK0hukbJOPG6GTNMC4gRgE2ZQPFiRomd6
+	ZPFO+TnSMUyJU/wCsD4TPmSnr2gVcUDN3hIZfWY/SWQP7FH9ivRZxOc5AMUXOKZvZlhLH0KGAPS
+	MQmfUkd6Os1eStLVOJcLj2jY+4VSWgW+0B7FdWJT8/Au8xAxbcUhdP5bhtf1tdwIHxtrqCF/bB/
+	4Hy3ek9w==
+X-Received: by 2002:a17:90a:e703:b0:38d:ddc2:7ccb with SMTP id 98e67ed59e1d1-38ec6406625mr281164a91.1.1784752885668;
+        Wed, 22 Jul 2026 13:41:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38ea466e62fsm1240712a91.1.2026.07.22.13.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 13:41:24 -0700 (PDT)
+Date: Wed, 22 Jul 2026 13:40:58 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Vladimir Vdovin <deliran@verdict.gg>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 8/8] selftests: net: add test for XDP_PASS
+ skb checksum invalidation
+Message-ID: <amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com>
+References: <20260715-bpf-xdp-meta-rxcksum-v5-0-623d5c0d0ab7@kernel.org>
+ <20260715-bpf-xdp-meta-rxcksum-v5-8-623d5c0d0ab7@kernel.org>
+ <aljNR2sf8qJVKFgb@devvm7509.cco0.facebook.com>
+ <alkBnI3XcH0XGjEo@lore-desk>
+ <al53WS9FMTnu7tBI@devvm7509.cco0.facebook.com>
+ <20260721082728.74142e6c@kernel.org>
+ <al_4VWS_EyyZLe8z@devvm7509.cco0.facebook.com>
+ <20260721183256.6f49d6e1@kernel.org>
+ <amEEEohxmC8hkBvY@devvm7509.cco0.facebook.com>
+ <20260722113525.34092660@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260722113525.34092660@kernel.org>
 
-Introduce a new vCPU feature KVM_ARM_VCPU_PMU_V3_STRICT. When set, KVM
-does not create a default PMU when initializing the vCPU, and userspace
-must select one explicitly via KVM_ARM_VCPU_PMU_V3_SET_PMU before the
-first KVM_RUN.
+On 07/22, Jakub Kicinski wrote:
+> On Wed, 22 Jul 2026 11:00:07 -0700 Stanislav Fomichev wrote:
+> > > > This is about current drivers that only report UNNECESSARY with xdp: the xdp
+> > > > prog has to maintain in-packet checksum if it changes the payload. I think
+> > > > it's a fair assumption?  
+> > > 
+> > > What about decap? If we decap the header that device validated 
+> > > as UNNECESSARY there's no possibility of maintaining the checksum
+> > > (by which IIUC you mean correcting it in along the payload changes).
+> > > 
+> > > I think we'd need some API to "decrement the csum level" ?
+> > > Or some heuristic in the drivers to decrement if the head moved
+> > > by at least len(IP+UDP) into the packet ?  
+> > 
+> > True :-/ I guess one more case to document?
+> 
+> What would we be documenting? That it's a known bug and we have no idea
+> how to address it? Or am I missing something?
 
-The flag forces the VMM to be aware of the PMU implementation of the
-guest to be created, so that certain information about the PMU becomes
-deterministic (if on a heterogeneous system) and becomes safe to be
-exposed to the guest. It can be used as an umbrella flag to gate future
-PMUv3 UAPI changes.
+Yeah, that UNECESSARY + decap in xdp has this corner case of inner
+csum being not validated (and currently no way to flip it to NONE from
+bpf).
 
-When no default PMU is created, kvm->arch.arm_pmu stays NULL until SET_PMU
-runs, so kvm_arm_pmu_v3_init() now refuses to run if kvm->arch.arm_pmu
-is NULL.
+(idk whether we really have nics that do csum_level>=2, so I'd just add
+bpf_invalidate_csum or something, but it's a separate conversation)
 
-Signed-off-by: Congkai Tan <congkai@amazon.com>
-Reviewed-by: Geoff Blake <blakgeof@amazon.com>
-Reviewed-by: Haris Okanovic <harisokn@amazon.com>
-Reviewed-by: Stanislav Spassov <stanspas@amazon.de>
-Co-developed-by: Oliver Upton <oupton@kernel.org>
-Signed-off-by: Oliver Upton <oupton@kernel.org>
----
- Documentation/virt/kvm/api.rst          | 11 +++++++++++
- Documentation/virt/kvm/devices/vcpu.rst | 11 +++++++++--
- arch/arm64/include/asm/kvm_host.h       |  2 +-
- arch/arm64/kvm/arm.c                    | 19 +++++++++++++++----
- arch/arm64/kvm/pmu-emul.c               | 18 +++++++++++++++++-
- include/uapi/linux/kvm.h                |  1 +
- 6 files changed, 54 insertions(+), 8 deletions(-)
+> Again: 
+>  .. the ask was to sketch out the plan of explicitly
+>  updating/invalidating the checksum even if we don't 
+>  implement it today
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index a5f9ee92f43e..4988c32df4bf 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -3515,6 +3515,17 @@ Possible features:
- 	  Depends on KVM_CAP_ARM_PSCI_0_2.
- 	- KVM_ARM_VCPU_PMU_V3: Emulate PMUv3 for the CPU.
- 	  Depends on KVM_CAP_ARM_PMU_V3.
-+	- KVM_ARM_VCPU_PMU_V3_STRICT: Enable strict PMUv3 UAPI.
-+	  Requires KVM_ARM_VCPU_PMU_V3. Depends on KVM_CAP_ARM_PMU_V3_STRICT.
-+	  When enabled:
-+
-+	    * Userspace must explicitly select a PMU implementation before
-+	      initializing the PMU or configuring a PMU event filter
-+
-+	    * If the PMU implements FEAT_PMUv3p4, PMMIR_EL1.SLOTS provides the
-+	      hardware value of the underlying implementation
-+
-+	    * Writes to PMCR_EL0.N via KVM_SET_ONE_REG are ignored
- 
- 	- KVM_ARM_VCPU_PTRAUTH_ADDRESS: Enables Address Pointer authentication
- 	  for arm64 only.
-diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-index 66e714f2fcfa..deb5c51bc00c 100644
---- a/Documentation/virt/kvm/devices/vcpu.rst
-+++ b/Documentation/virt/kvm/devices/vcpu.rst
-@@ -53,8 +53,9 @@ Returns:
- 	 =======  ======================================================
- 	 -EEXIST  Interrupt number already used
- 	 -ENODEV  PMUv3 not supported or GIC not initialized
--	 -ENXIO   PMUv3 not supported, missing VCPU feature or interrupt
--		  number not set (non-GICv5 guests, only)
-+	 -ENXIO   PMUv3 not supported, missing VCPU feature, missing
-+                  hardware PMU, or interrupt number not set (non-GICv5
-+                  guests, only)
- 	 -EBUSY   PMUv3 already initialized
- 	 =======  ======================================================
- 
-@@ -62,6 +63,9 @@ Request the initialization of the PMUv3.  If using the PMUv3 with an in-kernel
- virtual GIC implementation, this must be done after initializing the in-kernel
- irqchip.
- 
-+When the KVM_ARM_VCPU_PMU_V3_STRICT vCPU feature is enabled this must be done
-+after selecting a hardware PMU.
-+
- 1.3 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FILTER
- -----------------------------------------
- 
-@@ -108,6 +112,9 @@ hardware event. Filtering event 0x1E (CHAIN) has no effect either, as it
- isn't strictly speaking an event. Filtering the cycle counter is possible
- using event 0x11 (CPU_CYCLES).
- 
-+When the KVM_ARM_VCPU_PMU_V3_STRICT vCPU feature is enabled this must be done
-+after selecting a hardware PMU.
-+
- 1.4 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_SET_PMU
- ------------------------------------------
- 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 9e035d587970..39f7fc740d07 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -39,7 +39,7 @@
- 
- #define KVM_MAX_VCPUS VGIC_V3_MAX_CPUS
- 
--#define KVM_VCPU_MAX_FEATURES 9
-+#define KVM_VCPU_MAX_FEATURES 10
- #define KVM_VCPU_VALID_FEATURES	(BIT(KVM_VCPU_MAX_FEATURES) - 1)
- 
- #define KVM_REQ_SLEEP \
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 50adfff75be8..7dbefdd846aa 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -452,6 +452,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 		r = get_num_wrps();
- 		break;
- 	case KVM_CAP_ARM_PMU_V3:
-+	case KVM_CAP_ARM_PMU_V3_STRICT:
- 		r = kvm_supports_guest_pmuv3();
- 		break;
- 	case KVM_CAP_ARM_INJECT_SERROR_ESR:
-@@ -1563,8 +1564,10 @@ static unsigned long system_supported_vcpu_features(void)
- 	if (!cpus_have_final_cap(ARM64_HAS_32BIT_EL1))
- 		clear_bit(KVM_ARM_VCPU_EL1_32BIT, &features);
- 
--	if (!kvm_supports_guest_pmuv3())
-+	if (!kvm_supports_guest_pmuv3()) {
- 		clear_bit(KVM_ARM_VCPU_PMU_V3, &features);
-+		clear_bit(KVM_ARM_VCPU_PMU_V3_STRICT, &features);
-+	}
- 
- 	if (!system_supports_sve())
- 		clear_bit(KVM_ARM_VCPU_SVE, &features);
-@@ -1605,6 +1608,11 @@ static int kvm_vcpu_init_check_features(struct kvm_vcpu *vcpu,
- 	    test_bit(KVM_ARM_VCPU_PTRAUTH_GENERIC, &features))
- 		return -EINVAL;
- 
-+	/* Strict PMUv3 UAPI requires PMUv3. */
-+	if (test_bit(KVM_ARM_VCPU_PMU_V3_STRICT, &features) &&
-+	    !test_bit(KVM_ARM_VCPU_PMU_V3, &features))
-+		return -EINVAL;
-+
- 	if (!test_bit(KVM_ARM_VCPU_EL1_32BIT, &features))
- 		return 0;
- 
-@@ -1634,10 +1642,13 @@ static int kvm_setup_vcpu(struct kvm_vcpu *vcpu)
- 	int ret = 0;
- 
- 	/*
--	 * When the vCPU has a PMU, but no PMU is set for the guest
--	 * yet, set the default one.
-+	 * When the vCPU has a PMU, but no PMU is set for the guest yet, set
-+	 * the default one. If KVM_ARM_VCPU_PMU_V3_STRICT is set, no default
-+	 * PMU is created, and userspace must select a PMU via
-+	 * KVM_ARM_VCPU_PMU_V3_SET_PMU.
- 	 */
--	if (kvm_vcpu_has_pmu(vcpu) && !kvm->arch.arm_pmu)
-+	if (kvm_vcpu_has_pmu(vcpu) && !kvm->arch.arm_pmu &&
-+	    !kvm_vcpu_has_pmuv3_strict(vcpu))
- 		ret = kvm_arm_set_default_pmu(kvm);
- 
- 	/* Prepare for nested if required */
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index bcfd0a91e114..5b1af7e2176f 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -939,6 +939,10 @@ int kvm_arm_pmu_v3_enable(struct kvm_vcpu *vcpu)
- 
- static int kvm_arm_pmu_v3_init(struct kvm_vcpu *vcpu)
- {
-+	/* Only possible when using KVM_ARM_VCPU_PMU_V3_STRICT */
-+	if (!vcpu->kvm->arch.arm_pmu)
-+		return -ENXIO;
-+
- 	if (irqchip_in_kernel(vcpu->kvm)) {
- 		int ret;
- 
-@@ -1009,6 +1013,14 @@ u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
- {
- 	struct arm_pmu *arm_pmu = kvm->arch.arm_pmu;
- 
-+	/*
-+	 * Under KVM_ARM_VCPU_PMU_V3_STRICT no PMU exists until userspace sets
-+	 * one, so this can be reached before arm_pmu is set. Report no
-+	 * counters in that case.
-+	 */
-+	if (!arm_pmu)
-+		return 0;
-+
- 	/*
- 	 * PMUv3 requires that all event counters are capable of counting any
- 	 * event, though the same may not be true of non-PMUv3 hardware.
-@@ -1050,7 +1062,8 @@ static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
- }
- 
- /**
-- * kvm_arm_set_default_pmu - No PMU set, get the default one.
-+ * kvm_arm_set_default_pmu - No PMU set and KVM_ARM_VCPU_PMU_V3_STRICT not
-+ * set, get the default one.
-  * @kvm: The kvm pointer
-  *
-  * The observant among you will notice that the supported_cpus
-@@ -1190,6 +1203,9 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 		if (kvm_vm_has_ran_once(kvm))
- 			return -EBUSY;
- 
-+		if (!kvm->arch.arm_pmu)
-+			return -ENXIO;
-+
- 		if (!kvm->arch.pmu_filter) {
- 			kvm->arch.pmu_filter = bitmap_alloc(nr_events, GFP_KERNEL_ACCOUNT);
- 			if (!kvm->arch.pmu_filter)
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 419011097fa8..9fc8dfdfd65f 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -997,6 +997,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_S390_KEYOP 247
- #define KVM_CAP_S390_VSIE_ESAMODE 248
- #define KVM_CAP_S390_HPAGE_2G 249
-+#define KVM_CAP_ARM_PMU_V3_STRICT 250
- 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
--- 
-2.50.1
-
+SGTM, I'll leave it up to Lorenzo. I had this TODAY vs TOMORROW summary,
+we can expand on that with UNNECESSARY+csum_level plus maybe more
+details on the shape of kfuncs for TOMORROW section..
