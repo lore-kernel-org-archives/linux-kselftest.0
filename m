@@ -1,253 +1,128 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C94B47D476
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 17:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D07039EF39
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 17:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784828228; cv=none; b=LtTHuBxRz1tXyEDnau89LQawlgeQUr+YAYK5ADPzT091NDFpS2/yXx6W9U0O/0aXhHeavuV43FN1+R0d5bEZiN46RQPQ8yYUK4VU2hHL+C1lBYukIH+VSkzYy8VIR+28iAIpe1Qpe9Je+/sWdcEg64rfMI0YTL8uMjpAJ8wy1Do=
+	t=1784829482; cv=none; b=VAnaUh7a4JAHX160X+hfqYUZBBQPNX0EW/O59NnC5ooOjr4Z3PYEeGWcOxQ/6EQf9O8MJTiSVSemssmNPNNb/5RHuB0KZiw4pSmzvT+EOaGTneP/fPq6l7xYcTRlSG/RVYrkBISZ0A20kZxa+VH5BEDxdDOCSVSVvwMkng1v0cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784828228; c=relaxed/simple;
-	bh=OHRNaT5JjbQYbg0HfVsh/goi/Wp2JeVv837tKjXheiU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WeYMDAf4D8PxyRKqA5/cJn9sHXr1ED71qPg86iZFcFFges2ps2NyvfClrWgX0zWhpw6ye4mjzmJe+pM1SjH8SdagCY3KeiU4hiz/1rWH5JftZZQ7Qe1uD2QSXxvBnu3K26afimwPsgPqgDbZt9hhlelg0L2XhFKu5bHAtCqAmFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSXNC98m; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1784829482; c=relaxed/simple;
+	bh=uhSaHoLoNEt+88qNE9tlgwbWDNke6X5OxSpVGKX1ccs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YBK/ZCUwcjKXzJytiTvhRuUPh24D9O0trwfJe+MfAjfA6z/PZEXSWxZQdvgvZnoJb9keNbfYM/4IEALhlK/jtFWPxzIbBBQQCezKO1ENPeLwuwUtO+Pssj3xOjw2q/MLlLvGrc1uu6c8r7pYNbaOiw7TL9XZRV9gHQDvILdDyAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQfHPoeU; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSXNC98m"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84e3007a2b7so771273b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 10:36:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQfHPoeU"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38dcbade417so999311a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 10:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784828218; x=1785433018; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=i8Qd33SMLkRtmqANiDW8AEhl0t9s2Dut7/75bk+4IdQ=;
-        b=WSXNC98mn9E0uZv6c2hSBxaJ5THbotrgF8Z9RkvDYuq4Q4evsHpW4g3mqJYQWggIpf
-         zt0Gp0677ef4lE+UEuWL6cq09YFhfDkld1spJvjM/x2tEbA5n+/fYqZSj6/fh9IXcCTu
-         ixmXyltpDNi/NOEf9arwP00oJMN8zMDDDnQRimdOkX2p4kTQDi8PjYqwaCtc9DgMkCxx
-         c64FSyVvbcVHAJtVXLCEExjtElC0ViZjOER1MjCb/lF7xwMYJ8wnYTOeuoqaDZ/Lyq/E
-         BIdjNu3rl7Vd3ly213tz3cfTC31gvKlDq9z/0YF6dMEzjdJYXBn35fUWfRiuLEwR4v92
-         Xr2A==
+        d=gmail.com; s=20251104; t=1784829480; x=1785434280; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=RyhZL1WSIhCm6HgTN87jBbUJ2Vt3tknSGNAZ68PW66g=;
+        b=JQfHPoeUYOt2CFt7bVfp7u1IggAurZ4l0B5QdoN61uPUGCnc4FAb/KFPx7bbDqwiJt
+         6Ed/Pbx8okaIRMcjXiC6/Ue5YP2G1v8uM/BZo+dIilYK51ZTeT3NR8oxuIholwMpkpCs
+         K/yHbpfJCWyHEm4Je21dlHT1zu1pImOK7vPv0F2Npr3q8jfHNljiZN2FC1gTa5/KIfk/
+         1VCv8srYyfn5iI7momEDUq26Khqma6tmuPMb7NetH+vWxvSOFG1L5G8Ik2DI3Zw3xxMZ
+         Eco9XsFtckkR1qt0e8CHnKknBejtsT4+VfI8RC7+X9oYOp3l0sMSvEfMaj3/dhW2odIy
+         DZAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784828218; x=1785433018;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1784829480; x=1785434280;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=i8Qd33SMLkRtmqANiDW8AEhl0t9s2Dut7/75bk+4IdQ=;
-        b=kmDpI8Kgb3XyXfi0f4zFHK1dnN22kWAGt6zVGnlh0x9dU1k+joDzT2NJbwXJ7DfbiJ
-         srwW6VLJzrt0taV6PDwF1Slf0+sNgvXN4RM/qFPm74hQm2OQcqYPyn8iUW9L2o8kLfX4
-         s2jJnwi/Usb+kUpBQ3mARf1Ln3h4G7Z0lshifVvl5HNe8XHU7Bhh6pvpyoE8LsdRYcul
-         gf1Mf5FJccu81UAWDc3iWCLv2ll9VBxEPCqbF9IeZrQ7tBDpWi8nYThfWGyK92999NzP
-         1s4nqKOgch0CBCp/GNzN1k0RXeRFPenVJR2KOBkgRzj0ssjjKq3cLObdZdQEPy+UvX4Z
-         hLWA==
-X-Forwarded-Encrypted: i=1; AHgh+Rqvifym9qqK83FBLOJZrIF1HqE/L32VcU13mbcK62VO9fqeYDCMCAiOnmdNOtf3uugpYDupXIwcfSH7kHeKvis=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ328ArQ9ReU6Kbkb7sOcXjWmOckgpD/0sGgziKnOqMDBmkybF
-	1+20uUZ6v4heiloATYwDSg3brx7Xomiw25f5WHOeTx5PBG03adLjx5sg
-X-Gm-Gg: AR+sD11oD8Kz6JzQZiXj513TCg3+eRNAH7/U+BVeNfgHeYirqWwsQtKtFRDbXSLIV0I
-	jpbydjdAPDPunIASM8iNlU6lUtFUHUUwrGuANBi45pBdgyXaPsHjP+xmDCRPulzNi87sVJ/gkRB
-	BVwaUnHc68v+tMe+CqClEN8i+uZSLo34mXtVRKYRVxw3om1YcNY4PjUqwLXQDMEfPDPCZXlQImV
-	F/81IyjOhinP/8rAdLyoZ7XqxKRkzxBZP2uHd/hjIQkIzngHSBU2Xgtg7PRXmV6kGSvWfkaXXiD
-	YrlgJSp0bhWG6wNyNoPhYMM3ulUWc4VkIOto6B5XaHOc+SVl9o3cBEIcihF3yusXlFEQN7b3DRK
-	pgzZx/1mvXtRFG3jGxC00VhA1umNrYaYkT6k2uH+loU088qQqy1Er8gAye/hWvahy65u6qz4Xq9
-	KdOhqvTMaVPDtm8sRuLl94EauC7x6yHc0264OTQMV7dgwViPtV
-X-Received: by 2002:a05:6a00:cd3:b0:848:88e6:95d3 with SMTP id d2e1a72fcca58-84e2bc4d259mr4728321b3a.72.1784828217972;
-        Thu, 23 Jul 2026 10:36:57 -0700 (PDT)
-Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e20622dedsm2691612b3a.11.2026.07.23.10.36.56
+        bh=RyhZL1WSIhCm6HgTN87jBbUJ2Vt3tknSGNAZ68PW66g=;
+        b=I8wVAttlxJcso400GV3QVAT8bzKVSI5NX+GVqpPHMEgFU0X4XRpbDtmW+IbQl3usLd
+         TK2amh0GV0HZVVLCKU8lsGJ52QOUYGlpzKaEvMoL1OIIk+pJd3U+si/+P+sxxpIMHRxf
+         tTh7RCpWebTnpVB1sMQuh3IP6a9Ba/fug69mNOd1i1Ada0qT4WFsM5uvNOR6WZH4ornL
+         7vv8g2I0yDfgHl2wMfVQxtxD7esa/AkJ7PCtsmqy0HGEw/IRr3kTtwUySZglfJ4ASf4p
+         X7m4LGpP6dhywrYdw/mdRCVbL7ctlGJ4JwbHBy+I98Q48dtsEqBorf0S3AIs4w9T2l5x
+         FocQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrupV8LCzwA5jQ1EJVTicCO3bphai+P7uwVjBoQ1WHhMMyLE3F3kTSH0ku/vmFaZbs3vP4Asq/I913OY/F5bP4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxc0n6I/yJaPCtYat3Q/1FYj+2d+p4ChJOO6oP21+negFtER8uO
+	aYNYLk8OknxvtdVS7JxdIQb+u14P+9H7/kNGklgWNdhCUK/B8lZS9x50
+X-Gm-Gg: AR+sD13Yo7/XX6446/AxM9geMCHWomBi8qlZnIVvIZdBEBQhhSeuMTDYyg5WLj5EkpB
+	frBmUkk1nmAaO1vHAu9leJzZmcoPIk0FRcvJIguwj3Oevk4ZtCkllUiJAU9j7xDzATp8TqQmM6z
+	e3lrfronBQtdnjIUnJevcv5/Or03KF2yffell2DktBUuW9u8krM/ICCw1R3etRZdJ1EUxQXovZr
+	QC9IEDj03iWKTnS8HH+vwyRNaxDmkm6nsgKe5FlNZ5WxSQ9V9G+9Piu0SH0fW4eUEa2+8jClPNE
+	lncqUQEi36y8Y3jycgqn+xJsU/SLEKrICNrwWr1gd444WK256nZpTTiLzK+iOzR4p+i3GdNIlcP
+	oJbM4RHMAc3uOnPHzleVvpIltchEoIuxhmtmnlhnk32NiLGvzRIV2sciFoJqYv3KMEwwpIdVUgi
+	B2tJYBHlS6wAYW6dYk3SjzdJT+fj/xtYIhDaeB2eibreYpIONNxqB+Vt962ik=
+X-Received: by 2002:a17:90a:c890:b0:38e:dc4:3fbb with SMTP id 98e67ed59e1d1-38ec68982femr3801803a91.43.1784829480429;
+        Thu, 23 Jul 2026 10:58:00 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c221:d012:6e37:77f9? ([2620:10d:c090:500::2:8dac])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d13014d27sm18568791c88.4.2026.07.23.10.57.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 10:36:57 -0700 (PDT)
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Date: Thu, 23 Jul 2026 10:36:40 -0700
-Subject: [PATCH v11 8/8] drm/gpusvm: Use hmm_range_fault_unlocked_timeout()
- for range faults
+        Thu, 23 Jul 2026 10:57:59 -0700 (PDT)
+Message-ID: <22df73ce6c09065672d3a9406ae59c2cb264f96c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: Preserve pointer state for
+ commuted arithmetic
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, Yiyang Chen
+	 <chenyy23@mails.tsinghua.edu.cn>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, John Fastabend	
+ <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa	
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Emil Tsalapatis	
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Thu, 23 Jul 2026 10:57:56 -0700
+In-Reply-To: <c5c2dba26e217763c73c237daa6d8639043f5207.camel@gmail.com>
+References: <cover.1784696371.git.chenyy23@mails.tsinghua.edu.cn>
+		 <004a83de52a36e9f3acd6c3fa2d0dfd0a013460d.1784696372.git.chenyy23@mails.tsinghua.edu.cn>
+		 <amGUjFu1MN__jM4c@u94a>
+	 <c5c2dba26e217763c73c237daa6d8639043f5207.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260723-hmm-v10-v11-8-c55b003a4b61@gmail.com>
-References: <20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com>
-In-Reply-To: <20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
- "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
- Lyude Paul <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Min Ma <mamin506@gmail.com>, Lizhi Hou <lizhi.hou@amd.com>, 
- Oded Gabbay <ogabbay@kernel.org>, skinsburskii@gmail.com
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- nouveau@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
- Jason Gunthorpe <jgg@ziepe.ca>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784828202; l=4921;
- i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
- bh=OHRNaT5JjbQYbg0HfVsh/goi/Wp2JeVv837tKjXheiU=;
- b=3mS7hpEm1cC4EjlfjSHzs08itt/haPD5UmH5YZzhkX5wXqdTOzSMnls0rW++T0vSS8hxNEDOH
- H/0vN9YPqS8C3NJp8Qfk40j/53Cv5CNaQqrwQS1NX9qK2UYGBofyGE6
-X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
- pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
 
-Several GPU SVM paths take mmap_read_lock() only to call hmm_range_fault()
-and open-code mmu interval sequence setup before each HMM walk. They also
-retry -EBUSY until HMM_RANGE_DEFAULT_TIMEOUT expires.
+On Thu, 2026-07-23 at 10:35 -0700, Eduard Zingerman wrote:
+> On Thu, 2026-07-23 at 12:25 +0800, Shung-Hsi Yu wrote:
+>=20
+> ...
+>=20
+> > The sole purpose of having orig_off_reg seem to be for satisfying the
+> > 'off_reg =3D=3D dst_reg' conditional in sanitize_err(). If that's the c=
+ase,
+> > maybe it is better to change sanitize_err to accept an ptr_is_dst_reg
+> > argument too.
+> >=20
+> > And given now that we are starting to make more use of scratch register
+> > states, it seems better to get rid the likes of 'off_reg =3D=3D dst_reg=
+' all
+> > together, and simply have ptr_is_dst_reg passed down by
+> > adjust_scalar_min_max_vals().
+> >=20
+> >=20
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 52be0a118cce..72d49f2a57a3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -13505,13 +13505,13 @@ static int sanitize_ptr_alu(struct bpf_verifi=
+er_env *env,
+> >  			    const struct bpf_reg_state *off_reg,
+> >  			    struct bpf_reg_state *dst_reg,
+> >  			    struct bpf_sanitize_info *info,
+> > -			    const bool commit_window)
+> > +			    const bool commit_window,
+> > +			    const bool ptr_is_dst_reg)
+>=20
+> That's a bit invasive. I think the simplest thing to do is to drop
+> off_reg and dst_reg parameters from sanitize_err() and re-derive the
+> information about which one is a pointer.
 
-Use hmm_range_fault_unlocked_timeout() for those faults. The HMM helper now
-owns mmap_lock acquisition and refreshes range->notifier_seq for its
-internal retries, while GPU SVM keeps its existing driver-lock validation
-with mmu_interval_read_retry() after a successful fault.
-
-drm_gpusvm_scan_mm() and drm_gpusvm_range_evict() pass
-HMM_RANGE_DEFAULT_TIMEOUT as the helper retry budget for each HMM fault
-attempt. drm_gpusvm_get_pages() keeps its existing absolute outer deadline
-because it can be reached from GPU page-fault workers, where fatal signals
-from the faulting process cannot stop an endless invalidation retry loop.
-It passes the remaining time from that deadline to HMM for each fault
-attempt.
-
-Leave drm_gpusvm_check_pages() on hmm_range_fault() because that path is
-called with the mmap lock already held by its caller.
-
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@gmail.com>
----
- drivers/gpu/drm/drm_gpusvm.c | 60 ++++++++------------------------------------
- 1 file changed, 10 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_gpusvm.c b/drivers/gpu/drm/drm_gpusvm.c
-index 958cb605aedd..e912e994beb2 100644
---- a/drivers/gpu/drm/drm_gpusvm.c
-+++ b/drivers/gpu/drm/drm_gpusvm.c
-@@ -773,8 +773,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
- 		.end = end,
- 		.dev_private_owner = dev_private_owner,
- 	};
--	unsigned long timeout =
--		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
- 	enum drm_gpusvm_scan_result state = DRM_GPUSVM_SCAN_UNPOPULATED, new_state;
- 	unsigned long *pfns;
- 	unsigned long npages = npages_in_range(start, end);
-@@ -788,22 +787,7 @@ enum drm_gpusvm_scan_result drm_gpusvm_scan_mm(struct drm_gpusvm_range *range,
- 	hmm_range.hmm_pfns = pfns;
- 
- retry:
--	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
--	mmap_read_lock(range->gpusvm->mm);
--
--	while (true) {
--		err = hmm_range_fault(&hmm_range);
--		if (err == -EBUSY) {
--			if (time_after(jiffies, timeout))
--				break;
--
--			hmm_range.notifier_seq =
--				mmu_interval_read_begin(notifier);
--			continue;
--		}
--		break;
--	}
--	mmap_read_unlock(range->gpusvm->mm);
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
- 	if (err)
- 		goto err_free;
- 
-@@ -1408,6 +1392,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 	void *zdd;
- 	unsigned long timeout =
- 		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long remaining;
- 	unsigned long i, j;
- 	unsigned long npages = npages_in_range(pages_start, pages_end);
- 	unsigned long num_dma_mapped;
-@@ -1422,7 +1407,9 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 	struct dma_iova_state *state = &svm_pages->state;
- 
- retry:
--	if (time_after(jiffies, timeout))
-+	remaining = timeout - jiffies;
-+
-+	if (time_after_eq(jiffies, timeout))
- 		return -EBUSY;
- 
- 	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
-@@ -1439,21 +1426,7 @@ int drm_gpusvm_get_pages(struct drm_gpusvm *gpusvm,
- 	}
- 
- 	hmm_range.hmm_pfns = pfns;
--	while (true) {
--		mmap_read_lock(mm);
--		err = hmm_range_fault(&hmm_range);
--		mmap_read_unlock(mm);
--
--		if (err == -EBUSY) {
--			if (time_after(jiffies, timeout))
--				break;
--
--			hmm_range.notifier_seq =
--				mmu_interval_read_begin(notifier);
--			continue;
--		}
--		break;
--	}
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, remaining);
- 	mmput(mm);
- 	if (err)
- 		goto err_free;
-@@ -1720,8 +1693,7 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
- 		.end = drm_gpusvm_range_end(range),
- 		.dev_private_owner = NULL,
- 	};
--	unsigned long timeout =
--		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-+	unsigned long timeout = msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
- 	unsigned long *pfns;
- 	unsigned long npages = npages_in_range(drm_gpusvm_range_start(range),
- 					       drm_gpusvm_range_end(range));
-@@ -1736,24 +1708,12 @@ int drm_gpusvm_range_evict(struct drm_gpusvm *gpusvm,
- 		return -ENOMEM;
- 
- 	hmm_range.hmm_pfns = pfns;
--	while (!time_after(jiffies, timeout)) {
--		hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
--		if (time_after(jiffies, timeout)) {
--			err = -ETIME;
--			break;
--		}
--
--		mmap_read_lock(mm);
--		err = hmm_range_fault(&hmm_range);
--		mmap_read_unlock(mm);
--		if (err != -EBUSY)
--			break;
--	}
-+	err = hmm_range_fault_unlocked_timeout(&hmm_range, timeout);
- 
- 	kvfree(pfns);
- 	mmput(mm);
- 
--	return err;
-+	return err == -EBUSY ? -ETIME : err;
- }
- EXPORT_SYMBOL_GPL(drm_gpusvm_range_evict);
- 
-
--- 
-2.43.0
-
+Scratch that, dst type is gone when sanitize_err() called.
