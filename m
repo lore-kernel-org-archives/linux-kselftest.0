@@ -1,77 +1,94 @@
-Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB7935C1B7;
-	Thu, 23 Jul 2026 02:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AC8363084
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 03:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784774918; cv=none; b=n6y210EdVXvcjNF1C538+44w+rw4lzpk9W7+8FIQchCGB+2iSWhOTrsgbzVw5A3E3LFnVf/FZpuYIXkoufdtLLr5j8Xa1kVaejefxLHByEJCpgQsSt3kv///AyG3Ubl2dORrstQLBz+Jvzdvs0y/3FuyOaOdCwNXhTSA/7I+t/w=
+	t=1784777125; cv=none; b=TGjddhyz3Y6KNkN7flsdqK8OJIeOz6udHRYUgNk1D2IgtJfHyaXQiSiw0CRrcsoyUWT2APWhFsZFJ7WTdzKEs01/kq2KhHwNi0BP3pPKTL2V5pgGbvCdsHkrC8EqO/xGwLoY3g5NOM5K1XqV9VXbxFNYu5zYA6We2bVW6UyCmdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784774918; c=relaxed/simple;
-	bh=xO4Xsg6WMoznKKLCX2VF4Rxpd9VvTwSKgFTxYveIfGI=;
+	s=arc-20240116; t=1784777125; c=relaxed/simple;
+	bh=gfT0G2h32Mgahppc0W5ji5WK8maIODJ9zFl+mqtZVuU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBczSLYPzbDbk5qnSkOds3XkOYlYCa6E/9B/6jyMvnBvETpZLXwCfV73SXskzjwbXhpprj6VWGxSI7emDZUcZOyGvxygM2tJvGrkiXqR2Lzp/zPv0A1BJFMtOx+YPLfOILNT4yqiI2XqOG0HB5bzoemqM/d5p4196FURqSKsH5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=neDX52RF; arc=none smtp.client-ip=139.138.61.252
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=aBLmhHtTdGqyFhWTwTF63TWSso+9RLUzo/VVkBJUE/ElVPs+16owzEmf7J+B2XH0VnCjV/+0IugtzzGsIGOBPvVWcH0jNa+Ax58quo0/hoXHR3dpRDBhZBpU3XUoBPwVQTawUfheIwJ0DHCkyWgzp4/r9llLTY8kppVujlKUe5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=S5k+/km/; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="neDX52RF"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1784774916; x=1816310916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xO4Xsg6WMoznKKLCX2VF4Rxpd9VvTwSKgFTxYveIfGI=;
-  b=neDX52RFF9nhLLcjcGpGCQmv8NfaZkEIaIo8vOfLiH187FdbflX3bt2L
-   /F7MBgMQwIEq4zHRzvQ3PGF38Z4s6NH3NghwOgXkNp8ldcI893yMS9e1Q
-   jZuSKPsL/bGVZ9uRVums7t1ZjKFKFPoXB3onB+HW7Cu+wXOZ1q3LibIMK
-   bAnPHyA8qoWE5JWihz/zkuNXzxJSGNY43gnmLDOjJjMN4xGdUbTf9IWQV
-   GJY2Uoi7qycgC3eVv9o+3J0ZYbkXVRGsTRK10hopetM/5TeSsc0HzP6ej
-   mDqk4Cz0KhWTGn+BFCuaLA1EUdGo96he77chLt1cRx0t2AfJ3P6rPGVO/
-   w==;
-X-CSE-ConnectionGUID: DpLDW5xeT6Km+opSv0AMNw==
-X-CSE-MsgGUID: WEA4ANOiTUOF9EM2LHGFkQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11854"; a="227181184"
-X-IronPort-AV: E=Sophos;i="6.25,179,1779116400"; 
-   d="scan'208";a="227181184"
-Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
-  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 11:47:25 +0900
-Received: from az2nlsmgm1.o.css.fujitsu.com (unknown [10.150.26.203])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id ADAB31000342;
-	Thu, 23 Jul 2026 02:47:25 +0000 (UTC)
-Received: from az2nlsmom3.fujitsu.com (unknown [10.150.26.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 583C2C03F7A;
-	Thu, 23 Jul 2026 02:47:25 +0000 (UTC)
-Received: from sm-arm-grace07 (unknown [10.124.178.20])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmom3.fujitsu.com (Postfix) with ESMTPS id CECEC10001D0;
-	Thu, 23 Jul 2026 02:47:19 +0000 (UTC)
-Date: Thu, 23 Jul 2026 11:47:16 +0900
-From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 8/9] KVM: arm64: selftests: Add infrastructure for
- using stage-2 in guest
-Message-ID: <amGAtKiTirVSHUky@sm-arm-grace07>
-References: <20260516183003.799058-1-weilin.chang@arm.com>
- <20260516183003.799058-9-weilin.chang@arm.com>
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="S5k+/km/"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92ed19f4d60so334885a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 20:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1784777122; x=1785381922; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Kd13UizLWaDa1rNXvY/PJ0N43yZ3Vd9IZn7XTlTXtfM=;
+        b=S5k+/km/W3hDbRibPNpOoB80+fMcI4MbaVCKgEaeGawR+FQWl9kNV2iUGzMuP5o587
+         /iaVfV9Jd+R4VNTdxnjkkgdz20NTR/Eu8b80hXADBRflMrWslncYyJ3SvD3gwvv5ngtC
+         ziCEhyqOck9EWcwsKAG1K0Fzc1bP7k6aIwfto2hePcg8FFQ5b1ILjIFtAueuSZJkiFL5
+         nYdguJXw90nDowVcfKGttiFdnF1n59L9sXbcemc/huQrcwmkhJfTVLcf0o+RBBzMGJDB
+         vgBWGT12txaO7gCP8wM5mTntpmBdTwxcjXyxbZfzrXl9J3a1TwC6EBaOEEphMqOrCOjK
+         FmPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784777122; x=1785381922;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Kd13UizLWaDa1rNXvY/PJ0N43yZ3Vd9IZn7XTlTXtfM=;
+        b=DtoQ+N5UtPUtysKQiNTb4tFufZqWttM0wHfwdjyzGx2X3EJy3Rbpaw+Y7xJ+BHLhX/
+         kNS2Ot6LSOq6CjAJlQr4T+QyT/Ago72rQ7yXg9zRceRhDso8b9sL2SwzkK9P9MQG6VOH
+         gTORMh+XGZv6r1Bxg3dBsqVRk636OVMsvKe3GpTxIcPAzlik3aUuzzraPqLcPAPkgwk4
+         Iggoq5dl4Nb/S+NIjVqdkhtCdTJfYsqRHktwUVf6hqbonMOR3EN+nuJk+MVIO0sEqksF
+         i1lawzazdMlLJ5T8EItuhqlGFuNK35kM2RCGsdOAPZcymuz6o0U5MnzqW4bSqyQYvlXD
+         PcxA==
+X-Forwarded-Encrypted: i=1; AHgh+RoiRsI0ihCDlgONYWqwdIKaE0yz5qLQMLxwOaWozkp8DJEHELN5rjpkUWbtZA4f/v0SpCnpNidaxBX0a9r5opQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztYfHE26YB1SyM70zQSD6b/2mJN7RCkFLPPf3Imwu0tla9GoJq
+	ue2bPLVFv/LV/mHr25+QKDRGDMXW/KnIwD3mQ5awlEg65D4R5LEx0J0GwJEzvqf7G9laED4YjVO
+	jFfKU
+X-Gm-Gg: AR+sD11LoRBtIqpHjJ8dgWUR+BjNv2ObeZOfzcmbv2iNveeYg/xhYtlnBd+QKtUstzB
+	gGISxdT9AQhgdeKA3ka9OpLsesmdoxh3aPE5F+rESvBBTUOf6nmhRO6KtcLqietQweW8/GG6Wbl
+	UTVojz4krRyyN43CWMRcS2f81cPCv97VfJaDZNYPaO5wHzpFW7nnGKgua8WwPsuXAdDIu5oNcPQ
+	dYgHdd4bVZXjNtEb+heyv/rdTWfwSxPjeyrdjBm7sgYvrCvMibcZTtoeb8XTobSA1RKMNqHWXP3
+	kMDN+Jbzxww4d4tcPksg34wakrna0R16JqpKi/9RdUG7YjaCNET/nWmmhAqUObF4WAJxt+MhvYX
+	hZTqard+AbAwZzI3pMsPLj9QHfos3AFH8beRSekvvAwLqgHfOfFBEGzsKY96qEJGH437Opyb3P8
+	SdDeGzxKMEA9w5nBDbbX6yBBlm60y/qH75/jrJiNPehpKXoCtToAaa/oNu3RYM/bR42VDR
+X-Received: by 2002:a05:620a:808c:b0:92b:67e6:4b79 with SMTP id af79cd13be357-931048880c8mr90170685a.35.1784777122066;
+        Wed, 22 Jul 2026 20:25:22 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-931062c4ea8sm34465885a.28.2026.07.22.20.25.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 20:25:21 -0700 (PDT)
+Date: Wed, 22 Jul 2026 23:25:15 -0400
+From: Gregory Price <gourry@gourry.net>
+To: SJ Park <sj@kernel.org>
+Cc: arun.george@samsung.com, balbirs@nvidia.com, brendan.jackman@linux.dev, 
+	yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com, 
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	corbet@lwn.net, skhan@linuxfoundation.org, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, vishal.l.verma@intel.com, 
+	dave.jiang@intel.com, alison.schofield@intel.com, osandov@osandov.com, 
+	jannh@google.com, pfalcato@suse.de, jackmanb@google.com, hannes@cmpxchg.org, 
+	ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com, 
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
+	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
+	mkoutny@suse.com, jgg@ziepe.ca, jhubbard@nvidia.com, peterx@redhat.com, 
+	baolin.wang@linux.alibaba.com, npache@redhat.com, ryan.roberts@arm.com, dev.jain@arm.com, 
+	lance.yang@linux.dev, usama.arif@linux.dev, xu.xin16@zte.com.cn, 
+	chengming.zhou@linux.dev, roman.gushchin@linux.dev, muchun.song@linux.dev, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, driver-core@lists.linux.dev, 
+	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-debuggers@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, cgroups@vger.kernel.org, 
+	damon@lists.linux.dev, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 14/36] mm/damon: skip private node memory in DAMON
+ migration and pageout
+Message-ID: <amGHuputMNCFZ9CV@gourry-fedora-PF4VCD3F>
+References: <amCzmkdOr6AFv_kQ@gourry-fedora-PF4VCD3F>
+ <20260723001943.95854-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,259 +97,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260516183003.799058-9-weilin.chang@arm.com>
+In-Reply-To: <20260723001943.95854-1-sj@kernel.org>
 
-On Sat, May 16, 2026 at 07:30:02PM +0100, Wei-Lin Chang wrote:
-> Add a stage-2 page table generator, the s2_mmu structure, and vEL2
-> stage-2 preparation code for a guest hypervisor to turn on stage-2
-> translation for its nested guest.
+On Wed, Jul 22, 2026 at 05:19:42PM -0700, SJ Park wrote:
+> On Wed, 22 Jul 2026 08:16:56 -0400 Gregory Price <gourry@gourry.net> wrote:
 > 
-> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
-> ---
->  .../selftests/kvm/arm64/hello_nested.c        |   2 +-
->  .../selftests/kvm/arm64/shadow_stage2.c       |   2 +-
->  .../selftests/kvm/include/arm64/nested.h      |  15 +-
->  .../testing/selftests/kvm/lib/arm64/nested.c  | 145 +++++++++++++++++-
->  4 files changed, 160 insertions(+), 4 deletions(-)
+> > > "by default".  Does that mean it could be reclaimable in some situations?  If
+> > > so, could we check if it is reclaimable?
+> > > 
+> > 
+> > See the damon changes in:
+> > 
+> > https://lore.kernel.org/linux-mm/al-pkvmgIxGu3LzM@gourry-fedora-PF4VCD3F/T/#mfb99303c85dd9d4c3f58832dc28fc55583a7217a
 > 
-> diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> index 9ed5285f5f2d..b57e41c73214 100644
-> --- a/tools/testing/selftests/kvm/arm64/hello_nested.c
-> +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
-> @@ -62,7 +62,7 @@ static void guest_code(void)
->  	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
->  
->  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
-> -	prepare_hyp();
-> +	prepare_hyp_no_s2();
->  
->  	ret = run_l2(&vcpu, &hyp_data);
->  	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
-> diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-> index c5332b8b5683..2b274b810dcf 100644
-> --- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-> +++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-> @@ -72,7 +72,7 @@ static void guest_code(void)
->  	l2_pc = ucall_translate_to_gpa(l2_guest_code);
->  
->  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
-> -	prepare_hyp();
-> +	prepare_hyp_no_s2();
->  
->  	while (true) {
->  		GUEST_PRINTF("L2 enter\n");
-> diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
-> index fc59fabff12d..1bcbb31b8d67 100644
-> --- a/tools/testing/selftests/kvm/include/arm64/nested.h
-> +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
-> @@ -38,6 +38,14 @@ struct vcpu {
->  	struct cpu_context context;
->  };
->  
-> +struct s2_mmu {
-> +	gpa_t pgd;
-> +	unsigned int vmid;
-> +	unsigned int page_size_shift;
-> +	u64 vtcr;
-> +	u64 ipa_bits;
-> +};
-> +
->  /*
->   * KVM has host_data and hyp_context, combine them because we're only doing
->   * hyp context.
-> @@ -56,8 +64,13 @@ struct page_pool {
->  size_t get_page_size(void);
->  gpa_t alloc_page(struct page_pool *pp);
->  bool has_tgran_2(u64 mmfr0, size_t size);
-> -void prepare_hyp(void);
-> +void prepare_hyp_no_s2(void);
-> +void prepare_hyp(struct s2_mmu *mmu);
->  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top);
-> +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
-> +		       struct page_pool *pp);
-> +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
-> +		 size_t page_size, u64 ipa_bits);
->  int run_l2(struct vcpu *vcpu, struct hyp_data *hyp_data);
->  
->  u64 do_hvc(u64 action, u64 arg1, u64 arg2);
-> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
-> index cda41f355263..9848d607ef64 100644
-> --- a/tools/testing/selftests/kvm/lib/arm64/nested.c
-> +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
-> @@ -71,13 +71,22 @@ gpa_t alloc_page(struct page_pool *pp)
->  	}
->  }
->  
-> -void prepare_hyp(void)
-> +void prepare_hyp_no_s2(void)
->  {
->  	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW, hcr_el2);
->  	write_sysreg(hyp_vectors, vbar_el2);
->  	isb();
->  }
->  
-> +void prepare_hyp(struct s2_mmu *mmu)
-> +{
-> +	write_sysreg(mmu->vtcr, vtcr_el2);
-> +	write_sysreg(mmu->pgd | ((u64)mmu->vmid << 48), vttbr_el2);
-> +	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW | HCR_EL2_VM, hcr_el2);
-> +	write_sysreg(hyp_vectors, vbar_el2);
-> +	isb();
-> +}
-> +
->  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
->  {
->  	memset(vcpu, 0, sizeof(*vcpu));
-> @@ -86,6 +95,140 @@ void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
->  	vcpu->context.sys_regs[SP_EL1] = l2_stack_top;
->  }
->  
-> +static int stage2_levels(unsigned int page_size_shift, u64 ipa_bits)
-> +{
-> +	/* taken from ARM64_HW_PGTABLE_LEVELS(ipa) in KVM */
-> +	return (ipa_bits - 4) / (page_size_shift - 3);
-> +}
-> +
-> +static u64 get_index(struct s2_mmu *mmu, u64 ipa, int level)
-> +{
-> +	int width = mmu->page_size_shift - 3;
-> +	int shift_amount = mmu->page_size_shift + (3 - level) * width;
-> +
-> +	return (ipa >> shift_amount) & GENMASK_ULL(width - 1, 0);
-> +}
-> +
-> +static u64 pte_gpa_to_gva(u64 gpa)
-> +{
-> +	/*
-> +	 * This depends on how the memory used for s2pt is mapped in GVA,
-> +	 * currently it is assumed they are idmapped.
-> +	 */
-> +	return gpa;
-> +}
-> +
-> +static u64 pte_to_pt_base(u64 pte)
-> +{
-> +	return pte & GENMASK_ULL(47, 12);
-> +}
-> +
-> +#define S2_PTE_AF		(1ULL << 10)
-> +#define S2_PTE_SH_INNER		(3ULL << 8)
-> +#define S2_PTE_S2AP_RW		(3ULL << 6)
-> +#define S2_PTE_ATTR_NORMAL_WB	(0xfULL << 2)
-> +#define S2_PTE_TYPE_TABLE	(1ULL << 1)
-> +#define S2_PTE_TYPE_PAGE	(1ULL << 1)
-> +#define S2_PTE_VALID		1ULL
-> +
-> +/* No block mappings for now. */
-> +static void create_one_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa,
-> +				  struct page_pool *pp)
-> +{
-> +	int levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
-> +	u64 index, pte, pte_new, table_attr, page_attr;
-> +	gpa_t pte_addr, pt_base = mmu->pgd;
-> +
-> +	table_attr = S2_PTE_TYPE_TABLE | S2_PTE_VALID;
-> +	page_attr = S2_PTE_AF | S2_PTE_SH_INNER | S2_PTE_S2AP_RW |
-> +		    S2_PTE_ATTR_NORMAL_WB | S2_PTE_TYPE_PAGE | S2_PTE_VALID;
-> +
-> +	for (int level = 4 - levels; level <= 3; level++) {
-> +		index = get_index(mmu, ipa, level);
-> +		pte_addr = pt_base + index * 8;
-> +		pte = *((u64 *)pte_gpa_to_gva(pte_addr));
-> +
-> +		if (level == 3) {
-> +			/* Last level, install leaf entry. */
-> +			pte_new = pa & ~GENMASK_ULL(mmu->page_size_shift - 1, 0);
-> +			pte_new |= page_attr;
-> +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
-> +		} else if (!(pte & S2_PTE_VALID)) {
-> +			/* Empty next level table, allocate and install. */
-> +			pte_new = alloc_page(pp);
-> +			pte_new |= table_attr;
-> +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
-> +			pt_base = pte_to_pt_base(pte_new);
-> +		} else {
-> +			/* Next level table found, descend into it. */
-> +			pt_base = pte_to_pt_base(pte);
-> +		}
-> +	}
-> +}
-> +
-> +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
-> +		       struct page_pool *pp)
-> +{
-> +	u64 ipa_end;
-> +	u64 mask = pp->page_size - 1;
-> +
-> +	ipa_end = (ipa + size + mask) & ~mask;
-> +	ipa &= ~mask;
-> +	pa &= ~mask;
-> +
-> +	while (ipa < ipa_end) {
-> +		create_one_s2_mapping(mmu, ipa, pa, pp);
-> +		pa += pp->page_size;
-> +		ipa += pp->page_size;
-> +	}
-> +	dsb(ishst);
-> +}
-> +
-> +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
-> +		 size_t page_size, u64 ipa_bits)
-> +{
-> +	u64 ps, tg0, sl0_base, mmfr0 = read_sysreg(id_aa64mmfr0_el1);
-> +	int levels;
-> +
-> +	mmu->vmid = vmid;
-> +	mmu->pgd = pgd;
-> +	mmu->ipa_bits = ipa_bits;
-> +	mmu->vtcr = 0;
-> +
-> +	switch (page_size) {
-> +	case SZ_4K:
-> +		tg0 = VTCR_EL2_TG0_4K;
-> +		mmu->page_size_shift = 12;
-> +		sl0_base = 2;
-> +		break;
-> +	case SZ_16K:
-> +		tg0 = VTCR_EL2_TG0_16K;
-> +		mmu->page_size_shift = 14;
-> +		sl0_base = 3;
-> +		break;
-> +	case SZ_64K:
-> +	default:
-> +		tg0 = VTCR_EL2_TG0_64K;
-> +		mmu->page_size_shift = 16;
-> +		sl0_base = 3;
-> +		break;
-> +	}
-> +
-> +	levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
-> +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_SL0, (sl0_base - (4 - levels)));
-> +
-> +	ps = SYS_FIELD_GET(ID_AA64MMFR0_EL1, PARANGE, mmfr0);
-> +	/* cap ps to 48-bit */
-> +	ps = ps > 0b0101 ? 0b0101 : ps;
-> +	mmu->vtcr |= VTCR_EL2_RES1 | SYS_FIELD_PREP(VTCR_EL2, PS, ps)           |
-> +				    SYS_FIELD_PREP(VTCR_EL2, TG0, tg0)         |
-> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, SH0, INNER)  |
-> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, ORGN0, WBWA) |
-> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, IRGN0, WBWA);
-> +
-> +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_T0SZ, 64 - ipa_bits);
-> +}
-
-I understand that the selftest intentionally passes 40 as ipa_bits to init_s2_mmu().
-However, with a 16KB granule and DS=0, a 48-bit IPA requires two
-concatenated level 1 root tables, which this implementation does not
-appear to support.
-
-Thanks,
-Itaru.
-
-> +
->  void __sysreg_save_el1_state(struct cpu_context *ctxt)
->  {
->  	ctxt->sys_regs[SP_EL1] = read_sysreg(sp_el1);
-> -- 
-> 2.43.0
+> Summarizing what you want to say, quoting something from the patch, or at least
+> calling it "26th patch of this series" would have made reviewing much easier.
+> Cc-ing damon@ for only patches that toucing DAMON source files and the cover
+> letter of the series could also be helpful.  Please consider doing some of
+> these for future replies.
 > 
+
+I have been very much discouraged from this kind of trimming because it
+removes the context of the series from the individual patches - making it
+even more confusing.
+
+But I understand, I will try to remember to do this for you.
+
+> So, I understand later patches will make it optionally reclaimable and update
+> this restriction by the 26th patch?  That sounds fair.  But, could we drop "by
+> default" from the above comment for reducing the confusion?
+
+Yes, but you bring up a good point - I think this two-step process is
+actually poor form and that I need to redo it.
+
+Maybe this can be redone as node states (features?) such as:
+
+   N_MEMORY_RECLAIMABLE
+   N_MEMORY_DEMOTABLE
+   N_MEMORY_TIERABLE
+
+so these damon changes will forego this confusing intermediate step of:
+
+   if (folio_is_private_node(folio))
+
+and go straight to
+
+   if (node_is_reclaimable(folio_nid(folio)))
+
+In the first patch - without ever having to revisit damon again.
+
+> > 
+> > Technically there is nothing in migration core to prevent migration
+> > operations, it's done on a service basis - hotunplug, reclaim/demotion,
+> > user numa (mbind, migrate/move_pages) etc.
+> > 
+> > Operations on private nodes/private node folioes are refused if the
+> > capability bit is not set.
+> 
+> I haven't had a chance to read the entire series, sorry about that.  So, do you
+> mean the above blocking is not really needed, or that will conditionally be
+> allowed by another later patch?
+> 
+
+I will reduce this all to a single patch in v6, I see where things can
+be improved now based on a few pieces of feedback.
+
+Thanks SJ!
+~Gregory
