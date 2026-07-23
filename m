@@ -1,164 +1,286 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CE9257435
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 00:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784766487; cv=pass; b=ADSg8NPmWMkU515J8kC3PX2DoRIFakjFBnoCYGH864XlwzsS2ITAuY+oQn/k1q6/vc3tK+FaGM/t5uouajy/kg5oqFskWx9BGy+9hoybOgajhcjLhCTAJbBUlzsO5b7Pol+VfL2KE2N1RaGMJr+vs6YhB54Au5d3yOEo79WZLq4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784766487; c=relaxed/simple;
-	bh=WhgElbkyL+YQ2nUF3nV2RMwVyzKNCc93XobSfP2MaLw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVXhXJH9y4sfGUcwVu+Z4VixYFSCCdOQiijiaSlha6JpfCNgidyYk55nkNqCnyVvsNTIG61yMgF7hJN4FcVaGyr3dw/hV3zBU1D1DgENoabHi6gZYz53ObIB5OR/CKaWvREqp6OxxCoDP4e0M8xl6UbMCYdDxRr9XG5LPpYExkc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aQi9eNpB; arc=pass smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A47418CBE1
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 01:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784769493; cv=none; b=IaaKOYoI1zM2E1g0zXrV41/tP8UX9yQn1cp/XKU1u0/OHKmvvMQ/GeIBSr2RJf7hvRisuCTBsFdsJK+CuQcwMP/W0Wn8DE+C15TacKtuCaMYBvQkyWt5mnr+2Yw6Obe6A98rvgOLJbBAp7gX8/MCZpyQAHyqWWpmWPwFJQfn9Lo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784769493; c=relaxed/simple;
+	bh=TrnjZo8ZAqSB67M3vMZFcmj593axNcgT2qUTDvpk8/w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Oc7MBM7fH4yhh/KhvUpUKFpD+LOXCu+0xf/CuWwUNRvM2leMJtw0ZW0XxvJZFJSlM6tWZkM85fzElYvBvioSd0NpLHRF6jm4tdYfYbvcdzERfIwbLMVSCQ396lYURGsFo1x+cwacajYVGps6ghqgIjZZ196qn4GaHeMh/XSm3wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HBINnVza; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aQi9eNpB"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6626b5ace23so30267d50.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 17:28:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784766483; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VQJcramP1bklMGjV/KmHuSkCk08GOf6v8zydCfda3ilAmFnU1Ax3CGs5iqmw7KSKHh
-         ms3dDCgT1gQx7F30RKqf/LNHrhkndB9rzG6wmcJ4Mb5HKhjErIucXqzNwmpjxuH9gHrP
-         EMtt1ccgC8/QDK7oDtLzR9gBpEfv4UnvPK2UmDRmzaVcLHk2saAHmrdK/w6+C/O/VJwN
-         4duaWzvzmS4U2nVwm50k3bDuYPbauDWAllFaMc96rGweTpiGwEPcK707AwTXvroqUjnz
-         zTS61b9RTprTM+RBnAorDBSc88y1OVuZ0zF8ELyFt/G6D/oyEuSU9h9G/dTKObGwuZNO
-         Bp3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RsHJOPkB3r57eY7YSYNODJjccFT83NLJtKpeVdIvQDM=;
-        fh=qQyzxDfkI/82QF6EKWQpTm2MbxLPnHRHCfyIBsCZnCA=;
-        b=KxeNOrMyhjRARdySTZ+Eq3kqqCjvXnm5SeNfg87TK333xLu6NVJfUzXEXn6eXqIw5K
-         WG7iiPysIrJm+8RKzh/izu0YZmN2xpTIKfdhx96hbxUdzFKDevNK7of/mQZlc9YZVKmG
-         E9KpVWnWh4zWrY7++0QniGUF8f2mTOg+O+TH/8zmaT5VmEfwsfTvO9BVr6kbedlqvuGV
-         ydsEFnILsOJEgA5JvT4Dhs9xdSqQ0Gtqa6+glyt7zfjgMc+RzecfQN/rrZ5g/urOW1X+
-         wWcuLoU10KL6XZv60u3rS69fCHyvi78RDhRthK+z5RjycXHhcaMhAdbkHG/Sh/ToQFWb
-         VP4Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBINnVza"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84830c774a0so74725b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jul 2026 18:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784766483; x=1785371283; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RsHJOPkB3r57eY7YSYNODJjccFT83NLJtKpeVdIvQDM=;
-        b=aQi9eNpBGQV8AAhzfN8i4woXzNPhxVN+ZWnm9yvL6/H7gda88vqO88a3wFCTv8KKtg
-         puI0Bun1Voz4JzdRil3TAtNMKs4iGzRsEiljrZuSQ6MaOmjO/RmHJ/LV77iHkYa+htWd
-         H+eLkfppgiTayBWeuDP33BIF4KMm2KASKW9U8EvCwrO1MyxRj1Dkr9hF+EEIq830a6sG
-         A9ATcyC+P1K8QTcQC194Dau/RK/E1lE2XWwit/sQ/X8eVAHrgiM16LcpBag4jjSIu6Xo
-         qUqOD/bTqUdwl7yxgAK/xpLxSR9RSntXF3fBlVrc1KeMG5fzXZ4uhLVMXjpW/i99RUZQ
-         1Neg==
+        d=gmail.com; s=20251104; t=1784769491; x=1785374291; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=l/H8JNU91r/Q1MfTAvhCTVsqDz/YYgbouanwk7Man0k=;
+        b=HBINnVzahv3RraEf9UAGSjbVWulJLJOfMUxB+hBARliZ56zOjh4KozWGC27ebBkBez
+         hFctxrAsHmRmN+UCfqNTGGXQobdUzMlmU4YmWPYQlI7DRJ43hr/mZP7j052brdsemptY
+         n7tW/B+G1Al7Q/R2FoBQV8Ugc8nN4pD9jMK5pdJBCVlPz0/wDGZ72TGgwuhdgDx8Opm5
+         9qq/LKyn3IKW9URnIiRQ2QBPfvDMqaevvB6PE16Muo6qPVxa2NY1fpUUVq3uFC8iaJIA
+         oWe56jT/rjtmTvX0U9esW73atygHkzPtTD6Rv+lLdEmo/Od2zd7X33rteyhohScj7R6W
+         l5fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784766483; x=1785371283;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RsHJOPkB3r57eY7YSYNODJjccFT83NLJtKpeVdIvQDM=;
-        b=SOiJQAaP/cHcv+0Xj4GTYL5MZj8xmO12drt+CztfX2vqgsU1oxsjZO1H5tu91h603J
-         0xMzPAhb37eHYywfgxRiH028fg2UY0ahDXRghnK7roOUG/ksOkCnM1L6PBQ5zQXE5HAI
-         6RXnnfVEnh4M4k41rQcxNCzmSm3L+zbWV/YEuVadmNti7C5q3jgBm2eOv5LA0y89PLH5
-         HaZBaC1UgR7AlS/y+kJdO9EmMfLvlFFmpdz5OfAudAdBk5VahEWAye19umrnoH+rtCoE
-         Sq2DxcDND7drIj26r99uHDYdPQw23EL0niWLPj7CW+zi5SNPUVMWxhwQ9rH7PVPEFcYz
-         zDiw==
-X-Forwarded-Encrypted: i=1; AHgh+RqcmgRCisiLZsFqDbKFi0GVf5CrU2wqoBPGsT+zBpWYq0vNsl/Dcoo9479bWvWBgaeKx0gUXkvznrof0Xlujb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd6D2wjMDpIprHTLB4cj3il/j9ZQoPrkI7Bn0koZVJwyiuB138
-	qIr0go1h0SZ6qqYEa65aTEZQAJLkD2zvPtDstBhqnRPaBOB6r9LZ4OutdziuiRzv25dgPOPkNvP
-	iFyoROzv3IeHlsX0C3ZoIQwhKgVdpzlPmzRz2z4l9
-X-Gm-Gg: AR+sD134p3pIQ9gJPawoKO/nyCyk6Bb0o6ATyISdfMz6xdgrXvyZHRQWWRAJrz8Obyu
-	xlhTke+nB02xSgixTZCtcwgo1gqygFgGsUK14wb/3dshpFMq12/mI1/Cjdu2jJdU18m/r0qLjzH
-	mm5YvJexccRklrXrGI2p5aGpXNluKX2lSP6qTcKr5/LyialsPqw1Eqo5aHtx1E5t0c//UdNCk2C
-	/Xoh4xv6ZfJj117Pw+8BhnBEF8e/Rabeue57p2ooBrQWhvIk4kQYW2df4KkAJ3nvKEq5o7dLgAw
-	ZP/2gXuuuT+KcEbM
-X-Received: by 2002:a05:690e:346:b0:667:8471:41a2 with SMTP id
- 956f58d0204a3-668a616916amr101624d50.25.1784766482781; Wed, 22 Jul 2026
- 17:28:02 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784769491; x=1785374291;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=l/H8JNU91r/Q1MfTAvhCTVsqDz/YYgbouanwk7Man0k=;
+        b=oCmjziKOCyyzMEe2ftbcS907+DEdRFH9hANuvE7SVs4fAXQYWi7qelCbwYxA0bYsMv
+         WjJmps/vWSR2zYEBuJxT9btDf6QOs9zS5iK4LmCgYoxptjCat0ZkvEaf36PG0BckMjaQ
+         Q/ZlsvelHP7IWxx3D9RKB+Toeh/c2j3SZYaySQ/0lUkXjkZcgiPOVMarGPw/dIz0ANkW
+         gYvPnnCJxfzIeiWu7PPifFArd4xQuuC2P/NuMSX8NhywYi7GibSaxYwWc0GJa68UKQCv
+         kGH0+V2haSSTMRmkNKQKx0ERyzFHW0U8HMaaXj1Ah+enYeJZX0g7uPydekjbGCK5qil3
+         /ofw==
+X-Forwarded-Encrypted: i=1; AHgh+Rod/k09PlHQ1RXomM2AmAGse7iiTL83fTKyNczJW+Ob+BvqipO4I/BHD3J8q5171ILQxGQwAGbYXF9RP6mkt3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLNaHSdBJrUjIbc5cYQOYcVNGxYOPPf+l63tOFwtqdUo+axQSs
+	z0VFMiPebZ97LoE07++z1VQlPrfnIgZGnkCQNfsCuC+5VKs8aqCX+65I
+X-Gm-Gg: AR+sD12NEVmZjFhCG7OWjTrAI27YdIntEWgu/O7MfGMg1vLd/Gr1zCaFRIC5xS6nF2x
+	zg2+Aq/8gvrvCwIJ/wwQAP/viM4+841Eqf6RmRyhKrPAu4LSdTLPWkxuZwRS5Ny9vANI7rABVMd
+	stltpyDEtX2m7glzg1Fp9teibtHY2QzaI3+7XK9zYs3TUYsLvdezlM9GizS2oq1qlwqty78824l
+	/u/mZIEkX7KE3RqfErjpIpe5P9G/ZLtL1K2XcqyUTB6MRCI+E9cqFBH4qCyaX8koSsMYUQYGahS
+	Ez8bSemh3u4lGXpfWI+PKqGeciy7MwPFSn1dpIo2gUqWfS+gW+lzSXJ9Z2eJsFQK7CPy9dCpNfE
+	rl7JcH52+wAnFLOWZJBwG48MTXL65txbYA4T0lYx8yxqfTjxzY0xh9PXeCRT7vBslqP+nnvzRzX
+	i2Y4fhlSTeezQyAqaKeaz2rIGL2w==
+X-Received: by 2002:a05:6a00:a20f:b0:845:2ff5:b66d with SMTP id d2e1a72fcca58-84e2bb37352mr1415809b3a.35.1784769491217;
+        Wed, 22 Jul 2026 18:18:11 -0700 (PDT)
+Received: from CPC-mjac-HKWGEZ.localdomain ([70.37.26.37])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e175ea5c7sm2089045b3a.53.2026.07.22.18.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 18:18:09 -0700 (PDT)
+From: Jack Ma <jack4it@gmail.com>
+Subject: [PATCH net-next v4 0/3] net: nexthop: per-nexthop UDP dst port for
+ fdb (VXLAN) nexthops
+Date: Thu, 23 Jul 2026 01:17:52 +0000
+Message-Id: <20260723-b4-vxlan-fdb-port-v4-0-46e3a2dd88a3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722070801.2057634-1-wakel@google.com> <dca6abef-0f6c-414d-b7b5-02e5b2a355e3@igalia.com>
- <amD1LPWCvNNrYdQs@google.com>
-In-Reply-To: <amD1LPWCvNNrYdQs@google.com>
-From: Wake Liu <wakel@google.com>
-Date: Thu, 23 Jul 2026 08:27:24 +0800
-X-Gm-Features: AUfX_mxhm5_uM1lQOjqyc07yNdEsHMJcrmWEX1AmXcW-XvAVjMOakWrPmVbAWrw
-Message-ID: <CAOcRiAH=LyJoyoNe-BV8BYUomFs97OFzPkEL2u5G2HZAC3mmsw@mail.gmail.com>
-Subject: Re: [PATCH] selftests: futex: Restore support checks for futex2 and priv_hash
-To: Carlos Llamas <cmllamas@google.com>
-Cc: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, tglx@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net, 
-	shuah@kernel.org, mingo@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMBrYWoC/23NTQ6CMBAF4KuQrh0D5VdX3sO4mMIANdiStjYYw
+ t0t6IIFy5eZ972ZWTKSLLtGMzPkpZVahZCdIlb3qDoC2YTMeMyLuEw4iAz8NKCCthEwauMgqwo
+ heJITioKF3mioldNm3pkiB4omxx6/i32LJ9VuJdffXlqnzWeb93xr/JfKgyXPIYY27HGqWqqK8
+ ta9UA7nWr8236c7gSdHQhqEC2KMeZZiWeFeWJblC2uwEnkQAQAA
+X-Change-ID: 20260712-b4-vxlan-fdb-port-486bb215eab6
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Jack Ma <jack4it@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1784769488; l=10413;
+ i=jack4it@gmail.com; s=20260712; h=from:subject:message-id;
+ bh=TrnjZo8ZAqSB67M3vMZFcmj593axNcgT2qUTDvpk8/w=;
+ b=O/xDmMeacYivCkFYFa+h3SXtl0E+SehCcpIix59zADLU8VbDvecNBAfpn3oQD++e5jabkcDw8
+ Gd7zKyh0XJpA2VLuPDY9O6Dms0Q+jeSquEofYw9mkfq1fGPGPjgSqng
+X-Developer-Key: i=jack4it@gmail.com; a=ed25519;
+ pk=x8xh2Md9yNDil0xBOA9WA/oqC3O4Eg4rdlIul4YUktU=
 
-Hi Carlos, Andr=C3=A9,
+FDB nexthops let a VXLAN fdb entry point at a group of remote VTEPs, with the
+kernel flow-hashing across the group (commit 1274e1cc4226 ("vxlan: ecmp support
+for mac fdb entries")).  Each leg carries its own remote IP, but the UDP
+destination port is always taken from the VXLAN device (vxlan->cfg.dst_port)
+and cannot be set per leg.
 
-Ah, sorry about that. I didn't realize that I had already submitted
-the exact same patch and that Thomas had already merged/refactored it.
-Please ignore my previous email.
+This series adds an optional per-nexthop UDP destination port for fdb nexthops,
+so a group's legs can share a remote IP and differ only in UDP port.
+
+Motivation
+
+The deployment runs an overlay in which each tenant's traffic is terminated by
+a "forwarder": a pod that hosts the VXLAN VTEP, decapsulates the tenant's
+overlay, and relays it to and from that tenant's workload.  Forwarders for many
+different tenants are packed onto the same receiver node behind one
+mesh-routable underlay IP, and are demultiplexed purely by UDP destination
+port.  The host does a stateless outer-UDP demux by port; it never terminates
+the tunnel:
+
+  receiver node -- one mesh-routable underlay IP (NodeIP_A)
+  +----------------------------------------------------+
+  |  host netns: stateless outer-UDP demux by dst port |
+  |              (host does NOT terminate the tunnel)  |
+  |                                                    |
+  |     dst :40000        dst :40001        dst :40002 |
+  |         |                 |                 |      |
+  |   +-----v----+      +-----v----+      +-----v----+ |
+  |   | pod0 ns  |      | pod1 ns  |      | pod2 ns  | |
+  |   | vxlan    |      | vxlan    |      | vxlan    | |
+  |   | VTEP     |      | VTEP     |      | VTEP     | |
+  |   | decap    |      | decap    |      | decap    | |
+  |   +----------+      +----------+      +----------+ |
+  +----------------------------------------------------+
+  (up to ~10 forwarder pods packed per node)
+
+The packed pods are unrelated: each belongs to a different tenant on its own
+VXLAN VNI, so the per-pod UDP port is node-level demux, not an HA construct.
+The host, which only demuxes outer UDP, never has to reason about tenancy.
+
+A single forwarder is made highly available by running replicas.  The replicas
+of one forwarder share a single anycast overlay identity: one inner MAC and IP.
+Clients address that one identity, and a sender spreads flows across the live
+replicas with an fdb nexthop group.  Failover is transparent: a dead replica is
+just dropped from the group, with no client re-resolution or route change.  The
+single identity is deliberate; the endpoint is consumed one layer up as a
+single stable address, so giving each replica its own address would push
+multi-address handling and health-checking up into that consumer.
+
+Anti-affinity keeps the two replicas of one HA set on different nodes, so a
+group's legs land on distinct node IPs.  But each leg is still reachable only
+at (node IP, that pod's UDP port), so within one group the legs differ in IP
+*and* port.  A group can already carry a distinct IP per leg, but it takes the
+UDP port from the device (a single value), so it cannot send each leg to its
+own port.  That is the gap this series closes.
+
+Zooming into one forwarder pod, there is nothing for the host to load-balance:
+the tunnel terminates on a vxlan device inside the pod's own netns, and the pod
+reaches its tenant through a separate NIC:
+
+  one forwarder pod -- its own netns, tenant VNI X
+  +-------------------------------------------------+
+  |                                                 |
+  |   on/off-ramp NIC   <--- customer data plane    |
+  |   |   on-ramp (ingress) / off-ramp (egress)     |
+  |   |   inner packet                              |
+  |   vxlan (VTEP)   encap / decap for VNI X,       |
+  |   |              listens on this pod's UDP port |
+  |   |   outer VXLAN UDP                           |
+  |   eth0 (underlay)   NodeIP:port                 |
+  |   |   to peer VTEPs over the                    |
+  |   v   mesh underlay                             |
+  |                                                 |
+  +-------------------------------------------------+
+
+Existing mechanisms do not fit this shape:
+
+  - L3 multipath in the overlay needs each leg to be a distinct routable
+    nexthop with its own address.  Since an HA set is a single anycast address
+    by design, there are no distinct per-leg addresses to route over; the fdb
+    nexthop group bridging to that shared MAC is what load-balances.
+  - Host-side fan-out (XDP / TC / SO_REUSEPORT) assumes a shared host datapath
+    that is not there.  SO_REUSEPORT balances sockets within one netns, but the
+    receivers are in different netns (in fact different tenants).  An XDP/TC
+    fan-out would require the host to terminate the tunnel and re-dispatch
+    inner traffic across netns and VNI boundaries, i.e. become a VTEP, which
+    puts the host into the tenant datapath and largely duplicates what an fdb
+    nexthop group already does.
+  - Demuxing on VNI instead of port (one shared 4789 socket, multiple vxlan
+    devices differing only in VNI, moved into each pod's netns) works when the
+    co-located pods have different VNIs.  It does not help two same-VNI HA sets
+    on one node: their outer headers are identical, so the host would again
+    have to terminate the tunnel to tell them apart.  It also costs packing
+    density: with one shared underlay IP, VNI demux allows at most one VTEP per
+    (VNI, node), so N same-VNI HA sets of two replicas need 2N nodes, whereas a
+    per-pod port fits them on two nodes with anti-affinity preserved.
+
+This series adds the attribute:
+
+  - Patch 1 adds a netlink attribute NHA_DST_PORT (__be16, mirroring NDA_PORT),
+    stored in struct nh_info and echoed back on dump.  It is only accepted
+    together with NHA_FDB and NHA_GATEWAY.  Control-plane only; datapath
+    behaviour is unchanged.
+  - Patch 2 wires it into the VXLAN datapath: vxlan_fdb_nh_path_select() sets
+    rdst->remote_port to the selected leg's port.  vxlan_xmit_one() already
+    prefers rdst->remote_port when non-zero and otherwise falls back to the
+    device port, so nexthops without a port are unaffected (backward
+    compatible).
+  - Patch 3 extends the fdb nexthop selftests.
+
+On the uAPI: this does not add a new datapath concept.  A single fdb entry
+already carries a per-destination UDP port (NDA_PORT), and vxlan_xmit_one()
+already prefers rdst->remote_port when set.  NHA_DST_PORT is the nexthop analog
+of that existing attribute: control-plane only, no datapath change, and
+backward compatible (a leg with no port falls back to the device port as
+today).  It sits at the nexthop level rather than under NHA_ENCAP because fdb
+nexthops do not use the NHA_ENCAP / LWT infrastructure.
+
+Example:
+
+  ip nexthop add id 1  via 192.0.2.10 fdb dst_port 4789
+  ip nexthop add id 2  via 192.0.2.10 fdb dst_port 5789
+  ip nexthop add id 10 group 1/2 fdb
+  bridge fdb add 00:11:22:33:44:55 dev vxlan0 nhid 10
+
+Both legs share gateway 192.0.2.10 and differ only in UDP port; the kernel
+hashes flows across them.
+
+Testing: kernel and iproute2 built on net-next.  The fdb nexthop cases in
+fib_nexthops.sh pass, and the datapath test in test_vxlan_nh.sh confirms a
+per-nexthop port is used on the wire in place of the device default.  The
+series is bisectable: patches 1 and 2 each build individually.
+
+A matching iproute2 change adds the `dst_port` keyword to `ip nexthop`; it
+will be posted to the iproute2 list alongside this series.
+
+Changes in v4:
+- Rename NHA_FDB_PORT to the generic NHA_DST_PORT (struct field nh_dst_port,
+  nh_info.dst_port, iproute2 keyword dst_port).  Review noted "fdb port" is
+  too specific and can be confused with a bridge port; the attribute is now
+  named generically while validation stays fdb-only (Ido Schimmel, David
+  Ahern).
+- selftests: split the dst_port cases out of ipv4_fdb_grp_fcnal() /
+  ipv6_fdb_grp_fcnal() into dedicated ipv4_fdb_port_fcnal() /
+  ipv6_fdb_port_fcnal() tests, and require iproute2 dst_port support in
+  test_vxlan_nh.sh (Ido Schimmel).
+
+Changes in v3 (all addressing Ido Schimmel's review):
+- patch 1: type NHA_FDB_PORT with NLA_POLICY_MIN(NLA_BE16, 1) so the
+  attribute is big-endian and a zero port is rejected by the policy.
+- patch 1: reserve the NHA_FDB_PORT dump size based on nh_info->fdb_port
+  instead of fdb_nh, so only nexthops that carry a port account for it.
+- patch 2: fix the nexthop_path_fdb_result() continuation-line alignment
+  and drop the redundant fdb_port NULL check; its only caller always passes
+  a valid pointer.
+- patch 3: fold the control-plane checks into ipv4_fdb_grp_fcnal() and
+  ipv6_fdb_grp_fcnal() in fib_nexthops.sh rather than a standalone script,
+  and add datapath coverage to test_vxlan_nh.sh.
+
+Changes in v2:
+- Expand the cover letter with the deployment model and the
+  addressing-vs-load-balancing distinction that motivates the attribute, as
+  requested (Ido Schimmel).
+- Reword the problem statement: the UDP port is underlay demux (addressing),
+  not what distinguishes otherwise-interchangeable load-balancing targets.
+- Drop the speculative NHA_FDB_VNI follow-up note; there is no use case for a
+  per-leg VNI in an fdb nexthop group.
+- No functional change to the patches.
+
+v3: https://lore.kernel.org/netdev/20260721-b4-vxlan-fdb-port-v3-0-9aa0a543a78a@gmail.com/
+v2: https://lore.kernel.org/netdev/20260717-b4-vxlan-fdb-port-v2-0-f4862e8fe867@gmail.com/
+v1: https://lore.kernel.org/netdev/20260712191218.236-1-jack4it@gmail.com/
+
+Signed-off-by: Jack Ma <jack4it@gmail.com>
+---
+Jack Ma (3):
+      net: nexthop: add NHA_DST_PORT for fdb nexthops
+      vxlan: honor per-nexthop fdb destination port
+      selftests: net: add coverage for fdb nexthop dst_port
+
+ include/net/nexthop.h                        |  6 ++-
+ include/net/vxlan.h                          |  5 +-
+ include/uapi/linux/nexthop.h                 |  3 ++
+ net/ipv4/nexthop.c                           | 20 ++++++-
+ tools/testing/selftests/net/fib_nexthops.sh  | 81 ++++++++++++++++++++++++++++
+ tools/testing/selftests/net/test_vxlan_nh.sh | 34 +++++++++++-
+ 6 files changed, 144 insertions(+), 5 deletions(-)
+---
+base-commit: f6f3b36c15ed44de1fbb44e645e4fae8c4a4453e
+change-id: 20260712-b4-vxlan-fdb-port-486bb215eab6
 
 Best regards,
-Wake
+--  
+Jack Ma <jack4it@gmail.com>
 
-On Thu, Jul 23, 2026 at 12:52=E2=80=AFAM Carlos Llamas <cmllamas@google.com=
-> wrote:
->
-> On Wed, Jul 22, 2026 at 12:20:37PM -0300, Andr=C3=A9 Almeida wrote:
-> > Hi Wake,
-> >
-> > Em 22/07/2026 04:08, Wake Liu escreveu:
-> > > Older kernels may not support FUTEX2 syscalls or PR_FUTEX_HASH.
-> > > Removing these checks causes false failures when running the tests on
-> > > such kernels. Restore the checks so the tests can be gracefully
-> > > skipped when the features are not supported.
-> > >
-> > > Signed-off-by: Wake Liu <wakel@google.com>
-> > > ---
-> > >   tools/testing/selftests/futex/functional/futex_numa_mpol.c | 2 ++
-> > >   tools/testing/selftests/futex/functional/futex_priv_hash.c | 2 ++
-> > >   2 files changed, 4 insertions(+)
-> > >
-> > > diff --git a/tools/testing/selftests/futex/functional/futex_numa_mpol=
-.c b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> > > index 78c0f7a59e17..d215acf88120 100644
-> > > --- a/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> > > +++ b/tools/testing/selftests/futex/functional/futex_numa_mpol.c
-> > > @@ -103,6 +103,8 @@ static void __test_futex(void *futex_ptr, int err=
-_value, unsigned int futex_flag
-> > >                     break;
-> > >             }
-> > >             if (ret < 0) {
-> > > +                   if (errno =3D=3D ENOSYS || (errno =3D=3D EINVAL &=
-& (futex_flags & FUTEX2_NUMA)))
-> > > +                           ksft_exit_skip("futex2 or FUTEX2_NUMA not=
- supported by kernel\n");
-> >
-> > Why aren't you using SKIP() instead of ksft_exit_skip() like how you ha=
-ve
-> > done at
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
-=3Dlocking/futex&id=3D50c121e5a57abe446e46825fb9c69ac419765d5c
->
-> It's actually the same patch. See:
-> https://lore.kernel.org/all/20260624070223.1533167-1-wakel@google.com/
-> Thomas, just refactored it to use the harness API.
->
-> I'm not sure why Wake sent the same fix twice but it was likely by
-> mistake. That's all, nothing to see here.
->
-> --
-> Carlos Llamas
-
-
-
---=20
-Best Regards,
-Wake Liu
