@@ -1,229 +1,321 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011026.outbound.protection.outlook.com [52.101.70.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD83439F84;
-	Thu, 23 Jul 2026 11:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784805480; cv=none; b=LwwZOe6IcTDy1dv8VO5XEVJPjcEMrBIZOSXZvGQj8r/Z9bBMcrEcia7pSfODI3W9GmtX7Jr6rhIYVrhQ72+50eBghzRCeXsNSSYLelBcpHmRdQX8Di2+yYweSSre74dW8/XcAalPXhBWxPiK2XLv5eH9UwI6IdLQKhrCAoYFlYA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784805480; c=relaxed/simple;
-	bh=eMwvMv4TYvlpim5DdedkNl7Mz25FND2lgW3Pe9X+8C0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YbwHR8Oz/5F+lmFQQoqB0B3UFfWa9KhfnTtdfrC/a/ltHzyNzr/+VEdOg4bn+dPBTYE8/TQsPYAndNap3AJX1WTLQ607kZi5ffHA1CfJT9jpzGQFkaUQyEkslu3tit6T89fzqQl9Mt0qUTFxDeHm2rqt/FZiHNkLpvAl4gPetIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e4gjaq1Y; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F648274B46;
+	Thu, 23 Jul 2026 11:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.26
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784806667; cv=fail; b=VDQkF0sPNyj9rFKc5E+qV0Klp2YrvTTwAjPxmKhBPcFuln1Y/rsRvxICzPOSFqouOBGicfbiOS3xpD1EdiJ4HaBs8DGvGybx72IyTXNylXFz+ZTm+hgUGzu+5sOAz9+KHWpUvbWLtmrVv/vSBqUC14t0vYd7nOJx4xxBuNetgJg=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784806667; c=relaxed/simple;
+	bh=bAnROHtnklC5D9y+qqHMg+Ovyg81SOua5ILDyouGgfg=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=K9Qeha/9tz5yufAKVAo/JnN+6cgk4jifWn4xY26f/EDG+2byvUCa5avrb/WQy1c1F8402lar2TCTwBRGbd0YHg5xUPdS6lWK18O7Cg3UYdrBIeKAp5HxkVBciuLo0j89diErcaVJ+y4mOsHOjW5Eg6kmStCOf6dIpnEdXnpH+3I=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fe+vypdB; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fe+vypdB; arc=fail smtp.client-ip=52.101.70.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e4gjaq1Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784805475; x=1816341475;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eMwvMv4TYvlpim5DdedkNl7Mz25FND2lgW3Pe9X+8C0=;
-  b=e4gjaq1YY59kX7VrHNKWLOZLaEwxh6soeVdu93Nhpy2SaKtHNE7U3pV+
-   fpelD2qL1BOjznUx8Rs1dF6D4JjA0OwyHhAR5cQmAfpQaUmO+2Yqm4dJX
-   VtkidYWod4fpESSmUrTKVT2XovMt3rmPni9tFZ1FHWuWJF3KOkuQ7PmUL
-   knTtpMLvk/3hxu/I8vf7sn2A6J/yMz7aNlZD48trvltCTIDWfioA+/EfU
-   BBnU+o/GpXPDSXqDsT5gmafczlJq8NQ89aGXQCQpZ5tVoyg5Imm+RLTj6
-   knuxfZJ9UlRA+6dHkldiyuN4hJOZOE9NDDuATjW/joHsbPUu6VSkHHFYk
-   g==;
-X-CSE-ConnectionGUID: eDzaZPF/QbCSAKiEKq5exQ==
-X-CSE-MsgGUID: lOCnRD6PThSYqZjucgCLjw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11854"; a="87999522"
-X-IronPort-AV: E=Sophos;i="6.25,180,1779174000"; 
-   d="scan'208";a="87999522"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 04:17:48 -0700
-X-CSE-ConnectionGUID: SkAjmd3YQROqmGhYjclh2Q==
-X-CSE-MsgGUID: BjHtMkYTSx6Jd+DHEaU2lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,180,1779174000"; 
-   d="scan'208";a="256581046"
-Received: from unknown (HELO [10.238.208.132]) ([10.238.208.132])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 04:17:41 -0700
-Message-ID: <7fcb09da-7085-4df1-8a4a-b959a5c7abf8@intel.com>
-Date: Thu, 23 Jul 2026 19:17:38 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fe+vypdB";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fe+vypdB"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=HxeMmJ20zKWy5sbG8OFRsXOL6WvlYxv0wlTZG4LCYXa58dd2kBvD8joHNHpKYXy1oM472bXCmGbAA9YX7l4Ef40fv6gCRkB6nCmxf5JGqb8A61Z2BwqPsWoM0EVACz+5cN7QVEgtqZqjWKpGK9rpYoSW30sf0CBEDiM33+bE8KC67sSMHw13nuZOb4OSU2LcMFVtZ0Cf/Kgccj7dDqVDTdu7rxMmtfsgPOZSFDcLDCHr3aKiOZ2SWEelZtDdW01jmbxJjwFw7iGgDhfjaVbbUzXC30r7r+JXQ4bnQ/tXH6c/26qs1G4Gps26OctcybZUG9pDbHDzNmg2rIlkJ4wTTQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
+ b=udYxnQ2GhgCxeidYvyjTtfvbuQvXKyYiHYZORM90lyDHb9URVa9uVWzoZCYSVOt2q6ZWHG6Ok1n3ZNWLrf42uNICqIf6Or3tPiiYoDMOkVnsopwJVgeCF1xLoUgNWNVyi6E7Igt11XYqwWKWnUr4nsLeGfMxnKv40w+74BE1r1Ep80bxc8XFz21HQ+mZN0K91MtVj+vAMRxVNhEMUqnAC65p9zmYg/15MPEL5ZoTQX9V4TAY9Y0aFfBREYh5CTMd9JQTSqru68XxFb+A8Libj0iMsLn9wWp81Y9m7WYwqCa82Zg8SeJFmPSnOIFLPzqPn9U24qRyLIAMjLjYsphZMQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
+ b=fe+vypdBGwt73pSa/KLrPQWUPqv9nayQ+AofQslJpfLUuZ9PJFKhyikpyr/aQmeynl1xOUG1/a1aANosIWqIAwFxq32Px3TGTjOlLTeuVCiFL0mYmylnyPTOxA0DPXVGZbnIV0KqY+Zu4Om95aR7QiG4BkQnUjhDljWE12Qu6Ug=
+Received: from AM9P193CA0002.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:21e::7)
+ by PAVPR08MB9770.eurprd08.prod.outlook.com (2603:10a6:102:31e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.11; Thu, 23 Jul
+ 2026 11:37:36 +0000
+Received: from AM4PEPF00027A65.eurprd04.prod.outlook.com
+ (2603:10a6:20b:21e:cafe::d) by AM9P193CA0002.outlook.office365.com
+ (2603:10a6:20b:21e::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.11 via Frontend Transport; Thu,
+ 23 Jul 2026 11:37:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM4PEPF00027A65.mail.protection.outlook.com (10.167.16.86) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5
+ via Frontend Transport; Thu, 23 Jul 2026 11:37:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vsPGJlRQPyJJ77CnzablLLhVTr2NP4O42UPNrxWxejh8cxK1lUc/mef6gILP1qHgBJbjAO+0Wu74c9bIrsr08yBPzQfAqdtni+SWJEa8aBu29z7XxX0VbLp0rFvJoDJqdak2Psr1zt+maRTw126Luz+sFs6di7DKbgf9HABpEUmL/J2TJT2zY+FA2LIlBiiIcLWOf3n1/SQiyKGoanxPakx+SH/kSEb8OYgpw2NAeSJ/7xegQbT/q7NHUesx9ONmcD/1Q2eucBS3rsBjjfVCb2ir0sCTm7ZB2q+xTTXA3xWTbU7j+U5X3lt3qts4QI9X0iO5NN1wwGMcKiSHFpoROg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
+ b=yNZ254A28se8vTMHbNaNCeou69K6vrWk5e0PBI3GWxInqOKO78p5AC5LyeZrZd0Igt+L19/qBcdDw6IBqjKnES7L7WxSk4XKTqks1Uaxp1nPwkHyd4Vf8spzyXNdIO9k89XE7imnBOQ+ZsXZRvB5WaynGTLKuKb4hf7hmR8aAD4bIH2CxKLbWFS8D+Q1vQ5fo4Yi81PuiTmpVdD0S1LtewcrkokVOI2+cY6M9DHdUdsuxhYhYLGQC/v8ONAiV8m1mZ5ZHL0orzBVxHubErjFwZH163sVCo+1AABeJlJ8iSqfqxUisT/ZpVAIYN1s7N7fs7DNk3T6qGSKV+R7NJg7hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
+ b=fe+vypdBGwt73pSa/KLrPQWUPqv9nayQ+AofQslJpfLUuZ9PJFKhyikpyr/aQmeynl1xOUG1/a1aANosIWqIAwFxq32Px3TGTjOlLTeuVCiFL0mYmylnyPTOxA0DPXVGZbnIV0KqY+Zu4Om95aR7QiG4BkQnUjhDljWE12Qu6Ug=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by AM8PR08MB6580.eurprd08.prod.outlook.com (2603:10a6:20b:369::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.11; Thu, 23 Jul
+ 2026 11:36:31 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0245.009; Thu, 23 Jul 2026
+ 11:36:30 +0000
+Message-ID: <57f8415d-b80b-46fa-af1f-ad4a727e1582@arm.com>
+Date: Thu, 23 Jul 2026 12:36:28 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com
+Subject: Re: [PATCH RESEND v1 3/5] selftests/mm: skip khugepaged swap tests
+ without swap
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260722091219.61504-1-usama.anjum@arm.com>
+ <20260722091219.61504-4-usama.anjum@arm.com>
+ <9bb01e21-159a-427c-9d64-5db7070f0209@arm.com>
+ <5af250ab-6a52-48d3-bd50-64e8ddd99915@arm.com>
+ <188a0acc-dd03-443c-8e1f-329a4dddcd5f@arm.com>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <188a0acc-dd03-443c-8e1f-329a4dddcd5f@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P302CA0045.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:317::20) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 08/22] KVM: selftests: Add TDX boot code
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-8-15ad654a50db@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260722-tdx-selftests-v14-8-15ad654a50db@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|AM8PR08MB6580:EE_|AM4PEPF00027A65:EE_|PAVPR08MB9770:EE_
+X-MS-Office365-Filtering-Correlation-Id: bac64787-3a84-416d-1b25-08dee8aeca87
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|23010399003|7416014|1800799024|366016|921020|6133799003|5023799004|11063799006|4143699003|56012099006|10067099003|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info-Original:
+ H1xtRovmbyE+8RO0FPX0nciGbhedJl41GTUU+q2SrEU/O7bI6b8FiCZ8Sm+OvugQhlxCjDaQLDl5gUDwupoZ8Cke7fFf45Jx0gThHK8Bdo2tSJXcAeXMBFbMqS63wMxVNe0p4FlcWRageCwTxxwXVZb99z7LHvGZZTFZEQh3cbZrH3WUEYsZYSFOHzUdVkJLxN923B+EBRpMBSRUOxoH3ArKXBEyC2xVCu7hvQUCNu4FwYXoCdcibPVIWXgyKmDqxYIruSohsvYnahW10fPiu2mvxJ/0vxK09Qxn9cCpVF8pKY896cCwgnjA92kyqnteT6lw31JrbZKH090LDiJf6TlPDXJH07M+JMpLesUEBQBFr1zLFnv85YzVuL82ZZWZo6JK0NPsuPNMcT5bcBbM0vpoiDYBVAkdmjKEP0Uhohdnh3lAgvP5kIqaymfsXvqMOJt92RTvRo6EgFNvTPCJmA2+3q0ZcF1MtVdXwxgTXWNEIPD47qXDV3oVlKu5QGGX7U8PLm8IJQf9rGmxLiuNYsb5o4Wu5MZgqEMDV04TdpCq8K4J/j6fFCved8rPfo/35gQOzS+WlYKNgqN+1/i/+gKvnsGLImb70v02flB4x2JDs85YzIcpOS6jiGfVqMbdHhA9grSrWokKR2Vc4SJI5+fI8RlTS7wyEj67dgOwpclW7zrVcEGZgn5AfVu39R4mfXkcnodN0laeC9idmoIseQ==
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(1800799024)(366016)(921020)(6133799003)(5023799004)(11063799006)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ ivz5qaVbV8BenLOGv6IqF1Ub5hRYkmwJwWHR2G6z1byJbu3zAca5NRywWQCI4JD7UmQPmuWiBcgLWKpGFU1JF5SuGKoeSjBIBxsNGxE4Ux1RkvGF1h9zl+1z1ovt+fUmVxygJ4Lkjru/f3fAYVCndK68Jm4wwDHOhwdDDKHhpmxxpP9G57ixuJjvkd+1V4nVVE/LBy/oNg6mdRttGTxwEN1Ee6kBw0vpeRSyZQA/LVpBCBErgJrYmgsKFUiTpGhONuVSI9LbXQhW0tiHpS5dK09sGibld35S4ldmZeIruI3zf69r2fDA2U5OIbJ1P81qxem8ZRUXYU+gJEiTvDPuNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6580
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM4PEPF00027A65.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	799e756e-16f0-41ed-6fec-08dee8aea38b
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|23010399003|7416014|376014|82310400026|1800799024|14060799003|35042699022|921020|6133799003|56012099006|11063799006|5023799004|4143699003|10067099003|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	B6FGUJlPr1ENIE/jDo2fyEn+uKSJBnNJUXEgk2n4ubruv0sAz9IpHxZkAx2Q4tJiPoSLB+n2fhN6xcjz2+I325yvfHhgM/bG87cENKV6CjZzKqN2jvBevVha/hLh02BcVU8SgO0F2EPqmiwE5GpbvHUjMxr53sZ4XECB5Vf8iRuXnWSChs8IxdntqSc/U3xcdQMORjmUVo2jA5A1xf79cuTAmfbO1aRvioLVP0DGKYDF06x9w2Rqmpf1mgOJwgAWvvr9iNzXlUhwk8xw9kL4ayZJtk+gFkp145mGJmJHJUcp0+hiYamLszo1fAVdNis+mSHtWX3YFqF8WDvJd+qRkKlkUYhaHdwM+w5+LrcYsvcbR9cXGF54ld/P6STBCNzseqT7pHzu7wsRZGqYDy3dcCF/MeZhvhQEM0p4eVWsbVoV0n6S0gfpSVB6rPu0F9fyUtI8X733pewxhNf4u0/+U7aGFhiN+a+1NmPkiYPEZG358uVDWTFinyu5TQ0NtPm6ecQTWuCHx6KqpkIg4MF6wfS+xc/FKIjfzkLbScztVPMh3KBBmN5Yc/MLWXbMGowj+hIaKa0FA2fUhh+1R5RsnYX+HMNs/9f69/JUvsdpo/Fq4puw7f9OZ4slyFv0kpQ1ps5IRywiI0SRQZeDBykR1Z+rQnk4gEN7Om4jGbyC1AxQaXTdGOTyiZIh6/MIv0PnyEX50FY5mQsBdUGBZJ26t9OnXKIf1bGKEsmjODu0dR3y0Aaggjvx15RIvXr3WxSX
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(7416014)(376014)(82310400026)(1800799024)(14060799003)(35042699022)(921020)(6133799003)(56012099006)(11063799006)(5023799004)(4143699003)(10067099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	aUZRSEH9J5CVywGHvNjJw6nmnxE9o4GqgakjRULbnuKQIpetaRNWPQdPYCSx/58eGt8iJsSYkExDE0q+UxemlsYpXxztsXN+WZRfEiXhnBDBnz+ANOJJYQBMIBp5bOLi9vpClr3z9TcQznRAcOiAfgiMOpmBCjbh2Y+g96RR2SaY7pQp2FWP1foCiM/XLms/QYVuSdUFLIZWRKsvIryiiJevPud4db1tKRi0Sri7AkvuxPfavFGBcev6b8+7s+9Uo9/nqmrnaDkuy+ExoNn3zAPj2bj34VwnvnMBxFww3kS8trk9gExxdvGqm9dYdNNUzepHp7AsLVW3UD+z6kdqTTM6PnaQYSeEUJ4+CeZwqtGPMA40+IcZt3FW1hX8jNARJ6fz+GSSni1twj97+kIBuwufpJPuU1MucSPcUPpcxomQe2/lPb+pmY3vkmIMeFLT
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2026 11:37:35.2024
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bac64787-3a84-416d-1b25-08dee8aeca87
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A65.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9770
 
-On 7/23/2026 7:13 AM, Lisa Wang wrote:
-> From: Erdem Aktas <erdemaktas@google.com>
+On 23/07/2026 6:08 am, Sarthak Sharma wrote:
 > 
-> Add code to boot a TDX test VM. Since TDX registers are inaccessible to
-> KVM, the boot code loads the relevant values from memory into the
-> registers before jumping to the guest code.
 > 
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
-> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> Co-developed-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+> On 7/22/26 7:35 PM, Muhammad Usama Anjum wrote:
+>> Hi,
+>>
+>> Thank you for review.
+>>
+>> On 22/07/2026 1:16 pm, Sarthak Sharma wrote:
+>>> Hi Usama!
+>>>
+>>> On 7/22/26 2:41 PM, Muhammad Usama Anjum wrote:
+>>>> collapse_swapin_single_pte and collapse_max_ptes_swap require
+>>>> MADV_PAGEOUT to replace anonymous pages with swap entries.  On swapless
+>>>> systems there is no backing store with which to create those entries, so
+>>>> check_swap() reports missing setup rather than broken khugepaged behavior.
+>>>>
+>>>> Swapless configurations are common on Android and other constrained
+>>>> test devices.  Failing these cases obscures actionable results from the
+>>>> rest of the khugepaged suite.
+>>>>
+>>>> Check /proc/swaps before either swap-dependent case and skip when no
+>>>> active swap area exists.  With swap present, retain the existing
+>>>> MADV_PAGEOUT and swap-entry assertions unchanged.
+>>>>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>>>> ---
+>>>>  tools/testing/selftests/mm/khugepaged.c | 34 +++++++++++++++++++++++++
+>>>>  1 file changed, 34 insertions(+)
+>>>>
+>>>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+>>>> index 10e8dedcb087d..a152cec59fcbd 100644
+>>>> --- a/tools/testing/selftests/mm/khugepaged.c
+>>>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>>>> @@ -100,6 +100,28 @@ static void skip(const char *msg)
+>>>>  	exit_status = KSFT_SKIP;
+>>>>  }
+>>>>  
+>>>> +static bool is_swap_enabled(void)
+>>>> +{
+>>>> +	char buf[MAX_LINE_LENGTH];
+>>>> +	FILE *file;
+>>>> +	bool enabled = false;
+>>>> +
+>>>> +	file = fopen("/proc/swaps", "r");
+>>>> +	if (!file)
+>>>> +		return false;
+>>>> +
+>>>> +	if (!fgets(buf, sizeof(buf), file))
+>>>> +		goto out;
+>>>> +
+>>>> +	/* Check for first active swap entry. */
+>>>> +	if (fgets(buf, sizeof(buf), file))
+>>>> +		enabled = true;
+>>>> +
+>>>> +out:
+>>>> +	fclose(file);
+>>>> +	return enabled;
+>>>> +}
+>>>> +
+>>>>  static void save_settings(void)
+>>>>  {
+>>>>  	ksft_print_msg("Save THP and khugepaged settings...");
+>>>> @@ -734,6 +756,12 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
+>>>>  {
+>>>>  	void *p;
+>>>>  
+>>>> +	if (!is_swap_enabled()) {
+>>>> +		skip("No active swap");
+>>>
+>>> Can we prefix this skip message with a #, as recommended for KTAP
+>>> output? Right now it is printing like this:
+>> It looks like `skip()` is not being prefixed with `#` in this test
+>> because of how it is currently used.
+>>
+>> The `skip()` helper itself should probably be fixed, but that can be
+>> handled in a separate follow-up patch. This test is not fully
+>> TAP-compliant at the moment: the normal pass/fail output appears to be
+>> compliant, while the skip-related messages are not. Would it make sense
+>> to address that separately from this series?
+> 
+> I think there's nothing wrong with the skip() helper. Normal pass/fail
+> output appears to be TAP compliant because there's a ksft_print_msg(...)
+> call before calling pass()/fail() helpers. If we move the
+> ksft_print_msg() line before the is_swap_enabled() check, we'll get
+> output which is TAP compliant, something like this:
+Makes sense. I'll fix it in the next version.
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> 
+> # Run test: collapse_swapin_single_pte (khugepaged:anon)
+> # Swapout one page... No active swap
+> ok 16 # SKIP collapse_swapin_single_pte
+> #
+> # Run test: collapse_swapin_single_pte (madvise:anon)
+> # Swapout one page... No active swap
+> ok 17 # SKIP collapse_swapin_single_pte
+> #
+> # Run test: collapse_max_ptes_swap (khugepaged:anon)
+> # Swapout 65 of 512 pages... No active swap
+> ok 18 # SKIP collapse_max_ptes_swap
+> #
+> # Run test: collapse_max_ptes_swap (madvise:anon)
+> # Swapout 65 of 512 pages... No active swap
+> ok 19 # SKIP collapse_max_ptes_swap
+> 
+>>
+>> Also when we run the whole mm suite using ./run_vmtests.sh, it appends an extra
+>> # in start of the output which we get by running normal test directly. Its
+>> controversial already that we are applying TAP styling to suite level and test
+>> level as well. So non-compliant skip in this test makes overall output
+>> compliant.>
+>>>
+>>> # Run test: collapse_swapin_single_pte (khugepaged:anon)
+>>>  No active swap
+>>> ok 16 # SKIP collapse_swapin_single_pte
+>>> #
+>>> # Run test: collapse_swapin_single_pte (madvise:anon)
+>>>  No active swap
+>>> ok 17 # SKIP collapse_swapin_single_pte
+>>> #
+>>> # Run test: collapse_max_ptes_swap (khugepaged:anon)
+>>>  No active swap
+>>> ok 18 # SKIP collapse_max_ptes_swap
+>>> #
+>>> # Run test: collapse_max_ptes_swap (madvise:anon)
+>>>  No active swap
+>>>
+>>>
+>>>> +		ksft_test_result_report(exit_status, "%s\n", __func__);
+>>>> +		return;
+>>>> +	}
+>>>> +
+>>>>  	p = ops->setup_area(1);
+>>>>  	ops->fault(p, 0, hpage_pmd_size);
+>>>>  
+>>>> @@ -760,6 +788,12 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+>>>>  	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
+>>>>  	void *p;
+>>>>  
+>>>> +	if (!is_swap_enabled()) {
+>>>> +		skip("No active swap");
+>>>
+>>> Same here.
+>>>
+>>>> +		ksft_test_result_report(exit_status, "%s\n", __func__);
+>>>> +		return;
+>>>> +	}
+>>>> +
+>>>>  	p = ops->setup_area(1);
+>>>>  	ops->fault(p, 0, hpage_pmd_size);
+>>>>  
+>>>
+>>
+> 
 
-> ---
->   tools/testing/selftests/kvm/Makefile.kvm           |  1 +
->   .../selftests/kvm/include/x86/tdx/td_boot.h        | 22 ++++++--
->   tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S  | 61 ++++++++++++++++++++++
->   3 files changed, 81 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 397afebbb34b..645d9aac61db 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -32,6 +32,7 @@ LIBKVM_x86 += lib/x86/svm.c
->   LIBKVM_x86 += lib/x86/tdx/tdx_util.c
->   LIBKVM_x86 += lib/x86/ucall.c
->   LIBKVM_x86 += lib/x86/vmx.c
-> +LIBKVM_x86 += lib/x86/tdx/td_boot.S
->   
->   LIBKVM_arm64 += lib/arm64/gic.c
->   LIBKVM_arm64 += lib/arm64/gic_v3.c
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h b/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> index bf2282931d49..89cf6c3485be 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/td_boot.h
-> @@ -2,9 +2,6 @@
->   #ifndef SELFTEST_TDX_TD_BOOT_H
->   #define SELFTEST_TDX_TD_BOOT_H
->   
-> -#include <linux/compiler.h>
-> -#include <linux/types.h>
-> -
->   /*
->    * Layout for boot section (not to scale)
->    *
-> @@ -24,7 +21,19 @@
->    * |                           |
->    * |                           |
->    * |___________________________|____ 0x0_ffff_0000: TD_BOOT_PARAMETERS_GPA
-> + *
-> + * TD_BOOT_PARAMETERS_GPA is arbitrarily chosen to
-> + *
-> + * + be within the 4GB address space
-> + * + provide enough contiguous memory for the struct td_boot_parameters such
-> + *   that there is one struct td_per_vcpu_parameters for KVM_MAX_VCPUS
->    */
-> +#define TD_BOOT_PARAMETERS_GPA 0xffff0000
-> +
-> +#if !defined(__ASSEMBLY__) && !defined(__ASSEMBLER__)
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/types.h>
->   
->   /*
->    * The exact memory layout for LGDT or LIDT instructions.
-> @@ -63,4 +72,11 @@ struct td_boot_parameters {
->   	struct td_per_vcpu_parameters per_vcpu[];
->   };
->   
-> +void td_boot(void);
-> +void td_boot_code_end(void);
-> +
-> +#define TD_BOOT_CODE_SIZE (td_boot_code_end - td_boot)
-> +
-> +#endif /* !defined(__ASSEMBLY__) && !defined(__ASSEMBLER__) */
-> +
->   #endif /* SELFTEST_TDX_TD_BOOT_H */
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S b/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S
-> new file mode 100644
-> index 000000000000..bca9a4c3d8f8
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S
-> @@ -0,0 +1,61 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#include "tdx/td_boot.h"
-> +#include "tdx/td_boot_offsets.h"
-> +#include "processor_asm.h"
-> +
-> +.code32
-> +
-> +.globl td_boot
-> +td_boot:
-> +	/*
-> +	 * In this procedure, edi is used as a temporary register.
-> +	 * Paging is turned off.
-> +	 */
-> +	cli
-> +
-> +	movl $TD_BOOT_PARAMETERS_GPA, %ebx
-> +
-> +	/*
-> +	 * Find the address of struct td_per_vcpu_parameters for this
-> +	 * vCPU based on esi (TDX spec: initialized with vCPU id). Put
-> +	 * struct address into register for indirect addressing.
-> +	 */
-> +	movl $SIZEOF_TD_PER_VCPU_PARAMETERS, %eax
-> +	mul %esi
-> +	leal TD_BOOT_PARAMETERS_PER_VCPU(%ebx), %edi
-> +	addl %edi, %eax
-> +
-> +	/* Setup stack. */
-> +	movl TD_PER_VCPU_PARAMETERS_ESP_GVA(%eax), %esp
-> +
-> +	/* Setup GDT. */
-> +	leal TD_BOOT_PARAMETERS_GDT(%ebx), %edi
-> +	lgdt (%edi)
-> +
-> +	/* Setup IDT. */
-> +	leal TD_BOOT_PARAMETERS_IDT(%ebx), %edi
-> +	lidt (%edi)
-> +
-> +	/*
-> +	 * Set up control registers (There are no instructions to mov from
-> +	 * memory to control registers, hence use edi as a scratch register).
-> +	 */
-> +	movl TD_BOOT_PARAMETERS_CR4(%ebx), %edi
-> +	movl %edi, %cr4
-> +	movl TD_BOOT_PARAMETERS_CR3(%ebx), %edi
-> +	movl %edi, %cr3
-> +	movl TD_BOOT_PARAMETERS_CR0(%ebx), %edi
-> +	movl %edi, %cr0
-> +
-> +	/* Switching to 64bit mode after ljmp and then jump to guest code */
-> +	ljmp $(KERNEL_CS),$1f
-> +1:
-> +	jmp *TD_PER_VCPU_PARAMETERS_GUEST_CODE(%eax)
-> +
-> +/* Leave marker so size of td_boot code can be computed. */
-> +.globl td_boot_code_end
-> +td_boot_code_end:
-> +
-> +/* Disable executable stack. */
-> +.section .note.GNU-stack,"",%progbits
-> 
+-- 
+Thanks,
+Usama
 
