@@ -1,190 +1,338 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77248470E99;
-	Thu, 23 Jul 2026 02:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB7935C1B7;
+	Thu, 23 Jul 2026 02:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784774225; cv=none; b=m/1BBOBiLFeStbfnWGjtk7J7HCeq0PaRJ6ID5/LB/iVqVXmealeDhlTbpfpXtYjoxfvyBlYdTgLtUY/+vshHhQuRydii4vflz/V/NWuEIF6oSMyoxRfu0/sKTk8yhfmqcuBuHmBurahck+tBzGf84y41sqTZTZPBqPck0UR/NCs=
+	t=1784774918; cv=none; b=n6y210EdVXvcjNF1C538+44w+rw4lzpk9W7+8FIQchCGB+2iSWhOTrsgbzVw5A3E3LFnVf/FZpuYIXkoufdtLLr5j8Xa1kVaejefxLHByEJCpgQsSt3kv///AyG3Ubl2dORrstQLBz+Jvzdvs0y/3FuyOaOdCwNXhTSA/7I+t/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784774225; c=relaxed/simple;
-	bh=8wk/bP64hP2KTssLfv6UY/2vePcRTwVYSH6ldbyD1uo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=esia1IULVg1oycB+/8g9RwARZ6Ospw9bMQur7TEJreVzDUeahyBqQ+1UIGx4tmVyeSzfpj5cpaXTwTGmp6Pc4wFKFPWtTHFRURWbyay8KonQ+yX1CyJKVX/P7Flnd1mVkB0u+8YPsoE7COKAUdNkyyfA+I7vONgg8ur9CMffdMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:e839a83c-428e-4535-b3d4-f85157ba64fe,IP:0,U
-	RL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:2
-X-CID-META: VersionHash:e7bac3a,CLOUDID:d2742e206fa6391dd61c9f0c70fa0008,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:4
-	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
-	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 200611879; Thu, 23 Jul 2026 10:36:51 +0800
-Message-ID: <de2da58a-ae94-4e38-b9cc-517e48d894c3@kylinos.cn>
-Date: Thu, 23 Jul 2026 10:36:48 +0800
+	s=arc-20240116; t=1784774918; c=relaxed/simple;
+	bh=xO4Xsg6WMoznKKLCX2VF4Rxpd9VvTwSKgFTxYveIfGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBczSLYPzbDbk5qnSkOds3XkOYlYCa6E/9B/6jyMvnBvETpZLXwCfV73SXskzjwbXhpprj6VWGxSI7emDZUcZOyGvxygM2tJvGrkiXqR2Lzp/zPv0A1BJFMtOx+YPLfOILNT4yqiI2XqOG0HB5bzoemqM/d5p4196FURqSKsH5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=neDX52RF; arc=none smtp.client-ip=139.138.61.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="neDX52RF"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1784774916; x=1816310916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xO4Xsg6WMoznKKLCX2VF4Rxpd9VvTwSKgFTxYveIfGI=;
+  b=neDX52RFF9nhLLcjcGpGCQmv8NfaZkEIaIo8vOfLiH187FdbflX3bt2L
+   /F7MBgMQwIEq4zHRzvQ3PGF38Z4s6NH3NghwOgXkNp8ldcI893yMS9e1Q
+   jZuSKPsL/bGVZ9uRVums7t1ZjKFKFPoXB3onB+HW7Cu+wXOZ1q3LibIMK
+   bAnPHyA8qoWE5JWihz/zkuNXzxJSGNY43gnmLDOjJjMN4xGdUbTf9IWQV
+   GJY2Uoi7qycgC3eVv9o+3J0ZYbkXVRGsTRK10hopetM/5TeSsc0HzP6ej
+   mDqk4Cz0KhWTGn+BFCuaLA1EUdGo96he77chLt1cRx0t2AfJ3P6rPGVO/
+   w==;
+X-CSE-ConnectionGUID: DpLDW5xeT6Km+opSv0AMNw==
+X-CSE-MsgGUID: WEA4ANOiTUOF9EM2LHGFkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11854"; a="227181184"
+X-IronPort-AV: E=Sophos;i="6.25,179,1779116400"; 
+   d="scan'208";a="227181184"
+Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2026 11:47:25 +0900
+Received: from az2nlsmgm1.o.css.fujitsu.com (unknown [10.150.26.203])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id ADAB31000342;
+	Thu, 23 Jul 2026 02:47:25 +0000 (UTC)
+Received: from az2nlsmom3.fujitsu.com (unknown [10.150.26.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 583C2C03F7A;
+	Thu, 23 Jul 2026 02:47:25 +0000 (UTC)
+Received: from sm-arm-grace07 (unknown [10.124.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmom3.fujitsu.com (Postfix) with ESMTPS id CECEC10001D0;
+	Thu, 23 Jul 2026 02:47:19 +0000 (UTC)
+Date: Thu, 23 Jul 2026 11:47:16 +0900
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 8/9] KVM: arm64: selftests: Add infrastructure for
+ using stage-2 in guest
+Message-ID: <amGAtKiTirVSHUky@sm-arm-grace07>
+References: <20260516183003.799058-1-weilin.chang@arm.com>
+ <20260516183003.799058-9-weilin.chang@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: test timed may_goto
- preserves R0-R5
-To: Pu Lehui <pulehui@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>,
- Xi Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
- <20260722-riscv-bpf-timed-may-goto-v4-2-e117e6337bc7@kylinos.cn>
- <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260516183003.799058-9-weilin.chang@arm.com>
 
-On 2026/7/22 19:10, Pu Lehui wrote:
+On Sat, May 16, 2026 at 07:30:02PM +0100, Wei-Lin Chang wrote:
+> Add a stage-2 page table generator, the s2_mmu structure, and vEL2
+> stage-2 preparation code for a guest hypervisor to turn on stage-2
+> translation for its nested guest.
 > 
+> Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> ---
+>  .../selftests/kvm/arm64/hello_nested.c        |   2 +-
+>  .../selftests/kvm/arm64/shadow_stage2.c       |   2 +-
+>  .../selftests/kvm/include/arm64/nested.h      |  15 +-
+>  .../testing/selftests/kvm/lib/arm64/nested.c  | 145 +++++++++++++++++-
+>  4 files changed, 160 insertions(+), 4 deletions(-)
 > 
-> On 2026/7/22 12:21, Feng Jiang wrote:
->> Add a test that checks R0-R5 are preserved across
->> arch_bpf_timed_may_goto() calls.
->>
->> Use bpf_get_prandom_u32() to avoid the verifier removing the checks
->> via DCE.
->>
->> Suggested-by: Björn Töpel <bjorn@kernel.org>
->> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
->> ---
->>   .../selftests/bpf/progs/verifier_may_goto_1.c      | 57 ++++++++++++++++++++++
->>   1 file changed, 57 insertions(+)
->>
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> index 4bdf4256a41e..98d59108d097 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
->> @@ -106,4 +106,61 @@ __naked void may_goto_batch_2(void)
->>       : __clobber_all);
->>   }
->>   +/*
->> + * Use bpf_get_prandom_u32() to prevent DCE from removing the checks.
->> + * retval: 0=all ok, 1-6=R0-R5 clobbered.
->> + */
->> +SEC("raw_tp")
->> +__description("timed may_goto preserves R0-R5")
->> +__arch_x86_64
->> +__arch_arm64
->> +__arch_riscv64
->> +__success
->> +__retval(0)
+> diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> index 9ed5285f5f2d..b57e41c73214 100644
+> --- a/tools/testing/selftests/kvm/arm64/hello_nested.c
+> +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> @@ -62,7 +62,7 @@ static void guest_code(void)
+>  	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
+>  
+>  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> -	prepare_hyp();
+> +	prepare_hyp_no_s2();
+>  
+>  	ret = run_l2(&vcpu, &hyp_data);
+>  	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
+> diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> index c5332b8b5683..2b274b810dcf 100644
+> --- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> +++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> @@ -72,7 +72,7 @@ static void guest_code(void)
+>  	l2_pc = ucall_translate_to_gpa(l2_guest_code);
+>  
+>  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> -	prepare_hyp();
+> +	prepare_hyp_no_s2();
+>  
+>  	while (true) {
+>  		GUEST_PRINTF("L2 enter\n");
+> diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
+> index fc59fabff12d..1bcbb31b8d67 100644
+> --- a/tools/testing/selftests/kvm/include/arm64/nested.h
+> +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
+> @@ -38,6 +38,14 @@ struct vcpu {
+>  	struct cpu_context context;
+>  };
+>  
+> +struct s2_mmu {
+> +	gpa_t pgd;
+> +	unsigned int vmid;
+> +	unsigned int page_size_shift;
+> +	u64 vtcr;
+> +	u64 ipa_bits;
+> +};
+> +
+>  /*
+>   * KVM has host_data and hyp_context, combine them because we're only doing
+>   * hyp context.
+> @@ -56,8 +64,13 @@ struct page_pool {
+>  size_t get_page_size(void);
+>  gpa_t alloc_page(struct page_pool *pp);
+>  bool has_tgran_2(u64 mmfr0, size_t size);
+> -void prepare_hyp(void);
+> +void prepare_hyp_no_s2(void);
+> +void prepare_hyp(struct s2_mmu *mmu);
+>  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top);
+> +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
+> +		       struct page_pool *pp);
+> +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
+> +		 size_t page_size, u64 ipa_bits);
+>  int run_l2(struct vcpu *vcpu, struct hyp_data *hyp_data);
+>  
+>  u64 do_hvc(u64 action, u64 arg1, u64 arg2);
+> diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> index cda41f355263..9848d607ef64 100644
+> --- a/tools/testing/selftests/kvm/lib/arm64/nested.c
+> +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> @@ -71,13 +71,22 @@ gpa_t alloc_page(struct page_pool *pp)
+>  	}
+>  }
+>  
+> -void prepare_hyp(void)
+> +void prepare_hyp_no_s2(void)
+>  {
+>  	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW, hcr_el2);
+>  	write_sysreg(hyp_vectors, vbar_el2);
+>  	isb();
+>  }
+>  
+> +void prepare_hyp(struct s2_mmu *mmu)
+> +{
+> +	write_sysreg(mmu->vtcr, vtcr_el2);
+> +	write_sysreg(mmu->pgd | ((u64)mmu->vmid << 48), vttbr_el2);
+> +	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW | HCR_EL2_VM, hcr_el2);
+> +	write_sysreg(hyp_vectors, vbar_el2);
+> +	isb();
+> +}
+> +
+>  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
+>  {
+>  	memset(vcpu, 0, sizeof(*vcpu));
+> @@ -86,6 +95,140 @@ void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
+>  	vcpu->context.sys_regs[SP_EL1] = l2_stack_top;
+>  }
+>  
+> +static int stage2_levels(unsigned int page_size_shift, u64 ipa_bits)
+> +{
+> +	/* taken from ARM64_HW_PGTABLE_LEVELS(ipa) in KVM */
+> +	return (ipa_bits - 4) / (page_size_shift - 3);
+> +}
+> +
+> +static u64 get_index(struct s2_mmu *mmu, u64 ipa, int level)
+> +{
+> +	int width = mmu->page_size_shift - 3;
+> +	int shift_amount = mmu->page_size_shift + (3 - level) * width;
+> +
+> +	return (ipa >> shift_amount) & GENMASK_ULL(width - 1, 0);
+> +}
+> +
+> +static u64 pte_gpa_to_gva(u64 gpa)
+> +{
+> +	/*
+> +	 * This depends on how the memory used for s2pt is mapped in GVA,
+> +	 * currently it is assumed they are idmapped.
+> +	 */
+> +	return gpa;
+> +}
+> +
+> +static u64 pte_to_pt_base(u64 pte)
+> +{
+> +	return pte & GENMASK_ULL(47, 12);
+> +}
+> +
+> +#define S2_PTE_AF		(1ULL << 10)
+> +#define S2_PTE_SH_INNER		(3ULL << 8)
+> +#define S2_PTE_S2AP_RW		(3ULL << 6)
+> +#define S2_PTE_ATTR_NORMAL_WB	(0xfULL << 2)
+> +#define S2_PTE_TYPE_TABLE	(1ULL << 1)
+> +#define S2_PTE_TYPE_PAGE	(1ULL << 1)
+> +#define S2_PTE_VALID		1ULL
+> +
+> +/* No block mappings for now. */
+> +static void create_one_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa,
+> +				  struct page_pool *pp)
+> +{
+> +	int levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
+> +	u64 index, pte, pte_new, table_attr, page_attr;
+> +	gpa_t pte_addr, pt_base = mmu->pgd;
+> +
+> +	table_attr = S2_PTE_TYPE_TABLE | S2_PTE_VALID;
+> +	page_attr = S2_PTE_AF | S2_PTE_SH_INNER | S2_PTE_S2AP_RW |
+> +		    S2_PTE_ATTR_NORMAL_WB | S2_PTE_TYPE_PAGE | S2_PTE_VALID;
+> +
+> +	for (int level = 4 - levels; level <= 3; level++) {
+> +		index = get_index(mmu, ipa, level);
+> +		pte_addr = pt_base + index * 8;
+> +		pte = *((u64 *)pte_gpa_to_gva(pte_addr));
+> +
+> +		if (level == 3) {
+> +			/* Last level, install leaf entry. */
+> +			pte_new = pa & ~GENMASK_ULL(mmu->page_size_shift - 1, 0);
+> +			pte_new |= page_attr;
+> +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
+> +		} else if (!(pte & S2_PTE_VALID)) {
+> +			/* Empty next level table, allocate and install. */
+> +			pte_new = alloc_page(pp);
+> +			pte_new |= table_attr;
+> +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
+> +			pt_base = pte_to_pt_base(pte_new);
+> +		} else {
+> +			/* Next level table found, descend into it. */
+> +			pt_base = pte_to_pt_base(pte);
+> +		}
+> +	}
+> +}
+> +
+> +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
+> +		       struct page_pool *pp)
+> +{
+> +	u64 ipa_end;
+> +	u64 mask = pp->page_size - 1;
+> +
+> +	ipa_end = (ipa + size + mask) & ~mask;
+> +	ipa &= ~mask;
+> +	pa &= ~mask;
+> +
+> +	while (ipa < ipa_end) {
+> +		create_one_s2_mapping(mmu, ipa, pa, pp);
+> +		pa += pp->page_size;
+> +		ipa += pp->page_size;
+> +	}
+> +	dsb(ishst);
+> +}
+> +
+> +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
+> +		 size_t page_size, u64 ipa_bits)
+> +{
+> +	u64 ps, tg0, sl0_base, mmfr0 = read_sysreg(id_aa64mmfr0_el1);
+> +	int levels;
+> +
+> +	mmu->vmid = vmid;
+> +	mmu->pgd = pgd;
+> +	mmu->ipa_bits = ipa_bits;
+> +	mmu->vtcr = 0;
+> +
+> +	switch (page_size) {
+> +	case SZ_4K:
+> +		tg0 = VTCR_EL2_TG0_4K;
+> +		mmu->page_size_shift = 12;
+> +		sl0_base = 2;
+> +		break;
+> +	case SZ_16K:
+> +		tg0 = VTCR_EL2_TG0_16K;
+> +		mmu->page_size_shift = 14;
+> +		sl0_base = 3;
+> +		break;
+> +	case SZ_64K:
+> +	default:
+> +		tg0 = VTCR_EL2_TG0_64K;
+> +		mmu->page_size_shift = 16;
+> +		sl0_base = 3;
+> +		break;
+> +	}
+> +
+> +	levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
+> +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_SL0, (sl0_base - (4 - levels)));
+> +
+> +	ps = SYS_FIELD_GET(ID_AA64MMFR0_EL1, PARANGE, mmfr0);
+> +	/* cap ps to 48-bit */
+> +	ps = ps > 0b0101 ? 0b0101 : ps;
+> +	mmu->vtcr |= VTCR_EL2_RES1 | SYS_FIELD_PREP(VTCR_EL2, PS, ps)           |
+> +				    SYS_FIELD_PREP(VTCR_EL2, TG0, tg0)         |
+> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, SH0, INNER)  |
+> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, ORGN0, WBWA) |
+> +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, IRGN0, WBWA);
+> +
+> +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_T0SZ, 64 - ipa_bits);
+> +}
+
+I understand that the selftest intentionally passes 40 as ipa_bits to init_s2_mmu().
+However, with a 16KB granule and DS=0, a 48-bit IPA requires two
+concatenated level 1 root tables, which this implementation does not
+appear to support.
+
+Thanks,
+Itaru.
+
+> +
+>  void __sysreg_save_el1_state(struct cpu_context *ctxt)
+>  {
+>  	ctxt->sys_regs[SP_EL1] = read_sysreg(sp_el1);
+> -- 
+> 2.43.0
 > 
-> __arch_s390x is also supported timed_may_goto
-
-Will add it in v5.
-
-> 
->> +__naked void timed_may_goto_preserves_regs(void)
->> +{
->> +    asm volatile (
->> +    "call %[bpf_get_prandom_u32];"
->> +    "r6 = r0;"
->> +    "r0 = 0x1111;"
->> +    "r0 += r6;"
->> +    "r1 = 0x2222;"
->> +    "r1 += r6;"
->> +    "r2 = 0x3333;"
->> +    "r2 += r6;"
->> +    "r3 = 0x4444;"
->> +    "r3 += r6;"
->> +    "r4 = 0x5555;"
->> +    "r4 += r6;"
->> +    "r5 = 0x6666;"
->> +    "r5 += r6;"
->> +    ".8byte %[may_goto];"
->> +    ".8byte %[loop];"
->> +    "r0 -= r6;"
->> +    "r1 -= r6;"
->> +    "r2 -= r6;"
->> +    "r3 -= r6;"
->> +    "r4 -= r6;"
->> +    "r5 -= r6;"
->> +    "if r0 != 0x1111 goto 1f;"
->> +    "if r1 != 0x2222 goto 2f;"
->> +    "if r2 != 0x3333 goto 3f;"
->> +    "if r3 != 0x4444 goto 4f;"
->> +    "if r4 != 0x5555 goto 5f;"
->> +    "if r5 != 0x6666 goto 6f;"
->> +    "r0 = 0;"
->> +    "exit;"
->> +    "1: r0 = 1; exit;"
->> +    "2: r0 = 2; exit;"
->> +    "3: r0 = 3; exit;"
->> +    "4: r0 = 4; exit;"
->> +    "5: r0 = 5; exit;"
->> +    "6: r0 = 6; exit;"
->> +    :
->> +    : __imm(bpf_get_prandom_u32),
->> +      __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0)),
->> +      __imm_insn(loop, BPF_RAW_INSN(BPF_JMP | BPF_JA, 0, 0, -2, 0))
->> +    : __clobber_all);
->> +}
->> +
->>   char _license[] SEC("license") = "GPL";
->>
-> 
-> not work, pls take a look
-
-The __retval(0) annotation enables the test_run path in test_laoder.
-do_prog_test_run() sets data_in/data_out/repeat by default,
-which bpf_prog_test_run_raw_tp() rejects with EINVAL. Switching to
-SEC("syscall") makes test_loader use empty opts. Will fix it in v5.
-
-> 
-> root@(none):/mnt/bpf# ./test_progs -v -a verifier_may_goto_1
-> bpf_testmod.ko is already unloaded.
-> Loading bpf_testmod.ko...
-> [   26.123549] bpf_testmod: loading out-of-tree module taints kernel.
-> [   26.127885] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
-> Successfully loaded bpf_testmod.ko.
-> tester_init:PASS:tester_log_buf 0 nsec
-> process_subtest:PASS:obj_open_mem 0 nsec
-> process_subtest:PASS:specs_alloc 0 nsec
-> run_subtest:PASS:obj_open_mem 0 nsec
-> run_subtest:PASS:unexpected_load_failure 0 nsec
-> VERIFIER LOG:
-> =============
-> processed 43 insns (limit 1000000) max_states_per_insn 0 total_states 4 peak_states 5 mark_read 0
-> =============
-> do_prog_test_run:FAIL:1114 FAIL: Unexpected bpf_prog_test_run error: 22 (Invalid argument) #660/1   verifier_may_goto_1/timed may_goto preserves R0-R5:FAIL
-> #660     verifier_may_goto_1:FAIL
-> Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
-> Successfully unloaded bpf_testmod.ko.
-
--- 
-With Best Regards,
-Feng Jiang
-
