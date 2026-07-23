@@ -1,178 +1,320 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47CD3B71CC;
-	Thu, 23 Jul 2026 09:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4D47430CE3;
+	Thu, 23 Jul 2026 09:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784800312; cv=none; b=dh6ookw1yMEv1BKsgIdUQHw0gQFevAWxn/HgscJPdR+62oqF1j/is0gDWWnA2ccUd3c8vnlo3MWaBSTXfWKBYEYGzGZjYPzTtr56XMlEurezWLKLdVTy7EuWYwOTYY5qTh0tH/QOn2Bsh1HOvlJ9d57Cv8bCD58AMXlA+6jtWnE=
+	t=1784800506; cv=none; b=AXjpVQO/UIo+neeFEev0kyX9S9SvwJJyHZc2nFtrMqaLU/zQjYui0sUjnMRrlLrk3861+1TeOc5zYoaGynMgvz7WPdleMAR8z2nXHFdQuRc0dHX92jfsxTCdgaOAIFbkiu7GClq2PIP95pdk+o+J4k2ntrOpopRDZGaiTfxVynI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784800312; c=relaxed/simple;
-	bh=P5Wh4TrkCW6ED8kocuAlEWyWAe4gq8kh82kYAh84Qiw=;
+	s=arc-20240116; t=1784800506; c=relaxed/simple;
+	bh=fVZHcOTmYqngH3XoSXQOih1g4hC2SK8fCcdp7eblMtg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gJla1IXsugVm54e9DKtytVQyZo5w6gRHzHnUGnPbjFognOzWfACQTwIVw+sc7fPjyMCDJxub9zkSS2QXj2PwOrGRUOOJ/xJgK/KTaWzEl27A5wbiazbLxY1BNeSqjTfshl+hYt7WlrDuTAIVxgkBvodwgMAkMrM6i+MKgzpVdas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dg7X4k8j; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JR73Cea4; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=hT1Dh0V7YanGLnBrZdzrhWK0ARpTMfAoNNxwfkQHgMpAh2Q9j19if8Mp36JjdHqfGbqbFQIXdqO+9O3yuf74WQWz17QuU6z2f/slffXGHrGZZSpOGpUcnxhpRNZyEyzG+7jkIwcI9zS8jNbNihLI9IY5NsxFnnVFPNgE/UdNtEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=IaqLJkEE; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dg7X4k8j";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JR73Cea4"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 8E14A14000E8;
-	Thu, 23 Jul 2026 05:51:47 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Thu, 23 Jul 2026 05:51:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1784800307; x=
-	1784886707; bh=cL0CCyc/zlAc782RIGVb7q+r3hdXioHxIggZto+D5VI=; b=d
-	g7X4k8j3QU2Zq3Bs8i3PVaZabDbX/6M1/B5oWaeXC3AP/4CGDC7ekeL1/AeZlGes
-	3BGpQLV+9zjZ7LZVSKawbRcrkSfbj48cgLVm7vTrvc4ZVfspt02EwBRUSiSIdaP3
-	Bz2vjAoIa1Vz6le2zjNunptya43bO0yjnAHiRRKgUXLfqroyO0LO90LE9jM/TI2p
-	Ifx9/39ZZ2IyYQYjJBhPGa1Ce3yCXud7o7ZHowbL62cpSa+Lmfy9se7M135jWuYL
-	A8h/i9uxRj+D+knpZ0d5jLdXHBSsQNuhmonEF80m7KFNc6bqbwiIlGSmo4QAEfvP
-	0ndD9Z9iH/gSHELVKG8Xw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1784800307; x=1784886707; bh=cL0CCyc/zlAc782RIGVb7q+r3hdXioHxIgg
-	Zto+D5VI=; b=JR73Cea4fEVVJevKKdCZ45PiHndpPMAYjoRgTOgEi+XGU7SN8ki
-	ws+IRmGMEMy63TXDsQGAkGyznBqJlIHdtejrZnz8msmZO95k9RfgE/Bm+zMuGcZN
-	IncL/YUfmWoMKcN/WTlCEOZam+CdEeuXahYsvAlxFUXGlrKBLdYBvzFGsjXrZdGy
-	SHJ0PhuLUNfEaWns/wGuRsFu5IJddZ+T0weqoWH47MfxaBQBD1AWxE/GzW0B9Q2u
-	fctfw+9gVAANsIDryN9IreUoPj2JhUwcKWBH8Nb3n68b8lDFrZwzvHGjdM6BsS+X
-	A3wHqqI2WJCVrmCL/SVMgHwHesfNaicP8Bg==
-X-ME-Sender: <xms:MuRhaoIiJHY0oLk08sc5qk997vdVcUBrqBlVukuDNpX3s48YNCBs5w>
-    <xme:MuRhavHaHmVmPEHviB-iE3rGLnCY8r3SGT2WUO0IhE0JMU6e_lqpYc20MD8UBSkfe
-    XBuGS7PIHwsG48BwMwHsvuq6O_2eFOWhkt3ahS2aYGqrqYCJEllzAA>
-X-ME-Received: <xmr:MuRhatwQ80zKpLHwPcXnHxGTlY62l0xhzFj8f3Nt43coMIS0V8Jf9cD7Ue8>
-X-ME-Proxy-Cause: dmFkZTFJy/Gm5y8scJPGCyO8SFCHrQCoW9oaAVAjG+x6/ktgCZg78o1KvxXp+KzmGOWmo+
-    eFlJnuALyWH3eJn2iK7RmWrd3yxs1/YXOCiG2LnUZnW2rATb1pi78l89nHehXzIL+wiqaR
-    ccIjdfWaUFcRaxwBPTiw+6dcFSIMmNbVOkCTOuttLY6a8gkXeWmD3Fo3rXTfx031A5LncR
-    uplBasemc4Ig2Ab4JLX1FQvUv0x9FGdLqEb8YgNJR7VCmyNHWsvUU1Zmox4JJYqRAlXycg
-    A1DwNGu7lg702cGxwtgQmxD75TeRVcFl8N7REOK0r+NbIkMh4gkUOPvhLo/eSyvZnnQji5
-    AgWiJ4BB0odhMhGT/B41ee+lHVY6gHoE1rY4smH3z7k/p61E30pBrIltsQf2y+io6ngIqq
-    7trJmM0ep+HcZ6GyeD29aKDiC4XwK3i0w3SHr57i/dYQ2zp7b7T2Ab9pafDcctm36lH0KI
-    RVBSMfkUoQiD/zo2Kv3ggwmXCuAcZPB/mYcqwFDynuuYW9qvFCjdyKJdynfsaoY5sZuPub
-    IFhMNaJbVC3Kg9yh2zU1zBXeGtZCwa7Mt0I/WklFZ8S8TQObXJ5Yb+btP1BkHFTx4/kFIK
-    4pL5eiqxnZMVnUJpGqc5ZPR4jnNDo13Jsp1jovqZyI589ox0tAWyhrA/XYFA
-X-ME-Proxy: <xmx:MuRhasgNKpwcCyYFI5ynHtz9P9uLZhoE5J5PEMBfrUzSJGdG8FQhOA>
-    <xmx:MuRhaqKCCIW9FpOe6kxUYCCQkVo8KldtIlskOK9sb4YTdRdqf2uDkw>
-    <xmx:MuRhanACJ7BuKwIc3Su74jp41_w4onYL3X5rOJNKBpSUMTD8ovhXfQ>
-    <xmx:MuRhajTyWJ9oCni52q6aXLuUHO1xZaZJLLSb7rzpj-BcGHWbcqcpeQ>
-    <xmx:M-RhamonwTVcE4_ZFN18rO2e5H-kSrlPsc6NsRvu8uvesW6Tf35-KEmO>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 23 Jul 2026 05:51:45 -0400 (EDT)
-Date: Thu, 23 Jul 2026 11:51:43 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Breno Leitao <leitao@debian.org>
-Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Stefan Schmidt <stefan@datenfreihafen.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Remi Denis-Courmont <courmisch@gmail.com>,
-	=?utf-8?B?UsOpbWk=?= Denis-Courmont <remi.denis-courmont@nokia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 6/7] tls: convert getsockopt to sockopt_t
-Message-ID: <amHkLwihrCUx-_pk@krikkit>
-References: <20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org>
- <20260720-getsockopt_phase4-v2-6-8a08fcfa0d72@debian.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="IaqLJkEE"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18281477;
+	Thu, 23 Jul 2026 02:54:57 -0700 (PDT)
+Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7A153F66F;
+	Thu, 23 Jul 2026 02:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1784800502; bh=fVZHcOTmYqngH3XoSXQOih1g4hC2SK8fCcdp7eblMtg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IaqLJkEEzFpBfaEN0Z9BmxetfJsyFnVSsMERMEhsSznrRh44w+ptMZ5lowtpExZ0k
+	 /MCkiQ9t11ID1Lpq+ro6hM60Sp/rG+FGHMFC/Z64NhSM3gYbQ5Uqs90ZTpcrfGrU0O
+	 piIXbjUuv+Pr3P1OVDle5yDOy8BDYAYp4WfcvrMg=
+Date: Thu, 23 Jul 2026 10:54:49 +0100
+From: Wei-Lin Chang <weilin.chang@arm.com>
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 8/9] KVM: arm64: selftests: Add infrastructure for
+ using stage-2 in guest
+Message-ID: <rdkli7g56fbejodxtwcj4slqa3xwy7w52ljhgzb4z7ghfocjcg@4gatvcpxav3e>
+References: <20260516183003.799058-1-weilin.chang@arm.com>
+ <20260516183003.799058-9-weilin.chang@arm.com>
+ <amGAtKiTirVSHUky@sm-arm-grace07>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260720-getsockopt_phase4-v2-6-8a08fcfa0d72@debian.org>
+In-Reply-To: <amGAtKiTirVSHUky@sm-arm-grace07>
 
-2026-07-20, 09:17:47 -0700, Breno Leitao wrote:
-> Continue converting the proto-layer getsockopt callbacks to the sockopt_t
-> interface, converting do_tls_getsockopt() and its per-option helpers to
-> take a sockopt_t.
+On Thu, Jul 23, 2026 at 11:47:16AM +0900, Itaru Kitayama wrote:
+> On Sat, May 16, 2026 at 07:30:02PM +0100, Wei-Lin Chang wrote:
+> > Add a stage-2 page table generator, the s2_mmu structure, and vEL2
+> > stage-2 preparation code for a guest hypervisor to turn on stage-2
+> > translation for its nested guest.
+> > 
+> > Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
+> > ---
+> >  .../selftests/kvm/arm64/hello_nested.c        |   2 +-
+> >  .../selftests/kvm/arm64/shadow_stage2.c       |   2 +-
+> >  .../selftests/kvm/include/arm64/nested.h      |  15 +-
+> >  .../testing/selftests/kvm/lib/arm64/nested.c  | 145 +++++++++++++++++-
+> >  4 files changed, 160 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/arm64/hello_nested.c b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > index 9ed5285f5f2d..b57e41c73214 100644
+> > --- a/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > +++ b/tools/testing/selftests/kvm/arm64/hello_nested.c
+> > @@ -62,7 +62,7 @@ static void guest_code(void)
+> >  	l2_stack_top = ucall_translate_to_gpa(&l2_stack[L2STACKSZ]);
+> >  
+> >  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> > -	prepare_hyp();
+> > +	prepare_hyp_no_s2();
+> >  
+> >  	ret = run_l2(&vcpu, &hyp_data);
+> >  	GUEST_ASSERT_EQ(ret, ARM_EXCEPTION_TRAP);
+> > diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > index c5332b8b5683..2b274b810dcf 100644
+> > --- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > +++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > @@ -72,7 +72,7 @@ static void guest_code(void)
+> >  	l2_pc = ucall_translate_to_gpa(l2_guest_code);
+> >  
+> >  	init_vcpu(&vcpu, l2_pc, l2_stack_top);
+> > -	prepare_hyp();
+> > +	prepare_hyp_no_s2();
+> >  
+> >  	while (true) {
+> >  		GUEST_PRINTF("L2 enter\n");
+> > diff --git a/tools/testing/selftests/kvm/include/arm64/nested.h b/tools/testing/selftests/kvm/include/arm64/nested.h
+> > index fc59fabff12d..1bcbb31b8d67 100644
+> > --- a/tools/testing/selftests/kvm/include/arm64/nested.h
+> > +++ b/tools/testing/selftests/kvm/include/arm64/nested.h
+> > @@ -38,6 +38,14 @@ struct vcpu {
+> >  	struct cpu_context context;
+> >  };
+> >  
+> > +struct s2_mmu {
+> > +	gpa_t pgd;
+> > +	unsigned int vmid;
+> > +	unsigned int page_size_shift;
+> > +	u64 vtcr;
+> > +	u64 ipa_bits;
+> > +};
+> > +
+> >  /*
+> >   * KVM has host_data and hyp_context, combine them because we're only doing
+> >   * hyp context.
+> > @@ -56,8 +64,13 @@ struct page_pool {
+> >  size_t get_page_size(void);
+> >  gpa_t alloc_page(struct page_pool *pp);
+> >  bool has_tgran_2(u64 mmfr0, size_t size);
+> > -void prepare_hyp(void);
+> > +void prepare_hyp_no_s2(void);
+> > +void prepare_hyp(struct s2_mmu *mmu);
+> >  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top);
+> > +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
+> > +		       struct page_pool *pp);
+> > +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
+> > +		 size_t page_size, u64 ipa_bits);
+> >  int run_l2(struct vcpu *vcpu, struct hyp_data *hyp_data);
+> >  
+> >  u64 do_hvc(u64 action, u64 arg1, u64 arg2);
+> > diff --git a/tools/testing/selftests/kvm/lib/arm64/nested.c b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> > index cda41f355263..9848d607ef64 100644
+> > --- a/tools/testing/selftests/kvm/lib/arm64/nested.c
+> > +++ b/tools/testing/selftests/kvm/lib/arm64/nested.c
+> > @@ -71,13 +71,22 @@ gpa_t alloc_page(struct page_pool *pp)
+> >  	}
+> >  }
+> >  
+> > -void prepare_hyp(void)
+> > +void prepare_hyp_no_s2(void)
+> >  {
+> >  	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW, hcr_el2);
+> >  	write_sysreg(hyp_vectors, vbar_el2);
+> >  	isb();
+> >  }
+> >  
+> > +void prepare_hyp(struct s2_mmu *mmu)
+> > +{
+> > +	write_sysreg(mmu->vtcr, vtcr_el2);
+> > +	write_sysreg(mmu->pgd | ((u64)mmu->vmid << 48), vttbr_el2);
+> > +	write_sysreg(HCR_EL2_E2H | HCR_EL2_RW | HCR_EL2_VM, hcr_el2);
+> > +	write_sysreg(hyp_vectors, vbar_el2);
+> > +	isb();
+> > +}
+> > +
+> >  void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
+> >  {
+> >  	memset(vcpu, 0, sizeof(*vcpu));
+> > @@ -86,6 +95,140 @@ void init_vcpu(struct vcpu *vcpu, gpa_t l2_pc, gpa_t l2_stack_top)
+> >  	vcpu->context.sys_regs[SP_EL1] = l2_stack_top;
+> >  }
+> >  
+> > +static int stage2_levels(unsigned int page_size_shift, u64 ipa_bits)
+> > +{
+> > +	/* taken from ARM64_HW_PGTABLE_LEVELS(ipa) in KVM */
+> > +	return (ipa_bits - 4) / (page_size_shift - 3);
+> > +}
+> > +
+> > +static u64 get_index(struct s2_mmu *mmu, u64 ipa, int level)
+> > +{
+> > +	int width = mmu->page_size_shift - 3;
+> > +	int shift_amount = mmu->page_size_shift + (3 - level) * width;
+> > +
+> > +	return (ipa >> shift_amount) & GENMASK_ULL(width - 1, 0);
+> > +}
+> > +
+> > +static u64 pte_gpa_to_gva(u64 gpa)
+> > +{
+> > +	/*
+> > +	 * This depends on how the memory used for s2pt is mapped in GVA,
+> > +	 * currently it is assumed they are idmapped.
+> > +	 */
+> > +	return gpa;
+> > +}
+> > +
+> > +static u64 pte_to_pt_base(u64 pte)
+> > +{
+> > +	return pte & GENMASK_ULL(47, 12);
+> > +}
+> > +
+> > +#define S2_PTE_AF		(1ULL << 10)
+> > +#define S2_PTE_SH_INNER		(3ULL << 8)
+> > +#define S2_PTE_S2AP_RW		(3ULL << 6)
+> > +#define S2_PTE_ATTR_NORMAL_WB	(0xfULL << 2)
+> > +#define S2_PTE_TYPE_TABLE	(1ULL << 1)
+> > +#define S2_PTE_TYPE_PAGE	(1ULL << 1)
+> > +#define S2_PTE_VALID		1ULL
+> > +
+> > +/* No block mappings for now. */
+> > +static void create_one_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa,
+> > +				  struct page_pool *pp)
+> > +{
+> > +	int levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
+> > +	u64 index, pte, pte_new, table_attr, page_attr;
+> > +	gpa_t pte_addr, pt_base = mmu->pgd;
+> > +
+> > +	table_attr = S2_PTE_TYPE_TABLE | S2_PTE_VALID;
+> > +	page_attr = S2_PTE_AF | S2_PTE_SH_INNER | S2_PTE_S2AP_RW |
+> > +		    S2_PTE_ATTR_NORMAL_WB | S2_PTE_TYPE_PAGE | S2_PTE_VALID;
+> > +
+> > +	for (int level = 4 - levels; level <= 3; level++) {
+> > +		index = get_index(mmu, ipa, level);
+> > +		pte_addr = pt_base + index * 8;
+> > +		pte = *((u64 *)pte_gpa_to_gva(pte_addr));
+> > +
+> > +		if (level == 3) {
+> > +			/* Last level, install leaf entry. */
+> > +			pte_new = pa & ~GENMASK_ULL(mmu->page_size_shift - 1, 0);
+> > +			pte_new |= page_attr;
+> > +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
+> > +		} else if (!(pte & S2_PTE_VALID)) {
+> > +			/* Empty next level table, allocate and install. */
+> > +			pte_new = alloc_page(pp);
+> > +			pte_new |= table_attr;
+> > +			*((u64 *)pte_gpa_to_gva(pte_addr)) = pte_new;
+> > +			pt_base = pte_to_pt_base(pte_new);
+> > +		} else {
+> > +			/* Next level table found, descend into it. */
+> > +			pt_base = pte_to_pt_base(pte);
+> > +		}
+> > +	}
+> > +}
+> > +
+> > +void create_s2_mapping(struct s2_mmu *mmu, u64 ipa, u64 pa, size_t size,
+> > +		       struct page_pool *pp)
+> > +{
+> > +	u64 ipa_end;
+> > +	u64 mask = pp->page_size - 1;
+> > +
+> > +	ipa_end = (ipa + size + mask) & ~mask;
+> > +	ipa &= ~mask;
+> > +	pa &= ~mask;
+> > +
+> > +	while (ipa < ipa_end) {
+> > +		create_one_s2_mapping(mmu, ipa, pa, pp);
+> > +		pa += pp->page_size;
+> > +		ipa += pp->page_size;
+> > +	}
+> > +	dsb(ishst);
+> > +}
+> > +
+> > +void init_s2_mmu(struct s2_mmu *mmu, unsigned int vmid, gpa_t pgd,
+> > +		 size_t page_size, u64 ipa_bits)
+> > +{
+> > +	u64 ps, tg0, sl0_base, mmfr0 = read_sysreg(id_aa64mmfr0_el1);
+> > +	int levels;
+> > +
+> > +	mmu->vmid = vmid;
+> > +	mmu->pgd = pgd;
+> > +	mmu->ipa_bits = ipa_bits;
+> > +	mmu->vtcr = 0;
+> > +
+> > +	switch (page_size) {
+> > +	case SZ_4K:
+> > +		tg0 = VTCR_EL2_TG0_4K;
+> > +		mmu->page_size_shift = 12;
+> > +		sl0_base = 2;
+> > +		break;
+> > +	case SZ_16K:
+> > +		tg0 = VTCR_EL2_TG0_16K;
+> > +		mmu->page_size_shift = 14;
+> > +		sl0_base = 3;
+> > +		break;
+> > +	case SZ_64K:
+> > +	default:
+> > +		tg0 = VTCR_EL2_TG0_64K;
+> > +		mmu->page_size_shift = 16;
+> > +		sl0_base = 3;
+> > +		break;
+> > +	}
+> > +
+> > +	levels = stage2_levels(mmu->page_size_shift, mmu->ipa_bits);
+> > +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_SL0, (sl0_base - (4 - levels)));
+> > +
+> > +	ps = SYS_FIELD_GET(ID_AA64MMFR0_EL1, PARANGE, mmfr0);
+> > +	/* cap ps to 48-bit */
+> > +	ps = ps > 0b0101 ? 0b0101 : ps;
+> > +	mmu->vtcr |= VTCR_EL2_RES1 | SYS_FIELD_PREP(VTCR_EL2, PS, ps)           |
+> > +				    SYS_FIELD_PREP(VTCR_EL2, TG0, tg0)         |
+> > +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, SH0, INNER)  |
+> > +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, ORGN0, WBWA) |
+> > +				    SYS_FIELD_PREP_ENUM(VTCR_EL2, IRGN0, WBWA);
+> > +
+> > +	mmu->vtcr |= FIELD_PREP(VTCR_EL2_T0SZ, 64 - ipa_bits);
+> > +}
 > 
-> The thin tls_getsockopt() wrapper keeps its __user signature for now: it
-> builds a user-backed sockopt_t with sockopt_init_user(), calls the helper,
-> and writes the returned length back to optlen. The helpers use
-> copy_to_iter() instead of copy_to_user(); the NULL optval check in the
-> TLS_TX/TLS_RX path is preserved by testing the iterator user buffer.
+> I understand that the selftest intentionally passes 40 as ipa_bits to init_s2_mmu().
+> However, with a 16KB granule and DS=0, a 48-bit IPA requires two
+> concatenated level 1 root tables, which this implementation does not
+> appear to support.
+
+Woah, I wasn't aware of R_DXBSH.. So this exact configuration is forced
+to use concatenated translation tables :/
+
+Yeah I set this up so that we don't use concatenated translation tables,
+to simplify things a bit. But R_DXBSH makes this problematic. I think we
+can either special case this (which I am leaning towards), or just always
+use concatenated translation tables like KVM.
+
+Thanks,
+Wei-Lin Chang
+
 > 
-> No functional change.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
-
-Looks ok, just a few small comments:
-
-> -static int do_tls_getsockopt_conf(struct sock *sk, char __user *optval,
-> -				  int __user *optlen, int tx)
-> +static int do_tls_getsockopt_conf(struct sock *sk, sockopt_t *opt, int tx)
->  {
->  	int rc = 0;
->  	const struct tls_cipher_desc *cipher_desc;
->  	struct tls_context *ctx = tls_get_ctx(sk);
->  	struct tls_crypto_info *crypto_info;
->  	struct cipher_context *cctx;
-> -	int len;
-> +	int len = opt->optlen;
->  
-> -	if (get_user(len, optlen))
-> -		return -EFAULT;
-> -
-> -	if (!optval || (len < sizeof(*crypto_info))) {
-> +	if (!opt->iter_out.ubuf || len < sizeof(*crypto_info)) {
-
-Not something about your patch but... I really wonder what this NULL
-check was trying to accomplish. The other getsockopts in tls don't
-have one, I don't think the rest of networkng does that either.
-
-
-> @@ -591,12 +574,25 @@ static int tls_getsockopt(struct sock *sk, int level, int optname,
->  			  char __user *optval, int __user *optlen)
->  {
->  	struct tls_context *ctx = tls_get_ctx(sk);
-> +	sockopt_t opt;
-> +	int err;
->  
->  	if (level != SOL_TLS)
->  		return ctx->sk_proto->getsockopt(sk, level,
->  						 optname, optval, optlen);
->  
-> -	return do_tls_getsockopt(sk, optname, optval, optlen);
-> +	err = sockopt_init_user(&opt, optval, optlen);
-> +	if (err)
-> +		return err;
-> +
-> +	err = do_tls_getsockopt(sk, optname, &opt);
-> +	if (err)
-> +		return err;
-> +
-> +	if (put_user(opt.optlen, optlen))
-> +		return -EFAULT;
-
-One of the sashikos complains that we're now writing the length with
-put_user in cases where we didn't before. I don't think we need to
-care, but if someone complains, we could make this conditional on
-optlen having been changed by the handler.
-
-It also complains that optlen was getting updated on EFAULT and now
-it's not. There's possibly some code out there that's crazy enough to
-pass a bogus buffer to get the size it should have provided?
-
-Also some complaints about "what if optlen is negative". I think we
-can ignore all of that.
-
--- 
-Sabrina
+> Thanks,
+> Itaru.
+> 
+> > +
+> >  void __sysreg_save_el1_state(struct cpu_context *ctxt)
+> >  {
+> >  	ctxt->sys_regs[SP_EL1] = read_sysreg(sp_el1);
+> > -- 
+> > 2.43.0
+> > 
