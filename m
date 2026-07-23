@@ -1,597 +1,176 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A73637F001
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 21:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E0B38CFFE;
+	Thu, 23 Jul 2026 22:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784843723; cv=none; b=pPYJaZt4gmgK9y6K8JAjJwKbRfOcs3+DHcpjQgYLgDenQTUzYR54r/dUJsgy2dRNeeCQHzGcOlcF9rCPqIkBGLUmiJi2OUgATfEmq4JUyjzB8jmDIPIjAhZGlVx1nsrduOZERrMZYO/2qE2CWIvNCs+Bnt0uUqVRPXIiaj6cB6s=
+	t=1784844325; cv=none; b=rSAAfHU72NbWuUbMjOj+6cAD1iyVVz4YAu5C6FT4f4hBsLJVGXZDlXNg6z35ajiVrIlmXNuNnKEqNcw+0ckqRmOV1P8GBirl8Vf9qjAksm3bM2eMJQE9k/KPZRbrDdM9Uu9FYWEfbqEH+/cik1Lfk7/6VO6n4V+CAl9RGWEbbCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784843723; c=relaxed/simple;
-	bh=UPsACBuicuIQN57BKuzBLP8PI347otHv77xeSIzfaR4=;
+	s=arc-20240116; t=1784844325; c=relaxed/simple;
+	bh=KMSi59vXSlbpEDk7Z4Wo2L6x6XXJwMmnEmjaGikfZQY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XuD1V0Ne+tNcjEZg9jkFomgRlqn+uTjiIwI60ezI5ldw8QwbafTqMICf6J9Qmfqyt0I5qHDEYoalWmtMC4+Go6yOxo7OFjZPL6Z4OhlYjFMkxM0GbvUKXSvwkDiOEVLMythTQYqqJGcICdujMD7diy0aFpropQQx6jqjageiK14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yv2FEkYv; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1fhiw0HCIgeS2CKBsMZZtMrUlXA8NO/BkZ4GpJaVVkqgnWMIQtW8eeURtRoh+qZuRsiakmSpucRjUKgK8oZmQhhGB1tyss1CLgR0oTkksZltpTaZRiiDFX7+sUP0lf5j4wQnXUlLTxEgJb6ojnbJJHeB/E+bavzr06CWlkA4go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Ou97u7w/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rFgsJsHY; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yv2FEkYv"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ccdf36f63dso50045ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 14:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784843721; x=1785448521; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=WIzr+JgqewNTQ/0gbtkS7twloS48+dLUG20Ii2mnmEA=;
-        b=Yv2FEkYvU+FXbN1Da7eAFU3anBKQGmfZys+4biXwavl94PGUfNUpwoM5bU3A/uRLxJ
-         Qc5ktglp/jvuBpuWWTxOxRGcZh4+Mzfv6OvoBw15cIyFoVzFhTBYa2e0o+LlaBXia331
-         WRP9JJiV9KzL/p5f9lrKsXzUcsLVXfF1WyKNxI/U1TPLTnQ4aCW798tXnWwIyvFHChw8
-         l/cYoO75kRMR5jL9WYvZ47FJVzYzTmZ6K32jn57qK9+WwuNbn4HXRCVSYNDwNCT1rYjU
-         tMSqbDydSntHbbApp1MMgWpmibsZN1SAgFgagpTpzwvX57q335t890QuIMN87uDkCp2k
-         D5DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784843721; x=1785448521;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WIzr+JgqewNTQ/0gbtkS7twloS48+dLUG20Ii2mnmEA=;
-        b=Jb5xR5It0JBb/XcPwnwb7t0mvwfLJzFjnWdU194Tg5/k+taGA4P1vXKUQKb33eH3xb
-         7aQSYD3+OpQ7+2F1v/YtWjTJf0qrZwPTRHlblMAhF/1LewHA0bIndEtficjT5S0qh0F6
-         5ZgREAS41Vt/2uEd6xWq3p5fyvvDhuwv1pc+q8x8kazMWoP+e61KjciUjey4s7EI7AB5
-         uy1KTGdLrtmFIoVvbtynSoMF+F+VWyJwkqM0DyPqFCaGYnIxUYKFAJqzwk+oDt+LCpAT
-         FjoFZUyXsEiEeFrKY6mi/L5BqhpaQda6xSJc/r4NSTVUol6eqX3kXcV1CpjVPWNBOE7+
-         2hlw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp4aqW+FT+cB6X5Ky2sg4H1nNyg+0IX1U1DWWTgMBtoSBCLmJGPjxU1XM86dYfmuJW+YVls1DL1G+YmWvHmUU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4qt9Nfn4gpyHRXgj4o2cvnIf0bKRO5c1WhuFO4qTwmr0W/tSJ
-	nwhjiI20Zr1LUgfL3YbAjuy/Bcmdyd86SyYVAYA2tvqABBvYW2Yob9Peys57NicWVQ==
-X-Gm-Gg: AR+sD13+IYZbcZ1xbA4DJELsVC5INiUzBhUS5SX+vMhSX43TmXAbRBsXb5BIArq4ZLy
-	7JQdSltlWRMq0Nr5iFsr8T0Nte4b1STLsUdwR9gFeUQjO2qtn1vleCbRAr/wYCSR+rtmBnUOX7l
-	U+fuRPuNfbrdSKt2BrxbnlPvnrMewZl7Hz8rrkYaFOCEJWPlVOMi6DgDE8HvCHa8lhAH8odEmyU
-	pRPpTbcZtm8FJG3tLsHBBCgfhfPFJz+BLW4qBwz61s0EC1vrwLX8C+nwEnvG0NJkxWZxlxXfyES
-	i2buemYE7T/JJuOyK+s2AMdyYEWXBg7aXFaFAk/5mpX9FyRpjRLqAXduZwyPHfDjdorsUovI83s
-	FUNiphdN9o4wA3dZJfc8TUJJDq01MFjp8AZYRM5rB3k4IK0CJiIDLphfnhi8OtSJowO473An9GL
-	WwzgjbVFKJbVtjFbkIGmCPh9Ilqtv5/jkaMcIb
-X-Received: by 2002:a17:902:f687:b0:2b9:e831:5e5c with SMTP id d9443c01a7336-2cfc01915f2mr1526335ad.4.1784843719386;
-        Thu, 23 Jul 2026 14:55:19 -0700 (PDT)
-Received: from google.com (60.89.247.35.bc.googleusercontent.com. [35.247.89.60])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f2e6252sm40455355ad.52.2026.07.23.14.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 14:55:18 -0700 (PDT)
-Date: Thu, 23 Jul 2026 14:55:14 -0700
-From: Vipin Sharma <vipinsh@google.com>
-To: Josh Hilke <jrhilke@google.com>, alex@shazbot.org, dmatlack@google.com
-Cc: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com, 
-	ankita@nvidia.com, apopple@nvidia.com, bhelgaas@google.com, chrisl@kernel.org, 
-	christian.koenig@amd.com, corbet@lwn.net, dmatlack@google.com, graf@amazon.com, 
-	jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, julianr@linux.ibm.com, 
-	kees@kernel.org, kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, 
-	lukas@wunner.de, mattev@meta.com, michal.winiarski@intel.com, parav@nvidia.com, 
-	pasha.tatashin@soleen.com, praan@google.com, pratyush@kernel.org, rananta@google.com, 
-	rientjes@google.com, rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, 
-	schnelle@linux.ibm.com, skhan@linuxfoundation.org, skhawaja@google.com, 
-	vivek.kasireddy@intel.com, witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Subject: Re: [PATCH v5 06/20] vfio/pci: Preserve vfio-pci device files across
- Live Update
-Message-ID: <20260723181436.GB260824.vipinsh@google.com>
-References: <20260714151505.3466855-1-vipinsh@google.com>
- <20260714151505.3466855-7-vipinsh@google.com>
- <al_8v_I9Z2Dc_qjc@google.com>
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Ou97u7w/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rFgsJsHY"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id BB5C31D00275;
+	Thu, 23 Jul 2026 18:05:19 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Thu, 23 Jul 2026 18:05:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1784844319; x=
+	1784930719; bh=IgxnXdgI6dZEbDB2iGOyGA56ThzoX6AIFR2BrSSKah8=; b=O
+	u97u7w/K+gTx8I5BXzY+hAeuZh/zTC5N3QzqVS7UHvSb1B6lEnzHJRnYqIdW8v4L
+	/vsJ1+F8GXNvtRwvnMuE+czgIWJI2g5LZ0knhsCzaOTRfIn5IjvPicb4iYaCPpSf
+	h7FitCL2o/LLg0PfZqQs0hKaN8Qxn9sd9ObeKbs3TpLkzpeLnKBitZH3Ti54fDlM
+	DwIQVZijF0jwBI/pCFjNC3otsvU3XoZNGOFPGOAIqBdRY5VQ1XllXDSQIyReb2uq
+	XkPBJ80aEX/4HH/kvmZhBIY8RQQAY67mMxHGpLxUC10s857yQY/2mKuB9WfOMps/
+	0MB1XsE5eRYQghuPp9/Kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1784844319; x=1784930719; bh=IgxnXdgI6dZEbDB2iGOyGA56ThzoX6AIFR2
+	BrSSKah8=; b=rFgsJsHYKkMEvDt03q12OstgPl1t73jA/HNG0m1C8YkUvl++zjj
+	sYkt5M1e1fq2rE1bu7oS7MHjyYmBashIebz4JfDyaGjpv6wOMTP4ZyHQjk+he27O
+	14cMpXh33p1oH+rjZz93OYrEvlxIvCAoMJQTj+EaCItTo608lac854u4A+9CnsoD
+	f2+QtQHTf0BmE+4OsHlGVpNxXf3FfG+enGRY0HXgd5vyAZntigx05aN/hQZlep6z
+	XtMT1kEH/W/F+DZCED+LjqagnG9eV/2OEvmrfHgBGrXbZV7XGoyBlGNSa63aRlP3
+	WFX3rjlz9YflVHkX06h2eGz0bQhLxC7D/Rw==
+X-ME-Sender: <xms:HpBian6W0sUs-f53JnMn0UoOMz2aR_dHAD-GAb9r9WCo_9zr3uimSA>
+    <xme:HpBiaraFjU1HIqqkPa8J4NuySWDzgRcTCW8AfmA0isdx1VQ4isVgpHMkF-yiNLz5Y
+    xvQZnGZ6BktwzU7eGYxG4Ar55RNXdlOdOHOZ4nOmdZ3YE_x88rqLrs>
+X-ME-Received: <xmr:HpBialSOJ7n_T79Yz3m537owniyFYN1L_q1WPOQVpSCbbOkM_K_ptwEaavA>
+X-ME-Proxy-Cause: dmFkZTFxIrBP8eFCFTDjPyo2F2C0tvnGNTBqRlwzId+BV0hPrymnk6ayyxVnYbr5ZXIQNo
+    NagcGQQT0Srw1e6ihcOuafm2xP3fZEFPpei7PWvqhbO6kQ3dfpTidKAzeQsLQ5+7hj3Lq6
+    BHspIBw1iLT7mBKmbE0rCTPO+FIG4dETBhgBldkoSdrO+Ms6M92UJXoUdLCwmLCHEj+LiT
+    FZY7KMEVvKPuPL5Q3Tvb5Xxaa7vSXT7/ZAMYc3mmlBTDjBWGkhhn0CYWbx4A7SvrcLyLqt
+    lItHZvS7H6d1OROBHlcXXJ+5FNBG326/1GNX01TAiTh68j33KrbzysPLyHdKd1gJR2IyXt
+    ky5lKlqdemIL5gAbj4qgi0eaTElHj3klueS7dfT3RZvsqJYVli9PFHKpoOesBL6mk86sOx
+    Iy53c+xIVWY1Do2kQ/+zUrJARa8VdI0aZEtpGHdpob2OS+sCkJkNy6wI3oClKXha+Ex2H6
+    PDbW//e49NvDpHuq8gjhdtZSWr7eiyhU5TEUu2vPVDXoGvIRoiAMrxdAQG90tmuxP0t9Nz
+    TYq73RbwxkLiW39OKEbAR9b0HQVkl11o1WM6FaD8CS5oViTAob3MGGS+a8qmB1RfbU/GcC
+    YfW4j22VNlu1OtludlunAVEK3hpzq7hJQ5xn6YoN/5vakezLXYAv4JBlS4UA
+X-ME-Proxy: <xmx:HpBiaoJdjT4PHfK3DCRx8jgvF7Q8GJUUVS6qcbJvraUoRTqSJeT1MQ>
+    <xmx:HpBiajXaCmSLIPP6TwstYvu6U2nblRbvuJgHBcFOO0l1TD6xUNTXXg>
+    <xmx:HpBiasgEv7Ob6EcyteTZFHakcLoF_ykfttBcg6q8nZjXEgZiaSAi5g>
+    <xmx:HpBiavu-rd2bHCgr8k9DJB7OCv5EtnYHBf9mxYwdj9qXjXVFPDpK2g>
+    <xmx:H5BiarQX2rmPo5D_irklZ_SlXZHNi4CIOWEBpk7TeRMVnHjAM8A8Vf_4>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 23 Jul 2026 18:05:17 -0400 (EDT)
+Date: Fri, 24 Jul 2026 00:05:15 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Chuck Lever <cel@kernel.org>
+Cc: Hannes Reinecke <hare@suse.de>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/6] net/tls: Bound consecutive no-data
+ records in tls_sw_read_sock()
+Message-ID: <amKQGyH41zom7LGe@krikkit>
+References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
+ <20260720-tcp-read-sock-v2-1-29545d034f3c@kernel.org>
+ <b9d60674-1ba7-4f23-beee-4ddfffd4dda9@suse.de>
+ <909e0132-5c0c-4c0c-b8c5-b90b88ad0231@app.fastmail.com>
+ <amIj_DG7SuWx8MeY@krikkit>
+ <7a0f5521-3a44-4e8e-9a30-542b0ece448d@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <al_8v_I9Z2Dc_qjc@google.com>
+In-Reply-To: <7a0f5521-3a44-4e8e-9a30-542b0ece448d@app.fastmail.com>
 
-On Tue, Jul 21, 2026 at 11:16:25PM +0000, Josh Hilke wrote:
-> On Tue, Jul 14, 2026 at 08:14:51AM -0700, Vipin Sharma wrote:
-> > +static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *args)
-> > +{
-> > +	struct vfio_device *device = vfio_device_from_file(args->file);
-> > +	struct vfio_pci_core_device *vdev;
-> > +	struct pci_dev *pdev;
-> > +
-> > +	vdev = container_of(device, struct vfio_pci_core_device, vdev);
-> > +	pdev = vdev->pdev;
-> > +
-> > +	guard(mutex)(&device->dev_set->lock);
-> > +	guard(mutex)(&vdev->igate);
-> > +	guard(rwsem_write)(&vdev->memory_lock);
-> > +
-> > +	/*
-> > +	 * Userspace must disable interrupts on the device prior to freeze so
-> > +	 * that the device does not send any interrupts until new interrupt
-> > +	 * handlers have been established by the next kernel.
-> > +	 */
-> > +	if (vdev->irq_type != VFIO_PCI_NUM_IRQS) {
-> > +		pci_err(pdev, "Freeze failed! Interrupts are still enabled.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (pdev->current_state != PCI_D0) {
-> > +		pci_err(pdev, "Freeze failed! Device not in D0 state.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Reset is a temporary measure to provide kernel after kexec a clean
-> > +	 * device while VFIO live update work is under development and not
-> > +	 * fully supported. It will go away once continuous DMA support is
-> > +	 * added to device preservation.
-> > +	 */
-> > +	vfio_pci_zap_bars(vdev);
-> > +	vfio_pci_dma_buf_move(vdev, true);
-> > +	vfio_pci_core_try_reset(vdev);
-> 
-> I'm seeing the same lockdep splat the David found in v4.
-> https://lore.kernel.org/all/ag-aFA1BJxdJMywr@google.com/#t
-
-Thanks for reminding this.
-
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 7.2.0-dbg-DEV #3 Tainted: G S
-> ------------------------------------------------------
-> kexec/13355 is trying to acquire lock:
-> ff3f086c95315d08 (&group->mutex){+.+.}-{4:4}, at: pci_dev_reset_iommu_prepare+0x6e/0x200
-> 
-> but task is already holding lock:
-> ff3f082de7f399a8 (&vdev->memory_lock){++++}-{4:4}, at: vfio_pci_liveupdate_freeze+0x58/0x100
-> 
-> which lock already depends on the new lock.
+2026-07-23, 10:29:55 -0400, Chuck Lever wrote:
 > 
 > 
-> the existing dependency chain (in reverse order) is:
+> On Thu, Jul 23, 2026, at 10:23 AM, Sabrina Dubroca wrote:
+> > 2026-07-23, 09:24:47 -0400, Chuck Lever wrote:
+> >> 
+> >> 
+> >> On Thu, Jul 23, 2026, at 3:11 AM, Hannes Reinecke wrote:
+> >> > On 7/20/26 4:27 PM, Chuck Lever wrote:
+> >> >> A record that delivers no payload -- an empty TLS 1.3 data record
+> >> >> today, a control record once read_sock_rectype() lands -- leaves
+> >> >> tls_sw_read_sock() in its loop without advancing the caller's read
+> >> >> descriptor. A peer that streams such records keeps the receive loop
+> >> >> running, and the socket lock held, for as long as the records
+> >> >> arrive.
+> >> >> 
+> >> >> Cap the number of consecutive no-data records consumed per call. The
+> >> >> count resets on any record that delivers bytes, so a normal stream
+> >> >> is unaffected; a peer supplying only empty records is bounded to
+> >> >> TLS_RX_NODATA_LIMIT iterations before the call returns 0. read_sock
+> >
+> > Would a time-based limit be "better" than a packet count? For example
+> > that's what net_rx_action() (net/core/dev.c) does.
+> >
+> >
+> >> >> consumers treat that as "no progress, re-poll" rather than EOF, so
+> >> >> the connection stays up and makes progress once real data arrives.
+> >> >> 
+> >> >> Only tls_sw_read_sock() needs this cap. Its consumers drive the receive
+> >> >> loop from kernel context -- a work item or service thread holding the
+> >> >> socket lock across the whole call with no return to userspace -- so an
+> >> >> unbounded empty-record stream keeps that context and the lock pinned
+> >> >> for as long as the flood lasts. The cap supplies the return boundary
+> >> >> that a system call would otherwise provide. tls_sw_splice_read()
+> >> >> and tls_sw_recvmsg() already have one: they run in the calling task's
+> >> >> context, reschedule while draining the socket backlog (cond_resched()
+> >> >> in __release_sock()),
+> >
+> > tls_sw_read_sock() would also do that via tls_rx_rec_wait(), no?
+> >
+> >> >> and drop the socket lock when the call returns. A
+> >> >> flood there costs the caller only its own scheduler time, so the cap
+> >> >> would add nothing.
+> >> >> 
+> >> >> Signed-off-by: Chuck Lever <cel@kernel.org>
+> >> >> ---
+> >> >>   net/tls/tls_sw.c | 13 +++++++++++++
+> >> >>   1 file changed, 13 insertions(+)
+> >> >> 
+> >> > This is technically a fix, so it might be worthwhile sending it
+> >> > on its own.
+> >> 
+> >> My impression is that the issue this patch addresses is not
+> >> reachable until the subsequent patches in this series have
+> >> been applied. Thus I positioned it as a pre-requisite patch
+> >> in this series, and not as part of the earlier "fixes" series.
+> >
+> > It looks to me like a follow-up for 3be28e2c9cd0 ("net/tls: Consume
+> > empty data records in tls_sw_read_sock()"). Control records only
+> > become a problem after the rest of the series, but TLS 1.3 empty data
+> > records would get there with the current code, no?
 > 
-> -> #5 (&vdev->memory_lock){++++}-{4:4}:
->        down_read+0x3d/0x160
->        vfio_pci_mmap_huge_fault+0xb9/0x150
->        __do_fault+0x46/0x150
->        do_pte_missing+0x21a/0x1000
->        handle_mm_fault+0x7f8/0xb60
->        do_user_addr_fault+0x476/0x6c0
->        exc_page_fault+0x68/0xa0
->        asm_exc_page_fault+0x26/0x30
+> It sounds like a change in presentation strategy might be
+> needed: I have the other patches you suggested before but
+> was planning on submitting them after this series goes in.
 > 
-> -> #4 (&mm->mmap_lock){++++}-{4:4}:
->        __might_fault+0x5e/0x80
->        _copy_to_user+0x23/0x60
->        perf_read+0x114/0x310
->        vfs_read+0xe7/0x360
->        ksys_read+0x73/0x100
->        do_syscall_64+0x15f/0x4e0
->        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> -> #3 (&cpuctx_mutex){+.+.}-{4:4}:
->        __mutex_lock+0x8c/0xd80
->        perf_event_ctx_lock_nested+0x15a/0x210
->        perf_event_enable+0x18/0xa0
->        lockup_detector_online_cpu+0x22/0x30
->        cpuhp_invoke_callback+0xfb/0x2c0
->        cpuhp_thread_fun+0x164/0x1e0
->        smpboot_thread_fn+0x17e/0x280
->        kthread+0x10c/0x140
->        ret_from_fork+0x16b/0x310
->        ret_from_fork_asm+0x1a/0x30
-> 
-> -> #2 (cpuhp_state-up){+.+.}-{0:0}:
->        cpuhp_thread_fun+0x95/0x1e0
->        smpboot_thread_fn+0x17e/0x280
->        kthread+0x10c/0x140
->        ret_from_fork+0x16b/0x310
->        ret_from_fork_asm+0x1a/0x30
-> 
-> -> #1 (cpu_hotplug_lock){++++}-{0:0}:
->        cpus_read_lock+0x3b/0xd0
->        __cpuhp_state_add_instance+0x19/0x40
->        iova_domain_init_rcaches+0x1ef/0x230
->        iommu_setup_dma_ops+0x18a/0x560
->        iommu_device_register+0x188/0x220
->        intel_iommu_init+0x35a/0x440
->        pci_iommu_init+0x16/0x40
->        do_one_initcall+0xf5/0x400
->        do_initcall_level+0x82/0xa0
->        do_initcalls+0x59/0xa0
->        kernel_init_freeable+0x152/0x1d0
->        kernel_init+0x1a/0x130
->        ret_from_fork+0x16b/0x310
->        ret_from_fork_asm+0x1a/0x30
-> 
-> -> #0 (&group->mutex){+.+.}-{4:4}:
->        __lock_acquire+0x14c8/0x2750
->        lock_acquire+0xd3/0x2c0
->        __mutex_lock+0x8c/0xd80
->        pci_dev_reset_iommu_prepare+0x6e/0x200
->        pcie_flr+0x32/0xc0
->        __pci_reset_function_locked+0x84/0x120
->        vfio_pci_core_try_reset+0xa4/0x110
->        vfio_pci_liveupdate_freeze+0x8a/0x100
->        luo_file_freeze+0xd1/0x290
->        luo_session_serialize+0xa6/0x240
->        liveupdate_reboot+0x19/0x30
->        kernel_kexec+0x39/0xb0
->        __se_sys_reboot+0xfd/0x210
->        do_syscall_64+0x15f/0x4e0
->        entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> other info that might help us debug this:
-> 
-> Chain exists of:
->   &group->mutex --> &mm->mmap_lock --> &vdev->memory_lock
-> 
->  Possible unsafe locking scenario:
-> 
->        CPU0                    CPU1
->        ----                    ----
->   lock(&vdev->memory_lock);
->                                lock(&mm->mmap_lock);
->                                lock(&vdev->memory_lock);
->   lock(&group->mutex);
-> 
->  *** DEADLOCK ***
-> 
-> 9 locks held by kexec/13355:
->  #0: ffffffff85a81270 (system_transition_mutex){+.+.}-{4:4}, at: __se_sys_reboot+0xe4/0x210
->  #1: ffffffff85e1cfa8 (luo_session_serialize_rwsem){++++}-{4:4}, at: luo_session_serialize+0x30/0x240
->  #2: ffffffff85e1d140 (luo_session_global.outgoing.rwsem){+.+.}-{4:4}, at: luo_session_serialize+0x43/0x240
->  #3: ff3f082dee702108 (&session->mutex){+.+.}-{4:4}, at: luo_session_serialize+0x99/0x240
->  #4: ff3f082db51c2588 (&luo_file->mutex){+.+.}-{4:4}, at: luo_file_freeze+0x81/0x290
->  #5: ff3f082d8af761a8 (&new_dev_set->lock){+.+.}-{4:4}, at: vfio_pci_liveupdate_freeze+0x38/0x100
->  #6: ff3f082de7f39780 (&vdev->igate){+.+.}-{4:4}, at: vfio_pci_liveupdate_freeze+0x49/0x100
->  #7: ff3f082de7f399a8 (&vdev->memory_lock){++++}-{4:4}, at: vfio_pci_liveupdate_freeze+0x58/0x100
->  #8: ff3f086c908911f8 (&dev->mutex){....}-{4:4}, at: pci_dev_trylock+0x25/0x60
-> 
-> stack backtrace:
-> CPU: 132 UID: 0 PID: 13355 Comm: kexec Tainted: G S                  7.2.0-dbg-DEV #3 PREEMPTLAZY
-> Tainted: [S]=CPU_OUT_OF_SPEC
-> Hardware name: Google Izumi/izumi, BIOS 0.20260327.0-0 03/27/2026
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x54/0x70
->  print_circular_bug+0x2e1/0x300
->  check_noncircular+0xf9/0x120
->  ? __bfs+0x129/0x200
->  __lock_acquire+0x14c8/0x2750
->  ? __lock_acquire+0x1223/0x2750
->  ? check_noncircular+0xa5/0x120
->  ? pci_dev_reset_iommu_prepare+0x6e/0x200
->  lock_acquire+0xd3/0x2c0
->  ? pci_dev_reset_iommu_prepare+0x6e/0x200
->  ? lock_is_held_type+0x76/0x100
->  ? pci_dev_reset_iommu_prepare+0x6e/0x200
->  __mutex_lock+0x8c/0xd80
->  ? pci_dev_reset_iommu_prepare+0x6e/0x200
->  ? lockdep_hardirqs_on_prepare+0x152/0x220
->  ? _raw_spin_unlock_irqrestore+0x35/0x50
->  pci_dev_reset_iommu_prepare+0x6e/0x200
->  pcie_flr+0x32/0xc0
->  __pci_reset_function_locked+0x84/0x120
->  vfio_pci_core_try_reset+0xa4/0x110
->  vfio_pci_liveupdate_freeze+0x8a/0x100
->  luo_file_freeze+0xd1/0x290
->  luo_session_serialize+0xa6/0x240
->  liveupdate_reboot+0x19/0x30
->  kernel_kexec+0x39/0xb0
->  __se_sys_reboot+0xfd/0x210
->  ? check_object+0x1e8/0x390
->  ? init_object+0x34/0x110
->  ? lock_release+0xf0/0x330
->  ? kmem_cache_free+0x1b5/0x520
->  ? kmem_cache_free+0x1c9/0x520
->  ? _raw_spin_unlock_irqrestore+0x35/0x50
->  ? kmem_cache_free+0x1b5/0x520
->  ? __x64_sys_close+0x3d/0x80
->  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
->  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
->  do_syscall_64+0x15f/0x4e0
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7f04e7233313
-> Code: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc 89 fa b8 a9 00 00 00 bf ad de e1 fe be 69 19 12 28 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 f7 d8 48 8b 0d eb fb 06 00 64 89 01 48
-> RSP: 002b:00007ffe7c91b688 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
-> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f04e7233313
-> RDX: 0000000045584543 RSI: 0000000028121969 RDI: 00000000fee1dead
-> RBP: 00007ffe7c91b9b0 R08: 000000000000000a R09: 00007f04e72a4ff0
-> R10: 0000000000000011 R11: 0000000000000246 R12: 0000000000000001
-> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000002
->  </TASK>
-> 
+> But it could be sensible to post those first, along with
+> 1/6 of this series, destined for "net". Thoughts?
 
-This lock chain is slightly different than what David reported in his
-email on v4.
+That makes sense. 2..6/6 from this series can still be around for
+review (maybe with a [RFC] prefix if you resend the net-next patches
+before net gets merged into net-next, to help the maintainers by
+avoiding conflicts).
 
-Current dependency chain for v5:
-  -> #5 (&vdev->memory_lock){++++}-{4:4}:
-  -> #4 (&mm->mmap_lock){++++}-{4:4}:
-  -> #3 (&cpuctx_mutex){+.+.}-{4:4}:       // Different
-  -> #2 (cpuhp_state-up){+.+.}-{0:0}:      // Different
-  -> #1 (cpu_hotplug_lock){++++}-{0:0}:
-  -> #0 (&group->mutex){+.+.}-{4:4}:
-
-David's dependency chain on v4:
-  -> #4 (&vdev->memory_lock){++++}-{4:4}:
-  -> #3 (&mm->mmap_lock){++++}-{4:4}:
-  -> #2 (&type->i_mutex_dir_key#4){++++}-{4:4}:    // Different
-  -> #1 (cpu_hotplug_lock){++++}-{0:0}:
-  -> #0 (&group->mutex){+.+.}-{4:4}:
-
-This seems like &group->mutex connects to cpu_hotplug_lock during boot,
-and cpu_hotplug_lock can connect to &mm->mmap_lock through any 
-subsystems like Perf, VFS, etc.
-
-One thing to note, VFIO has an existing ioctl VFIO_DEVICE_RESET which
-calls vfio_pci_ioctl_reset() and locks are taken in the same order in
-that function:
-
-Lock vdev->memory_lock
- -> pci_try_reset_function()
-    -> pcie_flr()
-       -> pci_dev_reset_iommu_prepare()
-          -> Try to lock iommu_group->mutex
-
-pci_dev_reset_iommu_prepare() is added in pcie_flr() in the commit
-f5b16b802174 ("PCI: Suspend iommu function prior to resetting a
-device"). So, this is relatively a new change and may have not been
-caught yet.
-
-This is similar to what vfio_pci_liveupdate_freeze() is also doing
-regarding locks and reset.
-
-I am not 100% this is an actual issue considering group->mutex to
-cpu_hotplug_lock dependency happens early in boot.
-
-If this is an issue which must be fixed, I think we would have to makea
-flow like:
-  1. lock vdev->memory_lock
-  2. Disable memory in PCI_COMMAND.
-  3. Unlock vdev->memory_lock
-  4. Do PCI reset
-  5. Lock vdev->memory_lock and resume as old flow.
-
-I wrote a test code (with assistance from GEMINI) to trigger lockdep
-warning in 7.2-rc1 kernel commit without any liveupdate patches and I
-can reproduce issue on a host having Intel DSA device (8086:0b25). This
-program mmaps a BAR of a VFIO device and reads it, after that it
-resets the device.
-
-Expected: Program exits cleanly, without any lockdep warning.
-Actual: Lockdep warning is printed similar to above.
-
---------------------------------------
-/*
- * vfio_cdev_lockdep_reproducer.c
- *
- * Standalone reproducer using modern VFIO cdev (/dev/vfio/devices/vfioX)
- * and IOMMUFD (/dev/iommu) interfaces to trigger Lockdep circular locking
- * dependency between &vdev->memory_lock and &group->mutex on ATS PCI devices.
- *
- * Requirements:
- *   - Kernel booted with CONFIG_PROVE_LOCKING=y (Lockdep enabled)
- *   - An ATS-capable PCIe device bound to vfio-pci (e.g., Intel DSA / idxd)
- *
- * Build:
- *   gcc -Wall -static vfio_cdev_lockdep_reproducer.c -o vfio_cdev_lockdep_reproducer
- *
- * Usage:
- *   sudo ./vfio_cdev_lockdep_reproducer <pci_bdf>
- *   Example: sudo ./vfio_cdev_lockdep_reproducer 0000:6a:01.0
- */
-
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <linux/vfio.h>
-#include <linux/iommufd.h>
-
-static int find_vfio_cdev_path(const char *bdf, char *cdev_path, size_t size)
-{
-	struct dirent *entry;
-	char dir_path[256];
-	DIR *dir;
-
-	snprintf(dir_path, sizeof(dir_path),
-		 "/sys/bus/pci/devices/%s/vfio-dev/", bdf);
-	dir = opendir(dir_path);
-	if (!dir) {
-		fprintf(stderr, "[-] Failed to open %s (is %s bound?)\n",
-			dir_path, bdf);
-		return -1;
-	}
-
-	while ((entry = readdir(dir)) != NULL) {
-		if (strncmp("vfio", entry->d_name, 4) == 0) {
-			snprintf(cdev_path, size, "/dev/vfio/devices/%s",
-				 entry->d_name);
-			closedir(dir);
-			return 0;
-		}
-	}
-
-	closedir(dir);
-	return -1;
-}
-
-static int setup_vfio_cdev(const char *bdf, int *out_iommufd,
-			   int *out_device_fd)
-{
-	struct vfio_device_attach_iommufd_pt attach_args;
-	struct vfio_device_bind_iommufd bind_args;
-	struct iommu_ioas_alloc ioas_args;
-	char cdev_path[4096];
-	int iommufd;
-	int device_fd;
-	uint32_t ioas_id;
-	int ret;
-
-	ret = find_vfio_cdev_path(bdf, cdev_path, sizeof(cdev_path));
-	if (ret < 0) {
-		fprintf(stderr, "[-] Could not find cdev path for %s\n", bdf);
-		return -1;
-	}
-
-	printf("[*] Found VFIO cdev node: %s\n", cdev_path);
-
-	printf("[*] Opening /dev/iommu (IOMMUFD)...\n");
-	iommufd = open("/dev/iommu", O_RDWR);
-	if (iommufd < 0) {
-		perror("open(/dev/iommu)");
-		return -1;
-	}
-
-	memset(&ioas_args, 0, sizeof(ioas_args));
-	ioas_args.size = sizeof(ioas_args);
-
-	if (ioctl(iommufd, IOMMU_IOAS_ALLOC, &ioas_args) < 0) {
-		perror("IOMMU_IOAS_ALLOC");
-		close(iommufd);
-		return -1;
-	}
-	ioas_id = ioas_args.out_ioas_id;
-	printf("[+] Allocated IOMMUFD IOAS ID = %u\n", ioas_id);
-
-	printf("[*] Opening VFIO cdev device %s...\n", cdev_path);
-	device_fd = open(cdev_path, O_RDWR);
-	if (device_fd < 0) {
-		perror("open(cdev_path)");
-		close(iommufd);
-		return -1;
-	}
-
-	memset(&bind_args, 0, sizeof(bind_args));
-	bind_args.argsz = sizeof(bind_args);
-	bind_args.flags = 0;
-	bind_args.iommufd = iommufd;
-
-	if (ioctl(device_fd, VFIO_DEVICE_BIND_IOMMUFD, &bind_args) < 0) {
-		perror("VFIO_DEVICE_BIND_IOMMUFD");
-		close(device_fd);
-		close(iommufd);
-		return -1;
-	}
-	printf("[+] Bound VFIO device to IOMMUFD (devid = %u)\n",
-	       bind_args.out_devid);
-
-	memset(&attach_args, 0, sizeof(attach_args));
-	attach_args.argsz = sizeof(attach_args);
-	attach_args.flags = 0;
-	attach_args.pt_id = ioas_id;
-
-	if (ioctl(device_fd, VFIO_DEVICE_ATTACH_IOMMUFD_PT, &attach_args) < 0) {
-		perror("VFIO_DEVICE_ATTACH_IOMMUFD_PT");
-		close(device_fd);
-		close(iommufd);
-		return -1;
-	}
-	printf("[+] Attached VFIO device to IOAS ID %u\n", ioas_id);
-
-	*out_iommufd = iommufd;
-	*out_device_fd = device_fd;
-	return 0;
-}
-
-static void exercise_bar_fault(int device_fd)
-{
-	struct vfio_region_info reg;
-	volatile unsigned char dummy;
-	bool bar_mmapped;
-	void *map;
-	int i;
-
-	bar_mmapped = false;
-
-	for (i = VFIO_PCI_BAR0_REGION_INDEX; i <= VFIO_PCI_BAR5_REGION_INDEX; i++) {
-		memset(&reg, 0, sizeof(reg));
-		reg.argsz = sizeof(reg);
-		reg.index = i;
-
-		if (ioctl(device_fd, VFIO_DEVICE_GET_REGION_INFO, &reg) < 0)
-			continue;
-
-		if (!(reg.flags & VFIO_REGION_INFO_FLAG_MMAP) || reg.size == 0)
-			continue;
-
-		printf("[*] Found BAR%d (0x%llx). mmap()ing...\n",
-		       i, (unsigned long long)reg.size);
-
-		map = mmap(NULL, reg.size, PROT_READ | PROT_WRITE,
-			   MAP_SHARED, device_fd, reg.offset);
-		if (map == MAP_FAILED)
-			continue;
-
-		printf("[*] Touching BAR%d to trigger fault...\n", i);
-		dummy = *((volatile unsigned char *)map);
-		(void)dummy;
-		bar_mmapped = true;
-		break;
-	}
-
-	if (!bar_mmapped) {
-		printf("[!] No mmapable BAR found on this device.\n");
-		printf("[!] For QEMU, try: -device nvme,serial=1,ats=on\n");
-	}
-}
-
-int main(int argc, char **argv)
-{
-	const char *pci_bdf;
-	int device_fd;
-	int iommufd;
-	int ret;
-
-	if (argc != 2) {
-		fprintf(stderr, "Usage: %s <pci_bdf>\n", argv[0]);
-		fprintf(stderr, "Example: %s 0000:6a:01.0\n", argv[0]);
-		return EXIT_FAILURE;
-	}
-
-	pci_bdf = argv[1];
-
-	ret = setup_vfio_cdev(pci_bdf, &iommufd, &device_fd);
-	if (ret < 0)
-		return EXIT_FAILURE;
-
-	/*
-	 * Step 1: Exercise Page Fault path (mmap_lock -> memory_lock).
-	 * Scan BAR0 to BAR5 and mmap the first region supporting mmap().
-	 * Touching 1 byte causes page fault via vfio_pci_mmap_huge_fault(),
-	 * taking down_read(&vdev->memory_lock).
-	 */
-	exercise_bar_fault(device_fd);
-
-	/*
-	 * Step 2: Trigger VFIO_DEVICE_RESET ioctl.
-	 * Takes down_write(&vdev->memory_lock) -> pci_try_reset_function() ->
-	 * pci_dev_reset_iommu_prepare(), taking guard(mutex)(&group->mutex).
-	 *
-	 * Lockdep detects the circular dependency and reports WARNING.
-	 */
-	printf("[*] Issuing VFIO_DEVICE_RESET ioctl under memory_lock...\n");
-	if (ioctl(device_fd, VFIO_DEVICE_RESET) < 0) {
-		perror("VFIO_DEVICE_RESET");
-	} else {
-		printf("[+] VFIO_DEVICE_RESET completed successfully.\n");
-	}
-
-	printf("[*] Check 'dmesg' for Lockdep circular dependency report!\n");
-
-	close(device_fd);
-	close(iommufd);
-	return EXIT_SUCCESS;
-}
---------------------------------------
+-- 
+Sabrina
