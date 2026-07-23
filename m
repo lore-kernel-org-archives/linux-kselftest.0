@@ -1,156 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A05847045C
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 14:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD60647CC74;
+	Thu, 23 Jul 2026 14:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784817023; cv=none; b=lxcwBbD6ChS69sdwe4PlnyUCvmtcXu6O1uWZ5Pt67yWrE/TdsXCh50eHzRiF5RjiWpf2evyiMn8e06VWVcYrMlVJzmsDnahyuyc0ZejFvpW4Q3mB86mdOGtytjy2UzSyFzTVV91PINJTMzCEgXt2GeER226ACiNOjBqjsZ37TWM=
+	t=1784817250; cv=none; b=CmNQyjkZxuUJqXb0hWrUy1QI2/Dweo6JAFrN5W/ZnL0PUrh8PQoArD4z6m0oiA7yvJr5MhGkmnawOX0W9fL8Ih8QQmrKqptezbvIgEZjdLW098QJBiZk1dppzIO32FKYG7D+/uwb0tsZoFI4N/MR4vqU5T66SNGlEFYhZbUgPLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784817023; c=relaxed/simple;
-	bh=F2s46wGOdPXKLgCIDws5nDZNONmvFp/+H2PhS2Z5czo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=jy6DnGAVwGveZSrTMycygzMJ79nviw9A7DT8L7NQ0C3KPTDhym9i2VruJpRTGDusCgqvOrz/PTAmayab97ICSkI6kGvYpnCrHIBjlQvaFK7hz0OLOrHe6lZt8Un6TsktWGC9xEyV7RnGIJ2doPFeySNgVj//ko2LsVeO6nEFCFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C/J3Ldt+; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C/J3Ldt+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38131F00A3A;
-	Thu, 23 Jul 2026 14:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784817022;
-	bh=lVkCf1Oup/Rfz2tYBC+NTJsYOcPmgiCAUeL5SNhfPfE=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=C/J3Ldt+CDxHzdTbiJ8mqP+/HWHCRxzLCf9xhwW0ZKsJ/2N2B4mXKl6d+Mqt3PyE0
-	 0PtjF7CjnKUiGf0phkj7cT5/x+RAp2h69kNpt2cOhExvVRWdU8kLRwD0t3W+7+8Haz
-	 5vhwKfxqDnm9NbH+8SdPh3g185idD/T3AnmZpqsosxjvn3/WdB9jLjKTphx3uBt8TK
-	 /4eDONx5qEJ6F1Aj1Su34C+NnxCl8F+nT6E6T2aDpb7UoQyH2YbnIF7ShGCfKSWZh2
-	 VR3DO1mX0IEfQuGvf6QJRnNwrZSWMZjcC1t8VN9Q/9ljwfg5PobH8nqaL5BjehcFIN
-	 XgqvJ0IIoIIrw==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 6D96AF40070;
-	Thu, 23 Jul 2026 10:30:15 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Thu, 23 Jul 2026 10:30:15 -0400
-X-ME-Sender: <xms:dyViatwpYRxNT02u_2BdszsfWlN12RRwUXvpN4Seqql8f1ay6M1CPA>
-    <xme:dyViaoFOWZtvf9wdOM0e0erX3Nz87Hv16tCtQKL5HmloQv58ILVrfGIrErwsvN5PM
-    UNYFyp6PbmiuSOCzNewAlKLf6DlEsk9NKRu0emWmuPGhN7ffuP0U9pj>
-X-ME-Proxy-Cause: dmFkZTEQAPoN18lgstHosNLPhj4kQ17L7UPJTbGO/hDZVLaKqmCDYBcvf5RQ0sv26awX0C
-    +Yvjj86QfeDKbjS0CY3Ab6vDDIssEhfOF1FsHOkYY4AbCHdVu61HU06vO2mzPWK0AX/yil
-    VwP6wk7ty+Slb5OOiEVt1iAFtw3/SmB0ftOG0IzUU6UijDTpgzsZe4QpV1rbYvn+JQaf0q
-    LiEMUPwgtSdLxSNRmk+k/vhcjS+7CUopIiyON+EIOawKNxpITdvBAuy/HZVKpDB7bUNkFu
-    VfR+9KIHMly7FKskG6dku65Tw2vqzJtY7k7aWdJ4lzFSOAYnIyh32IuJ8twGNQR9D6qSKC
-    nZ6CCbeHtLS53v5l7e0xsnec4chGSvfSuF3qD+m3eZWfVaaWFFYKgksmwekpxN6EaqthA8
-    mPexOTNBfzeK8Ru3A9dPiVrv/HtXxfHsWSK1tfWPawM9UIWlH/711w+1MZbU8anh51IxYS
-    C8PGHQ4mDfbLnHShB4QybmmZ4NQPHA8W7sgkwmF02eGYATIXdf/XcxmGnIpuzEE4rnOyHf
-    94qlHzdt8YhoWImkPNbSyVc7GAYTMqRmYe3nGZacKUPBot9O0s5FJCwaw9aW75DHLIPlsZ
-    /h959mtyW02LnfmZJwG5HbMWDvWpLTVZbjtxT3W81BIhOgtKn5bQfklGOzjg
-X-ME-Proxy: <xmx:dyViajXYGEfKb6J8SfGpeXdJ_WjoeaZ4oodkEgMSyyWaIcLnyLIvrg>
-    <xmx:dyViak_4FbBW0Yedy2tXYkqyApXGsvArHl3KGNVAyjYoSCHFHJbi3A>
-    <xmx:dyVian7xRPEWBmVWzoED-zGMlI3EiPAd7W-64frsRXwayLnjssQyUQ>
-    <xmx:dyViat2EssvHQ3gcmRjU8-w0hKF8w_PJYpYXP8gSbLZ191vfwxOJLg>
-    <xmx:dyViauwlyh5FspUBJCtXLxbz6jgN6pVOFMihwyyLnWktbwbzRTRoqeBS>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 413F1780070; Thu, 23 Jul 2026 10:30:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1784817250; c=relaxed/simple;
+	bh=rnzS3t2OB9mXDKCdXxoAM7rMpi7xvwiWGRBta5UVvXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EcaAyn79OI8k9n+VDUcznDz1X1J3b1w0gLJgE3i8te3b5bLeLo4QDI/nQrCFloGwvWCTjMoGvEpbJKGQobyfz1pEIbnqYD4WWQPsIipA9E7qbQLTONNBdtVEYZam7/V82bynGMZPdnUvLZf2JaUlxJ8s0HHLMnsWu2t3lW4aDZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf12.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 9876C804F4;
+	Thu, 23 Jul 2026 14:34:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id 056E717;
+	Thu, 23 Jul 2026 14:33:13 +0000 (UTC)
+Date: Thu, 23 Jul 2026 10:33:36 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andi Kleen <ak@linux.intel.com>
+Cc: Markus Elfring <Markus.Elfring@web.de>, acpica-devel@lists.linux.dev,
+ bpf@vger.kernel.org, coresight@lists.linaro.org, kvm@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, mptcp@lists.linux.dev,
+ netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ virtualization@lists.linux.dev, Adrian Hunter <adrian.hunter@intel.com>,
+ Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, Andrew Morton
+ <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, Ankur
+ Arora <ankur.a.arora@oracle.com>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, Bobby Eshleman
+ <bobbyeshleman@meta.com>, Christian =?UTF-8?B?Qm9ybnRyw6RnZXI=?=
+ <borntraeger@linux.ibm.com>, Christophe Leroy <chleroy@kernel.org>,
+ Chun-Tse Shao <ctshao@google.com>, Claudio Imbrenda
+ <imbrenda@linux.ibm.com>, Costa Shulyupin <costa.shul@redhat.com>, Crystal
+ Wood <crwood@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>, Daniel
+ Lezcano <daniel.lezcano@kernel.org>, David Hildenbrand <david@kernel.org>,
+ David Matlack <dmatlack@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, Eduard
+ Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, Eric
+ Dumazet <edumazet@google.com>, Gabriele Monaco <gmonaco@redhat.com>,
+ Geliang Tang <geliang@kernel.org>, Ian Rogers <irogers@google.com>, Ingo
+ Molnar <mingo@redhat.com>, Ivan Pravdin <ipravdin.official@gmail.com>,
+ Jakub Kicinski <kuba@kernel.org>, James Clark <james.clark@linaro.org>,
+ Janosch Frank <frankja@linux.ibm.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Jiri Olsa <jolsa@kernel.org>, Joe Damato
+ <joe@dama.to>, John Garry <john.g.garry@oracle.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
+ Kent Gibson <warthog618@gmail.com>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Len Brown <lenb@kernel.org>, Leo Yan
+ <leo.yan@linux.dev>, Lukasz Luba <lukasz.luba@arm.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Mark Rutland <mark.rutland@arm.com>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Masami Hiramatsu <mhiramat@kernel.org>, Mat
+ Martineau <martineau@kernel.org>, Matthieu Baerts <matttbe@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Mike Leach <mike.leach@arm.com>,
+ Mina Almasry <almasrymina@google.com>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Nam Cao <namcao@linutronix.de>, Namhyung Kim <namhyung@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Pawel Chmielewski
+ <pawel.chmielewski@intel.com>, Peter Zijlstra <peterz@infradead.org>,
+ Quentin Monnet <qmo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Raghavendra Rao Ananta <rananta@google.com>, Saket Dumbre
+ <saket.dumbre@intel.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, Song Liu <song@kernel.org>, Srinivas Pandruvada
+ <srinivas.pandruvada@linux.intel.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Stefano Garzarella <sgarzare@redhat.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>,
+ Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Tomas Glozar
+ <tglozar@redhat.com>, Vipin Sharma <vipinsh@google.com>, Wander Lairson
+ Costa <wander@redhat.com>, Will Deacon <will@kernel.org>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, Willy Tarreau <w@1wt.eu>, Yonghong Song
+ <yonghong.song@linux.dev>, Zhang Chujun <zhangchujun@cmss.chinamobile.com>,
+ Zhang Rui <rui.zhang@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+ kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] tools: Use fputc() calls in some functions
+Message-ID: <20260723103336.6593118b@gandalf.local.home>
+In-Reply-To: <amIbVOIsOeZgcBZF@tassilo>
+References: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+	<amIbVOIsOeZgcBZF@tassilo>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AxBNoR0sEYLw
-Date: Thu, 23 Jul 2026 10:29:55 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Sabrina Dubroca" <sd@queasysnail.net>
-Cc: "Hannes Reinecke" <hare@suse.de>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
- "Jeff Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, netdev@vger.kernel.org,
- kernel-tls-handshake@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-nfs@vger.kernel.org
-Message-Id: <7a0f5521-3a44-4e8e-9a30-542b0ece448d@app.fastmail.com>
-In-Reply-To: <amIj_DG7SuWx8MeY@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-1-29545d034f3c@kernel.org>
- <b9d60674-1ba7-4f23-beee-4ddfffd4dda9@suse.de>
- <909e0132-5c0c-4c0c-b8c5-b90b88ad0231@app.fastmail.com>
- <amIj_DG7SuWx8MeY@krikkit>
-Subject: Re: [PATCH net-next v2 1/6] net/tls: Bound consecutive no-data records in
- tls_sw_read_sock()
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ncsjbmpq4hct7p4sj4iefr1r53tacukj
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 056E717
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+f7u83oRUulG9XwKl2P+q3kHYGrSLtLJ0=
+X-HE-Tag: 1784817193-538669
+X-HE-Meta: U2FsdGVkX19mSJrQ4yCgpa5T21s3DOyupJQtrDkbhb4BdFNkpGoXwq/ibfVmVhXFNmqX8uwKJldaBwfXYwLpcFxk6WAoDZEXT/gOP4/87ir9dCPM++yAwBRZudspVL4fEcLJ8BQR+IIioDSpRN3BUfGiJrTRVS7/uta9AmYBpm0bV/zvbFblUCnE1I0vyxTsAPHkh0LX+JrCxO4Fb8yldd7jKVRG3hDwMmD/y539S+5vq64BAxIp9RMpMFz5panzgBl/T6DnlC5NF2X6cBflLJ9t5of1YaVukjrextWC1Mkdf4ypcuVGdK7IR4N2F6BEhF3E+awXwxrLnbww9pI6GrXPJih6633rwSWNy/mC4FmaOinac79jHA==
 
+On Thu, 23 Jul 2026 06:47:00 -0700
+Andi Kleen <ak@linux.intel.com> wrote:
 
+> > The source code was transformed by using the Coccinelle software.  
+> 
+> gcc already does this transformation automatically.
 
-On Thu, Jul 23, 2026, at 10:23 AM, Sabrina Dubroca wrote:
-> 2026-07-23, 09:24:47 -0400, Chuck Lever wrote:
->> 
->> 
->> On Thu, Jul 23, 2026, at 3:11 AM, Hannes Reinecke wrote:
->> > On 7/20/26 4:27 PM, Chuck Lever wrote:
->> >> A record that delivers no payload -- an empty TLS 1.3 data record
->> >> today, a control record once read_sock_rectype() lands -- leaves
->> >> tls_sw_read_sock() in its loop without advancing the caller's read
->> >> descriptor. A peer that streams such records keeps the receive loop
->> >> running, and the socket lock held, for as long as the records
->> >> arrive.
->> >> 
->> >> Cap the number of consecutive no-data records consumed per call. The
->> >> count resets on any record that delivers bytes, so a normal stream
->> >> is unaffected; a peer supplying only empty records is bounded to
->> >> TLS_RX_NODATA_LIMIT iterations before the call returns 0. read_sock
->
-> Would a time-based limit be "better" than a packet count? For example
-> that's what net_rx_action() (net/core/dev.c) does.
->
->
->> >> consumers treat that as "no progress, re-poll" rather than EOF, so
->> >> the connection stays up and makes progress once real data arrives.
->> >> 
->> >> Only tls_sw_read_sock() needs this cap. Its consumers drive the receive
->> >> loop from kernel context -- a work item or service thread holding the
->> >> socket lock across the whole call with no return to userspace -- so an
->> >> unbounded empty-record stream keeps that context and the lock pinned
->> >> for as long as the flood lasts. The cap supplies the return boundary
->> >> that a system call would otherwise provide. tls_sw_splice_read()
->> >> and tls_sw_recvmsg() already have one: they run in the calling task's
->> >> context, reschedule while draining the socket backlog (cond_resched()
->> >> in __release_sock()),
->
-> tls_sw_read_sock() would also do that via tls_rx_rec_wait(), no?
->
->> >> and drop the socket lock when the call returns. A
->> >> flood there costs the caller only its own scheduler time, so the cap
->> >> would add nothing.
->> >> 
->> >> Signed-off-by: Chuck Lever <cel@kernel.org>
->> >> ---
->> >>   net/tls/tls_sw.c | 13 +++++++++++++
->> >>   1 file changed, 13 insertions(+)
->> >> 
->> > This is technically a fix, so it might be worthwhile sending it
->> > on its own.
->> 
->> My impression is that the issue this patch addresses is not
->> reachable until the subsequent patches in this series have
->> been applied. Thus I positioned it as a pre-requisite patch
->> in this series, and not as part of the earlier "fixes" series.
->
-> It looks to me like a follow-up for 3be28e2c9cd0 ("net/tls: Consume
-> empty data records in tls_sw_read_sock()"). Control records only
-> become a problem after the rest of the series, but TLS 1.3 empty data
-> records would get there with the current code, no?
+Yep, I showed this in my talk[1] that looked at what printf("Hello World!")
+does. Doing an objdump of:
 
-It sounds like a change in presentation strategy might be
-needed: I have the other patches you suggested before but
-was planning on submitting them after this series goes in.
+#include <stdio.h>
 
-But it could be sensible to post those first, along with
-1/6 of this series, destined for "net". Thoughts?
+int main(void) {
+	printf("Hello World!\n");
+	return 0;
+}
 
+has:
 
--- 
-Chuck Lever
+0000000000001139 <main>:
+    1139:       55                      push   %rbp
+    113a:       48 89 e5                mov    %rsp,%rbp
+    113d:       48 8d 05 c0 0e 00 00    lea    0xec0(%rip),%rax        # 2004 <_IO_stdin_used+0x4>
+    1144:       48 89 c7                mov    %rax,%rdi
+    1147:       e8 e4 fe ff ff          call   1030 <puts@plt>  <<<--- puts and not printf
+    114c:       b8 00 00 00 00          mov    $0x0,%eax
+    1151:       5d                      pop    %rbp
+    1152:       c3                      ret
+
+-- Steve
+
+[1] https://www.youtube.com/watch?v=JRyrhsx-L5Y
