@@ -1,107 +1,101 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7126D40D562;
-	Thu, 23 Jul 2026 08:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645C23FA5F0
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 09:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784796722; cv=none; b=eD2dOF4S02lb8LxUm09zzvZhcqsM6s08E86gqS8xUmpvqpvZGNwyedpCUDHcP3hwwBd7vYntGQzyzXGYbglIfLX0ZXhWmWuqRfAFofoYGLNcR3LROoDFxZGb2kvaWBDmFxyb5rzDE97k16vqwtJe5nOVj0a02bdkdFrnKWIfX1U=
+	t=1784797582; cv=none; b=lv1I+kNSiultLXRzbEi/nrxflXYHKFXFOZzOJw/zNFSvbxeZojwEgMEEFetUWLv1onCK2wveQL5T4KDarRKbcSMXgEYLjxdYvCA/QJPUzQswmFQ2DA5ewvL8AgwZNKnTpgn0wGdSsECGzV4oPa+u8zVPyclzlVyobpzqlRzJckk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784796722; c=relaxed/simple;
-	bh=MgE+UXon5rQaloIoY4oihijPCPm/+kUwqkDhSWvZQd0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PjfXdJ3/zl1ubi9Yu5ZPpn/wuJHaS8Q7Y9VF7HEFq+wOCXMNev1Pn5CZOoLzHvVIMwpGijxeBtRmwd9CHCl+OKBTs6vzbWq7MQRq1K2R2wH/oI1I5zE7i0npOQu0W0Y07P+TWEB/X74ztkRQC+led/eDsG6UKHm28DQQFk5/Jr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jri6bLLV; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1784797582; c=relaxed/simple;
+	bh=4GzYvS0NiTzZEAKCLNht7hm4a9KoQ91LLgq0quF4TyM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AK4D9VhOPIob7t7Qk8vWEtMccZcJNIpRk3teqZYT3RYKIdm1HB0wLlJGMuE+J4IrkMwe0nQQRVoGoFON4WfeIcsKYH59uHI7+d3rGpxpyImms61i5hnwdyrBkUK4q9GiqYmbrvQeflFyH/OesV8lgqZt3hAK04UwnN+90ELFPHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCcaJy4W; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jri6bLLV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Mm
-	N/y3uP7cgwc4G0YA5zVpkuGx7uvM2jBgyal0/5sj0=; b=jri6bLLVHxuT+P33WV
-	BlNNUuUmvUE9fmOWOut1j1bt8XpJ/1pSpZ95m6wq/w1mpShbxMaHONi6PcV0E1o2
-	/q9x6aT7XxE+xxjHuycpHQDoIYTYi6Zd4sYh3LvpYehKXeMKJimHZIZ1QBe4zxGS
-	mT7N33Dzvd3d7raY1JmDAQINk=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgAXxSj01WFqpPy0Ig--.27305S5;
-	Thu, 23 Jul 2026 16:51:02 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 bpf-next 3/5] selftests/bpf: Fix missing allocation null checks in test_progs.c
-Date: Thu, 23 Jul 2026 16:50:58 +0800
-Message-Id: <20260723085100.482147-4-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260723085100.482147-1-yangfeng59949@163.com>
-References: <20260723085100.482147-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCcaJy4W"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-473987fc217so81778f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 02:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784797579; x=1785402379; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qMKUSv5MV4Vhs6R+V8rT0aIWpGDegg6YGcZIq5CZLYY=;
+        b=LCcaJy4WwYw2KJHsmIsBKYNWdFeqzoU8lBQmsuFhvXuC5lnQ46u6FGSy6JMI5NAz4n
+         mTlURsvj4dCIHgADlX5eK6XpPkc6d0xRM5Na1Vuty4dqq6QnObP9o7/bI0GFeTQ1y6Fp
+         1bH1GSBpdWpj8qLM0X4hq9eJVEg6xdWedKJ+PWreeu1kW/xC8cd6wUdQMZ4xutSa9qCL
+         OIeuXMwHRBCwm8bNuFmDSVo2xFf/34D0sfwehXBSYRm9SGMIC9JsfdhVUnyuHXTrG6aZ
+         0goneJ/C5AqH2dzN33hjZCSC8XAVewWBH6mAnG7dazTZxnsvHM5U8j/YsmcM3gAHIE9W
+         VN+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784797579; x=1785402379;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qMKUSv5MV4Vhs6R+V8rT0aIWpGDegg6YGcZIq5CZLYY=;
+        b=Dccorpt9Ij+uSQJZ3GOe3LllIicvS3JB6eLAQ58J8RkbSF3sYq7H4X7i6/GHC8AYY0
+         TZkisZhHv+O15viffc2PrO5mZJpCfDep/K7f6fwg4Lz9EtaAsxk5qPmMp7DG4A1hn9rR
+         NaMAJlkUcHzRFSdyBLi1STDjYbu1PYAmGE2QLSO/AvMb1HFH2yLqbkMncZRiMFCCXYU5
+         PWtOfrK+s2QSSmnzRXKdgai0DwHFNwWpqdjHA5j1NYLyvH/TgfVlzayGRp2M64DnJBic
+         pQZBDfS1jTZcRfar/wBqnI+1lgm7reBcos45+yHm/nLiIqmmRMSk7WDiAGLLg+O9tDHZ
+         LSNw==
+X-Forwarded-Encrypted: i=1; AHgh+RqBNVyzJYh7VOTgumeYmiXy/6dt444bECvg0woBwS2zQ8xgALv31hPIAlIMMFzdlcanL0NKCN+0hamkkKdBJSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5xRPiGMU5KS+QGq4aKL6HA04hmVD6FErdZbNRCcXa0ZcIxlBb
+	Gq5WOmyJGvGTj5h+kSvRW+BlBKKv5W6x+BX4yOXcRxJBWTYiMz59mDinn2Dtx+EhyE4=
+X-Gm-Gg: AR+sD125l2BqzR9jGCtSzvyJYyz+fLfrSke0TRAf+6RnvF3IBc7B2zJtTXY6U5rUh8A
+	fJSAGIpCZ9iR97BCyshNTaepldvnyQpSKkxkpVbG5PRw7Ic4m+5kb6st6lfr4ckydrSzBEGZnsb
+	ob9Z+gy1XOsTpIfR+T/u/Z0zRHLFFi72zWk2hbWVTc9/2xLVbT9E4iV4Xrlp9Cvx9u2CpHdemhk
+	pdN/IxWg7SZggC2+sI/321mV+lRHypr43MIWlbgVXTNkKNnoYU+j92qQRNG8CQkA7prRSHSDyGB
+	hyNMAroA0BM85Wjk/LZL0TxUKAH51/U3LfVbmxAs494S7idU/QH538r+p8kSD+Th7+4f0UW0zfV
+	WniXh35t+YrH0gC8Of4TyxTJdYX7z6N2ppZNc41IJYyeAdD4Rwb5auZBrPGhGeY5vGxO9KAgtUd
+	eGb/mUos6Zs+njybeSH/ab+j1bDKKKV+H15HjT2GCkUl2O8i5ZJt88w3k2bssZwKjgurymBg+/4
+	4fyaCmK2W/E3jayJW+lAl/pZN7fiOY=
+X-Received: by 2002:a05:600c:37ca:b0:495:4505:dad0 with SMTP id 5b1f17b1804b1-49573c8fd24mr13828015e9.2.1784797579219;
+        Thu, 23 Jul 2026 02:06:19 -0700 (PDT)
+Received: from [192.168.2.69] (dynamic-077-179-229-147.77.179.pool.telefonica.de. [77.179.229.147])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956b4e8885sm90392205e9.0.2026.07.23.02.06.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2026 02:06:18 -0700 (PDT)
+Message-ID: <4391fd75-e190-4585-a5e0-6dd3099925b5@gmail.com>
+Date: Thu, 23 Jul 2026 11:06:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgAXxSj01WFqpPy0Ig--.27305S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AryDXw43ZrWfuFyDXw43KFg_yoW8Ar15pF
-	WkJr95Kr43XanIqFsxCrWjkF4rKw4vq3yxKayDt347ArnrXr97Kwn7KFWUtFn3urWFvrWf
-	Z3Wv9rsa9r48Ja7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jDNVkUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0BalHmph1favxAAA3+
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RESEND PATCH net 0/4] net: hsr: fix GRO/GSO super-packet
+ handling
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ horms@kernel.org, andrew+netdev@lunn.ch, qingfang.deng@linux.dev,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260722171836.196-1-xiexinet@gmail.com>
+ <dc814287-dfb1-4514-b349-104e6754cd38@redhat.com>
+Content-Language: en-GB
+From: Xin Xie <xiexinet@gmail.com>
+In-Reply-To: <dc814287-dfb1-4514-b349-104e6754cd38@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On 23/07/2026 09:59, Paolo Abeni wrote:
+> Please have a look at:
+> 
+> https://elixir.bootlin.com/linux/v6.6/source/Documentation/process/maintainer-netdev.rst#L385
+> 
+> Unfortunately this is a very bad period for unneeded repost, given the
+> unusually huge PW backport. Processing of this series will be delayed.
+> 
+> /P
+> 
+Apologies for the noise and the extra work in the PW queue. I missed the 24h rule for unreviewed resends and will strictly observe it going forward.
 
-Add null checks after memory allocations to prevent potential segmentation faults.
-
-Fixes: 79b453501310 ("tools/bpf: add a test for bpf_get_stack with tracepoint prog")
-Fixes: 0925225956bb ("bpf/selftests: Add granular subtest output for prog_test")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/test_progs.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 312743c4337f..301c6e11ceaf 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -730,11 +730,14 @@ int compare_map_keys(int map1_fd, int map2_fd)
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
- {
- 	__u32 key, next_key, *cur_key_p, *next_key_p;
--	char *val_buf1, *val_buf2;
--	int i, err = 0;
-+	char *val_buf1 = NULL, *val_buf2 = NULL;
-+	int i, err = -ENOMEM;
- 
- 	val_buf1 = malloc(stack_trace_len);
- 	val_buf2 = malloc(stack_trace_len);
-+	if (!val_buf1 || !val_buf2)
-+		goto out;
-+	err = 0;
- 	cur_key_p = NULL;
- 	next_key_p = &key;
- 	while (bpf_map_get_next_key(smap_fd, cur_key_p, next_key_p) == 0) {
-@@ -1514,6 +1517,10 @@ static int dispatch_thread_send_subtests(int sock_fd, struct test_state *state)
- 	int subtest_num = state->subtest_num;
- 
- 	state->subtest_states = malloc(subtest_num * sizeof(*subtest_state));
-+	if (!state->subtest_states) {
-+		state->subtest_num = 0;
-+		return -ENOMEM;
-+	}
- 
- 	for (int i = 0; i < subtest_num; i++) {
- 		subtest_state = &state->subtest_states[i];
 -- 
-2.43.0
-
+Xin
