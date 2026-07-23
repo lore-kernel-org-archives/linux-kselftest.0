@@ -1,97 +1,83 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAE53E2752
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 22:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62C3E5EDB
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 22:58:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784845357; cv=none; b=F63Z7WxlwLQA/l8P35my4EbHA7gWBBQ+mWvz4dM0wtaUpoRLyy2FBuEk7PFj7O/e8jO5bCwXQwaADSouN1nBpf0DztxI9q+yDFZTc8jpoK+PXAoT08uvFZkxD3wDLGkK7C+6hGaUFTno5h4A4EPNDa1IBFdN67bGBzEVSvGI5ck=
+	t=1784847534; cv=none; b=EqkPBUXv5FFUMqKB0JjSjii82MJJJhxTk6ANMVcHnR/L30uoI//uA6iFqB/0G4rc4ZIl1tzdQvoImafzC+2zQAGNeFILh77fdtPbYFo2wGJAPPs+rICjFEsaKEQVEIw2NQsWFB0di4R9I8pPm0c6IVvUFfqWtWF7cawbZfAdaps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784845357; c=relaxed/simple;
-	bh=Wvd75UyM3t5SH/M552skzv7ZTvYbtFThnmEOgAthFuk=;
+	s=arc-20240116; t=1784847534; c=relaxed/simple;
+	bh=yVe6z1RcUZaY3Sf56/QfYhtCxfjWa8zL2up9uH95h30=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J18aC0IXRh5MU7ey9U3w+J0GPBhN1o416U106dDQlHD3FrZwPC17yGbo/CvshgmxwyLvGCFsTPe5fvUNKHDslh9DPmtUDRh6uHEVNNfHlnmrejJOLUwxz0JKM2W5oQoyCp80UfegbYyRsf4VBo9duUA7TdyKGtAU4fJSKV3AyvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TnhdiESF; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ij2mG6c9aq9NbJQNmELHTX/mGM+vlESsQF9VOw5Y5iX4nwzQTJpRkftTHykGb2PhujEmsJrghSBGAlFx1OSA+4jEeobcpTIczqxifgr81O7Xcpj5p+7WuxkbkTPVwJPuCQ/r95VQu/H65pmWzvDUUkPEqQJdwP80tuV4uIj0Hks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mn4LlFnP; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TnhdiESF"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cacb8416a1so11757355ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 15:22:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mn4LlFnP"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ccdf36f63dso4865ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 15:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784845349; x=1785450149; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784847531; x=1785452331; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=vzwHTZR2iosFUiZOe0Oy97LjUFogfrOTmiFLxNsdVTA=;
-        b=TnhdiESFNVee+/U2SlhG1d5C8d33gpY2U5q9rvR+za+5edsgbVRJ2KygeDUSPGNmwE
-         nNL5VWLWBSRrOd+WiAL35Mv94IrHxwhp+nbkF9f50UTB+30QNNu/203dDPg5UvK6gzPb
-         +J4XuIJctudBv4vgO6hYlMVEi4zlGu7LV7dVEEj/M7+3sTAQz9gaCB5EHcPzJra4PYXJ
-         8eblodvrNtVlOQ21kGfIBcqrv2x/dAZVzb1Tkxq8SPE3zCzMZf7+1W4FBDAY0XDPt83Y
-         fJWq+R8rIP5tXQIxBJ81mSegmXIggPxBUFr/tVwAYyLONUnJyv/QkO7K7KoMoQK50MU7
-         eUbA==
+        bh=Zj8yGGu0ZvQspv+dm8spEGL6AmJp5gd8JQ+4SasQ24M=;
+        b=mn4LlFnPZHnhq6bgD26muuFAuTY3LEmaHjdmqYiV/FOtSRLYtcs/IryJ8ya5My0fHX
+         DjwNelgeHWvdrC4iZSQvHMhwQjSOspc0MhoZ9uuia8dU3h9HozAIlHkScfQCljztzp39
+         KoX0g7l/df5N/BMI/6WjwsVmI6c18nDM+N7Iwk/rHFXKoiZh5nVm3XIRg1WJOfAUQ+4V
+         xfEGYOfo/wqmxDgJDXTWS//xj+3YdcnRqjLm77AgBw+utfliuI1fUBW0BMPcupzfKG2W
+         O+Z3gUNErYx3rWxI16VN/F2xsD7i69tFm/Uwk2ERnWPHBYKHsMSuTFXDUtkkb9ja0KJr
+         bMFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784845349; x=1785450149;
+        d=1e100.net; s=20251104; t=1784847531; x=1785452331;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vzwHTZR2iosFUiZOe0Oy97LjUFogfrOTmiFLxNsdVTA=;
-        b=rT9xWhkvxCUA3aTG2OkrmqsWzC8yU+aklD5g7AOz2zJKXFRggr1hSLb+Q/6+N27X8b
-         dbVSVvUmQok+KOQXYsIT1oncniLOVLsiKQTVHD1dqt+DBkCTq4xW75SamoO+7DrNpC7m
-         zNEALIjsE7ljZ21gP/EaYCbYN54vOE8XI4KwSnxfYOqfTuZyVTg+EG7tLfIlfco/7deI
-         Q6JpZNQmWIcxpn0jzZFx2FpRTujafFefOdYCzUIPuD/vmApMHwBmqn3WRCsj6th3dEUy
-         gN9dm74BhOdB3BqPUdAgpkkjpn5gNy9TlUFTumUK4/lnb2Bu8988unoGMV1cFci37Lwt
-         5hAA==
-X-Forwarded-Encrypted: i=1; AHgh+RpPinrr8dasxTAIxm+kQ8whSvhxz0i/EufSNsKUf62SUQuZs48Rn39IAC2KgeTtMQBxwt6y1//UOG3TR41qgNw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9iNFEV+oWR4C554TojfRlIZxhlM145Ngpsl3arN+5BsQ+VN0Z
-	nXUBq8TGU6GSN2OTVi6MWLy8JCGFHXg5NvXvLe6SV+qK2j+HFEhlBT2A
-X-Gm-Gg: AR+sD13oF9xW+KdqM17qUXhRtx+gTkGy5chR0McwpcIhmixHdh8dU7WMnkQKPiEVJwa
-	1VWD97Yv8VGaYSPPZEOxLM6lcMiUqQcwo5Xn6CCbu8yWM5eL6eGT4eDDDoZuKJzyo7OaU3RX8XH
-	fPs4jpFy7bJEynQlTGvVOEKgWLTsE8NFT48zzVMepP3emDtuenb2WnIRswH+Kcoe5E15WpjG1Q0
-	NoMwt0dLtznsrTcGlWG6OmhPQ3/8xbGffNjLJwQDx57r/Xk3HZpazwfuSVCeGd+Ddwe0mg8Pl0w
-	cKao9/icu5QGclwAQ6I09fF5YBNbFjIKxSu106olq3YWcSo0LHO82fLCTH8sCHlon5lCIagccZ8
-	E3/FfIYp5DGOd0sIwSZ3eBjqPvb2cIO9uAiYexQgzRZB7kPXKBWeR6HWBiUONYQiRrt9b1ojWdA
-	Yaz6eXje4Bev+hkQqHHOKM7W75h5SJ1TFos2rmoNJMx8Bt
-X-Received: by 2002:a17:903:90f:b0:2cb:2b53:559f with SMTP id d9443c01a7336-2cfa6c793d3mr60755125ad.35.1784845349134;
-        Thu, 23 Jul 2026 15:22:29 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf8f38757esm40198575ad.75.2026.07.23.15.22.27
+        bh=Zj8yGGu0ZvQspv+dm8spEGL6AmJp5gd8JQ+4SasQ24M=;
+        b=P03yfS5AclNIv0ZPxeHYlsXjel7eXOtmhdoUK96czgRA1fnUT0qQtavd8OwI4pLf9M
+         DtAGqbj3Ar7/7+6PX1PyovpSSHCLZYPMwAzD09Zd7stJuuSqG0KSheeN53WnzpiNURKi
+         loVmdIAkcCgsWPPQy/gdBgU4PLxwTefYJJQro2umU6aOIwRQPgV5Qul+La49uMgwX1Gw
+         vfxYNjEFBhc07sxPZ5CuKN1aYqW9DEMO4Lac5ebqnSgGYLVFe8qPwCh//gb8lLMq1s4j
+         s2pwkevpEkCW7vOuXs0YEZVMH1c/j8C8v1hwdmJbNytfaUqRIbmeMZG30f+lWM+EV89d
+         PwHw==
+X-Forwarded-Encrypted: i=1; AHgh+RqhbFRW/7EXSqaDyZEG08ckfdYG0VETg5SzUd7s0GgVGKLPoms3awprHZdKxr9Tt5T4Zefm/QHETgZd7DX7XBo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjMocTLdNYHZ/95aDTamUXlx4Vb+mWN0yHq3NEH3Qo1WOfdsEG
+	GWb6vwMMU7uXLbmpOT3zKpBfvNync6Js5Xh9hE5JlbN4XIT/SOBz8QiXRQSg18odYA==
+X-Gm-Gg: AR+sD11BiBU5cbQoHJK0lARiLjgkNnuO9e6XJLtR2kADp61P/Nf+f7r3cJ7SwlmEhP5
+	gPNhXDJgPw6jpCh1dxw7Kxj53PaNiOSsqq8VwnclxcicBe2MiDXkwLZsqkaUJOCWcL7oliYarL+
+	cR/aY1bHveJrgiKe96RAHyz1cWLGXCD81aWtEktu7nQqumbZz/f3OVFDUvczt5+qUJEVYk40gLf
+	kFXccXsas8kvOsbDDq2cHBqat/5PT1PQp86Nd6zBg3hqf3YQPJzJb1s3uxZPbSIkKWiuGpjyiE0
+	ZXlSdDIxow6m4NsnfyMw74ezYZN+Ofxq6tWz/vTd8dHC7qBXysRrce0OzepUq4WTMPr+oWPyRPN
+	qAeFVI7zouuJUPHngiQhrInAnF+uFdvLhxc71etXelkOZT3W4BAgq1NV3s9vTXMjNHdzwLKZJNW
+	7SVfvfhAhLF+UXSvlb9XFz/1LxfS9TSp5E1n9J6q4=
+X-Received: by 2002:a17:902:d4c6:b0:2c9:a222:47e0 with SMTP id d9443c01a7336-2cfc049d8efmr1917685ad.20.1784847530903;
+        Thu, 23 Jul 2026 15:58:50 -0700 (PDT)
+Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e17236924sm3686474b3a.7.2026.07.23.15.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 15:22:28 -0700 (PDT)
-Date: Thu, 23 Jul 2026 15:22:25 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Lyude Paul <lyude@redhat.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Min Ma <mamin506@gmail.com>, Lizhi Hou <lizhi.hou@amd.com>,
-	Oded Gabbay <ogabbay@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v11 0/8] mm/hmm: Add mmap lock-drop support for
- userfaultfd-backed mappings
-Message-ID: <amKUIWpMfVS6OFkQ@skinsburskii>
-References: <20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com>
- <20260723142242.5d3f87208d47819d873ae458@linux-foundation.org>
+        Thu, 23 Jul 2026 15:58:50 -0700 (PDT)
+Date: Thu, 23 Jul 2026 15:58:45 -0700
+From: Vipin Sharma <vipinsh@google.com>
+To: alex@shazbot.org, rppt@kernel.org, pasha.tatashin@soleen.com, 
+	pratyush@kernel.org
+Cc: ajayachandra@nvidia.com, amastro@fb.com, ankita@nvidia.com, 
+	apopple@nvidia.com, bhelgaas@google.com, chrisl@kernel.org, christian.koenig@amd.com, 
+	corbet@lwn.net, dmatlack@google.com, graf@amazon.com, 
+	jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, jrhilke@google.com, 
+	julianr@linux.ibm.com, kees@kernel.org, kevin.tian@intel.com, leon@kernel.org, 
+	leonro@nvidia.com, lukas@wunner.de, mattev@meta.com, michal.winiarski@intel.com, 
+	parav@nvidia.com, praan@google.com, rananta@google.com, rientjes@google.com, 
+	rodrigo.vivi@intel.com, saeedm@nvidia.com, schnelle@linux.ibm.com, 
+	skhan@linuxfoundation.org, skhawaja@google.com, vivek.kasireddy@intel.com, witu@nvidia.com, 
+	yanjun.zhu@linux.dev, yi.l.liu@intel.com, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 00/20] vfio/pci: Base Live Update support for VFIO
+Message-ID: <20260723215749.GC260824.vipinsh@google.com>
+References: <20260714151505.3466855-1-vipinsh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,104 +86,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260723142242.5d3f87208d47819d873ae458@linux-foundation.org>
+In-Reply-To: <20260714151505.3466855-1-vipinsh@google.com>
 
-On Thu, Jul 23, 2026 at 02:22:42PM -0700, Andrew Morton wrote:
-> On Thu, 23 Jul 2026 10:36:32 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
+On Tue, Jul 14, 2026 at 08:14:45AM -0700, Vipin Sharma wrote:
+> Hello,
 > 
-> > This series extends the HMM framework to support userfaultfd-backed memory
-> > by allowing the mmap read lock to be dropped during hmm_range_fault().
-> > 
+> This series can be found on Github:
 > 
-> Thanks, I've updated mm.git to this version.
+>   https://github.com/shvipin/linux vfio/liveupdate/v5
 > 
-> AI review suggests there may be some problems.  Sorry, I don't recall if
-> these were considered in previous versions of the patchset:
-> 
-> 	https://sashiko.dev/#/patchset/20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com
+> This series provides the base support to enable Live Update feature for
+> VFIO PCI devices using the Live Update Orchestrator (LUO) and Kexec
+> Handover (KHO).
 > 
 
-These look like new findings, perhaps from a newer model or review prompt.
+Hi Alex, Pasha, Mike, and Pratyush,
 
-I do not think they apply here.
+I'd like to discuss which maintainer tree should take the VFIO Live
+Update series.
 
-The unlockable path sets FAULT_FLAG_ALLOW_RETRY only when HMM provides a
-non-NULL lock state pointer. The legacy hmm_range_fault() path passes NULL
-and therefore does not opt in to lock-dropping faults. Fault handlers are not
-supposed to return VM_FAULT_RETRY/VM_FAULT_COMPLETED with the mmap lock
-dropped unless FAULT_FLAG_ALLOW_RETRY allows that, so the NULL locked state is
-not expected to be dereferenced on the legacy path.
+For context on related efforts:
 
-For the FAULT_FLAG_TRIED concern, HMM is not trying to emulate GUP's exact
-single-address retry loop. If a fault drops mmap_lock, HMM has to restart the
-range walk because the VMA/page table state may have changed. Resetting the
-timeout on that path is intentional: a lock-dropping fault made progress, and
-the timeout is meant to bound mmu-notifier retry churn rather than the time
-spent servicing faults.
+  - PCI Live Update is targeting the Live Update tree (maintained by
+    Pasha, Mike, and Pratyush, with David Matlack maintaining the
+    PCI-specific code).
+    https://lore.kernel.org/linux-pci/20260710212616.1351130-2-dmatlack@google.com/
 
-Also, the newly converted HMM users are not using this path for ordinary
-file-backed page-cache population, and process-context callers can still be
-interrupted by fatal signals. All the existent kernel thread callers are
-capped by a timeout.
+  - IOMMU Live Update is planned to go through the IOMMU tree.
+    https://lore.kernel.org/linux-iommu/20260614233728.2212104-3-skhawaja@google.com/
 
-So I do not think this requires a code change.
+Given these different approaches, what is your preference for routing
+the VFIO Live Update code?
 
-Thanks,
-Stanislav
+Thanks
+Vipin Sharma
 
-
-> > 
-> > Changes in v11:
-> >   - Reject unstable address spaces in hmm_range_fault_unlocked_timeout()
-> >     after taking mmap_lock and before walking page tables.
-> >   - Compute the remaining HMM timeout budget before the time_after_eq()
-> >     check in drm_gpusvm_get_pages() to make sure it can't result in zero
-> >     and lead to infinite HMM range faulting loop.
-> 
-> Here's how v11 altered mm.git:
-> 
-> 
->  drivers/gpu/drm/drm_gpusvm.c |    4 ++--
->  mm/hmm.c                     |    6 ++++++
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> --- a/drivers/gpu/drm/drm_gpusvm.c~b
-> +++ a/drivers/gpu/drm/drm_gpusvm.c
-> @@ -1422,11 +1422,11 @@ int drm_gpusvm_get_pages(struct drm_gpus
->  	struct dma_iova_state *state = &svm_pages->state;
->  
->  retry:
-> +	remaining = timeout - jiffies;
-> +
->  	if (time_after_eq(jiffies, timeout))
->  		return -EBUSY;
->  
-> -	remaining = timeout - jiffies;
-> -
->  	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
->  	if (drm_gpusvm_pages_valid_unlocked(gpusvm, svm_pages))
->  		goto set_seqno;
-> --- a/mm/hmm.c~b
-> +++ a/mm/hmm.c
-> @@ -17,6 +17,7 @@
->  #include <linux/slab.h>
->  #include <linux/sched.h>
->  #include <linux/mmzone.h>
-> +#include <linux/oom.h>
->  #include <linux/pagemap.h>
->  #include <linux/leafops.h>
->  #include <linux/hugetlb.h>
-> @@ -806,6 +807,11 @@ int hmm_range_fault_unlocked_timeout(str
->  		if (ret)
->  			return ret;
->  
-> +		if (check_stable_address_space(mm)) {
-> +			mmap_read_unlock(mm);
-> +			return -EFAULT;
-> +		}
-> +
->  		if (timeout && time_after(jiffies, deadline)) {
->  			mmap_read_unlock(mm);
->  			return -EBUSY;
-> _
-> 
