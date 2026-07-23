@@ -1,130 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8805434E75A;
-	Thu, 23 Jul 2026 02:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77248470E99;
+	Thu, 23 Jul 2026 02:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784772683; cv=none; b=GF/6uWv9GujnJ9qriFMBqHpxZ4xkf2HBbC+xoU6xvpZ3+EcGii1/fG9hvVLJZaQr2eJpfxFpm/TpRTW1Lb7We/2OjU2qdv/gBCDj6UTsT3CkLa5a+p0Qlho+WL2/xJ629mCwwv+/5Xen8fZz4K1SHGFa4CMCE/q1mvzFTGKdd48=
+	t=1784774225; cv=none; b=m/1BBOBiLFeStbfnWGjtk7J7HCeq0PaRJ6ID5/LB/iVqVXmealeDhlTbpfpXtYjoxfvyBlYdTgLtUY/+vshHhQuRydii4vflz/V/NWuEIF6oSMyoxRfu0/sKTk8yhfmqcuBuHmBurahck+tBzGf84y41sqTZTZPBqPck0UR/NCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784772683; c=relaxed/simple;
-	bh=b7bgA4GS9lfKOXMTzjt9PgQ7i+Hg/NN96aHcSylK5wQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pmVqimW+oL/2+CRAKVIt4EUpUK/VF3stfAjRz5iVxZXugTPrbOI+XS6MH6+MZnIp3hZRsTM7kUYjJjyP6SConX3KPyjsTjX4mdfIcKOa4Wo8VbYLLnoPtQXNpp9eXkP46VnxEXNtDMFjy63ux7J9N5YEzBbN1Zim5KAmeoOUU7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=trMrDaTU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="trMrDaTU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C57CC19425;
-	Thu, 23 Jul 2026 02:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1784772683; bh=b7bgA4GS9lfKOXMTzjt9PgQ7i+Hg/NN96aHcSylK5wQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=trMrDaTU9oGMpWKQv3StYauGZvFQGni9gGjJprxxwViNz+ngzk0i6E/qzFl21akXt
-	 Y5j9kkJ9OG1v5AmIe8T6sXWUiqc+H0XvHHitamFcknVTvuQwpsDXt9GkuRZkQM7L2x
-	 UpwINa+wnJFjarMDzhnBISO5zuIqy9lQXiRAYcuM=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA82DC531C7;
-	Thu, 23 Jul 2026 02:11:22 +0000 (UTC)
-From: Alvin Sun <alvin.sun@linux.dev>
-Date: Thu, 23 Jul 2026 10:10:32 +0800
-Subject: [PATCH v9 09/10] rust: macros: remove `THIS_MODULE` static from
- `module!`
+	s=arc-20240116; t=1784774225; c=relaxed/simple;
+	bh=8wk/bP64hP2KTssLfv6UY/2vePcRTwVYSH6ldbyD1uo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=esia1IULVg1oycB+/8g9RwARZ6Ospw9bMQur7TEJreVzDUeahyBqQ+1UIGx4tmVyeSzfpj5cpaXTwTGmp6Pc4wFKFPWtTHFRURWbyay8KonQ+yX1CyJKVX/P7Flnd1mVkB0u+8YPsoE7COKAUdNkyyfA+I7vONgg8ur9CMffdMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:e839a83c-428e-4535-b3d4-f85157ba64fe,IP:0,U
+	RL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:2
+X-CID-META: VersionHash:e7bac3a,CLOUDID:d2742e206fa6391dd61c9f0c70fa0008,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|865|898,TC:nil,Content:4
+	|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,O
+	SI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 5c3682fa863f11f1aa26b74ffac11d73-20260723
+X-User: jiangfeng@kylinos.cn
+Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 200611879; Thu, 23 Jul 2026 10:36:51 +0800
+Message-ID: <de2da58a-ae94-4e38-b9cc-517e48d894c3@kylinos.cn>
+Date: Thu, 23 Jul 2026 10:36:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260723-fix-fops-owner-v9-9-c1c3af7f7bcb@linux.dev>
-References: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-In-Reply-To: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
- Igor Korotin <igor.korotin@linux.dev>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
- Carlos Llamas <cmllamas@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1784772679; l=1856;
- i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=b7bgA4GS9lfKOXMTzjt9PgQ7i+Hg/NN96aHcSylK5wQ=;
- b=XZI9XPcXFxW6ssnwu4RjhBeXuypNQUNTuRBLu+ygEQQcqK4O5f5EZ9xXYVaZ0tSYL3E4VYAqA
- kQqOLDz0hgIBLPSVtrfyYU82hXV4JZXZ6HWkCmNGPBS3X3KR6l5/Bur
-X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
- pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
-X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
- auth_id=684
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 2/3] selftests/bpf: test timed may_goto
+ preserves R0-R5
+To: Pu Lehui <pulehui@huawei.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>,
+ Xi Wang <xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260722-riscv-bpf-timed-may-goto-v4-0-e117e6337bc7@kylinos.cn>
+ <20260722-riscv-bpf-timed-may-goto-v4-2-e117e6337bc7@kylinos.cn>
+ <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
+Content-Language: en-US
+From: Feng Jiang <jiangfeng@kylinos.cn>
+In-Reply-To: <2cd8255d-2b0a-45d8-bbc2-ac19e196c41a@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-All users have been migrated to `ModuleMetadata::THIS_MODULE` const or
-`this_module::<LocalModule>()` helper. The `static THIS_MODULE`
-generated by the `module!` macro is no longer referenced anywhere,
-so remove it to avoid having two sources of the same `ThisModule`
-pointer.
+On 2026/7/22 19:10, Pu Lehui wrote:
+> 
+> 
+> On 2026/7/22 12:21, Feng Jiang wrote:
+>> Add a test that checks R0-R5 are preserved across
+>> arch_bpf_timed_may_goto() calls.
+>>
+>> Use bpf_get_prandom_u32() to avoid the verifier removing the checks
+>> via DCE.
+>>
+>> Suggested-by: Björn Töpel <bjorn@kernel.org>
+>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>> ---
+>>   .../selftests/bpf/progs/verifier_may_goto_1.c      | 57 ++++++++++++++++++++++
+>>   1 file changed, 57 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+>> index 4bdf4256a41e..98d59108d097 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+>> @@ -106,4 +106,61 @@ __naked void may_goto_batch_2(void)
+>>       : __clobber_all);
+>>   }
+>>   +/*
+>> + * Use bpf_get_prandom_u32() to prevent DCE from removing the checks.
+>> + * retval: 0=all ok, 1-6=R0-R5 clobbered.
+>> + */
+>> +SEC("raw_tp")
+>> +__description("timed may_goto preserves R0-R5")
+>> +__arch_x86_64
+>> +__arch_arm64
+>> +__arch_riscv64
+>> +__success
+>> +__retval(0)
+> 
+> __arch_s390x is also supported timed_may_goto
 
-Assisted-by: opencode:glm-5.2
-Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Acked-by: Danilo Krummrich <dakr@kernel.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
----
- rust/macros/module.rs | 16 ----------------
- 1 file changed, 16 deletions(-)
+Will add it in v5.
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index aa9a618d5d19e..23b6a1b456b80 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -497,22 +497,6 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
-         /// Used by the printing macros, e.g. [`info!`].
-         const __LOG_PREFIX: &[u8] = #name_cstr.to_bytes_with_nul();
- 
--        // SAFETY: `__this_module` is constructed by the kernel at load time and will not be
--        // freed until the module is unloaded.
--        #[cfg(MODULE)]
--        static THIS_MODULE: ::kernel::ThisModule = unsafe {
--            extern "C" {
--                static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
--            };
--
--            ::kernel::ThisModule::from_ptr(__this_module.get())
--        };
--
--        #[cfg(not(MODULE))]
--        static THIS_MODULE: ::kernel::ThisModule = unsafe {
--            ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
--        };
--
-         /// The `LocalModule` type is the type of the module created by `module!`,
-         /// `module_pci_driver!`, `module_platform_driver!`, etc.
-         type LocalModule = #type_;
+> 
+>> +__naked void timed_may_goto_preserves_regs(void)
+>> +{
+>> +    asm volatile (
+>> +    "call %[bpf_get_prandom_u32];"
+>> +    "r6 = r0;"
+>> +    "r0 = 0x1111;"
+>> +    "r0 += r6;"
+>> +    "r1 = 0x2222;"
+>> +    "r1 += r6;"
+>> +    "r2 = 0x3333;"
+>> +    "r2 += r6;"
+>> +    "r3 = 0x4444;"
+>> +    "r3 += r6;"
+>> +    "r4 = 0x5555;"
+>> +    "r4 += r6;"
+>> +    "r5 = 0x6666;"
+>> +    "r5 += r6;"
+>> +    ".8byte %[may_goto];"
+>> +    ".8byte %[loop];"
+>> +    "r0 -= r6;"
+>> +    "r1 -= r6;"
+>> +    "r2 -= r6;"
+>> +    "r3 -= r6;"
+>> +    "r4 -= r6;"
+>> +    "r5 -= r6;"
+>> +    "if r0 != 0x1111 goto 1f;"
+>> +    "if r1 != 0x2222 goto 2f;"
+>> +    "if r2 != 0x3333 goto 3f;"
+>> +    "if r3 != 0x4444 goto 4f;"
+>> +    "if r4 != 0x5555 goto 5f;"
+>> +    "if r5 != 0x6666 goto 6f;"
+>> +    "r0 = 0;"
+>> +    "exit;"
+>> +    "1: r0 = 1; exit;"
+>> +    "2: r0 = 2; exit;"
+>> +    "3: r0 = 3; exit;"
+>> +    "4: r0 = 4; exit;"
+>> +    "5: r0 = 5; exit;"
+>> +    "6: r0 = 6; exit;"
+>> +    :
+>> +    : __imm(bpf_get_prandom_u32),
+>> +      __imm_insn(may_goto, BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0)),
+>> +      __imm_insn(loop, BPF_RAW_INSN(BPF_JMP | BPF_JA, 0, 0, -2, 0))
+>> +    : __clobber_all);
+>> +}
+>> +
+>>   char _license[] SEC("license") = "GPL";
+>>
+> 
+> not work, pls take a look
+
+The __retval(0) annotation enables the test_run path in test_laoder.
+do_prog_test_run() sets data_in/data_out/repeat by default,
+which bpf_prog_test_run_raw_tp() rejects with EINVAL. Switching to
+SEC("syscall") makes test_loader use empty opts. Will fix it in v5.
+
+> 
+> root@(none):/mnt/bpf# ./test_progs -v -a verifier_may_goto_1
+> bpf_testmod.ko is already unloaded.
+> Loading bpf_testmod.ko...
+> [   26.123549] bpf_testmod: loading out-of-tree module taints kernel.
+> [   26.127885] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+> Successfully loaded bpf_testmod.ko.
+> tester_init:PASS:tester_log_buf 0 nsec
+> process_subtest:PASS:obj_open_mem 0 nsec
+> process_subtest:PASS:specs_alloc 0 nsec
+> run_subtest:PASS:obj_open_mem 0 nsec
+> run_subtest:PASS:unexpected_load_failure 0 nsec
+> VERIFIER LOG:
+> =============
+> processed 43 insns (limit 1000000) max_states_per_insn 0 total_states 4 peak_states 5 mark_read 0
+> =============
+> do_prog_test_run:FAIL:1114 FAIL: Unexpected bpf_prog_test_run error: 22 (Invalid argument) #660/1   verifier_may_goto_1/timed may_goto preserves R0-R5:FAIL
+> #660     verifier_may_goto_1:FAIL
+> Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+> Successfully unloaded bpf_testmod.ko.
 
 -- 
-2.43.0
-
+With Best Regards,
+Feng Jiang
 
