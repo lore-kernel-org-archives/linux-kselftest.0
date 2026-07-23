@@ -1,16 +1,16 @@
 Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A7D47B437;
-	Thu, 23 Jul 2026 12:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496BC48C40B;
+	Thu, 23 Jul 2026 12:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784809330; cv=none; b=PzKZRddggHpXQPXXE48i9JSHurtB+/3OqF38/FwXNyRkEH/J98+/eJO8IyLHmAJXKptggVQazRlX6fbs5n3lT05HgFlKXaUAGi2IRveGOCutgASpRdkO+kOOYlu79qiRXve1B4s1Aw4SgCIWJSDrdBkIfJaqaW0ZtBne8YXUQxg=
+	t=1784809336; cv=none; b=Y5OWkK/TsYWfeVfb2oWZ7cgD4/A3EkVpgYSzTlTQ4Topz7nEE1b7coU/fqqHIxYpnn++EG6+QytSVFi/xckUkoKm7C8YH/lUQ9m9HOJy/l1+0BqsiJe7c6Jyc4r/MQvLJp8ZNQNlanBv4Kcl/vurO4KYp+gvk1a9Kg4KicbjWMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784809330; c=relaxed/simple;
-	bh=0aCETM3BlVRGNduO75AdqbYb3DYFUNrgggcAF/0c4Bs=;
+	s=arc-20240116; t=1784809336; c=relaxed/simple;
+	bh=32Q+5eSAVonrEJnbHwtRugBf5p3YaZYDwHB60CiM88g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EVFlI6orr/usUTHRpRNv8EhOdAYGhEN9L2MMWKGmvrwYvmnbcyQRTFx7Ff8a21Z2hT2Or4XVF3cC4IJ/sXFhuW0H/Fkfz7Aqqj0r6xm+y+33cWokvLTzOXcH1e38+nNLWekJcAYTDfN19kwhs1ShRsorFeBWbUN3qHlRKd0C6SE=
+	 MIME-Version; b=EAIz/Vw+tcmzbxJpOEdONj2PnjTA+Yh2PbfjXnYyMvUzm8oj4fRhea2KCbmppCVPL66+niGEJXR/dpUmUBtSv5Zp3yCo42mNy/tq+BgdAPDRee5HurXDqwr9gAbtlbuwulO7uCPl7cv7fa/vsfOfUwiVLjU6m6w+lEj85/ikkQw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
@@ -18,12 +18,12 @@ Received: from [2001:67c:370:1998:30cb:b625:4f9:61b4] (helo=alea)
 	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsR9-00000003WlM-0GlJ;
-	Thu, 23 Jul 2026 14:22:03 +0200
+	id 1wmsRG-00000003Wli-0vPZ;
+	Thu, 23 Jul 2026 14:22:10 +0200
 Received: from equinox by alea with local (Exim 4.99.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsQm-00000000Q0e-1SU1;
-	Thu, 23 Jul 2026 14:21:40 +0200
+	id 1wmsQt-00000000Q0r-3Pzr;
+	Thu, 23 Jul 2026 14:21:47 +0200
 From: David 'equinox' Lamparter <equinox@diac24.net>
 To: Paolo Abeni <pabeni@redhat.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Ido Schimmel <idosch@nvidia.com>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	David 'equinox' Lamparter <equinox@diac24.net>
-Subject: [PATCH net-next v2 01/10] net/ipv6: fix lookup for ::/0 (non-)subtree route
-Date: Thu, 23 Jul 2026 14:19:27 +0200
-Message-ID: <20260723122106.99772-2-equinox@diac24.net>
+Subject: [PATCH net-next v2 02/10] net/ipv6: flatten ip6_route_get_saddr
+Date: Thu, 23 Jul 2026 14:19:28 +0200
+Message-ID: <20260723122106.99772-3-equinox@diac24.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260723122106.99772-1-equinox@diac24.net>
 References: <20260723122106.99772-1-equinox@diac24.net>
@@ -53,58 +53,48 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Assume a scenario with something like the following routes:
-default via fe80::1 dev dummy0
-2001:db8:1::/48 via fe80::10 dev dummy0
-2001:db8:1::/48 from 2001:db8:1:2::/64 via fe80::12 dev dummy0
+Inline ip6_route_get_saddr()'s functionality in rt6_fill_node(), to
+prepare for replacing the former with a dst based function.
 
-Now if a lookup happens for 2001:db8:1::2345, but with a source address
-*not* covered by the third route, the expectation is to hit the second
-one.  Unfortunately, this was broken since the code, on failing the
-lookup in the subtree, didn't consider the node itself which the subtree
-is attached to, i.e. route #2 above.
-
-The fix is simple, check if the subtree is attached to a node that is
-itself a valid route before backtracking to less specific destination
-prefixes.
-
-This case is somewhat rare for several reasons.  To begin with, subtree
-routes are most commonly attached to the default destination.
-Additionally, in the rare cases where a non-default destination prefix
-is host to subtree routes, the fallback on not hitting any subtree route
-is commonly a default route (or a subtree route on that).
-
-(Note that this was working for the "::/0 from ::/0" case since the root
-node is special-cased.  The issue was discovered during RFC 6724 rule
-5.5 testing, trying to find edge cases.)
+NB: the l3mdev handling introduced by commit 252442f2ae31 ("ipv6: fix
+source address selection with route leak") is dropped here - the l3mdev
+ifindex was a constant 0 on this call site, so that code was in fact
+dead.
 
 Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Cc: Maciej Żenczykowski <maze@google.com>
 ---
- net/ipv6/ip6_fib.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/ipv6/route.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
-index a130cdfaebfb..273f2bfc5286 100644
---- a/net/ipv6/ip6_fib.c
-+++ b/net/ipv6/ip6_fib.c
-@@ -1656,8 +1656,11 @@ static struct fib6_node *fib6_node_lookup_1(struct fib6_node *root,
- 					struct fib6_node *sfn;
- 					sfn = fib6_node_lookup_1(subtree,
- 								 args + 1);
--					if (!sfn)
-+					if (!sfn) {
-+						if (fn->fn_flags & RTN_RTINFO)
-+							return fn;
- 						goto backtrack;
-+					}
- 					fn = sfn;
- 				}
- #endif
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index a1301334da48..704afe2ddea7 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -5850,9 +5850,19 @@ static int rt6_fill_node(struct net *net, struct sk_buff *skb,
+ 			if (nla_put_u32(skb, RTA_IIF, iif))
+ 				goto nla_put_failure;
+ 	} else if (dest) {
+-		struct in6_addr saddr_buf;
+-		if (ip6_route_get_saddr(net, rt, dest, 0, 0, &saddr_buf) == 0 &&
+-		    nla_put_in6_addr(skb, RTA_PREFSRC, &saddr_buf))
++		struct in6_addr saddr_buf, *saddr = NULL;
++
++		if (rt->fib6_prefsrc.plen) {
++			saddr = &rt->fib6_prefsrc.addr;
++		} else {
++			struct net_device *dev = fib6_info_nh_dev(rt);
++
++			if (ipv6_dev_get_saddr(net, dev, dest, 0,
++					       &saddr_buf) == 0)
++				saddr = &saddr_buf;
++		}
++
++		if (saddr && nla_put_in6_addr(skb, RTA_PREFSRC, saddr))
+ 			goto nla_put_failure;
+ 	}
+ 
 -- 
 2.53.0
 
