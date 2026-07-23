@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB653E00B3
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 07:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597BC3655CE
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 07:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784792850; cv=none; b=AVU2wFJEg+JIbCx+hyBQQuTeKw1CUEtNchlu60N2ZZ//+SfYRPvSAa93HrS7/9UtOuKsND/gr0W1hmov6rVZxVdh3XRwyLO1Pa4AYcRwdYGBUkXRHQt4qbRO+b/Fe1I5K9gRut7sNNiclLEP1FiRustJkOXm1J2ythEmg0UNCjU=
+	t=1784792857; cv=none; b=eJCxzcITibaYXEKGw4zKRNRk9JRCYe88HaE4jSQBb+93iwP2AC6Lc2CUqEGyeEAgzARLfacVImnNlB3EF/KQJmoz3lvp8H0V85sBxtjAam0R3ZRyPHgkdUSLXUsgwW1h5Z11MttUQUydiYVXQdvfRHbRQvzKeLiThr2g48YjWzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784792850; c=relaxed/simple;
-	bh=wdoYB9ksSQhCXncTt4fxSxJ3Mz7TvFITOT54NotPTXQ=;
+	s=arc-20240116; t=1784792857; c=relaxed/simple;
+	bh=T2lbyT/yM7x1H71zHyiVIbknJvhnpix0X4z2hlwzwLI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FS95Av7g6M9a+6/3aloJjEHIpPb+hINF0wgUkmQtxH6AvsWOU9zm1PquH2xScSbsX+t7T8vw8736rJVGE8RNXDQsQ7MFp7X0bGT/FiJ2Cp7piGbwKEXHSxt4dsFiWat/hxBsqKwT2hsqvA0cF07SQX5LwPk51O8nX8h6zOLebTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a4pvFet3; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=gvT+Dg16uyq3hfEaMfeDDNZyxpLQErSdNRmqgEQbKFkv/2qxcUQdL1BI6XChIr/qioxNUXi7SCzGEncqd22BABSC7XF+BAfuytZYUohJOajeZ/rEWhnbNyb0B7igxhQAck0fs1VlztYFOgdfKbSXuFHVCiMvpBV8c1cU9OPVeIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DyxMNa5m; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a4pvFet3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DyxMNa5m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784792848;
+	s=mimecast20190719; t=1784792855;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NS4LZld37qPIOcoXEkiVMtyQomhnvEW3v8Emy4S5hTY=;
-	b=a4pvFet3tgJYNthVtVKuagCJ5es2b1IfLgr1UfFlYtwo2UrdC0CcAhPUn5vtEbPZXcPP7g
-	gACuHE6wZVNgPo3f4ZGo6fG+Oz5xyXZXPpo2bEAvG0MVzSSEQTeFGOOKjMTUm3jaJ1uvmP
-	DaJki3RgZdU3GHoXdjZdN496YJtgoQM=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=izA3D0CqoZEPLiW5dd3Cu7GNT4gzd8+KLF5CAaXCB1E=;
+	b=DyxMNa5mm6KgAsG51AI+20FHVitVPLlV7o310mDa9b4l2CFxUvmwNMColmve61Y4Nmm5DD
+	lS1ZkgkbJBTKDHMXlhMBrMvzU39h4zZFrnixW7buEHjwpHhQblLp4CRjlzbQkPotemDdP/
+	qLkERqTWlHGuhSf4GgGXfMeaEzKhi08=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-407--7MBmvfoPSCataVvgTb57Q-1; Thu,
- 23 Jul 2026 03:47:24 -0400
-X-MC-Unique: -7MBmvfoPSCataVvgTb57Q-1
-X-Mimecast-MFC-AGG-ID: -7MBmvfoPSCataVvgTb57Q_1784792843
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-43-NFarALcyPWOja-sJBvn8tQ-1; Thu,
+ 23 Jul 2026 03:47:29 -0400
+X-MC-Unique: NFarALcyPWOja-sJBvn8tQ-1
+X-Mimecast-MFC-AGG-ID: NFarALcyPWOja-sJBvn8tQ_1784792848
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 543C5182FA23;
-	Thu, 23 Jul 2026 07:47:23 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2656F197753F;
+	Thu, 23 Jul 2026 07:47:28 +0000 (UTC)
 Received: from gmonaco-thinkpadt14gen3.local (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EBA37180029A;
-	Thu, 23 Jul 2026 07:47:19 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 84600180029A;
+	Thu, 23 Jul 2026 07:47:24 +0000 (UTC)
 From: Gabriele Monaco <gmonaco@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -49,14 +49,14 @@ To: linux-kernel@vger.kernel.org,
 	Gabriele Monaco <gmonaco@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Cc: Wen Yang <wen.yang@linux.dev>,
-	Nam Cao <namcao@linutronix.de>,
+Cc: Nam Cao <namcao@linutronix.de>,
 	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
 	Tomas Glozar <tglozar@redhat.com>,
-	John Kacur <jkacur@redhat.com>
-Subject: [PATCH v5 16/17] selftests/verification: Rearrange the wwnr_printk test
-Date: Thu, 23 Jul 2026 09:45:33 +0200
-Message-ID: <20260723074534.43521-17-gmonaco@redhat.com>
+	John Kacur <jkacur@redhat.com>,
+	Wen Yang <wen.yang@linux.dev>
+Subject: [PATCH v5 17/17] selftests/verification: Add selftests for deadline and stall monitors
+Date: Thu, 23 Jul 2026 09:45:34 +0200
+Message-ID: <20260723074534.43521-18-gmonaco@redhat.com>
 In-Reply-To: <20260723074534.43521-1-gmonaco@redhat.com>
 References: <20260723074534.43521-1-gmonaco@redhat.com>
 Precedence: bulk
@@ -68,85 +68,91 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The wwnr_printk test expects no reactions in some situations, after
-fixing the bash assertion, the test is failing because expecting no
-reaction after a previous step had reactions is flaky without making
-sure all buffers are flushed.
+Add selftests to verify deadline monitors don't fail under expected
+conditions and the stall monitor report violations only when expected.
 
-Wait for reactions to be over when expected by polling dmesg for an
-interval without any rv message.
-Also simplify the load function to stop loads as soon as a reaction
-occurs, this limits the number of lines to flush and makes tests overall
-faster and more stable.
-
-Reviewed-by: Wen Yang <wen.yang@linux.dev>
 Reviewed-by: Nam Cao <namcao@linutronix.de>
 Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 ---
 
 Notes:
-    V5:
-    * Move wait for flush to avoid wwnr/printk selftest to hang
     V4:
-    * Wait for dmesg to flush all messages after reactions
+    * Restore original stall threshold after selftest
 
- .../verification/test.d/rv_wwnr_printk.tc     | 28 +++++++++++++++++--
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ .../verification/test.d/rv_deadline.tc        | 23 +++++++++++++
+ .../selftests/verification/test.d/rv_stall.tc | 33 +++++++++++++++++++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_deadline.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_stall.tc
 
-diff --git a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-index 96de95edb530..17e1edfb3902 100644
---- a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-+++ b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
-@@ -4,11 +4,29 @@
- # requires: available_reactors wwnr:monitor printk:reactor stress-ng:program
- 
- load() { # returns true if there was a reaction
--	local lines_before num
-+	local lines_before num load_pid ret
- 	num=$((($(nproc) + 1) / 2))
- 	lines_before=$(dmesg | wc -l)
--	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q
--	dmesg | tail -n $((lines_before + 1)) | grep -q "rv: monitor wwnr does not allow event"
-+	stress-ng --cpu-sched "$num" --timer "$num" -t 5 -q &
-+	load_pid=$!
-+	timeout 5 dmesg -w | tail -n +$((lines_before + 1)) | \
-+		grep -m 1 -q "rv: monitor wwnr does not allow event"
-+	ret=$?
-+	kill "$load_pid" || true
-+	wait "$load_pid" || true
-+	return $ret
+diff --git a/tools/testing/selftests/verification/test.d/rv_deadline.tc b/tools/testing/selftests/verification/test.d/rv_deadline.tc
+new file mode 100644
+index 000000000000..fc95267dbb82
+--- /dev/null
++++ b/tools/testing/selftests/verification/test.d/rv_deadline.tc
+@@ -0,0 +1,23 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# description: Test deadline monitors trigger no reaction
++# requires: available_reactors deadline:monitor printk:reactor stress-ng:program
++
++load() { # returns true if there was a reaction
++	local lines_before
++	lines_before=$(dmesg | wc -l)
++	stress-ng --cpu 2 --sched deadline --sched-period 100000000 \
++		--sched-deadline 100000000 --sched-runtime 20000000 -t 5 &
++	stress-ng --cpu 2 --sched rr --sched-prio 50 --cyclic 1 \
++		--cyclic-policy rr --cyclic-prio 50 -t 5 &
++	wait
++	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor [a-z]\+ does not allow event"
 +}
 +
-+# loads may flood the ringbuffer, wait for all pending printks (timeout at 2 minutes)
-+wait_dmesg_flush() {
-+	local last_before last_after
-+	for _ in $(seq 400); do
-+		last_before=$last_after
-+		last_after=$(dmesg | grep "rv:" | tail -n 1 || true)
-+		[ "$last_before" = "$last_after" ] && return 0
-+		sleep .3
-+	done
-+	return 1
- }
- 
- echo 1 > monitors/wwnr/enable
-@@ -17,12 +35,16 @@ echo printk > monitors/wwnr/reactors
- load
- 
- echo 0 > monitoring_on
-+wait_dmesg_flush
++echo 1 > monitors/deadline/enable
++echo printk > monitors/deadline/reactors
 +
- ! load || false
- echo 1 > monitoring_on
- 
- load
- 
- echo 0 > reacting_on
-+wait_dmesg_flush
++! load || false
 +
- ! load || false
- echo 1 > reacting_on
- 
++echo nop > monitors/deadline/reactors
++echo 0 > monitors/deadline/enable
+diff --git a/tools/testing/selftests/verification/test.d/rv_stall.tc b/tools/testing/selftests/verification/test.d/rv_stall.tc
+new file mode 100644
+index 000000000000..515a10263ca1
+--- /dev/null
++++ b/tools/testing/selftests/verification/test.d/rv_stall.tc
+@@ -0,0 +1,33 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-or-later
++# description: Test stall monitor
++# requires: available_reactors stall:monitor printk:reactor stress-ng:program
++
++THRESHOLD=/sys/module/stall/parameters/threshold_jiffies
++ORIG_THRESHOLD=$(cat $THRESHOLD)
++trap 'echo $ORIG_THRESHOLD > $THRESHOLD' EXIT
++
++load() { # returns true if there was a reaction
++	local lines_before cpu
++	cpu=$(($(nproc) - 1))
++	lines_before=$(dmesg | wc -l)
++	stress-ng --cpu 1 --taskset "$cpu" --sched rr --sched-prio 1 -t 3 &
++	stress-ng --cpu 5 --taskset "$cpu" -t 3 &
++	wait
++	dmesg | tail -n +$((lines_before + 1)) | grep -q "rv: monitor stall does not allow event"
++}
++
++echo 5000 > $THRESHOLD
++echo 1 > monitors/stall/enable
++echo printk > monitors/stall/reactors
++
++! load || false
++
++echo 0 > monitors/stall/enable
++echo 70 > $THRESHOLD
++echo 1 > monitors/stall/enable
++
++load
++
++echo nop > monitors/stall/reactors
++echo 0 > monitors/stall/enable
 -- 
 2.55.0
 
