@@ -1,16 +1,16 @@
 Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496BC48C40B;
-	Thu, 23 Jul 2026 12:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D391447988D;
+	Thu, 23 Jul 2026 12:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784809336; cv=none; b=Y5OWkK/TsYWfeVfb2oWZ7cgD4/A3EkVpgYSzTlTQ4Topz7nEE1b7coU/fqqHIxYpnn++EG6+QytSVFi/xckUkoKm7C8YH/lUQ9m9HOJy/l1+0BqsiJe7c6Jyc4r/MQvLJp8ZNQNlanBv4Kcl/vurO4KYp+gvk1a9Kg4KicbjWMg=
+	t=1784809342; cv=none; b=o9re+vsWkb4He23+qgWBcyFqMweuu8F3SQJX6bqUKdLItwvbtPzbQZRsaHNhBkOG7qgTZI/gHUPcmUk+0OQ82UOJLjg0QYfikcWtGbdLmSf6gknU56KND9ZLassXzAaelsldStIEbNtf3wYu+zgjOzMjH3ng41bRzdyebEC98cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784809336; c=relaxed/simple;
-	bh=32Q+5eSAVonrEJnbHwtRugBf5p3YaZYDwHB60CiM88g=;
+	s=arc-20240116; t=1784809342; c=relaxed/simple;
+	bh=lfrCeaqTmCJ2tP3X9wDmq7RPLxjm4JWDEbDGgIWt6Fc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EAIz/Vw+tcmzbxJpOEdONj2PnjTA+Yh2PbfjXnYyMvUzm8oj4fRhea2KCbmppCVPL66+niGEJXR/dpUmUBtSv5Zp3yCo42mNy/tq+BgdAPDRee5HurXDqwr9gAbtlbuwulO7uCPl7cv7fa/vsfOfUwiVLjU6m6w+lEj85/ikkQw=
+	 MIME-Version; b=OKG5XKVBYt1UZQTZDz+SzpB+CiymgGO1pqJkJj8I9o4eKPoRQboxbv1BpVFZ8z7xxhyej98r7Eb8XAn8Jwb/HQjSR+jA115PEQaUUKo2bdnigzYASRDbUSkvoFvfbZ8MpWMU1/HhGEDKrTQFDjc+KeBbeyC94tcVtm8Eg71rcZY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
@@ -18,12 +18,12 @@ Received: from [2001:67c:370:1998:30cb:b625:4f9:61b4] (helo=alea)
 	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsRG-00000003Wli-0vPZ;
-	Thu, 23 Jul 2026 14:22:10 +0200
+	id 1wmsRL-00000003Wly-0jyL;
+	Thu, 23 Jul 2026 14:22:15 +0200
 Received: from equinox by alea with local (Exim 4.99.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsQt-00000000Q0r-3Pzr;
-	Thu, 23 Jul 2026 14:21:47 +0200
+	id 1wmsQy-00000000Q10-3NJz;
+	Thu, 23 Jul 2026 14:21:52 +0200
 From: David 'equinox' Lamparter <equinox@diac24.net>
 To: Paolo Abeni <pabeni@redhat.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Ido Schimmel <idosch@nvidia.com>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	David 'equinox' Lamparter <equinox@diac24.net>
-Subject: [PATCH net-next v2 02/10] net/ipv6: flatten ip6_route_get_saddr
-Date: Thu, 23 Jul 2026 14:19:28 +0200
-Message-ID: <20260723122106.99772-3-equinox@diac24.net>
+Subject: [PATCH net-next v2 03/10] net/ipv6: create ipv6_fl_get_saddr
+Date: Thu, 23 Jul 2026 14:19:29 +0200
+Message-ID: <20260723122106.99772-4-equinox@diac24.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260723122106.99772-1-equinox@diac24.net>
 References: <20260723122106.99772-1-equinox@diac24.net>
@@ -55,46 +55,131 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Inline ip6_route_get_saddr()'s functionality in rt6_fill_node(), to
-prepare for replacing the former with a dst based function.
-
-NB: the l3mdev handling introduced by commit 252442f2ae31 ("ipv6: fix
-source address selection with route leak") is dropped here - the l3mdev
-ifindex was a constant 0 on this call site, so that code was in fact
-dead.
+This adds passing the relevant flow information as well as selected
+nexthop into the source address selection code, to allow the RFC6724
+rule 5.5 code to look at its details.
 
 Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
 ---
- net/ipv6/route.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ include/net/addrconf.h |  4 ++++
+ net/ipv6/addrconf.c    | 45 +++++++++++++++++++++++++++++++-----------
+ 2 files changed, 38 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index a1301334da48..704afe2ddea7 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -5850,9 +5850,19 @@ static int rt6_fill_node(struct net *net, struct sk_buff *skb,
- 			if (nla_put_u32(skb, RTA_IIF, iif))
- 				goto nla_put_failure;
- 	} else if (dest) {
--		struct in6_addr saddr_buf;
--		if (ip6_route_get_saddr(net, rt, dest, 0, 0, &saddr_buf) == 0 &&
--		    nla_put_in6_addr(skb, RTA_PREFSRC, &saddr_buf))
-+		struct in6_addr saddr_buf, *saddr = NULL;
-+
-+		if (rt->fib6_prefsrc.plen) {
-+			saddr = &rt->fib6_prefsrc.addr;
-+		} else {
-+			struct net_device *dev = fib6_info_nh_dev(rt);
-+
-+			if (ipv6_dev_get_saddr(net, dev, dest, 0,
-+					       &saddr_buf) == 0)
-+				saddr = &saddr_buf;
-+		}
-+
-+		if (saddr && nla_put_in6_addr(skb, RTA_PREFSRC, saddr))
- 			goto nla_put_failure;
- 	}
+diff --git a/include/net/addrconf.h b/include/net/addrconf.h
+index 8ced27a8229b..7bc0711b8717 100644
+--- a/include/net/addrconf.h
++++ b/include/net/addrconf.h
+@@ -142,6 +142,10 @@ struct inet6_ifaddr *ipv6_get_ifaddr(struct net *net,
+ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dev,
+ 		       const struct in6_addr *daddr, unsigned int srcprefs,
+ 		       struct in6_addr *saddr);
++int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst,
++		      const struct net_device *dst_dev,
++		      const struct sock *sk, unsigned int srcprefs,
++		      struct flowi6 *fl6);
+ int ipv6_get_lladdr(struct net_device *dev, struct in6_addr *addr,
+ 		    u32 banned_flags);
+ bool inet_rcv_saddr_equal(const struct sock *sk, const struct sock *sk2,
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index f1fe9ede1edb..0ba46ed518a9 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -1542,7 +1542,9 @@ struct ipv6_saddr_score {
+ };
  
+ struct ipv6_saddr_dst {
+-	const struct in6_addr *addr;
++	const struct flowi6 *fl6;
++	const struct dst_entry *dst;
++	const struct sock *sk;
+ 	int ifindex;
+ 	int scope;
+ 	int label;
+@@ -1619,7 +1621,7 @@ static int ipv6_get_saddr_eval(struct net *net,
+ 		break;
+ 	case IPV6_SADDR_RULE_LOCAL:
+ 		/* Rule 1: Prefer same address */
+-		ret = ipv6_addr_equal(&score->ifa->addr, dst->addr);
++		ret = ipv6_addr_equal(&score->ifa->addr, &dst->fl6->daddr);
+ 		break;
+ 	case IPV6_SADDR_RULE_SCOPE:
+ 		/* Rule 2: Prefer appropriate scope
+@@ -1697,11 +1699,11 @@ static int ipv6_get_saddr_eval(struct net *net,
+ 		 *	    non-ORCHID vs non-ORCHID
+ 		 */
+ 		ret = !(ipv6_addr_orchid(&score->ifa->addr) ^
+-			ipv6_addr_orchid(dst->addr));
++			ipv6_addr_orchid(&dst->fl6->daddr));
+ 		break;
+ 	case IPV6_SADDR_RULE_PREFIX:
+ 		/* Rule 8: Use longest matching prefix */
+-		ret = ipv6_addr_diff(&score->ifa->addr, dst->addr);
++		ret = ipv6_addr_diff(&score->ifa->addr, &dst->fl6->daddr);
+ 		if (ret > score->ifa->prefix_len)
+ 			ret = score->ifa->prefix_len;
+ 		score->matchlen = ret;
+@@ -1819,9 +1821,10 @@ static int ipv6_get_saddr_master(struct net *net,
+ 	return hiscore_idx;
+ }
+ 
+-int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+-		       const struct in6_addr *daddr, unsigned int prefs,
+-		       struct in6_addr *saddr)
++int ipv6_fl_get_saddr(struct net *net, const struct dst_entry *dst_entry,
++		      const struct net_device *dst_dev,
++		      const struct sock *sk, unsigned int prefs,
++		      struct flowi6 *fl6)
+ {
+ 	struct ipv6_saddr_score scores[2], *hiscore;
+ 	struct ipv6_saddr_dst dst;
+@@ -1832,11 +1835,13 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+ 	int hiscore_idx = 0;
+ 	int ret = 0;
+ 
+-	dst_type = __ipv6_addr_type(daddr);
+-	dst.addr = daddr;
++	dst_type = __ipv6_addr_type(&fl6->daddr);
++	dst.fl6 = fl6;
++	dst.sk = sk;
++	dst.dst = dst_entry;
+ 	dst.ifindex = dst_dev ? dst_dev->ifindex : 0;
+ 	dst.scope = __ipv6_addr_src_scope(dst_type);
+-	dst.label = ipv6_addr_label(net, daddr, dst_type, dst.ifindex);
++	dst.label = ipv6_addr_label(net, &fl6->daddr, dst_type, dst.ifindex);
+ 	dst.prefs = prefs;
+ 
+ 	scores[hiscore_idx].rule = -1;
+@@ -1911,11 +1916,29 @@ int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
+ 	if (!hiscore->ifa)
+ 		ret = -EADDRNOTAVAIL;
+ 	else
+-		*saddr = hiscore->ifa->addr;
++		fl6->saddr = hiscore->ifa->addr;
+ 
+ 	rcu_read_unlock();
+ 	return ret;
+ }
++EXPORT_SYMBOL(ipv6_fl_get_saddr);
++
++int ipv6_dev_get_saddr(struct net *net, const struct net_device *dst_dev,
++		       const struct in6_addr *daddr, unsigned int prefs,
++		       struct in6_addr *saddr)
++{
++	struct flowi6 fl6;
++	int ret;
++
++	memset(&fl6, 0, sizeof(fl6));
++	fl6.daddr = *daddr;
++
++	ret = ipv6_fl_get_saddr(net, NULL, dst_dev, NULL, prefs, &fl6);
++	if (!ret)
++		*saddr = fl6.saddr;
++
++	return ret;
++}
+ EXPORT_SYMBOL(ipv6_dev_get_saddr);
+ 
+ static int __ipv6_get_lladdr(struct inet6_dev *idev, struct in6_addr *addr,
 -- 
 2.53.0
 
