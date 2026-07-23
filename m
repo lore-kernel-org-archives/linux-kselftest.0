@@ -1,115 +1,69 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E6A649690C;
-	Thu, 23 Jul 2026 12:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FF324399E7;
+	Thu, 23 Jul 2026 13:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784811499; cv=none; b=bQpDeANCtCJe2yKnYaaQa7Fx+8Z1daduaDGRyITKBT3n70W7ao9JpWkQtSqjHWZRrgva2ZdcD/EoOH/+3BVBMO0Nw1D6GLwupzs4lL/hrCTODOch/BQMyMdJKDqf6EytsusWdIdKg+aQVr+RSKAFsK7vBng67cw9wKWj+pij/Ss=
+	t=1784812851; cv=none; b=mobsGhhf1g1c8Sb3lLsrAYRxgia3KM7o+9MTjX3rCdVrHzLoyAlAWR8MLJmbp3eggTDWpZsDAF8mBk7MJm5HbxASIl4pnXquX/t+PPe2Bnwsx1+rGn0mlt5a2vc6cANkbHJUV6j265yuEY6Ddf09hwYwQU+ysvnb6Hp0vXK9iIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784811499; c=relaxed/simple;
-	bh=tS3qt0hTqrRoA8Eare5/U/grQvdhUHhuH5FDy08Szas=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KowJ+ac5cfWZxBm6YjnIcs41SXqEO5/VtjFdIjZ5zCXwwVw2d4WO+gmVCZNHyeLnNBz0UQcSZcKrgnObONwywkPSiTUgwQKlaylMPenO2GLMmMZRgz6HbaaF4NjXjnUisPOx21jRhRzqZ/vv1ZvdCeUoPeOsaZERwML3zG6HNz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JCu95jwu; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JCu95jwu"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C24621595;
-	Thu, 23 Jul 2026 05:58:12 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF5C93F59E;
-	Thu, 23 Jul 2026 05:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784811496; bh=tS3qt0hTqrRoA8Eare5/U/grQvdhUHhuH5FDy08Szas=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JCu95jwuHdwvgEvwvBRQDHTAQhAyscg4Z8nM8CbNlXkEBNN9gvC/tjSRPEY9AmFXQ
-	 YlOHo0P+NdKWLi4XGlyaQyNr57TtZJX3FgvYYRvRnaRCalGAv6LHFycsfnB6W1ne1S
-	 ROoF87dO/gNP+odtZMxPE972Iu4paqR7pLVdgbOc=
-Date: Thu, 23 Jul 2026 13:58:11 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	Jean-Philippe Brucker <jpb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v13 02/32] arm64/fpsimd: Ensure all of ZCR_EL1 is
- initialised from idle
-Message-ID: <amIP42yILYNsNk0e@J2N7QTR9R3.cambridge.arm.com>
-References: <20260720-kvm-arm64-sme-v13-0-d9abd3ffa245@kernel.org>
- <20260720-kvm-arm64-sme-v13-2-d9abd3ffa245@kernel.org>
+	s=arc-20240116; t=1784812851; c=relaxed/simple;
+	bh=OG+vKz7Faio7yiNuX5mxPfhSuKzS3YumAyYZQW57Hhw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=VZws3q94LB06bAhvLN/XfuVHYsYrdXRVVNSi3C7en6NOTYE+7oIynMHzUDiEjaKsBF53wB7DVpDHBlD7rmidzY8hvPbWhyNjiiz+4IXz6jH2Yj4evlpeFcWgPHlrk38fOsyLAq1dlffdGb/kEo8tAimColBCgxCpBpMkxN7cNBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F551F000E9;
+	Thu, 23 Jul 2026 13:20:49 +0000 (UTC)
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0BFE3810902;
+	Thu, 23 Jul 2026 13:20:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260720-kvm-arm64-sme-v13-2-d9abd3ffa245@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] selftests/net: Skip srv6_end_dt46_l3vpn_test
+ if
+ iproute2 too old
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178481280740.2242888.6073807579937273134.git-patchwork-notify@kernel.org>
+Date: Thu, 23 Jul 2026 13:20:07 +0000
+References: <20260715122859.36177-1-alessio.faina@canonical.com>
+In-Reply-To: <20260715122859.36177-1-alessio.faina@canonical.com>
+To: Alessio Faina <alessio.faina@canonical.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ andrea.mayer@uniroma2.it, po-hsu.lin@canonical.com, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org
 
-On Mon, Jul 20, 2026 at 12:07:29AM +0100, Mark Brown wrote:
-> At present when exiting from idle we do not fully reinitialise ZCR_EL1,
-> we update ZCR_EL1.LEN with a read/modify/write cycle when loading task
-> state but never set any of the other bits to an explicit value.  Since
-> currently they are all architecturally RES0 or RAZ/WI this is not a
-> practical issue but it may become one if further fields are defined in
-> the register so we should explicitly configure the whole register.
->
-> Rename the existing sme_suspend_exit() (which handles this for SME) to
-> fpsimd_suspend_exit() and add set ZCR_EL1 to 0 there, if needed LEN will
-> be updated when loading task state.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+Hello:
 
-While this happens to work today, this is a more general architecture
-problem, and I think we should cc stable such that kernels will work
-reliably on future hardware.
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-All stable kernels support SVE, so this needs to go as far back as
-v5.10.y.
+On Wed, 15 Jul 2026 14:28:59 +0200 you wrote:
+> In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
+> the End.DT46 support is not available and the host_vpn_tests test contained
+> in the srv6_end_dt46_l3vpn_test.sh file is failing in some kernel backports.
+> This is the result of those tests:
+> 
+> ################################################################################
+> TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+> ################################################################################
+> 
+> [...]
 
-One minor comment below, but with that fixed up (and a CC stable):
+Here is the summary with links:
+  - [net-next,v3] selftests/net: Skip srv6_end_dt46_l3vpn_test if iproute2 too old
+    https://git.kernel.org/netdev/net-next/c/6217246bc5bf
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +void fpsimd_suspend_exit(void)
->  {
->  	u64 smcr = 0;
->  
-> -	if (!system_supports_sme())
-> -		return;
-> +	if (system_supports_sve())
-> +		write_sysreg_s(0, SYS_ZCR_EL1);
->  
-> -	if (system_supports_fa64())
-> -		smcr |= SMCR_ELx_FA64;
-> -	if (system_supports_sme2())
-> -		smcr |= SMCR_ELx_EZT0;
-> +	if (system_supports_sme()) {
 
-We should move the 'smcr' variable into this block. That way it's scoped
-to where it matters.
-
-> +		if (system_supports_fa64())
-> +			smcr |= SMCR_ELx_FA64;
-> +		if (system_supports_sme2())
-> +			smcr |= SMCR_ELx_EZT0;
->  
-> -	write_sysreg_s(smcr, SYS_SMCR_EL1);
-> -	write_sysreg_s(0, SYS_SMPRI_EL1);
-> +		write_sysreg_s(smcr, SYS_SMCR_EL1);
-> +		write_sysreg_s(0, SYS_SMPRI_EL1);
-> +	}
->  }
-
-Mark.
