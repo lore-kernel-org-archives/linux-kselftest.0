@@ -1,321 +1,359 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011026.outbound.protection.outlook.com [52.101.70.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F648274B46;
-	Thu, 23 Jul 2026 11:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.26
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784806667; cv=fail; b=VDQkF0sPNyj9rFKc5E+qV0Klp2YrvTTwAjPxmKhBPcFuln1Y/rsRvxICzPOSFqouOBGicfbiOS3xpD1EdiJ4HaBs8DGvGybx72IyTXNylXFz+ZTm+hgUGzu+5sOAz9+KHWpUvbWLtmrVv/vSBqUC14t0vYd7nOJx4xxBuNetgJg=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784806667; c=relaxed/simple;
-	bh=bAnROHtnklC5D9y+qqHMg+Ovyg81SOua5ILDyouGgfg=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=K9Qeha/9tz5yufAKVAo/JnN+6cgk4jifWn4xY26f/EDG+2byvUCa5avrb/WQy1c1F8402lar2TCTwBRGbd0YHg5xUPdS6lWK18O7Cg3UYdrBIeKAp5HxkVBciuLo0j89diErcaVJ+y4mOsHOjW5Eg6kmStCOf6dIpnEdXnpH+3I=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fe+vypdB; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fe+vypdB; arc=fail smtp.client-ip=52.101.70.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E7343D4E0
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 11:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784806719; cv=pass; b=AooWBXj/1p+vid+BEy7+EM06yUdknP9rBCoW6sUK8et48fGGxBM6jr8AVCSuQhmp7BNif8i17XQp3fhTk15v6NrSHyiPa0vifzh7fIZ2IVPemPUL9kloJWPQeCjITLNKH0nhcb8oU/SRay3dq0YUOCxzQTAXwNIYsY+y7n68/6M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784806719; c=relaxed/simple;
+	bh=SnHqdFWgUyEPNq9Oxt4pUkeCphttKY6rF9FgnM3DBVM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fbc2AniANHSsP6gGnWOXBxE1hAN/HqsxN9a2Xa3WjgFuEBOxHr5QXx1DNZZEMnePjOlvaBEbFeyw1T7xckHeGcnDc6VN+iFPTBcfcCdZlxcw9LZd6cQOb+CIGyQE69VP1c64f5v0XUQW1uPKZSq7vj7nP//KwPf1RDjKQ10Y2cI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RDMTq8pc; arc=pass smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fe+vypdB";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fe+vypdB"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=HxeMmJ20zKWy5sbG8OFRsXOL6WvlYxv0wlTZG4LCYXa58dd2kBvD8joHNHpKYXy1oM472bXCmGbAA9YX7l4Ef40fv6gCRkB6nCmxf5JGqb8A61Z2BwqPsWoM0EVACz+5cN7QVEgtqZqjWKpGK9rpYoSW30sf0CBEDiM33+bE8KC67sSMHw13nuZOb4OSU2LcMFVtZ0Cf/Kgccj7dDqVDTdu7rxMmtfsgPOZSFDcLDCHr3aKiOZ2SWEelZtDdW01jmbxJjwFw7iGgDhfjaVbbUzXC30r7r+JXQ4bnQ/tXH6c/26qs1G4Gps26OctcybZUG9pDbHDzNmg2rIlkJ4wTTQ==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
- b=udYxnQ2GhgCxeidYvyjTtfvbuQvXKyYiHYZORM90lyDHb9URVa9uVWzoZCYSVOt2q6ZWHG6Ok1n3ZNWLrf42uNICqIf6Or3tPiiYoDMOkVnsopwJVgeCF1xLoUgNWNVyi6E7Igt11XYqwWKWnUr4nsLeGfMxnKv40w+74BE1r1Ep80bxc8XFz21HQ+mZN0K91MtVj+vAMRxVNhEMUqnAC65p9zmYg/15MPEL5ZoTQX9V4TAY9Y0aFfBREYh5CTMd9JQTSqru68XxFb+A8Libj0iMsLn9wWp81Y9m7WYwqCa82Zg8SeJFmPSnOIFLPzqPn9U24qRyLIAMjLjYsphZMQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
- b=fe+vypdBGwt73pSa/KLrPQWUPqv9nayQ+AofQslJpfLUuZ9PJFKhyikpyr/aQmeynl1xOUG1/a1aANosIWqIAwFxq32Px3TGTjOlLTeuVCiFL0mYmylnyPTOxA0DPXVGZbnIV0KqY+Zu4Om95aR7QiG4BkQnUjhDljWE12Qu6Ug=
-Received: from AM9P193CA0002.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:21e::7)
- by PAVPR08MB9770.eurprd08.prod.outlook.com (2603:10a6:102:31e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.11; Thu, 23 Jul
- 2026 11:37:36 +0000
-Received: from AM4PEPF00027A65.eurprd04.prod.outlook.com
- (2603:10a6:20b:21e:cafe::d) by AM9P193CA0002.outlook.office365.com
- (2603:10a6:20b:21e::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.245.11 via Frontend Transport; Thu,
- 23 Jul 2026 11:37:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM4PEPF00027A65.mail.protection.outlook.com (10.167.16.86) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5
- via Frontend Transport; Thu, 23 Jul 2026 11:37:35 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vsPGJlRQPyJJ77CnzablLLhVTr2NP4O42UPNrxWxejh8cxK1lUc/mef6gILP1qHgBJbjAO+0Wu74c9bIrsr08yBPzQfAqdtni+SWJEa8aBu29z7XxX0VbLp0rFvJoDJqdak2Psr1zt+maRTw126Luz+sFs6di7DKbgf9HABpEUmL/J2TJT2zY+FA2LIlBiiIcLWOf3n1/SQiyKGoanxPakx+SH/kSEb8OYgpw2NAeSJ/7xegQbT/q7NHUesx9ONmcD/1Q2eucBS3rsBjjfVCb2ir0sCTm7ZB2q+xTTXA3xWTbU7j+U5X3lt3qts4QI9X0iO5NN1wwGMcKiSHFpoROg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
- b=yNZ254A28se8vTMHbNaNCeou69K6vrWk5e0PBI3GWxInqOKO78p5AC5LyeZrZd0Igt+L19/qBcdDw6IBqjKnES7L7WxSk4XKTqks1Uaxp1nPwkHyd4Vf8spzyXNdIO9k89XE7imnBOQ+ZsXZRvB5WaynGTLKuKb4hf7hmR8aAD4bIH2CxKLbWFS8D+Q1vQ5fo4Yi81PuiTmpVdD0S1LtewcrkokVOI2+cY6M9DHdUdsuxhYhYLGQC/v8ONAiV8m1mZ5ZHL0orzBVxHubErjFwZH163sVCo+1AABeJlJ8iSqfqxUisT/ZpVAIYN1s7N7fs7DNk3T6qGSKV+R7NJg7hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HxnSCuPymICaV0HcnMpdwqgmgvfujqrp17ZYdcuKN1Y=;
- b=fe+vypdBGwt73pSa/KLrPQWUPqv9nayQ+AofQslJpfLUuZ9PJFKhyikpyr/aQmeynl1xOUG1/a1aANosIWqIAwFxq32Px3TGTjOlLTeuVCiFL0mYmylnyPTOxA0DPXVGZbnIV0KqY+Zu4Om95aR7QiG4BkQnUjhDljWE12Qu6Ug=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by AM8PR08MB6580.eurprd08.prod.outlook.com (2603:10a6:20b:369::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.11; Thu, 23 Jul
- 2026 11:36:31 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0245.009; Thu, 23 Jul 2026
- 11:36:30 +0000
-Message-ID: <57f8415d-b80b-46fa-af1f-ad4a727e1582@arm.com>
-Date: Thu, 23 Jul 2026 12:36:28 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com
-Subject: Re: [PATCH RESEND v1 3/5] selftests/mm: skip khugepaged swap tests
- without swap
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260722091219.61504-1-usama.anjum@arm.com>
- <20260722091219.61504-4-usama.anjum@arm.com>
- <9bb01e21-159a-427c-9d64-5db7070f0209@arm.com>
- <5af250ab-6a52-48d3-bd50-64e8ddd99915@arm.com>
- <188a0acc-dd03-443c-8e1f-329a4dddcd5f@arm.com>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <188a0acc-dd03-443c-8e1f-329a4dddcd5f@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P302CA0045.GBRP302.PROD.OUTLOOK.COM
- (2603:10a6:600:317::20) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RDMTq8pc"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-69a5ecbbfb2so937905a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 04:38:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784806716; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qxOi7bLVRGtFlsaMVN+5YTD0l09gjcMlp81wWSWDrve0WVjyY00QY4ShoXvCXFyVZR
+         e2hMP057k8Xh2QGMHdadeTK2p4WyWXlOxwQyfN7bpC78P37PbfCHlRoJe7vPLYlNPz1k
+         Gi71xYA/shDs1jh20F2xq/oUaNcmvffJ+dfSj6oG1p2+pZW57Qz+WXJ87axb2NGMkzlU
+         wlEKgAFMfIuAPS4diodO1IwoW8PE3TuS3zyG3VXYCPfvrZqsPLUF6toc9uXckhrMuoWU
+         /vI6WHmiQxWCDIz4zISfYom38eM0U9+rqHYmvxVq2tqF98nEFxQCdRtpAzpbFUt1MgRG
+         PHHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3Vm/pUOpaksqwrAeLPB+SFjhRptlFPQ3mBtxFAX2gIE=;
+        fh=c7+dennwt7WShaDZSINDvVW2+J8jDSDnkJOHvX8/wzo=;
+        b=Wr5EggwRLwGnThZWj8oPeXb7+KSFFzaiAU8vz2mH9ONU5W8WgUNOlTj9yZXzhRq2tB
+         t9SZ7vXNeo+8mJK4jydIHZjAi+J8CYt/OIDP45jS4sLwyaLdNyOMZvRptRXTUAjYhgx+
+         lB5Qq8YsVFL3O+nUNXIy7m6ZcODj3IhEqaX+A9s/CG+Vmw0HMNuYzFuU2A0oz9aIKPLR
+         nA8knPrxNHKN5XZ5r6NWb03KBGAlJPoDZd9yDlXGLSJnI9WN7fzm3hAHzoG5V0JPHreQ
+         xYUMg0STKR9zB2Yjj1S+TBzeiQIIuDjAyy9Xqb5mZ405RvSYkjO7PawmJSM2UQw+vVGY
+         yfgw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784806716; x=1785411516; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3Vm/pUOpaksqwrAeLPB+SFjhRptlFPQ3mBtxFAX2gIE=;
+        b=RDMTq8pcFycEqomilfiE8N9mjdk4/v/R+22XYdKCnU51p84dKnsuU5jXcfFS6maKDV
+         FVCjZn/6sroD5YpqBA/AaTwPkL5UqvFcwRtMMsmCYO9iMoJTHy1d9FozD8Q7CWkj07P8
+         4SfLkS0+/bJDV3YRocpHvR7C86z+pHLK/8/J1nn0Lw8PgXBOV1VUhdymD/xYbYrm2lFm
+         m82dBSb2FyPBB+SMhldytHCztdNIhNXTkDK5hbmUDuX/dneaJd3Xt9C664GSfznjaUvy
+         rHsLYOrqOWdOkaa3o/S4AFtOAqvcS6u+kxaErNONtIFdfyp5GH8A6EjUC5JFGoNdNAfx
+         +a3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784806716; x=1785411516;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3Vm/pUOpaksqwrAeLPB+SFjhRptlFPQ3mBtxFAX2gIE=;
+        b=S+OCp0+H5w+BMCSOz24N30lt/I4RE0Gqrad6qQUcokOGKf+gRHOnjhaLSAksYJDk0Y
+         xVIp5lfgQxlf5kPURNSA5Aq+WtUVAXrmGcFsz/Dkv84SeaXI1I7hyVZPMFHWnvHOXem0
+         aajljxHa/RkRYsnMY4WdI4IFKr6WlyDvH5/ShxvzTi4rr+GJa6KCoSml+j874tDrJhcn
+         73wD5dlProPvK2HoCqpiNUMevUNyU7WjerfWaw/ziwvgOrsjrHnzjfG86P90DbQBSRNx
+         PDNBgr5o6X2reSMdANYgQKsgz6uHjwdAtduLCPkSkP+bWcNku4gnq0bKnD6SOSeihRoj
+         64cw==
+X-Forwarded-Encrypted: i=1; AHgh+RoE55LPAvTVuNuJqD3W+pWxxSlt6CTfTUqutSZEgr5QRku4Wqus4zswTkn+6/r4oEAso3+XwZMlBQo4/yFqId4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAhQ3wFRistPooU+6oRjCwfwIoXK1BYhl/4EPx8ejGagUztL9e
+	hodAsJQOSNF62IGT6bX5OFBpCdKiysNjbvjwXutrOTFdpgQB1mVVDrnnc35nWUeEJ2LpnojxuSx
+	xz76ZogRTnodJBDGeeWJO0UNH/64ThgM=
+X-Gm-Gg: AR+sD12/5KoG5ed8DQE/a/z52fu6sNsgnuT4BvUsD8Ehs4DDdk/ibkWcAUNNQNRe+Kx
+	WCj3xeXkynU9XQ3aTLOYzrTNqv3K0WvJVJgJ6GhbmNfvlHDFFaur3qBEKSbnup0qG5MFslzlNZ+
+	AO8rgZSIqEk90soIcPq7SwEGHwIJJEnotRMpVn04esKuXKeMy1dcAX4oQph4GaEzcXDFCpOGixf
+	1bH5hIreHMfrI8/XVVzL2vzxQm3H9Ax+UKKxII72ju06c9ibjTpNcVZPmonHckdJUihkMiyYqzp
+	WA==
+X-Received: by 2002:a17:907:7b97:b0:c12:34f0:f7b9 with SMTP id
+ a640c23a62f3a-c1c509e5e46mr148807066b.56.1784806715357; Thu, 23 Jul 2026
+ 04:38:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|AM8PR08MB6580:EE_|AM4PEPF00027A65:EE_|PAVPR08MB9770:EE_
-X-MS-Office365-Filtering-Correlation-Id: bac64787-3a84-416d-1b25-08dee8aeca87
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|376014|23010399003|7416014|1800799024|366016|921020|6133799003|5023799004|11063799006|4143699003|56012099006|10067099003|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info-Original:
- H1xtRovmbyE+8RO0FPX0nciGbhedJl41GTUU+q2SrEU/O7bI6b8FiCZ8Sm+OvugQhlxCjDaQLDl5gUDwupoZ8Cke7fFf45Jx0gThHK8Bdo2tSJXcAeXMBFbMqS63wMxVNe0p4FlcWRageCwTxxwXVZb99z7LHvGZZTFZEQh3cbZrH3WUEYsZYSFOHzUdVkJLxN923B+EBRpMBSRUOxoH3ArKXBEyC2xVCu7hvQUCNu4FwYXoCdcibPVIWXgyKmDqxYIruSohsvYnahW10fPiu2mvxJ/0vxK09Qxn9cCpVF8pKY896cCwgnjA92kyqnteT6lw31JrbZKH090LDiJf6TlPDXJH07M+JMpLesUEBQBFr1zLFnv85YzVuL82ZZWZo6JK0NPsuPNMcT5bcBbM0vpoiDYBVAkdmjKEP0Uhohdnh3lAgvP5kIqaymfsXvqMOJt92RTvRo6EgFNvTPCJmA2+3q0ZcF1MtVdXwxgTXWNEIPD47qXDV3oVlKu5QGGX7U8PLm8IJQf9rGmxLiuNYsb5o4Wu5MZgqEMDV04TdpCq8K4J/j6fFCved8rPfo/35gQOzS+WlYKNgqN+1/i/+gKvnsGLImb70v02flB4x2JDs85YzIcpOS6jiGfVqMbdHhA9grSrWokKR2Vc4SJI5+fI8RlTS7wyEj67dgOwpclW7zrVcEGZgn5AfVu39R4mfXkcnodN0laeC9idmoIseQ==
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(7416014)(1800799024)(366016)(921020)(6133799003)(5023799004)(11063799006)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- ivz5qaVbV8BenLOGv6IqF1Ub5hRYkmwJwWHR2G6z1byJbu3zAca5NRywWQCI4JD7UmQPmuWiBcgLWKpGFU1JF5SuGKoeSjBIBxsNGxE4Ux1RkvGF1h9zl+1z1ovt+fUmVxygJ4Lkjru/f3fAYVCndK68Jm4wwDHOhwdDDKHhpmxxpP9G57ixuJjvkd+1V4nVVE/LBy/oNg6mdRttGTxwEN1Ee6kBw0vpeRSyZQA/LVpBCBErgJrYmgsKFUiTpGhONuVSI9LbXQhW0tiHpS5dK09sGibld35S4ldmZeIruI3zf69r2fDA2U5OIbJ1P81qxem8ZRUXYU+gJEiTvDPuNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6580
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM4PEPF00027A65.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	799e756e-16f0-41ed-6fec-08dee8aea38b
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|23010399003|7416014|376014|82310400026|1800799024|14060799003|35042699022|921020|6133799003|56012099006|11063799006|5023799004|4143699003|10067099003|18002099003|22082099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	B6FGUJlPr1ENIE/jDo2fyEn+uKSJBnNJUXEgk2n4ubruv0sAz9IpHxZkAx2Q4tJiPoSLB+n2fhN6xcjz2+I325yvfHhgM/bG87cENKV6CjZzKqN2jvBevVha/hLh02BcVU8SgO0F2EPqmiwE5GpbvHUjMxr53sZ4XECB5Vf8iRuXnWSChs8IxdntqSc/U3xcdQMORjmUVo2jA5A1xf79cuTAmfbO1aRvioLVP0DGKYDF06x9w2Rqmpf1mgOJwgAWvvr9iNzXlUhwk8xw9kL4ayZJtk+gFkp145mGJmJHJUcp0+hiYamLszo1fAVdNis+mSHtWX3YFqF8WDvJd+qRkKlkUYhaHdwM+w5+LrcYsvcbR9cXGF54ld/P6STBCNzseqT7pHzu7wsRZGqYDy3dcCF/MeZhvhQEM0p4eVWsbVoV0n6S0gfpSVB6rPu0F9fyUtI8X733pewxhNf4u0/+U7aGFhiN+a+1NmPkiYPEZG358uVDWTFinyu5TQ0NtPm6ecQTWuCHx6KqpkIg4MF6wfS+xc/FKIjfzkLbScztVPMh3KBBmN5Yc/MLWXbMGowj+hIaKa0FA2fUhh+1R5RsnYX+HMNs/9f69/JUvsdpo/Fq4puw7f9OZ4slyFv0kpQ1ps5IRywiI0SRQZeDBykR1Z+rQnk4gEN7Om4jGbyC1AxQaXTdGOTyiZIh6/MIv0PnyEX50FY5mQsBdUGBZJ26t9OnXKIf1bGKEsmjODu0dR3y0Aaggjvx15RIvXr3WxSX
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(23010399003)(7416014)(376014)(82310400026)(1800799024)(14060799003)(35042699022)(921020)(6133799003)(56012099006)(11063799006)(5023799004)(4143699003)(10067099003)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	aUZRSEH9J5CVywGHvNjJw6nmnxE9o4GqgakjRULbnuKQIpetaRNWPQdPYCSx/58eGt8iJsSYkExDE0q+UxemlsYpXxztsXN+WZRfEiXhnBDBnz+ANOJJYQBMIBp5bOLi9vpClr3z9TcQznRAcOiAfgiMOpmBCjbh2Y+g96RR2SaY7pQp2FWP1foCiM/XLms/QYVuSdUFLIZWRKsvIryiiJevPud4db1tKRi0Sri7AkvuxPfavFGBcev6b8+7s+9Uo9/nqmrnaDkuy+ExoNn3zAPj2bj34VwnvnMBxFww3kS8trk9gExxdvGqm9dYdNNUzepHp7AsLVW3UD+z6kdqTTM6PnaQYSeEUJ4+CeZwqtGPMA40+IcZt3FW1hX8jNARJ6fz+GSSni1twj97+kIBuwufpJPuU1MucSPcUPpcxomQe2/lPb+pmY3vkmIMeFLT
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2026 11:37:35.2024
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bac64787-3a84-416d-1b25-08dee8aeca87
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A65.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9770
+References: <20260616155716.2631508-1-puranjay@kernel.org> <CANk7y0j0j9GH7GpN6ahjiUwab_884csZcecrVsfBHupUANMgNw@mail.gmail.com>
+In-Reply-To: <CANk7y0j0j9GH7GpN6ahjiUwab_884csZcecrVsfBHupUANMgNw@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 23 Jul 2026 12:38:21 +0100
+X-Gm-Features: AUfX_myZif7IV3J6fY3GEVJfNHdIvEqNpLWP5QqsObegWnRGod8mf5TyRQGbYSc
+Message-ID: <CANk7y0jv7dYpmts0RpoZT305rXvFQicfEXRsJ4f2_PR2Y4WYxA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: bpf@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>, 
+	Will Deacon <will@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
+	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
+	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23/07/2026 6:08 am, Sarthak Sharma wrote:
-> 
-> 
-> On 7/22/26 7:35 PM, Muhammad Usama Anjum wrote:
->> Hi,
->>
->> Thank you for review.
->>
->> On 22/07/2026 1:16 pm, Sarthak Sharma wrote:
->>> Hi Usama!
->>>
->>> On 7/22/26 2:41 PM, Muhammad Usama Anjum wrote:
->>>> collapse_swapin_single_pte and collapse_max_ptes_swap require
->>>> MADV_PAGEOUT to replace anonymous pages with swap entries.  On swapless
->>>> systems there is no backing store with which to create those entries, so
->>>> check_swap() reports missing setup rather than broken khugepaged behavior.
->>>>
->>>> Swapless configurations are common on Android and other constrained
->>>> test devices.  Failing these cases obscures actionable results from the
->>>> rest of the khugepaged suite.
->>>>
->>>> Check /proc/swaps before either swap-dependent case and skip when no
->>>> active swap area exists.  With swap present, retain the existing
->>>> MADV_PAGEOUT and swap-entry assertions unchanged.
->>>>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>>> ---
->>>>  tools/testing/selftests/mm/khugepaged.c | 34 +++++++++++++++++++++++++
->>>>  1 file changed, 34 insertions(+)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->>>> index 10e8dedcb087d..a152cec59fcbd 100644
->>>> --- a/tools/testing/selftests/mm/khugepaged.c
->>>> +++ b/tools/testing/selftests/mm/khugepaged.c
->>>> @@ -100,6 +100,28 @@ static void skip(const char *msg)
->>>>  	exit_status = KSFT_SKIP;
->>>>  }
->>>>  
->>>> +static bool is_swap_enabled(void)
->>>> +{
->>>> +	char buf[MAX_LINE_LENGTH];
->>>> +	FILE *file;
->>>> +	bool enabled = false;
->>>> +
->>>> +	file = fopen("/proc/swaps", "r");
->>>> +	if (!file)
->>>> +		return false;
->>>> +
->>>> +	if (!fgets(buf, sizeof(buf), file))
->>>> +		goto out;
->>>> +
->>>> +	/* Check for first active swap entry. */
->>>> +	if (fgets(buf, sizeof(buf), file))
->>>> +		enabled = true;
->>>> +
->>>> +out:
->>>> +	fclose(file);
->>>> +	return enabled;
->>>> +}
->>>> +
->>>>  static void save_settings(void)
->>>>  {
->>>>  	ksft_print_msg("Save THP and khugepaged settings...");
->>>> @@ -734,6 +756,12 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
->>>>  {
->>>>  	void *p;
->>>>  
->>>> +	if (!is_swap_enabled()) {
->>>> +		skip("No active swap");
->>>
->>> Can we prefix this skip message with a #, as recommended for KTAP
->>> output? Right now it is printing like this:
->> It looks like `skip()` is not being prefixed with `#` in this test
->> because of how it is currently used.
->>
->> The `skip()` helper itself should probably be fixed, but that can be
->> handled in a separate follow-up patch. This test is not fully
->> TAP-compliant at the moment: the normal pass/fail output appears to be
->> compliant, while the skip-related messages are not. Would it make sense
->> to address that separately from this series?
-> 
-> I think there's nothing wrong with the skip() helper. Normal pass/fail
-> output appears to be TAP compliant because there's a ksft_print_msg(...)
-> call before calling pass()/fail() helpers. If we move the
-> ksft_print_msg() line before the is_swap_enabled() check, we'll get
-> output which is TAP compliant, something like this:
-Makes sense. I'll fix it in the next version.
+Gentle ping for this.
 
-> 
-> # Run test: collapse_swapin_single_pte (khugepaged:anon)
-> # Swapout one page... No active swap
-> ok 16 # SKIP collapse_swapin_single_pte
-> #
-> # Run test: collapse_swapin_single_pte (madvise:anon)
-> # Swapout one page... No active swap
-> ok 17 # SKIP collapse_swapin_single_pte
-> #
-> # Run test: collapse_max_ptes_swap (khugepaged:anon)
-> # Swapout 65 of 512 pages... No active swap
-> ok 18 # SKIP collapse_max_ptes_swap
-> #
-> # Run test: collapse_max_ptes_swap (madvise:anon)
-> # Swapout 65 of 512 pages... No active swap
-> ok 19 # SKIP collapse_max_ptes_swap
-> 
->>
->> Also when we run the whole mm suite using ./run_vmtests.sh, it appends an extra
->> # in start of the output which we get by running normal test directly. Its
->> controversial already that we are applying TAP styling to suite level and test
->> level as well. So non-compliant skip in this test makes overall output
->> compliant.>
->>>
->>> # Run test: collapse_swapin_single_pte (khugepaged:anon)
->>>  No active swap
->>> ok 16 # SKIP collapse_swapin_single_pte
->>> #
->>> # Run test: collapse_swapin_single_pte (madvise:anon)
->>>  No active swap
->>> ok 17 # SKIP collapse_swapin_single_pte
->>> #
->>> # Run test: collapse_max_ptes_swap (khugepaged:anon)
->>>  No active swap
->>> ok 18 # SKIP collapse_max_ptes_swap
->>> #
->>> # Run test: collapse_max_ptes_swap (madvise:anon)
->>>  No active swap
->>>
->>>
->>>> +		ksft_test_result_report(exit_status, "%s\n", __func__);
->>>> +		return;
->>>> +	}
->>>> +
->>>>  	p = ops->setup_area(1);
->>>>  	ops->fault(p, 0, hpage_pmd_size);
->>>>  
->>>> @@ -760,6 +788,12 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
->>>>  	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
->>>>  	void *p;
->>>>  
->>>> +	if (!is_swap_enabled()) {
->>>> +		skip("No active swap");
->>>
->>> Same here.
->>>
->>>> +		ksft_test_result_report(exit_status, "%s\n", __func__);
->>>> +		return;
->>>> +	}
->>>> +
->>>>  	p = ops->setup_area(1);
->>>>  	ops->fault(p, 0, hpage_pmd_size);
->>>>  
->>>
->>
-> 
+I have been waiting for feedback for 7 months now. Please let me know
+how I can make this patchset better.
 
--- 
 Thanks,
-Usama
+Puranjay
 
+On Wed, Jul 15, 2026 at 2:24=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
+>
+> Hi Mark and Will,
+>
+> Could you please have a look at this patchset when you get a chance?
+>
+> It has been reviewed by Rob.
+>
+> Thanks,
+> Puranjay
+>
+> On Tue, Jun 16, 2026 at 4:57=E2=80=AFPM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
+> >
+> > Changelog:
+> >
+> > v4: https://lore.kernel.org/all/20260527121207.2312181-1-puranjay@kerne=
+l.org/
+> > Changes in v5:
+> > - Rework patch 2: drop the UAPI union. Instead rename the helper to per=
+f_clear_branch_entry() and
+> >   clear the entry with a single
+> >         *br =3D (struct perf_branch_entry){ }.
+> >   This stays kernel-internal, with no changes to the uapi/ or tools/ he=
+aders (James Clark).
+> > - Add an isb() to the BRBCR_EL1 =3D=3D 0 early-exit in the snapshot, fo=
+r consistency with the other
+> >   two exit paths (bpf-ci).
+> > - Add Rob Herring's Reviewed-by to patch 3
+> >
+> > v3: https://lore.kernel.org/all/20260413185740.3286146-1-puranjay@kerne=
+l.org/
+> > Changes in v4:
+> > - Fix leaking branch records when scheduled task has an unrelated perf =
+event (Sashiko)
+> > - Update tools/include/uapi/linux/perf_event.h as well for patch 2
+> > - Introduce cpu_has_brbe() and use it in
+> >   arm_brbe_snapshot_branch_stack(0 to make sure we don't run on a CPU
+> >   without BRBE.
+> > - Add explicit isb() after after writing to SYS_BRBFCR_EL1.
+> > - Rebase on latest arm64 tree.
+> >
+> > v2: https://lore.kernel.org/all/20260318171706.2840512-1-puranjay@kerne=
+l.org/
+> > Changes in v3:
+> > - Move NULL pmu_ctx fix from arm_pmuv3.c to perf core (Leo Yan)
+> > - Use union to clear branch entry bitfields instead of per-field
+> >   zeroing (Leo Yan)
+> > - Remove per-CPU brbe_active flag; check BRBCR_EL1 =3D=3D 0 instead (Ro=
+b
+> >   Herring)
+> > - Remove redundant valid_brbidr() check in snapshot path (Rob Herring)
+> > - Introduce for_each_brbe_entry() iterator to deduplicate bank
+> >   iteration (Rob Herring)
+> > - Include perf core maintainers (Leo Yan, Rob Herring)
+> >
+> > v1: https://lore.kernel.org/all/20260313180352.3800358-1-puranjay@kerne=
+l.org/
+> > Changes in v2:
+> > - Rebased on arm64/for-next/core
+> > - Add per-CPU brbe_active flag to guard against UNDEFINED sysreg access
+> >   on non-BRBE CPUs in heterogeneous big.LITTLE systems.
+> > - Fix pre-existing bug in perf_clear_branch_entry_bitfields() that miss=
+ed
+> >   zeroing new_type and priv bitfields, added as a separate patch with
+> >   Fixes tags (new patch 2).
+> > - Use architecture-specific selftest threshold (#if defined(__aarch64__=
+))
+> >   instead of raising the global threshold, to preserve x86 regression
+> >   detection.
+> >
+> > RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kern=
+el.org/
+> > Changes from RFC:
+> >  - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
+> >    found by Leo Yan during testing (patch 1)
+> >  - Pause BRBE before local_daif_save() to avoid branch pollution from
+> >    trace_hardirqs_off()
+> >  - Use local_daif_save() to prevent pNMI race from counter overflow
+> >    (Mark Rutland)
+> >  - Reuse perf_entry_from_brbe_regset() instead of duplicating register
+> >    read logic, by making it accept NULL event (Mark Rutland)
+> >  - Invalidate BRBE after reading to maintain record contiguity for
+> >    other consumers (Mark Rutland)
+> >  - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
+> >  - Tested on ARM FVP with BRBE enabled
+> >
+> > This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
+> > by implementing the perf_snapshot_branch_stack static call for ARM's
+> > Branch Record Buffer Extension (BRBE).
+> >
+> > bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
+> > branch records on-demand from any BPF tracing context. This was
+> > previously only available on x86 (Intel LBR) since v5.16. With BRBE
+> > available on ARMv9, this series closes the gap for ARM64.
+> >
+> > Usage model
+> > -----------
+> >
+> > The helper works in conjunction with perf events. The userspace
+> > component of the BPF application opens a perf event with
+> > PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
+> > to continuously record branches into BRBE (on ARM64) or LBR (on x86).
+> > A BPF program attached to a tracepoint, kprobe, or fentry hook can
+> > then call bpf_get_branch_snapshot() to snapshot the branch buffer at
+> > any point. Without an active perf event, BRBE is not recording and
+> > the buffer is empty.
+> >
+> > On-demand branch snapshots from BPF are useful for diagnosing which
+> > specific code path was taken inside a function. Stack traces only show
+> > function boundaries, but branch records reveal the exact sequence of
+> > jumps, calls, and returns within a function -- making it possible to
+> > identify which specific error check triggered a failure, or which
+> > callback implementation was invoked through a function pointer.
+> >
+> > For example, retsnoop [2] is a BPF-based tool for non-intrusive
+> > mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
+> > perf events with PERF_SAMPLE_BRANCH_STACK and then uses
+> > bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
+> > branch records whenever a traced function returns an error.
+> >
+> > Consider debugging a bpf() syscall that returns -EINVAL when creating
+> > a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
+> > with BRBE to trace the bpf() syscall and array_map_alloc_check():
+> >
+> >   $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=3Dany \
+> >              -F -k vmlinux --debug full-lbr
+> >   $ simfail bpf-bad-map-max-entries-array  # in another terminal
+> >
+> > Output of retsnoop:
+> >
+> >   --- fentry BPF program (entries #63-#17) ---
+> >
+> >   [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        =
+(hashtab.c)
+> >   [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           =
+(hashtab.c:750)
+> >   [#57-#55] ... dump_bpf_prog internal branches ...
+> >   [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    =
+(helpers.c:225)
+> >   [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          =
+(helpers.c:225)
+> >   [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
+> >   [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_buck=
+et
+> >   [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         =
+(hashtab.c:717)
+> >   [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           =
+(hashtab.c:750)
+> >   [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
+> >   [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      =
+(helpers.c:178)
+> >   [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_c=
+ntpct
+> >   [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           =
+(timekeeping.c:493)
+> >   [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            =
+(helpers.c:178)
+> >   [#29-#25] ... dump_bpf_prog internal branches ...
+> >   [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       =
+(trampoline.c:1190)
+> >   [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     =
+(trampoline.c:1195)
+> >
+> >   --- array_map_alloc_check (entries #16-#12) ---
+> >
+> >   [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       =
+(arraymap.c:55)
+> >   [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      =
+(arraymap.c:56)
+> >         . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
+> >   [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      =
+(arraymap.c:59)
+> >         . bpf_map_attr_numa_node
+> >   [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      =
+(arraymap.c:64)
+> >   [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           =
+(arraymap.c:82)
+> >
+> >   --- fexit trampoline overhead (entries #11-#00) ---
+> >
+> >   [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      =
+(trampoline.c:1145)
+> >   [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     =
+(trampoline.c:1146)
+> >   [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          =
+(trampoline.c:1157)
+> >   [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
+> >   [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0=
+x0 (arm_brbe.c:814)
+> >
+> >                    el0t_64_sync+0x168
+> >                    el0t_64_sync_handler+0x98
+> >                    el0_svc+0x28
+> >                    do_el0_svc+0x4c
+> >                    invoke_syscall.constprop.0+0x54
+> >     373us [-EINVAL] __arm64_sys_bpf+0x8
+> >                     __sys_bpf+0x87c
+> >                     map_create+0x120
+> >      95us [-EINVAL] array_map_alloc_check+0x8
+> >
+> > The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
+> > 64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
+> > trampoline that ran before the function, and entries #11-#00 (12)
+> > are consumed by the fexit trampoline that runs after. Entry #00
+> > shows the very last branch recorded before BRBE is paused: the call
+> > into arm_brbe_snapshot_branch_stack().
+> >
+> > The 5 useful entries (#16-#12) show the exact path taken inside
+> > array_map_alloc_check(). Record #14 shows a jump from line 56
+> > (bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
+> > shows an immediate jump from line 59 (attr->max_entries =3D=3D 0) to
+> > line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
+> > max_entries=3D=3D0 as the cause -- a diagnosis impossible with stack
+> > traces alone.
+> >
+> > [1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
+> > [2] https://github.com/anakryiko/retsnoop
+> >
+> > Puranjay Mohan (4):
+> >   perf/core: Fix sched_task callbacks for CPU-wide branch stack events
+> >   perf/core: Clear the whole branch entry in perf_clear_branch_entry()
+> >   perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+> >   selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+> >
+> >  arch/x86/events/amd/brs.c                     |   2 +-
+> >  arch/x86/events/amd/lbr.c                     |   2 +-
+> >  arch/x86/events/intel/lbr.c                   |   6 +-
+> >  drivers/perf/arm_brbe.c                       | 130 +++++++++++++++---
+> >  drivers/perf/arm_brbe.h                       |   9 ++
+> >  drivers/perf/arm_pmuv3.c                      |   5 +-
+> >  include/linux/perf_event.h                    |  16 +--
+> >  kernel/events/core.c                          |  17 ++-
+> >  .../bpf/prog_tests/get_branch_snapshot.c      |  13 +-
+> >  9 files changed, 150 insertions(+), 50 deletions(-)
+> >
+> >
+> > base-commit: 61c19a9feb1d87156e46e38d7759f3ad23710e24
+> > --
+> > 2.53.0-Meta
+> >
