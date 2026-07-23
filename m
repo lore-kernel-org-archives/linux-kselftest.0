@@ -1,160 +1,129 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354B630D419
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 21:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34463E3163;
+	Thu, 23 Jul 2026 21:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784841534; cv=none; b=HSTs0hAiXZTc9E5TNJGfpaQmoqSM7P1ouul+V8Qr3ahCZyBsmGdNp42VXnRtfxBjrsCsrwILV3mmDqbqRZ6LM1ldyOJ8TJ//+udXa++Nad7c/WHJzmHP2y24DOWY57IHmnTmLYOAchXHIoL5eXkQh/cC8TjWIop+vViJyjgRV4E=
+	t=1784841766; cv=none; b=Ev/xMUO6Oj6d+SMDY3PUn/RtlTTR2GDadoQVFdDvCdpSqUJaO76oug22zR/ObXA9cm05fSd5q+edIYWv0/PLyFMHoztX1lwvLePdj2t39XD2FTXKdeuSxxF6t++onMkcM389r3b0bC8iwVBNFzbtlwCNdxLAeZCCc3jnrzj7DE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784841534; c=relaxed/simple;
-	bh=SyZCInZKilbQdPQmrs2zGTsB3Jwy6Ej1gt7pA28JOUE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LWgwD5lVuiC5mgG/7NoEnEtBG9r5cv+bn+xjZ6V/0c3IAQ/JsCJ9CDufHMaXdSeYXovdl5eUMLQY1Cj8ikjke4U9GDMAnrUQTeeVew1NJITXBR+5q60cnh188T5MZrFykN1KKDGBwlwKXJ5j3dymcwcRHfDL8P2UdAgtKzeWmEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlGtFyE9; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784841766; c=relaxed/simple;
+	bh=lBYihD8VUd3/ijOxM1HG7tlwRXQ5GtSXGskH/OAen8c=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ZZkgd3Pb9lmvd6Xqfhs7pIIv/GZ/rp1hLQjcfL7bFFcWZ2RKzDiPnsOp3ohY1hP9vPR4gNt5FZWdqxrH3lY0nHs7Ful7ysZP7XfWAMMJcCp7rZ1mc9oRpx3cZV20OjtrgxLZC8O8kN7x0MPvJ02z991sRsGKw+dz7nBU3Hv6Jeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PqDGtK1y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlGtFyE9"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so1036259a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 14:18:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PqDGtK1y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E381F000E9;
+	Thu, 23 Jul 2026 21:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784841532; x=1785446332; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=RcG7tKEtGciiDJtTVHfd2DgDtlLt5OrXaeaVq5LH02I=;
-        b=DlGtFyE9tpSRTw5It+KM9adpPnk3qx6xKilj6DIycei9KFn4VP1blFr09pcJoO1GJh
-         cLZFq67z5OU61RUGrgKs46/ZeIAQaJoRO6gJFXic6ZiMulYevMdIbJ3rhnhLLjDBr1wN
-         otiizVSt94Cy/SPwSkv1G4eVLpYZvqrnv8IN+6Jo41repN94GOJmvvFH/CXtVMXZw6gc
-         L9CkidTQcpmo5IdwiBT+r4rSZSLfRz34sO0M05kpy4YXjegu0zh3hrW4XI+R67jUTYwR
-         EI1093dmk3vFxeGSsRD55RjM9nF+26oLdqoa9JHXSPexabWd8k/P9xhH6SIeDNvFdxMl
-         ma2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784841532; x=1785446332;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RcG7tKEtGciiDJtTVHfd2DgDtlLt5OrXaeaVq5LH02I=;
-        b=RFQX6P9/+AosXzcVoS5fy53qgm2XNIi7Ykr0+YFi2RmqstCvzNxOFMBCw2gtNN8TQU
-         3aHctXxBrsZf5Ts0uKsi5D1QpM1DCZEVrdLbg8Y0V4gL5CL3R1WaO3MkzD3VfW2GHfm1
-         zFV2TupSPCjAbhieDDeehDme9jP9EEhLv7rB/tQtFfAvEEKelS0AwtSfSge+FTSPl0u2
-         tj3FUU/7x3APS0b1vl9gpIuiEtnqfoBLrPG6aigWLbpzfv/xJzFnidXEonXbK4ZzLvLq
-         KA0kudbOOLnp4bnefQOiQh9j0xVafaHRlJuW7en9Iai4M6lYnG7/TqSse35xUeDOWs3k
-         /NPg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp9DuaUAQl1hV58DFJ5+ysZpAy5JAN8CsN7tBKQvcFoSjfgqKCi+rsNbIhjbGPsQgrlEDjIoJKF7wKwLmlEkhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0DiREGFeDJdXHBPfzg7D7TMwlkQLx2nE5Gpu72WKqFeRv54gl
-	TGW5SGyS2MmSSK13U9gxuGx++9o028QnjAiBqDtfyPpw4SaTHcDTDd+6
-X-Gm-Gg: AR+sD13gDhCeHZjr8nfR+VhT8hYH/sBg6y85T1oNgQJRYJRolk1AVvRSvBu5+TCt/Yg
-	XBKFkLyKoSGlt3SLCHEFQeLFt6nwuKPayMghSYqyDLcoCgHgwasevILQcHG29hPxH98vBoCJM4m
-	wJ85eOKo68tl1bKvKgyydL1gtsCOxhglmhpL/W0JExEDhvnDVG3Q5nnKe5qwZSMb5gxrK/A8mYm
-	LFJ+ThOU6l++pLARteevA0S15jx6SG3r3Xc0DcXGhoPpc3UjlFRu6mnb0IRm7kqcbDBDcXT7KVW
-	MXnq/fpm0PNfllGy/n6JHxuNJGZf/FKxOuFvpty7gucNVAcJTr5I77HY5NlDq14E4EZUOXBDXY0
-	IBts3XJvUztpOHd5VUEKc8ZXat1KtjENgx5TJzo5gcbW2IrMx4vzJFtuoEwarSKNxXvJKjY5Fjd
-	MRUEGi1Xu/tU6/L06vzt03F1DAySQd19Hb4LlSoIj9bOZGdO566lMlwtEhTag=
-X-Received: by 2002:a17:90b:580e:b0:380:9f17:6df3 with SMTP id 98e67ed59e1d1-38ec6495907mr5292630a91.4.1784841532556;
-        Thu, 23 Jul 2026 14:18:52 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c221:d012:6e37:77f9? ([2620:10d:c090:500::2:8dac])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d130a8421sm17306533c88.10.2026.07.23.14.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 14:18:52 -0700 (PDT)
-Message-ID: <f2dc5760f49efced48afa9a7f99317b35318aa7f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Cover commuted pointer
- state propagation
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	 <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan	
- <shuah@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai	
- <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Thu, 23 Jul 2026 14:18:49 -0700
-In-Reply-To: <c1023bb6c9e24d98cbe69f63e1df487f4d490108.1784696372.git.chenyy23@mails.tsinghua.edu.cn>
-References: <cover.1784696371.git.chenyy23@mails.tsinghua.edu.cn>
-	 <c1023bb6c9e24d98cbe69f63e1df487f4d490108.1784696372.git.chenyy23@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	d=linux-foundation.org; s=korg; t=1784841764;
+	bh=8LsF46xxakxlsARFJxGTWxEVy+kM0PIVoXm+jBklc8Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=PqDGtK1ymZc6iwXzb09CtmFYmLViI3ZUzwC4EZJzeq9zwSf91u2vNh/4wCIJIHPWO
+	 e15iO8gkDRLbbRBA2tojf2jKWmot7imPS0HbTnDJI9D1VtypOpQwHATciE7rioefeK
+	 s0fKBNhwMPvzspt/Hs40GfWyqW0dMZJpQhg7C0tk=
+Date: Thu, 23 Jul 2026 14:22:42 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, David
+ Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+ <shuah@kernel.org>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang
+ <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
+ <decui@microsoft.com>, Long Li <longli@microsoft.com>, Lyude Paul
+ <lyude@redhat.com>, Danilo Krummrich <dakr@kernel.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Min Ma <mamin506@gmail.com>, Lizhi Hou
+ <lizhi.hou@amd.com>, Oded Gabbay <ogabbay@kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+ linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v11 0/8] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+Message-Id: <20260723142242.5d3f87208d47819d873ae458@linux-foundation.org>
+In-Reply-To: <20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com>
+References: <20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2026-07-22 at 05:27 +0000, Yiyang Chen wrote:
-> Add verifier coverage for the three cases affected by preserving the full
-> pointer state across scalar +=3D pointer: stack frame number inheritance,
-> readonly-untrusted memory access, and dynptr data-slice invalidation.
->=20
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
+On Thu, 23 Jul 2026 10:36:32 -0700 Stanislav Kinsburskii <skinsburskii@gmail.com> wrote:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> This series extends the HMM framework to support userfaultfd-backed memory
+> by allowing the mmap read lock to be dropped during hmm_range_fault().
+> 
 
->  .../testing/selftests/bpf/progs/dynptr_fail.c | 31 ++++++++++++++
->  .../bpf/progs/mem_rdonly_untrusted.c          | 17 ++++++++
->  .../bpf/progs/verifier_basic_stack.c          | 41 +++++++++++++++++++
->  3 files changed, 89 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-> index 94489ac64da8e..7da4266bae09b 100644
-> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-> @@ -1635,6 +1635,37 @@ static int callback(__u32 index, void *data)
->          return 0;
->  }
-> =20
-> +/* A commuted add should preserve the parent id of a dynptr data slice.
-> + */
+Thanks, I've updated mm.git to this version.
 
-Nit: comments style is:
+AI review suggests there may be some problems.  Sorry, I don't recall if
+these were considered in previous versions of the patchset:
 
-  /* foo */
+	https://sashiko.dev/#/patchset/20260723-hmm-v10-v11-0-c55b003a4b61@gmail.com
 
-or
+> 
+> Changes in v11:
+>   - Reject unstable address spaces in hmm_range_fault_unlocked_timeout()
+>     after taking mmap_lock and before walking page tables.
+>   - Compute the remaining HMM timeout budget before the time_after_eq()
+>     check in drm_gpusvm_get_pages() to make sure it can't result in zero
+>     and lead to infinite HMM range faulting loop.
 
-  /*
-   * foo
-   * bar
-   */
+Here's how v11 altered mm.git:
 
-> +SEC("?raw_tp")
-> +__failure __msg("invalid mem access 'scalar'")
-> +int dynptr_slice_commuted_invalidate(void *ctx)
-> +{
-> +	struct bpf_dynptr ptr;
-> +	__u32 *slice, *derived;
-> +
-> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(__u32), 0, &ptr);
-> +
-> +	slice =3D bpf_dynptr_data(&ptr, 0, sizeof(__u32));
-> +	if (!slice)
-> +		goto done;
-> +
-> +	asm volatile ("%[dst] =3D 0;"
-> +		"%[dst] +=3D %[src];"
-> +		"%[src] =3D 0;"
 
-Nit: no need to zero out 'src'?
+ drivers/gpu/drm/drm_gpusvm.c |    4 ++--
+ mm/hmm.c                     |    6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-> +		: [dst]"=3D&r"(derived), [src]"+r"(slice)
-> +		:
-> +		: "memory");
-> +
-> +	bpf_ringbuf_discard_dynptr(&ptr, 0);
-> +	val =3D *derived;
-> +	return 0;
-> +
-> +done:
-> +	bpf_ringbuf_discard_dynptr(&ptr, 0);
-> +	return 0;
-> +}
-> +
+--- a/drivers/gpu/drm/drm_gpusvm.c~b
++++ a/drivers/gpu/drm/drm_gpusvm.c
+@@ -1422,11 +1422,11 @@ int drm_gpusvm_get_pages(struct drm_gpus
+ 	struct dma_iova_state *state = &svm_pages->state;
+ 
+ retry:
++	remaining = timeout - jiffies;
++
+ 	if (time_after_eq(jiffies, timeout))
+ 		return -EBUSY;
+ 
+-	remaining = timeout - jiffies;
+-
+ 	hmm_range.notifier_seq = mmu_interval_read_begin(notifier);
+ 	if (drm_gpusvm_pages_valid_unlocked(gpusvm, svm_pages))
+ 		goto set_seqno;
+--- a/mm/hmm.c~b
++++ a/mm/hmm.c
+@@ -17,6 +17,7 @@
+ #include <linux/slab.h>
+ #include <linux/sched.h>
+ #include <linux/mmzone.h>
++#include <linux/oom.h>
+ #include <linux/pagemap.h>
+ #include <linux/leafops.h>
+ #include <linux/hugetlb.h>
+@@ -806,6 +807,11 @@ int hmm_range_fault_unlocked_timeout(str
+ 		if (ret)
+ 			return ret;
+ 
++		if (check_stable_address_space(mm)) {
++			mmap_read_unlock(mm);
++			return -EFAULT;
++		}
++
+ 		if (timeout && time_after(jiffies, deadline)) {
+ 			mmap_read_unlock(mm);
+ 			return -EBUSY;
+_
 
-...
