@@ -1,125 +1,68 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650F238AC7E
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 16:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C721486B8E;
+	Thu, 23 Jul 2026 17:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784825596; cv=none; b=H4ErhNRdeJKM6ioN2tK/JEml0sV1SM8a7P4yhl+4SNyM0KELWdqZT+73HSmXquh9Dipq2ewqODa/tBdIfZYHMskAwhavt6QSLcJnJ763c/Xt0StfhjZIN06mL/zk7mxOzwS1/Kw8EHfd5TVivC8guKyaw07XTUtqrLu1y1KBCjM=
+	t=1784827259; cv=none; b=TJs5uYjiAVzpRquZmC4biaykiqrrzd53o8QC/FQfGadaRxnnr1r8L0Ctdz/bxT/pLBpTGrrFtFBFK2YjHpu1am96P+/rHAftVatRDNpPzjbm+mbOP5s5fOBs1Zh4+rj7ER7WmXJzGTANMNxbwblUGlZCgv5wf04M6YkR3WZMNwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784825596; c=relaxed/simple;
-	bh=z+HoEvmWYKtMfBygtPBl68CeMD6wWsLW69JzvhhpR/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nOIoKGDVTa27kxhrWotAS8RfT7YFvqFXPwVAalvL+6jZ7S4rxPW6QqGZUdQK9gNF99s8P8Fdqn/qLmqJ4GE1+OYm8VqqL080FJQKZB6URPzOsX/vqv4+9bTeSf8ONSPyyTg1T43Whjb4mFIiMO95HHNohPOJuyrPWhMD/1GlEMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Gk6jW8du; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="Gk6jW8du"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92ed19f4d60so65198285a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 09:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1784825593; x=1785430393; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bqVE/c/eX9E/Cy6wFBhLLV7HBSbIhrEkmRJZ6Osn4Tc=;
-        b=Gk6jW8duMorFxZCKOTImKK/cthkQTePo/7XXo0yOSe8t/4ZafB2e38eaAzmr6WeMVE
-         EUihxK/INqSSpq0j/FYQG3btxjT4+3qwY9q9QVjDr3h3KhUX0Sm6ty0CUZU4HhzHfM5A
-         KT4fWPdgBq718p0P0aWwUR2I9rNE5zu3guFZOhTjdlFGmNGcrLapR1HxQahETeYLGwiO
-         nOL+GnNGC1gOuxE8VjXSq6vIYbcYfq+JmU4geK+aeg6Mxms1DsVn7HVD6K4nJXOp0dM1
-         GlFRjxDBTSyJltmU9fOYCpkQu6/iK0v99poJz+5FONYUVksgFUwse+RD/2/BXvoh0feM
-         zZng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784825593; x=1785430393;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bqVE/c/eX9E/Cy6wFBhLLV7HBSbIhrEkmRJZ6Osn4Tc=;
-        b=U8CoFkPrB/vJymH8gRv7EI/3BPOWTPkv+zogJk20/20yTevEErq5GXPH3PFtmwBuu5
-         u5UNElf0+OeSydcDbhnafJrEyndAx8dXmGeglJ9mIkM2tprV1sJELnbSD327Y9cZuILh
-         oNXO2NVNmY/p5UokXTRBKYOhXLRIsyum52kszljYrdgYV1ViTfKTz7QghrKe4ctWL4mV
-         SEzFAjoMQl8RGxJoV30axtHR/KQd0IWiSjH3gz5fAjGU+Wn+IA44QHhr8ySIgfBxoGsk
-         EZz78CSAo8tKy6cxZQphMhRMGYeG+fLtjSxhODWvsqEyIF+sufxBk1dLsKzyvt1y5mw5
-         SSag==
-X-Forwarded-Encrypted: i=1; AHgh+RrWYZg4r9a9pR5bhqNdr+Jz+yi0DY17uls6vIvhjSdV/a8ts9vY6Zln/wAgPj/bK2QxPrucGtJ8w5+JSj0xJ8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbmqIYXl6kU5RIZxFJ1NTq2t6/iLmlo+2YseWhuQvYwUJ1pO6G
-	axer9C3y9Z10f9dHxPxaMyt4WUgbFZr7f04+cdqYlPp72stFf/LCaoKy28pJW2/c63k=
-X-Gm-Gg: AR+sD13b+0dhlgoz8WXStN8AkJ1LFEreHxgBBatTg0nDMGiKi0/xA/voaevpGRhEjp7
-	jnqcyVnAo4ZodQOERBAwNXndTPmrciTSrVq86J62twWrdsuGgjNXtFZVxlprLicfOiSfWRWmuBt
-	6z+SM8jhcgembtyPnwn992XBhgFpozKTbGTa764HKGLfe40lviR2pTEtZs31QGi8pEiwrcE+buQ
-	2MyrZc93PBLtjUSPmuTHnTL1tzT5EhPJQTSsVv/rN7L8ZTzADt7trZLE6smKJOl0sGwihD1udLa
-	GD2gMFiNacta+n3+cGLDKVOE0P+DGwVJU5ydESfYjQRtcGI9wT3pBc8uEQgkXzLzADJRzrGRcPh
-	aLHxWrunw6XqESeLggba3lDUXRE3xlWs4m7AcRxkWzbkWGeVZcqi1JOjvrTJcI7aal8YDfA5YjW
-	pqAEvDKqYNAHxSugoSJO9zOiBjB9TCYPZNzULhcLVWB5R1ct0u3hj0RO5NNQ==
-X-Received: by 2002:a05:620a:1729:b0:930:9533:5e32 with SMTP id af79cd13be357-9310468af9emr366578785a.7.1784825593202;
-        Thu, 23 Jul 2026 09:53:13 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907ba9e18d4sm48785446d6.23.2026.07.23.09.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 09:53:12 -0700 (PDT)
-Date: Thu, 23 Jul 2026 12:53:06 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Arun George/Arun George <arun.george@samsung.com>
-Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, balbirs@nvidia.com, 
-	brendan.jackman@linux.dev, yuzenghui@huawei.com, apopple@nvidia.com, alucerop@amd.com, 
-	matthew.brost@intel.com, akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, djbw@kernel.org, 
-	vishal.l.verma@intel.com, dave.jiang@intel.com, alison.schofield@intel.com, 
-	osandov@osandov.com, jannh@google.com, pfalcato@suse.de, jackmanb@google.com, 
-	hannes@cmpxchg.org, ziy@nvidia.com, pbonzini@redhat.com, osalvador@suse.de, 
-	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com, 
-	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev, baohua@kernel.org, 
-	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, yury.norov@gmail.com, 
-	linux@rasmusvillemoes.dk, longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org, 
-	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com, 
-	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com, 
-	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev, usama.arif@linux.dev, 
-	xu.xin16@zte.com.cn, chengming.zhou@linux.dev, roman.gushchin@linux.dev, 
-	muchun.song@linux.dev, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	driver-core@lists.linux.dev, nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, 
-	linux-debuggers@vger.kernel.org, linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, 
-	cgroups@vger.kernel.org, damon@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com, cpgs@samsung.com
-Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
-Message-ID: <amJGUuBZ2857QjDB@gourry-fedora-PF4VCD3F>
-References: <CGME20260720193443epcas5p167fa7d8490edfb4d8c0aa6a259db058f@epcas5p1.samsung.com>
- <20260720193431.3841992-1-gourry@gourry.net>
- <963815509.21784796303385.JavaMail.epsvc@epcpadp1new>
+	s=arc-20240116; t=1784827259; c=relaxed/simple;
+	bh=eg2EDBfms3wplILxobi8XAXY/AQEHIWEC9GQzLWfOOc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uicKkR/l7pXXDxtv++k0wLilI+Y/tcVvmWqPU9YmsSl1wcIBRic70x4sxNzT83bqaEp93l4jnNUtAYlEbQtB8ymkP84Lhq/oFbIctgEzwbLET6uFl/80OVx3Hd/bpkjJaAXZ9gZGxP0o3QMHzsJSjzFTV8dl5EVQNDQVMxnYFR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377A71F000E9;
+	Thu, 23 Jul 2026 17:20:58 +0000 (UTC)
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56A5739244CB;
+	Thu, 23 Jul 2026 17:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <963815509.21784796303385.JavaMail.epsvc@epcpadp1new>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/2] selftests: drv-net: Fix csum path in doc
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178482721290.2793774.14367887979673851139.git-patchwork-notify@kernel.org>
+Date: Thu, 23 Jul 2026 17:20:12 +0000
+References: <20260720215149.631145-1-pvorel@suse.cz>
+In-Reply-To: <20260720215149.631145-1-pvorel@suse.cz>
+To: Petr Vorel <pvorel@suse.cz>
+Cc: netdev@vger.kernel.org, petr.vorel@gmail.com, kuba@kernel.org,
+ willemb@google.com, linux-kselftest@vger.kernel.org
 
-On Thu, Jul 23, 2026 at 02:08:31PM +0530, Arun George/Arun George wrote:
-> On 21-07-2026 01:03 am, Gregory Price wrote:
-> > Changes Since V4
-> > ================
-> >   - dropped compressed ram example from series
-> >       - will submit separately if this moves forward
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 20 Jul 2026 23:51:48 +0200 you wrote:
+> From: Petr Vorel <petr.vorel@gmail.com>
 > 
-> We intend to test this series on a compression capable CXL expander 
-> hardware. Since compressed ram example (cram) is not part of this 
-> series, how do you suggest to do that? Do you have a version of cram 
-> module compatible with this series?
+> C source was moved in 1d0dc857b5d87.
 > 
-> ~Arun
+> Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> ---
+> Changes v1->v2 (both asked by Jakub):
+> * Sent to netdev
+> * Remove Fixes tag
+> 
+> [...]
 
-Hi Arun,
+Here is the summary with links:
+  - [v2,1/2] selftests: drv-net: Fix csum path in doc
+    https://git.kernel.org/netdev/net-next/c/b8363908ea1e
+  - [v2,2/2] selftests: drv-net: Fix TSO test doc
+    https://git.kernel.org/netdev/net-next/c/1306cf6dc1df
 
-I dropped it from the base series because i want to try to move forward
-with this without RFC.  The compressed service itself will be a separate
-submission after I get decent signal on whether this will be accepted.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I plan to RFC the new setup for compressed ram this a bit later, but I
-will share my working branch with you for testing.
 
-~Gregory
