@@ -1,93 +1,145 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8409A28F5;
-	Thu, 23 Jul 2026 12:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BC64A13B6;
+	Thu, 23 Jul 2026 12:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784809835; cv=none; b=JALevLeZsGHFzPIeyNrn6mUadz1+RiHfEMtNbV3r3Y3riEQwunm4BXva05e8UBt6z6/hdaRoIakgoRexbbMevBnx0JwfM05KMHjxgLM+ke64nkd3cfL+1Kj3cn/3jksYaj/Q+41TAJ838+tOqUfmOKE5lhIo9786EWq5RpI84mg=
+	t=1784810705; cv=none; b=ZgU4PfjSTsAn30Vqt5Djjk+CkWDdEVpj4lZP984PAwggTTnSQtVo8xRRlCxOXkq2wS9yP+KQs5YKy0J1EK/g7aiT30OOyzyNryr51IP83DpW5wkujMFetF37C/TxBDkbKyrttBdD3x46+GqVwey+0gjFhmMXLIea8Fxv1Oxa6OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784809835; c=relaxed/simple;
-	bh=D9b7QZwBuuV0OrDRC/6goX+R19G+8jmXb8K0TVh5EMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kknBj+CMO5M4GXEss5mN+53a9y61GxMQgNXei6IdfLyOPTtlJ5nlkvKj/bS5HAJc4//DpFcpROAQpdfprSsoh+sx7gvoygW1WZVsxFDYgUM670DY6oaEP3YajUJHaW1719/5AcdIySFvCt0FDmKAgniIAxgY65psaqjfLBeZmrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JgVcMkeT; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1784810705; c=relaxed/simple;
+	bh=BuUzWCouzpbbg2lPlgVYUKj5Ugh36+qSD5tNZJolJJs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fPHbFh8igHG1Gi/GKtKrAgPqfDfnkqhXGoregc0uztWDw6sT6FgSnPsno3WUbXrXr1rKkBezLevpeweQnaGMWaQ0EjpLj19X6z5f/dqykjg8m1bMa3UNZUKWf6eUsgKLidJgWXfrFv5yKMGp3KeWqFqDddOwv/TqcWT5r5MVsr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=h3iKsP1m; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JgVcMkeT"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="h3iKsP1m"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B9E01477;
-	Thu, 23 Jul 2026 05:30:28 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9D983F59E;
-	Thu, 23 Jul 2026 05:30:29 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC4E71477;
+	Thu, 23 Jul 2026 05:44:48 -0700 (PDT)
+Received: from [10.1.39.91] (e127648.arm.com [10.1.39.91])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDC523F59E;
+	Thu, 23 Jul 2026 05:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784809832; bh=D9b7QZwBuuV0OrDRC/6goX+R19G+8jmXb8K0TVh5EMs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JgVcMkeTJJ4P4FfZC2DKTIG2CK3JiugQN8UJUQ3GhN1/bKw8b0wDBvTCg4Y3Vrjsk
-	 z52idKXbarz8sd0UvNX6oWtOSwNsblHV0O56U5g95iiRceM67pCkvKW+SMDgzcBhcn
-	 +2gIRwAChHRW1BRbfLWA17HpoSK1Hzo4okc6lrfA=
-Date: Thu, 23 Jul 2026 13:30:23 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	Jean-Philippe Brucker <jpb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v12 02/29] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <amIJX3j6VHto1YWs@J2N7QTR9R3.cambridge.arm.com>
-References: <20260709-kvm-arm64-sme-v12-0-d0301d79ef58@kernel.org>
- <20260709-kvm-arm64-sme-v12-2-d0301d79ef58@kernel.org>
- <ali39DG6qie7XTuD@J2N7QTR9R3.cambridge.arm.com>
- <15a9ae14-395d-472a-a5be-9e46524fb493@sirena.org.uk>
- <3c76650f-ddda-47ae-a676-86016d8e39a6@sirena.org.uk>
+	t=1784810693; bh=BuUzWCouzpbbg2lPlgVYUKj5Ugh36+qSD5tNZJolJJs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=h3iKsP1moCJAhfAuwc685G5jUgL/Xz8jD4QcjUKj9EtWiwEvpf1YWW+dykI6sJYs7
+	 p/EbrgiDQGQOscZTsLxe4/88mRhxTg7t4SIowXEz1IvqBL3okDeoY4A5QJ1qth86ew
+	 nS91XcAKy86wHOi8uuG7HRZXfCepJZkfY7QsTO4w=
+Message-ID: <cfea177c-b618-4cac-9a74-1a442353849a@arm.com>
+Date: Thu, 23 Jul 2026 13:44:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c76650f-ddda-47ae-a676-86016d8e39a6@sirena.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] cpuidle: cache aggregated governor latency QoS
+ constraint
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>, rafael@kernel.org,
+ daniel.lezcano@kernel.org, lenb@kernel.org, pavel@kernel.org,
+ shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260721092324.17508-1-tianyaxiong@kylinos.cn>
+ <20260721092559.18921-1-tianyaxiong@kylinos.cn>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20260721092559.18921-1-tianyaxiong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Jul 18, 2026 at 01:35:21AM +0100, Mark Brown wrote:
-> On Thu, Jul 16, 2026 at 04:28:02PM +0100, Mark Brown wrote:
-> > On Thu, Jul 16, 2026 at 11:52:36AM +0100, Mark Rutland wrote:
+On 7/21/26 10:25, Yaxiong Tian wrote:
+> cpuidle_governor_latency_req() runs on every idle-state selection and
+> aggregates per-CPU resume latency with the global CPU latency and
+> wakeup latency QoS limits.  That path repeatedly walks get_cpu_device()
+> and pm_qos_read_value(), which shows up hot under menu_select().
 > 
-> > > >  		if (test_thread_flag(TIF_SME)) {
-> > > > -			unsigned long vq = sve_vq_from_vl(sme_vl);
-> > > > -			sysreg_clear_set_s(SYS_SMCR_EL1, SMCR_ELx_LEN, vq - 1);
-> > > > +			sysreg_cond_update_s(SYS_SMCR_EL1, task_smcr(current));
-> > > > +			isb();
-> > > >  		}
+> Cache the aggregated constraint per CPU and refresh it only when the
+> corresponding per-CPU generation changes.  The generation is already
+> bumped by the global and per-CPU resume latency QoS notifiers added
+> earlier in this series.
 > 
-> > > What's the ISB for? That mysteriously appeared in v11 without
-> > > explanation. It wasn't in the original code, prior versions of the
-> > > series, or my suggested rework with the task_smcr() helper.
+> On a menu governor profile, cpuidle_governor_latency_req() drops from
+> about 19.9% of menu_select time to about 4.2%, roughly a 6x reduction
+> in cost per call (~1.9 us down to ~0.3 us).
 > 
-> > > I don't believe it's necessary to add an ISB here.
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> ---
+>  drivers/cpuidle/governor.c | 37 ++++++++++++++++++++++++++++++++-----
+>  1 file changed, 32 insertions(+), 5 deletions(-)
 > 
-> > I can't remember or figure it out, I'll delete.
-> 
-> Actually I remembered: while SCMR_EL1.LEN is self synchronising the
-> "without the need for explict synchronization" wording is not present
-> for SMCR_EL1.{FA64,EZT0} and this is no longer explicitly just an update
-> of LEN.  It's possible I'm being overly paranoid here, I'll leave the
-> isb() and add a comment for the next version.
+> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+> index d286ccf19a69..67909470c14b 100644
+> --- a/drivers/cpuidle/governor.c
+> +++ b/drivers/cpuidle/governor.c
+> @@ -32,11 +32,17 @@ struct cpuidle_governor *cpuidle_prev_governor;
+>   */
+>  static DEFINE_PER_CPU(atomic_t, latency_req_gen);
+>  
+> +struct cpuidle_latency_req_cache {
+> +	unsigned int gen;
+> +	s64 latency_ns;
+> +};
+> +
+>  struct cpuidle_cpu_qos_nb {
+>  	struct notifier_block nb;
+>  	unsigned int cpu;
+>  };
+>  
+> +static DEFINE_PER_CPU(struct cpuidle_latency_req_cache, latency_req_cache);
 
-Ok.
+So this will initialize with latency_req_cache.gen = 0 and latency.req_cache.latency_ns = 0...
+Come to think of it maybe a no-req run is also good as the first and last selftest case.
 
-Given we've already forgotten that once so far, that definitely needs a
-comment.
+>  static DEFINE_PER_CPU(struct cpuidle_cpu_qos_nb, cpuidle_cpu_qos_nb);
+>  
+>  static void cpuidle_latency_req_invalidate_cpu(unsigned int cpu)
+> @@ -212,10 +218,22 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
+>   */
+>  s64 cpuidle_governor_latency_req(unsigned int cpu)
+>  {
+> -	struct device *device = get_cpu_device(cpu);
+> -	int device_req = dev_pm_qos_raw_resume_latency(device);
+> -	int global_req = cpu_latency_qos_limit();
+> -	int global_wake_req = cpu_wakeup_latency_qos_limit();
+> +	struct cpuidle_latency_req_cache *cache;
+> +	unsigned int gen;
+> +	struct device *device;
+> +	int device_req, global_req, global_wake_req;
+> +	s64 latency_ns;
+> +
+> +	cache = per_cpu_ptr(&latency_req_cache, cpu);
+> +	gen = atomic_read(per_cpu_ptr(&latency_req_gen, cpu));
+> +
+> +	if (likely(READ_ONCE(cache->gen) == gen))
+> +		return READ_ONCE(cache->latency_ns);
+> +
+> +	device = get_cpu_device(cpu);
+> +	device_req = dev_pm_qos_raw_resume_latency(device);
+> +	global_req = cpu_latency_qos_limit();
+> +	global_wake_req = cpu_wakeup_latency_qos_limit();
+>  
+>  	if (global_req > global_wake_req)
+>  		global_req = global_wake_req;
+> @@ -223,5 +241,14 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
+>  	if (device_req > global_req)
+>  		device_req = global_req;
+>  
+> -	return (s64)device_req * NSEC_PER_USEC;
+> +	latency_ns = (s64)device_req * NSEC_PER_USEC;
+> +
+> +	WRITE_ONCE(cache->latency_ns, latency_ns);
+> +	/*
+> +	 * Store gen last so a concurrent invalidate cannot leave a stale
+> +	 * latency_ns marked as current.
+> +	 */
 
-Mark.
+This doesn't guarantee the ordering.
+
+> +	WRITE_ONCE(cache->gen, gen);
+> +
+> +	return latency_ns;
+>  }
+
