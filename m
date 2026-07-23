@@ -1,16 +1,16 @@
 Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FF44334B8;
-	Thu, 23 Jul 2026 12:23:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2574E4334B8;
+	Thu, 23 Jul 2026 12:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784809430; cv=none; b=niEGx8QaNfoXVyGKvqdvIh5haQFiOlxq/OrzLZmM8F8EmSFE2kIwG/Qc7dEB1DH22BHRdbymBBUAx6Pz4SdiFsGX69zEXZmVfqXd80LUttxoJRlJAPs3ou1IHUtl5F6jpdQ9GL4/vRgVqSv5JpxUl+M86AXcj0Nh9I8dvSAW6Ug=
+	t=1784809439; cv=none; b=F6ZicSOeXVzhEljq3JOC4o4c4NRgMF5WYQoFSCoHSbCspE9scR37a6x9p6r2MzsYvNmld8UToJeCYwBdPNb1qXfWMIFC0K3L1A+haZ5mxuSIZv5/Nl0ad9D76ydcsAnnE5wUUAcPMjO6STr8XKScAG/Sllt8J+EJiEGelL1V0u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784809430; c=relaxed/simple;
-	bh=I7IR/QJzw7fHXXNSNsDNnjbu2daLho+C+H6OagnADZ4=;
+	s=arc-20240116; t=1784809439; c=relaxed/simple;
+	bh=uOxVZ8RQnUD/RzQJrLgyc0MIJUp6uGhe/avoeZKDYfY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vDoE+P49S1Chno2sFVOdcBR9fMQjexSidXH8paEKTyxNkllleuvPj1QAMmVv5wI5v0jQm29uK9adztOj6dP8FqZpy5C3DFtfEe9xM6EsLe4Ohcp89X37y2IrhZLmE19JND1YGXED2Z7taQYroRBw0mSYHT40aHlyLTJFHQXmml8=
+	 MIME-Version; b=FDayRFglO3MSgxhHlAufdjlFU6edFoy3DiPs+pZp44clYz1T9KRrZOFBNHdeoANZJN+0eRK8bDj2tVF617rd7R4qX8AZ8wqsCgS5JNTdWHJDFoZm+KMJtbCqa0/bl+s425VpXn4XPh4DziibC5m4cafQ2OM0uz0N93uoG73PCt0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
@@ -18,12 +18,12 @@ Received: from [2001:67c:370:1998:30cb:b625:4f9:61b4] (helo=alea)
 	by eidolon.nox.tf with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsSn-00000003Wpj-0fVg;
-	Thu, 23 Jul 2026 14:23:45 +0200
+	id 1wmsSv-00000003Wpj-13Yu;
+	Thu, 23 Jul 2026 14:23:53 +0200
 Received: from equinox by alea with local (Exim 4.99.2)
 	(envelope-from <equinox@diac24.net>)
-	id 1wmsR9-00000000Q1E-0oGY;
-	Thu, 23 Jul 2026 14:22:03 +0200
+	id 1wmsRS-00000000Q20-1MRx;
+	Thu, 23 Jul 2026 14:22:22 +0200
 From: David 'equinox' Lamparter <equinox@diac24.net>
 To: Paolo Abeni <pabeni@redhat.com>,
 	Jakub Kicinski <kuba@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Ido Schimmel <idosch@nvidia.com>,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	David 'equinox' Lamparter <equinox@diac24.net>
-Subject: [PATCH net-next v2 05/10] net/ipv6: drop ip6_route_get_saddr
-Date: Thu, 23 Jul 2026 14:19:31 +0200
-Message-ID: <20260723122106.99772-6-equinox@diac24.net>
+Subject: [PATCH net-next v2 06/10] net/ipv6: flip IPV6_SUBTREES default to Y
+Date: Thu, 23 Jul 2026 14:19:32 +0200
+Message-ID: <20260723122106.99772-7-equinox@diac24.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260723122106.99772-1-equinox@diac24.net>
 References: <20260723122106.99772-1-equinox@diac24.net>
@@ -55,50 +55,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It's no longer used anywhere.
+It's needed for RFC6724 rule 5.5, which as it turns out is more
+important than was initially discernible.
 
 Signed-off-by: David 'equinox' Lamparter <equinox@diac24.net>
 ---
- include/net/ip6_route.h | 26 --------------------------
- 1 file changed, 26 deletions(-)
+ net/ipv6/Kconfig | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/ip6_route.h b/include/net/ip6_route.h
-index 09ffe0f13ce7..fe13cb1d3257 100644
---- a/include/net/ip6_route.h
-+++ b/include/net/ip6_route.h
-@@ -140,32 +140,6 @@ void rt6_flush_exceptions(struct fib6_info *f6i);
- void rt6_age_exceptions(struct fib6_info *f6i, struct fib6_gc_args *gc_args,
- 			unsigned long now);
+diff --git a/net/ipv6/Kconfig b/net/ipv6/Kconfig
+index c3806c6ac96f..39659e9b53a3 100644
+--- a/net/ipv6/Kconfig
++++ b/net/ipv6/Kconfig
+@@ -243,16 +243,26 @@ config IPV6_MULTIPLE_TABLES
+ config IPV6_SUBTREES
+ 	bool "IPv6: source address based routing"
+ 	depends on IPV6_MULTIPLE_TABLES
++	default y
+ 	help
+ 	  Enable routing by source address or prefix.
  
--static inline int ip6_route_get_saddr(struct net *net, struct fib6_info *f6i,
--				      const struct in6_addr *daddr,
--				      unsigned int prefs, int l3mdev_index,
--				      struct in6_addr *saddr)
--{
--	struct net_device *l3mdev;
--	struct net_device *dev;
--	bool same_vrf;
--	int err = 0;
--
--	rcu_read_lock();
--
--	l3mdev = dev_get_by_index_rcu(net, l3mdev_index);
--	if (!f6i || !f6i->fib6_prefsrc.plen || l3mdev)
--		dev = f6i ? fib6_info_nh_dev(f6i) : NULL;
--	same_vrf = !l3mdev || l3mdev_master_dev_rcu(dev) == l3mdev;
--	if (f6i && f6i->fib6_prefsrc.plen && same_vrf)
--		*saddr = f6i->fib6_prefsrc.addr;
--	else
--		err = ipv6_dev_get_saddr(net, same_vrf ? dev : l3mdev, daddr, prefs, saddr);
--
--	rcu_read_unlock();
--
--	return err;
--}
--
- struct rt6_info *rt6_lookup(struct net *net, const struct in6_addr *daddr,
- 			    const struct in6_addr *saddr, int oif,
- 			    const struct sk_buff *skb, int flags);
+ 	  The destination address is still the primary routing key, so mixing
+ 	  normal and source prefix specific routes in the same routing table
+-	  may sometimes lead to unintended routing behavior.  This can be
+-	  avoided by defining different routing tables for the normal and
+-	  source prefix specific routes.
++	  may sometimes lead to unintended routing behavior if the order of
++	  lookups is misunderstood.  To achieve full separation based on source
++	  address, different routing tables should be defined for each source
++	  prefix.
+ 
+-	  If unsure, say N.
++	  Subtrees specifically address scenarios where local connectivity
++	  between source prefixes is shared and unrestricted, but some
++	  destinations (e.g. the default route) have more fine-grained rules.
++
++	  This feature is required to correctly support RFC6724 rule 5.5 in
++	  source address selection.  Rule 5.5 is a necessity for good
++	  multihoming, renumbering and source prefix liveliness checks.
++
++	  If unsure, say Y.
+ 
+ config IPV6_MROUTE
+ 	bool "IPv6: multicast routing"
 -- 
 2.53.0
 
