@@ -1,178 +1,137 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE903A5445;
-	Thu, 23 Jul 2026 05:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D56382379
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 06:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784785323; cv=none; b=pw06EVx+pyQnI2Lb3wRiIp3OAUo+BaiQ1kowmxzGE8YJGwZ9Z7X5RhcK/PhGNRHe6E5hNufIxhBav/+q9IyOcQ4krO10+x18pY0HY1RCxbn2Jg7OsrtQltNqEnciHRlvM1rBAHGqXOIlROi0cQYfEm2BrsnAfDfyEo1moVoRzr0=
+	t=1784787254; cv=none; b=Tl+RcNy4cOFjwnS9b4PYRmS3eVW5+0N6Y9pbaJZ1YHt70c39pwX6nt5TWoYCciyZQiL1S/7ZLc+WWHN/dROSST7FH9aiTjfMGE4CG9ZaJekaJ3Rwx+tYjrhQJjpu5Me04sP2+buxsJtKep0sBnAaELHM4e4AbWz3xnCsSCb/t5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784785323; c=relaxed/simple;
-	bh=sNbBrbNgL1DCvUesbsN84M4eYHPRqBcR/E53/mGivWk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dT2QnILSck5dIQVcc40vOSscDCffRI45YKalsilWOB6Uf/RsU6NDXy/nZd7kaMjqd0+Em7cIYNwKNbaqUGSjZDyAnc4/ynMKu9OwKNM036PEwoQZV+K5ysdN1Aydh1CMf4u4o4cKf4MvSIRMDWN1mwfp+B3WhzI1nkiXvaZG76s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 2e012e52865911f1aa26b74ffac11d73-20260723
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:acf894eb-d1fa-4853-9153-903f1dea7d32,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:5a4cc073e97d43289fcbe7c6e710344a,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-	,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 2e012e52865911f1aa26b74ffac11d73-20260723
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1905472986; Thu, 23 Jul 2026 13:41:40 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Thu, 23 Jul 2026 05:41:32 +0000
-Subject: [PATCH bpf-next v5 1/3] bpf, riscv: add support for timed may_goto
+	s=arc-20240116; t=1784787254; c=relaxed/simple;
+	bh=gzmNlmMApSypPBhZvx9nxVBx3Yh17K5S4fe4DDgxgKI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oDCE7r78ctvtYLyTM/jeJ89Y2SzB98ue0Q2BQhNo5gyni3jqzu5Ytpzb11aaJDtJwr3o1eflj6YQllihaLXyVuwQNp25GhvfYTtHU7DGb3qDcTuekl8T4NCWI2V2nlQnPRl485T217I8vppoGiSdR9a/BygzA7stEXOA8i33NaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IYD4nb77; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IYD4nb77"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784787238;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=elw6nFLy/P6WL5mNuJ1195kInp61UN0arSV7Sn5n+e0=;
+	b=IYD4nb77QKHlfm+gk8ZEa9dq1uZ+fFPOpqN9grB3vsE5T3zjKcxG+bQU1qbPmkUs8gPwO1
+	Fw9FOTH4AEZbCIqkU8JzaMlHoJ1Rng+Q/mOcUyMy+VTublXNwHORfsFF5gLZjVpMGVQNS3
+	i+FvCcC1w0f9K3lDmVjNbgWQPftWHXs=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Report the real error from libarena parallel workers
+Date: Thu, 23 Jul 2026 14:13:37 +0800
+Message-ID: <20260723061347.398591-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260723-riscv-bpf-timed-may-goto-v5-1-86acb54e5642@kylinos.cn>
-References: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-In-Reply-To: <20260723-riscv-bpf-timed-may-goto-v5-0-86acb54e5642@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Luke Nelson <luke.r.nels@gmail.com>, 
- Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Implement arch_bpf_timed_may_goto() for the RV64 JIT. The argument and
-return value are carried in BPF_REG_AX, and BPF R0-R5 are preserved
-across the call to the generic bpf_check_timed_may_goto().
+Several CI runs failed in the libarena parallel tests with -4 (-EINTR) [1],
+which says nothing about what actually went wrong.
 
-Enable bpf_jit_supports_timed_may_goto() so the verifier uses the timed
-expansion path.
+Two workers can fail like this:
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+  worker 1: gives up, e.g. the rendezvous times out, sets test_abort and
+            returns its own error (-ETIMEDOUT)
+  worker 2: sees test_abort and returns -EINTR
+
+-EINTR only means "someone else already gave up", so it carries no
+information. Which of the two gets reported depends on the order
+pthread_join() collects them, because
+
+	err = err ?: (long)thread_ret;
+
+keeps the first non-zero value and drops the rest. When the -EINTR worker
+comes first, the error describing the actual failure is lost.
+
+Skip -EINTR entirely: a worker only returns it once another worker has
+already reported the real error, so report and log only the real errors.
+
+It is still unclear whether the timeouts come from CI load or from a
+problem in the test itself. Report the error accurately first, so the next
+failure can be diagnosed.
+
+[1]:
+https://github.com/kernel-patches/bpf/actions/runs/29867905253/job/88764463566
+https://github.com/kernel-patches/bpf/actions/runs/29878191901/job/88794845824
+
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
 ---
- arch/riscv/net/Makefile             |  2 +-
- arch/riscv/net/bpf_jit_comp64.c     | 12 +++++++++-
- arch/riscv/net/bpf_timed_may_goto.S | 47 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+), 2 deletions(-)
+v1 -> v2:
+- hoist the worker_err declaration to the top of the function
+- skip -EINTR workers entirely: do not aggregate and do not log them
+- comment/commit message wording fixes
 
-diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-index 9a1e5f0a94e5..6458d4d51990 100644
---- a/arch/riscv/net/Makefile
-+++ b/arch/riscv/net/Makefile
-@@ -3,7 +3,7 @@
- obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
+v1: https://lore.kernel.org/bpf/20260722064713.357277-1-jiayuan.chen@linux.dev/
+---
+ .../selftests/bpf/prog_tests/libarena.c        | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
+index df7e4b8dc394..daade4150af6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+@@ -73,6 +73,7 @@ static int run_libarena_parallel_test_workers(struct libarena *skel,
+ 	uint32_t nthreads;
+ 	void *thread_ret;
+ 	int ret, err = 0;
++	int worker_err;
+ 	int i;
  
- ifeq ($(CONFIG_ARCH_RV64I),y)
--	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
-+	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o bpf_timed_may_goto.o
- else
- 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
- endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index ad089a9a4ea9..8fe8969fb8a0 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1841,7 +1841,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		if (aux->tail_call_reachable && insn->src_reg == BPF_PSEUDO_CALL)
- 			emit_sd(RV_REG_SP, ctx->tcc_offset, RV_REG_TCC, ctx);
+ 	for (nthreads = 0; nthreads < UINT_MAX; nthreads++) {
+@@ -118,7 +119,22 @@ static int run_libarena_parallel_test_workers(struct libarena *skel,
+ 			continue;
+ 		}
  
--		if (insn->src_reg != BPF_PSEUDO_CALL)
+-		err = err ?: (long)thread_ret;
++		worker_err = (long)thread_ret;
++
 +		/*
-+		 * arch_bpf_timed_may_goto() is emitted by the verifier and
-+		 * returns its result in BPF_REG_AX instead of BPF_REG_0, so
-+		 * skip the normal "move return register into R0".
++		 * A worker that bails out because another one already gave up
++		 * reports -EINTR. It is collateral damage that carries no
++		 * information, so skip it entirely: never let it become the
++		 * reported error, and don't log it either.
 +		 */
-+		if (insn->src_reg != BPF_PSEUDO_CALL && addr != (u64)arch_bpf_timed_may_goto)
- 			emit_mv(bpf_to_rv_reg(BPF_REG_0, ctx), RV_REG_A0, ctx);
- 		break;
++		if (!worker_err || worker_err == -EINTR)
++			continue;
++
++		if (!err)
++			err = worker_err;
++
++		fprintf(stdout, "%.*s__%d returned %d\n", (int)prefixlen, name,
++			i, worker_err);
  	}
-@@ -2161,3 +2166,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_timed_may_goto(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-new file mode 100644
-index 000000000000..02c637d87420
---- /dev/null
-+++ b/arch/riscv/net/bpf_timed_may_goto.S
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2026 Feng Jiang <jiangfeng@kylinos.cn> */
-+
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+
-+/*
-+ * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
-+ *	- input:  stack offset in BPF_REG_AX (t0)
-+ *	- output: updated count in BPF_REG_AX (t0)
-+ *
-+ * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-+ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
-+ * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-+ */
-+
-+SYM_FUNC_START(arch_bpf_timed_may_goto)
-+	addi	sp, sp, -(8*SZREG)
-+	REG_S	ra, 7*SZREG(sp)
-+	REG_S	s0, 6*SZREG(sp)
-+	addi	s0, sp, 8*SZREG
-+
-+	/* Save BPF registers R0-R5 (a5, a0-a4) */
-+	REG_S	a5, 5*SZREG(sp)
-+	REG_S	a0, 4*SZREG(sp)
-+	REG_S	a1, 3*SZREG(sp)
-+	REG_S	a2, 2*SZREG(sp)
-+	REG_S	a3, 1*SZREG(sp)
-+	REG_S	a4, 0*SZREG(sp)
-+
-+	add	a0, t0, s5
-+	call	bpf_check_timed_may_goto
-+	mv	t0, a0
-+
-+	/* Restore BPF registers R0-R5 */
-+	REG_L	a4, 0*SZREG(sp)
-+	REG_L	a3, 1*SZREG(sp)
-+	REG_L	a2, 2*SZREG(sp)
-+	REG_L	a1, 3*SZREG(sp)
-+	REG_L	a0, 4*SZREG(sp)
-+	REG_L	a5, 5*SZREG(sp)
-+
-+	REG_L	s0, 6*SZREG(sp)
-+	REG_L	ra, 7*SZREG(sp)
-+	addi	sp, sp, 8*SZREG
-+	ret
-+SYM_FUNC_END(arch_bpf_timed_may_goto)
-
+ 
+ 	free(threads);
 -- 
-2.53.0
+2.43.0
 
