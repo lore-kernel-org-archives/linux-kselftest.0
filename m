@@ -1,223 +1,166 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1CA3E3D8C
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 07:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3EA3D25AD
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jul 2026 07:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784791163; cv=none; b=AVD0KCKoMx51Kb7iU4CSxFIA7XwBaigJttml610dVEQxLcqjsfOgz5U6NDNX5Qp7OanDy4QuhJwVZ+b0QNCsvAlOGA0zwN6qAk74EZiheQ0qXeWl8NlFwGR9PWJj7EwAVtThXbsgPQk/8MCROl0fXWjLVz8Dey1parUtKRsC3L4=
+	t=1784792846; cv=none; b=u8typjiu2AZ5tAc+b1B24ypP3SCjEpNHMGIXYRlGKvzKGe1urMsQq+EQVT8iq9mGFzXzk5Q4K+yOXk8XvLdwBzkDJSPWkNVU+L9AqMmJwtaG2BMCxATT6dtw7kIMjJFXIsejjBBz2N4eE8pPYfgi5TPXLjF050N/MqQ5nUmN7DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784791163; c=relaxed/simple;
-	bh=FqG++2aqT+GsRBiRhO0Sak98kjYWuPyYH35Jm57J5YM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XuzHYxVssQciU7RiTEsXfsncDsd3lcSnB10V65D5obrjnHOHVb4WgR++7iRbyesJDoZgr/i0/N978seUkWsMUufogZyno+HxdTA0BTg+bFtE/TC/CeqgQ7BWJ91PIqa/RSv2lDN0MFmgR6Vt/cKK1FUN035kG4y6XL/AuXpklu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=2BUP4NqP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=8bZbumMs; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TuuX1SmJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IjkjRG9U; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1784792846; c=relaxed/simple;
+	bh=oHrzS7c2fdMxPD+EoUgQkE+zbdNYCbx8okcllqp9KYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f7e8stmm9ZbPPvqXU12ptCKvSw4l2o0NFKaJ1EgaC9A1TZIEu9aTv9iwDjn2djgZjKYANdCIhYuqn1YfZpjfSthaIoxmbzXKwazRR07XvFIRvpFjS0K1oleK6okbCzLtkgmGIzgJlUXpVkRVbI/HG+TrSyw1xYDW9sm/kATIyyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H4trLyOg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="2BUP4NqP";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="8bZbumMs";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TuuX1SmJ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IjkjRG9U"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H4trLyOg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784792844;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rU+JQSn24qoe+8/7ChMxhPzRjJgh1VjUQ1PsYPpKZ7A=;
+	b=H4trLyOgGZGwP2K/98vJLgZYiM77+p3T1Vt/4DQ0Gb1C9XubjBPqcOBoSQdQfRbbrgr7h+
+	Eg4DB5KeRfdLdtJyLRhVO+LoXHLLTyL8cWX7y+5vd+nyyO2BwwkXrq1LospMWdiPbmtSzo
+	FRbZpGSkV3jq6DUOoQTzpUW3kU0jOq8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-684-OIFZQ_uGMim6Wy1GXEkM8A-1; Thu,
+ 23 Jul 2026 03:47:20 -0400
+X-MC-Unique: OIFZQ_uGMim6Wy1GXEkM8A-1
+X-Mimecast-MFC-AGG-ID: OIFZQ_uGMim6Wy1GXEkM8A_1784792839
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DD0633E4D;
-	Thu, 23 Jul 2026 07:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1784791154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EODZ9+++oP4vf1fhSwHUyf2b+PlhxtgH2TJFwTfnvjI=;
-	b=2BUP4NqPdEID0U7/wHQZ/9G2GxejcMewD4D28EctvBYJTSz61w3aoA0D00xeq+SUDWr9hg
-	rBJvfThpPQyNT2PF0jb7fP36kVgE/mcNv6GzzWsDLLnF0mNrT7AeqMS/+5ta2HLc6mlL5J
-	QMPOn+dqq/o7OKVO/Rq6RCk+yjebPwI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1784791154;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EODZ9+++oP4vf1fhSwHUyf2b+PlhxtgH2TJFwTfnvjI=;
-	b=8bZbumMsjTGOxao8BvV5TFdialbq+zEFQSXpqgkQTy6aQ5rDCdaixlKPu53LA0TiVWxFL2
-	fQ3l7N+1mXWnXWAA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1784791152; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EODZ9+++oP4vf1fhSwHUyf2b+PlhxtgH2TJFwTfnvjI=;
-	b=TuuX1SmJtnPnP3r1hcmi2h28bAuN3OwmUuqW5ISRkUfW+nSIh5VLJG69URCk5WMCxSp7bx
-	moMpGjXVljRaTv/RwKBDBf5nR0ccdEIgaG2GizxepJr8EIFzJSt0FodM7/2kHRL+K08xTD
-	A8bL76VvpLf179MctXkROZQVMUZ+vOI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1784791152;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EODZ9+++oP4vf1fhSwHUyf2b+PlhxtgH2TJFwTfnvjI=;
-	b=IjkjRG9UM5nfGdx5e/TBGacMq1GN8rqX4ryFr1kKNqcllAR3Whlsdty2vpyV+Re2Xm24Aj
-	3oW5BOLSauGqGaBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6D8CB779B5;
-	Thu, 23 Jul 2026 07:19:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id G0DWGHDAYWo7PQAAD6G6ig
-	(envelope-from <hare@suse.de>); Thu, 23 Jul 2026 07:19:12 +0000
-Message-ID: <9c88fc7e-5853-436f-881f-20074a3c9279@suse.de>
-Date: Thu, 23 Jul 2026 09:19:12 +0200
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F2FA1182FA23;
+	Thu, 23 Jul 2026 07:47:18 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.local (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7F0EB180029D;
+	Thu, 23 Jul 2026 07:47:15 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Wen Yang <wen.yang@linux.dev>,
+	Nam Cao <namcao@linutronix.de>,
+	Thomas Weissschuh <thomas.weissschuh@linutronix.de>,
+	Tomas Glozar <tglozar@redhat.com>,
+	John Kacur <jkacur@redhat.com>
+Subject: [PATCH v5 15/17] selftests/verification: Fix wrong errexit assumption
+Date: Thu, 23 Jul 2026 09:45:32 +0200
+Message-ID: <20260723074534.43521-16-gmonaco@redhat.com>
+In-Reply-To: <20260723074534.43521-1-gmonaco@redhat.com>
+References: <20260723074534.43521-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 0/6] Deliver TLS control records to kernel
- read_sock consumers
-To: Chuck Lever <cel@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>,
- Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
- Tom Talpey <tom@talpey.com>
-Cc: netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TAGGED_RCPT(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,redhat.com,gmail.com,queasysnail.net,brown.name,oracle.com,talpey.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid]
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 7/20/26 4:27 PM, Chuck Lever wrote:
-> When kTLS is active, kernel consumers of the read_sock API cannot
-> see TLS control records: tls_sw_read_sock() rejects Alerts and
-> Handshake records with -EINVAL. A consumer that needs those records
-> falls back to sock_recvmsg() with ancillary buffers, which is why
-> NFSD's svcsock runs a MSG_CTRUNC recovery dance on every receive.
-> 
-> This series adds a read_sock_rectype proto_ops method that delivers
-> non-data records through a separate callback, then converts its first
-> consumer, NFSD's svcsock, to use it. NFS client (xprtsock), NVMe
-> target, and NVMe host are meant to move onto the same mechanism in
-> later series. The existing read_sock data path is unchanged.
-> 
-> The improvement is more than cosmetic. All of these consumers need
-> to handle TLS Alert messages efficiently and securely (in particular,
-> for KeyUpdate). A few design points worth mentioning:
-> 
-> - The new sk_read_rectype_actor_t callback does not share the data
->    actor's byte-counting contract. It returns 0 to consume a record or
->    a negative value to requeue it and stop delivery. The return is
->    never a byte count. svc_tcp_rectype_actor() relies on this,
->    returning 0 to consume every non-data record while stopping the
->    read loop through desc->count on a fatal alert.
-> 
-> - The no-data cap (patch 1) is a prerequisite, not a stand-alone fix.
->    Once control records reach read_sock, a record carrying no payload
->    stops advancing the caller's read descriptor, so a peer streaming
->    such records would pin the socket lock and the kernel receive
->    context for as long as the flood lasts. Bounding consecutive
->    no-data records supplies the return boundary a system call would
->    otherwise provide. The cap is scoped to tls_sw_read_sock() alone:
->    splice and recvmsg run in the caller's own context, reschedule, and
->    drop the lock on return, so they need nothing.
-> 
-> - The svcsock conversion is split so the new path can be reviewed
->    against the old. The old path is then removed by the last patch
->    in the series.
-> 
-> - read_sock_rectype has no direct userspace entry point, so its
->    selftest coverage (patch 4) drives the shared decryption and
->    rx_list delivery pipeline through the recvmsg and splice paths
->    instead.
-> 
-> ---
-> Changes in v2:
-> - Renamed the read_sock_cmsg proto_ops method to read_sock_rectype.
-> - Non-data records now use a record-type actor, not RFC cmsg-style.
-> - Bound no-data records so they can't pin the socket lock (new patch 1).
-> - Added selftests for data/control record interleaving (new patch 4).
-> - Link to v1: https://lore.kernel.org/r/20260217222033.1929211-1-cel@kernel.org
-> 
-> ---
-> Chuck Lever (6):
->        net/tls: Bound consecutive no-data records in tls_sw_read_sock()
->        net: Introduce read_sock_rectype proto_ops for control record delivery
->        tls: Implement read_sock_rectype for kTLS software path
->        selftests/tls: Add tests for data/control record interleaving
->        SUNRPC: Use read_sock_rectype for svcsock TCP receives
->        SUNRPC: Remove sock_recvmsg path from svcsock TCP receives
-> 
->   include/linux/net.h               |  28 +++
->   net/sunrpc/svcsock.c              | 381 +++++++++++++++++---------------------
->   net/tls/tls.h                     |   3 +
->   net/tls/tls_main.c                |   5 +
->   net/tls/tls_sw.c                  |  54 +++++-
->   tools/testing/selftests/net/tls.c | 298 ++++++++++++++++++++++++++++-
->   6 files changed, 556 insertions(+), 213 deletions(-)
-> ---
-> base-commit: 298bb2b8903323f6ef2eab4819a2e477765f0ff1
-> change-id: 20260327-tcp-read-sock-778a49660ff7
-> 
-> Best regards,
-> --
-> Chuck Lever <cel@kernel.org>
-> 
-> 
+RV selftest rely on bash errexit (set -e) to terminate with error, when
+a step is expected to return false, the following syntax is used:
 
-Good stuff. I was tempted to say 'We need it', but meanwhile we found
-during spec review that the REPLACETLSPSK mechanism as defined in the
-spec is at odds with the TLS KeyUpdate.
-So while we (from the NVMe side) might be wanting to use it eventually,
-we first have to figure out how to interact sanely between the NVMe
-and TLS layer.
+  ! cmd
 
-And I don't feel qualified to judge on NFS/SunRPC details, so didn't
-dare to do a review here.
+This however prevents the test from exiting when cmd is false (desired)
+but doesn't exit if cmd is true, since commands prefixed with ! are
+explicitly excluded from errexit.
 
-Cheers,
+Use the syntax
 
-Hannes
+  ! cmd || false
+
+Which ends up checking the exit value of ! cmd and supplies a false
+command for errexit to evaluate.
+
+Reviewed-by: Wen Yang <wen.yang@linux.dev>
+Acked-by: Nam Cao <namcao@linutronix.de>
+Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+---
+ .../verification/test.d/rv_monitor_enable_disable.tc   | 10 +++++-----
+ .../verification/test.d/rv_monitor_reactor.tc          |  4 ++--
+ .../selftests/verification/test.d/rv_wwnr_printk.tc    |  4 ++--
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+index f29236defb5a..61e2c8b54d9a 100644
+--- a/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
++++ b/tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+@@ -10,7 +10,7 @@ test_simple_monitor() {
+     grep -q "$monitor$" enabled_monitors
+ 
+     echo 0 > "monitors/$prefix$monitor/enable"
+-    ! grep -q "$monitor$" enabled_monitors
++    ! grep -q "$monitor$" enabled_monitors || false
+ 
+     echo "$monitor" >> enabled_monitors
+     grep -q 1 "monitors/$prefix$monitor/enable"
+@@ -34,12 +34,12 @@ test_container_monitor() {
+ 	test -n "$nested"
+ 
+     echo 0 > "monitors/$monitor/enable"
+-    ! grep -q "^$monitor$" enabled_monitors
++    ! grep -q "^$monitor$" enabled_monitors || false
+ 
+     for nested_dir in "monitors/$monitor"/*; do
+         [ -d "$nested_dir" ] || continue
+         nested=$(basename "$nested_dir")
+-        ! grep -q "^$monitor:$nested$" enabled_monitors
++        ! grep -q "^$monitor:$nested$" enabled_monitors || false
+     done
+ 
+     echo "$monitor" >> enabled_monitors
+@@ -71,5 +71,5 @@ for monitor_dir in monitors/*; do
+     fi
+ done
+ 
+-! echo non_existent_monitor > enabled_monitors
+-! grep -q "^non_existent_monitor$" enabled_monitors
++! echo non_existent_monitor > enabled_monitors || false
++! grep -q "^non_existent_monitor$" enabled_monitors || false
+diff --git a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+index 2958bf849338..516a20971390 100644
+--- a/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
++++ b/tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+@@ -64,5 +64,5 @@ done
+ 
+ monitor=$(ls /sys/kernel/tracing/rv/monitors -1 | head -n 1)
+ test -f "monitors/$monitor/reactors"
+-! echo non_existent_reactor > "monitors/$monitor/reactors"
+-! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors"
++! echo non_existent_reactor > "monitors/$monitor/reactors" || false
++! grep -q "\\[non_existent_reactor\\]" "monitors/$monitor/reactors" || false
+diff --git a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+index 5a59432b1d93..96de95edb530 100644
+--- a/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
++++ b/tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+@@ -17,13 +17,13 @@ echo printk > monitors/wwnr/reactors
+ load
+ 
+ echo 0 > monitoring_on
+-! load
++! load || false
+ echo 1 > monitoring_on
+ 
+ load
+ 
+ echo 0 > reacting_on
+-! load
++! load || false
+ echo 1 > reacting_on
+ 
+ echo nop > monitors/wwnr/reactors
 -- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+2.55.0
+
