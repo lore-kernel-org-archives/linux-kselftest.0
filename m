@@ -1,191 +1,117 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48413C1097;
-	Fri, 24 Jul 2026 21:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481663FD156
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 21:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784929291; cv=none; b=cJbmUXjUvONj8G+Xr9ZTOPmB0Zsh2G0AKA1c480pvHpaFqTTc42l4N4KSn2p/hNjdGvQP4/RoaRsc0VeAvr39SyLPs3Ojk6ZH0jzoOi48qOAz6xjv0WoSpj4qdeuWrOT8MtmBD3h4b+aX+E1TAFE5fwEDDkQVpBTw5ITB2RyOEE=
+	t=1784929316; cv=none; b=Ux9IeI2JOgwotFx2y3nYGVW3ksTpLvsL53RqRujFKHIqSLRUHW/wGBLLwekj7+0ccsNOXhzeP/2qiJODpqRnGnRt9ay4P0hS6pX+HXQ75vWQa2Zr4g4eyQ3d58+JFWyrnV/03L1PDJ3B7hjq3BCzkjrfMf7DiYt3I3rPEUWu3YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784929291; c=relaxed/simple;
-	bh=6bIR/igc8vtJnwe2y1aD78jUwOu4p7lxaqy0G9VYVCo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ndx0YT8qfBRUrzPmnTS8jsDYBojGxLQPUr6BX44pL+cNtKB02xOpzgfClkHqF+tsUtNRF2ZHteMF+WNoTnUJl9+BTrFot0AWeEM2HN7LUdwJhhGCtwNAv4fWKSYwcYOmX138Svcx8bea6yOayOErcMca6URMa5sGSTpGmggueM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=CJYyCdcU; arc=none smtp.client-ip=192.19.144.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1784929316; c=relaxed/simple;
+	bh=77AdLZwSlzRXNVmZcPS3aPRWxbdbniwiZ14tXP/9uvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYiuSti2j++N/AnSGOBGI3hSaFmI0ma0fi5AR2knteFbOE3s250/pgs+6+wzMk/r7o3DIZoYvFFbfzrigVWdpDDWylP4WUdbXGOViXzDDlaRA0TINB5NFZEgWbnpsx7OdLYtXOPip2mg8uafYNF9iKNuZkzw2ZU41bp6BkQ5MmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F98VlwXt; arc=none smtp.client-ip=74.125.227.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="CJYyCdcU"
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 551F3C0000F9;
-	Fri, 24 Jul 2026 14:41:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 551F3C0000F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1784929283;
-	bh=6bIR/igc8vtJnwe2y1aD78jUwOu4p7lxaqy0G9VYVCo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CJYyCdcUFWFjlHqsjLXkitcJEJLrYg5So/9dA5K9khMILJItPWq+fSa7EpoblrrC1
-	 Q6RVdH6yrSkXeo8KTkmSgb+yNXfkVpJmcZEG6h5oLZLPzAucn/HaObTiCeWgaf7fHl
-	 OYit4J/S9heBFS62V4P24EEYQCSr0lV77OXgeaCo=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id D0CF5ACD;
-	Fri, 24 Jul 2026 14:41:22 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: Shuvam Pandey <shuvampandey1@gmail.com>,
-	David Gow <david@davidgow.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Tiwei Bie <tiwei.btw@antgroup.com>,
-	linux-um@lists.infradead.org (open list:USER-MODE LINUX (UML)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
-	kunit-dev@googlegroups.com (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH stable 6.12 8/9] kunit: tool: skip stty when stdin is not a tty
-Date: Fri, 24 Jul 2026 14:41:18 -0700
-Message-Id: <20260724214119.1066665-9-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260724214119.1066665-1-florian.fainelli@broadcom.com>
-References: <20260724214119.1066665-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F98VlwXt"
+Received: by mail-pj2-f1.google.com with SMTP id d9443c01a7336-2cabf1f1051so3077465ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 14:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784929314; x=1785534114; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=v4ixN669MPx0d/t5228Qef0MeDlKadYsw/AtAwtoW40=;
+        b=F98VlwXtHLSvNA3/J8PgB0MtXpYptRA4vJH+f1BbNkuyk7hnC/OYI+WiQKXZnBk94b
+         48IzlLfGoW+ntnapKOSLlRmJxhyxm4p0/OQiE2/HoqsJueRc2EZUtgNIKH5WNZKwZ9NJ
+         V9SjcIkLRgTxAzJSK/G8hKcAH17/kftrEXMXyDlaaZxMHvxsfw46byRuXY0L3WQNI5yX
+         FCIFIDRlnv4YD1mPpQu7DaM/h9Om8xe9KeOsycJSqb+4YjdUo+8AnOvxDUUepR4d5EG5
+         58ykwH+HNkITEHRkxOU0oxFwq/39bwF+kWIFU8iw17iaHmRLgtpky/fURR72dge5RQ/A
+         Eidw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784929314; x=1785534114;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v4ixN669MPx0d/t5228Qef0MeDlKadYsw/AtAwtoW40=;
+        b=LRifRcrM/ygSLcubz0UuiaJ1GCi+h55qt6PiDCjEJdZJ/CvUFWAgP7MgqdVsuxtg8t
+         4Z563OQQSXpXq/GjYE2Fw6C6lfy58i5R0aEuaRRU/mjHrjzs+49tZkVr0ycsKMFUx/KC
+         uqXjU3+TA4FzSqZYrUTWljcSlr6gcOatHObaVjFeB9KHahi/xGkKutnsCOodjkPiC30J
+         zCwcPAuESwPDMfYWUPZA9lnacAXpaYK+jNdPEuhC8t/Xrxpvcerw2RjtoSY+xhQAqrBX
+         yt1Xp3H9UMOGBUGPLh1i6/875jEXdvcB+QqAaHdeCzou4HBjlUHeVGawQqJ3WZZh4GbK
+         4InA==
+X-Forwarded-Encrypted: i=1; AHgh+RpJ8dRYwtrUmUrM4YxN7h2DZ+zf9RvZ+F+LYhwXXS2yZ6fBbkN5ffgYVL0URCBWddNcRlbnQdBV9+IhFPH8IWs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBk3AVMD6jJV4MutPUFwB5FhsjZY2oQ+7wR9drfwYKMLm9Gm0L
+	qTa0K2ZpFUBOapyrOWhzo0yrUTHj00oHX98YcXm+sUhreWBx6eeHugGF
+X-Gm-Gg: AR+sD10fP2YpTMq0zNwWLABxxh3fEZKVfnoICBtaIwwSNHay4MiWMRrbikO4/oRiDrx
+	Vrdw8JOkU+mDKOqWGQkZOrcl0h6wD0HcB+88K9dtJLepNDXWBqyQ4VVq+DcsyzvIVe/2gpCEdt2
+	xrYz4GcU6SgOKXLGTeYt1jSR78ukCt+SA2zCiGdOfSoKKWkFyHzMUKn/H5v7V6GA5hJkR2QuaJN
+	hSjNZexMGefCXQcX/eb9LTotWv8aVwOfHSLzkcyVH7YFkfdmbYOaE89ipL67UQTM1Trgz8iILwn
+	JLRCqnr6ZZUB2TE0xhvbkkTpbjRCn0zy3TuOE+yG2EqsOSeGMIAOdniV6KtJBKztJmwkpbbkJ7s
+	vVQgaXg9hooyI+oGRF/nYHSZkujobJjnxxDPpVg1Dm61YVJP9lTUbpOHonPSlHj2G85ap6/9WvF
+	0+iMYs8A==
+X-Received: by 2002:a17:902:c943:b0:2ca:281:27f9 with SMTP id d9443c01a7336-2cfde8459edmr1610395ad.27.1784929313662;
+        Fri, 24 Jul 2026 14:41:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:43::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde81d81csm504415ad.80.2026.07.24.14.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 14:41:53 -0700 (PDT)
+Date: Fri, 24 Jul 2026 14:41:47 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, sdf@fomichev.me, 
+	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org, 
+	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v5 3/3] selftests/net: devmem.py: add
+ check_rx_large_niov
+Message-ID: <amPbqtxPdhs9QrVP@devvm7509.cco0.facebook.com>
+References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
+ <20260708-tcpdm-large-niovs-v5-3-34bf6fac941b@meta.com>
+ <20260721110903.34840531@kernel.org>
+ <amPTWGX/3LHepYR3@devvm29614.prn0.facebook.com>
+ <20260724143001.5afa8631@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260724143001.5afa8631@kernel.org>
 
-From: Shuvam Pandey <shuvampandey1@gmail.com>
+On 07/24, Jakub Kicinski wrote:
+> On Fri, 24 Jul 2026 14:04:24 -0700 Bobby Eshleman wrote:
+> > On Tue, Jul 21, 2026 at 11:09:03AM -0700, Jakub Kicinski wrote:
+> > > On Wed, 08 Jul 2026 15:55:06 -0700 Bobby Eshleman wrote:  
+> > > > +@ksft_disruptive
+> > > > +def check_rx_large_niov(cfg) -> None:
+> > > > +    """Run the devmem RX test with rx-buf-size = 16 KiB."""
+> > > > +    run_rx_large_niov(cfg)  
+> > > 
+> > > Any idea why the devmem tests sprinkle disruptive everywhere?
+> > > Disruptive means we take the link down, I don't think this test 
+> > > does that.  
+> > 
+> > Talked to Stan and he mentioned the original idea was not necessarily
+> > just for link down, but any test that could be considered disruptive to
+> > other tests, with the idea to eventually introduce some scheduling
+> > (postpone disruptive until the end).
+> 
+> Perhaps have such conversations on the list? IDK what Stan has in mind.
 
-commit e42c349f4cdfa43cb39a68c8f764f8cafc23a9a9 upstream
-
-run_kernel() cleanup and signal_handler() invoke stty unconditionally.
-When stdin is not a tty (for example in CI or unit tests), this writes
-noise to stderr.
-
-Call stty only when stdin is a tty.
-
-Add regression tests for these paths:
-- run_kernel() with non-tty stdin
-- signal_handler() with non-tty stdin
-- signal_handler() with tty stdin
-
-Signed-off-by: Shuvam Pandey <shuvampandey1@gmail.com>
-Reviewed-by: David Gow <david@davidgow.net>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-[florian: add missing 'import sys' required by sys.stdin.isatty(); the
-module was already present in the mainline tree before this commit but
-was absent from the 6.12 base of kunit_kernel.py]
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- tools/testing/kunit/kunit_kernel.py    | 11 +++++--
- tools/testing/kunit/kunit_tool_test.py | 42 ++++++++++++++++++++++++++
- 2 files changed, 51 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 3f2979f2f6ea..c09b66ba734b 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -14,6 +14,7 @@ import os
- import shlex
- import shutil
- import signal
-+import sys
- import threading
- from typing import Iterator, List, Optional, Tuple, Any
- from types import FrameType
-@@ -333,6 +334,12 @@ class LinuxSourceTree:
- 			return False
- 		return self.validate_config(build_dir)
- 
-+	def _restore_terminal_if_tty(self) -> None:
-+		# stty requires a controlling terminal; skip headless runs.
-+		if sys.stdin is None or not sys.stdin.isatty():
-+			return
-+		subprocess.call(['stty', 'sane'])
-+
- 	def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', filter: str='', filter_action: Optional[str]=None, timeout: Optional[int]=None) -> Iterator[str]:
- 		# Copy to avoid mutating the caller-supplied list. exec_tests() reuses
- 		# the same args across repeated run_kernel() calls (e.g. --run_isolated),
-@@ -380,11 +387,11 @@ class LinuxSourceTree:
- 			output.close()
- 
- 			waiter.join()
--			subprocess.call(['stty', 'sane'])
-+			self._restore_terminal_if_tty()
- 
- 	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
- 		if self._process:
- 				self._process.terminate()
- 				self._process.wait()
--		subprocess.call(['stty', 'sane'])
-+		self._restore_terminal_if_tty()
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 70e5d0abe87f..6e6200d52540 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -503,6 +503,48 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 				self.assertIn('kunit.filter_glob=suite.test1', start_calls[0])
- 				self.assertIn('kunit.filter_glob=suite.test2', start_calls[1])
- 
-+	def test_run_kernel_skips_terminal_reset_without_tty(self):
-+		def fake_start(unused_args, unused_build_dir):
-+			return subprocess.Popen(['printf', 'KTAP version 1\n'],
-+						text=True, stdout=subprocess.PIPE)
-+
-+		non_tty_stdin = mock.Mock()
-+		non_tty_stdin.isatty.return_value = False
-+
-+		with tempfile.TemporaryDirectory('') as build_dir:
-+			tree = kunit_kernel.LinuxSourceTree(build_dir, kunitconfig_paths=[os.devnull])
-+			with mock.patch.object(tree._ops, 'start', side_effect=fake_start), \
-+			     mock.patch.object(kunit_kernel.sys, 'stdin', non_tty_stdin), \
-+			     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call:
-+				for _ in tree.run_kernel(build_dir=build_dir):
-+					pass
-+
-+				mock_call.assert_not_called()
-+
-+	def test_signal_handler_skips_terminal_reset_without_tty(self):
-+		non_tty_stdin = mock.Mock()
-+		non_tty_stdin.isatty.return_value = False
-+		tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[os.devnull])
-+
-+		with mock.patch.object(kunit_kernel.sys, 'stdin', non_tty_stdin), \
-+		     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call, \
-+		     mock.patch.object(kunit_kernel.logging, 'error') as mock_error:
-+			tree.signal_handler(signal.SIGINT, None)
-+			mock_error.assert_called_once()
-+			mock_call.assert_not_called()
-+
-+	def test_signal_handler_resets_terminal_with_tty(self):
-+		tty_stdin = mock.Mock()
-+		tty_stdin.isatty.return_value = True
-+		tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[os.devnull])
-+
-+		with mock.patch.object(kunit_kernel.sys, 'stdin', tty_stdin), \
-+		     mock.patch.object(kunit_kernel.subprocess, 'call') as mock_call, \
-+		     mock.patch.object(kunit_kernel.logging, 'error') as mock_error:
-+			tree.signal_handler(signal.SIGINT, None)
-+			mock_error.assert_called_once()
-+			mock_call.assert_called_once_with(['stty', 'sane'])
-+
- 	def test_build_reconfig_no_config(self):
- 		with tempfile.TemporaryDirectory('') as build_dir:
- 			with open(kunit_kernel.get_kunitconfig_path(build_dir), 'w') as f:
--- 
-2.34.1
-
+I don't have much to add so I didn't post on the list. In my mind, disruptive
+started as "anything that can lead to a soft reset". But since the
+sockets tend to survive these well, I do agree that your definition
+of "link goes down" is a better fit.
