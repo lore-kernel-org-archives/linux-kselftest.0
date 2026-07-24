@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0317941F7D1;
-	Fri, 24 Jul 2026 10:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5AC42FCBA;
+	Fri, 24 Jul 2026 10:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784888721; cv=none; b=khTAK9w8hpFta1VPHi2AT/NSwLkWeq65QFiyjSysPRQ12nT39yyX6nhhMgFnj99296alsq6G982FzeX/PktW07FSx+k7zHwGinW9/FPRjp9X/p37YBeVbNi3W+aGnyDsKYuluhbiJFbfYDiExmICI4qeWM7d0QZDjbaevCVjZ04=
+	t=1784888726; cv=none; b=TRmX15bdDKex5ispis9S0/Lti315GtQf1VbxCgKsJfDzFfNs/g1KAQ5cQeNmt+4oSMEdfbKTF/oWCukDj99x/ut8eZ5Z3NAv7dfBNxB4C8me0XY+f3Og6IAwG/1hOUe/c0qQhnAllaWOoGTZb4znnCReTPh9mL5m/w+4/aQcNJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784888721; c=relaxed/simple;
-	bh=gjhEdojn6ZH69RosJEQqB2oqwaUfEM3sBTnWP0w/g2k=;
+	s=arc-20240116; t=1784888726; c=relaxed/simple;
+	bh=PTkd813JAn6wO/CqG5+sfWiGVF8RyWenBAffF9OaPTk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bkjMUmaBhxKLNky9qMvbgDPYBhCyhJuC4iHxi195nZXWLFrE+9w2BzJ6Oo1+yFwV6S7obxYtYC7OxKvNJYcTSR2P6igKAkNVste0640g03y9+pqHkDSt6fFCij3GGDMgnm5xgPRSFQ0VWFHu4bYqbzAu9jiPXTsn2KWHUpckF/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OAemU0+u; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=DXGyhKsYeTrdClBZejXL7DVSgJAOk35Glsu8RlTlXCtqlSIsppoiHEn20zjbKwpFKUj3BFGv18rS88D31fz/Y97Ej6cOjd6+kCnDClzmKJEAjQqSM4Fx6Ig3EqDK3Bk8+a5e1EHybjAX1zROzpCLP+jzWD35jUwwequY0Bujv64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=SYgESkRN; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OAemU0+u"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="SYgESkRN"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5931477;
-	Fri, 24 Jul 2026 03:25:13 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53A8C1477;
+	Fri, 24 Jul 2026 03:25:19 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 03FB13F66F;
-	Fri, 24 Jul 2026 03:25:12 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4D3083F66F;
+	Fri, 24 Jul 2026 03:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784888717; bh=gjhEdojn6ZH69RosJEQqB2oqwaUfEM3sBTnWP0w/g2k=;
+	t=1784888723; bh=PTkd813JAn6wO/CqG5+sfWiGVF8RyWenBAffF9OaPTk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OAemU0+uVLTgy6K8UI65WLReaYHpNiL+wmtJLPZk5gycAjgiOTE/Slg8yl+Kx7qEn
-	 6E/dCgnKnZlagJM2f3tiaG3HG7RVvbVNM+YiV/9fXOsHT4FxT/dV1XnVAJIeyCpWmb
-	 CQLc8U/xO8szAlH/Z52w4Hajp2pniG8CCVYFh2G8=
+	b=SYgESkRNnBZJfRvPIAM2Qt/TdjRWqMzPBuD4hU94OL1ezv2gj3cU8HFwZ8nTnwxfm
+	 ANbgDoeQZ+2WHT5aRpezBSm9mb/FES6quOK2ZBDucx6beJ1r/uG/Xcs2ktDs2NdTWP
+	 umVLYO3cSq91pKgdGhdg2w6PzxcAOjpcG25Vz5Hc=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -51,9 +51,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org,
 	sarthak.sharma@arm.com
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH v2 4/5] selftests/mm: skip hard dirty page-cache test on NFS
-Date: Fri, 24 Jul 2026 11:24:27 +0100
-Message-ID: <20260724102431.1199519-5-usama.anjum@arm.com>
+Subject: [PATCH v2 5/5] selftests/mm: retry migration failures for the full runtime
+Date: Fri, 24 Jul 2026 11:24:28 +0100
+Message-ID: <20260724102431.1199519-6-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260724102431.1199519-1-usama.anjum@arm.com>
 References: <20260724102431.1199519-1-usama.anjum@arm.com>
@@ -65,57 +65,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The hard dirty_pagecache variant uses MADV_HWPOISON to exercise recovery
-of a dirty file-backed page. The recovery path records -EIO in the
-address_space mapping, which NFS later reports when the test closes the
-file. This makes the test fail after the hwpoison checks have completed.
+move_pages() is best effort and can temporarily fail when concurrent
+faults race with page unmapping. A busy shared-anon workload can exhaust
+the current 100 retries long before the intended 20-second runtime and
+produce a false failure.
 
-Skip this variant when the test file is on NFS. Keep the hard clean-page
-and both soft-offline variants enabled because they use folio removal,
-invalidation, or migration rather than recording a delayed writeback
-error.
-
-The unsupported-filesystem path in clean_pagecache() also returns
-without closing the opened test file. Close the descriptor before
-skipping there and in dirty_pagecache().
+Use the full runtime as the retry window. Since the initial page location
+is unknown, require it to reach both alternating NUMA targets to confirm
+that cross-node migration made progress despite transient contention.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
 Changes since v1:
-- Limit the NFS skip to the hard dirty-page variant.
+- Retry per-page failures for the full runtime
+- Verify that both alternating NUMA targets are reached
 ---
- tools/testing/selftests/mm/memory-failure.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/migration.c | 39 ++++++++++++++------------
+ 1 file changed, 21 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-index 032ed952057c6..3c72084f57e8b 100644
---- a/tools/testing/selftests/mm/memory-failure.c
-+++ b/tools/testing/selftests/mm/memory-failure.c
-@@ -283,8 +283,10 @@ TEST_F(memory_failure, clean_pagecache)
- 	if (fd < 0)
- 		SKIP(return, "failed to open test file.\n");
- 	fs_type = get_fs_type(fd);
--	if (!fs_type || fs_type == TMPFS_MAGIC)
-+	if (!fs_type || fs_type == TMPFS_MAGIC) {
-+		close(fd);
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-+	}
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 29f7492453d43..4d55a424058a9 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -7,7 +7,7 @@
+ #include "kselftest_harness.h"
+ #include "hugepage_settings.h"
  
- 	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
- 		    MAP_SHARED, fd, 0);
-@@ -325,8 +327,11 @@ TEST_F(memory_failure, dirty_pagecache)
- 	if (fd < 0)
- 		SKIP(return, "failed to open test file.\n");
- 	fs_type = get_fs_type(fd);
--	if (!fs_type || fs_type == TMPFS_MAGIC)
-+	if (!fs_type || fs_type == TMPFS_MAGIC ||
-+	    (fs_type == NFS_SUPER_MAGIC && variant->type == MADV_HARD)) {
-+		close(fd);
- 		SKIP(return, "unsupported filesystem :%x\n", fs_type);
-+	}
+-#include <strings.h>
++#include <string.h>
+ #include <pthread.h>
+ #include <numa.h>
+ #include <numaif.h>
+@@ -20,7 +20,6 @@
  
- 	addr = mmap(0, self->page_size, PROT_READ | PROT_WRITE,
- 		    MAP_SHARED, fd, 0);
+ #define TWOMEG		(2<<20)
+ #define RUNTIME		(20)
+-#define MAX_RETRIES	100
+ #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
+ 
+ HUGETLB_SETUP_DEFAULT_PAGES(1)
+@@ -110,7 +109,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 	int ret, tmp;
+ 	int status = 0;
+ 	struct timespec ts1, ts2;
+-	int failures = 0;
++	int success = 0;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
+ 		return -1;
+@@ -119,29 +118,33 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 		if (clock_gettime(CLOCK_MONOTONIC, &ts2))
+ 			return -1;
+ 
+-		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME)
+-			return 0;
++		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME) {
++			/* Reaching both targets verifies a cross-node move. */
++			if (success >= 2)
++				return 0;
++			else
++				return -2;
++		}
+ 
+ 		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
+ 				MPOL_MF_MOVE_ALL);
+-		if (ret) {
+-			if (ret > 0) {
+-				/* Migration is best effort; try again */
+-				if (++failures < MAX_RETRIES)
+-					continue;
+-				printf("Didn't migrate %d pages\n", ret);
+-			}
+-			else
+-				perror("Couldn't migrate pages");
+-			return -2;
++		if (ret < 0) {
++			perror("Couldn't migrate pages");
++			return ret;
+ 		}
+-		failures = 0;
++		/* Migration is best effort. Try again */
++		if (ret > 0 || status < 0)
++			continue;
++		if (status != n2) {
++			printf("Page is on node %d instead of target node %d\n",
++			       status, n2);
++			return status;
++		}
++		success++;
+ 		tmp = n2;
+ 		n2 = n1;
+ 		n1 = tmp;
+ 	}
+-
+-	return 0;
+ }
+ 
+ void *access_mem(void *ptr)
 -- 
 2.47.3
 
