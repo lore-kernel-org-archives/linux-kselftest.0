@@ -1,157 +1,170 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC2C4412C03;
-	Fri, 24 Jul 2026 12:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784894758; cv=none; b=ZqCUHk4Z3lMV9EDWR5cDwVnw4wTc5TGfYk2iZW6RJajmGK/ofaAGru7Wxdkbbe6r2EDBQ+6HbYG3deNcwXuupIQ0kKwmT71RzoSm0djdpMKrbimnyMbLGz4rxpI32K1d9VezBNWESVAfHnauXfZbxzdLvv/Bw8tfi8PJcjFu900=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784894758; c=relaxed/simple;
-	bh=H5Q6O3f+4VsLMRu0BEb0Tqa+RIlw9y6bFNPPqXhmkJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d5+76Y67JO3hU0/XJGkBl/c8vu8tJBoAHfoFAocpiwT+Du2CMZWZl93SxZg3w+sVPf8oyQIvnC9PGfv5HQSGZvZJEjTUMrbD+h1+mfDNVBpVzS9ob0+UY3JPOHtGwA4kmfK7YGBEpbG3fZ5Uu09J0p+3MM1MubPdVLFExiK9gKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=PUQLs5JT; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010053.outbound.protection.outlook.com [52.101.56.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5767037D11C;
+	Fri, 24 Jul 2026 12:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784895671; cv=fail; b=NesyHmq8boJnwEpBAfyZV0CDvFejwOxKDMD4oMOK+fL+IF0OGGQHRcj3Vi7dXkm9rC91xYR2hVsXkX5dHhcDIemBgSvWIHsnru/1XfX18fAjUqOV8aQXDEeJTE1/7t8qxrLECp7jud0DHqx+zWlOWzdXZKTEKHTEr/QMGwhUhkI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784895671; c=relaxed/simple;
+	bh=7SCOcROPC47x27c321P/jzELbQE82+1GLqXpixFDi6c=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=bv5XJRbX9oJvF71gcGDEiImQMdIhykrUBLNKz5rv0uvTwIoT9TE94R2nfkkJ6uMAL/8MT0+tXUPnsX7W7EdSov+mLY0rs6Mc7TFjDa/7N3mVLr2k5mLm3faPWk6Vx4g4C4ejtkU6I0OQlZwLTWEakML07H5McqoBn2jOqixqcrc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=C1fDZ7/l; arc=fail smtp.client-ip=52.101.56.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="PUQLs5JT"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 383361476;
-	Fri, 24 Jul 2026 05:05:50 -0700 (PDT)
-Received: from [10.164.19.44] (unknown [10.164.19.44])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 584453F66F;
-	Fri, 24 Jul 2026 05:05:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784894754; bh=H5Q6O3f+4VsLMRu0BEb0Tqa+RIlw9y6bFNPPqXhmkJk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PUQLs5JTDwtG4lUIcvJ1bkbL105LXczgPsxaMjjS2Ymbk3kkkkZIjBzs/XZPt+cnI
-	 fBquC+M7+yOr2KGWvreF0z9TayqdV1x3mBRT52lDxro1OxBwvLDz8Qbnp1opXxAQV3
-	 rmdf44dOQKdDUJNK6DUl8Me/jT2gehKOiIBEqPFs=
-Message-ID: <75259d8f-1cdf-43e4-9fa4-9a2954435a96@arm.com>
-Date: Fri, 24 Jul 2026 17:35:44 +0530
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="C1fDZ7/l"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=l/qEIww9rBO5wSt+e8bWHvZyaURKYNg0NaHNMTTcIKoe7crfbQXCBjpEeyH1P4nQxsAQxX9vA+SWP0+MgfaAmVgGCumHLC3W1Zm55cI1z8CwCdU2f492mG2HsY9EzZVFett3eGSQxVgK9WODBQUd4ZZwQ9ibqi62ZfZbIQqcb9MClYpWYdSdxrzEF+kHiS4MNu2EPaSxoxMXKYgitsC/+/3QX9NH0+q+g2BwQkNEGamIyvUQ0WPe1na5/Fnk7jns6vtc9ivv7aG4gAA3ffs3DyG3VRzMMTuCRte4bmyPTVvlyynt0GEJnGJ9JmC0WFfXoHtchifMSsvYd6GeU6rdDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3qFjOW59QsRdd4uKat6dlqTNSb0rc35YXM0B/s1vU0c=;
+ b=Y3iwO1Nv0MAj1SnAaCgQZwliFSyoNIpfJjedA5iRbCdckJ/nnloowJFm2RNH7HSZfHmTqT0by/l7ru7jXVXU2sIsACwkgnkcxCbZ9tnntVPjY6Uq1nFwAWJW2gS8cnKYg0P9OZOs9I3CnYKrTz/WXK8V7GbFWXOsj7+/SmYUbdZCF1VpqOtqaoG1oIwZNP8ViSacBZItLrieGMNbwgiEIM0D3+/bjprnFhAucEs0RkrCp0CCH5s+qbp1fkJAUz4Qdwm1juUJZx26Ok1yWfCtBWLK9hVgbwWTfSkjQtCuN0uV3sljS5RvGb8HpKl5jiByUO37Tb+BgjclFWLVQK8AQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3qFjOW59QsRdd4uKat6dlqTNSb0rc35YXM0B/s1vU0c=;
+ b=C1fDZ7/lf2VJY89LtFm7yuxuqMvqrh2Cm4fUyud+TnxWvOGIWT51H78ubwbXbb5kP8pvBHJG1qKbNjj6tZJ7i7BZ3q/k/NMIAW/xXERTacIFIU+KJ/crXKRi7SpVDjkMCVHrswx8jJ2Fg+DwWQPvaABt8QdgGzGwaqgbueyWuWkYMQai2m2PvrRw0Rd3Zno2heWgPYHtJ+4g02Nw69KV2PNQGCtt8776tQi289ehx0UqXoN5OA1tJeuo7BtPNSEqP1BpTTgYpckA54E1q87bQQKOtf4BPY4ORx5FjuWjgAeZ5BJr6uk+JNGjuCGc2CnzwO4I255i96oRsbgeKh0MTg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ0PR12MB6733.namprd12.prod.outlook.com (2603:10b6:a03:477::9)
+ by IA1PR12MB9032.namprd12.prod.outlook.com (2603:10b6:208:3f3::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.12; Fri, 24 Jul
+ 2026 12:21:03 +0000
+Received: from SJ0PR12MB6733.namprd12.prod.outlook.com
+ ([fe80::f00d:2f6b:6f9b:8f97]) by SJ0PR12MB6733.namprd12.prod.outlook.com
+ ([fe80::f00d:2f6b:6f9b:8f97%6]) with mapi id 15.21.0223.017; Fri, 24 Jul 2026
+ 12:21:02 +0000
+From: Kai-Heng Feng <kaihengf@nvidia.com>
+To: rafael@kernel.org,
+	shuah@kernel.org,
+	kees@kernel.org
+Cc: julianbraha@gmail.com,
+	tony.luck@intel.com,
+	bp@alien8.de,
+	guohanjun@huawei.com,
+	mchehab@kernel.org,
+	xueshuai@linux.alibaba.com,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	csoto@nvidia.com,
+	mochs@nvidia.com,
+	Kai-Heng Feng <kaihengf@nvidia.com>
+Subject: [PATCH v2 RESEND 0/4] ACPI: APEI: GHES: Add NVIDIA Vera CPER decoder and tests
+Date: Fri, 24 Jul 2026 20:20:50 +0800
+Message-ID: <20260724122054.36162-1-kaihengf@nvidia.com>
+X-Mailer: git-send-email 2.50.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI3PR03CA0011.apcprd03.prod.outlook.com
+ (2603:1096:4:297::6) To SJ0PR12MB6733.namprd12.prod.outlook.com
+ (2603:10b6:a03:477::9)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] tools/mm: add a standalone GUP microbenchmark
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
- Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260716123226.197736-1-sarthak.sharma@arm.com>
- <20260716123226.197736-5-sarthak.sharma@arm.com>
- <4665dd2d-99c8-492c-a4cf-b72028317d0b@kernel.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <4665dd2d-99c8-492c-a4cf-b72028317d0b@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB6733:EE_|IA1PR12MB9032:EE_
+X-MS-Office365-Filtering-Correlation-Id: 242bb7a7-e328-448b-5389-08dee97e05d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|7416014|10067099003|11063799006|56012099006|6133799003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	F6/BA1rAafNCZE/Jj+gHFgwPNoEUfX0YWYFbSmEKrbRt3rthvpnD473LJ3hSfP1o1lSoDtTk3SDb41DriAW7BMScAbhqW6yh9HY1gFMnNFo6KI5AjTqJWacNZm5Bzq0wziiCIgEbNehhaB3jG+b+EDEFNCR7N7VgWZv6BorrbOap6FrCDEyLlRmiDv3Lk3x+Rk059h8J3pkn66FbU82jmR3sVyHYrYJLr3IbLkGBo688yIMZ8FovJyhWXUNKOvvGOoodN7HIA59iz4arlZhVUf/eb9t1Rt0VNe9c/Cctcrplh8962cWzIgBJpX7tOHS2iCSBJ1oatAGWejEtZMYu8B8MmTwMNeB1nFw0e35YcLTyIgg7Gh0dYKJxY8+ZiiFlBy9nnipX3WntuhiOII9bcVrZGsUWSAsBBu2z4cUn3wUNEchmbIrWJHSaG5ERsnJa0Hnzbg3C8b4LddHMfDwIauHw1UuOfplAMrJmlJJMev7Z0mdAhcgiT6ifn6uRrF5JcmotfUZ2jeFxYIe0Cj2l44HzHLj2SMj6g+IV55Wew3MCd5ktQK8AC6bEo46as6+QClDFUHIkxOPS9/0S71Jcq1gLy4OizXk/k6zUOhBT3zMMRrqkic5RxrEYcjm+BaO/v8Qw2U85xsd1R0Z2T0Oz7+N+uD7EZciVUuZMkb8X8fw=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB6733.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(7416014)(10067099003)(11063799006)(56012099006)(6133799003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?G7tXeLc4bYOpTf9GDiySmnkeyR9XnbGIWwxY+CuDJXLcyPXV4nnZ+a5n6esc?=
+ =?us-ascii?Q?r22VQwPA7jEMy/fpsdKAGi85pToZfmtmRXw/n9gcg7028ulRIYvNMqbsI6Rz?=
+ =?us-ascii?Q?NIY9YXcU4h4aqwxovCbHXoQXE3BvFEyB6Hxp3tM/3F3qvKUx3L3rdRcNcVit?=
+ =?us-ascii?Q?cYyz62s8wLahpWnJHp8/i5iLpLSquieSyLFqIffdHmNNFhqiA5t+lxBJEvlc?=
+ =?us-ascii?Q?zs9dZdBPgzzuMHD9krwJFkaeqqwpYv7U4YmOcjsoAKpudqEwZNvJAUm2sSx6?=
+ =?us-ascii?Q?5qx4pAKg6gyY3v0htCfabObbjlS2/FJVjPnXgmS+3AY4U2JfLcf0hnZPyva0?=
+ =?us-ascii?Q?9TQ1JlQKHz0SUXiqke1jhLphUe017TSLHtiAmt4H8BHXt0pZvhyqCk/BI0//?=
+ =?us-ascii?Q?op53rbrQpxLiamVesMTNqP9MaQhLTPJg2ehciwnFz9OSgpxsXlhzBas/41Qh?=
+ =?us-ascii?Q?9lCVCJHVDVQpBei1VXsEMj5a8c/wjKibuHDRZQxcIhuxo6VnW1bDaDUgqdgP?=
+ =?us-ascii?Q?zjryZrm/GOYbc86wNEqEkNm4hq5FrE4KlOsS+9sZwk7PJOa7DFIpoEPNQb5A?=
+ =?us-ascii?Q?PQacGQSPnRXEpfU41fiDa71zpRveiaJEaiUF7rWiPmjavTxF7+t2xh54Z+cS?=
+ =?us-ascii?Q?vn0CVJt8wTRCP+vDsQT/S03zx/po8056NnAXV7UqemzSrS1pMmLTFESGnURm?=
+ =?us-ascii?Q?hdxu+/4/KILs1LowxaCsgg6WEKRM2XXkzmJMpmV0mwNNEMyvLan6DhiIMW4h?=
+ =?us-ascii?Q?5bPJp4JnBz7M0H/asUZas7+sKaU0CF3/OH40DhrZ347N99jf3S/qgRqzjzPg?=
+ =?us-ascii?Q?nmQCnQQMKcfdr3QIhy61TTaR3Ur5TXUhtNyGQNBhjDs5R4skiu7WtfTwP15G?=
+ =?us-ascii?Q?gUvv5ieYP/08c7fN2mHzTmsC5B56iJ9YHcXrTffyZhGb0rBxr5TbFrzgJkuB?=
+ =?us-ascii?Q?H4QaLaadXhk/IiVbmiNrkD7mh+HApkl7phrXxBZ8cvUmCErKO4Bj6mjEGEJz?=
+ =?us-ascii?Q?pJfMElLWmsL66L3mJAfqfDDo0xkgGfUIr/fiZFXmf1vXfYr4SbipN3w8kItp?=
+ =?us-ascii?Q?63158UBZLIk2+OuLX/1dM9Rx2nrNpnMbuARjGnSP0ML810LFH5c8ySYRaaYp?=
+ =?us-ascii?Q?PLUsv1MyUrnLWMcnDKuiBPC92IoObVcL5+B7RuaT7iGe4YO0OS1JISmAQZsI?=
+ =?us-ascii?Q?7UVgy/30BMF+O+qp2QBcAFFgGEzJ01brA9qEIVWaGgJ+xIMyA1DGXUdmemvI?=
+ =?us-ascii?Q?VxQxvJMuHEfA5FaLHld67sZrRy26Q4lllfp47fwpHh098fhwMHyougErWeuh?=
+ =?us-ascii?Q?uJ82FSdK/NXlIdOLOzC3iKyHvwh3muBYd7qlm28prGNDD3jcVwHkZMUaoCMD?=
+ =?us-ascii?Q?YAEkiFkNM2w7WAfQQJu1fQYRu8aJO7tsc4jjk7vG2KzNJahbBqAhjiO30zQE?=
+ =?us-ascii?Q?nVwXYY551caaPQ7GmQYl1tbSpzfp9u7P50dzcvWSvZ95KLIJ3YfOID3KJlyr?=
+ =?us-ascii?Q?67CBBYiaEgJndFZYufgJ0TQZezPPea/qtL5kc4JpXqPd6tg1mV3bZMlbS4k7?=
+ =?us-ascii?Q?EY7e1JUXi60r7gIoWh2izhOgcF4mOcRt5euMY2bm61zxi0ZOWf5dUXl4/53S?=
+ =?us-ascii?Q?C9C0Uds3nk7UASuuaFhkl1raaUHm9Flog2TYDpQ/lCandnEaONK/aFpggjwb?=
+ =?us-ascii?Q?ot+TmMWhAo984H6z/PvDlCXrSWZGH1osSHX5LNXbV/pxcJXUormbUGUm3rXC?=
+ =?us-ascii?Q?MH/bEEt1mQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 242bb7a7-e328-448b-5389-08dee97e05d3
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB6733.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2026 12:21:01.7129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: egV6SF9TLp3GGm2WpeQzatfqjqxowJvlNZel3ejdOlCsdJfKjDK/tWdrB2ISXL2fqjF1PGZfbPqeZKbVhp5Ebg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9032
 
+Vera is NVIDIA's next-generation server SoC. It reports hardware
+errors via ACPI GHES using a CPER section format distinct from the
+existing Grace section. Without this series, firmware-reported errors
+on Vera platforms are received but not decoded.
 
+Patch 1 refactors the Grace decoder to separate parsing from logging,
+preparing it for testability and for sharing types with the new Vera
+decoder.
 
-On 21/07/26 7:22 pm, David Hildenbrand (Arm) wrote:
-> On 7/16/26 14:32, Sarthak Sharma wrote:
->> Add a command-line tool for benchmarking get_user_pages fast-path
->> (GUP_FAST), pin_user_pages fast-path (PIN_FAST), and pin_user_pages
->> longterm (PIN_LONGTERM) via the CONFIG_GUP_TEST debugfs interface.
->>
->> When invoked without arguments, gup_bench runs the benchmark subset
->> of configurations covered by run_gup_matrix() in run_vmtests.sh: all
-> 
-> To we really need the matrix in there? The matrix was good for selftests, but
-> not when using it as a benchmarking tool, no?
-> 
->> three GUP commands across read/write, private/shared mappings, and a
->> range of page counts, with THP on/off for regular mappings and hugetlb
->> for huge page mappings. Restore HugeTLB settings after each hugetlb
->> benchmark run. Validate numeric command-line arguments instead of
->> relying on atoi().
->>
->> This tool is a mix of reused and new logic. The mapping/setup path comes
->> from selftests/mm/gup_test.c, while the default benchmark matrix matches
->> the benchmark subset of run_gup_matrix() in run_vmtests.sh. The standalone
->> CLI and tools/mm integration are added here and the HugeTLB setup code is
->> shared via tools/lib/mm.
->>
->> Add gup_bench to BUILD_TARGETS and INSTALL_TARGETS in tools/mm/Makefile,
->> link it against the shared tools/lib/mm hugepage helpers, and ignore the
->> resulting binary in tools/mm/.gitignore. While here, also add the
->> missing thp_swap_allocator_test entry to .gitignore.
->>
->> Add tools/mm/gup_bench.c to the GUP entry in MAINTAINERS.
->>
->> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
->> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
->> ---
->>  MAINTAINERS          |   1 +
->>  tools/mm/.gitignore  |   2 +
->>  tools/mm/Makefile    |  10 +-
->>  tools/mm/gup_bench.c | 482 +++++++++++++++++++++++++++++++++++++++++++
->>  4 files changed, 492 insertions(+), 3 deletions(-)
->>  create mode 100644 tools/mm/gup_bench.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 26b06d80ab45..7d121dee9f0f 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -17024,6 +17024,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
->>  F:	mm/gup.c
->>  F:	mm/gup_test.c
->>  F:	mm/gup_test.h
->> +F:	tools/mm/gup_bench.c
->>  F:	tools/testing/selftests/mm/gup_longterm.c
->>  F:	tools/testing/selftests/mm/gup_test.c
->>  
->> diff --git a/tools/mm/.gitignore b/tools/mm/.gitignore
->> index 922879f93fc8..154d740be02e 100644
->> --- a/tools/mm/.gitignore
->> +++ b/tools/mm/.gitignore
->> @@ -2,3 +2,5 @@
->>  slabinfo
->>  page-types
->>  page_owner_sort
->> +thp_swap_allocator_test
-> 
-> ^ Does that belong into this patch?
-> 
->> +gup_bench
-> 
-> I wonder if it makes sense to "git mv" the existing tool (only slightly fixing
-> header inclusion to make it compile), essentially removing the old benchmark.
-> 
-> So it would be
-> 
-> 1) Move tools, fixing up includes and removing the gup testing logic+matrix to
->    make it compile
+Patches 2-4 add the Vera decoder, KUnit coverage for both decoders,
+and an EINJ-based kselftest for end-to-end validation on real hardware.
 
-I like your idea, it would reduce churn. But is it okay that there will be an
-intermediate state in which gup_test is not there? Wouldn't we call this a
-"regression"?
+Kai-Heng Feng (4):
+  ACPI: APEI: GHES: Refactor Grace decoder helpers
+  ACPI: APEI: GHES: Add NVIDIA Vera decoder
+  ACPI: APEI: GHES: Add Grace and Vera KUnit coverage
+  selftests: firmware: Add NVIDIA GHES EINJ selftest
 
+ drivers/acpi/apei/Kconfig                     |  17 +-
+ drivers/acpi/apei/Makefile                    |   1 +
+ drivers/acpi/apei/ghes-nvidia-test-fixtures.h | 233 ++++++
+ drivers/acpi/apei/ghes-nvidia-test.c          | 704 ++++++++++++++++++
+ drivers/acpi/apei/ghes-nvidia.c               | 480 ++++++++++--
+ drivers/acpi/apei/ghes-nvidia.h               |  63 ++
+ tools/testing/selftests/firmware/Makefile     |   4 +-
+ tools/testing/selftests/firmware/config       |   5 +
+ tools/testing/selftests/firmware/einj_lib.sh  | 189 +++++
+ .../selftests/firmware/ghes_nvidia_einj.sh    | 144 ++++
+ .../firmware/ghes_nvidia_einj_profiles.sh     |  46 ++
+ 11 files changed, 1838 insertions(+), 48 deletions(-)
+ create mode 100644 drivers/acpi/apei/ghes-nvidia-test-fixtures.h
+ create mode 100644 drivers/acpi/apei/ghes-nvidia-test.c
+ create mode 100644 drivers/acpi/apei/ghes-nvidia.h
+ create mode 100644 tools/testing/selftests/firmware/einj_lib.sh
+ create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj.sh
+ create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj_profiles.sh
 
-> 
-> 2) Extend tool by XYZ
-> 
-> 3) Add completely new selftest
-> 
-> Because looking at patch #5, there is not really any code reuse there, but I
-> suspect there should be some in this patch here when moving instead of copying.
-> 
-> That would make this a lot easier to review.
-> 
+-- 
+2.50.1 (Apple Git-155)
 
