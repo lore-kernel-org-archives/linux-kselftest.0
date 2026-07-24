@@ -1,581 +1,329 @@
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011026.outbound.protection.outlook.com [52.101.52.26])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1F542BC5F;
-	Fri, 24 Jul 2026 12:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.26
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784895702; cv=fail; b=tsACFhWEFDoe1JaYWBV2E9Lo/sjaU5TJx3vl2t0M9m82yvi9MZ2BKJBLfUkKL+328Emu6BOnqnsviS0sLLQyHLmC5jYQCAeEZ2sCAwQ4ErjYT8w2qRGvWrU0yWy+CjsgQ4Gm/eCvWoHbwpAKZOk+1Bc+ZFPd5FBK7DiheKjiYjA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784895702; c=relaxed/simple;
-	bh=MBPdsRpd7quP/ogkU5skJ7OU3KxxhWLM0T/bwTbkXE4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CC5246782;
+	Fri, 24 Jul 2026 12:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784896414; cv=none; b=EFRrFR6UkuGttjPDMLfxFC5TQ2E5+COuRsHHjnPgQkc5374uniEjQ/Kxe/AGOFa8M038C+ezxllsy2R9JSbhE3apWk2rojaIp6xCFXw7Ok5RDhsQjy569aPVAu/vOh1Tnz3iA16upEeNRG+2iQkk3NFlROXcJ0aGychmaOcQF3s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784896414; c=relaxed/simple;
+	bh=DZMpg0/WMF+4qdmbUl4il7B9sxz/8UcJto/PlZLOxJ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NLHhsj1mlbIDiIE+NwpxaLfVZ4PzCoqJEOsDMUoEd5RwkfbEp53jVL2QmI4W0be1vB8O629vt8UmSRYKErv1JealbG4RNmfmpRvtxrmbgLWPJcDtvfShSKdWulSySQkle5DJ1qctRspn9HtZav36sNWMpYoN6sHJY5md2l1Imks=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CHoKkFeY; arc=fail smtp.client-ip=52.101.52.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	 MIME-Version; b=tdA5GpkNrN3Hl20UlpgGetUWAIBbQrQiyMZidnNaFbdCXqj/BhN/6DOsoLkIzCuwk9zmiX8RD0wmJioC/iQ98E/Y63w5Pyi0leWvkCIwVqpyTcociarATpaJ8woZYvExBpVSU9pD6mOkc/ng0/kFo2eLuBx2iQGu5s/qE1sZIU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RARNucCx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CHoKkFeY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b3w4xa51/CaHs9gde2JI52JPNTyXWgXj54NvhMTDynIokp9edzhg6pflTSUjmcuFg97U3W6O855a4qfKdzuWTrY2G0qdGnlmHrExTLfOrcXlxDa6FmtQBQo+lJAlJBDcgXouXxVzg9ud4w5D8C625Urau1yfJVcl9ALN8o2aZHfl01QmgG0SeFhkkg6wu8YxQTeSA+mTiWXSpUdjvRHUkYN28EXf2SAQcwRhTcGqwLpCMBg28IZVtO/b+xvoDKgFNRxaepNSu/KmneplAN5jlsJ9Pf70P8sPIq3R6OtZV8IXZHyYeVLU/Jz/zeaXNG4s0HjHBLCERzIoygkYuFOUZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OIZpqKBtRJM0qmD5mh81mIrj71QURR3aNlbY0c+c2Eo=;
- b=sOC65OUg9vB8hNlJbkDMflFaTNZDc83QvFNcBtMExgD0rRp5k50vfe7eIKckYOcqo9V6OgVMYKmQDO1Wehxtf+KWJzLtGB5qdVfKPEkL2IqZwpMLp7HJ9mXyyEheSCueRzDAYfTYmvX478hFhHPqW8r34LE/AN7Q4jkhhzy0CqvcokOmHwtgWFbBsEGWNzP/nRGmZzbJzdbuhJqQE0VnjM4wfRrO/sz7n4IP37J+EA1ELVaCvNb3LxwT2mI/vyznO1wn5rbDkcfWkGfhupd8onK6eufxCobRHlGMhLeJnOsqiFzfA+AcghdNpCzNPm52zQrT7Z0TXCdLKHtdaWL97g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OIZpqKBtRJM0qmD5mh81mIrj71QURR3aNlbY0c+c2Eo=;
- b=CHoKkFeY/n45wgazop4nzEECftnlsmW5VoBDhEn9FubwLL6j/p6PA5BGKQwsWyiWTvHrRxSDXgZwht9L/6lEZgJmuEXxC7TjDtME635WRvtbIQy6fGQUT6tlt7fzVqv7CfxswAcvd6xHktYExLmZPOBWA7EswdIehpTSekZGTeH/RoUBgO6u+tfkQW/mSs1zUF22eooT4Y/bpGahMpE+DV92nhq1ncvnvOUAbnZLhu3kslWB1FrQvN7jbE0ZWWcIioxUVVNxSn6bqPv5SuWX2ywSTRvy4qn9XIGPFuyMbkKFJdzZVZIqtdZ66sR9tQe4Kkmf8U2MJogvF+96R1LyGg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB6733.namprd12.prod.outlook.com (2603:10b6:a03:477::9)
- by IA1PR12MB9032.namprd12.prod.outlook.com (2603:10b6:208:3f3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.12; Fri, 24 Jul
- 2026 12:21:29 +0000
-Received: from SJ0PR12MB6733.namprd12.prod.outlook.com
- ([fe80::f00d:2f6b:6f9b:8f97]) by SJ0PR12MB6733.namprd12.prod.outlook.com
- ([fe80::f00d:2f6b:6f9b:8f97%6]) with mapi id 15.21.0223.017; Fri, 24 Jul 2026
- 12:21:29 +0000
-From: Kai-Heng Feng <kaihengf@nvidia.com>
-To: rafael@kernel.org,
-	shuah@kernel.org,
-	kees@kernel.org
-Cc: julianbraha@gmail.com,
-	tony.luck@intel.com,
-	bp@alien8.de,
-	guohanjun@huawei.com,
-	mchehab@kernel.org,
-	xueshuai@linux.alibaba.com,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RARNucCx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BB11F000E9;
+	Fri, 24 Jul 2026 12:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784896412;
+	bh=YF5wYY4LkouR8YFwFcU+pHOne4ZFh3+9ga3mifIehL8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=RARNucCxfRYv8UtKWhAUB7H4T7KIILMDKfv9jZT3tTM+TvDjR99MWgfqIwcYVGeQe
+	 TPfEeaxa38Nc9b7hVvHBfDO4j+kQ5ssUF8NAZszf4DhNtAPjd53atV9+ycv2ND0UB7
+	 GajmrpL77HYRNVFAcOklAUS509LUmdJMXZufL+/qHKRuDtdqvah7YxR9jOaZdE7MB6
+	 HuMedIqOiP143kI2qpoAPK3i4nDxyhiDQiCfDbufkXM3nrZI3R4ABPOKtgX3Eymp2v
+	 gm2ecGf+2cXn+gZRunYjBU8AlOTRObl5dZXIuyeYpjMgH8WSfzB5YlvSLmXC1KwEDA
+	 7oGaIl2vMP91Q==
+From: Simon Horman <horms@kernel.org>
+To: xiaoliang.yang_1@nxp.com
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	csoto@nvidia.com,
-	mochs@nvidia.com,
-	Kai-Heng Feng <kaihengf@nvidia.com>
-Subject: [PATCH v2 RESEND 4/4] selftests: firmware: Add NVIDIA GHES EINJ selftest
-Date: Fri, 24 Jul 2026 20:20:54 +0800
-Message-ID: <20260724122054.36162-5-kaihengf@nvidia.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260724122054.36162-1-kaihengf@nvidia.com>
-References: <20260724122054.36162-1-kaihengf@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TPYP295CA0043.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:7::11) To SJ0PR12MB6733.namprd12.prod.outlook.com
- (2603:10b6:a03:477::9)
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	shuah@kernel.org,
+	vladimir.oltean@nxp.com,
+	vinicius.gomes@intel.com,
+	fejes@inf.elte.hu
+Subject: Re: [PATCH net-next 4/6] net: sched: act_frer: add FRER tc action
+Date: Fri, 24 Jul 2026 13:33:17 +0100
+Message-ID: <20260724123317.670722-1-horms@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260717095549.10565-5-xiaoliang.yang_1@nxp.com>
+References: <20260717095549.10565-5-xiaoliang.yang_1@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB6733:EE_|IA1PR12MB9032:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6aa5687b-931e-4c06-ccd5-08dee97e15f4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|7416014|3023799007|10067099003|11063799006|56012099006|6133799003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	4deR+dnkCYDSLc9UU2bmRG7t8extqIRsrpnN8jfSve9fCAhBaewgvMEyOVJl2TaGxoQ3RAEBLNoCq0UkjyeDdkaMGz7WC36s89t9bi5OMTF7t++PGzswP6UoWZfGsRP7xZV2OZob91Zz24t3YWvQaXxYyXcHaezQfPoPK2pJl5W/xAw9thCKp+JxWh2ygBg/Hgw8rc/6K7htYk7waU8fq1I+rCBl9stYwPNhojS5p1hsFpMv4tdlS3RcxMApj+r9SHYQqQos8uvtEIKvBv0Mwh/YlHfumlta/vNi/Oqq6V4zhtWFW8410TQK+SHjz88ETHBAIfEatL7RhqHYMD4oZKY16b7ZAJdIaW/u2xeEzOhuM5mX2ztrJh2nj787PEK9aSDZXlY4yDABHFPPpnUQIumRAIFtMzsNA2ZmN5qHry+prTad0x4qiD3YxTATR3crJG3Vu/Ff62MrHEz5+sTRoC3rym8u4zTTahaosGJ6vrop7dxxDdg55UxrYdjBA2LzqBsQBzdE900CfnS/e++a5iqYAFG5iKhP39oOMvHcWOD6x+CdYNTqJJ2o4OMHnVF4Nh0LJHq4B7exX6959w40e5zxRc52SkRKvpdMg9/vrDkcig7Mxu+d5zKOrn3ff4WfaLwmBCe2wEfuxHggv23jqXfppNglIFhwfPFRtNPSJjU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB6733.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(7416014)(3023799007)(10067099003)(11063799006)(56012099006)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7ONfWTRpSwrJLwflt6pIUyaClZSNLsssnrR1P9tSKQ31uQfmp0mnxGhDU8ig?=
- =?us-ascii?Q?hKw+0O6sRIwCtcIT+5kG3ejP1R13WkP6dDDEq11HyLvqFhzRZX3kUYB8YWeZ?=
- =?us-ascii?Q?GKs7r2fbYpNdjnPI9+/cjR1CIlmIG0lSNefSuN183l96plEzmcbOK9OCyzGK?=
- =?us-ascii?Q?PFpUlAk1IbLP7CMdGNHWUUA+Q19ygx10lisML/g2tf+K7qq9PHGzqM4CguS0?=
- =?us-ascii?Q?sPzuGXAOoC9t0HiR1gUw7Ov1JGLIiDn6MLfdQeJaCPEtHuf45nQDlGW6tZfc?=
- =?us-ascii?Q?h+MoPxQo/G8dr5eovXsHBDNvbzi2Fvj5bRppktAqR4WzZpuowWzp/ChXaAGj?=
- =?us-ascii?Q?6o3VH89xe7ZYb41iW3hpEgiZ1iQSULIKRL5CZHegywySgF4OvHSxYZXr5HB2?=
- =?us-ascii?Q?av5VA4hr6S/SiTGVTFoUxsaBbjtZM7ZHChv0iO09Wgda/KIZXEq6ADXZanbw?=
- =?us-ascii?Q?QgslhD5OySOzKi0d9ThNFE+zkGWIOsVtvD2+In3cdS3U2mROwVUX7eZRpPNH?=
- =?us-ascii?Q?fPTyFQgcdog6IH2f/OME4oRuTbnfxfZxe8rauZ7fAFBWD0nbNPnDrRHCLJWx?=
- =?us-ascii?Q?n031gU1PddBNeh/VNsepv+btleJm7eUSg3EooeOOir9CuoZ6vaFBsakxORxr?=
- =?us-ascii?Q?6XzBukra+zEld7wxlI7LAeIvLa4Ei52ZuAUTpZXWM44I1Ss8U64ICINCCEI3?=
- =?us-ascii?Q?YBn4A1GlV7XXp4ZD88ZobnPJmoG5xH6RT92VZzgg/aZZEzowQJjd31B1PU/E?=
- =?us-ascii?Q?mmkL93LABSO4sEZSd0eN4XGBFD+F3NLiwJBqyib+fplaUeoBbln0zNYFklY9?=
- =?us-ascii?Q?/HnYWdWE9e6WG/fyLRzwnBwc0UxuyAKLQ3u3Ly/8G7J/v1Nb2EnDo353QBZu?=
- =?us-ascii?Q?PjIN6bIxoyJ+YYVcW2oYGBy+edBxjhiRJSA/fH1ecuZwaui6F1DLP+kL3jCZ?=
- =?us-ascii?Q?BpKlljYgrWqrnVd3raOqIiASddgUc12yEikG2OCCRgaiEWD57FhGRfUtsfj9?=
- =?us-ascii?Q?qBMOtQ1Jm3o4h64NqOAvn4KwKYrQDTbiuCGqETtIxclC3uDONbYN/S1I/+LI?=
- =?us-ascii?Q?Z2bgnhQvfd6jBgGWeurxUbNutZTZoMyg53Qmpba91rv5JzyjgYMZsuGEz2oR?=
- =?us-ascii?Q?2amrxDoNfBnmNy9x+l8pvRmMMse71olFDEZ5+SXTaJNZD0cWbe67i+TOrDvH?=
- =?us-ascii?Q?6pjasvXtiBUNHqpOSyArjLV7J8o+NBMW05JvonP8JwVRxk4IB7aMB0mgNNn3?=
- =?us-ascii?Q?5gX2uTMjl3sGLsRuYq9ywTOjovAQqnVGwnnhXbtYenjcJSbYS5uqgjMBNihu?=
- =?us-ascii?Q?gF1uN7nrAGKV65zHubzegUioweaRo5JvkICNP2tvzjzgj70SxdwdyZHWofmF?=
- =?us-ascii?Q?RnC1WtXewbeP88PQbwwJNTp7aryRmCf5EoP873RwdF1HQCdU22XodKjf5jPJ?=
- =?us-ascii?Q?qUQi4IU0gLSNt07WimCk74y2oeyqzWv9fS4CXiENKnTZ59A2PHt60RxTYScv?=
- =?us-ascii?Q?t4/VFJ5xETZdp4Jivt/Yin7z2larHzF/bv3v7ek0rg+ApDCRcC1WvVASZ21i?=
- =?us-ascii?Q?nT3ezZb/xrCyo+HDqSyx44+5Pp0PKfniv2EuOd8Fk7fmnSa5tWpw7ZChPBlJ?=
- =?us-ascii?Q?f/Ih6btNWQ1h6/vTXjb274opl/Pd2juJzfZZASsmDy7H7wdDy0M9eHdBJXNw?=
- =?us-ascii?Q?z+f9OUAJWdpA5Q0p0h09PoXZ9G5/reMfLryQ9aXZE3aUTrfHOVsLVpz8SzqY?=
- =?us-ascii?Q?FGNv7GGxEQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa5687b-931e-4c06-ccd5-08dee97e15f4
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB6733.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jul 2026 12:21:28.2076
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: djXM2OkWEnUl3tqZ4rO/W8u+/CvJBpt5CUUIxS7ahg7DUahbxMIkDfYif3y2xikBt0VZ310bGGWIaEpNdOcO5w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9032
+Content-Transfer-Encoding: 8bit
 
-Exercise the full driver path on real Grace and Vera hardware using
-ACPI EINJ to inject CPER sections and validate the kernel log output.
-KUnit covers the parser in isolation; this test covers the path from
-firmware notification through GUID dispatch to decoded output.
-
-Signed-off-by: Kai-Heng Feng <kaihengf@nvidia.com>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://sashiko.dev/#/patchset/20260717095549.10565-3-xiaoliang.yang_1@nxp.com?part=4
 ---
-v2:
- - No change.
+--- Patch [4]: [PATCH net-next 4/6] net: sched: act_frer: add FRER tc action ---
+commit 51190c05963e5f23d401f666c097c54aacbdc2ad
+Author: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Subject: net: sched: act_frer: add FRER tc action
 
- tools/testing/selftests/firmware/Makefile     |   4 +-
- tools/testing/selftests/firmware/config       |   5 +
- tools/testing/selftests/firmware/einj_lib.sh  | 189 ++++++++++++++++++
- .../selftests/firmware/ghes_nvidia_einj.sh    | 144 +++++++++++++
- .../firmware/ghes_nvidia_einj_profiles.sh     |  46 +++++
- 5 files changed, 386 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/firmware/einj_lib.sh
- create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj.sh
- create mode 100755 tools/testing/selftests/firmware/ghes_nvidia_einj_profiles.sh
+This commit introduces the IEEE 802.1CB FRER tc action, implementing the
+Sequence Generation Function and the Sequence Recovery Function. It provides
+support for both cross-port shared sequence recovery and per-port individual
+recovery.
 
-diff --git a/tools/testing/selftests/firmware/Makefile b/tools/testing/selftests/firmware/Makefile
-index 7992969deaa2..b753dd123860 100644
---- a/tools/testing/selftests/firmware/Makefile
-+++ b/tools/testing/selftests/firmware/Makefile
-@@ -3,8 +3,8 @@
- CFLAGS = -Wall \
-          -O2
- 
--TEST_PROGS := fw_run_tests.sh
--TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh
-+TEST_PROGS := fw_run_tests.sh ghes_nvidia_einj.sh
-+TEST_FILES := fw_fallback.sh fw_filesystem.sh fw_upload.sh fw_lib.sh einj_lib.sh ghes_nvidia_einj_profiles.sh
- TEST_GEN_FILES := fw_namespace
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/firmware/config b/tools/testing/selftests/firmware/config
-index 6e402519b117..1b68e638d0b7 100644
---- a/tools/testing/selftests/firmware/config
-+++ b/tools/testing/selftests/firmware/config
-@@ -4,3 +4,8 @@ CONFIG_FW_LOADER_USER_HELPER=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_FW_UPLOAD=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_ACPI_APEI=y
-+CONFIG_ACPI_APEI_GHES=y
-+CONFIG_ACPI_APEI_EINJ=y
-+CONFIG_ACPI_APEI_GHES_NVIDIA=y
-diff --git a/tools/testing/selftests/firmware/einj_lib.sh b/tools/testing/selftests/firmware/einj_lib.sh
-new file mode 100644
-index 000000000000..ca569a9fe5b0
---- /dev/null
-+++ b/tools/testing/selftests/firmware/einj_lib.sh
-@@ -0,0 +1,189 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+EINJ_TABLE=/sys/firmware/acpi/tables/EINJ
-+EINJ_DEBUGFS=/sys/kernel/debug/apei/einj
-+NVIDIA_PLATFORM_GLOB=/sys/bus/platform/devices/NVDA2012:*
-+NVIDIA_DRIVER_DIR=/sys/bus/platform/drivers/nvidia-ghes
-+
-+einj_skip()
-+{
-+	echo "$0: $1" >&2
-+	exit $ksft_skip
-+}
-+
-+einj_require_root()
-+{
-+	[ "$(id -u)" -eq 0 ] || einj_skip "must be run as root"
-+}
-+
-+einj_require_debugfs()
-+{
-+	[ -d /sys/kernel/debug ] || einj_skip "debugfs is not mounted at /sys/kernel/debug"
-+}
-+
-+einj_require_einj()
-+{
-+	[ -e "$EINJ_TABLE" ] || einj_skip "ACPI EINJ table is missing"
-+	if [ ! -d "$EINJ_DEBUGFS" ]; then
-+		modprobe einj 2>/dev/null || true
-+	fi
-+	[ -d "$EINJ_DEBUGFS" ] || einj_skip "EINJ debugfs directory is missing"
-+}
-+
-+einj_require_vendor_einj()
-+{
-+	[ -e "$EINJ_DEBUGFS/vendor" ] || einj_skip "NVIDIA vendor EINJ metadata is missing"
-+	[ -e "$EINJ_DEBUGFS/vendor_flags" ] || einj_skip "NVIDIA vendor EINJ flags are missing"
-+}
-+
-+einj_require_available_error_type()
-+{
-+	local available
-+
-+	available=$(einj_read_trimmed_value available_error_type)
-+	[ -n "$available" ] || einj_skip "available_error_type is missing"
-+}
-+
-+einj_read_trimmed_value()
-+{
-+	local file=$1
-+
-+	einj_read_value "$file" | tr -d '\n'
-+}
-+
-+einj_require_writable_value()
-+{
-+	local file=$1
-+
-+	[ -w "$EINJ_DEBUGFS/$file" ] || einj_skip "$file is not writable"
-+}
-+
-+einj_require_writable_profile()
-+{
-+	local file
-+
-+	for file in error_type flags vendor_flags param1 param2 param3 param4 notrigger; do
-+		einj_require_writable_value "$file"
-+	done
-+}
-+
-+einj_find_bound_nvidia_device()
-+{
-+	local dev
-+
-+	for dev in $NVIDIA_PLATFORM_GLOB; do
-+		[ -e "$dev" ] || continue
-+		if [ "$(readlink -f "$dev/driver" 2>/dev/null)" = "$NVIDIA_DRIVER_DIR" ]; then
-+			echo "$dev"
-+			return 0
-+		fi
-+	done
-+
-+	return 1
-+}
-+
-+einj_require_bound_nvidia_device()
-+{
-+	local dev
-+
-+	dev=$(einj_find_bound_nvidia_device) || einj_skip "no bound NVIDIA GHES device"
-+	echo "$dev"
-+}
-+
-+einj_read_value()
-+{
-+	local file=$1
-+
-+	cat "$EINJ_DEBUGFS/$file"
-+}
-+
-+einj_write_value()
-+{
-+	local file=$1
-+	local value=$2
-+
-+	printf '%s\n' "$value" > "$EINJ_DEBUGFS/$file"
-+}
-+
-+einj_restore_value()
-+{
-+	local file=$1
-+	local value=$2
-+
-+	# Some EINJ controls read back as an empty string when unset, but the
-+	# debugfs write handler has no matching "clear" operation.
-+	[ -n "$value" ] || return 0
-+	einj_write_value "$file" "$value"
-+}
-+
-+einj_save_state()
-+{
-+	EINJ_SAVED_ERROR_TYPE=$(einj_read_value error_type)
-+	EINJ_SAVED_FLAGS=$(einj_read_value flags)
-+	EINJ_SAVED_PARAM1=$(einj_read_value param1)
-+	EINJ_SAVED_PARAM2=$(einj_read_value param2)
-+	EINJ_SAVED_PARAM3=$(einj_read_value param3)
-+	EINJ_SAVED_PARAM4=$(einj_read_value param4)
-+	EINJ_SAVED_VENDOR_FLAGS=$(einj_read_value vendor_flags)
-+	EINJ_SAVED_NOTRIGGER=$(einj_read_value notrigger)
-+}
-+
-+einj_restore_state()
-+{
-+	[ -n "${EINJ_SAVED_ERROR_TYPE+x}" ] || return 0
-+
-+	einj_restore_value error_type "$EINJ_SAVED_ERROR_TYPE"
-+	einj_restore_value flags "$EINJ_SAVED_FLAGS"
-+	einj_restore_value param1 "$EINJ_SAVED_PARAM1"
-+	einj_restore_value param2 "$EINJ_SAVED_PARAM2"
-+	einj_restore_value param3 "$EINJ_SAVED_PARAM3"
-+	einj_restore_value param4 "$EINJ_SAVED_PARAM4"
-+	einj_restore_value vendor_flags "$EINJ_SAVED_VENDOR_FLAGS"
-+	einj_restore_value notrigger "$EINJ_SAVED_NOTRIGGER"
-+}
-+
-+einj_emit_kmsg_marker()
-+{
-+	local tag=$1
-+	local marker
-+
-+	marker="ghes-nvidia-einj:${tag}:$$:${RANDOM}"
-+	printf '%s\n' "$marker" > /dev/kmsg
-+	printf '%s\n' "$marker"
-+}
-+
-+einj_capture_dmesg_after_marker()
-+{
-+	local marker=$1
-+
-+	dmesg | awk -v marker="$marker" '
-+		found { print }
-+		index($0, marker) { found = 1 }
-+	'
-+}
-+
-+einj_wait_for_dmesg_after_marker_contains()
-+{
-+	local marker=$1
-+	local needle=$2
-+	local timeout=${3:-10}
-+	local i
-+	local slice
-+
-+	for i in $(seq 1 "$timeout"); do
-+		slice=$(einj_capture_dmesg_after_marker "$marker")
-+		if printf '%s\n' "$slice" | grep -Fq "$needle"; then
-+			printf '%s\n' "$slice"
-+			return 0
-+		fi
-+		sleep 1
-+	done
-+
-+	return 1
-+}
-diff --git a/tools/testing/selftests/firmware/ghes_nvidia_einj.sh b/tools/testing/selftests/firmware/ghes_nvidia_einj.sh
-new file mode 100755
-index 000000000000..6fc4d3189235
---- /dev/null
-+++ b/tools/testing/selftests/firmware/ghes_nvidia_einj.sh
-@@ -0,0 +1,144 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+TEST_DIR=$(dirname "$0")
-+source "$TEST_DIR/einj_lib.sh"
-+source "$TEST_DIR/ghes_nvidia_einj_profiles.sh"
-+
-+einj_assert_nvidia_cper_output()
-+{
-+	local profile=$1
-+	local output=$2
-+
-+	if printf '%s\n' "$output" | grep -Fq 'Malformed NVIDIA'; then
-+		echo "$0: $profile produced malformed NVIDIA CPER output" >&2
-+		printf '%s\n' "$output" >&2
-+		return 1
-+	fi
-+
-+	if printf '%s\n' "$output" | grep -Fq 'NVIDIA Grace CPER section'; then
-+		if ! printf '%s\n' "$output" | grep -Fq 'signature:'; then
-+			echo "$0: $profile Grace output missing signature line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'error_type:'; then
-+			echo "$0: $profile Grace output missing error_type line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'number_regs:'; then
-+			echo "$0: $profile Grace output missing number_regs line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'instance_base:'; then
-+			echo "$0: $profile Grace output missing instance_base line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		return 0
-+	fi
-+
-+	if printf '%s\n' "$output" | grep -Fq 'NVIDIA Vera CPER section'; then
-+		if ! printf '%s\n' "$output" | grep -Fq 'signature:'; then
-+			echo "$0: $profile Vera output missing signature line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'event_type:'; then
-+			echo "$0: $profile Vera output missing event_type line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'event_sub_type:'; then
-+			echo "$0: $profile Vera output missing event_sub_type line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		if ! printf '%s\n' "$output" | grep -Fq 'event_context_count:'; then
-+			echo "$0: $profile Vera output missing event_context_count line" >&2
-+			printf '%s\n' "$output" >&2
-+			return 1
-+		fi
-+		return 0
-+	fi
-+
-+	echo "$0: $profile did not emit a recognized NVIDIA CPER section" >&2
-+	printf '%s\n' "$output" >&2
-+	return 1
-+}
-+
-+einj_run_profile()
-+{
-+	local profile=$1
-+	local marker
-+	local output
-+
-+	if ! einj_select_profile "$profile"; then
-+		echo "$0: unknown safe NVIDIA EINJ profile: $profile" >&2
-+		return 1
-+	fi
-+
-+	einj_require_writable_profile
-+
-+	printf '%s: running safe sample %s\n' "$0" "$profile"
-+	marker=$(einj_emit_kmsg_marker "$profile")
-+
-+	einj_write_value error_type "$EINJ_PROFILE_ERROR_TYPE"
-+	einj_write_value flags 0
-+	einj_write_value vendor_flags "$EINJ_PROFILE_VENDOR_FLAGS"
-+	einj_write_value param1 "$EINJ_PROFILE_PARAM1"
-+	einj_write_value param2 "$EINJ_PROFILE_PARAM2"
-+	einj_write_value param3 "$EINJ_PROFILE_PARAM3"
-+	einj_write_value param4 "$EINJ_PROFILE_PARAM4"
-+	einj_write_value notrigger 0
-+	einj_write_value error_inject 1
-+
-+	output=$(einj_wait_for_dmesg_after_marker_contains "$marker" "$EINJ_PROFILE_BANNER" 10) || {
-+		printf '%s: %s not supported on this platform\n' "$0" "$profile"
-+		return "$ksft_skip"
-+	}
-+
-+	einj_assert_nvidia_cper_output "$profile" "$output"
-+}
-+
-+einj_cleanup()
-+{
-+	local status=$1
-+
-+	if ! einj_restore_state; then
-+		echo "$0: failed to restore EINJ state" >&2
-+		[ "$status" -eq 0 ] && status=1
-+	fi
-+
-+	exit "$status"
-+}
-+
-+main()
-+{
-+	local profile
-+	local passed=0
-+
-+	einj_require_root
-+	einj_require_debugfs
-+	einj_require_einj
-+	einj_require_vendor_einj
-+	einj_require_available_error_type
-+	einj_save_state
-+	trap 'einj_cleanup "$?"' EXIT
-+
-+	einj_require_bound_nvidia_device
-+
-+	for profile in $(einj_list_profiles); do
-+		einj_run_profile "$profile" && passed=$((passed + 1)) || {
-+			[ "$?" -eq "$ksft_skip" ] || exit 1
-+		}
-+	done
-+
-+	[ "$passed" -gt 0 ] || einj_skip "no NVIDIA EINJ profiles produced output"
-+}
-+
-+main "$@"
-diff --git a/tools/testing/selftests/firmware/ghes_nvidia_einj_profiles.sh b/tools/testing/selftests/firmware/ghes_nvidia_einj_profiles.sh
-new file mode 100755
-index 000000000000..b25461d2238c
---- /dev/null
-+++ b/tools/testing/selftests/firmware/ghes_nvidia_einj_profiles.sh
-@@ -0,0 +1,46 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+# Run both architecture profiles on every platform; firmware silently ignores
-+# selectors it does not support, so a timeout just means "not this platform".
-+EINJ_PROFILE_NAMES="cmet_dump_status_grace cmet_dump_status_vera"
-+
-+einj_list_profiles()
-+{
-+	printf '%s\n' $EINJ_PROFILE_NAMES
-+}
-+
-+einj_select_profile()
-+{
-+	local profile=$1
-+
-+	case "$profile" in
-+	cmet_dump_status_grace)
-+		# Grace CMET dump/status: informational sample, selector 3.
-+		EINJ_PROFILE_ERROR_TYPE=0x80000010
-+		EINJ_PROFILE_VENDOR_FLAGS=1
-+		EINJ_PROFILE_PARAM1=3
-+		EINJ_PROFILE_PARAM2=0
-+		EINJ_PROFILE_PARAM3=0
-+		EINJ_PROFILE_PARAM4=0
-+		EINJ_PROFILE_BANNER='NVIDIA Grace CPER section'
-+		;;
-+	cmet_dump_status_vera)
-+		# Vera CMET-NULL dump/status: informational sample, selector 0.
-+		EINJ_PROFILE_ERROR_TYPE=0x80000010
-+		EINJ_PROFILE_VENDOR_FLAGS=1
-+		EINJ_PROFILE_PARAM1=0
-+		EINJ_PROFILE_PARAM2=0
-+		EINJ_PROFILE_PARAM3=0
-+		EINJ_PROFILE_PARAM4=0
-+		EINJ_PROFILE_BANNER='NVIDIA Vera CPER section'
-+		;;
-+	*)
-+		return 1
-+		;;
-+	esac
-+
-+	return 0
-+}
--- 
-2.50.1 (Apple Git-155)
+> diff --git a/net/sched/act_frer.c b/net/sched/act_frer.c
+> new file mode 100644
+> index 0000000000000..7b6db643788df
+> --- /dev/null
+> +++ b/net/sched/act_frer.c
 
+[ ... ]
+
+> @@ -59,21 +59,21 @@ static enum hrtimer_restart frer_rcvy_hrtimer_fn(struct hrtimer *timer)
+>  {
+>  	struct frer_rcvy *rcvy =
+>  		container_of(timer, struct frer_rcvy, hrtimer);
+>  	struct frer_rcvy_work *rw;
+>  
+>  	/* Allocate in GFP_ATOMIC context; if it fails the state is not
+>  	 * reset this cycle - the next frame will attempt again.
+>  	 */
+>  	rw = kmalloc_obj(*rw);
+
+[Severity: High]
+Can this allocation sleep in atomic context? The timer callback
+frer_rcvy_hrtimer_fn executes in softirq context, but kmalloc_obj(*rw)
+defaults to a GFP_KERNEL allocation which can sleep.
+
+>  	if (rw) {
+>  		INIT_WORK(&rw->work, frer_rcvy_reset_work_fn);
+>  		rw->rcvy = rcvy;
+>  		schedule_work(&rw->work);
+>  	}
+
+[Severity: High]
+Is there a use-after-free risk for the tc_action here? The timer dynamically
+allocates and queues a work item, but the cleanup routine only cancels the
+timer. If the action is freed, the pending work could execute and access
+freed memory in frer_rcvy_reset_work_fn.
+
+>  	return HRTIMER_NORESTART;
+>  }
+
+[ ... ]
+
+> @@ -109,51 +109,51 @@ static int frer_rtag_push(struct sk_buff *skb, u16 seq_num)
+>  {
+
+[ ... ]
+
+>  	skb->protocol = htons(ETH_P_RTAG);
+>  	skb_set_network_header(skb, head_len);
+>  	if (data_offset > 0)
+>  		skb_pull(skb, data_offset);
+
+[Severity: High]
+Does this leave skb->data pointing inside the R-TAG instead of the payload?
+The code shifts the MAC header backwards by 6 bytes but only pulls
+data_offset, leaving the pointer 6 bytes short.
+
+>  
+>  	/* Write R-TAG after the Ethernet / VLAN header */
+>  	rtag = (struct r_tag *)(new_mac_header + head_len);
+>  	rtag->reserved    = 0;
+>  	rtag->sequence_nr = htons(seq_num);
+>  	rtag->encap_proto = saved_proto;
+>  
+>  	return 0;
+>  }
+
+[ ... ]
+
+> @@ -162,51 +162,51 @@ static void frer_rtag_pop(struct sk_buff *skb)
+>  {
+
+[ ... ]
+
+>  	if (*proto_ptr != htons(ETH_P_RTAG))
+>  		return;
+
+[Severity: High]
+Can this early return path leave the pointer at the MAC header? It appears
+to exit without restoring skb->data using skb_pull(skb, data_offset).
+
+>  
+>  	rtag = (struct r_tag *)((unsigned char *)eh + head_len);
+>  	*proto_ptr = rtag->encap_proto;
+>  
+>  	skb->protocol = rtag->encap_proto;
+>  
+>  	skb_postpull_rcsum(skb, rtag, sizeof(struct r_tag));
+>  	skb_pull(skb, sizeof(*rtag));
+>  	skb_reset_mac_header(skb);
+>  
+>  	new_mac_header = skb_mac_header(skb);
+>  	memmove(new_mac_header, (unsigned char *)eh, head_len);
+>  
+>  	skb_set_network_header(skb, head_len);
+>  	if (data_offset > 0)
+>  		skb_pull(skb, data_offset);
+
+[Severity: High]
+Does this over-pull and skip 6 bytes of the payload? The code pushes
+data_offset (which included the 6-byte R-TAG), pulls 6 bytes, shifts the
+MAC header, and then pulls data_offset again.
+
+>  }
+
+[ ... ]
+
+> @@ -273,63 +273,63 @@ static bool frer_vector_alg(struct frer_rcvy *rcvy, int seq, bool individual)
+>  {
+
+[ ... ]
+
+>  	delta = (seq - (int)rcvy->rcvy_seq_num) &
+>  		(int)(rcvy->seq_space - 1);
+>  	/* Map delta > seq_space/2 to negative (signed wrap) */
+>  	if ((u32)delta & (u32)(rcvy->seq_space / 2))
+>  		delta -= (int)rcvy->seq_space;
+>  
+>  	if (delta >= (int)rcvy->history_len ||
+>  	    delta <= -(int)rcvy->history_len) {
+>  		/* Packet is out-of-range (rogue). */
+
+[Severity: High]
+Does this check permanently drop valid packets if history_len is configured
+to 1? A valid next sequential packet with delta equal to 1 would trigger
+this rogue packet check.
+
+>  		rcvy->stats_rogue_pkts++;
+>  		if (individual)
+>  			restart_timer = true;
+>  		pass = false;
+>  		goto out;
+>  	}
+
+[ ... ]
+
+> @@ -345,41 +345,41 @@ static bool frer_match_alg(struct frer_rcvy *rcvy, int seq, bool individual)
+>  {
+
+[ ... ]
+
+>  	if ((u32)seq == rcvy->rcvy_seq_num) {
+>  		/* Duplicate */
+>  		if (individual)
+>  			frer_rcvy_timer_restart(rcvy);
+>  		return false;
+>  	}
+>  
+>  	/* New sequence number: accept and update */
+>  	if ((u32)seq != ((rcvy->rcvy_seq_num + 1) % rcvy->seq_space))
+>  		rcvy->stats_out_of_order_pkts++;
+
+[Severity: Low]
+Does this modulo operation cause a build failure on 32-bit architectures?
+The modulo operator is used with a 64-bit divisor (rcvy->seq_space), which
+emits a call to __umoddi3.
+
+>  	rcvy->rcvy_seq_num = (u32)seq;
+>  	frer_rcvy_timer_restart(rcvy);
+>  	return true;
+>  }
+
+[ ... ]
+
+> @@ -407,130 +407,130 @@ static int tcf_frer_init(struct net *net, struct nlattr *nla,
+>  			 struct nlattr *est, struct tc_action **a,
+>  			 struct tcf_proto *tp, u32 flags,
+>  			 struct netlink_ext_ack *extack)
+>  {
+
+[ ... ]
+
+>  	err = tcf_action_check_ctrlact(parm->action, tp, &goto_ch, extack);
+>  	if (err < 0)
+>  		goto release_idr;
+>  
+>  	f = to_frer(*a);
+>  
+>  	spin_lock_bh(&f->tcf_lock);
+>  	goto_ch = tcf_action_set_ctrlact(*a, parm->action, goto_ch);
+>  	f->func     = func;
+>  	f->tag_type = tag_type;
+>  	f->tag_pop  = !!tb[TCA_FRER_RCVY_TAG_POP];
+
+[Severity: High]
+Does this early mutation cause a resource leak and state corruption? The
+code mutates live action fields and overwrites goto_chain before validating
+the TCA_FRER_RCVY_ALG attribute.
+
+If validation fails below, it jumps to release_idr without calling
+tcf_chain_put_by_act(goto_ch), leaking the old chain, and leaving the action
+running with a corrupted hybrid state.
+
+>  
+>  	if (func == TCA_FRER_FUNC_PUSH) {
+>  		if (ret == ACT_P_CREATED) {
+>  			spin_lock_init(&f->seqgen.lock);
+>  			f->seqgen.seq_space = 1 << 16;
+>  		}
+>  		/* gen_seq_num starts at 0 on creation; preserved on replace */
+>  	} else {
+
+[Severity: High]
+Does this cause a timer leak when changing modes? If a RECOVER action is
+replaced with a PUSH action, f->func is changed without cancelling the old
+rcvy.hrtimer. When the action is later deleted, the cleanup function will
+skip timer cancellation.
+
+>  		u8 alg = tb[TCA_FRER_RCVY_ALG] ?
+>  			 nla_get_u8(tb[TCA_FRER_RCVY_ALG]) :
+>  			 TCA_FRER_RCVY_VECTOR_ALG;
+
+[ ... ]
+
+>  		/* Cancel any running reset timer before re-initialising. */
+>  		if (ret != ACT_P_CREATED && f->rcvy.reset_msec) {
+>  			spin_unlock_bh(&f->tcf_lock);
+>  			hrtimer_cancel(&f->rcvy.hrtimer);
+>  			spin_lock_bh(&f->tcf_lock);
+>  		}
+>  
+>  		frer_rcvy_init_state(&f->rcvy, alg, history_len,
+>  				     reset_msec, take_no_seq);
+
+[Severity: High]
+Does unconditionally calling frer_rcvy_init_state() destroy active primitives?
+When replacing a live RECOVER action, spin_lock_init() and hrtimer_setup()
+are called while the datapath might concurrently acquire the lock or restart
+the timer.
+
+>  	}
+>  
+>  	spin_unlock_bh(&f->tcf_lock);
+>  
+>  	if (goto_ch)
+>  		tcf_chain_put_by_act(goto_ch);
+>  
+>  	return ret;
+>  
+>  release_idr:
+>  	tcf_idr_release(*a, bind);
+>  	return err;
+>  }
+
+[ ... ]
+
+> @@ -702,10 +702,10 @@ static void tcf_frer_cleanup(struct tc_action *a)
+>  {
+>  	struct tcf_frer *f = to_frer(a);
+>  
+>  	if (f->func == TCA_FRER_FUNC_RECOVER)
+>  		hrtimer_cancel(&f->rcvy.hrtimer);
+
+[Severity: High]
+As noted above, failing to cancel the dynamic workqueue item here leaves
+a pending work that will access the action memory after it is freed.
+
+>  }
