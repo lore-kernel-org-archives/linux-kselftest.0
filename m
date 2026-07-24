@@ -1,30 +1,53 @@
-Received: from eidolon.nox.tf (eidolon.nox.tf [185.142.180.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E987834214A;
-	Fri, 24 Jul 2026 15:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.128
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D2735DA64;
+	Fri, 24 Jul 2026 15:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784905872; cv=none; b=WLkOQb2cfhpXW3d64DFGaokj+zFdx/4cB0NdBEuHx2+ebH7HD6QQPTTo6BC4o+i6mk0sVNxvLLPp/VK4wN8rRoeLalkx/bHXghVDWpDb51aUcsz4khzKFMByWTBPJJ+h8q+3xVRTcu5Bn8H5fUTk/7OaW4RlROr/JEmN81UpRIw=
+	t=1784906185; cv=none; b=BZ1ibcr5xbQN8q/sw7uLK9oHJAoJbVU95K5Q5BRsKBMgGjsXI3gC6jqeQHH2iATxmxJZVDz2ODlq5SuzoHLiTs8X+wPqoyEmfT9xatFX6MjCE6W3LsxDsn2Yntd9o5INNFrk94dAgO1H+D/is80In3Qfkmz4FN7Ldp2B/iqjMFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784905872; c=relaxed/simple;
-	bh=FBocYxqrD3L3ICBl+vfnjqELTuyEivO13ec/XZUqkDA=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JdxzhgLisgn9xekl3NNf2SdHX9tg3M1MdQWv83Cha1pXLhmjv2qeIh8JKp03IK+i+b5BD3IGJTd5KYWJs3BgDFtIDtZO3cvHm+83SHckXXW9OE3Kr2WGGfz8y2G1QvdDX110ETw7dP5wxpAKemcEmzcVjQpbs5iRGWxYxMyQISo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net; spf=pass smtp.mailfrom=diac24.net; arc=none smtp.client-ip=185.142.180.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=diac24.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=diac24.net
-Received: from equinox by eidolon.nox.tf with local (Exim 4.98.2)
-	(envelope-from <equinox@diac24.net>)
-	id 1wnHYA-000000001F2-12IU;
-	Fri, 24 Jul 2026 17:10:58 +0200
-Date: Fri, 24 Jul 2026 17:10:58 +0200
-From: David 'equinox' Lamparter <equinox@diac24.net>
-To: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/10] RFC 6724 rule 5.5 support
-Message-ID: <amOAgsxNyqLyAu0G@eidolon.nox.tf>
-References: <20260723122106.99772-1-equinox@diac24.net>
+	s=arc-20240116; t=1784906185; c=relaxed/simple;
+	bh=rKKnjZ1tIKtzJ6HBpjgLc0Ck9asCrea4HP6d5oTMlaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nmiKQQAGN/9WXy/TkzsI2AzqJD2CDZgdMkJMIJu9dakSG2cnrJ1jSFfHFqvspcjkeOGorgiaS/Cs+nkqSJgA6KzfY+/0SOsEJrMicmDPL/hyGhUkUD6AAKHwj4+g9uKEIS2PwYYV5pmMAnNgw01n66/xiEKI3F9g2KL6aDAs0TI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gf3AIoOd; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="gf3AIoOd"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FF661477;
+	Fri, 24 Jul 2026 08:16:17 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 575F73F59E;
+	Fri, 24 Jul 2026 08:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1784906181; bh=rKKnjZ1tIKtzJ6HBpjgLc0Ck9asCrea4HP6d5oTMlaE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gf3AIoOdSgamjrSz8hHhDZKsUxu/dPE6rojytFhMlLNhMsaKk9o5MxNShE2E6XIxI
+	 tcbXXxM6RsEEIQxsdv0tHTlswHgO3YdYm3jnFrpON/Cb0/Iqgu7obS+gT/ysP/ay/7
+	 FlJmYEC+lZ9Cbn2OxpdtuBok6Nn9BerpTCPKwdzA=
+Date: Fri, 24 Jul 2026 16:16:11 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
+	Jean-Philippe Brucker <jpb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v13 02/32] arm64/fpsimd: Ensure all of ZCR_EL1 is
+ initialised from idle
+Message-ID: <amOBu-SfzZM7M5Oh@J2N7QTR9R3>
+References: <20260720-kvm-arm64-sme-v13-0-d9abd3ffa245@kernel.org>
+ <20260720-kvm-arm64-sme-v13-2-d9abd3ffa245@kernel.org>
+ <amIP42yILYNsNk0e@J2N7QTR9R3.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -33,101 +56,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260723122106.99772-1-equinox@diac24.net>
+In-Reply-To: <amIP42yILYNsNk0e@J2N7QTR9R3.cambridge.arm.com>
 
-Well, the Sashiko comment about removing ip6_route_get_saddr() feels a little bit gaslighting when the next commit is literally removing ip6_route_get_saddr() - but I'm looking at the other ones.  Also forgot to remove the MAINTAINERS line for the documentation file, which I said I'd do.
-
-Will send a v3 in a bit.
-
-
--equi
-
-On Thu, Jul 23, 2026 at 02:19:26PM +0200, David 'equinox' Lamparter wrote:
-> Hi all,
-> 
-> 
-> changes relative to previous version:
-> 
-> - ipv6_saddr_rule5p5() now makes a local copy of the flowi6; I was trying
->   to avoid that but it's just an invitation for breakage.
-> - added check + WARN_ONCE on subtree routes w/ nexthop objects.  The kernel
->   doesn't allow adding such routes, this is just a safety guard.
->   (this probably fixes the false positive complaint by Sashiko, it's a
->   reasonable safety guard to have independent of that.)
-> - new commit that does adds a comment about this on the kernel reject of
->   subtree + nexthop object routes, also reword the error texts to make sense
-> - added missing _rcu on iterating nexthops
-> - added missing +x on selftest
-> - fixed a comment & 2 checkpatch nits
-> - rephrased 2 parts of the documentation a little bit, actually include it in
->   the doc build (from ipv6.rst)
-> - added a selftest that uses (non-nexthop-object) ECMP routes
-> 
-> remainder is the original cover letter:
-> 
-> 
-> this patchset implements RFC6724 rule 5.5.  For the unaquainted:
-> 
->    Rule 5.5: Prefer addresses in a prefix advertised by the next-hop.
->    If SA or SA's prefix is assigned by the selected next-hop that will
->    be used to send to D and SB or SB's prefix is assigned by a different
->    next-hop, then prefer SA.  Similarly, if SB or SB's prefix is
->    assigned by the next-hop that will be used to send to D and SA or
->    SA's prefix is assigned by a different next-hop, then prefer SB.
-> 
-> The way this is done is through IPv6 subtree routes.  If a router
-> advertises some prefix in its RA/PIOs, source specific subtree routes
-> should be created for the default route (and RIOs) installed as a result
-> of processing that RA.
-> 
-> This may initially sound like a weird way to do it, but for one RFC8028
-> requires the subtree routes anyway, and also I did try the more obvious
-> approaches (explicitly tracking it, putting it on the address, putting
-> it on the neighbor entry) and all of them break in some scenarios.
-> 
-> I've put together a selftest, there's also a rather hacky test suite
-> created for an IETF hackathon: https://github.com/eqvinox/rule5p5-tests
-> (it's not specific to this patchset.)  I've also been dogfooding these
-> patches on my personal devices for more than a year.
-> 
-> Rule 5.5 itself has extensive history at the IETF, including changing
-> from optional to mandatory in the recent 6724 update.  It is immensely
-> useful (really: required) to make multihoming, renumbering and failover
-> work.
-> 
-> @Jakub you had previously asked me to resubmit the "prep" patches since
-> it was at a poor time (cf. Fri, Jul 25, 2025 at 05:39:58PM -0700).
-> (I had tried submitting the preparation bits on its own.)
-> 
-> @Paolo you had looked at the lookup fix:
-> On Tue, Nov 11, 2025 at 11:13:30AM +0100, Paolo Abeni wrote:
-> > The patch LGTM, and I agree this should go via net-next, given that it's
-> > really a corner case and I could miss nasty side-effects.
+On Thu, Jul 23, 2026 at 01:58:11PM +0100, Mark Rutland wrote:
+> On Mon, Jul 20, 2026 at 12:07:29AM +0100, Mark Brown wrote:
+> > At present when exiting from idle we do not fully reinitialise ZCR_EL1,
+> > we update ZCR_EL1.LEN with a read/modify/write cycle when loading task
+> > state but never set any of the other bits to an explicit value.  Since
+> > currently they are all architecturally RES0 or RAZ/WI this is not a
+> > practical issue but it may become one if further fields are defined in
+> > the register so we should explicitly configure the whole register.
 > >
-> > It looks like you have some testing scenario handy: it would be great to
-> > include it as a paired self-test; could you please add it?
+> > Rename the existing sme_suspend_exit() (which handles this for SME) to
+> > fpsimd_suspend_exit() and add set ZCR_EL1 to 0 there, if needed LEN will
+> > be updated when loading task state.
+> >
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
 > 
-> Cheers,
+> While this happens to work today, this is a more general architecture
+> problem, and I think we should cc stable such that kernels will work
+> reliably on future hardware.
 > 
+> All stable kernels support SVE, so this needs to go as far back as
+> v5.10.y.
 > 
-> equi (David)
+> One minor comment below, but with that fixed up (and a CC stable):
 > 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Sorry, having looked at some of the later patches I think this isn't
+quite right even with those changes, as we wouldn't have necessary
+context synchronization in all cases.
+
+I'll need to dig a bit more to come up with a more concrete solution.
+
+Mark.
+
+> > +void fpsimd_suspend_exit(void)
+> >  {
+> >  	u64 smcr = 0;
+> >  
+> > -	if (!system_supports_sme())
+> > -		return;
+> > +	if (system_supports_sve())
+> > +		write_sysreg_s(0, SYS_ZCR_EL1);
+> >  
+> > -	if (system_supports_fa64())
+> > -		smcr |= SMCR_ELx_FA64;
+> > -	if (system_supports_sme2())
+> > -		smcr |= SMCR_ELx_EZT0;
+> > +	if (system_supports_sme()) {
 > 
+> We should move the 'smcr' variable into this block. That way it's scoped
+> to where it matters.
 > 
-> diffstat:
->  Documentation/networking/ipv6-addrsel.rst                |  73 +++++++++++++++++++
->  Documentation/networking/ipv6.rst                        |   2 +
->  MAINTAINERS                                              |   1 +
->  include/net/addrconf.h                                   |   4 +
->  include/net/ip6_route.h                                  |  26 -------
->  net/ipv4/nexthop.c                                       |   5 +-
->  net/ipv6/Kconfig                                         |  18 ++++-
->  net/ipv6/addrconf.c                                      | 156 ++++++++++++++++++++++++++++++++++++---
->  net/ipv6/ip6_fib.c                                       |   5 +-
->  net/ipv6/ip6_output.c                                    |  26 +++++--
->  net/ipv6/route.c                                         |  26 +++++--
->  tools/testing/selftests/net/Makefile                     |   1 +
->  tools/testing/selftests/net/config                       |   1 +
->  tools/testing/selftests/net/ipv6_saddr_rfc6724rule5p5.py | 285 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  14 files changed, 574 insertions(+), 55 deletions(-)
+> > +		if (system_supports_fa64())
+> > +			smcr |= SMCR_ELx_FA64;
+> > +		if (system_supports_sme2())
+> > +			smcr |= SMCR_ELx_EZT0;
+> >  
+> > -	write_sysreg_s(smcr, SYS_SMCR_EL1);
+> > -	write_sysreg_s(0, SYS_SMPRI_EL1);
+> > +		write_sysreg_s(smcr, SYS_SMCR_EL1);
+> > +		write_sysreg_s(0, SYS_SMPRI_EL1);
+> > +	}
+> >  }
+> 
+> Mark.
 > 
