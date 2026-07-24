@@ -1,38 +1,38 @@
 Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A70471249;
-	Fri, 24 Jul 2026 22:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D7D471CE4;
+	Fri, 24 Jul 2026 22:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784932214; cv=none; b=IPdt4dVtTZn+/6lz1pasLMoIEhDfrFNUlGMvIa4pfQ20GH6cZ/D9ys4BorKYy3P+oPo/f39XA/WLEeASXT1Bh+DZ2lNpDLSfLYwzSnpj4FWMgSwHnVSI4Tg48i5DIXWQW2jO1fGf3KsJsWR1V3bzfjPTnAIZDiJVUULubQIZIk4=
+	t=1784932223; cv=none; b=gA+qC8J0kphJs27t0AJky3rElHOp3Fvyds/iQNoRFtFGnbeTvZTQqagD6579Wushlj+2tDKZe53rQWfaCqlSsxtGYZc0xnRhahpHZ691/atGunMLdSvGvC+ZMzwGL+q+KSYmw2YkmNN396Z6+9+kruBsD6kj4jL87pZDkoxNUdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784932214; c=relaxed/simple;
-	bh=8/w2kfEV4dpxs1e04E9KZKjsCZ7Gf858pYTInPu8Xdk=;
+	s=arc-20240116; t=1784932223; c=relaxed/simple;
+	bh=12LwphxrahrvDgBEuP7aeSaCsbNQvpBj8hd/rK7JMZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JVyRJ7CjK/E3caMzGOIJV342OVZBvATw/L6XA1rnWX1Vy/XpgKHDVgJTQ8DoElGoHP3Ms5Un6S76q1y8mM9AVaBq3W26fEkcqWGM146I8J038MPMbDilbENdA7k2UlnFGXZYy+hdtdEQGRekYzSlFsreJeXB13BsWzVtCk1nO1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=lDGkdWSg; arc=none smtp.client-ip=96.67.55.147
+	 MIME-Version; b=EpFAilRLEeWYiKn6joEFbh8XQIg1b3YlqcevrW1oSBnSUsL0cTpvhKy8N1iVmO7AwrwQZDqiEzjWkSaaI6TO1I4wI+AYGq2eK3XQ9yk8riU68k8hAFFSLj78eNAzoDyShkREP/i10ldUUjOMc3q76qM+DU6g3S6VIjL1TEDBnSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=j9VXakYJ; arc=none smtp.client-ip=96.67.55.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="lDGkdWSg"
+	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="j9VXakYJ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
 	; s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=phv1B9Yxat6YIEopEPUTNjYYzL54eFSY9r4GoCdruM0=; b=lDGkdWSgenq2WUBSSLwgIoU2bb
-	iq5fO5pwGwjNj4bxQlt4EaiKdpGhKGWYtAlH8V4HscBe+rLdz3LpbJ1rz4Eo+8VHi5Cf2YozwpoKa
-	/EOf7b6Fj1trVqdHRewh1VGmUqt2Uelwy48tNNXJNpUrXhxN2zVXjdupFpQVDCV2E7dnQLmXL8+iR
-	L2uoBhWRMCi66UhaWFlC12UuNvV8vGwQzSm9dIYb5f6FEjYNYvE+3V+Vz3IqDYqTDL0zb61Ac86UM
-	/peYQvZJXj0L62/5Os+HC3VsJDdWWxk6zGgLEgSYvF8x6yeOIqsGogSrLBPrd15tBYdhgtMl7L8QJ
-	6fXo9UZA==;
+	bh=QoasW0kcbLRMqvkHf+Serx6XJgI4VH5CVkhXEbwylBk=; b=j9VXakYJJ/PDqAUv2OdbSq8VPc
+	aERUc+tTW4sVfW6m5IUzJR0guy+ydhBDDxWUluYcqM7Ez8y6hdimGk6KrqTs70NkVhRpuwOoHQNTu
+	ZZFPqJl8o4utuNCC6WlF8tlaR4Ubj2Tjw00gPLLHnWPX6qdCkT0AxX0w/OqaGqTOFzfZw4nZdfstu
+	xLIJ5Fcem+GwhEfkimifB3M4xGgfxPk59FCH6H7OwCGjg9ldqWmBsf0njYcEjFIuLlHsJL3NFrnli
+	2ZWQkHIA+9Gx53I7ymyXSAOSVoUw9mxYolW5RZrDGQtBj1iyOyEb8mGiLC/FUEeMRVyh2lwbiF3Ba
+	jEqHE4Ig==;
 Received: from fangorn.home.surriel.com ([10.0.13.7])
 	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.97.1)
 	(envelope-from <riel@surriel.com>)
-	id 1wnOOs-0000000027h-1kjG;
+	id 1wnOOs-0000000027h-2FDa;
 	Fri, 24 Jul 2026 18:29:50 -0400
 From: Rik van Riel <riel@surriel.com>
 To: Andrew Morton <akpm@linux-foundation.org>
@@ -56,9 +56,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Rik van Riel <riel@surriel.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC v4 08/12] selftests/mm: cover /proc/pid/mem access to VM_PFNMAP memory
-Date: Fri, 24 Jul 2026 18:29:30 -0400
-Message-ID: <20260724222934.1463812-9-riel@surriel.com>
+Subject: [PATCH RFC v4 12/12] selftests/mm: add a slow-GUP content and COW test for mTHP
+Date: Fri, 24 Jul 2026 18:29:34 -0400
+Message-ID: <20260724222934.1463812-13-riel@surriel.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260724222934.1463812-1-riel@surriel.com>
 References: <20260724222934.1463812-1-riel@surriel.com>
@@ -70,121 +70,276 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reading a VM_PFNMAP mapping through /proc/pid/mem exercises
-__access_remote_vm() two ways: a COWed page has a struct page and is
-returned by get_user_page_vma(), while a raw PFN has none and is reached
-through vma->vm_ops->access().
+follow_page_mask() now batches a PTE-mapped large folio (mTHP) into one
+contiguous run for the slow get_user_pages() path. A mis-batched run would
+hand back the wrong pages or a stale COW copy, which the existing tests do
+not catch: gup_test checks only pin/unpin integrity, and cow exercises COW
+mostly at PMD size.
 
-Add two tests to pfnmap.c, both reading VM_PFNMAP memory through
-/proc/self/mem.
+Add mthp_gup_cow_test. It forces 64kB-only mTHP, writes a per-page-distinct
+pattern, then pins the region on the slow path (PIN_LONGTERM without
+USE_FAST) and compares the bytes the kernel copies back from the pinned
+pages against that pattern.
 
-procmem_cow_read maps the file MAP_PRIVATE and writable, writes to COW a
-page, then reads it back. Without the struct-page path in
-get_user_page_vma() this read is short: the access falls back to
-generic_access_phys(), which ioremaps the PFN, and ioremap of a COWed RAM
-page is rejected.
+The test covers a read pin, a write pin, and COW after fork(): a child
+write-pins to force per-page unshare and checks the copied contents, then
+rewrites its copy while the parent verifies its own contents are intact.
 
-procmem_pfn_read reads a raw PFN back through ->access(). ioremap rejects
-RAM, so it runs only for genuine device memory and is skipped for the
-default /dev/mem System RAM target.
+It also reports how many pages sit in contiguous large-folio runs, so a
+kernel without mTHP shows light coverage rather than passing vacuously.
 
 Assisted-by: Claude:claude-opus-4.8
 Signed-off-by: Rik van Riel <riel@surriel.com>
 ---
- tools/testing/selftests/mm/pfnmap.c | 66 +++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ tools/testing/selftests/mm/Makefile           |   1 +
+ .../testing/selftests/mm/mthp_gup_cow_test.c  | 213 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   1 +
+ 3 files changed, 215 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/mthp_gup_cow_test.c
 
-diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
-index 4f550822385a..6ff5d1029517 100644
---- a/tools/testing/selftests/mm/pfnmap.c
-+++ b/tools/testing/selftests/mm/pfnmap.c
-@@ -31,6 +31,7 @@ static sigjmp_buf sigjmp_buf_env;
- static char *file = "/dev/mem";
- static off_t file_offset;
- static int fd;
-+static int target_is_ram;
- 
- static void signal_handler(int sig)
- {
-@@ -113,6 +114,7 @@ static void pfnmap_init(void)
- 		if (err)
- 			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
- 				       strerror(-err));
-+		target_is_ram = 1;
- 	} else {
- 		file_offset = 0;
- 	}
-@@ -271,6 +273,70 @@ TEST_F(pfnmap, fork)
- 	ASSERT_EQ(ret, 0);
- }
- 
-+TEST_F(pfnmap, procmem_cow_read)
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index e6df968f0971..6b917a4f73e0 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -83,6 +83,7 @@ TEST_GEN_FILES += mrelease_test
+ TEST_GEN_FILES += mremap_dontunmap
+ TEST_GEN_FILES += mremap_test
+ TEST_GEN_FILES += mseal_test
++TEST_GEN_FILES += mthp_gup_cow_test
+ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += pagemap_ioctl
+ TEST_GEN_FILES += pfnmap
+diff --git a/tools/testing/selftests/mm/mthp_gup_cow_test.c b/tools/testing/selftests/mm/mthp_gup_cow_test.c
+new file mode 100644
+index 000000000000..52ee329d8641
+--- /dev/null
++++ b/tools/testing/selftests/mm/mthp_gup_cow_test.c
+@@ -0,0 +1,213 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Verify that the slow GUP path (pin_user_pages -> follow_page_mask ->
++ * follow_pte_batch) returns the correct pages for a PTE-mapped large folio
++ * (mTHP), including that COW copies produce the right content.
++ *
++ * Uses the CONFIG_GUP_TEST PIN_LONGTERM interface: START pins a range on the
++ * slow path, READ copies the pinned pages' bytes back so we can compare them
++ * against the pattern we wrote.
++ */
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <stdint.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <errno.h>
++#include <sys/ioctl.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
++#include <linux/types.h>
++
++#define ARRAY_SIZE(a)	(sizeof(a) / sizeof((a)[0]))
++
++#define GUP_DEV "/sys/kernel/debug/gup_test"
++
++#define PIN_LONGTERM_TEST_START	_IOW('g', 7, struct pin_longterm_test)
++#define PIN_LONGTERM_TEST_STOP	_IO('g', 8)
++#define PIN_LONGTERM_TEST_READ	_IOW('g', 9, __u64)
++#define USE_WRITE	1
++#define USE_FAST	2
++
++struct pin_longterm_test {
++	__u64 addr;
++	__u64 size;
++	__u32 flags;
++};
++
++#define ORDER_KB	64
++#define NR_FOLIOS	16
++#define REGION		((size_t)ORDER_KB * 1024 * NR_FOLIOS)
++
++static long PS;
++static int fails;
++static int tap;
++
++static void ok(int cond, const char *desc)
 +{
-+	char *priv, *buf;
-+	ssize_t rc;
-+	int mem_fd;
-+
-+	/*
-+	 * A COWed page in a VM_PFNMAP mapping has a struct page, so reading it
-+	 * through /proc/self/mem -- __access_remote_vm() -> get_user_page_vma()
-+	 * -- returns it directly, instead of routing to vma->vm_ops->access(),
-+	 * which ioremaps the PFN and cannot reach a COWed RAM page.
-+	 *
-+	 * Map the file MAP_PRIVATE and writable, write to COW a page into anon
-+	 * memory, then read the page back through /proc/self/mem.
-+	 */
-+	self->size2 = self->pagesize;
-+	self->addr2 = mmap(NULL, self->size2, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE, fd, file_offset);
-+	if (self->addr2 == MAP_FAILED)
-+		SKIP(return, "Cannot create a writable private pfnmap mapping");
-+	priv = self->addr2;
-+
-+	/* COW the page and stamp known bytes into the anon copy. */
-+	priv[0] = 0x42;
-+	priv[self->pagesize - 1] = 0x24;
-+
-+	buf = malloc(self->pagesize);
-+	ASSERT_NE(buf, NULL);
-+
-+	mem_fd = open("/proc/self/mem", O_RDONLY);
-+	ASSERT_GE(mem_fd, 0);
-+	rc = pread(mem_fd, buf, self->pagesize, (off_t)(uintptr_t)priv);
-+	close(mem_fd);
-+
-+	ASSERT_EQ(rc, (ssize_t)self->pagesize);
-+	EXPECT_EQ(buf[0], 0x42);
-+	EXPECT_EQ(buf[self->pagesize - 1], 0x24);
-+
-+	free(buf);
++	printf("%s %d %s\n", cond ? "ok" : "not ok", ++tap, desc);
++	if (!cond)
++		fails++;
 +}
 +
-+TEST_F(pfnmap, procmem_pfn_read)
++/* Deterministic, per-page-distinct pattern so any mis-order or leak shows. */
++static void fill(char *base, size_t sz, uint32_t salt)
 +{
-+	char buf[64];
-+	ssize_t rc;
-+	int mem_fd;
++	for (size_t off = 0; off < sz; off += PS) {
++		uint32_t k = off / PS;
++		uint64_t v = ((uint64_t)salt << 32) ^ (k * 0x9E3779B1u + 0x1234);
 +
-+	/*
-+	 * A raw PFN of a VM_IO/VM_PFNMAP mapping has no struct page, so
-+	 * __access_remote_vm() reaches it through vma->vm_ops->access()
-+	 * (generic_access_phys()). That ioremaps the PFN, which is rejected for
-+	 * RAM, so this only applies to genuine device memory.
-+	 */
-+	if (target_is_ram)
-+		SKIP(return, "Target is System RAM; ->access() cannot ioremap RAM");
-+
-+	mem_fd = open("/proc/self/mem", O_RDONLY);
-+	ASSERT_GE(mem_fd, 0);
-+	rc = pread(mem_fd, buf, sizeof(buf), (off_t)(uintptr_t)self->addr1);
-+	close(mem_fd);
-+
-+	ASSERT_EQ(rc, (ssize_t)sizeof(buf));
++		for (size_t i = 0; i < PS; i += sizeof(v))
++			memcpy(base + off + i, &v, sizeof(v));
++	}
 +}
 +
- int main(int argc, char **argv)
- {
- 	for (int i = 1; i < argc; i++) {
++static int wsysfs(const char *path, const char *val)
++{
++	int fd = open(path, O_WRONLY);
++
++	if (fd < 0)
++		return -1;
++	int r = write(fd, val, strlen(val));
++
++	close(fd);
++	return r < 0 ? -1 : 0;
++}
++
++/* Force sub-PMD 64kB mTHP only, so faults produce PTE-mapped large folios. */
++static void setup_mthp(void)
++{
++	const char *thp = "/sys/kernel/mm/transparent_hugepage";
++	char p[256];
++	static const int kb[] = { 16, 32, 64, 128, 256, 512, 1024, 2048 };
++
++	wsysfs("/sys/kernel/mm/transparent_hugepage/enabled", "never");
++	for (unsigned int i = 0; i < ARRAY_SIZE(kb); i++) {
++		snprintf(p, sizeof(p), "%s/hugepages-%dkB/enabled", thp, kb[i]);
++		wsysfs(p, kb[i] == ORDER_KB ? "always" : "never");
++	}
++}
++
++/* Count how many pages sit in a contiguous >=ORDER_KB PFN run (via pagemap). */
++static int count_large_pages(char *base, size_t sz)
++{
++	int pm = open("/proc/self/pagemap", O_RDONLY);
++	size_t n = sz / PS, large = 0;
++	uint64_t *pfn = calloc(n, sizeof(*pfn));
++
++	if (pm < 0)
++		return -1;
++	for (size_t k = 0; k < n; k++) {
++		uint64_t ent;
++		off_t idx = ((uintptr_t)base + k * PS) / PS * sizeof(ent);
++
++		if (pread(pm, &ent, sizeof(ent), idx) != sizeof(ent) ||
++		    !(ent & (1ULL << 63)))
++			pfn[k] = 0;
++		else
++			pfn[k] = ent & ((1ULL << 55) - 1);
++	}
++	close(pm);
++	for (size_t k = 0; k < n; k++)
++		if (k + 1 < n && pfn[k] && pfn[k + 1] == pfn[k] + 1)
++			large++;
++	free(pfn);
++	return large;
++}
++
++/* Pin @base..@sz on the slow path, read the pinned bytes back, compare to exp. */
++static int pin_verify(int fd, char *base, size_t sz, uint32_t wr, char *exp)
++{
++	struct pin_longterm_test a = {
++		.addr = (uintptr_t)base, .size = sz,
++		.flags = wr ? USE_WRITE : 0,		/* USE_FAST unset => slow */
++	};
++	char *got = mmap(NULL, sz, PROT_READ | PROT_WRITE,
++			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	__u64 ga = (uintptr_t)got;
++	int rc = -1;
++
++	if (got == MAP_FAILED)
++		return -1;
++	if (ioctl(fd, PIN_LONGTERM_TEST_START, &a)) {
++		fprintf(stderr, "START(%s) failed: %s\n",
++			wr ? "write" : "read", strerror(errno));
++		goto out;
++	}
++	if (ioctl(fd, PIN_LONGTERM_TEST_READ, &ga)) {
++		fprintf(stderr, "READ failed: %s\n", strerror(errno));
++		ioctl(fd, PIN_LONGTERM_TEST_STOP);
++		goto out;
++	}
++	ioctl(fd, PIN_LONGTERM_TEST_STOP);
++	rc = memcmp(got, exp, sz) ? 1 : 0;
++out:
++	munmap(got, sz);
++	return rc;
++}
++
++int main(void)
++{
++	PS = sysconf(_SC_PAGESIZE);
++	setup_mthp();
++
++	int fd = open(GUP_DEV, O_RDWR);
++
++	if (fd < 0) {
++		fprintf(stderr, "open %s: %s (CONFIG_GUP_TEST?)\n",
++			GUP_DEV, strerror(errno));
++		return 2;
++	}
++
++	char *r = mmap(NULL, REGION, PROT_READ | PROT_WRITE,
++		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (r == MAP_FAILED) {
++		perror("mmap");
++		return 2;
++	}
++	fill(r, REGION, 0xA1);				/* pattern P */
++	char *expP = malloc(REGION);
++
++	memcpy(expP, r, REGION);
++
++	int large = count_large_pages(r, REGION);
++
++	printf("# %d/%zu pages in contiguous large-folio runs\n",
++	       large, REGION / PS);
++	if (large < (int)(REGION / PS) / 4)
++		printf("# WARN: little mTHP backing; batch path lightly covered\n");
++
++	/* A: read pin over writable mTHP -> batches -> content must equal P. */
++	ok(pin_verify(fd, r, REGION, 0, expP) == 0,
++	   "slow read-pin of mTHP returns correct contents");
++
++	/* B: write pin -> FOLL_WRITE batch path -> content must equal P. */
++	ok(pin_verify(fd, r, REGION, 1, expP) == 0,
++	   "slow write-pin of mTHP returns correct contents");
++
++	/* C: COW isolation. Child write-pins (unshares) then rewrites; parent P. */
++	pid_t pid = fork();
++
++	if (pid == 0) {
++		int cfd = open(GUP_DEV, O_RDWR);
++		int a = pin_verify(cfd, r, REGION, 1, expP);	/* COW copy == P */
++
++		fill(r, REGION, 0xB2);			/* child writes Q */
++		_exit(a == 0 ? 0 : 1);
++	}
++	int st = 0;
++
++	waitpid(pid, &st, 0);
++	ok(WIFEXITED(st) && WEXITSTATUS(st) == 0,
++	   "child write-pin after COW returns correct (copied) contents");
++	ok(memcmp(r, expP, REGION) == 0,
++	   "parent contents intact after child COW writes");
++	/* D: parent read-pin again after the COW split still correct. */
++	ok(pin_verify(fd, r, REGION, 0, expP) == 0,
++	   "parent slow read-pin after COW still correct");
++
++	printf("# totals: pass:%d fail:%d\n", tap - fails, fails);
++	return fails ? 1 : 0;
++}
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 8c296dedf047..b49a3eb0c205 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -289,6 +289,7 @@ fi
+ # Dump pages 0, 19, and 4096, using pin_user_pages:
+ CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+ CATEGORY="gup_test" run_test ./gup_longterm
++CATEGORY="gup_test" run_test ./mthp_gup_cow_test
+ 
+ CATEGORY="userfaultfd" run_test ./uffd-unit-tests
+ uffd_stress_bin=./uffd-stress
 -- 
 2.53.0-Meta
 
