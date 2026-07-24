@@ -1,60 +1,62 @@
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C147C4477EE
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E81440A2D
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784905598; cv=none; b=T9ay15V7HtXF3h0X8JnJa51lBfaUezsWn/wrGFzgb/1XZ6Dpp+fycjxG0AhVrHSSuXWXPO9sYYhG7E84wVxGwyJ3YA+D1c6IAv5tKon13RhjyBUOkMVLthO6FKeI1yRzoOuM7NJojjL9f03fxfDrZsWBKXnxLvJsdSB/pyTNAdc=
+	t=1784905602; cv=none; b=T2MYeyQfuXQKqYGHVrg6OFi3k40zraSkgm8f/JkPpaGbyRJFsVnN+h9c4QQExpc2v4efjQIO37NnzjF+OMuJH02xulQSaaL6QpSyiYPMaYkIuCkPcwS5DbUnyrpNfnNznc0QxNHgoODuPEu4esDJa7Br1P+0XMsW3cz+ReX8GwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784905598; c=relaxed/simple;
-	bh=k2IZxo+RQvcI6PXmn2CgQ7Kxmkd9qEBrLBFwu9yl9ww=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MYNlMoHg6b9I/6RvurhorqXWTmnGuR98ZlBMHfGSRsIk+EC+JMnCLpcNhUgFPJDrRkgb/kDy23UfKpGLeHPK8s8yKxK+b9cSLnUaJ+u+93zzajrFdYQ1tx15JjeNhJUMpiSDks8oqZ8PEFJRP24iaTcI27ywJ+jjL2ZqIhB63lA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAy2kBcL; arc=none smtp.client-ip=209.85.217.42
+	s=arc-20240116; t=1784905602; c=relaxed/simple;
+	bh=WCFeK1U/sB8u6+XghEzeDL5uvuawBnLyk20EecCgWSc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eA4rK4pNSzRNIsLM1ftl+HAGMfcA3wIrU1K7N6Ice6nUgpnRfhWpZmZLQcdid0nhBdDEZn2YFOODMI7dFnu8i4HI7uEhQNLvNx9Y2Dt+PzWD4Qw+K4PugcFdAhlqNLVOjNHDSEGEejUtaUwnEINtYUjAF70VfNCtNeCpICaTz5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXq6QU+3; arc=none smtp.client-ip=209.85.217.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAy2kBcL"
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-74d55dac06eso238417137.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 08:06:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXq6QU+3"
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-74d55dac06dso131869137.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 08:06:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784905593; x=1785510393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=x2AhQYo9R5DmlVUQgPw/1HHJB2ak8KRQjAhLOo34IsY=;
-        b=dAy2kBcLmXLdDu2gBN7QfotWbwUU/7SVmzQDcoNZdMomTBo222gI6Ut/iFJxYpbnTO
-         FXJmDugqEi9v2MMls/p7dBZfC3+0WNGegpy2HnH46AO6H7QHFRBvYKZOa2vmAdK7JKf7
-         +H/8P++HFVAMAv7ED28tKpQ9V7qJZv3AQwdhiUq0EAzRX+lZAuDEu6KHN7uBN95yNUFl
-         5ehJwcERw2vdHsPk/3bWuTBvSFYxY3NG5Z8JUAaXZ7wTXPiNUOeSdOIP8Y1ZKJPJ4noB
-         KDURnFnN9EQ5+k1cW3ZfmbUcb1ZwV64jildulqUxHDnNGJJwn0m3QpQQ/gmg3ef1PCGj
-         6vmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784905593; x=1785510393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784905597; x=1785510397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=x2AhQYo9R5DmlVUQgPw/1HHJB2ak8KRQjAhLOo34IsY=;
-        b=VBvQFl6Ik10zjkIgX+PtiGPE+O0ib7CH7a4qhKVH1C7vd/IrGgpcRNB4F6LfMaeASh
-         9u73V7J1BJ8UU/s+//vbdeOXFt1HtV8gXMEMxspmU6rOgQpt5A4Uk9VFUjjJaSe5YZ/c
-         Fx+BXoo7cG4UnzTeYBpkLZCa55SD9kTkKh5gKsv2wKNsAKcuKHzXhddia+qmW4gNZuym
-         XmJ6/dhzTCPep5i0cI58S4wQE9z79fM8JwAe1QpsQbopAbFcEgcDNERi+lJa8L7e20ZC
-         W9OLR0X0g4ntEk5281KrotGCzCuSs8s4yoKRzRczKrLaJpBLNsOMYX/S9P4PsYtkcV0J
-         d2RA==
-X-Forwarded-Encrypted: i=1; AHgh+RpGT/Suzssc1QheCmqZ8RHsRWQi0mn189uL1LrSjMTsnD0+vfLuosXP1oXdSvdxkboOUAbx3MMk0eZUSwWjiHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0PJWg+9McEvvDXD/l8sxY9QhyqI+GkbJ1hKYW9wMmk/mPtDk/
-	rjsn9Gmt4/o3qUUFNpJMnP9LawVDGmuz/nLt2rmOAqAQCJFMaXphktvs9NsPe/q6/YE=
-X-Gm-Gg: AR+sD11kEEsgaIeSI4ex7MkXGCnPzNx27+saamIFewqHsRTNuchIR12z8OqE/c9thjH
-	M3UrpPqDnfey+C/PDgbC9l4XpBhxUejSQxry5GuqF3AWpIdkJWXa+o73tC9k3Y8ilGcBhVplX2V
-	U1T0YA1H3F5Pfr1wp+YJoHXb2XKnMH8nQ5ADHxTQYLOpEW2JdxCQ02DALToFIaBgKvyMFM455k6
-	GELaxqpc1JJ7cKbw6Lz8+ArN3xTWKvb9t1Q8Bj1WYHuAc4zku8XZ3MPEbPnVmjykkKmzK/dHebS
-	Ga2VJUg5I28tSYYbUzZICJCLIRn7GPfVwfv0rLRB1RTNo8xzDs6nVme4tgPBMaqC8Lm4qA9HteM
-	3Ya55qcS7IoF4FDrJhi1U9BL0exPlY/sPwEqEydzG7eA/Bm57X8QQR0JnKO5v6WI4ptyl6w==
-X-Received: by 2002:a05:6102:390e:b0:739:a2d:9621 with SMTP id ada2fe7eead31-74d5fbd5eebmr4372851137.13.1784905592834;
-        Fri, 24 Jul 2026 08:06:32 -0700 (PDT)
+        bh=6oyqB7q7QHkqcZKXENbolthguPaX/LV0/csmdxwyvY8=;
+        b=gXq6QU+3Qy1TeVqxyjn0hdRDRTYkqUieAMH2shLXY4sgOR9StX1V6kGtTXSEjVulwT
+         kWbNHiCPx8TR3i0f+4ysV+PLhboKdDKxNN1YXI4TUEtdrViovBVQDTbel2WzOiEBVyWd
+         q73LrMTGCq5ITpAkvhkGPJXiJ28BU6HCJ85zclS9uIp56ksKXQhCAYz2L66ZjTNFPL2F
+         HMlenBYPKQun5QDq4GSqxA3qx8z22rZhgjExfTKcxyE0A+GhDZTg1PgWD8+CxtesjOEk
+         CdUc86NdhGFy9TiUmvt6ApWXOc8JWqH5VQ/dfFt1RxJlf2KCa+wiLYoUWhGIz7+stDgE
+         tnlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784905597; x=1785510397;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6oyqB7q7QHkqcZKXENbolthguPaX/LV0/csmdxwyvY8=;
+        b=clmK8YnV6QKITMn7NpcuS8ykHxGqwrF6lrSEAuVtmUo0/ZOJd9kwBGDO7wjcxZ7bv6
+         ajrW/wurtK+5E/b9C6agR8e0gR47x5C4Na0fddyVxbdg3j2lxtwMauqd8SU20rAKTBl4
+         sEOoeLdqBA2bhAf9qEQHa1727WiT8uzxZ43scNEP0kM+SFX78ibiOgqvKHYj5wRXQ73s
+         rt8UlZWHjya79nv6gLNXiHdMEuJjg3ByLA0hNSW+qnLpvntM6s9VJBLCG9+JI9nv80Ds
+         OqlXkObS9dSpmMDixvMjNaf0NjFAj+FUp0KtTCEdD2wH4fO9xFq9vr2FaseP6eTTfiqM
+         yp2w==
+X-Forwarded-Encrypted: i=1; AHgh+RoXuGzn8GtidkEgwc48OByH/UXaTiOva//TYcU9iZfwYfJfwpXz6KLdEOJ7avu6zNv8J0jEmatCKkajSAxFASU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUYjCJJcQ2bV2Il4AseIVu1pb/+bZpMmNRShhaovHJM4aY8rZd
+	j4aqKAbcChvVmI2WKtR3xZr67WzMO6wt/NBEkpvHX1CN41C9/kWXsDMt
+X-Gm-Gg: AR+sD12RDd7tdtRaCeCs3OtOm7xpUzhPX3kcbJBlEsXFcbONrL2yxBpcNO7KTmqedhq
+	JSrT9mW7fvyUFDNCT1+3BBG1sgvHq9foMIhdXGlGMV7JRzXxf67uO7p13FLW/6bS8bguNO/brsU
+	WrwKl1Lh8eMSQ+53jS3CTLVc3hxE7QLhyP1o1i9fbnE6WJew136MOl+7HVdAlunmTamzfK/rFIx
+	pYIKMNzFg2Uy1J29YF/hVEB3x1PesMeYxoKHmmVZvb3d7Al/6fLyAPMdMvfiT/3jitziQSx0NBb
+	8jsOAgRiZePDPiF8ZA0ym+ogohwSXlByYTAPOQ0F8sBy/SLjfI3+DPq2xNefGztM6Qks1ir6vfn
+	j0aEIaoC4oyCVkqe8P2QzM6wm/b8+tWVVvcT60FB7QrNOnQo3FbOH/Uq7lGmMrHCcAPSU+g==
+X-Received: by 2002:a05:6102:2b83:b0:74c:7dbd:8c89 with SMTP id ada2fe7eead31-74d60909992mr3314336137.25.1784905597005;
+        Fri, 24 Jul 2026 08:06:37 -0700 (PDT)
 Received: from houminxi ([72.244.37.221])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-74ad32165f4sm7744810137.6.2026.07.24.08.06.27
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-74ad32165f4sm7744810137.6.2026.07.24.08.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 08:06:32 -0700 (PDT)
+        Fri, 24 Jul 2026 08:06:36 -0700 (PDT)
 From: Minxi Hou <houminxi@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -71,10 +73,12 @@ Cc: davem@davemloft.net,
 	horms@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v6 0/2] selftests/net/openvswitch: add SCTP flow key test
-Date: Fri, 24 Jul 2026 11:06:22 -0400
-Message-ID: <20260724150624.3457427-1-houminxi@gmail.com>
+Subject: [PATCH net-next v6 1/2] selftests/net/openvswitch: add SCTP flow key parsing to ovs-dpctl.py
+Date: Fri, 24 Jul 2026 11:06:23 -0400
+Message-ID: <20260724150624.3457427-2-houminxi@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260724150624.3457427-1-houminxi@gmail.com>
+References: <20260724150624.3457427-1-houminxi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,47 +87,175 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v5 failed in NIPA: the kernel rejected the SCTP-keyed flow with
-EINVAL(22) in add_flow. Root cause: v5 installed flows containing
-sctp() via ovs-dpctl.py without registering OVS_KEY_ATTR_SCTP in its
-flow-string parse table, so the parser silently dropped the L4 key;
-the kernel mandates the SCTP key when ipv4.proto == IPPROTO_SCTP
-(match_validate() in flow_netlink.c) and returns -EINVAL.
+The ovskey flow-string parser has no OVS_KEY_ATTR_SCTP entry, so a
+flow string containing sctp(src=.../dst=...) parses without error but
+silently drops the L4 key. The resulting flow carries only
+ipv4(proto=132), and the kernel rejects it: match_validate() in
+flow_netlink.c requires OVS_KEY_ATTR_SCTP when the IP protocol is
+IPPROTO_SCTP and returns -EINVAL for the missing key.
 
-The parse-table entry was present in v1-v4 and was accidentally
-dropped in the v4->v5 respin. v6 splits the fix from the test so each
-patch stands on its own: patch 1 restores SCTP parsing in ovs-dpctl.py
-(the NIPA fix) with unit tests, patch 2 adds the SCTP flow key test
-(same goal as v5).
+Register OVS_KEY_ATTR_SCTP in the parse table and add unit tests
+(runnable via ovs-dpctl.py --test) covering SCTP and the neighboring
+TCP/UDP/ICMP/IPv4 key parsers.
 
-Tested with vng on x86_64: all OVS selftests pass, including the new
-sctp_connect_v4.
-
-v6:
-  - split into 2 patches: ovs-dpctl.py parse fix + shell test
-  - restore OVS_KEY_ATTR_SCTP parse-table entry + unit tests (NIPA fix)
-  - listener readiness via /proc/net/sctp/eps (ss needs sctp_diag)
-  - add timeout 3 to socat clients (unidirectional connect hangs)
-  - restart listeners with kill -TERM + kill -0 poll (wait can hang)
-v5: https://lore.kernel.org/netdev/20260723084203.3483560-1-houminxi@gmail.com/
-  - switch to socat per Kicinski; NIPA FAIL: EINVAL in add_flow
-    (parse entry accidentally dropped in this respin)
-v4: https://lore.kernel.org/netdev/20260719162657.3263089-1-houminxi@gmail.com/
-  - rebase after ICMPv6 test merged; nc --sctp detection nit
-v3: https://lore.kernel.org/netdev/20260715015446.530018-1-houminxi@gmail.com/
-  - switch ncat -> nc with skip if nc lacks SCTP support
-v2: https://lore.kernel.org/netdev/20260707034718.2717982-1-houminxi@gmail.com/
-  - replace sleep after spawn with ovs_wait on listener stderr
-v1: https://lore.kernel.org/netdev/20260702090908.1253688-1-houminxi@gmail.com/
-
-Minxi Hou (2):
-  selftests/net/openvswitch: add SCTP flow key parsing to ovs-dpctl.py
-  selftests/net/openvswitch: add SCTP flow key test
-
- .../selftests/net/openvswitch/openvswitch.sh  | 121 ++++++++++++++++
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
+---
  .../selftests/net/openvswitch/ovs-dpctl.py    | 129 ++++++++++++++++++
- 2 files changed, 250 insertions(+)
+ 1 file changed, 129 insertions(+)
 
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index f3edd198223f..633af10d7e8a 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -15,6 +15,7 @@ import struct
+ import sys
+ import time
+ import types
++import unittest
+ import uuid
+ 
+ try:
+@@ -1984,6 +1985,11 @@ class ovskey(nla):
+                 "udp",
+                 ovskey.ovs_key_udp,
+             ),
++            (
++                "OVS_KEY_ATTR_SCTP",
++                "sctp",
++                ovskey.ovs_key_sctp,
++            ),
+             (
+                 "OVS_KEY_ATTR_ICMP",
+                 "icmp",
+@@ -3165,5 +3171,128 @@ def main(argv):
+     return 0
+ 
+ 
++def _init_ovskey_nlas():
++    """Initialize required NLA classes for ovskey parsing."""
++    nlmsg_atoms.encap_ovskey = encap_ovskey
++    nlmsg_atoms.ovskey = ovskey
++    nlmsg_atoms.ovsactions = ovsactions
++
++
++def _parse_flow(flowstr):
++    """Parse a flow string and return the key."""
++    key = ovskey()
++    key["attrs"] = []
++    key.parse(flowstr)
++    return key
++
++
++def _find_attr(key, attr_name):
++    """Find an attribute in parsed key."""
++    for attr in key["attrs"]:
++        if attr[0] == attr_name:
++            return attr[1]
++    return None
++
++
++class TestOvsKeyParse(unittest.TestCase):
++    """Unit tests for ovskey.parse() flow string parsing."""
++
++    @classmethod
++    def setUpClass(cls):
++        _init_ovskey_nlas()
++
++    def test_sctp_dst(self):
++        """Test SCTP destination port parsing."""
++        key = _parse_flow("sctp(dst=4443)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
++        self.assertIsNotNone(attr, "SCTP key not found")
++        self.assertEqual(attr["dst"], 4443)
++
++    def test_sctp_src(self):
++        """Test SCTP source port parsing."""
++        key = _parse_flow("sctp(src=4443)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
++        self.assertIsNotNone(attr, "SCTP key not found")
++        self.assertEqual(attr["src"], 4443)
++
++    def test_sctp_src_and_dst(self):
++        """Test SCTP source and destination port parsing."""
++        key = _parse_flow("sctp(src=1234,dst=5678)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
++        self.assertIsNotNone(attr, "SCTP key not found")
++        self.assertEqual(attr["src"], 1234)
++        self.assertEqual(attr["dst"], 5678)
++
++    def test_tcp_dst(self):
++        """Test TCP destination port parsing."""
++        key = _parse_flow("tcp(dst=80)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_TCP")
++        self.assertIsNotNone(attr, "TCP key not found")
++        self.assertEqual(attr["dst"], 80)
++
++    def test_udp_dst(self):
++        """Test UDP destination port parsing."""
++        key = _parse_flow("udp(dst=53)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_UDP")
++        self.assertIsNotNone(attr, "UDP key not found")
++        self.assertEqual(attr["dst"], 53)
++
++    def test_icmp_type_code(self):
++        """Test ICMP type and code parsing."""
++        key = _parse_flow("icmp(type=8,code=0)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_ICMP")
++        self.assertIsNotNone(attr, "ICMP key not found")
++        self.assertEqual(attr["type"], 8)
++        self.assertEqual(attr["code"], 0)
++
++    def test_ipv4_proto(self):
++        """Test IPv4 protocol parsing."""
++        key = _parse_flow("eth_type(0x0800),ipv4(proto=132)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_IPV4")
++        self.assertIsNotNone(attr, "IPv4 key not found")
++        self.assertEqual(attr["proto"], 132)
++
++    def test_eth_type(self):
++        """Test Ethernet type parsing."""
++        key = _parse_flow("eth_type(0x0800)")
++        attr = _find_attr(key, "OVS_KEY_ATTR_ETHERTYPE")
++        self.assertIsNotNone(attr, "EthType key not found")
++        self.assertEqual(attr, 0x0800)
++
++    def test_full_sctp_flow(self):
++        """Test complete SCTP flow string parsing."""
++        flowstr = (
++            "in_port(1),eth(),eth_type(0x0800),"
++            "ipv4(proto=132),sctp(dst=4443)"
++        )
++        key = _parse_flow(flowstr)
++        in_port = _find_attr(key, "OVS_KEY_ATTR_IN_PORT")
++        self.assertEqual(in_port, 1)
++        sctp = _find_attr(key, "OVS_KEY_ATTR_SCTP")
++        self.assertIsNotNone(sctp, "SCTP key not found")
++        self.assertEqual(sctp["dst"], 4443)
++
++    def test_sctp_roundtrip(self):
++        """Test parse -> dpstr -> parse keeps the SCTP key."""
++        key = _parse_flow("sctp(dst=4443)")
++        key2 = ovskey()
++        key2["attrs"] = []
++        remainder = key2.parse(key.dpstr())
++        self.assertEqual(remainder, "", "round-trip left unparsed text")
++        attr = _find_attr(key2, "OVS_KEY_ATTR_SCTP")
++        self.assertIsNotNone(attr, "SCTP key lost in round-trip")
++        self.assertEqual(attr["dst"], 4443)
++
++
++def test_ovskey_parse():
++    """Test ovskey.parse() method for various flow key types."""
++    suite = unittest.TestLoader().loadTestsFromTestCase(TestOvsKeyParse)
++    runner = unittest.TextTestRunner(verbosity=2)
++    result = runner.run(suite)
++    return 0 if result.wasSuccessful() else 1
++
++
+ if __name__ == "__main__":
++    if len(sys.argv) > 1 and sys.argv[1] == "--test":
++        sys.exit(test_ovskey_parse())
+     sys.exit(main(sys.argv))
 -- 
 2.55.0
 
