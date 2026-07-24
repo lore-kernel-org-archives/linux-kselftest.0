@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C21E41D228;
-	Fri, 24 Jul 2026 10:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3187342B746;
+	Fri, 24 Jul 2026 10:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784888713; cv=none; b=HsHuksLxoKUTypFPD663/0Se54comd82mgjcAXdjimzKPef7gO8/mZfS2hrcdXPK6NaYSjqFqkA/v+zR+O8xaFRtJQmsAmj7cM7lIRg9iyNpIFM34L0uTR/T8eakfe+oxGmVAEIQ380l0LJcWTL9TOeR9WdFBUY6pLK+cvAwJvw=
+	t=1784888715; cv=none; b=A/1dSjorjGQHVJJXPEFTfHT50ehLOzx1YYwbLTKJUgsAZ/7hzmpJpUT6nVGwpj7MjXTmSXj0wmZt784vHZIi2b18mzbzXeUQGkrhzGSKWoeR8/dojr3/SnppSpzZpHyJk4VQw1yDeihfnTfs0lJ+MlLw776uhKSqeBvTF3PiSB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784888713; c=relaxed/simple;
-	bh=5jwfmfxf7oRAwU0+Iu55SZwsCJdmgyHH7m7BYSAM9vo=;
+	s=arc-20240116; t=1784888715; c=relaxed/simple;
+	bh=MakI4ukXwu0PoXIFZ3JJzT172oQaQ64yT7zlKhSuUTw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=InbAfCyfqUdrsz5BXIIq3+gFNGVyyZQNehV+/vUJywc8xS5BK1SdnO8MJ0II/QlFiIGr+HB3XX6EUHHtS70sPR528UHYf5l7jAOpYb9XHJ8FJ6/q88AvGWCIQTL7WPF8ihO8w8TCBD73uQKP89bq/BB/rmbaxiLhkl9qmpnrDNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=l+ofVQqw; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=I6qQDfT2rA+JEOVKewo8abG3bAt3U/SXKtJ/07rXpfYpfc0HgDQU4xQzIRQgFC+3B7qB4psithlPtMn/v3FJWrI/1J9K1y5zQRBmEXQ5UtXp4nfej0Jw5KbFki3+vIiI1gqh+YjcxhyOBlPzk6aba1DHzbkDOJzIZTJRM3NJRZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=RyUi2Q98; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="l+ofVQqw"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="RyUi2Q98"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 283B51477;
-	Fri, 24 Jul 2026 03:25:03 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 854BA1595;
+	Fri, 24 Jul 2026 03:25:08 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 997B43F66F;
-	Fri, 24 Jul 2026 03:25:01 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 99B2B3F66F;
+	Fri, 24 Jul 2026 03:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784888707; bh=5jwfmfxf7oRAwU0+Iu55SZwsCJdmgyHH7m7BYSAM9vo=;
+	t=1784888712; bh=MakI4ukXwu0PoXIFZ3JJzT172oQaQ64yT7zlKhSuUTw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l+ofVQqwbTWimElc9Yq6VbYs+ZIY7H/dk9jj9QdtduerfU0exNqtADXcl7Ebywpv3
-	 ZRiV4zFxTvg/H56JTHQbkwdG0aSB2CzrzuiXcTkiB+MAedDF3R65iR6j6/O1IqiMU6
-	 4xRa+d0vS16w4oWbEFctoDR7kk5Vb0gqzeyrt0C0=
+	b=RyUi2Q981HswYqVpjbuDTwj78A3tH8i5UuXyjlM507jXF24nM0iAqloacy8W8SZGq
+	 Dvyh7DsZXMH6UZa5BzH/h9DKlmHQ75aJzUG5l/zDDHBJHo9mI1AUhOBZZX0jOspoiM
+	 1qqdagny8325f26PjfsJ2imrsIsB9FyvfRnyIzsI=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -51,9 +51,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org,
 	sarthak.sharma@arm.com
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH v2 2/5] selftests/mm: skip guard hole-punch test if MADV_REMOVE is unsupported
-Date: Fri, 24 Jul 2026 11:24:25 +0100
-Message-ID: <20260724102431.1199519-3-usama.anjum@arm.com>
+Subject: [PATCH v2 3/5] selftests/mm: skip khugepaged swap tests without swap
+Date: Fri, 24 Jul 2026 11:24:26 +0100
+Message-ID: <20260724102431.1199519-4-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260724102431.1199519-1-usama.anjum@arm.com>
 References: <20260724102431.1199519-1-usama.anjum@arm.com>
@@ -65,53 +65,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The hole_punch case verifies that guard regions survive MADV_REMOVE and
-that the backing range is punched out.  MADV_REMOVE delegates the hole
-punch to the backing filesystem, which may reject the operation with
-EOPNOTSUPP.
+collapse_swapin_single_pte and collapse_max_ptes_swap require
+MADV_PAGEOUT to replace anonymous pages with swap entries. On swapless
+systems there is no backing store with which to create those entries,
+so check_swap() reports missing setup rather than broken khugepaged
+behavior.
 
-That result means the test cannot establish the state whose guard
-semantics it intends to validate.  Treating the missing filesystem
-capability as a guard-region failure creates a false regression.
+Swapless configurations are common on Android and other constrained
+test devices. Failing these cases obscures actionable results from the
+rest of the khugepaged suite.
 
-Unmap the range and skip only when MADV_REMOVE fails with EOPNOTSUPP.
-Preserve the assertion for all other errors so failures on supported
-configurations remain visible.
+Check /proc/swaps before either swap-dependent case and skip when no
+active swap area exists. With swap present, retain the existing
+MADV_PAGEOUT and swap-entry assertions unchanged.
 
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Print each existing swapout diagnostic before the prerequisite check
+so skip() completes a KTAP diagnostic line instead of emitting an
+unprefixed message.
+
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- tools/testing/selftests/mm/guard-regions.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Changes since v1:
+- Print swapout diagnostics before reporting no-swap skips.
+---
+ tools/testing/selftests/mm/khugepaged.c | 38 +++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
-index b21df3040b1c7..5c8ec3ca75d7d 100644
---- a/tools/testing/selftests/mm/guard-regions.c
-+++ b/tools/testing/selftests/mm/guard-regions.c
-@@ -1912,7 +1912,7 @@ TEST_F(guard_regions, hole_punch)
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 10e8dedcb087d..54e888eb48bbc 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -100,6 +100,28 @@ static void skip(const char *msg)
+ 	exit_status = KSFT_SKIP;
+ }
+ 
++static bool is_swap_enabled(void)
++{
++	char buf[MAX_LINE_LENGTH];
++	FILE *file;
++	bool enabled = false;
++
++	file = fopen("/proc/swaps", "r");
++	if (!file)
++		return false;
++
++	if (!fgets(buf, sizeof(buf), file))
++		goto out;
++
++	/* Check for first active swap entry. */
++	if (fgets(buf, sizeof(buf), file))
++		enabled = true;
++
++out:
++	fclose(file);
++	return enabled;
++}
++
+ static void save_settings(void)
  {
- 	const unsigned long page_size = self->page_size;
- 	char *ptr;
--	int i;
-+	int i, ret;
+ 	ksft_print_msg("Save THP and khugepaged settings...");
+@@ -734,10 +756,16 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
+ {
+ 	void *p;
  
- 	if (variant->backing == ANON_BACKED)
- 		SKIP(return, "Truncation test specific to file-backed");
-@@ -1944,8 +1944,12 @@ TEST_F(guard_regions, hole_punch)
- 	}
- 
- 	/* Now hole punch the guarded region. */
--	ASSERT_EQ(madvise(&ptr[3 * page_size], 4 * page_size,
--			  MADV_REMOVE), 0);
-+	ret = madvise(&ptr[3 * page_size], 4 * page_size, MADV_REMOVE);
-+	if (ret == -1 && errno == EOPNOTSUPP) {
-+		ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+		SKIP(return, "MADV_REMOVE not supported by filesystem");
++	ksft_print_msg("Swapout one page...");
++	if (!is_swap_enabled()) {
++		skip("No active swap");
++		ksft_test_result_report(exit_status, "%s\n", __func__);
++		return;
 +	}
-+	ASSERT_EQ(ret, 0);
++
+ 	p = ops->setup_area(1);
+ 	ops->fault(p, 0, hpage_pmd_size);
  
- 	/* Ensure guard regions remain. */
- 	for (i = 0; i < 10; i++) {
+-	ksft_print_msg("Swapout one page...");
+ 	if (madvise(p, page_size, MADV_PAGEOUT))
+ 		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+ 	if (check_swap(p, page_size)) {
+@@ -760,10 +788,16 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+ 	int max_ptes_swap = thp_read_num("khugepaged/max_ptes_swap");
+ 	void *p;
+ 
++	ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap + 1, hpage_pmd_nr);
++	if (!is_swap_enabled()) {
++		skip("No active swap");
++		ksft_test_result_report(exit_status, "%s\n", __func__);
++		return;
++	}
++
+ 	p = ops->setup_area(1);
+ 	ops->fault(p, 0, hpage_pmd_size);
+ 
+-	ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap + 1, hpage_pmd_nr);
+ 	if (madvise(p, (max_ptes_swap + 1) * page_size, MADV_PAGEOUT))
+ 		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+ 	if (check_swap(p, (max_ptes_swap + 1) * page_size)) {
 -- 
 2.47.3
 
