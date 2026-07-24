@@ -1,125 +1,190 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F03E28B7DA
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 22:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A70471249;
+	Fri, 24 Jul 2026 22:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784931223; cv=none; b=jfVoyeQmiy0IJHxPd3oxb6LDQVURiyg0A+tt2rmQzxpBmrDRE4LZKvN+0A/9qBLdobiKX93haGBEQUOIoioHWGKrvjqtxh967D/iDL+JA1M7vJyu0jcbV/CCXVgyspDp9VPtItE/FLUHE6+ArHDlzBvew5h9uuycdkzIbVZDfSo=
+	t=1784932214; cv=none; b=IPdt4dVtTZn+/6lz1pasLMoIEhDfrFNUlGMvIa4pfQ20GH6cZ/D9ys4BorKYy3P+oPo/f39XA/WLEeASXT1Bh+DZ2lNpDLSfLYwzSnpj4FWMgSwHnVSI4Tg48i5DIXWQW2jO1fGf3KsJsWR1V3bzfjPTnAIZDiJVUULubQIZIk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784931223; c=relaxed/simple;
-	bh=pMKpKubFx9kEgDbednVOQ47WZM90zaPgp5ftx3GTfMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QIx7ou78pdie0IpI/es0Jw9Vd8T+nj82oGqSGawzMWxYfUk20mi+T6pX170YYWiAdV6eD4rUIct6oajX+vaN8aqHS+Y+BAiX/0gMTW7eKzaC6cs93Wd+cMRXSQFEinozRCZtjrnolFD6jUQPSzUr8mZhsczfEG2GqtKEramd8ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/uu45oP; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784932214; c=relaxed/simple;
+	bh=8/w2kfEV4dpxs1e04E9KZKjsCZ7Gf858pYTInPu8Xdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JVyRJ7CjK/E3caMzGOIJV342OVZBvATw/L6XA1rnWX1Vy/XpgKHDVgJTQ8DoElGoHP3Ms5Un6S76q1y8mM9AVaBq3W26fEkcqWGM146I8J038MPMbDilbENdA7k2UlnFGXZYy+hdtdEQGRekYzSlFsreJeXB13BsWzVtCk1nO1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=lDGkdWSg; arc=none smtp.client-ip=96.67.55.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/uu45oP"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8453427d3f4so1022879b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784931222; x=1785536022; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=z2sozbBNB86MDdVFB0IAFAWmkqaPuc9KNZQmr6UjhYE=;
-        b=N/uu45oPkIawysFLAkQk6ltaKaCSqLTnkBhZBgm/UfB4EtlWngLPRwQbPVc4UdH6QS
-         NW4ozGhV1D1K2ggsNsXTCSQ9NLjWIhQXIh0uyGoSVuHWS76jTo8jWsTug5As4xCxuJ07
-         lFjT1j5tKoaIr9Iasx5scXnqPuDFkqjDVB/2o642YFIEPDjV/HDjnMKjHD52WxXIBxIP
-         owgmo1iBP+NHHWXAVrvKMzVGDxW1IRwHWKyjginBqM4FESBmSV5JmEYdVkNfDN11hCUN
-         fiy1QQeaT+5hlnweTVfEtxiMERK54bc9gz+Kymb2EQ1LSwRjp4L83nxkUn4q9VlgTXcB
-         s3Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784931222; x=1785536022;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=z2sozbBNB86MDdVFB0IAFAWmkqaPuc9KNZQmr6UjhYE=;
-        b=fj0uyXkSA5YMGV9TggKas5GuY15LnwL4KDYhn7xIrDLxJIGP3YdFbpNCgPA912Hcjx
-         mkw87Ai/uODbod9K99BFD6yz1MRyI1lu5gBz37s77ArZhx3mSOcJHPKe5uzGCVumGSDg
-         RUpIJNXjADpfIZlYauxO6e9iCYdIN/9BAO6AqVxpADZlzYJ68+38hAJY81UawJmCwqf6
-         D4H/1V3b1GVwtBFTm7K7G6laLcOVzuc6bQVar2gnyDZlB0V0cXUl3Za4cn6YNkmAuBrP
-         DydfCdGt7/Nu5DBwmL5HEyJWI+SdbL5wRigzZTrMEBBNTnAvUiz9QBUrV1g8ZtEEF3Az
-         hgPA==
-X-Forwarded-Encrypted: i=1; AHgh+RpeaR6wvuIHCvN7W+rmBHcPoTQPT7kHHXSKu92rU3CTKe3bZ04L/M1VTaUTYfHXR8SPeOVK3PvvM8B2Ao9vjug=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1SfKrpGX0fzmjyH2SjvuOTXnzhsh9xGk92wgS45/CIFhdMtQT
-	d4UBVJslAFD6c7U9Ecx21OxyJ/t8Wm4RhZq/CKPUKHclDFTHi26etdQf
-X-Gm-Gg: AR+sD123o45TgemArsx4HOf/SWIlsMHxH9kgEnOKtGXxuiMUQTDlosaJes8eNiammSl
-	RvJTbW+jz4DSdJdVm741+orMypHURO5GENU9cCs1remR/z2Yh8VFxCr1T75yamZAGUtTweVsorq
-	OYeEFs5upMBuyk3DDFAiSID9P9n7lT8eHgCaNYK+g0Mt4epnyOylW/uw4IvFW1M8BfAQXtp4cU7
-	WaJhvuvH+WgTrfWmAc43f1RmqILwd84cihjSvbv9Iq0EYYlUdvwOPyni7oA8A8qwgCvmLHqf8Y1
-	pJlS3lMy0STAg0LscEc5GfAkc+tkX/Ronee5jGDCvtQvS1WmdZuArVr0jrE5Zt/Pv4SIru+aUCT
-	Y7M/RbPNOThES/ySPIiLIEj64UPlIeb1keEXSG/oV3iFgtnawsrQOXo7YDwHgBvOQK68uSYnsS4
-	DplF2axGMZVX6pQlX34EfcU3jbGEIOrDJXpsYXErMh9rAOf14MadaWijh3ENKUwjRtPhPxTLZ1o
-	gHTtkXXkbg=
-X-Received: by 2002:a05:6a00:982:b0:848:6720:6fee with SMTP id d2e1a72fcca58-84e59544f08mr53110b3a.40.1784931221615;
-        Fri, 24 Jul 2026 15:13:41 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:48::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e5344e577sm443138b3a.58.2026.07.24.15.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 15:13:40 -0700 (PDT)
-Date: Fri, 24 Jul 2026 15:13:37 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
-	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com,
-	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk,
-	Joe Damato <joe@dama.to>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 3/3] selftests/net: devmem.py: add
- check_rx_large_niov
-Message-ID: <amPjkerd2duU2DH4@devvm29614.prn0.facebook.com>
-References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
- <20260708-tcpdm-large-niovs-v5-3-34bf6fac941b@meta.com>
- <20260721110903.34840531@kernel.org>
- <amPTWGX/3LHepYR3@devvm29614.prn0.facebook.com>
- <20260724143001.5afa8631@kernel.org>
- <amPbqtxPdhs9QrVP@devvm7509.cco0.facebook.com>
- <20260724150716.07c49ad8@kernel.org>
+	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="lDGkdWSg"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
+	; s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=phv1B9Yxat6YIEopEPUTNjYYzL54eFSY9r4GoCdruM0=; b=lDGkdWSgenq2WUBSSLwgIoU2bb
+	iq5fO5pwGwjNj4bxQlt4EaiKdpGhKGWYtAlH8V4HscBe+rLdz3LpbJ1rz4Eo+8VHi5Cf2YozwpoKa
+	/EOf7b6Fj1trVqdHRewh1VGmUqt2Uelwy48tNNXJNpUrXhxN2zVXjdupFpQVDCV2E7dnQLmXL8+iR
+	L2uoBhWRMCi66UhaWFlC12UuNvV8vGwQzSm9dIYb5f6FEjYNYvE+3V+Vz3IqDYqTDL0zb61Ac86UM
+	/peYQvZJXj0L62/5Os+HC3VsJDdWWxk6zGgLEgSYvF8x6yeOIqsGogSrLBPrd15tBYdhgtMl7L8QJ
+	6fXo9UZA==;
+Received: from fangorn.home.surriel.com ([10.0.13.7])
+	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <riel@surriel.com>)
+	id 1wnOOs-0000000027h-1kjG;
+	Fri, 24 Jul 2026 18:29:50 -0400
+From: Rik van Riel <riel@surriel.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kernel-team@meta.com,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Usama Arif <usamaarif642@gmail.com>,
+	Rik van Riel <riel@surriel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH RFC v4 08/12] selftests/mm: cover /proc/pid/mem access to VM_PFNMAP memory
+Date: Fri, 24 Jul 2026 18:29:30 -0400
+Message-ID: <20260724222934.1463812-9-riel@surriel.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260724222934.1463812-1-riel@surriel.com>
+References: <20260724222934.1463812-1-riel@surriel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260724150716.07c49ad8@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 24, 2026 at 03:07:16PM -0700, Jakub Kicinski wrote:
-> On Fri, 24 Jul 2026 14:41:47 -0700 Stanislav Fomichev wrote:
-> > > > Talked to Stan and he mentioned the original idea was not necessarily
-> > > > just for link down, but any test that could be considered disruptive to
-> > > > other tests, with the idea to eventually introduce some scheduling
-> > > > (postpone disruptive until the end).  
-> > > 
-> > > Perhaps have such conversations on the list? IDK what Stan has in mind.  
-> > 
-> > I don't have much to add so I didn't post on the list. In my mind, disruptive
-> > started as "anything that can lead to a soft reset". But since the
-> > sockets tend to survive these well, I do agree that your definition
-> > of "link goes down" is a better fit.
-> 
-> My recollection was basically that the test is not safe to run over
-> SSH (without tmux). Hence the link down concern. If we say soft reset
-> that'd cover 95% of the tests so it's not very useful.
-> 
-> The existing doc and README already document the link down AFAICT.
+Reading a VM_PFNMAP mapping through /proc/pid/mem exercises
+__access_remote_vm() two ways: a COWed page has a struct page and is
+returned by get_user_page_vma(), while a raw PFN has none and is reached
+through vma->vm_ops->access().
 
-Indeed, so I'll just test and confirm if devmem's existing
-ksft_disruptive tests do or can cause link down, and submit a patch
-removing for those that don't.
+Add two tests to pfnmap.c, both reading VM_PFNMAP memory through
+/proc/self/mem.
+
+procmem_cow_read maps the file MAP_PRIVATE and writable, writes to COW a
+page, then reads it back. Without the struct-page path in
+get_user_page_vma() this read is short: the access falls back to
+generic_access_phys(), which ioremaps the PFN, and ioremap of a COWed RAM
+page is rejected.
+
+procmem_pfn_read reads a raw PFN back through ->access(). ioremap rejects
+RAM, so it runs only for genuine device memory and is skipped for the
+default /dev/mem System RAM target.
+
+Assisted-by: Claude:claude-opus-4.8
+Signed-off-by: Rik van Riel <riel@surriel.com>
+---
+ tools/testing/selftests/mm/pfnmap.c | 66 +++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+index 4f550822385a..6ff5d1029517 100644
+--- a/tools/testing/selftests/mm/pfnmap.c
++++ b/tools/testing/selftests/mm/pfnmap.c
+@@ -31,6 +31,7 @@ static sigjmp_buf sigjmp_buf_env;
+ static char *file = "/dev/mem";
+ static off_t file_offset;
+ static int fd;
++static int target_is_ram;
+ 
+ static void signal_handler(int sig)
+ {
+@@ -113,6 +114,7 @@ static void pfnmap_init(void)
+ 		if (err)
+ 			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
+ 				       strerror(-err));
++		target_is_ram = 1;
+ 	} else {
+ 		file_offset = 0;
+ 	}
+@@ -271,6 +273,70 @@ TEST_F(pfnmap, fork)
+ 	ASSERT_EQ(ret, 0);
+ }
+ 
++TEST_F(pfnmap, procmem_cow_read)
++{
++	char *priv, *buf;
++	ssize_t rc;
++	int mem_fd;
++
++	/*
++	 * A COWed page in a VM_PFNMAP mapping has a struct page, so reading it
++	 * through /proc/self/mem -- __access_remote_vm() -> get_user_page_vma()
++	 * -- returns it directly, instead of routing to vma->vm_ops->access(),
++	 * which ioremaps the PFN and cannot reach a COWed RAM page.
++	 *
++	 * Map the file MAP_PRIVATE and writable, write to COW a page into anon
++	 * memory, then read the page back through /proc/self/mem.
++	 */
++	self->size2 = self->pagesize;
++	self->addr2 = mmap(NULL, self->size2, PROT_READ | PROT_WRITE,
++			   MAP_PRIVATE, fd, file_offset);
++	if (self->addr2 == MAP_FAILED)
++		SKIP(return, "Cannot create a writable private pfnmap mapping");
++	priv = self->addr2;
++
++	/* COW the page and stamp known bytes into the anon copy. */
++	priv[0] = 0x42;
++	priv[self->pagesize - 1] = 0x24;
++
++	buf = malloc(self->pagesize);
++	ASSERT_NE(buf, NULL);
++
++	mem_fd = open("/proc/self/mem", O_RDONLY);
++	ASSERT_GE(mem_fd, 0);
++	rc = pread(mem_fd, buf, self->pagesize, (off_t)(uintptr_t)priv);
++	close(mem_fd);
++
++	ASSERT_EQ(rc, (ssize_t)self->pagesize);
++	EXPECT_EQ(buf[0], 0x42);
++	EXPECT_EQ(buf[self->pagesize - 1], 0x24);
++
++	free(buf);
++}
++
++TEST_F(pfnmap, procmem_pfn_read)
++{
++	char buf[64];
++	ssize_t rc;
++	int mem_fd;
++
++	/*
++	 * A raw PFN of a VM_IO/VM_PFNMAP mapping has no struct page, so
++	 * __access_remote_vm() reaches it through vma->vm_ops->access()
++	 * (generic_access_phys()). That ioremaps the PFN, which is rejected for
++	 * RAM, so this only applies to genuine device memory.
++	 */
++	if (target_is_ram)
++		SKIP(return, "Target is System RAM; ->access() cannot ioremap RAM");
++
++	mem_fd = open("/proc/self/mem", O_RDONLY);
++	ASSERT_GE(mem_fd, 0);
++	rc = pread(mem_fd, buf, sizeof(buf), (off_t)(uintptr_t)self->addr1);
++	close(mem_fd);
++
++	ASSERT_EQ(rc, (ssize_t)sizeof(buf));
++}
++
+ int main(int argc, char **argv)
+ {
+ 	for (int i = 1; i < argc; i++) {
+-- 
+2.53.0-Meta
+
