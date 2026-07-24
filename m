@@ -1,345 +1,132 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D7D471CE4;
-	Fri, 24 Jul 2026 22:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41EC4749EA;
+	Fri, 24 Jul 2026 23:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784932223; cv=none; b=gA+qC8J0kphJs27t0AJky3rElHOp3Fvyds/iQNoRFtFGnbeTvZTQqagD6579Wushlj+2tDKZe53rQWfaCqlSsxtGYZc0xnRhahpHZ691/atGunMLdSvGvC+ZMzwGL+q+KSYmw2YkmNN396Z6+9+kruBsD6kj4jL87pZDkoxNUdk=
+	t=1784935921; cv=none; b=MH3du710l+5yQHOtymGDSW99lGliZ5Ss97ltiZDyVNVz64aZNcwjEdH+4uxryx3aIsHEtk6i7G+QwMBdg4P781qpqe+mmZs4YMYpqDOaj8wFdtohteI0mVl9GaJ9u1mVqt1EDgpNG5PLnRu2ZvcoK3WGQ0AXvNYHs4sezQTEyVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784932223; c=relaxed/simple;
-	bh=12LwphxrahrvDgBEuP7aeSaCsbNQvpBj8hd/rK7JMZc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EpFAilRLEeWYiKn6joEFbh8XQIg1b3YlqcevrW1oSBnSUsL0cTpvhKy8N1iVmO7AwrwQZDqiEzjWkSaaI6TO1I4wI+AYGq2eK3XQ9yk8riU68k8hAFFSLj78eNAzoDyShkREP/i10ldUUjOMc3q76qM+DU6g3S6VIjL1TEDBnSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=j9VXakYJ; arc=none smtp.client-ip=96.67.55.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
+	s=arc-20240116; t=1784935921; c=relaxed/simple;
+	bh=GChuWHtHeEaZjIXTwv7AMY4nFwKkG1u1PFK2c5gtOBg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RCGmvsnrn3Riq0FIAzA8u+tLEqT+olXiPjgeIY4hI7XCQxKaGJQJ3Nt+jGIR+4XsJVFIL8X1qjTA2CpIYpG3rNHuOnBY8Cnj+uCews0UvEjLJBgSDkCxihH7YtF8SB6FculAZDUXB0azShIIkdN2CNfjjFpn1Y8LPw/9BfrbJf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SpUx5yxw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="j9VXakYJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
-	; s=mail; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=QoasW0kcbLRMqvkHf+Serx6XJgI4VH5CVkhXEbwylBk=; b=j9VXakYJJ/PDqAUv2OdbSq8VPc
-	aERUc+tTW4sVfW6m5IUzJR0guy+ydhBDDxWUluYcqM7Ez8y6hdimGk6KrqTs70NkVhRpuwOoHQNTu
-	ZZFPqJl8o4utuNCC6WlF8tlaR4Ubj2Tjw00gPLLHnWPX6qdCkT0AxX0w/OqaGqTOFzfZw4nZdfstu
-	xLIJ5Fcem+GwhEfkimifB3M4xGgfxPk59FCH6H7OwCGjg9ldqWmBsf0njYcEjFIuLlHsJL3NFrnli
-	2ZWQkHIA+9Gx53I7ymyXSAOSVoUw9mxYolW5RZrDGQtBj1iyOyEb8mGiLC/FUEeMRVyh2lwbiF3Ba
-	jEqHE4Ig==;
-Received: from fangorn.home.surriel.com ([10.0.13.7])
-	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <riel@surriel.com>)
-	id 1wnOOs-0000000027h-2FDa;
-	Fri, 24 Jul 2026 18:29:50 -0400
-From: Rik van Riel <riel@surriel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	kernel-team@meta.com,
-	Dave Hansen <dave.hansen@linux.intel.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SpUx5yxw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30111F00A3A;
+	Fri, 24 Jul 2026 23:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784935920;
+	bh=g/yMs5mpbraIdgJi4+gGtVX5xQCwfhYjp398n0dthvo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=SpUx5yxwVOVlZQgCYulYiAXs7IgrFjbDwRPdioIeTQk6Q6ErZH+frNylFd5zEP8kH
+	 hXoTlUqjlYWmbmZzdaoVe0UamntjcckDxAPBGsEJrfqGGC8Dgvd8t7BKB+rrHZH+22
+	 cH4Hzdx1945z2OLgRkuAuLp3SMxNQ+vbHHi3YiUdBN37wbdqAtyUc4784f0XVEZXhV
+	 ACvA0v2f5CxYhmnVo+fLfMHRuTpybgXFQOO26kPxkrNFaLXw38mJEmT8ViYZ4uE7NJ
+	 YxeOL+FHoWDwy/RdzEG/0I9H1abqUmBVlKGVSCF0tTakefqC4zSWsY/0lIM9uTBT6Y
+	 4fBYVHT4TvpAA==
+Date: Fri, 24 Jul 2026 19:31:52 -0400
+From: Namhyung Kim <namhyung@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: James Clark <james.clark@linaro.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Usama Arif <usamaarif642@gmail.com>,
-	Rik van Riel <riel@surriel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC v4 12/12] selftests/mm: add a slow-GUP content and COW test for mTHP
-Date: Fri, 24 Jul 2026 18:29:34 -0400
-Message-ID: <20260724222934.1463812-13-riel@surriel.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260724222934.1463812-1-riel@surriel.com>
-References: <20260724222934.1463812-1-riel@surriel.com>
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+Message-ID: <amP16I_cn58hhupT@google.com>
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+ <algbxQAAmurxms8X@google.com>
+ <DK6Z25AV02BM.3KXO0EMCMP2W9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DK6Z25AV02BM.3KXO0EMCMP2W9@gmail.com>
 
-follow_page_mask() now batches a PTE-mapped large folio (mTHP) into one
-contiguous run for the slow get_user_pages() path. A mis-batched run would
-hand back the wrong pages or a stale COW copy, which the existing tests do
-not catch: gup_test checks only pin/unpin integrity, and cow exercises COW
-mostly at PMD size.
+On Fri, Jul 24, 2026 at 07:19:45PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Thu Jul 16, 2026 at 1:46 AM CEST, Namhyung Kim wrote:
+> > Hello BPF folks,
+> >
+> > On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
+> >> I ran into the build issue mentioned in the first commit, because using
+> >> an option like LLVM=-15 is a documented way to build [1], but only
+> >> some of the LLVM tools defined in tools/ support this.
+> >>
+> >> After fixing that, a lot of other tidyups fell out. I didn't go too far,
+> >> for example some selftests include tools/testing/selftests/lib.mk which
+> >> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+> >> tools/scripts/Makefile.include and I stopped before touching the former.
+> >> Some other non build scripts hard code toolchains and I didn't touch
+> >> those either, this change is only focused on things that already
+> >> include Makefile.include.
+> >>
+> >> [1]: Documentation/kbuild/llvm.rst
+> >>
+> >> Signed-off-by: James Clark <james.clark@linaro.org>
+> >> ---
+> >> Changes in v4:
+> >> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
+> >>   already picks the correct sibling lld version. (Sashiko)
+> >> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org
+> >>
+> >> Changes in v3:
+> >> - Add warning for empty $USE_LD
+> >> - Use $HOSTREADELF in bpf Makefile
+> >> - Rebase on v7.2-rc3
+> >> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
+> >>
+> >> Changes in v2:
+> >> - Fix selftests/bpf build. LLD needs to take the full path to be used
+> >>   with -fuse-ld=
+> >> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
+> >>
+> >> ---
+> >> James Clark (4):
+> >>       tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+> >>       tools/build: Indent if else blocks
+> >>       tools/build: Allow versioning LLVM readelf
+> >>       tools/build: selftests: Remove some duplicate toolchain definitions
+> >>
+> >>  tools/bpf/resolve_btfids/Makefile    |  3 --
+> >>  tools/lib/api/Makefile               |  4 --
+> >>  tools/lib/bpf/Makefile               |  8 ++--
+> >>  tools/lib/subcmd/Makefile            |  4 --
+> >>  tools/lib/symbol/Makefile            |  4 --
+> >>  tools/perf/Makefile.perf             |  7 ----
+> >>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+> >>  tools/testing/selftests/bpf/Makefile |  1 -
+> >>  8 files changed, 46 insertions(+), 62 deletions(-)
+> >
+> > Are you ok with this change and going through perf tree?
+> >
+> 
+> Sorry for the delay, yes, feel free to take it through your tree.
 
-Add mthp_gup_cow_test. It forces 64kB-only mTHP, writes a per-page-distinct
-pattern, then pins the region on the slow path (PIN_LONGTERM without
-USE_FAST) and compares the bytes the kernel copies back from the pinned
-pages against that pattern.
+Thanks, can I take it as your Acked-by?
 
-The test covers a read pin, a write pin, and COW after fork(): a child
-write-pins to force per-page unshare and checks the copied contents, then
-rewrites its copy while the parent verifies its own contents are intact.
-
-It also reports how many pages sit in contiguous large-folio runs, so a
-kernel without mTHP shows light coverage rather than passing vacuously.
-
-Assisted-by: Claude:claude-opus-4.8
-Signed-off-by: Rik van Riel <riel@surriel.com>
----
- tools/testing/selftests/mm/Makefile           |   1 +
- .../testing/selftests/mm/mthp_gup_cow_test.c  | 213 ++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh     |   1 +
- 3 files changed, 215 insertions(+)
- create mode 100644 tools/testing/selftests/mm/mthp_gup_cow_test.c
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index e6df968f0971..6b917a4f73e0 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -83,6 +83,7 @@ TEST_GEN_FILES += mrelease_test
- TEST_GEN_FILES += mremap_dontunmap
- TEST_GEN_FILES += mremap_test
- TEST_GEN_FILES += mseal_test
-+TEST_GEN_FILES += mthp_gup_cow_test
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
- TEST_GEN_FILES += pfnmap
-diff --git a/tools/testing/selftests/mm/mthp_gup_cow_test.c b/tools/testing/selftests/mm/mthp_gup_cow_test.c
-new file mode 100644
-index 000000000000..52ee329d8641
---- /dev/null
-+++ b/tools/testing/selftests/mm/mthp_gup_cow_test.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Verify that the slow GUP path (pin_user_pages -> follow_page_mask ->
-+ * follow_pte_batch) returns the correct pages for a PTE-mapped large folio
-+ * (mTHP), including that COW copies produce the right content.
-+ *
-+ * Uses the CONFIG_GUP_TEST PIN_LONGTERM interface: START pins a range on the
-+ * slow path, READ copies the pinned pages' bytes back so we can compare them
-+ * against the pattern we wrote.
-+ */
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stdint.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <linux/types.h>
-+
-+#define ARRAY_SIZE(a)	(sizeof(a) / sizeof((a)[0]))
-+
-+#define GUP_DEV "/sys/kernel/debug/gup_test"
-+
-+#define PIN_LONGTERM_TEST_START	_IOW('g', 7, struct pin_longterm_test)
-+#define PIN_LONGTERM_TEST_STOP	_IO('g', 8)
-+#define PIN_LONGTERM_TEST_READ	_IOW('g', 9, __u64)
-+#define USE_WRITE	1
-+#define USE_FAST	2
-+
-+struct pin_longterm_test {
-+	__u64 addr;
-+	__u64 size;
-+	__u32 flags;
-+};
-+
-+#define ORDER_KB	64
-+#define NR_FOLIOS	16
-+#define REGION		((size_t)ORDER_KB * 1024 * NR_FOLIOS)
-+
-+static long PS;
-+static int fails;
-+static int tap;
-+
-+static void ok(int cond, const char *desc)
-+{
-+	printf("%s %d %s\n", cond ? "ok" : "not ok", ++tap, desc);
-+	if (!cond)
-+		fails++;
-+}
-+
-+/* Deterministic, per-page-distinct pattern so any mis-order or leak shows. */
-+static void fill(char *base, size_t sz, uint32_t salt)
-+{
-+	for (size_t off = 0; off < sz; off += PS) {
-+		uint32_t k = off / PS;
-+		uint64_t v = ((uint64_t)salt << 32) ^ (k * 0x9E3779B1u + 0x1234);
-+
-+		for (size_t i = 0; i < PS; i += sizeof(v))
-+			memcpy(base + off + i, &v, sizeof(v));
-+	}
-+}
-+
-+static int wsysfs(const char *path, const char *val)
-+{
-+	int fd = open(path, O_WRONLY);
-+
-+	if (fd < 0)
-+		return -1;
-+	int r = write(fd, val, strlen(val));
-+
-+	close(fd);
-+	return r < 0 ? -1 : 0;
-+}
-+
-+/* Force sub-PMD 64kB mTHP only, so faults produce PTE-mapped large folios. */
-+static void setup_mthp(void)
-+{
-+	const char *thp = "/sys/kernel/mm/transparent_hugepage";
-+	char p[256];
-+	static const int kb[] = { 16, 32, 64, 128, 256, 512, 1024, 2048 };
-+
-+	wsysfs("/sys/kernel/mm/transparent_hugepage/enabled", "never");
-+	for (unsigned int i = 0; i < ARRAY_SIZE(kb); i++) {
-+		snprintf(p, sizeof(p), "%s/hugepages-%dkB/enabled", thp, kb[i]);
-+		wsysfs(p, kb[i] == ORDER_KB ? "always" : "never");
-+	}
-+}
-+
-+/* Count how many pages sit in a contiguous >=ORDER_KB PFN run (via pagemap). */
-+static int count_large_pages(char *base, size_t sz)
-+{
-+	int pm = open("/proc/self/pagemap", O_RDONLY);
-+	size_t n = sz / PS, large = 0;
-+	uint64_t *pfn = calloc(n, sizeof(*pfn));
-+
-+	if (pm < 0)
-+		return -1;
-+	for (size_t k = 0; k < n; k++) {
-+		uint64_t ent;
-+		off_t idx = ((uintptr_t)base + k * PS) / PS * sizeof(ent);
-+
-+		if (pread(pm, &ent, sizeof(ent), idx) != sizeof(ent) ||
-+		    !(ent & (1ULL << 63)))
-+			pfn[k] = 0;
-+		else
-+			pfn[k] = ent & ((1ULL << 55) - 1);
-+	}
-+	close(pm);
-+	for (size_t k = 0; k < n; k++)
-+		if (k + 1 < n && pfn[k] && pfn[k + 1] == pfn[k] + 1)
-+			large++;
-+	free(pfn);
-+	return large;
-+}
-+
-+/* Pin @base..@sz on the slow path, read the pinned bytes back, compare to exp. */
-+static int pin_verify(int fd, char *base, size_t sz, uint32_t wr, char *exp)
-+{
-+	struct pin_longterm_test a = {
-+		.addr = (uintptr_t)base, .size = sz,
-+		.flags = wr ? USE_WRITE : 0,		/* USE_FAST unset => slow */
-+	};
-+	char *got = mmap(NULL, sz, PROT_READ | PROT_WRITE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	__u64 ga = (uintptr_t)got;
-+	int rc = -1;
-+
-+	if (got == MAP_FAILED)
-+		return -1;
-+	if (ioctl(fd, PIN_LONGTERM_TEST_START, &a)) {
-+		fprintf(stderr, "START(%s) failed: %s\n",
-+			wr ? "write" : "read", strerror(errno));
-+		goto out;
-+	}
-+	if (ioctl(fd, PIN_LONGTERM_TEST_READ, &ga)) {
-+		fprintf(stderr, "READ failed: %s\n", strerror(errno));
-+		ioctl(fd, PIN_LONGTERM_TEST_STOP);
-+		goto out;
-+	}
-+	ioctl(fd, PIN_LONGTERM_TEST_STOP);
-+	rc = memcmp(got, exp, sz) ? 1 : 0;
-+out:
-+	munmap(got, sz);
-+	return rc;
-+}
-+
-+int main(void)
-+{
-+	PS = sysconf(_SC_PAGESIZE);
-+	setup_mthp();
-+
-+	int fd = open(GUP_DEV, O_RDWR);
-+
-+	if (fd < 0) {
-+		fprintf(stderr, "open %s: %s (CONFIG_GUP_TEST?)\n",
-+			GUP_DEV, strerror(errno));
-+		return 2;
-+	}
-+
-+	char *r = mmap(NULL, REGION, PROT_READ | PROT_WRITE,
-+		       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (r == MAP_FAILED) {
-+		perror("mmap");
-+		return 2;
-+	}
-+	fill(r, REGION, 0xA1);				/* pattern P */
-+	char *expP = malloc(REGION);
-+
-+	memcpy(expP, r, REGION);
-+
-+	int large = count_large_pages(r, REGION);
-+
-+	printf("# %d/%zu pages in contiguous large-folio runs\n",
-+	       large, REGION / PS);
-+	if (large < (int)(REGION / PS) / 4)
-+		printf("# WARN: little mTHP backing; batch path lightly covered\n");
-+
-+	/* A: read pin over writable mTHP -> batches -> content must equal P. */
-+	ok(pin_verify(fd, r, REGION, 0, expP) == 0,
-+	   "slow read-pin of mTHP returns correct contents");
-+
-+	/* B: write pin -> FOLL_WRITE batch path -> content must equal P. */
-+	ok(pin_verify(fd, r, REGION, 1, expP) == 0,
-+	   "slow write-pin of mTHP returns correct contents");
-+
-+	/* C: COW isolation. Child write-pins (unshares) then rewrites; parent P. */
-+	pid_t pid = fork();
-+
-+	if (pid == 0) {
-+		int cfd = open(GUP_DEV, O_RDWR);
-+		int a = pin_verify(cfd, r, REGION, 1, expP);	/* COW copy == P */
-+
-+		fill(r, REGION, 0xB2);			/* child writes Q */
-+		_exit(a == 0 ? 0 : 1);
-+	}
-+	int st = 0;
-+
-+	waitpid(pid, &st, 0);
-+	ok(WIFEXITED(st) && WEXITSTATUS(st) == 0,
-+	   "child write-pin after COW returns correct (copied) contents");
-+	ok(memcmp(r, expP, REGION) == 0,
-+	   "parent contents intact after child COW writes");
-+	/* D: parent read-pin again after the COW split still correct. */
-+	ok(pin_verify(fd, r, REGION, 0, expP) == 0,
-+	   "parent slow read-pin after COW still correct");
-+
-+	printf("# totals: pass:%d fail:%d\n", tap - fails, fails);
-+	return fails ? 1 : 0;
-+}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 8c296dedf047..b49a3eb0c205 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -289,6 +289,7 @@ fi
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
- CATEGORY="gup_test" run_test ./gup_longterm
-+CATEGORY="gup_test" run_test ./mthp_gup_cow_test
- 
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
- uffd_stress_bin=./uffd-stress
--- 
-2.53.0-Meta
+Namhyung
 
