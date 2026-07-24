@@ -1,106 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B603E3D89;
-	Fri, 24 Jul 2026 14:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C147C4477EE
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784903066; cv=none; b=pALLwFKZDoszipAtrwHYKHFILwPJQnSgM4GzeWMGpjinfd3QSfBk4Yp9sSAN0XMskYfO78Mib91VAoHnKsTsASOx8wQmMQU56G5536cfVHRIu/YGnXV5+HBhS6VMFABmMQwLniWgz9wIVR60ykAxGXdpp/2ht/GsZq/reHfK7Ik=
+	t=1784905598; cv=none; b=T9ay15V7HtXF3h0X8JnJa51lBfaUezsWn/wrGFzgb/1XZ6Dpp+fycjxG0AhVrHSSuXWXPO9sYYhG7E84wVxGwyJ3YA+D1c6IAv5tKon13RhjyBUOkMVLthO6FKeI1yRzoOuM7NJojjL9f03fxfDrZsWBKXnxLvJsdSB/pyTNAdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784903066; c=relaxed/simple;
-	bh=K7NR1KenE85O5AVNDtB+QDIDdcnCgBkPnfDjB4v98Pg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pgBhVftKf/W3vvwuZZECJFgsCaSrj02rWw5MNMGz8scbADrYpDvZT5Vl/r7qmIdMV/6Skawddc+RgpRos6PgtS++gBCTOpSlUiP2yQ6D6JFCJrR5XMs0tcs0RpgLwwszPiCDUFo8Tnwz/TwdMqS+TGSby/KLRRQJE9CT24wc/tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lkjGVVSx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784905598; c=relaxed/simple;
+	bh=k2IZxo+RQvcI6PXmn2CgQ7Kxmkd9qEBrLBFwu9yl9ww=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MYNlMoHg6b9I/6RvurhorqXWTmnGuR98ZlBMHfGSRsIk+EC+JMnCLpcNhUgFPJDrRkgb/kDy23UfKpGLeHPK8s8yKxK+b9cSLnUaJ+u+93zzajrFdYQ1tx15JjeNhJUMpiSDks8oqZ8PEFJRP24iaTcI27ywJ+jjL2ZqIhB63lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAy2kBcL; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lkjGVVSx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7341F000E9;
-	Fri, 24 Jul 2026 14:24:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784903061;
-	bh=qVSKDC8t6hmFB8d5DchFcQsD5mrGgiBdRFoTRem4F7Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=lkjGVVSxy6IrXFoXa03Qc5UwKMemlqWxJ6ZPceECyfTcXzQItRF1XlPzBRA5nYTvl
-	 iUW8wEAy5VCEYzUbl2aLzXuuKIhM2meRLuK//wd/koBq2qLW7/8XkGmBRBLnKyqzFe
-	 2BTpcGi5T6qt9fRPdQXkpnvPp+H/vZJChl8pBerTc6O7MOclrjZm3kphetNpFKidTu
-	 sK+cfBP/XGEayroxUzcEBT63urFbsAWhOBcoIP6KchBQY3ch8GcYgwctpMMkOiTH9o
-	 ET2PImBCKiAiVNXbBU+AvuC3EIdMjD5Otn8DXC5fqpZR9zV5wh6kfPr3MoK8NT9YbL
-	 FMKd0/Iw1zC7A==
-Date: Fri, 24 Jul 2026 07:24:19 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, Vivek Kasireddy
- <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
- sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net,
- almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
- dw@davidwei.uk, Joe Damato <joe@dama.to>, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 1/3] net: devmem: allow rx-buf-size >
- PAGE_SIZE per dmabuf binding
-Message-ID: <20260724072419.62778bbe@kernel.org>
-In-Reply-To: <amKqlqgfZipKjrii@devvm29614.prn0.facebook.com>
-References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
-	<20260708-tcpdm-large-niovs-v5-1-34bf6fac941b@meta.com>
-	<20260721110713.325d36ba@kernel.org>
-	<amKqlqgfZipKjrii@devvm29614.prn0.facebook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAy2kBcL"
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-74d55dac06eso238417137.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 08:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784905593; x=1785510393; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=x2AhQYo9R5DmlVUQgPw/1HHJB2ak8KRQjAhLOo34IsY=;
+        b=dAy2kBcLmXLdDu2gBN7QfotWbwUU/7SVmzQDcoNZdMomTBo222gI6Ut/iFJxYpbnTO
+         FXJmDugqEi9v2MMls/p7dBZfC3+0WNGegpy2HnH46AO6H7QHFRBvYKZOa2vmAdK7JKf7
+         +H/8P++HFVAMAv7ED28tKpQ9V7qJZv3AQwdhiUq0EAzRX+lZAuDEu6KHN7uBN95yNUFl
+         5ehJwcERw2vdHsPk/3bWuTBvSFYxY3NG5Z8JUAaXZ7wTXPiNUOeSdOIP8Y1ZKJPJ4noB
+         KDURnFnN9EQ5+k1cW3ZfmbUcb1ZwV64jildulqUxHDnNGJJwn0m3QpQQ/gmg3ef1PCGj
+         6vmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784905593; x=1785510393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=x2AhQYo9R5DmlVUQgPw/1HHJB2ak8KRQjAhLOo34IsY=;
+        b=VBvQFl6Ik10zjkIgX+PtiGPE+O0ib7CH7a4qhKVH1C7vd/IrGgpcRNB4F6LfMaeASh
+         9u73V7J1BJ8UU/s+//vbdeOXFt1HtV8gXMEMxspmU6rOgQpt5A4Uk9VFUjjJaSe5YZ/c
+         Fx+BXoo7cG4UnzTeYBpkLZCa55SD9kTkKh5gKsv2wKNsAKcuKHzXhddia+qmW4gNZuym
+         XmJ6/dhzTCPep5i0cI58S4wQE9z79fM8JwAe1QpsQbopAbFcEgcDNERi+lJa8L7e20ZC
+         W9OLR0X0g4ntEk5281KrotGCzCuSs8s4yoKRzRczKrLaJpBLNsOMYX/S9P4PsYtkcV0J
+         d2RA==
+X-Forwarded-Encrypted: i=1; AHgh+RpGT/Suzssc1QheCmqZ8RHsRWQi0mn189uL1LrSjMTsnD0+vfLuosXP1oXdSvdxkboOUAbx3MMk0eZUSwWjiHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0PJWg+9McEvvDXD/l8sxY9QhyqI+GkbJ1hKYW9wMmk/mPtDk/
+	rjsn9Gmt4/o3qUUFNpJMnP9LawVDGmuz/nLt2rmOAqAQCJFMaXphktvs9NsPe/q6/YE=
+X-Gm-Gg: AR+sD11kEEsgaIeSI4ex7MkXGCnPzNx27+saamIFewqHsRTNuchIR12z8OqE/c9thjH
+	M3UrpPqDnfey+C/PDgbC9l4XpBhxUejSQxry5GuqF3AWpIdkJWXa+o73tC9k3Y8ilGcBhVplX2V
+	U1T0YA1H3F5Pfr1wp+YJoHXb2XKnMH8nQ5ADHxTQYLOpEW2JdxCQ02DALToFIaBgKvyMFM455k6
+	GELaxqpc1JJ7cKbw6Lz8+ArN3xTWKvb9t1Q8Bj1WYHuAc4zku8XZ3MPEbPnVmjykkKmzK/dHebS
+	Ga2VJUg5I28tSYYbUzZICJCLIRn7GPfVwfv0rLRB1RTNo8xzDs6nVme4tgPBMaqC8Lm4qA9HteM
+	3Ya55qcS7IoF4FDrJhi1U9BL0exPlY/sPwEqEydzG7eA/Bm57X8QQR0JnKO5v6WI4ptyl6w==
+X-Received: by 2002:a05:6102:390e:b0:739:a2d:9621 with SMTP id ada2fe7eead31-74d5fbd5eebmr4372851137.13.1784905592834;
+        Fri, 24 Jul 2026 08:06:32 -0700 (PDT)
+Received: from houminxi ([72.244.37.221])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-74ad32165f4sm7744810137.6.2026.07.24.08.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 08:06:32 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	i.maximets@redhat.com,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v6 0/2] selftests/net/openvswitch: add SCTP flow key test
+Date: Fri, 24 Jul 2026 11:06:22 -0400
+Message-ID: <20260724150624.3457427-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 23 Jul 2026 16:58:14 -0700 Bobby Eshleman wrote:
-> > > +	if (info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]) {
-> > > +		u32 rx_buf_size = nla_get_u32(info->attrs[NETDEV_A_DMABUF_RX_BUF_SIZE]);
-> > > +
-> > > +		if (!rx_buf_size || !is_power_of_2(rx_buf_size) ||
-> > > +		    rx_buf_size < PAGE_SIZE) {  
-> > 
-> > we should add a check: min: page-size in the Netlink policy?  
-> 
-> I played around with this adding:
-> 
-> Documentation/netlink/specs/netdev.yaml:
->  definitions:
->  +  -
->  +    type: const
->  +    name: page-size
->  +    value: 4096  # dummy value, to pass ynl_gen_c.py checks
->  +    header: asm/page.h
->  +    scope: kernel
-> 
-> Generating:
-> 
-> +static const struct netlink_range_validation
-> netdev_a_dmabuf_rx_page_size_range = {
-> +       .min    = PAGE_SIZE,
-> +       .max    = U32_MAX,
-> +};
-> +
-> 
-> ... but the dummy 4096 is kind of annoying. ynl_gen_c.py can't know the
-> value of PAGE_SIZE but needs some value for its arithmetic checks (e.g.,
-> confirm min < max is true).
-> 
-> Should we stick with using a dummy value, or should we add a patch
-> teaching ynl_gen_c.py to allow value-less consts (skip the arithmetic
-> checks)? 
+v5 failed in NIPA: the kernel rejected the SCTP-keyed flow with
+EINVAL(22) in add_flow. Root cause: v5 installed flows containing
+sctp() via ovs-dpctl.py without registering OVS_KEY_ATTR_SCTP in its
+flow-string parse table, so the parser silently dropped the L4 key;
+the kernel mandates the SCTP key when ipv4.proto == IPPROTO_SCTP
+(match_validate() in flow_netlink.c) and returns -EINVAL.
 
-Let's stick to a dummy one for now, but maybe something obviously dummy
-like 0 ?
+The parse-table entry was present in v1-v4 and was accidentally
+dropped in the v4->v5 respin. v6 splits the fix from the test so each
+patch stands on its own: patch 1 restores SCTP parsing in ovs-dpctl.py
+(the NIPA fix) with unit tests, patch 2 adds the SCTP flow key test
+(same goal as v5).
 
-BTW did you add both min and max checks? Cause the only risk with using
-a dummy value would be that the policy will be rendered inline, and
-inline policy is u16 so 64k wouldn't fit. But your sample above has a
-max of u32_max which forces the out-of-line policy, which is what we
-want.
+Tested with vng on x86_64: all OVS selftests pass, including the new
+sctp_connect_v4.
+
+v6:
+  - split into 2 patches: ovs-dpctl.py parse fix + shell test
+  - restore OVS_KEY_ATTR_SCTP parse-table entry + unit tests (NIPA fix)
+  - listener readiness via /proc/net/sctp/eps (ss needs sctp_diag)
+  - add timeout 3 to socat clients (unidirectional connect hangs)
+  - restart listeners with kill -TERM + kill -0 poll (wait can hang)
+v5: https://lore.kernel.org/netdev/20260723084203.3483560-1-houminxi@gmail.com/
+  - switch to socat per Kicinski; NIPA FAIL: EINVAL in add_flow
+    (parse entry accidentally dropped in this respin)
+v4: https://lore.kernel.org/netdev/20260719162657.3263089-1-houminxi@gmail.com/
+  - rebase after ICMPv6 test merged; nc --sctp detection nit
+v3: https://lore.kernel.org/netdev/20260715015446.530018-1-houminxi@gmail.com/
+  - switch ncat -> nc with skip if nc lacks SCTP support
+v2: https://lore.kernel.org/netdev/20260707034718.2717982-1-houminxi@gmail.com/
+  - replace sleep after spawn with ovs_wait on listener stderr
+v1: https://lore.kernel.org/netdev/20260702090908.1253688-1-houminxi@gmail.com/
+
+Minxi Hou (2):
+  selftests/net/openvswitch: add SCTP flow key parsing to ovs-dpctl.py
+  selftests/net/openvswitch: add SCTP flow key test
+
+ .../selftests/net/openvswitch/openvswitch.sh  | 121 ++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 129 ++++++++++++++++++
+ 2 files changed, 250 insertions(+)
+
+-- 
+2.55.0
+
