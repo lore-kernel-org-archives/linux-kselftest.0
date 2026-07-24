@@ -1,168 +1,94 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A80401A13;
-	Fri, 24 Jul 2026 11:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42529341ABB;
+	Fri, 24 Jul 2026 11:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784893624; cv=none; b=Ax8HDr2jJRpjMmhaMQ7IS3qwRDQVBt8KKxmJyAm3bYJrOFhKX7rXECqHjHko2EBwERzoqAKoTc1eBdkVi8cuPX7ZMt+RL3qoxaOUPjtvfv69NAWQxQuBoVccaPwoyD+wuo1zuXYhXCChzB39Jq4schdNRzHBAz1eWR3vTf0WM/A=
+	t=1784893781; cv=none; b=NJrw7RFlrNQWyHzuC/LR5lnHbYDKwbTdpPMD6tgeL1DKQ2iXvWszLcOrpFlG/Na2Iyb6buqnjBzNTpX1XAXujK9oScmcHOmlNrAeJcD1zw6XURDCnvUXnBMJ84CvZDRGllEbI4tvIrGI1moJC0LG/WUkC1NNHBvQsif8gLoAu0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784893624; c=relaxed/simple;
-	bh=pevkwXY6/+oZfqQlj9LQ9x6fIBIFzqxqXzMJxYGU0B8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=O0lo91kUXHfQq+6CeQHmuNRASfoNueRtTcrH/z4E1yGeKHQqZGugnA6v7142WdF92m5wL7GIw3dPkjEzwBv4fHL0Rui1R5n3ifK0mnyPQX7sV1uNZvvqssjg/waPZ/Ds1s6mjR34Psc0+zxIzI3AqjELjmAXsrrr11STS7DZhRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pvXRp5bk; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1784893781; c=relaxed/simple;
+	bh=cnAdeAJLUltCa4J1vXVc9LlRJS1wfeHcBwIzJjh4TyI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CoyjvtL/jDtWZk34cLGob89afLVjaxSnRaF73cKP8O6JWUzJO9Y4iXeR0xNnzxAP737UChNR/nGi8QtrVh8ezZjrtmPk8c8vux/fhUEK1WVlibCDJH+1G4jC7scCYhCb39eR0OokRFO5gQFcsbpPRIZSgzuCzlH64fcfr9/eYa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IJRnWIr5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pvXRp5bk"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C1551477;
-	Fri, 24 Jul 2026 04:46:50 -0700 (PDT)
-Received: from [10.164.19.44] (unknown [10.164.19.44])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 862AC3F59E;
-	Fri, 24 Jul 2026 04:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784893614; bh=pevkwXY6/+oZfqQlj9LQ9x6fIBIFzqxqXzMJxYGU0B8=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=pvXRp5bkiBA24zMTHT+OrGNmHWP/oqFZdHIxUWVQ6fY+pYnh22FioXInDtKWDAbyY
-	 reOMYS7ciZR5IRc9/9bauW85kJ6+1pAGOkikkethsTyAhzaZ6ktpLQwo9E1o7C5T00
-	 qJux4yfg6wZSrsqkhqtuLEtyv9tFLmLISaRZ8FI4=
-Message-ID: <15111e85-4143-476a-830e-9f7d47cc236e@arm.com>
-Date: Fri, 24 Jul 2026 17:16:45 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IJRnWIr5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AB01F00A3A;
+	Fri, 24 Jul 2026 11:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784893779;
+	bh=A9wffIWBNTT7G1KAuQXW99HVJUqU+Za83WdAtsgq78M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=IJRnWIr5WEKY90CiAd3DnViZtJaEvzI/M100VMWBvVFjqEuiZ35Fdl7ScoNTk5zML
+	 q85kt6iT/rYzqzecm8rZ+cr18IF0j4Gy7ELXztTtZW1Q2tr5QUaANnThF34T9x0fbr
+	 TKiQdeJNboQNx9+cr0ulsFdipkr4mdHae7qXAp0GsrisDLZY2fuHq/QYx12VqAYVrj
+	 y0mAOtQSR9cNa2YNUlRjtiuobx1BDJyze+UW8gHsFfWMfYK8gec0eyPuUhg99LpGMt
+	 xue6fJfVzt0wB6iVX+btp7hqbqYhLj22NKSPDdFUdaXc1TwJamWa9ONaUyOBKpHOZ4
+	 I196pqBeBXdKQ==
+From: Simon Horman <horms@kernel.org>
+To: xiaoliang.yang_1@nxp.com
+Cc: Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	shuah@kernel.org,
+	vladimir.oltean@nxp.com,
+	vinicius.gomes@intel.com,
+	fejes@inf.elte.hu
+Subject: Re: [PATCH net-next 3/6] uapi: tc_act: add tc_frer UAPI header
+Date: Fri, 24 Jul 2026 12:49:07 +0100
+Message-ID: <20260724114906.667323-2-horms@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260717095549.10565-4-xiaoliang.yang_1@nxp.com>
+References: <20260717095549.10565-4-xiaoliang.yang_1@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] selftests/mm: retry migration failures for the
- full runtime
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- sarthak.sharma@arm.com
-References: <20260724102431.1199519-1-usama.anjum@arm.com>
- <20260724102431.1199519-6-usama.anjum@arm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260724102431.1199519-6-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://sashiko.dev/#/patchset/20260717095549.10565-3-xiaoliang.yang_1@nxp.com?part=3
+---
+--- Patch [3]: [PATCH net-next 3/6] uapi: tc_act: add tc_frer UAPI header ---
+commit 070d4b29514ff2aff8a973818dd8d51372a699d4
+Author: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
 
+uapi: tc_act: add tc_frer UAPI header
 
-On 24/07/26 3:54 pm, Muhammad Usama Anjum wrote:
-> move_pages() is best effort and can temporarily fail when concurrent
-> faults race with page unmapping. A busy shared-anon workload can exhaust
-> the current 100 retries long before the intended 20-second runtime and
-> produce a false failure.
-> 
-> Use the full runtime as the retry window. Since the initial page location
-> is unknown, require it to reach both alternating NUMA targets to confirm
-> that cross-node migration made progress despite transient contention.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
+This commit defines the netlink attribute layout and enumerations for the 
+FRER tc action (IEEE 802.1CB). It introduces functional sub-commands,
+recovery configurations, and read-only statistics.
 
-Makes sense, but see below.
+> diff --git a/include/uapi/linux/tc_act/tc_frer.h b/include/uapi/linux/tc_act/tc_frer.h
+> new file mode 100644
+> index 0000000000000..241e90827e262
+> --- /dev/null
+> +++ b/include/uapi/linux/tc_act/tc_frer.h
+[ ... ]
+> +enum {
+> +	TCA_FRER_UNSPEC,
+> +	TCA_FRER_TM,                       /* struct tcf_t */
+> +	TCA_FRER_PARMS,                    /* struct tc_frer */
+> +	TCA_FRER_PAD,
+> +	TCA_FRER_FUNC,                     /* u8: tc_frer_func */
+> +	TCA_FRER_TAG_TYPE,                 /* u8: tc_frer_tag_type */
+> +	TCA_FRER_RCVY_INDIVIDUAL,          /* NLA_FLAG */
+> +	TCA_FRER_RCVY_ALG,                 /* u8: tc_frer_rcvy_alg */
+> +	TCA_FRER_RCVY_HISTORY_LEN,         /* u8: 1-32 */
 
-
-> Changes since v1:
-> - Retry per-page failures for the full runtime
-> - Verify that both alternating NUMA targets are reached
-> ---
->  tools/testing/selftests/mm/migration.c | 39 ++++++++++++++------------
->  1 file changed, 21 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index 29f7492453d43..4d55a424058a9 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -7,7 +7,7 @@
->  #include "kselftest_harness.h"
->  #include "hugepage_settings.h"
->  
-> -#include <strings.h>
-> +#include <string.h>
->  #include <pthread.h>
->  #include <numa.h>
->  #include <numaif.h>
-> @@ -20,7 +20,6 @@
->  
->  #define TWOMEG		(2<<20)
->  #define RUNTIME		(20)
-> -#define MAX_RETRIES	100
->  #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
->  
->  HUGETLB_SETUP_DEFAULT_PAGES(1)
-> @@ -110,7 +109,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
->  	int ret, tmp;
->  	int status = 0;
->  	struct timespec ts1, ts2;
-> -	int failures = 0;
-> +	int success = 0;
->  
->  	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
->  		return -1;
-> @@ -119,29 +118,33 @@ int migrate(uint64_t *ptr, int n1, int n2)
->  		if (clock_gettime(CLOCK_MONOTONIC, &ts2))
->  			return -1;
->  
-> -		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME)
-> -			return 0;
-> +		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME) {
-> +			/* Reaching both targets verifies a cross-node move. */
-> +			if (success >= 2)
-> +				return 0;
-> +			else
-> +				return -2;
-> +		}
->  
->  		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
->  				MPOL_MF_MOVE_ALL);
-> -		if (ret) {
-> -			if (ret > 0) {
-> -				/* Migration is best effort; try again */
-> -				if (++failures < MAX_RETRIES)
-> -					continue;
-> -				printf("Didn't migrate %d pages\n", ret);
-> -			}
-> -			else
-> -				perror("Couldn't migrate pages");
-> -			return -2;
-> +		if (ret < 0) {
-> +			perror("Couldn't migrate pages");
-> +			return ret;
->  		}
-> -		failures = 0;
-> +		/* Migration is best effort. Try again */
-> +		if (ret > 0 || status < 0)
-
-old code wasn't using status, so why now?
-
-> +			continue;
-> +		if (status != n2) {
-> +			printf("Page is on node %d instead of target node %d\n",
-> +			       status, n2);
-> +			return status;
-> +		}
-> +		success++;
->  		tmp = n2;
->  		n2 = n1;
->  		n1 = tmp;
->  	}
-> -
-> -	return 0;
->  }
->  
->  void *access_mem(void *ptr)
-
+[Severity: Medium]
+Are these u8 attributes necessary here, or should they be u32? The Netlink
+UAPI guidelines recommend avoiding integer types smaller than 32 bits for
+attributes. They save no memory due to the 4-byte attribute alignment and 
+using smaller types unnecessarily restricts future extensibility.
