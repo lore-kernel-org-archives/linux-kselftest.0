@@ -1,62 +1,62 @@
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E81440A2D
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7759448384
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 15:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784905602; cv=none; b=T2MYeyQfuXQKqYGHVrg6OFi3k40zraSkgm8f/JkPpaGbyRJFsVnN+h9c4QQExpc2v4efjQIO37NnzjF+OMuJH02xulQSaaL6QpSyiYPMaYkIuCkPcwS5DbUnyrpNfnNznc0QxNHgoODuPEu4esDJa7Br1P+0XMsW3cz+ReX8GwM=
+	t=1784905611; cv=none; b=KElsPiM1mlD1ocuW/6Oap195RYujBufbSYRe/FVLGhv5n/pYxjWQBOXSfhypeQ/hQlctJdYUafaeifsSaCIpYIGFeMK9AYCs+9OFwcqt82XakB60zrHz73enABayHN5f2xFKmShdUvpKyUXLqlSZHcIBrZ78aZ9a3LXZeaOHaZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784905602; c=relaxed/simple;
-	bh=WCFeK1U/sB8u6+XghEzeDL5uvuawBnLyk20EecCgWSc=;
+	s=arc-20240116; t=1784905611; c=relaxed/simple;
+	bh=aLvrgUhovUotbgq1yV5E5nzK8hKbIYLBa8oT5Q49nik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eA4rK4pNSzRNIsLM1ftl+HAGMfcA3wIrU1K7N6Ice6nUgpnRfhWpZmZLQcdid0nhBdDEZn2YFOODMI7dFnu8i4HI7uEhQNLvNx9Y2Dt+PzWD4Qw+K4PugcFdAhlqNLVOjNHDSEGEejUtaUwnEINtYUjAF70VfNCtNeCpICaTz5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXq6QU+3; arc=none smtp.client-ip=209.85.217.44
+	 MIME-Version; b=U9ltr5QIQEHljSaPYaIpPMYK+bjTB5FsWz76k8yHseE4n4LV6wwwt/W1T3ysYeqd4nU/zh+Cq5SdB2iXKDnrwTlLZLQDVJNkHY9D18uzVSh7SvaAGRvFcQ0/qcMZE0QkE+BWe5B6aG9U6GtQNebRBzLaOLDlBWREhRBYaDszLJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ATVgZt5R; arc=none smtp.client-ip=209.85.217.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXq6QU+3"
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-74d55dac06dso131869137.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 08:06:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ATVgZt5R"
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-738a5cc517eso364645137.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 08:06:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784905597; x=1785510397; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784905601; x=1785510401; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6oyqB7q7QHkqcZKXENbolthguPaX/LV0/csmdxwyvY8=;
-        b=gXq6QU+3Qy1TeVqxyjn0hdRDRTYkqUieAMH2shLXY4sgOR9StX1V6kGtTXSEjVulwT
-         kWbNHiCPx8TR3i0f+4ysV+PLhboKdDKxNN1YXI4TUEtdrViovBVQDTbel2WzOiEBVyWd
-         q73LrMTGCq5ITpAkvhkGPJXiJ28BU6HCJ85zclS9uIp56ksKXQhCAYz2L66ZjTNFPL2F
-         HMlenBYPKQun5QDq4GSqxA3qx8z22rZhgjExfTKcxyE0A+GhDZTg1PgWD8+CxtesjOEk
-         CdUc86NdhGFy9TiUmvt6ApWXOc8JWqH5VQ/dfFt1RxJlf2KCa+wiLYoUWhGIz7+stDgE
-         tnlg==
+        bh=5ElNQLPF+IOEJVGx3X6HzWFOmVSfbkgUy77zg9FdrcY=;
+        b=ATVgZt5R23l2x1nh786HIA6mHuK11Zjb1jbVX8J0IaP8348yzH5cs1fMLQeq4dZlSd
+         WtnK11qid36y4lHDi4ambFRy3Iu40g0MwAiMh8lfsIYw1JBu/NZMLgxamEPXil49WoJs
+         oo5JGNY0i/5nkhwz1nY655IFTdJdxSLqCziRdJjMFutKjPfQdF/pFpn95l6/hxFVaAYz
+         01XpqWmJUGJ57ex7NIeB+ct7vng8PaCi4v9Tihn/0qQQPrO5/C+ueSmc7UpqCk9ar1IS
+         CT3eL+XJhUP4yGhR7Jd/9luCHdocXcDoSimVifcpztLsk1iX1a3KV5QokWwU3QA9Q9o/
+         I6IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784905597; x=1785510397;
+        d=1e100.net; s=20251104; t=1784905601; x=1785510401;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6oyqB7q7QHkqcZKXENbolthguPaX/LV0/csmdxwyvY8=;
-        b=clmK8YnV6QKITMn7NpcuS8ykHxGqwrF6lrSEAuVtmUo0/ZOJd9kwBGDO7wjcxZ7bv6
-         ajrW/wurtK+5E/b9C6agR8e0gR47x5C4Na0fddyVxbdg3j2lxtwMauqd8SU20rAKTBl4
-         sEOoeLdqBA2bhAf9qEQHa1727WiT8uzxZ43scNEP0kM+SFX78ibiOgqvKHYj5wRXQ73s
-         rt8UlZWHjya79nv6gLNXiHdMEuJjg3ByLA0hNSW+qnLpvntM6s9VJBLCG9+JI9nv80Ds
-         OqlXkObS9dSpmMDixvMjNaf0NjFAj+FUp0KtTCEdD2wH4fO9xFq9vr2FaseP6eTTfiqM
-         yp2w==
-X-Forwarded-Encrypted: i=1; AHgh+RoXuGzn8GtidkEgwc48OByH/UXaTiOva//TYcU9iZfwYfJfwpXz6KLdEOJ7avu6zNv8J0jEmatCKkajSAxFASU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUYjCJJcQ2bV2Il4AseIVu1pb/+bZpMmNRShhaovHJM4aY8rZd
-	j4aqKAbcChvVmI2WKtR3xZr67WzMO6wt/NBEkpvHX1CN41C9/kWXsDMt
-X-Gm-Gg: AR+sD12RDd7tdtRaCeCs3OtOm7xpUzhPX3kcbJBlEsXFcbONrL2yxBpcNO7KTmqedhq
-	JSrT9mW7fvyUFDNCT1+3BBG1sgvHq9foMIhdXGlGMV7JRzXxf67uO7p13FLW/6bS8bguNO/brsU
-	WrwKl1Lh8eMSQ+53jS3CTLVc3hxE7QLhyP1o1i9fbnE6WJew136MOl+7HVdAlunmTamzfK/rFIx
-	pYIKMNzFg2Uy1J29YF/hVEB3x1PesMeYxoKHmmVZvb3d7Al/6fLyAPMdMvfiT/3jitziQSx0NBb
-	8jsOAgRiZePDPiF8ZA0ym+ogohwSXlByYTAPOQ0F8sBy/SLjfI3+DPq2xNefGztM6Qks1ir6vfn
-	j0aEIaoC4oyCVkqe8P2QzM6wm/b8+tWVVvcT60FB7QrNOnQo3FbOH/Uq7lGmMrHCcAPSU+g==
-X-Received: by 2002:a05:6102:2b83:b0:74c:7dbd:8c89 with SMTP id ada2fe7eead31-74d60909992mr3314336137.25.1784905597005;
-        Fri, 24 Jul 2026 08:06:37 -0700 (PDT)
+        bh=5ElNQLPF+IOEJVGx3X6HzWFOmVSfbkgUy77zg9FdrcY=;
+        b=Zp8dfavOxf8wNuFRy4nnDHcnDQmvPCEYoztUjEesG7c847Xw+1okufV3a5ib5Ltscp
+         RvwgfwPNa1eGRV6YG3AzN2Tm5TQ9E9bZkWBwTxQ8Nao9yjQaV0ETlNGo+mDHexjZkfA6
+         tOshwQnJ3vzL1CXriUhUbHtEiSA62YYMvyHt295c7i5KzJwpwt8QSFv4ohnTd8pDuMZQ
+         v6nPPS7xCOyJxRLG0vSU86SvcxXvJltY4Jdw7LnRq8G5pBFznXqnKftMEct6/H+0lqtB
+         vOXWSOby/WWEmjGqugn0Fm0E7VFXnuT/VCGuy+GpH6X/Ybd7oufm4jK03QpffUwW1RyD
+         j48A==
+X-Forwarded-Encrypted: i=1; AHgh+Ro4BosJaLqIrAQnZfmDwZ/Y/o7VFLxIttbTKjx+0kDk78vk9BoqDojV271Hadb0aV4GKgKYWyXjsLoDfmuY8oQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwNk+YBS4zUsjoLKRTHUla9HNW0sCOkT/kR348BerrfNU6fJmU
+	oBCcQT7qsejkpcSmrHo9oXie6JSUp6/9TKnhKs7rZ6uCTKPMEo1UlWN/
+X-Gm-Gg: AR+sD10KBwNyDRIbLOKMdNAccfEHBppdugFBpBoh9482KNhEGZKEPmK7TU1aMeNuF7G
+	mgRHYULh50ySJ6JPzntEJ8/fMC9N8O40jEscVJMmuUWvLFY37Fs46WD65p6T63YtAK+Ij3mrbNO
+	0c4r8gkzkYy6xFj+4TYldlBZmEYkeS2BG2R1PX/wyQOAw98SKyAMV/aioBU3Di5mcN3y5bABPof
+	okBa52zcCOo8++hXs9K8oGbwyT0KVfip811dTHxJ47IH3s9Un0uNvXz92M81YRvbnD98d1ZOOcO
+	NXPirRRqCYnaNJjfq67fjNiuI3n1GVyLYZsUt73LYXOLYzj476+kikS8sBkXd2LDxcRn9j0YEje
+	bKz9vFOS+qACPlw4g630/6ygJBayvqrN/F22BZTwb1ZpgVYxyOG2C3bo68B/lT26EezlACg==
+X-Received: by 2002:a05:6102:3f87:b0:74a:9ac9:792c with SMTP id ada2fe7eead31-74d5e3cb58dmr4397247137.12.1784905601146;
+        Fri, 24 Jul 2026 08:06:41 -0700 (PDT)
 Received: from houminxi ([72.244.37.221])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-74ad32165f4sm7744810137.6.2026.07.24.08.06.33
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-74ad32165f4sm7744810137.6.2026.07.24.08.06.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 08:06:36 -0700 (PDT)
+        Fri, 24 Jul 2026 08:06:40 -0700 (PDT)
 From: Minxi Hou <houminxi@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -73,9 +73,9 @@ Cc: davem@davemloft.net,
 	horms@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v6 1/2] selftests/net/openvswitch: add SCTP flow key parsing to ovs-dpctl.py
-Date: Fri, 24 Jul 2026 11:06:23 -0400
-Message-ID: <20260724150624.3457427-2-houminxi@gmail.com>
+Subject: [PATCH net-next v6 2/2] selftests/net/openvswitch: add SCTP flow key test
+Date: Fri, 24 Jul 2026 11:06:24 -0400
+Message-ID: <20260724150624.3457427-3-houminxi@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260724150624.3457427-1-houminxi@gmail.com>
 References: <20260724150624.3457427-1-houminxi@gmail.com>
@@ -87,175 +87,164 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ovskey flow-string parser has no OVS_KEY_ATTR_SCTP entry, so a
-flow string containing sctp(src=.../dst=...) parses without error but
-silently drops the L4 key. The resulting flow carries only
-ipv4(proto=132), and the kernel rejects it: match_validate() in
-flow_netlink.c requires OVS_KEY_ATTR_SCTP when the IP protocol is
-IPPROTO_SCTP and returns -EINVAL for the missing key.
+Add test_sctp_connect_v4() to verify OVS can match on SCTP flow keys
+(sctp src/dst port).
 
-Register OVS_KEY_ATTR_SCTP in the parse table and add unit tests
-(runnable via ovs-dpctl.py --test) covering SCTP and the neighboring
-TCP/UDP/ICMP/IPv4 key parsers.
+The test sets up client and server namespaces connected through an
+OVS bridge, installs port-keyed flows, and verifies:
+  - sctp(dst=4443) matches client-to-server INIT
+  - sctp(src=4443) matches server-to-client INIT-ACK
+  - removing flows drops the connection
+  - reinstalling flows restores connectivity
+
+The listener readiness probe reads /proc/net/sctp/eps instead of ss:
+ss requires the sctp_diag interface, which is not enabled on all
+kernels, while /proc/net/sctp/eps exists whenever SCTP is loaded.
 
 Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- .../selftests/net/openvswitch/ovs-dpctl.py    | 129 ++++++++++++++++++
- 1 file changed, 129 insertions(+)
+ .../selftests/net/openvswitch/openvswitch.sh  | 121 ++++++++++++++++++
+ 1 file changed, 121 insertions(+)
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index f3edd198223f..633af10d7e8a 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -15,6 +15,7 @@ import struct
- import sys
- import time
- import types
-+import unittest
- import uuid
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 853dbc1b00d7..b448324527d8 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -34,6 +34,7 @@ tests="
+ 	action_set				set: SET action rewrites fields
+ 	trunc					trunc: output truncation
+ 	icmpv6					icmpv6: ICMPv6 echo type match
++	sctp_connect_v4				sctp: SCTP flow key matching
+ 	psample					psample: Sampling packets with psample"
  
- try:
-@@ -1984,6 +1985,11 @@ class ovskey(nla):
-                 "udp",
-                 ovskey.ovs_key_udp,
-             ),
-+            (
-+                "OVS_KEY_ATTR_SCTP",
-+                "sctp",
-+                ovskey.ovs_key_sctp,
-+            ),
-             (
-                 "OVS_KEY_ATTR_ICMP",
-                 "icmp",
-@@ -3165,5 +3171,128 @@ def main(argv):
-     return 0
+ info() {
+@@ -611,6 +612,126 @@ test_icmpv6() {
+ 	return 0
+ }
  
- 
-+def _init_ovskey_nlas():
-+    """Initialize required NLA classes for ovskey parsing."""
-+    nlmsg_atoms.encap_ovskey = encap_ovskey
-+    nlmsg_atoms.ovskey = ovskey
-+    nlmsg_atoms.ovsactions = ovsactions
++# Check for an SCTP endpoint via /proc, which works without sctp_diag.
++sctp_eps_has() {
++	ip netns exec "$1" awk -v p="$2" '$6==p' /proc/net/sctp/eps | grep -q .
++}
 +
++# sctp_connect_v4 test
++# - sctp(dst=4443) matches client-to-server INIT
++# - sctp(src=4443) matches server-to-client INIT-ACK
++# - remove flows and verify connection fails, reinstall and recover
++test_sctp_connect_v4() {
++	local t="test_sctp_connect_v4"
++	local srv_ip=172.31.110.20
 +
-+def _parse_flow(flowstr):
-+    """Parse a flow string and return the key."""
-+    key = ovskey()
-+    key["attrs"] = []
-+    key.parse(flowstr)
-+    return key
++	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
++	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
 +
++	sbx_add "$t" || return $?
++	ovs_add_dp "$t" sctp4 || return 1
 +
-+def _find_attr(key, attr_name):
-+    """Find an attribute in parsed key."""
-+    for attr in key["attrs"]:
-+        if attr[0] == attr_name:
-+            return attr[1]
-+    return None
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "$t" "sctp4" "$ns" \
++		    "${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
 +
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add "${srv_ip}/24" dev s1
++	ip netns exec server ip link set s1 up
 +
-+class TestOvsKeyParse(unittest.TestCase):
-+    """Unit tests for ovskey.parse() flow string parsing."""
++	# Probe: check if kernel supports sctp flow key.
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
++	    '2' &>/dev/null
++	if [ $? -ne 0 ]; then
++		info "no support for sctp key - skipping"
++		ovs_exit_sig
++		return $ksft_skip
++	fi
++	ovs_del_flows "$t" sctp4
 +
-+    @classmethod
-+    def setUpClass(cls):
-+        _init_ovskey_nlas()
++	# ARP forwarding
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0806),arp()' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0806),arp()' \
++	    '1' || return 1
 +
-+    def test_sctp_dst(self):
-+        """Test SCTP destination port parsing."""
-+        key = _parse_flow("sctp(dst=4443)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
-+        self.assertIsNotNone(attr, "SCTP key not found")
-+        self.assertEqual(attr["dst"], 4443)
++	# SCTP port matching: dst for request, src for reply
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
++	    '1' || return 1
 +
-+    def test_sctp_src(self):
-+        """Test SCTP source port parsing."""
-+        key = _parse_flow("sctp(src=4443)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
-+        self.assertIsNotNone(attr, "SCTP key not found")
-+        self.assertEqual(attr["src"], 4443)
++	ovs_netns_spawn_daemon "$t" "server" \
++	    socat -u SCTP4-LISTEN:4443 STDOUT
++	local server_pid="$pid"
++	ovs_wait sctp_eps_has server 4443 || return 1
 +
-+    def test_sctp_src_and_dst(self):
-+        """Test SCTP source and destination port parsing."""
-+        key = _parse_flow("sctp(src=1234,dst=5678)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_SCTP")
-+        self.assertIsNotNone(attr, "SCTP key not found")
-+        self.assertEqual(attr["src"], 1234)
-+        self.assertEqual(attr["dst"], 5678)
++	info "verify SCTP association with port-keyed flows"
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    || return 1
 +
-+    def test_tcp_dst(self):
-+        """Test TCP destination port parsing."""
-+        key = _parse_flow("tcp(dst=80)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_TCP")
-+        self.assertIsNotNone(attr, "TCP key not found")
-+        self.assertEqual(attr["dst"], 80)
++	ovs_del_flows "$t" sctp4
 +
-+    def test_udp_dst(self):
-+        """Test UDP destination port parsing."""
-+        key = _parse_flow("udp(dst=53)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_UDP")
-+        self.assertIsNotNone(attr, "UDP key not found")
-+        self.assertEqual(attr["dst"], 53)
++	info "verify connection fails without flows"
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0806),arp()' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0806),arp()' \
++	    '1' || return 1
 +
-+    def test_icmp_type_code(self):
-+        """Test ICMP type and code parsing."""
-+        key = _parse_flow("icmp(type=8,code=0)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_ICMP")
-+        self.assertIsNotNone(attr, "ICMP key not found")
-+        self.assertEqual(attr["type"], 8)
-+        self.assertEqual(attr["code"], 0)
++	kill -TERM "$server_pid" 2>/dev/null
++	local i=0
++	while kill -0 "$server_pid" 2>/dev/null && [ "$i" -lt 5 ]; do
++	    sleep 0.2
++	    i=$((i + 1))
++	done
++	ovs_netns_spawn_daemon "$t" "server" \
++	    socat -u SCTP4-LISTEN:4443 STDOUT
++	server_pid="$pid"
++	ovs_wait sctp_eps_has server 4443 || return 1
 +
-+    def test_ipv4_proto(self):
-+        """Test IPv4 protocol parsing."""
-+        key = _parse_flow("eth_type(0x0800),ipv4(proto=132)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_IPV4")
-+        self.assertIsNotNone(attr, "IPv4 key not found")
-+        self.assertEqual(attr["proto"], 132)
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    >/dev/null 2>&1 \
++	    && { info "connection should fail without flows"
++	         return 1; }
 +
-+    def test_eth_type(self):
-+        """Test Ethernet type parsing."""
-+        key = _parse_flow("eth_type(0x0800)")
-+        attr = _find_attr(key, "OVS_KEY_ATTR_ETHERTYPE")
-+        self.assertIsNotNone(attr, "EthType key not found")
-+        self.assertEqual(attr, 0x0800)
++	info "reinstall flows and verify recovery"
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
++	    '1' || return 1
 +
-+    def test_full_sctp_flow(self):
-+        """Test complete SCTP flow string parsing."""
-+        flowstr = (
-+            "in_port(1),eth(),eth_type(0x0800),"
-+            "ipv4(proto=132),sctp(dst=4443)"
-+        )
-+        key = _parse_flow(flowstr)
-+        in_port = _find_attr(key, "OVS_KEY_ATTR_IN_PORT")
-+        self.assertEqual(in_port, 1)
-+        sctp = _find_attr(key, "OVS_KEY_ATTR_SCTP")
-+        self.assertIsNotNone(sctp, "SCTP key not found")
-+        self.assertEqual(sctp["dst"], 4443)
++	kill -TERM "$server_pid" 2>/dev/null
++	i=0
++	while kill -0 "$server_pid" 2>/dev/null && [ "$i" -lt 5 ]; do
++	    sleep 0.2
++	    i=$((i + 1))
++	done
++	ovs_netns_spawn_daemon "$t" "server" \
++	    socat -u SCTP4-LISTEN:4443 STDOUT
++	server_pid="$pid"
++	ovs_wait sctp_eps_has server 4443 || return 1
 +
-+    def test_sctp_roundtrip(self):
-+        """Test parse -> dpstr -> parse keeps the SCTP key."""
-+        key = _parse_flow("sctp(dst=4443)")
-+        key2 = ovskey()
-+        key2["attrs"] = []
-+        remainder = key2.parse(key.dpstr())
-+        self.assertEqual(remainder, "", "round-trip left unparsed text")
-+        attr = _find_attr(key2, "OVS_KEY_ATTR_SCTP")
-+        self.assertIsNotNone(attr, "SCTP key lost in round-trip")
-+        self.assertEqual(attr["dst"], 4443)
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    || return 1
 +
++	return 0
++}
 +
-+def test_ovskey_parse():
-+    """Test ovskey.parse() method for various flow key types."""
-+    suite = unittest.TestLoader().loadTestsFromTestCase(TestOvsKeyParse)
-+    runner = unittest.TextTestRunner(verbosity=2)
-+    result = runner.run(suite)
-+    return 0 if result.wasSuccessful() else 1
-+
-+
- if __name__ == "__main__":
-+    if len(sys.argv) > 1 and sys.argv[1] == "--test":
-+        sys.exit(test_ovskey_parse())
-     sys.exit(main(sys.argv))
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
 -- 
 2.55.0
 
