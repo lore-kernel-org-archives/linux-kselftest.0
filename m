@@ -1,65 +1,63 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2983C552B
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 17:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021F9280CC1
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 17:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784913591; cv=none; b=jqpL9HDRM99zzo2MUTimXGC95rB4x6xEfMzmRINbZFvpCbXLdZDNE2L+ctqYb5QyW0jb1O7ubrtc2pBaDNFOlZ6LwHKB0t75Ub27Jcn4n2YGl3RtZa02VLCHSvKtTU54n/7EOGGTre3vZePG5zfZGXU/n10flsA9SEq2FRdEnfM=
+	t=1784915343; cv=none; b=hDPtlgPXxytu/hl2cs8Z5cQUKPWQ+Q4Ez0Kyf4dSTZAetH3cBCF0GAi6G6G1pCQuGHNuS8dS1JCa9d5lzFnEtSxpj1L6MJ6Q6Qi93Z5Mtfdv+pptRgX6BgnKfI4OFJDec9BJlupj7YqMWR7gvm8CoKuR24B8nti7anioz7X/J5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784913591; c=relaxed/simple;
-	bh=h43OVubBFOUqhHHcp0LrQGUoL7yyuyHZKEUxyYWHBUE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DrzXl56Iw03SdmdsyDQNWe2mguK0JnN8prQKv0thI79XM8VXW3rNtgVAViE08ZMePYn81TN+9gRbZ/etmzqkUJ6nFjE29pqkM/yaO23n6a+7DpLVbmRL2r833dUF25955in85IBel5qkT+U8yaxd1Gw/0XycwOy2Kj3MuELpSJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYt/tflG; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784915343; c=relaxed/simple;
+	bh=56ibPZILETfHThBDfKbmus1vKcZ8DorsFStksKP13ps=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=XvikX50yOQT9Y0MmIhLuw8nC6uJcMDqcRyhOXsObaFgM93IiEfx8aMsvBuixNQYJiHvWaVa2YVEdzrj9uTxQ2PNXSNCawjeAF5xF0eQPXVpo2bP4AR47sO/OI5PxnxvWAWXxmE1IeWclA8QgpUFjUPnSk6FeS8VY2IZRROkuwXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=e89bBeIB; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYt/tflG"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495459712d2so1878365e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 10:19:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="e89bBeIB"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cfbbdfa60bso8109465ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 10:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784913587; x=1785518387; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1784915341; x=1785520141; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=JYt/tflGn11muPpBMVHJnVUocFze63t0VswaCJl0UGmUlc/kw9a7mejzVFHaorrKNW
-         tej5WEACR3SkJXb2JZiJp4WQxMRbg5gSJR3m6iEKu2TblmMzXwi3wI7kzZrXBu+ticrs
-         MQoRTq5mPuLW106CFbXAusqi9d+8okQc++xo+rcwI2oDfqbcPBhobx9qKYjJgo8rIPKY
-         jkaHa56KslGmDtEsiUwkw5JV3PbyLUU8assMCFC0l4WJvcnOu/vS2XFUMuNoYzMBrPNM
-         ulCmFOT8j7hK7XUX/HDoubNFMo2UOhO0ksVC9KFls2aCtgo6kL4mA4wjLIALmkUrxcoM
-         ekDw==
+        bh=8nT0uL29XlQVyhgfVPiRJ/FmnyaYBwM55XjwIgPxDPM=;
+        b=e89bBeIBXChRV32h/rN3zDtAfFNNueE0HAY+/4didJzxZnfPiCo0SNO1z1Gy4vEspN
+         m144MIKhQ1bXTCXVLNqJCmkSDH9JzPuhZ/gPR7c6YHbdeR6xewkaugXASYEBPQXWE0nG
+         KzmZLQ/f7g6c/Z0chJ//iBjRDxCu+J9pH88/ba8Nzn9z3rNA9LcXSfH3R5FT78/H98WR
+         JMmULLPFsvhzynT6WvrN6QQbXdGyViYZAjczEwhN7ISHeRO37CidWs/JumGHjPhkH6QT
+         v0Rdu6ixjab8GYKNDjpFZw66ouiAKkh6umJm3RrtXUHX4zPw3C1PkzwXM/SdSQzzsRGM
+         ge2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784913587; x=1785518387;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1784915341; x=1785520141;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=L3+9B6jEi/YEOzDc/YphoqSte0Rz8B3Zb4CYQMTzTI6fOhUB5JSySmBkZTZcHsuiWC
-         +vPhIN0g/VUbD5PfYCh+NKCHTqYsnzDwJJar9/wHhVLaS8w2Rp9+/HNeoRSNae34Ya6h
-         URfWaChd9Xdol6mNXyOHswYu9YJxsEGw7ao8t0Skhdu2qAkLRv02d6hTKA59fiqlGgBM
-         oGoPjUXheJ23M1dk8YgDqbHnFjV0e8CyePQPPGXK4phWdo9TfLYjcHUQFask5Ie+kXud
-         ErFn4N29I22Vc+J11bsxtDMEH+wBddN7ZHz7QiqvI0CXD1AtfoI1DyQZOxJqxWJ5GSff
-         cLrQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp1ZDjIktenH3I4rQqybG2nxKlZeAhx1lgFoy5fFAuP5Onn8I8s499W0pyrJYvfTTwcx+DkMrsngoUnyjP2LoQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT0HVocPcLOlsw5mpqRYtxY8IMKefwt21DgUjphWcMjxVN4d1V
-	AFJvH1eQNVEPO6x0Ek1DFcriy1Pmkhy5aB4BuU8S/dxsE6lWk4e+g0Yy
-X-Gm-Gg: AR+sD139GnY2bOZgqOacufdEti1ksBEEVKNxldH8gldvSGHBTVqgGSP1nLXC0RHdY3k
-	NDSIFQF3eQwanLrhBevJX5JYpBhfZ2//RFtPV0lcF77RSZpJ8FjfxUOHTpUwOmvNhHBF6nzZaDA
-	wDGSKXUfq0ZscOkfFSmCMbo8x9dHeO2PVV5XDry7XkWngsJyyWrJoQwUAItFm1TrCdSjWcZkCzC
-	wZP92hb7j528kIr0JG9TJ1aXhilzR8tYzAIMP5D63tencQNScvQkw5xjmmaMgzC7djWZNftu/DX
-	jJdf9BvHPO2enB1y2xJc4w7oQNKVEHguT2P9MMIGqQafqTopooLd+J3vRAnoQJsMjUYJD8NPtqQ
-	oH+XKGfUz4lFUd7dzFym8p1gFmNvzG7yEWgl0lMLBPuUj/9U9Bb6Ip4IwQK0g2fNsCa21xcE+ri
-	K3T0chS+zLgk+THz2FWgjY0aAvd8zwA03J8H2AcMJejr6AYHsIdNgruLjYxbmKWpPmTEIr68sGP
-	vdq8vM3mOgccNu6GrNPyLoK+j+ybAQ0oQVHxyA5TYrV
-X-Received: by 2002:a05:600c:5942:b0:495:6397:14b1 with SMTP id 5b1f17b1804b1-49573cf0ec2mr67839245e9.34.1784913586592;
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957f5665f0sm49342725e9.0.2026.07.24.10.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
+        bh=8nT0uL29XlQVyhgfVPiRJ/FmnyaYBwM55XjwIgPxDPM=;
+        b=L8l9WQQTIEkg8GSTkX05TawB1ETOBJkqnAOC8RnpY8taD8W+SMt23ycGywA75RS3qz
+         WDuCZjn7eaV+p8Vp849Z9FHvon1hZzoBLZGJMTwpE0qDTp1fPzGDXga/FWVai4o4zNtz
+         Knhkjq2da3Ffoa8agvtfo8nknmKN5t+qlRuMUzH11Ar3n9GDDBJHPVBeWMgA3cIBN334
+         zOUEMa4yr92E4xy6yQmCSQKyfunCPFL6MSbDWPwY/wBC5MKy4o8l6xMorD5bpH2KqUB4
+         b1xVzvHto+Ec6t72VtONmfZH5F+E8vAahfv7G1A4mC3EboS+E6WQ+lrmuyz/CNWWQiBh
+         fdOw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqnb2DEU2jBfG7uLT7/j1OniaFf5CoFOLt0Yaf4eSbQCKI0DprhVxoQ90DJHjrLaugLj4vuW1m9vdqIP38YRJU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO2y+B7UDE4Om/B1n00XrQkt88QC/r2kWvyJsthbt7v/d1ruCC
+	rNb3pgwfno3xVMKVDEGmqS3MWqYIZ2r3hszK+zH1M0j+FF9Uw51efAOomuEssy+vZ+s=
+X-Gm-Gg: AR+sD10HpQ3QrflZtFjoTuvCnx+B/OJR/Peq7BtpbOn4iA3nQdbnubuXI9++pUKYfTB
+	h9SCW4Plb+P41j9olDmnDkDaK0n83b37L3Ymvt9Xn2+9fdiiwX683quz92Z1q3VZjVdNCxJrgPo
+	xWlqFgnX7E36MY9raJpdkz/AssNzhkfbpbUPuwE30yzTjUqtskVXhIkYTuGLV/IExvgsnhphrdh
+	tOEIaUr3Hb3L6o9S3C7h7/MIKxPHrl9uLn/sNbJTzVzeoD1gQYIQDThjWWbXm3boIKL/dJthWt0
+	R1pcKjkAcD3KoLXsUqUZ0eBncws2Di9XhglQZQ+hET5xs9x8+iD43E3gpT2g1zEVe3l0pQSj/VK
+	t4JBZP04LR2k0CVu9TzZ25Xp8+9O146Ep2tfQ5pnw8dMQaGuG9eXYKhDzibINqMoxelYMtqce
+X-Received: by 2002:a17:90a:dfc5:b0:38e:3a8:2374 with SMTP id 98e67ed59e1d1-38ec6631d0emr7873518a91.30.1784915341289;
+        Fri, 24 Jul 2026 10:49:01 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::1:5d77])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d6ba579c3sm889647c88.8.2026.07.24.10.48.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jul 2026 10:49:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,106 +66,112 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Jul 2026 19:19:45 +0200
-Message-Id: <DK6Z25AV02BM.3KXO0EMCMP2W9@gmail.com>
-Cc: "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Mark Rutland"
- <mark.rutland@arm.com>, "Alexander Shishkin"
- <alexander.shishkin@linux.intel.com>, "Ian Rogers" <irogers@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Namhyung Kim" <namhyung@kernel.org>, "James Clark"
- <james.clark@linaro.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <algbxQAAmurxms8X@google.com>
-In-Reply-To: <algbxQAAmurxms8X@google.com>
+Date: Fri, 24 Jul 2026 13:48:58 -0400
+Message-Id: <DK6ZOIMWWEH5.3TSZNM0MNS8Z3@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Report the real error from
+ libarena parallel workers
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260723061347.398591-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260723061347.398591-1-jiayuan.chen@linux.dev>
 
-On Thu Jul 16, 2026 at 1:46 AM CEST, Namhyung Kim wrote:
-> Hello BPF folks,
+On Thu Jul 23, 2026 at 2:13 AM EDT, Jiayuan Chen wrote:
+> Several CI runs failed in the libarena parallel tests with -4 (-EINTR) [1=
+],
+> which says nothing about what actually went wrong.
 >
-> On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
->> I ran into the build issue mentioned in the first commit, because using
->> an option like LLVM=3D-15 is a documented way to build [1], but only
->> some of the LLVM tools defined in tools/ support this.
->>
->> After fixing that, a lot of other tidyups fell out. I didn't go too far,
->> for example some selftests include tools/testing/selftests/lib.mk which
->> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
->> tools/scripts/Makefile.include and I stopped before touching the former.
->> Some other non build scripts hard code toolchains and I didn't touch
->> those either, this change is only focused on things that already
->> include Makefile.include.
->>
->> [1]: Documentation/kbuild/llvm.rst
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->> Changes in v4:
->> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
->>   already picks the correct sibling lld version. (Sashiko)
->> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version=
--v3-0-8854bfe5af7e@linaro.org
->>
->> Changes in v3:
->> - Add warning for empty $USE_LD
->> - Use $HOSTREADELF in bpf Makefile
->> - Rebase on v7.2-rc3
->> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version=
--v2-0-f12cc4f031d8@linaro.org
->>
->> Changes in v2:
->> - Fix selftests/bpf build. LLD needs to take the full path to be used
->>   with -fuse-ld=3D
->> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version=
--v1-0-6cac1a9a4c8d@linaro.org
->>
->> ---
->> James Clark (4):
->>       tools/build: Allow versioning of all LLVM tools defined in Makefil=
-e.include
->>       tools/build: Indent if else blocks
->>       tools/build: Allow versioning LLVM readelf
->>       tools/build: selftests: Remove some duplicate toolchain definition=
-s
->>
->>  tools/bpf/resolve_btfids/Makefile    |  3 --
->>  tools/lib/api/Makefile               |  4 --
->>  tools/lib/bpf/Makefile               |  8 ++--
->>  tools/lib/subcmd/Makefile            |  4 --
->>  tools/lib/symbol/Makefile            |  4 --
->>  tools/perf/Makefile.perf             |  7 ----
->>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++---------=
--------
->>  tools/testing/selftests/bpf/Makefile |  1 -
->>  8 files changed, 46 insertions(+), 62 deletions(-)
+> Two workers can fail like this:
 >
-> Are you ok with this change and going through perf tree?
+>   worker 1: gives up, e.g. the rendezvous times out, sets test_abort and
+>             returns its own error (-ETIMEDOUT)
+>   worker 2: sees test_abort and returns -EINTR
 >
+> -EINTR only means "someone else already gave up", so it carries no
+> information. Which of the two gets reported depends on the order
+> pthread_join() collects them, because
+>
+> 	err =3D err ?: (long)thread_ret;
+>
+> keeps the first non-zero value and drops the rest. When the -EINTR worker
+> comes first, the error describing the actual failure is lost.
+>
+> Skip -EINTR entirely: a worker only returns it once another worker has
+> already reported the real error, so report and log only the real errors.
+>
+> It is still unclear whether the timeouts come from CI load or from a
+> problem in the test itself. Report the error accurately first, so the nex=
+t
+> failure can be diagnosed.
+>
+> [1]:
+> https://github.com/kernel-patches/bpf/actions/runs/29867905253/job/887644=
+63566
+> https://github.com/kernel-patches/bpf/actions/runs/29878191901/job/887948=
+45824
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-Sorry for the delay, yes, feel free to take it through your tree.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> Thanks,
-> Namhyung
 >
->> ---
->> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
->> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
->>
->> Best regards,
->> --
->> James Clark <james.clark@linaro.org>
->>
+> ---
+> v1 -> v2:
+> - hoist the worker_err declaration to the top of the function
+> - skip -EINTR workers entirely: do not aggregate and do not log them
+> - comment/commit message wording fixes
+>
+> v1: https://lore.kernel.org/bpf/20260722064713.357277-1-jiayuan.chen@linu=
+x.dev/
+> ---
+>  .../selftests/bpf/prog_tests/libarena.c        | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/te=
+sting/selftests/bpf/prog_tests/libarena.c
+> index df7e4b8dc394..daade4150af6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/libarena.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+> @@ -73,6 +73,7 @@ static int run_libarena_parallel_test_workers(struct li=
+barena *skel,
+>  	uint32_t nthreads;
+>  	void *thread_ret;
+>  	int ret, err =3D 0;
+> +	int worker_err;
+>  	int i;
+> =20
+>  	for (nthreads =3D 0; nthreads < UINT_MAX; nthreads++) {
+> @@ -118,7 +119,22 @@ static int run_libarena_parallel_test_workers(struct=
+ libarena *skel,
+>  			continue;
+>  		}
+> =20
+> -		err =3D err ?: (long)thread_ret;
+> +		worker_err =3D (long)thread_ret;
+> +
+> +		/*
+> +		 * A worker that bails out because another one already gave up
+> +		 * reports -EINTR. It is collateral damage that carries no
+> +		 * information, so skip it entirely: never let it become the
+> +		 * reported error, and don't log it either.
+> +		 */
+> +		if (!worker_err || worker_err =3D=3D -EINTR)
+> +			continue;
+> +
+> +		if (!err)
+> +			err =3D worker_err;
+> +
+> +		fprintf(stdout, "%.*s__%d returned %d\n", (int)prefixlen, name,
+> +			i, worker_err);
+>  	}
+> =20
+>  	free(threads);
 
