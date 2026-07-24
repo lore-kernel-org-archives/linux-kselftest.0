@@ -1,117 +1,138 @@
-Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481663FD156
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 21:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A46441618
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 21:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784929316; cv=none; b=Ux9IeI2JOgwotFx2y3nYGVW3ksTpLvsL53RqRujFKHIqSLRUHW/wGBLLwekj7+0ccsNOXhzeP/2qiJODpqRnGnRt9ay4P0hS6pX+HXQ75vWQa2Zr4g4eyQ3d58+JFWyrnV/03L1PDJ3B7hjq3BCzkjrfMf7DiYt3I3rPEUWu3YQ=
+	t=1784929326; cv=none; b=MzgXXztvH29WG+N4S6mQ+ERl2Mad9LygMzvPGMdW5U/lEU+AH0dS5kK69e8vy1ASM9zbnpwucWa2ZjHXrH/VSBBJnGdfkcGlRts4rhJweNjjvsj/7TRcqaqxOtM0B4nqL57Dxpho6lJIZUDIQcdQ+6Q34UYyxlPzn5bcA6fZf2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784929316; c=relaxed/simple;
-	bh=77AdLZwSlzRXNVmZcPS3aPRWxbdbniwiZ14tXP/9uvk=;
+	s=arc-20240116; t=1784929326; c=relaxed/simple;
+	bh=yK+v65dl8Oh8uBTbkQmHDaAB5BEVO8HHtvGN1jZbaD0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYiuSti2j++N/AnSGOBGI3hSaFmI0ma0fi5AR2knteFbOE3s250/pgs+6+wzMk/r7o3DIZoYvFFbfzrigVWdpDDWylP4WUdbXGOViXzDDlaRA0TINB5NFZEgWbnpsx7OdLYtXOPip2mg8uafYNF9iKNuZkzw2ZU41bp6BkQ5MmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F98VlwXt; arc=none smtp.client-ip=74.125.227.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=AYK8iBMXTB+gg/DDHGozE0ubp5AsxsIL5W/2e7QC2ei1D7xmxIpbDtaTbSFUMvsbvPov7xjZOJSi0UgeXSLiEakv5zyPwxOXN3theGh0EbVfb1YxkW3My36ujHdCg8ONuVevCbAF8+RoWyQ5GzN1dgjXr8v27oPzV/pYqWxAxXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QIBT3HMY; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F98VlwXt"
-Received: by mail-pj2-f1.google.com with SMTP id d9443c01a7336-2cabf1f1051so3077465ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 14:41:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QIBT3HMY"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cedda2ce6fso8182475ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 14:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784929314; x=1785534114; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1784929325; x=1785534125; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=v4ixN669MPx0d/t5228Qef0MeDlKadYsw/AtAwtoW40=;
-        b=F98VlwXtHLSvNA3/J8PgB0MtXpYptRA4vJH+f1BbNkuyk7hnC/OYI+WiQKXZnBk94b
-         48IzlLfGoW+ntnapKOSLlRmJxhyxm4p0/OQiE2/HoqsJueRc2EZUtgNIKH5WNZKwZ9NJ
-         V9SjcIkLRgTxAzJSK/G8hKcAH17/kftrEXMXyDlaaZxMHvxsfw46byRuXY0L3WQNI5yX
-         FCIFIDRlnv4YD1mPpQu7DaM/h9Om8xe9KeOsycJSqb+4YjdUo+8AnOvxDUUepR4d5EG5
-         58ykwH+HNkITEHRkxOU0oxFwq/39bwF+kWIFU8iw17iaHmRLgtpky/fURR72dge5RQ/A
-         Eidw==
+        bh=tXCbJonP5RTpEDTMHQcyo1IXdRFWvNUzhtlZCMlOUEo=;
+        b=QIBT3HMYkZq7pp+I+fKoOJjBzHciOhjFrdS+vbK3cWUL44uStiF2Qhmx5Ro/u6VObS
+         Lov+froDq8UeRkfIbvy/ODFpShsLpVnP+lP+Qs5WT76g2ofKLjtQsj2bpTdxipO+AStx
+         dGQGMBYOHOBL7QIv1+FMRr+9cf7hPde/qcf8yqLqQcqQ3etJO6Eu16udOByJD588eVv1
+         mxI6S6ABF1x2cApnSkxun6yK0Mt4sOCjwtW6mQg0/djV9cvZdRWoDgp0GjxCzCo6NOZv
+         PmkVDj7q3XBx26L8vYVn616BBoIU1FWTbsa1pfTUyIl6N0pKINC4gAIpEvvHJIbQU0bb
+         IQvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784929314; x=1785534114;
+        d=1e100.net; s=20251104; t=1784929325; x=1785534125;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=v4ixN669MPx0d/t5228Qef0MeDlKadYsw/AtAwtoW40=;
-        b=LRifRcrM/ygSLcubz0UuiaJ1GCi+h55qt6PiDCjEJdZJ/CvUFWAgP7MgqdVsuxtg8t
-         4Z563OQQSXpXq/GjYE2Fw6C6lfy58i5R0aEuaRRU/mjHrjzs+49tZkVr0ycsKMFUx/KC
-         uqXjU3+TA4FzSqZYrUTWljcSlr6gcOatHObaVjFeB9KHahi/xGkKutnsCOodjkPiC30J
-         zCwcPAuESwPDMfYWUPZA9lnacAXpaYK+jNdPEuhC8t/Xrxpvcerw2RjtoSY+xhQAqrBX
-         yt1Xp3H9UMOGBUGPLh1i6/875jEXdvcB+QqAaHdeCzou4HBjlUHeVGawQqJ3WZZh4GbK
-         4InA==
-X-Forwarded-Encrypted: i=1; AHgh+RpJ8dRYwtrUmUrM4YxN7h2DZ+zf9RvZ+F+LYhwXXS2yZ6fBbkN5ffgYVL0URCBWddNcRlbnQdBV9+IhFPH8IWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBk3AVMD6jJV4MutPUFwB5FhsjZY2oQ+7wR9drfwYKMLm9Gm0L
-	qTa0K2ZpFUBOapyrOWhzo0yrUTHj00oHX98YcXm+sUhreWBx6eeHugGF
-X-Gm-Gg: AR+sD10fP2YpTMq0zNwWLABxxh3fEZKVfnoICBtaIwwSNHay4MiWMRrbikO4/oRiDrx
-	Vrdw8JOkU+mDKOqWGQkZOrcl0h6wD0HcB+88K9dtJLepNDXWBqyQ4VVq+DcsyzvIVe/2gpCEdt2
-	xrYz4GcU6SgOKXLGTeYt1jSR78ukCt+SA2zCiGdOfSoKKWkFyHzMUKn/H5v7V6GA5hJkR2QuaJN
-	hSjNZexMGefCXQcX/eb9LTotWv8aVwOfHSLzkcyVH7YFkfdmbYOaE89ipL67UQTM1Trgz8iILwn
-	JLRCqnr6ZZUB2TE0xhvbkkTpbjRCn0zy3TuOE+yG2EqsOSeGMIAOdniV6KtJBKztJmwkpbbkJ7s
-	vVQgaXg9hooyI+oGRF/nYHSZkujobJjnxxDPpVg1Dm61YVJP9lTUbpOHonPSlHj2G85ap6/9WvF
-	0+iMYs8A==
-X-Received: by 2002:a17:902:c943:b0:2ca:281:27f9 with SMTP id d9443c01a7336-2cfde8459edmr1610395ad.27.1784929313662;
-        Fri, 24 Jul 2026 14:41:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:43::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde81d81csm504415ad.80.2026.07.24.14.41.53
+        bh=tXCbJonP5RTpEDTMHQcyo1IXdRFWvNUzhtlZCMlOUEo=;
+        b=WWe173YxL4YIhVL2nPRxtMtzkZp/js2lUcZTBgFMYmsbDljHEk5zuhXLVWif/hnXEH
+         /kmDBHqC+M8LwkdwnrgDl27mLktQMO7GkzyQwi9nAVRC679rneJJzNtsGYaOBpAZPvXx
+         Y6X0sBl8TMEKN6DvRXnbjfSTeOBq0o5TZSJNzhgBSXena7N8CVsvIKilRLy7mhvPI17z
+         9bCwDfnIpZV/GMtq3UcEZRDetbETOWWE4MaxewuNmuiCLR5YyDkJVWQ/DtlRM1zLLFvA
+         Ioe9GvHmb78JeCmDO+9IYgPfwhiZakuDA3GT+rg2MWJPf7N0b3a8VMV1zgNA3ymRkMhB
+         t63Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rovftnoh1PXXAeyvvRRSJ8aI0eNOHbI3mzel7ggiS7/5UcOt+ETFnkRrKn0Kcudo8p/YuqsHNMsV+fbIaLw4/E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4y7p6HEsF9MbFaLXvOFre/arzy9Ssgs705doIxwRdbin2qqkB
+	OqVCTDSh2WGLa+FeONfjn7vKpSkFs3zCZLgtYZrTCrarOIvXezTgwM/Du98l7oH2gw==
+X-Gm-Gg: AR+sD12Ztf3YDop9oPvxK1vX5j7fOcZCTCDyvCVXarAgTufeXKRp6SEovVe4VY2LoN0
+	DRnEnhM0lhIW5kd4Pw+wNVlx4KgUtJQ8a0WaKgUQPTs6vGBLAf8JreJPivHQDteTFd7FhY/QMyS
+	0dIjJg6fv4D9HlFCvOwH9k93CzRUVZ2mjP9tUYZYOQoL0DIqOs9H3Ozok/M9yyBr6iCzM80DtNv
+	0e59PVukuiTfg0RvCREwEP7BVgmH0qIUqU8GsaYIXgTuLmgBLKhlON3lGGznEp/AwEXidDtgRN1
+	yVUedZT3dCn/YEBPaNY0qNA5anCIItGc1gNBL0WpR2OUDJYB4wLfH41wBHeQVWlH21Kasxij6Lw
+	0eu2gGdZc3rcbfnctSfF7py4Ww/PKSKnPXkjfKEDeVPyqjdLItybTZCO1q2phErfQZ7oimQVAYr
+	E1ghC1Ef2A1J0McFr7x6KxkhtlEu3Q8JNHhMOcY47J
+X-Received: by 2002:a17:903:3d06:b0:2c9:c18f:7446 with SMTP id d9443c01a7336-2cfde8473b0mr1424615ad.27.1784929324250;
+        Fri, 24 Jul 2026 14:42:04 -0700 (PDT)
+Received: from google.com (79.217.168.34.bc.googleusercontent.com. [34.168.217.79])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde59bb35sm607925ad.12.2026.07.24.14.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 14:41:53 -0700 (PDT)
-Date: Fri, 24 Jul 2026 14:41:47 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org, sdf@fomichev.me, 
-	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org, 
-	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v5 3/3] selftests/net: devmem.py: add
- check_rx_large_niov
-Message-ID: <amPbqtxPdhs9QrVP@devvm7509.cco0.facebook.com>
-References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
- <20260708-tcpdm-large-niovs-v5-3-34bf6fac941b@meta.com>
- <20260721110903.34840531@kernel.org>
- <amPTWGX/3LHepYR3@devvm29614.prn0.facebook.com>
- <20260724143001.5afa8631@kernel.org>
+        Fri, 24 Jul 2026 14:42:03 -0700 (PDT)
+Date: Fri, 24 Jul 2026 21:42:00 +0000
+From: David Matlack <dmatlack@google.com>
+To: Josh Hilke <jrhilke@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>,
+	Alex Williamson <alex.williamson@nvidia.com>
+Subject: Re: [PATCH v6 0/6] vfio: selftests: Add driver for Intel Ethernet
+ Gigabit Controller (IGB)
+Message-ID: <amPcKEBsrkTH1JqQ@google.com>
+References: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260724143001.5afa8631@kernel.org>
+In-Reply-To: <20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com>
 
-On 07/24, Jakub Kicinski wrote:
-> On Fri, 24 Jul 2026 14:04:24 -0700 Bobby Eshleman wrote:
-> > On Tue, Jul 21, 2026 at 11:09:03AM -0700, Jakub Kicinski wrote:
-> > > On Wed, 08 Jul 2026 15:55:06 -0700 Bobby Eshleman wrote:  
-> > > > +@ksft_disruptive
-> > > > +def check_rx_large_niov(cfg) -> None:
-> > > > +    """Run the devmem RX test with rx-buf-size = 16 KiB."""
-> > > > +    run_rx_large_niov(cfg)  
-> > > 
-> > > Any idea why the devmem tests sprinkle disruptive everywhere?
-> > > Disruptive means we take the link down, I don't think this test 
-> > > does that.  
-> > 
-> > Talked to Stan and he mentioned the original idea was not necessarily
-> > just for link down, but any test that could be considered disruptive to
-> > other tests, with the idea to eventually introduce some scheduling
-> > (postpone disruptive until the end).
+On 2026-07-22 12:15 AM, Josh Hilke wrote:
+> This v6 of a series which adds a VFIO selftest driver for the Intel
+> Gigabit Ethernet controller (IGB), specifically targeting the 82576
+> device. IGB is fully virtualized in QEMU, making it suitable for running
+> VFIO selftests without specialized hardware.
+
+> Testing
+> =======
+> - VFIO selftests builds clean at every commit
+> - vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
+>   command to run the tests:
 > 
-> Perhaps have such conversations on the list? IDK what Stan has in mind.
+>   vng \
+>   --run arch/x86/boot/bzImage \
+>   --user root \
+>   --disable-microvm \
+>   --memory 32G \
+>   --cpus 8 \
+>   --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+>   --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
+>   --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
+>   --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
+>   --exec "modprobe vfio-pci && \
+>           ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
+>           ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
 
-I don't have much to add so I didn't post on the list. In my mind, disruptive
-started as "anything that can lead to a soft reset". But since the
-sockets tend to survive these well, I do agree that your definition
-of "link goes down" is a better fit.
+Extending this, you can run all VFIO selftests like this:
+
+make -C tools/testing/selftests TARGETS=vfio install
+vng \
+	...
+	--append="hugepagesz=2M hugepages=1 hugepagesz=1G hugepages=1" \
+	--exec "
+		tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 &&
+		export VFIO_SELFTESTS_BDF=0000:00:09.0 &&
+		cd tools/testing/selftests/kselftest_install &&
+		./run_kselftest.sh -o 360 -c vfio
+	"
+
+The --append flag makes sure there are HugeTLB pages allocated for
+vfio_dma_mapping_test. The "-o 360" is needed because
+vfio_pci_driver_test takes more than 45 seconds.
+
+> Alex Williamson (4):
+>       vfio: selftests: igb: Use PHY internal loopback on 82576
+>       vfio: selftests: Add helpers to re-enable interrupts
+>       vfio: selftests: igb: Factor hardware programming into igb_hw_init()
+>       vfio: selftests: igb: Recover after DMA-read faults
+> 
+> Josh Hilke (2):
+>       vfio: selftests: igb: Add driver for Intel 82576 device
+>       vfio: selftests: Retry on EAGAIN during device reset
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+Thanks!
