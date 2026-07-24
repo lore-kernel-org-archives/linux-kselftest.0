@@ -1,132 +1,136 @@
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41CB446C17
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 21:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E424457B3
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 21:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784927414; cv=none; b=YLfi+UTMIYW4d35WfHOK1JL5grioHITPbMVkA1kFFbGZklCyNhlEzVt8POPdN9CoBGED3yjNb4w07pZyAr+B2vPv6wD7zwSf7yjtnRrueTvu8n9lLe7vzyUcIXFifodaaIRSXBDix1Kq1twIlUCCGbZWLaTr6c/1uAlwEEx3D1c=
+	t=1784927472; cv=none; b=gnrzOwzlvMr1oqHW2OApJnmUY1s9ix1EZyAEFhqVOgs5dGuaF2PDFu8vMmyvemwDvqZp67XsvgjSp3jvoT/NkBleY9oqXrK0aCAt7Jx40OASnD7qh2h+9VaxiGzBmqYRkANSgQl9kNhY89RXXnps+9yomg3akWEycnf0i2Zs7Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784927414; c=relaxed/simple;
-	bh=TYtG7OzLw9fOqIZQN9VW86vPlkmDMaC9bn1DBPL/sf8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=phVuD54c+fqX1Mn+IsGGwYR7xBPy6gTtCpl/mj+eVzBLw45LLYHyhNHouWNq/k8Q0F57T4OZIS3fWEc2RuF4kaQte2UM2+PzeIy4ro37AaUwSswvximhwRcqr6Sj9yDMN1mAdaFABFomGGlzGxd1zsetI+akGEd+ujoCCTq1iqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IXk9pkhh; arc=none smtp.client-ip=209.85.210.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1784927472; c=relaxed/simple;
+	bh=RirywIIvCMGl+AmhsxILpmh/0g1v2KM8NX5F8TG1gsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q2r/VtAwtaD5hp0GLxpPHZlr23G5Bqg2S0rLEiT6AudXu3uEZ6XdtfDOy9s1JCWpebh6eR4NbS8Zp2mRL1F5nwYQcyqPrfE8sJgd/rSnbfVU10E4wJ5lYc0JLTbyryCscs4TPpiyvsMD4yc8F5UC9ba6NUU0CR9OHgBKm3JmnSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esC3Tvda; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IXk9pkhh"
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-84842381150so1291708b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 14:10:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esC3Tvda"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2caced6038eso12497385ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jul 2026 14:11:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784927411; x=1785532211; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XTReVzCNP0fxj6IgppN49ZsfvNVcyjFJjPGB1HCtc6w=;
-        b=IXk9pkhhAqQ9tt/ZLCTCihwzv0v5ZMiHAtQEQRhmJmxuHdUdQdufLhiVecA+0zRqtB
-         KxG4ZG9i9pIWKWt8CJHx3V0ARvB5LLqBs179po9XogDTjwUJvlWqSgw52Mjoz7ct3kqj
-         dTKU21KNVVdg+Qtq1wHNNdwnBx4qu1CUbGcj4P0wEQpN9g2V2wqMfEa6zZ3bUCt03t9x
-         PIQctKjMWVl32kV3toCBovo0R+wvBQ82aFv8hbJ67WnSholFHTxNHYbwDSZ9QrBQ56XW
-         JLwzRAG9ChS+IVYob4DDimvN2I23F9kjT71lc37Uotmt3U9vZO1e+YeZ1Ouka/R62uQX
-         49eQ==
+        d=gmail.com; s=20251104; t=1784927470; x=1785532270; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bWQIrK7yeLWM4ZB3OW1av571sFujM5GYrF90hFF5FZs=;
+        b=esC3TvdaGQ5JtUReZ++og6DtbrdHuKcXJhZmz4iBdZhnEAQ9k608wM5RKPHsc7/opv
+         5Fw4SMz3FQQVDLYW1cjKS07dT1TnnJmU6o1cfPkVPAcMQRiqAy36+jZYcT4rpeSiOgTR
+         2mi27NPqvefFxR54y3zfs+qVzU0ZH6mC8ZLhYg/hV9tiwuzQOV5oZV1WvpRATqz2syJn
+         g98ZCUBPy7bxidFYTmyjtCZhqhN4w2tEoaeA0Y3OSPUfUCWWDMubcptsxytC1r0x6zeY
+         3PDM7svt3VRn9rz5NlKO39QmLGcMzf/5XDbkDrX9c3wms+p/eaa0ntDtP0ZuFTQ1/I0d
+         mkJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784927411; x=1785532211;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XTReVzCNP0fxj6IgppN49ZsfvNVcyjFJjPGB1HCtc6w=;
-        b=gcIJF6nQ3GBp5WwcBhzkXiVclKcrkZZlo5gx/KVlzSzNavhteE7b0j9UH92w5qEVhX
-         mb6Nw1g9+S+TIFCtTWsUOYdW+jrf82pZivgMTeEOQUV9nNJkJ9h26txSeQGoYtkYbcTO
-         EBWnd2C2hOmYOc5gfueBbMX339tTF/59RVPmH1ycP+qNR4Wi4LKY+B+BVrY1IOqGHjkT
-         JLUWcaPF/9eqlU0+LMXhuNaWokx5xCYEPohCD3EvYZGmgMLbhfnrUEIOs2sQ+Qu7EBCZ
-         lMJ0xHyt33eIHHqvV3y2F0g0YPCZJLT9EFymCfoo9aPTMthtOYnPfbLwuF0zTIzQpHub
-         /sjQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqkqQnCbPGMFyNio2sxePtSX276SuL7E9wzIlAEq5m9xiKDSBW/wXL1RRHC/cN/n5nWc0+6I4FWuBVX0hY4QoY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlCJXKkqErOT2wB93SmUx6hgx/WwMeMEQrt4MEoPV2ornDwbmL
-	K8/CjNhfw8ybdA1icyG5B0e1b9QFN4YCKLWUf36gO0OqVrB3qodEf7qiIOkqRr1HuRFpN3c3xRX
-	0TjOSsQ==
-X-Received: from pfoc20.prod.google.com ([2002:aa7:8814:0:b0:84e:1951:8efd])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a20f:b0:84e:17ef:5460
- with SMTP id d2e1a72fcca58-84e2bb396bbmr9852497b3a.40.1784927410740; Fri, 24
- Jul 2026 14:10:10 -0700 (PDT)
-Date: Fri, 24 Jul 2026 14:10:10 -0700
-In-Reply-To: <20260703212145.343527-3-dwmw2@infradead.org>
+        d=1e100.net; s=20251104; t=1784927470; x=1785532270;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bWQIrK7yeLWM4ZB3OW1av571sFujM5GYrF90hFF5FZs=;
+        b=ngq+8kOUGGzCm8Wlh8QARSSxEs1+JNooOo55UMUQsGm8OAsYgiOAGpTYyia+Fdg6ow
+         Khb0xGo+BlwNfBk4BYD0BJWdG8ZrkgAVA0PRFPPpMAF7BceC3OgWdPYW93/xqVLPloAx
+         9nPbZZTkkCLElqCdZ0Px/58RlN5GVpAaF/Gt6jEKF3SOC+qjj4H4IDcPFJL7SZA03czI
+         2oRoyjqf53nU3jENlcJC+cQ0V8TrfGpCxrw63FBN2C59I/NnTdGal1cT8CNgycCsRPAr
+         eb2ubi21xh1K424BSQj/N6UzJ6HrpqmWiCPPMjknzDnvaKriH7MtO9KzakwmGYm4pgck
+         7ZbA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqe+ijXGJDj7sy8ACX6wZDe3PzeNWUJA/0P5Z2U2+V2jT15JZ8BYZcp5AgLwhCjXpFW/lo3wC2iYV4SgX4P8wY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7bmtuQADhX992CheQQO+ROCm/7oobSvqnbo2xNScsu/uWIea6
+	hADjzZ02aqO8QGrtpTJf+S2z2bL77aSP/qA7sS42ADNBCXz7B1WBZdKB
+X-Gm-Gg: AR+sD1215wg9CRZ/v6Mnnn8IGTD4cA7JWOtyEfjLxnQ3bmJm1iTcRw1CuU/ojIZANjq
+	kVWd6DXSRijdf52RfyZzDjXbYlgaorEIzFhcR1eW+N5L26UbJa0UmE5nnqKyk/oALEcY9Rkyt+v
+	tu8771YuRaxhtsJvwS/nWv7gTvsuFw2f9J3li674dlyzLud/pubmHM+I2Icz27M4YDM2sQ3tO9S
+	67wjPIZIqvP7z/kyaOlIszYjw9ibMpqApv8DCqQ2TMmIoS12gmTFw2p3TiI1TRPbiftE9Bwd5NE
+	wCJ2sznTXRJYoHSrnRtX/fSs5DAYCQZTxiLQ9XCipVEMqfI3yMTdlKYmYg4ZGoAkmPfF4T02KGl
+	KCsOnns94NEGvh/VOvkshgbRWCqfILDyjDFvskiKqwxtmKVG4pDZYyeaVvFB09HvQn6M+V6TkP0
+	dNEvqQp9HJwZHUu0YWwFGBnw==
+X-Received: by 2002:a17:903:1c2:b0:2bc:e299:4b3f with SMTP id d9443c01a7336-2cfd7953a96mr18549685ad.10.1784927470019;
+        Fri, 24 Jul 2026 14:11:10 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:9::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cfde7f48f8sm242665ad.70.2026.07.24.14.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2026 14:11:09 -0700 (PDT)
+Date: Fri, 24 Jul 2026 14:11:07 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
+	razor@blackwall.org, daniel@iogearbox.net, almasrymina@google.com,
+	matttbe@kernel.org, skhawaja@google.com, dw@davidwei.uk,
+	Joe Damato <joe@dama.to>, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v5 1/3] net: devmem: allow rx-buf-size >
+ PAGE_SIZE per dmabuf binding
+Message-ID: <amPU683HyCt3TJNG@devvm29614.prn0.facebook.com>
+References: <20260708-tcpdm-large-niovs-v5-0-34bf6fac941b@meta.com>
+ <20260708-tcpdm-large-niovs-v5-1-34bf6fac941b@meta.com>
+ <20260721110713.325d36ba@kernel.org>
+ <amKqlqgfZipKjrii@devvm29614.prn0.facebook.com>
+ <20260724072419.62778bbe@kernel.org>
+ <amOVWgJ3BAJ8I/4+@devvm29614.prn0.facebook.com>
+ <20260724125817.4495a7d4@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260703212145.343527-1-dwmw2@infradead.org> <20260703212145.343527-3-dwmw2@infradead.org>
-Message-ID: <amPUsqRiVUsC4tuS@google.com>
-Subject: Re: [PATCH v6 02/36] KVM: x86: Improve accuracy of KVM clock when TSC
- scaling is in force
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260724125817.4495a7d4@kernel.org>
 
-On Fri, Jul 03, 2026, David Woodhouse wrote:
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index f14009f25a3b..b2446c04a076 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -950,7 +950,7 @@ struct kvm_vcpu_arch {
->  	gpa_t time;
->  	s8  pvclock_tsc_shift;
->  	u32 pvclock_tsc_mul;
-> -	unsigned int hw_tsc_khz;
-> +	u64 hw_tsc_hz;
->  	struct gfn_to_pfn_cache pv_time;
->  	/* set guest stopped flag in pvclock flags field */
->  	bool pvclock_set_guest_stopped_request;
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index e69156b54cff..621d950ec692 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -2131,7 +2131,7 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
->  				*ecx = vcpu->arch.pvclock_tsc_mul;
->  				*edx = vcpu->arch.pvclock_tsc_shift;
->  			} else if (index == 2) {
-> -				*eax = vcpu->arch.hw_tsc_khz;
-> +				*eax = div_u64(vcpu->arch.hw_tsc_hz, 1000);
+On Fri, Jul 24, 2026 at 12:58:17PM -0700, Jakub Kicinski wrote:
+> On Fri, 24 Jul 2026 09:39:54 -0700 Bobby Eshleman wrote:
+> > > BTW did you add both min and max checks? Cause the only risk with using
+> > > a dummy value would be that the policy will be rendered inline, and
+> > > inline policy is u16 so 64k wouldn't fit. But your sample above has a
+> > > max of u32_max which forces the out-of-line policy, which is what we
+> > > want.  
+> > 
+> > Yep, u32_max:
+> > 
+> > +	 name: rx-page-size
+> > ...
+> > +        checks:
+> > +          min: page-size
+> > +          max: u32-max
+> > 
+> > Sorry, probably should have just sent the whole patch instead of
+> > replying hunk-by-hunk.
+> 
+> Ack, LG, just double checking.
+> 
+> > BTW, how expressive do we want these policies? For example, would
+> > absorbing the power_of_2 check into a policy be valid in the future? or
+> > is that too bespoke?
+> 
+> Power-of-2 could be useful (it's implicitly one bit set, which is also
+> potentially useful for validating one-hot flags). The trickiness is
+> combining power-of-2 and the min check :S We have one validation per
+> field. I was wondering if we would be better off defining the field
+> as a shift instead, then we only have to check min. But I thought
+> that it'd be a little unusual for uAPI and possibly maybe one day
+> we will want the non-power of 2? So I figured checking min using
+> the existing facilities and open coding power of two check is good
+> enough for now.
 
-Kinda silly, but s/1000/HZ_PER_KHZ.
-
->  			}
->  		}
->  	} else {
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0550359ed798..dbcff49cd561 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3314,7 +3314,8 @@ static void kvm_setup_guest_pvclock(struct pvclock_vcpu_time_info *ref_hv_clock,
->  int kvm_guest_time_update(struct kvm_vcpu *v)
->  {
->  	struct pvclock_vcpu_time_info hv_clock = {};
-> -	unsigned long flags, tgt_tsc_khz;
-> +	unsigned long flags;
-> +	u64 tgt_tsc_hz;
->  	unsigned seq;
->  	struct kvm_vcpu_arch *vcpu = &v->arch;
->  	struct kvm_arch *ka = &v->kvm->arch;
-> @@ -3340,8 +3341,8 @@ int kvm_guest_time_update(struct kvm_vcpu *v)
->  
->  	/* Keep irq disabled to prevent changes to the clock */
->  	local_irq_save(flags);
-> -	tgt_tsc_khz = get_cpu_tsc_khz();
-> -	if (unlikely(tgt_tsc_khz == 0)) {
-> +	tgt_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
-
-Here too.
+SGTM.
