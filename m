@@ -1,240 +1,214 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4502FE056;
-	Sat, 25 Jul 2026 09:25:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916B742A9D;
+	Sat, 25 Jul 2026 12:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784971537; cv=none; b=O5TrMsPAY5IU4iP1MQBa3mhed2/BLL0Y8F5c8rJTTkhC3cB3cgrZLZ+KnQkKho68YOkq7PQaWstSen6xJTN4y8mjPoDX4hPHLAvdmzRmqnKnvYGEschDTVegez42Pjm8ZlkWbkc8WQ+Jl6bXHYhdDsRJT1bOYqWpIX3UYFgK95M=
+	t=1784983541; cv=none; b=CAwAExI4GxEwn8b5e+DqgTx7U5aA0LJHGMR5S1rE5FydmW3IWEGtd8+ZpAJk39SeXLs+o4axFoSTf5fYZaJFrHAY+gCbWTIfnclS/K7M9hgcbC4VQnHfPQiA55npC4T9ajUBnkR+KTwyTJKwFW1ZAlU346V25O6Bykr/AJPwtjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784971537; c=relaxed/simple;
-	bh=JI2q/jrov0bUlRrc1A9ykQM6Jx3rFwik0ZalTA/bQbY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OTsEM1ugiiSbjGHHoUlGdM9lEFVhSB3Y3ZXoc+JKDKhLf42UfkjMEuhQnj78RREzX78ICX6MHWbt9e1w/0WBo/0o9WtacU+SbJJTpyyWtDpAugXQ4KjVjDRgPiqmzSk2eyLok20GxnAYtqiFg7M58Pa078XoU2uVmGsYMfgcwyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=S5W6HYsY; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1784983541; c=relaxed/simple;
+	bh=BDhgFjks1rCSdNlVHsz/7D6l2Z2HxASJMBuAspLM46g=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HF0cuqjU1Ld7K0/HneHvlWsizbT5Dkf0tLgOOP0daopksHxH5D6+9WUf2n4jjaJmViIRLC/zHH8xXskgskah9Vem9+1zhLmGss8CotGHfBSTHll9sn4vDZzv9/nOnVNA2KAgufIa8LN7cFssm7zxYjKiw6O9YKXNBiX1TaTErTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kjm0Xt9f; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="S5W6HYsY"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72EBB1476;
-	Sat, 25 Jul 2026 02:25:28 -0700 (PDT)
-Received: from [10.164.11.99] (unknown [10.164.11.99])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D0703F86F;
-	Sat, 25 Jul 2026 02:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1784971532; bh=JI2q/jrov0bUlRrc1A9ykQM6Jx3rFwik0ZalTA/bQbY=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=S5W6HYsYef4wFmguN05enQML7D1YvuffSKrYSEGK/A7OM/kkOZopZyrsXPGhaV+7j
-	 FBUIcOARCXfM6tvDX8VKtqn2kLOdS6gjYqHFskrAweR96JQG6+7NypyOssCqy4vPGa
-	 OX494Kw7oemwgONK3QcFhubF+sK7FMsLG8PVojMk=
-Message-ID: <58b824e7-dafa-4a8b-a8ca-d38151c97df6@arm.com>
-Date: Sat, 25 Jul 2026 14:55:23 +0530
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kjm0Xt9f"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=RwxggY9gc4GcZC2isiDohJMCFxWLehVGr+89zjMBUrI=; b=kjm0Xt9fUmW5uRkGi3EtVs6lug
+	ZwKZMp9rAtnGaL5ahc4W8og938J1F1zxNf+DJ/caiUSPQ4aq7OhllcAE6+1wq81lPNuBigi1Ymdbc
+	jWsQjsUZMnJC2IyVmGGSi6Ze1S5M7ARR1xPmJOjRdGpESlNH1GXPiBQkEsFbsuu04ZkAuS/JVAf2I
+	5HDqKWOPGHSHYeKoZZmmshnWg046Hh20cQ3Nm+haCrMfTnRk+CLcoqBY7tA3Y4BaAjoMgKUE7slz3
+	NP8uHoUy6gfj+H2IMJeVls4i/B9Zvc3YAlPUwfTI0MUeFuDrTtEUCvVZ5oo6Q8cigapXWyiVNlQWY
+	9Zcji1JA==;
+Received: from [2001:8b0:10b:5:5b17:8d34:712e:739e] (helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wnbkb-00000006Ehn-48CJ;
+	Sat, 25 Jul 2026 12:45:10 +0000
+Message-ID: <fd367b54511b52d891d8a50883ac05731150885e.camel@infradead.org>
+Subject: Re: [PATCH v6 08/36] KVM: x86: Activate master clock immediately on
+ vCPU creation
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>,  Borislav Petkov	 <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"	
+ <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross	
+ <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
+ Durrant	 <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
+ Bischoff	 <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
+ Gouly	 <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, Dongli
+ Zhang	 <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Date: Sat, 25 Jul 2026 13:45:08 +0100
+In-Reply-To: <06561667eee52c40ef4587fcc11f6bf964ce40bf.camel@infradead.org>
+References: <20260703212145.343527-1-dwmw2@infradead.org>
+		 <20260703212145.343527-9-dwmw2@infradead.org>
+	 <amPW1eAPpUuxLoj_@google.com>
+	 <06561667eee52c40ef4587fcc11f6bf964ce40bf.camel@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-9FZybFZZ3b5dnuxm+p2R"
+User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] selftests/mm: retry migration failures for the
- full runtime
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- sarthak.sharma@arm.com
-References: <20260724102431.1199519-1-usama.anjum@arm.com>
- <20260724102431.1199519-6-usama.anjum@arm.com>
- <15111e85-4143-476a-830e-9f7d47cc236e@arm.com>
- <a3ed6793-8285-4043-a0bb-10bd3890be19@arm.com>
- <6e2236ab-2cfd-4e61-98cc-4e4de9f76bd9@arm.com>
- <1c5b5101-1bf5-436e-a0dd-10b6cf81ff59@arm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <1c5b5101-1bf5-436e-a0dd-10b6cf81ff59@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
+--=-9FZybFZZ3b5dnuxm+p2R
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24/07/26 9:27 pm, Muhammad Usama Anjum wrote:
-> On 24/07/2026 4:23 pm, Dev Jain wrote:
->>
->>
->> On 24/07/26 5:23 pm, Muhammad Usama Anjum wrote:
->>> On 24/07/2026 12:46 pm, Dev Jain wrote:
->>>>
->>>>
->>>> On 24/07/26 3:54 pm, Muhammad Usama Anjum wrote:
->>>>> move_pages() is best effort and can temporarily fail when concurrent
->>>>> faults race with page unmapping. A busy shared-anon workload can exhaust
->>>>> the current 100 retries long before the intended 20-second runtime and
->>>>> produce a false failure.
->>>>>
->>>>> Use the full runtime as the retry window. Since the initial page location
->>>>> is unknown, require it to reach both alternating NUMA targets to confirm
->>>>> that cross-node migration made progress despite transient contention.
->>>>>
->>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->>>>> ---
->>>>
->>>> Makes sense, but see below.
->>>>
->>>>
->>>>> Changes since v1:
->>>>> - Retry per-page failures for the full runtime
->>>>> - Verify that both alternating NUMA targets are reached
->>>>> ---
->>>>>  tools/testing/selftests/mm/migration.c | 39 ++++++++++++++------------
->>>>>  1 file changed, 21 insertions(+), 18 deletions(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
->>>>> index 29f7492453d43..4d55a424058a9 100644
->>>>> --- a/tools/testing/selftests/mm/migration.c
->>>>> +++ b/tools/testing/selftests/mm/migration.c
->>>>> @@ -7,7 +7,7 @@
->>>>>  #include "kselftest_harness.h"
->>>>>  #include "hugepage_settings.h"
->>>>>  
->>>>> -#include <strings.h>
->>>>> +#include <string.h>
->>>>>  #include <pthread.h>
->>>>>  #include <numa.h>
->>>>>  #include <numaif.h>
->>>>> @@ -20,7 +20,6 @@
->>>>>  
->>>>>  #define TWOMEG		(2<<20)
->>>>>  #define RUNTIME		(20)
->>>>> -#define MAX_RETRIES	100
->>>>>  #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
->>>>>  
->>>>>  HUGETLB_SETUP_DEFAULT_PAGES(1)
->>>>> @@ -110,7 +109,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
->>>>>  	int ret, tmp;
->>>>>  	int status = 0;
->>>>>  	struct timespec ts1, ts2;
->>>>> -	int failures = 0;
->>>>> +	int success = 0;
->>>>>  
->>>>>  	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
->>>>>  		return -1;
->>>>> @@ -119,29 +118,33 @@ int migrate(uint64_t *ptr, int n1, int n2)
->>>>>  		if (clock_gettime(CLOCK_MONOTONIC, &ts2))
->>>>>  			return -1;
->>>>>  
->>>>> -		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME)
->>>>> -			return 0;
->>>>> +		if (ts2.tv_sec - ts1.tv_sec >= RUNTIME) {
->>>>> +			/* Reaching both targets verifies a cross-node move. */
->>>>> +			if (success >= 2)
->>>>> +				return 0;
->>>>> +			else
->>>>> +				return -2;
->>>>> +		}
->>>>>  
->>>>>  		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
->>>>>  				MPOL_MF_MOVE_ALL);
->>>>> -		if (ret) {
->>>>> -			if (ret > 0) {
->>>>> -				/* Migration is best effort; try again */
->>>>> -				if (++failures < MAX_RETRIES)
->>>>> -					continue;
->>>>> -				printf("Didn't migrate %d pages\n", ret);
->>>>> -			}
->>>>> -			else
->>>>> -				perror("Couldn't migrate pages");
->>>>> -			return -2;
->>>>> +		if (ret < 0) {
->>>>> +			perror("Couldn't migrate pages");
->>>>> +			return ret;
->>>>>  		}
->>>>> -		failures = 0;
->>>>> +		/* Migration is best effort. Try again */
->>>>> +		if (ret > 0 || status < 0)
->>
->> Also what if you migrated accidentally to node 0? In which case you
->> will return a false success below.
-> What do you mean by "migrated accidentally to node 0"? Can you give an
-> example?
+On Sat, 2026-07-25 at 08:59 +0100, David Woodhouse wrote:
+>=20
+> > Any reason this can't be?
+> >=20
+> > =C2=A0	if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
+> > =C2=A0		kvm_update_masterclock(vcpu->kvm);
+> >=20
+> > > +		kvm_update_masterclock(vcpu->kvm);
+> >=20
+> > I don't love doing work outside of KVM_RUN that is typically handled by=
+ KVM_RUN,
+> > but this seems fine?
+>=20
+> I think I tried that first and it didn't work because
+> KVM_REQ_MASTERCLOCK_UPDATE wasn't actually set yet. I remember going
+> round in circles a few times here. I'll take another look.
+>=20
 
-I meant it can happen that ret is 0, status is 0. Then you will pass
-"status != n2" and the function will return 0.
+On the other hand... I rip it out in patch 36 anyway, in favour of the
+cleaner answer that is available once I've cleaned up the rest of the
+masterclock stuff.
 
-So probably just return -2 instead of status?
+But I wanted this to be earlier in the series as it does fix things for
+the selftests which get introduced along the way. Otherwise we have to
+run the vCPU once to set the clocks up.
 
-> 
->>
->>
->>>>
->>>> old code wasn't using status, so why now?
->>> The old code not using it does not mean we cannot use it now. ret gives the
->>
->> I never implied that :) The observation was because I didn't see it mentioned
->> in the commit message, this change is orthogonal to the description.
->>
->>
->>> aggregate result, while status gives the per-page result: the destination
->>> node on success or a negative errno explaining the failure. In particular,
->>> move_pages() can return 0 with a negative status, so checking it prevents a
->>> failed move from being counted as successful.
->>
->> Crazy stuff. So move_pages() can return zero but that return value is not
->> really the return value and you have to check status.
->>
->> The man page reads:
->>
->> "status is an array of integers that return the status of each page.
->> The array contains valid values only if move_pages() did not return
->> an error."
->>
->> But then says
->>
->> "On success move_pages() returns zero.  On error, it returns -1, and sets
->> errno to indicate the  error. If positive value is returned, it is the
->> number of nonmigrated pages."
->>
->> I don't know which one to fix, the manpage or the ABI, I suspect the latter,
->> storing error codes in a variable and then returning zero sounds wrong.
->>
->>>
->>>>
->>>>> +			continue;
->>>>> +		if (status != n2) {
->>>>> +			printf("Page is on node %d instead of target node %d\n",
->>>>> +			       status, n2);
->>>>> +			return status;
->>>>> +		}
->>>>> +		success++;
->>>>>  		tmp = n2;
->>>>>  		n2 = n1;
->>>>>  		n1 = tmp;
->>>>>  	}
->>>>> -
->>>>> -	return 0;
->>
->> There is no return statement after the while loop. I suspect on some compiler
->> config it is gonna complain about this, or someone inevitably will run the
->> selftests with an old compiler and complain about this :)
-> The loop cannot fall through, and the minimum supported GCC and Clang versions
-> recognize that. No trailing return is needed.
+--=-9FZybFZZ3b5dnuxm+p2R
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-Okay.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCE8Ew
+ggWvMIIEl6ADAgECAhANkOKMSmGXhF5eMl0rsRhvMA0GCSqGSIb3DQEBDAUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjAeFw0yNDAzMTMwMDAwMDBaFw0zNDAz
+MTIyMzU5NTlaMGIxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UE
+AxMxRGlnaUNlcnQgQXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTCCAiIw
+DQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOfSIeC0vv1xPQ+dgSxbIIrkaru6skAWJYaGFzmv
+q4Kq+2wU2jxhcWlJg/JeP5jEkq/LM3pn5aaLao79j+XRmS7J1ZpJKUODJVoM4s9MQJhTMvo4qS5Z
+S64g6QR7Obkz3I1Lr3aWeSBmDDEyzue+NKtuWZ1Cxy3RdXo/w5HgRc3l2AercOM3Gt1XonTzEtTb
+Z/Hwc0Sn9Gz8RmGRK6Ka4hVDl8q/2l110KaV233Kh5etP0csXS8MIMdVRfRu3sc5hp13DG7lCKzK
+72a2GEpI8Wpl26G6I1/LMzz/98T+FqjTqxsdquk7Cj7m2vKGLW1BorpQH7WFGPdJQXJe1hfbfiZA
+CcVdCtl4nAacFacmsiArZBfX7AQGL7isvHUwwYFEtcApyGW4p2Lt+t8nvU0CANA6BHOpOz1xOP8W
+mAESbUriIjyuTUf3fJ9oDNCurVqhASMJCDaWI3lYX/QAoiAzt6akqbbZxo2ujW7mGGqc0KxqE2cs
+h2T79v7pC8aUtHBfwNrTR19GnZVxE0eQ7ViIQhR6mpSaUQFA9sG+cmD2G8TnCgYsLa0q8De6F61a
+CBevQGHNzrbZ3JAMneveYg/Jy1XxQHDRcvrMfWKe0jjcWbdKYlaGVPm5V1ILwYz7Yv5ewo3NUrxI
+GJiywe9qPhuJSDZs7VehTuI0FxGIsgKzVjgbAgMBAAGjggFcMIIBWDASBgNVHRMBAf8ECDAGAQH/
+AgEAMB0GA1UdDgQWBBT3m6JO05fF9DQPQw6Bhc6RkzKv+TAfBgNVHSMEGDAWgBTOw0q5mVXyuNtg
+v6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MHkGCCsGAQUFBwEBBG0wazAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEMG
+CCsGAQUFBzAChjdodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURS
+b290RzIuY3J0MEUGA1UdHwQ+MDwwOqA4oDaGNGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdp
+Q2VydEFzc3VyZWRJRFJvb3RHMi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUA
+A4IBAQA+b8Uw53sDspdZgukU+qzLyyHkcjlxGGhHlP+zrmDLKm1wEFvCRS2pili3Hy67i8N4N5NU
+vw5Rg6kv3lxb9S9Rktxk43k+tvm68pl7OxQE55ZjVY87P0lUPGwEqOOwLLyH02ZQcsfq5p5LrOH9
+0JvmvZ1yy73HS+VpDAqOlytE0NSvTIRqFFkKQGQwfjvtql9YflujuNNvJztjBaHKYZsnNSg+J38o
+jYq4TP3pSg3UdVH0PncVjPQyqxC9xef5Xae92Kbkzol3x7Nel3A1bwAkalrDMspvTHvey6LfiBks
+FIqviTnoy7fgjaRAJgHS+RXx/cmuRd3rUAclSVVrYu8RMIIHAzCCBOugAwIBAgIQAzUotrsybJHx
+HTjKOIVdIDANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQs
+IEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQg
+MjAyNCBDQTEwHhcNMjYwNzE4MDAwMDAwWhcNMjgwMTA0MjM1OTU5WjAeMRwwGgYDVQQDDBNkd213
+MkBpbmZyYWRlYWQub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2pYux73kdbYX
+sWF8f1u6DJP91qcqaZetsyfPkZk0B+MmXmAEv0kVes5n15V2mbDThOnpoPFly0UugQO9JYqLfrtD
+tKD5yL58fgrDB9Dw+LQikgrHafl6YSCds5AvUu/8hw2J6noKrcOLJpKlKn9Fl/4IB9Q3JIdLx5aa
+EtTqMalIPqHFOlgrJ7s+aua8xbB8YQ9ahqYBXWRJNv3P/2b1DYtdrz1oqZPE3CcB8Pc6Gf2a1Tcm
+6TAgtEx7Cf1BFcrsrMz7TWHmGQITieNb2r9UYWSc2Gp+GtYFNJCgT0JJXKUBIauPMKBLteYrL8Fo
+ff/uY44dC/mDWjdCP/5x0qelPQjlBvWdHL5zvBTOj06rJ0m3HNI/hnIcDh0Qu2j9reb9rLVcdym6
+bWmBM4uDEB8Zv9Ph0KTBFSy1IosyakuD1j1Os30EzjGfbi0EUXIvnOcYbTBAbM5UAzrxEHMhBvoX
+Pvnx+OyvjJmc9tWxTX6AcSz+m40esbT17URBeZS18afgieiikm5TynlUYP1LciR3hSgGVzvGXnKO
+02VDFR5itGWdRKZ2W5wIShNfWfhSa0D0K5UdIDt5Qc7sjzwK1Yb1sY5Tu0uA5mhIS82q1ov83uxB
+sFkriNnhGv/M1NCDVLBiOMsHu73qUM+yKmgKLwF9Hfn9WI25glbAMI4S5r3hYzcCAwEAAaOCAfcw
+ggHzMB8GA1UdIwQYMBaAFPebok7Tl8X0NA9DDoGFzpGTMq/5MB0GA1UdDgQWBBRcYhqbcGzn1jrT
+JOZaB8O7qllDpzAwBgNVHREEKTAngRNkd213MkBpbmZyYWRlYWQub3JngRBkYXZpZEB3b29kaG91
+LnNlMBQGA1UdIAQNMAswCQYHZ4EMAQUBAjAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEMIGpBgNVHR8EgaEwgZ4wTaBLoEmGR2h0dHA6Ly9jcmwzLmRpZ2ljZXJ0
+LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsME2gS6BJ
+hkdodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZT
+SEEzODQyMDI0Q0ExLmNybDCBjQYIKwYBBQUHAQEEgYAwfjAkBggrBgEFBQcwAYYYaHR0cDovL29j
+c3AuZGlnaWNlcnQuY29tMFYGCCsGAQUFBzAChkpodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v
+RGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZTSEEzODQyMDI0Q0ExLmNydDANBgkqhkiG9w0B
+AQsFAAOCAgEAocabrh1cPd5s3vY5rnlBVQSTc7zs2ZWs67dAIltR+05WELrYClVzzUhMs/LOJPlr
+EUo45UDDomXq38DxFepaPd9+iNLjXfn33EX/IG44j04lU/oF/Rg9VeQILkYLbCZ/x9wOjNHZc4SN
+ydY7Dhvf/sT5aBz88u7D5+azZJ7Qf1U57wYseCH1Mt0nDrtr5y19IJ8D9xJJ33RFL6vfpHZBBAQ8
++3RqkKNxLoV2aFvQhxdhjNLDqTv3LjUIdicwPraN7JkxEu7CV2Lka7eRqJgkWL7SK0YmBjGpRafs
++icP/ON5RCCKTTb6VlX8eTG2sJJfsFhvJNCCt6xexbWzWtIrfP7NvPBvwBB737AyEGBZkS5aNizT
+McURJGTv9UKvBh1LF/+tNhYtLvPCN7oecGzhCHht9jcwSkygTo3Y6YlK3QgOu+ncmiBbfeuwlLZ1
+LxbYvG6hgNqXv7u6YyADbYajAQJXJ2OQen39pm3Q/AQSyLYG+B8lDglWsM8tYXPlEdrYJcksGK6F
+nqIX6Bumn43rBooLJdiZp4WmfWdL2pxe+LxRDjprmqu1WprixDxULSTOKJZoqTlugs6y3Bc+if+s
+gHnBBtz9WQ6MtPHkh7zONDAFIKcBmv8OqPQCx0F3Wv3OEybwMpXx0OsKgK8wLldaX1pXcMuyDgTL
+Sqs0AV0OHUgwggcDMIIE66ADAgECAhADNSi2uzJskfEdOMo4hV0gMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UEAxMxRGlnaUNlcnQg
+QXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTAeFw0yNjA3MTgwMDAwMDBa
+Fw0yODAxMDQyMzU5NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqG
+SIb3DQEBAQUAA4ICDwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZe
+YAS/SRV6zmfXlXaZsNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2z
+kC9S7/yHDYnqegqtw4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qG
+pgFdZEk2/c//ZvUNi12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41va
+v1RhZJzYan4a1gU0kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0c
+vnO8FM6PTqsnSbcc0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PW
+PU6zfQTOMZ9uLQRRci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXt
+REF5lLXxp+CJ6KKSblPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQr
+lR0gO3lBzuyPPArVhvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7Iq
+aAovAX0d+f1YjbmCVsAwjhLmveFjNwIDAQABo4IB9zCCAfMwHwYDVR0jBBgwFoAU95uiTtOXxfQ0
+D0MOgYXOkZMyr/kwHQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3
+bXcyQGluZnJhZGVhZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEC
+MA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgakGA1UdHwSB
+oTCBnjBNoEugSYZHaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZEcyU01J
+TUVSU0E0MDk2U0hBMzg0MjAyNENBMS5jcmwwTaBLoEmGR2h0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv
+bS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsMIGNBggrBgEF
+BQcBAQSBgDB+MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wVgYIKwYBBQUH
+MAKGSmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNB
+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
+btdgw38cu3x5LYEcNp9WZk8AAAAAAAA=
 
 
-> 
->>
->>>>>  }
->>>>>  
->>>>>  void *access_mem(void *ptr)
->>>>
->>>
->>
-> 
-
+--=-9FZybFZZ3b5dnuxm+p2R--
