@@ -1,30 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E02D6E5A
-	for <linux-kselftest@vger.kernel.org>; Sat, 25 Jul 2026 13:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799AE3016F7
+	for <linux-kselftest@vger.kernel.org>; Sat, 25 Jul 2026 13:27:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784986027; cv=none; b=e0VnqJji/8m1Pkff+nFakkza4fo7JhoUqVBHBDZrt+Ms5bWEPKTB0oLRFKfYJO6CpOo2PVRvHaCE3elP91T5FeBC+x7tIlVHwLTKcTVLNej6Kkwuo90BEh1EGUlDoMjzwGN0y7h0F4W1/B/zvlxvgQ9/4XGBNFigLdsx9NxpDGw=
+	t=1784986036; cv=none; b=MVoz0slWVoZ/AOWQ6mcRhHb4YeRyVsiBQ8ghFZHvEtfXJRppw3u+z/LyAIjU7/zlKpcOTPqMpRPse4ZARon1dlLYhXYEaG7BUbOsslSaYLjgy1+UWMWomabIrp0kaXA7pUPYx8durNiPQV+9/v2kHjNjs4ZHZYyR3vk9w4wwO48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784986027; c=relaxed/simple;
-	bh=dXnO2CVcVShG8lP+gpd8VYYjwBsfavrtuqXmi6o1zdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MHbaJVaKxp06cJ40SR3lU0+23b02PAVxDdZdRQTRfX1DbqCn5OUyp44DaC8TiI0A+Zt1OZYX8uB2MJRAnBZsY2a3l7vLf7DAZDuMTPcXtWmLdWN6RmsXtbbjIKI4IWPcYNIXTFBfSE8x5qjtXTA0zKHKXY4T/XXnliD1a43lSk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LvT3B+tC; arc=none smtp.client-ip=95.215.58.174
+	s=arc-20240116; t=1784986036; c=relaxed/simple;
+	bh=U00Ow5Be10VLOexOUScmBazOhEMSLrTW9Z+qxJOgQxU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OtAgcyO0GqTKeDx8DTid2zuAfmkUF/ppkKa2sQ5tjkYMlbJs8ypWOlkzar0f3rp6zoyZLxlT/NIacCXiGiy6Gwfr5o6TxH01a8NBBbD0o1LAcyfLSgZcf8A8z7hvODx5SYrRb/N1ZnIKB947XkaDytCg4Uk1Ee0r6lQ+NRa1BPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DRKpmbdF; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LvT3B+tC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DRKpmbdF"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784986022;
+	t=1784986032;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GlVzZJS0JTsV98D/V1kP7SM0ZnBbLTv2sUFIA2Id9Mk=;
-	b=LvT3B+tCQVTCVDHWaj4oWobopdhM4Dsq2DWL05AOewKFErmevCAuZaV9+YVcutUex85isB
-	hieRII+6QQEbRGQjfbNPKBQQ5pV7hBDRNI9ldnA0E1tJB09n7DgoQiMy+lSndZm8pchore
-	eDV3x1YvvkFrh+rzf3qkwA8+jcKP8B0=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IuHnrLFdY5+tHg+xfjeq4QO05E7LaFAsksOboRXGLD4=;
+	b=DRKpmbdFvWNtKPbmLiWOEJDkpzOwui77eJPMnbS92XtwkHNvVgZnPxvwrKSv2E5rDOqTGq
+	n9PSXskFKLgMXwPWqb83Zg6iPVcAkgaR8JbX6fGVy5/IRn+AmAXa31twpK/D8LOAiBJRXV
+	GlC5VaHahxnMzU6l6zer/gIcuJGc62A=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -47,9 +49,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
-Date: Sat, 25 Jul 2026 21:26:22 +0800
-Message-ID: <20260725132624.78373-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 1/2] bpf: Fix sleepable check for tracing prog
+Date: Sat, 25 Jul 2026 21:26:23 +0800
+Message-ID: <20260725132624.78373-2-leon.hwang@linux.dev>
+In-Reply-To: <20260725132624.78373-1-leon.hwang@linux.dev>
+References: <20260725132624.78373-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,22 +80,53 @@ could be triggered by 'ping -c 1 -W 1 127.0.0.1':
 Fix it by disallowing sleepable tracing prog always when its target is
 bpf prog.
 
-Changes:
-v1 -> v2:
-* Drop redundant 'prog->sleepable' check.
-* Collect Acked-by from Viktor, Thanks.
-* v1: https://lore.kernel.org/bpf/20260724141422.10463-1-leon.hwang@linux.dev/
+Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
+Acked-by: Viktor Malik <vmalik@redhat.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Leon Hwang (2):
-  bpf: Fix sleepable check for tracing prog
-  selftests/bpf: Verify rejection of sleepable tracing prog
-
- kernel/bpf/verifier.c                         |  9 ++-
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
- .../selftests/bpf/progs/fentry_sleepable.c    | 19 +++++++
- tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
- 4 files changed, 88 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
-
---
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 52be0a118cce..22ac47d9a553 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18935,13 +18935,16 @@ static bool is_tracing_multi_id(const struct bpf_prog *prog, u32 btf_id)
+ }
+ 
+ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct bpf_prog *prog,
+-				  const struct btf *btf)
++				  const struct btf *btf, const struct bpf_prog *tgt_prog)
+ {
+ 	const struct btf_type *t;
+ 	const char *tname;
+ 
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_TRACING:
++		if (tgt_prog)
++			return -EINVAL;
++
+ 		t = btf_type_by_id(btf, btf_id);
+ 		if (!t)
+ 			return -EINVAL;
+@@ -19324,7 +19327,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		}
+ 
+ 		if (prog->sleepable) {
+-			ret = btf_id_allow_sleepable(btf_id, addr, prog, btf);
++			ret = btf_id_allow_sleepable(btf_id, addr, prog, btf, tgt_prog);
+ 			if (ret) {
+ 				module_put(mod);
+ 				bpf_log(log, "%s is not sleepable\n", tname);
+@@ -19575,7 +19578,7 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+ 
+ 	/* Check sleepable program attachment. */
+ 	if (prog->sleepable) {
+-		err = btf_id_allow_sleepable(btf_id, addr, prog, btf);
++		err = btf_id_allow_sleepable(btf_id, addr, prog, btf, NULL);
+ 		if (err)
+ 			return err;
+ 	}
+-- 
 2.55.0
+
