@@ -1,127 +1,266 @@
-Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BFC3BB687;
-	Sun, 26 Jul 2026 16:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499204908DF;
+	Sun, 26 Jul 2026 17:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785081684; cv=none; b=ZSugmos0l67VQWHh6RA/baWQoUOuNfhSAQW10Meulwf8x6327A1LSWRtcGT4WxB14JpocnqMlm64ogYI8zZojukzJIvOglqmmvo34McL2FbAHpDx48e04gC6p8T3UqcN2RSpn2F4PEKcWQMmltTxDW+PHH4orxNzN8CjLenSm2s=
+	t=1785087585; cv=none; b=gJVDijJXiUAdvXYPp6W3uhojkr+5ZTIlmNJ36AnTR2Lv11uiVrq6O9VtpvOhwDQH7jFj8+9w7lrQGKbNd3mou0OaNkJPm+me6waFmbtsmroCWnLj3UIAqLxQj7dZ2ZvMHLzFK6My804JERqwvvZlNxAWWy/LNLRPAfO9C+gQRlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785081684; c=relaxed/simple;
-	bh=qc8TI7coDHDMk6rrvcGxqI4PK/ClhXefLf/6sg/ahJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JtVuTzWYwdm9NVR9zx8qjLS1j1PHNfpHh6DfB0UjhPmOmpUspUkXsxLfAuLTU/aGzYg0YzP+KYvWZ0+aueOB1APEYv4CCD4RC/cmayJ41I/aYuTgj1DeORbLx7ujVHFeSEOOGnPaEBFX5Mpd+M5GRBrILju9AU1z3RRVAd0W6+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=RcqlGY0a; arc=none smtp.client-ip=51.159.59.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+	s=arc-20240116; t=1785087585; c=relaxed/simple;
+	bh=JcBZ7zgy5YdWNLTagKzSgvlDXjIXzA6zwI5Y0FHULNU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a8dJ97y6dDTWsXSE05i4mKZBvYbnlAwxg+OO/rR9iF+erkltZ7KAbJQJxfEf/C6uFI336nXNLPzCcrwujvgP8mIBqLWdZDJTe9HxtV1zfOeboVm2p89ViHYtQAtS1w+ea200rR9XyjFUadzVXv5bg0f2BQZUereqMl2wEH9zSng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jz4U7A5q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="RcqlGY0a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1785081672; bh=FjX+HZlxW+WsZ2V2ep3yP0QJydoexSzmKp0lKAEIC/4=;
-	h=From:Message-ID:From;
-	b=RcqlGY0aok5ZCGzOZcodOlpFs8c3UU6srA9sF7UB/uQmZycm8Ruxr/62oiF70kV9I
-	 7KmhruYAofFx93JyYTAqD6+ah+8gAocaB3WRmDfzG/d4hy7SNOTLaWQjjvqYV/GYSI
-	 YPfrYq6zmb9+D1KNrLkvjFbsaACgVVWsZN11ni1M=
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id 730DBC0A72;
-	Sun, 26 Jul 2026 18:01:12 +0200 (CEST)
-Date: Sun, 26 Jul 2026 18:01:11 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
-        LLVM Mailing List <llvm@lists.linux.dev>,
-        Yichun Zhang <yichun@openresty.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in abs()
- and friends
-Message-ID: <amYvRyLKZzEsFyq9@1wt.eu>
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-3-ammarfaizi2@openresty.com>
- <20260726151334.4c1ec6f1@pumpkin>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jz4U7A5q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD891F000E9;
+	Sun, 26 Jul 2026 17:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785087584;
+	bh=eZF0ss9+g9cB5Ev9NZkvD3gx7fD3lvf0xPhKSAJkt+g=;
+	h=From:To:Cc:Subject:Date;
+	b=jz4U7A5qxwSiAH6Wgo6OuAF4jeHzY9z7iCNmfO81tvM8PtJT6gBsXqvTJwxpSVKb2
+	 QpUkcSYpnLj/eSi8ESFJSo2s58keD6NmqhZQua38+uQ0cTlqzgi87wdmZcsPfc5Jmy
+	 yr7yNCtLuNHGulOUSBsFZRmFjWSmIGuFJuLSgKrZOOCV5WqKeY6LCiLLCXHZr7RUzM
+	 aw8hJ33z/2v4De8rOsESGd3GLI4A8IfZ/zh3qEd1KugmgQsx0z/Pnpk/SyTph8GNFb
+	 hyq/WKHn+lxeN7uZiOyGOD0GKNPAvTWjaelMjJIPVRUt9fkTd54VwpaD07hqdYRQOd
+	 nu58U2PQydO6Q==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v2 00/17] mm/damon: introduce data access-as-a-data attribute
+Date: Sun, 26 Jul 2026 10:39:16 -0700
+Message-ID: <20260726173935.94046-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260726151334.4c1ec6f1@pumpkin>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jul 26, 2026 at 03:13:34PM +0100, David Laight wrote:
-> On Sun, 26 Jul 2026 17:13:03 +0700
-> Ammar Faizi <ammarfaizi2@openresty.com> wrote:
-> 
-> > Negating the smallest negative value of a signed type overflows, which
-> > is undefined behavior. The selftests are built with:
-> > 
-> >     -fsanitize=undefined -fsanitize-trap=all
-> > 
-> > so a caller passing INT_MIN does not merely get an unspecified answer,
-> > it dies (on both x86-64 and i386):
-> > 
-> >     A simple test program:
-> > 
-> >       printf("x = %d\n", abs(INT_MIN));
-> > 
-> >     $ ./ab
-> >     Illegal instruction (core dumped)
-> > 
-> >     (gdb) bt
-> >     #0  0x0000000000401009 in main ()
-> >     (gdb) x/6i main
-> >        0x401000 <main>:     mov    $0x80000000,%eax
-> >        0x401005 <main+5>:   neg    %eax
-> >        0x401007 <main+7>:   jno    0x40100b <main+11>
-> >     => 0x401009 <main+9>:   ud2  
-> >        0x40100b <main+11>:  push   %rax
-> >        0x40100c <main+12>:  mov    $0x80000000,%esi
-> > 
-> > Negate in the corresponding unsigned type instead. The value still
-> > cannot be represented in the result type, so the minimum is returned
-> > unchanged.
-> > 
-> > Cc: Yichun Zhang <yichun@openresty.com>
-> > Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> > Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
-> > Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
-> > ---
-> >  tools/include/nolibc/stdlib.h | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-> > index 1816c2368b68..8d86044f759f 100644
-> > --- a/tools/include/nolibc/stdlib.h
-> > +++ b/tools/include/nolibc/stdlib.h
-> > @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
-> >   * As much as possible, please keep functions alphabetically sorted.
-> >   */
-> >  
-> > +/*
-> > + * The absolute value of the smallest negative value is not representable in
-> > + * the result type. Negate in the unsigned type so that the overflow is
-> > + * defined and return it unchanged, like the other libcs do.
-> > + */
-> > +
-> >  static __inline__
-> >  int abs(int j)
-> >  {
-> > -	return j >= 0 ? j : -j;
-> > +	return j >= 0 ? j : (int)-(unsigned int)j;
-> 
-> An alternative expression is -(j + 1) - 1
-> gcc (and I think clang) optimise it to just -j.
+TL;DR: extend DAMON's data attributes monitoring system to support page
+table accessed bit and PG_idle based access monitoring.
 
-This one would give -j -2, but ~(j - 1) would work, just like
-(~j + 1). However here the benefit of the casts in Ammar's
-version is that it's obvious that it's only playing with same
-size casts with no extra operation.
+DAMON was initially introduced as a data access monitor.  Users found
+data access pattern becomes more useful when it is combined with other
+data attributes such as belonging cgroups and backing page types.  For
+such cases, DAMON has extended to support such data attributes
+monitoring in addition to the original data access monitoring.  The
+DAMON probes system was introduced for this purpose.  Users set probes
+for filtering data attributes of their interest.  For use cases where
+the primary interests are the attributes but the access pattern, probe
+weights system has been introduced.  When it is used, DAMON applies its
+adaptive regions adjustment based on the monitored data attributes.
 
-Willy
+However, DAMON stops access monitoring when the probe weights are used.
+DAMON cannot optimally help users who have interests in both data
+attributes and access patterns.  Data access can also be thought of as
+another data attribute, though.  Extend the probe system to support data
+access as a data attribute.
+
+Introduce a new probe filter type, pgidle_unset.  It shows if the page
+is not set as idle.  Specifically, it shows the page table accessed bit
+and the PG_idle flag.  It can inform if the region is ever accessed. But
+it cannot say when it is accessed.  To answer the second question,
+introduce a new probe feature, prep actions.  Using the features, Users
+can specify what preparation actions should be made to each region for
+each probe.  DAMON executes the preparation actions for each sampling
+interval, like it is doing the preparation for access check in the
+access monitoring mode.  To help 'pgidle_unset' probe action use case,
+'set_pgidle' preparation action is introduced together.  The action does
+exactly what the access monitoring was doing: clearing the page table
+accessed bits and setting the PG_idle flags.
+
+Tests
+=====
+
+I compared the access pattern monitoring results from the classic way
+and the probe based way.  As expected, the probe based way shows the
+results similar to that of the classic way.  More detailed test methods
+and results are below.
+
+First, do the access monitoring using the DAMON user-space tool [1] in
+the classic way.  The system is idle.  It shows no access as expected.
+
+    $ sudo ./damo/damo start
+    $ sudo ./damo report access
+    heatmap: 00000000000000000000000000000000000000000000000029300000000000002222222100019000
+    # min/max temperatures: -440,000,000, 0, column size: 99.800 MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    0   addr 4.000 KiB    size 4.748 GiB   access 0 hz   age 4.400 s
+    1   addr 4.748 GiB    size 167.664 MiB access 0 hz   age 0 ns
+    2   addr 4.912 GiB    size 1.325 GiB   access 0 hz   age 4.400 s
+    3   addr 6.238 GiB    size 744.301 MiB access 0 hz   age 3.200 s
+    4   addr 6.964 GiB    size 438.594 MiB access 0 hz   age 4.400 s
+    5   addr 7.393 GiB    size 115.883 MiB access 0 hz   age 0 ns
+    6   addr 7.506 GiB    size 298.000 MiB access 0 hz   age 4.400 s
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Start an artificial memory access generator [2] and show the monitoring
+results.  As expected, it captures accesses.
+
+    $ ./masim/masim ./masim/configs/zigzag.cfg
+    $ sudo ./damo report access
+    heatmap: 68888888888888888888888888888886222222210017788888888888888888888888899999998777
+    # min/max temperatures: -850,000,000, 40,000,500, column size: 99.800 MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    0   addr 4.000 KiB    size 28.137 MiB  access 0 hz   age 4.200 s
+    1   addr 28.141 MiB   size 880.000 KiB access 170 hz age 0 ns
+    2   addr 29.000 MiB   size 4.000 MiB   access 0 hz   age 3.100 s
+    3   addr 33.000 MiB   size 500.000 KiB access 160 hz age 0 ns
+    4   addr 33.488 MiB   size 12.000 KiB  access 0 hz   age 1.700 s
+    5   addr 33.500 MiB   size 40.000 KiB  access 170 hz age 0 ns
+    6   addr 33.539 MiB   size 8.000 KiB   access 0 hz   age 900 ms
+    7   addr 33.547 MiB   size 80.000 KiB  access 170 hz age 0 ns
+    8   addr 33.625 MiB   size 32.000 KiB  access 0 hz   age 2.300 s
+    9   addr 33.656 MiB   size 68.000 KiB  access 170 hz age 0 ns
+    [...]
+    528 addr 7.437 GiB    size 368.586 MiB access 0 hz   age 900 ms
+    memory bw estimate: 28.521 GiB per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+After the artificial memory access generator is terminated, restart
+DAMON with the probe-based access monitoring.  Note that DAMON
+user-space tool [1] gained the support of probe-based access monitoring
+as an experimental feature, starting from v3.3.3.  As expected, it shows
+no access since the system is idle again.
+
+    $ sudo ./damo/damo start --probe_prep set_pgidle --probe_filter allow pgidle_unset
+    $ sudo ./damo report attrs
+    heatmap:
+    99999999999999999999899866666664000000000000000277777775333333333333333333333332
+    # min/max temperatures: -2,250,000,000, -1,690,000,000, column size:
+    99.800 MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    #   addr         size         age           probe_hits
+    0   4.000 KiB    2.316 GiB    16.900 s      0
+    1   2.316 GiB    790.730 MiB  18.400 s      0
+    2   3.088 GiB    794.406 MiB  22.200 s      0
+    3   3.864 GiB    796.473 MiB  22.500 s      0
+    4   4.642 GiB    786.223 MiB  17.600 s      0
+    5   5.410 GiB    2.326 GiB    20.600 s      0
+    6   7.736 GiB    62.773 MiB   20.700 s      0
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Start the artificial memory access generator [2] again and show the
+monitoring results.  As expected, it captures accesses similar to the
+classic monitoring mode.
+
+    $ ./masim/masim ./masim/configs/zigzag.cfg
+    $ sudo ./damo report attrs
+    heatmap:
+    88888888888888899999999888888888400000003888888888888888888888888888888888888888
+    # min/max temperatures: -2,100,000,000, 500, column size: 99.800 MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    #   addr         size         age           probe_hits
+    0   4.000 KiB    23.414 MiB   3.500 s       0
+    1   23.418 MiB   35.121 MiB   3.500 s       1
+    2   58.539 MiB   264.000 KiB  1.600 s       19
+    3   58.797 MiB   16.000 KiB   0 ns          0
+    4   58.812 MiB   92.000 KiB   1.400 s       20
+    5   58.902 MiB   996.000 KiB  600 ms        0
+    6   59.875 MiB   32.000 KiB   1.600 s       20
+    7   59.906 MiB   24.000 KiB   6.900 s       0
+    8   59.930 MiB   72.000 KiB   1.600 s       20
+    9   60.000 MiB   160.000 KiB  0 ns          0
+    [...]
+    316 6.641 GiB    754.949 MiB  1.300 s       0
+    317 7.378 GiB    428.676 MiB  1.500 s       0
+    memory bw estimate: 11.633 GiB per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Patches Sequence
+================
+
+First four patches (patches 1-4) introduce the new probe filter type for
+knowing if a region is accessed.  Patch 1 defines the new type in the
+core.  Patch 2 implements the execution of the new filter in the
+physical address space DAMON operation set.  Patch 3 implements a user
+interface on DAMON sysfs interface.  Patch 4 updates the documentation
+for the new filter type.
+
+Following 13 patches (patches 5-17) introduce the probe preparation
+actions feature.  Patch 5 defines the data structure for specifying the
+preparation actions.  Patch 6 completes setup of the API parameter for
+the prep.  Patch 7 extends the DAMON operation set callback list to
+connect the parameter with the underlying operation set.  Patch 8
+implements the execution of the prep in the physical address space DAMON
+operation set.
+
+Following five patches (patches 9-13) extends DAMON sysfs interface for
+the new prep feature.  Patch 14 adds simple selftest for basic file
+operations of the new sysfs files.  Final three patches (patches 15-17)
+respectively update design, usage and ABI documents for the new feature
+and its interface.
+
+[1] https://github.com/damonitor/damo
+[2] https://github.com/sjp38/masim
+
+Changelog
+=========
+
+Changes from RFC v1
+- RFC v1: https://lore.kernel.org/20260725210225.129944-1-sj@kernel.org
+- Fix wrong sample_addr setup condition.
+- Fix build warnings from sysfs part.
+- Fix typos.
+- Rebase to latest mm-new.
+- Add tests section to the cover letter.
+
+SJ Park (17):
+  mm/damon/core: introduce DAMON_FILTER_TYPE_PGIDLE_UNSET
+  mm/damon/paddr: support PGIDLE_UNSET probe filter type
+  mm/damon/sysfs: support pgidle_unset probe filter type
+  Docs/mm/damon/design: document pgidle_unset probe filter type
+  mm/damon/core: introduce damon_prep struct
+  mm/damon/core: commit preps
+  mm/damon/core: introduce damon_operations->prep_probes()
+  mm/damon/paddr: support damon_prep
+  mm/damon/sysfs: implement preps directory
+  mm/damon/sysfs: create probe preps directory
+  mm/damon/sysfs: implement probe prep directory
+  mm/damon/sysfs: create probe prep files for preps/nr file write
+  mm/damon/sysfs: pass preps to DAMON core
+  selftests/damon/sysfs.sh: test probe prep sysfs files
+  Docs/mm/damon/design: document probe preps
+  Docs/admin-guide/mm/damon/usage: document probe preps sysfs files
+  Docs/ABI/damon: document probe prep sysfs files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  13 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  18 +-
+ Documentation/mm/damon/design.rst             |  15 +-
+ include/linux/damon.h                         |  42 ++-
+ mm/damon/core.c                               | 103 ++++++-
+ mm/damon/paddr.c                              |  41 +++
+ mm/damon/sysfs.c                              | 280 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  27 ++
+ 8 files changed, 525 insertions(+), 14 deletions(-)
+
+
+base-commit: 4737efca4039cb5fe50569ea3ffb18c389483810
+-- 
+2.47.3
