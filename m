@@ -1,173 +1,136 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E50B37E5C8
-	for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 10:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB79837CD30;
+	Sun, 26 Jul 2026 11:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785063417; cv=none; b=oH+0RcKXyUi9VUYPooCbt9DPYmtOJEGyh3lhp02CCS7pW4ACVj58ikWYYxH395BNB6BE2hapWLlTn4M8iogZ5MRA2/Njo31iPDvVydg5/qyzUJoRwOAr2/sp8V/apRr03KG1oyO9jKO/Fo/vIddGq/x4/WBI4B/NE2k7rT/hjVc=
+	t=1785067008; cv=none; b=Lm6WnJodSM4acGine/pJ4YQI540kagF2TaDQYO7CfTE4QgYUV4p8lKoZH1ezFWjysg41N4ZCi8ONbYTK2gdMnsRMfIZBVLZrSJnnP/WRlRIV1//inGgap9yW5KHKog+pL3t4R7OSC6R/Ej9JkbcmY8Cfn3sN41frQltAzYNEcBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785063417; c=relaxed/simple;
-	bh=Lu5byszqUlnGfnfigbQHSkOtoVaUePJpDeishqMwxpw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B8Bvgq9gBeIxR7Sy/8e9a2/sCj7UMitAAHFSp0JwLR9fnPj0iD1886++IEUJAiUW1mmCv0xkc0qImw93KUsRgMbsni5UJEOxrWl1RfEA1hZnYHiJiswhG8H5oTdG1lge+mUVLV2NO8bnCK9jaiJWK/Bc98lVVj635/QsLEFjOGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxRL0+se; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785067008; c=relaxed/simple;
+	bh=Osw5vhnUpa8KJNod6zh8DjDcfqxO2OVv2i3PG2LCAgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sz5UBf4b0JHFqJL/jhXd2EKLP3u749NKRaupglXHHSjB2N6ZbX/FWEmppDiR1uhjqki9A0i2dzV2A/SA+2tIoxNCl71zyVwpO5Ra1mJS8w0slxl/osu0A4trBDh9lPQkrKG4tnXGQi2/gWF8gq6VAUTy2cgYqtYAiHmELzqXJq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kN4vCvFE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxRL0+se"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38e08baf860so1842007a91.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 03:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785063416; x=1785668216; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fJsViFdITFUa0GcW8Cpp/CcYnvssYDAfSDQp/+OuXPI=;
-        b=fxRL0+seP9OgSm+FGj3qp4oBjELOzUqBF/TSnuK8SF0MmB7KRlDg84isnKyzxgsYlg
-         l+UaSsBW0JSgZajs4D2nB73DbHrUWnpelOvikFQlid3pXe3Ks6WOvBleiVX7Z1oDW/hG
-         R3Ah1XCbUASjAhoG1/dMI+QxKpNDTXO3tm9gArFiVQGAjvHHN7Dwds7T1z/EqrB0ZFpg
-         BLLr36xvC4xb+jJlPy3deVy5MoJplB4lIYoO8V4xA89nE23NKMP/BuCpfiDGmlYcWiKu
-         yv9rks1ZLTdsh/xfqVQsvvSJWOGXTE2FGyG7iMVaxLVpZ37SB9KKvhhTg54eWghHgkOh
-         PYSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785063416; x=1785668216;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fJsViFdITFUa0GcW8Cpp/CcYnvssYDAfSDQp/+OuXPI=;
-        b=dZx2UQaRaMWY1kxf7AqeBglWuFD/XjcDqwR4tEUy7lmUZkZvFEpyQRDsOZVqlcvl9n
-         JtftOPQNA3SFJMyBO6WKt6put+UOvg2AdgQP+QmzkkY1DKSeuU2wFY3oiIoKlHnR6qzr
-         4zct/LGGdZk2kgMqgv/JrGZx5/JQPxWv6HxWpxxqpaJL3D7Swg+lFY61kDpm3WAnMcSR
-         BiT9W1qCENP69gEPYvwY6Gp7TioiR3Qf796Da42CVXr3uWtLnGOLu9B4WGy9tGnrHyrZ
-         gC2sHdaoX5yNAS9t052qrAZY4kFgxwSGMSfD5IUnr6sCN5qOkdQgcX8iwTHPUBtqAH+m
-         mINA==
-X-Forwarded-Encrypted: i=1; AHgh+RptpK4I+oFgNzyXvAMx1FCPe8lj7XpY/QE3kNSiqhQ7cgOTK/+1sKGS1m8OxcsRSHRfMCdPYOoazFcFzEfQoy0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySK3YNrw7kQwFA79UVigFa2wGZgZMrHmbctVaVLYXn9GCrfBet
-	qGuw+WvW92753cm7hUks71u4GJBbn6w1eRGLoiLQjjxnaizeDgz+I3KM
-X-Gm-Gg: AR+sD1351I+4m9NtW8f9Dc0rzm8CKsKjViKpJnw59oJ8b3nzEr91xmPVjVzR4dtynYT
-	bJ/kp1T2QZ4FjlIX0JoxlpYFo5t3iVi1AnI8cHmISfPcGhEd2yTZXK8YHcE/FI3vAmQk5nsG9EG
-	zaYFHJxdw0l84cBLe19BL3YCDLIKwxUlXnDNY5+ROmmZGvJ3F3tzl+XOykgoDJ7ds5a6GSEKv0K
-	UI9EQrvPVCTUpu6U6ckXmPsWKGP56R6y2gOndtSpFFpB0LvAhOAfQkMPSrr0fYTbomF211nGFE7
-	o6ogOmVQEAmWFQV6pCYiMUTjGOsSJnDuGgW3NvI331kjnmOrqakan5pM1HjtUWBgZZtOw9GKAU4
-	7FwOcRdLwjGaYQpJbILyx14Nso1xycrdGrVmWMzgUC3Bm3zEw5olbmiBvBlftZQCN0+Er/gOuyJ
-	TreukD3oNzpCvz2MwoOZt1AnoymmfpDWIuCvMuvdLMide+IEs=
-X-Received: by 2002:a17:90b:4f8b:b0:38e:7eb:d07b with SMTP id 98e67ed59e1d1-38f2975c750mr4543248a91.34.1785063415829;
-        Sun, 26 Jul 2026 03:56:55 -0700 (PDT)
-Received: from anna.. ([114.70.9.168])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f04175c1asm3645559a91.12.2026.07.26.03.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2026 03:56:53 -0700 (PDT)
-From: chanyoung <ppoo1220@gmail.com>
-To: netdev@vger.kernel.org
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	David Howells <dhowells@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	chanyoung <ppoo1220@gmail.com>
-Subject: [PATCH net 2/2] selftests: tls: add a test for splicing onto a full plaintext record
-Date: Sun, 26 Jul 2026 19:55:56 +0900
-Message-ID: <20260726105556.2719227-3-ppoo1220@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260726105556.2719227-1-ppoo1220@gmail.com>
-References: <20260726105556.2719227-1-ppoo1220@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kN4vCvFE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD2B1F000E9;
+	Sun, 26 Jul 2026 11:56:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785067007;
+	bh=kpwU+9PKazOTFn1wX64gm97MpS/jIFgxMXAts3m+7Ns=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kN4vCvFEIgV8ViFcpG28tUFvMQ/NZfw+/pfeq7b4XQHz+5bHlvUeKy9cXII/jYN2B
+	 Y0CzraY1iQ2PJ20S4vO+iRTr8ZzK/yA8U4yJc1zBXNqU83xxE30hgmeMqYLxDQ9MQS
+	 kOVomnN19GNv3ZKAB8K8V/7oo4ZxCdl70tw3YeRQAwdH81cdcvUEgjZhitQY97Jstt
+	 FhzsIADmOBDD1bbgszb0YP/IJcecrYq7rEF5uheu7nGS1k5jAHLGCybYuza9HMUjIq
+	 IPMYb624pEaWGfnnFN+s2uewzUFIszOruMFTzINwSx2XwS+Dlk4TmLyhAVEzq4ZKKC
+	 WopPjRqwKbm3g==
+Date: Sun, 26 Jul 2026 14:56:37 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Rik van Riel <riel@surriel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, kernel-team@meta.com,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Usama Arif <usamaarif642@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v4 12/12] selftests/mm: add a slow-GUP content and
+ COW test for mTHP
+Message-ID: <amX19fK0YVIEonfI@kernel.org>
+References: <20260724222934.1463812-1-riel@surriel.com>
+ <20260724222934.1463812-13-riel@surriel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260724222934.1463812-13-riel@surriel.com>
 
-Splicing into an open record whose plaintext scatterlist ring was already
-full used to wrap the ring's end index onto its start.  sk_msg_full() then
-reported the full ring as empty, so the loop kept overwriting live entries
-while sg.size grew, and pushing the record ran the AEAD scatterwalk off the
-end of the scatterlist.
+Hi Rik,
 
-Reaching that state needs the ring to be left full and unpushed across a
-syscall, which the copy path does when the fragment it adds is the one that
-fills the ring.  The test therefore fills the ring with splices, adds one
-byte with MSG_MORE, splices some more, and only then pushes the record.
+On Fri, Jul 24, 2026 at 06:29:34PM -0400, Rik van Riel wrote:
+> follow_page_mask() now batches a PTE-mapped large folio (mTHP) into one
+> contiguous run for the slow get_user_pages() path. A mis-batched run would
+> hand back the wrong pages or a stale COW copy, which the existing tests do
+> not catch: gup_test checks only pin/unpin integrity, and cow exercises COW
+> mostly at PMD size.
+> 
+> Add mthp_gup_cow_test. It forces 64kB-only mTHP, writes a per-page-distinct
+> pattern, then pins the region on the slow path (PIN_LONGTERM without
+> USE_FAST) and compares the bytes the kernel copies back from the pinned
+> pages against that pattern.
+> 
+> The test covers a read pin, a write pin, and COW after fork(): a child
+> write-pins to force per-page unshare and checks the copied contents, then
+> rewrites its copy while the parent verifies its own contents are intact.
+> 
+> It also reports how many pages sit in contiguous large-folio runs, so a
+> kernel without mTHP shows light coverage rather than passing vacuously.
+> 
+> Assisted-by: Claude:claude-opus-4.8
+> Signed-off-by: Rik van Riel <riel@surriel.com>
+> ---
+>  tools/testing/selftests/mm/Makefile           |   1 +
+>  .../testing/selftests/mm/mthp_gup_cow_test.c  | 213 ++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh     |   1 +
+>  3 files changed, 215 insertions(+)
+>  create mode 100644 tools/testing/selftests/mm/mthp_gup_cow_test.c
+> 
+> +
+> +static long PS;
+> +static int fails;
+> +static int tap;
+> +
+> +static void ok(int cond, const char *desc)
+> +{
+> +	printf("%s %d %s\n", cond ? "ok" : "not ok", ++tap, desc);
 
-MAX_SKB_FRAGS is configurable, so rather than hardcoding the number of
-fragments needed to fill the ring, sweep it over the plausible range so the
-one-byte send lands exactly on a full ring whatever the kernel was built
-with.
+Please (instruct claude to) use ksft_* helpers for printing messages and
+tracking failed and passed tests.
 
-On an unpatched kernel this oopses in the AEAD walk; with the preceding
-patch applied the whole tls selftest suite passes.
+> +	if (!cond)
+> +		fails++;
+> +}
+> +
+> +/* Deterministic, per-page-distinct pattern so any mis-order or leak shows. */
+> +static void fill(char *base, size_t sz, uint32_t salt)
+> +{
+> +	for (size_t off = 0; off < sz; off += PS) {
+> +		uint32_t k = off / PS;
+> +		uint64_t v = ((uint64_t)salt << 32) ^ (k * 0x9E3779B1u + 0x1234);
+> +
+> +		for (size_t i = 0; i < PS; i += sizeof(v))
+> +			memcpy(base + off + i, &v, sizeof(v));
+> +	}
+> +}
+> +
+> +static int wsysfs(const char *path, const char *val)
 
-Signed-off-by: Chanyoung Park <ppoo1220@gmail.com>
----
- tools/testing/selftests/net/tls.c | 52 +++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+There are existing helpers to read/write sysfs in vm_util.h
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index cbdd3ea28b9..d2666884ea8 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -835,6 +835,58 @@ TEST_F(tls, send_and_splice)
- 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
- }
- 
-+/* Splicing into an open record whose plaintext scatterlist ring is already
-+ * full used to wrap the ring's end index onto its start, after which
-+ * sk_msg_full() reported the full ring as empty: further pages overwrote
-+ * live entries and sg.size desynced from the walkable scatterlist, which
-+ * oopsed in the AEAD walk once the record was pushed.  The ring is left
-+ * full and unpushed by the copy path, which does not push the record when
-+ * the fragment it adds is the one that fills the ring.
-+ */
-+TEST_F(tls, splice_onto_full_record)
-+{
-+	int frag_len = 100, extra = 4;
-+	char mem_send[5000];
-+	char mem_recv[5000];
-+	int nfrags, i, total;
-+	int p[2];
-+
-+	memrnd(mem_send, sizeof(mem_send));
-+
-+	/* MAX_SKB_FRAGS is configurable (17 by default), so sweep the
-+	 * plausible range to land the one-byte send exactly on a full ring
-+	 * whatever this kernel was built with.
-+	 */
-+	for (nfrags = 12; nfrags <= 45; nfrags++) {
-+		total = (nfrags + extra) * frag_len + 2;
-+
-+		for (i = 0; i < nfrags; i++) {
-+			ASSERT_GE(pipe(p), 0);
-+			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
-+			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
-+					 SPLICE_F_MORE), frag_len);
-+			close(p[0]);
-+			close(p[1]);
-+		}
-+
-+		EXPECT_EQ(send(self->fd, mem_send, 1, MSG_MORE), 1);
-+
-+		for (i = 0; i < extra; i++) {
-+			ASSERT_GE(pipe(p), 0);
-+			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
-+			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
-+					 SPLICE_F_MORE), frag_len);
-+			close(p[0]);
-+			close(p[1]);
-+		}
-+
-+		EXPECT_EQ(send(self->fd, mem_send, 1, 0), 1);
-+
-+		EXPECT_EQ(recv(self->cfd, mem_recv, total, MSG_WAITALL), total);
-+		EXPECT_EQ(memcmp(mem_send, mem_recv, frag_len), 0);
-+	}
-+}
-+
- TEST_F(tls, splice_to_pipe)
- {
- 	int send_len = TLS_PAYLOAD_MAX_LEN;
+> +{
+> +	int fd = open(path, O_WRONLY);
+> +
+> +	if (fd < 0)
+> +		return -1;
+> +	int r = write(fd, val, strlen(val));
+> +
+> +	close(fd);
+> +	return r < 0 ? -1 : 0;
+> +}
+
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
