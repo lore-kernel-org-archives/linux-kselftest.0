@@ -1,142 +1,127 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0AD3C1977;
-	Sun, 26 Jul 2026 15:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.237.72.81
+Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BFC3BB687;
+	Sun, 26 Jul 2026 16:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785081109; cv=none; b=i5AemTkyG7xhpUiBRrZ/rxTnanPopcobUB4BW5qJv6gzLermWwqr3lhNTA7ro75UA0hkRUb/0pTJDNGuqfDWsuOmAa9tXP21VPxOKTFIaC0X1FbkrLpkIur17f8UC9uwTJksK2bvekBXDhdowZTJBv7TBHb+EX4EAsKlDP94Y1U=
+	t=1785081684; cv=none; b=ZSugmos0l67VQWHh6RA/baWQoUOuNfhSAQW10Meulwf8x6327A1LSWRtcGT4WxB14JpocnqMlm64ogYI8zZojukzJIvOglqmmvo34McL2FbAHpDx48e04gC6p8T3UqcN2RSpn2F4PEKcWQMmltTxDW+PHH4orxNzN8CjLenSm2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785081109; c=relaxed/simple;
-	bh=F3VGP5qFcG0dh7NSLI40qcc6OwRbZ3xhBeoGMR0s7o4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fr33WMTZAiB9xRnaIkJ7Z9TmATDzHWPf0cgUQOgKvIUwWBLpCXXzfhhgfsswhpMdp9IjK1F2uUyGffGGW8BPHUFXWajK/CQpwJCEEk097y5sayYjhOfSHBkQQ3jnc5EQ/puROr1DMWWJeI/GBBEF5KimE4IwKlXqD7nLb3ATfd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=CuhJ873V; arc=none smtp.client-ip=52.237.72.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1785081684; c=relaxed/simple;
+	bh=qc8TI7coDHDMk6rrvcGxqI4PK/ClhXefLf/6sg/ahJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JtVuTzWYwdm9NVR9zx8qjLS1j1PHNfpHh6DfB0UjhPmOmpUspUkXsxLfAuLTU/aGzYg0YzP+KYvWZ0+aueOB1APEYv4CCD4RC/cmayJ41I/aYuTgj1DeORbLx7ujVHFeSEOOGnPaEBFX5Mpd+M5GRBrILju9AU1z3RRVAd0W6+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=RcqlGY0a; arc=none smtp.client-ip=51.159.59.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="CuhJ873V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=ko4S4GtnHOTid7R/klIX1S/SeT+lva0
-	zlPajEOiQTLU=; b=CuhJ873VhDQRkNS9cnxm4jPY5aCJ2u4fVWEhx6nlhFwF3rX
-	vUPGZoZj4MHUiS+jEkpvyRXwcIf7ysvsR5Fei1L4hliyQ4yb/MIZoJfw7e9p/eOX
-	Hnae194ImUqKHJ3zsj5D9bmnBFTKuThbD9UV8fVFBr+Gx7tkn8jWVBLs3cU0=
-Received: from [127.0.0.1] (unknown [101.6.30.195])
-	by web1 (Coremail) with SMTP id yAQGZQDXcsL_LGZqS_CgAA--.34846S3;
-	Sun, 26 Jul 2026 23:51:27 +0800 (CST)
-From: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Date: Sun, 26 Jul 2026 23:51:17 +0800
-Subject: [PATCH bpf-next 1/2] bpf: Cancel RHash special fields on value
- recycle
+	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="RcqlGY0a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
+	t=1785081672; bh=FjX+HZlxW+WsZ2V2ep3yP0QJydoexSzmKp0lKAEIC/4=;
+	h=From:Message-ID:From;
+	b=RcqlGY0aok5ZCGzOZcodOlpFs8c3UU6srA9sF7UB/uQmZycm8Ruxr/62oiF70kV9I
+	 7KmhruYAofFx93JyYTAqD6+ah+8gAocaB3WRmDfzG/d4hy7SNOTLaWQjjvqYV/GYSI
+	 YPfrYq6zmb9+D1KNrLkvjFbsaACgVVWsZN11ni1M=
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by mta1.formilux.org (Postfix) with ESMTP id 730DBC0A72;
+	Sun, 26 Jul 2026 18:01:12 +0200 (CEST)
+Date: Sun, 26 Jul 2026 18:01:11 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
+        LLVM Mailing List <llvm@lists.linux.dev>,
+        Yichun Zhang <yichun@openresty.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
+Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in abs()
+ and friends
+Message-ID: <amYvRyLKZzEsFyq9@1wt.eu>
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+ <20260726101306.3772237-3-ammarfaizi2@openresty.com>
+ <20260726151334.4c1ec6f1@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260726-f01-23-rhash-cancel-bpf-next-v1-1-6e5e1131d885@mails.tsinghua.edu.cn>
-References: <20260726-f01-23-rhash-cancel-bpf-next-v1-0-6e5e1131d885@mails.tsinghua.edu.cn>
-In-Reply-To: <20260726-f01-23-rhash-cancel-bpf-next-v1-0-6e5e1131d885@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Mykyta Yatsenko <yatsenko@meta.com>, Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785081088; l=2442;
- i=gnq25@mails.tsinghua.edu.cn; s=20260605; h=from:subject:message-id;
- bh=F3VGP5qFcG0dh7NSLI40qcc6OwRbZ3xhBeoGMR0s7o4=;
- b=8/1wgwfuJdu+3HoDNsh70O4HFgUF+WF4OpSByigY9iOmvrcmgQi18b+eYvrS/zblfxurYfn5a
- Oo80fcr0jcEA1FLWvGAzO+kbNQTFeIAHZofVxLVf1zTovwcA00TjOtk
-X-Developer-Key: i=gnq25@mails.tsinghua.edu.cn; a=ed25519;
- pk=nqQ48fAxVTDp3z/IUmqv6BB+agXPpd8tQjDOBxwlgZo=
-X-CM-TRANSID:yAQGZQDXcsL_LGZqS_CgAA--.34846S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw1xJr1kWr1DJFyUJr4kXrb_yoW5JF4rpF
-	Z5Gry2kw48AFn8ZFWDtFs293yrWr15G34SkFW5Ka4Fvw1fZF92qr15JFWxJFyftF95Can3
-	try0qF45Xw4rCrDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBa1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r1Y6r17M2vYz4IE04k24VAvwV
-	AKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6x8ErcxFaVAv8VW8Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrw
-	ACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wrylc2xSY4AK67AK6ryrMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY2
-	0_GrWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-	3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-	AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
-	cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-	IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUgF4_UUUUU=
-X-CM-SenderInfo: xjqtjko6pdxz3vow2x5qjk3toohg3hdfq/1tbiAgYAA2plOCDawgADsL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260726151334.4c1ec6f1@pumpkin>
 
-Commit 6905f8601298 ("bpf: Allow special fields in resizable hashtab") says
-that "kptr semantics under in-place updates are identical to array map."
-However, after copy_map_value() preserves special fields,
-rhtab_map_update_existing() calls bpf_obj_free_fields() and drops retained
-kptrs. BPF_EXIST can therefore unexpectedly clear a kptr.
+On Sun, Jul 26, 2026 at 03:13:34PM +0100, David Laight wrote:
+> On Sun, 26 Jul 2026 17:13:03 +0700
+> Ammar Faizi <ammarfaizi2@openresty.com> wrote:
+> 
+> > Negating the smallest negative value of a signed type overflows, which
+> > is undefined behavior. The selftests are built with:
+> > 
+> >     -fsanitize=undefined -fsanitize-trap=all
+> > 
+> > so a caller passing INT_MIN does not merely get an unspecified answer,
+> > it dies (on both x86-64 and i386):
+> > 
+> >     A simple test program:
+> > 
+> >       printf("x = %d\n", abs(INT_MIN));
+> > 
+> >     $ ./ab
+> >     Illegal instruction (core dumped)
+> > 
+> >     (gdb) bt
+> >     #0  0x0000000000401009 in main ()
+> >     (gdb) x/6i main
+> >        0x401000 <main>:     mov    $0x80000000,%eax
+> >        0x401005 <main+5>:   neg    %eax
+> >        0x401007 <main+7>:   jno    0x40100b <main+11>
+> >     => 0x401009 <main+9>:   ud2  
+> >        0x40100b <main+11>:  push   %rax
+> >        0x40100c <main+12>:  mov    $0x80000000,%esi
+> > 
+> > Negate in the corresponding unsigned type instead. The value still
+> > cannot be represented in the result type, so the minimum is returned
+> > unchanged.
+> > 
+> > Cc: Yichun Zhang <yichun@openresty.com>
+> > Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+> > Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
+> > Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
+> > ---
+> >  tools/include/nolibc/stdlib.h | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+> > index 1816c2368b68..8d86044f759f 100644
+> > --- a/tools/include/nolibc/stdlib.h
+> > +++ b/tools/include/nolibc/stdlib.h
+> > @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
+> >   * As much as possible, please keep functions alphabetically sorted.
+> >   */
+> >  
+> > +/*
+> > + * The absolute value of the smallest negative value is not representable in
+> > + * the result type. Negate in the unsigned type so that the overflow is
+> > + * defined and return it unchanged, like the other libcs do.
+> > + */
+> > +
+> >  static __inline__
+> >  int abs(int j)
+> >  {
+> > -	return j >= 0 ? j : -j;
+> > +	return j >= 0 ? j : (int)-(unsigned int)j;
+> 
+> An alternative expression is -(j + 1) - 1
+> gcc (and I think clang) optimise it to just -j.
 
-Use bpf_obj_cancel_fields() in the update and deferred deletion paths, as
-hash and array maps do. It cancels timer, workqueue, and task-work state
-while the allocator destructor releases kptrs at final reclamation.
+This one would give -j -2, but ~(j - 1) would work, just like
+(~j + 1). However here the benefit of the casts in Ammar's
+version is that it's obvious that it's only playing with same
+size casts with no extra operation.
 
-Fixes: 6905f8601298 ("bpf: Allow special fields in resizable hashtab")
-Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
----
- kernel/bpf/hashtab.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 9f394e1aa2e8..54ea111daa8b 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -2865,14 +2865,14 @@ static int rhtab_map_alloc_check(union bpf_attr *attr)
- 	return htab_map_alloc_check(attr);
- }
- 
--static void rhtab_check_and_free_fields(struct bpf_rhtab *rhtab,
--					struct rhtab_elem *elem)
-+static void rhtab_check_and_cancel_fields(struct bpf_rhtab *rhtab,
-+					  struct rhtab_elem *elem)
- {
- 	if (IS_ERR_OR_NULL(rhtab->map.record))
- 		return;
- 
--	bpf_obj_free_fields(rhtab->map.record,
--			    rhtab_elem_value(elem, rhtab->map.key_size));
-+	bpf_obj_cancel_fields(&rhtab->map,
-+			      rhtab_elem_value(elem, rhtab->map.key_size));
- }
- 
- static void rhtab_mem_dtor(void *obj, void *ctx)
-@@ -2964,8 +2964,8 @@ static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem *elem, v
- 		rhtab_read_elem_value(&rhtab->map, copy, elem, flags);
- 		check_and_init_map_value(&rhtab->map, copy);
- 	}
--	/* Release internal structs: kptr, bpf_timer, task_work, wq */
--	rhtab_check_and_free_fields(rhtab, elem);
-+	/* Cancel reusable internal structs: bpf_timer, task_work, wq */
-+	rhtab_check_and_cancel_fields(rhtab, elem);
- 	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
- 	return 0;
- }
-@@ -3027,7 +3027,7 @@ static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_elem *el
- 	 * kptrs/etc. still sit in the slot. Cancel them after the copy
- 	 * to match arraymap's update semantics.
- 	 */
--	rhtab_check_and_free_fields(rhtab, elem);
-+	rhtab_check_and_cancel_fields(rhtab, elem);
- 	return 0;
- }
- 
-
--- 
-2.34.1
-
+Willy
