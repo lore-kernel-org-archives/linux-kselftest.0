@@ -1,64 +1,63 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B796337E5F5
-	for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 10:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3997C37F334
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 10:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785060809; cv=none; b=sR/vba0Z7bIJolLXhsSQGLWGhW5RjZj+6XyfIJx3fN+rxRdbTJkEOV23xVo+NdoC8zpzvPWZvzMTKNQjqooCJWTRzQo9aW4fBty4vFdUvoqXH2LbUKreykbnCwM353GUJMZWZ0v2CZu+uamBsDHOipPQSt78tpA8DqLHnSh4qiA=
+	t=1785060814; cv=none; b=t0cGLAIq9ncJas/OeC8+CcPO+kgi33ia1j0CXnrE0hFDcOlWQHCJ6ktFWM1825MgKXbQS46a8hj7IzPp23djf+7gypCGz02nHZmoqbGDRbNjiCUSTxDKD4tnqVFPuQhDGl7FTvt8E1f0w2XrbUPgnWIrBs52L0ysktEk8+wZTZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785060809; c=relaxed/simple;
-	bh=7OCUhmo3YD9ofJoscwFmxQOt4jzM3aGcuPX2u6bhnOM=;
+	s=arc-20240116; t=1785060814; c=relaxed/simple;
+	bh=9yh2PeC9iH2ehGJhAogCXH1OX690Q3HSkoCKr4p5te0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GQN5Q7n7qo70cuiYmoYzR5stvsseFhn9g4D0kMiS1Hr9BIOSYzVupD5GnCYhzKuiYNoM6lZQQOUN2twiDapUA0+CO8pdz3+iorJeUN6tXA26lWl0S5YLHcWkR2arWbyT++MHeLAg682EzO3aGxwovVb1aPTLbW144gKz+u6JFz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=WTCxYUiT; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=V5uRdBuAqs28pDQ+NGQmCq8cj3NKrnAOOkzHLyMtAGktdJTZSMyzbjRcdYREJHhqoXT7KHpUzmlG92yGbVzRvZZMqo2rFE0HmV7XUnzJFAErLGXlJc/7XxlQCGcLQbC+mSbtVO9HLZjgBQ9+n9Tp2tISbjilLV5eCp78yxmHYmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=k36wezwx; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="WTCxYUiT"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c9e30214d8fso1418761a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 03:13:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="k36wezwx"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cbb85186d43so858863a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 03:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785060807; x=1785665607; darn=vger.kernel.org;
+        d=openresty.com; s=google; t=1785060811; x=1785665611; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DFzxRl2W6j8iJng14jgnrShRQTusWOg9FAzc5E6yZYg=;
-        b=WTCxYUiTaDLxVagq0Vlsc2fbvI++Qp8YgAtwsnylH+1RNPn4B778KeSU83xLrnRbK7
-         eCDgVBVV8UzahM1P2mehY9Q1GHKFfJKXQoAOYwbZsGdMmmUczwhJrR8wnfxnZkDjYQm0
-         OuDTHj2axPKPxkH/o1diPDaWsVB2gSQHbWmI3KWXdKHI4WqjJEDKZLcv5UD6XqsF9FNY
-         yxOshkSnQgX6THHJoWtGAZzENecmxhsmYq25vJwYm4XJ1RzRxm0RYAcRFri2SeD2f+sq
-         JZQJuUFo0+Pz1Vl22ZbSSUnwHPxLsCDGa59HZLC5jwYktITlU3LpvRNmB7TQVn5etbsW
-         wsVA==
+        bh=CrlASkg3aEU6DCVKYIVsNYyPT/klq2H1IARTdtVshro=;
+        b=k36wezwx03n85ERYhgKuZaVjZng9syKhwGGhfwQoq5dyRbUPJwIfaO9M8KWWLS399F
+         62i0+OKvGL8NyZlwxQcec2RWohamDquZCsezuUJT2CLHGe8TvPttLLeBeYXvjAc5oAma
+         gIOM21ETW5oMCUjmoMwlYY/44gmmCnAQ3qmj4/GRjEZRi18mhSX/J8zpaqQkom9roau/
+         Otz63XZ+X65QG1Rs/Ypv+lpu9PMfuu81wzsJAvlT1ya47VpkgbLnaRgynFDQ9lyoKE2X
+         qb6KOHer4GzwzCC/5i61g/jSqQlJvZS9ha6pWIEIVnf+F6L6izohO2aiOAiyuC4sGsCE
+         YvGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785060807; x=1785665607;
+        d=1e100.net; s=20251104; t=1785060811; x=1785665611;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DFzxRl2W6j8iJng14jgnrShRQTusWOg9FAzc5E6yZYg=;
-        b=nVU5EE64MX5e1+zGQuUI20rCL9Oy1Ghw/vfWz4OABjK95/TlaF4NVU5zkiePqGdIKR
-         iyp/DHEb0CgDJMiLQ7MESo/A841PKg5fhR5F0aWG+O55tKzZ4/CLLsVn1byQWGnKFgtn
-         za2OOwsD24whAWw6hOJXsXcf+H1VsnZzAeVhCm0YV20Zi3Vm/NxjhvNECR0K6J0BsKto
-         DEus66Si623a2VPb2e4K9MNw7yb2trcPbCLg5KLgWP14O0ELsC7FT8zt5wR3iJx+9iKJ
-         ehnDWdClGVeKgGdxc12jHG1PU89h/u4NnougT4FGa8hONNDTt2DHuWBFR83JtXzcNtdU
-         rplA==
-X-Forwarded-Encrypted: i=1; AHgh+RoxTf65GltODiwCFt74mWW8vle5v4k7/ZB8IZCJEBdwpkwvsgLBaDv94wCQs0KaVLUx4afCq+gSDqZ061bZxnw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW3vP/4KCMAhopRxq6OVByeb3GengJcIpzN8SN4GGbYAW6q/RR
-	4GFMklOOh2qZIKU8wqGN6OU9cJw7gwbu8zi63UX5MKdI8jRl9E6BHZcsn2x7s4kEpmSX74OsE2k
-	5lJ3bZNi27w==
-X-Gm-Gg: AR+sD10C2PTlkd5g22e39LNODsNUX/3glr8px4i8VVXusbWIR3tbo9FMPic4ciBraCj
-	r3kdO/v2MxidXvs8kM1MxDfRvOeZq0gnpC5Eb4atp6j6Oe0E9o5gzugSoP3JghIvqNBZZ5B30Vj
-	8W8kot6EPsaiOuQu2x3qI0AnTwoY+R923n9gzmC5KoQT34RCNnLD9QGPi6WkJuc5UzKdlTs17er
-	7HObfNYUsaVnA9ylTJl2aOMOXoUpxzLv79Uq7qOHTctc0/5q3VgqIj3NthlB21BMv71NAQ51C+7
-	S7AjZRbn84fVKaexW1GvOivg+CHmQns7CMVf4rjsdBaeH54lyNkyznKcvsXH3RcIQWsWjioGAvk
-	FvT2CinBXkQJPK9yFXBXXMyIevkTsoya+LHi+sJWyeOtITwlKByQGawrGpNVrU8/UnM2RKtty54
-	7kbay5KvnGafLtjg==
-X-Received: by 2002:a05:6a21:681:b0:3b4:75c0:3ec0 with SMTP id adf61e73a8af0-3c67daaaf88mr4403603637.30.1785060807009;
-        Sun, 26 Jul 2026 03:13:27 -0700 (PDT)
+        bh=CrlASkg3aEU6DCVKYIVsNYyPT/klq2H1IARTdtVshro=;
+        b=eDU/lUfeCDtOqLK9TFa05Cr7qpHU3Sa3IHXqIijs4vmTHwEOsIVPHUi7q1xyV/3DKK
+         BVQj37c1vzQYhOIRYOByTX5nEF+dmBQmRoITrbTCMkbO4FGZbqFqKn4bffrJkOPxeolO
+         X4BoRwLE7PVbuYsCQWtagd/vD9ZLf/ObAhMrGrpOewnLhT92t+3ZTj1/3Vx8ZGOZvcF1
+         8tjiszGLPNgj1qh+xtqm4J2aHLoltSDiiYW6BfMenJswEL1KystHE7/OowEOvs5Jn+Vb
+         yJKKt+0Pin/0WgCl7svkAM3ltavX/pYMJ62ibWMxLiWiRG7evp5X35INFFFRzuYAlqm/
+         Ouqg==
+X-Forwarded-Encrypted: i=1; AHgh+RpOXziAXtgdi0L/5PUsX3akGUwqh8CzH/KJf3VPTSFUNQs1MWk7wfJPtxK5hPgV94ouS7IJqS0t8ue8uG08hH0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmeADIwU/dlq5tl/9UNgv/K2O96zw7tS0+63ADbghqVh3JtG1K
+	MsCSOriuzkg0oF9jr0EeFp4mi4HAgrNv/evbB8g2HQcrlnj6frygH33OJuRkftk25kg=
+X-Gm-Gg: AR+sD1028LAlX70Gd6QyBCzYV7RnD2mnP6/2kn4KS2HEEVJu5DvsVoaT4fQdPJy5GtX
+	x5Rlhw2j+ZpnEaY/bWEdDkdCVnri+BEzo7uKI3rV/4CHKcvXnMOZmuSBzwMJ/nr6cvT8QyPGbcS
+	M4e2wOdRSpPfnNIiV9NRlVFTlmUagQBP/0bxisMtzMW9JU1/e5TtW7voKBtkGl+FW7JGKUwl/x8
+	t4rdGfi3kKg7ja2R58V3rzpjbR/wRExje0FvzjoHEGc8WY/qETPCXtljkASsxHSpV8qaVZ7dMz4
+	yu/DAzAgTI0FU1VLNY1wmVEZfKub0aKKfpLCj9t9HQsXm8q67poDVRJkPM98pRirpJW5Y4D6RrK
+	5ca5YjFZ6qPsPBN1gRRjcMgSoIfJOWmI/jn60DtmmsUOhYhUlIKHvYUQYCgAmOmCqGaFjvWAcLp
+	MZgyiukcT9R3uT8g==
+X-Received: by 2002:a05:6a20:2d11:b0:3c3:824d:5200 with SMTP id adf61e73a8af0-3c67df2e412mr4352320637.41.1785060811108;
+        Sun, 26 Jul 2026 03:13:31 -0700 (PDT)
 Received: from integral2.. ([2402:8780:1329:2779:9db7:a8ec:2e1c:53e1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2026 03:13:26 -0700 (PDT)
+        Sun, 26 Jul 2026 03:13:30 -0700 (PDT)
 From: Ammar Faizi <ammarfaizi2@openresty.com>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
@@ -74,9 +73,9 @@ Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	gwml@gnuweeb.org
-Subject: [PATCH 3/4] selftests/nolibc: add abs() range test
-Date: Sun, 26 Jul 2026 17:13:04 +0700
-Message-Id: <20260726101306.3772237-4-ammarfaizi2@openresty.com>
+Subject: [PATCH 4/4] tools/nolibc: remove dead __ARCH_WANT_SYS_OLD_SELECT
+Date: Sun, 26 Jul 2026 17:13:05 +0700
+Message-Id: <20260726101306.3772237-5-ammarfaizi2@openresty.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
 References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
@@ -88,100 +87,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The existing abs/abs_noop cases only cover abs(-10) and abs(10), and
-labs() and llabs() have no coverage at all.  Nothing exercises the type
-minimum, where negating the argument overflows.
+The macro lost its last user when select() was reimplemented on top of
+pselect6 for every architecture; sys/select.h no longer looks at it,
+and nothing else in the tree does either. See commit 668e43737279
+("tools/nolibc/select: drop non-pselect based implementations").
 
-Add a case walking all three functions over the interesting points of
-their argument type: the minimum, the minimum plus one, an ordinary
-negative value, zero and the maximum. At the minimum the absolute
-value is not representable and the argument is returned unchanged.
+The comment that goes with it is stale for the same reason, as neither
+architecture can end up calling old_select any more.
 
-Both the arguments and the results have to be hidden from the
-optimizer. The compiler knows these functions never return a negative
-value, so it folds the comparisons at build time otherwise, and that
-would equally hide the overflow being tested for.
-
-Note that the overflow itself is only reported through the:
-
-    -fsanitize=undefined -fsanitize-trap=all
-
-flags the suite already builds with; without them the wrapped result
-is the same as the correct one. With the flags, and with the preceding
-fix reverted, the run dies with SIGILL on this test on both i386 and
-x86-64.
+Drop both from arch-x86.h and arch-arm.h.
 
 Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 47 ++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ tools/include/nolibc/arch-arm.h | 3 ---
+ tools/include/nolibc/arch-x86.h | 3 ---
+ 2 files changed, 6 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 996e8d13508e..4dc2ffea63bd 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1728,6 +1728,52 @@ int test_alloca(void)
- 	return *x - 0x1234;
- }
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 8681922e05ca..b88686fb19c4 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -33,10 +33,7 @@
+  *     with r7 before calling svc, and r6 is marked as clobbered.
+  *     We're just using any regular register which we assign to r7 after saving
+  *     it.
+- *
+- * Also, ARM supports the old_select syscall if newselect is not available
+  */
+-#define __ARCH_WANT_SYS_OLD_SELECT
  
-+/* abs(), labs() and llabs() over the whole range of their argument type */
-+int test_abs_range(void)
-+{
-+	int i, ri;
-+	long l, rl;
-+	long long ll, rll;
-+
-+	/*
-+	 * Both the inputs and the results have to stay opaque: the compiler
-+	 * knows abs() and friends never return a negative value and would
-+	 * otherwise fold the comparisons below at build time, which would also
-+	 * hide the undefined behavior that is being tested for.
-+	 */
-+	i = INT_MIN; l = LONG_MIN; ll = LLONG_MIN;
-+	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-+	ri = abs(i); rl = labs(l); rll = llabs(ll);
-+	__asm__ ("" : "+r" (ri), "+r" (rl), "+r" (rll));
-+	/* the absolute value is not representable, the input is returned */
-+	if (ri != INT_MIN || rl != LONG_MIN || rll != LLONG_MIN)
-+		return 1;
-+
-+	i = INT_MIN + 1; l = LONG_MIN + 1; ll = LLONG_MIN + 1;
-+	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-+	ri = abs(i); rl = labs(l); rll = llabs(ll);
-+	__asm__ ("" : "+r" (ri), "+r" (rl), "+r" (rll));
-+	if (ri != INT_MAX || rl != LONG_MAX || rll != LLONG_MAX)
-+		return 2;
-+
-+	i = -42; l = -42; ll = -42;
-+	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-+	if (abs(i) != 42 || labs(l) != 42 || llabs(ll) != 42)
-+		return 3;
-+
-+	i = 0; l = 0; ll = 0;
-+	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-+	if (abs(i) != 0 || labs(l) != 0 || llabs(ll) != 0)
-+		return 4;
-+
-+	i = INT_MAX; l = LONG_MAX; ll = LLONG_MAX;
-+	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-+	if (abs(i) != INT_MAX || labs(l) != LONG_MAX || llabs(ll) != LLONG_MAX)
-+		return 5;
-+
-+	return 0;
-+}
-+
- int test_difftime(void)
- {
- 	if (difftime(200., 100.) != 100.)
-@@ -1943,6 +1989,7 @@ int run_stdlib(int min, int max)
- 		CASE_TEST(toupper_noop);            EXPECT_EQ(1, toupper('A'), 'A'); break;
- 		CASE_TEST(abs);                     EXPECT_EQ(1, abs(-10), 10); break;
- 		CASE_TEST(abs_noop);                EXPECT_EQ(1, abs(10), 10); break;
-+		CASE_TEST(abs_range);               EXPECT_ZR(1, test_abs_range()); break;
- 		CASE_TEST(alloca);                  EXPECT_ZR(1, test_alloca()); break;
- 		CASE_TEST(difftime);                EXPECT_ZR(1, test_difftime()); break;
- 		CASE_TEST(memchr_foobar6_o);        EXPECT_STREQ(1, memchr("foobar", 'o', 6), "oobar"); break;
+ #if (defined(__THUMBEB__) || defined(__THUMBEL__)) && \
+     !defined(NOLIBC_OMIT_FRAME_POINTER)
+diff --git a/tools/include/nolibc/arch-x86.h b/tools/include/nolibc/arch-x86.h
+index fe152ac2650b..577e9b682eb3 100644
+--- a/tools/include/nolibc/arch-x86.h
++++ b/tools/include/nolibc/arch-x86.h
+@@ -25,10 +25,7 @@
+  *     don't have to experience issues with register constraints.
+  *   - the syscall number is always specified last in order to allow to force
+  *     some registers before (gcc refuses a %-register at the last position).
+- *
+- * Also, i386 supports the old_select syscall if newselect is not available
+  */
+-#define __ARCH_WANT_SYS_OLD_SELECT
+ 
+ #define __nolibc_syscall0(num)                                                \
+ ({                                                                            \
 -- 
 Ammar Faizi
 
