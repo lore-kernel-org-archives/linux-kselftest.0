@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612FC3E7BB4;
-	Mon, 27 Jul 2026 09:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B423B3EA940;
+	Mon, 27 Jul 2026 09:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785143023; cv=none; b=f9I6pEsAQVeRcMDntxHxy3ERQmBRrNvejv9ZXyXrwb6sttJuqbdQfTL1EseRBF9C4N0d5TWhgPbyItKdl4HA0obHii5Stw/7XaooUOe4rRgy7u/KQ8FLinE+Ad1IXo9BNToxZKZbOxYAYn2Wn4d9AVQnVlmvpTon4zdfwayaSlg=
+	t=1785143122; cv=none; b=gnlGxY6iiAVcE0kI0DdeTXcSYjsnsVti2+NSijBmTM4Ww4g8FEXFmfDWYk/WWAONh62xi+P+qNncWmjhpT6X9p92HJwtVcIB9b0sUCKNTdzIoRpEBs9KbseEytvS1QuuCSgBlVcK8Ks/6K6L/tqrgaajSlkKi/3kFPUbUP5HlTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785143023; c=relaxed/simple;
-	bh=bHOtjsQcPF++wuNWsjg2dYurojBxoMys+9lFkPoPZL4=;
+	s=arc-20240116; t=1785143122; c=relaxed/simple;
+	bh=LAOH9x5uQ4fiUCi9EnlUXvkLZM1AdqRC6F57JY5+YuY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
-	 MIME-Version; b=uFZv6t5gzTnZw4gZr0DAoVUK8naV1R3HZwIM1af0pTyaeSPMgEiSneTDkgxOwWc37cbR16N/ce1EhbOb8eNRE1jCg1Q9xPNsv7iSmAb+EsI1qPagBZMGXfzix6jVlGACY7QJhswQgyF90Z795RzDreszlW+14R3D5rdO1w/x6A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ckkAqvFG; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=kwSn2/EtU+9Tv0ShfxWrawJ7O2WW7eZ5ezi1vYXGUL4Mwi6+wHvtXxrlIWHefqO1hRq9SLVtdvgrinNlq5II5GT8g/QACfnQCkKaGA0fa9zpEx0hx001iO5lsXqM0xEY5aaRbEEcBofPSzNTUgzpzCByBv5Te/E9apAB9tXewhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uKX4rDz5; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ckkAqvFG"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uKX4rDz5"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:In-Reply-To:
 	Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:References;
-	bh=k+/4KOmOA7VtFq/TiMbhB175pzSrBzo6kcC+E7alf9o=; b=ckkAqvFGVRko/dNosnZSV0zeiQ
-	EAS1SH9QN7zuSTRiXIjgk5NxCV+5KPKYeYjhFiBnAvxDK4BoKZnj74QqpGZfIuAySTW1fIyfSmJ2m
-	hsR1FxqnIPhI+XwJVloIBkbgwRPzwIDyBARNv2lGg8rQ4D7+BmC9iXbJBuAwxHogNSys2paVx9zN8
-	L1JEXLIiHBeOOdV37ThlhvAefCvZxDrn4JTpjoziT6XK8WS7a1Rj2gOi4SKLIXxHS/OoNNOp7zige
-	Z8qJLXThk/IZhFL1Qqx9N4uW74Bq/8I6uqgMmCmc2R0JNV0DhriHh1W0MM+Odln1zPNqZZZig1mQg
-	9gFTZLRQ==;
+	bh=LAOH9x5uQ4fiUCi9EnlUXvkLZM1AdqRC6F57JY5+YuY=; b=uKX4rDz5bOMaTENC+HgjcofKHG
+	9RgmOywlyS2GxpLdpyKtz7zHzvCblG27wh2d6YMKy6oQn4mUQ0p7LFM9YDXaUd7KejiwMKW8eDq15
+	moMMpkneOApDdCqdgtkByPoQFCw1BOoYDrqeXIfFWgDbNY3dfzHakxHaZragm5Ny6+qLtutzu2I54
+	DLRF856iGieYlJOy0nUgmM0mH8cEc4t7PlcksWLCKaXcFY1LIcdcJbnmD/28eDcSTmhEOr+s9p9VX
+	sQm9HyvwJ1VTSmFyqoVUXgoHY+N0JRnjGmjg+u/gVFY7oi+woVuM1cHXaRz9dTG3w43i6CaPD4IBL
+	tTCWxOGw==;
 Received: from [2001:8b0:10b:5:45df:678b:e980:5dcd] (helo=u09cd745991455d.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1woHFB-0000000AKjN-36Ng;
-	Mon, 27 Jul 2026 09:03:29 +0000
-Message-ID: <1a5c0883140d470657b2cba24b964f5ce71b9a15.camel@infradead.org>
-Subject: Re: [PATCH v5 net-next 1/7] ptp: Add ioctls for PHC timestamps with
- quality attributes
+	id 1woHGu-0000000AKxU-23cR;
+	Mon, 27 Jul 2026 09:05:16 +0000
+Message-ID: <b5ee79c669669fc10a26ab3504ad250a43a32cd2.camel@infradead.org>
+Subject: Re: [PATCH v5 net-next 2/7] selftests/ptp: Extract
+ print_system_timestamp helper in testptp
 From: David Woodhouse <dwmw2@infradead.org>
 To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
  <davem@davemloft.net>,  Jakub Kicinski	 <kuba@kernel.org>,
@@ -54,10 +54,10 @@ Cc: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
  shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
  <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, Bjorn Helgaas
 	 <bhelgaas@google.com>, vadim.fedorenko@linux.dev
-Date: Mon, 27 Jul 2026 10:03:28 +0100
-In-Reply-To: <20260717065924.2556-2-akiyano@amazon.com>
+Date: Mon, 27 Jul 2026 10:05:15 +0100
+In-Reply-To: <20260717065924.2556-3-akiyano@amazon.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-4ZOm4MuXTXxbqLdjYgq3"
+	boundary="=-SlAzE88INSHR5pjtYJPF"
 User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,140 +68,25 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-4ZOm4MuXTXxbqLdjYgq3
+--=-SlAzE88INSHR5pjtYJPF
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Fri, 2026-07-17 at 06:59 +0000, Arthur Kiyanovski wrote:
-> Introduce two new ioctls that extend existing PTP timestamp interfaces
-> with clock quality information:
+> Extract the repeated switch-on-clockid pattern used for printing
+> system timestamps into a reusable helper function. This removes
+> code duplication in the -x (PTP_SYS_OFFSET_EXTENDED) output path
+> and prepares for additional callers.
 >
-> - PTP_SYS_OFFSET_EXTENDED_ATTRS: Extends PTP_SYS_OFFSET_EXTENDED
-> - PTP_SYS_OFFSET_PRECISE_ATTRS: Extends PTP_SYS_OFFSET_PRECISE
+> The "after" timestamp lines now include the sample number prefix
+> for consistency with the "before" lines, slightly changing the
+> output format.
 >
-> These ioctls provide quality attributes alongside timestamps:
->
-> 1. error_bound: Maximum deviation from true time (nanoseconds), based
->    on device's internal clock state
-> 2. clock_status: Synchronization state (unknown, initializing,
->    synchronized, free-running, unreliable)
-> 3. timescale: Time reference (TAI, UTC, etc.)
-> 4. counter_value: Raw system counter (e.g. TSC ticks) captured by the
->    timekeeping core alongside each system timestamp
-> 5. counter_id: Identifies the counter source (e.g. TSC, ARM arch counter)
->
-> This supports three use cases:
->
-> 1. Managed PHC devices (e.g., ENA, vmclock) that maintain their own
->    synchronization and can report quality metrics directly to userspace
->    without requiring ptp4l
->
-> 2. Applications that need complete time quality information in a single
->    call, regardless of how the PHC is synchronized
->
-> 3. VMMs that need raw system counter values paired
->    with PTP timestamps for feed-forward clock calibration, avoiding the
->    feedback loop inherent in NTP-style synchronization
->
-> Timescale definitions use a Continuity/Discipline framework to describe
-> timeline properties and steering behavior consistently across all
-> entries.
->
-> This implementation is based on the original RFC and the UAPI design
-> discussion linked below.
->
-> Link: https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon=
-.com/
-> Link: https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
-> Signed-off-by: Amit Bernstein <amitbern@amazon.com>
 > Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
 
-...
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 
-> +static long ptp_sys_offset_extended_attrs(struct ptp_clock *ptp, void __=
-user *arg)
-> +{
-> +	struct ptp_sys_offset_attrs *data __free(kfree) =3D NULL;
-> +	struct ptp_attrs_request request;
-> +	struct ptp_system_timestamp sts;
-> +	unsigned int n_samples;
-> +	int err;
-> +
-> +	if (copy_from_user(&request, arg, sizeof(request)))
-> +		return -EFAULT;
-> +
-> +	if (request.valid ||
-> +	    request.num_samples > PTP_MAX_SAMPLES ||
-> +	    request.num_samples =3D=3D 0)
-> +		return -EINVAL;
-> +
-> +	err =3D ptp_validate_sys_offset_clockid(request.clock_id);
-> +	if (err)
-> +		return err;
-> +
-> +	n_samples =3D request.num_samples;
-> +	sts.clockid =3D request.clock_id;
-> +
-> +	data =3D kzalloc(struct_size(data, timestamps, n_samples), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->request.num_samples =3D n_samples;
-> +
-> +	for (unsigned int i =3D 0; i < n_samples; i++) {
-> +		struct ptp_clock_attrs att =3D {};
-> +		struct timespec64 ts;
-> +
-> +		if (ptp->info->gettimexattrs64)
-> +			err =3D ptp->info->gettimexattrs64(ptp->info, &ts,
-> +							 &sts, &att);
-> +		else if (ptp->info->gettimex64)
-> +			err =3D ptp->info->gettimex64(ptp->info, &ts, &sts);
-> +		else
-> +			return -EOPNOTSUPP;
-> +
-> +		if (err)
-> +			return err;
-> +
-> +		/* Filter out disabled or unavailable clocks */
-> +		if (!sts.pre_sts.valid || !sts.post_sts.valid)
-> +			return -EINVAL;
-> +
-> +		data->timestamps[i].pre_systime.sys_time =3D
-> +			ktime_to_ns(sts.pre_sts.systime);
-> +		data->timestamps[i].pre_systime.sys_rawtime =3D
-> +			ktime_to_ns(sts.pre_sts.monoraw);
-> +		data->timestamps[i].pre_systime.sys_counter =3D
-> +			sts.pre_sts.cycles;
-
-I hate all this line wrapping, btw. I'll defer to the net coding style
-if they insist, but my preference would just be just to have longer
-lines. Especially when it's a block of assignments like this, the
-wrapped form is *much* harder to read.
-
-> +		data->timestamps[i].pre_systime.sys_counter_id =3D
-> +			sts.pre_sts.cs_id;
-
-You added PTP_COUNTER_* constants as we discussed=C2=B9... but didn't you
-forget to *map* to them here?
-
-=C2=B9 https://lore.kernel.org/all/877boqtg3g.ffs@tglx/
-
-
-Arguably, if the timestamps have a hw_csid then you should be returning
-that in place of the main one which will be kvmclock or hyperv
-nonsense. You can do that here for extended_attrs but precise_attrs
-will need a bit more work (as system_device_crosststamp doesn't have
-the hw_* fields). I won't randomise you further by asking you to handle
-that though. I'll do it in a follow-up.
-
-You can either map KVMCLOCK to unknown or give it a
-PTP_COUNTER_KVMCLOCK if you prefer. I suggest the former, as nobody who
-cares about time should be using kvmclock. And it means my promised
-follow-up will be providing counter data which previously wasn't
-provided, rather than *changing* what's provided.
-
---=-4ZOm4MuXTXxbqLdjYgq3
+--=-SlAzE88INSHR5pjtYJPF
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -299,22 +184,22 @@ vFEOOmuaq7VamuLEPFQtJM4olmipOW6CzrLcFz6J/6yAecEG3P1ZDoy08eSHvM40MAUgpwGa/w6o
 MAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTowOAYDVQQDEzFEaWdpQ2VydCBB
 c3N1cmVkIEcyIFNNSU1FIFJTQTQwOTYgU0hBMzg0IDIwMjQgQ0ExAhADNSi2uzJskfEdOMo4hV0g
 MA0GCWCGSAFlAwQCAQUAoIIBezAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yNjA3MjcwOTAzMjhaMC8GCSqGSIb3DQEJBDEiBCBe2jU5VOSAzQeCDTetMSPXJwKku0nk
-JCAmkcsBiDspgjCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
+BTEPFw0yNjA3MjcwOTA1MTVaMC8GCSqGSIb3DQEJBDEiBCDgB2T7jcMlv0dxBSiTqffZ0PL66oVz
+1iVb6cQN0ARC2zCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
 aUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBT
 SEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAwgYcGCyqGSIb3DQEJEAILMXigdjBiMQsw
 CQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFz
 c3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAw
-DQYJKoZIhvcNAQEBBQAEggIAl8xvFBVgxNrGppk35aN2xAh84KsoFq3HRQG+QYRqPcgKm6h8UCZl
-y1S/k+WTUj08GIOUKtqIIMqa++g0T9wuZZn9SAaoZzXzBiqTmULNzoGroXLQQCOEMbBUvGbAfkoq
-QhMMW0reqt0SxOxrK4zqhr56EnZ+Xk+k5vGsWP7XKX488pC80eYu9C/Y4QuydI9gdS/f8yhS+f8l
-dLhcIvntz93mxzlHeoR+jBRirUENDPCjgjmxGpdedhVqqqv7R2bk2vyO6cPuTk+fDze4QuhnLA8v
-cytVx1rhUDm2P0eUTrlEleqn92hF4Sdzg9udl/Gcxx9/48yDiZqFMjAgkhCPM1X0HaWNbh1pMNU/
-5zZLs5D2vCTi98kDPKSm6jzBKgFh7fFjUA4WqQPplvaMhCUT44IvXbZAePq9GrQ4ZRczSyv7pUhU
-uFj2K4qJZ4//P0JjtrEtBdIPoalH5iBPjmadF2KTsam59A7Dg3/pcLdFh4PjgS6Z50mxBzwM2v8n
-uHdKzLoCi046mARJQWFredlQdkVUFhV+uKIByF/3FW7IQuotfWK1mWKh2xVibpDO8g96vIsx2nL1
-cGZgtB6ZKIS8C1HBU6Z3CLeU/Q+Rhgc3veRqAasfow+f+A5OZATS6avXnbGxrUgXCE0PXYOjL0i8
-IQxuOauqcwubreVmQg0kAVoAAAAAAAA=
+DQYJKoZIhvcNAQEBBQAEggIAiRJD2R0KdxGQecmYhTpvYGV6IUAuGppdOll69JzBhrDwr2ZJ82zw
+FD4nYpDxZRpFe/jCVlba328D0OwvAS528VivBDPlVIZlTFaxEXk0yg5s/PD5QjmNZ+s/SMIR9kAe
+t6NfgvF++DCnl4utYbnCaAsSnL1tivAl1dspVJOKnvrp1jv0O1uDxRxWotttOpAPRuLfEfUaAoqU
+7Q9U4BeTg4KwfE0l/nHgn2WuUohkfeVzOOkCz473Uy1vSFBPQNWeEQQLR6kjitTWkUJXLxMvzonD
+kEi0TgsLZashhXFcadN7GzwIIuW7hqYrjWNlFFQiBtBBxGtb8mBTaOYdihib57+p7SWmhq1roIR/
+UWq25TDoH48EGil0ofi47j1RgQIvhqg7BYMDIZRVWIbfmKcAS0MTPVm4I3h9h+7EInpW400jqLiL
+kZjyfEk0jKIfOqpFShmR98ebm58KyT1VoEIVGvAOa9ccYt6oYiW9RBQNcsYD5d4cLzG2VKZtbo52
+EhGfLkObjz/p1yf0bVUiD6fG7Zy0WjogF6azXtKBvhPRVqoz5lzTI/BmdjBX0mD0eicmfXrayLRi
+N0gwZMxqn1rxPNbmhmwpkzcudOgGOzG9ks+0Dr3B7S/YhtPTj5zxWHyWr7bByA7APyjZQVkxFcjE
+W/WV+wbOfCNMhC7PAVaufxMAAAAAAAA=
 
 
---=-4ZOm4MuXTXxbqLdjYgq3--
+--=-SlAzE88INSHR5pjtYJPF--
