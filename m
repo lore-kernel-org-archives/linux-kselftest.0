@@ -1,561 +1,201 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F51E3F4DD2;
-	Mon, 27 Jul 2026 10:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408D3BED7D;
+	Mon, 27 Jul 2026 10:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785146862; cv=none; b=hDgc8jcXhuw5tw/wokvwyed8IhLDF+qomefzBhpcLV+aME8zZ+2OT8j9xr2AudOQelro6gt0mkl6XAWkDTMjVO9L15Vjzc4oJymWep21hwUtWL4ZqZKufxuD2JnQ7csD4OWAjreN5RDg1MMKgYNr2cOjlMXoqsfIpedrTdy/UiY=
+	t=1785148263; cv=none; b=O4xqdwgtfuDibQTOijeGk2uAg/bt7sHyGUlEXo4idz3qp8/U2d9+t8ziuY6WGEbT3NjA7MGf5+QoCxP4tm86BBSnXBMco8QCa6x1cxsGIZURD2fJ3RLVoQEQJqyEbdSmJIp2mWYUGib8tQ+p5gGbBbOw+TRCrhDOXp8Rjt72bRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785146862; c=relaxed/simple;
-	bh=BMVcLJmCpyRrXXcCWpXQRymEof2ePWajEjCSCzomzHM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CQojyMjuRubAP1mX8G0dV8aRykwomOcak+p/8qYZGaGj/f7+s6Bf9J84GMtujgeUV3TGL5cCtsX4TziCya038DSC2BbARhyz4aVGgsCJZPmtvRDqOtSGGaP5oKSzjylfms7daulm6kuxy/sLg8tBgOrwuN7uJfTxyDMyUF1mFHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=e4CLreeQ; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1785148263; c=relaxed/simple;
+	bh=to9PBPAgqzQtwrj/xu9pXDPVNpLlo723lWlyCRiy2SM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AXg7aBX3PyvueyTGnX1kon0bOqstBYzgiU82Cv3cTgPBJPErKYX/MGRq0qQgj1TfcX0rKsaoFbWSDfdNhXiO+HVpgzRdGlGGhxzlGcMMiFLI/ApniF3GZO+yUJmKybPzWljlxygTyZflKP8V5vDk96zGD6EKnax4zYmJvizmNuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=m+PApdSW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jeu31dwr; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="e4CLreeQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=AdApMorL2H4fBahescJf2ENcSZCp0VBZUBRzJxG+IS0=; b=e4CLreeQBe5evIE/lzOj7q5k4z
-	RMIVhFakVPMEcNUOS2lrp7yPVf7HqnwaOr3YIyPMzaki8o+GMkUU+LYwCGEvZ0sv6g73mFqh+DjB7
-	QN/eHyiHsLOjXSlozHaQYw/xXTpeZQQcDMlviXulLh/4vJfBX3FbxDFpQtslEUkVYJJWuP4S5ifqq
-	wcYzwAGoPhsuNiYHgWSKwc47X7uor3lWAoVnzUFMbPSR81vJkp4AFul75L7oLOx1+lNGNdCk2SoK5
-	5RSPn9540flI6Fmc0HRKGYCW1puJh9LiC/zEl859KXtCIMT8ell9hefT2bYIZ1r2mCBxXqeQ8HxP0
-	amNiutXA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1woIFG-006ouy-36;
-	Mon, 27 Jul 2026 10:07:39 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 27 Jul 2026 03:06:41 -0700
-Subject: [PATCH net-next v3 7/7] selftests: net: getsockopt_iter: cover
- rawv6, ieee802154, phonet and tls
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="m+PApdSW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jeu31dwr"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 1012EEC01E8;
+	Mon, 27 Jul 2026 06:30:51 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Mon, 27 Jul 2026 06:30:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1785148251; x=
+	1785234651; bh=62xXIsLKNu0RPA+OUccAzZfHaVO7nDCero1BquD50C8=; b=m
+	+PApdSWqysOgu0iS1S5+9zEyx0owxUtkY9/SGrgAuy7PvTw0bnxThH4Fa1GdiIhw
+	ZXDvQxAm+MohztNvtdvG1zRUf+smGQO73PcYO4HAA/K4c7YRjwhaujg4oAbL0VFl
+	Z4/HzJNErdqOO3r0cJYyL41mpZb6WVknde8z7AbmhdgNcmCbiqPk70cQIEn96bfk
+	3q4/9QVVTTxIlwOeOZQfrsP+aCOHlqUgt92y7Eg7dAEIiEt4oKCU6fDHY8g8K4ch
+	/yQPGOHxSWnbGaEajNnBMngwhgA0LVcOGA8q3Pd2lDtSfhrKOyuHjNqr19bBOdhN
+	PCwhK+zxmgFXHh2C2EHAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1785148251; x=1785234651; bh=62xXIsLKNu0RPA+OUccAzZfHaVO7nDCero1
+	BquD50C8=; b=jeu31dwrlzqW0ndrMqWlT236sl0v7xlwJG2VsXr25GDqoQwA+LX
+	PXJWsIHVLvPFUddhKNot1eaOyWdpWy0crVllwqqjWaRq25uqHP+x56oU0zB33aLh
+	JhVJ4Lr0hU8j93QMysfRvd/ZX9UQDYvJVCFdhe0VuSug4idjJz48CPyvzZ+g2XJn
+	MA1f81P42Ml7d16INF8C2pR1UoBZlfovR03JxeGr2sg9S2dMsweTHMs1wq97O6Jk
+	zQyYZm7rmbZXEhikoKJGb65gvipDGxbduYZ98NN3biW4uukgLixt3pahi/ZDgyVS
+	wCqujqq3gKgis/P4KhMF2Sko9pVa/Xiy7qQ==
+X-ME-Sender: <xms:WjNnaiMVY-MBLUT0eZxL9r2fkH5FAsmUyaxkEofF7NnLRPf70q8WKw>
+    <xme:WjNnas9vKY3ZpAeoOyHYnH_OExLYLYrS1Peps5xObmGgnQ7JQFtUwXoKHzkUmBDR3
+    d5g2qx6B3bvKp0tDQ3KFs_Ns4SOq4_WV92siF_uBV8WL62rZhyzhSa1>
+X-ME-Received: <xmr:WjNnarflr2xdwCbROEZoflJbwjXnt-su2ZWU7Y33WhFwWh8wGDQwSEbf9o4>
+X-ME-Proxy-Cause: dmFkZTE8P/0KHEclaEnL8ilGwpIhu7np1u9ll2evolM0JR24lfdg/rWshD4GHU53TdtySf
+    GIZpJbK4fwqAAgDVJeFPn3hJ490pWFRY2nhxntohUgjHUf89909l12nqdDYJ1dqVNID1vo
+    D8Gya9jCCJALykCrsugs4PghN4a//7fu6D7tNGSc4b7RbUqqAORbL71uy3QcquLx8LExdm
+    GF/2L2+2V6bgeBmbPso761Q8GUH8s9zMkxmgg+hy4QKxxxOU/ZUfQeUAYp821pXEtJVqKw
+    qmXgwLpLbu0dH7j7ZhtUkJQ8H0uA+yI2tG9hhRTXFFSUto1FMB261mEyZ0YRYCkZIOEveL
+    aOt9F/+siaJ7wjCYf1NvcWYiLrfukku/qeHjxPu4lq+ljM788N59xtxR/MpSYPKpFRFPo7
+    5kLQ4viBZu9mSQGD4HNSvSgzQAdyHHiBv6t98Xvo7zDt/ojWuwR6UtuHwf9vcnesGOrrYt
+    b1tDmylXu6RLnNTLPLNUpHJy0BH0JdVl86HA3jeKMsqKn8TodNeJx7nVCXeuwDqsUGQ+fd
+    SjYjPL3IXfJR7Vf7jmwWxUwW0ABQfCyGNVBP4u8EQuG+2RwL1V9lOJIeJoqXr25m+iCen0
+    OP7/aQLd1Bq/d+9GfrTD00TJDaskgRoT3c4DTFeQiNP9cSW5On7EfOjtQI7Q
+X-ME-Proxy: <xmx:WjNnajwZr_jL-ekli7Zy0zll5AKpknOjOlfdzvPCIP6fdosu2Qa5_A>
+    <xmx:WjNnaoJ7pwVe9UgwYePXCM1NWOy45mH0DcJkI3zuEy3xX8BrL2holQ>
+    <xmx:WjNnatEXq4ZrwwLz40N-NUOuQPPqGpG38KldXR1rTfEaflVEOQEYRQ>
+    <xmx:WjNnas8Za8KCiKP85T7zwlZYuJ6q-x8axAodSVQ19UgqUX_1i_bT8w>
+    <xmx:WzNnavl6M5YE0k7Ec3DB3tH4g3h5uI1t7CSYd5SOIlOa96qXLQglbQrX>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Jul 2026 06:30:50 -0400 (EDT)
+Date: Mon, 27 Jul 2026 12:30:48 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: chanyoung <ppoo1220@gmail.com>
+Cc: netdev@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net 1/2] tls: don't over-fill the plaintext sk_msg ring
+ in tls_sw_sendmsg_splice()
+Message-ID: <amczWCEaLMVQWZp8@krikkit>
+References: <20260726105556.2719227-1-ppoo1220@gmail.com>
+ <20260726105556.2719227-2-ppoo1220@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260727-getsockopt_phase4-v3-7-e89627544639@debian.org>
-References: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
-In-Reply-To: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
-To: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Alexander Aring <alex.aring@gmail.com>, 
- Stefan Schmidt <stefan@datenfreihafen.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Remi Denis-Courmont <courmisch@gmail.com>, 
- =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com, 
- =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi@remlab.net>, 
- Joe Damato <joe@dama.to>
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11804; i=leitao@debian.org;
- h=from:subject:message-id; bh=BMVcLJmCpyRrXXcCWpXQRymEof2ePWajEjCSCzomzHM=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqZy23HSLdzEwxTA2W71W9n6x8k5SRpwJQUm6V6
- NQNKb3tTu2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamcttwAKCRA1o5Of/Hh3
- be9sD/kBXDoyAgg8IrAaQnuLvqjcNOdyKX/kGAncEjlyAULRboa0sDtRTj/8sXKZ73mwz06YlsC
- ouNunfNNcK+kR1aN1RSe3caH3OXTkGoSu+rIjGZw9ZpeMKWBl3X1Z/WuZAN3Bu2YbZmBQuHmDHO
- XtTt+0wJE+xljyIcWP9vrRZR7jvJ1d7Qpik86gQ3Cyi3rWiqdIQ+fiRxVrIIFSZJcxzMoIbP8Ie
- Qlw77LPLI8d9YIbRyjOBxyEH6Mypdcm8lecxzWlTjRw9iSnOqh5IGHB2/Y+qvD+ywmXoQAjqB32
- PIT6bVOnfxxm5bm+Ia+DoMSXwcYwAlFneszyOBZOhnRgTCsEveeB0VKiQR9arBUaKFYEuXxwDt9
- 8VxVuf7kbTCl93EPL2i1/oyjW+qqo3CdK4jeot2ekT40LMFq5fCgtgG4bfyIkLSgtrLc4i3KpJh
- Zv+zF3ZuVpMvNKkkUxmqt5NztG+md0vkhVJhJj99E13jSzHi3XLySJ9874OnxbgImnYFNAihoDm
- HAT04TvHyktCCrZxbhQeMKSGDfR8U+3alOelPC85R8dDxEMrfYkDOZEiJbKpcTuVQRcZqXIOK2r
- dqrJS8rvOW4ZQGteLMhifvnA5Zp4x90FXYLYIK8/HPp/sAVFjNLXf1Pr8lVsXeiRJ75Qq7Fi4zD
- 8GJ+ygX6imHMK2w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260726105556.2719227-2-ppoo1220@gmail.com>
 
-Add fixtures for the newly converted getsockopt leaves:
+2026-07-26, 19:55:55 +0900, chanyoung wrote:
+> tls_sw_sendmsg_splice() appends pages to the open record's plaintext
+> sk_msg ring with sk_msg_page_add(), which performs no fullness check of
+> its own, and the loop only tests sk_msg_full() at the bottom of its
+> do-while.
+> 
+> If the ring is already full when the function is entered, the first
 
-  - rawv6:      IPV6_HDRINCL / IPV6_CHECKSUM int paths + a SOL_RAW
-                unknown-optname case that reaches do_rawv6_getsockopt().
-  - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
-                rejection.
-  - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
-                rejection.
-  - tls:        TLS_TX_ZEROCOPY_RO, the TLS_TX crypto_info round-trip at
-                the base and full cipher sizes, the NULL-optval and short
-                buffer EINVAL paths, and an unknown optname. It skips when
-                the kernel lacks TLS or AES-GCM.
+This should never happen. We need to fix whatever path leads to that
+invalid condition.
 
-Each fixture pins the returned-length / errno semantics across exact,
-oversized and short buffers, an unknown optname and a bogus level. The
-semantics are unchanged by the sockopt_t conversion, so the tests pass
-both before and after the leaf conversions.
+As you write in the cover letter:
 
-Acked-by: Rémi Denis-Courmont <remi@remlab.net>
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
-Reviewed-by: Joe Damato <joe@dama.to>
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/net/getsockopt_iter.c | 424 ++++++++++++++++++++++++++
- 1 file changed, 424 insertions(+)
+    The ring is left full and unpushed across a syscall by the copy path,
+    which does not set full_record when the fragment it adds is the one that
+    exactly fills the ring.
 
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-index fe5a5268bc34e..974065a23fa82 100644
---- a/tools/testing/selftests/net/getsockopt_iter.c
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -28,7 +28,10 @@
- #include <linux/vm_sockets.h>
- #include <linux/icmp.h>
- #include <netinet/in.h>
-+#include <netinet/tcp.h>
-+#include <arpa/inet.h>
- #include <sys/socket.h>
-+#include <linux/tls.h>
- #include "kselftest_harness.h"
+That's what we should fix.
+
+Which I think would be:
+
+
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index d4afc90fd796..d2e399be8ef6 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -832,6 +832,14 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 		if (!sk_stream_memory_free(sk))
+ 			goto wait_for_sndbuf;
  
- #ifndef AF_VSOCK
-@@ -40,6 +43,45 @@
- #ifndef ICMP_FILTER
- #define ICMP_FILTER 1
- #endif
-+#ifndef IPV6_HDRINCL
-+#define IPV6_HDRINCL 36
-+#endif
-+#ifndef IPV6_CHECKSUM
-+#define IPV6_CHECKSUM 7
-+#endif
-+#ifndef AF_IEEE802154
-+#define AF_IEEE802154 36
-+#endif
-+#ifndef SOL_IEEE802154
-+#define SOL_IEEE802154 0
-+#endif
-+#ifndef WPAN_WANTACK
-+#define WPAN_WANTACK 0
-+#endif
-+#ifndef AF_PHONET
-+#define AF_PHONET 35
-+#endif
-+#ifndef SOL_PNPIPE
-+#define SOL_PNPIPE 275
-+#endif
-+#ifndef PN_PROTO_PIPE
-+#define PN_PROTO_PIPE 2
-+#endif
-+#ifndef PNPIPE_ENCAP
-+#define PNPIPE_ENCAP 1
-+#endif
-+#ifndef PNPIPE_ENCAP_NONE
-+#define PNPIPE_ENCAP_NONE 0
-+#endif
-+#ifndef PNPIPE_ENCAP_IP
-+#define PNPIPE_ENCAP_IP 1
-+#endif
-+#ifndef SOL_TLS
-+#define SOL_TLS 282
-+#endif
-+#ifndef TCP_ULP
-+#define TCP_ULP 31
-+#endif
++		/* open record may be full if we couldn't push it in the last sendmsg call */
++		if (sk_msg_full(msg_pl)) {
++			full_record = true;
++			sk_msg_trim(sk, msg_en,
++				    msg_pl->sg.size + prot->overhead_size);
++			goto copied;
++		}
++
+ alloc_encrypted:
+ 		ret = tls_alloc_encrypted_msg(sk, required_size);
+ 		if (ret) {
+@@ -921,6 +929,12 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 						       msg_pl, try_to_copy);
+ 			if (ret < 0)
+ 				goto trim_sgl;
++
++			if (sk_msg_full(msg_pl)) {
++				full_record = true;
++				sk_msg_trim(sk, msg_en,
++					    msg_pl->sg.size + prot->overhead_size);
++			}
+ 		}
  
- /* ---------- netlink ---------- */
- 
-@@ -394,4 +436,386 @@ TEST_F(raw, bad_optname)
- 	ASSERT_EQ(sizeof(val), optlen);
- }
- 
-+/* ---------- raw (ipv6) ---------- */
-+
-+FIXTURE(rawv6)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(rawv6)
-+{
-+	self->fd = socket(AF_INET6, SOCK_RAW, IPPROTO_UDP);
-+	if (self->fd < 0)
-+		SKIP(return, "SOCK_RAW/IPv6 socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(rawv6)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(rawv6, hdrincl_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(rawv6, hdrincl_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* Raw int options clamp the reported length down to the user buffer
-+ * instead of returning EINVAL on a short buffer.
-+ */
-+TEST_F(rawv6, hdrincl_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_HDRINCL,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(rawv6, checksum_default)
-+{
-+	socklen_t optlen;
-+	int val = 0;
-+
-+	optlen = sizeof(val);
-+
-+	/* A non-ICMPv6 raw socket has the checksum disabled, reported as -1. */
-+	ASSERT_EQ(0, getsockopt(self->fd, IPPROTO_IPV6, IPV6_CHECKSUM,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_EQ(-1, val);
-+}
-+
-+TEST_F(rawv6, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	/* SOL_RAW reaches do_rawv6_getsockopt() directly. */
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- ieee802154 (dgram) ---------- */
-+
-+FIXTURE(ieee802154)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(ieee802154)
-+{
-+	self->fd = socket(AF_IEEE802154, SOCK_DGRAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_IEEE802154 dgram socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(ieee802154)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(ieee802154, wantack_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(ieee802154, wantack_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+TEST_F(ieee802154, wantack_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_IEEE802154, WPAN_WANTACK,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(ieee802154, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_IEEE802154, 0x7fff,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* dgram_getsockopt() rejects any level other than SOL_IEEE802154. */
-+TEST_F(ieee802154, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, WPAN_WANTACK,
-+				 &val, &optlen));
-+	ASSERT_EQ(EOPNOTSUPP, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- phonet (pep) ---------- */
-+
-+FIXTURE(phonet)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(phonet)
-+{
-+	self->fd = socket(AF_PHONET, SOCK_SEQPACKET, PN_PROTO_PIPE);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_PHONET pipe socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(phonet)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(phonet, encap_exact)
-+{
-+	socklen_t optlen;
-+	int val = -1;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == PNPIPE_ENCAP_NONE || val == PNPIPE_ENCAP_IP);
-+}
-+
-+TEST_F(phonet, encap_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+/* pep clamps the reported length down to the user buffer. Use an
-+ * int-sized backing buffer with a short optlen so the baseline kernel,
-+ * which writes a full int via put_user(), does not scribble past it.
-+ */
-+TEST_F(phonet, encap_undersize_clamped)
-+{
-+	socklen_t optlen = 2;
-+	int val = 0;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_PNPIPE, PNPIPE_ENCAP,
-+				&val, &optlen));
-+	ASSERT_EQ(2, optlen);
-+}
-+
-+TEST_F(phonet, bad_optname)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_PNPIPE, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* pep_getsockopt() rejects any level other than SOL_PNPIPE. */
-+TEST_F(phonet, bad_level)
-+{
-+	socklen_t optlen;
-+	int val;
-+
-+	optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_RAW, PNPIPE_ENCAP, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+	ASSERT_EQ(sizeof(val), optlen);
-+}
-+
-+/* ---------- tls ---------- */
-+
-+FIXTURE(tls)
-+{
-+	int fd;
-+	int sfd;
-+};
-+
-+FIXTURE_SETUP(tls)
-+{
-+	struct sockaddr_in a = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	socklen_t alen = sizeof(a);
-+	int lfd;
-+
-+	self->fd = -1;
-+	self->sfd = -1;
-+
-+	lfd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (lfd < 0)
-+		SKIP(return, "TCP socket: %s", strerror(errno));
-+	if (bind(lfd, (struct sockaddr *)&a, sizeof(a)) || listen(lfd, 1) ||
-+	    getsockname(lfd, (struct sockaddr *)&a, &alen)) {
-+		close(lfd);
-+		SKIP(return, "listener setup: %s", strerror(errno));
-+	}
-+	self->fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (connect(self->fd, (struct sockaddr *)&a, sizeof(a))) {
-+		close(lfd);
-+		SKIP(return, "connect: %s", strerror(errno));
-+	}
-+	self->sfd = accept(lfd, NULL, NULL);
-+	close(lfd);
-+	if (setsockopt(self->fd, IPPROTO_TCP, TCP_ULP, "tls", sizeof("tls")))
-+		SKIP(return, "TCP_ULP=tls: %s (built without TLS?)",
-+		     strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(tls)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+	if (self->sfd >= 0)
-+		close(self->sfd);
-+}
-+
-+/* do_tls_getsockopt_tx_zc(): fixed-size int, exact length required. */
-+TEST_F(tls, tx_zerocopy_exact)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val = -1;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(tls, tx_zerocopy_wrong_len)
-+{
-+	socklen_t optlen = 2;
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX_ZEROCOPY_RO,
-+				 &val, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* do_tls_getsockopt_conf(): NULL optval still yields EINVAL -- the
-+ * converted code tests opt->iter_out.ubuf in place of optval.
-+ */
-+TEST_F(tls, conf_null_optval)
-+{
-+	socklen_t optlen = 64;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, NULL, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(tls, conf_short)
-+{
-+	socklen_t optlen = 2;
-+	char buf[2];
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, buf, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+/* TLS_TX before crypto is set reports not-ready. */
-+TEST_F(tls, conf_not_ready)
-+{
-+	struct tls_crypto_info info;
-+	socklen_t optlen = sizeof(info);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, TLS_TX, &info, &optlen));
-+	ASSERT_EQ(EBUSY, errno);
-+}
-+
-+/* Set TX crypto, then read it back at the base and full sizes, exercising
-+ * both copy_to_iter() branches. SKIP if AES-GCM is unavailable.
-+ */
-+TEST_F(tls, conf_crypto_roundtrip)
-+{
-+	struct tls12_crypto_info_aes_gcm_128 tx = {
-+		.info.version = TLS_1_2_VERSION,
-+		.info.cipher_type = TLS_CIPHER_AES_GCM_128,
-+	};
-+	struct tls12_crypto_info_aes_gcm_128 full;
-+	struct tls_crypto_info base;
-+	socklen_t optlen;
-+
-+	if (setsockopt(self->fd, SOL_TLS, TLS_TX, &tx, sizeof(tx)))
-+		SKIP(return, "set TLS_TX aes_gcm_128: %s", strerror(errno));
-+
-+	optlen = sizeof(base);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &base, &optlen));
-+	ASSERT_EQ(sizeof(base), optlen);
-+	ASSERT_EQ(TLS_1_2_VERSION, base.version);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, base.cipher_type);
-+
-+	optlen = sizeof(full);
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_TLS, TLS_TX, &full, &optlen));
-+	ASSERT_EQ(sizeof(full), optlen);
-+	ASSERT_EQ(TLS_CIPHER_AES_GCM_128, full.info.cipher_type);
-+}
-+
-+TEST_F(tls, bad_optname)
-+{
-+	socklen_t optlen = sizeof(int);
-+	int val;
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_TLS, 0x7fff, &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
- TEST_HARNESS_MAIN
+ 		/* Open records defined only if successfully copied, otherwise
+
+
+
+> sk_msg_page_add() writes the reserved slot and sk_msg_iter_next() wraps
+> sg.end around to sg.start.  sk_msg_iter_dist() then returns 0, so
+> sk_msg_full() reports the ring as empty, the loop keeps running, and each
+> further add overwrites a live entry without putting its page reference
+> while sg.size keeps growing.  sg.size is then larger than the data
+> reachable by walking the logical [sg.start, sg.end) ring.
+> 
+> tls_push_record() marks the end of the scatterlist at the logical last
+> entry but passes the inflated msg_pl->sg.size to tls_do_encryption() as
+> cryptlen, so the AEAD scatterwalk runs past the end-marked entry and
+> dereferences the NULL returned by sg_next():
+
+TBH that also seems a bit dumb on the scatterwalk/crypto side. Users
+of the crypto library shouldn't pass data with inconsistent sg and
+data size, but I don't think this should crash the kernel.
+
+> 
+>   BUG: kernel NULL pointer dereference, address: 0000000000000008
+>   CPU: 1 UID: 1000 PID: 204 Comm: exploit Not tainted 7.2.0-rc4+ #1 PREEMPTLAZY
+>   RIP: 0010:memcpy_from_scatterwalk+0x32/0xc0
+>   Call Trace:
+>    <TASK>
+>    skcipher_walk_next+0x1d1/0x2c0
+>    gcm_encrypt_aesni_avx+0x1e9/0x220
+>    bpf_exec_tx_verdict+0x3bb/0x860
+>    tls_sw_sendmsg+0xa1a/0xca0
+>    __sys_sendto+0x1da/0x1f0
+>    do_syscall_64+0xdc/0x520
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>    </TASK>
+> 
+> An unprivileged user can reach this on a plain loopback TCP socket with
+> the "tls" ULP attached.  A full but unpushed plaintext ring survives
+> across a syscall through the copy path: sk_msg_clone() returns 0 rather
+> than -ENOSPC for the frag that makes the ring exactly full, because its
+> guard is "if (i == src->sg.end && len)" and len reaches 0 as that frag is
+> added, so full_record is never set and MSG_MORE keeps eor clear.  Since
+> record_room is a byte count, a frag-exhausted ring that holds only a few
+> hundred bytes still admits the next splice(), which then re-enters
+> tls_sw_sendmsg_splice() on a full ring.
+> 
+> The caller already handles a ring that becomes full during the splice by
+> testing sk_msg_full() afterwards and setting full_record to push the
+> record, so the loop condition only needs to be evaluated before the first
+> sk_msg_page_add() rather than after it.  Turn the do-while into a while
+> loop: when the ring is full on entry the function returns without adding
+> anything, the caller pushes the record, and the next iteration of the
+> caller's loop starts from a fresh, empty ring.
+
+Please make your LLM (much) less verbose.
 
 -- 
-2.53.0-Meta
-
+Sabrina
