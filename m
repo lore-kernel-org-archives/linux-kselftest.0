@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD55D223DE9;
-	Mon, 27 Jul 2026 00:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697182248A0;
+	Mon, 27 Jul 2026 00:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785112438; cv=none; b=GMh9udGn2JhEzcnYsslQ8uhI4NOdrg2STyvjIPg2QICaxn98O9zh+mllWIBGnKKv6A9DEZwJRgn0z56PzBSkXCyXmS4QUKhiReizceoJgz8xiUGuPK8TSsDW+6+UP+Dhi4wlEwIiBhZNfKtDx4Tq9AI0SPZqckajmVH21rszzFo=
+	t=1785112439; cv=none; b=VvNplYOuRXXsE7x+vDbV8WTb4Say4WHLmBIZT4mTs19APv7jK+S4scXErHE9LrKBlz5HAeLc4CiEgabsNOOb7x99+VHKVE6cnqSnWNIFj1TtXpxQvauno4ITOaQIwEtKkKHi4h+2TAw4XkkVUHMLIT+KrmR2RUkTuFOD75Inyrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785112438; c=relaxed/simple;
-	bh=sOaQ2FSWbuc1wGZgWpVrPzCm3/pSLywsFAZEyo+GFY0=;
+	s=arc-20240116; t=1785112439; c=relaxed/simple;
+	bh=ekd0UPDFYyfd2fgXSkSYzWqvvSN4Pdvo4U+SMTwgK2U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jOSridt5oVOXCR147qspGoAB0ptyvB9aSH1CebVI1lUu83JA0YhsPBFHz8lWNOXw50B2lZdVgq0o3vK3BQ61krMXBZePf3w6QL18orW20bJBtFm0bZv62hj/rDPO6MSNZMSziq1yFRsPOmR20i3+VEoqVReKbI/omzyZIzlQbHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIE9XCWj; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=n9BeeRVeFbZFL/v6IlumnTcnAyhrg880pQYc0Tcetlia/gQ5JiEYDLWKzV4BkYtu+TPy9aPuAt4g97KqzqJ0TrksajjikSa3bkl/TdxcWAmuCU7BPcaUlziNVzvhunsv0Qc94+Q9UsukZibihrEJ+kumFilYYQGmL1HxoIpcgjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXHCX+dm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIE9XCWj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8951F00ACF;
-	Mon, 27 Jul 2026 00:33:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXHCX+dm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687731F00A3E;
+	Mon, 27 Jul 2026 00:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785112436;
-	bh=BAwhA2kCKE7sPbH3qIOulBop0ZwjU5zdVf03X4xMTIo=;
+	s=k20260515; t=1785112437;
+	bh=kUN2qEqBVauu2435e4/0nZVZk4IpgraeVh8z6IiIeYQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=VIE9XCWjIpoEIilT35YHWOvT9ITDI6+6UPGMc7tbHBvzhrcx3eZxDstNaUKz7qt1a
-	 3EdfFOcS+MXb5kllgUvSuTnn0LorQpAcn/6GU4Z5E9zWrLCxyhrDO8TEEj/G+TMjag
-	 CMQMNtoLqCvPjg8YGKqB41TqQeolyyR89gqQtvAz1DUvWU4N3eqzPVSYsVf8yDjTyB
-	 rBrnoRLGJs+yRzOKvzQ75+PRBUV7LJWnavmCX2T9zHZPw+ZEMUoaNuxqAvs7Xr9676
-	 +DT9C1JOrkw6KK9/eZKO9/kx6lkoxjOgEr7K1bTUb/Q+bpxQb3r+Cav7jZJCQbUsYu
-	 JAvweDwG6ABBQ==
+	b=aXHCX+dmLew+6VD4LEH0FBLBSKsG2sR8VZ7Ppfl+UVADIWSFcmjbBNyYmcG/9xvKk
+	 vZ+/kVPNQegEoWkLsGuirM62VWuORIn8c4te2PW6bTOAPBUpDw53ZigTTHZoT5oxxp
+	 xpoe/fvnZU1JxiE/uowAlQrX8ywPaTnFkLz2pO6aeX2mDw0GtuOY+J/pdShgU9tbZi
+	 oZ5lhXwAmkZVe9LSVY9UbbzRGojUr94Mp74KcNbYSdDXD0R7DtWHyNeV1HnnXb3Npu
+	 7MIFvAnxM16luYrN1mAYW/zAKp63gtycND5DhMGQwvUb7bEiZr3XKFABnXlu5gLLTW
+	 t1v8aDFUJ+Z0w==
 From: Chuck Lever <cel@kernel.org>
-Date: Sun, 26 Jul 2026 20:33:36 -0400
-Subject: [PATCH net 8/9] selftests: tls: cover splice on a nonblocking
- socket
+Date: Sun, 26 Jul 2026 20:33:37 -0400
+Subject: [PATCH net 9/9] selftests: tls: cover splice after a failed
+ decrypt
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260726-tls-follow-on-v1-8-99bf4cc1c729@kernel.org>
+Message-Id: <20260726-tls-follow-on-v1-9-99bf4cc1c729@kernel.org>
 References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
 In-Reply-To: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -49,125 +49,167 @@ To: John Fastabend <john.fastabend@gmail.com>,
  Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.16-dev-da966
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3643; i=cel@kernel.org;
- h=from:subject:message-id; bh=sOaQ2FSWbuc1wGZgWpVrPzCm3/pSLywsFAZEyo+GFY0=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqZqdqUqtaRzGixo+kzrInEbUOcYk22/Z4u8nhf
- Qqx3wNb8fmJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCamanagAKCRAzarMzb2Z/
- l5SMEACi5LUq38Uz92VnBVSArzj2EVpQV3bsZjlOzPWkHu2Jt6RvbN1rf0ziZnBP6tyH+6HW8NB
- G2cPL0eh98dz5jmo6QDcVSHxuEy1qmRRQnGpMsH7q2MH42n4Eum5wpyhdkjg6hh/weuxjVeykef
- DJzqR+FFZ4nvmx6DRaGbRYNdhvCfpUSdCW6MbxUt3fqJMoIXghKKOdbCC749lDjVwldNBb4SWML
- 5kmf9S0FMiiiVG855GCPzdD3Hh4k0uVOgRbQ5cVsyC+9nTPy8yDPHcz2AHaj2ao7PzpgXHuEbSl
- 08IIcwAi8hD+x7E8IkgozkPtQIFFyILGkN7yNVYGo1fpmvE61NALr5GTqVhjBsG22nNc/2/8aXK
- qmSMMKKuzbocelaM1PHmUyHDm1/NWXbC1h0aQjRHHzJdlXQJff66BmuOjo1tKW0p3puIg9j9Nba
- FTV0tiPxCrfhVUWK8HxV1muBG676SzlCia/S0LyevC+UK2x+81QG/sln0mK4Mqih6ou6PryYeMH
- KhXFaWB2u0JFpUTLPeLXltVjBGbMBt/I5mTffo7OBTK77woQlqFPfqfHRRh5Bk87oasIe32J7NE
- sibhcdLIHKVpksslpsXtLTjJN1Rk5fmbRAmUGeM6DPsikd8CtxxdPIE5dWmR0RkGgKk3yUE0cYc
- PKdCsqKx1Irp8ag==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4752; i=cel@kernel.org;
+ h=from:subject:message-id; bh=ekd0UPDFYyfd2fgXSkSYzWqvvSN4Pdvo4U+SMTwgK2U=;
+ b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqZqdqckQ+gymUd2QSbCG361mtpo22REvb7sXpn
+ IO2tCbV3GaJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCamanagAKCRAzarMzb2Z/
+ l0WjEACoPdu/51X4KAigYzO6HbCPSEa1jUCw659wqg5BwDPdJjyuEaY5ZPdqjmyS1eWeyXNOHLp
+ pbrl3pXuLvcO51Zh4tgsrcDx3YP2EsideZdvxykUBxUR54OWlQ7t9NLexpugw7Qd+QYILetbVbK
+ IHdZi7pFtU1r3KOMIoZdbVVO44NhllWtA8ST7+HpwJ+O4sJ1n3FIkNDvNvEAlx9TPApRTsv68eg
+ OAzKbFPPT5u/BoLlurGjDDbJaI4WA8o47+Br8BJQMauBYyqb3Y1qEWCh69ho5N30cecWkrrIvyo
+ m6SFUoDR9vr1favdvfPqyPfdy0yPAnAZqr0xWzRfoZoHbtMUCWmduyGCAdUa8LCvl4bEpM5RNsK
+ whfk2g+Gy9pV9Fy4FvfiF/Chfh0CUfH2CABdXFZIg/a+M9WKEYPBPMpqONE+vpA6L2sL1IM2nJo
+ GPyZwVGy7o+zBgUR7hLWPQYQry1vzGD9LXmpmg89akqYvS5EtbuSaaASg0C94fGA4Be5nknM7Rj
+ 76tc1vSu8Rtm87n8NeJxYwKKgEPtaQD2b5AMsqystR88A1ooDVGKsYvBXZwvBt0HcqNjHKd8MjR
+ BkL9HfhyGpxeJ32w0LXBR5Vw4SqptHWLX+E7nwqqeEmzXz4Emm55j6aBBj/juJ1Ub+hCDHzxScX
+ DjCbvvp8CazMQEw==
 X-Developer-Key: i=cel@kernel.org; a=openpgp;
  fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
 
-Every existing splice call in this file either passes
-SPLICE_F_NONBLOCK or runs on a blocking socket, so nothing exercises
-the socket's own O_NONBLOCK on the splice path. A change that stops
-consulting sock->file->f_flags puts splice(2) and sendfile(2) back to
-sleeping in tls_rx_rec_wait() while a peer streams empty records, and
-the suite still reports pass.
+Nothing in this file splices a socket whose last decrypt failed, so
+the check that fails tls_sw_splice_read() on a broken connection can
+be removed without a test noticing. Such a splice hands the
+application plaintext that recvmsg() and read_sock() already refuse
+to return.
 
-Run the zero-length record variants a second time with O_NONBLOCK set
-on the socket and SPLICE_F_NONBLOCK left out of the splice flags. The
-two forms are required to reach the same outcome, so the existing
-per-variant expectations carry over unchanged. A kernel that ignores
-the socket flag sleeps in the EAGAIN variant until the harness
-timeout rather than returning.
+Extend the bad_auth pattern: corrupt an authenticated record, confirm
+recvmsg() reports EBADMSG, then splice the same socket and require
+EBADMSG again. A synchronous decrypt fails again on the still-queued
+record, so only an asynchronous decrypt, which needs TLS 1.2 and an
+AEAD advertising CRYPTO_ALG_ASYNC, reaches EBADMSG solely through the
+recorded-failure check.
 
-Only the flags the two forms pass differ, so the body of the
-existing test moves into zero_len_do_splice() and both call it. The
-check that a successful splice consumed the empty records ahead of
-the payload now covers the nonblocking socket as well.
+bad_auth builds the same corrupted record, so its construction moves
+into a helper the two tests share.
 
 Signed-off-by: Chuck Lever <cel@kernel.org>
 ---
- tools/testing/selftests/net/tls.c | 41 +++++++++++++++++++++++++++++++++------
- 1 file changed, 35 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/tls.c | 77 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 67 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index af47d9a6098c..7c178541edf4 100644
+index 7c178541edf4..8b68dbfcc592 100644
 --- a/tools/testing/selftests/net/tls.c
 +++ b/tools/testing/selftests/net/tls.c
-@@ -2743,23 +2743,24 @@ FIXTURE_TEARDOWN(zero_len_splice)
-  * A control record behind the run reports EINVAL, the error splice
-  * already reports for a control record it meets first.
-  */
--TEST_F(zero_len_splice, test)
-+static void
-+zero_len_do_splice(struct __test_metadata *_metadata,
-+		   struct _test_data_zero_len_splice *self,
-+		   const struct _fixture_variant_zero_len_splice *variant,
-+		   unsigned int splice_flags)
- {
- 	const struct raw_rec *payload;
- 	unsigned char buf[128];
- 	ssize_t ret;
- 	int p[2];
+@@ -24,6 +24,7 @@
+ #include "kselftest_harness.h"
  
--	if (self->notls)
--		SKIP(return, "no TLS support");
--
- 	ASSERT_GE(pipe(p), 0);
+ #define TLS_PAYLOAD_MAX_LEN 16384
++#define TLS_HDR_LEN 5
+ #define SOL_TLS 282
  
- 	payload = zero_len_send_recs(_metadata, self->fd, variant->recs);
- 
- 	if (variant->splice_ret < 0) {
- 		ret = splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--			     SPLICE_F_NONBLOCK);
-+			     splice_flags);
- 		EXPECT_EQ(ret, -1);
- 		if (ret == -1)
- 			EXPECT_EQ(errno, -variant->splice_ret);
-@@ -2769,7 +2770,7 @@ TEST_F(zero_len_splice, test)
- 		 * would then block until the harness timeout.
- 		 */
- 		ASSERT_EQ(splice(self->cfd, NULL, p[1], NULL, sizeof(buf),
--				 SPLICE_F_NONBLOCK), variant->splice_ret);
-+				 splice_flags), variant->splice_ret);
- 		ret = read(p[0], buf, sizeof(buf));
- 		EXPECT_EQ(ret, variant->splice_ret);
- 		if (ret == variant->splice_ret)
-@@ -2789,6 +2790,34 @@ TEST_F(zero_len_splice, test)
- 	close(p[1]);
+ static int fips_enabled;
+@@ -2883,28 +2884,85 @@ TEST_F(tls_err, bad_rec)
+ 	EXPECT_EQ(errno, EAGAIN);
  }
  
-+TEST_F(zero_len_splice, test)
-+{
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	zero_len_do_splice(_metadata, self, variant, SPLICE_F_NONBLOCK);
-+}
-+
-+/* The socket's own O_NONBLOCK governs the record wait, as it does on a
-+ * plain TCP socket, so a splice that omits SPLICE_F_NONBLOCK reaches
-+ * the same outcome as one that sets it. An unfixed kernel derives the
-+ * wait from SPLICE_F_NONBLOCK alone and sleeps here until the harness
-+ * timeout.
++/* Encrypt a record on the TX-only socket pair, corrupt its last
++ * byte, and hand the result to the socket under test. cfd carries a
++ * byte stream, so one recv() can return part of a record: take the
++ * fragment length from the record header and wait for the remainder.
 + */
-+TEST_F(zero_len_splice, nonblock_socket)
++static void tls_send_bad_auth(struct __test_metadata *_metadata,
++			      int fd, int cfd, int fd2)
 +{
-+	int sflags;
++	char buf[128];
++	int len;
++
++	memrnd(buf, sizeof(buf) / 2);
++	ASSERT_EQ(send(fd, buf, sizeof(buf) / 2, 0), sizeof(buf) / 2);
++
++	ASSERT_EQ(recv(cfd, buf, TLS_HDR_LEN, MSG_WAITALL), TLS_HDR_LEN);
++
++	len = ((unsigned char)buf[3] << 8) | (unsigned char)buf[4];
++	ASSERT_GT(len, 0);
++	ASSERT_LE(len, (int)sizeof(buf) - TLS_HDR_LEN);
++
++	ASSERT_EQ(recv(cfd, buf + TLS_HDR_LEN, len, MSG_WAITALL), len);
++
++	buf[TLS_HDR_LEN + len - 1]++;
++
++	ASSERT_EQ(send(fd2, buf, TLS_HDR_LEN + len, 0), TLS_HDR_LEN + len);
++}
++
+ TEST_F(tls_err, bad_auth)
+ {
+ 	char buf[128];
+-	int n;
+ 
+ 	if (self->notls)
+ 		SKIP(return, "no TLS support");
+ 
+-	memrnd(buf, sizeof(buf) / 2);
+-	EXPECT_EQ(send(self->fd, buf, sizeof(buf) / 2, 0), sizeof(buf) / 2);
+-	n = recv(self->cfd, buf, sizeof(buf), 0);
+-	EXPECT_GT(n, sizeof(buf) / 2);
++	tls_send_bad_auth(_metadata, self->fd, self->cfd, self->fd2);
+ 
+-	buf[n - 1]++;
+-
+-	EXPECT_EQ(send(self->fd2, buf, n, 0), n);
+ 	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
+ 	EXPECT_EQ(errno, EBADMSG);
+ 	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
+ 	EXPECT_EQ(errno, EBADMSG);
+ }
+ 
++/* A record that did not authenticate breaks the connection for every
++ * reader, splice included.
++ *
++ * The two decrypt paths reach that result differently. A synchronous
++ * decrypt leaves the record parsed, so the splice re-runs the decrypt
++ * and fails on the record itself; the ctx->async_wait.err check in
++ * tls_sw_splice_read() is not what stops it. Only an asynchronous
++ * decrypt, which needs a TLS 1.2 socket and an AEAD advertising
++ * CRYPTO_ALG_ASYNC, consumes the record before the failure is
++ * recorded, leaving that check the sole reason the splice fails.
++ */
++TEST_F(tls_err, bad_auth_splice)
++{
++	char buf[128];
++	ssize_t ret;
++	int p[2];
 +
 +	if (self->notls)
 +		SKIP(return, "no TLS support");
 +
-+	sflags = fcntl(self->cfd, F_GETFL, 0);
-+	ASSERT_GE(sflags, 0);
-+	ASSERT_EQ(fcntl(self->cfd, F_SETFL, sflags | O_NONBLOCK), 0);
++	tls_send_bad_auth(_metadata, self->fd, self->cfd, self->fd2);
 +
-+	zero_len_do_splice(_metadata, self, variant, 0);
++	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
++	EXPECT_EQ(errno, EBADMSG);
++
++	ASSERT_GE(pipe(p), 0);
++
++	ret = splice(self->cfd2, NULL, p[1], NULL, sizeof(buf),
++		     SPLICE_F_NONBLOCK);
++	EXPECT_EQ(ret, -1);
++	if (ret == -1)
++		EXPECT_EQ(errno, EBADMSG);
++
++	close(p[0]);
++	close(p[1]);
 +}
 +
- FIXTURE(tls_err)
+ TEST_F(tls_err, bad_in_large_read)
  {
- 	int fd, cfd;
+ 	char txt[3][64];
+@@ -3160,7 +3218,6 @@ static size_t parse_tls_records(struct __test_metadata *_metadata,
+ {
+ 	const __u8 *rec = rx_buf;
+ 	size_t total_plaintext_rx = 0;
+-	const __u8 rec_header_len = 5;
+ 
+ 	while (rec < rx_buf + rx_len) {
+ 		__u16 record_payload_len;
+@@ -3180,7 +3237,7 @@ static size_t parse_tls_records(struct __test_metadata *_metadata,
+ 
+ 		/* Plaintext must not exceed the specified limit */
+ 		ASSERT_LE(plaintext_len, max_payload_len);
+-		rec += rec_header_len + record_payload_len;
++		rec += TLS_HDR_LEN + record_payload_len;
+ 	}
+ 
+ 	return total_plaintext_rx;
 
 -- 
 2.54.0
