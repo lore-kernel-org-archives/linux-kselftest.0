@@ -1,32 +1,30 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D2637F015
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 14:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920B737E5DF
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 14:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785162594; cv=none; b=lkxdeize9KvqJEssnc4XBpDutREjSKMMrU/q0QJdf5Zjl0QfLpvxmGSYgInGe9fYLCBjLIoDaj9l+mERKJ5nofOGUqlCTVV33XJT3pNzraHOYU7EegnwwNMEYrFH7HQdDUn/XJ2gIEj8ohSe8/QoPoLn0GZLwFRaxcjvy9VEWck=
+	t=1785162598; cv=none; b=l7gBm0a0HiW59MC+1mKeAFgb8xJyri/SOnR4ThyssJaG4TxARQ483sSxjdVuHyeF8S8Qb2/sYfwQ6CC30+q4y6S1me21d/+lk76lwpozCE2U8eYn/9eF1r4cHzb2GbI3EdFX0hdpArnkOk0q4thHGzkSGOQMY0BRi+JDOQCER4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785162594; c=relaxed/simple;
-	bh=xgUC/3Fkqjw/e5LtHgVt3noPBmTgTj7kOpfQkp1kQRs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YpyitdCIhWPZ2rLCwduGTc40DaLz/+9Y/WMtOtDsSUl4I7YhyFYpKifsnlje/zkqfeO4KvisQpR1kKjMsanh469zbrDvnWFs0aqFr1/YsxWryyrHv3EsBqlWWfybmhhk/LWw0EE/iz4WNn+nRuWCInl94CNbEi21WPZgG51Y49Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZyLvmu/M; arc=none smtp.client-ip=95.215.58.170
+	s=arc-20240116; t=1785162598; c=relaxed/simple;
+	bh=rnLaruOSRQ5uDK5ZU7HDhI+DpzKpD8VvDeOSpc/EcEY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JUspaIuAYx39S9zl0JjATMKUtYN+zGdF9H6+ZcqHN/RTPY6xLQxTGVADn861H188chRob6CzaabCXWB8+CsWHGy7S89wwyZ2jA0zb/5hAsZ3y/P8G2Q0vIH9Dv1tZf9Do5hr/INCU+I+PzoByeXC8N86BGhrqHzIrzPoMERN3u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g3M+DqJk; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZyLvmu/M"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g3M+DqJk"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785162589;
+	t=1785162579;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TelY/e6rhqBnbaI//+7mxab5yF5lSU4GighDsL8mjtU=;
-	b=ZyLvmu/MHYpDNbUorLcBJbddnw77+HeD/DLH4+630pkX74zlnxiewseIkfb1Qk4Jrr5wk1
-	p/eTme8zssK5AaRtUalWpSb6uaj87dcJkyHuzHz+PqgI2S2cA7G0GafjxFncbd3VXndOc0
-	h047oJQZ2gXZPMmOr+7CsnF2v8yKmCE=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7tHghUuh4abL0fwwnOGlOayUFDXuWG+n5PvNG2j5QBw=;
+	b=g3M+DqJkQz7oVE7zYcnCb3KUfo0PuPSR/Dp6zubbXXsm8bnX9toxZx/W8oEBBSpY8cvZdP
+	Zkf0hJ/aJ/hY+gSQS39O/06Y3kgBfy3kLsFuLTSuVMyoRmnweLX7hJfdqk0ScnsFARuor1
+	croZ7gE4Yzs+dCd/ZRysqs8/yibw01o=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -50,11 +48,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct calls
-Date: Mon, 27 Jul 2026 22:28:43 +0800
-Message-ID: <20260727142844.21212-2-leon.hwang@linux.dev>
-In-Reply-To: <20260727142844.21212-1-leon.hwang@linux.dev>
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
+Subject: [PATCH 0/2] arm64: ftrace: enable single ftrace_ops for direct calls
+Date: Mon, 27 Jul 2026 22:28:42 +0800
+Message-ID: <20260727142844.21212-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,50 +60,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The BPF tracing multi link updates several direct-call sites through one
-ftrace_ops. Its implementation is therefore gated by
-HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
-DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
+Beyond the DIRECT_CALLS support on arm64 [1], select
+HAVE_SINGLE_FTRACE_DIRECT_OPS for arm64, which enables the BPF
+tracing_multi link on arm64 [2].
 
-Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
-direct calls. This enables BPF tracing multi links on arm64. Also
-generalize the unreachable-trampoline comment because the single-ops path
-does not use ops->direct_call.
+All tracing_multi link selftests are passed on arm64.
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- arch/arm64/Kconfig         | 2 ++
- arch/arm64/kernel/ftrace.c | 3 +--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ cd tools/testing/selftests/bpf
+ ./test_progs -a 'tracing_multi_*'
+ #545/1   tracing_multi_attach_rollback/put:OK
+ #545/2   tracing_multi_attach_rollback/unlink:OK
+ #545     tracing_multi_attach_rollback:OK
+ #546     tracing_multi_bench_attach:OK
+ #547/1   tracing_multi_test/skel_api:OK
+ #547/2   tracing_multi_test/link_api_pattern:OK
+ #547/3   tracing_multi_test/link_api_ids:OK
+ #547/4   tracing_multi_test/module_skel_api:OK
+ #547/5   tracing_multi_test/module_link_api_pattern:OK
+ #547/6   tracing_multi_test/module_link_api_ids:OK
+ #547/7   tracing_multi_test/intersect:OK
+ #547/8   tracing_multi_test/cookies:OK
+ #547/9   tracing_multi_test/session:OK
+ #547/10  tracing_multi_test/attach_api_fails:OK
+ #547/11  tracing_multi_test/fentry_direct_access:OK
+ #547/12  tracing_multi_test/fexit_direct_access:OK
+ #547/13  tracing_multi_test/fsession_direct_access:OK
+ #547/14  tracing_multi_test/fentry_after_multi:OK
+ #547     tracing_multi_test:OK
+ Summary: 3/16 PASSED, 0 SKIPPED, 0 FAILED
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 0de419ed780f..c98dca76859b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -188,6 +188,8 @@ config ARM64
- 		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
- 	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
- 		if DYNAMIC_FTRACE_WITH_ARGS
-+	select HAVE_SINGLE_FTRACE_DIRECT_OPS \
-+		if DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
- 		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
- 		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index e1a3c0b3a051..56ba72a87dfa 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -301,8 +301,7 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
- 
- 	/*
- 	 * If a custom trampoline is unreachable, rely on the ftrace_caller
--	 * trampoline which knows how to indirectly reach that trampoline
--	 * through ops->direct_call.
-+	 * trampoline which knows how to indirectly reach that trampoline.
- 	 */
- 	if (*addr != FTRACE_ADDR && !reachable_by_bl(*addr, pc))
- 		*addr = FTRACE_ADDR;
+ ./test_progs -a 'fill_link_info/tracing_multi_*'
+ #132/11  fill_link_info/tracing_multi_link_info:OK
+ #132/12  fill_link_info/tracing_multi_invalid_ubuff:OK
+ #132     fill_link_info:OK
+ Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+
+Links:
+[1] https://lore.kernel.org/all/20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev/
+[2] https://github.com/kernel-patches/bpf/pull/12986
+
+Leon Hwang (2):
+  arm64: ftrace: enable single ftrace_ops for direct calls
+  selftests/bpf: Enable tracing_multi tests on arm64
+
+ arch/arm64/Kconfig                                     | 2 ++
+ arch/arm64/kernel/ftrace.c                             | 3 +--
+ tools/testing/selftests/bpf/prog_tests/tracing_multi.c | 9 +++++++--
+ tools/testing/selftests/bpf/test_progs.h               | 6 ++++++
+ 4 files changed, 16 insertions(+), 4 deletions(-)
+
 -- 
 2.55.0
 
