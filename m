@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7023C09EE;
-	Mon, 27 Jul 2026 13:53:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AAC22EDD6B;
+	Mon, 27 Jul 2026 14:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785160427; cv=none; b=HngluWwlZK7y8+oN4QpmTd5GTjAmzQhQ1YJchMSdTe5WoyVVtq3lc+oDlesaaR3S3x10KhajfIogAEWyZgbI+YQbzFbnz1AO+pxFHamNXzzGFVz08ZW1sgcQtKsZXlzYsMbtrvNEtuARERGNnl7kBaEVysScIZOQd0AsXrzR45E=
+	t=1785161151; cv=none; b=A0YVdNhPx+QJZackTfSGPYQ/euQ2ogcAV7jPWgWxWCYxr7w8FdTUupREo2ttYGitOiZ94B113dg7TVfIrgTZoVtHqJ/wAqNQBOQan2MkjCkuOGhhq3RW2Z56kgq+/VaAg4LpmbRtTz54kF2ZhjF9s+CCR0253lGwKovFwgrbc2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785160427; c=relaxed/simple;
-	bh=I0cMM6Eegn/qaXWr5SySnO8OTJc3/VC1arVu3kSSt7A=;
+	s=arc-20240116; t=1785161151; c=relaxed/simple;
+	bh=nOo4q7EBanSw+rQza1vfbux4v50WfxcoDfWBOiwYJPA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dbWLOyIY34xUM1eQ2TvoS/0L3hKh6g3cgIzkjhJLIB0Qx/+DLM/mWYxLfAJ0W6hfg8fdOMFC99I21DqPGKvzTGujbwHKI8khCmY/5YcaG9thhAg40JhwmPxwF3pjZhMdZD2dCDM/9p7tTXKs+tq7ZYt07yQ9YxiQuXeH6013AP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RMlM4b05; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=uSqmrRH7H8gJazZHduCNbDptJYH/+XbRRiwo+Ja3bXLDDscADcyIXKmDVG3a8DjNN+vWl8Q4ykWZ5aGftm9pZy3k+RRkGPyU5tNXyk2OG39HWgABX3Qm53j2r/HLzBQU4KEfS/LZyWkY3Di5LYS3DRSebJZdy7Y/4tqtQY5JaNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=niDUXSF0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RMlM4b05"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2E31F000E9;
-	Mon, 27 Jul 2026 13:53:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="niDUXSF0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA551F000E9;
+	Mon, 27 Jul 2026 14:05:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785160426;
-	bh=qz4bHznQFYHtYd51Eh25zSS8E1FWwIIvc+FleuDk28o=;
+	s=k20260515; t=1785161148;
+	bh=SHR0wK14/4dXsi/tFV+pSIDb0Red1/aui8E/xX1Ll+o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RMlM4b05xpO38SPzaXPcJTSoOSEcy/MZaiBNgOMb8gnKZf2zZ77tYoNZB+UHpPjrT
-	 k86bnFTtjI5HdaYkgyphrfdRHgUr0E4jV/axWcAw6gRkuSEznJAJAu2ScfShwo9AdY
-	 gJbvt/M5CIlvJRfmUKd3GXRLVgItfoQIv0gQxPmRDFlB4HypSPS2qM6rp/ZkEM+oEz
-	 GCZSLq+rZ9iyVHVglUv5+8BdcLrn4J7oiYlOWzTeQ3NQ1ImYCExNCD+Z6BkLl4ZT1X
-	 Yda7xKaza6m2UggbBV6lx5qlPLlAY8lZQo9dC4pncFWiFO55BB1Sz7SLDPg8/IHa9u
-	 BNk6+Xv8qumIA==
-Message-ID: <7349d575-a1ed-4974-9b2f-2367cd58abad@kernel.org>
-Date: Mon, 27 Jul 2026 15:53:38 +0200
+	b=niDUXSF0pS2+Q4icyVkjQeECEicW20N7bbljqPs0J/bbAGPthPTJ2dA6qnJ95m/Sa
+	 Fwd4YsH0S76pJamz/lR4a+Zb9//2kUtxWFddKMiTI4p/qDfwLaxbAtfu6XbHfSoCS8
+	 KB82tQZH1C9GwxXRmDOG51clurtpzmGM+ZE7YUjuW7p8IpYymWRDFhKcdpAAlD8EFs
+	 jLse1g8ot50w5BPFA6sP6J6oPjBeuoO4aUNfJ6CjRBEj7Dpe/Jd279IZYtOl/Wrqd/
+	 lFsVL2RqzdcEPih3MoHTT7z95RM3C7a8sMn1xSHNG+5uO837+3WX6LpwG5dR7CtnA/
+	 9aOll2xBMLnuA==
+Message-ID: <de6f893a-4369-4ec4-b47d-517ce0c29558@kernel.org>
+Date: Mon, 27 Jul 2026 16:05:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,19 +37,19 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH RFC v4 12/12] selftests/mm: add a slow-GUP content and COW
  test for mTHP
-To: Rik van Riel <riel@surriel.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, kernel-team@meta.com,
+To: Mike Rapoport <rppt@kernel.org>, Rik van Riel <riel@surriel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, kernel-team@meta.com,
  Dave Hansen <dave.hansen@linux.intel.com>,
  Peter Zijlstra <peterz@infradead.org>, Suren Baghdasaryan
  <surenb@google.com>, Lorenzo Stoakes <ljs@kernel.org>,
  Vlastimil Babka <vbabka@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Matthew Wilcox <willy@infradead.org>,
- Usama Arif <usamaarif642@gmail.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
+ Michal Hocko <mhocko@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+ Matthew Wilcox <willy@infradead.org>, Usama Arif <usamaarif642@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 References: <20260724222934.1463812-1-riel@surriel.com>
- <20260724222934.1463812-13-riel@surriel.com>
+ <20260724222934.1463812-13-riel@surriel.com> <amX19fK0YVIEonfI@kernel.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,42 +96,60 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260724222934.1463812-13-riel@surriel.com>
+In-Reply-To: <amX19fK0YVIEonfI@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/25/26 00:29, Rik van Riel wrote:
-> follow_page_mask() now batches a PTE-mapped large folio (mTHP) into one
-> contiguous run for the slow get_user_pages() path. A mis-batched run would
-> hand back the wrong pages or a stale COW copy, which the existing tests do
-> not catch: gup_test checks only pin/unpin integrity, and cow exercises COW
-> mostly at PMD size.
+On 7/26/26 13:56, Mike Rapoport wrote:
+> Hi Rik,
 > 
-> Add mthp_gup_cow_test. It forces 64kB-only mTHP, writes a per-page-distinct
-> pattern, then pins the region on the slow path (PIN_LONGTERM without
-> USE_FAST) and compares the bytes the kernel copies back from the pinned
-> pages against that pattern.
+> On Fri, Jul 24, 2026 at 06:29:34PM -0400, Rik van Riel wrote:
+>> follow_page_mask() now batches a PTE-mapped large folio (mTHP) into one
+>> contiguous run for the slow get_user_pages() path. A mis-batched run would
+>> hand back the wrong pages or a stale COW copy, which the existing tests do
+>> not catch: gup_test checks only pin/unpin integrity, and cow exercises COW
+>> mostly at PMD size.
+>>
+>> Add mthp_gup_cow_test. It forces 64kB-only mTHP, writes a per-page-distinct
+>> pattern, then pins the region on the slow path (PIN_LONGTERM without
+>> USE_FAST) and compares the bytes the kernel copies back from the pinned
+>> pages against that pattern.
+>>
+>> The test covers a read pin, a write pin, and COW after fork(): a child
+>> write-pins to force per-page unshare and checks the copied contents, then
+>> rewrites its copy while the parent verifies its own contents are intact.
+>>
+>> It also reports how many pages sit in contiguous large-folio runs, so a
+>> kernel without mTHP shows light coverage rather than passing vacuously.
+>>
+>> Assisted-by: Claude:claude-opus-4.8
+>> Signed-off-by: Rik van Riel <riel@surriel.com>
+>> ---
+>>  tools/testing/selftests/mm/Makefile           |   1 +
+>>  .../testing/selftests/mm/mthp_gup_cow_test.c  | 213 ++++++++++++++++++
+>>  tools/testing/selftests/mm/run_vmtests.sh     |   1 +
+>>  3 files changed, 215 insertions(+)
+>>  create mode 100644 tools/testing/selftests/mm/mthp_gup_cow_test.c
+>>
+>> +
+>> +static long PS;
+>> +static int fails;
+>> +static int tap;
+>> +
+>> +static void ok(int cond, const char *desc)
+>> +{
+>> +	printf("%s %d %s\n", cond ? "ok" : "not ok", ++tap, desc);
 > 
-> The test covers a read pin, a write pin, and COW after fork(): a child
-> write-pins to force per-page unshare and checks the copied contents, then
-> rewrites its copy while the parent verifies its own contents are intact.
-> 
-> It also reports how many pages sit in contiguous large-folio runs, so a
-> kernel without mTHP shows light coverage rather than passing vacuously.
-> 
-> Assisted-by: Claude:claude-opus-4.8
+> Please (instruct claude to) use ksft_* helpers for printing messages and
+> tracking failed and passed tests.
 
-I'm sorry, I cannot be convinced to review this AI slop here. You should have
-known better to no send such a ... patch ... out.
+I'm afraid we won't have time to keep repeating the following:
 
-It completely violates to how we are supposed to write mm selftests in 2026.
+Documentation/process/coding-assistants.rst
 
-Also, testing some implementation details is not really what we want.
-
-Extend other tests to just naturally test mthp as well, please, if they don't
-already do that.
-
-Having a separate selftest just for this is just extremely ... odd.
+* Reviewing all AI-generated code
+[...]
+* Taking full responsibility for the contribution
 
 -- 
 Cheers,
