@@ -1,177 +1,158 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAA33DDAF6
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 07:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066F23C0605
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 08:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785137543; cv=none; b=u0UQH1S/l/1U+AKOAlcb7yfb8OSBkWtPTYddFrreKiLeOq8NBrJ5iKvcz4BOepUMZ679e+m4f22p4mJPnEPTkSS2ry1up+G+KL8xBodkk7r3cgdawT0letfUhSjUj53QnMMnA3OOPpicnDOM2WOVmBD99eJcnQmaqhQ1/y8FdhA=
+	t=1785142773; cv=none; b=L4w2EU5IbMg/KsBf6Nn89SWJP9pZAp18PxTLuqMov1HRdaIIg/hzG8tVP9Y0CYyK/KD/PGDen6GkE1PxD3X4UhO/nQWsYbdUH6mQJFcbTfiY/10dQe0VKgHWybQaIRLkJpYLRxpIRBle6cYU9LbKxxk4SxwBrhZK4mHwMmPUauw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785137543; c=relaxed/simple;
-	bh=AhaZ2ac8oEimySxpNjIfoYtWcC/kc92M7RxeTjSTuOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HmY9Lwu+QN/Dbg0xia86QBhoYdHNNEK3em3Wkz1Zpic2UwFWfbzqwBzUD1hBXV1YOPKuLhqdd7/r+sDn/YK4yxnjPN6ejA/hymUKm9dwgSzyM4O3aYbpxsFOPtsu1zhXUwfmpk1IsnOAGi/6i4K3HSPcpBFgljanbESUx7Uqmk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxQEIB1t; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785142773; c=relaxed/simple;
+	bh=TvaB5pDsZDJqz0nqqM/72TvbOhMxL40wRzdmMlRRozU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ncGX6ZnluIIaG/7kDxCsIpTeqwi/svZKNE6Bsy3Qb7lbgtV9cTeHCa1pVyowm13m+nEYKPiXCjbg8Ln/MM4nU3/nvD1sE2w8r6gIp7IXSuEHvTmN2xMyj7j7juBpcakmLWss3PIqTKDyeIBOqcBdl9Yu9FHgwr93w7D6DvNVOcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=Gsd8DHbr; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxQEIB1t"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so16120955e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 00:32:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="Gsd8DHbr"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b966dd74so15422635e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 01:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785137540; x=1785742340; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=blackwall.org; s=google; t=1785142770; x=1785747570; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=yOW/nYL4to09ZFRK9TrJFYsB5lOpHRRLHeRIsAezmMY=;
-        b=PxQEIB1ty3ohoNsjZt8ZnEQQ2pvRUcfeNeq2GcoWWD7h0b8aSOgPITmiRtL/cQM+a4
-         2L+WrSX+V2jXcL2RrwlIr8EifJ+uC+qKpub1FmB3dWT0q3AL/MVdJFZqDtdblzdy4IHe
-         fOj6SzTo4P1f4riMxWH96FL5otBDHpjS5MxDx1U+s3Xus5TAtDN9J7OWq1MecGlR/V/y
-         majJLnbi+MJgXhHHufw/8+bYXay5rdBVxr8E/+PzjwQ+eM43ArypaP3BMT3cnLMspdrb
-         NCJ2gAHegWr4SyNuveOMaOLYCZoUsCwbdRp4K+SNAH4G1s39rHPLmg3VIPz0OoM47dzA
-         74cg==
+        bh=cKXBOXAtqJDj69Ps8FseAtzEzy7p5GmYrwezoJp9Vo8=;
+        b=Gsd8DHbrX+tARlOxh/1frd7BmHEeZFioV9aA+R7U1bpPdVjA7crnkRj8lS3BCgY3TX
+         mVZnZouhtUcOqXcmxDoZrqXiQ4fChc2texwmIIYDgqK+TzrhPfiFsz7MSOc1fAEJ0P1h
+         jCdDfPEIFiABrYemmeSKfmyP2V4wmigFgxU/Zu9mWKUYUOTa4wmRbd565EK/25gHWOE3
+         n1eVi2L3ZUbfNBFRwJVjT8ODrCcGemPCk9XcTNjI6LcFK8kiJEqnOCK++6A6Z8vz/iji
+         yYfBFl2AsHeNqI8Fqir6PXoKPlIpxG39gqbVBZsiptGHTkAR/NRmpOjn94z3OzjBG3gU
+         S58Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785137540; x=1785742340;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1785142770; x=1785747570;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yOW/nYL4to09ZFRK9TrJFYsB5lOpHRRLHeRIsAezmMY=;
-        b=KnUziGVVF6ifM1AgRkber8zCuc11zraHni6ufxNaPzdXwSWtKijXiUPvQ1EwbIyaup
-         6sFPJyX/Jh3l6mA4+kocURS16qKIRDISi+Q6EHt7rYRMWtxVLA7eNUTd2eVKt1Gfffv9
-         OE0uqwpA0+f1C6o9dFuf4a2BUV3ox0PAXjsxi01UwWu790jCWPo0RS7SfVT/En2KW3Ro
-         RGA4uNa00aQi1OiOf6w6svxiDf/4fkL+URVqQlhLSdGTVv0zahZuYkn+gvWWTorS6ocU
-         PyepoNuH9Nwb/CdIx5527u6mNKoizM3itngZqA7S4nnaRL0jLJik+/5SOK1P7YJ8SEP5
-         qVkA==
-X-Forwarded-Encrypted: i=1; AHgh+RrSNvU+XQWua4zXzbvdiITjQAGexAULIkOO7ccpvux0wosAyOX5bVvfP+v5oDIrxt4DQKvAz/goiq+31zFeemA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZp7fSGORfNF7X7IQoZlfl3+XSW4wwzX6e0i8C+Cjp0j7cCOWC
-	pWlzd2ixq/wxgysWwaW16m1ojtJgMbzO9QixqgsqTdP3GjyFK8lB+exi
-X-Gm-Gg: AR+sD13zJNv0k1WmO7pwt8I5yUMcFs/fE1yN1pwgg++F9icW52hhUNHX6G5DucIP1YW
-	nYk5Jk298kTm+6+iY1dq7tDpRbVXVId5apoWCCsJ9MEVAudtv4S1qAQZ32E2+HF4/DGpeYRtzBf
-	CtUgTNY1dPQK8YVFazBx7CWsgPd1E4e8qm2WBCW48pzq4qyfxQNTYfXWBeYqiTcSH0PxdNVpQ6b
-	a/0LKd4CqOrrUT4KD7ksS/M3ubypNM6VL9tAcZCD806+MbPfddlH5qEpdRIopZhwVNDwBodR3Xl
-	QJalAXmd35ghvfOOckOh7OJpnOYDB0SAR2u0k59SQPtUKo2H5KqaSc0fryVNQZD3NWQxCG3nhC8
-	TJ/v1oNPMPupki1MsFYKuGbwjnxxqfanVHAZwLbsGkkS0EzbWoxFj2xAujqgXrfCpngnJMPjKSu
-	boqMbghVdggx+Od2C/11Jr2m2wT0NpjsjiAgVCvqk=
-X-Received: by 2002:a05:600c:3586:b0:496:bffb:fb7b with SMTP id 5b1f17b1804b1-496bffbfc25mr23100895e9.10.1785137539393;
-        Mon, 27 Jul 2026 00:32:19 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-496b4ee1d31sm219425825e9.5.2026.07.27.00.32.18
+        bh=cKXBOXAtqJDj69Ps8FseAtzEzy7p5GmYrwezoJp9Vo8=;
+        b=U9+XJkD3JMz5ZVq0sakbPk/PdrV9VVw9IUsnWWvyLzqCwOHIET8BTm3W8V7icPr98v
+         Q+Swe7V8A4lMjldQmPHBEWUqt+rcot1ZlIuU6VzQa8xMru9y7t/QW17CFJYPqAQ6hC5f
+         WRmwFGvPz1lvIYzmAl85K9JwGes7bBNPtC2UwIG4DqB2Q7lEyuOQEk1leMQs4OdBTqPP
+         gdTK5YA3GDERPUHqjXeLuWRZD/oynl1ZMNWX2YQU9IrenzLHUi+S4TygDlhtweA6jB0X
+         Izrj6XdLdmbhBHomq0vaS7cQCH9yWi/dLxWkX3rRkus4WxFTOPUsosjtuCrekPqqR/0Q
+         xGSA==
+X-Forwarded-Encrypted: i=1; AHgh+RrXPgbeVMtlwVRtTGLVdFzJGnWD7j0tTG4NzBDCpkxHTiiVBEVUCXZx317m+Qk3oq7SUm/+7bbgtLqg9hVDBNQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyFR0WHofQbwC1nOYT3id2jMetP02o/dyEg34lXiaOLoMp3Fgf
+	k1SO50DxpVV18zFgieWBQS8847DVvxU+ivoJAesa7O2dUuZxgtVY0PppI+TcGUcGh6c=
+X-Gm-Gg: AR+sD10DZ5/RxWWvExcwJSY6VraE1H5ZWFYU/RfchNYdi+m17KfyGFIsim/Xdr0YNKO
+	ItY6aA89tQyYx0TKicNYIIq33t4VWRi4c1ZszCVSp80Kyur7IUcwNSiLsthM/BYcMjDTBcGRE2p
+	dUUytxa6AB28YreGlKAUeHwXFLykVEKV4Qm64DpJQfQy7P6aj8FqUi9FQhzcTNN8JIPgDyIORVh
+	u2UVdVj/K44sVXYTSuOrpqeAJ2JUoTCKdq8Jhoz1+GGE0w4jmTBIirPtIl5xJ5pgQAvHIyXMAnI
+	lVH+Xm3yE+nzJASm2BanrP8mMraAQoYGXMbcFiCGa7EoOKf6Elo6CvQ5ZWZep6QXOP7tbwP/TeB
+	d9TXcqP1TeLQdQd/vmvrGULgiMDVD4q2DdtHpUSnxgkGfgjO+ODCT8ielheW9RhCFndc9r0FrRw
+	==
+X-Received: by 2002:a05:600c:8b14:b0:495:699:84ca with SMTP id 5b1f17b1804b1-496b57258d2mr102932055e9.28.1785142770032;
+        Mon, 27 Jul 2026 01:59:30 -0700 (PDT)
+Received: from localhost ([109.160.73.171])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85b9a596sm46290167f8f.4.2026.07.27.01.59.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 00:32:18 -0700 (PDT)
-Date: Mon, 27 Jul 2026 08:32:12 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Ammar Faizi <ammarfaizi2@openresty.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1?=
- =?UTF-8?B?aA==?= <linux@weissschuh.net>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Kselftest Mailing List
- <linux-kselftest@vger.kernel.org>, LLVM Mailing List
- <llvm@lists.linux.dev>, Yichun Zhang <yichun@openresty.com>, Alviro
- Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan
- <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in
- abs() and friends
-Message-ID: <20260727083212.223cb1ae@pumpkin>
-In-Reply-To: <amYvRyLKZzEsFyq9@1wt.eu>
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
-	<20260726101306.3772237-3-ammarfaizi2@openresty.com>
-	<20260726151334.4c1ec6f1@pumpkin>
-	<amYvRyLKZzEsFyq9@1wt.eu>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        Mon, 27 Jul 2026 01:59:29 -0700 (PDT)
+Date: Mon, 27 Jul 2026 11:59:16 +0300
+From: Nikolay Aleksandrov <razor@blackwall.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vivek Kasireddy <vivek.kasireddy@intel.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	linux-kselftest@vger.kernel.org, sdf@fomichev.me,
+	daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org,
+	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v6 1/3] net: devmem: allow rx-page-size >
+ PAGE_SIZE per dmabuf binding
+Message-ID: <amcd5DJF27eh8TZC@penguin>
+References: <20260724-tcpdm-large-niovs-v6-0-7975f62cdfbb@meta.com>
+ <20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
 
-On Sun, 26 Jul 2026 18:01:11 +0200
-Willy Tarreau <w@1wt.eu> wrote:
-
-> On Sun, Jul 26, 2026 at 03:13:34PM +0100, David Laight wrote:
-> > On Sun, 26 Jul 2026 17:13:03 +0700
-> > Ammar Faizi <ammarfaizi2@openresty.com> wrote:
-> >   
-> > > Negating the smallest negative value of a signed type overflows, which
-> > > is undefined behavior. The selftests are built with:
-> > > 
-> > >     -fsanitize=undefined -fsanitize-trap=all
-> > > 
-> > > so a caller passing INT_MIN does not merely get an unspecified answer,
-> > > it dies (on both x86-64 and i386):
-> > > 
-> > >     A simple test program:
-> > > 
-> > >       printf("x = %d\n", abs(INT_MIN));
-> > > 
-> > >     $ ./ab
-> > >     Illegal instruction (core dumped)
-> > > 
-> > >     (gdb) bt
-> > >     #0  0x0000000000401009 in main ()
-> > >     (gdb) x/6i main
-> > >        0x401000 <main>:     mov    $0x80000000,%eax
-> > >        0x401005 <main+5>:   neg    %eax
-> > >        0x401007 <main+7>:   jno    0x40100b <main+11>  
-> > >     => 0x401009 <main+9>:   ud2    
-> > >        0x40100b <main+11>:  push   %rax
-> > >        0x40100c <main+12>:  mov    $0x80000000,%esi
-> > > 
-> > > Negate in the corresponding unsigned type instead. The value still
-> > > cannot be represented in the result type, so the minimum is returned
-> > > unchanged.
-> > > 
-> > > Cc: Yichun Zhang <yichun@openresty.com>
-> > > Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> > > Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
-> > > Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
-> > > ---
-> > >  tools/include/nolibc/stdlib.h | 12 +++++++++---
-> > >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-> > > index 1816c2368b68..8d86044f759f 100644
-> > > --- a/tools/include/nolibc/stdlib.h
-> > > +++ b/tools/include/nolibc/stdlib.h
-> > > @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
-> > >   * As much as possible, please keep functions alphabetically sorted.
-> > >   */
-> > >  
-> > > +/*
-> > > + * The absolute value of the smallest negative value is not representable in
-> > > + * the result type. Negate in the unsigned type so that the overflow is
-> > > + * defined and return it unchanged, like the other libcs do.
-> > > + */
-> > > +
-> > >  static __inline__
-> > >  int abs(int j)
-> > >  {
-> > > -	return j >= 0 ? j : -j;
-> > > +	return j >= 0 ? j : (int)-(unsigned int)j;  
-> > 
-> > An alternative expression is -(j + 1) - 1
-> > gcc (and I think clang) optimise it to just -j.  
+On Fri, Jul 24, 2026 at 02:21:15PM -0700, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> This one would give -j -2,
-
-Gah, I meant -(j + 1) + 1 :-(
-
-> but ~(j - 1) would work, just like
-> (~j + 1). However here the benefit of the casts in Ammar's
-> version is that it's obvious that it's only playing with same
-> size casts with no extra operation.
-
-They only work for 2s compliment.
-While that is normal (and required for the next? C version)
-it isn't actually required by C.
-(Not that gcc supports '1s compliment' or 'sign overpunch'.)
-
-	David
-
+> Every devmem dmabuf binding today hands the page_pool PAGE_SIZE niovs.
+> This caps a single RX descriptor at PAGE_SIZE, burning CPU on buffer
+> churn for large flows.
 > 
-> Willy
+> Add a bind-time netlink attribute, NETDEV_A_DMABUF_RX_PAGE_SIZE, that
+> lets userspace request a larger niov size. The value must be a power of
+> two >= PAGE_SIZE.
+> 
+> Measurements:
+> Setup: kperf in devmem RX/TX cuda mode, 4 flows, 64 MB messages, 60s,
+> dctcp, num-rx-queues=4, dmabuf-rx/tx-size-mb=2048, 10 runs per niov
+> size, mlx5.
+> 
+> CPU Util:
+> 
+>    niov        net sirq %        net idle %         app sys %        app idle %
+>   -----  ----------------  ----------------  ----------------  ----------------
+>      4K   62.38 +/-  8.27   33.40 +/-  7.51   54.15 +/- 10.23   43.67 +/- 10.53
+>     16K   58.91 +/-  5.35   35.23 +/-  5.88   41.05 +/-  8.87   56.42 +/-  9.24
+>     32K   64.12 +/-  0.68   31.09 +/-  1.48   44.54 +/-  3.51   52.63 +/-  3.65
+>     64K   54.69 +/-  5.54   39.67 +/-  5.81   35.47 +/-  3.11   61.97 +/-  3.27
+> 
+> RX app sys % drops ~19% from 4K to 64K.
+> 
+> Throughput:
+> 
+>    niov       RX dev Gbps   RX flow avg Gbps
+>   -----  ----------------  -----------------
+>      4K  300.63 +/- 53.21    75.16 +/- 13.30
+>     16K  321.35 +/- 28.20    80.34 +/-  7.05
+>     32K  347.63 +/-  2.20    86.91 +/-  0.55
+>     64K  332.11 +/- 14.26    83.03 +/-  3.56
+> 
+> Throughput seems to increase, but the stdev is pretty wide so could just
+> be noise.
+> 
+> kperf support (not yet merged):
+> https://github.com/facebookexperimental/kperf/commit/8837577f920876bce6986ec18869ac04439ebcd2
+> 
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Reviewed-by: Mina Almasry <almasrymina@google.com>
+> ---
+>  Documentation/netlink/specs/netdev.yaml | 17 ++++++++++++
+>  include/uapi/linux/netdev.h             |  1 +
+>  net/core/devmem.c                       | 49 +++++++++++++++++++--------------
+>  net/core/devmem.h                       | 13 ++++++---
+>  net/core/netdev-genl-gen.c              | 11 ++++++--
+>  net/core/netdev-genl-gen.h              |  1 +
+>  net/core/netdev-genl.c                  | 18 ++++++++++--
+>  tools/include/uapi/linux/netdev.h       |  1 +
+>  8 files changed, 83 insertions(+), 28 deletions(-)
+> 
 
+LGTM,
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+
+Cheers,
+ Nik
