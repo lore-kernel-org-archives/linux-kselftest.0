@@ -1,65 +1,65 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066F23C0605
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 08:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCC93BE62B
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 09:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785142773; cv=none; b=L4w2EU5IbMg/KsBf6Nn89SWJP9pZAp18PxTLuqMov1HRdaIIg/hzG8tVP9Y0CYyK/KD/PGDen6GkE1PxD3X4UhO/nQWsYbdUH6mQJFcbTfiY/10dQe0VKgHWybQaIRLkJpYLRxpIRBle6cYU9LbKxxk4SxwBrhZK4mHwMmPUauw=
+	t=1785142996; cv=none; b=YifbXTWgh0bHGqAg21EuCj/kDX57IDh9rWn02NKUsa1DaBXiZK4NqH+/PenWYF9U5mrOoZ+OFVQ2qTOzivRWWt0gHlETxzaP+7cI71Hk0P159IXS/zmQnRr5SoMpSlRaZp338QRfZt9DDH8pdxcvGxra/kcDd4Pjy7P0JaD1RmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785142773; c=relaxed/simple;
-	bh=TvaB5pDsZDJqz0nqqM/72TvbOhMxL40wRzdmMlRRozU=;
+	s=arc-20240116; t=1785142996; c=relaxed/simple;
+	bh=kTDH5S4ysmo2sFaieTu2UjAmwNg8TwOXckYezAXHhh0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ncGX6ZnluIIaG/7kDxCsIpTeqwi/svZKNE6Bsy3Qb7lbgtV9cTeHCa1pVyowm13m+nEYKPiXCjbg8Ln/MM4nU3/nvD1sE2w8r6gIp7IXSuEHvTmN2xMyj7j7juBpcakmLWss3PIqTKDyeIBOqcBdl9Yu9FHgwr93w7D6DvNVOcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=Gsd8DHbr; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=jZHaVoUkR5HeGxl3G+Hp5YsrgG3D9NUNA2QkPfXnjV/cK6kDWdvAxHp+iKaykHeZHk6QcH+sSRnfzxicB/1lxi8e5zxpabZoG9xiitp9Y59fYkgru7BqGn4Es+BcR2tkLGUWv5nvnyjDMHbCViJR2Hibxn0bDq4ZIq61HUkHniw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=b3GviCnP; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="Gsd8DHbr"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b966dd74so15422635e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 01:59:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="b3GviCnP"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-49555a0e68bso12084655e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 02:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1785142770; x=1785747570; darn=vger.kernel.org;
+        d=blackwall.org; s=google; t=1785142993; x=1785747793; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=cKXBOXAtqJDj69Ps8FseAtzEzy7p5GmYrwezoJp9Vo8=;
-        b=Gsd8DHbrX+tARlOxh/1frd7BmHEeZFioV9aA+R7U1bpPdVjA7crnkRj8lS3BCgY3TX
-         mVZnZouhtUcOqXcmxDoZrqXiQ4fChc2texwmIIYDgqK+TzrhPfiFsz7MSOc1fAEJ0P1h
-         jCdDfPEIFiABrYemmeSKfmyP2V4wmigFgxU/Zu9mWKUYUOTa4wmRbd565EK/25gHWOE3
-         n1eVi2L3ZUbfNBFRwJVjT8ODrCcGemPCk9XcTNjI6LcFK8kiJEqnOCK++6A6Z8vz/iji
-         yYfBFl2AsHeNqI8Fqir6PXoKPlIpxG39gqbVBZsiptGHTkAR/NRmpOjn94z3OzjBG3gU
-         S58Q==
+        bh=edzEg2J/oLqzfs9TMR6atfH/lM7LkpfPbZs2uM8pJC4=;
+        b=b3GviCnPq9i1aD7Y5y7bzKgg6il0W8m9XaPJQ4I12+i4aM5U6hRMuNxR65SpN7uUHQ
+         PWnxjTKHglMT3cV+qGust9WX/AL2ARb8BKzITWhH8Vh121IvbLyE3dAKYnDNm9GGZ1pe
+         6hJ5U102tnuCTKYGutx5K+IuXtT/NE+AL8XrT0tWppE8Z0LndTSrSPMSw3QrO5E3CDOH
+         Ypzn5IVWR0x3oRtAyqN2N2ESOCYQH0oi8Ggm1mTvLI7vtBxBg0w2FqiCifuHZni5/e57
+         BT227eFMxD0Uq4pu2DXaipPgvWnq23gJCyk2ERmhKXNtOcpYOSKuQyH6cK2zDOMIDjI+
+         n0zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785142770; x=1785747570;
+        d=1e100.net; s=20251104; t=1785142993; x=1785747793;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cKXBOXAtqJDj69Ps8FseAtzEzy7p5GmYrwezoJp9Vo8=;
-        b=U9+XJkD3JMz5ZVq0sakbPk/PdrV9VVw9IUsnWWvyLzqCwOHIET8BTm3W8V7icPr98v
-         Q+Swe7V8A4lMjldQmPHBEWUqt+rcot1ZlIuU6VzQa8xMru9y7t/QW17CFJYPqAQ6hC5f
-         WRmwFGvPz1lvIYzmAl85K9JwGes7bBNPtC2UwIG4DqB2Q7lEyuOQEk1leMQs4OdBTqPP
-         gdTK5YA3GDERPUHqjXeLuWRZD/oynl1ZMNWX2YQU9IrenzLHUi+S4TygDlhtweA6jB0X
-         Izrj6XdLdmbhBHomq0vaS7cQCH9yWi/dLxWkX3rRkus4WxFTOPUsosjtuCrekPqqR/0Q
-         xGSA==
-X-Forwarded-Encrypted: i=1; AHgh+RrXPgbeVMtlwVRtTGLVdFzJGnWD7j0tTG4NzBDCpkxHTiiVBEVUCXZx317m+Qk3oq7SUm/+7bbgtLqg9hVDBNQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyFR0WHofQbwC1nOYT3id2jMetP02o/dyEg34lXiaOLoMp3Fgf
-	k1SO50DxpVV18zFgieWBQS8847DVvxU+ivoJAesa7O2dUuZxgtVY0PppI+TcGUcGh6c=
-X-Gm-Gg: AR+sD10DZ5/RxWWvExcwJSY6VraE1H5ZWFYU/RfchNYdi+m17KfyGFIsim/Xdr0YNKO
-	ItY6aA89tQyYx0TKicNYIIq33t4VWRi4c1ZszCVSp80Kyur7IUcwNSiLsthM/BYcMjDTBcGRE2p
-	dUUytxa6AB28YreGlKAUeHwXFLykVEKV4Qm64DpJQfQy7P6aj8FqUi9FQhzcTNN8JIPgDyIORVh
-	u2UVdVj/K44sVXYTSuOrpqeAJ2JUoTCKdq8Jhoz1+GGE0w4jmTBIirPtIl5xJ5pgQAvHIyXMAnI
-	lVH+Xm3yE+nzJASm2BanrP8mMraAQoYGXMbcFiCGa7EoOKf6Elo6CvQ5ZWZep6QXOP7tbwP/TeB
-	d9TXcqP1TeLQdQd/vmvrGULgiMDVD4q2DdtHpUSnxgkGfgjO+ODCT8ielheW9RhCFndc9r0FrRw
+        bh=edzEg2J/oLqzfs9TMR6atfH/lM7LkpfPbZs2uM8pJC4=;
+        b=VB2WgE274mZACbnpf6fTgwpyD9MT1JCivwSdzE8sGfOirlD7DVYXYBAXoP+xemr+NL
+         uk3OeopYuPbM0JyCjAZx3bvt+Hy81t+IJR6FPJBi7NncCIXuaQpX2ugsUxhY5npiIjfC
+         pjXSa08A6E6bdtWaN3ibDhlEeXg+MBx0RGcoJKo07YCou7MTvVEyvKYwO3xHe3yUIhQq
+         u/22pu/lclnyvghSqJLjpjT0kDy0MFIuFBFouN95PNIsxxnIsmpYD/sO0hkRq5xtid+U
+         XRB99qITHttPRCghHx7Hr1h/z02Z5JpXVr+rzrM7/E3VqcW+bwA2ugXhN/yrbwI8CU8f
+         9ROA==
+X-Forwarded-Encrypted: i=1; AHgh+RoFOhdzKUD9qusfrtn1lX5t/k3rSksblfz8k9smBq0p+icqqmhbtYiM0TRDSUzR2yfb/vreddD75Pl00+fW8vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa63xn0MdN8TfyJTR8mXaMyQxVCe2eTBj3LVuzdyqdAMusWp0S
+	UN+e9N2csmVYx2q3M4VUJwL4s14EIFFqTJGw+VLUDzbxBZU6gZ7yBOckL+l4Ma2mcUg=
+X-Gm-Gg: AR+sD11DmpTtLqWpjiiEDvcy414xcmntEtMbxjJTNku+pU3dZyg7c99XDqy3d+xDvMb
+	u+jXc+WB+s8BNybDE6owAUUWhm5bMB/7bLHFvsqyz6Y7L6ArvM0SNn+PfRCOr1fxPgNWpOcOszA
+	mcsRFUqH4k8dvVI5KssVQC4+lBialEnIS9B8OoQyry00rffKCQDMWLf3k0dWppzjul8edhb9EQg
+	4X9RyrW91QiE4W8HPD2Lzdvkw4NF9x1Cwzmn7iH0yDeuDhBI63bVs5azquIGFKxFckzCIeCDv3u
+	Eb7Gwda8CmqKJBvvOrihAF5ZZrBo5fgtLS3WYgWiep2HFcJ6Qf7z351C+/qCD+vC321k1H/oDlO
+	AA3U0x5jhGRnjwz+uB/sWC1miFZptVA1Ouah+CjQgkFHOUzvtaLO+63o6hrZUl7ofVnmWev2aZg
 	==
-X-Received: by 2002:a05:600c:8b14:b0:495:699:84ca with SMTP id 5b1f17b1804b1-496b57258d2mr102932055e9.28.1785142770032;
-        Mon, 27 Jul 2026 01:59:30 -0700 (PDT)
+X-Received: by 2002:a05:600c:3113:b0:493:c8f7:3631 with SMTP id 5b1f17b1804b1-496b570dacdmr90046155e9.22.1785142992910;
+        Mon, 27 Jul 2026 02:03:12 -0700 (PDT)
 Received: from localhost ([109.160.73.171])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85b9a596sm46290167f8f.4.2026.07.27.01.59.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-496b4ed5f93sm333309535e9.1.2026.07.27.02.03.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 01:59:29 -0700 (PDT)
-Date: Mon, 27 Jul 2026 11:59:16 +0300
+        Mon, 27 Jul 2026 02:03:11 -0700 (PDT)
+Date: Mon, 27 Jul 2026 12:03:06 +0300
 From: Nikolay Aleksandrov <razor@blackwall.org>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Donald Hunter <donald.hunter@gmail.com>,
@@ -79,11 +79,11 @@ Cc: Donald Hunter <donald.hunter@gmail.com>,
 	daniel@iogearbox.net, almasrymina@google.com, matttbe@kernel.org,
 	skhawaja@google.com, dw@davidwei.uk, Joe Damato <joe@dama.to>,
 	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v6 1/3] net: devmem: allow rx-page-size >
- PAGE_SIZE per dmabuf binding
-Message-ID: <amcd5DJF27eh8TZC@penguin>
+Subject: Re: [PATCH net-next v6 2/3] selftests/net: ncdevmem: add -b option
+ to set rx-page-size on bind
+Message-ID: <amceyvCsHb_B1-Of@penguin>
 References: <20260724-tcpdm-large-niovs-v6-0-7975f62cdfbb@meta.com>
- <20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
+ <20260724-tcpdm-large-niovs-v6-2-7975f62cdfbb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,67 +92,21 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
+In-Reply-To: <20260724-tcpdm-large-niovs-v6-2-7975f62cdfbb@meta.com>
 
-On Fri, Jul 24, 2026 at 02:21:15PM -0700, Bobby Eshleman wrote:
+On Fri, Jul 24, 2026 at 02:21:16PM -0700, Bobby Eshleman wrote:
 > From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> Every devmem dmabuf binding today hands the page_pool PAGE_SIZE niovs.
-> This caps a single RX descriptor at PAGE_SIZE, burning CPU on buffer
-> churn for large flows.
-> 
-> Add a bind-time netlink attribute, NETDEV_A_DMABUF_RX_PAGE_SIZE, that
-> lets userspace request a larger niov size. The value must be a power of
-> two >= PAGE_SIZE.
-> 
-> Measurements:
-> Setup: kperf in devmem RX/TX cuda mode, 4 flows, 64 MB messages, 60s,
-> dctcp, num-rx-queues=4, dmabuf-rx/tx-size-mb=2048, 10 runs per niov
-> size, mlx5.
-> 
-> CPU Util:
-> 
->    niov        net sirq %        net idle %         app sys %        app idle %
->   -----  ----------------  ----------------  ----------------  ----------------
->      4K   62.38 +/-  8.27   33.40 +/-  7.51   54.15 +/- 10.23   43.67 +/- 10.53
->     16K   58.91 +/-  5.35   35.23 +/-  5.88   41.05 +/-  8.87   56.42 +/-  9.24
->     32K   64.12 +/-  0.68   31.09 +/-  1.48   44.54 +/-  3.51   52.63 +/-  3.65
->     64K   54.69 +/-  5.54   39.67 +/-  5.81   35.47 +/-  3.11   61.97 +/-  3.27
-> 
-> RX app sys % drops ~19% from 4K to 64K.
-> 
-> Throughput:
-> 
->    niov       RX dev Gbps   RX flow avg Gbps
->   -----  ----------------  -----------------
->      4K  300.63 +/- 53.21    75.16 +/- 13.30
->     16K  321.35 +/- 28.20    80.34 +/-  7.05
->     32K  347.63 +/-  2.20    86.91 +/-  0.55
->     64K  332.11 +/- 14.26    83.03 +/-  3.56
-> 
-> Throughput seems to increase, but the stdev is pretty wide so could just
-> be noise.
-> 
-> kperf support (not yet merged):
-> https://github.com/facebookexperimental/kperf/commit/8837577f920876bce6986ec18869ac04439ebcd2
+> Add -b <bytes> to request a non-default niov size via
+> NETDEV_A_DMABUF_RX_PAGE_SIZE. When the value exceeds PAGE_SIZE,
+> udmabuf_alloc() switches to an MFD_HUGETLB-backed memfd so each 2 MB
+> hugepage produces one naturally-aligned sg entry.
 > 
 > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 > Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-> Reviewed-by: Mina Almasry <almasrymina@google.com>
 > ---
->  Documentation/netlink/specs/netdev.yaml | 17 ++++++++++++
->  include/uapi/linux/netdev.h             |  1 +
->  net/core/devmem.c                       | 49 +++++++++++++++++++--------------
->  net/core/devmem.h                       | 13 ++++++---
->  net/core/netdev-genl-gen.c              | 11 ++++++--
->  net/core/netdev-genl-gen.h              |  1 +
->  net/core/netdev-genl.c                  | 18 ++++++++++--
->  tools/include/uapi/linux/netdev.h       |  1 +
->  8 files changed, 83 insertions(+), 28 deletions(-)
+>  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 36 +++++++++++++++++++++--
+>  1 file changed, 33 insertions(+), 3 deletions(-)
 > 
-
-LGTM,
+ 
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-
-Cheers,
- Nik
