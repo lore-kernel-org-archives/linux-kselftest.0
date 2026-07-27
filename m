@@ -1,250 +1,103 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C98441BA60
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 15:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD1F41BA7C
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 15:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785167846; cv=none; b=OHou9ZIDiXi0kf5M7D4KrfpJNxB+t9xiWEd3TpaL50er4PdP8ZjGkY648omHWEjg5CnmdJimffAoTe39lBYrLCDJtPJ9yKvC1LeE8+5yEFX3Ff07JUYIJI1cJU2DHn3GIKF4Nu5olrn8Z3yoEdVS2UIo434+7JWtOvVRx5HCa2E=
+	t=1785167904; cv=none; b=RG/3eLFoKq+GgLUp9586w/Z/OaJ0LW0toAS1XNowWqsxyAIq42bWvJgEEvxyPZf4DtgIU/Mhn2K6J8ZiJl/+gJGIIxsgsNTMAqCupsWTUpugp3P5SiXIaCN/jjeL2Mqz3ePmWn3NK7ckfv5nw4ggrEy5DeVGbgszodxfplj/tBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785167846; c=relaxed/simple;
-	bh=DxYRo6/OcOwrAc9jvJMva38QnpvhfJT4IXjqt/fmTTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lsry8tx6AB2qzNSclZpZ6n3ujszkE53dKT+Gbg3iz3o/YuC622sappwz3sHHSTuXZjwzKN2UU7jVn0clo1H7x9YfdMz0G5sC4hnlBg694HMontnKBsBUMe8TlVVtm2xBZuc/h5WuCksZTwHLYBIqFwGsArFjZUJ9kKtuYQsQ+GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=1p8HshxJ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1884Zwi9; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Qe5v+oyJ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qPDDpjzi; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1785167904; c=relaxed/simple;
+	bh=BX9bwe99deEPi9NdI6Iq20Xhh6lQl753kSnAChLiVCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iJlJs1YGRcayCdenh4lDlS6EwpmwC4MQTcmcubFIi16oFQG2FLZTs61FgokdVJ3qaIWYpAx2XFrnL/FhxF0i5Xol6B6E1E05zeW6RFLom2j+PtZwJ1ivkQJjE9oqHZh9SZMjQCc+9lfoUzLRU8q8YT24hFqGjjDzwlVsqufOqMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=axx8WdBP; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="1p8HshxJ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1884Zwi9";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Qe5v+oyJ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qPDDpjzi"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6FC477B980;
-	Mon, 27 Jul 2026 15:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785167838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eamMMT550ofEglpL8nzRc2oDOeSt3/PH6Ml02EKhIQ8=;
-	b=1p8HshxJHatb2QpGfKqCpdCzlvpC5pSHxSOes+UVA/HrheSfomvXRA9BzcuPq4/oTP/b+N
-	5znBHvUpXABM0IeJy+eOHpUc9Av7bHC/tMSROUS+kQc65wV5EXry0644iDePPuRPVRI7qK
-	Eht1tC3Mc/fSYock5mYXU4Nrx781nWQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785167838;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eamMMT550ofEglpL8nzRc2oDOeSt3/PH6Ml02EKhIQ8=;
-	b=1884Zwi92BJcTjM9nggxCfNT2JDZeVezSwpr9bpV4K0ll/vbvMrx27aubP3hVbTOGGy7Gc
-	PRiENKlif6Pf+ZBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785167834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eamMMT550ofEglpL8nzRc2oDOeSt3/PH6Ml02EKhIQ8=;
-	b=Qe5v+oyJBD4Qm6oLT7hYrBG4phAugQ7fgx7lkV1ymQnaz+4f56KbsZPo2Maj+DWa+5ovlB
-	Y/lyPNQrz5rAxSt7XZFvGTERLABsDsAHj6/JRGb6hlbKU50GkqLkp+o8RBIpMNjBU4ZcWo
-	AeUmqXZA4R7QPbKsq6I5KEuX+6MpKsA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785167834;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eamMMT550ofEglpL8nzRc2oDOeSt3/PH6Ml02EKhIQ8=;
-	b=qPDDpjzi0CDVbmVZWm1IHOEmkVCcpmEyOnVytg4BheOVN4fOVma+82qSM1GYOhfjq4Ttlc
-	7KkMHCHKSXXZccCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 66252779B9;
-	Mon, 27 Jul 2026 15:57:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id TTLhGNp/Z2rxGAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 27 Jul 2026 15:57:14 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 11E48A0BA1; Mon, 27 Jul 2026 17:57:14 +0200 (CEST)
-Date: Mon, 27 Jul 2026 17:57:14 +0200
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, Li Chen <me@linux.beauty>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] pidfs: preserve thread pidfds reopened by file handle
-Message-ID: <v2etqvlc6cq3al2pbdf43gu5b4d5f5py7dagkblbbt6mxltfro@kospd7xpqeyo>
-References: <20260716052726.1032092-1-me@linux.beauty>
- <ks7xfhn7pzzm267bcfo725xwqa6famsv5yulmzgqt7hjdmepep@zm2dw2djd7yb>
- <20260722-esszimmer-umsetzen-nennt-ed5fc604300a@brauner>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axx8WdBP"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8485b358552so3028934b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 08:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785167902; x=1785772702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BX9bwe99deEPi9NdI6Iq20Xhh6lQl753kSnAChLiVCM=;
+        b=axx8WdBPMQBNYO3ou4JJzC2dw3+ly2NtkJDHJPvBNjOPukdaBaMnXOiSmP9/g7ZkzA
+         DJj/5WnSKRrHHZ6ijy73+XOIgo0XZKy8WjeIV8bLD9Q30FVGvE6YpZBPptD91Ar2GV3N
+         yQ9PybahKK0HF7FzEN+ZPYftKr9ke4W8HcFbDXeG9bO7QqzKx+g+sil0z1GFphB5730T
+         RgJPWV8HDL+K9d/H+5otXiMtG6u9weLkwZW6i6sNVi+Gfv6xZ+MmhCzhbggnaAVSGxIE
+         f5cng3IE+mCYR5TyhsMLKPZxSAoH5TTi7Ap5LYO482aUoOvuWxU3Lo93UBtJ+WtJ5c2Q
+         bzmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785167902; x=1785772702;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BX9bwe99deEPi9NdI6Iq20Xhh6lQl753kSnAChLiVCM=;
+        b=m9HRwq/4Xjr3VmEBx8fyMGSHD1TNhgh1ycxblv6KFN1wSh1I9Gbwu7tawPcI5SKszx
+         Jrtz4JPdZuZ886aj3VoV5riwcAXF2E19uLGVEmOJM7hrVGCiH0mGGTLeflHvQb//bs1T
+         XndpNP65TyqDY2kLWlRXmTNP1rPnzCuPCerC0rJJRCjN96l5v4FD5lAc5rP98PDEwhUU
+         MnPXWNpoBxjrqSZTYz8a/fITwYQCbRqHlEdJm/gsTg0cDsLFO8kcuUIVLcD0ZD+zOXOp
+         C6az9zQPMuHBPDbaJhFYDDexqkLnEQbjFfTJDwRlKjko4Zf9bx9AyfdkjYg2SvV62dKX
+         iVIw==
+X-Forwarded-Encrypted: i=1; AHgh+Rpqmno0osJtkx/RYspYJkgZlGOGXRDFDsdqKjQ+k4DW5j+W9+xhNjzkBs4b8DfBP3zR4dpaivUEV/ZJ7DWwVfo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaPNmYHNB9j9mz6v12QVh9PpKucGBVb2iKy2AM/7fDXCiMN6Cu
+	mw4n7T61FjV7Os0w4Jad0FutaYTnro0ZAO5w8g37mzIAOkr6VKepdkZQ
+X-Gm-Gg: AR+sD13nwrsd24D7ggp4snoL5L4zTDvWFs8gYGl8ikk1cZB79O66Ot5xwCiQn/QJwyc
+	g5wg/fEeJmNhGxav29W+NDCKEGc0pujzUr5RARYwwRgM2Oh58mRYInwCs7swdQqlT7UNYS3B7gD
+	xTfn2PVC3AvTC6LhSZBbNY3S2bJ0YKzyZZVBHY5g3wELuypF/pb7LslWp+oBfJ/fFb0Upsn2dsd
+	k3omTwpEmoPV8MD5swtzIbo6GNqi5lStsz49lyQ9w3sSY2oBiZR/6t4GkNnXxWm0r7s1lTxcvQn
+	oycz/mB7D0lKQY/vx49ebzi+HNYTFT6sCWGVNDd5iu7u/XDNivyXnoEDDGsS6bFH0dXDM4l/Ack
+	30w/5C6AkLvDV7bNjL3n32pcp63D9GtwaTBVq21ZwTXKcU+NIv9f8TdmbR0JEWajIj4PhGxHTqJ
+	/vClvWNm7HknsenkAxAZn8TkdD0ZWrNfJwl9q9BFs679cRIRXgGHjIV0BFVpiLmH1wQZyeFOeq/
+	Ox1dP67c7kTRr7V8XAkEcPjMgCLb5CLLO8+vLhmrzKI1E20ldQl0YsBbwrPrw3TYw==
+X-Received: by 2002:a05:6a20:a10a:b0:3c3:7ac4:dac7 with SMTP id adf61e73a8af0-3c6c7d8e60fmr199334637.45.1785167902516;
+        Mon, 27 Jul 2026 08:58:22 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:8b84:a60e:2cad:e760])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d130f55c6sm88978600c88.15.2026.07.27.08.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 08:58:22 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	hemendranaik@gmail.com,
+	horms@kernel.org,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	tahiliani@nitk.edu.in,
+	vishy0777@gmail.com
+Subject: Re: [PATCH net-next v3 1/2] net/sched: sch_fq_pie: add per-flow statistics via class ops
+Date: Mon, 27 Jul 2026 21:28:14 +0530
+Message-Id: <20260727155814.6454-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260720154635.627948f1@kernel.org>
+References: <20260720154635.627948f1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260722-esszimmer-umsetzen-nennt-ed5fc604300a@brauner>
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.com:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-On Wed 22-07-26 14:07:37, Christian Brauner wrote:
-> On 2026-07-16 13:11 +0200, Jan Kara wrote:
-> > On Thu 16-07-26 13:27:22, Li Chen wrote:
-> > > PIDFD_THREAD shares O_EXCL. do_dentry_open() clears O_EXCL after
-> > > pidfs_export_open() validates the flags, so open_by_handle_at()
-> > > silently turns a thread pidfd into a process pidfd.
-> > > 
-> > > Restore PIDFD_THREAD on the opened file, matching pidfs_alloc_file(),
-> > > and cover the restored flag with F_GETFL.
-> > > 
-> > > Signed-off-by: Li Chen <me@linux.beauty>
-> > 
-> > Makes sense. Just looking at this code, what about PIDFD_AUTOKILL (aka
-> > O_TRUNC?)? Reading the commit introducing it 07c3ef58223e it appears it was
-> > never meant to be directly requested by userspace so probably
-> > pidfs_export_open() needs to reject it. But that's unrelated issue to your
-> > patch so feel free to add:
-> 
-> Good point. But pidfs_export_open() is guarded by
-> pidfs_export_permission() which does:
-> 
-> #define VALID_FILE_HANDLE_OPEN_FLAGS \
-> 	(O_RDONLY | O_WRONLY | O_RDWR | O_NONBLOCK | O_CLOEXEC | O_EXCL)
-> 
-> 	if (oflags & ~(VALID_FILE_HANDLE_OPEN_FLAGS | O_LARGEFILE))
-> 		return -EINVAL;
-> 
-> and so is safe. But I've added the following patch on top which also
-> splats if that is passed!
-> 
-> From 99a859485394eca8cf6271de09ae72ac3b846bda Mon Sep 17 00:00:00 2001
-> From: Christian Brauner <brauner@kernel.org>
-> Date: Wed, 22 Jul 2026 13:56:28 +0200
-> Subject: [PATCH] pidfs: add pidfs_dentry_open() helper
-> 
-> Both pidfs_alloc_file() and pidfs_export_open() need to force O_RDWR
-> and reapply the pidfd flags that do_dentry_open() strips. Move the
-> common logic into a helper.
-> 
-> PIDFD_AUTOKILL is now part of the restore mask in the file handle path
-> as well, but pidfs_export_permission() rejects O_TRUNC, so this is a
-> no-op there. But warn nonetheless.
-> 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Hi Paolo, Jakub,
 
-Nice! Feel free to add:
+Thank you for reviewing the series and for your feedback.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+We double-checked the formatting tweaks and confirmed they are not
+required, so we'll drop them. Any unrelated corrections will be moved
+to a separate commit. We'll also fix the commit message indentation.
 
-								Honza
+We'll incorporate the suggested changes and submit a v4 of the kernel
+series, along with the corresponding iproute2 changes, shortly.
 
-> diff --git a/fs/pidfs.c b/fs/pidfs.c
-> index c20ffd747ff5..695215aa2a58 100644
-> --- a/fs/pidfs.c
-> +++ b/fs/pidfs.c
-> @@ -915,6 +915,20 @@ static struct dentry *pidfs_fh_to_dentry(struct super_block *sb,
->  	return path.dentry;
->  }
->  
-> +static struct file *pidfs_dentry_open(const struct path *path,
-> +				      unsigned int flags,
-> +				      const struct cred *cred)
-> +{
-> +	struct file *file;
-> +
-> +	/* pidfds are always O_RDWR. */
-> +	file = dentry_open(path, flags | O_RDWR, cred);
-> +	/* do_dentry_open() strips O_EXCL and O_TRUNC. */
-> +	if (!IS_ERR(file))
-> +		file->f_flags |= flags & (PIDFD_THREAD | PIDFD_AUTOKILL);
-> +	return file;
-> +}
-> +
->  /*
->   * Make sure that we reject any nonsensical flags that users pass via
->   * open_by_handle_at(). Note that PIDFD_THREAD is defined as O_EXCL, and
-> @@ -939,18 +953,14 @@ static int pidfs_export_permission(struct handle_to_path_ctx *ctx,
->  
->  static struct file *pidfs_export_open(const struct path *path, unsigned int oflags)
->  {
-> -	struct file *file;
-> -
->  	/*
-> -	 * Clear O_LARGEFILE as open_by_handle_at() forces it and raise
-> -	 * O_RDWR as pidfds always are.
-> +	 * Opening via file handle may never raise PIDFD_AUTOKILL. That can
-> +	 * only be done at task creation!
->  	 */
-> -	oflags &= ~O_LARGEFILE;
-> -	file = dentry_open(path, oflags | O_RDWR, current_cred());
-> -	/* do_dentry_open() strips O_EXCL, which encodes PIDFD_THREAD. */
-> -	if (!IS_ERR(file))
-> -		file->f_flags |= oflags & PIDFD_THREAD;
-> -	return file;
-> +	if (WARN_ON_ONCE(oflags & PIDFD_AUTOKILL))
-> +		return ERR_PTR(-EINVAL);
-> +	/* Clear O_LARGEFILE as open_by_handle_at() forces it. */
-> +	return pidfs_dentry_open(path, oflags & ~O_LARGEFILE, current_cred());
->  }
->  
->  static const struct export_operations pidfs_export_operations = {
-> @@ -1114,7 +1124,6 @@ static struct file_system_type pidfs_type = {
->  
->  struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags)
->  {
-> -	struct file *pidfd_file;
->  	struct path path __free(path_put) = {};
->  	int ret;
->  
-> @@ -1132,16 +1141,7 @@ struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags)
->  	VFS_WARN_ON_ONCE(!pid->attr);
->  
->  	flags &= ~PIDFD_STALE;
-> -	flags |= O_RDWR;
-> -	pidfd_file = dentry_open(&path, flags, current_cred());
-> -	/*
-> -	 * Raise PIDFD_THREAD and PIDFD_AUTOKILL explicitly as
-> -	 * do_dentry_open() strips O_EXCL and O_TRUNC.
-> -	 */
-> -	if (!IS_ERR(pidfd_file))
-> -		pidfd_file->f_flags |= (flags & (PIDFD_THREAD | PIDFD_AUTOKILL));
-> -
-> -	return pidfd_file;
-> +	return pidfs_dentry_open(&path, flags, current_cred());
->  }
->  
->  void __init pidfs_init(void)
-> -- 
-> 2.53.0
-> 
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thanks,
+Hemendra
