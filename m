@@ -1,146 +1,142 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E90627CCF0;
-	Mon, 27 Jul 2026 09:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8681E31E820;
+	Mon, 27 Jul 2026 10:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785146076; cv=none; b=hGpMY7FYXL//HJnl+i2dk1Ocs3c0oafDD1NJhRCIRIf7rrqDEiRi/cSfX5wQKwEE/MuG2YYrc7KCPIZqcCqsaKp5RSXmw0kqUvue8iucpOjgIFzYVtPWqTeE02797WK1RnIWWvB+uQXb0keL1kxY+HSMBAz1O1TaP2rvXQ63liA=
+	t=1785146821; cv=none; b=OBN6gb01W9l/Db1G2H/AWjRqCa9Xa1Zpw1VhmjGd3pabFu9JjbVwqoNnomA1lp6Qp97JHiYMTnKMMbJOXktv2dPd1ps7bexvvuxBd0PvLr7XFYUVDJ7mwqZRiwO2fKgH8S953FMVyxeWTOP1AlyjdX8fc80SOTZlj0nf7oqoY3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785146076; c=relaxed/simple;
-	bh=IwWrSDrINE++NYwqj/Bk+VRo4oGJ2eHfAb46LAiKODc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tMgoFj8lUihY3xQhVgee8upZhcsppBko3Bm3PSf8+c33ulwtjHxczkN1sIo4O3ejjIYUG30LXFQDxWFu8NOSOzv6nTQdAoFiyXwJQQ4MlcYcEfTEdH6h+Qn+e090QmvzrhkEaWNJ+ussdNWUqX/E3sQ7rJOWoxawlSOtmqyg8wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VkVpdYd2; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1785146821; c=relaxed/simple;
+	bh=4NPqPcWpwotJnjVLLDUBduZOBxwBnvIQGGsHSUwfPyk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cJyOMjCTFT8RE0OPCroK5lHPIdTdx6ve5F07I2oTStBtH3ByBtAMEHZc34rIcclh9SOuG1Un9KfPY3AmSNx25r9q6uqXAOzgYf6J7bTZd1aVOhsi8bYluPH4XAASp5DX+7gdw4rq43AkVWnTy5G59fqeKzfrt8/FVJT5uFLlEPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=NLWJrUXi; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VkVpdYd2"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D28AD143D;
-	Mon, 27 Jul 2026 02:54:25 -0700 (PDT)
-Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A2F6A3F66F;
-	Mon, 27 Jul 2026 02:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785146069; bh=IwWrSDrINE++NYwqj/Bk+VRo4oGJ2eHfAb46LAiKODc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VkVpdYd21kJu0+U4OzGUiBxP/KkjUT1DaHuHW8cdr0cIYRPVvg059nd7jIRnT0l10
-	 epzhR+iaQPlv+eKwAcvnKxZDzLfcqJOOF6zJaeB7nOXYSKmC9FbT8vqNArEIwj8Twy
-	 q6GWXNCWhWjHqC27zmzMXRr2aHzXPeUcOcl+66Rw=
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-To: Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/mm: unpoison pages in memory-failure teardown
-Date: Mon, 27 Jul 2026 10:54:14 +0100
-Message-ID: <20260727095415.385026-1-usama.anjum@arm.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="NLWJrUXi"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=GTyQHv3io296hlH7liLIH29JJ5mx+n2lNYZEFK3Ltuk=; b=NLWJrUXi309NY17PIxSi3Pjfk4
+	fJN/bxrb6bjUvbYBRMLRB3vUSUQMnDzN922gTI9kv31T7k2snqH3Io1lTG+DbX1ExE1avg4uKJBSh
+	lnoUlu2S0PxiaOE97qZVFitRC0Uob0iebzD3M95FEzG6pSqZ46X+YoEYJX4OKDOCCsfJFwWfytPRP
+	joJ4gUanLK6cpciYA0hkq0iiUTXxTcDutk8lnILHr8SZ2mMBylNL83YepLj37cUJdkRvqMAopzeeZ
+	jiIEeT3Jkwn/w68GMrD4pO4FRNM9gi5xL7i2RqABaJuKGJOHKhCmOmDOgzpBT2/Mg9slMyF7Tpvd8
+	ncB59fEA==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1woIEW-006os9-38;
+	Mon, 27 Jul 2026 10:06:54 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v3 0/7] net: convert rawv6, ieee802154, phonet and
+ tls getsockopt to sockopt_t
+Date: Mon, 27 Jul 2026 03:06:34 -0700
+Message-Id: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKstZ2oC/23NTQrDIBBA4avIrGMZbf6aVe9RSjFmTKSgQUVSQ
+ u5ekC5a6PrB93aIFCxFGNgOgbKN1jsY2LlioBflZuJ2goGBRNliJxo+U4peP/2aHuuiItVc9Cj
+ xoo1uUUHFYA1k7FbMGzhK3NGW4F4xWGxMPrzKLIvSP277x82CI69N3ehRyElTd51otMqdfJgLl
+ +UXIfEfITnyXmFvtFE4dfKHOI7jDSsokQUAAQAA
+X-Change-ID: 20260715-getsockopt_phase4-180209cfc60a
+To: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Alexander Aring <alex.aring@gmail.com>, 
+ Stefan Schmidt <stefan@datenfreihafen.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Remi Denis-Courmont <courmisch@gmail.com>, 
+ =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi.denis-courmont@nokia.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com, 
+ Joe Damato <joe@dama.to>, 
+ =?utf-8?q?R=C3=A9mi_Denis-Courmont?= <remi@remlab.net>
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2543; i=leitao@debian.org;
+ h=from:subject:message-id; bh=4NPqPcWpwotJnjVLLDUBduZOBxwBnvIQGGsHSUwfPyk=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqZy22YWF3FuS8kdCv4poHO8A8p0UXAxGY7nXPU
+ BmynVWYOVOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamcttgAKCRA1o5Of/Hh3
+ bZrOD/915zPBkHco03W0L7IaQhHTq4Y0gER43Ch8QubBg3tGLY/GLul9xNsfpGrQufpZUIEJQYv
+ aRXHEW2+WKm6c7cQIBQ6oSCoGlpIKdrS9pkHpTR8UG2A83YjW1+6O39FH/HssIh5cEVnTU/BCKs
+ ieu/o7cMtQL+20+q3d3kRasGvDThHVrv/C27CoL4DBri5edrhWdey8V9dcFOFY9Uu9wk2jFZx6v
+ curfCK3dAz3ynUrN2h/a3wLn0uKiUx/ulMQQwSkGy832/CBmmNbKOTbWdlEaocddE/r5Nsb3qPW
+ /jzrHt9OTvzaRochx5p+9KsNXV1tAlkmCIA1GkH9Wp0RIHtJ2T5E491DgQs6MUq9sPmotCoWEvN
+ 8kW5BSqbwzJVLCOf0yB/UR5jg7q5Oc+RPrXcAt9GH/WY81WVeWtCRiAnEoxDQ1CV8Mk4PzKIQyk
+ adQkclsB7RIMADZbw7Y0iG/1v5mvuRGvUxBLBeOCnpk5IcUxyGuEWvjyxBVY9/lkwmzmkOn4fmN
+ vrdOrcC5v2mX+YbD7Vl8xr4vl3UIwf159nMK2wmFXC2QbgzfEZNGKy9Z2pVYk0FnctW6NSxRkPr
+ ocym0qHs/hF3pyR1+81vqj4vyYrXBnK8iWPUCeTyH0zXlBevGnYYkoWuARIzqXoMMAcu9PJbrax
+ 6BvCgcy9NXVlraA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-The memory-failure tests call cleanup() only after all result checks.
-A failed ASSERT_* invokes fixture teardown and aborts the test, so it
-skips cleanup() and leaves the injected page hardware-poisoned.
+Now that sockopt_init_user() was already merged, builds a user-backed
+sockopt_t from the __user pair. A getsockopt leaf can then take
+a sockopt_t behind a thin __user wrapper: the wrapper builds it, calls
+the leaf, and writes the length back to optlen. The leaf copies with
+copy_to_iter() instead of copy_to_user().
 
-Invoke cleanup() from FIXTURE_TEARDOWN() instead. Guard it with
-self->triggered so tests that exit before injection do not try to
-unpoison a page when no injection was attempted. This runs the existing
-HWPoison and HardwareCorrupted checks on both normal and assertion-failure
-paths.
+Convert four more leaves the way udp and raw already were: ipv6 raw
+(do_rawv6_getsockopt), ieee802154 dgram, phonet pep, and tls
+(do_tls_getsockopt and its per-option helpers). 
 
-Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Converting phonet surfaced a pre-existing bug: pep_getsockopt() clamps the
+length it reports but writes a full int with put_user(), overrunning an
+optval buffer shorter than sizeof(int). It is fixed in its own patch, with
+a Fixes: tag, before the phonet conversion, so it can be backported alone.
+
+The last patch adds getsockopt_iter selftest fixtures for rawv6,
+ieee802154, phonet and tls, checking the returned length and errno across
+exact, oversized and short buffers, an unknown optname and a bad level.
+
+For full motivation about these changes, please check the initial thread
+at link
+https://lore.kernel.org/all/20260401-getsockopt-v2-0-611df6771aff@debian.org/#t
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/mm/memory-failure.c | 26 +++++++++------------
- 1 file changed, 11 insertions(+), 15 deletions(-)
+Changes in v3:
+- min_t() -> umin() on ieee802154/rawv6 (Joe)
+- Link to v2: https://patch.msgid.link/20260720-getsockopt_phase4-v2-0-8a08fcfa0d72@debian.org
 
-diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-index 5d00aab31f9b5..eaa8b9bd401a1 100644
---- a/tools/testing/selftests/mm/memory-failure.c
-+++ b/tools/testing/selftests/mm/memory-failure.c
-@@ -122,13 +122,6 @@ static void teardown_sighandler(void)
- 	sigaction(SIGBUS, &sa, NULL);
- }
- 
--FIXTURE_TEARDOWN(memory_failure)
--{
--	close(self->kpageflags_fd);
--	close(self->pagemap_fd);
--	teardown_sighandler();
--}
--
- static void prepare(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
- 		    void *vaddr)
- {
-@@ -200,8 +193,7 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
- 	ASSERT_EQ(pfn_flags & KPF_HWPOISON, KPF_HWPOISON);
- }
- 
--static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
--		    void *vaddr)
-+static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self)
- {
- 	unsigned long size;
- 	uint64_t pfn_flags;
-@@ -217,6 +209,16 @@ static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failu
- 	ASSERT_EQ(size, self->corrupted_size);
- }
- 
-+FIXTURE_TEARDOWN(memory_failure)
-+{
-+	if (self->triggered)
-+		cleanup(_metadata, self);
-+
-+	close(self->kpageflags_fd);
-+	close(self->pagemap_fd);
-+	teardown_sighandler();
-+}
-+
- TEST_F(memory_failure, anon)
- {
- 	char *addr;
-@@ -242,8 +244,6 @@ TEST_F(memory_failure, anon)
- 	else
- 		check(_metadata, self, addr, MADV_SOFT_ANON, ret);
- 
--	cleanup(_metadata, self, addr);
--
- 	ASSERT_EQ(munmap(addr, self->page_size), 0);
- }
- 
-@@ -309,8 +309,6 @@ TEST_F(memory_failure, clean_pagecache)
- 	else
- 		check(_metadata, self, addr, MADV_SOFT_CLEAN_PAGECACHE, ret);
- 
--	cleanup(_metadata, self, addr);
--
- 	ASSERT_EQ(munmap(addr, self->page_size), 0);
- 
- 	ASSERT_EQ(close(fd), 0);
-@@ -358,8 +356,6 @@ TEST_F(memory_failure, dirty_pagecache)
- 	else
- 		check(_metadata, self, addr, MADV_SOFT_DIRTY_PAGECACHE, ret);
- 
--	cleanup(_metadata, self, addr);
--
- 	ASSERT_EQ(munmap(addr, self->page_size), 0);
- 
- 	ASSERT_EQ(close(fd), 0);
--- 
-2.47.3
+Changes in v2:
+- Replace min_t() by umin() (David)
+- Link to v1: https://patch.msgid.link/20260716-getsockopt_phase4-v1-0-4f45cb12dce7@debian.org
+
+---
+Breno Leitao (7):
+      ipv6: raw: drop unused level argument from do_rawv6_getsockopt
+      ipv6: raw: convert do_rawv6_getsockopt to sockopt_t
+      ieee802154: convert dgram getsockopt to sockopt_t
+      phonet: pep: do not write beyond optlen in getsockopt
+      phonet: pep: convert getsockopt to sockopt_t
+      tls: convert getsockopt to sockopt_t
+      selftests: net: getsockopt_iter: cover rawv6, ieee802154, phonet and tls
+
+ net/ieee802154/socket.c                       |  38 ++-
+ net/ipv6/raw.c                                |  29 +-
+ net/phonet/pep.c                              |  36 ++-
+ net/tls/tls_main.c                            |  80 +++--
+ tools/testing/selftests/net/getsockopt_iter.c | 424 ++++++++++++++++++++++++++
+ 5 files changed, 534 insertions(+), 73 deletions(-)
+---
+base-commit: f6f3b36c15ed44de1fbb44e645e4fae8c4a4453e
+change-id: 20260715-getsockopt_phase4-180209cfc60a
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
