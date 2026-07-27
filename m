@@ -1,119 +1,141 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA443DB31E
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 11:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785153461; cv=pass; b=iIFwYH2Kv4SAot0Faz2wMXXGpnIV5LhsdNt4GnUI1SBJnJDJOsx8cS7XfPm8eGplnlYM5tQIm5TI9C3E7aXUXkuLIix0/lwi5vX5Ub8O2d4i5djyQ5ni6s115eGzrJXHf6sO5AnvLJjGFHnVdeOPuQso8XnZqVn9zx7Ikis69U8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785153461; c=relaxed/simple;
-	bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S881Q98/JmrfvMUiPOuSXWM6EaBfxbZpxgPk+cmdsRlkc8peMpXlI42M1bNha+3TWqeHbnI9J1EllpGq0asues7BUPzq8oFv/kausW8XLZME0Na+aTTLAPctUbs98Mjt/i+N6a1dCmatem8JqQQMry4RtOgaMNZDxzjLTC8py6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZtIpfPX; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C711D38B7D1;
+	Mon, 27 Jul 2026 12:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785153820; cv=none; b=tuc7mWWA3KCjnm8BRPVI4pOS+QktZWNFjnSA4/ev7KAByqnukyddDNxVKo1ojaVbUO5NukwVh+xyypvaaJLrTxEpjHD5RQEyUX24CX7luLYfDpfRz2U7qQNj6z06wYvgLIdnm+KSWr1jqlgnsNu2qhH3NHlrgGPLp0c5rvk5TaI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785153820; c=relaxed/simple;
+	bh=yxza4rdkw4/n6IIFAGuKrC+YZcXM3rJkjr83xeAFLLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lysTWcczXN4KXvxfv+d2YXEDKfSi0eg3GPNhKng21zeDKRV+mC1jVe926Ruvnclp3UATmAi5oe0bHnemdivHMU96MM2f+uQQMVkqWTa00VYbKgX9yZWpu3pPp8s3kwcaP1QbecPXhtJLCzkCfQVQkKFxDHQkiEWfsM2aHzJKur0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OiXA/qnr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZtIpfPX"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c15dd4b9132so385296266b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 04:57:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785153458; cv=none;
-        d=google.com; s=arc-20260327;
-        b=otYdVSOlD8db8Z/vb0fBXN2yNwmAv5ANDo4OJ4/QELqc/TBYhuZZp3jFAITrRetv+7
-         c9uVODGOou33pI0pkOAKVCj1gU8emb67WLk3VWGvRsYPWmxsaKPSfEiDnoGAPtGOyJGX
-         FfQ1mG3CE8AE/uv/Z+xDDuUlBK5L1fmsbKENKoHgcIDuJeYU0ZmJpI91v225ngrVkze0
-         wo5tw1OvD0H4rJUV6uIBVOayHpnHhkPnujO6loWZwLwxv9O1EOYiLJG9co6M+KXj8Udy
-         f7yhnHA7pp5BmJpJ1D1JBi43Ssg5hb3LukMR+UxJtZu1t0fRzDaZ2ZUSNL2v1ouMshS/
-         gJOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
-        fh=vKC8XWEqu0l4ideou/rmA4X+ULiA9k9m+Vz8xYEreYU=;
-        b=jE6gIhjt5/U/tuh9MXdeefUVV6Jf7d660KoqeRMsmbPwK00Uki3IuYu1BeTnLMvRSi
-         ImIR+ir1qXLZzmsQNgQMLpj92S0nGXP7bygyxnJsXYboyzbWrj2EgCtdjQx9Syl06UVe
-         xTOmzLjt2A0nQfJTIXbjVDVNXwbnTTfjf8oWDsiGWC+kwGZNCxoWAoC5vFTmikfwDHrR
-         X7ypEm2NJHPGZU/mMPpGqcBPBicJcJZY3lsNyZQRismsqBsZDlY3GTGdT95aQBUp6MpR
-         pFHFCxx4VAhQhgPm+Ruc0xZew9xR5NTyHIUZaKzL8Wh88fjgXI9CYXKJ5pD352CIoz4n
-         dHKQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785153458; x=1785758258; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
-        b=OZtIpfPXTTcaHnGhkDxSZFynofniA5nD8GoqxxI9N6LieHRLhnYkhl1h+62wg1zYXO
-         1CNEhOdxBBsIpFaGd+cQxgm+7attBl0knRJ0a6IoNWcmP9tpy7Lh5UWy8i8CVT4iqhoJ
-         2VadF7Ww1aMJK0JPQ0dUuRkru5DGuldDq4VwDsgOKMtgQ+HqHw/8lIRevyi5w4nZKa58
-         a+CPrKZujkAykRFbCyYjM/N17g8Tzqu1UzMQNqmCqMP2zgncjLH32tidtuP7hMYJxTNk
-         goeswJLhtRWJC2rVTcSEVT2RfRhjSG5BMcUz2s8g1Vh32q4Ki62TdriB3gdm7bpu3Gjt
-         zOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785153458; x=1785758258;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
-        b=bZXu348BqUVqKhCtMyQQiF/YLV92dhwcSndeTTUIQnfxr16ivqYbU2BHw2Brb0cm/7
-         DgQInCFBeKE4KKtWeBPEUziRH9mvFEfx3Y3o7gzlh6Uk0vEZdF7e7dJjUxBvhf+GmuYL
-         3O7S+GSZeaGOBVJCqHAk9wODfAxtg73LOYRuhe1ZGlIYqI8vAasxmHWolPIubwm1pwdM
-         Jc8KLFSpukoAgBYgDdv5aI06pX4gPH763q3i4o7wgc5olp4hRdIiQyLMnpClLYFAphGk
-         wOVFYK763v6FRi4fEY4ILTX9IOkyaznjIVBmEQNsyEdT9t/+gllc2qOi0fLw2nei0ROU
-         901w==
-X-Forwarded-Encrypted: i=1; AHgh+RrPu2vqgqPYJws/p1VWopPPV/1SaXPKadHnKlYhXB2KK4I/Dz/ikUpOZx1n6Vibopern9uijtIwVWf0cXlvwEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRppbegew1fBnSjGJB92keU6QUrPAp2hwG1WUFDLBdfMuO8fYy
-	EtUOEO/Iad/oRrq6jLKHUvVT6RTBPg+ZUf17Ub59a/85SxIRG2OihAlH7i2ToOP0XIhkKA5MTv7
-	pyINjdv334tkzx6+roqDPzAYTK+03XkY=
-X-Gm-Gg: AR+sD13JdbxicESRFAkNUo3xkCEcRKogEJNLvcvtrt/IusgdWoHnadBQQBBckLT60EM
-	FHYJOcywzQpTrg5JLiPyEXib1vSs/Xy/pKXadRHn1gQvElgmyu/YbFIpiLqfXQ1enbBR2ZhZUFp
-	5arrqrfvlGcgHlck50am55VMfQgm5UZeeAX6cn5nKi9wfa36qeB1dZlaWbrTquHiPD0q+FcBLVt
-	9spnTqzFp/16PZ4HRjO8FlXHv4rIw2FnO7k44hRk3GQ9WmwkVSRWIBdmKUP
-X-Received: by 2002:a17:907:d641:b0:c15:ca27:5818 with SMTP id
- a640c23a62f3a-c1f1eeaa320mr395955766b.28.1785153458189; Mon, 27 Jul 2026
- 04:57:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OiXA/qnr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320A91F000E9;
+	Mon, 27 Jul 2026 12:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785153818;
+	bh=xYWQxYr7Z8hEjbx0l6qZmmyZsK1/paY35yOfvBUEJA4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OiXA/qnrXF+F/T9jW8OrjlLT5fKXKnIHLf7BA+8YmJTwcwQP8TKwWmhs9QRsmcSS0
+	 IRs5bQUDtunXm9LtIyga8PhQHZSYYFun8znmV68wHwZ2xS7SDXDC4+zkEMhx+dSEpA
+	 f4fN/OOjlMMEJuEAc277wK0aK9kR3LY+j8llfbFY8uDtIN2DkeVk8ArXr2VbOkQ5Kw
+	 z72CrtZ8sBoxPESqYtD1MlGmen/WrsNutp5u+z3NNQ3lJUjDGnOy0mqGXAKzd1+y2u
+	 fMF3Gt53MY9JK8lsqKB2jn6QGMxgqLcJkjt2amNK6epwNnSJz63W3WEvB5PNHYrrsh
+	 4UBqnWTWRz0Tg==
+Date: Mon, 27 Jul 2026 13:03:16 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 13/15] mm/vma: make MAP_PRIVATE-mapped /dev/zero
+ mappings truly anonymous
+Message-ID: <amdI42D5Y_nsB1t_@lucifer>
+References: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
+ <20260720-b4-scalable-cow-virt-pgoff-v2-13-2d549757a76f@kernel.org>
+ <9d2c8f26-aaee-459f-b73f-d07d8671e805@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2026070925-delay-gauntlet-bc7c@gregkh> <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
- <2026070954-activist-left-8303@gregkh> <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
- <2026070948-lively-exchange-a458@gregkh> <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
- <14350a31-ffc7-41fd-84d3-6cfb2cb96841@lunn.ch> <CAE2MWknt86W6yCtuS_RupiuwiDqXT8wZqENM2DjiW1R=eY8qdg@mail.gmail.com>
- <797773e2-b155-451b-ae97-e8a005fd2d86@lunn.ch> <CAE2MWkmbdDrCw1HUKm17QG7dyihuxg_1VGTUNeBq9v8NVwJV3Q@mail.gmail.com>
- <20260719082223.GA1899043@shredder>
-In-Reply-To: <20260719082223.GA1899043@shredder>
-From: Ujjal Roy <royujjal@gmail.com>
-Date: Mon, 27 Jul 2026 17:27:22 +0530
-X-Gm-Features: AUfX_myN8vMPcj0vJcxFKIYLNoX74G7CTQydU2TzsiEAmJ7bTFLP5Hg7T5Y7VYE
-Message-ID: <CAE2MWkmE3N6q=_bOv7AaMFS15+SizkzVQV-SCMumc-D1rWcv3A@mail.gmail.com>
-Subject: Re: Please backport bridge multicast exponential field encoding fix
- series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg KH <gregkh@linuxfoundation.org>, 
-	Linux Stable <stable@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>, 
-	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d2c8f26-aaee-459f-b73f-d07d8671e805@sirena.org.uk>
 
-> We asked to target these patches at net-next because they don't fix a
-> regression (the encoding never worked correctly), so they are not
-> relevant for stable. Users that require this functionality should
-> upgrade to a new kernel that contains the patches.
+On Mon, Jul 27, 2026 at 12:48:57PM +0100, Mark Brown wrote:
+> On Mon, Jul 20, 2026 at 03:38:39PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > When mapping /dev/zero with MAP_PRIVATE, one ends up with strange VMAs
+> > originating from Linux's distant past.
+> >
+> > These have vma->vm_file set but NULL vma->vm_ops, meaning they satisfy
+> > vma_is_anonymous() but otherwise resemble a file-backed VMA.
 >
-Hmm, understood!
+> I'm seeing a test failure in the proc proc-self-map-files-0002 kselftest
+> which bisects to this change in -next.  The test just says:
+>
+> # selftests: proc: proc-self-map-files-002
+> not ok 11 selftests: proc: proc-self-map-files-002 # exit=1
+>
+> which isn't super informative.  Full log at:
+>
+>    https://lava.sirena.org.uk/scheduler/job/3030495#L13846
 
-> Regarding the stable-specific patch, in my experience, stable
-> maintainers don't accept such patches and prefer to backport patches
-> from upstream, even if it results in more changes.
+Thanks, will investigate!
 
-Then I feel we can skip the changes for stable now. Hi Greg, skip this
-thread and the changes from it. Will be in touch!
+It's likely making some assumptions that no longer apply about MAP_PRIVATE-/dev/zero mappings here.
+
+>
+> bisect log:
+>
+> # bad: [c5e32e86ca02b003f86e095d379b38148999293d] Add linux-next specific files for 20260726
+> # good: [692519a077bfb1a66d209e713d2210bb1d9adcaf] Merge branch 'for-linux-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
+> # good: [ef4f2357df6e9dd6213ce00d01253f3c458d5df0] regmap: clean up kernel-doc comments
+> # good: [86e9ba573c353afd1a46816682f4cc3dbabeeb23] irqchip/irq-imgpdc: Remove unused driver
+> git bisect start 'c5e32e86ca02b003f86e095d379b38148999293d' '692519a077bfb1a66d209e713d2210bb1d9adcaf' 'ef4f2357df6e9dd6213ce00d01253f3c458d5df0' '86e9ba573c353afd1a46816682f4cc3dbabeeb23'
+> # test job: [ef4f2357df6e9dd6213ce00d01253f3c458d5df0] https://lava.sirena.org.uk/scheduler/job/3020719
+> # test job: [86e9ba573c353afd1a46816682f4cc3dbabeeb23] https://lava.sirena.org.uk/scheduler/job/2955047
+> # test job: [c5e32e86ca02b003f86e095d379b38148999293d] https://lava.sirena.org.uk/scheduler/job/3030495
+> # bad: [c5e32e86ca02b003f86e095d379b38148999293d] Add linux-next specific files for 20260726
+> git bisect bad c5e32e86ca02b003f86e095d379b38148999293d
+> # test job: [673a43d4e283e8fc3bee7a874766278427263bc1] https://lava.sirena.org.uk/scheduler/job/3030777
+> # bad: [673a43d4e283e8fc3bee7a874766278427263bc1] Merge branch 'libcrypto-next' of https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+> git bisect bad 673a43d4e283e8fc3bee7a874766278427263bc1
+> # test job: [5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876] https://lava.sirena.org.uk/scheduler/job/3031099
+> # bad: [5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876] Merge branch 'xtensa-for-next' of https://github.com/jcmvbkbc/linux-xtensa.git
+> git bisect bad 5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876
+> # test job: [457b365bc545636d75f65067d18afa86f6ced162] https://lava.sirena.org.uk/scheduler/job/3031248
+> # bad: [457b365bc545636d75f65067d18afa86f6ced162] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+> git bisect bad 457b365bc545636d75f65067d18afa86f6ced162
+> # test job: [a8fa5c7be42a37866fcc315470df3307f0583c47] https://lava.sirena.org.uk/scheduler/job/3031351
+> # good: [a8fa5c7be42a37866fcc315470df3307f0583c47] mm/vma: update create_init_stack_vma() to use vma_flags_t
+> git bisect good a8fa5c7be42a37866fcc315470df3307f0583c47
+> # test job: [5c9f41c7115f0e16b7e133abca791a4860bee0b6] https://lava.sirena.org.uk/scheduler/job/3031429
+> # bad: [5c9f41c7115f0e16b7e133abca791a4860bee0b6] Merge branch 'kbuild-for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git
+> git bisect bad 5c9f41c7115f0e16b7e133abca791a4860bee0b6
+> # test job: [c68210527d235e59afa54bc6aba6ecc532488a82] https://lava.sirena.org.uk/scheduler/job/3031482
+> # bad: [c68210527d235e59afa54bc6aba6ecc532488a82] mm: page_alloc: fix non-movable reclaim storm in defrag_mode
+> git bisect bad c68210527d235e59afa54bc6aba6ecc532488a82
+> # test job: [497078da29fbfe6ae057c020f1e5717ded142471] https://lava.sirena.org.uk/scheduler/job/3031540
+> # good: [497078da29fbfe6ae057c020f1e5717ded142471] mm/huge_memory: fold split_folio_to_list_to_order() into split_folio_to_order()
+> git bisect good 497078da29fbfe6ae057c020f1e5717ded142471
+> # test job: [2afd297a9a621ad41892bc0a05481110f46ebfc2] https://lava.sirena.org.uk/scheduler/job/3031619
+> # bad: [2afd297a9a621ad41892bc0a05481110f46ebfc2] tools/testing/vma: add test to assert MAP_PRIVATE-/dev/zero is anon
+> git bisect bad 2afd297a9a621ad41892bc0a05481110f46ebfc2
+> # test job: [a4beb459e21af80c1d8c37b079686753c21932ca] https://lava.sirena.org.uk/scheduler/job/3031661
+> # good: [a4beb459e21af80c1d8c37b079686753c21932ca] mm/vma: introduce VMA virtual page offset field and add helpers
+> git bisect good a4beb459e21af80c1d8c37b079686753c21932ca
+> # test job: [84bd1aceb0233c3de9064028d31a16ecf50070d9] https://lava.sirena.org.uk/scheduler/job/3031711
+> # good: [84bd1aceb0233c3de9064028d31a16ecf50070d9] mm/rmap: track whether the page VMA mapped walk is anonymous
+> git bisect good 84bd1aceb0233c3de9064028d31a16ecf50070d9
+> # test job: [880b6fe7442df760fe0a726b5f5e568bc6b450b6] https://lava.sirena.org.uk/scheduler/job/3031752
+> # good: [880b6fe7442df760fe0a726b5f5e568bc6b450b6] tools/testing/vma: expand VMA merge tests to assert virt pgoff
+> git bisect good 880b6fe7442df760fe0a726b5f5e568bc6b450b6
+> # test job: [e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5] https://lava.sirena.org.uk/scheduler/job/3031804
+> # good: [e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5] mm/vma: only permit MAP_PRIVATE /dev/zero to be mapped anonymous
+> git bisect good e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5
+> # test job: [9f2782812095787d87ee6b742899ae37966ef0f5] https://lava.sirena.org.uk/scheduler/job/3031854
+> # bad: [9f2782812095787d87ee6b742899ae37966ef0f5] mm/vma: make MAP_PRIVATE-mapped /dev/zero mappings truly anonymous
+> git bisect bad 9f2782812095787d87ee6b742899ae37966ef0f5
+> # first bad commit: [9f2782812095787d87ee6b742899ae37966ef0f5] mm/vma: make MAP_PRIVATE-mapped /dev/zero mappings truly anonymous
+
+Cheers, Lorenzo
