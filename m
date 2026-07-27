@@ -1,34 +1,34 @@
 Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100B23546EA;
-	Mon, 27 Jul 2026 03:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EFC379C47;
+	Mon, 27 Jul 2026 03:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785123049; cv=none; b=cjKXa2rzvUyO7Yqp0yJ0UThVKskJC3kVQQ8MiXVvUFoYa3IQvyGvWFtR3muhmcE1s8Ies54dEkb6wWQ4nJBzt0GU4tCFbATGBhlwb+rRr+bC8D6+q3+Smnefc1kst6kL5Fw45eg2h5di65E13yOlo+h1eaSsu3hqS7TG4Yze/IA=
+	t=1785123779; cv=none; b=s4EdrGITODSNZQyvXR+xsvclqqUt/fxqUkIp3oJJMHck3/ZgqZ2VGIgo4fDwb/yb2CJZYs3WfeI9gatng9pd+Zk9fMNjLZXfCM1zevyuCikXh1bSyFK5jP9G6kY1zSHs7FsyrhcGPm/aO+vh+qSxb5uiiv2BYJ8GXFiqK3erBNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785123049; c=relaxed/simple;
-	bh=2Ycg6ink1MaIpaf4D/69QeuqWAQxtCWWaNC5j8n5b3s=;
+	s=arc-20240116; t=1785123779; c=relaxed/simple;
+	bh=XOKB/bnp/NgC/7tBxBpT/ASFcKxvfCUjnOfNrOu8ZxM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S0ppGv1Rs010W/BTKq//y5vQEVYHTchaTDGfX65VPQd0BAJxHh8KrWmZEdmFzZM9Ki7kVzaEsW3//nYJOoS9Qk7wndcvQ8lthjaoxk9+Z8HfhHho0J3jypKUIeAOJ7a+ycQ1AMYXkre5yn7chCPh43C9F5n6lRS3SO7OU1cK/DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=T41kn0Ir; arc=none smtp.client-ip=51.159.59.229
+	 Content-Type:Content-Disposition:In-Reply-To; b=E7Kx/4dPw9YkhJFafLtstO/1RnIx2YqiYLLIfAOMGDcwKlOJ1NNX0kJ2UQW0SuYnaNOsxCXc4SfjYO9Jp7krkpKlI7P9Jz1VUGIOxs3ESgEbUJTcSB7li+1EiikjBZDM6QJUNxvqDlVTvwbmBCl68vRPart0d4kyi7UJlEuvsSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=UjxlzCvl; arc=none smtp.client-ip=51.159.59.229
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="T41kn0Ir"
+	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="UjxlzCvl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
-	t=1785123044; bh=WGKn6QhZ4rvQnzMBTwg5k1gzG7lv+E92XHwgrK6gYi0=;
+	t=1785123775; bh=kZd37MsQOqgmjeqvv1f4EfGYwFgMPzGEExTIeEBcvhM=;
 	h=From:Message-ID:From;
-	b=T41kn0Ir7Crybp6VlVy75QVVp1QHGQYAgE5JmKDaDUUO+aaZ+Br5oyL98zlF0Ppf0
-	 WRogrtlWXh9OkFyElLopiYuSMvLERCrTQu79gkEm4x3SuI4g6bO1/RJI0lljgKxa3D
-	 b5h+dOpZ8tqvdX6rzpXyEhX1QmCIZsCC2JnKy53Y=
+	b=UjxlzCvlsjH46GP0jB1c2yNqZgo3V8c0qEFsj9AaQdJD1RTftnm0Cay8e6WRfIEyR
+	 I19sF2k2Z2xa0KXEL5XXAEn6GFyWFUizOo55ETgsJ3f0wpGU2glFVliwtUd6rJmpZ9
+	 hIlB4nsl4/i3VPyxWs68XF4asbq2SbgfujeYqS7o=
 Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by mta1.formilux.org (Postfix) with ESMTP id A4954C0A6E;
-	Mon, 27 Jul 2026 05:30:44 +0200 (CEST)
-Date: Mon, 27 Jul 2026 05:30:43 +0200
+	by mta1.formilux.org (Postfix) with ESMTP id E5138C0A6E;
+	Mon, 27 Jul 2026 05:42:54 +0200 (CEST)
+Date: Mon, 27 Jul 2026 05:42:54 +0200
 From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
+To: Ammar Faizi <ammarfaizi2@openresty.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
         LLVM Mailing List <llvm@lists.linux.dev>,
@@ -40,10 +40,11 @@ Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
         Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
 Subject: Re: [PATCH 1/4] tools/nolibc: evaluate syscall() arguments before
  the arch macros
-Message-ID: <ambQ4715PGeb6uFq@1wt.eu>
+Message-ID: <ambTvkneo9sf0lij@1wt.eu>
 References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
  <20260726101306.3772237-2-ammarfaizi2@openresty.com>
  <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
+ <CA+KFgX76tbg_LTh6-PO-zrmhWtrjP4y3u47s1wximVFUQKq=uA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,62 +54,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
+In-Reply-To: <CA+KFgX76tbg_LTh6-PO-zrmhWtrjP4y3u47s1wximVFUQKq=uA@mail.gmail.com>
 
-Hi Thomas, hi Ammar,
-
-On Sun, Jul 26, 2026 at 10:16:42PM +0200, Thomas Weißschuh wrote:
-> Thanks!
+On Mon, Jul 27, 2026 at 08:21:45AM +0700, Ammar Faizi wrote:
+> On Mon, Jul 27, 2026 at 3:16 AM Thomas Weißschuh wrote:
+> > __auto_type is only supported from GCC 4.9. I think this is old enough,
+> > but it should be mentioned at least.
+> > We really should have a documented policy for that.
 > 
-> On 2026-07-26 17:13:02+0700, Ammar Faizi wrote:
-> (...)
+> I suggest using the Linux kernel's minimal requirements. It's GCC 8.1
+> or Clang 17.0.1. Ref: https://docs.kernel.org/process/changes.html
 > 
-> > +#define __nolibc_syscall_eval6(_n, _a1, _a2, _a3, _a4, _a5, _a6)	\
-> > +({									\
-> > +	__auto_type __sc_n = (_n);					\
-> > +	__auto_type __sc_a1 = (_a1);					\
-> > +	__auto_type __sc_a2 = (_a2);					\
-> > +	__auto_type __sc_a3 = (_a3);					\
-> > +	__auto_type __sc_a4 = (_a4);					\
-> > +	__auto_type __sc_a5 = (_a5);					\
-> > +	__auto_type __sc_a6 = (_a6);					\
-> 
-> __auto_type is only supported from GCC 4.9. I think this is old enough,
-> but it should be mentioned at least.
+> What do you think?
 
-Well, at other places we already have typeof(arg) which is exactly the
-same, more explicit, and doesn't come with such restrictions, so I'd
-rather suggest we use it instead.
+Since it's userland (i.e. not building with the kernel's compiler), and
+often used for ease of porting boot-time tools in headless or embedded
+environments, I'd really like that we keep compatibility for as long as
+possible with oldest compilers that continue to work. Last time I checked,
+it was still working fine with gcc-4.4. I still have my 4.7.4-based
+toolchains that I regularly use for troublehooting and compatibility
+checks (and faster builds), I can recheck. We should not require that to
+be verified by contributors (too painful), however, noting "still known
+to build fine with version X" is helpful. And the day we discover that
+this promise has been broken for a year or so, we know we can safely
+update it. I can recheck ASAP.
 
-> We really should have a documented policy for that.
+> Should this be documented in nolibc.h as a comment?
 
-We could indeed. Till now the principle has been not to break support for
-older compilers without a really good reason (i.e. something that would
-become too complicated or impossible to do). At least we should add a
-README in the directory indicating what is oldest supported version, as
-it really doesn't cost anything to preserve support for that for a long
-time.
+It can indeed be sufficient to add a line to the first comment block.
+However I'm thinking that we would benefit from adding a larger README
+in the sub-dir for contributors that explains some of the traps we often
+have to mention.
 
-> > +	__nolibc_syscall6(__sc_n, __sc_a1, __sc_a2, __sc_a3, __sc_a4,	\
-> > +			  __sc_a5, __sc_a6);				\
-> > +})
-> > +
-> >  #define ___nolibc_syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
-> >  #define __nolibc_syscall_narg(...) ___nolibc_syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
-> > -#define __nolibc_syscall(N, ...) __nolibc_syscall##N(__VA_ARGS__)
-> > +#define __nolibc_syscall(N, ...) __nolibc_syscall_eval##N(__VA_ARGS__)
-> 
-> I'd like to apply the same thing to the __nolibc_syscallN()
-> usage within nolibc itself. While today we seem not to have any
-> problematic cases, at least I was not aware of the issue and breakage
-> might creep in accidentally. We can problably rename the
-> architecture-specific macros to __nolibc_syscall_archN()
-> and make __nolibc_syscall() the properly evaluating wrapper.
-
-Yes, I wasn't aware of that either. Also I'd like to recheck that
-MIPS continues to work fine because I seem to remember that its
-constraints tend to be harder to respect in syscall6() and it took
-us a few times to get it right. But maybe this could have helped
-instead.
-
-willy
+thanks,
+Willy
