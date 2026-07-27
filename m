@@ -1,30 +1,32 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920B737E5DF
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 14:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD8E2771B
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 14:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785162598; cv=none; b=l7gBm0a0HiW59MC+1mKeAFgb8xJyri/SOnR4ThyssJaG4TxARQ483sSxjdVuHyeF8S8Qb2/sYfwQ6CC30+q4y6S1me21d/+lk76lwpozCE2U8eYn/9eF1r4cHzb2GbI3EdFX0hdpArnkOk0q4thHGzkSGOQMY0BRi+JDOQCER4g=
+	t=1785162606; cv=none; b=dssQvY+EXamWqeg0poRoJSTw9jWf/l49xR9K1X9fT4bANU+O0EYvPETm9jqxF0deMqkmR7HL8m7OFoO3/Hwko21Z9/2PWwGvYABuX2M7t9elyy/yCS5ml6pJyyybXFo3xZhB6vWo/9CTav465yGauJ2lY34y2a9laRVKE9h6/Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785162598; c=relaxed/simple;
-	bh=rnLaruOSRQ5uDK5ZU7HDhI+DpzKpD8VvDeOSpc/EcEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JUspaIuAYx39S9zl0JjATMKUtYN+zGdF9H6+ZcqHN/RTPY6xLQxTGVADn861H188chRob6CzaabCXWB8+CsWHGy7S89wwyZ2jA0zb/5hAsZ3y/P8G2Q0vIH9Dv1tZf9Do5hr/INCU+I+PzoByeXC8N86BGhrqHzIrzPoMERN3u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g3M+DqJk; arc=none smtp.client-ip=95.215.58.172
+	s=arc-20240116; t=1785162606; c=relaxed/simple;
+	bh=vJRnn3b8SXIVIIEB5qCqSFb0fZdA2tscoj7YqldYjlc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=E/7HnzyQYQxdHhPUYjsNTF64MAEB3K756USaCJswFQkN/M4aWjA5JbXEWdUAonUmK2SMJYo/O94AITgcSfjuk5Rg9008IZ7/YgI4JPMF3EG+yyEl+EPQvlmnMDI7XnHZSZzSFg8r7szcU5NNGwxyBj3g2oBKVYg9WvjAAOZ9cow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dTaBFvVG; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g3M+DqJk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dTaBFvVG"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785162579;
+	t=1785162599;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7tHghUuh4abL0fwwnOGlOayUFDXuWG+n5PvNG2j5QBw=;
-	b=g3M+DqJkQz7oVE7zYcnCb3KUfo0PuPSR/Dp6zubbXXsm8bnX9toxZx/W8oEBBSpY8cvZdP
-	Zkf0hJ/aJ/hY+gSQS39O/06Y3kgBfy3kLsFuLTSuVMyoRmnweLX7hJfdqk0ScnsFARuor1
-	croZ7gE4Yzs+dCd/ZRysqs8/yibw01o=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ekHwziOYa71/KxCLz9kxR3k6w8ssyZhYpJA+Kg/5PDU=;
+	b=dTaBFvVGQzpRGOhAX1UlQkR4jYGmf72gDgG0gnQz5cFhTan5QM7OtC1MhQ1ULf6Hx14P7R
+	p7NFM72XmVDw7eQyfVJXgUr1Kjtwx5ek2oJZrEpM8dZHBbChvOpWEJc7OZaiKdWxDimhIM
+	VpbwVDEXWnEX/Ft5/++x/o0aftouYho=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -48,9 +50,11 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/2] arm64: ftrace: enable single ftrace_ops for direct calls
-Date: Mon, 27 Jul 2026 22:28:42 +0800
-Message-ID: <20260727142844.21212-1-leon.hwang@linux.dev>
+Subject: [PATCH 2/2] selftests/bpf: Enable tracing_multi tests on arm64
+Date: Mon, 27 Jul 2026 22:28:44 +0800
+Message-ID: <20260727142844.21212-3-leon.hwang@linux.dev>
+In-Reply-To: <20260727142844.21212-1-leon.hwang@linux.dev>
+References: <20260727142844.21212-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,55 +64,74 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Beyond the DIRECT_CALLS support on arm64 [1], select
-HAVE_SINGLE_FTRACE_DIRECT_OPS for arm64, which enables the BPF
-tracing_multi link on arm64 [2].
+arm64 now supports dynamic ftrace direct calls backed by a single
+ftrace_ops, which enables BPF tracing multi links.
 
-All tracing_multi link selftests are passed on arm64.
+Define ARCH_SUPPORTS_TRACING_MULTI_LINK for x86-64 and arm64, and use the
+shared capability to gate the tracing_multi functional, rollback,
+and attach benchmark tests.
 
- cd tools/testing/selftests/bpf
- ./test_progs -a 'tracing_multi_*'
- #545/1   tracing_multi_attach_rollback/put:OK
- #545/2   tracing_multi_attach_rollback/unlink:OK
- #545     tracing_multi_attach_rollback:OK
- #546     tracing_multi_bench_attach:OK
- #547/1   tracing_multi_test/skel_api:OK
- #547/2   tracing_multi_test/link_api_pattern:OK
- #547/3   tracing_multi_test/link_api_ids:OK
- #547/4   tracing_multi_test/module_skel_api:OK
- #547/5   tracing_multi_test/module_link_api_pattern:OK
- #547/6   tracing_multi_test/module_link_api_ids:OK
- #547/7   tracing_multi_test/intersect:OK
- #547/8   tracing_multi_test/cookies:OK
- #547/9   tracing_multi_test/session:OK
- #547/10  tracing_multi_test/attach_api_fails:OK
- #547/11  tracing_multi_test/fentry_direct_access:OK
- #547/12  tracing_multi_test/fexit_direct_access:OK
- #547/13  tracing_multi_test/fsession_direct_access:OK
- #547/14  tracing_multi_test/fentry_after_multi:OK
- #547     tracing_multi_test:OK
- Summary: 3/16 PASSED, 0 SKIPPED, 0 FAILED
+This allows the tests to run on arm64 while continuing to skip
+architectures without tracing multi link support. It also prevents the
+rollback test from treating an unsupported-link error as its expected
+attachment failure.
 
- ./test_progs -a 'fill_link_info/tracing_multi_*'
- #132/11  fill_link_info/tracing_multi_link_info:OK
- #132/12  fill_link_info/tracing_multi_invalid_ubuff:OK
- #132     fill_link_info:OK
- Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-
-Links:
-[1] https://lore.kernel.org/all/20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev/
-[2] https://github.com/kernel-patches/bpf/pull/12986
-
-Leon Hwang (2):
-  arm64: ftrace: enable single ftrace_ops for direct calls
-  selftests/bpf: Enable tracing_multi tests on arm64
-
- arch/arm64/Kconfig                                     | 2 ++
- arch/arm64/kernel/ftrace.c                             | 3 +--
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
  tools/testing/selftests/bpf/prog_tests/tracing_multi.c | 9 +++++++--
  tools/testing/selftests/bpf/test_progs.h               | 6 ++++++
- 4 files changed, 16 insertions(+), 4 deletions(-)
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+index f02ffc7f41d7..5aa48e090340 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+@@ -612,7 +612,7 @@ void serial_test_tracing_multi_bench_attach(void)
+ 	struct btf *btf;
+ 	int err;
+ 
+-#ifndef __x86_64__
++#if !ARCH_SUPPORTS_TRACING_MULTI_LINK
+ 	test__skip();
+ 	return;
+ #endif
+@@ -923,6 +923,11 @@ static void test_rollback_unlink(void)
+ 
+ void serial_test_tracing_multi_attach_rollback(void)
+ {
++#if !ARCH_SUPPORTS_TRACING_MULTI_LINK
++	test__skip();
++	return;
++#endif
++
+ 	if (test__start_subtest("put"))
+ 		test_rollback_put();
+ 	if (test__start_subtest("unlink"))
+@@ -931,7 +936,7 @@ void serial_test_tracing_multi_attach_rollback(void)
+ 
+ void test_tracing_multi_test(void)
+ {
+-#ifndef __x86_64__
++#if !ARCH_SUPPORTS_TRACING_MULTI_LINK
+ 	test__skip();
+ 	return;
+ #endif
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 2cf950afcd85..b1498e84773c 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -567,4 +567,10 @@ void validate_msgs(const char *log_buf, struct expected_msgs *msgs,
+ void free_msgs(struct expected_msgs *msgs);
+ void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog);
+ 
++#if defined(__x86_64__) || defined(__aarch64__)
++#define ARCH_SUPPORTS_TRACING_MULTI_LINK 1
++#else
++#define ARCH_SUPPORTS_TRACING_MULTI_LINK 0
++#endif
++
+ #endif /* __TEST_PROGS_H */
 -- 
 2.55.0
 
