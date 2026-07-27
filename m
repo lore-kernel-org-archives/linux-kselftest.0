@@ -1,201 +1,402 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408D3BED7D;
-	Mon, 27 Jul 2026 10:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4F33F86F9
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 11:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785148263; cv=none; b=O4xqdwgtfuDibQTOijeGk2uAg/bt7sHyGUlEXo4idz3qp8/U2d9+t8ziuY6WGEbT3NjA7MGf5+QoCxP4tm86BBSnXBMco8QCa6x1cxsGIZURD2fJ3RLVoQEQJqyEbdSmJIp2mWYUGib8tQ+p5gGbBbOw+TRCrhDOXp8Rjt72bRE=
+	t=1785150263; cv=none; b=RZJeH/+W4g9hryEq4CmyBWv1UWxTnn3UL1gHT3Yap2EPl95GvcH3sgTJjn4AWZsUX/u0nim3ZMvIIZpDMNqXUXp4yp2d92nkJAwHh1LHyWA+kuoY4b7zKyE1zX52N4eCXMBGKRNZzRzrNIhseYCkv+b9PFwV6E42lvU4OPZ/12A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785148263; c=relaxed/simple;
-	bh=to9PBPAgqzQtwrj/xu9pXDPVNpLlo723lWlyCRiy2SM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXg7aBX3PyvueyTGnX1kon0bOqstBYzgiU82Cv3cTgPBJPErKYX/MGRq0qQgj1TfcX0rKsaoFbWSDfdNhXiO+HVpgzRdGlGGhxzlGcMMiFLI/ApniF3GZO+yUJmKybPzWljlxygTyZflKP8V5vDk96zGD6EKnax4zYmJvizmNuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=m+PApdSW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jeu31dwr; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1785150263; c=relaxed/simple;
+	bh=zatUq8xJHUqH++J1UZPNwFpyaWEJMdbBJNxH4Uzd7BQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lV/7CcHc+KJLbemI/7bWB5xlW+UqcFJPPOULJ/6QevXaxU1kT/oGCdxuBWruCwSeqBIqkcOMC0q8vDb/2l3Q7E3YSbeU6WAWT2uCpe49cZ2RXKvB7kvv0Gs3Qy3OQGQgf0btuBQBu0HafgL+nOYEGBtCldZBmW6lI5+IG5BViDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ObudIpib; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="m+PApdSW";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jeu31dwr"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id 1012EEC01E8;
-	Mon, 27 Jul 2026 06:30:51 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Mon, 27 Jul 2026 06:30:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1785148251; x=
-	1785234651; bh=62xXIsLKNu0RPA+OUccAzZfHaVO7nDCero1BquD50C8=; b=m
-	+PApdSWqysOgu0iS1S5+9zEyx0owxUtkY9/SGrgAuy7PvTw0bnxThH4Fa1GdiIhw
-	ZXDvQxAm+MohztNvtdvG1zRUf+smGQO73PcYO4HAA/K4c7YRjwhaujg4oAbL0VFl
-	Z4/HzJNErdqOO3r0cJYyL41mpZb6WVknde8z7AbmhdgNcmCbiqPk70cQIEn96bfk
-	3q4/9QVVTTxIlwOeOZQfrsP+aCOHlqUgt92y7Eg7dAEIiEt4oKCU6fDHY8g8K4ch
-	/yQPGOHxSWnbGaEajNnBMngwhgA0LVcOGA8q3Pd2lDtSfhrKOyuHjNqr19bBOdhN
-	PCwhK+zxmgFXHh2C2EHAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1785148251; x=1785234651; bh=62xXIsLKNu0RPA+OUccAzZfHaVO7nDCero1
-	BquD50C8=; b=jeu31dwrlzqW0ndrMqWlT236sl0v7xlwJG2VsXr25GDqoQwA+LX
-	PXJWsIHVLvPFUddhKNot1eaOyWdpWy0crVllwqqjWaRq25uqHP+x56oU0zB33aLh
-	JhVJ4Lr0hU8j93QMysfRvd/ZX9UQDYvJVCFdhe0VuSug4idjJz48CPyvzZ+g2XJn
-	MA1f81P42Ml7d16INF8C2pR1UoBZlfovR03JxeGr2sg9S2dMsweTHMs1wq97O6Jk
-	zQyYZm7rmbZXEhikoKJGb65gvipDGxbduYZ98NN3biW4uukgLixt3pahi/ZDgyVS
-	wCqujqq3gKgis/P4KhMF2Sko9pVa/Xiy7qQ==
-X-ME-Sender: <xms:WjNnaiMVY-MBLUT0eZxL9r2fkH5FAsmUyaxkEofF7NnLRPf70q8WKw>
-    <xme:WjNnas9vKY3ZpAeoOyHYnH_OExLYLYrS1Peps5xObmGgnQ7JQFtUwXoKHzkUmBDR3
-    d5g2qx6B3bvKp0tDQ3KFs_Ns4SOq4_WV92siF_uBV8WL62rZhyzhSa1>
-X-ME-Received: <xmr:WjNnarflr2xdwCbROEZoflJbwjXnt-su2ZWU7Y33WhFwWh8wGDQwSEbf9o4>
-X-ME-Proxy-Cause: dmFkZTE8P/0KHEclaEnL8ilGwpIhu7np1u9ll2evolM0JR24lfdg/rWshD4GHU53TdtySf
-    GIZpJbK4fwqAAgDVJeFPn3hJ490pWFRY2nhxntohUgjHUf89909l12nqdDYJ1dqVNID1vo
-    D8Gya9jCCJALykCrsugs4PghN4a//7fu6D7tNGSc4b7RbUqqAORbL71uy3QcquLx8LExdm
-    GF/2L2+2V6bgeBmbPso761Q8GUH8s9zMkxmgg+hy4QKxxxOU/ZUfQeUAYp821pXEtJVqKw
-    qmXgwLpLbu0dH7j7ZhtUkJQ8H0uA+yI2tG9hhRTXFFSUto1FMB261mEyZ0YRYCkZIOEveL
-    aOt9F/+siaJ7wjCYf1NvcWYiLrfukku/qeHjxPu4lq+ljM788N59xtxR/MpSYPKpFRFPo7
-    5kLQ4viBZu9mSQGD4HNSvSgzQAdyHHiBv6t98Xvo7zDt/ojWuwR6UtuHwf9vcnesGOrrYt
-    b1tDmylXu6RLnNTLPLNUpHJy0BH0JdVl86HA3jeKMsqKn8TodNeJx7nVCXeuwDqsUGQ+fd
-    SjYjPL3IXfJR7Vf7jmwWxUwW0ABQfCyGNVBP4u8EQuG+2RwL1V9lOJIeJoqXr25m+iCen0
-    OP7/aQLd1Bq/d+9GfrTD00TJDaskgRoT3c4DTFeQiNP9cSW5On7EfOjtQI7Q
-X-ME-Proxy: <xmx:WjNnajwZr_jL-ekli7Zy0zll5AKpknOjOlfdzvPCIP6fdosu2Qa5_A>
-    <xmx:WjNnaoJ7pwVe9UgwYePXCM1NWOy45mH0DcJkI3zuEy3xX8BrL2holQ>
-    <xmx:WjNnatEXq4ZrwwLz40N-NUOuQPPqGpG38KldXR1rTfEaflVEOQEYRQ>
-    <xmx:WjNnas8Za8KCiKP85T7zwlZYuJ6q-x8axAodSVQ19UgqUX_1i_bT8w>
-    <xmx:WzNnavl6M5YE0k7Ec3DB3tH4g3h5uI1t7CSYd5SOIlOa96qXLQglbQrX>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jul 2026 06:30:50 -0400 (EDT)
-Date: Mon, 27 Jul 2026 12:30:48 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: chanyoung <ppoo1220@gmail.com>
-Cc: netdev@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net 1/2] tls: don't over-fill the plaintext sk_msg ring
- in tls_sw_sendmsg_splice()
-Message-ID: <amczWCEaLMVQWZp8@krikkit>
-References: <20260726105556.2719227-1-ppoo1220@gmail.com>
- <20260726105556.2719227-2-ppoo1220@gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ObudIpib"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4954aff6088so21697755e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 04:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1785150259; x=1785755059; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7nC3HrqDGZF7AOgHUOZz0pFaqYcIiLme0buP14VJS2k=;
+        b=ObudIpibwWwYXv6KqHwUBeF9Hij2W+1dp3zYQz2b5eMiblwuCYNy1hAfWf9TGResvb
+         jR+z+jHqPeWb/tWXNRuX9D+CZX9nYcT6zmMM/zAQjSOpfLLBQAxaYItxj6fc9+GC1hl0
+         Lz6+wL4qAg8RvFvF5sq2M2AQC7GspJogSL5YtMgdi/vLdrwJArqKcwNofHsogXoT2VWr
+         ejzXmB/xyhbx1QyP14uy2XeG7qX5gIzQVqgdxZUwzG55gxs9OBQsF8KWTEO+e10ddWMc
+         5ib7U+9r3kebehOznpasqj4qc1BU66LTGZZngoZJUT8cdizrJhn1XLGrk7q5XltFRkpd
+         /IqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785150259; x=1785755059;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7nC3HrqDGZF7AOgHUOZz0pFaqYcIiLme0buP14VJS2k=;
+        b=jb3AZXXemhclJbliQCTN3L6og69Pnyfe+2/Ev8FWDKAfvo7xIj5FxyyMLxvbJWRvig
+         SP7+zNf0fRgUzlfkPLKdaSPX17ghxIQeGMs8CCt0lwkFy+XRBzohI7aNq9hX466bFxKU
+         aZc9DeuNZyiFFy6MuaJzNNmkLv53yVfjY0MVyRHWdpP4gN71BMQksI56Qm5Kft5olesg
+         rbpjkepGwUt/pFlxQ3cgbTzREtCKdWsY6ys8X8x9nfg0EOBo6xo4VgyMsLFVPAl5F1fl
+         Ifks5G087kDaYWUTL32OWeBPj9xHOUQYnELkoq8A7m4SrpvYPoaGoN+Spvn0bbDPb35+
+         tEag==
+X-Forwarded-Encrypted: i=1; AHgh+RqIGmA6P+0XR4TLHbeDu+dCFWoYToFH7d8GkNyW+LB4+H0F07sY3Rj0/sJ//n//teSUtDCCSzI0m1zngI3DnVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlJk3AEqQu+X8pvQKP3UA3vn7MkAfydl4hW5nWP+X2IwZVjZkf
+	l8SyPkXdjEFPy4unWRomvprMv7E3TMukU/cZvN25MirkuF/ChIj+qJCg8YHu4hgXpvQ=
+X-Gm-Gg: AR+sD12W4YLTrWJwQJa6DTiYsPgf/Reox1dvJX1HRMXejA1arBBDpRwjQrbUNtmOmyB
+	M6z00cDTaObcelK73ianigvN7+l4hMi9Znz0r+DUZzb2EJIEUAOP2Y9BvZ2XZ5SFGyW34O7EmhA
+	czcy0/fa/0IWCOJCbsrUcVrEYG4/SxqhJ+U+a/8Yyc29L2+3/oyHF4jfO5pD7eO0kQqYdVn4SMr
+	oOmi0oQUdxLgi2v2nxGhaydCtZ3YEUgsS0SV40GvDLqRRcogmBZ+VwgXpihkobqOatwkPeDuu1F
+	rQ1rh/+g+GBCSZIG48pdhPcFFmGfAvf9roBzm0YsC6TSolwC1ZfmMgazm7POwbBQEtXgkGJ4+Tl
+	2yPsP/6hzH4D/3rYGwT9/Cc9MCCpPxLfyaMjWnp+6ZN/kkm93PywNY26f5MjUqlqZAuxa+hYB/n
+	4X72D9DXGyfzxfz8656g==
+X-Received: by 2002:a05:600c:3113:b0:493:c8f7:3631 with SMTP id 5b1f17b1804b1-496b570dacdmr94916415e9.22.1785150259287;
+        Mon, 27 Jul 2026 04:04:19 -0700 (PDT)
+Received: from [192.168.1.3] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-496b4f5f9f8sm212127145e9.9.2026.07.27.04.04.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 04:04:18 -0700 (PDT)
+Message-ID: <2941da1a-b0b4-47a6-b57c-b28703dc0454@linaro.org>
+Date: Mon, 27 Jul 2026 12:04:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260726105556.2719227-2-ppoo1220@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 00/21] ARM64 PMU Partitioning
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com,
+ corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com,
+ will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com,
+ joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <gsnt33x95sra.fsf@coltonlewis-kvm.c.googlers.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <gsnt33x95sra.fsf@coltonlewis-kvm.c.googlers.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-2026-07-26, 19:55:55 +0900, chanyoung wrote:
-> tls_sw_sendmsg_splice() appends pages to the open record's plaintext
-> sk_msg ring with sk_msg_page_add(), which performs no fullness check of
-> its own, and the loop only tests sk_msg_full() at the bottom of its
-> do-while.
+
+
+On 23/07/2026 9:57 pm, Colton Lewis wrote:
+> James Clark <james.clark@linaro.org> writes:
 > 
-> If the ring is already full when the function is entered, the first
-
-This should never happen. We need to fix whatever path leads to that
-invalid condition.
-
-As you write in the cover letter:
-
-    The ring is left full and unpushed across a syscall by the copy path,
-    which does not set full_record when the fragment it adds is the one that
-    exactly fills the ring.
-
-That's what we should fix.
-
-Which I think would be:
-
-
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index d4afc90fd796..d2e399be8ef6 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -832,6 +832,14 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
- 		if (!sk_stream_memory_free(sk))
- 			goto wait_for_sndbuf;
- 
-+		/* open record may be full if we couldn't push it in the last sendmsg call */
-+		if (sk_msg_full(msg_pl)) {
-+			full_record = true;
-+			sk_msg_trim(sk, msg_en,
-+				    msg_pl->sg.size + prot->overhead_size);
-+			goto copied;
-+		}
-+
- alloc_encrypted:
- 		ret = tls_alloc_encrypted_msg(sk, required_size);
- 		if (ret) {
-@@ -921,6 +929,12 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
- 						       msg_pl, try_to_copy);
- 			if (ret < 0)
- 				goto trim_sgl;
-+
-+			if (sk_msg_full(msg_pl)) {
-+				full_record = true;
-+				sk_msg_trim(sk, msg_en,
-+					    msg_pl->sg.size + prot->overhead_size);
-+			}
- 		}
- 
- 		/* Open records defined only if successfully copied, otherwise
-
-
-
-> sk_msg_page_add() writes the reserved slot and sk_msg_iter_next() wraps
-> sg.end around to sg.start.  sk_msg_iter_dist() then returns 0, so
-> sk_msg_full() reports the ring as empty, the loop keeps running, and each
-> further add overwrites a live entry without putting its page reference
-> while sg.size keeps growing.  sg.size is then larger than the data
-> reachable by walking the logical [sg.start, sg.end) ring.
+>> On 22/07/2026 12:03 am, Colton Lewis wrote:
+>>> Hi James, thanks for the review.
 > 
-> tls_push_record() marks the end of the scatterlist at the logical last
-> entry but passes the inflated msg_pl->sg.size to tls_do_encryption() as
-> cryptlen, so the AEAD scatterwalk runs past the end-marked entry and
-> dereferences the NULL returned by sg_next():
-
-TBH that also seems a bit dumb on the scatterwalk/crypto side. Users
-of the crypto library shouldn't pass data with inconsistent sg and
-data size, but I don't think this should crash the kernel.
-
+>>> James Clark <james.clark@linaro.org> writes:
+>>>> Hi Colton,
 > 
->   BUG: kernel NULL pointer dereference, address: 0000000000000008
->   CPU: 1 UID: 1000 PID: 204 Comm: exploit Not tainted 7.2.0-rc4+ #1 PREEMPTLAZY
->   RIP: 0010:memcpy_from_scatterwalk+0x32/0xc0
->   Call Trace:
->    <TASK>
->    skcipher_walk_next+0x1d1/0x2c0
->    gcm_encrypt_aesni_avx+0x1e9/0x220
->    bpf_exec_tx_verdict+0x3bb/0x860
->    tls_sw_sendmsg+0xa1a/0xca0
->    __sys_sendto+0x1da/0x1f0
->    do_syscall_64+0xdc/0x520
->    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->    </TASK>
+>>>> The existence of the parameter makes sense, but can't the default be
+>>>> arm_pmuv3.reserved_host_counters=0 instead of -1 (partition disabled)?
 > 
-> An unprivileged user can reach this on a plain loopback TCP socket with
-> the "tls" ULP attached.  A full but unpushed plaintext ring survives
-> across a syscall through the copy path: sk_msg_clone() returns 0 rather
-> than -ENOSPC for the frag that makes the ring exactly full, because its
-> guard is "if (i == src->sg.end && len)" and len reaches 0 as that frag is
-> added, so full_record is never set and MSG_MORE keeps eor clear.  Since
-> record_room is a byte count, a frag-exhausted ring that holds only a few
-> hundred bytes still admits the next splice(), which then re-enters
-> tls_sw_sendmsg_splice() on a full ring.
+>>> How would you interpret reserved_host_counters=0? Because that would
+>>> express that the host should have zero counters and the guest gets them
+>>> all. I remember in early versions of this series last year I did use 0
+>>> as the default but reviewers asked for a way to express the scenario of
+>>> of zero counters for the host.
 > 
-> The caller already handles a ring that becomes full during the splice by
-> testing sk_msg_full() afterwards and setting full_record to push the
-> record, so the loop condition only needs to be evaluated before the first
-> sk_msg_page_add() rather than after it.  Turn the do-while into a while
-> loop: when the ring is full on entry the function returns without adding
-> anything, the caller pushes the record, and the next iteration of the
-> caller's loop starts from a fresh, empty ring.
+> 
+>> I think I would interpret it as it is now. Can't the host still use them
+>> until the guest does and then they only get squeezed if there is a
+>> collision? That doesn't sound too bad to me. And if a host wants
+>> reserved counters they can set a positive number.
+> 
+> Yeah that makes sense. I was thinking in an old headspace when it was
+> just a static reservation instead of changing when a guest is loaded.
+> 
+>> Is reserved_host_counters==max_counters equivalent to -1? And there's no
+>> overview in the cover letter or documentation about how it interacts
+>> with the dynamic guest counter reservations. A bit more detail or a few
+>> paragraphs in one place would help users, maybe with examples so they
+>> don't have to piece together all the commit messages to work it out.
+> 
+> It's not equivalent since we need a case where the guest only has access
+> to the fixed-purpose counters like the dedicated cycle
+> counter. reserved_host_counters specifies the number of general purpose
+> counters.
+> 
+> I'll document the operation more clearly. In the future please feel free
+> to email me to ask if you are confused about something.
+> 
+>>>> It's still a bit fiddly having to do two things to make it work, and
+>>>> there's no documentation about what the defaults or other prerequisites
+>>>> are. IMO it's not even trivial to work out that you need to prefix it
+>>>> with "arm_pmuv3.", which documentation would improve.
+> 
+>>> It is fiddly, which is why the more I think about it the more I'd rather
+>>> ditch the kernel cmdline entirely and leave it up to KVM. That's the
+>>> most flexible approach. There isn't a good way to change the cmdline
+>>> after boot. Trying to make it writeable via sysfs runs into the problem
+>>> of when is it safe to apply the change.
+> 
+>>> I thought it was commonly understood module parameters need to be
+>>> prefixed by the module name, but I can add better documentation to that
+>>> effect.
+> 
+> 
+> 
+>> People just want it written out fully somewhere so they can copy paste
+>> it. Kernel developers might be able to piece it together, but not
+>> everyone will.
+> 
+> This is the KVM mailing list. Kernel developers are the primary
+> audience, but I will make reasonable efforts to include others in the
+> future.
+> 
 
-Please make your LLM (much) less verbose.
+I'm more thinking of the users of this after it gets merged, rather than 
+just for the review.
 
--- 
-Sabrina
+>>>> Testing the whole set I ran into a few issues:
+> 
+>>>> This warn is hit when there is some kind of interaction with 
+>>>> sleeping. I
+>>>> tried to bisect it but it only appears on the last commit when the
+>>>> option to enable partitioning is added.
+> 
+>>>>     /*
+>>>>      * ARM pmu always has to reprogram the period, so ignore
+>>>>      * PERF_EF_RELOAD, see the comment below.
+>>>>      */
+>>>>     if (flags & PERF_EF_RELOAD)
+>>>>         WARN_ON_ONCE(!(hwc->state & PERF_HES_UPTODATE));
+> 
+>>>> Steps to reproduce:
+> 
+>>>> Host (arm_pmuv3.reserved_host_counters=0):
+>>>>    $ sudo perf stat -C 2 -e \
+>>>>      'branches,branches,branches,branches,branches,branches'
+>>>>    $ sudo taskset --cpu-list 2 ./lkvm run --kernel \
+>>>>      /boot/vmlinux-7.1.0-rc7+ -m 1024 -c 1 --pmu
+> 
+>>>> Guest:
+>>>>    $ sleep 1
+> 
+>>>>     WARNING: drivers/perf/arm_pmu.c:302 at 
+>>>> cpu_pm_pmu_notify+0x278/0x2c0,
+>>>> CPU#2: swapper/2/0
+>>>>      Call trace:
+>>>>     cpu_pm_pmu_notify+0x278/0x2c0 (P)
+>>>>     notifier_call_chain+0x84/0x1d0
+>>>>     raw_notifier_call_chain+0x24/0x38
+>>>>     cpu_pm_exit+0x34/0x68
+>>>>     acpi_processor_ffh_lpi_enter+0x40/0x78
+>>>>     acpi_idle_lpi_enter+0x54/0x78
+>>>>     cpuidle_enter_state+0xb4/0x248
+>>>>     cpuidle_enter+0x44/0x68
+>>>>     do_idle+0x21c/0x300
+>>>>     cpu_startup_entry+0x40/0x50
+>>>>     secondary_start_kernel+0x120/0x150
+>>>>     __secondary_switched+0xc0/0xc8
+> 
+> 
+>>> I'll attempt to reproduce that. I've never seen it myself but I've
+>>> mainly been using QEMU for my testing.
+> 
+> 
+>> The newest Arm FVP should have cpuidle enabled if you boot it with ACPI,
+>> but I hit this on a Radxa Orion O6 board.
+> 
+> Noted. Thanks.
+> 
+> 
+>>>> When running the guest on a single CPU I get different counts for the
+>>>> same event for a single process, although this never happens on a host.
+>>>> I think there might even be some Perf tests which expect them to be the
+>>>> same, and this doesn't depend on whether any events are running on the
+>>>> host or not. Not sure if you ran all the Perf selftests in a guest or
+>>>> not?
+> 
+>>> I'll investigate but I'm not sure perf is intended to guarantee
+>>> that. perf stat just runs the event counters but may not write or read
+>>> them at exactly the same time.
+> 
+> 
+>> Is that true? The perf core calls perf_pmu_disable() when a process is
+>> scheduled out before reading the count of each event of that process in
+>> an inner loop. The perf_pmu_disable() clears PMCR_EL0.E which freezes
+>> all of the counters so they can be read out in a consistent state.
+> 
+>> It's important that they're all stopped at the same time because
+>> counters might be used in metrics as ratios of each other. So I think
+>> it's deliberately designed that way and appears to not be working in a
+>> guest now.
+> 
+> By default I think perf assumes events can be measured independently, If
+> you want to guarantee events are scheduled together to avoid measurement
+> skew you need to make sure the events are grouped.
+> 
+> The common way to do that is with {} around the event list:
+> 
+> perf stat -e {branches,branches}
+> 
+> Please see if that resolves the issue.
+> 
+
+Groups only change how the events are scheduled, not how the driver 
+starts or stops multiple events running on the same PMU (grouped or 
+ungrouped). In my repro I had less events than counters in HW, so they 
+will always be scheduled at the same time regardless of grouping.
+
+I did notice something extra though, you have to first open some amount 
+of counters, and then open more than that. Then the second time the ones 
+with different counts will be however many were opened first time, as if 
+some state has stuck.
+
+For example if I open two counters then 6, the first two always have 
+different counts the second time:
+
+   $ perf stat -e branches,branches true
+
+   Performance counter stats for 'true':
+
+             106129      branches 
+
+             106129      branches 
+
+
+
+   $ perf stat -e 
+'{branches,branches,branches,branches,branches,branches}' true
+
+   Performance counter stats for 'true':
+
+             117013      branches 
+
+             117013      branches 
+
+             110364      branches 
+
+             110364      branches 
+
+             110364      branches 
+
+             110364      branches
+
+
+After opening 6 again a third time they'll all have the same counts.
+
+>>>> I'm not sure if the exception level filtering isn't working or there is
+>>>> something wrong with freezing. Doesn't the host PMU driver need to
+>>>> freeze with HPME? I see it's still doing it with PMCR_EL0.E which
+>>>> freezes the guest's counters now doesn't it?
+> 
+>>> HPME only has any effect while HPMN is programmed to a value different
+>>> than the number of counters on the system. That is only true in a guest
+>>> context. As I understand it, that means HPME has no effect anywhere the
+>>> host driver needs to freeze counters since that happens in host context.
+> 
+> 
+>> Oh yeah that makes sense, I didn't think about that. I'm not sure if my
+>> other idea about exception level filtering being responsible makes sense
+>> either.
+> 
+> I'll check that too.
+> 
+>>> Maybe HPMN stays programmed during interrupt handling though. I'll
+>>> confirm.
+> 
+> 
+>>>> Host (arm_pmuv3.reserved_host_counters=0):
+>>>>    $ sudo taskset --cpu-list 2 ./lkvm run --kernel \
+>>>>      /boot/vmlinux-7.1.0-rc7+ -m 1024 -c 1 --pmu
+> 
+>>>> Guest:
+>>>>    $ perf stat -e branches,branches true
+> 
+>>>>     Performance counter stats for 'true':
+> 
+>>>>               167963      branches
+> 
+>>>>               160925      branches
+> 
+> 
+>>>>    $ perf stat -e branches,branches,branches,branches,branches true
+> 
+>>>>     Performance counter stats for 'true':
+> 
+>>>>               164425      branches
+> 
+>>>>               164425      branches
+> 
+>>>>               164425      branches
+> 
+>>>>               157743      branches
+> 
+>>>>               157743      branches
+> 
+> 
+>>>> When running the guest on two CPUs I just get zeros. Do the kvm
+>>>> selftests not catch this? Or is it something to do with my setup:
+> 
+>>> KVM selftests definitely don't catch it. I'll see if I can reproduce.
+> 
+>>> Since the problem happens with 2 CPUs I wonder if something is
+>>> triggering the lazy context swap behavior so the counter values aren't
+>>> being moved to the 2nd CPU correctly.
+> 
+> 
+>> If that was the case I would have expected it to be intermittent, or you
+>> would get a partial count if the second CPU started from 0, but not
+>> zeros every where every time. Let me know if I can run any more tests.
+> 
+> I'll let you know if I think of something.
+> 
+>>>> Host (arm_pmuv3.reserved_host_counters=0):
+>>>>    $ sudo taskset --cpu-list 2-3 ./lkvm run --kernel \
+>>>>      /boot/vmlinux-7.1.0-rc7+ -m 1024 -c 1 --pmu
+> 
+>>>> Guest:
+>>>>    $ perf stat -e branches,branches true
+> 
+>>>>    Performance counter stats for 'true':
+> 
+>>>>                    0      branches
+> 
+>>>>                    0      branches
+> 
+>>>> I also noticed I get the "squeezed" warning printed after launching the
+>>>> guest but not using Perf. This comment implies that not using counters
+>>>> makes it a nop:
+> 
+>>>>        /*
+>>>>      * If we aren't guest-owned then we know the guest isn't using
+>>>>      * the PMU anyway, so no need to bother with the swap.
+>>>>      */
+>>>>     if (vcpu->arch.pmu.access != VCPU_PMU_ACCESS_GUEST_OWNED)
+>>>>         return;
+> 
+>>>> But maybe linux is touching them in a way that makes them guest owned,
+>>>> even on probe? Or is the guest/host ownership tracking not working, I
+>>>> didn't look too hard.
+> 
+>>> Maybe. I'll check. The guest is also running its own PMU driver that
+>>> might trigger guest ownership on initialization since ownership is
+>>> determined by which registers the guest touches.
+> 
+> 
+>> It doesn't enable any counters though does it, even if it touches some
+>> of the registers to probe? Should that result in squeezing out host
+>> counters? Maybe it's more complicated to implement, but right now it
+>> seems like there is some complexity without much benefit as 90% of hosts
+>> are going to probe the counters just to see what's there but not use 
+>> them.
+> 
+> As far as I'm aware the driver probe shouldn't shouldn't enable any
+> counters or trigger squeezing. I'll narrow the conditions that trigger
+> guest ownership.
+> 
+> My first suspect is the guest driver probe is triggering guest ownership
+> by reading PMCR_EL0, which I agree should be changed to avoid that.
+
