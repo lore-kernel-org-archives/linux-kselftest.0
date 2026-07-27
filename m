@@ -1,176 +1,119 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BEA2F7F00;
-	Mon, 27 Jul 2026 11:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785153309; cv=none; b=fSwt7vClIkQXpd2WPQlrrrTdREDui8OdlGWvmMybsM+hznWyN+Uq42f/aIHQv+T9Aa9ZxjZ6jNDfiL0fO/Z1hG8P7XNCnC0W2lMYtjVCCDXV88cjNxHlPmz3Reg+7IvfM7q7mHA0VesGFJe7Y4nfZ7MYcypuHVvvl5LMJ3uxdl4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785153309; c=relaxed/simple;
-	bh=YDm++PBz78yrj4Mo9DYPbca0wLNFAgnaEc4UoJoICIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r9qtq/ztY1umzpuoUZbiZMNMxyzLhWD4RzGHelpbU7igUtuHzzNfMTi45tQC4EeRzpUNyq9Flb/4fS3/wKpHLvnHPeihbZvsErupW2cgMBP0HgITEXsJxIjtsH/x6gE0bfYfUv1lPtMSNLRIzVuSSkfPZcl/J7WbeexE6oSeTsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=nBmVjs1n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mINXaGn6; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA443DB31E
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 11:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785153461; cv=pass; b=iIFwYH2Kv4SAot0Faz2wMXXGpnIV5LhsdNt4GnUI1SBJnJDJOsx8cS7XfPm8eGplnlYM5tQIm5TI9C3E7aXUXkuLIix0/lwi5vX5Ub8O2d4i5djyQ5ni6s115eGzrJXHf6sO5AnvLJjGFHnVdeOPuQso8XnZqVn9zx7Ikis69U8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785153461; c=relaxed/simple;
+	bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S881Q98/JmrfvMUiPOuSXWM6EaBfxbZpxgPk+cmdsRlkc8peMpXlI42M1bNha+3TWqeHbnI9J1EllpGq0asues7BUPzq8oFv/kausW8XLZME0Na+aTTLAPctUbs98Mjt/i+N6a1dCmatem8JqQQMry4RtOgaMNZDxzjLTC8py6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZtIpfPX; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="nBmVjs1n";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mINXaGn6"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6325AEC007B;
-	Mon, 27 Jul 2026 07:55:04 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Mon, 27 Jul 2026 07:55:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1785153304; x=
-	1785239704; bh=1n/Khldtg6xbHy2jtiCSkAd5klR193GG81GnZWYs2W8=; b=n
-	BmVjs1njU/gdi3MZQXViEmYQDyBFW8F66bkXt5EoriZlIrkUPdy32Gdlzep3fJzd
-	sUfQy+RbkmoaV92vAXq7W8mh7C5geUhcZo3YCJKttmj0G06SxGZM28EDg9/PTIZ9
-	NeD5w8jBA3Hul7NLxzdycaNvY2OmQ0YqwUMEyhH2kx4ZigX3ZtmcRaBWqAXrqo/T
-	z355R6OwPC0qqjv+VtfHqoMxW1ZoGzjloNkfZphLd6mgX81W2lO4kicXSW6VTNHt
-	KdZ/ArBpU5+ZyS4DQh0YN8w6jeFeTs79dWz3dIshGLIMRtmfx2FuTkQx5tfi2aYE
-	d7OjpDnq7+A2Jv6HmTW6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1785153304; x=1785239704; bh=1n/Khldtg6xbHy2jtiCSkAd5klR193GG81G
-	nZWYs2W8=; b=mINXaGn6bqBsSWwec2QLRJdtUjKm88G0l6jnSKyveE39yXUNz/j
-	XQy8kvINczP9spG6vqwmeO0dTfQr401srmydpOAzdRtixql+6wxdlNuHSbavXaX5
-	iGAoe7qNrpzko/XeHUZSFfExW9hyaZvYksh133hUgRZiin7awbRSiNl0/7YWggYq
-	D6gXPU58fs5hTnktDE7UZO/kjOO9iGZciJukOCMHi9tlmqAazO/3fXn0n5IayLhD
-	f4Ts/E3cpdm4RNIL/4lGdtA+CODAni5OMSMVZU8G5tVFhsV07r11LVQYH9njlqrd
-	5uKInanwQYlUdNPrp4SvLo+CN6fLV+DcjcQ==
-X-ME-Sender: <xms:GEdnajmEe4WixFsR3CxQWICer3vV18xTzoajEWcLldUHz3an3DcDvA>
-    <xme:GEdnanjwna_MWsYTtLTOBFElkhc9rFxaF0Bmk9IWiaBSjk0fxYTzgPmHdR9IADyw7
-    wGW6iyAsqnRWW5SCEnqfvXLLAJdzRP2bPlZcm9j6ae3i2DHPzssJkI>
-X-ME-Received: <xmr:GEdnan0HoLKh5V2R0pUfxVYBZS96memdh38c1Kbbc7FW0c3asdmKNXMPX-8>
-X-ME-Proxy-Cause: dmFkZTEiaK2Ock2969CkF6+OcYxcbRC6FoAxf4St2dKsRvYdj0MWk6nNQrSq/KGlylvMgn
-    hjjop9ZjXKiLyW5w4/th1Wx7nh6GunxVGIqSnExzjLEFxNbEDEmB4I9l4+svrmKexLHsP/
-    gG+MSS+G5mue6/e2pmYTnYbq2wVcgWLZPZlR6BLmtQyPw+DesR92upaLa3+J8ca6M+W0RI
-    CtjznfgLPMNxUYxZ+e38Y97y7uVrnKuwXdDg7fzCbyPgo0yOm2NQkVKeVzXkyqyvehB4Zb
-    YC3eeB0C/NFsYjrf5AaW2mCoHbgSA+DegRXX7vsbG7oz+izbVmFQHw/I0D84Uf4NHp+bGb
-    Fyt9GgtM/H4isU4hwX/1wjYXHkfFhkxrUL6Og9uhGoWtbdIE9wcbdE7kZjDhNOIfqj+N4N
-    7SdbKAkxf5buy7UmvJaQnH/KqgrFTmRdS9B9EX4dWR5GiMvUIWGV0PJjCjwoSaJQVDygfe
-    Z0AosAWLmdNNPf23w5cfm1pPPMGIkdM6oDbHmxr3Uin6QVnc9An14uieR8uL5dKNz/BbJ9
-    3dNz07zAZAwYTJLjA7etG82sS6ZHE00p5qqWjKqibr4pH4K2rXIfoxlujM80hU7Q0Y9E2j
-    r0nmE2FE64QBcI3nb7DWfvjVghny0wOAv/+gi43puo4HpLn6fNnvHA5CgsrA
-X-ME-Proxy: <xmx:GEdnagLeZnQkpL1Rl4QyQztO6P-IgmzOQxYqws7Gdg-6zZoKpZ1xRA>
-    <xmx:GEdnanyu9NQ-GuWB18xzlSiEAWPdz1x119m0lCQTxA9zXwD_YA_LpQ>
-    <xmx:GEdnauWtqnEFWCCwtv6orgf1jn8YfgnFRFAB0IXQSNaDdhLnsF1iLQ>
-    <xmx:GEdnaniGkDYgx-mp7xRhj69Bn2brHrW1cMtbz55DSSBqnQ3SpgxVMQ>
-    <xmx:GEdnaq2_d-TAse9Ye4BRAd-h-eHZL2NK1jTDfhOTFZRLXeIHL9iPQphp>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jul 2026 07:55:03 -0400 (EDT)
-Date: Mon, 27 Jul 2026 13:55:00 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: chanyoung <ppoo1220@gmail.com>
-Cc: netdev@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: tls: add a test for splicing onto a
- full plaintext record
-Message-ID: <amdHFJlOVpACBir6@krikkit>
-References: <20260726105556.2719227-1-ppoo1220@gmail.com>
- <20260726105556.2719227-3-ppoo1220@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZtIpfPX"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c15dd4b9132so385296266b.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 04:57:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785153458; cv=none;
+        d=google.com; s=arc-20260327;
+        b=otYdVSOlD8db8Z/vb0fBXN2yNwmAv5ANDo4OJ4/QELqc/TBYhuZZp3jFAITrRetv+7
+         c9uVODGOou33pI0pkOAKVCj1gU8emb67WLk3VWGvRsYPWmxsaKPSfEiDnoGAPtGOyJGX
+         FfQ1mG3CE8AE/uv/Z+xDDuUlBK5L1fmsbKENKoHgcIDuJeYU0ZmJpI91v225ngrVkze0
+         wo5tw1OvD0H4rJUV6uIBVOayHpnHhkPnujO6loWZwLwxv9O1EOYiLJG9co6M+KXj8Udy
+         f7yhnHA7pp5BmJpJ1D1JBi43Ssg5hb3LukMR+UxJtZu1t0fRzDaZ2ZUSNL2v1ouMshS/
+         gJOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
+        fh=vKC8XWEqu0l4ideou/rmA4X+ULiA9k9m+Vz8xYEreYU=;
+        b=jE6gIhjt5/U/tuh9MXdeefUVV6Jf7d660KoqeRMsmbPwK00Uki3IuYu1BeTnLMvRSi
+         ImIR+ir1qXLZzmsQNgQMLpj92S0nGXP7bygyxnJsXYboyzbWrj2EgCtdjQx9Syl06UVe
+         xTOmzLjt2A0nQfJTIXbjVDVNXwbnTTfjf8oWDsiGWC+kwGZNCxoWAoC5vFTmikfwDHrR
+         X7ypEm2NJHPGZU/mMPpGqcBPBicJcJZY3lsNyZQRismsqBsZDlY3GTGdT95aQBUp6MpR
+         pFHFCxx4VAhQhgPm+Ruc0xZew9xR5NTyHIUZaKzL8Wh88fjgXI9CYXKJ5pD352CIoz4n
+         dHKQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785153458; x=1785758258; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
+        b=OZtIpfPXTTcaHnGhkDxSZFynofniA5nD8GoqxxI9N6LieHRLhnYkhl1h+62wg1zYXO
+         1CNEhOdxBBsIpFaGd+cQxgm+7attBl0knRJ0a6IoNWcmP9tpy7Lh5UWy8i8CVT4iqhoJ
+         2VadF7Ww1aMJK0JPQ0dUuRkru5DGuldDq4VwDsgOKMtgQ+HqHw/8lIRevyi5w4nZKa58
+         a+CPrKZujkAykRFbCyYjM/N17g8Tzqu1UzMQNqmCqMP2zgncjLH32tidtuP7hMYJxTNk
+         goeswJLhtRWJC2rVTcSEVT2RfRhjSG5BMcUz2s8g1Vh32q4Ki62TdriB3gdm7bpu3Gjt
+         zOng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785153458; x=1785758258;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=2k5B3idJmT6bC8h+ilrKx0XVLWjKGNXuCUQ2oqNbk3I=;
+        b=bZXu348BqUVqKhCtMyQQiF/YLV92dhwcSndeTTUIQnfxr16ivqYbU2BHw2Brb0cm/7
+         DgQInCFBeKE4KKtWeBPEUziRH9mvFEfx3Y3o7gzlh6Uk0vEZdF7e7dJjUxBvhf+GmuYL
+         3O7S+GSZeaGOBVJCqHAk9wODfAxtg73LOYRuhe1ZGlIYqI8vAasxmHWolPIubwm1pwdM
+         Jc8KLFSpukoAgBYgDdv5aI06pX4gPH763q3i4o7wgc5olp4hRdIiQyLMnpClLYFAphGk
+         wOVFYK763v6FRi4fEY4ILTX9IOkyaznjIVBmEQNsyEdT9t/+gllc2qOi0fLw2nei0ROU
+         901w==
+X-Forwarded-Encrypted: i=1; AHgh+RrPu2vqgqPYJws/p1VWopPPV/1SaXPKadHnKlYhXB2KK4I/Dz/ikUpOZx1n6Vibopern9uijtIwVWf0cXlvwEo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRppbegew1fBnSjGJB92keU6QUrPAp2hwG1WUFDLBdfMuO8fYy
+	EtUOEO/Iad/oRrq6jLKHUvVT6RTBPg+ZUf17Ub59a/85SxIRG2OihAlH7i2ToOP0XIhkKA5MTv7
+	pyINjdv334tkzx6+roqDPzAYTK+03XkY=
+X-Gm-Gg: AR+sD13JdbxicESRFAkNUo3xkCEcRKogEJNLvcvtrt/IusgdWoHnadBQQBBckLT60EM
+	FHYJOcywzQpTrg5JLiPyEXib1vSs/Xy/pKXadRHn1gQvElgmyu/YbFIpiLqfXQ1enbBR2ZhZUFp
+	5arrqrfvlGcgHlck50am55VMfQgm5UZeeAX6cn5nKi9wfa36qeB1dZlaWbrTquHiPD0q+FcBLVt
+	9spnTqzFp/16PZ4HRjO8FlXHv4rIw2FnO7k44hRk3GQ9WmwkVSRWIBdmKUP
+X-Received: by 2002:a17:907:d641:b0:c15:ca27:5818 with SMTP id
+ a640c23a62f3a-c1f1eeaa320mr395955766b.28.1785153458189; Mon, 27 Jul 2026
+ 04:57:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260726105556.2719227-3-ppoo1220@gmail.com>
+References: <2026070925-delay-gauntlet-bc7c@gregkh> <CAE2MWk=mm8_bkd54Gv1mdox6rfvx85Dd3AjOCxPz0fPAfyuWYA@mail.gmail.com>
+ <2026070954-activist-left-8303@gregkh> <CAE2MWkmcQdhGp3LTMtpgAse3AFcfKcAcpQe89+iijfP5e0w_QQ@mail.gmail.com>
+ <2026070948-lively-exchange-a458@gregkh> <CAE2MWkn3L7V3x8i0F-soGLxsBBo_Umgs1pJ3FwCw1OW7=U55zg@mail.gmail.com>
+ <14350a31-ffc7-41fd-84d3-6cfb2cb96841@lunn.ch> <CAE2MWknt86W6yCtuS_RupiuwiDqXT8wZqENM2DjiW1R=eY8qdg@mail.gmail.com>
+ <797773e2-b155-451b-ae97-e8a005fd2d86@lunn.ch> <CAE2MWkmbdDrCw1HUKm17QG7dyihuxg_1VGTUNeBq9v8NVwJV3Q@mail.gmail.com>
+ <20260719082223.GA1899043@shredder>
+In-Reply-To: <20260719082223.GA1899043@shredder>
+From: Ujjal Roy <royujjal@gmail.com>
+Date: Mon, 27 Jul 2026 17:27:22 +0530
+X-Gm-Features: AUfX_myN8vMPcj0vJcxFKIYLNoX74G7CTQydU2TzsiEAmJ7bTFLP5Hg7T5Y7VYE
+Message-ID: <CAE2MWkmE3N6q=_bOv7AaMFS15+SizkzVQV-SCMumc-D1rWcv3A@mail.gmail.com>
+Subject: Re: Please backport bridge multicast exponential field encoding fix
+ series to 6.1.y/6.6.y/6.12.y/6.18.y/7.0.y
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Greg KH <gregkh@linuxfoundation.org>, 
+	Linux Stable <stable@vger.kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, David Ahern <dsahern@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>, 
+	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>, bridge@lists.linux.dev, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-2026-07-26, 19:55:56 +0900, chanyoung wrote:
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index cbdd3ea28b9..d2666884ea8 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-> @@ -835,6 +835,58 @@ TEST_F(tls, send_and_splice)
->  	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
->  }
->  
-> +/* Splicing into an open record whose plaintext scatterlist ring is already
-> + * full used to wrap the ring's end index onto its start, after which
-> + * sk_msg_full() reported the full ring as empty: further pages overwrote
-> + * live entries and sg.size desynced from the walkable scatterlist, which
-> + * oopsed in the AEAD walk once the record was pushed.  The ring is left
-> + * full and unpushed by the copy path, which does not push the record when
-> + * the fragment it adds is the one that fills the ring.
-> + */
+> We asked to target these patches at net-next because they don't fix a
+> regression (the encoding never worked correctly), so they are not
+> relevant for stable. Users that require this functionality should
+> upgrade to a new kernel that contains the patches.
+>
+Hmm, understood!
 
-This comment (and the other one above the loop) duplicates contents of
-the commit message. Please drop them.
+> Regarding the stable-specific patch, in my experience, stable
+> maintainers don't accept such patches and prefer to backport patches
+> from upstream, even if it results in more changes.
 
-> +TEST_F(tls, splice_onto_full_record)
-> +{
-> +	int frag_len = 100, extra = 4;
-
-Why 4 extra splices? One should be enough to hit tls_sw_sendmsg_splice
-with the skmsg already full?
-
-> +	char mem_send[5000];
-> +	char mem_recv[5000];
-> +	int nfrags, i, total;
-> +	int p[2];
-> +
-> +	memrnd(mem_send, sizeof(mem_send));
-> +
-> +	/* MAX_SKB_FRAGS is configurable (17 by default), so sweep the
-> +	 * plausible range to land the one-byte send exactly on a full ring
-> +	 * whatever this kernel was built with.
-> +	 */
-> +	for (nfrags = 12; nfrags <= 45; nfrags++) {
-> +		total = (nfrags + extra) * frag_len + 2;
-> +
-> +		for (i = 0; i < nfrags; i++) {
-> +			ASSERT_GE(pipe(p), 0);
-
-Do we really need a fresh pipe for each iteration?
-
-> +			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
-> +			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
-> +					 SPLICE_F_MORE), frag_len);
-> +			close(p[0]);
-> +			close(p[1]);
-> +		}
-> +
-> +		EXPECT_EQ(send(self->fd, mem_send, 1, MSG_MORE), 1);
-> +
-> +		for (i = 0; i < extra; i++) {
-> +			ASSERT_GE(pipe(p), 0);
-> +			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
-> +			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
-> +					 SPLICE_F_MORE), frag_len);
-> +			close(p[0]);
-> +			close(p[1]);
-> +		}
-> +
-> +		EXPECT_EQ(send(self->fd, mem_send, 1, 0), 1);
-> +
-> +		EXPECT_EQ(recv(self->cfd, mem_recv, total, MSG_WAITALL), total);
-> +		EXPECT_EQ(memcmp(mem_send, mem_recv, frag_len), 0);
-
-Only comparing the first chunk ("frag_len" bytes) and not the full blob
-("total" bytes) isn't very useful.
-
-> +	}
-> +}
-> +
->  TEST_F(tls, splice_to_pipe)
->  {
->  	int send_len = TLS_PAYLOAD_MAX_LEN;
-> -- 
-> 2.43.0
-> 
-
--- 
-Sabrina
+Then I feel we can skip the changes for stable now. Hi Greg, skip this
+thread and the changes from it. Will be in touch!
