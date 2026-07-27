@@ -1,207 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB0C36F8F1;
-	Mon, 27 Jul 2026 11:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BEA2F7F00;
+	Mon, 27 Jul 2026 11:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785152948; cv=none; b=DLOuMJ+onueQigoEO3GfmPekPZjgJRvm+oepGVfwKm7bzDmMTRCgonynaVpL96Xlz+MiuiTL3nLa2eN+8BGaWWhcAhk8Vj9g4z0/hWSglxB2o7yLk1nnk7ojCiz86vWNjbmrNPoiaQFjSjOn2Yx/7uvMfZdNbQeyG/k0Uh1dKkQ=
+	t=1785153309; cv=none; b=fSwt7vClIkQXpd2WPQlrrrTdREDui8OdlGWvmMybsM+hznWyN+Uq42f/aIHQv+T9Aa9ZxjZ6jNDfiL0fO/Z1hG8P7XNCnC0W2lMYtjVCCDXV88cjNxHlPmz3Reg+7IvfM7q7mHA0VesGFJe7Y4nfZ7MYcypuHVvvl5LMJ3uxdl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785152948; c=relaxed/simple;
-	bh=c8ZzN0JhUobPXVxZSh/lGWhDPNTa9BlFi4dyKy5S0Z4=;
+	s=arc-20240116; t=1785153309; c=relaxed/simple;
+	bh=YDm++PBz78yrj4Mo9DYPbca0wLNFAgnaEc4UoJoICIA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CoSal/7EziE+oGioEOOumScqGqm6h/Iw9Cf7znpODP+tM+pzhaveWu+DqsOhkkQtDImHnEwv/XYLehfAu0JEbiXi+NXA0V6NnNQJyLgvVpibEpAdCR34n9p60RiyP5sJ5t30564pjjg8L8HnCUN/rkTBsjGgDKCfA61Uigkoz2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cmsjsw37; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=r9qtq/ztY1umzpuoUZbiZMNMxyzLhWD4RzGHelpbU7igUtuHzzNfMTi45tQC4EeRzpUNyq9Flb/4fS3/wKpHLvnHPeihbZvsErupW2cgMBP0HgITEXsJxIjtsH/x6gE0bfYfUv1lPtMSNLRIzVuSSkfPZcl/J7WbeexE6oSeTsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=nBmVjs1n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mINXaGn6; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cmsjsw37"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA521F000E9;
-	Mon, 27 Jul 2026 11:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785152946;
-	bh=0w0Ko2D1WhIaOOti4yqzGm07MqvhsgfFcrNCb6S1Nfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Cmsjsw37+O9Ea7DYXKQ81QJsdyIlmeyj7raCrxM467eM3FMA6utMU60EpVPmJE0Lb
-	 SE/thTZwuVeENSdB9McBOKoH9DkSJq1vBdXq/WiHTUbFDxMaAAmXpooWRnRu5zVYAk
-	 t5Ac7HFMQ0Z0Jut5D1aReTYbgvJZx/pXijt5jRAJOEqlYu1y5vKTKvhYTRtmRapo3s
-	 yoUb6FSALQHKU5kXsyK2FHhOL9Bf4AuUpFGj+W0FwcTxkpD0wT5bKyM5JW93i1rB7X
-	 aZhti1cZgu6S4UgVCP7Sgz1PlzuBF48vgO3vp1MqCSqFhcCwcuNUnen/WyPjwwFrsm
-	 BcVHvyBfLZFbw==
-Date: Mon, 27 Jul 2026 12:48:57 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Usama Arif <usama.arif@linux.dev>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Gregory Price <gourry@gourry.net>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
-	Xu Xin <xu.xin16@zte.com.cn>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="nBmVjs1n";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mINXaGn6"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id 6325AEC007B;
+	Mon, 27 Jul 2026 07:55:04 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Mon, 27 Jul 2026 07:55:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1785153304; x=
+	1785239704; bh=1n/Khldtg6xbHy2jtiCSkAd5klR193GG81GnZWYs2W8=; b=n
+	BmVjs1njU/gdi3MZQXViEmYQDyBFW8F66bkXt5EoriZlIrkUPdy32Gdlzep3fJzd
+	sUfQy+RbkmoaV92vAXq7W8mh7C5geUhcZo3YCJKttmj0G06SxGZM28EDg9/PTIZ9
+	NeD5w8jBA3Hul7NLxzdycaNvY2OmQ0YqwUMEyhH2kx4ZigX3ZtmcRaBWqAXrqo/T
+	z355R6OwPC0qqjv+VtfHqoMxW1ZoGzjloNkfZphLd6mgX81W2lO4kicXSW6VTNHt
+	KdZ/ArBpU5+ZyS4DQh0YN8w6jeFeTs79dWz3dIshGLIMRtmfx2FuTkQx5tfi2aYE
+	d7OjpDnq7+A2Jv6HmTW6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1785153304; x=1785239704; bh=1n/Khldtg6xbHy2jtiCSkAd5klR193GG81G
+	nZWYs2W8=; b=mINXaGn6bqBsSWwec2QLRJdtUjKm88G0l6jnSKyveE39yXUNz/j
+	XQy8kvINczP9spG6vqwmeO0dTfQr401srmydpOAzdRtixql+6wxdlNuHSbavXaX5
+	iGAoe7qNrpzko/XeHUZSFfExW9hyaZvYksh133hUgRZiin7awbRSiNl0/7YWggYq
+	D6gXPU58fs5hTnktDE7UZO/kjOO9iGZciJukOCMHi9tlmqAazO/3fXn0n5IayLhD
+	f4Ts/E3cpdm4RNIL/4lGdtA+CODAni5OMSMVZU8G5tVFhsV07r11LVQYH9njlqrd
+	5uKInanwQYlUdNPrp4SvLo+CN6fLV+DcjcQ==
+X-ME-Sender: <xms:GEdnajmEe4WixFsR3CxQWICer3vV18xTzoajEWcLldUHz3an3DcDvA>
+    <xme:GEdnanjwna_MWsYTtLTOBFElkhc9rFxaF0Bmk9IWiaBSjk0fxYTzgPmHdR9IADyw7
+    wGW6iyAsqnRWW5SCEnqfvXLLAJdzRP2bPlZcm9j6ae3i2DHPzssJkI>
+X-ME-Received: <xmr:GEdnan0HoLKh5V2R0pUfxVYBZS96memdh38c1Kbbc7FW0c3asdmKNXMPX-8>
+X-ME-Proxy-Cause: dmFkZTEiaK2Ock2969CkF6+OcYxcbRC6FoAxf4St2dKsRvYdj0MWk6nNQrSq/KGlylvMgn
+    hjjop9ZjXKiLyW5w4/th1Wx7nh6GunxVGIqSnExzjLEFxNbEDEmB4I9l4+svrmKexLHsP/
+    gG+MSS+G5mue6/e2pmYTnYbq2wVcgWLZPZlR6BLmtQyPw+DesR92upaLa3+J8ca6M+W0RI
+    CtjznfgLPMNxUYxZ+e38Y97y7uVrnKuwXdDg7fzCbyPgo0yOm2NQkVKeVzXkyqyvehB4Zb
+    YC3eeB0C/NFsYjrf5AaW2mCoHbgSA+DegRXX7vsbG7oz+izbVmFQHw/I0D84Uf4NHp+bGb
+    Fyt9GgtM/H4isU4hwX/1wjYXHkfFhkxrUL6Og9uhGoWtbdIE9wcbdE7kZjDhNOIfqj+N4N
+    7SdbKAkxf5buy7UmvJaQnH/KqgrFTmRdS9B9EX4dWR5GiMvUIWGV0PJjCjwoSaJQVDygfe
+    Z0AosAWLmdNNPf23w5cfm1pPPMGIkdM6oDbHmxr3Uin6QVnc9An14uieR8uL5dKNz/BbJ9
+    3dNz07zAZAwYTJLjA7etG82sS6ZHE00p5qqWjKqibr4pH4K2rXIfoxlujM80hU7Q0Y9E2j
+    r0nmE2FE64QBcI3nb7DWfvjVghny0wOAv/+gi43puo4HpLn6fNnvHA5CgsrA
+X-ME-Proxy: <xmx:GEdnagLeZnQkpL1Rl4QyQztO6P-IgmzOQxYqws7Gdg-6zZoKpZ1xRA>
+    <xmx:GEdnanyu9NQ-GuWB18xzlSiEAWPdz1x119m0lCQTxA9zXwD_YA_LpQ>
+    <xmx:GEdnauWtqnEFWCCwtv6orgf1jn8YfgnFRFAB0IXQSNaDdhLnsF1iLQ>
+    <xmx:GEdnaniGkDYgx-mp7xRhj69Bn2brHrW1cMtbz55DSSBqnQ3SpgxVMQ>
+    <xmx:GEdnaq2_d-TAse9Ye4BRAd-h-eHZL2NK1jTDfhOTFZRLXeIHL9iPQphp>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Jul 2026 07:55:03 -0400 (EDT)
+Date: Mon, 27 Jul 2026 13:55:00 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: chanyoung <ppoo1220@gmail.com>
+Cc: netdev@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	David Howells <dhowells@redhat.com>, Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 13/15] mm/vma: make MAP_PRIVATE-mapped /dev/zero
- mappings truly anonymous
-Message-ID: <9d2c8f26-aaee-459f-b73f-d07d8671e805@sirena.org.uk>
-References: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
- <20260720-b4-scalable-cow-virt-pgoff-v2-13-2d549757a76f@kernel.org>
+Subject: Re: [PATCH net 2/2] selftests: tls: add a test for splicing onto a
+ full plaintext record
+Message-ID: <amdHFJlOVpACBir6@krikkit>
+References: <20260726105556.2719227-1-ppoo1220@gmail.com>
+ <20260726105556.2719227-3-ppoo1220@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+RvKojDw0qW+zzpI"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260720-b4-scalable-cow-virt-pgoff-v2-13-2d549757a76f@kernel.org>
-X-Cookie: revolutionary, adj.:
+In-Reply-To: <20260726105556.2719227-3-ppoo1220@gmail.com>
 
+2026-07-26, 19:55:56 +0900, chanyoung wrote:
+> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+> index cbdd3ea28b9..d2666884ea8 100644
+> --- a/tools/testing/selftests/net/tls.c
+> +++ b/tools/testing/selftests/net/tls.c
+> @@ -835,6 +835,58 @@ TEST_F(tls, send_and_splice)
+>  	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+>  }
+>  
+> +/* Splicing into an open record whose plaintext scatterlist ring is already
+> + * full used to wrap the ring's end index onto its start, after which
+> + * sk_msg_full() reported the full ring as empty: further pages overwrote
+> + * live entries and sg.size desynced from the walkable scatterlist, which
+> + * oopsed in the AEAD walk once the record was pushed.  The ring is left
+> + * full and unpushed by the copy path, which does not push the record when
+> + * the fragment it adds is the one that fills the ring.
+> + */
 
---+RvKojDw0qW+zzpI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This comment (and the other one above the loop) duplicates contents of
+the commit message. Please drop them.
 
-On Mon, Jul 20, 2026 at 03:38:39PM +0100, Lorenzo Stoakes (ARM) wrote:
-> When mapping /dev/zero with MAP_PRIVATE, one ends up with strange VMAs
-> originating from Linux's distant past.
->=20
-> These have vma->vm_file set but NULL vma->vm_ops, meaning they satisfy
-> vma_is_anonymous() but otherwise resemble a file-backed VMA.
+> +TEST_F(tls, splice_onto_full_record)
+> +{
+> +	int frag_len = 100, extra = 4;
 
-I'm seeing a test failure in the proc proc-self-map-files-0002 kselftest
-which bisects to this change in -next.  The test just says:
+Why 4 extra splices? One should be enough to hit tls_sw_sendmsg_splice
+with the skmsg already full?
 
-# selftests: proc: proc-self-map-files-002
-not ok 11 selftests: proc: proc-self-map-files-002 # exit=3D1
+> +	char mem_send[5000];
+> +	char mem_recv[5000];
+> +	int nfrags, i, total;
+> +	int p[2];
+> +
+> +	memrnd(mem_send, sizeof(mem_send));
+> +
+> +	/* MAX_SKB_FRAGS is configurable (17 by default), so sweep the
+> +	 * plausible range to land the one-byte send exactly on a full ring
+> +	 * whatever this kernel was built with.
+> +	 */
+> +	for (nfrags = 12; nfrags <= 45; nfrags++) {
+> +		total = (nfrags + extra) * frag_len + 2;
+> +
+> +		for (i = 0; i < nfrags; i++) {
+> +			ASSERT_GE(pipe(p), 0);
 
-which isn't super informative.  Full log at:
+Do we really need a fresh pipe for each iteration?
 
-   https://lava.sirena.org.uk/scheduler/job/3030495#L13846
+> +			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
+> +			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
+> +					 SPLICE_F_MORE), frag_len);
+> +			close(p[0]);
+> +			close(p[1]);
+> +		}
+> +
+> +		EXPECT_EQ(send(self->fd, mem_send, 1, MSG_MORE), 1);
+> +
+> +		for (i = 0; i < extra; i++) {
+> +			ASSERT_GE(pipe(p), 0);
+> +			EXPECT_EQ(write(p[1], mem_send, frag_len), frag_len);
+> +			EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, frag_len,
+> +					 SPLICE_F_MORE), frag_len);
+> +			close(p[0]);
+> +			close(p[1]);
+> +		}
+> +
+> +		EXPECT_EQ(send(self->fd, mem_send, 1, 0), 1);
+> +
+> +		EXPECT_EQ(recv(self->cfd, mem_recv, total, MSG_WAITALL), total);
+> +		EXPECT_EQ(memcmp(mem_send, mem_recv, frag_len), 0);
 
-bisect log:
+Only comparing the first chunk ("frag_len" bytes) and not the full blob
+("total" bytes) isn't very useful.
 
-# bad: [c5e32e86ca02b003f86e095d379b38148999293d] Add linux-next specific f=
-iles for 20260726
-# good: [692519a077bfb1a66d209e713d2210bb1d9adcaf] Merge branch 'for-linux-=
-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
-# good: [ef4f2357df6e9dd6213ce00d01253f3c458d5df0] regmap: clean up kernel-=
-doc comments
-# good: [86e9ba573c353afd1a46816682f4cc3dbabeeb23] irqchip/irq-imgpdc: Remo=
-ve unused driver
-git bisect start 'c5e32e86ca02b003f86e095d379b38148999293d' '692519a077bfb1=
-a66d209e713d2210bb1d9adcaf' 'ef4f2357df6e9dd6213ce00d01253f3c458d5df0' '86e=
-9ba573c353afd1a46816682f4cc3dbabeeb23'
-# test job: [ef4f2357df6e9dd6213ce00d01253f3c458d5df0] https://lava.sirena.=
-org.uk/scheduler/job/3020719
-# test job: [86e9ba573c353afd1a46816682f4cc3dbabeeb23] https://lava.sirena.=
-org.uk/scheduler/job/2955047
-# test job: [c5e32e86ca02b003f86e095d379b38148999293d] https://lava.sirena.=
-org.uk/scheduler/job/3030495
-# bad: [c5e32e86ca02b003f86e095d379b38148999293d] Add linux-next specific f=
-iles for 20260726
-git bisect bad c5e32e86ca02b003f86e095d379b38148999293d
-# test job: [673a43d4e283e8fc3bee7a874766278427263bc1] https://lava.sirena.=
-org.uk/scheduler/job/3030777
-# bad: [673a43d4e283e8fc3bee7a874766278427263bc1] Merge branch 'libcrypto-n=
-ext' of https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-git bisect bad 673a43d4e283e8fc3bee7a874766278427263bc1
-# test job: [5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876] https://lava.sirena.=
-org.uk/scheduler/job/3031099
-# bad: [5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876] Merge branch 'xtensa-for-=
-next' of https://github.com/jcmvbkbc/linux-xtensa.git
-git bisect bad 5dd91aac4216c19e9eeea6e0c1a04bcb3e43a876
-# test job: [457b365bc545636d75f65067d18afa86f6ced162] https://lava.sirena.=
-org.uk/scheduler/job/3031248
-# bad: [457b365bc545636d75f65067d18afa86f6ced162] Merge branch 'for-next' o=
-f https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-git bisect bad 457b365bc545636d75f65067d18afa86f6ced162
-# test job: [a8fa5c7be42a37866fcc315470df3307f0583c47] https://lava.sirena.=
-org.uk/scheduler/job/3031351
-# good: [a8fa5c7be42a37866fcc315470df3307f0583c47] mm/vma: update create_in=
-it_stack_vma() to use vma_flags_t
-git bisect good a8fa5c7be42a37866fcc315470df3307f0583c47
-# test job: [5c9f41c7115f0e16b7e133abca791a4860bee0b6] https://lava.sirena.=
-org.uk/scheduler/job/3031429
-# bad: [5c9f41c7115f0e16b7e133abca791a4860bee0b6] Merge branch 'kbuild-for-=
-next' of https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git
-git bisect bad 5c9f41c7115f0e16b7e133abca791a4860bee0b6
-# test job: [c68210527d235e59afa54bc6aba6ecc532488a82] https://lava.sirena.=
-org.uk/scheduler/job/3031482
-# bad: [c68210527d235e59afa54bc6aba6ecc532488a82] mm: page_alloc: fix non-m=
-ovable reclaim storm in defrag_mode
-git bisect bad c68210527d235e59afa54bc6aba6ecc532488a82
-# test job: [497078da29fbfe6ae057c020f1e5717ded142471] https://lava.sirena.=
-org.uk/scheduler/job/3031540
-# good: [497078da29fbfe6ae057c020f1e5717ded142471] mm/huge_memory: fold spl=
-it_folio_to_list_to_order() into split_folio_to_order()
-git bisect good 497078da29fbfe6ae057c020f1e5717ded142471
-# test job: [2afd297a9a621ad41892bc0a05481110f46ebfc2] https://lava.sirena.=
-org.uk/scheduler/job/3031619
-# bad: [2afd297a9a621ad41892bc0a05481110f46ebfc2] tools/testing/vma: add te=
-st to assert MAP_PRIVATE-/dev/zero is anon
-git bisect bad 2afd297a9a621ad41892bc0a05481110f46ebfc2
-# test job: [a4beb459e21af80c1d8c37b079686753c21932ca] https://lava.sirena.=
-org.uk/scheduler/job/3031661
-# good: [a4beb459e21af80c1d8c37b079686753c21932ca] mm/vma: introduce VMA vi=
-rtual page offset field and add helpers
-git bisect good a4beb459e21af80c1d8c37b079686753c21932ca
-# test job: [84bd1aceb0233c3de9064028d31a16ecf50070d9] https://lava.sirena.=
-org.uk/scheduler/job/3031711
-# good: [84bd1aceb0233c3de9064028d31a16ecf50070d9] mm/rmap: track whether t=
-he page VMA mapped walk is anonymous
-git bisect good 84bd1aceb0233c3de9064028d31a16ecf50070d9
-# test job: [880b6fe7442df760fe0a726b5f5e568bc6b450b6] https://lava.sirena.=
-org.uk/scheduler/job/3031752
-# good: [880b6fe7442df760fe0a726b5f5e568bc6b450b6] tools/testing/vma: expan=
-d VMA merge tests to assert virt pgoff
-git bisect good 880b6fe7442df760fe0a726b5f5e568bc6b450b6
-# test job: [e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5] https://lava.sirena.=
-org.uk/scheduler/job/3031804
-# good: [e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5] mm/vma: only permit MAP_=
-PRIVATE /dev/zero to be mapped anonymous
-git bisect good e2ad1c5a1f0a96a4a0435213b0a5cb963dc501c5
-# test job: [9f2782812095787d87ee6b742899ae37966ef0f5] https://lava.sirena.=
-org.uk/scheduler/job/3031854
-# bad: [9f2782812095787d87ee6b742899ae37966ef0f5] mm/vma: make MAP_PRIVATE-=
-mapped /dev/zero mappings truly anonymous
-git bisect bad 9f2782812095787d87ee6b742899ae37966ef0f5
-# first bad commit: [9f2782812095787d87ee6b742899ae37966ef0f5] mm/vma: make=
- MAP_PRIVATE-mapped /dev/zero mappings truly anonymous
+> +	}
+> +}
+> +
+>  TEST_F(tls, splice_to_pipe)
+>  {
+>  	int send_len = TLS_PAYLOAD_MAX_LEN;
+> -- 
+> 2.43.0
+> 
 
---+RvKojDw0qW+zzpI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpnRagACgkQJNaLcl1U
-h9Bkbwf/e1ODlSOmYYDgjTGxH9Mk9+t+qWq57eHHh2tng+aAtgOYIW7WjPmZfHso
-zIa+M5BdWiAl+KKi/wqQbWiULlh9G2UjzkWDFbfFQ3Bfs7RkB4sZ/nlfB4rZ7d97
-9oXQcb7JTOA6iM+zSLN1gCywjiDd4MoVHa7CKNwNCnZ8lNGIkO2bCqXk6hc0YGw6
-SrD/lYIvzuIfUwt4r15iqsAvasl7+PzNq8KPId2XImeeWimy0lhF+63P2ek2iS+X
-lF2pox3VQ1S2KqJhde///oKeBnHk55l+LVRGQk/sDGsKY7AKJFVIUUXxYSgDFX3r
-v7ywTTFl0t/5qQhsnrPTTwJEh15R2A==
-=tNdo
------END PGP SIGNATURE-----
-
---+RvKojDw0qW+zzpI--
+-- 
+Sabrina
