@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E840381E96
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 16:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECFD42903A
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 16:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785170761; cv=none; b=SBDfWzxX/AbMY8Brgcb2PhH/xYpcvs+G36CRJs5aEWCAylcUsqgiJiyyv1lHOX06aoJ21uMRTnTubQ2fqro422C8XmoKcxw4TnFnkgrSdYXb9cqSCp0LguSDmgqLMuABjQZba91sEHEWe2IEqq6gCktGAEaSxFUiAAWWHPwAn00=
+	t=1785171162; cv=none; b=DpPHQ9FpWk8g6Ni4HuVNc+GA5vXCQozzQiqVNj/7jDce4/INjRZMHxOL1FcmF4xyT6j3G2v7SYDIiAop+q2SOTcb6JK952FdfjCuXdGEH+B6KiOVgYZfrmBe6cDMkjEyhYvsY6jO2mYX8EOrwHUffQHiqitJ4pZNiobfRWzJzq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785170761; c=relaxed/simple;
-	bh=lYkxJURr4b8T5fcyUwFfj0VPmUSd++MvHLs+J+120Qk=;
+	s=arc-20240116; t=1785171162; c=relaxed/simple;
+	bh=jAFqwKMCe16VBc+Nikk+/eIqTHG9xfLtWAiunlfem8g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZgpjlBrV3Bq5Er+kfL78zukmbWR0honoYcA35hLSZAGUDacVmrTI5tMK5y952m21TLvn0ouGJuypmzuAvh1GsLWpOsItVLljbRe7eYKAfDk3zhakq00EJqLtyuKqq7epuyJWPbpDHGcXx9gD5JjqKSCsG6r7GSKoUTlyhE6asLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ODMqdQgX; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=jQeq8sFqLEmDkwstWmXawFpHhHFwcxyGurlEK0FWSScYLjbHKU+EFgGZUAHpQeGyCT3sl2Md1MvRpyEl46ZjmeVO0GAlp1OYzEVZnb8i+iIr2/eqDsyHNFlAMLAFdYjIr6yKwoBAxj5gBveSuybkn7t6sY9ON3r7nc1nIhXgVvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mz0iuE7H; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ODMqdQgX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mz0iuE7H"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785170756;
+	t=1785171156;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sXIlDiKSKHoB5funfN0ip0RnphBZYOqvi0Mcm88qhBY=;
-	b=ODMqdQgXDPCFb/Co71Ndjhz9dQ/CkLN9N0o+suX1dbw/g5gB0mLmJ6y+a38Gwo88Fqggcm
-	qG1UUoTcn3phpNtrr/yVK+1mpXLMOSvcdhLB56AImA/annvY9vMmjJjdiHTTGQ18vOJbpF
-	4NjVfU/GWImgnrW/ICGjPEa0kAUiVuk=
+	bh=737YPCc/OqaflOGUif9Ots1oI1aRa+aDfXNVPdOX2Nc=;
+	b=mz0iuE7HjiTMGr5ynsrR8zgQeXteBde3kPHCfQj+P5ae/H06Aiw0BaWzgtRCJIsMIOqLCx
+	ptaFBnUgAka1Nt8LZpnXNQyWzkktGBAPkKgDOVAJ7/YWbHgQu4+TMSQ39XEgcNLF9TJisA
+	qEEtLXK92EzItukd+0JCvWV6dAa+KS4=
 From: Usama Arif <usama.arif@linux.dev>
 To: Muhammad Usama Anjum <usama.anjum@arm.com>
 Cc: Usama Arif <usama.arif@linux.dev>,
@@ -52,10 +52,10 @@ Cc: Usama Arif <usama.arif@linux.dev>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v3 1/5] selftests/mm: skip COW tmpfile cases when fallocate() is unsupported
-Date: Mon, 27 Jul 2026 09:45:44 -0700
-Message-ID: <20260727164545.897052-1-usama.arif@linux.dev>
-In-Reply-To: <20260727095225.372655-2-usama.anjum@arm.com>
+Subject: Re: [PATCH v3 2/5] selftests/mm: skip guard hole-punch test if MADV_REMOVE is unsupported
+Date: Mon, 27 Jul 2026 09:52:21 -0700
+Message-ID: <20260727165225.1628191-1-usama.arif@linux.dev>
+In-Reply-To: <20260727095225.372655-3-usama.anjum@arm.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -66,53 +66,60 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On Mon, 27 Jul 2026 10:52:17 +0100 Muhammad Usama Anjum <usama.anjum@arm.com> wrote:
+On Mon, 27 Jul 2026 10:52:18 +0100 Muhammad Usama Anjum <usama.anjum@arm.com> wrote:
 
-> The tmpfile-backed COW cases allocate a one-page file with fallocate()
-> before exercising private and shared mappings.  When the filesystem
-> backing tmpfile() does not implement fallocate(), setup fails with
-> EOPNOTSUPP and no COW behavior is exercised.
+> The hole_punch case verifies that guard regions survive MADV_REMOVE and
+> that the backing range is punched out.  MADV_REMOVE delegates the hole
+> punch to the backing filesystem, which may reject the operation with
+> EOPNOTSUPP.
 > 
-> This occurs when the temporary directory resides on a filesystem with
-> limited allocation support, such as NFSv3.  Reporting a failure adds
-> noise because the test prerequisite is absent rather than the COW
-> implementation being broken.
+> That result means the test cannot establish the state whose guard
+> semantics it intends to validate.  Treating the missing filesystem
+> capability as a guard-region failure creates a false regression.
 > 
-> Report EOPNOTSUPP as a skip.  Continue treating every other fallocate()
-> error as a failure so unexpected setup regressions remain visible.
+> Unmap the range and skip only when MADV_REMOVE fails with EOPNOTSUPP.
+> Preserve the assertion for all other errors so failures on supported
+> configurations remain visible.
 > 
 > Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
->  tools/testing/selftests/mm/cow.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/mm/guard-regions.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-> index 0c627ea89ff7b..c1b8920e29342 100644
-> --- a/tools/testing/selftests/mm/cow.c
-> +++ b/tools/testing/selftests/mm/cow.c
-> @@ -1718,8 +1718,13 @@ static void run_with_tmpfile(non_anon_test_fn fn, const char *desc)
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index b21df3040b1c7..5c8ec3ca75d7d 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -1912,7 +1912,7 @@ TEST_F(guard_regions, hole_punch)
+>  {
+>  	const unsigned long page_size = self->page_size;
+>  	char *ptr;
+> -	int i;
+> +	int i, ret;
 >  
->  	/* File consists of a single page filled with zeroes. */
->  	if (fallocate(fd, 0, 0, pagesize)) {
-> -		ksft_perror("fallocate() failed");
-> -		log_test_result(KSFT_FAIL);
-> +		if (errno == EOPNOTSUPP) {
-> +			ksft_print_msg("fallocate() not supported by filesystem\n");
-> +			log_test_result(KSFT_SKIP);
-> +		} else {
-> +			ksft_perror("fallocate() failed");
-> +			log_test_result(KSFT_FAIL);
-> +		}
+>  	if (variant->backing == ANON_BACKED)
+>  		SKIP(return, "Truncation test specific to file-backed");
+> @@ -1944,8 +1944,12 @@ TEST_F(guard_regions, hole_punch)
+>  	}
+>  
+>  	/* Now hole punch the guarded region. */
+> -	ASSERT_EQ(madvise(&ptr[3 * page_size], 4 * page_size,
+> -			  MADV_REMOVE), 0);
+> +	ret = madvise(&ptr[3 * page_size], 4 * page_size, MADV_REMOVE);
+> +	if (ret == -1 && errno == EOPNOTSUPP) {
+> +		ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +		SKIP(return, "MADV_REMOVE not supported by filesystem");
+> +	}
+> +	ASSERT_EQ(ret, 0);
 
-
-Correctly skips only unsupported fallocate() setup
+Correctly treats MADV_REMOVE EOPNOTSUPP as a missing prerequisite and unmaps before skipping
 
 Acked-by: Usama Arif <usama.arif@linux.dev>
 
->  		goto close;
->  	}
 >  
+>  	/* Ensure guard regions remain. */
+>  	for (i = 0; i < 10; i++) {
 > -- 
 > 2.47.3
 > 
