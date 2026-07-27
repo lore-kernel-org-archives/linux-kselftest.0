@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B423B3EA940;
-	Mon, 27 Jul 2026 09:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3924E2F872;
+	Mon, 27 Jul 2026 09:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785143122; cv=none; b=gnlGxY6iiAVcE0kI0DdeTXcSYjsnsVti2+NSijBmTM4Ww4g8FEXFmfDWYk/WWAONh62xi+P+qNncWmjhpT6X9p92HJwtVcIB9b0sUCKNTdzIoRpEBs9KbseEytvS1QuuCSgBlVcK8Ks/6K6L/tqrgaajSlkKi/3kFPUbUP5HlTg=
+	t=1785143166; cv=none; b=RkBxwYdPst/Y8bd7YVH3oSoQpeFI6GuiQZVQhrTLjLWPSna5799WmFOOM8yvNKxsl2MhUzGI1XLQP9oQm7AcObxq/S7MrpCNdW4t8Ty7Guo/b5dczVDfh7j3G82/5838g+GyPYgHs1ahw/Sn9AYbFHI1tsbHrMlJ1N7+ORHkpOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785143122; c=relaxed/simple;
-	bh=LAOH9x5uQ4fiUCi9EnlUXvkLZM1AdqRC6F57JY5+YuY=;
+	s=arc-20240116; t=1785143166; c=relaxed/simple;
+	bh=/ZnqnXyOxANA+LYla0CVjrDHZ2thN65L9Xd+XL5RBPw=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
-	 MIME-Version; b=kwSn2/EtU+9Tv0ShfxWrawJ7O2WW7eZ5ezi1vYXGUL4Mwi6+wHvtXxrlIWHefqO1hRq9SLVtdvgrinNlq5II5GT8g/QACfnQCkKaGA0fa9zpEx0hx001iO5lsXqM0xEY5aaRbEEcBofPSzNTUgzpzCByBv5Te/E9apAB9tXewhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uKX4rDz5; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=gTfbD4Y/HZxfTCrBUtmhxx8q0GMY9414Nl9EFc6YM3BnNdZtXTd8Fjxge5UUXFCFtYsKUDAfXxWjDhU0LUOtDyUFmhVLCMXA7kjzRIOTVTfPNsTRptsH676iKeUZSfOCjbPcf6Z71ktopiPXCjmNFSuZPsJh3qpTFTZFz/qw81w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tS87TVNs; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uKX4rDz5"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tS87TVNs"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:In-Reply-To:
 	Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:References;
-	bh=LAOH9x5uQ4fiUCi9EnlUXvkLZM1AdqRC6F57JY5+YuY=; b=uKX4rDz5bOMaTENC+HgjcofKHG
-	9RgmOywlyS2GxpLdpyKtz7zHzvCblG27wh2d6YMKy6oQn4mUQ0p7LFM9YDXaUd7KejiwMKW8eDq15
-	moMMpkneOApDdCqdgtkByPoQFCw1BOoYDrqeXIfFWgDbNY3dfzHakxHaZragm5Ny6+qLtutzu2I54
-	DLRF856iGieYlJOy0nUgmM0mH8cEc4t7PlcksWLCKaXcFY1LIcdcJbnmD/28eDcSTmhEOr+s9p9VX
-	sQm9HyvwJ1VTSmFyqoVUXgoHY+N0JRnjGmjg+u/gVFY7oi+woVuM1cHXaRz9dTG3w43i6CaPD4IBL
-	tTCWxOGw==;
+	bh=h9H6us2rtkkFP/PoI2Oxgky5SX0+J92bCdkRSgxYNDQ=; b=tS87TVNs4MbHe92LtQvv8ZE80f
+	8bdGX5OPoZ5NmG4Nncm6aJ5fmdUXsx16W/hdnEOGjn42cLQ/ZCJu213OiR2EMTY88ZBmkrqzW3D8z
+	2kwjkpoZWGftODRnZOCbvNRzFDSVX/YbHYqs/lJK0YYqVhnOIqOSA/IE8Ds14Fu+CSVuAFjbHcjI9
+	OvMQftE9rbodttxIYLo8ub5VOPCyeRcmS3h4Ur08drXNRx7J243ddU9ckBBT08nb8r0TGwu8TcznK
+	7ENSxlx2xoJM85sYtujusbjnVftmSUI1WesGEoCicalptnYryZJoJBHUA89e7769e+hDyC4vwYkEc
+	CrEsvx6g==;
 Received: from [2001:8b0:10b:5:45df:678b:e980:5dcd] (helo=u09cd745991455d.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1woHGu-0000000AKxU-23cR;
-	Mon, 27 Jul 2026 09:05:16 +0000
-Message-ID: <b5ee79c669669fc10a26ab3504ad250a43a32cd2.camel@infradead.org>
-Subject: Re: [PATCH v5 net-next 2/7] selftests/ptp: Extract
- print_system_timestamp helper in testptp
+	id 1woHHd-0000000AKzt-23CT;
+	Mon, 27 Jul 2026 09:06:01 +0000
+Message-ID: <80832e01d537e6f847013ec4525b0a11b04096a7.camel@infradead.org>
+Subject: Re: [PATCH v5 net-next 3/7] selftests/ptp: Add testptp support for
+ attributes ioctls
 From: David Woodhouse <dwmw2@infradead.org>
 To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
  <davem@davemloft.net>,  Jakub Kicinski	 <kuba@kernel.org>,
@@ -54,10 +54,10 @@ Cc: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
  shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
  <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>, Bjorn Helgaas
 	 <bhelgaas@google.com>, vadim.fedorenko@linux.dev
-Date: Mon, 27 Jul 2026 10:05:15 +0100
-In-Reply-To: <20260717065924.2556-3-akiyano@amazon.com>
+Date: Mon, 27 Jul 2026 10:06:00 +0100
+In-Reply-To: <20260717065924.2556-4-akiyano@amazon.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-SlAzE88INSHR5pjtYJPF"
+	boundary="=-w2T9kD1PQTWxJ2j6d9Ye"
 User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,25 +68,36 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-SlAzE88INSHR5pjtYJPF
+--=-w2T9kD1PQTWxJ2j6d9Ye
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Fri, 2026-07-17 at 06:59 +0000, Arthur Kiyanovski wrote:
-> Extract the repeated switch-on-clockid pattern used for printing
-> system timestamps into a reusable helper function. This removes
-> code duplication in the -x (PTP_SYS_OFFSET_EXTENDED) output path
-> and prepares for additional callers.
+> Add support for testing the new PTP_SYS_OFFSET_EXTENDED_ATTRS and
+> PTP_SYS_OFFSET_PRECISE_ATTRS ioctls in the testptp utility.
 >
-> The "after" timestamp lines now include the sample number prefix
-> for consistency with the "before" lines, slightly changing the
-> output format.
+> Add a "-a" modifier that requests clock quality attributes
+> (error_bound, status, timescale) alongside the existing extended (-x)
+> and precise (-X) offset requests:
+>   -x N -a: extended offset with attributes (N samples)
+>   -X -a:   precise cross-timestamp with attributes
 >
+> When the device does not report a given attribute, print an explicit
+> "not reported" line so all attributes are always accounted for.
+>
+> These options allow testing and validation of PHC devices that provide
+> clock quality information alongside timestamps.
+>
+> Also display the new clock_attrs capability in the -c output, and
+> update print_system_timestamp to print unrecognized clock types instead
+> of silently dropping them.
+>
+> Signed-off-by: Amit Bernstein <amitbern@amazon.com>
 > Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
 
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 
---=-SlAzE88INSHR5pjtYJPF
+--=-w2T9kD1PQTWxJ2j6d9Ye
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -184,22 +195,22 @@ vFEOOmuaq7VamuLEPFQtJM4olmipOW6CzrLcFz6J/6yAecEG3P1ZDoy08eSHvM40MAUgpwGa/w6o
 MAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTowOAYDVQQDEzFEaWdpQ2VydCBB
 c3N1cmVkIEcyIFNNSU1FIFJTQTQwOTYgU0hBMzg0IDIwMjQgQ0ExAhADNSi2uzJskfEdOMo4hV0g
 MA0GCWCGSAFlAwQCAQUAoIIBezAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yNjA3MjcwOTA1MTVaMC8GCSqGSIb3DQEJBDEiBCDgB2T7jcMlv0dxBSiTqffZ0PL66oVz
-1iVb6cQN0ARC2zCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
+BTEPFw0yNjA3MjcwOTA2MDBaMC8GCSqGSIb3DQEJBDEiBCBw7ZGnVTASQkQbsrJRir+lbGSKcTRr
+YhTCNZ/c2P/pmjCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
 aUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBT
 SEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAwgYcGCyqGSIb3DQEJEAILMXigdjBiMQsw
 CQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFz
 c3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAw
-DQYJKoZIhvcNAQEBBQAEggIAiRJD2R0KdxGQecmYhTpvYGV6IUAuGppdOll69JzBhrDwr2ZJ82zw
-FD4nYpDxZRpFe/jCVlba328D0OwvAS528VivBDPlVIZlTFaxEXk0yg5s/PD5QjmNZ+s/SMIR9kAe
-t6NfgvF++DCnl4utYbnCaAsSnL1tivAl1dspVJOKnvrp1jv0O1uDxRxWotttOpAPRuLfEfUaAoqU
-7Q9U4BeTg4KwfE0l/nHgn2WuUohkfeVzOOkCz473Uy1vSFBPQNWeEQQLR6kjitTWkUJXLxMvzonD
-kEi0TgsLZashhXFcadN7GzwIIuW7hqYrjWNlFFQiBtBBxGtb8mBTaOYdihib57+p7SWmhq1roIR/
-UWq25TDoH48EGil0ofi47j1RgQIvhqg7BYMDIZRVWIbfmKcAS0MTPVm4I3h9h+7EInpW400jqLiL
-kZjyfEk0jKIfOqpFShmR98ebm58KyT1VoEIVGvAOa9ccYt6oYiW9RBQNcsYD5d4cLzG2VKZtbo52
-EhGfLkObjz/p1yf0bVUiD6fG7Zy0WjogF6azXtKBvhPRVqoz5lzTI/BmdjBX0mD0eicmfXrayLRi
-N0gwZMxqn1rxPNbmhmwpkzcudOgGOzG9ks+0Dr3B7S/YhtPTj5zxWHyWr7bByA7APyjZQVkxFcjE
-W/WV+wbOfCNMhC7PAVaufxMAAAAAAAA=
+DQYJKoZIhvcNAQEBBQAEggIAjIAG6tumgWI8KZZ3hf841vgnRzAhsH5onaxjqHWlkojFAvkk3qX5
+tyZgcymR6IxT1/ATYOzgEBt0tKpUQ+zFrLX12700ENs19kghKOPl77POvy5NB+kw+f3v4h+YGuqI
+h7YEHd435usarW6JZD9MYVm7eRMyCjDbbU8L6cPcbyl5hRYKaZ0lWfV0jQEhrZHxcp7k8HBIYtrZ
+9+xRGCYjBVf0465pJbBc7fbgC2Cp0xD/z99E/+PPKhapEMb0W4TlzdrbFeDnYoP8iSOpGhLgmgfv
+v5VGjxg/CrjX9azxsLNE4z3lq458F3q2Q0qX7EtHxjcAGhAF+kN4jX+IBS++D1UySoVC86co2nQD
+KMro91NJGvOplxt5g+DzY5jsA4ggm7KmdTC3vAZoHfaFzyxSqMxawwVCYAXvE0uC75vONGkjCOrp
+lnAewo7ME+LacPMvd2rG91fAlyXhXNTEC1On52+TKdPj6IxXudn5tKh8I2ICW6TTTxaKbLxb8aXW
+Ynfsnon43fIwLxtDUuibP9xNa5Q6bI2EhUPM3HXm6H5NRvIBi916IXv8yeOyhFiGLxwQNtd6/frt
+WGIbEKmPPSG1KzsT1LqNgGgoHsztbsdNvyJG8+XmJJUGGMPCwjB6rUwLZdTiU9WjhZNrKRTJp0aD
+Uhw3jmnp0zVwNDW2Hh5CRF4AAAAAAAA=
 
 
---=-SlAzE88INSHR5pjtYJPF--
+--=-w2T9kD1PQTWxJ2j6d9Ye--
