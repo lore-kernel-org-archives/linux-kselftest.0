@@ -1,87 +1,80 @@
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C474282F13;
-	Mon, 27 Jul 2026 15:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D190390218
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 15:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785165580; cv=none; b=SiFz1pnLkOssaBANEn82cRehICsSn6G90dpD3neS3fogsnSi4xHf49VyQg/pq+LajK777BXLGBEirNDHUU4z5ds+beXGysAlVJ96TxZVZLD0xOFf01WZ0hFAgepKqVayqHmfrODHY+E+U/rr04lmirJsLjE/+Lb2NFupPhdDCG4=
+	t=1785166029; cv=none; b=kDVSaQNOS3uesFyCD5JynXuqqvTqg6/KrVkd+2Bi95Vl/qYFncDadMbGZ+rra1lDvB0JgHgvL2OggfCWA9c80oMeD8gjNHF7HuFUbw1XCJ0+G/SOHkxdc/NC82ewoHRrYRUFYxovjwV706eYrQerHOmCTryindyJzaiRalSiqRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785165580; c=relaxed/simple;
-	bh=y284ozQRIy2WqiSA2VvwQSCB4293kWQm6TX5I57U+lE=;
+	s=arc-20240116; t=1785166029; c=relaxed/simple;
+	bh=RCMszCJlDtXUzAucA4CPTK6T8J9yaphFlk12h49frKQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ktAULoukH85Nje1oMuO9YzWxrOkOuz2F7ZIG04IXyk84mV4nG76er/NVkV0i4RY5t3lj+nzDxl3XY/jf4/p5SAjQ5W5bpCOAF9KZQV8nDOA2Yo0nyOYIWZHW3FSn+9c1AWOHUs204AzPWohsJafDNmv6mn72kwEmhUKXmLXWmVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=awJbRnlZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MPHdlgbm; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZGlzfEKkDZ6M2AT6s6fM7D8LoJvxrBq8pKqBNJAzkMWXgF8jJ36Gu5CIT8w40eCKRfGHrdvSj7YnJYZNiaDYlnX9LLpukRsbh0h4xh8k0j4rAGsxSbntek+tho4laweLJRTnPnMZu+4x7PCMDxyh4QGBlKvyhCP4a4ivPfhama0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KSIVHuG2; arc=none smtp.client-ip=74.125.227.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="awJbRnlZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MPHdlgbm"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 4ECB5EC01E3;
-	Mon, 27 Jul 2026 11:19:35 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Mon, 27 Jul 2026 11:19:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1785165575; x=
-	1785251975; bh=CYAAxNS6WnMJ/vbrsWotGsCU8qry7A5N9QYkKo0TX8o=; b=a
-	wJbRnlZp802wCY2PtDp2jHhCY5vsr4ba/P+Z+7F0rpJvh293jIFKXTHvOtR1slHN
-	b5JYdUIuutoNoDWiOGa+wozgPRFdlMJ5Y9C62aFmBhZIExEcux9GTEOKO0sf33yC
-	GExEHuO1D4kknKSIeC4BHsxMciGCjFFNhVpcXZM1UophxM8U3L8CYUG3yGymjbUu
-	4hbZp8raBcQ4oKgFwebXMGCeHHsaSTEpWFlsg0B0eAcR948J0KwjvGShp8kSayqJ
-	e8uBwfjdlctoqM7Swx2sn2S7tYZdyIY1bl1pqOZs6kNAFPT5xNqblhRZRG4Q/pNU
-	70nsDyny2tjRnTBwPvJMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1785165575; x=1785251975; bh=CYAAxNS6WnMJ/vbrsWotGsCU8qry7A5N9QY
-	kKo0TX8o=; b=MPHdlgbmaaK3dqvonQ/QEE4RIxXWOtnDOz5jjIT17biatUuOAOs
-	9LR/crgY9EEUiNr60XcQMLy5uHPFQp0qs3mvOInV8Pj3QKnxzMp+Ck0D3LAKQY69
-	Cna73dGGByLYp87S3k5e95eyLYolV5MIWRazW8EOatXT4uQGyCXqH7JVaFDXuTHL
-	dI7xTPTcJCINwspw7QOTy/bo/oVaYDlplhdJNHntAGL4IuWqtGIM2i93pFap2rKW
-	SsFFpGe1ZZAf01yeatz8A60pEs83eiOUK6VRaMqPG/BsJIw1/SEQ+vCnCrccLX59
-	wtZA/aQqBj0YNeHGulL9RptYss1vIEnHvDg==
-X-ME-Sender: <xms:BndnavhYQmTtAUFR6GOoxY_iU4XGF0JNBTeQ4ismA4K16kT3GA8jJQ>
-    <xme:BndnaqQ3R8OZO7wG0wASbDuRetjCFktwBr2pnbxHsLM4Iwsym-wciM_RsJepWH8pE
-    TMhrrnJpMHS0xjCHko8TB-ivxa6lEl8t2u92QmjCHo821BNSneoEQ>
-X-ME-Received: <xmr:BndnaoZMzptY1sSfEjHZPQSXJ5BsGDub3nkCUq6VLCe0X9nWjp2p0qgsLYE>
-X-ME-Proxy-Cause: dmFkZTGwWkNDZbREeSoU5lGq7hE+MYOZvxXBYofejvLM/kll83ptNjKWEoZV3/3XRjUffo
-    okeTnihgOaynxDe3P4dyqYmviXiJfJ/QSXhd6SJygrNKgnaftemtApOdzelgXWV6fGojko
-    S4S+QthGmbGGN8m645v5JHqkyP0lFq/qGVh9L4fj6sxRVpQqys07x2rUkE+oPWTvWzbXj1
-    mCmOPiL/kw9UyrtdeklQ/54sn8HmCCiSO26Mdj5zwa1VfUfoWMSatJ1frkik+EUBW2anIL
-    vypVAFNVVeBAStZk5C5pEE5ujRF0l/eqq3spwmPz7/19exYYvuknuaPIZmzzQCnA9FZyJI
-    7LdUZqG2vRMxmBu74G5wn9Ahxu7GXR3NWKw6TcyZhAuZxgLIbOZX0ESadM4qorfvJ/SnYr
-    fRA+4I8lGjtnYbMmbgolYpXNaAm41IY5qKdRXU8yv573vwTaabObdOjBxXCuJgVKz6Fasi
-    O/wfpJUVgJJOyUPyvNLWgDTCMsGbt62pKG+fdcu7oOjfZDpRnjcm65usG77RYLup+UyJGh
-    FjvlWAnY9oe26wl1PLMlZ8WMYNvVmBeov3SLmoARVm5GfYyb6mlLZKRmbpp4xgO/6c80VV
-    pzywIbY6n5aN0J8gK0aNwzF72c511nmEW5QRMlSi/YnB+rAUE5TK/ildGLhw
-X-ME-Proxy: <xmx:BndnavTLA2bnO53F4KBPXQ3mFuLCsgH59ElTqfXKwHkENsVAGYbahA>
-    <xmx:Bndnav8plkUPCSp5H3a4Js7lmfQN-G-H7kw-seolJKz_YgkWrco1xg>
-    <xmx:Bndnanhm8CBab6ZX8tkG67j_3Ejnqgyg-Q-EPGHJD-fcwL9KNUg1Cg>
-    <xmx:BndnaoaqXFE9kGKHT0kT4GqIpzvlbC16iLtFtAuPneSWL5r_Jm_fzQ>
-    <xmx:B3dnaiC_J7PfnmPlZ95DehjXKJjqmQiG3n_GTXzyD9urD2vOhwPBTRvS>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jul 2026 11:19:34 -0400 (EDT)
-Date: Mon, 27 Jul 2026 17:19:32 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Chuck Lever <cel@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Dave Watson <davejwatson@fb.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 9/9] selftests: tls: cover splice after a failed
- decrypt
-Message-ID: <amd3BM0nTJBYlmtm@krikkit>
-References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
- <20260726-tls-follow-on-v1-9-99bf4cc1c729@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KSIVHuG2"
+Received: by mail-pj2-f11.google.com with SMTP id d9443c01a7336-2cf02ecb572so45104515ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 08:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785166027; x=1785770827; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5y4b5oEa+hE1ReLew0hc95qd67MVZsyBvHPuZveM4yw=;
+        b=KSIVHuG2We1xJpXK8g7YWyzw6Sn6dQhMkz8k8DNVIin25pSGEEEkgmkYOvx7YGjxsO
+         gpuc5NfH0QwLn2iHJuD+j/7k3rSIYZb2WdMf8/n4x/Glw1P+o8nnc2snF7fcc//F4CZw
+         2k2lXCf4RQfqsySu0wj37U5Z5K0uiI5PRMqluZmvnPOJBSzexoi6p24bYiKuiiZ7Ey8K
+         25rfkuswVX+NzO07Pc/Bh/xonjUjadS1vvG7mZTOLx/eiBjmnIg4TXhYyGqxfRFNzThx
+         pZRnprE7C39c9BOR7M9Wl9fkRzl6ZYn78QBEQPAuQ6DJ3Hl/sP2o31l/DN1nxji/D0He
+         eVLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785166027; x=1785770827;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5y4b5oEa+hE1ReLew0hc95qd67MVZsyBvHPuZveM4yw=;
+        b=dZ7N2N0qCAPXv30lQ7vXuN+La2xe7YbNh2JsbF9twv2bI1jcoGpenrxqaC+kRgumME
+         K3XB2Tbyc7MjFwv/vrkvtgL+ol1bsNOp8MP+vqTs/jcOSgUyFQ5xofiJwZ7gwnWEwuw6
+         tM4qJq1Jb73SXBOh1eZ76TsIDmeT8FJneiWbmOgviqF/T3dxEJdqqgnD/lxUMMAT8v2i
+         B7s1optByBiGEdyYanRLNIaY9jGoGC5HVKrVGJPQOghdKOlAvw9JR5hE4Hwlyq9IjMr7
+         Hz3GWs/AAWp7+3rXpoz5bAyW7dqsJe4caMV7NcuFhG8Ym/DBa3qjerDIeLTRKLLho38Y
+         M3Jw==
+X-Forwarded-Encrypted: i=1; AHgh+RpIb4sb1dph8Z9XlnJc4jD+wfI6lMLwapayrezbvB/5ZKkemLCLFQO7gJHj1rqj9Czn4eQTyuDftrFgM6/zJZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfSN+2GNlE42jtYWiFUBl0N9Wa2mIVqoxtQbX0awjYRl3P+n5O
+	rWTeHa+VMOSHm9mGVggmVwnzqhGEF10sbXdjP5Z1iXEMANhmKV/EkLHG6Nbr1IIKiig=
+X-Gm-Gg: AR+sD12uP8lpChlIeEGKrl8WtRzS3wP73VDSLyEoQHp+poGO+eMbFrYRsfknYDXn2WO
+	DL4GcGARS1x350OwUyMKsYPBgIwPZwSwN+IWY1a8u8rAF+A+bAA1t6vSziGoiOyzNtamwurKG3f
+	12u4v0TWuyAYeax3SShrW2poZvouGk8YMb3F4nuVXOBhgatQiIfZefzgscPAZCt/mAedwRmXrtK
+	xpKQQTAC4cJCm+Y26zOhLJAGrHdhZArut8tNbUCeqPPSpskVXE631in3pmer3CR7llnILrayIWo
+	C7Nxydg5FwU8tQQXQsQwvmHoAdZMWFrHzjkBHr/mVBPk2oP5AVKZFovg3btxHdmqbyD52u+r4mE
+	DZRmLVNq6yrTi/ZnJr+D1ZgcxGnkvq5GDS9A0/GiqfgOcmj7zGtINb1MForkmOyYsPlYcUw==
+X-Received: by 2002:a05:6a00:1798:b0:848:89ee:9de6 with SMTP id d2e1a72fcca58-84e88b4c1cfmr830748b3a.58.1785166026723;
+        Mon, 27 Jul 2026 08:27:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:3::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e532ad0f2sm3189796b3a.25.2026.07.27.08.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 08:27:06 -0700 (PDT)
+Date: Mon, 27 Jul 2026 08:07:14 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Remi Denis-Courmont <courmisch@gmail.com>, 
+	=?utf-8?B?UsOpbWk=?= Denis-Courmont <remi.denis-courmont@nokia.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com, Joe Damato <joe@dama.to>
+Subject: Re: [PATCH net-next v3 1/7] ipv6: raw: drop unused level argument
+ from do_rawv6_getsockopt
+Message-ID: <amd0G_gICVRdcEsR@devvm7509.cco0.facebook.com>
+References: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
+ <20260727-getsockopt_phase4-v3-1-e89627544639@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,89 +83,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260726-tls-follow-on-v1-9-99bf4cc1c729@kernel.org>
+In-Reply-To: <20260727-getsockopt_phase4-v3-1-e89627544639@debian.org>
 
-2026-07-26, 20:33:37 -0400, Chuck Lever wrote:
-> Nothing in this file splices a socket whose last decrypt failed, so
-> the check that fails tls_sw_splice_read() on a broken connection can
-> be removed without a test noticing. Such a splice hands the
-> application plaintext that recvmsg() and read_sock() already refuse
-> to return.
+On 07/27, Breno Leitao wrote:
+> do_rawv6_getsockopt() takes a level argument but never uses it; the
+> level dispatch is handled by the caller, rawv6_getsockopt(). Drop it,
+> matching ipv4's do_raw_getsockopt().
 > 
-> Extend the bad_auth pattern: corrupt an authenticated record, confirm
-> recvmsg() reports EBADMSG, then splice the same socket and require
-> EBADMSG again. A synchronous decrypt fails again on the still-queued
-> record, so only an asynchronous decrypt, which needs TLS 1.2 and an
-> AEAD advertising CRYPTO_ALG_ASYNC, reaches EBADMSG solely through the
-> recorded-failure check.
-
-async crypto is going away soon, I don't think it's worth mentioning
-it. (but first I'm finishing the surgery to get rid of skmsg)
-
-> bad_auth builds the same corrupted record, so its construction moves
-> into a helper the two tests share.
+> No functional change.
 > 
-> Signed-off-by: Chuck Lever <cel@kernel.org>
-> ---
->  tools/testing/selftests/net/tls.c | 77 ++++++++++++++++++++++++++++++++++-----
->  1 file changed, 67 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-> index 7c178541edf4..8b68dbfcc592 100644
-> --- a/tools/testing/selftests/net/tls.c
-> +++ b/tools/testing/selftests/net/tls.c
-> @@ -24,6 +24,7 @@
->  #include "kselftest_harness.h"
->  
->  #define TLS_PAYLOAD_MAX_LEN 16384
-> +#define TLS_HDR_LEN 5
->  #define SOL_TLS 282
->  
->  static int fips_enabled;
-> @@ -2883,28 +2884,85 @@ TEST_F(tls_err, bad_rec)
->  	EXPECT_EQ(errno, EAGAIN);
->  }
->  
-> +/* Encrypt a record on the TX-only socket pair, corrupt its last
-> + * byte, and hand the result to the socket under test. cfd carries a
-> + * byte stream, so one recv() can return part of a record: take the
-> + * fragment length from the record header and wait for the remainder.
-> + */
+> Reviewed-by: Joe Damato <joe@dama.to>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-I'm not a fan of adding a 5-line comment for every 10-line function.
-
-[...]
-> +TEST_F(tls_err, bad_auth_splice)
-> +{
-> +	char buf[128];
-> +	ssize_t ret;
-> +	int p[2];
-> +
-> +	if (self->notls)
-> +		SKIP(return, "no TLS support");
-> +
-> +	tls_send_bad_auth(_metadata, self->fd, self->cfd, self->fd2);
-> +
-> +	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
-> +	EXPECT_EQ(errno, EBADMSG);
-> +
-> +	ASSERT_GE(pipe(p), 0);
-> +
-> +	ret = splice(self->cfd2, NULL, p[1], NULL, sizeof(buf),
-> +		     SPLICE_F_NONBLOCK);
-> +	EXPECT_EQ(ret, -1);
-> +	if (ret == -1)
-
-nit: The rest of the tls tests just check errno when an error was
-expected. If we didn't get -1, the errno check will probably fail too,
-but at this point the test has already failed so IMO it's not worth
-adding extra conditionals.
-
-> +		EXPECT_EQ(errno, EBADMSG);
-> +
-> +	close(p[0]);
-> +	close(p[1]);
-> +}
-
--- 
-Sabrina
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
