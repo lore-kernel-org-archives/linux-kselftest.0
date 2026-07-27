@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D4641B8EF;
-	Mon, 27 Jul 2026 17:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8976A42CAFA;
+	Mon, 27 Jul 2026 17:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785174617; cv=none; b=hRNWgYGkxz+xdqw8wOw8g+wMwC5hH1ORzK40a+FjSPSoSQxNKMYHdosbVgGWHWMXmDGNbz2pjvP3nKRBJnM2J/kiid37MeqooaUt8U47+UNC11PlezQoiE5MwyBxDAoOmmMIqkERAsq+EnReUgEowJXTHaCwKLBWQEaf/3Ricn4=
+	t=1785174724; cv=none; b=Vwek+FJh3CrfZNBCTNLQLjLfevkhAmb28xvFU7OTzBsf9shw2wD6WoIyn12R87KWCx4/ZMI/G57HFXKuIptBep/FCO+Z47sBt7d48n3oiCCwPZY5tmOypbUQB2FlZBQZsmZqpevnz2+qqR8DYIZcQUbjpWiMZZbgCr8c5cliF+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785174617; c=relaxed/simple;
-	bh=2ol6eYUukiav9Pb9fxGGLPq0uv9ru576YFdpqyp6+IE=;
+	s=arc-20240116; t=1785174724; c=relaxed/simple;
+	bh=QBYGsPIDYzCW8cu26GUfzYqZpwLLiHLM3YAXNp0JVLk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=usfw7ef0B9dyXhLsoScv5fgSmjlSA59tfnF+uuKNTSiiLdC+BQ6ISS+gkkII3qYLmtcsKWgS4VU2WF/22ATEB+CdVZ08oagSlgGxMxtV2G6DCIXvxbkaXSu/TRaDcpGZQIVv7l4PP/npTc5gPyHED4EAqZZz1VqE8UsBMKygiVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOL7oWAh; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=SMGOtc4SQFLtHm4rUfqa4QDpNe0x6KSyuIHBdqIt7ChX+2BhsMa4oZwhJdpGPLlAGjc7EqoM8SrsBKojGVvoJid45Wmy4nfIS06v1YGVTezYe72/Wwj84FUKvMeygLq5nFeu1wW9SKqNzc27Ses/C4iPP5kL2xV+Ae3MIygqDj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cc2sRPHT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOL7oWAh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D531F000E9;
-	Mon, 27 Jul 2026 17:49:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cc2sRPHT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1A61F000E9;
+	Mon, 27 Jul 2026 17:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785174597;
-	bh=YUFE1QOuvD5+xSghGLkHfiIO4zTSLMkq28XoCsyQpI0=;
+	s=k20260515; t=1785174716;
+	bh=wecGDCQXBjfCFMVnfqOxk3k+NVRMuAsFJ4l2NNvx0O8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=gOL7oWAh1Y6fkJ88Ohv58AXd03Nh8iQjV6U/ofRkCt+4H+SSjaq4lbssWyR7JZ8N4
-	 BPUuBg6KyWuOeAy+/oqxlEyibvOo0OAbTbfSo2FvguCgz8uoFPBJlY+WpzKOs/1sXG
-	 dk9+I1vE0hHMRpkdjGvRePISoO6PkOmjWqz/e2Z5CoWdbaHzFdKfY9FBYaPHcLa+nZ
-	 dF4Md7OCoObOlXdnYbULLE8vxoRv1Z3PuTlLdAtfgrmD6PEcv9244oyo5ciK5B3Enl
-	 lvVv+BsAtYEbnUe8jkRTd4xCoyfvlnM0ZemU1ohXw36HshUzu/5931fXk3PDrsJaKk
-	 87Z2/YUzZYZCQ==
-Message-ID: <a191d359-6266-4229-892c-5746d7a0d2ad@kernel.org>
-Date: Mon, 27 Jul 2026 19:49:47 +0200
+	b=Cc2sRPHTNXRKzGfG9+3lp8wXF5VfmQAbLvCtDFgO7WpDM/Ph4ZVspG7WZSLuTW5mO
+	 oIavaX2DUBRi0sOwaqrXIxXVV2FTANcHPH5c4rvBzi/VKXxeGfVzjU9ntMocVoo55z
+	 5osiAAN5sXkqDS4BMwJhl7VoMsjMqkYi2LjG/vyDzNkH5LifcLUsLpbJVf8XUPdwPU
+	 2OYLyDfJC14kGHuyWgWoaLQIDWraUs+CEtPark3lvbUqYjgf/G1yzwuSlNlMDI1LZ4
+	 gBrVYx1l8UpUVimIH0JsbkORqRswgnN2nM4RXGeuCu9HlEJNVdNgJPCeEelfNtbHzT
+	 ZcDPebXtqS3fQ==
+Message-ID: <d68d3f5e-7983-4e91-b3a5-a5c8dd5a01e8@kernel.org>
+Date: Mon, 27 Jul 2026 19:51:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,7 +36,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 4/5] tools/mm: add a standalone GUP microbenchmark
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
+To: Dev Jain <dev.jain@arm.com>, Sarthak Sharma <sarthak.sharma@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
  <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
@@ -46,16 +46,16 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
  John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
  Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
  Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Jonathan Corbet <corbet@lwn.net>, Mark Brown <broonie@kernel.org>,
+ Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Jonathan Corbet <corbet@lwn.net>,
+ Mark Brown <broonie@kernel.org>,
  Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260716123226.197736-1-sarthak.sharma@arm.com>
  <20260716123226.197736-5-sarthak.sharma@arm.com>
  <4665dd2d-99c8-492c-a4cf-b72028317d0b@kernel.org>
- <86fbde8e-c0dd-4ccb-8890-210026ac6756@arm.com>
+ <75259d8f-1cdf-43e4-9fa4-9a2954435a96@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -102,14 +102,14 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <86fbde8e-c0dd-4ccb-8890-210026ac6756@arm.com>
+In-Reply-To: <75259d8f-1cdf-43e4-9fa4-9a2954435a96@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/22/26 06:38, Sarthak Sharma wrote:
-> Hi David!
+On 7/24/26 14:05, Dev Jain wrote:
 > 
-> On 7/21/26 7:22 PM, David Hildenbrand (Arm) wrote:
+> 
+> On 21/07/26 7:22 pm, David Hildenbrand (Arm) wrote:
 >> On 7/16/26 14:32, Sarthak Sharma wrote:
 >>> Add a command-line tool for benchmarking get_user_pages fast-path
 >>> (GUP_FAST), pin_user_pages fast-path (PIN_FAST), and pin_user_pages
@@ -120,9 +120,6 @@ On 7/22/26 06:38, Sarthak Sharma wrote:
 >>
 >> To we really need the matrix in there? The matrix was good for selftests, but
 >> not when using it as a benchmarking tool, no?
-> 
-> Yeah makes sense, I'll remove the matrix part.
-> 
 >>
 >>> three GUP commands across read/write, private/shared mappings, and a
 >>> range of page counts, with THP on/off for regular mappings and hugetlb
@@ -176,15 +173,6 @@ On 7/22/26 06:38, Sarthak Sharma wrote:
 >>> +thp_swap_allocator_test
 >>
 >> ^ Does that belong into this patch?
-> 
-> No it's just that when I was working on v1 of this patchset, I saw that
-> this binary hadn't been added to .gitignore so I added this, since I was
-> already modifying .gitignore to add gup_bench. It has stuck around since
-> then :). Will drop this from here and send a patch separately for this.
-
-Yes please, thanks!
-
-> 
 >>
 >>> +gup_bench
 >>
@@ -195,22 +183,16 @@ Yes please, thanks!
 >>
 >> 1) Move tools, fixing up includes and removing the gup testing logic+matrix to
 >>    make it compile
->>
->> 2) Extend tool by XYZ
->>
->> 3) Add completely new selftest
->>
->> Because looking at patch #5, there is not really any code reuse there, but I
->> suspect there should be some in this patch here when moving instead of copying.
->>
->> That would make this a lot easier to review.
->>
 > 
-> I agree that this would make it easier to review, but then there would
-> be an intermediate commit where there is no gup_test selftest. Is this
-> fine from a bisectability point of view?
+> I like your idea, it would reduce churn. But is it okay that there will be an
+> intermediate state in which gup_test is not there? Wouldn't we call this a
+> "regression"?
 
-Perfectly fine I think!
+I don't really see why that as a problem as we are effectively removing the old
+test and replacing it by a new one?
+
+In fact, while at it, we can just call the new test "gup.c", as the "_test" is
+superfluous.
 
 -- 
 Cheers,
