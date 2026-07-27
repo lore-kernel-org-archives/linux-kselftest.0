@@ -1,63 +1,64 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6021E3EC6A0;
-	Mon, 27 Jul 2026 09:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB553EDE64;
+	Mon, 27 Jul 2026 09:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785144214; cv=none; b=eCeQYODJ+nAxxioPdRfBH9OUmOXT/vrrY4B2bUdFELL4s8QjDWFNkDNItJ6M7pxwyD4EOevXSSYc7G3NecQgIMn+mYN7wwoZLU8poFISdA//1LFZ0eAj4+/e9Dh8uVFSnjjQXrc3XpehmBwsg1r/6k1G5USmoanIyFESZu/vl6E=
+	t=1785145229; cv=none; b=oWmFoQzcb8rBPGlrJ6VZMawWqq1NYocubR0Jl4V8VIlQdGn14o3XlzKC3ROktsUVNo65Ha8FjRIw2cJaEvz9b6IIWZqhGEF3hF0L8fPWw9zP6Ft/b0NuwzlWAQb1wy8aXl5DNr2I0bHsUogL61+YtEImheWVh4pG6VRWg5P0n48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785144214; c=relaxed/simple;
-	bh=2xIesUx/vdcBQyRRmZBEyAPNqR86KnnbLE+bHW7tKA4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
-	 MIME-Version; b=ZH2Wopyfloy4XJtq/qyjtI1QReXIJX0338vDzKDrxDbm8bPxaZFq73Rn1jwc5/M70GTopGuLQb/B5C7+g7pspszVAlzLqXdKhR+mMvW0XrCJT6cIHjnn0NO6d0FdR3BEMucpP1yaEnUxa2bLB5T/oGP5wxI88RBACibnrjMIqF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Q/L8KDrR; arc=none smtp.client-ip=90.155.50.34
+	s=arc-20240116; t=1785145229; c=relaxed/simple;
+	bh=9/cqmoWxgZjPcCIXajCooDxybeCNY+fYXSZTReQpiTg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OZlgk/w7gelw8Ii37Nd+G4oa2fanEQFCUsM1Xm1XRrZelCiuy6Kx2HyxNgnOlKdvcVbOU83pSfPCMVBWzh6Rsg1A3nC7vKJ2qr97podZnDdMKa3YP81uoc1KnyL7alaD3VITPsd2SCxF+aZFVfRoo1QfKqKEM4bYHTaaED+ieTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IDCQTKh7; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Q/L8KDrR"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IDCQTKh7"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:In-Reply-To:
-	Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:References;
-	bh=2xIesUx/vdcBQyRRmZBEyAPNqR86KnnbLE+bHW7tKA4=; b=Q/L8KDrRUm47hN58vKMGPpWvDM
-	uZvm6ysYfSoh90caLg3gv9iteRGhluWxiHrBDjYC3lqKyVGZVyr2mqvCsXbmr38i94AU0j1yNzgJt
-	eUgKaTBvIZKkNpOdrije0kfwQIudXQ5+DWX14Zh+kWrFpCkfGn6Y7i3uE1wERhj/Sw2xv/xmX8XH9
-	W1VYaRix2haBy56bAr6QG3pRgVvbhin+1uUFU0vcsDZx4F64EvLynVOcaZ6kdj8Qqbo2hEdaSMj2m
-	OF3CzqdYtHPBhMkWigvNBu+lyJGCsLR6gdWDW1MkTkt11c1DbRK+yRkN0Q4+FDQfra65f/mBp11uB
-	rF7MAG8w==;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=9/cqmoWxgZjPcCIXajCooDxybeCNY+fYXSZTReQpiTg=; b=IDCQTKh7guJmIavzhqYdQjccWD
+	Pl8pWTaKswgvkccDMxnm+BbJh9BialG0jPTJOA/BnKLeY/yISlvHB2BWMbZ/du3mXDgRVGac5LIjP
+	otZGDSNbznd/Tt4nRDU/G5GK6n54aXY7dlPyDfspnf1gbPCbbHEhJNOhFYXg7mNqh05GPbYqC8k2s
+	nHBMy6vKVDKTDbKGMYnLh0zsmLSm/bVGJIPqlMAWJOgfUrTiQtjo7GeMnFa/RAkzzI8jpyO2kj79w
+	Ysa+DjOYAyut5ruwzR3ra3qa51Xmy8U372uzYwWjtXsXnsL05olGDCdjQGFemqnBM+VESikOaOzWs
+	pO86jQpA==;
 Received: from [2001:8b0:10b:5:45df:678b:e980:5dcd] (helo=u09cd745991455d.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1woHYX-0000000AMaK-2UWS;
-	Mon, 27 Jul 2026 09:23:29 +0000
-Message-ID: <a7d422d7f23d9143187d3b473a03b74f5eb52da6.camel@infradead.org>
-Subject: Re: [PATCH v5 net-next 0/7] ptp: Add PHC timestamp quality
+	id 1woHot-0000000AOAV-0XLD;
+	Mon, 27 Jul 2026 09:40:23 +0000
+Message-ID: <ebe69e04ba6330800d58e078af1a62d8ca266064.camel@infradead.org>
+Subject: Re: [PATCH v4 net-next 0/7] ptp: Add PHC timestamp quality
  attributes
 From: David Woodhouse <dwmw2@infradead.org>
-To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
- <davem@davemloft.net>,  Jakub Kicinski	 <kuba@kernel.org>,
- netdev@vger.kernel.org
-Cc: Richard Cochran <richardcochran@gmail.com>, Eric Dumazet	
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Thomas Gleixner	
- <tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn	
- <andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo	
- <xuanzhuo@linux.alibaba.com>, Yonatan Sarna <ysarna@amazon.com>, Zorik
- Machulsky <zorik@amazon.com>, Alexander Matushevsky <matua@amazon.com>,
- Saeed Bshara <saeedb@amazon.com>,  Matt Wilson <msw@amazon.com>, Anthony
- Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>,  Evgeny
- Schmeilin <evgenys@amazon.com>, Netanel Belgazal <netanel@amazon.com>, Ali
- Saidi <alisaidi@amazon.com>,  Benjamin Herrenschmidt	 <benh@amazon.com>,
- Noam Dagan <ndagan@amazon.com>, David Arinzon	 <darinzon@amazon.com>,
- Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik	 <ofirt@amazon.com>,
- Amit Bernstein <amitbern@amazon.com>, 	linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, shuah@kernel.org,  Jonathan Corbet	
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman	
- <horms@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	vadim.fedorenko@linux.dev
-Date: Mon, 27 Jul 2026 10:23:28 +0100
-In-Reply-To: <20260717065924.2556-1-akiyano@amazon.com>
+To: Richard Cochran <richardcochran@gmail.com>, Arthur Kiyanovski
+	 <akiyano@amazon.com>
+Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, Paolo Abeni	
+ <pabeni@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Miroslav Lichvar
+	 <mlichvar@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Wen Gu	
+ <guwen@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, David
+ Woodhouse <dwmw@amazon.com>, Yonatan Sarna <ysarna@amazon.com>, Zorik
+ Machulsky <zorik@amazon.com>,  Alexander Matushevsky	 <matua@amazon.com>,
+ Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>,  Anthony
+ Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>, Evgeny
+ Schmeilin <evgenys@amazon.com>,  Netanel Belgazal <netanel@amazon.com>, Ali
+ Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt <benh@amazon.com>, 
+ Noam Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>, Evgeny
+ Ostrovsky	 <evostrov@amazon.com>, Ofir Tabachnik <ofirt@amazon.com>, Amit
+ Bernstein	 <amitbern@amazon.com>, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, shuah@kernel.org, Jonathan Corbet
+ <corbet@lwn.net>,  Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
+ <horms@kernel.org>, vadim.fedorenko@linux.dev
+Date: Mon, 27 Jul 2026 10:40:22 +0100
+In-Reply-To: <ama3UYqwwoJ3j8bq@hoboy.vegasvil.org>
+References: <20260714020340.25014-1-akiyano@amazon.com>
+	 <ama3UYqwwoJ3j8bq@hoboy.vegasvil.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-Fo5KZ3IDbUY3/LLMdnzg"
+	boundary="=-b8tAffcDC4BkaJMdEUWk"
 User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -68,25 +69,47 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-Fo5KZ3IDbUY3/LLMdnzg
+--=-b8tAffcDC4BkaJMdEUWk
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-07-17 at 06:59 +0000, Arthur Kiyanovski wrote:
-> This series adds quality attributes to PTP Hardware Clock (PHC)
-> timestamps, allowing userspace to obtain error bound, clock status,
-> timescale, and system counter values alongside timestamps in a single
-> call.
+On Sun, 2026-07-26 at 18:41 -0700, Richard Cochran wrote:
+> On Tue, Jul 14, 2026 at 02:03:01AM +0000, Arthur Kiyanovski wrote:
+> > This series adds quality attributes to PTP Hardware Clock (PHC)
+> > timestamps, allowing userspace to obtain error bound, clock status,
+> > timescale, and system counter values alongside timestamps in a
+> > single
+> > call.
+> >=20
+> > Motivation
+> > ----------
+> > The existing PTP APIs return timestamps without any indication of
+> > their quality. Applications that need clock accuracy and
+> > synchronization status commonly rely on external tools such as
+> > ptp4l, which implement synchronization logic and can export their
+> > measurement of clock accuracy.
+>=20
+> Yes, and what is wrong with that?=C2=A0 Nothing, AFAICT
 
-I've reworked my linux-phc extraction to sit on top of this (using
-temporary commits for now; I assume I'll rebase on top of net-next when
-this lands there).
+Sure, there's nothing wrong with that when it's userspace which is
+actually doing the discipline of the clock.
 
-It (almost, qv) passes a basic smoke test, feeding vmclock in QEMU with
-synthesised error-bound data, which ends up correctly visible to
-userspace =E2=80=94 apart from the csid.
+This is for the cases where the device itself is responsible for the
+discipline, and the driver is merely transporting the clock status.
 
---=-Fo5KZ3IDbUY3/LLMdnzg
+> ? For managed PHC devices =E2=80=94 such as
+> > the ENA network adapter, whose clock is synchronized by the device
+> > without userspace involvement =E2=80=94 these tools are not available, =
+and
+> > the existing APIs lack a way to report quality metrics to consumers
+> > of time.
+>=20
+> So make some user space tool that advertises your device's qualities.
+
+I suppose we could invent different device-specific ways for each of
+the drivers to expose the same information? But let's not.
+
+--=-b8tAffcDC4BkaJMdEUWk
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -184,22 +207,22 @@ vFEOOmuaq7VamuLEPFQtJM4olmipOW6CzrLcFz6J/6yAecEG3P1ZDoy08eSHvM40MAUgpwGa/w6o
 MAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTowOAYDVQQDEzFEaWdpQ2VydCBB
 c3N1cmVkIEcyIFNNSU1FIFJTQTQwOTYgU0hBMzg0IDIwMjQgQ0ExAhADNSi2uzJskfEdOMo4hV0g
 MA0GCWCGSAFlAwQCAQUAoIIBezAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yNjA3MjcwOTIzMjhaMC8GCSqGSIb3DQEJBDEiBCB9he+757mOgptrRLE4VNX1LncqVs+Z
-+RKh7U7ibdCr7zCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
+BTEPFw0yNjA3MjcwOTQwMjJaMC8GCSqGSIb3DQEJBDEiBCDqLB9iUaaanApr6vNKi4nyr5YJ2Zrn
+kAx2MQ6jVkIz0jCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
 aUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBT
 SEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAwgYcGCyqGSIb3DQEJEAILMXigdjBiMQsw
 CQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFz
 c3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAw
-DQYJKoZIhvcNAQEBBQAEggIAbFwMTnUn0w/x2Kp3FCZpcYS7E4p5aWavAT7SbfKheYeUTFmGd4S8
-rn4QsKPnVSBGHn+6tR3GFGcauRySFQeONs8LhitkWztHJyGNrvWTwGKNR6j/w2ueGd+mFTjpEiNn
-JOIEjuKlC4tJ6xc6dBZlQCBJJoAE5aGSuWJjMBtEtP7+YV1F0amSydyCKFPpGUtD+d1Qx/owadAT
-bXGHU0ioZf7/EyDwQ+VguIgSyNKkPuD2yhNct79Yca/k7JPmQKfIlyW6MmdUOB8e1nkULJqnP2H3
-mvBZDP0E/9yHObG7Hx3KlUVnKUFHChmEZ+umpg4B9yBdHueRadWx0WA1Exxt+FkBEnxGdkAuiBSj
-8xLBu9mOuhceGOiSQDBoz8TCDNxWh50zT4xxESrHTLvYZEveIivpi9mbwPJGaG8AkbXWhjGv0rTZ
-zJG4sUuX3LQ2Hl5uvVlVPfbLljTC8Mm/SS6r4KK9u1ggKpmUbTfjTSlzsl/72UUPhGKA7IS5+i7O
-xR1JB3VMSDT1vtCCkqXzJEnDMViO1r+mdO/mWgmuLlGqtJlEFpVS88kw0DYxdo98Xm7i1Pcq953O
-xSe/UuzGXwtXQEP71Y8ofDapgcpLw7qpDToYFXi0VvHoVbQdWf6oAXZ1Vo/2uhCvmPk00KwNL/jl
-DKfem4LcuNGU9JfyllovxAoAAAAAAAA=
+DQYJKoZIhvcNAQEBBQAEggIAiZ+Er8rKJXb9hGfAnYov0N405G/Ww7A8BO7456/O7ZvM01vVkkqT
+QZtVPfp91+G78TE2P1Y+Irdk98QJrfDe6doS6ALfSbOV9huFPRk5D08Rs9/56LKFrgkz6w2uTySn
+A/f5D/vD3kIIy5Vlbyb2hP0A49GJKiMtM/YL4Y1lJjX+kUAyBB36/onjNYtQlVZPXixoiokql/hS
+6PVoYSkX6QYIUQd/HFNtRMgbfJQ+CcIEUf2JODvICLyDA+EHrsdNyo70Gkw3hZvSAlpRaZ1LvPET
++krs516cw1FN/cvq2yUlc3DnltWR3kCGtJy1L/2+PNDVm4lvig4CGjejyxVufpckwPSxf7fE9q9D
+or2XHE1jC87bTOZQrIGErUacclh8162USmN83sWTQfQRLdZ3TI+oiRW9+9rRfN+HEjDoYvOEsCWC
+0QtqWwa+WPc9cFh1Ewq18n7GIU5zq88tJPAvqzEp6YXoAGvyh3tSDTo8nCDeuC9B7QfUg+91yNU5
+zojOc3M6LkxFjialDj5tG0thSItZcpb5YQfwA7bF9E+Lav+oW5gYpefBOZcbLOIxzUPGMzA+NtTR
+a5rhSA/amKrObqETsNMj3t1lS26lHjVnlNrJeezM6f9iebf1+vlZGl07Glr2LiuO5Ja6IcJ4f3LT
+w9BsKsR+krtJ/BXHpx+1fH0AAAAAAAA=
 
 
---=-Fo5KZ3IDbUY3/LLMdnzg--
+--=-b8tAffcDC4BkaJMdEUWk--
