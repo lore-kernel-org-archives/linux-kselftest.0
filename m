@@ -1,174 +1,135 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C555C2F4A14
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 01:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E591038A71F
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 01:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785115986; cv=none; b=rFLfdoEhLVEckmX8XgxUq3we3cp0Wm/t+KM63nz++LXZoPKLh2qORzPSoeklePKfRRyB4TcJYe0T16PjXXfr1mLoI0m3O+QK1OhHpNi66rkDnAxIbLj2e/V5zbiyJiE0DGxmlSdLYM0W+BMAYXjQkknXzXLhBJ9oAsQVtyn/nfg=
+	t=1785116505; cv=none; b=n6zarDfEnzMIlB+ek3Rhp0lCaMohQ25/dRzYuYZ8i2Qe6M4amOt0f0Y4qaLkjKCoVTdmjgY57XOFd0ttHX5h3iedte+JQW4cIPmjt3zIb837J/cDXc1OO2wwzMyvg9Tq4xvtH8puEG8y6gE4vY+V8YbgazXYGK1DsAEqF/f/rYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785115986; c=relaxed/simple;
-	bh=JvhlWiHubvipXGwiyYDoGh8n5w2sId5TPv7IkZCZSf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sv7959QXdWZHXFwDqB2APZqnDJUV/loxG2gkaHABDc3hJT5Z22peFCoCZy5/uWJ6d6ub5Jk2/9ZLb5GjPvBWucBPgvB5Ev1r5z7VykyWyIsdzo+nY7kTELKENrXuCTPscJ95Q5JYY65/EUZpeHAk5Um/33MEb7NS4vVbhgbNXLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=OPInpC6S; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
+	s=arc-20240116; t=1785116505; c=relaxed/simple;
+	bh=P+IeIdV3xEFBB4H/lA/+B+OOLo8fcz/TNMqrT2maHzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oj74fPl4imEx48jGQ3DgY8jkvjk6YgGQIjUp6534jKCWsnWVuDQd7vJtUciLnkQuoUQ+X7MonsivuDLIXvQkzLs6MNWAqlOQSXCjB0o3L/8F5eky1XmZoczMQJNCxA/HPJxTstLAlpYF/uxhVxJRuVl5hngAM9OOwg8L1XMfuAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwlkO8IM; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="OPInpC6S"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-ca97d139d5fso1261195a12.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 18:33:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwlkO8IM"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-81f36179dd5so26115517b3.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jul 2026 18:41:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785115984; x=1785720784; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QS8YqykbG3lvtABz9lYv5yB3o6Nx9CfZmlJ/xUd/ZDo=;
-        b=OPInpC6SF8U06+gD1VYAE4r/QyeGlQnM65JGdQQycmup3iyYfolkUD7K91ZelX9FmZ
-         BxJojypUVdVl7embGSj6MtxpG9vUa+jeqdsAL8OVlfr2thOkT2Pqz8JN4EGRLERJBUNU
-         o5GRhwTaGNgS1LLgMzgIlhmebIA8LqiBGNuPpaGJyy+gkfalDY+i+w8jH3ehu7RSvKYN
-         nMLzqi78rruBOUhezUXvJ9WF1UebAst1v6FdYjAr7Zh1g3eBxQ6BhPiaerFXQaVId3zc
-         1CSZmCVN3kIn8yx+Ui8Os8b0ecRoIWtRgPteHp7DYzGc4lmdycodpZQahfBrkZB5hnbi
-         gnBw==
+        d=gmail.com; s=20251104; t=1785116503; x=1785721303; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=v+AzfghQ44TeGSX/5Cn91O6zQUgy9oiVe8cggLcOOnA=;
+        b=XwlkO8IM90uGxg/QmyF4CowRaw2JSW7FdpVt+Px5e4dRFsQhsPae2mJ5WAoFzOG2Jc
+         pNooiSItaYF0q7c60gPZGfy+Bh4LPfmCWd80QNMQy3quxGfLGlO6HCAHPUmbIsD7Em/E
+         C8bWN3sV63e1YOr32aEdCTgx9oQ1xgEUAI3JKmocJ6ii9zuIqiVtSTWirDegZKWg9Or5
+         S9MnzoFRPOjaGbPvWZJpFcq4gi9YY7APxD5yhRaIDobm7g67QFFAQ6gUYtR9JtdQNsuB
+         xvsQu4Ky80UgUngsKZxOG94pilnFQZba5BkqotN4vQDQaKwhw5d/Z6aYtUTLv9fL4ZpC
+         fhZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785115984; x=1785720784;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QS8YqykbG3lvtABz9lYv5yB3o6Nx9CfZmlJ/xUd/ZDo=;
-        b=lXFQcv9XXXjOZ76SL1UDB1HHdYmLdyaYLeSX3Qj1sUmvCs9q6qmX7djIQhvcjz3IqM
-         fJXfBazNQpjoBOucl5xLks+9H/MDna2iIW8KgVq/OXtolTRfr6R5rzF+JwHWQjyGNlOl
-         umPAFX9tWCBgjzK5CGfTyMN+FIK6ySHAjahqDCjUn9B/9D4ggq00+fTCXhet58F8iwh/
-         L3oSv6z/LGmNQ4IJssfNXI5thcCmVxrdgve92gEGCMbLw9pxZW+dMZs+Zt9XK1R1/0cg
-         EBkgdUwqakUfM9IIuVhrh5RQmuDN/dpPEHA4qDMtnhYmMuQ4zWivjHK4Ib1r8Tm0vjn3
-         EI5g==
-X-Forwarded-Encrypted: i=1; AHgh+RqkOE/+6rX6kBwG8HaRwCPnXul8ItE0XbQK10UBnAv0u5ZMzWs/MdNbV2jDKrXCyYnkgKVxioYr7sjNPnsQK9g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziohGffQTyNgb2sN8fPnNE50e23XW+XVCeWKLDQ23dTxQxDLPP
-	4Qwhnsu6vuzMSHdBk4wKX5l/U7gxh36/A6UV7DLBbocsZpOqHch2EUBCG9QFdCHRAUQ=
-X-Gm-Gg: AR+sD10c7HYTVGy2Io37W7bCn3GCBu/k3eHOPdLTZBfgcLwCe3eNj9b4OrxFbfGHkdC
-	r0P6S/LM0FUeI7aI1WItUBvYntIQfD/q5LG3LwTOjRm0X6xhsGwx1n5XguEn0ui/+mLpDWsvqrK
-	52EVSi48aILDeytOGlBv5EXHTeXUPGWc0DI7PYF1cRrpZ+ygeeUOK2Ph4GbtjN8H7L/Duyui1+6
-	TQ+f0fZpO/MoLRAvvJCrUb7it5w0myKSOygDmzgUKazzChb9ukIjXQPukhdisT1gUp2GVL5vs3B
-	oITeuiTlIkuGsxALpLXgPc1CvvehhzwCkG8lKjEEVH1RmCuTMl8OWqcrGf3g0A6c6Jf3GUtdcL1
-	tgkfZin17aVrNP2j6q99acxPgxBT9ILHZbnzO0tYKj+Er26r3ffGhbt7HM3XCmO7RZaZaSzpkj9
-	BCcHgfKmF8JlcyXTvUQe6fpjuBCeHl0EEiiWyWKaFdX81VBozgdC7ed6auW5pd55RjodG7Jag=
-X-Received: by 2002:a05:6a21:695:b0:3c3:64cc:311a with SMTP id adf61e73a8af0-3c67dd65ec9mr6364557637.22.1785115984125;
-        Sun, 26 Jul 2026 18:33:04 -0700 (PDT)
-Received: from ?IPV6:2402:8780:1329:2779:943f:461f:3cbe:df62? ([2402:8780:1329:2779:943f:461f:3cbe:df62])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13e53094d65sm18958049c88.13.2026.07.26.18.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jul 2026 18:33:03 -0700 (PDT)
-Message-ID: <6a5f7481-124f-48ad-ab44-577b12d33592@openresty.com>
-Date: Mon, 27 Jul 2026 08:32:58 +0700
+        d=1e100.net; s=20251104; t=1785116503; x=1785721303;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=v+AzfghQ44TeGSX/5Cn91O6zQUgy9oiVe8cggLcOOnA=;
+        b=UNp6aRC2nODgLMGMYbS2FVUOwTwsGpTqXJiC9+/Wg48q8ewNGKCQ13IDmx89nkyuzv
+         lOw9PhmIqKUkXd5w3BbbFM7+tjP+zh4yERTGMPYY/tdEB8xbuehpx58e4oeZ30P7P9as
+         AHXOuPWyls9uHwoecSwH9Qtzdy5xk/00P0zLF6IsmSH5FilIdDcEBZnwdlCgismaSVsC
+         J+1bxqxrw/OHhwX4BOyjlT3xFU++QRgrKACio8YTwMn0y6F0dZ6lx9HtOFYE54wTJVvz
+         lcwVJ+3j/SSdFOvLQV50kBcQJKKKJLx6o1MtKS80opFmoT0yYWHy1zxx6uqQ7drV7NDb
+         JisQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpbngTZSiKP0Q3fl5ozX2Eu6QEkmlLT7E936wAk98MPkKcdnkZ3t7VXmfRUULcDzPGR6BJ/mbRC9ibtgwrZR+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxILmAo3lVDo9LMHJNZuhi4IaeuX3ERSeqys/WpD24ukVVP9O3y
+	VNrsSKd1NinaH8AIzw2l47bPC9BZvnz5JTZ+v2E7fTuKOpx/Hq5W9rMF
+X-Gm-Gg: AR+sD13kUVUs3jAny+Sbjag1JX0qnI8X3hd8Xi8h5uXE7NVhMSw0ccxNZAcMdKLqDtE
+	SxnKfG+6HhYeNuOciBqB9T5ojadR2msx9bIbOFWecmrHFDgQfKcvukSBunHaIE5DG1VnYUjHFyf
+	e+qKnhjaqdjyrQVt0Jwh/8bsWp/aLuiQvrV+Qh639k+YtwOJIgtPnF1q0GUdDE49oGnqznv1scW
+	4RycJyb5Tl2jYm716NJCmUQEMUo/rCohBerqKMmxc7nPyDEl8rCGfl1h9/ajy9ActH4Xw/+VUOy
+	LzcLiW/sZCRyXJYWcjNY2TxNtawtNbCzpz7tc19WZUoWuPd+4y/63tWssiZaLmlUWqXD2Txfs2T
+	TdWedY7RNY04Id23FTrsLMuepJVav0RJjXTT92PuiXo2dOs7aoa2bmD9Vq4wyprpa904Ix03/L6
+	wt4b/7hW2N9cgijBJw5JcrlHLMoxAcqxw=
+X-Received: by 2002:a05:690c:317:b0:81e:29d8:fae3 with SMTP id 00721157ae682-81f69e5051bmr20875487b3.46.1785116502789;
+        Sun, 26 Jul 2026 18:41:42 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2600:1700:2430:6f6e:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f6592ec1asm25204717b3.45.2026.07.26.18.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jul 2026 18:41:41 -0700 (PDT)
+Date: Sun, 26 Jul 2026 18:41:37 -0700
+From: Richard Cochran <richardcochran@gmail.com>
+To: Arthur Kiyanovski <akiyano@amazon.com>
+Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Wen Gu <guwen@linux.alibaba.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	David Woodhouse <dwmw@amazon.com>,
+	Yonatan Sarna <ysarna@amazon.com>,
+	Zorik Machulsky <zorik@amazon.com>,
+	Alexander Matushevsky <matua@amazon.com>,
+	Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>,
+	Anthony Liguori <aliguori@amazon.com>,
+	Nafea Bshara <nafea@amazon.com>,
+	Evgeny Schmeilin <evgenys@amazon.com>,
+	Netanel Belgazal <netanel@amazon.com>,
+	Ali Saidi <alisaidi@amazon.com>,
+	Benjamin Herrenschmidt <benh@amazon.com>,
+	Noam Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>,
+	Evgeny Ostrovsky <evostrov@amazon.com>,
+	Ofir Tabachnik <ofirt@amazon.com>,
+	Amit Bernstein <amitbern@amazon.com>,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Simon Horman <horms@kernel.org>, vadim.fedorenko@linux.dev
+Subject: Re: [PATCH v4 net-next 0/7] ptp: Add PHC timestamp quality attributes
+Message-ID: <ama3UYqwwoJ3j8bq@hoboy.vegasvil.org>
+References: <20260714020340.25014-1-akiyano@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] selftests/nolibc: add abs() range test
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
- LLVM Mailing List <llvm@lists.linux.dev>, Yichun Zhang
- <yichun@openresty.com>,
- Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- gwml@gnuweeb.org
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-4-ammarfaizi2@openresty.com>
- <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
-Content-Language: en-US
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-In-Reply-To: <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260714020340.25014-1-akiyano@amazon.com>
 
-On 7/27/26 3:00 AM, Thomas Weißschuh wrote:
->> +/* abs(), labs() and llabs() over the whole range of their argument type */
->> +int test_abs_range(void)
->> +{
->> +	int i, ri;
->> +	long l, rl;
->> +	long long ll, rll;
+On Tue, Jul 14, 2026 at 02:03:01AM +0000, Arthur Kiyanovski wrote:
+> This series adds quality attributes to PTP Hardware Clock (PHC)
+> timestamps, allowing userspace to obtain error bound, clock status,
+> timescale, and system counter values alongside timestamps in a single
+> call.
 > 
-> Reverse xmas?
+> Motivation
+> ----------
+> The existing PTP APIs return timestamps without any indication of
+> their quality. Applications that need clock accuracy and
+> synchronization status commonly rely on external tools such as
+> ptp4l, which implement synchronization logic and can export their
+> measurement of clock accuracy.
 
-Fixed for the next revision.
+Yes, and what is wrong with that?  Nothing, AFAICT
 
->> +
->> +	/*
->> +	 * Both the inputs and the results have to stay opaque: the compiler
->> +	 * knows abs() and friends never return a negative value and would
->> +	 * otherwise fold the comparisons below at build time, which would also
->> +	 * hide the undefined behavior that is being tested for.
->> +	 */
->> +	i = INT_MIN; l = LONG_MIN; ll = LLONG_MIN;
->> +	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-> 
-> We have _NOLIBC_OPTIMIZER_HIDE_VAR() for this.
+? For managed PHC devices — such as
+> the ENA network adapter, whose clock is synchronized by the device
+> without userspace involvement — these tools are not available, and
+> the existing APIs lack a way to report quality metrics to consumers
+> of time.
 
-Oh, I missed it.
+So make some user space tool that advertises your device's qualities.
 
-> Maybe it can be made variadic.
-Sounds good to me.
+Don't push this stuff into the kernel, where it doesn't belong.
 
-Does the following patch look good?
-
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-Date: Sun, 26 Jul 2026 13:17:14 -0700
-Subject: [PATCH] tools/nolibc: make _NOLIBC_OPTIMIZER_HIDE_VAR() variadic
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-The macro only takes a single variable, so code that needs to hide
-several at once has to either repeat it or open-code an asm statement
-with a list of operands. Accept up to four variables and build the
-operand list from them.
-
-Existing single-argument users are unaffected; the code generated for
-the callers in stdio.h is unchanged on i386 and x86-64.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
----
-  tools/include/nolibc/compiler.h | 15 +++++++++++++--
-  1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
-index f2d7a81d0d7c..ed69f6d26f56 100644
---- a/tools/include/nolibc/compiler.h
-+++ b/tools/include/nolibc/compiler.h
-@@ -77,8 +77,19 @@
-  #  define __nolibc_static_assert(_t)
-  #endif
-  
--/* Make the optimizer believe the variable can be manipulated arbitrarily. */
--#define _NOLIBC_OPTIMIZER_HIDE_VAR(var)	__asm__ ("" : "+r" (var))
-+#define __nolibc_hide1(_1)		"+r" (_1)
-+#define __nolibc_hide2(_1, ...)		"+r" (_1), __nolibc_hide1(__VA_ARGS__)
-+#define __nolibc_hide3(_1, ...)		"+r" (_1), __nolibc_hide2(__VA_ARGS__)
-+#define __nolibc_hide4(_1, ...)		"+r" (_1), __nolibc_hide3(__VA_ARGS__)
-+#define ___nolibc_hide_narg(_1, _2, _3, _4, N, ...) N
-+#define __nolibc_hide_narg(...)		___nolibc_hide_narg(__VA_ARGS__, 4, 3, 2, 1)
-+#define __nolibc_hide(N, ...)		__nolibc_hide##N(__VA_ARGS__)
-+#define __nolibc_hide_n(N, ...)		__nolibc_hide(N, __VA_ARGS__)
-+
-+/* Make the optimizer believe the variables can be manipulated arbitrarily. */
-+#define _NOLIBC_OPTIMIZER_HIDE_VAR(...)					\
-+	__asm__ ("" : __nolibc_hide_n(__nolibc_hide_narg(__VA_ARGS__),	\
-+				      __VA_ARGS__))
-  
-  #if __nolibc_has_feature(undefined_behavior_sanitizer)
-  #  if defined(__clang__)
-
--- 
-Ammar Faizi
+Thanks,
+Richard
 
