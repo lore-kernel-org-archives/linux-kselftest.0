@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FFB43E094;
-	Mon, 27 Jul 2026 17:49:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D4641B8EF;
+	Mon, 27 Jul 2026 17:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785174567; cv=none; b=r4NKfRQkfz/5TUOLn6b/Ybx4VWOccpLwiMTEC1hXmXSwOaWQDIIE9pa/Q8LtvQVxBbjhsNl3z5KX16VQ5osD0wulK6zcvc07mO5Td4JHVdahfBYZMA2qIbkWZ1tBQIeZzOtsQUa91u14tinc3ImGjCtgPx/OR77Mw2dS1UVGXRg=
+	t=1785174617; cv=none; b=hRNWgYGkxz+xdqw8wOw8g+wMwC5hH1ORzK40a+FjSPSoSQxNKMYHdosbVgGWHWMXmDGNbz2pjvP3nKRBJnM2J/kiid37MeqooaUt8U47+UNC11PlezQoiE5MwyBxDAoOmmMIqkERAsq+EnReUgEowJXTHaCwKLBWQEaf/3Ricn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785174567; c=relaxed/simple;
-	bh=TyaLdggY0HquU6uihvqvSQ2PgE9TuNYxW2y3vWE/6bc=;
+	s=arc-20240116; t=1785174617; c=relaxed/simple;
+	bh=2ol6eYUukiav9Pb9fxGGLPq0uv9ru576YFdpqyp6+IE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KJUoMKMlI2FpKHvACUUqawTf20/G0wWZCQzorAjkchU55pANy9nbnZ1/3NM0Ve9FDtnd6yC8hcHw5lNkclhoe+SViWRRYwtqvKS6qBp4Y1vQQvwx4C/KbXCp+lNXGeBlER3T3h6kBbzVH/SPO1R/EG6OFQUwkhbB1NL11O038k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IeYO0KT0; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=usfw7ef0B9dyXhLsoScv5fgSmjlSA59tfnF+uuKNTSiiLdC+BQ6ISS+gkkII3qYLmtcsKWgS4VU2WF/22ATEB+CdVZ08oagSlgGxMxtV2G6DCIXvxbkaXSu/TRaDcpGZQIVv7l4PP/npTc5gPyHED4EAqZZz1VqE8UsBMKygiVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOL7oWAh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IeYO0KT0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AD31F000E9;
-	Mon, 27 Jul 2026 17:49:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOL7oWAh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D531F000E9;
+	Mon, 27 Jul 2026 17:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785174554;
-	bh=H01NrCuzhYN6GF6uhnNDmJjIoKVi3JaIjksshzwjifs=;
+	s=k20260515; t=1785174597;
+	bh=YUFE1QOuvD5+xSghGLkHfiIO4zTSLMkq28XoCsyQpI0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=IeYO0KT0SctMH51xOZU7pRvklsBKJYhY00KwUtctIjeqmUFhr7XT9MM5mtG2tbPHC
-	 CziSKojecODvhUGUua6JLKUSa+NRtzQ+ssXCL6ohWdsq2q/iy5alu1f1LBqkHbXdlb
-	 XNuBCLpcjFp2t8tSFPYMv1j1/4Ji+0ab9iP6OXj9uvye+7N68bllI6+9EJWRTJQhzt
-	 gS307vRLTob9+Aa4ucFerFvHhfFE5TBukEcLljN9syXYnQUzug7tx4S1JlqZPqol02
-	 bpDHeWvTrG1EDi2uT9gvTDcPfXmHMceXjPvr7hXTQ+av06jFsogDgk+cFp7j8PNxgd
-	 vecS4ZkAmTMzw==
-Message-ID: <2f0eded6-5885-485e-baad-01d13080dc76@kernel.org>
-Date: Mon, 27 Jul 2026 19:49:04 +0200
+	b=gOL7oWAh1Y6fkJ88Ohv58AXd03Nh8iQjV6U/ofRkCt+4H+SSjaq4lbssWyR7JZ8N4
+	 BPUuBg6KyWuOeAy+/oqxlEyibvOo0OAbTbfSo2FvguCgz8uoFPBJlY+WpzKOs/1sXG
+	 dk9+I1vE0hHMRpkdjGvRePISoO6PkOmjWqz/e2Z5CoWdbaHzFdKfY9FBYaPHcLa+nZ
+	 dF4Md7OCoObOlXdnYbULLE8vxoRv1Z3PuTlLdAtfgrmD6PEcv9244oyo5ciK5B3Enl
+	 lvVv+BsAtYEbnUe8jkRTd4xCoyfvlnM0ZemU1ohXw36HshUzu/5931fXk3PDrsJaKk
+	 87Z2/YUzZYZCQ==
+Message-ID: <a191d359-6266-4229-892c-5746d7a0d2ad@kernel.org>
+Date: Mon, 27 Jul 2026 19:49:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,30 +35,27 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/5] selftests/mm: make file helpers return errors
-To: John Hubbard <jhubbard@nvidia.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Mark Brown <broonie@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Peter Xu <peterx@redhat.com>,
+Subject: Re: [PATCH v5 4/5] tools/mm: add a standalone GUP microbenchmark
+To: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
  Leon Romanovsky <leon@kernel.org>, Zi Yan <ziy@nvidia.com>,
  Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
  Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
  Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Jonathan Corbet <corbet@lwn.net>,
+ Jonathan Corbet <corbet@lwn.net>, Mark Brown <broonie@kernel.org>,
  Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260716123226.197736-1-sarthak.sharma@arm.com>
- <20260716123226.197736-2-sarthak.sharma@arm.com>
- <b66c233a-7956-461a-a3d8-3421c76c937a@kernel.org>
- <004e11f5-ab21-479d-80a3-64ab89465b85@sirena.org.uk>
- <cefe62b7-0167-46c1-9fe3-fe7efee90a7e@kernel.org>
- <cd539861-5f98-4906-8e36-f2a5a70687a5@arm.com>
- <4ad4c2f0-aa6b-435d-b649-a8320a418730@nvidia.com>
+ <20260716123226.197736-5-sarthak.sharma@arm.com>
+ <4665dd2d-99c8-492c-a4cf-b72028317d0b@kernel.org>
+ <86fbde8e-c0dd-4ccb-8890-210026ac6756@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -105,33 +102,115 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <4ad4c2f0-aa6b-435d-b649-a8320a418730@nvidia.com>
+In-Reply-To: <86fbde8e-c0dd-4ccb-8890-210026ac6756@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/22/26 20:57, John Hubbard wrote:
-> On 7/21/26 10:24 PM, Sarthak Sharma wrote:
->> Hi David and Mark!
->>
->> On 7/21/26 8:24 PM, David Hildenbrand (Arm) wrote:
->>>
->>>
->>> Right, and if we want to move this to tools/lib/mm later, maybe we can just not
->>> print anything and instead only return expressive errnos.
->>>
->>
->> Yes, we are not using ksft_* prints here because these functions move to
->> tools/lib/mm later in the series.
->>
->> Printing errors from the helpers was suggested by Mike [1]. I also think
->> this is useful since the diagnostic handling stays at one place, instead
->> of duplicating it in every caller.
+On 7/22/26 06:38, Sarthak Sharma wrote:
+> Hi David!
 > 
-> This is a common pitfall. In fact, the lower ("leaf") routines, *especially*
-> library-like functions that are called by disparate callers, should be
-> usually be silent. 
+> On 7/21/26 7:22 PM, David Hildenbrand (Arm) wrote:
+>> On 7/16/26 14:32, Sarthak Sharma wrote:
+>>> Add a command-line tool for benchmarking get_user_pages fast-path
+>>> (GUP_FAST), pin_user_pages fast-path (PIN_FAST), and pin_user_pages
+>>> longterm (PIN_LONGTERM) via the CONFIG_GUP_TEST debugfs interface.
+>>>
+>>> When invoked without arguments, gup_bench runs the benchmark subset
+>>> of configurations covered by run_gup_matrix() in run_vmtests.sh: all
+>>
+>> To we really need the matrix in there? The matrix was good for selftests, but
+>> not when using it as a benchmarking tool, no?
+> 
+> Yeah makes sense, I'll remove the matrix part.
+> 
+>>
+>>> three GUP commands across read/write, private/shared mappings, and a
+>>> range of page counts, with THP on/off for regular mappings and hugetlb
+>>> for huge page mappings. Restore HugeTLB settings after each hugetlb
+>>> benchmark run. Validate numeric command-line arguments instead of
+>>> relying on atoi().
+>>>
+>>> This tool is a mix of reused and new logic. The mapping/setup path comes
+>>> from selftests/mm/gup_test.c, while the default benchmark matrix matches
+>>> the benchmark subset of run_gup_matrix() in run_vmtests.sh. The standalone
+>>> CLI and tools/mm integration are added here and the HugeTLB setup code is
+>>> shared via tools/lib/mm.
+>>>
+>>> Add gup_bench to BUILD_TARGETS and INSTALL_TARGETS in tools/mm/Makefile,
+>>> link it against the shared tools/lib/mm hugepage helpers, and ignore the
+>>> resulting binary in tools/mm/.gitignore. While here, also add the
+>>> missing thp_swap_allocator_test entry to .gitignore.
+>>>
+>>> Add tools/mm/gup_bench.c to the GUP entry in MAINTAINERS.
+>>>
+>>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+>>> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+>>> ---
+>>>  MAINTAINERS          |   1 +
+>>>  tools/mm/.gitignore  |   2 +
+>>>  tools/mm/Makefile    |  10 +-
+>>>  tools/mm/gup_bench.c | 482 +++++++++++++++++++++++++++++++++++++++++++
+>>>  4 files changed, 492 insertions(+), 3 deletions(-)
+>>>  create mode 100644 tools/mm/gup_bench.c
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 26b06d80ab45..7d121dee9f0f 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -17024,6 +17024,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>>>  F:	mm/gup.c
+>>>  F:	mm/gup_test.c
+>>>  F:	mm/gup_test.h
+>>> +F:	tools/mm/gup_bench.c
+>>>  F:	tools/testing/selftests/mm/gup_longterm.c
+>>>  F:	tools/testing/selftests/mm/gup_test.c
+>>>  
+>>> diff --git a/tools/mm/.gitignore b/tools/mm/.gitignore
+>>> index 922879f93fc8..154d740be02e 100644
+>>> --- a/tools/mm/.gitignore
+>>> +++ b/tools/mm/.gitignore
+>>> @@ -2,3 +2,5 @@
+>>>  slabinfo
+>>>  page-types
+>>>  page_owner_sort
+>>> +thp_swap_allocator_test
+>>
+>> ^ Does that belong into this patch?
+> 
+> No it's just that when I was working on v1 of this patchset, I saw that
+> this binary hadn't been added to .gitignore so I added this, since I was
+> already modifying .gitignore to add gup_bench. It has stuck around since
+> then :). Will drop this from here and send a patch separately for this.
 
-Yes, agreed!
+Yes please, thanks!
+
+> 
+>>
+>>> +gup_bench
+>>
+>> I wonder if it makes sense to "git mv" the existing tool (only slightly fixing
+>> header inclusion to make it compile), essentially removing the old benchmark.
+>>
+>> So it would be
+>>
+>> 1) Move tools, fixing up includes and removing the gup testing logic+matrix to
+>>    make it compile
+>>
+>> 2) Extend tool by XYZ
+>>
+>> 3) Add completely new selftest
+>>
+>> Because looking at patch #5, there is not really any code reuse there, but I
+>> suspect there should be some in this patch here when moving instead of copying.
+>>
+>> That would make this a lot easier to review.
+>>
+> 
+> I agree that this would make it easier to review, but then there would
+> be an intermediate commit where there is no gup_test selftest. Is this
+> fine from a bisectability point of view?
+
+Perfectly fine I think!
 
 -- 
 Cheers,
