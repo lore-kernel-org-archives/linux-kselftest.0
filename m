@@ -1,52 +1,45 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CCB3BB102;
-	Tue, 28 Jul 2026 08:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BA23D301E
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 08:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785226754; cv=none; b=PY517slNGyVE7Z2ZDIYBUJWpgHLQAMuFwLg4+7QRsrPl1BBHIezTWqja/NpkR409ndrwaBsQpnOLe6tcK46yGZEFy+6VX0Lp+XDaBvpPQ66nox6osf/QCcOZSKD23phnNrjnoaZhMq+5JgnZUM8upVzdPO+4xv2QgREkq8RLoEg=
+	t=1785227941; cv=none; b=SeX+BNYiq1I2/SRpzI2epPMe+aMXuy70S/AG1EaQqzy4cu6OS6WGyQCJy4lEw2AqkSMfGlRehRaY+NQVkZsj2F07FyuEA+IZiq8241j2rPQQSV3JUODgvrwL6OcDkx0eyKh6JL8Tz6hIlrt1cJQFkDTSgN4Jzf+2g+7bqvzqj3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785226754; c=relaxed/simple;
-	bh=antlL4Mcs7l1DinmTSm0gfMlY6bMNIyHkQyUF7nsHls=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JO+rNiNKdLbCCyxp19r2QHeDkWIEOtjZJ9I6FMnO0ApjAgE/mbYQvPe1RfUzsnfNPpZRp5US8sX2ZH8TOASjYoX5Ma5WRwiIYofJUZcWpOKCDeIuSa9JB6aCeKb9CUdcCm/B7Y7cIfUMb4k1YfbbB5cq2K3MmP0wUyw8BCAyZHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HB1w/lWM; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1785227941; c=relaxed/simple;
+	bh=bUfnHhGxXNI9TF0TjXenconsZRV+LOrRxzgYTnurGik=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QmN4ETDg2SWfBEmAwmdYHlMKqdPbT4bGuRybDQLBMQ4eN8YFm2tn6aM27JpeWP8gXFz1r14z8CFZ4Xq21skkCXNLCqr7WVv4PJr0Q+CZnYw1IXlBuh1J1GXleXDWhDGdIQvWErlOSXhJiDFLloIoGiCIkT4XoKjFztXFuQBd9oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QxnmviKD; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HB1w/lWM"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785226746; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=lqDFCl7DalCEy9x0Yw1QNkF+tSzwo+I6FMPaEYjO+Uc=;
-	b=HB1w/lWMaMupM+gxcfskaAERB67rhnNixSNaKA77gKRokfvexoXkEJQK6NoSYvkCHN9EAOK3iPtHKMB0MVlwMNzwOi6oMymI2r8t2AYBBTrAJxl9frcxDF9wXBwBsHURCMlLtxULZ/USvBwbbO+SrzMwqWgUOMoIsWNFnuGr1j4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X8-ElbU_1785226424;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8-ElbU_1785226424 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Jul 2026 16:13:44 +0800
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org
-Cc: ziy@nvidia.com,
-	liam@infradead.org,
-	nico.pache@linux.dev,
-	dev.jain@arm.com,
-	ryan.roberts@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	baolin.wang@linux.alibaba.com,
-	linux-mm@kvack.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QxnmviKD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785227926;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZH4d5/BxOtrgAYDND11fz5q8aNdMt9i1KsWxLQi68Fo=;
+	b=QxnmviKDnk3nJpMvOLIUuZUSr0eplXoNARdBlgphihgIfxi85ajML0FlufiAU07SL9B2an
+	psaNGiSICUF/mPdYNBUHFxMcQfjxFoyII8uQSnXAtwNT1YxX8lZw7cfwLv2Zo6TYeAW5xo
+	57aKn+F8CVzpPd2inDip+HwxD53iObA=
+From: Tao Cui <cui.tao@linux.dev>
+To: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] selftests: mm: implement the mTHP-sized hugepage check helpers
-Date: Tue, 28 Jul 2026 16:13:35 +0800
-Message-ID: <8fd04f8c2f11390bf00058f9cd3d98d73544c75f.1785224928.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1785224928.git.baolin.wang@linux.alibaba.com>
-References: <cover.1785224928.git.baolin.wang@linux.alibaba.com>
+	linux-kernel@vger.kernel.org,
+	Ziyang Men <ziyang.meme@gmail.com>,
+	Tao Cui <cuitao@kylinos.cn>,
+	cui.tao@linux.dev
+Subject: [PATCH v2] selftests/cgroup: add PSI pressure trigger and validation tests
+Date: Tue, 28 Jul 2026 16:37:42 +0800
+Message-ID: <20260728083742.2359320-1-cui.tao@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,106 +47,355 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Implement mTHP-sized hugepage checking helpers using gather_folio_orders().
-Also rename the existing PMD-sized huge page check function to
-__check_pmd_huge() for clarity.
+From: Tao Cui <cuitao@kylinos.cn>
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+The cgroup selftests have no PSI coverage. Add test_psi.c: trigger
+smoke tests (one per fd, IRQ full-only), cgroup.pressure toggle, and a
+CPU-pressure trigger test using over-subscription. Skips when PSI is
+disabled or a resource is absent.
+
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
- tools/testing/selftests/mm/vm_util.c | 55 ++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 4 deletions(-)
+Changes since v1 (Michal Koutny, sashiko review):
+- Trim errno checks to smoke level; loosen toggle range checks.
+- Switch trigger test from memory to CPU pressure (deterministic, no SKIP).
+- churn_memory() removed -- sysconf/shared-helper point is moot.
+- Runner stays out of the cgroup; hogs reaped via cg_killall().
+- Add PSI/IRQ skip-guards, zero-init buffers, .gitignore entry.
+---
+ tools/testing/selftests/cgroup/.gitignore |   1 +
+ tools/testing/selftests/cgroup/Makefile   |   2 +
+ tools/testing/selftests/cgroup/config     |   1 +
+ tools/testing/selftests/cgroup/test_psi.c | 280 ++++++++++++++++++++++
+ 4 files changed, 284 insertions(+)
+ create mode 100644 tools/testing/selftests/cgroup/test_psi.c
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 09e5d5cabe21..a4ffaa0ca6fa 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -15,6 +15,10 @@
- #define SMAP_FILE_PATH "/proc/self/smaps"
- #define STATUS_FILE_PATH "/proc/self/status"
- #define MAX_LINE_LENGTH 500
-+#define PAGEMAP_PATH "/proc/self/pagemap"
-+#define KPAGEFLAGS_PATH "/proc/kpageflags"
-+#define GET_ORDER(nr_pages)    (31 - __builtin_clz(nr_pages))
-+#define NR_ORDERS 20
+diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+index 952e4448bf07..ce2b907c57ea 100644
+--- a/tools/testing/selftests/cgroup/.gitignore
++++ b/tools/testing/selftests/cgroup/.gitignore
+@@ -8,5 +8,6 @@ test_kill
+ test_kmem
+ test_memcontrol
+ test_pids
++test_psi
+ test_zswap
+ wait_inotify
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index e01584c2189a..a8c69e37332a 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -16,6 +16,7 @@ TEST_GEN_PROGS += test_kill
+ TEST_GEN_PROGS += test_kmem
+ TEST_GEN_PROGS += test_memcontrol
+ TEST_GEN_PROGS += test_pids
++TEST_GEN_PROGS += test_psi
+ TEST_GEN_PROGS += test_zswap
  
- unsigned int __page_size;
- unsigned int __page_shift;
-@@ -348,7 +352,7 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
- 	return entry;
- }
- 
--bool __check_huge(void *addr, char *pattern, int nr_hpages,
-+static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
- 		  uint64_t hpage_size)
- {
- 	char buffer[MAX_LINE_LENGTH];
-@@ -366,19 +370,62 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
- 	return thp == (nr_hpages * (hpage_size >> 10));
- }
- 
-+static bool check_large_folios(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
+ LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+@@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
+ $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
+ $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
+ $(OUTPUT)/test_pids: $(LIBCGROUP_O)
++$(OUTPUT)/test_psi: $(LIBCGROUP_O)
+ $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
+diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
+index 39f979690dd3..8a3ef479e83d 100644
+--- a/tools/testing/selftests/cgroup/config
++++ b/tools/testing/selftests/cgroup/config
+@@ -4,3 +4,4 @@ CONFIG_CGROUP_FREEZER=y
+ CONFIG_CGROUP_SCHED=y
+ CONFIG_MEMCG=y
+ CONFIG_PAGE_COUNTER=y
++CONFIG_PSI=y
+diff --git a/tools/testing/selftests/cgroup/test_psi.c b/tools/testing/selftests/cgroup/test_psi.c
+new file mode 100644
+index 000000000000..51dc35e26013
+--- /dev/null
++++ b/tools/testing/selftests/cgroup/test_psi.c
+@@ -0,0 +1,280 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include <linux/limits.h>
++
++#include "kselftest.h"
++#include "cgroup_util.h"
++
++/* How long to wait for the CPU-pressure trigger before giving up. */
++#define PSI_POLL_TIMEOUT_MS	5000
++
++static int pressure_open(const char *resource)
 +{
-+	int pagesize = getpagesize();
-+	int order = GET_ORDER(hpage_size / pagesize);
-+	int pagemap_fd, kpageflags_fd;
-+	int orders[NR_ORDERS], status;
-+	bool ret = false;
++	char path[PATH_MAX];
 +
-+	memset(orders, 0, sizeof(int) * NR_ORDERS);
++	snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
++	return open(path, O_RDWR);
++}
 +
-+	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-+	if (pagemap_fd == -1)
-+		ksft_exit_fail_msg("read pagemap fail\n");
++/* Write a trigger descriptor, including the trailing NUL the parser expects. */
++static ssize_t write_trigger(int fd, const char *trigger)
++{
++	return write(fd, trigger, strlen(trigger) + 1);
++}
 +
-+	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-+	if (kpageflags_fd == -1) {
-+		close(pagemap_fd);
-+		ksft_exit_fail_msg("read kpageflags fail\n");
++/* Trigger smoke test: second on same fd -> EBUSY; IRQ rejects "some". */
++static int test_proc_triggers(const char *root)
++{
++	static const char *const resources[] = { "io", "memory", "cpu" };
++	int ret = KSFT_FAIL;
++	int fd = -1;
++	int i;
++
++	(void)root;
++
++	for (i = 0; i < (int)ARRAY_SIZE(resources); i++) {
++		fd = pressure_open(resources[i]);
++		if (fd < 0) {
++			ksft_print_msg("open /proc/pressure/%s: %s\n",
++				       resources[i], strerror(errno));
++			goto cleanup;
++		}
++
++		errno = 0;
++		if (write_trigger(fd, "some 150000 2000000") <= 0) {
++			ksft_print_msg("%s: 'some' trigger rejected: %s\n",
++				       resources[i], strerror(errno));
++			goto cleanup;
++		}
++		/* A second trigger on the same fd must fail with EBUSY. */
++		errno = 0;
++		if (write_trigger(fd, "full 150000 2000000") != -1 || errno != EBUSY) {
++			ksft_print_msg("%s: second trigger expected EBUSY, got %s\n",
++				       resources[i], strerror(errno));
++			goto cleanup;
++		}
++
++		close(fd);
++		fd = -1;
 +	}
 +
-+	status = gather_folio_orders(addr, size, pagemap_fd,
-+			kpageflags_fd, orders, NR_ORDERS);
-+	if (status)
-+		goto out;
++	/* IRQ is full-only, and only exists with CONFIG_IRQ_TIME_ACCOUNTING. */
++	fd = pressure_open("irq");
++	if (fd >= 0) {
++		errno = 0;
++		if (write_trigger(fd, "some 150000 1000000") != -1) {
++			ksft_print_msg("irq 'some': expected failure, got %s\n",
++				       strerror(errno));
++			goto cleanup;
++		}
++		close(fd);
++		fd = -1;
++	}
 +
-+	if (orders[order] == nr_hpages)
-+		ret = true;
-+
-+out:
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
++	ret = KSFT_PASS;
++cleanup:
++	if (fd >= 0)
++		close(fd);
 +	return ret;
 +}
 +
- bool check_huge_anon(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
- {
--	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-+	if (hpage_size == read_pmd_pagesize())
-+		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
++/* cgroup.pressure 0/1 hides/shows the *.pressure files and round-trips. */
++static int test_cgroup_pressure_toggle(const char *root)
++{
++	char buf[BUF_SIZE] = { 0 };
++	char *cg = NULL;
++	int ret = KSFT_FAIL;
 +
-+	return check_large_folios(addr, size, nr_hpages, hpage_size);
- }
- 
- bool check_huge_file(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
- {
--	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-+	if (hpage_size == read_pmd_pagesize())
-+		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
++	cg = cg_name(root, "psi_toggle_test");
++	if (!cg)
++		goto cleanup;
++	if (cg_create(cg))
++		goto cleanup;
 +
-+	return check_large_folios(addr, size, nr_hpages, hpage_size);
- }
- 
- bool check_huge_shmem(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
- {
--	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-+	if (hpage_size == read_pmd_pagesize())
-+		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
++	if (cg_write(cg, "cgroup.pressure", "0")) {
++		ksft_print_msg("failed to disable cgroup.pressure\n");
++		goto cleanup;
++	}
++	if (cg_read(cg, "cgroup.pressure", buf, sizeof(buf)) < 0 || atoi(buf) != 0) {
++		ksft_print_msg("cgroup.pressure=0 readback: '%s'\n", buf);
++		goto cleanup;
++	}
++	if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) >= 0) {
++		ksft_print_msg("memory.pressure visible while disabled\n");
++		goto cleanup;
++	}
 +
-+	return check_large_folios(addr, size, nr_hpages, hpage_size);
- }
- 
- int64_t allocate_transhuge(void *ptr, int pagemap_fd)
++	if (cg_write(cg, "cgroup.pressure", "1")) {
++		ksft_print_msg("failed to re-enable cgroup.pressure\n");
++		goto cleanup;
++	}
++	if (cg_read(cg, "cgroup.pressure", buf, sizeof(buf)) < 0 || atoi(buf) != 1) {
++		ksft_print_msg("cgroup.pressure=1 readback: '%s'\n", buf);
++		goto cleanup;
++	}
++	if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) < 0) {
++		ksft_print_msg("memory.pressure unreadable while enabled\n");
++		goto cleanup;
++	}
++
++	ret = KSFT_PASS;
++cleanup:
++	if (cg)
++		cg_destroy(cg);
++	free(cg);
++	return ret;
++}
++
++/* Induce deterministic CPU pressure (more hogs than CPUs). */
++static int test_cgroup_trigger_fire(const char *root)
++{
++	char *cg = NULL, *cpupress = NULL;
++	int fd = -1, ret = KSFT_FAIL;
++	struct pollfd pfd;
++	long ncpus, i;
++	pid_t pid;
++
++	cg = cg_name(root, "psi_trigger_test");
++	if (!cg)
++		goto cleanup;
++	if (cg_create(cg))
++		goto cleanup;
++
++	cpupress = cg_control(cg, "cpu.pressure");
++	if (!cpupress)
++		goto cleanup;
++	fd = open(cpupress, O_RDWR);
++	if (fd < 0) {
++		ksft_print_msg("open cpu.pressure: %s\n", strerror(errno));
++		goto cleanup;
++	}
++
++	/* 1us threshold in a 1s window: any cpu stall fires it. */
++	errno = 0;
++	if (write_trigger(fd, "some 1 1000000") <= 0) {
++		ksft_print_msg("arming trigger failed: %s\n", strerror(errno));
++		goto cleanup;
++	}
++
++	ncpus = sysconf(_SC_NPROCESSORS_ONLN);
++	if (ncpus <= 0)
++		ncpus = 1;
++
++	pid = fork();
++	if (pid < 0) {
++		ksft_print_msg("fork: %s\n", strerror(errno));
++		goto cleanup;
++	}
++	if (pid == 0) {
++		/* Enter the cgroup, then over-subscribe it with CPU hogs. */
++		if (cg_enter_current(cg))
++			_exit(KSFT_FAIL);
++		for (i = 0; i < ncpus; i++) {
++			if (fork() == 0) {
++				for (;;)
++					asm volatile("" ::: "memory");
++				_exit(0);
++			}
++		}
++		for (;;)
++			asm volatile("" ::: "memory");	/* child is also a hog */
++		_exit(0);
++	}
++
++	pfd.fd = fd;
++	pfd.events = POLLPRI;
++	switch (poll(&pfd, 1, PSI_POLL_TIMEOUT_MS)) {
++	case -1:
++		ksft_print_msg("poll: %s\n", strerror(errno));
++		break;
++	case 0:
++		ksft_print_msg("no trigger event; could not induce cpu pressure\n");
++		ret = KSFT_SKIP;
++		break;
++	default:
++		if (pfd.revents & POLLPRI)
++			ret = KSFT_PASS;
++		else
++			ksft_print_msg("poll returned 0x%x\n", pfd.revents);
++		break;
++	}
++
++	/* Stop the hogs (bounded, so waitpid can't hang) and reap the child. */
++	cg_killall(cg);
++	waitpid(pid, NULL, 0);
++
++cleanup:
++	if (fd >= 0)
++		close(fd);
++	if (cg) {
++		cg_killall(cg);
++		cg_destroy(cg);
++	}
++	free(cpupress);
++	free(cg);
++	return ret;
++}
++
++#define TEST(x) { #x, x }
++
++struct psi_test {
++	const char *name;
++	int (*fn)(const char *root);
++};
++
++static struct psi_test tests[] = {
++	TEST(test_proc_triggers),
++	TEST(test_cgroup_pressure_toggle),
++	TEST(test_cgroup_trigger_fire),
++};
++
++int main(int argc, char **argv)
++{
++	char root[PATH_MAX];
++	int mempress_fd;
++	int i;
++
++	(void)argc;
++
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
++
++	if (cg_find_unified_root(root, sizeof(root), NULL))
++		ksft_exit_skip("cgroup v2 isn't mounted\n");
++
++	/* PSI must be enabled (CONFIG_PSI=y, not default-disabled). */
++	mempress_fd = open("/proc/pressure/memory", O_RDONLY);
++	if (mempress_fd < 0)
++		ksft_exit_skip("PSI unavailable (CONFIG_PSI=n or psi=0)\n");
++	close(mempress_fd);
++
++	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
++		ksft_exit_skip("memory controller isn't available\n");
++	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
++		if (cg_write(root, "cgroup.subtree_control", "+memory"))
++			ksft_exit_skip("failed to enable memory controller\n");
++
++	for (i = 0; i < (int)ARRAY_SIZE(tests); i++) {
++		switch (tests[i].fn(root)) {
++		case KSFT_PASS:
++			ksft_test_result_pass("%s\n", tests[i].name);
++			break;
++		case KSFT_SKIP:
++			ksft_test_result_skip("%s\n", tests[i].name);
++			break;
++		default:
++			ksft_test_result_fail("%s\n", tests[i].name);
++			break;
++		}
++	}
++
++	ksft_finished();
++}
 -- 
-2.47.3
+2.43.0
 
