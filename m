@@ -1,251 +1,176 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5072D3D75A9;
-	Tue, 28 Jul 2026 08:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8114F3D3D11
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 08:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785227959; cv=none; b=ocF7Oxacy0azF8bzROHsdkS7MexbbYatQ2F3a79PxO/bvvORDCOd1mRKqcjmV0eqS09n5GIVY+N2APVVwsCcI//aFffdy8hBLidfbJmNplMvoPSBuLoQycJSC0b2eCOqqvg+/HWALKJ3neWOstnRKr62J+L9uw8OJQL0tCr9OLY=
+	t=1785228392; cv=none; b=YWq0xMwr/ZV2qYCqFP8bPEa67EG2o8srZa5z54vJ38U6sDwt+hm7JeQv6bwjIv8KVqBwIROHNnPFjfJikVHrAM7+QWDWnjy2eXA1/nCulqe7QQhkjeM3ZKL7hScJ2NORihtAs/q4T8W/WLbgWLOXy6ZRX9Fmpj4yHEX/GEbuKQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785227959; c=relaxed/simple;
-	bh=CRg/Nh54HZ99tMwpElMnVNEMdGg+zKH3+U7LRFD/tYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bqBHKO1dwoD2r2Oj8kVI02H1qOFidffjnjySXDiMMsdD5QV5ms+VR//BLDBqO/SY2yCjiDzeMud/EbVBkb/JFhn10M1Iy+P2pD0DlyHIloZZ6WtKGFRPQDVZZLPiwuwB1AVBhI3O5vezQy5okTe+dV0PWlV4Z9BMHmOkvuAVWl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D+tASYGg; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785228392; c=relaxed/simple;
+	bh=DLea7GDB+WBJ7RoAC77zyEKX0QnwByXNUQOxrZdvpNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KYfqxU/o7L//S3rWw/xo0Ov0BSTVlpkFBP/hSO8XklnHheV+mitaKLewYkGSI64Ee5ixMlLB7ght4FTHdD1FRKvMVmADEglXD/JuDLlCz1bwpzkj6/5ylRRlwrBFJ7sMT75JZgFP7szpzIJQxK/8oEH/BraupetJLIbWmcs1eTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pdyzDaLq; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D+tASYGg"
-Message-ID: <a9dde63a-5f2d-494b-95dd-7567879de38d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785227954;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QbXjOIDNQAqLnMcNmNhhIkcZFnXKaj7v9jSB+IKjoGY=;
-	b=D+tASYGgBFHhUl7vxy1SvTJuUlL1fyINBlClOvQ9K4T3edtuSqXNpaYIxcusYBqtHtCGKn
-	4YFV+wfUruytiAPKlK/iMkIxiHxJeSoVj5BDR22K0phFcndN0nozhMJatVZeJF2M3nsdd0
-	JVFwwEIRGf5pB3U4V6tfCHcV69RCL/I=
-Date: Tue, 28 Jul 2026 16:38:44 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pdyzDaLq"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso23397565e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 01:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785228388; x=1785833188; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=TY5i83xUXytTq3W3hDjBOHFIBU26TkcCDfOy7gh1KLI=;
+        b=pdyzDaLqNNd7Xs/JYwRF0Mqn3R+HXD3Ec5us/7Vb8W81DDyWCDKu5bDkH7GALWFg52
+         VMVkU/sHu/BoXpTJqZ6ZvNIfmouSE75isrGyKfgY2nm7aUaoeoYSMb0dVwecuoaYJ4Oc
+         DlYP5TUspsRf6Whep/Ki9+NGHuXxT5p1YoGjAbo7PwaiwWq7A0zG6SyYJWoQnRm3HWIg
+         bHrL84ouUh5Fw5ZGrk5fo6tElEnNpG2lE+LnonZn9PVMLpbIRFnN+NWRYMT+x8VpG/d7
+         zeO2rc/Dd6rMXYJ7cSpexdQrCB5UVz4nXJvs0ju5EWKOfpXz7beAsSZjiTBW1AplvZg7
+         n+Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785228388; x=1785833188;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TY5i83xUXytTq3W3hDjBOHFIBU26TkcCDfOy7gh1KLI=;
+        b=qbQQSP5Z1GjaRQt7diubQgAAfZwZ/d/5aYmvdL4ZiULMSGgFhrjms4fJ55vQbq2VHT
+         jizLPpC0U+AhODxN0tkCIaCz9QRdQozYxar88pqluWUvY3r5+5bWgfgrIj7gCdQ556VR
+         pVPjl8AFrAFGeKwtssoyPHzLonGLN4FDOlst5EpmLBqfnSZ3k21RLmkbnMcfT5pet42k
+         c2Nejcd8A4RRBNO1Sdp+07cu+7FQOpE524fHg5bDqqT1hMTURFBhJT96In++T3+7BiDW
+         rfpAJnm7YS2HxGYNkbVbDSw/4bk54AalQwYnQNSXdYnOzRnOMceGGOxUYoCeozQ2ThzD
+         UXlA==
+X-Forwarded-Encrypted: i=1; AHgh+RpNU5m/CkNno+z+k1yF6GRbOw/WN6Wn3l7VdTalEm1QK7G61+YRhRtlYaj79U4QQmxwWjHyF6cpAJdEevHYPok=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIsd8/srfy0QxD55PRP75YwRLUFcDzKs7RCs0GgSXMaN1PuLl0
+	wb9WKkUV3g/1eHAehk8b4ULW79Mz/ui7BF4SlOObwxDdFt7qG1AwFhqs
+X-Gm-Gg: AR+sD13SAcMcXlEEliaZqeUc2QirEfLtdbetDByMJW+3PvcUYe1ZF94r8iifyCZrv8G
+	Hvb4PFKSBstIdVTDIUkx310FaYiuYIL7g/eepOZhMekE5qtRUCW4lY1pKy9uFVfYUswoNgHMDwT
+	M7s7FB9ruP85JIqCcLe/uQRe0DkoUZ4ByplD7qcIXj6cWaSa9SzDLccWQ94xggyODjTbp37/RXM
+	iynO2GLBaPzemY2FXoBBS9bymj0avrF0VHRkk/pAlN46FS6bZ36aWdzT9PoUv+JKKJMHAosMAjc
+	Dtz0lYfwxYM/q38CZFJAaBZRsab8tytuZGSrIMJ8GirDH0OLKbpQMgcgwcl1lx1vu1WQZ0GSCvM
+	jXuU/lGwzLUuD7pesn/E0alIu9j2tp0MR7xEF6/mZ3SaRGWKPuOp5ZYLlLsm8T+hkpF48TL0jC2
+	NqmzuJRxSs6ME9Tu0AT7pi+wgjYMAh4FF1+3gDOsLhXHDWHurd2A==
+X-Received: by 2002:a05:600c:3b13:b0:495:5890:8f6c with SMTP id 5b1f17b1804b1-496c653d3dcmr17415025e9.7.1785228387869;
+        Tue, 28 Jul 2026 01:46:27 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957f9b8b67sm340321705e9.4.2026.07.28.01.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 01:46:27 -0700 (PDT)
+Date: Tue, 28 Jul 2026 09:46:25 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ammar Faizi <ammarfaizi2@openresty.com>
+Cc: Willy Tarreau <w@1wt.eu>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
+ <linux@weissschuh.net>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Kselftest Mailing List
+ <linux-kselftest@vger.kernel.org>, LLVM Mailing List
+ <llvm@lists.linux.dev>, Yichun Zhang <yichun@openresty.com>, Alviro
+ Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan
+ <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, gwml@gnuweeb.org
+Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in
+ abs() and friends
+Message-ID: <20260728094626.0fb1a467@pumpkin>
+In-Reply-To: <20260726101306.3772237-3-ammarfaizi2@openresty.com>
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+	<20260726101306.3772237-3-ammarfaizi2@openresty.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 00/10] Fix missing fops.owner in Rust DRM/misc
- abstractions
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org,
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-pci@vger.kernel.org, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
- <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
- Igor Korotin <igor.korotin@linux.dev>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Bjorn Helgaas <bhelgaas@google.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
- Carlos Llamas <cmllamas@google.com>
-References: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Alvin Sun <alvin.sun@linux.dev>
-In-Reply-To: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-Hi Miguel,
+On Sun, 26 Jul 2026 17:13:03 +0700
+Ammar Faizi <ammarfaizi2@openresty.com> wrote:
 
-Back in v3, Gary suggested this series go via the rust tree.
-Would you be happy with that, or would you prefer a different
-path? If so, is there anything else needed from my side?
+> Negating the smallest negative value of a signed type overflows, which
+> is undefined behavior. The selftests are built with:
+> 
+>     -fsanitize=undefined -fsanitize-trap=all
+> 
+> so a caller passing INT_MIN does not merely get an unspecified answer,
+> it dies (on both x86-64 and i386):
 
-Best regards,
-Alvin
+Thinking more, that is probably the correct thing to do.
+'Undefined behaviour' means exactly that.
+It tends to be used for things that might cause traps on some architectures.
+But I believe 'undefined behaviour' is exactly that, erasing your hard disk
+(or starting a nuclear war) are both valid.
 
-On 7/23/26 10:10, Alvin Sun wrote:
-> During tyr debugfs development, a kernel NULL pointer dereference was
-> encountered after `rmmod tyr` while gnome-shell still held /dev/card1 open:
->
-> ```
->    [158827.868132] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
->    [158827.868918] Mem abort info:
->    [158827.869177]   ESR = 0x0000000086000004
->    [158827.869519]   EC = 0x21: IABT (current EL), IL = 32 bits
->    [158827.870000]   SET = 0, FnV = 0
->    [158827.870281]   EA = 0, S1PTW = 0
->    [158827.870571]   FSC = 0x04: level 0 translation fault
->    [158827.871043] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000108dec000
->    [158827.871623] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->    [158827.872242] Internal error: Oops: 0000000086000004 [#1]  SMP
->    [158827.872246] Modules linked in: tyr sunrpc snd_soc_simple_card rk805_pwrkey snd_soc_simple_card_utils rtw88_8822bu display_connector rtw88_usb rtw88_8822b snd_soc_rockchip_i2s_tdm snd_soc_hdmi_codec
->    rtw88_core]
->    [158827.872337] CPU: 4 UID: 1000 PID: 11276 Comm: gnome-s:disk$0 Tainted: G                 N  7.1.0-rc1+ #331 PREEMPT
->    [158827.880534] Tainted: [N]=TEST
->    [158827.880535] Hardware name: FriendlyElec NanoPi R6C/NanoPi R6C, BIOS v1.1 04/09/2025
->    [158827.880538] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->    [158827.880542] pc : 0x0
->    [158827.880547] lr : _RNvNtCs257m05FHVbX_3tyr2vm8pt_unmap+0x8c/0x12c [tyr]
->    [158827.880578] sp : ffff800083c236b0
->    [158827.880579] x29: ffff800083c236d0 x28: ffff00013f8a0000 x27: 0000000000000000
->    [158827.880585] x26: 000000000000007c x25: ffff000108e6ed80 x24: 0000000000401000
->    [158827.880590] x23: 0000000000000000 x22: 0000000040000000 x21: 0000000000001000
->    [158827.880595] x20: ffff00010f778138 x19: 0000000000400000 x18: 00000000ffffffff
->    [158827.880600] x17: 000000040044ffff x16: 045000f2b5503510 x15: 0720072007200720
->    [158827.880606] x14: 0720072007200720 x13: 0000000000401000 x12: 0000000000400000
->    [158827.880611] x11: ffff800083c239d0 x10: ffff000141e4fd88 x9 : 0000000000000000
->    [158827.880615] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000400000
->    [158827.880620] x5 : ffff00013f8a0000 x4 : 0000000000000000 x3 : 0000000000000001
->    [158827.880625] x2 : 0000000000001000 x1 : 0000000000400000 x0 : ffff00010f778138
->    [158827.880630] Call trace:
->    [158827.880632]  0x0 (P)
->    [158827.880635]  _RNvXs6_NtCs257m05FHVbX_3tyr2vmNtB5_9GpuVmDataNtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm11DriverGpuVm13sm_step_unmap+0x3c/0x120 [tyr]
->    [158827.891166]  _RNvMs4_NtNtNtCsgmSOfgXi5CZ_6kernel3drm5gpuvm6sm_opsINtB7_5GpuVmNtNtCs257m05FHVbX_3tyr2vm9GpuVmDataE13sm_step_unmapB13_+0x18/0x34 [tyr]
->    [158827.891187]  op_unmap_cb+0x78/0xb0
->    [158827.891196]  __drm_gpuvm_sm_unmap+0x18c/0x1b4
->    [158827.891204]  drm_gpuvm_sm_unmap+0x38/0x4c
->    [158827.891209]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm7exec_op+0x1cc/0x254 [tyr]
->    [158827.894085]  _RNvMs5_NtCs257m05FHVbX_3tyr2vmNtB5_2Vm11unmap_range+0x124/0x188 [tyr]
->    [158827.894105]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeNtNtCs257m05FHVbX_3tyr3gem8KernelBoEBK_+0x44/0xd8 [tyr]
->    [158827.894125]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel5alloc4kvec3VecNtNtCs257m05FHVbX_3tyr2fw7SectionNtNtBL_9allocator7KmallocEEB1r_+0x3c/0x100 [tyr]
->    [158827.894147]  _RINvNtCs5hGKnPbRUFW_4core3ptr13drop_in_placeINtNtNtCsgmSOfgXi5CZ_6kernel4sync3arc3ArcNtNtCs257m05FHVbX_3tyr2fw8FirmwareEEB1p_+0x94/0x190 [tyr]
->    [158827.894167]  _RNvMs4_NtNtCsgmSOfgXi5CZ_6kernel3drm6deviceINtB5_6DeviceNtNtCs257m05FHVbX_3tyr6driver12TyrDrmDriverE7releaseBW_+0x30/0x98 [tyr]
->    [158827.899550]  drm_dev_put.part.0+0x88/0xc0
->    [158827.899557]  drm_minor_release+0x18/0x28
->    [158827.899562]  drm_release+0x144/0x170
->    [158827.899567]  __fput+0xe4/0x30c
->    [158827.899573]  ____fput+0x14/0x20
->    [158827.899579]  task_work_run+0x7c/0xe8
->    [158827.899586]  do_exit+0x2a8/0xac4
->    [158827.899590]  do_group_exit+0x34/0x90
->    [158827.899594]  get_signal+0xaac/0xabc
->    [158827.899599]  arch_do_signal_or_restart+0x90/0x3e8
->    [158827.899606]  exit_to_user_mode_loop+0x140/0x1d0
->    [158827.899613]  el0_svc+0x2f4/0x2f8
->    [158827.899620]  el0t_64_sync_handler+0xa0/0xe4
->    [158827.899627]  el0t_64_sync+0x198/0x19c
->    [158827.899632] ---[ end trace 0000000000000000 ]---
-> ```
->
-> The root cause: `fops.owner` was `NULL` in Rust DRM drivers, so the kernel
-> never blocked module unloading while file descriptors were open. This leads to
-> use-after-free when drm_release (or other fops) is called on freed module code.
->
-> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, threads it
-> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates configfs
-> and rnull to use `this_module::<LocalModule>()`.
->
-> Assisted-by: opencode:glm-5.2
-> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+	David
+
+
+> 
+>     A simple test program:
+> 
+>       printf("x = %d\n", abs(INT_MIN));
+> 
+>     $ ./ab
+>     Illegal instruction (core dumped)
+> 
+>     (gdb) bt
+>     #0  0x0000000000401009 in main ()
+>     (gdb) x/6i main
+>        0x401000 <main>:     mov    $0x80000000,%eax
+>        0x401005 <main+5>:   neg    %eax
+>        0x401007 <main+7>:   jno    0x40100b <main+11>
+>     => 0x401009 <main+9>:   ud2  
+>        0x40100b <main+11>:  push   %rax
+>        0x40100c <main+12>:  mov    $0x80000000,%esi
+> 
+> Negate in the corresponding unsigned type instead. The value still
+> cannot be represented in the result type, so the minimum is returned
+> unchanged.
+> 
+> Cc: Yichun Zhang <yichun@openresty.com>
+> Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+> Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
+> Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
 > ---
-> Changes in v9:
-> - Rename the binder commit prefix from `rust: binder:` to `rust_binder:`
->    to match the in-tree module name.
-> - Link to v8: https://lore.kernel.org/r/20260713-fix-fops-owner-v8-0-2495cfa82d47@linux.dev
->
-> Changes in v8:
-> - Remove unused `crate::LocalModule` import in rnull configfs.
-> - Link to v7: https://lore.kernel.org/r/20260627-fix-fops-owner-v7-0-33cd3990edf0@linux.dev
->
-> Changes in v7:
-> - Use `crate::LocalModule` in `configfs_attrs!` and silence `clippy::crate_in_macro_def`, per Gary's review.
-> - Link to v6: https://lore.kernel.org/r/20260624-fix-fops-owner-v6-0-5295e333cb3e@linux.dev
->
-> Changes in v6:
-> - Update MAINTAINERS to cover the new `rust/kernel/module.rs`.
-> - Link to v5: https://lore.kernel.org/r/20260624-fix-fops-owner-v5-0-aa1cba242f05@linux.dev
->
-> Changes in v5:
-> - Add `#[inline]` to the `this_module()` helper.
-> - Fix configfs doc comment to reference `crate::LocalModule` instead of
->    bare `LocalModule`.
-> - Link to v4: https://lore.kernel.org/r/20260623-fix-fops-owner-v4-0-0daf5f077d5c@linux.dev
->
-> Changes in v4:
-> - Move module-related types into a new `rust/kernel/module.rs`.
-> - Migrate binder from the `module!`-generated `THIS_MODULE` static to
->    `this_module::<LocalModule>()`.
-> - Reorganise the series so that every commit builds independently, and
->    drop the legacy `THIS_MODULE` static once all users are migrated.
-> - Link to v3: https://lore.kernel.org/r/20260622-fix-fops-owner-v3-0-49d45cb37032@linux.dev
->
-> Changes in v3:
-> - Renamed vtable associated type `ThisModule` to `OwnerModule`
-> - Added `this_module()` helper for ergonomic `THIS_MODULE` access
-> - Refined vtable macro implementation: one-liner detection and single `defined_items` set
-> - Reordered commits to place doctest fallback before vtable auto-insert
-> - Link to v2: https://lore.kernel.org/r/20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev
->
-> Changes in v2:
-> - Merged old `static THIS_MODULE` and v1's `MODULE_PTR` into a single
->    `ModuleMetadata::THIS_MODULE` const
-> - `#[vtable]` macro now auto-inserts `type ThisModule`, removing all per-driver
->    manual patches from v1
-> - Added configfs & rnull usage site updates and doctest `LocalModule` fallback
-> - Link to v1: https://lore.kernel.org/r/20260519-fix-fops-owner-v1-0-2ded9830da14@linux.dev
->
-> ---
-> Alvin Sun (10):
->        rust: module: move module types into `module.rs`
->        rust: module: add `THIS_MODULE` const to `ModuleMetadata` trait
->        rust: doctest: add LocalModule fallback for #[vtable] ThisModule
->        rust: macros: auto-insert OwnerModule in #[vtable]
->        rust: drm: set fops.owner from driver module pointer
->        rust: miscdevice: set fops.owner from driver module pointer
->        rust: configfs: use `LocalModule` for `THIS_MODULE`
->        rust_binder: use `LocalModule` for `THIS_MODULE`
->        rust: macros: remove `THIS_MODULE` static from `module!`
->        rust: module: update MAINTAINERS to cover module.rs
->
->   MAINTAINERS                                |  2 +-
->   drivers/android/binder/rust_binder_main.rs |  3 +-
->   drivers/block/rnull/configfs.rs            |  5 +-
->   rust/kernel/auxiliary.rs                   |  2 +-
->   rust/kernel/configfs.rs                    |  9 ++--
->   rust/kernel/drm/device.rs                  |  3 +-
->   rust/kernel/drm/gem/mod.rs                 |  4 +-
->   rust/kernel/i2c.rs                         |  2 +-
->   rust/kernel/lib.rs                         | 75 +++-------------------------
->   rust/kernel/miscdevice.rs                  |  4 +-
->   rust/kernel/module.rs                      | 80 ++++++++++++++++++++++++++++++
->   rust/kernel/net/phy.rs                     |  6 ++-
->   rust/kernel/pci.rs                         |  2 +-
->   rust/kernel/platform.rs                    |  2 +-
->   rust/kernel/usb.rs                         |  2 +-
->   rust/macros/lib.rs                         |  6 +++
->   rust/macros/module.rs                      | 34 ++++++-------
->   rust/macros/vtable.rs                      | 41 +++++++++++++--
->   scripts/rustdoc_test_gen.rs                | 16 ++++++
->   19 files changed, 189 insertions(+), 109 deletions(-)
-> ---
-> base-commit: b7e5ac83cb16f7ffd11dc23736f84276602100ed
-> change-id: 20260519-fix-fops-owner-e3a77bb27c6c
-> prerequisite-change-id: 20260519-miscdev-use-format-9ab7e83b1c11:v3
-> prerequisite-patch-id: 405b334ff0d48ad350014f05a2321bdbaa025400
-> prerequisite-patch-id: 604b631c81d5423f4ebb2e12ba2d22e9ce371bfc
-> prerequisite-patch-id: cb550d94cefe01920e0d3ced2b2bcbecd76f3907
-> prerequisite-patch-id: 3bc830839742591460cb86d9472c04f4686dc600
-> prerequisite-patch-id: 571058244bc8c7088638d2e3225713011246c7e9
-> prerequisite-patch-id: 347c5a3c6dbef9832bfce8419fc23e6e08ba477f
-> prerequisite-patch-id: 3e202d988b56b88446f7535e90d3f00cf5f15701
->
-> Best regards,
+>  tools/include/nolibc/stdlib.h | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+> index 1816c2368b68..8d86044f759f 100644
+> --- a/tools/include/nolibc/stdlib.h
+> +++ b/tools/include/nolibc/stdlib.h
+> @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
+>   * As much as possible, please keep functions alphabetically sorted.
+>   */
+>  
+> +/*
+> + * The absolute value of the smallest negative value is not representable in
+> + * the result type. Negate in the unsigned type so that the overflow is
+> + * defined and return it unchanged, like the other libcs do.
+> + */
+> +
+>  static __inline__
+>  int abs(int j)
+>  {
+> -	return j >= 0 ? j : -j;
+> +	return j >= 0 ? j : (int)-(unsigned int)j;
+>  }
+>  
+>  static __inline__
+>  long labs(long j)
+>  {
+> -	return j >= 0 ? j : -j;
+> +	return j >= 0 ? j : (long)-(unsigned long)j;
+>  }
+>  
+>  static __inline__
+>  long long llabs(long long j)
+>  {
+> -	return j >= 0 ? j : -j;
+> +	return j >= 0 ? j : (long long)-(unsigned long long)j;
+>  }
+>  
+>  /* must be exported, as it's used by libgcc for various divide functions */
+
