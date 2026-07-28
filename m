@@ -1,346 +1,209 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B236F2FD69D;
-	Tue, 28 Jul 2026 02:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D9D2E7379;
+	Tue, 28 Jul 2026 02:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785204673; cv=none; b=UrfiwT60yp0IPypwgVYfSb055aIdNHyPdj2UWuS3Yqrw4FlXyJOg8hte+HHW8M6HwyGCBceJT7mzDAAoEvc1GEJLRidXhNI0yRscttA83D4idnM4Gr7TzezQbTq8ZEbEzS6vNx0jWvxs9eEgaMVr4QNRVKX0eEUubr9YwX6kZdg=
+	t=1785204849; cv=none; b=oTtISSyfY5DQ03lV5ekqelGY1Lb910c8+/eSsB5JQOBFn73Jxdgv7RKNQz5V8vxONL2+J0Yh5zqNtrga8MGAeSB+eWUuzbhBCTGIbV035myT95wTsi7urtcvU3N8Uop78v6uvBszDHVSeD+a1jJvmmJpaByZ+YGFp/k23gAPA/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785204673; c=relaxed/simple;
-	bh=86/HkldT4kDq315Z79cfJPN5e+fRffgsWgd3weKDx7c=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tpgaTZLRK0jsJ6MONUjIV3gmbT1wIfvRxp9Q9XBNMEL3721FWcIyYb5eotnothBvLfw6YXgfbXU5oSatvQ1NX03vUECpdZc2frGc+u2yx14FwZJlESeX0agy77gOtMn+D2g4tsWshLlWUMGXnbUVo4cRSO4izIgsotwTvR+iwwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=KpWIkLKs; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1785204849; c=relaxed/simple;
+	bh=GCpfHtrYQawezIZUO1LR06raphZYNnQ7cY8TQO4z/FY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KT5w/KrOckgn+xxKWyzTylYeeLJJ7fGxpdrbrg6Q91YZp77LAaDMZYKtetYHCsaymn+QTwb6OA4miHv3pCsd3X8tNtF551kkzm+3mqSpnXB9XLLsSwRMYvDY+siI3m2LaDT/yTJ/5GIyEJfUXuYdlm52pDNGQz42SzheFvUC8Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lLAzdzEQ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="KpWIkLKs"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=6Fco9ZFqafusOb7SnXia0G5YlRWPfWFIhDzPmljVxvM=;
-	b=KpWIkLKsRm6GYoKslab0jmT5turlFb23ZE7uOVTk4mibO1jOg0d1HPU9FHq5IhvyA1BS05nMr
-	hr/CA3K4imvmQO2VB1+/serGBIaOA4bfPAC9ZFJQcInHPo447nbSz0OejJJxnVCV/ltTREIoq5/
-	lAEz9v/xdIllLTUZV1les+U=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4h8Jbw41BRzLlXD;
-	Tue, 28 Jul 2026 10:01:32 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id BF02740578;
-	Tue, 28 Jul 2026 10:10:58 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 28 Jul
- 2026 10:10:58 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v3 2/2] kselftest/arm64: Add testcase for SECCOMP_RET_TRACE orig_x0 bypass
-Date: Tue, 28 Jul 2026 10:11:22 +0800
-Message-ID: <20260728021122.2640104-3-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260728021122.2640104-1-ruanjinjie@huawei.com>
-References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lLAzdzEQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=GCpfHtrYQawezIZUO1LR06raphZYNnQ7cY8TQO4z/FY=; b=lLAzdzEQl4ElZLY3Lc/nJ9PoYv
+	OxTCkwtykmNtIo4u0J7ihZdfvrOw3ZElsB7HHmXlInfnkDE0qO8NeB0Z+LQjsK4R2O5JrJU+pcNGo
+	SFnBwdJFz3qLISY38qQ4SFdXiX44LiUr6t1uqFAxibmlebwSysKdYpdn+ZJs23ThCaDUMYbT458ZE
+	hefyrl1vvavacElb8zHOyuL46NHHNwdLjBDz/1YW6ejk6xJfkXxcE55wgJ/NtFGT1KHFiDMb1Rqf2
+	kHTOqAJJt9DoDJwzBQE04e/mMV52dWODAKgdHl6r96CfpmKqEVzwlXtVb/C9AhAJ8P7VNji6YHIIg
+	6zeuamNw==;
+Received: from [2001:8b0:10b:5:dc99:b954:ecbb:94c8] (helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1woXKD-0000000C2JY-1Kxn;
+	Tue, 28 Jul 2026 02:13:45 +0000
+Message-ID: <8d53fa812a0bd457b53f0948c046214f209d86a1.camel@infradead.org>
+Subject: Re: [PATCH v6 05/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>,  Borislav Petkov	 <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"	
+ <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross	
+ <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
+ Durrant	 <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
+ Bischoff	 <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
+ Gouly	 <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, Dongli
+ Zhang	 <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Date: Tue, 28 Jul 2026 03:13:44 +0100
+In-Reply-To: <amgCrqyqg0zFbhO4@google.com>
+References: <20260703212145.343527-1-dwmw2@infradead.org>
+	 <20260703212145.343527-6-dwmw2@infradead.org> <amPWX8lKXw2KS_kZ@google.com>
+	 <e8e7554debef481d13265f0870e847e2fa37f7c2.camel@infradead.org>
+	 <amgCrqyqg0zFbhO4@google.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-iOYyDNY3mpnbpc85Vz8q"
+User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+
+
+--=-iOYyDNY3mpnbpc85Vz8q
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Transfer-Encoding: quoted-printable
 
-Add a selftest that verifies the kernel re-evaluates a seccomp filter
-with the correct (ptrace-modified) first argument after
-a SECCOMP_RET_TRACE stop. On arm64, syscall_get_arguments() reads
-the first argument from orig_x0, which may be stale if the tracer modified
-regs->regs[0] but orig_x0 was not synced.  This can cause the filter to
-see an old argument and incorrectly allow a syscall that it should
-have rejected.
+On Mon, 2026-07-27 at 18:15 -0700, Sean Christopherson wrote:
+>=20
+> Can the KVM_[GS]ET_CLOCK_GUEST changes be moved to the end of the series?=
+=C2=A0 The
+> total size of the series doesn't scare me, I just don't want to end up wi=
+th all
+> the fixes and cleanups stuck behind a patch that isn't a hard dependency.=
+=C2=A0 E.g.
+> AFAICT, none of the following changes, include selftests updates, actualy=
+ rely
+> on KVM_[GS]ET_CLOCK_GUEST existing.
 
-The child installs a filter that:
- - TRACEs write() when fd == 2
- - returns ERRNO(EPERM) when fd == 1
+That only matters if we plan to backport them, surely? And I wasn't.=20
 
-The parent catches the SECCOMP event, changes x0 (fd) from 2 to 1,
-and resumes the child.
+I suspect it won't be pretty, but I can have a go at moving
+KVM_[GS]ET_CLOCK_GUEST to the end. I guess in a similar vein we'd want
+to move KVM_VCPU_TSC_SCALE to the end too.
 
-If the seccomp re-evaluation sees the stale orig_x0 (fd=2) the filter
-returns TRACE again and the kernel (with recheck_after_trace=true)
-allows the syscall to proceed – write succeeds and the child exits 0.
-If the seccomp re-evaluation sees the new value (fd=1) the filter
-returns ERRNO(EPERM), write fails and the child exits non-zero.
-The test passes only when the write fails (child exit != 0).
+Some of the selftests will have to move too, as they do use those
+features.
 
-Before the fix:
-	# ./seccomp_ret_trace_x0_bypass
-	TAP version 13
-	1..1
-	not ok 1 write succeeded, orig_x0 bypass likely
-	# Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+--=-iOYyDNY3mpnbpc85Vz8q
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-After the fix:
-	# ./seccomp_ret_trace_x0_bypass
-	TAP version 13
-	1..1
-	ok 1 seccomp correctly denied modified syscall
-	# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCE8Ew
+ggWvMIIEl6ADAgECAhANkOKMSmGXhF5eMl0rsRhvMA0GCSqGSIb3DQEBDAUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjAeFw0yNDAzMTMwMDAwMDBaFw0zNDAz
+MTIyMzU5NTlaMGIxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UE
+AxMxRGlnaUNlcnQgQXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTCCAiIw
+DQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOfSIeC0vv1xPQ+dgSxbIIrkaru6skAWJYaGFzmv
+q4Kq+2wU2jxhcWlJg/JeP5jEkq/LM3pn5aaLao79j+XRmS7J1ZpJKUODJVoM4s9MQJhTMvo4qS5Z
+S64g6QR7Obkz3I1Lr3aWeSBmDDEyzue+NKtuWZ1Cxy3RdXo/w5HgRc3l2AercOM3Gt1XonTzEtTb
+Z/Hwc0Sn9Gz8RmGRK6Ka4hVDl8q/2l110KaV233Kh5etP0csXS8MIMdVRfRu3sc5hp13DG7lCKzK
+72a2GEpI8Wpl26G6I1/LMzz/98T+FqjTqxsdquk7Cj7m2vKGLW1BorpQH7WFGPdJQXJe1hfbfiZA
+CcVdCtl4nAacFacmsiArZBfX7AQGL7isvHUwwYFEtcApyGW4p2Lt+t8nvU0CANA6BHOpOz1xOP8W
+mAESbUriIjyuTUf3fJ9oDNCurVqhASMJCDaWI3lYX/QAoiAzt6akqbbZxo2ujW7mGGqc0KxqE2cs
+h2T79v7pC8aUtHBfwNrTR19GnZVxE0eQ7ViIQhR6mpSaUQFA9sG+cmD2G8TnCgYsLa0q8De6F61a
+CBevQGHNzrbZ3JAMneveYg/Jy1XxQHDRcvrMfWKe0jjcWbdKYlaGVPm5V1ILwYz7Yv5ewo3NUrxI
+GJiywe9qPhuJSDZs7VehTuI0FxGIsgKzVjgbAgMBAAGjggFcMIIBWDASBgNVHRMBAf8ECDAGAQH/
+AgEAMB0GA1UdDgQWBBT3m6JO05fF9DQPQw6Bhc6RkzKv+TAfBgNVHSMEGDAWgBTOw0q5mVXyuNtg
+v6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MHkGCCsGAQUFBwEBBG0wazAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEMG
+CCsGAQUFBzAChjdodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURS
+b290RzIuY3J0MEUGA1UdHwQ+MDwwOqA4oDaGNGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdp
+Q2VydEFzc3VyZWRJRFJvb3RHMi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUA
+A4IBAQA+b8Uw53sDspdZgukU+qzLyyHkcjlxGGhHlP+zrmDLKm1wEFvCRS2pili3Hy67i8N4N5NU
+vw5Rg6kv3lxb9S9Rktxk43k+tvm68pl7OxQE55ZjVY87P0lUPGwEqOOwLLyH02ZQcsfq5p5LrOH9
+0JvmvZ1yy73HS+VpDAqOlytE0NSvTIRqFFkKQGQwfjvtql9YflujuNNvJztjBaHKYZsnNSg+J38o
+jYq4TP3pSg3UdVH0PncVjPQyqxC9xef5Xae92Kbkzol3x7Nel3A1bwAkalrDMspvTHvey6LfiBks
+FIqviTnoy7fgjaRAJgHS+RXx/cmuRd3rUAclSVVrYu8RMIIHAzCCBOugAwIBAgIQAzUotrsybJHx
+HTjKOIVdIDANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQs
+IEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQg
+MjAyNCBDQTEwHhcNMjYwNzE4MDAwMDAwWhcNMjgwMTA0MjM1OTU5WjAeMRwwGgYDVQQDDBNkd213
+MkBpbmZyYWRlYWQub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2pYux73kdbYX
+sWF8f1u6DJP91qcqaZetsyfPkZk0B+MmXmAEv0kVes5n15V2mbDThOnpoPFly0UugQO9JYqLfrtD
+tKD5yL58fgrDB9Dw+LQikgrHafl6YSCds5AvUu/8hw2J6noKrcOLJpKlKn9Fl/4IB9Q3JIdLx5aa
+EtTqMalIPqHFOlgrJ7s+aua8xbB8YQ9ahqYBXWRJNv3P/2b1DYtdrz1oqZPE3CcB8Pc6Gf2a1Tcm
+6TAgtEx7Cf1BFcrsrMz7TWHmGQITieNb2r9UYWSc2Gp+GtYFNJCgT0JJXKUBIauPMKBLteYrL8Fo
+ff/uY44dC/mDWjdCP/5x0qelPQjlBvWdHL5zvBTOj06rJ0m3HNI/hnIcDh0Qu2j9reb9rLVcdym6
+bWmBM4uDEB8Zv9Ph0KTBFSy1IosyakuD1j1Os30EzjGfbi0EUXIvnOcYbTBAbM5UAzrxEHMhBvoX
+Pvnx+OyvjJmc9tWxTX6AcSz+m40esbT17URBeZS18afgieiikm5TynlUYP1LciR3hSgGVzvGXnKO
+02VDFR5itGWdRKZ2W5wIShNfWfhSa0D0K5UdIDt5Qc7sjzwK1Yb1sY5Tu0uA5mhIS82q1ov83uxB
+sFkriNnhGv/M1NCDVLBiOMsHu73qUM+yKmgKLwF9Hfn9WI25glbAMI4S5r3hYzcCAwEAAaOCAfcw
+ggHzMB8GA1UdIwQYMBaAFPebok7Tl8X0NA9DDoGFzpGTMq/5MB0GA1UdDgQWBBRcYhqbcGzn1jrT
+JOZaB8O7qllDpzAwBgNVHREEKTAngRNkd213MkBpbmZyYWRlYWQub3JngRBkYXZpZEB3b29kaG91
+LnNlMBQGA1UdIAQNMAswCQYHZ4EMAQUBAjAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEMIGpBgNVHR8EgaEwgZ4wTaBLoEmGR2h0dHA6Ly9jcmwzLmRpZ2ljZXJ0
+LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsME2gS6BJ
+hkdodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZT
+SEEzODQyMDI0Q0ExLmNybDCBjQYIKwYBBQUHAQEEgYAwfjAkBggrBgEFBQcwAYYYaHR0cDovL29j
+c3AuZGlnaWNlcnQuY29tMFYGCCsGAQUFBzAChkpodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v
+RGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZTSEEzODQyMDI0Q0ExLmNydDANBgkqhkiG9w0B
+AQsFAAOCAgEAocabrh1cPd5s3vY5rnlBVQSTc7zs2ZWs67dAIltR+05WELrYClVzzUhMs/LOJPlr
+EUo45UDDomXq38DxFepaPd9+iNLjXfn33EX/IG44j04lU/oF/Rg9VeQILkYLbCZ/x9wOjNHZc4SN
+ydY7Dhvf/sT5aBz88u7D5+azZJ7Qf1U57wYseCH1Mt0nDrtr5y19IJ8D9xJJ33RFL6vfpHZBBAQ8
++3RqkKNxLoV2aFvQhxdhjNLDqTv3LjUIdicwPraN7JkxEu7CV2Lka7eRqJgkWL7SK0YmBjGpRafs
++icP/ON5RCCKTTb6VlX8eTG2sJJfsFhvJNCCt6xexbWzWtIrfP7NvPBvwBB737AyEGBZkS5aNizT
+McURJGTv9UKvBh1LF/+tNhYtLvPCN7oecGzhCHht9jcwSkygTo3Y6YlK3QgOu+ncmiBbfeuwlLZ1
+LxbYvG6hgNqXv7u6YyADbYajAQJXJ2OQen39pm3Q/AQSyLYG+B8lDglWsM8tYXPlEdrYJcksGK6F
+nqIX6Bumn43rBooLJdiZp4WmfWdL2pxe+LxRDjprmqu1WprixDxULSTOKJZoqTlugs6y3Bc+if+s
+gHnBBtz9WQ6MtPHkh7zONDAFIKcBmv8OqPQCx0F3Wv3OEybwMpXx0OsKgK8wLldaX1pXcMuyDgTL
+Sqs0AV0OHUgwggcDMIIE66ADAgECAhADNSi2uzJskfEdOMo4hV0gMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UEAxMxRGlnaUNlcnQg
+QXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTAeFw0yNjA3MTgwMDAwMDBa
+Fw0yODAxMDQyMzU5NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqG
+SIb3DQEBAQUAA4ICDwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZe
+YAS/SRV6zmfXlXaZsNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2z
+kC9S7/yHDYnqegqtw4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qG
+pgFdZEk2/c//ZvUNi12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41va
+v1RhZJzYan4a1gU0kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0c
+vnO8FM6PTqsnSbcc0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PW
+PU6zfQTOMZ9uLQRRci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXt
+REF5lLXxp+CJ6KKSblPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQr
+lR0gO3lBzuyPPArVhvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7Iq
+aAovAX0d+f1YjbmCVsAwjhLmveFjNwIDAQABo4IB9zCCAfMwHwYDVR0jBBgwFoAU95uiTtOXxfQ0
+D0MOgYXOkZMyr/kwHQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3
+bXcyQGluZnJhZGVhZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEC
+MA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgakGA1UdHwSB
+oTCBnjBNoEugSYZHaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZEcyU01J
+TUVSU0E0MDk2U0hBMzg0MjAyNENBMS5jcmwwTaBLoEmGR2h0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv
+bS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsMIGNBggrBgEF
+BQcBAQSBgDB+MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wVgYIKwYBBQUH
+MAKGSmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNB
+NDA5NlNIQTM4NDIwMjRDQTEuY3J0MA0GCSqGSIb3DQEBCwUAA4ICAQChxpuuHVw93mze9jmueUFV
+BJNzvOzZlazrt0AiW1H7TlYQutgKVXPNSEyz8s4k+WsRSjjlQMOiZerfwPEV6lo9336I0uNd+ffc
+Rf8gbjiPTiVT+gX9GD1V5AguRgtsJn/H3A6M0dlzhI3J1jsOG9/+xPloHPzy7sPn5rNkntB/VTnv
+Bix4IfUy3ScOu2vnLX0gnwP3EknfdEUvq9+kdkEEBDz7dGqQo3EuhXZoW9CHF2GM0sOpO/cuNQh2
+JzA+to3smTES7sJXYuRrt5GomCRYvtIrRiYGMalFp+z6Jw/843lEIIpNNvpWVfx5Mbawkl+wWG8k
+0IK3rF7FtbNa0it8/s288G/AEHvfsDIQYFmRLlo2LNMxxREkZO/1Qq8GHUsX/602Fi0u88I3uh5w
+bOEIeG32NzBKTKBOjdjpiUrdCA676dyaIFt967CUtnUvFti8bqGA2pe/u7pjIANthqMBAlcnY5B6
+ff2mbdD8BBLItgb4HyUOCVawzy1hc+UR2tglySwYroWeohfoG6afjesGigsl2JmnhaZ9Z0vanF74
+vFEOOmuaq7VamuLEPFQtJM4olmipOW6CzrLcFz6J/6yAecEG3P1ZDoy08eSHvM40MAUgpwGa/w6o
+9ALHQXda/c4TJvAylfHQ6wqArzAuV1pfWldwy7IOBMtKqzQBXQ4dSDGCBCAwggQcAgEBMHYwYjEL
+MAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTowOAYDVQQDEzFEaWdpQ2VydCBB
+c3N1cmVkIEcyIFNNSU1FIFJTQTQwOTYgU0hBMzg0IDIwMjQgQ0ExAhADNSi2uzJskfEdOMo4hV0g
+MA0GCWCGSAFlAwQCAQUAoIIBezAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yNjA3MjgwMjEzNDRaMC8GCSqGSIb3DQEJBDEiBCBVY7VZbhVt4TQDVXm72E542yEXA/Pt
+lwfzrZ02831gQzCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
+aUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBT
+SEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAwgYcGCyqGSIb3DQEJEAILMXigdjBiMQsw
+CQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFz
+c3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAw
+DQYJKoZIhvcNAQEBBQAEggIAU1UXLJWulJ0pCninx42qURzw8hc/xX6xAfC2JvO12Rrs2672nZkx
+1pDIHHpmwWlrQpn7hGwALHqXdV4SIrlDcOOFK4BiLj5rVKDU1Km2eN1uqheG8V4lKJd9zplBXdLY
+wQrKAUN+RzBocQ5gkiMmdI+sJySrxx40Nt8nwNEFTomo2m9FBkEXYw9wA9moLBFo64oXw9huAh8L
+IkIoj2f5pWcAo+KnsLHsKp9zx4cSiTeMk5cnvDAsFcle/nynaZtinUvViQMWp84oumSYVBlKGh+8
+HVJwV3VUuqEbaMJTMEKm8lUDj/3UsmBGp4OUTPVSPKF1BV27WOuxCMmTF8LNFSrNBc6D+6ZP/7G+
+hbT7ADtfgU919m3rOkap9/vB4v4YRvHYVkfha9x1gIDdFToIwRa2BuHEx3RsILosutU2ih67boot
+oPOsmjUj4XPbtDNiemri/6DcpZywZziUEZvv8K22E0BkejM0LlniNmMR24Isoe5H+2HbfMaVqjOL
+ckVLifGFitHwDJzq7+11WpU3h73QwYNYvBgw2AuYRcyebw/TBqSDlnJSdy5D+/enbu0sdlZynpyh
+ZHVZaE+57o9cYk5moLl+zVHCLotYDDttbp0SgMkhL2dD2bFWDnTWTPj4HSNHEtScUCzXOnHTC8/C
+V5pl50Gs9C719YdTYejhI7wAAAAAAAA=
 
-Cc: Kees Cook <kees@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/all/20260717182758.17111-1-will@kernel.org/
-Link: https://lore.kernel.org/all/20260716120640.6590-1-will@kernel.org/
-Link: https://lore.kernel.org/all/202607152004.DEA95D63@keescook/
-Suggested-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- tools/testing/selftests/arm64/abi/.gitignore  |   1 +
- tools/testing/selftests/arm64/abi/Makefile    |   2 +-
- .../arm64/abi/seccomp_ret_trace_x0_bypass.c   | 204 ++++++++++++++++++
- 3 files changed, 206 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
 
-diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
-index 39129a9907c7..491a80db9dff 100644
---- a/tools/testing/selftests/arm64/abi/.gitignore
-+++ b/tools/testing/selftests/arm64/abi/.gitignore
-@@ -1,5 +1,6 @@
- hwcap
- ptrace
- seccomp_ptrace_x0_bypass
-+seccomp_ret_trace_x0_bypass
- syscall-abi
- tpidr2
-diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
-index 5a16db379bd4..a01d3806eba8 100644
---- a/tools/testing/selftests/arm64/abi/Makefile
-+++ b/tools/testing/selftests/arm64/abi/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2021 ARM Limited
- 
--TEST_GEN_PROGS := hwcap ptrace syscall-abi tpidr2 seccomp_ptrace_x0_bypass
-+TEST_GEN_PROGS := hwcap ptrace syscall-abi tpidr2 seccomp_ptrace_x0_bypass seccomp_ret_trace_x0_bypass
- 
- include ../../lib.mk
- 
-diff --git a/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c b/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
-new file mode 100644
-index 000000000000..3a69f53f4f88
---- /dev/null
-+++ b/tools/testing/selftests/arm64/abi/seccomp_ret_trace_x0_bypass.c
-@@ -0,0 +1,204 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test for SECCOMP_RET_TRACE argument modification bypass
-+ * via stale orig_x0 during filter re-evaluation.
-+ *
-+ * On arm64, syscall_get_arguments() reads the first argument from
-+ * regs->orig_x0.  When a seccomp filter returns SECCOMP_RET_TRACE,
-+ * ptrace may modify regs->regs[0] while orig_x0 remains unchanged.
-+ * The kernel then re-evaluates the filter; if it sees the stale
-+ * orig_x0, it may incorrectly allow a syscall that the tracer intended
-+ * to block.
-+ *
-+ * This test installs a filter that:
-+ *   - TRACEs write() when fd == 2
-+ *   - returns ERRNO(EPERM) when fd == 1
-+ *   - allows all other syscalls
-+ *
-+ * The child calls write(2, ...).  The parent catches the SECCOMP stop,
-+ * changes x0 (fd) from 2 to 1, and resumes the child.
-+ *
-+ * If re-evaluation sees the old fd=2 (stale orig_x0), the filter
-+ * returns TRACE again; because recheck_after_trace is true, the kernel
-+ * allows the syscall to proceed.  write(1, ...) succeeds, child exits 0.
-+ * -> test FAIL (bypass detected).
-+ *
-+ * If re-evaluation sees the new fd=1 (synced orig_x0), the filter
-+ * returns ERRNO(EPERM), write fails, child exits 1.
-+ * -> test PASS (no bypass).
-+ *
-+ * No special privileges required beyond CAP_SYS_PTRACE.
-+ */
-+#include <errno.h>
-+#include <signal.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <linux/elf.h>
-+#include <linux/filter.h>
-+#include <linux/seccomp.h>
-+#include <linux/ptrace.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef __NR_write
-+#define __NR_write 64
-+#endif
-+
-+#define PTRACE_EVENT_MASK(status) ((status) >> 16)
-+
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define ARG0_OFFSET	(offsetof(struct seccomp_data, args))
-+#else
-+#define ARG0_OFFSET	(offsetof(struct seccomp_data, args) + 4)
-+#endif
-+
-+static int do_child(void)
-+{
-+	long ret;
-+
-+	if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+		_exit(2);
-+
-+	raise(SIGSTOP);	/* synchronize with parent */
-+
-+	/*
-+	 * Filter:
-+	 *   if syscall == write:
-+	 *     if fd == 2 -> TRACE
-+	 *     if fd == 1 -> ERRNO(EPERM)
-+	 *     else -> ALLOW
-+	 *   else -> ALLOW
-+	 */
-+	struct sock_filter filter[] = {
-+		/* Load syscall number */
-+		BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, nr)),
-+		/* If not write, allow */
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_write, 0, 5),
-+		/* Load first argument (fd) */
-+		BPF_STMT(BPF_LD | BPF_W | BPF_ABS, ARG0_OFFSET),
-+		/* fd == 2 ? */
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 2, 0, 1),
-+		/* Yes: TRACE */
-+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_TRACE),
-+		/* fd == 1 ? */
-+		BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 1, 0, 1),
-+		/* Yes: ERRNO(EPERM) */
-+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ERRNO | (EPERM & SECCOMP_RET_DATA)),
-+		/* Other fd: ALLOW */
-+		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+
-+	struct sock_fprog prog = {
-+		.len = ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
-+		_exit(3);
-+	if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog))
-+		_exit(4);
-+
-+	/*
-+	 * write(2, ...) triggers TRACE, parent changes fd to 1.
-+	 * If re-eval sees fd=1 -> ERRNO -> write fails, ret = -EPERM.
-+	 * If re-eval sees fd=2 -> TRACE again -> allowed -> write succeeds.
-+	 */
-+	ret = syscall(__NR_write, 2, "", 0);
-+	_exit(ret == 0 ? 0 : 1);
-+}
-+
-+int main(void)
-+{
-+	struct user_pt_regs regs;
-+	struct iovec iov = { .iov_base = &regs, .iov_len = sizeof(regs) };
-+	pid_t child;
-+	int status;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	child = fork();
-+	if (child < 0)
-+		ksft_exit_fail_msg("fork failed: %s", strerror(errno));
-+
-+	if (!child)
-+		return do_child();
-+
-+	/* 1. Wait for initial SIGSTOP */
-+	if (waitpid(child, &status, 0) != child)
-+		ksft_exit_fail_msg("waitpid SIGSTOP");
-+	if (!WIFSTOPPED(status) || WSTOPSIG(status) != SIGSTOP)
-+		ksft_exit_fail_msg("unexpected initial stop");
-+
-+	/* 2. Enable SECCOMP ptrace events */
-+	if (ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESECCOMP))
-+		ksft_exit_fail_msg("PTRACE_SETOPTIONS");
-+
-+	/* 3. Continue child to hit SECCOMP stop */
-+	if (ptrace(PTRACE_CONT, child, 0, 0))
-+		ksft_exit_fail_msg("PTRACE_CONT");
-+
-+	/* 4. Wait for SECCOMP stop */
-+	while (1) {
-+		if (waitpid(child, &status, 0) != child)
-+			ksft_exit_fail_msg("waitpid SECCOMP");
-+		if (WIFEXITED(status)) {
-+			ksft_test_result_fail("child exited before SECCOMP stop\n");
-+			goto out;
-+		}
-+		if (WIFSIGNALED(status)) {
-+			ksft_test_result_fail("child killed unexpectedly\n");
-+			goto out;
-+		}
-+		if (WIFSTOPPED(status) &&
-+		    WSTOPSIG(status) == SIGTRAP &&
-+		    PTRACE_EVENT_MASK(status) == PTRACE_EVENT_SECCOMP)
-+			break;
-+		ptrace(PTRACE_CONT, child, 0, WSTOPSIG(status));
-+	}
-+
-+	/* 5. Modify x0 (fd) from 2 to 1 */
-+	if (ptrace(PTRACE_GETREGSET, child, NT_PRSTATUS, &iov))
-+		ksft_exit_fail_perror("GETREGSET");
-+	if (regs.regs[8] != __NR_write || regs.regs[0] != 2) {
-+		ksft_test_result_fail("unexpected regs: syscall=%llu, x0=%llu\n",
-+				      regs.regs[8], regs.regs[0]);
-+		goto out;
-+	}
-+	regs.regs[0] = 1;
-+	if (ptrace(PTRACE_SETREGSET, child, NT_PRSTATUS, &iov))
-+		ksft_exit_fail_perror("SETREGSET");
-+
-+	/* 6. Resume child */
-+	if (ptrace(PTRACE_CONT, child, 0, 0))
-+		ksft_exit_fail_perror("PTRACE_CONT");
-+
-+	/* 7. Reap child – must exit normally */
-+	if (waitpid(child, &status, 0) != child)
-+		ksft_exit_fail_msg("final waitpid");
-+
-+	if (!WIFEXITED(status)) {
-+		ksft_test_result_fail("child did not exit normally\n");
-+		goto out;
-+	}
-+
-+	if (WEXITSTATUS(status) != 0)
-+		ksft_test_result_pass("seccomp correctly denied modified syscall\n");
-+	else
-+		ksft_test_result_fail("write succeeded, orig_x0 bypass likely\n");
-+
-+out:
-+	if (child > 0) {
-+		kill(child, SIGKILL);
-+		waitpid(child, NULL, 0);
-+	}
-+	ksft_print_cnts();
-+	return ksft_get_fail_cnt() ? EXIT_FAILURE : EXIT_SUCCESS;
-+}
--- 
-2.34.1
-
+--=-iOYyDNY3mpnbpc85Vz8q--
