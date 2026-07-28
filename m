@@ -1,44 +1,47 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FE83DDB0D;
-	Tue, 28 Jul 2026 07:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC33D3E7BCE;
+	Tue, 28 Jul 2026 07:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785225386; cv=none; b=kHRKd0pFCvLMVukajGeLZtHW2uMQDZNTyg6xPOFe6AQ4K7NzcQHNlBeZC3MX3VVXT7QEnOvyf7A3FrZkrXt+Wz4qiYp7q1UtZ8XKtXZMgyScozyzuT0TJYZtwwi0cPnrd42G0DW8rwtt73ccB7R3n0j87roiscLXmpXKE5g/yGw=
+	t=1785225387; cv=none; b=VFmzWoByu0xCNWcKMrliiYNSVzyzqfdj7xVnUeRi8ImuaxarqjrSbcV7NFSBa9iZ2Nwkvj7Mfu7l5674ZalIj/6/L6GdOoAokAMGQNSug+PtW7cEDZHzPlurNDIu9WdOoT3yuLAhFQuktfW9q0hoXNb9os7+4cD5Fy4ZUFkGH38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785225386; c=relaxed/simple;
-	bh=YejfwdLeOZgCNJrFK90ekwz/e2S2Wl8ySKQBB5Fb1ic=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OyqrLQHHtLgijTqG51k4uevk3URjlGmG1Nr5lLv3IGfWW119LUgMqYoQcdLOvGp/dBNW+k0lqxjPOH0y103Q1ojHTiwXXb5q1i8jCjwEoJwXRGVoDT9pv+r7TN+euId5iCTh28+w/H7Es/CT4XvEvA0dp6S9zbq3N3D7v6J8Vpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=219+MlWC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xq+sE6Zs; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1785225387; c=relaxed/simple;
+	bh=iURTu10mGAMF8r101DAi59Sfd7rjDpf8oxW6jzJfeA4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=PjfCNOEvYrNtiGMx1IGgkHvjRTDX/aa07d6NA6JczK0tPS7LuD3l+hVHUa/WQ8KWrUGYC/2crdkhOy9nOjSi5vAkL7vCFXbTqrBeZs66XDzoJygVb+/RUfXpMTA4NE2U1FPHY2tWYRywXD5LjPCog6gJ85fZI0gasBQjEEgct2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Fg105P5h; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K0hBrtlM; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="219+MlWC";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xq+sE6Zs"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Fg105P5h";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K0hBrtlM"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1785225382;
+	s=2020; t=1785225384;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tqC6Sc3CXNZakHvNXt0MqGelML5TtCaduYHs8mYUhaY=;
-	b=219+MlWC/dTWAQNQSKH7oV+iYxUyvFD0g4t19oyGNRWCe64GTJJWKHs2OGXQUNMyqLx1nn
-	gyatciECelPQNtCkl16xs3rgx2ndt6cPKNjqaj8sSd0tgTafyTwEVRvKTcvt294AHGou3D
-	UiWZOjJkuFthps9boP6lZ3XTumQobhqd/C5F207rOybB0xjlHQtp1Z0WlNcCTdvJKocUOZ
-	htyvyK8wCoFJaLv7zgTad1cB8Dl97ZTRZu7s7teqHXZ5Xg5JsrXxvO1aMpge/VQvEJ7uCU
-	r21JooOXVQ6Ab+xKhsm/6rJVuwWXSyxB5BomPPVoG+PTdJt1o2fJyziUZ1xp1Q==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+iK7hxnOIbQ2L2eg+a06KzApf6xtxC4oqyM1hrJTosM=;
+	b=Fg105P5hLL+9sfBf2HghlPuvKsz2g23ldN2Hj3R7NEMjDyU/QPQKVag0KLY7nuzNzoLD7o
+	LSN9rpyEPa+pRuUkIpBcbIPLCNpjKTRDXxwzBOrqkKz6jp5t8Y4zGk0tEz3XeHfYZs7sZc
+	HhIRhmSFuTVa6Al2ngt+hn9rgxXBl+YFEZwm5B3IdNcVGn87GwQYVOMldyEhKfsgdM09CR
+	9jveTSga8lp83xmg7zhonstmFsakZzydWkuRYVsOl3c1AYegp18rKinVfWDUYroD/tZFyI
+	D6FWgv9TMSoefSqmsoEh5ZdwtOa+G8IRhKkd00HOqv/vZKeOXw1bZC50Iunv9g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1785225382;
+	s=2020e; t=1785225384;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tqC6Sc3CXNZakHvNXt0MqGelML5TtCaduYHs8mYUhaY=;
-	b=Xq+sE6ZsVeGDwZFMayOwPaFCPe9yMRZ2EoNzCTQ+dKsxpeqLlRLu2HZd8jHkIS+meMRxuc
-	+ZgG+4SD8i/pvPDg==
-Subject: [PATCH 0/5] selftests: vDSO: Add tests for auxiliary clocks
-Date: Tue, 28 Jul 2026 09:54:26 +0200
-Message-Id: <20260728-vdso-test-axuclocks-v1-0-2fcc883a2940@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+iK7hxnOIbQ2L2eg+a06KzApf6xtxC4oqyM1hrJTosM=;
+	b=K0hBrtlMVCEcF1rViGrHyVgE+MHccrWRPGu7fg0HSMylz0uZqPUQAtCa3f+2toZ4BIqlmS
+	LZZKkU4nNmoXYwCQ==
+Date: Tue, 28 Jul 2026 09:54:28 +0200
+Subject: [PATCH 2/5] selftests: vDSO: vdso_test_correctness: Use symbolic
+ clock IDs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,42 +50,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDcyML3bKU4nzdktTiEt3EitLknPzk7GJdY1MT4xQDI4M0C2MjJaDOgqL
- UtMwKsKnRsbW1AE88wmRlAAAA
-X-Change-ID: 20260728-vdso-test-axuclocks-3543d020f832
+Message-Id: <20260728-vdso-test-axuclocks-v1-2-2fcc883a2940@linutronix.de>
+References: <20260728-vdso-test-axuclocks-v1-0-2fcc883a2940@linutronix.de>
+In-Reply-To: <20260728-vdso-test-axuclocks-v1-0-2fcc883a2940@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785225381; l=923;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785225381; l=1760;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=YejfwdLeOZgCNJrFK90ekwz/e2S2Wl8ySKQBB5Fb1ic=;
- b=m71qDFx2tbJ9wQjS2Hw8fKMxkdWXWabjbiQrf8nc4XoI5eaVIM8FrSaGPhA6lbnWlF2QrVZ7h
- TjkYbLvJnZjBs2ww07BXwXcjgpAsaA9O9CrJQEMCITlZ9ANlfEXRQlT
+ bh=iURTu10mGAMF8r101DAi59Sfd7rjDpf8oxW6jzJfeA4=;
+ b=Oila3PVSNPMPpD8IEr4U2SXuHxdWW9jBuWj58DXVezDWxfUGzsRh2YxzJ2dLRHmErhQaHF5kX
+ r6wy7NpXEGtBrh4cIfzAb651+ZP0/HBxSiPlGjvGsJ0aEEr+fabFm6v
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Extend the test to also cover auxiliary clocks.
+While the hardcoded constants are correct, they are not obvious when
+reading the code.
+
+Switch to symbolic identifiers.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Thomas Weißschuh (5):
-      selftests: vDSO: vdso_test_correctness: Store the clock id in the array
-      selftests: vDSO: vdso_test_correctness: Use symbolic clock IDs
-      selftests: vDSO: vdso_test_correctness: Validate match for all returned errors
-      selftests: vDSO: vdso_test_correctness: Add tests for auxiliary clocks
-      selftests: vDSO: vdso_test_abi: Add tests for auxiliary clocks
+ .../testing/selftests/vDSO/vdso_test_correctness.c | 24 +++++++++++-----------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
- tools/testing/selftests/vDSO/vdso_test_abi.c       | 28 ++++++-
- .../testing/selftests/vDSO/vdso_test_correctness.c | 85 +++++++++++++---------
- 2 files changed, 79 insertions(+), 34 deletions(-)
----
-base-commit: fd22b44a474a791d78236c4aa40e0dd42f276941
-change-id: 20260728-vdso-test-axuclocks-3543d020f832
+diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+index bcce5053e822..3671ea815823 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
++++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+@@ -255,18 +255,18 @@ static const struct {
+ 	clockid_t id;
+ 	const char *const name;
+ } clocks[] = {
+-	{ 0,	"CLOCK_REALTIME"},
+-	{ 1,	"CLOCK_MONOTONIC"},
+-	{ 2,	"CLOCK_PROCESS_CPUTIME_ID"},
+-	{ 3,	"CLOCK_THREAD_CPUTIME_ID"},
+-	{ 4,	"CLOCK_MONOTONIC_RAW"},
+-	{ 5,	"CLOCK_REALTIME_COARSE"},
+-	{ 6,	"CLOCK_MONOTONIC_COARSE"},
+-	{ 7,	"CLOCK_BOOTTIME"},
+-	{ 8,	"CLOCK_REALTIME_ALARM"},
+-	{ 9,	"CLOCK_BOOTTIME_ALARM"},
+-	{ 10,	"CLOCK_SGI_CYCLE"},
+-	{ 11,	"CLOCK_TAI"},
++	{ CLOCK_REALTIME,		"CLOCK_REALTIME"},
++	{ CLOCK_MONOTONIC,		"CLOCK_MONOTONIC"},
++	{ CLOCK_PROCESS_CPUTIME_ID,	"CLOCK_PROCESS_CPUTIME_ID"},
++	{ CLOCK_THREAD_CPUTIME_ID,	"CLOCK_THREAD_CPUTIME_ID"},
++	{ CLOCK_MONOTONIC_RAW,		"CLOCK_MONOTONIC_RAW"},
++	{ CLOCK_REALTIME_COARSE,	"CLOCK_REALTIME_COARSE"},
++	{ CLOCK_MONOTONIC_COARSE,	"CLOCK_MONOTONIC_COARSE"},
++	{ CLOCK_BOOTTIME,		"CLOCK_BOOTTIME"},
++	{ CLOCK_REALTIME_ALARM,		"CLOCK_REALTIME_ALARM"},
++	{ CLOCK_BOOTTIME_ALARM,		"CLOCK_BOOTTIME_ALARM"},
++	{ 10,				"CLOCK_SGI_CYCLE"},
++	{ CLOCK_TAI,			"CLOCK_TAI"},
+ };
+ 
+ static void test_one_clock_gettime(int clock, const char *name)
 
-Best regards,
---  
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+-- 
+2.55.0
 
