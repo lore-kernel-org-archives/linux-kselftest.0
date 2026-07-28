@@ -1,105 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0013C38E129;
-	Tue, 28 Jul 2026 04:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495FC3876A7;
+	Tue, 28 Jul 2026 04:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785211980; cv=none; b=TmRVgzk3EN75LIzLqM3kRDZGbWcrjeB82yQlOCFmNQexNtAOzPgNrPLIsmEZYLxdMV7y3uEWXQERRg0xJwrEsQYyz9T39jZpmUc1cb3rlfi42GHDGbraGSKAnfeXu14GuKYk4J4/s1J3r6m9y4kSIjzy8LH8Gz4tAjbgL8Tt7yk=
+	t=1785212646; cv=none; b=T5MT1C4zkUzwvXYnBhXXzCN42STW/AhOx3K6GwOw4wK/ZJC37RNOPiyTaLz2GTekF6O+uUVIAdXiPnuwh9v208TfB0VzJmkQNmT7ZSgmKUhCnLbAwjJkEbKvZGXssYXiZir6WPbol2fu9tzbmWQfCGSJrLBj/mpoUZ+VTt1/Q0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785211980; c=relaxed/simple;
-	bh=I7iSQWo3DIeCl4GG9ImX2V39xbLJgFz5OBrIHCf8Mf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G4CrkHMndmUNRd4G2FX3jO/yoNoNOj0nFWJb68HE/tscPblMyiEYqgIoQ366muyy9w1twmNfIfzY+KoYHiyPpOOGYP6Gw9otHMyhUv9jElOQMwL4HTrHQQPi3Y71cqQmd1s/hiBD6wOcEcZojTUxgq4tNLWXkDhAba4laxbfOk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0Yk+E8c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785212646; c=relaxed/simple;
+	bh=TV0vn7xOGi/mH1KF8ZmxRN+1ZS3uwizd+ITrgJfAvzQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Hfa3dGgTu5rtkkrkZL988wolI+t81r+nu8c4BMtrT6aAdIUNhq6TX8PQPnNNi471nxZeOKXlEqk1PwGX/vhXToNdQA9lvOonbCu0PHps4HzjmchS+sj48of3/7H0axY1ddNqYHO3lu5AK58VarCoLQ/0yyNAsdBj+u44v+QKIXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Zk6eLt81; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0Yk+E8c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEAD31F01558;
-	Tue, 28 Jul 2026 04:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785211976;
-	bh=m+OX/QoubOtPs5CYX5dE9pYfjfAmb4FTinvx7UvjP30=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=o0Yk+E8cMC8Pge85QoIORj3dRWhVCFkvO4BmM61deMcSxvvkrTH2XOqCaeskS5VPL
-	 VaYCZMOsciebOOHkqJ1s3k8C1AxIExYCFBcZwBMZ4pQO8fCEI3W4cZ6lXnt58Q4qEy
-	 MPE7DcS8TF2LC05pO+fm2jXT3hjw8zwzNdsDST7yYTiPgthNqNe7p8wD3I/ROAucpf
-	 bxUNC0/uEEkEF77hjhN51POIvqV/Xnu/CbK++6yADl5jJ+95XJQ2MiAH0ZlXgPsYJN
-	 fQkx6hLrjldrJEdH5n8X5jvRm8oYW4S8mOe40wx5v/J3aDn6X4aSouHk7wBNiAy+Q7
-	 RxLATF8zAghTw==
-From: SJ Park <sj@kernel.org>
-To: 
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v2.2 14/17] selftests/damon/sysfs.sh: test probe prep sysfs files
-Date: Mon, 27 Jul 2026 21:12:35 -0700
-Message-ID: <20260728041242.187380-15-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260728041242.187380-1-sj@kernel.org>
-References: <20260728041242.187380-1-sj@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Zk6eLt81"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD47B1F000E9;
+	Tue, 28 Jul 2026 04:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1785212643;
+	bh=PQyIhBnDSp1LeV5j63D6Dt0ddnF6P/tt+RnNOupEkLI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Zk6eLt81z8NT0gqcdR0ASwDusUAygxVuTdX3+9SkcYZjzBv6w/o0AK0w754iNu4Sc
+	 HybK6J4Th2iMENNUY3oEniHIGPeaxNSWE3hFyyIyRFaXokBHx0td3W28F7xOm6Svwm
+	 5bdIAtZ0o95LWV/SBC5RR8k0twaZwbGmQNQNgSHk=
+Date: Mon, 27 Jul 2026 21:24:02 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Breno Leitao <leitao@debian.org>, <linux-mm@kvack.org>,
+ <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <kernel-team@meta.com>, David Hildenbrand <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya
+ Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett"
+ <liam@infradead.org>, <lance.yang@linux.dev>, Steven Rostedt
+ <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive
+ test
+Message-Id: <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
+In-Reply-To: <ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
+References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+	<20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
+	<ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add basic file operations test for newly introduced DAMON probe prep
-sysfs directories and files.
+On Thu, 9 Jul 2026 11:34:05 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-Signed-off-by: SJ Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+> > The script is intentionally NOT wired into run_vmtests.sh: every
+> > successful run panics the kernel, which is incompatible with the
+> > sequential "run each category in the same VM" model that
+> > run_vmtests.sh assumes.  It is also not registered as a TEST_PROGS /
+> > ksft_* wrapper so a default kselftest run does not opt itself into
+> > a panic.  The script is meant to be executed manually inside a
+> > disposable VM (e.g. virtme-ng), one variant per VM boot, and
+> > requires RUN_DESTRUCTIVE=1 in the environment as a safety net.
+> > 
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> 
+> With Mike's comment addressed:
+> 
+> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index f7fb94b84e716..ddebde6edabe4 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -361,6 +361,32 @@ test_intervals()
- 	test_intervals_goal "$intervals_dir/intervals_goal"
- }
- 
-+test_damon_prep()
-+{
-+	damon_prep_dir=$1
-+	ensure_file "$damon_prep_dir/prep_action" "exist" "600"
-+	ensure_write_succ "$damon_prep_dir/prep_action" "set_pgidle" \
-+		"valid input"
-+	ensure_write_fail "$damon_prep_dir/prep_action" "foo" "invalid input"
-+}
-+
-+test_damon_preps()
-+{
-+	preps_dir=$1
-+	ensure_dir "$preps_dir" "exist"
-+	ensure_file "$preps_dir/nr_preps" "exist" "600"
-+	ensure_write_succ "$preps_dir/nr_preps" "1" "valid input"
-+	test_damon_prep "$preps_dir/0"
-+
-+	ensure_write_succ  "$preps_dir/nr_preps" "2" "valid input"
-+	test_damon_prep "$preps_dir/0"
-+	test_damon_prep "$preps_dir/1"
-+
-+	ensure_write_succ "$preps_dir/nr_preps" "0" "valid input"
-+	ensure_dir "$preps_dir/0" "not_exist"
-+	ensure_dir "$preps_dir/1" "not_exist"
-+}
-+
- test_damon_filter()
- {
- 	damon_filter_dir=$1
-@@ -392,6 +418,7 @@ test_probe()
- {
- 	probe_dir=$1
- 	ensure_dir "$probe_dir" "exist"
-+	test_damon_preps "$probe_dir/preps"
- 	test_damon_filters "$probe_dir/filters"
- }
- 
--- 
-2.47.3
+As I understand it, Breno would prefer not to rewrite the selftest in C
+at this time.  IOW, we stick with the bash version for now and add
+"convert this to C" to the todo list, OK?
+
