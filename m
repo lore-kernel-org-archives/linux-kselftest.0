@@ -1,137 +1,116 @@
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE231353ED9;
-	Tue, 28 Jul 2026 06:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B664E3B8958
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 06:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785221256; cv=pass; b=p4xrHDNt5RApVe0g2dBtWLZQoqyRmFDl966WHNM14ERKtSS1KSdfTFtO9x1N85YyFdT5EfbN7LLfWbHLrXwk25YlIbAQBEz/TOtkqbYlQKqL8IGkAUbpvY26zsOBpDhwGWerHgecVS9KfLxfEMnWmWNGAqT+7wGUmuw9EAkxImo=
+	t=1785221500; cv=pass; b=cnFlcTnA5WPBZzXjytmBseONSzULHDQ6L4TEGKeOyxetSvn7vjxc2UcQ/ZBJ3muZyaSXDj+LdAFzrMFASnbpt+D9pxXvtMC8Eawf9RMsUXXG/GclNoLyI9t1gzE7/f5iL12c6RfEGJeHVqTpPXRyFub73Um0CKQDOGQpGv5YeNU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785221256; c=relaxed/simple;
-	bh=dNc+iC79OCbfpC6hRBLPEIS1q1TRvgJ59CintKmDc70=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=Ax7ByrQFQKDn5SzAuc9cl7v2h6NyzEiU9BJkwnBAQan5trS9Y+36jnimSZ21DyJENpMe7ajJk7J8BNnMl7E88Dmz3ouSHmX8+DTHc3Yy67q9Vd1esW4SRUe1xtm1rCLbNuS44dXm3c+GO7NFcxIN/3y+bwj0LvJ8bdUWr8oSZwk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=BQdwaS7N; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
+	s=arc-20240116; t=1785221500; c=relaxed/simple;
+	bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hhFo0VKlUozLMDP7gZB5LQW8yFELgWwioOBhjmYx791MuTK9y2JQegJIxNUxSkKhjstEOquBnGejkf0GGB99WklXOJ2hLGMKoowyiLkb+8LrkgwYoGNMnCepDiItAz8gqgKd9Ph9aiEqy4CmRmPqsMH+Rr+kV2fhOmApyVtIlYw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=HefDXMfr; arc=pass smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="BQdwaS7N"
-ARC-Seal: i=1; a=rsa-sha256; t=1785221235; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TvIdN3n3nX9mesttuHRse35qquvmcLLWEew98rctnjXjYjAm+DZwqaK1EML3B0+017OtK4caSSdw7Lq9nc28nybi/oxIa3O2h6kupIBAhgwTV/CrPR3p6drj/KUgdN4zDAuuJEfnWBf0tdrpPFQDjcBdD74gdLPSSGGVIWxf0XE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1785221235; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=h+alo87DzsG/NLeUiBDtldv0Pwr6MX5W2jGl8AXZVoc=; 
-	b=O+lF90tffZHLt8r+wHkezStq/EMIHrH5ULxT+hNek4ChVOjnykpMeUDBVXZ3hY3Dit/cBw+DTyYaAMRLZfpfj3VYvpZp7D21HMLCM5+9aP3kb5s+tFXFi9kOb60CvCxaunZ7oiMfARyEmFJMbop7XcAbaZaxatvW3vwyHCCtQNw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=linux.beauty;
-	spf=pass  smtp.mailfrom=me@linux.beauty;
-	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785221235;
-	s=zmail; d=linux.beauty; i=me@linux.beauty;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=h+alo87DzsG/NLeUiBDtldv0Pwr6MX5W2jGl8AXZVoc=;
-	b=BQdwaS7NrKhO9iS40hf2njkXL6a9J3ZaCd8MtyeQKiO260RY7Fj23mzRT1DXc72+
-	7DviC/WmkPB1YB5JRmLLOCl4MhgM3kl+25foSLspga6AUD31EHg99t5mnurbKGL96Z9
-	OBsPHSgs9luEx65HTxBkTkZxHzsxBoPQGzkf5rk0=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1785221234853120.14539619974221; Mon, 27 Jul 2026 23:47:14 -0700 (PDT)
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1785221231290976.0786587549686; Mon, 27 Jul 2026 23:47:11 -0700 (PDT)
-Date: Tue, 28 Jul 2026 14:47:11 +0800
-From: Li Chen <me@linux.beauty>
-To: "Jan Kara" <jack@suse.cz>, "Christian Brauner" <brauner@kernel.org>
-Cc: "Alexander Viro" <viro@zeniv.linux.org.uk>,
-	"Shuah Khan" <shuah@kernel.org>,
-	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>
-Message-ID: <19fa77a32a4.4055e8af2310651.5579113259972318429@linux.beauty>
-In-Reply-To: <v2etqvlc6cq3al2pbdf43gu5b4d5f5py7dagkblbbt6mxltfro@kospd7xpqeyo>
-References: <20260716052726.1032092-1-me@linux.beauty> <ks7xfhn7pzzm267bcfo725xwqa6famsv5yulmzgqt7hjdmepep@zm2dw2djd7yb> <20260722-esszimmer-umsetzen-nennt-ed5fc604300a@brauner> <v2etqvlc6cq3al2pbdf43gu5b4d5f5py7dagkblbbt6mxltfro@kospd7xpqeyo>
-Subject: Re: [PATCH] pidfs: preserve thread pidfds reopened by file handle
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="HefDXMfr"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so3386491a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 23:51:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785221498; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sTeqoNCfaamf4xSDfenj1caiG5ZjbxkJZn+ldk/lCFkvUGHWdwTTU9XCsZ8oi6ND6b
+         aV9vM78hykAm7Rj6eEZbo3685XONRALYdqvTDp5tya6On8LkJvye1GrMwogFQJUxIm0x
+         +HSwWwGhAviAehEaW6f+J7MCQsrePcF3LKaOOohNDzwdz4rcVEiF1L/9jQ6jNXIHz9WK
+         v7WEFGDdyiUJATeFBxQg75lG4QZuPeptNNUvfGASH4pEzelgmW0csm6VsMQcZ1TjVFeq
+         at6Tx3lLUlravvQNfTimuWg1+ZIZ4C+yTbqj+UtJEdbBnT83l5OBHji9GwhhhpWxINgY
+         wbng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        fh=ZHl5aO+ijVjpSzLo13l0KMooiFzf3mDQ2gF96V4J0x0=;
+        b=J6Gk43tyesbPL/vW4Nw7aI1x0U+L/u+NwObA8dvZWNzJMyNHKK93fYQEAyABnZZueO
+         mIQkQFHfET+daT2iWLXhxdXr6agqsjriRu26wYbeB1FDGnQkKRU+MD/LGIv7gnqQcSrj
+         eRPk40rEO7ZJMTvuxYNmjvPa9VRALbKyDRO/7mpQb4r0vvKQe1oVJYdb+bWMef/YqZAm
+         NoFEaevrlqQcwxMei2gGCIXVJDDbqW5sgEL0loSXdMa7ieBZwG71X1Jh5Wm3wEztH+SX
+         QvPEWE0ChsDAXt09B4yZKLtq/eQ6RUHGnTj0Zdlm3H+zjPaJpZB1RHYD4XGxHld/DJd9
+         SQIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openresty.com; s=google; t=1785221498; x=1785826298; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        b=HefDXMfrzC5ZE5Xx4NdEdxBMRsgA5zc4HvfzwGzgzdb+HWsYSCQwZRoukGzbN+Ygz/
+         XaFtWh8bpWftqgAh/rowBiP9ooriycHdb4eP+Aw6rUp7u4qzDEXwzeL4gDIfOcCRMLKO
+         Ru/LydACVGLOCzE3fMxgHx7++BL92JY1cJiathX9UzyMVedahC2s/HEshcDo0zz7kI6f
+         km3sB1zT5JX9abmUVR16+Uq2CZRhXkkKimaD2NNEY4HhCKKXP1qxXV5FkaOFwz3AsuJd
+         QTHjjl7P9mJ+iUczXFhRDzejCIV3/QqETC5YRnl+tlue3exsZA/zIfigZIEp2z8hS1yu
+         va5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785221498; x=1785826298;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        b=nOq+vWEqZFgvDXZBCiGr9oxj+tXlA1tE2Nc3WN43RrKNEdMogm7uZmVeEPHftWUZZ8
+         ybZH2d9mL+zdQjzYwkTSljPK8gb1BuD5Vvgn/rU80XDEFKMKzuMskJGq1EXdFARZVWwE
+         kSTT5jUo+86+gt4upKQse1OXQWcvOhkB23nJHkiTXwchlv07Y6HKlc1bLNEg6C/KsSpH
+         pYZoGKZPDucMcqhnI7/Tvb+O+hyqNuApJRGCZ5vqfcx3o7MdbOK1cyptrzmd69rCTrtr
+         XOWkvNKEdBrjkC7wZ1Aolt3kb2BwPnCaymB3oXLAP77VrwN8jQY+BhIR6PfQeyKKPcAU
+         c/nw==
+X-Forwarded-Encrypted: i=1; AHgh+RqQNrr3VJw+tMe/zMzi2YqKiWtFLtG/De9Z/Zg5VjzBg+o0J4zTWor2bknYN5gTY7LzzxKuXSAeWiGEhFbluvI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsFKhVJdLm9wQSJEAiXoSG7E8GK/o4ocVAfpNm5RH6/dGBb6xg
+	gyv61uIN5I0aa2Yg87uFyfUe5/yQhl8PyF6zJA3+HFawFAhiJwLQqzJz+tB+SDNyFKwGoFWJwGS
+	FVX+pxDRbIsGnj3Zt00CTQT3xq/++KNROk+4x8Sd0mg==
+X-Gm-Gg: AR+sD124hy66+pNb9Tp4c00e8dqgTXSqMuS06fjJlqC6tJQiK4oHukYhafNSun/SexQ
+	EQHLP2EgJhrOngp9I7wCiCJa7Xx14YfGXYv3s56ATf/5LjyPRIpUo5RCBlyETRecs9/o9IT8wM5
+	9OkU81fffpS9zP3KBAnYnr5SJlQBU8XmC7LVvhnGmZIe06IwscMzfyaFAvgajfuhM29koxBbPUA
+	juodcOljdSiHnrbWYJZD/2GMHalSeiE4WC/XQtd9a3c1LC9yx2EM69gdsbd0h0LOGjyW9L6dmSc
+	TflBH5RTDYE5R/PyjLm9
+X-Received: by 2002:a17:90b:51c5:b0:380:71eb:4014 with SMTP id
+ 98e67ed59e1d1-38f6a37e87fmr1398283a91.15.1785221498096; Mon, 27 Jul 2026
+ 23:51:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+ <20260726101306.3772237-2-ammarfaizi2@openresty.com> <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
+ <ambQ4715PGeb6uFq@1wt.eu> <6a6c1738-bdbf-4beb-9abc-e9c38434b8ac@t-8ch.de>
+In-Reply-To: <6a6c1738-bdbf-4beb-9abc-e9c38434b8ac@t-8ch.de>
+From: Ammar Faizi <ammarfaizi2@openresty.com>
+Date: Tue, 28 Jul 2026 13:51:25 +0700
+X-Gm-Features: AUfX_mwNMBgSu4dTxFsUacHTqp-RjCOEkBg0s1vRYDZbBtotdldmDUVB9cpOwoI
+Message-ID: <CA+KFgX51SLUKcpLhaLT0sT-b1k0k==am6ooaGj3VaFMkLMmWxg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] tools/nolibc: evaluate syscall() arguments before the
+ arch macros
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>, LLVM Mailing List <llvm@lists.linux.dev>, 
+	Yichun Zhang <yichun@openresty.com>, 
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 
-Hi Jan & Christian,
+On Mon, Jul 27, 2026 at 11:19=E2=80=AFPM Thomas Wei=C3=9Fschuh wrote:
+> On 2026-07-27 05:30:43+0200, Willy Tarreau wrote:
+> > Well, at other places we already have typeof(arg) which is exactly the
+> > same, more explicit, and doesn't come with such restrictions, so I'd
+> > rather suggest we use it instead.
+>
+> Agreed.
 
- ---- On Mon, 27 Jul 2026 23:57:14 +0800  Jan Kara <jack@suse.cz> wrote ---=
-=20
- > On Wed 22-07-26 14:07:37, Christian Brauner wrote:
- > > On 2026-07-16 13:11 +0200, Jan Kara wrote:
- > > > On Thu 16-07-26 13:27:22, Li Chen wrote:
- > > > > PIDFD_THREAD shares O_EXCL. do_dentry_open() clears O_EXCL after
- > > > > pidfs_export_open() validates the flags, so open_by_handle_at()
- > > > > silently turns a thread pidfd into a process pidfd.
- > > > >=20
- > > > > Restore PIDFD_THREAD on the opened file, matching pidfs_alloc_file=
-(),
- > > > > and cover the restored flag with F_GETFL.
- > > > >=20
- > > > > Signed-off-by: Li Chen <me@linux.beauty>
- > > >=20
- > > > Makes sense. Just looking at this code, what about PIDFD_AUTOKILL (a=
-ka
- > > > O_TRUNC?)? Reading the commit introducing it 07c3ef58223e it appears=
- it was
- > > > never meant to be directly requested by userspace so probably
- > > > pidfs_export_open() needs to reject it. But that's unrelated issue t=
-o your
- > > > patch so feel free to add:
- > >=20
- > > Good point. But pidfs_export_open() is guarded by
- > > pidfs_export_permission() which does:
- > >=20
- > > #define VALID_FILE_HANDLE_OPEN_FLAGS \
- > >     (O_RDONLY | O_WRONLY | O_RDWR | O_NONBLOCK | O_CLOEXEC | O_EXCL)
- > >=20
- > >     if (oflags & ~(VALID_FILE_HANDLE_OPEN_FLAGS | O_LARGEFILE))
- > >         return -EINVAL;
- > >=20
- > > and so is safe. But I've added the following patch on top which also
- > > splats if that is passed!
- > >=20
- > > From 99a859485394eca8cf6271de09ae72ac3b846bda Mon Sep 17 00:00:00 2001
- > > From: Christian Brauner <brauner@kernel.org>
- > > Date: Wed, 22 Jul 2026 13:56:28 +0200
- > > Subject: [PATCH] pidfs: add pidfs_dentry_open() helper
- > >=20
- > > Both pidfs_alloc_file() and pidfs_export_open() need to force O_RDWR
- > > and reapply the pidfd flags that do_dentry_open() strips. Move the
- > > common logic into a helper.
- > >=20
- > > PIDFD_AUTOKILL is now part of the restore mask in the file handle path
- > > as well, but pidfs_export_permission() rejects O_TRUNC, so this is a
- > > no-op there. But warn nonetheless.
- > >=20
- > > Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
- >=20
- > Nice! Feel free to add:
- >=20
- > Reviewed-by: Jan Kara <jack@suse.cz>
- >=20
+Noted, I'll use __typeof__() in the next version.
 
-  > Both pidfs_alloc_file() and pidfs_export_open() need to force O_RDWR
-  > and reapply the pidfd flags that do_dentry_open() strips. Move the
-  > common logic into a helper.
-
-Thanks both.
-
-Jan, thanks for pointing out the PIDFD_AUTOKILL angle.
-
-Christian, thanks for factoring this into pidfs_dentry_open() and
-applying the fix.
-
-Regards,
-Li=E2=80=8B
-
-
+--=20
+Ammar Faizi
