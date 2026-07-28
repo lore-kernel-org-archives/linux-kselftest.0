@@ -1,22 +1,22 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC33D3E7BCE;
-	Tue, 28 Jul 2026 07:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E143E9C23;
+	Tue, 28 Jul 2026 07:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785225387; cv=none; b=VFmzWoByu0xCNWcKMrliiYNSVzyzqfdj7xVnUeRi8ImuaxarqjrSbcV7NFSBa9iZ2Nwkvj7Mfu7l5674ZalIj/6/L6GdOoAokAMGQNSug+PtW7cEDZHzPlurNDIu9WdOoT3yuLAhFQuktfW9q0hoXNb9os7+4cD5Fy4ZUFkGH38=
+	t=1785225388; cv=none; b=McRTdkGdJBnvr1gUJbjjZ1kHE70t/HSir9SX4gp/gtLP2y6Ipn1Uq3otPsc5Jc0NBkrNHMoGSV7LD8Ag2e8wC8Z1IJYZFNTIz4O01Bi3ST46zQADMfdIs1fyTDvtB5zzgI19c5XlkI4CDqQoSu27Pdyr9HaHc5ADqu72lXwdYL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785225387; c=relaxed/simple;
-	bh=iURTu10mGAMF8r101DAi59Sfd7rjDpf8oxW6jzJfeA4=;
+	s=arc-20240116; t=1785225388; c=relaxed/simple;
+	bh=nBaH4uynzc+/SWX6lSuiZ6OiM7gO3CaI1BUwxQFBnVo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PjfCNOEvYrNtiGMx1IGgkHvjRTDX/aa07d6NA6JczK0tPS7LuD3l+hVHUa/WQ8KWrUGYC/2crdkhOy9nOjSi5vAkL7vCFXbTqrBeZs66XDzoJygVb+/RUfXpMTA4NE2U1FPHY2tWYRywXD5LjPCog6gJ85fZI0gasBQjEEgct2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Fg105P5h; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K0hBrtlM; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Bi3OqI3s0M6qEBrhJXeR8+hqgyPjU/Bcrq7LVgyGNlWV2karGsvcJf/eVgYyda8JhZdibC3EITh3q16k42qir3sCfM2cX6CSGrbnFXrdif2amQvgD860ox1+Z1Cr5I4ZRWfzCXcdY7i2FBlh98AuvgRNB56SovJs0kiqESXnlPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=J8wy+8QG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H0L6qUFj; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Fg105P5h";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K0hBrtlM"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="J8wy+8QG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H0L6qUFj"
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020; t=1785225384;
@@ -24,24 +24,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+iK7hxnOIbQ2L2eg+a06KzApf6xtxC4oqyM1hrJTosM=;
-	b=Fg105P5hLL+9sfBf2HghlPuvKsz2g23ldN2Hj3R7NEMjDyU/QPQKVag0KLY7nuzNzoLD7o
-	LSN9rpyEPa+pRuUkIpBcbIPLCNpjKTRDXxwzBOrqkKz6jp5t8Y4zGk0tEz3XeHfYZs7sZc
-	HhIRhmSFuTVa6Al2ngt+hn9rgxXBl+YFEZwm5B3IdNcVGn87GwQYVOMldyEhKfsgdM09CR
-	9jveTSga8lp83xmg7zhonstmFsakZzydWkuRYVsOl3c1AYegp18rKinVfWDUYroD/tZFyI
-	D6FWgv9TMSoefSqmsoEh5ZdwtOa+G8IRhKkd00HOqv/vZKeOXw1bZC50Iunv9g==
+	bh=ayZfBZRL6gYyR6W8VRtlphke6tdrwICFrrQNAymU26I=;
+	b=J8wy+8QG+llv9MTap7kzT7Ryd6oa1Mu0QU53OpqvkPl0Men2pH9irqY1TLs5/5jiC25KXv
+	yWxp54pR+Xf7YzRUilgz+vnLNk1gigam9jx8gj+MuDNg3LZ2PbYbFI9PTOmntqKkV87T4v
+	oN2hLxAjrLAmrNOCvpz4D215V+ndqxLsFWlmSFBA4g05cPxnosjq4tVVxEegguIN3fXJz7
+	7qzNVkm3Zd7QrhJrgUOkds12mF9mujLzS+aOoMyR9vHO9J1dh9PhoDZWpAI4BC4zQ8DXBG
+	PoDWlKAFHfDwrwbfvJRPP/CRH4LEXSR5d5gwKN9QSpZqV57JBXrWyYU1Voq60A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1785225384;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+iK7hxnOIbQ2L2eg+a06KzApf6xtxC4oqyM1hrJTosM=;
-	b=K0hBrtlMVCEcF1rViGrHyVgE+MHccrWRPGu7fg0HSMylz0uZqPUQAtCa3f+2toZ4BIqlmS
-	LZZKkU4nNmoXYwCQ==
-Date: Tue, 28 Jul 2026 09:54:28 +0200
-Subject: [PATCH 2/5] selftests: vDSO: vdso_test_correctness: Use symbolic
- clock IDs
+	bh=ayZfBZRL6gYyR6W8VRtlphke6tdrwICFrrQNAymU26I=;
+	b=H0L6qUFjlvqr3BN5px1XJZEhI0qgEDxC8zB6Um+QN8Df5E6cY6hZoCGZumFNjKKm71Ep90
+	qHDvHyLjU+uCT5CA==
+Date: Tue, 28 Jul 2026 09:54:29 +0200
+Subject: [PATCH 3/5] selftests: vDSO: vdso_test_correctness: Validate match
+ for all returned errors
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260728-vdso-test-axuclocks-v1-2-2fcc883a2940@linutronix.de>
+Message-Id: <20260728-vdso-test-axuclocks-v1-3-2fcc883a2940@linutronix.de>
 References: <20260728-vdso-test-axuclocks-v1-0-2fcc883a2940@linutronix.de>
 In-Reply-To: <20260728-vdso-test-axuclocks-v1-0-2fcc883a2940@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
@@ -58,59 +58,77 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785225381; l=1760;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785225381; l=2743;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=iURTu10mGAMF8r101DAi59Sfd7rjDpf8oxW6jzJfeA4=;
- b=Oila3PVSNPMPpD8IEr4U2SXuHxdWW9jBuWj58DXVezDWxfUGzsRh2YxzJ2dLRHmErhQaHF5kX
- r6wy7NpXEGtBrh4cIfzAb651+ZP0/HBxSiPlGjvGsJ0aEEr+fabFm6v
+ bh=nBaH4uynzc+/SWX6lSuiZ6OiM7gO3CaI1BUwxQFBnVo=;
+ b=4B95nF58XiRWtUvRDSyXlcveXkpnv0rslOMoNyizFe3DGSvnWKDssjGHeo3MyaBNvaJaN8BMD
+ hGZh/IjYCwKBUSkOjB8QvrfqVehVrctXZzOwRGOFGgMz4tBR9ysm2RU
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-While the hardcoded constants are correct, they are not obvious when
-reading the code.
+The vDSO should always produce the same errors as the system call.
+Either by reporting it explicitly or by falling back to the system call
+itself. Previously it was possible for a vDSO function to be present
+while the matching system call was disabled through
+CONFIG_COMPAT_32BIT_TIME=n, but this was aligned recently.
 
-Switch to symbolic identifiers.
+Make sure the error return values always match.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- .../testing/selftests/vDSO/vdso_test_correctness.c | 24 +++++++++++-----------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ .../testing/selftests/vDSO/vdso_test_correctness.c | 32 +++++++++++-----------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-index bcce5053e822..3671ea815823 100644
+index 3671ea815823..ffad3e636e56 100644
 --- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
 +++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-@@ -255,18 +255,18 @@ static const struct {
- 	clockid_t id;
- 	const char *const name;
- } clocks[] = {
--	{ 0,	"CLOCK_REALTIME"},
--	{ 1,	"CLOCK_MONOTONIC"},
--	{ 2,	"CLOCK_PROCESS_CPUTIME_ID"},
--	{ 3,	"CLOCK_THREAD_CPUTIME_ID"},
--	{ 4,	"CLOCK_MONOTONIC_RAW"},
--	{ 5,	"CLOCK_REALTIME_COARSE"},
--	{ 6,	"CLOCK_MONOTONIC_COARSE"},
--	{ 7,	"CLOCK_BOOTTIME"},
--	{ 8,	"CLOCK_REALTIME_ALARM"},
--	{ 9,	"CLOCK_BOOTTIME_ALARM"},
--	{ 10,	"CLOCK_SGI_CYCLE"},
--	{ 11,	"CLOCK_TAI"},
-+	{ CLOCK_REALTIME,		"CLOCK_REALTIME"},
-+	{ CLOCK_MONOTONIC,		"CLOCK_MONOTONIC"},
-+	{ CLOCK_PROCESS_CPUTIME_ID,	"CLOCK_PROCESS_CPUTIME_ID"},
-+	{ CLOCK_THREAD_CPUTIME_ID,	"CLOCK_THREAD_CPUTIME_ID"},
-+	{ CLOCK_MONOTONIC_RAW,		"CLOCK_MONOTONIC_RAW"},
-+	{ CLOCK_REALTIME_COARSE,	"CLOCK_REALTIME_COARSE"},
-+	{ CLOCK_MONOTONIC_COARSE,	"CLOCK_MONOTONIC_COARSE"},
-+	{ CLOCK_BOOTTIME,		"CLOCK_BOOTTIME"},
-+	{ CLOCK_REALTIME_ALARM,		"CLOCK_REALTIME_ALARM"},
-+	{ CLOCK_BOOTTIME_ALARM,		"CLOCK_BOOTTIME_ALARM"},
-+	{ 10,				"CLOCK_SGI_CYCLE"},
-+	{ CLOCK_TAI,			"CLOCK_TAI"},
- };
+@@ -277,14 +277,14 @@ static void test_one_clock_gettime(int clock, const char *name)
+ 	printf("[RUN]\tTesting clock_gettime for clock %s (%d)...\n", name, clock);
  
- static void test_one_clock_gettime(int clock, const char *name)
+ 	if (sys_clock_gettime(clock, &start) < 0) {
+-		if (errno == EINVAL) {
+-			vdso_ret = VDSO_CALL(vdso_clock_gettime, 2, clock, &vdso);
+-			if (vdso_ret == -EINVAL) {
+-				printf("[OK]\tNo such clock.\n");
+-			} else {
+-				printf("[FAIL]\tNo such clock, but __vdso_clock_gettime returned %d\n", vdso_ret);
+-				nerrs++;
+-			}
++		vdso_ret = VDSO_CALL(vdso_clock_gettime, 2, clock, &vdso);
++
++		if (-vdso_ret != errno) {
++			printf("[FAIL]\t clock_gettime(%d): Differing errors between syscall and vdso: %d %d\n",
++			       clock, vdso_ret, errno);
++			nerrs++;
++		} else if (errno == EINVAL) {
++			printf("[OK]\tNo such clock.\n");
+ 		} else {
+ 			printf("[WARN]\t clock_gettime(%d) syscall returned error %d\n", clock, errno);
+ 		}
+@@ -339,14 +339,14 @@ static void test_one_clock_gettime64(int clock, const char *name)
+ 	printf("[RUN]\tTesting clock_gettime64 for clock %s (%d)...\n", name, clock);
+ 
+ 	if (sys_clock_gettime64(clock, &start) < 0) {
+-		if (errno == EINVAL) {
+-			vdso_ret = VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
+-			if (vdso_ret == -EINVAL) {
+-				printf("[OK]\tNo such clock.\n");
+-			} else {
+-				printf("[FAIL]\tNo such clock, but __vdso_clock_gettime64 returned %d\n", vdso_ret);
+-				nerrs++;
+-			}
++		vdso_ret = VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
++
++		if (-vdso_ret != errno) {
++			printf("[FAIL]\t clock_gettime64(%d): Differing errors between syscall and vdso: %d %d\n",
++			       clock, vdso_ret, errno);
++			nerrs++;
++		} else if (errno == EINVAL) {
++			printf("[OK]\tNo such clock.\n");
+ 		} else {
+ 			printf("[WARN]\t clock_gettime64(%d) syscall returned error %d\n", clock, errno);
+ 		}
 
 -- 
 2.55.0
