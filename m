@@ -1,176 +1,101 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8114F3D3D11
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 08:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAED3E0C67;
+	Tue, 28 Jul 2026 08:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785228392; cv=none; b=YWq0xMwr/ZV2qYCqFP8bPEa67EG2o8srZa5z54vJ38U6sDwt+hm7JeQv6bwjIv8KVqBwIROHNnPFjfJikVHrAM7+QWDWnjy2eXA1/nCulqe7QQhkjeM3ZKL7hScJ2NORihtAs/q4T8W/WLbgWLOXy6ZRX9Fmpj4yHEX/GEbuKQ4=
+	t=1785229046; cv=none; b=lM6GdikBtQ4/pf+TmOJYRlgvj3uf0UXk78r2GGzzGR/XSKGQ4WgHMp/mmNPUONY6jA1nbFm+Fllcb6d27d7fl6qBC7Dw899WBhes1WOz8VS1tLf0Cn6SEURA9Ig5vrARLT8l4NpfRr2rxKUexJcaFZZN7K5kWYj1SmP3WnlpIuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785228392; c=relaxed/simple;
-	bh=DLea7GDB+WBJ7RoAC77zyEKX0QnwByXNUQOxrZdvpNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KYfqxU/o7L//S3rWw/xo0Ov0BSTVlpkFBP/hSO8XklnHheV+mitaKLewYkGSI64Ee5ixMlLB7ght4FTHdD1FRKvMVmADEglXD/JuDLlCz1bwpzkj6/5ylRRlwrBFJ7sMT75JZgFP7szpzIJQxK/8oEH/BraupetJLIbWmcs1eTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pdyzDaLq; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785229046; c=relaxed/simple;
+	bh=uK9Rg8fepHenBJNqcbxS3Ny7BRXXm2BtgSEzKmEfR4o=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=R8Qe27tdS+kILzkVDutImtGqoohit+08a+nMtpYTC8uEwMtHn3tDZw4YbMTcs5Otas7+9AvD/4lHQ+2PvHO/Qal2YzYAx8Xz3LnSAqhBdIR2B3ruTHneuXCbJ6KvoGEY1UCXFTwS08tdCn5skXFtE8nYT9QqyF03/gjsY3mcFJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6h9ohDYR; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pdyzDaLq"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso23397565e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 01:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785228388; x=1785833188; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TY5i83xUXytTq3W3hDjBOHFIBU26TkcCDfOy7gh1KLI=;
-        b=pdyzDaLqNNd7Xs/JYwRF0Mqn3R+HXD3Ec5us/7Vb8W81DDyWCDKu5bDkH7GALWFg52
-         VMVkU/sHu/BoXpTJqZ6ZvNIfmouSE75isrGyKfgY2nm7aUaoeoYSMb0dVwecuoaYJ4Oc
-         DlYP5TUspsRf6Whep/Ki9+NGHuXxT5p1YoGjAbo7PwaiwWq7A0zG6SyYJWoQnRm3HWIg
-         bHrL84ouUh5Fw5ZGrk5fo6tElEnNpG2lE+LnonZn9PVMLpbIRFnN+NWRYMT+x8VpG/d7
-         zeO2rc/Dd6rMXYJ7cSpexdQrCB5UVz4nXJvs0ju5EWKOfpXz7beAsSZjiTBW1AplvZg7
-         n+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785228388; x=1785833188;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TY5i83xUXytTq3W3hDjBOHFIBU26TkcCDfOy7gh1KLI=;
-        b=qbQQSP5Z1GjaRQt7diubQgAAfZwZ/d/5aYmvdL4ZiULMSGgFhrjms4fJ55vQbq2VHT
-         jizLPpC0U+AhODxN0tkCIaCz9QRdQozYxar88pqluWUvY3r5+5bWgfgrIj7gCdQ556VR
-         pVPjl8AFrAFGeKwtssoyPHzLonGLN4FDOlst5EpmLBqfnSZ3k21RLmkbnMcfT5pet42k
-         c2Nejcd8A4RRBNO1Sdp+07cu+7FQOpE524fHg5bDqqT1hMTURFBhJT96In++T3+7BiDW
-         rfpAJnm7YS2HxGYNkbVbDSw/4bk54AalQwYnQNSXdYnOzRnOMceGGOxUYoCeozQ2ThzD
-         UXlA==
-X-Forwarded-Encrypted: i=1; AHgh+RpNU5m/CkNno+z+k1yF6GRbOw/WN6Wn3l7VdTalEm1QK7G61+YRhRtlYaj79U4QQmxwWjHyF6cpAJdEevHYPok=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIsd8/srfy0QxD55PRP75YwRLUFcDzKs7RCs0GgSXMaN1PuLl0
-	wb9WKkUV3g/1eHAehk8b4ULW79Mz/ui7BF4SlOObwxDdFt7qG1AwFhqs
-X-Gm-Gg: AR+sD13SAcMcXlEEliaZqeUc2QirEfLtdbetDByMJW+3PvcUYe1ZF94r8iifyCZrv8G
-	Hvb4PFKSBstIdVTDIUkx310FaYiuYIL7g/eepOZhMekE5qtRUCW4lY1pKy9uFVfYUswoNgHMDwT
-	M7s7FB9ruP85JIqCcLe/uQRe0DkoUZ4ByplD7qcIXj6cWaSa9SzDLccWQ94xggyODjTbp37/RXM
-	iynO2GLBaPzemY2FXoBBS9bymj0avrF0VHRkk/pAlN46FS6bZ36aWdzT9PoUv+JKKJMHAosMAjc
-	Dtz0lYfwxYM/q38CZFJAaBZRsab8tytuZGSrIMJ8GirDH0OLKbpQMgcgwcl1lx1vu1WQZ0GSCvM
-	jXuU/lGwzLUuD7pesn/E0alIu9j2tp0MR7xEF6/mZ3SaRGWKPuOp5ZYLlLsm8T+hkpF48TL0jC2
-	NqmzuJRxSs6ME9Tu0AT7pi+wgjYMAh4FF1+3gDOsLhXHDWHurd2A==
-X-Received: by 2002:a05:600c:3b13:b0:495:5890:8f6c with SMTP id 5b1f17b1804b1-496c653d3dcmr17415025e9.7.1785228387869;
-        Tue, 28 Jul 2026 01:46:27 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957f9b8b67sm340321705e9.4.2026.07.28.01.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 01:46:27 -0700 (PDT)
-Date: Tue, 28 Jul 2026 09:46:25 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ammar Faizi <ammarfaizi2@openresty.com>
-Cc: Willy Tarreau <w@1wt.eu>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
- <linux@weissschuh.net>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Kselftest Mailing List
- <linux-kselftest@vger.kernel.org>, LLVM Mailing List
- <llvm@lists.linux.dev>, Yichun Zhang <yichun@openresty.com>, Alviro
- Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan
- <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in
- abs() and friends
-Message-ID: <20260728094626.0fb1a467@pumpkin>
-In-Reply-To: <20260726101306.3772237-3-ammarfaizi2@openresty.com>
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
-	<20260726101306.3772237-3-ammarfaizi2@openresty.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6h9ohDYR"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=2E0wmH0tw98SLcgF2VrOb2d3npZ2qjaYNZ4aVITL8K0=;
+	b=6h9ohDYRMrUc1iZIqmFylHx8eQ2pzOoLgSdu5w0Q+mz9toUgzOXOB8R3e81a/J2oHXHzRmgIA
+	uEO1JwEBJzergX7yD0qLx6sqjHn+HcQfWC+gOTna8W1nsQBWpL5rzwq5mvJjAc61S1Wl4Lq2uGp
+	ZCVYWBGG5e03jA2iqyIapM8=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4h8Tcf43tzz1T4Fq;
+	Tue, 28 Jul 2026 16:47:46 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9E189202E6;
+	Tue, 28 Jul 2026 16:57:15 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 28 Jul 2026 16:57:15 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 28 Jul 2026 16:57:14 +0800
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
+To: Andrew Morton <akpm@linux-foundation.org>, Breno Leitao
+	<leitao@debian.org>
+CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, "David
+ Hildenbrand" <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Vlastimil
+ Babka" <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, "Suren
+ Baghdasaryan" <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
+	<shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>, "Jonathan
+ Corbet" <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, "Liam R.
+ Howlett" <liam@infradead.org>, <lance.yang@linux.dev>, Steven Rostedt
+	<rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>
+References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+ <20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
+ <ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
+ <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <de29c5cc-3637-cd18-354d-55ceb3d60afd@huawei.com>
+Date: Tue, 28 Jul 2026 16:57:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On Sun, 26 Jul 2026 17:13:03 +0700
-Ammar Faizi <ammarfaizi2@openresty.com> wrote:
+On 2026/7/28 12:24, Andrew Morton wrote:
+> On Thu, 9 Jul 2026 11:34:05 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+>>> The script is intentionally NOT wired into run_vmtests.sh: every
+>>> successful run panics the kernel, which is incompatible with the
+>>> sequential "run each category in the same VM" model that
+>>> run_vmtests.sh assumes.  It is also not registered as a TEST_PROGS /
+>>> ksft_* wrapper so a default kselftest run does not opt itself into
+>>> a panic.  The script is meant to be executed manually inside a
+>>> disposable VM (e.g. virtme-ng), one variant per VM boot, and
+>>> requires RUN_DESTRUCTIVE=1 in the environment as a safety net.
+>>>
+>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>
+>> With Mike's comment addressed:
+>>
+>> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> As I understand it, Breno would prefer not to rewrite the selftest in C
+> at this time.  IOW, we stick with the bash version for now and add
+> "convert this to C" to the todo list, OK?
 
-> Negating the smallest negative value of a signed type overflows, which
-> is undefined behavior. The selftests are built with:
-> 
->     -fsanitize=undefined -fsanitize-trap=all
-> 
-> so a caller passing INT_MIN does not merely get an unspecified answer,
-> it dies (on both x86-64 and i386):
+Sure. Should I make this change or should we wait until Breno has time to do it?
 
-Thinking more, that is probably the correct thing to do.
-'Undefined behaviour' means exactly that.
-It tends to be used for things that might cause traps on some architectures.
-But I believe 'undefined behaviour' is exactly that, erasing your hard disk
-(or starting a nuclear war) are both valid.
-
-	David
-
-
-> 
->     A simple test program:
-> 
->       printf("x = %d\n", abs(INT_MIN));
-> 
->     $ ./ab
->     Illegal instruction (core dumped)
-> 
->     (gdb) bt
->     #0  0x0000000000401009 in main ()
->     (gdb) x/6i main
->        0x401000 <main>:     mov    $0x80000000,%eax
->        0x401005 <main+5>:   neg    %eax
->        0x401007 <main+7>:   jno    0x40100b <main+11>
->     => 0x401009 <main+9>:   ud2  
->        0x40100b <main+11>:  push   %rax
->        0x40100c <main+12>:  mov    $0x80000000,%esi
-> 
-> Negate in the corresponding unsigned type instead. The value still
-> cannot be represented in the result type, so the minimum is returned
-> unchanged.
-> 
-> Cc: Yichun Zhang <yichun@openresty.com>
-> Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
-> Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
-> ---
->  tools/include/nolibc/stdlib.h | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-> index 1816c2368b68..8d86044f759f 100644
-> --- a/tools/include/nolibc/stdlib.h
-> +++ b/tools/include/nolibc/stdlib.h
-> @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
->   * As much as possible, please keep functions alphabetically sorted.
->   */
->  
-> +/*
-> + * The absolute value of the smallest negative value is not representable in
-> + * the result type. Negate in the unsigned type so that the overflow is
-> + * defined and return it unchanged, like the other libcs do.
-> + */
-> +
->  static __inline__
->  int abs(int j)
->  {
-> -	return j >= 0 ? j : -j;
-> +	return j >= 0 ? j : (int)-(unsigned int)j;
->  }
->  
->  static __inline__
->  long labs(long j)
->  {
-> -	return j >= 0 ? j : -j;
-> +	return j >= 0 ? j : (long)-(unsigned long)j;
->  }
->  
->  static __inline__
->  long long llabs(long long j)
->  {
-> -	return j >= 0 ? j : -j;
-> +	return j >= 0 ? j : (long long)-(unsigned long long)j;
->  }
->  
->  /* must be exported, as it's used by libgcc for various divide functions */
-
+Thanks.
+.
