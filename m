@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CFE3B6370;
-	Tue, 28 Jul 2026 19:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F12B3A9014;
+	Tue, 28 Jul 2026 19:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785266510; cv=none; b=gq6pyIWyVXtyvNL9jb+Xv8t+3fkJRXbo2SvP7Nly3Tv4LFgzbQtK9Tyf3+OgBsHj/UZqjWY004REX++i3OAZD1d/C//izFHQK8N21aoIMVa/GW222tTJW1Vv3KOClfNh7Zn6k8OQmvoVS4BwASmWiUfaIObDN5HQRYL64WRu/OQ=
+	t=1785267106; cv=none; b=SfPSnlXVd6JzejaZ/vHvnRYF7JcwFJ5gDHQdg9FZUUuWM+JOGDjn4xQS0oBI+4YO0pqaxP2XwhKbFk9dscR9RSj5M9yyXJh/ssh+9fHry4yIhtUqSZG/3QjqpdOwLui6ZHVV5Y4b4yqtvXXvjo4ZjYzrIxiikxO9e2zMCkXVbA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785266510; c=relaxed/simple;
-	bh=P+d+2oIB2KjRZL36VeXUQCsEH2PVPW5HL1R6wj7cWko=;
+	s=arc-20240116; t=1785267106; c=relaxed/simple;
+	bh=mxE2iMmAsFJcPpVql1ZxMjXf9sIeOw6dombwVPK2pFM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oTVZya3XYA8f8M9WXR37ulQTiZIXtznBwT19g2RFQ8F87LayuLrUDeSLY10sb/xVnnbMUSH6GrIBrSuDY4cnrxC2Er6Qnm4WTcEzE/deXTfEtLe/RJdQ1zOzpDLCb9UEt+uqOQPJPWV4ZpVOqpRzNk2G9YN0yAo+osYbb2ZOUsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vh8cfK/W; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=resen5inPbnApmMSP5E+2tu468Qx5fU9BIg/BiiQfqbVfzmKhk+UGyHhqER1ZbEBJYAoauHYiSYwvHkQ7Rug661Z/wS+B7OyTRQunC0TgvCYQjy9RMB1IY3aP/IPyVe9/Z8Ix29mjPS295nUGcLFoLPCqZMuJzA8tiWzdeYr5I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0Vfw8tV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vh8cfK/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0C21F000E9;
-	Tue, 28 Jul 2026 19:21:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0Vfw8tV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EEBC1F000E9;
+	Tue, 28 Jul 2026 19:31:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785266508;
-	bh=VGWijSDtWk+fhGO38JmsrrEiRaeSqUZbV8BWwZgDlUQ=;
+	s=k20260515; t=1785267105;
+	bh=4SFJdxikqdRNRa/qa+7AI0ytQwewWTG8FQ5aZTm6euk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Vh8cfK/WbsuEuEqm5kKXePuRsF7HldqGGeMwCc6tysdn6iqjPxeGymZA3GA++fqkX
-	 VxoyTgbqgUxRJfYY5wQqB+npy7agacFIRHmwo0XO36VlGn36Bc+3CA5jQNbpVdMjLg
-	 3L/zLdRRMs4m9vef1gt5SiqqHl8JaFk6TC+7S9q6IOJ/VqSVMV4hrl2OUdo+AtNe2W
-	 2P9vdFRucWBF0JnvvzqGRXXx43Y+FKSLq3J3wbD8whX4AGHcdtBMfUoPiRAHYi4/rz
-	 niF4sE4GFgIpLBbcmj+AWCTJ0+Yq9ZwMy+fOUa4vj050x206qdNz5lAM9rUwNwex30
-	 8/rM9T7g3NKVg==
-Message-ID: <44f81bea-d64a-4f73-8665-46652a928c83@kernel.org>
-Date: Tue, 28 Jul 2026 21:21:40 +0200
+	b=A0Vfw8tVa40v2HKNYf8m0lH4kJCFp4ZKml4XuLziAL83lsuU3NuSm6WtLfSNK+bFv
+	 wETOvtd8y/iDbskOY6eBnYJOEvP3xyv346O99TDQFUWocu/3DkP7XQOXzYVdJP1xLB
+	 4iuCSkn8dCmydevlPZFnxS/EdKTD6m7/0sPqwhI8tDG8A4KWgEcB3ouoxtT1hWhpGM
+	 XDIDkhyLbSJM9rNeB2mdj6Oyx3lPnqQvOwdv8KsBeUAGiaoZ8Lw+xcaQkJU8WVQMFK
+	 6o0W9RAz7Ujj496o9gsZeq9waZoRWNPNpDl4RXzMGxYES7fPkGnP83pbvPY2boZKRM
+	 d+4nfiE3zYnCQ==
+Message-ID: <580fc92f-f146-4d76-85ce-6555cc3bc47c@kernel.org>
+Date: Tue, 28 Jul 2026 21:31:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,27 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
-To: Andrew Morton <akpm@linux-foundation.org>,
- Breno Leitao <leitao@debian.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@meta.com, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
- <20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
- <ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
- <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
- <de29c5cc-3637-cd18-354d-55ceb3d60afd@huawei.com>
- <amh1nZVVaaZSGD3M@gmail.com>
- <20260728122016.30752d36c3b3c3af231efa9d@linux-foundation.org>
+Subject: Re: [PATCH v2 0/2] selftests: Add missing initalization of pointer
+ passed to getline
+To: Chris Gellermann <christian.gellermann@codasip.com>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, liam@infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, ljs@kernel.org, mhocko@suse.com, rppt@kernel.org,
+ shuah@kernel.org, surenb@google.com, vbabka@kernel.org
+References: <20260526113848.530105-1-christian.gellermann@codasip.com>
+ <20260722130246.2135563-1-christian.gellermann@codasip.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -102,28 +90,24 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260728122016.30752d36c3b3c3af231efa9d@linux-foundation.org>
+In-Reply-To: <20260722130246.2135563-1-christian.gellermann@codasip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/28/26 21:20, Andrew Morton wrote:
-> On Tue, 28 Jul 2026 02:29:39 -0700 Breno Leitao <leitao@debian.org> wrote:
+On 7/22/26 15:02, Chris Gellermann wrote:
+> Hi there,
 > 
->> On Tue, Jul 28, 2026 at 04:57:13PM +0800, Miaohe Lin wrote:
->>>
->>> Sure. Should I make this change or should we wait until Breno has time to do it?
->>
->> Apologies for the delay. This is on my TODO list, and I'll prioritize it.
->>
->> Just to confirm: the feature is already in mm-next without the selftest, so I
->> only need to submit the C version of the test, correct?
+> just a gentle ping on these patches. It has received an acked-by from David
+> Hildenbrand (arm) and a reviewed-by from Lorenzo Stoakes.
 > 
-> The bash script is still there, no known issues.
+> I'm resending the patches as reply to this cover letter to clean up the previous situation.
 > 
-> We have the thing and tests are useful.  I'd say retain it until the
-> rewrite-in-C happens?
+> Let me know if it needs any further change.
 
-Nacked-by: David Hildenbrand <david@kernel.org>
+Have these been picked up in the meantime?
+
+For future reference: don't send v2 in reply to v1, as new revisions might just
+get buried in other discussions that way.
 
 -- 
 Cheers,
