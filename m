@@ -1,260 +1,110 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA1D330668
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 15:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785254349; cv=pass; b=aPxqbg5ggKl5qEYCTEQCnnAI27idg26hQ1U8unr7rkOAR8nHRkRfMg9GR25VHUjjp+m3ibvRAMvVFc1+1VDqlgZmF7asjwVlRXAPPDJBbWwOdNVscXEI8ZrmwXwBjo61jRsVpRiulFoQe/l4zMcC3ijWPG7Nxlj5+xFRbZN68J4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785254349; c=relaxed/simple;
-	bh=ePdzYx3Dv7RqO6ZInXv59a+0v2AEvDZHfhcy+eoz+Hk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=otBZlv+dr4y7J3UI97HT2fFNXp/3adTcbnbSP/Bc3LdLP3F0UVx4EuhQkJI3OEzMitk9akak6SMf0t5OWiyuMumRNy0jwLdEn6CXhU733DzM69TdJJocnaZlEK+2WeJqftJMwWVQ8fGOnm7nxq/2HakUdC33DngZ3IIUheyfTgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sgxACY/K; arc=pass smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB6D33D503
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785254997; cv=none; b=B8mw+vQ+CZBfBnKA+Gdx3CtJv2KeULquvIiLrixmTpd3f7Zk2SC8Y0tmN+hXav5+PxvTMCbyTxwEvR4qq6EcpLHVZV1fvgpias2hd16a1tKUjJTmqzZGyvKcg4qcdDggFbBzzjY1ciQRHrP9e8t7rtrulcX1tBgyemWF6FH67gE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785254997; c=relaxed/simple;
+	bh=VEtKYItgvF6GpuwE9OlSTJxtu0/qIWoEYNaHdcweSj0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JKJGT0Q2Sdpj8AXqnPosbGScn/zBGZVE639p1/+Fvq/PRKnzf3jX0YEo2P0QrDCyJ5sRy9iEyg40Y+wwUZ+N5A2MtAjx/eyVE1dzIlHCn/+LYa69K/0EXTYFKYB5GT+okItkV/mbFUKVXGMmlL1eJsVUEJD5ilGnVI7Y1NNFSMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=exmQZhYL; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sgxACY/K"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84e0688b859so6904b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 08:59:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785254347; cv=none;
-        d=google.com; s=arc-20260327;
-        b=PIH11e14T5A2VBerE+ePRX83X7NK/mK8963HNeW3PIuTllCOG5MBabyxH77L3tQkaX
-         8h42KUR9WK9TLmC3VUXZ8jt3tntXM/ijdJE55atFKkXOLFbLVaK7OBumVvM0pjxD0GMW
-         wV6wVYyoMsmiA0rkRUJfx0JQZsQ3mmJA5aHUG0ye0PcGIhSZjx33zBBZxC+opITD/Bfb
-         g32vQpCSSFu+cehI0jFPxeOeG/b/YnQ7opv+B3UKqvdbSxw72SvNvTKy9Dg7E/KlTEkx
-         aeEetzIsV/S8M6y4xiNoQ4JSwEuVmXGj7UmOlqdyYhSL5e2BKJAuVa0vSN82hl4CvuPQ
-         HtWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LI8BHo8dg9d3Los4oEWkJj6jH8UFcrTJLqvb7BOjjfI=;
-        fh=e2VqjHMDmRiZyhLY+DzMeAigm66jW3XVzIX4nJgn3eo=;
-        b=Goax/bNdjsqEDNvcdf6nNYknRAjw+xpQcT234p198RREmrbs3lFTowaWyAhPF4AtTZ
-         7bcA6khVQDNdCPU6QOO9iXakST64Mjm4nBM89ey4B6SgHafhyG0khId8DIUyjJGb50Iv
-         liG3h5y47FjL1p2quB9aq3ES71YInf3OuwefsgQXu+0br7nMmDhCFaamWXwHLpDH/F9t
-         v1e32uBa8f7pvVOOHwKcv7i2RGTlLLVm29tTmUpV9w6nkYoLZaj1kAqkvl2sPvoqEWt8
-         XCWvqXljDlGkIvdicC9lcZZIPtaUrBBYqT9BrRzAS37NVqa13HqCOmBeTNlj5rgDeHFG
-         wEDQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="exmQZhYL"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-381b831d535so19346a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 09:09:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785254347; x=1785859147; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LI8BHo8dg9d3Los4oEWkJj6jH8UFcrTJLqvb7BOjjfI=;
-        b=sgxACY/KwMOpmVtf9Au2GHwnFBIuY+n3iEdQnWyOrQqhIfySb+HQwXHYvkDWuhWYV9
-         rPZ/V/g5GezwszrRXtV/qXbtDkYGFbh8E8PsUjrzV66zMvxLr2/5KdbgKt8RW1hSdNcA
-         F/H7jwcmHf9w6B5jSvfNB2VPTEj9mz8GePssEaeR5fsWWFoN22OtbMo3HbMRLK3RiO/x
-         4dWqVkcRMUTbmhlbbmjhtKhk8cmAZ0azFYwJCwC4uabS23lJx7T9xl9OX/uV6VDRDcSM
-         +Vt2DG4ujzvpfL88ypcJzm8aJO7pEKkYHiPSNkZDbmr//YIZ2eAo2exja9808V75/OE0
-         A1+g==
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1785254995; x=1785859795; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fKlkS10WHow2oZrmc6sXzbA1EKchkKNr9Oo/Gx0jkgY=;
+        b=exmQZhYLEswmqDMMmoiLhDwZXpTOM1V/y/W5EbqXHIVCO2zq1Fou/QkLJSdm2D1B0i
+         Ugo4o4PUdMQ5yhaanFzhgLmIegFV95DWaWNPNPTmfJ3pmvZN2bM+7m0/4j25vyc+tQXP
+         94I6dPTacvNA9OKpHQp5DulUdHlBFhBvmaWuBH7HEZjsEb4oHZmdbZ5GNHB9Ub5rquJL
+         0tAzIYRwjYMOW0ssRgFNbJkEiMK5/06pCV8wFGtdRE4h/fFU9Dz07JWCQgtXqbOSXm66
+         8fs+p9PkiTV3Ddr8kMwF3R2FCjQsG34VS8P/aSWI0dgudq5zftF0jFtt4sFe9jicfTcr
+         s9gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785254347; x=1785859147;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LI8BHo8dg9d3Los4oEWkJj6jH8UFcrTJLqvb7BOjjfI=;
-        b=oVvUK+2hBNQ1I7IT5pcYhcBDjcxckcYd47nEfWwRMTM2EPu1FpTTP5mirr2Dx/RFT+
-         pX5OlXqtzModHNw/rGLENsExtU99J96WpExroHsmzQTZxVhTGx4IaQTEF7s4aL4GjALL
-         BsSlGbh+xorp3hEaKjfjmSATJbivwO0+Mf20q52qPi089ZHL02OLIMUdtIefPb0OXIBb
-         Ld+M9mBIt9ld9WFAQ3lPeaSu3JhXaHxKnYNyc/lTcj7bkw7rjZ97jzRDk8b+VS8ldr+c
-         JRn6NxTTq+gvZyLBFg11L45TmPZxBWmhmf4ETy6FQ8mDQWlgdkquIbR3ZhunqKQCXNqO
-         Fu0g==
-X-Forwarded-Encrypted: i=1; AHgh+RoC2SqMe4HplJVbbA8DYM/8XoPmvbzHFZk4AF+PQiKTsvqAPCAJEq8OUO+pVXCoF1DtYtnjrjlZCj3vUlCQsuI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/LH0WsXbN7E+LtndkLhj+1J+qbcXtmU3ytY0nqXAmNQQI2y4J
-	vait3BLqu4wu8QbodZ5SR1d1TINWLmBw2UvelUD2apuqr+VORTN6ng5R8StvnGpRLSi31eLLbZD
-	B8miGWjJwJsDpKyItmuPSHqwcnn87TGc=
-X-Gm-Gg: AR+sD13INL/wsRGWEYgWLsO5T9HnBGWrhXu65Ex5JWgf5KzHLsLF2JIy5HwYYoeMQdE
-	411hkda6LNiHlN655+JRrV4vh0bwxa9133XMldpyrTEWvxfEolslMVPhFRPOr2EwiDbQCJEuhKA
-	+GX139DtUeMRow5zkfQ7OxW2393WWGdL2ervTQLPw/Qk7Ycb51MrvnIcmPDo+qNhBsTBVPnyprG
-	cq/S+AJVrDFiyX5CRtTVftN603UzBXC89MzMTOfgQ86OPvXXNE+A/+Y+tTb+2FcaIQO+x45Qvut
-	6fxn5CQmg0uV0vPBW01A2eO1kvnDrEP/Zr1tZrw6fNc3KhVAe8fEc51aUbM=
-X-Received: by 2002:a05:6a00:1d8b:b0:846:7507:4e07 with SMTP id
- d2e1a72fcca58-84e9332c2d6mr3283061b3a.39.1785254347104; Tue, 28 Jul 2026
- 08:59:07 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785254995; x=1785859795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fKlkS10WHow2oZrmc6sXzbA1EKchkKNr9Oo/Gx0jkgY=;
+        b=L8rQkv6acZtOehMgeD7dJRny8b0RBkpXVwxgmaTWEzO9AbXFAF44GuCpOUsW97p/fL
+         h3tRWenVrIAmx74W1B+r48j/80woM7K5ZSgXoi8mq8+oQlOs3Wp6nX7iUzCgUYkgDZ5S
+         PPXIwybt1V45rkY5cTQ+u9s25dwb/74sm3lkZDbRGSWHIUhuf8TG+Cy6rBcZG2/YeN3K
+         EUDMXMPwdBQ0w9A/ffkkK8J+HLVMYi4PT0jZ0wCv3uUnxm0/0QoEJoOXIYoTfYfqCfuW
+         J4npsyk7Jtden7CtEPe7UHI3NuROwPAHKP3fUDH2s+JD0GJin4ctHfl/Gopd46qPDoqr
+         sd4w==
+X-Forwarded-Encrypted: i=1; AHgh+RpyMusg9W0R5LcO7ur7D/6H/jj4lH05mrvntViPT4mqAGMC6rKoO64dOKsf12knKf+3bbAifYhJ2nOUkoJt++4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+e6AfXJrtH30277pWNOxna1RlzdfIzA5psdFiv543vJy/K+ZL
+	K3T6OotST8yhfdC7FT5fAo4sqnNbDjkeUQoIrKhqBJb4DL1GeQW1wOuOwiODTbb/y/o=
+X-Gm-Gg: AR+sD11zXJ46tMy4FY4xnkv127mljuiwN5HbjHveXdkOeWo/HUtY9nCdu2AKJ70k9qD
+	LoC0LFFK3gk1AUEel3VfRedNyL4RtLh7rc7WMxXY3yhQckYWO4xo/dC/SZu9tHNBOhh+4Plg+8y
+	A0eBAF0a1W5ehAWVQipGq6HZtwB/5JDbrEAhLRWuDVHvfAynDBVYJIrX4v14R+kzvR6ksQjFk6w
+	Mo3SK4IARGKmnFoOAtZJ11e4zZcLzvotbWogaIkAUPQ3BgnZYbPEFEIj6PEFcL/ovGKALqQpvKU
+	Ia6POhKSBvsZ+wC9PY03OCibB3KHBrCKrwqR+IcmXyST0IGtMjIdG2NnOKxZVIEsMQNtlbMtxcI
+	6vhvzef6q9O49PIzaWOeq4v1/hdiNYwotpDV9jP1F14hoFeSLFnfU8ks4CdigKVw7c3oZHeFD8e
+	FoY+t1aotdtSuXRqkKe5RCMmmMioKk0CSRobiB4/Cw
+X-Received: by 2002:a17:90b:1d43:b0:381:20b:a9ee with SMTP id 98e67ed59e1d1-38f6a40f374mr3165066a91.14.1785254994697;
+        Tue, 28 Jul 2026 09:09:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:6::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f6d730072sm635826a91.2.2026.07.28.09.09.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 09:09:54 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	willemb@google.com,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Joe Damato <joe@dama.to>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/5] Add PACKET_IGNORE_OUTGOING selftest for packet sockets
+Date: Tue, 28 Jul 2026 09:09:25 -0700
+Message-ID: <20260728160935.4128982-1-joe@dama.to>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1784695085.git.rtoax@foxmail.com> <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
- <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com> <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
-In-Reply-To: <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 28 Jul 2026 08:58:54 -0700
-X-Gm-Features: AUfX_mx5_bBPCwgqJNnkpof7GPHnuwQRl83Ae8RTD7i_SajV9Ln5XUv-83bhiD4
-Message-ID: <CAEf4BzY6RPkm0xv=RHAKoNphYxM_6GmyLdhDbbZ3nAqNhkdW_g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
-To: Rong Tao <rtoax@foxmail.com>
-Cc: vmalik@redhat.com, andrii@kernel.org, ast@kernel.org, rongtao@cestc.cn, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>, 
-	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 27, 2026 at 7:50=E2=80=AFPM Rong Tao <rtoax@foxmail.com> wrote:
->
->
-> On 7/28/26 06:56, Andrii Nakryiko wrote:
-> > On Tue, Jul 21, 2026 at 9:42=E2=80=AFPM Rong Tao <rtoax@foxmail.com> wr=
-ote:
-> >> From: Rong Tao <rongtao@cestc.cn>
-> >>
-> >> Add string concatenation kfuncs, prototype:
-> >>
-> >>    int bpf_strcat(char *dst, u32 dst__sz, const char *src);
-> >>    int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
-> >>
-> >> This differs from the glibc library functions strcat and strncat, whic=
-h,
-> >> for safety reasons, require the size of the target string's memory spa=
-ce
-> >> as a parameter.
-> >>
-> >> The src parameter cannot directly pass a string constant, such as "XYZ=
-",
-> >> otherwise it will throw an error "write into map forbidden".
-> >>
-> >> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> >> ---
-> >>   kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++=
-++
-> >>   1 file changed, 75 insertions(+)
-> >>
-> >> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> >> index c18f1e16edee..85afff60365c 100644
-> >> --- a/kernel/bpf/helpers.c
-> >> +++ b/kernel/bpf/helpers.c
-> >> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1_=
-_ign, const char *s2__ign,
-> >>          return __bpf_strnstr(s1__ign, s2__ign, len, true);
-> >>   }
-> >>
-> >> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
-> >> +{
-> >> +       int dlen =3D 0, slen, space, copied;
-> >> +
-> >> +       if (sz =3D=3D 0 || dsz =3D=3D 0)
-> >> +               return -EINVAL;
-> >> +
-> >> +       while (dlen < dsz && dst[dlen] !=3D '\0')
-> >> +               dlen++;
-> >> +
-> >> +       if (dlen >=3D dsz)
-> >> +               return -E2BIG;
-> >> +
-> >> +       space =3D dsz - dlen;
-> >> +
-> >> +       slen =3D bpf_strnlen(src, sz);
-> >> +       if (space <=3D slen)
-> >> +               return -E2BIG;
-> >> +
-> >> +       copied =3D strncpy_from_kernel_nofault(dst + dlen, src, sz);
-> > I'm not sure strncpy_from_kernel_nofault() is designed to work
-> > correctly if dst can be modified concurrently. Which in BPF case, even
-> > though we validate that memory is correct, it still can be modified
-> > concurrently in such a way as to cause strncpy_from_kernel_nofault's
-> > inner dst[-1] based loop logic to go beyond the boundaries of target
-> > buffer.
-> >
-> > i.e., I don't believe current implementation is concurrency safe
->
-> Thank you very much for your reply. There is indeed a thread safety
-> issue. Let's look at a solution. I will submit v6. Thank you ;)
->
+Greetings:
 
-tbh, I'm not sure we need these new kfuncs at all. You should be able
-to easily to do the same with dynptr for dst buffer and existing
-strlen/probe_read helpers/kfuncs.
+Following up on my previous series [1] and further extending the selftests
+for packet sockets to test PACKET_IGNORE_OUTGOING.
 
-> Rong Tao
->
-> >
-> > pw-bot: cr
-> >
-> >
-> >> +       if (copied < 0)
-> >> +               return copied;
-> >> +       else if (copied =3D=3D 0 || copied =3D=3D 1)
-> >> +               return dlen;
-> >> +
-> >> +       /* The copied character count includes '\0'. */
-> >> +       return dlen + copied - 1;
-> >> +}
-> >> +
-> >> +/**
-> >> + * bpf_strcat - Append non-null bytes from a source string, and null-=
-terminate
-> >> + *              the result
-> >> + * @dst: Destination string.
-> >> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-> >> + * @src: Source string.
-> >> + *
-> >> + * Return:
-> >> + * * >=3D0      - Length of the concatenated string.
-> >> + *
-> >> + * * %-EINVAL - String @dst__ign is invalid.
-> >> + * * %-EFAULT - Cannot read or write one of the strings.
-> >> + * * %-E2BIG  - String @src__ign is too large or the remaining space =
-in
-> >> + *              @dst__ign is too small.
-> >> + * * %-ERANGE - One of the strings is outside of kernel address space
-> >> + */
-> >> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
-> >> +{
-> >> +       return __bpf_strncat(dst, dst__sz, src, dst__sz);
-> >> +}
-> >> +
-> >> +/**
-> >> + * bpf_strncat - Append non-null bytes from a source string, and null=
--terminate
-> >> + *               the result
-> >> + * @dst: Destination string.
-> >> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
-> >> + * @src: Source string.
-> >> + * @len: the maximum number of characters to concatenate, the null te=
-rminator
-> >> + *       \0 of the target string @dst will also be included.
-> >> + *
-> >> + * Return:
-> >> + * * >=3D0      - Length of the concatenated string.
-> >> + *
-> >> + * * %-EINVAL - String @dst__ign is invalid.
-> >> + * * %-EFAULT - Cannot read or write one of the strings.
-> >> + * * %-E2BIG  - String @src__ign is too large or the remaining space =
-in
-> >> + *              @dst__ign is too small.
-> >> + * * %-ERANGE - One of the strings is outside of kernel address space
-> >> + */
-> >> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, =
-u32 len)
-> >> +{
-> >> +       return __bpf_strncat(dst, dst__sz, src, len);
-> >> +}
-> >> +
-> >>   #ifdef CONFIG_KEYS
-> >>   /**
-> >>    * bpf_lookup_user_key - lookup a key by its serial
-> >> @@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
-> >>   BTF_ID_FLAGS(func, bpf_strcasestr);
-> >>   BTF_ID_FLAGS(func, bpf_strnstr);
-> >>   BTF_ID_FLAGS(func, bpf_strncasestr);
-> >> +BTF_ID_FLAGS(func, bpf_strcat);
-> >> +BTF_ID_FLAGS(func, bpf_strncat);
-> >>   #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
-> >>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
-> >>   #endif
-> >> --
-> >> 2.55.0
-> >>
->
+I re-ran the tests and the existing and new tests all pass.
+
+Thanks,
+Joe
+
+[1]: https://lore.kernel.org/netdev/20260720122714.759175-1-joe@dama.to/
+Joe Damato (5):
+  selftests/net: psock: Generalize psock bind
+  selftests/net: psock: Generalize stats check
+  selftests/net: psock_snd: unify on recvmsg()
+  selftests/net: psock_snd: Verify sll_pkttype
+  selftests/net: test PACKET_IGNORE_OUTGOING
+
+ tools/testing/selftests/net/psock_snd.c  | 147 ++++++++++++++++++-----
+ tools/testing/selftests/net/psock_snd.sh |   5 +
+ 2 files changed, 124 insertions(+), 28 deletions(-)
+
+
+base-commit: b515dc54795ef370be3cb396e7c12ad91686b6d1
+-- 
+2.53.0-Meta
+
