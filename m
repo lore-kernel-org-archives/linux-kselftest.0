@@ -1,153 +1,239 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010061.outbound.protection.outlook.com [52.101.84.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0674440A03;
-	Tue, 28 Jul 2026 13:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785246068; cv=none; b=ZTQPFOLlXmwJEyMrYktNpDT7ImAx85vzfqWY0uSVzkb0DQjl2plU+2WO4gbXDN08grJWGjMKr6+BzFchSf7bVSX1rx52kVj+Z0IWNUN7lM+skaYKScRldArOpFMnZeW0ilbzF51am8MmnTCx3bnY/JOMit5I0z0f0fXVwcz9TZ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785246068; c=relaxed/simple;
-	bh=d519tbNUY1zX6k442JW0TgBR7NVbPaiBhL5Lk+UuOWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nZuAe9Nc5wjH4GayrZc6m355TY8DMWcD43+gOGxiXFnyZp3AAp4EDutJRpWgFC7+bkLMeFwed+GXjDcZ3Q241Gmqxg7zrUBEB6wFtPvUHWBCrEnkWeUp+dgo1A3YF016puh830n5HZy8qH7mgYDodyaCmcBR3a/4HHvDiBMOkvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6rCQrh5; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75396427A1A;
+	Tue, 28 Jul 2026 14:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.61
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785248607; cv=fail; b=Wpti+cNkeay5cxB0B3uQMTU1eekUY9ek6U55Fpcn/rPs+50kdT9HVqiB/y7Fzw1HOJVlL616Tg5ZakXJCExG0nylSw8iHLTVKFsl1pLHNE0gHnxiwY4GgIOvJ6aYhR8fHddY36lcghfSj6PiRK3Qk2wJB2LT7bBcrBsifYMKJhM=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785248607; c=relaxed/simple;
+	bh=/2LBte+iaqMXGEor/GhJITEG1tlDOaUuvOapCNuLxOs=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=aLZ+V45DSjn1ncyi4UlaGAq5uUB2b116PhyoigtCaqM0DW6mdip1Cv8XwVoCfFZri27QNsS52oFyEOAKHShT+BKm1PX6xhv3ep3kVYysacbcLlVt3R4Xgpeb52o/gPRqYOktSj/5G2w/NTnRuSMQjGhODIEIsHILhuyO8BqQZw4=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=A0fxobD0; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=A0fxobD0; arc=fail smtp.client-ip=52.101.84.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6rCQrh5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50981F000E9;
-	Tue, 28 Jul 2026 13:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785246066;
-	bh=HEMU2TmSwsqrUTy8ZEKYu9Ae0PHGeT+f/ud0LSQJwt8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=U6rCQrh5cCM83BFeZR9/Qvz6ZbhtwuYWaehIe+rVPnqsrpeoZxZ7B10TBBl8W6i2v
-	 bNl8xdz3N7EGPECsNHEUwcq7V6eXM065C3EsgL84YXJLnqzq6/63+lR4ajgwFmWjia
-	 JkPs+1kKRodOHGdKHGtsSMAqqnX55EzHnTzrwhr6R+NPj/XCwR1rYWbkoP2dlqZOty
-	 fHKBsYlxdrZfaBsgyDoTQfTbzFICpH6JzdT1q8XsyCZQSIbVk30IicsnJBR+9DqOCg
-	 GcNUnIcJVMkBfM1LBlYvBh6QQsY2EOWD4OvET/dMUu0/DjKekDYnPntoQpf0AZbORa
-	 tMd75YGtaicKw==
-Date: Tue, 28 Jul 2026 14:40:44 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 00/15] mm/rmap: index MAP_PRIVATE file-backed folios
- by virt pgoff
-Message-ID: <amiwjyQr5l6O96Hk@lucifer>
-References: <20260720-b4-scalable-cow-virt-pgoff-v2-0-2d549757a76f@kernel.org>
- <880981b5-ef79-4c9a-a8bd-7540002fcd15@kernel.org>
- <amd9QR75eLNdgNU7@lucifer>
- <ameAekveMOcP7ffQ@casper.infradead.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="A0fxobD0";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="A0fxobD0"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=q2xNrA5yX4nwCdp69BXzdOQCvY9Lf4cOchjVAgMbS3XU463yy6/WqO8b9Vezl0s0/VuCPXGH4yI1o16E8nz7txXGTEUFBN1OYKjlazmvJfwJ6JRywO2ERVZTzZWR4+wNrlywJ3a0pnFcbJo2Jeyov3Ormax/EOVJOeb+v/pxIEEfdksXQs8d5wkAdHHJMhhCpxXJzA053KNeT7LuilMHNo3jr+FRwudcFIWtIXIsvJUUAhu9/WFkIZAP0pVR0+NppsE3cEA8HaU2D4L1KurXPIcCz6gkR+B1r7qThZfSoqVxXwWUKM4iBmLzRjDELzY76FdkOkbFeaVwhdZLmP+8Lg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DIc2UoDth2FewdCnIyWL6YZwuLkZgksFv0+0U/SuZsQ=;
+ b=vqsoxx7omPbiGAC7H750wWNrQCoaCt1yvDw3IXm/dWWPZPkIbZ5WG1gacqmiaOA5yPnu0bUmPzGM/+XeZtaTYS0i94Jnib3ksETMveXmsMzyBlJtmEaoIHeaSbWE7U0hYGGjc7TC3iT9oAf/fjTQATiSWtBGxyizfTsFmhDfDJnYA8d+6En4nHbJe/szJV10mY2B3zOTa/U5n4zkvrcAqgYLBNVkcPalN06vyvoCOAGcth8o/xzoTPgzWoB9mmXj0XPJIVqPiy+s8UXB2kqfyVXMoraLoNlWNkCodTMO0pwCuGYIKSrqT7dT1W5PKWnpcRjAfDUNquj2gSNCS2Q1ow==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DIc2UoDth2FewdCnIyWL6YZwuLkZgksFv0+0U/SuZsQ=;
+ b=A0fxobD0SyvIvpELlPGGZCV9aad0mR2gAVT+IkkF99A3BkSxFL2Z2Wyo1HE0lHpd6tRZ6cft1QKz0pAgLqDSCFn2/OwwITMWtz4yis3GdDeab/BSiVa1g+MobYI3b76vPJAgMHLY4hQBNXzCvOqm94dtOlbvFvCWRJbPM/B3p9M=
+Received: from AS4P191CA0051.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:657::23)
+ by DU5PR08MB10468.eurprd08.prod.outlook.com (2603:10a6:10:527::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Tue, 28 Jul
+ 2026 14:23:21 +0000
+Received: from AMS0EPF000001A3.eurprd05.prod.outlook.com
+ (2603:10a6:20b:657:cafe::18) by AS4P191CA0051.outlook.office365.com
+ (2603:10a6:20b:657::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.12 via Frontend Transport; Tue,
+ 28 Jul 2026 14:23:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS0EPF000001A3.mail.protection.outlook.com (10.167.16.228) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.5
+ via Frontend Transport; Tue, 28 Jul 2026 14:23:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iPSyUSe4Vuhg6MlzfNj8iwXF5p6DeCqYiPM25/ELWElIqbaWQVr++vDSGCXnYUtNdG7VCYfAbzHnWarNS55405BD+3tSnpQwe2zJIq8SaqcsFlkUkS8Ld+FeRPr8Pjm+ZpC7A6mipOEne6SmWN28rdZt4p6e3y3UFizgv2HNcyA9wSG8dFjI5rYHLTcZOZDhTHBNyXFCAnTVzGeERNQq7gc/s7neLsngb9CaFsGUlAbrFC98PsZ7O2bMV2Hhf9MpFgKC6wYyw8nQgcTckAoqdvHz9Iqe02UgueQ8xJETwV+gXLZyQ8jupC8coQtQg17E/rv6kpaAdagWBAVZbujOzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DIc2UoDth2FewdCnIyWL6YZwuLkZgksFv0+0U/SuZsQ=;
+ b=B/gdY68lurbQNv5f1w3UF/SYorxNngK9kZXGhvw/g0eV2y5vl4SBXetAPfzEWlemRpkZJfxz2EObNJdiZTfGt9Irq6sXUS4ujGUnOGrmtJBV5czHvtZBKE9iCDRkvs3t0A9E5Gbayzx2HJCFM9RiWOGRDc3VdgpXBJPCAi6gTA/mYNfPEBB8OsVXacqJTtBaMOwtCMihmZQR83kt4gTEHw5HFQZNpuFATjikucHz7vVK8nEcWb9QtsPVAYD2LgsTIUhBiqYQNOcZylDxsUmLHqkO/UpwJJg6xj/ZfoOtdO8r5NMfVOcG1RloMch/loCVJaB7uoLXzBbfPLxLULiWew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DIc2UoDth2FewdCnIyWL6YZwuLkZgksFv0+0U/SuZsQ=;
+ b=A0fxobD0SyvIvpELlPGGZCV9aad0mR2gAVT+IkkF99A3BkSxFL2Z2Wyo1HE0lHpd6tRZ6cft1QKz0pAgLqDSCFn2/OwwITMWtz4yis3GdDeab/BSiVa1g+MobYI3b76vPJAgMHLY4hQBNXzCvOqm94dtOlbvFvCWRJbPM/B3p9M=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
+ by DBAPR08MB5830.eurprd08.prod.outlook.com (2603:10a6:10:1a7::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Tue, 28 Jul
+ 2026 14:22:17 +0000
+Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
+ ([fe80::e079:6bd:fbe0:89b4%3]) with mapi id 15.21.0245.012; Tue, 28 Jul 2026
+ 14:22:16 +0000
+Message-ID: <9a289152-70c1-4e13-a0d5-f77bdee72d8a@arm.com>
+Date: Tue, 28 Jul 2026 15:22:14 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests/mm: unpoison pages in memory-failure teardown
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+References: <20260727095415.385026-1-usama.anjum@arm.com>
+ <a811c371-ef3d-4932-a9d4-2390a98e1382@kernel.org>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <a811c371-ef3d-4932-a9d4-2390a98e1382@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P123CA0053.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:310::18) To VI1PR08MB3421.eurprd08.prod.outlook.com
+ (2603:10a6:803:80::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ameAekveMOcP7ffQ@casper.infradead.org>
+X-MS-TrafficTypeDiagnostic:
+	VI1PR08MB3421:EE_|DBAPR08MB5830:EE_|AMS0EPF000001A3:EE_|DU5PR08MB10468:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73a92e6b-4a86-4eec-8230-08deecb3c70b
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|4143699003|10067099003|6133799003|11063799006|5023799004|56012099006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ ndCiT5ehRrhWhMLrXWNQznr2POOQhzkBWSSv36G0sh4sGbjTJds44OPvVRr+nsi4WM76ka0jtupnEn5YF3npyv1I1vP9Ii+Q4IrwNYyLaPmh4/nSaXmleoUtPboHvbkKAafYsHR9JrzMiRdbXLInn52s+C/JzW0/4yRCeh9X4o0edMUhu1DL81lHe8hWhQ5YZo8VsBD4sDEwamrgKAEM62jWD0s0SU2jY8okPuWQ6s2IxKz11aHt2VN708AupLSE1O7qX996XZS/gYJkfMjdBKevVr6YuCb313Q4W/YP0AoH8zrrX5pwYwibmnGdcHiJaODG2l5vSiCGKusYnF+vY6DtdDbQPCOrX8bNVHYZ+RUveXXuHEsBLXnXLUrrlIYfnl1reg9gGeIcqTKOCq9Via/i7EEdeqoyeFUM0ESYNk8gjN6vyg3HF4xX1Y/PeuNTtGK2gUNDT2pX8SPYrF8bZKvcxs247onb0sGxBfWBJqHdFesEBOunsqfsccJfiA+PbK+M0JFjhTVTRql94c/qctIkwEUyN1ZWuEv2WnSv93t0Q8zbTgg8dbVnzl8mFgW0OiQ/uoePkgjY8hhl6nfB5QmgN+Pw1Xk3e84d80DdHAl4yoOxJafOvgevR5DfuE3nS/s0iEI8cargCgghZ0tWUjY2ncfZerOgl7D9PRMS/0g=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(4143699003)(10067099003)(6133799003)(11063799006)(5023799004)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ amDKxWEu/syi0cqdNatVwTgWXcb0qu45tNKhXz2IbExKvXZqlKx1pUV0XcJCI4YBKYb6QAydSbL4HaBIBg/E+P0rGNRsDA30XqIj9LJB5BY6zxtyLJS5VOlovHKwbHO1vwviAEBkTk46mW9ezfgdxgfkwMf/uvGTg6xxu8AFT68LkzeLKjkcE195FFxQMzIClgkKseJZtn/emFiXKJl/qE5F1sY2vfjZSiO4229kFZwNHBFBKYlS1aRu7qgaHZtCAR1Mz0W37c63qWFq3AbdaigABr4os45v3mSxwhYBMd8N2hsJ8ftBAg2Meod0B03pAToTk8V+qgYyStZWr4ytzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5830
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS0EPF000001A3.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	1798c20f-5ac6-4f87-ecbd-08deecb3a00f
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|14060799003|1800799024|35042699022|376014|7416014|23010399003|36860700016|4143699003|10067099003|6133799003|11063799006|5023799004|56012099006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	ECrpUlh3f6E5xf38JiT03ACLxZO5RWKhnhaUrlLu7F1XqDBXVEM7ENZa/g0ioHatuTN3XklNAzSAZaNWzDoxnoY1vyKBFC982dNzYRmQBacIsoS8F06M/sYILoqwjPP1AhCCgZiDaQ72YigZdCPKKs4FOrSyvXnfiiB11C/Qu2ETK+k32JyKVnDH9zzxqVKrFEoiS0ISggKE8xyTjKUg49a7fEMWOgAImkfZljqyLpPZThnPMWAQUjii81k9N7usCcWNfVIQsLoOABzy6HPuhgVQYlnbdgOADaA6nyc+PTsfp8SAy88O6Wy483Z2WAarXmU5oWj4EQobRutPW0KPj7bUedN2MWF9QzM74Hqo3Dzcm+jnKTi7+hDoQBUkLCJ3NH2tJMiHQpVY1Fhp7Q7vOIzQopHFGNQn5G7/8SsXIr2e5PgoKtkrbWl1QC5jTHhSucMNGORxOYeUFi4eyNPFNJdl+BxoVQEKUmvvpttE9pX51gGSrZ1Z68SQfJldfCoYjEqCClWCuySA5v+CNJ/HzJAUR5XRnFlBTBThl2tZOK7xVEHefEltJNh+mYPfz1UEO99OWJiPe/B19msLPrmbxspOKdwTn9MkhY+w7BcODF90kejLTE4JXiVnusK0ixKVuJ3eBaF6/LWHe/UQ5yZT1IikwvbNYVSxi8BfYr3vWd0nw/pAeae+4o5UUQ1t1BUfeKKnU2pxImc+UR/P+vUeDw==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(14060799003)(1800799024)(35042699022)(376014)(7416014)(23010399003)(36860700016)(4143699003)(10067099003)(6133799003)(11063799006)(5023799004)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	4/LxOeaFRA1CnLGFEeTeaIg49CD3AUOqoTH/Kg9cGarC8O5DZWj+nJ1H1uKOjPvfrRf/9tn1G6dG4n4orBcejkvbCnfw4TcTw7diq5QGlo/qCu67FA+YnTf5A/UPkyMG4g5XO2/esNEF9Gz7a1fMidHDtU9qhTvl+4ROWo0FNHsI3nTCeeWHeoVltImixacklzx7/50sBBe240ai0wJxXgYV6hQnz7vDmgnO1XjY4WHTXWzxirHlSwjbDWBVFABc/x4l9FzIomHDREiPDxej1nHq3UXwQN1V+lPYKxjUWX77yxy5qtiE69cDy5waQDAzY4C8qhKRrb0ZzFrt3wlXOJzoAp9BnkC+mVN5hLEENbz5OrB+BzNMVTzlCrolM2mhLgH6/7Ost0v3Z898G+kkUynBKKS9nGhizpT0KowG4vtyyevEZRAKyKsZ3z4hNgIX
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2026 14:23:21.4848
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73a92e6b-4a86-4eec-8230-08deecb3c70b
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF000001A3.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10468
 
-On Mon, Jul 27, 2026 at 04:59:54PM +0100, Matthew Wilcox wrote:
-> On Mon, Jul 27, 2026 at 04:57:01PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Mon, Jul 27, 2026 at 04:44:06PM +0200, David Hildenbrand (Arm) wrote:
-> > > On 7/20/26 16:38, Lorenzo Stoakes (ARM) wrote:
-> > > > In memory management we've managed to manufacture a great deal of confusion
-> > > > around the concept of anonymous memory. We have:
-> > > >
-> > > > 1. 'Pure anon' memory - anonymous VMAs whose folios are anonymous and
-> > > >    swap-backed (thus for reclaim purposes, treated as anonymous). These are
-> > > >    simple enough.
-> > > >
-> > > > 2. shmem - file-backed VMAs, file-backed folios (from rmap perspective) so
-> > > >    present in the page cache and mapped by an address_space object, but
-> > > >    whose folios are also swap-backed (thus treated as anonymous for reclaim
-> > > >    purposes).
-> > > >
-> > > > 3. MAP_PRIVATE-mapped /dev/zero - a strange beast whose VMAs have
-> > > >    vma->vm_file set, but whose mmap_prepare callback clears vma->vm_ops to
-> > > >    satisfy vma_is_anonymous(), which results in VMAs that were mmap()'d
-> > > >    referencing a file, but are in every other sense anonymous, including the
-> > > >    folios.
-> > > >
-> > > > 4. Other MAP_PRIVATE-file backed mappings - These possess file-backed VMAs
-> > > >    and have file-backed folios until CoW'd, at which point those CoW'd
-> > > >    folios are anonymous.
-> > > >
-> > > > This series fixes issues 3 and 4.
-> > > >
-> > > > In order for us to traverse VMAs using the reverse mapping, we require two
-> > > > fields - folio->mapping and folio->index. The first tells the rmap code
-> > > > where to look for VMAs, and the second tells it at which offset the folio
-> > > > starts within the referenced object.
-> > > >
-> > > > For anonymous folios, folio->mapping points at an anon_vma object. For
-> > > > file-backed folios, it points at an address_space. And:
-> > > >
-> > > > * For file-backed folios folio->index is simply the page offset of the start
-> > > >   of the folio within the file.
-> > > >
-> > > > * For anonymous folios belonging to pure anon mappings, folio->index is
-> > > >   equal to the virtual page offset of the folio.
-> > > >
-> > > > * For anonymous folios belonging to file-backed mappings (i.e. CoW'd folios
-> > > >   of a MAP_PRIVATE file-backed mapping), folio->index is equal to the file
-> > > >   page offset.
-> > > >
-> > > > This series establishes a new virtual page offset property of VMAs to
-> > > > allow us to map anonymous folios at their virtual page offset, consistent
-> > > > with pure anon.
-> > >
-> > > As raised off-list, I consider the "virtual page offset" concept hard to grasp.
-> > >
-> > > Maybe it's just me :)
-> > >
-> > > Skimming over the code, I read "vmg->anon_pgoff", which is pretty intuitive to
-> > > me. Similarly vma_start_anon_pgoff() / vmg_end_anon_pgoff().
-> > >
-> > > Could we similarly just call this "anon_pgoff" /  "(linear) anon page index"
-> > > even on the VMA level.
-> >
-> > Yeah, I had originally done this.
-> >
-> > I renamed it because I worried that people might be confused by references to
-> > anon for file-backed VMA mappings.
-> >
-> > But I think probably you're right that referring to it as virtual page offset
-> > adds even more confusion vs. simply calling it anon. Will respin accordingly.
->
-> Would the term "logical page offset" be helpful?
->
-> I already use this in my description of folios:
->
->  * A folio is a physically, virtually and logically contiguous set
->  * of bytes.  It is a power-of-two in size, and it is aligned to that
->  * same power-of-two.  It is at least as large as %PAGE_SIZE.  If it is
->  * in the page cache, it is at a file offset which is a multiple of that
->  * power-of-two.  It may be mapped into userspace at an address which is
->  * at an arbitrary page offset, but its kernel virtual address is aligned
->  * to its size.
->
+On 27/07/2026 1:31 pm, David Hildenbrand (Arm) wrote:
+> On 7/27/26 11:54, Muhammad Usama Anjum wrote:
+>> The memory-failure tests call cleanup() only after all result checks.
+>> A failed ASSERT_* invokes fixture teardown and aborts the test, so it
+>> skips cleanup() and leaves the injected page hardware-poisoned.
+>>
+>> Invoke cleanup() from FIXTURE_TEARDOWN() instead. Guard it with
+>> self->triggered so tests that exit before injection do not try to
+>> unpoison a page when no injection was attempted. This runs the existing
+>> HWPoison and HardwareCorrupted checks on both normal and assertion-failure
+>> paths.
+>>
+>> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>> ---
+>>  tools/testing/selftests/mm/memory-failure.c | 26 +++++++++------------
+>>  1 file changed, 11 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
+>> index 5d00aab31f9b5..eaa8b9bd401a1 100644
+>> --- a/tools/testing/selftests/mm/memory-failure.c
+>> +++ b/tools/testing/selftests/mm/memory-failure.c
+>> @@ -122,13 +122,6 @@ static void teardown_sighandler(void)
+>>  	sigaction(SIGBUS, &sa, NULL);
+>>  }
+>>  
+>> -FIXTURE_TEARDOWN(memory_failure)
+>> -{
+>> -	close(self->kpageflags_fd);
+>> -	close(self->pagemap_fd);
+>> -	teardown_sighandler();
+>> -}
+>> -
+>>  static void prepare(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
+>>  		    void *vaddr)
+>>  {
+>> @@ -200,8 +193,7 @@ static void check(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure
+>>  	ASSERT_EQ(pfn_flags & KPF_HWPOISON, KPF_HWPOISON);
+>>  }
+>>  
+>> -static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self,
+>> -		    void *vaddr)
+>> +static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failure) * self)
+>>  {
+>>  	unsigned long size;
+>>  	uint64_t pfn_flags;
+>> @@ -217,6 +209,16 @@ static void cleanup(struct __test_metadata *_metadata, FIXTURE_DATA(memory_failu
+>>  	ASSERT_EQ(size, self->corrupted_size);
+>>  }
+>>  
+>> +FIXTURE_TEARDOWN(memory_failure)
+>> +{
+>> +	if (self->triggered)
+>> +		cleanup(_metadata, self);
+> 
+> If the variant->inject(self, addr) fails, self->triggered would already have
+> been set.
+> 
+> Wouldn't it be cleaner to have a new self->poisoned that we set only after
+> ->inject succeeded?
+Setting self->poisoned after variant->inject() returns would not cover the
+MADV_HARD signal path.
 
-Thanks, I was kinda getting at this sort of thing, and I did think 'virtual page
-offset' was a fairly common term of art, but as often with these things you go
-and look to check later and realise that maybe it's not :P
+The call path of madvise(MADV_HWPOISON) is:
 
-I think overall it's probably easier to go to anon everywhere, I'll eyeball it
-when done and make sure it's sane though!
+madvise() -> madvise_do_behavior() -> madvise_inject_error(MF_ACTION_REQUIRED) ->
+memory_failure() -> hwpoison_user_mappings() -> kill_procs(BUS_MCEERR_AR) ->
+kill_proc() -> force_sig_mceerr()
 
-Cheers, Lorenzo
+SIGBUS is therefore queued while the madvise system call is executing and
+delivered on return to userspace, before execution can continue after
+variant->inject().
+
+The test's sigbus_action() then calls siglongjmp(), so an assignment placed
+after variant->inject() would be bypassed. The flag would remain false and
+the test would attempt the injection again after returning to sigsetjmp().
+
+Also, memory_failure() sets PG_hwpoison before several recovery paths that
+can return an error, so a failed injection return does not prove that the
+page was not poisoned.
+
+Maybe renaming triggered to injection_attempted is more precise here.
+
+-- 
+Thanks,
+Usama
+
