@@ -1,62 +1,62 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BBD3CC7D3
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7617643A7F1
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785255000; cv=none; b=Z5rk+IqGL5YkPTZA6iM6oVQzVjHLj2N5TUXELA0Snf0ydec2b9IszMKPROxsyGHnA7fRMm3QKPnKQ8NWiPsxs7XrpBIxr7rYXRCyxu+tQ6R5Gk1cNxmpo1oc8hvIy2Zdw+2C4CxJLBEMl85ln0To5l5zunKCBrzi6BDoZ8mTMjg=
+	t=1785255003; cv=none; b=BaRd1pjPrKfhDmpB8xS3tCRwUB8gfvCIzPOqvNgbpfEZE1Xnl2Rs6aXSkm8yUlHmNKTX4u8fLe/PCAVteO4d8P2FdTzPr+6TyMs4NGGoa/clrtAK7juhsoSH0VsclN/AHBRJ+wEkOzyu95NyFMF+FkHfvSxassNzKGBD0T0Zxas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785255000; c=relaxed/simple;
-	bh=iWLgtboLR6eeifTFbpbNZJsQSIo8hfAjxNxNyjdyod4=;
+	s=arc-20240116; t=1785255003; c=relaxed/simple;
+	bh=UYlqUNEm0YyG3FPPau/Ebm32GWInJ+TUqYC8ieCIhbU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X2rd9KlM4OCzHNx6E6qWR+ezCpNwvG2C9sM9eOGJL6uFKbCJYvpWicCGwN4k9GZmKASnSfeHuNjAx6GejKKfmwkEUz0TTD09QxQnsmat1ThyIi2RNjd125tKhhK0opwuymb1IbIvg3zmN3ftcNgET/FzsUuK5j2uOaIG/dOIzDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=oKTmZtr0; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=YOqvJlMOJXULEt3WW56zakplYSwPrQ2BovotYwQ0SE3nxEMdRDzlrz6vz0523BTFCXRlYqDvzYmsNdWFZlvjQos1ZdMFaSdFOT46v9LyQ2CAh8yR3LVW9EDQRCT2vji4xq66WCjT4xiaHL8+vxDT2lNSErsEGSoJt0fyJcXghtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=eKveRZzf; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="oKTmZtr0"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8485ef63b68so4164818b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 09:09:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="eKveRZzf"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-848743155bcso12516b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 09:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1785254998; x=1785859798; darn=vger.kernel.org;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1785255000; x=1785859800; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vzLDqf3qkwmQV9Ac/krT+sjK+vy4k3H4FUkJylvYXqc=;
-        b=oKTmZtr09dhmp41pgfxf4oEI8K1H+hq0qJ6h4k9yvfrNj62OlgQ8rc6F2qIlOxEpiP
-         yS3uWJf4bBKC5/6nY7F8TAVdn4hGFgETN33qf50MQA8PzO3AF606A4/UKphq855uaDQp
-         OLiGBWzx3GHnaBR2/gO/YORbXpk35NZt+zsyaNIMHZ+G3kENPxPS2k5VN425xIQmH+w8
-         b5rkSz0QZOQN9JAteYaWx4O9fWfgBDpdQUWFx/C+R2ABwkgal2vQ1dDmXGMa79RrtWQh
-         0sMM46nCQ4tKG/CIlj/xyQVEwJH0DgqCUos3Fx+CPPBk28vOqSNoXui0QuhO2b2nkYsV
-         b5EQ==
+        bh=vUfz/Uk5z02XF6bLGMzCGPFjLe2D8UKrXP08L9Xjsvw=;
+        b=eKveRZzfM0dPMwK89rx2SKxQQRLTteG3pbaXcH1EU2EbTaX7q3x2KpJ2cHAoFt3Hm8
+         Ml3/ep3WJ+Bamd8KKysorOj34QwzvaN7IlV/RceUKcxaYXZlFKM7Rg49QB1c6uowV0R3
+         UGKdx/exCBTkbRj30pm6w6YkFsFvkt0SYd0/1IeqZXrmfxMRq/tN/lfH2HHVQr1c/w66
+         jpOhaIh/DqDYcqnUZUVE4SMEM1NZUxHv5R7TWmF9+UmMkUtocJ3m6xuo9VlQ5TacKu7e
+         OkMI+cqRLEfQTFG0FV0LkysVJGhuWL0xdwkm9nqusg0i+DYYQAH+sBJrhzuNdCGUTiW7
+         6RHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785254998; x=1785859798;
+        d=1e100.net; s=20251104; t=1785255000; x=1785859800;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vzLDqf3qkwmQV9Ac/krT+sjK+vy4k3H4FUkJylvYXqc=;
-        b=Xm0yxdUYE64i2GjHN2kNk3OynUDsYW4T5mhKqxIWQCQ0VYyA1R1NVBtyoOJO5FmTUI
-         MhARjjGreIv8TerT3JaY0erPsQHU+c5NJWT5nkgQDtUIcjwqpUVrLpWMvi/SX6w6F95j
-         SNI1soSeDweBelEjHY3WjteVkh/N4whre0GN4kONdj/fWNyNO6rvFrfpyQGG+QnkT4JF
-         f9GnD8yk5ZIzZKTo45T33zwBcIVl8Q8AeKfyk6eYiZW2mqe9kzkEf1dBHXiQPakU+Tw7
-         kDReLvJyzEJhwax/znjFhJogzPWHPrM8L5q37OHDwSTWcCZZE6P1YqwcBzP0al98MIh2
-         ycyw==
-X-Forwarded-Encrypted: i=1; AHgh+RqAnt+lT0u/zuVKQ2Cr7jvquxBMirXaMt1IKVZYyOAxx2uxvuhVgSsmDGkDxPvD0DvGGGVRUt12o5RIaBDxQqI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygvLSWE29x+R807DRs+E+2B/84labwSGUoUhEZoE9oqu6lRMOa
-	zOHTzZ8DXYJ+PsDH0+dVos6vxgMJDYW940zxR2CyaAWPFkim0eBO8MqXCyOV1l2cyrY=
-X-Gm-Gg: AR+sD11Frj77RSUJVkqn3bN9d+RVuuUxYsShQY+tjPUT65LBIGHxWZytG+3f+ymnRNJ
-	Qfkrgf6jjQO1iLyHb8wZWXambxWh3/U+Drg2WVBFtwAVmeGxkBnmnL1X/y/f0sw99fn+vW6/4Ih
-	eqVgpo2d7XRjiQm4lNBrezaJqGYAANfGHQRSJoFiDjHxqzwN5WFCdastGsG+dtNPB6nN9yNJuKO
-	qyQGTK/ObpA1TK7YUXsPmFOb+q7MrUBuP2uSsCf4I27reCz2lhPn5mpEUR/JXz3QK78Nqonkr6B
-	hz1BNc9cimjLmeaRAXV9KDZ++8jvQJdJ/e/YtQk7wloE1n4F291Ru7YacubewGEEs8bCCUHmcbu
-	mk9/zBj7csXY/839dqGDdJ7XFaZmKDVc+qblaT+AjrSOU8X7y4gi6eXGjP1M=
-X-Received: by 2002:a05:6a00:234a:b0:848:2f6e:e52d with SMTP id d2e1a72fcca58-84e9337e95fmr3283360b3a.65.1785254998467;
-        Tue, 28 Jul 2026 09:09:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:56::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea03767bbsm151521b3a.47.2026.07.28.09.09.57
+        bh=vUfz/Uk5z02XF6bLGMzCGPFjLe2D8UKrXP08L9Xjsvw=;
+        b=LgS5KDKpCw573nCptUG1t2owPstOCgxfyCgxmHiRwqy2DqtAftzNkIrEOUtI2v28pF
+         Vh8mBxaqqblExsMeKK53SCUN2LwMbUc8FFj3laREGzuKGD17nv1PbrOzIRKKUeMRPDEH
+         RH25RmWwzTkC+E/7VJv+W0bIBlbgyDSussVre/whMl8dVLKeGZ+CDY5RG2U4JZNOwE4q
+         KZu8ShuSQ9z4lLwhLah9DCPLMQK0Vm9Yzmg3h/RcSHtd00v/6EzuDosfFf9SW/s7XAF8
+         Ip6QdlO+ljGG6q4cerSKKQLXDG9w8OczC3Be2XKgPSdqOTh28MAM/HKk7tKYJuIqxLw6
+         By+Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+y2PeyQgDVpk+mt7vhqyc7+l6kb6XkBJLSad+YjEUCZ8qzK+J9fxfyfjotl75qBImPmIQC9T1Nf4qpk+mnMY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI9gospOhXsryzaraUo9Dxi104vtTZTRkSEazCjqmQVZW27fgY
+	1gRGu4Wo0IKX2obhxuBCAUpxcr7TSm4FMFqtXzLBlJDGbEFlX82uq4hiPxS5NGAhRKg=
+X-Gm-Gg: AR+sD1280bPejmb+mHUDqCocwaZOjvt/8My2oO02k4jj1d52GhnpY4OFvgNOCpFySRL
+	uCaPdMUaksbyR8SVG0o5C8rtW1CtX8tADUVUs2bWnslELk56FDNLhMihJwrv1e3X7FKgiEUBLgK
+	Q27SJ/EMgOoXZwnTVHHvT1RqERdVTY4tHHdO0LXGyvfJqUhiESYCxlzs9s1q1f5w6AzCxcwlhrC
+	yzN/1tA2EU4MZdqzXgpYNiaLHcTArp5X8PBGSyBLQC+VCGPMz2RXpFOoYlomihQBwA2Jt0sYWlK
+	wwNa4t9TPK4llnfIl5/lwliOqXC6Iktm8mJmk56mraMIDigvnFuATrHFJH6GMmKWarTLhyP3gQY
+	IEdFC0KF1eutg0NqHhQP65r6Y7b9GME7ZcIaeraOLL98qzdaEkuxmBJVO+IEb9aBMCDy6hQ==
+X-Received: by 2002:a05:6a00:ac89:b0:848:2eac:bfb2 with SMTP id d2e1a72fcca58-84e93107604mr3275386b3a.13.1785255000349;
+        Tue, 28 Jul 2026 09:10:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:46::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea0054afesm170583b3a.17.2026.07.28.09.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 09:09:57 -0700 (PDT)
+        Tue, 28 Jul 2026 09:09:59 -0700 (PDT)
 From: Joe Damato <joe@dama.to>
 To: netdev@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: andrew+netdev@lunn.ch,
 	linux-kselftest@vger.kernel.org,
 	Joe Damato <joe@dama.to>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/5] selftests/net: psock: Generalize stats check
-Date: Tue, 28 Jul 2026 09:09:27 -0700
-Message-ID: <20260728160935.4128982-3-joe@dama.to>
+Subject: [PATCH net-next 3/5] selftests/net: psock_snd: unify on recvmsg()
+Date: Tue, 28 Jul 2026 09:09:28 -0700
+Message-ID: <20260728160935.4128982-4-joe@dama.to>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260728160935.4128982-1-joe@dama.to>
 References: <20260728160935.4128982-1-joe@dama.to>
@@ -84,57 +84,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Generalize stats check code so that callers can specify the expected
-packets.
+Don't maintain two RX paths in do_rx(). Unify on recvmsg() and pass aux
+data only when needed.
+
+No functional change.
 
 Signed-off-by: Joe Damato <joe@dama.to>
 ---
- tools/testing/selftests/net/psock_snd.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/psock_snd.c | 28 ++++++++++---------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
 diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
-index bb9a9cfdbe95..d506ea19491b 100644
+index d506ea19491b..b2593daca603 100644
 --- a/tools/testing/selftests/net/psock_snd.c
 +++ b/tools/testing/selftests/net/psock_snd.c
-@@ -440,7 +440,7 @@ static void parse_opts(int argc, char **argv)
- 		error(1, 0, "option aux data (-a) conflicts with drop (-D)");
- }
- 
--static void check_packet_stats(int fd)
-+static void check_packet_stats(int fd, unsigned int expected_packets)
+@@ -314,25 +314,22 @@ static void do_rx(int fd, int expected_len, char *expected, bool is_psock)
  {
- 	struct tpacket_stats st = {};
- 	socklen_t len = sizeof(st);
-@@ -459,8 +459,9 @@ static void check_packet_stats(int fd)
- 		if (st.tp_drops == 0)
- 			error(1, 0, "stats: expected drops but tp_drops == 0");
- 	} else {
--		if (st.tp_packets != 1)
--			error(1, 0, "stats: tp_packets %u != 1", st.tp_packets);
-+		if (st.tp_packets != expected_packets)
-+			error(1, 0, "stats: tp_packets %u != %u",
-+			      st.tp_packets, expected_packets);
+ 	char cmsg_buf[1024] __attribute__((aligned(8))) = {};
+ 	bool aux = is_psock && cfg_aux_data;
+-	struct msghdr msg = {};
+-	struct iovec iov[1];
++	struct iovec iov = {
++		.iov_base = rbuf,
++		.iov_len = sizeof(rbuf),
++	};
++	struct msghdr msg = {
++		.msg_iov = &iov,
++		.msg_iovlen = 1,
++	};
+ 	int ret;
  
- 		if (st.tp_drops != 0)
- 			error(1, 0, "stats: tp_drops %u != 0", st.tp_drops);
-@@ -490,7 +491,7 @@ static void run_test(void)
- 	total_len = do_tx();
- 
- 	if (cfg_drop) {
--		check_packet_stats(fds);
-+		check_packet_stats(fds, 0);
- 		goto out;
+ 	if (aux) {
+-		iov[0].iov_base = rbuf;
+-		iov[0].iov_len = sizeof(rbuf);
+-
+-		msg.msg_iov = iov;
+-		msg.msg_iovlen = 1;
+-
+ 		msg.msg_control = cmsg_buf;
+ 		msg.msg_controllen = sizeof(cmsg_buf);
+-
+-		ret = recvmsg(fd, &msg, 0);
+-	} else {
+-		ret = recv(fd, rbuf, sizeof(rbuf), 0);
  	}
  
-@@ -498,7 +499,7 @@ static void run_test(void)
- 	if (cfg_payload_len == DATA_LEN && !cfg_use_vlan) {
- 		do_rx(fds, total_len - sizeof(struct virtio_net_hdr),
- 		      tbuf + sizeof(struct virtio_net_hdr), true);
--		check_packet_stats(fds);
-+		check_packet_stats(fds, 1);
- 	}
++	ret = recvmsg(fd, &msg, 0);
+ 	if (ret == -1)
+ 		error(1, errno, "recv");
+ 	if (ret != expected_len)
+@@ -341,11 +338,8 @@ static void do_rx(int fd, int expected_len, char *expected, bool is_psock)
+ 	if (memcmp(rbuf, expected, ret))
+ 		error(1, 0, "recv: data mismatch");
  
- 	do_rx(fdr, cfg_payload_len, tbuf + total_len - cfg_payload_len, false);
+-	if (aux) {
+-		struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
+-
+-		check_aux_data(cmsg, expected_len);
+-	}
++	if (aux)
++		check_aux_data(CMSG_FIRSTHDR(&msg), expected_len);
+ 
+ 	fprintf(stderr, "rx: %u\n", ret);
+ }
 -- 
 2.53.0-Meta
 
