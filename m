@@ -1,99 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DE63C4B79;
-	Mon, 27 Jul 2026 23:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFC51EE7B7
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 00:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785196688; cv=none; b=RTBlt5dnjng/9msRVvmauY3N8C3tI3c4kzLfc/VMnA5kD5RU3dlASeFKvj69ZUVmZdIE/3odgMdaufnELU1dEl26OLeUuvHJpgnbAjLn2c/kt4vu2MW9zVzn/oPUHrIw/5Ua1vB7uei7PHUO3pZ6g/5vpYTHfh5u3sxUOEZB5Ok=
+	t=1785199736; cv=none; b=CjGAzckTmAE+S4IBlCCZaWBwwhGHtLt73tU0h/9VRSPR9eVoYSyt8dL+OI+APkcH/YiWbuR3c14our3UY/ZGyMvWdYxgDD6viwMrbko3R0hWs0IajMEXgyBtWVNj4Ehz0qgTg0GJLXDW6PDa4ToFtNS0M8Bu+/gGeROtemgAthI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785196688; c=relaxed/simple;
-	bh=hVMN677+O6uQNNKVHkBX1eahrZKJbrbsynbQfKoV9ak=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=daGQYVcdlww4247QUTM8bNNIuXrokmLR+HckNb8aam3wwWrKG2zQuwv6lPyzdCIouNAJRbNMbejyNYsx6mnJzYmwcvof8Hi5cXTe7o7JEJrhfr01GMSo3Pv7nw+UmMF7/sZWDaBdoMV3lPyfO3AwHYisOLDkbSbPycKvcPuIAVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XvZyDnCi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785199736; c=relaxed/simple;
+	bh=Y+LoYAP9VjQ1WH+0mTFVX5LCQoQHjHxfT6/71MrLKcg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hQxbYe+MJ1PfJL22aqDGwVnAwyRYZsOgaADCgDm09TG7ZLKOPGOtI2O0ItxmSjrsGOtM1FUmE+iR1HIDx+0glFVmVXHOOBfD4Ec/mPp5GVzyyHP/GR+FcUik9KZhYVPu6GJr90KZaI7EQXqMtblkdWnm3OBvaIpUCsVHZ9XRkSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ONXPA+y0; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XvZyDnCi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558C61F000E9;
-	Mon, 27 Jul 2026 23:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785196687;
-	bh=GSUEwA8DxGTVwWrWOajToAHEB/JTqlNiZjDNq8cDJYw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=XvZyDnCiKiXqW9gM+BrcSj1Z/j69DU1exIRIzmYL54LXRrQB/s1/UIUePIVHMkaFR
-	 EfJUZOdg8OqjKWrcbMiJmOlxJoBC5R9sKBuq1vL+a+e1lH7fZRtnQtUVkQfnwdjC1n
-	 8TBKhrtCCzI9j+1DvUmzWdq0QB9JGga1iQ/cz2sEYXw5EzMXzjGxavQsBMOr8l2sk9
-	 hUYbfSIZ0O0e0NX9+sT1hbE5HHi+TMS/ylu5aPBPHrNaloy3i3HcnoEVkTXM0ZKJ7A
-	 nQ6Iez2ijjpH1bM/VU9UTaUS3SQ9Kl6j1NLF2X33pUHMEq8u16rDWIIfOZwbt2lnLP
-	 A57/EMk7WeM8g==
-Date: Tue, 28 Jul 2026 08:58:02 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Zhan Xusheng <zhanxusheng1024@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] tracing/probes: Extend max length of argument
- string
-Message-Id: <20260728085802.9882193694a680809f888800@kernel.org>
-In-Reply-To: <20260724023317.624074-1-zhanxusheng@xiaomi.com>
-References: <178399140457.27810.11387684872148824707.stgit@devnote2>
-	<20260724023317.624074-1-zhanxusheng@xiaomi.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ONXPA+y0"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so3234132a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 17:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1785199734; x=1785804534; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+wAfON367N7TUqFRglbZOr6w2el4iYP2m0VE4AXYueY=;
+        b=ONXPA+y02wjistWHpL/ovBtxW21OARyei/SrNNIlUnXYIT8Dlgrl4mNX8qBlDePlnA
+         I1YFOhuCAqFagnqbFgQrHNa/kTB/VMFMBIQ1bodDebJrDvL8oSoTQmqMZnDRA0j1gCDY
+         DPgpUb0bXMuDct8mq0H5PHDU73hohf9ttC4vMIHGF502M77R1vgbizGJ6I60LuZszS3z
+         WwqNPE0yDQlEeuq9lz+cvuTD0IpcpOXttDMqV8v4PKEnnQCLaPDQMQzntEoZuMebSWpk
+         DIxjsifH4J2bcixZrHk5vAxqwQhmVni09Idfer3RyOnhOsrUX1b/QLS8yv7p2x+ktgyO
+         LMrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785199734; x=1785804534;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+wAfON367N7TUqFRglbZOr6w2el4iYP2m0VE4AXYueY=;
+        b=cAnCoBQ3jNUoPU2dSSvOrmVXQprHpzUaOotZQJvHAlLd2yWlcR1S94cIBwln2TN6QU
+         0DpEDnCgLezPoXAJMhBBXNZHxGdPNjjxt4A75W8M9Lirk8iXH1unhcHrqsMmoLQ++IQ/
+         eyQixSVZ0kEB0bhcHpBOQDoveS2gdGbK90RX0+RbfBi3XJFP48UIcWEZPPerMiuCdEIO
+         U7iqX687KrJ4HP8F0fj6RkbX5lkDlOra5gslAk2oC0s4nyDS5qhCNrMifjV9BraO5Ahx
+         9J1v6JMiVjgq6j7pFdCd1Cr/klytWOt9boMFDiYGRVRe0CgytjnYUvisnvuWG34VPxpa
+         +VPg==
+X-Forwarded-Encrypted: i=1; AHgh+Rp8J0s7qCd9VwvAx5ZOpnDHjvp5WU6uIpiuYSMD6L4TkXcOSJuuX8Rwo3DXHxr7Fie9EgnwMfCsizP2irpLS2E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuPoMnZEo9PBGN14XeD6YCIsi1LkWmhaQ/5TLW8hG6Xphylw22
+	Iikv86oRW/9Qmqxps0Kvtdw2s9ksdTepJQTkr2n/VpOWV7ExDddO3sCMrjf++dMWBzg=
+X-Gm-Gg: AR+sD12TaM+Dyg2o0vCZZjfDZvSG9qCybdwZ+5vzb9F9HVT+aHxJtj9g/alpZQwoo+l
+	99hgvX9i12dPXZdQfNLiMc3g3U3gtV6ptdyaptRm3L7OYsEwVvbj2jY9GQd6IO9HQY5vw98Eb8d
+	flJ03aLaf5xuOgruIarW7L7pUdmx0o3irKzyNTmMmMkSXVWXYi1oArcNN0JYogoNQg/3te5kwyF
+	A6QVKsIKqVoc++rgX5ik559pV4Z8+OQK5DqGyWmvkWQUQTTskgX8eqXJcSCPYy20Q00N8CVndQU
+	TX3WvzbHWCBm2R8YWTs6uP5vFTYONErrEimVpLQFecWDe56zaPF3T91joOc7jjg/bRp26D3yR+o
+	Xdm41lV4rA8Qq5178JEHfJcGghEYCFR4KDw6jBQdM2Tufl9Gg1Eyu3YQtrSNf4IxiFXdn6QPXlR
+	hEtMDGF58I9DRBVPRx4RoW6FkUvffL5nQ3hIFk11PUPw==
+X-Received: by 2002:a17:90a:d888:b0:38d:e658:595a with SMTP id 98e67ed59e1d1-38f6a30d87emr171911a91.2.1785199733829;
+        Mon, 27 Jul 2026 17:48:53 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38f6414705bsm478503a91.15.2026.07.27.17.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2026 17:48:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 27 Jul 2026 20:48:51 -0400
+Message-Id: <DK9SHN2RV21T.485J38W373WQ@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add a sleepable page allocator for
+ map memory
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
+ <20260727062521.376231-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260727062521.376231-2-jiayuan.chen@linux.dev>
 
-On Fri, 24 Jul 2026 10:33:17 +0800
-Zhan Xusheng <zhanxusheng1024@gmail.com> wrote:
+On Mon Jul 27, 2026 at 2:24 AM EDT, Jiayuan Chen wrote:
+> bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
+> conservative guess for BPF program context that is always false under
+> PREEMPT_RT. So even a caller that really is sleepable gets the
+> non-blocking allocator, which never reclaims and never engages the OOM
+> machinery.
+>
+> Add bpf_map_alloc_page_sleepable() for callers that know they are
+> sleepable. The next patch uses it from the arena page fault handler.
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> On Tue, Jul 14, 2026 at 10:10:04AM +0900, Masami Hiramatsu (Google) wrote:
-> > -	char buf[MAX_ARGSTR_LEN + 1];
-> > +	char buf[MAX_COMMON_HEAD_LEN + 1];
-> > ...
-> > +#define MAX_ARGSTR_LEN		255
-> > +#define MAX_COMMON_HEAD_LEN	63
-> 
-> Keeping the head buffer at 63 avoids growing it to 256, but it also
-> preserves a pre-existing truncation of the kprobe/fprobe head: both
-> trace_kprobe_match_command_head() and trace_fprobe_match_command_head()
-> snprintf() the symbol / function name into this buffer ("%s" or "%s+%u").
-> Kernel symbols can be far longer than 63 -- Rust-mangled names are
-> routinely 150-200+ chars (KSYM_NAME_LEN is 512); I see 199-char symbols
-> in /proc/kallsyms here.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Hmm, good catch! OK, it seems trace_*probe_match_command_head() need
-to be updated. Let me fix it!
+> ---
+>  include/linux/bpf.h  |  1 +
+>  kernel/bpf/syscall.c | 21 +++++++++++++++++----
+>  2 files changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index d9542127dfdf..9ba03622709b 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2779,6 +2779,7 @@ struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id)=
+;
+> =20
+>  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+>  			unsigned long nr_pages, struct page **page_array);
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int=
+ nid);
+>  #ifdef CONFIG_MEMCG
+>  void bpf_map_memcg_enter(const struct bpf_map *map, struct mem_cgroup **=
+old_memcg,
+>  			 struct mem_cgroup **new_memcg);
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 0ff9e3aa293d..cec88450e4ce 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
+>  		!IS_ENABLED(CONFIG_PREEMPT_RT);
+>  }
+> =20
+> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
+WARN)
+> +
+>  static struct page *__bpf_alloc_page(int nid)
+>  {
+>  	if (!can_alloc_pages())
+>  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+> =20
+> -	return alloc_pages_node(nid,
+> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+> -				| __GFP_NOWARN,
+> -				0);
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+>  }
+> =20
+>  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+> @@ -636,6 +635,20 @@ int bpf_map_alloc_pages(const struct bpf_map *map, i=
+nt nid,
+>  	return ret;
+>  }
+> =20
+> +/*
+> + * For callers that know they run in a sleepable context, e.g. a user pa=
+ge
+> + * fault handler. can_alloc_pages() is a conservative guess made for BPF
+> + * program context - notably it is always false on PREEMPT_RT - so going
+> + * through bpf_map_alloc_pages() there would needlessly pick the
+> + * non-blocking allocator, which never reclaims and never engages the OO=
+M
+> + * machinery.
+> + */
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map, int=
+ nid)
+> +{
+> +	might_sleep();
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
+> +}
+> +
+> =20
+>  static int btf_field_cmp(const void *a, const void *b)
+>  {
 
-> 
-> This is the same delete-/match-by-command path you just fixed for the
-> args matcher in commit 15f197856d68 ("tracing/probes: Avoid temporary
-> buffer truncation in trace_probe_match_command_args()"):
-> dyn_event_release() passes the symbol as argv[0] to
-> *_match_command_head(), which then calls trace_probe_match_command_args().
-> The head runs first, so for a probe on a long symbol the head strcmp()
-> already fails and the probe cannot be matched/deleted by full command --
-> before the args fix is even reached.
-> 
-> Would it make sense to give the head matchers the same direct-comparison
-> treatment instead of a fixed buffer -- compare the symbol (and optional
-> "+offset") against argv[0] directly? uprobe already compares its filename
-> directly, so mainly kprobe and fprobe would need it, and
-> MAX_COMMON_HEAD_LEN could then be dropped.
-
-Yeah, that is the best way to solve this issue.
-
-Thanks for pointing it out!
-
-> 
-> Thanks,
-> Xusheng
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
