@@ -1,524 +1,166 @@
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC8E43A805
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.71
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785240720; cv=none; b=S4mGO6b7h4k51vXr8I3gD4WA5lXoDnuzmT1YlRCU5yNZZT6O9SE80vsQxRoOf9q4cVF8B57J8xG/WwKn6E5HIyKd+RJXAGaay5DdrDSClfjNxBHmI9+a5d4yBza4DZSawFJPxvwxzx91ERH+0QVocIjmSKYOD8kvcsAR+MnHTm4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785240720; c=relaxed/simple;
-	bh=UDygDN2Ss09ab9QyNSomsjICS39NjwqalNirheC99i4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ie+cv+VF87UorhIAU5UrxIwt2BQ6y0YgOnUTthTauVQE07VxmU0rzU0YirxasutnI4tOq31g8F1BaBZny1xLiEw/ekxC07eWHuOXpuujw5Av7dCFYAZIuTLJfTUKaX3PWsmAG44sPOcW4KhDF/T4jRcxaBGoRw1ci6+xOFx/Ph8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D7OQfK6d; arc=none smtp.client-ip=209.85.208.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0316D43744F
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785243055; cv=pass; b=WMYMj6Hf2aYvem0/gCXJBbSOXFZy6ay3H6n6TxNQUi81dOqHLsP2FOJRrH/eMbbqWTzXvZHiYoUzJhYUm9r8e3sGaMTXu5cADK+sVkTcIkn/U2eS03/os2YLbfsIsm1vNpFzeoT8o6imbn3KtQl3l6WVhsz60TyDEPv512UO8I0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785243055; c=relaxed/simple;
+	bh=ciilDS+xRvPxsVuFSlMssShZX6uxtvggWQJNgCYLgG4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UEp/tkmop7m0ncwulfU6lINn2SI5mxJHI0CDZ7mp/Eq/nxH9kc7eB/+JT/A9UMbg14hQ+oPl1gWW8WRaAQW7V41TPNi9L5nY7Ar2vyoLDndL9EOFCYe0CbZH76FhW/tg0+W2NPux7b8f36zCK7XdCLKMHyRe9oWme50o7SwvF8M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+n6tm92; arc=pass smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D7OQfK6d"
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-69a1ab55774so4145607a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:11:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+n6tm92"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5b2b92065ffso3436359e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:50:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785243050; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TAYPw1C/Y1r9RNnwd1Jkeyfo9TVFYkqEwdMa2wXiXNgSBovC+M++lhzOZkPKQw+cCD
+         ew54D8gTNWWZ46/hd5cx43qPPA8tLfrNj4nzO/evCZMeEfIrx6v91UZxWtlMDFDVXz/w
+         UsPupcr9zwuvdapmZ+9OvuKO5ZA5/GOCZAD6n6PdzN7Q3gF2tJVDZDd05HHYeMAJajz8
+         hKQK5vUBcDHvgDa391M+ltIlydOs4jnZzT/6N3PftF82ZUntY/Slt2XpCAWJaFkhMFkT
+         r/jdP42SLQ72pqCE22LjW15jpQ2Iu/sQa+Srmz2lUsH+Eee5jHUzDG5ZlHJMQyuouV/n
+         u6ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ciilDS+xRvPxsVuFSlMssShZX6uxtvggWQJNgCYLgG4=;
+        fh=edlPhYmbZdgG0cnwld71MKuiWY+CCKH6M74odycim0A=;
+        b=nBVwVQgTH99+4d0dbnCBO5HSttI1ssHl2bEwrbYALsG+2rBiCD9C5lOyk8dd3Snnoh
+         +XZicB9a0xnbHZr+RM8fl5d6bbBSpBR9yoZpDMaRgGQSHqFhOE0n58UBO2gavSXmA39g
+         4U+KT6EytqaMSPv6FUookAcda2bZ+9moBCjiPrph6mCE1KBqzAcLJLhsQHqN0RKAqnZ2
+         v2Zc0xzY/UDINkLezYOGIRfrYou2vXyE+6bmc/+llHLZH/34Z+bP+aKHwxh1VJP9LycG
+         Q/z5bSZ6BVFxUvmbuSRNuE9BWd71kDJUxrfuSd250dp/V4XBXNevhB0Iaun2yq1pFCju
+         e5Dw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785240714; x=1785845514; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=W6vavulIE7r7UKcwDAn6bF21k1jHwV10gRAXEWuRywE=;
-        b=D7OQfK6d9TD635tpiOYADVJeaEmKXNJrY1y+NqtLvNWh43/IIGQ8gWebxlKF0b5IHD
-         XkFYK/EOgwRb4uIlB/wLAVh5HqUskvudl7fKC82RSf7lcOjsUmWeKeoCk4w8YLSTbhF7
-         7mf5BKax6cTaMYcMxf1ZmioXQVI1P3QjLohMUkj+bK2zzaJRwSeTRX8ZRblbPekdELuB
-         pDlH7h8j+4iqBEzV+fzpLmQI83TiEjCZrXb6KrJqVyEO0atV7O67C3l2bkAXoElTpK1Q
-         UsSXGbPG0Q0NyFYhjVodh60iRZOH1wLao0H2rXt2DPSBr4SbmMEgLQGjJzumX8lbQPyb
-         DMLw==
+        d=gmail.com; s=20251104; t=1785243050; x=1785847850; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ciilDS+xRvPxsVuFSlMssShZX6uxtvggWQJNgCYLgG4=;
+        b=G+n6tm92KuLMl/NClb9QGiwtrtfwe7NeNt9XuUlW/bESVrpppHqpwcX4GB7YMgSYOM
+         YV9fn4QrZ4azpW2TO/2luvJhk+zud4cTrOWhHxjjHrom1+79UF1nVTMlhNPtWvG03c1e
+         iqtlasI7SFj887Q6sI4sY5Ohv70r64FvR9ItAfZpzUYY3qM7mD1T5BF4GBz686waJuNG
+         Dh11Zw6D44kEbBUojkwYyPJLeRSFeJkdc6rr9TjeMJHZfw63UhTk3Ety0fQhc66dIkyv
+         D/FID+hDmooKtVMLCAt1GiwFCD02Jiqc9Tu6sTRD9N10IwnBW2z3x9UZSvBQ9nehrHGm
+         qb4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785240714; x=1785845514;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=W6vavulIE7r7UKcwDAn6bF21k1jHwV10gRAXEWuRywE=;
-        b=tYUntzLcopMsKdp6RJt6qcamkwceRULXUWTIDfFlWS/DyYMor3mCkLZKN2xpQXYFjD
-         jF2dPgNtprDt09o2Mtkq89ZYUD/ZiDWOgvbxFk+iDwYMel2M1iI/LI61N0GfPHjIQ/23
-         MrocE4gt+yVrlMByQP2O51jZcjisLmRBcUuQ4pOH86w2OlPinUPlGFYK6IPIzwPX2Jiz
-         qC0kPS8eU12/3zNobgYINszLWWQDRS68wBjrDBJz+p3b5OIhjvNXCos7aRrP+hA3KTqg
-         iqghlTc1E5TCfMbzQ+EKQ5h2w/YgTqoiT0kKpw4PQD6XYXK2HJflNertnz3U7kP7/7E4
-         dO9g==
-X-Gm-Message-State: AOJu0YxX8l2NeWyQT5NXZCXOUYXeSs1mEEmSWiC2Sm8QoGhII7AgTI9i
-	Co21gSGVutq2OxfyjCZfhQAF2o7sgQxL9bMKokKILf/2TFjFaOeZ6yMnEU5w5g5V2vuwFahmC9n
-	dK9xvfLhJTCXdsIf+xQ==
-X-Received: from edup22.prod.google.com ([2002:a05:6402:10d6:b0:69c:76eb:92a])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:21d9:b0:69f:b617:5e99 with SMTP id 4fb4d7f45d1cf-6a034a0b17dmr1091211a12.8.1785240714131;
- Tue, 28 Jul 2026 05:11:54 -0700 (PDT)
-Date: Tue, 28 Jul 2026 12:11:38 +0000
-In-Reply-To: <20260728121138.1103610-1-tarunsahu@google.com>
+        d=1e100.net; s=20251104; t=1785243050; x=1785847850;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ciilDS+xRvPxsVuFSlMssShZX6uxtvggWQJNgCYLgG4=;
+        b=ktsI9AGy9RfOgywprEpg9+zQ3yacOkviNW38FAE6Ib0iJnHKR3s+uVsWc1YE06y2NT
+         Cl/oNH5xx/D4Kf3ddumtxerHYacGq753ZqvG6AUA39EOepHpOUXv3/r5WNE4oCuWD2WN
+         PS+Wcke3l97O9HUsR93hv9I8YEYttqAG+mbmqtq1aEN3cWboI8VhGH6vbodTYM2rZvzp
+         C/UamifLIeaZ1lPXkjkqnWYfI+Wg/pfRfmV2Ll9tRo1+N3OW8NVqJdlveoDP3L6/7PL1
+         KvtA5Tak7/UQ80LzPvWK0eTaK2B0NUu+++ES1kb7maLAAUCU9aDQUMif2h+V1J2lHC3r
+         gXlA==
+X-Forwarded-Encrypted: i=1; AHgh+RoNj4lU8Baf6NbIf5Ko1qYAY0x3wCCdaTkXBgiivEesKqtlWBD72L+Qe0dBGz0FzVSaYvUX1CyO6T+Nq6cwhRg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHe6MUfSXMyQlhgjYuNt5qngxRxCzjiPoLcriFmCjy+LH5vUiA
+	jSQrzzzFfd8sXFgCYPCGhZBVSbLUKQ6tplOkrUmZYzQOXsOXHiAjWbSTLubsD1kpMc+JJbjdj2X
+	TGNIDtncOg55Y6mcTaMas6xBSpB/aQXU=
+X-Gm-Gg: AR+sD10TfTv3znjmOMztDkL3oHi07rSWrmR7ztCO2j/uFhSMICfMvDL+SDoBSiIxpNS
+	s44ocRVgS/u+AteNcMqKVwGVNgTNmvyH4EcOL+m9E+JrtPWghoERrfA4FOwGOf+JbKBSjKl4/19
+	e7Gc+wwYu2Zl4xDa9Kk6XBpmHEP6O2e3bNWMAPNM9xxy7WfLR1NUIHcntCtMwNAsa5WqFnTjaGU
+	H1Cyrpw7OLFOdzOCDssA4uTylGyivuERxVZXElx1J1xPUuttOE4/QlKRn8MUvke76Lwu7dGHRXl
+	+93GcMHxsdwI4Bd2ehNyPODPEQfW/76oIAYeKs3AytDVsYt20w==
+X-Received: by 2002:a05:6512:3d92:b0:5b2:aa5d:9d34 with SMTP id
+ 2adb3069b0e04-5b2d02549demr532927e87.32.1785243049814; Tue, 28 Jul 2026
+ 05:50:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
-X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
-Message-ID: <20260728121138.1103610-12-tarunsahu@google.com>
-Subject: [PATCH v4 11/11] KVM: selftests: Add guest_memfd_preservation_test
-From: Tarun Sahu <tarunsahu@google.com>
-To: ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, seanjc@google.com, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Tarun Sahu <tarunsahu@google.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>
-Cc: linux-kselftest@vger.kernel.org, andre.przywara@arm.com, 
-	michael.roth@amd.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	will@kernel.org, vannapurve@google.com, maz@kernel.org, fvdl@google.com, 
-	kvm@vger.kernel.org, oliver.upton@linux.dev, kvmarm@lists.linux.dev, 
-	alexandru.elisei@arm.com, skhawaja@google.com, aneesh.kumar@kernel.org, 
-	linux-doc@vger.kernel.org, David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, 
-	kexec@lists.infradead.org, suzuki.poulose@arm.com
+MIME-Version: 1.0
+References: <20260725031214.43059-1-sigefriedhyy@gmail.com>
+ <20260725031214.43059-2-sigefriedhyy@gmail.com> <20260728101318.GA849975@shredder>
+In-Reply-To: <20260728101318.GA849975@shredder>
+From: Yuyang Huang <sigefriedhyy@gmail.com>
+Date: Tue, 28 Jul 2026 21:50:38 +0900
+X-Gm-Features: AUfX_mwsdRbo9fWBs-7B6gagL8r82IARkhC2JhHbxB1AoFtJCjjAI5_hFuH8Qms
+Message-ID: <CA+7S2vLgC--DOw1VLkRgpJ-X3pW5s4uox2tD8QFHzL5cdZjxiw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/2] ipv6: report why a route was deleted in RTM_DELROUTE
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Bobby Eshleman <bobbyeshleman@meta.com>, 
+	Chris J Arges <carges@cloudflare.com>, David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>, 
+	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Gal Pressman <gal@nvidia.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add guest_memfd_preservation_test to verify that KVM VM state and guest
-memory backed by guest_memfd are preserved across a kexec reboot via Live
-Update Orchestrator (LUO).
+On Tue, Jul 28, 2026 at 7:13=E2=80=AFPM Ido Schimmel <idosch@nvidia.com> wr=
+ote:
 
-This test includes multiple tests
-- (A) Test to preserve non-guest_memfd, non-memfd which must fail (/dev/null)
-- (B) Test to preserve guest_memfd with no INIT_SHARED flag which must fail
-- (C) Test to allocate the guest_memfd memory after preservation because
-  preservation makes the guest_memfd frozen. Which must fail as well.
-- (D) Test to verify guest_memfd with INIT_SHARED flag preservation across
-  kexec: Below is the details of stages in this test.
+> There are too many changes in this patch. The meaningful changes are
+> mixed in with a lot of churn. I suggest splitting it as follows:
+>
+> 1. Add the rta_del_reason enum and ip6_del_rt_reason(). Call it from
+> ip6_del_rt() with RTA_DEL_REASON_UNSPEC. No functional changes.
+>
+> 2. Propagate the deletion reason argument from ip6_del_rt_reason() all
+> the way to fib6_del_route(). Purely a mechanical change with a lot of
+> churn.
+>
+> 3. Change the relevant callers to specify the deletion reason instead of
+> RTA_DEL_REASON_UNSPEC. This is the meaningful change.
+>
+> Now the only thing that is left is to expose the deletion reason to user
+> space.
+>
+> 4. Add a deletion reason argument to rt6_fill_node() and pass UNSPEC.
+> Purely a mechanical change with a lot of churn.
+>
+> 5. Change rt6_fill_node() (and rt6_nlmsg_size()) to expose the reason to
+> user space assuming it is not UNSPEC. At this point it is still not
+> visible to user space since all the callers pass UNSPEC.
+>
+> 6. Add inet6_rt_del_notify() (see more below) and call it from
+> fib6_del_route() with the deletion reason. The inet6_rt_notify() callers
+> do not need to change.
+>
+> 7. Add the multicast groups and the notifications to rt-route.yaml (see
+> more below).
+>
+> 8. Add the deletion reason to rt-route.yaml.
+>
+> 9. Add the selftest.
 
-In Stage 1 (pre-kexec), create a VM with a guest_memfd memory slot, run guest
-code to write a deterministic pattern into guest_memfd, and preserve both
-the VM and guest_memfd file descriptors via LUO. This stage also tests
-A, B and C. A, B and C do not require stage2 so they will finish in
-stage 1 only.
+> At least sport and dport are only used in RTM_GETROUTE, but it does seem
+> like they won't be rejected if encoded in an RTM_NEWROUTE request, so I
+> guess it's OK to put them here.
 
-In Stage 2 (post-kexec), retrieve the preserved VM and guest_memfd file
-descriptors, reconstruct the VM using vm_create_from_fd(), re-map the
-retrieved guest_memfd, and execute guest code to verify data integrity
-against the original pattern.
+> This hunk (adding the mcast groups and notifications) is not related to
+> the deletion reason. Please split it to a separate patch. There are too
+> many changes in this patch as-is.
 
-Example usage:
-  $ ./guest_memfd_preservation_test --s 1
-  $ <kexec>
-  $ ./guest_memfd_preservation_test --s 2
+> Why not use enum rta_del_reason like we do with kfree_skb_reason()?
+>
+> Also, only one caller calls it from the deletion path, the rest pass
+> RTM_NEWROUTE and it's weird to see something like:
+>
+> inet6_rt_notify(RTM_NEWROUTE, rt, info, nlflags, RTA_DEL_REASON_UNSPEC);
+>
+> Maybe create inet6_rt_del_notify(rt, info, del_reason) and have it call
+> __inet6_rt_notify()? Then we don't need any changes in the addition
+> path.
 
-Signed-off-by: Tarun Sahu <tarunsahu@google.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/kvm/Makefile.kvm      |   6 +-
- .../kvm/guest_memfd_preservation_test.c       | 357 ++++++++++++++++++
- 3 files changed, 363 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/guest_memfd_preservation_test.c
+> Please use the enum throughout the patch instead of a plain u32.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c032f9a0451b..df764e430d25 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14549,6 +14549,7 @@ L:	kvm@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
- F:	Documentation/liveupdate/vmm.rst
-+F:	tools/testing/selftests/kvm/guest_memfd_preservation_test.c
- F:	virt/kvm/guest_memfd_luo.c
- F:	virt/kvm/kvm_luo.c
- 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 4ace12606e93..02cfd7fc718e 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -165,6 +165,8 @@ TEST_GEN_PROGS_x86 += pre_fault_memory_test
- 
- # Compiled outputs used by test targets
- TEST_GEN_PROGS_EXTENDED_x86 += x86/nx_huge_pages_test
-+# Manual test that forks a persistent background daemon; skip auto CI run
-+TEST_GEN_PROGS_EXTENDED_x86 += guest_memfd_preservation_test
- 
- TEST_GEN_PROGS_arm64 = $(TEST_GEN_PROGS_COMMON)
- TEST_GEN_PROGS_arm64 += arm64/aarch32_id_regs
-@@ -259,6 +261,7 @@ OVERRIDE_TARGETS = 1
- # which causes the environment variable to override the makefile).
- include ../lib.mk
- include ../cgroup/lib/libcgroup.mk
-+include ../liveupdate/lib/libliveupdate.mk
- 
- INSTALL_HDR_PATH = $(top_srcdir)/usr
- LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
-@@ -313,7 +316,8 @@ LIBKVM_S := $(filter %.S,$(LIBKVM))
- LIBKVM_C_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_C))
- LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
- LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
--LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ) $(LIBCGROUP_O)
-+LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ) \
-+						$(LIBCGROUP_O) $(LIBLIVEUPDATE_O)
- SPLIT_TEST_GEN_PROGS := $(patsubst %, $(OUTPUT)/%, $(SPLIT_TESTS))
- SPLIT_TEST_GEN_OBJ := $(patsubst %, $(OUTPUT)/$(ARCH)/%.o, $(SPLIT_TESTS))
- 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_preservation_test.c b/tools/testing/selftests/kvm/guest_memfd_preservation_test.c
-new file mode 100644
-index 000000000000..b790f2529837
---- /dev/null
-+++ b/tools/testing/selftests/kvm/guest_memfd_preservation_test.c
-@@ -0,0 +1,357 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2026, Google LLC.
-+ *
-+ * Author: Tarun Sahu <tarunsahu@google.com>
-+ *
-+ * Test for VM and guest_memfd preservation across kexec (Live Update) via LUO.
-+ *
-+ * NOTE: This is a MANUAL test and is excluded from automated CI/testing
-+ * frameworks because Stage 1 daemonizes into the background to pin resources
-+ * and requires a human operator to manually trigger kexec before Stage 2
-+ * is executed. Running Stage 1 automatically would leak the background daemon
-+ * and cause CI runners to falsely interpret it as a passed test.
-+ *
-+ * Usage:
-+ * Stage 1: ./guest_memfd_preservation_test --s 1
-+ * Stage 2: ./guest_memfd_preservation_test --s 2
-+ */
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <linux/sizes.h>
-+#include <linux/falloc.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "ucall_common.h"
-+#include "../kselftest.h"
-+#include "../kselftest_harness.h"
-+
-+#include <libliveupdate.h>
-+
-+#define TEST_PASSED(fmt, ...) ksft_print_msg(fmt, ##__VA_ARGS__)
-+
-+#define SESSION_NAME "gmem_vm_preservation_session"
-+#define VM_TOKEN 0x1001
-+#define GMEM_TOKEN 0x1002
-+
-+#define STATE_SESSION_NAME "gmem_preservation_state"
-+#define STATE_TOKEN 0x999
-+
-+#define UNSHARED_GMEM_TOKEN 0x9001
-+#define MMAP_ONLY_GMEM_TOKEN 0x9002
-+#define NON_GMEM_TOKEN 0x9003
-+#define FROZEN_GMEM_TOKEN 0x8888
-+
-+#define GPA SZ_4G
-+#define GMEM_MEM_SLOT 1
-+#define GMEM_SIZE (16ULL * 1024 * 1024)
-+#define DATA_SIZE (5ULL * 1024 * 1024)
-+
-+static size_t page_size;
-+
-+/* Deterministic byte pattern generation based on offset */
-+static inline uint8_t get_pattern_byte(size_t offset)
-+{
-+	return (uint8_t)(offset ^ 0x5A);
-+}
-+
-+static void guest_code_phase1(uint64_t gpa)
-+{
-+	uint8_t *mem = (uint8_t *)gpa;
-+
-+	for (size_t i = 0; i < DATA_SIZE; i++)
-+		mem[i] = get_pattern_byte(i);
-+
-+	GUEST_DONE();
-+}
-+
-+static void guest_code_phase2(uint64_t gpa)
-+{
-+	uint8_t *mem = (uint8_t *)gpa;
-+
-+	for (size_t i = 0; i < DATA_SIZE; i++) {
-+		uint8_t val = get_pattern_byte(i);
-+
-+		__GUEST_ASSERT(mem[i] == val,
-+			       "Data mismatch at offset %lu! Expected 0x%x, got 0x%x",
-+			       i, val, mem[i]);
-+	}
-+
-+	GUEST_DONE();
-+}
-+
-+static void setup_guest_memfd_region(struct kvm_vm *vm, int gmem_fd)
-+{
-+	vm_set_user_memory_region2(vm, GMEM_MEM_SLOT, KVM_MEM_GUEST_MEMFD, GPA, GMEM_SIZE, NULL,
-+				   gmem_fd, 0);
-+
-+	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
-+		virt_pg_map(vm, GPA + i, GPA + i);
-+}
-+
-+static void test_preserve_disallowed_no_init_shared(int session_fd,
-+						    struct kvm_vm *vm)
-+{
-+	int unshared_fd, ret;
-+
-+	ksft_print_msg("[STAGE 1] TEST 1: Preserving guest_memfd without INIT_SHARED...\n");
-+
-+	unshared_fd = __vm_create_guest_memfd(vm, GMEM_SIZE, 0);
-+	if (unshared_fd >= 0) {
-+		ret = luo_session_preserve_fd(session_fd, unshared_fd, UNSHARED_GMEM_TOKEN);
-+		TEST_ASSERT(ret < 0,
-+			    "Preservation without INIT_SHARED should fail");
-+		close(unshared_fd);
-+	}
-+	TEST_PASSED("[STAGE 1] TEST 1: PASSED\n");
-+}
-+
-+static void test_preserve_disallowed_mmap_only(int session_fd,
-+						struct kvm_vm *vm)
-+{
-+	int mmap_only_fd, ret;
-+
-+	if (!(vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS) &
-+	      GUEST_MEMFD_FLAG_MMAP))
-+		return;
-+
-+	ksft_print_msg("[STAGE 1] TEST 2: Preserving guest_memfd with MMAP only...\n");
-+
-+	mmap_only_fd = __vm_create_guest_memfd(vm, GMEM_SIZE,
-+					       GUEST_MEMFD_FLAG_MMAP);
-+	if (mmap_only_fd >= 0) {
-+		ret = luo_session_preserve_fd(session_fd, mmap_only_fd, MMAP_ONLY_GMEM_TOKEN);
-+		TEST_ASSERT(ret < 0,
-+			    "Preserving guest_memfd with MMAP only should fail");
-+		close(mmap_only_fd);
-+	}
-+	TEST_PASSED("[STAGE 1] TEST 2: PASSED\n");
-+}
-+
-+static void test_preserve_disallowed_non_gmem(int session_fd)
-+{
-+	int null_fd, ret;
-+
-+	ksft_print_msg("[STAGE 1] TEST 3: Preserving non-guest_memfd FD (/dev/null)...\n");
-+
-+	null_fd = open("/dev/null", O_RDWR);
-+	if (null_fd >= 0) {
-+		ret = luo_session_preserve_fd(session_fd, null_fd, NON_GMEM_TOKEN);
-+		TEST_ASSERT(ret < 0,
-+			    "Preserving /dev/null should fail");
-+		close(null_fd);
-+	}
-+	TEST_PASSED("[STAGE 1] TEST 3: PASSED\n");
-+}
-+
-+static void test_allocate_while_frozen(int luo_fd, struct kvm_vm *vm)
-+{
-+	int frozen_session, frozen_fd, ret;
-+	uint64_t flags;
-+	char *mem;
-+
-+	flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
-+	if ((vm_check_cap(vm, KVM_CAP_GUEST_MEMFD_FLAGS) & flags) != flags)
-+		return;
-+
-+	ksft_print_msg("[STAGE 1] TEST 4: Operations on frozen guest_memfd...\n");
-+
-+	frozen_session = luo_create_session(luo_fd, "session_frozen_ops");
-+	TEST_ASSERT(frozen_session >= 0, "Failed to create frozen test session");
-+
-+	frozen_fd = __vm_create_guest_memfd(vm, GMEM_SIZE, flags);
-+	TEST_ASSERT(frozen_fd >= 0, "Failed to create guest_memfd for frozen test");
-+
-+	mem = kvm_mmap(GMEM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, frozen_fd);
-+	mem[0] = get_pattern_byte(0);
-+	kvm_munmap(mem, GMEM_SIZE);
-+
-+	ret = luo_session_preserve_fd(frozen_session, frozen_fd, FROZEN_GMEM_TOKEN);
-+	TEST_ASSERT(ret == 0, "Failed to preserve guest_memfd for frozen test");
-+
-+	ret = fallocate(frozen_fd, FALLOC_FL_KEEP_SIZE, DATA_SIZE, page_size);
-+	TEST_ASSERT(ret == -1 && errno == EPERM,
-+		    "fallocate on frozen guest_memfd failed ret=%d errno=%d",
-+		    ret, errno);
-+
-+	ret = fallocate(frozen_fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-+			0, page_size);
-+	TEST_ASSERT(ret == -1 && errno == EPERM,
-+		    "fallocate punch hole on frozen guest_memfd failed ret=%d errno=%d",
-+		    ret, errno);
-+
-+	mem = kvm_mmap(GMEM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, frozen_fd);
-+
-+	TEST_ASSERT_EQ(READ_ONCE(mem[0]), get_pattern_byte(0));
-+	TEST_EXPECT_SIGBUS((void)READ_ONCE(mem[DATA_SIZE]));
-+
-+	kvm_munmap(mem, GMEM_SIZE);
-+
-+	luo_session_finish(frozen_session);
-+	close(frozen_session);
-+	close(frozen_fd);
-+
-+	TEST_PASSED("[STAGE 1] TEST 4: PASSED\n");
-+}
-+
-+static void test_gmem_preservation_stage1(int session_fd, struct kvm_vm *vm,
-+					   struct kvm_vcpu *vcpu, int *gmem_fd)
-+{
-+	uint64_t flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
-+	int fd, ret;
-+
-+	ksft_print_msg("[STAGE 1] TEST 5: Preserving VM and guest_memfd...\n");
-+
-+	fd = vm_create_guest_memfd(vm, GMEM_SIZE, flags);
-+	setup_guest_memfd_region(vm, fd);
-+
-+	vcpu_args_set(vcpu, 1, GPA);
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
-+
-+	ret = luo_session_preserve_fd(session_fd, vm->fd, VM_TOKEN);
-+	TEST_ASSERT(ret == 0, "Failed to preserve VM file descriptor");
-+
-+	ret = luo_session_preserve_fd(session_fd, fd, GMEM_TOKEN);
-+	TEST_ASSERT(ret == 0, "Failed to preserve guest_memfd file descriptor");
-+
-+	*gmem_fd = fd;
-+}
-+
-+static void test_gmem_preservation_stage2(int retrieved_vm_fd,
-+					   int retrieved_gmem_fd)
-+{
-+	struct userspace_mem_region *slot0;
-+	struct vm_shape shape = VM_SHAPE_DEFAULT;
-+	u64 nr_pages = 2048; /* 8MB for slot0 pages */
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	int i;
-+
-+	ksft_print_msg("[STAGE 2] TEST 5 (cont): Verifying VM & guest_memfd data...\n");
-+
-+	vm = vm_create_from_fd(retrieved_vm_fd, shape);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0,
-+				    nr_pages, 0);
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	for (i = 0; i < NR_MEM_REGIONS; i++)
-+		vm->memslots[i] = 0;
-+
-+	slot0 = memslot2region(vm, 0);
-+	ucall_init(vm, slot0->region.guest_phys_addr +
-+		       slot0->region.memory_size);
-+
-+	setup_guest_memfd_region(vm, retrieved_gmem_fd);
-+
-+	vcpu = vm_vcpu_add(vm, 0, guest_code_phase2);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	vcpu_args_set(vcpu, 1, GPA);
-+
-+	printf("Resuming / Running VM in Phase 2...\n");
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
-+
-+	/* kvm_vm_free will also close retrieved_vm_fd */
-+	kvm_vm_free(vm);
-+	TEST_PASSED("[STAGE 2] TEST 5: PASSED\n");
-+}
-+
-+static void run_stage_1(int luo_fd)
-+{
-+	int gmem_fd, session_fd;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+
-+	ksft_print_msg("[STAGE 1] Starting pre-kexec setup...\n");
-+
-+	ksft_print_msg("[STAGE 1] Creating state file for next stage (2)...\n");
-+	create_state_file(luo_fd, STATE_SESSION_NAME, STATE_TOKEN, 2);
-+
-+	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1,
-+					guest_code_phase1);
-+
-+	ksft_print_msg("[STAGE 1] Creating session '%s' and preserving FDs...\n",
-+		       SESSION_NAME);
-+	session_fd = luo_create_session(luo_fd, SESSION_NAME);
-+	TEST_ASSERT(session_fd >= 0, "Failed to create LUO session");
-+
-+	/* Run negative tests for disallowed preservation conditions */
-+	test_preserve_disallowed_no_init_shared(session_fd, vm);
-+	test_preserve_disallowed_mmap_only(session_fd, vm);
-+	test_preserve_disallowed_non_gmem(session_fd);
-+
-+	/* Run operations on frozen guest_memfd test independently */
-+	test_allocate_while_frozen(luo_fd, vm);
-+
-+	/* Run primary VM & guest_memfd preservation test */
-+	test_gmem_preservation_stage1(session_fd, vm, vcpu, &gmem_fd);
-+
-+	printf("\n============================================================\n");
-+	printf("Phase 1 Complete Successfully!\n");
-+	printf("VM file and guest_memfd file have been preserved via LUO.\n");
-+	printf("Tokens: VM_TOKEN=0x%x, GMEM_TOKEN=0x%x\n", VM_TOKEN, GMEM_TOKEN);
-+	printf("Machine Size: %llu MB, Data Size: %llu MB\n", GMEM_SIZE / SZ_1M,
-+				 DATA_SIZE / SZ_1M);
-+	printf("------------------------------------------------------------\n");
-+
-+	close(luo_fd);
-+	daemonize_and_wait();
-+}
-+
-+static void run_stage_2(int luo_fd, int state_session_fd)
-+{
-+	int retrieved_vm_fd, retrieved_gmem_fd, session_fd, stage;
-+
-+	ksft_print_msg("[STAGE 2] Starting post-kexec verification...\n");
-+
-+	restore_and_read_stage(state_session_fd, STATE_TOKEN, &stage);
-+	if (stage != 2)
-+		fail_exit("Expected stage 2, but state file contains %d", stage);
-+
-+	ksft_print_msg("[STAGE 2] Retrieving session '%s'...\n", SESSION_NAME);
-+	session_fd = luo_retrieve_session(luo_fd, SESSION_NAME);
-+	TEST_ASSERT(session_fd >= 0, "Failed to retrieve LUO session");
-+
-+	retrieved_vm_fd = luo_session_retrieve_fd(session_fd, VM_TOKEN);
-+	TEST_ASSERT(retrieved_vm_fd >= 0, "Failed to retrieve VM file descriptor");
-+
-+	retrieved_gmem_fd = luo_session_retrieve_fd(session_fd, GMEM_TOKEN);
-+	TEST_ASSERT(retrieved_gmem_fd >= 0, "Failed to retrieve guest_memfd file descriptor");
-+
-+	/* Run primary VM & guest_memfd post-kexec data verification */
-+	test_gmem_preservation_stage2(retrieved_vm_fd, retrieved_gmem_fd);
-+
-+	printf("\nSUCCESS: Phase 2 Complete! All 5MB complex data verified intact!\n");
-+
-+	luo_session_finish(session_fd);
-+	close(session_fd);
-+
-+	ksft_print_msg("[STAGE 2] Finalizing state session...\n");
-+	if (luo_session_finish(state_session_fd) < 0)
-+		fail_exit("luo_session_finish for state session");
-+	close(state_session_fd);
-+
-+	close(retrieved_gmem_fd);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD));
-+	page_size = getpagesize();
-+
-+	return luo_test(argc, argv, STATE_SESSION_NAME,
-+			run_stage_1, run_stage_2);
-+}
--- 
-2.55.0.229.g6434b31f56-goog
+Thank you very much for all the detailed reviews!
 
+Will adjust all the items properly in patchset v4.
+
+Yuyang
