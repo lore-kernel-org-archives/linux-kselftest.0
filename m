@@ -1,66 +1,66 @@
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA0B3B992C
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 23:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFD33AE6EB
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 23:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785279856; cv=none; b=t8dFx+ULxTt0oQxlZbPkkeDpB8x+1c8dRbJxh1MCTQUL/xLJam5joDQ9Dx0acBE99o3lOGXObbeVTLseoNiSuiDy+pTO5IFq08P2dMNqj4ZOSwomvuhGyd6qYej+5pPjXAyUDZUL4zPi9jlluS4q7oXG7a6Alm49lXQU0h+rd4g=
+	t=1785279972; cv=none; b=Sis1L/nSjKxQBzZCRGRA+5l708woMo9+OJT4O2TmdZxHi24Z837zfPXZZfjOUT5rI0fbkrY4mq2sCy9c0DTnki1cJWuRnstyU6Ty0FSGrAs8c651GGDpBgwY/YAw+rfbsbcaJwklTphuN9JByiF++StuiAvmC9QRGB4CXFAh3UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785279856; c=relaxed/simple;
-	bh=gHXZcf7IOMhEOJ4FGfr7TBj1sqZnBOL1N553RhUOdqg=;
+	s=arc-20240116; t=1785279972; c=relaxed/simple;
+	bh=DogBQgPNXswuGIoml9u4fiZ1siHOFMK0NYoj1Fcu0ek=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RdomWe1JZhtnQ0hPi9ql4NK0/wq9vep5vVfr5tKCrEIrJTgUYNwvGkjGY0gJpC2fUroc1Cwjh8fUYBAdizGaps/c5qiZ83chpsFvR7vkRzxYY+PkdYKVy03FAGBSZrqHzBqGK3ydjqfubKRtgfvwpp2BP0KK9Up9wdikAgKPGUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=heZFKCD+; arc=none smtp.client-ip=209.85.214.197
+	 To:Cc:Content-Type; b=ZgqNlDdrttJZ9eAcbwR3iKr4PTjHjVCFfccxB0kSWNYuhZ+ArUBwbDAUlVU+El+deqkRGl8Qx19Rs41KId8jmXvBsyJdXXd36llJWJ71PMc1nbQpQkatLRBPYSS1ROC6DwcEl7sQl0yU2RjXHdsMCOOKXVL29nL2LBOWUD56Ptw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XHnP7TLQ; arc=none smtp.client-ip=209.85.215.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="heZFKCD+"
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cfc52ddc55so4240835ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:04:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XHnP7TLQ"
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cb5cc1e139bso188748a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:06:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785279854; x=1785884654; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785279971; x=1785884771; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1l81sd+1Dt+3WFLZZe7rfpxDHFJTbu6GbcdYA+gInbc=;
-        b=heZFKCD+UpC5cJDMlKsyfS9fO5rMQFmCMbMkPFIxMODXmNfk+Vf1n7alfZ+shsoVpu
-         nnRdDRybxGWfkx8naPex6HHKVQnZc74i3fhZh2tyLjcZSJdgb12tWNISLDgzhxQigC15
-         9qZUBS865xSuneihcIMKYrx/SkMf1nHCKXlgCSzhYofdZfZPukJmrFoAyWKsWhxy9dVe
-         BS9E+S/cmosTJCR9csEVyaq5ZD5ScyPEH1ksak5KSgu45yABQHRh9GugkTqxYEB7RysJ
-         IL6EvtNoTCLwLjtuf0lf641LxTw6Pn6HWsLsuEXLATtoY4OS5Y2bFwrxafehhad8RQ2P
-         2hyA==
+        bh=kIqmps2dhv8tBsBvZD3H17qhoPMotCZtd+Geu7ae0Wc=;
+        b=XHnP7TLQcqGrUbh4qia9Wr/2HZjShWsF0N076n1po6boeZ6UXtU2NtkpEbfbggHwZF
+         sShCsohlVFZvoAywE37ZQARO2INQQyh6FJ9ptcxqFHHNtHMWK31Nk0eWQpMXS09abnDi
+         YkLWtoWza6Kh6F24bcEqvsiAul5NaG4s7H7OaRYANI8ZBDjRqrPUxBjrl+rxGOeQ5qh9
+         fzy0CwF1Slb7pivI5QShWDCnyQZfhwZRQCx5ya8S3MSVcYdt6ykHUo0h51zTFLBMRlW6
+         V0gvIMOYEtvD0bkKD3TsRlMZp4oQ4pjnsqBVt40tuDBSSq9tQaEc0FoF2so/RnHLAMUl
+         kGPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785279854; x=1785884654;
+        d=1e100.net; s=20251104; t=1785279971; x=1785884771;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1l81sd+1Dt+3WFLZZe7rfpxDHFJTbu6GbcdYA+gInbc=;
-        b=DYKf9ub1FQfowFVsxjmLMUygfzg6uFhkMEAGiMIP62QY7gzcfCZRdPvyMHRy7S89Nl
-         1rl9ktBj/B5EPN0KGPN4u9J2XkqLMXOTq2A7+Jhk0xwDe4He9XxWUUCBjVt7VTUN9Qtz
-         y/A39pnhJKPXv3qWEQDipNEjAZ+1aRa1EiqIY5mmL28OtE0FiE4s2j5tZKmHcNN4ym6f
-         FEIlcz0O6TsSaK+DcIf48tCloEMQc1rqXW8gmm9EuI7oxGJz7VyqLsZ1TmQhVI32kfAm
-         pMwBaZkW41i9ELw4oeXTHVrGmFxgmXRKG8sfBFW8uZBfXfNz49m98ivdYLXBLqz31FMv
-         TgBw==
-X-Forwarded-Encrypted: i=1; AHgh+RpnxTFlZD8M4xqIE13hef/ydSn6FpBRMqFfIqZ5VKT8s5RXhjvpnYXTUR1QM47hRdBBw6uo+iD8Ltu1bJCMyZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrd9lJXI9biQli7CiwfPvzkM+Ck6a6+ZTM1sXMltVNxybisKWJ
-	j9ilvXpWI/NI9mFLvKj5dm0pwiIcxSAaWl49Sz3fy9/G0mzQ7a9wzzrNh1AP6AuA9LHEAxk55zM
-	Bz5dlJA==
-X-Received: from plkz12.prod.google.com ([2002:a17:902:708c:b0:2ce:d2e2:393])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef07:b0:2cb:2b84:f431
- with SMTP id d9443c01a7336-2d015d607d0mr51470645ad.47.1785279853901; Tue, 28
- Jul 2026 16:04:13 -0700 (PDT)
-Date: Tue, 28 Jul 2026 16:04:13 -0700
-In-Reply-To: <20260728144954.355376-8-dwmw2@infradead.org>
+        bh=kIqmps2dhv8tBsBvZD3H17qhoPMotCZtd+Geu7ae0Wc=;
+        b=K/Br7lRDj1sXZDVgwrc7W5uZ0Tjnjo2NQ0Da1cb3jA/0+jH/cknRv1d3K2cfkKi3gd
+         hliZZBzs4p1thg7843k15LAXK/z5XhIyHsmeZyy3tzT0/5KHb+2c5JxIgR1qWZzLVEu7
+         qtQ0OtKR1W0Ov7+TpR1JUzncP3zGOBLdADPlq02LfY952sJdLokigIluLvvWhmpVCFfG
+         xjoSVZonqG7aKUdfmIYKLAlIlVUw1f5aRCoAE9UKScYuW1NjfDgrbkh2dRxZGhijUKgy
+         Q7eiEuWUhTY5D7Ea319o3U9++XaZv7SRxA7pNfmj1GLqCrxDzrMKtvrlnAs1tPQNk+D9
+         M4zw==
+X-Forwarded-Encrypted: i=1; AHgh+RpOGbio0FXLK4iwitRxhpU2ZMi9OwMGvp2mgUDDKn63EDFcWMN0mluFqOpx1MR/bkWBZ6+W16AH3zbVdrj1/8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRhHNhlJ/c4wOA5oLQln8dMtz7zL4W6UJXY5JuYsqJztZbv8lg
+	7tU2duDDKctm1penqCN8GgLrw7A9T4yMD7y/RYnBO5RXkL8g1mUQqEOWbOXLC+LH1SGFaT+tQQs
+	sHpwa1g==
+X-Received: from pfbig10.prod.google.com ([2002:a05:6a00:8b8a:b0:848:478d:6efb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:8c5:b0:845:f107:38c8
+ with SMTP id d2e1a72fcca58-84e9332e63bmr4750014b3a.47.1785279970563; Tue, 28
+ Jul 2026 16:06:10 -0700 (PDT)
+Date: Tue, 28 Jul 2026 16:06:09 -0700
+In-Reply-To: <20260728144954.355376-6-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-8-dwmw2@infradead.org>
-Message-ID: <amk1bREQeZNNW10n@google.com>
-Subject: Re: [PATCH v7 07/36] KVM: x86: Restructure get_kvmclock()
+References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-6-dwmw2@infradead.org>
+Message-ID: <amk14dmn5j7Oov1B@google.com>
+Subject: Re: [PATCH v7 05/36] KVM: x86: Fold __get_kvmclock() into get_kvmclock()
 From: Sean Christopherson <seanjc@google.com>
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -77,61 +77,20 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 Content-Type: text/plain; charset="us-ascii"
 
 On Tue, Jul 28, 2026, David Woodhouse wrote:
-> When the clock read fails (e.g. clocksource transitioning away from TSC),
-> fall back to that path rather than proceeding with uninitialised data or
-> spinning in the seqcount loop.
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> There is no need for the separate __get_kvmclock() helper; just inline
+> its body into get_kvmclock() within the seqcount retry loop.
 
-This is not restructuring, it is a logical change.  It's a good logical change,
-but it needs to be isolated.  This is what I have locally (spoiler alert; I'm
-working backwards a bit):
+Actually, there ends up being quite a bit of value if we rework the inner helper
+to be all about the master clock mode.  If we go that route, then the main loop
+is pretty self-explanatory, we can use early returns instead of continues and
+subtle fall-throughs, and the indentation levels go down.
 
-From: David Woodhouse <dwmw@amazon.co.uk>
-Date: Tue, 28 Jul 2026 15:26:35 -0700
-Subject: [PATCH] KVM: x86: Fall back to non-master-clock if clockread fails in
- get_kvmclock()
+	do {
+		data->flags = 0;
 
-When computing kvmclock and the it's currently in master-clock mode, fall
-back to the non-master-clock path if the clock read fils, e.g. if the
-kernel's clocksource transitioning away from TSC but ka->use_master_clock
-hasn't been udated yet.  The rdtsc() fall back was added (well, kept) in
-commit c68dc1b577ea ("KVM: x86: Report host tsc and realtime values in
-KVM_GET_CLOCK") purely to avoid uninitialized variables and compilation
-problems on 32-bit kernels (already addressed).  In hindsight, keeping the
-rdtsc() was a hack and a mistake.
-
-Link: https://lore.kernel.org/all/CAOQ_QsgVqS_PuJo8F10Gg5Xw+tKt+5gDx+kJf1j3CiPO4MAOqg@mail.gmail.com
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-[sean: isolate from refactoring changes, write changelog]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a0ed0969fcb3..895d3cf7bfcf 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1657,14 +1657,13 @@ static bool __get_kvmclock_master_clock(struct kvm *kvm,
- 	if (!tsc_hz)
- 		return false;
- 
--	if (kvm_get_walltime_and_clockread(&ts, &data->host_tsc)) {
--		data->realtime = ts.tv_nsec + NSEC_PER_SEC * ts.tv_sec;
--		data->flags |= KVM_CLOCK_REALTIME | KVM_CLOCK_HOST_TSC;
--	} else {
--		data->host_tsc = rdtsc();
--	}
-+	if (!kvm_get_walltime_and_clockread(&ts, &data->host_tsc))
-+		return false;
-+
-+	data->realtime = ts.tv_nsec + NSEC_PER_SEC * ts.tv_sec;
-+	data->flags |= KVM_CLOCK_REALTIME | KVM_CLOCK_HOST_TSC |
-+		       KVM_CLOCK_TSC_STABLE;
- 
--	data->flags |= KVM_CLOCK_TSC_STABLE;
- 	hv_clock.tsc_timestamp = ka->master_cycle_now;
- 	hv_clock.system_time = ka->master_kernel_ns + ka->kvmclock_offset;
- 	kvm_get_time_scale(NSEC_PER_SEC,  tsc_hz,
-
-base-commit: f8c5e70f5ed58dc9d39db90ecaba0ce76ac52189
---
+		seq = read_seqcount_begin(&ka->pvclock_sc);
+		if (!__get_kvmclock_master_clock(kvm, data))
+			data->clock = get_kvmclock_base_ns() + ka->kvmclock_offset;
+	} while (read_seqcount_retry(&ka->pvclock_sc, seq));
