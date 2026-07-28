@@ -1,55 +1,55 @@
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5557B43A7F6
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243C64399D4
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:11:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785240718; cv=none; b=obqgNJgqJVE+FMZCz4qvtWcw2krdzqmWC1qzcvIhIDRxPEVGsRghX/FcijK+nwLNIJM/3IJc2pDeO1IM7uleNWn2mh3XQhTYCn2OmbYUZFAYcmANb/BL8uDPNspht5tlDjhqvv4Db0Em1EJzfh0nZjuXk3gTxUOvqALmD44Q9qY=
+	t=1785240717; cv=none; b=JS2BEwApJEsbS09JtG3bLXAkhI+YFMsMMV1GtSRdN1WLolehTNOHrky4GZO1oeS/BYDGNk+0v3AIkkffQF8EFxShP4JSw2ITlaV0NpgtyBVJ2Bpj/Txt/3gAPixtGBQppC8wbtt5mtMH/e0hRKLBjgKDVmD3J8GsTXCuftOZzDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785240718; c=relaxed/simple;
-	bh=//dOX4zO0X4ZoL8mOmAWmQQZNeudbM5AbI8VS+aFh2I=;
+	s=arc-20240116; t=1785240717; c=relaxed/simple;
+	bh=TO6T9uww6lJLdEIDRwdalblJ0RmmQaoqllzwmIafrlM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fINxndFvtjnzmq/7cxKBEoLOWMMQNoIfVmGftAfSyZRSMZxOI42uRpKqO2F4NFVIJsUszpEqRPII7B3uXhxJgj3m1TiX37mjhM6w3+KlDG6xKOy4EN1M0Hufna1rYsIqT5ynyWqGZBjmnlewWha43gyh5QCqR5lC7RTOb8wv1g8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PwT0kHZg; arc=none smtp.client-ip=209.85.218.71
+	 To:Cc:Content-Type; b=pEkN29Pwb3gLb5kODWcI5pNUlbvsT/XQHzV2j/NbuKRi4DnR56N1T2p7SRSHTSp2ioPKQuTB+p3rfFNsLT1Exjq1bQkkg55gKkxEpjzxvcKSkfsvEjMZiIIwezr53OLZ0YIASRt0PHDC4oJ/5QbBUILz0JBJGS3X4u4+e7+8/n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aJV7S3C7; arc=none smtp.client-ip=209.85.208.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PwT0kHZg"
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c1c4715cf0eso393537466b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:11:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aJV7S3C7"
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-6984787eeddso3346464a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:11:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785240713; x=1785845513; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785240712; x=1785845512; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jLf4NZ8GM7enE5DcNnXkHjbguMY0Wvl4QcagAqNt0Jg=;
-        b=PwT0kHZgdGHMQk9bDTH7Ko/9eWgZRlWIlbQoAUqCWaIQryHfstL8Pgq/GOpThUgYsk
-         lsHipXHcmKoOu3pRdq6kZDXZW6ewtYW0X2cL2Dg6u+BqBsC/y+VrWVpZgC/i/5QKjg43
-         HyV/6xbdFrE9miA4FEtfvFTakf14NjHnIDiDoqr20vWx5swniYbLUD12XnRSYlIL8U6D
-         WYw41KOuN2d8edkX2KiEDvyzSYdrEfSYzlStLhi/m2iI1yqSlTImch1qHGUv+rXr1bcx
-         vVq0zIHG4/dheEptgjUv85x7Ecg7raCF3OL9ScCHqACZuQgvShJEEy82S0WNSLyB2vBb
-         BO5w==
+        bh=ARgzZjHeTdBuB8exqJqKuaM+KX+IhgDD0EDGHp8wJgQ=;
+        b=aJV7S3C7AcfVr0u/h52QfCMxIqYaDWlEzBLbOicXLXjlJylAtRiiZZJlnuVnAmDNDe
+         srDmkCUXIV/nuNQHOpj/kqcZTl+rG2NMW/uPjIvQycRgOnZChPkFA18J/o8kSaPw8vxN
+         yQVPEO/rpBZVJM7osUSbOJ0ZmdXtdfFVTdUyigdWnG4kvE32Onzpt0omRIdXXxvtb27x
+         tWbRNYyHYI0DgRBr7cTxFRqmv3ZriS3AKrhRWVLD5XQLNqUQwWyTpr0Jjo4G2jyWxe9D
+         Kic9EV9zfkCpOSBZHfhEB46O0AjkVO/ZbrffR/fvtb8/5i8qioPhngVU1kjNfJfjim0j
+         66fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785240713; x=1785845513;
+        d=1e100.net; s=20251104; t=1785240712; x=1785845512;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jLf4NZ8GM7enE5DcNnXkHjbguMY0Wvl4QcagAqNt0Jg=;
-        b=ELDt9IXwbu/gA9se1UqCiPTnq4AwPMpnkA/Uv+81db5uilYetBu3V0Dp5SbzNbVWKf
-         S3Kks/13K1R1f2sJF97K7Vd2qpF1wSzHsL1pAkccgomTKxbjB9N5cyuFy6kgp1zYM6a1
-         ueREfben6W9qd7YA6LUFcG2apCLoxTs0lvgvpSUXEhgZHsMSpwDKcFVoAoVK8ioTt4qQ
-         85qZDTWpB1EIj3sGQGBB/aDuda9HVOZctaowGg8T7hW/xW+llH1k7AMEJTS79kqcOSAX
-         Fu8ALo9efzKKuWp29iqMTM6LbUTJeVYy7+w5NkCqlPYA/N8/T/t977K/+IlLHpttk5QN
-         PcfQ==
-X-Gm-Message-State: AOJu0Yxc4XH/w/866L0Watqj3nFV/6pcJCbXBvBSbU/4wFEjk6gghnis
-	+q91cJxnR9Z0+nrhzGYuSrFcDYqg+i2fWDe0A1IKKLajWGnXi/+/AOOhoAXlWi9orPIRJ0DuTYF
-	oyjiY/ph7F2R+bU8CKQ==
-X-Received: from ejet14.prod.google.com ([2002:a17:906:178e:b0:c09:e2fc:4344])
+        bh=ARgzZjHeTdBuB8exqJqKuaM+KX+IhgDD0EDGHp8wJgQ=;
+        b=BjK34JFsLXrkv09EzirP1ADw0ecxl0ZBSS/bmL0CrKlsbY174R5IBWSsX3yEdnCg5/
+         GSY8QPOZ0w51UV+dcFcMRjY3JmmYXAAoWoNEd056d5lSXZvRoOSqmZewxwSclzBlTfWV
+         R0tVztC+YZZqowxtZpGKCSEBJAfcxi3gH1WAhQbOSl3Z2R4hEy5EOWwgzl0rOCDNpheR
+         XXkoj0f25pnAWtwYviTqTlK8NmhfbYqWZloQAgtntyN++pwU2tl3z7HjrggRbkno4D9U
+         +1bgdUlzRVyEsRUY+nLNrfF8aIBj3PokPdo8GYiWfCx9BThRyY3IDNFPe1X/NfUWC1pl
+         7zug==
+X-Gm-Message-State: AOJu0YxH2YBc9Qhhjd45qYBr+8E/r7wP37uOVNFqLxQF/Rv3Z0kzQVDv
+	lQqPKYsPP78SOmGYnmzl82ZmG0dSNEjAbrsOoZj4cPOtb5APo2we9tDhsoCw9NxjOoCXmweQRLf
+	VjYZR8pHovhrpV05kbA==
+X-Received: from ejjj6-n1.prod.google.com ([2002:a05:6938:a086:10b0:c15:be99:e164])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:906:6a02:b0:c1f:586a:8514 with SMTP id a640c23a62f3a-c1f725124camr96102666b.65.1785240713183;
- Tue, 28 Jul 2026 05:11:53 -0700 (PDT)
-Date: Tue, 28 Jul 2026 12:11:37 +0000
+ 2002:a05:6938:a087:20b0:c16:3187:997e with SMTP id a640c23a62f3a-c1f71d61504mr70847266b.7.1785240711384;
+ Tue, 28 Jul 2026 05:11:51 -0700 (PDT)
+Date: Tue, 28 Jul 2026 12:11:36 +0000
 In-Reply-To: <20260728121138.1103610-1-tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260728121138.1103610-1-tarunsahu@google.com>
 X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
-Message-ID: <20260728121138.1103610-11-tarunsahu@google.com>
-Subject: [PATCH v4 10/11] KVM: selftests: Split ____vm_create() and add vm_create_from_fd()
+Message-ID: <20260728121138.1103610-10-tarunsahu@google.com>
+Subject: [PATCH v4 09/11] docs: liveupdate: Add documentation for VM and
+ guest_memfd preservation
 From: Tarun Sahu <tarunsahu@google.com>
 To: ackerleytng@google.com, fuad.tabba@linux.dev, 
 	Andrew Morton <akpm@linux-foundation.org>, seanjc@google.com, dmatlack@google.com, 
@@ -77,116 +78,157 @@ Cc: linux-kselftest@vger.kernel.org, andre.przywara@arm.com,
 	kexec@lists.infradead.org, suzuki.poulose@arm.com
 Content-Type: text/plain; charset="UTF-8"
 
-Refactor ____vm_create() in the KVM selftest library to extract its
-initialization steps into separate helpers vm_init_fields() and
-vm_init_memory_properties(). Also introduce vm_create_from_fd() to
-instantiate a struct kvm_vm from an existing VM file descriptor.
+Add Documentation/liveupdate/vmm.rst detailing VMM requirements, scope,
+ordering constraints, and kernel-doc inclusions for KVM VM and
+guest_memfd preservation via Live Update Orchestrator (LUO).
 
-This allows test setups (such as guest_memfd preservation tests) to
-reconstruct and initialize a struct kvm_vm when restoring preserved
-VMs across live updates. No functional change is introduced for
-existing tests.
+Also update Documentation/core-api/liveupdate.rst and MAINTAINERS.
 
 Signed-off-by: Tarun Sahu <tarunsahu@google.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  3 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 49 ++++++++++++++++---
- 2 files changed, 44 insertions(+), 8 deletions(-)
+ Documentation/core-api/liveupdate.rst |   1 +
+ Documentation/liveupdate/vmm.rst      | 107 ++++++++++++++++++++++++++
+ MAINTAINERS                           |   1 +
+ 3 files changed, 109 insertions(+)
+ create mode 100644 Documentation/liveupdate/vmm.rst
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 04a910164a29..0626efa5a73b 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -471,6 +471,9 @@ const char *vm_guest_mode_string(u32 i);
+diff --git a/Documentation/core-api/liveupdate.rst b/Documentation/core-api/liveupdate.rst
+index 5a292d0f3706..bac58a363151 100644
+--- a/Documentation/core-api/liveupdate.rst
++++ b/Documentation/core-api/liveupdate.rst
+@@ -34,6 +34,7 @@ The following types of file descriptors can be preserved
+    :maxdepth: 1
  
- void kvm_vm_free(struct kvm_vm *vmp);
- void kvm_vm_restart(struct kvm_vm *vmp);
-+void vm_init_fields(struct kvm_vm *vm, struct vm_shape shape);
-+void vm_init_memory_properties(struct kvm_vm *vm);
-+struct kvm_vm *vm_create_from_fd(int vm_fd, struct vm_shape shape);
- void kvm_vm_release(struct kvm_vm *vmp);
- void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename);
- int kvm_memfd_alloc(size_t size, bool hugepages);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 195f3fdae1e3..d3f98d9eb709 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -276,13 +276,8 @@ __weak void vm_populate_gva_bitmap(struct kvm_vm *vm)
- 		(1ULL << (vm->va_bits - 1)) >> vm->page_shift);
- }
+    ../mm/memfd_preservation
++   ../liveupdate/vmm
  
--struct kvm_vm *____vm_create(struct vm_shape shape)
-+void vm_init_fields(struct kvm_vm *vm, struct vm_shape shape)
- {
--	struct kvm_vm *vm;
--
--	vm = calloc(1, sizeof(*vm));
--	TEST_ASSERT(vm != NULL, "Insufficient Memory");
--
- 	INIT_LIST_HEAD(&vm->vcpus);
- 	vm->regions.gpa_tree = RB_ROOT;
- 	vm->regions.hva_tree = RB_ROOT;
-@@ -380,9 +375,10 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
- 	if (vm->pa_bits != 40)
- 		vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
- #endif
-+}
+ Public API
+ ==========
+diff --git a/Documentation/liveupdate/vmm.rst b/Documentation/liveupdate/vmm.rst
+new file mode 100644
+index 000000000000..b8e8fb2b63c2
+--- /dev/null
++++ b/Documentation/liveupdate/vmm.rst
+@@ -0,0 +1,107 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++=============================
++VM & Guest_Memfd Preservation
++=============================
++
++.. kernel-doc:: virt/kvm/kvm_luo.c
++   :doc: KVM VM Preservation via LUO
++
++.. kernel-doc:: virt/kvm/guest_memfd_luo.c
++   :doc: Guest_Memfd Preservation via LUO
++
++VMM Instructions
++================
++
++This section describes the requirements, scope, conditions, and
++ordering constraints that a Virtual Machine Monitor (VMM) must adhere
++to for successful preservation and retrieval of guest_memfd files
++across a Live Update Orchestrator (LUO) sequence.
++
++Scope and Limitations
++---------------------
++
++At this stage, the scope of guest_memfd preservation is restricted to:
++
++1. **Fully Shared guest_memfd**:
++   At this time only fully shared guest_memfd is supported. Any system that
++   supports coco vm (which uses private guest_memfd), will not support
++   the preservation.
++
++2. **Standard Page Size**:
++   Only guest_memfd backed by standard page size (``PAGE_SIZE``,
++   order-0) pages is supported. Large/huge page backing (e.g.,
++   hugetlb guest_memfd) is not supported.
++
++Any Virtual Machine (VM) whose memory is fully backed by such
++guest_memfd files can be preserved across live update.
++
++VMM Actions and Conditions during Live Update
++---------------------------------------------
++
++During the live update sequence, the kernel introduces a *freezing*
++phase for the guest_memfd inode. Freezing prevents any modifications to
++the guest_memfd page cache. Specifically, once a guest_memfd mapping is
++frozen:
++
++- Any subsequent ``fallocate`` calls on the guest_memfd file descriptor
++  will fail and return ``-EPERM``.
++- Any new page faults (guest-side or host-userspace-side) that require
++  folio allocation will fail and return ``-EPERM``.
++
++To prevent vCPUs or VMM helper threads from failing due to these
++``-EPERM`` errors, the VMM must implement one of the following
++strategies:
++
++1. **Pause the VM (Recommended)**:
++   The VMM should pause/suspend all vCPUs before invoking the
++   preservation or freezing of the VM and guest_memfd files. This
++   ensures no new page faults or memory accesses can occur while the
++   guest_memfd is frozen.
++
++2. **Handle Fault Failures**:
++   If the VM is not paused, the VMM must be prepared to handle VM
++   exits or user page fault errors resulting from the ``-EPERM``
++   failures. The VMM must take appropriate action, such as
++   immediately pausing the VM, or aborting the live update sequence
++   (by tearing down or unpreserving the live update session).
++
++Preservation and Retrieval Ordering
++-----------------------------------
++
++Preservation Order
++~~~~~~~~~~~~~~~~~~
++
++There is no strict ordering requirement for initiating the
++preservation of the KVM VM file and the guest_memfd files; they are
++preserved independently. If kexec is triggered with guest_memfd
++preservation without preserving the vm file, kexec will fail.
++
++Retrieval Order
++~~~~~~~~~~~~~~~
++
++Similarly, there is no strict ordering required for retrieving the VM
++and guest_memfd files. Any file can be retrieved at any order.
++
++If guest_memfd file is retrieved and VM file is not retrieved, and
++luo_finish is called, then vm_file will be lost and guest_memfd file
++will be hanging around.
++
++NOTE: Before Initiating the preservation/retrieval, it is necessary to make
++sure that the kvm module is loaded (/dev/kvm must be available).
++
++
++VM & Guest_Memfd Preservation ABI
++=================================
++
++.. kernel-doc:: include/linux/kho/abi/kvm.h
++   :doc: DOC: guest_memfd Live Update ABI
++
++.. kernel-doc:: include/linux/kho/abi/kvm.h
++   :internal:
++
++See Also
++========
++
++- :doc:`/core-api/liveupdate`
++- :doc:`/userspace-api/liveupdate`
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8db8bb448b23..c032f9a0451b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14548,6 +14548,7 @@ L:	kexec@lists.infradead.org
+ L:	kvm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
++F:	Documentation/liveupdate/vmm.rst
+ F:	virt/kvm/guest_memfd_luo.c
+ F:	virt/kvm/kvm_luo.c
  
--	vm_open(vm);
--
-+void vm_init_memory_properties(struct kvm_vm *vm)
-+{
- 	/* Limit to VA-bit canonical virtual addresses. */
- 	vm->vpages_valid = sparsebit_alloc();
- 	vm_populate_gva_bitmap(vm);
-@@ -392,10 +388,47 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
- 
- 	/* Allocate and setup memory for guest. */
- 	vm->vpages_mapped = sparsebit_alloc();
-+}
-+
-+struct kvm_vm *____vm_create(struct vm_shape shape)
-+{
-+	struct kvm_vm *vm;
-+
-+	vm = calloc(1, sizeof(*vm));
-+	TEST_ASSERT(vm != NULL, "Insufficient Memory");
-+
-+	vm_init_fields(vm, shape);
-+
-+	vm_open(vm);
-+
-+	vm_init_memory_properties(vm);
-+
-+	return vm;
-+}
-+
-+struct kvm_vm *vm_create_from_fd(int vm_fd, struct vm_shape shape)
-+{
-+	struct kvm_vm *vm;
-+
-+	vm = calloc(1, sizeof(*vm));
-+	TEST_ASSERT(vm != NULL, "Insufficient Memory");
-+
-+	vm_init_fields(vm, shape);
-+
-+	vm->kvm_fd = _open_kvm_dev_path_or_exit(O_RDWR);
-+	vm->fd = vm_fd;
-+
-+	if (kvm_has_cap(KVM_CAP_BINARY_STATS_FD))
-+		vm->stats.fd = vm_get_stats_fd(vm);
-+	else
-+		vm->stats.fd = -1;
-+
-+	vm_init_memory_properties(vm);
- 
- 	return vm;
- }
- 
-+
- static u64 vm_nr_pages_required(enum vm_guest_mode mode,
- 				u32 nr_runnable_vcpus,
- 				u64 extra_mem_pages)
 -- 
 2.55.0.229.g6434b31f56-goog
 
