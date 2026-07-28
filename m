@@ -1,55 +1,55 @@
 Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C900432E96
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF035433BD9
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 12:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785240708; cv=none; b=jaMymTHTxOjDYBQtsAaavnwvyUwfMFS6pAiPRv0FeJsPhM9ljgL4+JTXH6OnjO4KQlvo7OtIxaTEpz3AS4o+oNgczDv1K27IKDy8wXaZceH9ms8/sWPgMWIBYi5lLQXaqpbIy1676MenpEQ4HOoRp7Y5aGZQ76jE+qA26+bZDOk=
+	t=1785240709; cv=none; b=CWw73PiL1bYeDWzLcb6hxRhLsQeGmvWqgZlcx+UjhZDsdI72b6KvZMltp6oHULFU2qbFmuaQpfkLhNdmgDicJqcNAetQlN7hhhAgJrQ7Km7wF7KaG2ELq95ne7qtCDCGOYVIG1ogKyUUAsvnSEUcBmg7bZQex4iYIBOTfaPuhbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785240708; c=relaxed/simple;
-	bh=ZCz6AmYTU8FxXnWNZdQqQYmBRxWh1wvH2S06+HipCfw=;
+	s=arc-20240116; t=1785240709; c=relaxed/simple;
+	bh=SHIy8aufCVUjYH99A1TRISaapb7ROtZzP7MZouZD/Bs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nbX0Vonc/qjK78kSNNYC+XtilXd7ghmhqvzG0C8l4ld6eF9N2hGWIfnE4x4FqYwIk/lXiADSV4vWq2Z5+hrujp3c2bAQzG6mEfNnh9b+kZH5xoish8sYKkIfGuKetsXFrs4NF543tVGCf38tF93NkyzRMrFYwfXWpQhdKcxxLKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QMx10qpT; arc=none smtp.client-ip=209.85.218.69
+	 To:Cc:Content-Type; b=kQz5eT0DmB80p/Q9A3U8rXWrDoA+8p1LyB5miOcM/eVlm1leFc5b+CBDg16GjhcndqSNNYkxm0AUy9/9vHaBxmMMA0TFHKZk4rWYsfTKDd9maYabi3Dzmhoh8bUVlQhaXNmcLS4PLVrk7AK/yUtd8tdjA3sDhDSa8b1BrgMd1rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ty8zGn5E; arc=none smtp.client-ip=209.85.218.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QMx10qpT"
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c15c32294e1so363705866b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:11:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ty8zGn5E"
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c15ff68c858so423899566b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 05:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785240705; x=1785845505; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785240706; x=1785845506; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MlhSbTxVjdyQy53nJTV53rS/2kuy2sPn8hGnbbTr+U4=;
-        b=QMx10qpT8YuuBhjmdqNy7xNvXAyvNhLMj8d0jiaZy1sGQ7sdFEUYlJAcs7H7srWjlK
-         l4AkRLD901b/UTsT+xl/8lr9wXzrZaY+3kMRGsXSex5fs10k1yT+EfcUzJhZ2kTxRK/K
-         VOPkstf1Nqnrh9zTl14pzBxy93S3BoS/D2QV7IbE/dT5Bfjt12WyjFLtuAsXC7O6R4DH
-         wqlHW8ZFdrRnC/nLF2+bpYQNLzSt+5E0vF3gc8RxTrVuC4um4YrlwhY+AF/qns2hzbUo
-         egOtDCkxlCqZkfpbkkuAy07xX/j6bH2ECm/VhrqgFE4yWVCjLOP5MNn01NV+FdSkrqu6
-         VRbQ==
+        bh=9QAs69nEaOS4rmhD2Q9ekgaAb43dU/I2zqcKzZYHR6c=;
+        b=ty8zGn5EbxAlNzy6eK4kkw0bpYul6E48uTiyw7qn6/m6/IAjTilDHrijKRIhGXMoH8
+         MD88KDxoL9+qWmBS7oNzfxCRswnlaan35RZTc9rzzPT08qa0ApKLxw4F0Wr/nrvA9PhO
+         cb0geAsqUSxuQ5sDa4/fTQBP8AGxvsvSItV3SDH5S8e5hM5/eq+wupzcCq9UBp21he+j
+         tfuDc3d7Jbbyu0i8EgrjdAMGs/MEKoKX5QkuRshXUJjuojCIx/E0IG1hkLiJXl8+0qD9
+         qIUpIwEeOoth9wLJIvU7VT0hpexOGMoW4tzqRCvJ6GB1w5bftc/fjwpNinKvMekdpR84
+         shBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785240705; x=1785845505;
+        d=1e100.net; s=20251104; t=1785240706; x=1785845506;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MlhSbTxVjdyQy53nJTV53rS/2kuy2sPn8hGnbbTr+U4=;
-        b=qa+x2iOlJKfGNuGpXO79jFQVFTGQMUkzVvbbQETAKCALzg4N8QymxQRJZB8buePYvh
-         Ikzil6eT2YoIzhKNPkZ8wWoIkWQzS7LiKJ9DEarw7zGeEo3LIfoRS1koo5Cp5D5lWjuP
-         OkqVIghqy7UE4Xq4IeDN7O1j16L6AKrlJ4P9YVfJlK9z+WDHySekM5JJtd9u8/aTjFjJ
-         mBpqP/1XLfyIZJqtG5D61TMj3mS4a5E830eug/wdtVYwkbynup9gTR4CU4+0KxjM5ZtI
-         744MC0YYNO2lx7+73lVZpMLQf/pd8zwyjeWDIu5QQ2YUU4s1SqPCa+GGqPI2dpIbu9mo
-         8uSg==
-X-Gm-Message-State: AOJu0YxqF0WshVUSQL81aQjKegxzzq4pJbyt5zAkfp4XAAk93IiK1f6l
-	eOtdZar7umxL6Wkg5E2g8KV+iFvOpPr7mYuWw2/dXHRPXT/BwpNIUQJVrH0EqCQpVH4HPY0c23B
-	+FbUcmUX+L5S0rMVxhA==
-X-Received: from ejqm4.prod.google.com ([2002:a17:906:5804:b0:c12:3a41:5220])
+        bh=9QAs69nEaOS4rmhD2Q9ekgaAb43dU/I2zqcKzZYHR6c=;
+        b=AhVjgZu55+U041hACqchm12PDwZS0cqTNfAl+ezmiep4C4MGq/lDZR32fY9G7ryCYz
+         hDt3B/TwDPhQ/AbRSFtttbzsPxN8r9z+oNb5F+cHqP9C5cC6EUz9tiEJNvggDZkjJsJk
+         qYE38Gsha7EvUlTG07UCcsi1roHPIzdEEbZfk5HYY4uFFxvGRVUsfk0csbgj4KlrcULW
+         qixoxb08N9zM+nro69HXy1a30qypCKS2mtuMH1gSLgvgbptw0zalyuFsSMWquc/08RQj
+         p2gMrHC0vNlb7/maCnu57NVFco7XeUMyZ3FBOuD6ZyfksA5zUAMEBassKexpK09kGcje
+         Gh3w==
+X-Gm-Message-State: AOJu0YxWfZclrrN1lD3IfL5LkOxPkwenG9iChp4oVJBb1GlLQf57rbg5
+	AS68u7h7NILBnbE+I0QBfICLEhnIeg/L1N+Nf+Xg7wQwlGmjJTqRrqHCQqfitEZeDzGuQGBsKqq
+	8ulqMGYgQWDgqlWzcHA==
+X-Received: from ejit16.prod.google.com ([2002:a17:906:3e50:b0:c15:8b2e:2c2a])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:1c0a:b0:c12:8b1c:454f with SMTP id a640c23a62f3a-c1f71cf9b88mr103366866b.2.1785240704443;
- Tue, 28 Jul 2026 05:11:44 -0700 (PDT)
-Date: Tue, 28 Jul 2026 12:11:30 +0000
+ 2002:a17:907:3f96:b0:c12:96af:acf7 with SMTP id a640c23a62f3a-c1f7215156cmr114258866b.43.1785240705336;
+ Tue, 28 Jul 2026 05:11:45 -0700 (PDT)
+Date: Tue, 28 Jul 2026 12:11:31 +0000
 In-Reply-To: <20260728121138.1103610-1-tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260728121138.1103610-1-tarunsahu@google.com>
 X-Mailer: git-send-email 2.55.0.229.g6434b31f56-goog
-Message-ID: <20260728121138.1103610-4-tarunsahu@google.com>
-Subject: [PATCH v4 03/11] KVM: Export kvm_uevent_notify_vm_create()
+Message-ID: <20260728121138.1103610-5-tarunsahu@google.com>
+Subject: [PATCH v4 04/11] KVM: Track weak reference to vm_file in struct kvm
 From: Tarun Sahu <tarunsahu@google.com>
 To: ackerleytng@google.com, fuad.tabba@linux.dev, 
 	Andrew Morton <akpm@linux-foundation.org>, seanjc@google.com, dmatlack@google.com, 
@@ -77,43 +77,83 @@ Cc: linux-kselftest@vger.kernel.org, andre.przywara@arm.com,
 	kexec@lists.infradead.org, suzuki.poulose@arm.com
 Content-Type: text/plain; charset="UTF-8"
 
-- Export kvm_uevent_notify_vm_create() to allow triggering KVM event
-  notifications during VM creation.
+- Add a weak reference 'vm_file' in struct kvm under
+  CONFIG_LIVEUPDATE_GUEST_MEMFD to enable reverse file resolution
+  without circular lifetime dependencies.
 
 Signed-off-by: Tarun Sahu <tarunsahu@google.com>
 ---
- include/linux/kvm_host.h | 1 +
- virt/kvm/kvm_main.c      | 5 +++++
- 2 files changed, 6 insertions(+)
+ include/linux/kvm_host.h | 12 ++++++++++++
+ virt/kvm/kvm_main.c      | 26 ++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
 diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 79b084887cdb..d9908c19e42f 100644
+index d9908c19e42f..8da9589425ee 100644
 --- a/include/linux/kvm_host.h
 +++ b/include/linux/kvm_host.h
-@@ -1076,6 +1076,7 @@ void kvm_put_kvm(struct kvm *kvm);
- bool file_is_kvm(struct file *file);
- struct file *kvm_create_vm_file(unsigned long type, const char *fdname);
- void kvm_put_kvm_no_destroy(struct kvm *kvm);
-+void kvm_uevent_notify_vm_create(struct kvm *kvm);
- 
- static inline struct kvm_memslots *__kvm_memslots(struct kvm *kvm, int as_id)
- {
+@@ -874,6 +874,18 @@ struct kvm {
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+ 	/* Protected by slots_lock (for writes) and RCU (for reads) */
+ 	struct xarray mem_attr_array;
++#endif
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Weak reference to the VFS file backing this KVM instance. Stored
++	 * without incrementing the file refcount to prevent a circular lifetime
++	 * dependency (since file->private_data already pins this struct kvm).
++	 * Used exclusively to resolve the file pointer back from struct kvm.
++	 *
++	 * Written/cleared via rcu_assign_pointer() and read locklessly under
++	 * RCU (e.g. via get_file_active() to prevent ABA races).
++	 */
++	struct file __rcu *vm_file;
+ #endif
+ 	char stats_id[KVM_STATS_NAME_SIZE];
+ };
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 3339b8fcd59f..701d4596a91c 100644
+index 701d4596a91c..14c32541ae34 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -6348,6 +6348,11 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
- 	kfree(env);
- }
- 
-+void kvm_uevent_notify_vm_create(struct kvm *kvm)
-+{
-+	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
-+}
-+
- static void kvm_init_debug(void)
+@@ -1346,6 +1346,19 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
  {
- 	const struct file_operations *fops;
+ 	struct kvm *kvm = filp->private_data;
+ 
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Clear the weak reference of the vm file.
++	 * In case vm file is closed by userspace, but kvm still has
++	 * other users like vCPUs, clearing this pointer ensures
++	 * that we don't have a dangling pointer to a closed file.
++	 *
++	 * Cleared via rcu_assign_pointer() to ensure proper memory visibility
++	 * for concurrent lockless readers under RCU.
++	 */
++	rcu_assign_pointer(kvm->vm_file, NULL);
++#endif
++
+ 	kvm_irqfd_release(kvm);
+ 
+ 	kvm_put_kvm(kvm);
+@@ -5488,6 +5501,19 @@ struct file *kvm_create_vm_file(unsigned long type, const char *fdname)
+ 		return file;
+ 	}
+ 
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Weak reference to the file (without get_file()) to prevent a circular
++	 * dependency. Safe because the file's release path clears this pointer
++	 * and drops its reference to the VM.
++	 *
++	 * Written via rcu_assign_pointer() because the pointer can be read
++	 * locklessly under RCU (e.g., in kvm_gmem_luo_preserve() via
++	 * get_file_active() to prevent lockless ABA races).
++	 */
++	rcu_assign_pointer(kvm->vm_file, file);
++#endif
++
+ 	/*
+ 	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
+ 	 * already set, with ->release() being kvm_vm_release().  In error
 -- 
 2.55.0.229.g6434b31f56-goog
 
