@@ -1,66 +1,66 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFD33AE6EB
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 23:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08494414A2F
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 23:18:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785279972; cv=none; b=Sis1L/nSjKxQBzZCRGRA+5l708woMo9+OJT4O2TmdZxHi24Z837zfPXZZfjOUT5rI0fbkrY4mq2sCy9c0DTnki1cJWuRnstyU6Ty0FSGrAs8c651GGDpBgwY/YAw+rfbsbcaJwklTphuN9JByiF++StuiAvmC9QRGB4CXFAh3UQ=
+	t=1785280692; cv=none; b=nUr4VaOIs8L11+e1aJs13uVj2PyB476DO9lwA2if1U7Dk2p7tYN7+PwM4qlckECSXXAskX23/Hpw6vjezTuQxGpdeeOiSPX/hruCVicJ/TTFRZSv5/TAJvZ/q/clX8mPn9kGjyzcZfITkPaHwmnktR8fEmwhZRLgHygFHuqHNeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785279972; c=relaxed/simple;
-	bh=DogBQgPNXswuGIoml9u4fiZ1siHOFMK0NYoj1Fcu0ek=;
+	s=arc-20240116; t=1785280692; c=relaxed/simple;
+	bh=+IJupd9m+CLvEhmJ4GqDmfvWjZ3qTqTi6mGL864Pic0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZgqNlDdrttJZ9eAcbwR3iKr4PTjHjVCFfccxB0kSWNYuhZ+ArUBwbDAUlVU+El+deqkRGl8Qx19Rs41KId8jmXvBsyJdXXd36llJWJ71PMc1nbQpQkatLRBPYSS1ROC6DwcEl7sQl0yU2RjXHdsMCOOKXVL29nL2LBOWUD56Ptw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XHnP7TLQ; arc=none smtp.client-ip=209.85.215.198
+	 To:Cc:Content-Type; b=jvmrGrGBxGJZABSzWrpdkNWqXEXOf+drTUoIObjJAuuU8Hi1VidndsQencN8utHTBh+WxJE4Dg+y3uGxQqiPCja0finJzDjZWgkWt4T3j2hUiT+P+Z4/a/PuDzUX0A6r3mcTId97J8O0tWBilzBji/Ckh2YlTtrECa0Jk65e0L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LDgUXepn; arc=none smtp.client-ip=209.85.210.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XHnP7TLQ"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cb5cc1e139bso188748a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:06:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LDgUXepn"
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8486c3411c8so436949b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 16:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785279971; x=1785884771; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785280690; x=1785885490; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kIqmps2dhv8tBsBvZD3H17qhoPMotCZtd+Geu7ae0Wc=;
-        b=XHnP7TLQcqGrUbh4qia9Wr/2HZjShWsF0N076n1po6boeZ6UXtU2NtkpEbfbggHwZF
-         sShCsohlVFZvoAywE37ZQARO2INQQyh6FJ9ptcxqFHHNtHMWK31Nk0eWQpMXS09abnDi
-         YkLWtoWza6Kh6F24bcEqvsiAul5NaG4s7H7OaRYANI8ZBDjRqrPUxBjrl+rxGOeQ5qh9
-         fzy0CwF1Slb7pivI5QShWDCnyQZfhwZRQCx5ya8S3MSVcYdt6ykHUo0h51zTFLBMRlW6
-         V0gvIMOYEtvD0bkKD3TsRlMZp4oQ4pjnsqBVt40tuDBSSq9tQaEc0FoF2so/RnHLAMUl
-         kGPA==
+        bh=ex04CCTVdjetODvdAROex2NhCtrMzXHsD4UUHe0nQXo=;
+        b=LDgUXepn+EoAg1oImPY8jLejYxWfJbdtXQ6sYISu4oarEjcpGfDeAp4nTzKICHrLMh
+         6HOUqGFHZ8uZWf0rThuwUD5qlkWWIe0cB2fPISHwJLAuPW6tJRpt6yAfnrg34o+vvWrN
+         oR37Cnbh8O9iuTFEo+4RDq2SK6VsbEDxFwEBkpHEPOz9p49UJlkWZMqDq0U7ufcwGpKV
+         Iv5y3bungwk3KYR2X7FlIMAaILmb/Kb45tB2XKHCkA+OF9uer4U5St4WP6Yf/0btcm/a
+         nLBzCCT90qSWylM2FRO0sFYOCTeMFCMR25ADrX4MNxE1YSkd83byTlBNVQhEg2ibexZs
+         v3Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785279971; x=1785884771;
+        d=1e100.net; s=20251104; t=1785280690; x=1785885490;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kIqmps2dhv8tBsBvZD3H17qhoPMotCZtd+Geu7ae0Wc=;
-        b=K/Br7lRDj1sXZDVgwrc7W5uZ0Tjnjo2NQ0Da1cb3jA/0+jH/cknRv1d3K2cfkKi3gd
-         hliZZBzs4p1thg7843k15LAXK/z5XhIyHsmeZyy3tzT0/5KHb+2c5JxIgR1qWZzLVEu7
-         qtQ0OtKR1W0Ov7+TpR1JUzncP3zGOBLdADPlq02LfY952sJdLokigIluLvvWhmpVCFfG
-         xjoSVZonqG7aKUdfmIYKLAlIlVUw1f5aRCoAE9UKScYuW1NjfDgrbkh2dRxZGhijUKgy
-         Q7eiEuWUhTY5D7Ea319o3U9++XaZv7SRxA7pNfmj1GLqCrxDzrMKtvrlnAs1tPQNk+D9
-         M4zw==
-X-Forwarded-Encrypted: i=1; AHgh+RpOGbio0FXLK4iwitRxhpU2ZMi9OwMGvp2mgUDDKn63EDFcWMN0mluFqOpx1MR/bkWBZ6+W16AH3zbVdrj1/8I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRhHNhlJ/c4wOA5oLQln8dMtz7zL4W6UJXY5JuYsqJztZbv8lg
-	7tU2duDDKctm1penqCN8GgLrw7A9T4yMD7y/RYnBO5RXkL8g1mUQqEOWbOXLC+LH1SGFaT+tQQs
-	sHpwa1g==
-X-Received: from pfbig10.prod.google.com ([2002:a05:6a00:8b8a:b0:848:478d:6efb])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:8c5:b0:845:f107:38c8
- with SMTP id d2e1a72fcca58-84e9332e63bmr4750014b3a.47.1785279970563; Tue, 28
- Jul 2026 16:06:10 -0700 (PDT)
-Date: Tue, 28 Jul 2026 16:06:09 -0700
-In-Reply-To: <20260728144954.355376-6-dwmw2@infradead.org>
+        bh=ex04CCTVdjetODvdAROex2NhCtrMzXHsD4UUHe0nQXo=;
+        b=RjNt75edhT8w9WtprU2h1NQJIJXQUJGnSgDHaj1Pnm9J+kdRRL37kT2w3eH3SjbD0i
+         fSkxJ+a1N+NGQ27ujCiyS3WujHFiML1W2ltSlMkiHKfFUMK0vS8duglhBdElvCEk4uAJ
+         fvatzlK60jS3tOdyQKPuzmyt8cdSz1NNo2G+KtKkRtRBCoRzkSwArQcY4fCpCrfd8cwM
+         WeJTnXfAC/gH0UXK8Ev0vkLlgErupEK5OYk9bCKOMgElTBoWim7zFfZROzulfXTAH/5Z
+         EfaFWKeNTiVigP4rygOqmEvaLQL62nnS+ctCtMDVSABJbh7z0y3ycOlprQOQOl9oKMeW
+         Fc0w==
+X-Forwarded-Encrypted: i=1; AHgh+RqeNwIs48xriQD6CmLgSobQUF3qWInSjaeq78iPk37QF4NJzvsGEaLWEC//Ex2Uv4TMzMWzbRo9jFf3Y6zL67A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvcE2TUtTX+FRP2wkyVJp4TKrvxSCWqtbDG4yZNK3gFHVC7c/c
+	+/5D/j5QVxfTbmrV3KkFSQlOG+T6wMW1cOALwJBVVZQN7cN/Jbb7WkmnqxxgvJ+P/6d1HpXuVSS
+	ZUoAGpA==
+X-Received: from pfbig4.prod.google.com ([2002:a05:6a00:8b84:b0:84b:4480:8b65])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:288e:b0:847:8250:2b2a
+ with SMTP id d2e1a72fcca58-84e933f382dmr4685664b3a.60.1785280690057; Tue, 28
+ Jul 2026 16:18:10 -0700 (PDT)
+Date: Tue, 28 Jul 2026 16:18:09 -0700
+In-Reply-To: <20260728144954.355376-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-6-dwmw2@infradead.org>
-Message-ID: <amk14dmn5j7Oov1B@google.com>
-Subject: Re: [PATCH v7 05/36] KVM: x86: Fold __get_kvmclock() into get_kvmclock()
+References: <20260728144954.355376-1-dwmw2@infradead.org>
+Message-ID: <amk4sX57FwapIp9B@google.com>
+Subject: Re: [PATCH v7 00/36] Cleaning up the KVM clock mess
 From: Sean Christopherson <seanjc@google.com>
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -77,20 +77,60 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 Content-Type: text/plain; charset="us-ascii"
 
 On Tue, Jul 28, 2026, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+> This is v7 of the series to clean up the KVM clock, rebased onto
+> kvm-x86/next (patch 1 of v6 is already merged there as commit
+> 710b3a30f407).
+
+FYI, I'm going to rebase that commit again, to put all of this in a dedicated
+topic branch.  But I'll also take care of updating references in commit messages.
+More below.
+
+> David Woodhouse (33):
+>       KVM: x86: Improve accuracy of KVM clock when TSC scaling is in force
+>       KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+>       KVM: x86: Activate master clock immediately on vCPU creation
+>       KVM: x86: Avoid NTP frequency skew for KVM clock on 32-bit host
+>       KVM: x86: Fold __get_kvmclock() into get_kvmclock()
+>       KVM: x86: Drop CPU pinning in get_kvmclock()
+>       KVM: x86: Restructure get_kvmclock()
+>       KVM: x86: Fix KVM clock precision in get_kvmclock() with TSC scaling
+>       KVM: x86: Use get_kvmclock() in kvm_get_wall_clock_epoch()
+>       KVM: x86: Fix compute_guest_tsc() to handle negative time deltas
+>       KVM: x86: Restructure kvm_guest_time_update() for TSC upscaling
+>       KVM: x86: Simplify and comment kvm_get_time_scale()
+
+I'll post a new version up through here, get it applied soon-ish, and then get
+back to chipping away at the rest of the series.  It'd obviously be nice to get
+all the cleanups (and the tests) into 7.3, but I suspect the rest will take a
+bit of back and worth (with Sashiko, if not me :-D).
+
+I may punt on "Restructure kvm_guest_time_update() for TSC upscaling" if I have
+trouble sorting through Sashiko's feedback, but I'll give it a shot.  I need to
+page that all back in anyways.
+
+>       KVM: x86: Remove implicit rdtsc() from kvm_compute_l1_tsc_offset()
+>       KVM: x86: Improve synchronization in kvm_synchronize_tsc()
+>       KVM: x86: Kill last_tsc_{nsec,write,offset} fields
+>       KVM: x86: Replace nr_vcpus_matched_tsc count with all_vcpus_matched_tsc bool
+>       KVM: x86: Allow KVM master clock mode when TSCs are offset from each other
+>       KVM: x86: Factor out kvm_use_master_clock()
+>       KVM: x86: Avoid gratuitous global clock updates
+>       KVM: x86/xen: Prevent runstate times from becoming negative
+>       KVM: x86: Avoid redundant masterclock updates from multiple vCPUs
+>       KVM: x86: Remove runtime Xen TSC frequency CPUID update
+>       KVM: x86: Re-synchronize TSC after KVM_SET_TSC_KHZ
+>       KVM: x86: Use ktime_get_snapshot_id() for master clock
+>       KVM: x86: Compute kvmclock base without pvclock_gtod_data
+>       KVM: x86: Cache host vclock_mode for masterclock eligibility checks
+>       KVM: x86: Remove pvclock_gtod_data and private timekeeping code
+>       KVM: x86: Activate master clock from kvm_arch_init_vm()
+>       KVM: selftests: Use UAPI pvclock-abi.h in xen_shinfo_test
+>       KVM: x86: Add KVM_VCPU_TSC_SCALE and fix the documentation on TSC migration
+>       KVM: selftests: Add master clock offset test
+>       KVM: selftests: Add Xen/generic CPUID timing leaf test
+>       KVM: selftests: Add Xen runstate migration test
 > 
-> There is no need for the separate __get_kvmclock() helper; just inline
-> its body into get_kvmclock() within the seqcount retry loop.
-
-Actually, there ends up being quite a bit of value if we rework the inner helper
-to be all about the master clock mode.  If we go that route, then the main loop
-is pretty self-explanatory, we can use early returns instead of continues and
-subtle fall-throughs, and the indentation levels go down.
-
-	do {
-		data->flags = 0;
-
-		seq = read_seqcount_begin(&ka->pvclock_sc);
-		if (!__get_kvmclock_master_clock(kvm, data))
-			data->clock = get_kvmclock_base_ns() + ka->kvmclock_offset;
-	} while (read_seqcount_retry(&ka->pvclock_sc, seq));
+> Jack Allister (3):
+>       UAPI: x86: Move pvclock-abi to UAPI for x86 platforms
+>       KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for accurate KVM clock migration
+>       KVM: selftests: Add KVM/PV clock selftest to prove timer correction
