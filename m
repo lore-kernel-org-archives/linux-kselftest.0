@@ -1,126 +1,80 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868833BBFC2;
-	Tue, 28 Jul 2026 09:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D44841DEC7;
+	Tue, 28 Jul 2026 10:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785232481; cv=none; b=ZDLmYCIrFAcIptWGfPAzmN4eiVqvNp/JKdC0SWlw5x8buH6iaHY8zGhJQdPgo4GkeOwe8j4IeOzgk9myPzZT7j7MEMNR16tdIT3wKNMuNzw3MWuQJKgjKNrO/zGV7o+k4fXvZAtQqtJi4JrwjtJt2FGk/UwitV/Sj/g79pfVxp0=
+	t=1785233095; cv=none; b=oYtaLGOXqtLCFjGzLf0A7ruPWRiZ1dKOkQmnvh/JUFfNb6O8/S+rWoDTo+YoyxOn2aR695Sj+0EZW7w97H+q9UkVOkfTgCMuIYHx+bN2U2431BOha0PsOT+Nd/FpMs4mzfeOpWq6GenqgNsBaZpkmHDCjdN0YCeYCGTiNY3oyrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785232481; c=relaxed/simple;
-	bh=Sym6R+pWGQYYnF1PwB6i5riKZG2OxVHFnwJ8kF6S7Os=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q16cRP6gdd5474XUeCTPDQULdXkVIIxYGpLPSn6qMN7rCsuQThCDG/VDMT+7Zvr5DpPmJmJ6RhR5jaKcRpnzEbB9k8Y8bo+yExXaEG0wFdez6N2UKF1e3DT+EK+SQBg1NNaFv8UaMFDNpWEvbAI33vOiK9LyOCYj55T/ByHdObM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ZYCTh1R5; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1785233095; c=relaxed/simple;
+	bh=fldViqCXk7TBmGoVM2Wtji97Bwx+gZkbsvsN1FN8rgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o85UdJgVVKPrtuh0mTGO6ktNbUSiyRnOAUTOUzUQT9BwFuY9a/D+YuTI+Y/Tcw7kX2/ro9b6SI6p8ql6XREutHYWtbYwhg0iSE1EI5RFT+Z/MuHOfvE+pvO6wrACLLuRUVVMQoE11DEakmK0CIXDcAbl8UyrXmRUuy5Cjnl5VIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=IyUA7HGA; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ZYCTh1R5"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785232476; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=islHuHQp3l4QW4GhF2VCHhIeu8amLI+tOc68Hlm4av0=;
-	b=ZYCTh1R5yDbD14ZT/ULpR3MmqimdIZKzJ7X+gvXVmmSBrULwf9dydbqRwwis4mtF51Jp2e+xFJcK6EWGARhBY+O4/ikxTKYgyMXSceKn3Q85M6qwwYeoHOcrgzBUirYetWgJZEHVZwBrnxrNiZxCY6OcslEjgKPdBof3RoH6Sgo=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0X8-NTRh_1785232475;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0X8-NTRh_1785232475 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 28 Jul 2026 17:54:35 +0800
-From: Philo Lu <lulie@linux.alibaba.com>
-To: stable@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	info@starlabs.sg,
-	ast@kernel.org,
-	lulie@linux.alibaba.com,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	dust.li@linux.alibaba.com
-Subject: [PATCH 5.10.y/5.15.y] bpf: Fix ld_{abs,ind} failure path analysis in subprogs
-Date: Tue, 28 Jul 2026 17:54:34 +0800
-Message-Id: <20260728095435.115338-1-lulie@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="IyUA7HGA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=omVkx6ZIAXX4NGOWuVToWaCdJsx8TywMjM/M4ZdteNU=; b=IyUA7HGAE9B6DXIthENMNsN5yv
+	agt4UUQzMY7rpj8+f6kKvzCXQrtBC1QUsNXsZJEURgIqlRK0TpUI4TcsntRxac55o/EaSD5BQQGZ9
+	UKviw5WaelwFblEdUk6X4piuD12gOBQFVlddqTrPb46cUi14L2EjqK76TnNEXE9YErYH8O0maCcAa
+	NxEwMbPyvPVtmdxyIrQ/N/D5VhPybDRbL25h2zpii5B3uxO9I2IJs3vlwgt5Eyeu6U3wpPzLLkPkJ
+	vCWKmysdN6F0ynIU4SlSt6yb66QQ5gwRk8amJ4Be7RmyktYULTacn/AuEWhrcstsMD29S+7bVf2uc
+	zkEaCCGQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1woefj-007b81-2L;
+	Tue, 28 Jul 2026 10:04:27 +0000
+Date: Tue, 28 Jul 2026 03:04:21 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Remi Denis-Courmont <courmisch@gmail.com>, 
+	=?utf-8?B?UsOpbWk=?= Denis-Courmont <remi.denis-courmont@nokia.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com, =?utf-8?B?UsOpbWk=?= Denis-Courmont <remi@remlab.net>, 
+	Joe Damato <joe@dama.to>
+Subject: Re: [PATCH net-next v3 7/7] selftests: net: getsockopt_iter: cover
+ rawv6, ieee802154, phonet and tls
+Message-ID: <amh3JXocONXT8Gb7@gmail.com>
+References: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
+ <20260727-getsockopt_phase4-v3-7-e89627544639@debian.org>
+ <20260727161652.58de366a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260727161652.58de366a@kernel.org>
+X-Debian-User: leitao
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+On Mon, Jul 27, 2026 at 04:16:52PM -0700, Jakub Kicinski wrote:
+> On Mon, 27 Jul 2026 03:06:41 -0700 Breno Leitao wrote:
+> >   - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
+> >                 rejection.
+> >   - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
+> >                 rejection.
+> 
+> The config options for these are not enabled in the config for net
+> selftest target. Doesn't look like we're testing anything particularly
+> meaningful here, so maybe just drop the cases for these?
 
-commit ee861486e377edc55361c08dcbceab3f6b6577bd upstream.
+Sure. Just to confirm my understanding: you'd like me to keep the
+selftest patch but drop the ieee802154 and phonet test cases, while
+retaining the rawv6 and tls cases. Is that correct?
 
-Usage of ld_{abs,ind} instructions got extended into subprogs some time
-ago via commit 09b28d76eac4 ("bpf: Add abnormal return checks."). These
-are only allowed in subprograms when the latter are BTF annotated and
-have scalar return types.
-
-The code generator in bpf_gen_ld_abs() has an abnormal exit path (r0=0 +
-exit) from legacy cBPF times. While the enforcement is on scalar return
-types, the verifier must also simulate the path of abnormal exit if the
-packet data load via ld_{abs,ind} failed.
-
-This is currently not the case. Fix it by having the verifier simulate
-both success and failure paths, and extend it in similar ways as we do
-for tail calls. The success path (r0=unknown, continue to next insn) is
-pushed onto stack for later validation and the r0=0 and return to the
-caller is done on the fall-through side.
-
-Fixes: 09b28d76eac4 ("bpf: Add abnormal return checks.")
-Reported-by: STAR Labs SG <info@starlabs.sg>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/r/20260408191242.526279-2-daniel@iogearbox.net
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-[ Dropped visit_abnormal_return_insn changes: depends on 7.0 symbols from
- e40f5a6bf88a ("bpf: correct stack liveness for tail calls");
- Hunk1: adapted IS_ERR/PTR_ERR to !branch/-EFAULT to match push_stack()
- NULL-on-failure convention;
- Dropped mark_reg_scratched(), which only affects log verbosity, introduced
- by 0f55f9ed21f9 ("bpf: Only print scratched registers and stack slots to
- verifier logs.").]
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- kernel/bpf/verifier.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ec447854f5345..5e71d58e4a300 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9644,6 +9644,22 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	mark_reg_unknown(env, regs, BPF_REG_0);
- 	/* ld_abs load up to 32-bit skb data. */
- 	regs[BPF_REG_0].subreg_def = env->insn_idx + 1;
-+	/*
-+	 * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=0
-+	 * which must be explored by the verifier when in a subprog.
-+	 */
-+	if (env->cur_state->curframe) {
-+		struct bpf_verifier_state *branch;
-+
-+		branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
-+		if (!branch)
-+			return -EFAULT;
-+		mark_reg_known_zero(env, regs, BPF_REG_0);
-+		err = prepare_func_exit(env, &env->insn_idx);
-+		if (err)
-+			return err;
-+		env->insn_idx--;
-+	}
- 	return 0;
- }
-
---
-2.47.3
-
+Thanks
+--breno
