@@ -1,214 +1,228 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8659A2F25F3;
-	Tue, 28 Jul 2026 02:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1422D662F
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 03:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785207065; cv=none; b=ujByDDiyV6wSCInA0RKgjYjiJMiGIi23cJX8KvH1H3dUrBJy0Jf1cU/tIl4jVr/fukNbt2FDTiiiED4CfabyEqjEZoPB5J4HQSNpgvfZVeIV2nMtKiNdsCe+Sog7OHxeB+mhurUMYf58f4otui1+I4yW4bNoA7mX8L7uC/9eMKc=
+	t=1785209935; cv=none; b=rrl2YHE/B8xvxdgdhbyPpLSOFFWc7UqoBA7XEpdrr80VI9rKHR4jCn5altucotrFonKXwP8St+QeLNndefBw6ajv1aIJny+7jkAfzccGtKRKsdnY2zRGeL9E0snYHDlgJjKBjlrmgXVUTrZoXeDN0ZkmTJZOsnGsGShn9iAR60E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785207065; c=relaxed/simple;
-	bh=W0BDYtxuDDdRLOUW+Dp+LxIodUKthKlk9kd+76vX//M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QUcqIYfPbdHCcNRk6/4f2NZyN15yNR3LI799FhKywPAutVD4b+/QeJTdNmo6F+wFgzyBb/c6aVuIyFz4iU8SgIDM+S94KLW1O8ACt6jILyWeZcPMWOsRJHm7oBHirewWiVjbkCqIO7KORWFp7DRQWi57B9wS1Dhshe3T+hPOeUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Mk9Vmt20; arc=none smtp.client-ip=162.62.57.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1785209935; c=relaxed/simple;
+	bh=rZjYNl3+MPB+91xxVJNulZvx9ICIzCZfQoEYPHyNCEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=W+FkxQoP88njRfbkVgevORpj6iCJuDZZEkVY/TzM3jbw8Yihiw4EZr0W0FwwOD5+ZT/7juig0J1dcD5XKz9ij0dqz7NP7gSiwULpHtN8tihfNYCZ6s9SbmWmhZp7Sobgthy1OHynboUua/4R+2kEYaiLDRp8jbNmX74J8wiL7UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MVTpRJws; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Mk9Vmt20"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1785207049;
-	bh=cW0TbNCISblwoiaULiHR+ZWC6JdcXp2rxqQLctE2VnU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Mk9Vmt20bk3Aoxd1gHH+7vbcFVUiZOB178RTWFm784elJGlLXUWmU4EWe9YMiFnVG
-	 FI+D6PxfAcpQNe4a/0fPtXnVJGipAz+D5EOxICg/BkRljCjU2gcaIaJKYQ1wjRGS83
-	 zU0yA85zga9aNH8RP4Yfatuoz4b7Q1wuoNFsZSzk=
-Received: from [10.56.52.25] ([39.156.73.14])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id CAD2E6BA; Tue, 28 Jul 2026 10:50:45 +0800
-X-QQ-mid: xmsmtpt1785207045tl40c9evp
-Message-ID: <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6qM7uZ4+S4/crVvRsJwd18KbjZMQDojTlKNfqKjjCCplOw9PAQy
-	 PVQeO+EAkQo5jKl+H1imUfVLK22X0ZhsdNs5lylSrHXtlzj7q39ovB15TPr3Jr12AO08bw08Ifa6
-	 bBKCy/p1OKM2qn+Vrk0PBeLNRKRQTuDF87REDN3ktCiAeKi8OTepuiIV3hdB9h+fyqrJ2MUdKyZb
-	 TBREELrZIWZ3d9mnsblXj++8nyBaL6cRcON6pb3EbqGDFH6zivYKO5wnJarGaf1gVslNkd+iqQpA
-	 4/lV/G5D/28wUUv/JH5dKaz83k2Sz3xxsbG/wHmkfWANpzVN4BqoPAD0pyJSn/wlqlwTRByP9qx5
-	 wBJX79rhKgYREVZp8TubJrB5JQxQvZEGy1zFZcrhQmJcLHXV2uIyrDSR4OEteZJ/KIQi2u0EA93n
-	 94t17Frmd+bX6eev936cg68q9NLeG2C33xK50Tgl31bZ+6cl7fc7PJ++iyDerBddPLrZ4M/eMR5Y
-	 GF6eRSWXO7TOjzax1la8pAEDuzIl38V3jPSqc6gTMgwzOfpc78OHLgSlMe+PP6Cgul/iO1P3eBbN
-	 w/YQzUWs4Vw2PgaGhI749Qozu0nwaXDgOXIQvh9/Og3oK7L/ao35wTjZZAQVb9PIL2dGqPiKK6M0
-	 kOC6iEQ6cw3x30pEFJIR2STg8pVKCH2ZReBC/BPKNz2JhlaOjICN+UFrYUN1Ow4A5gx6IGnwHUQH
-	 Ip+ZA5JGH1RhUZq6BCP76zhklUQ2dohy+Q4pAO6qtOSiCdQ7gdyQDRfOacWQrfDjFx9iQljNC/vU
-	 Qjf4YM2kRXAWbLsULFSj9/SH35t5FNDnPIovp/tRt8HvQpC4SBNVONZkTujCFqk04Sl8e3BHtEma
-	 9PFtZRnjazbXzz5VcrEVdpkxMGLoAFXSBvwcr418VNLpaTBvPDnmoOuI47y8XrBl07wPrPfsUH/G
-	 v8o62FwaihSe+0iHpmnx2aAcTF5igb0svrzYhmckewqr1NTBhDelVDLlDThdJyUVM22AGzu8wEY1
-	 BPORCLf5X771zUT+elmG5bfuJR/nAeYcFwFxzawcmq6rTvrI+K6QnZdWZzUfu3KLbVlObYxDjfsF
-	 j1ZwedE1PPWuStnxI=
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-X-OQ-MSGID: <f9a69aed-a050-4ca3-abe5-c32720534430@foxmail.com>
-Date: Tue, 28 Jul 2026 10:50:45 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MVTpRJws"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-848593533cbso2438280b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 20:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785209933; x=1785814733; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=q8rlllOW1RK3ni0UfDzUVjg1yaTTz9iURLbN/ICv9wY=;
+        b=MVTpRJwsBIBf8bL//bMNDDFRrETpq2j5uJVpbekoiXHUezVLCjVr1G4JERzPQ1fsAZ
+         bO4hjdnDHdpEJL7tQuC4pX4HgOWdfRVZWbTVTAoCIg5LpletYSI5Pemo3VKWOmmWEpW2
+         523hwHwyAbRvxNfojE9uVetu3uxH83IjjLwlcU/wZ6W0mgv2AluY99B2kJWoKx6XI71y
+         cJZ0sKUb0v5E6PtWSJ1ErN6nniF64cO0cLJT2r/p+qN89NHjxLNHrAkYDMEelU4m88oK
+         +NZjzzezMY4eHK5a8yatpBntS1DNCJ3W4HWoanK2Kr0/UAVGl4/CLUHO6UQNZKo05PLJ
+         KsbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785209933; x=1785814733;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q8rlllOW1RK3ni0UfDzUVjg1yaTTz9iURLbN/ICv9wY=;
+        b=bOEfw5a2rXDWyiiMt6xj45xohJSD0hZKdAzqBxmOsOxrE22aipk4KsrLnpiJJFzW25
+         mSLIxZ2v/4KAVSUxXEg4ASg2xTBvm6y5B3HYut+dPWB1RiWaDz/1V6IfGlKxwtfv1zSi
+         whdYSvfffYgZNh4kjrteooVxdOpJJ5O5ceGpm4gqb1dJPpXsGoKhSTjPEH/jM2gNUm8i
+         b0oKISAtjN94vj9pD2TiYKZBv3ZU0T6oY2Q8vo4C1tDJiZZ3Mfb4bd9W90ObasxBvyj3
+         SodA3E+h87BYd3oRS9pyv52PYNGqMKJVnDH580f8ZRGZdR89o1P4HleLkJ7cJU2LBtgL
+         WVwQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8jif3HTXmmqzQod40Mmb075PExmfOWomCogJ3jcSVZEaxTTlh3Bu6cw0Uua+f5zJfmaePbY1By76z3wbSnqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHOGBG/I2Gk8lxVyf3u1G1uY+hp1xrjdvYn8Cydyqvs7wFGZMG
+	EZobP8Fv4ukv1NmgaRN5ReClqsori0e7uiB51WiS6WReFj13CQULHZ9B
+X-Gm-Gg: AR+sD12zRzP6maAzYkpc6/lDKM0hdZgBG6+cOfTE5CXhD6yoB59LtJsuQEbHJHDhOl9
+	RXbc8Jpfs5Xvvjs5kiPchvGjPxtRlN0fdo3WNIi7fajbLd0UJl/H07kjhOfHGCaHSGZU8NGIw+d
+	tfIc4j0djsnDCOhxkwy75hY8j+MYDHjZCGzariuxoXOI9NWHhbXQEroBtTCR6Rgb5Q366kf3sg4
+	bjv6UL9BYW7uLGNkvlkoO9DRTLCWm2axCu04PkscKLsJ0/5FQj5S9vKMWTG2AWEwxfzV7APuUH/
+	1/iKjWZSGXgP1NEiaejEao/6csYxfL0G0+Ui9Bijh4yRrYwGcs1KqzQtS55/vth9QSArDIEFbbZ
+	lylYV5Ikh+qyC9mjMje4w/ySNRUqfRMYBhGnXx56mOBFs9iUsJpA9HuOywzYrs++teLN2ZLe+aX
+	yiEbD/XzQtX8/csVjNtl+hpysJsRA3mA==
+X-Received: by 2002:a05:6a00:84f:b0:847:8d54:f4f9 with SMTP id d2e1a72fcca58-84e93358f09mr584000b3a.51.1785209932964;
+        Mon, 27 Jul 2026 20:38:52 -0700 (PDT)
+Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e5325856dsm3753865b3a.9.2026.07.27.20.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2026 20:38:52 -0700 (PDT)
+From: Ning Ding <dingning04@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	shuah@kernel.org,
+	danieltimlee@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ning Ding <dingning04@gmail.com>
+Subject: [PATCH bpf] bpf: Reject writes through untrusted allocated pointers
+Date: Mon, 27 Jul 2026 20:38:37 -0700
+Message-ID: <20260728033837.1466123-1-dingning04@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260726021304.97ED91F000E9@smtp.kernel.org>
+References: <20260726021304.97ED91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: vmalik@redhat.com, andrii@kernel.org, ast@kernel.org, rongtao@cestc.cn,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
- "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
- <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <cover.1784695085.git.rtoax@foxmail.com>
- <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
- <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+A kptr loaded under an RCU read lock has MEM_ALLOC set. After
+bpf_rcu_read_unlock(), the verifier marks it PTR_UNTRUSTED, but
+check_ptr_to_btf_access() still allows writes because
+type_is_ptr_alloc_obj() ignores that flag.
 
-On 7/28/26 06:56, Andrii Nakryiko wrote:
-> On Tue, Jul 21, 2026 at 9:42 PM Rong Tao <rtoax@foxmail.com> wrote:
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> Add string concatenation kfuncs, prototype:
->>
->>    int bpf_strcat(char *dst, u32 dst__sz, const char *src);
->>    int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
->>
->> This differs from the glibc library functions strcat and strncat, which,
->> for safety reasons, require the size of the target string's memory space
->> as a parameter.
->>
->> The src parameter cannot directly pass a string constant, such as "XYZ",
->> otherwise it will throw an error "write into map forbidden".
->>
->> Signed-off-by: Rong Tao <rongtao@cestc.cn>
->> ---
->>   kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 75 insertions(+)
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index c18f1e16edee..85afff60365c 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
->>          return __bpf_strnstr(s1__ign, s2__ign, len, true);
->>   }
->>
->> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
->> +{
->> +       int dlen = 0, slen, space, copied;
->> +
->> +       if (sz == 0 || dsz == 0)
->> +               return -EINVAL;
->> +
->> +       while (dlen < dsz && dst[dlen] != '\0')
->> +               dlen++;
->> +
->> +       if (dlen >= dsz)
->> +               return -E2BIG;
->> +
->> +       space = dsz - dlen;
->> +
->> +       slen = bpf_strnlen(src, sz);
->> +       if (space <= slen)
->> +               return -E2BIG;
->> +
->> +       copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
-> I'm not sure strncpy_from_kernel_nofault() is designed to work
-> correctly if dst can be modified concurrently. Which in BPF case, even
-> though we validate that memory is correct, it still can be modified
-> concurrently in such a way as to cause strncpy_from_kernel_nofault's
-> inner dst[-1] based loop logic to go beyond the boundaries of target
-> buffer.
->
-> i.e., I don't believe current implementation is concurrency safe
+Reject writes through MEM_ALLOC pointers that are PTR_UNTRUSTED. Reads
+remain allowed and are converted to probe-memory accesses.
 
-Thank you very much for your reply. There is indeed a thread safety 
-issue. Let's look at a solution. I will submit v6. Thank you ;)
+Also skip the owning-reference check for these pointers, since they no
+longer have a live reference after leaving the RCU critical section.
 
-Rong Tao
+Add verifier tests for the rejected write and permitted read cases.
 
->
-> pw-bot: cr
->
->
->> +       if (copied < 0)
->> +               return copied;
->> +       else if (copied == 0 || copied == 1)
->> +               return dlen;
->> +
->> +       /* The copied character count includes '\0'. */
->> +       return dlen + copied - 1;
->> +}
->> +
->> +/**
->> + * bpf_strcat - Append non-null bytes from a source string, and null-terminate
->> + *              the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src: Source string.
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
->> +{
->> +       return __bpf_strncat(dst, dst__sz, src, dst__sz);
->> +}
->> +
->> +/**
->> + * bpf_strncat - Append non-null bytes from a source string, and null-terminate
->> + *               the result
->> + * @dst: Destination string.
->> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
->> + * @src: Source string.
->> + * @len: the maximum number of characters to concatenate, the null terminator
->> + *       \0 of the target string @dst will also be included.
->> + *
->> + * Return:
->> + * * >=0      - Length of the concatenated string.
->> + *
->> + * * %-EINVAL - String @dst__ign is invalid.
->> + * * %-EFAULT - Cannot read or write one of the strings.
->> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
->> + *              @dst__ign is too small.
->> + * * %-ERANGE - One of the strings is outside of kernel address space
->> + */
->> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len)
->> +{
->> +       return __bpf_strncat(dst, dst__sz, src, len);
->> +}
->> +
->>   #ifdef CONFIG_KEYS
->>   /**
->>    * bpf_lookup_user_key - lookup a key by its serial
->> @@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
->>   BTF_ID_FLAGS(func, bpf_strcasestr);
->>   BTF_ID_FLAGS(func, bpf_strnstr);
->>   BTF_ID_FLAGS(func, bpf_strncasestr);
->> +BTF_ID_FLAGS(func, bpf_strcat);
->> +BTF_ID_FLAGS(func, bpf_strncat);
->>   #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
->>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->>   #endif
->> --
->> 2.55.0
->>
+Fixes: 503e4def5414 ("bpf: Replace open code with for allocated object check")
+Closes: https://lore.kernel.org/all/20260726021304.97ED91F000E9@smtp.kernel.org/
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: Ning Ding <dingning04@gmail.com>
+---
+ kernel/bpf/verifier.c                         |  6 +-
+ .../bpf/progs/local_kptr_stash_fail.c         | 58 +++++++++++++++++++
+ 2 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7aa47342dc65..24c151ad2e62 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5804,13 +5804,15 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		 * program allocated objects (which always have id > 0),
+ 		 * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
+ 		 */
+-		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
++		if (atype != BPF_READ &&
++		    (!type_is_ptr_alloc_obj(reg->type) || reg->type & PTR_UNTRUSTED)) {
+ 			verbose(env, "only read is supported\n");
+ 			return -EACCES;
+ 		}
+ 
+ 		if (type_is_alloc(reg->type) && !type_is_non_owning_ref(reg->type) &&
+-		    !(reg->type & MEM_RCU) && !reg_is_referenced(env, reg)) {
++		    !(reg->type & (MEM_RCU | PTR_UNTRUSTED)) &&
++		    !reg_is_referenced(env, reg)) {
+ 			verifier_bug(env, "allocated object must have a referenced id");
+ 			return -EFAULT;
+ 		}
+diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
+index fcf7a7567da2..d7b8cd6458bb 100644
+--- a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
++++ b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
+@@ -8,14 +8,22 @@
+ #include "../bpf_experimental.h"
+ #include "bpf_misc.h"
+ 
++extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
++
+ struct node_data {
+ 	long key;
+ 	long data;
+ 	struct bpf_rb_node node;
+ };
+ 
++struct plain_data {
++	long key;
++};
++
+ struct map_value {
+ 	struct node_data __kptr *node;
++	struct plain_data __kptr *plain;
+ };
+ 
+ struct node_data2 {
+@@ -31,6 +39,7 @@ struct node_data2 {
+  * [35] TYPE_TAG 'kptr_ref' type_id=34
+  */
+ struct node_data *just_here_because_btf_bug;
++struct plain_data *just_here_because_btf_bug2;
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+@@ -82,4 +91,53 @@ long drop_rb_node_off(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?tc")
++__failure __msg("only read is supported")
++long write_untrusted_alloc_obj(void *ctx)
++{
++	struct map_value *mapval;
++	struct node_data *res;
++	int idx = 0;
++
++	mapval = bpf_map_lookup_elem(&some_nodes, &idx);
++	if (!mapval)
++		return 1;
++
++	bpf_rcu_read_lock();
++	res = mapval->node;
++	if (!res) {
++		bpf_rcu_read_unlock();
++		return 2;
++	}
++	barrier_var(res);
++	bpf_rcu_read_unlock();
++
++	res->key = 42;
++	return 0;
++}
++
++SEC("?tc")
++__success
++long read_untrusted_alloc_obj(void *ctx)
++{
++	struct map_value *mapval;
++	struct plain_data *res;
++	int idx = 0;
++
++	mapval = bpf_map_lookup_elem(&some_nodes, &idx);
++	if (!mapval)
++		return 1;
++
++	bpf_rcu_read_lock();
++	res = mapval->plain;
++	if (!res) {
++		bpf_rcu_read_unlock();
++		return 2;
++	}
++	barrier_var(res);
++	bpf_rcu_read_unlock();
++
++	return res->key;
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.43.0
 
