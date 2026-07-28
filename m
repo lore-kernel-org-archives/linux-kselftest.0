@@ -1,77 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304642641FC;
-	Tue, 28 Jul 2026 01:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D77C1E515
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 01:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785201063; cv=none; b=Lhsh5M4CvwD2ngvOOypKi7L9gcl+AZpF3P4ysFlUatbobF69pJfvczmL6Gjv/c2FJUwu+RqjZLG86WRyKAeRqiMZJjZ6NeWPgNRlIFxrT9T++FvNjDVjqfoibjivr/QR6a0BAsvdpNJYAsZk6rUoJHidURiX3RtXTper/fNR7XU=
+	t=1785201328; cv=none; b=XpLLEfPABtRm3xbY3enxFrIV0ujK51KJpEJ2BhfK5VIghOv+AEBmNwUp4yX2N1Am8U+3bq2E3r6OVB6RRTWA20eVWC0z10Mvw6lWady7nMGnO+S5+pdBwlrzus3hCS67yfUWOxqYU7wHV7PAOdblVofXA7X/G8z/Gcj/JrdCtRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785201063; c=relaxed/simple;
-	bh=QcTNW/xl76b51zbatSHVNa2jP7l1csY3QI0mJIV3xUA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kyMZHq0tcrU9mJ1HD9hX6t8giU/Q9QZsHw6zu/dlEtlDfkntKsRe+syG+xGh3tP2HXswnpS3wFXxFTIfbbF4nWs7gBjAO5zsGGLIqRlvI/CcEwo12LA+z6otYEZ2kBrud9psRIvN0LSR3QuCSsAeE0WJ+zRYJur/R8Nze0jnMRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q6IdMCTP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785201328; c=relaxed/simple;
+	bh=y/XcUrQ9JDmytrIFC28W6hlKYpOa2xKcjTs85GAJWDY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=fLyoO/GgVvFrvG6DXMIxoVgNq58FUJ1iqHA5YNuEDxznsyLhEjI5iGvp1Wnmil3VDgxIjzE8ZaoRYq8wZCAtBnB2Bx8PQaBYFbcxvwVIxzoeNKSgjcAe/uoWASRNDRE6svUkrS6r852crK3q2o2LnfxIRx4OMv+2oqc6rnS/hiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nkr26+jY; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q6IdMCTP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F451F000E9;
-	Tue, 28 Jul 2026 01:11:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785201061;
-	bh=XpGz++o1hIG6hggRhPu8aPVTpDuVu7JWAALkS9dQhzs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Q6IdMCTPLhyZnf9mMjOx/v9EaS5oCGR2Yd0HZjrSK0/BAkCFayFnq6v+Q6Psr6R+w
-	 D16J/3NaeL6MwxBX40J/ALShOr4DcIjWHp+rqEXFODITxJ0jpdj3b/U8sygdlmBGUc
-	 lyjmdRgs5qtoiMbmoLZp+cjSTKMZaiWtFBVrFfM5UeFOOXbfUSwfnN2Ckl/G5p/N8i
-	 4dwpe1yznvDhWzhpHWrt42hjBnlhZ28aab2CX0Ep8RvFUtuHjoKa/oS1yam6BIrycF
-	 Cbip5JA+t7WhJojox7/i1VunheyrRYnG4S+FDiZQcvMVlJauy6aTmVy61wUDHSw7ZA
-	 NlaE3ciYYbYQw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19B97380CED8;
-	Tue, 28 Jul 2026 01:10:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nkr26+jY"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cccfa32670so43869985ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jul 2026 18:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785201327; x=1785806127; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=c0xvxXA1DaICzQTJ/i8SO6Ba9ZbY1wPwU/bxHtjqVsI=;
+        b=nkr26+jY9SF2mcbJwzW8twOpyeORwlisIuc4yZFEk+V+a9jyM7ceEwy9pxrhMRPny2
+         aUup54qj3bynFaX2baeVVO8o60kNkeLFKJLXzuSGXEzCfskuBtl3schibaV5bsFxoP05
+         hUwZiUrDD9PmNaC4gYXGvX6stfDOKs6PN4nFqVxvMO+UWcoLHDszNmHwnP6rCALwtGa2
+         KRDa3pr3mv1xorNTcWxWLTmhOLm23NX+9CZE8dXOztNAYTKUmqqFweaS3MIsdi/aNQHV
+         EsRZg+9PGtbd/VAhIulTEMBfeAEw333aN7yHCMPsu+VE47p+2xFJPKPn7m+Vdlp8a1Jw
+         0grw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785201327; x=1785806127;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c0xvxXA1DaICzQTJ/i8SO6Ba9ZbY1wPwU/bxHtjqVsI=;
+        b=G8VrkRSxwUSUd5DpXRB1YkmqpH1F6RrPjQWwhiHmiB94JUYFIJ9GDCZgDRIIsgN6sJ
+         Oa4zagjw4JwHH/nQ2RB90nD/Jc41yVUsM8VpasE/Kh/2R6DuV0uKoRD6Dr0VBeNK6njw
+         v3E6BgP9WZhjSSmBqxFyqUYzA4oCmrtF2OrPFiDBaYTHQRBPACsdUyrXWSr0J29DZT2A
+         BQMI5fI8WSDZ1MH1t+WmP05eyz3nc26Rw/nLbS0gims0D0EZDLLfoFnEGZDYpFlQP8Wi
+         +nZ6AnqEHLebv4koYPfDl26tFR83MMVpUY1KZBWn7jQ0tC6aIARWBv4h5AaGXBw1EwL5
+         ytbA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqc8iyQ8D6evRJ+1V4pICOVCMyYzvRz/SBgXQK/XpeSIGA/iAksIx/rID6E4vlgntTYNWkQe/HYxOEOeitUj3k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyes1kcjPxlZ8BtIgYAQB+WYxcW/BYxion6uMG3sscaROZKHKCK
+	EQxmggvZoiDqmAu4k+IPE3yaNPqpNh9GZOlePdcxPNuOQA/CXVtHd16dO4pw1L0x03RhC32HOLf
+	dUoq8Aw==
+X-Received: from plas11.prod.google.com ([2002:a17:903:200b:b0:2ca:eea9:9845])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef11:b0:2cc:670d:9b2f
+ with SMTP id d9443c01a7336-2d015d57715mr2698085ad.33.1785201326747; Mon, 27
+ Jul 2026 18:15:26 -0700 (PDT)
+Date: Mon, 27 Jul 2026 18:15:26 -0700
+In-Reply-To: <e8e7554debef481d13265f0870e847e2fa37f7c2.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: net: Add a missing config option
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178520102663.1486027.17250560117614369813.git-patchwork-notify@kernel.org>
-Date: Tue, 28 Jul 2026 01:10:26 +0000
-References: <20260723140241.132120-1-alice.kernel@fastmail.im>
-In-Reply-To: <20260723140241.132120-1-alice.kernel@fastmail.im>
-To: Alice Mikityanska <alice.kernel@fastmail.im>
-Cc: kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, alice@isovalent.com
+Mime-Version: 1.0
+References: <20260703212145.343527-1-dwmw2@infradead.org> <20260703212145.343527-6-dwmw2@infradead.org>
+ <amPWX8lKXw2KS_kZ@google.com> <e8e7554debef481d13265f0870e847e2fa37f7c2.camel@infradead.org>
+Message-ID: <amgCrqyqg0zFbhO4@google.com>
+Subject: Re: [PATCH v6 05/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Sat, Jul 25, 2026, David Woodhouse wrote:
+> On Fri, 2026-07-24 at 14:17 -0700, Sean Christopherson wrote:
+> > Please post this as a standalone mini-series.=C2=A0 AFAICT, the only de=
+pendency of
+> > any kind is a minor conflict with the s/hw_tsc_khz/hw_tsc_hz change, an=
+d that's
+> > trivial to sort out later on.
+>=20
+> Hm? The calculations in kvm_vcpu_ioctl_set_clock_guest() are all Hz-
+> based, not kHz. This *was* the start of the series (Jack posted it on
+> its own in 2024), and I thought I'd moved the khz/hz thing to live
+> before it on purpose?
+>=20
+> The kvm_xen_shared_info_init() one could be later, I guess. But is also
+> trivial (and its commit message sets the stage for a bunch of the
+> cleanups by analysing the various *different* ways that kvmclock gets
+> derived).=20
+>=20
+> I confess I'm not stunningly keen on breaking the series up.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Can the KVM_[GS]ET_CLOCK_GUEST changes be moved to the end of the series?  =
+The
+total size of the series doesn't scare me, I just don't want to end up with=
+ all
+the fixes and cleanups stuck behind a patch that isn't a hard dependency.  =
+E.g.
+AFAICT, none of the following changes, include selftests updates, actualy r=
+ely
+on KVM_[GS]ET_CLOCK_GUEST existing.
 
-On Thu, 23 Jul 2026 17:02:41 +0300 you wrote:
-> From: Alice Mikityanska <alice@isovalent.com>
-> 
-> Commit 5cb53743e1ff ("selftests: net: Add a test for BIG TCP in UDP
-> tunnels") used iptables match comment, which was missed from the CI
-> kernel config. Add the missing config option.
-> 
-> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
-> 
-> [...]
+> How about we just do it in stages? Merge patch 1 as it's fairly trivial,=
+=20
 
-Here is the summary with links:
-  - [net-next] selftests: net: Add a missing config option
-    https://git.kernel.org/netdev/net-next/c/8fe79aa2f1d6
+Ya, I pushed that to kvm-x86 last week, though I rebased it today because o=
+f an
+unrelated goof.  It's currently commit 710b3a30f407 ("KVM: x86/xen: Do not =
+corrupt
+KVM clock in kvm_xen_shared_info_init()").  If nothing blows up in the next=
+ or two,
+that should be the stable hash going forward.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> and then I can use its commit ID when I refer to its taxonomy later. Then=
+ we
+> can do patches 2-6 which are the KVM_[GS]ET_CLOCK_GUEST support. And I ca=
+n
+> repost the remainder on top of that?
+>=20
+> > > +4.145 KVM_GET_CLOCK_GUEST
+> > > +----------------------------
+> > > +
+> > > +:Capability: none
+> >=20
+> > Why not add a CAP?=C2=A0 The check in the subsequent selftest is quite =
+gross.
+>=20
+> Because nobody would ever use it in practice anyway. Even if the ioctl
+> is present, you *still* have to try it and fall back to the old method
+> because there are ways that a *guest* can force master clock mode off.
 
-
+Hmm, I can see setups where a single entity controls both the host and the =
+guest
+wanting to assert that KVM_SET_CLOCK_GUEST succeeds, though I suppose it's
+unlikely such setups would use KVM_SET_CLOCK_GUEST in the first place.
