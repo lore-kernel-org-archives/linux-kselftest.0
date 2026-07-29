@@ -1,52 +1,52 @@
-Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+Received: from pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.162.73.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D8C1F936;
-	Wed, 29 Jul 2026 00:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11C01A9FA0;
+	Wed, 29 Jul 2026 00:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.162.73.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785284209; cv=none; b=FeR41+aQTm7i+NfEtF+LX996661wwr3/hPDwhhXZyIr9yiE9OMDEeFjj6VV23B0dqSXw0irnsAhuGjY5WnOO+9JranXmC29tTb55HQn4iXnN/5AmV3dABZWeIZHggMCAVo0sCvA7vHeQ6udyDAsH5eSuSNtknUQT0aYLdVpDkgQ=
+	t=1785284748; cv=none; b=sOdMSy+hK6XkIjOAFAICqA5wq1Ifs9ufZf60RQFD2Ip9WXjJ21xbeaZGFajcudagnzjdSuHZNxzCpI2gp087q/+tLXpBvApvwyageqkkAcMDeFm2BWDiamdlo1GicDsTverP2ZUuwWTwNHFyeXajjUdmZ6ToEPH7snyy1Z6SClw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785284209; c=relaxed/simple;
-	bh=MfdujIwDm4+ttQzSY6tpmUPQINnWq9E89sb6zDGpdHU=;
+	s=arc-20240116; t=1785284748; c=relaxed/simple;
+	bh=sn85DsfhNJp9/lGpXpfl2TNggUvlG9sxHIsmU3XX61w=;
 	h=MIME-Version:Content-Type:Subject:From:To:CC:In-Reply-To:
-	 References:Date:Message-ID; b=NHx/V+f+SejqQw4CC2DpJL0Qs2YDv2ZUgX+x5E2qbRN2EITGMqtHT6RelYCwas3sByvuOcR+/xiZCFaMCwk5x6WwTNHS1u3KAe8uSPDr24Iozkbzz9/DN2fGeremoc79of7XahcKO77x3oEpg3IyChvaSqXkUxDemfyHMPeKew8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=d6aqWgPj; arc=none smtp.client-ip=52.12.53.23
+	 References:Date:Message-ID; b=WXnv3ZXBmVqoJkqzWaLYFxLGTcVbC1V0vLS8pAY2TLLlygAaXXNofItgxfNcC51VXToQOdNbDYQPyV43qz8WXBps/SvYbmDM+VR5K3bExzQd+IaWraVV+9uoGZ5uRdx6eG9/obsKYY4afSnYO/CJMgt+LrL482Tr3BitQTH5mF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Ry+Rwdcp; arc=none smtp.client-ip=35.162.73.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="d6aqWgPj"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Ry+Rwdcp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1785284207; x=1816820207;
+  t=1785284746; x=1816820746;
   h=mime-version:content-transfer-encoding:subject:from:to:
    cc:in-reply-to:references:date:message-id;
-  bh=ZpD4Ua04Vv0uYDXdU0rOLhZG+hDOgEuRDU0pu7vViiY=;
-  b=d6aqWgPjovMOjAD0189E2wONGaQtewYUMC+6OH7+yfX9oSqJ52C5xkvi
-   8VmUOhEfcY0BgTWjwhWQm7YvXViwr63UIP1ECb9ITxwl6MHs0eMA17TSx
-   exDZCIuXrwNfsuKy5JMD5pDPG/y2P1UHMAmU5xfQ6d/SfVT/B5KtHnQSb
-   2eeKGIRvhsY+ZapwQxW3nrpS7ZsUE4EVH8xxg6e8UhNelTD1zV9XYZJYJ
-   mKqkFdB2IQtCMmHKHPikKxM8zTE6aziHnmyzNMWN2azwV47RLWiRwqFTR
-   905dDUMIEqV6XUCXnMwIAfoENLwzwbGxaBKYhDdl5mmKwnDU2JX50MP+r
+  bh=3Qu7iQQTfMqyd+q9siW7b9oN9ZueDTI9o6UwkN35qPM=;
+  b=Ry+Rwdcp6eYG7sk0LkWAEGBLHSfwlsNKfKGmHfwHuB11vH8mhY0ibPqz
+   tzmgUcFqldLWz2JL61xfZTy1UpG6U4FmQfZnR9L7KGefuDSkhIYyYfVMK
+   3+6flskdgdxXVSIYiEobSxgTSR1yI9qsrNUQXqnEt1IO1Jp48yC4M0F9H
+   wXuYCy3wSBoSfcMsT1Mc3zkBUcBcHIBVKHs03A0U8b4tlOkWRbipXD7O9
+   nHfvjxs8jECgrtu6q0NPXttkAGbJOFnhynZX1RLG7WGfga5VTgGCsSzU1
+   aUHuORL5mWILmJBrW3gdj4VjblEn01N+QjJKeVxLy0kUXRfxWNK7qpUcG
    Q==;
-X-CSE-ConnectionGUID: kfJWssZYSI2aKVdyC1H8Bw==
-X-CSE-MsgGUID: VHxpAjQDTsG23Ss1IAx9aA==
+X-CSE-ConnectionGUID: fJ9i4POmTICogX1gfo0a8Q==
+X-CSE-MsgGUID: Yzx29igPTCKMchZDsUfcKg==
 X-IronPort-AV: E=Sophos;i="6.25,191,1779148800"; 
-   d="scan'208";a="24410212"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 00:16:42 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.51:30802]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.26:2525] with esmtp (Farcaster)
- id 72b7a435-0e5c-4e65-af21-284e36f31ebe; Wed, 29 Jul 2026 00:16:42 +0000 (UTC)
-X-Farcaster-Flow-ID: 72b7a435-0e5c-4e65-af21-284e36f31ebe
+   d="scan'208";a="24327348"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 00:25:44 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:21671]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.10.59:2525] with esmtp (Farcaster)
+ id 2278361b-149b-4fa5-91d6-4c97f2e8d4fd; Wed, 29 Jul 2026 00:25:43 +0000 (UTC)
+X-Farcaster-Flow-ID: 2278361b-149b-4fa5-91d6-4c97f2e8d4fd
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Wed, 29 Jul 2026 00:16:42 +0000
+ Wed, 29 Jul 2026 00:25:43 +0000
 Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Wed, 29 Jul 2026 00:16:36 +0000
+ Wed, 29 Jul 2026 00:25:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,371 +55,259 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 net-next 1/7] ptp: Add ioctls for PHC timestamps
+Subject: Re: [PATCH v4 net-next 1/7] ptp: Add ioctls for PHC timestamps
  with quality attributes
 From: Arthur Kiyanovski <akiyano@amazon.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <akiyano@amazon.com>, <davem@davemloft.net>, <netdev@vger.kernel.org>,
-	<richardcochran@gmail.com>, <edumazet@google.com>, <pabeni@redhat.com>,
-	<dwmw2@infradead.org>, <tglx@linutronix.de>, <mlichvar@redhat.com>,
-	<andrew+netdev@lunn.ch>, <guwen@linux.alibaba.com>,
-	<xuanzhuo@linux.alibaba.com>, <dwmw@amazon.com>, <ysarna@amazon.com>,
-	<zorik@amazon.com>, <matua@amazon.com>, <saeedb@amazon.com>,
-	<msw@amazon.com>, <aliguori@amazon.com>, <nafea@amazon.com>,
-	<evgenys@amazon.com>, <netanel@amazon.com>, <alisaidi@amazon.com>,
-	<benh@amazon.com>, <ndagan@amazon.com>, <darinzon@amazon.com>,
-	<evostrov@amazon.com>, <ofirt@amazon.com>, <amitbern@amazon.com>,
-	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<shuah@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
-	<horms@kernel.org>, <bhelgaas@google.com>, <vadim.fedorenko@linux.dev>
-In-Reply-To: <20260727201514.2757107-1-kuba@kernel.org>
-References: <20260717065924.2556-2-akiyano@amazon.com>
- <20260727201514.2757107-1-kuba@kernel.org>
-Date: Wed, 29 Jul 2026 00:16:24 +0000
-Message-ID: <178528418489.4304.3834224813970456673.b4-reply@b4>
+To: Carolina Jubran <cjubran@nvidia.com>
+CC: Arthur Kiyanovski <akiyano@amazon.com>, <netdev@vger.kernel.org>, "Richard
+ Cochran" <richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>,
+	"Paolo Abeni" <pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>,
+	"Thomas Gleixner" <tglx@linutronix.de>, Miroslav Lichvar
+	<mlichvar@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>, Wen Gu
+	<guwen@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, David
+ Woodhouse <dwmw@amazon.com>, "Yonatan Sarna" <ysarna@amazon.com>, Zorik
+ Machulsky <zorik@amazon.com>, "Alexander Matushevsky" <matua@amazon.com>,
+	Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>, Anthony
+ Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>, Evgeny
+ Schmeilin <evgenys@amazon.com>, Netanel Belgazal <netanel@amazon.com>, Ali
+ Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt <benh@amazon.com>, Noam
+ Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>, Evgeny
+ Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik <ofirt@amazon.com>, Amit
+ Bernstein <amitbern@amazon.com>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <shuah@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
+	<horms@kernel.org>, <vadim.fedorenko@linux.dev>, Jakub Kicinski
+	<kuba@kernel.org>, David Miller <davem@davemloft.net>
+In-Reply-To: <58700765-8c3c-45a2-ae12-1f8ff46f4725@nvidia.com>
+References: <20260714020340.25014-1-akiyano@amazon.com>
+ <20260714020340.25014-2-akiyano@amazon.com>
+ <58700765-8c3c-45a2-ae12-1f8ff46f4725@nvidia.com>
+Date: Wed, 29 Jul 2026 00:25:30 +0000
+Message-ID: <178528473048.4304.18226079918671904614.b4-reply@b4>
 X-Mailer: b4 0.15.2
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
+X-ClientProxiedBy: EX19D035UWA004.ant.amazon.com (10.13.139.109) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On 2026-07-27 13:15:14-07:00, Jakub Kicinski wrote:
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
-> ---
-> ptp: Add ioctls for PHC timestamps with quality attributes
+On 2026-07-28 10:52:52+03:00, Carolina Jubran wrote:
+> On 14/07/2026 5:03, Arthur Kiyanovski wrote:
 > 
-> This introduces PTP_SYS_OFFSET_EXTENDED_ATTRS and
-> PTP_SYS_OFFSET_PRECISE_ATTRS, extending the existing extended/precise
-> offset ioctls with clock quality attributes (error bound, timescale,
-> sync status) and raw system counter fields. New driver callbacks
-> gettimexattrs64 and getcrosststampattrs are added to ptp_clock_info.
+> > +/*
+> > + * Clock status values for struct ptp_clock_attrs.status
+> > + */
+> > +enum ptp_clock_status {
+> > +	/* Clock synchronization status cannot be reliably determined */
+> > +	PTP_CLOCK_STATUS_UNKNOWN      = 0,
+> > +
+> > +	/* Clock is acquiring synchronization */
+> > +	PTP_CLOCK_STATUS_INITIALIZING = 1,
+> > +
+> > +	/* Clock is synchronized and maintained accurately by the device */
+> > +	PTP_CLOCK_STATUS_SYNCED       = 2,
+> > +
+> > +	/* Clock is drifting but remains within acceptable error bounds */
+> > +	PTP_CLOCK_STATUS_HOLDOVER     = 3,
+> > +
+> > +	/* Clock is drifting without adjustments or synchronization */
+> > +	PTP_CLOCK_STATUS_FREE_RUNNING = 4,
+> > +
+> > +	/* Clock is unreliable, the error_bound value cannot be trusted */
+> > +	PTP_CLOCK_STATUS_UNRELIABLE   = 5
+> > +};
 > 
-> Link: https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
-> Link: https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
-> 
-> A few questions inline below.
-> 
-> > diff --git a/drivers/ptp/ptp_chardev.c b/drivers/ptp/ptp_chardev.c
-> > index dc23cd708cfe..d30ee4f51fbb 100644
-> > --- a/drivers/ptp/ptp_chardev.c
-> > +++ b/drivers/ptp/ptp_chardev.c
-> > @@ -190,6 +190,8 @@ static long ptp_clock_getcaps(struct ptp_clock *ptp, void __user *arg)
-> >  		.cross_timestamping	= ptp->info->getcrosststamp != NULL,
-> >  		.adjust_phase		= ptp->info->adjphase != NULL &&
-> >  					  ptp->info->getmaxphase != NULL,
-> > +		.extended_attrs		= ptp->info->gettimexattrs64 != NULL,
-> > +		.precise_attrs		= ptp->info->getcrosststampattrs != NULL,
-> >  	};
-> 
-> [Medium]
-> Are the capability bits consistent with what the ioctls will actually
-> accept?
-> 
-> The caps are set based only on the presence of the new *_attrs callbacks,
-> but the ioctl handlers fall back to gettimex64/getcrosststamp when the
-> *_attrs callback is absent:
-> 
->     if (ptp->info->gettimexattrs64)
->         err = ptp->info->gettimexattrs64(ptp->info, &ts, &sts, &att);
->     else if (ptp->info->gettimex64)
->         err = ptp->info->gettimex64(ptp->info, &ts, &sts);
->     else
->         return -EOPNOTSUPP;
-> 
-> A userspace that respects the capability bits would refuse to call the
-> new ioctl on drivers that would in fact serve it via the fallback. Is
-> the fallback intended, and if so, should the caps advertise it? The
-> commit message does not describe this behavior.
-> 
-
-The fallback is intentional. I'll widen the caps in v6 so they advertise it
-(gettimexattrs64 || gettimex64, getcrosststampattrs || getcrosststamp) and
-document the behavior in the commit message. Thanks.
-
-> [ ... ]
-> 
-> > @@ -404,6 +413,130 @@ static long ptp_sys_offset_extended(struct ptp_clock *ptp, void __user *arg,
-> >  	return copy_to_user(arg, extoff, sizeof(*extoff)) ? -EFAULT : 0;
-> >  }
-> >  
-> > +static long ptp_sys_offset_extended_attrs(struct ptp_clock *ptp, void __user *arg)
-> > +{
-> > +	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
-> > +	struct ptp_attrs_request request;
-> > +	struct ptp_system_timestamp sts;
-> 
-> [Medium]
-> Can this leak uninitialized stack contents to userspace?
-> 
-> Only sts.clockid is initialized below, and sts is reused across loop
-> iterations. If any driver's gettimex64/gettimexattrs64 returns success
-> without touching pre_sts/post_sts on the sts pointer, sts.pre_sts.valid
-> is either uninitialized (first iteration) or stale (later iterations),
-> and the "if (!sts.pre_sts.valid || !sts.post_sts.valid)" gate can admit
-> a partially-populated snapshot.
-> 
-> On the success path the code then copies pre_sts.cycles, pre_sts.cs_id,
-> pre_sts.monoraw, pre_sts.systime and the post_sts equivalents to
-> userspace. The pre-existing ptp_sys_offset_extended() has the same
-> shape but only copied systime, so the exposed surface is now wider.
-> Would something like:
-> 
->     struct ptp_system_timestamp sts = {};
-> 
-> inside the loop (or at declaration) be safer?
+> Could you clarify the intended distinction between FREE_RUNNING and
+> UNRELIABLE? What does UNRELIABLE represent beyond FREE_RUNNING?
 >
 
-Yes — I'll zero-initialize sts per loop iteration in v6, so nothing
-uninitialized or stale can reach userspace. Thanks.
+They're on different axes. FREE_RUNNING means the clock isn't being
+disciplined but is coasting on a known oscillator, so error_bound is still
+meaningful and can be trusted (it grows predictably) — ptp_vmclock keeps
+populating it from the counter-period max-error rate in this state.
+UNRELIABLE instead means the clock is considered broken (e.g. the oscillator
+is faulty or abnormally unstable), so error_bound must not be trusted. This
+mirrors the VMClock specification [1], which defines FREERUNNING parameters
+as "expected to be valid and may be relied upon" and UNRELIABLE as the clock
+being "considered broken … should not be relied upon". A clock that is
+merely unsynchronized or resynchronizing (e.g. after a disruption) is better
+represented by UNKNOWN or INITIALIZING. I'll update the enum comments
+accordingly in v6.
+
+[1] https://uapi-group.org/specifications/specs/vmclock/
  
-> > +	unsigned int n_samples;
-> > +	int err;
-> > +
-> > +	if (copy_from_user(&request, arg, sizeof(request)))
-> > +		return -EFAULT;
-> > +
-> > +	if (request.valid ||
-> > +	    request.num_samples > PTP_MAX_SAMPLES ||
-> > +	    request.num_samples == 0)
-> > +		return -EINVAL;
 > 
-> [Medium]
-> Should this also reject non-zero request.rsv[]?
-> 
-> The kernel-doc for struct ptp_attrs_request says "Reserved for future
-> use, must be zero", but rsv[3] is never validated. The neighboring
-> ptp_sys_offset_extended() enforces the same contract on its own
-> reserved fields:
-> 
->     if (extoff->n_samples > PTP_MAX_SAMPLES || extoff->rsv[0] || extoff->rsv[1])
->         return -EINVAL;
-> 
-> Without a similar check, existing userspace binaries can start sending
-> garbage in rsv[], which then blocks any future repurposing of those
-> bytes.
-> 
+> Also, how is userspace expected to relate clock_status to error_bound?
+> Are there defined thresholds for transitions between the states or are
+> these entirely device-specific?
+>
 
-Agreed — v6 will reject a non-zero rsv[], matching
-ptp_sys_offset_extended(). Thanks.
+There are deliberately no kernel-defined thresholds — transitions are
+device-specific. status is a qualitative hint, error_bound the quantitative
+value, each gated by its own valid bit; the only defined cross-relation is
+that error_bound must not be trusted when status is UNKNOWN or UNRELIABLE.
+Fixed thresholds would be arbitrary across devices/hypervisors. I'll
+document this in v6.
+ 
+> > +
+> > +/*
+> > + * Clock timescale values for struct ptp_clock_attrs.timescale.
+> > + *
+> > + * These definitions describe the mathematical properties and reference
+> > + * epochs of the timescale provided by the PHC.
+> > + *
+> > + * Discipline: Describes the frequency/phase steering behavior.
+> > + * Continuity: Describes whether the timeline is uninterrupted.
+> > + */
+> > +enum ptp_clock_timescale {
+> > +	/* Unknown or unspecified timescale */
+> > +	PTP_TIMESCALE_UNKNOWN = 0,
+> > +
+> > +	/********************* Absolute Atomic Timescales *********************
+> > +	 * These timescales are continuous, monotonic standards based on atomic
+> > +	 * physics. They do not experience phase jumps.
+> > +	 **********************************************************************/
+> > +
+> > +	/**
+> > +	 * International Atomic Time (TAI)
+> > +	 * Epoch: 1958-01-01 00:00:00.
+> > +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> > +	 * Discipline: Primary atomic reference; no phase jumps.
+> > +	 */
+> > +	PTP_TIMESCALE_TAI = 1,
+> > +
+> > +	/**
+> > +	 * Terrestrial Time (TT)
+> > +	 * Epoch: 1958-01-01 00:00:00.
+> > +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> > +	 * Discipline: Defined as TAI + 32.184s constant offset.
+> > +	 */
+> > +	PTP_TIMESCALE_TT = 2,
+> > +
+> > +	/**
+> > +	 * Global Positioning System (GPS) Time
+> > +	 * Epoch: 1980-01-06 00:00:00.
+> > +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> > +	 * Discipline: Defined by the GPS constellation; fixed offset from TAI.
+> > +	 */
+> > +	PTP_TIMESCALE_GPS = 3,
+> > +
+> > +	/****************** UTC-Based Timescales (Civil Time) *****************
+> > +	 * These timescales are derived from TAI but adjusted to align with
+> > +	 * the Earth's rotation, primarily through leap seconds.
+> > +	 **********************************************************************/
+> > +
+> > +	/**
+> > +	 * Coordinated Universal Time (UTC) - Wall-clock (CLOCK_REALTIME)
+> > +	 * Epoch: 1970-01-01 00:00:00 (Unix epoch).
+> > +	 * Continuity: Discontinuous; subject to 1-second leap second
+> > +	 *             phase jumps.
+> > +	 * Discipline: Frequency steered; incorporates leap second corrections.
+> > +	 *
+> > +	 * Note: Leap-smeared UTC MUST NOT be advertised as PTP_TIMESCALE_UTC.
+> > +	 * Smear algorithms are not standardized and the resulting timescale
+> > +	 * is ambiguous. Implementations using smeared UTC MUST advertise
+> > +	 * PTP_TIMESCALE_UNKNOWN or PTP_TIMESCALE_PROPRIETARY instead.
+> > +	 */
+> > +	PTP_TIMESCALE_UTC = 4,
+> > +
+> > +	/**
+> > +	 * POSIX Time (Unix Time)
+> > +	 * Epoch: 1970-01-01 00:00:00.
+> > +	 * Continuity: Discontinuous; leap seconds handled by
+> > +	 *             repeating/skipping values.
+> > +	 * Discipline: Follows UTC frequency steering and phase jumps.
+> > +	 */
+> > +	PTP_TIMESCALE_POSIX = 5,
+> > +
+> > +	/****************** System-Relative Monotonic Clocks ******************
+> > +	 * These timescales are relative to a system event (like boot)
+> > +	 * and are not synchronized to an external atomic standard.
+> > +	 **********************************************************************/
+> > +
+> > +	/**
+> > +	 * Monotonic System Clock (CLOCK_MONOTONIC)
+> > +	 * Epoch: Arbitrary (System boot time).
+> > +	 * Continuity: Strictly monotonic; no leap seconds.
+> > +	 * Discipline: Frequency steered to match system reference;
+> > +	 *             does not advance during suspend.
+> > +	 */
+> > +	PTP_TIMESCALE_MONOTONIC = 6,
+> > +
+> > +	/**
+> > +	 * Raw Monotonic System Clock (CLOCK_MONOTONIC_RAW)
+> > +	 * Epoch: Arbitrary (System boot time).
+> > +	 * Continuity: Strictly monotonic; no leap seconds.
+> > +	 * Discipline: Raw hardware oscillator; no frequency steering
+> > +	 *             or discipline.
+> > +	 */
+> > +	PTP_TIMESCALE_MONOTONIC_RAW = 7,
+> > +
+> > +	/**
+> > +	 * Boot Time System Clock (CLOCK_BOOTTIME)
+> > +	 * Epoch: Arbitrary (System boot time).
+> > +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> > +	 * Discipline: Frequency steered to match system reference;
+> > +	 *             advances during suspend.
+> > +	 */
+> > +	PTP_TIMESCALE_BOOTTIME = 8,
+> > +
+> > +	/********************** Vendor-Specific Timescale *********************/
+> > +
+> > +	/* A proprietary or vendor-specific timescale with custom rules. */
+> > +	PTP_TIMESCALE_PROPRIETARY = 9,
+> > +};
+> > +
+> >   /*
+> >    * struct ptp_clock_time - represents a time value
+> >    *
+> > @@ -94,6 +225,119 @@ struct ptp_clock_time {
+> >   	__u32 reserved;
+> >   };
+> >   
+> > +/*
+> > + * Hardware counter identifiers for struct ptp_sys_time.sys_counter_id
+> > + */
+> > +enum ptp_counter_id {
+> > +	/* Counter value not available or type not specified */
+> > +	PTP_COUNTER_UNKNOWN = 0,
+> > +
+> > +	/* x86 Time Stamp Counter (TSC) */
+> > +	PTP_COUNTER_X86_TSC = 1,
+> > +
+> > +	/* ARM Generic Timer virtual counter */
+> > +	PTP_COUNTER_ARM_ARCH = 2,
+> > +};
+> > +
+> > +/* Valid flags for struct ptp_clock_attrs.valid */
+> > +#define PTP_ATTRS_VALID_ERROR_BOUND	(1 << 0)
+> > +#define PTP_ATTRS_VALID_TIMESCALE	(1 << 1)
+> > +#define PTP_ATTRS_VALID_STATUS		(1 << 2)
+> > +
+> > +/**
+> > + * struct ptp_clock_attrs - quality attributes for a PHC timestamp
+> > + *
+> > + * @valid:       Bitmask of PTP_ATTRS_VALID_* indicating which fields
+> > + *               are populated. Zero means no attributes available.
+> > + * @error_bound: Maximum error in nanoseconds. Valid only when
+> > + *               PTP_ATTRS_VALID_ERROR_BOUND is set.
+> > + * @timescale:   Clock timescale (enum ptp_clock_timescale). Valid only
+> > + *               when PTP_ATTRS_VALID_TIMESCALE is set.
+> > + * @status:      Synchronization status (enum ptp_clock_status). Valid
+> > + *               only when PTP_ATTRS_VALID_STATUS is set.
+> > + * @rsv:         Reserved for future use, must be zero.
+> > + */
+> > +struct ptp_clock_attrs {
+> > +	__u32 valid;
+> > +	__u32 error_bound;
+> 
+> Error relative to what? The advertised timescale's true time, or the
+> device's sync source? And is this a hard bound or an estimate?
 
-> > +
-> > +	err = ptp_validate_sys_offset_clockid(request.clock_id);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	n_samples = request.num_samples;
-> > +	sts.clockid = request.clock_id;
-> > +
-> > +	data = kzalloc(struct_size(data, timestamps, n_samples), GFP_KERNEL);
-> > +	if (!data)
-> > +		return -ENOMEM;
-> > +
-> > +	data->request.num_samples = n_samples;
-> 
-> [Low]
-> This is a _IOWR ioctl and the whole struct (including data->request) is
-> copied back to userspace at the end, but only data->request.num_samples
-> is populated. data->request.valid, data->request.clock_id and
-> data->request.rsv[] therefore always come back as zero, silently
-> overwriting the values userspace put in the request buffer.
-> 
-> Is that intentional? It is not mentioned in the commit message, and it
-> locks in a slightly surprising contract for future extensions.
-> 
-
-Not intentional — v6 will echo the full request back so
-valid/clock_id/num_samples/rsv round-trip as submitted. Thanks.
-
-> > +
-> > +	for (unsigned int i = 0; i < n_samples; i++) {
-> > +		struct ptp_clock_attrs att = {};
-> > +		struct timespec64 ts;
-> > +
-> > +		if (ptp->info->gettimexattrs64)
-> > +			err = ptp->info->gettimexattrs64(ptp->info, &ts,
-> > +							 &sts, &att);
-> > +		else if (ptp->info->gettimex64)
-> > +			err = ptp->info->gettimex64(ptp->info, &ts, &sts);
-> > +		else
-> > +			return -EOPNOTSUPP;
-> > +
-> > +		if (err)
-> > +			return err;
-> > +
-> > +		/* Filter out disabled or unavailable clocks */
-> > +		if (!sts.pre_sts.valid || !sts.post_sts.valid)
-> > +			return -EINVAL;
-> > +
-> > +		data->timestamps[i].pre_systime.sys_time =
-> > +			ktime_to_ns(sts.pre_sts.systime);
-> > +		data->timestamps[i].pre_systime.sys_rawtime =
-> > +			ktime_to_ns(sts.pre_sts.monoraw);
-> > +		data->timestamps[i].pre_systime.sys_counter =
-> > +			sts.pre_sts.cycles;
-> > +		data->timestamps[i].pre_systime.sys_counter_id =
-> > +			sts.pre_sts.cs_id;
-> 
-> [Critical]
-> Does the sys_counter_id assignment produce the correct UAPI value?
-> 
-> sts.pre_sts.cs_id is enum clocksource_ids from
-> include/linux/clocksource_ids.h:
-> 
->     CSID_GENERIC          = 0,
->     CSID_ARM_ARCH_COUNTER = 1,
->     CSID_S390_TOD         = 2,
->     CSID_X86_TSC_EARLY    = 3,
->     CSID_X86_TSC          = 4,
->     CSID_X86_KVM_CLK      = 5,
->     CSID_X86_ART          = 6,
-> 
-> But sys_counter_id is documented as enum ptp_counter_id from the UAPI:
-> 
->     PTP_COUNTER_UNKNOWN  = 0,
->     PTP_COUNTER_X86_TSC  = 1,
->     PTP_COUNTER_ARM_ARCH = 2,
-> 
-> With this direct assignment, on ARM sts.pre_sts.cs_id == 1
-> (CSID_ARM_ARCH_COUNTER) is reported to userspace as PTP_COUNTER_X86_TSC.
-> On x86, real CSID_X86_TSC (4) has no defined UAPI meaning. On s390,
-> CSID_S390_TOD (2) is reported as PTP_COUNTER_ARM_ARCH.
-> 
-> Should the ioctl translate cs_id into the UAPI enum before copying it
-> out? Once released, later adding a translation layer would break any
-> userspace that started decoding the raw kernel values.
-> 
-
-Good catch — that's a bug. v6 will translate enum clocksource_ids to the
-UAPI enum ptp_counter_id before copying out. Thanks.
-
-> [High]
-> On clocksources that are derived/virtualised (kvm-clock, scaled arch
-> counter, ART, ...), the raw underlying counter identity is exposed by
-> system_time_snapshot as hw_cycles/hw_csid rather than cycles/cs_id.
-> The new UAPI only propagates cycles/cs_id.
-> 
-> The commit message says one motivation is:
-> 
->     3. VMMs that need raw system counter values paired with PTP
->        timestamps for feed-forward clock calibration ...
-> 
-> but a guest on a derived clocksource will not see the underlying
-> hardware counter identity or value here. Should the UAPI also expose
-> hw_cycles/hw_csid, given that the struct is frozen once merged?
-> 
-
-This is being handled as a follow-up (David Woodhouse offered on-list to
-take the hw_csid side). This series exposes the base cs_id/cycles, and the
-UAPI leaves room to add the hw_* values without an ABI change.
-
-> > +		data->timestamps[i].devtime.device_time.sec = ts.tv_sec;
-> > +		data->timestamps[i].devtime.device_time.nsec = ts.tv_nsec;
-> > +		data->timestamps[i].devtime.attrs = att;
-> 
-> [ ... ]
-> 
-> > +}
-> > +
-> > +static long ptp_sys_offset_precise_attrs(struct ptp_clock *ptp, void __user *arg)
-> > +{
-> > +	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
-> > +	struct system_device_crosststamp xtstamp;
-> > +	struct ptp_attrs_request request;
-> > +	struct ptp_clock_attrs att = {};
-> > +	struct timespec64 ts;
-> > +	int err;
-> > +
-> > +	if (copy_from_user(&request, arg, sizeof(request)))
-> > +		return -EFAULT;
-> > +
-> > +	if (request.valid ||
-> > +	    request.num_samples != 1)
-> > +		return -EINVAL;
-> > +
-> > +	err = ptp_validate_sys_offset_clockid(request.clock_id);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	data = kzalloc(struct_size(data, timestamps, 1), GFP_KERNEL);
-> > +	if (!data)
-> > +		return -ENOMEM;
-> > +
-> > +	if (ptp->info->getcrosststampattrs)
-> > +		err = ptp->info->getcrosststampattrs(ptp->info, &xtstamp, &att);
-> > +	else if (ptp->info->getcrosststamp)
-> > +		err = ptp->info->getcrosststamp(ptp->info, &xtstamp);
-> > +	else
-> > +		return -EOPNOTSUPP;
-> 
-> [High]
-> Can any driver using get_device_system_crosststamp() actually serve
-> this ioctl?
-> 
-> xtstamp is declared without an initializer, so xtstamp.clock_id holds
-> whatever was on the stack. The pre-existing ptp_sys_offset_precise()
-> explicitly sets it:
-> 
->     struct system_device_crosststamp xtstamp = {
->         .clock_id = CLOCK_REALTIME,
->     };
-> 
-> Drivers commonly forward xtstamp to get_device_system_crosststamp() in
-> kernel/time/timekeeping.c, which switches on xtstamp->clock_id and
-> falls through to:
-> 
->     default:
->         WARN_ON_ONCE(1);
->         return -ENODEV;
-> 
-> So on most drivers implementing getcrosststamp (kvm, mlx5, ice, igc,
-> bnxt, s390, ...), an unprivileged caller of PTP_SYS_OFFSET_PRECISE_ATTRS
-> would trigger a first-hit WARN and get -ENODEV.
-> 
-> In addition, request.clock_id is validated by
-> ptp_validate_sys_offset_clockid() but never assigned to
-> xtstamp.clock_id, so the userspace-selected clock is silently dropped
-> even for the paths documented in the UAPI header (CLOCK_MONOTONIC,
-> CLOCK_MONOTONIC_RAW, CLOCK_AUX...).
-> 
-> Should xtstamp.clock_id be set from request.clock_id (and xtstamp
-> zeroed before use)?
-> 
-
-Real bug, thanks. v6 zero-initializes xtstamp and sets clock_id from the
-validated request. To avoid the get_device_system_crosststamp() default
-WARN, precise will validate clock_id against a dedicated allowlist (REALTIME
-+ AUX) and return -EINVAL for anything else.
-
-> [ ... ]
-> 
-> > diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
-> > index d6f54ccaf93b..849aef8191c5 100644
-> > --- a/drivers/ptp/ptp_clock.c
-> > +++ b/drivers/ptp/ptp_clock.c
-> > @@ -112,7 +112,9 @@ static int ptp_clock_gettime(struct posix_clock *pc, struct timespec64 *tp)
-> >  	struct ptp_clock *ptp = container_of(pc, struct ptp_clock, clock);
-> >  	int err;
-> >  
-> > -	if (ptp->info->gettimex64)
-> > +	if (ptp->info->gettimexattrs64)
-> > +		err = ptp->info->gettimexattrs64(ptp->info, tp, NULL, NULL);
-> > +	else if (ptp->info->gettimex64)
-> >  		err = ptp->info->gettimex64(ptp->info, tp, NULL);
-> >  	else
-> >  		err = ptp->info->gettime64(ptp->info, tp);
-> 
-> [Low]
-> This call site passes both sts and att as NULL, but the kernel-doc for
-> gettimexattrs64 only documents that att may be NULL ("fills @att (if
-> not NULL)"). The dual-NULL contract on sts is implicitly inherited
-> from gettimex64 but is not stated.
-> 
-> Would it be worth spelling out in the kernel-doc that both sts and att
-> may be NULL, so a new driver author does not skip the NULL check on
-> sts?
-
-Yes — v6 will state that both sts and att may be NULL. Thanks.
-
-> 
-> [ ... ]
+It's an upper bound (maximum error) in nanoseconds on the offset between
+device_time and true time on the advertised @timescale — not relative to an
+internal sync source, and a bound, not a statistical estimate. This follows
+the VMClock specification's [1] error model, which advertises maximum error
+bounds (T₁ ± time_maxerror, P ± counter_period_maxerror) as distinct from
+the estimated-error fields; we expose the maximum. On ENA it's the
+device-reported "timestamp error limit (nsec)". I'll clarify the
+@error_bound kernel-doc in v6.
 
 
