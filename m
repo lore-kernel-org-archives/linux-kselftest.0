@@ -1,52 +1,52 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8509438DC6E
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97EA3EC817
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785337944; cv=none; b=clbbEHtoYkM3OqqT1j8AfdfQUA2DPGb/ivgtRrxryPLwVGTcavVjUE1p9s+dyyENsaZfkHVjJwFV2ZdKjJn0/Fr5zoMnwgPXMSwiYMZq4In9fkPMz8JDQf8whWJJ5bk/pBJqsEwGhcU56dlGKWl/MvLkLR03Ee9hRDHYiNhk+CQ=
+	t=1785338250; cv=none; b=r6MvvQUmmWtfHBzynjVzmHUEwcSegFlUVkCkMjQ7EFgnZa+YzTfhGXnAWaHmp28tRNZ0aRTBEuugmU1XjrxaAsaGXFnU3BFtWp7uu/5m6dhBw8uOG32qdDWaBwWnT+xHKc9MBOTBnP72Zy2pWC87SwmT0Kyu6qfckDNmYwKZ3Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785337944; c=relaxed/simple;
-	bh=OcqSaTeLFBw/37oYMtNHG50Md6M29m6rUY9fQn9TwYo=;
+	s=arc-20240116; t=1785338250; c=relaxed/simple;
+	bh=+h9sttoR68rx+GrC/rxmaOenAHYFlJ1Bom+m58CnNCs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BT/tDV05vLUTGDUPyGLmyAocBI3BOj+oTyqnq1BPArQwHFQZhSbHGS6yRC//F7XnqrcspnGNlWZh74/45zBJKtX7AaryKnkKrRxM+cRDdv2ipsWIrJTcU95FPLAMea6gL0div5th1sy0FH9aIgYyUiRdAn+jgxwScFu4ndvWd3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d5LrJ0mL; arc=none smtp.client-ip=95.215.58.188
+	 To:Cc:Content-Type; b=sjY1FEoBx59cFGPVo2X6+SHcUmd/RQkqQM6LdWSwGIQG4XWWnKC04r8IL05fMLzrlQ5gCCIFDa2W2F4elJOfa9ItDrki6pLqz0DRLRqq++d+07Rh3ufdvrUun8NmG8oPbzucZMPPfJLiw6d40cLtx4DTu9kYSeTpqE3CdqusJDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CysC5sKL; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d5LrJ0mL"
-X-Forwarded-Encrypted: i=1; AHgh+RrHRxGZq4SvXgg9AFAKtAZSgnDWRsPLp46udWa9h+qHOmOJnNTdvJBwzkvFCDX9j35klekur6w7TXJ/4gKl7fE=@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CysC5sKL"
+X-Forwarded-Encrypted: i=1; AHgh+Rp71PMpvgQypKlf0IgPEi9xdx/ePxW7NnmwzdEUyOSlHcXBfmHV7WQoUFUvFCARPY9AWto+wZLTN4f+Dr7g5jQ=@vger.kernel.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785337940;
+	t=1785338246;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GZkD05VF0k87b16ZMBfeT0j3aww6dW2ILKTzqN3+UtU=;
-	b=d5LrJ0mLzh/njwugiAu7i0bMZFzC2cnGSx/Ji0dlMsLzueUM/qioUf584dGe2wzLIdFZjQ
-	E8Qf7vnY9FkBt+ZTPzPv8EowZRWUwHcHC4iBBTvXlN7QTHuDDivosSCCizcHb1XPqjxSVq
-	QFEaylEqt7hY5OsOdZmmidJlS8iJMKY=
-X-Gm-Message-State: AOJu0YzqbCqTB7o6vthRMPy0YJzafbHp2GT+xyDufL5z2VPBDoJbMYI+
-	AtBxOZXqIZmpaUugH8cDtgqGBCZ34lV3NRvEtI+gfueZ+JN3t1f20MH0KP77jd0KM4NZdZV6JVd
-	F4ulsmlzFSZbwukDU3bqgGu+Bjw8qfz8TJTESqB7S
-X-Received: by 2002:ac8:7e8e:0:b0:51b:ff0a:2048 with SMTP id
- d75a77b69052e-52b350e5e9dmr111891cf.3.1785337931850; Wed, 29 Jul 2026
- 08:12:11 -0700 (PDT)
+	bh=ti+NqKDTLfm/nZ8f6EX1KwjNP1iMFipkmncvpp1Cax0=;
+	b=CysC5sKLgkaYSDzdjbTUfAivIn3eu6l/jBVtLSbntAPX+duhPB3vKhUg+FTsop0OF09gQ0
+	wrQtNxm6uF0CtzQ7elx8BBEiuVqERyTwOateLZ62CppcTGkWnIlKjuWAR2spgTLMB+gUE0
+	s8Z8IB8bvhXxkuRhw2a3ysMwXJ8dVZA=
+X-Gm-Message-State: AOJu0YzkBYd5mliPsb8JVY6L/VjjCRpIZhvWe9LW8PZPCKRhGRBHqA8M
+	kOeSNhfcC31lQ7+GvFeUm1VeKUMYdemsxpPxo1uIyMqM7f4GDRPN0Es6i4oIz2GCx1zJBWSK0Qo
+	5zDJGK4Odk7VyuZtGJlB/Mk/QkIBQKB5whzSI2h/h
+X-Received: by 2002:ac8:7dc4:0:b0:528:3186:5799 with SMTP id
+ d75a77b69052e-52b35089d24mr441161cf.10.1785338243657; Wed, 29 Jul 2026
+ 08:17:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-1-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260720-hybrid-v9-1-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-2-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260720-hybrid-v9-2-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Wed, 29 Jul 2026 16:11:34 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTxy6f2EPhtOkHju39hGi91ZM5heu5ZA0upmmDxBq2GstQ@mail.gmail.com>
-X-Gm-Features: AUfX_myxJfjxAZR1tFLm51zrI58rRpwUPxuAUzGX7sj7-3UdzYo6Sjg9A4wrAHA
-Message-ID: <CA+EHjTxy6f2EPhtOkHju39hGi91ZM5heu5ZA0upmmDxBq2GstQ@mail.gmail.com>
-Subject: Re: [PATCH v9 01/16] KVM: arm64: Serialize repeated vCPU initialization
+Date: Wed, 29 Jul 2026 16:16:46 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTwCFXkQ=VHjQt3zt0TORh5YwPVCPBqFqTJF7YULxM-11g@mail.gmail.com>
+X-Gm-Features: AUfX_mxk11pzy6CU19PtboDUtDrd-zS8qSEKUP6-qNGENZgdWGBbQJn1zZ_m4NQ
+Message-ID: <CA+EHjTwCFXkQ=VHjQt3zt0TORh5YwPVCPBqFqTJF7YULxM-11g@mail.gmail.com>
+Subject: Re: [PATCH v9 02/16] KVM: arm64: PMU: Stop updating MDCR_EL2.HPMN
 To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
 	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
@@ -65,17 +65,19 @@ X-Migadu-Flow: FLOW_OUT
 On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
 <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
 >
-> The initial KVM_ARM_VCPU_INIT path holds config_lock while resetting the
-> vCPU, but repeated initialization of an existing vCPU does not. As a
-> result, reset_mdcr() can race with VM-wide PMU configuration and
-> overwrite MDCR_EL2 with a stale counter count.
+> KVM allows userspace to write any value to MDCR_EL2.HPMN. However,
+> kvm_arm_set_nr_counters() rewrites HPMN for every vCPU whenever
+> userspace changes the PMU or its counter count. This can discard a
+> value previously restored with KVM_SET_ONE_REG.
 >
-> Take config_lock around the repeated-init checks and reset. The vCPU
-> ioctl already holds vcpu->mutex, matching the established lock ordering.
+> The architecture only defines HPMN's value on warm reset. Stop
+> rewriting it after vCPU initialization and update nr_pmu_counters
+> directly instead. reset_mdcr() continues to initialize HPMN from the
+> counter count current at KVM_ARM_VCPU_INIT.
 >
 > Fixes: c8823e51b534 ("KVM: arm64: Fix MDCR_EL2.HPMN reset value")
-> Closes: https://sashiko.dev/#/patchset/20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp?part=1
-> Assisted-by: Codex:gpt-5.6-sol
+> Closes: https://sashiko.dev/#/patchset/20260706-hybrid-v8-0-de459617b59d%40rsg.ci.i.u-tokyo.ac.jp?part=6
+> Assisted-by: Codex:gpt-5.5
 > Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
 Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
@@ -84,56 +86,53 @@ Cheers,
 /fuad
 
 > ---
->  arch/arm64/kvm/arm.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
+>  arch/arm64/kvm/pmu-emul.c | 22 ++--------------------
+>  1 file changed, 2 insertions(+), 20 deletions(-)
 >
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 50adfff75be8..a06ea39f57b1 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -1652,29 +1652,26 @@ static int __kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
->  {
->         unsigned long features = init->features[0];
->         struct kvm *kvm = vcpu->kvm;
-> -       int ret = -EINVAL;
-> +       int ret;
->
-> -       mutex_lock(&kvm->arch.config_lock);
-> +       lockdep_assert_held(&kvm->arch.config_lock);
->
->         if (test_bit(KVM_ARCH_FLAG_VCPU_FEATURES_CONFIGURED, &kvm->arch.flags) &&
->             kvm_vcpu_init_changed(vcpu, init))
-> -               goto out_unlock;
-> +               return -EINVAL;
->
->         bitmap_copy(kvm->arch.vcpu_features, &features, KVM_VCPU_MAX_FEATURES);
->
->         ret = kvm_setup_vcpu(vcpu);
->         if (ret)
-> -               goto out_unlock;
-> +               return ret;
->
->         /* Now we know what it is, we can reset it. */
->         kvm_reset_vcpu(vcpu);
->
->         set_bit(KVM_ARCH_FLAG_VCPU_FEATURES_CONFIGURED, &kvm->arch.flags);
->         vcpu_set_flag(vcpu, VCPU_INITIALIZED);
-> -       ret = 0;
-> -out_unlock:
-> -       mutex_unlock(&kvm->arch.config_lock);
-> -       return ret;
-> +       return 0;
+> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+> index 98305bbfc095..b5df6843dbcd 100644
+> --- a/arch/arm64/kvm/pmu-emul.c
+> +++ b/arch/arm64/kvm/pmu-emul.c
+> @@ -1022,30 +1022,12 @@ u8 kvm_arm_pmu_get_max_counters(struct kvm *kvm)
+>         return bitmap_weight(arm_pmu->cntr_mask, ARMV8_PMU_MAX_GENERAL_COUNTERS);
 >  }
 >
->  static int kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
-> @@ -1690,6 +1687,8 @@ static int kvm_vcpu_set_target(struct kvm_vcpu *vcpu,
->         if (ret)
->                 return ret;
+> -static void kvm_arm_set_nr_counters(struct kvm *kvm, unsigned int nr)
+> -{
+> -       kvm->arch.nr_pmu_counters = nr;
+> -
+> -       /* Reset MDCR_EL2.HPMN behind the vcpus' back... */
+> -       if (test_bit(KVM_ARM_VCPU_HAS_EL2, kvm->arch.vcpu_features)) {
+> -               struct kvm_vcpu *vcpu;
+> -               unsigned long i;
+> -
+> -               kvm_for_each_vcpu(i, vcpu, kvm) {
+> -                       u64 val = __vcpu_sys_reg(vcpu, MDCR_EL2);
+> -                       val &= ~MDCR_EL2_HPMN;
+> -                       val |= FIELD_PREP(MDCR_EL2_HPMN, kvm->arch.nr_pmu_counters);
+> -                       __vcpu_assign_sys_reg(vcpu, MDCR_EL2, val);
+> -               }
+> -       }
+> -}
+> -
+>  static void kvm_arm_set_pmu(struct kvm *kvm, struct arm_pmu *arm_pmu)
+>  {
+>         lockdep_assert_held(&kvm->arch.config_lock);
 >
-> +       guard(mutex)(&vcpu->kvm->arch.config_lock);
-> +
->         if (!kvm_vcpu_initialized(vcpu))
->                 return __kvm_vcpu_set_target(vcpu, init);
+>         kvm->arch.arm_pmu = arm_pmu;
+> -       kvm_arm_set_nr_counters(kvm, kvm_arm_pmu_get_max_counters(kvm));
+> +       kvm->arch.nr_pmu_counters = kvm_arm_pmu_get_max_counters(kvm);
+>  }
+>
+>  /**
+> @@ -1111,7 +1093,7 @@ static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+>         if (n > kvm_arm_pmu_get_max_counters(kvm))
+>                 return -EINVAL;
+>
+> -       kvm_arm_set_nr_counters(kvm, n);
+> +       kvm->arch.nr_pmu_counters = n;
+>         return 0;
+>  }
 >
 >
 > --
