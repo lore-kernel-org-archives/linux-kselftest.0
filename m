@@ -1,55 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDB927280A;
-	Wed, 29 Jul 2026 05:17:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54F9372B3C;
+	Wed, 29 Jul 2026 06:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785302243; cv=none; b=W5cAUo6Q/gZ6FlOFlqj5HYirit76+N7IkCbLHg0Qs3wiQT22P6DCuD8S5iq8FQ73A1r3rKQ19LtHefvzl0j7HVO5i1TfMYHjUheDEhEONN1pBPYCAy9/JfoF8AQdR2SVmFTRydxe3u3bjGpz154E768RalOf1FAseYU6oq4ou6k=
+	t=1785305769; cv=none; b=vGfrhoJvIy93fVvKddSndumqwJXBEwpAKQAVYQyxPMA5vgK1/KNrrHV8r+e2nwIuRGH0c6RMldrBA6+6gU5X/o8UZzxpCAd84gkjaYxZ8wHm6oMGrgC+6vjL0dG7/O5V+H/MfLc2YJtwGwaqWvVW/o0QYVp5cWxzxP3R+5dWE+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785302243; c=relaxed/simple;
-	bh=b0V3v+Qn18zsM2oGfooMbXC1xj29XL9U6pde+gHzMd4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=M8pH3dwF4X2u0jq/DykxGCeT07DJMMKbEOQu7xUI4kxf9ipE3RZJwxceyrTeItVjl6nT3KB4EDla72ZiMU4fcf4mrfjoF6J9wb6bvfPGEETaMRv/Q4ySTWowPldrwckv5FNvWwoaghaecKhMV2AOA2UJINbRImDAMIJnHWqCa08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhZImyy4; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhZImyy4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 828C51F00A3A;
-	Wed, 29 Jul 2026 05:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785302241;
-	bh=yWs/6GxHQxoazFHckud13tONmCIETA3kp/c4/93T8NM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EhZImyy49vt9VDzAGhjB3JLqZvmRIkP8dVwVm6zFEToqWk8UED3GrttsvyEZIMjr1
-	 xzICm3UOdob564x9n0uwBj2n/8C0oZOZszoY6S6XE7+ug1yZreBTRVOAW/b+56Tlog
-	 YaXfxojn0sUte61ZkePHT+5ou9lMB8n2+4bafMetmJVz5/8JnDbOgOdtNkaf9Qle8C
-	 jslz9QhFqszhv9Zer7+APDKiL4bUhLVNu0NveFivM2O153YPJ+Tgt8c15WCidP7q7V
-	 H9PkRNGTZWcY2/+CIMNaD5apedNQ2GVhj6d9iDJ4BWtXIdIIlTO4LFqiEFW1glXFSK
-	 voWjQuyVjcYwA==
-Message-ID: <10356f7d8b0ffdba27987c79fc7f4b7574cf873b.camel@kernel.org>
-Subject: Re: [PATCH 02/11] nvmet-tcp: implement accept mptcp proto
-From: Geliang Tang <geliang@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>, Matthieu Baerts <matttbe@kernel.org>, 
- Nilay Shroff <nilay@linux.ibm.com>, Hannes Reinecke <hare@suse.de>,
- Christoph Hellwig <hch@lst.de>
-Cc: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Sagi
- Grimberg <sagi@grimberg.me>, Chaitanya Kulkarni <kch@nvidia.com>, Mat
- Martineau <martineau@kernel.org>,  "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Geliang Tang
- <tanggeliang@kylinos.cn>, 	linux-nvme@lists.infradead.org,
- netdev@vger.kernel.org, mptcp@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, John Meneghini <jmeneghi@redhat.com>,
- Randy Jennings <randyj@purestorage.com>, zhenwei pi <zhenwei.pi@linux.dev>,
- Hui Zhu <zhuhui@kylinos.cn>,  Gang Yan <yangang@kylinos.cn>
-Date: Wed, 29 Jul 2026 13:17:10 +0800
-In-Reply-To: <4df03cad08088fba7fb49beaeb6513cef5b87c2b.camel@kernel.org>
-References: <cover.1779934709.git.tanggeliang@kylinos.cn>
-			<a1fa5dd3ebb0cafe1bf7948bf2a96436e9452e19.1779934709.git.tanggeliang@kylinos.cn>
-		 <20260528082344.7e4cd1a1@kernel.org>
-	 <4df03cad08088fba7fb49beaeb6513cef5b87c2b.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.2-9 
+	s=arc-20240116; t=1785305769; c=relaxed/simple;
+	bh=e8FGAVTT5khFAyFskXVaBczff1W5aySeK9CTbu9nWfs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zp1Ij1eKfrzqHSb4sXpTF6og8WuJ6g26lHhfRPVHEQuAQe+TjyTsPjnB6ZptmqPg3heDvIb1X7UN6ARsDLk7vSqsDdODqefE1B8omPFYwxYzHNVm6JJrb/3e6Y18ohLbE+VSXm06liBmIlw7Di4/R6R1uJ0PvKzZmX9I20IAe8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f4c3d9da8b1411f1aa26b74ffac11d73-20260729
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
+	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD_SPF, CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:68a28910-ec20-41a6-ac6c-187de75d6c84,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:68a28910-ec20-41a6-ac6c-187de75d6c84,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:63fb6d16496f8e0ad5477dbb5e0857ce,BulkI
+	D:2607291415576EBNHADR,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:
+	nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
+	RE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: f4c3d9da8b1411f1aa26b74ffac11d73-20260729
+X-User: tianyaxiong@kylinos.cn
+Received: from tian-x86.. [(106.16.184.249)] by mailgw.kylinos.cn
+	(envelope-from <tianyaxiong@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 662220583; Wed, 29 Jul 2026 14:15:54 +0800
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+To: rafael@kernel.org,
+	daniel.lezcano@kernel.org,
+	christian.loehle@arm.com,
+	lenb@kernel.org,
+	pavel@kernel.org,
+	shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yaxiong Tian <tianyaxiong@kylinos.cn>
+Subject: [PATCH v2 0/6] cpuidle: speed up do_idle() by caching the governor latency QoS constraint
+Date: Wed, 29 Jul 2026 14:15:49 +0800
+Message-ID: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,232 +69,155 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+cpuidle_governor_latency_req() is evaluated on every idle-state
+selection.  It aggregates the per-CPU resume latency with the global
+CPU latency and wakeup latency QoS limits by repeatedly calling
+get_cpu_device() and pm_qos_read_value() cpu_latency_qos_limit()
+cpu_wakeup_latency_qos_limit().
 
-Thank you all very much for your interest in "NVMe over MPTCP" and for
-adding review comments to this version of the series. This has been
-very helpful to me. There are indeed some issues with this version, but
-the good news is that I have recently found a direction for improving
-it.
+Use ftrace's function_graph, we can see:
+parent:          do_idle
+parent_total_ns: 36671010505
+parent_count:    5994
 
-On Fri, 2026-05-29 at 22:20 +0800, Geliang Tang wrote:
-> Hi Jakub,
-> 
-> On Thu, 2026-05-28 at 08:23 -0700, Jakub Kicinski wrote:
-> > On Thu, 28 May 2026 11:10:36 +0800 Geliang Tang wrote:
-> > > Dedicated MPTCP helpers are introduced for setting accept socket
-> > > options.
-> > > These helpers (no_linger, set_priority, set_tos) set the values
-> > > on
-> > > all
-> > > existing subflows using mptcp_for_each_subflow(). The values are
-> > > then
-> > > synchronized to other newly created subflows in
-> > > sync_socket_options().
-> > 
-> > These are not protocol specific options, why do we have to export
-> > MPTCP-specific functions for them?
-> 
-> Thank you for reading the code. In addition to the three MPTCP-
-> specific
-> functions implemented in this patch, I have implemented and exported
-> the following six MPTCP-specific functions throughout the series:
-> 
->     void mptcp_sock_set_nodelay(struct sock *sk)
->     int mptcp_sock_set_syncnt(struct sock *sk, int val)
->     void mptcp_sock_set_tos(struct sock *sk, int val)
->     void mptcp_sock_no_linger(struct sock *sk)
->     void mptcp_sock_set_priority(struct sock *sk, u32 priority)
->     void mptcp_sock_set_reuseaddr(struct sock *sk)
-> 
-> These correspond to the following six functions originally used for
-> TCP:
-> 
->     tcp_sock_set_nodelay()
->     tcp_sock_set_syncnt()
->     ip_sock_set_tos()
->     sock_no_linger()
->     sock_set_priority()
->     sock_set_reuseaddr()
+SYMBOL                                                      TIME_NS    %ROOT  %PARENT      COUNT
+--------------------------------------------------------------------------------------------------
+do_idle                                                 36671010505  100.00%  100.00%       5994
+  cpuidle_idle_call                                     35566528731   96.99%   96.99%       8570
+    call_cpuidle                                        35476606844   96.74%   99.75%       8561
+      cpuidle_enter                                     35472932468   96.73%   99.99%       8526
+    cpuidle_select                                         52097031    0.14%    0.15%       8580
+      menu_select                                          49555181    0.14%   95.12%       8580
+        tick_nohz_get_sleep_length                         28843887    0.08%   58.21%       8570
+        cpuidle_governor_latency_req                        9567488    0.03%   19.31%       8580
+        tick_nohz_tick_stopped                              2057031    0.01%    4.15%      15695
+    cpuidle_reflect                                        11427201    0.03%    0.03%       8561
+      menu_reflect                                          6579506    0.02%   57.58%       8526
+        tick_nohz_idle_got_tick                             2231559    0.01%   33.92%       8526
+      __sysvec_apic_timer_interrupt                          105520    0.00%    0.92%          3
+    tick_nohz_idle_stop_tick                                8279641    0.02%    0.02%       1475
+    ---- skip
 
-Here I missed one option, SO_BINDTODEVICE. Currently, NVMe TCP sets 7
-sockopts: TCP_NODELAY, TCP_SYNCNT, IP_TOS, SO_LINGER, SO_PRIORITY,
-SO_REUSEADDR, and SO_BINDTODEVICE. The first 6 are called through the
-following 6 functions:
+The majority of the time spent in cpuidle_enter for CPUs entering
+idle state has already been charged to the idle path. Among the
+remaining contributors, cpuidle_governor_latency_req() accounts 
+for a non-negligible portion of the overall latency.
 
-    tcp_sock_set_nodelay()
-    tcp_sock_set_syncnt()
-    ip_sock_set_tos()
-    sock_no_linger()
-    sock_set_priority()
-    sock_set_reuseaddr()
+Under the menu governor this shows up hot: ftrace data shows,
+ cpuidle_governor_latency_req() accounts for about 19.9% of
+menu_select() time (~1.9 us/call).  After caching the aggregated
+value per CPU and invalidating via QoS notifiers, that share drops to
+about 4.2% (~0.3 us/call), roughly a 6x reduction on this path.
 
-The last one is called through sock_setsockopt:
+The ftrace data before and after the optimization is shown below:
+1) original
+parent:          menu_select
+parent_total_ns: 160492937
+parent_count:    16718
 
-    ret = sock_setsockopt(queue->sock, SOL_SOCKET, SO_BINDTODEVICE,
-                          optval, strlen(iface));
+SYMBOL                                                      TIME_NS    %ROOT  %PARENT      COUNT
+--------------------------------------------------------------------------------------------------
+menu_select                                               160492937  100.00%  100.00%      16718
+  tick_nohz_get_sleep_length                              100262940   62.47%   62.47%      16698
+    tick_nohz_next_event                                   67891299   42.30%   67.71%      16689
+      rcu_needs_cpu                                         2825649    1.76%    4.16%      16689
+      timekeeping_max_deferment                             2380377    1.48%    3.51%      15296
+    hrtimer_next_event_without                             17865162   11.13%   17.82%      15296
+      hrtimer_bases_next_event_without                      2707631    1.69%   15.16%      15296
+      _raw_spin_lock_irqsave                                2461132    1.53%   13.78%      15296
+        native_queued_spin_lock_slowpath                        177    0.00%    0.01%          1
+      _raw_spin_unlock_irqrestore                           2364647    1.47%   13.24%      15296
+    can_stop_idle_tick                                      2906072    1.81%    2.90%      16698
+  cpuidle_governor_latency_req                             31988150   19.93%   19.93%      16718
+    get_cpu_device                                          4122502    2.57%   12.89%      16718
+    pm_qos_read_value                                       3427318    2.14%   10.71%      16718
+    cpu_latency_qos_limit                                   3005804    1.87%    9.40%      16718
+    cpu_wakeup_latency_qos_limit                            3005475    1.87%    9.40%      16718
+  tick_nohz_tick_stopped                                    4551981    2.84%    2.84%      29496
 
-In NVMe TCP, the first three - TCP_NODELAY, TCP_SYNCNT, IP_TOS - are
-protocol-specific, while the last four - SO_LINGER, SO_PRIORITY,
-SO_REUSEADDR, SO_BINDTODEVICE - are protocol-independent.
+%ROOT = share of menu_select; %PARENT = share of immediate caller (inclusive)
 
-When we add NVMe MPTCP support, all sockets created when using NVMe
-MPTCP are MPTCP sockets. Using the above functions to set sockopts on
-MPTCP sockets will not succeed. The implementations of these 7 sockopts
-for MPTCP are all protocol-specific. MPTCP needs to set the sockopts
-not only on the MPTCP socket itself but also synchronize them to all
-subflow sockets, so that the sockopts actually take effect.
+2) post-optimized
+parent:          menu_select
+parent_total_ns: 55428604
+parent_count:    7626
 
-Therefore, in this version, I defined MPTCP-specific sockopt functions
-for each option, and switched between TCP and MPTCP by defining the
-struct nvmet_tcp_proto and struct nvme_tcp_proto structures.
+SYMBOL                                                      TIME_NS    %ROOT  %PARENT      COUNT
+--------------------------------------------------------------------------------------------------
+menu_select                                                55428604  100.00%  100.00%       7626
+  tick_nohz_get_sleep_length                               37464607   67.59%   67.59%       7544
+    tick_nohz_next_event                                   24076913   43.44%   64.27%       7522
+      get_next_timer_interrupt                             16332381   29.47%   67.83%       5854
+      rcu_needs_cpu                                         1489633    2.69%    6.19%       7522
+      timekeeping_max_deferment                              870851    1.57%    3.62%       5586
+    hrtimer_next_event_without                              6140153   11.08%   16.39%       5586
+      hrtimer_bases_next_event_without                       979000    1.77%   15.94%       5586
+      _raw_spin_lock_irqsave                                 808786    1.46%   13.17%       5586
+      _raw_spin_unlock_irqrestore                            785518    1.42%   12.79%       5586
+    can_stop_idle_tick                                      1583137    2.86%    4.23%       7544
+  cpuidle_governor_latency_req                              2321119    4.19%    4.19%       7626
+  tick_nohz_tick_stopped                                    1863015    3.36%    3.36%      12751
 
+%ROOT = share of menu_select; %PARENT = share of immediate caller (inclusive)
 
+This series:
+- patch1~pathc3: Add QoS notifiers-related infrastructure and updates to
+latency_req_gen.
+- patch4: Implement QoS constraint for cache-aggregated governor latency
+- patch5: add latency_req QoS idle-state selection test
+- patch6: add idle-state disable selftest
 
-A better design is to initiate protocol-specific sockopt settings from
-the NVMe side by calling the sock_common_setsockopt() function. This
-can automatically select the appropriate protocol and call each
-protocol's .setsockopt implementation to set the sockopt, thus making
-it compatible with both TCP and MPTCP, without needing to export
-functions from the TCP or MPTCP side for NVMe to use.
+Patch 5 and 6 can be a separate topic.
 
-For MPTCP, all 7 sockopt functions can be implemented by passing each
-sockopt to sock_common_setsockopt(), similar to:
+Changelog:
+v2:
+- In patch4: 
+      1: Fix latency_req_gen zero-initialization causing system to
+      2: Remove unnecessary WRITE_ONCE/READ_ONCE and add usage
+         restriction comments.
+      3: Rename the original cpuidle_governor_latency_req()
+         to cpuidle_aggregate_latency_req, and have the new
+         cpuidle_governor_latency_req() call it to implement
+         caching logic.
+- In patch5: 
+      1: Factor out common logic in preparation for the idle-state
+         disable selftest.
+      2: Add a preexisting QoS/disable warning to alert users that
+         existing system settings may interfere with the test.
+      3: Fix ResumeLatencyGuard value restoration.
+- Add patch6 for idle-state disable selftest
 
-static void nvmet_tcp_sock_no_linger(struct sock *sk) 
-{
-    struct linger ling = { .l_onoff = 1, .l_linger = 0 }; 
+V1 link is:
+https://lore.kernel.org/linux-pm/20260721092324.17508-1-tianyaxiong@kylinos.cn/
 
-    sock_common_setsockopt(sk->sk_socket, false, SOL_SOCKET, SO_LINGER,
-                           KERNEL_SOCKPTR(&ling), sizeof(ling));
-}
+Yaxiong Tian (6):
+  pm: qos: add notifiers for CPU latency and wakeup latency QoS
+  cpuidle: subscribe to global latency QoS notifiers
+  cpuidle: invalidate latency gen on per-CPU resume QoS changes
+  cpuidle: cache aggregated governor latency QoS constraint
+  selftests/cpuidle: add latency_req QoS idle-state selection test
+  selftests/cpuidle: add idle-state disable selftest
 
-However, for TCP, the three protocol-specific options - TCP_NODELAY,
-TCP_SYNCNT, IP_TOS - can be implemented by calling
-sock_common_setsockopt(), but the other four protocol-independent ones
-need to be called through sock_setsockopt(). To hide this difference,
-we can call the higher-level do_sock_setsockopt() function instead,
-like:
+ drivers/cpuidle/cpuidle.c                     |  15 +-
+ drivers/cpuidle/cpuidle.h                     |   2 +
+ drivers/cpuidle/governor.c                    | 148 ++++++++-
+ include/linux/pm_qos.h                        |  23 ++
+ kernel/power/qos.c                            |  50 ++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cpuidle/Makefile      |   7 +
+ tools/testing/selftests/cpuidle/config        |   3 +
+ .../cpuidle/cpuidle_disable_state.py          | 133 +++++++++
+ .../cpuidle/cpuidle_latency_req_qos.py        | 280 ++++++++++++++++++
+ .../testing/selftests/cpuidle/cpuidle_lib.py  | 226 ++++++++++++++
+ tools/testing/selftests/cpuidle/settings      |   2 +
+ 12 files changed, 885 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100644 tools/testing/selftests/cpuidle/config
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle_disable_state.py
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle_latency_req_qos.py
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle_lib.py
+ create mode 100644 tools/testing/selftests/cpuidle/settings
 
-static void nvmet_tcp_sock_no_linger(struct sock *sk) 
-{
-    struct linger ling = { .l_onoff = 1, .l_linger = 0 }; 
+-- 
+2.43.0
 
-    do_sock_setsockopt(sk->sk_socket, false, SOL_SOCKET, SO_LINGER,
-                       KERNEL_SOCKPTR(&ling), sizeof(ling));
-}
-
-In this way, this wrapper becomes protocol-independent and works
-correctly for both TCP and MPTCP. Moreover, all 7 functions are
-uniformly converted into wrappers that call do_sock_setsockopt(), so
-every one of them becomes protocol-independent without needing to
-distinguish between TCP and MPTCP internally.
-
-static void nvmet_tcp_sock_set_priority(struct sock *sk, u32 priority)
-{
-    do_sock_setsockopt(sk->sk_socket, false, SOL_SOCKET, SO_PRIORITY,
-                       KERNEL_SOCKPTR(&priority), sizeof(priority));
-}
-
-static void nvmet_tcp_sock_set_reuseaddr(struct sock *sk) 
-{
-    int val = SK_CAN_REUSE;
-
-    do_sock_setsockopt(sk->sk_socket, false, SOL_SOCKET, SO_REUSEADDR,
-                       KERNEL_SOCKPTR(&val), sizeof(val));
-}
-
-static void nvmet_tcp_sock_set_nodelay(struct sock *sk) 
-{
-    int val = 1; 
-
-    do_sock_setsockopt(sk->sk_socket, false, SOL_TCP, TCP_NODELAY,
-                       KERNEL_SOCKPTR(&val), sizeof(val));
-}
-
-static void nvmet_tcp_sock_set_tos(struct sock *sk, int tos) 
-{
-    do_sock_setsockopt(sk->sk_socket, false, SOL_IP, IP_TOS,
-                       KERNEL_SOCKPTR(&tos), sizeof(tos));
-}
-
-static int nvme_tcp_sock_set_bindtodevice(struct sock *sk, char *iface)
-{
-    return do_sock_setsockopt(sk->sk_socket, false, SOL_SOCKET,
-                              SO_BINDTODEVICE,
-                              KERNEL_SOCKPTR(iface), strlen(iface));
-}
-
-static int nvme_tcp_sock_set_syncnt(struct sock *sk, int val) 
-{
-    return do_sock_setsockopt(sk->sk_socket, false, SOL_TCP,
-                              TCP_SYNCNT, KERNEL_SOCKPTR(&val),
-                              sizeof(val));
-}
-
-With this approach, there is no longer any need to define structures
-like struct nvmet_tcp_proto and struct nvme_tcp_proto, nor to export
-special set-sockopt functions from the MPTCP side. We only need to
-define these 7 wrappers for NVMe, and then replace the original
-function calls with the wrapper calls to enable MPTCP support. For
-example:
-
--   sock_set_reuseaddr(port->sock->sk);
--   tcp_sock_set_nodelay(port->sock->sk);
-+   nvmet_tcp_sock_set_reuseaddr(port->sock->sk);
-+   nvmet_tcp_sock_set_nodelay(port->sock->sk);
-    if (so_priority > 0)
--       sock_set_priority(port->sock->sk, so_priority);
-+       nvmet_tcp_sock_set_priority(port->sock->sk, so_priority);
-
-
-
-With these changes, implementing NVMe MPTCP support is simplified to
-just choosing which type of socket to create at socket creation time.
-In addition, I am also pushing the company I work for to join the NVMe
-membership, in preparation for submitting an MPTCP proposal to the NVMe
-technical working group in the future.
-
-
-
-
-I'm thinking that this approach of unifying NVMe sockopts via
-do_sock_setsockopt() could actually serve as a general improvement, and
-it would be valid even independently of this MPTCP series. If no one
-objects, I will send these patches of do_sock_setsockopt() improvement
-to the NVMe mailing list for review in the near future.
-
-
-
-Thanks,
--Geliang
-
-> 
-> The first two functions - tcp_sock_set_nodelay() and
-> tcp_sock_set_syncnt() - cannot be directly used with an MPTCP socket.
-> In fact, passing an MPTCP socket to tcp_sock_set_nodelay() even
-> causes
-> a crash. Therefore I implemented these two MPTCP-specific functions.
-> Actually, a better approach would be to add protocol-independent
-> sock_set_nodelay() and sock_set_syncnt() in net/core/sock.c.
-> 
-> The third function, ip_sock_set_tos(), takes different arguments for
-> TCP vs. MPTCP. For MPTCP, it needs to pass inet_sk(msk->first)-
-> > rcv_tos, so I implemented an MPTCP-specific function.
-> 
-> The last three functions - sock_no_linger(), sock_set_priority(), and
-> sock_set_reuseaddr() - are not protocol-specific, but attributes set
-> on
-> the MPTCP socket cannot be synchronized to its subflows because
-> mptcp_sockopt_sync_locked() checks msk->setsockopt_seq. Thus I
-> implemented these three MPTCP-specific functions, explicitly calling
-> sockopt_seq_inc(msk) inside them to increment msk->setsockopt_seq, so
-> that mptcp_sockopt_sync_locked() can properly synchronize the
-> attributes to all subflows. There should be a better solution for
-> this,
-> and I will discuss it with @Matt.
-> 
-> Please give me some advice.
-> 
-> Thanks,
-> -Geliang
