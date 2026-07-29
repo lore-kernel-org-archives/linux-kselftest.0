@@ -1,119 +1,362 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483D5486627;
-	Wed, 29 Jul 2026 13:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAA748B37A
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 13:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785330858; cv=none; b=X6hw24kgWzrk3L+eI9czynXJ8NIC4QVfUvqb7foD2xIhaSCY9a84sB2SchnNafFjtLgmjg2RG305YiqJGb53m0pfoO9Q8bm4jDGHMdg/+CTn3QaBk6lLZWLAuxt/82OvwZxq94802eEvTo7JJgU1NrXgTiKTYrz2mjJFFh8Y8DE=
+	t=1785331396; cv=none; b=BAqgtmJDirAfw+Cmdw/aNrnDZtFe+gfF6ezEoIJwpz5RUc5tiGVWRCdIIcTvA9WBuWR0Teu4f4OWK7aEGAhILn+z2oXOY5btSUTApZC3AOoizZvfkQwo4n0HURmL2OVk+RoWJ9td1IqdfwmG9crXBKAiz5dvW6dk2QRoe/ln2mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785330858; c=relaxed/simple;
-	bh=C1O3S9T7lAA6q6Z0iZeGMINMeO8DXktjesQYoXYUmmc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=iSdRlC0QaQcbZ2is60Rdbq32lRDNOkbiNKEPuO2z5Piwxdy8ZyizDYBZs2Fb+nuylRpiB4lTCfnaU5+PhUBI6spu+9E3uplM/R3AWOJYd/4iLy+TXGBTtYmiy2PzN+cbgirjpx7p66yxOXDBkUP38nSeUqA/60X2G8RO9f3meKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RV6W/6Xf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785331396; c=relaxed/simple;
+	bh=ZZMcD4I79X+ry5UESE8/y992VJr2AaCKGnCuH5RaWak=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=exv+bJhWloWx+4DcgZMscycgtMLa103239TkU0/6tXYbgfBg3FHOfYTP7bcGy/cxWKdVqcrP3glb9W4NmbhnEhPdKoedQuOu2jMXObnlQjb9C5QfeJLtPbrrw8F5fhuLtXjO05D5GQL47OD1dEE0akc71v4BCwMGiYbX1D6uD9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mtj5NF+i; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RV6W/6Xf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9871F1F00A3A;
-	Wed, 29 Jul 2026 13:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785330857;
-	bh=C1O3S9T7lAA6q6Z0iZeGMINMeO8DXktjesQYoXYUmmc=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=RV6W/6Xf9zhYD4j4uGKSd+5ClC9LgbiIucEFPeO2VoGkzqAL5s51GCpYzMdj/2X9N
-	 9FVOfLvt0kqZw7jxqzDuhQDBurt24yACnzTQkbHlH5n5h0W4y19YlgPmzwyoZ+Fwb9
-	 mDasiZWrlUcXN0Q+KU06UxjA8BciZyqAJFvuCcIblMK7lahl2hARcXmUlC3/lQIkaU
-	 IMyhyiP39MYgepkzCmQgjQu+rdndeAhp2qXkDANZ2VR1BEgusgonleC7GW0yk10mwz
-	 UZBt5o+AVnxgCea3lUrWfCIUta2f0+SIIEi5t8UgkHQf6HYc2LjTSaDVtxUGpIMjin
-	 JgKEusOEsEEOA==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A7225F4006F;
-	Wed, 29 Jul 2026 09:14:15 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Wed, 29 Jul 2026 09:14:15 -0400
-X-ME-Sender: <xms:p_xpagLKwV26FIcSCEV6kS6QEJnb1Y3bVOTpiwQYsmphTe2bXtE-Gw>
-    <xme:p_xpaq-iZ9iGgWwLiD0qbWJ6a26Gy_QI4aD2x3uSDR5EcmhtyKJlzlzZwnkDOL3Rs
-    AUcD8WDToviEPXS4t7cfnaDxWoRLz7rJxKrFm9fEXCLJeplPp98vfkm>
-X-ME-Proxy-Cause: dmFkZTGEoTIjlYcV++Q9tJt0LGVCaHSiJhlyuRn73LL0pmntnHkUwQYd0WiF0xd+FF/a/U
-    NpuZeydx5yfUYeRW9OreiZBCL1h9SYh4dQSeyl3U/ki8hYCSbfoxNPQne80nt4/nwQ3Qhl
-    vh/wflsL1EWZ+zrjFNyY5cNIJ4XZk3XU7YKYn5vA1ka5YLlAUZansUsVNGiMOCM2y+Xp+R
-    9n17MQRDmNWxmDHhZiev4SWOkoFuSqaFvJA5jgNW9kClbm+wRxVXqd8R2JcKPbzkicqh0c
-    LIn7cPvksCztrVmGPeoZ441/YsNZDFr9deuxL1gGn6pdiwzGG0vrKSlK8+yPfTPyCpHHez
-    pKXlJDF4cQ1ECA84JQN4JcEMSKFlLI18XaTCnuaeI2Ic42X+wlO/ozZ1Z25AoVou+tzFIN
-    QOw24b+vnpl9JgMkohbvQLLVJaC/EW0B/8a2fxVR0F0ufAGcsb7T42ddMj5AwMIafcb4PU
-    Q0xEY8k7wMUsTe1cqXqXMRoH6GIF7ajhETjYdm6VZWl2k/H0JWdlTqqtZ8lM2TxchMKjTN
-    h2z70jpWsyYlg6gQPZyWu/SVUjesqCAFOvQX5Mb6Dt5YcG7jDOXTFkIDLm00Ms9muB+Ohk
-    W4DGrWrwdkkHe+CJay3CnwOGyhLNm/TmskNmih2x6JkFbnkrcdJU/0Hjn7wg
-X-ME-Proxy: <xmx:p_xpaoFCymrU9lF2uecN1O3GamKNIDey20AWrPG1jdZqDJKVVWal4w>
-    <xmx:p_xpapNBdXeoCnXSKkWrY_8U5oITFCCN6J73H3QbLU6L7xSpUq0DFw>
-    <xmx:p_xpahhdDtdc9nbZRrYMbD1jR7nAezpnc8-ImS2vC7sWajO35kZr9Q>
-    <xmx:p_xpah27Mi9NO4SFg2dY3RhDTEqTErYAjn-Nkh5e65H3M16DDf1fzA>
-    <xmx:p_xpamn39zA-L-hVr1gS4LDyWgbDCgo4xtkigN--Ea6GbHhuR3tc4dm1>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 88501780070; Wed, 29 Jul 2026 09:14:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mtj5NF+i"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-47f707e5d75so678433f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 06:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785331392; x=1785936192; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=qtisZXxp66Ja5qyzCPlhZzLSzh5LLKzx/lw7V4AEa14=;
+        b=Mtj5NF+ifPcNI73a3yUm8BFklD35vDqm5ixoaMbyiggjeB5Vdi7EpiPH9LMMavUGKs
+         zvKIcjdYEOh71TsPvL8JHDg8JblS2nNQVpFwIPFK/c4KV3G2zXsOrsUAnyU82qbxdPPN
+         Huv421yVCrfIChkgQddM/D6eDWx79fuz1zBf9aXRG8oEMfY46M5m9EZp8ZpMKD4y12t/
+         vlRv/aZ5fkHXcMOM97od/NQuM3b+Mp09yetxaFHiul/NZ1qLdJKYnjU8zFRrbQqZPnzD
+         6C1W2V70ao7JnUufiW25n5nvRYV4kqpI4TaehMw3c9lqDEgSFuLCVEUs08zTqL5905w5
+         xRTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785331392; x=1785936192;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qtisZXxp66Ja5qyzCPlhZzLSzh5LLKzx/lw7V4AEa14=;
+        b=NVPWFYwWjGtSgZnvu6zfGgkgEcXrp1ceblEQHiskO8PtziUUlDTiWPmqUyJXtFGgkd
+         Qcn+AgJsUNxMDVdKI1PkBEk4RLRENPReZBW5zEeZe5eXGHywcnlwLpiDqzd6QGQU4nqR
+         V7AM81KU/ZdsSJ1JlylIGXRD8iNGJM2+NSJHIKDZOqegY7Gs7omJPMlOPsMDA85D/vqO
+         SrqorUnWUW3Tfis1+RMU2lciZMPdWimlrLUMkH/lkrxxvz+3XJOHFisE4eVFfpeT3dPH
+         6v7/jNgVE6ZUyZbzpV34fM3HD4v27XVrkCmBbRAqdAzjbM6tw3ORALdD2hS8c/C+z1HE
+         zhLA==
+X-Forwarded-Encrypted: i=1; AHgh+RpGTVmWwZNpCvgUhjU3lGd1xaCYNV18bU1J6aGnDw+Wgxgt27JMueYueRGIwjtu12x6gu9DKeMZ2Gb2neqMrDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJuOTcar9O/snSpry6QhPsN4HxxoCNO4lMMChq2NyNy5BPtjJ4
+	bITMPqFJsDQg7LKuJS0th+nnoVTdaerwPoDK5d0QWz4A9tbGj+ovhKZ9
+X-Gm-Gg: AR+sD13hgS7L+V7VT+M6Px3nXgFjj2RMxsTRTWqIHTiIFGuq2nZGEqtxc5SGWnAPp5/
+	1G63ncPjQvam9RL9D1K4Mt2x9xiivI8zg+il7Mnv5BUzywwDx4reFRP8Cycy+AAaQpaJWJKoyuj
+	oOgYPpb33UVHLIQ/jJWaCy3YCmODhD55v3BeN+i8EEmStihPaQLFGiJuLorAT26GSPEzPICE3bS
+	r5gBUK44a4/5+F3IZ90EFZ3Qii/PzM0M/UZwmmmvs9+lNvWZJjVFymQD4nX9I7XZ+WeHKCiCBzB
+	DD15iRNNg9co9LRaw02jJpliWDkEpRhD/bAmQPQjUJ0NcPtkt7IflrUBAeOeX8AMOR99IlN59S3
+	pWGigIJlMn4xT0Q8vPLthqX5iWo2qDdRskQLQlt3Vs+3iqIdhHAFeDk9dtsLZnoEOLAA0J2vlQ9
+	zMsbDNQEOBfUitLmm8RAyJKB2XPjWbpuXFJA==
+X-Received: by 2002:a5d:5f48:0:b0:47f:9425:1a2a with SMTP id ffacd0b85a97d-47fb1ea7954mr7488293f8f.30.1785331392081;
+        Wed, 29 Jul 2026 06:23:12 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::dd7e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6aa3b1csm8366628f8f.1.2026.07.29.06.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 06:23:11 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 29 Jul 2026 15:23:09 +0200
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+	rostedt@goodmis.org, naveen@kernel.org, davem@davemloft.net,
+	mhiramat@kernel.org, stable@vger.kernel.org,
+	linux-open-source@crowdstrike.com
+Subject: Re: [RFC PATCH bpf-next 3/3] selftests/bpf: add ftrace_permanent test
+Message-ID: <amn-vbX6AitcIcC0@krava>
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+ <20260729005959.3853865-4-andrey.grodzovsky@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ao_Ba7jWoOG-
-Date: Wed, 29 Jul 2026 09:13:55 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Sabrina Dubroca" <sd@queasysnail.net>
-Cc: "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
- "Jeff Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, netdev@vger.kernel.org,
- kernel-tls-handshake@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-nfs@vger.kernel.org
-Message-Id: <3d0d0566-ac93-4cff-8ce5-d5637ee60b90@app.fastmail.com>
-In-Reply-To: <amnwsWrxv6KvrZ_L@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
- <20260728185124.72e421c8@kernel.org>
- <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
- <20260728193058.7f6b453b@kernel.org>
- <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
- <amnwsWrxv6KvrZ_L@krikkit>
-Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype proto_ops for
- control record delivery
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260729005959.3853865-4-andrey.grodzovsky@crowdstrike.com>
+
+On Tue, Jul 28, 2026 at 08:59:59PM -0400, Andrey Grodzovsky wrote:
+> Cover the FTRACE_OPS_FL_PERMANENT fix on BPF trampolines and
+> ftrace-based kprobes/kretprobes: attach a fentry, fexit, kprobe, and
+> kretprobe program in turn and confirm kernel.ftrace_enabled=0 is
+> refused with EBUSY while attached, then succeeds once detached. Also
+> confirm a new fentry/kprobe attach is itself refused while
+> ftrace_enabled=0 is already in effect.
+> 
+> kprobe.multi/kretprobe.multi/kprobe.session are intentionally not
+> covered, matching the production change's scope.
+> 
+> Skip the kprobe/kretprobe subtests when CONFIG_KPROBES_ON_FTRACE is
+> off (e.g. arm64), read back via skel->kconfig->CONFIG_KPROBES_ON_FTRACE
+> (same __kconfig idiom as progs/test_fill_link_info.c).
+> 
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+
+hi,
+I have some links active already after boot which makes test to fail:
+
+  [root@qemu-1 bpf]# echo 0 > /proc/sys/kernel/ftrace_enabled
+  bash: echo: write error: Device or resource busy
+
+  [root@qemu-1 bpf]# ./test_progs -t ftrace_permanent -v
+  bpf_testmod.ko is already unloaded.
+  Loading bpf_testmod.ko...
+  Successfully loaded bpf_testmod.ko.
+  test_ftrace_permanent:PASS:skel_open_and_load 0 nsec
+  check_blocks_disable:PASS:attach_fentry 0 nsec
+  check_blocks_disable:PASS:disable_refused 0 nsec
+  check_blocks_disable:PASS:read_back 0 nsec
+  check_blocks_disable:PASS:still_enabled 0 nsec
+  check_blocks_disable:FAIL:disable_after_detach unexpected error: -16 (errno 16)
+  check_blocks_disable:PASS:reenable 0 nsec
+  #145/1   ftrace_permanent/fentry_blocks_disable:FAIL
+  check_blocks_disable:PASS:attach_fexit 0 nsec
+  check_blocks_disable:PASS:disable_refused 0 nsec
+  check_blocks_disable:PASS:read_back 0 nsec
+  check_blocks_disable:PASS:still_enabled 0 nsec
+  check_blocks_disable:FAIL:disable_after_detach unexpected error: -16 (errno 16)
+  check_blocks_disable:PASS:reenable 0 nsec
+  #145/2   ftrace_permanent/fexit_blocks_disable:FAIL
+  check_blocks_disable:PASS:attach_kprobe 0 nsec
+  check_blocks_disable:PASS:disable_refused 0 nsec
+  check_blocks_disable:PASS:read_back 0 nsec
+  check_blocks_disable:PASS:still_enabled 0 nsec
+  check_blocks_disable:FAIL:disable_after_detach unexpected error: -16 (errno 16)
+  check_blocks_disable:PASS:reenable 0 nsec
+  #145/3   ftrace_permanent/kprobe_blocks_disable:FAIL
+  check_blocks_disable:PASS:attach_kretprobe 0 nsec
+  check_blocks_disable:PASS:disable_refused 0 nsec
+  check_blocks_disable:PASS:read_back 0 nsec
+  check_blocks_disable:PASS:still_enabled 0 nsec
+  check_blocks_disable:FAIL:disable_after_detach unexpected error: -16 (errno 16)
+  check_blocks_disable:PASS:reenable 0 nsec
+  #145/4   ftrace_permanent/kretprobe_blocks_disable:FAIL
+  check_attach_while_disabled_refused:FAIL:disable unexpected error: -16 (errno 16)
+  #145/5   ftrace_permanent/fentry_attach_while_disabled_refused:FAIL
+  check_attach_while_disabled_refused:FAIL:disable unexpected error: -16 (errno 16)
+  #145/6   ftrace_permanent/kprobe_attach_while_disabled_refused:FAIL
+  #145     ftrace_permanent:FAIL
+  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+  Successfully unloaded bpf_testmod.ko.
+
+jirka
 
 
-
-On Wed, Jul 29, 2026, at 8:23 AM, Sabrina Dubroca wrote:
-> 2026-07-28, 22:51:30 -0400, Chuck Lever wrote:
->> On Tue, Jul 28, 2026, at 10:30 PM, Jakub Kicinski wrote:
-
->> > You just need to try a little harder to produce a better solution.
->> > Rework or augment existing callbacks to let your achieve the behavi=
-or
->> > you want.
->>=20
->> My original approach was to add a new read_sock variant because I
->> suspected you wouldn=E2=80=99t want read_sock itself to grow another =
-argument.
->
-> Given that there's only 2 existing consumers of read_sock (strp and
-> nvme, and I'm not sure why strp/sockmap use it at all) [1], and 3
-> arguments to read_sock, adding an argument would be ok IMO. The
-> implementation (tls_sw_read_sock/tls_sw_read_sock_rectype) ends up
-> being a small wrapper around a function that does the actual work with
-> a NULL check, might as well propagate that to the callers.
->
-> For me the problem is more that this new argument is very specific to
-> TLS, and dropping something TLS-specific in a generic API (struct
-> proto_ops) is quite ugly. If we want to make this generic, we're back
-> to cmsg (or something cmsg-like).
-
-Fair enough.
-
-
---=20
-Chuck Lever
+>  .../bpf/prog_tests/ftrace_permanent.c         | 144 ++++++++++++++++++
+>  .../selftests/bpf/progs/ftrace_permanent.c    |  43 ++++++
+>  2 files changed, 187 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/ftrace_permanent.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/ftrace_permanent.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/ftrace_permanent.c b/tools/testing/selftests/bpf/prog_tests/ftrace_permanent.c
+> new file mode 100644
+> index 000000000000..dbe78009a291
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/ftrace_permanent.c
+> @@ -0,0 +1,144 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 CrowdStrike */
+> +#include <test_progs.h>
+> +#include "ftrace_permanent.skel.h"
+> +
+> +/*
+> + * fentry/fexit/kprobe/kretprobe now carry FTRACE_OPS_FL_PERMANENT, so
+> + * kernel.ftrace_enabled=0 must be refused with EBUSY while any of them
+> + * is attached, and allowed again once detached.
+> + *
+> + * kprobe.multi/kretprobe.multi/kprobe.session are out of scope.
+> + * kprobe/kretprobe subtests need CONFIG_KPROBES_ON_FTRACE (e.g. not on
+> + * arm64) and are skipped otherwise.
+> + */
+> +
+> +#define FTRACE_ENABLED_PATH "/proc/sys/kernel/ftrace_enabled"
+> +
+> +static int read_ftrace_enabled(int *val)
+> +{
+> +	char buf[16] = {};
+> +	int fd, n;
+> +
+> +	fd = open(FTRACE_ENABLED_PATH, O_RDONLY);
+> +	if (fd < 0)
+> +		return -errno;
+> +	n = read(fd, buf, sizeof(buf) - 1);
+> +	close(fd);
+> +	if (n <= 0)
+> +		return -EIO;
+> +	*val = atoi(buf);
+> +	return 0;
+> +}
+> +
+> +/* Returns 0 on success, or -errno on write failure. */
+> +static int write_ftrace_enabled(int val)
+> +{
+> +	char buf[4];
+> +	int fd, n, len, err = 0;
+> +
+> +	fd = open(FTRACE_ENABLED_PATH, O_WRONLY);
+> +	if (fd < 0)
+> +		return -errno;
+> +	len = snprintf(buf, sizeof(buf), "%d", val);
+> +	n = write(fd, buf, len);
+> +	if (n < 0)
+> +		err = -errno;
+> +	close(fd);
+> +	return err;
+> +}
+> +
+> +/*
+> + * Attach @prog, assert kernel.ftrace_enabled=0 is refused while attached
+> + * and stays at 1, then detach and assert the disable now succeeds.
+> + */
+> +static void check_blocks_disable(struct bpf_program *prog, const char *name)
+> +{
+> +	struct bpf_link *link;
+> +	int val, err;
+> +
+> +	link = bpf_program__attach(prog);
+> +	if (!ASSERT_OK_PTR(link, name))
+> +		return;
+> +
+> +	err = write_ftrace_enabled(0);
+> +	ASSERT_EQ(err, -EBUSY, "disable_refused");
+> +	if (!ASSERT_OK(read_ftrace_enabled(&val), "read_back"))
+> +		goto detach;
+> +	ASSERT_EQ(val, 1, "still_enabled");
+> +
+> +detach:
+> +	bpf_link__destroy(link);
+> +
+> +	ASSERT_OK(write_ftrace_enabled(0), "disable_after_detach");
+> +	ASSERT_OK(write_ftrace_enabled(1), "reenable");
+> +}
+> +
+> +/* Attach @prog while ftrace_enabled=0 and assert it is refused. */
+> +static void check_attach_while_disabled_refused(struct bpf_program *prog, const char *name)
+> +{
+> +	struct bpf_link *link;
+> +
+> +	if (!ASSERT_OK(write_ftrace_enabled(0), "disable"))
+> +		return;
+> +
+> +	link = bpf_program__attach(prog);
+> +	if (!ASSERT_ERR_PTR(link, name))
+> +		bpf_link__destroy(link);
+> +
+> +	ASSERT_OK(write_ftrace_enabled(1), "reenable");
+> +}
+> +
+> +void test_ftrace_permanent(void)
+> +{
+> +	struct ftrace_permanent *skel;
+> +	bool kprobes_on_ftrace;
+> +	int orig = 1;
+> +
+> +	/* Save and always restore ftrace_enabled. */
+> +	if (read_ftrace_enabled(&orig)) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	skel = ftrace_permanent__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+> +		goto restore;
+> +
+> +	kprobes_on_ftrace = skel->kconfig->CONFIG_KPROBES_ON_FTRACE;
+> +
+> +	if (test__start_subtest("fentry_blocks_disable"))
+> +		check_blocks_disable(skel->progs.test_fentry, "attach_fentry");
+> +
+> +	if (test__start_subtest("fexit_blocks_disable"))
+> +		check_blocks_disable(skel->progs.test_fexit, "attach_fexit");
+> +
+> +	if (test__start_subtest("kprobe_blocks_disable")) {
+> +		if (kprobes_on_ftrace)
+> +			check_blocks_disable(skel->progs.test_kprobe, "attach_kprobe");
+> +		else
+> +			test__skip();
+> +	}
+> +
+> +	if (test__start_subtest("kretprobe_blocks_disable")) {
+> +		if (kprobes_on_ftrace)
+> +			check_blocks_disable(skel->progs.test_kretprobe, "attach_kretprobe");
+> +		else
+> +			test__skip();
+> +	}
+> +
+> +	if (test__start_subtest("fentry_attach_while_disabled_refused"))
+> +		check_attach_while_disabled_refused(skel->progs.test_fentry, "attach_fentry");
+> +
+> +	if (test__start_subtest("kprobe_attach_while_disabled_refused")) {
+> +		if (kprobes_on_ftrace)
+> +			check_attach_while_disabled_refused(skel->progs.test_kprobe,
+> +							    "attach_kprobe");
+> +		else
+> +			test__skip();
+> +	}
+> +
+> +	ftrace_permanent__destroy(skel);
+> +restore:
+> +	write_ftrace_enabled(orig);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/ftrace_permanent.c b/tools/testing/selftests/bpf/progs/ftrace_permanent.c
+> new file mode 100644
+> index 000000000000..ca706d8edc23
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/ftrace_permanent.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 CrowdStrike */
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <stdbool.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +extern bool CONFIG_KPROBES_ON_FTRACE __kconfig __weak;
+> +
+> +/* This function is here to have CONFIG_KPROBES_ON_FTRACE used and
+> + * added to object BTF, so the userspace side can read it back via
+> + * skel->kconfig->CONFIG_KPROBES_ON_FTRACE.
+> + */
+> +int unused(void)
+> +{
+> +	return CONFIG_KPROBES_ON_FTRACE ? 0 : 1;
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +int BPF_PROG(test_fentry, int a)
+> +{
+> +	return 0;
+> +}
+> +
+> +SEC("fexit/bpf_fentry_test2")
+> +int BPF_PROG(test_fexit, int a, __u64 b)
+> +{
+> +	return 0;
+> +}
+> +
+> +SEC("kprobe/bpf_fentry_test3")
+> +int test_kprobe(struct pt_regs *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +SEC("kretprobe/bpf_fentry_test4")
+> +int BPF_KRETPROBE(test_kretprobe)
+> +{
+> +	return 0;
+> +}
+> -- 
+> 2.34.1
+> 
