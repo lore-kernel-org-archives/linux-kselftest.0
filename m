@@ -1,52 +1,52 @@
-Received: from pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.77.92])
+Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171933F660D;
-	Wed, 29 Jul 2026 23:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.77.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588853E1681;
+	Wed, 29 Jul 2026 23:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785368297; cv=none; b=lW0MzrSZ2yMcsHuq4aAHdk30mxnnuO8fwmNBg+rrx4V55j6RQJD/Y7bEgKtJII8B1a9gi8lv/mtvwGQ3r3HXA5MUPqJty5JFT0U7eyLLDYvCZ5oaj/rODLh7R6Wh3Eye/SpJ3RvEF/T/an+fkBE9w4V37JQx0gcM2B9CdMfRkEY=
+	t=1785368302; cv=none; b=Xfvb6EWXfTAOreQns7YPJia5vV/vvPbTOyrUujhD4yGUpxt5Pp3Ax1zdF4FlkK4EKLtI0KhBEc0MKArBhA59fLB1ERUPOISgZCHgUgRiSmsgfEimFr7ahG5gwHkw9QompFa6TiO5VukOVvsw59j3THuou2nzjfB54b89r6Xzc3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785368297; c=relaxed/simple;
-	bh=TlzcoICQ1gJsQbu78L61HDY0rppVTqbOQrIrhefqI28=;
+	s=arc-20240116; t=1785368302; c=relaxed/simple;
+	bh=Q4tts8rbKOTUzU++0ONk9pReOYsLCLWbEcMqS2eccOE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aopdoIlN4mzzSomCXCttTe6n9UwQmD8LedghhWLem7rz1NQ2rsfx70j5jP+sSD2DklwyIOyaSy9rFrU0yvkvCapnaBVDv/WeRSGR0hS+2ku/ekIDosk7G7Kqhn8Acs/23vwOGBVs/3EY+cZYgqCjXf1Ua2FsKS2V85wq0LNx8og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=mRLpibt8; arc=none smtp.client-ip=44.246.77.92
+	 MIME-Version:Content-Type; b=NtVt6QqnEQZ0BU8JM69NaXYqBJUhYtNWZh4hO+rmUHED4Tw/+XbVmNzBsKhNhEXTdToAn4B4r/x9ENicr/IhKTwFti3j6qs1sEbHQBUi3EYQ8E6BPz+1Q0kw1x7rKpI8jXC23xE+sDPerIbVQhXZcqJV4Yqru3/bjqJJKUP0d/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=CgcFbmPV; arc=none smtp.client-ip=52.34.181.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="mRLpibt8"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="CgcFbmPV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1785368296; x=1816904296;
+  t=1785368301; x=1816904301;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FfWJyTmRsx+Xhd0MGY9qu5bM6VZQEUjOoKvWFVxtys4=;
-  b=mRLpibt8oEBHRWQUs7oUAXLLDXDp8tG0GncqYzGilSB8qJrsf+cjUYHx
-   MkUYyOVUvF00wkto7uV7PKSN4fnjCqe9eE2z3dumHBDa6YYgL6j0wC1Pe
-   Zi26Ue0efgaxcNUW/a2vFFzXFgkSUa3yEniBbNE1qIC7D8bNu5Njv2OiH
-   k+PUHVg5G2ykIbHQKDnhmNAly8GFdQslxj3oOESFqAO8oOLGK7+DhGLrI
-   HLP2cc4reGLJhLf2Yb8dUcjKW6lX81cBuj/bjqYq8IBbjxHzhkL/pkOT1
-   lmsMKJFMcLbgMlZEh35arwzw4VeCwf1wF0GHIbwchZcUg+eeJwZ6gMEv2
+  bh=0pS18HU2nJ5l5OJpL1JsMgYZyJbsxXjmIvaXDtlzLZM=;
+  b=CgcFbmPV5dNh4zaSIOfJ3LpU6vDZtYLeR+jjwWyosrDW/9n3dt6xtWw/
+   mjDn9DQe4wbyEACR5AAYQmpKQX4Plbeq/ZTTuDqomYdA/a1szZdCWwWCH
+   CNDJhJjNH1EsNJ8lOZdu2sMC48dAa6vJPDfQRFsewnlwcYZxVBtzp7IQg
+   IIfeB8uT/c9P1ld+rmLz2Ell6sf4Sa5NhmTLnWR2tVMjuO59ItpspKc6d
+   TrDv/vwcobNp2lf+CLvIJleDry0svq9ObnLnu7njh5TfckcOlUc6qIxNv
+   oKa4JUdQ+8lNbQIN6wnMM8SNZao2YxQsafQNrLVaBHNBgi82qqlOIZzxN
    w==;
-X-CSE-ConnectionGUID: 2woH6J+0RVmB14kasixIrA==
-X-CSE-MsgGUID: mY1c4nNMRZCij4XkcPF49g==
+X-CSE-ConnectionGUID: 1i2Lby+sTMuFQHRHBrF22Q==
+X-CSE-MsgGUID: TBFBbF6QSGuRKfSEJFD23A==
 X-IronPort-AV: E=Sophos;i="6.25,193,1779148800"; 
-   d="scan'208";a="24617473"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-004.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 23:38:12 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:29543]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.11:2525] with esmtp (Farcaster)
- id 72e50afd-6742-4f3d-8a9a-c2d0fd5de050; Wed, 29 Jul 2026 23:38:12 +0000 (UTC)
-X-Farcaster-Flow-ID: 72e50afd-6742-4f3d-8a9a-c2d0fd5de050
+   d="scan'208";a="24606966"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 23:38:18 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.51:30434]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.18.129:2525] with esmtp (Farcaster)
+ id 4e3da015-2054-4a18-83d1-025fa63b5ea8; Wed, 29 Jul 2026 23:38:18 +0000 (UTC)
+X-Farcaster-Flow-ID: 4e3da015-2054-4a18-83d1-025fa63b5ea8
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Wed, 29 Jul 2026 23:38:12 +0000
+ Wed, 29 Jul 2026 23:38:17 +0000
 Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Wed, 29 Jul 2026 23:38:06 +0000
+ Wed, 29 Jul 2026 23:38:12 +0000
 From: Arthur Kiyanovski <akiyano@amazon.com>
 To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
 	Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>
@@ -68,10 +68,10 @@ CC: Arthur Kiyanovski <akiyano@amazon.com>, Eric Dumazet
 	<linux-doc@vger.kernel.org>, <shuah@kernel.org>, Jonathan Corbet
 	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
 	<horms@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	<vadim.fedorenko@linux.dev>
-Subject: [PATCH v6 net-next 3/7] selftests/ptp: Add testptp support for attributes ioctls
-Date: Wed, 29 Jul 2026 23:37:32 +0000
-Message-ID: <20260729233740.16516-4-akiyano@amazon.com>
+	<vadim.fedorenko@linux.dev>, David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH v6 net-next 4/7] ptp: ptp_vmclock: Implement attributes ioctls
+Date: Wed, 29 Jul 2026 23:37:33 +0000
+Message-ID: <20260729233740.16516-5-akiyano@amazon.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260729233740.16516-1-akiyano@amazon.com>
 References: <20260729233740.16516-1-akiyano@amazon.com>
@@ -86,243 +86,349 @@ Content-Type: text/plain
 X-ClientProxiedBy: EX19D036UWB003.ant.amazon.com (10.13.139.172) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Add support for testing the new PTP_SYS_OFFSET_EXTENDED_ATTRS and
-PTP_SYS_OFFSET_PRECISE_ATTRS ioctls in the testptp utility.
+Implement the gettimexattrs64 and getcrosststampattrs callbacks in the
+ptp_vmclock driver to provide clock quality attributes through the new
+PTP_SYS_OFFSET_EXTENDED_ATTRS and PTP_SYS_OFFSET_PRECISE_ATTRS ioctls.
 
-Add a "-a" modifier that requests clock quality attributes
-(error_bound, status, timescale) alongside the existing extended (-x)
-and precise (-X) offset requests:
-  -x N -a: extended offset with attributes (N samples)
-  -X -a:   precise cross-timestamp with attributes
+The ptp_vmclock device exposes:
+- error_bound: Derived from time_maxerror_nanosec, accumulated with
+  counter frequency error (counter_period_maxerror_rate_frac_sec) over
+  elapsed counter ticks
+- clock_status: Mapped from the device's clock_status field
+- timescale: Always reports TAI (UTC sources are converted by tai_adjust()
+  before the attributes are populated)
 
-When the device does not report a given attribute, print an explicit
-"not reported" line so all attributes are always accounted for.
+The legacy ioctls return -EINVAL when clock_status is UNRELIABLE since
+they have no way to communicate clock state to userspace. The attrs
+ioctls have a status field for this purpose, so they treat UNRELIABLE
+as success and let userspace check the status field.
 
-Also print the system counter value and its identifier (sys_counter,
-sys_counter_id) returned in struct ptp_sys_time, so the counter source
-is visible; a sys_counter_id of 0 (UNKNOWN) with sys_counter 0 indicates
-an unavailable or unidentified counter source.
+To avoid a race where the hypervisor could update clock_status between
+the timestamp call and the UNRELIABLE check, the clock state is captured
+inside the seq_count loop for a consistent snapshot with the timestamp.
 
-These options allow testing and validation of PHC devices that provide
-clock quality information alongside timestamps.
-
-Also display the new extended_attrs/precise_attrs capabilities in the -c
-output, and update print_system_timestamp to print unrecognized clock
-types instead of silently dropping them.
-
-Co-developed-by: Amit Bernstein <amitbern@amazon.com>
-Signed-off-by: Amit Bernstein <amitbern@amazon.com>
 Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- tools/testing/selftests/ptp/testptp.c | 124 +++++++++++++++++++++++++-
- 1 file changed, 120 insertions(+), 4 deletions(-)
+ drivers/ptp/ptp_vmclock.c | 197 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 181 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
-index d603d9f82237..62b1d0340d71 100644
---- a/tools/testing/selftests/ptp/testptp.c
-+++ b/tools/testing/selftests/ptp/testptp.c
-@@ -148,6 +148,8 @@ static void usage(char *progname)
- 		" -T val     set the ptp clock time to 'val' seconds\n"
- 		" -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
- 		" -X         get a ptp clock cross timestamp\n"
-+		" -a         also report clock quality attributes (error_bound,\n"
-+		"            status, timescale); use together with -x or -X\n"
- 		" -y val     pre/post tstamp timebase to use {realtime|monotonic|monotonic-raw}\n"
- 		" -z         test combinations of rising/falling external time stamp flags\n",
- 		progname, PTP_MAX_SAMPLES);
-@@ -174,8 +176,10 @@ static void print_system_timestamp(int sample_num, __kernel_clockid_t clockid,
- 		break;
+diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
+index eebdcd5ebc08..fe26123ad940 100644
+--- a/drivers/ptp/ptp_vmclock.c
++++ b/drivers/ptp/ptp_vmclock.c
+@@ -53,6 +53,17 @@ struct vmclock_state {
+ 	char *name;
+ };
+ 
++/**
++ * struct vmclock_crosststamp_ctx - context for get_device_system_crosststamp()
++ * @st: vmclock device state
++ * @attrs: optional output for PTP clock attributes, populated inside the
++ *         seq_count loop for a consistent snapshot with the timestamp
++ */
++struct vmclock_crosststamp_ctx {
++	struct vmclock_state *st;
++	struct ptp_clock_attrs *attrs;
++};
++
+ #define VMCLOCK_MAX_WAIT ms_to_ktime(100)
+ 
+ /* Require at least the flags field to be present. All else can be optional. */
+@@ -95,13 +106,111 @@ static bool tai_adjust(struct vmclock_abi *clk, uint64_t *sec)
+ 	return false;
+ }
+ 
++static uint8_t vmclock_get_ptp_timescale(uint8_t vmclock_time_type)
++{
++	switch (vmclock_time_type) {
++	case VMCLOCK_TIME_UTC:
++		return PTP_TIMESCALE_UTC;
++	case VMCLOCK_TIME_TAI:
++		return PTP_TIMESCALE_TAI;
++	case VMCLOCK_TIME_MONOTONIC:
++		return PTP_TIMESCALE_MONOTONIC;
++	default:
++		return PTP_TIMESCALE_UNKNOWN;
++	}
++}
++
++static uint8_t vmclock_get_ptp_status(uint8_t vmclock_status)
++{
++	switch (vmclock_status) {
++	case VMCLOCK_STATUS_UNKNOWN:
++		return PTP_CLOCK_STATUS_UNKNOWN;
++	case VMCLOCK_STATUS_INITIALIZING:
++		return PTP_CLOCK_STATUS_INITIALIZING;
++	case VMCLOCK_STATUS_SYNCHRONIZED:
++		return PTP_CLOCK_STATUS_SYNCED;
++	case VMCLOCK_STATUS_FREERUNNING:
++		return PTP_CLOCK_STATUS_FREE_RUNNING;
++	case VMCLOCK_STATUS_UNRELIABLE:
++		return PTP_CLOCK_STATUS_UNRELIABLE;
++	default:
++		return PTP_CLOCK_STATUS_UNKNOWN;
++	}
++}
++
++static void vmclock_populate_ptp_attributes(struct vmclock_state *st,
++					    struct ptp_clock_attrs *att,
++					    uint64_t delta)
++{
++	uint64_t maxerror_ns = UINT_MAX;
++
++	if (!att)
++		return;
++
++	/* Only calculate if the base error is flagged as valid
++	 * by the hypervisor.
++	 */
++	if (VMCLOCK_FIELD_PRESENT(st->clk, time_maxerror_nanosec) &&
++	    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_TIME_MAXERROR_VALID)) {
++		maxerror_ns = le64_to_cpu(st->clk->time_maxerror_nanosec);
++
++		/* If frequency error is also valid, accumulate it
++		 * over the delta.
++		 */
++		if (VMCLOCK_FIELD_PRESENT(st->clk, counter_period_maxerror_rate_frac_sec) &&
++		    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_PERIOD_MAXERROR_VALID)) {
++			uint64_t maxerror_rate, err_hi, err_frac, growth_ns;
++
++			if (st->clk->counter_period_shift >= 128) {
++				maxerror_ns = U64_MAX;
++				goto saturate;
++			}
++
++			maxerror_rate = le64_to_cpu(st->clk->counter_period_maxerror_rate_frac_sec);
++			err_frac = mul_u64_u64_shr_add_u64(&err_hi, delta,
++							   maxerror_rate,
++							   st->clk->counter_period_shift,
++							   0);
++
++			if (err_hi >= U64_MAX / NSEC_PER_SEC) {
++				maxerror_ns = U64_MAX;
++				goto saturate;
++			}
++
++			growth_ns = (err_hi * NSEC_PER_SEC) +
++				    mul_u64_u64_shr(err_frac, NSEC_PER_SEC, 64);
++
++			/* Guard against overflow */
++			if (U64_MAX - growth_ns < maxerror_ns)
++				maxerror_ns = U64_MAX;
++			else
++				maxerror_ns += growth_ns;
++		}
++	}
++
++saturate:
++	/* PTP UAPI error_bound is 32-bit nanoseconds */
++	att->error_bound = (maxerror_ns > UINT_MAX) ?
++		UINT_MAX : (uint32_t)maxerror_ns;
++	att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
++	att->timescale = vmclock_get_ptp_timescale(st->clk->time_type);
++	/* tai_adjust() already converted UTC to TAI before we're called */
++	if (st->clk->time_type == VMCLOCK_TIME_UTC)
++		att->timescale = PTP_TIMESCALE_TAI;
++	att->valid |= PTP_ATTRS_VALID_TIMESCALE;
++	att->status = vmclock_get_ptp_status(st->clk->clock_status);
++	att->valid |= PTP_ATTRS_VALID_STATUS;
++}
++
+ static int vmclock_get_crosststamp(struct vmclock_state *st,
+ 				   struct ptp_system_timestamp *sts,
+ 				   struct system_counterval_t *system_counter,
+-				   struct timespec64 *tspec)
++				   struct timespec64 *tspec,
++				   struct ptp_clock_attrs *attrs)
+ {
+ 	ktime_t deadline = ktime_add(ktime_get(), VMCLOCK_MAX_WAIT);
+ 	uint64_t cycle, delta, seq, frac_sec;
++	uint8_t clock_status = VMCLOCK_STATUS_UNKNOWN;
+ 
+ #ifdef CONFIG_X86
+ 	/*
+@@ -121,9 +230,6 @@ static int vmclock_get_crosststamp(struct vmclock_state *st,
+ 		 */
+ 		virt_rmb();
+ 
+-		if (st->clk->clock_status == VMCLOCK_STATUS_UNRELIABLE)
+-			return -EINVAL;
+-
+ 		/*
+ 		 * When invoked for gettimex64(), fill in the pre/post system
+ 		 * times. The simple case is when system time is based on the
+@@ -164,6 +270,17 @@ static int vmclock_get_crosststamp(struct vmclock_state *st,
+ 		if (!tai_adjust(st->clk, &tspec->tv_sec))
+ 			return -EINVAL;
+ 
++		/*
++		 * Capture clock state inside the seq_count loop for a
++		 * consistent snapshot with the timestamp. The attrs path
++		 * reports it to userspace via the status field; the legacy
++		 * path saves it for the UNRELIABLE check after the loop.
++		 */
++		if (attrs)
++			vmclock_populate_ptp_attributes(st, attrs, delta);
++		else
++			clock_status = st->clk->clock_status;
++
+ 		/*
+ 		 * This pairs with a write barrier in the hypervisor
+ 		 * which populates this structure.
+@@ -181,6 +298,17 @@ static int vmclock_get_crosststamp(struct vmclock_state *st,
+ 		system_counter->cs_id = st->cs_id;
  	}
  
--	if (!name)
-+	if (!name) {
-+		printf("sample #%2d: unknown clock %d\n", sample_num, clockid);
- 		return;
-+	}
++	/*
++	 * If attrs is set, attributes were already populated inside the
++	 * seq_count loop. Return success even for UNRELIABLE - the attrs
++	 * ioctl can report the status to userspace.
++	 */
++	if (attrs)
++		return 0;
++
++	if (clock_status == VMCLOCK_STATUS_UNRELIABLE)
++		return -EINVAL;
++
+ 	return 0;
+ }
  
- 	printf("sample #%2d: %s time %s: %lld.%09u\n",
- 	       sample_num, name, when, sec, nsec);
-@@ -194,6 +198,7 @@ int main(int argc, char *argv[])
- 	struct ptp_sys_offset *sysoff;
- 	struct ptp_sys_offset_extended *soe;
- 	struct ptp_sys_offset_precise *xts;
-+	struct ptp_sys_offset_attrs *attrs_data;
+@@ -193,7 +321,8 @@ static int vmclock_get_crosststamp(struct vmclock_state *st,
+ static int vmclock_get_crosststamp_kvmclock(struct vmclock_state *st,
+ 					    struct ptp_system_timestamp *sts,
+ 					    struct system_counterval_t *system_counter,
+-					    struct timespec64 *tspec)
++					    struct timespec64 *tspec,
++					    struct ptp_clock_attrs *attrs)
+ {
+ 	struct pvclock_vcpu_time_info *pvti = this_cpu_pvti();
+ 	unsigned int pvti_ver;
+@@ -204,7 +333,8 @@ static int vmclock_get_crosststamp_kvmclock(struct vmclock_state *st,
+ 	do {
+ 		pvti_ver = pvclock_read_begin(pvti);
  
- 	char *progname;
- 	unsigned int i;
-@@ -215,6 +220,7 @@ int main(int argc, char *argv[])
- 	int pct_offset = 0;
- 	int getextended = 0;
- 	int getcross = 0;
-+	int use_attrs = 0;
- 	int n_samples = 0;
- 	int pin_index = -1, pin_func;
- 	int pps = -1;
-@@ -232,7 +238,8 @@ int main(int argc, char *argv[])
- 
- 	progname = strrchr(argv[0], '/');
- 	progname = progname ? 1+progname : argv[0];
--	while (EOF != (c = getopt(argc, argv, "cd:e:E:f:F:ghH:i:k:lL:n:o:p:P:rsSt:T:w:x:Xy:z"))) {
-+	while (EOF != (c = getopt(argc, argv,
-+				  "acd:e:E:f:F:ghH:i:k:lL:n:o:p:P:rsSt:T:w:x:Xy:z"))) {
- 		switch (c) {
- 		case 'c':
- 			capabilities = 1;
-@@ -317,6 +324,9 @@ int main(int argc, char *argv[])
- 				return -1;
- 			}
+-		ret = vmclock_get_crosststamp(st, sts, system_counter, tspec);
++		ret = vmclock_get_crosststamp(st, sts, system_counter, tspec,
++					      attrs);
+ 		if (ret)
  			break;
-+		case 'a':
-+			use_attrs = 1;
-+			break;
- 		case 'X':
- 			getcross = 1;
- 			break;
-@@ -373,6 +383,8 @@ int main(int argc, char *argv[])
- 			       "  %d programmable pins\n"
- 			       "  %d cross timestamping\n"
- 			       "  %d adjust_phase\n"
-+			       "  %d extended_attrs\n"
-+			       "  %d precise_attrs\n"
- 			       "  %d maximum phase adjustment (ns)\n",
- 			       caps.max_adj,
- 			       caps.n_alarm,
-@@ -382,6 +394,8 @@ int main(int argc, char *argv[])
- 			       caps.n_pins,
- 			       caps.cross_timestamping,
- 			       caps.adjust_phase,
-+			       caps.extended_attrs,
-+			       caps.precise_attrs,
- 			       caps.max_phase_adj);
+ 
+@@ -233,17 +363,19 @@ static int ptp_vmclock_get_time_fn(ktime_t *device_time,
+ 				   struct system_counterval_t *system_counter,
+ 				   void *ctx)
+ {
+-	struct vmclock_state *st = ctx;
++	struct vmclock_crosststamp_ctx *vctx = ctx;
++	struct vmclock_state *st = vctx->st;
+ 	struct timespec64 tspec;
+ 	int ret;
+ 
+ #ifdef SUPPORT_KVMCLOCK
+ 	if (READ_ONCE(st->sys_cs_id) == CSID_X86_KVM_CLK)
+ 		ret = vmclock_get_crosststamp_kvmclock(st, NULL, system_counter,
+-						       &tspec);
++						       &tspec, vctx->attrs);
+ 	else
+ #endif
+-		ret = vmclock_get_crosststamp(st, NULL, system_counter, &tspec);
++		ret = vmclock_get_crosststamp(st, NULL, system_counter, &tspec,
++					      vctx->attrs);
+ 
+ 	if (!ret)
+ 		*device_time = timespec64_to_ktime(tspec);
+@@ -251,12 +383,10 @@ static int ptp_vmclock_get_time_fn(ktime_t *device_time,
+ 	return ret;
+ }
+ 
+-static int ptp_vmclock_getcrosststamp(struct ptp_clock_info *ptp,
+-				      struct system_device_crosststamp *xtstamp)
++static int ptp_vmclock_do_getcrosststamp(struct vmclock_crosststamp_ctx *vctx,
++					 struct system_device_crosststamp *xtstamp)
+ {
+-	struct vmclock_state *st = container_of(ptp, struct vmclock_state,
+-						ptp_clock_info);
+-	int ret = get_device_system_crosststamp(ptp_vmclock_get_time_fn, st,
++	int ret = get_device_system_crosststamp(ptp_vmclock_get_time_fn, vctx,
+ 						NULL, xtstamp);
+ #ifdef SUPPORT_KVMCLOCK
+ 	/*
+@@ -265,6 +395,7 @@ static int ptp_vmclock_getcrosststamp(struct ptp_clock_info *ptp,
+ 	 * timestamp that get_device_system_crosststamp() *can* handle.
+ 	 */
+ 	if (ret == -ENODEV) {
++		struct vmclock_state *st = vctx->st;
+ 		struct system_time_snapshot systime_snapshot;
+ 
+ 		ktime_get_snapshot_id(CLOCK_REALTIME, &systime_snapshot);
+@@ -273,13 +404,23 @@ static int ptp_vmclock_getcrosststamp(struct ptp_clock_info *ptp,
+ 		    systime_snapshot.cs_id == CSID_X86_KVM_CLK) {
+ 			WRITE_ONCE(st->sys_cs_id, systime_snapshot.cs_id);
+ 			ret = get_device_system_crosststamp(ptp_vmclock_get_time_fn,
+-							    st, NULL, xtstamp);
++							    vctx, NULL, xtstamp);
  		}
  	}
-@@ -619,7 +633,7 @@ int main(int argc, char *argv[])
- 		free(sysoff);
- 	}
+ #endif
+ 	return ret;
+ }
  
--	if (getextended) {
-+	if (getextended && !use_attrs) {
- 		soe = calloc(1, sizeof(*soe));
- 		if (!soe) {
- 			perror("calloc");
-@@ -654,7 +668,60 @@ int main(int argc, char *argv[])
- 		free(soe);
- 	}
++static int ptp_vmclock_getcrosststamp(struct ptp_clock_info *ptp,
++				      struct system_device_crosststamp *xtstamp)
++{
++	struct vmclock_state *st = container_of(ptp, struct vmclock_state,
++						ptp_clock_info);
++	struct vmclock_crosststamp_ctx vctx = { .st = st };
++
++	return ptp_vmclock_do_getcrosststamp(&vctx, xtstamp);
++}
++
+ /*
+  * PTP clock operations
+  */
+@@ -306,7 +447,29 @@ static int ptp_vmclock_gettimex(struct ptp_clock_info *ptp, struct timespec64 *t
+ 	struct vmclock_state *st = container_of(ptp, struct vmclock_state,
+ 						ptp_clock_info);
  
--	if (getcross) {
-+	if (getextended && use_attrs) {
-+		attrs_data = calloc(1, sizeof(*attrs_data) +
-+				    getextended * sizeof(struct ptp_timestamp));
-+		if (!attrs_data) {
-+			perror("calloc");
-+			return -1;
-+		}
+-	return vmclock_get_crosststamp(st, sts, NULL, ts);
++	return vmclock_get_crosststamp(st, sts, NULL, ts, NULL);
++}
 +
-+		attrs_data->request.num_samples = getextended;
-+		attrs_data->request.clock_id = ext_clockid;
++static int ptp_vmclock_gettimexattrs(struct ptp_clock_info *ptp,
++				     struct timespec64 *ts,
++				     struct ptp_system_timestamp *sts,
++				     struct ptp_clock_attrs *att)
++{
++	struct vmclock_state *st = container_of(ptp, struct vmclock_state,
++						ptp_clock_info);
 +
-+		if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED_ATTRS, attrs_data)) {
-+			perror("PTP_SYS_OFFSET_EXTENDED_ATTRS");
-+		} else {
-+			printf("extended attrs timestamp request returned %d samples\n",
-+			       getextended);
++	return vmclock_get_crosststamp(st, sts, NULL, ts, att);
++}
 +
-+			for (i = 0; i < getextended; i++) {
-+				struct ptp_timestamp *ts = &attrs_data->timestamps[i];
++static int ptp_vmclock_getcrosststampattrs(struct ptp_clock_info *ptp,
++					   struct system_device_crosststamp *xtstamp,
++					   struct ptp_clock_attrs *att)
++{
++	struct vmclock_state *st = container_of(ptp, struct vmclock_state,
++						ptp_clock_info);
++	struct vmclock_crosststamp_ctx vctx = { .st = st, .attrs = att };
 +
-+				printf("  sample #%u:\n", i);
-+				printf("    sys before: %lld ns\n",
-+				       (long long)ts->pre_systime.sys_time);
-+				printf("    sys_counter_id: %u\n",
-+				       ts->pre_systime.sys_counter_id);
-+				printf("    sys_counter:    %llu\n",
-+				       (unsigned long long)ts->pre_systime.sys_counter);
-+				printf("    phc time:   %lld.%09u\n",
-+				       ts->devtime.device_time.sec,
-+				       ts->devtime.device_time.nsec);
-+				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_ERROR_BOUND)
-+					printf("    error_bound: %u ns\n",
-+					       ts->devtime.attrs.error_bound);
-+				else
-+					printf("    error_bound: not reported\n");
-+				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_STATUS)
-+					printf("    status: %u\n",
-+					       ts->devtime.attrs.status);
-+				else
-+					printf("    status: not reported\n");
-+				if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_TIMESCALE)
-+					printf("    timescale: %u\n",
-+					       ts->devtime.attrs.timescale);
-+				else
-+					printf("    timescale: not reported\n");
-+				printf("    sys after:  %lld ns\n",
-+				       (long long)ts->post_systime.sys_time);
-+			}
-+		}
-+
-+		free(attrs_data);
-+	}
-+
-+	if (getcross && !use_attrs) {
- 		xts = calloc(1, sizeof(*xts));
- 		if (!xts) {
- 			perror("calloc");
-@@ -677,6 +744,55 @@ int main(int argc, char *argv[])
- 		free(xts);
- 	}
++	return ptp_vmclock_do_getcrosststamp(&vctx, xtstamp);
+ }
  
-+	if (getcross && use_attrs) {
-+		attrs_data = calloc(1, sizeof(*attrs_data) +
-+				    sizeof(struct ptp_timestamp));
-+		if (!attrs_data) {
-+			perror("calloc");
-+			return -1;
-+		}
-+
-+		attrs_data->request.num_samples = 1;
-+		/* precise crosstimestamp supports only CLOCK_REALTIME/AUX */
-+		attrs_data->request.clock_id = CLOCK_REALTIME;
-+
-+		if (ioctl(fd, PTP_SYS_OFFSET_PRECISE_ATTRS, attrs_data)) {
-+			perror("PTP_SYS_OFFSET_PRECISE_ATTRS");
-+		} else {
-+			struct ptp_timestamp *ts = &attrs_data->timestamps[0];
-+
-+			puts("precise attrs crosstimestamp request okay");
-+			printf("device time: %lld.%09u\n",
-+			       ts->devtime.device_time.sec,
-+			       ts->devtime.device_time.nsec);
-+			printf("system time: %lld ns\n",
-+			       (long long)ts->systime.sys_time);
-+			printf("raw time:    %lld ns\n",
-+			       (long long)ts->systime.sys_rawtime);
-+			printf("sys_counter_id: %u\n",
-+			       ts->systime.sys_counter_id);
-+			printf("sys_counter:    %llu\n",
-+			       (unsigned long long)ts->systime.sys_counter);
-+			if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_ERROR_BOUND)
-+				printf("error_bound: %u ns\n",
-+				       ts->devtime.attrs.error_bound);
-+			else
-+				printf("error_bound: not reported\n");
-+			if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_STATUS)
-+				printf("status: %u\n",
-+				       ts->devtime.attrs.status);
-+			else
-+				printf("status: not reported\n");
-+			if (ts->devtime.attrs.valid & PTP_ATTRS_VALID_TIMESCALE)
-+				printf("timescale: %u\n",
-+				       ts->devtime.attrs.timescale);
-+			else
-+				printf("timescale: not reported\n");
-+		}
-+
-+		free(attrs_data);
-+	}
-+
- 	if (channel >= 0) {
- 		if (ioctl(fd, PTP_MASK_CLEAR_ALL)) {
- 			perror("PTP_MASK_CLEAR_ALL");
+ static int ptp_vmclock_enable(struct ptp_clock_info *ptp,
+@@ -324,9 +487,11 @@ static const struct ptp_clock_info ptp_vmclock_info = {
+ 	.adjfine	= ptp_vmclock_adjfine,
+ 	.adjtime	= ptp_vmclock_adjtime,
+ 	.gettimex64	= ptp_vmclock_gettimex,
++	.gettimexattrs64 = ptp_vmclock_gettimexattrs,
+ 	.settime64	= ptp_vmclock_settime,
+ 	.enable		= ptp_vmclock_enable,
+ 	.getcrosststamp = ptp_vmclock_getcrosststamp,
++	.getcrosststampattrs = ptp_vmclock_getcrosststampattrs,
+ };
+ 
+ static struct ptp_clock *vmclock_ptp_register(struct device *dev,
 -- 
 2.47.3
 
