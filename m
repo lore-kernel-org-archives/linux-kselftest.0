@@ -1,265 +1,271 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6509339FCCD
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 18:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785349240; cv=pass; b=PKq4rbFrb/sjYckUdY75e7OGKH4vc90C6HjRw+kOkhZmCocNuJ6w/T7ft88pXWvv5xYn/FmiWUI8QemyI4asP6wkjQRvM3cfGFw8JltykziNc1t4QRL99ZnWpLtZPAyZpoMHri6beQ1uYqrhCPPupOyLeewmS6XAUFLpgevEI5c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785349240; c=relaxed/simple;
-	bh=n4u6Lkyyb3K0KXlI8hsKysRf1EtEUR4qmTh5L+rzGD0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464DF3ACEE3
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785352523; cv=none; b=cawejC3Jx3ngkNZDL8LnG/tCwOCLj/uDVH3Uobi4T1+auIRSsVORQ7lfoJJlMv17leiKBntlNr/6/BzIhVCII83q31850WJkY8fzvBoWmc1FgLd2AZFhnzfZ9XqY+Po84LTCtEat/K7bI8nXdgMcqukGxnpdeqbHo23TSrJmUo8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785352523; c=relaxed/simple;
+	bh=CRlbOvhwmMk34+IkB30q2D3hlJgnmxjlopMJW5gz+qc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O0QZGo6WzxUxPAnBzWcBPfjn+b0kGK/3UHIAfSQK3ysx9FEwH9bvWeIi4Tt0ko4lnaOBxHtMNFINEYHRFAlfRaxG5dgM8/K6/ErXjzGcRiFON3Q53ypRFG0X6ynzPq4i2Y7MfybhexyGPEmDYA/3TN0nF2+6PNOj3BVxplojx9A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=iHY8BRF0; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Seqce8dK; arc=pass smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	 To:Cc:Content-Type; b=kqTUaZGX43U4uBWx9J4H0wiaGrgK+VN5SWwyss1tsI1NBbdBc3Y7xSOipRU2qtAQeOqnBlJc5gndehp+hdZxghjnzYFx6bhh9xn2T1/ECTZoUQtC5tVxbb8M0t5VoY+ijiBN8UX3boXl0DtgF+ijpDuob7Uz5PSdImt9LzOqxc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=twbe6a8R; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="iHY8BRF0";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Seqce8dK"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66THLfld2214569
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 18:20:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=PzM3c/AUdHEP/V1SQKl0uANVAZmgdR90jTajOWlVlhY=; b=iHY8
-	BRF02H3ThfZf4HVBVFgcPMlLqm5MGMZ/VZQjSZBartJjCLg5o3zKCU5pw7m7TrEw
-	9VsI3Vy/NUmtyVwR3vZpdSUIehqLxpvOyZwYBeBD/h4BcSPl4p8/dQ6iwoy+vdae
-	7yXAkfVZvzLvZXDQTgjV8oGyZl+5A6wspnTXis57RqgBPs6AVOWXuqsBj5xAiIMl
-	bsaVMPcPMCIhjJSmO3Ba/WZ8pKzJ4fTq9J1HawGG4ILIgjY8VeylAEv80pPLsDRX
-	rNWKBmbO/wyvivi/YzVQPIwjHE3kLPmXylMyhJKMYNOdrXaTnxU68x8B06cT7QVK
-	WMH3m8LPZ+VMJvJiiA==
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4fqk0rs7r9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 18:20:31 +0000 (GMT)
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-81ec0eb032aso39587917b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 11:20:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785349231; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fmmaey2v+vLQ8g7GOZwRwxnaU7Vn+gu1sRrew4Bsc0nLXB5N8g8vsdyqc9fUui6Tt/
-         2OsMjhwRuwg/bAVOAfOEt/F94lBHv034A1FNSk7HcYzFxsHWclmhy8Pb6Z71rgwOAczn
-         NXa9l2BVfS2/GIhL3qXl6cuRMbC5Yx/Xn/5KJ9oy9sxOHM4gb4oGHnPjp6trvxrY7C+5
-         T2/x+4vECm18B5gEFyIXEq1cC3oDUMRG2XoylJgmBkT6hHsDSmNo/VWAD86lejHXQptP
-         yBDZPrro78zv7EReQmd5PWv5f8H3pakndeACgkc/J8NxK4oWRl7uUyDtLSwVnX6bC/6I
-         /kfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PzM3c/AUdHEP/V1SQKl0uANVAZmgdR90jTajOWlVlhY=;
-        fh=m1MdsXNr3WXVIb4jQXUnBDwaOuazBBGClkK27CixV5s=;
-        b=MvGHEgYZ2EQISnYXICTDCMyAdfAf+KoZx0ssBQTWBaiUr17GCn/FqGMhBJDpJh7R5c
-         dw++5Rbjar+Du0N7O5UKLJ/CQTwcM5/ULtPhhZ1ngVbYcreIb9k9aX21DfxSR2epftqh
-         pLNBlfr08ab/lrhzAcW79Nr1eJ7ma4aVT19G01a3cas6He0V2M0nibwnnr9h+4B0u7TM
-         8B5wD8erVlAkWxhsv+p2DpBt2DuXhz87VWBMocmjaB2T+QlIjZxSd7aRlOR0/1zv/tHe
-         7HLaQd/LGIw8XuSk7yNsztABVtHKbXNXqPe+dXYKRIU2jYztJ+XYUqgHIC4KRewkl2FB
-         09eQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1785349231; x=1785954031; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PzM3c/AUdHEP/V1SQKl0uANVAZmgdR90jTajOWlVlhY=;
-        b=Seqce8dK1T1KrK1jY26btQ3NXgi3a/+1e44dJBu0R9V8vxn7LBGN6DRCzawL/mVzsH
-         W+KD4ZBS7AJBN1J+c9Z+zRbOssWFG+EGb0hjcZOIE/hXpPeWwvzGq8uYKQGdlSPS02OH
-         XojDu0BjyfM7G7kGexnIFXXNusHsecPJatK5oEaLO+wm1PcgbBZ0pPATsrdt9TBASNZL
-         NDFUgFt59QWrPVN8ATChrnd8hARdx8oI6+Fi5u0fLNjmMbTajSOkASH8R7Csykinnzfa
-         IlbQ5bIACf5vQNR1zGu8IP0WpcxrQenoYyqvGLakcyYrppzPJ6jIFGuiPvJmve2Jb0E/
-         gwig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785349231; x=1785954031;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PzM3c/AUdHEP/V1SQKl0uANVAZmgdR90jTajOWlVlhY=;
-        b=jlS4O+4N7MYkhemfPqrZ9DTSKonQ1RA/uibE2+XrMd9o8BbRZ4Ufp48I8k5jt2WZ/b
-         0+91AeFWphENSUz8990Me6DTWPgyg9aBbgjipulSmplR71FkX0TazrLtBvDYTjzt7svb
-         aWRFm6DOXruAkEjuMoyz7Hpz/v82xgoV0LJN9BLGI3shDzE42F6FCN5Vp/szX37+6uk5
-         +sN0/iTlGpvW4alJDl+nUJhj7KoQPPug1CkpR+yKkoUXiGgkiaSc56UHOS6ioqkLSz7+
-         fg6pO1ThiR9a5RvXYyie0p0dkr1INX6v73Ci4Ot3qftldu/B/qnUw02jEbTgZnlMSSOw
-         6zsA==
-X-Forwarded-Encrypted: i=1; AHgh+RpfpDYDHK51gGJ36HmdDLw0/NZYZj1zMqjrplonAZKnyDgov+AkfKplvck7K1krEXM/W6sJlzNJnBxm8sqUKsE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw76FSFK/9NKiNOnXPEZ1ZK1GV0NA661mRIx4qqcAl0MYE72NhS
-	geegs8eTsgL96i78oj5QAUXUBFVK0eddBN7Xyr2CNbnShXo2KLuP/BW1UYuqV3v4+yww+IzKnOg
-	xfSK90ObLFAPzzWqnZzFZTbuMbzLot2W8SsQQLiv804B5F8lYvWH1V2k+4H2rCoQhMI9/johha5
-	6T9a46OcXpV6fAIh0yX55SMhjth2BoBDCZK/uS0Ww9K8Wj
-X-Gm-Gg: AR+sD13qsIdDmBiSuzMmYk79RD8w3Qd1Mhh2iEiL0NX0iENyj1AsWKJQhFc6g5NppV1
-	lj+LqJhdfKPSE3gfbSvmOI9VFOqxv5V+/PxSwRG9twyk9t/QbcGEHhx7s8bjLdNQa0oZ+B++0Xj
-	+8Z9zBTlszhnwFFv/4p/1E9hdmQlsEjlww40nQ6Sajwzivz2sPUJy5VjWO
-X-Received: by 2002:a05:690c:9b08:b0:806:5a1c:d892 with SMTP id 00721157ae682-81f99362200mr38160747b3.47.1785349230894;
-        Wed, 29 Jul 2026 11:20:30 -0700 (PDT)
-X-Received: by 2002:a05:690c:9b08:b0:806:5a1c:d892 with SMTP id
- 00721157ae682-81f99362200mr38160237b3.47.1785349230082; Wed, 29 Jul 2026
- 11:20:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="twbe6a8R"
+X-Forwarded-Encrypted: i=1; AHgh+Rp9SNcsbHn8zAE/5xbPLCxXeXlA78acmdF7LVFTs3gqFmADOh0zVQb3XZpNxKn7xfeawssCoCt0wc7PK7AAE1Y=@vger.kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785352517;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6RdMoQ7TRONjplxch2Jr2tfEGLhzUYaVY+oPPESaChU=;
+	b=twbe6a8RvR2t1hTHZ7qXP3zmVmKLzotLMUo2d3JhZs2AaP6BkpC8ynkWOv05AyMdhNIYBO
+	GPp/r6rYYbEZfHziTJirVMqb0A9EAM4T4tWkjD2R58bAL2nqmQpoLeTzhDJdLqi55Gs8EE
+	MBO7nkvO8YgdZFHtUiMZCoadjKGioHE=
+X-Gm-Message-State: AOJu0YzQC+xmGUB0SlDTT+ayOireOMOt9a/voRfzD0s4HP5dPl7YFKeE
+	C2xDWwfNSGcYXzYU42ibmhbA0J1MrKixTkvCYYJpEjcTNHjS8PJcD6qnX/J4AevMGfFJWIrbTSr
+	ktqDl/0GuG1qPriGJ2dRCNeeMddbHRkWtryTzif8o
+X-Received: by 2002:ac8:6106:0:b0:519:b82d:fe62 with SMTP id
+ d75a77b69052e-52b3784b752mr459921cf.7.1785352511041; Wed, 29 Jul 2026
+ 12:15:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
- <20260729104114.04298a48@gandalf.local.home> <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
- <20260729113136.32af2a4d@gandalf.local.home> <CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
- <20260729133232.1e6c79eb@gandalf.local.home>
-In-Reply-To: <20260729133232.1e6c79eb@gandalf.local.home>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Wed, 29 Jul 2026 14:20:17 -0400
-X-Gm-Features: AUfX_mylfstO_nr2YAMR0KtoaEUkuyIT32SLYOev--K7OVQlRoslcyNqTeL-jhE
-Message-ID: <CAOu3gNg6kNYp-Sc9Eme6yW7Nu7wV6hZ9=CG0eptROfhQ-H8nFA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
- trampoline/kprobe ftrace_ops permanent
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
-        davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
-        linux-open-source@crowdstrike.com, mbenes@suse.cz
+References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-15-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260720-hybrid-v9-15-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Wed, 29 Jul 2026 20:14:00 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTwfUjVtXwj52Oe0Gbt7n99S0OmUmQmPm2zHf59V-ii-Ww@mail.gmail.com>
+X-Gm-Features: AUfX_mzAWeAj1VZbwdEOyYlhWbcnTGqxChe8dN2ESb6R_ooem2wymLvHTc4GB94
+Message-ID: <CA+EHjTwfUjVtXwj52Oe0Gbt7n99S0OmUmQmPm2zHf59V-ii-Ww@mail.gmail.com>
+Subject: Re: [PATCH v9 15/16] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: MQAn5DGlUWI6oFhk2J-TGt9BR2a-PfJv
-X-Authority-Analysis: v=2.4 cv=RJeD2Yi+ c=1 sm=1 tr=0 ts=6a6a446f cx=c_pps
- a=0mLRTIufkjop4KoA/9S1MA==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=R_n4Uisa8axJ7jemP0ek:22 a=meVymXHHAAAA:8 a=Z4Rwk6OoAAAA:8
- a=LEQXHG-ZodL2_mGlm5IA:9 a=QEXdDO2ut3YA:10 a=WgItmB6HBUc_1uVUp3mg:22
- a=2JgSa4NbpEOStq-L5dxp:22 a=HkZW87K1Qel5hWWM3VKY:22
-X-Proofpoint-ORIG-GUID: MQAn5DGlUWI6oFhk2J-TGt9BR2a-PfJv
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI5MDE0MSBTYWx0ZWRfX0olrSf0s9eu6
- z8793vdPJ5+6aCwHwepUcUPGlS7u71a3TAoKOQApsZUz321Z2tZiLsMEe7MMUQ0jgsAH3vx8KoI
- DpQOVCtndRi2kLuXhsDoeYLEHlRWIV5+2SylDGcjrCkTC9/KoIrUj/opNLOi1bVX6B09r8eudSz
- hxBxQgl2DhQCTG2kL7lsYoW4C2Iz4B6dQQa8ILK261fQFwXnP4bbgM00P6+Aclw6iS9x9XXTQjK
- /gRhuM/4ylLyFqBOzqDERJqTL/rx1NqeiIk8+h+zLQUTpcJiZqs/2j1frATUKVQxB+LJa7hOsrr
- rRpcO3lde+Mfjsgl/hkmTROAeCSIlgjMbsC2uflCc7C4AXSlR0YjieT+LZiyo9j4jThl6yj7UU4
- ywzVbpfh+6Aa2ewGG0FU000UDlLQN7Sn+kP9JMuUgSRbSNgCgQi9co3gi7Kcx2WeGuUSgHvzZ8u
- VBiuw/cN2keM/WS6bBg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI5MDE0MSBTYWx0ZWRfXy5yeuVNQyWFG
- GvM9918KndQR09TY43n3/AjXZYjU+G5OvO+hjwbI4dKaKzqlShCUbkBSYSaYKUuMhLsoUlutED2
- V+6mny2FJioHSL8pqzDU4ueg7VOGM8Z/4ibOUVZQuS+MZh8SrLPq
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11859
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 spamscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607290141
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jul 29, 2026 at 1:32=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
+On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
+<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
 >
-> On Wed, 29 Jul 2026 08:47:33 -0700
-> Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
+> create a "fixed-counters-only" PMU.
 >
-> > On Wed, 29 Jul 2026 at 08:31, Steven Rostedt <rostedt@goodmis.org> wrot=
-e:
-> > >
-> > > > > Honestly, I would love to get rid of it as today ftrace has prove=
-n to be
-> > > > > rather stable. But as it is a user space ABI, I'm not sure what w=
-ill break
-> > > > > if we do. I wonder if we just make it a nop, and print a message =
-to dmesg
-> > > > > saying:
-> > > > >
-> > > > >   "ftrace_enabled no longer does anything. Please report if you n=
-eed it to."
-> > > > >
-> > > > > ?
-> > > >
-> > > > Thanks Steven, if you and/or other community members would approve =
-such
-> > > > approach I would happily do this instead for a few reasons -
-> > >
-> > > It's actually if Linus is OK with this approach.
-> >
-> > The rule is always the same, and I don't understand why there's any
-> > discussion about it because it's been stated a million times: we can
-> > try to make any ABI changes at all, and what matters is whether it
-> > breaks somebodys setup.
-> >
-> > If people rely on old behavior, it can't change. And if people don't,
-> > nobody cares. It really is that simple. That is literally the
-> > DEFINITION of "don't break user space".
+> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
+> attribute provides a getter that facilitates kernel and userspace
+> debugging/testing.
 >
-> That's basically what I said. I was just restating it and not asking if I
-> was correct. I added you more for the below information you added.
->
-> >
-> > Whether something is user-*VISIBLE* in theory is entirely immaterial
-> > except in the sense of "be careful, this needs testing and may have to
-> > be reverted". So user-visibility isn't a "don't do it", it's a "do it
-> > carefully, and knowing that you may have to revert immediately if
-> > somebody complains".
->
-> Totally agree.
->
-> >
-> > So changing user-visible things is potentially a lot of wasted effort,
-> > and needs loving care and follow-up.
-> >
-> > So everybody should typically avoid changing user-visible things
-> > because it's potentially painful and developer-intensive, but not
-> > because it can't be done.
-> >
-> > All that matters is whether real user workloads regress.
-> >
-> > And please make sure that any changed behaviour is really obvious, so
-> > that people don't spend lots of time chasing down *why* something
-> > broke. A kernel printk is generally way too subtle - and no, the
-> > tracing "make the printk extra ugly with crazy ASCII barfics" model is
-> > not an improvement.
-> >
-> > It might be better to actually return an error to user space so that
-> > users can see that setting ftrace_enabled to zero failed and it would
-> > show up in user logs. kernel developers may think that kernel logs are
-> > important, but users seldom even think about them. Of course, that can
-> > then cause even worse regressions, so there's a balance here.
-> >
-> > End result: don't do user visible changes unless you really really
-> > care. And then you spend the extra effort.
->
-> Honestly, I don't know of any tooling that would use this kill-switch or
-> any reason to do so. For live kernel patching and for BPF, it doesn't eve=
-n
-> work. Hasn't for some time. It's now a "kill some ftrace but not all".
->
-> Hence, again, the switch itself is rather useless.
->
-> It now is starting to cause a burden, as there's internal code depending =
-on
-> ftrace functionality to always be working and can cause some nasty
-> undefined behavior if someone were to set that kill switch to zero. The
-> solution is to either play whack-a-mole and make sure all those use cases
-> have the PERMANENT flag set so the kill-switch does not affect them. Or w=
-e
-> simply disable the kill-switch.
->
-> But I like your idea about it returning -ENOSUP if someone tries to set i=
-t
-> to zero. Doing that and the printk should let people know why it didn't
-> work if they do care.
->
-> And yes, we need to be ready to revert it if someone does come back and s=
-ay
-> their tooling broke because of it.
->
-> Andrey, care to make a patch to do that?
->
-> Have setting it to zero return -ENOSUP and print a message saying:
->
->  "The ftrace_enabled file is deprecated and no longer disables ftrace"
->
-> -- Steve
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
-Gladly! As BPF users we can attest that this switch causes pain and
-handling complications.
+In terms of the UAPI policy, I have no strong opinion. In terms of the
+implementation, it looks correct to me. FILTER/SET_PMU and
+FIXED_COUNTERS_ONLY are mutually exclusive both ways, and the EXPLICIT
+flag keeps that from blocking the default-PMU path.
 
-Should I also clean up the entire PERMANENT flag logic we now have and
-drop the flag itself?
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-Thanks,
-Andrey
+Cheers,
+/fuad
+
+> ---
+>  Documentation/virt/kvm/devices/vcpu.rst | 30 ++++++++++++++++++++++++++----
+>  arch/arm64/include/uapi/asm/kvm.h       |  1 +
+>  arch/arm64/kvm/pmu-emul.c               | 30 +++++++++++++++++++++++++++---
+>  tools/arch/arm64/include/uapi/asm/kvm.h |  1 +
+>  4 files changed, 55 insertions(+), 7 deletions(-)
+>
+> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+> index 66e714f2fcfa..1d592e70bdea 100644
+> --- a/Documentation/virt/kvm/devices/vcpu.rst
+> +++ b/Documentation/virt/kvm/devices/vcpu.rst
+> @@ -74,7 +74,8 @@ irqchip.
+>          -ENODEV  PMUv3 not supported or GIC not initialized
+>          -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
+>                   configured as required prior to calling this attribute
+> -        -EBUSY   PMUv3 already initialized or a VCPU has already run
+> +        -EBUSY   PMUv3 already initialized, a VCPU has already run or
+> +                 FIXED_COUNTERS_ONLY has already been set
+>          -EINVAL  Invalid filter range
+>          =======  ======================================================
+>
+> @@ -116,14 +117,14 @@ using event 0x11 (CPU_CYCLES).
+>
+>  :Returns:
+>
+> -        =======  ====================================================
+> +        =======  ===========================================================
+>          -EBUSY   PMUv3 already initialized, a VCPU has already run or
+> -                  an event filter has already been set
+> +                  an event filter or FIXED_COUNTERS_ONLY has already been set
+>          -EFAULT  Error accessing the PMU identifier
+>          -ENXIO   PMU not found
+>          -ENODEV  PMUv3 not supported or GIC not initialized
+>          -ENOMEM  Could not allocate memory
+> -        =======  ====================================================
+> +        =======  ===========================================================
+>
+>  Request that the VCPU uses the specified hardware PMU when creating guest events
+>  for the purpose of PMU emulation. The PMU identifier can be read from the "type"
+> @@ -165,6 +166,27 @@ explicitly selected, or the number of counters is out of range for the
+>  selected PMU. Selecting a new PMU cancels the effect of setting this
+>  attribute.
+>
+> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
+> +------------------------------------------------------
+> +
+> +:Parameters: no additional parameter in kvm_device_attr.addr
+> +
+> +:Returns:
+> +
+> +        =======  ==================================================
+> +        -EBUSY   PMUv3 already initialized, a VCPU has already run,
+> +                 an event filter has already been set or
+> +                 a hardware PMU has already been specified
+> +        -ENXIO   Attempted to get before setting
+> +        -ENODEV  Attempted to set while PMUv3 not supported
+> +        =======  ==================================================
+> +
+> +If set, KVM emulates PMUv3 without programmable event counters.
+> +
+> +When this attribute is enabled, the vCPU can run on any physical CPU
+> +that has a PMU, regardless of the underlying implementation. This
+> +attribute is VM-scoped.
+> +
+>  2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
+>  =================================
+>
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 1c13bfa2d38a..39a1a1e412e6 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -437,6 +437,7 @@ enum {
+>  #define   KVM_ARM_VCPU_PMU_V3_FILTER           2
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_PMU          3
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS  4
+> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY      5
+>  #define KVM_ARM_VCPU_TIMER_CTRL                1
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER                0
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER                1
+> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+> index 1ec09ef28467..ff5d5f66a9c0 100644
+> --- a/arch/arm64/kvm/pmu-emul.c
+> +++ b/arch/arm64/kvm/pmu-emul.c
+> @@ -1118,8 +1118,8 @@ int kvm_arm_set_default_pmu(struct kvm *kvm)
+>          * affines the VMM to a particular cluster of cores.
+>          *
+>          * In any case, userspace should just do the sane thing and use the UAPI
+> -        * to select a PMU type directly. But, be wary of the baggage being
+> -        * carried here.
+> +        * to select a PMU type directly, or request fixed-counters-only
+> +        * emulation. But, be wary of the baggage being carried here.
+>          */
+>         struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu(raw_smp_processor_id());
+>
+> @@ -1144,11 +1144,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>                 arm_pmu = entry->arm_pmu;
+>                 if (arm_pmu->pmu.type == pmu_id) {
+>                         if (kvm_vm_has_ran_once(kvm) ||
+> +                           kvm_pmu_fixed_counters_only(kvm) ||
+>                             (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
+>                                 ret = -EBUSY;
+>                                 break;
+>                         }
+>
+> +                       set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
+>                         kvm_arm_set_pmu(kvm, arm_pmu);
+>                         cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
+>                         ret = 0;
+> @@ -1159,6 +1161,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
+>         return ret;
+>  }
+>
+> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
+> +{
+> +       struct kvm *kvm = vcpu->kvm;
+> +
+> +       lockdep_assert_held(&kvm->arch.config_lock);
+> +
+> +       if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
+> +           test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
+> +               return -EBUSY;
+> +
+> +       set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
+> +       kvm->arch.nr_pmu_counters = 0;
+> +
+> +       return 0;
+> +}
+> +
+>  static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+>  {
+>         struct kvm *kvm = vcpu->kvm;
+> @@ -1236,7 +1254,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>                      filter.action != KVM_PMU_EVENT_DENY))
+>                         return -EINVAL;
+>
+> -               if (kvm_vm_has_ran_once(kvm))
+> +               if (kvm_vm_has_ran_once(kvm) || kvm_pmu_fixed_counters_only(kvm))
+>                         return -EBUSY;
+>
+>                 if (!kvm->arch.pmu_filter) {
+> @@ -1281,6 +1299,8 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>
+>                 return kvm_arm_pmu_v3_set_nr_counters(vcpu, n);
+>         }
+> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
+> +               return kvm_arm_pmu_v3_set_pmu_fixed_counters_only(vcpu);
+>         case KVM_ARM_VCPU_PMU_V3_INIT:
+>                 return kvm_arm_pmu_v3_init(vcpu);
+>         }
+> @@ -1307,6 +1327,9 @@ int kvm_arm_pmu_v3_get_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>                 irq = vcpu->arch.pmu.irq_num;
+>                 return put_user(irq, uaddr);
+>         }
+> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
+> +               if (kvm_pmu_fixed_counters_only(vcpu->kvm))
+> +                       return 0;
+>         }
+>
+>         return -ENXIO;
+> @@ -1320,6 +1343,7 @@ int kvm_arm_pmu_v3_has_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+>         case KVM_ARM_VCPU_PMU_V3_FILTER:
+>         case KVM_ARM_VCPU_PMU_V3_SET_PMU:
+>         case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS:
+> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
+>                 if (kvm_vcpu_has_pmu(vcpu))
+>                         return 0;
+>         }
+> diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
+> index 1c13bfa2d38a..39a1a1e412e6 100644
+> --- a/tools/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/tools/arch/arm64/include/uapi/asm/kvm.h
+> @@ -437,6 +437,7 @@ enum {
+>  #define   KVM_ARM_VCPU_PMU_V3_FILTER           2
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_PMU          3
+>  #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS  4
+> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY      5
+>  #define KVM_ARM_VCPU_TIMER_CTRL                1
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER                0
+>  #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER                1
+>
+> --
+> 2.55.0
+>
+>
