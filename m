@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CEC34D3B2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB89314A73;
 	Wed, 29 Jul 2026 00:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785285310; cv=none; b=e/gvQ6l/X1HOtPWWwcn+CRYEN3qHDu4mBqfmUn9mG5yyocnNnz4Yl+hFeZMfYdLnqlndTBCaH/X7INTey2UOEI4akB4fuTWBLsnkw93GbWNQs18mSre0bo/QrtjsqBRpDobmU804wabwTDNClto0U3rw5IF/PMXgdNusNb3GkfY=
+	t=1785285310; cv=none; b=b5sl/fWBOEbaa+zl12U5e6MMlE1PlzjMg3oG4V9psBsBFzpATdTsYOD3AApWyZ73VM53fqK6ElfaP0TRYhlmJp4u9z4vm05ZCLjdC8x9FNO+F41n+tK1HM+FFxFhVvZ43t5Wurls/jUqeYZtsMCd8jIIT/ssjt2NCzEQLS7C0bU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785285310; c=relaxed/simple;
-	bh=ee+k0gLRIeOZJUzHjO+ZbWO7XbmvclzhozNvKeyrbGA=;
+	bh=9b4OkH1UVPXahUABlJXnZw6CG9OK9HzlpLr58d+35cg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mMR0OAlPc9/lJ/M6nvBg0RUZKz9rWQcIXQ2AjdE5vD1ITm6wrPl2kD7aPQmqTHOcqaZrwttL7lSQG+OZi0Cawp/dFoBo0snBQ9tR85Kgqx3W4E1JLLC71V6dD2dfieLJOZS0N4Am4yMKdeM5oAk9ikemqjbNQe2tKoqjXNISQig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OR7QxTZe; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=YeOsMu/fAnMOaHg8P9aZESM+ltJ57dTZK9VVamjz1oHmQ+biSIy7x778EuOJitGDtx7PqvvhhdM31vWtPUpB53FDhsxSC4kHX8CQR73IcHwTfqOhAR+RPA3uAc7JlWniX5+jeKLZBmw8egbSZsl5kGzVANtLDTwBXXokbnqlkvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clq2aBWx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OR7QxTZe"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B1E85C2BCF6;
-	Wed, 29 Jul 2026 00:35:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clq2aBWx"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E65FDC4AF60;
+	Wed, 29 Jul 2026 00:35:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1785285310;
-	bh=ee+k0gLRIeOZJUzHjO+ZbWO7XbmvclzhozNvKeyrbGA=;
+	s=k20201202; t=1785285309;
+	bh=9b4OkH1UVPXahUABlJXnZw6CG9OK9HzlpLr58d+35cg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=OR7QxTZeB8cLZAL8piDxH5E3w3Py9EtcLMUC4/KODO6/KDSA+wUidbU5Yk/nPck1Y
-	 qFUCfQL2+qh9Ub4gruqAJyB8FifZCZ1zXaInhnFfymvxpFdXMTyUws0dYVN0ZI5ZV0
-	 JILKrluTFgUhkuDMOHYaj9k+4MxEnT7aPLfR5JTb/IFfwKNhYKvqfeW1ET7cRGkloE
-	 BodlBBGdV5EwVf/FWpQmygM0I2yNISlyzOPJJzo6QjzmJadBFq+64BlR4wUgn2c4aP
-	 zjJ67Gdw8qjh3IlHzgT3Utv/AOvaceW72M+mgAuahl4U9bojhzOeH71ihdInSqmhFQ
-	 ZzX3/1CK/U2MQ==
+	b=clq2aBWx9Alot0pv7M7s8qZTr8yTK8zJdJe+MBJvc8slSqjhb8hdwqzTWL3M8+JhD
+	 LLqMuhobL9gEBQM6/ot7aSCOKnTvVzf7x/pkBQWVANsLg18GTvXNJyCx7YBakclDEd
+	 tqAh5clVuRbrHCxSog2Ri8gwEbMac4xFOK2nrg6ZQ+BdLFshdX3b5bJixnKfWsWVLQ
+	 N1W1R6uvp2zyP36ZAMw1KFbBFSkdFlt3MtUXiLMqZBw/7AkOeQG1YsrOPzKQZMn5uq
+	 iBTXZZJNYf9Egd3Xt/GvD70egQLDO8KzExlV3obPqCPrLiVxcJJDFTlvcpVf10KquK
+	 OIZ+sRvDuhBJg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A088C54F52;
-	Wed, 29 Jul 2026 00:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC686C54F57;
+	Wed, 29 Jul 2026 00:35:09 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Tue, 28 Jul 2026 17:35:33 -0700
-Subject: [PATCH v9 34/41] KVM: selftests: Add helpers to pin pages with
- CONFIG_GUP_TEST
+Date: Tue, 28 Jul 2026 17:35:25 -0700
+Subject: [PATCH v9 26/41] KVM: selftests: Add helpers for calling ioctls on
+ guest_memfd
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260728-gmem-inplace-conversion-v9-34-35f9aec2aed2@google.com>
+Message-Id: <20260728-gmem-inplace-conversion-v9-26-35f9aec2aed2@google.com>
 References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
 In-Reply-To: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -76,11 +76,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785285305; l=2727;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785285305; l=5371;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=fMGRLXRDe9ewbqPURje2qeKCNAQagU823U8K9a0Ohls=;
- b=M0kLKLw+slgjihad6M2qkRHDlEJzV5uijRgDG/1KOFYV34CKq+mVkd2roLDanEtYk9Q1949d6
- YIoh1s1Ou5oDCLYuiAW1u5k5SqByblCRE089lYADsuuVCxWin4B8Tro
+ bh=SztH8ywp+zsWQWj3F1zxcBTjt+wFMDPSUxmq9Oc2LcE=;
+ b=ibfbjTjCAV9TI7MZlzIl0m2kX9XyXJtAMLcr/jr3yXI8Xnea+IR2gMEEugravqAlY3FTzz9z5
+ NZkhNU9wgjxAH4PsjDYJUKzobhKtXyPSEl4cNa4WvDVdm+f4XRF293O
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -88,83 +88,165 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Ackerley Tng <ackerleytng@google.com>
+From: Sean Christopherson <seanjc@google.com>
 
-Add helper functions to allow KVM selftests to pin memory using
-CONFIG_GUP_TEST. This is useful for testing scenarios where some page has
-an increased refcount. such as in guest_memfd in-place conversion tests.
+Add helper functions to kvm_util.h to support calling ioctls, specifically
+KVM_SET_MEMORY_ATTRIBUTES2, on a guest_memfd file descriptor.
 
-The helpers open /sys/kernel/debug/gup_test and invoke the
-PIN_LONGTERM_TEST_START and PIN_LONGTERM_TEST_STOP ioctls. Since this
-functionality depends on the kernel being built with CONFIG_GUP_TEST,
-provide stub implementations that trigger a test failure if the
-configuration is missing.
+Introduce gmem_ioctl() and __gmem_ioctl() macros, modeled after the
+existing vm_ioctl() helpers, to provide a standard way to call ioctls
+on a guest_memfd.
 
+Add gmem_set_memory_attributes() and its derivatives (gmem_set_private(),
+gmem_set_shared()) to set memory attributes on a guest_memfd region.
+Also provide "__" variants that return the ioctl error code instead of
+aborting the test. These helpers will be used by upcoming guest_memfd
+tests.
+
+To avoid code duplication, factor out the check for supported memory
+attributes into a new macro, TEST_ASSERT_SUPPORTED_ATTRIBUTES, and use
+it in both the existing vm_set_memory_attributes() and the new
+gmem_set_memory_attributes() helpers.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
 Tested-by: Shivank Garg <shivankg@amd.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util.h |  3 +++
- tools/testing/selftests/kvm/lib/kvm_util.c     | 25 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ tools/testing/selftests/kvm/include/kvm_util.h | 94 +++++++++++++++++++++++---
+ 1 file changed, 86 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 626c960b4bb82..b726e49a3cfcf 100644
+index 2186e98583969..626c960b4bb82 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -1197,6 +1197,9 @@ static inline int pin_self_to_any_cpu(void)
- 	return pin_task_to_any_cpu(pthread_self());
+@@ -392,6 +392,16 @@ static __always_inline void static_assert_is_vcpu(struct kvm_vcpu *vcpu) { }
+ 	__TEST_ASSERT_VM_VCPU_IOCTL(!ret, #cmd, ret, (vcpu)->vm);	\
+ })
+ 
++#define __gmem_ioctl(gmem_fd, cmd, arg)				\
++	kvm_do_ioctl(gmem_fd, cmd, arg)
++
++#define gmem_ioctl(gmem_fd, cmd, arg)				\
++({								\
++	int ret = __gmem_ioctl(gmem_fd, cmd, arg);		\
++								\
++	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(#cmd, ret));	\
++})
++
+ /*
+  * Looks up and returns the value corresponding to the capability
+  * (KVM_CAP_*) given by cap.
+@@ -418,8 +428,16 @@ static inline void vm_enable_cap(struct kvm_vm *vm, u32 cap, u64 arg0)
+ 	vm_ioctl(vm, KVM_ENABLE_CAP, &enable_cap);
  }
  
-+void pin_pages(void *vaddr, uint64_t size);
-+void unpin_pages(void);
++/*
++ * KVM_SET_MEMORY_ATTRIBUTES{,2} overwrites _all_ attributes.  These
++ * flows need significant enhancements to support multiple attributes.
++ */
++#define TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes)				\
++	TEST_ASSERT(!(attributes) || (attributes) == KVM_MEMORY_ATTRIBUTE_PRIVATE,	\
++		    "Update me to support multiple attributes!")
 +
- void kvm_print_vcpu_pinning_help(void);
- void kvm_parse_vcpu_pinning(const char *pcpus_string, u32 vcpu_to_pcpu[],
- 			    int nr_vcpus);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e706669596947..ae0d7ff13f9f5 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -19,6 +19,8 @@
- #include <unistd.h>
- #include <linux/kernel.h>
+ static inline void vm_set_memory_attributes(struct kvm_vm *vm, gpa_t gpa,
+-					    u64 size, u64 attributes)
++					    size_t size, u64 attributes)
+ {
+ 	struct kvm_memory_attributes attr = {
+ 		.attributes = attributes,
+@@ -428,17 +446,11 @@ static inline void vm_set_memory_attributes(struct kvm_vm *vm, gpa_t gpa,
+ 		.flags = 0,
+ 	};
  
-+#include "../../../../../mm/gup_test.h"
-+
- #define KVM_UTIL_MIN_PFN	2
+-	/*
+-	 * KVM_SET_MEMORY_ATTRIBUTES overwrites _all_ attributes.  These flows
+-	 * need significant enhancements to support multiple attributes.
+-	 */
+-	TEST_ASSERT(!attributes || attributes == KVM_MEMORY_ATTRIBUTE_PRIVATE,
+-		    "Update me to support multiple attributes!");
++	TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes);
  
- u32 kvm_random_seed;
-@@ -645,6 +647,29 @@ int __pin_task_to_cpu(pthread_t task, int cpu)
- 	return pthread_setaffinity_np(task, sizeof(cpuset), &cpuset);
+ 	vm_ioctl(vm, KVM_SET_MEMORY_ATTRIBUTES, &attr);
  }
  
-+static int gup_test_fd = -1;
-+
-+void pin_pages(void *vaddr, uint64_t size)
+-
+ static inline void vm_mem_set_private(struct kvm_vm *vm, gpa_t gpa,
+ 				      u64 size)
+ {
+@@ -451,6 +463,72 @@ static inline void vm_mem_set_shared(struct kvm_vm *vm, gpa_t gpa,
+ 	vm_set_memory_attributes(vm, gpa, size, 0);
+ }
+ 
++static inline int __gmem_set_memory_attributes(int fd, u64 offset,
++					       size_t size, u64 attributes,
++					       u64 *error_offset)
 +{
-+	const struct pin_longterm_test args = {
-+		.addr = (uint64_t)vaddr,
++	struct kvm_memory_attributes2 attr = {
++		.attributes = attributes,
++		.offset = offset,
 +		.size = size,
-+		.flags = PIN_LONGTERM_TEST_FLAG_USE_WRITE,
++		.flags = 0,
++		.error_offset = 0,
++	};
++	int r;
++
++	r = __gmem_ioctl(fd, KVM_SET_MEMORY_ATTRIBUTES2, &attr);
++
++	/* Copy error_offset regardless of r so caller can check. */
++	if (error_offset)
++		*error_offset = attr.error_offset;
++
++	return r;
++}
++
++static inline int __gmem_set_private(int fd, u64 offset, size_t size,
++				     u64 *error_offset)
++{
++	return __gmem_set_memory_attributes(fd, offset, size,
++					    KVM_MEMORY_ATTRIBUTE_PRIVATE,
++					    error_offset);
++}
++
++static inline int __gmem_set_shared(int fd, u64 offset, size_t size,
++				    u64 *error_offset)
++{
++	return __gmem_set_memory_attributes(fd, offset, size, 0,
++					    error_offset);
++}
++
++static inline void gmem_set_memory_attributes(int fd, u64 offset,
++					      size_t size, u64 attributes)
++{
++	struct kvm_memory_attributes2 attr = {
++		.attributes = attributes,
++		.offset = offset,
++		.size = size,
++		.flags = 0,
 +	};
 +
-+	gup_test_fd = __open_path_or_exit("/sys/kernel/debug/gup_test", O_RDWR,
-+					  "Is CONFIG_GUP_TEST enabled?");
++	TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes);
 +
-+	TEST_ASSERT_EQ(ioctl(gup_test_fd, PIN_LONGTERM_TEST_START, &args), 0);
++	__TEST_REQUIRE(kvm_check_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES) > 0,
++		       "No valid attributes for guest_memfd ioctl!");
++
++	gmem_ioctl(fd, KVM_SET_MEMORY_ATTRIBUTES2, &attr);
 +}
 +
-+void unpin_pages(void)
++static inline void gmem_set_private(int fd, u64 offset, size_t size)
 +{
-+	TEST_ASSERT_EQ(ioctl(gup_test_fd, PIN_LONGTERM_TEST_STOP), 0);
-+
-+	kvm_free_fd(gup_test_fd);
++	gmem_set_memory_attributes(fd, offset, size,
++				   KVM_MEMORY_ATTRIBUTE_PRIVATE);
 +}
 +
- static u32 parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
- {
- 	u32 pcpu = atoi_non_negative("CPU number", cpu_str);
++static inline void gmem_set_shared(int fd, u64 offset, size_t size)
++{
++	gmem_set_memory_attributes(fd, offset, size, 0);
++}
++
+ void vm_guest_mem_fallocate(struct kvm_vm *vm, gpa_t gpa, u64 size,
+ 			    bool punch_hole);
+ 
 
 -- 
 2.55.0.508.g3f0d502094-goog
