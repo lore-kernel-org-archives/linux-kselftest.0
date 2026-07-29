@@ -1,106 +1,73 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170503E763F;
-	Wed, 29 Jul 2026 14:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E4E48D860;
+	Wed, 29 Jul 2026 14:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785336046; cv=none; b=GxwBNrWjy4DRZ1Whl9AQwaEP8437PNbU71mjnlzGlPUCLT25ZJ+qMdfZ5HFb5qfcLWDUKK7bLjHOJiFLbFV5wKMmsJnlE0sS/KJuW0Ar9yc1M9dWBvpMmPUgI2qk+mrDTWiraMGLVTYHQVrVFQj3UywAhFIp2rW0/mlDXyYkeqY=
+	t=1785336465; cv=none; b=X5CZBMTw+Bz3RCx8f9SpF9WOuV2T6oV/iPJsx7/RKWD8IRr1/jf1HiqN4PSFGIrur8IA17mSqalRvPYrIEHs3jVUZEGdC53x7aq41IXHS5iR29YJrMB2ObNA6B/VH8hTtySBJFQmfrpLgEf91nBpyNXQuUxSw07T1XkylFULR/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785336046; c=relaxed/simple;
-	bh=iC7LSdLV7T1od8xnAA41YHNWP9QOdGmvAAxgkXtGQOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=og1A/tJRLE5DZnqCAoP5LdP/Jiv+kDtvIRmypVX3cAhkdnqaJE/xljJFo0F0QPTi19g0R24xLrvynyKcXRytZ8D/duMMYb8I3jTYq6KO9jJaV2PCbbBewU572RiGh+XYXs7j2ClBiX4+0u58OxIenGeoiCyChbUD5+TKX9URSfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf17.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 8F4121A0672;
-	Wed, 29 Jul 2026 14:40:41 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id A1A2A1B;
-	Wed, 29 Jul 2026 14:40:38 +0000 (UTC)
-Date: Wed, 29 Jul 2026 10:41:14 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <song@kernel.org>,
- <jolsa@kernel.org>, <naveen@kernel.org>, <davem@davemloft.net>,
- <mhiramat@kernel.org>, <stable@vger.kernel.org>,
- <linux-open-source@crowdstrike.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
- trampoline/kprobe ftrace_ops permanent
-Message-ID: <20260729104114.04298a48@gandalf.local.home>
-In-Reply-To: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1785336465; c=relaxed/simple;
+	bh=loGLgY5ItIsMY88MkR/DfsoCUrV7HI8lv3NLVWyqBRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lhu7UPw+WOh9oW/D/ptkYBY8svZ4/8fH4yZGw2eKJ1rDej4N12JMsazMcRYVH8b44GG53jcLOj5ilTVf86RCxXmJWH+7GiQoPsq6yJ4rBlSqQE6lx24Rcz/bqOE2DFcFLaMnDpgBE7DfVVpa3PmVCZpSXJ8CIaaoo9SC1EZzmyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TiqIDOQw; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TiqIDOQw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C561F00A3E;
+	Wed, 29 Jul 2026 14:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785336462;
+	bh=DKnDu4X+rd4KrlY4SCfiPQqPTppxa4AM+AMSVEZhOAo=;
+	h=From:To:Cc:Subject:Date;
+	b=TiqIDOQwPGDBSVnMJbEvoEPzZcNn+F3m5XzA85F62BYB1ZlzLADlSx0vjAchcq/tj
+	 mXRKiKsJcnrgGuhrL6l9WdmnBs8MqDA+RS272sbGKsCHhmaEaUCu/xxc5ncW3+ighg
+	 hcbHAAjkvNt2/ElFUCantFwaoxwv/TUkQ8i2Dot19CmoVnQymCCc0YR8Bj9l8KjsYu
+	 FsL8VX2sEPx2S2fgv3GtoxmoKO1cMBisiLnukS7KV1uQzMcI97ou9tnlWkJSAszFyF
+	 +OSmGzMj5PFeO1COnq4f5W6Mzuqlvfb1jUyu/5P7RmDkC7XY5a89olL+n/woqNgAI5
+	 Q1I53lU/pJ2FA==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH 0/6] mm/damon: add kunit and selftests for probes and probe weights
+Date: Wed, 29 Jul 2026 07:47:31 -0700
+Message-ID: <20260729144738.90895-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A1A2A1B
-X-Stat-Signature: 499kyhgzpha8ede91uyypk9psck4c73c
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18XandzLXTa8+ciNlokeOIqor1xPSfBmv0=
-X-HE-Tag: 1785336038-944796
-X-HE-Meta: U2FsdGVkX1/Q1VMD5PBWVVztUmDRsGyKdjgXyyq8UOEsrvQ4x8MkzXVv1XagktdXZg1hMtLPMbF3NG+14pqvCAulEmETwfclWLYJIdRiZak9IoPT5g5AQigCoGedHitSSmWGanL4HrTJm0lErfH81v8KlhDAZmQZYsgdMsWkNMjy2IJQaC0A2sTvtDwwcdQYm02RzAZu7L41x4P9CEfsnp2T/VfPCN7BNLGDi5y7JeOOHekGj3ZQtSALsU2etuRHhnP5z+yJvx5GFf6Lnxb0tf9dDXZBBVEtiwbg1f1L/hod8IXDzvan3OO3eICs4HYii9aKRI/C0D+DmjpPM54ck9EkdhXVEMsBhzpc5DpAerz3LLWIyijKPpCZ7gXcxIDld4fwbILHnK9sVTCBl1mtdQ==
+Content-Transfer-Encoding: 8bit
 
-On Tue, 28 Jul 2026 20:59:56 -0400
-Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+DAMON recently introduced probes and probe weights.  Add kunit and
+selftests for ensuring the parameters for features can be set using the
+core API and the sysfs ABI, respectively.
 
-> This fixes a long-standing issue: kernel.ftrace_enabled=0 silently
-> disables BPF trampolines (fentry/fexit) and ftrace-based
-> kprobes/kretprobes. The write succeeds, the hook stops firing with no
-> error, and re-enabling silently restores it. Livepatch already solved
-> this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
-> ftrace while a permanent ops is registered and refuses to register
-> one while ftrace is disabled[1].
+SJ Park (6):
+  mm/damon/tests/core-kunit: test damon_commit_filter()
+  mm/damon/tests/core-kunit: add damon_commit_probes() test
+  selftests/damon/_damon_sysfs: implement DamonProbes
+  selftests/damon/drgn_dump_damon_status: dump probes
+  selftests/damon/sysfs.py: extend commit assertion function for probes
+  selftests/damon/sysfs.py: test damon probes
 
-The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
-back when ftrace was first added to the kernel. It's addition was namely
-there because live runtime modification of kernel code was new and we were
-worried about how stable it could be.
+ mm/damon/tests/core-kunit.h                   | 121 +++++++++++++++++
+ tools/testing/selftests/damon/_damon_sysfs.py | 123 +++++++++++++++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  32 +++++
+ tools/testing/selftests/damon/sysfs.py        |  35 ++++-
+ 4 files changed, 309 insertions(+), 2 deletions(-)
 
-Honestly, I would love to get rid of it as today ftrace has proven to be
-rather stable. But as it is a user space ABI, I'm not sure what will break
-if we do. I wonder if we just make it a nop, and print a message to dmesg
-saying:
 
-  "ftrace_enabled no longer does anything. Please report if you need it to."
-
-?
-
-> 
-> For trampolines this restores a historical property: from 2019-2022
-> they shared one global direct_ops, marked permanent the same
-> way[2].It was later lost as a side effect of the 2022
-> per-trampoline-ops split (patch 1's Fixes tag) and never
-> restored.[3][4] Kprobes never carried this protection at all, so
-> for them that is long-standing issue rather than a regression.
-> 
-> Patch 1: trampolines. Patch 2: classic kprobes/kretprobes. Patch 3:
-> a selftest covering both directions for all four hook types.
-> 
-> P.S
-> I initially implemented a per-record opt-in flag[5], but dropped it
-> as over-engineering once I saw the original blanket restriction.
-> 
-> P.P.S
-> Open question: kprobe.multi/kretprobe.multi/kprobe.session
-> (fprobe-backed) aren't covered -- return-capturing fprobes share the
-> function-graph tracer's subops manager with unrelated tracers, so
-> marking it permanent needs a different, per-record approach. Perhaps
-> something along the lines of [5].
-
-Honestly, I would like to start deprecating that kill switch.
-
-For the series:
-
-Acked-by: Steven Rostedt <rostedt@goodmis.org>
-
--- Steve
+base-commit: 2f558ff382eed84b9ffde4dbd630a1fc4c57fab4
+-- 
+2.47.3
