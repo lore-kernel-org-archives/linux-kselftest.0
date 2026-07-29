@@ -1,147 +1,143 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238883B0581
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A3B411A0F
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 16:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785340076; cv=none; b=CAj7ERaEozZDaRQFAKo+Ex1+K6xBnGgzVYdZeK2ab1PhKtt9CJIp41f7BFmCehLX0oNX8LCRwJAVylSU8Ddc0onFGkxfJBL2zDgndUokb8V2Tlq2qrKn8e+2r5Hiqv7kBwWlfddwuaXPaPaGsIql/ejCp2LXbnEk5B6th4kmd0Y=
+	t=1785340909; cv=none; b=fsnIwFv/Dop/uymoyqN7Tv8QQ/75xNhhzCNVshcL2Ao2p1EruCYZ5sAnU9jHJuNAQJ04LMa29iTdmwNkzPVD53v3j6XZFRQ30NacHr/2rp+ANqkjvoTSXlDm3pJ28lYfl1o/HGReAo7e9fGNugtsiSI/F50z5gIFbu1XIzhvSv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785340076; c=relaxed/simple;
-	bh=EXhgVMS0NxlxE5f0pFtmC2iT2ieedzhRX+u7Ni9PIk8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R0/cmN5Vudq86lBLotUjnkwWD3D4WLJlnVjePSVxZsxytC2XHhOhFfEPJGcTg2GrR7koziqpFKTRk8joQ449RsdF/bOFa9sElMIVGtL0Ymav1eep6xJPMQQjeqp3fbhdAxKys1f8hEn1AJaGeDMYq62IEtPRP58FM4UTTS409Ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=OV8xTAoQ; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OV8xTAoQ"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-69c1220bd51so1734192a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 08:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1785340073; x=1785944873; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8fldeuHlUZsSgbof6A4RukHGxb8EkbZ80+aaj64d3jk=;
-        b=OV8xTAoQxXUDo6xWyNB6bv7plWghUh/KVmswVMTKPsyj/n/R57TaB2j82DIsGGuK4C
-         Hx3V3B+XX5YVX+rKw+up0JYcgfUkV3tZeiQGkb2VRHvNp6x7fC8/xtLe+Fc7C/NIVHVJ
-         ZfqwGCY5hDXcAok7N/Cweil8ybB69cmnUFv0M=
+	s=arc-20240116; t=1785340909; c=relaxed/simple;
+	bh=RwAX5pgChJMqfXEa33Kd2aBkaBUj6UYE8AgaDNe40rs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q2AIbx39qjjRzA01TeKfKKxMINkYtykpX2NdVdAnnYL1tbDnZa7CfN0Yjb2fmVlwvRqMP6Z8NTOi78LhHnNfLS+7Kmkk8u9m7YfWd+CUkgzK44ibO8j3JthxT/YJ/WMaNbZEP2SJDZ+getG3vDykLQAwLpuUK9zaEL6nJub5y+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-4956bc73c0eso4367835e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 09:01:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785340073; x=1785944873;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=8fldeuHlUZsSgbof6A4RukHGxb8EkbZ80+aaj64d3jk=;
-        b=c70aHmixpi0i2n+bG2ZvtU36PDAGnaqkTBapFCDpQ1ByaSBAOM1iZWI7YDCppn1hwb
-         fakVmvZSV2oUd2lAuJdJB2bHSWw4Vr8HDNOeWk2vIVXk+oEUKdkyEDLVIU8Td/tC0xx4
-         QCm5MY8VCRzmM582VLN/wKLvvCGd3UROyIwqg3LqoPueTVyABNjUhLYBX6b9DmFdNrdq
-         zYk45kBqf3dpd2UpJHT2AoW5nDIt1HWt8AWCgf0IG7TDftrHdqkD5v39sepQE8USo+9F
-         a6avdHCNg2m0IlDJ8BLt7mrtHUrfPk6487QxAYdqTPw60mcfCZq/8lDHEgeZ1/lFr3b4
-         eUAw==
-X-Forwarded-Encrypted: i=1; AHgh+RoGw2gMF1s+kMizkNatacE7VvJ3c3o/YNGUeOCjug4735uX5p9Z8PHendiSxISq12dKRqE6Bnt4tqA9j6x5yTo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxkf9kNHPgvCUc1GoBfPUVFY0onDLuwCTvsocCfvEtJGXv9H58a
-	W4qboQgaYDsAGA2hczK0asnboOe+MDHZjlzWKY5dbntG2ub3XMBy2DNjr2y5Yw04Ons/R27dABd
-	lC4r+iS8=
-X-Gm-Gg: AR+sD10BOjizzyyYfx6VgMcFB4xkz7o8YZhM3kgYXbhSqLQHejOD8o2X51bZt40mHHZ
-	N9f32T9w+KMg9Bsc1Lqt9IcJVc8eb39pR8a6W3WTcHF2UbyBtctfgRdH6xFVWOjTQjVgvISXxel
-	aPcCifTrmppFLFM5sQAZsg9AEfXh4zo365ReebkhalkJI9pAYNW6Quf/j9ICPGDUKklkB5tXE4a
-	6+l0e3FKFhehs/p9qSMcm68DzNK+UFcWAaHOq322kYZdGxPAvTPOGMOfHKy1Nzukq/+j7tE742C
-	xPeTRdr8aJKtDX6Z6rtdAwj8HM/L5+v29cCUki665N//3GAPXdw7a8p5VdK8f6ITh2ywp5+HGil
-	qcHjlFYL+/9NwWgppDAiubvBk77yd/FYzedbNNzVjhZg/SppfGQeBrQerB0CAGqdnGsW3CP232S
-	CkJEaUHV8hAnjLRTBNW+WsSSftEDt0AgJE/KlLdfDckhSw8f2Gwg0M/g/0XA3mek+k1RzD9+Xps
-	TIfy4OGIvMPiOyadQvlIEwH9nhn8akvEdBCOw==
-X-Received: by 2002:a05:6402:190d:b0:698:663d:d7bd with SMTP id 4fb4d7f45d1cf-6a034a5289dmr4023480a12.11.1785340073048;
-        Wed, 29 Jul 2026 08:47:53 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a050c4ac32sm1101662a12.19.2026.07.29.08.47.51
-        for <linux-kselftest@vger.kernel.org>
+        d=1e100.net; s=20251104; t=1785340906; x=1785945706;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=B4Wt+vjl343skXe3sXNKhwsDuZGTpbrXV2WgtrONqIc=;
+        b=A/Txvyg+z7df0QZqhFo2xIuydXUs/8eGdmKAvEPspVQQjvKv59cBDqgkjAUtXeT1yg
+         A+2r1gLNn7ywf+PSgCuECrdaZJ1MaJWHIgpSTWiilHAJvi5bXCII1jn13b+60PDQTmuA
+         QDyJjbsZNrJ4dKLMoK89o4doq0tgs379MuzRQXOK/ijmKU9aj2ulU7CTRjf1RfsBuCN/
+         0Tk07NrLZMCi6T1ZOUvICd4KTP8IkMReE3qL0OP6bkRzHgXqq03TNbowURjoWmTvvBJF
+         eveuhS5KW09i6n2B7e7rPtddqincXSD+ycxNjurkjpJKZDJ/0LV+LR9zGaPMGY5Kgruu
+         A4Xg==
+X-Forwarded-Encrypted: i=1; AHgh+Rqwy+1X3Ls1MUtEk19P8fMwR0phIdYplIAMrfw4l+Bn3cVxp2I3FvlerwVCpQV8V3FawF+ne4+YfNxJ/IimsWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEDRtkB3X/gXWHJs9g3jSxFDJx/E4WjKBKyi+2HOvsX3KhcNo4
+	cHmXLwVecjt5y/McCwlwxXmyUorMk18CsaN/G+xreQXlAoKfL4BN958x
+X-Gm-Gg: AR+sD11ebhk2H/AVJ5nRncsNx7iw3sPdgPxkVTkSOeE0+le4S2/8+zy9qnlPq2e0TNq
+	XDiYOSFG15QDkL+QK1iJYCcK/ezcXVEwNlGt9Q8whwX1Fvcmek0Vz9q9YZrw1TL0Ile6CiAn9ve
+	yIrqLoMSO/NpU7DHNHEV18r79012yLKUyFN5d5DVaeyby4woxcGAcACdg5gHMpcptwNKEYZZVvW
+	6tDg887vk0GDzD84MRfOyq8BePS7cg/VgA69ohtcuaK44cunl2fKco6NPZicmodw4G7oOWAoP6y
+	HRIFi255LUGvWknYPB//RMtVRcI3dyCgHb9IO8AwSa2AQGm+bgrlY15u7ZwG8tDvfTNXLjpc5bL
+	NZWoI61H/g5kD84FruW4Oni6xZXM4FAcNouCD+yGZuYQWnh4QUXiyC33qLaslwzKvVdgSQNyhGu
+	Qjly2tB0IlYgFw8wil301yxEUJ9CqU1CWFua+0Oe65fc9AxiPaOlj/EKdmyfga8q6FiXROsgde6
+	YvHGLxKO5ovHZkXdcKsitVzOto=
+X-Received: by 2002:a05:600c:4fd2:b0:493:e79e:da6b with SMTP id 5b1f17b1804b1-496c6590660mr93994975e9.21.1785340905518;
+        Wed, 29 Jul 2026 09:01:45 -0700 (PDT)
+Received: from [192.168.88.241] (78-80-108-129.customers.tmcz.cz. [78.80.108.129])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6abd0a6sm7503911f8f.10.2026.07.29.09.01.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 08:47:51 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-69c1220bd51so1734125a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 08:47:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RoMs/Gc7yy+atWwtZKeE1Npog/8oIrMLjcIpBzXEV/Cw6hsccg1BJO06fZmxjxAUaFL5MaNFv4E/A6VytTpRTA=@vger.kernel.org
-X-Received: by 2002:a17:906:fe47:b0:c15:bea2:d209 with SMTP id
- a640c23a62f3a-c1f7215dee1mr360497966b.4.1785340071289; Wed, 29 Jul 2026
- 08:47:51 -0700 (PDT)
+        Wed, 29 Jul 2026 09:01:44 -0700 (PDT)
+Message-ID: <9e03f8a1-a880-48a1-b392-a6d72c2abe8e@ovn.org>
+Date: Wed, 29 Jul 2026 18:01:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
- <20260729104114.04298a48@gandalf.local.home> <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
- <20260729113136.32af2a4d@gandalf.local.home>
-In-Reply-To: <20260729113136.32af2a4d@gandalf.local.home>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 29 Jul 2026 08:47:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
-X-Gm-Features: AUfX_mzh3d70XkZOQ8mPTBmYgVx50lGXSyciETgOqHmLrGk5Ua4q2GHqtff665s
-Message-ID: <CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
- trampoline/kprobe ftrace_ops permanent
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, song@kernel.org, 
-	jolsa@kernel.org, naveen@kernel.org, davem@davemloft.net, mhiramat@kernel.org, 
-	stable@vger.kernel.org, linux-open-source@crowdstrike.com, mbenes@suse.cz
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/2] selftests: openvswitch: SCTP flow key
+ parsing
+To: Minxi Hou <houminxi@gmail.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, aconole@redhat.com, echaudro@redhat.com,
+ i.maximets@ovn.org, dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org, horms@kernel.org, linux-kernel@vger.kernel.org
+References: <20260729064549.3647518-1-houminxi@gmail.com>
+Content-Language: en-US
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <20260729064549.3647518-1-houminxi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 29 Jul 2026 at 08:31, Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > > Honestly, I would love to get rid of it as today ftrace has proven to be
-> > > rather stable. But as it is a user space ABI, I'm not sure what will break
-> > > if we do. I wonder if we just make it a nop, and print a message to dmesg
-> > > saying:
-> > >
-> > >   "ftrace_enabled no longer does anything. Please report if you need it to."
-> > >
-> > > ?
-> >
-> > Thanks Steven, if you and/or other community members would approve such
-> > approach I would happily do this instead for a few reasons -
->
-> It's actually if Linus is OK with this approach.
+On 7/29/26 8:45 AM, Minxi Hou wrote:
+> Add OVS_KEY_ATTR_SCTP to the ovskey parse table in ovs-dpctl.py so
+> that SCTP flow strings carry the L4 key through to the kernel, and
+> add a matching selftest in openvswitch.sh.
+> 
+> The missing parse-table entry caused a selftest NIPA failure: the
+> flow string "sctp(dst=4443)" parsed without error but silently
+> dropped the L4 key, producing a flow with only ipv4(proto=132).
+> The kernel's match_validate() then rejected it with -EINVAL because
+> OVS_KEY_ATTR_SCTP was missing for IPPROTO_SCTP.
+> 
+> Changes from v6:
+>   - Trim unit tests to cover only the new SCTP key parser
+>     (removed tests for TCP/UDP/ICMP/IPv4/EthType which were out of
+>     scope for this patch); address Aaron's feedback that testing
+>     existing parsers was excessive for a selftest tool.
 
-The rule is always the same, and I don't understand why there's any
-discussion about it because it's been stated a million times: we can
-try to make any ABI changes at all, and what matters is whether it
-breaks somebodys setup.
+I think, what Aaron meant is that we don't need tests for the test code
+in general, not only for existing parsers.  And I agree that it feels
+a little excessive.  I'd suggest dropping the unit tests and merge patches
+back into one.
 
-If people rely on old behavior, it can't change. And if people don't,
-nobody cares. It really is that simple. That is literally the
-DEFINITION of "don't break user space".
+Also, you need to update the tools/testing/selftests/net/openvswitch/config
+to include SCTP, as it is not enabled at the moment.
 
-Whether something is user-*VISIBLE* in theory is entirely immaterial
-except in the sense of "be careful, this needs testing and may have to
-be reverted". So user-visibility isn't a "don't do it", it's a "do it
-carefully, and knowing that you may have to revert immediately if
-somebody complains".
+Aaron will do a more technical review of the test, so please wait for his
+reply before sending v8.
 
-So changing user-visible things is potentially a lot of wasted effort,
-and needs loving care and follow-up.
-
-So everybody should typically avoid changing user-visible things
-because it's potentially painful and developer-intensive, but not
-because it can't be done.
-
-All that matters is whether real user workloads regress.
-
-And please make sure that any changed behaviour is really obvious, so
-that people don't spend lots of time chasing down *why* something
-broke. A kernel printk is generally way too subtle - and no, the
-tracing "make the printk extra ugly with crazy ASCII barfics" model is
-not an improvement.
-
-It might be better to actually return an error to user space so that
-users can see that setting ftrace_enabled to zero failed and it would
-show up in user logs. kernel developers may think that kernel logs are
-important, but users seldom even think about them. Of course, that can
-then cause even worse regressions, so there's a balance here.
-
-End result: don't do user visible changes unless you really really
-care. And then you spend the extra effort.
-
-               Linus
+Best regards, Ilya Maximets.
