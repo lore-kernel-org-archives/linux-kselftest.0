@@ -1,271 +1,166 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464DF3ACEE3
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62163CC7EA;
+	Wed, 29 Jul 2026 19:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785352523; cv=none; b=cawejC3Jx3ngkNZDL8LnG/tCwOCLj/uDVH3Uobi4T1+auIRSsVORQ7lfoJJlMv17leiKBntlNr/6/BzIhVCII83q31850WJkY8fzvBoWmc1FgLd2AZFhnzfZ9XqY+Po84LTCtEat/K7bI8nXdgMcqukGxnpdeqbHo23TSrJmUo8=
+	t=1785354231; cv=none; b=mrLV2GE0Na0IOBc9wtQgIp3/mLs8WZNQW40o+syXxT8+rdNEUl9JrS8W8canN+KKyk7dBYmSGLODBCF1f8ujWnUbbAxR5dKpj0YGQCZCSBGs4onWSwnQSXyWfnrqhxmcRPimRF7VV8GjGVBS0Nh2V9Ihw/YODQ04ObAVqvKA2a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785352523; c=relaxed/simple;
-	bh=CRlbOvhwmMk34+IkB30q2D3hlJgnmxjlopMJW5gz+qc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kqTUaZGX43U4uBWx9J4H0wiaGrgK+VN5SWwyss1tsI1NBbdBc3Y7xSOipRU2qtAQeOqnBlJc5gndehp+hdZxghjnzYFx6bhh9xn2T1/ECTZoUQtC5tVxbb8M0t5VoY+ijiBN8UX3boXl0DtgF+ijpDuob7Uz5PSdImt9LzOqxc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=twbe6a8R; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785354231; c=relaxed/simple;
+	bh=nLnUgJR6suWJ3SvggDnbh+c5djeq93+SfpwayxUJLaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HyIEyKSv2jTp+0i7EZENFFqZ2ui2jXqfSUKqv+67u4WvY1HL80pUFJfaJs6x75probUCJlP2u2m295ru0TAX2ee+qTjpBm/xMr3Flv+xdXFr4bAdZcboh1NkmZgrUINQhZj6M7iKDaNWEobY40NkF+5394KFtauSUhCaCwTKcZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=aLcEj4Yh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YJQXFH+V; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="twbe6a8R"
-X-Forwarded-Encrypted: i=1; AHgh+Rp9SNcsbHn8zAE/5xbPLCxXeXlA78acmdF7LVFTs3gqFmADOh0zVQb3XZpNxKn7xfeawssCoCt0wc7PK7AAE1Y=@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785352517;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6RdMoQ7TRONjplxch2Jr2tfEGLhzUYaVY+oPPESaChU=;
-	b=twbe6a8RvR2t1hTHZ7qXP3zmVmKLzotLMUo2d3JhZs2AaP6BkpC8ynkWOv05AyMdhNIYBO
-	GPp/r6rYYbEZfHziTJirVMqb0A9EAM4T4tWkjD2R58bAL2nqmQpoLeTzhDJdLqi55Gs8EE
-	MBO7nkvO8YgdZFHtUiMZCoadjKGioHE=
-X-Gm-Message-State: AOJu0YzQC+xmGUB0SlDTT+ayOireOMOt9a/voRfzD0s4HP5dPl7YFKeE
-	C2xDWwfNSGcYXzYU42ibmhbA0J1MrKixTkvCYYJpEjcTNHjS8PJcD6qnX/J4AevMGfFJWIrbTSr
-	ktqDl/0GuG1qPriGJ2dRCNeeMddbHRkWtryTzif8o
-X-Received: by 2002:ac8:6106:0:b0:519:b82d:fe62 with SMTP id
- d75a77b69052e-52b3784b752mr459921cf.7.1785352511041; Wed, 29 Jul 2026
- 12:15:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="aLcEj4Yh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YJQXFH+V"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id CD83814004C6;
+	Wed, 29 Jul 2026 15:43:40 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Wed, 29 Jul 2026 15:43:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1785354220;
+	 x=1785440620; bh=/WZTYwj1pa14Adp3/TGnLpvZs3ITI9hsnPwlfGpTn0M=; b=
+	aLcEj4Yhhu0aAQOY7MS1uIQATBSQ9cmONqHnxyMjN0bTzcig6JG0K+x1Ytpu1YVG
+	8ucJdTZ0pSgDcm/fRm3xkxfKJ289kmNw0Ufasz7ipt+yiXfr3x9zVDtSSuh0FRUz
+	EPu0ZXhRER3Gb+3aURveZ2WgFJF+GyixWdTMptN+cQNyoru+6NG9pTplqqAHcO2h
+	yIt3btpXGltvSrnpTXiqv604XmxXfnmIzXbCmLG1UPw+BAPpKjDZZ1OU/gS/IXk5
+	AzGBOxaxfjKP8eFUMU/NbTQb9P+k7HI0FP2hERfEX+12LgkCm6TxlhlKoBJIb/jT
+	DBJ3bK2V4YavBTfpfg8jEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785354220; x=
+	1785440620; bh=/WZTYwj1pa14Adp3/TGnLpvZs3ITI9hsnPwlfGpTn0M=; b=Y
+	JQXFH+VbmDuuP07XTVoaMiiJRLKl48/K9EWdVeWllZ/7g7CbUKEYavq+AnUJWAWz
+	xF/ds7AM07zSbCIoS6fza8D7dpj7BppXwvl5OGtW/yXhPd6mf72MTvaGiB5q75pP
+	sl+lOiwWKbhxJBoBNALQa85bvvzTn5+ZbxOG1cAlv8qtSMdGsK+2668ecC9+76Qf
+	Nuu23nbPxpdLqtEqS6tRPcRfBm4E1M5A8k3Nfmsf5pAVkAQOmY1Uj15bI60mHeAM
+	sbVAnNLnrhkKE2s/lbq/IjomNVPHXNjuKPYDIGfktgZTvrhJ+EsYyXJ25rZkO+Th
+	k470HucgnqGH/aRoDL8rQ==
+X-ME-Sender: <xms:7FdqalPm44yloWrbNiFWBMSrUMd0p6r3rQHSztdwnjGfJA6EXL3WFw>
+    <xme:7Fdqaj-hM-0ry4ly_VrBQNu0pY6Q72KpFJH6CRx3VWpsXfXsMXQ3Ut3Btd4R1QJA9
+    BO38WzrMbxUYu5nuwzyDF5j7w_e-kaYL3HY0WRqqHRI8S8EwZopo7I>
+X-ME-Received: <xmr:7FdqameSsSzP9Mv817HGbrQ1h5ijSdGZN7GIaIayf9SjB9LnrT6vmQQXOLwRkg>
+X-ME-Proxy-Cause: dmFkZTGu9NgC9buE7lFboILNhQgV1L3g2WrumCuUpsIMWqELc6X5+10ciExH4cOUmqfNXS
+    n2aQO3jclx/10KahzZQ+JvnH1u0DHN/RBsijkXg4UOoynCoHrTcYj/zGVNngiJPQ8suzAY
+    kR5Fb0jfQXGEdVjClKCsosiFUiSpjubNWOLlko2nLNcLw+lCX2leDmdu0f8b+HJWlb1VkC
+    UcREpU7V/ZIbQwZp881SgSQ0tJ1hgxIqKv+OyMPO2cfvYE+kMxrVdE8cYNlYDoOntMmRxr
+    weOndLHULoJFLZYZKPDgJEudxs1FLTiBnTpsr9P3u5V23JrPduYPir8JG2iGgQY7xTmub2
+    KWU4hZH09rQQBkB3VR8//EA+qXqqaW3LJQ/h8EfVD2ZaOL+9PSpgsA1AsnHbmvjq9I4ODR
+    7w50oiEecike5s/jKwEAPA+BqwuJSqE00aRtQ6DjXwslDdSvUcFePaVYFGH+XnS45WNA2j
+    CQeEICkmDPcRXF1P1TPwrfeeb9FXtCDdxuoZrUukCbi5xdYt6R6nelJ38w9i0gB2RN884E
+    CXhUpTZ6t0rbqmDjiUA8rhZJxEVDdY2edOupvIRpoP727hqddEQr3lBjjEd0SriY4gMogn
+    6OIVlv+8gwIPF/J5XlAi9XCOycTOTvLcmAJil3hDe+iTTawXm/z7ckPlAp7A
+X-ME-Proxy: <xmx:7FdqaizAywzeYNvbq0pcekB_1AjMAsdDslZ8IF9G177KwkjQY6PlGQ>
+    <xmx:7FdqarIvFll9WzePJYrPynRYP2v4p96imkMrwtdlJcbBXmWbhs9gyQ>
+    <xmx:7FdqakHw8D7N7AZOPcCe1fJfGyz9j9IzclU7A2TI58So6VtS-DsnOA>
+    <xmx:7Fdqan_h3J8g62PHWqwP9Awf67e5V8Cx8ztoXwLGxNu0E_eOFd2CPw>
+    <xmx:7FdqalhLMfO2LyJRNWzNwl3J0HPtml5M2lNb1PthAzcpFolsP34zGDVh>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Jul 2026 15:43:39 -0400 (EDT)
+Date: Wed, 29 Jul 2026 13:43:37 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: Josh Hilke <jrhilke@google.com>
+Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>,
+ alex@shazbot.org
+Subject: Re: [PATCH v7 5/6] vfio: selftests: Retry on EAGAIN during device
+ reset
+Message-ID: <20260729134337.2ed84a99@shazbot.org>
+In-Reply-To: <20260728-igb_v3_b4-v7-5-4616c3745796@google.com>
+References: <20260728-igb_v3_b4-v7-0-4616c3745796@google.com>
+	<20260728-igb_v3_b4-v7-5-4616c3745796@google.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-15-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260720-hybrid-v9-15-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Wed, 29 Jul 2026 20:14:00 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTwfUjVtXwj52Oe0Gbt7n99S0OmUmQmPm2zHf59V-ii-Ww@mail.gmail.com>
-X-Gm-Features: AUfX_mzAWeAj1VZbwdEOyYlhWbcnTGqxChe8dN2ESb6R_ooem2wymLvHTc4GB94
-Message-ID: <CA+EHjTwfUjVtXwj52Oe0Gbt7n99S0OmUmQmPm2zHf59V-ii-Ww@mail.gmail.com>
-Subject: Re: [PATCH v9 15/16] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
-<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->
-> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
-> create a "fixed-counters-only" PMU.
->
-> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
-> attribute provides a getter that facilitates kernel and userspace
-> debugging/testing.
->
-> Assisted-by: Codex:gpt-5.6-sol
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+On Tue, 28 Jul 2026 23:24:30 +0000
+Josh Hilke <jrhilke@google.com> wrote:
 
-In terms of the UAPI policy, I have no strong opinion. In terms of the
-implementation, it looks correct to me. FILTER/SET_PMU and
-FIXED_COUNTERS_ONLY are mutually exclusive both ways, and the EXPLICIT
-flag keeps that from blocking the default-PMU path.
-
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
-
-Cheers,
-/fuad
-
+> Add retry logic to vfio_pci_device_reset() to handle the case where PCI
+> resets fail due to lock contention, in which case
+> pci_try_reset_function() returns -EAGAIN.
+> 
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Josh Hilke <jrhilke@google.com>
 > ---
->  Documentation/virt/kvm/devices/vcpu.rst | 30 ++++++++++++++++++++++++++----
->  arch/arm64/include/uapi/asm/kvm.h       |  1 +
->  arch/arm64/kvm/pmu-emul.c               | 30 +++++++++++++++++++++++++++---
->  tools/arch/arm64/include/uapi/asm/kvm.h |  1 +
->  4 files changed, 55 insertions(+), 7 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-> index 66e714f2fcfa..1d592e70bdea 100644
-> --- a/Documentation/virt/kvm/devices/vcpu.rst
-> +++ b/Documentation/virt/kvm/devices/vcpu.rst
-> @@ -74,7 +74,8 @@ irqchip.
->          -ENODEV  PMUv3 not supported or GIC not initialized
->          -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
->                   configured as required prior to calling this attribute
-> -        -EBUSY   PMUv3 already initialized or a VCPU has already run
-> +        -EBUSY   PMUv3 already initialized, a VCPU has already run or
-> +                 FIXED_COUNTERS_ONLY has already been set
->          -EINVAL  Invalid filter range
->          =======  ======================================================
->
-> @@ -116,14 +117,14 @@ using event 0x11 (CPU_CYCLES).
->
->  :Returns:
->
-> -        =======  ====================================================
-> +        =======  ===========================================================
->          -EBUSY   PMUv3 already initialized, a VCPU has already run or
-> -                  an event filter has already been set
-> +                  an event filter or FIXED_COUNTERS_ONLY has already been set
->          -EFAULT  Error accessing the PMU identifier
->          -ENXIO   PMU not found
->          -ENODEV  PMUv3 not supported or GIC not initialized
->          -ENOMEM  Could not allocate memory
-> -        =======  ====================================================
-> +        =======  ===========================================================
->
->  Request that the VCPU uses the specified hardware PMU when creating guest events
->  for the purpose of PMU emulation. The PMU identifier can be read from the "type"
-> @@ -165,6 +166,27 @@ explicitly selected, or the number of counters is out of range for the
->  selected PMU. Selecting a new PMU cancels the effect of setting this
->  attribute.
->
-> +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
-> +------------------------------------------------------
-> +
-> +:Parameters: no additional parameter in kvm_device_attr.addr
-> +
-> +:Returns:
-> +
-> +        =======  ==================================================
-> +        -EBUSY   PMUv3 already initialized, a VCPU has already run,
-> +                 an event filter has already been set or
-> +                 a hardware PMU has already been specified
-> +        -ENXIO   Attempted to get before setting
-> +        -ENODEV  Attempted to set while PMUv3 not supported
-> +        =======  ==================================================
-> +
-> +If set, KVM emulates PMUv3 without programmable event counters.
-> +
-> +When this attribute is enabled, the vCPU can run on any physical CPU
-> +that has a PMU, regardless of the underlying implementation. This
-> +attribute is VM-scoped.
-> +
->  2. GROUP: KVM_ARM_VCPU_TIMER_CTRL
->  =================================
->
-> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-> index 1c13bfa2d38a..39a1a1e412e6 100644
-> --- a/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/arch/arm64/include/uapi/asm/kvm.h
-> @@ -437,6 +437,7 @@ enum {
->  #define   KVM_ARM_VCPU_PMU_V3_FILTER           2
->  #define   KVM_ARM_VCPU_PMU_V3_SET_PMU          3
->  #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS  4
-> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY      5
->  #define KVM_ARM_VCPU_TIMER_CTRL                1
->  #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER                0
->  #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER                1
-> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-> index 1ec09ef28467..ff5d5f66a9c0 100644
-> --- a/arch/arm64/kvm/pmu-emul.c
-> +++ b/arch/arm64/kvm/pmu-emul.c
-> @@ -1118,8 +1118,8 @@ int kvm_arm_set_default_pmu(struct kvm *kvm)
->          * affines the VMM to a particular cluster of cores.
->          *
->          * In any case, userspace should just do the sane thing and use the UAPI
-> -        * to select a PMU type directly. But, be wary of the baggage being
-> -        * carried here.
-> +        * to select a PMU type directly, or request fixed-counters-only
-> +        * emulation. But, be wary of the baggage being carried here.
->          */
->         struct arm_pmu *arm_pmu = kvm_pmu_probe_armpmu(raw_smp_processor_id());
->
-> @@ -1144,11 +1144,13 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
->                 arm_pmu = entry->arm_pmu;
->                 if (arm_pmu->pmu.type == pmu_id) {
->                         if (kvm_vm_has_ran_once(kvm) ||
-> +                           kvm_pmu_fixed_counters_only(kvm) ||
->                             (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
->                                 ret = -EBUSY;
->                                 break;
->                         }
->
-> +                       set_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags);
->                         kvm_arm_set_pmu(kvm, arm_pmu);
->                         cpumask_copy(kvm->arch.supported_cpus, &arm_pmu->supported_cpus);
->                         ret = 0;
-> @@ -1159,6 +1161,22 @@ static int kvm_arm_pmu_v3_set_pmu(struct kvm_vcpu *vcpu, int pmu_id)
->         return ret;
+>  .../vfio/lib/include/libvfio/vfio_pci_device.h          |  1 +
+>  tools/testing/selftests/vfio/lib/vfio_pci_device.c      | 17 ++++++++++++++++-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> index 2e67afc0d580..27bdf561925f 100644
+> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> @@ -41,6 +41,7 @@ struct vfio_pci_device {
+>  struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu);
+>  void vfio_pci_device_cleanup(struct vfio_pci_device *device);
+>  
+> +int __vfio_pci_device_reset(struct vfio_pci_device *device);
+>  void vfio_pci_device_reset(struct vfio_pci_device *device);
+>  
+>  void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> index 7b8394d0ac50..1b29cef96b04 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  #include <dirent.h>
+> +#include <errno.h>
+>  #include <fcntl.h>
+>  #include <libgen.h>
+>  #include <stdint.h>
+> @@ -221,9 +222,23 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
+>  		       write ? "write to" : "read from", config);
 >  }
->
-> +static int kvm_arm_pmu_v3_set_pmu_fixed_counters_only(struct kvm_vcpu *vcpu)
+>  
+> +int __vfio_pci_device_reset(struct vfio_pci_device *device)
 > +{
-> +       struct kvm *kvm = vcpu->kvm;
+> +	if (ioctl(device->fd, VFIO_DEVICE_RESET, NULL))
+> +		return -errno;
 > +
-> +       lockdep_assert_held(&kvm->arch.config_lock);
-> +
-> +       if (kvm_vm_has_ran_once(kvm) || kvm->arch.pmu_filter ||
-> +           test_bit(KVM_ARCH_FLAG_PMU_V3_EXPLICIT, &kvm->arch.flags))
-> +               return -EBUSY;
-> +
-> +       set_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, &kvm->arch.flags);
-> +       kvm->arch.nr_pmu_counters = 0;
-> +
-> +       return 0;
+> +	return 0;
 > +}
 > +
->  static int kvm_arm_pmu_v3_set_nr_counters(struct kvm_vcpu *vcpu, unsigned int n)
+>  void vfio_pci_device_reset(struct vfio_pci_device *device)
 >  {
->         struct kvm *kvm = vcpu->kvm;
-> @@ -1236,7 +1254,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
->                      filter.action != KVM_PMU_EVENT_DENY))
->                         return -EINVAL;
->
-> -               if (kvm_vm_has_ran_once(kvm))
-> +               if (kvm_vm_has_ran_once(kvm) || kvm_pmu_fixed_counters_only(kvm))
->                         return -EBUSY;
->
->                 if (!kvm->arch.pmu_filter) {
-> @@ -1281,6 +1299,8 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
->
->                 return kvm_arm_pmu_v3_set_nr_counters(vcpu, n);
->         }
-> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
-> +               return kvm_arm_pmu_v3_set_pmu_fixed_counters_only(vcpu);
->         case KVM_ARM_VCPU_PMU_V3_INIT:
->                 return kvm_arm_pmu_v3_init(vcpu);
->         }
-> @@ -1307,6 +1327,9 @@ int kvm_arm_pmu_v3_get_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
->                 irq = vcpu->arch.pmu.irq_num;
->                 return put_user(irq, uaddr);
->         }
-> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
-> +               if (kvm_pmu_fixed_counters_only(vcpu->kvm))
-> +                       return 0;
->         }
->
->         return -ENXIO;
-> @@ -1320,6 +1343,7 @@ int kvm_arm_pmu_v3_has_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
->         case KVM_ARM_VCPU_PMU_V3_FILTER:
->         case KVM_ARM_VCPU_PMU_V3_SET_PMU:
->         case KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS:
-> +       case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
->                 if (kvm_vcpu_has_pmu(vcpu))
->                         return 0;
->         }
-> diff --git a/tools/arch/arm64/include/uapi/asm/kvm.h b/tools/arch/arm64/include/uapi/asm/kvm.h
-> index 1c13bfa2d38a..39a1a1e412e6 100644
-> --- a/tools/arch/arm64/include/uapi/asm/kvm.h
-> +++ b/tools/arch/arm64/include/uapi/asm/kvm.h
-> @@ -437,6 +437,7 @@ enum {
->  #define   KVM_ARM_VCPU_PMU_V3_FILTER           2
->  #define   KVM_ARM_VCPU_PMU_V3_SET_PMU          3
->  #define   KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS  4
-> +#define   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY      5
->  #define KVM_ARM_VCPU_TIMER_CTRL                1
->  #define   KVM_ARM_VCPU_TIMER_IRQ_VTIMER                0
->  #define   KVM_ARM_VCPU_TIMER_IRQ_PTIMER                1
->
-> --
-> 2.55.0
->
->
+> -	ioctl_assert(device->fd, VFIO_DEVICE_RESET, NULL);
+> +	int r;
+> +
+> +	do {
+> +		r = __vfio_pci_device_reset(device);
+> +	} while (r == -EAGAIN);
+> +
+> +	VFIO_ASSERT_EQ(r, 0, "ioctl(device->fd, VFIO_DEVICE_RESET) failed\n");
+>  }
+
+This has roughly the same unbounded loop issue that Sashiko flagged
+waiting for the register level reset to complete, shouldn't we also
+introduce a retry cap here?  A delay would also help bound that retry
+cap versus the instant retry here.
+
+Also, please rebase to linux-next to keep the driver inclusion
+consistent with the already merged nv_falcon driver (trivial) and
+unblock Sashiko from applying the series for review (more important).
+David's R-bs from v6 can also carry forward on the unmodified patches.
+Thanks,
+
+Alex
