@@ -1,68 +1,68 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CDB1624C0
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AB91C5D5E
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785283591; cv=none; b=ZtfWPiXe+dxSVh5u95pXxSzLx71dLI8o/jWjhoy+tUgSj1vTh9mngronI0UbMSwZvULKvcWPQL4ODjlYFHfEK7MTtsSS5q9g7+SBFmDZ3hINEMdcq03ABu9sqCE0GG6zG1K80jBQu7A0chv51WHREO9c+9E5HZn270QnFbZDC88=
+	t=1785283593; cv=none; b=oPxLBO6kq5tYxsj76pWPUXOB5O1tgOfiPemhc8JDQIY55BBJBjkcR5wyfoDz6DuzJdbj93nqBR6EE1v0fGxRDEVOJDoT2jQSxJ6HpPGfd2YFQqTWGpM9dJ57G3YVNHV6PQn4iLcWBDjvajYv6PprVwaTjugRcptkJrdCQ2Fkfhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785283591; c=relaxed/simple;
-	bh=+21yumqrc3iiQtqtkl1hQgsQq8q/ettUoLBh+1Nj1Zc=;
+	s=arc-20240116; t=1785283593; c=relaxed/simple;
+	bh=n6B0m/+R9mN5iX6PJBomszTE8W1zcQIZoUz1pg5+JyE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HGvBk9Wg2jSlg1AEWstGvqhzKASOlyiEuF7QoKBci0sGhFeFeU3mPxTZfs5Wy2he42Ze++7/OUYizKR5f6mTZwZJCS8Kck//bQkHyMirum1G8uInKxUAEV64VSBySSm4Qd4Fhwn4mBRPo6eLb44SdcyDwzdpA0ibMP91DjYu2co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=SemkvbaJ; arc=none smtp.client-ip=209.85.161.41
+	 In-Reply-To:To:Cc; b=LQPY1y4l0pPXcnOQG3EKcPi4z/wLVneQJf77yQBbTKXZFoIy0o7bbE/VgUs6U524bYgbqYb/2aTjdhm1I/eaPzsAD5ulbAskeqSFZWCZf2BsT2zKsMY40lG1mO/LnAcUmnUn3fPY4NXLIXAg2mbKUcyQqNyacXJPVAPf6ugXTng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=LqawIfoB; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="SemkvbaJ"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6aae244ef49so311667eaf.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:06:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="LqawIfoB"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6ab06473488so203409eaf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:06:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785283588; x=1785888388;
+        d=1e100.net; s=20251104; t=1785283590; x=1785888390;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=24j9QhebMBn4aSJO102Oadv+5Gy+qFLKVHNJxhcauas=;
-        b=GxtojV67eduZebIGtTo3Uwp1gEniEPH8HQXRcEqzOK1kX3UCGw66Wz1fg5ccVU21O7
-         pWIDNgvN6VC0HR+EsWtAx5quT9lHxq4Tx5cTOrRAL0EUzy8SjaXQAKCNNzbCj5Y8F/JX
-         m7wrTr9DMFauhIf78HsIs4DaDxRiMbbuvBX/Gpc4R9raPv8iaiHauARpits2sGF2sFwW
-         Hr8C56GwYS+sXmJZQ0mE3RX8GXP3rhYXfs/vrWINuNWD54oHR5+n3Q1c2vNzM+kIDVtI
-         2ixWYJMC2Lankzr80w80SiJPewWPECOPc5D+LtrvrCmhV2xcXBOEbO9Sb0yQvjpyD2Nc
-         1SnA==
-X-Forwarded-Encrypted: i=1; AHgh+RpEWqACt6DFMmyzgyYNxrN2UCGKwdHPT+HO6+sXjjoL0g3UkusWi1WJAp2LqfAeAFtDi7fR23Z2OdvQQZht4UQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVR6Z0jHN5Px8PtsB9G8dqOpB+qScs0hEVxmRwxjkO+XH8VKdh
-	gAFWUcmp/ZVMKcp5HwOoG9oo+WZQGgaxZHpLMYhT46SdmqKOHxUClMmm
-X-Gm-Gg: AR+sD136UkQJE91/gW35ot9Dex9BUe5CRB0MVQlJmLRTlOFnuYDveo+fi3fJ8TYdgYN
-	Qdltb1ExGSb/K3NkClIgtqxnmN5Ym2Xy5h0hms62nDADZdwfhZRkI846j4YVK5VCEl+rJBudL60
-	asCXkRb0YsZYM+u4PkO68po5EL2+ZSr4ScHOYHZXk13CUHO6FC4MVsHHvx04rUe4bS5BThQMsfR
-	IJY8Q2fTVZpFMjBxsI6y2o+o6QryqwkEKLPL4BInBcTS3WgVKzs392Qp+M6aQGBLvEYxHLQ7lMY
-	E/zf4iG3zko1MPowWt8qFZigdV4t/jzB0GLeNjOUAY1XYlB/6rRlG6okFJDpj+iHj7b7B5OTNLk
-	KQifplNapP0GHlqjfOQ9PSK8thVVWc8mu6sYYGlVruzAYBzr9kftSxMGn/66uQjPoAYmRHkWL9n
-	KDKCrN+Jl30Sluyos5qADo74gFzJP9W8T4SHvMuSapfyUToEYDlaa0M3J5Kq4fv/63y+7pPma+H
-	x0/H7lsdyrJi76oZtB+7/frav2CDnL6hCBtOONXJYW88Ye5MQXXk8F//NSwIEdE1Q==
-X-Received: by 2002:a05:6820:991:b0:6aa:de29:651 with SMTP id 006d021491bc7-6ac96bbc77dmr2563428eaf.16.1785283587566;
-        Tue, 28 Jul 2026 17:06:27 -0700 (PDT)
+        bh=6jVe2SJOqGG1SvAsoVGiyJK19dwvcga29gSaKO426pw=;
+        b=DuW9/ctmF1iZ4hiI8S/VEtyYJqs1LLmb0lqaYM+qTw/BLfK/m+w4zr2vMRmUeupbPC
+         FkoNItdcVhCMgPoQLUBS08rTtimSLYa/SrcvnDsrjQZIi8lB7dXlkDuSNcZykK3hslih
+         zJRTruhscNL7RbP9bMpTaNX5Rsk73EUnlpjQRy+KdehTVsGda4k5jm92fC7WMITsP/mG
+         ZeKefzdv4P9ZfBg0Z0CRfUHlIryGLxBpR4x8e8NnLJdZdd4whx87bv1MnrJ8MXrDoo3X
+         4Cyn6eGddvyaUU0hhGTh6k79vFOpr4nBk4moMonad9QyGVuCmqIiRx5L9KUuzchZ6LsV
+         E+tg==
+X-Forwarded-Encrypted: i=1; AHgh+RpipzvujeMRyz2dTAPEaRN2HvrfeomtmD6XztuLBVT9dKMLSRis8iFlI5ZKIZajQV3qn0robgs9GxZa6GRbf+o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyegQzqDdOt01qB7Qhivd9q0Q7vxRlzV3QC5JlaKvKYv1ZDPOqS
+	sQ8TdrSFv8+tE4+uxpIkMJemBlqKvZ/LwAfzqayImwAnxXn62JNN2H8K
+X-Gm-Gg: AR+sD13KUetlIK7YawEmolApFJfOUTqWoKZ9spH90jHHD242416s+yk5RoueZ2UL3FE
+	zHUHUVgW6XcMjsi8eyXxCqWAW8iRqC6Dg/aub/xGq+4UphC5IOYqPtcDJ0IfqgVSwCr1qnuDx3z
+	31p4CYzrOzsnVBs38Ij5XJw4aUFkB7iN7Xy0jq/exBM/OTSJOE0nBHAXY5E04yiITryijY0ju5R
+	WxnTOk/rHvsdZCyrh1KQL2nanW+AjgXZdHo/HpK0V78AXfTkeazn2ZhwCdRVJbAQHVDkhfV37J4
+	NcrVKANqESmpiJUL9vasIctS8nlZjSpbOnlNGYEakSsFFjxaIhwfpgYVkrKsBnoAy8JZXsyZs9K
+	NzHX+qnAm6DW2c5kc0PveUoq9aIjiGNV+Gt3jv73G9UGzPlEgYucy5UeCuBITVubYTc2Nq0Xt7n
+	yjrTQFZLPHhcqKcBdo/Cf2/0nKTs0fuPMQQPAJyaNms+CwFPPCtc8zQQcYRnE/D2lj0Iao305ca
+	QneTDvFdOrRGemMqcvVhBpIgU8Os7FU4a5fXrx/3wF1DWtK1Qzp5y5G6s8Xf/Mutj5Fi8IoD0H/
+X-Received: by 2002:a05:6820:f005:b0:6aa:dadb:454f with SMTP id 006d021491bc7-6ac96972091mr2358636eaf.7.1785283590263;
+        Tue, 28 Jul 2026 17:06:30 -0700 (PDT)
 Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6aca9a41fddsm25607eaf.8.2026.07.28.17.06.26
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f00d8d397asm926314a34.17.2026.07.28.17.06.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 17:06:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8649060A0A;
-	Wed, 29 Jul 2026 00:06:25 +0000 (UTC)
+        Tue, 28 Jul 2026 17:06:29 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 57DB460A0A;
+	Wed, 29 Jul 2026 00:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1785283586;
+	s=dkim; t=1785283589;
 	h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=24j9QhebMBn4aSJO102Oadv+5Gy+qFLKVHNJxhcauas=;
-	b=SemkvbaJN8PBoqDc2hIhliBVn6xQsoEGYpJ+N4j0EFrYmeywHXg+u03tay0LwW3CPcsAbs
-	P4c+T9Dz8SnsXA7/guYtoUkwq7FhuvngPgdnBAUNbJDRkX8pgU6QMlsGWgyYWRdlZidk2Q
-	WgO+LEcQHsI9kwoNskj/qcc7KzreBirPmHcTiNpNV3hht0RC1R7XkXFkPgYh5wdxfBblW7
-	nSnkHFOiLspfBGfnbrtzOiXQuztH6EWH84ZWm9W5XXpG4bKzfDyLIP+V4XIAP0pqqBC5Oe
-	KmXflPSb62su/TYDSLevuVGqAtCAd+7eqJ0z8NDq3BvcfDXSjn060mxnNTFQ/g==
+	bh=6jVe2SJOqGG1SvAsoVGiyJK19dwvcga29gSaKO426pw=;
+	b=LqawIfoBR6+8GigFrjy0t+CvYSKND9u3viEfkgzsuSJA7D8leZiS9qTKSlHqkwBtA87KyR
+	ygxoOb4LIGcDzTxSjjHF6wjFAd+6jqaCcQdCFtQuFPAVIO34eht7tNeyWp/VDSeIIU6+Cj
+	/AAQs7Ltq32NdayMoqqIt1Hf+kzQG71wz9ET3cM6ErWu3JQtpapyllIICKYjM10KfgLBOY
+	455zyGm0L5gK4A8OQMohgglUdFV+YQOZ52YchJgX9YNjcu5N9zqeVqql0iPSaW7UP3qkf2
+	YJC+qYC5vBL+rsviFIevr0S9X+Z4zVSqJGfh5WpPlhgcZzcVDrDC72gw6exyUg==
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Tue, 28 Jul 2026 21:06:12 -0300
-Subject: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to
+Date: Tue, 28 Jul 2026 21:06:13 -0300
+Subject: [PATCH 3/3] selftests/bpf: Route test_kmods build artifacts to
  OUTPUT
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
+Message-Id: <20260728-selftests-bpf_oot-v1-3-05feb15d94db@marliere.net>
 References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
 In-Reply-To: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -86,137 +86,115 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, 
  =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1785283576; l=5081;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1785283576; l=5078;
  i=ricardo@marliere.net; h=from:subject:message-id;
- bh=+21yumqrc3iiQtqtkl1hQgsQq8q/ettUoLBh+1Nj1Zc=;
+ bh=n6B0m/+R9mN5iX6PJBomszTE8W1zcQIZoUz1pg5+JyE=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QEKD2FATcCJzGf0QFFFA/qzTxxSDYXZ6pTQK4n8oyAbTjj6MweRHluLsw0fegMwtlVnq2pZ4uDM
- GtTKVmcouYQo=
+ QKHw7ZLG4TsiAIVGlXkPRX25iNSsGGnLqHmwnL4UDvjNghR1nmi2H/KXhxPN7ouXdai/aUxnlSr
+ eKmOnnXp79wc=
 X-Developer-Key: i=ricardo@marliere.net; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 X-Last-TLS-Session-Version: TLSv1.3
 
-libarena's BPF objects, linked objects, and skeleton headers are always
-written into the source tree regardless of whether an out-of-tree build
-directory was specified via O=.
+When building bpf selftests with O=, the kernel module intermediates (.ko,
+.o, .mod.*, .cmd files, Module.symvers, modules.order) produced by the
+test_kmods sub-make are placed in the source tree instead of the
+out-of-tree directory, because kbuild external-module builds always write
+output to the M= source directory by default.
 
-Add OUTPUT support to libarena/Makefile: default OUTPUT to '.' for
-standalone builds, prefix all generated file targets with $(OUTPUT)/, and
-use addprefix to propagate the directory into the per-object lists. Create
-$(OUTPUT) at Makefile-load time with a $(shell mkdir -p) so all rules have
-a valid destination.
+Introduce TEST_KMODS_OUTDIR in bpf/Makefile that resolves to
+$(OUTPUT)/test_kmods when OUTPUT is set, and fall back to the in-tree
+test_kmods/ directory for standalone builds. Update the pattern rule, the
+RM invocation, and the copy rule to use this variable, and pass
+OUTPUT=$(OUTPUT)/test_kmods to the test_kmods sub-make.
 
-In the parent bpf/Makefile, pass OUTPUT="$(OUTPUT)/libarena" in
-LIBARENA_MAKE_ARGS and update LIBARENA_SKEL/LIBARENA_ASAN_SKEL to reflect
-the new location. Pass the absolute target path as the make goal so the
-sub-make goal matches the $(OUTPUT)/... rule in libarena/Makefile
-regardless of the invocation directory.
+In test_kmods/Makefile, forward the received OUTPUT value as MO= to the
+kernel Makefile. The top-level kernel Makefile maps MO= to
+KBUILD_EXTMOD_OUTPUT, which redirects all external-module build output to
+the specified directory. The kernel also creates that directory
+automatically, so no explicit mkdir is needed.
+
+Also update the CLEAN target in bpf/Makefile to propagate OUTPUT to both
+the test_kmods and libarena sub-makes so that clean removes from the
+correct location.
 
 Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 ---
- tools/testing/selftests/bpf/Makefile          | 11 ++++++-----
- tools/testing/selftests/bpf/libarena/Makefile | 24 ++++++++++++++----------
- 2 files changed, 20 insertions(+), 15 deletions(-)
+ tools/testing/selftests/bpf/Makefile            | 16 ++++++++++------
+ tools/testing/selftests/bpf/test_kmods/Makefile |  3 +++
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b289183475d4..7d42632f9d42 100644
+index 7d42632f9d42..b150a66f3c25 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -826,7 +826,8 @@ LIBARENA_MAKE_ARGS = \
- 		CLANG="$(CLANG)" \
- 		BPF_CFLAGS="$(BPF_CFLAGS) $(CLANG_CFLAGS)" \
- 		BPF_TARGET_ENDIAN="$(BPF_TARGET_ENDIAN)" \
--		Q="$(Q)"
-+		Q="$(Q)" \
-+		OUTPUT="$(OUTPUT)/libarena"
+@@ -135,6 +135,9 @@ TEST_PROGS_EXTENDED := \
+ TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+ 	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
+ TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
++# Build directory for kernel modules: routed to $(OUTPUT)/test_kmods when
++# OUTPUT is set so that kbuild intermediates stay out of the source tree.
++TEST_KMODS_OUTDIR := $(if $(OUTPUT),$(OUTPUT)/test_kmods,test_kmods)
  
- LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
- 				 libarena/include/*		\
-@@ -835,17 +836,17 @@ LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
- 				 libarena/selftests/*		\
- 				 libarena/*.bpf.o)
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = \
+@@ -163,8 +166,8 @@ override define CLEAN
+ 	$(Q)$(RM) -r $(TEST_GEN_FILES)
+ 	$(Q)$(RM) -r $(TEST_KMODS)
+ 	$(Q)$(RM) -r $(EXTRA_CLEAN)
+-	$(Q)$(MAKE) -C test_kmods clean
+-	$(Q)$(MAKE) -C libarena clean
++	$(Q)$(MAKE) -C test_kmods $(if $(OUTPUT),OUTPUT=$(OUTPUT)/test_kmods) clean
++	$(Q)$(MAKE) -C libarena $(if $(OUTPUT),OUTPUT=$(OUTPUT)/libarena) clean
+ 	$(Q)$(MAKE) docs-clean
+ endef
  
--LIBARENA_SKEL := libarena/libarena.skel.h
-+LIBARENA_SKEL := $(OUTPUT)/libarena/libarena.skel.h
+@@ -301,17 +304,18 @@ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
+ # support that for regular rules. However, pattern matching rules are implicitly
+ # treated as grouped even with older versions of make, so as a workaround, the
+ # subst() turns the rule into a pattern matching rule
+-$(addprefix test_kmods/,$(subst .ko,%ko,$(TEST_KMODS))): $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard test_kmods/Makefile test_kmods/*.[ch])
+-	$(Q)$(RM) test_kmods/*.ko test_kmods/*.mod.o # force re-compilation
++$(addprefix $(TEST_KMODS_OUTDIR)/,$(subst .ko,%ko,$(TEST_KMODS))): $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard test_kmods/Makefile test_kmods/*.[ch])
++	$(Q)$(RM) $(TEST_KMODS_OUTDIR)/*.ko $(TEST_KMODS_OUTDIR)/*.mod.o # force re-compilation
+ 	$(Q)$(MAKE) $(submake_extras) -C test_kmods				\
+ 		$(if $(O),O=$(abspath $(O)))					\
+ 		$(if $(KBUILD_OUTPUT),KBUILD_OUTPUT=$(abspath $(KBUILD_OUTPUT)))\
++		$(if $(OUTPUT),OUTPUT=$(OUTPUT)/test_kmods)			\
+ 		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)				\
+ 		EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
  
- $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
--	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
-+	+$(MAKE) -C libarena $(LIBARENA_SKEL) $(LIBARENA_MAKE_ARGS)
+-$(TEST_KMOD_TARGETS): $(addprefix test_kmods/,$(TEST_KMODS))
++$(TEST_KMOD_TARGETS): $(addprefix $(TEST_KMODS_OUTDIR)/,$(TEST_KMODS))
+ 	$(call msg,MOD,,$@)
+-	$(Q)$(if $(PERMISSIVE),if [ -f test_kmods/$(@F) ]; then )cp test_kmods/$(@F) $@$(if $(PERMISSIVE),; fi)
++	$(Q)$(if $(PERMISSIVE),if [ -f $(TEST_KMODS_OUTDIR)/$(@F) ]; then )cp $(TEST_KMODS_OUTDIR)/$(@F) $@$(if $(PERMISSIVE),; fi)
  
- ifneq ($(CLANG_HAS_ARENA_ASAN),)
--LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
-+LIBARENA_ASAN_SKEL := $(OUTPUT)/libarena/libarena_asan.skel.h
- CFLAGS += -DHAS_BPF_ARENA_ASAN
  
- $(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
--	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
-+	+$(MAKE) -C libarena $(LIBARENA_ASAN_SKEL) $(LIBARENA_MAKE_ARGS)
+ DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
+diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+index 031c7454ce65..53e47e715ec4 100644
+--- a/tools/testing/selftests/bpf/test_kmods/Makefile
++++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+@@ -32,14 +32,17 @@ PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
+ all:
+ ifeq ($(PERMISSIVE),)
+ 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		$(if $(OUTPUT),MO=$(OUTPUT)) \
+ 		M=$(TEST_KMOD_DIR) modules
+ else ifneq ("$(wildcard $(KDIR))", "")
+ 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		$(if $(OUTPUT),MO=$(OUTPUT)) \
+ 		M=$(TEST_KMOD_DIR) modules
  endif
  
- # Define test_progs test runner.
-diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testing/selftests/bpf/libarena/Makefile
-index 5e2ab514805e..195d5f833186 100644
---- a/tools/testing/selftests/bpf/libarena/Makefile
-+++ b/tools/testing/selftests/bpf/libarena/Makefile
-@@ -27,10 +27,14 @@ BPFDIR=$(abspath $(LIBARENA)/..)
- INCLUDE_DIR ?= $(BPFDIR)/tools/include
- LIBBPF_INCLUDE ?= $(INCLUDE_DIR)
- 
-+# Build output directory; defaults to in-tree for standalone builds.
-+OUTPUT ?= .
-+$(shell mkdir -p $(OUTPUT))
-+
- # Scan src/ and selftests/ to generate the final binaries
- LIBARENA_SOURCES = $(wildcard $(LIBARENA)/src/*.bpf.c) $(wildcard $(LIBARENA)/selftests/*.bpf.c)
--LIBARENA_OBJECTS = $(notdir $(LIBARENA_SOURCES:.bpf.c=.bpf.o))
--LIBARENA_OBJECTS_ASAN = $(notdir $(LIBARENA_SOURCES:.bpf.c=_asan.bpf.o))
-+LIBARENA_OBJECTS = $(addprefix $(OUTPUT)/,$(notdir $(LIBARENA_SOURCES:.bpf.c=.bpf.o)))
-+LIBARENA_OBJECTS_ASAN = $(addprefix $(OUTPUT)/,$(notdir $(LIBARENA_SOURCES:.bpf.c=_asan.bpf.o)))
- 
- INCLUDES = -I$(LIBARENA)/include -I$(BPFDIR)
- ifneq ($(INCLUDE_DIR),)
-@@ -61,32 +65,32 @@ CFLAGS += $(INCLUDES)
- vpath %.bpf.c $(LIBARENA)/src $(LIBARENA)/selftests
- vpath %.c $(LIBARENA)/src $(LIBARENA)/selftests
- 
--skeletons: libarena.skel.h libarena_asan.skel.h
-+skeletons: $(OUTPUT)/libarena.skel.h $(OUTPUT)/libarena_asan.skel.h
- .PHONY: skeletons
- 
--libarena_asan.skel.h: libarena_asan.bpf.o
-+$(OUTPUT)/libarena_asan.skel.h: $(OUTPUT)/libarena_asan.bpf.o
- 	$(call msg,GEN-SKEL,libarena,$@)
- 	$(Q)$(BPFTOOL) gen skeleton $< name "libarena_asan" > $@
- 
--libarena.skel.h: libarena.bpf.o
-+$(OUTPUT)/libarena.skel.h: $(OUTPUT)/libarena.bpf.o
- 	$(call msg,GEN-SKEL,libarena,$@)
- 	$(Q)$(BPFTOOL) gen skeleton $< name "libarena" > $@
- 
--libarena_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
-+$(OUTPUT)/libarena_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
- 	$(call msg,GEN-OBJ,libarena,$@)
- 	$(Q)$(BPFTOOL) gen object $@ $^
- 
--libarena.bpf.o: $(LIBARENA_OBJECTS)
-+$(OUTPUT)/libarena.bpf.o: $(LIBARENA_OBJECTS)
- 	$(call msg,GEN-OBJ,libarena,$@)
- 	$(Q)$(BPFTOOL) gen object $@ $^
- 
--%_asan.bpf.o: %.bpf.c
-+$(OUTPUT)/%_asan.bpf.o: %.bpf.c
- 	$(call msg,CLNG-BPF,libarena,$@)
- 	$(Q)$(CLANG) $(BPF_CFLAGS) $(ASAN_FLAGS) -DBPF_ARENA_ASAN $(BPF_TARGET_ENDIAN) -c $< -o $@
- 
--%.bpf.o: %.bpf.c
-+$(OUTPUT)/%.bpf.o: %.bpf.c
- 	$(call msg,CLNG-BPF,libarena,$@)
- 	$(Q)$(CLANG) $(BPF_CFLAGS) $(BPF_TARGET_ENDIAN) -c $< -o $@
- 
  clean:
--	$(Q)rm -f *.skel.h *.bpf.o *.linked*.o
-+	$(Q)rm -f $(OUTPUT)/*.skel.h $(OUTPUT)/*.bpf.o $(OUTPUT)/*.linked*.o
+ ifneq ("$(wildcard $(KDIR))", "")
+ 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
++		$(if $(OUTPUT),MO=$(OUTPUT)) \
+ 		M=$(TEST_KMOD_DIR) clean
+ endif
 
 -- 
 2.55.0
