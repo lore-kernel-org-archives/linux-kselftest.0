@@ -1,239 +1,224 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050103644A0
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A43A4C6D;
+	Wed, 29 Jul 2026 01:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785285808; cv=none; b=lKcJ8kEhrMxQJWXXFUOUIXQ6lfNNUXXNqgK4qQ+m0l8Lq6UTH1hLy48un5lcfa0cNcnjN7BgoEO+b5Yqi27CYe9VMzoHaj9dZ0cu2XJ2YN9RUQ1s3GSAeoztNvz1kPQbtysu6MfzBOFBteQQa2/UV9/NQ5tyqISeXzfRjBV1S88=
+	t=1785287376; cv=none; b=gR1hagxthFqeZzqZamSxCiKxQMlUeLQKFObNtDnp2VvQi8kgJkljK6huvmmfybxyyTMjlmw57nDUKNpecfU6gQmAxGpKIO9nhEeYAaPCVIV5QMtb0mOCfVieNAdnihPU3PS7NycC9ousPx7wj29UoQ5qZJkAPeGcAwPunxYAd24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785285808; c=relaxed/simple;
-	bh=APYCemeVpFyyQFz6LEPXl8WGerHiLbS1D/pRVvv203w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OMYPaBs7TdsM/TWbdjRYoahCd+NFBJ5CYs3bO0Kd5Q1DkFnPzDtc6dtWxFu0bwftQ17IPbFQP7flTIPJLDTtn5OOD7IaVD8Oz1Qyz/i0GXrY9jI5akAagEmP93cLvCOEsPrtBbT++82Md/p2MrxRXDZEJB0fTJuqn7cm1t0nco4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sogQOZSj; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785287376; c=relaxed/simple;
+	bh=NNxWxDe7kC54EChcb0afgEdncgGE85PBgYX/IthWpao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fxCzl39RFGkaB+vpJJ+cXNg8uXCdBQsLPzo/UtFchZ4MSNl09uwCH3CBSbWQNgHA/rWNwEF05evPsuHKGUjOZnn60NGBO01EAUR7c1BzPwUyFKWGaW8by0aSRbZLSOcnLcWBB38DT1k+Z8a1N7fHky0Eep0AVTp11Mg7ouQrqd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=NounuZcA; arc=none smtp.client-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sogQOZSj"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4956242332dso3088705e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785285805; x=1785890605; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=r4Gw4ioSscdZva3p6jvwUu/0HqrTnRkxRU/WO0C15fA=;
-        b=sogQOZSj7xcs0FbY4THWDXfEjHj7eVtr4mZFVnUe2n/38bsyQ+osbul3t1/oLWWhop
-         t2YaGqOCLp+Pg0/1iX38RhdKdlevACgcX9yEzVwsyi8uEnXyu87Hbjhinp6BD5ja0OCb
-         wZgYI9aSCGTQJk2zzwsIdFXxEJTZglCAOraHoGmDTm7gLLCymuW+COQ/000uiLTnbc7x
-         tgw1rx769ZDsK40Flsj5UkP0SyzQ+l/sOU+nYLgbkU/7ch/4HZCaSZy6k10mIP01vHDt
-         tFkFgl1yOv0a/PPO1ms9iM2p/YB+0/jziphlErczOQ4kD7FR3631Gyx+cTimWCiuR7CI
-         mLJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785285805; x=1785890605;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=r4Gw4ioSscdZva3p6jvwUu/0HqrTnRkxRU/WO0C15fA=;
-        b=DphnnBWCgtgoUzHImgzVmkkwaoKLmraTgK5QJ5zsS1Dpy2tThK3Uq86m4xg8Pgnax9
-         99KrxWKkyih8TXjlK5V78zanJpUYi3JX+2YBw7agfiHeFhJXbN6bN3zwtkFPe7AqW2I9
-         iKwizq89HbaSckYSAX6BV/iT/0cjTviCaPf1gHeqFiiiKzyJ3VP0wjA913a0PKbL2xeJ
-         mAzY3KJc7YEUvZK39ieb4xBD5CLR0rlFSklrA9pFmYB/MDM+e3PMp5UU3b8r9m7qgLyH
-         gJIvvH0MIK2SErN5inLEPe5qy24OpsJZHqR4P7pazQseaDF6g8V1qbutL8rCx0jlMx/P
-         wXhg==
-X-Forwarded-Encrypted: i=1; AHgh+RoSeJz+MN62BiKPpJpltMfzhkcQmorUoVF1WNTCMTbkHrpOmVrYF+Sb+JOmYSU0JSVGQyqrjLOkOLLXNerRaco=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAOjD2cWd123kQExVdI3eCqgafwPF1ZskQ6NyJYpm1AAKQcV4d
-	E0+tGh/OmbbQuG8xCqfAUQlAlcnBlxq05cUUHv9RY7IorrbQs2Gk6kLG
-X-Gm-Gg: AR+sD13likc8ukfr1wFlTXgTGR8VpaIPqAqZOmnF6Zee5oIe3FfD0JFbvpCSdOj6Od5
-	HIiAIplLkAtP3KRuSzpYNEZ1u9gi8ph5X9xjzscFGj27zoWxHOXKwOe1eVbvR7rt/ttNE2yOO9R
-	AagBi+JEm9Sp+tmQRBGqKAh6FG516slScrTFF+aSePLZQr4fiEX9G4AAlZ1rok2nR3Q5CsD/JyE
-	kzrnmAy7WJNLL9w2p6h9B/ROv7QEigGTe2y2rVEsgn65+CcvW1YQ3r+flzWK5X+WePdAi6wOi5B
-	hUV34rOUNusxWHzptXqK1o+MlU3VgZyNKDD0yRfLYubUvQOC6VYJKz5tWxjVpM+sRUuYjMVXhVD
-	MGksbjPh4W28I45hYcQofq73N3hXT20D79a6gbalaLTitkqc2+2INXn0K9PgiRtt8YzCIv26nYm
-	SsVpzpMqBL5aIhQrvym478ur7QalZ1c17cOWHXG1n2c8ktJ8V1sXWRNYT29QaDuuguUzPbEwZAP
-	+mN1Aoz5FRFQyH++XWuFUcSxnVQBumuqL0AST/BwSvsBmexZFO1f6AdNWzCdP9G11ImXawSis2E
-	4OeGWz78ee/K1eIZqFIg4YEJznWvX/YmV5YwvCYm8wYBp8YJoQKTKMedKe89sh0uYoBW5yX4yFu
-	0F8JC7JhAita4m7jj2g==
-X-Received: by 2002:a05:600c:3b0c:b0:495:4d2d:82f2 with SMTP id 5b1f17b1804b1-496c659dd2bmr53499995e9.26.1785285805037;
-        Tue, 28 Jul 2026 17:43:25 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-b323-2b01-0d98-9fe8-a4cd-78ab.310.pool.telefonica.de. [2a02:3100:b323:2b01:d98:9fe8:a4cd:78ab])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6aa3a88sm2827343f8f.6.2026.07.28.17.43.23
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 28 Jul 2026 17:43:24 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Karl Mehltretter <kmehltretter@gmail.com>
-Subject: [PATCH 2/2] kselftest/arm64: fp-ptrace: Fix checks for inactive SVE and SSVE regsets
-Date: Wed, 29 Jul 2026 02:42:55 +0200
-Message-Id: <20260729004255.15630-2-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260729004255.15630-1-kmehltretter@gmail.com>
-References: <20260729004255.15630-1-kmehltretter@gmail.com>
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="NounuZcA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1785287366;
+	bh=NGrM93qcsTKpKJ2a72fk46gVB12KhLwjYNwPwYiXtbk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NounuZcAfTNdLIV0/JI1nLMXNEcgIDklDuF1YAbUFtBGZDXN5ftM9isd80tgVIm8w
+	 TUPJr5xo4KmBIwjUIjye3WzUMEWOrQ0LmZi/SQUYfoHLRGH3xHC8Qnq0Izeadj8ifn
+	 fWiOwS2iI6+nmib/D8VH0pN39z9NYzF3B5zcZXLM=
+Received: from [10.56.52.25] ([39.156.73.14])
+	by newxmesmtplogicsvrszc56-0.qq.com (NewEsmtp) with SMTP
+	id 2002B400; Wed, 29 Jul 2026 09:08:00 +0800
+X-QQ-mid: xmsmtpt1785287280tzgiu16hj
+Message-ID: <tencent_C3B23E2E87554A5E5747DD10790D44843209@qq.com>
+X-QQ-XMAILINFO: OUk+E8Vw5ntvi+W+ju8ja5BDsHZ0EHPgY/f5BnHTXw1MalAkvUzoVED6se0uXL
+	 wQe6DxjM8otvfiTBwL37D7UeRQeanoJfG4ZsAn6xnifiL2bZDw3pBwSafEUyCNfw0OWcAaFQDRC+
+	 2zkR9Cmi9vY7ZS46Zbm/zSp3OPMEXZ8YyYU2FR8oz7rTA9dbbc/mi44hOSWw34eN+L2HxqJ9Foa5
+	 FVoJtyFnwr7iTiQ52JttqXTcaoVh2XxC+meuw8g37ZtLwPDcij4nS3EzwCIXJKU04LuuqLHkyoYR
+	 Mt5+tFfpugvfM6Pm2EuE+Ui5jx+j7UtP2oecq4cQVuZJc7a8adbcgGeXehvkk6Yd3wKul7UZgMj6
+	 2illl9K/qPQv0ii/tB+S8kGgk0j1Mz2yXnG5U99hK+mZSE+RgIxes3/NNP+Fm/i2uG8gFNyyf7js
+	 vByg1H4VE9tZZRz8GlZBCQtAJQ+R194yit3cZWlWC4HpVM1XT2SGvdaRm7stz81fNr/EDCG5BmRW
+	 yOtNYjJU7FgWrdReVixejeBEajSNysgvJi79vZ5iiF/iPm4JOH+prhv7J4p8LsjWZGzLTbVO8ACB
+	 Y3oNbuTE+Jdw09EPDAQnZglTl1EKgPojNYM2P2cTZKIXwtQwUQsSMwuuMIp23RWsNLVSQ26Ua8aL
+	 jcsgZsXtVnpuU/BFd91GJKvVc9u/H0z3Q079gl65x1KbNtOGIKGTZJ3xALTaeaWNC8St7XO30imM
+	 qmvenVP7kI3c40br6Ppg0j4NyKGVPfs+kHPB56yhsnymm2ECT5XLqAGnijmfoqUb6qjLWNKPUK8B
+	 uBu1CO+Lpg7GxPggH7klVrD3yB0z3jY9dtewnWaxEOP5zIm7ZtLoLmsqq9EyR1qQn+rLQINDvjQH
+	 EAR4+QjMgS+vDfDIy+E/qzBTKSCPfJ9LhAM5JlVgn28s9syvNqVrgoR8l3gOP3Tz1Q7S/WXaXyKA
+	 1Y15ZtA2iKzEeSPZBMnqe+XTod1xdZDqYxkjR0wwaQENb/iRTA0PGtQjLF6LzcIsxY2ZO5Oe/j+V
+	 wXYSh7Uxr9ST8uM6dhryOi6P6gz4dCapAt4xBeHktBHN/FYMhv8F54Bu/349IiGDYvlVYQrjXFJv
+	 +JDkt1j45XT6V09wE=
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+X-OQ-MSGID: <6d7d5ae0-56d3-475b-b85e-ffb5a08089aa@foxmail.com>
+Date: Wed, 29 Jul 2026 09:08:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: add bpf_strcat,bpf_strncat kfunc
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: vmalik@redhat.com, andrii@kernel.org, ast@kernel.org, rongtao@cestc.cn,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+ "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)"
+ <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <cover.1784695085.git.rtoax@foxmail.com>
+ <tencent_60882E4BE4F247C5F6D564F41BF1C3004805@qq.com>
+ <CAEf4BzbRvjT3X=Ds+YqLiZt=A0ujk1t2GCDcmbdT3+QX+DsQDQ@mail.gmail.com>
+ <tencent_185F6B461110090D468588B2422E5955A409@qq.com>
+ <CAEf4BzY6RPkm0xv=RHAKoNphYxM_6GmyLdhDbbZ3nAqNhkdW_g@mail.gmail.com>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <CAEf4BzY6RPkm0xv=RHAKoNphYxM_6GmyLdhDbbZ3nAqNhkdW_g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The checks on the header size reported for the inactive regset of the
-NT_ARM_SVE/NT_ARM_SSVE pair compare it against sizeof(sve), but sve is
-a struct user_sve_header *, so this is 8 rather than the intended 16.
-The kernel carried the identical typo when filling in the header, so
-kernel and test agreed on the wrong value and the test passed.
 
-Compare against sizeof(*sve), stop after the header checks for an
-inactive regset since it has no payload to compare, and prefill the
-buffer with a sentinel to verify that reading an inactive regset
-leaves everything after the header untouched. This also covers the
-getter's return value, which determines how many bytes ptrace copies
-back to userspace.
-
-Fixes: 864f3ddcd715 ("kselftest/arm64: fp-ptrace: Adjust to new inactive mode behaviour")
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
-With the size comparison fixed, fp-ptrace fails against kernels that
-do not have the preceding regset fix.
-
- tools/testing/selftests/arm64/fp/fp-ptrace.c | 47 +++++++++++++++++---
- 1 file changed, 41 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/arm64/fp/fp-ptrace.c b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-index 22c584b78be5..b435837c8c0e 100644
---- a/tools/testing/selftests/arm64/fp/fp-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-@@ -65,6 +65,9 @@
- /* VL 128..2048 in powers of 2 */
- #define MAX_NUM_VLS 5
- 
-+/* Sentinel for detecting buffer bytes the kernel did not write */
-+#define REGSET_SENTINEL 0xa5
-+
- /*
-  * FPMR bits we can set without doing feature checks to see if values
-  * are valid.
-@@ -181,6 +184,20 @@ static bool compare_buffer(const char *name, void *out,
- 	return false;
- }
- 
-+static bool buffer_is_filled(const void *buffer, size_t size,
-+			     unsigned char value)
-+{
-+	const unsigned char *bytes = buffer;
-+	size_t i;
-+
-+	for (i = 0; i < size; i++) {
-+		if (bytes[i] != value)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- struct test_config {
- 	int sve_vl_in;
- 	int sve_vl_expected;
-@@ -401,6 +418,7 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
- 	struct user_sve_header *sve;
- 	struct user_fpsimd_state *fpsimd;
- 	struct iovec iov;
-+	size_t buf_size;
- 	int ret, vq;
- 	bool pass = true;
- 
-@@ -409,14 +427,16 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
- 
- 	vq = __sve_vq_from_vl(config->sve_vl_in);
- 
--	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
--	iov.iov_base = malloc(iov.iov_len);
-+	buf_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
-+	iov.iov_len = buf_size;
-+	iov.iov_base = malloc(buf_size);
- 	if (!iov.iov_base) {
- 		ksft_print_msg("OOM allocating %lu byte SVE buffer\n",
- 			       iov.iov_len);
- 		return false;
- 	}
- 
-+	memset(iov.iov_base, REGSET_SENTINEL, buf_size);
- 	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_SVE, &iov);
- 	if (ret != 0) {
- 		ksft_print_msg("Failed to read initial SVE: %s (%d)\n",
-@@ -440,10 +460,16 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
- 	}
- 
- 	if (svcr_in & SVCR_SM) {
--		if (sve->size != sizeof(sve)) {
-+		if (sve->size != sizeof(*sve)) {
- 			ksft_print_msg("NT_ARM_SVE reports data with PSTATE.SM\n");
- 			pass = false;
- 		}
-+		if (!buffer_is_filled(iov.iov_base + sizeof(*sve),
-+				      buf_size - sizeof(*sve), REGSET_SENTINEL)) {
-+			ksft_print_msg("NT_ARM_SVE wrote beyond its header with PSTATE.SM\n");
-+			pass = false;
-+		}
-+		goto out;
- 	} else {
- 		if (sve->size != SVE_PT_SIZE(vq, sve->flags)) {
- 			ksft_print_msg("Mismatch in SVE header size: %d != %lu\n",
-@@ -485,6 +511,7 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
- 	struct user_sve_header *sve;
- 	struct user_fpsimd_state *fpsimd;
- 	struct iovec iov;
-+	size_t buf_size;
- 	int ret, vq;
- 	bool pass = true;
- 
-@@ -493,14 +520,16 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
- 
- 	vq = __sve_vq_from_vl(config->sme_vl_in);
- 
--	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
--	iov.iov_base = malloc(iov.iov_len);
-+	buf_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
-+	iov.iov_len = buf_size;
-+	iov.iov_base = malloc(buf_size);
- 	if (!iov.iov_base) {
- 		ksft_print_msg("OOM allocating %lu byte SSVE buffer\n",
- 			       iov.iov_len);
- 		return false;
- 	}
- 
-+	memset(iov.iov_base, REGSET_SENTINEL, buf_size);
- 	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_SSVE, &iov);
- 	if (ret != 0) {
- 		ksft_print_msg("Failed to read initial SSVE: %s (%d)\n",
-@@ -523,10 +552,16 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
- 	}
- 
- 	if (!(svcr_in & SVCR_SM)) {
--		if (sve->size != sizeof(sve)) {
-+		if (sve->size != sizeof(*sve)) {
- 			ksft_print_msg("NT_ARM_SSVE reports data without PSTATE.SM\n");
- 			pass = false;
- 		}
-+		if (!buffer_is_filled(iov.iov_base + sizeof(*sve),
-+				      buf_size - sizeof(*sve), REGSET_SENTINEL)) {
-+			ksft_print_msg("NT_ARM_SSVE wrote beyond its header without PSTATE.SM\n");
-+			pass = false;
-+		}
-+		goto out;
- 	} else {
- 		if (sve->size != SVE_PT_SIZE(vq, sve->flags)) {
- 			ksft_print_msg("Mismatch in SSVE header size: %d != %lu\n",
--- 
-2.51.0
+On 7/28/26 23:58, Andrii Nakryiko wrote:
+> On Mon, Jul 27, 2026 at 7:50 PM Rong Tao <rtoax@foxmail.com> wrote:
+>>
+>> On 7/28/26 06:56, Andrii Nakryiko wrote:
+>>> On Tue, Jul 21, 2026 at 9:42 PM Rong Tao <rtoax@foxmail.com> wrote:
+>>>> From: Rong Tao <rongtao@cestc.cn>
+>>>>
+>>>> Add string concatenation kfuncs, prototype:
+>>>>
+>>>>     int bpf_strcat(char *dst, u32 dst__sz, const char *src);
+>>>>     int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len);
+>>>>
+>>>> This differs from the glibc library functions strcat and strncat, which,
+>>>> for safety reasons, require the size of the target string's memory space
+>>>> as a parameter.
+>>>>
+>>>> The src parameter cannot directly pass a string constant, such as "XYZ",
+>>>> otherwise it will throw an error "write into map forbidden".
+>>>>
+>>>> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>>>> ---
+>>>>    kernel/bpf/helpers.c | 75 ++++++++++++++++++++++++++++++++++++++++++++
+>>>>    1 file changed, 75 insertions(+)
+>>>>
+>>>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>>>> index c18f1e16edee..85afff60365c 100644
+>>>> --- a/kernel/bpf/helpers.c
+>>>> +++ b/kernel/bpf/helpers.c
+>>>> @@ -4195,6 +4195,79 @@ __bpf_kfunc int bpf_strncasestr(const char *s1__ign, const char *s2__ign,
+>>>>           return __bpf_strnstr(s1__ign, s2__ign, len, true);
+>>>>    }
+>>>>
+>>>> +static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
+>>>> +{
+>>>> +       int dlen = 0, slen, space, copied;
+>>>> +
+>>>> +       if (sz == 0 || dsz == 0)
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       while (dlen < dsz && dst[dlen] != '\0')
+>>>> +               dlen++;
+>>>> +
+>>>> +       if (dlen >= dsz)
+>>>> +               return -E2BIG;
+>>>> +
+>>>> +       space = dsz - dlen;
+>>>> +
+>>>> +       slen = bpf_strnlen(src, sz);
+>>>> +       if (space <= slen)
+>>>> +               return -E2BIG;
+>>>> +
+>>>> +       copied = strncpy_from_kernel_nofault(dst + dlen, src, sz);
+>>> I'm not sure strncpy_from_kernel_nofault() is designed to work
+>>> correctly if dst can be modified concurrently. Which in BPF case, even
+>>> though we validate that memory is correct, it still can be modified
+>>> concurrently in such a way as to cause strncpy_from_kernel_nofault's
+>>> inner dst[-1] based loop logic to go beyond the boundaries of target
+>>> buffer.
+>>>
+>>> i.e., I don't believe current implementation is concurrency safe
+>> Thank you very much for your reply. There is indeed a thread safety
+>> issue. Let's look at a solution. I will submit v6. Thank you ;)
+>>
+> tbh, I'm not sure we need these new kfuncs at all. You should be able
+> to easily to do the same with dynptr for dst buffer and existing
+> strlen/probe_read helpers/kfuncs.
+Thank you. You share the same view as Viktor. Indeed, strcat and 
+probe_read are functionally redundant. Let's discard this commit. Thank 
+you.
+>
+>> Rong Tao
+>>
+>>> pw-bot: cr
+>>>
+>>>
+>>>> +       if (copied < 0)
+>>>> +               return copied;
+>>>> +       else if (copied == 0 || copied == 1)
+>>>> +               return dlen;
+>>>> +
+>>>> +       /* The copied character count includes '\0'. */
+>>>> +       return dlen + copied - 1;
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * bpf_strcat - Append non-null bytes from a source string, and null-terminate
+>>>> + *              the result
+>>>> + * @dst: Destination string.
+>>>> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
+>>>> + * @src: Source string.
+>>>> + *
+>>>> + * Return:
+>>>> + * * >=0      - Length of the concatenated string.
+>>>> + *
+>>>> + * * %-EINVAL - String @dst__ign is invalid.
+>>>> + * * %-EFAULT - Cannot read or write one of the strings.
+>>>> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
+>>>> + *              @dst__ign is too small.
+>>>> + * * %-ERANGE - One of the strings is outside of kernel address space
+>>>> + */
+>>>> +__bpf_kfunc int bpf_strcat(char *dst, u32 dst__sz, const char *src)
+>>>> +{
+>>>> +       return __bpf_strncat(dst, dst__sz, src, dst__sz);
+>>>> +}
+>>>> +
+>>>> +/**
+>>>> + * bpf_strncat - Append non-null bytes from a source string, and null-terminate
+>>>> + *               the result
+>>>> + * @dst: Destination string.
+>>>> + * @dst__sz: Maximum bytes of @dst__ign, includes the trailing NUL.
+>>>> + * @src: Source string.
+>>>> + * @len: the maximum number of characters to concatenate, the null terminator
+>>>> + *       \0 of the target string @dst will also be included.
+>>>> + *
+>>>> + * Return:
+>>>> + * * >=0      - Length of the concatenated string.
+>>>> + *
+>>>> + * * %-EINVAL - String @dst__ign is invalid.
+>>>> + * * %-EFAULT - Cannot read or write one of the strings.
+>>>> + * * %-E2BIG  - String @src__ign is too large or the remaining space in
+>>>> + *              @dst__ign is too small.
+>>>> + * * %-ERANGE - One of the strings is outside of kernel address space
+>>>> + */
+>>>> +__bpf_kfunc int bpf_strncat(char *dst, u32 dst__sz, const char *src, u32 len)
+>>>> +{
+>>>> +       return __bpf_strncat(dst, dst__sz, src, len);
+>>>> +}
+>>>> +
+>>>>    #ifdef CONFIG_KEYS
+>>>>    /**
+>>>>     * bpf_lookup_user_key - lookup a key by its serial
+>>>> @@ -4958,6 +5031,8 @@ BTF_ID_FLAGS(func, bpf_strstr);
+>>>>    BTF_ID_FLAGS(func, bpf_strcasestr);
+>>>>    BTF_ID_FLAGS(func, bpf_strnstr);
+>>>>    BTF_ID_FLAGS(func, bpf_strncasestr);
+>>>> +BTF_ID_FLAGS(func, bpf_strcat);
+>>>> +BTF_ID_FLAGS(func, bpf_strncat);
+>>>>    #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+>>>>    BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+>>>>    #endif
+>>>> --
+>>>> 2.55.0
+>>>>
 
