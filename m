@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B8F47ECFA;
-	Wed, 29 Jul 2026 14:47:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A29495538;
+	Wed, 29 Jul 2026 14:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785336467; cv=none; b=Fkq1iUyuXFjiZAZjBvdbkxlnfTIZU+2wiek601abaAzTx3RqBTv8jSVpC6LZI47DOppnr0LGfLuygCXKNgn8/nJhRbFPIvQzjmMKxgjvnH+JEosWbN4hTh4+1TXsPeLiyjocr/poXacGdLPtbEihRIOMc6XMstUdNotZJgVQsW0=
+	t=1785336468; cv=none; b=VUePziSVCzhRCQC7l2wmQkQYS4RbDpdS4A45B0GsgbxkeINQZMV2tAGG8DYwtDBop8vQZtohG7SrQbiiDYcG2fV9cWDrxZjRK67pIYctNHedmWRYOP2IcGWl94o4Fenkl0e8+83kzhzZydkyR2eX/xf0hDYBTa8uEyk6H/ILAu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785336467; c=relaxed/simple;
-	bh=DJPYvh3BoeDGZsI6ipGISBHF/SQmPmzJIQyhoWHeFFc=;
+	s=arc-20240116; t=1785336468; c=relaxed/simple;
+	bh=fxU+kl/M3exfDLzFkdNJVMJXwSy1c6L92KGmpdS7j5A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GNAdq4H30V/WljV/1ccTSQAGtc3vfkd/UIs9hKqXNmqBeJCcgj+n6B+kJPprCThMXDHj1aPPhQDU478TCLeNqg7LVLY92Pq5V7MCxR901WG3PVSpnyQz/bQ8phZUGOc3A1fSZjZ3+R6yki7CouhnBpGiKj57hB4tv9giAa9N7tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKYKFRM1; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ePAKt94+Nf7QVU7KoRZNU6jDE0GarvgpUAzHwECKDa4zMFnHnVBS+mwdkyLQjNuxCzYMk4uFtsSQMDbzLeq0PZQn/pbH6/o9kUVZK2fFP82YFHf2CcUEFsnIwBCryWDnwGWfaWDWyp0eGA9NX2MbTjn7CpX995uZ7vyyRgoYP6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgotZjgc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKYKFRM1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B20A1F00ADB;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgotZjgc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38321F00ADF;
 	Wed, 29 Jul 2026 14:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785336464;
-	bh=MtDpGEkDh7eFQBN1dloGGbcdOXn6qckrmCm8+BjUBow=;
+	s=k20260515; t=1785336465;
+	bh=PRRcJRQPR3buBmMaDcVwulWeVM6qSbo735r2+CfQnW4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fKYKFRM1R/OCPGoBU0BaoGq5cV55Eouhc7kW5fvTzrjoeWnw8oGVfX+lv7uNM0mZx
-	 myBMSUGwVzIeXaC/JNHrEzKyxK4zU7SX7y9ZIY+Qnc+pl705brcx9LdRU7kuim0A+9
-	 MKvsuXs/1j1DkoIEkuIUYjhgTVxQAhFmxTziyPxA374uAbpu8v+89AD5XP7zOrz+Hi
-	 z9OaJle3nahczWGdsxGqfpB84eqEvkXd3XCCKEQwzZu9fB8xWH4hRvMsK2FmYUa2Ne
-	 DDh1AQP6GTWFWRWXeUN/fDrC6VKMwoXjYLd2Lvd7ilJBNNkb9N6jZ4ka0mwSelx9a+
-	 E/Ev/kw7oFB0Q==
+	b=ZgotZjgcWhh/HHekUuR450+WnuFoBpIEPEnKN/COLJ7BI9rXBJRIIn2VOMwHETiPT
+	 pi1qlDGztuEvmHpHXKH7i5gSQYMBEcLFpA7OpyFiFsW/24Ae0SqkQtAgRrW1DPd+Wu
+	 7kdzvMnr/4GYdvm/S0YWdkbTnK95LhZ2hpVZVRarabtDYZh8JVaGWXmQ2GvPQ+OUHi
+	 Isa7HoW/9S/LKiPxJOWAfRwTBxp1nZ/OWdFO1aEGHjBSG4sAPk3HyFbZH98EZmRK8t
+	 BIHt6bcuWqXwaX1kp7mASyVBut0Zmj2O5I76SE8yLSUaB51XvzA67RETFrwcPkwAuo
+	 LdZOLORa0Py+Q==
 From: SJ Park <sj@kernel.org>
 To: 
 Cc: SJ Park <sj@kernel.org>,
@@ -34,9 +34,9 @@ Cc: SJ Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH 4/6] selftests/damon/drgn_dump_damon_status: dump probes
-Date: Wed, 29 Jul 2026 07:47:35 -0700
-Message-ID: <20260729144738.90895-5-sj@kernel.org>
+Subject: [RFC PATCH 6/6] selftests/damon/sysfs.py: test damon probes
+Date: Wed, 29 Jul 2026 07:47:37 -0700
+Message-ID: <20260729144738.90895-7-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260729144738.90895-1-sj@kernel.org>
 References: <20260729144738.90895-1-sj@kernel.org>
@@ -48,64 +48,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend drgn_dump_damon_status.py to dump damon_ctx->probes.  It will be
-used to see if in-kernel DAMON status are changed as the user sets the
-probes via sysfs.
+Extend sysfs.py to commit DAMON probes via sysfs, and see if it changed
+in-kernel DAMON status as expected using drgn.
 
 Signed-off-by: SJ Park <sj@kernel.org>
 ---
- .../selftests/damon/drgn_dump_damon_status.py | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ tools/testing/selftests/damon/sysfs.py | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/damon/drgn_dump_damon_status.py b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-index 09552e91bc782..4622046fd0118 100755
---- a/tools/testing/selftests/damon/drgn_dump_damon_status.py
-+++ b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-@@ -48,6 +48,37 @@ def attrs_to_dict(attrs):
-         ['max_nr_regions', int],
-         ])
- 
-+def filter_to_dict(damon_filter):
-+    filter_type_keyword = {
-+            0: 'anon',
-+            1: 'memcg',
-+            }
-+    dict_ = {
-+            'type': filter_type_keyword[int(damon_filter.type)],
-+            'matching': bool(damon_filter.matching),
-+            'allow': bool(damon_filter.allow),
-+            }
-+    type_ = dict_['type']
-+    if type_ == 'memcg':
-+        dict_['memcg_id'] = int(damon_filter.memcg_id)
-+    return dict_
-+
-+def filters_to_list(filters):
-+    return [filter_to_dict(f)
-+            for f in list_for_each_entry(
-+                'struct damon_filter', filters.address_of_(), 'list')]
-+
-+def probe_to_dict(probe):
-+    return to_dict(probe, [
-+        ['weight', int],
-+        ['filters', filters_to_list],
-+        ])
-+
-+def probes_to_list(probes):
-+    return [probe_to_dict(p)
-+            for p in list_for_each_entry(
-+                'struct damon_probe', probes.address_of_(), 'list')]
-+
- def addr_range_to_dict(addr_range):
-     return to_dict(addr_range, [
-         ['start', int],
-@@ -199,6 +230,7 @@ def damon_ctx_to_dict(ctx):
-     return to_dict(ctx, [
-         ['ops', ops_to_dict],
-         ['attrs', attrs_to_dict],
-+        ['probes', probes_to_list],
-         ['adaptive_targets', targets_to_list],
-         ['schemes', schemes_to_list],
-         ['pause', bool],
+diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
+index 159cbeac067f8..66c826189320d 100755
+--- a/tools/testing/selftests/damon/sysfs.py
++++ b/tools/testing/selftests/damon/sysfs.py
+@@ -319,7 +319,21 @@ def main():
+                 intervals_goal=_damon_sysfs.IntervalsGoal(
+                     access_bp=400, aggrs=3, min_sample_us=5000,
+                     max_sample_us=10000000),
+-                update_us=2000000),
++                update_us=2000000,
++                probes=_damon_sysfs.DamonProbes(
++                    probes=[_damon_sysfs.DamonProbe(
++                        weight=42,
++                        filters=_damon_sysfs.DamonFilters(
++                            filters=[
++                                _damon_sysfs.DamonFilter(
++                                    type_='anon',
++                                    matching=True,
++                                    allow=True,
++                                    ),
++                                ]),
++                            ),
++                            ]),
++                    ),
+             schemes=[_damon_sysfs.Damos(
+                 action='pageout',
+                 access_pattern=_damon_sysfs.DamosAccessPattern(
 -- 
 2.47.3
