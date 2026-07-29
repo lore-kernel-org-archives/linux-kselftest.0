@@ -1,73 +1,72 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C23E43F4A6
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 22:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8973844160D
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 22:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785364028; cv=none; b=SZfXJS+TD8f7WnNmrouhyMFfO1IgOmhAb25vEs2S2EhURpa+KGjOQTVMEQ9WMxONx9UIvmgHoy7XiH/0TjdfTtYu+32Vjb5xKOrLVOOSFvZ8JU/kplc7OXL61Fms3vy1unzbEekLVEA/tx/tMzoQBZyfOHY/NghH9QJ0proEObE=
+	t=1785364030; cv=none; b=NpYJDjWTRwvy0/03ytCKw3rr+atbHiPYKBvU9hRoFahO8dSJQqeY0KEcwaxWeksOG0PK5tef6H/DHZcJqD0s5YKh9jtU8DlZuvv8RqqrmJnLpqq8RlETncC8shB717m8s7KX9vUKqZG0jQX+70AOWfy2KBPvscQehik/HdNhMSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785364028; c=relaxed/simple;
-	bh=r1c+CaBhW5s4wXFD2O6k3jFF+p8PGPmXib9duAj+dtw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=IfHuGTGfwalUUneMkXsYh0mnq50sUZD7CpwC0VUACku3rheGXYYupNxmOp7BLgYXcvOXPasRWwCgMlmAWxb3S/qvSz4OD2iUu+hU14lVhpNaNCB2iD0m5lhzLYpZEq5tPZ1QFABP/VJjbuyGqb95GUfpQp+QRCg0O/D7fnTmfpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KPdG9xoO; arc=none smtp.client-ip=209.85.215.200
+	s=arc-20240116; t=1785364030; c=relaxed/simple;
+	bh=wlJIN434m1B02053gQxbQpMbv/Dy+ix9obbN9kLh4s0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SN5qi03madiCJfVlczHDnE7b+7+c+ZqDI8Y0wKLx6vBcYOxTZiKttxglHVZr/UswMHhKxccGisBd8CYe4TE2L656Z04B7T/bDmIJfS+8lO0CJAl9y+LXa5EWvTEIAAUTu0rwpGbGBMuBuW1ykuGB0RUFD7oRi2fLaZlRRGLrr0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qe8RUVV0; arc=none smtp.client-ip=209.85.210.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KPdG9xoO"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cb48f41343aso128169a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:27:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qe8RUVV0"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8482b95574dso1746189b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785364026; x=1785968826; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6i9gxS0ccvnf11VUuXna08dr0rnR4es/fvIWpwBhRHA=;
-        b=KPdG9xoOeeAkYwv6rNeVc5TFkPwRqXwfsC+TcpzDrN11WI2y8npCLKWpgqycMjN/qF
-         rsAtx5ARHDpyzr2Dgl+SsJxlPaxeixFDNne+rsIvyrr5X4011QQ5uwiO49gEoBXGCTmE
-         D3Slza//jAE8CdvMd9tR+Hdjn+ANl3ZKuOn+sGOE9sN7m20Hmyejt1F2f6hBhaV6xJya
-         Zn1lUKdsuQRDrnUsMiZt9YghiV1FpDpncfkk8e+gFKKchgUtOi1JFItFF4iMk2ce/dNH
-         qTBcywDrSrVWozsEPwhmeiQjNejsDErBn5fRYz7gVwdlqZI18rBRVNVMPPH1hwG4nBA9
-         XrWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785364026; x=1785968826;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785364028; x=1785968828; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6i9gxS0ccvnf11VUuXna08dr0rnR4es/fvIWpwBhRHA=;
-        b=Iib3UkFxJ0k5xcggftjD4M3KgDCMTGgPUU/UdSa4HDqNc32P58TM4TxNySc1mXXCQM
-         8GlBeB1+0B4RolDXJxsMyNpPzRdEVc7VfasNjT03J0IYl3P0vxDTT4hvHBIDRdvc9EpH
-         IGWeiSUCIS5l4SDEQPZsE7J8th6tXFKN4cXIZEeiqoC1mLxzx63aTNHCL3HOsjXrgXVs
-         ua6HMZDh8cVxH1kcWeU2lejOx9AqmArCogyhdvCfKkYobQIed3HkSJryz+f1b1QBq67G
-         GPt2A9yfYZpXGJ4JFO1uWl2uA/CElfF8QOmoKGDozraDdi8YNYGeoi7aprLzsHbkxPms
-         1PxQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ros4jRT6VI7UzPnUvOXZMr5+H1IVqiir8WMv6l620NbZOWEXut3Gr6y+eeDHLBbgHyKNqtnYLxNb293c4Hc/Qs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgVgvHkbzd8PkkRUdHVpIcnYDUsEIx3oQlJjjT1Gwh1KVXI44Q
-	K541+AI54BmepclaZl/wkwy9KCHQgsmXEQfkUS+apfh30Pic5mbop27PF4Lsy7bAMiTSEVNhDuQ
-	wUEtjkUGo
-X-Received: from plhz9.prod.google.com ([2002:a17:902:d9c9:b0:2ca:c400:4a09])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d54f:b0:2ce:803c:6f09
- with SMTP id d9443c01a7336-2d035eece1emr1289925ad.18.1785364025721; Wed, 29
- Jul 2026 15:27:05 -0700 (PDT)
-Date: Wed, 29 Jul 2026 22:26:55 +0000
+        bh=VTA69v3wZkPrXlz62Ym5nIcPFGV+JV+ANqnVMXAU+r0=;
+        b=Qe8RUVV0g/OdWOENDN4LO5FNb7LQ/3tfu/TKqqypJ6h2WKaQWjKW7YX5hYog6L78xK
+         VsCX7NJn9+dzRUHp+cwl/97SXNeCrhY9xfZ++GtTQ8VAq03kTm2CObjZ7vl4A3hShcT5
+         iWPDC0mIb6jl14/Yghfbe4BRckEsSYj4aXSyYWpF6Vb2QXCovlMl02jx3bAPiN9rPBbd
+         W34pavXhL2Mfw1DpSlz3X0ov2M9AvC6BEpC0MXnkH3niWvoj4bu0ZM706MPQ5Rz9M6R2
+         pbNOCAntpWylo/bBdKFyhbNqY1bsSr/jtzdQVae4YH7YApor7EyxT6GZXPNX33uTHLSM
+         U0Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785364028; x=1785968828;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VTA69v3wZkPrXlz62Ym5nIcPFGV+JV+ANqnVMXAU+r0=;
+        b=kh3E47Fp3ji4qRpnfc+GVMayhA1kl3LKLnNWDihz3ohzDU3DtoaTcpqSQ2Psgwi2ZU
+         eBAV6BPWJPuazyiTjWBBzo8Fw2dc8IOFs6xQjogUkqHm/dPzKHsU/xhlXyh+f+Ud1L2D
+         4EsgJ2qmYMlI1Xafn7OnH0EJDkW9EF1yQFLrlvJphXYgZg18dYCLKQfgdzcabUW21Ws7
+         8tPnhFKnkYivQ8IRUeilOW6gBwejKG9IcMMJBfEONk4hzNXM98rEytEaoP5Iz+sNYtQR
+         F0MghADESyn4eF96YD1Q6GL2NoUAqh402Xq+n6lpwko1ZsexWhqdEryIl4savViHRro6
+         +gwQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrM303JcZ10plyIrDRlVISAnqxRgXpVJCnwlq4PVWhBWkRHlv07jqV74KJ6wLgAaGeK6OlfPoMTFWbI3HltfRg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqWc8EObe6RDG4Z5mB2dxZ1XaEDcHacQDT0bOZJIaALNSmoWTz
+	7psEKAXLLOzMK+30Xlv4K9n2R0DYUTS9PvcANekgRG3GDkHGxPBq1FPjyLT1RD4lM+H87cHF9RR
+	FgO7Ovnsc
+X-Received: from pfbhu4.prod.google.com ([2002:a05:6a00:6984:b0:84c:2a14:d041])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1495:b0:846:bc81:3e29
+ with SMTP id d2e1a72fcca58-84ebc1eb713mr172397b3a.2.1785364027505; Wed, 29
+ Jul 2026 15:27:07 -0700 (PDT)
+Date: Wed, 29 Jul 2026 22:26:57 +0000
+In-Reply-To: <20260729-igb_v3_b4-v8-0-3ed236272b4e@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAC9+amoC/2XM3QoCIRCG4VsJjzP8GZ21o+4jIlKnTag1dkOK2
- HvPogOjw2+Y532yicZEE1svnmykkqaUhzq65YKF02HoiadYN1NCWYECeer9vui9Bw5OOggSNOr
- A6v91pGO6f1rbXd2nNN3y+PikC7yv34oUTaUAF9xYQlIGbQhy0+fcn2kV8oW9M8W0FFpqKnXSC E0xetf5P2obqlRLbaXCk4zKOdlF+KPY0q6lWClYaYNGMOjsD53n+QWJXeg2VAEAAA==
-X-Change-Id: 20260707-igb_v3_b4-49194c14373c
+References: <20260729-igb_v3_b4-v8-0-3ed236272b4e@google.com>
 X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785364025; l=4280;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785364025; l=8608;
  i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=r1c+CaBhW5s4wXFD2O6k3jFF+p8PGPmXib9duAj+dtw=; b=GvZyKrMoebAjcDDlHpBwLITYvFjBc8UxGxjmlTe7z78CFZom1l0u1GemCj7aUoJII1+yOy7th
- 7cDIB3fSI19CZcMppmbdegaPL19XcAoeU/u4gVi0fAcGCsp6EgDot1c
+ bh=wPb+c+MbGAcpIWYwLzOo7G/LSXV29g7+OrCXOLlf1NA=; b=JmhaLwIkg3eEiRtgAhcHAmUhxL6P9oN2Vp+cuhfEzx+GYByefvm1LD2Vg3Y/q6sBKLjwM/DAH
+ lcLo9DbKd3hAAtohtHB6Pruwj1fZsWyFv1YE2m85Olo92GFgwazviwd
 X-Mailer: b4 0.14.3
-Message-ID: <20260729-igb_v3_b4-v8-0-3ed236272b4e@google.com>
-Subject: [PATCH v8 0/6] vfio: selftests: Add driver for Intel Ethernet Gigabit
- Controller (IGB)
+Message-ID: <20260729-igb_v3_b4-v8-2-3ed236272b4e@google.com>
+Subject: [PATCH v8 2/6] vfio: selftests: igb: Use PHY internal loopback on 82576
 From: Josh Hilke <jrhilke@google.com>
 To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -75,105 +74,226 @@ Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel
 	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
 Content-Type: text/plain; charset="utf-8"
 
-This v8 of a series which adds a VFIO selftest driver for the Intel
-Gigabit Ethernet controller (IGB), specifically targeting the 82576
-device. IGB is fully virtualized in QEMU, making it suitable for running
-VFIO selftests without specialized hardware.
+From: Alex Williamson <alex.williamson@nvidia.com>
 
-v7: https://lore.kernel.org/kvm/20260722-igb_v3_b4-v6-0-0be1d29918d4@google.com/
+The submitted driver waits for PHY autonegotiation and then enables MAC
+loopback via RCTL.LBM_MAC.  QEMU's emulated igb tolerates this, but the
+82576 datasheet rejects the MAC loopback path on real hardware:
 
-Version 8 caps the retry logic in vfio_pci_device_reset() so that it
-doesn't loop forever, and rebases the series onto linux-next.
+  Section 3.5.6.1 (Loopback Support / General): "Use PHY Loopback
+  instead of MAC Loopback on the 82576."
 
-Testing
-=======
-- VFIO selftests builds clean at every commit
-- vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
-  command to run the tests:
+  Section 3.5.6.2 (MAC Loopback): "MAC Loopback is not used on this
+  device."
 
-  vng \
-  --run arch/x86/boot/bzImage \
-  --user root \
-  --disable-microvm \
-  --memory 32G \
-  --cpus 8 \
-  --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
-  --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
-  --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
-  --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
-  --exec "modprobe vfio-pci && \
-          ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
-          ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
---------
-Changelog:
+  Section 3.5.6.3.1 (Setting the 82576 to PHY loopback Mode): set PHY
+  control register bits 8 (duplex), 14 (loopback), clear bit 12
+  (autoneg enable), set the speed via bits 6 and 13.  For 1Gb/s the
+  register value is 0x4140.
 
-v7 -> v8:
-- Rebase onto linux-next branch. (Alex)
-- Implement retry limit in vfio_pci_device_reset(). (Alex)
-- Carry David's reviewed-by tag onto the patches that haven't been
-  touched since v6.
+  Section 8.10.1 (RCTL register): "When using the internal PHY, LBM
+  should remain set to 00b and the PHY instead configured for
+  loopback through the MDIO interface."
 
-v6 -> v7:
-- Allow the driver to be used on any architecture. (Alex) 
-- Fix regression in reset logic for the physical device. (Alex)
+Replace igb_phy_setup_autoneg() with igb_setup_loopback() which:
 
-v5 -> v6:
-- Retry on EAGAIN during device reset to handle transient lock contention (Sashiko).
+  - writes PHY register 0 with LOOPBACK | SPEED_1000 | FULL_DUPLEX
+  - forces the MAC into 1Gb/s full duplex via CTRL.FRCSPD, CTRL.FRCDPX,
+    CTRL.SPD_1000, CTRL.FD, CTRL.SLU; without forcing the MAC link
+    state, the descriptor engine does not run on real hardware
 
-v4 -> v5:
-- Reordered igb_remove() to reset the device before disabling MSI-X (Sashiko)
-- Refactored hardware reset logic into igb_reset() helper.
-- Simplified reset completion check to usleep + assertion instead of retry loop (Sashiko).
-- Allow arbitrary test data by enabling Multicast Promiscuous (MPE)
-  and Broadcast Accept (BAM) modes (Sashiko).
-- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number (Sashiko).
+PHY internal loopback (section 3.5.6.3) wraps data at the end of the
+PHY datapath before the MDI, so the physical link state and cable
+speed are irrelevant.  This matches the kernel ethtool selftest path
+in igb_integrated_phy_loopback()
+(drivers/net/ethernet/intel/igb/igb_ethtool.c).
 
-v3 -> v4
-- Enable MSI-X mode in GPIE (Sashiko)
-- Fix hardware initilization order to avoid race conditions (Alex/Sashiko)
-- Add memory barrier to prevent speculative reads (Alex/Sashiko)
-- Clean up stale references in commit messages and comments (Alex/Sashiko)
-- Add a comment to address software/firmware semaphore (Alex/Sashiko)
+QEMU's igb emulation drives STATUS.LU exclusively from its autoneg-done
+timer or a network-backend link-state change; the guest cannot set
+STATUS.LU through CTRL.SLU.  Its receive path checks STATUS.LU
+(e1000x_hw_rx_enabled in hw/net/e1000x_common.c) and drops every
+loopback frame until LU is set.  Issue a one-shot autoneg-restart PHY
+write at the top of igb_setup_loopback() to kick the timer; the
+subsequent PHY write clears autoneg-enable, so on real hardware
+autoneg never starts and the write is a no-op.
 
-v2 -> v3
-- Poll reset bit and document the required wait time (David/Sashiko)
-- Fix the logic for enabling PCI_COMMAND_MEMORY (David/Sashiko)
-- Fail the test if autonegotation fails (David/Sashiko)
-- Handle endianness conversions (David/Sashiko)
-- Use real IGB headers at the start of the series (David)
-- Add E1000_TXD_CMD_IFCS to the TX descriptor command word (Sashiko)
+QEMU's igb also does not honor PHY register 0 bit 14 (PHY internal
+loopback) and relies on RCTL.LBM_MAC to wrap TX descriptors back to
+the RX queue.  Datasheet 8.10.1 advises that LBM remain 00b when
+using the internal PHY, but empirically setting LBM_MAC has no
+observable effect on real 82576 (MAC loopback is not implemented per
+3.5.6.2), so set it alongside PHY loopback as the actual loopback
+mechanism under QEMU.  With these two QEMU-only accommodations the
+selftest works in both environments without environment-specific code
+paths.
 
-v1 -> v2
-- Removed the chunking loop in igb_memcpy_start() (David)
-- Removed redundant writes to status_error and hdr_addr (David)
-- Include official IGB header files (David)
+Remove igb_read_phy() which becomes unused.
 
-Signed-off-by: Josh Hilke <jrhilke@google.com>
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
+Reviewed-by: David Matlack <dmatlack@google.com>
 ---
-Alex Williamson (4):
-      vfio: selftests: igb: Use PHY internal loopback on 82576
-      vfio: selftests: Add helpers to re-enable interrupts
-      vfio: selftests: igb: Factor hardware programming into igb_hw_init()
-      vfio: selftests: igb: Recover after DMA-read faults
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 121 +++++++++++++--------
+ 1 file changed, 73 insertions(+), 48 deletions(-)
 
-Josh Hilke (2):
-      vfio: selftests: igb: Add driver for Intel 82576 device
-      vfio: selftests: Retry on EAGAIN during device reset
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+index 6fc6e7c0e723..1b30a188a864 100644
+--- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+@@ -115,57 +115,70 @@ static int igb_write_phy(struct igb *igb, u32 offset, u16 data)
+ 	return 0;
+ }
+ 
+-static int igb_read_phy(struct igb *igb, u32 offset, u16 *data)
++/*
++ * Configure the device for PHY internal loopback per 82576 datasheet
++ * section 3.5.6.3.1.  Force the PHY to 1Gb/s full duplex with loopback
++ * enabled, then force the MAC link state to match.  Internal loopback
++ * wraps data at the end of the PHY datapath (section 3.5.6.3), so the
++ * physical link state is irrelevant.
++ *
++ * Section 3.5.6.1 directs to "Use PHY Loopback instead of MAC Loopback
++ * on the 82576", and section 3.5.6.2 states "MAC Loopback is not used
++ * on this device."  RCTL.LBM_MAC is still set elsewhere as a QEMU-only
++ * accommodation; see the RCTL programming in the caller for the
++ * rationale.
++ */
++static void igb_setup_loopback(struct igb *igb)
+ {
+-	u32 mdic;
+-	int i;
+-
+-	mdic = ((offset << E1000_MDIC_REG_SHIFT) |
+-		(1 << E1000_MDIC_PHY_SHIFT) |
+-		E1000_MDIC_OP_READ);
+-
+-	igb_write32(igb, E1000_MDIC, mdic);
+-
+-	for (i = 0; i < 1000; i++) {
+-		usleep(50);
+-		mdic = igb_read32(igb, E1000_MDIC);
+-		if (mdic & E1000_MDIC_READY)
+-			break;
+-	}
+-
+-	if (!(mdic & E1000_MDIC_READY))
+-		return -1;
+-
+-	if (mdic & E1000_MDIC_ERROR)
+-		return -1;
+-
+-	*data = (u16)mdic;
+-	return 0;
+-}
+-
+-static void igb_phy_setup_autoneg(struct igb *igb)
+-{
+-	int timeout_ms = 1000;
+-	bool success = false;
+-	u16 phy_status;
++	u32 ctrl;
+ 	int ret;
+-	int i;
+ 
+-	/* Trigger auto-negotiation */
+-	ret = igb_write_phy(igb, MII_BMCR,
++	/*
++	 * Kick the autoneg machinery solely to bring STATUS.LU up under
++	 * QEMU's igb emulation: QEMU only updates STATUS.LU via its
++	 * autoneg-done timer, and without LU set its receive path
++	 * (e1000x_hw_rx_enabled) drops every loopback frame.  On real
++	 * hardware autoneg cannot complete before the next PHY write
++	 * below clears the autoneg-enable bit, so this is effectively a
++	 * no-op there.
++	 */
++	(void)igb_write_phy(igb, MII_BMCR,
+ 			    BMCR_ANENABLE | BMCR_ANRESTART);
++
++	/* PHY control: loopback + 1Gb/s full duplex, autoneg disabled. */
++	ret = igb_write_phy(igb, MII_BMCR,
++			    BMCR_LOOPBACK |
++			    BMCR_SPEED1000 |
++			    BMCR_FULLDPLX);
+ 	VFIO_ASSERT_EQ(ret, 0, "Failed to write PHY control register");
+ 
+-	for (i = 0; i < timeout_ms; i++) {
+-		if (igb_read_phy(igb, MII_BMSR, &phy_status) == 0) {
+-			success = !!(phy_status & BMSR_ANEGCOMPLETE);
+-			if (success)
+-				break;
+-		}
+-		usleep(1000);
+-	}
++	/*
++	 * Brief delay before forcing the MAC, mirroring the kernel ethtool
++	 * selftest in igb_integrated_phy_loopback().  Not specified by the
++	 * datasheet, but empirically required by the kernel driver.
++	 */
++	usleep(50000);
++
++	/*
++	 * Force the MAC to 1Gb/s full duplex with link up.  Without forcing
++	 * the link state the descriptor engine does not run, since the chip
++	 * normally waits for a real negotiated link.
++	 */
++	ctrl = igb_read32(igb, E1000_CTRL);
++	ctrl &= ~E1000_CTRL_SPD_SEL;
++	ctrl |= E1000_CTRL_FRCSPD |
++		E1000_CTRL_FRCDPX |
++		E1000_CTRL_SPD_1000 |
++		E1000_CTRL_FD |
++		E1000_CTRL_SLU;
++	igb_write32(igb, E1000_CTRL, ctrl);
+ 
+-	VFIO_ASSERT_TRUE(success, "Auto-negotiation did not complete in time");
++	/*
++	 * Settling delay matching the kernel ethtool selftest's msleep(500)
++	 * at the tail of igb_integrated_phy_loopback().  Not specified by
++	 * the datasheet; empirical, and inherited from the kernel driver.
++	 */
++	usleep(500000);
+ }
+ 
+ static int igb_probe(struct vfio_pci_device *device)
+@@ -243,8 +256,8 @@ static void igb_init(struct vfio_pci_device *device)
+ 		vfio_pci_config_writew(device, PCI_COMMAND, cmd_reg);
+ 	}
+ 
+-	/* Trigger autonegotiation. This enables IGB to transmit data. */
+-	igb_phy_setup_autoneg(igb);
++	/* Configure PHY internal loopback for testing. */
++	igb_setup_loopback(igb);
+ 
+ 	/*
+ 	 * Disable DMA re-send on PCIe completion timeout (82576 datasheet
+@@ -299,12 +312,24 @@ static void igb_init(struct vfio_pci_device *device)
+ 	}
+ 	VFIO_ASSERT_GE(retries, 0);
+ 
+-	/* Enable Receiver and Transmitter */
++	/*
++	 * Enable Receiver and Transmitter.  RCTL.LBM_MAC is set in addition
++	 * to PHY loopback as a QEMU-only accommodation: QEMU's emulated igb
++	 * does not honor PHY register 0 bit 14 (PHY internal loopback) and
++	 * relies on RCTL.LBM_MAC to wrap TX descriptors back to the RX
++	 * queue.  Datasheet 8.10.1 (RCTL register) advises "When using the
++	 * internal PHY, LBM should remain set to 00b", so setting LBM_MAC
++	 * here deviates from datasheet guidance; empirically the bit has
++	 * no observable effect on real 82576 hardware because MAC loopback
++	 * is not implemented (datasheet 3.5.6.2).  Setting both lets the
++	 * selftest work on both real hardware and QEMU without conditional
++	 * code paths.
++	 */
+ 	rctl = E1000_RCTL_EN |       /* Receiver Enable */
+ 	       E1000_RCTL_UPE |      /* Unicast Promiscuous (for dummy MAC) */
+ 	       E1000_RCTL_MPE |      /* Multicast Promiscuous */
+ 	       E1000_RCTL_BAM |      /* Broadcast Accept Mode */
+-	       E1000_RCTL_LBM_MAC |  /* MAC Loopback Mode */
++	       E1000_RCTL_LBM_MAC |  /* MAC Loopback - for QEMU emulation only */
+ 	       E1000_RCTL_SECRC;     /* Strip CRC (needed for memcmp) */
+ 	igb_write32(igb, E1000_RCTL, rctl);
+ 	igb_write32(igb, E1000_TCTL, E1000_TCTL_EN);
 
- .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
- .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
- .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
- tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 579 +++++++++++++++++++++
- .../vfio/lib/include/libvfio/vfio_pci_device.h     |  15 +
- tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
- tools/testing/selftests/vfio/lib/vfio_pci_device.c |  42 +-
- tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   3 +-
- 8 files changed, 641 insertions(+), 2 deletions(-)
----
-base-commit: 550cab3931e84e8a7701155f4dc40c0e4069d390
-change-id: 20260707-igb_v3_b4-49194c14373c
-
-Best regards,
 -- 
-Josh Hilke <jrhilke@google.com>
+2.55.0.508.g3f0d502094-goog
 
