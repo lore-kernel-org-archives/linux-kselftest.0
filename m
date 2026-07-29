@@ -1,225 +1,81 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58083921DE
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 17:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9513A1693;
+	Wed, 29 Jul 2026 17:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785347264; cv=none; b=RR+FaiUkm6fdCneNUnETNzWK2hgRzQT7TVNxpfGmyQcDauBHFVEkAas5tGF95ZLwak8I7TYD67efmAMbhNbEzTrtD3imsH3l4AmQXZGlv1T2rr8S3O+5YIBgPrf0o22keYDwVqLBwfTi2Q+iw9+BdQQxq8V6nly83dzknI1yRUI=
+	t=1785347593; cv=none; b=pJ3U0lU2vrcM4QwNUr7gz82UBtZ9xO1n5FR2t/LQZHMOoRq2NNMGcX4tPd0EkA0dWbkgk0ALUkE0FZTJNwd2qJ6gdZUfqGs8bhYFeMAnyhTn2XL0Xg+O+id59zFzwSJtl5Gs0PMduMImSY6rAiLiB02GkwF8E56Dre3YhLfZsDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785347264; c=relaxed/simple;
-	bh=BuAHwTI2qSZ9KYlAVj2MRWyGcPgbLsHavo3hOIRH2Kc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kla7+Jl3XpdQrFJxS5nm4kJb1Nkjsinu6GMvqfIk10XJ8o4C2xG+lojsXj8GQl82soaTfiDCrxQJUjTlRUy43nE0b1ZZ/E5xaXnUNEyoHQp6XG4NFYvn2l185CaHhDNfar24v9Mj/9Q8yg4msuTeevdsLmN0Cx1TyEIsssaiw9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LvIDRLjW; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LvIDRLjW"
-X-Forwarded-Encrypted: i=1; AHgh+RqWn9dcKnF2WQnSMFLSotwwMJXB+UhO0PNYxoN6NeC01lqMJJelb3Ou9U53A+cg8JO8cH06jMhChqvyT6DAslY=@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785347254;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IeRo16GwGxWMem/Vo4ri2U5hfNnBxk9Oq5X7cUuthyE=;
-	b=LvIDRLjWEGPcykfMeIYjpAZvtrEjZvqijvEHTTbqyoUJeOLPZYSyDWisDzaK88Dw+wUPqB
-	PKthOESFKzBQtaKmgBPmRJ2Y4yJW3ho2Hn8cl8bXc99wkAxHuNGDOchS5Ot7HuQJl8rAms
-	qbdXYWgCKMBmmri+fWsdkTcn6wkjN1g=
-X-Gm-Message-State: AOJu0YwMbYmfU9t53Q0b4pFGw93vU0r/GDyQZjSMW6sp+LWSkg9va1oT
-	13QkTrFbfb7+pg++Kkb9vQWbYSaoNe3yrzGyAq4w8b0RTN90NVyArkWO9l/dnXq10pLRdkl/YVG
-	jpKtmOrRK6D3QwPYbxZyKK73NNM/bdNPU/Z2Lv9tv
-X-Received: by 2002:a05:6512:1314:b0:5b2:a5e9:3aba with SMTP id
- 2adb3069b0e04-5b2d9b614acmr37313e87.6.1785347243412; Wed, 29 Jul 2026
- 10:47:23 -0700 (PDT)
+	s=arc-20240116; t=1785347593; c=relaxed/simple;
+	bh=X2qFcRsHCwHj1YWVPTJBxLn0VgM/uHUBg2zmLMndN5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h9qB5nS0mRlxCCyOdKvXmIlZubDDWza8pmZ9Aae2NkF9ktN+QIYlS5THsWwsI4bWk4S1tpKSU6qBsYeRRh2QAPipG6WFr5fJ9fj4bzq/4hAe0lrbEL7l6Ms44P+Sf/J2uzMmya8141DKWeka5JhAqGpo/fcJqOdARhHuU6gzehY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf02.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 1A51EC06C2;
+	Wed, 29 Jul 2026 17:53:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id CA86F8000F;
+	Wed, 29 Jul 2026 17:52:59 +0000 (UTC)
+Date: Wed, 29 Jul 2026 13:53:35 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
+ davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
+ linux-open-source@crowdstrike.com, mbenes@suse.cz
+Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
+ trampoline/kprobe ftrace_ops permanent
+Message-ID: <20260729135335.2583c8f5@gandalf.local.home>
+In-Reply-To: <20260729133232.1e6c79eb@gandalf.local.home>
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+	<20260729104114.04298a48@gandalf.local.home>
+	<CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+	<20260729113136.32af2a4d@gandalf.local.home>
+	<CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
+	<20260729133232.1e6c79eb@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-8-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260720-hybrid-v9-8-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Wed, 29 Jul 2026 18:46:43 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTyEnNGrZHbHKK9cW0-kOynrDqZVwRb0MeLAM=wGUYFbRw@mail.gmail.com>
-X-Gm-Features: AUfX_mwpeXBo_K7R-ZzBlG5aqjhgeVn_6sJDBLp3FQhFslgMr5nn9WZIS1Jgf5E
-Message-ID: <CA+EHjTyEnNGrZHbHKK9cW0-kOynrDqZVwRb0MeLAM=wGUYFbRw@mail.gmail.com>
-Subject: Re: [PATCH v9 08/16] KVM: arm64: selftests: Cover PMU state in MDCR_EL2
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: CA86F8000F
+X-Stat-Signature: jme8cjmcjbqwka1jqn8yzo9dui3bnjyi
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18YRGlSju6UgRQMOFXLkhBxRNtuOpp1Uu8=
+X-HE-Tag: 1785347579-571022
+X-HE-Meta: U2FsdGVkX1+Ry7N3Tw+/M+8AbEpuRvf5J2IQfeBkjs9Pp3DoI6xiRsBkunmZUaGoNONmSIG219k6fwVREQzL+7a0qti7jjI7VQQvXm42UstXkJ8/kYhqPjALnDzpiH5z3NzcAsXqy/O7SfYmASOsUxvCX300CGO9vqI6SXhDlFzfVfSsMoqYXsHJq0l2n55KDLtd1iYgvkKhaGFWfg9Y4c4Mm432C1rVspFI8H/OJBRyzxruGKeXCpQk6w+7JmaoKSiz3mmbGViLiq+bnTsBAHZsMUaqaN1ICTFvAfLBX2mWAHfI/OMuRf0Xk+mmMMgkhRHuFBMjbETvC07yWnGLse05Mff72d88uto501E4zlUbK4bCU7YJt5gZ33qN9c7i
 
-On Mon, 20 Jul 2026 at 06:44, Akihiko Odaki
-<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->
-> Add MDCR_EL2 coverage to vpmu_counter_access when EL2 is available.
->
-> For each configured PMCR_EL0.N value, verify that an arbitrary HPMN
-> value, including one above the configured counter count, round-trips
-> through KVM_SET_ONE_REG and survives SET_NR_COUNTERS. Also verify that
-> HPME can be toggled without disturbing HPMN and that KVM_ARM_VCPU_INIT
-> resets HPMN from the configured count.
->
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+On Wed, 29 Jul 2026 13:32:32 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+> Honestly, I don't know of any tooling that would use this kill-switch or
+> any reason to do so. For live kernel patching and for BPF, it doesn't even
+> work. Hasn't for some time. It's now a "kill some ftrace but not all".
+> 
+> Hence, again, the switch itself is rather useless.
 
-Cheers,
-/fuad
+Also, since the BPF direct trampolines originally had the PERMANENT flag
+set, but due to some code updates lost the flag, and if someone were to
+turn off ftrace, it would cause bugs with the BPF programs that were using
+it, it makes me feel more confident that nothing is using that file to
+disable ftrace.
 
-> ---
->  .../selftests/kvm/arm64/vpmu_counter_access.c      | 90 ++++++++++++++++++++--
->  1 file changed, 85 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> index 3b5bb421f401..73f04e4c6ca3 100644
-> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> @@ -25,6 +25,14 @@
->  /* The cycle counter bit position that's common among the PMU registers */
->  #define ARMV8_PMU_CYCLE_IDX            31
->
-> +#ifndef MDCR_EL2_HPMN
-> +#define MDCR_EL2_HPMN                  GENMASK_ULL(4, 0)
-> +#endif
-> +
-> +#ifndef MDCR_EL2_HPME
-> +#define MDCR_EL2_HPME                  BIT_ULL(7)
-> +#endif
-> +
->  struct vpmu_vm {
->         struct kvm_vm *vm;
->         struct kvm_vcpu *vcpu;
-> @@ -466,15 +474,12 @@ static void guest_code_done(void)
->         GUEST_DONE();
->  }
->
-> -static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool expect_fail)
-> +static void set_nr_counters(struct kvm_vcpu *vcpu,
-> +                           unsigned int nr_counters, bool expect_fail)
->  {
-> -       struct kvm_vcpu *vcpu;
->         unsigned int prev;
->         int ret;
->
-> -       create_vpmu_vm(guest_code);
-> -       vcpu = vpmu_vm.vcpu;
-> -
->         prev = get_pmcr_n(vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0)));
->
->         ret = __vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> @@ -486,6 +491,17 @@ static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool
->                             nr_counters, prev);
->         else
->                 TEST_ASSERT(!ret, KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +}
-> +
-> +static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
-> +                                                bool expect_fail)
-> +{
-> +       struct kvm_vcpu *vcpu;
-> +
-> +       create_vpmu_vm(guest_code);
-> +       vcpu = vpmu_vm.vcpu;
-> +
-> +       set_nr_counters(vcpu, nr_counters, expect_fail);
->
->         vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL, KVM_ARM_VCPU_PMU_V3_INIT, NULL);
->  }
-> @@ -588,6 +604,69 @@ static void run_pmregs_validity_test(u64 pmcr_n)
->         destroy_vpmu_vm();
->  }
->
-> +static void run_mdcr_el2_validity_test(u64 pmcr_n)
-> +{
-> +       struct kvm_vcpu_init init;
-> +       struct kvm_vcpu *vcpu;
-> +       u64 expected_mdcr, mdcr;
-> +
-> +       pr_debug("MDCR_EL2 test with pmcr_n %lu\n", pmcr_n);
-> +
-> +       create_vpmu_vm(guest_code);
-> +       if (!vm_supports_el2(vpmu_vm.vm)) {
-> +               destroy_vpmu_vm();
-> +               return;
-> +       }
-> +
-> +       vcpu = vpmu_vm.vcpu;
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       expected_mdcr = u64_replace_bits(mdcr, FIELD_MAX(MDCR_EL2_HPMN),
-> +                                        MDCR_EL2_HPMN);
-> +       vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2),
-> +                    expected_mdcr);
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       TEST_ASSERT(mdcr == expected_mdcr,
-> +                   "MDCR_EL2 was not properly updated after HPMN write (expected 0x%lx, got 0x%lx)",
-> +                   expected_mdcr, mdcr);
-> +
-> +       set_nr_counters(vcpu, pmcr_n, false);
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       TEST_ASSERT(mdcr == expected_mdcr,
-> +                   "MDCR_EL2 changed after PMU_V3_SET_NR_COUNTERS (expected 0x%lx, got 0x%lx)",
-> +                   expected_mdcr, mdcr);
-> +
-> +       vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       TEST_ASSERT(mdcr == expected_mdcr,
-> +                   "MDCR_EL2 changed after PMU_V3_INIT (expected 0x%lx, got 0x%lx)",
-> +                   expected_mdcr, mdcr);
-> +
-> +       expected_mdcr = mdcr ^ MDCR_EL2_HPME;
-> +       vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2),
-> +                    expected_mdcr);
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       TEST_ASSERT(mdcr == expected_mdcr,
-> +                   "MDCR_EL2 was not properly updated after HPME write (expected 0x%lx, got 0x%lx)",
-> +                   expected_mdcr, mdcr);
-> +
-> +       kvm_get_default_vcpu_target(vpmu_vm.vm, &init);
-> +       init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-> +       aarch64_vcpu_setup(vcpu, &init);
-> +
-> +       mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +       TEST_ASSERT(FIELD_GET(MDCR_EL2_HPMN, mdcr) == pmcr_n,
-> +                   "MDCR_EL2.HPMN is not reset after INIT (expected %lu, got %lu)",
-> +                   pmcr_n, FIELD_GET(MDCR_EL2_HPMN, mdcr));
-> +
-> +       destroy_vpmu_vm();
-> +}
-> +
->  /*
->   * Create a guest with one vCPU, and attempt to set the PMCR_EL0.N for
->   * the vCPU to @pmcr_n, which is larger than the host value.
-> @@ -672,6 +751,7 @@ int main(void)
->         for (i = 0; i <= pmcr_n; i++) {
->                 run_access_test(i);
->                 run_pmregs_validity_test(i);
-> +               run_mdcr_el2_validity_test(i);
->         }
->
->         for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
->
-> --
-> 2.55.0
->
->
+The bug causing BPF programs being disabled by it has been around since 6.0
+and there hasn't been any complaints about those BPF programs breaking. It
+makes me think there hasn't been tooling that set ftrace_disabled to zero!
+
+[ Distros now use BPF with ftrace
+ cat /sys/kernel/tracing/enabled_functions to see if yours is too
+]
+
+-- Steve
