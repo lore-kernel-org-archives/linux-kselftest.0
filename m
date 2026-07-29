@@ -1,57 +1,62 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEFA4418FF;
-	Wed, 29 Jul 2026 08:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0953CF208;
+	Wed, 29 Jul 2026 08:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785313775; cv=none; b=aZmSolLpDX7EBQ3m3oSDDKY3pUD2w+A9ZsAfjG2aM6WFUC5bCUGTKhzARIToCt/x3rePUsn6KvIm/r6U7qg6dJfbbJHTMGLqRKCTsxV8HJgeGtonHqAZyG0xMCgTVh5NsBv9O5FlPBP4qfoK0Yac5HrxwDiMMJaULs2M8OTGfpE=
+	t=1785315206; cv=none; b=CtSI1qsWDV+sg/lO8xd/FU1xkRtMDac9F62cKUBIifNq8gVZ/KL5fgvs2xFF4TW42UQr7oZiikWCTinSERD/y82vcQwjPc01t3BjibRFqT0AgMVlnYBJW9XeO9zN/I3btxNcDY7e7P2+aXT3JZrdQXeOXfaPfenmivizVquhgHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785313775; c=relaxed/simple;
-	bh=VFZ0+Lh5/JPFmkK6EEPPupE650IIyxbYVnYKHjZ5P64=;
+	s=arc-20240116; t=1785315206; c=relaxed/simple;
+	bh=Ss/DaoJYNqjgpN1lAskphAlKNITya8LLU2vIUgnSPIA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rxTDrZOZrFdtDiyNkuLnl63W7NjibSqVJBBwTwLPJpFz8e4BIs0up/O/+lAmy0rL+h5jArG7ahqDKNhFOvp1dy7xpC2Jac9Oxyi6xql4WwhYL/XSebPPlE4fs/+zOx8b2vUV6nDmqwXHtljJJVK3XvoJaBjsKtnMvF1WDUtEDZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=mc8Pl7g8; arc=none smtp.client-ip=82.195.75.108
+	 Content-Type:Content-Disposition:In-Reply-To; b=O4P1aGQ/GTqpddK/tdc6yS1MKnybCNPONsuMWl0DOmh3/fN+VfHqtgzll2zYDLiEaz5Xd8gkXq3SgfXBB477ZvE3+PtdotcBkUvZliLpfSX7HgBWFkfOuSj38Yjom6jJZDctOs7hj3LEwodLHkw5K/9fnLcO4rtMgxMaA4mnSgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=kKo2A1BQ; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="mc8Pl7g8"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="kKo2A1BQ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Ha3p20eciL1b0U2/i0foT+nPYGb8ce64+SXodI21S3A=; b=mc8Pl7g846n3Pvpovhu+4c0uz4
-	0hAxcrWrf1lrDBkR0fAOMB276ZLgU3OdTlnEBowYWZH2ADYSDWt80F8Cm2C2Zh1KdFZpnWoYOarh/
-	udJ28lCwCbBPxbz1lbYbzN5kQ7r11WMZhecsU7EUau2kTaALWbzOxbyUhgjGxqH2z5K7tb/HYLCsz
-	CYryUtOaFEt//xEWuJaI4ESSLDKhsofr8tUAX+EKErN1tYe/s86LsExRjhooRBv0Ku23cZA06Gstx
-	BOzNd4ItVBijypydpLRARpictnkw/2ss/GCsMrT5SxiTQY27XDFn/4OogWTzsBn8eMxynhN+2kAvb
-	QOQctCPw==;
+	bh=Ss/DaoJYNqjgpN1lAskphAlKNITya8LLU2vIUgnSPIA=; b=kKo2A1BQR3Y09foW8g7qBwUPmX
+	NYROK6U4J0bpmZKOyfm1oFEXpv3CNR7vfCuRy+FO0mbwp84eXe/JU9LFMYD1ge1BkKqbwxKSdae2K
+	4KqnPzg5sQt3KaFOUT+/Qrql0v/KSWTs/CgLao7wTcgECQR7c1SU6cLiV/gtktS9ZhLLmN4GgWr2O
+	4ki88TRZvcEBBLW+SutP4Up07yWZHIh4rfIlySxODkjQaFtKxlBp0dlXMiRmcx1UyuRLTtaUU1YqS
+	/p7TeB9eHR2ldVifgdc8dOspz1w740YC97n3B9wlxbYGxnj8yYlC1HwuqWePIDeQM51EBozdKJoZv
+	akJNbqqw==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wozez-008K21-1f;
-	Wed, 29 Jul 2026 08:29:05 +0000
-Date: Wed, 29 Jul 2026 01:28:57 -0700
+	id 1wp02F-008KmC-2v;
+	Wed, 29 Jul 2026 08:53:08 +0000
+Date: Wed, 29 Jul 2026 01:53:01 -0700
 From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: sdf@fomichev.me, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Alexander Aring <alex.aring@gmail.com>, Stefan Schmidt <stefan@datenfreihafen.org>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Remi Denis-Courmont <courmisch@gmail.com>, 
-	=?utf-8?B?UsOpbWk=?= Denis-Courmont <remi.denis-courmont@nokia.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com, =?utf-8?B?UsOpbWk=?= Denis-Courmont <remi@remlab.net>, 
-	Joe Damato <joe@dama.to>
-Subject: Re: [PATCH net-next v3 7/7] selftests: net: getsockopt_iter: cover
- rawv6, ieee802154, phonet and tls
-Message-ID: <amm4M6UIEMFTgVtg@gmail.com>
-References: <20260727-getsockopt_phase4-v3-0-e89627544639@debian.org>
- <20260727-getsockopt_phase4-v3-7-e89627544639@debian.org>
- <20260727161652.58de366a@kernel.org>
- <amh3JXocONXT8Gb7@gmail.com>
- <20260728153735.7e449d76@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
+Message-ID: <amm72Bu9qmWLI-9b@gmail.com>
+References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
+ <20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
+ <ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
+ <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
+ <de29c5cc-3637-cd18-354d-55ceb3d60afd@huawei.com>
+ <amh1nZVVaaZSGD3M@gmail.com>
+ <20260728122016.30752d36c3b3c3af231efa9d@linux-foundation.org>
+ <44f81bea-d64a-4f73-8665-46652a928c83@kernel.org>
+ <amkn21ftNme48Vbl@gmail.com>
+ <f83d5b26-b369-489b-a305-1eb5ec6fccfb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,29 +65,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260728153735.7e449d76@kernel.org>
+In-Reply-To: <f83d5b26-b369-489b-a305-1eb5ec6fccfb@kernel.org>
 X-Debian-User: leitao
 
-On Tue, Jul 28, 2026 at 03:37:35PM -0700, Jakub Kicinski wrote:
-> On Tue, 28 Jul 2026 03:04:21 -0700 Breno Leitao wrote:
-> > On Mon, Jul 27, 2026 at 04:16:52PM -0700, Jakub Kicinski wrote:
-> > > On Mon, 27 Jul 2026 03:06:41 -0700 Breno Leitao wrote:  
-> > > >   - ieee802154: WPAN_WANTACK dgram int path + non-SOL_IEEE802154 level
-> > > >                 rejection.
-> > > >   - phonet:     PNPIPE_ENCAP pep int path + non-SOL_PNPIPE level
-> > > >                 rejection.  
-> > > 
-> > > The config options for these are not enabled in the config for net
-> > > selftest target. Doesn't look like we're testing anything particularly
-> > > meaningful here, so maybe just drop the cases for these?  
-> > 
-> > Sure. Just to confirm my understanding: you'd like me to keep the
-> > selftest patch but drop the ieee802154 and phonet test cases, while
-> > retaining the rawv6 and tls cases. Is that correct?
-> 
-> Yes, that's right.
+On Wed, Jul 29, 2026 at 09:25:16AM +0200, David Hildenbrand (Arm) wrote:
+> On 7/29/26 00:07, Breno Leitao wrote:
+> > I have a draft of the selftest in C already and I will give it more bake
+> > time, and I will submit it until EOW.
+>
+> IMHO there is no need to rush this test here, we could merge it after the main work.
+>
+> We neglected our selftests quite a bit in the past, and that is biting us now.
+>
+> That's why I push back hard now (sorry) against stuff that is different than the
+> rest and not easy to maintain.
+>
+> I know, hwpoison-panic is a destructive test, but I really don't think we should
+> just merge mostly unreviewed bash tests that will just bitrot.
+>
+> Which makes me wonder now: should this actually be a selftest? It's nothing one
+> would just want to run in a CI. It will crash your machine.
+>
+> Maybe this should just be a tool in tools/mm? I really think so. So having a
+> nice C-level hwpoison-panic.c in tools/mm might be the way to go.
 
-Ack. Thanks for the clarification.
+Agreed. In v6 [0] I actually removed the selftest entirely, since the value
+wasn't clear and it seemed like an ugly duckling.
 
-I will update it.
+It seems tools/mm would be a good fit, and make a better home for this
+type of "test".
+
+Given more changes coming in memory failure (at least from my side
+[1][2]), I think it would be a good idea to create a subdirectory
+(tools/mm/memory-failure) and keep these semi-destructive tools in there. Is
+this the right direction?
+
+> So let's rather make this test well maintainable and have it properly reviewed
+> than rushing something suboptimal.
+
+Sounds good. I'll move this to tools/mm and resubmit. Given Andrew has
+removed the selftest from mm-unstable while keeping the rest of the
+series (which is fully reviewed and frictionless), so I'll focus on the
+test tool now and send it separately.
+
+Thanks for the discussion,
 --breno
+
+Link: https://lore.kernel.org/all/20260511-ecc_panic-v6-0-183012ba7d4b@debian.org/ [0]
+Link: https://lore.kernel.org/all/20260728-kexec_posioned-v1-1-160c81d180fe@debian.org/ [1]
+Link: https://lore.kernel.org/all/20260717-hwpoison-kho-v1-0-9c5eda551998@debian.org/ [2]
+
