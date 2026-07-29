@@ -1,133 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4334908D5;
-	Wed, 29 Jul 2026 03:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6694642A80;
+	Wed, 29 Jul 2026 03:38:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785295091; cv=none; b=js09trcOExJjcxrQ6KqjHnTUxTMkuToOF0OFX5mcPqmzudQxBJTRIHJmvIgqHQ0HVkMC3nT0qaOgFatHP+u8sh/8p7qw/odevY9SEBPCjStvrDCWgNMylcclWgg5B88mNQ466lwOnMsp6feQ5meUAV0CNmkY2MdSwqRTjdcFgwI=
+	t=1785296281; cv=none; b=BpcRfztUFeQQK/2bjXVxsDY+knIJijPJzdfpAUpsYRiKqOUlWfq5NfW4cxkaTjsVX6LcK0dTgNduplJFqPv253gkdelG4MLHX2pQKxXBt+Te8tugpypfZSvCwR2/Jp6sDqJnkGxadBjZiF1SQKcWpNp4jJjZFlYFQfvxDaSz6DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785295091; c=relaxed/simple;
-	bh=iWO8uagfZiFOmjzR1znwWCLgJmMwl8vmRNioWQsB+Nk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=C1Znd5RoJDfawVM1YVVFO1rG38ps9OdalopMBKrGjef28wtSSr6MYjbB/GhLxj6/HkGMbQK5oY9gt6LWQ0SpiaHZJ2P+ld3VkYoZu3Xg8MHFLsfX9yMgfqwhhQC0zz5/yEYB0EsDqJuu4R4RDfqcdI0d6o3q4B8fznO1aCefD8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/ZPiqHe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785296281; c=relaxed/simple;
+	bh=ZKQkp9JI/TGOpnjSJDTVSY0XSOfwq0Xkuj8jUA3dFi8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=onPd9MRCVHbsrJGVa6eQ1C5t45TCW6PfYG8WxMGkN+h88in9lnVjfPowkPccEqKeQ3Ynfglby4iLuynkTuJg8oIyYmHz0gFEgYm2eKVyUvlP75ie99WJsNdziS88kZ7kp9PYG55FRQeTFwjctyfa5uM+TYYiyuZ9RnDz7JjwDvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SO6J+KXG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/ZPiqHe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B1A1F00A3D;
-	Wed, 29 Jul 2026 03:18:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SO6J+KXG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3471B1F000E9;
+	Wed, 29 Jul 2026 03:37:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785295090;
-	bh=iWO8uagfZiFOmjzR1znwWCLgJmMwl8vmRNioWQsB+Nk=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=K/ZPiqHeLEdyPeZ62Pd5wC4pyrN6UXys0075W83rRRhNvcDs8fBsJIDLjf96Ya29z
-	 aR+cDXfqxbVV7d/vhAwowevLFDBzcnaMS2twTUHD3D3e9W9NHqJ6p+8YaK5OHflzyB
-	 sQtD/l3nBBZmuBaDlWY1dpcScbunOrO8PlIKJ4YRZzh4rVl3nTGJISh1yAZenVnUcJ
-	 op9FzGeJASomCxRhcz1zfF1LX/wxjCmPgepR88DdqrnuUOorUupe+o5YGfo+4dpDkE
-	 y/h4kHOA+ifG+304+KVcZ3il6T6Gd79WihbQ/QuXul1kfGTiVEbetkN6swwdRocULD
-	 NQB/KucjkuIdg==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 52775F40071;
-	Tue, 28 Jul 2026 23:18:08 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Tue, 28 Jul 2026 23:18:08 -0400
-X-ME-Sender: <xms:8HBpauiYuSVao1nXz2_A-t9Cd_QHZPiNHL0L6GRDVCXwphPxiOfCjQ>
-    <xme:8HBpap1e1dC04iK1T-82r6Eel7ydz8YYVmEJr_cIe7avR0PT7H8zTkKSi1JcWSf00
-    QaaFtqAxloI6MxKZ7vJflYvDPGk5MZCIITid6AytUdijDsolt8R0MIz>
-X-ME-Proxy-Cause: dmFkZTFlEvRLbxX/R7zrLd/d14ESObNiG04tZzmu3JcUwUgAbZyCOJr8+YmY5DERybfv6K
-    W5yfYcHcBzmUsxNIAdSIB6pC756ZF0kuM5dnDeYA8X5sF3hdMdwHwtULFCh7cflMcQO+Rb
-    ScxOXWKV90IS18VXlSM6uSDQgbUNzy50fIQV6kWuvarSxUw+bMt53ChE/tSgwFgHg79+Wu
-    kVSN6vlAk0s339hLZhaGxl6l3V4LGiiZA+NrR8AnNK2bJ04gXA9AMHQVK72JRiDZEkqHNI
-    Sy9cJ41LHDFGfSc0LSDeArTnITANULnb46kynrYqZatYqqTlF+yCd7H8S6gQDD1VanosAv
-    yydkgk3pcWgdKMnyuLieMVfbe33Evmb4OkTmHmwBnLZejebiq41EZ2vh/Pd49OHMiy5lcQ
-    CYvOzYaXnKotfE5nsxZT6etk0rgWoeu1vwGGA7XfMYelJYmPHOHoD2hrLCDnl9PRMv2uEG
-    XTzutqU6lMVk0UlZQm/Q3ieelBVQc/t7aHSUMU27MiC3CSbHKdkk4EH2CfQ+cmjtw8Ed1m
-    5ucat/a9A4OnvF7du7QTYBcc2LFvHhYW3MApu3t8znlslfqd2Pq4s7Tmdvze0ot1ofqFct
-    eJEQCUrAX6oROh0zXtQgpR5Zf1ipVKoXH9yt+ym81yY/8l4ZzqUl9y3FHNkQ
-X-ME-Proxy: <xmx:8HBpaqba7bbukgISIBNvp-xGSrQlPFrND9bERp5qm4Ul21ZdSxD03Q>
-    <xmx:8HBpak8MUXFXgqcIIvJ06BfvOiocOmXQIfk_iLRe6UB--jmuBc5xlA>
-    <xmx:8HBpaklCEAangC8UjY6YlTAG_tmK5lscrxP2cs4MSO3DVBlyoagTdA>
-    <xmx:8HBpapYueU33O7xT10rSKE741geeL2gH8Ko9qi_LoQzESLvjXAFddA>
-    <xmx:8HBpasMhDfdGuqeDyKEE2Hsw6ybAluEXbZeYdtSWPPn0Lgj2NujAy_Xe>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 305A9780070; Tue, 28 Jul 2026 23:18:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1785296279;
+	bh=PHXHv/8aRUsKBfW2c2nIcEHw5jx7iOabXJGxsw9CVD4=;
+	h=From:To:Cc:Subject:Date;
+	b=SO6J+KXGJ+KUH/INHpG2J3XmOghTN32xj2I3aUF8jHBFcCQJan0Ay60/+mVNh53ly
+	 rsSr61U/6oVD8O58hiJfnh1WaihBVkSZFmaPg11HpYc0Jy5zUsUxjbFFTiXjlMYI4C
+	 Wx+H3XRV2eZv4dybzFbdRGiT2PZDQmCm/zF8CRBTzlGNc2G9yv41YcvOFT6iiRcpxz
+	 EOsyF1O2GzQe9qOqYYQN9biolkpM1et/UFUpXIxtA0n8SE5/zg9L/iJ2CQqtJyGB7K
+	 mmSOoPnHRmX0bBNzkwmVZwodSHQ6hixPZeYjHBoPv3RtfnrqrouCGXsHG6um/LZtcg
+	 LoXhDcN2Hf3aw==
+From: SJ Park <sj@kernel.org>
+To: 
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v1.1 00/10] mm/damon: cleanup code, add test cases, and update guidances in docs
+Date: Tue, 28 Jul 2026 20:37:40 -0700
+Message-ID: <20260729033751.131213-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 28 Jul 2026 23:17:48 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Jakub Kicinski" <kuba@kernel.org>
-Cc: "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Sabrina Dubroca" <sd@queasysnail.net>, "Shuah Khan" <shuah@kernel.org>,
- "Jeff Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, netdev@vger.kernel.org,
- kernel-tls-handshake@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-nfs@vger.kernel.org
-Message-Id: <fdd3e54d-2eb6-468c-9877-adc0809d64b2@app.fastmail.com>
-In-Reply-To: <20260728184712.09cc50f4@kernel.org>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-1-29545d034f3c@kernel.org>
- <20260728184712.09cc50f4@kernel.org>
-Subject: Re: [PATCH net-next v2 1/6] net/tls: Bound consecutive no-data records in
- tls_sw_read_sock()
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+
+Misc cleanup, improvements and updates of code, test, and documents.
+
+Patches 1-3 cleanup DAMON code.  Patches 4-8 adds kunit and selftest
+test cases for recently fixed bugs and a new feature.  Patches 9 and 10
+update guidelines for AI review and what document to read, on DAMON
+documents.
+
+Changes from RFC
+- RFC: https://lore.kernel.org/20260728052811.192712-1-sj@kernel.org
+- Remove ctx parameter of __damon_va_init_regions().
+- Fix damon_nr_samples_per_aggr() overflow kunit test.
+- Rebase to the latest mm-new.
+
+SJ Park (10):
+  mm/damon/core: use damon_nr_samples_per_aggr() for max merge threshold
+  mm/damon/core: remove debug messages
+  mm/damon/vaddr: remove a debug message
+  mm/damon/tests/core-kunit: extend set_regions() test for error case
+  mm/damon/tests/core-kunit: test <=0 size damon_set_regions() inputs
+  mm/damon/tests/core-kunit: test overlapping ranges for set_regions()
+  mm/damon/tests/core-kunit: test damon_nr_samples_per_aggr()
+  selftests/damon/sysfs.sh: test hugepage_mem_bp quota goal
+  Docs/mm/damon/maintainer-profile: update AI review for Sashiko replies
+  Docs/ABI/damon: recommend subsystem doc instead of admin-guide
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  2 +-
+ Documentation/mm/damon/maintainer-profile.rst | 19 ++----
+ mm/damon/core.c                               | 12 +---
+ mm/damon/tests/core-kunit.h                   | 65 ++++++++++++++++---
+ mm/damon/vaddr.c                              | 16 +----
+ tools/testing/selftests/damon/sysfs.sh        |  1 +
+ 6 files changed, 68 insertions(+), 47 deletions(-)
 
 
-
-On Tue, Jul 28, 2026, at 9:47 PM, Jakub Kicinski wrote:
-> On Mon, 20 Jul 2026 10:27:55 -0400 Chuck Lever wrote:
->> A record that delivers no payload -- an empty TLS 1.3 data record
->> today, a control record once read_sock_rectype() lands -- leaves
->> tls_sw_read_sock() in its loop without advancing the caller's read
->> descriptor. A peer that streams such records keeps the receive loop
->> running, and the socket lock held, for as long as the records
->> arrive.
->>=20
->> Cap the number of consecutive no-data records consumed per call. The
->> count resets on any record that delivers bytes, so a normal stream
->> is unaffected; a peer supplying only empty records is bounded to
->> TLS_RX_NODATA_LIMIT iterations before the call returns 0. read_sock
->> consumers treat that as "no progress, re-poll" rather than EOF, so
->> the connection stays up and makes progress once real data arrives.
->>=20
->> Only tls_sw_read_sock() needs this cap. Its consumers drive the recei=
-ve
->> loop from kernel context -- a work item or service thread holding the
->> socket lock across the whole call with no return to userspace -- so an
->> unbounded empty-record stream keeps that context and the lock pinned
->> for as long as the flood lasts. The cap supplies the return boundary
->> that a system call would otherwise provide. tls_sw_splice_read()
->> and tls_sw_recvmsg() already have one: they run in the calling task's
->> context, reschedule while draining the socket backlog (cond_resched()
->> in __release_sock()), and drop the socket lock when the call returns.=
- A
->> flood there costs the caller only its own scheduler time, so the cap
->> would add nothing.
->
-> Is this alluding to PREEMPT_NONE (which for practical purposes is=20
-> no longer a thing AFAIU)?
-
-No. The cond_resched() reference was a bad way to make the point.
-
-What the bound protects is the calling NFSD thread. A client can
-open multiple connections that all send a continuous stream of empty
-TLS records, as a denial of service attack. The mechanism added
-here is an escape hatch for consumers.
-
-This patch has already moved to a prerequisite series, intended for
-=E2=80=9Cnet=E2=80=9D instead of =E2=80=9Cnet-next=E2=80=9D at Sabrina=E2=
-=80=99s request.
-
-https://lore.kernel.org/r/20260726-tls-follow-on-v1-0-99bf4cc1c729@kerne=
-l.org
-
---=20
-Chuck Lever
+base-commit: bc87db7fa4d8d45745620150a9487efcb6ebbd51
+-- 
+2.47.3
