@@ -1,373 +1,172 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADA63438AD
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785354389; cv=none; b=MW9iKNRJBIxRjjqhJ+I51qiIHlgSpqR6++LEbBkbmAdvrmvRZpIh9ZHrat4hRYIr3LokPxTYJI7g2ta2UPBlCh3eSv1E5/deQ1GRRiXpruvs/0VtkEc8vVkoS0jayWT+uUHpWtuopjgvkVxlDNIorkZ/bScQi0OIfloLcs59zBY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785354389; c=relaxed/simple;
-	bh=MTsW4DPZPh15sIO/nZBnNM4EnhVhCyLOHMDWXXit5kI=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9AD3CB2D7
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785354554; cv=pass; b=J8zR+M2KKFFvPs4/Nau6vmdB2VX+9blMWBfVndr4ypNvFBVg41/Wz6ayRWBYiDdafbDtsk8bkKTxKknWYBcCqfdKlt9FkvbTBiZzbFg4xUrvMCIyPCw1YQSKIA8cfoQF24STVJidggVs6bKUNZJgaQ45cNPB/5Par1zq5FMMg/c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785354554; c=relaxed/simple;
+	bh=0WW8IB1JX2f94+iPoUzoqfdlDsRGZQ88EgPOwCAJ8y0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RHH1RXKkhqg/OwvHYCSvt90zACbJEA4WKwFYrXBOTlJIjW3zTjP9qDvGZgvStml6cyIRduKMMnFVuj5IfnVBAHUqje7a4x48XvRKWRxfAMQxTQWr4GsqNr2QkL4D1Fv5b384KB4ll1KstJ2YoHv112Q9roxuHpnFZdBU7J0wOPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eiVAZMAT; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 To:Cc:Content-Type; b=MoGYFU1uAAAUZWWenD/cpJmGFVCNfeeAXEWIWOF58OfpJdNrZM/amDQGrAcx1Tk2eViJlYU76chblIg2w2yPhliX2sZOhtg8EqR3VIETEvGzPrBgLOoZxbqsMud+TkBURPK8jfew8k2fHbL5VdBRBgRyIwH7rMYk0LG9KhzqL38=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YK0H0xb1; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Ct0t1uRA; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eiVAZMAT"
-X-Forwarded-Encrypted: i=1; AHgh+Rq77oFzppbyqDR5zzp5WbxdlnhQ04L7iY2zOo2NRtT7mnasPxDoexr+cMHapFDwYqI/11qYS/XhjNVrAeCxdRA=@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785354380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m7NYxbVQukXWkUZPHzw13nh5/XBlWOt6m2oUVluhMlA=;
-	b=eiVAZMATiLFTNH+QRKacDTp2Khpgj3vLlMak4pt6unw98SzRf++7dnjIfB1tsMMSuCzZqX
-	C+eYdbkV1og1ZFN/CP1QdSeaoU8/Z+9OaZxTpDUWySGGs9X5CSbJGPhMIhoabR9hJn9QFe
-	SS5W46zSWseyKAfBH9ZDZDuFVenJomE=
-X-Gm-Message-State: AOJu0Yyv2mJVXOiOyC/1v5ENHeU2lbl5TTXnaoNwGxkvFACtHboik4Yx
-	Q55w62XDhgCjAdDEkHoM9If+Gvco3PfTVjKneHF2YLBTmzyoC8d0pykZz85OS7LDJuKMMOjJOQY
-	hMkTMD82mOvauUQBYS8BPdPLmnvlM6nZ4+F2eWAfh
-X-Received: by 2002:a05:622a:5145:b0:4ff:c0e7:be9c with SMTP id
- d75a77b69052e-52b3741055amr1691401cf.0.1785354377611; Wed, 29 Jul 2026
- 12:46:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YK0H0xb1";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Ct0t1uRA"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66TJWCw53107653
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:49:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=0WW8IB1JX2f94+iPoUzoqfdlDsRGZQ88EgPOwCAJ8y0=; b=YK0H
+	0xb1DPm9nCDpxbGpqgnswy4YgJeR3BrnGFAshAoVEcGsbUZp76B7dTTDLlwA336H
+	r8R+amugj/dUWLx/0DXqETIwgtKrrZZ95h0j6q0abz3sZT5caDP7KVALCpee2Qr4
+	uhEyVr0pc2Wvcjp9RwjNzzcGqe38ZcD/nEW+P7UiNNaxvP0Z5mDdGnhfwLu7hXc/
+	NvpzLBpd5Wkrtl6Q33yxS4lpBjPRr+yvYUWHtfQpzAWJl0E2rviGI0PwFuO5AslD
+	Z5O+3Zhr6qXNG24in8/OTW5yH/CzrvoePvA/wzI3D94//uPKj/wgga7iias7Zxr/
+	effjiovKfg3ZLmTuVQ==
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4fq6mcv9xk-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 19:49:03 +0000 (GMT)
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-81e92ddc199so28694467b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 12:49:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785354542; cv=none;
+        d=google.com; s=arc-20260327;
+        b=it4jbJR1E0AIFOeEIjTQZhKPvoE7+aBjn3oeQPpzTZ7S2DtHrcKm0WWu/2kmmUnnFT
+         zwEUjYuC1iaObs/7aF8CAvKmPQmyiekSo7QiYRUKcPIqweglqcn+fFHlxF/FWyPMCb3e
+         XoBblm5nAXbTV8n21pC4MdYBsFhqY5tcZFAG1eU9ym7IFhb3t8+aEoHdtQVFgzlJyLga
+         zvZXDuHqEffrpusK9rKxRhshM1vq77eKNqcxdTQMNMA2AYszAgqXx3qlzm8sOz7VXsHQ
+         OShN2jrQfKNEE/UZxuwNHDljN89/aCjR+3PbhFntkZiqUFwa95sDnShrbDPPYgngtr8J
+         YT+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0WW8IB1JX2f94+iPoUzoqfdlDsRGZQ88EgPOwCAJ8y0=;
+        fh=mfzpxbDNyqm95RQ3Ua/VVDTb9H22rR58Isjk87gngyg=;
+        b=C4g09dCdV1YXCtTFuvC+Nvr1JGESSM09eRH8dhH9WyvjmDIEExDbBNSOGGtKHY3TzQ
+         LsfgrAQX3weYeeSdvjQsL/0D9jezRsQWHJMUqLS2Q3QzfrvYnmx06FBQZ+I4Rw9ZEIJp
+         IJy4gRXEzwKHwhdKu5jLBRSYFzMX+Jzyr6hLcdGIT0X5Ez0q6r4Zu5mJ31SZnlRl1SYm
+         gIopytYPcW7IMExkViZWPvgk4e8ZJJEfu5A+zLdVMNYKEFtQqq1EXyTPTPvFmXzzaWaI
+         Jn0kgkYALXCkFm8AnbnG/7Jtzz+1SNne/70BzAEpddfLe4Yr8tAiR1kGN9ibbF1ANthQ
+         DLBw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1785354542; x=1785959342; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0WW8IB1JX2f94+iPoUzoqfdlDsRGZQ88EgPOwCAJ8y0=;
+        b=Ct0t1uRAKmNEO6pU2WZjuhEiLI6pnLsHrBXITu9Y3sLBMtCqAKrLBKserQ1xNGkp3H
+         qgEE1s8+hL89s8d8/Cwrdn/tVvwD2Dmd0/lAy54ADr7VSWlOQz6l1+dp7vJGPiXk7kly
+         5nKFRfVqHmi5JBIn0BOTs5QnPf8usuSlD248mYEoCDgQXrRIHpOGu62+xOk2/Vjnt2U0
+         f9AHmkGsflOWZfV8FlfY4v4ROwWPVUJXrlnKYYsavAnNSjs27J2rSAqjs7l3hql4QC48
+         Q7UwkRq44+bu69v2Q/QX1aVCq2c9bMD9x7rhUacD7dKH+NTZOASip+2FLwmYiCILt+ti
+         fJYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785354542; x=1785959342;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0WW8IB1JX2f94+iPoUzoqfdlDsRGZQ88EgPOwCAJ8y0=;
+        b=OkJ9BTTGifo+KzCgQvyZvzZ5LfnIZLaqTvNBN4yMiSUDFeSF2vzGrYqpyolNvFlL/O
+         BDTv5VGurIw1YcowjDHBBd/RdIBSpimC6k3F7042ZPjvzHPIet0gqKhEX5Xh0AyjcdT+
+         21ktJxYdJ73HXeW0inhCiINdo9rmHFUb5GJhhLn9hbwm9wKofoREk98rKBv2eXsODUFY
+         okYdnmE/ssx5wcuXEsLHuQVxQXkb/biZ+tts+lnZE1t8kA8H4v1HCq676OC2akIQf4eY
+         Pag0KciHgXHq5do2sjKeNKXdVnUdH5hQeR+ZR/y+FQyGzDA/G4/vqcbU9A+161Fj8sbw
+         CWgQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrRo2nATRjb+/2mz1US6sw43rcgvpbfciSYpJ2BwMaEgQU3lmkZT/PFHRbLfBsOW5wBMwLFyb3Hqj7DBOVnjho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOHWRGdGkic8natJM3Jq3cjVC+sAXGg2AtHmi17DgLPnhFbl3k
+	4ua15j/XprZB5XkKqZRiLMc1+nGdZGZikICYIwrAutazQoGPk7M4TqZCcBsI/vUp9J63r4NFAPV
+	Sw6/UojttWLmjU9gbrvuQeSIM2GimTyKL72WCNgBrdUo96BjadQDg5kcRIYL/MdmEQZMT8oNRFP
+	xa0U5+JVv7mxMCsvTNYLdLpsUnJ6rQ/NZxML6dee3v5Nlt
+X-Gm-Gg: AR+sD13LNllB/yXlI4c7w+FeDWz3zLLhHwh0ChrnvU7QGsAoqvJ6z/8B+LkWB7ts2wm
+	N+DPIAw1tWayTedJj8bTozxkeKwMV7vWBNwToNWtilWJ4Cobmn0d34yZdJZ49kyGER/9uOlskeo
+	XIULLnx2KL26ZrBmiLkWw8jiaaTLaIATu0xoYwbwbn706dvkPYvX+dcq2k
+X-Received: by 2002:a05:690c:4d84:b0:81e:d91c:29af with SMTP id 00721157ae682-81fb5e5db0emr1654857b3.70.1785354542426;
+        Wed, 29 Jul 2026 12:49:02 -0700 (PDT)
+X-Received: by 2002:a05:690c:4d84:b0:81e:d91c:29af with SMTP id
+ 00721157ae682-81fb5e5db0emr1654567b3.70.1785354541887; Wed, 29 Jul 2026
+ 12:49:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-16-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260720-hybrid-v9-16-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Wed, 29 Jul 2026 20:45:00 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTyTOCyZRRsGj3hbzk6H=ZPZTfTCYQpv+o0MpcoLAXS95A@mail.gmail.com>
-X-Gm-Features: AUfX_mz5uV-Ty8nXNE0Bq2AH3IvUn36RDUN3WfgUMxDQ01Xo6HoyBjFL8QvNB8Y
-Message-ID: <CA+EHjTyTOCyZRRsGj3hbzk6H=ZPZTfTCYQpv+o0MpcoLAXS95A@mail.gmail.com>
-Subject: Re: [PATCH v9 16/16] KVM: arm64: selftests: Test PMU_V3_FIXED_COUNTERS_ONLY
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+ <20260729104114.04298a48@gandalf.local.home> <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+ <20260729113136.32af2a4d@gandalf.local.home> <CAHk-=wjzHTuomhTegkD69veDVRxprX8NB=i7A+BEB2-v6v5n+g@mail.gmail.com>
+ <20260729133232.1e6c79eb@gandalf.local.home> <CAOu3gNg6kNYp-Sc9Eme6yW7Nu7wV6hZ9=CG0eptROfhQ-H8nFA@mail.gmail.com>
+ <20260729154541.0099cb14@gandalf.local.home>
+In-Reply-To: <20260729154541.0099cb14@gandalf.local.home>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Wed, 29 Jul 2026 15:48:50 -0400
+X-Gm-Features: AUfX_mwF7DC0oGaTu80DDaK_FjjbvMjtCRB7Zz3uBteLMCWzuxKcaF0VD4WX16M
+Message-ID: <CAOu3gNj=Ev+gW82_K1LFhjDWrmJ5CXGU26P6Mb8kEZrbGaMdqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
+ trampoline/kprobe ftrace_ops permanent
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
+        davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
+        linux-open-source@crowdstrike.com, mbenes@suse.cz
 Content-Type: text/plain; charset="UTF-8"
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI5MDE1MiBTYWx0ZWRfX9eWjDda2jGvS
+ caPj3gmOxhWuSFS24bPEnSsUbUXXHl6IdebZw1Q3Wgk0FVca1MWbOXRpwLNOMSznGVcUkq7v9u5
+ WAxP/XE7j0MIl82iDTI7+eFI6XHBhkvlspc0hbqFdF+pou5M+NAW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI5MDE1MiBTYWx0ZWRfX5A6J4Z3ujSlR
+ Kezs3N361xl77ZL+CTSn7Cgq4ZJ66hpI3xBCQNhkWZe0OXVYeyi4Vi647psDLb4cJgF9avn8gNy
+ Lj28WiiVPLj2xat53sLhbE9b85EJaPH3myck3k+e5ectxIIwLLGCDuAZEhKOw/GJoyUuRp8qI2Q
+ 46t8XYpaok5uXCt3mRqlZj/WbnoIkkwh93F5yFK+CbyGB1bs1sCVcTVVfsKUERzwAcn8az8EhfY
+ cfAqNQbYkBRsn4PdYQiRvI2ZRvCo4do4IXaC1z5J7UcDWQLtYLnVuDvPbCW7qHKeOqSjYDRtVOo
+ +LHfCjyoFx9V1oyopbHKr3UkWw8/8yOamZ1Q6/V/04oDwvfb98rr7TF4OOE4rn2pW77LjGLdaZH
+ hMznP3ayo4k9+/R2krJWnHu+sZQt6MoTgmansUsSc/WL4QlDeJ9P8G3FQ/VfR1ShvbOd57htG/c
+ EkpX5OTsE9OwlEUFX8A==
+X-Proofpoint-GUID: 6JEDYmhhryZugoy3uZfRDZVkPi0hGQiT
+X-Authority-Analysis: v=2.4 cv=UOPt2ify c=1 sm=1 tr=0 ts=6a6a592f cx=c_pps
+ a=NMvoxGxYzVyQPkMeJjVPKg==:117 a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=2KvRFfd_T_-xjmS8C1aD:22 a=meVymXHHAAAA:8 a=pl6vuDidAAAA:8
+ a=jHs7IjXvhldTIRZNGaAA:9 a=QEXdDO2ut3YA:10 a=kLokIza1BN8a-hAJ3hfR:22
+ a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-ORIG-GUID: 6JEDYmhhryZugoy3uZfRDZVkPi0hGQiT
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11859
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607290152
 
-On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
-<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+On Wed, Jul 29, 2026 at 3:45=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
-> Assert the following:
-> - FIXED_COUNTERS_ONLY is unset at initialization.
-> - FIXED_COUNTERS_ONLY can be set.
-> - Setting an event filter when FIXED_COUNTERS_ONLY has already been set
->   results in EBUSY.
-> - Setting FIXED_COUNTERS_ONLY when an event filter has already been set
->   results in EBUSY.
-> - Setting FIXED_COUNTERS_ONLY when a VCPU has already run results in
->   EBUSY.
+> On Wed, 29 Jul 2026 14:20:17 -0400
+> Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 >
-> Run the existing PMU and MDCR_EL2 tests in fixed-only mode. Verify that
-> enabling the mode preserves the userspace MDCR_EL2 value until a
-> subsequent KVM_ARM_VCPU_INIT resets HPMN to zero.
+> > Should I also clean up the entire PERMANENT flag logic we now have and
+> > drop the flag itself?
 >
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+> No, because we may need it in the unlikely case that we need to revert th=
+e
+> disabling of ftrace_enabled code.
+>
+> After so many years, we can drop that flag if nobody complains.
+>
+> -- Steve
 
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+Got you.
+Will do.
 
-Cheers,
-/fuad
-
-
-> ---
->  .../selftests/kvm/arm64/vpmu_counter_access.c      | 166 +++++++++++++++++----
->  1 file changed, 137 insertions(+), 29 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> index 73f04e4c6ca3..b5f8ce8d3451 100644
-> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> @@ -411,12 +411,7 @@ static void create_vpmu_vm(void *guest_code)
->  {
->         struct kvm_vcpu_init init;
->         u8 pmuver, ec;
-> -       u64 dfr0, irq = 23;
-> -       struct kvm_device_attr irq_attr = {
-> -               .group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> -               .attr = KVM_ARM_VCPU_PMU_V3_IRQ,
-> -               .addr = (u64)&irq,
-> -       };
-> +       u64 dfr0;
->
->         /* The test creates the vpmu_vm multiple times. Ensure a clean state */
->         memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-> @@ -442,8 +437,6 @@ static void create_vpmu_vm(void *guest_code)
->         TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
->                     pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
->                     "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
-> -
-> -       vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
->  }
->
->  static void destroy_vpmu_vm(void)
-> @@ -494,13 +487,22 @@ static void set_nr_counters(struct kvm_vcpu *vcpu,
->  }
->
->  static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
-> +                                                bool fixed_counters_only,
->                                                  bool expect_fail)
->  {
->         struct kvm_vcpu *vcpu;
-> +       u64 irq = 23;
->
->         create_vpmu_vm(guest_code);
->         vcpu = vpmu_vm.vcpu;
->
-> +       if (fixed_counters_only)
-> +               vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +       vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +
->         set_nr_counters(vcpu, nr_counters, expect_fail);
->
->         vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL, KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> @@ -510,15 +512,15 @@ static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters,
->   * Create a guest with one vCPU, set the PMCR_EL0.N for the vCPU to @pmcr_n,
->   * and run the test.
->   */
-> -static void run_access_test(u64 pmcr_n)
-> +static void run_access_test(u64 pmcr_n, bool fixed_counters_only)
->  {
->         u64 sp;
->         struct kvm_vcpu *vcpu;
->         struct kvm_vcpu_init init;
->
-> -       pr_debug("Test with pmcr_n %lu\n", pmcr_n);
-> +       pr_debug("Test with pmcr_n %lu, fixed_counters_only %d\n", pmcr_n, fixed_counters_only);
->
-> -       test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-> +       test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
->         vcpu = vpmu_vm.vcpu;
->
->         /* Save the initial sp to restore them later to run the guest again */
-> @@ -552,14 +554,14 @@ static struct pmreg_sets validity_check_reg_sets[] = {
->   * Create a VM, and check if KVM handles the userspace accesses of
->   * the PMU register sets in @validity_check_reg_sets[] correctly.
->   */
-> -static void run_pmregs_validity_test(u64 pmcr_n)
-> +static void run_pmregs_validity_test(u64 pmcr_n, bool fixed_counters_only)
->  {
->         int i;
->         struct kvm_vcpu *vcpu;
->         u64 set_reg_id, clr_reg_id, reg_val;
->         u64 valid_counters_mask, max_counters_mask;
->
-> -       test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-> +       test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, false);
->         vcpu = vpmu_vm.vcpu;
->
->         valid_counters_mask = get_counters_mask(pmcr_n);
-> @@ -604,13 +606,15 @@ static void run_pmregs_validity_test(u64 pmcr_n)
->         destroy_vpmu_vm();
->  }
->
-> -static void run_mdcr_el2_validity_test(u64 pmcr_n)
-> +static void run_mdcr_el2_validity_test(u64 pmcr_n, bool fixed_counters_only)
->  {
->         struct kvm_vcpu_init init;
->         struct kvm_vcpu *vcpu;
->         u64 expected_mdcr, mdcr;
-> +       u64 irq = 23;
->
-> -       pr_debug("MDCR_EL2 test with pmcr_n %lu\n", pmcr_n);
-> +       pr_debug("MDCR_EL2 test with pmcr_n %lu, fixed_counters_only %d\n",
-> +                pmcr_n, fixed_counters_only);
->
->         create_vpmu_vm(guest_code);
->         if (!vm_supports_el2(vpmu_vm.vm)) {
-> @@ -631,6 +635,16 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
->                     "MDCR_EL2 was not properly updated after HPMN write (expected 0x%lx, got 0x%lx)",
->                     expected_mdcr, mdcr);
->
-> +       if (fixed_counters_only) {
-> +               vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +               mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> +               TEST_ASSERT(mdcr == expected_mdcr,
-> +                           "MDCR_EL2 changed after PMU_V3_FIXED_COUNTERS_ONLY (expected 0x%lx, got 0x%lx)",
-> +                           expected_mdcr, mdcr);
-> +       }
-> +
->         set_nr_counters(vcpu, pmcr_n, false);
->
->         mdcr = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_MDCR_EL2));
-> @@ -638,6 +652,9 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
->                     "MDCR_EL2 changed after PMU_V3_SET_NR_COUNTERS (expected 0x%lx, got 0x%lx)",
->                     expected_mdcr, mdcr);
->
-> +       vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +
->         vcpu_device_attr_set(vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
->                              KVM_ARM_VCPU_PMU_V3_INIT, NULL);
->
-> @@ -672,11 +689,11 @@ static void run_mdcr_el2_validity_test(u64 pmcr_n)
->   * the vCPU to @pmcr_n, which is larger than the host value.
->   * The attempt should fail as @pmcr_n is too big to set for the vCPU.
->   */
-> -static void run_error_test(u64 pmcr_n)
-> +static void run_error_test(u64 pmcr_n, bool fixed_counters_only)
->  {
->         pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
->
-> -       test_create_vpmu_vm_with_nr_counters(pmcr_n, true);
-> +       test_create_vpmu_vm_with_nr_counters(pmcr_n, fixed_counters_only, true);
->         destroy_vpmu_vm();
->  }
->
-> @@ -737,25 +754,116 @@ static void test_set_nr_counters_after_vcpu_run(void)
->         kvm_vm_free(vm);
->  }
->
-> -int main(void)
-> +static void test_config(u64 pmcr_n, bool fixed_counters_only)
-> +{
-> +       u64 i;
-> +
-> +       for (i = 0; i <= pmcr_n; i++) {
-> +               run_access_test(i, fixed_counters_only);
-> +               run_pmregs_validity_test(i, fixed_counters_only);
-> +               run_mdcr_el2_validity_test(i, fixed_counters_only);
-> +       }
-> +
-> +       for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
-> +               run_error_test(i, fixed_counters_only);
-> +}
-> +
-> +static void test_fixed_counters_only(void)
->  {
-> -       u64 i, pmcr_n;
-> +       struct kvm_pmu_event_filter filter = { .nevents = 0 };
-> +       struct kvm_vm *vm;
-> +       struct kvm_vcpu *running_vcpu;
-> +       struct kvm_vcpu *stopped_vcpu;
-> +       struct kvm_vcpu_init init;
-> +       int ret;
-> +       u64 irq = 23;
-> +
-> +       create_vpmu_vm(guest_code);
-> +       ret = __vcpu_has_device_attr(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY);
-> +       if (ret) {
-> +               TEST_ASSERT(ret == -1 && errno == ENXIO,
-> +                           KVM_IOCTL_ERROR(KVM_HAS_DEVICE_ATTR, ret));
-> +               destroy_vpmu_vm();
-> +               return;
-> +       }
-> +
-> +       /* Assert that FIXED_COUNTERS_ONLY is unset at initialization. */
-> +       ret = __vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +       TEST_ASSERT(ret == -1 && errno == ENXIO,
-> +                   KVM_IOCTL_ERROR(KVM_GET_DEVICE_ATTR, ret));
-> +
-> +       /* Assert that setting FIXED_COUNTERS_ONLY succeeds. */
-> +       vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +       /* Assert that FIXED_COUNTERS_ONLY is set. */
-> +       vcpu_device_attr_get(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +
-> +       /*
-> +        * Setting an event filter when FIXED_COUNTERS_ONLY has already been set
-> +        * results in EBUSY.
-> +        */
-> +       ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-> +       TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +                   KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +       destroy_vpmu_vm();
-> +
-> +       create_vpmu_vm(guest_code);
-> +
-> +       /*
-> +        * Assert that setting FIXED_COUNTERS_ONLY when an event filter has
-> +        * already been set results in EBUSY.
-> +        */
-> +       vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_FILTER, &filter);
-> +
-> +       ret = __vcpu_device_attr_set(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +       TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +                   KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +       destroy_vpmu_vm();
-> +
-> +       /*
-> +        * Assert that setting FIXED_COUNTERS_ONLY when a VCPU has already run
-> +        * results in EBUSY.
-> +        */
-> +       vm = vm_create(2);
-> +       vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +       init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-> +       running_vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code_done);
-> +       stopped_vcpu = aarch64_vcpu_add(vm, 1, &init, guest_code_done);
-> +       kvm_arch_vm_finalize_vcpus(vm);
-> +       vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +       vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> +       vcpu_run(running_vcpu);
-> +
-> +       ret = __vcpu_device_attr_set(stopped_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY, NULL);
-> +       TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +                   KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +       kvm_vm_free(vm);
-> +
-> +       test_config(0, true);
-> +}
->
-> +int main(void)
-> +{
->         TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
->         TEST_REQUIRE(kvm_supports_vgic_v3());
->         TEST_REQUIRE(kvm_supports_nr_counters_attr());
->
->         test_set_nr_counters_after_vcpu_run();
-> -
-> -       pmcr_n = get_pmcr_n_limit();
-> -       for (i = 0; i <= pmcr_n; i++) {
-> -               run_access_test(i);
-> -               run_pmregs_validity_test(i);
-> -               run_mdcr_el2_validity_test(i);
-> -       }
-> -
-> -       for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
-> -               run_error_test(i);
-> +       test_config(get_pmcr_n_limit(), false);
-> +       test_fixed_counters_only();
->
->         return 0;
->  }
->
-> --
-> 2.55.0
->
->
+Andrey
