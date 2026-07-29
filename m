@@ -1,433 +1,194 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638C84119E0;
-	Wed, 29 Jul 2026 16:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785341744; cv=none; b=csz6Pus4cTKku5PjyrCO5ZOFSKPRA7/F3jgaDXSbCP7utL356Mt3bHRBWCCa/3Dls2Es70tJujkLVMphOfeTLcIaBw0aTVflt55JDU0uW1GFmDhO5WFETHUCZXJGukqeCaCayAbbvdtzNspCFTGYITFKxRmFQ4Zn3SD/vkNlLCk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785341744; c=relaxed/simple;
-	bh=KL6M6jldh4OGblH3DDBkOwecrS2Pt85lnWZTrRWoAOg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GPCxWfcj1/6A+0gr0H+YV1Pl1z/5lAQnyFZeba0NLLtfKjfcz+OTW6hqohoVTP2iwGVUDUMH5mqXY9h+d9ID6c0Xd4Gsju7AFKEIz3RsDbaV55f+X4KJ8fadYlMQFJ8zCaKXBszVTUow5CEWXK8iBEB3urut++psWVj/uxfWVTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=izv4G859; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazolkn19013073.outbound.protection.outlook.com [52.103.35.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD73A4119FC;
+	Wed, 29 Jul 2026 16:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.35.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785341992; cv=fail; b=XCFD7z+tpM6xtjLZVJFBd0NSpNyeNWEDJ4y+j26KE3xyAXGhqGdcx6jWjO4EWAoGqZ4WY2frQkeS+URmkCoe4VvGIcKjm0TjiHMhpjBlBjb6uLTC0gB4RZBWB3nuArObrKZbLftdASKcA0cguYEmIWOQf3DZJ8RLUsqt2tp2Tz4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785341992; c=relaxed/simple;
+	bh=ERm1mN75E5q4HP20F9BgQE7AwPdK6pqYd9lOHLGhR8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Pr3M96Vo65i4SkjT96lqfdQqGDqRcFtDhe5p+gsK6+ch7ZLDCV/6Z8MMU7It55Ua+uTCa5B7LfScW9DKn1G2NyWfa7Q/56P7fPzLLw43MUz6TKnnnATwVmqqccfD1Hp4E/+o1ePPIfTvNc5Q8SA9SDCb/N4SUKu4ky16iD2Y/Bg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=cizQ004B; arc=fail smtp.client-ip=52.103.35.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="izv4G859"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A12791684;
-	Wed, 29 Jul 2026 09:15:37 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 439963F66F;
-	Wed, 29 Jul 2026 09:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785341741; bh=KL6M6jldh4OGblH3DDBkOwecrS2Pt85lnWZTrRWoAOg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=izv4G859vnJx1HuX3pqvgnoZoD7Uqnl6IdMrMGE90uebRlwZLXyxVM8o5E7ChQCcp
-	 u1kFvxB73YbQIbsTbKlD6kjTIqUWUVjoleoa8YjsoKwFnJTJ9Qt/0m5fACNWzI0GDS
-	 QuurNlCQsmsqKuPskAKNP7FsfuroEV+E5U+7eBtQ=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	David Matlack <dmatlack@google.com>,
-	Leonardo Bras <leo.bras@arm.com>,
-	Ackerley Tng <ackerleytng@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Wu Fei <wu.fei9@sanechips.com.cn>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>
-Cc: kvm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="cizQ004B"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FhxOlgXXYSbhB3/TZK3tSFBXsTVBE+iXcaCy98LI3xu10GEUc80g+OskmJwc0VEwsrtoULUnwGZ2ZfrQpJ1BsNxAm9Wa5jxdmCObRdUEvEbDCRFvoYqIiL3Rs8AWkCx++aBsvxV2O+iMX3Un4gNz0UQceKKad08DTmlVv3PKyZgej6UBwEmo3ziqxcmDe+hiXJsY7l+VrehXpHGhiv0kzDJvQhAyEfDcnBUo8bjJISbjG2Zso/5bOtWBNyliK7oQuFK7OzesdpCdOUM94/EV384bV+i8FvSS84r9trYwhjB302W7tuAHVqb0r8MGjYqkXzQggFIPYcZQaoqRyco4Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cRaO948ptd/K92rOrGdWoBQVqFjUkdatCE0f3psTt84=;
+ b=QT3ibsBSFcPJ0vM4Go+CynDI1jSoaleSoJWBs2FtCxL6MYVpOUNWlnYOKoEeYcKGA+nkWijindnscdBZ/LLVqQKmqSR2rAZB8MJlniQcE96uShPLTg8NJxJXv1CGKiMyR0yBryiz5JZVs3yeCR1Os02FaWPer8/ZzDwBO3Kc4mGLujiFbPTvEPt4ahEZbw6FFNhX4A56OsvLM+fIm6apJorRt/9RYsfLvgFqULPrYhUSkTP96ymEnCsqYttUyKufiSHxNN5JqV0yCBnCZx8midsrptLDCiINvqLAmlirJe48uFYf7QN2QjUfW8IdIimrMN8a4PuDGC4kIg8vCOQNCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cRaO948ptd/K92rOrGdWoBQVqFjUkdatCE0f3psTt84=;
+ b=cizQ004BxdlEU0SO3pUm3/ZTHgBDiWKIx6cmZFNqPO+Y7nfjwGgFfH0v1maLuuQJFX8NTFa7P3moBuYhrpT3+DUDZ1IT/pn1XobpDjEbha1TfJSbF/SpuYk9UrYPXvj4lI4jFuZ5pmfJDhrZBynaT+/TzzpWQ0JQ7ZZGG2ujEoEloSGXXtvh8KO6d5Jhx7VufVri9bEw1Tpd3HLH3pK+16cqGLui89q7Pg26qvdXc8Qx5C+yA2+rJiNh2TOY3yGvfjzjD1+Nio5vxoGdz/GDl7gBiQ6S0eagmKVlL5rmzwHGKVnhNR1ltklmalnrKPXEVPpaqhDbbICFutUHTaN4jA==
+Received: from DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:46::29)
+ by GV2PR10MB6405.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:bb::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Wed, 29 Jul
+ 2026 16:19:46 +0000
+Received: from DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b098:308e:73ed:c664]) by DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::b098:308e:73ed:c664%6]) with mapi id 15.21.0245.012; Wed, 29 Jul 2026
+ 16:19:45 +0000
+From: mohammad.abukhader@hotmail.com
+To: brendan.higgins@linux.dev,
+	david@davidgow.net
+Cc: raemoar63@gmail.com,
 	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v4 3/3] KVM: selftests: dirty_log_perf_test: Add dirty-ring support
-Date: Wed, 29 Jul 2026 17:15:18 +0100
-Message-ID: <20260729161519.3778839-5-leo.bras@arm.com>
+Subject: [PATCH] kunit: tool: fix _list_tests filtering wrong variable when list has TAP prefix
+Date: Wed, 29 Jul 2026 20:19:02 +0400
+Message-ID:
+ <DB7PR10MB2249CF29AB83F5BFBEC0801988CA2@DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260729161519.3778839-2-leo.bras@arm.com>
-References: <20260729161519.3778839-2-leo.bras@arm.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DX0P273CA0017.AREP273.PROD.OUTLOOK.COM
+ (2603:1086:300:5b::8) To DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:46::29)
+X-Microsoft-Original-Message-ID:
+ <20260729161902.59654-1-mohammad.abukhader@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13231; i=leo.bras@arm.com; h=from:subject; bh=KL6M6jldh4OGblH3DDBkOwecrS2Pt85lnWZTrRWoAOg=; b=owGbwMvMwCX2pizjszvTwvWMp9WSGLKy1Pm2zdv9rl60Y6dU3IsZyZVCL9//MHfNaMmtyBT6Y tS1hKuso5SFQYyLQVZMkUX20fxVPN+nZBy58mMBzBxWJpAhDFycAjCRCXcZGZbckDmrdP+AbcVx 9gvcngdWzSxs3/X04PYVL7gdDOumFRkyMmwW3d9ffCD50NNUndtrDr+awVi62Wl1tOqbc9Nu3N7 QK8AEAA==
-X-Developer-Key: i=leo.bras@arm.com; a=openpgp; fpr=36E6C95AE0F111CC5B6F4D2E688C33F8A0C5B0C5
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR10MB2249:EE_|GV2PR10MB6405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fe19549-7ec0-4748-acf9-08deed8d3420
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|19110799012|41001999006|20031999006|24021099003|15080799012|8060799015|23021999003|39105399006|4140399003|5072599009|25010399006|5062599005|25031999004|24071999003|40105399003|440099028|3412199025;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?IvdWKKMXc1spsfo0eHtG3ZrwyLD96hWklAWbcRrvq9iO3Wt+X0cHnxkdDARB?=
+ =?us-ascii?Q?Ahj6ZvZQWVZ4ERt8qWT1c+VY47m/YhnWWgSmOhWlYSvBZRxI2F9Pfp+cfFWs?=
+ =?us-ascii?Q?sW71jhyn0CvKaCLIrAv+pMFvog2Flt/3rLAoGgJWWNUroDiYy4/Tf8ZppOp7?=
+ =?us-ascii?Q?+LF+2R89WW2JfsJxYtmPmL4waKqEcnnpJIPj7BVvt+oTfhkgymb+TNE5JSy5?=
+ =?us-ascii?Q?vmT91glalGIzAPglx1WYRymJWKON3Hk4umZdC2NJnSi/Nsu5C3oQH0hBggHO?=
+ =?us-ascii?Q?S8DthqGpLYtTvUpILWrGmoYtDf9+vgoYO/1imBFWJ84fw924McJT35fFKV4y?=
+ =?us-ascii?Q?0tP699hItenQ2D0/YQxxTvNNEfe38FerbavIEr90/pdVR+MduEZH0yFqxBQi?=
+ =?us-ascii?Q?XBfO5/6/WV5Wc43DEGzAp7xxmdCywbvrbShzp8zgHSJ3TZ1XIKzAmlf97bVp?=
+ =?us-ascii?Q?2912mhbr8io8IfSk35BcFq/8HQv7xdvNOJgyQjkQ9qeSsNfSg+cMrK8kBizb?=
+ =?us-ascii?Q?4ankf2ItcyUTWUYEBb+w7FYDZ5UHAcb4+zIya+vKrJTHZMF63w0lVEdcpMyB?=
+ =?us-ascii?Q?UH8lUkuRv0wjximRE1TA0r8W3lDfU0N0pgt5baH5MjNwIdFdKwNGCDu1jppb?=
+ =?us-ascii?Q?8hAtNPSU3vE3J5jkAq5XTfOR9/S7oTySdUD0QwvUWQs/i2Xe93SKH6dHS5sv?=
+ =?us-ascii?Q?e/xahvizViTIf00tViNd+4iSUVri2UOPz8fwbNKKwLCX0ArnDibwl+HvkIdN?=
+ =?us-ascii?Q?ygTrP0i4buXAnojjNcg/NG2N/p3VbJkz8G1Cv07/Fgq9OtuSdQb7eZ0JQJBX?=
+ =?us-ascii?Q?VDp2NY8VmyS6LijNsUJKqUQzwIC/GarD+4HTOz4F6Ahv6oe6erNwIGxRaFZR?=
+ =?us-ascii?Q?1cCYbMpcezi3yST5nAcSj78GlmbYDDzkzL3+Ta2PpHEAFmMceOkisXuUNd/u?=
+ =?us-ascii?Q?14y5we0Cce7yW0D94PLZurVRf+/04RZehXLO2dluSvIHP9CC4CSZsNkvHdTA?=
+ =?us-ascii?Q?zfMmxf9VkzFCBL/v8OR7QkTbNHhOBwckqhmNaFygZRhmTrZ5XPfnEbt2pTmI?=
+ =?us-ascii?Q?qGh1kZPYnB7ETqWrL6/omAI4QQECXPRh2u0cbz1DGxEk6pLyg1A=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?flMZZXsh/gZ2VuFFMR+oqutOhnhyxSRAS8XuHpW5tQ3mVya0gtwZQjbNgypa?=
+ =?us-ascii?Q?9Mhk6OojaKz+sOPsI3I70w7ISbqzJaQUpVkx+Gzq+5tK4eK2XSHfdffHEIIQ?=
+ =?us-ascii?Q?oU7rnZNNYR962zQJXY9dJNEJsYR8HbDEO2ZELTY9oyklYDkl0i4Hi4sKbWAL?=
+ =?us-ascii?Q?oba1hlwpPAPMwFUtVTx+NkhYBMkYOOtZB2Qh19jstj5hp7PXNuI+FvUiAPKQ?=
+ =?us-ascii?Q?ne7/hNrmak5T1RS/yEOBkrvgvkeu7gYVIy2x6j0InpQIfZnHawop5CrHSmk4?=
+ =?us-ascii?Q?228KkkyuH2ZlO45CgOyxbFOLTa5weUmOd75ZKEjVi544JY4kTO8aBHur3asi?=
+ =?us-ascii?Q?lc3ZxD23jk7WkDBsvLb08wiuaURjvsAMncLXSTVFGVSmFmrsSsupvcO4j9Sl?=
+ =?us-ascii?Q?j8BehyWf4EyAeX4XgiM/8xmzLI/u6Pk8UCsXm3STRLUgumm+jzj4TV6/tEiR?=
+ =?us-ascii?Q?f+SKYRqKvRF1gRywjGNrUtbkg4ueVqk7Q80GiSsWD2RH8PeOJjwLVmEiS0ml?=
+ =?us-ascii?Q?u5OPiFbREdr1ji5HR59ysqlZpYPWyrTRKwH0/pVXahi31z4qXom3h9wZRq0l?=
+ =?us-ascii?Q?a59ixYfQEoG8EnZxN/zFgGtg869NizVKNP21kcbrj5jWSS7tSfz4akZd4Bh3?=
+ =?us-ascii?Q?IOkQV9dLoD49lHOFNvHxN3W0lYNhTVUbgCIiaVbgE7ffhblpFv+1Po+ttPFM?=
+ =?us-ascii?Q?OcO/kyYVpuH5iMGGAGWSPZyXYsCOq2rIV9rl/7icD/T+BT31UL2+g2USUZbC?=
+ =?us-ascii?Q?qYbb/XHZuEc6iBtLeqxmnh0wC4Nijmui9p5gSjF7cq81Ra9bwBhVzM4UWDau?=
+ =?us-ascii?Q?pS/MKagifZ0tMD2RkXzlWfAb+8xy+exCTQGuhDnx4mH/Ga3DkRhZTmVqML59?=
+ =?us-ascii?Q?GU3pZ+6HkHO8VP8CCl3nFRtPhOHdHsxfWd1ZyStgZFKjCmoXalzgZfLuYvjl?=
+ =?us-ascii?Q?cHX/yc2x7wA9IPP698FhpBjhaP7ryI0wujeNPCC4baMuasZqi+qrXn7Ge3aH?=
+ =?us-ascii?Q?7hgsNVUZY2zaI8d2TNpEDVONaR6dwsta6a/t/JNN1FnsOa4iqLEA5oUXQjEK?=
+ =?us-ascii?Q?L3JjRiqGhOjRxwIvIqoU9nxu+EgaitsDf6U0e7uX/UbKL21ZlVfwoUJbBriv?=
+ =?us-ascii?Q?7Pjlobf0W4fKV+AjClQXzE9zpFpICsOcXdWpN//v0anXtylx1Z+yIC1+u0hK?=
+ =?us-ascii?Q?rERpy6aCpujS9yfhk76ekA02MqXvqcfV9UnzawUmGDkQS77+sFsC4er4lNWx?=
+ =?us-ascii?Q?FWbmBXfBj9egksTc060Km0Y6ffj7Ni/D+Z3U+nabzJxrt8g+6ceqh5zT/m5x?=
+ =?us-ascii?Q?ferrHs2v4kXKi8HBTMjdT+yhsn50koSeJmGYKQl/dLlGpAQPtcGXHGzcI1rw?=
+ =?us-ascii?Q?fTf+3xDZKBQXw69ErbYkR84IEBZlTW+kLtw0e2WVW0eVkSFcVw=3D=3D?=
+X-OriginatorOrg: sct-15-20-9412-4-msonline-outlook-d3deb.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe19549-7ec0-4748-acf9-08deed8d3420
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2026 16:19:45.8272
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB6405
 
-dirty_log_test supports both dirty-bitmap and dirty-ring as dirty-page
-tracking mechanisms, while dirty_log_perf_test only supports dirty-bitmap.
+From: Mohammad Abu-Khader <mohammad.abukhader@hotmail.com>
 
-Add support to dirty-ring on dirty_log_perf_test so it can be used to
-compare performance between changes in the mechanism.
+`_list_tests()` runs the kernel to list tests, strips printk timestamp
+lines via `extract_tap_lines()`, then drops the dummy TAP header from
+the cleaned `lines`.  However the subsequent regex filter mistakenly
+operates on the original `output` instead of the cleaned `lines`.  When
+the kernel output includes timestamp prefixes (common with UML or slower
+setups), e.g.:
 
-vcpu_last_completed_iteration now needs smp_load_acquire/smp_store_relase()
-for iterations >0 (after populating) as dirty-ring will save per-cpu time
-spent on cleaning, and we can't have that reordered, as it may break the
-summing-up.
+  [    0.100000] suite.test1
+  [    0.100000] suite.test2
 
-smp_load_acquire(&vcpu_last_completed_iteration) is not needed on iteration
-zero (populating) as dirty-logging should not be enabled, and we do not
-access it from the run_test thread.
+the anchored regex `^[^\s.]+\.[^\s.]+$` rejects them and `--list_tests`
+returns an empty list.
 
-Signed-off-by: Leonardo Bras <leo.bras@arm.com>
+Filter `lines` instead of `output`, matching the behavior of the
+adjacent `_list_tests_attr()` which already returns the cleaned list.
+
+Add a regression test with timestamp-prefixed input to verify the fix.
+
+Fixes: 723c8258c8fe ("kunit: tool: Add command line interface to filter and report attributes")
 ---
- .../selftests/kvm/dirty_log_perf_test.c       | 128 ++++++++++++++++--
- 1 file changed, 114 insertions(+), 14 deletions(-)
+ tools/testing/kunit/kunit.py           |  2 +-
+ tools/testing/kunit/kunit_tool_test.py | 12 ++++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 69b38791440e..6e80d36cc61a 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -6,68 +6,134 @@
-  *
-  * Copyright (C) 2018, Red Hat, Inc.
-  * Copyright (C) 2020, Google, Inc.
-  */
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index ac3f7159e67f..91d234ac3b57 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -126,7 +126,7 @@ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest)
+ 	lines.pop()
  
- #include <stdio.h>
- #include <stdlib.h>
- #include <time.h>
- #include <pthread.h>
- #include <linux/bitmap.h>
-+#include <asm/barrier.h>
+ 	# Filter out any extraneous non-test output that might have gotten mixed in.
+-	return [l for l in output if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
++	return [l for l in lines if re.match(r'^[^\s.]+\.[^\s.]+$', l)]
  
- #include "kvm_util.h"
- #include "test_util.h"
- #include "memstress.h"
- #include "guest_modes.h"
- #include "ucall_common.h"
+ def _list_tests_attr(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> Iterable[str]:
+ 	args = ['kunit.action=list_attr']
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index da88c3a1651d..85ae21754bdf 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -979,6 +979,18 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(
+ 			args=['kunit.action=list'], build_dir='.kunit', filter_glob='suite*', filter='', filter_action=None, timeout=300)
  
- /* How many host loops to run by default (one KVM_GET_DIRTY_LOG for each loop)*/
- #define TEST_HOST_LOOP_N		2UL
- 
- static int nr_vcpus = 1;
- static u64 guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
- static bool run_vcpus_while_disabling_dirty_logging;
- 
- /* Host variables */
- static u64 dirty_log_manual_caps;
-+static u32 dirty_ring_size;
- static bool host_quit;
- static int iteration;
- static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
-+static struct timespec vcpu_dirty_ring_collect[KVM_MAX_VCPUS];
++	def test_list_tests_with_prefix(self):
++		want = ['suite.test1', 'suite.test2', 'suite2.test1']
++		self.linux_source_mock.run_kernel.return_value = [
++			'[    0.100000] TAP version 14',
++			'[    0.200000] suite.test1',
++			'[    0.200000] suite.test2',
++			'[    0.300000] suite2.test1']
 +
-+static void dirty_ring_collect(struct kvm_vcpu *vcpu, u32 *ring_idx,
-+				struct timespec *ts)
-+{
-+	static pthread_mutex_t collect = PTHREAD_MUTEX_INITIALIZER;
-+	struct timespec start;
-+	struct kvm_dirty_gfn *dirty_gfns = vcpu_map_dirty_ring(vcpu);
-+	u32 idx = *ring_idx;
-+	u32 ring_size = vcpu->vm->dirty_ring_size / sizeof(struct kvm_dirty_gfn);
-+	int cleared, count;
++		got = kunit._list_tests(self.linux_source_mock,
++				     kunit.KunitExecRequest(None, None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False, False))
++		self.assertEqual(got, want)
 +
-+	pthread_mutex_lock(&collect);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+
-+	while (true) {
-+		struct kvm_dirty_gfn *cur;
-+
-+		cur = &dirty_gfns[idx % ring_size];
-+		if (smp_load_acquire(&cur->flags) != KVM_DIRTY_GFN_F_DIRTY)
-+			break;
-+
-+		smp_store_release(&cur->flags, KVM_DIRTY_GFN_F_RESET);
-+		idx++;
-+	}
-+
-+	count = idx - *ring_idx;
-+	*ring_idx = idx;
-+
-+	cleared = kvm_vm_reset_dirty_ring(vcpu->vm);
-+
-+	/* Cleared pages should be the same as collected, as KVM is supposed to
-+	 * clear only the entries that have been harvested, and a single vcpu will
-+	 * harvest at time.
-+	 */
-+	TEST_ASSERT(cleared == count, "Reset dirty pages (%u) mismatch "
-+		    "with collected (%u)", cleared, count);
-+
-+	*ts = timespec_add(*ts, timespec_elapsed(start));
-+
-+	pthread_mutex_unlock(&collect);
-+}
- 
- static void vcpu_worker(struct memstress_vcpu_args *vcpu_args)
- {
- 	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
- 	int vcpu_idx = vcpu_args->vcpu_idx;
- 	u64 pages_count = 0;
- 	struct kvm_run *run;
- 	struct timespec start;
- 	struct timespec ts_diff;
- 	struct timespec total = (struct timespec){0};
- 	struct timespec avg;
-+	bool use_dirty_ring = !!vcpu->vm->dirty_ring_size;
-+	u32 ring_idx = 0;
- 	int ret;
- 
- 	run = vcpu->run;
- 
- 	while (!READ_ONCE(host_quit)) {
- 		int current_iteration = READ_ONCE(iteration);
-+		struct timespec collect = (struct timespec){0};
- 
- 		clock_gettime(CLOCK_MONOTONIC, &start);
--		ret = _vcpu_run(vcpu);
-+
-+		do {
-+			ret = _vcpu_run(vcpu);
-+			if (!use_dirty_ring)
-+				break;
-+
-+			dirty_ring_collect(vcpu, &ring_idx, &collect);
-+		} while (!ret && run->exit_reason == KVM_EXIT_DIRTY_RING_FULL);
-+
- 		ts_diff = timespec_elapsed(start);
- 
-+		if (use_dirty_ring) {
-+			ts_diff = timespec_sub(ts_diff, collect);
-+			vcpu_dirty_ring_collect[vcpu_idx] = collect;
-+		}
-+
- 		TEST_ASSERT(ret == 0, "vcpu_run failed: %d", ret);
- 		TEST_ASSERT(get_ucall(vcpu, NULL) == UCALL_SYNC,
- 			    "Invalid guest sync status: exit_reason=%s",
- 			    exit_reason_str(run->exit_reason));
- 
- 		pr_debug("Got sync event from vCPU %d\n", vcpu_idx);
--		vcpu_last_completed_iteration[vcpu_idx] = current_iteration;
-+		/*
-+		 * Make sure vcpu_last_completed_iteration write happens before
-+		 * updating current iteration.  Pairs with run_test, after populating..
-+		 */
-+		smp_store_release(&vcpu_last_completed_iteration[vcpu_idx],
-+				  current_iteration);
- 		pr_debug("vCPU %d updated last completed iteration to %d\n",
- 			 vcpu_idx, vcpu_last_completed_iteration[vcpu_idx]);
- 
- 		if (current_iteration) {
- 			pages_count += vcpu_args->pages;
- 			total = timespec_add(total, ts_diff);
- 			pr_debug("vCPU %d iteration %d dirty memory time: %ld.%.9lds\n",
- 				vcpu_idx, current_iteration, ts_diff.tv_sec,
- 				ts_diff.tv_nsec);
- 		} else {
-@@ -112,42 +178,46 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	struct timespec start;
- 	struct timespec ts_diff;
- 	struct timespec get_dirty_log_total = (struct timespec){0};
- 	struct timespec vcpu_dirty_total = (struct timespec){0};
- 	struct timespec avg;
- 	struct timespec clear_dirty_log_total = (struct timespec){0};
- 	int i;
- 
- 	vm = memstress_create_vm(mode, nr_vcpus, guest_percpu_mem_size,
- 				 p->slots, p->backing_src,
--				 p->partition_vcpu_memory_access, 0);
-+				 p->partition_vcpu_memory_access,
-+				 dirty_ring_size);
- 
- 	memstress_set_write_percent(vm, p->write_percent);
- 
- 	guest_num_pages = (nr_vcpus * guest_percpu_mem_size) >> vm->page_shift;
- 	guest_num_pages = vm_adjust_num_guest_pages(mode, guest_num_pages);
- 	host_num_pages = vm_num_host_pages(mode, guest_num_pages);
- 	pages_per_slot = host_num_pages / p->slots;
- 
--	bitmaps = memstress_alloc_bitmaps(p->slots, pages_per_slot);
-+	if (!dirty_ring_size)
-+		bitmaps = memstress_alloc_bitmaps(p->slots, pages_per_slot);
- 
- 	if (dirty_log_manual_caps)
- 		vm_enable_cap(vm, KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2,
- 			      dirty_log_manual_caps);
- 
- 	/* Start the iterations */
- 	iteration = 0;
- 	host_quit = false;
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
--	for (i = 0; i < nr_vcpus; i++)
-+	for (i = 0; i < nr_vcpus; i++) {
- 		vcpu_last_completed_iteration[i] = -1;
-+		vcpu_dirty_ring_collect[i] = (struct timespec){0};
-+	}
- 
- 	/*
- 	 * Use 100% writes during the population phase to ensure all
- 	 * memory is actually populated and not just mapped to the zero
- 	 * page. The prevents expensive copy-on-write faults from
- 	 * occurring during the dirty memory iterations below, which
- 	 * would pollute the performance results.
- 	 */
- 	memstress_set_write_percent(vm, 100);
- 	memstress_set_random_access(vm, false);
-@@ -178,30 +248,45 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 	while (iteration < p->iterations) {
- 		/*
- 		 * Incrementing the iteration number will start the vCPUs
- 		 * dirtying memory again.
- 		 */
- 		clock_gettime(CLOCK_MONOTONIC, &start);
- 		iteration++;
- 
- 		pr_debug("Starting iteration %d\n", iteration);
- 		for (i = 0; i < nr_vcpus; i++) {
--			while (READ_ONCE(vcpu_last_completed_iteration[i])
-+			while (smp_load_acquire(&vcpu_last_completed_iteration[i])
- 			       != iteration)
- 				;
- 		}
- 
- 		ts_diff = timespec_elapsed(start);
- 		vcpu_dirty_total = timespec_add(vcpu_dirty_total, ts_diff);
- 		pr_info("Iteration %d dirty memory time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
-+		if (dirty_ring_size) {
-+			struct timespec iteration_sum = (struct timespec){0};
-+
-+			for (i = 0; i < nr_vcpus; i++)
-+				iteration_sum = timespec_add(iteration_sum,
-+							     vcpu_dirty_ring_collect[i]);
-+
-+			pr_info("Iteration %d clear dirty ring time: %ld.%.9lds\n",
-+				iteration, iteration_sum.tv_sec, iteration_sum.tv_nsec);
-+
-+			clear_dirty_log_total = timespec_add(clear_dirty_log_total,
-+							     iteration_sum);
-+			continue;
-+		}
-+
- 		clock_gettime(CLOCK_MONOTONIC, &start);
- 		memstress_get_dirty_log(vm, bitmaps, p->slots);
- 		ts_diff = timespec_elapsed(start);
- 		get_dirty_log_total = timespec_add(get_dirty_log_total,
- 						   ts_diff);
- 		pr_info("Iteration %d get dirty log time: %ld.%.9lds\n",
- 			iteration, ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 		if (dirty_log_manual_caps) {
- 			clock_gettime(CLOCK_MONOTONIC, &start);
-@@ -231,46 +316,53 @@ static void run_test(enum vm_guest_mode mode, void *arg)
- 		ts_diff.tv_sec, ts_diff.tv_nsec);
- 
- 	/*
- 	 * Tell the vCPU threads to quit.  No need to manually check that vCPUs
- 	 * have stopped running after disabling dirty logging, the join will
- 	 * wait for them to exit.
- 	 */
- 	host_quit = true;
- 	memstress_join_vcpu_threads(nr_vcpus);
- 
--	avg = timespec_div(get_dirty_log_total, p->iterations);
--	pr_info("Get dirty log over %lu iterations took %ld.%.9lds. (Avg %ld.%.9lds/iteration)\n",
--		p->iterations, get_dirty_log_total.tv_sec,
--		get_dirty_log_total.tv_nsec, avg.tv_sec, avg.tv_nsec);
-+	if (!dirty_ring_size) {
-+		avg = timespec_div(get_dirty_log_total, p->iterations);
-+		pr_info("Get dirty log over %lu iterations took %ld.%.9lds. (Avg %ld.%.9lds/iteration)\n",
-+			p->iterations, get_dirty_log_total.tv_sec,
-+			get_dirty_log_total.tv_nsec, avg.tv_sec, avg.tv_nsec);
-+	}
- 
--	if (dirty_log_manual_caps) {
-+	if (dirty_log_manual_caps || dirty_ring_size) {
- 		avg = timespec_div(clear_dirty_log_total, p->iterations);
- 		pr_info("Clear dirty log over %lu iterations took %ld.%.9lds. (Avg %ld.%.9lds/iteration)\n",
- 			p->iterations, clear_dirty_log_total.tv_sec,
- 			clear_dirty_log_total.tv_nsec, avg.tv_sec, avg.tv_nsec);
- 	}
- 
--	memstress_free_bitmaps(bitmaps, p->slots);
-+	if (!dirty_ring_size)
-+		memstress_free_bitmaps(bitmaps, p->slots);
- 	memstress_destroy_vm(vm);
- }
- 
- static void help(char *name)
- {
- 	puts("");
- 	printf("usage: %s [-h] [-a] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-r random seed ] [-s mem type]"
--	       "[-x memslots] [-w percentage] [-c physical cpus to run test on]\n", name);
-+	       "[-x memslots] [-w percentage] [-c physical cpus to run test on] \n"
-+	       "[-d dirty-ring entries]\n", name);
- 	puts("");
- 	printf(" -a: access memory randomly rather than in order.\n");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-+	printf(" -d: enable dirty-ring for tracking dirty pages, with given entries count.\n"
-+	       "     If non-zero, will cause dirty-ring to be used instead of\n"
-+	       "     dirty-bitmap. Must be a power of two.\n");
- 	printf(" -g: Do not enable KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2. This\n"
- 	       "     makes KVM_GET_DIRTY_LOG clear the dirty log (i.e.\n"
- 	       "     KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE is not enabled)\n"
- 	       "     and writes will be tracked as soon as dirty logging is\n"
- 	       "     enabled on the memslot (i.e. KVM_DIRTY_LOG_INITIALLY_SET\n"
- 	       "     is not enabled).\n");
- 	printf(" -p: specify guest physical test memory offset\n"
- 	       "     Warning: a low offset can conflict with the loaded test code.\n");
- 	guest_modes_help();
- 	printf(" -n: Run the vCPUs in nested mode (L2)\n");
-@@ -302,42 +394,50 @@ int main(int argc, char *argv[])
- 	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
- 	const char *pcpu_list = NULL;
- 	struct test_params p = {
- 		.iterations = TEST_HOST_LOOP_N,
- 		.partition_vcpu_memory_access = true,
- 		.backing_src = DEFAULT_VM_MEM_SRC,
- 		.slots = 1,
- 		.write_percent = 100,
- 	};
- 	int opt;
-+	u64 tmp;
- 
- 	/* Override the seed to be deterministic by default. */
- 	guest_random_seed = 1;
- 
- 	dirty_log_manual_caps =
- 		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
- 	dirty_log_manual_caps &= (KVM_DIRTY_LOG_MANUAL_PROTECT_ENABLE |
- 				  KVM_DIRTY_LOG_INITIALLY_SET);
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "ab:c:eghi:m:nop:r:s:v:x:w:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ab:c:d:eghi:m:nop:r:s:v:x:w:")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			p.random_access = true;
- 			break;
- 		case 'b':
- 			guest_percpu_mem_size = parse_size(optarg);
- 			break;
- 		case 'c':
- 			pcpu_list = optarg;
- 			break;
-+		case 'd':
-+			tmp = parse_size(optarg);
-+			TEST_ASSERT(tmp, "Dirty-ring size should be > 0");
-+			TEST_ASSERT(tmp <= UINT32_MAX / sizeof(struct kvm_dirty_gfn),
-+				    "Dirty-ring size (%lu) is too large.", tmp);
-+			dirty_ring_size = tmp * sizeof(struct kvm_dirty_gfn);
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
- 			break;
- 		case 'g':
- 			dirty_log_manual_caps = 0;
- 			break;
- 		case 'h':
- 			help(argv[0]);
- 			break;
+ 	@mock.patch.object(kunit, '_list_tests')
+ 	def test_run_isolated_by_suite(self, mock_tests):
+ 		mock_tests.return_value = ['suite.test1', 'suite.test2', 'suite2.test1']
 -- 
 2.55.0
 
