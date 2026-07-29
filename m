@@ -1,193 +1,174 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A75411A0D
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785338612; cv=pass; b=ftc+/v3UdNd2Pf0N5e1UwV8Sv4SQOzdGxzOuBfdXbUoGwmlgMs6WKc39F1Da7Er13V/nuZJtZkdvEveWJsqMvYb9vzwyFTtNpFUmPJ9znYELyIrXaEV7p6KsGXgHh/Xx8uoCqKWzV4D949tRl6+VJd8xn5seHfIGoHuM6t4vhao=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785338612; c=relaxed/simple;
-	bh=LVBzsbGMtEvkKYlB4ymkqikHz0oYkp14Iw5Po3+7C0c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fxaaXUD4cOwRwawrMwKwYc1kGCs32dR4X6An11dFZhQwW6G9d6SnG4e34RP1WyPO1s0JZxCIxz4In1DgV65XLArA6qMR6OXEXdd82e0acz8Bu4H26KWnvQwenDcVC/5B9FMLIelnDaJs2YWIKeVwQcUUn3n/iEOTwYuCqzKyfJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aGp1RfGH; arc=pass smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aGp1RfGH"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-51c10e86e52so281541cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 08:23:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785338609; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UeJQCfuVSSwel2IPc6aX95KSr79p7XjVfzik+5XzSY7aNU8JEktnO9zOQDxiIiycgp
-         9HZOM4D6dvB+iJqkENE/1Xk+RoHMcOr9dvgoUp1mlhWCvgzzYs9drJhkEYqAlsAKmoob
-         Vx6gicWVjuWEZfl/WRB59fujcB6fyHo1FsGva+4DmCPPfr+xIDbmUcZ4q5sDTvHhAklQ
-         R2t/BHk0+VQByFVkKBME7s+lzK791MdSUKv+2BkbeixvhTR8ZS0BVY+wX7h9EdW+TgB8
-         dwwVN/E8+tbxqzaZ7fP1V1vBsMcgS+RtDBVGjU/Xs6PRH710BKa1/FCTtaEEY7DSr+eI
-         RIaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=EYpYlO78zITH6UjIoefobo5Po8cUwvLKaBgMucaKFtQ=;
-        fh=VfHqN+yCV0tLdjHJMK7NCvO8ufXYORXEkvZUJCouyz4=;
-        b=hRkjlqNkVukMnZvcHc66KtZYZxaJmc+G1eeo93cd2585Yxzm6zZ2QQQHqfiUHD8hvY
-         65u1b6LMjzWlIYgm8w6QUaF5EJuyD8QzWMpqPUtOKHrh/ppakx4CYyDKe90OVs9lriuy
-         wRYPHkduTj7XTy+jN9RI9ubBssg5L3uv7dau4mFDRGqGXMzsoQ9xVMM5Pu51FMuE+/IW
-         Tiq/7jxr3HC6t7/REON7JVi86V8Ju9gRpig7fAMP9eT1OW+ZG5zoM7zgP5oZ4Wv3k39r
-         4c6AMcuZ29Wc1I9nIq2WH5VkfERfr1xvLXZTUypEWdn715sRM992yznsvpz7DCIjUaU2
-         lspA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785338609; x=1785943409; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EYpYlO78zITH6UjIoefobo5Po8cUwvLKaBgMucaKFtQ=;
-        b=aGp1RfGHDlZ0hE4muYzIy3nsHjllrhLfyxOgl9wIAwWgbWxY4eJL9CwgYJd3H9+CD/
-         YqXHu9a+ynMSeJvf4Sc9dm8G66UZRRaP9FoSI1sC+9iwh7gZFG+8ama5NPrT7BeAKAju
-         U+kjvu1B8GLGc0vIPfbyODcHWSfy0aldcQU/uuDkdtMnse9DkxBQ9j7Bk75Hx/QpYFYH
-         TNvsOm3aW30rMhjPMXRWmldbn6RJQVT++j6SQmLngVlEexYmTQ0raoeZIcZelPhY7C1k
-         wq+nm0wg42/YwUWOOQYY11QH3LzJeaUA8x7nP8Ehr+Hfs9XxGw+4MaRX5q7xAeUGSCH+
-         mrag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785338609; x=1785943409;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=EYpYlO78zITH6UjIoefobo5Po8cUwvLKaBgMucaKFtQ=;
-        b=rzY/sSr3HAHQJsz6T7hDKTZJI37UPdzeGGRyOHRY/dhYrp/xXKmZ49cggowfjKYrM2
-         9PgAEeHD4G8NgxrA3U5BCnkpSQmGj0oCRa57hvSLSlcQIpTLCpHNrj8UQIicq9WuGAiw
-         4ueV7pizcusMK7ki/oqyujXQbgLGdtWHaU+4PBoaJwLIFUYAhJzKA2NY3wGei565Vlg1
-         83p+XsuPz8dP1Yfh49feasviYe1MttYP3e58ZkVKMaVzWSL7E2RobGtsHfJGtRtbfEWE
-         uU717fZL5HnnjU/zZ0M4SNivr0NrC5/O8L0uFZ+NMq1TVi8HL+5z+m3JAZXzyDklaT4a
-         FaXA==
-X-Forwarded-Encrypted: i=1; AHgh+RqEjvvK3zAlUWeaMsFe92MXZHCnjbPdP6jBkrrZ3Pp1qgwSZNn5ynutKJSn1t2vswsxIOVagv9MdOUixNrc8+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywmp5yA1LrRmQEfGVTIIwO0l45zkJpwVY4JY5DAkjrD7XCZuTsm
-	s9uhZqjK83/7pKUFC4Lb9iwtj1ZeFQJHmKQbdzf7+QeiyL3nJWMR4qcFAS2j4zBz2F+l+5Avf8A
-	qmPxRkAdp3CysW3hom8IzvMeKyu0pR9v7XF+JyZhm
-X-Gm-Gg: AR+sD12nraz5YSDJgtf9gC4vIgo3FfByys4pJSMvdVzt5WfJBpHokN0HxTA+EUM9SNT
-	2jhwHssXa4gFtSFG5R13EtNguumE/Juq28kQOidjz2oKeT9w42hKCbAA46YaMuNt9gjJkiuo54P
-	kgIJBCCt8iIRvzhCM2jTNyq2TVAJSGdjEeafDAyQOsIdW7DRnBEQ8R7auu8R76kniPtQ1tIqEgL
-	Dg6AqHMZrt4nemDdvYCr48MhuI5+hP9W5OCArFBeeiqVP/3geUZHzkRFjIPZmFOMuIRnp4iJfDe
-	gwCrLZbm5mbOOMbrpD7J31iLfOoXoYoENat2bCkVfGHoV2kS9n+unehHgwyNtS8VmZI9fVuZx7e
-	VogNkK8wVxA==
-X-Received: by 2002:ac8:7c56:0:b0:527:f08f:56a2 with SMTP id
- d75a77b69052e-52b35089837mr565631cf.8.1785338608520; Wed, 29 Jul 2026
- 08:23:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5EE3C1D78;
+	Wed, 29 Jul 2026 15:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785339075; cv=none; b=t7t73cQXl/vGWsrE/8x0kJhrE0DZvLuc7ve7VGZSOq2sXT/KoiVWBnK69fwbnQwGp6ac3gSEnrDPSbJhPQZuVkD4bA0MZ9Sv33kfYo7rI3k1wVE5oo3KiXVVC0EKqflFO9ENlDLUoNs3F2U5m/MiGdYKUb+55vQr01zXwSOWVno=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785339075; c=relaxed/simple;
+	bh=mCrppwFzqJJ3wA+pXsNCVDraYaxnPzZ7fkcGZbHDj0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZydRpSG/Jkc/GySjeXHANHewqxgXkDcW4ZN4s+H4ckU/eP/o+sDGk3XNiI4CvPYRsbvvjuEQSB91h4x4D81cJLRLU2NlOkb/HDwbe9shaDK/iibhxJiMKD2CJXMJVylC5iJaiV4w1q9sqtTYMZe6BiQWHuVB7jFLP66PPzFkNvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 881C0A0702;
+	Wed, 29 Jul 2026 15:31:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 187762000E;
+	Wed, 29 Jul 2026 15:31:01 +0000 (UTC)
+Date: Wed, 29 Jul 2026 11:31:36 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, song@kernel.org, jolsa@kernel.org, naveen@kernel.org,
+ davem@davemloft.net, mhiramat@kernel.org, stable@vger.kernel.org,
+ linux-open-source@crowdstrike.com, mbenes@suse.cz, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark
+ trampoline/kprobe ftrace_ops permanent
+Message-ID: <20260729113136.32af2a4d@gandalf.local.home>
+In-Reply-To: <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+	<20260729104114.04298a48@gandalf.local.home>
+	<CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp> <20260720-hybrid-v9-4-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <20260720-hybrid-v9-4-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
-From: Fuad Tabba <tabba@google.com>
-Date: Wed, 29 Jul 2026 16:22:51 +0100
-X-Gm-Features: AUfX_mwUs9MTXlZgLAxa7rxOqn4AEWfpGlzGWJmBR-6Vw5CXw5g4z3qo-EMbdA0
-Message-ID: <CA+EHjTzwDrP=3a7f38e2H_H1YPV0igRryhfuNCigZQUFy02tng@mail.gmail.com>
-Subject: Re: [PATCH v9 04/16] KVM: arm64: selftests: Test SET_NR_COUNTERS
- after first run
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Stat-Signature: fi7kd9udmk8fragx7joh8yamexgf4j44
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 187762000E
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19TYrfKJHtehk40lCha/ZA9AhcvzQlaqVE=
+X-HE-Tag: 1785339060-4129
+X-HE-Meta: U2FsdGVkX1/nZ9MxXgktekmcCky5uR/3BC1TA3nmiHmC+yuqKFVTke/NdY7s8PcjAZtNIp5ezjyQCHtLutnOHPayYSaJ2QvGkJYCgtEdSki3mKRx+DjQD8LpoeeFIKzKqsjGBQvW+QXgEFz1LP+ILBP5ElNrlZoxjb8yeMf7B/TyFgdLtvAPVg1IzjinRa6Unwnlmww2cw3pgcMYDuzu12R/TWi0Gci2/Hsu5JBi8PcSfSLxNa4JdxIhNXYTDNY3/Dmp21dVagWyVZ/q6jkkeAYzbIwzihsctnolT1qkGdKzkH6uDVW0UBz84GE4j03JDRpBqXoZgvLavngGIL/WmU3F4CDTwtn5iQ+kg5Uvwx4czWp3GZ42PA2jc1H0aMBeYEyRKG6ULYPO+4rqNb1up0gZS5worSRnGI9/aaJgKQU=
 
-On Mon, 20 Jul 2026 at 06:44, Akihiko Odaki
-<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->
-> Add a regression test that runs one vCPU and then tries to change the
-> VM-scoped PMU counter count through an idle sibling. Verify that
-> SET_NR_COUNTERS fails with EBUSY once any vCPU has run.
->
-> Assisted-by: Codex:gpt-5.6-sol
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+[ Adding Linus in case he cares ]
 
-Cheers,
-/fuad
+On Wed, 29 Jul 2026 11:00:31 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-> ---
->  .../selftests/kvm/arm64/vpmu_counter_access.c      | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> index 22223395969e..3b5bb421f401 100644
-> --- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-> @@ -461,6 +461,11 @@ static void run_vcpu(struct kvm_vcpu *vcpu, u64 pmcr_n)
->         }
->  }
->
-> +static void guest_code_done(void)
-> +{
-> +       GUEST_DONE();
-> +}
-> +
->  static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool expect_fail)
->  {
->         struct kvm_vcpu *vcpu;
-> @@ -622,6 +627,37 @@ static bool kvm_supports_nr_counters_attr(void)
->         return supported;
->  }
->
-> +static void test_set_nr_counters_after_vcpu_run(void)
-> +{
-> +       struct kvm_vcpu *running_vcpu, *stopped_vcpu;
-> +       unsigned int nr_counters = 0;
-> +       struct kvm_vcpu_init init;
-> +       struct kvm_vm *vm;
-> +       int ret;
-> +       u64 irq = 23;
-> +
-> +       vm = vm_create(2);
-> +       vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +       init.features[0] |= BIT(KVM_ARM_VCPU_PMU_V3);
-> +       running_vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code_done);
-> +       stopped_vcpu = aarch64_vcpu_add(vm, 1, &init, guest_code_done);
-> +       kvm_arch_vm_finalize_vcpus(vm);
-> +
-> +       vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
-> +       vcpu_device_attr_set(running_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                            KVM_ARM_VCPU_PMU_V3_INIT, NULL);
-> +       vcpu_run(running_vcpu);
-> +
-> +       ret = __vcpu_device_attr_set(stopped_vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
-> +                                    KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS,
-> +                                    &nr_counters);
-> +       TEST_ASSERT(ret == -1 && errno == EBUSY,
-> +                   KVM_IOCTL_ERROR(KVM_SET_DEVICE_ATTR, ret));
-> +
-> +       kvm_vm_free(vm);
-> +}
-> +
->  int main(void)
->  {
->         u64 i, pmcr_n;
-> @@ -630,6 +666,8 @@ int main(void)
->         TEST_REQUIRE(kvm_supports_vgic_v3());
->         TEST_REQUIRE(kvm_supports_nr_counters_attr());
->
-> +       test_set_nr_counters_after_vcpu_run();
-> +
->         pmcr_n = get_pmcr_n_limit();
->         for (i = 0; i <= pmcr_n; i++) {
->                 run_access_test(i);
->
-> --
-> 2.55.0
->
->
+> ,
+>=20
+> On Wed, Jul 29, 2026 at 10:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis.=
+org> wrote:
+> >
+> > On Tue, 28 Jul 2026 20:59:56 -0400
+> > Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+> > =20
+> > > This fixes a long-standing issue: kernel.ftrace_enabled=3D0 silently
+> > > disables BPF trampolines (fentry/fexit) and ftrace-based
+> > > kprobes/kretprobes. The write succeeds, the hook stops firing with no
+> > > error, and re-enabling silently restores it. Livepatch already solved
+> > > this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
+> > > ftrace while a permanent ops is registered and refuses to register
+> > > one while ftrace is disabled[1]. =20
+> >
+> > The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
+> > back when ftrace was first added to the kernel. It's addition was namely
+> > there because live runtime modification of kernel code was new and we w=
+ere
+> > worried about how stable it could be.
+> >
+> > Honestly, I would love to get rid of it as today ftrace has proven to be
+> > rather stable. But as it is a user space ABI, I'm not sure what will br=
+eak
+> > if we do. I wonder if we just make it a nop, and print a message to dme=
+sg
+> > saying:
+> >
+> >   "ftrace_enabled no longer does anything. Please report if you need it=
+ to."
+> >
+> > ? =20
+>=20
+> Thanks Steven, if you and/or other community members would approve such
+> approach I would happily do this instead for a few reasons -
+
+It's actually if Linus is OK with this approach.
+
+>=20
+> 1) Seems like the more correct course of action if idneed this switch
+> effectively became obsolete in usage instead of piling extra logic to work
+> around it.
+>=20
+> 2) As I mentioned in the end of the cover letter, I believe for some cases
+> such as fsessions/ksessions and multi opts retprobes, this patchset is
+> not effective and the issue will persist, requiring a more complicated so=
+lution
+> for them anyway if we want watertight resilience.
+>=20
+> If you approve this - I can try what you suggested, this would include
+> making the
+> knob a NOP with a message, dropping the FTRACE_OPS_FL_PERMANENT
+> flag and reverting/cleaning what's possible from the original livepatch p=
+atchset
+> that dealt with this issue [1]
+>=20
+> One question is what the correct set of tests to run in such a case
+> would be to verify
+> we didn't break anything. For this patchset I ran BPF and livepatch
+
+Hah! That's the key question isn't it? It's a user space visible knob. I
+don't have anything that uses it, but I have no idea of there's a tool out
+there that does. Linus's rule is to not break user space. If nothing uses
+it, then it's OK to get rid of (as getting rid of it will not break user
+space). But, if something uses it for a good reason, then we are stuck with
+it. We really will not know until we disable it and somebody complains.
+
+-- Steve
+
+
+
+> selftest suites, but
+> I wonder what else would need to be run.
+>=20
+> CC Miroslav for Livepatch.
+>=20
+> Thanks,
+> Andrey
+>=20
+> [1] - https://lore.kernel.org/all/20191016113316.13415-1-mbenes@suse.cz/T=
+/#u
+>=20
+> > =20
+> > >
+> > > For trampolines this restores a historical property: from 2019-2022
+> > > they shared one global direct_ops, marked permanent the same
+> > > way[2].It was later lost as a side effect of the 2022
+> > > per-trampoline-ops split (patch 1's Fixes tag) and never
+> > > restored.[3][4] Kprobes never carried this protection at all, so
+> > > for them that is long-standing issue rather than a regression.
+> > >
+> > > Patch 1: trampolines. Patch 2: classic kprobes/kretprobes. Patch 3:
+> > > a selftest covering both directions for all four hook types.
+> > >
+> > > P.S
+> > > I initially implemented a per-record opt-in flag[5], but dropped it
+> > > as over-engineering once I saw the original blanket restriction.
+> > >
+> > > P.P.S
+> > > Open question: kprobe.multi/kretprobe.multi/kprobe.session
+> > > (fprobe-backed) aren't covered -- return-capturing fprobes share the
+> > > function-graph tracer's subops manager with unrelated tracers, so
+> > > marking it permanent needs a different, per-record approach. Perhaps
+> > > something along the lines of [5]. =20
+> >
+> > Honestly, I would like to start deprecating that kill switch.
+> >
+> > For the series:
+> >
+> > Acked-by: Steven Rostedt <rostedt@goodmis.org>
+> >
+> > -- Steve =20
+
