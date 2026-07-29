@@ -1,64 +1,66 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A3228F948
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050103644A0
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785285805; cv=none; b=psjDBy57tdk6dSt9x8oD7adZhgJIgvd2s1Z9RHYC/E64ZUj0KVJ3JFJXWULzloITQh4YfG4DmFCtufwALiGkdp2gYeKFJNdAsTLWbByyLMr33lB95D/oYrgK/H5+F4d0ZGyLRGWCJHbM6Ryb5eGmtFaMGmj1D9viGYwwjpkuSEk=
+	t=1785285808; cv=none; b=lKcJ8kEhrMxQJWXXFUOUIXQ6lfNNUXXNqgK4qQ+m0l8Lq6UTH1hLy48un5lcfa0cNcnjN7BgoEO+b5Yqi27CYe9VMzoHaj9dZ0cu2XJ2YN9RUQ1s3GSAeoztNvz1kPQbtysu6MfzBOFBteQQa2/UV9/NQ5tyqISeXzfRjBV1S88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785285805; c=relaxed/simple;
-	bh=3/X/mr/YLaMPqkwboLnuUiwo3mFws+Ie2fvug+qqqyc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XL2O2WgTMBfHO+4Ec7dsg+9bZql0UdUDq+rB3aCLmTEwiBZ2OTngPiWaU605c/BUW+GxFNdUx92EjtpKYSFYU6rv3VvTs/szUYJnX2IY3LLooPOr0Bto9NqLxtU4r+kmq80v2386TiHBYlp0m5LltV25VoAEC9If9zfs+2bFDOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n5i7eNVI; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1785285808; c=relaxed/simple;
+	bh=APYCemeVpFyyQFz6LEPXl8WGerHiLbS1D/pRVvv203w=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OMYPaBs7TdsM/TWbdjRYoahCd+NFBJ5CYs3bO0Kd5Q1DkFnPzDtc6dtWxFu0bwftQ17IPbFQP7flTIPJLDTtn5OOD7IaVD8Oz1Qyz/i0GXrY9jI5akAagEmP93cLvCOEsPrtBbT++82Md/p2MrxRXDZEJB0fTJuqn7cm1t0nco4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sogQOZSj; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n5i7eNVI"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-49555a0e68bso1760315e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:43:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sogQOZSj"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4956242332dso3088705e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:43:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785285802; x=1785890602; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7jYWGw53POFllg0ieqjSR4fZVEzdVp2GRfz+60jKrRk=;
-        b=n5i7eNVIzxaXm9Sfx5OK2GexSelUK52YQs6LxUo60a/ysjqhbZZ2EFYT/bTFleP1b9
-         qgiBamvaC96ItttPI+vVKL7lj16lqrf3Beg4p5LflWAtUOqg1SkPAsr9WFRr1e6WavKk
-         t7lqm6Zy2I2GsQqpNv7ZbXM2wPGXjrfIBVO4VmBVYbg4XTeDkFtiqgWeEOml/FV8cbyx
-         fGkdv/gKhsL9dfQxheMpLpdyqluXtaz3pplZuGRQ3NSBzbU+fFufBvvJYW3I4aAFKrjK
-         ptghdFW+xcHu2Rq+v+RJO3H3L7bmqg1QPCmVGlbBAMNGn7cCOC1aBjTuML6UcmKxqnG6
-         Muug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785285802; x=1785890602;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1785285805; x=1785890605; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7jYWGw53POFllg0ieqjSR4fZVEzdVp2GRfz+60jKrRk=;
-        b=ewFM0r1c2tohyM68LOZ1jir3xqdUqcvt7ehFAZ2TwDarEZdn0sddt0ARE1st7R+Jmv
-         YD9BTXQUWuQHEuXnbqvdrmRtVbYiW5aqCwj0yaaev1qLQ0dWmN56KElMoP2fDlzFDqDN
-         Dulzc880V4n7JQt++8q+fManR+G6oezDihNTKVAZ8i4OYDmBask1oRo3eFNnokrfc01K
-         qJwu7zANnWcqcIAMjhBe7h+Hc8IydjDl2m1HI4x2jhZsnzrKuFZ2muI6Ss3tXbnWqdoK
-         SQH+g7dbfhVpwc4+bMOmKxcdnm3Rh4uizdi3rZx7/vgwfUUEa0xl+MRyFib+OQO3QIFI
-         nL3g==
-X-Forwarded-Encrypted: i=1; AHgh+RrHpVRu3t2wqQmWPc0Jc47JljwhaoWxtudA7JinlUI4gUJ5g74EvYhAAoJ3kTWvSwzNeK3J50W7NP63jS3OHH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxdCZXYq4cnWSgAiEPOxcQieTPqvIwEjYM9ILFF0RnxyxPjahp
-	jN+AswW4AWRGaQRZ3DakYFCYs/3Cb7WUWpU6NMXCixhEft/yiwmHulZD
-X-Gm-Gg: AR+sD11lm5MXdrWI+kzERzL7kzXABDtj1rEOzHPKML3+RvRZaxCFsmcowOSTiEMM/OB
-	Cmfad4zWo1NIGvFNX1DKCnlHseeXBXxE3JSI1qGdb6kfpufWA6CClf7oIk84l8m4nTpEkJJm772
-	4rTr5ZjAGN21Y1uDhZhVFely4Q9+KITpFZMJm1ggbUx0s+NdG5bS1wq/Wppb8GQMFZdZgFU1G8H
-	UEWSBDZ+eLKKGZyecKv/sXvZy7KBVc8V3FsMmMlsYIPGlrUKb9tAJ/WAV5m2cKqlMENnrLBppAs
-	VHw+WTYDW6tyVVOPzYoK/uMSyWFrmBpYtRy6ZYHBrXApb6oIMqPF9eOUWzJqTIhbylSVqWC4joF
-	zuawZSH+xulkFUwQzCKcf5jFmrDVH4XYYLROCFrdak6N05nIzG6q/sixYdsg/oJ1MJFekP9iQ/u
-	XfMFRF4Rg9DsAWLEtSSz/TYSotmBJus0FOhL2BYXKo9nDfCtFSXok7xLZdxBmClMG3MaTx6DCcU
-	UbxrS09kD6wp0P0iJ6TW+HRB/lVc/O+XL4wO1yAT2BVvzaeqtIE9QIdhIAI24HpnN1uAsryfBEA
-	aDMU57cd/LMc+eKz1SrgL/eJRqz0KISzT7eRPPbpTP49IE49/jUckNpBaDTDuRK81Dipa291MD+
-	THHbIFQ==
-X-Received: by 2002:a05:600c:3b1f:b0:495:4cba:e288 with SMTP id 5b1f17b1804b1-496c653eb6amr48053165e9.15.1785285801374;
-        Tue, 28 Jul 2026 17:43:21 -0700 (PDT)
+        bh=r4Gw4ioSscdZva3p6jvwUu/0HqrTnRkxRU/WO0C15fA=;
+        b=sogQOZSj7xcs0FbY4THWDXfEjHj7eVtr4mZFVnUe2n/38bsyQ+osbul3t1/oLWWhop
+         t2YaGqOCLp+Pg0/1iX38RhdKdlevACgcX9yEzVwsyi8uEnXyu87Hbjhinp6BD5ja0OCb
+         wZgYI9aSCGTQJk2zzwsIdFXxEJTZglCAOraHoGmDTm7gLLCymuW+COQ/000uiLTnbc7x
+         tgw1rx769ZDsK40Flsj5UkP0SyzQ+l/sOU+nYLgbkU/7ch/4HZCaSZy6k10mIP01vHDt
+         tFkFgl1yOv0a/PPO1ms9iM2p/YB+0/jziphlErczOQ4kD7FR3631Gyx+cTimWCiuR7CI
+         mLJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785285805; x=1785890605;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=r4Gw4ioSscdZva3p6jvwUu/0HqrTnRkxRU/WO0C15fA=;
+        b=DphnnBWCgtgoUzHImgzVmkkwaoKLmraTgK5QJ5zsS1Dpy2tThK3Uq86m4xg8Pgnax9
+         99KrxWKkyih8TXjlK5V78zanJpUYi3JX+2YBw7agfiHeFhJXbN6bN3zwtkFPe7AqW2I9
+         iKwizq89HbaSckYSAX6BV/iT/0cjTviCaPf1gHeqFiiiKzyJ3VP0wjA913a0PKbL2xeJ
+         mAzY3KJc7YEUvZK39ieb4xBD5CLR0rlFSklrA9pFmYB/MDM+e3PMp5UU3b8r9m7qgLyH
+         gJIvvH0MIK2SErN5inLEPe5qy24OpsJZHqR4P7pazQseaDF6g8V1qbutL8rCx0jlMx/P
+         wXhg==
+X-Forwarded-Encrypted: i=1; AHgh+RoSeJz+MN62BiKPpJpltMfzhkcQmorUoVF1WNTCMTbkHrpOmVrYF+Sb+JOmYSU0JSVGQyqrjLOkOLLXNerRaco=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAOjD2cWd123kQExVdI3eCqgafwPF1ZskQ6NyJYpm1AAKQcV4d
+	E0+tGh/OmbbQuG8xCqfAUQlAlcnBlxq05cUUHv9RY7IorrbQs2Gk6kLG
+X-Gm-Gg: AR+sD13likc8ukfr1wFlTXgTGR8VpaIPqAqZOmnF6Zee5oIe3FfD0JFbvpCSdOj6Od5
+	HIiAIplLkAtP3KRuSzpYNEZ1u9gi8ph5X9xjzscFGj27zoWxHOXKwOe1eVbvR7rt/ttNE2yOO9R
+	AagBi+JEm9Sp+tmQRBGqKAh6FG516slScrTFF+aSePLZQr4fiEX9G4AAlZ1rok2nR3Q5CsD/JyE
+	kzrnmAy7WJNLL9w2p6h9B/ROv7QEigGTe2y2rVEsgn65+CcvW1YQ3r+flzWK5X+WePdAi6wOi5B
+	hUV34rOUNusxWHzptXqK1o+MlU3VgZyNKDD0yRfLYubUvQOC6VYJKz5tWxjVpM+sRUuYjMVXhVD
+	MGksbjPh4W28I45hYcQofq73N3hXT20D79a6gbalaLTitkqc2+2INXn0K9PgiRtt8YzCIv26nYm
+	SsVpzpMqBL5aIhQrvym478ur7QalZ1c17cOWHXG1n2c8ktJ8V1sXWRNYT29QaDuuguUzPbEwZAP
+	+mN1Aoz5FRFQyH++XWuFUcSxnVQBumuqL0AST/BwSvsBmexZFO1f6AdNWzCdP9G11ImXawSis2E
+	4OeGWz78ee/K1eIZqFIg4YEJznWvX/YmV5YwvCYm8wYBp8YJoQKTKMedKe89sh0uYoBW5yX4yFu
+	0F8JC7JhAita4m7jj2g==
+X-Received: by 2002:a05:600c:3b0c:b0:495:4d2d:82f2 with SMTP id 5b1f17b1804b1-496c659dd2bmr53499995e9.26.1785285805037;
+        Tue, 28 Jul 2026 17:43:25 -0700 (PDT)
 Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-b323-2b01-0d98-9fe8-a4cd-78ab.310.pool.telefonica.de. [2a02:3100:b323:2b01:d98:9fe8:a4cd:78ab])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6aa3a88sm2827343f8f.6.2026.07.28.17.43.20
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6aa3a88sm2827343f8f.6.2026.07.28.17.43.23
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 28 Jul 2026 17:43:20 -0700 (PDT)
+        Tue, 28 Jul 2026 17:43:24 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>
@@ -70,10 +72,12 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Karl Mehltretter <kmehltretter@gmail.com>
-Subject: [PATCH 1/2] arm64/fpsimd: ptrace: Fix inactive SVE and SSVE regsets
-Date: Wed, 29 Jul 2026 02:42:54 +0200
-Message-Id: <20260729004255.15630-1-kmehltretter@gmail.com>
+Subject: [PATCH 2/2] kselftest/arm64: fp-ptrace: Fix checks for inactive SVE and SSVE regsets
+Date: Wed, 29 Jul 2026 02:42:55 +0200
+Message-Id: <20260729004255.15630-2-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20260729004255.15630-1-kmehltretter@gmail.com>
+References: <20260729004255.15630-1-kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,69 +86,154 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-sve_init_header_from_task() takes header as a pointer, so for the
-inactive mode
+The checks on the header size reported for the inactive regset of the
+NT_ARM_SVE/NT_ARM_SSVE pair compare it against sizeof(sve), but sve is
+a struct user_sve_header *, so this is 8 rather than the intended 16.
+The kernel carried the identical typo when filling in the header, so
+kernel and test agreed on the wrong value and the test passed.
 
-	header->size = sizeof(header);
+Compare against sizeof(*sve), stop after the header checks for an
+inactive regset since it has no payload to compare, and prefill the
+buffer with a sentinel to verify that reading an inactive regset
+leaves everything after the header untouched. This also covers the
+getter's return value, which determines how many bytes ptrace copies
+back to userspace.
 
-stores 8 rather than sizeof(struct user_sve_header), which is 16.
-Userspace sees an impossible size smaller than the header it
-describes.
-
-The inactive-mode check in sve_get_common() compares header.size
-against sizeof(header) as well, but there header is a struct, so the
-check can never fire. Reads of NT_ARM_SVE and NT_ARM_SSVE for the
-inactive mode therefore still return the other mode's FPSIMD data,
-exactly the situation the check was added to prevent.
-
-Fix the size, and make the check return the remaining membuf space
-instead of 0, which regset_get() would interpret as the entire
-(zero-filled) buffer having been populated.
-
-Fixes: b93e685ecff7 ("arm64/fpsimd: ptrace: Do not present register data for inactive mode")
+Fixes: 864f3ddcd715 ("kselftest/arm64: fp-ptrace: Adjust to new inactive mode behaviour")
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
-Found by inspection while reviewing arch/arm64.
+With the size comparison fixed, fp-ptrace fails against kernels that
+do not have the preceding regset fix.
 
-Confirmed in the generated code: building arch/arm64/kernel/ptrace.o
-with arm64 defconfig and gcc 15.2.0 and disassembling sve_get_common
-shows the inactive branch storing a literal 8 into header.size, and no
-compare against 16 anywhere - the compiler constant-folds the check
-away entirely and falls straight through to __fpr_get(). That is a
-machine-checked demonstration that the early return can never fire.
+ tools/testing/selftests/arm64/fp/fp-ptrace.c | 47 +++++++++++++++++---
+ 1 file changed, 41 insertions(+), 6 deletions(-)
 
-Runtime tested under QEMU TCG with -cpu max,sme=on. Before this
-change, PTRACE_GETREGSET(NT_ARM_SSVE) on a tracee outside streaming
-mode returned header.size == 8 and copied the 528-byte NT_PRFPREG
-payload. Afterwards, header.size is 16 and bytes in the userspace
-buffer after the header are left untouched.
-
- arch/arm64/kernel/ptrace.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 4d08598e2891..2a72c61a8af9 100644
---- a/arch/arm64/kernel/ptrace.c
-+++ b/arch/arm64/kernel/ptrace.c
-@@ -801,7 +801,7 @@ static void sve_init_header_from_task(struct user_sve_header *header,
- 	if (active)
- 		header->size = SVE_PT_SIZE(vq, header->flags);
- 	else
--		header->size = sizeof(header);
-+		header->size = sizeof(*header);
- 	header->max_size = SVE_PT_SIZE(sve_vq_from_vl(header->max_vl),
- 				      SVE_PT_REGS_SVE);
- }
-@@ -837,7 +837,7 @@ static int sve_get_common(struct task_struct *target,
- 	 * from the other mode to userspace.
- 	 */
- 	if (header.size == sizeof(header))
--		return 0;
-+		return to.left;
+diff --git a/tools/testing/selftests/arm64/fp/fp-ptrace.c b/tools/testing/selftests/arm64/fp/fp-ptrace.c
+index 22c584b78be5..b435837c8c0e 100644
+--- a/tools/testing/selftests/arm64/fp/fp-ptrace.c
++++ b/tools/testing/selftests/arm64/fp/fp-ptrace.c
+@@ -65,6 +65,9 @@
+ /* VL 128..2048 in powers of 2 */
+ #define MAX_NUM_VLS 5
  
- 	switch ((header.flags & SVE_PT_REGS_MASK)) {
- 	case SVE_PT_REGS_FPSIMD:
++/* Sentinel for detecting buffer bytes the kernel did not write */
++#define REGSET_SENTINEL 0xa5
++
+ /*
+  * FPMR bits we can set without doing feature checks to see if values
+  * are valid.
+@@ -181,6 +184,20 @@ static bool compare_buffer(const char *name, void *out,
+ 	return false;
+ }
+ 
++static bool buffer_is_filled(const void *buffer, size_t size,
++			     unsigned char value)
++{
++	const unsigned char *bytes = buffer;
++	size_t i;
++
++	for (i = 0; i < size; i++) {
++		if (bytes[i] != value)
++			return false;
++	}
++
++	return true;
++}
++
+ struct test_config {
+ 	int sve_vl_in;
+ 	int sve_vl_expected;
+@@ -401,6 +418,7 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
+ 	struct user_sve_header *sve;
+ 	struct user_fpsimd_state *fpsimd;
+ 	struct iovec iov;
++	size_t buf_size;
+ 	int ret, vq;
+ 	bool pass = true;
+ 
+@@ -409,14 +427,16 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
+ 
+ 	vq = __sve_vq_from_vl(config->sve_vl_in);
+ 
+-	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
+-	iov.iov_base = malloc(iov.iov_len);
++	buf_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
++	iov.iov_len = buf_size;
++	iov.iov_base = malloc(buf_size);
+ 	if (!iov.iov_base) {
+ 		ksft_print_msg("OOM allocating %lu byte SVE buffer\n",
+ 			       iov.iov_len);
+ 		return false;
+ 	}
+ 
++	memset(iov.iov_base, REGSET_SENTINEL, buf_size);
+ 	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_SVE, &iov);
+ 	if (ret != 0) {
+ 		ksft_print_msg("Failed to read initial SVE: %s (%d)\n",
+@@ -440,10 +460,16 @@ static bool check_ptrace_values_sve(pid_t child, struct test_config *config)
+ 	}
+ 
+ 	if (svcr_in & SVCR_SM) {
+-		if (sve->size != sizeof(sve)) {
++		if (sve->size != sizeof(*sve)) {
+ 			ksft_print_msg("NT_ARM_SVE reports data with PSTATE.SM\n");
+ 			pass = false;
+ 		}
++		if (!buffer_is_filled(iov.iov_base + sizeof(*sve),
++				      buf_size - sizeof(*sve), REGSET_SENTINEL)) {
++			ksft_print_msg("NT_ARM_SVE wrote beyond its header with PSTATE.SM\n");
++			pass = false;
++		}
++		goto out;
+ 	} else {
+ 		if (sve->size != SVE_PT_SIZE(vq, sve->flags)) {
+ 			ksft_print_msg("Mismatch in SVE header size: %d != %lu\n",
+@@ -485,6 +511,7 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
+ 	struct user_sve_header *sve;
+ 	struct user_fpsimd_state *fpsimd;
+ 	struct iovec iov;
++	size_t buf_size;
+ 	int ret, vq;
+ 	bool pass = true;
+ 
+@@ -493,14 +520,16 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
+ 
+ 	vq = __sve_vq_from_vl(config->sme_vl_in);
+ 
+-	iov.iov_len = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
+-	iov.iov_base = malloc(iov.iov_len);
++	buf_size = SVE_PT_SVE_OFFSET + SVE_PT_SVE_SIZE(vq, SVE_PT_REGS_SVE);
++	iov.iov_len = buf_size;
++	iov.iov_base = malloc(buf_size);
+ 	if (!iov.iov_base) {
+ 		ksft_print_msg("OOM allocating %lu byte SSVE buffer\n",
+ 			       iov.iov_len);
+ 		return false;
+ 	}
+ 
++	memset(iov.iov_base, REGSET_SENTINEL, buf_size);
+ 	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_SSVE, &iov);
+ 	if (ret != 0) {
+ 		ksft_print_msg("Failed to read initial SSVE: %s (%d)\n",
+@@ -523,10 +552,16 @@ static bool check_ptrace_values_ssve(pid_t child, struct test_config *config)
+ 	}
+ 
+ 	if (!(svcr_in & SVCR_SM)) {
+-		if (sve->size != sizeof(sve)) {
++		if (sve->size != sizeof(*sve)) {
+ 			ksft_print_msg("NT_ARM_SSVE reports data without PSTATE.SM\n");
+ 			pass = false;
+ 		}
++		if (!buffer_is_filled(iov.iov_base + sizeof(*sve),
++				      buf_size - sizeof(*sve), REGSET_SENTINEL)) {
++			ksft_print_msg("NT_ARM_SSVE wrote beyond its header without PSTATE.SM\n");
++			pass = false;
++		}
++		goto out;
+ 	} else {
+ 		if (sve->size != SVE_PT_SIZE(vq, sve->flags)) {
+ 			ksft_print_msg("Mismatch in SSVE header size: %d != %lu\n",
 -- 
 2.51.0
 
