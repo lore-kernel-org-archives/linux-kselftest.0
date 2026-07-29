@@ -1,177 +1,264 @@
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.162.73.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D5F449B0E
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 22:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75FE3BC668;
+	Wed, 29 Jul 2026 22:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.162.73.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785364034; cv=none; b=MVsb7HZj0Ax7MDv5hF7q1I9pehzkpReBiAuYlTc6+gpfIlOVxZoUM0zE6EbapsR8Gk4mur0OQ+x4vdra7YuApY6SS1NR+YZ6b+0R8s00x0cYDUcfydl11nCAfJJgPaxzdXw6JJtm8yRqpJvkCxHqjxUbKn2j3raQ+RLRTQo6PHk=
+	t=1785365027; cv=none; b=ln9I72d/jtGEp0a8LpsP73vkk6YBIpdi6LVmoNHylSqMWhwUArG+0WZyYSgny3KoxdsfE0DI1TRs1D7ptefmRmfUx06/GLSR2clRHJ6KYJ9HXHzzg3/raIkGHQ1x3DPoEA/XHTZ9zShdWbDB3fJOfgRDnmqNJvyuy9qmDLakOng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785364034; c=relaxed/simple;
-	bh=lGkrKT9/9Ew0IKaXTGFVzH1tnSEh/k/7aacZK72GMd8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CvtfzmWuLl7iHfvbqNW4NyKFtilpYlzq3l0VGvtgouAxmOyf+BEwCALMaKXaR9I46G6LC3lu1UYmA5psahAkUn/eoMYnV5VQ098aKqcpgVL+FHia/Hd9YExWmI0Stirda79CtD7Ah8BZ0dlLUWusAVbFba3u+Djoep7t0tyM4OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H2222HWs; arc=none smtp.client-ip=209.85.210.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
+	s=arc-20240116; t=1785365027; c=relaxed/simple;
+	bh=NqV2gyvwf53YD0fgRW+DGPQBXmeCXDR8/qp5ZwNz77o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fdNy4IYaef0XdFqNxsZUMdG5soJw9iRQxU24Vu49+ib5qkY5FowL9JAx7o5XayLGVVW5swW5GShGN/4pCAefggSBOBn4XYHhxxo+jLZ9lNLzlixvB5ot1RxC0lT5oxTX3tX3l9uZAyNP9JYqePzw2pTF8HjOpaxD/rBrK8l3XjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=s1F6DSqo; arc=none smtp.client-ip=35.162.73.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H2222HWs"
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8484ba00601so1642597b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 15:27:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="s1F6DSqo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785364031; x=1785968831; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dYSUOVi/YcPFHLGdsUg+6qIajHpp6dbl/W50j1kiKQU=;
-        b=H2222HWsmlLrMlp5zfH5Dz6Zv7/pItUr5Io+Z0Y+mT2Qd9a9KAjZ2UOOZWWx8qV6G4
-         otFT6U+AaWaaglZy0bMEfEI75RlCBqdcm5j9ApeZX7HH/I80WjqiZJzvZ1sXidC7ko2b
-         6v51cWP/ePVdElOp7q2XQXORfgtGcnhdtH/JxW/vH3SS8qOQf/FHjoeK9zD3k+dsD0EZ
-         yYYwOgyIs8bZnCcHfu5W1sNnhwmoJqBijhCz8noz4mlYuZbx+3SEiqoltNkRkZ1w2V2O
-         yGHqKCfX8k0BwoIqMMy9dqF7jJuhRzrQr9yUy3QrIQ2r9p6+qeXqEUQr5uaHJePPLTO2
-         Tnag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785364031; x=1785968831;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dYSUOVi/YcPFHLGdsUg+6qIajHpp6dbl/W50j1kiKQU=;
-        b=cgeqmIQUKAIU7wjcj7CZbNB71Pdtj4p9205q3NH/m+vYhIblRsoPXOFEU4476o8moO
-         xDyoBtgtWg+RXl0OO1UMIDjMLUELIbLaHdSOAvb1Txz6BcWrhrhri/eAPPV9NT43APLK
-         J8QSMgH4d8gbYU9dcGKn2st5BNO7776QcKkr0ywF2VHxuG5w665G3EE71WrNGOBDMeD5
-         Ti+mbHZTGa1s2nKj437PSXSXy5N4VgLqPTyasDp7+5sFJdk7YJ7BOSWMdKNMwLlUhe6V
-         AZ+5PvqSfjIQXjL4u+QoaS4n7OEuZuj3+stbMTrN7gznRhg+sx+41nJ+m9nEqKjJquL+
-         qtBg==
-X-Forwarded-Encrypted: i=1; AHgh+Ror9OYizgDlUcJ37x+RQUXtoArX6Jvj3WhMvHFqejKUjfoAT7CQrV3qQt6CSQpr7otM1wn0w/6cYPlbjsfGDNo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcWlt5vHtsLqvgM2v8lTzxIqV2WQ+z/dFLJ6jrLLeKdto4J6aY
-	b06LxSSsckO7k5OS/rfEO5tYNb/e+AbYNohaNZQVD3SB6lHf6LOtc9ybBf2vl4Bbfe/hJvCJFTO
-	LzPjR7+wT
-X-Received: from pfwz9.prod.google.com ([2002:a05:6a00:1d89:b0:847:926b:dc17])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:e13:b0:848:438d:3665
- with SMTP id d2e1a72fcca58-84ebc3ddc5dmr138466b3a.41.1785364030976; Wed, 29
- Jul 2026 15:27:10 -0700 (PDT)
-Date: Wed, 29 Jul 2026 22:27:01 +0000
-In-Reply-To: <20260729-igb_v3_b4-v8-0-3ed236272b4e@google.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1785365025; x=1816901025;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0cX/Esl8gY+kO7NvHpvUsQS5CTl2FTbhi4a44jfBkNE=;
+  b=s1F6DSqo30cAKWg3bsccEFX4mSRqwz1MyuwvRkPWhnLSntkQTS/qLd4V
+   W7G2SB0qeIz01hS58jETo2Mg5ap7UI/us9FYpPO3Tv59PSP4Ph3dYaT6n
+   2Li1mTp/6en6ofm2grxjMEHKOu4RltWNsPu6aaR5dk8aQwwVF+tZlS+Mv
+   +Z0gXZiE9gLnS2336P1H3DcJXoo7tcF/wFhD77FJBf2ubGGXPtrSJctdA
+   zX/ID0uMAMXXj+7g7PN2clCbg+JkZLUazRf6qVOGB25difFIEdEe37wsB
+   7DmRxQS3y3Lc41L2FZTqYAuLiIdnSihhl1210VQfvGj0XYbqZVX0Cack0
+   g==;
+X-CSE-ConnectionGUID: +d1g9/U0QvqXxX9KBS5qrQ==
+X-CSE-MsgGUID: zkxEMZQ7T0GVgf3wSW7srg==
+X-IronPort-AV: E=Sophos;i="6.25,193,1779148800"; 
+   d="scan'208";a="24412671"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-012.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 22:43:43 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:21014]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.47.97:2525] with esmtp (Farcaster)
+ id c47381f9-be81-467c-b111-5c82cc533eb5; Wed, 29 Jul 2026 22:43:42 +0000 (UTC)
+X-Farcaster-Flow-ID: c47381f9-be81-467c-b111-5c82cc533eb5
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Wed, 29 Jul 2026 22:43:42 +0000
+Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Wed, 29 Jul 2026 22:43:36 +0000
+From: Arthur Kiyanovski <akiyano@amazon.com>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>
+CC: Arthur Kiyanovski <akiyano@amazon.com>, Eric Dumazet
+	<edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, David Woodhouse
+	<dwmw2@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Miroslav Lichvar
+	<mlichvar@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Andrew Lunn
+	<andrew@lunn.ch>, Carolina Jubran <cjubran@nvidia.com>, Wen Gu
+	<guwen@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "David
+ Woodhouse" <dwmw@amazon.com>, Yonatan Sarna <ysarna@amazon.com>, "Zorik
+ Machulsky" <zorik@amazon.com>, Alexander Matushevsky <matua@amazon.com>,
+	"Saeed Bshara" <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>, Anthony
+ Liguori <aliguori@amazon.com>, Nafea Bshara <nafea@amazon.com>, Evgeny
+ Schmeilin <evgenys@amazon.com>, Netanel Belgazal <netanel@amazon.com>, Ali
+ Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt <benh@amazon.com>, Noam
+ Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>, Evgeny
+ Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik <ofirt@amazon.com>, Amit
+ Bernstein <amitbern@amazon.com>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <shuah@kernel.org>, Jonathan Corbet
+	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
+	<horms@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	<vadim.fedorenko@linux.dev>
+Subject: [PATCH v6 net-next 0/7] ptp: Add PHC timestamp quality attributes
+Date: Wed, 29 Jul 2026 22:43:18 +0000
+Message-ID: <20260729224328.16440-1-akiyano@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260729-igb_v3_b4-v8-0-3ed236272b4e@google.com>
-X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785364025; l=4430;
- i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=UBcl8gUyQtUwJkhFbO1LHBTsapqjS6lR0WFKGzbETtI=; b=eFIZsSOClpkIO21dUN00oLj3idNkOQtKSMeC3Z1lg5ws2dNR3DUpmj1ZGAqlAYvWe5yFkwf2m
- 3nbGfDKRTJxAf3YByZZOKuWUbk709zSniEPPlNbbgrr4T+B/DMbSbyD
-X-Mailer: b4 0.14.3
-Message-ID: <20260729-igb_v3_b4-v8-6-3ed236272b4e@google.com>
-Subject: [PATCH v8 6/6] vfio: selftests: igb: Recover after DMA-read faults
-From: Josh Hilke <jrhilke@google.com>
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
-	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D044UWA002.ant.amazon.com (10.13.139.11) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-From: Alex Williamson <alex.williamson@nvidia.com>
+This series adds quality attributes to PTP Hardware Clock (PHC)
+timestamps, allowing userspace to obtain error bound, clock status,
+timescale, and system counter values alongside timestamps in a single
+call.
 
-The mix_and_match test intentionally submits a TX descriptor with an
-unmapped source IOVA so that the DMA read fails.  On real 82576
-hardware the resulting fault leaves the descriptor engine unable to
-service subsequent valid descriptors, so the next memcpy in the same
-test iteration times out.
+Motivation
+----------
+The existing PTP APIs return timestamps without any indication of
+their quality. Applications that need clock accuracy and
+synchronization status commonly rely on external tools such as
+ptp4l, which implement synchronization logic and can export their
+measurement of clock accuracy. For managed PHC devices - such as
+the ENA network adapter, whose clock is synchronized by the device
+without userspace involvement - these tools are not available, and
+the existing APIs lack a way to report quality metrics to consumers
+of time.
 
-The 82576 datasheet (section 4.2.1.6.1) describes CTRL.RST as the
-software mechanism to recover from a hung device.  Empirically
-CTRL.RST alone is not sufficient in this state: the visible queue
-registers are reinitialized, but the next valid memcpy still posts
-descriptors without any TDH/TDT progress in the same process.  A
-fresh device open after the failure works, which points to a reset
-scope broader than CTRL.RST being required.  The 82576 advertises
-PCIe FLR; VFIO_DEVICE_RESET drives FLR and supplies that scope while
-preserving the selftest process and its DMA mappings.
+This was previously proposed as an RFC [1] with a single ioctl.
+Based on community feedback, the design was reworked to cover both
+the extended (multi-sample) and precise (cross-timestamp) paths.
 
-Add igb_error_reset_and_reinit() implementing the recovery sequence:
-issue VFIO_DEVICE_RESET, re-arm the kernel-side MSI-X trigger against
-the still-valid eventfd via vfio_pci_irq_reenable() (this does not
-touch the eventfd, which test fixtures may have cached), and
-re-program the device via igb_hw_init().  FLR clears EICR and leaves
-EIMS=0, so no explicit interrupt mask or cause writes are needed.
-igb_hw_init() resets tx_tail/rx_tail to 0 and igb_memcpy_start() zeros
-each descriptor before submission, so no ring memset is needed either.
+Design
+------
+The UAPI was redesigned based on Thomas Gleixner's proposal [2]:
 
-Call this from igb_memcpy_wait() on completion timeout. Lock contention
-during reset (e.g. if PCIe/IOMMU/AER error handling triggered by the
-just-observed DMA fault holds the device lock) is handled by the retry
-logic now present inside vfio_pci_device_reset(). The failed memcpy still
-returns -ETIMEDOUT; reset recovery only ensures the next operation starts
-from a usable device state.
+- A unified data structure (struct ptp_sys_offset_attrs) is used
+  for both extended and precise ioctls.
 
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
----
- tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 38 +++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+- A u32 valid bitmask in struct ptp_clock_attrs indicates which
+  attributes are populated, replacing sentinel values. Drivers
+  set only the bits for attributes they provide.
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-index 12fce3d69025..4adad15f16a0 100644
---- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-@@ -480,6 +480,28 @@ static void igb_memcpy_start(struct vfio_pci_device *device, iova_t src,
- 	igb_write32(igb, E1000_TDT(0), igb->tx_tail);
- }
- 
-+/*
-+ * Reset the device via VFIO_DEVICE_RESET (PCIe FLR on the 82576) and
-+ * re-program it.  VFIO_DEVICE_RESET tears down the kernel-side MSI-X
-+ * trigger but leaves user-side eventfds intact, so re-arm the trigger
-+ * via vfio_pci_irq_reenable() before reprogramming so any caller-cached
-+ * eventfd remains valid.
-+ *
-+ * FLR clears device-side state to power-on reset values (datasheet
-+ * 4.2.1.5.1: a PF FLR is "equivalent to a D0->D3->D0 transition"), so
-+ * EIMS and EICR come back as 0 from their register-defined initial
-+ * values, and igb_hw_init() resets tx_tail/rx_tail to 0.  The next
-+ * igb_memcpy_start() will memset each descriptor it touches before
-+ * submission, so no explicit IMC/EICR writes or ring memsets are
-+ * needed here.
-+ */
-+static void igb_error_reset_and_reinit(struct vfio_pci_device *device)
-+{
-+	vfio_pci_device_reset(device);
-+	vfio_pci_msix_reenable(device, MSIX_VECTOR, 1);
-+	igb_hw_init(device);
-+}
-+
- static int igb_memcpy_wait(struct vfio_pci_device *device)
- {
- 	struct igb *igb = to_igb_state(device);
-@@ -522,7 +544,21 @@ static int igb_memcpy_wait(struct vfio_pci_device *device)
- 
- 	igb_irq_enable(igb);
- 
--	return (status & 1) ? 0 : -ETIMEDOUT;
-+	if (status & 1)
-+		return 0;
-+
-+	/*
-+	 * The descriptor never completed.  On real 82576 hardware this
-+	 * typically follows a DMA-read fault from one of the intentional
-+	 * unmapped-IOVA tests; the fault leaves the descriptor engine
-+	 * unable to service subsequent valid descriptors.  CTRL.RST alone
-+	 * reinitializes the queue registers but leaves the engine wedged
-+	 * for the current process, so a broader VFIO_DEVICE_RESET (FLR)
-+	 * is required.
-+	 */
-+	igb_error_reset_and_reinit(device);
-+
-+	return -ETIMEDOUT;
- }
- 
- static void igb_send_msi(struct vfio_pci_device *device)
+- System counter values (cycles + counter_id) are carried in
+  struct ptp_sys_time alongside each system timestamp. These are
+  populated by the timekeeping core cross-timestamp infrastructure,
+  which is now merged in net-next [3] - drivers do not fill them.
+  This series therefore applies directly to net-next with no
+  out-of-tree dependency.
 
+- Graceful degradation: the attrs ioctls work even on devices
+  without attrs callbacks, falling back to gettimex64 /
+  getcrosststamp and returning attrs.valid = 0. The capability
+  bits reflect this fallback so cap-respecting userspace does not
+  skip the ioctl on base-only drivers.
+
+A capability flag is added to ptp_clock_caps so userspace can
+discover attributes support.
+
+Patches 2-3 add testptp support for the new ioctls.
+
+Patch 4 implements the attributes for ptp_vmclock, reporting
+error bound, clock status, and timescale.
+
+Patches 5-7 implement the attributes for the ENA driver,
+reporting error bound from the device's PHC layer.
+
+v6:
+- ptp: reject a non-zero reserved field (request.rsv[]) in the
+  attrs ioctls, matching ptp_sys_offset_extended(). (Jakub Kicinski)
+- ptp: zero-initialize the per-sample system-timestamp snapshot in
+  ptp_sys_offset_extended_attrs() so no uninitialized or stale stack
+  data can reach userspace. (Jakub Kicinski)
+- ptp: translate the kernel enum clocksource_ids to the UAPI enum
+  ptp_counter_id before returning sys_counter_id; sources that are
+  not a raw hardware counter (e.g. kvmclock) are reported as
+  PTP_COUNTER_UNKNOWN with sys_counter = 0. (Jakub Kicinski,
+  David Woodhouse)
+- ptp: initialize the precise cross-timestamp struct and set its
+  clock_id from the validated request; validate clock_id against a
+  precise-path allowlist (CLOCK_REALTIME + CLOCK_AUX) so unsupported
+  clocks return -EINVAL instead of triggering a WARN in
+  get_device_system_crosststamp(). (Jakub Kicinski, David Woodhouse)
+- ptp: make the extended_attrs/precise_attrs capability bits reflect
+  the base-callback fallback (gettimexattrs64 || gettimex64,
+  getcrosststampattrs || getcrosststamp) and document the fallback
+  and the att.valid semantics. (Jakub Kicinski)
+- ptp: echo the full request header back from the attrs ioctls so
+  valid/clock_id/num_samples/rsv round-trip. (Jakub Kicinski)
+- ptp: clarify the FREE_RUNNING vs UNRELIABLE and HOLDOVER status
+  comments and the @error_bound kernel-doc (a maximum bound, not a
+  statistical estimate; not to be trusted when status is UNKNOWN or
+  UNRELIABLE). (Carolina Jubran)
+- ptp: document that both @sts and @att may be NULL in the
+  gettimexattrs64 kernel-doc. (Jakub Kicinski)
+- selftests/ptp: print the returned system counter value and id
+  (sys_counter, sys_counter_id) in the attrs output.
+- Exposing the underlying hw_csid/hw_cycles for derived clocksources
+  (kvmclock, ART, ...) is left to a follow-up; the UAPI leaves room
+  to add them without an ABI change. (David Woodhouse)
+
+v5:
+- ptp: simplify ptp_sys_offset_{extended,precise}_attrs() to copy
+  the request header onto the stack and allocate the result buffer
+  once, instead of memdup_user() + kfree() + kzalloc(). (Saeed
+  Bshara)
+- ptp: deduplicate the kernel-doc for gettimexattrs64 /
+  getcrosststampattrs by referencing the base gettimex64 /
+  getcrosststamp callbacks. (Saeed Bshara)
+- ptp: add missing kernel-doc member descriptions for struct
+  ptp_timestamp and struct ptp_sys_offset_attrs.
+- selftests/ptp: map the clockid to a name and print once instead
+  of three duplicated printfs. (Saeed Bshara)
+- selftests/ptp: make -a a modifier on -x/-X instead of an
+  exclusive option; drop -A (use -X -a); trim the unknown-clock
+  output; print "not reported" for attributes the device does not
+  report. (Saeed Bshara)
+- ptp_vmclock: scope the local 'st' inside the SUPPORT_KVMCLOCK
+  block to fix an unused-variable warning on !CONFIG_KVM_GUEST.
+  (kernel test robot)
+- No UAPI changes; the ioctl structures are unchanged from v4.
+
+v4:
+- Complete UAPI redesign per Thomas Gleixner's proposal [2]:
+  unified data structure with u32 valid bitmask, system counter
+  in ptp_sys_time (populated by core, not drivers), graceful
+  degradation for devices without attrs callbacks. (Thomas Gleixner,
+  David Woodhouse)
+- Counter values moved from driver attrs callback to timekeeping
+  core infrastructure - drivers no longer set counter_id or
+  counter_value.
+- Flexible array member for timestamps[] (kernel bounds the copy,
+  userspace allocates for num_samples requested).
+- Drop separate ptp_clock_attributes kernel struct - driver
+  callbacks fill the UAPI ptp_clock_attrs directly.
+
+v3:
+- Remove patch 5/8 from v2 (return-code bugfix) - sent separately
+  as [PATCH net] to the net tree.
+- Zero-initialize struct ptp_clock_attributes in PTP core ioctl
+  handlers to prevent stack leak of unset fields. (Simon Horman,
+  sashiko)
+- ptp_vmclock: validate counter_period_shift < 128 to prevent
+  undefined behavior on untrusted hypervisor input. (sashiko)
+- ptp_vmclock: add overflow check on err_hi * NSEC_PER_SEC to
+  prevent silent wraparound producing erroneously small error
+  bound. (sashiko)
+- ptp_vmclock: report PTP_TIMESCALE_TAI after tai_adjust() to
+  avoid timescale mismatch. (sashiko)
+- ENA: set counter_id = 0, counter_value = 0 in gettimexattrs64
+  for defense-in-depth. (sashiko)
+
+v2:
+- Fix build bisectability: move ena_com.c consumer updates into
+  patch 6/8 and ena_phc.c caller update into patch 7/8 so each
+  patch compiles independently.
+- Add missing Cc for Amit Bernstein (co-author of ENA patches).
+
+[1] https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
+[2] https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
+[3] https://lore.kernel.org/all/20260526165826.392227559@kernel.org/
+
+Arthur Kiyanovski (7):
+  ptp: Add ioctls for PHC timestamps with quality attributes
+  selftests/ptp: Extract print_system_timestamp helper in testptp
+  selftests/ptp: Add testptp support for attributes ioctls
+  ptp: ptp_vmclock: Implement attributes ioctls
+  net: ena: Update PHC admin interface for error bound support
+  net: ena: Add error bound to PHC communication layer
+  net: ena: Implement gettimexattrs64 callback for PTP attributes
+
+ .../device_drivers/ethernet/amazon/ena.rst    |   2 +
+ .../net/ethernet/amazon/ena/ena_admin_defs.h  |  17 +-
+ drivers/net/ethernet/amazon/ena/ena_com.c     |  51 ++--
+ drivers/net/ethernet/amazon/ena/ena_com.h     |   5 +-
+ drivers/net/ethernet/amazon/ena/ena_debugfs.c |   3 +
+ drivers/net/ethernet/amazon/ena/ena_phc.c     |  61 +++-
+ drivers/ptp/ptp_chardev.c                     | 208 ++++++++++++-
+ drivers/ptp/ptp_clock.c                       |   4 +-
+ drivers/ptp/ptp_vmclock.c                     | 197 +++++++++++-
+ include/linux/ptp_clock_kernel.h              |  20 ++
+ include/uapi/linux/ptp_clock.h                | 283 +++++++++++++++++-
+ tools/testing/selftests/ptp/testptp.c         | 198 +++++++++---
+ 12 files changed, 939 insertions(+), 110 deletions(-)
+
+
+base-commit: b515dc54795ef370be3cb396e7c12ad91686b6d1
 -- 
-2.55.0.508.g3f0d502094-goog
+2.47.3
 
