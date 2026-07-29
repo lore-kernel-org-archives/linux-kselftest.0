@@ -1,69 +1,80 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3B63A961B;
-	Wed, 29 Jul 2026 06:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2315277CA5
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 06:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785305938; cv=none; b=h66IyzYY3Kv8IlekYjVsyaK2EMhIV2NlWt0WeWWxcXii3j9Ho6LbWwM/D5OPd7zuswvFaJBRyt8L7spt2Ki7yR5b+1HrsV96zS26Np88p0cbirOLbVFWM+PIBE16PBCptRdKVUcc5ZPiTrynzYEQq3nYZErZX1rbTZZQE1jMQng=
+	t=1785307565; cv=none; b=Q7uKDVDtjW/tYgN1hepPcj1WBmqY7n2Rqa4KEZSS3vikEpm1eMB8EGYGHfIBh8TMZwuGYj+gjyS+o4b/0kkplYuvv77VFwqJZFhBY84GAC+lP+UUq4Ij2br1k0bHVKnKHpyExFbAfXW/MH9Qer0YgA8Yk0laC5lzvkHFCJwiDPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785305938; c=relaxed/simple;
-	bh=rMOz9tNCBFm7cV1VsMeyU8NEXZBCS8iWVwHAEyI8zj0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NFGe9XoNBkK+tT87fn8Xdry1XEj7MSEQxEhMcFrosoF6vkej8gV0BrSDC2gt8Eoh42ORE+5ugJX0wn7s9tizNxtvaYjI//E8zvXm/lF6OSVwcN3zcPXmLf8Eyq+n+KLrnY/ws2Jp7NueNj2FyRlwR2K6aa/CfbiJ/E/XYGNYjN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 59dc81648b1511f1aa26b74ffac11d73-20260729
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
-	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
-	CIE_GOOD_SPF, CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:da59ef48-c325-4653-aa0d-748f8d93aa2d,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:da59ef48-c325-4653-aa0d-748f8d93aa2d,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:cd6b38ad01831fe32bf65835281ceb14,BulkI
-	D:260729141848R6NOSYHN,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
-	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
-	0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 59dc81648b1511f1aa26b74ffac11d73-20260729
-X-User: tianyaxiong@kylinos.cn
-Received: from tian-x86.. [(106.16.184.249)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 2134096418; Wed, 29 Jul 2026 14:18:44 +0800
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-To: rafael@kernel.org,
-	daniel.lezcano@kernel.org,
-	christian.loehle@arm.com,
-	lenb@kernel.org,
-	pavel@kernel.org,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
+	s=arc-20240116; t=1785307565; c=relaxed/simple;
+	bh=F5aaMBz3ntcXyH9DOYL2EeiL7J+djOIAMrX2GVcnn/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P+MynGUxc0HH7/4wQ1Tkg1Ue2gKD1dDiPPCI2UAS03ozwraeRAfDdmdRG2HaugFA3oHLv3a3FxuFlh01jj52/hohFs2EC8wnyIPirh/XMVKRJVYpHjZxcFHkv0ttjfWfQWqVjPnslP1Ostkyu7jHU85W5sg8frwhylavqYVYdrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AFU63/Hc; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AFU63/Hc"
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-5bf9466867cso179280e0c.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 23:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785307561; x=1785912361; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=o3KBK6CTQYOIsrhrkquHUtDzN79doVR9bWCDjPdk58I=;
+        b=AFU63/Hc8kT4TOSHpD/ZyKIUkYB/X67Pz9RE/dHB0+vyUI9iO4Vm2hN2EvqrwKH5f3
+         MAmYKLjviDMW+GPC/4rQA23//18EA96dw9MS5NrqLlr54CrKnTtXVR3orjfqA6nA0QY4
+         kIyl89d2XM5hBotg+w1qjUJLPuwxrfMBG8/RJBMXN+dv6FVbjnZ8QY2ZKLkckCIsvJj3
+         JVjzGiYLs7KQjzKTeyfBGw5L9wXcrOGN2DrgHa5XUk4UEByJgYnf4BMgesACh2ryEJ1W
+         wrjpYoSWaWcPSY8P0dYD7IQQKHfRxQgu2CLT2wf1xCB0ZkHAo7LWsfapc4tGfSMpx61N
+         6wvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785307561; x=1785912361;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o3KBK6CTQYOIsrhrkquHUtDzN79doVR9bWCDjPdk58I=;
+        b=bMfCblI8IK/fKMwNeopv6ddtpbEgT67KlrPVlz38ZUCSMlUKv98UKs0vft/YyjOJfc
+         jYYjE5hNAEM5SiU+IwoCpxU7LmZjzbnOUWStt3dezmuQoH33aiq4pVmRacEP62MZUOP6
+         fqWSinwDYkpkx/WyUm8Ch39AyKj+rSuVhejpiVoomyw9WKdVlcL8LUWcGrZB3YqpZfm1
+         9/ZjmuOfquB5eh5g/zcs0JzB9qldzivFt56j6bv/lJa7gY6cYRmgwH1sfdbAAMh+VZb1
+         qMRDRTlwhKxWZxM6TRuu3WWEQ9GA3L3vK8RdGO2YZRaZYioynKLvevMWIGKA3a9R6Rbd
+         axdg==
+X-Forwarded-Encrypted: i=1; AHgh+RrzjtORi0+820X/m01NRFtfqpS/n68lKPfMqQdJasinrQL5sHB6S1cB8hyHnkDMyj/0oQ7svuX13PyDMNYPmo8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywug3UfbsezdyxgP7w3m4uWNcM1BG6LeTETk1Dtv4bl5ZzFylhQ
+	xU5yxdKOptaRjSMq2mg7NUvBVZ8XuqoTZTXribmm4dGXEIu9nrfqwYJK
+X-Gm-Gg: AR+sD12NniIjjO+AswQw+U3F5VkMYhGIzOkfNKi/6iOqwiLBKsYuGBydIioCve+KA/P
+	46q2b7fNfrPbF0L8PoyN+HGFlSJO+LN0FDI3X3K19Z6gwQVDwkgjxA7P2+jBTo6K1fdox7oZegE
+	Y8Nm1LLissBmjuVhw67XXRR5PKo2Q1dzbrO1oV9/xhE/PiIKTco/1IBjxNYMyEq+CJSmWKBW5HT
+	3+g6+u7HLaJQNmzd92t/5Jb+efiPzDwfywCzyxuXPATY1mGwbK4Iyc4YJ/d4Bk02VWGK7ghg+78
+	rEtMrwos/DtaXrAHYfmeNkmzG/URMOVGxm9/UPG40Zj13uNUgH6eYuWoEjB78DYLJs3IwLrFCO1
+	Y4e2+gp6BHL2F3fFuikVVzA8wsGq0GIp4S5QrlN7jnwydJSdyJHE3IYEirCwoTMOdimxrUqGlvY
+	gDinsyGz1W7S2aWoCttM/OAUd9QkkwOMFhkJwTMUuYbEXAXRkQg16N
+X-Received: by 2002:a05:6122:130a:b0:5a0:370:f12c with SMTP id 71dfb90a1353d-5c33fa28cffmr2295113e0c.11.1785307561123;
+        Tue, 28 Jul 2026 23:46:01 -0700 (PDT)
+Received: from houminxi ([61.170.216.249])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c34ef4dcf5sm1548090e0c.6.2026.07.28.23.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 23:46:00 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	dev@openvswitch.org,
 	linux-kselftest@vger.kernel.org,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH v2 6/6] selftests/cpuidle: add idle-state disable selftest
-Date: Wed, 29 Jul 2026 14:18:40 +0800
-Message-ID: <20260729061840.14965-1-tianyaxiong@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
-References: <20260729061549.13419-1-tianyaxiong@kylinos.cn>
+	shuah@kernel.org,
+	horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v7 0/2] selftests: openvswitch: SCTP flow key parsing
+Date: Wed, 29 Jul 2026 02:45:47 -0400
+Message-ID: <20260729064549.3647518-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,178 +83,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Verify that writing 1 to cpuidle stateX/disable stops that state from
-gaining usage while other states continue to idle, then restore the
-previous disable value.
+Add OVS_KEY_ATTR_SCTP to the ovskey parse table in ovs-dpctl.py so
+that SCTP flow strings carry the L4 key through to the kernel, and
+add a matching selftest in openvswitch.sh.
 
-Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
----
- tools/testing/selftests/cpuidle/Makefile      |   2 +-
- .../cpuidle/cpuidle_disable_state.py          | 133 ++++++++++++++++++
- tools/testing/selftests/cpuidle/settings      |   2 +-
- 3 files changed, 135 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/cpuidle/cpuidle_disable_state.py
+The missing parse-table entry caused a selftest NIPA failure: the
+flow string "sctp(dst=4443)" parsed without error but silently
+dropped the L4 key, producing a flow with only ipv4(proto=132).
+The kernel's match_validate() then rejected it with -EINVAL because
+OVS_KEY_ATTR_SCTP was missing for IPPROTO_SCTP.
 
-diff --git a/tools/testing/selftests/cpuidle/Makefile b/tools/testing/selftests/cpuidle/Makefile
-index 116afec7fc0f..0e054199acc5 100644
---- a/tools/testing/selftests/cpuidle/Makefile
-+++ b/tools/testing/selftests/cpuidle/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS := cpuidle_latency_req_qos.py
-+TEST_PROGS := cpuidle_latency_req_qos.py cpuidle_disable_state.py
- TEST_FILES := cpuidle_lib.py
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/cpuidle/cpuidle_disable_state.py b/tools/testing/selftests/cpuidle/cpuidle_disable_state.py
-new file mode 100755
-index 000000000000..72ad5278c53c
---- /dev/null
-+++ b/tools/testing/selftests/cpuidle/cpuidle_disable_state.py
-@@ -0,0 +1,133 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""
-+cpuidle: verify user disable of an idle state blocks selection.
-+
-+Writes 1 to /sys/devices/system/cpu/cpuN/cpuidle/stateX/disable and checks
-+that stateX does not gain usage while other states still idle.
-+"""
-+
-+from __future__ import annotations
-+
-+import os
-+import sys
-+from typing import Dict, Optional
-+
-+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-+import cpuidle_lib as cl
-+import ksft
-+
-+
-+def pick_disable_target(states: Dict[int, cl.IdleState]) -> Optional[int]:
-+	"""Prefer deepest user-enabled state; keep at least one shallower enabled."""
-+	ordered = sorted(states)
-+	if len(ordered) < 2:
-+		return None
-+	for idx in reversed(ordered):
-+		if idx == ordered[0]:
-+			continue
-+		s = states[idx]
-+		if s.disable_path and s.disable == 0:
-+			return idx
-+	return None
-+
-+
-+class DisableStateGuard:
-+	def __init__(self, path: str):
-+		self.path = path
-+		self.prev: Optional[str] = None
-+
-+	def __enter__(self):
-+		self.prev = open(self.path).read().strip()
-+		with open(self.path, "w") as f:
-+			f.write("1\n")
-+		return self
-+
-+	def __exit__(self, *args):
-+		if self.prev is None:
-+			return
-+		with open(self.path, "w") as f:
-+			f.write(f"{self.prev}\n")
-+
-+
-+def run_disable_case(desc: str, states: Dict[int, cl.IdleState],
-+		     target: int) -> None:
-+	s = states[target]
-+	ksft.print_msg(f"=== {desc} ===")
-+	ksft.print_msg(f"disable state{target}:{s.name} (lat={s.latency_us})")
-+
-+	with DisableStateGuard(s.disable_path):
-+		ud = cl.measure_idle()
-+
-+	total = sum(ud.values())
-+	cl.print_usage_table(states, ud, {target})
-+	ksft.print_msg(f"total_usage+={total} disabled_usage+={ud[target]}")
-+
-+	if total <= 0:
-+		ksft.test_result_fail(f"{desc}: too little idle activity ({total})")
-+		return
-+	if ud[target] > 0:
-+		ksft.test_result_fail(
-+			f"{desc}: state{target}({s.name}) usage+={ud[target]} "
-+			"while user-disabled"
-+		)
-+		return
-+	ksft.test_result_pass(desc)
-+
-+
-+def run_reenable_case(desc: str, states: Dict[int, cl.IdleState],
-+		      target: int) -> None:
-+	"""After restore, confirm disable sysfs is cleared and idle still works."""
-+	s = states[target]
-+	ksft.print_msg(f"=== {desc} ===")
-+	ksft.print_msg(f"re-enabled state{target}:{s.name}")
-+
-+	ud = cl.measure_idle()
-+	total = sum(ud.values())
-+	cl.print_usage_table(states, ud)
-+	ksft.print_msg(f"total_usage+={total} target_usage+={ud[target]}")
-+
-+	if total <= 0:
-+		ksft.test_result_fail(f"{desc}: too little idle activity ({total})")
-+		return
-+	cur = int(open(s.disable_path).read())
-+	if cur != 0:
-+		ksft.test_result_fail(f"{desc}: disable sysfs still {cur}")
-+		return
-+	ksft.test_result_pass(desc)
-+
-+
-+def main() -> None:
-+	ksft.print_header()
-+
-+	states = cl.require_root_and_cpuidle(min_states=2)
-+	# Need disable sysfs on states we might target.
-+	states = {i: s for i, s in states.items() if s.disable_path}
-+	if len(states) < 2:
-+		ksft.set_plan(1)
-+		ksft.test_result_skip("need at least 2 cpuidle states with disable")
-+		ksft.finished()
-+
-+	cl.log_states(states, extra=True)
-+	cl.warn_preexisting_qos()
-+
-+	target = pick_disable_target(states)
-+	if target is None:
-+		ksft.set_plan(1)
-+		ksft.test_result_skip("no user-enabled deep state to disable")
-+		ksft.finished()
-+
-+	ksft.set_plan(2)
-+	run_disable_case(
-+		f"disable state{target} blocks selection", states, target
-+	)
-+	states = cl.read_states()
-+	run_reenable_case(
-+		f"restore state{target} disable", states, target
-+	)
-+
-+	ksft.finished()
-+
-+
-+if __name__ == "__main__":
-+	main()
-diff --git a/tools/testing/selftests/cpuidle/settings b/tools/testing/selftests/cpuidle/settings
-index 1d2078f92780..1bbc754b982b 100644
---- a/tools/testing/selftests/cpuidle/settings
-+++ b/tools/testing/selftests/cpuidle/settings
-@@ -1,2 +1,2 @@
--# QoS ceilings x paths, plus no-QoS baselines.
-+# QoS ceilings x paths, no-QoS baselines, plus disable-state windows.
- timeout=180
--- 
-2.43.0
+Changes from v6:
+  - Trim unit tests to cover only the new SCTP key parser
+    (removed tests for TCP/UDP/ICMP/IPv4/EthType which were out of
+    scope for this patch); address Aaron's feedback that testing
+    existing parsers was excessive for a selftest tool.
+  - _parse_flow() now checks for unparsed remainder.
+
+v6: https://lore.kernel.org/netdev/20260724150624.3457427-1-houminxi@gmail.com/
+v5: https://lore.kernel.org/netdev/20260723215630.2502169-1-houminxi@gmail.com/
+v4: https://lore.kernel.org/netdev/20260723162503.1790998-1-houminxi@gmail.com/
+v3: https://lore.kernel.org/netdev/20260722214915.4128292-1-houminxi@gmail.com/
+v2: https://lore.kernel.org/netdev/20260721190648.2713156-1-houminxi@gmail.com/
+v1: https://lore.kernel.org/netdev/20260718215437.3257200-1-houminxi@gmail.com/
+
+Minxi Hou (2):
+  selftests/net/openvswitch: add SCTP flow key parsing to ovs-dpctl.py
+  selftests/net/openvswitch: add SCTP flow key test
+
+ .../testing/selftests/net/openvswitch/openvswitch.sh   | 121 +++++++++++++++++
+ .../testing/selftests/net/openvswitch/ovs-dpctl.py     |  82 ++++++++++++
+ 2 files changed, 203 insertions(+)
+
+--
+2.55.0
 
