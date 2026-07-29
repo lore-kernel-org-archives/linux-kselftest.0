@@ -1,207 +1,277 @@
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6733647CA91;
-	Wed, 29 Jul 2026 12:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785327803; cv=none; b=jR2y570VPvoWIidOdB64avkpndDSKDXIJ0an4eSkSnDGlTkTwyArJoUquM+/lxLSe77E7hJPku4ARKXrK8YoUahAh+MQcKgzMjk6XGeD+misIoKj/o8QLTyXJ/FeDTXyy838Bn6vamADX1Y2cUHHYkuAONTkdWSZvK80HXFTw2I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785327803; c=relaxed/simple;
-	bh=n8Eq+6+Nhabtgy8GnoTwIOfS6ttg6xbpMsrfwdi/K2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WpVlW4ciPeYXNnI5/KHhhr+I/kDA5qDlrLyaw0lx0KNBZMxPngE7sbranuqaaB53GZXIFms4jxUFulgfWtr+CXs2+DNUl/QGBMEagzLR9Q51VpQxwiebNrxlS1qvtphXTFt8I4gXWM3vFDuWJ3e32yFvGAsvKIStWAYYHcGb1LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=gsozdCQW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c0/dNjdx; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E48483813
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 12:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785329060; cv=pass; b=Ucw2JxFJPnS4tqgd/upiw5cear/qGBw0DyQGMU5N6xT+JQpMcA52MyVNZxn2yZQUtGLjmIWnMs3aRfH08UgWidxsz90Iou7gDQyth6gfoyJq60aMPvwAfhrOoWLMMp2w4bNf3z8SAmiho3PXpZRPDofhf73xQ/E+KLzZvT0H+cc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785329060; c=relaxed/simple;
+	bh=F8IHG4OYKgE61JI9JGANwQRR9aQYRg2JCeFAbzAKbyg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kyOz2pNbt3liMUndHobr72XQqjXjrZxX+9VXJKCFP5/Qe40cVMwxtDpSbYkPcM9+E7xc4cENo8jU7g8OISkh8Tdo2wbw6G5YNNf+PQ6kkyf/Ecu3xv0EFzKppcfkGMnco2zK1u6Y2D9tM6JJtZun9wmxF2RyaN7Yu8YMoOHPCCQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b=DWQhrzYh; arc=pass smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="gsozdCQW";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c0/dNjdx"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id 013811D000D9;
-	Wed, 29 Jul 2026 08:23:16 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Wed, 29 Jul 2026 08:23:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1785327796; x=1785414196; bh=FjyWDcU0AQmtNTB7vEHZRRZ3y0JXpUzK
-	aPUWS4TnRNM=; b=gsozdCQW8M4slO9m2Al4quBNj5zWOyyrCdYVk8uLh1kYiTf/
-	CaA0GbEdMGS+5eHIhIFDBpSPjK5g6b2pIlpY2hQRmIgx1Q5Acp2ovfgKm+r3EmJ5
-	z9h+qmjjwXrXo8lMvdRyyLD1zmaOJchi7q7mmf/46k+DcTYAuchd/WX9QHgI5e5S
-	TzkDDKkOWA1j/Rj7QJnWiV41uHSKGpwP2oiRcQe0jAcOCZjr2B9BTU/oBQLGn9/t
-	piiiuek7ohPNSD47TniWR/JGnQcUizOJ3ebJu8zqas7dClF904CT/a3fDay9l0BC
-	Rr4Xnci9lBKgtqgKRSLYkeF84YGxRSGIMJd9gQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785327796; x=
-	1785414196; bh=FjyWDcU0AQmtNTB7vEHZRRZ3y0JXpUzKaPUWS4TnRNM=; b=c
-	0/dNjdxcpyvR5Vkz3EhNUI+/lC/vZbCnDmhpFrx0RN8ZVqxHPqDwpQoFmM1NXUdK
-	p8FQa0lBTn2taUkOFtVtei62vVSHTjICGfu0WwkynhpP3e+fAf9j+d8F1AtVz3HU
-	yubRND5W/FpYxPkUefjm4mR7qiDkcfUPUIdxEhhp3EUK6VuiaeXJiuhTagoYB1ht
-	6RTnW60lDJGeH8RB3y1Pil+Q9BWc5FZDiprlrZRqwHVZiWwR9tpvEul5h8C5B4Xr
-	tPaKIJqZ9A+GMLlYcTlWfZmDav/LkdNiKMioVMzV8T+XyLN5DD8wXcih1rKVJYIU
-	WKMJAMzFEGGwmGpAeuMZg==
-X-ME-Sender: <xms:tPBpalzdOSSlXBf-Igff4kYyTG5U4tgAKFWBhkpEoVxQ7hbdIV1lOQ>
-    <xme:tPBpaltb_nVYMLej4kxwOTyytiElPM8iNWr7fnrRm5aCeQtLDivCEueFW1ny0xGvk
-    R7oB-j-ZxmS0CPa3ClrhwI3Rm25OfoG7Lsn7LEcpWMUMNjA-Tf6g30>
-X-ME-Received: <xmr:tPBpavEXKEYfzwoeoJh_JN2ICvBz0A4a264GbgkgiYRaEZaW5ak8IETq9iM>
-X-ME-Proxy-Cause: dmFkZTFy9VLstGC/2JcdpGCUEJUK2PuokghQUZYXXVIWYSAQOOOeIK+6vlG3o8tX1idpjb
-    1PHrG9dAgQIo5ypYYC0qtY3cChtoy2fp/jCSB7yeyU0FN3durHDdbxeQ+CBKqSfHuaiEic
-    vMWUb509ccfuHqTBkPmeJHn+btYOQHCNl67P1clA46qs8HQqIQ7PGsu/JGILF+Hn1D3jK1
-    dzr+Li6MpLHGQXKgDpe73QxdN2ObNJbKqGGvIpR8iTmqvoPh70wNHs3xzAw8SPq/4xSdPc
-    IzdhyfUqb1mAgaasV0aEoKgeHTsme1Ao0dajfkHJn0xpGy6usq+cwOqPooDPwD2NSqg5O3
-    Z+F1/GOk8LgyqEYMIR6dZosT0takI/Oneplo/f+1M6KY7LJN29s96z2d1ZSgb0PdDFMKNe
-    PGKtPYoKHFVXXeq8+8hNQDJoUC4SQ6g09DVYO2bAKL/Vc9GURYv49Q7mgQPyXKfGJVWwE4
-    8vBNodZQb+VJbzWIopLwYhBr0BReaZH+PC2xravXShPQ/MMRJ/8+Dp7RiLRaEGMun1tx9b
-    MiP+vE6kJO3H7ND86cVSmLuiXWZwtU9Ifsa4DCGqjhnGHt3YvCC4Dkf7GT3iI9IlTu5VGn
-    4U5noyZo/n3Ufc9wrZ+19RYDvFH6XdMa3fHM0tETBcFjBebowqgjt+HAEBPg
-X-ME-Proxy: <xmx:tPBpaj6HUksZdpZj87eKdKS-I-FWUndbMP31fSu7rova__7vRCUJxw>
-    <xmx:tPBpagxUeMM3zWCKF1qmpF2fSSq1sSWLMXAJ4-Yw8kihUrIHZ8woGQ>
-    <xmx:tPBpap3wgex4l2Jq0BM5CTAFIuBZZkG35TtseW5ZmWEzO-5-XbH6Vg>
-    <xmx:tPBpar4IjnyYK3oy5D2vIB6Uxx9aQmP9ViNDOZ4NvBSsX40o5ZKwvQ>
-    <xmx:tPBpanlYb8acziyIEb4ysKeH9OPo0X4Z-ce7We48iVrR7Uv_HIniMrTV>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Jul 2026 08:23:15 -0400 (EDT)
-Date: Wed, 29 Jul 2026 14:23:13 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Chuck Lever <cel@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype
- proto_ops for control record delivery
-Message-ID: <amnwsWrxv6KvrZ_L@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
- <20260728185124.72e421c8@kernel.org>
- <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
- <20260728193058.7f6b453b@kernel.org>
- <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=brainfault-org.20251104.gappssmtp.com header.i=@brainfault-org.20251104.gappssmtp.com header.b="DWQhrzYh"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-493f6de72faso6758785e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 05:44:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785329045; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Z4k9/Vli6fExaI+h4luaik3nuH60uS6NPZGnSH8QRBsI+Mmy9k/DSKoZhtH/zoCuWM
+         W2bljFnfoLmafopH8qbR2D3uI5JNIG02ENyFWTK0Rg/3QmVql/UvwR8VWGUDbFFq7mAz
+         yhvaNO6zJw37fCnKbV7qQz8yLR/wW9RDlWSI3MQhXK47rK7ZTUn4IB7PRk+GiSvWtlGU
+         mBBkMM9x01uyCBuxiTD0tQ7G49lA1UEVOeJF4YqyM8gRokP4t52TX5lk9JdIGgz1mNIw
+         QYWQzofSVQw9Jjj3OAxzF6PlJIji4FT7r+HDcAp8DGGipjWfCg0nFnf5yjEZ08uQHY0f
+         plGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hm5r/xpzCIodGlWiNThjdtOQlm2HxnqjU/kCjY5K+u0=;
+        fh=9WkFcpK7SqBjSfrBtBtngJpK9uDgNGCqAkukkbv1Kfw=;
+        b=EX5dI1VBJ9AQpJTWURm82v+U0zDv3GmzSdnYC7/PX6Z2MiRKgNbybOxGRpF/aFd8Wz
+         ZL3uR0WfvE/z9eno/7JG6/rHI06mR/YF//zPiT3kg8psFapwK5tUOUF1Vm68bnBJ4IZ8
+         klNnnnrtQZvVwbspQIfGHJT+KTO3k3ux1YrosSHh1DoWjzWkqrNvaKpi4k5F4dK+mze0
+         JTxjRmZ596q6UXSAIFQBIuHZaArWtee6Eo17y/oh1c2mB+86tZlK9faQDScIL0HbZHvq
+         RtIC02Eqaus4PEkhWPufaYtc8dY7vUVEHH+PcDiRc+yOl0Qtv1TpesKDpf5Nl0/7rGte
+         VCMg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20251104.gappssmtp.com; s=20251104; t=1785329045; x=1785933845; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hm5r/xpzCIodGlWiNThjdtOQlm2HxnqjU/kCjY5K+u0=;
+        b=DWQhrzYheQhSynDBCEkUszZnFJZwWCS20UENDd6L65sUakFpmGW3q2aURTm2NWH9y6
+         XcvXJU4y55EfBLCxo77wuEhDlSmMemY7bv+hPQTpCL6KsgualbKKlVC5itclC0w30sSY
+         H0KVdStgG85k5bTEBtm+nIUsa4sCU00ighaIPpKhbLMRg9oDN4uQ+7YfsC6+BH0QL3Qa
+         2VktVcrK0ghWi88gD/cj/VVeJF6FfNsMvAqtPw/TMb3M7xmx1zjyomQt2J3OdvmzbuIY
+         yhaX48kML8Kw2w3EMcjmK03Pe1eoEKZj2VfTdW8qBEtJgLRQFWB73Bw+4XjwVZfKumFg
+         Y89A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785329045; x=1785933845;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hm5r/xpzCIodGlWiNThjdtOQlm2HxnqjU/kCjY5K+u0=;
+        b=FPMh91Jbf7YT4XxMjlbs4J/n1bRxoUuJzK440XYNXtOEFBPdqsyJuCOXCYiLeCXTEB
+         UhS9QLAsniGkBB0DXN/EecBgD6ocHTROxql4Qg1NuPHwGYLGeymXM8h43frIwGRXDgdh
+         ziHQFzEAvIl/VCk1UogTYIbreD7qHQBpF8Xb6nhtXojG3Xq83GN9R0L52UyX4XayZBaB
+         mMs7QbQ84sVWyITr8p+Hx2JiKjK8DUshodSlgZ2EGZXrPiRtaXu9l5LkxHH0o5p7uNmY
+         QjZfAA2XCmLLmUpnllGz8kUDaSGiJCiaXv06XPKs1x924BzfaGKWbjhSjUm5dRlqdgg2
+         YPeQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrn8BtsxF+mjqI5atvY7cxnBAdJG/wyVRkN47xxizQhZjdNg+daIzBKbjFfNSp/az0H6OwELNH5LlkY+M9gJEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPRcHm+SY31xXjAFEfRuDCJfHb0CIiLncq0lltghSDhZuAPOCy
+	VFcdWoq1rvq0tenHvzU07I2xaw5WGqJ6OrcU4YSM/Ju9NP4vVhtQHP57hs+h42+Do5V2aQUz9p5
+	rlO6UUkBxBt6obVHy22BK2JuVE2mChjJFJDB419JG3w==
+X-Gm-Gg: AR+sD12JwC6BnbN5gxMlCRLUVc39YxtiYNC0svX6VOAxuv8zM+WQ+aj/09YsxDmGApP
+	93yq8TM4HfKu1ZqEBGoiw7QcVSI3y2cmQCrkIIugImwEofGRlsn4G6hwG/v8MkEJlcr6qczND3W
+	8QtGpra4Sg7szcbe6YVES3xCD2mENTeDY6vmCfs8bg4chLPBnnQF+1ytJtenN9Bnhkcr2m1KnyH
+	Z6Sr354ykKog10rdkMFdQ/DBurGkuQdaeDdtP3ZUn/mIFlvlJv1OjCeO169lV7ipG1fGjKBjMVD
+	+6AjRvMkhuTJ7nnCdAN1HYqSVA/X5XkH54E4lg+KfLH9NlVp8aKOezjYXR28UucvyR+l2W/vW7G
+	Ma0bomm0UKVL42RHJUJAvvRN9a6k4Ou+xGtdRJElwNajf0uQkANrftw+5A4fFJPg=
+X-Received: by 2002:a05:600c:4746:b0:495:3c6f:7c18 with SMTP id
+ 5b1f17b1804b1-497fd2f50bbmr22311715e9.3.1785329045078; Wed, 29 Jul 2026
+ 05:44:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
+References: <20260713010302.303278-1-inochiama@gmail.com> <20260713010302.303278-2-inochiama@gmail.com>
+In-Reply-To: <20260713010302.303278-2-inochiama@gmail.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Wed, 29 Jul 2026 18:13:52 +0530
+X-Gm-Features: AUfX_mwNGvCJ0K_M3RbragaNPirqy3_PcAwefERtLMiHMQvQ2ITGlUlXogu6tRE
+Message-ID: <CAAhSdy2dGry-jgpCGJyH6-qRbp2WVsJU39XskkigxCdyxmi=eQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/8] RISC-V: KVM: Add support for Svadu FWFT features
+To: Inochi Amaoto <inochiama@gmail.com>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Atish Patra <atish.patra@linux.dev>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Andy Chiu <andybnac@gmail.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Deepak Gupta <debug@rivosinc.com>, 
+	Thomas Huth <thuth@redhat.com>, Sergey Matyukevich <geomatsi@gmail.com>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>, Quan Zhou <zhouquan@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-2026-07-28, 22:51:30 -0400, Chuck Lever wrote:
-> 
-> 
-> On Tue, Jul 28, 2026, at 10:30 PM, Jakub Kicinski wrote:
-> > On Tue, 28 Jul 2026 21:57:21 -0400 Chuck Lever wrote:
-> >> > To me this is an ugly one-off workaround that doesn't fit into 
-> >> > the proto_ops (only TLS will use it). And you seem to net out
-> >> > to the same LOC on SUNRPC side with and without this?  
-> >> 
-> >> It’s not about LOC. It’s about not cluttering the normal I/O
-> >> path with a lot of exception processing to handle TLS Alert
-> >> records. The CMSG API is very difficult to use and leaks the
-> >> alert messages into I/O buffers (which for in-kernel consumers
-> >> are page cache pages). It’s piss-poor API design.
-> >
-> > I'm not arguing that it's amazing. Doesn't mean we will YOLO
-> > a special proto callback for every protocol stacking :/
-> 
-> No-one is asking you to roll over. Review means you get to steer
-> us in the right direction, and I promise to do the leg work. Terse
-> rejection doesn’t move the discussion forward. It stops it cold.
-> 
-> Complaining about slop also does not tell me where you need this
-> to go. I use AI to go from blank page to RFC/v1. Where we go next
-> is up to human taste, as always.
+On Mon, Jul 13, 2026 at 6:33=E2=80=AFAM Inochi Amaoto <inochiama@gmail.com>=
+ wrote:
+>
+> Hardware updating of PTE A/D bits is controlled through ADUE bit in
+> henvcfg Expose the feature only if both Svadu and Svade are supported
+> for VS-mode.
+>
+> Allow the VMM to enable/disable this feature by change the ISA
+> extension state in the guest.
+>
+> Assisted-by: YuanSheng:claude-4.7-opus
+> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> Signed-off-by: Inochi Amaoto <inochiama@gmail.com>
+> ---
+>  arch/riscv/include/uapi/asm/kvm.h |  1 +
+>  arch/riscv/kvm/vcpu_sbi_fwft.c    | 76 +++++++++++++++++++++++++++++++
+>  2 files changed, 77 insertions(+)
+>
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index 504e73305343..7bbea8812d92 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -240,6 +240,7 @@ struct kvm_riscv_sbi_fwft_feature {
+>  struct kvm_riscv_sbi_fwft {
+>         struct kvm_riscv_sbi_fwft_feature misaligned_deleg;
+>         struct kvm_riscv_sbi_fwft_feature pointer_masking;
+> +       struct kvm_riscv_sbi_fwft_feature pte_ad_hw_updating;
+>  };
+>
+>  /* If you need to interpret the index values, here is the key: */
+> diff --git a/arch/riscv/kvm/vcpu_sbi_fwft.c b/arch/riscv/kvm/vcpu_sbi_fwf=
+t.c
+> index ab39ac464ffd..4d474a439b29 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_fwft.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_fwft.c
+> @@ -94,6 +94,45 @@ static bool kvm_fwft_is_defined_feature(enum sbi_fwft_=
+feature_t feature)
+>         return false;
+>  }
+>
+> +static void kvm_sbi_fwft_env_flag_reset_helper(struct kvm_vcpu *vcpu,
+> +                                              u64 flag)
 
-RFC/v1 wasn't sent to netdev.
+Try to use upto 80-90 characters per-line.
 
-[jumping to the end of your reply]
-> I thought the RFC series cover letter made it clear that we are
-> looking for input and direction, not to sell a completely formed idea.
+s/kvm_sbi_fwft_env_flag_reset_helper/kvm_sbi_fwft_envcfg_flag_reset/
 
-Then this should have been tagged as "RFC v2". "PATCH v2" sounds more
-like a fully formed idea.
+> +{
+> +       vcpu->arch.cfg.henvcfg &=3D ~flag;
+> +}
+> +
+> +static long kvm_sbi_fwft_env_flag_set_helper(struct kvm_vcpu *vcpu,
+> +                                            struct kvm_sbi_fwft_config *=
+conf,
+> +                                            bool one_reg_access,
+> +                                            unsigned long value, u64 fla=
+g)
 
+s/kvm_sbi_fwft_env_flag_set_helper/kvm_sbi_fwft_envcfg_flag_set/
 
-I see in the RFC thread some doubts about whether read_sock is
-actually helpful with TLS.
+> +{
+> +       struct kvm_vcpu_config *cfg =3D &vcpu->arch.cfg;
+> +
+> +       if (value =3D=3D 0)
+> +               cfg->henvcfg &=3D ~flag;
+> +       else if (value =3D=3D 1)
+> +               cfg->henvcfg |=3D flag;
+> +       else
+> +               return SBI_ERR_INVALID_PARAM;
+> +
+> +       if (!one_reg_access) {
+> +               csr_write(CSR_HENVCFG, vcpu->arch.cfg.henvcfg);
+> +               if (IS_ENABLED(CONFIG_32BIT))
+> +                       csr_write(CSR_HENVCFGH, vcpu->arch.cfg.henvcfg >>=
+ 32);
+> +       }
+> +
+> +       return SBI_SUCCESS;
+> +}
+> +
+> +static long kvm_sbi_fwft_env_flag_get_helper(struct kvm_vcpu *vcpu,
+> +                                            struct kvm_sbi_fwft_config *=
+conf,
+> +                                            bool one_reg_access,
+> +                                            unsigned long *value, u64 fl=
+ag)
 
-Ignoring the "does read_sock even help?" aspect, how much improvement
-are you seeing by going from "read_sock with fallback to recvmsg+cmsg
-in case we get a non-DATA record" to "read_sock_rectype"? (current
-svcsock [before this series] doesn't use read_sock, it may be good to
-compare those 3 variants and not just "old read_sock vs new
-read_sock", but "read_sock vs read_sock++" is the important one to
-justify an API change)
+s/kvm_sbi_fwft_env_flag_get_helper/kvm_sbi_fwft_envcfg_flag_get/
 
-Non-DATA record should be fairly uncommon, I'm not that convinced "oh
-well let's try again" once in a while causes a measurable degradation.
+> +{
+> +       *value =3D (vcpu->arch.cfg.henvcfg & flag) =3D=3D flag;
+> +
+> +       return SBI_SUCCESS;
+> +}
+> +
+>  static bool kvm_sbi_fwft_misaligned_delegation_supported(struct kvm_vcpu=
+ *vcpu)
+>  {
+>         return misaligned_traps_can_delegate();
+> @@ -137,6 +176,34 @@ static long kvm_sbi_fwft_get_misaligned_delegation(s=
+truct kvm_vcpu *vcpu,
+>         return SBI_SUCCESS;
+>  }
+>
+> +static bool kvm_sbi_fwft_pte_ad_hw_updating_supported(struct kvm_vcpu *v=
+cpu)
+> +{
+> +       return riscv_isa_extension_available(vcpu->arch.isa, SVADU) &&
+> +               riscv_isa_extension_available(vcpu->arch.isa, SVADE);
+> +}
+> +
+> +static void kvm_sbi_fwft_reset_pte_ad_hw_updating(struct kvm_vcpu *vcpu)
+> +{
+> +       if (kvm_sbi_fwft_pte_ad_hw_updating_supported(vcpu))
+> +               kvm_sbi_fwft_env_flag_reset_helper(vcpu, ENVCFG_ADUE);
+> +}
+> +
+> +static long kvm_sbi_fwft_set_pte_ad_hw_updating(struct kvm_vcpu *vcpu,
+> +                                               struct kvm_sbi_fwft_confi=
+g *conf,
+> +                                               bool one_reg_access, unsi=
+gned long value)
+> +{
+> +       return kvm_sbi_fwft_env_flag_set_helper(vcpu, conf, one_reg_acces=
+s,
+> +                                               value, ENVCFG_ADUE);
+> +}
+> +
+> +static long kvm_sbi_fwft_get_pte_ad_hw_updating(struct kvm_vcpu *vcpu,
+> +                                               struct kvm_sbi_fwft_confi=
+g *conf,
+> +                                               bool one_reg_access, unsi=
+gned long *value)
+> +{
+> +       return kvm_sbi_fwft_env_flag_get_helper(vcpu, conf, one_reg_acces=
+s,
+> +                                               value, ENVCFG_ADUE);
+> +}
+> +
+>  #ifndef CONFIG_32BIT
+>
+>  static bool try_to_set_pmm(unsigned long value)
+> @@ -246,6 +313,15 @@ static const struct kvm_sbi_fwft_feature features[] =
+=3D {
+>                 .set =3D kvm_sbi_fwft_set_misaligned_delegation,
+>                 .get =3D kvm_sbi_fwft_get_misaligned_delegation,
+>         },
+> +       {
+> +               .id =3D SBI_FWFT_PTE_AD_HW_UPDATING,
+> +               .first_reg_num =3D offsetof(struct kvm_riscv_sbi_fwft, pt=
+e_ad_hw_updating.enable) /
+> +                                sizeof(unsigned long),
+> +               .supported =3D kvm_sbi_fwft_pte_ad_hw_updating_supported,
+> +               .reset =3D kvm_sbi_fwft_reset_pte_ad_hw_updating,
+> +               .set =3D kvm_sbi_fwft_set_pte_ad_hw_updating,
+> +               .get =3D kvm_sbi_fwft_get_pte_ad_hw_updating,
+> +       },
+>  #ifndef CONFIG_32BIT
+>         {
+>                 .id =3D SBI_FWFT_POINTER_MASKING_PMLEN,
+> --
+> 2.55.0
+>
 
-Even with recvmsg(), you have 2 choices:
- - pass a cmsg every time, and check the record type for every recv
- - don't pass a cmsg, and do a retry when you get -EIO
+Otherwise, this looks good to me.
 
-This proposal (call a different CB depending on record type) is... an
-"interesting" approach.
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-> >> > There needs to be a very strong reason for us to add APIs for
-> >> > in kernel consumers.  
-> >> 
-> >> This is not a helpful position. Your objection is the same
-> >> every time, treating the in-kernel users as second-class
-> >> citizens.
-> >
-> > No, it's not a second class citizen. But kernel consumers have a
-> > tendency to break all abstractions and insert hacks all over the place
-> > just because they are not forced to go via uAPI boundary which forces
-> > people to think about the API design.
-> 
-> Granted that user space self-tests can’t reach kernel-only APIs.
-> But that is what Kunit is for.
-> 
-> 
-> > You just need to try a little harder to produce a better solution.
-> > Rework or augment existing callbacks to let your achieve the behavior
-> > you want.
-> 
-> My original approach was to add a new read_sock variant because I
-> suspected you wouldn’t want read_sock itself to grow another argument.
-
-Given that there's only 2 existing consumers of read_sock (strp and
-nvme, and I'm not sure why strp/sockmap use it at all) [1], and 3
-arguments to read_sock, adding an argument would be ok IMO. The
-implementation (tls_sw_read_sock/tls_sw_read_sock_rectype) ends up
-being a small wrapper around a function that does the actual work with
-a NULL check, might as well propagate that to the callers.
-
-For me the problem is more that this new argument is very specific to
-TLS, and dropping something TLS-specific in a generic API (struct
-proto_ops) is quite ugly. If we want to make this generic, we're back
-to cmsg (or something cmsg-like). And then the benefit for users of
-read_sock gets down to avoiding the "try read_sock, then fall back to
-recvmsg" logic.
-
-
-[1] well, there's also some users that call tcp_read_sock directly
-[1], but I think they can be ignored other than "they'll need to pass
-NULL since .read_sock = tcp_read_sock"
-drivers/infiniband/sw/siw/siw_cm.c	tcp_read_sock(sk, &rd_desc, siw_tcp_rx_data);
-drivers/infiniband/sw/siw/siw_qp.c	tcp_read_sock(sk, &rd_desc, siw_tcp_rx_data);
-drivers/scsi/iscsi_tcp.c		tcp_read_sock(sk, &rd_desc, iscsi_sw_tcp_recv);
-net/rds/tcp_recv.c			tcp_read_sock(sock->sk, &desc, rds_tcp_data_recv);
-
--- 
-Sabrina
+Regards,
+Anup
