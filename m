@@ -1,148 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1856C413231;
-	Wed, 29 Jul 2026 07:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA473BBA0F;
+	Wed, 29 Jul 2026 07:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785309934; cv=none; b=RS8h6YlvJUTwCfoPLYxRLDO06uQwF6CKfhtOBEL0MNXlijALeuC6byJ/H6DkWAr71idXjE6PItQ9CkJfh+Ry3NGGJJKpVdfja+tbr7HXI313XGNCJJfJAOERKXbh3ByqGF72++yvV+aEUv8qI1dHssfgm5hxfGZfv/ipk5C/O4E=
+	t=1785309943; cv=none; b=J/1Q0QuOHt+d97IF2WxG1x889vd9hkmBt69AMYS03i1BkZis6ZZDmQUZNDdkgogdtcTrqQfNkqoAsEXlep2Dq3V8jZzmQhb5RCS2ZY9QPbSYtwVKVS3Y5dvY0HJ1a76KJNgDgEAduIoL4DoTl8OuaxHIaAtZGeoRcsW/YEq9H+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785309934; c=relaxed/simple;
-	bh=jfcKZLRcWasoL4ma/4cmYpmGtsQPOfE/fsG73ePMqik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rdPmyb2/65ndRsPgZ7FNJ64VUi14kF41jlgUXl0HkQ8NUbLpX4IAT0ehX5KyCiqUzzNnkhJFWlKq/EXET8e6Ir0zx0aWH2wkeqaa7qusZFRr6o/pHR2kDyAPK/e2Lt8H/il/GCHX1iPRBptkMB5hlxUbVz9NFXbZm+jDMxujx/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrHTwLjJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785309943; c=relaxed/simple;
+	bh=uA9E/02FBdvC/3xgD65N3r2jIubgdR1WUsAw5W6kXyg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pEQLfs7iVRPvUh8pasPBeKPRYQxGq1SXM0Y59tZ3SEqt+8aSNRFfJaPJq9eQOkjEUTLdKu+KFLZhcghwMSBM2aIz/NAow47U+jt+njztzpBheY0EX6PYC7sBsCqv7y1OCE6Yj8L8fwqpMtTiKy/1CK7OyYNMOJae63iM8ow0VE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KCnHMQTY; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrHTwLjJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0E91F00A3E;
-	Wed, 29 Jul 2026 07:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785309922;
-	bh=QDYGOjKuL1DA4Q6uwlbbmneA/BmguYqcNOaxqEegx2M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=DrHTwLjJpITm/cjqhWV7x/iP3bTeLhLircGa6mbjz/8f+qPhDzz2UQhg2nFWs/3OF
-	 EA4nZImw4WZh84vPgyd8V45CC2WNDxOXls8bTlNskB+sMWGOnyEU3uaonE1y1ZiX3E
-	 5uaDC6ZdazBr7xk3jw8nmOS6LWoKytzQMyrizvrTlS76Ja+sEjq1NeK73SqS5a66bH
-	 Hpx1EGNFGSDU3TnfHQBMD8vJNBV37zyP1E5YiOKOkbsg93KN9mTCG8ZPedd1IDpIt6
-	 V8rPNR920GqiSWpwBRzf7BfmDfLmWQ+47PtH1rtpAtSuRK+VMrriITQtZjQ9GWhd47
-	 JInm8Ie73VRyw==
-Message-ID: <f83d5b26-b369-489b-a305-1eb5ec6fccfb@kernel.org>
-Date: Wed, 29 Jul 2026 09:25:16 +0200
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KCnHMQTY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=vr
+	qb3sxHYXBZhJfHNSGI2OIYuH/m+iQgzsQRyibmvh4=; b=KCnHMQTYzPp+UN2aBT
+	y+zB93ZLVEnnykqasZgTrKLaSPrNC2gsL7FCuvXMlhODROyLsA+4NNc6W325mUxV
+	sIIw28Rj7O2x/0McHL4TjbOK23yQ0XS+VUQ2EePsXcuN+Ac0mMd7wPG1tbrMqbzj
+	ex36r+RmeMHZ0cnYAUrr2zo6I=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3dImqqmlq0n+hMg--.15305S2;
+	Wed, 29 Jul 2026 15:24:26 +0800 (CST)
+From: Lei Zhu <zhulei_szu@163.com>
+To: david@ixit.cz,
+	bongsu.jeon@samsung.com,
+	shuah@kernel.org
+Cc: oe-linux-nfc@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests: nci: Correct pthread_create return value check
+Date: Wed, 29 Jul 2026 15:24:26 +0800
+Message-Id: <20260729072426.303484-1-zhulei_szu@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@meta.com, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20260630-ecc_panic-v10-0-c6ed5b62eea2@debian.org>
- <20260630-ecc_panic-v10-6-c6ed5b62eea2@debian.org>
- <ee4982bf-ff45-8f0b-3b76-7ca19228f12b@huawei.com>
- <20260727212402.09baa9381ca426273fad4719@linux-foundation.org>
- <de29c5cc-3637-cd18-354d-55ceb3d60afd@huawei.com>
- <amh1nZVVaaZSGD3M@gmail.com>
- <20260728122016.30752d36c3b3c3af231efa9d@linux-foundation.org>
- <44f81bea-d64a-4f73-8665-46652a928c83@kernel.org>
- <amkn21ftNme48Vbl@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <amkn21ftNme48Vbl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3dImqqmlq0n+hMg--.15305S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFWxZr4UCr15urWfJFWUJwb_yoW5JF1kpa
+	48Aa4kCF48AF4vy3W3AFZ0vF45tr4DXFWkArZ09348u3y3X3yrtr1kKFyUWF17urZ8t3WF
+	vryruF9xuF4xJF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jeoGQUUUUU=
+X-CM-SenderInfo: x2kxzvxlbv63i6rwjhhfrp/xtbC7wvJF2ppqqtIigAA36
 
-On 7/29/26 00:07, Breno Leitao wrote:
-> On Tue, Jul 28, 2026 at 09:21:40PM +0200, David Hildenbrand (Arm) wrote:
->> On 7/28/26 21:20, Andrew Morton wrote:
->>>
->>>
->>> The bash script is still there, no known issues.
->>>
->>> We have the thing and tests are useful.  I'd say retain it until the
->>> rewrite-in-C happens?
->>
->> Nacked-by: David Hildenbrand <david@kernel.org>
-> 
-> I have a draft of the selftest in C already and I will give it more bake
-> time, and I will submit it until EOW.
+From: Lei Zhu <zhulei@kylinos.cn>
 
-IMHO there is no need to rush this test here, we could merge it after the main work.
+The pthread_create() functions returns 0 on success and a positive value on
+failure. Modify the return value check to correctly detect failure cases.
 
-We neglected our selftests quite a bit in the past, and that is biting us now.
+Fixes: 72696bd8a09d ("selftests: nci: Extract the start/stop discovery function")
+Signed-off-by: Lei Zhu <zhulei@kylinos.cn>
+---
+- Sashiko pointed out ignored the return value check in
+  disconnect_tag. Fixed now.
+---
+ tools/testing/selftests/nci/nci_dev.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-That's why I push back hard now (sorry) against stuff that is different than the
-rest and not easy to maintain.
-
-I know, hwpoison-panic is a destructive test, but I really don't think we should
-just merge mostly unreviewed bash tests that will just bitrot.
-
-Which makes me wonder now: should this actually be a selftest? It's nothing one
-would just want to run in a CI. It will crash your machine.
-
-Maybe this should just be a tool in tools/mm? I really think so. So having a
-nice C-level hwpoison-panic.c in tools/mm might be the way to go.
-
-So let's rather make this test well maintainable and have it properly reviewed
-than rushing something suboptimal.
-
+diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
+index 312f84ee0444..c053f5cf2745 100644
+--- a/tools/testing/selftests/nci/nci_dev.c
++++ b/tools/testing/selftests/nci/nci_dev.c
+@@ -438,7 +438,7 @@ FIXTURE_SETUP(NCI)
+ 	else
+ 		rc = pthread_create(&thread_t, NULL, virtual_dev_open,
+ 				    (void *)&self->virtual_nci_fd);
+-	ASSERT_GT(rc, -1);
++	ASSERT_EQ(rc, 0);
+ 
+ 	rc = send_cmd_with_idx(self->sd, self->fid, self->pid,
+ 			       NFC_CMD_DEV_UP, self->dev_idex);
+@@ -509,7 +509,7 @@ FIXTURE_TEARDOWN(NCI)
+ 			rc = pthread_create(&thread_t, NULL, virtual_deinit,
+ 					    (void *)&self->virtual_nci_fd);
+ 
+-		ASSERT_GT(rc, -1);
++		ASSERT_EQ(rc, 0);
+ 		rc = send_cmd_with_idx(self->sd, self->fid, self->pid,
+ 				       NFC_CMD_DEV_DOWN, self->dev_idex);
+ 		EXPECT_EQ(rc, 0);
+@@ -590,7 +590,7 @@ int start_polling(int dev_idx, int proto, int virtual_fd, int sd, int fid, int p
+ 
+ 	rc = pthread_create(&thread_t, NULL, virtual_poll_start,
+ 			    (void *)&virtual_fd);
+-	if (rc < 0)
++	if (rc)
+ 		return rc;
+ 
+ 	rc = send_cmd_mt_nla(sd, fid, pid, NFC_CMD_START_POLL, 2, nla_start_poll_type,
+@@ -610,7 +610,7 @@ int stop_polling(int dev_idx, int virtual_fd, int sd, int fid, int pid)
+ 
+ 	rc = pthread_create(&thread_t, NULL, virtual_poll_stop,
+ 			    (void *)&virtual_fd);
+-	if (rc < 0)
++	if (rc)
+ 		return rc;
+ 
+ 	rc = send_cmd_with_idx(sd, fid, pid,
+@@ -830,6 +830,8 @@ int disconnect_tag(int nfc_sock, int virtual_fd)
+ 
+ 	status = pthread_create(&thread_t, NULL, virtual_deactivate_proc,
+ 				(void *)&virtual_fd);
++	if (status)
++		return status;
+ 
+ 	close(nfc_sock);
+ 	pthread_join(thread_t, (void **)&status);
+@@ -874,7 +876,7 @@ TEST_F(NCI, deinit)
+ 	else
+ 		rc = pthread_create(&thread_t, NULL, virtual_deinit,
+ 				    (void *)&self->virtual_nci_fd);
+-	ASSERT_GT(rc, -1);
++	ASSERT_EQ(rc, 0);
+ 
+ 	rc = send_cmd_with_idx(self->sd, self->fid, self->pid,
+ 			       NFC_CMD_DEV_DOWN, self->dev_idex);
 -- 
-Cheers,
+2.25.1
 
-David
