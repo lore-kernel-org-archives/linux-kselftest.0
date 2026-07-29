@@ -1,69 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA1D54774;
-	Wed, 29 Jul 2026 02:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5A033E348
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 02:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785291853; cv=none; b=eDS7UI7VpkeNRRUrXCzl74EAS/RdmfFLb9RBqq9JqRk0t+C+WW39UTUptZSb5QbfH8PzGIFWi6I1R07gnK58qHSp+LWMS1TZxe3VXvvzCqI2mITSeLu1PmxQc1j0XJCe7wdKPKp4HHxaTq2dkb6PiPRNr0ECmNXsC2AAllCkQw8=
+	t=1785292197; cv=none; b=scgGTTxP4ooqy3h/X/oS5qihU9Po4V4kIsRb1EpS7dwoA8qQ8AwI+FkttDic6QHfOrJ1VTBMTcSdbWZOEUJd82UweP3Tec2G+gx26e99SldjUDuoKq2EK5mzPyb0U1luYI3oV+g+T4pyLS8MOn7QptNttyQ9ma6Nvlgd7lAF0rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785291853; c=relaxed/simple;
-	bh=XUIq8aOF6Tno9b9c/9ogAX6wHIo8g5YZZD9TCEDWNDU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JxvHrXnwHKOs1Sak2Qe37Yp9/WAiV8qyGcYIUpCGLoK/mf+DFehT17TTz48ye4OKeQMIJgtDeIKWwRdHeCx5qeIH6Ers0o/aF8icGdaKqsNQimnFa9G3Ip/jecn4+GiITsaKGtutgjHgPAFw/BnN1FgGcL6YbmrbMtK3C4zao9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVO3SV30; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785292197; c=relaxed/simple;
+	bh=S/5a3tZKaG1DhHr+vr7kXCnj7Webr6UiI9jqlWXgH/g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u4kpDc5zIUxXQ4DhuK9J8XKPrMDfnHnE0eAu2+vlVjZ5K6VasBR3eXEpOnKwITgXaaqRNHYolcIn2QBzdUtws9V5/TpAOY5gNC1cz3F06C4yQxKSA7oXulSX9dWTQqMm/XXCVQFY8v6iIKSOAdGMx4PpgjLH9TRB5YIHW4BdgYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIsOq2l6; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVO3SV30"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942EB1F000E9;
-	Wed, 29 Jul 2026 02:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785291852;
-	bh=G4+RfJBCvWya/zp6SvMmWI5PU/fVYmvHM22tHQWDbP0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=WVO3SV30SUf5ppjM0jI7Ss+SBlU0MD+uyVB16M/n1YvniigqIkvQPJN7j6T8seqDE
-	 PPtGEsibpQXOv8SIzBPv2hPAqhH0g0xjMC0HjSM+FjVNEwIME/tPwuGwP24sbckVXI
-	 v8RXYsEGD2pKqXrqgNP6RVANi11bWwFKKkY9dmstjVSldROxlhhmuQdq5nLCP7QADM
-	 wpUHi0l31tcS6+cGbywxh13xEOCw8AFOkfDskSZHgmQF/b6ccxWPhpS6GRLnbIUgvl
-	 PdjzdPiocEI0XNYWVeX92Rq0Vo1HDgYEUYHQWNLYSgn2W8m6FhcM691et+0Yi330m2
-	 lGmebLQ9cf9ow==
-Date: Tue, 28 Jul 2026 19:24:10 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Chuck Lever" <cel@kernel.org>
-Cc: "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Sabrina Dubroca"
- <sd@queasysnail.net>, "Shuah Khan" <shuah@kernel.org>, "Jeff Layton"
- <jlayton@kernel.org>, NeilBrown <neil@brown.name>, "Olga Kornievskaia"
- <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>, "Tom Talpey"
- <tom@talpey.com>, netdev@vger.kernel.org,
- kernel-tls-handshake@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-nfs@vger.kernel.org
-Subject: Re: [PATCH net-next v2 0/6] Deliver TLS control records to kernel
- read_sock consumers
-Message-ID: <20260728192410.75212c03@kernel.org>
-In-Reply-To: <0e1f1b09-fa91-4a6b-b60c-39bae6e287a6@app.fastmail.com>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
-	<20260728184312.20b21582@kernel.org>
-	<97b61f5f-57df-4a29-85a0-613f7b7e75eb@app.fastmail.com>
-	<20260728185525.27b443a9@kernel.org>
-	<0e1f1b09-fa91-4a6b-b60c-39bae6e287a6@app.fastmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIsOq2l6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785292192;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bgK4DkmBX3WByoHXl7Q/Ih8jzCTq/qOCycXaOJxX9Qs=;
+	b=uIsOq2l6e8igoM1RmPvodxi5IDAu9uX8uvK5vKuHWUPdf8QiDo59TEQCfKe/KZ2xaIs5tc
+	4l90xgNtZIaxeMOqjnfVLTG1BLFPZA90eKKieTpZLfqeu2AU4vhe0/WTsmfueCExAdVed+
+	0qak5n1me/BSuTKP7Y7Tpr5AGgXKwj4=
+From: Chenguang Zhao <chenguang.zhao@linux.dev>
+To: chenhuacai@kernel.org,
+	kernel@xen0n.name,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yangtiezhu@loongson.cn
+Cc: hengqi.chen@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	chenguang.zhao@linux.dev,
+	Chenguang Zhao <zhaochenguang@kylinos.cn>
+Subject: [PATCH v4 0/4] LoongArch bpf kptr xchg inline support
+Date: Wed, 29 Jul 2026 10:28:33 +0800
+Message-Id: <20260729022837.355549-1-chenguang.zhao@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 28 Jul 2026 22:16:22 -0400 Chuck Lever wrote:
-> >> It makes sense to me. Which terms do you have trouble with?
-> >> 
-> >> Patch 1 is moving to a pre-requisite series, so this can be dropped
-> >> from the cover letter.  
-> >
-> > Did you write this? If not what model did you use?  
-> 
-> I did not write this text. It was written with Opus 5 and reviewed by
-> gpt-5.6, sashiko (gemini), and myself, repeatedly.
+From: Chenguang Zhao <zhaochenguang@kylinos.cn>
 
-I was just curious. I find gpt-5.6 output largely incomprehensible.
+This series enables the BPF verifier to inline bpf_kptr_xchg()
+into BPF_XCHG on LoongArch64, and fixes the underlying JIT
+atomic ordering that makes such inlining safe.
+
+The BPF verifier can lower bpf_kptr_xchg() to a single BPF_XCHG
+atomic when the JIT advertises ptr xchg support via
+bpf_jit_supports_ptr_xchg(). This removes helper-call overhead
+from the kptr exchange fast path. Inlining is only correct when
+the JITed exchange provides the same sequentially consistent
+ordering as the bpf_kptr_xchg() helper.
+
+Patch 1 fixes memory ordering for all value-returning BPF atomic
+RMW operations emitted by the LoongArch bpf JIT. Per LKMM,
+value-returning atomic RMW must provide sequentially consistent
+ordering. Plain AMO instructions and bare ll/sc loops on LoongArch
+do not satisfy this by themselves:
+ - BPF_FETCH (ADD/AND/OR/XOR): switch to am*_db.{b,h,w,d}
+ - BPF_XCHG: switch to amswap_db.{b,h,w,d}
+ - BPF_CMPXCHG: emit dbar 0x700 after the ll/sc loop, matching
+   __WEAK_LLSC_MB in cmpxchg.h
+Non-value-returning RMW ops (plain BPF_ADD, BPF_AND, etc.)
+remain weakly ordered, consistent with LKMM. This fix is independent
+of kptr inlining and benefits all BPF programs using value-returning
+atomics on LoongArch.
+
+Patch 2 implements bpf_jit_supports_ptr_xchg() so the verifier
+may inline bpf_kptr_xchg() on LoongArch64.
+
+Patches 3 and 4 extend bpf selftests: functional coverage via
+kptr_xchg_inline, and an optional kptr-xchg benchmark to compare
+helper vs inlined paths.
+
+Chenguang Zhao (4):
+  LoongArch: bpf: Fix memory ordering for value-returning atomics
+  LoongArch: bpf: Advertise JIT support for kptr xchg inline
+  selftests/bpf: Enable kptr_xchg_inline test on LoongArch
+  selftests/bpf: Add kptr-xchg benchmark
+
+ arch/loongarch/include/asm/inst.h             | 18 ++++
+ arch/loongarch/net/bpf_jit.c                  | 37 ++++---
+ tools/testing/selftests/bpf/Makefile          |  2 +
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../selftests/bpf/benchs/bench_kptr_xchg.c    | 96 +++++++++++++++++++
+ .../bpf/prog_tests/kptr_xchg_inline.c         |  3 +-
+ .../selftests/bpf/progs/kptr_xchg_bench.c     | 49 ++++++++++
+ 7 files changed, 192 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+
+---
+v4:
+ - Resend patches against new kernel.
+
+v3:
+ - https://lore.kernel.org/all/1782119051687451.15056.seg@mailgw.kylinos.cn/
+
+v2:
+ - https://lore.kernel.org/all/20260603100438.2177817-1-zhaochenguang@kylinos.cn/
+
+v1:
+ - https://lore.kernel.org/all/20260602021515.214560-1-zhaochenguang@kylinos.cn/
+
+-- 
+2.25.1
+
