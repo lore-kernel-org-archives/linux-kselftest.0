@@ -1,69 +1,52 @@
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AB91C5D5E
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 00:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D8C1F936;
+	Wed, 29 Jul 2026 00:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785283593; cv=none; b=oPxLBO6kq5tYxsj76pWPUXOB5O1tgOfiPemhc8JDQIY55BBJBjkcR5wyfoDz6DuzJdbj93nqBR6EE1v0fGxRDEVOJDoT2jQSxJ6HpPGfd2YFQqTWGpM9dJ57G3YVNHV6PQn4iLcWBDjvajYv6PprVwaTjugRcptkJrdCQ2Fkfhs=
+	t=1785284209; cv=none; b=FeR41+aQTm7i+NfEtF+LX996661wwr3/hPDwhhXZyIr9yiE9OMDEeFjj6VV23B0dqSXw0irnsAhuGjY5WnOO+9JranXmC29tTb55HQn4iXnN/5AmV3dABZWeIZHggMCAVo0sCvA7vHeQ6udyDAsH5eSuSNtknUQT0aYLdVpDkgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785283593; c=relaxed/simple;
-	bh=n6B0m/+R9mN5iX6PJBomszTE8W1zcQIZoUz1pg5+JyE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LQPY1y4l0pPXcnOQG3EKcPi4z/wLVneQJf77yQBbTKXZFoIy0o7bbE/VgUs6U524bYgbqYb/2aTjdhm1I/eaPzsAD5ulbAskeqSFZWCZf2BsT2zKsMY40lG1mO/LnAcUmnUn3fPY4NXLIXAg2mbKUcyQqNyacXJPVAPf6ugXTng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=LqawIfoB; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785284209; c=relaxed/simple;
+	bh=MfdujIwDm4+ttQzSY6tpmUPQINnWq9E89sb6zDGpdHU=;
+	h=MIME-Version:Content-Type:Subject:From:To:CC:In-Reply-To:
+	 References:Date:Message-ID; b=NHx/V+f+SejqQw4CC2DpJL0Qs2YDv2ZUgX+x5E2qbRN2EITGMqtHT6RelYCwas3sByvuOcR+/xiZCFaMCwk5x6WwTNHS1u3KAe8uSPDr24Iozkbzz9/DN2fGeremoc79of7XahcKO77x3oEpg3IyChvaSqXkUxDemfyHMPeKew8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=d6aqWgPj; arc=none smtp.client-ip=52.12.53.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="LqawIfoB"
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6ab06473488so203409eaf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jul 2026 17:06:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785283590; x=1785888390;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6jVe2SJOqGG1SvAsoVGiyJK19dwvcga29gSaKO426pw=;
-        b=DuW9/ctmF1iZ4hiI8S/VEtyYJqs1LLmb0lqaYM+qTw/BLfK/m+w4zr2vMRmUeupbPC
-         FkoNItdcVhCMgPoQLUBS08rTtimSLYa/SrcvnDsrjQZIi8lB7dXlkDuSNcZykK3hslih
-         zJRTruhscNL7RbP9bMpTaNX5Rsk73EUnlpjQRy+KdehTVsGda4k5jm92fC7WMITsP/mG
-         ZeKefzdv4P9ZfBg0Z0CRfUHlIryGLxBpR4x8e8NnLJdZdd4whx87bv1MnrJ8MXrDoo3X
-         4Cyn6eGddvyaUU0hhGTh6k79vFOpr4nBk4moMonad9QyGVuCmqIiRx5L9KUuzchZ6LsV
-         E+tg==
-X-Forwarded-Encrypted: i=1; AHgh+RpipzvujeMRyz2dTAPEaRN2HvrfeomtmD6XztuLBVT9dKMLSRis8iFlI5ZKIZajQV3qn0robgs9GxZa6GRbf+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyegQzqDdOt01qB7Qhivd9q0Q7vxRlzV3QC5JlaKvKYv1ZDPOqS
-	sQ8TdrSFv8+tE4+uxpIkMJemBlqKvZ/LwAfzqayImwAnxXn62JNN2H8K
-X-Gm-Gg: AR+sD13KUetlIK7YawEmolApFJfOUTqWoKZ9spH90jHHD242416s+yk5RoueZ2UL3FE
-	zHUHUVgW6XcMjsi8eyXxCqWAW8iRqC6Dg/aub/xGq+4UphC5IOYqPtcDJ0IfqgVSwCr1qnuDx3z
-	31p4CYzrOzsnVBs38Ij5XJw4aUFkB7iN7Xy0jq/exBM/OTSJOE0nBHAXY5E04yiITryijY0ju5R
-	WxnTOk/rHvsdZCyrh1KQL2nanW+AjgXZdHo/HpK0V78AXfTkeazn2ZhwCdRVJbAQHVDkhfV37J4
-	NcrVKANqESmpiJUL9vasIctS8nlZjSpbOnlNGYEakSsFFjxaIhwfpgYVkrKsBnoAy8JZXsyZs9K
-	NzHX+qnAm6DW2c5kc0PveUoq9aIjiGNV+Gt3jv73G9UGzPlEgYucy5UeCuBITVubYTc2Nq0Xt7n
-	yjrTQFZLPHhcqKcBdo/Cf2/0nKTs0fuPMQQPAJyaNms+CwFPPCtc8zQQcYRnE/D2lj0Iao305ca
-	QneTDvFdOrRGemMqcvVhBpIgU8Os7FU4a5fXrx/3wF1DWtK1Qzp5y5G6s8Xf/Mutj5Fi8IoD0H/
-X-Received: by 2002:a05:6820:f005:b0:6aa:dadb:454f with SMTP id 006d021491bc7-6ac96972091mr2358636eaf.7.1785283590263;
-        Tue, 28 Jul 2026 17:06:30 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f00d8d397asm926314a34.17.2026.07.28.17.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 17:06:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 57DB460A0A;
-	Wed, 29 Jul 2026 00:06:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1785283589;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=6jVe2SJOqGG1SvAsoVGiyJK19dwvcga29gSaKO426pw=;
-	b=LqawIfoBR6+8GigFrjy0t+CvYSKND9u3viEfkgzsuSJA7D8leZiS9qTKSlHqkwBtA87KyR
-	ygxoOb4LIGcDzTxSjjHF6wjFAd+6jqaCcQdCFtQuFPAVIO34eht7tNeyWp/VDSeIIU6+Cj
-	/AAQs7Ltq32NdayMoqqIt1Hf+kzQG71wz9ET3cM6ErWu3JQtpapyllIICKYjM10KfgLBOY
-	455zyGm0L5gK4A8OQMohgglUdFV+YQOZ52YchJgX9YNjcu5N9zqeVqql0iPSaW7UP3qkf2
-	YJC+qYC5vBL+rsviFIevr0S9X+Z4zVSqJGfh5WpPlhgcZzcVDrDC72gw6exyUg==
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Tue, 28 Jul 2026 21:06:13 -0300
-Subject: [PATCH 3/3] selftests/bpf: Route test_kmods build artifacts to
- OUTPUT
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="d6aqWgPj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1785284207; x=1816820207;
+  h=mime-version:content-transfer-encoding:subject:from:to:
+   cc:in-reply-to:references:date:message-id;
+  bh=ZpD4Ua04Vv0uYDXdU0rOLhZG+hDOgEuRDU0pu7vViiY=;
+  b=d6aqWgPjovMOjAD0189E2wONGaQtewYUMC+6OH7+yfX9oSqJ52C5xkvi
+   8VmUOhEfcY0BgTWjwhWQm7YvXViwr63UIP1ECb9ITxwl6MHs0eMA17TSx
+   exDZCIuXrwNfsuKy5JMD5pDPG/y2P1UHMAmU5xfQ6d/SfVT/B5KtHnQSb
+   2eeKGIRvhsY+ZapwQxW3nrpS7ZsUE4EVH8xxg6e8UhNelTD1zV9XYZJYJ
+   mKqkFdB2IQtCMmHKHPikKxM8zTE6aziHnmyzNMWN2azwV47RLWiRwqFTR
+   905dDUMIEqV6XUCXnMwIAfoENLwzwbGxaBKYhDdl5mmKwnDU2JX50MP+r
+   Q==;
+X-CSE-ConnectionGUID: kfJWssZYSI2aKVdyC1H8Bw==
+X-CSE-MsgGUID: VHxpAjQDTsG23Ss1IAx9aA==
+X-IronPort-AV: E=Sophos;i="6.25,191,1779148800"; 
+   d="scan'208";a="24410212"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 00:16:42 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.51:30802]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.26:2525] with esmtp (Farcaster)
+ id 72b7a435-0e5c-4e65-af21-284e36f31ebe; Wed, 29 Jul 2026 00:16:42 +0000 (UTC)
+X-Farcaster-Flow-ID: 72b7a435-0e5c-4e65-af21-284e36f31ebe
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Wed, 29 Jul 2026 00:16:42 +0000
+Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Wed, 29 Jul 2026 00:16:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,130 +55,371 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260728-selftests-bpf_oot-v1-3-05feb15d94db@marliere.net>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-In-Reply-To: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Subject: Re: [PATCH v5 net-next 1/7] ptp: Add ioctls for PHC timestamps
+ with quality attributes
+From: Arthur Kiyanovski <akiyano@amazon.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <akiyano@amazon.com>, <davem@davemloft.net>, <netdev@vger.kernel.org>,
+	<richardcochran@gmail.com>, <edumazet@google.com>, <pabeni@redhat.com>,
+	<dwmw2@infradead.org>, <tglx@linutronix.de>, <mlichvar@redhat.com>,
+	<andrew+netdev@lunn.ch>, <guwen@linux.alibaba.com>,
+	<xuanzhuo@linux.alibaba.com>, <dwmw@amazon.com>, <ysarna@amazon.com>,
+	<zorik@amazon.com>, <matua@amazon.com>, <saeedb@amazon.com>,
+	<msw@amazon.com>, <aliguori@amazon.com>, <nafea@amazon.com>,
+	<evgenys@amazon.com>, <netanel@amazon.com>, <alisaidi@amazon.com>,
+	<benh@amazon.com>, <ndagan@amazon.com>, <darinzon@amazon.com>,
+	<evostrov@amazon.com>, <ofirt@amazon.com>, <amitbern@amazon.com>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<shuah@kernel.org>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
+	<horms@kernel.org>, <bhelgaas@google.com>, <vadim.fedorenko@linux.dev>
+In-Reply-To: <20260727201514.2757107-1-kuba@kernel.org>
+References: <20260717065924.2556-2-akiyano@amazon.com>
+ <20260727201514.2757107-1-kuba@kernel.org>
+Date: Wed, 29 Jul 2026 00:16:24 +0000
+Message-ID: <178528418489.4304.3834224813970456673.b4-reply@b4>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1785283576; l=5078;
- i=ricardo@marliere.net; h=from:subject:message-id;
- bh=n6B0m/+R9mN5iX6PJBomszTE8W1zcQIZoUz1pg5+JyE=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKHw7ZLG4TsiAIVGlXkPRX25iNSsGGnLqHmwnL4UDvjNghR1nmi2H/KXhxPN7ouXdai/aUxnlSr
- eKmOnnXp79wc=
-X-Developer-Key: i=ricardo@marliere.net; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
-X-Last-TLS-Session-Version: TLSv1.3
+X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-When building bpf selftests with O=, the kernel module intermediates (.ko,
-.o, .mod.*, .cmd files, Module.symvers, modules.order) produced by the
-test_kmods sub-make are placed in the source tree instead of the
-out-of-tree directory, because kbuild external-module builds always write
-output to the M= source directory by default.
+On 2026-07-27 13:15:14-07:00, Jakub Kicinski wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> ptp: Add ioctls for PHC timestamps with quality attributes
+> 
+> This introduces PTP_SYS_OFFSET_EXTENDED_ATTRS and
+> PTP_SYS_OFFSET_PRECISE_ATTRS, extending the existing extended/precise
+> offset ioctls with clock quality attributes (error bound, timescale,
+> sync status) and raw system counter fields. New driver callbacks
+> gettimexattrs64 and getcrosststampattrs are added to ptp_clock_info.
+> 
+> Link: https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
+> Link: https://lore.kernel.org/all/87se7ht25o.ffs@tglx/
+> 
+> A few questions inline below.
+> 
+> > diff --git a/drivers/ptp/ptp_chardev.c b/drivers/ptp/ptp_chardev.c
+> > index dc23cd708cfe..d30ee4f51fbb 100644
+> > --- a/drivers/ptp/ptp_chardev.c
+> > +++ b/drivers/ptp/ptp_chardev.c
+> > @@ -190,6 +190,8 @@ static long ptp_clock_getcaps(struct ptp_clock *ptp, void __user *arg)
+> >  		.cross_timestamping	= ptp->info->getcrosststamp != NULL,
+> >  		.adjust_phase		= ptp->info->adjphase != NULL &&
+> >  					  ptp->info->getmaxphase != NULL,
+> > +		.extended_attrs		= ptp->info->gettimexattrs64 != NULL,
+> > +		.precise_attrs		= ptp->info->getcrosststampattrs != NULL,
+> >  	};
+> 
+> [Medium]
+> Are the capability bits consistent with what the ioctls will actually
+> accept?
+> 
+> The caps are set based only on the presence of the new *_attrs callbacks,
+> but the ioctl handlers fall back to gettimex64/getcrosststamp when the
+> *_attrs callback is absent:
+> 
+>     if (ptp->info->gettimexattrs64)
+>         err = ptp->info->gettimexattrs64(ptp->info, &ts, &sts, &att);
+>     else if (ptp->info->gettimex64)
+>         err = ptp->info->gettimex64(ptp->info, &ts, &sts);
+>     else
+>         return -EOPNOTSUPP;
+> 
+> A userspace that respects the capability bits would refuse to call the
+> new ioctl on drivers that would in fact serve it via the fallback. Is
+> the fallback intended, and if so, should the caps advertise it? The
+> commit message does not describe this behavior.
+> 
 
-Introduce TEST_KMODS_OUTDIR in bpf/Makefile that resolves to
-$(OUTPUT)/test_kmods when OUTPUT is set, and fall back to the in-tree
-test_kmods/ directory for standalone builds. Update the pattern rule, the
-RM invocation, and the copy rule to use this variable, and pass
-OUTPUT=$(OUTPUT)/test_kmods to the test_kmods sub-make.
+The fallback is intentional. I'll widen the caps in v6 so they advertise it
+(gettimexattrs64 || gettimex64, getcrosststampattrs || getcrosststamp) and
+document the behavior in the commit message. Thanks.
 
-In test_kmods/Makefile, forward the received OUTPUT value as MO= to the
-kernel Makefile. The top-level kernel Makefile maps MO= to
-KBUILD_EXTMOD_OUTPUT, which redirects all external-module build output to
-the specified directory. The kernel also creates that directory
-automatically, so no explicit mkdir is needed.
+> [ ... ]
+> 
+> > @@ -404,6 +413,130 @@ static long ptp_sys_offset_extended(struct ptp_clock *ptp, void __user *arg,
+> >  	return copy_to_user(arg, extoff, sizeof(*extoff)) ? -EFAULT : 0;
+> >  }
+> >  
+> > +static long ptp_sys_offset_extended_attrs(struct ptp_clock *ptp, void __user *arg)
+> > +{
+> > +	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
+> > +	struct ptp_attrs_request request;
+> > +	struct ptp_system_timestamp sts;
+> 
+> [Medium]
+> Can this leak uninitialized stack contents to userspace?
+> 
+> Only sts.clockid is initialized below, and sts is reused across loop
+> iterations. If any driver's gettimex64/gettimexattrs64 returns success
+> without touching pre_sts/post_sts on the sts pointer, sts.pre_sts.valid
+> is either uninitialized (first iteration) or stale (later iterations),
+> and the "if (!sts.pre_sts.valid || !sts.post_sts.valid)" gate can admit
+> a partially-populated snapshot.
+> 
+> On the success path the code then copies pre_sts.cycles, pre_sts.cs_id,
+> pre_sts.monoraw, pre_sts.systime and the post_sts equivalents to
+> userspace. The pre-existing ptp_sys_offset_extended() has the same
+> shape but only copied systime, so the exposed surface is now wider.
+> Would something like:
+> 
+>     struct ptp_system_timestamp sts = {};
+> 
+> inside the loop (or at declaration) be safer?
+>
 
-Also update the CLEAN target in bpf/Makefile to propagate OUTPUT to both
-the test_kmods and libarena sub-makes so that clean removes from the
-correct location.
-
-Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
----
- tools/testing/selftests/bpf/Makefile            | 16 ++++++++++------
- tools/testing/selftests/bpf/test_kmods/Makefile |  3 +++
- 2 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 7d42632f9d42..b150a66f3c25 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -135,6 +135,9 @@ TEST_PROGS_EXTENDED := \
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
- 	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
- TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
-+# Build directory for kernel modules: routed to $(OUTPUT)/test_kmods when
-+# OUTPUT is set so that kbuild intermediates stay out of the source tree.
-+TEST_KMODS_OUTDIR := $(if $(OUTPUT),$(OUTPUT)/test_kmods,test_kmods)
+Yes — I'll zero-initialize sts per loop iteration in v6, so nothing
+uninitialized or stale can reach userspace. Thanks.
  
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = \
-@@ -163,8 +166,8 @@ override define CLEAN
- 	$(Q)$(RM) -r $(TEST_GEN_FILES)
- 	$(Q)$(RM) -r $(TEST_KMODS)
- 	$(Q)$(RM) -r $(EXTRA_CLEAN)
--	$(Q)$(MAKE) -C test_kmods clean
--	$(Q)$(MAKE) -C libarena clean
-+	$(Q)$(MAKE) -C test_kmods $(if $(OUTPUT),OUTPUT=$(OUTPUT)/test_kmods) clean
-+	$(Q)$(MAKE) -C libarena $(if $(OUTPUT),OUTPUT=$(OUTPUT)/libarena) clean
- 	$(Q)$(MAKE) docs-clean
- endef
- 
-@@ -301,17 +304,18 @@ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
- # support that for regular rules. However, pattern matching rules are implicitly
- # treated as grouped even with older versions of make, so as a workaround, the
- # subst() turns the rule into a pattern matching rule
--$(addprefix test_kmods/,$(subst .ko,%ko,$(TEST_KMODS))): $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard test_kmods/Makefile test_kmods/*.[ch])
--	$(Q)$(RM) test_kmods/*.ko test_kmods/*.mod.o # force re-compilation
-+$(addprefix $(TEST_KMODS_OUTDIR)/,$(subst .ko,%ko,$(TEST_KMODS))): $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard test_kmods/Makefile test_kmods/*.[ch])
-+	$(Q)$(RM) $(TEST_KMODS_OUTDIR)/*.ko $(TEST_KMODS_OUTDIR)/*.mod.o # force re-compilation
- 	$(Q)$(MAKE) $(submake_extras) -C test_kmods				\
- 		$(if $(O),O=$(abspath $(O)))					\
- 		$(if $(KBUILD_OUTPUT),KBUILD_OUTPUT=$(abspath $(KBUILD_OUTPUT)))\
-+		$(if $(OUTPUT),OUTPUT=$(OUTPUT)/test_kmods)			\
- 		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)				\
- 		EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
- 
--$(TEST_KMOD_TARGETS): $(addprefix test_kmods/,$(TEST_KMODS))
-+$(TEST_KMOD_TARGETS): $(addprefix $(TEST_KMODS_OUTDIR)/,$(TEST_KMODS))
- 	$(call msg,MOD,,$@)
--	$(Q)$(if $(PERMISSIVE),if [ -f test_kmods/$(@F) ]; then )cp test_kmods/$(@F) $@$(if $(PERMISSIVE),; fi)
-+	$(Q)$(if $(PERMISSIVE),if [ -f $(TEST_KMODS_OUTDIR)/$(@F) ]; then )cp $(TEST_KMODS_OUTDIR)/$(@F) $@$(if $(PERMISSIVE),; fi)
- 
- 
- DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-index 031c7454ce65..53e47e715ec4 100644
---- a/tools/testing/selftests/bpf/test_kmods/Makefile
-+++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-@@ -32,14 +32,17 @@ PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
- all:
- ifeq ($(PERMISSIVE),)
- 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
-+		$(if $(OUTPUT),MO=$(OUTPUT)) \
- 		M=$(TEST_KMOD_DIR) modules
- else ifneq ("$(wildcard $(KDIR))", "")
- 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
-+		$(if $(OUTPUT),MO=$(OUTPUT)) \
- 		M=$(TEST_KMOD_DIR) modules
- endif
- 
- clean:
- ifneq ("$(wildcard $(KDIR))", "")
- 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
-+		$(if $(OUTPUT),MO=$(OUTPUT)) \
- 		M=$(TEST_KMOD_DIR) clean
- endif
+> > +	unsigned int n_samples;
+> > +	int err;
+> > +
+> > +	if (copy_from_user(&request, arg, sizeof(request)))
+> > +		return -EFAULT;
+> > +
+> > +	if (request.valid ||
+> > +	    request.num_samples > PTP_MAX_SAMPLES ||
+> > +	    request.num_samples == 0)
+> > +		return -EINVAL;
+> 
+> [Medium]
+> Should this also reject non-zero request.rsv[]?
+> 
+> The kernel-doc for struct ptp_attrs_request says "Reserved for future
+> use, must be zero", but rsv[3] is never validated. The neighboring
+> ptp_sys_offset_extended() enforces the same contract on its own
+> reserved fields:
+> 
+>     if (extoff->n_samples > PTP_MAX_SAMPLES || extoff->rsv[0] || extoff->rsv[1])
+>         return -EINVAL;
+> 
+> Without a similar check, existing userspace binaries can start sending
+> garbage in rsv[], which then blocks any future repurposing of those
+> bytes.
+> 
 
--- 
-2.55.0
+Agreed — v6 will reject a non-zero rsv[], matching
+ptp_sys_offset_extended(). Thanks.
+
+> > +
+> > +	err = ptp_validate_sys_offset_clockid(request.clock_id);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	n_samples = request.num_samples;
+> > +	sts.clockid = request.clock_id;
+> > +
+> > +	data = kzalloc(struct_size(data, timestamps, n_samples), GFP_KERNEL);
+> > +	if (!data)
+> > +		return -ENOMEM;
+> > +
+> > +	data->request.num_samples = n_samples;
+> 
+> [Low]
+> This is a _IOWR ioctl and the whole struct (including data->request) is
+> copied back to userspace at the end, but only data->request.num_samples
+> is populated. data->request.valid, data->request.clock_id and
+> data->request.rsv[] therefore always come back as zero, silently
+> overwriting the values userspace put in the request buffer.
+> 
+> Is that intentional? It is not mentioned in the commit message, and it
+> locks in a slightly surprising contract for future extensions.
+> 
+
+Not intentional — v6 will echo the full request back so
+valid/clock_id/num_samples/rsv round-trip as submitted. Thanks.
+
+> > +
+> > +	for (unsigned int i = 0; i < n_samples; i++) {
+> > +		struct ptp_clock_attrs att = {};
+> > +		struct timespec64 ts;
+> > +
+> > +		if (ptp->info->gettimexattrs64)
+> > +			err = ptp->info->gettimexattrs64(ptp->info, &ts,
+> > +							 &sts, &att);
+> > +		else if (ptp->info->gettimex64)
+> > +			err = ptp->info->gettimex64(ptp->info, &ts, &sts);
+> > +		else
+> > +			return -EOPNOTSUPP;
+> > +
+> > +		if (err)
+> > +			return err;
+> > +
+> > +		/* Filter out disabled or unavailable clocks */
+> > +		if (!sts.pre_sts.valid || !sts.post_sts.valid)
+> > +			return -EINVAL;
+> > +
+> > +		data->timestamps[i].pre_systime.sys_time =
+> > +			ktime_to_ns(sts.pre_sts.systime);
+> > +		data->timestamps[i].pre_systime.sys_rawtime =
+> > +			ktime_to_ns(sts.pre_sts.monoraw);
+> > +		data->timestamps[i].pre_systime.sys_counter =
+> > +			sts.pre_sts.cycles;
+> > +		data->timestamps[i].pre_systime.sys_counter_id =
+> > +			sts.pre_sts.cs_id;
+> 
+> [Critical]
+> Does the sys_counter_id assignment produce the correct UAPI value?
+> 
+> sts.pre_sts.cs_id is enum clocksource_ids from
+> include/linux/clocksource_ids.h:
+> 
+>     CSID_GENERIC          = 0,
+>     CSID_ARM_ARCH_COUNTER = 1,
+>     CSID_S390_TOD         = 2,
+>     CSID_X86_TSC_EARLY    = 3,
+>     CSID_X86_TSC          = 4,
+>     CSID_X86_KVM_CLK      = 5,
+>     CSID_X86_ART          = 6,
+> 
+> But sys_counter_id is documented as enum ptp_counter_id from the UAPI:
+> 
+>     PTP_COUNTER_UNKNOWN  = 0,
+>     PTP_COUNTER_X86_TSC  = 1,
+>     PTP_COUNTER_ARM_ARCH = 2,
+> 
+> With this direct assignment, on ARM sts.pre_sts.cs_id == 1
+> (CSID_ARM_ARCH_COUNTER) is reported to userspace as PTP_COUNTER_X86_TSC.
+> On x86, real CSID_X86_TSC (4) has no defined UAPI meaning. On s390,
+> CSID_S390_TOD (2) is reported as PTP_COUNTER_ARM_ARCH.
+> 
+> Should the ioctl translate cs_id into the UAPI enum before copying it
+> out? Once released, later adding a translation layer would break any
+> userspace that started decoding the raw kernel values.
+> 
+
+Good catch — that's a bug. v6 will translate enum clocksource_ids to the
+UAPI enum ptp_counter_id before copying out. Thanks.
+
+> [High]
+> On clocksources that are derived/virtualised (kvm-clock, scaled arch
+> counter, ART, ...), the raw underlying counter identity is exposed by
+> system_time_snapshot as hw_cycles/hw_csid rather than cycles/cs_id.
+> The new UAPI only propagates cycles/cs_id.
+> 
+> The commit message says one motivation is:
+> 
+>     3. VMMs that need raw system counter values paired with PTP
+>        timestamps for feed-forward clock calibration ...
+> 
+> but a guest on a derived clocksource will not see the underlying
+> hardware counter identity or value here. Should the UAPI also expose
+> hw_cycles/hw_csid, given that the struct is frozen once merged?
+> 
+
+This is being handled as a follow-up (David Woodhouse offered on-list to
+take the hw_csid side). This series exposes the base cs_id/cycles, and the
+UAPI leaves room to add the hw_* values without an ABI change.
+
+> > +		data->timestamps[i].devtime.device_time.sec = ts.tv_sec;
+> > +		data->timestamps[i].devtime.device_time.nsec = ts.tv_nsec;
+> > +		data->timestamps[i].devtime.attrs = att;
+> 
+> [ ... ]
+> 
+> > +}
+> > +
+> > +static long ptp_sys_offset_precise_attrs(struct ptp_clock *ptp, void __user *arg)
+> > +{
+> > +	struct ptp_sys_offset_attrs *data __free(kfree) = NULL;
+> > +	struct system_device_crosststamp xtstamp;
+> > +	struct ptp_attrs_request request;
+> > +	struct ptp_clock_attrs att = {};
+> > +	struct timespec64 ts;
+> > +	int err;
+> > +
+> > +	if (copy_from_user(&request, arg, sizeof(request)))
+> > +		return -EFAULT;
+> > +
+> > +	if (request.valid ||
+> > +	    request.num_samples != 1)
+> > +		return -EINVAL;
+> > +
+> > +	err = ptp_validate_sys_offset_clockid(request.clock_id);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	data = kzalloc(struct_size(data, timestamps, 1), GFP_KERNEL);
+> > +	if (!data)
+> > +		return -ENOMEM;
+> > +
+> > +	if (ptp->info->getcrosststampattrs)
+> > +		err = ptp->info->getcrosststampattrs(ptp->info, &xtstamp, &att);
+> > +	else if (ptp->info->getcrosststamp)
+> > +		err = ptp->info->getcrosststamp(ptp->info, &xtstamp);
+> > +	else
+> > +		return -EOPNOTSUPP;
+> 
+> [High]
+> Can any driver using get_device_system_crosststamp() actually serve
+> this ioctl?
+> 
+> xtstamp is declared without an initializer, so xtstamp.clock_id holds
+> whatever was on the stack. The pre-existing ptp_sys_offset_precise()
+> explicitly sets it:
+> 
+>     struct system_device_crosststamp xtstamp = {
+>         .clock_id = CLOCK_REALTIME,
+>     };
+> 
+> Drivers commonly forward xtstamp to get_device_system_crosststamp() in
+> kernel/time/timekeeping.c, which switches on xtstamp->clock_id and
+> falls through to:
+> 
+>     default:
+>         WARN_ON_ONCE(1);
+>         return -ENODEV;
+> 
+> So on most drivers implementing getcrosststamp (kvm, mlx5, ice, igc,
+> bnxt, s390, ...), an unprivileged caller of PTP_SYS_OFFSET_PRECISE_ATTRS
+> would trigger a first-hit WARN and get -ENODEV.
+> 
+> In addition, request.clock_id is validated by
+> ptp_validate_sys_offset_clockid() but never assigned to
+> xtstamp.clock_id, so the userspace-selected clock is silently dropped
+> even for the paths documented in the UAPI header (CLOCK_MONOTONIC,
+> CLOCK_MONOTONIC_RAW, CLOCK_AUX...).
+> 
+> Should xtstamp.clock_id be set from request.clock_id (and xtstamp
+> zeroed before use)?
+> 
+
+Real bug, thanks. v6 zero-initializes xtstamp and sets clock_id from the
+validated request. To avoid the get_device_system_crosststamp() default
+WARN, precise will validate clock_id against a dedicated allowlist (REALTIME
++ AUX) and return -EINVAL for anything else.
+
+> [ ... ]
+> 
+> > diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+> > index d6f54ccaf93b..849aef8191c5 100644
+> > --- a/drivers/ptp/ptp_clock.c
+> > +++ b/drivers/ptp/ptp_clock.c
+> > @@ -112,7 +112,9 @@ static int ptp_clock_gettime(struct posix_clock *pc, struct timespec64 *tp)
+> >  	struct ptp_clock *ptp = container_of(pc, struct ptp_clock, clock);
+> >  	int err;
+> >  
+> > -	if (ptp->info->gettimex64)
+> > +	if (ptp->info->gettimexattrs64)
+> > +		err = ptp->info->gettimexattrs64(ptp->info, tp, NULL, NULL);
+> > +	else if (ptp->info->gettimex64)
+> >  		err = ptp->info->gettimex64(ptp->info, tp, NULL);
+> >  	else
+> >  		err = ptp->info->gettime64(ptp->info, tp);
+> 
+> [Low]
+> This call site passes both sts and att as NULL, but the kernel-doc for
+> gettimexattrs64 only documents that att may be NULL ("fills @att (if
+> not NULL)"). The dual-NULL contract on sts is implicitly inherited
+> from gettimex64 but is not stated.
+> 
+> Would it be worth spelling out in the kernel-doc that both sts and att
+> may be NULL, so a new driver author does not skip the NULL check on
+> sts?
+
+Yes — v6 will state that both sts and att may be NULL. Thanks.
+
+> 
+> [ ... ]
+
 
