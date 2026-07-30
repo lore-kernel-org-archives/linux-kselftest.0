@@ -1,76 +1,203 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A022EDD40;
-	Thu, 30 Jul 2026 18:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1D83803C3
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 18:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785436504; cv=none; b=bKiPGLD7tlF0rV1AK6YfghEfHyIa8gdaz5U2NWUl74pYeOgylEHJl/t6NZlOjRzDAkoDC4YnMlOPESDvit/7SySJqDAP4AK1l3rw/ZPT/RomWnuYJuibggAlXnoWhpME/YUX8stEOxuRCIqv4ImEQeBjjkI1s2s/Lk7E/RbFXJs=
+	t=1785436689; cv=none; b=p/NCjJXthV19O2haeCmGhXtEVoG6qeSH7t9JmRcLLcDdP+S7T4Mq/MpXUtDP6O1grM/wcwhX8SA1EeWHU/XXPNB+Cq5cJJYg0WGDQvSpcQbfT6/phwxrjo7CszlIbHVHQ+L4zX8sPKS9RNkUU0YDynrc5z9kZJsEiv+WT2avWFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785436504; c=relaxed/simple;
-	bh=2ldMrhV1ugKVggGGxGNHKWoq1NXNyzXemeVaKlQ0DTs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lt+Fk58czG02YGeITxH7D1T5DtABgkE50XshjWNlRNtqbKDlYRXwFYCANjBe8Tw+0plEm6UauLuVUol5R+uk/D2qJdyBHmMzDf14z4rCBFRRcrfV7Oxs33RzRortQhBIzjaSi0DZDXOrVau0+m6gQKMbNg91GgJxXtMiCeDZ32c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=htitda2P; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1785436689; c=relaxed/simple;
+	bh=MclfqqAOvRhjdUnW4KUPI/0nCU2GrBKsXkAWYdFV3iA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=HFp8+FzjV82dWSUyDjNGCQRDCrin65grQ9wJJLSVxXJlF5jOenKn59JNSh00ETfHhbEt2RNryyXtgwey32/BzBYkU9/Wn3XfownVA3pYZNVJKaiLUyXZbOTwh9iHVB5/M3fMmWLf0dwtGg0TSYcGc0ziBJGkiqo9z0e+xFQU6PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sn6IXPEg; arc=none smtp.client-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="htitda2P"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4h9yYL6GL9z1XM30k;
-	Thu, 30 Jul 2026 18:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1785436494; x=1788028495; bh=2ldMrhV1ugKVggGGxGNHKWoq
-	1NXNyzXemeVaKlQ0DTs=; b=htitda2Pa84jRhL0ptF2wiOxirvBOO4OcUCa7oa3
-	ccO96JGKk2alZ+Z/av07dlQHemaffkVJn4+zTNeoxmCGnIRwcWNLELdIbGqJoXHD
-	0AthCXGyaI3SiSgHv1Bx8tfiCxP5v/OAPcyDeWcAE6f6EZVTlxaSmP9aOztQ9URc
-	1t7KWDRCy2PpSVVDbA4OeIEmrERTS6Q6m7YckeUpEx3HBzAPV62a3/K7DxT9v6K8
-	1Q/SNOOspTDX/5txICnz9Lqv5o++kTHegRzlxnK2JXGU6zThCsBWTcgJb/I7hAEG
-	cbP4+8xeOu+3rzyFNcInOEgRCb9Niva6J70DihtEyRdiYg==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id uwqm6bYaInKa; Thu, 30 Jul 2026 18:34:54 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4h9yY44G6Cz1XM4TB;
-	Thu, 30 Jul 2026 18:34:48 +0000 (UTC)
-Message-ID: <87d2c139-8020-4b04-af4c-eae0f61f5301@acm.org>
-Date: Thu, 30 Jul 2026 11:34:47 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sn6IXPEg"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38dc085b0a7so281066a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 11:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785436680; x=1786041480; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/bpb7rVnMP2yhSUFeRPzDa/SCZEbyHiuIMPgM8gQi/g=;
+        b=Sn6IXPEgqgRF8446dQ0UvfQLVQ6V89UtPH62la5io7ghi6qfLF3JXCOy+O0i33GtvK
+         FDAAo9lVQORTKPeN1r2jXco0X66mlccyhOxOGx44h2RLCnu2OZkz3ACHGsc3fQ1wz+Wv
+         BjXh0qdNksOqmlK8JVnGoUaUQR0xlAn4gnpYpey6LwAwP01VngNLQZf/vmmSuqLYUetV
+         7Ar9JX9B40fw2c1AYpnrKE/UmaU0xaA+osJPPgdm6/nXCrFnePfQ0fCevWMjx2lx6Rz8
+         RzeGzjTSq6+Zme/A1GCX2DPFgV9WUR62FFnzxg0/s0VHb0NQCTvhWdObBAHPKR3a20zm
+         4qeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785436680; x=1786041480;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/bpb7rVnMP2yhSUFeRPzDa/SCZEbyHiuIMPgM8gQi/g=;
+        b=PoS9ap7Py3CGOYOLUfBqQu/lscZtzDyZqjlLWf7Yi5VMawxiI5gAppcQtg7s1dwB3i
+         /OW9iz1TIhuzSzP+pDnOSV44gPqeujW980M2YcF054LCS7Gcy0nuFmaz8/7+/ZzBE8iJ
+         4BPhV26aSdfUvxhMG+fkUJ3fR1eTadT/bK6RiYenn8SqbZzRxd5zKHuY60wBmAu7i8d8
+         zE7s+5YAArUvI9Wp1x8vKBqibW/sCSeKT1LVvCpgMZG68Sel4677g60UQr/VfInyHQZA
+         cFmHXKgh2NkbJlFPBtWFN/RmAUrMydMlrS2RvbfBlXRVDKY53hQgroEIhuzYXu3WYRux
+         Elqw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro8dajK1Toq06yyhx3g9Ia3tua6HgQslPHEDEfLX61uigjE6fX+VuG6F0JBUv9a3JzwIhYqeMg3pbegxEdsgys=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOz3vNDPCIQAJ9U6VkMVMvCe3q6ptddpiX4MhmWgyfAvIw6ajs
+	9kU6aAEfioDFKgUPQEg1UK6XKok3GPXhWu8zK32qfxZUBxG5vycireuRHq/ciPxjgQYENe75WZy
+	lc75cUg==
+X-Received: from pjon4.prod.google.com ([2002:a17:90a:9284:b0:381:127b:2e24])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:c884:b0:381:3b5d:30f4
+ with SMTP id 98e67ed59e1d1-38f9bd51be4mr3217997a91.1.1785436679924; Thu, 30
+ Jul 2026 11:37:59 -0700 (PDT)
+Date: Thu, 30 Jul 2026 11:37:59 -0700
+In-Reply-To: <073cfbe1-0a27-015b-c688-53c186100fa1@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH rdma-next v3 07/14] RDMA/srp: Make the SRP sysfs class net
- namespace aware
-To: Jiri Pirko <jiri@resnulli.us>, linux-rdma@vger.kernel.org
-Cc: cgroups@vger.kernel.org, netdev@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, jgg@ziepe.ca,
- leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, cmeiohas@nvidia.com,
- roman.gushchin@linux.dev, zyjzyj2000@gmail.com, shuah@kernel.org,
- tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org,
- alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com,
- wenjia@linux.ibm.com, yanjun.zhu@linux.dev, cui.tao@linux.dev
-References: <20260716132316.1495242-1-jiri@resnulli.us>
- <20260716132316.1495242-8-jiri@resnulli.us>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20260716132316.1495242-8-jiri@resnulli.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260504112808.21276-1-sebott@redhat.com> <7575a845-a542-4b16-b512-aec3126f97f3@linux.dev>
+ <335f21e5-493d-012d-b07c-2e48cc2b9aeb@redhat.com> <a6ccc7a8-488b-4454-81b1-f29dd875845c@linux.dev>
+ <073cfbe1-0a27-015b-c688-53c186100fa1@redhat.com>
+Message-ID: <amuaB-dZ2s3lI8NU@google.com>
+Subject: Re: [PATCH] KVM: selftests: fix steal_time for arm64 with host page
+ size > 4K
+From: Sean Christopherson <seanjc@google.com>
+To: Sebastian Ott <sebott@redhat.com>
+Cc: Zenghui Yu <zenghui.yu@linux.dev>, Jiakai Xu <xujiakai2025@iscas.ac.cn>, 
+	Shuah Khan <shuah@kernel.org>, Andrew Jones <andrew.jones@oss.qualcomm.com>, 
+	Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kvmarm@lists.linux.dev, Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On 7/16/26 6:23 AM, Jiri Pirko wrote:
-> Tag srp_class by the RDMA device's net namespace so SRP hosts derived from
-> same-named RDMA devices can coexist across namespaces.
+On Mon, Jun 29, 2026, Sebastian Ott wrote:
+> On Sun, 28 Jun 2026, Zenghui Yu wrote:
+> 
+> > On 6/22/26 10:14 PM, Sebastian Ott wrote:
+> > > 
+> > > Fix the following failure when running with 16K host page size:
+> > > ==== Test Assertion Failure ====
+> > >   lib/kvm_util.c:991: vm_adjust_num_guest_pages(vm->mode, npages) == npages
+> > >   pid=873 tid=873 errno=0 - Success
+> > >      1  0x0000000000405a27: vm_mem_add at kvm_util.c:991
+> > >      2  0x000000000040241f: check_steal_time_uapi at steal_time.c:223 (discriminator 7)
+> > >      3   (inlined by) main at steal_time.c:539 (discriminator 7)
+> > >      4  0x00007fff8b57af3b: ?? ??:0
+> > >      5  0x00007fff8b57b007: ?? ??:0
+> > >      6  0x0000000000402b6f: _start at ??:?
+> > >   Number of guest pages is not compatible with the host. Try npages=4
+> > > 
+> > > Fixes: fc240715fc50 ("KVM: selftests: arm64: Fix steal_time test after UAPI refactoring")
+> > > Reported-by: Zenghui Yu <zenghui.yu@linux.dev>
+> > > Link: https://lore.kernel.org/kvmarm/7575a845-a542-4b16-b512-aec3126f97f3@linux.dev/T/#u
+> > > Signed-off-by: Sebastian Ott <sebott@redhat.com>
+> > > ---
+> > >  tools/testing/selftests/kvm/steal_time.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+> > > index 76fcdd1fd3cb..cdb81f3ee4b2 100644
+> > > --- a/tools/testing/selftests/kvm/steal_time.c
+> > > +++ b/tools/testing/selftests/kvm/steal_time.c
+> > > @@ -208,6 +208,7 @@ static void check_steal_time_uapi(void)
+> > >  {
+> > >      struct kvm_vm *vm;
+> > >      struct kvm_vcpu *vcpu;
+> > > +    unsigned int gpages;
+> > >      u64 st_ipa;
+> > >      int ret;
+> > > 
+> > > @@ -220,8 +221,9 @@ static void check_steal_time_uapi(void)
+> > >      };
+> > > 
+> > >      vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
+> > > -    vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, 1, 0);
+> > > -    virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, 1);
+> > > +    gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, 1);
+> > 
+> > Would vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE) be better
+> > to describe the number of pages we want to add?
+> 
+> Hm, I don't think we care. This is just for the uapi checker - the vm/vcpu
+> doesn't even run..
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Even though we don't truly care, we can "fix" that and dedup code at the same
+time.  E.g.
+
+diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
+index bc3c62b72c58..c0256d4c4b09 100644
+--- a/tools/testing/selftests/kvm/steal_time.c
++++ b/tools/testing/selftests/kvm/steal_time.c
+@@ -27,6 +27,9 @@
+ static void *st_gva[NR_VCPUS];
+ static u64 guest_stolen_time[NR_VCPUS];
+ 
++static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
++                                          struct kvm_vcpu *vcpus[]);
++
+ #if defined(__x86_64__)
+ 
+ /* steal_time must have 64-byte alignment */
+@@ -210,17 +213,14 @@ static void check_steal_time_uapi(void)
+        u64 st_ipa;
+        int ret;
+ 
+-       vm = vm_create_with_one_vcpu(&vcpu, NULL);
+-
+        struct kvm_device_attr dev = {
+                .group = KVM_ARM_VCPU_PVTIME_CTRL,
+                .attr = KVM_ARM_VCPU_PVTIME_IPA,
+                .addr = (u64)&st_ipa,
+        };
+ 
++       vm = vm_create_steal_time(1, NULL, &vcpu);
+        vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
+-       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, 1, 0);
+-       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, 1);
+ 
+        st_ipa = (ulong)ST_GPA_BASE | 1;
+        ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
+@@ -500,13 +500,26 @@ static void run_vcpu(struct kvm_vcpu *vcpu)
+        }
+ }
+ 
++static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
++                                          struct kvm_vcpu *vcpus[])
++{
++       unsigned int gpages;
++       struct kvm_vm *vm;
++
++       vm = vm_create_with_vcpus(NR_VCPUS, guest_code, vcpus);
++       gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE * nr_vcpus);
++       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
++       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, gpages);
++
++       return vm;
++}
++
+ int main(int ac, char **av)
+ {
+        struct kvm_vcpu *vcpus[NR_VCPUS];
+        struct kvm_vm *vm;
+        pthread_t thread;
+        cpu_set_t cpuset;
+-       unsigned int gpages;
+        long stolen_time;
+        long run_delay;
+        bool verbose;
+@@ -518,10 +531,7 @@ int main(int ac, char **av)
+        cpu = pin_self_to_any_cpu();
+ 
+        /* Create a VM and an identity mapped memslot for the steal time structure */
+-       vm = vm_create_with_vcpus(NR_VCPUS, guest_code, vcpus);
+-       gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE * NR_VCPUS);
+-       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
+-       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, gpages);
++       vm = vm_create_steal_time(NR_VCPUS, guest_code, vcpus);
+ 
+        ksft_print_header();
+        TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
 
