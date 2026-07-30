@@ -1,88 +1,50 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC103815E8
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 07:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736593AA504;
+	Thu, 30 Jul 2026 08:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785397569; cv=none; b=Aeq61cEebyTDT1EZ3/2g56ZyHL7O29AAPWsRd6YpMNU6TngauPyNBPS8SCnkNndXQbjtb+8qJDFvO3WwFO5vkxnCamVxnIzqOx9PWOzrCC+h4pojjY8F0mtDntkTPJ2NU+iPRewkQpUZumfCrMTNiynuZa4r1GkfUp3LD1zXQVs=
+	t=1785399590; cv=none; b=oBogsAilI/P80feSow/1mwzh0+4VGDElZq/Cdjt0xUlByrPkHXoNtMOJAmfG2EDLljB46zhDLlmsLyuNeYFcfZEP0gU64FrNwVpmtFlF3Ug7Qy0/Lnpv/q/5AmUG84abOz3c1X2tlUyD53FtsR8eaDYRDu0sYq7eyAt+5CiG04Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785397569; c=relaxed/simple;
-	bh=PfBPNOtpFdbuSDIVqBy0MnRsviWeGKooezDpGmkPdOI=;
+	s=arc-20240116; t=1785399590; c=relaxed/simple;
+	bh=wpfIrMcHN8QikkXCKITCLw0AA407+GAAoFiif3VfJc0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DcrJyc6sM5eF6BH7SZ/4no7nJISv7UQKz8GCL6uUN6yngnrDfngGttb2+Sw5gkUoKp6xWcOFUgMzcOv/Q+6dSWHXs+TVSgHsY51fNWpASUMpZMhZKhaODYl57mNfaUOQXfH91mpyP0qvFMaCBGH4qycSrguV7c35y/Ybfgcshns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iymaUKGj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=CJ6pbIxT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=e1RILAYFplIkkbfRa009Xugi9dW+FFNA7OjN45E6BLxVtXIeJC5DptMKy9PdC8WpwrfMe1LrLRs7OWYU0IM83XzM0HQviCeb+v4vhFYXYs0mIz/AAiQQUA83z/AZ64DFpzCho9ILsGNsIDUg1U4di6xUHA7DXul5ZsFFyRcS+kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3QOOEV7; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iymaUKGj";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="CJ6pbIxT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785397566;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wEu4Whn6/VhWgzbr5zcc31fQM8Ixy+oar4j+cn9O7Gg=;
-	b=iymaUKGjCtw4SDRRXt9PuTm7mJ1w1WxeNcS9/caM246+mb8hCC/hVVDxkRrZaOpWQoTE3J
-	HfrSyM9Y4kwqoiyZG5xy6Bq0aB4R7dm8woC8kZaLYO3ja3NPJnMJbe+Tk4eiNnE6h6YI9F
-	TAUx/l5mqn3uorOMj6D4s//Q0MN+Et0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-192-JQ7m93sdM9m6MxQVuBV_KA-1; Thu, 30 Jul 2026 03:46:04 -0400
-X-MC-Unique: JQ7m93sdM9m6MxQVuBV_KA-1
-X-Mimecast-MFC-AGG-ID: JQ7m93sdM9m6MxQVuBV_KA_1785397563
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-47f835ac1aeso1273853f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 00:46:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1785397563; x=1786002363; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wEu4Whn6/VhWgzbr5zcc31fQM8Ixy+oar4j+cn9O7Gg=;
-        b=CJ6pbIxTcCcow7X1FK0dDkFAnzF0Wt38SY1Gb/AjBnkhu+yS6r4MkFHXQrMMKQfYFw
-         EfE13iAo42CFlIKdLzt2ralZtkq8Sfugo18AfrKZyB4Azbbb5EMl8vXkSBprCxTmii6A
-         dXs8Va7rzSUzBTJIxkeRy7/rs2/TIJs7VOOF3Oq+NPNUe9VRgPyi59/Uavzhu6ucNOaV
-         0OTIo5Ivc/xJySgktFt0tcZMqjsITncZQIxLtdyfEEHisTJRwV6UfUsS36Mozftn/vvE
-         ta0Az8FtBjVQeq4LNnNoBAGHxtARP6fdI53btgSj8X4yTYDK/8WFj14M3TK7ymuGyz0V
-         VBqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785397563; x=1786002363;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wEu4Whn6/VhWgzbr5zcc31fQM8Ixy+oar4j+cn9O7Gg=;
-        b=p34ub1VWNG9pHwY2eODgMBrgKVVxvqUJpxCpoCetjs3Toy5LO0SuKcrAt78ihKJSwq
-         AFjJXDQAosVbazXDuH9ZX2i/1Bvy3trnVyCa8S+QzwIruJG7oT4m5g+N1RCJsYiCyqC7
-         oozLQQ9kCFG+BYuz5xQP0n04Z04idqGT2CI6oKtqyPduRHBgcgcPgOEjTGxaanTAmhVE
-         ig7q5sPWb0Cphw9soHMm14fyIIizokbQA4Yn3Z5v55j/Rz0pd9g/EQMT4L1Ao3CsICSj
-         yEU92ScKfK7qLbt+6u+IqFao7FRPr+HCsO62O0f4M6IyuExQ6nltKbq6h/Es5wsHPL3r
-         4+XQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqUzWEOJK2PSLSwIsrCTWv8LYUD0dZCBT2gKiFLaPSA8pswp4tn9ANs4RqIW4VvLK4TPK5rnLIX6GfqUQVmL+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWZ+fPstRTbicyO1JD120SHviquz2t37cFIa8bVgJhFHreAKgV
-	SNffBm4BJlAVJzrjCW5nbSsijPZVttMkUYxwELYiHUBOdLOEh7PRFOwYE55yb68RDxeNC3FROZC
-	7HtHqBohagCF260ZXu0mPTXsZnkRN6mU6GWKed7DxcUny80kjOU/rLR5cvi9IXIrNISjKsSQZYk
-	zAGw==
-X-Gm-Gg: AR+sD11n6I3cQYoa4CDfdNJoOxiVzfE/RSsMgLEr7DKFT/HuLHxNWHpX8vIi5zvQm0w
-	tzzHjLxTyjF2WSwrICc0IpRxSD8wKZ47qwB++/Hf1wvovT33yG+5iDdPYuzNFD99a9u29+SFkBM
-	Xk356f/8I2iDxjgz7aE7CXi0CIAHtjy5+wA9jTCdgtgB3XaW9003ZYtF+rv8jEFvh9WuXSSUCgE
-	FjMjQbOtlf7LvwbjJeG+LA/3sKMYHY1xIE4jHQXCSyTSg5HmgjZqcfUjieF2SQevvLfPNc95wlT
-	DgupuysAhiK6ErInkhzTXsAc13T0CMp82Cfi17/7u3YBdzawEb3Nj6baeCzHNVyTbfzTmgt8fLy
-	NIB79jkacLQlXpWI7u52+4eOiufLFMc1wg1gurGLqUxzTNub41YtNBjMEqBaWSVBlLc6Sl0d3E1
-	bIpw==
-X-Received: by 2002:a05:6000:2302:b0:47f:5a97:2a5d with SMTP id ffacd0b85a97d-47fc822e563mr1779822f8f.11.1785397563517;
-        Thu, 30 Jul 2026 00:46:03 -0700 (PDT)
-X-Received: by 2002:a05:6000:2302:b0:47f:5a97:2a5d with SMTP id ffacd0b85a97d-47fc822e563mr1779780f8f.11.1785397563114;
-        Thu, 30 Jul 2026 00:46:03 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:5521:6b10:58fd:68f:7756:389d? ([2a0d:3344:5521:6b10:58fd:68f:7756:389d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fc88d6e5bsm4070850f8f.3.2026.07.30.00.46.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 00:46:02 -0700 (PDT)
-Message-ID: <606acc01-e22d-4e69-ad26-a8afff262b98@redhat.com>
-Date: Thu, 30 Jul 2026 09:46:01 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3QOOEV7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785399588; x=1816935588;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wpfIrMcHN8QikkXCKITCLw0AA407+GAAoFiif3VfJc0=;
+  b=I3QOOEV73HGlKGqseDzRPfT+U48RxhP3u55EfFdnWEbRukk4HefA1bR8
+   393wDOdrfKAgeJ8AP36M058z1p11k7c9Z5uifGckATHmmcG5Xiq7kbLCL
+   Vy49AgiNj/uHKaNFt2f328Paopfr3EZnZBLeE9y12xEWLI0olqFJrY6Ew
+   qFrsU1jS1A4S/ik6SoHuoC6V+r44BQj6mNJFZDqu08l1MEN1+XF62SxTC
+   gnuBq+L77D9WEnyEuhlvxV6zaveszOtChlwmvMajRWWkdOpWcn4xnnZ/A
+   0FuaZwfUOexmpLddbk34iAWz1e03sNBAuSWHi5IbTnsc3H0NK9Ha4oa4V
+   g==;
+X-CSE-ConnectionGUID: mqBI/tinTl6nf1kg+8s5Vg==
+X-CSE-MsgGUID: Z6Vbqc7vT1+QLc+N48VI9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86091135"
+X-IronPort-AV: E=Sophos;i="6.25,194,1779174000"; 
+   d="scan'208";a="86091135"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2026 01:19:45 -0700
+X-CSE-ConnectionGUID: 0mKvQIstRByDOckKXDh64w==
+X-CSE-MsgGUID: iicRvDLaTO+wZke7z8GHMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,194,1779174000"; 
+   d="scan'208";a="259664017"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.238.208.132]) ([10.238.208.132])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2026 01:19:34 -0700
+Message-ID: <df06e0ec-9462-4072-a0c7-054f1978bf89@intel.com>
+Date: Thu, 30 Jul 2026 16:19:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,63 +52,66 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: net: Add a missing config option
-To: Alice Mikityanska <alice@isovalent.com>,
- Matthieu Baerts <matttbe@kernel.org>
-Cc: Alice Mikityanska <alice.kernel@fastmail.im>,
- Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>,
- "David S. Miller" <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260723140241.132120-1-alice.kernel@fastmail.im>
- <47b580de-9d11-46c9-91c5-55eb13c00bc4@kernel.org>
- <CAD0BsJVqmQRz1yNKMMWH1MT+kgVEh=wY=LOTy_ObeTDCsrhHFg@mail.gmail.com>
+Subject: Re: [PATCH v9 04/41] KVM: Rename memory attribute APIs to prepare for
+ in-place gmem conversion
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-4-35f9aec2aed2@google.com>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <CAD0BsJVqmQRz1yNKMMWH1MT+kgVEh=wY=LOTy_ObeTDCsrhHFg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260728-gmem-inplace-conversion-v9-4-35f9aec2aed2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 10:44 PM, Alice Mikityanska wrote:
-> On Mon, 27 Jul 2026 at 12:09, Matthieu Baerts <matttbe@kernel.org> wrote:
->> On 23/07/2026 16:02, Alice Mikityanska wrote:
->>> From: Alice Mikityanska <alice@isovalent.com>
->>>
->>> Commit 5cb53743e1ff ("selftests: net: Add a test for BIG TCP in UDP
->>> tunnels") used iptables match comment, which was missed from the CI
->>> kernel config. Add the missing config option.
->>
->> It helps, the CI can now run this test!
->>
->> Reviewed-by: Matthieu Baerts <matttbe@kernel.org>
->>
->>
->> But I think another follow-up patch is required, because this test is
->> flaky when using a debug kernel config:
->>
->>
->> https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=big-tcp-tunnels-sh
->>
->> Maybe because wait_local_port_listen() is required after having called
->> netserver?
+On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
+> From: Sean Christopherson<seanjc@google.com>
 > 
-> The issue is hard to reproduce on my machine, but I could reproduce it
-> in ~12 hours of non-stop testing in a loop. It reproduces even with
-> wait_local_port_listen, so it must be something else. The log above
-> (and my repro attempts) shows that it fails in a non-first test, but
-> netserver starts only once, before the first test. If the failure was
-> due to netserver not being ready, it would fail in the first test.
-> I'll keep investigating.
-I *think* this kind of flakes are sort of expected for 'performance'
-related tests when running on debug kernel: the environment can be
-painful slow, and few failed iterations I saw has csum offload disabled
-- even lower expected tput.
+> Rename memory attribute APIs to add a "vm_" in the name in anticipation of
+> moving PRIVATE tracking into guest_memfd, to allow in-place conversion
+> between SHARED and PRIVATE.  At that point, there will effectively be two
+> (potential) sources of memory attributes: the VM and guest_memfd.
+> 
+> kvm_vm_set_mem_attributes() already has "vm" in the name to indicate that
+> it is a VM ioctl. Rename it to kvm_set_vm_mem_attributes() to show that it
+> is setting the VM's memory attributes. (Drop the VM-ioctl scoping since it
+> is a helper local to the file.) Update the accompanying trace function to
+> match.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson<seanjc@google.com>
+> Reviewed-by: Fuad Tabba<tabba@google.com>
+> Tested-by: Shivank Garg<shivankg@amd.com>
+> Signed-off-by: Ackerley Tng<ackerleytng@google.com>
 
-AFAICS the target packet number is independent from KSFT_MACHINE_SLOW
-and the actual offload setting. Possibly you can tune the target value a
-bit WRT the mentioned variables or skip entirely pkts number validation
-in the slowest permutation (note that the self-test will still have some
-value due to code coverage with sanitizers enabled).
-
-/p
-
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
