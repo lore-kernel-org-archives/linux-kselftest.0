@@ -1,121 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3077C332917;
-	Thu, 30 Jul 2026 12:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5BF421F0F
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 13:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785415712; cv=none; b=ZfiHtmuefDjCEicCooKA2JhnKkDFQrluH3TiAkJHea7nKlrPWs86Muq0Iy1/hqgoO/s6V0Kt80Bl/CugvF5fU/1hk1umqDcyh/ei0sJ0r9KLaDxrdKTZ9Y/7S85dKP9l7QMz/qx/+iem7dpaD8OXhG0H2ItQftGuii/sLMrBjx4=
+	t=1785416740; cv=none; b=LY6PPJhLvX/zqZWgR+sniMzmovjA53TQRaW9SegQQ1Ge2LxbfNgoIVZbsZiHWWcnKSW/3GboEzn9fUVnqfKFEHbN9e5DohXF6PvBSrBuvEqCz4edoN4V1kICF24FeDg3/ZBFIV1OwBlJJHtNtXyXD6kFno+JclqCFis9mxFx56c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785415712; c=relaxed/simple;
-	bh=HPjcDNhGJCytVvFKNqjTUkjIlGNvnbHgNbfapQwT3qY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q1Yr8eYnCk3IbR1w7mVJBNXUtQF7xmFvP6blPOGhH8oxW11SFTjuhbsWwNoPK84Nl27MsHQbbpWWgsf+eeYmj6W/r0kt53rruFbYNPWpSwoQU6kSoF10tUc0DahvzVnInVXGF3UipX4dNf8Nq/COvOX689h4gfJaY5IO+2J+rbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUg/WBkr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785416740; c=relaxed/simple;
+	bh=EjmTf8LwIIx7Ib5CT6rFqnT5a3W8I7XG0yLS3L/og14=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=DDQI0KMROHHoX9RBG0UCTx0A9ySlqY0lfy6DuXO/BY1UiNOvBRq7IDd1tVwY2CwaMn0nSQ0rxcfXj2HKBaMECjuDe/UhlKq+/NmkOAXcl33dIo+OAxjrE+JYw0/vpRT5xGd0HxVXt8pXoi+XPR/BPQEtPYOSX2yIg+7Z5vXkVVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0xgh64r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUg/WBkr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EB61F000E9;
-	Thu, 30 Jul 2026 12:48:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0xgh64r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053FA1F000E9;
+	Thu, 30 Jul 2026 13:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785415710;
-	bh=UIfD52whRdajlRMAs/wH6Qy+tiFNtzMSJDrWVPET15M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jUg/WBkr561zbGX58qkiWcD88JbxTs7n3IAzWM5w5aLtyAGKEIjl1xHDWWdQ7crlF
-	 rQSHXJm7KHaH4ZyHtXcmFQFnjRYQX6o5Hc5Ul8kJwRqTwBqxhRPsmOLvm0Zgr+CATy
-	 QxGK2DH+HqpyHpfoEREFctTirmMHHWk5g1193Y4cSUDY1iw46aTiz54FxkL6w6caTD
-	 /Edq8FHJaUGejWUrfjKOIklvUbW5AIwj0b+69OZDPo5WQUL0dN6Ukyn5NfAGY/bpws
-	 P3ki/KyUXhE2vZL1rgriZRyDbco7BxiLiqS0F/ZXD6RlaWzJho/xsEQemw5qD6DMRL
-	 GVwUk1XGyLnGQ==
-Message-ID: <b351c5cf-bad7-4252-b6cb-1e728c97577a@kernel.org>
-Date: Thu, 30 Jul 2026 14:48:25 +0200
+	s=k20260515; t=1785416739;
+	bh=DJrzZEt6s3ePrW+9VHCPUcX/GaLLt5IZAmd1xaq4w+c=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=l0xgh64r4V99nsQzcnvLgW1JELM5DuZ2B7mEh2dkbZjSIIzRPGpimlMSM4YBuOz/A
+	 VA1Fp/A0m7d0RrmHW2NDwSJGdzoZ8mvEDhDtYIALZN1LhN4KTam+nlW4yPcAgUAw3U
+	 tcRoQ2Z0dJTwmd12UHqH5zEJHR7FuXSrOg7l3ykvUcrtXVi1SKGQyEfumnV5K15WO3
+	 uKPL8SNvUH0Ylm3XhQtUBxIdwDAhLlRIDZ8QMU4c2Zn51DEhNwJlruMCXD/KxA++Rg
+	 cdD8OXRY//dqL1jM+M95txaM6IdaXDwlJjCnE8XQYJyMIFdKSKcbXrnGT5vbWV3o6L
+	 cd4A027xL7L5Q==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 0B86AF40071;
+	Thu, 30 Jul 2026 09:05:38 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Thu, 30 Jul 2026 09:05:38 -0400
+X-ME-Sender: <xms:IUxrauuU-EF01Uc4TRuFIXKRLd7oEs0m6IbB7uiH-vN9x2kGJaU8Cg>
+    <xme:IUxrauRd1Vp8wbXN3mNAGIOTPURpYjCJIodFaOKDVXB7bNtRqLeCbFzDre-LPoDVl
+    AapzNlfFiq_Btt0iaxiFm4dKU7TtgXKwU-YwWP3QA7MCmQuzWc_jNA>
+X-ME-Proxy-Cause: dmFkZTEFaJv/n2Fv+ED/y8q0JWs7hY3wITl5ESRQfzfCfIfeLB0g81SERaKZShlS1jUxcf
+    Bts6VF10pEPw/rDGRa2T6wbQb8XYXNzzoWnZSux05lJR5vGxGFF4zC0j2Bm8skso4/6R1u
+    OrgGF2zPtaMXeGseDQML/f6IHp3inbqDcNUb36Qg/c5DH+4d19/i60xEl6kKd8M5c4Ay8M
+    IPkSBySFzbigBzxEWzK4+5PktK/eoNVGMi9aaKd+O3dunrjdgeAEr/HZPMrqxnhW7l31A+
+    v7BTguitmAHE2HuSjxKjE4Ap6kBKvjy0E4+M61z5SuTfiZDP7VgN4xRWz69ljJ7Wwq+TA5
+    TGlJYh2I5CsrwGFc7dejV46U3c1vVbV9u+MbnFoiSG/nQhbTdFmDVM8z99yVTHgH+u1N1S
+    JbfGsYSAvycMLa5Jlt6NvY9/ILqZ6IkDPluTkOW62vt9NZNVFN0zpp/k0KSbxHOZnOb7Tg
+    tO3BhqXvHkj8z+PbHwKYHmp27fdbWxdstMfW0c7Ww1uO0y5HCNtNx19zJqgC+0JGlMWPS4
+    5k+fD08n4ZKVpisq68mGOsI2s2HctiVVifouj+83ATo3IHTG7iFyuJZ1FOKOR3ErXM/VD7
+    w2jElzsO21SJZGhfi7VervF/cDRb0xUa6e4ye74PHHHFfND43Qmhq1Q3+/pw
+X-ME-Proxy: <xmx:IUxraiSnnYhfsGmIL_kikgMylyrsBvdXBnIzxTCyBvkxjI2DMtg5fw>
+    <xmx:IkxrajpVXxOW4-ZMDrnWLOxlboiWwRRId_GomPHhm8P-Q_KVxNR2Xw>
+    <xmx:Ikxras2AbJOccyYBM5ud20C6DkiraTtEGBmDXBJrQBD6ct95-YDzsw>
+    <xmx:Ikxrai5wGIFiwvy_94EygPsCaEVPII6XHwZdpn-zfoltfa3gs9U0uA>
+    <xmx:IkxragRR6gI3-WSS2yuGjf1XFAwOKdzhjIm-WyEMbQkwcCK1lwwrAhQl>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D82A4780070; Thu, 30 Jul 2026 09:05:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mm: unpoison pages in memory-failure
- teardown
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260729091127.1001179-1-usama.anjum@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260729091127.1001179-1-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: A0WByMxMWtsc
+Date: Thu, 30 Jul 2026 09:05:17 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: "Sabrina Dubroca" <sd@queasysnail.net>
+Cc: "John Fastabend" <john.fastabend@gmail.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Dave Watson" <davejwatson@fb.com>,
+ "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Message-Id: <eaa66ad3-fd50-4ec5-b097-e60bd11b2bc9@app.fastmail.com>
+In-Reply-To: <amsVm65P9E0_SUT3@krikkit>
+References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
+ <20260726-tls-follow-on-v1-1-99bf4cc1c729@kernel.org>
+ <amsVm65P9E0_SUT3@krikkit>
+Subject: Re: [PATCH net 1/9] net/tls: Bound time spent on no-data records in
+ tls_sw_read_sock()
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 11:11, Muhammad Usama Anjum wrote:
-> The memory-failure tests call cleanup() only after all result checks.
-> A failed ASSERT_* invokes fixture teardown and aborts the test, so it
-> skips cleanup() and leaves the injected page hardware-poisoned.
-> 
-> Invoke cleanup() from FIXTURE_TEARDOWN() instead. Guard it with
-> self->injection_attempted so tests that exit before injection do not try
-> to unpoison a page when no injection was attempted. Injection can poison
-> a page before returning an error or delivering SIGBUS, so teardown must
-> clean up after every injection attempt. This runs the existing HWPoison
-> and HardwareCorrupted checks on both normal and assertion-failure paths.
-> 
-> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
 
-Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
+
+On Thu, Jul 30, 2026, at 5:12 AM, Sabrina Dubroca wrote:
+> 2026-07-26, 20:33:29 -0400, Chuck Lever wrote:
+
+>> Bound a run of such records, as net_rx_action() bounds a softirq
+>> poll. The first record that delivers no bytes arms a deadline
+>> TLS_RX_NODATA_NS ahead; any record that delivers bytes disarms it,
+>> so a normal stream never trips it. Breaking out with nothing copied
+>
+> Another thought here: I think a peer that sends "some" 0-length data
+> records followed by one (possibly very small) data record, and then
+> repeats that sequence, will not hit this "rate-limiting" of no-data
+> records. Is that right? And if so, is that a problem?
+
+That occurred to me too. It's right on the cusp between still
+making progress and gumming things up. Neither the packet-count
+limit nor the time-bound address this case.
+
+I don't have a good answer.
+
+
+> [I'm guessing that the caller is doing something equivalent to
+> recvmsg(WAITALL), so it could be stuck for a long time even with this
+> new bound]
+
+Still digesting your other feedback. I plan to send a v2 to
+address it.
+
 
 -- 
-Cheers,
-
-David
+Chuck Lever
