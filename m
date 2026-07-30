@@ -1,119 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FECB38DC50;
-	Thu, 30 Jul 2026 14:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555DA423782;
+	Thu, 30 Jul 2026 14:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785422830; cv=none; b=ZY84L2YD/F2MLdHtc3ZB9uZskShkMfngSNocgWBBis3ThPAMNj4QNw/vyVgpldtzU5S9Ffllt/EtU6dpz6+DzQATO6yhFlst/7VpE/OrROy9UOj5RfIpJyPzFy5+icw+qwcoyMp8mr2m3+gz6zCvR4J7A6J5P54VKIiqvcAxzVU=
+	t=1785423371; cv=none; b=WRc7alABqS8ln8gCTg1AmSiv1fZj1vC05shBFBzYnF8K8NygqQEhKi2OsdBWfYgsxbUM0MOqbkGR8gz2abj5IkMaMOxMpvbPnlke5jBvr/2UAAzVwxWjNxlM4kDYZkMq2BrcIsarUkbTdyWa5c/rBsuvt8tD5e1oQ4w4UzVJEJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785422830; c=relaxed/simple;
-	bh=kUE5i8p9QVvzL+XnMimLV4JyGsBzaWMnWl8xmyuYB6Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=id5ozh6/mI002keyYPpToWQvTplYVr0p1VmLgzHX6cYWGK45bSWBzy9HXM+wMDLAnsC6hTNEy0CI36r41aWHw0eRToV1iyDiyuwul57QTJijKDc067NnxsZKe3F0tAgSiaD1qjrpym6quLRSUpwkh6MDgOr7jeFdgGf0ExHksA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWtQDiQp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785423371; c=relaxed/simple;
+	bh=kXcMxAJWsM4oAFeGyUQmH45nAj7AtZr0Z4ppu7c+hiI=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ncYMu2n4tln0NysMLNqIHdBk8ei9+/dwC3Qfl5UXTwjsTJII0uDZ/+ptdbSOrxt/5brLAyiY6EIK0VEMgKT5vgIlOvxdCwuN7RQUyM0+yq5XeW85/8CfzIbuaOc7rr9kvprF4/HcRCHYPHEMORcJET+xY/NszU0oSXfZUq8jZyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=erWz8uJv; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWtQDiQp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F66C1F00A3A;
-	Thu, 30 Jul 2026 14:47:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785422828;
-	bh=FYx9PFFHsxsK0B8I6N6sUGEP6tsXyBn7+dYN7OyFtFg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eWtQDiQpWc/KiRV8lRfmdpMx9GkYxDg3FajW9zcGCjORaFy6CYcZMtzQRqc5ZG997
-	 kfu2uFc/MAXvZeSwYxAFxrynCsnYsgvXadTYodCOU3kiejfURLUz5IWZ1ZP9oqdZD6
-	 iGnDR71fjIqg55V/PLWIMBNaoYPyhuONESsahmi6wOflm7/fo5bP6Rs3U/LlbyaGCt
-	 D9/mB5Y/HgK0t7nmAalFwtdOw9iaaBprLSXbf6QulQWW/8t5vm0bFfMcc6hS0zMP5J
-	 5eyJ88Mnz/KpjNIXJGwylPnQP0UP/GYezFea5buBsQ+eHa3DweQyKSHnijSVP8F6MS
-	 lJm5qu2jjT+tA==
-From: Simon Horman <horms@kernel.org>
-To: xiexinet@gmail.com
-Cc: Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	kees@kernel.org,
-	petr.wozniak@gmail.com,
-	qingfang.deng@linux.dev,
-	fmaurer@redhat.com,
-	luka.gejak@linux.dev,
-	bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH net v2 1/4] net: hsr: fix packet drops caused by GRO superpackets
-Date: Thu, 30 Jul 2026 15:46:53 +0100
-Message-ID: <20260730144653.147367-1-horms@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260724161253.79-2-xiexinet@gmail.com>
-References: <20260724161253.79-2-xiexinet@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="erWz8uJv"
+Message-ID: <23996589-fe21-4f39-bcbb-91eb1df56bd7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785423357;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zUUDKd2U6LDtxoRgmCJwB3udrKdBg0xqgfAlInbPBio=;
+	b=erWz8uJvvnGk0b/SFuwEq3Ug9fuf9+ZaNsBMPmXhZrUuUwf4yAAjBzDYA5/gqMNzSvx1iF
+	mmwb8n7vBuZq/LMWl5EOjdONqFzFImyUy0+cj9DaQWcIatr+D9tVeaSix6W8Nwod+BbMQd
+	pFhr+q+x93XnQJqVqKTHuAc1olyZqXw=
+Date: Thu, 30 Jul 2026 22:55:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, hannes@cmpxchg.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org, tj@kernel.org
+Subject: Re: [PATCH v2] selftests/cgroup: add user_usec sanity check in
+ test_cpucg_nice
+To: Shaojie Sun <sunshaojie@kylinos.cn>, mkoutny@suse.com
+References: <amnqUlrPxhTobE1E@localhost.localdomain>
+ <20260730130717.1236233-1-sunshaojie@kylinos.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260730130717.1236233-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://sashiko.dev/#/patchset/20260724161253.79-2-xiexinet@gmail.com?part=1
----
---- Patch [1]: [PATCH net v2 1/4] net: hsr: fix packet drops caused by GRO superpackets ---
-commit b386202ef95164a9e68085058531ac441d9df79d
-Author: Xin Xie <xiexinet@gmail.com>
 
-net: hsr: fix packet drops caused by GRO superpackets
 
-This commit fixes HSR/PRP packet drops by preventing lower devices from
-aggregating frames into GRO super-packets. It adds dev_disable_gro() and
-netif_disable_gro() functions and calls them during HSR port setup.
-
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5933c5dab09ee..a6cf2adc86256 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-
-[ ... ]
-
-> @@ -1840,6 +1840,24 @@ void netif_disable_lro(struct net_device *dev)
->  	}
->  }
+在 2026/7/30 21:07, Shaojie Sun 写道:
+> In test_cpucg_nice, after the child process exits, user_usec is
+> read from cpu.stat but the value is not checked. Add a sanity check
+> to ensure user_usec > 0, analogous to test_cpucg_stats(), so that
+> the test fails early if CPU usage wasn't properly accounted.
+> 
+> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+> ---
+> v2: Instead of simply removing the unused user_usec read, add a sanity
+>     check (if user_usec <= 0, goto cleanup) analogous to test_cpucg_stats(),
+>     as suggested by Michal.
+> 
+>  tools/testing/selftests/cgroup/test_cpu.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+> index 7a40d76b9548..5a44705ed3fd 100644
+> --- a/tools/testing/selftests/cgroup/test_cpu.c
+> +++ b/tools/testing/selftests/cgroup/test_cpu.c
+> @@ -291,6 +291,8 @@ static int test_cpucg_nice(const char *root)
 >  
-> +void netif_disable_gro(struct net_device *dev)
-> +{
-> +	struct net_device *lower_dev;
-> +	struct list_head *iter;
-> +
-> +	dev->wanted_features &= ~(NETIF_F_GRO | NETIF_F_GRO_HW);
+>  		user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
+>  		nice_usec = cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
+> +		if (user_usec <= 0)
+> +			goto cleanup;
+>  		if (!values_close_report(nice_usec, expected_nice_usec, 1))
+>  			goto cleanup;
+>  
+Acked-by: Tao Cui <cuitao@kylinos.cn>
 
-[Severity: High]
-Does this one-time modification of wanted_features prevent userspace from
-subsequently re-enabling GRO?
-
-Since NETIF_F_GRO and NETIF_F_GRO_HW are not included in the
-NETIF_F_UPPER_DISABLES macro definition in include/linux/netdev_features.h,
-would netdev_sync_upper_features() and netdev_sync_lower_features() fail
-to enforce the disabled state on lower devices during features recalculation?
-
-Could an administrator run ethtool -K eth0 gro on (or add a new physical
-device to an intermediate upper device already enslaved to HSR) to bypass
-this restriction and cause the HSR packet drops to resurface?
-
-> +	netdev_update_features(dev);
-> +
-> +	if (unlikely(dev->features & (NETIF_F_GRO | NETIF_F_GRO_HW)))
-> +		netdev_WARN(dev, "failed to disable GRO!\n");
-> +
-> +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
-> +		netdev_lock_ops(lower_dev);
-> +		netif_disable_gro(lower_dev);
-> +		netdev_unlock_ops(lower_dev);
-> +	}
-> +}
