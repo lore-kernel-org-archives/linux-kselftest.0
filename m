@@ -1,96 +1,96 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E6A3BCD2A
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42123BAD89
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785439495; cv=pass; b=XONezBDRSh0lkM8pmOpGpN25fr6x1h662fsnTMeGfba850gYfnhubqvRZsmzvl+JRKOYY0HSbHuRlmzJJSudWOzrnZAEWVil37ia2bp6bjurBZQzTFyx/GqO2LaCUps1hwvjXD5LEz2uHxmjkEbiuux2k4oqksj/96VqwctCdPk=
+	t=1785439602; cv=pass; b=NSbMZs5YN80RFXsYIeJjN8sej/g8riAsra5yb/tStlSMSs/FeeZ44Nlz5GIHlekmtQRk8L4DUQJKlgav46ZIm9JjuiQ+W85hjKqI5IiDj1/dfP8ZAiRqrlnvyubJwMUt0kzneC4Gl/wT+KRo6v4NXavMIKoYdmYIjzjMhALOLGw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785439495; c=relaxed/simple;
-	bh=qGCwWekkbKVRAE16HHBDDGNLZ3QC59KlU6bNJrMwTbY=;
+	s=arc-20240116; t=1785439602; c=relaxed/simple;
+	bh=bb6LlJEaD+pxUjSMvDq7nulMIBFh2L95e4hfasZCgfw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P1loqPbYEB31tmX4fqKBPWA2NlUbUG7QfolqQRjCQud+aXVGY7vNvZ+MYqpFrfA0Etvexk4jRMZD64HeaAoE4wLrkKDXNBj8dRHG+E80djmq21LOenYymASrsNJDToIdOgZZdvNXcBczCwZVxQOO+9ZLuGiAr2KWe748SOiCRvA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i2Vt7r7N; arc=pass smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=lrgMYh0RjsOyI5XuhhHkncJjw8+fEeypKQHeQy51XIoxqg9yyye/zqyjWhxzalD6CA42vi02db9bLOpizopdoaRsko5HaXFfVbZoTwGcIrcWt3LU3Mp09cWlpBaKO+F14XAXlQUtDPSWZ3Wfl5NhdS3rQyWTH4xUWLCUjHwKmfg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NoxyRFge; arc=pass smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i2Vt7r7N"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38759bcd877so247093a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:24:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785439493; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NoxyRFge"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ceae1ed204so2157365ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:26:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785439595; cv=none;
         d=google.com; s=arc-20260327;
-        b=dRMF4BTujmZZroreZgHsSnSkAlzg2J4soy0hVIDalAhSmfv1Btr3D1N4e2hTUp9A2Z
-         KqTQJfoQd8MfCy4ex/O4JBnNJrY/zrT9ntzS55qKYZkdIQb3dsQY470aOx8Di6rfdLYZ
-         M0vCOziuvHH52RV7lldtGCiVYS+rgJIo5fdhj3dOra1VkfsxTQA3wzQmWWf0PJ6Ll5uk
-         MDFnaJZTR5BDZmGPBrtDevxiDpEI95zp4tgNh3q76WGqd1f7Ip+9fyfGvPHt2CKrWrs3
-         zSG8kfd0heU5W2qEG6NSpxgVEQwFiNrBQpnGvrIRiLLlN/V+9Hg8OV1AO96B6XrzJ8T3
-         HZwg==
+        b=kaevH0uErcTaS2TcggAD6tUjpruQReyA5BKtLi7rpnFbCvyyVq423PInBuoIowix4y
+         ZGJBt8rXOpNTiiMAct/AUMkWvlZH1cEMI1tot2IXmDL3dIrPqcw2XLUvkWRGfAk7Ye/v
+         rSTtabyudIXTaFdw2S5X4Xj3YoYDjXbh4arw3oN5JQBTSHvmPGaD0LoAAYodtfe7RXIE
+         knN8AYsHSko8oDnjYhFWBGKVChQIDA8mZOu5AqmyLIiwLSK9rmWPdCtdh5Zr8Qlwzlw3
+         ngppq5LdxdN5DIN5hzhSyL0lCQ/i5E2iC27oqEWcFKV0g5TBRYZvpH64bmkvo9fU5hT3
+         YtZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=qGCwWekkbKVRAE16HHBDDGNLZ3QC59KlU6bNJrMwTbY=;
-        fh=cLsEen/NQp3zV6GOq/vFMSdimmVDrY/z1ndtKNHsOHU=;
-        b=G3YZtgEdyIEJpZAipmvPeNpOumM1CxZU86TkHdadTSzgGac9yEjTWBP4WOtCynCLA0
-         93vdDwTVILQ39eH4umDTMRkTAFi4pmkboXr4xWriGy7/bVew6paerRG8dBAfY07c//IH
-         hkoYYLKHEkbwsL/9HkYN5MtODHh2gTCWG+t/cggBMbt27hnoo9La++7F6Gpuc+yQVR+3
-         ei2fFBqZSXtovgye8QoOk4l1NtSVxEMUgAbBRyqoKVYnwkiQiXifnwbX4j+Psnia/GxK
-         hA0xCgzT7OWJW8XpAAK0/fNQj9ovUaSA5HEgRWdCX6gDxsLAXYx2E+0QTLydTCn+6k75
-         sLIQ==;
+        bh=bb6LlJEaD+pxUjSMvDq7nulMIBFh2L95e4hfasZCgfw=;
+        fh=Mmqy/HrPOqC2samKFp8TRyrZF2gYtCC+ThMXIHE+MBY=;
+        b=GJuizw9ecxxK2sUrs1IAJYJUM9KUG7NXhzrz59YEyzViPfT1KePUlCkBq9C9xWrUNN
+         hgqvHULzlw1ktxqLKafv/UwaGfayZL3ITpBj9axa49hGuACOSukq/gx2ZSKmGDBvTnaS
+         yetjl+zoYwNj3hlHnD07PuA19jppKOOH2jac3gsCaGpEIYMGjui2uiUIasBVOMk2YTjg
+         EWMr0R66ardizk2qfWFr5rJvdfRJ6WXj0PcoNvn4aTahPaZ/gv/dtSSBIi1GZA1ywcAc
+         ZhBPCxUm5/KuBFl9j0o3KIQq/vSER8S9ofFZlsAQFvPzOAkaPj/Cy9xuJfG6UfVdZX2n
+         5IPQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785439493; x=1786044293; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785439595; x=1786044395; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=qGCwWekkbKVRAE16HHBDDGNLZ3QC59KlU6bNJrMwTbY=;
-        b=i2Vt7r7NFyqUfFeQmtNGdveBTP9e/9XpRF8DsrfjIWKwQE8k+kiG6maqA61l9crfK/
-         wuk5PcIwg9LBfchAbarU2kXuPAZ5H87KJ8zzxojs6kN+wn9IOrOaZuB2bM0VjXT4FX0m
-         8Gk/E/2TdND5lUfQeEAJg/HybOqgXDoFKVcgpV447hPzIzpuOpqqXJvh3IDruSsRxgAc
-         goBvDsRPotmbFWs5AeMNJi2UxDITWdNP1hEfMyOI0dKJn9m4ZMp4hCAHVvQEvhLseqsk
-         o6KFt7wn4MF5w2N4CzXvDkGNZRDst4Zud5lkXfRiPGFf8jKKSObG5ROINUWZZjkrjW3Y
-         vmBg==
+        bh=bb6LlJEaD+pxUjSMvDq7nulMIBFh2L95e4hfasZCgfw=;
+        b=NoxyRFgeFDi07Ueg0yX0nKcjq716API0pV0MnVi7COPBoerDDqinhIYd/XBqjM3FD1
+         bGUrHA2apjrFsb8DwvpJGLB0Gi01h8uTbn9xxtdrrnT+tc5rrW/dko08st32WTQRcNGG
+         RhWT14CCzEOmDFyAOSGL/ZQQmBy+zSVkfzDFCcE5cw3Ct+jZFZmCrMYHg/5vZTm9XKK0
+         GFDPAPMDRCMe0gG4dPe8yS9Sv45kbzci+i8+cvLPtgLCiOVId/yuU4Txl7FYgDRDsU9m
+         1MqM3uEsch0O98wXuIjKrSdObE4XDgBuwEBEqanUyLFbVTU68yoSZxgWsaAqlnBUJFV5
+         EcEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785439493; x=1786044293;
+        d=1e100.net; s=20251104; t=1785439595; x=1786044395;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qGCwWekkbKVRAE16HHBDDGNLZ3QC59KlU6bNJrMwTbY=;
-        b=niTn0KGMR3MpiANwYRHY8szbFglCSQzJesrZao+7s98Q51T8APJ0TRCYihtywEC/WC
-         xkV+25ZfBHnphLBoqMfj9mG5q5XaUhj8/oqBsKSrZWniPyyszU6BQ6HB22zTtJxZJUHy
-         WhNQS7b5+SSfPI1ERfHASsTcChhaNltmrz3BjFK6Uv1I4TA3xzKRL5cjGUM+PyMp04Sg
-         HlsXdyjHesju0FWgUwU4F6fWBFzjJaQIqXw5Z3b4vLCnamFrKUgmKCJhW8330YNxba+u
-         EciPpBBxpQlyrMvFPbSFo89ljLcro7xdz6+I7fQEQu+4hWtygJjOEI8Wx6zcYTa9gAkA
-         aSTQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp3QXjEveN6XS0vIrbkuHJYBRYIrlXq41YBope7oJs8/WqFqLrtcnuy0u4i4AM8109+Uq0p9ACRBQryUCkoj10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhBHe0KouLKZ0Z2bi5iU1SvnxrzAVEkMGSVtx3LunXqXmoMbw4
-	u4vN8rZExs0dF/PnEUjE7cEG+5++rIADHef/KFahOFS/VNDnk+EbdrD9iByn5XHCQ2ZrUdQwSNV
-	qm2HsIWCoZQcQIwTgkvBF6SV29K46y9j/6IVEp8U=
-X-Gm-Gg: AR+sD12veqkS0YC60LcbbMeJE92IP+ueRWLMGcSgVPxNyy5VHezryBYPxn/SlqAuQPv
-	0n4I0eSvPdHDZkmqySk+3nb7QEG7KR76+oFUZ0WfoJ7g29y0GF3QzsYiwUzQo3brnfgaRhm5Mdq
-	WHsuzLiJscOYinOTDbeS5ZjcExtcihZUX1JkrBBI3G2wy5dZbJvVp7s/4n3EzZTqF0ojfTnaPa7
-	JVeeaj3goJ6WoEesoy62/2eSHbE6xDYRSxifNEpTlAuM8l9kZVJI9nB8zuiRtOB6NyK80WaTj5H
-	J5L1+UyWNS1ODEDS6XHbzIobipJDc+Ir10p4IVoEpviVzBgtk2tDAZs13HYvlL/iPINvqgPgjNv
-	SZRQXJzvQeZKV3GZcIgQnINI0MZrs8+AinDoFYcSN6lfjvWXPwrIymBeRNQxbgQufihnEVoTV
-X-Received: by 2002:a17:90b:1b45:b0:37f:be6c:f3f2 with SMTP id
- 98e67ed59e1d1-38f9be2b44dmr3162247a91.2.1785439492812; Thu, 30 Jul 2026
- 12:24:52 -0700 (PDT)
+        bh=bb6LlJEaD+pxUjSMvDq7nulMIBFh2L95e4hfasZCgfw=;
+        b=UimLBOAtuDB9qwCZ0J1OsjSXQnA02Kg36ppJIvtC/nG/mtthvqg2XVtX+uQ4GyLTXD
+         Dbo0zc91OXm1m8GAXxPu6KuN1wzJVz5K/WRNUD7uO2jWrGZZ5SObZpnHwyHGap0RLhRa
+         OWNTedSm8B09/VF3hPtsECALa3OV8jFVkJFZXIiV7ixLC8qdozUHPeRK5cmTdv9tCMSd
+         GIentaS3RcOG239d2si2ZdXq1D4Bf4gutqjN01u6L9evsdi0bHpfvrm40nsmx1aQMbRM
+         /tDmKViEJcRFcXwbwk7s2jiBvQ8rh109m7Rz9HMqIK3SyvReHCeN45eE5hExUKakciMs
+         xGbQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rrb0Pr9Ttv7+K/CLhcsZlt3fyCOg2PH/XtIO3ij0D5MTe4md43lNUxUpJB3X3YpNLvX/7+xJyZlVzoNkrQ+Fq8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK6ShQz/246BjV2V/ES4tvTqhUjM7IjNZntMmnItWy+3TiMii4
+	igwp40GKD/pM0ju63BnsJa9Is/NrgYkAg8MIbdJYk+ExECs97nmPyfrKsMvm89EnWde7Mf+aY6X
+	4brXOxwMCzt6PUslURZmAePza2RQpLZFlkei/EI4=
+X-Gm-Gg: AR+sD12eaxHV3pPRCf4YN8xoauxeNAhA9+/CjSt56hGWqcl43eGKT8ZNR7DRlmyClj8
+	1xO3rgmZKH2+Uq9MXSRASQolE0f+V/xfAgB+Au//q74WAek2aFbNkCuIIWQOIJlPsxdQKtUonQj
+	HiclMyaTdN+5JI3HMA8SITAk5KPbFXKvO+dN55NNdgcG9wksux5XuVr3q+JHIVfggvCz+RMFy0T
+	WePZ1tGB+IQNBe2Qje6j0g/8bFJNrBFXT3r4ErGDM/exGLIBg2rnK6iM2u+CJ7r0oa1KVaXlWXc
+	ZTa87e55TC03aeEXF0WNoIbmYwDBTy61PoLs6Qa4VhNJpycXOCBzKUL2wtrJ+pVXrT1+YtRqT7E
+	0/G7rmLo2imwmqvDJeXNxno8TJGixRMtL791hR6dMH/UUyB0fh6nyS1Cvup6idBB2k2EhDyXB
+X-Received: by 2002:a05:6a20:9d91:b0:3b3:241f:66c6 with SMTP id
+ adf61e73a8af0-3c900519d70mr3904677637.26.1785439594316; Thu, 30 Jul 2026
+ 12:26:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de> <20260730-auxclock-nanosleep-prep-v1-11-cd8b61229a7c@linutronix.de>
-In-Reply-To: <20260730-auxclock-nanosleep-prep-v1-11-cd8b61229a7c@linutronix.de>
+References: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de> <20260730-auxclock-nanosleep-prep-v1-13-cd8b61229a7c@linutronix.de>
+In-Reply-To: <20260730-auxclock-nanosleep-prep-v1-13-cd8b61229a7c@linutronix.de>
 From: John Stultz <jstultz@google.com>
-Date: Thu, 30 Jul 2026 12:24:40 -0700
-X-Gm-Features: AUfX_mxVlosGecKuHtjsDqQBYVphwYSYcbuRp_ZGCYJJ3EyLOia6bU_MUWIAJUc
-Message-ID: <CANDhNCrdXvgGhta47mkXPsXdRh_yQ9BdLrDpD7+Q8Dq=R4Ljdg@mail.gmail.com>
-Subject: Re: [PATCH 11/16] selftests: timers: nanosleep: Move all single clock
- tests out of the loop in main()
+Date: Thu, 30 Jul 2026 12:26:22 -0700
+X-Gm-Features: AUfX_myn-RLgtDysjtaVAuX36XIL4GcSL3NevKvSc_wbm-YtTB_pa6PAjHbH8VM
+Message-ID: <CANDhNCqZ6UzXSq6xjMZGCcMTs16QPEZUWtR0zBa7aGgBvKOeew@mail.gmail.com>
+Subject: Re: [PATCH 13/16] selftests: timers: nsleep-lat: Use NSEC_PER_MSEC
+ define for unreasonable latency
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_=28Schneider_Electric=29?= <thomas.weissschuh@linutronix.de>
 Cc: Thomas Gleixner <tglx@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
 	Miroslav Lichvar <mlichvar@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
@@ -103,7 +103,7 @@ On Wed, Jul 29, 2026 at 11:47=E2=80=AFPM Thomas Wei=C3=9Fschuh (Schneider E=
 lectric)
 <thomas.weissschuh@linutronix.de> wrote:
 >
-> Make the code easier to read by avoiding a goto.
+> Use the predefined symbol to make the code easier to understand.
 >
 > Signed-off-by: Thomas Wei=C3=9Fschuh (Schneider Electric) <thomas.weisssc=
 huh@linutronix.de>
