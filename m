@@ -1,113 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5BF421F0F
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 13:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4CD419310;
+	Thu, 30 Jul 2026 13:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785416740; cv=none; b=LY6PPJhLvX/zqZWgR+sniMzmovjA53TQRaW9SegQQ1Ge2LxbfNgoIVZbsZiHWWcnKSW/3GboEzn9fUVnqfKFEHbN9e5DohXF6PvBSrBuvEqCz4edoN4V1kICF24FeDg3/ZBFIV1OwBlJJHtNtXyXD6kFno+JclqCFis9mxFx56c=
+	t=1785416864; cv=none; b=Grtgp9GrwCdp76OBYHPxoVi96CXMe4FzNYWOdP3GkTlftau/I8qCuYmoHUaJ4JaqIL5FVb8EKLdjZR7H9sbhwGmtaKWEbEs/IfZRmCJlYgWi32y7Y9Yvbxcl49EJ+I5RUk0G5cCm/GafJO6TTfduFjPb9SSQCdcPkiO3W9MZsqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785416740; c=relaxed/simple;
-	bh=EjmTf8LwIIx7Ib5CT6rFqnT5a3W8I7XG0yLS3L/og14=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=DDQI0KMROHHoX9RBG0UCTx0A9ySlqY0lfy6DuXO/BY1UiNOvBRq7IDd1tVwY2CwaMn0nSQ0rxcfXj2HKBaMECjuDe/UhlKq+/NmkOAXcl33dIo+OAxjrE+JYw0/vpRT5xGd0HxVXt8pXoi+XPR/BPQEtPYOSX2yIg+7Z5vXkVVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0xgh64r; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0xgh64r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053FA1F000E9;
-	Thu, 30 Jul 2026 13:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785416739;
-	bh=DJrzZEt6s3ePrW+9VHCPUcX/GaLLt5IZAmd1xaq4w+c=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=l0xgh64r4V99nsQzcnvLgW1JELM5DuZ2B7mEh2dkbZjSIIzRPGpimlMSM4YBuOz/A
-	 VA1Fp/A0m7d0RrmHW2NDwSJGdzoZ8mvEDhDtYIALZN1LhN4KTam+nlW4yPcAgUAw3U
-	 tcRoQ2Z0dJTwmd12UHqH5zEJHR7FuXSrOg7l3ykvUcrtXVi1SKGQyEfumnV5K15WO3
-	 uKPL8SNvUH0Ylm3XhQtUBxIdwDAhLlRIDZ8QMU4c2Zn51DEhNwJlruMCXD/KxA++Rg
-	 cdD8OXRY//dqL1jM+M95txaM6IdaXDwlJjCnE8XQYJyMIFdKSKcbXrnGT5vbWV3o6L
-	 cd4A027xL7L5Q==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0B86AF40071;
-	Thu, 30 Jul 2026 09:05:38 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Thu, 30 Jul 2026 09:05:38 -0400
-X-ME-Sender: <xms:IUxrauuU-EF01Uc4TRuFIXKRLd7oEs0m6IbB7uiH-vN9x2kGJaU8Cg>
-    <xme:IUxrauRd1Vp8wbXN3mNAGIOTPURpYjCJIodFaOKDVXB7bNtRqLeCbFzDre-LPoDVl
-    AapzNlfFiq_Btt0iaxiFm4dKU7TtgXKwU-YwWP3QA7MCmQuzWc_jNA>
-X-ME-Proxy-Cause: dmFkZTEFaJv/n2Fv+ED/y8q0JWs7hY3wITl5ESRQfzfCfIfeLB0g81SERaKZShlS1jUxcf
-    Bts6VF10pEPw/rDGRa2T6wbQb8XYXNzzoWnZSux05lJR5vGxGFF4zC0j2Bm8skso4/6R1u
-    OrgGF2zPtaMXeGseDQML/f6IHp3inbqDcNUb36Qg/c5DH+4d19/i60xEl6kKd8M5c4Ay8M
-    IPkSBySFzbigBzxEWzK4+5PktK/eoNVGMi9aaKd+O3dunrjdgeAEr/HZPMrqxnhW7l31A+
-    v7BTguitmAHE2HuSjxKjE4Ap6kBKvjy0E4+M61z5SuTfiZDP7VgN4xRWz69ljJ7Wwq+TA5
-    TGlJYh2I5CsrwGFc7dejV46U3c1vVbV9u+MbnFoiSG/nQhbTdFmDVM8z99yVTHgH+u1N1S
-    JbfGsYSAvycMLa5Jlt6NvY9/ILqZ6IkDPluTkOW62vt9NZNVFN0zpp/k0KSbxHOZnOb7Tg
-    tO3BhqXvHkj8z+PbHwKYHmp27fdbWxdstMfW0c7Ww1uO0y5HCNtNx19zJqgC+0JGlMWPS4
-    5k+fD08n4ZKVpisq68mGOsI2s2HctiVVifouj+83ATo3IHTG7iFyuJZ1FOKOR3ErXM/VD7
-    w2jElzsO21SJZGhfi7VervF/cDRb0xUa6e4ye74PHHHFfND43Qmhq1Q3+/pw
-X-ME-Proxy: <xmx:IUxraiSnnYhfsGmIL_kikgMylyrsBvdXBnIzxTCyBvkxjI2DMtg5fw>
-    <xmx:IkxrajpVXxOW4-ZMDrnWLOxlboiWwRRId_GomPHhm8P-Q_KVxNR2Xw>
-    <xmx:Ikxras2AbJOccyYBM5ud20C6DkiraTtEGBmDXBJrQBD6ct95-YDzsw>
-    <xmx:Ikxrai5wGIFiwvy_94EygPsCaEVPII6XHwZdpn-zfoltfa3gs9U0uA>
-    <xmx:IkxragRR6gI3-WSS2yuGjf1XFAwOKdzhjIm-WyEMbQkwcCK1lwwrAhQl>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D82A4780070; Thu, 30 Jul 2026 09:05:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1785416864; c=relaxed/simple;
+	bh=iI2iVuAgWWW+LXM2DwlZZV17MfsfBsP61WW2fOWo8XY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=EL8NyOOD+9+nXERyx69RmkzmGlhG5sR0jJ7qxMJQeDz/7BRXnwnIj85bEQRTAQbv9gazRBtFz1eN6mQ2MQdMFHbiWDS2JI9ZllmRYmZyV857dwQWbt5KxjCNHzEj4VKPGIbDlEAeY0/csQ6VL/VGgxMnst8FUqYR43GcMTCXepQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 9e43710c8c1711f1aa26b74ffac11d73-20260730
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:7e5adc1a-1d6e-4384-9149-c3ae899ac799,IP:10,
+	URL:0,TC:0,Content:-5,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:30
+X-CID-INFO: VERSION:1.3.12,REQID:7e5adc1a-1d6e-4384-9149-c3ae899ac799,IP:10,UR
+	L:0,TC:0,Content:-5,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:30
+X-CID-META: VersionHash:e7bac3a,CLOUDID:39c320572c7efb317360af1dc3df1baa,BulkI
+	D:260730210734W7YZYM6M,BulkQuantity:0,Recheck:0,SF:10|66|78|81|82|102|127|
+	850|865|898,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:
+	nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
+	RE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 9e43710c8c1711f1aa26b74ffac11d73-20260730
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 352084493; Thu, 30 Jul 2026 21:07:29 +0800
+From: Shaojie Sun <sunshaojie@kylinos.cn>
+To: mkoutny@suse.com
+Cc: cgroups@vger.kernel.org,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	sunshaojie@kylinos.cn,
+	tj@kernel.org
+Subject: [PATCH v2] selftests/cgroup: add user_usec sanity check in test_cpucg_nice
+Date: Thu, 30 Jul 2026 21:07:17 +0800
+Message-Id: <20260730130717.1236233-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <amnqUlrPxhTobE1E@localhost.localdomain>
+References: <amnqUlrPxhTobE1E@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A0WByMxMWtsc
-Date: Thu, 30 Jul 2026 09:05:17 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Sabrina Dubroca" <sd@queasysnail.net>
-Cc: "John Fastabend" <john.fastabend@gmail.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Dave Watson" <davejwatson@fb.com>,
- "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Message-Id: <eaa66ad3-fd50-4ec5-b097-e60bd11b2bc9@app.fastmail.com>
-In-Reply-To: <amsVm65P9E0_SUT3@krikkit>
-References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
- <20260726-tls-follow-on-v1-1-99bf4cc1c729@kernel.org>
- <amsVm65P9E0_SUT3@krikkit>
-Subject: Re: [PATCH net 1/9] net/tls: Bound time spent on no-data records in
- tls_sw_read_sock()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+In test_cpucg_nice, after the child process exits, user_usec is
+read from cpu.stat but the value is not checked. Add a sanity check
+to ensure user_usec > 0, analogous to test_cpucg_stats(), so that
+the test fails early if CPU usage wasn't properly accounted.
 
+Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+---
+v2: Instead of simply removing the unused user_usec read, add a sanity
+    check (if user_usec <= 0, goto cleanup) analogous to test_cpucg_stats(),
+    as suggested by Michal.
 
-On Thu, Jul 30, 2026, at 5:12 AM, Sabrina Dubroca wrote:
-> 2026-07-26, 20:33:29 -0400, Chuck Lever wrote:
+ tools/testing/selftests/cgroup/test_cpu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> Bound a run of such records, as net_rx_action() bounds a softirq
->> poll. The first record that delivers no bytes arms a deadline
->> TLS_RX_NODATA_NS ahead; any record that delivers bytes disarms it,
->> so a normal stream never trips it. Breaking out with nothing copied
->
-> Another thought here: I think a peer that sends "some" 0-length data
-> records followed by one (possibly very small) data record, and then
-> repeats that sequence, will not hit this "rate-limiting" of no-data
-> records. Is that right? And if so, is that a problem?
-
-That occurred to me too. It's right on the cusp between still
-making progress and gumming things up. Neither the packet-count
-limit nor the time-bound address this case.
-
-I don't have a good answer.
-
-
-> [I'm guessing that the caller is doing something equivalent to
-> recvmsg(WAITALL), so it could be stuck for a long time even with this
-> new bound]
-
-Still digesting your other feedback. I plan to send a v2 to
-address it.
-
-
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index 7a40d76b9548..5a44705ed3fd 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -291,6 +291,8 @@ static int test_cpucg_nice(const char *root)
+ 
+ 		user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
+ 		nice_usec = cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
++		if (user_usec <= 0)
++			goto cleanup;
+ 		if (!values_close_report(nice_usec, expected_nice_usec, 1))
+ 			goto cleanup;
+ 
 -- 
-Chuck Lever
+2.25.1
+
