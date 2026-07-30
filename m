@@ -1,260 +1,70 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F8A38F62F
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785441394; cv=pass; b=U+SLOC0JAB9LuQU8mhiRbIjmGp7cFi2byNS/d72Tj/59cBVdP6DOrTQvUspkCk+M03VV8hL2pqd3qM+uucvaEPxGck22zcu5oCQpUI4E/QiFAvbCG+CViGGxET/NENK5q/OaSEAj4704M1pgiysmu+mkG+2lV2GlbR1cxJiy6JM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785441394; c=relaxed/simple;
-	bh=Fd1f99vygy+qd1Txs8X/LRlu3cQ5f0p0/unNHTb7UvY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G4efPFYCZJ/yqJaHplu5KHxTH/3BbhqVpC08OBvp6f4Q0cz4cMcU7mfPR2SjaOSFUEgK7YTCUgJqFrZ9u54+rayWaa1gUGDSpgFN4ASa5jqaeIkzC1HyacWx1/8vmr23f3BOGf30eRbpJIcqrVnQ3bMI4xFdiIQ/M0jV7rxeuUI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+zpmeNw; arc=pass smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C90438757C;
+	Thu, 30 Jul 2026 20:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785442393; cv=none; b=SLpT0JtO5WKFWQzs4xk3CrcImByUxnF9Q3SF+j9z6gLoQlwPUADc6PTLvHMhGjAM8HrNQ2+WSc89snaJvwP5ofFgvTddJPUG2+r9RiEz8IhmNUA+9g/2KU1wLlEssgG3B5IxmIUvDUKtY4PJO1kHr69fWsXP9+WSEWF6BQu8i90=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785442393; c=relaxed/simple;
+	bh=4JXKWABCRw8ktBnzJUvFz1gfjrwaVinTbE68vFeeI9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=soAL7/pDEmYXBDiRrG3N5T0OPpLgC5Hfa3Q+07kM5ARNhkJmztM7gFgECMCF9C3WvUr6XZI786CsbdBX4Na6pmNMISV2pGJrRwBHV8Zmjtvd5V7Pz074NToaKlZDlh0kYu+iNJ11FPorkmQv48Dj9Wfcil/2XJE8utI7f1G4BpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WEZAPKQs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+zpmeNw"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8485b358552so339695b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:56:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785441392; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Uulvwu6UxshQvKH8l54Q5eJFHT/rnPfaRMDRxMZdMevHMCgN2C93UQIO2drqMqACXf
-         wjn+i4fn7RInJRdIrxRHNijnbc6E2X63BD68QCeoWPC40FimQh2GAad0Y+r1MvYg1IzP
-         YXnGf94XvINOvBvoc3GSrg6Ef1C/YxGtM1bBOApmyVRgKgGx4aAhlgPTsBTT6GvQ3972
-         i+4EZwgLrbDP9rX0YIM4dVrI5L+iHrvm0fI/q42RqdIBzC6hNbSY/L+MTwcnIAC2UFhB
-         E5FTWyJlX8OO2Sb8bMHgO3b5yXCT0K+Gmaiq7i9obu6ED0XIsYl2XhBu/1Gg5ZM7NRu4
-         n89g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        fh=PpI3C2SMz3tChV7tA3bJFPGoyogSOIRf6y3ajxSTrPA=;
-        b=qBT0IUe2hMBSVyGnMkTV8EFPY1BDotWkPT8u7hv8y0xPlupSETjXejtv1MQPXVUxh+
-         rW+n5vMXB7fPSap94wayKcnNphbl8NMGnbhPIqec8jGuwvqO0Agv0r9RWjIvrugyGeT+
-         teWwLGB4clNJQEp9IiHYXjmPCn15rc5o5Io+jF3l/cZguzAaFUoD3/pIpVd67N7BQpjA
-         4inwPOfGm7//aEXP+GP2rJ1I/0nQFEk+zGYH03zyK2MIQf/pUalSpwgB4RGt579HBP2g
-         pjwv2bcL9nyRfsMqOpVMV7oyBxSPgCuZB6FQX29odBev8AY3+GctF5N1AbHw6mv/AJ7u
-         DoTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785441392; x=1786046192; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        b=R+zpmeNwpb0tTZhPzKBk1xNQvVtRfZ7O4Hqk1zmHS6n1as4eig2rQQvlmIcKyMRXAo
-         kXNGG/gvyVCavWDL72/E3cxXmdc9pBhAacrBHKCkiVDhvjFSsP3pk8OsZLrmh97Ltw8/
-         iqGs1SO7W06O07AnWfV0lbEPD5YXeWRSQi0euaT8wh/19VIRigWN4EqQzu4KBcg70J1v
-         GH5nMmqZj4WvjRqWkca649m4c5pkbdK/jnsCXvfALJ/CWt2hQrPU7yFE9BaWjSorhlJT
-         dPJ0mMjsm4rzgpN3jooOTHGIf7DsCzNw/DrlYdnuO1On5g9cIQ79Uf3+HzObtqlf3Jyk
-         VLQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785441392; x=1786046192;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
-        b=IdFhEk1txvL6BTUswAc4eBZxPMuV6zUmaH/lleL+i6YKlVBczQ7qX9nfj/siYzUoOC
-         a4DnBTQsOCY8A4OOG0keQkKHuwo9imYT2cex8SDmdVR0+InQePnOq4ySoOrqkwkXEIdn
-         fhrIHf3hONacSv4i+a14h9ca0XfXFoLx7pil+ZCmLwU37cxx0m3qwm1mNgytuEL0VHJc
-         dHVvj8HjaIb1oQxIFYXmW0sJEWVONPOfMsUMdLjbAnL1tmnedjd+zC4YIIpc5Hajm9Fx
-         ZK7ldQ3u8i9tg3xG/mUk9xrpr4OU0YXyduy68FUHpjlIj20wVh+J4s/eODcgzDyHMVHh
-         tbaw==
-X-Forwarded-Encrypted: i=1; AHgh+RqKTiBPr2z3OOBHUKDQus6I4N9k8k2MKPtYsVmb+PNHqnwKSMYjjbpXg/D9zXqBmlDzKEww+x3kxBpXaUVGTAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdx6JZTpIa7dNT9OFHgfoUQE9CPILFA1CoQEn05vWoriLWpvN7
-	yJhHy9l5eXNHxgMEXrhbG/VUiMjOAHbbq/2rCF/v3jiKQWj3Cd2o/h7rRQE4YvQlmTglD4cd629
-	B0lPH7u/1hFUPwoJVH9mh4CNZ9aV6+dA=
-X-Gm-Gg: AR+sD10I2S2/eHuTAl8X6kU6F+sK8YVzive8ZtvPtkK/3QSZvVvfysKg6ZkNWy3jdhq
-	ks3DMzYYJvt4f2kmM3Ahic+biPyqTfnvGZtgVuN01RXQXc7ViR6DTeUscqF5PSKndPfZw47MylZ
-	AzcbYvLmwBmtw1OlY4OP28sasHS2gsUuOf0sTGutlsrYC3GE87tOxlMA2uHp133LDeKnYFaG1Ei
-	g/FAul6+BMo6ls3sC+m4W/ECDzM5mvPNNwKne3XWHhbMf2O4I6JzUMC8Qufj8llOzHh/M0daIjG
-	nOmTmxhP7FyXbYpYXc8gVvb0YmlJ9zvJqZiW3s/53h5hZcd3EAjdoIryv86Cn2Y9Y00CzA4WCNv
-	iLaHXO1rwmycpE7kaxD6IO4GwQ9r0IWBK7BAyGN6PbQ==
-X-Received: by 2002:a05:6a00:928f:b0:847:904c:8452 with SMTP id
- d2e1a72fcca58-84ebc3cfb0cmr3687688b3a.38.1785441391979; Thu, 30 Jul 2026
- 12:56:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WEZAPKQs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F1E1F000E9;
+	Thu, 30 Jul 2026 20:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785442391;
+	bh=4JXKWABCRw8ktBnzJUvFz1gfjrwaVinTbE68vFeeI9Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=WEZAPKQsFs0JcaAkzNyNiousiKXZcUitZqPGLCvV4JjU2EB3zhEYiPRXnY6O4ZyqT
+	 fgp23ejOXwndloa42GegzDV6iuoJw1zShT18Yzyl2Z3BZ9gFS2pGJje0NspILa1mDC
+	 4+ySAd1CFxLeLquNJymLpA8UgXHbo9QxHq1pyc/UB9G12lUh9U5RuHcuEYc30kavh4
+	 3kXwiMOIccvlmAMMRPs4tucULC1+F8clFC1rKXMlrTbfBQQt7T5EgLsE5k4cIJn4RM
+	 nicF48qX663n2LNrtVRWanQa2D68qQd6xlKDrHouaxo20U1bR4xuD/erfn6BdSvt8Y
+	 oEp2U0FvCM9hw==
+Date: Thu, 30 Jul 2026 13:13:10 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca
+ <sd@queasysnail.net>, Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+ Alexei Lazar <alazar@nvidia.com>, Boris Pismenny <borisp@nvidia.com>,
+ Carolina Jubran <cjubran@nvidia.com>, Chris Mi <cmi@nvidia.com>, Cosmin
+ Ratiu <cratiu@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, Doruk Tan
+ Ozturk <doruk@0sec.ai>, Dragos Tatulea <dtatulea@nvidia.com>, Gal Pressman
+ <gal@nvidia.com>, Jacob Keller <Jacob.e.keller@intel.com>, Jianbo Liu
+ <jianbol@nvidia.com>, Kees Cook <kees@kernel.org>, Lama Kayal
+ <lkayal@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>, Patrisious
+ Haddad <phaddad@nvidia.com>, Raed Salem <raeds@nvidia.com>, Rahul
+ Rameshbabu <rrameshbabu@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Stanislav Fomichev <sdf.kernel@gmail.com>
+Subject: Re: [PATCH net-next 12/12] net: psp: Add a self test for PSP with
+ HW-GRO
+Message-ID: <20260730131310.43308d17@kernel.org>
+In-Reply-To: <d90068b2-8c88-4675-9e51-62f1ce72966f@nvidia.com>
+References: <20260730091756.2543777-1-tariqt@nvidia.com>
+	<20260730091756.2543777-13-tariqt@nvidia.com>
+	<d90068b2-8c88-4675-9e51-62f1ce72966f@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-3-puranjay@kernel.org>
-In-Reply-To: <20260616155716.2631508-3-puranjay@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 12:56:14 -0700
-X-Gm-Features: AUfX_mypllbuQtwnAyQGtjj8wrW31i_okmt7jn4Zb1OXf9HqTBm6BS29OcrxDXw
-Message-ID: <CAEf4BzYrwthXzMP-oyxfnFyFm+N0ZD_cEB8Sz7pYn97RMPgb7w@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] perf/core: Clear the whole branch entry in perf_clear_branch_entry()
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 16, 2026 at 8:57=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
->
-> perf_clear_branch_entry_bitfields() resets the bitfields of struct
-> perf_branch_entry one at a time and deliberately leaves from/to alone,
-> since callers overwrite those immediately. The list of assignments has to
-> be kept in sync with the struct by hand, and it has already drifted:
-> new_type and priv were added to perf_branch_entry but never cleared here,
-> so stale values can leak into the records handed to userspace.
->
-> Clear the entry with a single struct assignment instead:
->
->         *br =3D (struct perf_branch_entry){ };
->
-> Every caller writes from/to right after the clear, so zeroing them as wel=
-l
-> is harmless and the dead stores are elided on the x86 LBR read paths.
-> There is no longer anything to keep in sync when a field is added.
->
-> The helper no longer touches only the bitfields, so rename it to
-> perf_clear_branch_entry() and update the callers, fixing up the
-> br+nr/br+out spacing on the touched lines while at it.
->
-> Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
-> Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
-> Suggested-by: James Clark <james.clark@linaro.org>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  arch/x86/events/amd/brs.c   |  2 +-
->  arch/x86/events/amd/lbr.c   |  2 +-
->  arch/x86/events/intel/lbr.c |  6 +++---
->  drivers/perf/arm_brbe.c     |  2 +-
->  include/linux/perf_event.h  | 16 ++--------------
->  5 files changed, 8 insertions(+), 20 deletions(-)
->
+On Thu, 30 Jul 2026 12:58:07 +0300 Tariq Toukan wrote:
+> Oh, please ignore this one. Sent by mistake.
+> It's a leftover I had locally.
 
-Another one for tip/perf probably?... Puranjay, maybe send the first
-two patches separately?
-
-
-> diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
-> index 06f35a6b58a5..68c5f42965e9 100644
-> --- a/arch/x86/events/amd/brs.c
-> +++ b/arch/x86/events/amd/brs.c
-> @@ -343,7 +343,7 @@ void amd_brs_drain(void)
->
->                 rdmsrq(brs_from(brs_idx), from);
->
-> -               perf_clear_branch_entry_bitfields(br+nr);
-> +               perf_clear_branch_entry(br + nr);
->
->                 br[nr].from =3D from;
->                 br[nr].to   =3D to;
-> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> index d24da377df77..08401fd60585 100644
-> --- a/arch/x86/events/amd/lbr.c
-> +++ b/arch/x86/events/amd/lbr.c
-> @@ -181,7 +181,7 @@ void amd_pmu_lbr_read(void)
->                     entry.to.split.reserved)
->                         continue;
->
-> -               perf_clear_branch_entry_bitfields(br + out);
-> +               perf_clear_branch_entry(br + out);
->
->                 br[out].from    =3D sign_ext_branch_ip(entry.from.split.i=
-p);
->                 br[out].to      =3D sign_ext_branch_ip(entry.to.split.ip)=
-;
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 72f2adcda7c6..295da179fa74 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -755,7 +755,7 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc=
-)
->
->                 rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
->
-> -               perf_clear_branch_entry_bitfields(br);
-> +               perf_clear_branch_entry(br);
->
->                 br->from        =3D msr_lastbranch.from;
->                 br->to          =3D msr_lastbranch.to;
-> @@ -846,7 +846,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc=
-)
->                 if (abort && x86_pmu.lbr_double_abort && out > 0)
->                         out--;
->
-> -               perf_clear_branch_entry_bitfields(br+out);
-> +               perf_clear_branch_entry(br + out);
->                 br[out].from     =3D from;
->                 br[out].to       =3D to;
->                 br[out].mispred  =3D mis;
-> @@ -920,7 +920,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events =
-*cpuc,
->                 to =3D rdlbr_to(i, lbr);
->                 info =3D rdlbr_info(i, lbr);
->
-> -               perf_clear_branch_entry_bitfields(e);
-> +               perf_clear_branch_entry(e);
->
->                 e->from         =3D from;
->                 e->to           =3D to;
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c..effbdeacfcbb 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-> @@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, st=
-ruct perf_branch_entry *ent
->                 return false;
->
->         brbinf =3D bregs.brbinf;
-> -       perf_clear_branch_entry_bitfields(entry);
-> +       perf_clear_branch_entry(entry);
->         if (brbe_record_is_complete(brbinf)) {
->                 entry->from =3D bregs.brbsrc;
->                 entry->to =3D bregs.brbtgt;
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea..e034be4a473a 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1467,21 +1467,9 @@ static inline u32 perf_sample_data_size(struct per=
-f_sample_data *data,
->         return size;
->  }
->
-> -/*
-> - * Clear all bitfields in the perf_branch_entry.
-> - * The to and from fields are not cleared because they are
-> - * systematically modified by caller.
-> - */
-> -static inline void perf_clear_branch_entry_bitfields(struct perf_branch_=
-entry *br)
-> +static inline void perf_clear_branch_entry(struct perf_branch_entry *br)
->  {
-> -       br->mispred     =3D 0;
-> -       br->predicted   =3D 0;
-> -       br->in_tx       =3D 0;
-> -       br->abort       =3D 0;
-> -       br->cycles      =3D 0;
-> -       br->type        =3D 0;
-> -       br->spec        =3D PERF_BR_SPEC_NA;
-> -       br->reserved    =3D 0;
-> +       *br =3D (struct perf_branch_entry){ };
->  }
->
->  extern void perf_output_sample(struct perf_output_handle *handle,
-> --
-> 2.53.0-Meta
->
+Ack, looks like patchwork did the right thing so all good
