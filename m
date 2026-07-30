@@ -1,134 +1,260 @@
-Received: from rev.ng (rev.ng [94.130.142.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A544B3D1CC6;
-	Thu, 30 Jul 2026 23:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.130.142.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785453231; cv=none; b=swaN/vIEjWopLwypK4DViPjcipiO49jUAqZHAdX0lIRyOcxnbOGex9gdyTCh79WiHoApY5qeV0U0NREFQ8yg0ivhlFVe3zPALxvaiH6NeE9ecxRUbq31P4dO9BrVTkAeRBk98NqkZruEJlp1ynuTrYJTj9FX6gJpELvylWxU0RU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785453231; c=relaxed/simple;
-	bh=qpliqiKuvEv+vF0M/OFzrGJTZm6oBflZ5YmeE0dPaj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sZbVs9wQI03IF2NhISEv1MkUpjfC3fk6DWW/JD1WHvpzWxZPMUUqhFjahChmPFPMwOCcmDeFN2rcviEpsb7fFTA8zwzzI4rTTR13fjW9nQBtt1OVuXhdFQiFUZlyEkXcfFFXh4P19kbPbdzXdFE/VsDEodo1gjOZGBEhCiUjuVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rev.ng; spf=pass smtp.mailfrom=rev.ng; dkim=pass (1024-bit key) header.d=rev.ng header.i=@rev.ng header.b=W59GTqzz; arc=none smtp.client-ip=94.130.142.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rev.ng
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rev.ng
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF53A47668D
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 23:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785453466; cv=pass; b=DBvSVD6lK9DKoq1v7wY5Z8P66pmgG3L3yNBPaOlE41AgACD3QcgziX4BgYKlNV78np65Ccv8UjnBvcCnXbBcl/bb3dhliQPLQs/jatuTj83jMu4ZaZBqbteLSJMFr7FPYBeaoSSOSY4PCNUUjB/+UCfNz3HTkDEqSwEcTaKEN1M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785453466; c=relaxed/simple;
+	bh=uH7ghrXluYE2TY6jBIOVAseYWUaqLO51qwkHccqB7P8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LIQ/hhU+7o9vlm6vVJy9zqWW0oVYHoMfLkW4NbsAJXXRFejSa3YSOJoW8ymkySPzt2uFReSlXRT6axUSA6BjPRZ3ciRzKAEPj2ZTpz0ECU2rxqO62/b2EacOporI3WXjpGB2lm6zeHUDH67Ekkk7UQV+KUFlb0iVwO1wy1NWGB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TXFkkdpd; arc=pass smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rev.ng header.i=@rev.ng header.b="W59GTqzz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rev.ng;
-	s=dkim; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-	In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive:List-Unsubscribe:List-Unsubscribe-Post:
-	List-Help; bh=L54GOWdjqRndf1N0Bl3JKPypFdhuh4dOD9kZrETKjt0=; b=W59GTqzz28XGIfy
-	MgWx2m5J08iQh2gCyOqieNW/0EwHDytQKkSAAl/wKbD1Y3PD8KMO8aVJd04cLL531CRhIouIUz2cQ
-	vf3sQspzC7+QNsYSFQ9VPoZVxfFd4tf4ltvruZ0zH8MQTZC/pMjcfRSvwLDW7ZrWkQHJnUhMeaDo0
-	ks=;
-Date: Fri, 31 Jul 2026 00:46:04 +0200
-From: Alessandro Di Federico <ale@rev.ng>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Farid Zakaria <farid.m.zakaria@gmail.com>, david.laight.linux@gmail.com,
- jack@suse.cz, jannh@google.com, kees@kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me,
- shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-Message-ID: <20260731004604.53c66732@spawn>
-In-Reply-To: <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
- <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
- <20260722011217.45e79a08@spawn>
- <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TXFkkdpd"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84e507b079dso325644b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 16:17:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785453462; cv=none;
+        d=google.com; s=arc-20260327;
+        b=DfppJhIZSXdEOiDdQ4+tU02UJ4cvvb5Le/5jy5DIgKMH8y59d3r9nxJIdDQyThfwkw
+         hG6QIv97L251TU5ghEPaJHdo0lzzodzdgtD5k/Dsc3Ms9aicWtbDLV+3b4LSWKuEd0jw
+         f2wUOhug2XfA4BuVAfm8bICHFog32rLsIWHIoezINn6vknXVrj7lAW9AwC9c0caIgVcp
+         kQKhMRZNns1WzkEH6jiAeJf+1US+IQ6Koxg5MUR7Lu/+Qj7RKcIVqI5dDQXQv76m0tYh
+         6SpyC2xrK7vcN0jmCwVjockJ1+pPHVgoie81VFqYAEO8R8pDi+dIDUEKnqLbIED2Pi6q
+         7dZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HN7zDDQbvlDZjNwY0qPH1mYkjJsN1iMdoFqR902Gxck=;
+        fh=LZWX8lEKuZZAtTCvSeiwTKdqxGO2GV86F3Y1G2UdoLs=;
+        b=TzR4uZL4upFH65NvkZtvjUhJRxy/swK7ztOYxt7Q0NaLa8E+AxcnCDMRV+a7cNLaez
+         3U4J8kN7quroeLD3BSVR9SuphQcG30+EpZKXUvSTXVZ44ZVtdWyHn3hsNec20abNj9yS
+         nlu2AXXUMlYCtE3aCBVh62vf/f3Xiu8TwvkzObDn/dTb/sM4blZ4Hm+rgD6+QP0A6JE/
+         j1STot3+8BjuyUfqk3Iy8/0KzGKfbNyCB033ame/8+LZu04WfrQlWx9HXsmMZQ5KYfmS
+         ydKYDqhabuXTvkLDVlJqvsuwLwLSMJ7erKzYDTv8BWaxzn9J7t9CEqOHzSBgHsqHYzkW
+         G+RA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785453461; x=1786058261; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HN7zDDQbvlDZjNwY0qPH1mYkjJsN1iMdoFqR902Gxck=;
+        b=TXFkkdpdH+5ySWventRqqUJX5UCGui/4ksmJJCbk7xBUZYmRuudCo7Esqe1uDyCa9T
+         jwKFtBFVzyZ335WeWVxyr6ddShW6HYZr74/HnHDQRju0J8WPBdxJJ245IIiv2TTV0dFx
+         IfzC2bA3jenJSvZ/pX0b0Tfr1sak7kkHDJ9f1QZFNHkem72f9O10HZ11a2EdmxXTULE3
+         n6QFYCyOMtWmoUS+klxWmu02hiO7Zr7Lhp4fgQr/HGupH+IZRe04aHl5kKIS7NcQTk5L
+         D5vp6iSmUIyT7TkMekhWBGrvHg2dXD39rjSond/4MIkK6GFm9zFDsqNopSlDGnpI/LdF
+         oeog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785453462; x=1786058262;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HN7zDDQbvlDZjNwY0qPH1mYkjJsN1iMdoFqR902Gxck=;
+        b=DzLTovwgbtnxBptmmdHb2M0ivQWvcOK6+qWmGYrBzB4RZJNOL900KA/hnj7Krbmxzi
+         v7UgpOVQjgbsNWTpUkQJzTwfDUYse7Kgb131/3dVDlCeSOqPWRpj4lpx7MwK/G0NPRXQ
+         UvXnbEqg9Ld53hToMdsbAPTv6mItuIt2ojwqln10qqCN1vFqNjB3Fv1/R2eCKt3+agpG
+         UlotjVr3me5PF1tTudur0eRorVgjAfxIs0X7pHR1J7IZUT6XKI0FOwskOi6fnG0oiqgB
+         k5GKqbJ4RXbS+8v6TsknaBuY8Rs0SMmjzHDf7y8SorCxViiy0+neT+6aqaQe07Kmdeoa
+         AF2Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rpu6dRTz2er6Dcf3lPxDKj+cxxvQqNWtNZs+eRa82VbkBCAZa4BxDcVq6XWKfbIsMIUA+fjSZRVUk9OoOocVtA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgiWzPGT7PIf8Jf0Jv45n+LYvFuL/3i1HhiJBVUBNegDk6OCLk
+	moIgBUfsIwqscDR9trQ2f/A9G2XndTGeFijSdJ9r0cKmu0aUMV7uScYQfFvhnwJivkQR+HLiwpQ
+	7Xk7brC8Gp3FDfZlaiRwrFGRpyUMvmOY=
+X-Gm-Gg: AR+sD11xDiQ2TZDX9aVrmI/tugt5kGyaHsrzTHgcDF7uRDeqzu1/pqc748028HZbaoX
+	A5Z0zvvgS2uxW9CYmc0IdyU3KB56h3ppZxBPjGWskm/muwWvidUsruTtUZs0wX6kNJpYDHna779
+	QRFygNZohhc6X8rohhx+menc5CqgNuoyd3GPq4OAU35PGws60uYClvrSeF2BOgfooz/be4i3iHO
+	lIn3EGD3J1+rWOv209o2owp0mBXpd56tZjwJbV1mbOyIdcikariCMtEl7bn+dE+B9yx6R4NgOI8
+	aPDeUChfQ+H4B8JCtbk77sImOiH80uL7VAmJuLav6ggHTzKiNe89a/12dm7+vmVwPlnSxHNhUq1
+	shfqVJITcx84BiB8V+kAkqdKfYLa7SLlEQJqmnpa/xA==
+X-Received: by 2002:a05:6a00:b8a:b0:845:d285:3b6e with SMTP id
+ d2e1a72fcca58-84ebc424114mr3604060b3a.58.1785453461591; Thu, 30 Jul 2026
+ 16:17:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260728145727.45153-1-leon.hwang@linux.dev> <20260728145727.45153-2-leon.hwang@linux.dev>
+In-Reply-To: <20260728145727.45153-2-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 30 Jul 2026 16:17:26 -0700
+X-Gm-Features: AUfX_mymg7vnw0zG7lfwWFkM5C6NQ6YmwTk13yZtxM7GCJ5dcRiiAY94zhjDPU8
+Message-ID: <CAEf4BzaDhyPm4ERJi_0BTW3jLaqVfYybLKDWg6Pub2=8Ca7P3A@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Optimize string scan kfuncs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Rong Tao <rongtao@cestc.cn>, 
+	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>, Viktor Malik <vmalik@redhat.com>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 22 Jul 2026 15:33:40 +0200
-Christian Brauner <brauner@kernel.org> wrote:
+On Tue, Jul 28, 2026 at 7:58=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> Use aligned nofault word loads for the strchr, strrchr, and strlen
+> kfunc families. Align once, hoist the full-word boundary, and use
+> word-at-a-time masks to skip irrelevant words or locate the first
+> matching or NUL byte.
+>
+> Factor the common unaligned-byte, aligned-word, and byte-fallback
+> plumbing into an expansion macro. Keep algorithm-specific actions expande=
+d
+> at each call site.
+>
+> Allow the shared finder to match both ASCII case variants so the
+> case-insensitive substring kfuncs can use the same word-at-a-time scan.
+>
+> If a word load faults, retry from the same address byte-at-a-time. Keep
+> the byte path under KMSAN to avoid reading uninitialized storage beyond
+> the terminator, and preserve the existing limits and error semantics.
+>
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/helpers.c | 180 +++++++++++++++++++++++++++++++++----------
+>  1 file changed, 141 insertions(+), 39 deletions(-)
+>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 88b38db47de9..36075c683166 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -30,6 +30,8 @@
+>  #include <linux/irq_work.h>
+>  #include <linux/buildid.h>
+>
+> +#include <asm/word-at-a-time.h>
+> +
+>  #include "../../lib/kstrtox.h"
+>
+>  /* If kernel subsystem is allowing eBPF programs to call this function,
+> @@ -3727,6 +3729,95 @@ __bpf_kfunc void __bpf_trap(void)
+>   * __get_kernel_nofault instead of plain dereference to make them safe.
+>   */
+>
+> +/* Abstract the common unaligned-byte, aligned-word, and byte-fallback s=
+can. */
+> +#define bpf_str_for_each_word(s, limit, pos, word, byte, byte_label,   \
+> +                             byte_action, word_action, err_label)      \
+> +do {                                                                   \
+> +       __label__ byte_label;                                           \
+> +       size_t __word_end;                                              \
+> +                                                                       \
+> +       if (IS_ENABLED(CONFIG_KMSAN))                                   \
+> +               goto byte_label;                                        \
+> +                                                                       \
+> +       for (; (pos) < (limit) &&                                       \
+> +              !IS_ALIGNED((unsigned long)((s) + (pos)), sizeof(word)); \
+> +            (pos)++) {                                                 \
+> +               __get_kernel_nofault(&(byte), (s) + (pos),              \
+> +                                    unsigned char, err_label);         \
+> +               byte_action;                                            \
+> +       }                                                               \
+> +                                                                       \
+> +       __word_end =3D (pos) + round_down((limit) - (pos), sizeof(word));=
+ \
+> +       for (; (pos) < __word_end; (pos) +=3D sizeof(word)) {            =
+ \
+> +               __get_kernel_nofault(&(word), (s) + (pos),              \
+> +                                    unsigned long, byte_label);        \
+> +               word_action;                                            \
+> +       }                                                               \
+> +                                                                       \
+> +byte_label:                                                            \
+> +       for (; (pos) < (limit); (pos)++) {                              \
+> +               __get_kernel_nofault(&(byte), (s) + (pos),              \
+> +                                    unsigned char, err_label);         \
+> +               byte_action;                                            \
+> +       }                                                               \
+> +} while (0)
+> +
+> +static __always_inline int bpf_str_find(const char *s, size_t limit, uns=
+igned char c,
+> +                                       bool ignore_case, bool nul_is_mat=
+ch)
+> +{
+> +       const struct word_at_a_time constants =3D WORD_AT_A_TIME_CONSTANT=
+S;
+> +       const unsigned char match_c =3D ignore_case ? tolower(c) : c;
+> +       const unsigned char alt_c =3D ignore_case && islower(match_c) ?
+> +                                   toupper(match_c) : match_c;
+> +       const unsigned long repeated_c =3D REPEAT_BYTE(match_c);
+> +       const unsigned long repeated_alt =3D REPEAT_BYTE(alt_c);
+> +       unsigned long word, zero_data, char_data, alt_data;
+> +       unsigned long zero_at, char_at, alt_at;
+> +       const bool has_alt =3D alt_c !=3D match_c;
+> +       unsigned char sc;
+> +       size_t pos =3D 0;
+> +
+> +       bpf_str_for_each_word(s, limit, pos, word, sc, byte_at_a_time, ({
+> +               if (sc =3D=3D match_c || (has_alt && sc =3D=3D alt_c))
+> +                       return pos;
+> +               if (sc =3D=3D '\0')
+> +                       return nul_is_match ? pos : -ENOENT;
+> +       }), ({
+> +               zero_at =3D has_zero(word, &zero_data, &constants);
+> +               char_at =3D has_zero(word ^ repeated_c, &char_data, &cons=
+tants);
+> +               alt_at =3D has_alt ? has_zero(word ^ repeated_alt, &alt_d=
+ata, &constants) : 0;
+> +               if (!zero_at && !char_at && !alt_at)
+> +                       continue;
+> +
+> +               if (zero_at) {
+> +                       zero_data =3D prep_zero_mask(word, zero_data, &co=
+nstants);
+> +                       zero_at =3D find_zero(create_zero_mask(zero_data)=
+);
+> +               } else {
+> +                       zero_at =3D sizeof(word);
+> +               }
+> +               if (char_at) {
+> +                       char_data =3D prep_zero_mask(word ^ repeated_c, c=
+har_data, &constants);
+> +                       char_at =3D find_zero(create_zero_mask(char_data)=
+);
+> +               } else {
+> +                       char_at =3D sizeof(word);
+> +               }
+> +               if (alt_at) {
+> +                       alt_data =3D prep_zero_mask(word ^ repeated_alt, =
+alt_data, &constants);
+> +                       alt_at =3D find_zero(create_zero_mask(alt_data));
+> +                       char_at =3D min(char_at, alt_at);
+> +               }
+> +
+> +               if (char_at <=3D zero_at)
+> +                       return pos + char_at;
+> +               return nul_is_match ? pos + zero_at : -ENOENT;
+> +       }), err_out);
 
-> I think this could even just be part of systemd. You ship the distro
-> with a file for that in /etc/binfmt.d/ and systemd loads that bpf
-> program for PT_INTERP_WITH_ORIGIN.
+looking at the above code, I'd say it's just not worth it. Too much
+code and complexity, IMO. For the absolute majority of BPF programs
+this small speed up won't matter, while for those BPF programs where
+doing tons of bpf_strstr-like operations is the essence of those
+programs and has a huge impact on the performance, they can basically
+implement and maintain this complexity in their own code base.
 
-One could delegate the feature to user space, but that makes it much
-harder to get adopted in a uniform way.
+> +
+> +       return pos =3D=3D XATTR_SIZE_MAX ? -E2BIG : -ENOENT;
+> +
+> +err_out:
+> +       return -EFAULT;
+> +}
+> +
 
-Will systemd, Android [1] and OpenWrt implement this? In the same way?
-If so, at that point it could have just been a feature of the Linux ELF
-extension. 
-
-Of course the Android people could disable the feature even if it's
-in the kernel, but if the convention is established by the kernel,
-there's really no reason to deviate from it in the way it's implemented.
-
-The whole point of the portability thing is to reduce the assumptions
-you make about the target system. Ideally, you just want to use
-features widely available in kernels in the wild.
-
-But from what I understand from another thread, your intention is to
-use userspace as testbench, correct?
-
-> This is policy that the admin should decide
-
-Agreed, but the admin is probably satisfied with enabling/disabling,
-not deciding whether the program header type is `PT_INTERP_WITH_ORIGIN`
-or `PT_ORIGIN_ENABLED_INTERP`. Same for the distro maintainers.
-
-> not an arbitrary extension into elf core.
-
-I think that, in order for this to be useful, it needs to be a ELF
-feature, not something the admin/distro maintainer puts together in
-eBPF.
-
-Then, from a security perspective, AFAIU, implementing this in
-eBPF does not solve the problems that have been discussed.
-
-For instance, `selftests/exec: add binfmt_misc bpf-backed handler test`
-does string manipulation (no `openat`).
-
-I understand that's just an example and it's not the same as committing
-to a new ABI feature, but still.
-
-Overall, I feel like the current proposal pushes back on having a new
-ELF feature for security reasons, but then delegates to distro
-maintainers who want to use the feature to take those risks. But also,
-distro maintainers don't really need this feature because they can just
-write /nix.
-
-I love binfmt_misc enabling you to do ./foreign-architecture-binary or
-./notepad.exe and spawn qemu/wine (usually with your friendly sysadmin
-approval) and extra flexibility in that area with eBPF is super cool.
-However if we are thinking about portability, this make sense only if
-it's a default-enabled ELF feature (implemented in eBPF or not).
-
-I'd be happy to try to work on the example eBPF program using openat,
-address the various security concerns that have been mentioned until it
-looks right and then it could be loaded by default, but with an option
-to disable it. But I'm not sure whether there's such a thing as "default
-loaded eBPF program".
-
-Alternatively, I could extend the ELF core as a parallel feature of
-the eBPF-based mechanism, reviving some patches from previous
-iterations.
-
-What do you think?
-
--- 
-Alessandro Di Federico
-rev.ng Labs
-
-[1] There's a flavor of nix for Android (using proot) which would
-benefit from this:
-
-    https://github.com/nix-community/nix-on-droid-app
+[...]
