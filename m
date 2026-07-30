@@ -1,265 +1,300 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012027.outbound.protection.outlook.com [40.93.195.27])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1664F3F8EB5;
-	Thu, 30 Jul 2026 09:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785403188; cv=fail; b=WGhzLwlLZjjXOaL+5T5m3JWhaUEaVYzWhCBufmOZlphmkkeL5y0KhRzL9uQY+uxeTFBjQPBfZVZ4OUQUWIbsDWXvPH44qZBkfupEsxFIFxWZXOH/bry8jFpIQb8SWu+KcYZxH+QqO5QwY8pbeWrfEiKRzeFk4s/W3WArnIAbdM0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785403188; c=relaxed/simple;
-	bh=kxOTU8L/4Bz2Ih2+a2ZPHMGlLL+Qch0TMoTytc2oE4M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AtoXuAExlY18wWFnKBpSsUosynQJWKlJ9DlDR/yae8gangyHSYPcs+YYmBfJtcqd8GyoN3QbJcFSWSwzm78G9NiQJrnD+vxz49+KIM0XT/7j5UYCZ+Es3qPeEbki3gYIU+vRJ78w8TywKQ4jGeCBp20F52/t80ucgW7wO89ZW/c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=amBSQNim; arc=fail smtp.client-ip=40.93.195.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7C240681D;
+	Thu, 30 Jul 2026 09:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785403201; cv=none; b=t1bckOjxhBnERF90Ko9QM73dz+RjulbWCtrL4K/S0nSEJjQcQgrW5hY5Kk8TZ2t1lXNJ0SrCpNkdnvKHlU8wm3a6VMiPoMq7JrnDAmyaUQHd5aI2ziolC7012HQYyEqLx6Nm4h/UiG97vTQoM608cB/F3RiMhC8p6sV+chS1vHY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785403201; c=relaxed/simple;
+	bh=dwwg3b+ZOL62YKib9I5AfEB9R3R0vyOcjXRiI/q6b8c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=j/gH3NyAZ+qmcrkCowz/bOSLIl7E5/nmulDvar8tR4wpzGtFcnosiZffSRDyg32cacP1zFfTQBN4JFBAT6Knk3yaPxdeWSGKjdBKyUkkkwc7iRKCfUcqZEQNtkbuhzD1kZjlhOKdfDbSN0Afs7DRaNx/pd5dsBSTM+EsJeK1yuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=BcHBTWfV; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="amBSQNim"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UO2mesMEf3x1146Dpq5PyrpNOlzUJ57zetOgmjHZnLzJ6vJjgVxl5+ClkNjZHEQi/49OmNqxt2GKUePjAAzc5hQ32sxedJkOpqW6xapNq31XKpnKhkOmaruPWBhCakFmx0+dujcb/Kf5B3FvjwQIh9JAskGC3oWZNoogVTV6UaF/ce7ked3TBGdG0xh7iNkm3C/beEv53gB8crC6pVIQc3KB4HY57n/3fPMJtlMhH6REAVNap4e62aE83uqWfmTsiTENQb4rMccVxV5PiS8ogjvtWHuhPTVivQFw4G5/m+aG4Yiq5KwR753isvXz5g0JY5t9yRsqtYOV9bsAeyREBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9hyHIL5NdCQ/KTN89/w1LSOcDEnoZkaPUlpEIL7mPgA=;
- b=ehh903PyfojGTN+D0sNH0vurMj/KLagiCN7dfi8auP8i9WPKIQhPgLpZj8r50RHrT9BfYe+IUpmIMlb5Zs1XSx6OOFK/bU5SmIRr9czMVcsnDjl273yZEczxD6g3dDJGfRTnyuLB6C1sWSCQA+iOoql/Y0faIZGNYM+ucnuFF+epTN3J1pwsyyCqLzywD3AXOmqWGOXPuauuiWOY4razPCHBXEo4RfWToDGEkmS+x9z35AIqeiCqL3AbzGg9/ZpctmZ2uMTOKj034aj+W1mQBqo4GGoPfYSdoKqac6oKxnMYlXlWqVePa/G/HhOpm/U1TIGILlm/89m4/jeBzqP+7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9hyHIL5NdCQ/KTN89/w1LSOcDEnoZkaPUlpEIL7mPgA=;
- b=amBSQNim/j9Rl2UdWRaedZ3DqzsMyyZVx4oh4bXWSyaMBRXpzPppjqHos9DqM9Go4wYD1/lH7UF2zpyHmI/qoGS8UVVrMCqx23bkwxoLDi16eeoTa/WTEsAhboXq903g1WUDNMqv2kActNvbll/Mm4jiNdbgtB0mTd2Xz1zy+ZXzGERSBo9Fg9VbDBTSa03x1j740xJOmLD4FQD7mNW/z5IzlWulyxuy2+NqzvsTDENzR5g/RkyNVLtdtbWwBWovtIqhX2Go6bOH/kte/V91G88UneQJ5oQGglMdkYVh/GWPCVoCuqGu43cAwxSCUXedxNGZfmUpr6TXCMO8dZ34fw==
-Received: from BY3PR10CA0026.namprd10.prod.outlook.com (2603:10b6:a03:255::31)
- by IA1PR12MB6044.namprd12.prod.outlook.com (2603:10b6:208:3d4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.12; Thu, 30 Jul
- 2026 09:19:41 +0000
-Received: from SJ5PEPF000001CE.namprd05.prod.outlook.com
- (2603:10b6:a03:255:cafe::64) by BY3PR10CA0026.outlook.office365.com
- (2603:10b6:a03:255::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.13 via Frontend Transport; Thu,
- 30 Jul 2026 09:19:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001CE.mail.protection.outlook.com (10.167.242.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.292.8 via Frontend Transport; Thu, 30 Jul 2026 09:19:40 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Thu, 30 Jul
- 2026 02:19:27 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 30 Jul
- 2026 02:19:27 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Thu, 30
- Jul 2026 02:19:19 -0700
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sabrina Dubroca <sd@queasysnail.net>
-CC: Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Alexei Lazar
-	<alazar@nvidia.com>, Boris Pismenny <borisp@nvidia.com>, Carolina Jubran
-	<cjubran@nvidia.com>, Chris Mi <cmi@nvidia.com>, Cosmin Ratiu
-	<cratiu@nvidia.com>, Daniel Zahka <daniel.zahka@gmail.com>, Doruk Tan Ozturk
-	<doruk@0sec.ai>, Dragos Tatulea <dtatulea@nvidia.com>, Gal Pressman
-	<gal@nvidia.com>, Jacob Keller <Jacob.e.keller@intel.com>, Jianbo Liu
-	<jianbol@nvidia.com>, Kees Cook <kees@kernel.org>, Lama Kayal
-	<lkayal@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, Mark Bloch <mbloch@nvidia.com>, "Patrisious
- Haddad" <phaddad@nvidia.com>, Raed Salem <raeds@nvidia.com>, Rahul Rameshbabu
-	<rrameshbabu@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan
-	<shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Simon Horman
-	<horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Stanislav Fomichev
-	<sdf.kernel@gmail.com>, Tariq Toukan <tariqt@nvidia.com>
-Subject: [PATCH net-next 08/13] net/mlx5e: psp: Handle HW-decapsulated RX PSP packets
-Date: Thu, 30 Jul 2026 12:17:50 +0300
-Message-ID: <20260730091756.2543777-9-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260730091756.2543777-1-tariqt@nvidia.com>
-References: <20260730091756.2543777-1-tariqt@nvidia.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="BcHBTWfV"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=/28blu1NG36zbLxIrIgwc+Efg+/pqw6U48OltEuk0aY=;
+	b=BcHBTWfVrUNK6NhhjQTKPiUOxiFOcExi/aAXvImQ9qaz5MGswsFbCylT7zCys3+D5pgtV28qm
+	Qp1YOcw0mAld6Vm+ih7Aq4sreLDcejWKv+fLUCFo99UFbNvmrbkuZQb7tmpPDg7+tlWPaFPNxg3
+	3tgRWQX10ptG8PeR1ubBf7Q=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4h9k1n40F3z1prQc;
+	Thu, 30 Jul 2026 17:10:21 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3AA0F4057F;
+	Thu, 30 Jul 2026 17:19:51 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 30 Jul
+ 2026 17:19:50 +0800
+Message-ID: <bb134352-087d-451f-948a-2c8b635047d0@huawei.com>
+Date: Thu, 30 Jul 2026 17:19:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CE:EE_|IA1PR12MB6044:EE_
-X-MS-Office365-Filtering-Correlation-Id: be969f71-eec9-4242-8e8b-08deee1baf73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|7416014|376014|23010399003|36860700016|11063799006|56012099006|10067099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	A53j1wLJdRqL1KqHu4Hhx8VZNwsqOsJ1XXTv+7xzVNzsNmMKjKcpvxMnjceUnvz32ESuD9WOQei+F9r4V/NPQIXVhTj0DEn37TVYlKn52+JIP9qaRnVLNdXd7rbtc9lrbfNkypUW3lknIm5rPjCKCQ4CZiLD6mR491Qss3JC+StKrKh5SGEvjCky47bD3fCfF0OGCB78PyIbcnu9+YTiOEl+CqfSb+oNfoS+kgIBpj9BfRrecJGKHYj2i/lWH9p6NNBCo0wZlAu/y0hM6A8jAwYAUXM48ZLKM6IVQmCo1EYcup1ZqW+2gDbOaXVRl7xySYTqhkcHytv6WxnCVr2Hj76RL0SgEWbISIm6kpLqzFgLZu+sUQV620lXv6eNqy0Z6w/toKzWRqkd7oSKDctE5FtkNM17vKKoJQhoHypOxm/6jGqKULNpL9h/dq+S8jKMoHjHPpnND/xpZ49w1/bqjyX2HQq7jEmgrH7pfiOUFIxXdSU0xglgXxAqY84KtknEuIlcvHdUAmzfNexS7ZrKxxDJXnR8YLjWGXtqNPxd9BYZ7iGN4buMJ9/iDATQ5FNilAvcxnhEmsvOTEVv7cxfqtHoCZslJpGAYu4cky1ALHeQAY21FUjButXi+JEBRyomsYfQhrk/Q/lpXQgFQ8zywNR6hxo1BLUx7xh9xVf7F/6obOlDYlT0kxSr9LbIs0WkV3/ybyh7le7uCcbMScKTcA==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(7416014)(376014)(23010399003)(36860700016)(11063799006)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	1TGuQQIuSk5Pjv8pNTatOjW869qaoUwCQACEBx6jn60vkpQ1H3lI7ywT8vJtUqdlrstdXrwIiI9WdS81APkWAQxBRxsqXXjd/E3tWSPn5qpppLqTBB7eMwQBzagn/1dg3jxPXdOLMohftYKBKT2NG9bEXkQRQkRS5zQ89Ae9535zmvh8awus+u7140lgAMqd6tQIjE6VyCt/mst2ylW0YBW8XFs3HdALJ/LiGtKKu5FKLFE8jgIeGfB3XH4EucfLcBdNT9eBnyk+wnaorcmtcipL7ASXbgYuGMoiRQKgpr0Jsqai2hytfp3WdO7ZljwyYpF2pHAQAC667I0rIwRelanzj/gWzcILqaDb08HxDtP1cYJS96NQHPivUGPg7SYCvelsnkuBrR3KDL+AjN1LIweg515hlmvWgVKgx0B6THjBMeT5jckdHMx5nDdQemc1
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 09:19:40.8028
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: be969f71-eec9-4242-8e8b-08deee1baf73
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001CE.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6044
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 4/6] riscv, bpf: Split prologue and epilogue
+ into helper functions
+Content-Language: en-US
+To: Varun R Mallya <varunrmallya@gmail.com>, <pjw@kernel.org>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+	<memxor@gmail.com>, <bjorn@kernel.org>
+CC: <alex@ghiti.fr>, <martin.lau@linux.dev>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+	<puranjay@kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20260722140015.1982158-1-varunrmallya@gmail.com>
+ <20260722140015.1982158-5-varunrmallya@gmail.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260722140015.1982158-5-varunrmallya@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-From: Cosmin Ratiu <cratiu@nvidia.com>
 
-mlx5e_psp_offload_handle_rx_skb() handles RX PSP packets.
+Hi Varun,
 
-Add an additional flow tag marker and helpers for decapsulated PSP
-packets and extend the handler to construct the PSP skb extension from
-the CQE fields (SPI in ft_metadata and PSP version in flow_tag).
+looks good to me, but some real small nits.
 
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
----
- .../mellanox/mlx5/core/en_accel/flow_tag.h    | 10 ++++--
- .../mellanox/mlx5/core/en_accel/psp_rxtx.c    | 21 +++++++++--
- .../mellanox/mlx5/core/en_accel/psp_rxtx.h    | 36 ++++++++++++++++++-
- 3 files changed, 61 insertions(+), 6 deletions(-)
+On 2026/7/22 22:00, Varun R Mallya wrote:
+> Split bpf_jit_build_prologue() and __build_epilogue() into helpers.
+> normal_stack_adjust() computes the frame size for the callee-saved
+> registers a program actually clobbers, emit_normal_prologue() allocates
+> the frame and spills those registers, and emit_normal_restore() reloads
+> them.
+> 
+> The kcfi preamble, fentry nops and tail-call-counter setup are hoisted
+> before the frame-size computation and they do not depend on it and the
+> emitted instruction sequence is unchanged.
+> 
+> No functional change.
+> 
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 152 ++++++++++++++++++--------------
+>   1 file changed, 87 insertions(+), 65 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index ad089a9a4ea9..b804382075c4 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -198,9 +198,84 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+>   		emit_addi(rd, rd, lower, ctx);
+>   }
+>   
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/flow_tag.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/flow_tag.h
-index 28b4470bc91f..d422f96ffced 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/flow_tag.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/flow_tag.h
-@@ -16,8 +16,10 @@
-  *              1 = IPsec
-  *              2 = MACsec
-  *              3 = PSP (HW decrypted, PSP header present)
-- *              4-7 = reserved
-- *   [20:16] = reserved
-+ *              4 = PSP decap (HW decrypted & decapsulated)
-+ *              5-7 = reserved
-+ *   [20:17] = PSP version (4 bits, valid when proto == PSP decap)
-+ *   16      = reserved
-  *   [15:0]  = used by other subsystems (e.g. TC).
+pls use the following comment format:
+
+/*
+  * xxx
   */
- #define MLX5E_ACCEL_FLOW_TAG_PROTO_MASK		GENMASK(23, 21)
-@@ -25,6 +27,10 @@
- #define MLX5E_ACCEL_FLOW_TAG_PROTO_IPSEC	(1 << 21)
- #define MLX5E_ACCEL_FLOW_TAG_PROTO_MACSEC	(2 << 21)
- #define MLX5E_ACCEL_FLOW_TAG_PROTO_PSP		(3 << 21)
-+#define MLX5E_ACCEL_FLOW_TAG_PROTO_PSP_DECAP	(4 << 21)
-+
-+#define MLX5E_ACCEL_FLOW_TAG_PSP_VER_SHIFT	17
-+#define MLX5E_ACCEL_FLOW_TAG_PSP_VER_MASK	(0xF << MLX5E_ACCEL_FLOW_TAG_PSP_VER_SHIFT)
- 
- static inline u32 mlx5e_accel_flow_tag(struct mlx5_cqe64 *cqe)
- {
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-index 348fd7a96261..2beffee14278 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.c
-@@ -118,10 +118,25 @@ bool mlx5e_psp_offload_handle_rx_skb(struct net_device *netdev, struct sk_buff *
- {
- 	struct mlx5e_priv *priv = netdev_priv(netdev);
- 	u16 dev_id = priv->psp->psd->id;
--	bool strip_icv = true;
--	u8 generation = 0;
-+	struct psp_skb_ext *pse;
-+
-+	if (mlx5e_psp_is_decap(cqe)) {
-+		/* UDP + PSP headers and PSP trailer removed by HW.
-+		 * Construct the PSP extension from CQE metadata.
-+		 */
-+		pse = skb_ext_add(skb, SKB_EXT_PSP);
-+		if (unlikely(!pse))
-+			goto drop;
-+
-+		pse->spi = mlx5e_psp_get_spi(cqe);
-+		pse->version = mlx5e_psp_get_version(cqe);
-+		pse->dev_id = dev_id;
-+		pse->generation = 0;
-+		skb->decrypted = 1;
-+		return false;
-+	}
- 
--	if (psp_dev_rcv(skb, dev_id, generation, strip_icv))
-+	if (psp_dev_rcv(skb, dev_id, 0, true))
- 		goto drop;
- 
- 	skb->decrypted = 1;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.h
-index a26faf7cfc27..41b60259b3bc 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/psp_rxtx.h
-@@ -81,10 +81,29 @@ static inline bool mlx5e_psp_is_rx_flow(struct mlx5_cqe64 *cqe)
- {
- 	u32 proto = mlx5e_accel_flow_tag_proto(cqe);
- 
--	return proto == MLX5E_ACCEL_FLOW_TAG_PROTO_PSP;
-+	return proto == MLX5E_ACCEL_FLOW_TAG_PROTO_PSP ||
-+		proto == MLX5E_ACCEL_FLOW_TAG_PROTO_PSP_DECAP;
- 
- }
- 
-+static inline bool mlx5e_psp_is_decap(struct mlx5_cqe64 *cqe)
-+{
-+	u32 proto = mlx5e_accel_flow_tag_proto(cqe);
-+
-+	return proto == MLX5E_ACCEL_FLOW_TAG_PROTO_PSP_DECAP;
-+}
-+
-+static inline u8 mlx5e_psp_get_version(struct mlx5_cqe64 *cqe)
-+{
-+	return (mlx5e_accel_flow_tag(cqe) & MLX5E_ACCEL_FLOW_TAG_PSP_VER_MASK) >>
-+		MLX5E_ACCEL_FLOW_TAG_PSP_VER_SHIFT;
-+}
-+
-+static inline __be32 mlx5e_psp_get_spi(struct mlx5_cqe64 *cqe)
-+{
-+	return cqe->ft_metadata;
-+}
-+
- bool mlx5e_psp_offload_handle_rx_skb(struct net_device *netdev, struct sk_buff *skb,
- 				     struct mlx5_cqe64 *cqe);
- #else
-@@ -110,6 +129,21 @@ static inline bool mlx5e_psp_is_rx_flow(struct mlx5_cqe64 *cqe)
- 	return false;
- }
- 
-+static inline bool mlx5e_psp_is_decap(struct mlx5_cqe64 *cqe)
-+{
-+	return false;
-+}
-+
-+static inline u8 mlx5e_psp_get_version(struct mlx5_cqe64 *cqe)
-+{
-+	return 0;
-+}
-+
-+static inline __be32 mlx5e_psp_get_spi(struct mlx5_cqe64 *cqe)
-+{
-+	return 0;
-+}
-+
- static inline bool mlx5e_psp_offload_handle_rx_skb(struct net_device *netdev,
- 						   struct sk_buff *skb,
- 						   struct mlx5_cqe64 *cqe)
--- 
-2.44.0
 
+or
+
+/* xxx */
+
+> -static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+> +/* Stack space for the callee-saved registers a normal program spills,
+
+how about, the registers based strictly on what is seen in the bpf prog.
+
+> + * excluding the BPF stack itself.
+> + */
+> +static int normal_stack_adjust(struct rv_jit_context *ctx)
+>   {
+> -	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
+> +	int stack_adjust = 0;
+> +
+> +	if (seen_reg(RV_REG_RA, ctx))
+> +		stack_adjust += 8;
+> +	stack_adjust += 8; /* RV_REG_FP */
+> +	if (seen_reg(RV_REG_S1, ctx))
+> +		stack_adjust += 8;
+> +	if (seen_reg(RV_REG_S2, ctx))
+> +		stack_adjust += 8;
+> +	if (seen_reg(RV_REG_S3, ctx))
+> +		stack_adjust += 8;
+> +	if (seen_reg(RV_REG_S4, ctx))
+> +		stack_adjust += 8;
+> +	if (seen_reg(RV_REG_S5, ctx))
+> +		stack_adjust += 8;
+> +	if (ctx->arena_vm_start)
+> +		stack_adjust += 8;
+> +	stack_adjust += 8; /* RV_REG_TCC */
+> +
+> +	return round_up(stack_adjust, STACK_ALIGN);
+> +}
+> +
+> +/* Allocate the frame and save the callee-saved registers the program
+> + * actually clobbers, then point FP at the frame top.
+> + */
+> +static void emit_normal_prologue(struct rv_jit_context *ctx, int stack_adjust)
+
+prefer to let ctx as last param, and the following pls make a change.
+
+> +{
+> +	int store_offset = stack_adjust - 8;
+> +	/* tailcall starts here, emit insn before it must be fixed */
+
+remove this comment.
+
+> +
+> +	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> +
+> +	if (seen_reg(RV_REG_RA, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_RA, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	emit_sd(RV_REG_SP, store_offset, RV_REG_FP, ctx);
+> +	store_offset -= 8;
+> +	if (seen_reg(RV_REG_S1, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S1, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	if (seen_reg(RV_REG_S2, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S2, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	if (seen_reg(RV_REG_S3, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S3, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	if (seen_reg(RV_REG_S4, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S4, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	if (seen_reg(RV_REG_S5, ctx)) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_S5, ctx);
+> +		store_offset -= 8;
+> +	}
+> +	if (ctx->arena_vm_start) {
+> +		emit_sd(RV_REG_SP, store_offset, RV_REG_ARENA, ctx);
+> +		store_offset -= 8;
+> +	}
+> +
+> +	/* store TCC from RV_REG_TCC to stack */
+> +	emit_sd(RV_REG_SP, store_offset, RV_REG_TCC, ctx);
+> +	ctx->tcc_offset = store_offset;
+> +
+> +	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> +}
+> +
+> +static void emit_normal_restore(struct rv_jit_context *ctx, int stack_adjust) > +{
+> +	int store_offset = stack_adjust - 8;
+>   
+>   	if (seen_reg(RV_REG_RA, ctx)) {
+>   		emit_ld(RV_REG_RA, store_offset, RV_REG_SP, ctx);
+> @@ -235,6 +310,13 @@ static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   
+>   	/* restore TCC from stack to RV_REG_TCC */
+>   	emit_ld(RV_REG_TCC, ctx->tcc_offset, RV_REG_SP, ctx);
+> +}
+> +
+> +static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+> +{
+> +	int stack_adjust = ctx->stack_size;
+> +
+> +	emit_normal_restore(ctx, stack_adjust);
+>   
+>   	emit_addi(RV_REG_SP, RV_REG_SP, stack_adjust, ctx);
+>   	/* Set return value. */
+> @@ -2006,34 +2088,12 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   {
+> -	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+> +	int i, stack_adjust, bpf_stack_adjust;
+>   
+>   	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+>   	if (bpf_stack_adjust)
+>   		mark_fp(ctx);
+>   
+> -	if (seen_reg(RV_REG_RA, ctx))
+> -		stack_adjust += 8;
+> -	stack_adjust += 8; /* RV_REG_FP */
+> -	if (seen_reg(RV_REG_S1, ctx))
+> -		stack_adjust += 8;
+> -	if (seen_reg(RV_REG_S2, ctx))
+> -		stack_adjust += 8;
+> -	if (seen_reg(RV_REG_S3, ctx))
+> -		stack_adjust += 8;
+> -	if (seen_reg(RV_REG_S4, ctx))
+> -		stack_adjust += 8;
+> -	if (seen_reg(RV_REG_S5, ctx))
+> -		stack_adjust += 8;
+> -	if (ctx->arena_vm_start)
+> -		stack_adjust += 8;
+> -	stack_adjust += 8; /* RV_REG_TCC */
+> -
+> -	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
+> -	stack_adjust += bpf_stack_adjust;
+> -
+> -	store_offset = stack_adjust - 8;
+> -
+>   	/* emit kcfi type preamble immediately before the  first insn */
+>   	emit_kcfi(is_subprog ? cfi_bpf_subprog_hash : cfi_bpf_hash, ctx);
+>   
+> @@ -2046,46 +2106,8 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>   	if (!is_subprog)
+>   		emit(rv_addi(RV_REG_TCC, RV_REG_ZERO, MAX_TAIL_CALL_CNT), ctx);
+>   
+> -	/* tailcall starts here, emit insn before it must be fixed */
+
+keep this comment here.
+
+> -
+> -	emit_addi(RV_REG_SP, RV_REG_SP, -stack_adjust, ctx);
+> -
+> -	if (seen_reg(RV_REG_RA, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_RA, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	emit_sd(RV_REG_SP, store_offset, RV_REG_FP, ctx);
+> -	store_offset -= 8;
+> -	if (seen_reg(RV_REG_S1, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_S1, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	if (seen_reg(RV_REG_S2, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_S2, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	if (seen_reg(RV_REG_S3, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_S3, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	if (seen_reg(RV_REG_S4, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_S4, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	if (seen_reg(RV_REG_S5, ctx)) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_S5, ctx);
+> -		store_offset -= 8;
+> -	}
+> -	if (ctx->arena_vm_start) {
+> -		emit_sd(RV_REG_SP, store_offset, RV_REG_ARENA, ctx);
+> -		store_offset -= 8;
+> -	}
+> -
+> -	/* store TCC from RV_REG_TCC to stack */
+> -	emit_sd(RV_REG_SP, store_offset, RV_REG_TCC, ctx);
+> -	ctx->tcc_offset = store_offset;
+> -
+> -	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+> +	stack_adjust = normal_stack_adjust(ctx) + bpf_stack_adjust;
+> +	emit_normal_prologue(ctx, stack_adjust);
+>   
+>   	if (bpf_stack_adjust)
+>   		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
