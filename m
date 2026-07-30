@@ -1,129 +1,132 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26633B2D0D
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E7F3B47E6
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785393384; cv=none; b=ibbSBxGZ61lRZheM05mN6lpHs+yXRvpGhdzg7sN8eUaNPkZtJaxiOpwNM9JyDiEPoBvcNpPE9YUczFd5G//NL7x5OUT2QugZxZ6OAt5GtwzmY6Vp1wsUemOAkoKK/K6OVCradv9MZD4yABU9Gs20KfA0zpgR/4e6/+6kOBk2wm8=
+	t=1785393573; cv=none; b=rbFwcXCkRPzRAT4dSgLN1Jc8TI5QV3eHoMwuKkMLJO4WjqpA5CyE+gc/5nKEMHni84G3BS80MUyZEQIsmvUbg8EKLBf+bm/+GxmH2H+3mYJxo6xQ+UHVCtXzojWVVdvg6JIVVblOcEgSVYLyOWJG0nLzjakH7IaPb82Lk2YiN3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785393384; c=relaxed/simple;
-	bh=d6cqkNkrA6VgWVaf8YHHsunGkY2K7fvI3djAUWPPOJw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sT/C51qz1kHcUM55nZAX6ivSANM+nh7MUNK+vGiprRSMgqXknxj5svI5BejR6e5h3f7HcjN/FsA+1wsYVO812y1gpahj8U1slsCoUMFFFxOwVZotBNr8GNovspLw8gxf15iiqhvo25iO5q5sFG4BV5b1fLisJ/VKniP2kZqXVac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=CR02EmMJ; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1785393573; c=relaxed/simple;
+	bh=WncTQphxVp0l2Tk7Aew9QDDKQTVA3eE7asUk3yooeoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GhodS33WWbUeHD53gu5mf1FKjEkfjfOgXNLFBnhYF62QtDBLRv9Ltq+J6VLyqkyk6SKBs8eEa7bdygQHglC6zmBrj+mwgOjpTELpWEG3RdeWMldZfDtKPVvkv5g4YzToSvSMBKUvrTvZXEsJoXMYtpzOsd2DVmQgCnA+gtXx3DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=r9Bnawsg; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="CR02EmMJ"
-Received: from [133.11.54.183] (h183.csg.ci.i.u-tokyo.ac.jp [133.11.54.183])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 66U6aH4o056545
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Thu, 30 Jul 2026 15:36:17 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=/MaMi87RWhMSAus5qN4EIk8TtDM9x9f0bzGDNP+s4l8=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1785393378; v=1;
-        b=CR02EmMJ6YJKNFkKLren40kXzZGtLt35yQRS20Az0NGX7Jm0IItpOIiJ48tk4D+j
-         rVeOUQaPTaJLIRQMGQGPymW+FcXh4R5wmIxwBqX6xun4O/ZABjohzvFq452q1ev/
-         YrSg6ACGWGVzhxeqB01mYofr+/ZJgWbwtqkkbmyAAP/YRm1+e7Rz3/UVkgzaU6Wt
-         dr0B0wZv9b+dBkyktdOfUGGcH10DMnIhloYmuEY1CnDswT7VJRMVYCyf8ra5Kb4s
-         ZKZderu/9rHc0ARcUKa3rC1OPfvFkqbg9UXc7WcR4S+1DZISyboyD9RQ+jn0zfbV
-         viziw2KISB01Nbt8FTXigQ==
-Message-ID: <e023d791-38c3-47b4-9b09-3420fe78d9ea@rsg.ci.i.u-tokyo.ac.jp>
-Date: Thu, 30 Jul 2026 15:36:15 +0900
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="r9Bnawsg"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-92ea24a2dbfso159770185a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 23:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1785393570; x=1785998370; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kOg1TP69pkfX9jACUFVlU927ii/AFS16vNDFEmK7SsI=;
+        b=r9BnawsghlDcat/pe84AtaXEUH943VqDqoT86wpPLtvduovJvTkepYIApcK1kcS8dm
+         Vsbr2HII615RJDo632lNp0VVIk4jIsyUPPLcjZ8G4kf7MUiscXwqTTMMwLZfyFdC/QnN
+         f70GImoBQnn4kdpfMeSMKIUTaVJIokZFnAWahC3B01mdSflxvyXXndmWwaULOUhz0m3q
+         tPZTXKH1pcBVfEDmSEhiq8AuTzB3paxBpAsg8AYTUEfIz9cdRVb8d9Zl+BpjDqEH0Bo9
+         nLEdgyH+WPJoX/9Jvq4uTgVa8DmfohQOLZK2BWsHLPOhSI6MWT2TSx+G8e8h2lnHSk9K
+         fJPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785393570; x=1785998370;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kOg1TP69pkfX9jACUFVlU927ii/AFS16vNDFEmK7SsI=;
+        b=o9dsPyiiYDPPnyVf+XHKt7u40lujHPzU2TolK5ctPmJhVSecZg3J6gmsVgqMK1nEy5
+         knVLn/aQA1vWeCps+fHE8RVWn96Qd/feW6/W+dP4cLpr7FweBHiTu3PIpCUpAhYTtbn7
+         Uly+stQvs4iassT2DuDCpf9tlQKjWCLE279PyQiTJmWQlH0FX05m+AUwCdX1CnxGj54h
+         Y6AA3j8Hj1V2CMx6ivh++EoUFYKnoq3oOwmh0KsPqlEw27bvjVbh7iE5nGr8gLS1vPL6
+         KCvo/4J8LV+CmS2o8QQMTv6qRsndvCvx6hiieT+Nui6A2e7cs0arxoKswUaq+jF08/rr
+         iYdw==
+X-Forwarded-Encrypted: i=1; AHgh+RrwYjYueZs5/5RtLkPawrUtJ1dti8clemz+GOWFP2EEdJaOoVDFyPvycWeNE8rqM+tYZj+7w2FWSwmjVBd/mns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGwPk9aCC/L+wBohnoSDcHIgpOmEJxt+ZpkwLsY4EgQV7fKU+R
+	OIVvO7htoD1cbmOq/ee+KsP/lj+j7/ZjPUyBwPaYOJz2OT3MH9IKtzVQ1zF0AxJTij0=
+X-Gm-Gg: AR+sD12Lerx2Kcrl68zEX2zFhP6NoqxhakwXEu6E2kbr5GHha46HN1LS/0TngJYUtgX
+	yW7FQ0EizyOYkmAniGDokGexaWrhRZ7n1lOSLstzE88RHj/nrbB0DoBA3jRFN2ylcCs6o2wuYm9
+	UxuKYOF8Pr8eNi5iV3AlRMhUiXa+p19cVwZ7K258BsYpKeW9CUP3So+Pabgb/IOcZ4AITZHFjRU
+	gfGUBLf1nGxdZnNPPbl2FGwips6quYJjFcQyXuvZ2jm0KJ4O6Oe+D+QHxDjJLF/aXSXvV/1sMCb
+	bQhHemNyDbl1HTLSKTtK1UgXsb9xZ8f5Sl+LZHvQ1L+wDKhajOXS6ZHdIWMHn9KJ2Y+wXHaas+1
+	e/q9QPRFI6YSQ6o1eWLPTppPlAehC7K3i4b3kgGG1J+Wz3MF4OH53554ejZZJqRx92OBkO41F5Q
+	NgqcB10IApua8jKRX8Al9HkArA9k0HDkxUuc1TpDJpCyZxhkhnPuWdwQ+52jaCfbyAZLYH49olD
+	IVtwsRk3zgXjb3PIvIc/e7MptMa8tVxkARvfHJkSam3
+X-Received: by 2002:a05:620a:72c5:10b0:930:ea99:8097 with SMTP id af79cd13be357-93486cf8599mr88361385a.61.1785393570464;
+        Wed, 29 Jul 2026 23:39:30 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-933d3221c71sm356647085a.2.2026.07.29.23.39.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 23:39:29 -0700 (PDT)
+Date: Thu, 30 Jul 2026 02:39:27 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 03/15] mm: abstract vma_address() and introduce
+ vma_anon_address()
+Message-ID: <amrw2v7TVl_AG5_3@gourry-fedora-PF4VCD3F>
+References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
+ <20260729-b4-scalable-cow-virt-pgoff-v3-3-e8ecfefea812@kernel.org>
+ <amrV0Y7ZUtihiB2B@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 14/16] KVM: arm64: PMU: Implement fixed-counters-only
- emulation
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas
- <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steffen Eiden <seiden@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
- <20260720-hybrid-v9-14-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
- <CA+EHjTx0zNQ_yPCz38vGYpBssshE4b3KWaoUxjzuerGgzB=JSQ@mail.gmail.com>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <CA+EHjTx0zNQ_yPCz38vGYpBssshE4b3KWaoUxjzuerGgzB=JSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amrV0Y7ZUtihiB2B@gourry-fedora-PF4VCD3F>
 
-
-
-On 2026/07/30 3:18, Fuad Tabba wrote:
-> Hi Akihiko,
+On Thu, Jul 30, 2026 at 12:58:22AM -0400, Gregory Price wrote:
+> On Wed, Jul 29, 2026 at 05:48:38PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > 
+> > This will be necessary for determining the address of a folio's index
+> > within a VMA when the folio belongs to a MAP_PRIVATE file-backed VMA but
+> > has been CoW'd, and thus is anonymous, once the anonymous VMA page offset
+> > field is used for the reverse mapping.
+> > 
 > 
-> On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
-> <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> ...
+> This is a doozy of a sentence... 
 > 
->> +/**
->> + * kvm_pmu_create_perf_event - create a perf event for a counter
->> + * @pmc: Counter context
->> + */
->> +static void kvm_pmu_create_perf_event(struct kvm_pmc *pmc)
->> +{
->> +       struct kvm_vcpu *vcpu = kvm_pmc_to_vcpu(pmc);
->> +       struct arm_pmu *arm_pmu = vcpu->kvm->arch.arm_pmu;
->> +
->> +       if (kvm_pmu_fixed_counters_only(vcpu->kvm)) {
->> +               do {
->> +                       arm_pmu = kvm_pmu_probe_armpmu(READ_ONCE(vcpu->cpu));
->> +
->> +                       if (!arm_pmu) {
->> +                               pr_warn_once("kvm: Unsupported PMU variation detected.\n");
->> +                               add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
->> +                               return;
->> +                       }
+> ... determines the address of a folio's index within a VMA when
+>   - the folio belongs to a MAP_PRIVATE file-backed VMA, but
+>   - <The VMA> has been cow'd
+>   - thus <The CoW'd VMA> is anonymous (as well)
+>   - The original VMA may or may not also be marked anonymous?
+>     (just clarifying, could be original mapper or a COW that COWs)
 > 
-> Sashiko flagged that this can leave the perf event out of sync with
-> the sysreg, which looks plausible: on a pCPU with no registered pPMU
-> this returns without recreating the event, so a guest event-type
-> change there updates the sysreg but not the event, and after migrating
-> back to a pCPU the original pPMU covers, kvm_pmc_enable_perf_event()
-> re-enables the stale event instead of recreating it.
+> Ow, my brain.  One question below
 > 
-> I know you treat the no-pPMU case as out of spec, but the dropped
-> update lands once the vCPU is back on a normal pCPU. Is this intended?
 
-"[PATCH v9 06/16] KVM: arm64: PMU: Recreate events after MDCR_EL2 
-changes" calls kvm_pmu_stop_counter() in kvm_vcpu_reload_pmu(), so it 
-does not matter whether this function calls kvm_pmu_stop_counter().
+After re-reading the cover-letter again - my note here is wrong and
+my brain hurts more.
 
-The other changes that require recreating the event are currently not 
-handled at all as Sashiko complains [1]. I'll fix that as done in 
-MDCR_EL2 setters in the next version.
+... determines the address of a folio's index within a VMA when
+  - the folio belongs to a MAP_PRIVATE file-backed VMA, but
+  - <The Folio> has been CoW'd
+  - thus <The CoW'd Folio> is <now marked> anonymous
+  - The original folio may or may not have been anonymous
+    (depending on whether it, itself, was a CoW copy)
 
-That said, I do not intend to add any extra complexity to provide any 
-guarantee for a system with unsupported PMU variation except that the 
-user can notice and react to that (i.e., the taint is reported and no 
-oops happens due to NULL dereference). The patch message is somewhat 
-misleading in this aspect so I'm going to fix that in the next version.
+Lorenzo you are truly doing Darwin's work untangling all of this.
 
-[1] 
-https://sashiko.dev/#/patchset/20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp?part=6
-
-Regards,
-Akihiko Odaki
+~Gregory
