@@ -1,356 +1,183 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F50415F15
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 23:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E60479872;
+	Thu, 30 Jul 2026 23:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785455147; cv=none; b=L9W+f9XoiKVSPdHV/tOccDtQEKeq8OFir/kmDp7n69Am5s/O2BUn9LOIss0Qyuixe95wjtXwaMCUjpDXq2aD+Ksd/pWxDMgLL02wqBfAX5UxbCGJbGQ9iIgPThYU4zKHYD5zRZr3F0Op9ZJ0lLb/9rr6o/BjVv7iWuH6o4TsnUE=
+	t=1785455362; cv=none; b=FtGNtwwrM+XGT/T8pkKZ4HNO6hBifeNf/vhdives8ZSYGdpcJjoa7lg24iEgOGvh1JTG4nnq3UXbX9zpb6t7ceJhK+e3Fh2ztflLynRtyBESrVEzZ9l1R04sjLt9pO/pWz5XzSu7CrDph4n1bLu2iDHKfaX2q9I2QfaBRnO1TJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785455147; c=relaxed/simple;
-	bh=g5JI2ISuJpDK1rGZXzBnJjdbj1LWap5IiNy3B60XDFc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fw5yrurD5/wHetdaHsiFsKZiUFoxBYTQyIi1X8CQ2VRh1BKaRIIqZCgda6Y2by5+V5BRncGTjjNdarejsZuiEc0xE4UMtp8KFfkBYR8t34WoOExxztM0Sn6Vd7DCxs4fGbrPE5LedDZzNq9S67z6UH0GC/YwTt4ke1RnaNtmYc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GFPouuRO; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785455362; c=relaxed/simple;
+	bh=EBqRt2FUcludAcZTS+/lEH3JghanKhXyWdirr2aKXZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FU1omGwusrMH6XktfeL8S3cuFABvwNIW+f7sTMmAoFjXKFK/9f1E5LIokAvMWOzsIhWgjuU45eU3u1JazUBM70YqaOVStbdUGFVbnWnlwvXuyRkiwS0u8aPZghkYTi23hgwmOfoerY7DqBeS8qPLYcSNe6DQj+0RvgwHAWbH/Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=auUUHpuF; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GFPouuRO"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8f18d92172aso4552706d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 16:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785455144; x=1786059944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=37JfktnWKSwnsVTmyOwT4tNbEmQBNW4uYVQkWjpnTqE=;
-        b=GFPouuROcz6ugxIHaVAki2vlYjr4mflpEJijkejWsj3ry0f1ZDVi6yog4/amul3QJF
-         Fcw8m53cQCl587c38e/t461TLC2j/9KBbtOjL4/XrDpn3hJMnAlJcbx9ITWGTvvvlcED
-         qwIj2NLPSNzj72Xrp/lH7afLhpSWLTSM6THX4mIg6Q5Sc2sgYUuPmZJXZr4IhTrKYrdh
-         2QTq+6RadmWOKKQKOKYvbCg67L4DcEmcF3xyyKkBTtXvgHD7vA2ZDf0J0t112YSVyE0A
-         GfbScAoKZiNXY9GlwN7DdcDVJ+iHY4nQHsI2b7jCQDzf5yRWSqjP4LtlxjjAKeXCh4D3
-         zHJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785455144; x=1786059944;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=37JfktnWKSwnsVTmyOwT4tNbEmQBNW4uYVQkWjpnTqE=;
-        b=Gy/7+WLXhHiROC2myhaQ5Lct0MR7vHEiDibk14KxUMv/Co7wxF3tmokK4KxoMM0Gh4
-         u1tPtrtKhSaAEPlSei2wDx9A3+g+q0o5+F+8pCYIQ/blildfWO83gsMsPhIc+jgPfZoF
-         JPPjgeNbPwq2iktEfms1uRFTYNugeyEcfku4Q6eIcY73dVIvnnSkekF6pwEIgQTBRkc/
-         ePVXzZWNIrGgeG/4A2E913IwniNBvanycZZR9sdNClSpDylylV6Z8rw4yoT+qRmmx8/5
-         00zIzXTwlq4o/KkGBxxVFCd5gUIXiMGkJKeR11vX8S6pcvSy9I6Q19cZDql2GQ0VHLKg
-         o2+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpRCZYGsoXVHsywVCKDWvj0rcHWRBaaAoQYG8NDE0MXaiqP/S/olitzX/7C6hzBfQpiBcXPQ3FwUTihYhOfskg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrNv2p5dzR9Z1V2XSawQmG2Z04MEq3hSuihyAvtlwIpVEgwc71
-	hqMhvwGVu2CMgVTpiiaCBy8MRVER+cpO8/tX604GFL7T/JCtbaYt6Ri5
-X-Gm-Gg: AR+sD107L1+pYlMjmEgh6QXiOf3/hyTUIlg3teen0toT2yuxnr/ll0R8cYEQnunCMAk
-	cxuYAsglnFuTSQ2Oq7IRXWk+FPZPgoj0D1q8rAemTjJXysl5yzgblrrloDA+mg3yfViEO0YR8Oo
-	WVuw4wqDD1WfI7WIM+rfFDK9SkUtoH8S0bY//eyA3rwNAgdHEnXKod8VjexBMTTEEDi4razdiFu
-	uTjN//E4+1sQbK3tdBxlripgTo2eHccmqBqJjaLdG640FNjnVmcjqgnqF91qdq49k19Pp/ryuXr
-	xiE6+Dr1EyyeKnxBHc5hjzE06rjo21wWVshYQgtFAH1VXCcFZA52MtrOuMu6CvgMGL41E2XyJ7Y
-	F/Awa1y6zpn6Ov+iXJc63zdVlVej9ELFIg2Br5a9IiPz24QpavHaxTwk/BQqVUifWZn/lh1OhNY
-	gU1Szc9hJch6WeFRJaMvkv2XFUYm0hXVQrRHsWE4qyeLQGz9jBtgjr7EbH+7HmpnZnjGW+8n1YG
-	8l4KEtxQR0P+dfDM+ppQEpP/WDolYy0moEk14gtgBdpVcVJdyZ9CDiO8A2ofVI=
-X-Received: by 2002:a05:6214:4a86:b0:907:4598:ad3 with SMTP id 6a1803df08f44-908347b8db0mr47894106d6.50.1785455143760;
-        Thu, 30 Jul 2026 16:45:43 -0700 (PDT)
-Received: from battery.lan (pool-138-88-31-60.washdc.fios.verizon.net. [138.88.31.60])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908323e8bc0sm28991836d6.26.2026.07.30.16.45.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 16:45:42 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	David Windsor <dwindsor@gmail.com>
-Subject: [PATCH v6 bpf-next 4/4] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
-Date: Thu, 30 Jul 2026 19:45:33 -0400
-Message-ID: <20260730234533.1912709-5-dwindsor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260730234533.1912709-1-dwindsor@gmail.com>
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="auUUHpuF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785455359; x=1816991359;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EBqRt2FUcludAcZTS+/lEH3JghanKhXyWdirr2aKXZk=;
+  b=auUUHpuFzGeVZ72PwoolN8CdqpZPj99EaEsw+S1+P3OVDrVlFGaw58FC
+   qZnzBvE30kFzlDms4X1X/YKjHTmc55l7aDMNagvp3TCvCE4B3gQkJVo1a
+   XoT4f5BswG+9T8TbF8Cb3XBlfSD7MDYZXUU+vKzmy/DtgoXoTVI7WmC2K
+   ggctskMDemlPjr12IVNctzbKjjXX6f3rIQvMyO1oKBU6vPfU/eFtx/doo
+   iPvPE19T3b09NC2bjXsZ0kJrlof32EJQU5HBPtl67DV52vD+6i2NMGx57
+   89X5Xw9A0oNSV8iQ3kEdoymBDnO5xAySwvGEwfe8xZyu2FVCpmNzA5Q5d
+   A==;
+X-CSE-ConnectionGUID: pHjIpe0nRyGUdgZw/+Rt5g==
+X-CSE-MsgGUID: 2k0BMBAIRaehF6zOXqAVRg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="96670035"
+X-IronPort-AV: E=Sophos;i="6.25,195,1779174000"; 
+   d="scan'208";a="96670035"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2026 16:49:18 -0700
+X-CSE-ConnectionGUID: 3hvv/sojQLGAat42r0fN/g==
+X-CSE-MsgGUID: 6mgkoACnRjCJhd9evfHvNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,195,1779174000"; 
+   d="scan'208";a="298631756"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.248]) ([10.124.240.248])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2026 16:49:03 -0700
+Message-ID: <dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com>
+Date: Fri, 31 Jul 2026 07:49:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 07/41] KVM: guest_memfd: Wire up core private/shared
+ attribute interfaces
+To: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-7-35f9aec2aed2@google.com>
+ <60d19013-d6d7-4eec-827a-2622e22cec98@intel.com>
+ <CAEvNRgF0SxmoMtqq69tUih54A9K7j_wcMFRrq=r9w6TnAGAUQQ@mail.gmail.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <CAEvNRgF0SxmoMtqq69tUih54A9K7j_wcMFRrq=r9w6TnAGAUQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Test bpf atomic inode xattr labeling in inode_init_security.
+On 7/31/2026 4:42 AM, Ackerley Tng wrote:
+> Xiaoyao Li <xiaoyao.li@intel.com> writes:
+> 
+>> On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
+>>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>>> index 33c9830190e2e..89cf922232920 100644
+>>> --- a/virt/kvm/guest_memfd.c
+>>> +++ b/virt/kvm/guest_memfd.c
+>>> @@ -893,6 +893,27 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>    EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+>>>
+>>>    #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+>>> +static bool kvm_range_is_private(struct file *file, pgoff_t index,
+>>> +				 size_t nr_pages, struct kvm *kvm, gfn_t gfn)
+>>> +{
+>>> +	struct inode *inode = file_inode(file);
+>>> +	pgoff_t last = index + nr_pages - 1;
+>>> +	struct maple_tree *mt;
+>>> +	void *entry;
+>>> +
+>>> +	if (!gmem_in_place_conversion)
+>>> +		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+>>> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>>> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+>>> +
+>>> +	mt = &GMEM_I(inode)->attributes;
+>>> +	mt_for_each(mt, entry, index, last) {
+>>> +		if (kvm_gmem_interpret_entry(inode, entry) !=
+>>> +		    KVM_MEMORY_ATTRIBUTE_PRIVATE)
+>>> +			return false;
+>>> +	}
+>>> +	return true;
+>>> +}
+>>>
+>>>    static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>    				struct file *file, gfn_t gfn, struct page *src_page,
+>>> @@ -913,9 +934,7 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>
+>>>    	folio_unlock(folio);
+>>>
+>>> -	if (!kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + 1,
+>>> -						KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>>> -						KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
+>>> +	if (!kvm_range_is_private(file, index, 1, kvm, gfn)) {
+>>
+>> It's checking if a single gfn is private.
+>>
+> 
+> But with huge page support we'd need to check a range of gfns... I guess
+> there's the argument of not keeping complexity for the future, but in
+> this case it's undoing functionality for this series and probably adding
+> it back later.
 
-Signed-off-by: David Windsor <dwindsor@gmail.com>
----
- tools/testing/selftests/bpf/bpf_kfuncs.h      |   5 +
- .../selftests/bpf/prog_tests/fs_kfuncs.c      | 156 ++++++++++++++++++
- .../bpf/progs/test_init_inode_xattr.c         |  33 ++++
- 3 files changed, 194 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
+let's leave the work for huge page support in the future.
 
-diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
-index ae71e9b69051..2639f9f94195 100644
---- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-+++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-@@ -92,4 +92,9 @@ extern int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__str,
- 				const struct bpf_dynptr *value_p, int flags) __ksym __weak;
- extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name__str) __ksym __weak;
- 
-+struct lsm_xattrs;
-+extern int bpf_init_inode_xattr(struct lsm_xattrs *xattrs,
-+				const char *name__str,
-+				const struct bpf_dynptr *value_p) __ksym __weak;
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-index 43a26ec69a8e..b208522dbd33 100644
---- a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-@@ -10,6 +10,7 @@
- #include "test_get_xattr.skel.h"
- #include "test_set_remove_xattr.skel.h"
- #include "test_fsverity.skel.h"
-+#include "test_init_inode_xattr.skel.h"
- 
- static const char testfile[] = "/tmp/test_progs_fs_kfuncs";
- 
-@@ -268,6 +269,155 @@ static void test_fsverity(void)
- 	remove(testfile);
- }
- 
-+static void test_init_inode_xattr(void)
-+{
-+	struct test_init_inode_xattr *skel = NULL;
-+	int fd = -1, err;
-+	char value_out[64];
-+
-+	/* This test must be run from a fs that calls
-+	 * security_inode_init_security().
-+	 */
-+	const char *testfile_new = "/dev/shm/test_progs_fs_kfuncs_new";
-+
-+	skel = test_init_inode_xattr__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_init_inode_xattr__open_and_load"))
-+		return;
-+
-+	skel->bss->monitored_pid = getpid();
-+	err = test_init_inode_xattr__attach(skel);
-+	if (!ASSERT_OK(err, "test_init_inode_xattr__attach"))
-+		goto out;
-+
-+	/* Trigger inode_init_security */
-+	fd = open(testfile_new, O_CREAT | O_RDWR, 0644);
-+	if (!ASSERT_GE(fd, 0, "create_file"))
-+		goto out;
-+
-+	/*
-+	 * Probably should not be needed as we will be labeling a file
-+	 * in /dev/shm, but just in case we check if the hook was actually
-+	 * called.
-+	 */
-+	if (!skel->bss->hook_ran) {
-+		printf("%s:SKIP:inode_init_security hook was not invoked\n",
-+		       __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	/* The filesystem does not accept xattrs at inode creation. */
-+	if (skel->data->init_result == -EOPNOTSUPP) {
-+		printf("%s:SKIP:filesystem does not support LSM init xattrs\n",
-+		       __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	ASSERT_EQ(skel->data->init_result, 0, "init_result");
-+
-+	/* initxattrs prepends "security." to the name. */
-+	err = getxattr(testfile_new, "security.bpf.test_label", value_out,
-+		       sizeof(value_out));
-+	if (err < 0 && errno == ENODATA) {
-+		printf("%s:SKIP:filesystem did not apply LSM xattrs\n",
-+		       __func__);
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_GE(err, 0, "getxattr"))
-+		goto out;
-+
-+	ASSERT_EQ(err, (int)sizeof(skel->data->xattr_value), "xattr_size");
-+	ASSERT_EQ(strncmp(value_out, "unconfined_u:object_r:user_home_t:s0",
-+			  sizeof("unconfined_u:object_r:user_home_t:s0")), 0,
-+		  "xattr_value");
-+
-+out:
-+	close(fd);
-+	test_init_inode_xattr__destroy(skel);
-+	remove(testfile_new);
-+}
-+
-+/* Keep in sync with BPF_LSM_INODE_INIT_XATTRS in include/linux/bpf_lsm.h. */
-+#define INIT_INODE_XATTR_MAX 4
-+
-+/*
-+ * Programs may attach to inode_init_security without an attach-time limit, but
-+ * the kfunc only lets BPF claim INIT_INODE_XATTR_MAX xattr slots per inode.
-+ * Calls beyond that budget are rejected at runtime with -ENOSPC.
-+ */
-+static void test_init_inode_xattr_slot_limit(void)
-+{
-+	struct test_init_inode_xattr *skel[INIT_INODE_XATTR_MAX + 1] = {};
-+	struct bpf_link *link[INIT_INODE_XATTR_MAX + 1] = {};
-+	const char *testfile_slot = "/dev/shm/test_progs_fs_kfuncs_slot";
-+	int ok = 0, nospc = 0, notrun = 0, other = 0;
-+	int i, fd = -1;
-+
-+	/* All programs attach successfully; there is no attach-time cap. */
-+	for (i = 0; i <= INIT_INODE_XATTR_MAX; i++) {
-+		skel[i] = test_init_inode_xattr__open();
-+		if (!ASSERT_OK_PTR(skel[i], "open"))
-+			goto out;
-+
-+		snprintf(skel[i]->rodata->xattr_name,
-+			 sizeof(skel[i]->rodata->xattr_name), "bpf.label_%d",
-+			 i);
-+
-+		if (!ASSERT_OK(test_init_inode_xattr__load(skel[i]), "load"))
-+			goto out;
-+
-+		skel[i]->bss->monitored_pid = getpid();
-+
-+		link[i] = bpf_program__attach_lsm(skel[i]->progs.test_init_inode_xattr);
-+		if (!ASSERT_OK_PTR(link[i], "attach"))
-+			goto out;
-+	}
-+
-+	/* Trigger inode_init_security once with all programs attached. */
-+	fd = open(testfile_slot, O_CREAT | O_RDWR, 0644);
-+	if (!ASSERT_GE(fd, 0, "create_file"))
-+		goto out;
-+
-+	/*
-+	 * Exactly INIT_INODE_XATTR_MAX programs claim a slot; test
-+	 * xattr budget accounting with -ENOSPC.
-+	 */
-+	for (i = 0; i <= INIT_INODE_XATTR_MAX; i++) {
-+		int res = skel[i]->data->init_result;
-+
-+		if (!skel[i]->bss->hook_ran || res == -EOPNOTSUPP)
-+			notrun++;
-+		else if (res == 0)
-+			ok++;
-+		else if (res == -ENOSPC)
-+			nospc++;
-+		else
-+			other++;
-+	}
-+
-+	if (notrun == INIT_INODE_XATTR_MAX + 1) {
-+		printf("%s:SKIP:hook not invoked or fs lacks LSM init xattrs\n",
-+		       __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	ASSERT_EQ(ok, INIT_INODE_XATTR_MAX, "slots_within_budget");
-+	ASSERT_EQ(nospc, 1, "slot_over_budget");
-+	ASSERT_EQ(other, 0, "unexpected_result");
-+
-+out:
-+	if (fd >= 0)
-+		close(fd);
-+	for (i = 0; i <= INIT_INODE_XATTR_MAX; i++) {
-+		bpf_link__destroy(link[i]);
-+		test_init_inode_xattr__destroy(skel[i]);
-+	}
-+	remove(testfile_slot);
-+}
-+
- void test_fs_kfuncs(void)
- {
- 	/* Matches xattr_names in progs/test_get_xattr.c */
-@@ -288,4 +438,10 @@ void test_fs_kfuncs(void)
- 
- 	if (test__start_subtest("fsverity"))
- 		test_fsverity();
-+
-+	if (test__start_subtest("init_inode_xattr"))
-+		test_init_inode_xattr();
-+
-+	if (test__start_subtest("init_inode_xattr_slot_limit"))
-+		test_init_inode_xattr_slot_limit();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c b/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
-new file mode 100644
-index 000000000000..ce3d8d39de9c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Cisco Systems, Inc. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_kfuncs.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u32 monitored_pid;
-+int hook_ran;
-+int init_result = -1;
-+
-+const char xattr_name[16] = "bpf.test_label";
-+char xattr_value[] = "unconfined_u:object_r:user_home_t:s0";
-+
-+SEC("lsm/inode_init_security")
-+int BPF_PROG(test_init_inode_xattr, struct inode *inode, struct inode *dir,
-+	     const struct qstr *qstr, struct lsm_xattrs *xattrs)
-+{
-+	struct bpf_dynptr value_ptr;
-+	__u32 pid;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	hook_ran = 1;
-+	bpf_dynptr_from_mem(xattr_value, sizeof(xattr_value), 0, &value_ptr);
-+	init_result = bpf_init_inode_xattr(xattrs, xattr_name, &value_ptr);
-+
-+	return 0;
-+}
--- 
-2.53.0
+>> We can just use kvm_mem_is_private()? And it seems can be a separate patch.
+>>
+> 
+> Do you mean that this refactoring could be a separate patch? I could
+> refactor out kvm_range_is_private() in a separate patch, then put in the
+> mt_for_each() check in this patch together as part of all the rest of
+> the "wiring".
+> 
+> I considered that but it seemed like the refactoring was too small to
+> separate out into another patch when the mt_for_each() part is going to
+> be in this patch anyway.
+> 
+> Or, I could add an earlier patch to first replace the call to
+> kvm_range_has_vm_memory_attributes() with a call to check just 1 gfn,
+> then this wiring patch would be simpler.
+>
+
+This is what I meant. An earlier patch to just replace 
+kvm_range_has_vm_memory_attributes() with kvm_mem_is_private(). Then we 
+can drop this 'big' diff in this patch.
+
+If kvm_range_is_private() is useful/required by huge page support, then 
+let the huge page series to introduce it. It has nothing to do with the 
+in-place conversion series.
+
+> Let me know what y'all think is best. Thanks!
+> 
+>>>    		ret = -EINVAL;
+>>>    		goto out_put_folio;
+>>>    	}
 
