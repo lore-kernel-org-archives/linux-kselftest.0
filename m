@@ -1,144 +1,106 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E61D3B583A;
-	Thu, 30 Jul 2026 06:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30336346ADB
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785394088; cv=none; b=DXHn/vHDiScG0r/Wd13YYzFdrogQcHepx0ZCLGSQbWpmu1OEbNBHOWU4JPqaukVy6RNjKVGzPDDhVwcKWWzB1o6MV7Q8nrN5W6qyYknhbCxWNOPc3lYvGTnp/K3hCvo0pySolsr+J9EPyTMPchYkBEHdHN5WJPUBWGnzzl6bH+8=
+	t=1785394381; cv=none; b=awWMNDRsif4MBXl6mhbGRJuEctm1Gba+w3K63YE6d5zIKs9Fjb9P7JjO0xMRq0+wypRQDhl1+fNxTx6dQZjPhkpeg/yqx/JbqZxtXGSYWzlu8crVqY9fbLXEZRjCWPxtusbqXKNo/otx+loYBe4WwnHz5iuq3b24O2j3xd/guFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785394088; c=relaxed/simple;
-	bh=cUXvWgpHvavzMPmDRzKum1/SvWgScmfvyd6LPyeOKto=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ILeRO0P0NKsfzingHA6wZpfm0fIJxteFtAF7m3FdewN4CT/nQV5wtr5dMOh5v/5f3EXc2H6esN/XljrxS6MAgyF8fY51klf9wUW/ZUKgbFGyHR2kKAlcjpqPBQlRHp8WMyzeU7wfBqnpRWKrmTKYltjFffG2JX3vKrm6GyocMJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WsL5O3BF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0Nd5ERmi; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1785394381; c=relaxed/simple;
+	bh=Pbj0P+gU8va8jJCrhk4MN1M1pVJoePTsLFgY9CKEP0E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qn+wrkMp2pkq201ggf7x3KsPT/+fHIeauamdble/Go9ZPfESWtDWPpWtMsCtr2oZNZGA09cXcP1nA5tpF+l+efveb0/5GFNHaUjHa6qfCCgKjIMu8QJ3kZuFdH45T1b8txDLBdd3ekHH+tgziLqYKuf67bpqcKpI2AJyt0AmzTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Lm98HCaw; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WsL5O3BF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0Nd5ERmi"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=28Schneider_Electric=29?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1785394074;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Lm98HCaw"
+X-Forwarded-Encrypted: i=1; AHgh+RpQJeo8m5ztTXRyrZenVbG7kqI7MzfBQtRvNgoor4dIFDRhP6dxzAoe4iMQDBCBwlq7e/fp8xxl1TvcHHkAQUI=@vger.kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785394375;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sdr5cDv/mhpFX+x0CnuUGtsXAPxcrE1Hliq6YLtsHWU=;
-	b=WsL5O3BFGZGs+8of0ozENmxPtXOkEZUdrRSrFOxFW7tBWAyvbvNFEzoThVSo9BWNaVHKmK
-	t5tRAdNdwgSvf/MtkSo2VhGdjO7VloHVX4USi+Ku2RcnEYMnDWa4IlQhojcvisYDQ3S4um
-	5ChtA1e+Y0HRzSekZuclSVPp3cf49oTqNq1Khx8cQC8ZnLZQVcrjHNO2M0Is8Se7Y/IvN2
-	f2lP9AMeZJMT9cL+pL0LdEqBoIIECUTEFpkGswA0GdfrrYC3dJzopTC+DFB9K90KYtvR+I
-	BxrbR02wU5lxvvwGRzFpwbB8CCkiwKoHHnXta7uHtjca03jdvOzkj0BX07SQVw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1785394074;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sdr5cDv/mhpFX+x0CnuUGtsXAPxcrE1Hliq6YLtsHWU=;
-	b=0Nd5ERmijstM32kwFgtDwdGrPTh1hiIG+3QOB0AvhpOKOycI/m9NauQsYLa2Bs9HfXnebx
-	dHXj2gSegoc63fCw==
-Date: Thu, 30 Jul 2026 08:47:52 +0200
-Subject: [PATCH 15/16] selftests: timers: nsleep-lat: Reuse kselftest error
- numbers
+	bh=Pbj0P+gU8va8jJCrhk4MN1M1pVJoePTsLFgY9CKEP0E=;
+	b=Lm98HCaw8OSzPqQ7McByaMRWie+KSmLnTztUSS1Kqfq43iclOamgYebi8726xLH8hKYZHY
+	zRVwEpgzJTtwfoukX0BgagaNV7o4qvWd3jH12LNhWvaMOW+S4y6uNNsGVQSvDQ85hOwE11
+	ep1aH/SzKcdOdYPqg09ack+BJXebZyw=
+X-Gm-Message-State: AOJu0YwIiRLe+bhWuAZF7UNP0oUMBXK0/u+YuRj2cTLJEDK0aAg/3/7S
+	l6Rom3T6Ce2eUsL82bj8NxGtqeTGM9ADzZJp/JHo4xx0Vmx/I5W7UeX/IQZ3IDkuQ+HBZ2jgDWz
+	B+MUJL1nOraD0LR6br80Vf9j3DfyTrArpr1/bMe1A
+X-Received: by 2002:a05:622a:1f18:b0:528:38d6:71b4 with SMTP id
+ d75a77b69052e-52b39484e98mr9124391cf.11.1785394358893; Wed, 29 Jul 2026
+ 23:52:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260730-auxclock-nanosleep-prep-v1-15-cd8b61229a7c@linutronix.de>
-References: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de>
-In-Reply-To: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de>
-To: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@kernel.org>, 
- Stephen Boyd <sboyd@kernel.org>, Miroslav Lichvar <mlichvar@redhat.com>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>, 
- Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh_=28Schneider_Electric=29?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785394062; l=2145;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=cUXvWgpHvavzMPmDRzKum1/SvWgScmfvyd6LPyeOKto=;
- b=XKLXYIqrPv/vcDEN7uN9IH835WkS3I0IUQvlZCVOJ+mPhnbIKCs2Re43iMLVzSmV18lhJ9lUH
- VbuUJ2RbXytD2ISHzbz0lxztiM5wnXtsvWxLoAHW5vlzDv19lZYHVl4
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+ <20260720-hybrid-v9-14-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+ <CA+EHjTx0zNQ_yPCz38vGYpBssshE4b3KWaoUxjzuerGgzB=JSQ@mail.gmail.com> <e023d791-38c3-47b4-9b09-3420fe78d9ea@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <e023d791-38c3-47b4-9b09-3420fe78d9ea@rsg.ci.i.u-tokyo.ac.jp>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Thu, 30 Jul 2026 07:52:01 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTxAH-eW4soxjbSJi8DwbH-yRXE-jJ9s02nEZ7kVXxxWMQ@mail.gmail.com>
+X-Gm-Features: AUfX_my8ZWlfDB9plrXG5PWElkl5pTmNLk-LtsIhDb0mp2MLaqYsxid4gcfDy1k
+Message-ID: <CA+EHjTxAH-eW4soxjbSJi8DwbH-yRXE-jJ9s02nEZ7kVXxxWMQ@mail.gmail.com>
+Subject: Re: [PATCH v9 14/16] KVM: arm64: PMU: Implement fixed-counters-only emulation
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Migadu-Flow: FLOW_OUT
 
-The test currently defines its own custom error numbers.
-These mirror the semantics from the standard KFST_* constants.
+Hi Akihiko,
 
-To make the code easier to read, use the standard result constants.
+On Thu, 30 Jul 2026 at 07:36, Akihiko Odaki
+<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+...
+> > Sashiko flagged that this can leave the perf event out of sync with
+> > the sysreg, which looks plausible: on a pCPU with no registered pPMU
+> > this returns without recreating the event, so a guest event-type
+> > change there updates the sysreg but not the event, and after migrating
+> > back to a pCPU the original pPMU covers, kvm_pmc_enable_perf_event()
+> > re-enables the stale event instead of recreating it.
+> >
+> > I know you treat the no-pPMU case as out of spec, but the dropped
+> > update lands once the vCPU is back on a normal pCPU. Is this intended?
+>
+> "[PATCH v9 06/16] KVM: arm64: PMU: Recreate events after MDCR_EL2
+> changes" calls kvm_pmu_stop_counter() in kvm_vcpu_reload_pmu(), so it
+> does not matter whether this function calls kvm_pmu_stop_counter().
+>
+> The other changes that require recreating the event are currently not
+> handled at all as Sashiko complains [1]. I'll fix that as done in
+> MDCR_EL2 setters in the next version.
+>
+> That said, I do not intend to add any extra complexity to provide any
+> guarantee for a system with unsupported PMU variation except that the
+> user can notice and react to that (i.e., the taint is reported and no
+> oops happens due to NULL dereference). The patch message is somewhat
+> misleading in this aspect so I'm going to fix that in the next version.
 
-Signed-off-by: Thomas Weißschuh (Schneider Electric) <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/timers/nsleep-lat.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
+I see, yes, fixing the changelog would help.
 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index ead3271287d6..86af6d81cb14 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -29,8 +29,6 @@
- 
- #define UNRESONABLE_LATENCY (40 * NSEC_PER_MSEC)
- 
--#define UNSUPPORTED 0xf00f
--
- struct timespec timespec_add(struct timespec ts, unsigned long long ns)
- {
- 	ts.tv_nsec += ns;
-@@ -60,9 +58,9 @@ int nanosleep_lat_test(int clockid, long long ns)
- 	target.tv_nsec = ns%NSEC_PER_SEC;
- 
- 	if (clock_gettime(clockid, &start))
--		return UNSUPPORTED;
-+		return KSFT_SKIP;
- 	if (clock_nanosleep(clockid, 0, &target, NULL))
--		return UNSUPPORTED;
-+		return KSFT_SKIP;
- 
- 	count = 10;
- 
-@@ -74,7 +72,7 @@ int nanosleep_lat_test(int clockid, long long ns)
- 
- 	if (((timespec_sub(start, end)/count)-ns) > UNRESONABLE_LATENCY) {
- 		ksft_print_msg("Large rel latency: %lld ns :", (timespec_sub(start, end)/count)-ns);
--		return -1;
-+		return KSFT_FAIL;
- 	}
- 
- 	/* Next check absolute latency */
-@@ -88,10 +86,10 @@ int nanosleep_lat_test(int clockid, long long ns)
- 
- 	if (latency/count > UNRESONABLE_LATENCY) {
- 		ksft_print_msg("Large abs latency: %lld ns :", latency/count);
--		return -1;
-+		return KSFT_FAIL;
- 	}
- 
--	return 0;
-+	return KSFT_PASS;
- }
- 
- #define SKIPPED_CLOCK_COUNT 3
-@@ -125,12 +123,7 @@ int main(int argc, char **argv)
- 
- 		}
- 
--		if (ret == UNSUPPORTED) {
--			ksft_test_result_skip("%s\n", clock_name(clockid));
--		} else {
--			ksft_test_result(ret >= 0, "%s\n",
--					 clock_name(clockid));
--		}
-+		ksft_test_result_report(ret, "%s\n", clock_name(clockid));
- 	}
- 
- 	ksft_finished();
+Thanks,
+/fuad
 
--- 
-2.55.0
-
+>
+> [1]
+> https://sashiko.dev/#/patchset/20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp?part=6
+>
+> Regards,
+> Akihiko Odaki
