@@ -1,101 +1,728 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4CD419310;
-	Thu, 30 Jul 2026 13:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ADA943846F
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 13:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785416864; cv=none; b=Grtgp9GrwCdp76OBYHPxoVi96CXMe4FzNYWOdP3GkTlftau/I8qCuYmoHUaJ4JaqIL5FVb8EKLdjZR7H9sbhwGmtaKWEbEs/IfZRmCJlYgWi32y7Y9Yvbxcl49EJ+I5RUk0G5cCm/GafJO6TTfduFjPb9SSQCdcPkiO3W9MZsqU=
+	t=1785418449; cv=none; b=NFJHTvrXYg60iZ3y3aWtJFEH0yXeBq/ApM3zmenEQnkwiPHHZvDI8CSLdIcuGF2KwTh5GG2c4+mdlk1ORQOlDsxSyR2+TQJgxHgesURi7qJRxbQau48ooYHuVd0LWNbkLvwrnu+1MyO4h066bugD6kNkc2ugPKy2KJjd7H41kP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785416864; c=relaxed/simple;
-	bh=iI2iVuAgWWW+LXM2DwlZZV17MfsfBsP61WW2fOWo8XY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EL8NyOOD+9+nXERyx69RmkzmGlhG5sR0jJ7qxMJQeDz/7BRXnwnIj85bEQRTAQbv9gazRBtFz1eN6mQ2MQdMFHbiWDS2JI9ZllmRYmZyV857dwQWbt5KxjCNHzEj4VKPGIbDlEAeY0/csQ6VL/VGgxMnst8FUqYR43GcMTCXepQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9e43710c8c1711f1aa26b74ffac11d73-20260730
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:7e5adc1a-1d6e-4384-9149-c3ae899ac799,IP:10,
-	URL:0,TC:0,Content:-5,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:30
-X-CID-INFO: VERSION:1.3.12,REQID:7e5adc1a-1d6e-4384-9149-c3ae899ac799,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:30
-X-CID-META: VersionHash:e7bac3a,CLOUDID:39c320572c7efb317360af1dc3df1baa,BulkI
-	D:260730210734W7YZYM6M,BulkQuantity:0,Recheck:0,SF:10|66|78|81|82|102|127|
-	850|865|898,TC:nil,Content:0|15|50,EDM:5,IP:-2,URL:0,File:nil,RT:nil,Bulk:
-	nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
-	RE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 9e43710c8c1711f1aa26b74ffac11d73-20260730
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 352084493; Thu, 30 Jul 2026 21:07:29 +0800
-From: Shaojie Sun <sunshaojie@kylinos.cn>
-To: mkoutny@suse.com
-Cc: cgroups@vger.kernel.org,
-	hannes@cmpxchg.org,
+	s=arc-20240116; t=1785418449; c=relaxed/simple;
+	bh=Z5cn9KF2FiIl2AYZ8//BOtFTyUTqhPYqdIWblcn8D+A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UhPuaym5TPHst69peUDeS+RD0h/ZgBjqy5Iu20Zj/S/g6xLEPYn6kHrvKuGsYu3PMH5+lh3sh0/rbh/bgZrNYAH/KZQpO3VeCEnBQZDliUB9WevDkWinNmTzT43t3OgZnyBSIVhMrAnVrYoVFAomylvwkk4dGY2qrP2JAQ/0sMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=fqcjIttB; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="fqcjIttB"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38101f85591so614041a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1785418440; x=1786023240; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+8iy48LRSaHvFT2ivmOzZOtB23dNqwu0A+jcMYBsw6o=;
+        b=fqcjIttBNLw3bgL0gDLQRB/XCLqjG+G9e0KbRtoBre7A6IMBTxPQr/n4Gkp38SGaHE
+         k8UTPpR/GUO9DfrJ5StkdsnZkfHCi2CyYOlr2N241E8AnqyV8rWCdfuEJQce5xsKwDIu
+         tvQElzwpZGRWAd38hzLRdT5bteWdkC2KzqWaBtb2c5sr1OmiFkxvqc8rjnGBp+uBE5yx
+         VnHLDq9ecX2lsnHclkHTPPLHdmfsLTvXALgHgluvAdrDof4hyKIrX3yDW+u19prZPdpE
+         0LGkVQVj74UYKZ1+rySFtFh41OlQsbbmU1KdXzUsDHCIz4Tz29WY+W0KZKbh4tugdbeH
+         BStg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785418440; x=1786023240;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+8iy48LRSaHvFT2ivmOzZOtB23dNqwu0A+jcMYBsw6o=;
+        b=IVaTxtzjpNe+VWkY7uyBEpfkUrwMEB38VvgxeuwAt83o/FD08WxavkwzG9TAhavBq0
+         Q6H6Ch1/RkTPKqsQj2ctvdoAP5JpRsGObPCNz0kcnCcMMfCkJhX86isXsDK7hgmMcc1g
+         GNBBDW2GT8mbvwNvmBRdtI6yn4gspMY/n06THfsDfrGo0Ys+FnIjqxFPF2M4plVE82D+
+         ipnUzlMzNpN6kVrVEKBJ3FJqAxvQXPvSIL7JrPTPr0NQGZykUGzR9uYYlssrMjGQzNam
+         O+QbH6386gP6slJePFyBEhDZ+QV6G8XAOxV3h8Qi5ezTOpTNkEwZIekv8JAZa4UddZX/
+         t6zw==
+X-Forwarded-Encrypted: i=1; AHgh+RrLo3/qmr/6YtgcCXGWeQidWR48j3qUYnT7osav5+JNy78a7+n3zOTTl8v83+pxaimXG2FvySpsnDHwlAexO5A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH+/xbAZxZINqe4I9CkUtYOHU1vbgzPjmzTdavXbRuzV5MEl/X
+	yWIWRl9+ARDRWbNLTkMsuvIg9mr9GuBdTTA1tIUorTaoIVEojlpzXE2iLdW+QIKndLs=
+X-Gm-Gg: AR+sD11NtArGBi4qoCqg7slCBxAijF5Z/cEoaYXSodtSNBrScINi1Y/nbxEaUQjPQXs
+	ZLCbSTG3vcG27tL9CYnh8mOtGqhqZT7qSjbuPhqNn7vvV6Qk3hbvWuPGFXZ+x0CsvrScP4ugTub
+	d1PWd0B+MaJlYKasW0xMJV/iSLbDiAZoPLvbmTvrCuW9QhB0Pdx02aFamduZwkDsVZ8YOBE2xuO
+	zHSrKvWm+ET4Qdkz4P52kCmOPMFJY8RF6fFWBU6V1FOlR96FGwhIFyJmQOCBUrtTzmmAAdfO2KA
+	azGo9UzOBAY5IHNAJHCPVTv0VHoGPioVmBhcvFOyEvcy7uWtk9jGfvPYS32pFJ262/W366HGfd1
+	SJuzHWor4ZvVVljd7Zm5DbdlY5Ingw2aTuxr/wO5ztUV9hy4z/qdQ0dKfjjDHup6h0Y0m0c3gXi
+	OiHE58bPgJLguGaU3qncyF4JIJ021WPzHuOwQvP1COhz+DDwuqGeKEZIz+h/A5Wp+15ljpPIcY0
+	gNGyK5sJWGlbHCly20jmbXE
+X-Received: by 2002:a17:90b:3806:b0:38e:a52e:a3c9 with SMTP id 98e67ed59e1d1-38fa6aa7baamr372527a91.8.1785418440252;
+        Thu, 30 Jul 2026 06:34:00 -0700 (PDT)
+Received: from FJ7FR2JRQ3.bytedance.net ([2408:8740:c4ff:1::8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504d3c68asm24563284eec.24.2026.07.30.06.33.51
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 30 Jul 2026 06:33:58 -0700 (PDT)
+From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+To: Himanshu Chauhan <himanshu.chauhan@oss.qualcomm.com>
+Cc: linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org
-Subject: [PATCH v2] selftests/cgroup: add user_usec sanity check in test_cpucg_nice
-Date: Thu, 30 Jul 2026 21:07:17 +0800
-Message-Id: <20260730130717.1236233-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <amnqUlrPxhTobE1E@localhost.localdomain>
-References: <amnqUlrPxhTobE1E@localhost.localdomain>
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	=?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Subject: [PATCH v9 2/5] riscv: add support for SBI Supervisor Software Events extension
+Date: Thu, 30 Jul 2026 21:33:33 +0800
+Message-ID: <20260730133333.54325-1-zhangzhanpeng.jasper@bytedance.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <CA+Ht8=b59YDH+7jrea8PcFq3HtFaSk81O8oyQAQ1+ZP3aCb0QQ@mail.gmail.com>
+References: <CA+Ht8=b59YDH+7jrea8PcFq3HtFaSk81O8oyQAQ1+ZP3aCb0QQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-In test_cpucg_nice, after the child process exits, user_usec is
-read from cpu.stat but the value is not checked. Add a sanity check
-to ensure user_usec > 0, analogous to test_cpucg_stats(), so that
-the test fails early if CPU usage wasn't properly accounted.
+From: Clément Léger <cleger@rivosinc.com>
 
-Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+The SBI SSE extension allows the supervisor software to be notified by
+the SBI of specific events that are not maskable. The context switch is
+handled partially by the firmware which will save registers a6 and a7.
+When entering kernel we can rely on these 2 registers to setup the stack
+and save all the registers.
+
+Since SSE events can be delivered at any time to the kernel, including
+during exception handling, we need a way to locate the current_task for
+context tracking. On RISC-V, it is stored in scratch when in user space
+or tp when in kernel space (in which case SSCRATCH is zero). But at the
+beginning of exception handling, SSCRATCH is used to swap tp and
+check the origin of the exception. If interrupted at that point, then,
+there is no way to reliably know where is located the current
+task_struct. Even checking the interruption location won't work as SSE
+event can be nested on top of each other so the original interruption
+site might be lost at some point. In order to retrieve it reliably,
+store the current task in an additional __sse_entry_task per_cpu array.
+This array is then used to retrieve the current task based on the
+hart ID that is passed to the SSE event handler in a6.
+
+That being said, the way the current task struct is stored should
+probably be reworked to find a better reliable alternative.
+
+Since each event (and each CPU for local events) have their own
+context and can preempt each other, allocate a stack (and a shadow stack
+if needed) for each of them (and for each cpu for local events).
+
+The SSE handler runs as a synthetic handler episode, but completion must
+resume the context that was interrupted by the SSE event.  Preserve stvec
+and, when the hypervisor extension is present, hstatus across do_sse() so
+the handler episode does not leak trap-vector or virtualization state into
+the interrupted context.
+
+When completing the event, if we were coming from kernel with interrupts
+disabled, simply return there. If coming from userspace or kernel with
+interrupts enabled, simulate an interrupt exception by setting IE_SIE in
+CSR_IP to allow delivery of signals to user task. For instance this can
+happen when a RAS event has been generated by a user application and a
+SIGBUS has been sent to a task.
+
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
+Co-developed-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 ---
-v2: Instead of simply removing the unused user_usec read, add a sanity
-    check (if user_usec <= 0, goto cleanup) analogous to test_cpucg_stats(),
-    as suggested by Michal.
+Thanks for reporting this. Please find a corrected replacement for v9 patch
+2/5 below. It fixes the truncated sbi_sse_entry.S; patches 3/5 through 5/5
+apply unchanged.
 
- tools/testing/selftests/cgroup/test_cpu.c | 2 ++
- 1 file changed, 2 insertions(+)
+I am still working through the final review and testing for v10. Sorry for
+keeping you waiting.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7a40d76b9548..5a44705ed3fd 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -291,6 +291,8 @@ static int test_cpucg_nice(const char *root)
+ arch/riscv/include/asm/asm.h         |  14 +-
+ arch/riscv/include/asm/scs.h         |   7 +
+ arch/riscv/include/asm/sse.h         |  47 +++++++
+ arch/riscv/include/asm/switch_to.h   |  14 ++
+ arch/riscv/include/asm/thread_info.h |   1 +
+ arch/riscv/kernel/Makefile           |   1 +
+ arch/riscv/kernel/asm-offsets.c      |  14 ++
+ arch/riscv/kernel/sbi_sse.c          | 162 ++++++++++++++++++++++
+ arch/riscv/kernel/sbi_sse_entry.S    | 200 +++++++++++++++++++++++++++
+ 9 files changed, 457 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/include/asm/sse.h
+ create mode 100644 arch/riscv/kernel/sbi_sse.c
+ create mode 100644 arch/riscv/kernel/sbi_sse_entry.S
+
+diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+index e9e8ba83e632..50bace00053c 100644
+--- a/arch/riscv/include/asm/asm.h
++++ b/arch/riscv/include/asm/asm.h
+@@ -90,16 +90,24 @@
+ .endm
  
- 		user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
- 		nice_usec = cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
-+		if (user_usec <= 0)
-+			goto cleanup;
- 		if (!values_close_report(nice_usec, expected_nice_usec, 1))
- 			goto cleanup;
+ #ifdef CONFIG_SMP
+-.macro asm_per_cpu dst sym tmp
+-	lw    \tmp, TASK_TI_CPU_NUM(tp)
+-	slli  \tmp, \tmp, RISCV_LGPTR
++.macro asm_per_cpu_with_cpu dst sym tmp cpu
++	slli  \tmp, \cpu, RISCV_LGPTR
+ 	la    \dst, __per_cpu_offset
+ 	add   \dst, \dst, \tmp
+ 	REG_L \tmp, 0(\dst)
+ 	la    \dst, \sym
+ 	add   \dst, \dst, \tmp
+ .endm
++
++.macro asm_per_cpu dst sym tmp
++	lw \tmp, TASK_TI_CPU_NUM(tp)
++	asm_per_cpu_with_cpu \dst \sym \tmp \tmp
++.endm
+ #else /* CONFIG_SMP */
++.macro asm_per_cpu_with_cpu dst sym tmp cpu
++	la    \dst, \sym
++.endm
++
+ .macro asm_per_cpu dst sym tmp
+ 	la    \dst, \sym
+ .endm
+diff --git a/arch/riscv/include/asm/scs.h b/arch/riscv/include/asm/scs.h
+index 023a412fe38d..0d70a35bc01a 100644
+--- a/arch/riscv/include/asm/scs.h
++++ b/arch/riscv/include/asm/scs.h
+@@ -17,6 +17,11 @@
+ 	load_per_cpu gp, irq_shadow_call_stack_ptr, \tmp
+ .endm
  
++/* Load the per-CPU IRQ shadow call stack to gp. */
++.macro scs_load_sse_stack reg_evt
++	REG_L gp, SSE_REG_EVT_SHADOW_STACK(\reg_evt)
++.endm
++
+ /* Load task_scs_sp(current) to gp. */
+ .macro scs_load_current
+ 	REG_L	gp, TASK_TI_SCS_SP(tp)
+@@ -40,6 +45,8 @@
+ .endm
+ .macro scs_load_irq_stack tmp
+ .endm
++.macro scs_load_sse_stack reg_evt
++.endm
+ .macro scs_load_current
+ .endm
+ .macro scs_load_current_if_task_changed prev
+diff --git a/arch/riscv/include/asm/sse.h b/arch/riscv/include/asm/sse.h
+new file mode 100644
+index 000000000000..d3ce8c2b5221
+--- /dev/null
++++ b/arch/riscv/include/asm/sse.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2024 Rivos Inc.
++ */
++#ifndef __ASM_SSE_H
++#define __ASM_SSE_H
++
++#include <asm/sbi.h>
++
++#ifdef CONFIG_RISCV_SBI_SSE
++
++struct sse_event_interrupted_state {
++	unsigned long a6;
++	unsigned long a7;
++};
++
++struct sse_event_arch_data {
++	void *stack;
++	void *shadow_stack;
++	unsigned long tmp;
++	struct sse_event_interrupted_state interrupted;
++	unsigned long interrupted_phys;
++	u32 evt_id;
++	unsigned int hart_id;
++	unsigned int cpu_id;
++};
++
++static inline bool sse_event_is_global(u32 evt)
++{
++	return !!(evt & SBI_SSE_EVENT_GLOBAL);
++}
++
++void arch_sse_event_update_cpu(struct sse_event_arch_data *arch_evt, int cpu);
++int arch_sse_init_event(struct sse_event_arch_data *arch_evt, u32 evt_id,
++			int cpu);
++void arch_sse_free_event(struct sse_event_arch_data *arch_evt);
++int arch_sse_register_event(struct sse_event_arch_data *arch_evt);
++
++void sse_handle_event(struct sse_event_arch_data *arch_evt,
++		      struct pt_regs *regs);
++asmlinkage void handle_sse(void);
++asmlinkage void do_sse(struct sse_event_arch_data *arch_evt,
++		       struct pt_regs *reg);
++
++#endif
++
++#endif
+diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
+index 0e71eb82f920..ded8dc440b12 100644
+--- a/arch/riscv/include/asm/switch_to.h
++++ b/arch/riscv/include/asm/switch_to.h
+@@ -88,6 +88,19 @@ static inline void __switch_to_envcfg(struct task_struct *next)
+ 			:: "r" (next->thread.envcfg) : "memory");
+ }
+ 
++#ifdef CONFIG_RISCV_SBI_SSE
++DECLARE_PER_CPU(struct task_struct *, __sbi_sse_entry_task);
++
++static inline void __switch_sbi_sse_entry_task(struct task_struct *next)
++{
++	__this_cpu_write(__sbi_sse_entry_task, next);
++}
++#else
++static inline void __switch_sbi_sse_entry_task(struct task_struct *next)
++{
++}
++#endif
++
+ extern struct task_struct *__switch_to(struct task_struct *,
+ 				       struct task_struct *);
+ 
+@@ -122,6 +135,7 @@ do {							\
+ 	if (switch_to_should_flush_icache(__next))	\
+ 		local_flush_icache_all();		\
+ 	__switch_to_envcfg(__next);			\
++	__switch_sbi_sse_entry_task(__next);		\
+ 	((last) = __switch_to(__prev, __next));		\
+ } while (0)
+ 
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 55019fdfa9ec..d14b45610c73 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -36,6 +36,7 @@
+ #define OVERFLOW_STACK_SIZE     SZ_4K
+ 
+ #define IRQ_STACK_SIZE		THREAD_SIZE
++#define SSE_STACK_SIZE		THREAD_SIZE
+ 
+ #ifndef __ASSEMBLER__
+ 
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index cabb99cadfb6..8d4aed6368a6 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -101,6 +101,7 @@ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+ obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+ obj-$(CONFIG_RISCV_SBI)		+= sbi.o sbi_ecall.o
++obj-$(CONFIG_RISCV_SBI_SSE)	+= sbi_sse.o sbi_sse_entry.o
+ ifeq ($(CONFIG_RISCV_SBI), y)
+ obj-$(CONFIG_SMP)		+= sbi-ipi.o
+ obj-$(CONFIG_SMP) += cpu_ops_sbi.o
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index af827448a609..7cc03f5a0673 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -15,6 +15,8 @@
+ #include <asm/ptrace.h>
+ #include <asm/cpu_ops_sbi.h>
+ #include <asm/stacktrace.h>
++#include <asm/sbi.h>
++#include <asm/sse.h>
+ #include <asm/suspend.h>
+ 
+ void asm_offsets(void);
+@@ -533,6 +535,18 @@ void asm_offsets(void)
+ 	DEFINE(FREGS_A6,	    offsetof(struct __arch_ftrace_regs, a6));
+ 	DEFINE(FREGS_A7,	    offsetof(struct __arch_ftrace_regs, a7));
+ #endif
++
++#ifdef CONFIG_RISCV_SBI_SSE
++	OFFSET(SSE_REG_EVT_STACK, sse_event_arch_data, stack);
++	OFFSET(SSE_REG_EVT_SHADOW_STACK, sse_event_arch_data, shadow_stack);
++	OFFSET(SSE_REG_EVT_TMP, sse_event_arch_data, tmp);
++	OFFSET(SSE_REG_HART_ID, sse_event_arch_data, hart_id);
++	OFFSET(SSE_REG_CPU_ID, sse_event_arch_data, cpu_id);
++
++	DEFINE(SBI_EXT_SSE, SBI_EXT_SSE);
++	DEFINE(SBI_SSE_EVENT_COMPLETE, SBI_SSE_EVENT_COMPLETE);
++	DEFINE(ASM_NR_CPUS, CONFIG_NR_CPUS);
++#endif
+ #ifdef CONFIG_RISCV_SBI
+ 	DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
+ 	DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
+diff --git a/arch/riscv/kernel/sbi_sse.c b/arch/riscv/kernel/sbi_sse.c
+new file mode 100644
+index 000000000000..f30ae9ff77c9
+--- /dev/null
++++ b/arch/riscv/kernel/sbi_sse.c
+@@ -0,0 +1,162 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2025 Rivos Inc.
++ */
++#include <linux/nmi.h>
++#include <linux/scs.h>
++#include <linux/bitfield.h>
++#include <linux/percpu-defs.h>
++
++#include <asm/asm-prototypes.h>
++#include <asm/switch_to.h>
++#include <asm/irq_stack.h>
++#include <asm/sbi.h>
++#include <asm/sse.h>
++
++DEFINE_PER_CPU(struct task_struct *, __sbi_sse_entry_task);
++
++void __weak sse_handle_event(struct sse_event_arch_data *arch_evt, struct pt_regs *regs)
++{
++}
++
++void do_sse(struct sse_event_arch_data *arch_evt, struct pt_regs *regs)
++{
++	nmi_enter();
++
++	/* Retrieve missing GPRs from SBI */
++	sbi_ecall(SBI_EXT_SSE, SBI_SSE_EVENT_ATTR_READ, arch_evt->evt_id,
++		  SBI_SSE_ATTR_INTERRUPTED_A6,
++		  (SBI_SSE_ATTR_INTERRUPTED_A7 - SBI_SSE_ATTR_INTERRUPTED_A6) + 1,
++		  arch_evt->interrupted_phys, 0, 0);
++
++	memcpy(&regs->a6, &arch_evt->interrupted, sizeof(arch_evt->interrupted));
++
++	sse_handle_event(arch_evt, regs);
++
++	nmi_exit();
++}
++
++static void *alloc_to_stack_pointer(void *alloc)
++{
++	return alloc ? alloc + SSE_STACK_SIZE : NULL;
++}
++
++static void *stack_pointer_to_alloc(void *stack)
++{
++	return stack - SSE_STACK_SIZE;
++}
++
++#ifdef CONFIG_VMAP_STACK
++static void *sse_stack_alloc(unsigned int cpu)
++{
++	void *stack = arch_alloc_vmap_stack(SSE_STACK_SIZE, cpu_to_node(cpu));
++
++	return alloc_to_stack_pointer(stack);
++}
++
++static void sse_stack_free(void *stack)
++{
++	vfree(stack_pointer_to_alloc(stack));
++}
++
++static void arch_sse_stack_cpu_sync(struct sse_event_arch_data *arch_evt)
++{
++	void *p_stack = arch_evt->stack;
++	unsigned long stack = (unsigned long)stack_pointer_to_alloc(p_stack);
++	unsigned long stack_end = stack + SSE_STACK_SIZE;
++
++	/*
++	 * Flush the tlb to avoid taking any exception when accessing the
++	 * vmapped stack inside the SSE handler
++	 */
++	if (sse_event_is_global(arch_evt->evt_id))
++		flush_tlb_kernel_range(stack, stack_end);
++	else
++		local_flush_tlb_kernel_range(stack, stack_end);
++}
++#else /* CONFIG_VMAP_STACK */
++static void *sse_stack_alloc(unsigned int cpu)
++{
++	void *stack = kmalloc(SSE_STACK_SIZE, GFP_KERNEL);
++
++	return alloc_to_stack_pointer(stack);
++}
++
++static void sse_stack_free(void *stack)
++{
++	kfree(stack_pointer_to_alloc(stack));
++}
++
++static void arch_sse_stack_cpu_sync(struct sse_event_arch_data *arch_evt) {}
++#endif /* CONFIG_VMAP_STACK */
++
++static int sse_init_scs(int cpu, struct sse_event_arch_data *arch_evt)
++{
++	void *stack;
++
++	if (!scs_is_enabled())
++		return 0;
++
++	stack = scs_alloc(cpu_to_node(cpu));
++	if (!stack)
++		return -ENOMEM;
++
++	arch_evt->shadow_stack = stack;
++
++	return 0;
++}
++
++void arch_sse_event_update_cpu(struct sse_event_arch_data *arch_evt, int cpu)
++{
++	arch_evt->cpu_id = cpu;
++	arch_evt->hart_id = cpuid_to_hartid_map(cpu);
++}
++
++int arch_sse_init_event(struct sse_event_arch_data *arch_evt, u32 evt_id,
++			int cpu)
++{
++	void *stack;
++
++	arch_evt->evt_id = evt_id;
++	stack = sse_stack_alloc(cpu);
++	if (!stack)
++		return -ENOMEM;
++
++	arch_evt->stack = stack;
++
++	if (sse_init_scs(cpu, arch_evt)) {
++		sse_stack_free(arch_evt->stack);
++		return -ENOMEM;
++	}
++
++	if (sse_event_is_global(evt_id)) {
++		arch_evt->interrupted_phys =
++					virt_to_phys(&arch_evt->interrupted);
++	} else {
++		arch_evt->interrupted_phys =
++				per_cpu_ptr_to_phys(&arch_evt->interrupted);
++	}
++
++	arch_sse_event_update_cpu(arch_evt, cpu);
++
++	return 0;
++}
++
++void arch_sse_free_event(struct sse_event_arch_data *arch_evt)
++{
++	scs_free(arch_evt->shadow_stack);
++	sse_stack_free(arch_evt->stack);
++}
++
++int arch_sse_register_event(struct sse_event_arch_data *arch_evt)
++{
++	struct sbiret sret;
++
++	arch_sse_stack_cpu_sync(arch_evt);
++
++	sret = sbi_ecall(SBI_EXT_SSE, SBI_SSE_EVENT_REGISTER, arch_evt->evt_id,
++			 (unsigned long)handle_sse, (unsigned long)arch_evt, 0,
++			 0, 0);
++
++	return sbi_err_map_linux_errno(sret.error);
++}
+diff --git a/arch/riscv/kernel/sbi_sse_entry.S b/arch/riscv/kernel/sbi_sse_entry.S
+new file mode 100644
+index 000000000000..c5c1cb5443b6
+--- /dev/null
++++ b/arch/riscv/kernel/sbi_sse_entry.S
+@@ -0,0 +1,200 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Copyright (C) 2025 Rivos Inc.
++ */
++
++#include <linux/init.h>
++#include <linux/linkage.h>
++
++#include <asm/alternative-macros.h>
++#include <asm/asm.h>
++#include <asm/csr.h>
++#include <asm/hwcap.h>
++#include <asm/scs.h>
++
++/* When entering handle_sse, the following registers are set:
++ * a6: contains the hartid
++ * a7: contains a sse_event_arch_data struct pointer
++ */
++SYM_CODE_START(handle_sse)
++	/* Save stack temporarily */
++	REG_S sp, SSE_REG_EVT_TMP(a7)
++	/* Set entry stack */
++	REG_L sp, SSE_REG_EVT_STACK(a7)
++
++	addi sp, sp, -(PT_SIZE_ON_STACK)
++	REG_S ra, PT_RA(sp)
++	REG_S s0, PT_S0(sp)
++	REG_S s1, PT_S1(sp)
++	REG_S s2, PT_S2(sp)
++	REG_S s3, PT_S3(sp)
++	REG_S s4, PT_S4(sp)
++	REG_S s5, PT_S5(sp)
++	REG_S s6, PT_S6(sp)
++	REG_S s7, PT_S7(sp)
++	REG_S s8, PT_S8(sp)
++	REG_S s9, PT_S9(sp)
++	REG_S s10, PT_S10(sp)
++	REG_S s11, PT_S11(sp)
++	REG_S tp, PT_TP(sp)
++	REG_S t0, PT_T0(sp)
++	REG_S t1, PT_T1(sp)
++	REG_S t2, PT_T2(sp)
++	REG_S t3, PT_T3(sp)
++	REG_S t4, PT_T4(sp)
++	REG_S t5, PT_T5(sp)
++	REG_S t6, PT_T6(sp)
++	REG_S gp, PT_GP(sp)
++	REG_S a0, PT_A0(sp)
++	REG_S a1, PT_A1(sp)
++	REG_S a2, PT_A2(sp)
++	REG_S a3, PT_A3(sp)
++	REG_S a4, PT_A4(sp)
++	REG_S a5, PT_A5(sp)
++
++	/* Retrieve entry sp */
++	REG_L a4, SSE_REG_EVT_TMP(a7)
++	/* Save CSRs */
++	csrr a0, CSR_EPC
++	csrr a1, CSR_SSTATUS
++	csrr a2, CSR_STVAL
++	csrr a3, CSR_SCAUSE
++
++	REG_S a0, PT_EPC(sp)
++	REG_S a1, PT_STATUS(sp)
++	REG_S a2, PT_BADADDR(sp)
++	REG_S a3, PT_CAUSE(sp)
++	REG_S a4, PT_SP(sp)
++
++	/* Disable user memory access and floating/vector computing */
++	li t0, SR_SUM | SR_FS_VS
++	csrc CSR_STATUS, t0
++
++	load_global_pointer
++	scs_load_sse_stack a7
++
++#ifdef CONFIG_SMP
++	lw t4, SSE_REG_HART_ID(a7)
++	lw t3, SSE_REG_CPU_ID(a7)
++
++	bne t4, a6, .Lfind_hart_id_slowpath
++
++.Lcpu_id_found:
++#else
++	mv t3, zero
++#endif
++
++	asm_per_cpu_with_cpu t2 __sbi_sse_entry_task t1 t3
++	REG_L tp, 0(t2)
++
++	mv a1, sp /* pt_regs on stack */
++
++	/*
++	 * Run the SSE handler with the normal exception vector, but restore the
++	 * interrupted stvec before completing the event. SSE can arrive while
++	 * the kernel is using a temporary trap vector in a sensitive entry path.
++	 */
++	csrr s3, CSR_STVEC
++	la t0, handle_exception
++	csrw CSR_STVEC, t0
++
++	/*
++	 * Preserve the full HS-mode virtualization state across the handler.
++	 * hstatus is live supervisor state rather than an SSE interrupted
++	 * attribute, and OpenSBI consumes hstatus.SPV during event completion.
++	 * Saving the whole CSR keeps the handler episode transparent to KVM and
++	 * avoids having to infer which hstatus bits may matter to a guest resume.
++	 */
++	ALTERNATIVE("nop", "csrr s5, hstatus", 0, RISCV_ISA_EXT_h, 1)
++
++	/*
++	 * Save sscratch for restoration since we might have interrupted the
++	 * kernel in early exception path and thus, we don't know the content of
++	 * sscratch.
++	 */
++	csrrw s4, CSR_SSCRATCH, x0
++
++	mv a0, a7
++
++	call do_sse
++
++	csrw CSR_SSCRATCH, s4
++	ALTERNATIVE("nop", "csrw hstatus, s5", 0, RISCV_ISA_EXT_h, 1)
++	csrw CSR_STVEC, s3
++
++	REG_L a0, PT_STATUS(sp)
++	REG_L a1, PT_EPC(sp)
++	REG_L a2, PT_BADADDR(sp)
++	REG_L a3, PT_CAUSE(sp)
++	csrw CSR_SSTATUS, a0
++	csrw CSR_EPC, a1
++	csrw CSR_STVAL, a2
++	csrw CSR_SCAUSE, a3
++
++	REG_L ra, PT_RA(sp)
++	REG_L s0, PT_S0(sp)
++	REG_L s1, PT_S1(sp)
++	REG_L s2, PT_S2(sp)
++	REG_L s3, PT_S3(sp)
++	REG_L s4, PT_S4(sp)
++	REG_L s5, PT_S5(sp)
++	REG_L s6, PT_S6(sp)
++	REG_L s7, PT_S7(sp)
++	REG_L s8, PT_S8(sp)
++	REG_L s9, PT_S9(sp)
++	REG_L s10, PT_S10(sp)
++	REG_L s11, PT_S11(sp)
++	REG_L tp, PT_TP(sp)
++	REG_L t0, PT_T0(sp)
++	REG_L t1, PT_T1(sp)
++	REG_L t2, PT_T2(sp)
++	REG_L t3, PT_T3(sp)
++	REG_L t4, PT_T4(sp)
++	REG_L t5, PT_T5(sp)
++	REG_L t6, PT_T6(sp)
++	REG_L gp, PT_GP(sp)
++	REG_L a0, PT_A0(sp)
++	REG_L a1, PT_A1(sp)
++	REG_L a2, PT_A2(sp)
++	REG_L a3, PT_A3(sp)
++	REG_L a4, PT_A4(sp)
++	REG_L a5, PT_A5(sp)
++
++	REG_L sp, PT_SP(sp)
++
++	li a7, SBI_EXT_SSE
++	li a6, SBI_SSE_EVENT_COMPLETE
++	ecall
++
++#ifdef CONFIG_SMP
++.Lfind_hart_id_slowpath:
++
++	/* Restore current task struct from __sbi_sse_entry_task */
++	li t1, ASM_NR_CPUS
++	/* Slowpath to find the CPU id associated to the hart id */
++	la t0, __cpuid_to_hartid_map
++
++.Lhart_id_loop:
++	REG_L t2, 0(t0)
++	beq t2, a6, .Lcpu_id_found
++
++	/* Increment pointer and CPU number */
++	addi t3, t3, 1
++	addi t0, t0, RISCV_SZPTR
++	bltu t3, t1, .Lhart_id_loop
++
++	/*
++	 * This should never happen since we expect the hart_id to match one
++	 * of our CPU, but better be safe than sorry
++	 */
++	la tp, init_task
++	la a0, sse_hart_id_panic_string
++	la t0, panic
++	jalr t0
++#endif
++
++SYM_CODE_END(handle_sse)
++
++SYM_DATA_START_LOCAL(sse_hart_id_panic_string)
++    .ascii "Unable to match hart_id with cpu\0"
++SYM_DATA_END(sse_hart_id_panic_string)
 -- 
-2.25.1
-
+2.50.1 (Apple Git-155)
