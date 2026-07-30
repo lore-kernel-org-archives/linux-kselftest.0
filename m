@@ -1,203 +1,81 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1D83803C3
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 18:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B03C469821;
+	Thu, 30 Jul 2026 19:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785436689; cv=none; b=p/NCjJXthV19O2haeCmGhXtEVoG6qeSH7t9JmRcLLcDdP+S7T4Mq/MpXUtDP6O1grM/wcwhX8SA1EeWHU/XXPNB+Cq5cJJYg0WGDQvSpcQbfT6/phwxrjo7CszlIbHVHQ+L4zX8sPKS9RNkUU0YDynrc5z9kZJsEiv+WT2avWFs=
+	t=1785438222; cv=none; b=dDcNuDkiTU0CJ+siBCxppcGI8WwwX3wwqg8QLZ+i3TJDLBsA9xnhfRifVnS5eO331dvlTWlBSj5WZpcec6wOqY6JYHpnkkaf+KzV5TG6Y7dZj3mEC3D+0E3kluZvXUmjpKKuVGA4suShRl0NQRsJarxKqhOTQUOrkc2RwiCOQGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785436689; c=relaxed/simple;
-	bh=MclfqqAOvRhjdUnW4KUPI/0nCU2GrBKsXkAWYdFV3iA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=HFp8+FzjV82dWSUyDjNGCQRDCrin65grQ9wJJLSVxXJlF5jOenKn59JNSh00ETfHhbEt2RNryyXtgwey32/BzBYkU9/Wn3XfownVA3pYZNVJKaiLUyXZbOTwh9iHVB5/M3fMmWLf0dwtGg0TSYcGc0ziBJGkiqo9z0e+xFQU6PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sn6IXPEg; arc=none smtp.client-ip=209.85.216.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1785438222; c=relaxed/simple;
+	bh=HgBI0p3L78A2gotBtRXW+DqrxGUnWnjoc1ImI8EwE6I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nNKZn7mD5cGDV5i9XH4eZ36GxQIDS31TNRQNUE8IbIVASueeyN97Iqva+zIqGpJA7NZ4wowUEzJZrdMB1NDEpz+pDlTxyzuyQM+NCNH/YFe0LoxSBSwNs54X2P7hmq07hmNGUc4Qr8nPA5sTz4G3dF5zxJR3you42WqL0f7GeC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=nHEFK/Hq; arc=none smtp.client-ip=192.19.166.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sn6IXPEg"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38dc085b0a7so281066a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 11:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785436680; x=1786041480; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/bpb7rVnMP2yhSUFeRPzDa/SCZEbyHiuIMPgM8gQi/g=;
-        b=Sn6IXPEgqgRF8446dQ0UvfQLVQ6V89UtPH62la5io7ghi6qfLF3JXCOy+O0i33GtvK
-         FDAAo9lVQORTKPeN1r2jXco0X66mlccyhOxOGx44h2RLCnu2OZkz3ACHGsc3fQ1wz+Wv
-         BjXh0qdNksOqmlK8JVnGoUaUQR0xlAn4gnpYpey6LwAwP01VngNLQZf/vmmSuqLYUetV
-         7Ar9JX9B40fw2c1AYpnrKE/UmaU0xaA+osJPPgdm6/nXCrFnePfQ0fCevWMjx2lx6Rz8
-         RzeGzjTSq6+Zme/A1GCX2DPFgV9WUR62FFnzxg0/s0VHb0NQCTvhWdObBAHPKR3a20zm
-         4qeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785436680; x=1786041480;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/bpb7rVnMP2yhSUFeRPzDa/SCZEbyHiuIMPgM8gQi/g=;
-        b=PoS9ap7Py3CGOYOLUfBqQu/lscZtzDyZqjlLWf7Yi5VMawxiI5gAppcQtg7s1dwB3i
-         /OW9iz1TIhuzSzP+pDnOSV44gPqeujW980M2YcF054LCS7Gcy0nuFmaz8/7+/ZzBE8iJ
-         4BPhV26aSdfUvxhMG+fkUJ3fR1eTadT/bK6RiYenn8SqbZzRxd5zKHuY60wBmAu7i8d8
-         zE7s+5YAArUvI9Wp1x8vKBqibW/sCSeKT1LVvCpgMZG68Sel4677g60UQr/VfInyHQZA
-         cFmHXKgh2NkbJlFPBtWFN/RmAUrMydMlrS2RvbfBlXRVDKY53hQgroEIhuzYXu3WYRux
-         Elqw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro8dajK1Toq06yyhx3g9Ia3tua6HgQslPHEDEfLX61uigjE6fX+VuG6F0JBUv9a3JzwIhYqeMg3pbegxEdsgys=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOz3vNDPCIQAJ9U6VkMVMvCe3q6ptddpiX4MhmWgyfAvIw6ajs
-	9kU6aAEfioDFKgUPQEg1UK6XKok3GPXhWu8zK32qfxZUBxG5vycireuRHq/ciPxjgQYENe75WZy
-	lc75cUg==
-X-Received: from pjon4.prod.google.com ([2002:a17:90a:9284:b0:381:127b:2e24])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:c884:b0:381:3b5d:30f4
- with SMTP id 98e67ed59e1d1-38f9bd51be4mr3217997a91.1.1785436679924; Thu, 30
- Jul 2026 11:37:59 -0700 (PDT)
-Date: Thu, 30 Jul 2026 11:37:59 -0700
-In-Reply-To: <073cfbe1-0a27-015b-c688-53c186100fa1@redhat.com>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="nHEFK/Hq"
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 309B6C0000D6;
+	Thu, 30 Jul 2026 12:03:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 309B6C0000D6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1785438213;
+	bh=HgBI0p3L78A2gotBtRXW+DqrxGUnWnjoc1ImI8EwE6I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nHEFK/Hqfyuiu+tmUEQ1GQ5PNfZiZ5Imb0eoZcwf4gJgu7OcW+nHKXBgUZjj5liqt
+	 77IFOYSYUTL+bd1gV+Km3j9CGju2yzu7OcaELc02e14fxFDkUfOfzDR2MHtu6bB2g4
+	 DwiaFdX/d7/IK1h3F+c8CMpjDTiIGZkm9BC0RPTY=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id EBFDFADD;
+	Thu, 30 Jul 2026 12:03:32 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Tiwei Bie <tiwei.btw@antgroup.com>,
+	linux-um@lists.infradead.org (open list:USER-MODE LINUX (UML)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
+	kunit-dev@googlegroups.com (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [PATCH stable 6.18 0/2] Kunit backports for older systems
+Date: Thu, 30 Jul 2026 12:03:27 -0700
+Message-Id: <20260730190329.3388222-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260504112808.21276-1-sebott@redhat.com> <7575a845-a542-4b16-b512-aec3126f97f3@linux.dev>
- <335f21e5-493d-012d-b07c-2e48cc2b9aeb@redhat.com> <a6ccc7a8-488b-4454-81b1-f29dd875845c@linux.dev>
- <073cfbe1-0a27-015b-c688-53c186100fa1@redhat.com>
-Message-ID: <amuaB-dZ2s3lI8NU@google.com>
-Subject: Re: [PATCH] KVM: selftests: fix steal_time for arm64 with host page
- size > 4K
-From: Sean Christopherson <seanjc@google.com>
-To: Sebastian Ott <sebott@redhat.com>
-Cc: Zenghui Yu <zenghui.yu@linux.dev>, Jiakai Xu <xujiakai2025@iscas.ac.cn>, 
-	Shuah Khan <shuah@kernel.org>, Andrew Jones <andrew.jones@oss.qualcomm.com>, 
-	Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvmarm@lists.linux.dev, Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 29, 2026, Sebastian Ott wrote:
-> On Sun, 28 Jun 2026, Zenghui Yu wrote:
-> 
-> > On 6/22/26 10:14 PM, Sebastian Ott wrote:
-> > > 
-> > > Fix the following failure when running with 16K host page size:
-> > > ==== Test Assertion Failure ====
-> > >   lib/kvm_util.c:991: vm_adjust_num_guest_pages(vm->mode, npages) == npages
-> > >   pid=873 tid=873 errno=0 - Success
-> > >      1  0x0000000000405a27: vm_mem_add at kvm_util.c:991
-> > >      2  0x000000000040241f: check_steal_time_uapi at steal_time.c:223 (discriminator 7)
-> > >      3   (inlined by) main at steal_time.c:539 (discriminator 7)
-> > >      4  0x00007fff8b57af3b: ?? ??:0
-> > >      5  0x00007fff8b57b007: ?? ??:0
-> > >      6  0x0000000000402b6f: _start at ??:?
-> > >   Number of guest pages is not compatible with the host. Try npages=4
-> > > 
-> > > Fixes: fc240715fc50 ("KVM: selftests: arm64: Fix steal_time test after UAPI refactoring")
-> > > Reported-by: Zenghui Yu <zenghui.yu@linux.dev>
-> > > Link: https://lore.kernel.org/kvmarm/7575a845-a542-4b16-b512-aec3126f97f3@linux.dev/T/#u
-> > > Signed-off-by: Sebastian Ott <sebott@redhat.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/steal_time.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-> > > index 76fcdd1fd3cb..cdb81f3ee4b2 100644
-> > > --- a/tools/testing/selftests/kvm/steal_time.c
-> > > +++ b/tools/testing/selftests/kvm/steal_time.c
-> > > @@ -208,6 +208,7 @@ static void check_steal_time_uapi(void)
-> > >  {
-> > >      struct kvm_vm *vm;
-> > >      struct kvm_vcpu *vcpu;
-> > > +    unsigned int gpages;
-> > >      u64 st_ipa;
-> > >      int ret;
-> > > 
-> > > @@ -220,8 +221,9 @@ static void check_steal_time_uapi(void)
-> > >      };
-> > > 
-> > >      vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
-> > > -    vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, 1, 0);
-> > > -    virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, 1);
-> > > +    gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, 1);
-> > 
-> > Would vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE) be better
-> > to describe the number of pages we want to add?
-> 
-> Hm, I don't think we care. This is just for the uapi checker - the vm/vcpu
-> doesn't even run..
+This patch series addresses an issue we encountered on older Ubuntu
+20.04.6 LTS servers whereby running Kunit would not return to a prompt
+and it would not be possible to Ctrl-C the running session either.
 
-Even though we don't truly care, we can "fix" that and dedup code at the same
-time.  E.g.
+David Gow (1):
+  kunit: tool: Terminate kernel under test on SIGINT
 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index bc3c62b72c58..c0256d4c4b09 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -27,6 +27,9 @@
- static void *st_gva[NR_VCPUS];
- static u64 guest_stolen_time[NR_VCPUS];
- 
-+static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
-+                                          struct kvm_vcpu *vcpus[]);
-+
- #if defined(__x86_64__)
- 
- /* steal_time must have 64-byte alignment */
-@@ -210,17 +213,14 @@ static void check_steal_time_uapi(void)
-        u64 st_ipa;
-        int ret;
- 
--       vm = vm_create_with_one_vcpu(&vcpu, NULL);
--
-        struct kvm_device_attr dev = {
-                .group = KVM_ARM_VCPU_PVTIME_CTRL,
-                .attr = KVM_ARM_VCPU_PVTIME_IPA,
-                .addr = (u64)&st_ipa,
-        };
- 
-+       vm = vm_create_steal_time(1, NULL, &vcpu);
-        vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
--       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, 1, 0);
--       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, 1);
- 
-        st_ipa = (ulong)ST_GPA_BASE | 1;
-        ret = __vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
-@@ -500,13 +500,26 @@ static void run_vcpu(struct kvm_vcpu *vcpu)
-        }
- }
- 
-+static struct kvm_vm *vm_create_steal_time(u32 nr_vcpus, void *guest_code,
-+                                          struct kvm_vcpu *vcpus[])
-+{
-+       unsigned int gpages;
-+       struct kvm_vm *vm;
-+
-+       vm = vm_create_with_vcpus(NR_VCPUS, guest_code, vcpus);
-+       gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE * nr_vcpus);
-+       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
-+       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, gpages);
-+
-+       return vm;
-+}
-+
- int main(int ac, char **av)
- {
-        struct kvm_vcpu *vcpus[NR_VCPUS];
-        struct kvm_vm *vm;
-        pthread_t thread;
-        cpu_set_t cpuset;
--       unsigned int gpages;
-        long stolen_time;
-        long run_delay;
-        bool verbose;
-@@ -518,10 +531,7 @@ int main(int ac, char **av)
-        cpu = pin_self_to_any_cpu();
- 
-        /* Create a VM and an identity mapped memslot for the steal time structure */
--       vm = vm_create_with_vcpus(NR_VCPUS, guest_code, vcpus);
--       gpages = vm_calc_num_guest_pages(VM_MODE_DEFAULT, STEAL_TIME_SIZE * NR_VCPUS);
--       vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE, 1, gpages, 0);
--       virt_map(vm, ST_GPA_BASE, ST_GPA_BASE, gpages);
-+       vm = vm_create_steal_time(NR_VCPUS, guest_code, vcpus);
- 
-        ksft_print_header();
-        TEST_REQUIRE(is_steal_time_supported(vcpus[0]));
+Shuvam Pandey (1):
+  kunit: tool: skip stty when stdin is not a tty
+
+ tools/testing/kunit/kunit_kernel.py    | 38 ++++++++++++++++-------
+ tools/testing/kunit/kunit_tool_test.py | 42 ++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 11 deletions(-)
+
+-- 
+2.34.1
 
