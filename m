@@ -1,149 +1,134 @@
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+Received: from rev.ng (rev.ng [94.130.142.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56929404BD5;
-	Thu, 30 Jul 2026 23:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A544B3D1CC6;
+	Thu, 30 Jul 2026 23:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.130.142.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785452980; cv=none; b=FELmpM9d9GwkcNGVJxyFqmc+TgZ3A0mRhKnoYhv4kELCnkqf4CyiltGudSudtBOwCF71DYUwd22CTHOeDotYMTjCS8R4eJoaxK0S7UJw+NgAw4XkQETVpZ8rLYrWct+PtMHAvzRc1Dwz4aJ18pdn5eA0F6s4BFA60vS+lDCQGCM=
+	t=1785453231; cv=none; b=swaN/vIEjWopLwypK4DViPjcipiO49jUAqZHAdX0lIRyOcxnbOGex9gdyTCh79WiHoApY5qeV0U0NREFQ8yg0ivhlFVe3zPALxvaiH6NeE9ecxRUbq31P4dO9BrVTkAeRBk98NqkZruEJlp1ynuTrYJTj9FX6gJpELvylWxU0RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785452980; c=relaxed/simple;
-	bh=p8vcO9sqYN8YGBKmhGTuSESszkicWRx14lcnGRZEhbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zy2r+p4qg4FpQriCO2VZaz3yQsnPjHrKjyE7P6pojAjl/sHoV7CdnmcMAFKbjGvB0wF5KggBTfokC0VGjxIH2ohGBK3YHtSklYNmPKqSK5QNJPHKjaUza68M+m5W9f8WV4ThV9r5AUTbpwzZHEJgzjf2Qb+rokadIsfV4AuHsIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=NVmdkuZT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=czLT6riA; arc=none smtp.client-ip=202.12.124.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1785453231; c=relaxed/simple;
+	bh=qpliqiKuvEv+vF0M/OFzrGJTZm6oBflZ5YmeE0dPaj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sZbVs9wQI03IF2NhISEv1MkUpjfC3fk6DWW/JD1WHvpzWxZPMUUqhFjahChmPFPMwOCcmDeFN2rcviEpsb7fFTA8zwzzI4rTTR13fjW9nQBtt1OVuXhdFQiFUZlyEkXcfFFXh4P19kbPbdzXdFE/VsDEodo1gjOZGBEhCiUjuVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rev.ng; spf=pass smtp.mailfrom=rev.ng; dkim=pass (1024-bit key) header.d=rev.ng header.i=@rev.ng header.b=W59GTqzz; arc=none smtp.client-ip=94.130.142.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rev.ng
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rev.ng
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="NVmdkuZT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="czLT6riA"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 3503A1D00120;
-	Thu, 30 Jul 2026 19:09:36 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Thu, 30 Jul 2026 19:09:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1785452976; x=1785539376; bh=p8mXE8RqAAFfOuwZkx+RyJGiSlmZs059
-	fFe8cZB1vz4=; b=NVmdkuZTL3CIhifCITdGadXrohKRhupkomU//lQoLTt0OF/U
-	M7nGahTIRiMH+mrE2nXkSBXbSo0qnOFntjx3I7t1/LFvjXpX5qwyT9xmo7apX34b
-	2/ohbv6avZrMF/QkLc7PO9SUTE7qGgRFchJ6ALNC9SHCLmnKvggapNNoW2EnsiCf
-	C7OW0stlZGU8Pur9MajhjV8YvohNdZWJGXNX1ozt/XEXr0psIkDVAROf9BPLzM7s
-	+JlHaoNi2pzJbsrXRheiLroF2W52v0+5wSMhC/C/v7li3t6ULJQua6QZ1SpoZqd4
-	44+dmcNWU7UJiFF5trn5UHFDEIDWA8ZMm/2oHw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785452976; x=
-	1785539376; bh=p8mXE8RqAAFfOuwZkx+RyJGiSlmZs059fFe8cZB1vz4=; b=c
-	zLT6riAWyoFVpkdEYp45CryApBx11J8CT54rwY0TAeV+QsZaaPS3wSxy+FtHH0FG
-	Sf46HuB+aic6QF7ioC8/ML7Nt8KM3fQ3jIv9TrKK11gxlPgCSRX74FBQwqBD2JJe
-	FpoOmKpgXEDuZZ6LqCRJvNy4EllEK/TgLdzVLt2g07AQ0BpKLqmGxTRAnSb7shi5
-	UgttIFtBtMEuOVzdXXcnIKJVSqAWnZhuE/qUTDPQdFW2IWTgas7EpYoHQYtLo3Q9
-	3zUUt+8MqeDpIqiTZNXONzkwGOyT/Eas5AakiPBdIHsxy6320+PE1RnUeTW/2Vkn
-	fc2SVzoqLp87WjJ633WWQ==
-X-ME-Sender: <xms:r9lratAVuEL_tSUIhhBdvNuUvwnHhtP5H1PdZcS_z62O-ha5ZT68Vw>
-    <xme:r9lrar-cZHvC99pJqNtfETvgCXcWEtswtrOzhmuMqNQuWPSsqHUIJ5srzK9ryLu3G
-    w9FOogApTzRN5eTZkMDNTB3-J4dmLui17nr9ekOpBBszVQqbVB4lAkY>
-X-ME-Received: <xmr:r9lraoXHoXHMiJNHzAOLMo4NNNUXQCC8afmCzrWwcQOJvDOKjlrTm0mdeDA>
-X-ME-Proxy-Cause: dmFkZTFX0J2mwK0ucs+bNdNdsXX5JEB1iH9hBaw/20LZzznGsfd769sIYQ6qyKOZO2I6jG
-    uJElLJhiPAeoBeMNNRAwZNu+KfT4zJHjVE3aZ2Ci1FpFoDnBYikVOIU1TipVptH227b4ut
-    /D5W3gNggJwgwgpaNnw3rM1quzOBBljzZTZkvg5chFj3pk4bg+DUmsBrE2A33adxMlusFJ
-    pVIh/wIq6+IMQVHrO9lleJfdfX6iy8eBcfO5iB3Ri1jf85bxd1ciThEd1v4Dryofu51p2g
-    IIY4Kc7rbrW9gISdrsyK3zjW3u8voftJb/cNT9gzFFYn/1JHee01XmMtUvbjkDA7zQ3cRy
-    taFwHniCW7xoAUz0+vBry54qizOeR/spxvxTgUjZY6atzNi9sbtf6A8w4E4qSFeEEzoDT2
-    F46bGGvh7jp0l+8k4DxDSN+f1pzuv8/l6PZP/ki+Y4QB8SDKuHds+SNJcftH6Vm8mQIRtV
-    UeXna6jPW4xf8C+nD8zyfmzUjGEjypNJaQAG/SdN91QHDyAduRh9YWTiRiKBACfcd7oWwv
-    jZx3onT2aZKDf2ICm23oZm9H8q7I/sp4jFUwox0PbNLRrWfq0o1axfqNW4tIvBqHmoVAmJ
-    zIS8bmOh7hOafLgECT53o5nxvvZFgX/w0FEcYtr9KElm0Xr+orJiWU6Vtc3w
-X-ME-Proxy: <xmx:r9lrakJBUVYF_Xave2M0o1py_DfaC87nMxMU9JF_TTz17Qnze1Fk1Q>
-    <xmx:r9lrasAfvUBLaYWRc5xZZAaXaRpbdtdGCp92hgbkSQE_ZT9kxLde8g>
-    <xmx:r9lrakFkwPNIvkE0AdoyuPW2_SJvgmr6gjMm92RewDTqUvBpozm9Jg>
-    <xmx:r9lrapKdOoH-S14C-7e5k46YhKggHvIUxtlFnAIQU2JDbmQyPE2XWg>
-    <xmx:sNlrat0jAkZLsBDGcH0_4VTrCeehf6yzMplONhiHka0506I5ru2FCm9D>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Jul 2026 19:09:35 -0400 (EDT)
-Date: Fri, 31 Jul 2026 01:09:33 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Chuck Lever <cel@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype
- proto_ops for control record delivery
-Message-ID: <amvZraHU3n2sQts1@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
- <20260728185124.72e421c8@kernel.org>
- <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
- <20260728193058.7f6b453b@kernel.org>
- <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
- <20260729163142.4f41484f@kernel.org>
- <amtcwSO24GGq_qd0@krikkit>
- <20260730143556.4a8463fd@kernel.org>
+	dkim=pass (1024-bit key) header.d=rev.ng header.i=@rev.ng header.b="W59GTqzz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rev.ng;
+	s=dkim; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
+	In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive:List-Unsubscribe:List-Unsubscribe-Post:
+	List-Help; bh=L54GOWdjqRndf1N0Bl3JKPypFdhuh4dOD9kZrETKjt0=; b=W59GTqzz28XGIfy
+	MgWx2m5J08iQh2gCyOqieNW/0EwHDytQKkSAAl/wKbD1Y3PD8KMO8aVJd04cLL531CRhIouIUz2cQ
+	vf3sQspzC7+QNsYSFQ9VPoZVxfFd4tf4ltvruZ0zH8MQTZC/pMjcfRSvwLDW7ZrWkQHJnUhMeaDo0
+	ks=;
+Date: Fri, 31 Jul 2026 00:46:04 +0200
+From: Alessandro Di Federico <ale@rev.ng>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Farid Zakaria <farid.m.zakaria@gmail.com>, david.laight.linux@gmail.com,
+ jack@suse.cz, jannh@google.com, kees@kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mail@johnericson.me,
+ shuah@kernel.org, viro@zeniv.linux.org.uk, Gemini <assistant@google.com>
+Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
+ interpreter selection
+Message-ID: <20260731004604.53c66732@spawn>
+In-Reply-To: <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+ <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+ <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+ <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
+ <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
+ <20260722011217.45e79a08@spawn>
+ <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260730143556.4a8463fd@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-2026-07-30, 14:35:56 -0700, Jakub Kicinski wrote:
-> On Thu, 30 Jul 2026 16:16:33 +0200 Sabrina Dubroca wrote:
-> > 2026-07-29, 16:31:42 -0700, Jakub Kicinski wrote:
-> > > On Tue, 28 Jul 2026 22:51:30 -0400 Chuck Lever wrote:  
-> > > > No-one is asking you to roll over. Review means you get to steer
-> > > > us in the right direction, and I promise to do the leg work. Terse
-> > > > rejection doesn’t move the discussion forward. It stops it cold.  
-> > > 
-> > > With LLMs tho, the entire human effort is in finding the right design,
-> > > rather than the code. So asking maintainers to hand hold everyone thru
-> > > their features is unrealistic.
-> > > 
-> > > Off the top of my head I think a setsockopt which pre-seeds the content
-> > > type so that the read returns an errno if the queued content type is
-> > > different could be a simple fix. You'd configure that on your sockets
-> > > to DATA and once you see a EWHATEVER you'd assume that some special
-> > > record arrived and the socket has to be handed back over to the TLS
-> > > control path. This is literally the first thing that comes to mind,
-> > > IDK how ugly it will look in reality so no promises.  
-> > 
-> > But then you're back to "read_sock stopped, caller has to take some
-> > special action to handle the next bit of payload". It's not better
-> > than "read_sock, and do a recvmsg when read_sock says it's not DATA".
-> 
-> My bad, I replied without looking at the code.
-> We already constrain control records in the way I proposed.
-> rcvmsg (w/o cmsg) and read_sock will error out if the next
-> record is control.
-> 
-> I guess I don't understand what Chuck meant when he said that
-> he has control data leaking into page cache ;/
+On Wed, 22 Jul 2026 15:33:40 +0200
+Christian Brauner <brauner@kernel.org> wrote:
 
-I think "if you do recvmsg with a cmsg and pages, your control records
-end up in the pages".
+> I think this could even just be part of systemd. You ship the distro
+> with a file for that in /etc/binfmt.d/ and systemd loads that bpf
+> program for PT_INTERP_WITH_ORIGIN.
 
-To avoid that, you'd have to run recvmsg-nocmsg/read_sock to get all
-the DATA out, then once you know the next chunk of payload is a
-control record (and hopefully nothing else is reading from your
-socket), one recvmsg+cmsg into a separate buffer.
+One could delegate the feature to user space, but that makes it much
+harder to get adopted in a uniform way.
 
-The weird read_sock_rectype magic here avoids all that.
+Will systemd, Android [1] and OpenWrt implement this? In the same way?
+If so, at that point it could have just been a feature of the Linux ELF
+extension. 
+
+Of course the Android people could disable the feature even if it's
+in the kernel, but if the convention is established by the kernel,
+there's really no reason to deviate from it in the way it's implemented.
+
+The whole point of the portability thing is to reduce the assumptions
+you make about the target system. Ideally, you just want to use
+features widely available in kernels in the wild.
+
+But from what I understand from another thread, your intention is to
+use userspace as testbench, correct?
+
+> This is policy that the admin should decide
+
+Agreed, but the admin is probably satisfied with enabling/disabling,
+not deciding whether the program header type is `PT_INTERP_WITH_ORIGIN`
+or `PT_ORIGIN_ENABLED_INTERP`. Same for the distro maintainers.
+
+> not an arbitrary extension into elf core.
+
+I think that, in order for this to be useful, it needs to be a ELF
+feature, not something the admin/distro maintainer puts together in
+eBPF.
+
+Then, from a security perspective, AFAIU, implementing this in
+eBPF does not solve the problems that have been discussed.
+
+For instance, `selftests/exec: add binfmt_misc bpf-backed handler test`
+does string manipulation (no `openat`).
+
+I understand that's just an example and it's not the same as committing
+to a new ABI feature, but still.
+
+Overall, I feel like the current proposal pushes back on having a new
+ELF feature for security reasons, but then delegates to distro
+maintainers who want to use the feature to take those risks. But also,
+distro maintainers don't really need this feature because they can just
+write /nix.
+
+I love binfmt_misc enabling you to do ./foreign-architecture-binary or
+./notepad.exe and spawn qemu/wine (usually with your friendly sysadmin
+approval) and extra flexibility in that area with eBPF is super cool.
+However if we are thinking about portability, this make sense only if
+it's a default-enabled ELF feature (implemented in eBPF or not).
+
+I'd be happy to try to work on the example eBPF program using openat,
+address the various security concerns that have been mentioned until it
+looks right and then it could be loaded by default, but with an option
+to disable it. But I'm not sure whether there's such a thing as "default
+loaded eBPF program".
+
+Alternatively, I could extend the ELF core as a parallel feature of
+the eBPF-based mechanism, reviving some patches from previous
+iterations.
+
+What do you think?
 
 -- 
-Sabrina
+Alessandro Di Federico
+rev.ng Labs
+
+[1] There's a flavor of nix for Android (using proot) which would
+benefit from this:
+
+    https://github.com/nix-community/nix-on-droid-app
