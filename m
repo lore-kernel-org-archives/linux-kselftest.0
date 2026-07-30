@@ -1,118 +1,138 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA5B3368AB
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 03:06:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E87433AD
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 03:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785380767; cv=none; b=q5s7ERZDufa5PFAQk8el6Hnpw1HB2rsjf5YXww4hWHrv+vWjV0xT+rtZHJJcGJBKJliPGbTcnFScYaeC0Dx1tlSlHtGBd+nO9wCyH5b3knwv4WhiwntadePsqBBZrq9MSvgyS5er50OG9SYaJwy64pmPqnvhKQ0fabhB3rtW/48=
+	t=1785382332; cv=none; b=VMN+xwYTDb85SfB+iAvpedXoPm3XnkgRrdr7cVjYGQsAsoA+DY/vobW4YemdQ7QKwA5SFpnLBRTq5sI9CwgT/D4DFTqrutIQpuo5Yq3nbyFj5YLf8ZjJ5OCcGD1t+1auWdDmsGA/OzgwR8tmeDZye7X3Nxd8xbrTa7CDlHjNncg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785380767; c=relaxed/simple;
-	bh=cllLhgmRjXVeqwURSS43GIa+82qyOa48o4iQoBUuXwk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aW/H407IH0uImVDncgt782GBjZhLUzVV2KIt4K/3piVOTuJJp5UqYi7iwAijnPM27JD5++9M7HTF5xC20ff1ZiXVD7b39HHhQJvM/KQMLquQBWoK2FJwaqDOuTOu/21zWJrXB6XUpZuTStuWJkBZcKlmdFVvAXk2K/woNWgMhUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DP14HDqt; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785382332; c=relaxed/simple;
+	bh=V8PGeWeyokDrNTSzkeX0jP1Wwsix/DVehHwbDVareWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSTCiz8U24KbdahEbuqIAAHAmyoio+h1SCQhfdo1ZAUo3uqD5s90oQLRUYC9lMXutsuijANUFpGCopXk36rFMOAcYWZd6ntj7Q4yxSIfcBxCswHIVnNOfH9Qz1UHm4tSwN5gMmdniP2uvaNk+OZij0tINPcEYnxNaRTSMZVYJ/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=FJOXcIr7; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DP14HDqt"
-Message-ID: <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785380753;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eMkah/7xCdD4zUghDYh4eVNm7WoXmd5uInZAQK3gLPA=;
-	b=DP14HDqt8/CWCynEUMpJuo5di6yH7F1t3gzWP9h5l5ZP5yRB8fSAQsJyc3igiPwr4sXStT
-	UMKuJWYdNe15ZE0uL72LHZDVS3nEW3+3HoK/kKgm5hIAhhndT5GUTYq2PWvO8ztr1CMzab
-	LXWPuRRQbVlQNMnJeIRsKmX2Y92EnMw=
-Date: Thu, 30 Jul 2026 11:05:42 +0800
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="FJOXcIr7"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8ee43b3e5abso12108366d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 20:32:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1785382330; x=1785987130; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HJ2tPnxbrcFKcFZzwn864hCbrfOqlBJ/Hk+311dwGeA=;
+        b=FJOXcIr77Ck9WU5lIz1XKl8wt0M1P/WB0i+NClo1czpP0tyf3qiQiJeFFHw2Yumbj5
+         EP3jyHB407dAb4Wmb/BM8axIqZecYdKUvtrRCGQ3um4YpEvqjk/dQdXnyUOLNbzTFxMZ
+         +LotiaZgwOKlEj3e80/PPwQiq+uSlmpEKLCTeEd6qDtwU3AlvjBr4uewcuyyVXvEM91F
+         vkSmX8wjCKFyYTIf2jzof6weHIWEhokGXu33ebTUbQYAyE4dYsXMqwhZ/ZrAHd4TTTan
+         qS2KM1AtgpkbI17z0dAioxxW2v03Vf0tRMNGLAxds3as7Pg4a1B9FIc1stFR+W28llRi
+         cWkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785382330; x=1785987130;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HJ2tPnxbrcFKcFZzwn864hCbrfOqlBJ/Hk+311dwGeA=;
+        b=ZgipLYlZ5D9IEydygfoxz20tDGVQN96VnH8VQRctQ0oMUQQagN1F5LuvzL3WqFUbKq
+         NnUudp5gz4Yddx4g+GfzQuC2mr9+U0/7rxeesaBs1QA13CaWVVOy+CRbFBG3Q88oQNuL
+         4W1N7jDzworxCy/aE7cH7XiYbEHMfwnEImOQTlfIe/l4vUkB+4ftce9Nuu1zO90TS4iX
+         OyQ0LcjmHEcl40uW4cGtlOjQfB4ln9Us4My96MP0Y8jReUmN5NqlDEJ233Dxpu3jOj8m
+         DYwYr2dW370od+KC/pahT99QQ7VntS1LpzoDg5skeC7uS/2Y+vXFN3GqJdWdzjNsps25
+         8QcQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrxFqf2zOyF8n/HUGJ8kl8m60WhLyAXrkDyvouYLrpcJQsVFwvi3cayKAztdBq5/BIyeGMroOCfodTI+j9D5V4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9OwFR2ktVge/v5qdM2ZAyYbNPZov8dWZe6jbYF56nKAcBiiMd
+	/gRPDbqZx6S3x6Dzmgix64lr+i+Kdlo5XN3bskrWrqpGhLh7g+yO/ftL0y+3tH9/Liw=
+X-Gm-Gg: AR+sD13M1tkCFH/QHCc92wF4M4FwqkV5u9MkjEdoMZvt5J0YMpDRcoAyjr03pYMnFUb
+	QOwN/Y2SqDMsr59bRuODxe6R2pu/jPkefR2gCVdG7l6frDlXuGZdH8ijyh/2U8cE2KqOPt8VuMZ
+	FUVNZ8FpJpQXl2afEd6mDYW/IMwW6r/IIEgy6bIly/n+wBos850Itj4TgDXZHPEHoVDVj+YG9ec
+	jDiGqJYR5z0JDXtbi64It578CzZQ3PbVwtsKxXOCFLEE5rwsBQyXmvorV1cROOk0Av+k17gRXtM
+	qFFhSM7jJU1Uv9n06dvkxvvt0dgeTT3Ne7IvHuheMawM4u0c5sc9ggazOTT8yiM9eAHMJlP8wMA
+	7hf5ZVxvtDEBxbm5tYBlAUGYOjGJBgdXham22FS91dsWh2uQRty+kdkdyiG3uxobBW8pw2C9JbO
+	SmrUQuSZxW8Na40uiRQlcneTBmPCmcmbqdimOmt0D/ujB32c4pluqeAawu9+ZgDWyUSkXF7oyY0
+	HREGVWdMKLMhSRL3cNWOaoN4FjZyFcQya3tC1VNwsDJ
+X-Received: by 2002:a05:6214:3b88:b0:8ea:7785:f3e6 with SMTP id 6a1803df08f44-908347b2701mr8202616d6.42.1785382329952;
+        Wed, 29 Jul 2026 20:32:09 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908323eb01esm6949626d6.30.2026.07.29.20.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2026 20:32:07 -0700 (PDT)
+Date: Wed, 29 Jul 2026 23:32:04 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 01/15] mm/vma: introduce VMA anon page offset field
+ and add helpers
+Message-ID: <amrFcza2MxHb2cTX@gourry-fedora-PF4VCD3F>
+References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
+ <20260729-b4-scalable-cow-virt-pgoff-v3-1-e8ecfefea812@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev> <amnqXeC6D4mjcAe_@krava>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <amnqXeC6D4mjcAe_@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260729-b4-scalable-cow-virt-pgoff-v3-1-e8ecfefea812@kernel.org>
 
-On 29/7/26 19:56, Jiri Olsa wrote:
-> On Mon, Jul 27, 2026 at 10:28:43PM +0800, Leon Hwang wrote:
->> The BPF tracing multi link updates several direct-call sites through one
->> ftrace_ops. Its implementation is therefore gated by
->> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
->> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
->>
->> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
->> direct calls. This enables BPF tracing multi links on arm64. Also
->> generalize the unreachable-trampoline comment because the single-ops path
->> does not use ops->direct_call.
+On Wed, Jul 29, 2026 at 05:48:36PM +0100, Lorenzo Stoakes (ARM) wrote:
+> This patch establishes fields within the vm_area_struct type to store the
+> anonymous page offset of VMAs.
 > 
-> hi,
-> iirc arm needs ops->direct_call for trampolines to work properly,
-> that's the reason we enabled single ftrace_ops on x86 only:
+> The anonymous page offset of a VMA is equal to vma->vm_start >> PAGE_SHIFT
+> if they are unfaulted or were not remapped, otherwise it is equal to this
+> value at the point of first fault.
 > 
->   424f6a361096 bpf,x86: Use single ftrace_ops for direct calls
+> Currently, anonymous folios belonging to CoW'd MAP_PRIVATE-mapped
+> file-backed VMAs are tracked by their file offset. By adding anonymous
+> offset as a property of VMAs, we can now track them by their anonymous page
+> offset instead.
 > 
-> I don't understand the arm usage of op->direct_call, but it looks like
-> (codex thinks) that the fast path won't always work without op->direct_call
-> being set
-
-
-In theory, op->direct_call is the fallback for the case:
-HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS=y, out-of-range target, and non-BPF
-direct ops. This is what Codex thinks about.
-
-However, after searching the call sites of
-register_ftrace_direct()/__modify_ftrace_direct() in kernel, which would
-set ops->direct_call, the actual callers are in bpf/trampoline.c, which
-have been gated with HAVE_SINGLE_FTRACE_DIRECT_OPS. That said, for
-normal usage of HAVE_SINGLE_FTRACE_DIRECT_OPS=y, op->direct_call is unused.
-
-If someone uses register_ftrace_direct() or
-modify_ftrace_direct/_nolock() outside BPF in the future,
-op->direct_call will be used.
-
-So, I'd like to drop the comment change in the next revision.
-
-Thanks,
-Leon
-
+> By tracking this, we provide the means by which to eliminate this
+> inconsistency, and more importantly lay the foundations for future work for
+> the scalable CoW anonymous rmap rework.
 > 
-> from arch/arm64/kernel/entry-ftrace.S:
+> This patch simply adds the fields and some simple helpers. Subsequent
+> patches will update mm code to make use of these fields correctly.
 > 
-> 	#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> 		/*
-> 		 * If the op has a direct call, handle it immediately without
-> 		 * saving/restoring registers.
-> 		 */
-> 		ldr     x17, [x11, #FTRACE_OPS_DIRECT_CALL]             // op->direct_call
-> 		cbnz    x17, ftrace_caller_direct
-> 	#endif
-> 	#endif
+> The fields chosen are packed in the VMA such that, for 64-bit kernel
+> builds, no additional space is taken up.
 > 
-> jirka
+> The first field is present on cacheline 0 containing key VMA fields, and
+> the second on cacheline 3, which contains file-backed reverse mapping
+> fields.
+> 
+> Given the relative time spent accessing reverse mapping fields as well as
+> updating them, there shouldn't be any performance impact here from false
+> sharing.
+> 
+> Update the VMA userland tests to account for this change.
+> 
+> No callsites are updated yet, so no functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+Much clearer :], appreciate the rewording.
+
+Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
 
