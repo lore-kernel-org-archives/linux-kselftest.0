@@ -1,178 +1,112 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EC0369D57
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 10:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBE13AFD0A;
+	Thu, 30 Jul 2026 10:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785405757; cv=none; b=CD1a0YUwyDGHXpJZgoTIX27mqM1J8gAS1PbuwLwvxojGUQ4vE3o6g+gq2ndxI29DXscTYmnfvwTPW+mNelM9gXYq5OwP0f4AUq99w6oPXZvp9sYTli6qQpXlALgDMa5mILySLUvc/Z0mHo4x1Eay0nbSs/xMnpQ/zJWiQ8hFfOc=
+	t=1785406609; cv=none; b=jd4wTaoBqTiaJZ6DQgp897Ohm6b51UujIdZwVLL6v42640uBB8OcotFf2OD3JRyl6+ChoCHwOwjjvhWh+mudauSO0DS2Fxt3eRLEDSrns1WNFG64U35zDybCEMCdxUYVOA5s+Wyi9RJtD+YmStylIzX0u8neGzBSNafOK1YtToQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785405757; c=relaxed/simple;
-	bh=NFkjmCLHwyG+B0Pl7rsoQW6FdVaAAGrryORwHIsxb0k=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ZP6T+bKLMqEG786et7hUfg+s8t5dzsLPuckk3NkHTnq/nq/QFTrPzcfjKmKbV5/KxZPY+jzFyLUKxcIl608QpLOrdWX5cnQBMQZc5yeaFs8qsG6E1J7ZkEMnR2e2jQ4znGFWhddXn4xXNxHx3TNkIZP1O+iftsSlZt6TsAaw4QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ilGCgENL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=05Q6Xt9w; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tujvrapK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tOqeV6yB; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1785406609; c=relaxed/simple;
+	bh=PB+uLhBhuVi2eHOCqB5NdYV/HZin1iTUIdENJCq0MnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TG1q+0TEjUoXMr7TY5oQgulS/GlpRkJJFMZuhIZYQ/HoMSutIEBHXGSaiFD1i3pt24y8N1DMCaQSoyTC2HQNHU2z3NuYEq1n1wfhNeCcwCYHOCUREvUfCrBar66LNe9rC9xDcB2YjGOtvOVR9arrpreb9lEFVLhPqQF1Vs8zAv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gicFi79A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ilGCgENL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="05Q6Xt9w";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tujvrapK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tOqeV6yB"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6FF827D6D0;
-	Thu, 30 Jul 2026 10:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785405749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gCKYcexeEqW/+AQcCaEVGAueHEUvyo6QxPKVayeZ8KI=;
-	b=ilGCgENLvX/guoqW+qE2WyvurHISjY2W/TaSK2EVyLVw8N5gpi2COq4VoFBiZ8YrmGHK5X
-	637Fmx3cBsZzTHoHgeumanxfNiDsdIaIZgkjH3852r20D3Q/3nY2aZGAl85dR69H+tvP46
-	s8JdsMpVYphReRlCX0yCnCqPMf3TLUQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785405749;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gCKYcexeEqW/+AQcCaEVGAueHEUvyo6QxPKVayeZ8KI=;
-	b=05Q6Xt9wPWSvq1aBM8C8dJS1WTCu6PlM8VfBiAgdy2jKSeufccJtkIDBY2XPMGmgGo0Bnk
-	yA7K6SmZ2kp01JBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785405744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gCKYcexeEqW/+AQcCaEVGAueHEUvyo6QxPKVayeZ8KI=;
-	b=tujvrapKWs5ip4A1ujcbNptVVI9pnUu0RTQge8/DEOjnSicAOmCrRpIZyNZFBXoZL1eqfw
-	yo+UhFgOyIH+6LlBgDKz5swZlxhEkKfC5GMmzBuKxpdI3ZWslKejzsLMURQpDlUc8sBtGA
-	fYsHneJfB9nVIqoibgwVR5iPaypYsOw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785405744;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gCKYcexeEqW/+AQcCaEVGAueHEUvyo6QxPKVayeZ8KI=;
-	b=tOqeV6yBhIcaAqNjkCPA+hNAPzQzBu7n4/HMi6wO8PsafSZFF32Q59FVK3mps1aJhNGaVe
-	QSdZxzuaMlcDs2Bg==
-Date: Thu, 30 Jul 2026 12:02:24 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
-    linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, song@kernel.org, 
-    jolsa@kernel.org, naveen@kernel.org, davem@davemloft.net, 
-    mhiramat@kernel.org, stable@vger.kernel.org, 
-    linux-open-source@crowdstrike.com
-Subject: Re: [RFC PATCH bpf-next 0/3] ftrace, kprobes, bpf: mark trampoline/kprobe
- ftrace_ops permanent
-In-Reply-To: <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2607301159420.14091@pobox.suse.cz>
-References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com> <20260729104114.04298a48@gandalf.local.home> <CAOu3gNgc0XHScgEf+yWF5Kr8sAm8Fsa4RBuwL0YE2EscSiBPrA@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gicFi79A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F2D1F000E9;
+	Thu, 30 Jul 2026 10:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785406607;
+	bh=jY7VtAKWV/98Ym8QzylyCgqneeBfbLyDYEdBY8MaJjs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gicFi79A1plyT5Ti6H4RX8MMHL+IUzcvhaDxk+855KtXagGlz88zpfpsLlMy6qiWp
+	 KrMOEXmTZ9YJV8WurjO/RePpEPPCJFTrJYf4zkVCmofvO9P9CYTZZGtQsmkbmkyviF
+	 4P3QQ9cB7b3pi9ZzhJ7V+wJasty4ReS8mTQzt2zhu1rim+TbsQVxlDGF+wZ7ZougrS
+	 vXPQ+mv6Wb4YXCTWJLRoTOJzjKraalZtYoo0h7uc0Ln8jxlGGUaZTbSsRQumeclcX2
+	 aLHXyf2rM3HWXJlUX2XrOB52z8JLwApbZUFOu/q2n4aD283FkJYC0jCY1hRrVWDMD1
+	 oM+G+hzJQ9LGg==
+Date: Thu, 30 Jul 2026 11:16:24 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Gregory Price <gourry@gourry.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 03/15] mm: abstract vma_address() and introduce
+ vma_anon_address()
+Message-ID: <amskFlOFd7l-VRpQ@lucifer>
+References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
+ <20260729-b4-scalable-cow-virt-pgoff-v3-3-e8ecfefea812@kernel.org>
+ <amrV0Y7ZUtihiB2B@gourry-fedora-PF4VCD3F>
+ <amrw2v7TVl_AG5_3@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-2146828000-882904578-1785405744=:14091"
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RSPAMD_EMAILBL_FAIL(0.00)[rostedt.goodmis.org:server fail]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amrw2v7TVl_AG5_3@gourry-fedora-PF4VCD3F>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
----2146828000-882904578-1785405744=:14091
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-Hi,
-
-On Wed, 29 Jul 2026, Andrey Grodzovsky wrote:
-
-> ,
-> 
-> On Wed, Jul 29, 2026 at 10:40 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, Jul 30, 2026 at 02:39:27AM -0400, Gregory Price wrote:
+> On Thu, Jul 30, 2026 at 12:58:22AM -0400, Gregory Price wrote:
+> > On Wed, Jul 29, 2026 at 05:48:38PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > >
+> > > This will be necessary for determining the address of a folio's index
+> > > within a VMA when the folio belongs to a MAP_PRIVATE file-backed VMA but
+> > > has been CoW'd, and thus is anonymous, once the anonymous VMA page offset
+> > > field is used for the reverse mapping.
+> > >
 > >
-> > On Tue, 28 Jul 2026 20:59:56 -0400
-> > Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+> > This is a doozy of a sentence...
 > >
-> > > This fixes a long-standing issue: kernel.ftrace_enabled=0 silently
-> > > disables BPF trampolines (fentry/fexit) and ftrace-based
-> > > kprobes/kretprobes. The write succeeds, the hook stops firing with no
-> > > error, and re-enabling silently restores it. Livepatch already solved
-> > > this for itself via FTRACE_OPS_FL_PERMANENT, which refuses to disable
-> > > ftrace while a permanent ops is registered and refuses to register
-> > > one while ftrace is disabled[1].
+> > ... determines the address of a folio's index within a VMA when
+> >   - the folio belongs to a MAP_PRIVATE file-backed VMA, but
+> >   - <The VMA> has been cow'd
+> >   - thus <The CoW'd VMA> is anonymous (as well)
+> >   - The original VMA may or may not also be marked anonymous?
+> >     (just clarifying, could be original mapper or a COW that COWs)
 > >
-> > The /proc/sys/kernel/ftrace_enabled was added as a "safety kill switch"
-> > back when ftrace was first added to the kernel. It's addition was namely
-> > there because live runtime modification of kernel code was new and we were
-> > worried about how stable it could be.
+> > Ow, my brain.  One question below
 > >
-> > Honestly, I would love to get rid of it as today ftrace has proven to be
-> > rather stable. But as it is a user space ABI, I'm not sure what will break
-> > if we do. I wonder if we just make it a nop, and print a message to dmesg
-> > saying:
-> >
-> >   "ftrace_enabled no longer does anything. Please report if you need it to."
-> >
-> > ?
-> 
-> Thanks Steven, if you and/or other community members would approve such
-> approach I would happily do this instead for a few reasons -
-> 
-> 1) Seems like the more correct course of action if idneed this switch
-> effectively became obsolete in usage instead of piling extra logic to work
-> around it.
-> 
-> 2) As I mentioned in the end of the cover letter, I believe for some cases
-> such as fsessions/ksessions and multi opts retprobes, this patchset is
-> not effective and the issue will persist, requiring a more complicated solution
-> for them anyway if we want watertight resilience.
-> 
-> If you approve this - I can try what you suggested, this would include
-> making the
-> knob a NOP with a message, dropping the FTRACE_OPS_FL_PERMANENT
-> flag and reverting/cleaning what's possible from the original livepatch patchset
-> that dealt with this issue [1]
-> 
-> One question is what the correct set of tests to run in such a case
-> would be to verify
-> we didn't break anything. For this patchset I ran BPF and livepatch
-> selftest suites, but
-> I wonder what else would need to be run.
-> 
-> CC Miroslav for Livepatch.
+>
+> After re-reading the cover-letter again - my note here is wrong and
+> my brain hurts more.
+>
+> ... determines the address of a folio's index within a VMA when
+>   - the folio belongs to a MAP_PRIVATE file-backed VMA, but
+>   - <The Folio> has been CoW'd
+>   - thus <The CoW'd Folio> is <now marked> anonymous
+>   - The original folio may or may not have been anonymous
+>     (depending on whether it, itself, was a CoW copy)
 
-Thanks. It would be nice to drop ftrace_enabled altogether because your 
-patch set just proves that it is completely uses nowadays. Ack to it. At 
-the same time I have doubts based on the experience with our SLES and how 
-difficult it is to drop a single feature because there is always someone 
-somewhere using even the obscure ones (and sometimes in a very weird way). 
-Fingers crossed.
+Yeah :) this message is meant to be effectively a placeholder for 'there's a
+good reason for doing this' :) I go to greater lengths to explain in the bits
+that actually implement it.
 
-Miroslav
----2146828000-882904578-1785405744=:14091--
+>
+> Lorenzo you are truly doing Darwin's work untangling all of this.
+
+Thanks :)
+
+This is really painful stuff and trying to get to scalable CoW the 'right way'
+(i.e. several series and probably 3 figures of patches) is a slog, but once in
+place will be worthwhile (and also save a bunch of memory :)
+
+>
+> ~Gregory
