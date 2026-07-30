@@ -1,87 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66A2175A97;
-	Thu, 30 Jul 2026 00:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2DE269D18;
+	Thu, 30 Jul 2026 02:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785370265; cv=none; b=qjZUDeTcPseo4n1t+9BxcHTDu4ldFBr5rmA1GxTJ5qZHCNsTg2+5Div2JBjb8DpHzGHCCIKzBWDAgxkuERJUNy556XUVuZyERcFJeFyeTKUWzLHiNuV9IgMxxAuvJf4lpRD6UFIxms80rGybnQyu/chl4IyXFPWyf/2vvNtiIOE=
+	t=1785377152; cv=none; b=q9xipWyKLsskb2xHB2GFj7k9U+2olNsEEFJ6PXbCKuernL+Yoj6JfMb86nH1J7ePb/A2KLgTcypWYHG2grwRk3H+AnyVFJsAcufRz6EN4n7XU+g8a1w8S4dvTak2voxlkFQM0CAKrnbtAAa4qIuVmDm77MXBfftdufmOqUB1VCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785370265; c=relaxed/simple;
-	bh=l0Kjke7ci9wJl/UXiC6nBW1xUktZiAKap9ViTmSI3Rc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=B2p82LtMfzfYVd4IAAr4pUKgeE9ynRujBrWiOjfRyEwpxp8LsLj5TaDmedpDkj99bg5i9Fh3LPVE0pBbdPBY/K/Qv36G6QZzKHtvV+fj2H0ioMJJzbJ+6MjVLPIJC7h5wAWhT9I7cNVFYFjMAHIM7fbGR1M0oAWrpJ1+7kdrEsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o1BBOe8d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785377152; c=relaxed/simple;
+	bh=zCpM8nw84Td0be4gyTOO2Zen0fA+viIvdOiFxkk4Xy4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a47dJfG3+2bh8i/bpOSJgtQO2TLViNzVhppHQiXlhZ8QU+geRqVJY1bPvCuMdkL/5/clkFxnUBXSX30U7U/2G1+BTPRmNrCP5y38//xxysO/vzCpytJc/pkDabrxSYDA1Gs1avUDs0pGGuj/+VzOXS14EtJYWKnxsjKj4LJNjXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fI6wqLze; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o1BBOe8d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B401F000E9;
-	Thu, 30 Jul 2026 00:11:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fI6wqLze"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC6C11F000E9;
+	Thu, 30 Jul 2026 02:05:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785370263;
-	bh=WNBf7vcnRnqBuJySp5fZ+6YEWR3zYmPQ3c974AuSIFE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=o1BBOe8dKkbHutesBG/qLY1E1j5dj2zcwQQZ60Jvko8KKwPKB0Iaj4/J2lz8XdtC+
-	 /Om8kPFuSqnoBRYT0Op99O3LL63kuimNQRnvvDPg+lj2uvLBQ7y6oV3BQpoax05blu
-	 j96i/tWNPDlrfSnn/mjlzoGe4S0IbazGBr9Jr/Jtx2a4SlBK4/IfYJ+/DpI3yQhe9z
-	 IlfwSljwYcBnPYaL+MM4B6oZww8gQ55eh+F4dwRdtHfx4hWi03/LNiRBk8v024gGrv
-	 eul95NtpLQsV443ae5t1LosAk0ucgN3b4l7pmTTFYELn8K+UyMJXPAMaVg0pdj18ul
-	 e6WX1w16PGKug==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569EB3926250;
-	Thu, 30 Jul 2026 00:10:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1785377150;
+	bh=7x8AKkOBsrw0bA4La+UA98midhUSUxMgJkViBYIy9cE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=fI6wqLzePBaYQquET0/cMEqOZvPAeABSSJzwlFj0HGdT+QcVeLdEryJGs9kekT0Fe
+	 83hU0fubc2eJFo1XNhLjMhLHoFqShwPoliRkMVKbmbr0KgMW2FA4D5jwIAtMgBZqos
+	 v/nqeLT1OfF5H2Hf/lswRDgl8dxviJTQVi1+aCirwv4s59/4JcXjI/hb4EPFH4alty
+	 8VV+cIbhFBSNTneMDTAA/pWCnriWPfTH/kqeQMv4d29+uBZNhgEyoHp/7avfjfLDsd
+	 V6NWdZEOtGXKw9WPB+Tm77Jh1wfXJ2we0qkT00NxiRZ8+bvtC13FogcGbklUTkWAl4
+	 6fwom9wM7rhqg==
+Date: Wed, 29 Jul 2026 19:05:49 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, Vivek Kasireddy
+ <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>,
+ Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan
+ <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+ linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
+ sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net,
+ almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
+ dw@davidwei.uk, Joe Damato <joe@dama.to>, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v6 1/3] net: devmem: allow rx-page-size >
+ PAGE_SIZE per dmabuf binding
+Message-ID: <20260729190549.4756835c@kernel.org>
+In-Reply-To: <20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
+References: <20260724-tcpdm-large-niovs-v6-0-7975f62cdfbb@meta.com>
+	<20260724-tcpdm-large-niovs-v6-1-7975f62cdfbb@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] Add PACKET_IGNORE_OUTGOING selftest for
- packet
- sockets
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178537022688.3290991.16102834801090577683.git-patchwork-notify@kernel.org>
-Date: Thu, 30 Jul 2026 00:10:26 +0000
-References: <20260728160935.4128982-1-joe@dama.to>
-In-Reply-To: <20260728160935.4128982-1-joe@dama.to>
-To: Joe Damato <joe@dama.to>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- willemb@google.com, linux-kselftest@vger.kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri, 24 Jul 2026 14:21:15 -0700 Bobby Eshleman wrote:
+> +    value: 0  # dummy: codegen needs a number, real value is the PAGE_SIZE macro (header)
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+yamllint says:
 
-On Tue, 28 Jul 2026 09:09:25 -0700 you wrote:
-> Greetings:
-> 
-> Following up on my previous series [1] and further extending the selftests
-> for packet sockets to test PACKET_IGNORE_OUTGOING.
-> 
-> I re-ran the tests and the existing and new tests all pass.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/5] selftests/net: psock: Generalize psock bind
-    https://git.kernel.org/netdev/net-next/c/0982666c1bb0
-  - [net-next,2/5] selftests/net: psock: Generalize stats check
-    https://git.kernel.org/netdev/net-next/c/9404fe514efc
-  - [net-next,3/5] selftests/net: psock_snd: unify on recvmsg()
-    https://git.kernel.org/netdev/net-next/c/2544d30c11eb
-  - [net-next,4/5] selftests/net: psock_snd: Verify sll_pkttype
-    https://git.kernel.org/netdev/net-next/c/f5a445d2a2a3
-  - [net-next,5/5] selftests/net: test PACKET_IGNORE_OUTGOING
-    https://git.kernel.org/netdev/net-next/c/b75609e42bbc
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+  12:81     error    line too long (89 > 80 characters)  (line-length)
