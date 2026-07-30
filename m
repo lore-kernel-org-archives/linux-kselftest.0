@@ -1,155 +1,149 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213D136DA00
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 23:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56929404BD5;
+	Thu, 30 Jul 2026 23:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785452637; cv=none; b=Gngog9ZqttHI42MId7r9DzRYZmcl+8JcOiM3AYJch2+Fv2mTWKFgrOBoy6+wuqKmDnYaWXVKj+JxmD6TqUdJ3t/h1h0Su8GyEFwBng1mU8W/IikJ6HXOOLRcwgt5liX2QonX1bt8J+NyOB/4FUeKSqfWv49ywMpwLnc6QkIVppI=
+	t=1785452980; cv=none; b=FELmpM9d9GwkcNGVJxyFqmc+TgZ3A0mRhKnoYhv4kELCnkqf4CyiltGudSudtBOwCF71DYUwd22CTHOeDotYMTjCS8R4eJoaxK0S7UJw+NgAw4XkQETVpZ8rLYrWct+PtMHAvzRc1Dwz4aJ18pdn5eA0F6s4BFA60vS+lDCQGCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785452637; c=relaxed/simple;
-	bh=d4woD7hqYoPXEohXiOL20f0tSRpzoG5kZLjT/jPNQFA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fF7w7OYbbHS00tNZdMYRarimVFJqmametLH00vKJKs9ibvBX7E0L71gCs6cc9p+n5YVoAtgjMlBH8FmP1og3azZLDzluC/Ubi2I4H9B6hYEbMzPF2h4i/riQVJSFcnpH3R3+sVj4ZdWhLzD2DKRRavJlKFbbj/WFtAcaQpseTIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ByXJ6MS1; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785452980; c=relaxed/simple;
+	bh=p8vcO9sqYN8YGBKmhGTuSESszkicWRx14lcnGRZEhbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zy2r+p4qg4FpQriCO2VZaz3yQsnPjHrKjyE7P6pojAjl/sHoV7CdnmcMAFKbjGvB0wF5KggBTfokC0VGjxIH2ohGBK3YHtSklYNmPKqSK5QNJPHKjaUza68M+m5W9f8WV4ThV9r5AUTbpwzZHEJgzjf2Qb+rokadIsfV4AuHsIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=NVmdkuZT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=czLT6riA; arc=none smtp.client-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ByXJ6MS1"
-Message-ID: <77edc25d-a521-4f65-84ed-dbb016593902@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785452631;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OAzNMKmzxCFzEOWAiEeFQaer1iebyg6cnDmy70dSSVc=;
-	b=ByXJ6MS1MhKl0IZKznqW2J5nDrksOfD/dwgBIHmiEQXINrWpU3ijNcB6h40pP7yFC5i1vM
-	gUD57GI4yWuIFnk56E1motluBATL65JoyAMundcpQ2zA2vs6bjJIR14Nd3A/OfA2iTBfTn
-	CMAjhXxMsRAxvi87UlEJeKSsQFE83ms=
-Date: Thu, 30 Jul 2026 16:03:33 -0700
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="NVmdkuZT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="czLT6riA"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 3503A1D00120;
+	Thu, 30 Jul 2026 19:09:36 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Thu, 30 Jul 2026 19:09:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
+	 t=1785452976; x=1785539376; bh=p8mXE8RqAAFfOuwZkx+RyJGiSlmZs059
+	fFe8cZB1vz4=; b=NVmdkuZTL3CIhifCITdGadXrohKRhupkomU//lQoLTt0OF/U
+	M7nGahTIRiMH+mrE2nXkSBXbSo0qnOFntjx3I7t1/LFvjXpX5qwyT9xmo7apX34b
+	2/ohbv6avZrMF/QkLc7PO9SUTE7qGgRFchJ6ALNC9SHCLmnKvggapNNoW2EnsiCf
+	C7OW0stlZGU8Pur9MajhjV8YvohNdZWJGXNX1ozt/XEXr0psIkDVAROf9BPLzM7s
+	+JlHaoNi2pzJbsrXRheiLroF2W52v0+5wSMhC/C/v7li3t6ULJQua6QZ1SpoZqd4
+	44+dmcNWU7UJiFF5trn5UHFDEIDWA8ZMm/2oHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785452976; x=
+	1785539376; bh=p8mXE8RqAAFfOuwZkx+RyJGiSlmZs059fFe8cZB1vz4=; b=c
+	zLT6riAWyoFVpkdEYp45CryApBx11J8CT54rwY0TAeV+QsZaaPS3wSxy+FtHH0FG
+	Sf46HuB+aic6QF7ioC8/ML7Nt8KM3fQ3jIv9TrKK11gxlPgCSRX74FBQwqBD2JJe
+	FpoOmKpgXEDuZZ6LqCRJvNy4EllEK/TgLdzVLt2g07AQ0BpKLqmGxTRAnSb7shi5
+	UgttIFtBtMEuOVzdXXcnIKJVSqAWnZhuE/qUTDPQdFW2IWTgas7EpYoHQYtLo3Q9
+	3zUUt+8MqeDpIqiTZNXONzkwGOyT/Eas5AakiPBdIHsxy6320+PE1RnUeTW/2Vkn
+	fc2SVzoqLp87WjJ633WWQ==
+X-ME-Sender: <xms:r9lratAVuEL_tSUIhhBdvNuUvwnHhtP5H1PdZcS_z62O-ha5ZT68Vw>
+    <xme:r9lrar-cZHvC99pJqNtfETvgCXcWEtswtrOzhmuMqNQuWPSsqHUIJ5srzK9ryLu3G
+    w9FOogApTzRN5eTZkMDNTB3-J4dmLui17nr9ekOpBBszVQqbVB4lAkY>
+X-ME-Received: <xmr:r9lraoXHoXHMiJNHzAOLMo4NNNUXQCC8afmCzrWwcQOJvDOKjlrTm0mdeDA>
+X-ME-Proxy-Cause: dmFkZTFX0J2mwK0ucs+bNdNdsXX5JEB1iH9hBaw/20LZzznGsfd769sIYQ6qyKOZO2I6jG
+    uJElLJhiPAeoBeMNNRAwZNu+KfT4zJHjVE3aZ2Ci1FpFoDnBYikVOIU1TipVptH227b4ut
+    /D5W3gNggJwgwgpaNnw3rM1quzOBBljzZTZkvg5chFj3pk4bg+DUmsBrE2A33adxMlusFJ
+    pVIh/wIq6+IMQVHrO9lleJfdfX6iy8eBcfO5iB3Ri1jf85bxd1ciThEd1v4Dryofu51p2g
+    IIY4Kc7rbrW9gISdrsyK3zjW3u8voftJb/cNT9gzFFYn/1JHee01XmMtUvbjkDA7zQ3cRy
+    taFwHniCW7xoAUz0+vBry54qizOeR/spxvxTgUjZY6atzNi9sbtf6A8w4E4qSFeEEzoDT2
+    F46bGGvh7jp0l+8k4DxDSN+f1pzuv8/l6PZP/ki+Y4QB8SDKuHds+SNJcftH6Vm8mQIRtV
+    UeXna6jPW4xf8C+nD8zyfmzUjGEjypNJaQAG/SdN91QHDyAduRh9YWTiRiKBACfcd7oWwv
+    jZx3onT2aZKDf2ICm23oZm9H8q7I/sp4jFUwox0PbNLRrWfq0o1axfqNW4tIvBqHmoVAmJ
+    zIS8bmOh7hOafLgECT53o5nxvvZFgX/w0FEcYtr9KElm0Xr+orJiWU6Vtc3w
+X-ME-Proxy: <xmx:r9lrakJBUVYF_Xave2M0o1py_DfaC87nMxMU9JF_TTz17Qnze1Fk1Q>
+    <xmx:r9lrasAfvUBLaYWRc5xZZAaXaRpbdtdGCp92hgbkSQE_ZT9kxLde8g>
+    <xmx:r9lrakFkwPNIvkE0AdoyuPW2_SJvgmr6gjMm92RewDTqUvBpozm9Jg>
+    <xmx:r9lrapKdOoH-S14C-7e5k46YhKggHvIUxtlFnAIQU2JDbmQyPE2XWg>
+    <xmx:sNlrat0jAkZLsBDGcH0_4VTrCeehf6yzMplONhiHka0506I5ru2FCm9D>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Jul 2026 19:09:35 -0400 (EDT)
+Date: Fri, 31 Jul 2026 01:09:33 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Chuck Lever <cel@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
+	NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype
+ proto_ops for control record delivery
+Message-ID: <amvZraHU3n2sQts1@krikkit>
+References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
+ <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
+ <20260728185124.72e421c8@kernel.org>
+ <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
+ <20260728193058.7f6b453b@kernel.org>
+ <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
+ <20260729163142.4f41484f@kernel.org>
+ <amtcwSO24GGq_qd0@krikkit>
+ <20260730143556.4a8463fd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-To: Leon Hwang <leon.hwang@linux.dev>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260727142844.21212-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260730143556.4a8463fd@kernel.org>
 
-On 7/27/26 7:28 AM, Leon Hwang wrote:
-> The BPF tracing multi link updates several direct-call sites through one
-> ftrace_ops. Its implementation is therefore gated by
-> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
-> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
+2026-07-30, 14:35:56 -0700, Jakub Kicinski wrote:
+> On Thu, 30 Jul 2026 16:16:33 +0200 Sabrina Dubroca wrote:
+> > 2026-07-29, 16:31:42 -0700, Jakub Kicinski wrote:
+> > > On Tue, 28 Jul 2026 22:51:30 -0400 Chuck Lever wrote:  
+> > > > No-one is asking you to roll over. Review means you get to steer
+> > > > us in the right direction, and I promise to do the leg work. Terse
+> > > > rejection doesn’t move the discussion forward. It stops it cold.  
+> > > 
+> > > With LLMs tho, the entire human effort is in finding the right design,
+> > > rather than the code. So asking maintainers to hand hold everyone thru
+> > > their features is unrealistic.
+> > > 
+> > > Off the top of my head I think a setsockopt which pre-seeds the content
+> > > type so that the read returns an errno if the queued content type is
+> > > different could be a simple fix. You'd configure that on your sockets
+> > > to DATA and once you see a EWHATEVER you'd assume that some special
+> > > record arrived and the socket has to be handed back over to the TLS
+> > > control path. This is literally the first thing that comes to mind,
+> > > IDK how ugly it will look in reality so no promises.  
+> > 
+> > But then you're back to "read_sock stopped, caller has to take some
+> > special action to handle the next bit of payload". It's not better
+> > than "read_sock, and do a recvmsg when read_sock says it's not DATA".
 > 
-> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
-> direct calls. This enables BPF tracing multi links on arm64. Also
-> generalize the unreachable-trampoline comment because the single-ops path
-> does not use ops->direct_call.
-
-Hi Leon,
-
-I don't think this change can land as is yet. The series doesn't even
-apply cleanly to bpf-next, but that's minor.
-
-More importantly, it depends on Jose's series [1], which is not in the
-mainline yet. And there Mark has raised performance concerns [2] and
-the discussion still seems to be open.
-
-[1] https://lore.kernel.org/all/20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev/
-[2] https://lore.kernel.org/all/amjnf5gz0xP5PTSB@J2N7QTR9R3/
-
+> My bad, I replied without looking at the code.
+> We already constrain control records in the way I proposed.
+> rcvmsg (w/o cmsg) and read_sock will error out if the next
+> record is control.
 > 
-> Assisted-by: Codex:gpt-5.6-sol
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  arch/arm64/Kconfig         | 2 ++
->  arch/arm64/kernel/ftrace.c | 3 +--
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 0de419ed780f..c98dca76859b 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -188,6 +188,8 @@ config ARM64
->  		    CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS)
->  	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
->  		if DYNAMIC_FTRACE_WITH_ARGS
-> +	select HAVE_SINGLE_FTRACE_DIRECT_OPS \
-> +		if DYNAMIC_FTRACE_WITH_DIRECT_CALLS\
+> I guess I don't understand what Chuck meant when he said that
+> he has control data leaking into page cache ;/
 
-The select is only conditional on DYNAMIC_FTRACE_WITH_DIRECT_CALLS, so
-it can be set along with HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS. And AFAIU
-this would make the fast path effectively dead: every BPF direct call
-routed through ftrace_caller now goes through the slow path.
+I think "if you do recvmsg with a cmsg and pages, your control records
+end up in the pages".
 
-As Mark noted in the other thread, on arm64 trampolines come from
-EXECMEM_BPF, so they always land out of BL range (chance of landing in
-range is 256M/terabytes).
+To avoid that, you'd have to run recvmsg-nocmsg/read_sock to get all
+the DATA out, then once you know the next chunk of payload is a
+control record (and hopefully nothing else is reading from your
+socket), one recvmsg+cmsg into a separate buffer.
 
-I vibe-slop-coded a benchmark and ran it on a Neoverse V2 machine, and
-toggling your config change seems to be causing a 1.3x regression in
-the tracing overhead:
+The weird read_sock_rectype magic here avoids all that.
 
-  do-nothing fentry (r0=0; exit) on __arm64_sys_getpid, 20 M calls, min-of-N, several boots. Results:
-
-              untraced (base)   traced        overhead
-  Kernel A    ~128 ns/call      ~145.5 ns     ~17.6 ns   (fast path: br x17)
-  Kernel B    ~127 ns/call      ~150.4 ns     ~23.4 ns   (slow path: save regs + call_direct_funcs + hash)
-
-This confirms Jiri's suspicion.
-
-However my understanding is the regression should mostly disappear in
-case some version of in-range trampoline allocation on arm64 lands.
-
-So, I think the landing sequence should be something like follows:
-  * in-range BPF-trampoline allocation that Jose proposed [3]
-  * then HAVE_SINGLE_FTRACE_DIRECT_OPS selection
-
-After all of that reaches mainline, then a selftest patch can go
-through the bpf-next.
-
-[3] https://lore.kernel.org/all/amn7cBQ-cqs2XlKV@linux.dev/
-
->  	select HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS \
->  		if (DYNAMIC_FTRACE_WITH_ARGS && !CFI && \
->  		    (CC_IS_CLANG || !CC_OPTIMIZE_FOR_SIZE))
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index e1a3c0b3a051..56ba72a87dfa 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -301,8 +301,7 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
->  
->  	/*
->  	 * If a custom trampoline is unreachable, rely on the ftrace_caller
-> -	 * trampoline which knows how to indirectly reach that trampoline
-> -	 * through ops->direct_call.
-> +	 * trampoline which knows how to indirectly reach that trampoline.
->  	 */
->  	if (*addr != FTRACE_ADDR && !reachable_by_bl(*addr, pc))
->  		*addr = FTRACE_ADDR;
-
+-- 
+Sabrina
