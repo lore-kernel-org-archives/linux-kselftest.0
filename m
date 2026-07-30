@@ -1,106 +1,104 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F1F4192FC
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F8A38F62F
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785441382; cv=pass; b=l/WOz0hfdBzTPaR2IpafouXFHOOhAZ8EG5LlIcQeNtk9bOYG85M43IWzm6bKQ6IuUCN1EyN5rWv5bpyxNzj1jwEmsoWo5oa8lqTW8KJ0DssPruk3s/ybLuqnNVssfCjthcsQgAg1vf+geNvO22FHf0zUwppU2OuvPLvqE8KUi0U=
+	t=1785441394; cv=pass; b=U+SLOC0JAB9LuQU8mhiRbIjmGp7cFi2byNS/d72Tj/59cBVdP6DOrTQvUspkCk+M03VV8hL2pqd3qM+uucvaEPxGck22zcu5oCQpUI4E/QiFAvbCG+CViGGxET/NENK5q/OaSEAj4704M1pgiysmu+mkG+2lV2GlbR1cxJiy6JM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785441382; c=relaxed/simple;
-	bh=8h9uuvioLmMzyjoC2PDlkvIO7nOSrqldyopjlTG22tQ=;
+	s=arc-20240116; t=1785441394; c=relaxed/simple;
+	bh=Fd1f99vygy+qd1Txs8X/LRlu3cQ5f0p0/unNHTb7UvY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ptycYzUrqcg8BZyZcUiSGRB0PvA88uLI1ef4RxSRVihTwNpHoaB6D4TDg/eiWyrMuuMhdMmPCnfwZu9JO2qrGFq8eR9mscsmE4RffZtUB0YPFb8wxdrGWnvtormcm2pnMlGoe8cHwEEVYs0t5nnpCmAwV18Tk8Wimtugw5WiVJ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kFAuRFFM; arc=pass smtp.client-ip=209.85.210.170
+	 To:Cc:Content-Type; b=G4efPFYCZJ/yqJaHplu5KHxTH/3BbhqVpC08OBvp6f4Q0cz4cMcU7mfPR2SjaOSFUEgK7YTCUgJqFrZ9u54+rayWaa1gUGDSpgFN4ASa5jqaeIkzC1HyacWx1/8vmr23f3BOGf30eRbpJIcqrVnQ3bMI4xFdiIQ/M0jV7rxeuUI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+zpmeNw; arc=pass smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kFAuRFFM"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso63361b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:56:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785441380; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+zpmeNw"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8485b358552so339695b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:56:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785441392; cv=none;
         d=google.com; s=arc-20260327;
-        b=H3HSlUjM7Xoi9zl+chNTZqCphE1J0tS+Hzyzy/QNzpicMETVWk/5aLxpb8S2BG14H2
-         9ItWQLCl3AH9Uyfy+txtxlkUioyvUNcEcoaHZ7U1MH/Ltzl4a2BR8aR8u+nwA00jgW+2
-         tNx8kGhK7X062iaZgljgMHfXu07nQVBtdCAflbjjX4p+SwkzxrmzbWnMnwVbRMN1t3Dq
-         III9w1b8riuCXuzYlLnFwlcV0C45INbvUrdXDIjsrKNTcmyGMrnRuT3NfQ08CZa8XUGw
-         5HwM02UsSgO+fetIgNKFOKW3VXbSQpIqeqs0QUxCgiVd+iMFA2kaDi6nmF0kfG4PDXAu
-         1Kvg==
+        b=Uulvwu6UxshQvKH8l54Q5eJFHT/rnPfaRMDRxMZdMevHMCgN2C93UQIO2drqMqACXf
+         wjn+i4fn7RInJRdIrxRHNijnbc6E2X63BD68QCeoWPC40FimQh2GAad0Y+r1MvYg1IzP
+         YXnGf94XvINOvBvoc3GSrg6Ef1C/YxGtM1bBOApmyVRgKgGx4aAhlgPTsBTT6GvQ3972
+         i+4EZwgLrbDP9rX0YIM4dVrI5L+iHrvm0fI/q42RqdIBzC6hNbSY/L+MTwcnIAC2UFhB
+         E5FTWyJlX8OO2Sb8bMHgO3b5yXCT0K+Gmaiq7i9obu6ED0XIsYl2XhBu/1Gg5ZM7NRu4
+         n89g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=A3+RQo/HppHWztT11zWZQCBoviyZeuu95fXLxqIvMec=;
-        fh=TfjAIbGcgb0wSXzp9JT0GnqXVKJNq/bW8wa1TXU0toU=;
-        b=FFuu+rDdB3cgdvvZF4U/t4JbdGK8tFzaye0nc6pou4WF/zo1giKgxxCpdM7BzLj9Lf
-         DWyYKkommeJmy4nhx8K5feaGwno01KTmD64L8UbXx6H/b/ahXYQdBXL2Nsp0w1JSIy2o
-         gj6Zt+TqFwCb4pTpLte6yHc+uvBJiAXhLKxuO1zrsc9MTGtanBMsSr10H5aR6tYrcxCC
-         gEPorbf46LLC8TYGGYIpQiF5HguLfYEyRlCfqsRiWtZbbxC6GZcQN07QNdEzPsh84a2r
-         /MJ8pT8vNQrn9QnpFTXH3Zb4jtd7NUVWsYs84CpmuY0Mh2P/tn4sFA9KzTPF1CC0bajP
-         kBUw==;
+        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
+        fh=PpI3C2SMz3tChV7tA3bJFPGoyogSOIRf6y3ajxSTrPA=;
+        b=qBT0IUe2hMBSVyGnMkTV8EFPY1BDotWkPT8u7hv8y0xPlupSETjXejtv1MQPXVUxh+
+         rW+n5vMXB7fPSap94wayKcnNphbl8NMGnbhPIqec8jGuwvqO0Agv0r9RWjIvrugyGeT+
+         teWwLGB4clNJQEp9IiHYXjmPCn15rc5o5Io+jF3l/cZguzAaFUoD3/pIpVd67N7BQpjA
+         4inwPOfGm7//aEXP+GP2rJ1I/0nQFEk+zGYH03zyK2MIQf/pUalSpwgB4RGt579HBP2g
+         pjwv2bcL9nyRfsMqOpVMV7oyBxSPgCuZB6FQX29odBev8AY3+GctF5N1AbHw6mv/AJ7u
+         DoTg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785441380; x=1786046180; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785441392; x=1786046192; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=A3+RQo/HppHWztT11zWZQCBoviyZeuu95fXLxqIvMec=;
-        b=kFAuRFFMcGTtFSWlDoDw0YcOhlQeFMimBQU3AS0Lton5OG62fk3rksWzL6pIUGaesX
-         d8K50qteJAawQXSX7rbD0eDnRHawW+cgKH+OuHHNnQy0uI6SBeHKWrjZbs5QyURzdZpJ
-         cxaE6bzzXL9nYzTvNTFPRu6+2iX/Q2LeHWT7lIJ0I5RmGp36B4wzH0/li7HnDCtb5Dc2
-         xtNyDX1x509QApVd5YpFwXwr5vDHWardXnKvTFNtwG6tFd6p32VWe+ZMilk59GgNbsI8
-         UZTLTINsFtpLDxKnXWOpqNrW3CS4hA1oQ603vgqY8U95eCVv/cI8hmag3NeZut43ECU0
-         nYaw==
+        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
+        b=R+zpmeNwpb0tTZhPzKBk1xNQvVtRfZ7O4Hqk1zmHS6n1as4eig2rQQvlmIcKyMRXAo
+         kXNGG/gvyVCavWDL72/E3cxXmdc9pBhAacrBHKCkiVDhvjFSsP3pk8OsZLrmh97Ltw8/
+         iqGs1SO7W06O07AnWfV0lbEPD5YXeWRSQi0euaT8wh/19VIRigWN4EqQzu4KBcg70J1v
+         GH5nMmqZj4WvjRqWkca649m4c5pkbdK/jnsCXvfALJ/CWt2hQrPU7yFE9BaWjSorhlJT
+         dPJ0mMjsm4rzgpN3jooOTHGIf7DsCzNw/DrlYdnuO1On5g9cIQ79Uf3+HzObtqlf3Jyk
+         VLQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785441380; x=1786046180;
+        d=1e100.net; s=20251104; t=1785441392; x=1786046192;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=A3+RQo/HppHWztT11zWZQCBoviyZeuu95fXLxqIvMec=;
-        b=I8yd6ssvnf+oNMijeRl871OcshwNURtVTxHxuzLTHGiBHyCOaH8yrAUhSZBc/pbjEm
-         OnC0D/HSbeb72m50H0pi5vc+84IWHrNgbHB/4cc2PPEp1UdIG+MKngReKFTG3HPL1CG4
-         FVQB2Nv0pNj6HIf0lX/gK/2m7n7v7BbXIhFm2DxuSb8x8fk8WEj2K4H5SSWHUSNNxH3n
-         E0ZY11dgvIAHnrEEpn4zFuVsc8kjiOW9y1XhOWFszmqz9MhMPOKbtB+CvA1XdvxCXbah
-         ITei3AiQJJEqoK9KBNxue03xDTgXqeedF1SBJAj6w7oakfvNRZz6umeWk0S+1rvRoNrM
-         TaEQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rotf0J0KTKyY7UFDXQVWU0p0R5Gg9SAciIwgiCUqe7YmimuEmxLp+sdQFNyB3Tr0NV8WITIvyYzTPEr3g9aC1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM4hOUuLl/P3Wy9zVlO9xD/NWK68IpupswFH7DXzDltZCANm3X
-	pr5h+8ThzZqjH2+5o6Yrtzsfi4Wdf0URb4XwSRDEFbTBlNt0cgGD3Mr/iko+6heiWQ2QXwONgZt
-	D/Bq2z9qxahmzroq4K+HjveAYHoS/6a8=
-X-Gm-Gg: AR+sD139zHUrGBubA3pcr+PoAU2jYdbm06Zyc5pIbhFxTs0K4tYkKJ0df0rJ+Gt/Rvf
-	vwvGjPrklU92w9BKoZQKaARXyECGr2BYptgWM5ACIJAibgaZQu5UBtWkdqCNaqCTSEWBCOuF8cz
-	FwgHj0MlGcJhSWeYlunABHzKBbRhI9yExLzVG1rehFeSWeoPASXgudHj6cuQqA3KAeljCSRt7eW
-	3Mn2Dnfg6N5vbCn15/pEWYg3AF71L5tGSjbKkGygOzY8Q+yQIL1hKqIZA7fZyEB4dLKewbKMWTm
-	uMw5nwsT0IIvebplvN/yPa7IOSUepe82om6bMl/cMB9uIgjQ2Hgg2O0WJkiv3E2vuCLNhVwU2/q
-	oYI8+Z6AvztC5SMvtenRwjiE9JgK67sO+p5H3Ms+l9g==
-X-Received: by 2002:a05:6a00:b53:b0:845:df5c:2567 with SMTP id
- d2e1a72fcca58-84eca755270mr1251616b3a.25.1785441380230; Thu, 30 Jul 2026
- 12:56:20 -0700 (PDT)
+        bh=qLJjqOKfhyu7g7JHPGSZLeYWicOZ0Mup3q40HiWWSR0=;
+        b=IdFhEk1txvL6BTUswAc4eBZxPMuV6zUmaH/lleL+i6YKlVBczQ7qX9nfj/siYzUoOC
+         a4DnBTQsOCY8A4OOG0keQkKHuwo9imYT2cex8SDmdVR0+InQePnOq4ySoOrqkwkXEIdn
+         fhrIHf3hONacSv4i+a14h9ca0XfXFoLx7pil+ZCmLwU37cxx0m3qwm1mNgytuEL0VHJc
+         dHVvj8HjaIb1oQxIFYXmW0sJEWVONPOfMsUMdLjbAnL1tmnedjd+zC4YIIpc5Hajm9Fx
+         ZK7ldQ3u8i9tg3xG/mUk9xrpr4OU0YXyduy68FUHpjlIj20wVh+J4s/eODcgzDyHMVHh
+         tbaw==
+X-Forwarded-Encrypted: i=1; AHgh+RqKTiBPr2z3OOBHUKDQus6I4N9k8k2MKPtYsVmb+PNHqnwKSMYjjbpXg/D9zXqBmlDzKEww+x3kxBpXaUVGTAU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxdx6JZTpIa7dNT9OFHgfoUQE9CPILFA1CoQEn05vWoriLWpvN7
+	yJhHy9l5eXNHxgMEXrhbG/VUiMjOAHbbq/2rCF/v3jiKQWj3Cd2o/h7rRQE4YvQlmTglD4cd629
+	B0lPH7u/1hFUPwoJVH9mh4CNZ9aV6+dA=
+X-Gm-Gg: AR+sD10I2S2/eHuTAl8X6kU6F+sK8YVzive8ZtvPtkK/3QSZvVvfysKg6ZkNWy3jdhq
+	ks3DMzYYJvt4f2kmM3Ahic+biPyqTfnvGZtgVuN01RXQXc7ViR6DTeUscqF5PSKndPfZw47MylZ
+	AzcbYvLmwBmtw1OlY4OP28sasHS2gsUuOf0sTGutlsrYC3GE87tOxlMA2uHp133LDeKnYFaG1Ei
+	g/FAul6+BMo6ls3sC+m4W/ECDzM5mvPNNwKne3XWHhbMf2O4I6JzUMC8Qufj8llOzHh/M0daIjG
+	nOmTmxhP7FyXbYpYXc8gVvb0YmlJ9zvJqZiW3s/53h5hZcd3EAjdoIryv86Cn2Y9Y00CzA4WCNv
+	iLaHXO1rwmycpE7kaxD6IO4GwQ9r0IWBK7BAyGN6PbQ==
+X-Received: by 2002:a05:6a00:928f:b0:847:904c:8452 with SMTP id
+ d2e1a72fcca58-84ebc3cfb0cmr3687688b3a.38.1785441391979; Thu, 30 Jul 2026
+ 12:56:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-2-puranjay@kernel.org>
-In-Reply-To: <20260616155716.2631508-2-puranjay@kernel.org>
+References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-3-puranjay@kernel.org>
+In-Reply-To: <20260616155716.2631508-3-puranjay@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 30 Jul 2026 12:56:03 -0700
-X-Gm-Features: AUfX_myauPf-9BUS4q5KaEKx2Sh46ySRXTd0ms5asoEI3-_AoZYC3_ia32CZLHo
-Message-ID: <CAEf4BzakTaTr16F4xRF4wti46Gfq7Csky=drai=aE_aUSOFbTQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] perf/core: Fix sched_task callbacks for CPU-wide
- branch stack events
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay@kernel.org>, 
-	Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+Date: Thu, 30 Jul 2026 12:56:14 -0700
+X-Gm-Features: AUfX_mypllbuQtwnAyQGtjj8wrW31i_okmt7jn4Zb1OXf9HqTBm6BS29OcrxDXw
+Message-ID: <CAEf4BzYrwthXzMP-oyxfnFyFm+N0ZD_cEB8Sz7pYn97RMPgb7w@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] perf/core: Clear the whole branch entry in perf_clear_branch_entry()
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
 	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
 	James Clark <james.clark@linaro.org>, Ian Rogers <irogers@google.com>, 
 	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
 	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
@@ -114,101 +112,149 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jun 16, 2026 at 8:57=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
 > wrote:
 >
-> perf_pmu_sched_task() returns early when cpuctx->task_ctx is non-NULL,
-> deferring to perf_ctx_sched_task_cb() in the context sched_in/out
-> paths. But perf_ctx_sched_task_cb() only walks the task context's
-> pmu_ctx_list -- PMUs that have only CPU-wide events are not on that
-> list and their sched_task callback is silently skipped.
+> perf_clear_branch_entry_bitfields() resets the bitfields of struct
+> perf_branch_entry one at a time and deliberately leaves from/to alone,
+> since callers overwrite those immediately. The list of assignments has to
+> be kept in sync with the struct by hand, and it has already drifted:
+> new_type and priv were added to perf_branch_entry but never cleared here,
+> so stale values can leak into the records handed to userspace.
 >
-> On ARM64 with CPU-wide branch recording:
+> Clear the entry with a single struct assignment instead:
 >
->   perf record -b -e cycles -a -- ls
+>         *br =3D (struct perf_branch_entry){ };
 >
-> armv8pmu_sched_task() is skipped whenever the scheduled task has an
-> unrelated perf event (e.g. a software event), and branch records leak
-> across task boundaries.
+> Every caller writes from/to right after the clear, so zeroing them as wel=
+l
+> is harmless and the dead stores are elided on the x86 LBR read paths.
+> There is no longer anything to keep in sync when a field is added.
 >
-> A second problem exists in __perf_pmu_sched_task(): it passes
-> cpc->task_epc directly to pmu->sched_task(), but task_epc is NULL for
-> PMUs with only CPU-wide events. When perf_pmu_sched_task() does reach
-> the loop (because cpuctx->task_ctx is NULL), this causes a NULL
-> pointer dereference:
+> The helper no longer touches only the bitfields, so rename it to
+> perf_clear_branch_entry() and update the callers, fixing up the
+> br+nr/br+out spacing on the touched lines while at it.
 >
->   Unable to handle kernel NULL pointer dereference at virtual address 00[=
-.]
->   PC is at armv8pmu_sched_task+0x14/0x50
->   Call trace:
->     armv8pmu_sched_task+0x14/0x50 (P)
->     perf_pmu_sched_task+0xac/0x108
->     __perf_event_task_sched_out+0x6c/0xe0
->
-> Fix both:
->
->  - Remove the blanket early return in perf_pmu_sched_task() when
->    cpuctx->task_ctx is set. Instead, skip individual CPCs that have a
->    task_epc (those are handled by perf_ctx_sched_task_cb()). CPCs
->    without a task_epc are CPU-only and must be handled here.
->
->  - Fall back to &cpc->epc in __perf_pmu_sched_task() when task_epc is
->    NULL, so the callback always gets a valid pmu_ctx.
->
-> Fixes: bd2756811766 ("perf: Rewrite core context handling")
+> Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
+> Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
+> Suggested-by: James Clark <james.clark@linaro.org>
 > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 > ---
->  kernel/events/core.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+>  arch/x86/events/amd/brs.c   |  2 +-
+>  arch/x86/events/amd/lbr.c   |  2 +-
+>  arch/x86/events/intel/lbr.c |  6 +++---
+>  drivers/perf/arm_brbe.c     |  2 +-
+>  include/linux/perf_event.h  | 16 ++--------------
+>  5 files changed, 8 insertions(+), 20 deletions(-)
 >
 
-This looks like perf core bug fix, Peter/Ingo, would you like to take
-this directly into your tip/perf/urgent tree?
+Another one for tip/perf probably?... Puranjay, maybe send the first
+two patches separately?
 
 
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 6d1f8bad7e1c..6604f6e8f352 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -3906,7 +3906,8 @@ static void __perf_pmu_sched_task(struct perf_cpu_p=
-mu_context *cpc,
->         perf_ctx_lock(cpuctx, cpuctx->task_ctx);
->         perf_pmu_disable(pmu);
+> diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
+> index 06f35a6b58a5..68c5f42965e9 100644
+> --- a/arch/x86/events/amd/brs.c
+> +++ b/arch/x86/events/amd/brs.c
+> @@ -343,7 +343,7 @@ void amd_brs_drain(void)
 >
-> -       pmu->sched_task(cpc->task_epc, task, sched_in);
-> +       pmu->sched_task(cpc->task_epc ? cpc->task_epc : &cpc->epc,
-> +                       task, sched_in);
+>                 rdmsrq(brs_from(brs_idx), from);
 >
->         perf_pmu_enable(pmu);
->         perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
-> @@ -3919,12 +3920,20 @@ static void perf_pmu_sched_task(struct task_struc=
-t *prev,
->         struct perf_cpu_context *cpuctx =3D this_cpu_ptr(&perf_cpu_contex=
-t);
->         struct perf_cpu_pmu_context *cpc;
+> -               perf_clear_branch_entry_bitfields(br+nr);
+> +               perf_clear_branch_entry(br + nr);
 >
-> -       /* cpuctx->task_ctx will be handled in perf_event_context_sched_i=
-n/out */
-> -       if (prev =3D=3D next || cpuctx->task_ctx)
-> +       if (prev =3D=3D next)
->                 return;
+>                 br[nr].from =3D from;
+>                 br[nr].to   =3D to;
+> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> index d24da377df77..08401fd60585 100644
+> --- a/arch/x86/events/amd/lbr.c
+> +++ b/arch/x86/events/amd/lbr.c
+> @@ -181,7 +181,7 @@ void amd_pmu_lbr_read(void)
+>                     entry.to.split.reserved)
+>                         continue;
 >
-> -       list_for_each_entry(cpc, this_cpu_ptr(&sched_cb_list), sched_cb_e=
-ntry)
-> +       list_for_each_entry(cpc, this_cpu_ptr(&sched_cb_list), sched_cb_e=
-ntry) {
-> +               /*
-> +                * PMUs with per-task events are handled by
-> +                * perf_ctx_sched_task_cb() via perf_event_context_sched_=
-in/out
-> +                * when a task context is active.
-> +                */
-> +               if (cpuctx->task_ctx && cpc->task_epc)
-> +                       continue;
-> +
->                 __perf_pmu_sched_task(cpc, sched_in ? next : prev, sched_=
-in);
-> +       }
+> -               perf_clear_branch_entry_bitfields(br + out);
+> +               perf_clear_branch_entry(br + out);
+>
+>                 br[out].from    =3D sign_ext_branch_ip(entry.from.split.i=
+p);
+>                 br[out].to      =3D sign_ext_branch_ip(entry.to.split.ip)=
+;
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index 72f2adcda7c6..295da179fa74 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
+> @@ -755,7 +755,7 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc=
+)
+>
+>                 rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
+>
+> -               perf_clear_branch_entry_bitfields(br);
+> +               perf_clear_branch_entry(br);
+>
+>                 br->from        =3D msr_lastbranch.from;
+>                 br->to          =3D msr_lastbranch.to;
+> @@ -846,7 +846,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc=
+)
+>                 if (abort && x86_pmu.lbr_double_abort && out > 0)
+>                         out--;
+>
+> -               perf_clear_branch_entry_bitfields(br+out);
+> +               perf_clear_branch_entry(br + out);
+>                 br[out].from     =3D from;
+>                 br[out].to       =3D to;
+>                 br[out].mispred  =3D mis;
+> @@ -920,7 +920,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events =
+*cpuc,
+>                 to =3D rdlbr_to(i, lbr);
+>                 info =3D rdlbr_info(i, lbr);
+>
+> -               perf_clear_branch_entry_bitfields(e);
+> +               perf_clear_branch_entry(e);
+>
+>                 e->from         =3D from;
+>                 e->to           =3D to;
+> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> index ba554e0c846c..effbdeacfcbb 100644
+> --- a/drivers/perf/arm_brbe.c
+> +++ b/drivers/perf/arm_brbe.c
+> @@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, st=
+ruct perf_branch_entry *ent
+>                 return false;
+>
+>         brbinf =3D bregs.brbinf;
+> -       perf_clear_branch_entry_bitfields(entry);
+> +       perf_clear_branch_entry(entry);
+>         if (brbe_record_is_complete(brbinf)) {
+>                 entry->from =3D bregs.brbsrc;
+>                 entry->to =3D bregs.brbtgt;
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 48d851fbd8ea..e034be4a473a 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1467,21 +1467,9 @@ static inline u32 perf_sample_data_size(struct per=
+f_sample_data *data,
+>         return size;
 >  }
 >
->  static void perf_event_switch(struct task_struct *task,
+> -/*
+> - * Clear all bitfields in the perf_branch_entry.
+> - * The to and from fields are not cleared because they are
+> - * systematically modified by caller.
+> - */
+> -static inline void perf_clear_branch_entry_bitfields(struct perf_branch_=
+entry *br)
+> +static inline void perf_clear_branch_entry(struct perf_branch_entry *br)
+>  {
+> -       br->mispred     =3D 0;
+> -       br->predicted   =3D 0;
+> -       br->in_tx       =3D 0;
+> -       br->abort       =3D 0;
+> -       br->cycles      =3D 0;
+> -       br->type        =3D 0;
+> -       br->spec        =3D PERF_BR_SPEC_NA;
+> -       br->reserved    =3D 0;
+> +       *br =3D (struct perf_branch_entry){ };
+>  }
+>
+>  extern void perf_output_sample(struct perf_output_handle *handle,
 > --
 > 2.53.0-Meta
 >
