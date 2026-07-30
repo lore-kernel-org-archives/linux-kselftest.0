@@ -1,136 +1,233 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6769043BDCB;
-	Thu, 30 Jul 2026 14:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CE019CD1D;
+	Thu, 30 Jul 2026 14:28:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785420999; cv=none; b=OCeDUIJn7qpPenYV82Ar8xWp5mXJwZ+oNCxATJZT0uVFo/HaXntLRDfyg2h9orQi3tS0UXlGSrs0RRvEgGH/aSPmked8Y8iqS7C3PT4f65OGkn6uYt9n4vgnjQuedw+oTU2pgX9BNUgc4a0uoXEfCV3hU0P7aJSai3zmmFjZGN4=
+	t=1785421689; cv=none; b=e5ZNQkCSEHN8cNAw1/wdav0BuwbWtT3khUBB0oCfcbOCT805+Or0JJjc51nWWMGSm73MysSpPx/d3LlCM20FTKOsaQF/A1ULS2TfiEu9P9iGgGLjUrHEl7hCo1txsubxYko0Mwy0OYSIPdrsFSf6lmWh6qXoNvZwUnx051UDEjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785420999; c=relaxed/simple;
-	bh=neyuCrtmmIrWJ/iVD0cqPhZqHnNftIit3tNwhhtFy2Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bVMoUzsKIJxb4MhLApP8bboF9CCB7csC2y0Qa3FaAoti0A7q2iK5VmRyN5oAAqu5prIccYU+I77R1DXvQK8b/HYdUhlyQKlXEvJYCkWw69UOv8DNABdMj1rBDY2pO+W+SIVpB9Ba3t7h/hVnwYjKmXm0NmA01y9ruu3Tsx5hCPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=klOTFwzt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FYxXsxHz; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="klOTFwzt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FYxXsxHz"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 85D3AEC01B5;
-	Thu, 30 Jul 2026 10:16:36 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 30 Jul 2026 10:16:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1785420996; x=1785507396; bh=e22OP4qR6VMUdIgHXf2EU5bTioavoTrM
-	CQbP68IkrAE=; b=klOTFwztwLwOvU+Ij0HSQKn+FFBcU+0olmBds+XGv4Xyv3/q
-	36+uwEfDwmjSo3JnPbrtv0v6mb6mIfTGUtl95YyjdxWInXFfqOSo3CXNmBUnIWZk
-	PSNWIVXSdHFlRoF/ja2E+/b+tpPZaLMaIg7k7tbVdjPnaVp2OY6GEroj4jx2Mhn0
-	kStcH/3WqkXxc6SXUItSa849njsVn5JK0wls5j6JdEt/HP7qXu4mitksdlBa1h09
-	kfWC1WhGqKQRSSZ01sGQ5oKJzJ6hGw+X2/H8WjTaYfKy3QEvKZpDwmTjUp/EUwyx
-	QDiEUISaWKpnuAuPfAcis7Khmhqo25379ecBoQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785420996; x=
-	1785507396; bh=e22OP4qR6VMUdIgHXf2EU5bTioavoTrMCQbP68IkrAE=; b=F
-	YxXsxHznsnmxH/fwkJWG/+r04Qeyuk1DSEUvR9rBarZJCTWfTjbilO85Iwb8X+yz
-	zLy/a6sa74dTqE7Nnnt0G5GFRN5gAnDE4+G+X6XuPIpDSuArW333zimD50D/e292
-	i3yce+oIpwJqNpEBKFU+DeOR6/+G1w4WGu+KzWPJu5lTCxHV3EV/vz6ohKDA3U/F
-	7BS0QEhj0Ypwzy2llmxVdKaMIsQbQ1zA4Pxt2LOFHT02hFWJf8fuRj38M28DYH29
-	Gl34svSWzD+C9zP+T0Enc3RBVaFzFgEEYSitr+sYcB/AybaZ03zguDkwVbQ95AKr
-	akq1/SRzB0aSsd8eUmamQ==
-X-ME-Sender: <xms:xFxrarAmApjk6kYeOgKZVL5l4DTA_pqWG4m-tlkPDBMM3pS5m2XWzw>
-    <xme:xFxrah8MlyVJH95dqiJNtuCSVSXEesSie3-lnoll89EvmCZxC7PtPzQpss9TtQ6Ac
-    yEVdXi0wgkALkLRJD-8xYkXR35vkUsysU0dODnFlmErKuetuS6XDg>
-X-ME-Received: <xmr:xFxramVzqyWEl4i7nCM0FdBRInUvkM34x9S1dkYP5C2EPnx3LXZ2hOHT-0A>
-X-ME-Proxy-Cause: dmFkZTGLLBkJ6ZVUV3LnEzngFLMlIUsRBFCHzkrYUmJPwtiwCHdQ9B5yaqM8iUq5/SltAJ
-    klJUul8cCDtP0rQokE2+Penaiue+l4yIWbmSj5GMWfw7oynZ1iZY/EfteVnQI04GhtLeFG
-    MqXOzquqaCe/ClHBLXoI2JZI4WNnRXh8FjQlVJ3K4w+TLoqvQ3IMRZMer1ghUfzD+JTIQC
-    fySNcnLDpWqPMbrq41raFnQJDnfv3P1hI+QDCuFio32/VEuPTneCThV53IVVmerKZ//pU6
-    RQC6QC3qiEznB5TmkGL8td57xpCpum0qmsBw8cIluX5z1vqFevzhB+ZkmPJnKgRtUJXpNj
-    EKoGRfwmsZR6qTVAzvJFZW+9P9r4gxI8rtL1ni+YGfSt91LylhC5qiCybaok6aEhbA2cjF
-    gcBhXg6T4zqFn8WqySpFjwx6XLxOl3G1+vtYCSBE7WuMoSE0GgNZySA/x7kciyA9nKYd+6
-    RC0uebugREK9ceHc6Da1kWTyztFEIyaeutM7hV7HTrkamTdPQ9/VUebXrhK2GgEbowlLNJ
-    OSVWwejG+qYk5ugPOkgyDMicLP9kTHv8P2wAsNJNGzRCzb/X5buLjZPfoKa7W3hDM6LZgb
-    tSJ6fkQLTW9VXLDo9fbYBqQlqmqpMuw+EyeEE0EL98sjzPUKx9fkl399oEgA
-X-ME-Proxy: <xmx:xFxraqKvWmF2XzPio1jfdTSW4RpFxnEFIXGZ1iGt2tcKhpUQ1ncjiw>
-    <xmx:xFxraqBea23UmzspUnK87GLTC1TowILwiuhGjDdY0Sko21h--ETngg>
-    <xmx:xFxraqFp7rxU4PF-v3H-TBhqLaytFcm9RtRQFhw-W5hLODDnKp3OrQ>
-    <xmx:xFxranInJ7f3Z6aN61gL46NYwGaR7HmsBuYedezBFQ722RJFEnF9Ew>
-    <xmx:xFxraj2DnPopppfeLJ_vxYyopw9ezLRXYpPlvw9TFJBBCXtXnYj6VWVj>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Jul 2026 10:16:35 -0400 (EDT)
-Date: Thu, 30 Jul 2026 16:16:33 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Chuck Lever <cel@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype
- proto_ops for control record delivery
-Message-ID: <amtcwSO24GGq_qd0@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
- <20260728185124.72e421c8@kernel.org>
- <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
- <20260728193058.7f6b453b@kernel.org>
- <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
- <20260729163142.4f41484f@kernel.org>
+	s=arc-20240116; t=1785421689; c=relaxed/simple;
+	bh=t94t8KtJ61N2TsEAJHjQF3Mlc9AtBsJrlCNd8l/F6eY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mK0pwEfOMB5tZPbAC3dwbSlGwtKu3+pSCHMEDW3bdc7pFGRA+JMW9aQQCfrHK5rBxi5BDPdugKO7lpsGQ8YJ30/oDyd8vfv2v8NmAXrAUiTajQxVH45wMC0RudPP0jNSZw55ONHWengQBXTLLTKVZ+LrXuwjHibJhVcZvrve2Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d781e4528c2211f1aa26b74ffac11d73-20260730
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:516c430b-7fe1-49d7-9a66-939a5b14d875,IP:15,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-INFO: VERSION:1.3.12,REQID:516c430b-7fe1-49d7-9a66-939a5b14d875,IP:15,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:15
+X-CID-META: VersionHash:e7bac3a,CLOUDID:da6d92cb45a1abfbac2444a16ceb26d2,BulkI
+	D:26073022275497LA2ENX,BulkQuantity:0,Recheck:0,SF:10|38|66|78|102|127|850
+	|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:ni
+	l,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE
+	:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d781e4528c2211f1aa26b74ffac11d73-20260730
+X-User: yijiangshan@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
+	(envelope-from <yijiangshan@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1917665023; Thu, 30 Jul 2026 22:27:49 +0800
+From: Jiangshan Yi <yijiangshan@kylinos.cn>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	13667453960@163.com,
+	Jiangshan Yi <yijiangshan@kylinos.cn>
+Subject: [PATCH] selftests/mm: make libnuma-dependent tests optional
+Date: Thu, 30 Jul 2026 22:27:22 +0800
+Message-Id: <20260730142722.874189-1-yijiangshan@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260729163142.4f41484f@kernel.org>
 
-2026-07-29, 16:31:42 -0700, Jakub Kicinski wrote:
-> On Tue, 28 Jul 2026 22:51:30 -0400 Chuck Lever wrote:
-> > >> It’s not about LOC. It’s about not cluttering the normal I/O
-> > >> path with a lot of exception processing to handle TLS Alert
-> > >> records. The CMSG API is very difficult to use and leaks the
-> > >> alert messages into I/O buffers (which for in-kernel consumers
-> > >> are page cache pages). It’s piss-poor API design.  
-> > >
-> > > I'm not arguing that it's amazing. Doesn't mean we will YOLO
-> > > a special proto callback for every protocol stacking :/  
-> > 
-> > No-one is asking you to roll over. Review means you get to steer
-> > us in the right direction, and I promise to do the leg work. Terse
-> > rejection doesn’t move the discussion forward. It stops it cold.
-> 
-> With LLMs tho, the entire human effort is in finding the right design,
-> rather than the code. So asking maintainers to hand hold everyone thru
-> their features is unrealistic.
-> 
-> Off the top of my head I think a setsockopt which pre-seeds the content
-> type so that the read returns an errno if the queued content type is
-> different could be a simple fix. You'd configure that on your sockets
-> to DATA and once you see a EWHATEVER you'd assume that some special
-> record arrived and the socket has to be handed back over to the TLS
-> control path. This is literally the first thing that comes to mind,
-> IDK how ugly it will look in reality so no promises.
+The mm selftests Makefile unconditionally builds three test binaries
+that depend on libnuma (migration, ksm_tests, rmap). When libnuma-dev
+is not installed, the build fails with a hard error, inconsistent with
+how the optional liburing dependency is already handled via
+check_config.sh.
 
-But then you're back to "read_sock stopped, caller has to take some
-special action to handle the next bit of payload". It's not better
-than "read_sock, and do a recvmsg when read_sock says it's not DATA".
+These three tests hard-depend on libnuma at both compile time
+(#include <numa.h>) and link time (-lnuma), confirmed by grepping all
+.c files under tools/testing/selftests/mm/ for numa.h/numaif.h, which
+matches exactly ksm_tests.c, migration.c, and rmap.c.
 
+Extend check_config.sh to probe for libnuma via a compile-plus-link
+check (the link check needs a main() symbol), gate the three tests in
+TEST_GEN_FILES behind NUMA_EXTRA_LIBS, and print a warning when
+libnuma is missing. The liburing section is switched from ">" to ">>"
+writes and both output files are truncated once at the top, so the new
+libnuma section can append without overwriting the liburing section.
+
+Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+---
+ tools/testing/selftests/mm/Makefile        | 21 +++++++++--
+ tools/testing/selftests/mm/check_config.sh | 44 +++++++++++++++++++---
+ 2 files changed, 57 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index e6df968f0971..235c8ec788a7 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -75,7 +75,9 @@ ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64)
+ TEST_GEN_FILES += memfd_secret
+ endif
+ TEST_GEN_FILES += memory-failure
++ifneq ($(NUMA_EXTRA_LIBS),)
+ TEST_GEN_FILES += migration
++endif
+ TEST_GEN_FILES += mkdirty
+ TEST_GEN_FILES += mlock-random-test
+ TEST_GEN_FILES += mlock2-tests
+@@ -94,7 +96,9 @@ TEST_GEN_FILES += uffd-stress
+ TEST_GEN_FILES += uffd-unit-tests
+ TEST_GEN_FILES += uffd-wp-mremap
+ TEST_GEN_FILES += split_huge_page_test
++ifneq ($(NUMA_EXTRA_LIBS),)
+ TEST_GEN_FILES += ksm_tests
++endif
+ TEST_GEN_FILES += ksm_functional_tests
+ TEST_GEN_FILES += mdwe_test
+ TEST_GEN_FILES += hugetlb_fault_after_madv
+@@ -103,7 +107,9 @@ TEST_GEN_FILES += hugetlb_dio
+ TEST_GEN_FILES += droppable
+ TEST_GEN_FILES += guard-regions
+ TEST_GEN_FILES += merge
++ifneq ($(NUMA_EXTRA_LIBS),)
+ TEST_GEN_FILES += rmap
++endif
+ TEST_GEN_FILES += folio_split_race_test
+ 
+ ifneq ($(ARCH),arm64)
+@@ -256,11 +262,11 @@ $(OUTPUT)/gup_longterm: LDLIBS += $(IOURING_EXTRA_LIBS)
+ 
+ $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
+ 
+-$(OUTPUT)/ksm_tests: LDLIBS += -lnuma
++$(OUTPUT)/ksm_tests: LDLIBS += $(NUMA_EXTRA_LIBS)
+ 
+-$(OUTPUT)/migration: LDLIBS += -lnuma
++$(OUTPUT)/migration: LDLIBS += $(NUMA_EXTRA_LIBS)
+ 
+-$(OUTPUT)/rmap: LDLIBS += -lnuma
++$(OUTPUT)/rmap: LDLIBS += $(NUMA_EXTRA_LIBS)
+ 
+ local_config.mk local_config.h: check_config.sh
+ 	$(call msg,CHK,config,$@)
+@@ -277,6 +283,15 @@ warn_missing_liburing:
+ 	echo
+ endif
+ 
++ifeq ($(NUMA_EXTRA_LIBS),)
++all: warn_missing_libnuma
++
++warn_missing_libnuma:
++	@echo ; \
++	echo "Warning: missing libnuma support. Some tests (migration, ksm_tests, rmap) will be skipped." ; \
++	echo
++endif
++
+ ifneq ($(PAGE_FRAG_WARNING),)
+ all: warn_missing_page_frag
+ 
+diff --git a/tools/testing/selftests/mm/check_config.sh b/tools/testing/selftests/mm/check_config.sh
+index 32beaefe279e..8e6d1616561b 100755
+--- a/tools/testing/selftests/mm/check_config.sh
++++ b/tools/testing/selftests/mm/check_config.sh
+@@ -7,10 +7,17 @@
+ OUTPUT_H_FILE=local_config.h
+ OUTPUT_MKFILE=local_config.mk
+ 
++# Truncate output files so that re-running this script does not
++# accumulate duplicate content (all writes below use append ">>").
++: > $OUTPUT_H_FILE
++: > $OUTPUT_MKFILE
++
+ tmpname=$(mktemp)
+ tmpfile_c=${tmpname}.c
+ tmpfile_o=${tmpname}.o
+ 
++trap 'rm -f ${tmpname} ${tmpname}.*' EXIT
++
+ # liburing
+ echo "#include <sys/types.h>"        > $tmpfile_c
+ echo "#include <liburing.h>"        >> $tmpfile_c
+@@ -19,12 +26,39 @@ echo "int func(void) { return 0; }" >> $tmpfile_c
+ $CC $CFLAGS -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
+ 
+ if [ -f $tmpfile_o ]; then
+-    echo "#define LOCAL_CONFIG_HAVE_LIBURING 1"  > $OUTPUT_H_FILE
+-    echo "IOURING_EXTRA_LIBS = -luring"          > $OUTPUT_MKFILE
++    echo "#define LOCAL_CONFIG_HAVE_LIBURING 1"  >> $OUTPUT_H_FILE
++    echo "IOURING_EXTRA_LIBS = -luring"          >> $OUTPUT_MKFILE
+ else
+-    echo "// No liburing support found"          > $OUTPUT_H_FILE
+-    echo "# No liburing support found, so:"      > $OUTPUT_MKFILE
++    echo "// No liburing support found"          >> $OUTPUT_H_FILE
++    echo "# No liburing support found, so:"      >> $OUTPUT_MKFILE
+     echo "IOURING_EXTRA_LIBS = "                >> $OUTPUT_MKFILE
+ fi
+ 
+-rm ${tmpname}.*
++rm -f $tmpfile_o
++
++# libnuma
++echo "#include <numa.h>"            > $tmpfile_c
++echo "#include <numaif.h>"         >> $tmpfile_c
++echo "int func(void) { return 0; }" >> $tmpfile_c
++echo "int main(void) { return 0; }" >> $tmpfile_c
++
++$CC $CFLAGS -c $tmpfile_c -o $tmpfile_o >/dev/null 2>&1
++
++if [ -f $tmpfile_o ]; then
++    tmplink=${tmpname}.bin
++    # Also check linking, not just compilation, because <numa.h> may be
++    # available without the shared library (libnuma-dev vs libnuma)
++    if $CC $CFLAGS $tmpfile_c -o $tmplink -lnuma >/dev/null 2>&1; then
++        echo "#define LOCAL_CONFIG_HAVE_LIBNUMA 1"  >> $OUTPUT_H_FILE
++        echo "NUMA_EXTRA_LIBS = -lnuma"             >> $OUTPUT_MKFILE
++    else
++        echo "// No libnuma support found"          >> $OUTPUT_H_FILE
++        echo "# No libnuma support found, so:"      >> $OUTPUT_MKFILE
++        echo "NUMA_EXTRA_LIBS = "                   >> $OUTPUT_MKFILE
++    fi
++else
++    echo "// No libnuma support found"              >> $OUTPUT_H_FILE
++    echo "# No libnuma support found, so:"          >> $OUTPUT_MKFILE
++    echo "NUMA_EXTRA_LIBS = "                       >> $OUTPUT_MKFILE
++fi
++
 -- 
-Sabrina
+2.25.1
+
