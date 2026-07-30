@@ -1,178 +1,111 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E43F469837;
-	Thu, 30 Jul 2026 19:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785438223; cv=none; b=Obr7l91l1sio8rKapQfGrzf4dwer0VjiY11AinXsDGB9aGN44izNxWTghGI2LqkIcXTEJJImNHAR9i3pNtQvXwYMippFM3mqNRMaNQoMjIzJkt3BpFRK8QgzqNf4p+yYcMRFLd0jKPxpX4TVOiawkGkdug0ituexfT5T/xuX3c4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785438223; c=relaxed/simple;
-	bh=bEojjssgy+3BVmNhMsFy/IPLoFjK4P2FmNivYkd0/vk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ur4H1BlX4vuor5dzaqSmGPbevFcFx9LqzGqudLuxM2DVnVYLz9nNAuadF9bnu2oO/GfmiRKa/MmgyxlPfYhbp3bjJz1wXtebwk80qFqIgOabepQorZHyPALr9nzA6DdqsDXDIdQP817SQTBVRIxV1VGHBN5kKfYIh1+oj5371BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=EHy+TmYm; arc=none smtp.client-ip=192.19.144.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C75030C142
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 19:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785438627; cv=pass; b=KSK1KjMthclgu5IQxIBN02qpAfd/SLiXNt6l+S719MRWKvoBauBsPT/PJ7iYtyygZLqDbiDxsBPUmTREjvl23Zr+oRbQ4dm2j1rrAnT1VVIPl/rtPIRZRvvY5wPgdqT1nXiaQZ0nZKfa+DtZzRvKc9kBUXqgshdbBBjDXCAxblA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785438627; c=relaxed/simple;
+	bh=kr8L9VZCN3nS7ZLylL5loX2EZot5rXBgCgp+oAd7zp0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eXxBs7OyI7ipbYcu/XBhLzMbkYiRTlpaRAUJjo7raa2/SMXScDc7iAlTKdIHG+EiChLNf9k0KSPp/y8bEZUsY8xMiNrVrNCHYqg59UxowCQ1yNDl1ZhIYVTkxPETZkgc8cqlTLFLgljtUeyH9C1PS2XL40+isVVl21H3HFJ8Yxg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=veBgQr61; arc=pass smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="EHy+TmYm"
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id A6F0DC0005CB;
-	Thu, 30 Jul 2026 12:03:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com A6F0DC0005CB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1785438213;
-	bh=bEojjssgy+3BVmNhMsFy/IPLoFjK4P2FmNivYkd0/vk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EHy+TmYmSosSUrvVzqRYNpqu7/nfKORF0xH9EjA0uhDbMXlIYp9hWakGokxvR9gdY
-	 mkCEH7154OFsRD0zRr151ISuR27VxXSZtWs+JAyqjouwto4eeZcPGK6UBjiA8NfHEt
-	 NQZgolfED513EOQk/MvwATI4lSR1Mpi2FvvMym3Q=
-Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 34531ADE;
-	Thu, 30 Jul 2026 12:03:33 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: stable@vger.kernel.org
-Cc: David Gow <david@davidgow.net>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Cursor <cursoragent@cursor.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <raemoar63@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Tiwei Bie <tiwei.btw@antgroup.com>,
-	linux-um@lists.infradead.org (open list:USER-MODE LINUX (UML)),
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
-	kunit-dev@googlegroups.com (open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)),
-	bcm-kernel-feedback-list@broadcom.com
-Subject: [PATCH stable 6.18 1/2] kunit: tool: Terminate kernel under test on SIGINT
-Date: Thu, 30 Jul 2026 12:03:28 -0700
-Message-Id: <20260730190329.3388222-2-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260730190329.3388222-1-florian.fainelli@broadcom.com>
-References: <20260730190329.3388222-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="veBgQr61"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cee9b74ee1so1096175ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 12:10:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785438621; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZPeEWGgmjIxRl8fAcxS4f5I899pHsOXw3i2N2o9OmUrwsUgmS3Hy5HNmurUtQjIMby
+         gYZ8rnTXqIHU3kLJS3zWQMO07M6vxNtRxoDpTw+m4RR+73jCLgYq+F4XrXLC9qkvqg7R
+         /uhiX96equAEtzGTSRBPsNVP0Y8Ak2eWVUiTWzxxdVUBTvq5GSbaBQHQf3WFGjSUqjUL
+         XC1sB6ZRqcSDFkzZjvHm+gEvxQ4xPVcX5fgJBCEjLLWukKwXguwl2UwcU70EnSR+lmzV
+         zX9G0XsTZ12uxL/rOcIuXx/dq+m8PWR4vIxXZwvMnNOxiGCsXbkTu83wvcnEl73KH2t7
+         tmlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kr8L9VZCN3nS7ZLylL5loX2EZot5rXBgCgp+oAd7zp0=;
+        fh=Y7+5YBMcBjm66jxDgLW1rK5LsFwfY6x6tDaZhHVauEs=;
+        b=NAdC9Eui/EJ2PchOa1alBooKgJPDu0QWmyIv5gfweAC3mGQSGfRMEn6Tnns42obLTJ
+         staX2vY8yLDymOxYNNUD56IEGNjAnkzrthCA8EWqQz5ndzwL6IWBGWFI5PwYHKyeP88p
+         ozBjBkRcHj1+JD2npfGxfc07zOOLzzLK2/ZQ6YtGrZEbGD0/BsYYEwf+Jp3D5Q2S9Bn6
+         GJetN3dJv0a72w9nv9uOw3G4y4ZAl4rwjJ0XV8OFWQ6l6j/jQK249ByVnWW5uvD98u9B
+         0gXfNU8vhdlavI6jN0T7a6WH2zy2NBJEIKNm7B10Ifp7DjUmxdgGOFkWMG4sRyW4BGBK
+         bGqA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785438621; x=1786043421; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kr8L9VZCN3nS7ZLylL5loX2EZot5rXBgCgp+oAd7zp0=;
+        b=veBgQr61TB6pByI4xmxFwDBqGKSNCZUI2/knttKh6t53Mwb5A8Udfv2Z5/zfVqrV1X
+         yVaL2SUW2AqrLaJkGF6rFQOn1t+lb26SohPjVjgXdTjUZQuFIh+qWWLNRkb0DmyP9QnV
+         MnHbK5FQEnlQQ0LipsUh6vqr0Qn+PLFq6ZAbb2QOctXupHbCkU8wPFs59oDHeFAg8dw2
+         OdjYXAYGSgXrWtRs6nPlT9ivZ5Mn7DHsH2Y8ul2uqRkeaR/nuFxAO114l9+fv4+ghkpp
+         U/NR1X++q6OluCUzLBIdB34dz4N/6VR/4Ht6ebyOVZnRoxy2G6Ni6VUUW9SpV2iD3lVd
+         bQzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785438621; x=1786043421;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kr8L9VZCN3nS7ZLylL5loX2EZot5rXBgCgp+oAd7zp0=;
+        b=g3Kc6cvFReBNYb/enN1+FWHM3XMnKXFoGv8boA+OAm8J5HBzuQZ/7+ATMWFxP9NPPN
+         tGrZ6WJZz1cMcTeLFKq11X3ok59QwrIR2y7/EV7ObwqHqJAkrArfza3aSouD2hW9Dr5I
+         1ccmybT3pY8svW4YBdf2Q+FRThYgOFPOyEnr3jHS9PFqo5buZ4ejOQweF7f0Qis9kVBQ
+         JRbfTcUrkTRC0q5tZbR0ka5Mg8XL1tIXgLkHg92dZjHwRP3ZdHwH0IKSJ6Wa7VFZVaC2
+         mjeQe99kY2CzW1GjblGxS4MQGTqjMkjztW31hDeW4j56ILodQnBNgLmuAHxL6u32/f3W
+         FF5w==
+X-Forwarded-Encrypted: i=1; AHgh+Rp79aK1/bLw3czYQebBYuvQgvCDPrnuhTTrprVJc8U3CmoC1t172H1dc2zxOWnJqwxrO39u0CFOZkA9VudmoIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ4Ua3bS43bTwxDc6jTwyBzWC5d7PNuoG3S40G8jDoUYxZ9jf2
+	T2TxzZz7ErJfemuitnD53zVfCG0BzCR72aP3ksLmNrAct0kvxgvoGCu1CWbj2baNY62UeLiNCZT
+	ZjzYg8fkGN691mhGtS+AADSuu3cviCTpsghJNRSI=
+X-Gm-Gg: AR+sD11+jDmV5hD7R/+OA942QMz+BVy+Usoq1dcG/nTWKYd/fLzE4U8Cr1pGkF91lAp
+	+dRuGKEWlHwaS1g+4Ng5KdyMf9DckAoaPNm5ydTgRQnPaU67S1XsZOmO/+P9k54EQt5NLIsPUSp
+	zark4IGJOVN0mqFkK3c35uO6aVut9FjzMky3pKGXqtrLpc0/VD20ayjuZJIW8Q6i9zfoUunYnFx
+	USyf6deOnSWxQbRSj21X3XZsKNs+t87D1/eDYOGH9YtGWMYoM8kItZ+LFB8rUg3SHzBo4tFB9t0
+	lPCUwKkeiE3s6A1g6fQAj3uIkQ6qKZ0B/Vhy/PmC4vLt1JIM+HEH0Oclx1a/4FzDckIqJ285lVl
+	Utg7drkcJO6fR8Jgqs5jftQo6cdZDfCGYGXvikapyfso2nf1UPbosq7QvAXKcrndvvrthPmlB
+X-Received: by 2002:a05:6a21:7305:b0:3b3:2703:115 with SMTP id
+ adf61e73a8af0-3c9004b2f98mr3261296637.16.1785438620884; Thu, 30 Jul 2026
+ 12:10:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de> <20260730-auxclock-nanosleep-prep-v1-6-cd8b61229a7c@linutronix.de>
+In-Reply-To: <20260730-auxclock-nanosleep-prep-v1-6-cd8b61229a7c@linutronix.de>
+From: John Stultz <jstultz@google.com>
+Date: Thu, 30 Jul 2026 12:10:09 -0700
+X-Gm-Features: AUfX_mwySuDn962xIniqMzPklRpi8xF47aXO9YX3CJA7oXvkGjnU-0gExKE-R_w
+Message-ID: <CANDhNCoBvOuZ53phaHnkZX3qMyD9yBdaj45xv85FzjidSnMpJQ@mail.gmail.com>
+Subject: Re: [PATCH 06/16] selftests: add clock-helpers.h
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_=28Schneider_Electric=29?= <thomas.weissschuh@linutronix.de>
+Cc: Thomas Gleixner <tglx@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Miroslav Lichvar <mlichvar@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: David Gow <david@davidgow.net>
+On Wed, Jul 29, 2026 at 11:47=E2=80=AFPM Thomas Wei=C3=9Fschuh (Schneider E=
+lectric)
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> Multiple selftests duplicate various clock-related functionality.
+> Add a new header to collect and deduplicate those.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh (Schneider Electric) <thomas.weisssc=
+huh@linutronix.de>
 
-commit 8f260b02eeeffbf2263c2b82b6e3e32fd73cde2b upstream
-
-kunit.py will attempt to catch SIGINT / ^C in order to ensure the TTY isn't
-messed up, but never actually attempts to terminate the running kernel (be
-it UML or QEMU). This can lead to a bit of frustration if the kernel has
-crashed or hung.
-
-Terminate the kernel process in the signal handler, if it's running. This
-requires plumbing through the process handle in a few more places (and
-having some checks to see if the kernel is still running in places where it
-may have already been killed).
-
-Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Closes: https://lore.kernel.org/all/aaFmiAmg9S18EANA@smile.fi.intel.com/
-Signed-off-by: David Gow <david@davidgow.net>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Tested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-[florian: resolved conflict in signal_handler(): upstream references
-_restore_terminal_if_tty() which is introduced by the following commit;
-retained subprocess.call(['stty', 'sane']) until that helper is available]
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Co-authored-by: Cursor <cursoragent@cursor.com>
-Change-Id: I4fc947a1e9268b8611151f7845edb4c832f05890
----
- tools/testing/kunit/kunit_kernel.py | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 2998e1bc088b..4f0bec8fb4e1 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -16,7 +16,7 @@ import shutil
- import signal
- import sys
- import threading
--from typing import Iterator, List, Optional, Tuple
-+from typing import Iterator, List, Optional, Tuple, Any
- from types import FrameType
- 
- import kunit_config
-@@ -265,6 +265,7 @@ class LinuxSourceTree:
- 		if kconfig_add:
- 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
- 			self._kconfig.merge_in_entries(kconfig)
-+		self._process : Optional[subprocess.Popen[Any]] = None
- 
- 	def arch(self) -> str:
- 		return self._arch
-@@ -358,36 +359,45 @@ class LinuxSourceTree:
- 			args.append('kunit.filter_action=' + filter_action)
- 		args.append('kunit.enable=1')
- 
--		process = self._ops.start(args, build_dir)
--		assert process.stdout is not None  # tell mypy it's set
-+		self._process = self._ops.start(args, build_dir)
-+		assert self._process is not None # tell mypy it's set
-+		assert self._process.stdout is not None  # tell mypy it's set
- 
- 		# Enforce the timeout in a background thread.
- 		def _wait_proc() -> None:
- 			try:
--				process.wait(timeout=timeout)
-+				if self._process:
-+					self._process.wait(timeout=timeout)
- 			except Exception as e:
- 				print(e)
--				process.terminate()
--				process.wait()
-+				if self._process:
-+					self._process.terminate()
-+					self._process.wait()
- 		waiter = threading.Thread(target=_wait_proc)
- 		waiter.start()
- 
- 		output = open(get_outfile_path(build_dir), 'w')
- 		try:
- 			# Tee the output to the file and to our caller in real time.
--			for line in process.stdout:
-+			for line in self._process.stdout:
- 				output.write(line)
- 				yield line
- 		# This runs even if our caller doesn't consume every line.
- 		finally:
- 			# Flush any leftover output to the file
--			output.write(process.stdout.read())
-+			if self._process:
-+				if self._process.stdout:
-+					output.write(self._process.stdout.read())
-+					self._process.stdout.close()
-+				self._process = None
- 			output.close()
--			process.stdout.close()
- 
- 			waiter.join()
- 			subprocess.call(['stty', 'sane'])
- 
- 	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
-+		if self._process:
-+				self._process.terminate()
-+				self._process.wait()
- 		subprocess.call(['stty', 'sane'])
--- 
-2.34.1
-
+Acked-by: John Stultz <jstultz@google.com>
