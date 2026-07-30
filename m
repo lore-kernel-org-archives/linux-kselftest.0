@@ -1,87 +1,121 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B1536C5A1;
-	Thu, 30 Jul 2026 02:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0872137F014;
+	Thu, 30 Jul 2026 03:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785379430; cv=none; b=P5Cq4U2ElnrnrcdnhPJMNOoNS38Bh2PvtHRWgLCm55HP02vZzID1m5Z4Cw816ls3wzKwLx07QtWjZPVV+rKLcTIlJUWLveCWkhIyfPtTExNM3Iq6x45jZa6liSP45H6z57rzqfPGUuqfBeHeP01kERXVc6b37gK0U2LB+3/aI4o=
+	t=1785380491; cv=none; b=dSUEFt8z0fvs/L9Mqv3LdzoZGqD2VdZxPrbcPrvppVNIhcetqu0cyTAHJAhmYbrP3oMXeIhKLurY7yYMVuYZFvTtXTW8sgTf9tR3m0FJapjcaYrDcMrK1mI0p6Av//iyjEDhyHEbJ3M2OGMB+byWGHxxskv8r02dnNMMVjuWJsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785379430; c=relaxed/simple;
-	bh=tvL1GGuiXyaGJu5Kv+BgrMIn24K2NDoiYXeSFkpQfiI=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ZWX/psLLn7H4M7QXvgQFxKZx9wFFtNeJdSfxf6ZANfs/93QqpA8HthWq2OYybLeOiy2LDbK/WCCFN36OYYJjcwzUviMPnDQXZ0mdN47D8tyEZr5FGDSUVXDKJXXsf/BcJTTFHNrXqCxqristYlso0gM9PiakPWF4U3BEubvqgYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=VMZ46RqI; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1785380491; c=relaxed/simple;
+	bh=PADfhq9IlcxYkFge9t3Awg1WHo9oQLWHaRF7TLtzY4Y=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=A+KsdGTBanQbmPbUWniRgPk0KwPrLtVMorGGbtKHJmT9D/rsrbpX6pEca+U/R6177ctsIxnqWMJZ+kjxIsy+sAOJZZvmE0MXgeaOc2f9ht4uzQ/Dy8DYlduNOm+cz5HavEKIachfTIVMJTA6kyc4Wi7LHD/+bzd57ZgPG6OaxGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a60Bm23+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="VMZ46RqI"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=/mxo84jFtDmlVPzlZM55LKGbQvKfWkJO0S8IHkeqn7c=;
-	b=VMZ46RqIq9OSd+MAcy0wUr504ndiZCamN9htiAl5ocn9npPx3vu+DhN/995QNmnJiZEqW4d+T
-	uuI4RF/wqepMcoz+9rB+hpfl/O7c+UWyllcue4rXZnjpcOXEIzQzJvh7Wyti+lu3Y8nKHRuIGWE
-	G40Gvhih4ds03O2iuvGo5qk=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4h9YDZ2ZCJz1prLg;
-	Thu, 30 Jul 2026 10:34:06 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id D7D322025F;
-	Thu, 30 Jul 2026 10:43:35 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 30 Jul 2026 10:43:35 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 30 Jul 2026 10:43:34 +0800
-Subject: Re: [PATCH v2] selftests/mm: unpoison pages in memory-failure
- teardown
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-CC: <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand
-	<david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
-	<liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
-	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
-	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-References: <20260729091127.1001179-1-usama.anjum@arm.com>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <43cca64a-60fb-ef51-2ec9-a73205168fab@huawei.com>
-Date: Thu, 30 Jul 2026 10:43:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a60Bm23+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CE1F1F000E9;
+	Thu, 30 Jul 2026 03:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785380489;
+	bh=ZbDAMpcDYdvZrUn/eTSwKKqDRSCBsLNaQd23zQxbA6w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=a60Bm23+AR5el/WMydQ2tACYvNZ1Ru6iIMfFCl63jHYLOh1unYDsyZ7iLHd7n/XVN
+	 yWiW/YhdZJQx7ij/CEMH/X14We9D4+Zz1qjBQ40JKn2ek25AFb0C+mP2I0bqDQy4ee
+	 wjYk9qhMH//+PUmhI90qYCjoSAZzy9eVgXtGqIsk03QaRsmCRa0AqTTGZZHrpiJL2+
+	 +1/Ug3XHQznJSQa6E7hne6LRVoiOWrqOrPlqp+aZ79dSuYVb0ibRbvQ9ieB/QQFrXg
+	 boYZw5/v40Jt/auZRYemfkpXfaAYpgxWaXEZ21yl93dDWouDUh7OZ/jlPmxeQd1NZo
+	 uPR4IGwR8M65A==
+Date: Thu, 30 Jul 2026 12:01:22 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <song@kernel.org>,
+ <jolsa@kernel.org>, <rostedt@goodmis.org>, <naveen@kernel.org>,
+ <davem@davemloft.net>, <mhiramat@kernel.org>, <stable@vger.kernel.org>,
+ <linux-open-source@crowdstrike.com>
+Subject: Re: [RFC PATCH bpf-next 2/3] kprobes: mark ftrace-based kprobe ops
+ permanent
+Message-Id: <20260730120122.bc7a0daa4b28a8577f9a2038@kernel.org>
+In-Reply-To: <20260729005959.3853865-3-andrey.grodzovsky@crowdstrike.com>
+References: <20260729005959.3853865-1-andrey.grodzovsky@crowdstrike.com>
+	<20260729005959.3853865-3-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20260729091127.1001179-1-usama.anjum@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemq500010.china.huawei.com (7.202.194.235)
 
-On 2026/7/29 17:11, Muhammad Usama Anjum wrote:
-> The memory-failure tests call cleanup() only after all result checks.
-> A failed ASSERT_* invokes fixture teardown and aborts the test, so it
-> skips cleanup() and leaves the injected page hardware-poisoned.
+On Tue, 28 Jul 2026 20:59:58 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+
+> kernel.ftrace_enabled=0 silently kills ftrace-based kprobes/kretprobes
+> the same way it does BPF trampolines: arm succeeds, the probe stops
+> firing with no error, and re-enabling silently restores it. Unlike
+> trampolines this is not a regression -- ftrace-based kprobes have
+> never carried this protection, so the bug is long-standing.
 > 
-> Invoke cleanup() from FIXTURE_TEARDOWN() instead. Guard it with
-> self->injection_attempted so tests that exit before injection do not try
-> to unpoison a page when no injection was attempted. Injection can poison
-> a page before returning an error or delivering SIGBUS, so teardown must
-> clean up after every injection attempt. This runs the existing HWPoison
-> and HardwareCorrupted checks on both normal and assertion-failure paths.
+> kprobe_ftrace_ops/kprobe_ipmodify_ops are shared only among
+> ftrace-based kprobe attachers, not with any other tracer, so the same
+> unconditional FTRACE_OPS_FL_PERMANENT livepatch already uses applies
+> cleanly here too, with no kernel/trace/ftrace.c changes needed.
 > 
-> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Known limitation: kprobe.multi/kretprobe.multi/kprobe.session
+> (fprobe-backed, kernel/trace/fprobe.c) are not covered. Entry-only
+> fprobes could take the same fix, but return-capturing fprobes route
+> through the function-graph tracer's shared subops manager, which is
+> also used by unrelated tracers (function_graph, irqsoff, wakeup
+> latency, function profiler) -- marking it permanent would block
+> ftrace_enabled=0 for those too. Left for a follow-up.
+> 
 
-Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+In the another thread, Steve and you agreed to just remove
+ftrace_enabled, so I assume we will drop this patch.
+But from the kprobes point of view this seems reasonable change.
 
-Thanks.
-.
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
+Thank you,
+
+> Cc: stable@vger.kernel.org
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+>  kernel/kprobes.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index bfc89083daa9..5a54511eee79 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1122,14 +1122,15 @@ static struct kprobe *alloc_aggr_kprobe(struct kprobe *p)
+>  #endif /* CONFIG_OPTPROBES */
+>  
+>  #ifdef CONFIG_KPROBES_ON_FTRACE
+> +/* Same protection livepatch gives its own ftrace_ops. */
+>  static struct ftrace_ops kprobe_ftrace_ops __read_mostly = {
+>  	.func = kprobe_ftrace_handler,
+> -	.flags = FTRACE_OPS_FL_SAVE_REGS,
+> +	.flags = FTRACE_OPS_FL_SAVE_REGS | FTRACE_OPS_FL_PERMANENT,
+>  };
+>  
+>  static struct ftrace_ops kprobe_ipmodify_ops __read_mostly = {
+>  	.func = kprobe_ftrace_handler,
+> -	.flags = FTRACE_OPS_FL_SAVE_REGS | FTRACE_OPS_FL_IPMODIFY,
+> +	.flags = FTRACE_OPS_FL_SAVE_REGS | FTRACE_OPS_FL_IPMODIFY | FTRACE_OPS_FL_PERMANENT,
+>  };
+>  
+>  static int kprobe_ipmodify_enabled;
+> -- 
+> 2.34.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
