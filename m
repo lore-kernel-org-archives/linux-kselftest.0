@@ -1,122 +1,211 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4E83B27FA
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C183AA182
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Jul 2026 06:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785392926; cv=none; b=ByQzz5fWlTrQJ0imeNMsc2z4iwbzRODRxgLQt5JrYaZIqtODa64EHh493v/nA8YfZF+UEUW/UYUP1dYUJnyQto/LoKTDKeYxulgFE5oLZZ/vRRSzhVQkzzfceI27WpFer8EsXVu3gH2sCbCZZzahz3Avd611eUoK7SfL72yraOs=
+	t=1785393100; cv=none; b=rkqo1Kof08SYEl9lqTySDHJboF8XXHj6hsgW478w0y5Sud7IQOLsPEWv6jPGtnq1PpEnNEN+Z5s8MrCPrBEqx1cOZHNhrTDJCRjffv+g+Fvik+qvGZaV4QKrMlUwrdmpu3yEGV9M/JwwkQA5VdimDjhtf5QDhYIxyhCb3xOpzRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785392926; c=relaxed/simple;
-	bh=On1K3w81fo3KsHiluy85FHhsNbZ3rFpNf8XA/wTGIuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YC6HQTPY4xvn2U+8gKdJRakQPvUzhEvHQvbiYy2fd3N6hfFlBu7m8m3e1LoNH6frrGnzighTd+cIL3SNVAilnaF3IOzTx0yf4pHAZkGcJt8w4Ohxr93GNRJk1pvSxwMKZpH/0ChdgsPhPO3xAOWt3kjC2YLCwbzxg7rC2QAejN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=Xoinvwuy; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1785393100; c=relaxed/simple;
+	bh=sbMYUCSymqtK47EOKzAJOAFr7vCx44JGs0xy+7yRMKs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pGrmc7vnh2xl8EKu501B6AtdHjABqcvKBBH1ARUWmF+pdGhE/J/eXE/5shXqfII46qbJvds9KCgKzFzDi4aoZMtGzj/qoINjafh23Dr1cP+j4WlaFd8up1xSQKQhNIa7BG7o//jRLaydoq2WcILjSgPsxtzFRo2r51qc7zhx6Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A8YI8kTE; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="Xoinvwuy"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-92e5b048375so95869185a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jul 2026 23:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1785392920; x=1785997720; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BYuSkRMlAL8RFmXTAhfpgmHH3OtvbWBlkpFHBuC4V6M=;
-        b=XoinvwuyyCqJJMjYeE7YopI2LKZonCNERKJgEn5p0j1kOL5jpSypAzwv9MmO6uHx6+
-         VE3FKIFrwlodVOQ5QkuhSzQJA82N4rVG1aEX71DT5fbmQ0TVhNxDUTqG6DP2YyvgRJzA
-         Y8X3c7nCuBtToSOOkmMYJi3gtWBTdH8FsfZzNRc6flOFGmkn32LibInyTiy/FDCxevVV
-         dx9ySgcg5a8jmJvLo+tl+CGNDf2hkhxPPmSdW0bDnHEOKwykZAJCMWXQA8YBxPWlsM4U
-         A/wUkTk5Gh1c8Cp80l2UbEMGG8vGG5IljZyjR7piGMOBrMLgOba/fTeb0QKwn5ex2wge
-         kWXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785392920; x=1785997720;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BYuSkRMlAL8RFmXTAhfpgmHH3OtvbWBlkpFHBuC4V6M=;
-        b=mDVjfEWeBK0nCip7mXIHG4kwY+jFs4XlLl9dXKDFL/9afYA+Umv2bBraq7ywctV4Ql
-         EvtY3uf4yJs8TG00yQ4paRtcTr5EQrlZuIn+u3r7cJGDaKOvsct1J9fLZ7HPjP/k+oz7
-         jSNyGrB/SzCrxSw1r6OfuuCLxVS86cxby5h60wQBBM8J0T9/tDpwHiwG9OZxxpYwj9Hg
-         /h/8s9CQhAGGYKkNV0YGJCrXh00R+9VXPU73lF8Zt/ymOPpfXjXFgUmyJOlgBF8MgXOi
-         DAGU4WMdZPmhWMy/g9AZMUKrM1Xei4MlYYSTd73XBtVezIDO3tD1WJapbqnClv2Em+kg
-         jnrA==
-X-Forwarded-Encrypted: i=1; AHgh+RoGUdYS6SzIeW0/TFg0CULMrK16hIKlyelbLIv0c2vrWoW+/skEwM0BELBNLAPkNd8SePOlMonBqCrCmxFxP4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywg8SzRuUCngDrsa8SUw/2xupJOb3UEvzCePOkzEHnDmarpJTY
-	pCgxt9UCWM/qwUBpXEIMQ9VHUvG66GosY2Cj6nO81zdEKBLDWycz0+fG1SVF+OAgHWQ=
-X-Gm-Gg: AR+sD12e1Ep0+hOZzh8AFq928NDrdu6VY5QCeJcmFcyzXQaV04ADDEOeRKGZ1/01Ud7
-	hxTYRcasdg0eRdLCZIPIjJrwSb5awfoIdT+OisT4ub5QRyybEidn0wTzOMQFI0KbYnQsZ2vqAWq
-	kmKz2ZWyoL3mhBVbOv0+Ai5qojStBG4CRaAMIwu9MWRj1DHA0K97W9j+UUz5Pninak2MoZyd3K4
-	2txh6mvReoKyWl061C84aHxbdsXkPLywa130trYVnsAavtR+nlJo9nHdmRao1K0nRsDgqxhyACh
-	80ZmHA4VCB/I0Srit5MdSghTGckUfwuVgfOtg5QxBAhe3KwCTKrXTYiGeR2V5CxEJWwIKaMpmQJ
-	8V0b/dqHFNzenR2kY5i4VMFk1PcskjWs5uMPl6xBCKhjryA/e1T7f3MvQIJgJSzJYFU97aZV8jx
-	XMW2lQf/ll5WXSf+CKx8C+NCyfRsAQhjvLUtCygtAZBTlOO3M+4XKrwtzZQwQKL3Ds1uV6nNkZ6
-	qCZ6hedB1ixzZsj5ZcI8DhoxgvSKWjXxrmOE6pcEIglywejbltGm8g=
-X-Received: by 2002:a05:620a:252:b0:92e:fe10:3f02 with SMTP id af79cd13be357-9348613d64dmr94585385a.51.1785392919868;
-        Wed, 29 Jul 2026 23:28:39 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-933e7318180sm346275085a.28.2026.07.29.23.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jul 2026 23:28:37 -0700 (PDT)
-Date: Thu, 30 Jul 2026 02:28:35 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 02/15] mm: introduce linear_anon_page_index()
-Message-ID: <amru_6sVmelONPh8@gourry-fedora-PF4VCD3F>
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-2-e8ecfefea812@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A8YI8kTE"
+X-Forwarded-Encrypted: i=1; AHgh+RqQSx3nJA9GqjHLHCFfEaryrmjnlPm4PEwB4eNkWQM50daM+M90JODTYtOux+VaU+xjUb41OHbwDpjsxdTdEeA=@vger.kernel.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785393091;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vlYljchxQ5reT/eVU8Xnl/sWmMhVEbgvnN8Wduj0Ep0=;
+	b=A8YI8kTEFgTNxVgv2DDnWOzq/FHeU5dHiwobcj1wKecoW6PWQohSoDljkzSFrmE6dNRUxT
+	CdQ+OVY8OQrkDcmeHB2CicBinLiVnZ2Q9KC47m24H1fVhHGKzTXT85JLc8/nGSk8ffYpo7
+	9JkQJOG3w1ef2810Rod298jOfOXkbow=
+X-Gm-Message-State: AOJu0YzNIFHU20kgFPapB7pxYe2xHMco/WkigT3CIRFk82rSiPAfAZah
+	pY6uAjmazMLKSdSw7bvam6v2AB+s/CsZEI/qvbUTP3yj77xX+5WFL57Q02tIOLyaKqbx3+JuUxt
+	kvgNJM0mmK9iarng3L+Hwbz04I8XqrZkVDQkc/VVX
+X-Received: by 2002:a05:622a:684e:20b0:517:5ac7:332e with SMTP id
+ d75a77b69052e-52b3933f844mr5275111cf.6.1785393052137; Wed, 29 Jul 2026
+ 23:30:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260729-b4-scalable-cow-virt-pgoff-v3-2-e8ecfefea812@kernel.org>
+References: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20260720-hybrid-v9-0-2b713ca1b5dc@rsg.ci.i.u-tokyo.ac.jp>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Thu, 30 Jul 2026 07:29:00 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTyAtAg=u61nwqGYPstRkq1qiBJ=Up_9e=J_3FUOONZ9YA@mail.gmail.com>
+X-Gm-Features: AUfX_mwGOo05YLjkVSJlO76kvHbah6i3Ay-YiXXIqVAHXXpYgYhu4HvJ-rdWTks
+Message-ID: <CA+EHjTyAtAg=u61nwqGYPstRkq1qiBJ=Up_9e=J_3FUOONZ9YA@mail.gmail.com>
+Subject: Re: [PATCH v9 00/16] KVM: arm64: PMU: Use multiple host PMUs
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Steffen Eiden <seiden@linux.ibm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jul 29, 2026 at 05:48:37PM +0100, Lorenzo Stoakes (ARM) wrote:
-> This function provides the anonymous equivalent of linear_page_index(),
-> instead offsetting based on the anonymous page offset of the VMA.
-> 
-> It is valid only for anonymous or MAP_PRIVATE file-backed mappings. It must
-> not be called for shared file-backed mappings.
-> 
-> For pure anon VMAs, this will be equal to linear_page_index().
-> 
-> Assert that both of these invariants are true In linear_anon_page_index()
-> and implement the algorithm in __linear_anon_page_index().
-> 
-> Note that MAP_PRIVATE-/dev/zero mappings will satisfy vma_is_anonymous()
-> but not fulfill this invariant, so when asserting this we check
-> vma->vm_file to account for this.
-> 
-> We do not update callsites yet, so no functional change intended.
-> 
-> Also const-ify vma_is_anonymous() to make it compatible with the
-> const-ified linear_anon_page_index().
-> 
-> VMA userland tests are also updated accordingly.
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+On Mon, 20 Jul 2026 at 06:39, Akihiko Odaki
+<odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+...
+> A QEMU patch that demonstrates the usage of the new attribute is
+> available at:
+> https://lore.kernel.org/qemu-devel/20260706-kvm-v4-1-089cac8c25c3@rsg.ci.i.u-tokyo.ac.jp/
+> ("[PATCH RFC v4] target/arm/kvm: Choose PMU backend")
+>
+> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
-Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
+I didn't test with the QEMU patch, but I tested on QEMU: booting the
+host and a KVM guest, plus the vpmu_counter_access and get-reg-list
+KVM selftests under nvhe, vhe, andvhe with kvm-arm.mode=nested.
+
+For the series:
+Tested-by: Fuad Tabba < fuad.tabba@linux.dev>
+
+Cheers,
+/fuad
+
+> ---
+> Changes in v9:
+> - Dropped patch
+>   "KVM: arm64: Disallow vPMU when pPMUs do not cover all CPUs".
+> - Added patch
+>   "KVM: arm64: PMU: Stop updating MDCR_EL2.HPMN".
+> - Added patch
+>   "KVM: arm64: selftests: Cover PMU state in MDCR_EL2".
+> - Added patch
+>   "arm64: errata: Require Apple IMPDEF PMUv3 traps on all CPUs".
+> - Added patch
+>   "KVM: arm64: Don't clear vcpu->cpu in kvm_arch_vcpu_put()".
+> - Noted that fixed-counters-only mode avoids relying on the default PMU.
+> - Clarified why fixed-counters-only mode hides PMCEID.
+> - Added patch "KVM: arm64: Serialize repeated vCPU initialization".
+> - Added patch "KVM: arm64: PMU: Freeze counter count after first run".
+> - Added patch
+>   "KVM: arm64: selftests: Test SET_NR_COUNTERS after first run".
+> - Added patch "KVM: arm64: PMU: Recreate events after MDCR_EL2 changes".
+> - Clarified why extra IMPDEF PMUv3 trap support on a late CPU is safe.
+> - Changed fixed-counters-only emulation to taint the kernel when it
+>   encounters a CPU without a registered pPMU; see the commit message.
+> - Added patch
+>   "KVM: arm64: PMU: Keep implemented counter mask EL-independent".
+> - Added a targeted bitfield helper type change to tools headers.
+> - Link to v8: https://patch.msgid.link/20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v8:
+> - Added patch
+>   "KVM: arm64: Disallow vPMU when pPMUs do not cover all CPUs".
+> - Split patch "KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY".
+> - Documented the FEAT_PMUv3_ICNTR support plan.
+> - Ensured KVM_ARM_VCPU_PMU_V3_FILTER and
+>   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY are mutually exclusive.
+> - Ensured KVM_ARM_VCPU_PMU_V3_SET_PMU and
+>   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY are mutually exclusive.
+> - Dropped the code to support KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS for
+>   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY.
+> - Added a function to de-duplicate
+>   "test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY, ...)".
+> - Link to v7: https://lore.kernel.org/r/20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v7:
+> - Fixed the vCPU run hang in test_fixed_counters_only().
+> - Link to v6: https://lore.kernel.org/r/20260413-hybrid-v6-0-e79d760f7f1b@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v6:
+> - Removed WARN_ON_ONCE() in kvm_pmu_create_perf_event(). It can be
+>   triggered in kvm_arch_vcpu_load() before it checks supported_cpus.
+> - Removed an extra lockdep assertion in kvm_arm_pmu_v3_get_attr().
+> - Fixed error messages in test_fixed_counters_only().
+> - Fixed the vCPU run in test_fixed_counters_only().
+> - Link to v5: https://lore.kernel.org/r/20260411-hybrid-v5-0-b043b4d9f49e@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v5:
+> - Rebased.
+> - Fixed the order to clear KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY in
+>   kvm_arm_pmu_v3_set_pmu().
+> - Fixed the setting of KVM_ARM_VCPU_PMU_V3_IRQ in
+>   test_fixed_counters_only().
+> - Changed to WARN_ON_ONCE() when kvm_pmu_probe_armpmu() returns NULL in
+>   kvm_pmu_create_perf_event(), which is no longer supposed to happen.
+> - Link to v4: https://lore.kernel.org/r/20260317-hybrid-v4-0-bd62bcd48644@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v4:
+> - Extracted kvm_pmu_enabled_counter_mask() into a separate patch.
+> - Added patch "KVM: arm64: PMU: Protect the list of PMUs with RCU".
+> - Merged KVM_REQ_CREATE_PMU into KVM_REQ_RELOAD_PMU.
+> - Added a check to avoid unnecessary KVM_REQ_RELOAD_PMU requests.
+> - Dropped the change to avoid setting kvm_arm_set_default_pmu() when
+>   KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY is not set.
+> - Link to v3: https://lore.kernel.org/r/20260225-hybrid-v3-0-46e8fe220880@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v3:
+> - Renamed the attribute to KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY.
+> - Changed to request the creation of perf counters when loading vCPU.
+> - Link to v2: https://lore.kernel.org/r/20250806-hybrid-v2-0-0661aec3af8c@rsg.ci.i.u-tokyo.ac.jp
+>
+> Changes in v2:
+> - Added the KVM_ARM_VCPU_PMU_V3_COMPOSITION attribute to opt in the
+>   feature.
+> - Added code to handle overflow.
+> - Link to v1: https://lore.kernel.org/r/20250319-hybrid-v1-1-4d1ada10e705@daynix.com
+>
+> ---
+> Akihiko Odaki (15):
+>       KVM: arm64: Serialize repeated vCPU initialization
+>       KVM: arm64: PMU: Stop updating MDCR_EL2.HPMN
+>       KVM: arm64: PMU: Freeze counter count after first run
+>       KVM: arm64: selftests: Test SET_NR_COUNTERS after first run
+>       KVM: arm64: PMU: Keep implemented counter mask EL-independent
+>       KVM: arm64: PMU: Recreate events after MDCR_EL2 changes
+>       tools headers: Use u* types for bitfield helpers
+>       KVM: arm64: selftests: Cover PMU state in MDCR_EL2
+>       arm64: errata: Require Apple IMPDEF PMUv3 traps on all CPUs
+>       KVM: arm64: PMU: Protect the list of PMUs with RCU
+>       KVM: arm64: PMU: Pass the pPMU to kvm_map_pmu_event()
+>       KVM: arm64: PMU: Pass the target CPU to kvm_pmu_probe_armpmu()
+>       KVM: arm64: PMU: Implement fixed-counters-only emulation
+>       KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
+>       KVM: arm64: selftests: Test PMU_V3_FIXED_COUNTERS_ONLY
+>
+> Oliver Upton (1):
+>       KVM: arm64: Don't clear vcpu->cpu in kvm_arch_vcpu_put()
+>
+>  Documentation/virt/kvm/devices/vcpu.rst            |  30 ++-
+>  arch/arm64/include/asm/kvm_host.h                  |   4 +
+>  arch/arm64/include/uapi/asm/kvm.h                  |   1 +
+>  arch/arm64/kernel/cpu_errata.c                     |   2 +-
+>  arch/arm64/kvm/arm.c                               |  18 +-
+>  arch/arm64/kvm/pmu-emul.c                          | 241 +++++++++++------
+>  arch/arm64/kvm/reset.c                             |  16 +-
+>  arch/arm64/kvm/sys_regs.c                          |  31 ++-
+>  include/kvm/arm_pmu.h                              |   5 +
+>  tools/arch/arm64/include/uapi/asm/kvm.h            |   1 +
+>  tools/include/linux/bitfield.h                     |  26 +-
+>  .../selftests/kvm/arm64/vpmu_counter_access.c      | 284 ++++++++++++++++++---
+>  12 files changed, 510 insertions(+), 149 deletions(-)
+> ---
+> base-commit: cb9360ae6549120975f20887840fb33d47c13898
+> change-id: 20250224-hybrid-01d5ff47edd2
+>
+> Best regards,
+> --
+> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+>
+>
