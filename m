@@ -1,225 +1,90 @@
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD1C3B0591
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785541119; cv=none; b=Skq328PYX0RVO2tHr9dXJw1JxpCyi3xsdi+vjmTcew2JwrTKY2+CAVvDE7OK/gtwvz1O72sfDzlV8pkDeYWEHmYwIIrPeePMhqQjPFqC9KckaS/NeCDMGQtocB19NdtbXVo4eXnhYGTQCeYes48t7soUYev4B0aHG1sg2hhCDvs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785541119; c=relaxed/simple;
-	bh=zKG0iS70PV1ZsDDU0ojNP7wKsx3DKqaKvtYhgGjhqec=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=maItTNNKySmDZesXkqexGkLLxRwnQ8qMpmWVcxGeLobQ5MnMRLwB31E09n1F/AqijRfedvTDMKf9YjVrOp42b/BUWdUFbkr3zPKsq/al/1V7QWRD7uhmSX47UxkERQmcKdOD7A88ktbv/UhzNzOvQkPVT/HMG2BwgyI+GukoYT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W1vKjvQW; arc=none smtp.client-ip=209.85.210.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7423546E2;
+	Fri, 31 Jul 2026 23:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785542315; cv=pass; b=Pj/CyqyexIpLFLXqUHiaRqYaGc9uLIGCeoMl9tGBD5n3loDWwgO7FydowVhJA/MyfzH/I4++YNkUR9z55StueWgV2awPgswAmCUZZnhlION+UfvCTNqQVDiWk8nUpyHjCV2734097Js2jEvpOMYo34jKJHukS2TBl0dlLq8xCak=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785542315; c=relaxed/simple;
+	bh=l1vrpNqgWN83YNMcggHN1LJ1I8uOJOLaMBeiiGtetSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=S20IiUD+eDFBdgLpepDo30a0IvQJ0aFEYIE+qjUwEH5l/DKqTKg7iJF6VLcjKf8AFMuiWaZiwAcB0NYMbb83ucohzpNxayjmgYo7TUqPDfiUwq83Va3UnzSKo3iMlN2sn6CEEYEBwgubsnwDUtpiP97KCNasdScr2u/Xpm6IOlg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=AzMdvKwz; arc=pass smtp.client-ip=136.143.169.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W1vKjvQW"
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-84842381150so2871554b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785541117; x=1786145917; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=dmKsJOviftvACUGPABBN88S+tJ91thYPhBWQcoJdx18=;
-        b=W1vKjvQWU2LANf0hil7JAJKIzwtCO2qQsxWxRYPJFktMEYoEosVjNuPvQOlgo+yN9/
-         9Efpz3ACwONT5oj34ijQIr2zrNOzFUt4rGxNkk60pwlO+u7i7ffdexxCEMoAu5wHU8V3
-         zSYEsX3fR7iSQ3V2wDi6NUbH1MML9uI9P+KstO/dBj6nLwyJMr1hj0fLNUxQOqvAp3iY
-         +2MOL7MJnmK0fI8Qg2svBwS8be/XAIq3dym2AI6Bojk/7SaU4IG0ju0nN+ulP7vGKdGA
-         s662rLvG7wrLlDQYX7IxYNoaznEWfUsgM2VTbRVLusuNNfL6/ngs6/HhtedAOSKMdZoc
-         guHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785541117; x=1786145917;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dmKsJOviftvACUGPABBN88S+tJ91thYPhBWQcoJdx18=;
-        b=irCdv3OifqANFHjA4GHWOlpZJa6yfcvvPO76Sdk7px+Jx39qS0Er5u8whjdS0l63Gc
-         naseUSsuBj6pm1mx/i0pB2bGUTB+WUEfSp45DSAPWJgfge7Wq4g1neawAm4ROJBdNKc3
-         WvA9wdfNvXWE+c2su4kD/Rjyhl2d2yZwProkEkf/dOmQACApDg8OD7aZ/AKBowHyJxVp
-         sJPH83MguNbSTsUd//wWy5hwn831OF8Ys6adLKtd2WXJ42D5+qQpK21AiAS/ICqSlCxQ
-         jY6d7ETBSxW/FMoe6YYv1ab9q2OGvIJWQFTCvAC4tby9m1O+k2fNHm8uZvseAMPlA+Q0
-         2EyA==
-X-Forwarded-Encrypted: i=1; AHgh+RqmK57mfBOQplG7mu14M8pb5MfNSuzIj7THWCWd1YZ4xIlb3zCyI7IOwuzYDVqsoe0Ox/afJ373NgMlV2z9mK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMK+8aaH75AKfiAXufrh+UlOlTjZsyA1z9Aa0rR02lBPIQqZjx
-	EP/w3yRPedMf4ZHn3TI0uFYjhK9RZ84EMgXu61rdA3jShqqHzN72NHaJV+luyNkNoYkHTna0YD+
-	HhYeRdg==
-X-Received: from pful5.prod.google.com ([2002:a05:6a00:1405:b0:847:a85b:6c23])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:6c8f:b0:847:8b0f:2508
- with SMTP id d2e1a72fcca58-84ee47789c4mr1324782b3a.13.1785541116639; Fri, 31
- Jul 2026 16:38:36 -0700 (PDT)
-Date: Fri, 31 Jul 2026 16:38:36 -0700
-In-Reply-To: <20260728144954.355376-35-dwmw2@infradead.org>
+	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="AzMdvKwz"
+ARC-Seal: i=1; a=rsa-sha256; t=1785542297; cv=none; 
+	d=zohomail.eu; s=zohoarc; 
+	b=WX5XyM4fTvhxDNXXaVuVrjfgqmlns1mzH9lGwyU3a3dd2NX9hsRdyYhWeEZUuNqopePLvu+TgBxA3uDvOIomHCZNQA2KsdNjvU+M27uPsQBnBq4S+q7llHsB9o5QMf8tOyfJt7nphPEiZ5eWI8kl1f1njn5wuZ8G79kkHMmgSB8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+	t=1785542297; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=l1vrpNqgWN83YNMcggHN1LJ1I8uOJOLaMBeiiGtetSQ=; 
+	b=e6AESJiNslyuLLgWlE398Gc7Box+MaDrJ+m2o8Wbtu43BGqefj2ePJldjdFAyWuLRaejujVlOaMTP1ru98GF4obRsXeuRe3dtpaHf3kUtZAf7HluUpscs40y0WB5LBymCQrO/EcE1i/vE9gpxR06c0vas33nHRrR+W16y48XqGs=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+	dkim=pass  header.i=iusegentoo.com;
+	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
+	dmarc=pass header.from=<ali@iusegentoo.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785542297;
+	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=l1vrpNqgWN83YNMcggHN1LJ1I8uOJOLaMBeiiGtetSQ=;
+	b=AzMdvKwzZoyhPfldWQo9Jn/ceYgS9yJI62Uux/muh8FMK4y/p8h6u6PeIxM8O7N9
+	Qxwz4l4pWJJrMwfxrUCKhhb4IWXYnH3+BDwzYTXjjaxXiPD3t3MUVXvO0R0xZ533qQu
+	C7P6JIZZ+YUzkuGedriPyBv6kVyeAu+MqJn2/qNc=
+Received: by mx.zoho.eu with SMTPS id 1785542295141313.1768707530664;
+	Sat, 1 Aug 2026 01:58:15 +0200 (CEST)
+From: Ali Ahmet Memis <ali@iusegentoo.com>
+To: xiexinet@gmail.com
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH net v3 0/4] net: hsr: fix GRO/GSO super-packet handling
+Date: Sat,  1 Aug 2026 02:57:27 +0300
+Message-ID: <20260731235727.204167-1-ali@iusegentoo.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260731090224.18-1-xiexinet@gmail.com>
+References: <20260731090224.18-1-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-35-dwmw2@infradead.org>
-Message-ID: <am0x_ORC0olomizu@google.com>
-Subject: Re: [PATCH v7 34/36] KVM: selftests: Add master clock offset test
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Tue, Jul 28, 2026, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
->=20
-> Verify that KVM master clock mode remains active when vCPUs have
-> different TSC offsets but the same frequency. Creates three vCPUs,
-> sets one to a different TSC value, and confirms:
->=20
->  - KVM_CLOCK_HOST_TSC is set (master clock active)
->  - KVM_CLOCK_TSC_STABLE IS set (master clock =E2=87=92 stable flag)
->  - PVCLOCK_TSC_STABLE_BIT is NOT set (offsets differ)
->=20
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> Assisted-by: Kiro (claude-opus-4.6-1m)
-> ---
->  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
->  .../kvm/x86/masterclock_offset_test.c         | 180 ++++++++++++++++++
->  2 files changed, 181 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/x86/masterclock_offset_te=
-st.c
->=20
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/sel=
-ftests/kvm/Makefile.kvm
-> index 95539deea266..f6027a35f790 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -108,6 +108,7 @@ TEST_GEN_PROGS_x86 +=3D x86/pmu_event_filter_test
->  TEST_GEN_PROGS_x86 +=3D x86/private_mem_conversions_test
->  TEST_GEN_PROGS_x86 +=3D x86/private_mem_kvm_exits_test
->  TEST_GEN_PROGS_x86 +=3D x86/pvclock_test
-> +TEST_GEN_PROGS_x86 +=3D x86/masterclock_offset_test
+On Fri, Jul 31, 2026 at 11:02:19AM +0200, Xin Xie wrote:
+> [PATCH net v3 0/4] net: hsr: fix GRO/GSO super-packet handling
 
-Keep these sorted alphabetically.
+I tested the series on top of net under virtme-ng (QEMU/KVM, x86_64).
 
->  TEST_GEN_PROGS_x86 +=3D x86/pvclock_migration_test
->  TEST_GEN_PROGS_x86 +=3D x86/set_boot_cpu_id
->  TEST_GEN_PROGS_x86 +=3D x86/set_sregs_test
-> diff --git a/tools/testing/selftests/kvm/x86/masterclock_offset_test.c b/=
-tools/testing/selftests/kvm/x86/masterclock_offset_test.c
-> new file mode 100644
-> index 000000000000..88e2bd2edab5
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86/masterclock_offset_test.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Test that KVM master clock mode works with different TSC offsets
-> + * as long as all vCPUs have the same TSC frequency.
-> + */
-> +#include <stdint.h>
-> +#include <string.h>
-> +
-> +#include "test_util.h"
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +
-> +#include <asm/pvclock-abi.h>
-> +
-> +#define KVMCLOCK_GPA	0xc0000000ull
-> +#define TSC_OFFSET	(1000000000ULL)
-> +
-> +static uint64_t pvclock_calc(struct pvclock_vcpu_time_info *pvti, uint64=
-_t guest_tsc)
-> +{
-> +	uint64_t delta =3D guest_tsc - pvti->tsc_timestamp;
-> +
-> +	if (pvti->tsc_shift >=3D 0)
-> +		delta <<=3D pvti->tsc_shift;
-> +	else
-> +		delta >>=3D -(int)pvti->tsc_shift;
-> +
-> +	return pvti->system_time + ((__uint128_t)delta * pvti->tsc_to_system_mu=
-l >> 32);
-> +}
-> +
-> +static void guest_code(void)
-> +{
-> +	wrmsr(MSR_KVM_SYSTEM_TIME_NEW, KVMCLOCK_GPA | KVM_MSR_ENABLED);
-> +	for (;;)
-> +		GUEST_SYNC(0);
-> +}
-> +
-> +int main(void)
-> +{
-> +	struct kvm_vcpu *vcpus[3];
-> +	struct kvm_clock_data clock;
-> +	struct pvclock_vcpu_time_info pvti[3];
-> +	struct kvm_vm *vm;
-> +	uint64_t offset0, host_tsc, clk0, clk2;
-> +	int i;
-> +
-> +	TEST_REQUIRE(sys_clocksource_is_based_on_tsc());
-> +
-> +	vm =3D vm_create_with_vcpus(3, guest_code, vcpus);
-> +
-> +	TEST_REQUIRE(!__vcpu_has_device_attr(vcpus[0], KVM_VCPU_TSC_CTRL,
-> +					     KVM_VCPU_TSC_OFFSET));
-> +
-> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> +				    KVMCLOCK_GPA, 1,
-> +				    vm_calc_num_guest_pages(VM_MODE_DEFAULT,
-> +							   getpagesize()), 0);
-> +	virt_map(vm, KVMCLOCK_GPA, KVMCLOCK_GPA,
-> +		 vm_calc_num_guest_pages(VM_MODE_DEFAULT, getpagesize()));
-> +
-> +	/* Get vCPU 0's default offset and set vCPU 2's offset higher */
-> +	vcpu_device_attr_get(vcpus[0], KVM_VCPU_TSC_CTRL,
-> +			     KVM_VCPU_TSC_OFFSET, &offset0);
-> +	uint64_t offset2 =3D offset0 + TSC_OFFSET;
-> +	vcpu_device_attr_set(vcpus[2], KVM_VCPU_TSC_CTRL,
-> +			     KVM_VCPU_TSC_OFFSET, &offset2);
-> +
-> +	/* Run each vCPU to enable kvmclock (with offset already set) */
-> +	for (i =3D 0; i < 3; i++) {
+selftests/net/hsr/hsr_gro_superpacket.sh passes: the SAN emits TSO
+super-packets (TX frame-size average around 41 kB, well over the 2048
+byte threshold) while both DUT LAN legs stay per-frame (average around
+1497 bytes, under the 1514 byte guard), and the test reports success.
+For contrast, without the series the same topology leaks oversized,
+HSR-tagged frames onto the LAN legs (up to roughly 28 kB, ethertype
+0x88fb), which this work eliminates. hsr_ping, prp_ping and hsr_redbox
+still pass.
 
-ARRAY_SIZE(vcpus)
+I also went through the code. Patch 1 mirrors netif_disable_lro() and
+dev_disable_lro() faithfully, and clearing both NETIF_F_GRO and
+NETIF_F_GRO_HW matches the changelog intent. For patch 2 I audited all
+seqnr_lock users; after the change it guards only the sequence counter
+updates, so dropping the outer lock around hsr_forward_skb() cannot race
+any other state. For patch 3 the __skb_gso_segment() dispatch and the
+consume_skb() and kfree_skb() paths look correct, and the port type gate
+keeps LAN and tagged aggregates out of software segmentation.
 
-> +		vcpu_run(vcpus[i]);
-> +		TEST_ASSERT_KVM_EXIT_REASON(vcpus[i], KVM_EXIT_IO);
-> +	}
-> +
-> +	/* Check master clock is active */
-> +	memset(&clock, 0, sizeof(clock));
-> +	vm_ioctl(vm, KVM_GET_CLOCK, &clock);
+Per-patch Reviewed-by for patches 1 to 3 sent separately.
 
-Provide an API.
-
-> +	pr_info("KVM_GET_CLOCK flags: 0x%x\n", clock.flags);
-> +	TEST_ASSERT(clock.flags & KVM_CLOCK_HOST_TSC,
-> +		    "Master clock should be active, flags=3D0x%x", clock.flags);
-> +	TEST_ASSERT(clock.flags & KVM_CLOCK_TSC_STABLE,
-> +		    "KVM_CLOCK_TSC_STABLE should be set, flags=3D0x%x", clock.flags);
-> +
-> +	/* Get per-vCPU pvclock in order 0, 2, 1 */
-> +	int order[] =3D {0, 2, 1};
-
-Please don't declare variables in the middle code.  Yes, it's now technical=
-ly
-possible thanks to all the guard() magic, but it's still against preferred =
-kernel
-style.
-
-Though this itself is probably a really, really good indication that this n=
-eeds
-to be split into multiple testcases.  Maybe using TEST_F() and a custom fix=
-ture?
+Tested-by: Ali Ahmet Memis <ali@iusegentoo.com>
