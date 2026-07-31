@@ -1,145 +1,286 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F07F390C85;
-	Fri, 31 Jul 2026 08:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8D43064B5
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 09:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785488255; cv=none; b=cEmhsWqKkZOEKqntFGlPe9zgEuwef+470vnngmR17Ieh4XRsHPwRlr1PSO0zD6BZSp0tlKn7U9Vfvw7BI2S/u4oMp/meEETRWh35wPRVpGXdxOUag25+prD8oiwbWzyU85ngO8nSBn2S1jswBN3fkCz15m1HFwV499GmD++QZsQ=
+	t=1785488550; cv=none; b=of4drjdkUVh8ELJGDn4+L9RM5JYnaQimlPQSLStvT9hFAuEufjIQ6HdtMFrD/uC6Opm1SAesALzreVW10+CsRijKiRUuTMqd1SUiPudrm8Uq+3lRlBt8qmOR3VN/CWj6TSNYO/g5tVFli8WEN+LSw6K+M0Sdr9MEr/RZ3SWWuhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785488255; c=relaxed/simple;
-	bh=1b87pWmuiWigK1wPtNTyW7rMpkhrK9XpARbjh2u7/PY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QBe0LWZnLM+E9Ous+PeShv/qDSPPgDLze6wVzY1swli55eDSIIoNkr9abtwsbICdHBeV496AvgbXxurckkPTPGc8STWItCo0QHjGdjjK9pmXz5+kEC9g3oyWjdkkDmT4VYP4/L+SpZpueTrnYYsCp/lWCIXubqB+H7GyQZkBeBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aw5s8MJG; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785488550; c=relaxed/simple;
+	bh=Rz5nAQxD9dzi7f1HZQXIEM2PVcmvgnNeWMsMmOJ3iM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BaydNyqqOVbbljvebAW7vpQJkxVl/d6bkR0Ub9bOuz/fnho+/MHiL6eAgDeI47tE9FfOKoDaF+vNf8zjbcDP3rhH7vTUsyj24oipE0pqEZ9zh73+4WGXvz1zznFcdHc6sfM5bcjJnf+5UhVzWyxHM8z63WtiaryddzYx0sTANS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juTvJyC1; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aw5s8MJG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785488255; x=1817024255;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1b87pWmuiWigK1wPtNTyW7rMpkhrK9XpARbjh2u7/PY=;
-  b=aw5s8MJGfXsoP382n7VNNcFxiZvjRJWrs3xRExx00XFzPhbf7BCJwu79
-   M6rEukLPssyoel8BxlsZnyk+FKYAnmxddLw1cppDuFBz+OgZwiFu53fWY
-   i5IWE+D280Xr1pYcu0/JFqgpZjFAySWWZnwNuLsoZAT893UBbE1vozNLi
-   g0FKGKnnriK0MF1+1nkI2tsGFQFvMnFgXtp40onuArblKYgaomnClE2fl
-   xEGAwZtHWbI7lni7ac+3sLS8f1gqCFzo2j5Moh/yW3inY70Qzhh8pFjOH
-   9p3NuhkmBPLi9n6zyvpH3A6KXt1ek36mgmBpIOpmyWj+ytg2jlWDqzTVH
-   A==;
-X-CSE-ConnectionGUID: I/Umm3QLQH+Z/QKKVbGJ7g==
-X-CSE-MsgGUID: dfjyr33qS/CR4RWtwfPpOQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="86063906"
-X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
-   d="scan'208";a="86063906"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:57:34 -0700
-X-CSE-ConnectionGUID: w/eqajcFTA22UWQ2rzow+g==
-X-CSE-MsgGUID: HP5ylDh8QcWlI7vAtQHsxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
-   d="scan'208";a="283856796"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.248]) ([10.124.240.248])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:57:18 -0700
-Message-ID: <b78bfee9-29f3-4044-8ac7-f294b3cd0ad8@intel.com>
-Date: Fri, 31 Jul 2026 16:57:15 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juTvJyC1"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47f502ff678so84865f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 02:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785488547; x=1786093347; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+eM+ORJQphpBEjlLS6lBhvY6W8A+kEMRV5W3folsyVI=;
+        b=juTvJyC1U4VfLKHHBwFnC9Wf9uEgyhRkDiyG2lMG7807JtCi9tUwPz8oCapruSWNst
+         VFHmYuMum7b9Idr5fHuEco2ZECM/e4bm3b5nCjO7sWYJ5Kd5CVCyLtDo/e0UCwedBRap
+         yZVXMnf3ZmFy6C3PyE98H/ZL9+wEZKjLFATTKGiZGguEl/EwjDuoIN2JW2I4EeGeD5gE
+         2sl+tjZ5SATryp7Vst6rM/qsDhJ8DFceVHSxv4U0eiMIKVFayS4ynegWMfgwQmwLFbuh
+         9fTb83z3nLSz6yPPC2gF2mIWEcJ8zFCGC8J3yMIc5PNCRzWxUW1mH8xZn1MyS4xDVo9+
+         Kj5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785488547; x=1786093347;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+eM+ORJQphpBEjlLS6lBhvY6W8A+kEMRV5W3folsyVI=;
+        b=MqyIsSDC1lRksZugiZnSKis+xjBefwQVQMD7fo2kJ6mmP6EJ3uqkyc9z+wNKbMkE3j
+         xF5SjhvWvbdRz4GVEERJKeg75la/5N94e5aIpk5PWkku6unY41wQDMfn9KLqz9fP59j6
+         TOTjYb+pt6dVnUm0IYxx/+OUjuu6G+YkxyTKapEdLtLRzDjQSZ66iCJtPz4K1EAWJ8ED
+         eDBgDuwtRJEkay7ivgvtKV975ALG6WxGi1av07dLmuHyEmovMhKp2s34xLsQ3ziUi6Gz
+         n00fqG5Od0EeMq8/oTQrr0+L1WG6q1/y6AZwEYDExnA5EKepK7kGiSgRXybLE0mhtqNw
+         7XwA==
+X-Forwarded-Encrypted: i=1; AHgh+RpWoZRCfK+AnHgO3tqynjHR3CDT2lOxFbPSTqbMnwbUNW6Uegar9Y0lmv7X+vlmgFDeqpfc+EcxwnhxO8ejOmw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4Ct0Q20/NLhKEjaoyGhCDTPdYO4UsbCCT40xEKPZqrEZsnhyn
+	Nx0vB2u/auK+gSE+SJWUusYTRFm1WH0Y02v/sQJRnvwH6/zM8UmpxO4C
+X-Gm-Gg: AR+sD12d0TuioF9ZZcQSvYQp1uTpj6QdprX/zaVA5GFViRnetVwIr2NJRneeypA+zgq
+	6ig3H4hwaxrbME4C+Omcr80tuae0g4vOUc/JSNcg8cDkxVAPmXcsbHAklb526pwULvCnUHQtlP3
+	PTqZoy08tvu92eBcGsqjzbiR9QrCs/LK6f2XTaUWKdCaoudloKRb7Ej2r3nO1f3QhsTclQvHuhh
+	J2ZkzPPNod+xwvbXAYCPnusb3/WxPUGC9ooL5GIAu2bQgqlNVWoBnr5tp7pZqhPG3U+98JKxzxe
+	vAox0TJGx7rIriH/PLV8e+RJSOhlT9r+KVqdRYEgq4OaKRhlU2GlDMQhor3UA0ZR42WlvudjOef
+	WJ3REQ7oDRmxywfSWyBG7Bgu6HU/vsfbLMVJJC10vqOsvtunapEHNpiBC6EmasHQEBa0VbkvxmY
+	bAsrMggFOnu+ag60ArFKMKnYYBnyGapY14FvOiq7LSJXnzOBChj21Lcldl4TbHcivaM4xmZAVHm
+	cMBzRK7PAIkxxE2FfABKRUKKSEgA+HHIbHV5w1mqxHmipEWZpDvZxfMBzvdyD81fbhT3sG+43nl
+	x22vadGH4rKA46OfOGbEIQ==
+X-Received: by 2002:a05:6000:4202:b0:47f:6c7e:b32d with SMTP id ffacd0b85a97d-47fd2abd5a9mr3197342f8f.1.1785488546264;
+        Fri, 31 Jul 2026 02:02:26 -0700 (PDT)
+Received: from L-022584.energy.envision.com (dynamic-077-184-219-058.77.184.pool.telefonica.de. [77.184.219.58])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41d1a58sm2965051f8f.7.2026.07.31.02.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 02:02:25 -0700 (PDT)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	kees@kernel.org,
+	petr.wozniak@gmail.com,
+	qingfang.deng@linux.dev,
+	fmaurer@redhat.com,
+	luka.gejak@linux.dev,
+	bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com,
+	stable@vger.kernel.org,
+	Xin Xie <xiexinet@gmail.com>
+Subject: [PATCH net v3 0/4] net: hsr: fix GRO/GSO super-packet handling
+Date: Fri, 31 Jul 2026 11:02:19 +0200
+Message-ID: <20260731090224.18-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 01/41] KVM: guest_memfd: Introduce per-gmem attributes,
- use to guard user mappings
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-1-35f9aec2aed2@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260728-gmem-inplace-conversion-v9-1-35f9aec2aed2@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson<seanjc@google.com>
-> 
-> Start plumbing in guest_memfd support for in-place private<=>shared
-> conversions by tracking attributes via a maple tree.  KVM currently tracks
-> private vs. shared attributes on a per-VM basis, which made sense when a
-> guest_memfd_only_ supported private memory, but tracking per-VM simply
-> can't work for in-place conversions as the shared/private status of a given
-> page needs to be per-gmem_inode, not per-VM.
-> 
-> Use the filemap invalidation lock to protect the maple tree, as taking the
-> lock for read when faulting in memory (for userspace or the guest) isn't
-> expected to result in meaningful contention, and using a separate lock
-> would add significant complexity (avoiding deadlock is quite difficult).
-> 
-> Co-developed-by: Vishal Annapurve<vannapurve@google.com>
-> Signed-off-by: Vishal Annapurve<vannapurve@google.com>
-> Co-developed-by: Fuad Tabba<tabba@google.com>
-> Signed-off-by: Fuad Tabba<tabba@google.com>
-> Signed-off-by: Sean Christopherson<seanjc@google.com>
-> Tested-by: Shivank Garg<shivankg@amd.com>
-> Co-developed-by: Ackerley Tng<ackerleytng@google.com>
-> Signed-off-by: Ackerley Tng<ackerleytng@google.com>
+HSR/PRP forward frames one by one: each wire frame gets its own tag
+or RCT and sequence number, and duplicate discard is per frame. Two
+aggregation mechanisms break that per-frame assumption:
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+* On RX, a lower device that aggregates frames into a GRO
+  super-packet feeds the HSR receive and forward paths a single
+  skb instead of the individual frames. Depending on the lower
+  device, that super-skb is then either rejected outright (for
+  example when it exceeds the lower MTU at egress), or forwarded
+  without valid per-wire-frame HSR/PRP processing: its single
+  trailing HSR tag / PRP RCT cannot represent the per-frame
+  trailers and sequence numbers of the aggregated frames. On
+  memory-constrained devices processing super-skbs in softirq
+  context also pressures atomic allocation.
 
-<...>
+* At the forward entry, a GSO super-packet (locally generated on
+  the master, or delivered intact by software NICs such as veth)
+  would be tagged and forwarded as a single frame, violating
+  per-frame wire semantics.
 
->   static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
-> @@ -60,9 +68,25 @@ static pgoff_t kvm_gmem_get_index(struct kvm_memory_slot *slot, gfn_t gfn)
->   	return gfn - slot->base_gfn + slot->gmem.pgoff;
->   }
->   
-> +static u64 kvm_gmem_interpret_entry(struct inode *inode, void *entry)
+Patch 1 adds netif_disable_gro() and dev_disable_gro() alongside
+the existing LRO helpers.  HSR calls the public wrapper at
+enslavement time, while the networking core handles the generic
+feature update and recursive lower-device traversal. Enslavement to
+an HSR/PRP master therefore strips NETIF_F_GRO and NETIF_F_GRO_HW
+on the lower device. Disabling GRO on our own lowers is the cheap,
+always-correct default for this problem: unlike the bridge,
+HSR/PRP must attach a tag or RCT and a sequence number to every
+wire frame, so leaving GRO enabled and re-segmenting later (the
+bridge pattern) would add per-packet segmentation cost and still
+could not recover per-frame trailer state from a super-skb. This
+is a setup-time default, not an immutable feature policy: a later
+privileged feature override, or a lower newly attached below a
+stacked slave, can re-enable GRO without re-walking the HSR
+enslavement path.
 
-Ummm, I'm not sure on the name. It doesn't look like KVM's style?
+Patch 2 is a preparatory locking change: it shrinks
+hsr->seqnr_lock from whole hsr_forward_skb() calls to the
+individual sequence counter updates, so that the segmentation work
+of patch 3 (per-segment allocation, checksums and forwarding)
+never runs with BH disabled under the global sequence lock.
+Patch 3 depends on patch 2; their automatic stable selection is
+limited to 7.0 and newer, where sparse-bitmap duplicate discard
+accepts out-of-order arrival. Older stable branches require an
+adapted backport.
 
-Maybe, just kvm_gmem_get_attributes()?
+Patch 3 unfolds the remaining GSO super-packets at the forward
+entry with the top-level GSO dispatch (__skb_gso_segment()), so
+each wire frame still gets its own tag and sequence number. Patch 1
+and patch 3 cover different sources and neither is redundant:
+patch 1 establishes the safe default on our own enslaved lowers at
+setup time (a later privileged override can re-enable GRO, and
+patch 3 is the fail-safe for that case), while patch 3 handles GSO
+super-packets that legitimately arise from locally generated
+master traffic or from untagged SAN ingress on the interlink.
+Segmentation is offered only for those two roles, whose frames are
+known to be plain Ethernet. A super-packet from a LAN slave may
+carry per-frame HSR tags or PRP RCT trailers that software
+segmentation cannot recover, and an already-tagged HSR/PRP
+super-packet violates per-frame wire semantics; both are rejected
+by ingress-port policy. The HSR master also stops advertising
+NETIF_F_GSO_MASK so locally generated traffic is segmented as
+early as possible.
 
-> +{
-> +	if (WARN_ON_ONCE(!entry)) {
-> +		bool initially_shared = GMEM_I(inode)->flags &
-> +					GUEST_MEMFD_FLAG_INIT_SHARED;
-> +
-> +		return initially_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> +	}
-> +
-> +	return xa_to_value(entry);
-> +}
+Patch 4 adds a kselftest covering the above: GRO disabled on
+enslaved devices, no GSO/TSO advertised by the HSR master, and a
+TCP stream from a TSO-enabled SAN through an HSR DUT. The stream
+evidence is direct: the SAN's TX frame-size average must exceed a
+fixed super-packet threshold while the DUT LAN legs' averages stay
+below a fixed per-frame guard, which is aggregate evidence that
+super-packets entered the forward path and bulk output was
+segmented (not a per-frame maximum proof); zero retransmits is
+reported as a secondary health signal. The one-shot iperf3 server
+is confined to a private mktemp workdir with its real exit status
+propagated, so on every path exercised by the test itself (normal
+completion, server startup failure, client failure,
+never-published PID, and baseline/final counter-snapshot parse
+failures) no process or directory can leak.
+
+Validation:
+* build: W=1 allmodconfig and allyesconfig, base vs patched - no
+  new warnings (final run on this frozen v3 candidate: all four
+  builds RC=0; 342/342 normalized warnings in allmodconfig and
+  345/345 in allyesconfig, base-vs-patched diffs empty).
+* selftests (all on this exact v3 kernel, QEMU x86_64):
+  hsr_gro_superpacket passes (GRO stripped on enslaved devices; SAN
+  TX frame-size average ~38k bytes > super-packet threshold; DUT
+  LAN legs ~1.5k bytes < per-frame guard; 0 retransmits) and fails
+  on the base kernel: the LAN per-frame-average guard fails at
+  approximately 1.9 kB on a veth lower device (aggregate evidence;
+  not a universal MTU-drop or per-frame-maximum proof); hsr_ping,
+  hsr_redbox, link_faults and
+  prp_ping all pass.
+* functional: IPv4, IPv6 and VLAN-tagged SAN TSO streams unfold
+  per-frame through an HSR DUT with clean dmesg; the counter
+  assertions show super-packets entering the forward path and
+  per-frame output on both LAN legs. LAN-side aggregates and
+  already-tagged super-packets are dropped by ingress-port policy
+  (supplementary, reused v1/v2 evidence per the same patch-id
+  argument).
+* concurrency: parallel interlink-RX (GSO) and master-TX streams
+  with supervision timers running, under a PROVE_LOCKING kernel
+  built from this candidate: both streams 0 retransmits, no
+  lockdep/WARN/BUG/sleep-atomic findings.
+* lifecycle: normal completion, server startup failure, client
+  failure, a never-published server PID (live-but-unpublished
+  proven), and forced baseline/final counter-snapshot parse
+  failures all exit bounded with no leftover iperf3 process,
+  workdir, or namespace (all re-run on this exact v3 script; the
+  parse-failure paths are new v3 evidence: a baseline-snapshot
+  parse failure aborts before the iperf3 client workload, a
+  final-snapshot parse failure aborts before any counter-delta
+  verdict, and both leave no process or workdir).
+* physical igb lower devices (supplementary, reused v1 evidence:
+  patches 1-3 are patch-id identical and the only upstream delta
+  in the touched files is an unrelated 2-line hsr_del_port()
+  change): GRO stripped at enslavement; force-enabled generic GRO
+  super-packets unfold at line rate with a clean dmesg.
+
+---
+
+Changes in v3:
+- Fix the selftest's early-abort path: both TX counter snapshot
+  blocks now validate their values as decimal counters. Previously
+  the error flag was lost in a command-substitution subshell: a
+  baseline-snapshot parse failure let the test continue into the
+  iperf3 client workload, and a final-snapshot parse failure was
+  only caught indirectly. Now a baseline failure aborts before the
+  client workload, and a final failure aborts before any
+  counter-delta evaluation.
+- Wrap the remaining lines that exceed 80 columns (tab-expanded)
+  in the selftest.
+- Make the selftest's network namespaces instance-unique via
+  setup_ns()/cleanup_all_ns(): the previous hard-coded namespace
+  names were deleted unconditionally at setup, which could destroy
+  unrelated host namespaces and made concurrent instances collide.
+  Also re-prove that pre-existing namespaces survive and that two
+  instances run in parallel.
+- Patch 2 message: state explicitly that the lock shrink removes
+  the old allocation-through-forward ordering guarantee and why
+  current sparse-bitmap duplicate discard accepts that; correct
+  the seqnr_lock history to its actual branch shape.
+- Patch 1 message and the failure description: the outcome of a
+  GRO aggregate is driver-dependent (rejected by a constrained
+  lower device, or forwarded without valid per-frame processing),
+  not a universal MTU drop. Also spell out the enforcement
+  contract: the enslavement-time GRO disable is a setup-time
+  default, not an immutable feature policy, and patch 3 is the
+  fail-safe for traffic that still arrives aggregated.
+- Stable floor: patches 2 and 3 are marked for 7.0 and newer
+  (sparse-bitmap duplicate discard); patch 1's eligibility is
+  unchanged; older branches need adapted backports.
+- Rebase onto current net; patches 1-3 code payloads are unchanged
+  (stable patch-ids).
+- Cover clarifications: the concrete RX failure site, the patch 1
+  vs patch 3 layering, and why disabling GRO is preferred over
+  re-segmenting later.
+
+Note on the v2 contest report: the v2 series conflicts in net-next
+with our own PRP RedBox series now merged there
+(https://lore.kernel.org/netdev/20260717201457.54-1-xiexinet@gmail.com/).
+On current net it applies cleanly (re-verified by a full-series
+git am). A tested net-next merge resolution is available on
+request.
+
+Previous postings (newest first):
+v2: https://lore.kernel.org/netdev/20260724161253.79-1-xiexinet@gmail.com/
+v1: https://lore.kernel.org/netdev/20260722171836.196-1-xiexinet@gmail.com/
+
+Xin Xie (4):
+  net: hsr: fix packet drops caused by GRO superpackets
+  net: hsr: shrink seqnr_lock to sequence counter updates
+  net: hsr: unfold GSO super-packets at the forward entry
+  selftests: net: hsr: add GRO super-packet forwarding test
+
+ include/linux/netdevice.h                     |   2 +
+ net/core/dev.c                                |  18 +
+ net/core/dev_api.c                            |  16 +
+ net/hsr/hsr_device.c                          |  17 +-
+ net/hsr/hsr_forward.c                         |  53 +-
+ net/hsr/hsr_slave.c                           |  12 +-
+ tools/testing/selftests/net/hsr/Makefile      |   1 +
+ .../selftests/net/hsr/hsr_gro_superpacket.sh  | 462 ++++++++++++++++++
+ 8 files changed, 557 insertions(+), 24 deletions(-)
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+
+
+base-commit: 51b093a7ba27476e1f639455f005e8d2e75390e4
+-- 
+2.43.0
 
