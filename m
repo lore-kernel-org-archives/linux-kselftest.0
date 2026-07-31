@@ -1,93 +1,229 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0E4381B04
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:11:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4309B36F8E7
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785528709; cv=none; b=eSI2RmRpySjr4btbWxAwf3rOHm7biPe0IkyTd49HA6aprV0tXVuAPLNIiQMxet80azg7esTk8V1p2NyLa6+fSi1NQjn6S8ExGlJ3EVlXJlmOGOr23g5AgAXe26MbdpYAWoX1edojv1kU4lu6JZzSv+geemmRVj/1s2KMorIoLTk=
+	t=1785529000; cv=none; b=UnsE/s5zCbwH84amQvBvKTaQPB2eJeGLFN69DuhvghZjcjWX5hZ4KlnyLdstRqFvih0PRVWVVzyr+EOf6fgDfWwB/z3CvP+eynFiQle3grUlUTcIq9jrv7XkDnVivVGkqNvptGmldFCgySd94jiVS9sZEkeJ+NYuPjHxxaM9M44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785528709; c=relaxed/simple;
-	bh=33e8ObnVADSbfFZgUMyvgoQvOwBUQ+VNku56S/k47s0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LJeciDHusi3comZGNhfvWpTjbJPEwoF4ozAPAp04SWJrYlVkaTtQ9VvbRdlS2rpEHN5zxibQXmS489U90I5cp0ltwjcGN9paW6FO5ibtcdlwS3QxIgYTL/DKqWWu24dZXcnX7nR0CGDZ6QrlSu1f3fT3TTcXncx59B3QWBCyhwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ob7+dPIp; arc=none smtp.client-ip=209.85.215.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1785529000; c=relaxed/simple;
+	bh=fT4Wh7zLimmN8YPV2rfhV4SibyXoX/Z38RLbsH3AQK4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=UauBYZx3EVKDZN5SaFgPXjt56p36XyQV3gjvwZdtpFbWxs18C70wD0iPX57uGchJuRa1in3pKT+ID0AkITv5Gg554hr7GRnVwvqwTeSBccPmzqadOWbiFlNdvKsSFR8mHacTXvainDVZVSyHyja71qE13Bafh7oEZRVgWWzyBOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qsTVrI0k; arc=none smtp.client-ip=74.125.225.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ob7+dPIp"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cbb6433e9d4so1633907a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:11:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qsTVrI0k"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47f4c92d1b3so376615f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:16:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785528708; x=1786133508; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bxmXIU2iY4wJrhpgJP6fox76TKpljehd+FqjXTThCRg=;
-        b=Ob7+dPIpFlKpe7Ne++zSPvBcrkbuLIXB+tkm6wEv4Rr+tVtzJ1+9R+EQ82D4sOSuBJ
-         j4eh09Ni8tHDB5tJQg8LOL/VLMGE+XD+0tkCLxVqnxQhREiTOOD0oTWoFuQwHkZcFY2C
-         n7WEP8koDmACJOQeAM1m6Qsf9NR6qSk6OwFRyFbGuqDI6q87heESDzwzyHOCnl2VDWcN
-         mOajs4tCqJre9whMA69MSa2OcgnLMLFp+yrcf5+7zbSSmcdeOz3KkvFaeIFt/Hzt8Goc
-         xclWEGxlNx7h1IAHriHiV437hX6L5gUdQlf3Ty6TFU+Q34elJHgEbhCYpsg3vnbaBhim
-         CqNQ==
+        d=gmail.com; s=20251104; t=1785528997; x=1786133797; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=jKBxHr4kakqx5giULQAhQrBpk8zyW3hvnaTsLQOKVHw=;
+        b=qsTVrI0k9n+NaG5nRSTNcfGGTVu3qK0HTCtdPZzZ4nTOh0oiH+9HqnB+2YRwbMGrCJ
+         mBTdljhXa3aHVXMBFKq1wkBkx/fs1RiufxfykPN8fX7wvmDunGFbHiZI3rwgsLZoskzd
+         qiOH6zeAYvTQy54PtNPpu04WVBZIRx0/g0rcCUgZ8HiG57akUTRWRpiC9loFmoymXOAy
+         c4ah1O5pK3kxmCgSUx1H/jRcOX/VZqCqlPNhYjX2OvxiKrl0FLZGkdb8LbhkRFnPapfF
+         Vx1A2mPyIMb+5np+gO9GFTDQcMVXJP9pdPlP1BecWTcT8idK/mcLVxDQ2MvMmdpt8eLL
+         tCVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785528708; x=1786133508;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bxmXIU2iY4wJrhpgJP6fox76TKpljehd+FqjXTThCRg=;
-        b=Cqn2KFrAW8HqeNVCzzD5YL6X9gLJeRnOqyPBhGHzyAAGvwh0jPe0LS3vgb1gm8b/P0
-         yixqNGEt6/cekSsv9CTy2RzH/BnDmdXGXs6lFSEDZbXeZwIaeiBqEYKEwFlFXC98zKup
-         2snOIC0x7YQhszwVq5D2jPIdVPC5TrvTDvb5EzxmqZOOygx3Yx/C5vDorv+WfULPfqSh
-         0VmfUBHB+vxrx6vB/2ru96iwC1dxAGa4VbiDR66Oh8dERX19fLAS5++dm/7Dd4jzjpSP
-         tA8XG/jAuODpF6zWsaxRBFX6TzVScJx7x/z4QCBTVP7LrZV20Ck2VxUI8AXcyA0KvTn8
-         Dlgg==
-X-Forwarded-Encrypted: i=1; AHgh+RrfqCPIGWwavPYiSYPMznaTvZIpb9K5KYjiw+n1MaXPjZCEsMC3NjmwhSNCHtiZBFhJaKDuc50sCE6mwm3oF1E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLB2IdgQyUrgGy13L6w8ui64um807jCFMqrt+QGo2TTpoudvTy
-	C6VlXFtyZMEPfl2ggeXCftSMcZMmVTO7klB1g7ZIKZ9SlE1pH7OJozLtw2Pr6vlU+gP8a5I+pY2
-	WAnwwWA==
-X-Received: from pfbfi13.prod.google.com ([2002:a05:6a00:398d:b0:847:86de:a817])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:92a9:b0:848:63fb:fda7
- with SMTP id d2e1a72fcca58-84ee48cdaddmr811949b3a.44.1785528707582; Fri, 31
- Jul 2026 13:11:47 -0700 (PDT)
-Date: Fri, 31 Jul 2026 13:10:11 -0700
-In-Reply-To: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
+        d=1e100.net; s=20251104; t=1785528997; x=1786133797;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jKBxHr4kakqx5giULQAhQrBpk8zyW3hvnaTsLQOKVHw=;
+        b=EhiCYBcDMwprFW2+PyO62Z6eAlVUvvMBct6d1noYuaUNEH1VteFSCJorYdoEJA/Q1I
+         uB3FU6ZW5qRH/g3hAyFJVn84H9p+lfGX4xfFggl8Z1Cn4QuKjZKdOnj7HvytL7rw3mqe
+         eyvjqCJ97aoBWwc35RpYoZRlN4bTNGettzmr/sGyV/y52KM5zFFvIFGFrjC4aEyLyfm8
+         fkr2rvoqtAL/p6w5NP+InDzx+2oH83tMIwUJV4WBIq3am4inmuC3VnLdx9uU+ISNTqry
+         qchESUQmhJYOZELjAq8bT+BMOD2T9GebwqXYa7tLNBMhiWrdYFoyVO7znPgkz7JTB1PH
+         +HcQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpbqFhk3Pi23Vx7dBcAVkYqClsSeAj39GxDvqU21KALSxQrYXf7+hccat3sC79avuaaPTv0WrsNkK0R7fQaPMs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw11Fm1EPWG7wFbuZRPzQUNlcVbtbb3MyTDjznL1YZczxXGbKTY
+	SodG5e7i8qgVkT39SMcrvKiOCj1MW5LHcvOHUvaVdIrKk3ruCDdoskCy
+X-Gm-Gg: AR+sD12dr8zuSQj7Cv5ZIA/0DEEXdaMi3QaslBCWBbKBVtYhB111nvzvpImcy4zv7o8
+	T1PSOHvsV2DcJFBHOO03I/xpoHrzaezF70PPD4S0MUVz/PYqhqEXKNKUJ1M93dpfget3bSu+E/q
+	sPO5HxJDKvxWnN2Hx1po0GuIeL6ugScGXow6SmOrXQf66vFcdz9hjD622m+h3Vf+aQ6k+uaIlmT
+	8aZ29w1/quJEMEfHMpvsGA7Sw0XuBqMufcbSh6QBS6QTzuuAlijMsAzPR8aYJ1vkV22rKHFBCBX
+	hR1D/85aVsZJ3rv04aZO1nNctxlHkH+80aBeNF0/o1deLZvZf4n+WTJuxz7DJT1cRhkLaJk1FHa
+	ZgQNik2NPLJKXolZtFucb0MWOcBiz1R3vva2lDWyYIScISllVBArdEp1jkLe/+AbWDYRzV8iaih
+	zesn5P87M+1JY/aXX97wJju6bD6vdXeJVZQn+5m3SERPGblrwGtbqQ85SWssJneH2QstYMpX3XP
+	hTQiklbOshxsXvym80mmKuyM+5x3t+0s/43KjJ44ZhXNq9zt0AoN08mLhEPgIcx4iC3qDrv77RL
+	n4pIbYsFhlIBqzpn8drMAgki9AE=
+X-Received: by 2002:a05:6000:4205:b0:47f:77a8:7e20 with SMTP id ffacd0b85a97d-47fd7308f0emr2136026f8f.35.1785528997285;
+        Fri, 31 Jul 2026 13:16:37 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458bf7csm8953678f8f.32.2026.07.31.13.16.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 13:16:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
-X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
-Message-ID: <178552822130.2706707.4814565423555232517.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: SVM: Always intercept ICEBP, add INT1 selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	David Woodhouse <dwmw2@infradead.org>
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>, "Saenz Julienne, Nicolas" <nsaenz@amazon.es>, 
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 31 Jul 2026 22:16:36 +0200
+Message-Id: <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
+ Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
+ "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
+ <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+ <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+ <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
+ <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+ <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
+ <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+ <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
+ <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+In-Reply-To: <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
 
-On Thu, 07 May 2026 12:22:24 +0100, David Woodhouse wrote:
-> ICEBP (INT1, opcode 0xF1) generates a #DB that is architecturally a
-> trap, but on SVM it was not always intercepted. Unconditionally
-> intercept ICEBP on SVM to match VMX behaviour and ensure correct
-> event delivery semantics.
-> 
-> Add two selftests exercising ICEBP:
-> 
-> [...]
+On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
+> On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
+>> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> > <memxor@gmail.com> wrote:
+>> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
+>> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> > <memxor@gmail.com> wrote:
+>> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+>> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+>> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwiv=
+edi
+>> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
+>> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@=
+paul-moore.com> wrote:
+>> >> >
+>> >> > ...
+>> >> >
+>> >> >> Yes, I understand you feel it should be placed under security/. Yo=
+u are entitled
+>> >> >> to your opinion.
+>> >> >>
+>> >> >> No, I do not think the newly added kfunc is a big enough layering =
+violation such
+>> >> >> that we need to do it ASAP, disregarding everything else outlined =
+above. I am
+>> >> >> sure you see that too. There are several other instances of simila=
+r kfuncs.
+>> >> >>
+>> >> >> Therefore, please attempt to meet me halfway here.
+>> >> >
+>> >> > I'm happy to work with you, and/or anyone else, who wants to work o=
+n
+>> >> > finding a way to test kfuncs that live in security/bpf_lsm_kfuncs.c=
+.
+>> >>
+>> >> Right, and for that file to exist, you need to get everyone (FS, BPF =
+folks) to
+>> >> agree on whether placing all such kfuncs there makes sense. It is not=
+ for both
+>> >> of us to decide on our own. So let's revisit this whole topic once yo=
+u've done
+>> >> that exercise.
+>> >
+>> > The kfunc that David has proposed must be located in
+>> > security/bpf_lsm_kfuncs.c, similar to the VFS kfuncs and
+>> > fs/bpf_fs_kfuncs.c.  If you read David's bpf_init_inode_xattr() kfunc
+>>
+>> Sigh.
+>>
+>> I now went and read the archives, and Christian already told you no befo=
+re [0],
+>> which I missed in my first read. So two people whom this code affects al=
+ready
+>> objected to your proposal.
+>
+> As mentioned previously, David's kfunc has nothing to do with the VFS.
+> Look at the code if you haven't already and you'll see what I mean.
+> The only relevance to the VFS is the fact that "inode" and "xattr" are
+> used in the name; David's currently proposed kfunc is an LSM kfunc,
+> not a VFS kfunc.
 
-Applied the KVM change to kvm-x86 svm, but omitted the selftests, at least for
-now.
+I am sorry, I read it and I don't see why it is an LSM kfunc. It is absolut=
+ely a
+VFS kfunc, that is using LSM APIs to some end. The LSM specific bits are al=
+ready
+in security/.
 
-[1/1] KVM: SVM: Always intercept ICEBP, add INT1 selftests
-      https://github.com/kvm-x86/linux/commit/ec9a16c6aeba
+At the very least, it is a mix of both, but definitely not one or the other=
+.
+Therefore, the situation is already ideal, code owned by different people i=
+s in
+the files they signed up to maintain.
 
---
-https://github.com/kvm-x86/linux/tree/next
+>
+> If you find yourself required to abide by Christian's comment, despite
+> this not being a VFS kfunc, that's fine, but this puts us at a
+> stalemate and David will need to find another approach for his work.
+
+Paul, let me remind you of another email you sent [0], in which you contrad=
+ict
+yourself. I don't know what caused you to get confused over the month.
+
+In it, you tell David to move *LSM* bits into security_lsmxattr_add(), whic=
+h has
+been done in patch 2. Thus, by your own characterization, it means the rest=
+ is
+*not LSM* code.
+
+Quoting you verbatim:
+> As I said previously, if you absolutely insist on the kfunc being in
+> the VFS kfunc file, the LSM specific bits need to be abstracted out
+			^^^^^^^^^^^^^^^
+> into an LSM function.
+
+You yourself made the point in that same email that the kfunc can stay in t=
+he
+current file once LSM bits were moved out, and your request was honored.
+
+At this point, anybody reading this thread will only see your position as a=
+ way
+to undermine David's work and waste everyone's time, such that you can grin=
+d an
+axe against BPF folks. It's a repeating pattern.
+
+I tried my best to engage in good faith, but it is clearly not working.
+
+ [0]: https://lore.kernel.org/bpf/CAHC9VhQd0-N1g=3Dg8gspeV7bhLz0LA6DF5HZyB7=
+mW6VW_7oSt2w@mail.gmail.com
