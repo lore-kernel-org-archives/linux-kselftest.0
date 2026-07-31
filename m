@@ -1,87 +1,167 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155FB2DEA89;
-	Fri, 31 Jul 2026 13:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785503977; cv=none; b=t36eLf6GTl8VCZ8iaLEZB/xjAhtDMneZN15Gs36a3Kkj4ZB0NIulN3f2PuIhbwVHDx5Jr7I44m625e1PB8iu0eWpecYkLeaXPn0yFivrErKrO5lQz2uMJsiZAl/tvdfTGbSPlW0ejJLsKoTv0BI7znK98fKxfyOzeCGDY+vfoaQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785503977; c=relaxed/simple;
-	bh=E1tRmvIhWaFUORpomd+rU6taOpaiH06zAUlXOtTHnGo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=toVdHNs7LdKZaQ9EkN+su/L3n9Os7fEtt7Duv6IOe9daaWiSgLmhh6MXA8kF1mpNzr8cg7jH5F6/KaLDXUHF+VSWuM5V9RLG+D8QelvRCAIdqQSlXdMVECcQi4x5WgOd13WwigiU8ajCbED+SJXR6LZ7S9RbR5ttLA6rzc5GeI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=aQDSykJ9; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1403CF204
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785505789; cv=pass; b=JAMKrDYbmiu+qdDgoc67iSXNyQEMiLgV/5R3T3RV03U14WvgdGKG5xBFyma6596C2rgJBUNEPx/iaQUle5C0ebpgUdTWuv1bHnt5t3lImwaaongqh2c6BwgDkkFKzxdzg6EykvzftAYuzZGokADdeJH86qq9u+6cO/ZPcYAAfmc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785505789; c=relaxed/simple;
+	bh=YZ9CkSlTlrJLbh1WOVmHl9IAHWd1C2X3EZjHD0e7Bls=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TZ/+z7M49Soq5FDxw+Vf7l3IMimdL2i6FPSBG/VediL2GyLavLJMzwCg/MCjtllwOFsm2U7BNyTwzi7pfntcE/d92vOiuiUqSUVvai/MFrtDdcI4uQOOaoboPG/ungy6lkh9ISR/YhNGqiGef6bjMnbTaRkM6ljREcFYPskQFIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qg2MeH0a; arc=pass smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="aQDSykJ9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ozj+azE2WMAic6md6kpz5inr7tjqcL2PUGO5bai+aX0=; b=aQDSykJ9iT8w8kZVB0r7hPlEYY
-	+QYMtbW/SO3mjA7PLH1BAUTc/Madc6281vzWxlV83jB1fYi431eKbSK4gIc/u6KFRIy9V6vYb6rtm
-	tcAkdQfeTvkG33j0UuYOUJK+3Mzs8LgAnqxvG+44MxN2TVs1uxuNwmpmhYv9icMy9qYMzMpdTDkhd
-	VbC3OQLf9CVtr8KYez6WnSvD3XsmtBtu9dc3CVyms/jpr1pmIi9pG2ud538T/lnZX0UD3vUGruw9l
-	Pr4Je6WjpoZl0FkbQRn37HV9/JQMKNrghDRJXHsaZRS2bitl1E4YC59SvbEOCMXnp4mYxVunq+YBi
-	X52rfNMA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wpn94-00A2YM-0r;
-	Fri, 31 Jul 2026 13:19:26 +0000
-Date: Fri, 31 Jul 2026 06:19:20 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Miaohe Lin <linmiaohe@huawei.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com, Lorenzo Stoakes <ljs@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>, lance.yang@linux.dev, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v10 6/6] selftests/mm: add hwpoison-panic destructive test
-Message-ID: <amygM1INCTEoYY2Y@gmail.com>
-References: <de29c5cc-3637-cd18-354d-55ceb3d60afd@huawei.com>
- <amh1nZVVaaZSGD3M@gmail.com>
- <20260728122016.30752d36c3b3c3af231efa9d@linux-foundation.org>
- <44f81bea-d64a-4f73-8665-46652a928c83@kernel.org>
- <amkn21ftNme48Vbl@gmail.com>
- <f83d5b26-b369-489b-a305-1eb5ec6fccfb@kernel.org>
- <amm72Bu9qmWLI-9b@gmail.com>
- <d0d62d7d-8701-4692-89b9-84dff71a7cf0@kernel.org>
- <amnTfwagJQpEY_21@gmail.com>
- <2e1ca7be-ce73-4146-95fe-d8cff4da9494@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qg2MeH0a"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4a496b6cc3dso422659b6e.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 06:49:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785505779; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fWVBuSyZ7B0YmpjXAsYsmgSz3RN8C6aiQ9GArQ6oRLNS6vk870fGFTliEAoCRjmQrS
+         /1xqw3vxKPLUCoHY4sgQuYrQOfbuDwLqr78xKouFlB8MrrY3O4idcKrXxdESOMfJ4GIr
+         RiNz5VHKinocgIxlqzdHTVi2YmSncDuflG8B/dc8yy3viyxIQ6zLlLFitN8dfU5jSheM
+         x2UucSVDigaIhqcxf+m11k7IRrNdYRmsBMpVleV6r2qAbviG1WYJAFjdwO3xg+2lmEcL
+         xapIeKk9qVsUkaB9q01UBKjoNcwJQjOh9o9gI+tRPJSLQ0vu365f8EqGJRWKY27o1Uv+
+         Jekg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sCROSErOvst+rw5J7GR2giK0/Qqz2Z7mQAMi+70946Y=;
+        fh=KzXK1cGfp9hlytvPwsabXjyhY41N4mr7bJV2t4hdgMs=;
+        b=b8bpuQmrOXkSPxMqNQuZ4Br6GUEYAndMOhyXVYplPUrJsirZEoAKNXIyqaIvcZDdVt
+         J7jHU7i2BIiGdJqxsS52Pj4qXSd1foSia1IqqmVFdLa5Avg6Oq3/hG5/Lf3RbYWgqV3S
+         ti8GwjaAliUz5CsKVmIlyCbmk0Jz/V3RvdkIwX5PUjucBJT4srvQqEEYpLDgX7wghzKt
+         v9Zq2EdxKm5LJUdin29npPSJcHXpKrt7UJIIzHaXlqPGlJNdJTVfqg0lpVyacN6zRids
+         IVSzjbzUF5NSaIWQ2KPvL1u3gwc9reHKrNZSU68rbxaY1WFr+ssUT55SK/GcD7wn1nd+
+         /MDw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785505779; x=1786110579; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sCROSErOvst+rw5J7GR2giK0/Qqz2Z7mQAMi+70946Y=;
+        b=Qg2MeH0ar3dUWrbDhSdYL1mOObW9k9LRK0A3OVYEpDmZ9FnXWsT7igVPlFGgqvvulC
+         SEU4FNfXsgm/aXDMO9ovfvPlpzJRkcy9/o815pDSQCXZqDkJV0FN4O2IUBHMohHcQA+b
+         uXfK7p+v7QG/SLw8/VpRTna5SbfT1DUP3s23k37LnJ80wOdbyXF9Z9zkabP5oA6hvra9
+         QXKfbbu22Vml+oBs0T7o7oSwMO1pU5vw4uLUarpDlH2PUqyWgUASyo4FI/x3MXLKlRun
+         6ccLa0rUo9ig8Yz5+DSB/CIOkfgXgMtsJ5FAfWI+aO35Z1BRDxGqSMnzJ+wQNLJsvyh4
+         zryg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785505779; x=1786110579;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sCROSErOvst+rw5J7GR2giK0/Qqz2Z7mQAMi+70946Y=;
+        b=AHCpTW06sYgLt52DMsdHjq8qvkRTj0TpTY/0KEm7hacyDcmwvISiGQGa3RMwY04OPS
+         xMTjqDAsMs3Gr0tp6yLesZ7njovHhCDkToFR8xqS6kCiwv5/phmv0NFcAaZppJoGFCpd
+         /9io3W7oN2hxt5Kl2V263y8ZVJ3Lx2j0w0SGOI9V1uwr3qVfwy7pPzHrmwUiWSy+WpvH
+         0RRdc51AUQXQsvbnEJs8ZWkfgqhrdb3AjeXFM+xBN5twjEtn31n83hY8qzcLpOZ1nS1f
+         klDyjpFISkkafnZDqM3IBkIosVjhkdnEX3x13dT9k7RsfrQfy5KYMKwUfv6dmlbBN1lR
+         r/DQ==
+X-Forwarded-Encrypted: i=1; AHgh+RodwMaIzDgepG2rGShefb2wH39H/FFTlYAc7e89JDWuKNg8YeQrbcWIwtbrRj/XOTqt+CM8Jrmcv91X8e9GcxU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaUUL2SavxcY72PDVTkIYm6dncGAafpmcXuXzxKnCYjkZK9ALv
+	Jm7+GfZU70GaZ0Jk7uQO4DB5+7amhpLf4zE6mj7+pNK+AQBf+51rQyVLsXH5Kai8Fd98hQEklih
+	HGpyNm+s/VTj6mj4lh/HEQ2JKa4039Eg=
+X-Gm-Gg: AR+sD11EYZcIh5vRKs9kdgv40J+bTbAMNWmPi+ShSUitrzodxGI6zrhL8rUk1d6tqTk
+	jutXUxCo8sqNxGGshJILgGz5djKDP4YgsMuHlvertBqOVXIt78CiPkf+oWure+ApSh0fyylbS7s
+	yRsyctVGKhaG6elpPFiSC5VvBN0weIY6+8t2TYJFzpBL3xy8jNDFCVAurSGkZ2CbooenyVP1wk6
+	v9T0zPa38itlR+nYXaEi8WZJ4RCN5iasbCJJ/C1fPdTHRvTTn41cvsQSNvW2iyJwpKx7m6GRhsI
+	W+twGtuYy3tuYVub13THG8Ov46XNUPrIzdSoSg0pw9pD/Ij5WkrAXGI+jVLHDfJVsLwJykspyiY
+	7
+X-Received: by 2002:a05:6808:344c:b0:4ab:2abe:f031 with SMTP id
+ 5614622812f47-4ae4c42b8a4mr2564917b6e.6.1785505779353; Fri, 31 Jul 2026
+ 06:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e1ca7be-ce73-4146-95fe-d8cff4da9494@kernel.org>
-X-Debian-User: leitao
+References: <20260730100006.3547944-1-reshmaisat@gmail.com>
+ <20260730100006.3547944-2-reshmaisat@gmail.com> <CANn89iLqLYAE_ZbK8F1HNop7nVPAR8AaMD2ojk+XuCNomJPEUg@mail.gmail.com>
+In-Reply-To: <CANn89iLqLYAE_ZbK8F1HNop7nVPAR8AaMD2ojk+XuCNomJPEUg@mail.gmail.com>
+From: Reshma Sreekumar <reshmaisat@gmail.com>
+Date: Fri, 31 Jul 2026 15:49:28 +0200
+X-Gm-Features: AUfX_myxRyw9a1CIwOvJkIMGVH30iSlpFvC5hopR2ZmA55gPHYfsi0yrgbcYxtc
+Message-ID: <CAGwYyQmtvyKd-NiA0-3fgB0FAjnExF+svd5CRaNzUvvMLemzfw@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net/sched: flag inconsistent qdisc dumps
+To: Eric Dumazet <edumazet@google.com>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org, 
+	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 29, 2026 at 01:11:36PM +0200, David Hildenbrand (Arm) wrote:
-> On 7/29/26 12:21, Breno Leitao wrote:
-> > On Wed, Jul 29, 2026 at 11:09:11AM +0200, David Hildenbrand (Arm) wrote:
-> >> Avoid bash scripts, please :)
-> > 
-> > Sorry, I will try to control my fingers next time.
-> > 
-> > Jokes aside, all the selftests I maintain
-> > (tools/testing/selftests/drivers/net/netconsole) were done in bash, so,
-> > I got totally biased.
-> 
-> Ah, I see. The MM folks are not known to be bash experts, which is why we limit
-> our bash scripts to a bare minimum (and focus on C tests).
+On Thu, Jul 30, 2026 at 1:24 PM Eric Dumazet <edumazet@google.com> wrote:
+  > I dislike this patch; it will force dump operations to restart on
+busy netns.
+  >
+  > Most devices are created with a new ifindex (dev_index_reserve() is
+  > called with ifindex =3D=3D 0)
+  >
+  > Forcing a given ifindex is rather unusual.
 
-Thanks for the guidance. I've rewritten the test in C and posted it:
+  Agreed.
 
-https://lore.kernel.org/all/20260731-memory_failure_rewrite_test-v1-1-6aa8c6435693@debian.org/
+  For context on why I went looking: we hit this on production hosts runnin=
+g
+  kernels predating 748bbef5fc6a. An agent that reconciles tc configuration
+  against a qdisc dump saw qdiscs that did exist as absent, tried to create=
+ them
+  again (-EEXIST), and tore down configuration it believed had gone stale.
+  Because nothing sets cb->seq there, a truncated reply is indistinguishabl=
+e
+  from a complete one, so there was no way to detect it and retry.
+
+  748bbef5fc6a makes that far less likely, and I have not been able to repr=
+oduce
+  the missing-qdisc case on 7.2-rc5. One case does remain, which this patch
+  would not have fixed either: ctx->q_idx is a position within the per-devi=
+ce
+  qdisc_hash walk, so a qdisc added or removed on the device at a batch bou=
+ndary
+  misaligns the skip count.
+
+  Is that worth reporting to userspace, and how would you want it detected?
+
+
+On Thu, Jul 30, 2026 at 12:25=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
+ wrote:
+>
+> On Thu, Jul 30, 2026 at 12:00=E2=80=AFPM Reshma Sreekumar <reshmaisat@gma=
+il.com> wrote:
+> >
+> > tc_dump_qdisc() walks every netdev in the netns and can span many netli=
+nk
+> > batches.  RTNL is only held while a single batch is filled, so devices =
+can
+> > be registered or unregistered in between.  Since 748bbef5fc6a ("net/sch=
+ed:
+> > switch tc_dump_qdisc() to for_each_netdev_dump()") the walk resumes on =
+an
+> > ifindex rather than a list position, but ifindexes are reused: a device
+> > created between two batches can be given an ifindex the dump has alread=
+y
+> > walked past, and is then missed entirely.  Before that commit the resum=
+e
+> > used a position in the device list, so any unregister shifted every lat=
+er
+> > device and silently dropped a run of qdiscs from the reply.
+>
+> I dislike this patch; it will force dump operations to restart on busy ne=
+tns.
+>
+> Most devices are created with a new ifindex (dev_index_reserve() is
+> called with ifindex =3D=3D 0)
+>
+> Forcing a given ifindex is rather unusual.
+>
+> I suggest detecting this specific use case instead of slowing down everyt=
+hing.
