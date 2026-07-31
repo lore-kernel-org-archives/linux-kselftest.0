@@ -1,184 +1,193 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B272369D45
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 22:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A209B376A15
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 22:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785535458; cv=none; b=jKt9AGSthC6RVUSB3TzZLd+RcIF/SkZ2qHKGJVnWIoNNhsrd4J6wmsoU/u6h11RN4TqyuscmCmog3z/+mt9y2miMH2sEFZvdVR8qkyvqE5htaqCy3EAo+fRAAGaWoiHk979KNfVxcbZBS6xCb1UiH6ZWzZCPSFWy6JnlxbWj1Co=
+	t=1785535479; cv=none; b=HFlDp+QFqmckFRnFY0SFfoOIlvhGS7bdBdGzADqaIOFF3CxTFZnG7sHs8JjBLyS1dKeGM+G9vfPDJdySFn26hTjGsL916J43Cin0TVVrwEl8JroO6Znq0EqGRxr68nP1JVYg6lXkKGidfE0UPDpiRXWA2v6RtH6fwX/6f8//aI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785535458; c=relaxed/simple;
-	bh=MHqkxONd47xYtXkQvMIn+bZeV1Kl1MS+VS9PxsAVyfI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=osnp0ZsZLNvgMWRaiPhTjLMlv491cofjKPSu8ELevoUwqZrxQsD9Im3OJciYxCFJ3Om8oPOpopRXWPiRRQPC0ftAGlPMc849iQ9JW6vQTYxZI8FOOP24HSLVk19gPFXa8mvR59E17g62wfK7ZO3fjBT203tp53a5Cwvrdci94J4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pu0sdSlB; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1785535479; c=relaxed/simple;
+	bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=q3HaswKrymlLAaMFpwd7TSE5bQy/D33IrvMgV3AhBrnev2m/YTYEmCPqzLSVM+7Q3wnIpjk487ZiRCrfvZr+FzaUmM3RTTttt1/FVrTO0YVP2gF+CTDLX5/Aqux8W4Pn8ORa0p7wPWAZYH3B2j0F3nFdMSEGyL1hbTt5y5roH10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIYc7LW1; arc=none smtp.client-ip=74.125.225.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pu0sdSlB"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-38e7ff7b375so1618117a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 15:04:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIYc7LW1"
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-472365266f5so780900f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 15:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785535456; x=1786140256; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Kjm1X49/TS50eJc3UJI0XiqdzXOvgZST2gXdTEOC2CE=;
-        b=pu0sdSlBY7rLbYlglYp3/Hvabr353s4dXLqY3CxkrsvEO0ZVPogYT0IFJnN+X4HLby
-         CZ6P0QciehGB4isurkcDf4cEvD9i7AYonvW9LmQLPQH9CQJdLWpy7ksw3pz9oCftlUXC
-         Is+WhHIHyL2ev/3zD6GXQ0ifuaZolWqI4UD9yeRKMda4AKYXMM7CUAZWxqbuve663xAK
-         xNBQ3lMJEmHc3XyAm6ybGbW5pwXI+D1yFBPJwc2dy/Ni0gJNQSBSZ9feWOjW8fU8Gj87
-         izMPPFGIYgF4MvHBEWTOGJIQVGtbb1r7f1RvA3jz9LjtzzK0idTlVpMqSo2Zw3QVzpVK
-         paNg==
+        d=gmail.com; s=20251104; t=1785535476; x=1786140276; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+        b=PIYc7LW15LqbZkuMZDZjDpDgb1MFX210iD/B31BuAI42dM5EYfOBbO/Fh10jSoFIY/
+         0u1l8A5Hx7/s+GvcEcBhy8cURVeHM5Mo+PR2U7rr73gqoB0XO+TXH85kpIDxV9MxO2iF
+         u5ejd1oHvPWQcEiG7F/4S55oI4uG4XLG4Fc4TUFTmrClQjiESbHEt1YOsgEWzsglrFRj
+         cfYQblJxRtDV8yHUAR3tZg0wJFtDXzgtj5vCiP2rW7j2OTqYYiQy3oAnl8sPTXBC3Vgd
+         TNwm9tvwJZIo2J7M9aGAO+ZMMIfT6tWgpS1BgGWNZrZbwtFrUtc2kldvKC34K9wz5nQC
+         kzjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785535456; x=1786140256;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Kjm1X49/TS50eJc3UJI0XiqdzXOvgZST2gXdTEOC2CE=;
-        b=fJ5viaqRlz+tQ7MgJjjYHsHNkMG+Ru9dorCnsTg8togNB9uo795UFn+HbLqkNxXrUJ
-         v+FLU/6RLKVUKG+oknD/9TDJBrfi3gEPdx7PmAUCwEYBrVaiOjFPhgX9LBabu5miAj2R
-         IAqmrx3ftxntuzV7ikJJGoLoK+x62lzGYRniMObCa5e0odNq8A+s6GTp7C5kXSpYOnbG
-         Whyr9g634crjB/Ze8paeTJ1NJZkT5pWSfmku07tgfVfIQ242b32Fi4+sphW5ChozG2ze
-         rshyphRaWCw1P8uOuq4ZE8huI/4M4lwyhQUita1cMLzQqcYKC4+CExil0BdGjO38P2yN
-         UH/w==
-X-Forwarded-Encrypted: i=1; AHgh+RpqdknAWH4e/8jeNBZnVX+dMbEwqR5yVD+Y0CsOm5nBNwKswlvcXMxAlgliQDxvebU3rQFPm4iLuQXqcSmIb8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgzIOHA2bZI010O17vPP9awG2H7QQtkhAc8HvfffWQXlOR89vs
-	RSHQintufVR5rF5UmtC2KyAZpX4UYCiSdDEquoBbDLmPFBi+HBM0Rl245WvSdgBKSU6cgQOYmUI
-	HxaMiPQ==
-X-Received: from pjbie11.prod.google.com ([2002:a17:90b:400b:b0:38e:b8e0:d97d])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:57e6:b0:38f:23d6:b4ad
- with SMTP id 98e67ed59e1d1-38fbc3f7e43mr1187379a91.8.1785535456041; Fri, 31
- Jul 2026 15:04:16 -0700 (PDT)
-Date: Fri, 31 Jul 2026 15:04:15 -0700
-In-Reply-To: <20260710050442.826777-1-hemanth.selam@gmail.com>
+        d=1e100.net; s=20251104; t=1785535476; x=1786140276;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=i2mO12QQOJ2mz4UuDmayqPHsK2P8n8l4gan0qKokjpE=;
+        b=U1JDGPDz120pMmPuIVLsuZOEU5Gq1pgmZ3z6lEXOlAM7XX/jKJN2M3fA6+KqX1oCTh
+         XiNcEznyOBLWkRozc+hIGoX6I/K78N5bfqLlIy2DzqC6LHrNTdF0Vzes0uD2Y+iURuvp
+         aFrPGuO16ih92am47lcB0q5SEjq7ZPhVtbP6sggbStIGyKJ/N7uSxtlQEvTL9Pj+mdYQ
+         sdyVp0JkTKSST+HKMrRF1hujKnHgzV5ts+55gwcOjxdZILyWteKRp1jeuo/1kQuJUha8
+         6F8PuoYYwQb2WqoqKsE+miDdInzfguADqqP7hWUW/+px2mHHPnh8JhsgIdL2cZCsBeTh
+         zAEg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3lB52CPxTJAhboB5gaxgtWJJGWPg2j54NefxYAJJlQmSWLrAbCYnIlca47iFHCX8EI/4X/hEJGMJjIo47ETU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFT84pRxEi6hMoqPQckd1gVDpgGVhuoAM6bJeyPBZfodjPbfbe
+	UUCw+fcTQR0lezg7+/D5R1cjROy2CVojiGktYkayhY4Xu6XYc6G2eK/m
+X-Gm-Gg: AR+sD12BpDvbv/rmvQ9TvKDqBT6BF2miKkMc7jFGBoT/JjjHm2tFRvtyVQXOVGeDvfF
+	IQGEMGh9raj6T275i1hTTd/pLAOfWCQks2DVshcPNXlhv9K5/5SUiYEN6XYezUC7hArUzdaE/ee
+	gRv5qqb/DJXXWjHwtQ0aGOGTOzn9lY8+bG/hJZBPVGrov9QvHpzbDA6+ezrVrED3cDcfIFQd7ml
+	KtLVjkpMPXeZ6d7UYMQOm3vUjc0cJJjtk7lUekKI9VuCk9JgMv+hCqqjDU4BMc1SpAOwFni5Eh2
+	w/VztsWoHP0cAr+yF4J+AnI+fpqlbChStqcb3yI0OrEPmT1RFAFkAsadnuOpWD/xZkOcmfLLXwc
+	qqKcTR2XzVmTUl/eFDWuamvZ7qpyIHXedeXRVZr0LI8PtuYeesNpMBJ7QHp5gmdV9GQYr1ZHRzk
+	ybqbsbnIJEPakfSh8V0G/HFZiGtof1+ssbySYEZRTOTjcrtJ6GqV8zkfiwO22k9MhAAiKe1SNDe
+	IaqrtTojhr0ICsg40+MZ/KrbNR3SSEjnDQ4rzs/KfInC/o650b/Malzg5EFsgh11DgoMEyKPwWA
+	1PoQnCzL3wVOIDjIA/b1xAIU5wk=
+X-Received: by 2002:a05:6000:2707:b0:47f:7005:285e with SMTP id ffacd0b85a97d-47fd72f988emr1633857f8f.53.1785535475666;
+        Fri, 31 Jul 2026 15:04:35 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45a1240sm9623006f8f.36.2026.07.31.15.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 15:04:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260709174955.628913-1-hemanth.selam@gmail.com> <20260710050442.826777-1-hemanth.selam@gmail.com>
-Message-ID: <am0b36OWeFSy2faX@google.com>
-Subject: Re: [PATCH v3] KVM: selftests: Add a test for KVM_CREATE_VM VM type enforcement
-From: Sean Christopherson <seanjc@google.com>
-To: Hemanth Selam <hemanth.selam@gmail.com>
-Cc: pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 01 Aug 2026 00:04:34 +0200
+Message-Id: <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
+Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "James
+ Morris" <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, "Casey
+ Schaufler" <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+X-Mailer: aerc 0.21.0
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+ <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+ <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
+ <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+ <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
+ <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+ <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
+ <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+ <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+ <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
+ <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com>
+ <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
+In-Reply-To: <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
 
-A handful of nits, but no need for another version, I'll fixup when applying.
+On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
+> On Fri, Jul 31, 2026 at 5:29=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
+>> > On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> > <memxor@gmail.com> wrote:
+>> >> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
+>> >> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> > <memxor@gmail.com> wrote:
+>> >> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
+>> >> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
+>> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
+>> >> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwive=
+di
+>> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+>> >> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya D=
+wivedi
+>> >> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+>> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikey=
+a Dwivedi
+>> >> >> >> >> >> > <memxor@gmail.com> wrote:
+>> >> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wro=
+te:
+>> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore =
+<paul@paul-moore.com> wrote:
+>
+> ...
+>
+>> I think you keep forgetting that you cannot unilaterally decide this. Bo=
+th VFS
+>> and BPF people have told you that it does not make sense. What was clear=
+ly LSM
+>> specific code has been moved under security/ already.
+>
+> I'm charged with doing the Right Thing for the LSM framework, and in
+> my opinion it is in the best interest of the LSM framework that the
+> kfunc being proposed lives in security/bpf_lsm_kfuncs.c, just as the
+> VFS kfuncs live in fs/bpf_fs_kfuncs.c.
+>
 
-Thanks!
+I think the "Right Thing" would be caring about your users and the project
+moving forward, who want this functionality, and figuring out the best way =
+to
+make it happen while working collaboratively with others. Life is full of
+tradeoffs.
 
-On Fri, Jul 10, 2026, Hemanth Selam wrote:
-> diff --git a/tools/testing/selftests/kvm/vm_types_test.c b/tools/testing/selftests/kvm/vm_types_test.c
-> new file mode 100644
-> index 000000000000..e8ef3b018f6c
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/vm_types_test.c
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Verify that KVM_CREATE_VM accepts exactly the VM types enumerated by
-> + * KVM_CAP_VM_TYPES, and rejects every other type with -EINVAL.
-> + */
-> +#include <errno.h>
-> +#include <stdbool.h>
-> +#include <unistd.h>
-> +
-> +#include <linux/kvm.h>
-> +
-> +#include "kvm_util.h"
-> +#include "test_util.h"
-> +
-> +int main(void)
-> +{
-> +	unsigned int supported_types;
-> +	unsigned long type;
-> +	int kvm_fd, fd;
+Instead of dictating how others should bend over backwards to agree to your
+arbitrary rules on code organization, which they don't agree with.
 
-Probably worth declaring "fd" inside the for-loop.   Definitely a coin toss on
-which is "better".
+Everyone you've pitched your idea on code organization to disagrees with yo=
+u.
+Yet, you remain adamant that it's the only way forward.
 
-> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_VM_TYPES));
-> +
-> +	kvm_fd = open_kvm_dev_path_or_exit();
-> +	supported_types = kvm_check_cap(KVM_CAP_VM_TYPES);
-> +	pr_info("KVM_CAP_VM_TYPES: 0x%x\n", supported_types);
+Materially, both you and I know nothing of consequence would happen if the =
+kfunc
+stays where it is.
 
-Rather than "KVM_CAP_VM_TYPES" print a more human friendly message, e.g.
-"Supported VM Types: ", otherwise it's not entirely obvious that the message is
-printing the result of KVM_CAP_VM_TYPES version the raw macro number.
+As a consequence, everyone suffers because they first need to satisfy your =
+whims
+on how all code and kfuncs written thus far are wrong, and need to be moved
+around ASAP, including the one being proposed.
 
-> +
-> +	/*
-> +	 * KVM_CAP_VM_TYPES is a u32 bitmap, so only types 0..31 can ever be
-> +	 * advertised.  Walk past that range as well to confirm that any
-> +	 * out-of-range type is rejected rather than silently accepted.
+Not only is that a disservice to your users, but also people who've reviewe=
+d
+code (apart from you), and more importantly the person who worked on this p=
+atch
+set for several months.
 
-Rather than lean on KVM internals, I think it makes sense to express this limitation
-in terms of KVM_CHECK_EXTENSION's return values.  Which is still kinda sorta an
-internal detail, but it's at least more visible to userspace.
+At least a month ago, you had the good sense of not dying over this hill.
 
-Specifically, track supported_types as an "unsigned long", and then have the
-comment talk about KVM's deliberately retristed return value, not how KVM tracks
-its supported types internally.  As a bonus, the loop can iterate on the bits per
-supported_types, not a hardcoded "64".
-
-	/*
-	 * For compatibility with 32-bit kernels, KVM_CHECK_EXTENSION restricts
-	 * its return to 32-bit values, i.e. only types 0..31 can be advertised.
-	 * Walk past that range as well to confirm that any out-of-range type is
-	 * rejected rather than silently accepted (or truncated).
-	 */
-	for (type = 0; type < BITS_PER_TYPE(supported_types); type++) {
-
-> +	 */
-> +	for (type = 0; type < 64; type++) {
-> +		bool supported = type < 32 && (supported_types & (1U << type));
-
-And then if supported_types is an "unsigned long", the "type < 32" goes away.
-A bonus to _that_ is that the test will Just Work if future KVM does enumerate
-support for types > 31.
-
-The bitwise-AND can also use BIT().
-
-> +
-> +		fd = __kvm_ioctl(kvm_fd, KVM_CREATE_VM, (void *)type);
-> +
-> +		if (supported) {
-> +			TEST_ASSERT(fd >= 0,
-> +				    "KVM_CREATE_VM(%lu) should succeed, KVM_CAP_VM_TYPES=0x%x",
-> +				    type, supported_types);
-> +			close(fd);
-
-kvm_close()
-
-> +		} else {
-> +			TEST_ASSERT(fd < 0 && errno == EINVAL,
-> +				    "KVM_CREATE_VM(%lu) should fail with EINVAL, KVM_CAP_VM_TYPES=0x%x",
-> +				    type, supported_types);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/kvm/x86/sev_init2_tests.c b/tools/testing/selftests/kvm/x86/sev_init2_tests.c
-> index 8db88c355f16..d4227dc922ab 100644
-> --- a/tools/testing/selftests/kvm/x86/sev_init2_tests.c
-> +++ b/tools/testing/selftests/kvm/x86/sev_init2_tests.c
-> @@ -77,10 +77,6 @@ void test_vm_types(void)
->  {
->  	test_init2(KVM_X86_SEV_VM, &(struct kvm_sev_init){});
->  
-> -	/*
-> -	 * TODO: check that unsupported types cannot be created.  Probably
-> -	 * a separate selftest.
-> -	 */
->  	if (have_sev_es)
->  		test_init2(KVM_X86_SEV_ES_VM, &(struct kvm_sev_init){});
->  
-> -- 
-> 2.43.7
-> 
+> [...]
