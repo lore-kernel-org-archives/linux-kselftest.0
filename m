@@ -1,50 +1,50 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A963D669D;
-	Fri, 31 Jul 2026 08:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F07F390C85;
+	Fri, 31 Jul 2026 08:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785487834; cv=none; b=V7jTO3fRA5jNzt0Zi/v28BP3zRfTDtMWd8QIHWZ6lqahmaWax71LRI51IcVFd9BM19oere4MSMfXH0/ie4gtpAvPF87itUAm5xCSO6LaDJfpvrlcDYQQsWwksiJP+5GZfjwFv1s8coAr/5NtzJkT7tSBv/pojJfnCzst8AYWbWc=
+	t=1785488255; cv=none; b=cEmhsWqKkZOEKqntFGlPe9zgEuwef+470vnngmR17Ieh4XRsHPwRlr1PSO0zD6BZSp0tlKn7U9Vfvw7BI2S/u4oMp/meEETRWh35wPRVpGXdxOUag25+prD8oiwbWzyU85ngO8nSBn2S1jswBN3fkCz15m1HFwV499GmD++QZsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785487834; c=relaxed/simple;
-	bh=Vv/Cn/5d+0Kxx85L2VsjAbjj1pHoGsVQxFQjE4JSdWI=;
+	s=arc-20240116; t=1785488255; c=relaxed/simple;
+	bh=1b87pWmuiWigK1wPtNTyW7rMpkhrK9XpARbjh2u7/PY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a9IPYnzz7LtgNy5KsaGTHLQpdOiraHXAYVDt8tUgsuezN8nolKaZWK562YrKlm3eczpm4JSADXvqw6KBgYX/rxQm9hWl81lSi3EYhVnMsnM0GD8GgLfYhvphWPRbYH7WmkUJJej0JPXmeiKOSsFeCTN9KR9gJo/Ro4HMbPaxJWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCP0riZe; arc=none smtp.client-ip=198.175.65.19
+	 In-Reply-To:Content-Type; b=QBe0LWZnLM+E9Ous+PeShv/qDSPPgDLze6wVzY1swli55eDSIIoNkr9abtwsbICdHBeV496AvgbXxurckkPTPGc8STWItCo0QHjGdjjK9pmXz5+kEC9g3oyWjdkkDmT4VYP4/L+SpZpueTrnYYsCp/lWCIXubqB+H7GyQZkBeBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aw5s8MJG; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCP0riZe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aw5s8MJG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785487831; x=1817023831;
+  t=1785488255; x=1817024255;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=Vv/Cn/5d+0Kxx85L2VsjAbjj1pHoGsVQxFQjE4JSdWI=;
-  b=NCP0riZewqxgW3ic/LErKLz07cfQn+Rux3lyXUU+Jrb5j0PjE4ezW0Cl
-   oWEWddQo81WD19uc0sf9SBFHvaGkuqJSeKnC/VRNP71tyxeXmy9yM7kcW
-   QamnZXTb9Da9ZLiATwor77vYuDP6vASgV2i4joR0/abcdKLMM0c3ywJVp
-   F8N/eisXkqG/dvPAiQfmw4AcLz1NZZDTEP6UMy71ZH982GDkyYkMJ+9x9
-   O095T6yUfnWsbmzgCfud4HGJl6CuIb9XL37fqDMqo9qV9hSme0zLbcrHW
-   zva53UVeLtAb8ejo92fTL++4qFpJSkDNOTFgGvVJbsbC3B45d/fzlUVF2
+  bh=1b87pWmuiWigK1wPtNTyW7rMpkhrK9XpARbjh2u7/PY=;
+  b=aw5s8MJGfXsoP382n7VNNcFxiZvjRJWrs3xRExx00XFzPhbf7BCJwu79
+   M6rEukLPssyoel8BxlsZnyk+FKYAnmxddLw1cppDuFBz+OgZwiFu53fWY
+   i5IWE+D280Xr1pYcu0/JFqgpZjFAySWWZnwNuLsoZAT893UBbE1vozNLi
+   g0FKGKnnriK0MF1+1nkI2tsGFQFvMnFgXtp40onuArblKYgaomnClE2fl
+   xEGAwZtHWbI7lni7ac+3sLS8f1gqCFzo2j5Moh/yW3inY70Qzhh8pFjOH
+   9p3NuhkmBPLi9n6zyvpH3A6KXt1ek36mgmBpIOpmyWj+ytg2jlWDqzTVH
    A==;
-X-CSE-ConnectionGUID: ZVEJeDmMS+aGAqIDvVZMmQ==
-X-CSE-MsgGUID: hXzoRH+rTqG0YpxJQiHTRQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="86063045"
+X-CSE-ConnectionGUID: I/Umm3QLQH+Z/QKKVbGJ7g==
+X-CSE-MsgGUID: dfjyr33qS/CR4RWtwfPpOQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="86063906"
 X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
-   d="scan'208";a="86063045"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:50:17 -0700
-X-CSE-ConnectionGUID: A4HFO+S5Tmuuqd/nni8mzQ==
-X-CSE-MsgGUID: Rw54lWB3T+uC2VIA7y6DHA==
+   d="scan'208";a="86063906"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:57:34 -0700
+X-CSE-ConnectionGUID: w/eqajcFTA22UWQ2rzow+g==
+X-CSE-MsgGUID: HP5ylDh8QcWlI7vAtQHsxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
-   d="scan'208";a="262491702"
+   d="scan'208";a="283856796"
 Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.248]) ([10.124.240.248])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:49:57 -0700
-Message-ID: <9ef8179d-f79d-429c-b841-d23c1e0a0bff@intel.com>
-Date: Fri, 31 Jul 2026 16:49:52 +0800
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:57:18 -0700
+Message-ID: <b78bfee9-29f3-4044-8ac7-f294b3cd0ad8@intel.com>
+Date: Fri, 31 Jul 2026 16:57:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 16/41] KVM: guest_memfd: Zero page while getting pfn
+Subject: Re: [PATCH v9 01/41] KVM: guest_memfd: Introduce per-gmem attributes,
+ use to guard user mappings
 To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
  binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
  david@kernel.org, jmattson@google.com, jthoughton@google.com,
@@ -85,87 +86,60 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
  linux-coco@lists.linux.dev
 References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-16-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-1-35f9aec2aed2@google.com>
 Content-Language: en-US
 From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260728-gmem-inplace-conversion-v9-16-35f9aec2aed2@google.com>
+In-Reply-To: <20260728-gmem-inplace-conversion-v9-1-35f9aec2aed2@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
+> From: Sean Christopherson<seanjc@google.com>
 > 
-> Move the folio initialization logic from kvm_gmem_get_pfn() into
-> __kvm_gmem_get_pfn() to also zero pages if the page is to be used in
-> kvm_gmem_populate().
+> Start plumbing in guest_memfd support for in-place private<=>shared
+> conversions by tracking attributes via a maple tree.  KVM currently tracks
+> private vs. shared attributes on a per-VM basis, which made sense when a
+> guest_memfd_only_ supported private memory, but tracking per-VM simply
+> can't work for in-place conversions as the shared/private status of a given
+> page needs to be per-gmem_inode, not per-VM.
 > 
-> With in-place conversion, the existing data in a guest_memfd page can be
-> populated into guest memory through platform-specific ioctls.
+> Use the filemap invalidation lock to protect the maple tree, as taking the
+> lock for read when faulting in memory (for userspace or the guest) isn't
+> expected to result in meaningful contention, and using a separate lock
+> would add significant complexity (avoiding deadlock is quite difficult).
 > 
-> Without first zeroing the page obtained using __kvm_gmem_get_pfn(), it
-> might contain uninitialized host memory, which would leak to the guest if
-> the populate completes.
-> 
-> guest_memfd pages are zeroed at most once in the page's entire lifetime
-> with guest_memfd, and that is tracked using the uptodate flag.
-> 
-> Zeroing the page in __kvm_gmem_get_pfn() is chosen over zeroing in
-> kvm_gmem_get_folio() since other flows, such as a future write() syscall,
-> can get a page, write to the page and then set page uptodate without
-> zeroing.
-> 
-> This aligns with the concept of zeroing before first use - the other place
-> where zeroing happens is in kvm_gmem_fault_user_mapping().
-> 
-> Don't mark the page uptodate again after populating, since the page would
-> already be marked uptodate before the post_populate() call.
-> 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Co-developed-by: Vishal Annapurve<vannapurve@google.com>
+> Signed-off-by: Vishal Annapurve<vannapurve@google.com>
+> Co-developed-by: Fuad Tabba<tabba@google.com>
+> Signed-off-by: Fuad Tabba<tabba@google.com>
+> Signed-off-by: Sean Christopherson<seanjc@google.com>
+> Tested-by: Shivank Garg<shivankg@amd.com>
+> Co-developed-by: Ackerley Tng<ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng<ackerleytng@google.com>
 
 Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-> ---
->   virt/kvm/guest_memfd.c | 12 +++++-------
->   1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 505bb6747620b..ea2752989f8bd 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -1078,6 +1078,11 @@ static struct folio *__kvm_gmem_get_pfn(struct file *file,
->   		return ERR_PTR(-EHWPOISON);
->   	}
+<...>
+
+>   static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
+> @@ -60,9 +68,25 @@ static pgoff_t kvm_gmem_get_index(struct kvm_memory_slot *slot, gfn_t gfn)
+>   	return gfn - slot->base_gfn + slot->gmem.pgoff;
+>   }
 >   
-> +	if (!folio_test_uptodate(folio)) {
-> +		clear_highpage(folio_page(folio, 0));
-> +		folio_mark_uptodate(folio);
+> +static u64 kvm_gmem_interpret_entry(struct inode *inode, void *entry)
+
+Ummm, I'm not sure on the name. It doesn't look like KVM's style?
+
+Maybe, just kvm_gmem_get_attributes()?
+
+> +{
+> +	if (WARN_ON_ONCE(!entry)) {
+> +		bool initially_shared = GMEM_I(inode)->flags &
+> +					GUEST_MEMFD_FLAG_INIT_SHARED;
+> +
+> +		return initially_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
 > +	}
 > +
->   	*pfn = folio_file_pfn(folio, index);
->   	if (max_order)
->   		*max_order = 0;
-> @@ -1107,11 +1112,6 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
->   		goto out;
->   	}
->   
-> -	if (!folio_test_uptodate(folio)) {
-> -		clear_highpage(folio_page(folio, 0));
-> -		folio_mark_uptodate(folio);
-> -	}
-> -
->   #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
->   	if (kvm_gmem_is_private_mem(file_inode(file), index))
->   		r = kvm_arch_gmem_make_private(kvm, gfn, *pfn,
-> @@ -1171,8 +1171,6 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
->   	}
->   
->   	ret = post_populate(kvm, gfn, pfn, src_page, opaque);
-> -	if (!ret)
-> -		folio_mark_uptodate(folio);
->   
->   out_put_folio:
->   	folio_put(folio);
-> 
+> +	return xa_to_value(entry);
+> +}
 
