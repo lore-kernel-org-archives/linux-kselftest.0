@@ -1,128 +1,225 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EE035AC11
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:36:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD1C3B0591
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785540990; cv=none; b=IH5/r6eohDAMk1kH71IHO3r4H0JTAxnPKRh62aWqBLSBzafqpkpesEPojoLaIc5GJiB7b/3j0uVca7b58eW5N++WxZLIrfqmxCJeZnJ49rZ3fQdwslkGmRPmaAu/bxV6lAKg0DXkhCvPbcs9SSekYETVbqfojaHxRBeRHWucvKE=
+	t=1785541119; cv=none; b=Skq328PYX0RVO2tHr9dXJw1JxpCyi3xsdi+vjmTcew2JwrTKY2+CAVvDE7OK/gtwvz1O72sfDzlV8pkDeYWEHmYwIIrPeePMhqQjPFqC9KckaS/NeCDMGQtocB19NdtbXVo4eXnhYGTQCeYes48t7soUYev4B0aHG1sg2hhCDvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785540990; c=relaxed/simple;
-	bh=QYK8WLkDehn0NGcwyXwvNHYq73sWHci4bNTcehdMdWk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZhR+1QeEeksUILeQs4mGknfrrNaR3ld0mnxnwckeNwPVRzWLL8xNXZTd4+ALzQNWtgBFkse/LVpjtL5+eE4BG7HKJaz2qRUDTxB9ga5KV9VeOh0RAa/+bUwNcYpvpA+T9QpG1nerDrdqinuuqNpOX/NQghZGP9Bb0mtBhfwVb3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/ZfGRJy; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785541119; c=relaxed/simple;
+	bh=zKG0iS70PV1ZsDDU0ojNP7wKsx3DKqaKvtYhgGjhqec=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=maItTNNKySmDZesXkqexGkLLxRwnQ8qMpmWVcxGeLobQ5MnMRLwB31E09n1F/AqijRfedvTDMKf9YjVrOp42b/BUWdUFbkr3zPKsq/al/1V7QWRD7uhmSX47UxkERQmcKdOD7A88ktbv/UhzNzOvQkPVT/HMG2BwgyI+GukoYT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W1vKjvQW; arc=none smtp.client-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/ZfGRJy"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cea3004256so17876845ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:36:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W1vKjvQW"
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-84842381150so2871554b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785540989; x=1786145789; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=0SaMYRu6wc8EGbj4CgxV89pDWL6LLqMsE1gsbynFtMc=;
-        b=k/ZfGRJyUZSsbA5z3z3wPDVHIlRl/kBaonJQP7y2I5m6cmLXvmz47a3h1IWj/sH771
-         RHdXUhyptyZ63A/d6ftaHdvR+IfWeQIkPGs5/viRHnqrf10YbwSI66KvKLlmzMtie6un
-         LRDJLQ+wcQcKijclP3Fm8GmWAnSYxe1Ihr8HHmfVrNY3lfqKAfC4blnZDpLvO5Bwm59+
-         kriMG7w+TxZNSLmcifqSi2tYuKTZhISZ7HGvvKCZxDhugmIK7zU60BD6103iJZin2A/m
-         xzEQYaLrzEa+vBSIdXJJHR0FxFsZcI+TLLiw01UeK0pR4dl75znSCDQeOOaAtTlrwAfy
-         WOkQ==
+        d=google.com; s=20251104; t=1785541117; x=1786145917; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=dmKsJOviftvACUGPABBN88S+tJ91thYPhBWQcoJdx18=;
+        b=W1vKjvQWU2LANf0hil7JAJKIzwtCO2qQsxWxRYPJFktMEYoEosVjNuPvQOlgo+yN9/
+         9Efpz3ACwONT5oj34ijQIr2zrNOzFUt4rGxNkk60pwlO+u7i7ffdexxCEMoAu5wHU8V3
+         zSYEsX3fR7iSQ3V2wDi6NUbH1MML9uI9P+KstO/dBj6nLwyJMr1hj0fLNUxQOqvAp3iY
+         +2MOL7MJnmK0fI8Qg2svBwS8be/XAIq3dym2AI6Bojk/7SaU4IG0ju0nN+ulP7vGKdGA
+         s662rLvG7wrLlDQYX7IxYNoaznEWfUsgM2VTbRVLusuNNfL6/ngs6/HhtedAOSKMdZoc
+         guHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785540989; x=1786145789;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=0SaMYRu6wc8EGbj4CgxV89pDWL6LLqMsE1gsbynFtMc=;
-        b=NhmI5vgV3mYtkCbLecy5OMSbVl4Y8NDhk3trPmFOunX9UKKfa7XS9FQErh91R5OFim
-         5vib5JKjVRNiqjOrU6P+U2GjSM/eNf/2720i95+4PjEwEskc1adQQiOO4qroi3jy26vy
-         mdiKHhDNUT2FBCyggsHmCa2xOf+POQTWJqAySFHMFIJA+y3CzBoWYpGK7IsqY5ym4YWu
-         Mnt4OezXkMgGRfs9C1GyozmXUvN/nAdMaySx8/GiXfDnqPwvE599+CVkSVfMCKC5I1Wf
-         twafuVCsXrDsAIatq0qCBEXaVpbnBvXpEz94tcZc7FAQyH4254qSk0VL1fJRlKh8K8Xv
-         e6UQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrAmKFKFFeThLxgBdunGXdvHkHs9YMnmfe8zuwJYXEazGIoW4BU5tDe/+XSV0ILNQFIxp71u3ESOTZoSXZvZRs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzubyVcipCz2HEL0pjj4/hlFUluyo3HFD2lbdQZATyWty+ujRgZ
-	rRGcdQ2h6scYOGcKJMJBuajGGravnIYg6CIl1ExfM+EHb1EMST+LmNaE
-X-Gm-Gg: AR+sD11afFVbj33eVmhTyukYVfPJLWptKRWMs5wq32rZ59ThaTQUoBgEpHKKcg0PbTo
-	MJMudbwchjxvRMaOmYu66s5jXTYV93isMJ5/cpEcuiXIee1h+tji1ApB5GCHTG15O+TbKFwdioR
-	syElgMHVY9T59mWmTGfkuD5KUbBTNMUTI86gMojNVT+J/IzC/PI3EuLBD/qagkQZioYdwI22X6k
-	/y47qCxjWboU8pBzMUaymxvBRHHyiIOsvbBoOmQ0gnrrjlDJMlSlSr2hQspEduwuBFSmbQeIEAb
-	3IH1BDjVqzbVCFjnXVkjQ5beJnuAf16Z8ZXViXBoKWKmwzylUtHdTicyPqYFP0Ashx8yvR7Lm+A
-	MsPbUOT4HFA5wU9Orh01rWO82KN1NpuParaKquBTUZO23V5fbypx10AC+S4a0MIHQnpIEKkufmG
-	UpE3TBQZs57/qdV/m4g4Rx9PYIF7gDm/oNYIhyHpk7OL9xd/8DZL9PaGM/eoM+qcEtRF0Fprfk2
-	h+hDl0=
-X-Received: by 2002:a17:903:fa6:b0:2cc:85a7:36ee with SMTP id d9443c01a7336-2d052462dc8mr17339815ad.32.1785540988695;
-        Fri, 31 Jul 2026 16:36:28 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:41::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b120d98sm11355105ad.59.2026.07.31.16.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 16:36:28 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Fri, 31 Jul 2026 16:36:23 -0700
-Subject: [PATCH net-next] selftests: drv-net: enable devmem TCP in the test
- config
+        d=1e100.net; s=20251104; t=1785541117; x=1786145917;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dmKsJOviftvACUGPABBN88S+tJ91thYPhBWQcoJdx18=;
+        b=irCdv3OifqANFHjA4GHWOlpZJa6yfcvvPO76Sdk7px+Jx39qS0Er5u8whjdS0l63Gc
+         naseUSsuBj6pm1mx/i0pB2bGUTB+WUEfSp45DSAPWJgfge7Wq4g1neawAm4ROJBdNKc3
+         WvA9wdfNvXWE+c2su4kD/Rjyhl2d2yZwProkEkf/dOmQACApDg8OD7aZ/AKBowHyJxVp
+         sJPH83MguNbSTsUd//wWy5hwn831OF8Ys6adLKtd2WXJ42D5+qQpK21AiAS/ICqSlCxQ
+         jY6d7ETBSxW/FMoe6YYv1ab9q2OGvIJWQFTCvAC4tby9m1O+k2fNHm8uZvseAMPlA+Q0
+         2EyA==
+X-Forwarded-Encrypted: i=1; AHgh+RqmK57mfBOQplG7mu14M8pb5MfNSuzIj7THWCWd1YZ4xIlb3zCyI7IOwuzYDVqsoe0Ox/afJ373NgMlV2z9mK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMK+8aaH75AKfiAXufrh+UlOlTjZsyA1z9Aa0rR02lBPIQqZjx
+	EP/w3yRPedMf4ZHn3TI0uFYjhK9RZ84EMgXu61rdA3jShqqHzN72NHaJV+luyNkNoYkHTna0YD+
+	HhYeRdg==
+X-Received: from pful5.prod.google.com ([2002:a05:6a00:1405:b0:847:a85b:6c23])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:6c8f:b0:847:8b0f:2508
+ with SMTP id d2e1a72fcca58-84ee47789c4mr1324782b3a.13.1785541116639; Fri, 31
+ Jul 2026 16:38:36 -0700 (PDT)
+Date: Fri, 31 Jul 2026 16:38:36 -0700
+In-Reply-To: <20260728144954.355376-35-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-35-dwmw2@infradead.org>
+Message-ID: <am0x_ORC0olomizu@google.com>
+Subject: Re: [PATCH v7 34/36] KVM: selftests: Add master clock offset test
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
-X-B4-Tracking: v=1; b=H4sIAHYxbWoC/x3MWwqDMBAF0K2E++1AfNCWbKX0Q/SOHaixZIII4
- t4LPQs4J5zF6EjhROFubltGCm0TML3HvFBsRgroYneL974V50crvbrM3FeuMm1ZbREd9DH0GjW
- OM5qAb6Ha8Z+fyKySeVS8rusHlaTij3MAAAA=
-X-Change-ID: 20260731-selftests-devmem-config-f4f843f0f0ad
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: quoted-printable
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Tue, Jul 28, 2026, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+>=20
+> Verify that KVM master clock mode remains active when vCPUs have
+> different TSC offsets but the same frequency. Creates three vCPUs,
+> sets one to a different TSC value, and confirms:
+>=20
+>  - KVM_CLOCK_HOST_TSC is set (master clock active)
+>  - KVM_CLOCK_TSC_STABLE IS set (master clock =E2=87=92 stable flag)
+>  - PVCLOCK_TSC_STABLE_BIT is NOT set (offsets differ)
+>=20
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Assisted-by: Kiro (claude-opus-4.6-1m)
+> ---
+>  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>  .../kvm/x86/masterclock_offset_test.c         | 180 ++++++++++++++++++
+>  2 files changed, 181 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/x86/masterclock_offset_te=
+st.c
+>=20
+> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/sel=
+ftests/kvm/Makefile.kvm
+> index 95539deea266..f6027a35f790 100644
+> --- a/tools/testing/selftests/kvm/Makefile.kvm
+> +++ b/tools/testing/selftests/kvm/Makefile.kvm
+> @@ -108,6 +108,7 @@ TEST_GEN_PROGS_x86 +=3D x86/pmu_event_filter_test
+>  TEST_GEN_PROGS_x86 +=3D x86/private_mem_conversions_test
+>  TEST_GEN_PROGS_x86 +=3D x86/private_mem_kvm_exits_test
+>  TEST_GEN_PROGS_x86 +=3D x86/pvclock_test
+> +TEST_GEN_PROGS_x86 +=3D x86/masterclock_offset_test
 
-The config fragment already sets CONFIG_UDMABUF=y, but kconfig silently
-drops it. UDMABUF/NET_DEVMEM both depend on DMA_SHARED_BUFFER, which we
-can't enable directly, so we need to enable a config that selects it. We
-use SYNC_FILE for that purpose here.
+Keep these sorted alphabetically.
 
-Additionally, we flip on CONFIG_NET_DEVMEM as well.
+>  TEST_GEN_PROGS_x86 +=3D x86/pvclock_migration_test
+>  TEST_GEN_PROGS_x86 +=3D x86/set_boot_cpu_id
+>  TEST_GEN_PROGS_x86 +=3D x86/set_sregs_test
+> diff --git a/tools/testing/selftests/kvm/x86/masterclock_offset_test.c b/=
+tools/testing/selftests/kvm/x86/masterclock_offset_test.c
+> new file mode 100644
+> index 000000000000..88e2bd2edab5
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/x86/masterclock_offset_test.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Test that KVM master clock mode works with different TSC offsets
+> + * as long as all vCPUs have the same TSC frequency.
+> + */
+> +#include <stdint.h>
+> +#include <string.h>
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +
+> +#include <asm/pvclock-abi.h>
+> +
+> +#define KVMCLOCK_GPA	0xc0000000ull
+> +#define TSC_OFFSET	(1000000000ULL)
+> +
+> +static uint64_t pvclock_calc(struct pvclock_vcpu_time_info *pvti, uint64=
+_t guest_tsc)
+> +{
+> +	uint64_t delta =3D guest_tsc - pvti->tsc_timestamp;
+> +
+> +	if (pvti->tsc_shift >=3D 0)
+> +		delta <<=3D pvti->tsc_shift;
+> +	else
+> +		delta >>=3D -(int)pvti->tsc_shift;
+> +
+> +	return pvti->system_time + ((__uint128_t)delta * pvti->tsc_to_system_mu=
+l >> 32);
+> +}
+> +
+> +static void guest_code(void)
+> +{
+> +	wrmsr(MSR_KVM_SYSTEM_TIME_NEW, KVMCLOCK_GPA | KVM_MSR_ENABLED);
+> +	for (;;)
+> +		GUEST_SYNC(0);
+> +}
+> +
+> +int main(void)
+> +{
+> +	struct kvm_vcpu *vcpus[3];
+> +	struct kvm_clock_data clock;
+> +	struct pvclock_vcpu_time_info pvti[3];
+> +	struct kvm_vm *vm;
+> +	uint64_t offset0, host_tsc, clk0, clk2;
+> +	int i;
+> +
+> +	TEST_REQUIRE(sys_clocksource_is_based_on_tsc());
+> +
+> +	vm =3D vm_create_with_vcpus(3, guest_code, vcpus);
+> +
+> +	TEST_REQUIRE(!__vcpu_has_device_attr(vcpus[0], KVM_VCPU_TSC_CTRL,
+> +					     KVM_VCPU_TSC_OFFSET));
+> +
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+> +				    KVMCLOCK_GPA, 1,
+> +				    vm_calc_num_guest_pages(VM_MODE_DEFAULT,
+> +							   getpagesize()), 0);
+> +	virt_map(vm, KVMCLOCK_GPA, KVMCLOCK_GPA,
+> +		 vm_calc_num_guest_pages(VM_MODE_DEFAULT, getpagesize()));
+> +
+> +	/* Get vCPU 0's default offset and set vCPU 2's offset higher */
+> +	vcpu_device_attr_get(vcpus[0], KVM_VCPU_TSC_CTRL,
+> +			     KVM_VCPU_TSC_OFFSET, &offset0);
+> +	uint64_t offset2 =3D offset0 + TSC_OFFSET;
+> +	vcpu_device_attr_set(vcpus[2], KVM_VCPU_TSC_CTRL,
+> +			     KVM_VCPU_TSC_OFFSET, &offset2);
+> +
+> +	/* Run each vCPU to enable kvmclock (with offset already set) */
+> +	for (i =3D 0; i < 3; i++) {
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- tools/testing/selftests/drivers/net/hw/config | 2 ++
- 1 file changed, 2 insertions(+)
+ARRAY_SIZE(vcpus)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
-index ed8642b68094..d89a9ba17655 100644
---- a/tools/testing/selftests/drivers/net/hw/config
-+++ b/tools/testing/selftests/drivers/net/hw/config
-@@ -15,11 +15,13 @@ CONFIG_IPV6_SIT=y
- CONFIG_IPV6_TUNNEL=y
- CONFIG_NET_CLS_ACT=y
- CONFIG_NET_CLS_BPF=y
-+CONFIG_NET_DEVMEM=y
- CONFIG_NET_IPGRE=y
- CONFIG_NET_IPGRE_DEMUX=y
- CONFIG_NET_IPIP=y
- CONFIG_NETKIT=y
- CONFIG_NET_SCH_INGRESS=y
-+CONFIG_SYNC_FILE=y
- CONFIG_UDMABUF=y
- CONFIG_USER_NS=y
- CONFIG_VXLAN=y
+> +		vcpu_run(vcpus[i]);
+> +		TEST_ASSERT_KVM_EXIT_REASON(vcpus[i], KVM_EXIT_IO);
+> +	}
+> +
+> +	/* Check master clock is active */
+> +	memset(&clock, 0, sizeof(clock));
+> +	vm_ioctl(vm, KVM_GET_CLOCK, &clock);
 
----
-base-commit: 2fbade66245059c78daeaccfce13ecf499fffb51
-change-id: 20260731-selftests-devmem-config-f4f843f0f0ad
+Provide an API.
 
-Best regards,
--- 
-Bobby Eshleman <bobbyeshleman@meta.com>
+> +	pr_info("KVM_GET_CLOCK flags: 0x%x\n", clock.flags);
+> +	TEST_ASSERT(clock.flags & KVM_CLOCK_HOST_TSC,
+> +		    "Master clock should be active, flags=3D0x%x", clock.flags);
+> +	TEST_ASSERT(clock.flags & KVM_CLOCK_TSC_STABLE,
+> +		    "KVM_CLOCK_TSC_STABLE should be set, flags=3D0x%x", clock.flags);
+> +
+> +	/* Get per-vCPU pvclock in order 0, 2, 1 */
+> +	int order[] =3D {0, 2, 1};
 
+Please don't declare variables in the middle code.  Yes, it's now technical=
+ly
+possible thanks to all the guard() magic, but it's still against preferred =
+kernel
+style.
+
+Though this itself is probably a really, really good indication that this n=
+eeds
+to be split into multiple testcases.  Maybe using TEST_F() and a custom fix=
+ture?
