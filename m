@@ -1,79 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E251D30567D;
-	Fri, 31 Jul 2026 02:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F7514A60F
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 05:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785465594; cv=none; b=gdxdUAGIrt6JqHmY+9pFcyegNZ4ZI6zTpx+FRKVNAo2EO9F3DEZkk+d4oGwgUVcb3QGdwX0BQWGlP6JMOJc4hj/hwVxNz+HhQCZqSMDKX0ylV7doF4h247eWEtHKYjdixgB8VakRfwXQzH0rJ6g1+KIoBAWeKtLkt6tznAgFmWg=
+	t=1785475157; cv=none; b=ITkxU9r+B5AmOzcbji66alIh8/NqQhsLoFzgBRCtWAC3fOt67KalwjHsiZPj9mf6WoClH3Rbkn+7yz7dnlrmGlpgOzI9h9aOSdjJBxF3XwZ5BLIsJSBFrgLhTNifKVa6cTBjhMfDX448ydp69oMmcFInoyZ+8fMkddGdGmp66Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785465594; c=relaxed/simple;
-	bh=Kya/bty4jlSaSL4y9hVKPnS+NhGB6XxZNN0tcenNXOI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P3kphElWVPej/cpJBqOlIVouJJ3hS22gJehtOgTeyNsoWCF8LFQrjN1tN5/N1sxyVR+P5I8Hvp6k2uNZVwV3N/E+DnaUvDUXq+fyM7lWI2r1Yl3yml58FA5Vd2bXH4/ueLEbmgjqXsi0UIW/cLLDy7HtAxBmfdPQkL/FsJpYzbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZhcuieoZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785475157; c=relaxed/simple;
+	bh=Xl40XVAbl5/NEfxk8jBsC+ldmXn8QF0CTbVLOG5vVak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UQ28v90edheNnLAv9aos+dN6HLyDa3g/X973L+aLkJAQhZIBXfOrbI/NgSF/CVeX96sWdAsCRK+U1cojnobHtCajcnKI9ZkEq92mk2BozkewXjd7JLALnVzqdFsVH7N1IYaXA4Kf0sS7JrJ9PPRuSD7rUpEV0EQHVcxOho/cD9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hk8TxX8i; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZhcuieoZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60BD1F00A3A;
-	Fri, 31 Jul 2026 02:39:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785465593;
-	bh=d9qrK/f/+MLuISmePFKu73yneVXZg9cnhjUQC4CDVKM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ZhcuieoZtziFBG/PnK4+5MctAvtwzlDYnO/wLtsfWgxcA2y+zd6vHwtBwSP4vnNhW
-	 SMetTTWseWh3EJbYlmxf+mOkQjfTj2/4RWUrUiFm1lokpfdLxk+32RYfGhCJl03j2T
-	 roZGUptz/aUUhSxBC+NbWa1L3f6kEdmerAGS1GWxL5WEHZEoAgyvrA1hWLT3Tb/L3B
-	 tVBEU5NgbELWYd6BUSRcAL3qL1HxQTHeODoI7lROGpExFAs78T9F4vTdgBpfgDW2YW
-	 PmCZg5oR/dRCfUVTgkmQJmg6/970z5rDeR3PXstZSxxJyTARces5mCDK/xJQ8Kv1UX
-	 W4OFmMbVZd/tg==
-From: Sasha Levin <sashal@kernel.org>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Sasha Levin <sashal@kernel.org>,
-	stable@vger.kernel.org,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Tiwei Bie <tiwei.btw@antgroup.com>,
-	"open list:USER-MODE LINUX (UML)" <linux-um@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>,
-	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH stable 6.12 0/9] Kunit backports for older systems
-Date: Thu, 30 Jul 2026 22:39:45 -0400
-Message-ID: <20260730203700.stable-0007@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <2026073005-release-puzzling-8f07@gregkh>
-References: <20260724214119.1066665-1-florian.fainelli@broadcom.com> <2026073005-release-puzzling-8f07@gregkh>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hk8TxX8i"
+Message-ID: <6ccbcd6b-ef0e-41d8-a5a4-80b7e94c7fd6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785475143;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9w+5s7rfo24271BZftg+qqsMB69AhQoZJfr2nqQsJY4=;
+	b=hk8TxX8izVpu5swD9haQQPntp1QZZfKasPOxoobkBvtgc2AiqrKhl4/xBr+Bh42EwAqOxA
+	qk0BQldKNcFoTnrPh89FrLaOOGMEyrJWK2Ngm3J+RE3/QGNDtTPlWg9HiNr0/uEjREoO1B
+	Rp2CBsnl5rTWQeOxUbapFfEJ7Fca39A=
+Date: Fri, 31 Jul 2026 13:18:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Optimize string scan kfuncs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Rong Tao <rongtao@cestc.cn>, Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+ Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260728145727.45153-1-leon.hwang@linux.dev>
+ <20260728145727.45153-2-leon.hwang@linux.dev>
+ <CAEf4BzaDhyPm4ERJi_0BTW3jLaqVfYybLKDWg6Pub2=8Ca7P3A@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzaDhyPm4ERJi_0BTW3jLaqVfYybLKDWg6Pub2=8Ca7P3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jul 30, 2026 at 02:38:42PM +0200, Greg KH wrote:
->Many of these are not in newer stable kernel versions.  So can you send
->patches for 6.12 and all newer branches (i.e. 6.18.y and 7.1.y) for the
->missing patches for them, and then resend this 6.12.y series and we will
->be glad to queue this up then.
+On 31/7/26 07:17, Andrii Nakryiko wrote:
+> On Tue, Jul 28, 2026 at 7:58 AM Leon Hwang <leon.hwang@linux.dev> wrote:
 
-The gap is smaller than it looks: 7.1.y already carries all nine
-commits, and 6.18.y was missing only two of them, "kunit: tool: skip
-stty when stdin is not a tty" and "kunit: tool: Terminate kernel under
-test on SIGINT". Both cherry-pick to 6.18.y with no adaptation, so I
-picked them up there first rather than making Florian respin.
+[...]
 
-With that done, queued the series for 6.12, thanks.
+>> +
+>> +               if (char_at <= zero_at)
+>> +                       return pos + char_at;
+>> +               return nul_is_match ? pos + zero_at : -ENOENT;
+>> +       }), err_out);
+> 
+> looking at the above code, I'd say it's just not worth it. Too much
+> code and complexity, IMO. For the absolute majority of BPF programs
+> this small speed up won't matter, while for those BPF programs where
+> doing tons of bpf_strstr-like operations is the essence of those
+> programs and has a huge impact on the performance, they can basically
+> implement and maintain this complexity in their own code base.
+> 
 
--- 
+
+Agreed on the complexity concern.
+
+Let's leave the str kfuncs as-is.
+
 Thanks,
-Sasha
+Leon
+
+>> +
+>> +       return pos == XATTR_SIZE_MAX ? -E2BIG : -ENOENT;
+>> +
+>> +err_out:
+>> +       return -EFAULT;
+>> +}
+>> +
+> 
+> [...]
+
