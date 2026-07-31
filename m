@@ -1,215 +1,128 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7D546984C
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:35:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EE035AC11
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785540940; cv=none; b=fiHTRp55vZ5ZBcNiI6JRfpFiIZYV5x82KnolEdaSLxf2hyWjz0zuZODb47wGHNxFpsbqAKI5KyjJ0oVqKOkUcstY4XKmMOU0q/MlGTAfRP+jkJi5fL17LYWLgsSuVgTKBqN6W6a3xwrOwygqs5Pm8bYheM1M0NiXesSnYFbV/ps=
+	t=1785540990; cv=none; b=IH5/r6eohDAMk1kH71IHO3r4H0JTAxnPKRh62aWqBLSBzafqpkpesEPojoLaIc5GJiB7b/3j0uVca7b58eW5N++WxZLIrfqmxCJeZnJ49rZ3fQdwslkGmRPmaAu/bxV6lAKg0DXkhCvPbcs9SSekYETVbqfojaHxRBeRHWucvKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785540940; c=relaxed/simple;
-	bh=E7AD1CY3Sv52g2oANantVmZ5L4EPUbRo2OwSiRw2zRo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=qvjZeBGx25RQrUH24HGFCK3R6exCaW8wHbO/dG7VKiwXpH9b7wBfCVkytXnrmv3hZz36Wq7DUVjh7fl/8Q47xu1qU0V69sTk/kyR5cTTGJwrfkmhw2+pVwyf/MpO6dpxuwkm47uaocZZbkm85uw8B51JybIwFDS2j36/V/WhyjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hRMc5/Hk; arc=none smtp.client-ip=74.125.225.137
+	s=arc-20240116; t=1785540990; c=relaxed/simple;
+	bh=QYK8WLkDehn0NGcwyXwvNHYq73sWHci4bNTcehdMdWk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZhR+1QeEeksUILeQs4mGknfrrNaR3ld0mnxnwckeNwPVRzWLL8xNXZTd4+ALzQNWtgBFkse/LVpjtL5+eE4BG7HKJaz2qRUDTxB9ga5KV9VeOh0RAa/+bUwNcYpvpA+T9QpG1nerDrdqinuuqNpOX/NQghZGP9Bb0mtBhfwVb3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k/ZfGRJy; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hRMc5/Hk"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49553da76dcso1195565e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:35:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k/ZfGRJy"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cea3004256so17876845ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785540936; x=1786145736; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=NAH7LZBWSLN1vfCOZsndZVsDBYzJNfOag1t/z/WjVS0=;
-        b=hRMc5/HkH7EAo3d6JMqtf1CusAWagPmDZh1+2bIF4ntX3h9LCW+ETsiJ1lTyPABKoE
-         FCXSkciHGOZ0F0WUP1p8DSuAI4xTYQ7AwIqATxrEhnKMX4gwUwJEzhoRrSqDKGNYDnBO
-         PeBn/yXq0sXOmzbZ7tAQo1qGbC98+acngNaysJSaa/22qoz7xMKiIfQtvAYUdbMS3gK3
-         XPD4U0KrXX2sr/uucqyMh1J0uaJDVEcaRGXhKBIOXBi0TLMMP1ETP09G+IA74ifDLJ+a
-         LQVnXKmc6qDNeWa3TjMDTHWOUSWmz+THeOpAHC2C3mjuK9ZRIH058RGDTH+qwMa0Y5sI
-         LqSQ==
+        d=gmail.com; s=20251104; t=1785540989; x=1786145789; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=0SaMYRu6wc8EGbj4CgxV89pDWL6LLqMsE1gsbynFtMc=;
+        b=k/ZfGRJyUZSsbA5z3z3wPDVHIlRl/kBaonJQP7y2I5m6cmLXvmz47a3h1IWj/sH771
+         RHdXUhyptyZ63A/d6ftaHdvR+IfWeQIkPGs5/viRHnqrf10YbwSI66KvKLlmzMtie6un
+         LRDJLQ+wcQcKijclP3Fm8GmWAnSYxe1Ihr8HHmfVrNY3lfqKAfC4blnZDpLvO5Bwm59+
+         kriMG7w+TxZNSLmcifqSi2tYuKTZhISZ7HGvvKCZxDhugmIK7zU60BD6103iJZin2A/m
+         xzEQYaLrzEa+vBSIdXJJHR0FxFsZcI+TLLiw01UeK0pR4dl75znSCDQeOOaAtTlrwAfy
+         WOkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785540936; x=1786145736;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NAH7LZBWSLN1vfCOZsndZVsDBYzJNfOag1t/z/WjVS0=;
-        b=KohurKR6kmPH5J9VDDdalcrtxP/lT8f1gPtBnr7Slx/voL2TaeZfPJz9KvJn02jrIE
-         nNHN7uq6zIt2FiAwBSH6npBlIQmoRaEwTcmmA4WKj61xHTyPlcat+pCdM3uqrVSXCpyd
-         EDMVQdmCPB4OBV9JRIGuXT1QqBpufqNMNLLEq6MEWMZWAuPO+NXKK462nxlyLQcvFn+n
-         jRGW9d/dP6zF4Yy9OZ1eQi9pdGQZnBWsbwlk7usqGRJtyNwsLJiAq1As+iN0kLAPMrJd
-         8xoNYm2XSdm3vz2TzYYdqBvxpxuHffv0H+uQsWMbfm+eX6vRqlP72nDR88Ged55a5HkS
-         WCnQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoO9xw3D01P/xF/o/tcgcWQT9UtHiHy5A42vvcjbjRvsNQZmTzKiqO1NaKzHoIdLFXJmA7C8J53/NXJGY4QSNQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz8S10AigfilwoLAWvs60QnNgqegi9QbTr155cqGfu7NNikV5r
-	MZsRkWTovcjlwXobGJxGc+MvBDQefOI0jSjhy/lQ9FTyLi2/lXchGGMM
-X-Gm-Gg: AR+sD11rW3/ZkCRyuegm+NiSwdiM0krmb+xX4/milKjFx4JtY0XH6wJIoE21wp8wfej
-	Em06nIt//ZOi12EVByGsoK1UBmkUYRhIzipdfbl7TrBytwQ0+jbLX6fNOcWXzsq/Cgy8OO9TnUa
-	qKCJKMrCHrJLbZQsoR82QdSy5LXfPDnmxeR3rRDa5c0UKCeLHHuykxScw034TVPuzAaRRJuZb1s
-	o2OJ9+MDoiWDyAB3/NQwu0a2CXa0WPQcjBj7yolIPIA/R08pkw/VnAbhoDLVoJsasCNPeQolC5V
-	PU6X76ULL2Q2V3lpfE40lHW4EI0m/4VvU2EskAK048yFcG4kQg9+PCED7I8SRkSUAbYe11pCRxu
-	Gp0oswpflQHRta3vu/Qfi6tFJ1vaJZyodXahwxuVcG2Gh09H58GRe/SM+X/kPg4QfP9tto7PQrt
-	IlMAQonU2QtINGidGEGfqH93Z8k4W7iBx2D7sP65V14rAkttj0a2RQ9jxPWb7cOFBTM9u0nckgL
-	0hw4KFs3DEc1SKtXkgrFUY63hZdytFI9KAzmhpFz6HTbB9eU9dzjYaH34Bpv0kNfL+5XohLMd2V
-	g2BCRMS+JV/FgN1WM+lWAQQ1yV3t/Zhdtib/nw==
-X-Received: by 2002:a05:600c:4292:b0:495:406f:dff6 with SMTP id 5b1f17b1804b1-4980c68e114mr998445e9.33.1785540936415;
-        Fri, 31 Jul 2026 16:35:36 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41d1756sm10260172f8f.4.2026.07.31.16.35.36
+        d=1e100.net; s=20251104; t=1785540989; x=1786145789;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=0SaMYRu6wc8EGbj4CgxV89pDWL6LLqMsE1gsbynFtMc=;
+        b=NhmI5vgV3mYtkCbLecy5OMSbVl4Y8NDhk3trPmFOunX9UKKfa7XS9FQErh91R5OFim
+         5vib5JKjVRNiqjOrU6P+U2GjSM/eNf/2720i95+4PjEwEskc1adQQiOO4qroi3jy26vy
+         mdiKHhDNUT2FBCyggsHmCa2xOf+POQTWJqAySFHMFIJA+y3CzBoWYpGK7IsqY5ym4YWu
+         Mnt4OezXkMgGRfs9C1GyozmXUvN/nAdMaySx8/GiXfDnqPwvE599+CVkSVfMCKC5I1Wf
+         twafuVCsXrDsAIatq0qCBEXaVpbnBvXpEz94tcZc7FAQyH4254qSk0VL1fJRlKh8K8Xv
+         e6UQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrAmKFKFFeThLxgBdunGXdvHkHs9YMnmfe8zuwJYXEazGIoW4BU5tDe/+XSV0ILNQFIxp71u3ESOTZoSXZvZRs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzubyVcipCz2HEL0pjj4/hlFUluyo3HFD2lbdQZATyWty+ujRgZ
+	rRGcdQ2h6scYOGcKJMJBuajGGravnIYg6CIl1ExfM+EHb1EMST+LmNaE
+X-Gm-Gg: AR+sD11afFVbj33eVmhTyukYVfPJLWptKRWMs5wq32rZ59ThaTQUoBgEpHKKcg0PbTo
+	MJMudbwchjxvRMaOmYu66s5jXTYV93isMJ5/cpEcuiXIee1h+tji1ApB5GCHTG15O+TbKFwdioR
+	syElgMHVY9T59mWmTGfkuD5KUbBTNMUTI86gMojNVT+J/IzC/PI3EuLBD/qagkQZioYdwI22X6k
+	/y47qCxjWboU8pBzMUaymxvBRHHyiIOsvbBoOmQ0gnrrjlDJMlSlSr2hQspEduwuBFSmbQeIEAb
+	3IH1BDjVqzbVCFjnXVkjQ5beJnuAf16Z8ZXViXBoKWKmwzylUtHdTicyPqYFP0Ashx8yvR7Lm+A
+	MsPbUOT4HFA5wU9Orh01rWO82KN1NpuParaKquBTUZO23V5fbypx10AC+S4a0MIHQnpIEKkufmG
+	UpE3TBQZs57/qdV/m4g4Rx9PYIF7gDm/oNYIhyHpk7OL9xd/8DZL9PaGM/eoM+qcEtRF0Fprfk2
+	h+hDl0=
+X-Received: by 2002:a17:903:fa6:b0:2cc:85a7:36ee with SMTP id d9443c01a7336-2d052462dc8mr17339815ad.32.1785540988695;
+        Fri, 31 Jul 2026 16:36:28 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:41::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04b120d98sm11355105ad.59.2026.07.31.16.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 16:35:36 -0700 (PDT)
+        Fri, 31 Jul 2026 16:36:28 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Date: Fri, 31 Jul 2026 16:36:23 -0700
+Subject: [PATCH net-next] selftests: drv-net: enable devmem TCP in the test
+ config
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 01 Aug 2026 01:35:35 +0200
-Message-Id: <DKD5FPZ03IMC.294CDPH0KRZGP@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "David Windsor" <dwindsor@gmail.com>, "Paul Moore" <paul@paul-moore.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>, "KP Singh"
- <kpsingh@kernel.org>, "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "James Morris" <jmorris@namei.org>, "Serge E .
- Hallyn" <serge@hallyn.com>, "Casey Schaufler" <casey@schaufler-ca.com>,
- "Stephen Smalley" <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek"
- <omosnace@redhat.com>, "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-X-Mailer: aerc 0.21.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
- <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
- <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
- <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
- <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
- <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
- <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
- <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
- <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
- <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com>
- <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
- <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com>
- <CAHC9VhQmb=v3-T5HZUzfr_me6S7bo6sX0Vs4nDFQZnMe+SQOMQ@mail.gmail.com>
- <CAEXv5_huGfd7u0tKW5Eq5bSH+rzkB=ThKOTLnfnxepqTmgcUPA@mail.gmail.com>
- <DKD5ES7LKD1F.YKD4OU6GTUXR@gmail.com>
-In-Reply-To: <DKD5ES7LKD1F.YKD4OU6GTUXR@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
+X-B4-Tracking: v=1; b=H4sIAHYxbWoC/x3MWwqDMBAF0K2E++1AfNCWbKX0Q/SOHaixZIII4
+ t4LPQs4J5zF6EjhROFubltGCm0TML3HvFBsRgroYneL974V50crvbrM3FeuMm1ZbREd9DH0GjW
+ OM5qAb6Ha8Z+fyKySeVS8rusHlaTij3MAAAA=
+X-Change-ID: 20260731-selftests-devmem-config-f4f843f0f0ad
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-On Sat Aug 1, 2026 at 1:34 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Sat Aug 1, 2026 at 1:11 AM CEST, David Windsor wrote:
->> On Fri, Jul 31, 2026 at 6:23=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
->>>
->>> On Fri, Jul 31, 2026 at 6:04=E2=80=AFPM Kumar Kartikeya Dwivedi
->>> <memxor@gmail.com> wrote:
->>> > On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
->>> > > On Fri, Jul 31, 2026 at 5:29=E2=80=AFPM Kumar Kartikeya Dwivedi
->>> > > <memxor@gmail.com> wrote:
->>> > >> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
->>> > >> > On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
->>> > >> > <memxor@gmail.com> wrote:
->>> > >> >> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
->>> > >> >> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwive=
-di
->>> > >> >> > <memxor@gmail.com> wrote:
->>> > >> >> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
->>> > >> >> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dw=
-ivedi
->>> > >> >> >> > <memxor@gmail.com> wrote:
->>> > >> >> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
->>> > >> >> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya=
- Dwivedi
->>> > >> >> >> >> > <memxor@gmail.com> wrote:
->>> > >> >> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
->>> > >> >> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Karti=
-keya Dwivedi
->>> > >> >> >> >> >> > <memxor@gmail.com> wrote:
->>> > >> >> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wro=
-te:
->>> > >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Ka=
-rtikeya Dwivedi
->>> > >> >> >> >> >> >> > <memxor@gmail.com> wrote:
->>> > >> >> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Winds=
-or wrote:
->>> > >> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul =
-Moore <paul@paul-moore.com> wrote:
->>>
->>> ...
->>>
->>> > As a consequence, everyone suffers because they first need to satisfy=
- your whims
->>> > on how all code and kfuncs written thus far are wrong, and need to be=
- moved
->>> > around ASAP, including the one being proposed.
->>>
->>> That's not a reasonble or truthful summary of things, I've only
->>> requested that David locate his proposed kfunc in
->>> security/bpf_lsm_kfuncs.c, I never suggested he move any others.
->>>
->>
->> Looking at what's left of the kfunc itself, it's basically nothing.
->> Everything meaningful has been moved into security/ already.
->>
->> Aside from bpf dynptr ops, what's left is:
->>
->> if (!name__str)
->>     return -EINVAL;
->>
->
-> You can actually lose this one, the verifier should prevent passing NULL =
-for
-> name__str. Other functions don't check it either. Feel free to check it, =
-or add
+From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-.. and I meant, feel free to double check that passing NULL indeed fails ju=
-st in
-case.
+The config fragment already sets CONFIG_UDMABUF=y, but kconfig silently
+drops it. UDMABUF/NET_DEVMEM both depend on DMA_SHARED_BUFFER, which we
+can't enable directly, so we need to enable a config that selects it. We
+use SYNC_FILE for that purpose here.
 
-> a negative test in case you're worried about it.
->
->> if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX, sizeof(XATTR_BPF_LSM_SUFFIX=
-) - 1))
->>     return -EPERM;
->>
->> if (!xattrs->xattrs)
->>     return -EOPNOTSUPP;
->>
->> ... then a call to security_lsmxattr_add. Why not move this chunk into
->> security_lsmxattr_add, and leave the remaining bits, which are pure
->> bpf, in fs/ for now, and litigate the total placement of all of them
->> once v7 lands?
->>
->
-> I wouldn't bother, everything LSM specific is already where it belongs.  =
-That
-> said, your question is a good demonstration of the absurdity of the ask h=
-ere.
->
->>> --
->>> paul-moore.com
+Additionally, we flip on CONFIG_NET_DEVMEM as well.
+
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+ tools/testing/selftests/drivers/net/hw/config | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
+index ed8642b68094..d89a9ba17655 100644
+--- a/tools/testing/selftests/drivers/net/hw/config
++++ b/tools/testing/selftests/drivers/net/hw/config
+@@ -15,11 +15,13 @@ CONFIG_IPV6_SIT=y
+ CONFIG_IPV6_TUNNEL=y
+ CONFIG_NET_CLS_ACT=y
+ CONFIG_NET_CLS_BPF=y
++CONFIG_NET_DEVMEM=y
+ CONFIG_NET_IPGRE=y
+ CONFIG_NET_IPGRE_DEMUX=y
+ CONFIG_NET_IPIP=y
+ CONFIG_NETKIT=y
+ CONFIG_NET_SCH_INGRESS=y
++CONFIG_SYNC_FILE=y
+ CONFIG_UDMABUF=y
+ CONFIG_USER_NS=y
+ CONFIG_VXLAN=y
+
+---
+base-commit: 2fbade66245059c78daeaccfce13ecf499fffb51
+change-id: 20260731-selftests-devmem-config-f4f843f0f0ad
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
 
