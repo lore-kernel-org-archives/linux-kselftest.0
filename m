@@ -1,67 +1,68 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E899534EF11
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC417463B64
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785540263; cv=none; b=KD7meqBOzJNg1551J5UtjaoLQ+VnLkFR8P5x+WnWUILuTeFTDPS0K5m0IpShKM+SiUr3t5kKGv+Ay41ibCNQxfftExqylqgfIQ+LCRQwQzEDv70BMa+Y2KDLu1+OwJKLcyZbz0GrRp0R6jjkC4omhfXY+6rr8zn6igU68r5HL+U=
+	t=1785540781; cv=none; b=Oqx7LvQTLOZfJx9I+cj1ibd7Xj0GYggqEcd6CcqXvtSJoKQ3RC643tmPoZohKrGu/h/0tJiIgWGEB7345VYzlWo9VeuEUeVJVwU0UmMttwrfyN7Kn+A8gK1kkAITIvU8QRlgZpqHBhGX4jILJ5u7zB3VOrDV8XsHgAcJ+i6aJmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785540263; c=relaxed/simple;
-	bh=58Te/+tOkv6LXXdsGaDB5qVdhgpv8m07P5AoW0v8c68=;
+	s=arc-20240116; t=1785540781; c=relaxed/simple;
+	bh=t+Cf3qmtd23qA0r4BDXkizW3SEklEe7ujMZOzL2AWCs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sOkXcPk29I6SjjadxabIEyfT+uLntdW3deFcray0Fwx438AXiO/mls0Cydvdcuxp6dbzKo5cePnnVXVlnm5XRuCEpe/UwZYuCleGqBwOKeIzV4Q3Hv+O1C7ojTAI0eBMO6sdIDNai4sWUnFnpBqmKPdTcNZXNTsPgbdZ8N6leps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q6/1KJVr; arc=none smtp.client-ip=209.85.216.72
+	 To:Cc:Content-Type; b=dKywXAhUISQ+XKAgDvbKJCq8S3NqJKD+xAOTIjkKjRuk0m3M3sVo3PaF0ji/+OnNcpy3bC1OvLiRoJc3kPa8FfV5tTQ/Y5h/ZRttAR9Cly0KFwLPEPohHQ2UlhyJUHQdZ9j7tmLPFv1TSSyioPioZv00D3rYzPoTbcz7xghfa48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fgk+Y4bv; arc=none smtp.client-ip=209.85.215.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q6/1KJVr"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38dbf293831so3457124a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:24:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fgk+Y4bv"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cb5cc1e13f8so1826379a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:32:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785540261; x=1786145061; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fun1HisIe61fwc36HWwP0mEpqtzKSpu6BfRxhF/FWAM=;
-        b=q6/1KJVrIcQq7HZ8Izyn8hHdR2/rDr3BqD8DMrCRuKMaik5izzE9bOvK3C8BE0chLE
-         ZUwMb/p+7MWpaTRDh/pGB+QK26ERJggAMa+eAcDWOvVOcosqLHN7nLCUrgOKb4zF4cIO
-         coyBDjWuMml8v61Ftm50glPUmTAbeTAfaBsbSrxOqKXIeKTltMnZOU7wK7oZlDBC0Lrb
-         hsb9jRA7KNR/+jCW/2Waxf93K8FaUdPJC/Z2XaGQymGYfpB+W3X1e3cbXPhyVvCyP67K
-         iCv9gvDPkq4+I/GzsWDTxYtJPT3yihXNMEy+n5qG6b5rlD1Q6OprFQaf/Ccf6dLW7VGe
-         NB7w==
+        d=google.com; s=20251104; t=1785540779; x=1786145579; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=8/b1huLAEdiKYHbWYUwfN/XZnmcBk/ZLpbBd8pgF/SE=;
+        b=fgk+Y4bvva3BMtU4tIH1kM66mbRCYtM8Bg2dPRChe14j5kVr0u86mcpHjdxzxmDAhV
+         f7vn9ECkcG2UmHM26vC3fnPIcSyhnCkwiFkELGQY/cRL5zU/C2a+iq/iiE1Wm9Rnl281
+         /3gckBJ7xh4faEhLhwBMbB2ZzFe8OrNdYq5eMsKOGuXOyhUl8dJfxywL6s89BKBn4g7j
+         ji+Ffi4vTp5cno3pv41Z5N1+JKUvNiI4G2L2JCztABMWDK8Z03U1Va2KNTqWJZWLZb1T
+         1SdfKPR2Q8jYti6SE5+zLiBupHAFTUtm96f1LhbVLZ/EbXTWWh3JQbZ6KyI8DCsgPkrx
+         bdYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785540261; x=1786145061;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fun1HisIe61fwc36HWwP0mEpqtzKSpu6BfRxhF/FWAM=;
-        b=Mz4pvzOxz2HNdVtdnwk0k8SmRA/zjRjXkaHUss8/M2XMdcmUR8FfBuTLV+AU9fYoO6
-         AsHkwTpPVyRN/kp06ucPaOfvhzWd9eeyx2ErOvJZ42GIfUXKwdNvwIKinm3FgN1vBclc
-         auU1EKNSOKx0ypMKXpkg/+KQjVtC+qHlrAd2BiIcCj2Uj/NuB2vKUI2Q+g4Qdlm6ngqq
-         wFFi+GJLtafM2cop21Itm54ta8KBslxkmVen9yfQNKBm6uoLVSf/GZlOnzhdb3DUQ+Yl
-         hqNv9+s8WLu4YcEUGlvwaDIv1rooj60Q+B4Hszpcllf1sQrP1O4ppl1hI8MpGmiBFJJn
-         l9xA==
-X-Forwarded-Encrypted: i=1; AHgh+RoqR7n+rdqGH3P3M1Oqp0BUHQPRqX18smpfu7mkJDcRAnUEcx06QfeTnfXpie9N55Ss/J9ZM8BYYHxIh+8KNwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb3uHNyS3xqVzKSbLoeQI352nwwCtgNF90oX4gpFvcJrPsO+0T
-	0Z2bHKRbop+pfP/vD6XCAxMy6oOaTSmuU2c0egN3whoXvY3onIaqdGckaK8Mk/CaoN3ipatxIDV
-	49vmgUw==
-X-Received: from pjbms10.prod.google.com ([2002:a17:90b:234a:b0:38e:b9dd:4f3f])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b02:b0:38e:bbf1:de34
- with SMTP id 98e67ed59e1d1-38fbc3e7e39mr1464539a91.7.1785540261077; Fri, 31
- Jul 2026 16:24:21 -0700 (PDT)
-Date: Fri, 31 Jul 2026 16:24:20 -0700
-In-Reply-To: <20260728144954.355376-32-dwmw2@infradead.org>
+        d=1e100.net; s=20251104; t=1785540779; x=1786145579;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8/b1huLAEdiKYHbWYUwfN/XZnmcBk/ZLpbBd8pgF/SE=;
+        b=KpMUQbm8tbdy3nNFZRsC9Ra7knRZtGHxlSmpKXNnevVSsJpSh/DWI7U557GxhGKjam
+         2ByRFhuNAFPcOMKBMvZ8xTGuGGxlq1D6SnT13BO1T4bP9ccq02V2XzjT+H3+CKqysmjX
+         JkVCDfrIg/WmvIjzA4ncgkMuDFyh0i4pDuu18jpsHf16z+VA8K8rP+mZxBYr1eSzsjWG
+         Xl7lnEKse66W35myJrWsflXqWH+QIUCJ8KctlSZJPZ3V42FWZadbce3+/qTI4haD4ra4
+         iw37PVNP1ZKuhTmMo4h59zzipNRdVt+eoaslYgEXWukx/3ktHLv2bbIXn8U6yzsEtfIc
+         lA5w==
+X-Forwarded-Encrypted: i=1; AHgh+RoMqel4TXfob0g2t8wjpkoINPtFFITUeyjLqddMS3GQNaPQk6wbSiXtbw6kcQjx2jD8gpxUZFz9cMIWUtugerU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPDqzHms1kiWFa/E7P2zWKeVQ9giSWtSdZTGRqIVkzNa4FDoDt
+	uC28tFrEyBkN7uR9/0EHLIrw0cDu713OntRk4Qs70Sp5x7Bk9F1C0seT8aPWKrixXdD3PWhmBs/
+	3wK1z8A==
+X-Received: from pgbs63.prod.google.com ([2002:a63:5e42:0:b0:cbb:5dd3:9904])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9e0e:b0:3c0:9c18:d5a7
+ with SMTP id adf61e73a8af0-3c92a8d8717mr1547928637.68.1785540778920; Fri, 31
+ Jul 2026 16:32:58 -0700 (PDT)
+Date: Fri, 31 Jul 2026 16:32:58 -0700
+In-Reply-To: <20260728144954.355376-34-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-32-dwmw2@infradead.org>
-Message-ID: <am0upFND1r93HPxq@google.com>
-Subject: Re: [PATCH v7 31/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
- accurate KVM clock migration
+References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-34-dwmw2@infradead.org>
+Message-ID: <am0wquLHtd28syfx@google.com>
+Subject: Re: [PATCH v7 33/36] KVM: selftests: Add KVM/PV clock selftest to
+ prove timer correction
 From: Sean Christopherson <seanjc@google.com>
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -75,179 +76,239 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
 	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 28, 2026, David Woodhouse wrote:
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5c78dd1e4c69..0680332d7d45 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3435,6 +3435,169 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
->  	}
->  }
->  
-> +#ifdef CONFIG_X86_64
-> +static int kvm_vcpu_ioctl_get_clock_guest(struct kvm_vcpu *v, void __user *argp)
+> +int main(int argc, char *argv[])
 > +{
-> +	struct pvclock_vcpu_time_info hv_clock = {};
-> +	struct kvm_vcpu_arch *vcpu = &v->arch;
-> +	struct kvm_arch *ka = &v->kvm->arch;
-> +	unsigned int seq;
+> +	static const struct option long_opts[] =3D {
+> +		{ "sleep", required_argument, NULL, 's' },
+> +		{ "help",  no_argument,       NULL, 'h' },
+> +		{ NULL,    0,                  NULL,  0  },
+> +	};
+> +	unsigned int sleep_sec =3D 2;
+> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_vm *vm;
+> +	uint64_t host_khz;
+> +	uint64_t freq;
+> +	int opt;
 > +
-> +	/*
-> +	 * If KVM_REQ_CLOCK_UPDATE is already pending, or if the pvclock
-> +	 * has never been generated at all, call kvm_guest_time_update().
-> +	 */
-> +	if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, v) || !vcpu->hw_tsc_hz) {
-> +		int idx = srcu_read_lock(&v->kvm->srcu);
-> +		int ret = kvm_guest_time_update(v);
-> +
-> +		srcu_read_unlock(&v->kvm->srcu, idx);
-
-		guard(srcu)(&vcpu->kvm->srcu);
-
-		if (kvm_guest_time_update(v))
-			return -EBUSY;
-
-> +		if (ret)
-> +			return -EINVAL;
-
-This should be -EBUSY, because KVM_REQ_CLOCK_UPDATE is a transient condition.
-And that's why a capability is needed: if userspace goes with the "probe" method,
-it could get a temporary failure, and then a naive userspace could stop using
-the ioctl entirely.
-
+> +	while ((opt =3D getopt_long(argc, argv, "s:h", long_opts, NULL)) !=3D -=
+1) {
+> +		switch (opt) {
+> +		case 's':
+> +			sleep_sec =3D atoi(optarg);
+> +			break;
+> +		case 'h':
+> +		default:
+> +			usage(argv[0]);
+> +			return opt =3D=3D 'h' ? 0 : 1;
+> +		}
 > +	}
 > +
-> +	/*
-> +	 * Reconstruct the pvclock from the master clock state, matching
-> +	 * exactly what kvm_guest_time_update() writes to the guest.
-> +	 */
-> +	do {
-> +		seq = read_seqcount_begin(&ka->pvclock_sc);
+> +	TEST_REQUIRE(sys_clocksource_is_based_on_tsc());
+> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_TSC_CONTROL));
 > +
-> +		if (!ka->use_master_clock)
-> +			return -EINVAL;
+> +	vm =3D vm_create_with_one_vcpu(&vcpu, guest_code);
+> +	configure_pvclock(vm);
+> +
+> +	/* Check KVM_GET_CLOCK_GUEST is supported */
+> +	{
+> +		struct pvclock_vcpu_time_info tmp;
+> +		int ret =3D __vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUEST, &tmp);
+> +		TEST_REQUIRE(ret =3D=3D 0);
 
-EINVAL also feels wrong, userspace hasn't done anything wrong.  Maybe -ENODATA?
-Not sure what the right returnis.
+It will likely be a moot point since we should have a CAP, but don't do TES=
+T_REQUIRE()
+on a local variable like this, it completely defeates the purpose of the ma=
+cro
+shenanigans.  Becuase this:
 
-> +
-> +		hv_clock.tsc_timestamp = kvm_read_l1_tsc(v, ka->master_cycle_now);
-> +		hv_clock.system_time = ka->master_kernel_ns + ka->kvmclock_offset;
-> +	} while (read_seqcount_retry(&ka->pvclock_sc, seq));
-> +
-> +	hv_clock.tsc_shift = vcpu->pvclock_tsc_shift;
-> +	hv_clock.tsc_to_system_mul = vcpu->pvclock_tsc_mul;
-> +	hv_clock.flags = ka->all_vcpus_matched_tsc ? PVCLOCK_TSC_STABLE_BIT : 0;
-> +
-> +	if (copy_to_user(argp, &hv_clock, sizeof(hv_clock)))
-> +		return -EFAULT;
-> +
-> +	return 0;
+  1..0 # SKIP - Requirement not met: ret =3D=3D 0
+
+is useless information, whereas this:
+
+  1..0 # SKIP - Requirement not met: !__vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUES=
+T, &tmp)
+
+gives the user a starting point without having to go search through the tes=
+t code.
+
+> +	}
+
+...
+
+> +static volatile uint32_t vcpu_counter;
+> +static void guest_code_stable_bit(void)
+> +{
+> +	uint32_t idx =3D __atomic_fetch_add(&vcpu_counter, 1, __ATOMIC_SEQ_CST)=
+;
+> +	uint64_t gpa =3D KVMCLOCK_GPA + idx * sizeof(struct pvclock_vcpu_time_i=
+nfo);
+
+This series needs to be updated to catch up to upstream.  Selftests now use
+u32, u64, etc.  And at least one patch missed an obvious opportunity for gu=
+ard().=20
+
+> +	wrmsr(MSR_KVM_SYSTEM_TIME_NEW, gpa | KVM_MSR_ENABLED);
+> +	GUEST_SYNC(0);
+> +	GUEST_SYNC(0);
+> +	GUEST_SYNC(0);
 > +}
 > +
-> +/*
-> + * Reverse the calculation in the hv_clock definition.
-> + *
-> + * time_ns = ( (cycles << shift) * mul ) >> 32;
-> + * (although shift can be negative, so that's bad C)
-> + *
-> + * So for a single second,
-> + * NSEC_PER_SEC = ( ( FREQ_HZ << shift) * mul ) >> 32
-> + * NSEC_PER_SEC << 32 = ( FREQ_HZ << shift ) * mul
-> + * ( NSEC_PER_SEC << 32 ) / mul = FREQ_HZ << shift
-> + * ( NSEC_PER_SEC << 32 ) / mul ) >> shift = FREQ_HZ
-> + */
-> +static u64 hvclock_to_hz(u32 mul, s8 shift)
+> +static void set_tsc_offset(struct kvm_vcpu *vcpu, uint64_t offset)
 > +{
-> +	u64 tm = NSEC_PER_SEC << 32;
+> +	struct kvm_device_attr attr =3D {
+> +		.group =3D KVM_VCPU_TSC_CTRL,
+> +		.attr =3D KVM_VCPU_TSC_OFFSET,
+> +		.addr =3D (__u64)(uintptr_t)&offset,
+> +	};
 > +
-> +	/* Maximise precision. Shift right until the top bit is set */
-> +	tm <<= 2;
-> +	shift += 2;
-> +
-> +	/* While 'mul' is even, increase the shift *after* the division */
-> +	while (!(mul & 1)) {
-> +		shift++;
-> +		mul >>= 1;
-> +	}
-> +
-> +	tm /= mul;
-> +
-> +	if (shift >= 64)
-> +		return 0;
-> +	if (shift > 0)
-> +		return tm >> shift;
-> +	if (shift <= -64)
-> +		return 0;
-> +	return tm << -shift;
+> +	TEST_REQUIRE(__vcpu_has_device_attr(vcpu, KVM_VCPU_TSC_CTRL,
+> +					    KVM_VCPU_TSC_OFFSET) =3D=3D 0);
+> +	vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &attr);
+
+This quite clearly belongs in library code.
+
 > +}
 > +
-> +static int kvm_vcpu_ioctl_set_clock_guest(struct kvm_vcpu *v, void __user *argp)
+> +static void run_vcpu_once(struct kvm_vcpu *vcpu)
 > +{
-> +	struct pvclock_vcpu_time_info user_hv_clock;
-> +	struct kvm *kvm = v->kvm;
-> +	struct kvm_arch *ka = &kvm->arch;
-> +	u64 curr_tsc_hz, user_tsc_hz;
-> +	u64 user_clk_ns;
-> +	u64 guest_tsc;
-> +	int rc = 0;
+> +	struct ucall uc;
 > +
-> +	if (copy_from_user(&user_hv_clock, argp, sizeof(user_hv_clock)))
-> +		return -EFAULT;
+> +	vcpu_run(vcpu);
+> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+> +	switch (get_ucall(vcpu, &uc)) {
+> +	case UCALL_ABORT:
+> +		REPORT_GUEST_ASSERT(uc);
+
+Gah, we really need to have vcpu_run() handle guest asserts.
+
+> +		break;
+> +	case UCALL_SYNC:
+> +		break;
+> +	default:
+> +		TEST_FAIL("Unexpected ucall");
+> +	}
+> +}
 > +
-> +	if (user_hv_clock.pad0 || user_hv_clock.pad[0] || user_hv_clock.pad[1])
-> +		return -EINVAL;
+> +static void test_tsc_stable_bit(void)
+> +{
+> +	struct pvclock_vcpu_time_info pvti;
+> +	struct kvm_vcpu *vcpus[2];
+> +	struct kvm_vm *vm;
+> +	int ret;
 > +
-> +	if (!user_hv_clock.tsc_to_system_mul)
-> +		return -EINVAL;
+> +	pr_info("Testing PVCLOCK_TSC_STABLE_BIT with matched/unmatched TSCs\n")=
+;
 > +
-> +	if (user_hv_clock.tsc_shift < -31 || user_hv_clock.tsc_shift > 31)
-> +		return -EINVAL;
-> +
-> +	user_tsc_hz = hvclock_to_hz(user_hv_clock.tsc_to_system_mul,
-> +				    user_hv_clock.tsc_shift);
-> +
-> +	kvm_hv_request_tsc_page_update(kvm);
+> +	vm =3D vm_create_with_vcpus(2, guest_code_stable_bit, vcpus);
+> +	configure_pvclock(vm);
 > +
 > +	/*
-> +	 * kvm_start_pvclock_update() takes tsc_write_lock and opens
-> +	 * the pvclock seqcount; kvm_end_pvclock_update() closes both.
-> +	 * All clock state modifications between them are atomic with
-> +	 * respect to readers in kvm_guest_time_update().
+> +	 * Case 1: All TSCs matched (same frequency and offset).
+> +	 * Master clock should be active, PVCLOCK_TSC_STABLE_BIT set.
 > +	 */
-> +	kvm_start_pvclock_update(kvm);
-> +	pvclock_update_vm_gtod_copy(kvm);
+> +	run_vcpu_once(vcpus[0]);
 > +
-> +	if (!ka->use_master_clock) {
-> +		rc = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	curr_tsc_hz = (u64)get_cpu_tsc_khz() * HZ_PER_KHZ;
-> +	if (unlikely(curr_tsc_hz == 0)) {
-> +		rc = -EINVAL;
-
-Same comments here regarding return codes.
-
-> +		goto out;
-> +	}
-> +
-> +	if (kvm_caps.has_tsc_control)
-> +		curr_tsc_hz = kvm_scale_tsc(curr_tsc_hz,
-> +					    v->arch.l1_tsc_scaling_ratio);
+> +	ret =3D __vcpu_ioctl(vcpus[0], KVM_GET_CLOCK_GUEST, &pvti);
+> +	TEST_ASSERT(!ret, "GET_CLOCK_GUEST should succeed with matched TSCs");
+> +	TEST_ASSERT(pvti.flags & PVCLOCK_TSC_STABLE_BIT,
+> +		    "PVCLOCK_TSC_STABLE_BIT should be set with matched TSCs");
 > +
 > +	/*
-> +	 * Allow for a discrepancy of 1 kHz either way between the TSC
-> +	 * frequency used to generate the user's pvclock and the current
-> +	 * host's measured frequency, since they may not precisely match.
+> +	 * Case 2: Different TSC offset, same frequency.
+> +	 * Master clock should still be active (frequency matches), but
+> +	 * PVCLOCK_TSC_STABLE_BIT should be cleared (offsets differ).
 > +	 */
-> +	if (user_tsc_hz < curr_tsc_hz - 1000 ||
-> +	    user_tsc_hz > curr_tsc_hz + 1000) {
-
-I don't follow, why is KVM restricting what frequency userspace can set?
-
-> +		rc = -ERANGE;
-> +		goto out;
+> +	set_tsc_offset(vcpus[1], 12345678);
+> +	run_vcpu_once(vcpus[1]);
+> +	run_vcpu_once(vcpus[0]);
+> +
+> +	ret =3D __vcpu_ioctl(vcpus[0], KVM_GET_CLOCK_GUEST, &pvti);
+> +	if (ret) {
+> +		/* Master clock disabled by offset mismatch =E2=80=94 old kernel */
+> +		pr_info("  Skipping offset tests (master clock requires matched offset=
+s)\n");
+> +		goto out_stable;
 > +	}
+> +	TEST_ASSERT(!(pvti.flags & PVCLOCK_TSC_STABLE_BIT),
+> +		    "PVCLOCK_TSC_STABLE_BIT should be clear with offset-mismatched TSC=
+s");
+> +
+> +	/*
+> +	 * Case 3: Different TSC frequency.
+> +	 * Master clock should be disabled entirely.
+> +	 */
+> +	vcpu_ioctl(vcpus[1], KVM_SET_TSC_KHZ,
+> +		   (void *)(unsigned long)(__vcpu_ioctl(vcpus[1], KVM_GET_TSC_KHZ, NUL=
+L) / 2));
+> +	/* Write TSC to trigger kvm_synchronize_tsc / kvm_track_tsc_matching */
+> +	vcpu_set_msr(vcpus[1], MSR_IA32_TSC, 0);
+> +	run_vcpu_once(vcpus[1]);
+> +
+> +	ret =3D __vcpu_ioctl(vcpus[0], KVM_GET_CLOCK_GUEST, &pvti);
+> +	TEST_ASSERT(ret && errno =3D=3D EINVAL,
+> +		    "GET_CLOCK_GUEST should fail with frequency-mismatched TSCs, got %=
+d (errno %d)",
+> +		    ret, errno);
+> +
+> +out_stable:
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +static void test_clock_guest_with_offsets(void)
+> +{
+> +	struct pvclock_vcpu_time_info pvti0, pvti1, pvti1_after;
+> +	struct kvm_vcpu *vcpus[2];
+> +	struct kvm_vm *vm;
+> +	int64_t delta;
+> +	int ret;
+> +
+> +	pr_info("Testing KVM_[GS]ET_CLOCK_GUEST with different TSC offsets\n");
+> +
+> +	vm =3D vm_create_with_vcpus(2, guest_code_stable_bit, vcpus);
+> +	configure_pvclock(vm);
+> +
+> +	/* Set different TSC offsets on the two vCPUs */
+> +	set_tsc_offset(vcpus[0], 0);
+> +	set_tsc_offset(vcpus[1], 1000000000ull);
+> +
+> +	/* Run both to establish kvmclock */
+> +	run_vcpu_once(vcpus[0]);
+> +	run_vcpu_once(vcpus[1]);
+> +
+> +	/* GET_CLOCK_GUEST on both =E2=80=94 should succeed (master clock activ=
+e) */
+> +	ret =3D __vcpu_ioctl(vcpus[0], KVM_GET_CLOCK_GUEST, &pvti0);
+> +	if (ret) {
+> +		pr_info("  Skipping (master clock requires matched offsets on this ker=
+nel)\n");
+> +		kvm_vm_free(vm);
+> +		return;
+> +	}
+> +	ret =3D __vcpu_ioctl(vcpus[1], KVM_GET_CLOCK_GUEST, &pvti1);
+> +	TEST_ASSERT(!ret, "GET_CLOCK_GUEST on vcpu1 failed");
+> +
+> +	/* The tsc_timestamps should differ (different offsets) */
+> +	TEST_ASSERT(pvti0.tsc_timestamp !=3D pvti1.tsc_timestamp,
+> +		    "tsc_timestamps should differ with different offsets");
+> +
+> +	/* Sleep to let time elapse, then restore vcpu0's clock */
+> +	sleep(1);
+> +	vcpu_ioctl(vcpus[0], KVM_SET_CLOCK_GUEST, &pvti0);
+> +
+> +	/* Run vcpu0 to process the clock update */
+> +	run_vcpu_once(vcpus[0]);
+> +
+> +	/* GET_CLOCK_GUEST on vcpu1 =E2=80=94 should reflect the correction */
+> +	ret =3D __vcpu_ioctl(vcpus[1], KVM_GET_CLOCK_GUEST, &pvti1_after);
+> +	TEST_ASSERT(!ret, "GET_CLOCK_GUEST on vcpu1 after SET failed");
+
+Please add proper APIs instead of copy+pasting the same code everywhere.  E=
+.g.
+this should really be something like
+
+	vcpu_get_clock_guest(vcpus[1], ...);
+
+where vcpu_ioctl() asserts success.
