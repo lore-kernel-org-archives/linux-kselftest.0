@@ -1,171 +1,235 @@
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D635C698;
-	Fri, 31 Jul 2026 08:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0193C3D75D3;
+	Fri, 31 Jul 2026 08:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785487013; cv=none; b=NQUU+9ixuqF1Ig5eStmT/eXw33MbIxrk1iszNX4KYXT0pCFpV3+ovUPPY6dNzTkTXnTDjSjhVShgHNHjpBeXaevY95ZGyPzvnpDnEJNPZCGovhGBFBtN/lKxqCpOZIN4PVMrglK1CAgdKXA6hZ/hgC4dNRkK29Bm6gj0RPiN5rA=
+	t=1785487737; cv=none; b=QRyL2xcCMZDiP7xjEGmW4RFKrk3JBXv3asXDTxpToSmwf2Z2VDYlW8G5R6B7X7/fHNvw0T5iDeh20WZ8i8WmOE+zWfiiOPkptN5gtzA0l8/hwYvF61m60nLhfTmEKANb0jRUqeYRC1DF4d7i/9A4VWk5BzxysWcrruRLQytg2O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785487013; c=relaxed/simple;
-	bh=UhHiy/GEJsPCrU9SuTgC4oXUK6ZB5y+Ya7RWZpJ6CRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iZ2VNM27C0whF71kN1eYyCOV83hobgjISEoLBuwzd1+rE7T6FBOcNeZXWZHD2vDRw9rbrKbpiLg0l2J8z/iyn1npz8X077c9E45qdtiTsWOrOhaaKvCgrbCX1l7TNBKDeoSP6lc4crpLZkHDuRborIJa6OomrTH+ey+sjHsaGtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=OmYVEnxp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YxRlSkdv; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1785487737; c=relaxed/simple;
+	bh=HUslESBRwUMZ0nIYtDZHqU/vSK5vrxqzYKo2GaPJ8E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TNdPdqRx+t2MLb7bxtIFUn6nf11OU/MX1B+KyPZdXKzbqvY8/VFWPvFnq80ZdjVeBGupJ6oOV6XONDGaSY9Rbw7DcbTUVZ89RxcfBXx2Ekaz8HdAP+LN0M78p2V9ExXycHSPFqunZk2h7r1IgzhTsy+UV2pEZ5Ab02Zt+oWsffE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fG3ztazc; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="OmYVEnxp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YxRlSkdv"
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 5C31C1400124;
-	Fri, 31 Jul 2026 04:36:49 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Fri, 31 Jul 2026 04:36:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm3;
-	 t=1785487009; x=1785573409; bh=55/Dki21CPp0xTBDv9wxOurQpKr17pIb
-	AbJ3Rj0bSAM=; b=OmYVEnxpVgj0NTismDMgBPCC0Dk+JYL/Rx6dskGbWNi4ipFv
-	7L6iO9jOnEoLDssvi2o3Ej+JzwrAJcbkaLD9GkF8HbnWPB6B7CLKuMPYJQsghLjh
-	tU1R+vAqTt3JzeKjH/Rw8QeOHbUMirkKBl5Czq3GUk+XIZ0DvhIiglK37xqD1S52
-	ipXPm5azx2n5pGhVjREJ8Gd1xHVUDLutnyISbudrT2uqUSVDQTh3PLS5O6K7yCIo
-	biNX95WU4eVgBekaYfTGqnTHSBux2Taa8yHSw+ttThKIEY/1wuR8Hc+gJs9MqdD+
-	WnpDjZqflO0Ap9g6hCyt3oDSBRPl72eRyMN1iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785487009; x=
-	1785573409; bh=55/Dki21CPp0xTBDv9wxOurQpKr17pIbAbJ3Rj0bSAM=; b=Y
-	xRlSkdvrcoy3LY3UQgNsdY118QxPig2aGadla/lVVfOueMXNEBLtiMKL1Zy0kCzw
-	1tShhE/z6yFpNop2fjOGuH+5f8PqBwort7HWy+d3pmhywsWes2P1QynMY3bZuvzX
-	/YJ+rB8DEdE4ycyn0ybW8gX/QYFox8EhkcmKC2aJqvc/CyXzR+Mn3SNqB/rAH8v0
-	c2SeZ3Xy8aN0c4L+Tc9hgH2VCYSaQHjn5maQpIZi889mU2zVjZIz1Yk5QEviRz0F
-	byZ2jf3ScCInMC7THd4ZwJvPQWfRz8kTKiXQyaj03Y31wySknuIe0bqK5q13diLY
-	TgdqUXLcXccTNowJZecqA==
-X-ME-Sender: <xms:oF5satoUjOdYqmz07MH6VJ14rTNDOQG42SMu32cLrbsDOs8cp4pH6A>
-    <xme:oF5sagEwA-qKoOrBBmV52-idKCGvGrcxl1UF1iQ1K0xBynXnEzhJCYL4HCEG-loOL
-    2zbvl9fXORsW7Rig0bKt0uQUkmmGAamP31kViUo821k28NG-WSnfWHo>
-X-ME-Received: <xmr:oF5sap_GSwBMFtVD_6Mz30UnwMm5swSYEHYlhRffOEdeNdM1hU0xzrNoNow>
-X-ME-Proxy-Cause: dmFkZTF7RoPB8mCkeCg4uacjPZ1PgHkmVmiuKI3QLAjZiadC6Yk41rqNXzn6XTESWPoBHt
-    AcPxwSusquJGEJJVgeICF/RY0js4wDCBZ5uXXrzpdrBLlI2AYAujGZ5ne17O4odKtkJ6vE
-    jEVjXUeyZDodLNJ4AinRBPe5r8mDG+O9aXmPwpelPLuReX+nfvZtLyBof23MJ5yWTsXKk0
-    OejG3JS7ynFTsOMrlCwbM8SNg992OLXpV8gBzmNl5AP+K5Zg+NGGFlipFJIDQ+UCJqOK8D
-    qPInMtQoiemoqd+ZKgIOfZ4VHUuY3qlCyCmuVI4o43de15YSvgaUVqcQ/VKytQgIKNd3C6
-    Qv+zX6OmDEgYzPk/C7lQvcPQHrNX0EYOSQxylMCC7h1G+nhNne3EK9h+SgFlgms4r8F5r3
-    MJDotkzK5B4s570gBMhP6lr+tXblaDhqDmWNpM7qvwHpybyihAoDI9oQxGUyhR/Ewli8wP
-    iI3Upr23vBCBb8UYe6rjwxgHw8di1lf5lFegjtcR0KpiYGj4Ai2/AO0O4h5reof9W1Cw61
-    mXEYc3a5rYK5W6yib9kB8vWazMfCtaQkUrT075HsMzgtgIr2HGiH2EkScxUokD4G0q9v2i
-    ROI0Ql2k8Jofmw0zHITSZb8VXNyOSVypbE717M2Q/FKXbHvdjQw8aL5JDOkg
-X-ME-Proxy: <xmx:oF5salQ73Id2MzP81C-_KSqm00IkA-YBTaE-GOBXOqk6_t4-0Fz1OQ>
-    <xmx:oF5samrFLVrnzJNddhSx9WH0EQGVZsefHmgijcYicB9lDBJx6qivyg>
-    <xmx:oF5saqOpRSKDTptOZ6MonWWqHCd6jnxu0c237rtW_SQJzcXDFv1kXA>
-    <xmx:oF5sakw0p_51Z15LbYyhfhojBd19qgUVbshWPw7y457RxWsMhCnmnQ>
-    <xmx:oV5saqXaXf9gtstpXhAzWaEtaQtUqn7hcd6kCVN-RHXQb9nHdkKlpGTa>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Jul 2026 04:36:48 -0400 (EDT)
-Date: Fri, 31 Jul 2026 10:36:46 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Chuck Lever <cel@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>,
-	NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-	netdev@vger.kernel.org, kernel-tls-handshake@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-nfs@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: Introduce read_sock_rectype
- proto_ops for control record delivery
-Message-ID: <amxenihnJifrwuYv@krikkit>
-References: <20260720-tcp-read-sock-v2-0-29545d034f3c@kernel.org>
- <20260720-tcp-read-sock-v2-2-29545d034f3c@kernel.org>
- <20260728185124.72e421c8@kernel.org>
- <480a8337-a91e-40e5-8dbd-d165599fba4b@app.fastmail.com>
- <20260728193058.7f6b453b@kernel.org>
- <a6fb364d-8344-408e-bcd5-0cee4ffabdc3@app.fastmail.com>
- <20260729163142.4f41484f@kernel.org>
- <amtcwSO24GGq_qd0@krikkit>
- <20260730143556.4a8463fd@kernel.org>
- <6deaada6-b916-4232-9df9-fff27472e98c@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fG3ztazc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785487734; x=1817023734;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HUslESBRwUMZ0nIYtDZHqU/vSK5vrxqzYKo2GaPJ8E4=;
+  b=fG3ztazcN5tw9OIkae9RsZIahi9YChRM/X6b4vHmCCSo7LaFT7D95lfL
+   YqPy44uQKwcEIJQz8CkAqlC/ciwc2NXKv83Xzd/WEXxfQdMr/I7d3STte
+   uM5MurQgHTkOA6OLW8hd0pf1qwTDnkEqs8Zfsds6Fmv6kI5jiPl1D4WyA
+   4ebd4jlcUU9hA52zQIFgDwe+M29O4k4ZKo9TNGa1CuX+8i7Z00+lUM+9/
+   TMugwNBwd+qxvB9deYvCo+MjN/wnySED8v4ovFnkEgz1XRmtCkxP8skMd
+   utxfViX8QT6FHEH7Jimqz+QXOqmNPRhlbYPl3Ie6lhWPGTlxkkuBeLoxY
+   Q==;
+X-CSE-ConnectionGUID: DZt75D95SmmslyFgxfhFfQ==
+X-CSE-MsgGUID: GcyvQWFMQA2S4IVki/I8EA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="86062840"
+X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
+   d="scan'208";a="86062840"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:48:51 -0700
+X-CSE-ConnectionGUID: u7DGKLPZS/eJ51NjhAIFwA==
+X-CSE-MsgGUID: ExP7CWv0QIW+0DfJQgeuiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,196,1779174000"; 
+   d="scan'208";a="262491487"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.248]) ([10.124.240.248])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 01:48:35 -0700
+Message-ID: <7f23d149-b7f0-465a-a9c0-5c7484e289d2@intel.com>
+Date: Fri, 31 Jul 2026 16:48:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6deaada6-b916-4232-9df9-fff27472e98c@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 20/41] KVM: Let userspace disable per-VM mem
+ attributes, enable per-gmem attributes
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-20-35f9aec2aed2@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260728-gmem-inplace-conversion-v9-20-35f9aec2aed2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-2026-07-30, 20:12:22 -0400, Chuck Lever wrote:
+On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
 > 
+> Make gmem_in_place_conversion a module parameter so that userspace can
+> configure enable or disable the use of VM-level memory attributes. The
+> module parameter is only available if CONFIG_KVM_VM_MEMORY_ATTRIBUTES is
+> enabled.
 > 
-> On Thu, Jul 30, 2026, at 5:35 PM, Jakub Kicinski wrote:
-> > On Thu, 30 Jul 2026 16:16:33 +0200 Sabrina Dubroca wrote:
-> >> 2026-07-29, 16:31:42 -0700, Jakub Kicinski wrote:
+> To avoid inconsistencies in the way memory attributes are tracked in KVM
+> and guest_memfd, the vm_memory_attributes module_param is made
+> read-only (0444).
 > 
-> >> > Off the top of my head I think a setsockopt which pre-seeds the content
-> >> > type so that the read returns an errno if the queued content type is
-> >> > different could be a simple fix. You'd configure that on your sockets
-> >> > to DATA and once you see a EWHATEVER you'd assume that some special
-> >> > record arrived and the socket has to be handed back over to the TLS
-> >> > control path. This is literally the first thing that comes to mind,
-> >> > IDK how ugly it will look in reality so no promises.  
-> >> 
-> >> But then you're back to "read_sock stopped, caller has to take some
-> >> special action to handle the next bit of payload". It's not better
-> >> than "read_sock, and do a recvmsg when read_sock says it's not DATA".
+> Since selecting CONFIG_KVM_VM_MEMORY_ATTRIBUTES disables in-place
+> conversion, actually make CONFIG_KVM_VM_MEMORY_ATTRIBUTES selectable. Make
+> the config only selectable for (CoCo) VM types that might use
+> vm_memory_attributes.
 > 
-> But the “recover the control type with a separate operation” is strictly
-> better than “pass a CMSG buffer to every I/O operation just in case” ;-)
+> Since memory attributes are trackable in guest_memfd, the concept of having
+> private memory is no longer dependent on
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES. Define kvm_arch_has_private_mem() based on
+> platform config, so that having private memory is dependent on (CoCo) VM
+> type.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Tested-by: Shivank Garg <shivankg@amd.com>
+> [Define module_param only if CONFIG_KVM_VM_MEMORY_ATTRIBUTES is enabled]
+> Suggested-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h |  4 +++-
+>   arch/x86/kvm/Kconfig            | 14 ++++++++++----
+>   virt/kvm/guest_memfd.c          |  2 ++
+>   virt/kvm/kvm_main.c             |  5 ++++-
+>   4 files changed, 19 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index ceb2abf43b76f..766eb094eaae6 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1849,7 +1849,9 @@ enum kvm_intr_type {
+>   	((vcpu) && (vcpu)->arch.handling_intr_from_guest && \
+>   	 (!!in_nmi() == ((vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)))
+>   
+> -#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#if defined(CONFIG_KVM_SW_PROTECTED_VM) ||	\
+> +    defined(CONFIG_KVM_INTEL_TDX) ||		\
+> +    defined(CONFIG_KVM_AMD_SEV)
+>   #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
+>   #endif
+>   
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index abb108886733a..2c3c22aeafa54 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -81,13 +81,21 @@ config KVM_WERROR
+>   	  If in doubt, say "N".
+>   
+>   config KVM_VM_MEMORY_ATTRIBUTES
+> -	bool
+> +	bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
+> +	depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
+> +	help
+> +	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
+> +	  memory attributes.  Using per-VM attributes is deprecated in favor of
+> +	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
+> +	  CoCo VMs using a VMM that doesn't support guest_memfd memory
+> +	  attributes.
+> +
+> +	  If unsure, say N.
+>   
+>   config KVM_SW_PROTECTED_VM
+>   	bool "Enable support for KVM software-protected VMs"
+>   	depends on EXPERT
+>   	depends on KVM_X86 && X86_64
+> -	select KVM_VM_MEMORY_ATTRIBUTES
+>   	help
+>   	  Enable support for KVM software-protected VMs.  Currently, software-
+>   	  protected VMs are purely a development and testing vehicle for
+> @@ -138,7 +146,6 @@ config KVM_INTEL_TDX
+>   	bool "Intel Trust Domain Extensions (TDX) support"
+>   	default y
+>   	depends on INTEL_TDX_HOST
+> -	select KVM_VM_MEMORY_ATTRIBUTES
+>   	select HAVE_KVM_ARCH_GMEM_POPULATE
+>   	help
+>   	  Provides support for launching Intel Trust Domain Extensions (TDX)
+> @@ -162,7 +169,6 @@ config KVM_AMD_SEV
+>   	depends on KVM_AMD && X86_64
+>   	depends on CRYPTO_DEV_SP_PSP && !(KVM_AMD=y && CRYPTO_DEV_CCP_DD=m)
+>   	select ARCH_HAS_CC_PLATFORM
+> -	select KVM_VM_MEMORY_ATTRIBUTES
+>   	select HAVE_KVM_ARCH_GMEM_CONVERT
+>   	select HAVE_KVM_ARCH_GMEM_RECLAIM
+>   	select HAVE_KVM_ARCH_GMEM_INVALIDATE
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index ea2752989f8bd..df67a6188aa99 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -1137,10 +1137,12 @@ static bool kvm_range_is_private(struct file *file, pgoff_t index,
+>   {
+>   	struct inode *inode = file_inode(file);
+>   
+> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+>   	if (!gmem_in_place_conversion)
+>   		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+>   							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>   							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+> +#endif
+>   
+>   	return kvm_gmem_range_has_attributes(inode, index, nr_pages,
+>   					     KVM_MEMORY_ATTRIBUTE_PRIVATE);
 
-That's up to every user to decide :)
+With my suggestion[1] on patch 7, this diff block can be dropped.
 
-> > My bad, I replied without looking at the code.
-> > We already constrain control records in the way I proposed.
-> > rcvmsg (w/o cmsg) and read_sock will error out if the next
-> > record is control.
+[1] 
+https://lore.kernel.org/all/dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com/
+
+The code looks good to me,
+
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index e961cc297ba2a..eb9f433278d2f 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -102,7 +102,10 @@ static bool __ro_after_init allow_unsafe_mappings;
+>   module_param(allow_unsafe_mappings, bool, 0444);
+>   
+>   #ifdef kvm_arch_has_private_mem
+> -bool __ro_after_init gmem_in_place_conversion = false;
+> +bool __ro_after_init gmem_in_place_conversion = !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES);
+> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +module_param(gmem_in_place_conversion, bool, 0444);
+> +#endif
+>   EXPORT_SYMBOL_FOR_KVM_INTERNAL(gmem_in_place_conversion);
+>   #endif
+>   
 > 
-> Almost.
-> 
-> There is no API contract for ->read_sock, but the TLS read_sock
-> implementation itself will return -EINVAL for two unrelated reasons:
-> 
->   - net/tls/tls_sw.c:2068-2072 — entry gate: sk_psock_get(sk) returns
->     non-NULL, so the socket is under sockmap/BPF. Drop the ref and
->     refuse before even acquiring the reader.
 
-You can ignore this one, it's just a leftover that 79511603a65b ("tls:
-remove dead sockmap (psock) handling from the SW path") missed. I'll
-get back to cleaning all this up once I'm not drowning in reviews
-(I'm sure being on holidays next week will help with that).
-
->   - net/tls/tls_sw.c:2111-2115 — per-record: tlm->control !=
->     TLS_RECORD_TYPE_DATA. The record is requeued rather than consumed.
-> 
-> As far as I can tell, no other socket provider that implements read_sock
-> will return -EINVAL. But this isn’t a documented guarantee that a
-> socket consumer can depend on, currently.
-> 
-> What would make this just a little friendlier is having distinct errnos
-> for these two conditions, and a kdoc API contract that documents them.
-
-+1 on the API contract doc. I have no idea what read_actor does to
-desc, how that relates to the returned value, and if it modifies the
-skb it gets in any way. That makes it hard to figure out the correct
-behavior for tls_sw_read_sock().
-
-Maybe we should even come up with some new internal errno (like one of
-the >=512 in include/linux/errno.h). And maybe this -errno return
-should be desc->error instead. I really don't know how read_sock is
-supposed to behave.
-
--- 
-Sabrina
