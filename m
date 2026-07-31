@@ -1,53 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6732E432301
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 14:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E605643803C
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 15:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785509964; cv=none; b=qaItrNFgAnAMXxluBa5zTtiIOh+5nQkG6+2bryX6sJCCPrKZJuFDU2XHbjObybIQB5MZ3YG28XTdE0cKExHILQnLosgOYARAOTdLzanSAclwlGv/5wh+ge0n4Wq8BK0Ewk+q2fy4DkYipiGtfPJQZJqWqcxbK2KGRil00CUJNYM=
+	t=1785510544; cv=none; b=Oj6DW/1EgrPYMAhjynU6T18DZSUTUv0W+Hxdd0BEnFkXVcxAV62RYYyitM1pRafpjsHlT6Tfyafp804zihQpZ8ldVhcZXvPUX+yJ5UvVbnDhkmUBG/j+cnrYl7UbBoQYLA4AdjIjHldz7m42cVKCTnCllH5Po+L/q9HqQDYMUX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785509964; c=relaxed/simple;
-	bh=c6cPb7PSp3JUeUhUO4+oAzTADEyNQE4jXFaaHyq4WQQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZjV06u9CL3mygjiytJjTtlSBtaWgmCVXu5cXKkznE0A5Wu+psGCiTPGaxed09VdNnuWRkee2UmXnjGhghkhl1UVl/dQNmpACEkWH3UGus2/6DrlZuQXtoayXzz0SCnsFXjbPM72Q5LjJitR92zJSyMsXQnSkovzy2nLMuq9kVtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SdMw5GNx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785510544; c=relaxed/simple;
+	bh=AIVWrh6CF4CKx4RF7vzN6YiuXpAZvS5KqSwfzePjOCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CNwKUyRF1/nhU2ahxJhw6OUb8Qlusu8BWCVjz59bHqqqk/tEuhJ0uOqgd122ZyfeNiCy8SbzGYxp7Yf0kteWw2H4HIuhgBwkcenGWBYTvjbzeBGlqRf7fsZMToZVO43Aa5mcBiEbDw4M/H0JSFf7E/C5xaSHriU8RjWx8V0sii0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JkGWWF5g; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SdMw5GNx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785509962;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Zfzl5161juAkmaNitF1Hm5SCf0UuByVgyEH28WzLNRA=;
-	b=SdMw5GNxLDuYQ855kHR4fwxz7uKSHOhQW0qDJUk5dNFVp+Z1DQ152pbtrP22MUHtSOh8yX
-	WUS7M9z1+BBhNLi5pBlr5CI/11xJPuxOtSG5oTOGud3I+9VMdXnDVtalWxU0O9VjYIAeqM
-	nxmartclkfWl7ek/fM/DUJ0khz10hP8=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-551-ELLellS0MraqB44IboUyNQ-1; Fri,
- 31 Jul 2026 10:59:18 -0400
-X-MC-Unique: ELLellS0MraqB44IboUyNQ-1
-X-Mimecast-MFC-AGG-ID: ELLellS0MraqB44IboUyNQ_1785509957
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA97F1956088;
-	Fri, 31 Jul 2026 14:59:17 +0000 (UTC)
-Received: from bgrech-thinkpadp1gen3.rmtustx.csb (unknown [10.2.16.27])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B5A6D42A;
-	Fri, 31 Jul 2026 14:59:16 +0000 (UTC)
-From: Brian Grech <bgrech@redhat.com>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	Brian Grech <bgrech@redhat.com>
-Subject: [PATCH] selftests/net: fin_ack_lat: fix latency threshold typo
-Date: Fri, 31 Jul 2026 09:59:14 -0500
-Message-ID: <20260731145914.4014912-1-bgrech@redhat.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JkGWWF5g"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c1c4c7ddaf6so163362666b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 08:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1785510534; x=1786115334; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gOaXPDNzFmfCcFZASeKm4HD2Emk8ASo1ynV4rSmHLg0=;
+        b=JkGWWF5gOjxkMrtpUQnC0kHCKCA3ttjqTCMdQPIQE2A5UYwLq1eZL4gKLP0DQkuRt1
+         n0DZRcuOr9wrD1JRrLw8AAIUsjdiLUdraGfE14xZ/yooQKHdvOBT4aDlBOe41XykaCSh
+         9csXID9vksGdyUNwsRh43D2hL2GY3ojFIfix8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785510534; x=1786115334;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gOaXPDNzFmfCcFZASeKm4HD2Emk8ASo1ynV4rSmHLg0=;
+        b=MHQ5K1JA1dyldLJC5Mn7r7lNW5P5dfT5P6RGps0HYfSkRnMyVfx843e/gnJVOCa5Xe
+         RW825s9T9WJxK8/hbuMR/ihcObKvgrlz1ZSGsOCVLsVNnKWRizXA9ASGCsz4nNrvROnY
+         GgHyjsgkDkTpywCwqseq44Q3J8vhmsy0Gig93stqX4kW1/Pv0dhh160/G/sy3wMLRkAY
+         qKG9GjBikkCkfNE99VZMkzm6His05WwgsALFcDzsjH4hhl/zKuS4c1Td8fpznXX7x6Hr
+         qM6kzTvsssRveagdriL8xfnS7b4yLTWtzg7Fy2yot2rcuOhLg1m+QyDAYqlVB79pYEo6
+         fIHA==
+X-Forwarded-Encrypted: i=1; AHgh+RqcKcgevVvuMExXM0iUV/4DS+RXONg4/hyZ+9VRF1yBQHNhi2AAK0O1oCVKzdkl9ktSAYNDegvGm1hGvxSM0G4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy27ORXPhED2wUP5Ic5HFIKOuePCDEDVJkbgGlAhfgFXYPVw/Xd
+	JJkN11gn35+GbvVbsG2LtSG9PRsWMqQ0cba/MF5cwWKEdTOJZewUIsDgUu/97Uiy7Q==
+X-Gm-Gg: AR+sD13qI3lwecvDw2LAJxER0SyijTCsmiA6JbUPEzvA5TV5xFy2a+UxVq/Fhhx56NT
+	ecTtwK4MZrQqEEwZFbxzQh2VTuv5S16ONLVmu/tyne8px/jGeV+MbRDM3DYK0EXfUW5NlcIjaPp
+	+f7fxxxqSeryYmUcrMJFgj+O200FvekvSRqH2R2zch8VLdiTwfM0CJCv20YPciiUE1e+fkdnET8
+	vJdz98RGX5kEvTA3vHA2s+rUwjV9Bz3F8NYgkFM8Gb6fw4Wb/TgJTH+DdTdk40t3LlnHe4U7ZpF
+	KuK7WE/PaZM/0WOjqngaXKkP//f+sjSxOWGphN+pThWz7/rCZ/7BDfjYrzzhC6hxv1/G1bUscOj
+	bkvBVFTu5MaZCKS3AoQn2AqDay+AUjEcHAnvW5wHg5h/aT/NhB7BIjwQtDmX5H906d5ufQJMyNm
+	dJImO4/9IPt4SYSENN0XpbbgeP7GOVB8HhFGus11zCLNm/bD/mIhdOJa/8yX38LSoU2DjBX8R1s
+	1+C5GNsyFeWIQiuuar9YfzJV/JhRRCSujNkmbonIe0UbOe9vhuA7Bg=
+X-Received: by 2002:a05:6938:a08a:10b0:c1f:e172:cf16 with SMTP id a640c23a62f3a-c1fe172d0aamr53127366b.46.1785510534451;
+        Fri, 31 Jul 2026 08:08:54 -0700 (PDT)
+Received: from dmaluka.c.googlers.com.com (110.121.148.146.bc.googleusercontent.com. [146.148.121.110])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45a0c8bsm5647974f8f.34.2026.07.31.08.08.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 08:08:54 -0700 (PDT)
+From: Dmytro Maluka <dmaluka@chromium.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Mathias Krause <minipli@grsecurity.net>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Vineeth Pillai <vineeth@bitbyteword.org>,
+	Chuanxiao Dong <chuanxiao.dong@intel.com>,
+	Aashish Sharma <aashish@aashishsharma.net>,
+	Grzegorz Jaszczyk <jaszczyk@chromium.org>,
+	Dmytro Maluka <dmaluka@chromium.org>
+Subject: [PATCH v2 2/4] KVM: x86: Fix off-by-one in max_vcpu_ids bounds checks
+Date: Fri, 31 Jul 2026 15:08:43 +0000
+Message-ID: <20260731150846.1728164-3-dmaluka@chromium.org>
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
+In-Reply-To: <20260731150846.1728164-1-dmaluka@chromium.org>
+References: <20260731150846.1728164-1-dmaluka@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,33 +83,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-The FIN-ACK latency threshold was written as 100000 (100ms) instead
-of the intended 1000000 (1 second). Connections completing between
-100ms and 1 second were incorrectly flagged as high-latency outliers
-and printed as failures on loaded systems.
+max_vcpu_ids and KVM_CAP_MAX_VCPU_ID are exclusive, i.e. the maximum
+allowed vcpu_id value is max_vcpu_ids minus one, not max_vcpu_ids.
 
-Add the missing zero to restore the intended 1 second threshold.
+Fix sanity checks for KVM_SET_BOOT_CPU_ID and KVM_CAP_MAX_VCPU_ID to
+correctly fail when bsp_vcpu_id is set to max_vcpu_ids, not to a value
+below max_vcpu_ids.
 
-Signed-off-by: Brian Grech <bgrech@redhat.com>
+Fixes: 7c305d5118e6 ("KVM: x86: Limit check IDs for KVM_SET_BOOT_CPU_ID")
+Fixes: d29bf2ca1404 ("KVM: x86: Prevent excluding the BSP on setting max_vcpu_ids")
+Signed-off-by: Dmytro Maluka <dmaluka@chromium.org>
 ---
- tools/testing/selftests/net/fin_ack_lat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/x86.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
-index 70187494b57a..4117332eb1a9 100644
---- a/tools/testing/selftests/net/fin_ack_lat.c
-+++ b/tools/testing/selftests/net/fin_ack_lat.c
-@@ -69,7 +69,7 @@ static void client(int port)
- 		lat = timediff(start, end);
- 		sum_lat += lat;
- 		nr_lat++;
--		if (lat < 100000)
-+		if (lat < 1000000)
- 			goto close;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 47cb9eba113b..b576b46869d2 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -6908,7 +6908,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 			break;
  
- 		if (getsockname(sock, (struct sockaddr *)&laddr, &len) == -1)
+ 		mutex_lock(&kvm->lock);
+-		if (kvm->arch.bsp_vcpu_id > cap->args[0]) {
++		if (kvm->arch.bsp_vcpu_id >= cap->args[0]) {
+ 			;
+ 		} else if (kvm->arch.max_vcpu_ids == cap->args[0]) {
+ 			r = 0;
+@@ -7478,8 +7478,8 @@ int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+ 		mutex_lock(&kvm->lock);
+ 		if (kvm->created_vcpus)
+ 			r = -EBUSY;
+-		else if (arg > KVM_MAX_VCPU_IDS ||
+-			 (kvm->arch.max_vcpu_ids && arg > kvm->arch.max_vcpu_ids))
++		else if (arg >= KVM_MAX_VCPU_IDS ||
++			 (kvm->arch.max_vcpu_ids && arg >= kvm->arch.max_vcpu_ids))
+ 			r = -EINVAL;
+ 		else
+ 			kvm->arch.bsp_vcpu_id = arg;
 -- 
-2.55.0
+2.55.0.508.g3f0d502094-goog
 
