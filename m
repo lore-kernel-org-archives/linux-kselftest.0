@@ -1,96 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD46E442B1D;
-	Fri, 31 Jul 2026 16:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B263DB335;
+	Fri, 31 Jul 2026 16:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785516633; cv=none; b=di9TgH3cFq82xIypRU10Cpic5i5QL9BNT7VVPkzUHUCz5b3E84+bMG83oHiwr/o3uvmvpo7gICsl/iMJAI0zI9i75QBE81EPCvzLf4U6vP332RiReDP1jpA4KmgFpOt/Cq8lOBAOCkRzK2yE0SI/Wxh9pz4V1966U9ur3oN3GvA=
+	t=1785517105; cv=none; b=qxUXgWNXA9UyZ4iwr2JQBcDYIwuHuNfQ1sBTgpI7BYhAsi8GRJexfceb5LO8plAmoonuYfEZh6OuYkGCQTK15i5AqNPOF5A+JPYS+TGmv9KK2AQrdy/kG2hh4UyDAKtLzjmZXRujWM0fMq8/95h0vkQVGfAoDU/ZgYKULMvpJic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785516633; c=relaxed/simple;
-	bh=9c9PLUvH30dXfqYjdoYJIcXUdiGZ2eaDs8yIsaJP7TI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aH1ReI0r8yu/bbKO5Vej0qRh+uEpICNbRxgpuc+AnzZE6NiWOjBPwBUwfvPq5v0nH3COWqlzeVwngfpjEiZ8XmynBeeWnafpancEy2fapbeONvdFIwdECG43yO8xkEKUO3j7Vmyqf29jQcUbj2FyAKn1t5HMWyhernPbG+hyP8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ktjZOL+3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785517105; c=relaxed/simple;
+	bh=7Wkc5vnPJfK8+T6cj+GxOwF6aP8t3LLmOUCwYz0pevc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eJ6ywt5LQddsv6DbL9zYscSuBYI4mO/g9VXKeoiaCX1K3r7dl/C2yKi7y0cZFaQN1AmDxh8ZlXg7dm7PKzKDWo1Tkr3JBTkZ5qRyMejbJGFdZIZ1ptQ/Tf4ppI6UP93ubrbnZJ/EjVBk8Aa8ZhAEG+glxuCG1myMsxuckSWkNXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QDupzw9e; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ktjZOL+3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 549B51F00AC4;
-	Fri, 31 Jul 2026 16:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785516631;
-	bh=mui2xF2dMnnZlOxVw1sqBdljvZlHXe1/8LY8aJH8dmE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ktjZOL+33rXXoNXWdQqK2fF+kEpvn/4+xFqH3E0+OSfLdgMRayoVE8HPAiD/0Karr
-	 yxtT9894SpC0LShGmt6g9XJXdKJQPfCV0cuHdDBygmrBcRE0DgcJM0dCd/5M7sol8k
-	 5tVBuhXOhBWHpqVTtQ5LbRcaD/orXFdLQQJyDoQ3EcyyyJeCEvzon3AIhWhQQKTTNj
-	 Xc3QE15C1ZsD3SS/RKpaBggJFUk5LmkjgcTah1CxRfwHBYH/wfYCG1b/b8tfZ3lMD0
-	 XNGOGsNL7PIchyyR/56hNkPJud9nAEFwZSqlB4B60u40U02tvfPAOrzoZIfr6hlwjO
-	 R6PEda4JvZLjw==
-Date: Fri, 31 Jul 2026 17:50:22 +0100
-From: Will Deacon <will@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 04/11] arm64: errata: Require Apple IMPDEF PMUv3 traps
- on all CPUs
-Message-ID: <amzSTp3cUCMuwJKf@google.com>
-References: <20260710-hybrid-v8-0-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
- <20260710-hybrid-v8-4-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QDupzw9e"
+Message-ID: <191efe80-24d1-4aab-8746-21afb4c379bc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785517090;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7Wkc5vnPJfK8+T6cj+GxOwF6aP8t3LLmOUCwYz0pevc=;
+	b=QDupzw9eNh0JVgtVkhnk9fpyAzqrfoSZcykUG5rIYn9PyeUrXBswOnBQUHvPKBV/p2MNUf
+	mfRJ1cQlIl9txEmp6iCYbDFObuLFKeBZy0GRG3CtTIljNnrDbkEdkJiywNamh8zB4FrxIM
+	8PggOuJ4D54cvOEyYOsxvLigg1zLIWo=
+Date: Sat, 1 Aug 2026 00:57:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260710-hybrid-v8-4-621409f3a592@rsg.ci.i.u-tokyo.ac.jp>
+Subject: Re: [PATCH v9 00/10] Fix missing fops.owner in Rust DRM/misc
+ abstractions
+To: Gary Guo <gary@garyguo.net>,
+ Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
+ <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
+ Igor Korotin <igor.korotin@linux.dev>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org,
+ linux-modules@vger.kernel.org, driver-core@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>
+References: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
+ <CANiq72m59O-ruHUvUcZC7yCvu0KV0w_m5vMO4e0rxyHdRmihJw@mail.gmail.com>
+ <68c43a03-5fa0-42a8-b886-2c756e39515e@linux.dev>
+ <DKCWO60T6JPR.1P3AAJAATMXBI@garyguo.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <DKCWO60T6JPR.1P3AAJAATMXBI@garyguo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jul 10, 2026 at 08:14:58PM +0900, Akihiko Odaki wrote:
-> KVM relies on ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS as a system-wide
-> precondition for PMUv3 emulation on affected Apple CPUs. A local CPU
-> erratum is too weak for that: once the workaround is enabled, a late CPU
-> that misses it may still be onlined.
-> 
-> Make the workaround an all-early-CPU capability instead. The matcher is
-> still local because it depends on MIDR_EL1, but the capability is only
-> advertised if all early CPUs match, and late CPUs that miss it are
-> rejected once the capability is enabled.
-> 
-> Assisted-by: Codex:gpt-5.5
-> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-> ---
->  arch/arm64/kernel/cpu_errata.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-> index 476a37c82108..14ce49d693c4 100644
-> --- a/arch/arm64/kernel/cpu_errata.c
-> +++ b/arch/arm64/kernel/cpu_errata.c
-> @@ -964,7 +964,7 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
->  	{
->  		.desc = "Apple IMPDEF PMUv3 Traps",
->  		.capability = ARM64_WORKAROUND_PMUV3_IMPDEF_TRAPS,
-> -		.type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
-> +		.type = ARM64_CPUCAP_EARLY_LOCAL_CPU_FEATURE,
 
-I always get tangled in knots with this code, but does this correctly
-handle the case where the boot/early CPUs don't have the impdef PMU
-feature but late-onlined CPUs do? I'm not sure we configure the traps
-correctly in that case but this is all gloriously undocumented.
+On 8/1/26 00:43, Gary Guo wrote:
+> On Fri Jul 31, 2026 at 5:34 PM BST, Alvin Sun wrote:
+>> Hi Miguel,
+>>
+>> Thanks for taking a look!
+>>
+>> On 7/31/26 14:46, Miguel Ojeda wrote:
+>>> On Thu, Jul 23, 2026 at 4:11 AM Alvin Sun <alvin.sun@linux.dev> wrote:
+>>>> base-commit: b7e5ac83cb16f7ffd11dc23736f84276602100ed
+>>> Was this old tag used for some reason?
+>> That was an oversight on my part - I forgot to rebase onto the latest
+>> tag before sending v9. The series is now based on v7.2-rc4.
+>>
+>>>> prerequisite-change-id: 20260519-miscdev-use-format-9ab7e83b1c11:v3
+>>>> prerequisite-patch-id: 405b334ff0d48ad350014f05a2321bdbaa025400
+>>>> prerequisite-patch-id: 604b631c81d5423f4ebb2e12ba2d22e9ce371bfc
+>>>> prerequisite-patch-id: cb550d94cefe01920e0d3ced2b2bcbecd76f3907
+>>>> prerequisite-patch-id: 3bc830839742591460cb86d9472c04f4686dc600
+>>>> prerequisite-patch-id: 571058244bc8c7088638d2e3225713011246c7e9
+>>>> prerequisite-patch-id: 347c5a3c6dbef9832bfce8419fc23e6e08ba477f
+>>>> prerequisite-patch-id: 3e202d988b56b88446f7535e90d3f00cf5f15701
+>>> Are all these actually needed? Some seem unrelated (some were already
+>>> applied too).
+>> The prerequisites were just some import formatting changes that the
+>> series depended on at the time. After rebasing onto v7.2-rc4, I was
+>> able to drop all of them - the rebase was clean with no conflicts.
+>>
+>> I'll send v10 shortly.
+> If the patch applies cleanly then there's a no need to send a new version.
 
-Will
+Sounds good. I'll hold off on v10 then. Thanks!
+
+Best regards,
+Alvin
+
+>
+> Best,
+> Gary
+>
+>> Best regards,
+>> Alvin
+>>
+>>> The only one that seems needed has Andreas' Acked-by, so
+>>> I guess it is fine.
+>>>
+>>> (By the way, I will use this second message to take this chance to
+>>> move the modules maintainers in the To: in case it helps, since I
+>>> didn't do it in my previous message)
+>>>
+>>> Thanks!
+>>>
+>>> Cheers,
+>>> Miguel
+>
