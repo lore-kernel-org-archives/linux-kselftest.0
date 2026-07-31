@@ -1,71 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f226.google.com (mail-pl1-f226.google.com [209.85.214.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221243D3CF2;
-	Fri, 31 Jul 2026 23:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C3C3D5668
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785539746; cv=none; b=QCzCjhGUQUOvkS9rjRewp25lBfhr6z+DApLfSqk32/vBdzWQXrbSY2nOsYjRKB02TPc/hd+K/1yqsgMUe1HFkjeV/DIyEOIwsU+mqxzJrhJGkJq51+aIOvXeeQNoexNijXkE3mu+KdmsrScMTqOhpwcmJQtn8Z9gd1fnEmdIj6c=
+	t=1785539771; cv=none; b=cHv9Ax580Eflsl4kZq/g5zr//dtYXTD1ExB59eulmvaNkV63wkCE8OsLofjkxMv2TkU6tCC3WJ72r+5mDP5s3NgC2BQvfXDEcfmVRdWLyE4Qe5bhFv38nHShPWYDUfNywIZXXRwTpRZnP+qyP56dwrTujjBXBSdKh8cpGy05CZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785539746; c=relaxed/simple;
-	bh=So6Ub7VcEdURIC9Cw1Po+tU+Mmci/s0GtxtldO16gnA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fvvz5a9Tl5CMWtuXSS4Qicxel8u4cLtwA/TCU2UCnfHgm4E9GFvDveibPFb3MpEkxfqba7MKNGuEKoiLzTOd1g3iOLyoOmDcpnVQyAHaSTL19k+Up9E2UXMLxOe5zpJ4xgL55lXxGiT/o4d1VCxYqmmwebnSw5XkeKifkt4ZkyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7NKCP8e; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785539771; c=relaxed/simple;
+	bh=UhkbNNATlf7EoN+UKbHM+mV6TO/MAfeNM22oA+WBTDw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EUw/BXy3w2Ui3P/6TyhqDffwjPxa8jiAB3u08P8fddjQiYOjJu1ziSzDheEduggGXwzmoZR5M8+bZ56Cmttyf93v1CXLmB7S3GzQl+oxgoBfKjAhtRNxSIk2LktZ6g3ekm6d5WY0ApTeCDgqz9uFuaNZAoJ5BQZPVU3ctFVkAVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Cs0Lrt42; arc=none smtp.client-ip=209.85.214.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7NKCP8e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAE91F00AC4;
-	Fri, 31 Jul 2026 23:15:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785539744;
-	bh=So6Ub7VcEdURIC9Cw1Po+tU+Mmci/s0GtxtldO16gnA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=X7NKCP8eGnSgR29+BXGYD2BtwXHJ/0jdqD+vQXsyaMkPow6unBAkKM/UiPhFBf1ty
-	 I8FlbywNJ+hbsORmA8bnJRnkyNQZ9SkSO02v6Sy0lYgt+8DT2AkJcqPe4C1sHD2OYS
-	 sLpi/u+vdPVRomEr+M8XJG8lNp/yKsCed1LfDIFlNcbLcoiHDc+MR9PvvBXOvIY7C0
-	 6ntSW39bny4CgjaA1JFRHekq9zfDTj0wDeibcsr2dl/7Z0Kk87lQrGmEtmAAAYwmhZ
-	 mPXfD426+b+brRL+JN7wJDlYcQrX3LSz61xMGkFkGZ8uoiJA42oIzWUaahLOTDbkP6
-	 IPbM/iikIOelg==
-Date: Fri, 31 Jul 2026 16:15:43 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Gerd Hoffmann <kraxel@redhat.com>, Vivek Kasireddy
- <vivek.kasireddy@intel.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
- sdf@fomichev.me, razor@blackwall.org, daniel@iogearbox.net,
- almasrymina@google.com, matttbe@kernel.org, skhawaja@google.com,
- dw@davidwei.uk, Joe Damato <joe@dama.to>, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v6 3/3] selftests/net: devmem.py: add
- check_rx_large_niov
-Message-ID: <20260731161543.1021caed@kernel.org>
-In-Reply-To: <am0bHSeJqcgdm3vn@devvm29614.prn0.facebook.com>
-References: <20260724-tcpdm-large-niovs-v6-0-7975f62cdfbb@meta.com>
-	<20260724-tcpdm-large-niovs-v6-3-7975f62cdfbb@meta.com>
-	<20260729191649.55ab7942@kernel.org>
-	<amvEJVio9XtCn+YT@devvm29614.prn0.facebook.com>
-	<20260730151433.6f71258e@kernel.org>
-	<am0bHSeJqcgdm3vn@devvm29614.prn0.facebook.com>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Cs0Lrt42"
+Received: by mail-pl1-f226.google.com with SMTP id d9443c01a7336-2cedda2ce6fso12729795ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785539769; x=1786144569;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=78eASuWYN+bdMC8EWrF3gOKxrSi6Ec2rxlN0ZtVlNR0=;
+        b=c2OXXLC+2cPMzFv12Z9OtrSwkNAVA4xrkiGKI5rKGYkyj1o/mkWaspuqsq4mmfxNq6
+         8ndYcESgyWfYav/u35qqQsfDuP2klMPKCfBDjzlMLsr24s4mzP7N0hfDc67l0Rf5R1IW
+         E3tcp9eXnkWgH9RlNPqG9SbiEKq0J06+TsHz9iUZt1I9TjZ0m+EdOtReFiAIzPzwfW1k
+         XH1nyfQwQiw+psxt1M8zw5p76uO34k65q4wFfSeWiy4/rpcc8kUU1yxHOjDbPIwsEv4s
+         txCnpHkJgNNoF+eR4kZVeJs7a5ccI+wywCqa6c7NyewtPD8ei7go+vWqsioJDNiYWv52
+         0JTw==
+X-Forwarded-Encrypted: i=1; AHgh+RpRcnFE9qCsI2cacB8/AdVGa+RPfJWXahtIZJAZ3I2X/l0fvThtFDvugahEoVjftz/GUbiUVXS8JIQlulfyPOc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTbF6Wb6r5W7GVe74bTxTdBt+ugA4mkGduZegt0TCSNbVXclIJ
+	a1xjumzauVMYNSQcV9wk1HFfP0Ze/q+mTTZ2btgZ5ITB9Xvu+Wh+WRbGDK9UkY3VG0PXt436oUh
+	RunYIir8SBx7dO7zYcjRXtAlLVXOResvVcD6szaY1V8e9LYIsuxS6IEr0pqYA3n1p9i+g1jCObo
+	ryMFuKl1Nz0TkPKWI/tzlrM+mr3iwB/qovIHghNnz3kKmdN/PuE8wi26c0wToJL7D+84nSYzrf5
+	FlR5RIwgZyYtzAUVYlZYCzPCjRm
+X-Gm-Gg: AR+sD11fRzbUzWX6TgfxhJXfXWQwAfkwidsgILAujBjs8FahgfAIW1FK/Vobi5prIYD
+	LeBR4ZG5HUku8y8H+L2HOJzd0HNckmO/xQ7ktdGCSgHoS/NoXNCfFNoiT5fo6/kYuL2tuGTG05p
+	HGC5hHzIjzZnZzvk/aYglctCPSCXa9D1+TUVZo9qfl5+vEpNhC6VEniAIiYeNo5djp0/W+Jfcvv
+	ZAwE8+6XXKzbOsbT3U4AMq/5erPq8tMv3zaZlp8EsIy0R3h8JWEEYdMMZczI/QbI48yQ42AfewS
+	4fVQ/kQTJRiOe2boVaVmxTjojolrDGsqzmWgZxamH8jWOW80nuLWMuHXiVmJSrG/GZur+KxCQB+
+	46ODe/J/hiZnWWox15gqlJbjODdNxe2txHbDvixcLzTd8rd16DqRwgduvG+J6iANiNMsTg287oa
+	rHOvTv/N0W9lUK1V6ARcU5UaqwKwwfudRJyVr284PA
+X-Received: by 2002:a17:902:f70c:b0:2cf:dcd4:c646 with SMTP id d9443c01a7336-2d052462f7fmr15664355ad.33.1785539769249;
+        Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-26.dlp.protect.broadcom.com. [144.49.247.26])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2d04b1379f3sm2350435ad.38.2026.07.31.16.16.08
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbb20f82a0eso2001917a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1785539767; x=1786144567; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=78eASuWYN+bdMC8EWrF3gOKxrSi6Ec2rxlN0ZtVlNR0=;
+        b=Cs0Lrt42aP9e1MzzKRdbLlr8PkSl839yKbCaIS1bYUOcNo1nXdkJQXf7RAYK76h9r2
+         myLMkG2oUS4+HzaHJK6ypPoitMacpz/hRgr9NRET1ms9wE5lSYnFHDhEhCPy/jSdTP6J
+         dU5lfpGEG2l0D6WdsIK+6MYORxynqQYZOUUm8=
+X-Forwarded-Encrypted: i=1; AHgh+RrFs8dJCRIrxiTNSM5QSMfczarVlZjCGZKrZq1BaMkfsvfUBbZtdSdZxZVT9F8NDfkGCz70RhXN8eCN00o8DDQ=@vger.kernel.org
+X-Received: by 2002:a05:6a21:3113:b0:3bf:b60b:da95 with SMTP id adf61e73a8af0-3c92a88f651mr1347630637.60.1785539767356;
+        Fri, 31 Jul 2026 16:16:07 -0700 (PDT)
+X-Received: by 2002:a05:6a21:3113:b0:3bf:b60b:da95 with SMTP id adf61e73a8af0-3c92a88f651mr1347602637.60.1785539766919;
+        Fri, 31 Jul 2026 16:16:06 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e04506csm10341357eec.17.2026.07.31.16.16.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2026 16:16:05 -0700 (PDT)
+Message-ID: <b8ec703e-145f-4466-8d4a-a67740098c15@broadcom.com>
+Date: Fri, 31 Jul 2026 16:16:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH stable 6.12 0/9] Kunit backports for older systems
+To: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
+ Rae Moar <raemoar63@gmail.com>, Kees Cook <kees@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+ Tiwei Bie <tiwei.btw@antgroup.com>,
+ "open list:USER-MODE LINUX (UML)" <linux-um@lists.infradead.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)"
+ <linux-kselftest@vger.kernel.org>,
+ "open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)"
+ <kunit-dev@googlegroups.com>, bcm-kernel-feedback-list@broadcom.com,
+ Greg KH <gregkh@linuxfoundation.org>
+References: <20260724214119.1066665-1-florian.fainelli@broadcom.com>
+ <2026073005-release-puzzling-8f07@gregkh>
+ <20260730203700.stable-0007@kernel.org>
+Content-Language: en-US, fr-FR
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20260730203700.stable-0007@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-On Fri, 31 Jul 2026 15:01:01 -0700 Bobby Eshleman wrote:
-> Meanwhile, do we want drivers/net/hw/config to workaround by carrying
-> something like SYNC_FILE or DMABUF_HEAPS, or wait and see about the
-> udmabuf kconfig change?
+On 7/30/26 19:39, Sasha Levin wrote:
+> On Thu, Jul 30, 2026 at 02:38:42PM +0200, Greg KH wrote:
+>> Many of these are not in newer stable kernel versions.  So can you send
+>> patches for 6.12 and all newer branches (i.e. 6.18.y and 7.1.y) for the
+>> missing patches for them, and then resend this 6.12.y series and we will
+>> be glad to queue this up then.
+> 
+> The gap is smaller than it looks: 7.1.y already carries all nine
+> commits, and 6.18.y was missing only two of them, "kunit: tool: skip
+> stty when stdin is not a tty" and "kunit: tool: Terminate kernel under
+> test on SIGINT". Both cherry-pick to 6.18.y with no adaptation, so I
+> picked them up there first rather than making Florian respin.
 
-Let's enable SYNC_FILE for now and pursue the UDMABUF change in
-parallel. It will land in another tree if at all, so we'll have
-to wait a while before it propagates to us.
+Thanks Sasha! Before seeing your email I had sent out the two missing 
+6.18.y patches:
+
+https://lore.kernel.org/all/20260730190329.3388222-1-florian.fainelli@broadcom.com/
+
+> 
+> With that done, queued the series for 6.12, thanks.
+> 
+
+Great, thanks!
+-- 
+Florian
