@@ -1,157 +1,170 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8573B14C7
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 15:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300A743B4B5
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 15:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785511039; cv=pass; b=NrTcSaRswi0fQVVmDARzOxreHXy/wEVxFW4slJQyxWPjQI1IFBa3gvHrgayDD5Yr8k4eGGP9D/YXk7IxBWJRUsNFXnywmTD6bHfE7/vlIuToNBpJk1zymdKmjx6ayUn/lty5MKLkCK4xOYciZtcpTG4NMWpeEp2KI+s+8S29LX8=
+	t=1785511311; cv=pass; b=s4H6x1BYUFsyX9UtW5fpnG1Zjh7S+aFeunVU4c1fI2P6QwWWxCL6k49aPSW8Bz+cy1Kcib9sS0KgSbG2sMv7tlCnTTqik6alDisnKgSbNLv0rGJhaFoya/m75YGY9iKK28XDkQlATXUSr3cKK/Sa/pT1CQCWTKg500Pf421Ejyw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785511039; c=relaxed/simple;
-	bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
+	s=arc-20240116; t=1785511311; c=relaxed/simple;
+	bh=v+WL3XoOwQikXd2JtezOQGH92bijGZnMB9gOFI0vCIY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l8E+0ChGwmlDWjKvFwCGkFmSS/PSB/kYsKZ2KolZ/vEERALCySAVCjSSDlwbu0UMNIPXt4xualpJKCLpOMvw7fQOHYzLUdY75b9nKzpKdlzhksqviBlZtqN8O+F+5IbMxeBV4amuJV4bajsp7KPwNPa8v21VY9+aYfs42dgrpaw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=C5URBVxJ; arc=pass smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=GoESIz7ehCtuagY17piXHasIK9W4APAsHD/aWJmGYziCsF53t0gbKXBdlklbgUYRzoE5YmeW/YKzFzBBFIH/pRshCGIG6vGv7LrddC4+Ls+NKsyWZ27b685PRIuy9/2gOXTfwN8SG/GsZjlryIE6Vwm6wO39XNN/fU2V4iEWYcc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MQeqDpEH; arc=pass smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="C5URBVxJ"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ced3386430so10530365ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 08:17:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785511036; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQeqDpEH"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84a2dcede83so1647844b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 08:21:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785511305; cv=none;
         d=google.com; s=arc-20260327;
-        b=qGqcGr04T467AUDAdeT2GUBcUugISGT56e7jhXLgjxasRdnY1g5Zv6nCdWNIfidLha
-         crArb8tJ96O06dcoLH2uy+RCUhpcc0H+vPBTWoEfSzrDLI4mdAgyRQIsMzGmaw2Z3IxI
-         YrmEY60alhlZ7T7cLD6/16F2nKZAA48PgSqHGvM0L0sNPYdHnstaxHak1G9ON+UEJ4yC
-         8upPxCA+wx8hRT1pPXJIovLvAxFwsAo+xjuxcm4neIefhQKScYqVLcDFQd5v8ugdEZ1c
-         Xg62DhgCORSao6lMoWXv2RU7AD0ussL57jqTgfw5RVLCNeQz+9yOSXmQOwESiZXOqeTW
-         FL8A==
+        b=s8SMszharJw73o6tOVEfzVM2PuLH6/+DuNaVT+l2Vl3AXH85P2ViY6FxuKuS6OeB6D
+         0WNmKMTUIrjY4DwS8jBSxL828v7wM4CKuB980BCa57eP34WIIaPDC1WisjUinDDuWzIw
+         LhxZafQ3fS+WJA9QJbh7LddMppHMMk1C6keOFqx2jlAznBvK3nIrYY6Lj3dQDZjrW8s8
+         9ofF5xo7ulGPnadGpjDWmMzRzFOc8bwfrh2e8jrZ6sT92n++KQ0KCVss+NBCdXuia61Z
+         yL7XH0eSjmsPj+XX+kqzoJ7CryCPd++cVVaKZiJTOceai4gUjzZjFyCwoV1ipx0fI3jW
+         1jWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        fh=lHKLE1zM8hYt50govA4jNIPSB/8L22LVopDmccwP0H4=;
-        b=WkTMxbcXbBegoT2IkMWuRPE1Kn2vnpyWRfuqTJUGwLnjfwJX3O90stVWIkCTtjVZjc
-         bd2yzAdSRMUytFB/OJViNJD251M7zEZZUPCjidxFxTP0URX1piwTOM/TfB7HLSXGkSEY
-         Hp1gV57cYXmM6upPSQiQwi58v8svdoeiiQjyK3OOG0ehUw+CYSBEWpc1csh9g2YMNBNA
-         1SEa1dmIfZu4RJ0kKydy2aoRIdtbUMh4PS0uPTsADqN2SfWQ//vgQfUF+u0PGMunChIt
-         ojsOCapc4w866LBMgRG+o7cEUsZ+NFHBH95xT8OSEoYe8zSP0vlGSK/tjkqmbq/KtKty
-         3b4g==;
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        fh=rhAmw0+cGtY93ds1ooG7nZXrGW5RLWHXaS6eIdAnmGA=;
+        b=sBfARfFE5vwPcn1g91JQXVZMOLJg/vEp+NgSnGw6opiLT5Fiwvag4/mObSEdWA9bWq
+         2Q+q46lUYWFAGO8irtjsqeWp6jh6fVxBtcama4O+yLYUmM5X+SCrTW0LDEd4W/I+UHTv
+         ssT0LMzfs9bRMMND0CLPpYLPqVoTSa9Eo1sdD0luHZ5zhBjYcqQJKGwaCyB/Xt0HkosS
+         7/b4y/v/Rihv55ZH2QaNcPIxpWhS6MV7xvwem4QDiWtvDC2pXb43IER6caUB2a9ak5FF
+         VFBQsICBKexEKgKPScTequLooqDmlgQdMT3MMjoTCy+yGB1/fusTRzrkxaQavIZ7VLE1
+         zcgQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785511036; x=1786115836; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785511305; x=1786116105; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        b=C5URBVxJ5tERBLgnpI1F6Uk1I8wczA1DgsZx6wU5E29TDJD9OlexQVboj2ikm7m4Vo
-         G+DVy29rCfY3z8DteBOBZrGBt0A6NzbErXM1yBfFloMA1eBgxFG47mHi78CJI7hh5MTS
-         Kajg4htZS9wNxXJmoOulS7kZUqkRiOhQe3zOkrQpebhQd9lt9YZIF1/aHmfGmxtjhxGa
-         rD/2gv7lce/d0vipnWSBIgY6IZW6n4Z1DEk+Iv3wdUrZyhATZdXzysAX6p/yE0ZA9PHy
-         G4lifiyT6/Kvh4p2Q7Ogfwx4NUJ17PuYzIPlojAjBifCDzNPoMo0FU5DWkCLgTqj15n3
-         ZXew==
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        b=MQeqDpEHId0AWi0fgHZhE1c71pI0bvQX5eTFev+whg/QuqGJdhQX8ac8o/w2I91UTm
+         MGkSTswyKgaeoFfVRoSOLX/4EAbb2u0vq/rqvhvbSOzlU1u7hGsyJN8oeQHcIDYxQ/Su
+         61hScehPZXmT9xHG0S5L/LePjdMg2ogk3DTyPKzbhI/j+5ZC+tztzfFqdL4Cgbyiu+U7
+         MF6soGGw+PeXaMxAji8TpP5tZmiWTMTqT7qc3G33uGv0xX3Bu2LX2V4X1ZJNUvlHUDyl
+         vwv9CxogyV2tqUquBhiBZPY0E3Btq+QcLYoeYUFc/kAJC/KKmSNxgq3lCERZw6qAEbD8
+         mAfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785511036; x=1786115836;
+        d=1e100.net; s=20251104; t=1785511305; x=1786116105;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MaagnOxntbuxGRXITbLMVGEEGsWlGpeYqyeDM+L3JQ0=;
-        b=YfY/OZxBYEONiMu85sGM4Y4EAVdKwKMvQ+pVzyUKRaKm9NRodAWdC3SwchKibrndBF
-         zFf0i7P86Bt3PbSHov0cdLV5fGZFyqtXGAIwvmuMBf2RV2vllg2yfcKfTrX29lmO5QbO
-         zTahjmRr9Y+bZBVzWdCAv+TqNWOJeTvqW/EOAUlUBPfjOZS0wm5lP8xhLSdBqRsrdKjq
-         4/6bRBn7JkvClV4q2XLGrYUu6lE9hInAzgszUa7EVkf//bDYuWvjnJpecHKUCjAhoMWl
-         pS4n5SdYB34uATzxtXwmUt4eT/NtG/rmOo7l2SAYexvb3l8X87lzURhpQGHMnI0WRvFR
-         5uPA==
-X-Forwarded-Encrypted: i=1; AHgh+RrXxcu3Sr8V56ffDedWIn4w2WTusj6+8Gg0rvT3RsoFx8wxXDqmKE/1kAP8uZcR5NESuWFHZpiXxPVWvUB9vQo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8v0eKz1ADOdrfCE4TCrDy4LyFOCXZZm8mnndhOpu/ovbI4O4C
-	xBmE2xFm5MTHjPCQgfnShdb9JBwYeX0QwSxRXEpvTfdvgPBrWrL81Upm8maMLCadcQwLI0osbx6
-	ymbtiLJ8UAtsnoGltwapY2eRUWCj9PtXJvucdzQrt
-X-Gm-Gg: AR+sD13droSvX+HNtlAia/YI9D1SqIUhyiA73zXpOXW/VOJZa4TMQRV9LjoTqVM9eeC
-	17YebfE8E5mYqGi1q4Ll4RxFAqPU5He3xe76Z3pTXqtxEeCJ2yiv+k/2OpxYqjusUHoaN3Xmq7J
-	z8EXTUJE9C+Ls2rAB4nxsEs7a9AHCTDJ387lIkhth6hKGp39YkCndKtLZUUrOoBQmYMr67T9wym
-	3TrqlRk2UCbhkRbmpCpMZxnNiaOpBG5Ead4Riss23nDNEcXwyo5lJ7/mj3+G3N8+vZAUOF8k4px
-	qOHaGhfkAPpM5/w4Zz6bYyIm8tOLiylpr2iEL0EwR9ls
-X-Received: by 2002:a17:902:ecd1:b0:2ca:b89:7bcf with SMTP id
- d9443c01a7336-2d0523b96d8mr3879785ad.22.1785511036384; Fri, 31 Jul 2026
- 08:17:16 -0700 (PDT)
+        bh=p9+LRn/SvSrh7d6/E5JqQArA7jl7jdT+NZc32lFMXxY=;
+        b=V61VKgTf8bURnDya8Ew7EkYy3c35NXDa3t7oYz1s0f5YIKIn5+heVmTXpzR00t2HaP
+         c/YiQ0FjttPGMHTVdan3EAGSnGh7TSTiiTbRN2SmDJldDvZVcOZsmXwVpGXdYAJZ7Ugm
+         b8G1Dl9XX2eidWfP1dmd2g81RnivRLYsI4/ZE737KH5gLp5JrXtRhNnavBU5demwy4EC
+         LzIEEs2biNbx6XJX6fwFybSMdcT6GmdUxksehJEWIRIcVByJ4ybROkf6vUHjiJqhb3WH
+         z6zvBPIcPmykhaHWjM6aGeRuacSeDICRIXMTNJCR8wwbTLkg/tX+To1WQSBxziGsjeGo
+         Xouw==
+X-Forwarded-Encrypted: i=1; AHgh+RrFLGMQkO7YYUoFldXVEN2X54x5LyNGW8ans1yhcnNnsjgJrwZpFzOUm//YEmC7hf5oh5oNYZQVOnViT6sMLOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhA2znEBsPbj4KMLI0NiYafMCqtB8vXREaDrzmJj3rA11ANuuF
+	jEAqBGd8GTnEbcP/lDbKhS3aYWF8SxDdt53K5A/iuwKrmT3NzxX08/qiKX5Aw34Juy+8Yk7T9eq
+	h+1jEPisdUjIDnT21OcpWyMlr96jef0g=
+X-Gm-Gg: AR+sD12eO1MNBHM1mZgf5y+IU7CFRKOXuT3JkpyH5eDwgHIflzcbWuop2e53nP5qJ42
+	fdBrjhBUMqMpr/HzRHlTnOQFKSjkzuq5hUHNg8KqSXCyNzXJFxzgHSxclzvjVnETSAtCHEdCGHk
+	URplMuhvAg0eq62K0n2IrxniFlfdwuQtA6xyK+YSQoXTK8q7m+rYNX7w+58SEg9ZuOuqdm/ecAA
+	M+8AVsxZW4WSWS+Bx0k68EY0/DP3wGFYLadD92HUcFsFJbdfM8f6khAXo+qaISclq38sOrOp8kW
+	JwpePl3qVWiHgRrhQh/Turcfk/CjdlhiX+cmUJ3W2w06RTLrpZdixVFu6dAjUK5sLDUaV+AySZV
+	vHhVaGoqDoGr/OWhAK3RBWtW7Ag==
+X-Received: by 2002:a05:6a00:418d:b0:848:2f77:e2dc with SMTP id
+ d2e1a72fcca58-84ee49aa19bmr73028b3a.69.1785511304566; Fri, 31 Jul 2026
+ 08:21:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com> <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
-In-Reply-To: <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 11:17:04 -0400
-X-Gm-Features: AUfX_my_07XA5O156m3d-t8I3fv7r1HuUVA6nIPOKrM8LOdCX7kqs7sLBvl0mUM
-Message-ID: <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: David Windsor <dwindsor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260725132624.78373-1-leon.hwang@linux.dev> <CAEf4BzaoQaODE4F1wfrp37=83bePY=gKpunacKr3rmO230+B3Q@mail.gmail.com>
+ <66eaf62b-202b-45b9-8934-fbbc80caa84a@linux.dev>
+In-Reply-To: <66eaf62b-202b-45b9-8934-fbbc80caa84a@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 31 Jul 2026 08:21:32 -0700
+X-Gm-Features: AUfX_mwX1Lnn-oFVg3jgqe6P4ofXoWURmDZdlHg78-NJyoQdPMHudZHx9cqdijU
+Message-ID: <CAEf4BzbjmW0e6DqFLUAyV+m_usHSkHpux3AdS72bJtsmYQC_LA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Sechang Lim <rhkrqnwk98@gmail.com>, 
+	Varun R Mallya <varunrmallya@gmail.com>, Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 30, 2026 at 8:01=E2=80=AFPM David Windsor <dwindsor@gmail.com> =
+On Thu, Jul 30, 2026 at 10:20=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
 wrote:
-> On Thu, Jul 30, 2026 at 7:53=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
+>
+> On 31/7/26 08:07, Andrii Nakryiko wrote:
+> > On Sat, Jul 25, 2026 at 6:27=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
+> >> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing =
+prog
+> >> is allowed to attach to '__x64_'-alike prefix symbols.
+> >>
+> >> It is because the verifier does not verify whether the symbol is a ker=
+nel
+> >> function or a bpf prog. That said, a sleepable tracing prog is allowed=
+ to
+> >> attach to a bpf prog target whose name has '__x64_'-alike prefix.
+> >>
+> >> For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
 > >
-> > Based on our discussion in the v5 patchset, I was expecting to see
-> > this under security/; did something happen, or was there some
-> > confusion?
+> > we do have addr, so we should be able to distinguish between attaching
+> > to kernel function vs BPF program, no?
+>
+>
+> Yes, we can distinguish a bpf prog from a kernel function by addr.
+>
+> I'd prefer passing 'tgt_prog' to btf_id_allow_sleepable() as a simple
+> change.
+>
+
+I don't think there is a need for new tgt_prog argument, we can just
+check that supplied btf is not kernel/module BTF (see btf_is_kernel())
+
 > >
+> >> prog, and copies buffer from a user pointer with bpf_copy_from_user()
+> >> helper. After attaching the XDP prog to lo interface, the kernel BUG
+> >> could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+> >>
+> >> [    3.460756] BUG: sleeping function called from invalid context at k=
+ernel/bpf/trampoline.c:1324
+> >>
+> >> Fix it by disallowing sleepable tracing prog always when its target is
+> >> bpf prog.
+> >
+> > what happens when we freplace sleepable BPF program/subprogram with
+> > another sleepable BPF subprogram? And same question for sleepable
+> > fentry/fexit program attaching to sleepable BPF program? Is it
+> > something that just cannot work or we can actually allow that?
 >
-> Nothing happened, perhaps some confusion. I was basing the placement
-> off of Kumar's comment in v5:
 >
-> > I don't think we should do that in v6 though. What you're describing af=
-fects all
-> other xattr kfuncs. That's a broader discussion we should have separately=
- when
-> folks are back from vacation, and more importantly involve FS folks where=
- the
-> code currently lives. As you say yourself, the lines are blurry, xattrs a=
-re as
-> much a filesystem concept.
+> Currently, sleepable freplace/fentry/fexit progs are already disallowed
+> from attaching to bpf prog, because btf_id_allow_sleepable() returns
+> -EINVAL for them (except for this BUG).
 >
-> My take on this was, leave it in fs/ for now and then litigate the
-> placement of all of the fs-related kfuncs after bpf_init_inode_xattr
-> lands.
+> Since no one has proposed relaxing the restriction, I'd like to keep it
+> as-is when fixing this BUG.
 >
-> Happy to place this in security/ in v7, if that's preferred. Apologies
-> if I misread the thread.
-
-Okay, it looks like there was some confusion/misunderstanding.
-
-My understanding of Kumar's comments was that he was referring to the
-exisiting LSM related kfuncs that are located in fs/bpf_fs_kfuncs.c,
-not necessarily the new kfunc you are proposing in this patchset.
-Kumar is welcome to correct either one or both of us, if we read that
-wrong :)
-
-However, regardless of Kumar's intent, speaking as the LSM maintainer,
-my stance on this is that the kfunc you are proposing must live in
-security/bpf_lsm_kfuncs.c to be acceptable.
-
---=20
-paul-moore.com
+> I'm not sure whether allowing it would introduce any issue.
+>
+> Thanks,
+> Leon
+>
+> > [...]
+>
+>
