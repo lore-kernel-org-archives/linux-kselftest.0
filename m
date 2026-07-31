@@ -1,145 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F443C9EE9;
-	Fri, 31 Jul 2026 09:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882383F58E0;
+	Fri, 31 Jul 2026 10:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785491812; cv=none; b=EJMKL3pbHZmCHDQrY0YMvcT3l5JGnmORknFu2wEkLZnryfT88696Erwoyv25dPh4g5IDAJgincptKj/BJRUVB0RrGGrVm8t5O0e2V4mqy5rZNuaZZ/fBCt8OEmyJP1iQJh/5GSm8HJXvYdkThrJ5OFjw3vbjDj+b5jm7jaXBClI=
+	t=1785492828; cv=none; b=G5mfX/qOIgfRUpm9pexJXlzLeWUda2L4/LdTlJutTizKAE5hSzBH7uZEoJgVRI+TVKje5xpzMq0iRcIZDPuf37mX2XMG/rHBkrdsZvergslrVh+wHPUnvVjSSw2s8HJcq5OAl64mQeApIZAoHhilljnRl+T3dTC0cBhB+nZ+LIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785491812; c=relaxed/simple;
-	bh=DOwwg71Kekju6qLnmGfhTqtRNRbfyVhmg9zsJnHZLgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AX5adfLfN3uG0IQXIiXWMIZxwcNOGEGtJYrIroSHcSB3iYCJ5iUXG+YjnF7lL/oLeSFIoZO0CKTflhszilBEPxZfWenXBy8C/wmjfXz6otrSqHy2a2dFoQ5/yVgc2VQWzchktTWgQ30bWPhQrbZPIltOovA+xexgTLN3z/Kb4OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hINXc30n; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785492828; c=relaxed/simple;
+	bh=DaAs9v2s48e9JMFkP+I5JIQ1sntx0U1Ktp2zFL4yLtE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=lFQWz8jMmzshzK+nRXCXPvDdj0rxVm111Mp0SFMJgnPcmiOyKzs79osvYkk24nKjkzFnkZyME+F6mB1dg8xDU1z+fwneZGOBAV6OXfnUiUfC6wN1GQ1XFHGykLS+zKHpIX3tBoBF1q4fUaPYTZmhHCC5kKpPCNy2Hk6ylIWBvHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=u59+EVoG; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hINXc30n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE51C1F000E9;
-	Fri, 31 Jul 2026 09:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785491800;
-	bh=UJzatnBRREcF0bQmpNpCCB0NZsjOpJ4uKmlxw9TORHA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hINXc30n0nbQqQo9tuwXgBfCoCBC3SwoZ7cfl/1LfbwEoZZd0eNlUseLRNl8vHPgm
-	 XvIiiwJkwiEE9zAwIqlPTc0s3IXxdIRk4Hp4Mnt+GJKaSBG9Hw87FIesYgGHsaCzgf
-	 k5esBgQMr3SyQ7jJwS7TCooU9pj7LCwNqb+SB3VHQvfJkTBZUo9BEtJ0ADUKZsd9Mk
-	 1kuKcdSHftCWakbFVtYSf32BrM3g7PygJZ5gmiTpLuoDA1csONhHKfN2fOeZrsuijE
-	 xDVqYZvH5M3k23JEU5zNhLHdyn/Frz0EorVYtdEhqHVqKXIh8MMlOZ6aWbn7QcxTyN
-	 QpRSXOULspGzA==
-Date: Fri, 31 Jul 2026 10:56:35 +0100
-From: Simon Horman <horms@kernel.org>
-To: "Hemendra M. Naik" <hemendranaik@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, jiri@resnulli.us,
-	jhs@mojatatu.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, vishy0777@gmail.com,
-	tahiliani@nitk.edu.in
-Subject: Re: [PATCH net-next v4 1/3] net/sched: sch_fq_pie: add per-flow
- statistics via class ops
-Message-ID: <20260731095635.GG51943@horms.kernel.org>
-References: <20260727164056.106203-1-hemendranaik@gmail.com>
- <20260727164056.106203-2-hemendranaik@gmail.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="u59+EVoG"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=8LK1SF//t3va2bThbeH1OWK77lJlFXbCBS1qpFyGJdU=; b=u59+EVoGC98m2JEO8LFmuFQs7B
+	Y02NU7GEnkp3ZquWsk1yC8BpCD5AuwZhSzGdonKvi3ahW/ninNrLBONNa6FG8XQpSpbM+wocf8QWq
+	Fjxh7MVNmvPxZq5fg1YPykGNfHtcDlf7yyCz4iyZX/a35i3m4AeKLu8Oy5lrODICFpXQtqmK6FPsO
+	jRsh8T409Wr5ZJWVFD0Vk1G4kY5E7ijUsKZVaFIyl8OU5fOB3fGUyZ1qwNQHUSqIXVTVVD5rt1mqF
+	HKi34LuInZ2UD/YYZD9JO7d7ZOs8PTQWSkcuityzhDigolK1ICf1mt+d5mTokX9aQCm8ZzPO2rE08
+	eilgjXmg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wpkF9-009wAv-1O;
+	Fri, 31 Jul 2026 10:13:31 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Fri, 31 Jul 2026 03:13:04 -0700
+Subject: [PATCH v2 1/3] mm: kmemleak: default min_unref_scans to 2 for
+ verbose auto-scan
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260727164056.106203-2-hemendranaik@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260731-kmemleak_hardened-v2-1-7b9689ac77cb@debian.org>
+References: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
+In-Reply-To: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, workflows@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kernel-team@meta.com
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1646; i=leitao@debian.org;
+ h=from:subject:message-id; bh=DaAs9v2s48e9JMFkP+I5JIQ1sntx0U1Ktp2zFL4yLtE=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVAsT97IECXFQK2T5y0rTmoAdJIv7jKa0scr
+ gqh/l+QROyJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
+ bR2MD/96NkIxUrTkZVumh95rB23L+q8p7ZqHB7FrhzGUp9KmBdL9RzmuB6fzjDt4Zwxi7z4cSLb
+ hD3eJUmI8k/xCJW7LAV1nvEieJq/GrowJ1YCvvbFyAVXq3xT3CX61ppzdrpTgZt8/rgfqApHikg
+ OwPaN1FJ9rBWIDqddC+tQGi0V6Ra1w6fsnyEv1GfWXjEXiyXuzEyp4/DRdOrh5feJH/M6l9oUqk
+ RpEKaMNlV8C5gGF3AXJSpaq9pRgGGW9+3Z8hpWROdbd1r7j5M/UpVWzoW8wmuSv4RcUmcPduQF5
+ gtzK0DOCHNQlBTLjLm3foQBGw0Z+Gs5cQEEKB4xCFLir4I0/bmEE3zLeGcgN9nlX86yRC31GMHe
+ OBFDJo+oM2MX5cnozIEfpyxQ+iy22Wm0lxMpSzHmwMqjk+RgBMySL2Sr06+u3StGLSNcS9T1VI8
+ cRn0gbnACMoT8TfNkMnDsbA+tGm2FLg4Z/79ATyxCl2PgxRW+R6Ah0P9uXMZhDUQxPNbFzWBCh0
+ pEJv98e5oFLqKiX7DYNq5oe8yR60A0VxG0Tpqz4hmZf767Afdq3RwjKaWqPMvsZe+X0KZaEyH7O
+ hIc/yiosrztgTH6toi/L96B3EeYq9hBeW6wUjDaBf6QUiDN6ePrYuc9LkNknlDOKKbxRboYRLRE
+ 5W+Cz3RXAYaVEyw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Mon, Jul 27, 2026 at 10:10:54PM +0530, Hemendra M. Naik wrote:
+min_unref_scans defers reporting an object as leaked until it has stayed
+unreferenced for that many consecutive scans, filtering out objects that
+are only transiently unreferenced during a scan.
 
-...
+It defaults to 1, which reports on the first unreferenced scan.
 
-> +static struct tcf_block *fq_pie_tcf_block(struct Qdisc *sch, unsigned long cl,
-> +					  struct netlink_ext_ack *extack)
-> +{
-> +	struct fq_pie_sched_data *q = qdisc_priv(sch);
-> +
-> +	if (cl)
-> +		return NULL;
-> +	return q->block;
-> +}
+CONFIG_DEBUG_KMEMLEAK_VERBOSE depends on CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN,
+so a kernel built with it runs the scan thread periodically and the user
+has opted into detailed leak reporting. A second confirming scan then
+happens on its own.
 
-Hi,
+Default min_unref_scans to 2 there to suppress transient false positives,
+and keep it at 1 otherwise, where a manually triggered scan is expected to
+report immediately. The value stays writable through the module parameter.
 
-The AI-generated review of this patch on netdev-ai [1] reports several
-findings. And while I'd appreciate it if you could look over each of them
-the one below seems to warrant highlighting here.
+CONFIG_DEBUG_KMEMLEAK_VERBOSE defaults to n, so this does not change the
+default for kernels that do not opt in.
 
-[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260727164056.106203-1-hemendranaik%40gmail.com?part=1
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ mm/kmemleak.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-   Is the side effect of making fq_pie filter-capable intended, and should
-   it be described in the commit message?
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index f63dfacee7ca1..8fa409a4f9fb2 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -237,7 +237,8 @@ static struct task_struct *scan_thread;
+ /* used to avoid reporting of recently allocated objects */
+ static unsigned long jiffies_min_age;
+ /* consecutive scans an object must stay unreferenced before reporting */
+-static unsigned int min_unref_scans = 1;
++static unsigned int min_unref_scans =
++	IS_ENABLED(CONFIG_DEBUG_KMEMLEAK_VERBOSE) ? 2 : 1;
+ module_param(min_unref_scans, uint, 0644);
+ static unsigned long jiffies_last_scan;
+ /* delay between automatic memory scannings */
 
-   Before this patch fq_pie_qdisc_ops had no .cl_ops, so filter attachment
-   was rejected in net/sched/cls_api.c:__tcf_qdisc_find():
+-- 
+2.53.0-Meta
 
-	cops = (*q)->ops->cl_ops;
-	if (!cops) {
-		NL_SET_ERR_MSG(extack, "Qdisc not classful");
-		err = -EINVAL;
-
-   q->filter_list was therefore always NULL and the filter branch of
-   fq_pie_classify() was unreachable since fq_pie was added.  With .cl_ops
-   present and fq_pie_tcf_block() returning q->block, 'tc filter add ...
-   parent <fq_pie handle>' now succeeds and classifier verdicts plus
-   classid-driven flow selection become live in the enqueue fast path.
-
-   That newly reachable code does not handle TC_ACT_CONSUMED:
-
-   net/sched/sch_fq_pie.c:fq_pie_classify() {
-	result = tcf_classify_qdisc(skb, filter, &res, false);
-	if (result >= 0) {
-		switch (result) {
-		case TC_ACT_STOLEN:
-		case TC_ACT_QUEUED:
-		case TC_ACT_TRAP:
-			*qerr = NET_XMIT_SUCCESS | __NET_XMIT_STOLEN;
-			fallthrough;
-		case TC_ACT_SHOT:
-			return 0;
-		}
-		if (TC_H_MIN(res.classid) <= q->flows_cnt)
-			return TC_H_MIN(res.classid);
-	}
-
-   TC_ACT_CONSUMED is TC_ACT_VALUE_MAX + 1, so it is >= 0 and matches no
-   case arm, and control reaches the classid path.  act_ct produces it
-   after the skb ownership has already been handed away:
-
-   net/sched/act_ct.c:tcf_ct_act() {
-   out_frag:
-	if (err != -EINPROGRESS)
-		tcf_action_inc_drop_qstats(&c->common);
-	return TC_ACT_CONSUMED;
-
-   tcf_action_exec() propagates any value != TC_ACT_PIPE and
-   __tcf_classify() returns it verbatim.  For a filter such as
-	tc filter add dev eth0 parent 1: matchall action ct
-
-   with no flowid, res.classid is 0, TC_H_MIN(0) <= flows_cnt holds and 0
-   is returned, so fq_pie_qdisc_enqueue() frees the consumed skb a second
-   time:
-
-	idx = fq_pie_classify(skb, sch, &ret);
-	if (idx == 0) {
-		if (ret & __NET_XMIT_BYPASS)
-			qdisc_qstats_drop(sch);
-		__qdisc_drop(skb, to_free);
-
-   and with 'flowid 1:N' a valid flow index is returned instead, so
-   flow_queue_add() links the already freed skb into q->flows[idx].  Can
-   fragmented traffic hitting that qdisc then cause a double free or
-   use-after-free?
-
-   That TC_ACT_CONSUMED is expected from qdisc-attached filter chains is
-   also visible in net/sched/cls_api.c:tcf_qevent_handle(), which has an
-   explicit case TC_ACT_CONSUMED: arm that must not free the skb.
-
-   fq_codel, sfq and cake have the same missing arm, but for fq_pie the
-   path only becomes reachable with this patch.
-
-...
