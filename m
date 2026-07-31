@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4352E30B514;
-	Fri, 31 Jul 2026 01:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A0A2773E4;
+	Fri, 31 Jul 2026 01:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785461999; cv=none; b=cr5tKCV7leSfGy7rGhqW6ncwsm7v9KauBtTgOfbPtfpcxZwWZB+MBxSeypGYWTJ1eFOWhnc8nt15/lu3q6lvIf2XM3Z3WajByoRORCkBUO0wotzzfwq333vWhd1ngAnQsSmamiqFLUJ+l/7bWj0sRxkb6TZcOC3k9aZBfHeYZm0=
+	t=1785461999; cv=none; b=lCB8te42TRnlvuEMAMNPVEOoKmShLmAYcpi4DfxYhtTK7sE4HT0rThZ1+VkjpqO3ehYS5mAbIaMGruMexeYT5Yyw3PQLTq2L4QXARia4NSiXEDoPLYukNhih/69efsGcZQV9YggAZYIXRWNtDUudyeU/f/f+0zmzDxOrCvbWx1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785461999; c=relaxed/simple;
-	bh=gmfOvQpg/29MvOXbEpr2ofG95JCpYbrLfEDUPVnB9LE=;
+	bh=l7RJTnbz2nxLBWNM7N77s1JHDjl1SXmWSlb2PenA1DM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rlqfWp4aKCWsAbm0voKpJIAxNZdMrqpBtgmUvW9NxpeR91Uz35tSxIp1BGPOXC+wu+dbmoWo+CDkmvGe9dcEnZ50mkeIDxCFO5FY1tKYKHplT/fQm1GfLVxpmZBZBT/ntdebc5kOl9o7M7pdHDtUxizcK4Hl8Et4ChTGebfTQDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqqY33A4; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=VaRE6bz0jdh5eF+bUxedfDqTPegTa5t4VImJdZJ7+J4qMPItQR8SOPH4gJZ+ttcIm7SbQe3sg+6JGYbgBS4eI8jN+Yr6yUjEfkFIThAwkHdXoQzHIayvcZV+d2JV9astncXKF2ZQEx3tiTJEeOfCMHQI0TRjlGdCznZd2GjjmJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtI5t5n2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqqY33A4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D8501F00A3D;
-	Fri, 31 Jul 2026 01:39:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtI5t5n2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F601F00A3E;
+	Fri, 31 Jul 2026 01:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785461996;
-	bh=h37DEeA+2/1CIikSV0eAJaWf+BOkDP9LtZS32A9B50s=;
+	s=k20260515; t=1785461997;
+	bh=sC1/xEc/Q+j8n3WeiNwZt1sUnZE8LRPdhRlVtmhW3hw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gqqY33A4GQRZ2QKwoPyQqh8XXm573IyKxHXDkOWcHMFtazCf7kPqDJZHoN/EnkRkl
-	 1rE6GB8/QH7HIvISqHLtEFCvL2x6hRDn5FFnZPjrP2iBrgMJUAa/hNaoIN+dobgKm/
-	 BgO9Bdxb5AQKIZQl4mdgcUb8aW+F/e6XJ00QUB2jTMdeiImd1F1VhIIEobvEMscg6X
-	 X3yD855nw39G6YUq0vCkzZ67B8spJWQgdo7mP10ULJEbnSWMuvR7QUrZlH4mTst0AT
-	 97NEFCixfFrUeCb4Haf+KReI8LWpAXN7SyR9pCtudHLZl9P4LFl1ayQe93/3affs4a
-	 P6LEnfEFciecg==
+	b=MtI5t5n2DXPMfr8DTxpbPu0rBtWXT/C+ZEvcN9WltowN7ORs5ixfmP7QfDRXtkZHB
+	 nlYEPXM3bpcvX1Yh6tjuBDnKnyxsKEIolQaXddDzefwsBAtxhm0FzC1FTdr9A95Fl3
+	 h6RFSBqdhMDLbIlChzoSqO+XdK0qq8cEFRdpCGNXjIrklKeX6s4/shl9yzFy4z+8bu
+	 OtpuylJBYNPiVJYjurL1nET++RCKXkl54N8CWmwQMWlOYPZYvvkVKHPNNWcutALj3v
+	 kO8olZx1CFcoT1PclPhdRO4s/puQOH4MF6hoATvddAt0MUeHkoYN+akz70C4L2LzAy
+	 Wkuc0R2jg36aQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: marcelomspessoto@gmail.com
 Cc: Jakub Kicinski <kuba@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	marcelospe@proton.me
-Subject: Re: [PATCH net-next 3/4] selftests: net: test IPV6_FL_F_REFLECT
-Date: Thu, 30 Jul 2026 18:39:55 -0700
-Message-ID: <20260731013955.752403-1-kuba@kernel.org>
+Subject: Re: [PATCH 4/4] selftests: net: adopt harness for flow label mgr
+Date: Thu, 30 Jul 2026 18:39:56 -0700
+Message-ID: <20260731013956.752437-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260727043516.93101-4-marcelospe@proton.me>
-References: <20260727043516.93101-4-marcelospe@proton.me>
+In-Reply-To: <20260727043516.93101-5-marcelospe@proton.me>
+References: <20260727043516.93101-5-marcelospe@proton.me>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,198 +49,309 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
---- Patch [3]: [PATCH net-next 3/4] selftests: net: test IPV6_FL_F_REFLECT ---
-commit 9b79debc5b7eacef4cf0bdc8e171841fff374daf
+--- Patch [4]: [PATCH 4/4] selftests: net: adopt harness for flow label mgr ---
+commit 645c864c25dbeeb65888e7e3525b6298beb1ae4c
 Author: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 
-selftests: net: test IPV6_FL_F_REFLECT
+selftests: net: adopt harness for flow label mgr
 
-This adds a REFLECT sub-test to tools/testing/selftests/net/ipv6_flowlabel_mgr.c,
-reusing the existing tcp_listen()/tcp_connect() helpers to set up a connection.
-A new set_flowlabel_consistency() helper toggles
-/proc/sys/net/ipv6/flowlabel_consistency around the new test block, since the
-kernel refuses IPV6_FL_F_REFLECT while that sysctl is enabled.
+This converts tools/testing/selftests/net/ipv6_flowlabel_mgr.c from the
+hand-rolled explain()/expect_pass()/expect_fail() helpers to
+kselftest_harness.h, splitting run_tests() into individual TEST() cases.
+It also removes parse_opts() and the cfg_long_running/cfg_verbose options.
 
-A few questions below.
+A few questions about the conversion below.
 
 > Author: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 > Signed-off-by: Marcelo Mendes Spessoto Junior <marcelospe@proton.me>
 
 [Severity: Low]
-The author address in the commit header (marcelomspessoto@gmail.com) does not
-match the Signed-off-by address (marcelospe@proton.me), which checkpatch
-reports as "email address ... from: does not match Signed-off-by". Since the
-Developer's Certificate of Origin is tied to the author identity, could the
-From:/Signed-off-by be made consistent (or both addresses listed) so the patch
-can be applied?
+The From: address (marcelomspessoto@gmail.com) and the Signed-off-by:
+address (marcelospe@proton.me) differ, so the sign-off chain cannot be
+matched to the author by tooling.
+
+checkpatch.pl reports this as "From:/Signed-off-by: email address
+mismatch". Could either the sign-off address be changed to match the
+author address, or an explicit From: line be added at the top of the
+patch body?
+
+> Another change made to the structure of ipv6_flowlabel_mgr test file
+> was the removal of parse_opts. The supported opts were already not
+> used on TEST_GEN_PROGS and are not impactful for development. Opt (-l)
+> skips long tests that are not time consuming at all, while the TH_LOG
+> and code comments can cover the information obtainable from (-v).
+
+[Severity: Medium]
+Is this description accurate on two points?
+
+First, the binary is listed in TEST_GEN_FILES in
+tools/testing/selftests/net/Makefile, not TEST_GEN_PROGS; it is driven by
+the TEST_PROGS script ipv6_flowlabel.sh, whose only invocation is:
+
+	./in_netns.sh ./ipv6_flowlabel_mgr
+
+Second, the -l tests are described as "not time consuming at all", but
+FL_MIN_LINGER is 6 in this file, so each sleep(FL_MIN_LINGER * 2 + 1) is
+13 seconds. Dropping cfg_long_running turns both previously gated blocks
+into unconditional tests, adding roughly 26 seconds of wall time to every
+run of ipv6_flowlabel.sh.
+
+Since no in-tree invocation ever passed -l, these assertions have also
+never been exercised by an automated run before. Should the changelog say
+that the long-running checks are now always enabled, rather than
+describing them as inexpensive?
 
 > diff --git a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
-> index 383a84ea9385c..da253dff2cfd4 100644
+> index da253dff2cfd4..9aa5c8146f171 100644
 > --- a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
 > +++ b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
 
 [ ... ]
 
-> @@ -138,6 +139,19 @@ static void tcp_connect(int listener, uint32_t flowlabel, int *client, int *acce
->  	*accepted = afd;
->  }
+> @@ -39,23 +40,6 @@
+>  		.sin6_port	= htons(8888),				\
+>  	}
 >  
-> +static void set_flowlabel_consistency(bool enable)
-> +{
-> +	int fd;
-> +
-> +	fd = open("/proc/sys/net/ipv6/flowlabel_consistency", O_WRONLY);
-> +	if (fd == -1)
-> +		error(1, errno, "open flowlabel_consistency");
-
-[Severity: Low]
-Should an unavailable or unwritable sysctl be a skip rather than a hard
-failure? Any open()/write()/close() error here calls error(1, ...), which
-exits the whole ipv6_flowlabel_mgr binary with status 1, so kselftest reports
-FAIL rather than SKIP (exit code 4).
-
-Before this patch the binary only issued setsockopt()/getsockopt() and needed
-no privileges, and it already degrades gracefully elsewhere:
-
-		if (setuid(USHRT_MAX)) {
-			fprintf(stderr, "[INFO] skip setuid child test\n");
-			exit(0);
-		}
-
-With this change, environments without a writable /proc/sys hierarchy
-(CONFIG_SYSCTL=n, /proc not mounted or read-only, restricted container, no
-CAP_NET_ADMIN over the netns) turn all the pre-existing, unrelated flowlabel
-management assertions into a FAIL. Could only the REFLECT sub-test be skipped
-in that case?
-
-> +	if (write(fd, enable ? "1" : "0", 1) != 1)
-> +		error(1, errno, "write flowlabel_consistency");
-> +	if (close(fd))
-> +		error(1, errno, "close flowlabel_consistency");
-> +}
-
-[Severity: Medium]
-Does this leave net.ipv6.flowlabel_consistency permanently at 0 in the
-namespace the test ran in?
-
-Two things stand out. First, the helper never reads the current value, so
-set_flowlabel_consistency(true) is a hardcoded write of "1" rather than a
-restore, and an administrator's deliberate 0 is silently overwritten even on
-success.
-
-Second, everything between the disable and the "restore" in run_tests() aborts
-the process on failure, so the restore is skipped entirely:
-
-#define __expect(x)							\
-	do {								\
-		if (!(x))						\
-			fprintf(stderr, "[OK]   " #x "\n");		\
-		else							\
-			error(1, 0, "[ERR]  " #x " (line %d)", __LINE__); \
-	} while (0)
-
-and tcp_listen()/tcp_connect() likewise call error(1, errno, ...) on
-socket/bind/listen/connect/accept failure. There is no atexit() or signal
-handler, so any failing assertion (or a signal) exits with the sysctl still 0.
-
-That direction is fail-open, since ipv6_flowlabel_get() only rejects the flag
-while the sysctl is set:
-
-net/ipv6/ip6_flowlabel.c:ipv6_flowlabel_get() {
-	if (freq->flr_flags & IPV6_FL_F_REFLECT) {
-		if (READ_ONCE(net->ipv6.sysctl.flowlabel_consistency)) {
-			net_info_ratelimited("Can not set IPV6_FL_F_REFLECT if flowlabel_consistency sysctl is enable\n");
-			return -EPERM;
-		}
-}
-
-Under ipv6_flowlabel.sh the throwaway netns from in_netns.sh absorbs the leak,
-but ipv6_flowlabel_mgr is installed as a standalone TEST_GEN_FILES binary with
-its own option parsing and is commonly run directly, in which case the writes
-land in the caller's (typically init_net) namespace and persist after the test.
-
-Would it fit the existing convention better to set the prerequisite from the
-wrapper script inside the namespace, the way the other sysctls in this suite
-are handled?
-
-  ./in_netns.sh \
-    sh -c 'sysctl -q -w net.ipv6.auto_flowlabels=0 && ./ipv6_flowlabel -l 1'
-
->  static void run_tests(int fd)
->  {
->  	int wstatus;
+> -#define explain(x)							\
+> -	do { if (cfg_verbose) fprintf(stderr, "       " x "\n"); } while (0)
+> -
+> -#define __expect(x)							\
+> -	do {								\
+> -		if (!(x))						\
+> -			fprintf(stderr, "[OK]   " #x "\n");		\
+> -		else							\
+> -			error(1, 0, "[ERR]  " #x " (line %d)", __LINE__); \
+> -	} while (0)
+> -
+> -#define expect_pass(x)	__expect(x)
+> -#define expect_fail(x)	__expect(!(x))
+> -
+> -static bool cfg_long_running;
+> -static bool cfg_verbose;
+> -
+>  static int flowlabel_get(int fd, uint32_t label, uint8_t share, uint16_t flags)
 
 [ ... ]
 
-> @@ -254,6 +268,37 @@ static void run_tests(int fd)
->  	close(remote_afd);
->  	close(remote_cfd);
->  	close(remote_listener);
+> @@ -141,6 +125,10 @@ static void tcp_connect(int listener, uint32_t flowlabel, int *client, int *acce
+>  
+>  static void set_flowlabel_consistency(bool enable)
+>  {
+> +	/* flowlabel_consistency must be disable to use the IPV6_FL_F_REFLECT
+> +	 * flag. This helper function is required for setting up and tearing
+> +	 * down test cases for this flag.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but "must be disable" reads as a typo for "must be
+disabled".
+
+Also, does the second sentence match the code? set_flowlabel_consistency()
+is called inline twice from reflect_flag(), and there is no
+FIXTURE_SETUP()/FIXTURE_TEARDOWN() anywhere in the file, so nothing
+performs the "tearing down" role described here.
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but the helpers reached from the
+new harness bodies still abort the process instead of emitting a TAP
+result. set_flowlabel_consistency() calls error(1, errno, "open
+flowlabel_consistency") when /proc/sys/net/ipv6/flowlabel_consistency
+cannot be opened, and tcp_listen()/tcp_connect() do the same on bind,
+listen, connect or accept failure.
+
+>  	int fd;
+>  
+>  	fd = open("/proc/sys/net/ipv6/flowlabel_consistency", O_WRONLY);
+
+An unprivileged run therefore exits the harness child with status 1, and
+the harness prints a bare "not ok" with no TAP diagnostic. Given the
+changelog says the conversion "enforces TAP standard", would SKIP() from
+kselftest_harness.h be a better fit for these environment preconditions?
+
+[ ... ]
+
+> @@ -152,187 +140,270 @@ static void set_flowlabel_consistency(bool enable)
+
+[ ... ]
+
+> +TEST(exclusive_label_share)
+> +{
+
+[ ... ]
+
+> +	err = flowlabel_get(fd, 2, IPV6_FL_S_ANY, IPV6_FL_F_CREATE);
+> +	ASSERT_TRUE(err) TH_LOG("expected reuse to fail, due to linger");
 > +
-> +	explain("Prepare TCP SYN for REFLECT flag validation");
+> +	sleep(FL_MIN_LINGER * 2 + 1);
+
+[Severity: Medium]
+These two assertions plus the 13 second sleep were previously behind
+if (cfg_long_running) and never ran in CI. Was enabling them
+unconditionally intended?
+
+The other side effect is state left behind in the per-netns label table:
+this test finishes holding label 2, and renew_label_linger() below
+deliberately extends label 5's linger to 26 seconds. A repeated run of the
+binary in the same namespace within that window, or a single filtered test
+run, would fail the initial IPV6_FL_S_EXCL create.
+
+Related to that, splitting run_tests() into separate TEST() cases suggests
+per-test independence, but cannot_get_non_existent_label() and
+cannot_put_non_existent_label() still assume label 1 does not exist while
+can_create_and_get_and_put_labels() creates it. Is the ordering dependency
+between these cases worth a comment, or could each case use a distinct
+label?
+
+> +
+> +	err = flowlabel_get(fd, 2, IPV6_FL_S_ANY, IPV6_FL_F_CREATE);
+> +	ASSERT_TRUE(!err) TH_LOG("expected reuse to succeed after linger");
+> +
+> +	ASSERT_EQ(0, close(fd));
+> +}
+> +
+> +TEST(user_private_label_share)
+> +{
+
+[ ... ]
+
+>  	pid = fork();
+> -	if (pid == -1)
+> -		error(1, errno, "fork");
+> +	ASSERT_NE(-1, pid) TH_LOG("fork failed");
+>  	if (!pid) {
+> -		expect_pass(flowlabel_get(fd, 3, IPV6_FL_S_USER, 0));
+> -		if (setuid(USHRT_MAX))
+> +		if (flowlabel_get(fd, 3, IPV6_FL_S_USER, 0))
+> +			exit(1);
+> +		if (setuid(USHRT_MAX)) {
+>  			fprintf(stderr, "[INFO] skip setuid child test\n");
+> -		else
+> -			expect_fail(flowlabel_get(fd, 3, IPV6_FL_S_USER, 0));
+> +			exit(0);
+> +		}
+> +		if (!flowlabel_get(fd, 3, IPV6_FL_S_USER, 0))
+> +			exit(1);
+>  		exit(0);
+>  	}
+
+[Severity: Low]
+Does this lose the per-check diagnostic that expect_pass()/expect_fail()
+used to print? Both child expectations, "child can get the user-private
+label" and "child cannot get it after setuid(nobody)", now collapse to the
+same exit(1), so the parent can only report:
+
+	ASSERT_EQ(0, WEXITSTATUS(wstatus)) TH_LOG("child reported unexpected result");
+
+with no indication of which sub-check failed. The same applies to the
+child in process_private_label_share(). Would distinct exit codes, or a
+TH_LOG-carrying variant, keep the information the removed macros printed?
+
+Separately, when setuid(USHRT_MAX) fails on a non-root run the child
+prints "[INFO] skip setuid child test" and exits 0, so the harness reports
+the whole case as "ok" while a sub-check was skipped. This matches the old
+behaviour, but SKIP() is now available.
+
+[ ... ]
+
+> +TEST(renew_label_linger)
+> +{
+> +	/* After a label with EXCL share is put and lingered, it must be
+> +	 * possible to create a new one. Check if RENEW action extends
+> +	 * the linger period of put label, blocking creation after previous
+> +	 * linger time.
+> +	 */
+
+[Severity: Low]
+Does the first sentence describe this test? The body does
+get(5, S_EXCL, CREATE) -> renew(5, 26) -> put(5) -> sleep(13) and then only
+asserts that creation still fails; there is no assertion that creation
+succeeds once the extended linger elapses. The positive case is covered by
+exclusive_label_share() instead.
+
+> +	int fd, err;
+
+[ ... ]
+
+> +	sleep(FL_MIN_LINGER * 2 + 1);
+> +
+> +	err = flowlabel_get(fd, 5, IPV6_FL_S_ANY, IPV6_FL_F_CREATE);
+> +	ASSERT_TRUE(err) TH_LOG("expected reuse to fail, new linger time not over yet");
+> +
+> +	ASSERT_EQ(0, close(fd));
+> +}
+
+[ ... ]
+
+> +TEST(reflect_flag)
+> +{
+
+[ ... ]
+
 > +	set_flowlabel_consistency(false);
-> +	int reflect_listener = tcp_listen();
-> +	struct in6_flowlabel_req reflect_on = {
-> +		.flr_action = IPV6_FL_A_GET,
-> +		.flr_flags = IPV6_FL_F_REFLECT,
-> +	};
-> +	explain("Enable REFLECT on the listener before the client connects");
-> +	expect_pass(setsockopt(reflect_listener, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_on, sizeof(reflect_on)));
+> +
+> +	listener = tcp_listen();
+> +	err = setsockopt(listener, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_on, sizeof(reflect_on));
+> +	ASSERT_TRUE(!err) TH_LOG("failed to enable REFLECT on the listener");
+> +
+> +	tcp_connect(listener, 7, &cfd, &afd);
+> +
+> +	err = getsockopt(afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_query, &reflect_query_len);
+> +	ASSERT_TRUE(!err) TH_LOG("failed to query the accepted socket's outgoing label");
+> +	ASSERT_EQ(7, ntohl(reflect_query.flr_label)) TH_LOG("accepted socket did not reflect client's label");
 
-[Severity: Low]
-This isn't a bug, but three of the new assertion lines exceed the 100 column
-limit checkpatch enforces (counting the leading tab as 8 columns): the
-setsockopt() line above is around 113 columns, the getsockopt() line below is
-around 111, and the two lines using &reflect_off are around 110. The
-pre-existing REMOTE block stays under the limit. Wrapping the arguments or
-shortening the variable names would address it.
+[Severity: Medium]
+Can this leave net.ipv6.flowlabel_consistency disabled?
 
-> +	int reflect_cfd, reflect_afd;
-> +	tcp_connect(reflect_listener, 7, &reflect_cfd, &reflect_afd);
-> +	struct in6_flowlabel_req reflect_query = {
-> +		.flr_action = IPV6_FL_A_GET,
-> +	};
-> +	socklen_t reflect_query_len = sizeof(reflect_query);
-> +	explain("Query the accepted socket's outgoing label, should be reflected");
-> +	expect_pass(getsockopt(reflect_afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_query, &reflect_query_len));
-> +	expect_pass(ntohl(reflect_query.flr_label) != 7);
+set_flowlabel_consistency(false) is called at the top, and the matching
+set_flowlabel_consistency(true) only runs on the straight-line success
+path at the end. Every ASSERT_* in between ends the test child
+immediately:
 
-[Severity: Low]
-Does this line assert the opposite of what it reads as? expect_pass() is
-__expect(), which succeeds when the expression is false:
+	ASSERT_*  ->  OPTIONAL_HANDLER(1)  ->  __bail(1, _metadata)
 
-#define __expect(x)							\
-	do {								\
-		if (!(x))						\
-			fprintf(stderr, "[OK]   " #x "\n");		\
-		else							\
-			error(1, 0, "[ERR]  " #x " (line %d)", __LINE__); \
-	} while (0)
+tools/testing/selftests/kselftest_harness.h:__bail() {
+	if (for_realz) {
+		if (t->teardown_fn)
+			t->teardown_fn(false, t, t->self, t->variant);
+		abort();
+	}
 
-#define expect_pass(x)	__expect(x)
+A plain TEST() is registered by __TEST_IMPL, which never assigns
+.teardown_fn, so teardown_fn is NULL and the child just abort()s without
+running the restore at the end of the body. The error() paths inside
+tcp_listen()/tcp_connect() and a harness timeout kill behave the same way.
 
-So this passes only when ntohl(reflect_query.flr_label) == 7, which is the
-intended check, but the failure diagnostic prints
-"[ERR]  ntohl(reflect_query.flr_label) != 7", i.e. the inverse of the real
-expectation. Someone later "fixing" the condition to == 7 would silently
-invert the test so it passes exactly when reflection is broken.
+Since each test runs in a forked child, the parent continues, so any test
+running after reflect_flag (and anything else in that namespace or on the
+host) proceeds with flow label consistency validation off. The most likely
+trigger is exactly the regression this test exists to catch:
 
-The macro was written for syscall return codes where 0 means pass; would an
-explicit comparison spelled out as a return-code style check, or a separate
-value-comparison macro, be clearer here? The same idiom was introduced by the
-earlier REMOTE patch in this series
-(expect_pass(ntohl(freq.flr_label) != 6)), so both could be adjusted together.
+	ASSERT_EQ(7, ntohl(reflect_query.flr_label))
 
-> +	struct in6_flowlabel_req reflect_off = {
-> +		.flr_action = IPV6_FL_A_PUT,
-> +		.flr_flags = IPV6_FL_F_REFLECT,
-> +	};
-> +	explain("PUT+REFLECT disables reflection on the accepted socket");
-> +	expect_pass(setsockopt(reflect_afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_off, sizeof(reflect_off)));
-> +	explain("cannot disable reflection twice");
-> +	expect_fail(setsockopt(reflect_afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_off, sizeof(reflect_off)));
+The in-tree path runs the binary under ./in_netns.sh, and the sysctl is
+per-netns, so the leak is normally confined to a temporary namespace; but
+the binary is also run directly by developers, where the host setting is
+left disabled.
+
+Would FIXTURE_SETUP()/FIXTURE_TEARDOWN() be a better home for this, since
+teardown_fn is the only callback the harness still runs after a failed
+assertion? That would also make the new comment on
+set_flowlabel_consistency() about "setting up and tearing down" accurate.
+
+> +
+> +	err = setsockopt(afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_off, sizeof(reflect_off));
+> +	ASSERT_TRUE(!err) TH_LOG("failed to disable REFLECT on the accepted socket");
+> +
+> +	err = setsockopt(afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &reflect_off, sizeof(reflect_off));
+> +	ASSERT_TRUE(err) TH_LOG("expected disabling REFLECT twice to fail");
+> +
 > +	set_flowlabel_consistency(true);
-> +	close(reflect_afd);
-> +	close(reflect_cfd);
-> +	close(reflect_listener);
+> +
+> +	ASSERT_EQ(0, close(afd));
+> +	ASSERT_EQ(0, close(cfd));
+> +	ASSERT_EQ(0, close(listener));
 >  }
+
+For reference, the earlier commit adding the IPV6_FL_F_REFLECT test also
+skipped the restore on its error() paths, so the missing restore is not
+new; this patch increases the number of abort points between the two calls.
