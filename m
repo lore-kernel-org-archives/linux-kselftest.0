@@ -1,129 +1,320 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B933E4C98;
-	Fri, 31 Jul 2026 10:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E853E3DAF;
+	Fri, 31 Jul 2026 10:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785492845; cv=none; b=tXJwyKh6eCk6c4r+QLBYT8n0VCQ1a13m867qA3ajSqLKRwwKrnA/6Ae0e64auRYIny5h8FJ+WQMhNK9vA5iLLtO74ptXIjyvLDC91P2lJX5ZhJf5jDVov14/BmCVv8+b3SQie2aXw6TxmBVhEv4smhthg55MEBsBzIrYF+FHpNg=
+	t=1785493408; cv=none; b=r9caM8vd3XjJz+PlAZSsrMFidjD6LSz1L+D1sj+2J9Y5mmYOp1pdIQs6SCjh1IEjFwbXKeHKaH02G4pf6nc/TL6mBSV1V9h7V9UW4Or0em8wgtz20lb3K12S8o5qcLUjbQAfgP8BPwmcQEvzNZzdgaruLZsmW0O9PAYOYoSUDBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785492845; c=relaxed/simple;
-	bh=Oj4udiEjmpiOjfHea+V/PwK9ca6Z32nug57dxTay9Ho=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=g7JLSzaKBQR1hC/pdEq3OFrfgq68zOQD7WFer06o/b5fPL6JAk+0+FO4JvWM1AYrLFgZm/fV3Wv/0MxWnb3AiWwRQ5LcUed11rVe1+dpKyb/5oc1/rhqhKEnta6l1HUiOSp0SqdhSEJ6I+1DSAO84NzPeiMVrW+E3US5KqPtZqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=v/AfJXjO; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1785493408; c=relaxed/simple;
+	bh=6cB9O7pUciB6KuC2E18tng862YvUebMYrIRP9pUKy0w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ClIr/40ntbfOWSxgc176kTqWVxt9fYhqw+aAq6wEy1euv2Kk1CtEg53osGC9QyVRVpRv7bn8nwiT140l4EIh0iPEjkpVtcU/tvGL9oWl7kwUXQVmopnhFEFWeemeu7bYkBi18uKZv+GgarEMEU9RmqgaDYDXFmL0ZHWZ9+wdPU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D3fgrGBs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="v/AfJXjO"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=ubcjTD4WMXtsiq8p2FJU6LDktp9obYXwMtyJ483ghMU=; b=v/AfJXjOnFdaw8rUFIUcYMWkI4
-	qQN7iICNQcgMvwpO7u92p4W+7U0OoO+jXPOymbTRLEutPeAYZkqNhghiRJmbEkVzOGL1gFhcKpgei
-	+wsd+HGExLTqCGMKNZVuHivIcLKDmycv2G9cd+TVaZMSvaLhR+0vJ64XHkxIkwxgKBFFjlupn4cF/
-	KGqGWjMp+DCVvyWrZKu0rWAxaMV3/tK8/SvZ5z9jH3mXuatdCfzdhB8QGadIv3AONMPX7lp+LARFp
-	Yj2ong1kVQqxYNU3wAxiLPV4JoXrt2meAu21/h+ZiNrin0gRCAZuEPMEABK/X/OAHYr7i8jYmg8pD
-	qlHfDU4w==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wpkFJ-009wBK-1J;
-	Fri, 31 Jul 2026 10:13:41 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 31 Jul 2026 03:13:06 -0700
-Subject: [PATCH v2 3/3] selftests/mm: kmemleak: drop stale min_unref_scans
- default from comments
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D3fgrGBs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED52B1F000E9;
+	Fri, 31 Jul 2026 10:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785493388;
+	bh=Q8cP4hl7RfSW63WGPZpgq/c4DIBfBJqZy2Uq+yIleFw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=D3fgrGBsKDY+4ezUBNeQ3HbZD0+SRskvYbfBCSn55QFfjEKu3mXnn9ezjHcPYPsca
+	 vieqV97queleJctDqLYqOu5ArnigpCdJSIHo1SVnyQjQe9v7iSLk7gBLYcWZzWLzS/
+	 +e2yLTVrXYmakGoB9q5F6x03TBD50ADg7ADbheXFK4r2o2zjpun5qEDb5KC+Ye1lRj
+	 eiba8rMZDJL23cBBTxXbPi3ZuLn69+njNw6cVVLV6VrLfxaPBtLQhxVKqya1Gb4+Yl
+	 StjLCY7cSLCGSug3ybfEG2qsbRCl5MiHOHNIapj0MF4ap12EGohcpWjs9J5SsZQPHo
+	 9g0e1bokGxFtg==
+Message-ID: <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org>
+Date: Fri, 31 Jul 2026 12:22:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
+To: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>,
+ "hughd@google.com" <hughd@google.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-14-35f9aec2aed2@google.com>
+ <4460e252-b6de-4df3-bea8-0368a9d0f4ff@kernel.org>
+ <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260731-kmemleak_hardened-v2-3-7b9689ac77cb@debian.org>
-References: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
-In-Reply-To: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, workflows@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2281; i=leitao@debian.org;
- h=from:subject:message-id; bh=Oj4udiEjmpiOjfHea+V/PwK9ca6Z32nug57dxTay9Ho=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVAWQRNUMdRa9PHEBXY7Nf8tp4hOStjJKxld
- uKVu49wgSWJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
- bXlrD/94O2e9I6iW9tkOQ8YBD5tmLc8N681vxPuVSgqZnf4F0a28eyrsM4SHdjXBOYfkDxqakwT
- alJi3+n+fVADlOmxOsH3DxPtRzJ9Ips5yCM+oYMqmN5CzknQpLupbeTqAa90hH2D2qGpzlomVR/
- UJReyIkTFNHj1+OeymYac0D/PQjOokkvuSb8qQPIle+jA2o/kZS58GV+0Vc/VEqX/M1h7K++s+P
- Zn/3eYAsYavPJpCw6GE+ZN/mNj28KmDWGMOg2LfULmIvqtTqjeAHnqB0Yf77nCKg4oHQjjioh8b
- zxQ+ZLujJ3CtUixw704ZM/O/qICJSHIBp12aCTgRZ/ilCWL3CEQ17jSFkGXzOSa6y0TrZgVFwSK
- YkUsAjKJlXGmrk+o/6vAKvz0c+1t/S7lfqpKJYzMRlc0UmVBLXNnNnBohVhPARVK9bHsvI5mNC1
- IXzaml6bk3bQxE/KNM3lv0G+TfZkA0iKMX+DROuDRl+9JwIO7Pwc5YAquuOA9WaAczOACiIdclx
- QGIoztu9sCIy8MeK+cA+EQJEWH4rhMVO3etUWzy9kg+jMBKTgOfnpfJrsxnZdv1GJ3cWtC+1lsX
- hF39qVjOljB08s6XxAVj0gcXIt0fFKbSbOR57nxyDlQtGQ66R4Vo7vM3CZ/n2NpAw3g5xhT8ht5
- UMv7S0LQJtBOL3w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
 
-The test writes min_unref_scans explicitly for every case, so its comments
-describing 1 as the default are both unnecessary and, since the default is
-now conditional, wrong. Refer to the threshold values directly.
+> 
+> I didn't really like this either, the drain_state thing is really
+> awkward, but in both usages (collect_longterm_unpinnable_folios() and
+> guest_memfd), there's an outer loop where if the draining happened on
+> the local CPU before it should skip straight to just draining on all the
+> other CPUs.
 
-No functional change.
+Just nasty :)
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/ksft_kmemleak_confirm.sh | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+>> I was hoping that we could embed more logic in a helper. The history [1] of the
+>> refcount check is rather sad:
+>>
+>> https://lore.kernel.org/all/c5bac539-fd8a-4db7-c21c-cd3e457eee91@google.com/
+>>
+>> ... primarily because of mlock() handling.
+>>
+> 
+> In the original code in collect_longterm_unpinnable_folios(), I couldn't
+> find anything that handles folio_test_mlock(), so I was lost for a while
+> until I realized mlock() doesn't add a refcount to the folio.
 
-diff --git a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
-index 3a8576e835c8d..72ded5e6794c9 100755
---- a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
-+++ b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
-@@ -5,7 +5,7 @@
- # (the min_unref_scans module parameter).
- #
- # kmemleak only reports an object once it has stayed unreferenced for
--# min_unref_scans consecutive scans. The default of 1 reports on the first
-+# min_unref_scans consecutive scans. A threshold of 1 reports on the first
- # scan (historical behaviour); higher values filter transient false
- # positives where a live object's only reference is briefly invisible to a
- # single scan (e.g. an RCU tree update in flight while the scan runs). The
-@@ -16,8 +16,7 @@
- #   - a freshly allocated object is greyed on its first scan (its checksum
- #     settles then), so nothing can be reported before that priming scan;
- #     each case below primes once first,
--#   - with the default threshold (min_unref_scans=1) one scan after priming
--#     reports the orphans,
-+#   - at min_unref_scans=1 one scan after priming reports the orphans,
- #   - raising the threshold to 2 needs two scans after priming: one is not
- #     enough, the second reports,
- #   - the parameter reads back what was written.
-@@ -105,9 +104,8 @@ echo 3 > "$PARAM"
- # scan. Every case below runs this priming scan before counting.
- prime() { scan; }
- 
--# 1) min_unref_scans=1 (default): one scan after priming reports the
--#    orphans. This also establishes that the helper produces detectable
--#    orphans here.
-+# 1) min_unref_scans=1: one scan after priming reports the orphans. This
-+#    also establishes that the helper produces detectable orphans here.
- echo 1 > "$PARAM"
- gen_orphans
- prime
+mlocked folios in the mlock cache hold a reference as well.
+
+> 
+> Are you kind of proposing an optimization to
+> collect_longterm_unpinnable_folios() by adding a check for
+> !folio_test_mlock()? I hope we can put that in a separate patch series,
+> I'm still hoping to get this series in for 7.3!!
+
+I was trying to avoid messing with the refcount for ordinary LRU cache pages.
+mlock() should be a corner case for guest_memfd.
+
+Relying on the refcount just means that one unconditionally performs a lot of LRU
+cache draining even though it doesn't make any sense.
+
+> 
+>> For guest_memfd(), would mlock() ever apply on a path where you need that check?
+>>
+> 
+> For guest_memfd, if a folio were mlocked, unmapping it would fail, and
+> so the refcount on the folio would be elevated. The
+> kvm_gmem_is_safe_for_conversion() check in the patch after this one
+> would fail, correctly.
+> 
+> I really wanted the caller of the lru_add_drain_progressive() function
+> to control whether to do the drain (see below), which would solve the
+> mlock problem by not assuming the use of folio_expected_ref_count() to
+> determine whether to do draining.
+
+Again, the problem is that on *any* raised reference you would drain. I
+was trying to limit the harm.
+
+[...]
+
+>> + */
+>> +static void lru_cache_drain_for_folio(const struct folio *folio,
+>> +		enum lru_cache_drained *drained)
+> 
+> The main thing I wanted in the proposed version
+> (lru_add_drain_progressive()), was to let the caller determine whether
+> to try or to continue draining.
+
+Why?
+
+> 
+> I wanted the caller to have full control over whether to drain or not,
+> so I didn't want to pass folio into the function. I thought the caller
+> should first determine whether to drain, then call the function.
+
+Why?
+
+That's literally what the existing refcount check tries to do: figure out if
+there are LRU caches.
+
+> 
+> This version assumes that the caller wants to continue draining based on
+> something to do with a folio, and the folio may or may not be on the
+> lru_add fbatch at all, which is a little strange to me.
+
+I really don't understand what you are trying to say.
+
+Draining only makes sense if something is on the LRU cache. And there are
+better ways of checking that than relying only on even less precise refcounts.
+
+If someone wants to do an early refcount check to abort the overall
+operation, that's fine.
+
+> 
+> Also, this version enforces a certain definition of "expected" number of
+> refcounts on the folio. I guess in this case this definition works with
+> guest_memfd, but guest_memfd doesn't support swap so the swapcache check
+> in folio_expected_ref_count() isn't necessary.
+
+?!
+
+That's why we have the universal definition of expected references and the
+common helper.
+
+Because pagecache pages commonly don't support the swapcache.
+
+> Also, if the definition
+> folio_expected_ref_count() changes, then guest_memfd is implicitly
+> affected. Not sure if the "expected" definition is the same for all
+> callers?
+
+It must, because that is used all over the place. The only thing it
+cannot deal with is references held by the caller (which could be supplied
+through and "additional references" parameter like we do elsewhere).
+
+> 
+> I guess if there was a function named
+> folio_ref_counts_indicate_presence_only_in_the_filemap() instead of
+> folio_expected_ref_count(), then it'd be the perfect function for
+
+You're not seriously proposing such an abomination I hope?
+
+> guest_memfd to use. The current definition of folio_expected_ref_count()
+> also includes page table mappings, but in this check guest_memfd really
+> wants to make sure that there are no page table mappings.
+
+You can just check early for mappings.
+
+Remember: this is about LRU draining, *not* about your final
+"unexpected references" check.
+
+> 
+> This version folds folio_likely_lru_cached() into the check, and I
+> adopted the check for guest_memfd because it'd help with huge pages,
+> though technically guest_memfd is always 4K now so the check is also
+> pointless.
+
+Who cares if we end up with a common usable helper? We have usless
+checks *all over the place* in common helpers.
+
+> 
+> I tried a macro version of this where the macro caller can pass in a
+> full condition, which would look like this:
+> 
+>   lru_add_drain_while(folio_may_be_lru_cached(folio) &&
+>                       folio_ref_count(folio) != expected_refcount,
+>                       drain_state);
+
+Yuk.
+
+> 
+> but I thought that just created something people have to jump to, to
+> first understand how the macro works, so I left it as an explicit while
+> loop instead.
+> 
+>> +{
+>> +	if (!folio_likely_lru_cached(folio))
+>> +		return false;
+>> +
+>> +	/* Try local draining first, if not already done previously. */
+>> +	if (*drained == LRU_CACHE_NOT_DRAINED) {
+>> +		lru_add_drain();
+>> +		*drained = LRU_CACHE_DRAINED;
+>> +	}
+>> +	/* Try draining all CPUs next if still not an LRU folio. */
+>> +	if (folio_likely_lru_cached(folio) && *drained == LRU_CACHE_DRAINED) {
+>> +		lru_add_drain_all();
+>> +		*drained = LRU_CACHE_DRAINED_ALL;
+>> +	}
+>> +}
+>> +
+>>  /*
+>>   * Returns the number of collected folios. Return value is always >= 0.
+>>   */
+>> @@ -2266,9 +2316,9 @@ static unsigned long collect_longterm_unpinnable_folios(
+>>  		struct list_head *movable_folio_list,
+>>  		struct pages_or_folios *pofs)
+>>  {
+>> +	enum lru_cache_drained drained = LRU_CACHE_NOT_DRAINED;
+> 
+> I also considered an enum, but it would be another thing to export. I
+> was thinking to have drain_state just be opaque to the caller and the
+> only thing the caller needs to know is to initialize it to 0.
+> 
+> Perhaps there's a better way to "make it opaque"?
+
+Putting an enum into a header is a problem in which universe? :)
+
+Ackerley, please stop making up stuff. Having generic helper is not a problem. Doing
+checks in common helpers is not a problem. Putting enums in headers is not a problem.
+
+Your version is just bad.
+
+I can later try something that keeps the questionable refcount checks in place,
+maybe that could do as a temporary solution until Hugh possibly finds a way to
+remove the need for draining entirely.
 
 -- 
-2.53.0-Meta
+Cheers,
 
+David
