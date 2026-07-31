@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E189B3CAA3F;
-	Fri, 31 Jul 2026 10:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C314C3E1694;
+	Fri, 31 Jul 2026 10:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785492836; cv=none; b=tTCrDvgPPkBoJI5hbrazzlqTpVpuAzjyRp++cMvZKU1bZ46ewef8Cb8NgySOL/Cp4alhH1W0DN8YDv4wyC/04LaT5liFhopk6LLlsvYbWPl9pJoY7LXTMBps2xgNF1Sv6yL7P56Xrq0V7UIj4IKv8XqipPS9eVg89s07kuqusag=
+	t=1785492838; cv=none; b=XQRhlh3Rg7oTI25V043s1pQ6JcfwMCb/3yQdpXU1ptfzgHHuDONxUaiLDaELZGb5n/I8d8gJYc1TM0+58dJ9559maO0j/1947Vggi5PWoWh+FmkXvsStj01Bwjo86mOP7r8OXovisDIt/ysgFiHeEsV5JENlMsEeCGdKt/QmjbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785492836; c=relaxed/simple;
-	bh=yushGXHZHDaSIkXcWCwIaU2p131csUNRGVUynS0/D8Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O6IaciFaul3lDYOEtx9RqsMgIcbIWPpKYi+NqEY/E9Ogc3yVuoNhbBVIH/DFcuZA0Y+NLsmBUcpi2MNOe/+FgtNqRilWZpaEqM5anU0tVmO+BCY8wshiwyAXtUlCRMG6BkpvTc2QeCFK2LtOXe24xqOpGLQ/00fv0l8izgQ2Y7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=EFFE+9nM; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1785492838; c=relaxed/simple;
+	bh=rI4kD2TwEQlbmRB9Uvl6bgmy4k9IQvZx1edgQ1gLWsk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XV+uzma6pqfzo1YyOmfeHBpoDO693oa5AFfAMF0pySkNbyBobV/SbiTIYUudXOu0xOTlUC7T6KuVaw7763dW66NLLzelOQWsRPYdumxWCDUPEaxVew/zvCMc9Oi3HGwTKyVwgP+0XGcNROoHsW9CS+MVxV/vr4BtXG835UEM0ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=MYYIYtx2; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="EFFE+9nM"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="MYYIYtx2"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=xV4fEJeXNzRRTz9eyzhHqxzd2ssVnPioX8g4LZc5jns=; b=EFFE+9nM6xVpiuj8tLWcGSG3QK
-	So+ZKmIWLcq7SzyIVr+PhfO/kMpiQSIoyVCxtUZTR/VFza+ivXNDfsif+3EUOfD4IJE4mGjRbXkMA
-	8uPN8FkhXMPRFjpRDzSvXJbMUhxzcTBIoOCXX3FBP1/jYDf86MsGEg2E9Q1Jbxp2uzguwNqEdjV44
-	cGzxb0f+CW94YTxCin6JLhxY3zLCXiH5kyGqW3Y0tT9EfUKUCZFF/r0a+it7OW049t9dmiAeWCv0g
-	9E7w1ZS+f9GfzQk5n6nZpfVxK1a1qRurXXajriUCiwXW12ql/CiLFd8irJRnf2O9ZNCE/qJtOKJFr
-	jchBGW1g==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=xv27c0/vD/Df/b4Y/cIi4N2Epf5NFx+e9qZ5FbCg3WY=; b=MYYIYtx25XZoY10teoNoDLot/E
+	Gl9sbTwyvUQ6S0g5EIbUCl+mr6lZVAfMUoeka7/OYi6q25930ikXJMu4itu6NyBTiSfjit93Hv3xm
+	rzBoWiFMrELqo/27L1V0wCEQ8Go7WUjnhMQ1I5ow6p9jWnT33J1Z8tbXfjYKCovV3UVt7ayuN7ilz
+	lZIe5uH+WaOOXwoUcJhDOqkfklhFMi+bHhhvAL/fXfFa2MfRBONhcEXgH/6hGcq7n76ik3ZTFAGBi
+	PlViSh1cEXzz6f7rWorRnvX9mKWcX54xMDD2E9gkM3hvm0cljVTFVF7f/cf0sVJTwhwTg04HZO/83
+	TJxDTG6Q==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wpkFE-009wB6-1X;
-	Fri, 31 Jul 2026 10:13:36 +0000
+	id 1wpkF3-009wAq-1P;
+	Fri, 31 Jul 2026 10:13:26 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 31 Jul 2026 03:13:05 -0700
-Subject: [PATCH v2 2/3] Documentation: kmemleak: document the conditional
- min_unref_scans default
+Subject: [PATCH v2 0/3] mm: kmemleak: default min_unref_scans to 2 for
+ verbose kernels
+Date: Fri, 31 Jul 2026 03:13:03 -0700
+Message-Id: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,9 +44,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260731-kmemleak_hardened-v2-2-7b9689ac77cb@debian.org>
-References: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
-In-Reply-To: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
+X-B4-Tracking: v=1; b=H4sIAC91bGoC/33NQQ7CIBBA0auQWRczQKumK+9hGgMyLZNaMGAaT
+ cPdjT2A2794f4NCmalALzbItHLhFKEXuhFwDzZOJNlDL0CjPuLJoJwXWh5k51uw2VMkL+mMXau
+ 9Up0eoRHwzDTyezevQyMgcHml/NkXq/rVf9qqpJIOnUY0xrXOXTw5tvGQ8gRDrfULAi/+m7MAA
+ AA=
+X-Change-ID: 20260730-kmemleak_hardened-e80542d1152f
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
@@ -59,57 +61,88 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1829; i=leitao@debian.org;
- h=from:subject:message-id; bh=yushGXHZHDaSIkXcWCwIaU2p131csUNRGVUynS0/D8Q=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVAkbMzz1VnyGwGOef4ZiEzj2NbeGxr5mJpq
- Mv6SE71RKuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
- bSlmEACfchMqlXsVkdT9/a+9nVdaRgU7yjDLJWJnQzY/f1pqyxIZVO8LKdjRhDQcjuquiFPAyK0
- iih8KXXYxdT+qjkc2o+h5QXPRA1Y/F5F/Wc8jeLib+XxAbON9LEeFWQbHDkh8crWUQd8Rrm2Fph
- kr95DQSmCJmtyrJrE1KgH978QJv6mnUfM00iwGsuF0rs4wTym01lhT6H2LWtR8g20s1dQuhXcml
- 9Mt8Xj1N+y9k8Qs/6m0hdkkIE1/CT9AxXovfdTUaUzvIzJZIwv4ESXYEKaKEmbUIlvPg/6l8NuN
- sFtUpJ1KvVlFIIgZTt8VpDtYZi/eCg6fbHSqehBmU/mKhCouRBp1OUfaIcKMPiSNgR14gWkI6nX
- 5/PYU1tI8QiUoVceE6xRvwBAkWYiZNXptJWZ1N/PsqLmW7x8LKzH/a9ZDBDXGHmBXiLWdhwkKrk
- BfoTjefFk4NZDwebFcgo2stmynjLgVrcyXy8koRUm04NM/2wiFNFhGcPdeGsRRiB0FTifOAI0bk
- nq9dtNdBqImemco0ADvxNLWXE2wbf3G/N289iVUqEFhfOUmjhH8WiqaRA/VPUtOGeb9OFt9n6/T
- tFn/LLSrFf7bQCFFlccBFv6ivAa+lih2Whj477mmmLtT3N7F92E3xKYp6nPistjW0+BCvuHXAZz
- 8JCoNWOcFKaqFPw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2742; i=leitao@debian.org;
+ h=from:subject:message-id; bh=rI4kD2TwEQlbmRB9Uvl6bgmy4k9IQvZx1edgQ1gLWsk=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVA+cxEjDiwoAAfP34NakpeN+bDGV7HTNug6
+ phdzcYHNhOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
+ bQYmD/4vgOFaWo7gi6XQJHUDIJpkx64lWbF6oOsiz9aXuHUj0eWlHY247RHDUkkSrHA4RPLHVwB
+ 8yOO0FqFxl9Aq61ahvmzNu/e3ydpOdB6PEIDDZnaRs7/IWiBZwBMVMnkza+NG6nLTN1D08UtFGE
+ aZax4IGjtqWLmhQiCAj7Ti3C4OQn8xiPx8UVTBKVAgjOobr0Lf0pl+RKsSufunk48xYzQFWIFGe
+ uwen6kuEq3dxgmeZaAW9adl0kYVyWSzkKhyxSOuRIdGEjQ1GdVAglQFhB6OmiX0UHHSjUr5xe82
+ DJROxYxZKkXo+HZZwLNcEl34OXGrEU8VsfSGIwx3DqLjAm/QRYtQOJipkp+iAWdLyxh2upoKet6
+ athzJlL1Fylw3WccUK2kZESu679j2EfpoCPsRvrFhVg8zDI/m0r9xWudsexomB8xzV8ObizDDhI
+ rAia3+qMrvxtxwmOgy9uPrgMRZ3ZZlIvToQuUhxR19cfp9w0fBj2O3GEOB5/b65UDpzc8RJgfRz
+ L7YMWzcbKB4C4bi+ggAqJZdxRl+NPW+S03Fx6NiNsGkOxADK+LJ8ltxhDeRm27n3FGKDKMjUQtf
+ MvrNmhaddv5FZgpP5sKdMT8Yg4lCjIH2ImUDAA3VbAho2JBRwEyS/3RS8++ivDA/UbEkCjn6fcB
+ DkbErejp9H9e2Ww==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-min_unref_scans now defaults to 2 when CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN and
-CONFIG_DEBUG_KMEMLEAK_VERBOSE are both enabled, but the documentation still
-states that the default is unconditionally 1.
+When CONFIG_DEBUG_KMEMLEAK_VERBOSE is set, which means the host is in
+auto scan mode, set min_unref_scans to 2, avoiding false positives.
+
+CONFIG_DEBUG_KMEMLEAK_VERBOSE depends on CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN,
+so a kernel built with it already runs the scan thread periodically and
+the user has asked for detailed leak reports.
+
+The confirming second scan comes for free there, so default
+min_unref_scans to 2 in that case and keep it at 1 everywhere else.
+CONFIG_DEBUG_KMEMLEAK_VERBOSE defaults to n, so nothing changes for
+kernels that do not opt in.
+
+The other two patches bring the documentation and the selftest comments
+in line with the new conditional default.
+
+PS: A similar patch (v1 of this patchset) is applied to Meta's kernel,
+in real production hosts.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- Documentation/dev-tools/kmemleak.rst | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Changes in v2:
+- Test only CONFIG_DEBUG_KMEMLEAK_VERBOSE, which already depends on
+  CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN; the #if block becomes a plain
+  IS_ENABLED() initializer
+- Note in the changelog that CONFIG_DEBUG_KMEMLEAK_VERBOSE defaults to n
+- New patch: update Documentation/dev-tools/kmemleak.rst, which still
+  documented the default as unconditionally 1
+- New patch: drop the stale "default" wording from the
+  ksft_kmemleak_confirm.sh comments
+- Link to v1: https://patch.msgid.link/20260730-kmemleak_hardened-v1-1-b0b20033b4bb@debian.org
 
-diff --git a/Documentation/dev-tools/kmemleak.rst b/Documentation/dev-tools/kmemleak.rst
-index a8a83bc69ceb8..d1b690b171696 100644
---- a/Documentation/dev-tools/kmemleak.rst
-+++ b/Documentation/dev-tools/kmemleak.rst
-@@ -198,11 +198,13 @@ systems, because of pointers temporarily stored in CPU registers or
- stacks. Kmemleak defines MSECS_MIN_AGE (defaulting to 1000) representing
- the minimum age of an object to be reported as a memory leak.
- 
--The ``min_unref_scans`` module parameter (default 1) requires an object to
--be seen unreferenced in that many consecutive scans before it is reported.
--Keeping it at 1 preserves the historical behaviour; higher values filter
--the transient false positives described above, at the cost of delaying
--genuine reports by up to that many scans. It can be set at boot with
-+The ``min_unref_scans`` module parameter requires an object to be seen
-+unreferenced in that many consecutive scans before it is reported. It
-+defaults to 2 when CONFIG_DEBUG_KMEMLEAK_VERBOSE is enabled, where the
-+periodic scan thread confirms a leak on its own, and to 1 otherwise. A
-+value of 1 preserves the historical behaviour; higher values filter the
-+transient false positives described above, at the cost of delaying genuine
-+reports by up to that many scans. It can be set at boot with
- ``kmemleak.min_unref_scans=<n>`` or at run-time via
- ``/sys/module/kmemleak/parameters/min_unref_scans``.
- 
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+To: David Hildenbrand <david@kernel.org>
+To: Lorenzo Stoakes <ljs@kernel.org>
+To: "Liam R. Howlett" <liam@infradead.org>
+To: Vlastimil Babka <vbabka@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+To: Michal Hocko <mhocko@suse.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: workflows@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 
--- 
-2.53.0-Meta
+---
+Breno Leitao (3):
+      mm: kmemleak: default min_unref_scans to 2 for verbose auto-scan
+      Documentation: kmemleak: document the conditional min_unref_scans default
+      selftests/mm: kmemleak: drop stale min_unref_scans default from comments
+
+ Documentation/dev-tools/kmemleak.rst                | 12 +++++++-----
+ mm/kmemleak.c                                       |  3 ++-
+ tools/testing/selftests/mm/ksft_kmemleak_confirm.sh | 10 ++++------
+ 3 files changed, 13 insertions(+), 12 deletions(-)
+---
+base-commit: 78bc8af4affb9a732504eb22eeac7d1e50883853
+change-id: 20260730-kmemleak_hardened-e80542d1152f
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
