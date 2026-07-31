@@ -1,102 +1,189 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0063F459ADE
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:26:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E0445C6F8
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785515163; cv=none; b=oZBB9ev2or7gWXR+9LDV9BBZqJ8Zj2EiLmE6bmF4bdOu++qzV6e6SKmMRyb7Ma4QAnGMuMXnHWURlQdUXov+LIuOk8lJqw5QXHzb5P8LK8ICVRZr2x3T2IOCro282t2GlWLFd3TE+9+Bc5EGZ1ILPsTPpG7Rbkvr1VQOw9vJ2D0=
+	t=1785515194; cv=none; b=hipm8LS2clC1TPW4uImJ0U7lHTqi/juJIU0HhsOjvxnd8Tv7Ij+iScY/AW/C5Fhr0sFl14lsT7r8DJUxHp5AkfqxX7ceXiVzhu2iX4S/Jc9Jty618/Ak1+NYDFeRIzMbjNg1yWtKeWAXG/h57qRJJxgDTdv2h4J+2SrfZ8Lpq9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785515163; c=relaxed/simple;
-	bh=ECK76g+9rlK+cAVr53M3Xrn1vPFCZMYT848BIFCAC68=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UNyEGiOzy7ss4GCNXeZE3QC85aYz4GaExjU3X/D3pr1EW8glXtTUVwpR58nmjTchJpID62rHuvurWB9qwVR42c6c6yKl3ECYtgbg8tXI537D6NfqC+C81IxcBafilAeSxiszC89qaFb7WqTRYavhgt/ZjOFT3OP34XQRiv/1ujk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PWo6/oeh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785515194; c=relaxed/simple;
+	bh=tmfdgsRNGmMoH53JWSNejad3XkKOScNgIyXixI/ReSE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SC8miLNmg+tw6R41jHNMBZ58Zeu02cuD8t6OtGSPgovg2b6e0UX+3p8OUq2oymidvmZGKsVGQbXTUABk0LDwzfJlo7ZYXIrIITGINVJRjsFFZriZqLoiAg+lQJZxl/SSTMRWNld/HEkBAx69IRrTz7Lm/EYamA+13ri5fmJa9Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cQq0Hcdr; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PWo6/oeh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785515160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dIv97IOLn0/ejJggLwfffj67mbRXdGHwKIKr7oQyrK0=;
-	b=PWo6/oehIFca3y2ThWYbZx3FrXP6kaVt+130vJ/0GWtSFFqqs7Sozd0lnkRMZsl2wzN/eP
-	mP6SysQauYMRHDZyzuKT8qMssK7THu9rRBr8qZVHZm9K/qdIUzmhgduhk6v0xT0WtdJhep
-	ey1YXJugv/1/V9GKTb8FplIu/qGlCXk=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-247-G9RTodWjOj6fEXA19gRLuQ-1; Fri,
- 31 Jul 2026 12:25:55 -0400
-X-MC-Unique: G9RTodWjOj6fEXA19gRLuQ-1
-X-Mimecast-MFC-AGG-ID: G9RTodWjOj6fEXA19gRLuQ_1785515154
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2FE37195608D;
-	Fri, 31 Jul 2026 16:25:54 +0000 (UTC)
-Received: from bgrech-thinkpadp1gen3.rmtustx.csb (unknown [10.2.16.63])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2AB281956047;
-	Fri, 31 Jul 2026 16:25:53 +0000 (UTC)
-From: Brian Grech <bgrech@redhat.com>
-To: stable@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	Brian Grech <bgrech@redhat.com>
-Subject: [PATCH] selftests/net: gro: use variable sleep to handle slow environments
-Date: Fri, 31 Jul 2026 11:25:50 -0500
-Message-ID: <20260731162550.4112730-1-bgrech@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cQq0Hcdr"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cca3673560so20056865ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 09:26:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785515191; x=1786119991; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ICGNWuPesT/hzVX75ShCk7Kt8oQvWLyQi/M5mp0efms=;
+        b=cQq0Hcdr0r3PJQFHe2++OWFB2+NTTTKzwLXHp9sbf5CcOqxPuvOYOPEo4Wk79d0Euu
+         En+Nz+SPNupRZZN+Bjxfw1HzaZPWxH6hSR+eNa1auWZq7vYaa2V0jua9Rmp8sq+c3Fjl
+         ylycm5nS1nEyd/xdhWdVk5LWtelb/hjCVHT9Rr304ltdSLPRIJey1PW7OphyVGN9GZr9
+         nNMpL0NeJtgBz2p3vi123hL5sjSSBeNkpbRI5yqm2IHfQPwo9KpfC9vTllKXY3RJpPBS
+         nsZNJW+qtQBGpMrEG+QlUFREEbDvaRQGAJ9nfJRiU32eTXL2wC6u8kD2FuOToSEMR+2H
+         Gs/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785515191; x=1786119991;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ICGNWuPesT/hzVX75ShCk7Kt8oQvWLyQi/M5mp0efms=;
+        b=DobIksiH2tpDcjfxmmxsScSe0pYQJy7EplHOV7d1Hlkd+xQgbVNe9GXg9Cu4FJ8JjS
+         yHzbKbknWWrG1qRM+IurggAcdzWVlJTmI5BCkISMDYJTinSI2wZypzqe+WvwowOPd99G
+         ggR18MfmxwrqGJFWTBlu8xrrgKMQvt0MuuzdXzYOroRpFgz3qmBqLMEJf0b3N1Maoesd
+         F0KmKZLGYfiAvByJRaKaAcy8dVa+8V8mSZonf9KIqeMuMm7kju2v2bkQlKPNLHuYI+XL
+         A1mRkZY4dQj7VO1ZLUZAurTLVv5/pnL2BsZRwGbbtAclUM6/H5yAXyy0ku0TbPUzD4/9
+         KK8w==
+X-Forwarded-Encrypted: i=1; AHgh+RqhJnVqw4tyj5GbVuUhS5EtFsV4tonEsvqTdCmaqtqaD48up/98Wqy02zO9OJhgGhJlmdg0GhQ2UDzzuJEa+JY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8l5NJ+kRBinEc78hYoGs4Xprh4dh2MLdi1VLnCNrre3K6XDu3
+	CfscqZS1tjqfRZt97cdVIH4cJNdwO8Zv5fQOvOPSmH0nyaQED2wR4TYEqQ1Kr1DjCDpVQ/pSAE+
+	Oa4xSfA==
+X-Received: from plhi11.prod.google.com ([2002:a17:903:2ecb:b0:2cc:5fd1:2d93])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3b8e:b0:2ce:b096:e517
+ with SMTP id d9443c01a7336-2d0521cda4dmr6567475ad.5.1785515190881; Fri, 31
+ Jul 2026 09:26:30 -0700 (PDT)
+Date: Fri, 31 Jul 2026 09:26:30 -0700
+In-Reply-To: <dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Mime-Version: 1.0
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-7-35f9aec2aed2@google.com>
+ <60d19013-d6d7-4eec-827a-2622e22cec98@intel.com> <CAEvNRgF0SxmoMtqq69tUih54A9K7j_wcMFRrq=r9w6TnAGAUQQ@mail.gmail.com>
+ <dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com>
+Message-ID: <amzMtg4K6qEEsudx@google.com>
+Subject: Re: [PATCH v9 07/41] KVM: guest_memfd: Wire up core private/shared
+ attribute interfaces
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-The server socket initialization sleep was hardcoded at 0.5 seconds.
-On slow or heavily loaded machines this is insufficient, causing the
-client to connect before the server is ready and producing spurious
-test failures.
+On Fri, Jul 31, 2026, Xiaoyao Li wrote:
+> On 7/31/2026 4:42 AM, Ackerley Tng wrote:
+> > Xiaoyao Li <xiaoyao.li@intel.com> writes:
+> > 
+> > > On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
+> > > > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > > > index 33c9830190e2e..89cf922232920 100644
+> > > > --- a/virt/kvm/guest_memfd.c
+> > > > +++ b/virt/kvm/guest_memfd.c
+> > > > @@ -893,6 +893,27 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > > >    EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+> > > > 
+> > > >    #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+> > > > +static bool kvm_range_is_private(struct file *file, pgoff_t index,
+> > > > +				 size_t nr_pages, struct kvm *kvm, gfn_t gfn)
+> > > > +{
+> > > > +	struct inode *inode = file_inode(file);
+> > > > +	pgoff_t last = index + nr_pages - 1;
+> > > > +	struct maple_tree *mt;
+> > > > +	void *entry;
+> > > > +
+> > > > +	if (!gmem_in_place_conversion)
+> > > > +		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+> > > > +							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+> > > > +							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+> > > > +
+> > > > +	mt = &GMEM_I(inode)->attributes;
+> > > > +	mt_for_each(mt, entry, index, last) {
+> > > > +		if (kvm_gmem_interpret_entry(inode, entry) !=
+> > > > +		    KVM_MEMORY_ATTRIBUTE_PRIVATE)
+> > > > +			return false;
+> > > > +	}
+> > > > +	return true;
+> > > > +}
+> > > > 
+> > > >    static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > > >    				struct file *file, gfn_t gfn, struct page *src_page,
+> > > > @@ -913,9 +934,7 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > > > 
+> > > >    	folio_unlock(folio);
+> > > > 
+> > > > -	if (!kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + 1,
+> > > > -						KVM_MEMORY_ATTRIBUTE_PRIVATE,
+> > > > -						KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
+> > > > +	if (!kvm_range_is_private(file, index, 1, kvm, gfn)) {
+> > > 
+> > > It's checking if a single gfn is private.
+> > > 
+> > 
+> > But with huge page support we'd need to check a range of gfns... I guess
+> > there's the argument of not keeping complexity for the future, but in
+> > this case it's undoing functionality for this series and probably adding
+> > it back later.
+> 
+> let's leave the work for huge page support in the future.
 
-Respect KSFT_MACHINE_SLOW by extending the sleep to 2 seconds when
-set, consistent with how other selftests handle slow environments.
+It's not just for hugepage support, the core functionality is used in this series
+by __kvm_gmem_set_attributes() in:
 
-Note: tools/testing/selftests/net/gro.sh was replaced by gro.py in
-mainline after v6.12. This fix applies to stable trees that still
-carry the original gro.sh implementation.
+  KVM: guest_memfd: Return early if range already has requested attributes
 
-Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
-Cc: stable@vger.kernel.org  # 6.12
+> > > We can just use kvm_mem_is_private()? And it seems can be a separate patch.
+> > > 
+> > 
+> > Do you mean that this refactoring could be a separate patch? I could
+> > refactor out kvm_range_is_private() in a separate patch, then put in the
+> > mt_for_each() check in this patch together as part of all the rest of
+> > the "wiring".
+> > 
+> > I considered that but it seemed like the refactoring was too small to
+> > separate out into another patch when the mt_for_each() part is going to
+> > be in this patch anyway.
+> > 
+> > Or, I could add an earlier patch to first replace the call to
+> > kvm_range_has_vm_memory_attributes() with a call to check just 1 gfn,
+> > then this wiring patch would be simpler.
+> > 
+> 
+> This is what I meant. An earlier patch to just replace
+> kvm_range_has_vm_memory_attributes() with kvm_mem_is_private(). Then we can
+> drop this 'big' diff in this patch.
+> 
+> If kvm_range_is_private() is useful/required by huge page support, then let
+> the huge page series to introduce it. It has nothing to do with the in-place
+> conversion series.
 
-Signed-off-by: Brian Grech <bgrech@redhat.com>
----
- tools/testing/selftests/net/gro.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
-index aabd6e5480b8..c4ed09e5f002 100755
---- a/tools/testing/selftests/net/gro.sh
-+++ b/tools/testing/selftests/net/gro.sh
-@@ -21,12 +21,14 @@ run_test() {
-   # Each test is run 3 times to deflake, because given the receive timing,
-   # not all packets that should coalesce will be considered in the same flow
-   # on every try.
-+  local sleep_time=0.5
-+  [ "$KSFT_MACHINE_SLOW" = yes ] && sleep_time=2
-   for tries in {1..3}; do
-     # Actual test starts here
-     ip netns exec $server_ns ./gro "${ARGS[@]}" "--rx" "--iface" "server" \
-       1>>log.txt &
-     server_pid=$!
--    sleep 0.5  # to allow for socket init
-+    sleep $sleep_time   # to allow for socket init
-     ip netns exec $client_ns ./gro "${ARGS[@]}" "--iface" "client" \
-       1>>log.txt
-     wait "${server_pid}"
--- 
-2.55.0
-
+If it weren't for the fact that the range-based search is used later in this
+series, I would 100% agree with Xiaoyao.  But since the core logic is used and
+needed elsewhere, and because kvm_range_has_vm_memory_attributes() takes a range,
+my vote is to provide the plumbing now, even though a small portion of it isn't
+strictly necessary.
