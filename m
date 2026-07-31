@@ -1,500 +1,259 @@
-Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929FD37997A;
-	Fri, 31 Jul 2026 20:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785530400; cv=none; b=YFhXC5S8+FZ3WgHoCzRU1nxHISUj++qncx0L3gh8DFSNUZPQ650zizAYjGMrqazQUkwrWV6EMzNBvplP2Z/WXyOLHnU6M0HNs3j2HFzUYHWjZgJvOBOTz6x2B5u4x9j2jz617yoLPdAYtNSxVpyrRXn1uqIlSsM69C7p1x9+rjc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785530400; c=relaxed/simple;
-	bh=7jou5J1V5WhQ8JPJPMA+mGod2e8BORQN/EQKB8JEnpI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QtDJOId/wooaOsodHBaimwv1gBR3ppNCrbMYHUPPZnINjaD1YnD7bWV9IazPP2pkykvTJW/nIsA68DCR5vNtA5lAY8EVpIXk4QXC1Ek4WpSFX/9vWwfZiOTbc53/qlGyQxEM9v7CYKB5CMwCw4aQrG55A1lqZSjFCySpBcn0Y2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ENsGIcMh; arc=none smtp.client-ip=44.245.243.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3E92EC086
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785530929; cv=pass; b=F1FjOIPQxiqLGCCdRK48538LwxczE5IdUIsDmgPvew9DfHH8T8mwPwsyY3xw2C7kVKRwIs2Ea4Srs8TySlIFOpTiyFpxOgDAShskrYN1IFOZOV7bKxM6M3vq1yXl72O25Bt03siY3vjD+Eapm466f0uZAP6kzaE0eT57tXxfO2k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785530929; c=relaxed/simple;
+	bh=M8VnBEn1fzw+IBCpYk4jT3YhvULPCFsyVr4mz7NayKA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aP2UHttTggVn0N9QHUUMOdoN2ERzcpK7P2ldkgoGMDBug3ZXphtf47l6YhPXgp+FbxRadsqOZJHkCJilDd9Nj7b/TAjWY6USGrg1CjyEotWezytbzDkXr6xs1aGROubOygvuAPWfPm1C3NvrZ3FCfL5+eHlE3J3mleHYQPSonJM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LdHFbH20; arc=pass smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ENsGIcMh"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LdHFbH20"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso1141478a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:48:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785530927; cv=none;
+        d=google.com; s=arc-20260327;
+        b=c3QCkXuub4GL5ceXx6lY0aml2nehQabs226pyeTVeBepH/+9uAPlDubOG/qIqCAaus
+         BHo2cIzTz09iKJNL+Ev/WlhFAdua6tD3mI1RZLxv4fo6b/MshYH3rVMRZMljARkpta1e
+         SXmq6LxV+mqvP956o7F87SeiJilhbRYs8qIxJbe1ZdIOwnI/Pw2+y7+8a0RzLzPe4k3z
+         UwjSi3Y3ktQVy0JL7KZbLcky9VJVSmckLatrbP2UOwX7XW8vP+K+TdzsLPP+InANj8yE
+         PU/y/f08RMoYFMFAsahYVq99s2N7SpHhdR96EIVlrGGIQ2NVPzyrpzGn//Qj+9zeQoJz
+         Dh5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
+        fh=Opq+emGHRi9Uh+0xmKdwvQgmyr4y5BzwRf5ksKPmXHc=;
+        b=WqlX+IA/oNIx3DIpH9xJPrZOgFO3aLlCVc6GeitVrbX/mdDFO3qi5/ge8PQrITa9hK
+         z4r6oqLOGgzNmn0lZFm8Sg3kkR0XvHADdmXdSE77/3o+iEOztnm1ifx1/IsfkAxzDwCt
+         4cbySyIneN9sNnJYCkamHd0SSpb7ldSQkL4EGXjZJOQs3GeKRJp2U08bckOOdDZsXO4U
+         SlQa8DLzpcSud/X5FRFfot9VOx+9mFAbaUU8/sc7cyM6CDna9LCHp24JbtFO22QEmqsd
+         Q1/dp2/rUivS77PGQVi8VGZXDMBeUTVuNXXeSegEXdZbwSudYK3tTQQNUvXaX6RjBZF7
+         0zSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1785530398; x=1817066398;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UY9++tBrj+ufFcnIOLtX0X/zdoGWUMqnOXF6hmcyc7k=;
-  b=ENsGIcMh2HB2k0Lpzi5X+hPgwvNR0XjFUZItb0ZQ9KD9tywD/N9EWl9j
-   XI5Qd9Lww7NhQna4TZp1Wu1SXBxOPrJeaBDjwodhtqljG1mpglFyMVtKv
-   +nFTebDikVMBlv+3xF6/L8JL6DRsA4nOO9Wrv7gOJogWw7P7uPecY02ry
-   N4GdLdokcwIzZKSqR29JUQUC49qCAjs8HQS6Hlob81idjlbs8oCj3/eGY
-   Eq+bzLL2X/ImXyAlCTJGUQgj81wi0CVeQsBXHT95dR6fiHBcy56fHkI7+
-   qfFrPDOrOqD29/Cmg1QHylIsCmuSP3oZEo76IfIDkmBJpGsHQ8Y2/SSGB
-   A==;
-X-CSE-ConnectionGUID: n4PvU6OJQ1SIQT0KC6nEKA==
-X-CSE-MsgGUID: LnErrtT4SJqbSQ1TtRnchQ==
-X-IronPort-AV: E=Sophos;i="6.25,197,1779148800"; 
-   d="scan'208";a="24292015"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 20:39:58 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:25417]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.53.248:2525] with esmtp (Farcaster)
- id ee6a3ae2-b6d0-4ebd-bfc2-cd2c8d8c2707; Fri, 31 Jul 2026 20:39:57 +0000 (UTC)
-X-Farcaster-Flow-ID: ee6a3ae2-b6d0-4ebd-bfc2-cd2c8d8c2707
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Fri, 31 Jul 2026 20:39:57 +0000
-Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Fri, 31 Jul 2026 20:39:56 +0000
-From: Jimmy Zuber <jamz@amazon.com>
-To: Miklos Szeredi <miklos@szeredi.hu>, Shuah Khan <shuah@kernel.org>
-CC: <fuse-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH 2/2] selftests/fuse: test post-EOF page zeroing when a file is extended
-Date: Fri, 31 Jul 2026 20:38:42 +0000
-Message-ID: <20260731203842.540798-3-jamz@amazon.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260731203842.540798-1-jamz@amazon.com>
-References: <20260731203842.540798-1-jamz@amazon.com>
+        d=paul-moore.com; s=google; t=1785530927; x=1786135727; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
+        b=LdHFbH20iCZVdvfuvpPkfYhY6pFn0NbfBZM5U58l9BQg2+6m8rZ+bUHF8qH19sXw5Q
+         wDxZeTkPpvyefiTYrBQ1nJWXiGVQWvsrrP46ruNDRUxJghwLLaRnCX5I/hm8ws8TNxuK
+         weSJbzouzt30b0fh72kvnGnVRemdDNcpUN+Pu6mNibI6yQe6VFweS6kyNnz/r0XdgoB6
+         /97UTU8mULx8K+Q48/y0eDhW/h4sYhi117eAuYl7jAmXBDXLVvulBBzUysScDAno6yl4
+         owulwUZTveoQTyt6lOdiqcV8j1xtFIMm2HDSa/p3zN+pL7EiE89JWCI1JKT1l/3lpxDx
+         9v4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785530927; x=1786135727;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n99Y4TVdVLwkrmbFc6xvkbJUkFajn56eSscgelJgGwE=;
+        b=Gnr3fdf9e5rrGrdESajNYw5/eb0Qpuv8jXEez7SBLWkc8U7K8zj4AqBN7wN+K46+Q7
+         eCUiXuDKc3BnqV1vNowNO08rdgWhzik774KrhouBLWrC1gmTuufXVThsh2BozvNfsNOu
+         tWms0iK/BtcmT6Zf2NG5clw/IR7htNID1XDZpjq+tCgx7BDf8+N2EtuGcQeMAaGZQeAL
+         Zzl+Ui6sdEX2e2b5AZMzHCY/pZBq/qMzVqni0BB9LssNFkVWOKK4DUWphoPUciRP5SHv
+         8t5KYGkYLsRcw264LJGg9WtZi775yCZuEGncxOUaGeiCrKnjk7FxwwMXXtx+siJwrmsH
+         mj+Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpNqFBEIeRWEzd++gs22pHbZiaiAAr63YkGH24DlhfC2v83cy0jnJT+G0FowWQsUlppuzQ+5DkCYFpOHKC+j7I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUCw7xNZBP2RxF9JZbTLwEb8g3W1xRpVIyAXIl7bhlgmWjzdLd
+	d2k2h+9Qc98f6fuhQXe6pV8V6juCgpRreBUYmyjRPi2Luj99FqQ1SSlHMoOnqPQ3Kz/VslG1/zv
+	sqwC4KztJK3+zWAD/3eaTuYjQGgZoLscTe3qqhTNs
+X-Gm-Gg: AR+sD12WUF3VYsldYOLxejkCSnu+91fZD8Zu0ctTZcvbxlvKaLb/BcNdF665paBCwvu
+	MS6Mzf5d+CVLi9qWFX3ZjvItuycjZFapYvOlgGeS6+4bI27p0hxCbTDAlIanofQnzJmi8Ej5wk5
+	tlwWSkEsyQJycE6inqcewmoXYZzMxx2jRCDoE5kqpVfvNAj51HzYBZe/4y2HVfnAh49FrQkVLYV
+	5SyHVx1gI9G7ICz2npxdV/QyNS4RIl2+l0C6/UNPg7UeLs3mWExRLf5Mqj5HX/xQd15hjVvrVvP
+	sPvyjz88lIx0Yj0eh0YGC3zTBTn+3C7mGBnMaXDWLiNN
+X-Received: by 2002:a17:90b:4c44:b0:38e:21da:9257 with SMTP id
+ 98e67ed59e1d1-38fbc55a8ffmr1001602a91.37.1785530926988; Fri, 31 Jul 2026
+ 13:48:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D044UWB003.ant.amazon.com (10.13.139.168) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+ <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+ <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+ <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+ <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+In-Reply-To: <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 31 Jul 2026 16:48:34 -0400
+X-Gm-Features: AUfX_mygZc7iXRdpSQn--2JfmeRTMiYoMN85HlxYxxZIHazgpGRFnpSW3d_XCEA
+Message-ID: <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a regression test for the bug where extending a file left the tail of
-the old partial EOF page exposing stale mmap-dirtied data instead of zeros.
+On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
+> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
+> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
+> >> > <memxor@gmail.com> wrote:
+> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
+> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
+> >> >> > <memxor@gmail.com> wrote:
+> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwive=
+di
+> >> >> >> > <memxor@gmail.com> wrote:
+> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dw=
+ivedi
+> >> >> >> >> > <memxor@gmail.com> wrote:
+> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
+> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <pau=
+l@paul-moore.com> wrote:
+> >> >> >
+> >> >> > ...
+> >> >> >
+> >> >> >> Yes, I understand you feel it should be placed under security/. =
+You are entitled
+> >> >> >> to your opinion.
+> >> >> >>
+> >> >> >> No, I do not think the newly added kfunc is a big enough layerin=
+g violation such
+> >> >> >> that we need to do it ASAP, disregarding everything else outline=
+d above. I am
+> >> >> >> sure you see that too. There are several other instances of simi=
+lar kfuncs.
+> >> >> >>
+> >> >> >> Therefore, please attempt to meet me halfway here.
+> >> >> >
+> >> >> > I'm happy to work with you, and/or anyone else, who wants to work=
+ on
+> >> >> > finding a way to test kfuncs that live in security/bpf_lsm_kfuncs=
+.c.
+> >> >>
+> >> >> Right, and for that file to exist, you need to get everyone (FS, BP=
+F folks) to
+> >> >> agree on whether placing all such kfuncs there makes sense. It is n=
+ot for both
+> >> >> of us to decide on our own. So let's revisit this whole topic once =
+you've done
+> >> >> that exercise.
+> >> >
+> >> > The kfunc that David has proposed must be located in
+> >> > security/bpf_lsm_kfuncs.c, similar to the VFS kfuncs and
+> >> > fs/bpf_fs_kfuncs.c.  If you read David's bpf_init_inode_xattr() kfun=
+c
+> >>
+> >> Sigh.
+> >>
+> >> I now went and read the archives, and Christian already told you no be=
+fore [0],
+> >> which I missed in my first read. So two people whom this code affects =
+already
+> >> objected to your proposal.
+> >
+> > As mentioned previously, David's kfunc has nothing to do with the VFS.
+> > Look at the code if you haven't already and you'll see what I mean.
+> > The only relevance to the VFS is the fact that "inode" and "xattr" are
+> > used in the name; David's currently proposed kfunc is an LSM kfunc,
+> > not a VFS kfunc.
+>
+> I am sorry, I read it and I don't see why it is an LSM kfunc. It is absol=
+utely a
+> VFS kfunc, that is using LSM APIs to some end. The LSM specific bits are =
+already
+> in security/.
 
-The test is a self-contained raw /dev/fuse server (no libfuse dependency)
-that runs without writeback_cache and returns FOPEN_KEEP_CACHE, the
-configuration in which the bug is visible.  Its backing data is always zero
-in the hole, so any non-zero byte a read sees is stale page-cache data.
-All offsets are relative to the runtime page size.  Four cases:
+We clearly have different opinions on the matter.  I've mentioned why
+I believe it is a LSM kfunc, I would be interested to hear why you
+believe it is a VFS kfunc (what VFS functions does it call, what VFS
+variables does it manipulate, etc.).
 
-  - write_extend: pollute the post-EOF tail, extend past it by writing into
-    a later page, and verify the tail reads back as zero;
-  - ftruncate_extend: same, but extend via ftruncate();
-  - fallocate_extend: same, but extend via fallocate() at the old EOF;
-  - extend_into_eof_page_preserves_data: an extending write landing inside
-    the old EOF page must not be clobbered by the zeroing.
+> > If you find yourself required to abide by Christian's comment, despite
+> > this not being a VFS kfunc, that's fine, but this puts us at a
+> > stalemate and David will need to find another approach for his work.
+>
+> Paul, let me remind you of another email you sent [0], in which you contr=
+adict
+> yourself. I don't know what caused you to get confused over the month.
+>
+> In it, you tell David to move *LSM* bits into security_lsmxattr_add(), wh=
+ich has
+> been done in patch 2. Thus, by your own characterization, it means the re=
+st is
+> *not LSM* code.
+>
+> Quoting you verbatim:
+> > As I said previously, if you absolutely insist on the kfunc being in
+> > the VFS kfunc file, the LSM specific bits need to be abstracted out
+>                         ^^^^^^^^^^^^^^^
+> > into an LSM function.
+>
+> You yourself made the point in that same email that the kfunc can stay in=
+ the
+> current file once LSM bits were moved out, and your request was honored.
+>
+> At this point, anybody reading this thread will only see your position as=
+ a way
+> to undermine David's work and waste everyone's time, such that you can gr=
+ind an
+> axe against BPF folks. It's a repeating pattern.
 
-Each case fails without the fix and passes with it.
+It seems foolish to speculate on what *everyone* reading this thread
+might be thinking, but since the discussion has decayed to the point
+where we are spelunking archives for quotes, let me provide my comment
+from David's v5 patchset where I explain myself:
 
-Signed-off-by: Jimmy Zuber <jamz@amazon.com>
----
- .../selftests/filesystems/fuse/.gitignore     |   1 +
- .../selftests/filesystems/fuse/Makefile       |   3 +
- .../filesystems/fuse/write_extend_eof_test.c  | 368 ++++++++++++++++++
- 3 files changed, 372 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
+"I'm sorry David, now that I'm seeing this function again, especially
+with the LSM specific bits extracted into a LSM function, this absolutely
+belongs somewhere under security/.  It's only callable from within a
+BPF LSM callback and all it does outside of some BPF pointer boilerplate
+is call right back into a LSM helper function."
 
-diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
-index 3e72e742d08e..fb51603fe419 100644
---- a/tools/testing/selftests/filesystems/fuse/.gitignore
-+++ b/tools/testing/selftests/filesystems/fuse/.gitignore
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- fuse_mnt
- fusectl_test
-+write_extend_eof_test
-diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
-index 612aad69a93a..0c2c613af0ac 100644
---- a/tools/testing/selftests/filesystems/fuse/Makefile
-+++ b/tools/testing/selftests/filesystems/fuse/Makefile
-@@ -3,10 +3,13 @@
- CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := fusectl_test
-+TEST_GEN_PROGS += write_extend_eof_test
- TEST_GEN_FILES := fuse_mnt
- 
- include ../../lib.mk
- 
-+$(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
-+
- VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
- ifeq ($(VAR_CFLAGS),)
- VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse
-diff --git a/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c b/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
-new file mode 100644
-index 000000000000..ca6ce6eca382
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
-@@ -0,0 +1,368 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Regression test for the fuse write-extend partial-EOF-page zeroing bug.
-+ *
-+ * A buffered write that extends i_size past a non-page-aligned EOF must zero
-+ * the tail of the old last page.  If an application has mmap'd that page and
-+ * stored into the post-EOF region (undefined until the file grows), the
-+ * now-in-bounds tail must read back as zero, not as the stale stored bytes.
-+ *
-+ * The bug is exposed on a non-writeback_cache server that keeps the page cache
-+ * across the write (FOPEN_KEEP_CACHE without FOPEN_DIRECT_IO).  This test is a
-+ * raw /dev/fuse server in that mode; the backing data is always zero in the
-+ * hole, so any non-zero byte a read sees is stale page-cache data.
-+ *
-+ * Requires root to mount fuse.
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/falloc.h>
-+#include <pthread.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <sys/uio.h>
-+#include <linux/fuse.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define FUSE_ROOT_ID	1
-+#define FILE_INO	2
-+#define MAX_WRITE	(128 * 1024)
-+#define BACKING_SIZE	(4 * 1024 * 1024)
-+#define POLLUTE		0xee
-+
-+/* Server-side state, shared with the responder thread. */
-+struct server {
-+	int fd;
-+	unsigned char backing[BACKING_SIZE];	/* authoritative bytes */
-+	uint64_t size;
-+};
-+
-+static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
-+{
-+	struct fuse_out_header oh = {
-+		.len = sizeof(oh) + (data ? len : 0),
-+		.error = error,
-+		.unique = unique,
-+	};
-+	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
-+
-+	/* Errors here are teardown races (device closed on unmount); ignore. */
-+	if (writev(fd, iov, data ? 2 : 1) < 0)
-+		return;
-+}
-+
-+static void fill_attr(struct fuse_attr *a, uint64_t ino, uint32_t mode,
-+		      uint64_t size)
-+{
-+	memset(a, 0, sizeof(*a));
-+	a->ino = ino;
-+	a->mode = mode;
-+	a->nlink = 1;
-+	a->size = size;
-+	a->blksize = sysconf(_SC_PAGESIZE);
-+}
-+
-+static void *server_thread(void *arg)
-+{
-+	struct server *s = arg;
-+	static char buf[MAX_WRITE + 4096];
-+
-+	for (;;) {
-+		ssize_t n = read(s->fd, buf, sizeof(buf));
-+		struct fuse_in_header *ih = (void *)buf;
-+
-+		if (n < 0) {
-+			if (errno == EINTR || errno == EAGAIN)
-+				continue;
-+			return NULL;	/* device closed on unmount */
-+		}
-+		if (n < (ssize_t)sizeof(*ih))
-+			continue;
-+
-+		switch (ih->opcode) {
-+		case FUSE_INIT: {
-+			struct fuse_init_in *in = (void *)(ih + 1);
-+			struct fuse_init_out out = {0};
-+
-+			/* No FUSE_WRITEBACK_CACHE: the exposed configuration. */
-+			out.major = FUSE_KERNEL_VERSION;
-+			out.minor = FUSE_KERNEL_MINOR_VERSION;
-+			out.max_readahead = in->max_readahead;
-+			out.max_write = MAX_WRITE;
-+			out.max_background = 16;
-+			out.congestion_threshold = 12;
-+			out.flags = FUSE_MAX_PAGES;
-+			out.max_pages = MAX_WRITE / sysconf(_SC_PAGESIZE);
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_GETATTR: {
-+			struct fuse_attr_out out = {0};
-+			int root = ih->nodeid == FUSE_ROOT_ID;
-+
-+			out.attr_valid = 3600;
-+			fill_attr(&out.attr, ih->nodeid,
-+				  root ? (S_IFDIR | 0755) : (S_IFREG | 0644),
-+				  root ? 0 : s->size);
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_LOOKUP: {
-+			struct fuse_entry_out out = {0};
-+
-+			out.nodeid = FILE_INO;
-+			out.attr_valid = 3600;
-+			out.entry_valid = 3600;
-+			fill_attr(&out.attr, FILE_INO, S_IFREG | 0644, s->size);
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_OPEN:
-+		case FUSE_OPENDIR: {
-+			struct fuse_open_out out = {0};
-+
-+			/* Keep the cache across the write, but not direct I/O. */
-+			out.open_flags = FOPEN_KEEP_CACHE;
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_READ: {
-+			struct fuse_read_in *in = (void *)(ih + 1);
-+			uint64_t off = in->offset;
-+			uint32_t size = in->size;
-+
-+			if (off >= BACKING_SIZE)
-+				size = 0;
-+			else if (off + size > BACKING_SIZE)
-+				size = BACKING_SIZE - off;
-+			reply(s->fd, ih->unique, 0, s->backing + off, size);
-+			break;
-+		}
-+		case FUSE_WRITE: {
-+			struct fuse_write_in *in = (void *)(ih + 1);
-+			struct fuse_write_out out = {0};
-+			uint64_t off = in->offset;
-+			uint32_t size = in->size;
-+
-+			if (off < BACKING_SIZE) {
-+				uint32_t c = size;
-+
-+				if (off + c > BACKING_SIZE)
-+					c = BACKING_SIZE - off;
-+				memcpy(s->backing + off, in + 1, c);
-+				if (off + c > s->size)
-+					s->size = off + c;
-+			}
-+			out.size = size;
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_SETATTR: {
-+			struct fuse_setattr_in *in = (void *)(ih + 1);
-+			struct fuse_attr_out out = {0};
-+
-+			if ((in->valid & FATTR_SIZE) && in->size <= BACKING_SIZE) {
-+				if (in->size > s->size)
-+					memset(s->backing + s->size, 0,
-+					       in->size - s->size);
-+				s->size = in->size;
-+			}
-+			out.attr_valid = 3600;
-+			fill_attr(&out.attr, ih->nodeid, S_IFREG | 0644, s->size);
-+			reply(s->fd, ih->unique, 0, &out, sizeof(out));
-+			break;
-+		}
-+		case FUSE_FALLOCATE: {
-+			struct fuse_fallocate_in *in = (void *)(ih + 1);
-+			uint64_t end = in->offset + in->length;
-+
-+			/* Only plain (size-extending) fallocate is used here. */
-+			if (!(in->mode & FALLOC_FL_KEEP_SIZE) &&
-+			    end <= BACKING_SIZE && end > s->size) {
-+				memset(s->backing + s->size, 0, end - s->size);
-+				s->size = end;
-+			}
-+			reply(s->fd, ih->unique, 0, NULL, 0);
-+			break;
-+		}
-+		case FUSE_FLUSH:
-+		case FUSE_RELEASE:
-+		case FUSE_RELEASEDIR:
-+		case FUSE_FSYNC:
-+		case FUSE_ACCESS:
-+			reply(s->fd, ih->unique, 0, NULL, 0);
-+			break;
-+		case FUSE_FORGET:
-+			break;
-+		default:
-+			reply(s->fd, ih->unique, -EOPNOTSUPP, NULL, 0);
-+			break;
-+		}
-+	}
-+}
-+
-+FIXTURE(fuse)
-+{
-+	struct server *srv;
-+	pthread_t thread;
-+	char dir[64];
-+	long page;		/* runtime page size */
-+	off_t eof;		/* mid-page EOF, page-relative */
-+	int fd;			/* open test file */
-+	char *map;		/* mmap of the EOF page */
-+	int mounted;
-+};
-+
-+FIXTURE_SETUP(fuse)
-+{
-+	char opts[128];
-+	pthread_t t;
-+
-+	if (geteuid() != 0)
-+		SKIP(return, "need root to mount fuse");
-+
-+	self->page = sysconf(_SC_PAGESIZE);
-+	self->fd = -1;
-+	self->map = MAP_FAILED;
-+
-+	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
-+			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, self->srv);
-+
-+	self->srv->fd = open("/dev/fuse", O_RDWR);
-+	ASSERT_GE(self->srv->fd, 0);
-+
-+	strcpy(self->dir, "/tmp/fuse_weof_XXXXXX");
-+	ASSERT_NE(NULL, mkdtemp(self->dir));
-+
-+	snprintf(opts, sizeof(opts),
-+		 "fd=%d,rootmode=40000,user_id=0,group_id=0",
-+		 self->srv->fd);
-+	ASSERT_EQ(0, mount("fuse", self->dir, "fuse", 0, opts));
-+	self->mounted = 1;
-+
-+	ASSERT_EQ(0, pthread_create(&t, NULL, server_thread, self->srv));
-+	self->thread = t;
-+}
-+
-+FIXTURE_TEARDOWN(fuse)
-+{
-+	if (self->map != MAP_FAILED)
-+		munmap(self->map, self->page);
-+	if (self->fd >= 0)
-+		close(self->fd);
-+	if (self->mounted)
-+		umount2(self->dir, MNT_DETACH);
-+	if (self->srv && self->srv != MAP_FAILED) {
-+		if (self->srv->fd > 0)
-+			close(self->srv->fd);
-+		munmap(self->srv, sizeof(*self->srv));
-+	}
-+	if (self->dir[0])
-+		rmdir(self->dir);
-+}
-+
-+/*
-+ * Create the test file with a mid-page EOF and mmap-store POLLUTE into its
-+ * post-EOF tail (a legal store, undefined until the file grows).  Leaves the
-+ * file open and the EOF page mapped in the fixture for the caller to extend.
-+ */
-+static void pollute_eof_tail(struct __test_metadata *_metadata,
-+			     FIXTURE_DATA(fuse) * self)
-+{
-+	off_t eof = 2 * self->page + self->page / 4;
-+	char path[128];
-+	char *buf;
-+
-+	snprintf(path, sizeof(path), "%s/file", self->dir);
-+	self->fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0644);
-+	ASSERT_GE(self->fd, 0);
-+	self->eof = eof;
-+
-+	buf = malloc(eof);
-+	ASSERT_NE(NULL, buf);
-+	memset(buf, 'A', eof);
-+	ASSERT_EQ(eof, pwrite(self->fd, buf, eof, 0));
-+	free(buf);
-+
-+	self->map = mmap(NULL, self->page, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			 self->fd, eof & ~(self->page - 1));
-+	ASSERT_NE(MAP_FAILED, self->map);
-+	memset(self->map + (eof & (self->page - 1)), POLLUTE,
-+	       self->page - (eof & (self->page - 1)));
-+}
-+
-+/* Assert the old post-EOF tail [eof, end of its page) now reads back as zero. */
-+static void assert_tail_zeroed(struct __test_metadata *_metadata,
-+			       FIXTURE_DATA(fuse) * self)
-+{
-+	off_t base = self->eof & ~(self->page - 1);
-+	char *tail = malloc(self->page);
-+	int i;
-+
-+	ASSERT_NE(NULL, tail);
-+	ASSERT_EQ(self->page, pread(self->fd, tail, self->page, base));
-+	for (i = self->eof & (self->page - 1); i < self->page; i++)
-+		ASSERT_EQ(0, tail[i]);
-+	free(tail);
-+}
-+
-+/* Basic: pollute the post-EOF tail, extend past it by a later write. */
-+TEST_F(fuse, write_extend)
-+{
-+	pollute_eof_tail(_metadata, self);
-+	ASSERT_EQ(4, pwrite(self->fd, "data", 4, 5 * self->page + self->page / 3));
-+	assert_tail_zeroed(_metadata, self);
-+}
-+
-+/* Extend via ftruncate() rather than a write. */
-+TEST_F(fuse, ftruncate_extend)
-+{
-+	pollute_eof_tail(_metadata, self);
-+	ASSERT_EQ(0, ftruncate(self->fd, 8 * self->page));
-+	assert_tail_zeroed(_metadata, self);
-+}
-+
-+/* Extend via fallocate() starting at the old EOF. */
-+TEST_F(fuse, fallocate_extend)
-+{
-+	pollute_eof_tail(_metadata, self);
-+	ASSERT_EQ(0, fallocate(self->fd, 0, self->eof, 4 * self->page));
-+	assert_tail_zeroed(_metadata, self);
-+}
-+
-+/* A write landing inside the old EOF page must not clobber its own data. */
-+TEST_F(fuse, extend_into_eof_page_preserves_data)
-+{
-+	off_t base, wr;
-+	char *buf, *rd;
-+	int i;
-+
-+	pollute_eof_tail(_metadata, self);
-+	base = self->eof & ~(self->page - 1);
-+	wr = base + 3 * self->page / 4;		/* starts in the EOF page */
-+
-+	buf = malloc(2 * self->page);
-+	ASSERT_NE(NULL, buf);
-+	memset(buf, 'B', 2 * self->page);
-+	ASSERT_EQ(2 * self->page, pwrite(self->fd, buf, 2 * self->page, wr));
-+	free(buf);
-+
-+	rd = malloc(self->page);
-+	ASSERT_NE(NULL, rd);
-+	ASSERT_EQ(self->page, pread(self->fd, rd, self->page, base));
-+	/* [eof, wr) is hole -> zero; [wr, page) is written data -> 'B'. */
-+	for (i = self->eof & (self->page - 1); i < wr - base; i++)
-+		ASSERT_EQ(0, rd[i]);
-+	for (i = wr - base; i < self->page; i++)
-+		ASSERT_EQ('B', rd[i]);
-+	free(rd);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.50.1
+You are welcome to view that however you like.  I saw the v5 patchset
+and the nature of the kfunc became painfully obvious to me so I
+changed my opinion.
 
+> I tried my best to engage in good faith, but it is clearly not working.
+
+I've been working with David and providing feedback for a while now
+(perhaps before you started commenting? not sure on that), and I'm
+continuing to engage with David, you, and anyone else who wants to
+comment on this thread.
+
+[NOTE: Dropped Matt's address due to bounces, see my other email in
+this thread about that.]
+
+--=20
+paul-moore.com
