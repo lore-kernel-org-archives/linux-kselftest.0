@@ -1,137 +1,99 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1987E362153
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785528454; cv=pass; b=lGDLwUWE2PHX83je2NT0+tTb3qZbX+0e92/xIoT/kwmKffunYggwmmM222NN8fm03nFojXn7yMAw1XgvxcBdAKuhc7XbMhLZOHiegHI+qQrtKqcm+UPzIP+PQu59O5+XU4Yjd7H9kMRuQOsFJ0j9bKAT6oSXxpgfefSFN7xZVBE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785528454; c=relaxed/simple;
-	bh=HaZxmJqYx+9+QhSynH8AmDcWjKIvancPwzCQZQKd8SY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W3aFDzgLhzB1/lKYO6JzO+2lkfJKP0LjpqWvys8ClMwQ/wze46lkT8N69dH8E6EfsKK+Ab2icQkCVX7B6vZ3LsX6NAhwjalVvyD43/tO+4o2cI/eltKi+fsh+c01nRQSse+3YAOiw9Y9VsrfWp+tsUTsOGbdTYUmjs7DZ1b362M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NPlVNPEd; arc=pass smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFE234888F
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785528612; cv=none; b=EDB9TW591XO9E/AV5nSd+Q+nXvFO3u9Ex4YXKm7EK3kkNv+wCKjMal2DOr+MroNesDI1eEJW5TCImgAD71D9FXNBPxAmX50i/TkegNyVeXLuH0+XpA98XZnb7OkD5bnPDd/vKfxU0TBmGo0TmzKFEbbxu19RXH/RTW/qOzEb3OY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785528612; c=relaxed/simple;
+	bh=EbkAtw/yPxzI+zkDqTO3nDCw8wZaoKCV5tUxOPgLNqc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Content-Type; b=GmkQELnAx1QiAB9nrFYBRUQd/YIVVDGR5tk2pV0ZCdvDbjLjpk4INpIF/dJi1Gq9HwkVp73bcNFPkYZBQ0lf7M1SKef490beWMAEfPtqnRKhGwG7RjbawWjJz5lVvzBXH8Lc5sTdGE90iQh+EZFSDkBMnOac7baRiu+cedJVQCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EUH7X7Vb; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NPlVNPEd"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84862b0d5f8so1347209b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:07:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785528452; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oo8sUyg9oMvPlwf2Kym0CY5kr0ZS/wv5xXxkbFZBJx8zBw79Y1Tt28+sl4VC0PE6Cz
-         MSvSyVBzWBziMmiIiv6RbncHA8y0ekr6WFOE2BN11fv7iAXII4MYSnGvO5wxY0m7g7U4
-         B0DYWGLlv5ejLd77gktjL1DQcFaTuB4r+Svvcd7cSUzPC8ox9W08mJ8vFmeDAIjHp3q8
-         0ordE7Dqxsr8IA5qOBCPktnL4IHepTJlRQwwP651Xtnal4OYAbqGN6wSOa+GhzBDBKF0
-         Z7Eoclpzd9FhiMDDoF6zV0+fXTFMvIbRtuc7cEkpshOQV0z4xzchIykH7Ks/LqjpiMGh
-         Cj9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        fh=7ywV3jwmHYWg+jHZ8290rOsr0WiH0RQm8SR6CNyrqec=;
-        b=BUDo+qM7vwIWYtfSMCRij2CHbyRYHfrV+IrazdtUXjn73g0jY8ZQV7pm7fVLY99v8d
-         z7r8tJklnwCaOjoKa+kyW6TfLxNdszTVjGaXrtl/7Q/wOrHZ1gr/rp69I4J2cP9HJ2uo
-         t8HZ3Y+iqwiiOa2bNcycZ2J1GPynK0l9fRclHXARNdE6jiTXiZmZSJ4dco0NLV04Gl5A
-         geddnSYRT1mN7alVYyEFb3nvFWvN86mi5lq4M6zfa5MEx7PsbZTAVMhl3AKBxDSls5p1
-         QeWcYJWlj1Wyr7s8HHRCSaDq3+CjhXumR7uamyhTg8/iWBU1/O4U4ShFU8BCBJ3uOH3C
-         hyGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EUH7X7Vb"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8487eb67173so2723316b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785528452; x=1786133252; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        b=NPlVNPEdkpYXPJZFPwbxsaV60UpEogskvIjAU9EuMgFV1M1pdX30eUEMpNbcZd94b1
-         2gRxZ3L7whZk6DM0OCU5ZE0mVe9F7l1VNH9e5D1dLNE3sapfOKBfrNlY2INCBYhaUU+D
-         Qy1Pq0Ja2OghaPhJ5SD2MfpL2GfwXjc6A41eRM7Wh98mjqfHH7/FYowwpjUsLil1FBHa
-         hktynS0v4DT82vvLWYbcGZiCfnJ6rBbK4zjySew1QGWe7DAEKDYewlDQqsklNKGmC0T1
-         dOLfERsr1Ca8HHki5+fMgF87EdRPhNsNTZ2h2dVCEHY8YScFMiyAoVk66LKpMADwZxDn
-         +GsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785528452; x=1786133252;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785528611; x=1786133411; darn=vger.kernel.org;
+        h=content-type:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IINxWFvd1Xd2t87DnvaxuJRBg50D9LzcF6dTbifwyFw=;
-        b=GPBCVHEOCm/TXT9+5ZFzuVq3ejg4vyS+pAS7XxSUVUZfiFVOlWg3Foxg2d7fL7zBJm
-         PlUJlwMSH/0m7nYAWHWWaX6R/hvkD9p08IPqC7n7s2Qx2NYh6p7rjIDD1VicUeF61eLe
-         6FVGWzibbiQIqgDcxEyFDGnWX5CJXQSk5urm+c/YARlLDL0cc7vWCTa+GzFOXNISpy/u
-         vajYAXrT4ja0S5XUlZw+EZnay2JZQmwTfh/Kdl+8A4ISXu5p6lFA5EAWMwbC5rFE3LpE
-         Ovph/btY9nv74zFRQ6wm6c4LZ7lyN+ZEWHIEBNaNbIBuVWlbRcSDZWYFiIi1koCGUI7X
-         4DaQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq+DEIM+lTsblPWRQZ2tyc7fjA9r290M7tKXeKicNJcLyCL5x7pAAKk1qhRXvIFR9SQEbwTMN0TH3zqO5s1Z1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkKNpmBb9iLRdAwtTHwpl9ZNFoDe2DBBrZhj5mUjO6wPwjBwUK
-	RM3LH2tfiIvdpHQdh/0PurZBQdpDkluvFu8t/8YLQiJPXpuj7IMqiv2E5XxuUY3FtATp67/iP87
-	7ZvxqrzRQ2JJuR/FV6gPpjzZqF6jQApyw8k+HcjOy
-X-Gm-Gg: AR+sD10POth5p9opVBMwGJnvnkEuMS2N4MSlWEoEtJp6VRcncvN+BogZjrfA9LX8QAp
-	t1xN+peCFgoi72B13fnwJOlYagOBRznIGmfvuCqMEGu7Mr/7OMzrDHVn3JHPQVqj6yPqIF19JYf
-	f3rIwhNUVaqSt3M4tHBBnHZJDSxvxAqFMYt4bA7Z4i3CyKSGqJjKRuTLT662iGa3ocHXwgSFIYM
-	7qdxNW++nP9+m2Ce+nBmtABj079dXbZFalLYF/E94qiyChoiUFsK+6ARlL1hYpmjbTAKMgdU3Od
-	pL1+pwz+uwljLJ7nJsh0yc72glSQNHblacWVSwKI+YYMslxgtQQFQbw=
-X-Received: by 2002:a05:6a00:9094:b0:847:7a61:e68e with SMTP id
- d2e1a72fcca58-84ee482cf83mr862916b3a.31.1785528452555; Fri, 31 Jul 2026
- 13:07:32 -0700 (PDT)
+        bh=6dGHZhChNpAHEZYB2yzeExiUjrKbT3b7Zh2GTXyKqp4=;
+        b=EUH7X7Vbv4/l+BwVXuuqLMnRLyHEUB/DxQAU/eTnGEz55NEyVg6g4f5/HdTsspSU4F
+         2AnlvFgrvKtDSByeLBmXaFCXX5KjSQ8W2OZqz55SUq+8V/9GmnIsobrQhrALQwLuHnXR
+         Clyw9aWyZfb45rZbBoblwBJhL26YCigISCxVNyUbKcvM6hROmZ63oU15sanYmfIFxCPS
+         ka3jWY+vYcHA56P2TSYY0bHs0xo8fKE625tiUTP5NOOSpA2VFKJh3sgFPmR2fDxgYC4x
+         bkBS7FoEH9k3V8VZzsDIvdb7kHxo98mJBcUfy2TVYGnM9eY7J0SYpgr2gvUmfgOG3QN1
+         WxNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785528611; x=1786133411;
+        h=content-type:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6dGHZhChNpAHEZYB2yzeExiUjrKbT3b7Zh2GTXyKqp4=;
+        b=X+MTxTtxzvr90B53GKTW3BPfnZdT6zbw9WHQPAISncrNJN/Z6hDL7yJe1CB9h1C0GU
+         UKZ7wNCmLYQSmRBec/pHi7OcnaxTKKSqGrdV0rhJsXhJe6+rcSbUH/vdiMkT2bJ9kGvA
+         4N/IXkB4BIEhZkm33mX19FIEfBqNvdsl3KKfdgNh0vbcXZb8BMOovbdovwd2mWNTYho1
+         /2jNjSPJ7pz4oO7D4XX4f+dsR0M7u4kFn56mk8qSfsMdMu0WNq/DE1VhsUT4HQr15nmu
+         ACwiFExn1nlABfp/xddSDYdsKyNIMKIVxNSG1LMo5GwHy4fhQb66ooJ1UQooZ7a8MQIf
+         bWhQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoKBSP31XWXzphfUA+3Krdv7LmQ4tRUuOTpRU024ksJfn/UGJJtgPzWPqRE2WH4vRIVcaw5dgIYjJmPRGFtBDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+KFNiz9ZfQ+y7IG3zjaUEMg5P6oZAn98GeW9w34av3ujp6ZDV
+	ZjDaIn/v4j9aNK/qfxQZJTt4nSMaoNVqiTlDt5g54IxVwQve6zuVO5OSUKDue3giYaslIpNIWUr
+	0w50pfg==
+X-Received: from pfbi27-n2.prod.google.com ([2002:a05:6a00:a51b:20b0:848:5395:9a78])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1d87:b0:848:4256:d6ad
+ with SMTP id d2e1a72fcca58-84ee48f8ab0mr799329b3a.60.1785528610394; Fri, 31
+ Jul 2026 13:10:10 -0700 (PDT)
+Date: Fri, 31 Jul 2026 13:09:44 -0700
+In-Reply-To: <20260703212145.343527-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 31 Jul 2026 16:07:20 -0400
-X-Gm-Features: AUfX_mwbFUF3u9BOCn6R0bUcxbx1dq-jZz_UTL6QyKSEwU_IdbxDl3CNhAP30WA
-Message-ID: <CAHC9VhR8RpkP-N4J0wGbv167NctjFTOg5Z+n4_M0pjp3Fbnamw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260703212145.343527-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
+Message-ID: <178552799129.2700794.10181439022561913222.b4-ty@google.com>
+Subject: Re: [PATCH v6 00/36] Cleaning up the KVM clock mess
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org, 
+	David Woodhouse <dwmw2@infradead.org>
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Jul 31, 2026 at 4:01=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> ...
+On Fri, 03 Jul 2026 22:17:39 +0100, David Woodhouse wrote:
+> This is v6 of the series to clean up the KVM clock, rebased onto the
+> tip timers/ptp material (the timers-ptp-2026-06-13 merge, which includes
+> Thomas's ktime snapshot series and the read_snapshot patches).
+> 
+> The KVM clock has historically suffered from three problems:
+> 
+>  1. Imprecision: get_kvmclock_ns() computed the clock from the *host*
+>     TSC without applying guest TSC scaling, causing systemic drift from
+>     the values the guest computes from its own TSC.
+> 
+> [...]
 
-Completely unrelated to everything else in this thread, does anyone
-reading this know if Matt Bobrowski is still at Google?  I've been
-getting bounces on his @google.com address for a few weeks now, I'm
-assuming others have as well?  If anyone is still in touch with Matt,
-can you ask him to update his address in MAINTAINERS?  Failing that,
-can we at least remove his email from MAINTAINERS (feel free to leave
-his name if possible?) so we don't keep getting bounces on postings?
+Applied patch 1 to kvm-x86 clocks.
 
-[NOTE: for obvious reasons I dropped Matt's address from this email]
+[01/36] KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_init()
+        https://github.com/kvm-x86/linux/commit/3d4b20b5a7df
 
---=20
-paul-moore.com
+--
+https://github.com/kvm-x86/linux/tree/next
