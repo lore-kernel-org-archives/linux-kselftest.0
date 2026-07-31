@@ -1,260 +1,271 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90B9443311;
-	Fri, 31 Jul 2026 18:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6D4345CBE
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 18:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785521714; cv=none; b=eWQjWYvwFOr+RiJU8kT/b/0Hbd8ehPEqsMbzunFNwh5MQ3eH9zPFrj5YNtFlVJBI6WhV/czm6HviiVdb7Ge/ggwGTMaa9Im63rZVryTIvkXwUeS96eqbVJPJ5ZZjVMTCg6tFToa475vEOXJvgbf5RJUWtIgEvI94EO+9YGpolwU=
+	t=1785521887; cv=none; b=eEGhvOdAspD30+RaWBuj+AtMd7QawAI/6IcYbaERBe1srjxekleG5mmFfsaH4PEfMVs40giZP5+YN6ldaKlbyu9o2LcRr6vymRbenPq4z2psSTlHNy6a66wyfZy9mrprqWho6JUIoHIoPhPw21wnM0f7VsXsWd0QhQAFk1xbh/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785521714; c=relaxed/simple;
-	bh=2Moq2AK3SSG6Wgcc8ZmuFd3ydbPumPydyOFkSk499Tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dIT3VQbI0gbgRZmYWrUB+7+JnxG4Pi4MDC/XpsB4QK1tZoXd7wUauNoE68Jp8EvMA1BFCcMGCToxbMqdJ6EetvAcrIQClcfqJVnZJdzpwr+srZMqraEocMfDPQaSGgPeLbS+Vh5v6x0sddQfPm9gkvZ3EJhMcA6YbD2VoGbr7dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=B/yr5I5R; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fgGrR0Eo; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	s=arc-20240116; t=1785521887; c=relaxed/simple;
+	bh=8g7KXe528qNP4LXN8HqY8b8J0ptgbH/4lXoqEsFZCQ4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=cIeFVpEELiCtccQbox613lha6QwHR0zT8jbE85cV2rZii3x+1nrP+MecXzAQbwpW03998OHcG1K3n3aKqaaPqhXUf3QxeQwZOSIleIAiHsYLN1X9haqyssw7BOY2gm5AZaZN91cKJEZ1ENXrQV12f+wBpy3K4hThUEoi22RYJHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KZsB/vvC; arc=none smtp.client-ip=74.125.225.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="B/yr5I5R";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fgGrR0Eo"
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id 035F6EC01DE;
-	Fri, 31 Jul 2026 14:15:06 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Fri, 31 Jul 2026 14:15:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1785521705;
-	 x=1785608105; bh=wara+qW6sdFZ1836AKS1NURRQzyRNvWsCNqprbx89LU=; b=
-	B/yr5I5RdkPIc7eQcKq0a3PQYmFEKJGIRzbjq121GMHj42j4nkFeRutF0zr2TKDK
-	vGsnTIIs7T+6WJf/ULywOPqxPPh18caNwN/x8vfZyvBwh3u2MnCtBBEUc0MWEPwW
-	UOPV10MaD3rXc/f72ef4y8eQnR6H3PiCFE1Z6zI0rCDgqrxGXObdxyx/NV9++uSE
-	0vuY1zU3s1RAV0veBYIBPPgZCew4phIDJLAey8+2EL7CGPR/OcM1MbYgWrJHk5Z8
-	UUemhvGQgs0A44cKH5dYArIb+N0O3ZoE8cWVZSEjeA+dS9TrardZmPXKnk53l6pD
-	bMjkYjhIZZspI586e7NLbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785521705; x=
-	1785608105; bh=wara+qW6sdFZ1836AKS1NURRQzyRNvWsCNqprbx89LU=; b=f
-	gGrR0EomkameyvTMqUiajdv35srWPd8LsK2D1lugcVteupJDSZF0gpyNYL1zFZFg
-	41MTzi/5K3Ar5NSuvkwVOmiTleG2TJq6npLdnsiEZGwEr4138v91wuA0foDKpWeM
-	//Lo4mymZ6Pf1L1Qb7FJ0INBldWP609+js9pChLU5ut4FBQP1mnswpvjjohI4g0e
-	6XIJZcs1H0u8+xSsJ/BraEFrXVd7QYbGU0nLSbxdnAsIuy8IzK4wXTIm7Na3in13
-	hqdke5mLlPYGecaIg153XajlpMEKyx/L9X9swvVVZ6yqcJqYehQByro077khbZXp
-	pzNfavWj47Z6sE4P9suaA==
-X-ME-Sender: <xms:KeZsauk98lbigP5olN3hAvfd-YfEP8fi4BhlhlD-FbPu_tuOsOmQAA>
-    <xme:KeZsamRoMduIwqH6mp0ni6-hs6zbnOBugh-Rre6CFYuObY3prl0kUbGxcynR-KQ1V
-    mJlcPszO9TGcjmpO9ERZAjOJ_JxYkP7OOvOWHuSFZv8oScBg4uk_w>
-X-ME-Received: <xmr:KeZsatVGCnXhBxLxDIbH3j6XUVoT7PgHU2MWMgLRg6YPKp8FGiT-xMNHWOhNXA>
-X-ME-Proxy-Cause: dmFkZTEptP546QCDj06/N8/lJGxmRh8V2NbF93IEPiTPkDOvRohe6SIyHZ4/4gqm/Wk8J3
-    ClJGX+3QXMXXsACjvxLY98+TxILOjdB9MPhzn9KC8cSrd2Lkeh899lkLIIYY+9TnhdY4yf
-    GrCpAHhc/bwj/FEy5dYhfJazSOQuIgecfAgl+7yR3uI9e60hS099jIbgoWYzssUz3Sewr7
-    HPomG169a6qN/N5wfbLtDI/xFfXlL8zIOCPcVVtI2HQL6pc6fUcJMM1sC0qh0JRFp/Mp+c
-    WXzl/6k/PgshKaftXZK/EEk5ZNsIA/fcWzGH1uK7CmTBLrbFpzeclfpV2YrEvjziSonRag
-    btYkhDlJgunFcE66xbV3xo02tgzr5GlM4VPoqyFfNaEhL2oUxLlZVjwsYiktGWkOV+J5AA
-    X1gDeJ0sRpnD38iCZTEuNPUTZGow6QYPaYygoRyTTGV2laTJwQaWwVvcjqo+m7iFdhSkcN
-    Q/2hgGpBLAmCbd83sevlzopnTqHtXoNBG0vmwE6Xa9CKC2z3/diCHVLGFxvzHEm86fG8p4
-    pN/BvriiX0724Y1dgN/ZoUmYFkDpyQG7AkDSd2R3XkAAAFWoIfV2IsqP8EqNPqPlv2cj1e
-    C7BOhyKLR8n2JWxx+yYQ8EdXIhV/hyQ64LPox33ngl3liSvOl0qFgwj3dSgg
-X-ME-Proxy: <xmx:KeZsaqJtK4seGqNF_Yk9-8nNC-G9X9NRzT3iK_oO1nNg9kTflQGd6w>
-    <xmx:KeZsat1y-0b_9lxBEzrwHl_D-X04xNFbzXrgZiiDf7vm7-owzWYIxg>
-    <xmx:KeZsanJ3c9z-MbQICj_cFT6-peVZpSTZVkGYPEB31y8fq3YOQzoolw>
-    <xmx:KeZsaogfsO-1MhHyTWCZt7pfHbZJXeaA8gQcfGzCfruaFsFUu3vRIQ>
-    <xmx:KeZsaiuJaJTYS_53Pot_ejAv9_WhdaGu4EofmurrAe7ciIy1OnZRxd0z>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Jul 2026 14:15:04 -0400 (EDT)
-Date: Fri, 31 Jul 2026 12:15:02 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: Josh Hilke <jrhilke@google.com>
-Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, Alex
- Williamson <alex.williamson@nvidia.com>, alex@shazbot.org
-Subject: Re: [PATCH v9 1/5] vfio: selftests: igb: Add driver for Intel 82576
- device
-Message-ID: <20260731121502.3e5416ca@shazbot.org>
-In-Reply-To: <20260730-igb_v3_b4-v9-1-9e4d8682437e@google.com>
-References: <20260730-igb_v3_b4-v9-0-9e4d8682437e@google.com>
-	<20260730-igb_v3_b4-v9-1-9e4d8682437e@google.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KZsB/vvC"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso417504f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 11:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785521884; x=1786126684; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=NfTR8XppsBKdhupdPij7rDfGq57BVGWLklEXWleA36Q=;
+        b=KZsB/vvCejDkWdB0KEZdr3hj2NOryJhOXJLbJJBOD8grenwokohrNJeJR9hxFK9PUf
+         8CjY1PnT2qX8MDqhDlWQdgstN0QZCWgaZnwcBgqMPUinoqAcBLDu+JHNvolOaTgiEKe+
+         TVDELCJqwkvHQt3QofXdChuvIQB9Z3TWnuSh+DtXvtN17iZusn/RkV/UQ6hLLOdOkDDE
+         eQ5TYRMbCBAfUBTjkJKd40YlkGaVCqqGiEvCvYSegHzPUCCIaI+m1IS/IamQhRAyrZmK
+         LHcWGwwZp8wV1RSuIaUr8X/28LZg7J90Lktwi6aQ3TTUTw8Rz2+xBOWgMMR8x4SRPhDQ
+         AgEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785521884; x=1786126684;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NfTR8XppsBKdhupdPij7rDfGq57BVGWLklEXWleA36Q=;
+        b=pG7wHo5N9faXVOok8Hu7iIhqRrzTWP3xZlPZI0z9AZMV/Uk2obwzKMj9+Ovut+AmSx
+         tjVdL2TY0OIuKsBNbK24NZAly5oWnbJ0IVqYMTmdCOEZ80Tk+lhmftMfyBD0YT0/rPiG
+         7hT9Asl2SulFgtya6MctfbAKiPzVqh/c11P42KczIzeuZBh1XrpvCgniesxFl65hHkms
+         uS1ZO1bb2sRdjwv08L+2wrO/waVAdkfHAgi1nPDv0/SSHr/i2bDspH3fJdyPrDKfLUxg
+         aQ4wUW2ZJc2Jj3DY5mx0Tt1wi7K2bDW69TdgLyVNL1x5S89VR2iuXDa/kDCYCYaaRHu1
+         a1Zw==
+X-Forwarded-Encrypted: i=1; AHgh+RpBzKSewtoPA1jNbEuC0kLkPOoYl59JQmaNbQtZqDrxcpA40SfCCpjsc6Dwv8QJkwfc2chEmGFrEbXYigOGMx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOBVfRGK56GVL1rLCDudN9Z4zOhiBies8HHvnuFqxXGlELHosl
+	yFp0h5p/4YUidAGrrtLBgzh/WAm0AmPYCh4z/I47WOb4Av3BLaA/UNao
+X-Gm-Gg: AR+sD11XjdNukaEPp6Vyf5/l8rAWt7q1w5PpE5LcoZ1VRaXOXVcBdOb27NvOgeu8LBH
+	3MKdtmF+MvS9RpeRDGCEDNNN3on4hM2ldf6zwGER6njuBT1afHcwovPVz/XtB3EJiyB2LH02KD5
+	O0HvznVvrUGkviz8U4VvKunFvFwvbjLjSzjvRTZ1QPt8gLcEQU7CzGfs+li2ajKcLCAFiy0oTUi
+	xLWEqpK34cLC3pOSW6g9oPJVbjf+lfuB+fDfpa1nHLvsseKParbC6Zkk34S7QFeNx++Mq3xetbu
+	3mm1PCFo7PBQ0HEt83Xf1ZyeSM6FIaxGZWQZyTnXupPq3SdYfTGUaBU915+e3Sqc01H+iAY1l/Z
+	lhFRr15fTNKto95al6MDMLRJBakmoj//lJ8quM2eq1RSjz3Xai86mXszMHj2/i+0qd4hkb8wlPM
+	qPgv+bIP5LFxNAy/fIc8nld+9wmbh8uuux5yyUBJgz6K6FHROwd+tCFWkctCmJi1+4SiZd/MWY8
+	wY4aPQspimIFN4PqcxWmLW4A3W+4nENdqUajOaUbr4s6xH45RMn4Jtx/Ml+dyIGRRRi2gwH6eQ0
+	pRryDWonzDrvrQEKMmtzlGdFlmbaaMh7B30JfA==
+X-Received: by 2002:a5d:5f51:0:b0:475:f0f0:9ec8 with SMTP id ffacd0b85a97d-47fd7328eb4mr1388509f8f.51.1785521883948;
+        Fri, 31 Jul 2026 11:18:03 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd45a1abfsm7033628f8f.37.2026.07.31.11.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2026 11:18:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 31 Jul 2026 20:18:03 +0200
+Message-Id: <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
+Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
+ Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
+ "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
+ <casey@schaufler-ca.com>, "Stephen Smalley"
+ <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
+ "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
+ <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
+ <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
+ Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
+ <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+X-Mailer: aerc 0.21.0
+References: <20260730234533.1912709-1-dwindsor@gmail.com>
+ <20260730234533.1912709-4-dwindsor@gmail.com>
+ <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
+ <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
+ <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
+ <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
+ <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
+ <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
+ <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
+ <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
+In-Reply-To: <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
 
-On Thu, 30 Jul 2026 23:31:29 +0000
-Josh Hilke <jrhilke@google.com> wrote:
-> +static void igb_init(struct vfio_pci_device *device)
-> +{
-> +	struct igb *igb = to_igb_state(device);
-> +	u64 iova_tx, iova_rx;
-> +	u32 ctrl, rctl;
-> +	u16 cmd_reg;
-> +	int retries;
-> +
-> +	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
-> +
-> +	/* Set up rings and calculate IOVAs */
-> +	igb->bar0 = device->bars[0].vaddr;
-> +
-> +	iova_tx = to_iova(device, igb->tx_ring);
-> +	iova_rx = to_iova(device, igb->rx_ring);
-> +
-> +	igb_reset(igb);
-> +
-> +	/* Signal that the driver is loaded */
-> +	ctrl = igb_read32(igb, E1000_CTRL_EXT);
-> +	ctrl |= E1000_CTRL_EXT_DRV_LOAD;
-> +	ctrl &= ~E1000_CTRL_EXT_LINK_MODE_MASK;
-> +	igb_write32(igb, E1000_CTRL_EXT, ctrl);
-> +
-> +	/* Enable PCI Bus Master. */
-> +	cmd_reg = vfio_pci_config_readw(device, PCI_COMMAND);
-> +	if ((cmd_reg & (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY)) !=
-> +	    (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY)) {
-> +		cmd_reg |= (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY);
-> +		vfio_pci_config_writew(device, PCI_COMMAND, cmd_reg);
-> +	}
-> +
-> +	/* Configure PHY internal loopback for testing. */
-> +	igb_setup_loopback(igb);
-> +
-> +	/*
-> +	 * Disable DMA re-send on PCIe completion timeout (82576 datasheet
-> +	 * section 8.6.1, GCR.Completion_Timeout_Resend, bit 16).  The
-> +	 * mix_and_match test intentionally submits descriptors targeting
-> +	 * unmapped IOVAs; with the default (set) value, the device keeps
-> +	 * retrying the failed read indefinitely, which keeps PCIe AER and
-> +	 * IOMMU error handling busy and interferes with reset recovery.
-> +	 */
-> +	ctrl = igb_read32(igb, E1000_GCR);
-> +	ctrl &= ~E1000_GCR_CMPL_TMOUT_RESEND;
-> +	igb_write32(igb, E1000_GCR, ctrl);
-> +
-> +	/* Configure TX and RX descriptor rings */
-> +	igb_write32(igb, E1000_TDBAL(0), (u32)iova_tx);
-> +	igb_write32(igb, E1000_TDBAH(0), (u32)(iova_tx >> 32));
-> +	igb_write32(igb, E1000_TDLEN(0), RING_SIZE * sizeof(struct igb_tx_desc));
-> +	igb_write32(igb, E1000_TDH(0), 0);
-> +	igb_write32(igb, E1000_TDT(0), 0);
-> +	igb_write32(igb, E1000_TXDCTL(0), E1000_TXDCTL_QUEUE_ENABLE);
-> +
-> +	igb_write32(igb, E1000_RDBAL(0), (u32)iova_rx);
-> +	igb_write32(igb, E1000_RDBAH(0), (u32)(iova_rx >> 32));
-> +	igb_write32(igb, E1000_RDLEN(0), RING_SIZE * sizeof(struct igb_rx_desc));
-> +	igb_write32(igb, E1000_RDH(0), 0);
-> +	igb_write32(igb, E1000_RDT(0), 0);
-> +
-> +	/*
-> +	 * Select the advanced one-buffer descriptor format.  Per 82576
-> +	 * datasheet section 7.1.5.2: "SRRCTL[n].DESCTYPE must be set to a
-> +	 * value other than 000b for the 82576 to write back the special
-> +	 * descriptors."  struct igb_rx_desc matches the advanced one-buffer
-> +	 * writeback layout (section 7.1.5.2), so polling rx.wb.status_error
-> +	 * requires this format.  Section 8.10.2 specifies DESCTYPE[27:25].
-> +	 *
-> +	 * The direct write also zeroes SRRCTL.BSIZEPACKET, which is
-> +	 * intentional: per section 7.1.3.1 a zero BSIZEPACKET falls back to
-> +	 * the RCTL.BSIZE buffer size, whose reset default (00b) is 2048
-> +	 * bytes -- ample for the loopback frames here.
-> +	 */
-> +	igb_write32(igb, E1000_SRRCTL(0), E1000_SRRCTL_DESCTYPE_ADV_ONEBUF);
-> +
-> +	igb_write32(igb, E1000_RXDCTL(0), E1000_RXDCTL_QUEUE_ENABLE);
-> +
-> +	/* Wait for TX and RX queues to be enabled */
-> +	retries = 2000;
-> +	while (retries-- > 0) {
-> +		if ((igb_read32(igb, E1000_TXDCTL(0)) & E1000_TXDCTL_QUEUE_ENABLE) &&
-> +		    (igb_read32(igb, E1000_RXDCTL(0)) & E1000_RXDCTL_QUEUE_ENABLE))
-> +			break;
-> +		usleep(10);
-> +	}
-> +	VFIO_ASSERT_GE(retries, 0);
+On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
+> On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
+>> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwivedi
+>> > <memxor@gmail.com> wrote:
+>> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
+>> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@paul-moor=
+e.com> wrote:
+>> >> >>
+>> >> >>
+>> >> >> Okay, it looks like there was some confusion/misunderstanding.
+>> >> >>
+>> >> >> My understanding of Kumar's comments was that he was referring to =
+the
+>> >> >> exisiting LSM related kfuncs that are located in fs/bpf_fs_kfuncs.=
+c,
+>> >> >> not necessarily the new kfunc you are proposing in this patchset.
+>> >> >> Kumar is welcome to correct either one or both of us, if we read t=
+hat
+>> >> >> wrong :)
+>> >> >>
+>> >> >
+>> >> > Yes, after another reading, that does appear to be the case =3D).
+>> >> >
+>> >> > We'll need v7 anyway to fix the ocfs-related UAF the bot found.
+>> >> >
+>> >>
+>> >> Since there is confusion, let me clear it up.
+>> >>
+>> >> I meant it for all of them. I don't think it makes sense to keep this=
+ one in
+>> >> security/ when others are in fs/bpf_fs_kfuncs.c. That confusing limbo=
+ state is
+>> >> worse than just placing it where others already are.
+>> >>
+>> >> As I already said, the discussion around whether all of them they sho=
+uld go in
+>> >> security/ is orthogonal and should be done separately; it isn't produ=
+ctive to
+>> >> repeatedly bring it up in the context of this patch set.
+>> >>
+>> >> I honestly don't get the urgency; it will be a mechanical change if w=
+e need to
+>> >> make such changes. The worst outcome would be stalling David's work o=
+ver it.
+>> >>
+>> >> As for landing this stuff, we can let Paul take the patches touching =
+security/
+>> >> and route the rest (3-4) through bpf-next after the merge window. We =
+need them
+>> >> to go through BPF CI anyway to ensure nothing breaks.
+>> >
+>> > Some existing LSM kfuncs are located in the wrong files.  I'm not
+>> > suggesting that David needs to fix the existing problems, but there is
+>> > no reason to keep making the same mistakes.  The new LSM kfunc must go
+>> > in security/bpf_lsm_kfuncs.c; if that isn't acceptable to the BPF
+>> > developers then David will need to find a new way that doesn't involve
+>> > kfuncs.
+>>
+>> What "mistakes"? Really? It's just code organization bureaucracy. Callin=
+g it a
+>> mistake is just blowing things out of proportion.
+>
+>  :D
+>
+> You've no doubt seen the challenging interactions between some of the
+> BPF and LSM developers over the past several years.  A recent BPF LSM
+> bug/vulnerability as well as these interactions between the BPF/LSM
+> devs, has caused me to take a much closer look at how things have been
+> done regarding the BPF LSM and there are a number of things that
+> should be addressed.  Not all of those things will be addressed now,
+> but I won't support patches that continue to do things the wrong way
+> because I currently have very little faith in our ability to correct
+> them later.
 
-I'm not sure how I missed this in the previous iteration, but this
-new-ish assert exposes a latent ordering issue on real hardware.  As per
-the below referenced register definitions, the per-queue enable bits are
-zero until the global enable bits are set.
+I am not sure whether you shared whatever concerns you are talking about.  =
+If
+they are valid, we would be happy to engage and resolve them.
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-index 97a2f29aade3..fae523059f86 100644
---- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-@@ -303,16 +303,6 @@ static void igb_hw_init(struct vfio_pci_device *device)
- 
-        igb_write32(igb, E1000_RXDCTL(0), E1000_RXDCTL_QUEUE_ENABLE);
- 
--       /* Wait for TX and RX queues to be enabled */
--       retries = 2000;
--       while (retries-- > 0) {
--               if ((igb_read32(igb, E1000_TXDCTL(0)) & E1000_TXDCTL_QUEUE_ENABLE) &&
--                   (igb_read32(igb, E1000_RXDCTL(0)) & E1000_RXDCTL_QUEUE_ENABLE))
--                       break;
--               usleep(10);
--       }
--       VFIO_ASSERT_GE(retries, 0);
--
-        /*
-         * Enable Receiver and Transmitter.  RCTL.LBM_MAC is set in addition
-         * to PHY loopback as a QEMU-only accommodation: QEMU's emulated igb
-@@ -335,6 +325,21 @@ static void igb_hw_init(struct vfio_pci_device *device)
-        igb_write32(igb, E1000_RCTL, rctl);
-        igb_write32(igb, E1000_TCTL, E1000_TCTL_EN | E1000_TCTL_PSP);
- 
-+       /*
-+        * Wait for TX and RX queues to be enabled.  Per the RXDCTL/TXDCTL
-+        * register definitions (8.10.10/8.12.13), the per-queue enable bit
-+        * "remains zero" until the global RCTL.RXEN/TCTL.TXEN are set, so
-+        * E1000_RCTL_EN and E1000_TCTL_EN must already be written above.
-+        */
-+       retries = 2000;
-+       while (retries-- > 0) {
-+               if ((igb_read32(igb, E1000_TXDCTL(0)) & E1000_TXDCTL_QUEUE_ENABLE) &&
-+                   (igb_read32(igb, E1000_RXDCTL(0)) & E1000_RXDCTL_QUEUE_ENABLE))
-+                       break;
-+               usleep(10);
-+       }
-+       VFIO_ASSERT_GE(retries, 0);
-+
-        /*
-         * Program MSI-X interrupt routing per 82576 datasheet:
-         *
+I am aware of the past discussions, but we did spend additional effort to f=
+ind a
+way that worked well for everyone in the end.
 
-Back to 35/35 on real hardware with this.  NB, patch is against fully
-applied series, so lands in igb_hw_init() but the source of the
-ordering issue is in patch 1 here, where it's igb_init().  Thanks,
+> I do hope that at some time in the future we can reach a
+> point where there is more cooperation between the two communities, but
+> given the recent difficulties over even the small things, we are not
+> there yet.
+>
 
-Alex
+I think it takes two hands to clap.
 
-> +
-> +	/*
-> +	 * Enable Receiver and Transmitter.  RCTL.LBM_MAC is set in addition
-> +	 * to PHY loopback as a QEMU-only accommodation: QEMU's emulated igb
-> +	 * does not honor PHY register 0 bit 14 (PHY internal loopback) and
-> +	 * relies on RCTL.LBM_MAC to wrap TX descriptors back to the RX
-> +	 * queue.  Datasheet 8.10.1 (RCTL register) advises "When using the
-> +	 * internal PHY, LBM should remain set to 00b", so setting LBM_MAC
-> +	 * here deviates from datasheet guidance; empirically the bit has
-> +	 * no observable effect on real 82576 hardware because MAC loopback
-> +	 * is not implemented (datasheet 3.5.6.2).  Setting both lets the
-> +	 * selftest work on both real hardware and QEMU without conditional
-> +	 * code paths.
-> +	 */
-> +	rctl = E1000_RCTL_EN |       /* Receiver Enable */
-> +	       E1000_RCTL_UPE |      /* Unicast Promiscuous (for dummy MAC) */
-> +	       E1000_RCTL_MPE |      /* Multicast Promiscuous */
-> +	       E1000_RCTL_BAM |      /* Broadcast Accept Mode */
-> +	       E1000_RCTL_LBM_MAC |  /* MAC Loopback - for QEMU emulation only */
-> +	       E1000_RCTL_SECRC;     /* Strip CRC (needed for memcmp) */
-> +	igb_write32(igb, E1000_RCTL, rctl);
-> +	igb_write32(igb, E1000_TCTL, E1000_TCTL_EN | E1000_TCTL_PSP);
+So far, I have tried to engage constructively, and offered to discuss where
+these kfuncs collectively should stay in a separate discussion. Explained w=
+hy it
+cannot be done unilaterally, and that we need consensus from all stakeholde=
+rs
+(FS, BPF, LSM). Explained that we need to figure out how the testing strate=
+gy
+for such cross-cutting changes would work if they don't go through BPF tree=
+.
+
+In response, I have only seen you continually tried to derail the whole thi=
+ng
+over the location of the kfunc, threatening to not let it move forward.
+
+Yes, I understand you feel it should be placed under security/. You are ent=
+itled
+to your opinion.
+
+No, I do not think the newly added kfunc is a big enough layering violation=
+ such
+that we need to do it ASAP, disregarding everything else outlined above. I =
+am
+sure you see that too. There are several other instances of similar kfuncs.
+
+Therefore, please attempt to meet me halfway here.
+
+It is calling a single security_lsmxattr_add() kfunc cleanly abstracted and
+already placed under security/, where it belongs.
+
+>> I don't think you can simply decide this unilaterally either. Do you tak=
+e full
+>> responsibility that kfuncs going there won't introduce BPF side regressi=
+ons? Who
+>> makes sure patches touching the new location run through BPF CI? All of =
+this
+>> needs to be thought through before we decide upon anything.
+>
+> I would expect, and require, that patch submitters perform the
+> necessary testing for the patches they submit; this is no different
+> from any other patch today that is submitted for the LSM framework.
+
+It doesn't scale. The amount of combinations (architectures x compilers x m=
+odes)
+that need to be tested for the BPF subsystem is beyond reasonable for any p=
+atch
+submitter to test themselves. The only realistic approach is letting it go
+through BPF CI and exercising the full matrix on submission.
+
+It is fairly apparent to me that you do not have a clear picture how BPF co=
+de
+gets tested (which is fine and understandable).
+
+It only underscores my point: we need to move this discussion elsewhere, an=
+d
+have a broader dialogue and form consensus. Not litigate over it in this th=
+read.
+
+David spent considerable effort on this set, and has carefully reworked his=
+ code
+several times. Blocking his work over this terriotrial argument would be a =
+loss
+for everyone, including the users of the kernel.
+
+Anyhow, I cannot stop you, but it would be unfortunate if you continue to d=
+ouble
+down, in that case we'll have to figure out other ways of moving things for=
+ward.
+
+> [...]
