@@ -1,212 +1,196 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B783442106
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 19:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C4C438023
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 19:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785525654; cv=none; b=MlAJbSxHXXf1CxA3uSqjRfsIePJzP33qBmNU/+ZzsNeUIjqigUCp3GnxaRFVbT4XbTncycKDUy7EVP74LL/XUKAOOj9PGAu/9d6Leprroj0r3fk9Xo/HpHh943u1PPuxez4vwGcW6yqG2APpfq3fUYWMX+c0SmBBs5mQndFV3uQ=
+	t=1785526011; cv=none; b=SYHmWijKOdM+OiaBfZUm7Sm+uE63C+kXCcWPsDmo8BE19V51ivar0GchjcUdAOsqm9IE3rZa1LJj516NZs201RFEf6Hn1KZc+rMmjQTtGohBq2Un2QonmBzthIVnrdcMRoJNINi+925bn2U2yQf0Oa1V4qwPpy4f2l/JQNy4/mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785525654; c=relaxed/simple;
-	bh=W/cQazly5+ZSmwW+vMYjDeAOiE27Kjc1Cr7JvjQ9jfs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=D9RmRa2pOtzYrvjSjGe4Io50lDnuXy8EjzMCV1xtGi5cbnSLY52UQpzX42zKne8SAcQa8XE0iVprcJgEi7C6yR7LXmtu+umfyvTubic2aoOpFiUt9ukN/a/Z+khlBXVKFqS+e2Yc6C3QPwRCw48dOWSoKJK0Gf9nPHJAPxG3kOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhAFGLhV; arc=none smtp.client-ip=74.125.225.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785526011; c=relaxed/simple;
+	bh=jU6UYytjY3AFFrVy0qdbdv/IWSusOxrvD3h6qJD6fFw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=byafFep6vLFPfnFP58MWjoe2LOfGmHK3ruK8OCfCH+AEr0jHGFuk5PY1QMrgs3l+3eIT2YN8uIKy86/dza4Tbc8r7I/d/QrAc1WkSHQAkN64WmsD/aEd/SzlaClSJjojQiKncfqgJF3P31uucSma3dbM/DW9nPess0Sdx2xtKFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Psssxxpp; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhAFGLhV"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-47301772842so669623f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 12:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785525651; x=1786130451; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=3/Y6YcDM4/zvWNQ6LoR9jhMZHzjhOIbqHOCYPbHDmdw=;
-        b=nhAFGLhVLCPf3TVFJtApTCWIQHVQvV9MPsEf6fHLya8JT19sY+BBoWI8P2L631IEIJ
-         JIkv0qRStiFochcRnso74FFbiEfM/zttVtvwqSjkUbHlVPAeIAYxgorGBqyGf2MlJ6Ns
-         ytLz0mKTS35yftkeGpuJ+kqpCzkq6UjL1Rl0VaszcxCHb61UAIvcd/ADrkHlbSKM5uyk
-         AHjkndgGbiaAlzFO8cM0IHpd4pxrKvRZUkari1tm7Q1M8zoC5MO5t2ioOxxnfyNtiapG
-         /zuGi/w7A7XStv38XKLTDte6pi/D36FArcTi/C/rsmrow9rW5NNV6udYKSzDpjoXZfyB
-         aJSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785525651; x=1786130451;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3/Y6YcDM4/zvWNQ6LoR9jhMZHzjhOIbqHOCYPbHDmdw=;
-        b=FhqevSQpWaSSGE5j4pg6Clm/x9yNCr0nGSdYQMF710zokoBlHD142BOfYWvIzi9+WH
-         eV0Fv9jrbR6KrzZgCciQ5KPOdD+sIHvpn2Osl/WaXReUF131Sf2H4uEf4QhJAHH8q4tZ
-         ntt25zWzWPUYVLT60KII1u5YltyXNac03mHFtD9cH+6DCa91vHNlxQta8DIgj0uV73sO
-         et2rPydGl4UwnWux8If9k6beCrhLQbtKp3OLkdXsTr6V6DgPzyK7STRvsD8bru0EqseI
-         ipeGRFipd8RmjnN5d1jHtfVTdn6TpwZimjae9PludrzcV0TxpRIVNpSLkOEm+9gCEXVf
-         LaHg==
-X-Forwarded-Encrypted: i=1; AHgh+RrwmbyIhahaePtRzGvCqNE8PmTORQ6xS8VQX3pHbG3RCYtO4yEWQGDHxtMml+Hq9mK/hCWlrIawn4Wt6tOh2/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJLPbBBecmQIeWnO5NZb/T5bNo5ujALbQKhkP70OsSegKmlYlO
-	5Mkr/mXwqeAyE0JUNsPczmSe64JQNgzboTtZYM0yThPloe3f1CAFfnfJ
-X-Gm-Gg: AR+sD10hNIc5myw1TPxgzkSoQQczfQWRZjRvLkhVOvE8gPB6NTHeMWzP20TCv71Hpvy
-	DqcOs1swYf2R501Q31gTOZ3/1N357aVk1cZUpKM4Wx1pK1gxk8VrdlTH8vUZmJZxFdgGoCK592Y
-	lI/1JJyjVcfKmCU1Wx2/otEDWK3cEna9/kKW+IvLX3VBLsCS7I6z+aXCu4IDNgywt6klsNEds5h
-	DqpOWrP/vC/UMUt4vYgGYbc4IytFDLfLvAtCdpm8ue5nlZWri609FE0ZzOzxi4r12woZTjTZywy
-	5g/wbXJLeuS6JSPpIXaE6NQRFShHwHIvr3t1ms9hmWyk/044cgRA6d3c9fTZVpv4FjhyDLWsP0V
-	wnOcQjEv1f3Ube/GexMBkHKgGy4yLWi+/gbZxAFHjvZh4pOpegkIyaVLQv52z2TCpuY3ah+Oejl
-	pTPn6PBNqAzvdCuq8ZC41rLDjQJUe9AB9QC3hU8t7bZjmprr+ZFmgUm0VZT89twTd7neTPRi3DJ
-	HHVSuWFqIJXm6Zvx7DEvAgYaRV5oz0l/eukGzDrBwVDuCcrZeD9rjZzOq3Yujv56sojZ9xcAQhX
-	98KHxoQr9JmMzUZdx6UTcpk+t1A=
-X-Received: by 2002:adf:eac3:0:b0:47d:dfc6:b28b with SMTP id ffacd0b85a97d-47fd72e1887mr1421938f8f.30.1785525651097;
-        Fri, 31 Jul 2026 12:20:51 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd456a6cbsm7789645f8f.23.2026.07.31.12.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 12:20:50 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Psssxxpp"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785526005;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ld4l7r6m5QLBkZmwYEz1rs+iqEDUsqkuE4Lyo1OSGKU=;
+	b=PsssxxppJE9xcpru1Qb2+wChVaTC0VIw8VcSSwUHmruAYdudcL14BVY6JEUr/QTlcZcGG+
+	+PUso8oOZX1gtSZ93Fff2cuZW8a761zy4QIuYqXPgT5j9px3szlbW3t9TZcyLd0HWRCRWf
+	79Ma6UYTEBUH0ZiI8VsAkngrj1Ey5vI=
+From: Usama Arif <usama.arif@linux.dev>
+To: tglx@kernel.org,
+	peterz@infradead.org,
+	andrealmeid@igalia.com,
+	dave@stgolabs.net,
+	dvhart@infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	mingo@redhat.com,
+	shuah@kernel.org
+Cc: shakeel.butt@linux.dev,
+	hannes@cmpxchg.org,
+	riel@surriel.com,
+	d@ilvokhin.com,
+	kernel-team@meta.com,
+	Usama Arif <usama.arif@linux.dev>
+Subject: [PATCH] futex: Avoid hash-bucket locking for mismatched waits
+Date: Fri, 31 Jul 2026 12:26:24 -0700
+Message-ID: <20260731192624.140399-1-usama.arif@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 31 Jul 2026 21:20:50 +0200
-Message-Id: <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>
-Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
- Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
- "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
- <casey@schaufler-ca.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
- <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
- <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
- <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
- <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
- <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
-In-Reply-To: <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
-> On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
->> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
->> > <memxor@gmail.com> wrote:
->> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
->> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwivedi
->> >> > <memxor@gmail.com> wrote:
->> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
->> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwivedi
->> >> >> > <memxor@gmail.com> wrote:
->> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
->> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@pau=
-l-moore.com> wrote:
->> >
->> > ...
->> >
->> >> Yes, I understand you feel it should be placed under security/. You a=
-re entitled
->> >> to your opinion.
->> >>
->> >> No, I do not think the newly added kfunc is a big enough layering vio=
-lation such
->> >> that we need to do it ASAP, disregarding everything else outlined abo=
-ve. I am
->> >> sure you see that too. There are several other instances of similar k=
-funcs.
->> >>
->> >> Therefore, please attempt to meet me halfway here.
->> >
->> > I'm happy to work with you, and/or anyone else, who wants to work on
->> > finding a way to test kfuncs that live in security/bpf_lsm_kfuncs.c.
->>
->> Right, and for that file to exist, you need to get everyone (FS, BPF fol=
-ks) to
->> agree on whether placing all such kfuncs there makes sense. It is not fo=
-r both
->> of us to decide on our own. So let's revisit this whole topic once you'v=
-e done
->> that exercise.
->
-> The kfunc that David has proposed must be located in
-> security/bpf_lsm_kfuncs.c, similar to the VFS kfuncs and
-> fs/bpf_fs_kfuncs.c.  If you read David's bpf_init_inode_xattr() kfunc
+futex_wait_setup() increments the bucket waiter count in futex_q_lock() and
+takes hb->lock before checking whether the futex word matches the expected
+value. A mismatch then immediately undoes the waiter accounting and drops
+the lock again without queueing anything.
 
-Sigh.
+In a fleet-wide sampled profile at Meta, among samples whose leaf was
+native_queued_spin_lock_slowpath(), the top call paths were:
 
-I now went and read the archives, and Christian already told you no before =
-[0],
-which I missed in my first read. So two people whom this code affects alrea=
-dy
-objected to your proposal.
+        shrink_inactive_list()   (lru_lock)   25.0%
+        futex_wait_setup()       (hb->lock)   21.6%
+        futex_wake()             (hb->lock)   19.5%
+        raw_spin_rq_lock()       (rq lock)     6.1%
+        __remove_mapping()                     3.3%
+        lock_list_lru_of_memcg()               3.1%
 
-  [0]: https://lore.kernel.org/bpf/20260625-schnabel-rennmaschine-parieren-=
-bcb352c3cf59@brauner
+Together, the two futex paths represented 41.1% of sampled qspinlock
+slowpath events in this profile.
 
-> you will notice there is nothing in the function relating to the VFS,
-> well other than the "inode" and "xattr" in the name of the function;
+Read the futex word once before taking hb->lock. That read sits outside the
+waiters/value ordering documented at the top of waitwake.c and may be
+stale, so it may only be used to refuse to block: a mismatch is a valid
+outcome for the wait as a whole and is returned as -EWOULDBLOCK without
+locating the hash bucket. A match proves nothing and is discarded; the
+decision to queue is still taken by the existing test under hb->lock. This
+reaches the futex_wake() side too, as dropping the transient
+futex_hb_waiters_inc()/dec() pair lets a concurrent waker find the bucket
+empty in futex_hb_waiters_pending() and skip hb->lock as well.
 
-I can also read it the other way. There is only one "security_lsmxattr_add(=
-)"
-call that is LSM related, and the rest is VFS or BPF specific stuff.
+get_futex_key() runs get_user_pages_fast() only for shared futexes, so
+their page has just been faulted in and the non-faulting
+futex_get_value_locked() normally succeeds. The reference is dropped again
+before get_futex_key() returns, so the page can go away; the locked path
+below recovers when it does. A private futex may still be nonresident, so
+read it faultably with get_user_inline().
 
-There would be no xattr support in LSM code without filesystems implementin=
-g
-them.
+The precheck stays after get_futex_key() so that its address validation,
+alignment and access_ok() included, keeps taking precedence over
+-EWOULDBLOCK. All three callers, __futex_wait(), futex_wait_requeue_pi()
+and io_futex_wait(), already treat a nonzero return as failure with
+hb->lock not held. futex_wait_multiple_setup() keeps the old sequence:
+FUTEX_WAITV has to set TASK_INTERRUPTIBLE before queueing the first futex
+of the vector.
 
-Please avoid making absurd and non-sensical arguments.
+perf bench futex hash only ever mismatches, as its futex words are
+calloc()ed to zero while every operation waits for 1234. On a 16-vCPU,
+8-GiB guest, median of five 'perf bench futex hash -r 5 $args' runs
+of the reported mean per-thread throughput, in operations per second:
 
-If we went by this logic, we would have to move the entirety of the kernel =
-under
-security/, since anything that calls into LSM code becomes eligible to go t=
-here.
+        $args    benchmark                  parent      patched     change
+        -b 2     private, two buckets      303,410    4,392,639      14.5x
+        -b 0     private, global hash    2,776,498    4,397,887     +58.4%
+        -b 0 -S  shared                  1,990,412    2,727,487     +37.0%
 
-> this is purely a LSM kfunc and I stand by my previous comments.  The
-> BPF maintainers have seen fit to decide quite a few things LSM related
-> solely on their own, I see no reason why requiring a LSM kfunc be
-> located in security/bpf_lsm_kfuncs.c is unreasonable given our current
-> situation.
->
-> As I said earlier, I'm happy to work with you, David, or anyone else
-> on ensuring security/bpf_lsm_kfuncs.c has the proper test coverage,
-> but I'm not going to continue to go back and forth about the location
-> of the bpf_init_inode_xattr() kfunc that is proposed in this patchset.
-> If you, or any of the other BPF maintainers, are not able to live with
-> that location then David will need to find another way.
+This benchmark no longer measures futex hash bucket contention, because its
+words never match and every operation now returns before the bucket is
+located: neither futex_hash() nor hb->lock is reached, and the -b knob
+stops affecting the result (both patched rows are ~4.4M).
 
-Yeah, I think we've spilled enough ink on this. We'll figure out a way to m=
-ove
-things forward.  Since VFS people disagree too, the kfunc should stay where=
- it
-is in this series.
+The futex functional selftests pass with PROVE_LOCKING, DEBUG_ATOMIC_SLEEP
+and FAIL_FUTEX enabled.
 
-I am always open to revisiting all this once you can convince others by mak=
-ing
-useful arguments, instead of imposing your will onto them and throwing a ta=
-ntrum.
+Signed-off-by: Usama Arif <usama.arif@linux.dev>
+---
+ kernel/futex/waitwake.c                       | 30 +++++++++++++++----
+ .../selftests/futex/functional/futex_numa.c   |  6 ++--
+ 2 files changed, 28 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
+index d4483d15d30a..dc22aea9808a 100644
+--- a/kernel/futex/waitwake.c
++++ b/kernel/futex/waitwake.c
+@@ -627,17 +627,18 @@ int futex_wait_setup(u32 __user *uaddr, u32 val, unsigned int flags,
+ 	int ret;
+ 
+ 	/*
+-	 * Access the page AFTER the hash-bucket is locked.
+-	 * Order is important:
++	 * Perform the authoritative value check AFTER the hash-bucket is
++	 * locked. Order is important:
+ 	 *
+ 	 *   Userspace waiter: val = var; if (cond(val)) futex_wait(&var, val);
+ 	 *   Userspace waker:  if (cond(var)) { var = new; futex_wake(&var); }
+ 	 *
+ 	 * The basic logical guarantee of a futex is that it blocks ONLY
+ 	 * if cond(var) is known to be true at the time of blocking, for
+-	 * any cond.  If we locked the hash-bucket after testing *uaddr, that
+-	 * would open a race condition where we could block indefinitely with
+-	 * cond(var) false, which would violate the guarantee.
++	 * any cond.  If the decision to block came from a test of *uaddr taken
++	 * before the hash-bucket is locked, that would open a race where we
++	 * could block indefinitely with cond(var) false, violating the
++	 * guarantee.  The unlocked test below may only refuse to block.
+ 	 *
+ 	 * On the other hand, we insert q and release the hash-bucket only
+ 	 * after testing *uaddr.  This guarantees that futex_wait() will NOT
+@@ -649,6 +650,25 @@ int futex_wait_setup(u32 __user *uaddr, u32 val, unsigned int flags,
+ 	if (unlikely(ret != 0))
+ 		return ret;
+ 
++	/*
++	 * A mismatch here refuses the wait without locating the hash bucket;
++	 * a match is rechecked under the lock below before queueing.
++	 *
++	 * get_futex_key() runs get_user_pages_fast() only for shared futexes,
++	 * so their page is resident and the non-faulting read suffices, with
++	 * the locked path recovering if it does not.  A private futex may
++	 * still be nonresident, so read it faultably here.  Note that
++	 * futex_get_value_locked() only disables faults, it does not need
++	 * hb->lock.
++	 */
++	if (flags & FLAGS_SHARED)
++		ret = futex_get_value_locked(&uval, uaddr);
++	else
++		ret = get_user_inline(uval, uaddr);
++
++	if (!ret && uval != val)
++		return -EWOULDBLOCK;
++
+ retry_private:
+ 	if (1) {
+ 		CLASS(hbr, hbr)(&q->key);
+diff --git a/tools/testing/selftests/futex/functional/futex_numa.c b/tools/testing/selftests/futex/functional/futex_numa.c
+index e0a33510ccb6..029a9a6afd95 100644
+--- a/tools/testing/selftests/futex/functional/futex_numa.c
++++ b/tools/testing/selftests/futex/functional/futex_numa.c
+@@ -144,9 +144,9 @@ static void *contendfn(void *_arg)
+ 
+ 	while (!*args->done) {
+ 		/*
+-		 * futex2_wait() will take hb-lock, verify *var == val and
+-		 * queue/abort.  By knowingly setting val 'wrong' this will
+-		 * abort and thereby generate hb-lock contention.
++		 * By knowingly setting val 'wrong' this wait is always
++		 * refused.  futex2_wait() now detects that before taking
++		 * hb-lock, so this no longer generates hb-lock contention.
+ 		 */
+ 		futex2_wait(&args->lock->val, ~0U, fflags, NULL, 0);
+ 		args->val++;
+-- 
+2.53.0-Meta
+
