@@ -1,332 +1,287 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A313CC324;
-	Fri, 31 Jul 2026 11:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B2F3E95B3;
+	Fri, 31 Jul 2026 12:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785499162; cv=none; b=Rwvlko8TMRA4l2NRKgx/yu+xhFSN6D1CAjO0e/w27uQv3zNsFaOaH9ouoAsmIcA6u6506SHVeDhXDssyXuZ9CXdq4oBfPzOoTmmrlwNt9P3ffEajv1xGoOeOeo+okJx4cA4OTrIl2Tk9+O9FRqGf1i6meBS73L1Qo9l0db9e7dA=
+	t=1785501454; cv=none; b=aRa6EXG24FnfjbyExu48Vkqi5MTo/QKXdhuj9SVtdiZgT0xRpEGN7OXCxCfP31yDuWv+18Wns4MWGwjMuHUp1sSEMHolcBQS9Ng9fXmqUVB9xXYRJcmWFKsggigWi6hTuN8qOhNiB0u6kQNTn7N62Ua3uYaSdTTy/8wwm8kouQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785499162; c=relaxed/simple;
-	bh=hEFxzcRWstFUAXCBAAUDu40G2TRn32sP14RQkNifo+8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=aunrns/nuGvMBBsRuBpOSwMmnpZHakmBgNBZ/20No7uVBs1vBhNLa6DGm0po8WKB7a59QIsyskM+6HkbwoRJYD65wvTB2fwqVfNcnWVoRUt3ZfIAbs4D3MgVLqbgTnREof1ZXpt/X78Odxdr5wAKM6p3qny5HZTYIBZu7Rz8zBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvoDkQlu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785501454; c=relaxed/simple;
+	bh=rU/IHBPS6E37VuQfMB0fWgnkjM5zY0A4UawzDcU+Uhs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AsXrqtpGUXkHXlUQJFEMQK6khNqPiA8YSdDtBOl2N6HhAAHQT5l+lP+iw+SlGPPIftCeWN79CTXx3gpa6xA0odIyaMIInuN3QJLbfG+TJl2IssByig0LVZsMPLcOSLQnat3tOTzdTR+0RxPSLTvfQHgdVQ4Bg8lyEWCK7uflx/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2CvPnGC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvoDkQlu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C541F000E9;
-	Fri, 31 Jul 2026 11:59:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2CvPnGC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40A01F00A3A;
+	Fri, 31 Jul 2026 12:37:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785499160;
-	bh=Nm4XNdosDTkLpy1A2APf3Rq2Y20s3PmQ81LS+20iumM=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=KvoDkQluOqIEZqgpMUedMAAOQZiM8Px+cdim13BhGWGcz0luftftif+Cex6mR4bSV
-	 gn5P+xU2YooQ3Z2SdV7qPHL2pJ7r6g31jBlgtau48sz4n1qgfWJBrdohaEdZwkECTL
-	 Eut9WfJq6LEaJiPWx2qEQ65O0oj9AwH4xpXnDsgw8X8UnhDL05lP4hGQYtH6TRqFpe
-	 kk9qzkt+ptAmYy3WQnFunTrOFyvkt8xnhNdDCTsDboPYvLJgdOzltNvsCWbgbWmPKN
-	 96YXjoNb4IYBa1EkNJapNnEmz+0jyskTAUeQnAHQEAaYszPi1OfZmiDEQ4+18Hd18+
-	 ICAFYfm9QPX1A==
-Message-ID: <edc3566b-370c-41a0-a71d-2e4a0e1a94f7@kernel.org>
-Date: Fri, 31 Jul 2026 13:59:01 +0200
+	s=k20260515; t=1785501450;
+	bh=OgdCVvwMBfX5rSeE52zboqAMHLylON4PY1/yeADLJTo=;
+	h=From:Subject:Date:To:Cc;
+	b=j2CvPnGC7Y02+8tQA+9A1bx2rF+K4O5qe0TM7+BNRssJScIwfIp5M7KUUMQUR/zb8
+	 OH1DVaUUiRoYzbrFVQyEywl49fLHPeL8svu/zt2xEqgVkERor9CvQXssQH/7QEHnNE
+	 qbO0Msa6PgmN/iFpNoZQqQf3i2CSD2eUxhuQM/Ggl2y1OjI33+Oz7+dIfgz2fZlabw
+	 Lqt5Ful/GoqGwHIFp3ybzPfhSS2OBx/+M/S9Mv04F7moeKS239pd4GtIRA3md3K4Ti
+	 x4jnGxjZ1wmDgaVvUxEwnD6ISzNXHGS3cRZPFGsUrutxfX3+MFK+T4gEHYQ2btUJl0
+	 TU8l9muaIadKQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v17 00/14] KVM: arm64: Provide guest support for GCS
+Date: Fri, 31 Jul 2026 13:25:38 +0100
+Message-Id: <20260731-arm64-gcs-v17-0-5e39ca01b14e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-To: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
- andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
- chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>,
- "hughd@google.com" <hughd@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-14-35f9aec2aed2@google.com>
- <4460e252-b6de-4df3-bea8-0368a9d0f4ff@kernel.org>
- <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
- <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEKUbGoC/23TS27cMAwG4KsEXtcFSVGvrnqPIgs9qBmjzUxgB
+ 0aDYO5eKUVnZKjwyoI/SSR/f0ybrIts07enj2mVfdmW66W+oP3yNKVzuJxkXnJdmAhIQX3msL4
+ Ynk9pm0UhhgjZWfJT/T6GTea4hks6N/H28tpWX1cpy+/PI3481/fzsr1d1/fPE3dsq3/3tmi6v
+ XecYY5FG1u8ijGY7z9lvcivr9f1NLVtduoocU+p0pwoYWZOJHGgqqMKe6oqTTkXX7yD7N1A+UE
+ d2J5ypcalElS9Mhg/UN1Rop7qSr0UdJizUcQDNXeKAL6nplLrROssIXDOA7UPisdTbaUEmNipm
+ K3VA3X/KAMdBr+71iZfJFlrrJIyUP+ghnRPfaVQjGI2ProCA0V4WAeH6SC0HnsvFDOhh3GyiB0
+ +lostUYzRoWcrKY71IvX40GZsmWKqFVfMyoQR30PFdUbHa7dUEVG0rv4rIjJi7vGhX9hypWugI
+ GUDnv5T8z1Yul4bDrglS4tSnAO66MZkoXlgj8eGtWwZVlq0JGXz8eTb7fYH1ERA8D0EAAA=
+X-Change-ID: 20230303-arm64-gcs-e311ab0d8729
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
+ Oliver Upton <oupton@kernel.org>
+Cc: Peter Maydell <peter.maydell@linaro.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10001; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=rU/IHBPS6E37VuQfMB0fWgnkjM5zY0A4UawzDcU+Uhs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqbJb7H0Ojsu3XSRFgBW9y2gTJI6jOJ+Lol072y
+ p2L9BqWF9qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCamyW+wAKCRAk1otyXVSH
+ 0BT6B/9GjtJVOFWYxDxR0w9LUKMVYfKyb+Y26SlIUwvDgPshyYbTprSEpd7vyitppNDpWO/Ql0U
+ vC08g0/VKnAjTDXkJNY/F4t2vNJPSamXxBCWC333GZcTTH7tm2ny4djH4IL7+pKgQjf/PrDuYTC
+ pVslguRwPtWDyfZO0otozmnLY3njyXca1xyPbAtVusIEbW9ZAbNl3L6B9/814CXaqhgz7raMfdw
+ kbfClSsRZ6c3eA7WOpCAbknA9xNqRMExZX3YlOc9xKtqL/1GbCTJUQGWeRvkyUr7L2XHc1aavIB
+ i2CSEcTZY6jXusoCw/b+/NIhhqKg4Ko9S78EfO6Vp/F9fJW4
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 7/31/26 12:22, David Hildenbrand (Arm) wrote:
->>
->> I didn't really like this either, the drain_state thing is really
->> awkward, but in both usages (collect_longterm_unpinnable_folios() and
->> guest_memfd), there's an outer loop where if the draining happened on
->> the local CPU before it should skip straight to just draining on all the
->> other CPUs.
-> 
-> Just nasty :)
-> 
->>
->>> I was hoping that we could embed more logic in a helper. The history [1] of the
->>> refcount check is rather sad:
->>>
->>> https://lore.kernel.org/all/c5bac539-fd8a-4db7-c21c-cd3e457eee91@google.com/
->>>
->>> ... primarily because of mlock() handling.
->>>
->>
->> In the original code in collect_longterm_unpinnable_folios(), I couldn't
->> find anything that handles folio_test_mlock(), so I was lost for a while
->> until I realized mlock() doesn't add a refcount to the folio.
-> 
-> mlocked folios in the mlock cache hold a reference as well.
-> 
->>
->> Are you kind of proposing an optimization to
->> collect_longterm_unpinnable_folios() by adding a check for
->> !folio_test_mlock()? I hope we can put that in a separate patch series,
->> I'm still hoping to get this series in for 7.3!!
-> 
-> I was trying to avoid messing with the refcount for ordinary LRU cache pages.
-> mlock() should be a corner case for guest_memfd.
-> 
-> Relying on the refcount just means that one unconditionally performs a lot of LRU
-> cache draining even though it doesn't make any sense.
-> 
->>
->>> For guest_memfd(), would mlock() ever apply on a path where you need that check?
->>>
->>
->> For guest_memfd, if a folio were mlocked, unmapping it would fail, and
->> so the refcount on the folio would be elevated. The
->> kvm_gmem_is_safe_for_conversion() check in the patch after this one
->> would fail, correctly.
->>
->> I really wanted the caller of the lru_add_drain_progressive() function
->> to control whether to do the drain (see below), which would solve the
->> mlock problem by not assuming the use of folio_expected_ref_count() to
->> determine whether to do draining.
-> 
-> Again, the problem is that on *any* raised reference you would drain. I
-> was trying to limit the harm.
-> 
-> [...]
-> 
->>> + */
->>> +static void lru_cache_drain_for_folio(const struct folio *folio,
->>> +		enum lru_cache_drained *drained)
->>
->> The main thing I wanted in the proposed version
->> (lru_add_drain_progressive()), was to let the caller determine whether
->> to try or to continue draining.
-> 
-> Why?
-> 
->>
->> I wanted the caller to have full control over whether to drain or not,
->> so I didn't want to pass folio into the function. I thought the caller
->> should first determine whether to drain, then call the function.
-> 
-> Why?
-> 
-> That's literally what the existing refcount check tries to do: figure out if
-> there are LRU caches.
-> 
->>
->> This version assumes that the caller wants to continue draining based on
->> something to do with a folio, and the folio may or may not be on the
->> lru_add fbatch at all, which is a little strange to me.
-> 
-> I really don't understand what you are trying to say.
-> 
-> Draining only makes sense if something is on the LRU cache. And there are
-> better ways of checking that than relying only on even less precise refcounts.
-> 
-> If someone wants to do an early refcount check to abort the overall
-> operation, that's fine.
-> 
->>
->> Also, this version enforces a certain definition of "expected" number of
->> refcounts on the folio. I guess in this case this definition works with
->> guest_memfd, but guest_memfd doesn't support swap so the swapcache check
->> in folio_expected_ref_count() isn't necessary.
-> 
-> ?!
-> 
-> That's why we have the universal definition of expected references and the
-> common helper.
-> 
-> Because pagecache pages commonly don't support the swapcache.
-> 
->> Also, if the definition
->> folio_expected_ref_count() changes, then guest_memfd is implicitly
->> affected. Not sure if the "expected" definition is the same for all
->> callers?
-> 
-> It must, because that is used all over the place. The only thing it
-> cannot deal with is references held by the caller (which could be supplied
-> through and "additional references" parameter like we do elsewhere).
-> 
->>
->> I guess if there was a function named
->> folio_ref_counts_indicate_presence_only_in_the_filemap() instead of
->> folio_expected_ref_count(), then it'd be the perfect function for
-> 
-> You're not seriously proposing such an abomination I hope?
-> 
->> guest_memfd to use. The current definition of folio_expected_ref_count()
->> also includes page table mappings, but in this check guest_memfd really
->> wants to make sure that there are no page table mappings.
-> 
-> You can just check early for mappings.
-> 
-> Remember: this is about LRU draining, *not* about your final
-> "unexpected references" check.
-> 
->>
->> This version folds folio_likely_lru_cached() into the check, and I
->> adopted the check for guest_memfd because it'd help with huge pages,
->> though technically guest_memfd is always 4K now so the check is also
->> pointless.
-> 
-> Who cares if we end up with a common usable helper? We have usless
-> checks *all over the place* in common helpers.
-> 
->>
->> I tried a macro version of this where the macro caller can pass in a
->> full condition, which would look like this:
->>
->>   lru_add_drain_while(folio_may_be_lru_cached(folio) &&
->>                       folio_ref_count(folio) != expected_refcount,
->>                       drain_state);
-> 
-> Yuk.
-> 
->>
->> but I thought that just created something people have to jump to, to
->> first understand how the macro works, so I left it as an explicit while
->> loop instead.
->>
->>> +{
->>> +	if (!folio_likely_lru_cached(folio))
->>> +		return false;
->>> +
->>> +	/* Try local draining first, if not already done previously. */
->>> +	if (*drained == LRU_CACHE_NOT_DRAINED) {
->>> +		lru_add_drain();
->>> +		*drained = LRU_CACHE_DRAINED;
->>> +	}
->>> +	/* Try draining all CPUs next if still not an LRU folio. */
->>> +	if (folio_likely_lru_cached(folio) && *drained == LRU_CACHE_DRAINED) {
->>> +		lru_add_drain_all();
->>> +		*drained = LRU_CACHE_DRAINED_ALL;
->>> +	}
->>> +}
->>> +
->>>  /*
->>>   * Returns the number of collected folios. Return value is always >= 0.
->>>   */
->>> @@ -2266,9 +2316,9 @@ static unsigned long collect_longterm_unpinnable_folios(
->>>  		struct list_head *movable_folio_list,
->>>  		struct pages_or_folios *pofs)
->>>  {
->>> +	enum lru_cache_drained drained = LRU_CACHE_NOT_DRAINED;
->>
->> I also considered an enum, but it would be another thing to export. I
->> was thinking to have drain_state just be opaque to the caller and the
->> only thing the caller needs to know is to initialize it to 0.
->>
->> Perhaps there's a better way to "make it opaque"?
-> 
-> Putting an enum into a header is a problem in which universe? :)
-> 
-> Ackerley, please stop making up stuff. Having generic helper is not a problem. Doing
-> checks in common helpers is not a problem. Putting enums in headers is not a problem.
-> 
-> Your version is just bad.
-> 
-> I can later try something that keeps the questionable refcount checks in place,
-> maybe that could do as a temporary solution until Hugh possibly finds a way to
-> remove the need for draining entirely.
-> 
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
-And looking at it, the current folio_ref_count() in GUP is entirely wrong
-and always makes us drain local+all.
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
-Let me fix that first, which will also modify this code.
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
-I'd say, to unblock gmem we could have something minimal that I would clean
-up later, but I think the problem is that lru_add_drain() / lru_add_drain_all()
-is not exported, right?
+This series implements support for managing GCS for KVM guests.
 
--- 
-Cheers,
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v17:
+- Rebase onto v7.2-rc4.
+- Fix mapping of HFGITR_EL2.nGCSEPP.
+- Implement a test for NV emulation around EXLOCK.
+- Fix NV exception emulation issues.
+- Add GCS[PC]R_EL1 to locate_direct_register().
+- Add barriers.
+- Add ID_AA64PFR1_EL1.GCS to set_id_regs.
+- Comment updates.
+- Link to v16: https://lore.kernel.org/r/20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org
 
-David
+Changes in v16:
+- Rebase onto v6.17-rc3.
+- Also expose the feature to nested guests.
+- Implement emulation of EXLOCK when returning from nested guests.
+- Rename enter_exception_gcs() to compute_exlock().
+- Move all ID_AA64PFR1_EL1 handling to the final kernel patch.
+- Drop unneeded forwarding of GCS exceptions.
+- Commit and cover message updates.
+- Link to v15: https://lore.kernel.org/r/20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org
+
+Changes in v15:
+- Rebase onto v6.17-rc1.
+- Link to v14: https://lore.kernel.org/r/20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org
+
+Changes in v14:
+- Rebase onto arm64/for-next/gcs which includes all the non-KVM support.
+- Manage the fine grained traps for GCS instructions.
+- Manage PSTATE.EXLOCK when delivering exceptions to KVM guests.
+- Link to v13: https://lore.kernel.org/r/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org
+
+Changes in v13:
+- Rebase onto v6.12-rc1.
+- Allocate VM_HIGH_ARCH_6 since protection keys used all the existing
+  bits.
+- Implement mm_release() and free transparently allocated GCSs there.
+- Use bit 32 of AT_HWCAP for GCS due to AT_HWCAP2 being filled.
+- Since we now only set GCSCRE0_EL1 on change ensure that it is
+  initialised with GCSPR_EL0 accessible to EL0.
+- Fix OOM handling on thread copy.
+- Link to v12: https://lore.kernel.org/r/20240829-arm64-gcs-v12-0-42fec947436a@kernel.org
+
+Changes in v12:
+- Clarify and simplify the signal handling code so we work with the
+  register state.
+- When checking for write aborts to shadow stack pages ensure the fault
+  is a data abort.
+- Depend on !UPROBES.
+- Comment cleanups.
+- Link to v11: https://lore.kernel.org/r/20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org
+
+Changes in v11:
+- Remove the dependency on the addition of clone3() support for shadow
+  stacks, rebasing onto v6.11-rc3.
+- Make ID_AA64PFR1_EL1.GCS writeable in KVM.
+- Hide GCS registers when GCS is not enabled for KVM guests.
+- Require HCRX_EL2.GCSEn if booting at EL1.
+- Require that GCSCR_EL1 and GCSCRE0_EL1 be initialised regardless of
+  if we boot at EL2 or EL1.
+- Remove some stray use of bit 63 in signal cap tokens.
+- Warn if we see a GCS with VM_SHARED.
+- Remove rdundant check for VM_WRITE in fault handling.
+- Cleanups and clarifications in the ABI document.
+- Clean up and improve documentation of some sync placement.
+- Only set the EL0 GCS mode if it's actually changed.
+- Various minor fixes and tweaks.
+- Link to v10: https://lore.kernel.org/r/20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org
+
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
+
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
+
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
+
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
+
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
+
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
+
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
+
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
+
+---
+Mark Brown (14):
+      arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+      KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP
+      KVM: arm64: Manage GCS access and registers for guests
+      KVM: arm64: Ensure GCS memory effects are visible
+      KVM: arm64: Set PSTATE.EXLOCK when entering an exception
+      KVM: arm64: Validate GCS exception lock when emulating ERET
+      KVM: arm64: Forward GCS exceptions to nested guests
+      KVM: arm64: Enforce EXLOCK for SPSR and ELR
+      KVM: arm64: Allow GCS to be enabled for guests
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+      KVM: selftests: arm64: Add GCS to set_id_regs
+      KVM: selftests: arm64: Only restore SPSR_EL1 and ELR_EL1 if they change
+      tools: Synchronise the kernel esr.h
+      KVM: selftests: arm64: Add GCS EXLOCK exception emulation test
+
+ arch/arm64/include/asm/el2_setup.h                 |   5 +
+ arch/arm64/include/asm/kvm_emulate.h               |  11 +
+ arch/arm64/include/asm/kvm_host.h                  |  14 +
+ arch/arm64/include/asm/kvm_nested.h                |  39 +++
+ arch/arm64/include/asm/vncr_mapping.h              |   2 +
+ arch/arm64/include/uapi/asm/ptrace.h               |   1 +
+ arch/arm64/kvm/emulate-nested.c                    |   7 +-
+ arch/arm64/kvm/handle_exit.c                       |  18 +-
+ arch/arm64/kvm/hyp/exception.c                     |  37 +++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h         |  31 ++
+ arch/arm64/kvm/hyp/nvhe/switch.c                   |  13 +
+ arch/arm64/kvm/hyp/vhe/switch.c                    |   4 +
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c                 |  24 ++
+ arch/arm64/kvm/nested.c                            |   3 +-
+ arch/arm64/kvm/sys_regs.c                          |  83 ++++-
+ tools/arch/arm64/include/asm/esr.h                 | 113 ++++++-
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ tools/testing/selftests/kvm/arm64/gcs_exceptions.c | 346 +++++++++++++++++++++
+ tools/testing/selftests/kvm/arm64/get-reg-list.c   |  12 +
+ tools/testing/selftests/kvm/arm64/set_id_regs.c    |   1 +
+ tools/testing/selftests/kvm/lib/arm64/handlers.S   |  10 +
+ 21 files changed, 751 insertions(+), 24 deletions(-)
+---
+base-commit: 1590cf0329716306e948a8fc29f1d3ee87d3989f
+change-id: 20230303-arm64-gcs-e311ab0d8729
+
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
+
