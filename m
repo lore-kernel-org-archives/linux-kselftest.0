@@ -1,106 +1,102 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A822D97BB
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0063F459ADE
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785515116; cv=none; b=E9371832qcTb509FU9WF8hJk81szNqJB0Z4LDXlKSvzKeapX840L+Ay1mWBs2xMBfPEdQd3WuaYK/imtYKS5CNZLDq6RKlg6Kl+WBMF1+vZb2g/vxgL+5ibTqiLkhTI7bdmuBdHJsEHk/Zg/eyfmrB6ATY0Zhlv5nAgYhYKdZpQ=
+	t=1785515163; cv=none; b=oZBB9ev2or7gWXR+9LDV9BBZqJ8Zj2EiLmE6bmF4bdOu++qzV6e6SKmMRyb7Ma4QAnGMuMXnHWURlQdUXov+LIuOk8lJqw5QXHzb5P8LK8ICVRZr2x3T2IOCro282t2GlWLFd3TE+9+Bc5EGZ1ILPsTPpG7Rbkvr1VQOw9vJ2D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785515116; c=relaxed/simple;
-	bh=mmCa+FdRO+K+/IkGEw0Xm9vDEfMDaGW/xLX+tz93PlQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lF0ZdIeLFo/V1/KLJsp88gGkXtNGJ0UkAP++lXU4vz342QSNrPBQn/nRI871Mnt6uS5rcFU3nYxf5185NdoV3qs5+xQwYjNioFpc5YuCsfyvAi8b+47RTYkm83I4YJo+CivPLte9Tk9cRgTemHji3xlKJ2HMLzKY+kKFp1SCfJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CpHA6gPC; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785515163; c=relaxed/simple;
+	bh=ECK76g+9rlK+cAVr53M3Xrn1vPFCZMYT848BIFCAC68=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UNyEGiOzy7ss4GCNXeZE3QC85aYz4GaExjU3X/D3pr1EW8glXtTUVwpR58nmjTchJpID62rHuvurWB9qwVR42c6c6yKl3ECYtgbg8tXI537D6NfqC+C81IxcBafilAeSxiszC89qaFb7WqTRYavhgt/ZjOFT3OP34XQRiv/1ujk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PWo6/oeh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CpHA6gPC"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-69fc6a09b5aso2161987a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 09:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785515113; x=1786119913; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cpDVb8o2CW8R0i27JDWwyUc9WY4TavWFBH3ru2q2sb4=;
-        b=CpHA6gPChMzv/eiKZ4yAxAYjqYXLfnwhF5kPcBFXFalkd/O2TA3UbPvTMWP9oNydgH
-         E7xh8jBUWnWX5WduAuUJBQXunU3fXY6XTIWbpdEpIuM3rO0MbxPY6YjHMzuLufK4OzhO
-         7SnbuqvNFCTM/YMpRDT/MocHJFWx918x6AV3hp6GoLSa/w0vRBIhJw+x1W4Ec8aukbtL
-         wxeARj1TDLlUon5VwQ3W0b0bG4bmG94G5PXbjD/i7gGRNNe+/sF2QPv0HntpGIdSUuHT
-         eXxyMZAxgsckOzjCPkmW/plhUqzvu4gC/BNEfuS6zD0LxchtII1UKVJgFdhCe86TgIdN
-         hf4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785515113; x=1786119913;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cpDVb8o2CW8R0i27JDWwyUc9WY4TavWFBH3ru2q2sb4=;
-        b=afrjh5HzrXBZLYqbcJ1Br4vP90ESkDtYWot1kxyVNYTimgzRZMnL22JKwTT9VSDID+
-         QKGNvyPiDS6OJgN3Bns0nsMg5r68uwJdGNkqV6XUl1WjG5yRIxgtZDFo62LdyrJCMfn8
-         UtaWydR+ags3+7kul3qGGIHTXsDa3PV/utXv6maR3jaTJ3UmyqiN89RsXH5ckyQudvZl
-         JO/JGl8PokjCr1jrciAkI1TiUEv7WKEGTHQQdbStgI0zODYyVBF8Cc0gQvRKhkLxd9Ne
-         MylJ6zvH/S66aM5FvkZVZpdhyGuvC85rHjlg/Dqad15aQCkgVnJmjOENnvqeQUVFM+8f
-         Ol4A==
-X-Forwarded-Encrypted: i=1; AHgh+RqilvBWs7XKTG/XStAvgwqqzzfgZmYSbZTF60nKtPPCD5jkQ5K7sSupKDPnK1cf+xK7GTWjygufUI9/3KFZn2Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9bN2XhN6PZbdRSKJIlQCLnMnYv0AXh7rJ2e8cOp8Sk/WkuXSa
-	FUkE1f/tTJPy94WI2jvRxFUWL9F9+VE/iS6KiXwJvU+OizU7bK05BDFa
-X-Gm-Gg: AR+sD13h6W5+dF9LjxOvG+rZE8RWazpVqPodOQ4Q9Jh6EmUBr06nITa167vPmSbz72a
-	+Dc6hAgkNiSksAC2fDP0k1FxbXFvNDvJBjVl7M6CzaSTZCD3vYEw/PffcqnreEdCbBxX/MjtoQ/
-	7s/Mi/rdkYc8c6nV9/2kUaXShPeI29vmikUd9eVeQLAgsURY5NRRhOs2kW3nYDtlywFQRACyhbv
-	8YQGv9yRW27zzs77hD0Kgx7A7QNikgBxEPSY68+KMHzVa08vGTadWWW+6EPrwjjKDwhj0h75qMC
-	NL7bYoruyj1COVIdMx72fZFj4+5Bi3DsqhQUZidsNyW4yAZgz4YTGUct9t72kpIlPrssRZw7gdp
-	LSxdQEaVIm0VnWFumFhRgvBRP0UGHcc2vNqSeoef3qOXtD+FMJoWNiPvXEn+QISLx2h0OuGS1Jn
-	o95SPncIzR1zwIyyp4+m31QvAIxzRPUSCoywXFsu5oVoOoadUksOekbUR+aLb82/uDpXa1rO4ia
-	RMEScDwMMTv795RKr90ejgwHxxuzXCQoq4OMUPTflFpYT+JJMvkuz/RfdmtKgiDHFsk
-X-Received: by 2002:a05:6402:4542:b0:68d:92cf:52f4 with SMTP id 4fb4d7f45d1cf-6a0a7c5e9f1mr180913a12.5.1785515112462;
-        Fri, 31 Jul 2026 09:25:12 -0700 (PDT)
-Received: from fedora-laptop ([172.245.82.59])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c655626sm2838383a12.22.2026.07.31.09.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 09:25:11 -0700 (PDT)
-Date: Fri, 31 Jul 2026 11:24:57 -0500
-From: Ming Lei <tom.leiming@gmail.com>
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: Re: [PATCH] selftests: ublk: add rotating auto_buf index regression
- test
-Message-ID: <amzMWY8FcK8SZWnz@fedora-laptop>
-References: <20260730010910.799346-3-yangxiuwei@kylinos.cn>
- <20260730024050.1062354-1-yangxiuwei@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PWo6/oeh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785515160;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dIv97IOLn0/ejJggLwfffj67mbRXdGHwKIKr7oQyrK0=;
+	b=PWo6/oehIFca3y2ThWYbZx3FrXP6kaVt+130vJ/0GWtSFFqqs7Sozd0lnkRMZsl2wzN/eP
+	mP6SysQauYMRHDZyzuKT8qMssK7THu9rRBr8qZVHZm9K/qdIUzmhgduhk6v0xT0WtdJhep
+	ey1YXJugv/1/V9GKTb8FplIu/qGlCXk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-247-G9RTodWjOj6fEXA19gRLuQ-1; Fri,
+ 31 Jul 2026 12:25:55 -0400
+X-MC-Unique: G9RTodWjOj6fEXA19gRLuQ-1
+X-Mimecast-MFC-AGG-ID: G9RTodWjOj6fEXA19gRLuQ_1785515154
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2FE37195608D;
+	Fri, 31 Jul 2026 16:25:54 +0000 (UTC)
+Received: from bgrech-thinkpadp1gen3.rmtustx.csb (unknown [10.2.16.63])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2AB281956047;
+	Fri, 31 Jul 2026 16:25:53 +0000 (UTC)
+From: Brian Grech <bgrech@redhat.com>
+To: stable@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Brian Grech <bgrech@redhat.com>
+Subject: [PATCH] selftests/net: gro: use variable sleep to handle slow environments
+Date: Fri, 31 Jul 2026 11:25:50 -0500
+Message-ID: <20260731162550.4112730-1-bgrech@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260730024050.1062354-1-yangxiuwei@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Thu, Jul 30, 2026 at 10:40:50AM +0800, Yang Xiuwei wrote:
-> Batch AUTO_BUF_REG COMMIT must unregister the old auto_buf index before
-> storing the next one. Fixed per-tag indexing (A == B) masks bugs that
-> clear after overwriting io->buf.
-> 
-> Add kublk --rotate_auto_buf so each tag alternates between two sparse
-> buffer indices, and test_batch_04.sh to exercise that path. Without the
-> driver fix, the request ref stays stuck and I/O hangs; the test uses a
-> short timeout and kills the ublk daemon to recover. With the fix, a
-> small write completes quickly.
-> 
-> Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
+The server socket initialization sleep was hardcoded at 0.5 seconds.
+On slow or heavily loaded machines this is insufficient, causing the
+client to connect before the server is ready and producing spurious
+test failures.
 
-Looks fine, 
+Respect KSFT_MACHINE_SLOW by extending the sleep to 2 seconds when
+set, consistent with how other selftests handle slow environments.
 
-Reviewed-by: Ming Lei <tom.leiming@gmail.com>
+Note: tools/testing/selftests/net/gro.sh was replaced by gro.py in
+mainline after v6.12. This fix applies to stable trees that still
+carry the original gro.sh implementation.
 
-BTW, this selftest patch should have been part of
-"[PATCH v2 0/2] ublk: fix auto buf reg ordering around uring_cmd"
+Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
+Cc: stable@vger.kernel.org  # 6.12
 
+Signed-off-by: Brian Grech <bgrech@redhat.com>
+---
+ tools/testing/selftests/net/gro.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
-Ming
+diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
+index aabd6e5480b8..c4ed09e5f002 100755
+--- a/tools/testing/selftests/net/gro.sh
++++ b/tools/testing/selftests/net/gro.sh
+@@ -21,12 +21,14 @@ run_test() {
+   # Each test is run 3 times to deflake, because given the receive timing,
+   # not all packets that should coalesce will be considered in the same flow
+   # on every try.
++  local sleep_time=0.5
++  [ "$KSFT_MACHINE_SLOW" = yes ] && sleep_time=2
+   for tries in {1..3}; do
+     # Actual test starts here
+     ip netns exec $server_ns ./gro "${ARGS[@]}" "--rx" "--iface" "server" \
+       1>>log.txt &
+     server_pid=$!
+-    sleep 0.5  # to allow for socket init
++    sleep $sleep_time   # to allow for socket init
+     ip netns exec $client_ns ./gro "${ARGS[@]}" "--iface" "client" \
+       1>>log.txt
+     wait "${server_pid}"
+-- 
+2.55.0
+
