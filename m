@@ -1,229 +1,104 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.68.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4309B36F8E7
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 20:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97D137B032;
+	Fri, 31 Jul 2026 20:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.68.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785529000; cv=none; b=UnsE/s5zCbwH84amQvBvKTaQPB2eJeGLFN69DuhvghZjcjWX5hZ4KlnyLdstRqFvih0PRVWVVzyr+EOf6fgDfWwB/z3CvP+eynFiQle3grUlUTcIq9jrv7XkDnVivVGkqNvptGmldFCgySd94jiVS9sZEkeJ+NYuPjHxxaM9M44=
+	t=1785530337; cv=none; b=kWa6kHd8Jr+s6eSOXhdI41cjlF7EuQPXLcOjoCf+Sk8GF3D1r7tJINoTSGH5Oniuuz+oisfcZ36sHlU1UmMqakU7bMToZxGfXkul3X2D/MhNRgG1GpPFw/YFACqMhNyoUbHr+C26yWg7iIGx2hAOeqWlGQW6k4onF8+DLGVNJo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785529000; c=relaxed/simple;
-	bh=fT4Wh7zLimmN8YPV2rfhV4SibyXoX/Z38RLbsH3AQK4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=UauBYZx3EVKDZN5SaFgPXjt56p36XyQV3gjvwZdtpFbWxs18C70wD0iPX57uGchJuRa1in3pKT+ID0AkITv5Gg554hr7GRnVwvqwTeSBccPmzqadOWbiFlNdvKsSFR8mHacTXvainDVZVSyHyja71qE13Bafh7oEZRVgWWzyBOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qsTVrI0k; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785530337; c=relaxed/simple;
+	bh=taS6rUdv5gSiPxqmImB/coa9UsW48A6kRT5CAj9t/V4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZhUF+R6sWM1a29fE7oRcZ68q8WKisl0bHGR406Ee0HoY7Foi2QxUJS7s3JNb6IoBq0iy5FIpIprYdZmd1R4X6n+KyMptKwaR4RP3pQDrxSn6BFZ1OK+e3kViBhfyVsCa7Vry8mWZ8eI4DMxZ0JWqAOlNqPstVdYMfRYhuT+3Z5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Zi6l71Ca; arc=none smtp.client-ip=44.246.68.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qsTVrI0k"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-47f4c92d1b3so376615f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 13:16:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Zi6l71Ca"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785528997; x=1786133797; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jKBxHr4kakqx5giULQAhQrBpk8zyW3hvnaTsLQOKVHw=;
-        b=qsTVrI0k9n+NaG5nRSTNcfGGTVu3qK0HTCtdPZzZ4nTOh0oiH+9HqnB+2YRwbMGrCJ
-         mBTdljhXa3aHVXMBFKq1wkBkx/fs1RiufxfykPN8fX7wvmDunGFbHiZI3rwgsLZoskzd
-         qiOH6zeAYvTQy54PtNPpu04WVBZIRx0/g0rcCUgZ8HiG57akUTRWRpiC9loFmoymXOAy
-         c4ah1O5pK3kxmCgSUx1H/jRcOX/VZqCqlPNhYjX2OvxiKrl0FLZGkdb8LbhkRFnPapfF
-         Vx1A2mPyIMb+5np+gO9GFTDQcMVXJP9pdPlP1BecWTcT8idK/mcLVxDQ2MvMmdpt8eLL
-         tCVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785528997; x=1786133797;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jKBxHr4kakqx5giULQAhQrBpk8zyW3hvnaTsLQOKVHw=;
-        b=EhiCYBcDMwprFW2+PyO62Z6eAlVUvvMBct6d1noYuaUNEH1VteFSCJorYdoEJA/Q1I
-         uB3FU6ZW5qRH/g3hAyFJVn84H9p+lfGX4xfFggl8Z1Cn4QuKjZKdOnj7HvytL7rw3mqe
-         eyvjqCJ97aoBWwc35RpYoZRlN4bTNGettzmr/sGyV/y52KM5zFFvIFGFrjC4aEyLyfm8
-         fkr2rvoqtAL/p6w5NP+InDzx+2oH83tMIwUJV4WBIq3am4inmuC3VnLdx9uU+ISNTqry
-         qchESUQmhJYOZELjAq8bT+BMOD2T9GebwqXYa7tLNBMhiWrdYFoyVO7znPgkz7JTB1PH
-         +HcQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpbqFhk3Pi23Vx7dBcAVkYqClsSeAj39GxDvqU21KALSxQrYXf7+hccat3sC79avuaaPTv0WrsNkK0R7fQaPMs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw11Fm1EPWG7wFbuZRPzQUNlcVbtbb3MyTDjznL1YZczxXGbKTY
-	SodG5e7i8qgVkT39SMcrvKiOCj1MW5LHcvOHUvaVdIrKk3ruCDdoskCy
-X-Gm-Gg: AR+sD12dr8zuSQj7Cv5ZIA/0DEEXdaMi3QaslBCWBbKBVtYhB111nvzvpImcy4zv7o8
-	T1PSOHvsV2DcJFBHOO03I/xpoHrzaezF70PPD4S0MUVz/PYqhqEXKNKUJ1M93dpfget3bSu+E/q
-	sPO5HxJDKvxWnN2Hx1po0GuIeL6ugScGXow6SmOrXQf66vFcdz9hjD622m+h3Vf+aQ6k+uaIlmT
-	8aZ29w1/quJEMEfHMpvsGA7Sw0XuBqMufcbSh6QBS6QTzuuAlijMsAzPR8aYJ1vkV22rKHFBCBX
-	hR1D/85aVsZJ3rv04aZO1nNctxlHkH+80aBeNF0/o1deLZvZf4n+WTJuxz7DJT1cRhkLaJk1FHa
-	ZgQNik2NPLJKXolZtFucb0MWOcBiz1R3vva2lDWyYIScISllVBArdEp1jkLe/+AbWDYRzV8iaih
-	zesn5P87M+1JY/aXX97wJju6bD6vdXeJVZQn+5m3SERPGblrwGtbqQ85SWssJneH2QstYMpX3XP
-	hTQiklbOshxsXvym80mmKuyM+5x3t+0s/43KjJ44ZhXNq9zt0AoN08mLhEPgIcx4iC3qDrv77RL
-	n4pIbYsFhlIBqzpn8drMAgki9AE=
-X-Received: by 2002:a05:6000:4205:b0:47f:77a8:7e20 with SMTP id ffacd0b85a97d-47fd7308f0emr2136026f8f.35.1785528997285;
-        Fri, 31 Jul 2026 13:16:37 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd458bf7csm8953678f8f.32.2026.07.31.13.16.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 13:16:36 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1785530335; x=1817066335;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SnLOtL6OfB2jJTAGaU2rbvIii1GYRI8Lg0cDOKcF0mw=;
+  b=Zi6l71CaYwK9vlvYBu8XfwWuyA/hvt5RjkkvxsBi17m84qMmoAslNMot
+   QK9/pZz4P1MSsDwldIYrL1i5rGORNQAlhBa78ga8cjo3fmT6Y9R69Js6f
+   j6sAHc2F4rrfLQwHDGrDY4w/LU6Wr+JaNJStIaloSR98L87PofnL6qnkY
+   uqQ0nTzBd9loQaW4xBtyEItricZBc2bFFdS8aQLGqOthHuRSRlc93fsfm
+   xuuulA9BJSI0Y+VJSpCh1mpp/v6LcC/SF3iVYr9wVk8zcBbkskaXWQXhS
+   m4mTFcr4ls0Oijy+QRgp1KpdN8i7tMztfLuoH9sB/ME2bD3uxxvU2Gr8N
+   A==;
+X-CSE-ConnectionGUID: bz6HU1t+SO6baJcNZaqujA==
+X-CSE-MsgGUID: 7urMvQkdQwyfJwIVGlX91w==
+X-IronPort-AV: E=Sophos;i="6.25,197,1779148800"; 
+   d="scan'208";a="24812452"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 20:38:55 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:9604]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.47.97:2525] with esmtp (Farcaster)
+ id 50979d40-255f-4bf0-8f91-511eeb35044b; Fri, 31 Jul 2026 20:38:55 +0000 (UTC)
+X-Farcaster-Flow-ID: 50979d40-255f-4bf0-8f91-511eeb35044b
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Fri, 31 Jul 2026 20:38:55 +0000
+Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
+ Fri, 31 Jul 2026 20:38:54 +0000
+From: Jimmy Zuber <jamz@amazon.com>
+To: Miklos Szeredi <miklos@szeredi.hu>, Shuah Khan <shuah@kernel.org>
+CC: <fuse-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH 0/2] fuse: zero the partial EOF page when extending a file
+Date: Fri, 31 Jul 2026 20:38:40 +0000
+Message-ID: <20260731203842.540798-1-jamz@amazon.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 31 Jul 2026 22:16:36 +0200
-Message-Id: <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>
-Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
- Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
- "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
- <casey@schaufler-ca.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
- <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
- <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
- <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
- <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
- <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com>
- <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D033UWC003.ant.amazon.com (10.13.139.217) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
-> On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
->> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya Dwivedi
->> > <memxor@gmail.com> wrote:
->> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
->> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
->> >> > <memxor@gmail.com> wrote:
->> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
->> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwivedi
->> >> >> > <memxor@gmail.com> wrote:
->> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
->> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwiv=
-edi
->> >> >> >> > <memxor@gmail.com> wrote:
->> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
->> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@=
-paul-moore.com> wrote:
->> >> >
->> >> > ...
->> >> >
->> >> >> Yes, I understand you feel it should be placed under security/. Yo=
-u are entitled
->> >> >> to your opinion.
->> >> >>
->> >> >> No, I do not think the newly added kfunc is a big enough layering =
-violation such
->> >> >> that we need to do it ASAP, disregarding everything else outlined =
-above. I am
->> >> >> sure you see that too. There are several other instances of simila=
-r kfuncs.
->> >> >>
->> >> >> Therefore, please attempt to meet me halfway here.
->> >> >
->> >> > I'm happy to work with you, and/or anyone else, who wants to work o=
-n
->> >> > finding a way to test kfuncs that live in security/bpf_lsm_kfuncs.c=
-.
->> >>
->> >> Right, and for that file to exist, you need to get everyone (FS, BPF =
-folks) to
->> >> agree on whether placing all such kfuncs there makes sense. It is not=
- for both
->> >> of us to decide on our own. So let's revisit this whole topic once yo=
-u've done
->> >> that exercise.
->> >
->> > The kfunc that David has proposed must be located in
->> > security/bpf_lsm_kfuncs.c, similar to the VFS kfuncs and
->> > fs/bpf_fs_kfuncs.c.  If you read David's bpf_init_inode_xattr() kfunc
->>
->> Sigh.
->>
->> I now went and read the archives, and Christian already told you no befo=
-re [0],
->> which I missed in my first read. So two people whom this code affects al=
-ready
->> objected to your proposal.
->
-> As mentioned previously, David's kfunc has nothing to do with the VFS.
-> Look at the code if you haven't already and you'll see what I mean.
-> The only relevance to the VFS is the fact that "inode" and "xattr" are
-> used in the name; David's currently proposed kfunc is an LSM kfunc,
-> not a VFS kfunc.
+Extending a fuse file past a non-page-aligned EOF does not zero the tail of
+the old last page.  When that page is cached and has been mmap-dirtied
+beyond the old EOF, the now in-bounds tail is served to later reads as stale
+data rather than zeros, which violates POSIX file-extension semantics.
 
-I am sorry, I read it and I don't see why it is an LSM kfunc. It is absolut=
-ely a
-VFS kfunc, that is using LSM APIs to some end. The LSM specific bits are al=
-ready
-in security/.
+This is the same class of bug that commit b1817b18ff20 ("NFS: Protect
+against 'eof page pollution'") fixed for the NFS client; fuse has the
+equivalent gap on its non-writeback_cache, FOPEN_KEEP_CACHE path.
+pagecache_isize_extended() cannot be reused because it is a no-op when
+i_blocksize() >= PAGE_SIZE, which always holds for a non-fuseblk mount, so
+patch 1 open-codes the zeroing and calls it from all three paths that extend
+a file: buffered write, setattr/truncate, and fallocate.  Patch 2 adds a
+self-contained raw /dev/fuse selftest covering each path; every case fails
+without patch 1 and passes with it.
 
-At the very least, it is a mix of both, but definitely not one or the other=
-.
-Therefore, the situation is already ideal, code owned by different people i=
-s in
-the files they signed up to maintain.
+Tested by booting the patched kernel under User-Mode Linux and running the
+new selftest (4/4 pass; 4/4 fail without patch 1), and reproduced against
+libfuse's passthrough_ll example daemon (-o cache=always,no_writeback).
 
->
-> If you find yourself required to abide by Christian's comment, despite
-> this not being a VFS kfunc, that's fine, but this puts us at a
-> stalemate and David will need to find another approach for his work.
+Jimmy Zuber (2):
+  fuse: zero the partial EOF page when extending a file
+  selftests/fuse: test post-EOF page zeroing when a file is extended
 
-Paul, let me remind you of another email you sent [0], in which you contrad=
-ict
-yourself. I don't know what caused you to get confused over the month.
+ fs/fuse/dir.c                                 |   3 +
+ fs/fuse/file.c                                |  56 +++
+ fs/fuse/fuse_i.h                              |   1 +
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +
+ .../filesystems/fuse/write_extend_eof_test.c  | 368 ++++++++++++++++++
+ 6 files changed, 432 insertions(+)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
 
-In it, you tell David to move *LSM* bits into security_lsmxattr_add(), whic=
-h has
-been done in patch 2. Thus, by your own characterization, it means the rest=
- is
-*not LSM* code.
 
-Quoting you verbatim:
-> As I said previously, if you absolutely insist on the kfunc being in
-> the VFS kfunc file, the LSM specific bits need to be abstracted out
-			^^^^^^^^^^^^^^^
-> into an LSM function.
+base-commit: 7d87a5a284bb34edb3f4e7e312ef403b3385a7b7
+-- 
+2.50.1
 
-You yourself made the point in that same email that the kfunc can stay in t=
-he
-current file once LSM bits were moved out, and your request was honored.
-
-At this point, anybody reading this thread will only see your position as a=
- way
-to undermine David's work and waste everyone's time, such that you can grin=
-d an
-axe against BPF folks. It's a repeating pattern.
-
-I tried my best to engage in good faith, but it is clearly not working.
-
- [0]: https://lore.kernel.org/bpf/CAHC9VhQd0-N1g=3Dg8gspeV7bhLz0LA6DF5HZyB7=
-mW6VW_7oSt2w@mail.gmail.com
