@@ -1,150 +1,89 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9189047D93C
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 18:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3582347987E;
+	Fri, 31 Jul 2026 18:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785523848; cv=none; b=PnLArPqJVA3SI8mGlXbNpLScmssk9Gp7W8/947zgGaIzAfvN/93TMPYFP9yVqVB2U4eMqS1+iYgcMT0/0CXKy8NmtLW0UymYWpI3EvTaSmfzJSA3sz1+AAjKkr8myhYnAWV6+eALeB8A8/PNOoEOWq5VkFr0Ol5eNPNiDQguSf4=
+	t=1785523914; cv=none; b=mN2WG/QCekCGE9wlsyupGHBUVzYByes2tCeIUA1Ag3QXhc9WHgzoq5ILeXMY8XwR5Ewl1+flHxD2zzmdD9RJ0G4aab5wGibLJywCyelQSD4vPkzB7DTTuFb6r72+z80XibhovY0wUk2cr9z+UQJt3AoN49Xig8ASbwmw2nbFJhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785523848; c=relaxed/simple;
-	bh=rNSgybq+EC4StYKEvWW6N9mV5/JG+X6iCipGDYsDyAo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=W1JrCO78Gqw4Afeq5wx9tiCZGDEqGf4+a3M+bx+qAFo7AoIhMwJPKomy0G5/seXdqdh68LEgbkwFz+piNLG730y7a3vD3rc9hYDDxhA4X4ygWgjbNlTmlOX8MSAt784sSvEAVLMvDNig1mNbs9/UY1pHy1d7PjoOYwSMhZGR2b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lla4kMeS; arc=none smtp.client-ip=74.125.225.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785523914; c=relaxed/simple;
+	bh=Xk98sFUvrCpMxkX85+qDFdjYRwm+QTgOL6cUrk3dQgE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HWGpidng3LEkt2+pZkejMXA3EP3Js+X5Srkay/lZXzKF0GvAyFG3CdKzyZ4zbtNfroyFU90uMdtWdt6fVnAsN2dNISlLqaxbpm0OiZIY1NWWAEnicBQYNXH+q+UntvtEw8e6lnYHErJVqlJEmgBX8IVwnJ2gFOoEkrzobklNEMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cWj+jl6+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lla4kMeS"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-4730b8edae6so372948f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 11:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785523845; x=1786128645; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=rNSgybq+EC4StYKEvWW6N9mV5/JG+X6iCipGDYsDyAo=;
-        b=Lla4kMeSwb1aRASQHA6OqAznb9OQ1+LmN9z9/3LN2wfQM5ggl/5b/+9Bcn51wZziyV
-         nQgA1fhNLzXKilbNgD1B/nAkNhGCpzkh1P6JSs1dcdfy0LX/yNuivIZ6Vj0JPdQgqfAF
-         YoNfutpa+7MCRfwGXxt1b19w+jfkRM2Iw8CL+Ct2rjfus7qYqyFihMQc80KUbYSPuXZO
-         Ovwf8QV8eijEwCO/VAkq3bap7PRJhwW5SsvoAv1yuPRDQ3O/d8blnxd96K/hk7baYk4K
-         oNsTYLO9yuIioNX0ot0UpeU6sGIta8lnNT6Blok4h53+Zz9TQIN/vPXD+KUR0rCN4HT5
-         i4nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785523845; x=1786128645;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rNSgybq+EC4StYKEvWW6N9mV5/JG+X6iCipGDYsDyAo=;
-        b=PXmKnLHxVAC+97aeqigLGmZsuuexW1yOmlUh1T0pc6YUHkgRx9gi4ZxalUa9AVpz+j
-         lWjNZdNHlbChNPkL5N5oNtmnAfb9u4S49nf9Aosg+s1KtvEgxy+D7d04VP7YLmpJIqXW
-         34AkTif0BQRxQWyiV6PLQykhf4nRQmWeofVdN0y8yvLzrVkzphVyRMfepk1wgXPY5fIK
-         9mRIob1e3YxQxENvHRoPTMFFu5LkTB3gUe0jlo8X0SORmTpo24YtZhyDHqtZzP1L/LsI
-         joPl+rwxBpNveroI3acMC0nR/YGciKYMQWg64yDHmrJ1pejyuP+abAnWmHlsAHgNtXtG
-         2BJA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro24VZs0uon+zPxB9mKVBu76x9ApIZzNhfklYEzJ7ZF+7VX5Z0iL6BC6S9uno1MNLd+QCwS9nBvNV+xkm0sKDk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKcuTepA8vgYdSk51nXt5Y8P7oCH6pt3y/t8RCLhSTe3AASutX
-	G5GnQKM7tR+QQmtjWABCCgG21zH9Dmy6W/z22uQWshwt2ZzLkgfBo+yR
-X-Gm-Gg: AR+sD10aMrcTD+rur8HvV/6IITJsxXOBl8N4UeU2Uqcud505CRS8fz4LaYFwGULh7I6
-	G+Qn2GfkewF9NO41VE+Q6q/lffaS71bWkWU7hJmdC2TJyK7LU7MA8A2iMbj2xF1wPB1TLEDMF8d
-	gnM9s2lPe8wwOLV2WYiqbkEVg4Fa8ZEEAy/cD1LD4D4my+eCwzgD6R/fjcKooOVwIYTtwumxjjT
-	8wIK9GleAA2WfKrxF4NAem4wdNtl4qqbHs2mApTgsLX+26hXjLofsYFCTA4vUDQAl+tkLGc5rYY
-	gTDUz0slkrOyVIu0t8bqIDHJGfAVuMORDziSi+sJmLIjx/YHoZQhaE6jZwdJPDsgAtPf1f6A8ug
-	Wi09ZnC6XyQR+zatwxEd2o1hIkdJloaDzuth5FUT/iys9bHA3A0Sjd5zvq37eXbSjknLy4Ji0Mq
-	3NaIhFpsDVVU+uT+uSin3mSYqXXiVCwEVKDNBDdNj36a2QuToQEgE9IB/FILZpYLMRMTqa8t80h
-	kMaHyBPsNK8BrE/JhRfZ2oV1z289AWn1FmiFHQHaGtjP1/X1rKUcZ+2mxgpFjBLhfMgBbApUtmX
-	j9VF+4rtdFW6IUNHQKE+x9CfITg=
-X-Received: by 2002:a5d:5307:0:b0:47f:48cb:ea5b with SMTP id ffacd0b85a97d-47fd72fb87dmr1338696f8f.43.1785523844695;
-        Fri, 31 Jul 2026 11:50:44 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd41e2484sm8232834f8f.11.2026.07.31.11.50.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 11:50:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cWj+jl6+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B221F00AC4;
+	Fri, 31 Jul 2026 18:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785523913;
+	bh=WZot6GFuhy9a+s0IugMlJ70eCJTGgM/zB3nf4mCWRaw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=cWj+jl6+CIO586r12U21up84e9GPZCTcTt1faCSxLcxizMMQQYcGKJGz/RvwNUsY/
+	 aNz08ZnrEy2GS4PI9u7HWHsjdy2cEuPiuw4/2ICAhpkLXV+jfknNspSWeB8GuyJdiZ
+	 v4l033aztqBDf7SJKezD1t/ki1Ul0fh+H749i48g6EUXUccI/Kk1nM9juxWpPQahEK
+	 hS5gBep5O6YqbxDTAEq0IbrHvL+dXmHxuPf6At3kVig8G23cbWX8/SnAMmXWMwo/vw
+	 xdCfQCzCunPoMu9xqGAK4A18oKbFIOUJQhxkIJYMXhgFS/Ms+YHadkGCkOuth+dJTa
+	 j/oVHggj+p9Hg==
+From: Oliver Upton <oupton@kernel.org>
+To: kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Congkai Tan <congkai@amazon.com>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Haris Okanovic <harisokn@amazon.com>,
+	Geoff Blake <blakgeof@amazon.com>,
+	Stanislav Spassov <stanspas@amazon.de>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] KVM: arm64: Expose PMMIR_EL1.SLOTS to guests
+Date: Fri, 31 Jul 2026 11:51:44 -0700
+Message-ID: <178552142318.30097.12495596662819704320.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260722202702.4165917-1-congkai@amazon.com>
+References: <20260722202702.4165917-1-congkai@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 31 Jul 2026 20:50:43 +0200
-Message-Id: <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>
-Cc: "David Windsor" <dwindsor@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Matt
- Bobrowski" <mattbobrowski@google.com>, "James Morris" <jmorris@namei.org>,
- "Serge E . Hallyn" <serge@hallyn.com>, "Casey Schaufler"
- <casey@schaufler-ca.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Mimi Zohar" <zohar@linux.ibm.com>, "Roberto Sassu"
- <roberto.sassu@huawei.com>, "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>, "Alexander Viro"
- <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>, "Jan
- Kara" <jack@suse.cz>, "Shuah Khan" <shuah@kernel.org>,
- <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com>
- <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com>
- <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com>
- <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com>
- <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
-> On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrote:
->> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kartikeya Dwivedi
->> > <memxor@gmail.com> wrote:
->> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore wrote:
->> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar Kartikeya Dwivedi
->> >> > <memxor@gmail.com> wrote:
->> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Windsor wrote:
->> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Paul Moore <paul@paul-m=
-oore.com> wrote:
->
-> ...
->
->> Yes, I understand you feel it should be placed under security/. You are =
-entitled
->> to your opinion.
->>
->> No, I do not think the newly added kfunc is a big enough layering violat=
-ion such
->> that we need to do it ASAP, disregarding everything else outlined above.=
- I am
->> sure you see that too. There are several other instances of similar kfun=
-cs.
->>
->> Therefore, please attempt to meet me halfway here.
->
-> I'm happy to work with you, and/or anyone else, who wants to work on
-> finding a way to test kfuncs that live in security/bpf_lsm_kfuncs.c.
+On Wed, 22 Jul 2026 20:26:58 +0000, Congkai Tan wrote:
+> Today when the perf tool runs in a guest on cores with PMUv3p4, it fails
+> to parse the default metrics with "Failure to read '#slots'", since perf
+> can only read 0 from sysfs caps/slots, which is backed by PMMIR_EL1.SLOTS
+> that KVM traps as RAZ/WI.
+> 
+> Taking into account backward compatibility and heterogeneous systems, the
+> exposure of PMMIR_EL1.SLOTS is gated behind a new vCPU feature flag:
+> 
+> [...]
 
-Right, and for that file to exist, you need to get everyone (FS, BPF folks)=
- to
-agree on whether placing all such kfuncs there makes sense. It is not for b=
-oth
-of us to decide on our own. So let's revisit this whole topic once you've d=
-one
-that exercise.
+Applied to next, thanks!
+
+[1/4] KVM: arm64: Expose PMMIR_EL1.SLOTS under strict PMUv3 UAPI
+      https://git.kernel.org/kvmarm/kvmarm/c/453f6ff04b8d
+[2/4] KVM: arm64: Advertise STALL_SLOT* in PMCEID1 under strict PMUv3 UAPI
+      https://git.kernel.org/kvmarm/kvmarm/c/203b22f76dc3
+[3/4] KVM: arm64: Ignore writes to PMCR_EL0.N when using strict UAPI
+      https://git.kernel.org/kvmarm/kvmarm/c/bbef6317f97b
+[4/4] KVM: arm64: Add KVM_ARM_VCPU_PMU_V3_STRICT vCPU feature
+      https://git.kernel.org/kvmarm/kvmarm/c/ad220e275c39
+
+--
+Best,
+Oliver
