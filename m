@@ -1,57 +1,57 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B187443E24
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2008343802C
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785514102; cv=none; b=eATYdTBk5GrnN7FcUnW29/He/yfOyIPz6Q5YhGFvZTN0GHE2wtDYWFovSsNVuTsvGshAmR109Pgd6JS+cmf+x9OcW4QFsLdgthdhUTwxGEFESv7ZF59x1bmjEcBvOYYwji/YgblF4WXUEP0Xd81hg2I+eFnO2xG0rjwMzZZR/p4=
+	t=1785514310; cv=none; b=uOnZuTe7pqtkYjwgiekzTne7dGypETf6SLugGphs1Z+MSEehqUnKzz9XalWW6kEfPPH1TdDXjNYpe4jE0dAfLRZEd5aq2DRqf6qjTB4Q+dtqVaWBJ5KuWiSd7yDsfVnm7+GYCk78i0NQXmAGApzKYRmkFQbotyBy4nay6hwdV7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785514102; c=relaxed/simple;
-	bh=eoU/bl01juZhkFeEsFCNMw62ts9Heu+h9ABYGuS6Gco=;
+	s=arc-20240116; t=1785514310; c=relaxed/simple;
+	bh=ZHuGxhrJ3MrlsbogF2sbcHpAeby7swdSHdnCo3MZvUM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KA6m4OHhcp+WFADfkdZb2y8E+uTxmVJo/+cr45Bu2nuoNnCv8unoSb/E5c7A6JSOju/REz0y63trvlcvL7pPcxOTOiN1zDSyXOzNW6cUZsot/lqHSPmROZOKDUMmTMAMV8aAX+EenHyBkHOt+pn5Mua2HG5mZjv1JloUUoF3LJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NiSFwaBK; arc=none smtp.client-ip=209.85.216.72
+	 To:Cc:Content-Type; b=tqI923bdVrmoB/mInRCOGTusi35zbN7bc5cK9khZxFlbzd9rZ89iZfCmrLqWN3L1TDcTevtzZ895RallqMAaFwhe8rgZ5m4XeUDQJIxfM6p0XPxhGWc0K61XLWK+xdMx7ya4XbBsBOKepX6XHLlKi+7b7Vypqhh2ddd836uDVt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FNsquI40; arc=none smtp.client-ip=209.85.210.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NiSFwaBK"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38e7621655eso2027160a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 09:08:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FNsquI40"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-848544a8496so1423465b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 09:11:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785514099; x=1786118899; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785514308; x=1786119108; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fnhBgLexccnG/MXIqot9sZlADClDA3hnAx45msmNhUo=;
-        b=NiSFwaBKPsjjoPv3NvcMIWPqVxq0p7c+DyG+r9piw2MBF7EDbV9Ep7OZH8o4eerwJk
-         H4JIySR2SCukYBn3VBz7X3hXMstFPXpFLW5EU0wf0VT2ardZaaOgdzP7I+pKGu8EKi3j
-         5U71NNkkCRnm6Vhw7uq179S2yAPv/XNEnuCDF53GWfvCNTqK9llFMQJwpEpbukV7n7xA
-         5SbrFFcfGjnwPkFtop0zYzjr6cja1EyCPReIDeZKQzXyOSU9mHEwdvmA9E9sDROLayR1
-         FEJmkTo1V7BqW2UhxmuWNg9uFLq/SGsXwt+zlEvzp5J78rCQnjEGOxk+OJSnyRHsccnG
-         73eA==
+        bh=bm06E1ea+m3fCfij6trKrrVxSCnF5pTP6S2pONTnQSo=;
+        b=FNsquI405OAyDg3DfoezRZ/2NOz2pxC1lHjzZaU63iXcJW+W49WaLVw6IKEmg+Lgo+
+         MKkI4Cq9XkJhOMZl7ChRNuqVl4c3cga8aHB9KiSFS40wy073Kvnv/tbXDzpjkog7Z6WS
+         vo57B5jwjoRpVUtlq31kvm00NdWVjZd0dT7t/vQ4l8sy6lG6SNE7nVwo8R7K7d9tpwd4
+         IsDr5vGeGreZvPtNOAZVkvkTh2He3GkPVNbkoaxFfERVsEgUrzwEQpkpbDDaKDv4RHw2
+         bF0ZNtK+bSkN5ATX/2hymbT5f2izZg29iMuT5pfHXTEP3i5MjGkoUlAwB+foOtwSO7Ne
+         gMoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785514099; x=1786118899;
+        d=1e100.net; s=20251104; t=1785514308; x=1786119108;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fnhBgLexccnG/MXIqot9sZlADClDA3hnAx45msmNhUo=;
-        b=DOn0KFkvfieoHpNK0918pTOamDFNnBHh+gdg0gEFWXlWm8ifUzU7V61Kt4NIL7ddw8
-         6sErwYT1yjwwDpG+wHzc5OMeF3nqrQl1EdiUXM2eSmLeex+3tIP2mhh6M51zSNn+4byN
-         UBQuObqjiY29OqOu4eILrp9TIA6bXIdClsW4eLJ+6okJrBYxyfSauKbH8IifvI0zU/Kk
-         xbIZkltuebtH485WghKDMiR4Fq76CaER6Z8IH9WctiaFetmrgl8zn2pJXFlO6a5j54GL
-         TR38UYFWvaHuvJCh9DiIAmSW/1dsXLcf7eOkSVJrXmhx7k1ry6KQgL3Eo4z+5PfhsfJ2
-         di8w==
-X-Forwarded-Encrypted: i=1; AHgh+RpAZVVMKVYoIoNhCgyB+Dl22f+94cKIAEhVMr2QjLgGKxj9EmRj6rQrgStxfaETDCjrXVDEMRRaI5lnGK2Aot8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt8T1EFHofBbEpgSv2EvjQiz9cwdhdZ6M9BVmejhI20j6ETj54
-	x79PRIXjdGbhiyDWF0x80o3f6qnSQLj3vuP5TaNfcP9xtkKT32807oML5Ipl915+UKR2GpxU4hu
-	T+yXQQQ==
-X-Received: from pjp5.prod.google.com ([2002:a17:90b:55c5:b0:37f:acb7:9d81])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1a8a:b0:37c:18e0:90dc
- with SMTP id 98e67ed59e1d1-38fbc45a7abmr414580a91.16.1785514098749; Fri, 31
- Jul 2026 09:08:18 -0700 (PDT)
-Date: Fri, 31 Jul 2026 09:08:18 -0700
-In-Reply-To: <b78bfee9-29f3-4044-8ac7-f294b3cd0ad8@intel.com>
+        bh=bm06E1ea+m3fCfij6trKrrVxSCnF5pTP6S2pONTnQSo=;
+        b=pTghIyOe62PgDV81IYxuasZ8wR9k2ts3fHw/9PqdFfI6J07IdrppisWFmNK1nw1kS5
+         w9sAKEfbxvs0VBf2y620jOEuYCYwIzQv/Gaavtv9sIcsdykxh6Lr9dAUzKe7eOt8DRZ9
+         OmvWO17ZfM1erWIy/UN6xQqK7x6Ux0b0XvtI3RnsEseYKW+pRXBia7zeYnTflfpYhMma
+         GbnOegdeHLgDV2jPLQNNqojArBKLSjc8OrKGRg5FPAfWJuVG3c+95W87UR1IdBuucufr
+         vHzaA/azQZggl7b6OfuEVh/ycaCr3JswLssYmOUITxPVOOuM0hdA4bBFM7M4HUmldGyv
+         NUHg==
+X-Forwarded-Encrypted: i=1; AHgh+RpkQ9h5k4dXtHtavp2z6pAVqdj+KVRO2Az7UsAOFhcNPzArbyxfNXO3SSCyrQ8wOnxsxjMU7Mx8GwePKPE7Usg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi8Zr90fUllP8f6WlDO7C3MGLLDqhKhg4z79OXBKzYgIUlFe1j
+	u10NjUgM060W/TWuHZnLactnBIH6Zal9QqfB1iGnpUFIMoIbY+Zf8B8w9TrlrllodtpklTuWYOz
+	r7uDB3Q==
+X-Received: from pgl1.prod.google.com ([2002:a63:b01:0:b0:c99:7baf:125f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4091:b0:84e:4d6:78fe
+ with SMTP id d2e1a72fcca58-84ee47dc3aemr250368b3a.3.1785514308039; Fri, 31
+ Jul 2026 09:11:48 -0700 (PDT)
+Date: Fri, 31 Jul 2026 09:11:47 -0700
+In-Reply-To: <d3fef015-0546-4993-b354-a8464d79e48c@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,10 +59,9 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-1-35f9aec2aed2@google.com> <b78bfee9-29f3-4044-8ac7-f294b3cd0ad8@intel.com>
-Message-ID: <amzIckjuwf0JfINI@google.com>
-Subject: Re: [PATCH v9 01/41] KVM: guest_memfd: Introduce per-gmem attributes,
- use to guard user mappings
+ <20260728-gmem-inplace-conversion-v9-18-35f9aec2aed2@google.com> <d3fef015-0546-4993-b354-a8464d79e48c@intel.com>
+Message-ID: <amzJQ8u8I18B4Gdm@google.com>
+Subject: Re: [PATCH v9 18/41] KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
 From: Sean Christopherson <seanjc@google.com>
 To: Xiaoyao Li <xiaoyao.li@intel.com>
 Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
@@ -96,41 +95,84 @@ Content-Type: text/plain; charset="us-ascii"
 
 On Fri, Jul 31, 2026, Xiaoyao Li wrote:
 > On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
-> > From: Sean Christopherson<seanjc@google.com>
+> > From: Ackerley Tng <ackerleytng@google.com>
 > > 
-> > Start plumbing in guest_memfd support for in-place private<=>shared
-> > conversions by tracking attributes via a maple tree.  KVM currently tracks
-> > private vs. shared attributes on a per-VM basis, which made sense when a
-> > guest_memfd_only_ supported private memory, but tracking per-VM simply
-> > can't work for in-place conversions as the shared/private status of a given
-> > page needs to be per-gmem_inode, not per-VM.
+> > Update tdx_gmem_post_populate() to handle cases where userspace requests
+> > "no source page". To handle "no source page", populate (perform
+> > TDH.MEM.PAGE.ADD) using memory in-place at the target PFN.
 > > 
-> > Use the filemap invalidation lock to protect the maple tree, as taking the
-> > lock for read when faulting in memory (for userspace or the guest) isn't
-> > expected to result in meaningful contention, and using a separate lock
-> > would add significant complexity (avoiding deadlock is quite difficult).
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Tested-by: Shivank Garg <shivankg@amd.com>
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > ---
+> >   Documentation/virt/kvm/x86/intel-tdx.rst | 4 ++++
+> >   arch/x86/kvm/vmx/tdx.c                   | 8 +++++---
+> >   2 files changed, 9 insertions(+), 3 deletions(-)
 > > 
-> > Co-developed-by: Vishal Annapurve<vannapurve@google.com>
-> > Signed-off-by: Vishal Annapurve<vannapurve@google.com>
-> > Co-developed-by: Fuad Tabba<tabba@google.com>
-> > Signed-off-by: Fuad Tabba<tabba@google.com>
-> > Signed-off-by: Sean Christopherson<seanjc@google.com>
-> > Tested-by: Shivank Garg<shivankg@amd.com>
-> > Co-developed-by: Ackerley Tng<ackerleytng@google.com>
-> > Signed-off-by: Ackerley Tng<ackerleytng@google.com>
+> > diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
+> > index 6a222e9d09541..d8d9409120e61 100644
+> > --- a/Documentation/virt/kvm/x86/intel-tdx.rst
+> > +++ b/Documentation/virt/kvm/x86/intel-tdx.rst
+> > @@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
+> >   Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
+> >   provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
+> > +If guest_memfd in-place conversion is enabled, pass 0 for @source_addr
+> > +to represent "no source page". A source page is required if in-place
+> > +conversion is not enabled or not supported.
+> > +
+> >   Note, before calling this sub command, memory attribute of the range
+> >   [gpa, gpa + nr_pages] needs to be private.  Userspace can use
+> >   KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index d1af0a752e97e..e890da5f18aed 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -3192,7 +3192,7 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+> >   	if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
+> >   		return -EIO;
+> > -	kvm_tdx->page_add_src = src_page;
+> > +	kvm_tdx->page_add_src = src_page ?: pfn_to_page(pfn);
+> >   	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
+> >   	kvm_tdx->page_add_src = NULL;
+> > @@ -3238,7 +3238,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
+> >   	if (copy_from_user(&region, u64_to_user_ptr(cmd->data), sizeof(region)))
+> >   		return -EFAULT;
+> > -	if (!PAGE_ALIGNED(region.source_addr) || !region.source_addr ||
+> > +	if (!PAGE_ALIGNED(region.source_addr) ||
+> > +	    (!gmem_in_place_conversion && !region.source_addr) ||
 > 
-> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Sorry, I still want to discuss why we only allow in-place PAGE.ADD for
+> gmem_in_place_conversion only. Though Yan raised this opinion[1] in previous
+> v8, I'm not quite following her argument. So let me try again.
 > 
-> <...>
+> I think in-place PAGE.ADD of TDX doesn't need to depend on
+> gmem_in_place_conversion. There are two use cases actually.
 > 
-> >   static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
-> > @@ -60,9 +68,25 @@ static pgoff_t kvm_gmem_get_index(struct kvm_memory_slot *slot, gfn_t gfn)
-> >   	return gfn - slot->base_gfn + slot->gmem.pgoff;
-> >   }
-> > +static u64 kvm_gmem_interpret_entry(struct inode *inode, void *entry)
+> 1). Userspace sets the gmem page as private, and invokes the in-place
+> PAGE.ADD by passing a 0 source_addr. Due to patch 16, the target PFN will be
+> ADD'ed to TD as a all-0 page.
 > 
-> Ummm, I'm not sure on the name. It doesn't look like KVM's style?
+> 2). Userspace sets the gmem page as shared, and writes the desired content
+> to it. Then converts the page to private, and invokes the in-place PAGE.ADD
+> by passing a 0 source_addr. The target PFN will be ADD'ed to TD with desired
+> content.
 > 
-> Maybe, just kvm_gmem_get_attributes()?
+> For gmem_in_place_conversion == false, only case 1) is possible.
+> For gmem_in_place_conversion == true, both case 1) and 2) are possible.
+> 
+> Basically, this patch is changing the behavior of KVM_TDX_INIT_MEM_REGION.
+> Before, it returns -EINVAL when region.source_addr == 0. Now it wants to
+> allow the "region.source_addr == 0" case. If we can allow it
+> unconditionally, why bother adding the restriction to allow it only when
+> gmem_in_place_conversion == true?
 
-+1000, "interpret_entry" is extremely vague.
+As I said[*] in that thread:
+
+ : Because retroactively adding support for out-of-place conversion is pointless
+ : (requires a userspace update for a feature that's being deprecated), KVM can't
+ : generally support using the source for out-of-place conversion (it's effectively
+ : an obscure zero-page optimization), and IMO rejecting the out-of-place conversion
+ : scenario is valuable for KVM developers, e.g. to help newcomers understand what
+ : exactly is and isn't possible.
+
+[*] https://lore.kernel.org/all/akMPZePBdwQlD74H@google.com
