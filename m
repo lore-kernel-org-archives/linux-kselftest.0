@@ -1,168 +1,106 @@
-Received: from mail-pl1-f226.google.com (mail-pl1-f226.google.com [209.85.214.226])
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C3C3D5668
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B0F3D7D67
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 23:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785539771; cv=none; b=cHv9Ax580Eflsl4kZq/g5zr//dtYXTD1ExB59eulmvaNkV63wkCE8OsLofjkxMv2TkU6tCC3WJ72r+5mDP5s3NgC2BQvfXDEcfmVRdWLyE4Qe5bhFv38nHShPWYDUfNywIZXXRwTpRZnP+qyP56dwrTujjBXBSdKh8cpGy05CZw=
+	t=1785539774; cv=none; b=eK7wsxTuT6+X7Gv0y7U66lDdVj7vFSE5Eeq1gfy6LYGkPkjWy53cSDhNw5Xwufd4KIa6bveP4eXzR1gjrks/YcceCTRp2mpYRZy2+nCh/0KlH0VNNpuodJ/hrFeWYy3+421AXplGnoGjiCXdTtVbIIrL36z+l/YUBq4bmoBYqKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785539771; c=relaxed/simple;
-	bh=UhkbNNATlf7EoN+UKbHM+mV6TO/MAfeNM22oA+WBTDw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EUw/BXy3w2Ui3P/6TyhqDffwjPxa8jiAB3u08P8fddjQiYOjJu1ziSzDheEduggGXwzmoZR5M8+bZ56Cmttyf93v1CXLmB7S3GzQl+oxgoBfKjAhtRNxSIk2LktZ6g3ekm6d5WY0ApTeCDgqz9uFuaNZAoJ5BQZPVU3ctFVkAVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Cs0Lrt42; arc=none smtp.client-ip=209.85.214.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1785539774; c=relaxed/simple;
+	bh=A2ZszD5oB/5IQjIY93Gpv4YTCK5z3C0SzJKpHpheYqk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=q4B5P9awo/Hbnw+fyoTr+BnkHw+ELECbH1ryslavBGvdjKZoHFM1OSfKmU0Io/SI8x0fd3aUs/Ir5AVmyhHseHffGRfPXPfofioBN2WrsGJj3C19iX9CUUoQOB2C/KCuKicml2Bx7xPwqw5D1ahaGXfuB8/g53RSXzj130z+qbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A8OuXPAN; arc=none smtp.client-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Cs0Lrt42"
-Received: by mail-pl1-f226.google.com with SMTP id d9443c01a7336-2cedda2ce6fso12729795ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785539769; x=1786144569;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=78eASuWYN+bdMC8EWrF3gOKxrSi6Ec2rxlN0ZtVlNR0=;
-        b=c2OXXLC+2cPMzFv12Z9OtrSwkNAVA4xrkiGKI5rKGYkyj1o/mkWaspuqsq4mmfxNq6
-         8ndYcESgyWfYav/u35qqQsfDuP2klMPKCfBDjzlMLsr24s4mzP7N0hfDc67l0Rf5R1IW
-         E3tcp9eXnkWgH9RlNPqG9SbiEKq0J06+TsHz9iUZt1I9TjZ0m+EdOtReFiAIzPzwfW1k
-         XH1nyfQwQiw+psxt1M8zw5p76uO34k65q4wFfSeWiy4/rpcc8kUU1yxHOjDbPIwsEv4s
-         txCnpHkJgNNoF+eR4kZVeJs7a5ccI+wywCqa6c7NyewtPD8ei7go+vWqsioJDNiYWv52
-         0JTw==
-X-Forwarded-Encrypted: i=1; AHgh+RpRcnFE9qCsI2cacB8/AdVGa+RPfJWXahtIZJAZ3I2X/l0fvThtFDvugahEoVjftz/GUbiUVXS8JIQlulfyPOc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTbF6Wb6r5W7GVe74bTxTdBt+ugA4mkGduZegt0TCSNbVXclIJ
-	a1xjumzauVMYNSQcV9wk1HFfP0Ze/q+mTTZ2btgZ5ITB9Xvu+Wh+WRbGDK9UkY3VG0PXt436oUh
-	RunYIir8SBx7dO7zYcjRXtAlLVXOResvVcD6szaY1V8e9LYIsuxS6IEr0pqYA3n1p9i+g1jCObo
-	ryMFuKl1Nz0TkPKWI/tzlrM+mr3iwB/qovIHghNnz3kKmdN/PuE8wi26c0wToJL7D+84nSYzrf5
-	FlR5RIwgZyYtzAUVYlZYCzPCjRm
-X-Gm-Gg: AR+sD11fRzbUzWX6TgfxhJXfXWQwAfkwidsgILAujBjs8FahgfAIW1FK/Vobi5prIYD
-	LeBR4ZG5HUku8y8H+L2HOJzd0HNckmO/xQ7ktdGCSgHoS/NoXNCfFNoiT5fo6/kYuL2tuGTG05p
-	HGC5hHzIjzZnZzvk/aYglctCPSCXa9D1+TUVZo9qfl5+vEpNhC6VEniAIiYeNo5djp0/W+Jfcvv
-	ZAwE8+6XXKzbOsbT3U4AMq/5erPq8tMv3zaZlp8EsIy0R3h8JWEEYdMMZczI/QbI48yQ42AfewS
-	4fVQ/kQTJRiOe2boVaVmxTjojolrDGsqzmWgZxamH8jWOW80nuLWMuHXiVmJSrG/GZur+KxCQB+
-	46ODe/J/hiZnWWox15gqlJbjODdNxe2txHbDvixcLzTd8rd16DqRwgduvG+J6iANiNMsTg287oa
-	rHOvTv/N0W9lUK1V6ARcU5UaqwKwwfudRJyVr284PA
-X-Received: by 2002:a17:902:f70c:b0:2cf:dcd4:c646 with SMTP id d9443c01a7336-2d052462f7fmr15664355ad.33.1785539769249;
-        Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-26.dlp.protect.broadcom.com. [144.49.247.26])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2d04b1379f3sm2350435ad.38.2026.07.31.16.16.08
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 Jul 2026 16:16:09 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbb20f82a0eso2001917a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:16:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A8OuXPAN"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38dd87656d3so2062306a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 16:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1785539767; x=1786144567; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785539773; x=1786144573; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=A2ZszD5oB/5IQjIY93Gpv4YTCK5z3C0SzJKpHpheYqk=;
+        b=A8OuXPANnLkDjarhzKPe24I6SF43B15rvif1t1SQ0QC67vSCeuD6AXVGy/D3nWeQNH
+         Pav0kVzw0SgEy1O6C6cpRR7MXAUl4tz2Quzdj8/Un9nv4U27NsyY2Ly5RZbgBJM25zWT
+         uOd0UGXyFkUXkVj+Fs24OSsNHhGtSIr8B0EFeo8CBFPW2M4EsQLoLlPsntwau+rxy0rv
+         hWAEEF3RVWKmW+41MAQlwEGylETmDUiRym/EHVy/kwogCZFjncvpZ8pdClWKVMGbpFDF
+         p3b+cddI/bBOLzuiReaGe+Q+I5EWk/HZT6uUxA4aEICIRh0aHVE18tHma2p7n0bHZDAu
+         vV4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785539773; x=1786144573;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=78eASuWYN+bdMC8EWrF3gOKxrSi6Ec2rxlN0ZtVlNR0=;
-        b=Cs0Lrt42aP9e1MzzKRdbLlr8PkSl839yKbCaIS1bYUOcNo1nXdkJQXf7RAYK76h9r2
-         myLMkG2oUS4+HzaHJK6ypPoitMacpz/hRgr9NRET1ms9wE5lSYnFHDhEhCPy/jSdTP6J
-         dU5lfpGEG2l0D6WdsIK+6MYORxynqQYZOUUm8=
-X-Forwarded-Encrypted: i=1; AHgh+RrFs8dJCRIrxiTNSM5QSMfczarVlZjCGZKrZq1BaMkfsvfUBbZtdSdZxZVT9F8NDfkGCz70RhXN8eCN00o8DDQ=@vger.kernel.org
-X-Received: by 2002:a05:6a21:3113:b0:3bf:b60b:da95 with SMTP id adf61e73a8af0-3c92a88f651mr1347630637.60.1785539767356;
-        Fri, 31 Jul 2026 16:16:07 -0700 (PDT)
-X-Received: by 2002:a05:6a21:3113:b0:3bf:b60b:da95 with SMTP id adf61e73a8af0-3c92a88f651mr1347602637.60.1785539766919;
-        Fri, 31 Jul 2026 16:16:06 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e04506csm10341357eec.17.2026.07.31.16.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2026 16:16:05 -0700 (PDT)
-Message-ID: <b8ec703e-145f-4466-8d4a-a67740098c15@broadcom.com>
-Date: Fri, 31 Jul 2026 16:16:03 -0700
+        bh=A2ZszD5oB/5IQjIY93Gpv4YTCK5z3C0SzJKpHpheYqk=;
+        b=iqhvFoMm2619X2eU75uWryVGl58Ia4K2hz9ewE17LPyziit1s+GP8UiYr4wZMc8/Ls
+         emiu8fnjYI8cI6/EwrTkxhVymtdxiAirbuu8wH1RGIr22Ky7wIALmB03zHxfEKB+3RX7
+         dqFRh5+6+yojCciGKZYJAJ56yqpCv/3/VjZnprEy0lM0i+CXJPVbFdEkHAnnjM7UvqCT
+         QCpA123P6BA2ChQO98KnY94OKIqtYwI0iU+GL88eTsMzpgPzas3DRgGdNOsOAEaIFURb
+         nIm8b6ZBUxHBdJjNAtVd/invj5g4lxGZpBpq0k/NR02LDZTlqL1hOxBU07MgGoLTFzSu
+         kPcQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqd53haB3tgNGvEs2esC+Ilg4RZ+UvQYmO3v6TPJ9hDS82FsS5IkkWF7Zu6ZB9VyqvQ9ZNnt76NtgDeVadPZRg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxP3N9GSe4ZJaF6cBDRMFCP5CMkTgcEEuggrr/KT+TS/VH1Atsw
+	5n7mndgWdafWD7f9td+5SSf4QQjcNfDr39vakkjNqT25ij7Vi98cmcqur9Ek3dgrURKGKpjZ6Oz
+	mswn94w==
+X-Received: from pjbqx12.prod.google.com ([2002:a17:90b:3e4c:b0:38e:a577:5cbd])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:584e:b0:38e:76f8:fcbe
+ with SMTP id 98e67ed59e1d1-38fbc561b48mr1327142a91.29.1785539772383; Fri, 31
+ Jul 2026 16:16:12 -0700 (PDT)
+Date: Fri, 31 Jul 2026 16:16:11 -0700
+In-Reply-To: <e8e7554debef481d13265f0870e847e2fa37f7c2.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH stable 6.12 0/9] Kunit backports for older systems
-To: Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>, Kees Cook <kees@kernel.org>,
- Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
- Tiwei Bie <tiwei.btw@antgroup.com>,
- "open list:USER-MODE LINUX (UML)" <linux-um@lists.infradead.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)"
- <linux-kselftest@vger.kernel.org>,
- "open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)"
- <kunit-dev@googlegroups.com>, bcm-kernel-feedback-list@broadcom.com,
- Greg KH <gregkh@linuxfoundation.org>
-References: <20260724214119.1066665-1-florian.fainelli@broadcom.com>
- <2026073005-release-puzzling-8f07@gregkh>
- <20260730203700.stable-0007@kernel.org>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260730203700.stable-0007@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Mime-Version: 1.0
+References: <20260703212145.343527-1-dwmw2@infradead.org> <20260703212145.343527-6-dwmw2@infradead.org>
+ <amPWX8lKXw2KS_kZ@google.com> <e8e7554debef481d13265f0870e847e2fa37f7c2.camel@infradead.org>
+Message-ID: <am0su482WLEa3ojQ@google.com>
+Subject: Re: [PATCH v6 05/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/30/26 19:39, Sasha Levin wrote:
-> On Thu, Jul 30, 2026 at 02:38:42PM +0200, Greg KH wrote:
->> Many of these are not in newer stable kernel versions.  So can you send
->> patches for 6.12 and all newer branches (i.e. 6.18.y and 7.1.y) for the
->> missing patches for them, and then resend this 6.12.y series and we will
->> be glad to queue this up then.
-> 
-> The gap is smaller than it looks: 7.1.y already carries all nine
-> commits, and 6.18.y was missing only two of them, "kunit: tool: skip
-> stty when stdin is not a tty" and "kunit: tool: Terminate kernel under
-> test on SIGINT". Both cherry-pick to 6.18.y with no adaptation, so I
-> picked them up there first rather than making Florian respin.
+On Sat, Jul 25, 2026, David Woodhouse wrote:
+> On Fri, 2026-07-24 at 14:17 -0700, Sean Christopherson wrote:
+> > On Fri, Jul 03, 2026, David Woodhouse wrote:
+> > > +4.145 KVM_GET_CLOCK_GUEST
+> > > +----------------------------
+> > > +
+> > > +:Capability: none
+> >=20
+> > Why not add a CAP?=C2=A0 The check in the subsequent selftest is quite =
+gross.
+>=20
+> Because nobody would ever use it in practice anyway.=20
 
-Thanks Sasha! Before seeing your email I had sent out the two missing 
-6.18.y patches:
+Yes, the selftest will.
 
-https://lore.kernel.org/all/20260730190329.3388222-1-florian.fainelli@broadcom.com/
+> Even if the ioctl is present, you *still* have to try it and fall back to=
+ the
+> old method because there are ways that a *guest* can force master clock m=
+ode
+> off.
 
-> 
-> With that done, queued the series for 6.12, thanks.
-> 
-
-Great, thanks!
--- 
-Florian
+That's totally fine, but userspace, especially for selftests, needs a way t=
+o
+know the ioctl exists and _should_ work.
