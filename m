@@ -1,97 +1,112 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F7514A60F
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 05:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC7A3446A7
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 05:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785475157; cv=none; b=ITkxU9r+B5AmOzcbji66alIh8/NqQhsLoFzgBRCtWAC3fOt67KalwjHsiZPj9mf6WoClH3Rbkn+7yz7dnlrmGlpgOzI9h9aOSdjJBxF3XwZ5BLIsJSBFrgLhTNifKVa6cTBjhMfDX448ydp69oMmcFInoyZ+8fMkddGdGmp66Z8=
+	t=1785475252; cv=none; b=UJ2GdWMKzjovX2MqR8SBgCHbHbR166DemQ7a4AfGfAneTJHM4TPd0W96YJkJ8/VI789/LsMOfb71ciMuKe3QNQ9KrT3XDrQvVLLukUuHerdU1myA3N5nxmdwHwvNaoUmKBWNrRgGyopEDm4mjRhPB+9zwOJ3bJq3ruFQA4w9VhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785475157; c=relaxed/simple;
-	bh=Xl40XVAbl5/NEfxk8jBsC+ldmXn8QF0CTbVLOG5vVak=;
+	s=arc-20240116; t=1785475252; c=relaxed/simple;
+	bh=4DE+BGGFZ3lbTaMXTgeG3KlatLYDVgNbDOjJ5MlJ84w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UQ28v90edheNnLAv9aos+dN6HLyDa3g/X973L+aLkJAQhZIBXfOrbI/NgSF/CVeX96sWdAsCRK+U1cojnobHtCajcnKI9ZkEq92mk2BozkewXjd7JLALnVzqdFsVH7N1IYaXA4Kf0sS7JrJ9PPRuSD7rUpEV0EQHVcxOho/cD9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hk8TxX8i; arc=none smtp.client-ip=95.215.58.183
+	 In-Reply-To:Content-Type; b=FUsVyWEAXX1kuGZ5wH8D39gD1Ldeeu4c6tvLTouf4lxrRyY5egvXe8tu8m+F8q+DBTo1PXc8CdULi3Kh2Wr6wA+Onib7JF7klsrCn9XsC7IjHIIcKfdSISsv8gN34YlHn3D2Kx3XwNmRlXl5ZRSGXOswz/CQ4L+Y3XHXx2L376Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=olbHzuCL; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hk8TxX8i"
-Message-ID: <6ccbcd6b-ef0e-41d8-a5a4-80b7e94c7fd6@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="olbHzuCL"
+Message-ID: <66eaf62b-202b-45b9-8934-fbbc80caa84a@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785475143;
+	t=1785475237;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9w+5s7rfo24271BZftg+qqsMB69AhQoZJfr2nqQsJY4=;
-	b=hk8TxX8izVpu5swD9haQQPntp1QZZfKasPOxoobkBvtgc2AiqrKhl4/xBr+Bh42EwAqOxA
-	qk0BQldKNcFoTnrPh89FrLaOOGMEyrJWK2Ngm3J+RE3/QGNDtTPlWg9HiNr0/uEjREoO1B
-	Rp2CBsnl5rTWQeOxUbapFfEJ7Fca39A=
-Date: Fri, 31 Jul 2026 13:18:40 +0800
+	bh=Bc45Iw8dDn/v0HbunpRl3SnMCcbOwMXJUnAbG4NHxoo=;
+	b=olbHzuCLiFlT8JfA0UUxWbjzsTO96XucjaJv3ffWeK86sN/xzGyiPRI6amgrXYNjC1sNqr
+	B14JkOA4eBFtYuYeQE1XGfW6E350xzo+yG1MAeB3Dri7p5qWTrRWvPdwIIG+MwDgQb+Ogz
+	g1SBimTsEB7j7pez65JAzAhpM7T6edY=
+Date: Fri, 31 Jul 2026 13:20:15 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Optimize string scan kfuncs
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix sleepable check for tracing prog
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
  Kumar Kartikeya Dwivedi <memxor@gmail.com>,
  Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
  Emil Tsalapatis <emil@etsalapatis.com>,
  Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Rong Tao <rongtao@cestc.cn>, Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
+ Sechang Lim <rhkrqnwk98@gmail.com>, Varun R Mallya <varunrmallya@gmail.com>,
  Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260728145727.45153-1-leon.hwang@linux.dev>
- <20260728145727.45153-2-leon.hwang@linux.dev>
- <CAEf4BzaDhyPm4ERJi_0BTW3jLaqVfYybLKDWg6Pub2=8Ca7P3A@mail.gmail.com>
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <20260725132624.78373-1-leon.hwang@linux.dev>
+ <CAEf4BzaoQaODE4F1wfrp37=83bePY=gKpunacKr3rmO230+B3Q@mail.gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzaDhyPm4ERJi_0BTW3jLaqVfYybLKDWg6Pub2=8Ca7P3A@mail.gmail.com>
+In-Reply-To: <CAEf4BzaoQaODE4F1wfrp37=83bePY=gKpunacKr3rmO230+B3Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 31/7/26 07:17, Andrii Nakryiko wrote:
-> On Tue, Jul 28, 2026 at 7:58 AM Leon Hwang <leon.hwang@linux.dev> wrote:
-
-[...]
-
->> +
->> +               if (char_at <= zero_at)
->> +                       return pos + char_at;
->> +               return nul_is_match ? pos + zero_at : -ENOENT;
->> +       }), err_out);
+On 31/7/26 08:07, Andrii Nakryiko wrote:
+> On Sat, Jul 25, 2026 at 6:27 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+>> is allowed to attach to '__x64_'-alike prefix symbols.
+>>
+>> It is because the verifier does not verify whether the symbol is a kernel
+>> function or a bpf prog. That said, a sleepable tracing prog is allowed to
+>> attach to a bpf prog target whose name has '__x64_'-alike prefix.
+>>
+>> For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
 > 
-> looking at the above code, I'd say it's just not worth it. Too much
-> code and complexity, IMO. For the absolute majority of BPF programs
-> this small speed up won't matter, while for those BPF programs where
-> doing tons of bpf_strstr-like operations is the essence of those
-> programs and has a huge impact on the performance, they can basically
-> implement and maintain this complexity in their own code base.
+> we do have addr, so we should be able to distinguish between attaching
+> to kernel function vs BPF program, no?
+
+
+Yes, we can distinguish a bpf prog from a kernel function by addr.
+
+I'd prefer passing 'tgt_prog' to btf_id_allow_sleepable() as a simple
+change.
+
 > 
+>> prog, and copies buffer from a user pointer with bpf_copy_from_user()
+>> helper. After attaching the XDP prog to lo interface, the kernel BUG
+>> could be triggered by 'ping -c 1 -W 1 127.0.0.1':
+>>
+>> [    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+>>
+>> Fix it by disallowing sleepable tracing prog always when its target is
+>> bpf prog.
+> 
+> what happens when we freplace sleepable BPF program/subprogram with
+> another sleepable BPF subprogram? And same question for sleepable
+> fentry/fexit program attaching to sleepable BPF program? Is it
+> something that just cannot work or we can actually allow that?
 
 
-Agreed on the complexity concern.
+Currently, sleepable freplace/fentry/fexit progs are already disallowed
+from attaching to bpf prog, because btf_id_allow_sleepable() returns
+-EINVAL for them (except for this BUG).
 
-Let's leave the str kfuncs as-is.
+Since no one has proposed relaxing the restriction, I'd like to keep it
+as-is when fixing this BUG.
+
+I'm not sure whether allowing it would introduce any issue.
 
 Thanks,
 Leon
 
->> +
->> +       return pos == XATTR_SIZE_MAX ? -E2BIG : -ENOENT;
->> +
->> +err_out:
->> +       return -EFAULT;
->> +}
->> +
-> 
 > [...]
+
 
