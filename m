@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C314C3E1694;
-	Fri, 31 Jul 2026 10:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B933E4C98;
+	Fri, 31 Jul 2026 10:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785492838; cv=none; b=XQRhlh3Rg7oTI25V043s1pQ6JcfwMCb/3yQdpXU1ptfzgHHuDONxUaiLDaELZGb5n/I8d8gJYc1TM0+58dJ9559maO0j/1947Vggi5PWoWh+FmkXvsStj01Bwjo86mOP7r8OXovisDIt/ysgFiHeEsV5JENlMsEeCGdKt/QmjbE=
+	t=1785492845; cv=none; b=tXJwyKh6eCk6c4r+QLBYT8n0VCQ1a13m867qA3ajSqLKRwwKrnA/6Ae0e64auRYIny5h8FJ+WQMhNK9vA5iLLtO74ptXIjyvLDC91P2lJX5ZhJf5jDVov14/BmCVv8+b3SQie2aXw6TxmBVhEv4smhthg55MEBsBzIrYF+FHpNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785492838; c=relaxed/simple;
-	bh=rI4kD2TwEQlbmRB9Uvl6bgmy4k9IQvZx1edgQ1gLWsk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XV+uzma6pqfzo1YyOmfeHBpoDO693oa5AFfAMF0pySkNbyBobV/SbiTIYUudXOu0xOTlUC7T6KuVaw7763dW66NLLzelOQWsRPYdumxWCDUPEaxVew/zvCMc9Oi3HGwTKyVwgP+0XGcNROoHsW9CS+MVxV/vr4BtXG835UEM0ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=MYYIYtx2; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1785492845; c=relaxed/simple;
+	bh=Oj4udiEjmpiOjfHea+V/PwK9ca6Z32nug57dxTay9Ho=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=g7JLSzaKBQR1hC/pdEq3OFrfgq68zOQD7WFer06o/b5fPL6JAk+0+FO4JvWM1AYrLFgZm/fV3Wv/0MxWnb3AiWwRQ5LcUed11rVe1+dpKyb/5oc1/rhqhKEnta6l1HUiOSp0SqdhSEJ6I+1DSAO84NzPeiMVrW+E3US5KqPtZqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=v/AfJXjO; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="MYYIYtx2"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="v/AfJXjO"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=xv27c0/vD/Df/b4Y/cIi4N2Epf5NFx+e9qZ5FbCg3WY=; b=MYYIYtx25XZoY10teoNoDLot/E
-	Gl9sbTwyvUQ6S0g5EIbUCl+mr6lZVAfMUoeka7/OYi6q25930ikXJMu4itu6NyBTiSfjit93Hv3xm
-	rzBoWiFMrELqo/27L1V0wCEQ8Go7WUjnhMQ1I5ow6p9jWnT33J1Z8tbXfjYKCovV3UVt7ayuN7ilz
-	lZIe5uH+WaOOXwoUcJhDOqkfklhFMi+bHhhvAL/fXfFa2MfRBONhcEXgH/6hGcq7n76ik3ZTFAGBi
-	PlViSh1cEXzz6f7rWorRnvX9mKWcX54xMDD2E9gkM3hvm0cljVTFVF7f/cf0sVJTwhwTg04HZO/83
-	TJxDTG6Q==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=ubcjTD4WMXtsiq8p2FJU6LDktp9obYXwMtyJ483ghMU=; b=v/AfJXjOnFdaw8rUFIUcYMWkI4
+	qQN7iICNQcgMvwpO7u92p4W+7U0OoO+jXPOymbTRLEutPeAYZkqNhghiRJmbEkVzOGL1gFhcKpgei
+	+wsd+HGExLTqCGMKNZVuHivIcLKDmycv2G9cd+TVaZMSvaLhR+0vJ64XHkxIkwxgKBFFjlupn4cF/
+	KGqGWjMp+DCVvyWrZKu0rWAxaMV3/tK8/SvZ5z9jH3mXuatdCfzdhB8QGadIv3AONMPX7lp+LARFp
+	Yj2ong1kVQqxYNU3wAxiLPV4JoXrt2meAu21/h+ZiNrin0gRCAZuEPMEABK/X/OAHYr7i8jYmg8pD
+	qlHfDU4w==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wpkF3-009wAq-1P;
-	Fri, 31 Jul 2026 10:13:26 +0000
+	id 1wpkFJ-009wBK-1J;
+	Fri, 31 Jul 2026 10:13:41 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH v2 0/3] mm: kmemleak: default min_unref_scans to 2 for
- verbose kernels
-Date: Fri, 31 Jul 2026 03:13:03 -0700
-Message-Id: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
+Date: Fri, 31 Jul 2026 03:13:06 -0700
+Subject: [PATCH v2 3/3] selftests/mm: kmemleak: drop stale min_unref_scans
+ default from comments
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,11 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAC91bGoC/33NQQ7CIBBA0auQWRczQKumK+9hGgMyLZNaMGAaT
- cPdjT2A2794f4NCmalALzbItHLhFKEXuhFwDzZOJNlDL0CjPuLJoJwXWh5k51uw2VMkL+mMXau
- 9Up0eoRHwzDTyezevQyMgcHml/NkXq/rVf9qqpJIOnUY0xrXOXTw5tvGQ8gRDrfULAi/+m7MAA
- AA=
-X-Change-ID: 20260730-kmemleak_hardened-e80542d1152f
+Message-Id: <20260731-kmemleak_hardened-v2-3-7b9689ac77cb@debian.org>
+References: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
+In-Reply-To: <20260731-kmemleak_hardened-v2-0-7b9689ac77cb@debian.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
  Shuah Khan <skhan@linuxfoundation.org>, 
@@ -61,88 +59,71 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  kernel-team@meta.com
 X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2742; i=leitao@debian.org;
- h=from:subject:message-id; bh=rI4kD2TwEQlbmRB9Uvl6bgmy4k9IQvZx1edgQ1gLWsk=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVA+cxEjDiwoAAfP34NakpeN+bDGV7HTNug6
- phdzcYHNhOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
- bQYmD/4vgOFaWo7gi6XQJHUDIJpkx64lWbF6oOsiz9aXuHUj0eWlHY247RHDUkkSrHA4RPLHVwB
- 8yOO0FqFxl9Aq61ahvmzNu/e3ydpOdB6PEIDDZnaRs7/IWiBZwBMVMnkza+NG6nLTN1D08UtFGE
- aZax4IGjtqWLmhQiCAj7Ti3C4OQn8xiPx8UVTBKVAgjOobr0Lf0pl+RKsSufunk48xYzQFWIFGe
- uwen6kuEq3dxgmeZaAW9adl0kYVyWSzkKhyxSOuRIdGEjQ1GdVAglQFhB6OmiX0UHHSjUr5xe82
- DJROxYxZKkXo+HZZwLNcEl34OXGrEU8VsfSGIwx3DqLjAm/QRYtQOJipkp+iAWdLyxh2upoKet6
- athzJlL1Fylw3WccUK2kZESu679j2EfpoCPsRvrFhVg8zDI/m0r9xWudsexomB8xzV8ObizDDhI
- rAia3+qMrvxtxwmOgy9uPrgMRZ3ZZlIvToQuUhxR19cfp9w0fBj2O3GEOB5/b65UDpzc8RJgfRz
- L7YMWzcbKB4C4bi+ggAqJZdxRl+NPW+S03Fx6NiNsGkOxADK+LJ8ltxhDeRm27n3FGKDKMjUQtf
- MvrNmhaddv5FZgpP5sKdMT8Yg4lCjIH2ImUDAA3VbAho2JBRwEyS/3RS8++ivDA/UbEkCjn6fcB
- DkbErejp9H9e2Ww==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2281; i=leitao@debian.org;
+ h=from:subject:message-id; bh=Oj4udiEjmpiOjfHea+V/PwK9ca6Z32nug57dxTay9Ho=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqbHVAWQRNUMdRa9PHEBXY7Nf8tp4hOStjJKxld
+ uKVu49wgSWJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCamx1QAAKCRA1o5Of/Hh3
+ bXlrD/94O2e9I6iW9tkOQ8YBD5tmLc8N681vxPuVSgqZnf4F0a28eyrsM4SHdjXBOYfkDxqakwT
+ alJi3+n+fVADlOmxOsH3DxPtRzJ9Ips5yCM+oYMqmN5CzknQpLupbeTqAa90hH2D2qGpzlomVR/
+ UJReyIkTFNHj1+OeymYac0D/PQjOokkvuSb8qQPIle+jA2o/kZS58GV+0Vc/VEqX/M1h7K++s+P
+ Zn/3eYAsYavPJpCw6GE+ZN/mNj28KmDWGMOg2LfULmIvqtTqjeAHnqB0Yf77nCKg4oHQjjioh8b
+ zxQ+ZLujJ3CtUixw704ZM/O/qICJSHIBp12aCTgRZ/ilCWL3CEQ17jSFkGXzOSa6y0TrZgVFwSK
+ YkUsAjKJlXGmrk+o/6vAKvz0c+1t/S7lfqpKJYzMRlc0UmVBLXNnNnBohVhPARVK9bHsvI5mNC1
+ IXzaml6bk3bQxE/KNM3lv0G+TfZkA0iKMX+DROuDRl+9JwIO7Pwc5YAquuOA9WaAczOACiIdclx
+ QGIoztu9sCIy8MeK+cA+EQJEWH4rhMVO3etUWzy9kg+jMBKTgOfnpfJrsxnZdv1GJ3cWtC+1lsX
+ hF39qVjOljB08s6XxAVj0gcXIt0fFKbSbOR57nxyDlQtGQ66R4Vo7vM3CZ/n2NpAw3g5xhT8ht5
+ UMv7S0LQJtBOL3w==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-When CONFIG_DEBUG_KMEMLEAK_VERBOSE is set, which means the host is in
-auto scan mode, set min_unref_scans to 2, avoiding false positives.
+The test writes min_unref_scans explicitly for every case, so its comments
+describing 1 as the default are both unnecessary and, since the default is
+now conditional, wrong. Refer to the threshold values directly.
 
-CONFIG_DEBUG_KMEMLEAK_VERBOSE depends on CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN,
-so a kernel built with it already runs the scan thread periodically and
-the user has asked for detailed leak reports.
-
-The confirming second scan comes for free there, so default
-min_unref_scans to 2 in that case and keep it at 1 everywhere else.
-CONFIG_DEBUG_KMEMLEAK_VERBOSE defaults to n, so nothing changes for
-kernels that do not opt in.
-
-The other two patches bring the documentation and the selftest comments
-in line with the new conditional default.
-
-PS: A similar patch (v1 of this patchset) is applied to Meta's kernel,
-in real production hosts.
+No functional change.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v2:
-- Test only CONFIG_DEBUG_KMEMLEAK_VERBOSE, which already depends on
-  CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN; the #if block becomes a plain
-  IS_ENABLED() initializer
-- Note in the changelog that CONFIG_DEBUG_KMEMLEAK_VERBOSE defaults to n
-- New patch: update Documentation/dev-tools/kmemleak.rst, which still
-  documented the default as unconditionally 1
-- New patch: drop the stale "default" wording from the
-  ksft_kmemleak_confirm.sh comments
-- Link to v1: https://patch.msgid.link/20260730-kmemleak_hardened-v1-1-b0b20033b4bb@debian.org
-
-To: Catalin Marinas <catalin.marinas@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-To: Jonathan Corbet <corbet@lwn.net>
-To: Shuah Khan <skhan@linuxfoundation.org>
-To: David Hildenbrand <david@kernel.org>
-To: Lorenzo Stoakes <ljs@kernel.org>
-To: "Liam R. Howlett" <liam@infradead.org>
-To: Vlastimil Babka <vbabka@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-To: Michal Hocko <mhocko@suse.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Cc: workflows@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-
----
-Breno Leitao (3):
-      mm: kmemleak: default min_unref_scans to 2 for verbose auto-scan
-      Documentation: kmemleak: document the conditional min_unref_scans default
-      selftests/mm: kmemleak: drop stale min_unref_scans default from comments
-
- Documentation/dev-tools/kmemleak.rst                | 12 +++++++-----
- mm/kmemleak.c                                       |  3 ++-
  tools/testing/selftests/mm/ksft_kmemleak_confirm.sh | 10 ++++------
- 3 files changed, 13 insertions(+), 12 deletions(-)
----
-base-commit: 78bc8af4affb9a732504eb22eeac7d1e50883853
-change-id: 20260730-kmemleak_hardened-e80542d1152f
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+diff --git a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
+index 3a8576e835c8d..72ded5e6794c9 100755
+--- a/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
++++ b/tools/testing/selftests/mm/ksft_kmemleak_confirm.sh
+@@ -5,7 +5,7 @@
+ # (the min_unref_scans module parameter).
+ #
+ # kmemleak only reports an object once it has stayed unreferenced for
+-# min_unref_scans consecutive scans. The default of 1 reports on the first
++# min_unref_scans consecutive scans. A threshold of 1 reports on the first
+ # scan (historical behaviour); higher values filter transient false
+ # positives where a live object's only reference is briefly invisible to a
+ # single scan (e.g. an RCU tree update in flight while the scan runs). The
+@@ -16,8 +16,7 @@
+ #   - a freshly allocated object is greyed on its first scan (its checksum
+ #     settles then), so nothing can be reported before that priming scan;
+ #     each case below primes once first,
+-#   - with the default threshold (min_unref_scans=1) one scan after priming
+-#     reports the orphans,
++#   - at min_unref_scans=1 one scan after priming reports the orphans,
+ #   - raising the threshold to 2 needs two scans after priming: one is not
+ #     enough, the second reports,
+ #   - the parameter reads back what was written.
+@@ -105,9 +104,8 @@ echo 3 > "$PARAM"
+ # scan. Every case below runs this priming scan before counting.
+ prime() { scan; }
+ 
+-# 1) min_unref_scans=1 (default): one scan after priming reports the
+-#    orphans. This also establishes that the helper produces detectable
+-#    orphans here.
++# 1) min_unref_scans=1: one scan after priming reports the orphans. This
++#    also establishes that the helper produces detectable orphans here.
+ echo 1 > "$PARAM"
+ gen_orphans
+ prime
+
+-- 
+2.53.0-Meta
 
