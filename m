@@ -1,41 +1,41 @@
 Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B15B45A2A4;
-	Fri, 31 Jul 2026 23:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DF123AB88;
+	Sat,  1 Aug 2026 00:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785542378; cv=pass; b=O9Pojydr31gfQQQXyDM9gV6rrbOCfO6tBAZgQ989z7GYUpAjoUOyaDtc+KZcoWn/7R1hyK3/X3ANYyla6hjPqfrosECJp5yuQ/14F/StDXHb9xLvuxZmQu4aRBUBEM30qJjq9ps6bUMWYhqd3LrglTrTwWKf4xgA3loJKM3e8as=
+	t=1785544200; cv=pass; b=fr+Ps8dg1RMs8TSXznBb7HosH3kRlJc4Wlhu2ib4SnCCNDf+Y3ur20wXJmtgfNlVGYFuGbGCW58+JXw/OW1ZenfouhIkXTX8djIgSsE61Mpcf+wSIkGJ2prm1P72BhwzHRQWh+d70LdTUFsF/RZoXJz7W0NAY471bQu1o6zV9Kc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785542378; c=relaxed/simple;
-	bh=VPHQbDALnYKS7N43+ET9wHLrmRaPdi+7heTTk9VLHg8=;
+	s=arc-20240116; t=1785544200; c=relaxed/simple;
+	bh=Oo8ktB1oIe7A3k/8FnlnZF8SdGqYtXFE5XWDIaf8EF0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GfKr+djkS9vaVXQLUhLlNLwh4lMWjM7pYP8QDHj7vF2lBFIPE0IzIDYtsKb/o4gy/OX0TMoqd2G42xARE3XN1Qa+LgTr9g0Di37LX4UhLYAV6VgwWq0LhnCdyzLJyBCZVVs59PBGL4w1HSVAUzsAmLjl6njT1bjLSOlFMKDKQ2U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=DZ91gz7Y; arc=pass smtp.client-ip=136.143.169.57
+	 MIME-Version; b=f4WHY6p9LXN8kB9mYa0D2kSqjYOH0Lh3/aiMAqryq4XDu6ySOEkIwFA8zBZPoJ1qVnuLNt9Hn4zeMezVKCfICl/KzcENY+AyrZr5Nt5lRFRwBZsTONHfsYRNgxfyEh0krrj7rDYNMUECwCwiEebNitEoPZj64HWnslfhc6yR694=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=kFWu6rVi; arc=pass smtp.client-ip=136.143.169.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="DZ91gz7Y"
-ARC-Seal: i=1; a=rsa-sha256; t=1785542362; cv=none; 
+	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="kFWu6rVi"
+ARC-Seal: i=1; a=rsa-sha256; t=1785544174; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=GinOe8bML+u28wYVUfXzt1t0lzzk1GD/9HeeqLYmwaKjfvD1WplNilP5t07ia1cxHsy5IGLFk+6m0qlEop47wpascpsSn+tf2jss0yjHPyutZjLui0yqz2jcqAYC6fYcLI96QB10QoSC9EyI4G9SHmlA4vqXiHJR2IhzYfvgka8=
+	b=i01wJRsiQeC5gayqpJEVCG6YibCHI5mRTHR0hkoWCRPLtfEKZjnmmqpfrA6Y4R0jcl4ZymnXXWzYDhinEmEBQuzW4+0FVEJjkKIGpRwOO5IwYrmQZ31Un2Mw7nvZmetbsx7sqDH3dTBZkhYqlc2vP0ecuc4SDrIHHELL7vRCwIo=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785542362; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VPHQbDALnYKS7N43+ET9wHLrmRaPdi+7heTTk9VLHg8=; 
-	b=XU48SUooZiDoWBhFTZqNAhAZfDu5uMGpT9TId42YOLCINTpBtW3fennSd5nfkYYc5rcsMnOSTiLy6VsVxFg591rFF+u1oTaR5OG4y++BL5JGenKGWPJ4ENoEn/Cf4n5di46H6Vs4/I63Xd9AEtLuVBouj1mOaQKNV+Hng6isojI=
+	t=1785544174; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Oo8ktB1oIe7A3k/8FnlnZF8SdGqYtXFE5XWDIaf8EF0=; 
+	b=JHT44KS66TCVKXm3rWq6dKcrbPf3PNtQkc0MKUiUQEuYU22D/6C05Qfs6q7SHr4G72mEsux2BkCe1nwGyceVZJOa8c34BUxG/qslt7Z1XQqRMmR5CgLtaCiFR3QVAI4Eo31KC4lLLBEhZ+A/+DVeu6AikG49SHu7pubw/u1YvLY=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=iusegentoo.com;
 	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
 	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785542362;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785544174;
 	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=VPHQbDALnYKS7N43+ET9wHLrmRaPdi+7heTTk9VLHg8=;
-	b=DZ91gz7Yxziam/IdXdCoRdyxvAEdliJKJ1I26mfHadrPkV2uakiOF1QMGeNdJPJo
-	KsdkqPVXaELHt2N2kUyU/O3fn5OH79H8DORUH7n0tX+IueMuy+7TmtNrJTL+aSoE+hY
-	JhgJnTo6wcra/b8urFHPXgOKYv6G9OaK6UUEqlC8=
-Received: by mx.zoho.eu with SMTPS id 1785542359399426.66247028501107;
-	Sat, 1 Aug 2026 01:59:19 +0200 (CEST)
+	bh=Oo8ktB1oIe7A3k/8FnlnZF8SdGqYtXFE5XWDIaf8EF0=;
+	b=kFWu6rViw+xps7vC8Dt9W+1EfoTo3fLz0FLv70Gy5HnJ4Df15JlzZqYx4a51sQg+
+	HlRkp3PxAcKAkPHhvmcb/gyg+KoJE3fVt7vR+oRRcaqcBW3S/qZfUus9htej2oUyXHe
+	cg88B/YvlL44Zbm84mSoRY5IovUh3MiJuMyMGrt0=
+Received: by mx.zoho.eu with SMTPS id 1785544171281710.4026826509987;
+	Sat, 1 Aug 2026 02:29:31 +0200 (CEST)
 From: Ali Ahmet Memis <ali@iusegentoo.com>
 To: xiexinet@gmail.com
 Cc: netdev@vger.kernel.org,
@@ -44,15 +44,16 @@ Cc: netdev@vger.kernel.org,
 	kuba@kernel.org,
 	pabeni@redhat.com,
 	horms@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Subject: Re: [PATCH net v3 4/4] selftests: net: hsr: add GRO super-packet forwarding test
-Date: Sat,  1 Aug 2026 02:59:07 +0300
-Message-ID: <20260731235907.204522-1-ali@iusegentoo.com>
+	shuah@kernel.org,
+	lukma@denx.de,
+	m-karicheri2@ti.com,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 0/3] net: hsr: fix shared-skb mutations in the forwarding path
+Date: Sat,  1 Aug 2026 03:29:19 +0300
+Message-ID: <20260801002919.241208-1-ali@iusegentoo.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260731090224.18-5-xiexinet@gmail.com>
-References: <20260731090224.18-5-xiexinet@gmail.com>
+In-Reply-To: <20260728143604.26-1-xiexinet@gmail.com>
+References: <20260728143604.26-1-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,12 +63,15 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-I ran this under virtme-ng (QEMU/KVM). It passes on the patched kernel:
-the SAN TX frame-size average is around 41 kB, well over the 2048 byte
-threshold, both DUT LAN legs average around 1497 bytes, under the 1514
-byte guard, and it reports success. On an unpatched kernel it correctly
-fails, where oversized HSR-tagged frames reach the LAN legs, so the test
-discriminates the fix. The topology setup and the counter delta
-thresholds look sound.
+I reproduced both classes and tested the series under virtme-ng (QEMU/KVM).
 
-Reviewed-by: Ali Ahmet Memis <ali@iusegentoo.com>
+Running hsr_shared_mutation.sh on an unpatched kernel fails both cases: in
+the PRP LAN-ID case all 200 frames leave slave A carrying slave B's LAN id,
+and in the HSR RedBox case the master receives the RedBox MAC instead of the
+originating node's MAC. With the series applied both are isolated: slave A
+keeps its own LAN id on all 200 frames, and the master keeps the node MAC
+while the interlink keeps the RedBox MAC. The test passes.
+
+Reviewed-by for the individual patches sent separately.
+
+Tested-by: Ali Ahmet Memis <ali@iusegentoo.com>
