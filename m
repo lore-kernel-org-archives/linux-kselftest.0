@@ -1,91 +1,97 @@
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from smtp-1.orcon.net.nz (smtp-1.orcon.net.nz [60.234.4.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DE82F1FEC;
-	Sat,  1 Aug 2026 20:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C374A388E4D;
+	Sat,  1 Aug 2026 21:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.234.4.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785615505; cv=none; b=F4N4FlqXNl6GzyFOpVktTT1jWfwusSGPdzGdD3KOTVMBlzTsn7b3XFrkmrW7mmE6kQXFF/4vNFefP09GyP2UHAP1otj2YgSfEpdvng/r0MSiKGJiMz9qKTotkJyWgPdcZgjFVyzEsFiwy81VsAkIcSfi5RHtufhewNO2RaN5NwY=
+	t=1785619211; cv=none; b=KHbO/GUGizsszVlh1UoktRmS7JDD/SbmOjt5surYJS5GvnIaNNoewiphsEiMRZp111Da5VVR6YRc99WuGlNwxQXW+A5Ugzp6MVtMIndRuKaCnmh+Vxf42fz9kiZoJw++bdI/+kRvQ0eWtOYYmFdyFG4xczec+JyzGZWg7+D1DRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785615505; c=relaxed/simple;
-	bh=rhXyF8pIyiyUOoM5S27TLhIQCX7EvbbEBzG41ltrGBY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=A4eUdHgwS8xiwX02tAsUFRAIApZd1ONglcTYC0TXXmAXI2aOwV73RBVNuqxOF6ubIewnJdHXZLztT70t8pS61/WyQEiuC7IUCBBvyMEodrqQK+xJjKOoCsqTuXAe9r2e+HRbthCQGuRIjy0ENUjavl8SxOrhybZ1FvpPM4fhyzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=b1Zvhng5; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+	s=arc-20240116; t=1785619211; c=relaxed/simple;
+	bh=qexUHF92cXHnG8dgDTjIzZ788n68PLsQqzXZyT0m+I8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6Bc4ERTXUb523ZhAv6HdP0xq0wRRSvrt1G3Q9C+I0mn1x3xdZbh8Hl1IYqbctr9vRF31XVahIqDAh+W7vRCqWyMiHvG+RbDjAfR+94RnVpC9an5p2MoQb3t2XWA7hX8KYzJrJlLPGjd2xHxLUWiB243hWgkIDpDjPp6HGUvvMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orcon.net.nz; spf=pass smtp.mailfrom=orcon.net.nz; dkim=pass (2048-bit key) header.d=orcon.net.nz header.i=@orcon.net.nz header.b=TkRoszJb; arc=none smtp.client-ip=60.234.4.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=orcon.net.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=orcon.net.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="b1Zvhng5"
+	dkim=pass (2048-bit key) header.d=orcon.net.nz header.i=@orcon.net.nz header.b="TkRoszJb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=wrh5brteCixAIwSv2QdPqDNRKaKwM8cKGrvEUCnGDaU=; t=1785615501;
-	x=1786220301; b=b1Zvhng5+0n40c7iH9MwnIApyeYOaNkqEZbk4HnEX5PXbbGjYi2LeIx6IPtj7
-	7C64OY8fyUDV+cqlPw14wmH1yFYUmcEhNSTuIuLVucvB+YYS978w2ZJ8pP7j6G8CaK8+dL81y0Pg+
-	2BPrN9MDwxdSUxZrcGkrHRpKHIrDPfMK0AE1QlTWq7GCSNA7lgC21PbLlz5+QyFQCx4AgcvfWV+U5
-	BU/UUt1i508gtK9/LaEtLOlUQgMNDr/IHxcyqgMkD8JW4SPti5XoURdaXHhsiUObnio98DNRbGJ+Y
-	FTg8ltN9H6fnnwXv4ANBJ+bTBcuGkWNYNZ+MF+ULJWlABNvBvQ==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1wqG6S-00000002H4u-4Ap5; Sat, 01 Aug 2026 22:14:41 +0200
-Received: from p5dc558fe.dip0.t-ipconnect.de ([93.197.88.254] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1wqG6S-00000002KhB-35Th; Sat, 01 Aug 2026 22:14:40 +0200
-Message-ID: <3218c2afc2c99394c43a6380b175185af659078e.camel@physik.fu-berlin.de>
+	d=orcon.net.nz; s=s1; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=bMaHB05759hUWh6s2Px/OGZgY5ofdAGTdnYrSFn6HcI=; b=TkRoszJb6BIYbotjw620M8fz/r
+	Nh++5aIWSKPg2L+1k4/s0RWxfnHO6DRJ2ZYlcYQmLRK0gOErfuAoCqbJ+/oASY1Z+2NKWqG8fRRu4
+	6KbeglZrHbTcc0IKZKN/qxaUqrUSsbNGd04ogLM5VPKcEDp9+wkNfoLCQzQ3Hs4OpVeR0hTLRlgnI
+	G/HwD4NxIy6KlsVDd9FzckymInDKbyc4oRltVEC4Z3Ruejvk9NMvWmhpVr+o+3jSD1GUcQ/5vfWVM
+	TyzFTkm0n29H2VnTXy84xt5ibXqiVrazteUxqETOQbIBJOqW6Lk8DtRd1+RWmmM2eD+UeWtSPpvQj
+	Bi+dyjOQ==;
+Received: from [121.99.247.178] (port=11869 helo=creeky)
+	by smtp-1.orcon.net.nz with esmtpa (Exim 4.90_1)
+	(envelope-from <mcree@orcon.net.nz>)
+	id 1wqGVo-0003cd-2y; Sun, 02 Aug 2026 08:40:52 +1200
+Date: Sun, 2 Aug 2026 08:40:46 +1200
+From: Michael Cree <mcree@orcon.net.nz>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Magnus Lindholm <linmag7@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-alpha@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
 Subject: Re: [PATCH v2] tools/nolibc: add support for Alpha
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Willy Tarreau <w@1wt.eu>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
-	 <linux@weissschuh.net>, Magnus Lindholm <linmag7@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Richard Henderson
-	 <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Date: Sat, 01 Aug 2026 22:14:38 +0200
-In-Reply-To: <am5HA7UbmUEEChZc@1wt.eu>
+Message-ID: <am5ZzoODKbVJ8q_t@creeky>
+Mail-Followup-To: Michael Cree <mcree@orcon.net.nz>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Magnus Lindholm <linmag7@gmail.com>, Shuah Khan <shuah@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-alpha@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
 References: <20260722-nolibc-alpha-v2-1-4970e48eb7bf@weissschuh.net>
-	 <am5HA7UbmUEEChZc@1wt.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 
+ <am5HA7UbmUEEChZc@1wt.eu>
+ <3218c2afc2c99394c43a6380b175185af659078e.camel@physik.fu-berlin.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3218c2afc2c99394c43a6380b175185af659078e.camel@physik.fu-berlin.de>
+X-GeoIP: NZ
+X-Spam_score: -2.9
+X-Spam_score_int: -28
+X-Spam_bar: --
 
-Hi,
+On Sat, Aug 01, 2026 at 10:14:38PM +0200, John Paul Adrian Glaubitz wrote:
+> On Sat, 2026-08-01 at 21:20 +0200, Willy Tarreau wrote:
+> > On Wed, Jul 22, 2026 at 12:07:05AM +0200, Thomas Weiﬂschuh wrote:
+> > > A straightforward new architecture.
+> > > 
+> > > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> > > ---
+> > > Only tested on QEMU so far.
+> > > Testing on real hardware would be very welcome.
+> > 
+> > I'd love to, but last year I could fix my serial port (replaced the chip
+> > on the motherboard) and the new one died a few minutes later :-(  I'm
+> > starting to seriously suspect a flaky PSU that doesn't regulate its 12V
+> > output well and that is progressively killing the mobo.
+> 
+> Magnus (CC'ed) should be able to test the patch on real hardware.
 
-On Sat, 2026-08-01 at 21:20 +0200, Willy Tarreau wrote:
-> On Wed, Jul 22, 2026 at 12:07:05AM +0200, Thomas Wei=C3=9Fschuh wrote:
-> > A straightforward new architecture.
-> >=20
-> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> > ---
-> > Only tested on QEMU so far.
-> > Testing on real hardware would be very welcome.
->=20
-> I'd love to, but last year I could fix my serial port (replaced the chip
-> on the motherboard) and the new one died a few minutes later :-(  I'm
-> starting to seriously suspect a flaky PSU that doesn't regulate its 12V
-> output well and that is progressively killing the mobo.
+I had tested it on XP1000 and ES45 with no test suite failures shown,
+but hadn't got around to reporting that fact.
 
-Magnus (CC'ed) should be able to test the patch on real hardware.
+Tested-by: Michael Cree <mcree@orcon.net.nz>
 
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Cheers,
+Michael.
