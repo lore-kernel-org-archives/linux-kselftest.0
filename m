@@ -1,74 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FEE39CD02;
-	Sat,  1 Aug 2026 01:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCF239C637
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 04:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785548424; cv=none; b=SQQtX/ztWA5Gp5gwzwvGK03Ximem1ZqLQYnvogGlQNXNi9bxORtSj+ipOgvjnCMJ6TDPYk8NsZwoAreAKNO1HBouA/2NKQzemiS0vAunCo94nMGKJTdKvj9tV6bvwIPV0WyvgsAXVX4S3BtU+pKtpdOy4B1bzAIYJGgyF2+RUIM=
+	t=1785557592; cv=none; b=Ykzff8yH+GpxO/Zx+6z5AqQmrU8xkUmemmU3cTWDCexRFSnQri6A/rmCXn3L/lxNodxMLRSGNiWx8MZdtWcoKXQgogOGnZ7AyOuEEkeO5sRGi8J4hsu91p65ya/n0hsc5M2Bt7Ve0FcB7p7ZnMMvFIsrN+6ggq58EJCbJqvLCtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785548424; c=relaxed/simple;
-	bh=ST0h2x06Xwc755aSjCRANrMjKXZx/VQqczRH7VaVIII=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZoKeX7vzomcgo0RY0XmqKqvDzBLemiWA8jJOgJVo6J17ZyEmUfLWPhglhrrZfFZmQjCeqPpPgr03sEozFBxBfsTD2SHRhuj/dLC8MHAl26JPFMW9dWyGHdG/Qzh3SsiUFH+/bs6n3M3INy+iDQxjCtd53SQHMBKz/I6xSC3UgqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmQjKhzn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785557592; c=relaxed/simple;
+	bh=tE4aHWnPmx88w/MUAY0jqP8Q0YG2GlCJjM4idzsJ7dc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jDKK+REhF+xY0WpYPyb00ZC+F/XfKmmv6xkTTEg+B7ldizxYFF1YYOGNxQbTocxDQqhZyKYcPOEiNZ6GL16M7nFTz317O+U+KxHgUsM4QEiz8RrPs1vfEH6BRY9PFW/Fkj0qMWOke1CelGb+MwmjhBPBrDFeGcJJFdkkhoZVZ04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S5XtltjR; arc=none smtp.client-ip=209.85.216.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmQjKhzn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 618491F00ACF;
-	Sat,  1 Aug 2026 01:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785548421;
-	bh=EvogDc+M75b9b3TPBdsSj8jbjbVAHwKKv/rtp15v1+s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HmQjKhzn/ZdYh8Sui5um9Q0RA+TgaAE2s/ZXntGsD2jWVfbxEbloW8/EeZsMdPxHa
-	 hQ+JaxgkEWH53qtXb//z683yN7qaCdD6PID52wlEZqEVKxS8ZpFZ9ITzk5YgQLzL+7
-	 EBpXuUgYnDP8Q1W+DLkVxH2WfxWVJEHLgJoWzK+pQyELTnEh8zcz+3iX5cEGuHHMKS
-	 DM1TlQxApWKmZp4uN8sdVsxDqzrkXyeaAR8dWmyPRyMK7eFzrvXZ2hYRZCkIZhVj11
-	 9k+B9dZEgH4gPOvjNJ0G8iRBViCl2cBItlf7mhsKdXL5+QO9BtDuhi5zNWmGrvvdLy
-	 mwJso9j4l2Agg==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>,
-	Rae Moar <raemoar63@gmail.com>,
-	Kees Cook <kees@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Tiwei Bie <tiwei.btw@antgroup.com>,
-	linux-um@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH stable 6.18 0/2] Kunit backports for older systems
-Date: Fri, 31 Jul 2026 21:40:10 -0400
-Message-ID: <20260731211008.stable-0009@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260730190329.3388222-1-florian.fainelli@broadcom.com>
-References: <20260730190329.3388222-1-florian.fainelli@broadcom.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S5XtltjR"
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-38e11baa66eso1532481a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 21:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785557590; x=1786162390; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5XpdFy8Z6PUfDqbqo17LIsT1Kc72p948s1zae/y2clQ=;
+        b=S5XtltjRBhus4DoWBW/FIqp3+OfWKNA99ujo1x4jcIENDJltrIm0XgIO0xx8oMbVmS
+         dgZkDtS7wg4cwiGd5plXIskh39Le1co7AJpubBvOovVjyvVV4MNfLucbQcj6Gpi+Obq3
+         Zre0dqNegcaipBZbH9n62KUeJkXRkOXsWZtyn4+SvLnfg7V6hxUczQ3JrIIt1WklkEVX
+         equysbgaBOdLih3NJKDwDtpXemBOkDYQCAbdXoD+SjOy7zbTIX7PXJsc8l6NVlmWN6uF
+         lAKjrAxxBk88g/CdA6neMgI8CTIYzZ8gIvf9MIm7U0PYZ7ajdSnMaAeGO+sakEPyqT+1
+         DSMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785557590; x=1786162390;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5XpdFy8Z6PUfDqbqo17LIsT1Kc72p948s1zae/y2clQ=;
+        b=VcffZvqZS+skJa9BcJTkLyGataRcGzmYC6rCs1qsGGclXWZOPrgaKanB3HCTRlryZ6
+         r7XnngbKG/Iwf9SOsAHrCRNPwDT5FUb77hdEeROdigm0mEkVKttJvIoY9e0rcdhvU7FJ
+         g3bD8wGWrXTEWriJROj9Kfrly0FUZYper2HdCw8Es5cWrVo0enW+kawZ7ionoiZH9TXE
+         M7SutdjG2ioMyqv261dqGb9xYDto/ziZm0UI1SCWWHANHNZbvPQo0SnqwxPTo/BbkhV7
+         DyhDcXwCCHTqoqQDd2GCBXi1RaKg74CNjMq1TrWDBMDiVxbfgwsTdpaHoLDJ6Dj4JrzO
+         v7gw==
+X-Forwarded-Encrypted: i=1; AHgh+RrC6Qa5JWf7l7UepO0ZwaiLThK6kb78O7+FIQR9V4oCMmzjh+/F4jRZd8SrAfuMwYPysUVUcWqwsiIXKcYH9v8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdQQbw//mX8fTFPOGmeRNtroSiYWtJyf8IRbZODZbIdntuXO/S
+	rko/Zh6ieduD5sRAIEyw9QF8U/CBoTaMjMp8sEii1VsMJzMYvlZ53T5OBKEe74plu4m/I/VTky2
+	tfsBDatdeKg==
+X-Received: from pjgg7.prod.google.com ([2002:a17:90b:57c7:b0:37c:c540:67c4])
+ (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c91:b0:387:e0db:bc26
+ with SMTP id 98e67ed59e1d1-38fbc538106mr1983898a91.38.1785557590236; Fri, 31
+ Jul 2026 21:13:10 -0700 (PDT)
+Date: Sat,  1 Aug 2026 04:12:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
+Message-ID: <20260801041255.752039-1-wfelipe@google.com>
+Subject: [PATCH] selftests/cgroup: test_zswap: skip test_no_kmem_bypass if
+ debugfs is unavailable
+From: Wilson Felipe Pereira <wfelipe@google.com>
+To: Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Wilson Felipe Pereira <wfelipe@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jul 30, 2026 at 12:03:27PM -0700, Florian Fainelli wrote:
-> David Gow (1):
->   kunit: tool: Terminate kernel under test on SIGINT
->
-> Shuvam Pandey (1):
->   kunit: tool: skip stty when stdin is not a tty
+test_no_kmem_bypass() needs to read
+/sys/kernel/debug/zswap/stored_pages via get_zswap_stored_pages() to
+verify that compressed pages are charged to the memcg.
 
-Both of these are already queued for 6.18 as plain cherry-picks, so
-there's nothing to do here - no need to respin. Thanks!
+When running in an environment where debugfs is not mounted or
+CONFIG_DEBUG_FS is disabled, get_zswap_stored_pages() fails, causing the
+loop to terminate early and report a false negative (KSFT_FAIL).
 
+Selftests should not fail when if debugfs is unavailable, and it
+should print a message when it is skipped.
+
+Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
+---
+ tools/testing/selftests/cgroup/test_zswap.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index 49b36ee791606..c4f7b66f1b206 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -566,12 +566,19 @@ static int test_no_kmem_bypass(const char *root)
+ 	int child_status;
+ 	char *test_group = NULL;
+ 	pid_t child_pid;
++	size_t stored_pages;
+ 
+ 	/* Read sys info and compute test values accordingly */
+ 	if (sysinfo(&sys_info) != 0)
+ 		return KSFT_FAIL;
+-	if (sys_info.totalram > 5000000000)
++	if (sys_info.totalram > 5000000000) {
++		ksft_print_msg("requires less than 5000000000 total ram\n");
+ 		return KSFT_SKIP;
++	}
++	if (get_zswap_stored_pages(&stored_pages)) {
++		ksft_print_msg("debugfs at /sys/kernel/debug is required\n");
++		return KSFT_SKIP;
++	}
+ 	values = mmap(0, sizeof(struct no_kmem_bypass_child_args), PROT_READ |
+ 			PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+ 	if (values == MAP_FAILED)
+@@ -604,7 +611,6 @@ static int test_no_kmem_bypass(const char *root)
+ 	/* Try to wakeup kswapd and let it push child memory to zswap */
+ 	set_min_free_kb(min_free_kb_high);
+ 	for (int i = 0; i < 20; i++) {
+-		size_t stored_pages;
+ 		char *trigger_allocation = malloc(trigger_allocation_size);
+ 
+ 		if (!trigger_allocation)
 -- 
-Thanks,
-Sasha
+2.55.0.508.g3f0d502094-goog
+
