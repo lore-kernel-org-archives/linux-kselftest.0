@@ -1,64 +1,64 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86793306B0A
-	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 13:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7572F49F6
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 13:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785591779; cv=none; b=KUEPPXpNQlkm9VnEFVmRXhKIIhm6FI48Lon27bY0LLNFi9mExjB3H/3dzajyy/UZ8py5cTySEAq1veqSqLhuSKPi0ms0h66lD1Px7nKxXOZqpzaPWI9kvwmAamzxyBhQ4dSg+73T+MA1MMPDoGjQ3auhtO+AJU+B3afuTWKVX5A=
+	t=1785591787; cv=none; b=AMgMjP+jZyRA8DeXtj6SDjJx50lAUHqt77wXze7FXSZXGOuYSD1bhs4HXwp97Sig7JW9mzhWnV/RuU14nWSnjr+ZIp+YBbUH0GEoz+x4zn+SAfq6WRPXfbk/dm9MP7s02Tj0MPHMYVxqzH5J8obgFjM0QvVtHktxqkM0JSnwJPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785591779; c=relaxed/simple;
-	bh=7oZpUAI64myintFN5P3mwkl+kh7M5jFwqp1ttfu5Aas=;
+	s=arc-20240116; t=1785591787; c=relaxed/simple;
+	bh=pb8bhPoTH0rHkw3kmuOdle1bI2sKEr+SbI9ru9+uM84=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cg0s4t6QVG6xFnwwqnbZNQ58PodEdP+kWox3p/DGVDHYZr93a2IAunsJAP/lDgTGZ+CHWNOUvKUpUmDH+uFezv+igIwTucTEQB6LRiqLSFTDJww9sm32+DNl9mDClw2SvMWBMv4vZlR/739YqT6/rgeqw+NwihYovAL1KX9NwZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWpjD7HN; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=DXJE8S7e5HXiihLYxVT8CPEdz0CRaZJs7I+2vLr22lbNTp5ogWQm3Q2m8Z6IiJaW69CM7ZTaV1WD38bM0Fh6H/P0UaUsyimwXOKyeeuSpF4G5lEwtJQrA2sE2VTeI5BD6Yo5kILJPxTWyRFm8BeVc7ZdaRKVyQ25uliH6x5zwCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=By8o/p3M; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWpjD7HN"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ceb096e675so23341445ad.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 01 Aug 2026 06:42:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="By8o/p3M"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbb662575d3so1075940a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 01 Aug 2026 06:43:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785591778; x=1786196578; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785591785; x=1786196585; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jtGDI9BCziEtTlla0MY6NVjGHkp8vq0UbFBjp9Cujkk=;
-        b=dWpjD7HNEUS3q0o+pKmD79/04YOGK9ebHoZXUjasDJSpgpQM1BkoMCuSsAMGE2nI/R
-         rHlLE8XIo45hjEZZi85226sCnLwtW994EwTrFiwo1+L8z/oZlMI/KPM+hokBqOSFjzyV
-         svvfennsuKReqPsmKZwGk/5i9dD0kbCAMGbbcMuOLx+E/cV8BIa0UwzoxARHE5qu+2z3
-         HWk71kVKIkihGoGjYV+DvkvnjG7PvtJSKphcO2ae71W6JX8crMeSEA+9GGcHYsgccc+9
-         sKI7N3geCA1YfLj3boAQvlSwopAf7p658lYFqcUPCJ9m/5N1sxQmb4bADSQALydIX/kP
-         QU8A==
+        bh=TqwX7lGfwVTZrv3NkOKGPL2b4D0FBuhrUgvXr3c+0ww=;
+        b=By8o/p3Mx7rHNvlCav8tDoI7GD4W3IULH5tv8iOEVPAugRVJDTnMG3fTsu1Cz4NwDV
+         Wvf/1ay+jZs8FukkoIiFPcme21HgNS+dX+ncpyxgdpz7R+plZkYDIYGj4XubiBvVqaSF
+         COiUfxhrvwt1eeG1I54ssPQJ5weVJlFgNBDdjwhH57xpvYUveFmEC5AE1Sjyyf4RkQXv
+         whMUZYrG3nCGnWor9YWn/JwMdsZ4h9vAkJjmBuN2bIk2OWmmjaIdwxQeQZZWHl8J91u7
+         ikP+CoPsK8tRBscLRWiiq65UMNlTZF38HoYT/AHVPN3QX4bt7hjjkRf62WaHvUZOi4y2
+         Oqxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785591778; x=1786196578;
+        d=1e100.net; s=20251104; t=1785591785; x=1786196585;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jtGDI9BCziEtTlla0MY6NVjGHkp8vq0UbFBjp9Cujkk=;
-        b=V+WZm10qAifck6eG7DcVsCM5tYkcixheFpI7/7rZmbmsNIlEXqmiO+iY4TXwYsIL9T
-         2QLUfB9dr6ad1myYWF21Pxl3VD2uqV6VlEUBGBW5LL/uQpoSS/k1GwNGaAhRJsvH8yQ9
-         heTJLQdQ58M7yLWSJqMkTozQHjEgTjBKkV+w8QYKnyfsNLwPAhmTKvScQxlAr5YQkl2O
-         kr1uXp8a9qhdRW6EkLGucrXSbyGftGNj21+jNlKQQ8tUkcl31XCa8JIfdXeLl7qKHsgI
-         A0n9av1vRTm1P3Vy3bzT+66kwZEldlZU90WN1IstFUbZTYvn0s0+HctAWjlSmrYOr7M1
-         Jg6A==
-X-Forwarded-Encrypted: i=1; AHgh+Ro/gOUK6WyA6rW6HWomtFB+Tj7hpLvJ7rliFqB0phGNQk7Pbkt6SgVo2RCFwPgf/Sjpv3fIeDMwsUJG7SjQqkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAe4mWL0k2VBMHtq1c5n9sL13FkB4+Zd9x7lHL4p+JIFfxJZMk
-	EopNIbS+x5hn0gluEznSMF13GPM9H3oS7HKB3EHDqAHvmnzTTVle39a0
-X-Gm-Gg: AR+sD13sfcGFMXbP2rx9DNbugRkVmrXJixuZzVufhO533ydS82LQXl3uUHUAFbd6Z5c
-	5xfjbvSd7aPiG7uDCpu3TH6b4bxMuU7KtPEwo+xq8qUprJa4/VkcVc4kdW+E2T7Q7gZIwEpy1EY
-	rinv5jqkw7K4iP5Jl3IbumfmPatt5zeOciILFimm8S2d8rm5ivVm1lZ8QMkSSMr1a4M+QEe0YyA
-	fseDqG2ThzZtdEri0mOFXfi8JVmdBaK+vOkkMPZqmp7+POJ4m8RrrGNX89GCN17+jtyFu3lxoqc
-	1OJbm9p4L6nJF99Sz/aYBfGUzDNc9pnhs/8L8gRH9dd9LpQqAMBlW4bi3PcbCNdBan8ycRaJkdZ
-	D53nTnlhwCyHiRgK8He+eqfmaNt4d9pLAJV6wV+W357skXoOg8e/WT7/y5hB1cHkkFiGvnMaJGr
-	Z1mdDsCEp2MGEPW70DexNHLxedXtJ2pn8CjuRKkVvIpuzI+AxOeHB1oDVitNmGIIV47CGlw5Gbb
-	JPJ
-X-Received: by 2002:a05:6a21:510:b0:398:7ed3:a001 with SMTP id adf61e73a8af0-3c92a543d1dmr3175828637.2.1785591777858;
-        Sat, 01 Aug 2026 06:42:57 -0700 (PDT)
+        bh=TqwX7lGfwVTZrv3NkOKGPL2b4D0FBuhrUgvXr3c+0ww=;
+        b=O2dNiT8GrZF8MZ+MxXUsg8fj88rDScorhWC2gvR/I6vByxJALCSFP2yPt7UUP0IciR
+         6Zx753HcV9cTjGowvCHo7ZDZdnl+KszYxs00vHhLQYK7EL/fSXRy/Z4xYpKMpcnv1SJ3
+         sBhGO28KM+qaG7JzbDJs5vxrRaaBt0PNA13CYkq5GZM+f7Ykupidcc1CTmF5W9n3Kinc
+         76Xo27rcALlcLUnObgo3j6AZ27+aeej43fQ5VMRvWx77L1p9NliZTeg+Hkam/2HJypDX
+         4QneGEoOrO17Q4S5yO2H2xZCJsYF5LR4/JQXSJ+U0eX6uojSnZyLaBvPf+jMr9ctokv8
+         Kq0Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpvOAhDvNrad/J2Jp4OCquXjXHwmFU23sGSDCuI+cn84wMSCvIJHwRQRblpqSaqpOxuGp62chlOoCa8kvQqMNg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf+plOe1T/oqHmemFWsniRWwpZJL/GT8RiFtKFGCKTSs3DLyQp
+	bF50rYO2Cd4E0aTdkQbq8A0p/484yHpepHoUkjvBkJgGsxWQsuYcqBp1
+X-Gm-Gg: AR+sD10E+cyicSYW/DWKVqYUstwrvVgy9H5XPXzo9j6uaeo3cLg//9+4YwOqhWYElWg
+	CdOX4531+b7j05Tn/UFsC5SoB7ldvy7DssJqHUV85dJS71/vrYNMx+beGBxLBRRGJXKDgXGyO5l
+	eotqgAaIn6N2ngvsWydM2jfOjKIpIyfYI7FscJtY9EJz26XNbFU+XgQaX/x0jGLut5gvtwF4hRl
+	8twmAB7PYW9maTkXRkh5BmoicnzkoF/mC5XpgGM3cUw/9G6LTJzPV9hYgIKmMzo8wEEiHFLXbVw
+	XRd4GIiV8duDPpSiVlvIrGH3RdDj1VWCy8qLNkbI2LSzTTyWEzjzKjSGvHXZsFgRXhbFz/8y2ix
+	1dRr45MDVyhQbRtWM73P181gjBx4jzuTPwH46iDtySDZxcXKq5M/BPs9ETZ/tpOvYfR3Fk9UiXd
+	y7hzpZhWNaBe9ARx+kcBz8OdpvT2qe1PjFuoqjdaQT6lolafrhnWSfiakMXumYSFke8dR9WKGhX
+	RWq
+X-Received: by 2002:a05:6a21:10d:b0:3c3:954d:279a with SMTP id adf61e73a8af0-3c92a85c84dmr3413623637.33.1785591785010;
+        Sat, 01 Aug 2026 06:43:05 -0700 (PDT)
 Received: from enjou-Legion-Y7000P-2019 ([165.232.167.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153dd4e5b0sm16077652eec.1.2026.08.01.06.42.49
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153dd4e5b0sm16077652eec.1.2026.08.01.06.42.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 06:42:57 -0700 (PDT)
+        Sat, 01 Aug 2026 06:43:04 -0700 (PDT)
 From: Ren Wei <enjou1224z@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -73,9 +73,9 @@ Cc: davem@davemloft.net,
 	vega@nebusec.ai,
 	milkory@outlook.com,
 	enjou1224z@gmail.com
-Subject: [PATCH net v2 1/2] net/sched: reject overly deep qdisc hierarchies
-Date: Sat,  1 Aug 2026 21:42:33 +0800
-Message-ID: <1e9ab39597423fd5d13cfaaf52279b8ee3d9fc3c.1785434373.git.milkory@outlook.com>
+Subject: [PATCH net v2 2/2] selftests/tc-testing: add qdisc hierarchy depth tests
+Date: Sat,  1 Aug 2026 21:42:34 +0800
+Message-ID: <5cc2d26a7c8e553759cdd29a3116f843fabc25ba.1785434373.git.milkory@outlook.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1785434373.git.milkory@outlook.com>
 References: <cover.1785434373.git.milkory@outlook.com>
@@ -89,77 +89,98 @@ Content-Transfer-Encoding: 8bit
 
 From: Zijie Huang <milkory@outlook.com>
 
-Deep qdisc hierarchies can lead to excessive recursion in qdisc tree
-walkers and exhaust the kernel stack. The existing loop check does not
-cover the create-and-graft path, so a hierarchy can still be extended by
-creating a new child qdisc below an already deep parent.
+Add tdc coverage for the qdisc hierarchy depth limit.
 
-Store the hierarchy depth in struct Qdisc and update it when qdiscs are
-grafted. Reject new child qdiscs once the parent is already at the maximum
-allowed depth.
+The tests verify that the deepest allowed hierarchy can still be created
+and that adding another child qdisc below it is rejected.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Assisted-by: Codex:gpt-5.4
 Signed-off-by: Zijie Huang <milkory@outlook.com>
+Assisted-by: Codex:gpt-5.4
 Signed-off-by: Ren Wei <enjou1224z@gmail.com>
 ---
-changes in v2:
-  - Store the qdisc hierarchy depth in struct Qdisc and update it from
-    qdisc_graft(), instead of walking the parent chain.
-  - Move the depth check to qdisc_graft() so it is applied at the actual
-    attach point.
-  - Add tdc tests for the maximum allowed depth and rejection above it.
-  - v1 Link: https://lore.kernel.org/all/cover.1785304107.git.milkory@outlook.com/
+ .../tc-testing/tc-tests/qdiscs/depth.json     | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
 
-
- include/net/sch_generic.h | 1 +
- net/sched/sch_api.c       | 9 +++++++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 45a1e8c78222..cbc248776511 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -99,6 +99,7 @@ struct Qdisc {
- 	struct hlist_node       hash;
- 	u32			handle;
- 	u32			parent;
-+	int			depth;
- 
- 	struct netdev_queue	*dev_queue;
- 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 668bcd60d183..65b35528d125 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1114,6 +1114,9 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 		unsigned int i, num_q, ingress;
- 		struct netdev_queue *dev_queue;
- 
-+		if (new)
-+			new->depth = 0;
-+
- 		ingress = 0;
- 		num_q = dev->num_tx_queues;
- 		if ((q && q->flags & TCQ_F_INGRESS) ||
-@@ -1211,9 +1214,15 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 			NL_SET_ERR_MSG(extack, "STAB not supported on a non root");
- 			return -EINVAL;
- 		}
-+		if (new && parent->depth >= 7) {
-+			NL_SET_ERR_MSG(extack, "Qdisc hierarchy is too deep");
-+			return -E2BIG;
-+		}
- 		err = cops->graft(parent, cl, new, &old, extack);
- 		if (err)
- 			return err;
-+		if (new)
-+			new->depth = parent->depth + 1;
- 		notify_and_destroy(net, skb, n, classid, old, new, extack);
- 	}
- 	return 0;
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
+new file mode 100644
+index 000000000000..48f8683f0d1a
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
+@@ -0,0 +1,74 @@
++[
++    {
++        "id": "ad43",
++        "name": "Create qdisc hierarchy at maximum depth",
++        "category": [
++            "qdisc",
++            "depth"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
++            "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: htb default 1",
++            "$TC class add dev $DUMMY parent 2: classid 2:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 2:1 handle 3: htb default 1",
++            "$TC class add dev $DUMMY parent 3: classid 3:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 3:1 handle 4: htb default 1",
++            "$TC class add dev $DUMMY parent 4: classid 4:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 4:1 handle 5: htb default 1",
++            "$TC class add dev $DUMMY parent 5: classid 5:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 5:1 handle 6: htb default 1",
++            "$TC class add dev $DUMMY parent 6: classid 6:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 6:1 handle 7: htb default 1",
++            "$TC class add dev $DUMMY parent 7: classid 7:1 htb rate 10mbit"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 7:1 handle 8: htb default 1",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 8: parent 7:1",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY root"
++        ]
++    },
++    {
++        "id": "c519",
++        "name": "Reject qdisc hierarchy above maximum depth",
++        "category": [
++            "qdisc",
++            "depth"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
++            "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: htb default 1",
++            "$TC class add dev $DUMMY parent 2: classid 2:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 2:1 handle 3: htb default 1",
++            "$TC class add dev $DUMMY parent 3: classid 3:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 3:1 handle 4: htb default 1",
++            "$TC class add dev $DUMMY parent 4: classid 4:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 4:1 handle 5: htb default 1",
++            "$TC class add dev $DUMMY parent 5: classid 5:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 5:1 handle 6: htb default 1",
++            "$TC class add dev $DUMMY parent 6: classid 6:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 6:1 handle 7: htb default 1",
++            "$TC class add dev $DUMMY parent 7: classid 7:1 htb rate 10mbit",
++            "$TC qdisc add dev $DUMMY parent 7:1 handle 8: htb default 1",
++            "$TC class add dev $DUMMY parent 8: classid 8:1 htb rate 10mbit"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 8:1 handle 9: htb default 1",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 9:",
++        "matchCount": "0",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY root"
++        ]
++    }
++]
 -- 
 2.47.2
-
