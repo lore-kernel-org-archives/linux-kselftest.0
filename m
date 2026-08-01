@@ -1,186 +1,188 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7572F49F6
-	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 13:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809F42139C9
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 13:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785591787; cv=none; b=AMgMjP+jZyRA8DeXtj6SDjJx50lAUHqt77wXze7FXSZXGOuYSD1bhs4HXwp97Sig7JW9mzhWnV/RuU14nWSnjr+ZIp+YBbUH0GEoz+x4zn+SAfq6WRPXfbk/dm9MP7s02Tj0MPHMYVxqzH5J8obgFjM0QvVtHktxqkM0JSnwJPM=
+	t=1785592268; cv=none; b=FEmjtXHRbkvRnpFtM2kbk+1THIgHlBWfXRbQji1/Qoh0W6Td/ft2HfQTMIqKROoKyVBOm5DbsN+dp0wdonIqkqWcNMhFKtWfIY3vpYE3+k9VcCYINaV5aHt4PTMfLV874ICzJqxGTnkW0TUE3RzyW65Ig4KbjVi+VX8Rp+ATrA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785591787; c=relaxed/simple;
-	bh=pb8bhPoTH0rHkw3kmuOdle1bI2sKEr+SbI9ru9+uM84=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DXJE8S7e5HXiihLYxVT8CPEdz0CRaZJs7I+2vLr22lbNTp5ogWQm3Q2m8Z6IiJaW69CM7ZTaV1WD38bM0Fh6H/P0UaUsyimwXOKyeeuSpF4G5lEwtJQrA2sE2VTeI5BD6Yo5kILJPxTWyRFm8BeVc7ZdaRKVyQ25uliH6x5zwCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=By8o/p3M; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785592268; c=relaxed/simple;
+	bh=rt25cJP/RrTvIsnCdMRI8qYKXwgY7lSCF/dPp1wNwGY=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=nlifQB1yddCJ2rBvi54DzleC8F9igdO9nNCOWZ4rfq3gOKtYaILyC6SUFQir8FcjU80PPNItOG/fOM0R0NiNazi7RfvjdBwnS6xOWopgqS75t9ND8birx16frZpCuDfm7NtyQfhKMbaXfC4xlkE+jvkHtCIbIM4b0BneVWjbF+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lk3BpRn3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="By8o/p3M"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbb662575d3so1075940a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 01 Aug 2026 06:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785591785; x=1786196585; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TqwX7lGfwVTZrv3NkOKGPL2b4D0FBuhrUgvXr3c+0ww=;
-        b=By8o/p3Mx7rHNvlCav8tDoI7GD4W3IULH5tv8iOEVPAugRVJDTnMG3fTsu1Cz4NwDV
-         Wvf/1ay+jZs8FukkoIiFPcme21HgNS+dX+ncpyxgdpz7R+plZkYDIYGj4XubiBvVqaSF
-         COiUfxhrvwt1eeG1I54ssPQJ5weVJlFgNBDdjwhH57xpvYUveFmEC5AE1Sjyyf4RkQXv
-         whMUZYrG3nCGnWor9YWn/JwMdsZ4h9vAkJjmBuN2bIk2OWmmjaIdwxQeQZZWHl8J91u7
-         ikP+CoPsK8tRBscLRWiiq65UMNlTZF38HoYT/AHVPN3QX4bt7hjjkRf62WaHvUZOi4y2
-         Oqxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785591785; x=1786196585;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TqwX7lGfwVTZrv3NkOKGPL2b4D0FBuhrUgvXr3c+0ww=;
-        b=O2dNiT8GrZF8MZ+MxXUsg8fj88rDScorhWC2gvR/I6vByxJALCSFP2yPt7UUP0IciR
-         6Zx753HcV9cTjGowvCHo7ZDZdnl+KszYxs00vHhLQYK7EL/fSXRy/Z4xYpKMpcnv1SJ3
-         sBhGO28KM+qaG7JzbDJs5vxrRaaBt0PNA13CYkq5GZM+f7Ykupidcc1CTmF5W9n3Kinc
-         76Xo27rcALlcLUnObgo3j6AZ27+aeej43fQ5VMRvWx77L1p9NliZTeg+Hkam/2HJypDX
-         4QneGEoOrO17Q4S5yO2H2xZCJsYF5LR4/JQXSJ+U0eX6uojSnZyLaBvPf+jMr9ctokv8
-         Kq0Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpvOAhDvNrad/J2Jp4OCquXjXHwmFU23sGSDCuI+cn84wMSCvIJHwRQRblpqSaqpOxuGp62chlOoCa8kvQqMNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf+plOe1T/oqHmemFWsniRWwpZJL/GT8RiFtKFGCKTSs3DLyQp
-	bF50rYO2Cd4E0aTdkQbq8A0p/484yHpepHoUkjvBkJgGsxWQsuYcqBp1
-X-Gm-Gg: AR+sD10E+cyicSYW/DWKVqYUstwrvVgy9H5XPXzo9j6uaeo3cLg//9+4YwOqhWYElWg
-	CdOX4531+b7j05Tn/UFsC5SoB7ldvy7DssJqHUV85dJS71/vrYNMx+beGBxLBRRGJXKDgXGyO5l
-	eotqgAaIn6N2ngvsWydM2jfOjKIpIyfYI7FscJtY9EJz26XNbFU+XgQaX/x0jGLut5gvtwF4hRl
-	8twmAB7PYW9maTkXRkh5BmoicnzkoF/mC5XpgGM3cUw/9G6LTJzPV9hYgIKmMzo8wEEiHFLXbVw
-	XRd4GIiV8duDPpSiVlvIrGH3RdDj1VWCy8qLNkbI2LSzTTyWEzjzKjSGvHXZsFgRXhbFz/8y2ix
-	1dRr45MDVyhQbRtWM73P181gjBx4jzuTPwH46iDtySDZxcXKq5M/BPs9ETZ/tpOvYfR3Fk9UiXd
-	y7hzpZhWNaBe9ARx+kcBz8OdpvT2qe1PjFuoqjdaQT6lolafrhnWSfiakMXumYSFke8dR9WKGhX
-	RWq
-X-Received: by 2002:a05:6a21:10d:b0:3c3:954d:279a with SMTP id adf61e73a8af0-3c92a85c84dmr3413623637.33.1785591785010;
-        Sat, 01 Aug 2026 06:43:05 -0700 (PDT)
-Received: from enjou-Legion-Y7000P-2019 ([165.232.167.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153dd4e5b0sm16077652eec.1.2026.08.01.06.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2026 06:43:04 -0700 (PDT)
-From: Ren Wei <enjou1224z@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	vega@nebusec.ai,
-	milkory@outlook.com,
-	enjou1224z@gmail.com
-Subject: [PATCH net v2 2/2] selftests/tc-testing: add qdisc hierarchy depth tests
-Date: Sat,  1 Aug 2026 21:42:34 +0800
-Message-ID: <5cc2d26a7c8e553759cdd29a3116f843fabc25ba.1785434373.git.milkory@outlook.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1785434373.git.milkory@outlook.com>
-References: <cover.1785434373.git.milkory@outlook.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lk3BpRn3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165B21F00ACA;
+	Sat,  1 Aug 2026 13:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785592267;
+	bh=AehxbtTGF0gHvDxz02bjJOtwVnqS4RItAc5Dqc+aBLc=;
+	h=Date:From:To:In-Reply-To:References:Subject;
+	b=lk3BpRn3akXRe++bkm9xzZxRi1KWYz2PKXQvHoMUhypiY1tY6Hal2foBDkcvFrhsM
+	 owZ/DzsSMuWSFLN+bvw6v/gQNATZ0Eyl+a2KU1vXntm3NP1tipamF8VJuEmYQvErs4
+	 +5LjWZUk7D2V08DNN2AHp1il/8B4Dbsr6dUbwTbeQ/yn4c4cg5+eQgunkbJAvIQ/xa
+	 st/UWB+eivGF9CgDXNPvFPpWrq7umIMd+gB+55ae4gRRLeDi/q3NLAhp3ffOaNLI4Y
+	 zhkhYbABW7fP1MMOCnDjnnX5ouiEasJipHG4CncSy60KjUkaBp9D2Bt/iBON4DLxs/
+	 BfPQ2Hw8k4z3A==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id F1A6EF40074;
+	Sat,  1 Aug 2026 09:51:05 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-01.internal (MEProxy); Sat, 01 Aug 2026 09:51:05 -0400
+X-ME-Sender: <xms:yfltasYo_UjqxWMz0tTveMJjl2c6riV3sBGWq2MmNl-FoKMQuVC04A>
+    <xme:yfltaiMUg6wTZ0QwGQWZh7Sv2Z-DpR1BxtUT4wEC_W0UITZMHVI3p194unMvqW7j7
+    e2EUOUkWzat4watr_qQ7quTEwMky5tBbMXr_o1tC85oomWXytMWnC_u>
+X-ME-Proxy-Cause: dmFkZTFDIiY0uqQK1LdtvM6HVqGsuZVZSKNkYEGOrhrS5nnb8BrWjcxGs/uz4FlYHK3rqR
+    22yCTvZQ7tt1rBEUoThDD3bnY45V6GPXLMK6dj4gPwmKgDIlOrCcLiyFgJ5kpAyKhRUB56
+    90Wl600FMFPiYiou+quSy94b2OOuMUiTApL0GAw441EY+jLJP+kAxw2GXT9pwtjPuqje5l
+    vJeGR06VoKCPKwpmPJMyDj6tVkf+S90JavUU+Ardhhz0XxHeKE1Ha2znYoe54Gnr5MH8vb
+    H+HfGTxwf38rFY6y4Ug1wwfECyKiLZacmpeCtAYT8Vszo2U4QWziRrq2RfhZ8l18ajfzYw
+    nDigfTBveJKIlM6MyCf4MHKwCqa070Y/SQf/7kILrXxW6K58qjRWcQ8loRi0TZyAT0QIIt
+    T7n3Ep01Li0qLIzGXRYD3Uw+5koMmhSBYODdx6XZULmGeL5CA0iYte3z9DgZbPoR4nnN3j
+    /lIQr/hwzKmZBtNLFHztcy4kr7ybOP0URgCitDy8ZW7fcII3sK/jPiJb3Fuy8SoVEZ2VQ4
+    3eLRXVNezuBLcPZluzp/PWstmQc8vtXUMc0UutobwNArfek8KkdOGGJeQtO0KKHepU7Rrf
+    hZ90/qG5RaMVjkA6QddDvEcFo3npjqXMyMcadoThgeSJ07zBP0IzpfuMyBpQ
+X-ME-Proxy: <xmx:yfltahDJ6Oprnr_7741u2ZNzOGu9QlvsmFO2jgRNigFkZUfacp7IVg>
+    <xmx:yfltatUJoj3atT6ZgxqPKVxsxI8ndj247lpj3Tqz2KSDYBD1Ph4-ug>
+    <xmx:yfltanDDcEZYMMu4b1BSlzWjCjaoT2GyzZ0RV4-EupKXA9TUXi25rw>
+    <xmx:yfltao8kcOc-67pxmqKBxAiKD7H6ZSygVbqB1hf8aBPxr2eGQoPwZQ>
+    <xmx:yfltamEeV4kwMyzorZmP0qRhl-lbQ0xGC217anmkS9_Z_2r3bXIC6S9K>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D0295182007E; Sat,  1 Aug 2026 09:51:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Sat, 01 Aug 2026 15:50:45 +0200
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Hui Wang" <hui.wang@canonical.com>, shuah@kernel.org,
+ "Shuah Khan" <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
+Message-Id: <04dd6e7c-e290-477a-a4bc-45d0ace102be@app.fastmail.com>
+In-Reply-To: <20260608111300.63242-1-hui.wang@canonical.com>
+References: <20260608111300.63242-1-hui.wang@canonical.com>
+Subject: Re: [PATCH] selftests/efivarfs: skip write tests if efivarfs is mounted
+ read-only
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Zijie Huang <milkory@outlook.com>
+Hello Hui Wang,
 
-Add tdc coverage for the qdisc hierarchy depth limit.
+On Mon, 8 Jun 2026, at 13:13, Hui Wang wrote:
+> efivarfs is mounted read-only when the firmware does not provide a
+> working runtime SetVariable() service. This happens, for example, on
+> systems where the EFI runtime is provided by U-Boot's efi_loader (a
+> common case on RISC-V under QEMU booting via OpenSBI -> U-Boot -> GRUB),
+> or when runtime services are disabled (efi=noruntime, lockdown, etc).
+>
+> In that situation every test that creates, modifies or deletes an EFI
+> variable is bound to fail, producing spurious test failures that do not
+> reflect a real kernel bug.
+>
+> Detect the mount mode in check_prereqs() and store it in the global
+> efivarfs_mode ("ro" or "rw"). Extend run_test() to take an optional
+> "rw" argument marking tests that require a writable efivarfs; such tests
+> are reported as [SKIP] (instead of being run and failing) when efivarfs
+> is read-only, along with an explanatory message.
+>
+> test_create_empty and test_invalid_filenames are left to run
+> unconditionally, since their expectation still holds on a read-only
+> mount; their stderr is silenced to avoid noise from the read-only
+> redirection failures.
+>
+> Assisted-by: Copilot:claude-opus-4-8
+> Signed-off-by: Hui Wang <hui.wang@canonical.com>
+> ---
+>  tools/testing/selftests/efivarfs/efivarfs.sh | 44 +++++++++++++++-----
+>  1 file changed, 33 insertions(+), 11 deletions(-)
+>
+> diff --git a/tools/testing/selftests/efivarfs/efivarfs.sh 
+> b/tools/testing/selftests/efivarfs/efivarfs.sh
+> index c62544b966ae..d8883fdf3b01 100755
+> --- a/tools/testing/selftests/efivarfs/efivarfs.sh
+> +++ b/tools/testing/selftests/efivarfs/efivarfs.sh
+> @@ -26,16 +26,33 @@ check_prereqs()
+>  		echo $msg efivarfs is not mounted on $efivarfs_mount >&2
+>  		exit $ksft_skip
+>  	fi
+> +
+> +	# Determine whether efivarfs is mounted read-only or read-write
+> +	# and store the result ("ro" or "rw") in the global efivarfs_mode.
+> +	if grep -q "^\S\+ $efivarfs_mount efivarfs ro[, ]" /proc/mounts; then
+> +		efivarfs_mode=ro
+> +	else
+> +		efivarfs_mode=rw
+> +	fi
+>  }
+> 
+>  run_test()
+>  {
+>  	local test="$1"
+> +	# Second (optional) argument: "rw" if the test needs a writable
+> +	# efivarfs. Such tests are skipped when efivarfs is mounted read-only.
+> +	local need_rw="$2"
+> 
+>  	echo "--------------------"
+>  	echo "running $test"
+>  	echo "--------------------"
+> 
+> +	if [ "$need_rw" = "rw" ] && [ "$efivarfs_mode" = "ro" ]; then
+> +		echo "  [SKIP] efivarfs is mounted read-only," \
+> +		     "skipping test that requires write access" >&2
+> +		return
+> +	fi
+> +
+>  	if [ "$(type -t $test)" = 'function' ]; then
+>  		( $test )
+>  	else
+> @@ -74,7 +91,7 @@ test_create_empty()
+>  {
+>  	local file=$efivarfs_mount/$FUNCNAME-$test_guid
+> 
+> -	: > $file
+> +	: 2>/dev/null > $file
+> 
+>  	if [ -e $file ]; then
+>  		echo "$file can be created without writing" >&2
+> @@ -361,18 +378,23 @@ check_prereqs
+> 
+>  rc=0
+> 
+> -run_test test_create
+> +if [ "$efivarfs_mode" = "ro" ]; then
+> +	echo "efivarfs is mounted read-only on $efivarfs_mount;" \
+> +	     "tests that require write access will be skipped" >&2
+> +fi
+> +
+> +run_test test_create rw
+>  run_test test_create_empty
+> -run_test test_create_read
+> -run_test test_delete
+> -run_test test_zero_size_delete
+> -run_test test_open_unlink
+> -run_test test_valid_filenames
+> +run_test test_create_read rw
+> +run_test test_delete rw
+> +run_test test_zero_size_delete rw
+> +run_test test_open_unlink rw
+> +run_test test_valid_filenames rw
+>  run_test test_invalid_filenames
+> -run_test test_no_set_size
+> +run_test test_no_set_size rw
+>  setup_test_multiple
+> -run_test test_multiple_zero_size
+> -run_test test_multiple_create
+> -run_test test_multiple_delete_on_write
+> +run_test test_multiple_zero_size rw
+> +run_test test_multiple_create rw
+> +run_test test_multiple_delete_on_write rw
+> 
 
-The tests verify that the deepest allowed hierarchy can still be created
-and that adding another child qdisc below it is rejected.
+This looks rather messy to me. Can't you have the rw tests in
+a single if scope that is only entered when the mount is rw?
 
-Signed-off-by: Zijie Huang <milkory@outlook.com>
-Assisted-by: Codex:gpt-5.4
-Signed-off-by: Ren Wei <enjou1224z@gmail.com>
----
- .../tc-testing/tc-tests/qdiscs/depth.json     | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
-new file mode 100644
-index 000000000000..48f8683f0d1a
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/depth.json
-@@ -0,0 +1,74 @@
-+[
-+    {
-+        "id": "ad43",
-+        "name": "Create qdisc hierarchy at maximum depth",
-+        "category": [
-+            "qdisc",
-+            "depth"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: htb default 1",
-+            "$TC class add dev $DUMMY parent 2: classid 2:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 2:1 handle 3: htb default 1",
-+            "$TC class add dev $DUMMY parent 3: classid 3:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 3:1 handle 4: htb default 1",
-+            "$TC class add dev $DUMMY parent 4: classid 4:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 4:1 handle 5: htb default 1",
-+            "$TC class add dev $DUMMY parent 5: classid 5:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 5:1 handle 6: htb default 1",
-+            "$TC class add dev $DUMMY parent 6: classid 6:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 6:1 handle 7: htb default 1",
-+            "$TC class add dev $DUMMY parent 7: classid 7:1 htb rate 10mbit"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 7:1 handle 8: htb default 1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 8: parent 7:1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root"
-+        ]
-+    },
-+    {
-+        "id": "c519",
-+        "name": "Reject qdisc hierarchy above maximum depth",
-+        "category": [
-+            "qdisc",
-+            "depth"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: htb default 1",
-+            "$TC class add dev $DUMMY parent 2: classid 2:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 2:1 handle 3: htb default 1",
-+            "$TC class add dev $DUMMY parent 3: classid 3:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 3:1 handle 4: htb default 1",
-+            "$TC class add dev $DUMMY parent 4: classid 4:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 4:1 handle 5: htb default 1",
-+            "$TC class add dev $DUMMY parent 5: classid 5:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 5:1 handle 6: htb default 1",
-+            "$TC class add dev $DUMMY parent 6: classid 6:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 6:1 handle 7: htb default 1",
-+            "$TC class add dev $DUMMY parent 7: classid 7:1 htb rate 10mbit",
-+            "$TC qdisc add dev $DUMMY parent 7:1 handle 8: htb default 1",
-+            "$TC class add dev $DUMMY parent 8: classid 8:1 htb rate 10mbit"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY parent 8:1 handle 9: htb default 1",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 9:",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root"
-+        ]
-+    }
-+]
--- 
-2.47.2
