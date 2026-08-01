@@ -1,41 +1,41 @@
 Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B78330B01;
-	Sat,  1 Aug 2026 00:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF06356777;
+	Sat,  1 Aug 2026 00:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785544202; cv=pass; b=DRBfHPTbFZh5+N2wcYNSpHtNLt8b/P43aeOoULhVR9nZoofDuMVjAszkW79BsWjJHXghuiw9LNIfuksslYgfkC4kqLdzkzOFS4GyQ37ugf/g9isQM3gYCMi4Ph7lbqD6efrm2lpiyJ8vOFycdq0/I7pWQ5x5bS/eh+yB+g+zX0Q=
+	t=1785544216; cv=pass; b=kkD9oqysan75rH9yZ+tIb15xzFUF5BTWbmssQABSrHoBDerwRXg4zPe/QalPVylWTPCqVBbMNNCVQ5D1eXegsQwe9jyOSrnJXxLqAqKj/+VEUP/pL3W4L5ZSAcIfSLHYv37q6Yq/Z/1/dd3TPx7U8kcwDVUd1uom/E98gV41BS8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785544202; c=relaxed/simple;
-	bh=YRUWZ9DNGa0m7Ubjh4sd2r8kwcNGiN4CDequP1LnvtM=;
+	s=arc-20240116; t=1785544216; c=relaxed/simple;
+	bh=vbDdHPLYsJBn1MmaoZYwxgB7QZRgd5YLQssaabKahzM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ci8+MRNwUpHfkV+FTDg0bUmJrxRx4iawmA63VfOUouoxGxRzqt9oOPiEyQhcbhZ0ToerfB3s9Umhb+6RJr6tkuL7FBboTwZO8+zAj52tSA/WfhXSiGxbGemZlinotcic8Bs8KAjAcaUCJWyW7mF+hBwM+sKhD5Ty6pqin22LWRc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=dxKp9Opo; arc=pass smtp.client-ip=136.143.169.57
+	 MIME-Version; b=nEaInI0pVFEKqsac8x2wvnQYlPW2tHIyzbeqGbiXbG8/oRO2rQjB8bEyKbvHAb0cVpdS/vXFI18kiUvfUXayo0gAqKZKXEfAhIogiYoGmhIkA0Zgio1ah5xPmLlsM95e350k/7qfegAtb7Vdv4jSGk6t/QFNkOEdwY/vEdBXBAs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=R4HZ5eul; arc=pass smtp.client-ip=136.143.169.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="dxKp9Opo"
-ARC-Seal: i=1; a=rsa-sha256; t=1785544185; cv=none; 
+	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="R4HZ5eul"
+ARC-Seal: i=1; a=rsa-sha256; t=1785544199; cv=none; 
 	d=zohomail.eu; s=zohoarc; 
-	b=bpUZ7Qf/3ABIDN4cOcsQQBwbEbVfTBTnO4ecdKCgFj0iQ0O7t2yyfWOeNNEDUuKNTTEDyWOvbGDvnL55Tk6WnwD6Z91Mzyo8oKKWEMvcMXUG1XhiukErRQS2FWQEF1dfFdq1kM9HacBBLnTBz5LXYSZN5PtVYOsf3UcRFD6a6FM=
+	b=cZ0d8GoKZ/nfSvV/4LxByvxu3P9XBcuOf/QcAxxMsudKGBYMl0ADP4Sz/K4uthAagu63wSLohHDHKTlRjIirXkQTSHN97kCNakfNyRdH5yUHnvOjZI8qYY/k7NA2rku+EACX+y6FPTNOW5Hlq+GvxjagLF6KxCybZWql79fL8Dg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785544185; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=YRUWZ9DNGa0m7Ubjh4sd2r8kwcNGiN4CDequP1LnvtM=; 
-	b=DMKIXPkzqLsndpzXt4lEfsMC19t1Ky0noTCtSQs2xb0pI2gtJJPV6tPDGoHQzvN/XY+gumfiZrXIEBVdBiTwKa+jxZCRLAWm70woG3eh2CgcjRuzL/bxBxsxyotTJgKSLQ9cc81GcBmvKL1WXdpANKB4Aqn/21O/w/d37Aj0bKE=
+	t=1785544199; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=vbDdHPLYsJBn1MmaoZYwxgB7QZRgd5YLQssaabKahzM=; 
+	b=N3kv4YzR7wOLqghbbDkv4sg+uU6ld8MQ0K+DFhYS4Gbl9fyZRah4JwhofIsfpuO19rE1Rz/tNQAqmgC0WClswhXEV8ynuIRXqEU59igAAnS5tjVkTgFv59Gq7THi/5hsdRMnEeS5nU8IB21zcEV2PmpwEHkov6ZbQg2y0/t2z9Y=
 ARC-Authentication-Results: i=1; mx.zohomail.eu;
 	dkim=pass  header.i=iusegentoo.com;
 	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
 	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785544185;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785544199;
 	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=YRUWZ9DNGa0m7Ubjh4sd2r8kwcNGiN4CDequP1LnvtM=;
-	b=dxKp9OpoU7sbxounxPp8yjaH5ZkD2p6vvoK3VUaKBGX5+geC7Kue87e4RwHkcPZc
-	uosRRWWN8SHk19cWnRcGBU1useXrk6239USuJqZdd3UHlpHIcw/OBX1o9xwwnupT90l
-	U/fNbcPPRIQGai8MFTuCTAc5IIv1Kj9Vg063Pcto=
-Received: by mx.zoho.eu with SMTPS id 178554418405749.5205180207995;
-	Sat, 1 Aug 2026 02:29:44 +0200 (CEST)
+	bh=vbDdHPLYsJBn1MmaoZYwxgB7QZRgd5YLQssaabKahzM=;
+	b=R4HZ5eul/tAJSLzavvevLwYlSATEX/fBbOe7iegLe+6DLEwYLJyTrZIPTfngUTab
+	VPX5gFpeP0BQasE8fr2Ko6+ze2YHzD5hv80IKiFaPtygjbAz/B5yeMtn23h3y8s3Xfh
+	PqFhI7rMpfZYRaJXpok5EYTi7xiPPfy+gSx7+2i4=
+Received: by mx.zoho.eu with SMTPS id 178554419779435.15803406835005;
+	Sat, 1 Aug 2026 02:29:57 +0200 (CEST)
 From: Ali Ahmet Memis <ali@iusegentoo.com>
 To: xiexinet@gmail.com
 Cc: netdev@vger.kernel.org,
@@ -48,12 +48,12 @@ Cc: netdev@vger.kernel.org,
 	lukma@denx.de,
 	m-karicheri2@ti.com,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 1/3] net: hsr: privatize interlink-bound skbs before address mutation
-Date: Sat,  1 Aug 2026 03:29:31 +0300
-Message-ID: <20260801002931.241238-1-ali@iusegentoo.com>
+Subject: Re: [PATCH net 2/3] net: hsr: clone before updating path and LAN IDs in tagged frames
+Date: Sat,  1 Aug 2026 03:29:44 +0300
+Message-ID: <20260801002944.241301-1-ali@iusegentoo.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260728143604.26-2-xiexinet@gmail.com>
-References: <20260728143604.26-2-xiexinet@gmail.com>
+In-Reply-To: <20260728143604.26-3-xiexinet@gmail.com>
+References: <20260728143604.26-3-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,12 +63,12 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-The skb_cow() is placed before the address mutation and, thanks to the
-short-circuit, only runs when the interlink skb can alias a live
-consumer: master-originated frames, or ring frames the master also
-consumes (is_local_dest and not is_local_exclusive). The zero-copy ring
-paths keep their behavior. On allocation failure the frame is dropped
-with rx_dropped accounting, matching the tagged-frame creation failure
-path. Reads correctly to me.
+Clone first, privatize with skb_cow(), reacquire the header or trailer
+pointer, then write the id: this removes the shared-buffer mutation for
+both hsr_create_tagged_frame() and prp_create_tagged_frame(). The error
+paths (clone failure, cow failure, NULL trailer) all free the clone and
+return NULL, and adding kfree_skb() on the NULL-trailer path also closes
+a leak. Using skb_cow() rather than skb_cow_head() is right since the PRP
+RCT sits at the linear tail.
 
 Reviewed-by: Ali Ahmet Memis <ali@iusegentoo.com>
