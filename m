@@ -1,73 +1,120 @@
-Received: from sender-of-o57.zoho.eu (sender-of-o57.zoho.eu [136.143.169.57])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BC7346E5E;
-	Sat,  1 Aug 2026 00:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785544230; cv=pass; b=WfibG+Zi6A8lbnqo2YP6BsKkepaqQZsOtypiUH6h1+tWsrcM7+9ocmk1A7UjgFVy/0y9KwyP37mKi19QVpYPSy+pAX40+TKSg18p032B1JEYVI9fwCnazSHEy4+hOQf67NnZrD5G5mOFjnmkG2KbXDfnE/5xRw+gTBOY3yKOc9Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785544230; c=relaxed/simple;
-	bh=JWXxw3NIt7qXg9QGhg7Ca3toVvHnbpflD31sY3JSwpM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kj3Wdo0eyPri7WcTcCFxc0X3k1UYRMibAZyOIkOmSTyfHXThbeFIZshplj5wDj499T2dinOIyaCthfi7EhnIk/cC3AhUmqcg/k2k/qCVu7lNYjr33pspuoTm3mdCgKjF0yQbnkdwLLRDmUFgm9gccZgOPi/H+8KNBaOEYX3Fmd0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=UZPr+myC; arc=pass smtp.client-ip=136.143.169.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1C13002DD
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 00:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785544273; cv=none; b=ouZ/JaFP5fIlQUHD9oJ7WNse9iLGCbWvAKSLCsfYHmilzyDnFKyAw90cI60sEEYyqmB/I1mh9Fs499N+3KoCyVAmrKcgJa+SQwu7nGnhSFErpOy5Orr1HVVDBz/dTwX3TO/UWOa6edMG+bOYTFSWItAob88X5RNvWmAKkllh9fA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785544273; c=relaxed/simple;
+	bh=DTBwgs8S1sAi2koYnIwWweu8EC1Mh2QZ7r67IGibE4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C6si2ynrrD3jCB6iLXWmAA2mbWs2HDh2J4guyHFHloqPMxYgjtLeSqUecwLUqC1SWa0Hr3WA0YCdE7SCTg0X0b5qFTFc/bTyGVdL/KONvyLgjPXwp6GrW9Q55qzDFqjwYgMQhQEeCe6exnSLCK/HHDjd0jHm6aywr7Ufpi/PXMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AjGNcwZm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="UZPr+myC"
-ARC-Seal: i=1; a=rsa-sha256; t=1785544214; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=azQc/Pg4b3qSu4YCgZwd062YKIogBicbYM/JNb8Zx/m3P8rf/4PPFYDt2McosdvkH7Vbw99AcjD2Ykgm67D0sJXjnGWgA7O7r+fwU3fuXUoRyCNlddWHuOpqqAea61YNXBsp3g6d4NZZAqBZarRwex2Yt+6zmKIE6zBzkCKX3fI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785544214; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=JWXxw3NIt7qXg9QGhg7Ca3toVvHnbpflD31sY3JSwpM=; 
-	b=lBUHAh8ij9NL0IGrN9P/uGdMQvodpVADIZsUVX00m10/wPCVj7CSfyQY5pCOnqemWAzwhfQAiY3zpbxCSBpgrsGaUISZasp/CjE9Yj8HWa7a85Z7l7M2jCDbEQH1aruFgd5IjyOimMIAHhc8sKwAqLzZuXTEZ48qGGEC3OS/A6E=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=iusegentoo.com;
-	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
-	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785544214;
-	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=JWXxw3NIt7qXg9QGhg7Ca3toVvHnbpflD31sY3JSwpM=;
-	b=UZPr+myCbtRSXWFit0FS+m1b07YsbFqAz3QKkaZX/qAAFK7U9El+B4oOGgUUThG6
-	tq/PNJhiogi+Js43sm6yTHB+oaBlzj2SFY+h0etMG0zQ6BY0iJ18WwEqvmiFOpzy89y
-	gCe/n9A39mHLxKjo1E74UVwC1+CF/ePwGI4HKnVg=
-Received: by mx.zoho.eu with SMTPS id 1785544212792437.3094937556949;
-	Sat, 1 Aug 2026 02:30:12 +0200 (CEST)
-From: Ali Ahmet Memis <ali@iusegentoo.com>
-To: xiexinet@gmail.com
-Cc: netdev@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	lukma@denx.de,
-	m-karicheri2@ti.com,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 3/3] selftests: net: hsr: add shared-mutation regression test
-Date: Sat,  1 Aug 2026 03:29:58 +0300
-Message-ID: <20260801002958.241367-1-ali@iusegentoo.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260728143604.26-4-xiexinet@gmail.com>
-References: <20260728143604.26-4-xiexinet@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AjGNcwZm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785544271;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zqTqj3+/j/AbFq2RoVrHCV42PTj4hoEfVpDtllzCIrc=;
+	b=AjGNcwZmetqM9yH2ypnaXQmNJ+jlCRGWHynQaz4BzC6qgN+XFC7fv1qVGiESPDE4PNMJ56
+	KBLQyNedwW5h/rRIz6h54vBq3NW+tJHaVadNX2aJStzMgxDo6vCSjwl4nuMVzxTA5Ix7Ws
+	pHCwgqAGLZg+C7pWPJTWUIHRhNLJ/dw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-IM_ZwtJiOAmahgM67owaQg-1; Fri,
+ 31 Jul 2026 20:31:06 -0400
+X-MC-Unique: IM_ZwtJiOAmahgM67owaQg-1
+X-Mimecast-MFC-AGG-ID: IM_ZwtJiOAmahgM67owaQg_1785544264
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0504A1800348;
+	Sat,  1 Aug 2026 00:31:04 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.88.33])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2236330002E9;
+	Sat,  1 Aug 2026 00:31:01 +0000 (UTC)
+Date: Fri, 31 Jul 2026 20:30:58 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz,
+	corbet@lwn.net, jpoimboe@kernel.org, shuah@kernel.org,
+	jolsa@kernel.org, mhiramat@kernel.org, stable@vger.kernel.org,
+	linux-open-source@crowdstrike.com
+Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/livepatch: update
+ test-ftrace.sh for deprecated ftrace_enabled
+Message-ID: <am0-QoUNQo4p2sBg@redhat.com>
+References: <20260731175358.3542156-1-andrey.grodzovsky@crowdstrike.com>
+ <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-The test covers both classes: the PRP LAN-ID race under a netem delay on
-one slave, and the HSR RedBox source-MAC alias with a tagged multicast on
-a slave. The capability probes (tc, python3, sch_netem, HSR/PRP support)
-exit ksft_skip and propagate that status, while real failures exit 1. The
-capture filters keying on destination, post-strip EtherType and payload
-while leaving the asserted source MAC unfiltered look correct.
+On Fri, Jul 31, 2026 at 01:53:58PM -0400, Andrey Grodzovsky wrote:
+> kernel.ftrace_enabled=0 is now refused on kernels that deprecate the
+> knob, so the old disable/reload flow no longer applies there. Probe
+> for this with ftrace_disable_supported() and keep the full original
+> scenario (disable, fail to load a livepatch, re-enable, load, confirm
+> disable is refused while loaded) on kernels where it still works;
+> otherwise just confirm the write is refused.
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Suggested-by: Miroslav Benes <mbenes@suse.cz>
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+>  .../testing/selftests/livepatch/functions.sh  | 13 ++++++
+>  .../selftests/livepatch/test-ftrace.sh        | 45 ++++++++++++-------
+>  2 files changed, 41 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 30dc677b2f45..7fa4bda70221 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -126,6 +126,19 @@ function set_ftrace_enabled() {
+>  	echo "livepatch: kernel.ftrace_enabled = $result" > /dev/kmsg
+>  }
+>  
+> +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=0
+> +#	can still disable ftrace on this kernel. Newer kernels deprecate
+> +#	the knob and always refuse the write with -EOPNOTSUPP.
+> +function ftrace_disable_supported() {
+> +	local result
+> +
+> +	sysctl -q kernel.ftrace_enabled=0 &> /dev/null
+> +	result=$(sysctl --values kernel.ftrace_enabled)
+> +	sysctl -q kernel.ftrace_enabled=1 &> /dev/null
+> +
+> +	[[ "$result" == "0" ]]
+> +}
 
-Reviewed-by: Ali Ahmet Memis <ali@iusegentoo.com>
+Small nit: AFAICT, it doesn't really affect the test pattern, but it
+would be a bit cleaner if this function restored the original value
+instead of always turning it on, like (untested):
+
+	orig=$(sysctl --values kernel.ftrace_enabled)
+	sysctl -q kernel.ftrace_enabled=0 &> /dev/null
+	result=$(sysctl --values kernel.ftrace_enabled)
+	sysctl -q "kernel.ftrace_enabled=$orig" &> /dev/null
+
+	[[ "$result" == "0" ]]
+
+--
+Joe
+
