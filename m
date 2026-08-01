@@ -1,38 +1,37 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F482F745C;
-	Sat,  1 Aug 2026 08:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F482E03EA;
+	Sat,  1 Aug 2026 08:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785571691; cv=none; b=RXcMYX+aIhh1rDD9pz9DVdilTmlDBqS+WfL3AF8x0JO2iUnvd1MrywaT0Qo4s0Y1dMd35v2+HlXn9U7yIqRlz6h5L21HYmxP4HZYm/dczPsTTBy/5Js9sRMYXVCkHkVWs8UhaD9AG0f7sOkB5NrwVlqnaJwD7M2pbTtzdAzGrAc=
+	t=1785573550; cv=none; b=bvn59Ki3mqgFsNy81WiZuLvGTwGdCWh0JikId8jqtizU0Ob/sOH4SG8UtWiH0reICS/vELN496dXMge9KXD2NFDFDGIq+IEFy7/2IuEIXuF2xLjNNOebaFGlzF3du4fycg7K+N/4Xh/+kxNzr3xuSMwBIgsfdvXLPcq366P8q9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785571691; c=relaxed/simple;
-	bh=v1+3zy5+7LaxOhHvfTC8bDdKo0UHPcU7nQzs91R0yrU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MkG5tvQ1JxBcomw6wX4LFkfcFBUhsEIUmRid1Ui+ZyRPy11Kb7GlsUe3cyok8/MKYQGLePIvCUT/P8bD3haW3fuhpmlJNOTUTwGSw7I6Wmh6ykaK81dU04dJX6XoK0H9R1SAdjyRqVy2eHAAwP+iT3+ETLe6reftymqaStP/zy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=keOR5Qrp; arc=none smtp.client-ip=90.155.50.34
+	s=arc-20240116; t=1785573550; c=relaxed/simple;
+	bh=OcQS5zISubcc909ep30z/BSs34w45XRYk5EE4EWfLqY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
+	 MIME-Version; b=BlwC3GO0PxM40zcGuHLNG7eXYkaTt5kQzHG0odlue1AAh6NS7dELNa0uvcBT4D+hJ8suPAc/FOoYrpe8z16nC4sTTl+8T78S4C01D+x3S5DmwWRFOD+RVlXMct5td3XscXTZr2X9munnvLO6QxRw6PXjNzgiv7c+jaAs5vYN2Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vQasd3OR; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="keOR5Qrp"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vQasd3OR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=18bIdcOeGSTwG3qH9s4I6NnzfHA4VI/ZEO9zsxictiQ=; b=keOR5QrpcT3tMBAohjjaUZz9So
-	2846u95schqlk5LuRQutlcPQXxNmIrUE0JXY0TCc36e/2lGCX737H+8lis2ylsMEcjBN6wGLjSTCc
-	0El67Eyc8eR0xLVlj2nt/Arft+RO0sfAttqftRvlrdcGvsvlk5s7kznZo6DMJIRdhmIaXZMMtOglg
-	DKyWmovB9dCR7acS4cD8Gd0TMLMgUEFFDfwswlxFakYgWXgZuVAREXhXjY/iQZ+lH94yu45PqBChE
-	HQwrWXJJAC2mRlKWeXXr02DmHShTFiM1hMmpT5tR8H2j9dcsOehYbCuKXkjA1u/ZPQVKrijIpAFS3
-	eVFs87qg==;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:In-Reply-To:
+	Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:References;
+	bh=RmaoA/bE6iZHtJ0us23hNByggU40JWjLRZegqTIvQPI=; b=vQasd3OR46RhN5KQUpGQADF6bW
+	+2c2nY5mmQ1ulxEFUgciJnHuT+vVqELlROSkKpdtnyAVQXispOa7zBqnCRAHCARNVKsSBI8q4cDD+
+	q06S0c/9hrZ1sFmFB52Ppd6cgwderqAXpGFQh+o5oE0hkb5JpUcQPMBZOr+uJvIamKup99id/gis3
+	2xav0+WJIn+qUmtpTrGUsGU1xCgc/k3m7pdakbOJapFPtJptJ4Y7ERj662DVDQmiFMDrX0mn+QcmO
+	EbCNQuEfDPviupojz10DBBKE9qABvEjYNZT6YS0ZifMB+3jJFF1hptMLxOXK1XZw6Pvd3nlS7i+kf
+	RRwqHUlA==;
 Received: from [2001:8b0:10b:5:784e:4057:b43d:bb6b] (helo=u09cd745991455d.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wq4l0-00000003hNc-3Aw4;
-	Sat, 01 Aug 2026 08:07:46 +0000
-Message-ID: <d2d98dd31718eb925ae44b0eceb325538a8174ae.camel@infradead.org>
-Subject: Re: [PATCH v7 31/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
- accurate KVM clock migration
+	id 1wq5Ey-00000003jTv-3gah;
+	Sat, 01 Aug 2026 08:38:45 +0000
+Message-ID: <8b90851f38ef5b10cdcdc70e7543bd6b0b5e2773.camel@infradead.org>
+Subject: Re: [PATCH v6 00/36] Cleaning up the KVM clock mess
 From: David Woodhouse <dwmw2@infradead.org>
 To: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -47,13 +46,10 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  Zhang	 <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Date: Sat, 01 Aug 2026 09:07:46 +0100
-In-Reply-To: <am0upFND1r93HPxq@google.com>
-References: <20260728144954.355376-1-dwmw2@infradead.org>
-	 <20260728144954.355376-32-dwmw2@infradead.org>
-	 <am0upFND1r93HPxq@google.com>
+Date: Sat, 01 Aug 2026 09:38:44 +0100
+In-Reply-To: <178552799129.2700794.10181439022561913222.b4-ty@google.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-hhE/NFLqzUIzrpVlTdn+"
+	boundary="=-n8Rk3MbvUbHa+AO2Y0Ay"
 User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -64,31 +60,39 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-hhE/NFLqzUIzrpVlTdn+
+--=-n8Rk3MbvUbHa+AO2Y0Ay
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-07-31 at 16:24 -0700, Sean Christopherson wrote:
->=20
-> > +	/*
-> > +	 * Allow for a discrepancy of 1 kHz either way between the TSC
-> > +	 * frequency used to generate the user's pvclock and the current
-> > +	 * host's measured frequency, since they may not precisely match.
-> > +	 */
-> > +	if (user_tsc_hz < curr_tsc_hz - 1000 ||
-> > +	=C2=A0=C2=A0=C2=A0 user_tsc_hz > curr_tsc_hz + 1000) {
->=20
-> I don't follow, why is KVM restricting what frequency userspace can set?
+On Fri, 2026-07-31 at 13:09 -0700, Sean Christopherson wrote:
+> Applied patch 1 to kvm-x86 clocks.
+>
+> [01/36] KVM: x86/xen: Do not corrupt KVM clock in kvm_xen_shared_info_ini=
+t()
+>         https://github.com/kvm-x86/linux/commit/3d4b20b5a7df
 
-Userspace actually sets the frequency with KVM_SET_TSC_KHZ. What KVM is
-insisting upon here is that the input to KVM_SET_CLOCK_GUEST is
-*consistent* with the guest's TSC frequency (within a little slop
-caused by different host TSCs).
+Thanks. Could the clocks branch be based on something that includes the
+timekeeping work from the timers-ptp-2026-06-13 merge (in v7.2-rc1)?
 
-I think the comment above it is fairly badly worded though ("host's
-measured frequency"), so I'll fix that.
+The later parts of the series depend on ktime_get_snapshot_id() and the
+reworked struct system_time_snapshot from there. Your kvm-x86/next
+branch does have it; I'll keep my WIP kvmclock8 branch based on that
+for now as I address the other comments.
 
---=-hhE/NFLqzUIzrpVlTdn+
+
+*   2d6d57f889f3 Merge tag 'timers-ptp-2026-06-13' of tip
+|\
+| * bc484a509673 ptp: vmclock: Use hw_cycles from snapshot for precise TSC =
+pairing
+| ...
+| * ca1ec8bfac8c timekeeping: Add clocksource read_snapshot() method and hw=
+_cycles to snapshot
+| ...
+| * ef22786707e3 timekeeping: Use system_time_snapshot::systime/monoraw ins=
+tead of ::real/raw
+| * eba302268a01 timekeeping: Provide ktime_get_snapshot_id()
+
+--=-n8Rk3MbvUbHa+AO2Y0Ay
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -186,22 +190,22 @@ vFEOOmuaq7VamuLEPFQtJM4olmipOW6CzrLcFz6J/6yAecEG3P1ZDoy08eSHvM40MAUgpwGa/w6o
 MAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTowOAYDVQQDEzFEaWdpQ2VydCBB
 c3N1cmVkIEcyIFNNSU1FIFJTQTQwOTYgU0hBMzg0IDIwMjQgQ0ExAhADNSi2uzJskfEdOMo4hV0g
 MA0GCWCGSAFlAwQCAQUAoIIBezAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yNjA4MDEwODA3NDZaMC8GCSqGSIb3DQEJBDEiBCCx6LFSi3mTZHte3UKbr1SYwMC+1Sbx
-fqXVt8jJ3ebHRDCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
+BTEPFw0yNjA4MDEwODM4NDRaMC8GCSqGSIb3DQEJBDEiBCAso9YgR/k05/yJ8iZRqVjWS7kJsmyC
+4WAIPhpvsss2dTCBhQYJKwYBBAGCNxAEMXgwdjBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGln
 aUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBT
 SEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAwgYcGCyqGSIb3DQEJEAILMXigdjBiMQsw
 CQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFz
 c3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQgMjAyNCBDQTECEAM1KLa7MmyR8R04yjiFXSAw
-DQYJKoZIhvcNAQEBBQAEggIAYgstmq2fylz6eE4M82Uj4rzKYdzkSNcnWI+4Sk7ckLcTx+hEckGL
-lcM2Pd04AVNbB/iuyw87C+1kW/34wEBPZ6DdFE96NDTX0Vfd01vAhmASua0Os46qt7kNcAgQ696R
-HQZstzHuiZ8V8cnIR4tpaVtOXV9hsKhkbSC/1WZCTH+zgeMHwzYgq81HiD1sOmwWeq3LZsoggZF5
-MciAGdU3DfY5QTXzXX3inwM8/6HSfjDeSTnEj8duWYQ+p2CwNuahtFGlECr5offONE1+RJV2EsXz
-vJTTqwNWuJXuf9enthTtTuLLIhi93LyLKJzUzarGQcyHgjWUfLCn0YGLAapZlF6gFjZdp+PSObD3
-oa8jwHXK+kp1YIEyBmwPpDNRs7RQvkCe65lv+CVd2HzHNCjDrL1MWzqBog4dALOrdhZhLsZ1e48t
-lQJvp04HDSRCwrLsizwDEf+eGjQnc72V6zowxgZLhyXJoq4pISKTsWHqGww/KyD0VqkYuNxkQ98M
-sdd2FIN9NV7tqDAxLt8L9NiY06n0plgyk95JgtGOtevUoD/0itCiUUJ9qSGx6oQ6g55RTuws2HhH
-Ijwxk6xZgxdWCb6Pmr2EQnOe/E5djI2HIMPjRtag03cXP2pAW344YBQvSkQRWfiEGdFk7kU+3qRc
-H5lnUq64/yTq6jmeC4zkY2MAAAAAAAA=
+DQYJKoZIhvcNAQEBBQAEggIAdAvGOIdR3Jym1MBnTKyIkb7N1sSz5Vej8AU3UrA7wQyFFV+xxt+W
+U4+JFtZ/Fi5klcY9EzNDudfDBWhyon49IkXMD+S7082yR4+xOttX/b1DnZDcgkppOpUUjl3LbTeB
+TyDLay066nD7PRf+LbW4aQJq/8o6ZAP0toivg2yaJlOPSBtqXkgCbUSAWvXwM0N4f02Gfc7AS32K
+6xGoc7OkcR3HVB/v11ESFFstkri9pIkxTlqKUeTu042PvM8aYc0I48LdzjbnxgpA/FoJ3OBqb9WK
+nPc8jYH6Vna1CKV012j2/vMsCBKaxflX7LoCSL9o80CfJ1TN/RRst8IUBScdH0PfLKs1L6Ueun3+
+1lE+TR4+lSJH1hMcq/MUB0cKpdhY45b2CV63E7jgvEzvY2UpJpTv9vQ+faTcsO7cWQ+yWPf8LZqJ
+Lpt6CFDkb96sBQTo1KuSWBsrqcixjynHePxls5aJRN62LJpi3gAR85/caH53Cr/jVj51/p0a86ga
+U11YtBGy1lkCecUfGiftwY0FQyXcyEqTbl829EhxNQhZOvGUKBAWf9Wt8AQOBrj1d8gNKTazslyN
+nAvZhMNEbG3c4G6IqJOy1JT/LjRRpwwQlYmaBgG5EFLhQgtiHuxdyB4ZEFT033Rj0JaWnRf2q/lZ
+DDryVrM9D3j/jkMsEszYe1MAAAAAAAA=
 
 
---=-hhE/NFLqzUIzrpVlTdn+--
+--=-n8Rk3MbvUbHa+AO2Y0Ay--
