@@ -1,139 +1,131 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E48B380FDB;
-	Sat,  1 Aug 2026 05:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2143AEF46
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Aug 2026 05:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785560920; cv=none; b=XkGxESdAHqbMtP4Zmpo9tWUNQuWKyBM8QbBlF6Lg6v/QyfmnSmdBR7iOmzPMl3G3wLzjp8MLPzFqDnkujq5qY8zZZ8aPTa1cdz/Vz7Vq0ewpawluAgmIMLWC1zsCGRuh2ubLAlM2AZDzNKjuK0VCBXFXjIdMwaewlqx0UuVzWro=
+	t=1785561202; cv=none; b=QcxSi1lsPBEGVwp5ucKJVgzdTWUOYfAgVMaDWgbtyxjxdwGsCvFGPREycvftZWgNdhzjCAW8/9DSmi7nmvdFqbvl1WrQNRLtWSjSZqxZeTuw3QvK9iBkn/A8GQoRIGKv/rkCSMak51lhAGXrSe71JJK8HI5XXsWXf9on+GARwkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785560920; c=relaxed/simple;
-	bh=3HZF/U5SDEG9V1zscAgO3uTLRyXzMVLUYmMuNqOdVjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g164Idzr2dNCOQm1AsoT8VJ6m7+Ag5XaqXwtbu+VbWreC8ilVyLpHSZ+p2uGyulGRVSrNTlFZoAUTGuiF6Hmjtys6ALKg6GllRoH1oczUKSJfdSshLyuZtqKsMbWTj7RcOdHSGELqV9ODUAYSjFUMsysas0JBmWUFc8tk+sgTFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XkEjDm94; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1785561202; c=relaxed/simple;
+	bh=axuNdE1mwbFWEpJB6Ct9uJBJt9kptYoIs2A9D8C/nKg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YX/AcA19H5PlcUjfvG+Q2ElMHSxl+cyN4LO7G7UEPZKhBmeXQu6RvLDaRAH2dKEoKljVavJ7AGISlOaYgaMTbScBQwzJOWMmp6wQJq/TGhEO+cNZR9wt7uN4zLG1lmUzC7Fwtb8y94IdyCMORWXII6CUYjaCnm/S5NL6AVTf4Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--shivajikant.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UhQhbsy+; arc=none smtp.client-ip=209.85.210.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--shivajikant.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XkEjDm94"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785560909; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=UJRJbzaMPn7EWU1PuaFIxydKwh1J5WKdvnMdojZ2MQw=;
-	b=XkEjDm94jqW2hYL3B6s/pL1IOh6ESLLSQPAqJWFIDjYbqvmc/cAx0K35b20IuUTiLabSH4DrhCdigUzkxQTQacOcCWIS5Has9e1Is0Brcm/R8O5b5zrHDLfCSg3FxWaBMaTNbj7aTZVXIT4i2/ha5Sl1pGFWGYSrS2GHOyJ73Fg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0X89Sdcd_1785560907;
-Received: from 30.32.91.114(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X89Sdcd_1785560907 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Sat, 01 Aug 2026 13:08:28 +0800
-Message-ID: <00123a40-5aec-4600-9db5-6905806387b0@linux.alibaba.com>
-Date: Sat, 1 Aug 2026 13:08:27 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UhQhbsy+"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8485b7e18b4so3207443b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jul 2026 22:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785561200; x=1786166000; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bYqwZAvPaq1z+L+b1vgHCEIGBd9UB7fT/g85RdNXiY0=;
+        b=UhQhbsy+GmJIyGe0fZBTuxo0fq79HcWzVNUemSHrJT2hL6m8a7ZwGmh0d5i7+PcC7j
+         A88rgaCMr68/Ugdq3dJ4eMPdtYhL7egXg7hQau07J8RflMYXrPAtEazaJsxyDEED+rtj
+         Ve32norAb13y6V/mt+x/mSpdn8MoVfwWUOGifh4FZKZ93Alo7U/8oebJ6TFEUgXrUc0x
+         HE3W7yNFkFql/LmO5E1p1cQiSQ18lAaTa+TcI4YCFHqVoQc/ZADrJtXSmc13cILKAk48
+         qHKBwZtpRbV1z1/ez5AeGOYoyjtiFtl0OR4uGZrlxdwSS9Afn6TOvIBQZc+ffeByX4SC
+         i5zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785561200; x=1786166000;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bYqwZAvPaq1z+L+b1vgHCEIGBd9UB7fT/g85RdNXiY0=;
+        b=RbFlJUVbnEilhEMWwnMDavjpMsAlQIWc5LVifmoQUXvOiQHNbL4TzszymOUpr2Gbpf
+         5a0xFrBz+rlnQbWZgcb4N4mWTYSbc5aedfPWbYQE4UwCgPgr3uv5ii+0XUKip0VB1+gB
+         JztibIswiyqGVOC1eW3uzhHCa2h9acT7sAjetxBfixRA7uj6I7papHp7yomHdfkfYRTZ
+         cz1oaAJrBkE54SsNBt753ECWeMFQeCxKnobpW+81mBZlXozn+Mg4MKCmBWs8ewKAWHmE
+         JvcPy7vTNBbIIo7PdcNTx4RzIzUQNLaYADSzOJzzs1lLtgHZ1mL+gEmQh14g3d1Zg14h
+         gHCQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro6bns7fAuhf0CRyU1Wuan0TbTVbPk2dK1pR5f6P4x/ZFD9/X9PgaOrFn0zDoy+rFL56RdIRvgoa9BJ4QIelMs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9Vom6/OR2T2Euc2TLHOYvivCWIxvNfLTjlBjPf19I6oGTyRln
+	4hdQDC9jiuvWe1vvv+2vS3ERb+nK327diwqpo6B02CuBkPCcY2QEXNKpMS84dl5D288P5Lp9JRy
+	ABz7jwoouiSJm5kIrY+JZ2Z9NbA==
+X-Received: from pgnh22.prod.google.com ([2002:a63:3856:0:b0:c9a:53ea:434a])
+ (user=shivajikant job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:e081:b0:3b4:75c0:3ec0 with SMTP id adf61e73a8af0-3c92a75521amr2048634637.30.1785561199861;
+ Fri, 31 Jul 2026 22:13:19 -0700 (PDT)
+Date: Sat,  1 Aug 2026 05:13:00 +0000
+In-Reply-To: <20260801051307.478469-1-shivajikant@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] selftests: mm: implement the mTHP-sized hugepage
- check helpers
-To: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org
-Cc: ziy@nvidia.com, liam@infradead.org, nico.pache@linux.dev,
- dev.jain@arm.com, ryan.roberts@arm.com, baohua@kernel.org,
- lance.yang@linux.dev, usama.arif@linux.dev, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1785224928.git.baolin.wang@linux.alibaba.com>
- <8fd04f8c2f11390bf00058f9cd3d98d73544c75f.1785224928.git.baolin.wang@linux.alibaba.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <8fd04f8c2f11390bf00058f9cd3d98d73544c75f.1785224928.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260801051307.478469-1-shivajikant@google.com>
+X-Mailer: git-send-email 2.55.0.508.g3f0d502094-goog
+Message-ID: <20260801051307.478469-2-shivajikant@google.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add IP_TRANSPARENT and
+ IPV6_TRANSPARENT to setget_sockopt
+From: Shivaji Kant <shivajikant@google.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, kuniyu@google.com, anubhavsinggh@google.com, 
+	Shivaji Kant <shivajikant@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
+	Hoyeon Lee <hoyeon.lee@suse.com>, Guillaume Maudoux <layus.on@gmail.com>, 
+	Leon Hwang <leon.hwang@linux.dev>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+Add test coverage for IP_TRANSPARENT and IPV6_TRANSPARENT socket options
+in the setget_sockopt BPF selftest to verify bpf_setsockopt() and
+bpf_getsockopt() helpers.
 
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Tested-by: Anubhav Singh <anubhavsinggh@google.com>
+Signed-off-by: Shivaji Kant <shivajikant@google.com>
+---
+ tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
+ tools/testing/selftests/bpf/progs/setget_sockopt.c  | 2 ++
+ 2 files changed, 4 insertions(+)
 
-On 7/28/26 4:13 PM, Baolin Wang wrote:
-> Implement mTHP-sized hugepage checking helpers using gather_folio_orders().
-> Also rename the existing PMD-sized huge page check function to
-> __check_pmd_huge() for clarity.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->   tools/testing/selftests/mm/vm_util.c | 55 ++++++++++++++++++++++++++--
->   1 file changed, 51 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 09e5d5cabe21..a4ffaa0ca6fa 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -15,6 +15,10 @@
->   #define SMAP_FILE_PATH "/proc/self/smaps"
->   #define STATUS_FILE_PATH "/proc/self/status"
->   #define MAX_LINE_LENGTH 500
-> +#define PAGEMAP_PATH "/proc/self/pagemap"
-> +#define KPAGEFLAGS_PATH "/proc/kpageflags"
-> +#define GET_ORDER(nr_pages)    (31 - __builtin_clz(nr_pages))
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index c4b438854565..593b38f90417 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -31,10 +31,12 @@
+ #define __SO_ACCEPTCON		(1 << 16)
+ 
+ #define IP_TOS			1
++#define IP_TRANSPARENT		19
+ 
+ #define SOL_IPV6		41
+ #define IPV6_TCLASS		67
+ #define IPV6_AUTOFLOWLABEL	70
++#define IPV6_TRANSPARENT	75
+ 
+ #define TC_ACT_UNSPEC		(-1)
+ #define TC_ACT_OK		0
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+index 636a7cd8e2fa..d96e99b67aeb 100644
+--- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -69,12 +69,14 @@ static const struct sockopt_test sol_tcp_tests[] = {
+ 
+ static const struct sockopt_test sol_ip_tests[] = {
+ 	{ .opt = IP_TOS, .new = 0xe1, .expected = 0xe1, .tcp_expected = 0xe0, },
++	{ .opt = IP_TRANSPARENT, .flip = 1, },
+ 	{ .opt = 0, },
+ };
+ 
+ static const struct sockopt_test sol_ipv6_tests[] = {
+ 	{ .opt = IPV6_TCLASS, .new = 0xe1, .expected = 0xe1, .tcp_expected = 0xe0, },
+ 	{ .opt = IPV6_AUTOFLOWLABEL, .flip = 1, },
++	{ .opt = IPV6_TRANSPARENT, .flip = 1, },
+ 	{ .opt = 0, },
+ };
+ 
+-- 
+2.55.0.508.g3f0d502094-goog
 
-sashiko comment:
-"Is there a risk of undefined behavior here if nr_pages evaluates to 0?
-
-If check_large_folios() is called with an hpage_size smaller than the 
-system page size, the division hpage_size / pagesize will yield 0. 
-Calling __builtin_clz(0) results in undefined behavior."
-
-This doesn't happen now. But for code robustness, I'll add a hpage_size 
-check in check_large_folios().
-
-> +#define NR_ORDERS 20
->   
->   unsigned int __page_size;
->   unsigned int __page_shift;
-> @@ -348,7 +352,7 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->   	return entry;
->   }
->   
-> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
-> +static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
->   		  uint64_t hpage_size)
->   {
->   	char buffer[MAX_LINE_LENGTH];
-> @@ -366,19 +370,62 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
->   	return thp == (nr_hpages * (hpage_size >> 10));
->   }
->   
-> +static bool check_large_folios(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size)
-> +{
-> +	int pagesize = getpagesize();
-> +	int order = GET_ORDER(hpage_size / pagesize);
-> +	int pagemap_fd, kpageflags_fd;
-> +	int orders[NR_ORDERS], status;
-> +	bool ret = false;
-> +
-> +	memset(orders, 0, sizeof(int) * NR_ORDERS);
-> +
-> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap_fd == -1)
-> +		ksft_exit_fail_msg("read pagemap fail\n");
-> +
-> +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> +	if (kpageflags_fd == -1) {
-> +		close(pagemap_fd);
-> +		ksft_exit_fail_msg("read kpageflags fail\n");
-> +	}
-> +
-> +	status = gather_folio_orders(addr, size, pagemap_fd,
-> +			kpageflags_fd, orders, NR_ORDERS);
-> +	if (status)
-> +		goto out;
-> +
-> +	if (orders[order] == nr_hpages)
-> +		ret = true;
-
-sashiko comment:
-"Does this code overflow the orders[] stack array if the calculated 
-order is 20 or greater?
-
-For example, on architectures supporting very large huge pages (like 
-16GB huge pages on PowerPC), the order could be 22. It looks like 
-indexing orders[order] here without bounds checking could cause an 
-out-of-bounds stack read."
-
-This doesn't look like the mTHP order size, but I'll add an order check.
