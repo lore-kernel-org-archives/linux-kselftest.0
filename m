@@ -1,225 +1,263 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010012.outbound.protection.outlook.com [40.93.198.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A943C2D;
-	Sun,  2 Aug 2026 22:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785711044; cv=fail; b=R75WLubiVwvqL5Om0onBqokhWNr7EB69ykIS04WjrSf84g0jF5O6n/Qh8WuzSDXLZu3nan1JDA69elA/h8TvWj3cSFZrWgwbGpiowM/rxqkWuiXMyK0EciPTsPnA9hmpa7IXp2Bkrz3GVjhc5pn7+zn5q4ZnABnkEEWTaFdvbmc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785711044; c=relaxed/simple;
-	bh=u99sbFPMG+XwoaUjys769YkxFjfR3AC1OVc9NLMD5fY=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:References:
-	 In-Reply-To:MIME-Version; b=hcixUNkDodEMgSxEm16J+a+OCRJ4qxTdc08xF+7a4a0KPp53UWkTVzNYN7hUU5xPxKDgYGyPuCu+2Ykt00fzYJni8d998RAujWk+3GO6bugRF3rymY6lbOp0XU6+0tg8O1ge4ifx5v5WJlN5tMaLInyUZxi8RrPY9hVylpcdgso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=drD1euwz; arc=fail smtp.client-ip=40.93.198.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB803346BE
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 22:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785711259; cv=none; b=H9rZRPFgcBkxTvNal1j94EQnvKWzLfHJY+Zz5oLgwF39LQr0jWWuJe19YfRs6JcaP8IlFlbbjU6ml5hpWCchrE8HMzD+g5YwpiZLfrYkFilt18c6W7xFjK8ZCbf7o8mVHfQs4TVdXvoBkxpXflOCE+Fvj5cnCCJQtWAaY6MBK1E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785711259; c=relaxed/simple;
+	bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=cCEanT29iW5iE1bA7VDPRgpZtN1ck/FMsCI5REtmknGAEcx11XF2L0jU7qGGT4mVFx2wEq/u61JpKDeLx6ASiQunoBEnZ0/LCbHsdwvyh2iPCEllsCPHYj5gnuFKshuiK4k5WmdGgSW30B+r99xJsvAh+FxCMUcWxKqosxiP5QI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bY3uP0kR; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="drD1euwz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DSjXuMR6Hzv/1LrVDnMh1gNioWQidQHY2DfMjSZaiyXgWOqPUJ137YdvqqKE7w7ayMF3EVtnWschqOZ6aoxpxOnWlwiyJ6lFckhB/57UmBOwLwHh0AY7chBKbhz7GgV/oS2D0SwjUAdog5cQug0cNr4+X1E1janD/i55ZfuUoWd2eDbuRIlh5Q94UCaIiq6ZXsESxAAh7TA8CsQJYq02JZ0f1rR63fonxC3z8eTl6zt1eDH/ILgDsMhwTFTjN4fYWG1oPPP09UABlJH/YZ03r5B3XeTmQHSUrVuItXY8dPr9eHHyb69/AP78mwxG+omh9VuzFZhPi52Dmtcpgmanzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CVwWwQdKTK9HqZs1QmUSo2B0oGlTQAei9AZRUo9zB1s=;
- b=R6SORqz4SQiTq+cpblfeGF7ltkwo+DWmx+RP5DcmYd9757LhdEw/RUD3yAPdhnSIN/F3+h+bdJXjKP/MtyAe9okSgdFIwvxusrTS9gSDqZ8dCl/StJoscbtKbgDw7YSxyJezEPv/tHsFIr6RnDeDiFAH1rS6+FBfITA8hq5S5myyvAOiZOJMf1MY8klt2b5LqN82Slj1Nz2+p2FQlAQNsorudtjpbpW9GY9dmpbxo5JiCF5zhDyy61Lcj12LqUNk3puS4XSKXSBbwjNqMwuGwYSDApUZmkga2OzdVRwfji03cvbNNwL5jFhD6CydZ29kyX8oCytQbkOFzPGyO+uzbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CVwWwQdKTK9HqZs1QmUSo2B0oGlTQAei9AZRUo9zB1s=;
- b=drD1euwzwybUzeJLhunKMp+v52huZZQnOOmGrxrwwkqGFWLFUTxRedMQFiAvoEa8rXMfG0Ih/sWNdpWk2skgn+ZcVROdIqtjVTlvlNujMKsOKEay0jfegsNEGILduqikMdQE6QOiBo3Bnm0YOX8yad+eVQBAOdrhfydVs2UPj4Q4c96M2oe3dbrh3KMjwbFFYaVmE7gBwxvbNynqgufiegfB3QrH2NM47Xa7cI/UjDvlSZQZw7xHd+igobCK6hIoMmkVEBBT5XpTyxkDHlzbSH137o1KHWX7dpYokJOffUZBgs456fVlogi4FMjeZ9swF5YmLR8W288ekVAB8D7/Dw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by DS0PR12MB9037.namprd12.prod.outlook.com (2603:10b6:8:f1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.17; Sun, 2 Aug
- 2026 22:50:38 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0270.016; Sun, 2 Aug 2026
- 22:50:38 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 02 Aug 2026 18:50:36 -0400
-Message-Id: <DKETQDCO9OYH.2FDBR4ZXGHLM@nvidia.com>
-Subject: Re: [PATCH 16/16] selftests/mm: skip khugepaged shmem cases without
- a PMD page cache folio
-Cc: "Baolin Wang" <baolin.wang@linux.alibaba.com>, "Barry Song"
- <baohua@kernel.org>, "Dev Jain" <dev.jain@arm.com>, "Hugh Dickins"
- <hughd@google.com>, "Lance Yang" <lance.yang@linux.dev>, "Liam R. Howlett"
- <liam@infradead.org>, "Michal Hocko" <mhocko@suse.com>, "Mike Rapoport"
- <rppt@kernel.org>, "Ryan Roberts" <ryan.roberts@arm.com>, "Shuah Khan"
- <shuah@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>, "Usama Arif"
- <usama.arif@linux.dev>, "Vlastimil Babka" <vbabka@kernel.org>,
- <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-To: "Kiryl Shutsemau" <kirill@shutemov.name>, "Andrew Morton"
- <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Nico Pache" <nico.pache@linux.dev>
-From: "Zi Yan" <ziy@nvidia.com>
-X-Mailer: aerc 0.21.0
-References: <20260802195254.1937477-1-kirill@shutemov.name>
- <20260802195254.1937477-17-kirill@shutemov.name>
-In-Reply-To: <20260802195254.1937477-17-kirill@shutemov.name>
-X-ClientProxiedBy: YQ1P288CA0004.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:9e::22) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bY3uP0kR"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-ca7c1176317so2408498a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 15:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785711257; x=1786316057; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
+        b=bY3uP0kRMsuULbpZlFeF5RWa9VlHnvoG/QRyfnPiTkaXJBsbSXy1pyPlzZrn61gtRW
+         TCbbFJyca4jIEoSovch7cesNS0uXJ4pZIdOUtrp8mvJenMcJmT8JdhHM36g2kjDjgeV3
+         vP/Qxdk0ILb3sPOFY4zGSC1IHf8VDlwojSsLBf82KLRf95vMHsccVLSIUPJgPVirRd7M
+         oRS0j15F0TNIIN/nh8LW3kj5Jar8gkXX7RwNHfzZPiMQstOeT0pOoQQ2vCfsY8U/JRlO
+         oDyW16EqZzal2HKTcIsszbC8cqlf1ibcDjqMGTUfpOxxOLWHMAh/lDL4CtJjjWetAI/h
+         ydGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785711257; x=1786316057;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
+        b=E5DUUBk5ZUmOu6Paqi6H23T/r3zwxCrSeG614wls2PjFEftI8DTrcZXq4bB9dTsF7k
+         3oVk4Y481akjTxJu25YyBJZ8SgS4vlXm/EKhdZgpSn5MKzN4DNt0BBm/Flw2t69Mh3JI
+         4dipw+cx+0SBiwA6tnuvSufRP+4r7Wny9NERp/qiPAFYmJhzdJB2sOqmBqYaWggeTnUQ
+         VgjdhvMCNYMv6WuTALir0E/qOOlfPIGNm0ct7j7PoH/b10d4jCdNe5nAbFWjuMjgpLJv
+         hrZ7jiVMx4LSwsasIHYzdLOcUWSd4mxZKmVcSXKI4m3oNjH7ksXZN9KIW/a+Egtc191U
+         W4+w==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1SX7wrOKmo45ufRkQskcSzK5iUkH9OMOa1r42vei53vCJtnBjiXG8eJ3SpQ0pFrSwuoP5KzS3KzriYtz7Jj4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT53tEZEYD5b6uV1boTGaFjq2EnnCtPO5c/dDjEYzZnQVNQUKW
+	loRwmjGpQICdy6M9V7Fes/XhOm5pEnDqLd+BorH+nE2Wn1TU389gYMhj
+X-Gm-Gg: AR+sD124q4rQyMQWeGaFEsnpjoLNG/kW1LGvpRCiSsq99uasQZxnGrd2uJ3VkTDAJRi
+	APKVBYNutlsdIY1NAIrIerDo/T/KJ/NKRtEKbdtb2x2rxiVm3k0UNMb5KZfscbpsD6KjOES6eRG
+	//zkUMlQwScQ6w/TkDhS08ljp3lkISoN1H7U9+d3jd2e/sNhcuatKWQhKo/ATd/ZvYvvG7imIbw
+	pFAgOcAd37sHgdkYsk8tgJxwnrOC/6ftIgDJidnitg5ucWMG40unGJgQ5o956tDzjtVu0wHPUs7
+	T1G2NrsVQ0omY6H67+TQtVHcEfhdnDODTTqyU+ZNh9BlkPmWpreaazq/wq0108Ti83exxzIVcGK
+	VZhmBCozzl1JY9vFFtek08oVAldR5tMuTf3V+OcoyinV/AoQP+z3Wc3mNbHh9SxCLIaMsC7wbJf
+	S5TDp/+/JKGdcIcDEzs2M8LDHn5IlvlLYTuiHY8NpiFb16EIavH5ICiPsJMhCHLb4=
+X-Received: by 2002:a05:6a20:b598:b0:3c0:e552:f2d with SMTP id adf61e73a8af0-3c92a761f35mr7446088637.34.1785711257265;
+        Sun, 02 Aug 2026 15:54:17 -0700 (PDT)
+Received: from localhost ([73.222.46.22])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e18e70esm50339576eec.29.2026.08.02.15.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Aug 2026 15:54:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DS0PR12MB9037:EE_
-X-MS-Office365-Filtering-Correlation-Id: 227324b9-af71-4b66-9157-08def0e878ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|18002099003|22082099003|6133799003|56012099006|5023799004|11063799006|4143699003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	Q3z+ii1fO8nKj6aUiOMPlAfiC5cdn7CW2234u1zkqYuzue86Lyc7RpBAOWGvD2rlog86XnvERIhAEVCx09jB573vbyQrcc95yEn+8mwnVe7WNVMnj2ax7i1bJDiKQmr0mleoOlpFkzkUFaB/p4nIHOqyiJD+kKDhWACLFEEx7WV27gA77CWDJbMHhLROjku3vnPPEGzyuFKZe5OQ3heWmiN9JAac1iqSpFfQglxlftuDcQryLA0upTyR6coT46Iuaqw8tmZd49xvsxAW9tHlLOoVHow813d3rd4BrjU2G2R4nf/O/sleAVXUXDnh9ZhmyNE5FqYpsEKyzXVy3jJSCMKKRkWEAkQ4xwhb5q7P4MI+TreDZ7E/g/2c8tW5PKmA0HIgtnUpBi/KLfOF5tRW8K6Z+4THUFS8d21E41O9InYW53+MwzCR7CnCmAptulnuFLv86O15q0seGy7ycaQ+wsJZIo3BMv5RMF5dvJHCJk1C0k7f9ySCXoGMAm6BwVaWEkWd2LcOsqY884XH7/cqgk6IokWriPULjCQNq17EH4SFJ1dOIczbb06kr2jRyxFiWgA74l2HUXko3Lq3T+jrDxz/MAzFi6YDh3Ijb9ouxyfecNnKgRuZuMRAPDU8xkk+rlm86ag8reRjtVGp+jJSIuu7/tbmI78SnLqC+7sxLQk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(18002099003)(22082099003)(6133799003)(56012099006)(5023799004)(11063799006)(4143699003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WjVTVlBiNjBIUTFYMTdSRkNlM043T2x6czI5QWFOT0l0ajZ3SjdIRFo5d1J1?=
- =?utf-8?B?Sk8xeUh4WWdsY052bjAzd2RRdEZ4NWVRaW8yZVQ1Nm5pMm9abDRzU1BSam1E?=
- =?utf-8?B?SXVaa3UvR0pZRVNyWEZpM2gzQmNoeXZZWExkQkJSTm9YcFc3dDFsY0ltaWJB?=
- =?utf-8?B?U2gra0lGWGVXeGNmdlI0ejJlajdtWXVqQ2ttbW9xVU1jdExTY2w1ZFJrS0FC?=
- =?utf-8?B?aU04TDNFNnZJb3NueGVBVi9Cc2pnSjNnWmZsQ0FNT2kzOWZNek5YYkFSc0hR?=
- =?utf-8?B?cUlRYjBOcTVVL0p4WWg4cWNQb0x4MXdrYjRkMHplb3pGUy9FT1N5M0xoVlZB?=
- =?utf-8?B?SzdybGNGMnNjeExmaFlCNThnZVJMM1Zyd1RFeHMwemJOZVR0NUhBd05BQmZL?=
- =?utf-8?B?Y1U3ZUxweTdSSkFRc2hQUXBjUElJMG9EcFNmVTk1SGlTK2wySGVtS2V4WnRM?=
- =?utf-8?B?c01vUjhtOVBkcEY5WE1LVnkzbG02aEUwd3dERHR6YXpIekJscWpzVEJROThp?=
- =?utf-8?B?SFpNVUxGLy9PZk9nZkFZcXVYZzVOUUhhUnlGQi9HbGFML1RMSnp3TXlDcjNn?=
- =?utf-8?B?dkxlMVdqRWViZ240aWJJYlUwcm9ESno0Yk1xY0RDci9qYit0VnMzZ0Jia2V5?=
- =?utf-8?B?MFpISHE2RG9iVWpOMTFDN1N1dVdHWkphQ25vT3JJYWpmWjdGbWFmRG05dCtR?=
- =?utf-8?B?ZGg2bDRCU3J2S0hnajRMcFErTEl6NWpxRGF6dEtGc2VkTG1nbWJJUHhldlhV?=
- =?utf-8?B?TFlOQml4azc4bWhVRmtBRCtnemtCMGx1Y2V4T082ZjJ6RmkxWWgvU0JtTlZk?=
- =?utf-8?B?a2lXWFBVM3gvV2ErNU9MamRxeUExZjZPZ2NmVHhhdCtCTTdnTVdMdHpENVk2?=
- =?utf-8?B?VzJQV0JlN1ZMVGZwQ3BZaDR1MEVVZUxsTEl1ZHpPQWVva3hrV2tQVUxjY2s3?=
- =?utf-8?B?UWU2cjVWRkNlQjBvTUFJcmhFUFBkRFAyaTRQR0NVWkFkUnhzUklkQXJkaENU?=
- =?utf-8?B?MU9RZDdzWWZBcXl4czFFeTkzaUlpMytkcHBIU2w0MXpQMmRZamk3VVNzWC9i?=
- =?utf-8?B?Nmd6TUJsZnJlNUFFcERDRGgza21jdzVranRrRFhqb29HOVAyYVlHNlJZWkxO?=
- =?utf-8?B?OGRCWExoTE84cXNKSXEvcExQUitTQVN1Qk16WGlaMzgxNzI0eEtDd0V3WWlp?=
- =?utf-8?B?ZXZYelNKZVZVcDVTWlU0UHAweTNrVWVJQ3NhNjdpN242TXlDRnpZeEViVWtY?=
- =?utf-8?B?cmZVYjhtbnI3VjYyVWpUcGhsbjlQUTdreFdZMGtiN2hHbmhEaWNLbWJXMlZ4?=
- =?utf-8?B?VFRUT1poQ1FYc3RDNjNnczV1TVEraVg4VlRidThydFloMXBxb2Q2d0dmUlM4?=
- =?utf-8?B?Z3p5bDFJbnVFRkM5UFlZT2JLcHgyM0VacTl1anMzS1BVTXRpNzEzYUJTQ01N?=
- =?utf-8?B?OEhvSWg4SndVdlc0MUh1SUluY2xxay9VMVRMUld6dDE5bkw0UlppY2pSUzRa?=
- =?utf-8?B?UWdEV2MwQnRFbjBOM3Y3YU5wOERETzd5OG9lVmI4S2tqbDJUeFZSZVZlYUtx?=
- =?utf-8?B?L3ozZ1pEa1ViaDVvT3pMc0REUCtpNmhRSDlzSEJXWG9ERERqdk5BNFhvNzNw?=
- =?utf-8?B?YVJvTU43YnFCemdlMHZxRzNpbkRrS1M4SFdpbGtFcUZoRjJKSTJ5T0Ntb1NO?=
- =?utf-8?B?UkhYSVA5WGY4bkFycDFTOXRQUmM1QjlSN3RJNklRT1NRR3pLM25qRk1TcVdF?=
- =?utf-8?B?OVYvaEd2WitNb2Qvc29CUXpKa2lOdCtKR0pJeTZTWGpmeGhHaW55ZUpMdFVU?=
- =?utf-8?B?SzNQdVRicFFqb3J6QlBMUVVCbEUzVHYxUmk3UzFWb1puZzh6WnV1emlpT05V?=
- =?utf-8?B?VFMzTHdPMFJmNm5PQ3lrMFZGOUNzbCtKZEp1V1dUV1QxbisrSElFTmdvY3ZV?=
- =?utf-8?B?WFBnM2VUVzJoUStlSDQ2VFRUYUR5NW8rUUMxaG9EdVlVYzlLcDVaY1VWRjc4?=
- =?utf-8?B?TUZzbE8zNVd2Ni84VGg3bU1YbnRrRUVjbUQxNzFOSXNmMytaVEFBY2kwZU5x?=
- =?utf-8?B?SEtiTzkyeXZvZlpYV1d3ZlcvY081d0I2eXpGLzlEK1UrM0h6TDBQMzNhVW9r?=
- =?utf-8?B?dDcvZTl5Q1FmMmRaZGhzVnpiN3Z5QzUrbVhVVXpPRTVxK2ZBc3l4R0t5bXV1?=
- =?utf-8?B?R08vNSt3bXljdXlOYWxJK1VSemcxWFduVHhTdGVNcUJTL1N5MTJPdHRvKzFs?=
- =?utf-8?B?ZzZRQ2FIZWZCQzJXbmhzTTdpSjJDVjdDZGU2dnkzeVpCbTN4ZnZ0MUQyRzlD?=
- =?utf-8?Q?ZttoJEDljfJ57ENdBW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 227324b9-af71-4b66-9157-08def0e878ff
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2026 22:50:38.7344
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YMMA9PeSq2IeDfrpino0WxI+Ph5hokFFDi91UVFJ8zjCC0bv8L2PEPdd9sE9hgWb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9037
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 02 Aug 2026 15:54:15 -0700
+Message-Id: <DKETT5RWDAG9.1AP6L1IJ3CL72@gmail.com>
+Cc: "Farid Zakaria" <farid.m.zakaria@gmail.com>,
+ <david.laight.linux@gmail.com>, <jack@suse.cz>, <jannh@google.com>,
+ <kees@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-mm@kvack.org>, <mail@johnericson.me>, <shuah@kernel.org>,
+ <viro@zeniv.linux.org.uk>, "Gemini" <assistant@google.com>
+Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
+ interpreter selection
+From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Alessandro Di Federico"
+ <ale@rev.ng>
+X-Mailer: aerc 0.21.0
+References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
+ <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
+ <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
+ <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
+ <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
+ <20260722011217.45e79a08@spawn>
+ <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
+ <20260731004604.53c66732@spawn>
+ <20260731-batterie-galant-zumachen-d4b91acf8af0@brauner>
+In-Reply-To: <20260731-batterie-galant-zumachen-d4b91acf8af0@brauner>
 
-On Sun Aug 2, 2026 at 3:52 PM EDT, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+On Fri Jul 31, 2026 at 2:41 AM PDT, Christian Brauner wrote:
+> On Fri, Jul 31, 2026 at 12:46:04AM +0200, Alessandro Di Federico wrote:
+>> One could delegate the feature to user space, but that makes it much
+>> harder to get adopted in a uniform way.
+>>
+>> Will systemd, Android [1] and OpenWrt implement this? In the same way?
+>> If so, at that point it could have just been a feature of the Linux ELF
+>> extension.
 >
-> The page cache caps folio order at MAX_PAGECACHE_ORDER, and
-> xas_split_alloc() puts that cap below the PMD order where a PMD is 512M -=
--
-> arm64 with 64K base pages, as include/linux/pagemap.h says outright.
-> shmem_huge_global_enabled() then offers no PMD order at all, so
-> MADV_COLLAPSE of a shmem range answers -EINVAL and khugepaged passes over
-> it.
+> Whether systemd, Android or OpenWrt adopt something isn't a decision the
+> kernel gets to make and it isn't one it has to make. Merging code doesn't
+> create adoption. It creates an obligation to keep the behavior working
+> forever. That includes the machines whose owners never asked for it.
+>
+> It's also not how ELF conventions get established. PT_GNU_STACK and
+> PT_GNU_PROPERTY are the two OS-range headers our loader acts on. And
+> they came out of the toolchain and we implemented them afterwards.
+>
+> The one time we picked a program header type ourselves ahead of the ABI
+> PT_ARM_MEMTAG_MTE in 761b9b366cec we collided with PT_AARCH64_UNWIND
+> and had to change the name and the value three months later. We got away
+> with it because it's a coredump segment that gdb reads, not the exec
+> behavior of every binary on the system.
+>
+> If you want systemd, Android and OpenWrt to agree on one marker, the
+> thing that produces that agreement is generic-abi with binutils and
+> glibc/musl on board, and then we can implement it.
+>
+> So we don't actually disagree about there being an ELF feature. We
+> disagree about what the header means. My position is that the header
+> names the intent and userspace implements the resolution. Yours is that
+> the kernel does both.
+>
+>> Of course the Android people could disable the feature even if it's
+>> in the kernel, but if the convention is established by the kernel,
+>> there's really no reason to deviate from it in the way it's implemented.
+>
+> The kernel can't establish this convention. It can only implement one.
+> If binutils won't emit the header and no loader cooperates, we've shipped
+> uapi that nothing uses and that we still can't remove.
+>
+>> The whole point of the portability thing is to reduce the assumptions
+>> you make about the target system. Ideally, you just want to use
+>> features widely available in kernels in the wild.
+>
+> Sure, but nothing merged today is widely available tomorrow. Both need a
+> new kernel. Uniform-by-default doesn't arrive sooner because it went
+> into core elf.
+>
+> And a new phdr doesn't degrade nicely. On any kernel that doesn't know
+> it the binary has no PT_INTERP it loads as static. Dies horribly at an
+> unrelocated _start.
+>
+> And keeping a literal $ORIGIN fallback in PT_INTERP instead and old
+> kernels or gVisor open it cwd-relative, so an attacker who controls cwd
+> plants ./$ORIGIN/ld.so.
+>
+>> But from what I understand from another thread, your intention is to
+>> use userspace as testbench, correct?
+>
+> Not testbench as in "go away and come back later". The difference is
+> where the semantics live once they turn out to be wrong. Get a corner
+> case wrong in a bpf handler and the distro ships a fix in the next
+> update. Get it wrong in load_elf_binary() and it's the exec behavior of
+> arbitrary binaries... which we can't change afterwards.
+>
+>> > This is policy that the admin should decide
+>>
+>> Agreed, but the admin is probably satisfied with enabling/disabling,
+>> not deciding whether the program header type is `PT_INTERP_WITH_ORIGIN`
+>> or `PT_ORIGIN_ENABLED_INTERP`. Same for the distro maintainers.
+>
+> Nobody is asking an admin to name a program header type. The distro ships
+> the handler and a file in /etc/binfmt.d and the admin never sees either.
+>
+> But note what you argued here... If it needs an enable/disable switch
+> then it is policy. And the only question left is what the switch looks
+> like. A global boot-time on/off is the worst available version of it.
+> It's one bit, machine-wide and can't be scoped to a subtree, can't be
+> delegated.
+>
+>> Then, from a security perspective, AFAIU, implementing this in
+>> eBPF does not solve the problems that have been discussed.
+>>
+>> For instance, `selftests/exec: add binfmt_misc bpf-backed handler test`
+>> does string manipulation (no `openat`).
+>
+> The handler doing nothing but string manipulation isn't a simplification
+> in the example. It's the design. The program never opens anything. It
+> computes a path and hands it back, and the kernel opens it with
+> open_exec() under the credentials of whoever called execve(). There is
+> no openat() to add. And fwiw, it also supports pre-opened binaries for
+> really crazy use-cases where you want to pin a set of loaders once.
+>
+> The module RFC resolved $ORIGIN in kernel code opened the interpreter
+> itself with file_open_root(..., O_RDONLY, 0).
+> That skips everything open_exec() does and it achors path resolution at
+> the binary's directory. .. clamps there and absolute symlinks resolve
+> inside it. $ORIGIN/../lib/ld.so, which is the RPATH idiom everyone
+> actually writes, silently means <bindir>/lib/ld.so.
+>
+> I'm not holding an RFC to final-code standards. The point is that this
+> is fiddly.
+>
+>> Overall, I feel like the current proposal pushes back on having a new
+>> ELF feature for security reasons, but then delegates to distro
+>> maintainers who want to use the feature to take those risks.
+>
+> It doesn't delegate the risk. It binds it to whoever wants the feature.
+>
+> Whether resolving the loader relative to the binary is safe depends on
+> invariants of the deployment. Is the tree immutable, who may write to it,
+> which prefixes are trusted. The kernel doesn't know any of that.
+> /nix/store is root-owned and immutable, so the policy is safe there. The
+> same semantics pointed at a directory the user can write to is a hole.
+> Only the deployment can tell those two apart.
+>
+> Userspace arrived at the same answer, incidentally. glibc expands $ORIGIN
+> under __libc_enable_secure only when it is the first path component and
+> the result is rooted in a trusted directory. That trusted-directory
+> notion is exactly what an in-kernel implementation would have to invent.
+> And it is deployment-specific.
+>
+>> But also, distro maintainers don't really need this feature because
+>> they can just write /nix.
+>
+> Right, and that's the honest core of it. The people who need this are
+> users on machines that someone else administers.
+>
+> But "default-enabled ELF feature" is a strange shape of fix for it.
+> Because the machines you'd be enabling it on belong to the people who
+> never asked. This proposals is to change what exec does for everyone
+> else in order to serve some use-cases.
+>
+>> I'd be happy to try to work on the example eBPF program using openat,
+>> address the various security concerns that have been mentioned until it
+>> looks right and then it could be loaded by default, but with an option
+>> to disable it. But I'm not sure whether there's such a thing as "default
+>> loaded eBPF program".
+>
+> And there is such a thing. The distro ships the object plus a file in
+> /etc/binfmt.d and systemd loads it at boot. That is a default-loaded
+> program with an option to disable, it just lives in the distro image
+> rather than in vmlinux. If one handler ends up being what everybody
+> ships, that's the uniformity you're after, and nobody had to freeze
+> resolution semantics to get it. Could even be upstream in systemd.
+>
+>> Alternatively, I could extend the ELF core as a parallel feature of
+>> the eBPF-based mechanism, reviving some patches from previous
+>> iterations.
+>
+> I'd rather not, for the reasons above.
 
-IIRC, after READ_ONLY_THP_FOR_FS is removed, all pagecache folios are
-split using non uniform split, xas_try_split(), so does shmem (except
-shmem in swapcache not splittable). In theory, we can get rid of the
-cap, since xas_try_split() does not split more than one level like
-one can try to make xas_split_alloc() split more than two level (e.g.,
-512MB to 64KB on arm64 with 64KB base page).
+Christian,
 
->
-> The shmem cases nonetheless ask for a PMD-sized shmem folio, so on such a
-> configuration four of them fail and the run bails out in the middle:
->
-> not ok 2 collapse_full not ok 4 collapse_single_pte_entry # Allocate huge
-> page...Bail out! madvise(MADV_COLLAPSE): Invalid argument (22)
->
-> That is the kernel declining something it deliberately does not support,
-> not a collapse defect.  Skip those cases where the PMD order is not a shm=
-em
-> order, which thp_shmem_supported_orders() already reports -- it reads the
-> same per-size shmem_enabled controls the kernel only publishes for orders
-> the page cache can hold.  A tmpfs-backed file argument is skipped on the
-> same grounds, and a run left with nothing to collapse into skips outright=
-.
->
-> Anonymous collapse is unaffected: its orders are not capped this way, and
-> the anonymous cases pass at a 512M PMD.
->
-> Assisted-by: Claude-Code:claude-opus-5
-> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/self=
-tests/mm/khugepaged.c
-> index 9213ce1658d0..c5a3c3922581 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -1584,6 +1584,27 @@ int main(int argc, char **argv)
->  	hpage_pmd_nr =3D hpage_pmd_size / page_size;
->  	hpage_pmd_order =3D __builtin_ctz(hpage_pmd_nr);
-> =20
-> +	/*
-> +	 * The page cache caps folio order at MAX_PAGECACHE_ORDER, which
-> +	 * xas_split_alloc() puts below the PMD order on arm64 with 64K pages.
-> +	 * A PMD-sized page cache folio is then impossible, so the kernel
-> +	 * refuses these collapses by design and there is nothing to test.
-> +	 */
-> +	if (!(thp_shmem_supported_orders() & (1UL << hpage_pmd_order))) {
-> +		if (shmem_ops) {
-> +			ksft_print_msg("no PMD-order page cache folio: skipping shmem\n");
-> +			shmem_ops =3D NULL;
-> +		}
-> +		if (finfo.type =3D=3D VMA_SHMEM && read_only_file_ops) {
-> +			ksft_print_msg("no PMD-order page cache folio: skipping tmpfs file\n"=
-);
-> +			read_only_file_ops =3D NULL;
-> +			read_write_file_read_ops =3D NULL;
-> +			read_write_file_write_ops =3D NULL;
-> +		}
-> +		if (!anon_ops && !shmem_ops && !read_only_file_ops)
-> +			ksft_exit_skip("Nothing left to collapse into\n");
-> +	}
-> +
->  	if (anon_target_order &&
->  	    !(thp_supported_orders() & (1UL << anon_target_order)))
->  		ksft_exit_skip("Order %d is not a supported anon THP order\n",
+Could you help me please understand how the next branch makes
+its way to the kernel?
+
+I see NixOS Offers the latest as of 7.1.
+
+The topic for binfmt is named on 7.3.binfmt in vfs so my assumption is
+that it's slated for 7.3.
+
+So that means when Linux pulls for 7.3.rc1 I could start to test it on
+NixOS? Maybe 3 more weeks?
 
 
 
-
---=20
-Best Regards,
-Yan, Zi
 
