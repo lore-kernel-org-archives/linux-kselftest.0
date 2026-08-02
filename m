@@ -1,78 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414A53B1034;
-	Sun,  2 Aug 2026 12:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7942E3B38BD
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 14:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785672796; cv=none; b=Ssbq9rNjSRD8Hp/Gx9+4qrWIEo/Q03nklLEiiIyGcbQwEKE87l3zcRY+DVjWTGGmPn61TgjJ4mEYxSj6bPmDuAQfP+zIcnZP1ALFlX73GnFdEKO6lwHGyCoaO3tjkLox+ZiaEA2+a5VfqiXfNhdac3N7xc785sacaPZqgnc7HHk=
+	t=1785679840; cv=none; b=Bh1k4uOZDD8h5hzortTG+owr5ai6qogWvUCnUoDxvprF7wc0wTzZqU85lGSza+dVhU1Fj15xtAxo/IEy2fJqVEcexpypE7/QM8J6E/30pP2DqS6cJq+shunYl4gLljWGbCi7gg/SG2WERwVyLO40Jvw1uvtsq7Yot/IznYhdPmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785672796; c=relaxed/simple;
-	bh=QPtYCfasPX09a9+Idi+TZfijK57IBKX/XsVMVlEdymY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PJO078yvCdhd2XlT/OuDHfqpwMFBuTTFeZcLtxQEyhVbmHHDk0kcbzLcP67RIum9qpTe075eLWS3/78vDteTGVXZgPUk8/1U3aXX9PBpCwgeCS1A0PunDMDSPZ7nMYKga3TDMjYKb11WMDSF4aMmqjIKaq332B/9u6wR/Xeb61U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WeiAd8kD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785679840; c=relaxed/simple;
+	bh=lRO8VDcoa3TIBO/CPMJ0s3De3InVTqKIhmYtGLt8Y20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ARSbwehGKB5vIAf0HeCt5WaEC1wf6e86dxOmQYkpCJJprtswmVzN0ual8mLUD87WoT/lurwfbrYsiQ2QFMp5OUF+iQ4Fn7bJxz3PKnzhkecj9ZizN3QokwTTgjD32chC5SWcthRIWjXPLlHTg2lbRvqMbywFSluNcnRkRGLrosg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G82nP5D0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WeiAd8kD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257811F000E9;
-	Sun,  2 Aug 2026 12:13:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G82nP5D0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCC91F00A3A
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 14:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785672794;
-	bh=V2avLvPB80HIFXkBSkpiF/wYujLC5U42IwkZ/F2PszQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WeiAd8kD7RZ7Cy9BY0UEnsOZp7QiaPyfAGkKzfIbmqxbvTv2Qlc57WFGenCwpyo4a
-	 eOF7VdhbNAd06ifc3Qo+Qq1jMpQmexfEsp4rab3zFSriz+mMbbgdgZ60VHI0Dz3Zzc
-	 vmDhUjmeJZpM6CgAsbc+wNKCkTPguHCFcs/I4MHklECSbiE8PadjbRJZIcQBzqIgMc
-	 fSz79vXwF01bCeD+I7aLoLnrAJxKJ1GfrXJp/Thdj+RMhLPKixB0GQQ5OTVyHOtxM2
-	 eKuDr8tMPe1JGb+H2KdndHthHH1lxn7c1grMlQYyILB3aUNdOZ+m6FiErCnEyEcWmZ
-	 jmdyGigLPnqSQ==
-From: Will Deacon <will@kernel.org>
-To: catalin.marinas@arm.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 0/2] kselftest/arm64: Add two arm64 kselftests for orig_x0 issue
-Date: Sun,  2 Aug 2026 13:12:31 +0100
-Message-ID: <178566425249.4143122.5280798109588478069.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260728021122.2640104-1-ruanjinjie@huawei.com>
-References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
+	s=k20260515; t=1785679839;
+	bh=DQjOuBhLjuT6mtQbbyh60bt901EFtaE/jLkYdyn1c4k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=G82nP5D0tsGLzX1I/FFM3k8eEygPSUOoUPchd3r2nRl/KND3ClcDu73CaZcUSrVtj
+	 8QFvHcdMt7M6zZqjYwzu9dTuNVWJolVQCyzedHHm5Xby8xDUCB22JdX6Hh3RJY28sR
+	 IR1hQMHiUfSvEOwBAHn2pGmIYwsuOTNhs5gXoTlr6nhHKPm8l3tO5jSUv+bYd/vTQ6
+	 ELgvBG0r45f38Ub8jChpSHdvWWxcrtvQtnRfs4YkckhcbteEPwFK7fOBYSfHnBJUiI
+	 3wHkam8pXKVDRPslClRdsjB7uHAY8pRtVjKrYpm6Y6y/4Ji3BOxLh/hQG42LvycaIx
+	 fyQWWG7ULRE7w==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a17f91so2775031a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 07:10:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rpon8uvI8GnKFn3GmWFz6hKp+DakJ0fu5/NPH1qvmc9M4jLbQlUQmC0o/DPE2pHcrCJr8ghLPUqGlspnVHJyO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk7/vqAeJ31O/sHGEk2iLl1t0Ll76s9tAbv49L4Yv6HpwIlOHn
+	yU9tt+muZhqMB3mYlky6FdhaM6I5dxV5UeutilRE4vScW6LtDimNcQjQPzWpgfrT8VhAPIMzA4w
+	i3mGgcAVz6DBGO0r7RRBf3pzBbLQIWCw=
+X-Received: by 2002:a05:6402:5055:b0:6a0:926e:f8fa with SMTP id
+ 4fb4d7f45d1cf-6a0a7c60456mr4742944a12.2.1785679837852; Sun, 02 Aug 2026
+ 07:10:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20260616022615.2141072-1-maobibo@loongson.cn>
+In-Reply-To: <20260616022615.2141072-1-maobibo@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 2 Aug 2026 22:10:26 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7Zy4c=pQyGFpp7BaEr6XMg1sO5=8mEEKd-UN1K0eUzdQ@mail.gmail.com>
+X-Gm-Features: AUfX_mxH34VOw-RYvT74o-50Pv__NPojjRwRUzsuTf4wTRGTeKstN_GkN6ajPjs
+Message-ID: <CAAhV-H7Zy4c=pQyGFpp7BaEr6XMg1sO5=8mEEKd-UN1K0eUzdQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] KVM: LoongArch: selftests: Add FPU test case
+To: Bibo Mao <maobibo@loongson.cn>
+Cc: kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 28 Jul 2026 10:11:20 +0800, Jinjie Ruan wrote:
-> Recently, a security issue related to orig_x0 was discovered and fixed
-> in arm64, but there are still no test cases covering it. Seccomp,
-> tracepoints, and audit can observe a stale value for x0 after a ptracer
-> or SECCOMP_RET_TRACE modifies x0.
-> 
-> As Kees suggested, this series adds two kselftests for arm64 that validate
-> the orig_x0 re-synchronisation fix in ptrace, the first one is for ptrace
-> update, the second one is for SECCOMP_RET_TRACE update.
-> 
-> [...]
+Series applied, thanks.
 
-Applied to arm64 (for-next/selftests), thanks!
 
-[1/2] kselftest/arm64: Add seccomp ptrace x0 bypass test
-      https://git.kernel.org/arm64/c/2fcbc4adf997
-[2/2] kselftest/arm64: Add testcase for SECCOMP_RET_TRACE orig_x0 bypass
-      https://git.kernel.org/arm64/c/21e37da12071
+Huacai
 
-Cheers,
--- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+On Tue, Jun 16, 2026 at 10:26=E2=80=AFAM Bibo Mao <maobibo@loongson.cn> wro=
+te:
+>
+> Here add FPU test case and verify FPU register get and set APIs, the
+> FPU width supports 64/128/256 bits. It is important for VM migration.
+> ---
+> v2 ... v3:
+>   1. Remove __vm_has_feature() and use __kvm_has_device_attr() directly
+>      when checking LSX/LASX feature in patch 2.
+>
+> v1 ... v2:
+>   1. Replace hardcode value with CSR_EUEN_XXX when enable FPU access.
+>   2. Add attribute __aligned(64) with kvm_fpureg variable with better FPU
+>      save and restore.
+>   3. Add clobber $f0 register with inline assemble language with
+>      fld.d/vld/xvld instruction.
+>   4. Add fallthrough between UCALL_DONE and UCALL_SYNC switch case
+>      sentences.
+>   5. Remove sync_global_from_guest() between vcpu_fpu_get() ioctl test
+>      case, since the buffer is not modified with such instructions
+>      fld.d/vld/xvld.
+>   6. Modify FPU register with random value rather than plus 0x10, and
+>      random() is replaced with value 0x10.
+> ---
+> Bibo Mao (2):
+>   KVM: LoongArch: selftests: Enable LASX feature by auto detect method
+>   KVM: LoongArch: selftests: Add FPU test case
+>
+>  tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>  .../kvm/include/loongarch/processor.h         |  18 +++
+>  .../selftests/kvm/lib/loongarch/processor.c   |  12 +-
+>  .../selftests/kvm/loongarch/fpu_test.c        | 138 ++++++++++++++++++
+>  4 files changed, 168 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/loongarch/fpu_test.c
+>
+>
+> base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
+> --
+> 2.39.3
+>
