@@ -1,73 +1,73 @@
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD05434DB74;
-	Sun,  2 Aug 2026 19:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6389B350A05;
+	Sun,  2 Aug 2026 19:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785700410; cv=none; b=jSas9dcEGpSbCJWX5bGJbU6NgaEyj3d7a6+k4r8Q81r0laupGltQUNrNgVllyCVE5C944/1B232yB8UdEaFkp51/gDsCq6/+RE+7a8GzRQS/ZHQ0RSyj/xY/05GA7u0CeaUJ5z2FU3dz4aYDdQMaSCPqtzHKvxbpVabWU/TPIPY=
+	t=1785700411; cv=none; b=UHUmWTNhvhPk0MtMnX+LgTi+wOHBmqobLb5vql0PZcGqmg7KM8bv3cK2IOE/B3JcK1oU8ba0fHMPOatEehtag/PSma9RVoU4p9AiPfIUooaLAcaLlT6buSKa3D2o5q5S4ghqOENkenLYoXJTLJNT3KDqv64xAo12tyLzc0IeFdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785700410; c=relaxed/simple;
-	bh=TdqOYszDCN/y4qNxCAGzohdTUPV2FSK1kiUwmYTHmsg=;
+	s=arc-20240116; t=1785700411; c=relaxed/simple;
+	bh=yVAibKXUJAe4Ssb1Y/vqUcEG83HlhIVvVZNLrC9b9R4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EdtB2W4377ai5Rl1wMCOtiwsnRsQRgYovGFDfanP/BXgbDFFXFl/0+Zwwx32hSxnHK3AMcIQTvR7RH51dKV6h205xZvNEtiL6Uj3roDHJWZNJcOk2JLBUn/feC139pVHsX7o3wsE4FzCWcZ5HQCP38A4DLyOG94sVPGSbHG5k+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Pwt1XfR9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IIyIrBG7; arc=none smtp.client-ip=103.168.172.157
+	 MIME-Version; b=JFTilBEYlul8hnjLBWTqkV4r6F2CZqmmkG4IpQE6C85wJjqzcBmywzGUcYnRbWS55Zc4eo8TKoqTsSpN6QIr4tD06pGtEtS198Mc13zx00FEgR2WtbScu2PcT9Ek2iAOKO0TjrOsoIgwbFZU2ubMs2QnLMggRYlnRI2qj3q5mEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=stznTiNQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FoLVHw5n; arc=none smtp.client-ip=103.168.172.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Pwt1XfR9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IIyIrBG7"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id DEB671400051;
-	Sun,  2 Aug 2026 15:53:27 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Sun, 02 Aug 2026 15:53:27 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="stznTiNQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FoLVHw5n"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id B1220EC003D;
+	Sun,  2 Aug 2026 15:53:29 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Sun, 02 Aug 2026 15:53:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1785700407; x=1785786807; bh=a2Jw/mn+UfsKcDTO+dGnQEf7SQYHheMb
-	TSYp9dOdyHA=; b=Pwt1XfR927N4rs7e9ppzMF0mFPF2QC616AAkWDcjo0sXt7if
-	eKQZhjKtcPkPgiG69y9DcADkO3G9/XQR9R0VP8+asAV7NASoH0mtJAGWcYfP/R7n
-	beOQc+1Uy0063uWVRWqSTgCitYzQoY691uQoLlFHvzDqdJebW2aJ2ei7Rhi4N17u
-	dUTEEZrdOZWz0yPW/zO5UbSTvYVcupLCZwbOzq89jz0j9K/YkuNRbBznkqOQMCX+
-	a5X3pZFlalVUcbRyvQyyZlELIgg/3K/iKVqqlPQExqItOY+z9Quyp4xKXcCGZpF5
-	1WTQPY55OflfiMKGeBbxo2SPj9tak+qmqmBGng==
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1785700409; x=
+	1785786809; bh=7FZW+EYif6AgDaxVaWyDapT5OvK8OdUCwgMiwqQSV3U=; b=s
+	tznTiNQmqF5b2CZryy0KpGRsiV6OViYY7o2g+BDGldsxmmE3On+itwE4ig1lX7j7
+	nQ8oNIvIRWhEls4xFBRnQ18I6s2Ov4YvwoqLRuS6q/tLkGcD6Gnyda5UtY77dHuK
+	fvf7QIF8DFKFroWfbD7iZj7KZtAIqA8Iplv68qAP9WxzzAzGY/G6p8i+5rc7ENcg
+	/fKraQHor5yns8BLROut5dlPG927qSWXcN1l0n1AmjtZcnMtMeGp8kNpZScQkFne
+	VyCAEnBwHPClEs0x7MWgp7k9vUq0TK5ZnLuntmcvf0lUN7RTouUvQaMVLUHcZVDV
+	jLrKdWxquKnCtW3WYXSxw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1785700407; x=
-	1785786807; bh=a2Jw/mn+UfsKcDTO+dGnQEf7SQYHheMbTSYp9dOdyHA=; b=I
-	IyIrBG7CPap1NwdJClTpvaxTmQKXxZxFUysfUkBFxrKXhz4QmgmhuW+Puo7b9rO9
-	tFfZPSK9DNXc01kkdI6h9ls1YkcxSj4tAc03YPqci8BQ5egrHIz4xXh7+2cJcREj
-	wrrnL3ztiRGSHasUvo3gU1qVykspwb41YIICfxEmTsiXhGpvqIQzQeujIHc6MbC2
-	Ya2HFFs/TO8omJqOLZCZK7+FS+5SFL/oGQAE/5ZbMLjaP6CinPl18Sb5aCGZpT3K
-	Ke4Si89gt3rsvUTV0l7Ci63mKZ9CmIxfjSi37r3EVVPxYIlnTyWsMtCl4bFbj/f0
-	EJ2Q5u48bSdHI680JjfXg==
-X-ME-Sender: <xms:N6BvahUhGeuYZ0711oAZ_Gzhs-uUg478G-UNtU64eAXrkg60Uam7cg>
-    <xme:N6BvasGbgw0X2LSS5tz1m5FXeNKL8sTvvCU0H0rh4vimvQ663BUpcxLqIJMbLS-Y0
-    6iLVwOjjnKZuldgaAncga8g-vKRomQQ77yu6lIv8x5JhnvnxDMJSDo>
-X-ME-Received: <xmr:N6BvaqVUCjk-ppRiuoTfg1iDjrg2FDD2SrUSXR8_n-JL2aF69v8OJHGRQ3M>
-X-ME-Proxy-Cause: dmFkZTF0jcSSKFGDg2KrIu5c43P4SsiipwcvDQBe+CHxos2n8PFgvSXAdv5YVW583HVAOz
-    W5evq6qe09LpHqloXNM1K7VWF721j2bpam5IryqVMcYz9qouNwbpBEKv3Y5gifbeJAqW/Q
-    YZQrbB51yLEk86mWZaGZ1Drq0Xy949i11wvFP7mkSWE3f4+XiyFqs+bTi+V6AVpUjNMMFr
-    yeY2fCKzWlrX4GavSe/JRyGqxABGArlOuRBA0IP4mMA1yNK8fSDYGTdjzDrtr8AjwNqVIi
-    3BcHDiClTVSc/WD5f6J8XCsMYF+6dE+0Mr4gWnl6eMmh6FUU5GqCPEjsceh07AxGuRDdh+
-    EfRV12s7ikyQpMRWBYerSeFU2WBXxwmZE2LSsp5hy0hwP/rtpbErwtxuMvwEAS95+EE44V
-    wr/cr8b/Uj/n7txdJMzlDjK2GRMySkFpK+xQTR6kTq9FyioT1d0lGAzRCmwklzvYIFPHue
-    b/sz8gYxpIjRubmuFCDvAt3N5F676Rjh6sI5Q1NCHcULkgi970rianfQBc4MP7/ZcNd0as
-    ZiYLbRwIgFAwoUdb+2NjIHD1mIkQXuYKVl7Hr0jZj6jOVzy/N1jN24aUOJuJjOLsxIVqMq
-    Oz4v4aokkX+9Og1Ez1qdRHcAVRF97BiFz3KosqyvJRDcMOSxgWigX64K07sA
-X-ME-Proxy: <xmx:N6BvanAP-8paNO_ewjpIydZkMjYcfBsBbXQoQHvRaR_VTSdI5i0lPA>
-    <xmx:N6Bvaj12wix-oBeOaW8Ma_MGMDW1wIYp0ylPkCBIZsyFBupY_3QYww>
-    <xmx:N6BvavR8e8GmcI_M1336EuK7BJRpb26NtSgJFO2clNPUpggV4GPf8A>
-    <xmx:N6BvaobkfhT0quS9diYMdO6c38L88t8D8X2FiTwTKVVWU_gM8g0oLg>
-    <xmx:N6BvaiwLgSwxHSaZf4y4mbUXY4VCcuRQx0mRiinuZEsY0dNXo5dF5pZu>
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1785700409; x=1785786809; bh=7
+	FZW+EYif6AgDaxVaWyDapT5OvK8OdUCwgMiwqQSV3U=; b=FoLVHw5nxx/F5py0v
+	Qv+Z9yvEyjLh5uS3jW3LdLWXa30gKKbt/hdQDMutG7HrtIq8nNxzrN1B0YcEh/5R
+	9UII/tnCBHRmkz/26Sc59oQl/zCOt4TyV0whjBkVJhu0IG4+PAl8zbzI+sM2wv2k
+	+4z5Pxb1/3rjpIuvC1issdjLxznGlugOsqiGxc7jESe31jBvWQ2HtaQxQ+HL8edF
+	jhC/0e1ZqmuATBUUVcvUfaYSeAQI8+PT+0Fj0OgOXMFbh4SrqyiE0OTBRDbzLelf
+	vF0ovbSJPC7Ww1005CQcY8IKxFPkPYCkwIgGZfchYhEAwG3lOX9wm9oGk3E1Hj+p
+	ssQIA==
+X-ME-Sender: <xms:OaBvahh-9R6oNYXDo1ujSgu38lD7Ec1kpS0Oryes0fWFtevhAkMIVw>
+    <xme:OaBvagjoq3YyqKaIDEiCqOVnWsXDhczNcdvXkHf9Qm4lEANRNMitJSXwaji_zWdS6
+    woK2rv6VJYu9saMLVWeqk4NoQKdVwRwampI5IobVkw3iH4AF6jd7CdO>
+X-ME-Received: <xmr:OaBvauCYLhcAZemYi8Q3UzhiLn3zhc2681MWMbuTV4fxSP70iGPGQ51nxtE>
+X-ME-Proxy-Cause: dmFkZTFcbv35QwNbwWPHQBcJdrWasH4YRFOBaNWig98oa0GgLD3LmQrthvyDgK5JnDhp96
+    dBkNywOXlTP9Hby+cm0vRQHofuB4BhsdtVcBrMer/A2AOpegfr9Hr7RYzI6OqquxWhxeXC
+    aB5bOw4cR5G6EDzO4v2r94SJnXRDYvi2NMwyCB/quID+suEuw0TjLUMYjjQ5pFm1F3OqpQ
+    Ctej7rOharBpUeBz9hjZojzUlseCYYYMV+BulSa6+jD3O5m4ZOeULsSyQlLb9bciCyrhiP
+    bT+z0cGYr8PFizBGTpPnPZCe+jZkx/DQlEsoaoSV2SjHlZpE6q2+n/t1AcZaLqu1qPGmNN
+    z90saZGKqwnA0OHicr5CRo1m0XGloodzuJN6K3LrYMdUc32o5HezHN5D6o7GxvEMVTCrqo
+    Jg90XFZhCqxBOFcbyFx5zBccvUWjXs5XaDA8rcb4iouA/s3MarmqACnbgM0PLpelAVMi+k
+    Hb7R+HOIQZfzGBH8GXPcKatXrPoj0/+8lcDKqGgqfAtsuODUcwMISJY2sznO+z4F83XX4V
+    1zQ1kwEbWNbWIGFIs3sqYovc74Vqk85aYRlhMPALItw6p9oAb8/rNKP7CUhnrWRwko+1LA
+    S1ErpvDI1RaQzESTmJ9TKO5XZAP5eeplJlBuAO8tJO3oOWoilwQuzOJdVKjQ
+X-ME-Proxy: <xmx:OaBvao8eHQZS91AfBA8QM5Ksby3u4S2YHNGlsIR2pA_iv5WVXcZK8g>
+    <xmx:OaBvanDAbMaRXuyaxYzlSKw2pxezxWRDkVmv5zSY_OXY9zCV7cKfZg>
+    <xmx:OaBvaqvmqs4eTssPhayr-M7EXGlEMnb0oaOOa63gAjFHaGJduiZjGw>
+    <xmx:OaBvanFRXXFFIY_u05n40tiEnj1uAFuc16kcG8QOGW9BqHlMl3sPcQ>
+    <xmx:OaBvalcAEGy2CaMNUPVPO3Go97SELE7cZ9L7yzUjJN8EqsLyFjmD6uR8>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 2 Aug 2026 15:53:27 -0400 (EDT)
+ 2 Aug 2026 15:53:28 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
@@ -91,9 +91,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: [PATCH 14/16] selftests/mm: zap whole PTE tables in the khugepaged race harness
-Date: Sun,  2 Aug 2026 20:52:46 +0100
-Message-ID: <20260802195254.1937477-15-kirill@shutemov.name>
+Subject: [PATCH 15/16] selftests/mm: scale khugepaged's collapse wait with the PMD size
+Date: Sun,  2 Aug 2026 20:52:47 +0100
+Message-ID: <20260802195254.1937477-16-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260802195254.1937477-1-kirill@shutemov.name>
 References: <20260802195254.1937477-1-kirill@shutemov.name>
@@ -103,57 +103,68 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The race harness's MADV_DONTNEED thread zaps 1..32 pages at a time —
-never a whole PMD-aligned area, so the empty-table reclaim
-(CONFIG_PT_RECLAIM), which only engages when a zap spans the full
-table, never ran against a collapse in any soak. Fuzzing had to find
-the resulting class instead: the table vanishing between the
-engine's park and install passes.
+wait_for_scan() gives khugepaged a fixed three seconds, whatever a huge
+page costs to build. collapse_full() asks for four of them, which is 8M at
+a 2M PMD and 2G at a 512M PMD -- arm64 with 64K base pages -- and three
+seconds does not cover copying 2G. The escape hatch does not help either:
+it wants two full khugepaged passes inside the same three seconds, and one
+pass over a 512M PMD takes about that long by itself.
 
-Make the thread zap a whole PMD-aligned area once every 64
-iterations, keeping the fine-grained zaps as the common case.
+So collapse_full fails there on a collapse that works. Measured with a
+probe that faults 4 x 512M, marks it MADV_HUGEPAGE and polls: all four PMDs
+collapse, with collapse_alloc=4 at the PMD size and no allocation
+failures. Raising only this budget makes the test pass, and it does not
+turn into a "Fail" -- which is what khugepaged completing two passes
+without collapsing would produce.
+
+Scale the budget with the memory to be collapsed: keep three seconds as
+the floor and add a second per 64M. That leaves a 2M PMD at exactly the
+three seconds it has now, and gives 35s at a 512M PMD, where the collapse
+measures under 3s. Keying it on nr_hpages * hpage_pmd_size rather than the
+PMD size alone matters because the callers ask for one or four; scaling
+linearly on PMD size alone would ask for 768s, which is not a budget so
+much as a hang.
+
+This also brings the helper in line with khugepaged_full_pass(), which
+already allows 30s and is why the order-parameterized cases pass at a 512M
+PMD while this one did not.
+
+arm64/64K: khugepaged all:anon 21 pass/1 fail -> 22 pass/0 fail. x86-64
+unchanged, 129 ok.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged_race.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
-index 304c72b4ee3c..2aa45c9e8a77 100644
---- a/tools/testing/selftests/mm/khugepaged_race.c
-+++ b/tools/testing/selftests/mm/khugepaged_race.c
-@@ -124,8 +124,23 @@ static void *dontneed_fn(void *arg)
- 		unsigned long page_idx = rand_page(&seed);
- 		unsigned long nr = 1UL << (rand_r(&seed) % 6);	/* 1..32 pages */
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 21a8fb24dc43..9213ce1658d0 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -573,8 +573,17 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
+ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
+ 			  struct mem_ops *ops)
+ {
++	/*
++	 * The budget has to cover khugepaged copying nr_hpages *
++	 * hpage_pmd_size, plus two of its passes over the mm. Three seconds
++	 * does that at a 2M PMD, but the same test moves 2G at a 512M PMD
++	 * (arm64 with 64K base pages) and 3s is then marginal: it fails on a
++	 * collapse that completes correctly, just not inside the budget.
++	 * Allow a further second per 64M to collapse.
++	 */
++	const unsigned long bytes = (unsigned long)nr_hpages * hpage_pmd_size;
++	int timeout = 6 + 2 * (bytes / (64UL << 20));
+ 	int full_scans;
+-	int timeout = 6; /* 3 seconds */
  
--		madvise(region + page_idx * page_size, nr * page_size,
--			MADV_DONTNEED);
-+		/*
-+		 * Once in a while zap a whole PMD-aligned area: only a
-+		 * zap spanning the full table triggers the empty-table
-+		 * reclaim (CONFIG_PT_RECLAIM), which can free a table
-+		 * out from under a parked collapse — sub-table zaps
-+		 * never reach that path.
-+		 */
-+		if (!(rand_r(&seed) % 64)) {
-+			unsigned long area = page_idx /
-+					(hpage_pmd_size / page_size);
-+
-+			madvise(region + area * hpage_pmd_size,
-+				hpage_pmd_size, MADV_DONTNEED);
-+		} else {
-+			madvise(region + page_idx * page_size,
-+				nr * page_size, MADV_DONTNEED);
-+		}
- 		usleep(rand_r(&seed) % 500);
- 	}
- 	return NULL;
+ 	/* Sanity check */
+ 	if (!ops->check_huge(p, 0))
 -- 
 2.54.0
 
