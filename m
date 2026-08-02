@@ -1,263 +1,296 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB803346BE
-	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 22:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37673002B9
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 23:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785711259; cv=none; b=H9rZRPFgcBkxTvNal1j94EQnvKWzLfHJY+Zz5oLgwF39LQr0jWWuJe19YfRs6JcaP8IlFlbbjU6ml5hpWCchrE8HMzD+g5YwpiZLfrYkFilt18c6W7xFjK8ZCbf7o8mVHfQs4TVdXvoBkxpXflOCE+Fvj5cnCCJQtWAaY6MBK1E=
+	t=1785712442; cv=none; b=ZDMuggb4nrGeNng9AUA4ZeMQYRbI+6vIM3oaO3BgZ+FUB0eK7TXRgI0DqBLeRwA+A71uj30MLMUznrYGjxpgxWB7cYiCdl+bhtwfU7o8WVzchvkH7dlYBt3G3rQtMFXVrhoQI0e7kSU03FXnlJiHG3Hsqt1sBi5HklHVjUkIAb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785711259; c=relaxed/simple;
-	bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=cCEanT29iW5iE1bA7VDPRgpZtN1ck/FMsCI5REtmknGAEcx11XF2L0jU7qGGT4mVFx2wEq/u61JpKDeLx6ASiQunoBEnZ0/LCbHsdwvyh2iPCEllsCPHYj5gnuFKshuiK4k5WmdGgSW30B+r99xJsvAh+FxCMUcWxKqosxiP5QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bY3uP0kR; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1785712442; c=relaxed/simple;
+	bh=k1fkw7WNhvI6GXASm5e75WiACpnhQ9kNrN2Sioy4TK4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PICCqExUhdGUCZwOzH2rTopK3mOgbnec2wixrb/YGrZpbjOsmYBPqjMDsYfwRSP3YxLvUBlSVcshI3bSxm+a68Kmqt/m9FFzA2fDqbJGcJRrZV+QJqGqeqlSBdAnUEJarctYGzGKOBd+PV4Tco56uBtdenprNlAn7dwDfy2/Yzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qulABJSz; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bY3uP0kR"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-ca7c1176317so2408498a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 15:54:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qulABJSz"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cf6d65d8a7so37663205ad.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 16:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785711257; x=1786316057; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
-        b=bY3uP0kRMsuULbpZlFeF5RWa9VlHnvoG/QRyfnPiTkaXJBsbSXy1pyPlzZrn61gtRW
-         TCbbFJyca4jIEoSovch7cesNS0uXJ4pZIdOUtrp8mvJenMcJmT8JdhHM36g2kjDjgeV3
-         vP/Qxdk0ILb3sPOFY4zGSC1IHf8VDlwojSsLBf82KLRf95vMHsccVLSIUPJgPVirRd7M
-         oRS0j15F0TNIIN/nh8LW3kj5Jar8gkXX7RwNHfzZPiMQstOeT0pOoQQ2vCfsY8U/JRlO
-         oDyW16EqZzal2HKTcIsszbC8cqlf1ibcDjqMGTUfpOxxOLWHMAh/lDL4CtJjjWetAI/h
-         ydGw==
+        d=gmail.com; s=20251104; t=1785712440; x=1786317240; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pU4v6hRTUge0KrXkRRWZsd+tc6Y5PUpwswApZzkRyGg=;
+        b=qulABJSzgzKFfh5fmuaasYELrpznotCNM96Bs85ZqE3KClAwAUCpaSj5Zp+bWvY+PF
+         WG/TXebrIpN5/L/TA4qdiw4Ztn8y/6X/8hk4Gg27zQRgx9ha2RlObrpa6vTrecJCQ8YG
+         NKtX/UWfhNVyBD9CtgaHH1RthYnJTcA/6sX34y79UmEloh1afU439U090YihQPtBg9am
+         e/HPJt+dfOzt1wl9hwipUaabpZqpZhliYi4oNCQWCNLJDVVjEMfH4IgO37D15aI2rsV+
+         55v0kdhqKcj/9bIzyIg2I75ZN3bR2pdeLq/cScrprKzgCsD+GU696WMPUypB0gK60Alk
+         07rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785711257; x=1786316057;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hSFBKkmya71V99CcvaKtLUtW6MLEeCo92pqjKBtH7Xc=;
-        b=E5DUUBk5ZUmOu6Paqi6H23T/r3zwxCrSeG614wls2PjFEftI8DTrcZXq4bB9dTsF7k
-         3oVk4Y481akjTxJu25YyBJZ8SgS4vlXm/EKhdZgpSn5MKzN4DNt0BBm/Flw2t69Mh3JI
-         4dipw+cx+0SBiwA6tnuvSufRP+4r7Wny9NERp/qiPAFYmJhzdJB2sOqmBqYaWggeTnUQ
-         VgjdhvMCNYMv6WuTALir0E/qOOlfPIGNm0ct7j7PoH/b10d4jCdNe5nAbFWjuMjgpLJv
-         hrZ7jiVMx4LSwsasIHYzdLOcUWSd4mxZKmVcSXKI4m3oNjH7ksXZN9KIW/a+Egtc191U
-         W4+w==
-X-Forwarded-Encrypted: i=1; AHgh+Rr1SX7wrOKmo45ufRkQskcSzK5iUkH9OMOa1r42vei53vCJtnBjiXG8eJ3SpQ0pFrSwuoP5KzS3KzriYtz7Jj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT53tEZEYD5b6uV1boTGaFjq2EnnCtPO5c/dDjEYzZnQVNQUKW
-	loRwmjGpQICdy6M9V7Fes/XhOm5pEnDqLd+BorH+nE2Wn1TU389gYMhj
-X-Gm-Gg: AR+sD124q4rQyMQWeGaFEsnpjoLNG/kW1LGvpRCiSsq99uasQZxnGrd2uJ3VkTDAJRi
-	APKVBYNutlsdIY1NAIrIerDo/T/KJ/NKRtEKbdtb2x2rxiVm3k0UNMb5KZfscbpsD6KjOES6eRG
-	//zkUMlQwScQ6w/TkDhS08ljp3lkISoN1H7U9+d3jd2e/sNhcuatKWQhKo/ATd/ZvYvvG7imIbw
-	pFAgOcAd37sHgdkYsk8tgJxwnrOC/6ftIgDJidnitg5ucWMG40unGJgQ5o956tDzjtVu0wHPUs7
-	T1G2NrsVQ0omY6H67+TQtVHcEfhdnDODTTqyU+ZNh9BlkPmWpreaazq/wq0108Ti83exxzIVcGK
-	VZhmBCozzl1JY9vFFtek08oVAldR5tMuTf3V+OcoyinV/AoQP+z3Wc3mNbHh9SxCLIaMsC7wbJf
-	S5TDp/+/JKGdcIcDEzs2M8LDHn5IlvlLYTuiHY8NpiFb16EIavH5ICiPsJMhCHLb4=
-X-Received: by 2002:a05:6a20:b598:b0:3c0:e552:f2d with SMTP id adf61e73a8af0-3c92a761f35mr7446088637.34.1785711257265;
-        Sun, 02 Aug 2026 15:54:17 -0700 (PDT)
-Received: from localhost ([73.222.46.22])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e18e70esm50339576eec.29.2026.08.02.15.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Aug 2026 15:54:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785712440; x=1786317240;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pU4v6hRTUge0KrXkRRWZsd+tc6Y5PUpwswApZzkRyGg=;
+        b=XLEURoTZAwAZ9kK/5KqhTqUPM87mCYtMn4ZIEOO2kIPyB4huvhV396Y8icW9ojWe/1
+         nI340RGbhxN+tsZhCEODbYNfMU+i5UEP6pFFTzpYl5nayurMRhvHMjHGf3/SPMQtRqS9
+         RjtO9NSU0Cxzkkidp6d6HJn93kfBgCwW1yKBot+Lc9R0rnDNClUa6XNAEdfx2UIx1PGn
+         i4sEODS+PuYhwOz2Q7yu4M5PuBw2xFohMwXw7owioFcoM2apGPZ7Nljs/FTewfT1/rit
+         wBEsbr917qDkK5qwRCjEdU/vhMTlgUU/cCROavIUaf4apnNa9u1wAxasSdeMBThhExK2
+         s3Kg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq9GTc5RkZyW9utgMdvhkJN168/Bz74D9/6XnviFpTHnAVM/9Bwq2jKJ5SDT/eEXjWMtd8veJjMaabe31bMzpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycGof7FAff4Clf42dL9V9N5kT7RugrAArexBfOpIqyrkYfV6dB
+	3M0iYLvtir/CLeQi5KKlAtqGXpZBbvVo6eCSwIlCP+5VXb4+zVyiufjE
+X-Gm-Gg: AR+sD10POh0nAq48xk7IkaomGwnCLKc9i5ZMRN7KAjg0AGhdoaMVcMPml2NKCIxEMxP
+	LyN1Q9fCSiQIzzLf1D1LJBaEbipGTy1p8sJGoxGDIDn4fDalGWYgXkemR4UvEl0R/uKiX2N6Tzd
+	R15975/gXNFodXLzeUnqFawvLBGZF+xRRtmHqQHgKtI2ihUIzqkAxjSqfWPalpcD6UCQgOVuyZW
+	Qu9ahYxsWZN1MpnGHPjYLC4Tt79wFUA79MVWv8Z2Fqzda0SotHSAfcAGD2rgoy54E8xvzduO71/
+	0RmdtGHursSsyVlO0WN6sfgJ+miwFDgENM3nmgatGWcTabbi9bAPs2AvO7OxkN9nOmngxkRjg8g
+	fOmQ2N2qI7As7C3OqrWh9NjlWroEBJjuDYubOSfxPAyBlbFZi23quR+C/11B3ghbzBDdZelsR2o
+	p7iXgQbBBP34euytFNFZUnp9Bty1ClNdG58EDoQaDU+7zUFe/Vkw9o4gYsjuty41AyGiOTY7nGA
+	YTLmnHdVdyvqe3V
+X-Received: by 2002:a17:903:2b0b:b0:2bf:dd0:c8b1 with SMTP id d9443c01a7336-2d052035401mr83974545ad.0.1785712439995;
+        Sun, 02 Aug 2026 16:13:59 -0700 (PDT)
+Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae67d0esm29110265ad.30.2026.08.02.16.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 16:13:59 -0700 (PDT)
+From: Ning Ding <dingning04@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Ning Ding <dingning04@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Justin Suess <utilityemal77@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf] bpf: Invalidate RCU pointers after final spin unlock
+Date: Sun,  2 Aug 2026 16:12:37 -0700
+Message-ID: <20260802231248.2781334-1-dingning04@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 02 Aug 2026 15:54:15 -0700
-Message-Id: <DKETT5RWDAG9.1AP6L1IJ3CL72@gmail.com>
-Cc: "Farid Zakaria" <farid.m.zakaria@gmail.com>,
- <david.laight.linux@gmail.com>, <jack@suse.cz>, <jannh@google.com>,
- <kees@kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-mm@kvack.org>, <mail@johnericson.me>, <shuah@kernel.org>,
- <viro@zeniv.linux.org.uk>, "Gemini" <assistant@google.com>
-Subject: Re: [RFC PATCH] fs: binfmt_misc: introduce eBPF-based matching and
- interpreter selection
-From: "Farid Zakaria" <farid.m.zakaria@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>, "Alessandro Di Federico"
- <ale@rev.ng>
-X-Mailer: aerc 0.21.0
-References: <20260704-kochkunst-hauswand-blass-7226e9443a9f@brauner>
- <20260704211409.1978485-1-farid.m.zakaria@gmail.com>
- <20260706-uhren-raubbau-sinnkrise-e40a8337414b@brauner>
- <CACCo2jm5=xrQNfak=TdO=2oh0DC5pe+atj=UfuTa8Y9s8GVkqg@mail.gmail.com>
- <20260707-campieren-fingen-himbeeren-e4b682bd8e63@brauner>
- <20260722011217.45e79a08@spawn>
- <20260722-raser-leselust-konsolidieren-05f8e36a0782@brauner>
- <20260731004604.53c66732@spawn>
- <20260731-batterie-galant-zumachen-d4b91acf8af0@brauner>
-In-Reply-To: <20260731-batterie-galant-zumachen-d4b91acf8af0@brauner>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri Jul 31, 2026 at 2:41 AM PDT, Christian Brauner wrote:
-> On Fri, Jul 31, 2026 at 12:46:04AM +0200, Alessandro Di Federico wrote:
->> One could delegate the feature to user space, but that makes it much
->> harder to get adopted in a uniform way.
->>
->> Will systemd, Android [1] and OpenWrt implement this? In the same way?
->> If so, at that point it could have just been a feature of the Linux ELF
->> extension.
->
-> Whether systemd, Android or OpenWrt adopt something isn't a decision the
-> kernel gets to make and it isn't one it has to make. Merging code doesn't
-> create adoption. It creates an obligation to keep the behavior working
-> forever. That includes the machines whose owners never asked for it.
->
-> It's also not how ELF conventions get established. PT_GNU_STACK and
-> PT_GNU_PROPERTY are the two OS-range headers our loader acts on. And
-> they came out of the toolchain and we implemented them afterwards.
->
-> The one time we picked a program header type ourselves ahead of the ABI
-> PT_ARM_MEMTAG_MTE in 761b9b366cec we collided with PT_AARCH64_UNWIND
-> and had to change the name and the value three months later. We got away
-> with it because it's a coredump segment that gdb reads, not the exec
-> behavior of every binary on the system.
->
-> If you want systemd, Android and OpenWrt to agree on one marker, the
-> thing that produces that agreement is generic-abi with binutils and
-> glibc/musl on board, and then we can implement it.
->
-> So we don't actually disagree about there being an ELF feature. We
-> disagree about what the header means. My position is that the header
-> names the intent and userspace implements the resolution. Yours is that
-> the kernel does both.
->
->> Of course the Android people could disable the feature even if it's
->> in the kernel, but if the convention is established by the kernel,
->> there's really no reason to deviate from it in the way it's implemented.
->
-> The kernel can't establish this convention. It can only implement one.
-> If binutils won't emit the header and no loader cooperates, we've shipped
-> uapi that nothing uses and that we still can't remove.
->
->> The whole point of the portability thing is to reduce the assumptions
->> you make about the target system. Ideally, you just want to use
->> features widely available in kernels in the wild.
->
-> Sure, but nothing merged today is widely available tomorrow. Both need a
-> new kernel. Uniform-by-default doesn't arrive sooner because it went
-> into core elf.
->
-> And a new phdr doesn't degrade nicely. On any kernel that doesn't know
-> it the binary has no PT_INTERP it loads as static. Dies horribly at an
-> unrelocated _start.
->
-> And keeping a literal $ORIGIN fallback in PT_INTERP instead and old
-> kernels or gVisor open it cwd-relative, so an attacker who controls cwd
-> plants ./$ORIGIN/ld.so.
->
->> But from what I understand from another thread, your intention is to
->> use userspace as testbench, correct?
->
-> Not testbench as in "go away and come back later". The difference is
-> where the semantics live once they turn out to be wrong. Get a corner
-> case wrong in a bpf handler and the distro ships a fix in the next
-> update. Get it wrong in load_elf_binary() and it's the exec behavior of
-> arbitrary binaries... which we can't change afterwards.
->
->> > This is policy that the admin should decide
->>
->> Agreed, but the admin is probably satisfied with enabling/disabling,
->> not deciding whether the program header type is `PT_INTERP_WITH_ORIGIN`
->> or `PT_ORIGIN_ENABLED_INTERP`. Same for the distro maintainers.
->
-> Nobody is asking an admin to name a program header type. The distro ships
-> the handler and a file in /etc/binfmt.d and the admin never sees either.
->
-> But note what you argued here... If it needs an enable/disable switch
-> then it is policy. And the only question left is what the switch looks
-> like. A global boot-time on/off is the worst available version of it.
-> It's one bit, machine-wide and can't be scoped to a subtree, can't be
-> delegated.
->
->> Then, from a security perspective, AFAIU, implementing this in
->> eBPF does not solve the problems that have been discussed.
->>
->> For instance, `selftests/exec: add binfmt_misc bpf-backed handler test`
->> does string manipulation (no `openat`).
->
-> The handler doing nothing but string manipulation isn't a simplification
-> in the example. It's the design. The program never opens anything. It
-> computes a path and hands it back, and the kernel opens it with
-> open_exec() under the credentials of whoever called execve(). There is
-> no openat() to add. And fwiw, it also supports pre-opened binaries for
-> really crazy use-cases where you want to pin a set of loaders once.
->
-> The module RFC resolved $ORIGIN in kernel code opened the interpreter
-> itself with file_open_root(..., O_RDONLY, 0).
-> That skips everything open_exec() does and it achors path resolution at
-> the binary's directory. .. clamps there and absolute symlinks resolve
-> inside it. $ORIGIN/../lib/ld.so, which is the RPATH idiom everyone
-> actually writes, silently means <bindir>/lib/ld.so.
->
-> I'm not holding an RFC to final-code standards. The point is that this
-> is fiddly.
->
->> Overall, I feel like the current proposal pushes back on having a new
->> ELF feature for security reasons, but then delegates to distro
->> maintainers who want to use the feature to take those risks.
->
-> It doesn't delegate the risk. It binds it to whoever wants the feature.
->
-> Whether resolving the loader relative to the binary is safe depends on
-> invariants of the deployment. Is the tree immutable, who may write to it,
-> which prefixes are trusted. The kernel doesn't know any of that.
-> /nix/store is root-owned and immutable, so the policy is safe there. The
-> same semantics pointed at a directory the user can write to is a hole.
-> Only the deployment can tell those two apart.
->
-> Userspace arrived at the same answer, incidentally. glibc expands $ORIGIN
-> under __libc_enable_secure only when it is the first path component and
-> the result is rooted in a trusted directory. That trusted-directory
-> notion is exactly what an in-kernel implementation would have to invent.
-> And it is deployment-specific.
->
->> But also, distro maintainers don't really need this feature because
->> they can just write /nix.
->
-> Right, and that's the honest core of it. The people who need this are
-> users on machines that someone else administers.
->
-> But "default-enabled ELF feature" is a strange shape of fix for it.
-> Because the machines you'd be enabling it on belong to the people who
-> never asked. This proposals is to change what exec does for everyone
-> else in order to serve some use-cases.
->
->> I'd be happy to try to work on the example eBPF program using openat,
->> address the various security concerns that have been mentioned until it
->> looks right and then it could be loaded by default, but with an option
->> to disable it. But I'm not sure whether there's such a thing as "default
->> loaded eBPF program".
->
-> And there is such a thing. The distro ships the object plus a file in
-> /etc/binfmt.d and systemd loads it at boot. That is a default-loaded
-> program with an option to disable, it just lives in the distro image
-> rather than in vmlinux. If one handler ends up being what everybody
-> ships, that's the uniformity you're after, and nobody had to freeze
-> resolution semantics to get it. Could even be upstream in systemd.
->
->> Alternatively, I could extend the ELF core as a parallel feature of
->> the eBPF-based mechanism, reviving some patches from previous
->> iterations.
->
-> I'd rather not, for the reasons above.
+A verifier-tracked spin lock provides implicit RCU protection while held.
+Consequently, a kptr loaded from a lock-protected map value is marked
+MEM_RCU.
 
-Christian,
+process_spin_lock() invalidates non-owning references on unlock, but leaves
+RCU-protected references intact. This is correct while another RCU context
+remains active. However, for a sleepable program, releasing its final lock
+can end the only RCU-protected context. The verifier then allows a MEM_RCU
+pointer to be used after its protection has ended.
 
-Could you help me please understand how the next branch makes
-its way to the kernel?
+Invalidate RCU-protected references when a successful unlock changes
+in_rcu_cs() from true to false. Non-sleepable programs remain in their
+invocation-wide implicit RCU context, and an explicit RCU read-side section
+continues to protect pointers across the unlock.
 
-I see NixOS Offers the latest as of 7.1.
+A task kptr retained across the final unlock can race with removal of the
+map kptr and bpf_task_release(). This was confirmed to result in a
+task_struct use-after-free in __bpf_get_task_stack().
 
-The topic for binfmt is named on 7.3.binfmt in vfs so my assumption is
-that it's slated for 7.3.
+Add a negative sleepable regression and positive non-sleepable and explicit
+RCU controls.
 
-So that means when Linux pulls for 7.3.rc1 I could start to test it on
-NixOS? Maybe 3 more weeks?
+Fixes: 5861d1e8dbc4 ("bpf: Allow bpf_spin_{lock,unlock} in sleepable progs")
+Assisted-by: Codex:gpt-5.6-sol
+Assisted-by: ChatGPT:GPT-5.6-Pro
+Signed-off-by: Ning Ding <dingning04@gmail.com>
+---
+ kernel/bpf/verifier.c                         |  5 ++
+ .../selftests/bpf/prog_tests/task_kfunc.c     |  2 +
+ .../selftests/bpf/progs/task_kfunc_common.h   | 12 +++++
+ .../selftests/bpf/progs/task_kfunc_failure.c  | 24 ++++++++++
+ .../selftests/bpf/progs/task_kfunc_success.c  | 48 +++++++++++++++++++
+ 5 files changed, 91 insertions(+)
 
-
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fdc5fbb1f78c..aea9fdbbd33a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -204,6 +204,7 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
+ static int release_reference_nomark(struct bpf_verifier_state *state, int id);
+ static int release_reference(struct bpf_verifier_env *env, int id);
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
++static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env);
+ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
+ static bool is_tracing_prog_type(enum bpf_prog_type type);
+ static int ref_set_non_owning(struct bpf_verifier_env *env,
+@@ -7051,6 +7052,7 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			return err;
+ 		}
+ 	} else {
++		bool was_in_rcu_cs;
+ 		void *ptr;
+ 		int type;
+ 
+@@ -7078,10 +7080,13 @@ static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			verbose(env, "%s_unlock cannot be out of order\n", lock_str);
+ 			return -EINVAL;
+ 		}
++		was_in_rcu_cs = in_rcu_cs(env);
+ 		if (release_lock_state(cur, type, reg->id, ptr)) {
+ 			verbose(env, "%s_unlock of different lock\n", lock_str);
+ 			return -EINVAL;
+ 		}
++		if (was_in_rcu_cs && !in_rcu_cs(env))
++			invalidate_rcu_protected_refs(env);
+ 
+ 		invalidate_non_owning_refs(env);
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+index e6e95c1416e6..fbd7855712c1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+@@ -176,6 +176,8 @@ static const char * const success_tests[] = {
+ 	"test_task_from_pid_current",
+ 	"test_task_from_pid_invalid",
+ 	"task_kfunc_acquire_trusted_walked",
++	"task_kfunc_acquire_after_spin_unlock_non_sleepable",
++	"task_kfunc_acquire_after_spin_unlock_explicit_rcu",
+ 	"test_task_kfunc_flavor_relo",
+ 	"test_task_kfunc_flavor_relo_not_found",
+ };
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+index e9c4fea7a4bb..052c9d0e3e2a 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_common.h
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
+@@ -20,6 +20,18 @@ struct {
+ 	__uint(max_entries, 1);
+ } __tasks_kfunc_map SEC(".maps");
+ 
++struct task_kptr_lock_value {
++	struct bpf_spin_lock lock;
++	struct task_struct __kptr * task;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct task_kptr_lock_value);
++	__uint(max_entries, 1);
++} task_kptr_lock_map SEC(".maps");
++
+ struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
+ void bpf_task_release(struct task_struct *p) __ksym;
+ struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+index 8942b5478129..7a0c7ee95511 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
+@@ -378,3 +378,27 @@ int BPF_PROG(task_kfunc_release_in_map, struct task_struct *task, u64 clone_flag
+ 
+ 	return 0;
+ }
++
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("R1 must be a rcu pointer")
++int BPF_PROG(task_kfunc_acquire_after_final_spin_unlock)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (!task)
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	if (acquired)
++		bpf_task_release(acquired);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+index d63a79ee33dc..2bab7634c9df 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+@@ -6,6 +6,7 @@
+ #include <bpf/bpf_helpers.h>
+ 
+ #include "../bpf_experimental.h"
++#include "bpf_misc.h"
+ #include "task_kfunc_common.h"
+ 
+ char _license[] SEC("license") = "GPL";
+@@ -366,6 +367,53 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 cl
+ 	return 0;
+ }
+ 
++SEC("fentry/" SYS_PREFIX "sys_getpgid")
++int BPF_PROG(task_kfunc_acquire_after_spin_unlock_non_sleepable)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (!task)
++		return 0;
++
++	acquired = bpf_task_acquire(task);
++	if (acquired)
++		bpf_task_release(acquired);
++	return 0;
++}
++
++SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
++int BPF_PROG(task_kfunc_acquire_after_spin_unlock_explicit_rcu)
++{
++	struct task_kptr_lock_value *v;
++	struct task_struct *task, *acquired;
++	int key = 0;
++
++	v = bpf_map_lookup_elem(&task_kptr_lock_map, &key);
++	if (!v)
++		return 0;
++
++	bpf_rcu_read_lock();
++	bpf_spin_lock(&v->lock);
++	task = v->task;
++	bpf_spin_unlock(&v->lock);
++	if (task) {
++		acquired = bpf_task_acquire(task);
++		if (acquired)
++			bpf_task_release(acquired);
++	}
++	bpf_rcu_read_unlock();
++	return 0;
++}
++
+ SEC("syscall")
+ int test_task_from_vpid_current(const void *ctx)
+ {
+-- 
+2.43.0
 
