@@ -1,158 +1,225 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010012.outbound.protection.outlook.com [40.93.198.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7020A33D6EE
-	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 20:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785703474; cv=none; b=o8q8aeLTzIOOeE/6Zr2+aJrzMoffzDQ9UtUPdU2jsXVH269hBvUtvBgpsZ+vqyhEkO/71hLF8Vm/geylLwmmQbMneK9KoCdJhO7X08m6fqWcJG70DGXzU5lwE7IqGJvhl8nRSY4/nIIBVnRdUgdtqRQcuemXCN1+eSAGoJZD0gY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785703474; c=relaxed/simple;
-	bh=XoF2yLF3AcvHIdTsY8+5xQfUf5rqYNg3g91Py3R48nM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=us0nNQXBO3NEcZhdc1gZJ7fDUXmRUnaXdl6McvdVGphA9PJGt5RNvtBvOMjWLnpyW6JPsB6uz5KH2NJyicrwsWUT4ANraCyfwlVl56wPTrpjEhRBMn0nP/e/57JnGEfCxBGGQXbf3aDzc4OzgBV2lDfSNPg8psmYVRaCTGJCCAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYQqho85; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A943C2D;
+	Sun,  2 Aug 2026 22:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785711044; cv=fail; b=R75WLubiVwvqL5Om0onBqokhWNr7EB69ykIS04WjrSf84g0jF5O6n/Qh8WuzSDXLZu3nan1JDA69elA/h8TvWj3cSFZrWgwbGpiowM/rxqkWuiXMyK0EciPTsPnA9hmpa7IXp2Bkrz3GVjhc5pn7+zn5q4ZnABnkEEWTaFdvbmc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785711044; c=relaxed/simple;
+	bh=u99sbFPMG+XwoaUjys769YkxFjfR3AC1OVc9NLMD5fY=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:References:
+	 In-Reply-To:MIME-Version; b=hcixUNkDodEMgSxEm16J+a+OCRJ4qxTdc08xF+7a4a0KPp53UWkTVzNYN7hUU5xPxKDgYGyPuCu+2Ykt00fzYJni8d998RAujWk+3GO6bugRF3rymY6lbOp0XU6+0tg8O1ge4ifx5v5WJlN5tMaLInyUZxi8RrPY9hVylpcdgso=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=drD1euwz; arc=fail smtp.client-ip=40.93.198.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYQqho85"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49548e01d02so7564005e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 13:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785703471; x=1786308271; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=J0Po6SXhfV2vXQAkV6y/NPCPoeX6dz+V1IoPOu929LY=;
-        b=CYQqho85vIYW54C7T/LuNZF+XP6kEz6GqinVZd1K45OrdACOK4fgJjVPvVO9V/TLu+
-         m5pzpiGV/TT81y2lwNF1tE1gvBLvRi8pfB/TeJtePmAma7/nUFgWzswVXoVH39GROu20
-         hWLe5PVSruXssnNjOS0qPqI4Fy2+SG6Cqs4/FAHqpS+a5S7sPzEPvYmbNfaKczaNow5+
-         m8UgU3VvNGlj5t2NRX0l+o7yaC2JLHk4Z2luVhn7c9PFQim8qf492rpDwas2Z76XPoFz
-         HcrnR7n4R0YLzFJzxC0k8l3b4MbRPKpR2MS36dL5ADVdngCYazpAb+bDmVxFnl81Sebs
-         cePw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785703471; x=1786308271;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=J0Po6SXhfV2vXQAkV6y/NPCPoeX6dz+V1IoPOu929LY=;
-        b=NsLq7mwJEow3optAWlzWCgQscQRC39t8or+/TAEBL8X3xFIZ/9CS4UjQxUwMo0Po2x
-         axTjuynm6my5rBsOpQpHy+ZVr0ju0lZT8RN40nxIfIQWpYl7cXaCUvY5mbyMcYBGUJXM
-         LAFbEN1EuIfQKfc4/pYinvCZwRoBroMbjWujsqu5i0aoqdytxvHN1OrBIwvTbT6f/oma
-         m8OL5MsSlz1i/qaJqMdeFXdG1ru7G0PLuH0yK1iReb5jVMN2QrfSmiaXLfRoO/z2n9ag
-         DlkYSxkZxg4vPbn4PEaqZNFAN+1BS9h2N/0e+cECZ/S01wwirrK2hGkBoNxVBxaOEzN2
-         O26g==
-X-Forwarded-Encrypted: i=1; AHgh+RpfKq6s0BNv0TWxTMJJVFztG+j4AZ18x/CosLV3WAz23O1JMhER2iWiB94B2ycpQ52S4MKHLaf04PQa1OS/8mM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw73jelpiqMOeRKnHFGjuJEW2VQY1jlR7GpBWzf40g2SgDSF+Ct
-	LIz7Y6mGbw61TFR0NDc2Cq3X9rsHSh7WOw7Z85HlZ0YuWkwiz0EJ60EJ
-X-Gm-Gg: AR+sD135g9Ny2v02FwwFLfSj3RKr8qdG90lXxD6A3iUsMvS3OCuOjhogDicZ/X9p0/t
-	GvwPNWXjvtRD3u2OprN/vyDgHEBAV+iQ441UnOWoAGDsYQ684fExUJfIN1Xor+G0vQmeD7Bg5uE
-	nn021ay53iQV10pM3se7OZD2ysRrhFxYcpalRD1O1d00j6DD37fjPbUe7pR2rMZ1kPyC1UNFK65
-	blhZCDK2zXQH2MCristPZhMxuILQbVeNk7BfxWaHlf8riHW+RNsh/9MjA7VfbzeABiyY2a0eM6U
-	U7zg/Ol8sKXALOCgjEKN+47zYOHZ9FydZN0yKxlLo4dkZnShhkOLwtaUJrz36iikKTIu3XFE+4S
-	KwJqSLlkUznoW+A0p7Z/8zwUhIl/DCG2RHZWgrYvtMNhhgOZfIvD2cgHGOSED2uGp2+CLwQyBlT
-	4iHRsnKLurb3/N5KgnSK4pkE+CAfQLU4FrmtML/4tO0E7bPIfb
-X-Received: by 2002:a05:600c:a4d:b0:493:e46e:157d with SMTP id 5b1f17b1804b1-4980c693eaemr164544645e9.19.1785703470644;
-        Sun, 02 Aug 2026 13:44:30 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b8d04fsm218215135e9.3.2026.08.02.13.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 13:44:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 2 Aug 2026 22:44:27 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: ftrace: enable single ftrace_ops for direct
- calls
-Message-ID: <am-sK_buCVI3khJv@krava>
-References: <20260727142844.21212-1-leon.hwang@linux.dev>
- <20260727142844.21212-2-leon.hwang@linux.dev>
- <amnqXeC6D4mjcAe_@krava>
- <d745ca80-6516-4c61-8107-88c6a2d9cea4@linux.dev>
- <amsuU7eXuoziObdh@krava>
- <3f8e64b4-e60a-4eba-afb6-5af668ac1f85@linux.dev>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="drD1euwz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DSjXuMR6Hzv/1LrVDnMh1gNioWQidQHY2DfMjSZaiyXgWOqPUJ137YdvqqKE7w7ayMF3EVtnWschqOZ6aoxpxOnWlwiyJ6lFckhB/57UmBOwLwHh0AY7chBKbhz7GgV/oS2D0SwjUAdog5cQug0cNr4+X1E1janD/i55ZfuUoWd2eDbuRIlh5Q94UCaIiq6ZXsESxAAh7TA8CsQJYq02JZ0f1rR63fonxC3z8eTl6zt1eDH/ILgDsMhwTFTjN4fYWG1oPPP09UABlJH/YZ03r5B3XeTmQHSUrVuItXY8dPr9eHHyb69/AP78mwxG+omh9VuzFZhPi52Dmtcpgmanzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CVwWwQdKTK9HqZs1QmUSo2B0oGlTQAei9AZRUo9zB1s=;
+ b=R6SORqz4SQiTq+cpblfeGF7ltkwo+DWmx+RP5DcmYd9757LhdEw/RUD3yAPdhnSIN/F3+h+bdJXjKP/MtyAe9okSgdFIwvxusrTS9gSDqZ8dCl/StJoscbtKbgDw7YSxyJezEPv/tHsFIr6RnDeDiFAH1rS6+FBfITA8hq5S5myyvAOiZOJMf1MY8klt2b5LqN82Slj1Nz2+p2FQlAQNsorudtjpbpW9GY9dmpbxo5JiCF5zhDyy61Lcj12LqUNk3puS4XSKXSBbwjNqMwuGwYSDApUZmkga2OzdVRwfji03cvbNNwL5jFhD6CydZ29kyX8oCytQbkOFzPGyO+uzbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CVwWwQdKTK9HqZs1QmUSo2B0oGlTQAei9AZRUo9zB1s=;
+ b=drD1euwzwybUzeJLhunKMp+v52huZZQnOOmGrxrwwkqGFWLFUTxRedMQFiAvoEa8rXMfG0Ih/sWNdpWk2skgn+ZcVROdIqtjVTlvlNujMKsOKEay0jfegsNEGILduqikMdQE6QOiBo3Bnm0YOX8yad+eVQBAOdrhfydVs2UPj4Q4c96M2oe3dbrh3KMjwbFFYaVmE7gBwxvbNynqgufiegfB3QrH2NM47Xa7cI/UjDvlSZQZw7xHd+igobCK6hIoMmkVEBBT5XpTyxkDHlzbSH137o1KHWX7dpYokJOffUZBgs456fVlogi4FMjeZ9swF5YmLR8W288ekVAB8D7/Dw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by DS0PR12MB9037.namprd12.prod.outlook.com (2603:10b6:8:f1::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.17; Sun, 2 Aug
+ 2026 22:50:38 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0270.016; Sun, 2 Aug 2026
+ 22:50:38 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 02 Aug 2026 18:50:36 -0400
+Message-Id: <DKETQDCO9OYH.2FDBR4ZXGHLM@nvidia.com>
+Subject: Re: [PATCH 16/16] selftests/mm: skip khugepaged shmem cases without
+ a PMD page cache folio
+Cc: "Baolin Wang" <baolin.wang@linux.alibaba.com>, "Barry Song"
+ <baohua@kernel.org>, "Dev Jain" <dev.jain@arm.com>, "Hugh Dickins"
+ <hughd@google.com>, "Lance Yang" <lance.yang@linux.dev>, "Liam R. Howlett"
+ <liam@infradead.org>, "Michal Hocko" <mhocko@suse.com>, "Mike Rapoport"
+ <rppt@kernel.org>, "Ryan Roberts" <ryan.roberts@arm.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>, "Usama Arif"
+ <usama.arif@linux.dev>, "Vlastimil Babka" <vbabka@kernel.org>,
+ <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+To: "Kiryl Shutsemau" <kirill@shutemov.name>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Nico Pache" <nico.pache@linux.dev>
+From: "Zi Yan" <ziy@nvidia.com>
+X-Mailer: aerc 0.21.0
+References: <20260802195254.1937477-1-kirill@shutemov.name>
+ <20260802195254.1937477-17-kirill@shutemov.name>
+In-Reply-To: <20260802195254.1937477-17-kirill@shutemov.name>
+X-ClientProxiedBy: YQ1P288CA0004.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:c01:9e::22) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f8e64b4-e60a-4eba-afb6-5af668ac1f85@linux.dev>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DS0PR12MB9037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 227324b9-af71-4b66-9157-08def0e878ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|18002099003|22082099003|6133799003|56012099006|5023799004|11063799006|4143699003|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	Q3z+ii1fO8nKj6aUiOMPlAfiC5cdn7CW2234u1zkqYuzue86Lyc7RpBAOWGvD2rlog86XnvERIhAEVCx09jB573vbyQrcc95yEn+8mwnVe7WNVMnj2ax7i1bJDiKQmr0mleoOlpFkzkUFaB/p4nIHOqyiJD+kKDhWACLFEEx7WV27gA77CWDJbMHhLROjku3vnPPEGzyuFKZe5OQ3heWmiN9JAac1iqSpFfQglxlftuDcQryLA0upTyR6coT46Iuaqw8tmZd49xvsxAW9tHlLOoVHow813d3rd4BrjU2G2R4nf/O/sleAVXUXDnh9ZhmyNE5FqYpsEKyzXVy3jJSCMKKRkWEAkQ4xwhb5q7P4MI+TreDZ7E/g/2c8tW5PKmA0HIgtnUpBi/KLfOF5tRW8K6Z+4THUFS8d21E41O9InYW53+MwzCR7CnCmAptulnuFLv86O15q0seGy7ycaQ+wsJZIo3BMv5RMF5dvJHCJk1C0k7f9ySCXoGMAm6BwVaWEkWd2LcOsqY884XH7/cqgk6IokWriPULjCQNq17EH4SFJ1dOIczbb06kr2jRyxFiWgA74l2HUXko3Lq3T+jrDxz/MAzFi6YDh3Ijb9ouxyfecNnKgRuZuMRAPDU8xkk+rlm86ag8reRjtVGp+jJSIuu7/tbmI78SnLqC+7sxLQk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(18002099003)(22082099003)(6133799003)(56012099006)(5023799004)(11063799006)(4143699003)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WjVTVlBiNjBIUTFYMTdSRkNlM043T2x6czI5QWFOT0l0ajZ3SjdIRFo5d1J1?=
+ =?utf-8?B?Sk8xeUh4WWdsY052bjAzd2RRdEZ4NWVRaW8yZVQ1Nm5pMm9abDRzU1BSam1E?=
+ =?utf-8?B?SXVaa3UvR0pZRVNyWEZpM2gzQmNoeXZZWExkQkJSTm9YcFc3dDFsY0ltaWJB?=
+ =?utf-8?B?U2gra0lGWGVXeGNmdlI0ejJlajdtWXVqQ2ttbW9xVU1jdExTY2w1ZFJrS0FC?=
+ =?utf-8?B?aU04TDNFNnZJb3NueGVBVi9Cc2pnSjNnWmZsQ0FNT2kzOWZNek5YYkFSc0hR?=
+ =?utf-8?B?cUlRYjBOcTVVL0p4WWg4cWNQb0x4MXdrYjRkMHplb3pGUy9FT1N5M0xoVlZB?=
+ =?utf-8?B?SzdybGNGMnNjeExmaFlCNThnZVJMM1Zyd1RFeHMwemJOZVR0NUhBd05BQmZL?=
+ =?utf-8?B?Y1U3ZUxweTdSSkFRc2hQUXBjUElJMG9EcFNmVTk1SGlTK2wySGVtS2V4WnRM?=
+ =?utf-8?B?c01vUjhtOVBkcEY5WE1LVnkzbG02aEUwd3dERHR6YXpIekJscWpzVEJROThp?=
+ =?utf-8?B?SFpNVUxGLy9PZk9nZkFZcXVYZzVOUUhhUnlGQi9HbGFML1RMSnp3TXlDcjNn?=
+ =?utf-8?B?dkxlMVdqRWViZ240aWJJYlUwcm9ESno0Yk1xY0RDci9qYit0VnMzZ0Jia2V5?=
+ =?utf-8?B?MFpISHE2RG9iVWpOMTFDN1N1dVdHWkphQ25vT3JJYWpmWjdGbWFmRG05dCtR?=
+ =?utf-8?B?ZGg2bDRCU3J2S0hnajRMcFErTEl6NWpxRGF6dEtGc2VkTG1nbWJJUHhldlhV?=
+ =?utf-8?B?TFlOQml4azc4bWhVRmtBRCtnemtCMGx1Y2V4T082ZjJ6RmkxWWgvU0JtTlZk?=
+ =?utf-8?B?a2lXWFBVM3gvV2ErNU9MamRxeUExZjZPZ2NmVHhhdCtCTTdnTVdMdHpENVk2?=
+ =?utf-8?B?VzJQV0JlN1ZMVGZwQ3BZaDR1MEVVZUxsTEl1ZHpPQWVva3hrV2tQVUxjY2s3?=
+ =?utf-8?B?UWU2cjVWRkNlQjBvTUFJcmhFUFBkRFAyaTRQR0NVWkFkUnhzUklkQXJkaENU?=
+ =?utf-8?B?MU9RZDdzWWZBcXl4czFFeTkzaUlpMytkcHBIU2w0MXpQMmRZamk3VVNzWC9i?=
+ =?utf-8?B?Nmd6TUJsZnJlNUFFcERDRGgza21jdzVranRrRFhqb29HOVAyYVlHNlJZWkxO?=
+ =?utf-8?B?OGRCWExoTE84cXNKSXEvcExQUitTQVN1Qk16WGlaMzgxNzI0eEtDd0V3WWlp?=
+ =?utf-8?B?ZXZYelNKZVZVcDVTWlU0UHAweTNrVWVJQ3NhNjdpN242TXlDRnpZeEViVWtY?=
+ =?utf-8?B?cmZVYjhtbnI3VjYyVWpUcGhsbjlQUTdreFdZMGtiN2hHbmhEaWNLbWJXMlZ4?=
+ =?utf-8?B?VFRUT1poQ1FYc3RDNjNnczV1TVEraVg4VlRidThydFloMXBxb2Q2d0dmUlM4?=
+ =?utf-8?B?Z3p5bDFJbnVFRkM5UFlZT2JLcHgyM0VacTl1anMzS1BVTXRpNzEzYUJTQ01N?=
+ =?utf-8?B?OEhvSWg4SndVdlc0MUh1SUluY2xxay9VMVRMUld6dDE5bkw0UlppY2pSUzRa?=
+ =?utf-8?B?UWdEV2MwQnRFbjBOM3Y3YU5wOERETzd5OG9lVmI4S2tqbDJUeFZSZVZlYUtx?=
+ =?utf-8?B?L3ozZ1pEa1ViaDVvT3pMc0REUCtpNmhRSDlzSEJXWG9ERERqdk5BNFhvNzNw?=
+ =?utf-8?B?YVJvTU43YnFCemdlMHZxRzNpbkRrS1M4SFdpbGtFcUZoRjJKSTJ5T0Ntb1NO?=
+ =?utf-8?B?UkhYSVA5WGY4bkFycDFTOXRQUmM1QjlSN3RJNklRT1NRR3pLM25qRk1TcVdF?=
+ =?utf-8?B?OVYvaEd2WitNb2Qvc29CUXpKa2lOdCtKR0pJeTZTWGpmeGhHaW55ZUpMdFVU?=
+ =?utf-8?B?SzNQdVRicFFqb3J6QlBMUVVCbEUzVHYxUmk3UzFWb1puZzh6WnV1emlpT05V?=
+ =?utf-8?B?VFMzTHdPMFJmNm5PQ3lrMFZGOUNzbCtKZEp1V1dUV1QxbisrSElFTmdvY3ZV?=
+ =?utf-8?B?WFBnM2VUVzJoUStlSDQ2VFRUYUR5NW8rUUMxaG9EdVlVYzlLcDVaY1VWRjc4?=
+ =?utf-8?B?TUZzbE8zNVd2Ni84VGg3bU1YbnRrRUVjbUQxNzFOSXNmMytaVEFBY2kwZU5x?=
+ =?utf-8?B?SEtiTzkyeXZvZlpYV1d3ZlcvY081d0I2eXpGLzlEK1UrM0h6TDBQMzNhVW9r?=
+ =?utf-8?B?dDcvZTl5Q1FmMmRaZGhzVnpiN3Z5QzUrbVhVVXpPRTVxK2ZBc3l4R0t5bXV1?=
+ =?utf-8?B?R08vNSt3bXljdXlOYWxJK1VSemcxWFduVHhTdGVNcUJTL1N5MTJPdHRvKzFs?=
+ =?utf-8?B?ZzZRQ2FIZWZCQzJXbmhzTTdpSjJDVjdDZGU2dnkzeVpCbTN4ZnZ0MUQyRzlD?=
+ =?utf-8?Q?ZttoJEDljfJ57ENdBW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 227324b9-af71-4b66-9157-08def0e878ff
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2026 22:50:38.7344
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YMMA9PeSq2IeDfrpino0WxI+Ph5hokFFDi91UVFJ8zjCC0bv8L2PEPdd9sE9hgWb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9037
 
-On Fri, Jul 31, 2026 at 10:30:37AM +0800, Leon Hwang wrote:
-> On 30/7/26 18:58, Jiri Olsa wrote:
-> > On Thu, Jul 30, 2026 at 11:05:42AM +0800, Leon Hwang wrote:
-> >> On 29/7/26 19:56, Jiri Olsa wrote:
-> >>> On Mon, Jul 27, 2026 at 10:28:43PM +0800, Leon Hwang wrote:
-> >>>> The BPF tracing multi link updates several direct-call sites through one
-> >>>> ftrace_ops. Its implementation is therefore gated by
-> >>>> HAVE_SINGLE_FTRACE_DIRECT_OPS in addition to
-> >>>> DYNAMIC_FTRACE_WITH_DIRECT_CALLS.
-> >>>>
-> >>>> Select HAVE_SINGLE_FTRACE_DIRECT_OPS whenever arm64 enables dynamic ftrace
-> >>>> direct calls. This enables BPF tracing multi links on arm64. Also
-> >>>> generalize the unreachable-trampoline comment because the single-ops path
-> >>>> does not use ops->direct_call.
-> >>>
-> >>> hi,
-> >>> iirc arm needs ops->direct_call for trampolines to work properly,
-> >>> that's the reason we enabled single ftrace_ops on x86 only:
-> >>>
-> >>>   424f6a361096 bpf,x86: Use single ftrace_ops for direct calls
-> >>>
-> >>> I don't understand the arm usage of op->direct_call, but it looks like
-> >>> (codex thinks) that the fast path won't always work without op->direct_call
-> >>> being set
-> >>
-> >>
-> >> In theory, op->direct_call is the fallback for the case:
-> >> HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS=y, out-of-range target, and non-BPF
-> >> direct ops. This is what Codex thinks about.
-> >>
-> >> However, after searching the call sites of
-> >> register_ftrace_direct()/__modify_ftrace_direct() in kernel, which would
-> >> set ops->direct_call, the actual callers are in bpf/trampoline.c, which
-> >> have been gated with HAVE_SINGLE_FTRACE_DIRECT_OPS. That said, for
-> >> normal usage of HAVE_SINGLE_FTRACE_DIRECT_OPS=y, op->direct_call is unused.
-> >>
-> >> If someone uses register_ftrace_direct() or
-> >> modify_ftrace_direct/_nolock() outside BPF in the future,
-> >> op->direct_call will be used.
-> > 
-> > so any 2nd user on the same function triggers the slow path,
-> > and that's fine, the single_ops handles slow path correctly
-> > 
-> > but IIUC the out-of-range target will now always go through slow path,
-> > which in current code it doesn't, right?
-> > 
-> 
-> Right.
-> 
-> Pls see the sibling thread with Ihor. With in-range BPF trampoline
-> allocation, the slow-path regression should mostly disappear.
-> 
-> Let's continue the discussion in that thread.
+On Sun Aug 2, 2026 at 3:52 PM EDT, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+> The page cache caps folio order at MAX_PAGECACHE_ORDER, and
+> xas_split_alloc() puts that cap below the PMD order where a PMD is 512M -=
+-
+> arm64 with 64K base pages, as include/linux/pagemap.h says outright.
+> shmem_huge_global_enabled() then offers no PMD order at all, so
+> MADV_COLLAPSE of a shmem range answers -EINVAL and khugepaged passes over
+> it.
 
-please paste the link/subject for that thread
+IIRC, after READ_ONLY_THP_FOR_FS is removed, all pagecache folios are
+split using non uniform split, xas_try_split(), so does shmem (except
+shmem in swapcache not splittable). In theory, we can get rid of the
+cap, since xas_try_split() does not split more than one level like
+one can try to make xas_split_alloc() split more than two level (e.g.,
+512MB to 64KB on arm64 with 64KB base page).
 
-thanks,
-jirka
+>
+> The shmem cases nonetheless ask for a PMD-sized shmem folio, so on such a
+> configuration four of them fail and the run bails out in the middle:
+>
+> not ok 2 collapse_full not ok 4 collapse_single_pte_entry # Allocate huge
+> page...Bail out! madvise(MADV_COLLAPSE): Invalid argument (22)
+>
+> That is the kernel declining something it deliberately does not support,
+> not a collapse defect.  Skip those cases where the PMD order is not a shm=
+em
+> order, which thp_shmem_supported_orders() already reports -- it reads the
+> same per-size shmem_enabled controls the kernel only publishes for orders
+> the page cache can hold.  A tmpfs-backed file argument is skipped on the
+> same grounds, and a run left with nothing to collapse into skips outright=
+.
+>
+> Anonymous collapse is unaffected: its orders are not capped this way, and
+> the anonymous cases pass at a 512M PMD.
+>
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/self=
+tests/mm/khugepaged.c
+> index 9213ce1658d0..c5a3c3922581 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -1584,6 +1584,27 @@ int main(int argc, char **argv)
+>  	hpage_pmd_nr =3D hpage_pmd_size / page_size;
+>  	hpage_pmd_order =3D __builtin_ctz(hpage_pmd_nr);
+> =20
+> +	/*
+> +	 * The page cache caps folio order at MAX_PAGECACHE_ORDER, which
+> +	 * xas_split_alloc() puts below the PMD order on arm64 with 64K pages.
+> +	 * A PMD-sized page cache folio is then impossible, so the kernel
+> +	 * refuses these collapses by design and there is nothing to test.
+> +	 */
+> +	if (!(thp_shmem_supported_orders() & (1UL << hpage_pmd_order))) {
+> +		if (shmem_ops) {
+> +			ksft_print_msg("no PMD-order page cache folio: skipping shmem\n");
+> +			shmem_ops =3D NULL;
+> +		}
+> +		if (finfo.type =3D=3D VMA_SHMEM && read_only_file_ops) {
+> +			ksft_print_msg("no PMD-order page cache folio: skipping tmpfs file\n"=
+);
+> +			read_only_file_ops =3D NULL;
+> +			read_write_file_read_ops =3D NULL;
+> +			read_write_file_write_ops =3D NULL;
+> +		}
+> +		if (!anon_ops && !shmem_ops && !read_only_file_ops)
+> +			ksft_exit_skip("Nothing left to collapse into\n");
+> +	}
+> +
+>  	if (anon_target_order &&
+>  	    !(thp_supported_orders() & (1UL << anon_target_order)))
+>  		ksft_exit_skip("Order %d is not a supported anon THP order\n",
+
+
+
+
+--=20
+Best Regards,
+Yan, Zi
+
