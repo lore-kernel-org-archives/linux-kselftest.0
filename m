@@ -1,211 +1,299 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8A93B47DF
-	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 14:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785682215; cv=pass; b=sZDaMf6L3MbJKdgF9pjcs+WjzBh21+331up5QCmizc2ykz0YeS8WWzeWhsFmON8LZDjC7+9Y4GEW65F2a84KOw8vBITaiEXxjUI/l1O+A+SGfsOeP8Y3SScKvRwnkzVNfcvak1uIH8CyC+RRSJKQSKdzl7QUVgG//2q/lfVCcU4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785682215; c=relaxed/simple;
-	bh=7kkcp+wOorntAb3DNadH0Q8Sg1yGSgKiD+TONbs7qUE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=plBvqhWutP3LSs0v+wpCKGnM08QrCgBFEbkLBygKYFTODsSPgeJZCR/KXSTMjAzetqebbNIPdnYB2C0M1deRkBuOpEEZ++wGgkZZnR92QeAMGK4IZmHBQUPX2JzQsl72GAmQ2rgzwxCV7xW+nH060EuhTNHX9qiHPeAwMQ8e/0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=d3TmUEmD; arc=pass smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78F13B71C2
+	for <linux-kselftest@vger.kernel.org>; Sun,  2 Aug 2026 15:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785685871; cv=none; b=f0c8HZzT/1YFCHK92t+0+b7hxhRwEHf6VKYi3kDOFPs5k5M88q/XAWMkrA07nrvZvd8PMiiMaCodD+fHXUdPVmpMinuhKU/Ynd+5YERN4fV1SLy/yxden+yDVI4y9CM9h69I1AsbXAE6XkjCRhMY4PXMgLI5/uClv1+JOzasSS0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785685871; c=relaxed/simple;
+	bh=iVoXS/MCfZMGKW6zjNFDH3PZcbm/bTlAERaqpSEasl0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=J+ZdD1/LyNF1AObRDEwrLQBS70r3kgNzh5vghjtalpO7c7RbneOAFSh86UkPZ2y8oeydiH23hAakRbU6wWitCz0iC+fRyqUQifLXEkuMsoxgX3ybwqxZmNzJcASDxng+P87u23pQkAF9AmLYckNVXeRdo3tfXxsqdkligRWOSso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g2smPlnS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="d3TmUEmD"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-848643382fcso2253221b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 07:50:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785682213; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jqb4jIJ6qgpK9XtH1P43OFVgfIswqts5voqqvbVX2+rZ1ufsLI0PaidWu4Px09kirH
-         pXRXGCLXODs5kn7cNXykuZis5S24N1q0lSG2YjNd3J5zJ9vZhcAohV0hY4Ij26Q6lKmh
-         J6lw0kAbSWGE+XSS14DUyucVHRgrrIoZE/s8fpvwYCjCAsbPazlEf04kFJyuhcu9qrUp
-         gqBnPVzKVxUW8kKsmbZR2zE4nTGiC+DUy+PvdUWH4+XB/b478crz6q6LgDZ+Crkngt3T
-         WmltEhbSYinbyVioyw5BUPP2S43NZNrfiWRWyF51tT89DzybYX4qlbGaKuY8U8/qMwAN
-         Memg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OmgWl/f4uXW4AQpzfCn2lxP5muAJ5BUlRpvNvDKBVgs=;
-        fh=H61TohoA2SBiUTkOZLqFGP9nslLzGVCjnmDk0oRc9gc=;
-        b=MBcjMulNoqE7UroTyPylSEPVWVmaaDqFqlWUWmUHIAPmycfiA5vsbi8CriXHoc0tf+
-         845yBOOX5m5hS/Erp96JWDv19Y+DikHD0eTAUcBRhMF1irbTVXtA0GQ5UbLH71IyYu63
-         S9iq6f93HdArDlPjFnBemVWltBFdREDJoyZwv663hgnL2j2qb6ia50rhXZCwqwi7Elrp
-         3Dvzm04hgayCUAiPra/KrYlRaAOiCZhQpdc236KEm/15aO0GuHxpT3hFakqcfrgNOVje
-         pKyxkDpw4SwbGMlfeZpKk2byhzkE5GoMxbmJ2dlFzM/EJ/iZlsV4UTCVw5y32TQrYQM5
-         wz3Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1785682213; x=1786287013; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OmgWl/f4uXW4AQpzfCn2lxP5muAJ5BUlRpvNvDKBVgs=;
-        b=d3TmUEmDewxJT2GJJ7flVa7AXI99c0jYB/Vci5U63n3USKpC5+LDvLpUnz4on+ypxi
-         a/iyVr7JUa0NIzulDnSprmnZdyTmouYpUiDDFC5wel/7jkvzaPLhR46rOzF/X9RAu6AT
-         1g1BZaRSKENCDMGTi7RlE1Xu++pjSkF0+9myK99aZTDszaTD7vn9SH4p5xWpeUJ0kzcu
-         ln9n1Ye7sIwrY0SUdzj58jQBwZbVu9ffhcJeJlsjiJCt6oKF0Nmoz7uMUf9iOQRkl6Kf
-         abDInXlm5RnSjfJ3IH5DV0+J4Z8YI317/4LJ1/KC3fEioyR0GHlcv+b8ZtLGH36/6mqk
-         cf5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785682213; x=1786287013;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OmgWl/f4uXW4AQpzfCn2lxP5muAJ5BUlRpvNvDKBVgs=;
-        b=YaxPWk2qe7JqrJ3xRjk8rWk61kadT025yWHJoOH+gq5giXonTtUY6oNNh11f0EmWOs
-         ks0rCn2neSGcTsuJiVmEyPIDQRIkHK6YN6qSDsayclMqTN7dOmTp784n1u4hDlheM1Qn
-         BFIdHKb3SJoVCbGqKpWI+ODtaJ/WGyvYfHazMRRYQqHZxPg/4czwpvzyXQWxmmBr9rxU
-         9LzTsQrf0Fgj5a6Hj9Gl/nI8Fnr9VpKJigVbyBbeLwLWbW5LUkjE14MDO5no1Br2GZml
-         SlIYJPnarLOqfrvWZE1gS/YZmeL1pu6J7je6g5VQtzrrBJoUHiW5aY75GoQ0wxxbr0c1
-         ijcQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqK8eweNTiH/6TxEU0ex6Mfr1sPOjilgz+eGUhWqYG6/ybwd6dwkdowqvYA344tknM/MLhwQGeWOkRPp3XjrHQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwClaYxWmX81hO+b6W/+ENIRof3ETqOga5CiEsTUqJgocN4WVMm
-	/RVFqNEk3ejooGx4mvpKr1c8r0/CUENmsCKlw4ZF0PBmvXjbXp2kXM287PIMVp7EQT9Z9FZ0iRt
-	Mg7xFBVcthz7h4L/PWhLJpvqrWFqGzURsEM3tZNw+
-X-Gm-Gg: AR+sD13xzPLCysoEicQRjMnOoCGY2rIjw4VSW8/p7rFxA6WDg/A33EsDwB9TNffntxn
-	qN/CQGKWZmpaO+ijZajIlXAQz2ICrXMQyW7CozfwGSmP/WTEwCIbDp0MACpVvxpV/FDdfF76wGO
-	UKCYSjaMYolTNFl1+PTE6qfzcOADsONttCseUPgCSbBB1BDlfE1qB4uxU3xUsJjelf429iptDwJ
-	mDdXFqWCUJzdWphIZEUQUq0gYt9bqucu3fH6/eRcdSdsy4mP7ulHjnuSnEodVdn6pjdweyDFLYa
-	PisvuRiguJyuuEXOiux2ewRkCdhZY8k63JrUPruJdLqb
-X-Received: by 2002:a05:6a00:9289:b0:848:6c1c:17c0 with SMTP id
- d2e1a72fcca58-84ee47c7dbbmr6238656b3a.19.1785682213526; Sun, 02 Aug 2026
- 07:50:13 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g2smPlnS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785685867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vOfM0yeJzY4si1w7/5HxuvGeapeHoMF6WCh6/reuF7g=;
+	b=g2smPlnS4/dXHmnKOk24wObe30LxMKtGeSAdlCVPUnO9olfGuI7WNCP300xTcINKIN1Ax0
+	0IHdEib59efKnsEppDZWGXnoHNqb/fLmfzaAaDCiGdd8shZfYdBuul3pNVhB74lsJuSNHE
+	MWGEkjr5esupE7peOQWZwBRcQGoFd8c=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-416-1eGIdxt_PMaigfKBNkCZGg-1; Sun,
+ 02 Aug 2026 11:51:04 -0400
+X-MC-Unique: 1eGIdxt_PMaigfKBNkCZGg-1
+X-Mimecast-MFC-AGG-ID: 1eGIdxt_PMaigfKBNkCZGg_1785685862
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 72F5C195608E;
+	Sun,  2 Aug 2026 15:51:02 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.89.32])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7B5491956044;
+	Sun,  2 Aug 2026 15:51:00 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org,  davem@davemloft.net,  edumazet@google.com,
+  kuba@kernel.org,  pabeni@redhat.com,  echaudro@redhat.com,
+  i.maximets@ovn.org,  dev@openvswitch.org,
+  linux-kselftest@vger.kernel.org,  shuah@kernel.org,  horms@kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v8] selftests/net/openvswitch: add SCTP flow
+ key support and test
+In-Reply-To: <20260731062655.4088575-1-houminxi@gmail.com> (Minxi Hou's
+	message of "Fri, 31 Jul 2026 02:26:55 -0400")
+References: <20260731062655.4088575-1-houminxi@gmail.com>
+Date: Sun, 02 Aug 2026 11:50:59 -0400
+Message-ID: <f7tzez4v7vg.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260730234533.1912709-1-dwindsor@gmail.com> <20260730234533.1912709-4-dwindsor@gmail.com>
- <CAHC9VhT=m-GtOZx2AHym7uN1CNx94arKBiXeVC7LTEJ-b=1EVQ@mail.gmail.com>
- <CAEXv5_iiNspub=qE1YW-01sV_bxxFUrrcAR4KV4Ec5i_mePtHw@mail.gmail.com>
- <CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com>
- <CAEXv5_iHLmzPT3Jj+qZsdt1Nk_5OD4Up3GGV0S9G7KyQshFhDA@mail.gmail.com>
- <DKCVF3KRQSOJ.1WKITMP369I0R@gmail.com> <CAHC9VhR5yfw+sMfrYpy8Qm2uNoxqsTweh=KhDRZsU1CioHRDDQ@mail.gmail.com>
- <DKCWFKAD79IU.TMCNT9RUAJAU@gmail.com> <CAHC9VhRQWRKHi-hdtvSnYPD_dqgP7Q8RB_X4PEDLwPUe6EegYA@mail.gmail.com>
- <DKCYOLBUWJBZ.1N8JAXJ3QJYCE@gmail.com> <CAHC9VhRK38bVU5+rYxwLsvVt0oBBSWs4xKsjexbvc3TuA9LVNQ@mail.gmail.com>
- <DKCZDM2G8VHO.38SPG4I4JZTJI@gmail.com> <CAHC9VhR3AK4r4_0eqWxDmrA8UKOsbyQh6ZRRie99Pe6cW0EL8Q@mail.gmail.com>
- <DKD00NYVQQC9.OK8JEWHH1NUV@gmail.com> <CAHC9VhQ5vSr6JK0xtNnP2cre+3bbW9GUT7kXwLAcctwNpPzwrA@mail.gmail.com>
- <DKD17D5H7N95.2VI5IOQBNTHGX@gmail.com> <CAHC9VhQ24fp7_sy1=NiWkfzPLSM35ugSCOKDKxnm6H9W-pDa6Q@mail.gmail.com>
- <DKD2R5268G2C.TPLR4XMTZ91R@gmail.com> <CAHC9VhQNozNGH4o=8D6wxks4deZ2eVOHmxFK=fvjhkCC0JSCkw@mail.gmail.com>
- <DKD3I17NPS96.3G49BTZ4ZVUVV@gmail.com> <CAHC9VhQmb=v3-T5HZUzfr_me6S7bo6sX0Vs4nDFQZnMe+SQOMQ@mail.gmail.com>
- <CAEXv5_huGfd7u0tKW5Eq5bSH+rzkB=ThKOTLnfnxepqTmgcUPA@mail.gmail.com> <CAHC9VhQxeNJ1U_cUX=4mdJT17jG2ZFY27YM2CXK8wcuRPQYtrQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhQxeNJ1U_cUX=4mdJT17jG2ZFY27YM2CXK8wcuRPQYtrQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 2 Aug 2026 10:50:03 -0400
-X-Gm-Features: AUfX_myOurolkOWbQTM-uf1kAESEJT0FADttjcAMdHsh5yOJTC09VeSrydmRClc
-Message-ID: <CAHC9VhSRbwLD_yxEPKx38X59KcjZWKPQj2QnGupP4NFC6zu66A@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 3/4] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: David Windsor <dwindsor@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Sun, Aug 2, 2026 at 10:46=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> On Fri, Jul 31, 2026 at 7:11=E2=80=AFPM David Windsor <dwindsor@gmail.com=
-> wrote:
-> > On Fri, Jul 31, 2026 at 6:23=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > > On Fri, Jul 31, 2026 at 6:04=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > > On Fri Jul 31, 2026 at 11:49 PM CEST, Paul Moore wrote:
-> > > > > On Fri, Jul 31, 2026 at 5:29=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > > > > <memxor@gmail.com> wrote:
-> > > > >> On Fri Jul 31, 2026 at 10:48 PM CEST, Paul Moore wrote:
-> > > > >> > On Fri, Jul 31, 2026 at 4:16=E2=80=AFPM Kumar Kartikeya Dwived=
-i
-> > > > >> > <memxor@gmail.com> wrote:
-> > > > >> >> On Fri Jul 31, 2026 at 10:01 PM CEST, Paul Moore wrote:
-> > > > >> >> > On Fri, Jul 31, 2026 at 3:20=E2=80=AFPM Kumar Kartikeya Dwi=
-vedi
-> > > > >> >> > <memxor@gmail.com> wrote:
-> > > > >> >> >> On Fri Jul 31, 2026 at 9:05 PM CEST, Paul Moore wrote:
-> > > > >> >> >> > On Fri, Jul 31, 2026 at 2:50=E2=80=AFPM Kumar Kartikeya =
-Dwivedi
-> > > > >> >> >> > <memxor@gmail.com> wrote:
-> > > > >> >> >> >> On Fri Jul 31, 2026 at 8:42 PM CEST, Paul Moore wrote:
-> > > > >> >> >> >> > On Fri, Jul 31, 2026 at 2:18=E2=80=AFPM Kumar Kartike=
-ya Dwivedi
-> > > > >> >> >> >> > <memxor@gmail.com> wrote:
-> > > > >> >> >> >> >> On Fri Jul 31, 2026 at 6:59 PM CEST, Paul Moore wrot=
-e:
-> > > > >> >> >> >> >> > On Fri, Jul 31, 2026 at 12:32=E2=80=AFPM Kumar Kar=
-tikeya Dwivedi
-> > > > >> >> >> >> >> > <memxor@gmail.com> wrote:
-> > > > >> >> >> >> >> >> On Fri Jul 31, 2026 at 6:02 PM CEST, Paul Moore w=
-rote:
-> > > > >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:44=E2=80=AFAM Kumar =
-Kartikeya Dwivedi
-> > > > >> >> >> >> >> >> > <memxor@gmail.com> wrote:
-> > > > >> >> >> >> >> >> >> On Fri Jul 31, 2026 at 5:30 PM CEST, David Win=
-dsor wrote:
-> > > > >> >> >> >> >> >> >> > On Fri, Jul 31, 2026 at 11:17=E2=80=AFAM Pau=
-l Moore <paul@paul-moore.com> wrote:
-> > >
-> > > ...
-> > >
-> > > > As a consequence, everyone suffers because they first need to satis=
-fy your whims
-> > > > on how all code and kfuncs written thus far are wrong, and need to =
-be moved
-> > > > around ASAP, including the one being proposed.
-> > >
-> > > That's not a reasonble or truthful summary of things, I've only
-> > > requested that David locate his proposed kfunc in
-> > > security/bpf_lsm_kfuncs.c, I never suggested he move any others.
-> >
-> > Looking at what's left of the kfunc itself, it's basically nothing.
-> > Everything meaningful has been moved into security/ already.
-> >
-> > Aside from bpf dynptr ops, what's left is:
-> >
-> > if (!name__str)
-> >     return -EINVAL;
-> >
-> > if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX, sizeof(XATTR_BPF_LSM_SUFFI=
-X) - 1))
-> >     return -EPERM;
-> >
-> > if (!xattrs->xattrs)
-> >     return -EOPNOTSUPP;
-> >
-> > ... then a call to security_lsmxattr_add. Why not move this chunk into
-> > security_lsmxattr_add, and leave the remaining bits, which are pure
-> > bpf, in fs/ for now, and litigate the total placement of all of them
-> > once v7 lands?
+Hi Minxi,
+
+Minxi Hou <houminxi@gmail.com> writes:
+
+> The ovskey flow-string parser has no OVS_KEY_ATTR_SCTP entry, so a
+> flow string containing sctp(src=.../dst=...) parses without error but
+> silently drops the L4 key. The resulting flow carries only
+> ipv4(proto=132), and the kernel rejects it: match_validate() in
+> flow_netlink.c requires OVS_KEY_ATTR_SCTP when the IP protocol is
+> IPPROTO_SCTP and returns -EINVAL for the missing key.
 >
-> Thanks David, but my comments and decision are based on the kfunc as a
-> whole, not necessarily how the work is divided between the kfunc and
-> the LSM hook it calls; shuffling bits of code between the two doesn't
-> change the character of the function.
+> Register OVS_KEY_ATTR_SCTP in the parse table and add a matching
+> selftest that verifies SCTP flow key matching (sctp src/dst port).
+>
+> Also enable CONFIG_IP_SCTP in the selftest kernel config.
+>
+> Signed-off-by: Minxi Hou <houminxi@gmail.com>
+> ---
+>
+> Changes from v7:
+>   - Drop all unit tests per Ilya's feedback (tests for test code
+>     feels excessive); merge patches back into one.
+>   - Enable CONFIG_IP_SCTP in the selftest kernel config.
+>   - Rebase onto latest net-next; add base-commit header.
+> v7: https://lore.kernel.org/netdev/20260729064549.3647518-1-houminxi@gmail.com/
+> v6: https://lore.kernel.org/netdev/20260724150624.3457427-1-houminxi@gmail.com/
+> v5: https://lore.kernel.org/netdev/20260723215630.2502169-1-houminxi@gmail.com/
+> v4: https://lore.kernel.org/netdev/20260723162503.1790998-1-houminxi@gmail.com/
+> v3: https://lore.kernel.org/netdev/20260722214915.4128292-1-houminxi@gmail.com/
+> v2: https://lore.kernel.org/netdev/20260721190648.2713156-1-houminxi@gmail.com/
+> v1: https://lore.kernel.org/netdev/20260718215437.3257200-1-houminxi@gmail.com/
+>
+>  .../testing/selftests/net/openvswitch/config  |   1 +
+>  .../selftests/net/openvswitch/openvswitch.sh  | 121 ++++++++++++++++++
+>  .../selftests/net/openvswitch/ovs-dpctl.py    |   5 +
+>  3 files changed, 127 insertions(+)
+>
+> diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
+> index c659749cd086..754297b1644e 100644
+> --- a/tools/testing/selftests/net/openvswitch/config
+> +++ b/tools/testing/selftests/net/openvswitch/config
+> @@ -1,6 +1,7 @@
+>  CONFIG_GENEVE=m
+>  CONFIG_INET_DIAG=y
+>  CONFIG_IPV6=y
+> +CONFIG_IP_SCTP=y
+>  CONFIG_NETFILTER=y
+>  CONFIG_NET_IPGRE=m
+>  CONFIG_NET_IPGRE_DEMUX=m
+> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> index 853dbc1b00d7..b448324527d8 100755
+> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+> @@ -34,6 +34,7 @@ tests="
+>  	action_set				set: SET action rewrites fields
+>  	trunc					trunc: output truncation
+>  	icmpv6					icmpv6: ICMPv6 echo type match
+> +	sctp_connect_v4				sctp: SCTP flow key matching
+>  	psample					psample: Sampling packets with psample"
+>  
+>  info() {
+> @@ -611,6 +612,126 @@ test_icmpv6() {
+>  	return 0
+>  }
+>  
+> +# Check for an SCTP endpoint via /proc, which works without sctp_diag.
+> +sctp_eps_has() {
+> +	ip netns exec "$1" awk -v p="$2" '$6==p' /proc/net/sctp/eps | grep -q .
+> +}
+> +
+> +# sctp_connect_v4 test
+> +# - sctp(dst=4443) matches client-to-server INIT
+> +# - sctp(src=4443) matches server-to-client INIT-ACK
+> +# - remove flows and verify connection fails, reinstall and recover
+> +test_sctp_connect_v4() {
+> +	local t="test_sctp_connect_v4"
+> +	local srv_ip=172.31.110.20
+> +
+> +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
+> +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
 
-To be clear, this means I would still need to see the proposed kfunc
-in security/bpf_lsm_kfuncs.c to be deemed acceptable.  Also to be
-clear, I'm not suggesting, or even requiring, that you move any of the
-other existing kfuncs in your patchset; I never suggested that as a
-requirement for your work.
+socat has the option to run the listener with ',fork' option, which I'll
+talk about below.
 
---=20
-paul-moore.com
+> +	sbx_add "$t" || return $?
+> +	ovs_add_dp "$t" sctp4 || return 1
+> +
+> +	info "create namespaces"
+> +	for ns in client server; do
+> +		ovs_add_netns_and_veths "$t" "sctp4" "$ns" \
+> +		    "${ns:0:1}0" "${ns:0:1}1" || return 1
+> +	done
+> +
+> +	ip netns exec client ip addr add 172.31.110.10/24 dev c1
+> +	ip netns exec client ip link set c1 up
+> +	ip netns exec server ip addr add "${srv_ip}/24" dev s1
+> +	ip netns exec server ip link set s1 up
+> +
+> +	# Probe: check if kernel supports sctp flow key.
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
+> +	    '2' &>/dev/null
+> +	if [ $? -ne 0 ]; then
+> +		info "no support for sctp key - skipping"
+> +		ovs_exit_sig
+> +		return $ksft_skip
+> +	fi
+> +	ovs_del_flows "$t" sctp4
+> +
+> +	# ARP forwarding
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0806),arp()' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0806),arp()' \
+> +	    '1' || return 1
+> +
+> +	# SCTP port matching: dst for request, src for reply
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
+> +	    '1' || return 1
+> +
+> +	ovs_netns_spawn_daemon "$t" "server" \
+> +	    socat -u SCTP4-LISTEN:4443 STDOUT
+> +	local server_pid="$pid"
+> +	ovs_wait sctp_eps_has server 4443 || return 1
+> +
+> +	info "verify SCTP association with port-keyed flows"
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
+> +	    || return 1
+
+We spawn a socat instance to listen, and then after we determine the
+connection has succeeded, we kill everything, and create new flows.
+BUT, as sashiko points out, we do this multiple times, and don't even
+check whether the listen socket successfully comes up in the second /
+third ones.
+
+I think we could use a single SCTP listen instance with the fork option
+as an optimization.  In that case, it would better test that the flows
+are working versus just colliding on some possible listener race issue.
+What I mean is the pattern:
+
+ -- setup flows
+ -- connect
+ -- tear down flows
+
+seems fine to me, but the respawning of the listen side feels excessive.
+
+Sashiko seems to imply that we could also do the wait-test with longer
+timeout, in the case that we respawn the listener.  There again I'd
+argue that it's better just not restarting all of the listening side
+each time.
+
+> +	ovs_del_flows "$t" sctp4
+> +
+> +	info "verify connection fails without flows"
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0806),arp()' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0806),arp()' \
+> +	    '1' || return 1
+> +
+> +	kill -TERM "$server_pid" 2>/dev/null
+> +	local i=0
+> +	while kill -0 "$server_pid" 2>/dev/null && [ "$i" -lt 5 ]; do
+> +	    sleep 0.2
+> +	    i=$((i + 1))
+> +	done
+> +	ovs_netns_spawn_daemon "$t" "server" \
+> +	    socat -u SCTP4-LISTEN:4443 STDOUT
+> +	server_pid="$pid"
+> +	ovs_wait sctp_eps_has server 4443 || return 1
+> +
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
+> +	    >/dev/null 2>&1 \
+> +	    && { info "connection should fail without flows"
+> +	         return 1; }
+> +
+> +	info "reinstall flows and verify recovery"
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
+> +	    '2' || return 1
+> +	ovs_add_flow "$t" sctp4 \
+> +	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
+> +	    '1' || return 1
+> +
+> +	kill -TERM "$server_pid" 2>/dev/null
+> +	i=0
+> +	while kill -0 "$server_pid" 2>/dev/null && [ "$i" -lt 5 ]; do
+> +	    sleep 0.2
+> +	    i=$((i + 1))
+> +	done
+> +	ovs_netns_spawn_daemon "$t" "server" \
+> +	    socat -u SCTP4-LISTEN:4443 STDOUT
+> +	server_pid="$pid"
+> +	ovs_wait sctp_eps_has server 4443 || return 1
+> +
+> +	ovs_sbx "$t" ip netns exec client \
+> +	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
+> +	    || return 1
+> +
+> +	return 0
+> +}
+> +
+>  # psample test
+>  # - use psample to observe packets
+>  test_psample() {
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index f3edd198223f..ce790d936832 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -1984,6 +1984,11 @@ class ovskey(nla):
+>                  "udp",
+>                  ovskey.ovs_key_udp,
+>              ),
+> +            (
+> +                "OVS_KEY_ATTR_SCTP",
+> +                "sctp",
+> +                ovskey.ovs_key_sctp,
+> +            ),
+>              (
+>                  "OVS_KEY_ATTR_ICMP",
+>                  "icmp",
+>
+> base-commit: 2fbade66245059c78daeaccfce13ecf499fffb51
+
