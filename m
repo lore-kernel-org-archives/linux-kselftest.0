@@ -1,63 +1,68 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD4342EEBE
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 18:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6000542123C
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 18:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785781149; cv=none; b=frdh4lQXyHLTHaWlNnMhy/4s0rSnGClnCt+3y8WyqRoLtraCd/IdnM8D/NXsDPI274zxldwqeSA9pa0S0oWJxkW5fR7IFWr4WDuTanXng5Yh1eemxFf8rJ6fxFXEwONBtRHExmmgt+eS98lCVgH0YafQZEW9mM9+kHQw61x4cRI=
+	t=1785781150; cv=none; b=ebztzhmxcm/t8kCyTYUFgDFOKcoe0n4Lp7hXIjo2Yo8s9JRsgQcaXTw9taVUt9sRcv6tZvX8oyMSeVVaofknKTG9CjWMgWO8asCYQruWL3cz+u+52/KDh5ALGGRR4CV0enpo9PDrJ/ixqdAZeraLtxT7wQNraA/N692KGbi5ttA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785781149; c=relaxed/simple;
-	bh=raK8shwkaaPHW/yd1zlOipdRHT+xg/2FiiC1Ujgc/1Q=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=HZcDaLuwxGohcSbLQFvzofXmqJFtX6L/0tx1b9nd8DlUALM3PObehdn+OUpNPwvUrdcQ8K28xDGlPL+PAnJPbrLYwOp7pLmQ1eunZ62UhtcBMJk2iqEIlfpBm4quRRrOQ3HBTyTJGJNW6rpqnw2WJAm08l/CKWwf9otzbRHMMHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XvrpeKja; arc=none smtp.client-ip=209.85.215.199
+	s=arc-20240116; t=1785781150; c=relaxed/simple;
+	bh=v4jcurBknsFwSFqxXV+HHE5IZcn3tXxARlW04I6mzDc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Xl/X+thy7pd1xCLKYYRpk4jIE7rqS+l0img+32vwLRgNz8HC2nIzzRA/KPAwoVWKf016q1ymA2UL92f6ZGayIVHgDH2OSA8yB8b5Em1ULot1dHTNcyR8CUxbED6uquzkc7CehSoKeuB7oIEEE7D9sUPRy371prm0SunrFAfZTMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Sto4dhjz; arc=none smtp.client-ip=209.85.216.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XvrpeKja"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cbb467e56aaso4570397a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 11:19:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Sto4dhjz"
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-38f5ac7416eso4073787a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 11:19:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785781146; x=1786385946; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=rk/ZaDQXy7W4s45i7JxVik8cU26Hiqezbm85GUMkrUE=;
-        b=XvrpeKja4dlHOifxkpg75R+YwQAlFbi0lZyooTSxjB6P1jNPpUX1GJiC/PQPvlD6nE
-         fmFTpG7SA9scpfMftnxb3Gxq9IyElsqWVyRO2lyJ30GdsNCE5EdGXqJmF/9gAOXKAvEV
-         szw07OCG0ebd2IDOC+5dZTUboupPFIN1aa0eZ6wKoPg0hurieoPLEyz21PJ+7yEz/KLG
-         gVYYlM4vpUpu7xWsi4anYAUqUrNGSrML9KoJw8MzOfseeExLMLLo2uEJpTBFY2mWwOzu
-         +QpBVCiJYHCRFWGKubcrzSQkAbMdcUksYtpk74y8GHh0Figvb+40VBgT4ZIRklawqxaJ
-         BPHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785781146; x=1786385946;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785781148; x=1786385948; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rk/ZaDQXy7W4s45i7JxVik8cU26Hiqezbm85GUMkrUE=;
-        b=K21pgQrbq9ypqKhqmnDbmNerZMcgKm5MXZmN+eoJDMVRJZH2fdBBUOm4NGNRCjQyyg
-         +zKvEsn5Sbj4He4guHjPBMPfxswpdEKKE+xhrA0oYsRTkq4BQB6F1t0xRNOUCjnHcJr1
-         XeNFdGLWVCRDbYbMLSzp7BmaWo2IVWeRtwuM5ed2tzK6XOoS25YD4Crh13W3tWygK8PU
-         J3Xo8fHx3Kd86LeccSgPawU7aJmBDwPPH88Mwk4JupHGLA+ONC9XPpv7i7MvL4bIT+pW
-         QdmuBu9aojrBeEkWWBt7bWNbIk/OtBcOCBWJcCcPCs/4TbVFM1SYyl4nNP43BxkpfGJH
-         qmFQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrP0hVu6RJZYHsxUJFPOSUrCX3Dw0rcBc4aE40l2j59yvtMfkZlZExzYlgL7BraIc/7TswB+R0rt6DKNLJ499Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5bHso8uLg5ll5fUogVh9n1xqlEZ2I8GitNtxVpCUZ7brReA+c
-	7oOoWoaZ/R1eR3F53JkpSYgv1mp7rNE2HeY3wkX66Sn51hh0t32qqCiMYQ4mo5YBYNTL7NCt1mA
-	i+WolZqT36bovZlFdfRuL5md0aQ==
-X-Received: from dycnn12.prod.google.com ([2002:a05:7301:140c:b0:311:6a48:9c0f])
+        bh=N85O2htbxOwQYBQXBqLzGIcLGYl30Jy447s5MbRSUDA=;
+        b=Sto4dhjzb+DF/TRfseUlLPUjYWcz/0BF5+ssA1IbvFEQTxycOPf8u5Em7v1rGrIZev
+         oJDBNW1Vtuq8981m877lR9+CC0zEpDYZ35Ly8XZ6tbmJJZtxhFJJXa74O+UkKukQESPZ
+         WntxGfe6smgkVOHE7z/sq2OHSgajxj6GidoXQQkGQEkeS5WjqbtApSQvAlbCSelumJk2
+         awZwzK87GyIxiaNAmPDwPTQCzRTmSY917Wum09WBgWQFfNH6daN/TMamXahkrmpPpaHb
+         giW9hLXHqydbsnMKKlBx8vaIFygDK4YwVkspYgU7RlbbSFUBs+g2nTNAKPtVCQZ7jU9x
+         ig7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785781148; x=1786385948;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=N85O2htbxOwQYBQXBqLzGIcLGYl30Jy447s5MbRSUDA=;
+        b=oopqTln0U55EheYIjuhk+VnVO+S8GzGFWk5SrhOXx76AXDWAP0rYwqtDXk4c+uCc0q
+         NkbywhTvkJlHL/kopkrgwFQKP/XUfQ7nQ1PEnUtrqOzFY/zV7u6pjm+I5Meh7iS5o0ex
+         7V2z94iq27KllFkREemf1dgMUGI8fWOZLpAcbQbCOhkIw14uZl9uUpE0RTwDXRHFQPqa
+         eYFNtHRzxdK+2guomiE/CWHtmGPWL+madt33xWMF7COF2Zao5G2Lp8nIfS7paWt/XGt1
+         iNX1xFkEn/09KbQzJbpAxxboLNEylCDvXjFsHNlWbE9LqLHRlJ4IX+7wauPE6H1ZoBdp
+         Gqig==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1/yMyLTejy8WGC4JHd08+Ou3ikaaOYALHbypmEK57TKL1jbzYvKANLRKzxMqE97gY204iGREbbDgM01wKOq8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBqPfyNU690Mu29DZV2HG1jkTucGYtMBboI5FWbFvlX6Bo5Xh1
+	bvFXZeAGaLGTad6CVoGFj2GE3Y8+RfeO9fRcn6ymb2b56Kd+4IxruBbWQR+2U4Y4tg7RS1N63YF
+	xNgfugDhi4VjILgJnqegprf++GA==
+X-Received: from dycnh9.prod.google.com ([2002:a05:7300:ce89:b0:313:f483:7fe2])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:7d0c:b0:3bb:2200:f67b with SMTP id adf61e73a8af0-3c92a8139e7mr11604873637.40.1785781146359;
- Mon, 03 Aug 2026 11:19:06 -0700 (PDT)
-Date: Mon,  3 Aug 2026 18:18:25 +0000
+ 2002:a17:90b:5746:b0:38e:5c6:4db9 with SMTP id 98e67ed59e1d1-38fbc425f10mr9496461a91.11.1785781147399;
+ Mon, 03 Aug 2026 11:19:07 -0700 (PDT)
+Date: Mon,  3 Aug 2026 18:18:26 +0000
+In-Reply-To: <20260803181852.491437-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260803181852.491437-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
-Message-ID: <20260803181852.491437-1-almasrymina@google.com>
-Subject: [PATCH net-next v2 1/2] selftests: drv-net: devmem: fix 5-tuple flow steering
+Message-ID: <20260803181852.491437-2-almasrymina@google.com>
+Subject: [PATCH net-next v2 2/2] selftests: drv-net: ncdevmem: gracefully
+ retry bind()
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
@@ -67,40 +72,48 @@ Cc: Mina Almasry <almasrymina@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
 	Stanislav Fomichev <sdf@fomichev.me>, Bobby Eshleman <bobbyeshleman@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When configuring traffic for the devmem tests, 5-tuple flow steering may
-be required if the environment does not provide network namespaces.
-Pass the correct remote address parameter and fall back to 5-tuple flow
-steering if netns is not available.
+During tests, ethnl_rings_set randomly bounces the link causing a
+transient IPv6 Duplicate Address Detection "tentative" race, resulting
+in spurious -EADDRNOTAVAIL aborts inside the ncdevmem server.
+
+Add a simple 10 second retry loop around bind() to absorb the link bounce.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
- tools/testing/selftests/drivers/net/hw/devmem_lib.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2:
+- Refactored C99 mid-scope variables to strictly adhere to C89 styling.
+- Dropped single-line curly brace avoidance syntax.
+v1: https://patchwork.kernel.org/project/netdevbpf/patch/20260801131220.1367229-2-almasrymina@google.com/
+---
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-index 0921ff03eb81c..3ede6fd426929 100644
---- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-@@ -111,7 +111,7 @@ def ncdevmem_tx(cfg, port, chunk_size=0):
-     else:
-         ifname = cfg.ifname
-         addr = cfg.remote_addr
--        extras = []
-+        extras = [f"-c {cfg.addr}"]
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index ffe1d5c1fa4e1..67901a0123e8c 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -843,6 +843,7 @@ static int do_server(struct memory_buffer *mem)
+ 	char iobuf[819200];
+ 	int ret, err = -1;
+ 	char buffer[256];
++	int retries = 10;
+ 	int socket_fd;
+ 	int client_fd;
  
-     if chunk_size:
-         extras.append(f"-z {chunk_size}")
-@@ -212,7 +212,7 @@ def run_rx_hds(cfg):
-         port = rand_port()
+@@ -898,7 +899,12 @@ static int do_server(struct memory_buffer *mem)
+ 	fprintf(stderr, "binding to address %s:%d\n", server_ip,
+ 		ntohs(server_sin.sin6_port));
  
-         listen_cmd = ncdevmem_rx(cfg, port, verify=False,
--                                 fail_on_linear=True)
-+                                 fail_on_linear=True, flow_steer=not hasattr(cfg, 'netns'))
-         socat = socat_send(cfg, port, buf_size=size)
- 
-         with bkg(listen_cmd, exit_wait=True, ns=netns) as ncdevmem:
-
-base-commit: 69963a0678a347d57c4ac8b16939dba216eb95ce
+-	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
++	while (retries--) {
++		ret = bind(socket_fd, &server_sin, sizeof(server_sin));
++		if (!ret)
++			break;
++		sleep(1);
++	}
+ 	if (ret) {
+ 		pr_err("Failed to bind");
+ 		goto err_close_socket;
 -- 
 2.55.0.571.g244d577d93-goog
 
