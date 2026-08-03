@@ -1,37 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D91A3A8739;
-	Mon,  3 Aug 2026 20:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2291A6834;
+	Mon,  3 Aug 2026 20:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785789084; cv=none; b=NUNR6OaXSy0PDwAsLNEGQQOkL3d4f84OWT+exT30g0gl8AGDbe+yq+LxWrHYQmyna9s4kxslHLLcpVUEjOpcvy6Qvadf/4+oViZmEXuPyxlhe7Tz/i1O4Rp1XpKZb0vK1RbBD4JuVReEIIp7iLxtiVjSLjJ3TuDXnt38hQwM+q8=
+	t=1785789427; cv=none; b=ht5d6GQ7SaMX4azOAKVp7Mb4sTIg8PqQGsIPNTN0z4n3MLVrUZEqONIwbtPzqZJjJmdT2ZzNIDHhbp75+PtExx/QbE56x33FHO1bqGHUkueaAGa6WazYjihqmHrGhelPvV1I0cIj4N44Ax3k8VDcrEoyTIVLtoVuoaGQSmP5A8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785789084; c=relaxed/simple;
+	s=arc-20240116; t=1785789427; c=relaxed/simple;
 	bh=qe9HqxSH8weKOsQz7xdpPCbb8t8nXaijblupLCe0aIE=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=R0qwD9Pquh6toepgq9NbC6x0MTAkJ6iB6V63HxejON9croqGRiCAHUor9ppf3xIii1jFIonLqxZBiI2IDDfCksXIW3ig1UZE5IEWpWRCewPR6F0DzLfrSqjDlgw6dMDXqOQ9LBJI1MEH4tGHcXVjLMSa/vtfWVvp6XUweN2Qr5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XHj12WSK; arc=none smtp.client-ip=100.103.45.18
+	 Mime-Version:Content-Type; b=VvOVOgviM+QmBEWVSVs0K8fL+6QEzzJCxPg/SIjiIoK8tAgKWhF5r/LbFrtT/3gajd0nqyxNyI/niN0gwgNtBT7qBXjkqdNhUA2xO/NFhJfEudNphkf0kiAXou/1fp4Ocq43BpohuoLj+l9Z8nDfVhKOevJOLP7qy/tJcC0n620=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aSycqoDt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XHj12WSK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA1C1F000E9;
-	Mon,  3 Aug 2026 20:31:22 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aSycqoDt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398101F000E9;
+	Mon,  3 Aug 2026 20:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1785789082;
+	d=linux-foundation.org; s=korg; t=1785789425;
 	bh=iMh3w0+qZ5zyF1rAJ4Uge+BoFOIwwL+v8MTv/OMlkA4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=XHj12WSKB/2ACWP0tk8hdfYluL7pzrlMl1+c5eZWsNFvwzOhC4Ey9eUW4vEiIrrCa
-	 lrJ2kPQ2j0ifrG6yc8cTlSkCT7F4BSxnJjY+wYLXNSsB0a4aTSN4WBaESJxy/DvDZ7
-	 zthdev34WOQMu5UKKXJqRCqdgm6bDWvOSgSyDiv8=
-Date: Mon, 3 Aug 2026 13:31:21 -0700
+	b=aSycqoDt6Ue8FrORd2jndpWs5JR2y9E38MOlxJbLqzuBP0LLm+CqDEFA7zddxwnSB
+	 FUa7DmInwFD8s7DXlsiwPvgYtFE9HvED2XSjma7QxAcYt7BDOpH/1ivJsLozSQ26Db
+	 9VzrFuQQxj08IyZWAhqNe1D55W6xpSzvmxYtHzyY=
+Date: Mon, 3 Aug 2026 13:37:04 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
 To: Chris Gellermann <christian.gellermann@codasip.com>
 Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
  richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
- linux-kernel@vger.kernel.org
+ linux-kernel@vger.kernel.org, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Juri
+ Lelli <juri.lelli@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel
+ Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K
+ Prateek Nayak <kprateek.nayak@amd.com>
 Subject: Re: [PATCH 2/2] selftests/membarrier: Skip unpermitted membarrier
  command test if preregistered by libc
-Message-Id: <20260803133121.04903cdd40ce25e17f786385@linux-foundation.org>
+Message-Id: <20260803133704.8802e73e1a212364e64f67ee@linux-foundation.org>
 In-Reply-To: <20260803124900.3328789-3-christian.gellermann@codasip.com>
 References: <20260803124900.3328789-1-christian.gellermann@codasip.com>
 	<20260803124900.3328789-3-christian.gellermann@codasip.com>
