@@ -1,33 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766D6364EB8;
-	Mon,  3 Aug 2026 09:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0BA37107E
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 10:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785751097; cv=none; b=B+3PQ9D63uhEBOGmfJ2BjbZA2wenEgcxxnUywDAi0UoZ6ygobSOfrszKBcka+wEudpkHKqNn1eEM77DGDUJCNEJ+MskFPx60m8R8JgS5D+IHUx5vTQBcdkUYIaVvAibrHl0QtLLIF8hsVFeMIinWwIDPTEqB+36rQV0VFpQZisU=
+	t=1785751247; cv=none; b=txCTOI2kdr/l4I28TpLhCW+lboL/+xKs9nWr1a7QQJOmYM6M+1CjuGSKsMhkRr/DJVVZbjy5tP37ZAxJND2Pp2c/Gg8sWegKUUOuYGCGzaHLdjWUxhzX8OGgdEjirhZcweiaCFbzH08O/XIZrx8s+4brS2WFOlYralcKFw7eUxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785751097; c=relaxed/simple;
-	bh=a0fPgLwnpRU9zG89OZ7+q31emzY1bYn/vvAGlJ07LdI=;
+	s=arc-20240116; t=1785751247; c=relaxed/simple;
+	bh=HCC8D+G0rb1aAiQw9n58KzRT16izY5PvVK0a7SdEOV8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RazS06WxiWOzYd44YRA6POLaM5YGZj7/UgOI06HkOYRLjYjpC1WGYb6WolUeXNBLdlYWCdgRCWZ4TVKNTGWoLt21VoQB3KVaS8yyQT9mn//K0PFnWvWOEvMC+fzKguP/IkfEqvaY1z1eEbbf83BN2TGC8Nl7jnSzc4asHOhGvXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6myUY3X; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=ENy/2qiAzYyMg1yceZl5Do5i+0MEyNIjHMGeqnZP+LdIV6ZxDzwnswPNySkVtyexuMe2MgIiCRaCuV7X7Z6MN3Uf8YTxIiaSNsEh6sHr8jkg4A1KARBPxhwIPQP6Ac71D6JSluagwmxxIEBFWi0oncoJsJRsISGY1VaSExI8lx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DuBz7l6Z; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6myUY3X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645551F000E9;
-	Mon,  3 Aug 2026 09:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785751096;
-	bh=P8UnGQEOlr9FcmnvZVT8xoq/kYbj2bRkrjLSo5mwrl4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=P6myUY3Xbz49vwq6IgIb2kslwXvdReafe9z7l3yqlKBhRH6oL6atSWgcmYMMoXryB
-	 11cIYedWL+sawg0/C+41yTk9MksOmpjYvpt5gJ3WtPOaKRTV1uWUJTKKP9ePhTHZwJ
-	 256ALvNtP9ItZaJuqgAknonR7ZqsoUywFna3j9O65jXwkbtmNa9fe32JLcXAi2K51l
-	 YFh1GyppfyJUNFqAq/jvXbm9ZpJ94OMo8ow6xM/9JMCOs938n+X7eG5fTQNvPLorCt
-	 2flhCHtXG+2zfcMKBjRy3ciJTg/z8AaFxd4Pq1iwwWT4KNf4aiWuFtmCXEhm6KikRe
-	 hQmRIobzYLPvw==
-Message-ID: <1d84f43f-6f59-4685-bd4d-ac7a724bff5a@kernel.org>
-Date: Mon, 3 Aug 2026 11:58:02 +0200
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DuBz7l6Z"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c1c4c7ddaf6so485892866b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 03:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1785751243; x=1786356043; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QxMk4MUQUDc+H1bfo3Qxr4A1ELX+7kM8nIGEj1DxyWY=;
+        b=DuBz7l6ZSRxVFCHSNJMdxDJNRgWuPAIaYRV4P/nwAWpahXGH1xyKUxYztOFOcxfxAu
+         tIS40BzBHNqPTy/epf8/Zq07KMoyZdHtTgz+n5xdAMxw4slNASF+EmzOvtFrzzpZS67N
+         frno3LKE4doXKzEJtXvQRUy8gM3mN5umH5y4W1GB/E1sPfJ30BIAxxDsKvH5zqdbQJYI
+         mMf9etBmeAlBwqSprXkSVZQrWRdh9aLUfvy3NK91vHhycH2Hh34mLzmrqeDUuYLPfipU
+         UuwBO9QdgenZvKFEdno7Dkgwzoo9GwwiijaYHx/iJbJpZIX+MtcA+wloYa22FlickLPo
+         OZuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785751243; x=1786356043;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QxMk4MUQUDc+H1bfo3Qxr4A1ELX+7kM8nIGEj1DxyWY=;
+        b=lI41dOwuIK5G4b1GzME1152qs3hWnRCxQkS+LxvM3+7lZ6vI04V9kq83JXyTnopCTs
+         Mq39JhPqYTvr8KoOhIk/PyRcng+q/0wKA/roLm3llVzozPKkMzyeSHsAmsvIzUfWxsHk
+         +7rwH2QleUmyYyVaSs6ypTXpVdGc7n8sSE1xN8BlbvZDlQSThNRV2fY3e8cn9/f1Yrb0
+         mTzuNmo3P54ivmgyzeWHyr8BJ2tXVp2Hldhw+ABEYPPNT5rnC8RayqT23S8gSfBL6rFM
+         TDPJ8bGlIdU2BMCPN9Z5mudzcIYasYHC5OTDgwAGzyAQ992jS6nHiN8Iz5n0EvIAGIhd
+         u38A==
+X-Forwarded-Encrypted: i=1; AHgh+RoYBnVg6NXhzh+gSH28RGPfZp3CPCG1U1esPEQgMLYtIpDWF2TGusUMlDsUT7Z6KxOGMe2rcF6otWkF+Ouo4/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4KLUPCmVq3Sel4bUYjA9OsBum+jmS3ydRI4N/4ecsWWsZdq5D
+	w3HVA2k0ktLW4jk7Gd3uEsVb2hDgh2GYwn0LAhu5PWcYQdrswJytBvMfU6+yC9pCQR4=
+X-Gm-Gg: AR+sD11GjsV/X4f8T+S5TteHpGsF8kL372uHNQy828zg4MlalnxrIUC+lfnC7AA/ez/
+	jyt6WtwFloN+Ba6nDM1cu6sNLyd8c+4KAi4gfKTY+uZ9QNpow6lsrB1ijIAz0d0GrVlkg3+fDGo
+	Beyz2Eo9XUSYy/tX8EyYO+FBSe1vo9IxdSNxWO/4BSNjnJ7HhiF5TYLQRfD8jLrcT81Z0cQnouD
+	1qjQxo7mWf2VLQ8X+8b4UGmgeSIIgERXPFlpcG5xoX+9Pt5SYH26Pkz4GZ9pg7LZFShJBDKzxOj
+	RbfbDapPe2hvXNzEtXeCmUqfopRCICdSr1MPu2zShnDWN73dXXVVGPsRVpHRelLnUWElYbl1V+A
+	DhXOdRBd99W127Skn+7TnS5NYLKCAWlsvDq1E+3mfv4IBiQkJd7rfwWGdoZlTcC5DAAafEwjQOT
+	y8OchyBcgvypfJPhVKNeyL3uAluIpX6NUij3LskMdE6Z3LFZXaFa9VnUvgxklqgt4U+WoZLCinf
+	c2w6/I=
+X-Received: by 2002:a17:906:a98:b0:c19:611c:fa94 with SMTP id a640c23a62f3a-c1fe7f520f5mr446666366b.27.1785751242813;
+        Mon, 03 Aug 2026 03:00:42 -0700 (PDT)
+Received: from [192.168.1.183] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fd3c5b387sm496061166b.2.2026.08.03.03.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2026 03:00:41 -0700 (PDT)
+Message-ID: <9f2c4bbd-5889-4899-b96d-41566363c408@linaro.org>
+Date: Mon, 3 Aug 2026 11:00:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,99 +70,167 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/15] mm/vma: introduce VMA anon page offset field and
- add helpers
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-1-e8ecfefea812@kernel.org>
- <2ac2746f-18b4-4960-8628-82e87c2140ce@kernel.org> <anBjLV4CvmpBzEiw@lucifer>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH v5 2/4] perf/core: Clear the whole branch entry in
+ perf_clear_branch_entry()
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>,
+ Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Stephane Eranian <eranian@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
+ <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260616155716.2631508-1-puranjay@kernel.org>
+ <20260616155716.2631508-3-puranjay@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <anBjLV4CvmpBzEiw@lucifer>
-Content-Type: text/plain; charset=UTF-8
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260616155716.2631508-3-puranjay@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
->> The former would be better
->>
->> 	__vma_set_start_anon_pgoff(dest, vma_start_anon_pgoff(src));
+
+On 16/06/2026 16:57, Puranjay Mohan wrote:
+> perf_clear_branch_entry_bitfields() resets the bitfields of struct
+> perf_branch_entry one at a time and deliberately leaves from/to alone,
+> since callers overwrite those immediately. The list of assignments has to
+> be kept in sync with the struct by hand, and it has already drifted:
+> new_type and priv were added to perf_branch_entry but never cleared here,
+> so stale values can leak into the records handed to userspace.
 > 
-> Ack that's fair, will update it.
+> Clear the entry with a single struct assignment instead:
+> 
+> 	*br = (struct perf_branch_entry){ };
+> 
+> Every caller writes from/to right after the clear, so zeroing them as well
+> is harmless and the dead stores are elided on the x86 LBR read paths.
+> There is no longer anything to keep in sync when a field is added.
+> 
+> The helper no longer touches only the bitfields, so rename it to
+> perf_clear_branch_entry() and update the callers, fixing up the
+> br+nr/br+out spacing on the touched lines while at it.
+> 
+> Fixes: b190bc4ac9e6 ("perf: Extend branch type classification")
+> Fixes: 5402d25aa571 ("perf: Capture branch privilege information")
+> Suggested-by: James Clark <james.clark@linaro.org>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>   arch/x86/events/amd/brs.c   |  2 +-
+>   arch/x86/events/amd/lbr.c   |  2 +-
+>   arch/x86/events/intel/lbr.c |  6 +++---
+>   drivers/perf/arm_brbe.c     |  2 +-
+>   include/linux/perf_event.h  | 16 ++--------------
+>   5 files changed, 8 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
+> index 06f35a6b58a5..68c5f42965e9 100644
+> --- a/arch/x86/events/amd/brs.c
+> +++ b/arch/x86/events/amd/brs.c
+> @@ -343,7 +343,7 @@ void amd_brs_drain(void)
+>   
+>   		rdmsrq(brs_from(brs_idx), from);
+>   
+> -		perf_clear_branch_entry_bitfields(br+nr);
+> +		perf_clear_branch_entry(br + nr);
+>   
+>   		br[nr].from = from;
+>   		br[nr].to   = to;
+> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> index d24da377df77..08401fd60585 100644
+> --- a/arch/x86/events/amd/lbr.c
+> +++ b/arch/x86/events/amd/lbr.c
+> @@ -181,7 +181,7 @@ void amd_pmu_lbr_read(void)
+>   		    entry.to.split.reserved)
+>   			continue;
+>   
+> -		perf_clear_branch_entry_bitfields(br + out);
+> +		perf_clear_branch_entry(br + out);
+>   
+>   		br[out].from	= sign_ext_branch_ip(entry.from.split.ip);
+>   		br[out].to	= sign_ext_branch_ip(entry.to.split.ip);
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index 72f2adcda7c6..295da179fa74 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
+> @@ -755,7 +755,7 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
+>   
+>   		rdmsrq(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
+>   
+> -		perf_clear_branch_entry_bitfields(br);
+> +		perf_clear_branch_entry(br);
+>   
+>   		br->from	= msr_lastbranch.from;
+>   		br->to		= msr_lastbranch.to;
+> @@ -846,7 +846,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
+>   		if (abort && x86_pmu.lbr_double_abort && out > 0)
+>   			out--;
+>   
+> -		perf_clear_branch_entry_bitfields(br+out);
+> +		perf_clear_branch_entry(br + out);
+>   		br[out].from	 = from;
+>   		br[out].to	 = to;
+>   		br[out].mispred	 = mis;
+> @@ -920,7 +920,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
+>   		to = rdlbr_to(i, lbr);
+>   		info = rdlbr_info(i, lbr);
+>   
+> -		perf_clear_branch_entry_bitfields(e);
+> +		perf_clear_branch_entry(e);
+>   
+>   		e->from		= from;
+>   		e->to		= to;
+> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> index ba554e0c846c..effbdeacfcbb 100644
+> --- a/drivers/perf/arm_brbe.c
+> +++ b/drivers/perf/arm_brbe.c
+> @@ -604,7 +604,7 @@ static bool perf_entry_from_brbe_regset(int index, struct perf_branch_entry *ent
+>   		return false;
+>   
+>   	brbinf = bregs.brbinf;
+> -	perf_clear_branch_entry_bitfields(entry);
+> +	perf_clear_branch_entry(entry);
+>   	if (brbe_record_is_complete(brbinf)) {
+>   		entry->from = bregs.brbsrc;
+>   		entry->to = bregs.brbtgt;
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index 48d851fbd8ea..e034be4a473a 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1467,21 +1467,9 @@ static inline u32 perf_sample_data_size(struct perf_sample_data *data,
+>   	return size;
+>   }
+>   
+> -/*
+> - * Clear all bitfields in the perf_branch_entry.
+> - * The to and from fields are not cleared because they are
+> - * systematically modified by caller.
+> - */
+> -static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
+> +static inline void perf_clear_branch_entry(struct perf_branch_entry *br)
+>   {
+> -	br->mispred	= 0;
+> -	br->predicted	= 0;
+> -	br->in_tx	= 0;
+> -	br->abort	= 0;
+> -	br->cycles	= 0;
+> -	br->type	= 0;
+> -	br->spec	= PERF_BR_SPEC_NA;
+> -	br->reserved	= 0;
+> +	*br = (struct perf_branch_entry){ };
+>   }
+>   
+>   extern void perf_output_sample(struct perf_output_handle *handle,
 
-But looking at the existing code
+Reviewed-by: James Clark <james.clark@linaro.org>
 
-vma_set_pgoff(vma, vma_start_pgoff(vma) - delta);
-
-etc, maybe we can keep it as is for symmetry.
-
--- 
-Cheers,
-
-David
