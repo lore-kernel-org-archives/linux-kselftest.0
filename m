@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC653CF690;
-	Mon,  3 Aug 2026 11:05:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA89F37BE81;
+	Mon,  3 Aug 2026 11:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785755118; cv=none; b=bnapHFI8Q9dH+sne0YQDdkYsBeRnNR7b15Ezs00oPUb/y2Ebri2BYMsR1SH2YZw1o7d/IYE3KmFAvQujMjfyZVV5wdp6FqpJZF1mbFzi3jKPK1bIXFEZ2oGaeTEeilGpKSL7P44vie3A7WMiUr0b0v8y0PliBiLciLmYSwZLcWs=
+	t=1785755123; cv=none; b=u4xdA/FcZyOixQJtMQ52C9+gVfhJdh4qNF9iKXxPDNiWflozP8OI5P6b4g5MdSlSj2PbkRHv+Wz/HONUdRqfyoW7Us0DFnSVNE7fkAsurEANfDGwjlheppPWaNZDW2JBnttYrNQH0cXGvTZWBP2AZ3UYXk15GRYlKBBIstiTCOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785755118; c=relaxed/simple;
-	bh=lN5LqEf+uk1T6xWt+bHisxvHkurO9fRBbhlgza4HvUQ=;
+	s=arc-20240116; t=1785755123; c=relaxed/simple;
+	bh=IgRcXaVc6Olcnpdw07yyyrynMFN2rbp+tJh3jxGKVTg=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=mPfadbk1GNeKxjsc/NcR5ToLHCp3dNYsYhutK4apXdR4z0PF+35l5MJJnt+3J/cQjQlrqplzjSf8QQCTk/sivjUyfGqNp7uVq5RObZLhoRmwi35EClbs5PBX9snBJ5RCUWrcm8G0GfuJg9C12Ri3gAS8KCRxEX+oUmJVUgqPyGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/CyDoWr; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=GeN0dVrlIwCDjxBOSG0KC9PlbpEF/kS/Gx0UcfehGf3S30TiBww7+KVIdPQYyLnKwxyqXU8zsdhpsiyZl0yQ+AWkEmYiGvuI3jt0+O4jJEWkqD/Dps09Wd7yenYYXzkoAVduUoKTvjqXScOnWW0Yf9EKgcN+iGbF2b+na369JlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZ2gDhbU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/CyDoWr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27561F000E9;
-	Mon,  3 Aug 2026 11:05:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZ2gDhbU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E241F00A3A;
+	Mon,  3 Aug 2026 11:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785755110;
-	bh=tyP/Cdwf4PniO7raZAb+hbrsr712JwUYvH/yZlove1k=;
+	s=k20260515; t=1785755116;
+	bh=DDKR1dCVeIWJBea0NvOAJ7bfFFbiQtK40uSg+uOfi+w=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=h/CyDoWr+dqXY2I6lkcbByCEhr+WWS3aEVMplzESHyFZDSujqYfL+SNEJRaITcaE5
-	 X8OAw9vMFYO1XihYjXEdk/Nle+d9vshPp8vi7STfMfohs3cHZlvAUEKm4mK9qz4WzS
-	 CVAOWOdLzUXuNRkFxnZ5yyKQ2ypbchzsqGlcTD1oiQao3Je2OE9uVvjpRLrvpEuFrf
-	 CCVPqeadOcb8WpsupcFyUgHXVIzw1zt8q+0zVENH+cGiV7fAcmBQEpewoBuowxFJBC
-	 MiZwgF4BJYINyF2I/nOPdimB+iQHlzlcAtqd2XdKB4P8OGhj2trcfpohKrXed9GI5X
-	 BVPg28rIOiZ6g==
+	b=aZ2gDhbUdv8u/vW7g2zB7xL14AZwWy9NwZMfuJWDklUPfivAaoAZa514qWdkP1ddV
+	 RO/w5axr6lvedaKdxqUDyE9r0HmIDQdQxVGbqiuzdiuBFcZeRtVtRzlcZaRz0ePHZ3
+	 xFpcDBrrxMMGcaBBt1rgkgvymGEHmXjXgxgGn+Hv//N33uBT/sO51oIEDTI9KALNB/
+	 lGqPe65JvGsBKVzE2Tiom+7sRYk4l5yrgm0RM81byxY/iB/YhKozVrcKkWi2j0ixuE
+	 nRzAgr8UcmISpZ7VEMipuc/2nQgC2FNAW9u5X0fw6gyK0F1gvoDKxFp+M6sQatNZtf
+	 swG1QZrFLNO6A==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -33,8 +33,9 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 06/16] selftests/mm: add khugepaged race harness
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 09/16] selftests/mm: skip khugepaged swap tests when no
+ swap is configured
 From: Mike Rapoport <rppt@kernel.org>
 To: Kiryl Shutsemau <kirill@shutemov.name>
 Cc: Andrew Morton <akpm@linux-foundation.org>, 
@@ -49,43 +50,36 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>, 
  linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-In-Reply-To: <20260802195254.1937477-7-kirill@shutemov.name>
+In-Reply-To: <20260802195254.1937477-10-kirill@shutemov.name>
 References: <20260802195254.1937477-1-kirill@shutemov.name>
- <20260802195254.1937477-7-kirill@shutemov.name>
+ <20260802195254.1937477-10-kirill@shutemov.name>
 Date: Mon, 03 Aug 2026 14:04:23 +0300
-Message-Id: <178575506331.1561566.172804163825999862.b4-review@b4>
+Message-Id: <178575506332.1561566.7690482774981947944.b4-review@b4>
 X-Mailer: b4 0.16-dev
 
-> Collapse serializes against faults, GUP, fork, mremap and zapping
-> through a protocol of locks, TLB flushes and refcount checks; none of
-> the khugepaged selftests exercise it under contention.
+> collapse_swapin_single_pte and collapse_max_ptes_swap swap pages out with
+> MADV_PAGEOUT and then require them to be swapped. With no swap area
+> configured MADV_PAGEOUT is a no-op, so check_swap() finds nothing and the
+> tests report a failure that only reflects the environment, not khugepaged.
 > 
-> Add khugepaged_race: two faulters, MADV_DONTNEED, transient FOLL_PIN
-> (gup_test), fork and mremap threads race one of three collapse
-> drivers over the same ranges:
+> Skip both when /proc/swaps shows no swap area, so a missing swap device
+> yields a SKIP rather than a spurious failure. A real swap-out failure with
+> swap present still fails as before.
 > 
->   stepped   khugepaged driven one full pass at a time via
->             khugepaged_full_pass() — deterministic extent per step;
->   free      free-running khugepaged (scan_sleep_millisecs=0) — soak;
->   madvise   MADV_COLLAPSE + MADV_DONTNEED loop — the PMD-order axis.
-> 
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 6f42e35b5227..a8b6b839cb97 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -404,6 +404,13 @@ CATEGORY="cow" run_test ./cow
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+>
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index b43e060b4118..b074b005b62f 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -181,6 +181,21 @@ static void get_finfo(const char *dir)
+>  	ksft_exit_fail_msg("%s: Could not read: %s\n", __func__, path);
+>  }
 >  
->  CATEGORY="thp" run_test ./folio_order_check
->  
-> +
-> +CATEGORY="thp" run_test ./khugepaged_race -d 5 -m stepped
-> +
-> +CATEGORY="thp" run_test ./khugepaged_race -d 5 -m free
-> +
-> +CATEGORY="thp" run_test ./khugepaged_race -d 5 -m madvise
+> +static bool has_swap(void)
 
-Please set the default duration so it will be 5 seconds for each mode
-and make ./khugepaged_race run all the modes by default.
+Would be usefull in vm_util.
 
 -- 
 Sincerely yours,
