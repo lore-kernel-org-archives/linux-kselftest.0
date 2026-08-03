@@ -1,255 +1,270 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B1F3016E1
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 01:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785721839; cv=none; b=nKKBVL0EP83zXqIejzF9ZorTijr3MYqJjt4y4d99z9H4iVbPkLbHi5622t9AkknTGWl9BkOSTkCmrU6NoMFrXMl0/iLKXCdJyYYeaRoYR+qnMBGgr+tI0yRim3+oYVR01oQaQLGdARhLCuXWYYuqXCDi50LZEOLLRgSVnsT/xvc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785721839; c=relaxed/simple;
-	bh=r/AKtcfmh+i0t/IAyo56XCM2gpkFYyYIGp9e1yvhZY4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=s7bEkcytyEI5qD2c/gPZ4bNG3M0dPN9XEauBSBNcbnSnZvIBTOu7JVIJYVZ5qP61BQoTNGWc/sHEWspsLPxvSgQlXAU5ABN24Xs7KyaL8SG+zEOQ/hkOqs9+Lzh0J7owQLtxK8ULz/G9MXpJ8T+Geyihn2DAwoMddll8nzBzMf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qhf4Xd6W; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAE93126A0
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 02:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785724164; cv=pass; b=Sj77PHZM+klaTHmUfoXO2YVaDPhR4HuQyQt6rYcK/It9F15yE7R3QNBkdLj5QTt/Wu9q+3m9EgVOMzQ9VlC3D3Ybzm7Pr8A4rqzC2JCkXeF4j66k6yWutjQZbO7aHWhk8wqrXHWpc4GxhgKgB+KofwqnaE8cKWG+kxePD9kFzts=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785724164; c=relaxed/simple;
+	bh=6BKo6a/fZZgSNwGYMaNu4yAY6/Dm7GkFusN13Gumcu4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qsRgnibROCLFP34GSgJYQFEBkOLMeeDsMZivGh/1o/GUJXVQi9KQoi2Lsn0+NtnMLSfSy3vVvD9D5vDqjfhUOdlstQMQIs6A6TedW7QjB9urJpFuZOibxv1m+bPV8wZiXCujJPItX9EAE7igqxGnAK/c9BreIl5iPhJXQXE7+kk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8YvpmWS; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qhf4Xd6W"
-Message-ID: <24e52e2a-d47e-4baf-9ce8-d66e8bb9b99c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785721835;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KGjkU2S+UQ8+uueiw5ohLDox719eKH3WXwxyMJy25ow=;
-	b=Qhf4Xd6Wi5go8vXBwrtXiQPqbnq9Z/zzsn1/6iOznD9EpeUv7JIdwDZ2tTuZymfSYRJOMA
-	m6SqQm/WPRFc913JBP6FVcXBiSL++n+AwRhsMFiqIvXTcEgG6SZof4l+qwT0yLbMk4VtT7
-	sjt5oUTUNFgaVM6enwNNXeAIrriXDZQ=
-Date: Mon, 3 Aug 2026 09:50:24 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8YvpmWS"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5aec6360133so2609242e87.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 19:29:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785724160; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Jc2Zm2HSbPE+aJiBNF1gU8vjwpnI+QKYdQZ9cXKAyovy0OXf7EZ96UsFb2q0GJQdzO
+         EmfnpGTLRhhtII1H4Pn7Txd1eOxmj7GvYoIHVV//rkpjxg2ODN1HL7XyPz68YNe70nF6
+         /4KznmLOKtdbmjISXN6WIX3AEgVhP5mmOQshPBDoW8S/JU0XCp1p64ZmZw41OrLvgAbs
+         h/PpSUr084B3GPb2jPPIqNvMSh5JqNdclCSGFdVIjhPj8WpVDiietJoxCwo/+X+YbpC3
+         +9Apcu7AXKUZE/UbUyDKExpa7FeYpWjgFqm8/ZUciv8p1dtrM/BXuCI9OVMoCIOJMMjM
+         1lCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yVhihwITAfz3n4uJB5RhPmF2OZxrlKktDDWd4HN0PXU=;
+        fh=m4sVkcne0BkFSUnbvZlDsgLvMkHBQvqghUNUqr6rt70=;
+        b=kbfBNqlplnI2kAbPJDbV/7hludJVqq36BWjsUw2xUh/lbOSXFIRrFvOocxBP95/aA2
+         I78VqhvW/5RRMPLc96VSpWHUTC3OMP/l1aNXlE79O0pU87PnOa31kYDZGrpSOBp+PVqH
+         S/QHSYd0E2Ec4g5ho7diTUVj9ea7KsLUC3VggM7nLftybBzfiWmXXU89kG2uWUwwB/Mj
+         LnaWGbgjHLPdKXWhklH90N7TG2iVyiJ6eCP8QaFJ9voSK6+ACYqAF7Q42p92CBKv9fQf
+         /Omz2oX1uAg1XDgiAazgH2NwfezB4ellkNs6g/MLUdMWFb65u0mnYLvn8Afce2n4ynn9
+         dKAQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785724160; x=1786328960; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yVhihwITAfz3n4uJB5RhPmF2OZxrlKktDDWd4HN0PXU=;
+        b=f8YvpmWSB6W49+J7o8rVOxTJ5sDwDnAUMyTIHUkUNAjyK/E7iF44FrCBZr3iSbR9Br
+         OtbTIWd9nLlnR+DvosjDtKvT6QWaJkq6t27N/g+PFZVmqqIBbCW1jFMbezAmVUSkMT1f
+         7Z/D0Jly2H4+2ZQP99Hi7DV9ZG9PEsXpBft5R+++b1o2GVx/6A+aNe+oo835/LQKjzjP
+         mYR09zuogm47sQ4bjnhNj0AjR3v4XbGaw6mKvLw5hITyARCV88su/ZqsitOYAuNnXnv0
+         r4uLrID9ECSiVWRmoPLe8FiVPT5zZLt2IVNUZdk7M+Gr9D2+JXZ4Mh+XEaI2GriLIO4K
+         4g5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785724160; x=1786328960;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yVhihwITAfz3n4uJB5RhPmF2OZxrlKktDDWd4HN0PXU=;
+        b=ZSit2RojzLkwRI3pVDtthdK8DsVoZBLvb9vTFlkgP5biBiu13dUesgt0smf3UbBD4F
+         /dcN+CSIYNRBu2FOfYXCT0UsXdu6EjAtjrUtFgNeKEIITvfvVVtGV4qDhwbmJuZBzIvc
+         4kIuF3UJZ/J683ksqLPkIxQzEmgN/KtzyXuPpHNapA6tKSy+8Op/6gKtT//691DFXVuO
+         +qzhxJ9TMTvH/lkjyqKp5iyDohT4wOwMwEEJHLfDhONhFrtDr9/ee+J6nD3vdE5mfMZI
+         +UYtYDtoWAkWke0IVezCI4gJvEDSCKLKL3qkFEJ8fRs+SiUou71TZapuhE6EQm+Fyoh8
+         6hbA==
+X-Forwarded-Encrypted: i=1; AHgh+RplrCpWwW4E49e5GqOcIrrfj/MnDO5sYIgXvxfhsnMoDcdIihgkQnF7jjP/bmj1Fle71t3FmT1TTc4KxFmq4DM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVgOQlUBP8HxAI/18Vo757Z/RtfZC+4XvEgVeva4KbH1eI13CQ
+	gaUzJD2TWYoVxpKoJcdIigx/fYaAQZezp2tXE9JqjxnbG1TRuObXGaRw/cEXUe2CAZthUP4xF0D
+	KlBi9vomKfUHhzHtCO3axO3XXZZfdywY=
+X-Gm-Gg: AR+sD11ZXI8B45PkgCS/QTevMyligu4OYYlQsyBnvkBgmdQd4Jh5ChIPwYynNEM6Y5i
+	qh7BWYMPqp7abWQD3f0l9xwDW/qjNbC89yz6/ln+pNMkZUL6LAdhOH+EeWl8/BQ6AT8BRFa6lk5
+	xILq/DwCU0g1iwSTxvZJfQBQpS6jKyHqv0S55uq7dfrdlA8xPmmPEwYV/gpNTlNBTQ+EW3rYpVt
+	DjysYTTENuDP3EFjmFwOvKube05G0nnx6dt3dvnv6SJ3ctKCiLEOMh8BTr2OUzslBsEM+U/S6eQ
+	ojI1utX+a8SVKoov+av/1Jo2mXENwgccrunsGYz4+aQ=
+X-Received: by 2002:a05:6512:61c1:10b0:5b2:a3a3:f8bc with SMTP id
+ 2adb3069b0e04-5b2e4f34600mr1078603e87.24.1785724160105; Sun, 02 Aug 2026
+ 19:29:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 4/9] libbpf: Add support for global percpu
- data
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-To: Andrii Nakryiko <andrii@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260715153254.92010-1-leon.hwang@linux.dev>
- <20260715153254.92010-5-leon.hwang@linux.dev>
- <DK167GCPUAJE.3GGIPEE5MIX3G@etsalapatis.com>
- <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
-Content-Language: en-US
-In-Reply-To: <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260726021304.97ED91F000E9@smtp.kernel.org> <20260728033837.1466123-1-dingning04@gmail.com>
+ <DKEUME1DRKOR.2R2XVNQDZKVSR@gmail.com>
+In-Reply-To: <DKEUME1DRKOR.2R2XVNQDZKVSR@gmail.com>
+From: Ning Ding <dingning04@gmail.com>
+Date: Sun, 2 Aug 2026 19:29:08 -0700
+X-Gm-Features: AUfX_mwEwpHI-i2By8EjhZXHPmcGr0Ttv7R6KbGsYZWY-jR3VTn86BzlSh-gME0
+Message-ID: <CAJP4iuumoLdD62rXf=3HexiKVoKbXHJka7tm9+Cw-LaKmuvC+A@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Reject writes through untrusted allocated pointers
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, shuah@kernel.org, 
+	danieltimlee@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20/7/26 12:59, Leon Hwang wrote:
-> On 18/7/26 05:39, Emil Tsalapatis wrote:
->> On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
-> 
-> [...]
-> 
->>>  
->>>  struct elf_sec_desc {
->>> @@ -1839,6 +1842,8 @@ static size_t bpf_map_mmap_sz(const struct bpf_map *map)
->>>  	switch (map->def.type) {
->>>  	case BPF_MAP_TYPE_ARRAY:
->>>  		return array_map_mmap_sz(map->def.value_size, map->def.max_entries);
->>> +	case BPF_MAP_TYPE_PERCPU_ARRAY:
->>> +		return map->def.value_size;
->>>  	case BPF_MAP_TYPE_ARENA:
->>>  		return page_sz * map->def.max_entries;
->>>  	default:
->>> @@ -1866,7 +1871,8 @@ static int bpf_map_mmap_resize(struct bpf_map *map, size_t old_sz, size_t new_sz
->>>  	return 0;
->>>  }
->>>  
->>> -static char *internal_map_name(struct bpf_object *obj, const char *real_name)
->>> +static char *internal_map_name(struct bpf_object *obj, const char *real_name,
->>> +			       enum libbpf_map_type type)
->>
->> We can avoid passing the type here by testing against ".percpu" since
->> that's how we are deriving the map type in the first place. But more
->> importantly:
->>
->>>  {
->>>  	char map_name[BPF_OBJ_NAME_LEN], *p;
->>>  	int pfx_len, sfx_len = max((size_t)7, strlen(real_name));
->>> @@ -1907,8 +1913,11 @@ static char *internal_map_name(struct bpf_object *obj, const char *real_name)
->>>  	if (sfx_len >= BPF_OBJ_NAME_LEN)
->>>  		sfx_len = BPF_OBJ_NAME_LEN - 1;
->>>  
->>> -	/* if there are two or more dots in map name, it's a custom dot map */
->>> -	if (strchr(real_name + 1, '.') != NULL)
->>> +	/*
->>> +	 * Don't prefix the bpf_object name if this is a custom dot map
->>> +	 * (containing two or more dots) or a percpu data map.
->>> +	 */
->>> +	if (strchr(real_name + 1, '.') != NULL || type == LIBBPF_MAP_PERCPU)
->>
->> Is there a reason we don't use the exact same logic as the other
->> internal maps here? I understand that a lot of the conventions around
->> the naming are there for legacy reasons, but it seems like we're
->> singling out the .percpu section for highly nonbvious reasons. Imo we
->> should consider doing the same prefixing for a bare ".percpu" section
->> that we do for the other internal ones. At the very least, there needs
->> to be some explanation as to why .percpu gets special treatment.
-> 
-> 
-> I prefer passing 'type'. Excluding _PERCPU here is to avoid the legacy
-> naming convention for new internal maps.
-> 
->>
->> @Andrii Wdyt? 
->>
->>>  		pfx_len = 0;
->>>  	else
->>>  		pfx_len = min((size_t)BPF_OBJ_NAME_LEN - sfx_len - 1, strlen(obj->name));
->>> @@ -1938,7 +1947,7 @@ static bool map_is_mmapable(struct bpf_object *obj, struct bpf_map *map)
->>>  	struct btf_var_secinfo *vsi;
->>>  	int i, n;
->>>  
->>> -	if (!map->btf_value_type_id)
->>> +	if (!map->btf_value_type_id || map->libbpf_type == LIBBPF_MAP_PERCPU)
->>>  		return false;
->>
->> Nit: These are two separate checks rolled into one, and each one checks
->> a different thing. THe type check against MAP_PERCPU merits a comment as
->> well: It's the only internal section that is not really mappable because
->> there's no way to represent it as userspace state.
-> 
-> 
-> Ack.
-> 
-> Will add a new iff for libbpf_type check with a comment.
-> 
->>
->>>  
->>>  	t = btf__type_by_id(obj->btf, map->btf_value_type_id);
->>> @@ -1962,6 +1971,7 @@ static int
->>>  bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
->>>  			      const char *real_name, int sec_idx, void *data, size_t data_sz)
->>>  {
->>> +	bool is_percpu = type == LIBBPF_MAP_PERCPU;
->>>  	struct bpf_map_def *def;
->>>  	struct bpf_map *map;
->>>  	size_t mmap_sz;
-> [...]
-> 
->>> @@ -4944,7 +4970,7 @@ static int map_fill_btf_type_info(struct bpf_object *obj, struct bpf_map *map)
->>>  
->>>  	/*
->>>  	 * LLVM annotates global data differently in BTF, that is,
->>> -	 * only as '.data', '.bss' or '.rodata'.
->>> +	 * only as '.data', '.bss', '.percpu' or '.rodata'.
->>>  	 */
->>>  	if (!bpf_map__is_internal(map))
->>>  		return -ENOENT;
->>> @@ -5293,18 +5319,30 @@ static int
->>>  bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
->>>  {
->>>  	enum libbpf_map_type map_type = map->libbpf_type;
->>> +	bool is_percpu = map_type == LIBBPF_MAP_PERCPU;
->>
->> Nit: If we do 
->> 	__u64 update_flags = is_percpu ? BPF_F_ALL_CPUS : 0;
->>
->> we can declare the variable as const and ...
->>
->>> +	__u64 update_flags = 0;
->>>  	int err, zero = 0;
->>>  	size_t mmap_sz;
->>>  
->>> +	if (is_percpu) {
->>> +		if (!obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU_DATA)) {
->>> +			pr_warn("map '%s': kernel does not support percpu data.\n",
->>> +				bpf_map__name(map));
->>> +			return -EOPNOTSUPP;
->>> +		}
->>> +
->>> +		update_flags = BPF_F_ALL_CPUS;
->>> +	}
->>
->> ... we can collapse the above into a single nested level:
->>
->> 	if (is_percpu && !obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU_DATA)) {
->> 		...
->> 	}
-> 
-> Good point.
-> 
->>
->>> +
->>>  	if (obj->gen_loader) {
->>>  		bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps,
->>> -					 map->mmaped, map->def.value_size);
->>> +					 map->mmaped, map->def.value_size, update_flags);
->>>  		if (map_type == LIBBPF_MAP_RODATA || map_type == LIBBPF_MAP_KCONFIG)
->>>  			bpf_gen__map_freeze(obj->gen_loader, map - obj->maps);
->>>  		return 0;
->>>  	}
->>>  
->>> -	err = bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
->>> +	err = bpf_map_update_elem(map->fd, &zero, map->mmaped, update_flags);
->>>  	if (err) {
->>>  		err = -errno;
->>>  		pr_warn("map '%s': failed to set initial contents: %s\n",
->>> @@ -5349,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
->>>  			return err;
->>>  		}
->>>  		map->mmaped = mmaped;
->>> +	} else if (is_percpu) {
->>> +		if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
->>> +			err = -errno;
->>> +			pr_warn("map '%s': failed to mprotect() contents: %s\n",
->>> +				bpf_map__name(map), errstr(err));
->>> +			return err;
->>> +		}
->>>  	} else if (map->mmaped) {
->>>  		munmap(map->mmaped, mmap_sz);
->>>  		map->mmaped = NULL;
->>> @@ -10807,11 +10852,16 @@ static bool map_uses_real_name(const struct bpf_map *map)
->>>  	 * such map's corresponding ELF section name as a map name.
->>>  	 * This check distinguishes .data/.rodata from .data.* and .rodata.*
->>>  	 * maps to know which name has to be returned to the user.
->>> +	 * Map name of the custom .percpu.* maps might be truncated to
->>> +	 * BPF_OBJ_NAME_LEN-1 chars in internal_map_name(). Hence, percpu data
->>> +	 * maps must use real name for their user-visible name.
->>>  	 */
->>>  	if (map->libbpf_type == LIBBPF_MAP_DATA && strcmp(map->real_name, DATA_SEC) != 0)
->>>  		return true;
->>>  	if (map->libbpf_type == LIBBPF_MAP_RODATA && strcmp(map->real_name, RODATA_SEC) != 0)
->>>  		return true;
->>> +	if (map->libbpf_type == LIBBPF_MAP_PERCPU)
->>> +		return true;
->>
->> Same comment as above here wrt uniformity. This is the part that
->> requires us to check agianst the map type in __init_internal_map().
-> 
-> 
-> Let us wait for Andrii's comment.
-> 
+The existing PTR_UNTRUSTED branch is after the access-permission
+check. It only handles the case where we propagate the PTR_UNTRUSTED
+flag to a field pointer loaded through a BPF_READ. For a direct write
+such as res->key =3D 42, no pointer is loaded and that branch has no
+effect:
 
-Hi Andrii,
+my_child =3D res->child; // in that case, my_child will be marked with
+PTR_UNTRUSTED, that is what the existing PTR_UNTRUSTED do.
+res->key =3D 42; // The existing check doesn't handle this.
 
-Any comment?
-
-Thanks,
-Leon
-
+On Sun, Aug 2, 2026 at 4:32=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gmai=
+l.com> wrote:
+>
+> On Tue Jul 28, 2026 at 5:38 AM CEST, Ning Ding wrote:
+> > A kptr loaded under an RCU read lock has MEM_ALLOC set. After
+> > bpf_rcu_read_unlock(), the verifier marks it PTR_UNTRUSTED, but
+> > check_ptr_to_btf_access() still allows writes because
+> > type_is_ptr_alloc_obj() ignores that flag.
+> >
+> > Reject writes through MEM_ALLOC pointers that are PTR_UNTRUSTED. Reads
+> > remain allowed and are converted to probe-memory accesses.
+> >
+> > Also skip the owning-reference check for these pointers, since they no
+> > longer have a live reference after leaving the RCU critical section.
+> >
+> > Add verifier tests for the rejected write and permitted read cases.
+> >
+> > Fixes: 503e4def5414 ("bpf: Replace open code with for allocated object =
+check")
+> > Closes: https://lore.kernel.org/all/20260726021304.97ED91F000E9@smtp.ke=
+rnel.org/
+> > Assisted-by: Codex:gpt-5.6-sol
+> > Signed-off-by: Ning Ding <dingning04@gmail.com>
+> > ---
+>
+> Same comment for this one, split kernel and selftests into separate patch=
+es.
+>
+> >  kernel/bpf/verifier.c                         |  6 +-
+> >  .../bpf/progs/local_kptr_stash_fail.c         | 58 +++++++++++++++++++
+> >  2 files changed, 62 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 7aa47342dc65..24c151ad2e62 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -5804,13 +5804,15 @@ static int check_ptr_to_btf_access(struct bpf_v=
+erifier_env *env,
+> >                * program allocated objects (which always have id > 0),
+> >                * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
+> >                */
+> > -             if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->ty=
+pe)) {
+> > +             if (atype !=3D BPF_READ &&
+> > +                 (!type_is_ptr_alloc_obj(reg->type) || reg->type & PTR=
+_UNTRUSTED)) {
+> >                       verbose(env, "only read is supported\n");
+> >                       return -EACCES;
+> >               }
+>
+> There is a PTR_UNTRUSTED check already earlier in this function, why is t=
+hat not
+> working or not enough?
+>
+> pw-bot: cr
+>
+> >
+> >               if (type_is_alloc(reg->type) && !type_is_non_owning_ref(r=
+eg->type) &&
+> > -                 !(reg->type & MEM_RCU) && !reg_is_referenced(env, reg=
+)) {
+> > +                 !(reg->type & (MEM_RCU | PTR_UNTRUSTED)) &&
+> > +                 !reg_is_referenced(env, reg)) {
+> >                       verifier_bug(env, "allocated object must have a r=
+eferenced id");
+> >                       return -EFAULT;
+> >               }
+> > diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c =
+b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
+> > index fcf7a7567da2..d7b8cd6458bb 100644
+> > --- a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
+> > +++ b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
+> > @@ -8,14 +8,22 @@
+> >  #include "../bpf_experimental.h"
+> >  #include "bpf_misc.h"
+> >
+> > +extern void bpf_rcu_read_lock(void) __ksym;
+> > +extern void bpf_rcu_read_unlock(void) __ksym;
+> > +
+> >  struct node_data {
+> >       long key;
+> >       long data;
+> >       struct bpf_rb_node node;
+> >  };
+> >
+> > +struct plain_data {
+> > +     long key;
+> > +};
+> > +
+> >  struct map_value {
+> >       struct node_data __kptr *node;
+> > +     struct plain_data __kptr *plain;
+> >  };
+> >
+> >  struct node_data2 {
+> > @@ -31,6 +39,7 @@ struct node_data2 {
+> >   * [35] TYPE_TAG 'kptr_ref' type_id=3D34
+> >   */
+> >  struct node_data *just_here_because_btf_bug;
+> > +struct plain_data *just_here_because_btf_bug2;
+> >
+> >  struct {
+> >       __uint(type, BPF_MAP_TYPE_ARRAY);
+> > @@ -82,4 +91,53 @@ long drop_rb_node_off(void *ctx)
+> >       return 0;
+> >  }
+> >
+> > +SEC("?tc")
+> > +__failure __msg("only read is supported")
+> > +long write_untrusted_alloc_obj(void *ctx)
+> > +{
+> > +     struct map_value *mapval;
+> > +     struct node_data *res;
+> > +     int idx =3D 0;
+> > +
+> > +     mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
+> > +     if (!mapval)
+> > +             return 1;
+> > +
+> > +     bpf_rcu_read_lock();
+> > +     res =3D mapval->node;
+> > +     if (!res) {
+> > +             bpf_rcu_read_unlock();
+> > +             return 2;
+> > +     }
+> > +     barrier_var(res);
+> > +     bpf_rcu_read_unlock();
+> > +
+> > +     res->key =3D 42;
+> > +     return 0;
+> > +}
+> > +
+> > +SEC("?tc")
+> > +__success
+> > +long read_untrusted_alloc_obj(void *ctx)
+> > +{
+> > +     struct map_value *mapval;
+> > +     struct plain_data *res;
+> > +     int idx =3D 0;
+> > +
+> > +     mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
+> > +     if (!mapval)
+> > +             return 1;
+> > +
+> > +     bpf_rcu_read_lock();
+> > +     res =3D mapval->plain;
+> > +     if (!res) {
+> > +             bpf_rcu_read_unlock();
+> > +             return 2;
+> > +     }
+> > +     barrier_var(res);
+> > +     bpf_rcu_read_unlock();
+> > +
+> > +     return res->key;
+> > +}
+> > +
+> >  char _license[] SEC("license") =3D "GPL";
+>
