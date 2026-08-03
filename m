@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C57372ED6;
-	Mon,  3 Aug 2026 09:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766D6364EB8;
+	Mon,  3 Aug 2026 09:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785750885; cv=none; b=AFD3kM38cwvtzuT6oAjAYl+aYC8g8ITXDPgKNNqYjVm6PESMyZeR1BsA0JMjb2uc2/n6AW+cZufVPifMewuFwytw1CrJTCeeYRUU5injICa6c2+9o96wUcU3kkQbyU62ju49/BeI3UYAxCn8JIM6VL8O7uzFDHxrW38qBknimfc=
+	t=1785751097; cv=none; b=B+3PQ9D63uhEBOGmfJ2BjbZA2wenEgcxxnUywDAi0UoZ6ygobSOfrszKBcka+wEudpkHKqNn1eEM77DGDUJCNEJ+MskFPx60m8R8JgS5D+IHUx5vTQBcdkUYIaVvAibrHl0QtLLIF8hsVFeMIinWwIDPTEqB+36rQV0VFpQZisU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785750885; c=relaxed/simple;
-	bh=wmFeqWt9hJEPTyJSIKsn/MjQEmqGDQGIFb5QQiVbaOI=;
+	s=arc-20240116; t=1785751097; c=relaxed/simple;
+	bh=a0fPgLwnpRU9zG89OZ7+q31emzY1bYn/vvAGlJ07LdI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZpRo+4K0VMkomN56K011D2QjwgQNwD+FpSM+wG2WPZY9nuB94+Ae1ovIPDNMR/q0ViWNZKZz09AUlFXlvgqR/060iGY59Gzeope1l3574s9wyn2oN36RX1SXCwI1CF8HbS8X2KbXuHOdFEhm/+T4i2gy+2Ah7kh9WXAggafdqE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RfaeX1ev; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=RazS06WxiWOzYd44YRA6POLaM5YGZj7/UgOI06HkOYRLjYjpC1WGYb6WolUeXNBLdlYWCdgRCWZ4TVKNTGWoLt21VoQB3KVaS8yyQT9mn//K0PFnWvWOEvMC+fzKguP/IkfEqvaY1z1eEbbf83BN2TGC8Nl7jnSzc4asHOhGvXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6myUY3X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RfaeX1ev"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADCF1F000E9;
-	Mon,  3 Aug 2026 09:54:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6myUY3X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645551F000E9;
+	Mon,  3 Aug 2026 09:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785750883;
-	bh=BtCt30ComJ5hFVYJ6JxEppVhYdFn14YBeB2m9YZ4FcY=;
+	s=k20260515; t=1785751096;
+	bh=P8UnGQEOlr9FcmnvZVT8xoq/kYbj2bRkrjLSo5mwrl4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RfaeX1evo2opn3iP075wHiCgO+MwXQ631YicQrYI/QwrGQvnBstOT7phdU+zTmijA
-	 iy4qWlgzZ7q0FAdOCNSk+U1hzQaUR8vL8hJ7Pbi9zrCmqb5XPe1YMYDhZP4f/XRDNW
-	 0mbP8jZ/SGWDe1xUFAKJQ/l3QLsU/umRnS+U8IP5lX6sUcBSP6oYVADJb8LkmENkPJ
-	 7P8BRpFLPQ2W+jSdosjXqf99ZDe60hgo3unwD2NZZoMnk7Nv7C0r6FrHMDqofaoG2L
-	 z6t8iLVCdWFobWF81wM/G/Cmi9dyPi/jjq4Q+gEa58G832Df/6I1AKorvn+aHpVLk6
-	 6kZq0J0ju49aQ==
-Message-ID: <73adddc9-4321-4f6d-ac67-470c8f515fff@kernel.org>
-Date: Mon, 3 Aug 2026 11:54:31 +0200
+	b=P6myUY3Xbz49vwq6IgIb2kslwXvdReafe9z7l3yqlKBhRH6oL6atSWgcmYMMoXryB
+	 11cIYedWL+sawg0/C+41yTk9MksOmpjYvpt5gJ3WtPOaKRTV1uWUJTKKP9ePhTHZwJ
+	 256ALvNtP9ItZaJuqgAknonR7ZqsoUywFna3j9O65jXwkbtmNa9fe32JLcXAi2K51l
+	 YFh1GyppfyJUNFqAq/jvXbm9ZpJ94OMo8ow6xM/9JMCOs938n+X7eG5fTQNvPLorCt
+	 2flhCHtXG+2zfcMKBjRy3ciJTg/z8AaFxd4Pq1iwwWT4KNf4aiWuFtmCXEhm6KikRe
+	 hQmRIobzYLPvw==
+Message-ID: <1d84f43f-6f59-4685-bd4d-ac7a724bff5a@kernel.org>
+Date: Mon, 3 Aug 2026 11:58:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,9 +35,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/15] mm: introduce and use vma_filebacked_address()
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
+Subject: Re: [PATCH v3 01/15] mm/vma: introduce VMA anon page offset field and
+ add helpers
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
  Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
  Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
@@ -57,11 +58,12 @@ To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
  Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
  Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
  Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-5-e8ecfefea812@kernel.org>
+ <20260729-b4-scalable-cow-virt-pgoff-v3-1-e8ecfefea812@kernel.org>
+ <2ac2746f-18b4-4960-8628-82e87c2140ce@kernel.org> <anBjLV4CvmpBzEiw@lucifer>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -108,23 +110,22 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260729-b4-scalable-cow-virt-pgoff-v3-5-e8ecfefea812@kernel.org>
+In-Reply-To: <anBjLV4CvmpBzEiw@lucifer>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 18:48, Lorenzo Stoakes (ARM) wrote:
-> In cases where we know that the VMA is file-backed, use
-> vma_filebacked_address() rather than vma_address().
-> 
-> This lays the foundation for using the anonymous page offset via
-> vma_anon_address().
 
-I was briefly confused why we can't do that immediately.
-
+>> The former would be better
+>>
+>> 	__vma_set_start_anon_pgoff(dest, vma_start_anon_pgoff(src));
 > 
-> Also add an assert to ensure that the VMA whose address is required is not
-> anonymous.
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Ack that's fair, will update it.
+
+But looking at the existing code
+
+vma_set_pgoff(vma, vma_start_pgoff(vma) - delta);
+
+etc, maybe we can keep it as is for symmetry.
 
 -- 
 Cheers,
