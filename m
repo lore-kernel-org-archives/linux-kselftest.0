@@ -1,100 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EBF30F7FB;
-	Mon,  3 Aug 2026 10:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B0737DEB5;
+	Mon,  3 Aug 2026 10:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785752380; cv=none; b=FUlXs6cW3MZDbmGmisgddaUWat9kzYKf1Rlg8CHke6SXuzSXPi/6koCqvQdKy9ukEyo2TuBoqj2t5B9V+rfqA3ec63RD4neeIHq5p7GnF6CkzTMNoiEz3KXEXSwwsxncQCb+YUAt6+xCnMA1En6Oh5H/0YkKWaeXbGBZq0rDCrU=
+	t=1785753070; cv=none; b=PI26cgMAokT9r6xFP/YpK2D24HuQsBI5HGHJUDqud4btxabuT/hmE2utrkMcP5IaPYrcxt7EDT7ip/Xx8awuWCwV3qlNm3K/QD0ZtFVY0TpsVmKSiAJ3FDMa9JiHbbXClXp+JXiqeF7o1xZH30JEJCxghf6wsy4HKvdNTgpy0ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785752380; c=relaxed/simple;
-	bh=8Calt/307KNtJWkdgXAaLvbQuXAUY9A61wZewMbZh70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yv0SOmsRCFjuGNafaaO30wLCdsVGTBWKlMpDfs2jn4JJiA+150d3x6MxqZVdSN2zULtWX4HlqPVVyEu5KfpZEGRB9QvgkYaQWoLhIst9H497VwBIXzURuJqpTC7w5Zhp1GvUgg7RXqjW7RM41RW8R4YWX5cGbGxiDLVa53PeVWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ng5+8DMZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785753070; c=relaxed/simple;
+	bh=+EWOLDeCW4n9l7HMY05WIpY+OE52FCsUo/41G6kNu5s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=la8Na+t0/46Rscg8TaDONyoT4rRsYvwWMWrBkzJv2S5V1bmpgnsL6IHlwQTm10g+lhGVtd49cN4QeR+OxAs6bfgl4skpjGGQElg/Q8F77LDYhhNQ3pCL4N9HKUM/gl3UZkZhA218ifBAk51Dim3fHUwWzp6aRMpQFbYqEUWjOZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YC67v2eA; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ng5+8DMZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC771F000E9;
-	Mon,  3 Aug 2026 10:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785752379;
-	bh=8Calt/307KNtJWkdgXAaLvbQuXAUY9A61wZewMbZh70=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ng5+8DMZLWORmfsZsD86xD4jesgzvb9X5altilrjo/7i9jmsg7xuKWjOJ/gfRV5tO
-	 8fzVFdM1AIWECwrfdrJ+TXz2wZLM+iclMvXu4n30Ls6HFiva8ZNxrp4gyqEilXbqnZ
-	 6BAZcBS/dOD/8BPCwmOigxUn9lQIrS2VqYBNXPqfOMVmS+uRPQ01Ve9VdV/ZfP3E6B
-	 ts3Tw7GIIWTaJQTeTaSwKDpF6lLcECWEXdqN2Ml3JxMKEEC5KbJajQYO9otNUffjEw
-	 DpyBexfE3thgwcsqwEriB9WeApPb4CMgalZLCUSwtevtR5O5x4yU8qqhqcqZUSo0ys
-	 bVC7pGX6AxNXQ==
-Date: Mon, 3 Aug 2026 11:19:17 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Gregory Price <gourry@gourry.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 04/15] mm: update print_bad_page_map() to show
- anonymous page index
-Message-ID: <anBqV9z6hVLIqoIn@lucifer>
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-4-e8ecfefea812@kernel.org>
- <amrvgjPNfKqWPUU0@gourry-fedora-PF4VCD3F>
- <fec1be38-406d-4656-95eb-048729afec40@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YC67v2eA"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785753064;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8+IjhCE/ZNrC0bMBIhtdbaluok7XpIs3WtnbhLNhxMk=;
+	b=YC67v2eA3az2cCw5x1Bx6Hh9QPPFGQ4R8thQ83/0M96lj9LJ5S5Pv0z2CaEQEMP1wioNgC
+	lPk33yKRiYZG/DauzuJ6hBtKbUleoiaWzTX9ZipyR8nOCRqrLEicSuUHVL/dt3imhdTQuU
+	SxEO5y3mpO9kZbfUoRk8xaSI7KBQ7vU=
+From: Hongfu Li <hongfu.li@linux.dev>
+To: shuah@kernel.org,
+	richard.weiyang@gmail.com,
+	reddybalavignesh9979@gmail.com,
+	akpm@linux-foundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	hongfu.li@linux.dev,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH] selftests/prctl: Fix non-anonymous VMA mapping in set-anon-vma-name test
+Date: Mon,  3 Aug 2026 18:30:46 +0800
+Message-ID: <20260803103046.14324-1-hongfu.li@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fec1be38-406d-4656-95eb-048729afec40@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Aug 03, 2026 at 11:39:11AM +0200, David Hildenbrand (Arm) wrote:
-> On 7/30/26 08:32, Gregory Price wrote:
-> > On Wed, Jul 29, 2026 at 05:48:39PM +0100, Lorenzo Stoakes (ARM) wrote:
-> >> This is potentially useful debugging information and matches the existing
-> >> page offset provided.
-> >>
-> >> Use the raw __linear_anon_page_index() function so as to always output this
-> >> value regardless of whether the mapping is file-backed or not.
-> >>
-> >
-> > Begs the question whether we should mark the value based on whether
-> > it is file backed or not, but i suppose you can gleen that from the
-> > other printed values (anon_mem, mapping, vm_ops, etc).
->
-> You mean something anon_pgoff_t or what did you have in mind?
+From: Hongfu Li <lihongfu@kylinos.cn>
 
-I suspect he means e.g. adding a (A) suffix or something? Like page offset xxx
-(F) or yyy (A) I guess?
+The test creates a non-anonymous VMA (ptr_not_anon) via mmap() with
+MAP_PRIVATE but without MAP_ANONYMOUS, using fd=0 (stdin) as the file
+descriptor.  This always fails because fd=0 is not a regular file,
+and the failure was hidden because ASSERT_NE() incorrectly checked
+for NULL instead of MAP_FAILED.
 
-For anon_pgoff_t it'd have to be a typedef struct { pgoff_t val; } anon_pgoff_t
-to be meaningful and then you'd have weirdness with assignment to
-e.g. folio->index/other calculations, and especially linear_folio_index() which
-returns the right pgoff_t depending on file-backed/anon :)
+Fix by using mkstemp() + ftruncate() to create a real temporary file,
+then mapping it with MAP_PRIVATE to obtain a genuine file-backed VMA.
+Also fix the mmap() error checks to use MAP_FAILED instead of NULL,
+and pass fd=-1 for the anonymous mapping for clarity.  The temp file
+is unlinked immediately so it does not persist on disk.
 
-So I don't think it'd be helpful, and the asserts already prevent incorrect
-usage.
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+---
+ .../selftests/prctl/set-anon-vma-name-test.c  | 21 ++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
->
-> --
-> Cheers,
->
-> David
+diff --git a/tools/testing/selftests/prctl/set-anon-vma-name-test.c b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+index ac6721b184a6..5f9589534da8 100644
+--- a/tools/testing/selftests/prctl/set-anon-vma-name-test.c
++++ b/tools/testing/selftests/prctl/set-anon-vma-name-test.c
+@@ -4,11 +4,13 @@
+  */
+ 
+ #include <errno.h>
++#include <fcntl.h>
+ #include <sys/prctl.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <sys/mman.h>
+ #include <string.h>
++#include <unistd.h>
+ 
+ #include "kselftest_harness.h"
+ 
+@@ -73,15 +75,24 @@ int was_renaming_successful(char *target_name, unsigned long ptr)
+ 
+ FIXTURE(vma) {
+ 	void *ptr_anon, *ptr_not_anon;
++	int fd_not_anon;
+ };
+ 
+ FIXTURE_SETUP(vma) {
++	char template[] = "./set-anon-vma-test-XXXXXX";
++
+ 	self->ptr_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
+-					MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
+-	ASSERT_NE(self->ptr_anon, NULL);
++					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(self->ptr_anon, MAP_FAILED);
++
++	self->fd_not_anon = mkstemp(template);
++	ASSERT_NE(self->fd_not_anon, -1);
++	unlink(template);
++	ASSERT_EQ(ftruncate(self->fd_not_anon, AREA_SIZE), 0);
+ 	self->ptr_not_anon = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE,
+-					MAP_PRIVATE, 0, 0);
+-	ASSERT_NE(self->ptr_not_anon, NULL);
++					MAP_PRIVATE, self->fd_not_anon, 0);
++	ASSERT_NE(self->ptr_not_anon, MAP_FAILED);
++	close(self->fd_not_anon);
+ }
+ 
+ FIXTURE_TEARDOWN(vma) {
+@@ -98,7 +109,7 @@ TEST_F(vma, renaming) {
+ 	EXPECT_EQ(rename_vma((unsigned long)self->ptr_anon, AREA_SIZE, BAD_NAME), -EINVAL);
+ 
+ 	TH_LOG("Try to rename non-anonymous VMA");
+-	EXPECT_EQ(rename_vma((unsigned long) self->ptr_not_anon, AREA_SIZE, GOOD_NAME), -EINVAL);
++	EXPECT_EQ(rename_vma((unsigned long) self->ptr_not_anon, AREA_SIZE, GOOD_NAME), -EBADF);
+ }
+ 
+ TEST_HARNESS_MAIN
+-- 
+2.54.0
 
---
-Cheers, Lorenzo
