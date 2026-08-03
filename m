@@ -1,69 +1,69 @@
-Received: from mail-oi1-f227.google.com (mail-oi1-f227.google.com [209.85.167.227])
+Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EF33B1009
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475F53B6BF1
 	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 21:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785791690; cv=none; b=rNcmkxL9TNtYQK8QjYKgWm6n+SJW4fYVvhFaRAeNkTG0T+myqgioO47q4LsvtMRIo4bi/U1OQuNK6Yop/YzRaKJfRXNW12kokPPPKvKOXkzRwox8DLjOL4p5stfhqscy0JK+ow9buNCcbuVR9fHI8h6Fuyn5osE6Xv7afLGnKPA=
+	t=1785791690; cv=none; b=WnOsX3Ky1J1lsX2QtqVvh2S74eoTiKb4hqbpl0R0WQZguaERN6rmPNYXHVNasg1CQDi38os4XrJXroK7MJnh0BYg5jvPwtIm6fz9HIl9gRErTofYhWNvzrEvM4EEDtYucoLMy8qCNWy9Rj8OEAlFTJ04BPsl+GbsKYzB3hyii3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785791690; c=relaxed/simple;
-	bh=9acBFwHuoe1WjBcMr0Xej+GgpA3/dG8koVdNsnmmatw=;
+	bh=FZL9v2s6V8OT5jqjZ1eRmbGaCvw5y2UKD5VJGsOygJU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=otgp5JJFeLC+q+olKUe+MtGHt7H1+o0EnMczix8a3VRYL5pYEL4nnVffaYC+s+7Pw3bqg0WgktCppe/2+jtcYkFiPvReTv07b4gR+wiUPSW25MgFK102V+JjHLutN1w7Ksnhh30+2FvB0/YANtG1t5uBa1fgoUM6aU5ni3Zd8R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=G1wejPQr; arc=none smtp.client-ip=209.85.167.227
+	 MIME-Version; b=AaheQrwMjLuYMvsfmsfSghUN5Lbx3BGglWhoYGFc7lNLvo/YSvxniahLgt8kCExafVg/4SBhcnx6bKymdBwn4lOYtBYEg9t2cDqLd7VXlNMXoyLrNEizdKYNSZU6PhtAU0yk3ZrhaN07pK4PXn8CkMZIgr+ZEuLst9JXJPC80Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Zh+Kgzcq; arc=none smtp.client-ip=209.85.215.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="G1wejPQr"
-Received: by mail-oi1-f227.google.com with SMTP id 5614622812f47-495efdede87so451715b6e.2
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Zh+Kgzcq"
+Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-cb2513ec378so217026a12.3
         for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 14:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1785791685; x=1786396485; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1785791686; x=1786396486; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uczeYpDC/SttNe9telPi5/5P4P2/v7kOCg4CCf1zw7s=;
-        b=G1wejPQrYslJGiG4PDO4PcNu4a7nr7geQkg51aHduQhBLYccVJO0lOQmYSAkozkrMp
-         bwq/JF1a7H6BNTgDpZx6l0Yo+TFkvwk4Bs97M27FFyhkkeFGIw0bGvU0Lz+EzSlUyesa
-         O2OSiZ5qvrNPRE4nZBGX/i2D0tx9qbhXIrvGXhvW/mUhjVoKo1C1U3BMy2gtRho7ODD+
-         2nC7U+vQU51nCuXKUhAArcbBvkmzTRFNMRVTRhTBWGSf6bVhdU9ZgnAxNh9z/PuJ8ARa
-         suOGpd2U2h4i8fw5lFkm4nOK3khezMwfi9hmk+OGB8hfthJWr2g1j/W/vdiQ/y9JO5R9
-         dSuw==
+        bh=n/+0NVp90japE4LHVXnwsuexjdaVJbd+UcY0JpTVc78=;
+        b=Zh+KgzcqsjZ9fYjx0VQ/MVPSZonJ6O/NVeSOSGyYNcIgONdfM1jR4b1EUZDTvtzo7T
+         Ax+4iR7LWDUZSAbvhIILk/2IgnDJoIC/qUnFX4WAXmOIEdc5z0Pk/IV2KsRrz4pS4eky
+         +1goBgeqks8KDihQVW0iq2F47kwXeZVJA6jmZngrZ6KcsUW5oVNu6GfK+/fhHfzbRncd
+         FN7f3xV7w9Plyh5AidCfd906R2vvz9asRnRT+4zOL/HdjRQ8iu4iUsuA0zORX+mQOqiF
+         PJyCit8DlApqogldVSmzQemURP11V+q90CutXFoUOxH4lK2mwqa5MmDuyVJdQ9vJecns
+         zuOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785791685; x=1786396485;
+        d=1e100.net; s=20251104; t=1785791686; x=1786396486;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uczeYpDC/SttNe9telPi5/5P4P2/v7kOCg4CCf1zw7s=;
-        b=gsmSe2hr+kceIgTaKq5ZDOHvPi7JQu1OWiFGnvHY7uvjfSXOr1f2hDf9dJs4ltH8ZC
-         veryxrHhV0rYgMn9fUQrt8u0/22tdBF1U/PmntWWa0o5GycMDlEpH78TSw0tbY3wVNlU
-         SSlg+IcsC3QmthJDnHOdzf8Uz6m55PpNlscS+GdRASXZHwh21s9iE9FGTPY8HNBaJVoO
-         tmAvfXMee0ib5uxqZlzB5SqLik64NHS3lK/W+W7i4sZ88Wd4eOI2dZNotul6CTf7m8Dq
-         5jYLDTUqIO5nItTNYn6qCdWugCsFMlH5rE7LSOwBlbmG0zDMaOAcH/o33YwEC2VetbFk
-         G9fg==
-X-Forwarded-Encrypted: i=1; AHgh+RrJZ3vUPAZ6z8ObZVUz5t9C8dDXvsWu4fv0zKyArawjIRDrjiJN+ANqkOYiVO0tBFqUhZuTPd8Ya0YswWXuAb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh1xO8/hnG49uk6H1y00/WtXtkECSGKHSCws6bZ+L4jOg+mGrm
-	rynxG742Nc/I6zvywDoEaVeYJnTuKA5XnQ4Lw3sCJZYRVvsjL1U0ylWiyQo8rJV2JNbcsPWSUX8
-	ssDy1h66NJPvdivPDowZVFO6wcHvZgCktD3lq
-X-Gm-Gg: AR+sD13bhozygpedo9Mgw4MmYShbA84SFcVdAM4p3b8K69xVY6otrXUHsYu2ISZSe6V
-	6XfwqLReOX7va8bMOmMhn20aEOPvKXON2WcdQ3//sAcQv4JQpwUzwjk8MZFXRhmCX50TCFLk/rr
-	ejQyu4BMIa8OcOwWtNyBLLNwLx5/Of6o1TE+as6j/GMgq+rsHSHmPEUAeqwkX70E/uaZMOijbwu
-	QQu/OOFaXFc9vI0qpTt9s7oV9FZ/KibSmwGvVd/K3SrmG2lyyS7o/iu3pY79CGmKX6MjNfPtKCe
-	X9458v+g4P9tUCq4+NFdzuZajsLHjh6IhVnyAjHVUUbY2ZmhsVL5sLJ+5EOR1TEe6KzLZLJwmx5
-	z2GC+PXeZIFrFMtycJuJSjNKd9YP3wZX/
-X-Received: by 2002:a05:6808:50a7:b0:496:d5:7b22 with SMTP id 5614622812f47-4af5df715e8mr12303752b6e.1.1785791685069;
+        bh=n/+0NVp90japE4LHVXnwsuexjdaVJbd+UcY0JpTVc78=;
+        b=X3EwS4RkWUqXbcY6vDixd4DUoXEIQAjnSnNKWMk7huio670wA8kznabEF5DnPhy6br
+         wrUAHgI54h7brR+DxoghH4d1WoFLu3OaWpriKC/qRlsGB5CeRV+hPNcO0omXvlloLVyD
+         VZeVcKpStsr0u/cL9y1zqD0blWgQkan8JBcSdo/1E/Qa7Dv9d4UK8RkJ6IX7t27DWYT3
+         vgCt8yGaKCKiHyggXnrDkBnvb2GrIprHjyyHYMrb7yXV3HFChhuEWTeMf/SfR01dBhSI
+         7dMJ1IJVnA/DiMpP+DcyAP3CNWrj25l1i+sJuIVGUKGiDUnWO7jZCZcMvjC89iNQKu0A
+         /MSg==
+X-Forwarded-Encrypted: i=1; AHgh+Rpvw+z3BB5e5+UaWApz7tqfQPec3+bTo2CFdt17dvKWDG5bgU7yWiHdrty+Xrz/poPtQESukXZfziJV5fUBUR0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXOyzrFGl3oRlmzp659+OICx784CHtmdCyXmQVER2LTPtmTkhj
+	UD/2E/fULMU9rVwDtmVaQh4CxGka1DYQTba8N6ltNzgyvQuRC/zdhINuHGqcVLydID5I3GcnSDm
+	yCr5bMI+5s7ku2+LBuggkHIVpk5XsleSwnK1jKlASjVkUeE0dnG60
+X-Gm-Gg: AR+sD13ZBVY4poJDOqW7BnBDJ2NJJ9EsEqoX96FwbYK5bC9ZuXV1Hs/NuePz+sfUIee
+	Zxc+GoMtdOVSmqsRThoBu3/syr7g3NAhKhdSGtL5BchDhhAMZpyqbqvSjZpVpzv1ra07Rmomk1q
+	Yn7dr+aTbTaMGgUQndNbv6Zzr8NOEKw9wrgf60g+cd8OOxKyNHUGrmVjwdAJXaKaNjnS1SWzj2B
+	tX4XT6ddQsVJ1bJuM5yxBSpXRRChvZOVS7CJvCIuxz9bd8gN2cEEsNvluku47a713B2Hmg5ZEIZ
+	ivAhdEXX7Sz4c0kAs3zKPBQVHMqhcarz/zRf8jPmtdj7U2z6sM8rINBTAnuF96BEAsNojLUgkci
+	tKVefeHPxhTIQKPkLEg==
+X-Received: by 2002:a17:903:38c7:b0:2c9:8287:fd0d with SMTP id d9443c01a7336-2d052438c91mr158785315ad.3.1785791685662;
         Mon, 03 Aug 2026 14:14:45 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-458f6639937sm1031268fac.9.2026.08.03.14.14.44
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2d04b16e439sm11538945ad.47.2026.08.03.14.14.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 03 Aug 2026 14:14:45 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id A39C0402B3;
-	Mon,  3 Aug 2026 15:14:44 -0600 (MDT)
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 07E1F43663;
+	Mon,  3 Aug 2026 15:14:45 -0600 (MDT)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id A0BB7E4041D; Mon,  3 Aug 2026 15:14:44 -0600 (MDT)
+	id 0567DE4041D; Mon,  3 Aug 2026 15:14:45 -0600 (MDT)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <tom.leiming@gmail.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -72,9 +72,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 1/8] ublk: consistently use u16 for queue and tag numbers
-Date: Mon,  3 Aug 2026 15:14:33 -0600
-Message-ID: <20260803211441.2538144-2-csander@purestorage.com>
+Subject: [PATCH v2 3/8] ublk: split request validation from io_desc init
+Date: Mon,  3 Aug 2026 15:14:35 -0600
+Message-ID: <20260803211441.2538144-4-csander@purestorage.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260803211441.2538144-1-csander@purestorage.com>
 References: <20260803211441.2538144-1-csander@purestorage.com>
@@ -86,447 +86,185 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The u16 nr_hw_queues and queue_depth fields of the ublk UAPI struct
-ublksrv_ctrl_dev_info constrain the number of queues and queue depth of
-each ublk device. However, the ublk driver is a bit inconsistent with
-the type it uses to represent these values, mixing u16 with int and
-unsigned int. Change all queue number, queue depth, q_id, and tag
-variables/fields to u16 to save some space.
+In preparation for moving the struct ublksrv_io_desc initialization from
+the thread submitting ublk requests to the daemon thread receiving them,
+split the fallible part of ublk_setup_iod{,_zoned}() into new helper
+ublk_validate_req{,_zoned}(). Only ublk_setup_iod{,_zoned}() accesses
+the io_desc and cannot error out.
+
+Return a bool value from ublk_validate_req{,_zoned}() as the existing
+error code ublk_setup_iod{,_zoned}() returns is only checked against
+BLK_STS_OK.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 Reviewed-by: Ming Lei <tom.leiming@gmail.com>
 ---
- drivers/block/ublk_drv.c | 80 ++++++++++++++++++++--------------------
- 1 file changed, 41 insertions(+), 39 deletions(-)
+ drivers/block/ublk_drv.c | 70 +++++++++++++++++++++++++++-------------
+ 1 file changed, 48 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index dd5d336eba29..da88c8042db6 100644
+index d364a5d0ebc2..7f0549238d76 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -235,22 +235,22 @@ struct ublk_io {
- 	void *buf_ctx_handle;
- 	spinlock_t lock;
- } ____cacheline_aligned_in_smp;
- 
- struct ublk_queue {
--	int q_id;
--	int q_depth;
-+	u16 q_id;
-+	u16 q_depth;
- 
- 	unsigned long flags;
- 	struct ublksrv_io_desc *io_cmd_buf;
- 
- 	bool force_abort;
- 	bool canceling;
- 	bool fail_io; /* copy of dev->state == UBLK_S_DEV_FAIL_IO */
- 	spinlock_t		cancel_lock;
- 	struct ublk_device *dev;
--	u32 nr_io_ready;
-+	u16 nr_io_ready;
- 
- 	/*
- 	 * For supporting UBLK_F_BATCH_IO only.
- 	 *
- 	 * Inflight ublk request tag is saved in this fifo
-@@ -325,11 +325,11 @@ struct ublk_device {
- 	spinlock_t		lock;
- 	struct mm_struct	*mm;
- 
- 	struct ublk_params	params;
- 
--	u32			nr_queue_ready;
-+	u16			nr_queue_ready;
- 	bool 			unprivileged_daemons;
- 	struct mutex cancel_mutex;
- 	bool canceling;
- 	pid_t 	ublksrv_tgid;
- 	struct delayed_work	exit_work;
-@@ -401,11 +401,11 @@ static inline void ublk_io_evts_deinit(struct ublk_queue *q)
- 	WARN_ON_ONCE(!kfifo_is_empty(&q->evts_fifo));
- 	kfifo_free(&q->evts_fifo);
- }
- 
- static inline struct ublksrv_io_desc *
--ublk_get_iod(const struct ublk_queue *ubq, unsigned tag)
-+ublk_get_iod(const struct ublk_queue *ubq, u16 tag)
- {
- 	return &ubq->io_cmd_buf[tag];
- }
- 
- static inline bool ublk_support_zero_copy(const struct ublk_queue *ubq)
-@@ -421,12 +421,11 @@ static inline bool ublk_dev_support_zero_copy(const struct ublk_device *ub)
- static inline bool ublk_support_shmem_zc(const struct ublk_queue *ubq)
- {
- 	return ubq->flags & UBLK_F_SHMEM_ZC;
- }
- 
--static inline bool ublk_iod_is_shmem_zc(const struct ublk_queue *ubq,
--					unsigned int tag)
-+static inline bool ublk_iod_is_shmem_zc(const struct ublk_queue *ubq, u16 tag)
- {
- 	return ublk_get_iod(ubq, tag)->op_flags & UBLK_IO_F_SHMEM_ZC;
- }
- 
- static inline bool ublk_dev_support_shmem_zc(const struct ublk_device *ub)
-@@ -862,22 +861,22 @@ static ssize_t ublk_batch_copy_io_tags(struct ublk_batch_fetch_cmd *fcmd,
- static unsigned int unprivileged_ublks_max = 64;
- static unsigned int unprivileged_ublks_added; /* protected by ublk_ctl_mutex */
- 
- static struct miscdevice ublk_misc;
- 
--static inline unsigned ublk_pos_to_hwq(loff_t pos)
-+static inline u16 ublk_pos_to_hwq(loff_t pos)
- {
- 	return ((pos - UBLKSRV_IO_BUF_OFFSET) >> UBLK_QID_OFF) &
- 		UBLK_QID_BITS_MASK;
- }
- 
- static inline unsigned ublk_pos_to_buf_off(loff_t pos)
- {
- 	return (pos - UBLKSRV_IO_BUF_OFFSET) & UBLK_IO_BUF_BITS_MASK;
- }
- 
--static inline unsigned ublk_pos_to_tag(loff_t pos)
-+static inline u16 ublk_pos_to_tag(loff_t pos)
- {
- 	return ((pos - UBLKSRV_IO_BUF_OFFSET) >> UBLK_TAG_OFF) &
- 		UBLK_TAG_BITS_MASK;
- }
- 
-@@ -1229,22 +1228,22 @@ static noinline void ublk_put_device(struct ublk_device *ub)
- {
- 	put_device(&ub->cdev_dev);
- }
- 
- static inline struct ublk_queue *ublk_get_queue(struct ublk_device *dev,
--		int qid)
-+		u16 qid)
- {
- 	return dev->queues[qid];
- }
- 
- static inline struct ublksrv_io_desc *
--ublk_queue_cmd_buf(struct ublk_device *ub, int q_id)
-+ublk_queue_cmd_buf(struct ublk_device *ub, u16 q_id)
- {
- 	return ublk_get_queue(ub, q_id)->io_cmd_buf;
- }
- 
--static inline int __ublk_queue_cmd_buf_size(int depth)
-+static inline int __ublk_queue_cmd_buf_size(u16 depth)
- {
- 	return round_up(depth * sizeof(struct ublksrv_io_desc), PAGE_SIZE);
- }
- 
- static inline int ublk_queue_cmd_buf_size(struct ublk_device *ub)
-@@ -1665,11 +1664,11 @@ static inline void __ublk_abort_rq(struct ublk_queue *ubq,
- 	else
- 		ublk_end_request(rq, BLK_STS_IOERR);
- }
- 
- static void
--ublk_auto_buf_reg_fallback(const struct ublk_queue *ubq, unsigned tag)
-+ublk_auto_buf_reg_fallback(const struct ublk_queue *ubq, u16 tag)
- {
- 	struct ublksrv_io_desc *iod = ublk_get_iod(ubq, tag);
- 
- 	iod->op_flags |= UBLK_IO_F_NEED_REG_BUF;
- }
-@@ -1776,11 +1775,11 @@ static bool ublk_start_io(const struct ublk_queue *ubq, struct request *req,
- }
- 
- static void ublk_dispatch_req(struct ublk_queue *ubq, struct request *req)
- {
- 	unsigned int issue_flags = IO_URING_CMD_TASK_WORK_ISSUE_FLAGS;
--	int tag = req->tag;
-+	u16 tag = req->tag;
- 	struct ublk_io *io = &ubq->ios[tag];
- 
- 	pr_devel("%s: complete: qid %d tag %d io_flags %x addr %llx\n",
- 			__func__, ubq->q_id, req->tag, io->flags,
- 			ublk_get_iod(ubq, req->tag)->addr);
-@@ -2366,11 +2365,11 @@ static const struct blk_mq_ops ublk_batch_mq_ops = {
- 	.timeout	= ublk_timeout,
- };
- 
- static void ublk_queue_reinit(struct ublk_device *ub, struct ublk_queue *ubq)
- {
--	int i;
-+	u16 i;
- 
- 	ubq->nr_io_ready = 0;
- 
- 	for (i = 0; i < ubq->q_depth; i++) {
- 		struct ublk_io *io = &ubq->ios[i];
-@@ -2411,11 +2410,11 @@ static int ublk_ch_open(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
- static void ublk_reset_ch_dev(struct ublk_device *ub)
- {
--	int i;
-+	u16 i;
- 
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
- 		struct ublk_queue *ubq = ublk_get_queue(ub, i);
- 
- 		/* Sync with ublk_cancel_cmd() */
-@@ -2483,20 +2482,20 @@ static void ublk_partition_scan_work(struct work_struct *work)
-  *   means.
-  */
- static void ublk_set_canceling(struct ublk_device *ub, bool canceling)
- 	__must_hold(&ub->cancel_mutex)
- {
--	int i;
-+	u16 i;
- 
- 	ub->canceling = canceling;
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
- 		ublk_get_queue(ub, i)->canceling = canceling;
- }
- 
- static bool ublk_check_and_reset_active_ref(struct ublk_device *ub)
- {
--	int i, j;
-+	u16 i, j;
- 
- 	if (!ublk_dev_need_req_ref(ub))
- 		return false;
- 
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
-@@ -2525,11 +2524,11 @@ static bool ublk_check_and_reset_active_ref(struct ublk_device *ub)
- static void ublk_ch_release_work_fn(struct work_struct *work)
- {
- 	struct ublk_device *ub =
- 		container_of(work, struct ublk_device, exit_work.work);
- 	struct gendisk *disk;
--	int i;
-+	u16 i;
- 
- 	/*
- 	 * For zero-copy and auto buffer register modes, I/O references
- 	 * might not be dropped naturally when the daemon is killed, but
- 	 * io_uring guarantees that registered bvec kernel buffers are
-@@ -2644,11 +2643,12 @@ static int ublk_ch_mmap(struct file *filp, struct vm_area_struct *vma)
- {
- 	struct ublk_device *ub = filp->private_data;
- 	size_t sz = vma->vm_end - vma->vm_start;
- 	unsigned max_sz = ublk_max_cmd_buf_size();
- 	unsigned long pfn, end, phys_off = vma->vm_pgoff << PAGE_SHIFT;
--	int q_id, ret = 0;
-+	int ret = 0;
-+	u16 q_id;
- 
- 	spin_lock(&ub->lock);
- 	if (!ub->mm)
- 		ub->mm = current->mm;
- 	if (current->mm != ub->mm)
-@@ -2717,11 +2717,11 @@ static void ublk_abort_batch_queue(struct ublk_device *ub,
-  * So no one can hold our request IO reference any more, simply ignore the
-  * reference, and complete the request immediately
-  */
- static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
- {
--	int i;
-+	u16 i;
- 
- 	for (i = 0; i < ubq->q_depth; i++) {
- 		struct ublk_io *io = &ubq->ios[i];
- 
- 		if (io->flags & UBLK_IO_FLAG_OWNED_BY_SRV)
-@@ -2760,11 +2760,11 @@ static void ublk_start_cancel(struct ublk_device *ub)
+@@ -698,12 +698,28 @@ static int ublk_report_zones(struct gendisk *disk, sector_t sector,
  out:
- 	mutex_unlock(&ub->cancel_mutex);
- 	ublk_put_disk(disk);
+ 	kvfree(buffer);
+ 	return ret;
  }
  
--static void ublk_cancel_cmd(struct ublk_queue *ubq, unsigned tag,
-+static void ublk_cancel_cmd(struct ublk_queue *ubq, u16 tag,
- 		unsigned int issue_flags)
+-static blk_status_t ublk_setup_iod_zoned(struct ublk_queue *ubq,
+-					 struct request *req)
++static bool ublk_validate_req_zoned(const struct request *req)
++{
++	switch (req_op(req)) {
++	case REQ_OP_ZONE_OPEN:
++	case REQ_OP_ZONE_CLOSE:
++	case REQ_OP_ZONE_FINISH:
++	case REQ_OP_ZONE_RESET:
++	case REQ_OP_ZONE_APPEND:
++	case REQ_OP_ZONE_RESET_ALL:
++		return true;
++	case REQ_OP_DRV_IN:
++		return !!ublk_zoned_get_report_desc(req);
++	default:
++		return false;
++	}
++}
++
++static void ublk_setup_iod_zoned(struct ublk_queue *ubq, struct request *req)
  {
- 	struct ublk_io *io = &ubq->ios[tag];
- 	struct ublk_device *ub = ubq->dev;
- 	struct io_uring_cmd *cmd = NULL;
-@@ -2911,11 +2911,11 @@ static inline bool ublk_dev_ready(const struct ublk_device *ub)
- 	return ub->nr_queue_ready == ub->dev_info.nr_hw_queues;
- }
+ 	struct ublk_zoned_report_desc *desc;
+ 	u32 ublk_op;
  
- static void ublk_cancel_queue(struct ublk_queue *ubq)
- {
--	int i;
-+	u16 i;
- 
- 	if (ublk_support_batch_io(ubq)) {
- 		ublk_batch_cancel_queue(ubq);
- 		return;
+ 	switch (req_op(req)) {
+@@ -725,24 +741,19 @@ static blk_status_t ublk_setup_iod_zoned(struct ublk_queue *ubq,
+ 	case REQ_OP_ZONE_RESET_ALL:
+ 		ublk_op = UBLK_IO_OP_ZONE_RESET_ALL;
+ 		break;
+ 	case REQ_OP_DRV_IN:
+ 		desc = ublk_zoned_get_report_desc(req);
+-		if (!desc)
+-			return BLK_STS_IOERR;
+ 		ublk_init_iod(ubq, req, UBLK_IO_OP_REPORT_ZONES, desc->nr_zones,
+ 			      desc->sector);
+-		return BLK_STS_OK;
+-	case REQ_OP_DRV_OUT:
+-		/* We do not support drv_out */
+-		return BLK_STS_NOTSUPP;
++		return;
+ 	default:
+-		return BLK_STS_IOERR;
++		WARN_ON_ONCE(1);
++		return;
  	}
-@@ -2925,11 +2925,11 @@ static void ublk_cancel_queue(struct ublk_queue *ubq)
+ 
+ 	ublk_init_iod(ubq, req, ublk_op, blk_rq_sectors(req), blk_rq_pos(req));
+-	return BLK_STS_OK;
  }
  
- /* Cancel all pending commands, must be called after del_gendisk() returns */
- static void ublk_cancel_dev(struct ublk_device *ub)
+ #else
+ 
+ #define ublk_report_zones (NULL)
+@@ -759,14 +770,18 @@ static void ublk_dev_param_zoned_apply(struct ublk_device *ub)
+ static int ublk_revalidate_disk_zones(struct ublk_device *ub)
  {
--	int i;
-+	u16 i;
- 
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
- 		ublk_cancel_queue(ublk_get_queue(ub, i));
- }
- 
-@@ -2959,11 +2959,11 @@ static void ublk_wait_tagset_rqs_idle(struct ublk_device *ub)
- 	}
- }
- 
- static void ublk_force_abort_dev(struct ublk_device *ub)
- {
--	int i;
-+	u16 i;
- 
- 	pr_devel("%s: force abort ub: dev_id %d state %s\n",
- 			__func__, ub->dev_info.dev_id,
- 			ub->dev_info.state == UBLK_S_DEV_LIVE ?
- 			"LIVE" : "QUIESCED");
-@@ -3156,11 +3156,11 @@ ublk_config_io_buf(const struct ublk_device *ub, struct ublk_io *io,
  	return 0;
  }
  
- static inline void ublk_prep_cancel(struct io_uring_cmd *cmd,
- 				    unsigned int issue_flags,
--				    struct ublk_queue *ubq, unsigned int tag)
-+				    struct ublk_queue *ubq, u16 tag)
+-static blk_status_t ublk_setup_iod_zoned(struct ublk_queue *ubq,
+-					 struct request *req)
++static bool ublk_validate_req_zoned(const struct request *req)
  {
- 	struct ublk_uring_cmd_pdu *pdu = ublk_get_uring_cmd_pdu(cmd);
- 
- 	/*
- 	 * Safe to refer to @ubq since ublk_queue won't be died until its
-@@ -3960,12 +3960,12 @@ static int ublk_handle_non_batch_cmd(struct io_uring_cmd *cmd,
- 				     unsigned int issue_flags)
- {
- 	const struct ublksrv_io_cmd *ub_cmd = io_uring_sqe_cmd(cmd->sqe,
- 							       struct ublksrv_io_cmd);
- 	struct ublk_device *ub = cmd->file->private_data;
--	unsigned tag = READ_ONCE(ub_cmd->tag);
--	unsigned q_id = READ_ONCE(ub_cmd->q_id);
-+	u16 tag = READ_ONCE(ub_cmd->tag);
-+	u16 q_id = READ_ONCE(ub_cmd->q_id);
- 	unsigned index = READ_ONCE(ub_cmd->addr);
- 	struct ublk_queue *ubq;
- 	struct ublk_io *io;
- 
- 	if (cmd->cmd_op == UBLK_U_IO_UNREGISTER_IO_BUF)
-@@ -4167,11 +4167,12 @@ static const struct file_operations ublk_ch_batch_io_fops = {
- 	.mmap = ublk_ch_mmap,
- };
- 
- static void __ublk_deinit_queue(struct ublk_device *ub, struct ublk_queue *ubq)
- {
--	int size, i;
-+	int size;
-+	u16 i;
- 
- 	size = ublk_queue_cmd_buf_size(ub);
- 
- 	for (i = 0; i < ubq->q_depth; i++) {
- 		struct ublk_io *io = &ubq->ios[i];
-@@ -4188,22 +4189,22 @@ static void __ublk_deinit_queue(struct ublk_device *ub, struct ublk_queue *ubq)
- 		ublk_io_evts_deinit(ubq);
- 
- 	kvfree(ubq);
+-	return BLK_STS_NOTSUPP;
++	return false;
++}
++
++static void ublk_setup_iod_zoned(struct ublk_queue *ubq, struct request *req)
++{
++	WARN_ON_ONCE(1);
  }
  
--static void ublk_deinit_queue(struct ublk_device *ub, int q_id)
-+static void ublk_deinit_queue(struct ublk_device *ub, u16 q_id)
- {
- 	struct ublk_queue *ubq = ub->queues[q_id];
+ #endif
  
- 	if (!ubq)
- 		return;
- 
- 	__ublk_deinit_queue(ub, ubq);
- 	ub->queues[q_id] = NULL;
+ static inline void __ublk_complete_rq(struct request *req, struct ublk_io *io,
+@@ -1495,11 +1510,26 @@ static unsigned int ublk_unmap_io(bool need_map,
+ 		return ublk_copy_user_pages(req, 0, &iter, dir);
+ 	}
+ 	return rq_bytes;
  }
  
--static int ublk_get_queue_numa_node(struct ublk_device *ub, int q_id)
-+static int ublk_get_queue_numa_node(struct ublk_device *ub, u16 q_id)
+-static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
++static bool ublk_validate_req(const struct ublk_queue *ubq,
++			      const struct request *req)
++{
++	switch (req_op(req)) {
++	case REQ_OP_READ:
++	case REQ_OP_WRITE:
++	case REQ_OP_FLUSH:
++	case REQ_OP_DISCARD:
++	case REQ_OP_WRITE_ZEROES:
++		return true;
++	default:
++		return ublk_queue_is_zoned(ubq) && ublk_validate_req_zoned(req);
++	}
++}
++
++static void ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
  {
- 	unsigned int cpu;
+ 	u32 ublk_op;
  
- 	/* Find first CPU mapped to this queue */
- 	for_each_possible_cpu(cpu) {
-@@ -4212,18 +4213,19 @@ static int ublk_get_queue_numa_node(struct ublk_device *ub, int q_id)
+ 	switch (req_op(req)) {
+ 	case REQ_OP_READ:
+@@ -1516,17 +1546,15 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
+ 		break;
+ 	case REQ_OP_WRITE_ZEROES:
+ 		ublk_op = UBLK_IO_OP_WRITE_ZEROES;
+ 		break;
+ 	default:
+-		if (ublk_queue_is_zoned(ubq))
+-			return ublk_setup_iod_zoned(ubq, req);
+-		return BLK_STS_IOERR;
++		ublk_setup_iod_zoned(ubq, req);
++		return;
  	}
  
- 	return NUMA_NO_NODE;
+ 	ublk_init_iod(ubq, req, ublk_op, blk_rq_sectors(req), blk_rq_pos(req));
+-	return BLK_STS_OK;
  }
  
--static int ublk_init_queue(struct ublk_device *ub, int q_id)
-+static int ublk_init_queue(struct ublk_device *ub, u16 q_id)
+ static inline struct ublk_uring_cmd_pdu *ublk_get_uring_cmd_pdu(
+ 		struct io_uring_cmd *ioucmd)
  {
--	int depth = ub->dev_info.queue_depth;
-+	u16 depth = ub->dev_info.queue_depth;
- 	gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO;
- 	struct ublk_queue *ubq;
- 	struct page *page;
- 	int numa_node;
--	int size, i, ret;
-+	int size, ret;
-+	u16 i;
- 
- 	/* Determine NUMA node based on queue's CPU affinity */
- 	numa_node = ublk_get_queue_numa_node(ub, q_id);
- 
- 	/* Allocate queue structure on local NUMA node */
-@@ -4264,19 +4266,20 @@ static int ublk_init_queue(struct ublk_device *ub, int q_id)
- 	return ret;
+@@ -2136,12 +2164,10 @@ static enum blk_eh_timer_return ublk_timeout(struct request *rq)
  }
  
- static void ublk_deinit_queues(struct ublk_device *ub)
+ static blk_status_t ublk_prep_req(struct ublk_queue *ubq, struct request *rq,
+ 				  bool check_cancel)
  {
--	int i;
-+	u16 i;
+-	blk_status_t res;
+-
+ 	if (unlikely(READ_ONCE(ubq->fail_io)))
+ 		return BLK_STS_TARGET;
  
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
- 		ublk_deinit_queue(ub, i);
+ 	/* With recovery feature enabled, force_abort is set in
+ 	 * ublk_stop_dev() before calling del_gendisk(). We have to
+@@ -2158,14 +2184,14 @@ static blk_status_t ublk_prep_req(struct ublk_queue *ubq, struct request *rq,
+ 
+ 	if (check_cancel && unlikely(ubq->canceling))
+ 		return BLK_STS_IOERR;
+ 
+ 	/* fill iod to slot in io cmd buffer */
+-	res = ublk_setup_iod(ubq, rq);
+-	if (unlikely(res != BLK_STS_OK))
++	if (unlikely(!ublk_validate_req(ubq, rq)))
+ 		return BLK_STS_IOERR;
+ 
++	ublk_setup_iod(ubq, rq);
+ 	blk_mq_start_request(rq);
+ 	return BLK_STS_OK;
  }
  
- static int ublk_init_queues(struct ublk_device *ub)
- {
--	int i, ret;
-+	int ret;
-+	u16 i;
- 
- 	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
- 		ret = ublk_init_queue(ub, i);
- 		if (ret)
- 			goto fail;
-@@ -5179,11 +5182,11 @@ static int ublk_ctrl_set_size(struct ublk_device *ub, const struct ublksrv_ctrl_
- 	return ret;
- }
- 
- struct count_busy {
- 	const struct ublk_queue *ubq;
--	unsigned int nr_busy;
-+	u16 nr_busy;
- };
- 
- static bool ublk_count_busy_req(struct request *rq, void *data)
- {
- 	struct count_busy *idle = data;
-@@ -5217,12 +5220,11 @@ static int ublk_wait_for_idle_io(struct ublk_device *ub,
- 	 */
- 	if (ublk_dev_support_batch_io(ub))
- 		return 0;
- 
- 	while (elapsed < timeout_ms && !signal_pending(current)) {
--		unsigned int queues_cancelable = 0;
--		int i;
-+		u16 i, queues_cancelable = 0;
- 
- 		for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
- 			struct ublk_queue *ubq = ublk_get_queue(ub, i);
- 
- 			queues_cancelable += !!ubq_has_idle_io(ubq);
+ /*
 -- 
 2.54.0
 
