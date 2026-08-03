@@ -1,214 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688443BCD17;
-	Mon,  3 Aug 2026 11:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50704028EE
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 11:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756783; cv=none; b=U1Vqgv3NYl/ioWGSsw42dKIvODvIonibFA1/4zNJb/2n5zh9+KEEdZJuCPmuW0bW8iz54ocPxsED4GEXSVriE8L+WWluBKcoT/+y5YpPehSUZA0lZXvlh7KpmKbmbQUx1eEhdV3S9ixkM8EzKdYk073Y+4RjqhtW2VOc1JPTuZE=
+	t=1785757370; cv=none; b=Sdsp2BbZP5eufsYqTaE24kRX8QdskLUZGeqk8zg2C72MzesskS7Jv2NPIUxzyS0YyGuuHx6tdYSquqfEoIeNxC+cR3FTF1qFHSk1MAGFYyAxeHbzFFRqDQB1/XMaUKh8sC9Bmja8vqXri/Ve+tC9Mxd/VMUwYc1lK+/Geg/cNuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756783; c=relaxed/simple;
-	bh=CPgeJbCnf3cH0QGbQ+IT/c2E4/3pteyzD4LU+sVLWbo=;
+	s=arc-20240116; t=1785757370; c=relaxed/simple;
+	bh=EoBJn323TIy1KMOZADmdbo1IaAhJXEp2vRvB924koCw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FNqWS2Do9fwaQ15qCpAHo2UqhJgjqFHzHEPxKEccmXx3/bfxPfTu7Q15agQI/eXSuLW9kC7v7BnoV2Vc/eaa9mHW4qKefeybvq8M7hzC9JccPqSnYRx3V84BssoDydkGWkt+gaLivBlhYKf094r9K/z3EUMLRhHLaKpty5LxoXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SttuxkJ/; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=Xg7g0EqlyI4mJAhJcdgBvDsz0uOIBjgGx3vRlEQT9a6xMgFQG9f8DsRF+juseX1AKmpvdaXwvIFwiniic3KEL7GYYYXlrdqXwSZEsDiGROPurkNX8rwsFsK5NjH5JrScIxZzS6+JLiMUggwToQzqOqGAF1S/vcWaWcoM8Ap7bBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S5HP9WXs; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SttuxkJ/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560C51F00A3A;
-	Mon,  3 Aug 2026 11:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785756782;
-	bh=ZdkYkZfcV13Rm76AHyDXctAB6jChiddr7RTO+n76n64=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SttuxkJ/o74K45+6zlwW1rejwGDsKpDF91iLL81a11ij5Ult+WrfH+5LI51Ybr3wK
-	 1wqUG75oERvglx5vVielESYfP5TTjDkm6+pY6B4+aYC3rIlhgztLQOMcFKZcsKK661
-	 yT0qz6VnJElKTTvYXQ0L6f1AVQC3lc61PakAIFTnzL9xS0jUmFL/GMWR1q9pIIfZ9q
-	 3w3M9rEiHWxklbgu1qstWXa41n1GN/pusx5mE8eLqYKfRncMwHRwHMaJhDvLPMSOJT
-	 ln3QAdZ9d7yutDSCaNk+Yx9qNMfG/wvLqPW7gfofin7DjO4ti3tn8QfWqBU3rFkZyR
-	 hKqzjMSANV0bw==
-Message-ID: <5dcf29d5-2fb4-4550-a3e9-a39645d736c8@kernel.org>
-Date: Mon, 3 Aug 2026 13:32:50 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S5HP9WXs"
+Message-ID: <db99502e-ddf8-42e4-beb5-65d866a820ea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785757356;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WDaB8Vf+UkRRfG5S/URFrbambtsY/cWlKTatsH5ESA8=;
+	b=S5HP9WXsgdXtiP9X1r6rvUgv9HgG6ipC2bNs1YtBcagjqgc0+irFyU5CBGP+n8B9yoDJUi
+	KigEmokgZbhCX1SWLlEfSKJfYBZt95qJx/YOeXRpHOr7udQxRp3pcAGI7bw4uBJPrBz05D
+	gNjVUvM/ARCwroi/9Bu/ySw7dgLi564=
+Date: Mon, 3 Aug 2026 19:42:19 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 09/15] mm/rmap: use anon pgoff to track MAP_PRIVATE
- file-backed anon folios
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-9-e8ecfefea812@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20260729-b4-scalable-cow-virt-pgoff-v3-9-e8ecfefea812@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add a test for arena fault-in
+ under memory.max
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+References: <20260727062521.376231-1-jiayuan.chen@linux.dev>
+ <20260727062521.376231-4-jiayuan.chen@linux.dev>
+ <DK9SMAEXY39E.195HV3J7GB8AI@etsalapatis.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <DK9SMAEXY39E.195HV3J7GB8AI@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 7/29/26 18:48, Lorenzo Stoakes (ARM) wrote:
-> Currently anonymous folios belonging to CoW'd MAP_PRIVATE file-backed
-> mappings are indexed by their page offset within the file in which they
-> were originally mapped.
-> 
-> This differs from anonymous folios belonging to pure anon mappings which
-> are indexed by their anonymous page offset (the address at which they'd
-> belong in the VMA when first faulted).
-> 
-> This change fixes this inconsistency, always indexing anonymous folios by
-> their anonymous page offset regardless of the VMA to which they belong.
-> 
 
-Yes, this is great.
-
-> The foundations have been laid such that we need only switch this
-> functionality on such by:
-> 
-> * Using linear_anon_page_index() in __folio_set_anon() to assign the
->   folio's index to the anonymous linear index rather than the file-backed
->   one.
-> 
-> * Otherwise using linear_anon_page_index() in all instances where
->   anonymous folios are being referenced or manipulated.
-> 
-> * Replacing vma_address() with vma_filebacked_address() or
->   vma_anon_address() as appropriate.
-> 
-> * Updating the merging logic to check that anonymous page offsets are
->   aligned as well as filebacked ones for MAP_PRIVATE file-backed VMAs,
->   introducing needs_adjacent_anon_pgoff() to figure out when this is
->   required.
-> 
-> * Updating linear_folio_page_index() to invoke linear_anon_page_index()
->   if the folio is anonymous.
-> 
-> * Updating vma_address_end() to use the VMA's anonymous page offset when
->   pvmw->pgoff is anonymous.
-> 
-> * Correcting folio_within_range() to use anonymous page offset for
->   anonymous folios.
-> 
-> This will have no impact on merging of anonymous VMAs, whose page offset
-> and anonymous page offset are identical, nor will it impact shared
-> file-backed VMAs, which will continue to be merged based on the file-backed
-> page offset.
-> 
-> However, MAP_PRIVATE file-backed mappings must now be aligned on anonymous
-> page offset as well.
-> 
-> In most instances this should have no impact on merging of file-backed
-> mappings, which are usually not merged all that often, let alone
-> MAP_PRIVATE mapped ones, and rarely remapped and faulted before being moved
-> back in place (the case in which a merge may now fail).
+On 7/28/26 8:54 AM, Emil Tsalapatis wrote:
+> On Mon Jul 27, 2026 at 2:24 AM EDT, Jiayuan Chen wrote:
+>> A child joins a memcg capped at 64M and faults an arena in until it runs
+>> out of the budget. Without the kernel fix the child dies with SIGSEGV on
+>> a valid arena address; with it, the child is killed by the memcg OOM
+>> killer.
+>>
+>> With the fix:
+>>
+>>    serial_test_arena_memcg:PASS:child killed by signal
+>>    serial_test_arena_memcg:PASS:not killed by SIGSEGV
+>>    #5       arena_memcg:OK
+>>
+>>    # dmesg
+>>     arena_vm_fault+0x655/0xa90
+>>    Memory cgroup out of memory: Killed process 512, file-rss:67920kB
+>>
+>> Without the fix:
+>>
+>>    serial_test_arena_memcg:PASS:child killed by signal
+>>    serial_test_arena_memcg:FAIL:not killed by SIGSEGV: actual 11
+>>    #5       arena_memcg:FAIL
+>>
+>>    # dmesg
+>>    test_progs[508]: segfault at 100004025000 ...
+>>
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+>> ---
+>>   .../selftests/bpf/prog_tests/arena_memcg.c    | 158 ++++++++++++++++++
+>>   .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+>>   2 files changed, 182 insertions(+)
+>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>>   create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>> new file mode 100644
+>> index 000000000000..9665946fa29e
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>> @@ -0,0 +1,158 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <test_progs.h>
+>> +#include <fcntl.h>
+>> +#include <signal.h>
+>> +#include <sys/mman.h>
+>> +#include <sys/wait.h>
+>> +#include <unistd.h>
+>> +#include <sys/user.h>
+>> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
+>> +#include <unistd.h>
+>> +#define PAGE_SIZE getpagesize()
+>> +#endif
+>> +
+>> +#include "cgroup_helpers.h"
+>> +#include "arena_memcg.skel.h"
+>> +
+>> +#define CG_PATH		"/arena_memcg"
+>> +
+>> +/* Budget the arena gets on top of whatever is already charged after load. */
+>> +#define ARENA_BUDGET	(64 * 1024 * 1024)
+>> +
+>> +/*
+>> + * cgroup_helpers builds paths from getpid(), but the work dir belongs to the
+>> + * process that set the environment up. The child references it through that
+>> + * pid, so build the path explicitly.
+>> + */
+>> +static void cg_file_path(char *buf, size_t sz, pid_t owner, const char *file)
+>> +{
+>> +	snprintf(buf, sz, "/mnt/cgroup-test-work-dir%d%s/%s", owner, CG_PATH, file);
+> These are copied over from cgroup_helpers.c, but it's not obvious they
+> originate from there. Maybe let's move them to cgroup_helpers.h where we
+> can use them everywhere for consistency.
 
 Agreed.
 
-[...]
 
->  
->  /**
-> - * vma_address - Find the virtual address a page range is mapped at.
-> - * @vma: The vma which maps this object.
-> - * @pgoff: The page offset within its object.
-> - * @nr_pages: The number of pages to consider.
-> - *
-> - * If any page in this range is mapped by this VMA, return the first address
-> - * where any of these pages appear.  Otherwise, return -EFAULT.
-> - */
-> -static inline unsigned long vma_address(const struct vm_area_struct *vma,
-> -		pgoff_t pgoff, unsigned long nr_pages)
-> -{
-> -	return __vma_address(vma, pgoff, vma_start_pgoff(vma), nr_pages);
-> -}
-
-Good to see this go.
-[...]
-
->  	rmap_item->anon_vma = vma->anon_vma;
-> -	rmap_item->linear_page_index = linear_page_index(vma, rmap_item->address);
-> +	/* The VMA is always anon/MAP_PRIVATE-file backed so use anon index. */
-> +	rmap_item->linear_page_index = linear_anon_page_index(vma, rmap_item->address);
-
-You can drop this comment: It's an anon_vma + linear_page_index pair, so the
-anon_page_index is implied.
-
-[...]
-
->  	WRITE_ONCE(folio->mapping, (struct address_space *) anon_vma);
-> -	folio->index = linear_page_index(vma, address);
-> +	folio->index = linear_anon_page_index(vma, address);
+>
+> The main issue I see is that this only triggers consistently with PREEMPT_RT, correct?
 
 
-Apart from the LGTM.
+It's not RT specified issue.
 
--- 
-Cheers,
 
-David
+> I tried with the default vmtest config we have but it does not trigger
+> at all. More importantly, it doesn't trigger reliably with PREEMPT_RT,
+> either. Does it for you? Can we cycle forks/frees multiple times to try
+> and trigger this more reliably?
+
+
+
+I stated vm(RT and non-RT) locally and ran test_progs 100 times and all 
+tests passed.
+
+I also used official bpf CI(non-RT) to run selftest, but still all tests 
+passed...
+
+So I'm not clear which config is associated with...
+https://github.com/kernel-patches/bpf/actions/runs/30795982316
+https://github.com/kernel-patches/bpf/actions/runs/30798024430
+https://github.com/kernel-patches/bpf/actions/runs/30801539977
+https://github.com/kernel-patches/bpf/actions/runs/30808717560
+
+
